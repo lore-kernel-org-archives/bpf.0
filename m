@@ -1,157 +1,152 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47F93B7B84;
-	Tue, 13 Oct 2026 07:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31EB2F7F12;
+	Tue, 13 Oct 2026 07:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791877605; cv=none; b=cDcJjdrBhNOsZ+cFPpO0RufaQg5Fmq5/QGkGjv47Rc/ihiEgIVM3bAJGUE+H1mOUgf1ffkMpdw6SQ8rhCcMxhMthscO6D2f2CeB4jCSeJbHrEf9RetF0Ogexrru7patjVN6ljONCH9pXJhFuknj7+rW3dgrqWvsTGofzv4ylJvE=
+	t=1791878077; cv=none; b=DCHbp6Hru42q4Ejqq0wGfklMmuFLGhmfGn0Tytds+P3gt1gig3h1haSE+Gt3+DDKu8pDf38L2yZE/TsSYvkkb3MrwLGIbFb6MOIha7/xlvEAwlYSBhJVBTY1ffUkS/ofdDmcl3hurZrOW6TIieIhArOklbUeCdn8Xrj3Q88rpwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791877605; c=relaxed/simple;
-	bh=kqh5UWkz+aPn66PWCf11QsrGKC2RTfd46/Fypr8xPVY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eCiWuSQc7+y7b8shAaDhf9tPNxuuVNtEe4SdkSQJ+L63Kr0OX/NqycWOO+lDB2cW7gv0pZY+e2aArrDJ5JwX3bTFB2Bbs0VYrG0gtcmO1qspFzizL9FcKZiql/pDWTML3SdfofWsGEWS1mDsxmQld3RTxEIEcoA+4ptPB2PhGbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=IyoaCRer; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1791878077; c=relaxed/simple;
+	bh=HZBlcHp/BWFoEMR6Fp47RlBLZKIgW549n1fkDUHGAXU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a9xzbichoGEY/rDPbYklkweCX79vhBWFiGiRdJewm+TN46LmsNOpBnYWccyUEWopGtqByVz5L/jqI5mHa8nTSh5boiA0xDALkrnKkQ5PmUKfQwGVF72SKg3u0TVFz0zpDp9lI4ODNV7frCKCd7hf4LtJR6+f6QgcEoP2Kh36jTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=nxpvrRaN; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IyoaCRer"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=5ZEZzELnvolUpIyeLg3RxehH4NULQswA+ln1L1k4RHc=; b=IyoaCRerLeEfiuhfSoY65l6DFt
-	Mq//JqhMgq3kLLt8B7JlDsgQYPhuC77JDFtsliGBjyOp6hq48KEjh2kmyeeBOUp2iotWvdOY5JU+c
-	KDBxIQeOJxviQFAWI8oF3+sU+DH/MyF+jJAbmc9jLWp0gfwEKly3G05GQelJQGvZG5qa4S8amIc7l
-	TMcEK2MYNedqkesnoOAiOnnfhHBWKXKa7nxBil6ZiKO8X9gvUFDkwuQ2iis8x6kpAvktaayoLt0mj
-	bxgalyDd4nOkb7ccIEnska9KY684HRxsbpsXDByNCsemFr158/yC2ij+37Tph66nlmxgGz5Vzo+lr
-	VKMTNsog==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xGXDP-0000000FDQO-1ttG;
-	Tue, 13 Oct 2026 07:46:27 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 939DC30063F; Tue, 13 Oct 2026 09:46:25 +0200 (CEST)
-Date: Tue, 13 Oct 2026 09:46:25 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sandipan Das <sandipan.das@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Ananth Narayan <ananth.narayan@amd.com>
-Subject: Re: [PATCH] perf/x86/amd/lbr: Limit branch snapshots to valid entries
-Message-ID: <20261013074625.GC2009045@noisy.programming.kicks-ass.net>
-References: <20261007181002.4005262-1-sandipan.das@amd.com>
- <20261012153014.GU4121339@noisy.programming.kicks-ass.net>
- <94d387f2-ff07-4895-a722-e8ded4203309@amd.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="nxpvrRaN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1791878075; x=1823414075;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HZBlcHp/BWFoEMR6Fp47RlBLZKIgW549n1fkDUHGAXU=;
+  b=nxpvrRaNY5jdQrLt/WH0W23hsetVYmwCerFQrqIBCDz8RSkrUGQ1uI1P
+   YyTvJXrUmo7mwOCNVw3hSPMRZYdrgh/ToJ4YYRH9IwAJsZqlCgVThjjDa
+   161p48+9HPB+sv9wCvh/gvVZE9BQz0PtLkGn+TomE3s8P+u2T9eISDUgn
+   wDLQt3Ei7u0WMb0MG31bDXkWHfT9+GJ/0kcAqst6EVdD14YGIOxda9ceB
+   /SrfCcrNJbJ2FCVPH0UI0IVhelS1CM87Du7R8SfeC73bnIX/hGGOrw6yz
+   ApGCaL+ohM9WjPa1Mic/ZOCaXW4VCWzW9yiECqvsFfhYXVgn6B+HQ9CSF
+   Q==;
+X-CSE-ConnectionGUID: h3CEN31aTviRUZfHx3weuQ==
+X-CSE-MsgGUID: R/KshpZzRGqazUOD0C6WAQ==
+X-IronPort-AV: E=Sophos;i="6.27,155,1787036400"; 
+   d="scan'208";a="75296097"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2026 00:54:34 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.49; Tue, 13 Oct 2026 00:54:34 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Tue, 13 Oct 2026 00:54:31 -0700
+Date: Tue, 13 Oct 2026 09:54:30 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+CC: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre
+ Torgue <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Ong Boon Leong <boon.leong.ong@intel.com>,
+	<netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/2] net: stmmac: fix XDP TX DMA address for
+ compound RX pages
+Message-ID: <20261013075430.cptcdk3ra6ordhd5@DEN-DL-M70577.microsemi.net>
+References: <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
+ <20261012-stmmac-xdp-tx-pre-fixes-v1-1-05fd0c90f7e1@oss.qualcomm.com>
+ <20261012194317.o642ym7ddsmny25x@DEN-DL-M70577.microsemi.net>
+ <as1HVdDa4yN4yp11@lore-desk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <94d387f2-ff07-4895-a722-e8ded4203309@amd.com>
+In-Reply-To: <as1HVdDa4yN4yp11@lore-desk>
 
-On Tue, Oct 13, 2026 at 12:14:58PM +0530, Sandipan Das wrote:
-> On 12-10-2026 21:00, Peter Zijlstra wrote:
-> > On Wed, Oct 07, 2026 at 11:40:02PM +0530, Sandipan Das wrote:
-> >> The branch snapshot callback used by bpf_get_branch_snapshot() copies
-> >> up to x86_pmu.lbr_nr entries from cpuc->lbr_entries[], even when the
-> >> last LBR read kept fewer branches. The entries past lbr_stack.nr are
-> >> invalid, but they end up reaching BPF programs.
-> >>
-> >> Limit copying to lbr_stack.nr entries and also reset lbr_stack.nr when
-> >> amd_pmu_lbr_read() skips reading the registers, so that a stale count
-> >> is never reused.
-> >>
-> >> Fixes: a4d18112e531 ("perf/x86/amd: Support capturing LBR from software events")
-> >> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> >> Closes: https://lore.kernel.org/all/sashiko-outbox-163130@kernel.org/
-> >> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
-> >> ---
-> >>  arch/x86/events/amd/core.c | 2 +-
-> >>  arch/x86/events/amd/lbr.c  | 4 +++-
-> >>  2 files changed, 4 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> >> index 49b6b8fce566..bf631f60757c 100644
-> >> --- a/arch/x86/events/amd/core.c
-> >> +++ b/arch/x86/events/amd/core.c
-> >> @@ -944,7 +944,7 @@ static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, u
-> >>  	cpuc = this_cpu_ptr(&cpu_hw_events);
-> >>  
-> >>  	amd_pmu_lbr_read();
-> >> -	cnt = min(cnt, x86_pmu.lbr_nr);
-> >> +	cnt = min(cnt, cpuc->lbr_stack.nr);
-> >>  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
-> >>  
-> >>  	amd_pmu_v2_enable_all(0);
-> >> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-> >> index 1e1b2f08cb51..a00d3850c4a8 100644
-> >> --- a/arch/x86/events/amd/lbr.c
-> >> +++ b/arch/x86/events/amd/lbr.c
-> >> @@ -165,8 +165,10 @@ void amd_pmu_lbr_read(void)
-> >>  	struct branch_entry entry;
-> >>  	int out = 0, idx, i;
-> >>  
-> >> -	if (!cpuc->lbr_users)
-> >> +	if (!cpuc->lbr_users) {
-> >> +		cpuc->lbr_stack.nr = 0;
-> >>  		return;
-> >> +	}
-> >>  
-> >>  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
-> >>  		entry.from.full	= amd_pmu_lbr_get_from(i);
+Hi Lorenzo,
+
+> > Hi Lorenzo,
+> 
+> Hi Daniel,
+> 
 > > 
-> > You now seem to deviate from what the Intel code does. Please clarify.
+> > > When RX buffers are compound pages (order > 0), only the head page
+> > > carries the DMA address programmed by the page pool
+> > > (page_pool_get_dma_addr()). stmmac_xdp_xmit_xdpf() computed the head
+> > > buffer's bus address from the page that happens to contain the data:
+> > > 
+> > > 	page = frag ? skb_frag_page(frag)
+> > > 		    : virt_to_page(xdpf->data);
+> > > 	dma_addr = page_pool_get_dma_addr(page);
+> > > 	...
+> > > 
+> > > RX pages become compound as soon as dma_buf_sz needs more than one page
+> > > (pp_params.order = order_base_2(num_pages) > 0), which happens from an
+> > > MTU around 3000 bytes once dma_buf_sz reaches 4096. If an XDP program
+> > > moves the data forward with bpf_xdp_adjust_head() by more than about a
+> > > page, xdpf->data points into a tail page whose struct page has no DMA
+> > > address: page_pool_get_dma_addr() then returns a bogus bus address, and
+> > > dma_sync_single_for_device() together with the TX descriptor transmit
+> > > from the wrong location.
+> > 
+> > Looks to me like mtu > ETH_DATA_LAN is rejected when setting a prog, and also
+> > on mtu change when a prog is attached. So can this even happen today?
 > 
-> Yes, it is a deviation. I thought of proposing the following but didn't
-> proceed because I was not sure about the if condition in the second hunk
-> which considers things other than cpuc->lbr_users for an early return.
+> yes, these issues are real but at the moment we can't trigger them since we
+> have the MTU limitation in stmmac_change_mtu()/stmmac_xdp_set_prog().
+> These are preliminary fixes in order to remove this limitation.
+> There is a leftover issue we still need to fix about jumbo frames in
+> stmmac_xdp_xmit_xdpf().
 
-Dapeng, can you look into this? I would really like to keep behaviour
-consistent where possible.
+Thanks for clarifying.
 
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index 0a34d674df59..5dfb9e9156e8 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -2822,7 +2822,7 @@ __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
->         struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
 > 
->         intel_pmu_lbr_read();
-> -       cnt = min_t(unsigned int, cnt, x86_pmu.lbr_nr);
-> +       cnt = min_t(unsigned int, cnt, cpuc->lbr_stack.nr);
+> Regards,
+> Lorenzo
 > 
->         memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
->         intel_pmu_enable_all(0);
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index 0b446d8912e4..6b070490f461 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -1026,8 +1026,10 @@ void intel_pmu_lbr_read(void)
->          * but this simple approach seems to work for now.
->          */
->         if (!cpuc->lbr_users || vlbr_exclude_host() ||
-> -           cpuc->lbr_users == cpuc->lbr_pebs_users)
-> +           cpuc->lbr_users == cpuc->lbr_pebs_users) {
-> +               cpuc->lbr_stack.nr = 0;
->                 return;
-> +       }
-> 
->         x86_pmu.lbr_read(cpuc);
-> 
+> > 
+> > > 
+> > > Use virt_to_head_page() to read the DMA base of the buffer and keep the
+> > > offset relative to the head page (sizeof(*xdpf) + xdpf->headroom), which
+> > > is correct no matter which page the data ends up in.
+> > 
+> > I think the fix looks correct.
+> > 
+> > > 
+> > > Fixes: be8b38a722e6 ("net: stmmac: Add support for XDP_TX action")
+> > > Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+> > > ---
+> > >  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > > index b8b4de4c5b1a..ca61ab449e32 100644
+> > > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > > @@ -5301,7 +5301,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
+> > >  			struct page *page;
+> > >  
+> > >  			page = frag ? skb_frag_page(frag)
+> > > -				    : virt_to_page(xdpf->data);
+> > > +				    : virt_to_head_page(xdpf->data);
+> > >  			dma_addr = page_pool_get_dma_addr(page);
+> > >  			if (frag)
+> > >  				dma_addr += skb_frag_off(frag);
+> > > 
+> > > -- 
+> > > 2.56.0
+> > > 
+> > 
+> > /Daniel
+
+Reviewed-by: Daniel Machon <daniel.machon@microchip.com>
