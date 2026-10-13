@@ -1,114 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74BE51B167;
-	Tue, 13 Oct 2026 17:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A277A51C331
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791911088; cv=none; b=Q7/V90y4LM4BlrCeCSwy5/xw4nvHVOO2CVaonduf3HbYSGzisSCgORRlXxbTQLCXPsDChWV6Kvw3ToPSzsp32StG/ObYBJHxLIXFbG3lVWcMgJjUXU4tphTSzsMIg7KyFWxgiBsRT/ozvOsWF6/poLdH5LHQSmHq8pJm2nZMDdU=
+	t=1791911366; cv=none; b=WhgLze5qOKBTCyRAJXuaCWtrYJTy87SKPX06/cux4p1ewgiEtH3jIbrtZfNxwnCAcjNzdZwGULwNItL4Jh6EO/JLeSAlBcoj1SllSNUBWxr4ymBY8BnLCJJLnnQJGidhLNpT77B7ri9UcdhNXTwOpIWi9AH5eicSN6PMtWAGi+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791911088; c=relaxed/simple;
-	bh=9dNcM9X5XKBcssjruktIrFoEkKYg65GWxWsBlvWUxao=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=iutp1eTAaLxKVFdQtQwCp/MMF1b3oEMQf2MhKV9B0ngHVu/R/tWcVhSkE2TgTE29iAi64miwPQK8FHv70oKNbLIYBcCEy+NW0e1mOnm9KgnGwU6kMtnd7qck3TtztujvqwAtva1h7LDL3AcF+cyGzEzCd/LU2X9FB6WpW6vrGmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHhpxNma; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHhpxNma"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B671F000FF;
-	Tue, 13 Oct 2026 17:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791911087;
-	bh=trYYkzD1fUs2CPyc6avA9Aj89H9HqMjaP7lJEkleLw0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MHhpxNma2+XUsPMVZHnq8rTIQWBMavytXojW7y5vd4gUuugEqYGxdRuV8qU3XwwYP
-	 AZIcUXMjujc/YsJgY2YU2XxNRApLORzKbQf/yHrrteWGOgGShuuyE6iQIMpclWNS3w
-	 iBu8BkqypB5Qp8HrYKusRxuaM9ENB7F1tMjDaVI9D9tXByX9d20zvGote51RlW3ZIi
-	 puL/us9LlgbOPGp9XUjcvtSCKVw6sfSHlid6LvnpsM8NjjNsDZn5IcPWGiXUKAclZ6
-	 WZeLj0Pe2LX9+pKUcFKBE9SkSrg/kSXHF+dOQAhq42r5Jv3UV3/GL4QA4TIm7aopsI
-	 8Ju3bft2ogs+g==
-Message-ID: <sashiko-outbox-170187@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v6 11/39] infiniband: update hfi1 to use
- remap_vmalloc_range()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, selinux@vger.kernel.org, bpf@vger.kernel.org, linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-s390@vger.kernel.org, "Oliver
- Upton" <oupton@kernel.org>, "Marc Zyngier" <maz@kernel.org>, "Heiko
- Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-11-1aa3c9b139f9@kernel.org>
-References: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
- <20261013-b4-mmap-prepare-vma-flag-sanify-v6-11-1aa3c9b139f9@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 13 Oct 2026 17:04:45 +0000
+	s=arc-20240116; t=1791911366; c=relaxed/simple;
+	bh=cmkL5KPwFiJiPA+9F2CM+7W4m+sEtAAG3wm8xU08M7c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QoJyjCdmh/UBWnznwRIMv+c4XGyOVAU7JHB3BIo/VJnMMnjYLQiYXJ0gYsK4rhH9eXsX1KO28qWHowMSBIy8AZV8BWo/7mbeKfMpR2dNMWfdTOQvzUgJrNYduzY+sEajwsYKHoqrIwcON+fx+rCR/oodJvPSQMYqRUySa1HXNoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 598D430FB5C2BA; Tue, 13 Oct 2026 10:09:10 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v3 00/11] bpf: Follow up by-value struct and __int128 argument support
+Date: Tue, 13 Oct 2026 10:09:10 -0700
+Message-ID: <20261013170910.2126673-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] mm: VM_WARN_ON_ONCE triggered by vm_flags_reset() in mmap hook
---
+This is a follow-up to the series "bpf: Support by-value struct and
+__int128 arguments" [1], which placed kfunc arguments by the kernel
+calling convention in the x86-64 and arm64 JITs, and made the arm64
+trampoline place an argument aligned to 16 bytes: an __int128, or an
+aggregate holding one. This series covers what was left, and a few
+problems found on the way:
 
-commit a356d47e4beede9d3e032c777130976d06dd5dd8
-Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+  - The x86-64 trampoline. x86-64 starts such an argument passed on the
+    stack at a 16-byte aligned slot, which can leave an empty slot
+    before it, but the trampoline copied the stack arguments as if
+    there were none. A bpf program attached to such a function read the
+    wrong values from the empty slot on, and with fexit, where the
+    trampoline calls the traced function itself, that function got its
+    stack arguments one slot off as well.
 
-    infiniband: update hfi1 to use remap_vmalloc_range()
-   =20
-    In cases which map chip memory from vmalloc()'d ranges, the hfi1 infini=
-band
-    drivers currently installs a fault handler, and then smuggles the kernel
-    virtual address of this range in vma->vm_pgoff.
+  - A trampoline on a BPF function. BPF code calls one with argument
+    slot N where the kernel convention passes its Nth u64 argument, but
+    the trampolines placed the arguments by their types: arm64 left a
+    register empty before a 16-byte argument, and x86-64 would not split
+    one between r9 and the stack. Such a function is now described to
+    its trampoline as one u64 per slot.
 
-> diff --git a/drivers/infiniband/hw/hfi1/file_ops.c b/drivers/infiniband/h=
-w/hfi1/file_ops.c
-> index dc548e6802e24..b02d1f1dbb27b 100644
-> --- a/drivers/infiniband/hw/hfi1/file_ops.c
-> +++ b/drivers/infiniband/hw/hfi1/file_ops.c
-[ ... ]
-> @@ -422,7 +418,7 @@ static int hfi1_file_mmap(struct file *fp, struct vm_=
-area_struct *vma)
->  			ret =3D -EPERM;
->  			goto done;
->  		}
-> -		vm_flags_clear(vma, VM_MAYWRITE);
-> +		vm_flags_mod(vma, VM_DONTEXPAND, VM_MAYWRITE);
->  		/*
->  		 * Mmap multiple separate allocations into a single vma.  From
->  		 * here, dma_mmap_coherent() calls dma_direct_mmap(), which
-[ ... ]
-> @@ -559,12 +546,10 @@ static int hfi1_file_mmap(struct file *fp, struct v=
-m_area_struct *vma)
->  	}
-> =20
->  	vm_flags_reset(vma, flags);
-> -	mmap_cdbg(ctxt, subctxt, type, mapio, vmf, memaddr, memvirt, memdma,=20
-> +	mmap_cdbg(ctxt, subctxt, type, mapio, is_vmalloc, memaddr, memvirt, mem=
-dma,
->  		  memlen, vma);
-> -	if (vmf) {
-> -		vma->vm_pgoff =3D PFN_DOWN(memaddr);
-> -		vma->vm_ops =3D &vm_ops;
-> -		ret =3D 0;
-> +	if (is_vmalloc) {
-> +		ret =3D remap_vmalloc_range(vma, memvirt, 0);
+  - The x86-64 trampoline on a function of a program that can tail call
+    pushed the tail call counter pointer between the stack arguments and
+    the return address.
 
-[Severity: Medium]
-Will this trigger a lockdep warning due to the VMA not being write-locked?
+  - A static function whose BTF is unreliable could still take stack
+    arguments, while its trampoline saved and restored only five
+    registers. Attaching to such a function is now refused.
 
-In hfi1_file_mmap(), modifying the VMA flags using vm_flags_reset() (and
-the newly introduced vm_flags_mod() earlier in this function) enforces=20
-write-lock assertions via vma_assert_write_locked().=20
+  - The x86-64 JIT passed a kfunc's 16-byte aligned stack argument at an
+    address that was only 8-byte aligned, while the callee may rely on
+    the alignment.
 
-Because the VMA is not yet inserted into the tree and is not write-locked=20
-during the mmap callback, its vm_lock_seq is uninitialized (UINT_MAX) and=20
-will not match the mm lock sequence. This triggers a VM_WARN_ON_ONCE_VMA.
+  - Tests with an __int128 at an odd slot, where arm64 leaves a register
+    or a stack slot empty. On arm64 such a kfunc gets BTF only with the
+    pahole patch [2], now in pahole master after v1.32, so these tests
+    were not part of [1].
 
-Should vm_flags_init() be used instead?
+Patch 1 keeps the x86-64 trampoline's tail call counter pointer clear of
+the stack arguments, and patch 2 tests it. Patch 3 adds the odd-slot
+kfunc tests. Patch 4 describes a BPF function to its trampoline as one
+u64 per slot, and patch 5 places the x86-64 trampoline arguments by the
+calling convention. Patches 6 and 7 test trampolines on kernel functions
+and on BPF functions with an argument after a 16-byte aligned one. Patch
+8 refuses a trampoline on an unreliable static function with stack
+arguments, and patch 9 tests it, along with a BPF function whose 16-byte
+argument x86-64 splits between r9 and the stack. Patch 10 gives a
+kfunc's stack argument the 16-byte alignment it needs on x86-64, and
+patch 11 tests it.
+
+  [1] https://lore.kernel.org/bpf/20260912195156.980886-1-yonghong.song@l=
+inux.dev/
+  [2] https://lore.kernel.org/dwarves/20260917164043.1577508-1-yonghong.s=
+ong@linux.dev/
+
+Changelogs:
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20261013003429.1853052-1-yonghong.s=
+ong@linux.dev/
+    - Index the two halves of a struct holding an __int128 in ctx by the
+      byte order, so the tracing tests also hold on a big-endian
+      kernel. (patches 6, 7 and 9)
+    - Say that only x86-64 BPF code splits a 16-byte argument between r9
+      and the stack; on arm64 nothing is split. (patches 4 and 9)
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20261009064206.1238047-1-yonghong.s=
+ong@linux.dev/
+    - Replace the bpf_tgt_prog flag of v1 patch 2, which only
+      bpf_jit_place_args() looked at, with a model of one u64 per
+      argument slot for a BPF function, built in
+      bpf_check_attach_target(). This also fixes the arm64 trampoline,
+      which took a 16-byte argument split between x7 and the stack as
+      wholly in registers, without any arch change. (patch 4)
+    - Refuse a trampoline on a static function whose BTF is unreliable
+      but which takes stack arguments. (patches 8 and 9)
+    - New: keep the x86-64 trampoline's tail call counter pointer in a
+      slot of its frame instead of pushing it between the stack
+      arguments and the return address. (patches 1 and 2)
+    - New: pass a kfunc's 16-byte aligned stack argument 16-byte aligned
+      in the x86-64 JIT, with bpf_jit_stack_slots_to_align() and
+      bpf_jit_plan_slot_moves() in kernel/bpf/core.c. (patches 10 and
+      11)
+    - Reword the x86-64 placement patch and the BPF function test for
+      the new model. (patches 5 and 7)
+
+Yonghong Song (11):
+  bpf, x86: Pass a trampoline's stack arguments by the calling
+    convention
+  selftests/bpf: Test trampoline stack args in a program that can tail
+    call
+  selftests/bpf: Test by-value __int128 kfunc arguments at an odd slot
+  bpf: Describe a BPF function to its trampoline as one u64 per slot
+  bpf, x86: Place trampoline arguments by the x86-64 calling convention
+  selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
+  selftests/bpf: Test trampoline args of a BPF function at an odd slot
+  bpf: Refuse a trampoline on an unreliable static function with stack
+    args
+  selftests/bpf: Test trampolines on more BPF functions with stack args
+  bpf, x86: Give a kfunc's stack argument the 16-byte alignment it needs
+  selftests/bpf: Test that a kfunc gets its __int128 stack argument
+    aligned
+
+ arch/x86/net/bpf_jit_comp.c                   | 276 +++++++++++-------
+ include/linux/filter.h                        |   5 +
+ kernel/bpf/core.c                             |  50 +++-
+ kernel/bpf/verifier.c                         |  66 ++++-
+ .../selftests/bpf/prog_tests/tracing_struct.c | 217 +++++++++++++-
+ .../selftests/bpf/progs/aggregate_arg_kfunc.c | 113 +++++++
+ .../progs/tracing_stack_arg_tailcall_tgt.c    |  59 ++++
+ .../progs/tracing_stack_arg_tailcall_tracer.c |  23 ++
+ .../bpf/progs/tracing_struct_int128.c         |  54 ++++
+ .../bpf/progs/tracing_struct_int128_tgt.c     |  98 +++++++
+ .../bpf/progs/tracing_struct_int128_tracer.c  |  82 ++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  84 ++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  15 +
+ 13 files changed, 1025 insertions(+), 117 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_stack_arg_t=
+ailcall_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_stack_arg_t=
+ailcall_tracer.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tracer.c
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013-b4-mmap-pr=
-epare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org?part=3D11
+2.53.0-Meta
+
