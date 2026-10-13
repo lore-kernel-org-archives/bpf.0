@@ -1,174 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4F54FD294;
-	Tue, 13 Oct 2026 12:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760D83FD955;
+	Tue, 13 Oct 2026 12:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791893138; cv=none; b=NtuRzfIy46DpBNTcn8T9osgLfn0lMH7GRxl6DoOA7KPhGMTZ6GI0rjPbVQeuUT+AYjnq+n/aAZQnYcBzbfKFXqG5nJ6fKxhIpGo5/WaVhFuwFODNerWDIKDUTq7baeArJvJtD9wpQOnc6yhW+hLKOKYjNKpzuHDdyBGwaMdAy3g=
+	t=1791893178; cv=none; b=W0cOB5ZoB7AVdiPND+yuaMl8NdcU0ld4kY9RDUgxQhdb6H18qVYFQNVxCRLHdiqogo9SjGFXe8rCYvzrUjJ/kuNCMcnlqKnNm/VIkbVBLeq0hb4d6YjmBsVccby4TWKdx3MNbn1GzT1T29E2qMEsvW6o8n8otQ52TD7/RN2jBDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791893138; c=relaxed/simple;
-	bh=RDMRTrW0f3C3n6sfr4GOtlMFWKPHFCkzDNSTMcYfzBA=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HuzHBzXE97svt4uMJqxLwdsPa92KXqJVxcZRmsQmPcffmXgLOOAmMsnENgZjTVXno5C5CEAULEVsswGp/JyudWpGJV4df8a5SX8VTL/bPwagXqa+JAk5kw4y+NHPGHo0atQDS90+QSww5n7OxXkJcFQ6FWOo5c0VtqWaMNqUOaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UYUCUYBu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791893178; c=relaxed/simple;
+	bh=A4+2RIjVH4PDDEkF7kuXITq+214r5Ljx7gquaEjiI04=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=CpgltS87kEfquN1kLpZu4f/Dvjcii0PXFrsEYY9twZUMoqm8v1JguWa78a5TkxL1sG5Y/J47GyqMc2Cuo1qGulRFX6qWO4TtUVPA2DdXgV4aQpCc813267HA8zFsDD+rdMA82umbcOOmEQCfP8mLUte9TPYs+0lkY/m1hEM9Ejg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=x4RpA1an; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UYUCUYBu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44081F000FF;
-	Tue, 13 Oct 2026 12:05:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791893136;
-	bh=eLuxRn0HI2+L+S6CnDQ4l8LJp0sYjVvvTXXp9+IBAHo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=UYUCUYBuiyIaDPFtO253R/aGLmOqURdE9bx4Xmeo1IwU7pyr7f4mZy3waipQkeLq/
-	 P02AKQBdjt9YhjniVh2YTLHsid5FRMGZMnFFM55Kebr/cm9w8HKONzxyJf1T1B2OeC
-	 2gQ13mS8/xAyrBJwoxvSujWXqNKJ/w2YdCWXOQvNtX5m8BMPwo59louhBkl22ijTGr
-	 ChosmSQtL38e8ayWUX0zBTCsz+ni6qxPuajw3nsC0n0wP7fEPS6HNb+x+pNwdinVnn
-	 /sf8hoXfBa7j43AEvTkChC+7f3E/SMyAPw+flSv+r/518az5eHXiBaHDrH5kgy2JzU
-	 dY+oou8JXsueA==
-Subject: Re: [PATCH net-next v2 2/4] eth: mpnic: report per-queue stats
-From: netdev-bot+sashiko@kernel.org
-To: daniel.zahka@gmail.com
-Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, edumazet@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Tue, 13 Oct 2026 12:05:35 +0000
-Message-ID: <179189313526.434549.10762925482009523771@kernel.org>
-In-Reply-To: <20261012-mpnic-counters3-v2-2-8afba81c2d5a@gmail.com>
-References: <20261012-mpnic-counters3-v2-2-8afba81c2d5a@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="x4RpA1an"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5B73CA154D;
+	Tue, 13 Oct 2026 14:06:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1791893169; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=eMLdNmdNwgUmvAo6yFCQwGyE2IXMBMPu/dG68ponrNc=;
+	b=x4RpA1anJUuS6zo86bux7WVQtdYUwwEKX5gOg2e6Pmj7RB5A1O08u9aUZnNZavuNduP+Mz
+	DbQ/tQKRZvQ8yb8BG5QDHf7vULvBdcN+Lrg0Mz6nLbkgJ3dYPqixPoUfGaoBkswyuC13ZZ
+	8WW6NckeKULzD80LBeWQ0v2xm2ttFX5yYTiT446qZum2Xm8+VzCQY8LF4oReLmDXeNKnqG
+	jIcHHAjUI7HAZBPltTfQ1avQsgmlS6Paxc2InQPR3mXFxLFEdg3+eV7eM8NLHGsRij8ncg
+	Eh24DGwxRDd8daIFQ2hJQO4JQ3fT17UiTjJWK7/R6tyt8lXjF1MXaIMpZgD6xQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Tue, 13 Oct 2026 14:06:06 +0200
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Kurt Kanzenbach <kurt@linutronix.de>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Eric Dumazet
+ <edumazet@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Song Yoong Siang
+ <yoong.siang.song@intel.com>, Mohd Faizal Abdul Rahim
+ <faizal.abdul.rahim@intel.com>, Ong Boon Leong <boon.leong.ong@intel.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net v3 2/2] net: stmmac: Stop Tx queue when (en|dis)abling
+ XSK pools
+In-Reply-To: <20261013-stmmac_xsk_crashes-v3-2-50fca7790af2@linutronix.de>
+References: <20261013-stmmac_xsk_crashes-v3-0-50fca7790af2@linutronix.de>
+ <20261013-stmmac_xsk_crashes-v3-2-50fca7790af2@linutronix.de>
+Message-ID: <cccec8df7c85b987bc67affeedfe40e2@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+Hi Kurt
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+On 13.10.2026 10:57, Kurt Kanzenbach wrote:
+> When enabling or disabling XSK pools in parallel to Tx traffic, kernel
+> crashes occur. For VLAN tagged frames that happens in stmmac_xmit() ->
+> dwmac4_set_vlan_tag() and for normal frames in stmmac_xmit() ->
+> dwmac4_set_addr(). Both of these functions access the Tx DMA 
+> descriptors.
+> 
+> The XDP pool (en|dis)ablement frees and reallocates the Tx DMA 
+> resources:
+> 
+>  stmmac_disable_tx_queue:
+>    __free_dma_tx_desc_resources
+> 
+>  stmmac_enable_tx_queue:
+>    __alloc_dma_tx_desc_resources
+>    __init_dma_tx_desc_rings
+> 
+> NAPI is disabled during that allocation window, but the Tx queue is not
+> stopped. Therefore, add the stopping of the Tx queue during the 
+> enabling
+> and disabling of XSK pools.
+> 
+> The issue can be easily reproduced by:
+> 
+>  1. Run iperf
+>  2. Run application which opens an AF_XDP/ZC socket
+> 
+> Also add a dedicated queue check for the XDP Tx paths.
+> 
+> Fixes: 132c32ee5bc0 ("net: stmmac: Add TX via XDP zero-copy socket")
+> Suggested-by: Nicolai Buchwitz <nb@tipi-net.de> # XDP Tx checks
+> Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> [...]
 
-- [Medium] This patch reports the RCQ `rcq.packets` and `rcq.bytes`
-  counters as the netdev qstats `rx-packets` and `rx-bytes` attributes.
+Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
+Tested-by: Nicolai Buchwitz <nb@tipi-net.de> # stm32mp215
 
---
-
-eth: mpnic: report per-queue stats
-
-This commit exposes the per-ring packet and byte counters through the
-netdev queue stats API. Counters for deactivated rings are reported
-through the base stats.
-
-> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
-> index 5164475a0f943..c2f4a326a8f0f 100644
-> --- a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
-> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
-
-[ ... ]
-
-> @@ -146,6 +147,77 @@ static const struct net_device_ops mpnic_netdev_ops = {
->  	.ndo_get_stats64	= mpnic_get_stats64,
->  };
->  
-> +static void mpnic_get_queue_stats_rx(struct net_device *dev, int idx,
-> +				     struct netdev_queue_stats_rx *rx)
-> +{
-> +	struct mpnic_net *mpn = netdev_priv(dev);
-> +	struct mpnic_ring *rxr = mpn->rx[idx];
-> +	struct mpnic_queue_stats *stats;
-> +	unsigned int start;
-> +	u64 bytes, packets;
-> +
-> +	if (!rxr)
-> +		return;
-> +
-> +	stats = &rxr->stats;
-> +	do {
-> +		start = u64_stats_fetch_begin(&stats->syncp);
-> +		bytes = u64_stats_read(&stats->rcq.bytes);
-> +		packets = u64_stats_read(&stats->rcq.packets);
-> +	} while (u64_stats_fetch_retry(&stats->syncp, start));
-> +
-> +	rx->bytes = bytes;
-> +	rx->packets = packets;
-> +}
-
-[Severity: Medium]
-Do rcq.packets and rcq.bytes match the qstats meaning of rx-packets and
-rx-bytes?
-
-The netdev.yaml spec defines rx-packets as "Number of wire packets
-successfully received and passed to the stack". It defines rx-bytes as
-"Successfully received bytes, see rx-packets".
-
-In mpnic_clean_rcq() in mpnic_txrx.c, packets++ runs for every META
-completion, including completions where the driver drops the packet:
-
-drivers/net/ethernet/meta/mpnic/mpnic_txrx.c:mpnic_clean_rcq() {
-    ...
-			if (likely(!(rcd &
-				     MPNIC_RCD_META_UNCORRECTABLE_ERR_MASK) &&
-				   !state->pkt.add_frag_failed)) {
-				bytes += xdp_get_buff_len(&state->pkt.buff);
-				skb = xdp_build_skb_from_buff(&state->pkt.buff);
-			}
-
-			if (likely(skb)) {
-				napi_gro_receive(&nv->napi, skb);
-			} else {
-				mpnic_put_pkt_buff(&state->pkt, true);
-				if (rcd & MPNIC_RCD_META_UNCORRECTABLE_ERR_MASK)
-					errors++;
-				else
-					dropped++;
-			}
-
-			state->pkt.buff.data_hard_start = NULL;
-			packets++;
-    ...
-	u64_stats_add(&rcq->stats.rcq.packets, packets - errors);
-	u64_stats_add(&rcq->stats.rcq.bytes, bytes);
-	u64_stats_add(&rcq->stats.rcq.dropped, dropped);
-    ...
-}
-
-Only errors are subtracted from packets. If add_frag_failed is set, or if
-xdp_build_skb_from_buff() returns NULL, the packet is counted in dropped
-and also in rx-packets.
-
-The buffer length is also added to bytes before xdp_build_skb_from_buff()
-runs. A failed skb build therefore still counts toward rx-bytes. An
-add_frag_failed drop adds to packets but not to bytes, so the two
-counters also disagree with each other.
-
-mpnic_get_base_stats() reports the same values once
-mpnic_aggregate_ring_rcq_counters() folds them into base->rx. The
-miscount carries over after a ring is deactivated.
-
-fbnic_clean_rcq() handles this by jumping to next_dont_count for dropped
-packets, so they are counted in neither packets nor bytes. Could mpnic
-do the same?
-
-The counter semantics come from "eth: mpnic: count packets, bytes, and
-drops per ring" earlier in this series. This patch is the one that
-exposes them as qstats rx-packets and rx-bytes.
-
-The later patch "eth: mpnic: count Rx allocation failures" also counts
-skb build failures in alloc_failed. Those packets still stay in packets
-and bytes.
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-mpnic-counters3-v2-0-8afba81c2d5a%40gmail.com
+Thanks,
+Nicolai
