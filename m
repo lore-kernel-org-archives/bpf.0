@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-85.mta0.migadu.com [91.218.175.85])
+Received: from mta0.migadu.com (out-132.mta0.migadu.com [91.218.175.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D4050255F
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 14:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.85
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B11A51354F
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 14:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791901566; cv=none; b=fuWjyXe3/iPacfQIbxPSeSYzApoLbOrcFwdkfk5atIMmVPYyBgApZYL4XSPuk2+en6o42gDmQI5BgnpjWBNzONnIvnD4mYi/UVVQHUmQnCwIQntolSymJe06Qzpj3yMXDtkz/xkacHaxa/z9NVfcPAdEhNgfUNRXGuquVIRE0WU=
+	t=1791901875; cv=none; b=jqxGU5ZtPYB7PPh0EsOcHo9Vjd4/E1OV9aLxdofqD8lBIeeN6HFi0868LDPwaZ+vQVl+IaRpiYKlklRs/MA1Gnse7WMEIgjKssnmfKt3ckJKGD1NP6Yg5zwX4j9JkGwexdb6zoOwVrvvI0zYich3Rje4EYl/0Xtlu2BkqZzr3Ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791901566; c=relaxed/simple;
-	bh=NyLlmoJrUzrbPSJQk0ZNFoepQqGUbwDRoFt1ZJcd/EM=;
+	s=arc-20240116; t=1791901875; c=relaxed/simple;
+	bh=aFdW3Sl2DZKCyvfpKxTeKspxeSwzXnp+EUtyc1/WGH4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bM3LrsZdjLQxjcDu4Z86I/dG9ry8ZqMfNWvkvAPDzrSMzkU76ubyPOS3IPoNWEANa+LgwIqjBmvW87U4oZhL6bGivNLHHUCiduz3aidjXG9o0/nmTRwlTJUhO9Sj93AEZS08XH20xQ9xciMdEljmKCpDjLSXeta0ThAt/zTMmwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yg+CTecB; arc=none smtp.client-ip=91.218.175.85
+	 In-Reply-To:Content-Type; b=QaW5FgaY/dAJyhbWHtTrnueqyvTreJX7F/BC8XTYypqEvNi604qgINZNq21aVo0fxJpVacZy6+rPZUttTFSuOFnMxwQoZg4W3S5SH+J4EhYqul77y301kmlFtmXyeJVrK89WJf8TezE4TFv2Srz6gjihp3/Cya6AsO5HdOo1po8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eoJlvh64; arc=none smtp.client-ip=91.218.175.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yg+CTecB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eoJlvh64"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NyLlmoJrUzrbPSJQk0ZNFoepQqGUbwDRoFt1ZJcd/EM=;
+DKIM-Signature: a=rsa-sha256; bh=aFdW3Sl2DZKCyvfpKxTeKspxeSwzXnp+EUtyc1/WGH4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791901561; v=1; x=1792506361;
- b=Yg+CTecBAyt/B5NexlmwMiE1DkpLv4NKVOOqfBXnmnwplVYiruGJVjX/MqvDf8Fb9n1xssCP
- kcoV33HZiiVejTap9lMLRGk2GzFHXG5hBa7JnHC/LWUuHCEp7AyBwaWeUGlO7msYHkwer1DFuO1
- l8jkfBMyZUFOw7pIhMFoNXt8=
+ t=1791901871; v=1; x=1792506671;
+ b=eoJlvh647ta7e54BFajN8zCUa+NouzYbkrznGYAZm4bjoOFNQmTnK/ByQJ01onAN1FtkVgVI
+ d82sV4qaNjL0/XZoS8MIPA4J20x6lwXFHFGmWuhgy7X9NyXAVj9ad6GoxebiEu5aiWAxXzREyeu
+ /DroAWWAXLghlgUIhYrPuJIY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e0d2199c220c93f6;
-	Tue, 13 Oct 2026 14:26:01 +0000
-X-Mizu-Trace-ID: e0d2199c220c93f6
+Received: by smtp.migadu.com with ESMTPS id e5967c2a850c3aa8;
+	Tue, 13 Oct 2026 14:31:10 +0000
+X-Mizu-Trace-ID: e5967c2a850c3aa8
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <4c2cf439-63b2-43c8-87f9-7c51125c3cc7@linux.dev>
-Date: Tue, 13 Oct 2026 07:25:59 -0700
+Message-ID: <95eb26fb-f44e-48df-a549-5c2a9959f88c@linux.dev>
+Date: Tue, 13 Oct 2026 07:31:04 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -40,84 +40,72 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf-next v2 09/11] selftests/bpf: Test trampolines on more
  BPF functions with stack args
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261013003429.1853052-1-yonghong.song@linux.dev>
- <20261013003515.1860439-1-yonghong.song@linux.dev>
- <sashiko-outbox-168817@kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261013003515.1860439-1-yonghong.song@linux.dev>
+ <e1e2e14c0e37c53d1bee32ec10d50b60f46c645c37b2b1cbf832a66c8fb84967@mail.kernel.org>
 Content-Language: en-GB
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <sashiko-outbox-168817@kernel.org>
+In-Reply-To: <e1e2e14c0e37c53d1bee32ec10d50b60f46c645c37b2b1cbf832a66c8fb84967@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 10/13/26 2:51 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf: check_unreliable_func_args incorrectly counts slots, allowing corrupting trampoline
-> --
+On 10/13/26 3:28 AM, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Test trampolines on more BPF functions with stack args
+> TL;DR: Nit only: the callee_split() comment in the selftest says h is split
+> between register and stack, but that is x86-64 specific; on arm64 nothing is
+> split. Suggests saying so.
 >
-> commit c87f5bcaff5cc54c864fa434bbfefe8d6bff2bbc
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> selftests/bpf: Test trampolines on more BPF functions with stack args
->
-> Add two functions to the BPF target program of the int128_tgt_prog test.
-> callee_split() takes a struct holding an __int128 after five u64s, so
-> on x86-64 it is passed split between r9 and the stack.
->
->> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
->> index ad46eabe784f8..e68fd5627ec1c 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+>> diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+>> --- a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+>> +++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
 > [ ... ]
->> +/*
->> + * A static function whose BTF is unreliable gets a trampoline that only knows
->> + * of the register arguments, so one taking stack arguments must be refused.
->> + */
->> +static void test_tgt_prog_unreliable(void)
+>
+>> @@ -44,6 +44,25 @@ static __noinline __u64 callee_stack(__u64 a, __u64 b, __u64 c, __u64 d,
+>>   	       i * 10;
+>>   }
+>>
+>> +/* BPF code splits h between the last argument register and the stack. */
+>> +static __noinline __u64 callee_split(__u64 a, __u64 b, __u64 c, __u64 d,
+>> +				     __u64 e, struct int128_arg h, __u64 i)
 >> +{
-> [ ... ]
->> +	err = bpf_program__set_attach_target(tracer->progs.unreliable_entry, fd,
->> +					     "callee_unreliable");
->> +	if (!ASSERT_OK(err, "set_attach_target"))
->> +		goto out;
->> +
->> +	err = tracing_struct_int128_tracer__load(tracer);
->> +	ASSERT_ERR(err, "tracer__load");
->> +	ASSERT_HAS_SUBSTR(log_buf, "unreliable BTF and stack arguments", "log");
-> [Severity: High]
-> While this test accurately checks callee_unreliable() which takes 6 scalar
-> arguments, is there a potential issue in the verifier's
-> check_unreliable_func_args() when dealing with struct arguments that occupy
-> multiple slots?
+>> +	return a + b * 2 + c * 3 + d * 4 + e * 5 + (__u64)h.v * 6 +
+>> +	       (__u64)((unsigned __int128)h.v >> 64) * 7 + i * 8;
+>> +}
+> This isn't a bug, but is this comment accurate for every architecture this
+> test runs on?
 >
-> In kernel/bpf/verifier.c:check_unreliable_func_args(), if
-> btf_distill_func_proto() fails (e.g. because an argument is a struct larger
-> than 16 bytes), the fallback path counts the number of arguments instead
-> of 8-byte slots:
+> test_int128_tgt_prog() is built for x86-64 and for arm64, and a..e already
+> occupy R1-R5 in BPF terms, so h and i are each stack arguments as far as
+> the BPF ISA is concerned.
 >
-> 	if (btf_distill_func_proto(NULL, btf, func_proto, tname, &m)) {
-> 		/* at least a slot for each argument */
-> 		nslots = btf_type_vlen(func_proto);
-> 	}
+> The split between a register and the stack only comes from the x86-64 JIT,
+> which maps the first stack argument slot to r9:
 >
-> For a BPF subprogram taking a 32-byte struct by value and 4 other arguments
-> (5 arguments total), the actual slot count is 1 + 1 + 1 + 1 + 4 = 8 slots
-> (meaning 3 slots are on the stack). But the fallback calculates nslots = 5.
+> arch/x86/net/bpf_jit_comp.c:x86_arg_reg[] = { BPF_REG_1, ..., BPF_REG_5,
+> X86_REG_R9 }
+>
+> On arm64 the first three stack argument slots are mapped to x5-x7, so h
+> would land in x5/x6 and i in x7, with nothing split.
+>
+> The commit message already says "on x86-64 it is passed split between r9
+> and the stack", and the comment on the neighbouring callee_stack() names
+> x86-64 and arm64 separately.
+>
+> Could this comment say that the split is x86-64 specific, for example "x86-64
+> BPF code passes h in r9 and its first stack slot"?
 
-The compiler should already change 32-byte struct to a pointer to struct,
-so the actual slot count should be 5. So we should be okay.
+You are right. The comment is not good. Will fix.
 
 >
-> Since 5 <= MAX_BPF_FUNC_REG_ARGS (5), check_unreliable_func_args()
-> incorrectly returns 0, permitting attachment.
 >
-> The generated trampoline will not save or restore the stack arguments.
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 >
-> Does this cause the target BPF subprogram to read uninitialized stack
-> memory from the trampoline frame as its arguments, leading to data corruption
-> and undefined behavior?
->
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38329598343
 
