@@ -1,301 +1,385 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD089472783
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 18:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE01517BA2
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 18:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791915865; cv=none; b=DfbexNQ6+ZGeeU003qfh6MLltvd6pTaRRE6p21m0n88e2vGcPghpZXPJcqZH98sqJ9lmBLO8NG9RS4y26Tapq7HQjn+f8qTW00zdLzYY+5qIssNmZ+mO8rk9SBcGw4gBgKO9R4xcuVV3/pDGBZdyl6sgnv9JvCEqA+tdJC8eRVc=
+	t=1791916054; cv=none; b=KPiNpGRdQDSJsLGslbMf4wlemTKekA4vFS1ttaVfoE50WZk/dKsFalHBMHf3Gaon1rl6NxZ/6wN713Xxd2SoNg4l8VA4Cj9er0NyWxkeTJbXnJ5v9ypXe/hOPx+dp1kFyii9wU2FF6GJ0fBDDIF9LrrDZZFsYoxU2B7//Vi7hiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791915865; c=relaxed/simple;
-	bh=7if6Umjv6zt+eB/TyjHQ2M8+DtW8+u3VSI2lHM1qgmg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=T80FsUa+b/VSoIqvfzKeiEiKsS+JZll+Ds2CZiOjasloIgLL6cX3QubaEYRRw0pUi2H97l7OZ2hfar9G+KNuayp8MJ+UKinSI2bVESTmdO+1Fj4QwFjVelVVQ5HG/9jo5fPEHklDBnbtDk7QmpQXOVUxv93Xs0v/lsHEmNstS24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XqJNxkBs; arc=none smtp.client-ip=209.85.161.44
+	s=arc-20240116; t=1791916054; c=relaxed/simple;
+	bh=KgfLtkjemoJDRzRz79tgx72By9fLqPq7ZnG/aHJCE6U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hjyxvf/IYo5yvSWWkn/wJIKUZZf5ckw0I6mgTMs5sVUw0BjbWDcINiRnDMPESoEt246xQKNKW8x0tSg9MDaHypOe3GMBcAwySKXlq3hKCOIsPdY4iZhl2OoXnaLf2p+m3HDreeMz9h92g0s+BDFmOtkqWuvdgE6C16OYQ8Vd8Dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mek/oxSs; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XqJNxkBs"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6f5a0893610so165234eaf.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 11:24:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mek/oxSs"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-48b02b1b4cfso3429775f8f.0
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 11:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791915862; x=1792520662; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=CrakmgXMtdoVnoNgswFtoyyOjaZ8kjF18Znv/ag/z9w=;
-        b=XqJNxkBsJHmlkDK7nYs+PNCHCQJa23Y7cWpCHDeNvhK7Es7tLulS6PKfJB02UK7Bxg
-         nIbnXoO2DYtt7D6NT5r000Fu8/dAVduYFnVNLN4s8sLGY/r8EjpHrDYxenEHrC4zC+i5
-         UE04Trw2u4fBsa9XtSSVgRpw6mMzWPYC+de3xee7m180tNvJOXzhtQvr7RhUJmjcX7hn
-         QAMAbtV/GpyepXnGNPqiTCUtdNT+iTMAB1L1VPckO7Tu9apF/hSW9WZFq8fQUwvQ+/8E
-         +1v5G5ZO+N6zZpOV2EOCRdUam5Q0zcbOR6ns5xnsigKTakc8a/82Eb6Wre2taNNNMv3G
-         GRIw==
+        d=gmail.com; s=20251104; t=1791916050; x=1792520850; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=El7V+Nu/0GblZkWD/bQdXseCG+PWhlkrTXZyM5KkrnQ=;
+        b=mek/oxSsIWYwYRqDFeEf+B9A+RrhbrRRcpFEzlFnbCwUWncDAhxZv48ftvitJ67BMS
+         Ti+bPX8oQixzpvGxDjtmWXE40knyISuJYoBEuIp9CM1H4pWL9kxZfvy8OX+C6hedABbf
+         1jBxbz+gA//vNltyMwOuvYfvq05Wavz2dDYriVy5xOxNwsrBDiDB/uO0HGMkDvv2gKXI
+         BYztNEHgSt38UB6wQmi1opP2tPvM/OiDj0yvJZdDcxPAMvgPksWi/BMbfoTKOCj85iAS
+         rR9zfXjtqAJttlc+BSnWF/3UIqritThaOf/CPLP2NiED6eN//xf/ScEtHs2eIr0mlq+H
+         S3+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791915862; x=1792520662;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=CrakmgXMtdoVnoNgswFtoyyOjaZ8kjF18Znv/ag/z9w=;
-        b=ZeQfvO/hGROp/d40s2UpwRhN00rzqzldPtk7m+pz/B+uU5A+KOiWIiNXh6llBIgPeP
-         tpYh8/vz2+n4S1NXwendE2UWKKaHJJC7HQJH8MKxMNwZx5QGn3fuFMd9MVaNqZRlvBBL
-         IQsjdpaIFy1QksfGaAZ5GmC9hO1sqGWUhR+i8M1qySRyTdU4GotHfAw6IkBr0RFwx7FY
-         yzZrtazob/ryqeTdbvG0o5q+KdFPdg+q5oUa5WEQbikQRDEz37tsU20HIY6HTeRKbsPH
-         79ozulSKpUUGgdiPIdir2qdzhhO5mCep9pnxOFewrfDqwEktiTwr+EoN7oAXZHv6RsNr
-         v5sw==
-X-Gm-Message-State: AFq9FYKGPszSmgIt6QPFUK7uJ+qv9KmoCb7NE+ye3+BpXAfK49PYWxys
-	TapoiO7Luye2w92jJVpsGqG//2y4gIUT1DTaNhpohPMAWB3rFs/wY4Wc
-X-Gm-Gg: AYBFou2MefYnHOY83QENJF3VJbzGXh3AR5bILQJyLJj8LDCwo71EXvUwOaaKzZAeNZi
-	0rQ8NtPCS84RKXKB692v0jYB3jX8n7Sk+9BipZkZ/4fYEOi6+GIjF+cwGcLslHs1bEFkwP5iWj7
-	E88RLvhmAzUcO3zre1k3RCKkBZGqsstCiLm/13/xaufYBeS86CARcbk01qCD27S7YFVAhkRVBho
-	FKNiOIpqb7YQgx3G4WkWA6DlNfSCVswW5e9Al+DNj7lo+Ey7IF9XGg7+ZupIw681jBaz+T1gclg
-	Zh9Sc5z3EnEL62k/ywpRsVo5rTNrYC22msEglhkunBg0qNq2I1Vl4t4PAcU0nhtDVD/djdfTDy1
-	npqgbGJp1xObuy8LeIFFT/yTf68X9TXM6oj1picaiBHlyCTtTb9FjlNr5gslr/IvNExCyN+vXDQ
-	JskSh0GLKsgpr6fXOdCdJKygv61bAaNX+a9+NuwKpqXuX0qBXdp5IUl7Dts5H4bF4/rTrIQIeRW
-	pJlx/iMcCLc4P1Swtb8y3tO+KrinYFDQfe6kXjzk488nZyex8ZJk0UfSHtwihenfDimSdHBT+Os
-	ZODU5SlcH3eyFaEllBOihUW1UhtswG4P9nJoZqGplKGqmEmq0ar6o82EJ2fC05BARI3avkrDW+Z
-	0gnxOMCtKu8dlVo1DJn2NSw==
-X-Received: by 2002:a05:6820:4c13:b0:6d7:4142:8b8c with SMTP id 006d021491bc7-6ef0fa9d818mr9965327eaf.64.1791915861931;
-        Tue, 13 Oct 2026 11:24:21 -0700 (PDT)
-Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6eef6e22b46sm12627103eaf.0.2026.10.13.11.24.20
+        d=1e100.net; s=20260707; t=1791916050; x=1792520850;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=El7V+Nu/0GblZkWD/bQdXseCG+PWhlkrTXZyM5KkrnQ=;
+        b=F6LQCjvf4BTs8qE4C92h3C1+XIMIRYngPvbTIpwrbon3SplAZ5T5vBx9And6EITKP1
+         txZ6CWJEVFybNwbgvrR5GRJKEOuqJC+7Dznkokd+3ucRMafQ1XsV7UEZuekm/4v++Ry3
+         QNIRUfR54eh+/4S5eFlxopKhvILyzGct+RIjdcJ8Ge3VuoUX7YEsrk6liX90TmmFaEui
+         aXeMsCsv+np2of+SwILfmBqruC6z4aOa2Jtc/5cyKIv6BrQElitGvvgHn6whd8uZAP+k
+         0Kk34Jn+X0NsLQ37RAil4kOrDjmE0IqIVg6ihX2ylHLeEVF0DLyzkLkJqbfcilW2MS3y
+         bG6Q==
+X-Gm-Message-State: AFq9FYJSv9xYcHkDFMGAp59Ys98gqisVtXjzZMkhQG1sNJaUu56caBLi
+	jrSVA8EML0PATHhhkBmWyMizElpSsR/HhRIXbCMxbJd0drvyItmMdbuBif0R1lj6d9XSYQ==
+X-Gm-Gg: AYBFou3JWH8UBYCQLCzSI4B+ZI/UCC+nFZXDclrygypHeiyz+liB4rsQ7m/jVpG8g6A
+	h193OVfixkqjNnf7up+V4OGrrcKHlinnUuPu1AvQdsBTo88Acf7yk1qUMzNXznjbqHXLEFQ3clu
+	fG8bEkIDuPozZIAk24/gWnAH5EtyYV9/s8j4OIRFJDifPT5c8MqPMfyIEDMKT4G5jL5kiKmc88q
+	G2sw4L6VYgQ6zflpzwVAXOsl8MWzVYzmioRVAobWovnd9+YzyV/VSw1HXnON2IB6dCiJWfzhbN9
+	e5XsIpOi7/tp06ZpQfOmrToauQ139OgMi6I0YthEyvR3RO+WYVLjaxh0b6g4chtihtYgJf4A3ep
+	kEjPAqT30+gyafeQG7GDOz295naEFP/HDwdonLSOrXR+c/qLf5fpfEpdAbRF5TI6+BpXUb76pIY
+	QJXw9Pe5CR6zOuyxKEFlFHYE9Sfz+KaTop7uINdxRaIGFObE8VNXbAup7hS3mUVLIMU4fuY2+N1
+	xA73B05axPS4hoyr18+wgtm7PV7AB1FfYA18561Qznbfg==
+X-Received: by 2002:a05:600c:5254:b0:4a0:20b4:ba93 with SMTP id 5b1f17b1804b1-4a18e4aa11dmr275071405e9.16.1791916049899;
+        Tue, 13 Oct 2026 11:27:29 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4a195002123sm395882095e9.1.2026.10.13.11.27.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 11:24:21 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 13 Oct 2026 12:24:19 -0600
-Subject: [PATCH net v3] xsk: freeze deferred pool teardown without blocking
- unregister
+        Tue, 13 Oct 2026 11:27:29 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	eddyz87@gmail.com,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	liamwisehart@meta.com,
+	martin.lau@linux.dev,
+	pabeni@redhat.com,
+	song@kernel.org,
+	netdev@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	ameryhung@gmail.com,
+	kuniyu@google.com,
+	memxor@gmail.com,
+	jiayuan.chen@linux.dev,
+	Mahe Tardy <mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v2] bpf: allow ksock connect/send calls from wq
+Date: Tue, 13 Oct 2026 18:27:26 +0000
+Message-ID: <20261013182726.276372-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20261013-xsk-suspend-teardown-v3-1-2d6be7602947@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NQQ7CIBAF0Ks0rMVMh1rBlfcwLhCmLVFpAxVrm
- t5d0oVxo8s/P/P+zCIFR5EdipkFSi663ucgNgUznfYtcWdzZghYgxLAp3jl8REH8paPpIPtn54
- rwEbJCqRRguXXIVDjppU9MU8jO+dj5+LYh9c6lcq1+q+mkpdc10YbaUDAhY7tXbvb1vT3FUz4Q
- UqA3Q8EM4JW7hFlUwlU38iyLG/bi9SeAgEAAA==
-X-Change-ID: 20260930-xsk-suspend-teardown-902f98408c93
-To: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: bpf@vger.kernel.org, Eric Dumazet <edumazet@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- linux-kernel@vger.kernel.org, James Hilliard <james.hilliard1@gmail.com>
-X-Mailer: b4 0.15.2
 
-Deferred pool destruction calls ndo_bpf() under RTNL. system_wq is
-not frozen during system sleep, so that callback can run after a
-device has suspended and gated its clocks. Use system_freezable_wq
-so running destruction finishes before device suspend and new work
-waits until process thaw.
+In the initial implementation in '7ae4eb14c5f9 ("bpf: Add ksock
+kfuncs")', it was decided to let the ksock kfuncs go through the LSM
+hooks instead of by-passing them, and thus to disallow the use of the
+kfuncs from asynchronous workqueues as the credentials would be
+different than the task context that triggered the kfuncs.
 
-Keep assigned pools visible to NETDEV_UNREGISTER independently of
-the socket list. A released socket has already left that list, but
-its final pool put can queue destruction after workqueues freeze.
-A resume-time unregister would then wait for a device reference
-whose release cannot run until the resume completes.
+After some discussions, in particular at Plumbers 2026 at the
+presentation introducing this new ksock API[^1], it was agreed that
+by-passing the LSM from socket created by BPF programs should be okay
+and thus that the process context switch from kthread executing the
+workqueues wouldn't be an issue.
 
-Track assigned pools per netdev with netdev operations locking and detach
-remaining pools after the notifier socket walk, including copy-mode pools.
-This also covers leased queues without scanning pools from unrelated
-devices or network namespaces. Remove the entry on assignment failure and
-normal teardown. The deferred worker still owns the pool and later observes
-the cleared device pointer, avoiding a second driver detach or put.
+For now, the ksock kfuncs still trigger the LSM hooks but we relax the
+constraint on not using the workqueues as it will be useful for users
+triggering connect() or send() from non-sleepable programs (like
+tracing, support will be extended in future patches).
 
-The lifetime problem was identified by code inspection of the deferred
-release and system-sleep paths.
+Also adapt test_ksock_wq() added in 'c93cbdb13f99 ("selftests/bpf: Add
+ksock test for async callback guard")' to test that the connect() and
+send() kfuncs are now allowed and work when called from workqueues.
 
-Fixes: 1c1efc2af158 ("xsk: Create and free buffer pool independently from umem")
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Note that bpf_ksock_create() still checks for workqueue context
+execution and makes sure the current->nsproxy is defined as we rely on
+the network namespace to be defined (could be NULL in the case do_exit()
+was called on the task before the wq was scheduled) and to be the one
+from the task that triggered the SYSCALL bpf prog.
+
+[^1]: https://lpc.events/event/20/contributions/2430/
+
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
-Changes in v3:
-- Protect the per-netdev pool list with netdev operations locking, as
-  requested by Stanislav Fomichev and Björn Töpel.
-- Assert operations locking for copy-mode assignment too, and share a
-  locked detach helper so unregister holds the lock across the pool walk.
-- Rebase onto current net.
-- Link to v2: https://patch.msgid.link/20261005-xsk-suspend-teardown-v2-1-2d87228f4329@gmail.com
+v1: https://lore.kernel.org/bpf/20261013163101.205638-1-mahe.tardy@gmail.com/
 
-Changes in v2:
-- Track assigned pools per netdev instead of scanning a global pool list.
-- Keep deferred releases visible across queue changes and queue leases.
-- Rebase onto current net.
-- Link to v1: https://patch.msgid.link/20260930-xsk-suspend-teardown-v1-1-a6cac8c030be@gmail.com
----
- include/linux/netdevice.h   |  5 +++++
- include/net/xsk_buff_pool.h |  3 +++
- net/xdp/xsk.c               |  5 +++++
- net/xdp/xsk_buff_pool.c     | 46 ++++++++++++++++++++++++++++++++++++++-------
- 4 files changed, 52 insertions(+), 7 deletions(-)
+ net/core/bpf_ksock.c                          | 27 +------
+ .../selftests/bpf/prog_tests/ksock_wq.c       | 29 +++++--
+ tools/testing/selftests/bpf/progs/ksock_wq.c  | 76 +++++++++++++++----
+ 3 files changed, 91 insertions(+), 41 deletions(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 3cff2174dc03..ac257221c7c5 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -2545,6 +2545,11 @@ struct net_device {
- 	/* protected by rtnl_lock */
- 	struct bpf_xdp_entity	xdp_state[__MAX_XDP_MODE];
- 
-+#ifdef CONFIG_XDP_SOCKETS
-+	/** @xsk_pools: assigned AF_XDP pools, ops protected */
-+	struct hlist_head	xsk_pools;
-+#endif
-+
- 	u8 dev_addr_shadow[MAX_ADDR_LEN];
- 	netdevice_tracker	linkwatch_dev_tracker;
- 	netdevice_tracker	watchdog_dev_tracker;
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index a7df573784fd..02e89350faf9 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -48,6 +48,8 @@ struct xsk_buff_pool {
- 	struct device *dev;
- 	struct net_device *netdev;
- 	struct list_head xsk_tx_list;
-+	/* Assigned pools, including deferred releases; ops protected. */
-+	struct hlist_node dev_node;
- 	/* Protects modifications to the xsk_tx_list */
- 	spinlock_t xsk_tx_list_lock;
- 	refcount_t users;
-@@ -119,6 +121,7 @@ bool xp_put_pool(struct xsk_buff_pool *pool);
- void xp_clear_dev(struct xsk_buff_pool *pool);
- void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
- void xp_del_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
-+void xp_clear_dev_all(struct net_device *dev);
- 
- /* AF_XDP, and XDP core. */
- void xp_free(struct xdp_buff_xsk *xskb);
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 33475b180ea6..781ba46eb152 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -2145,6 +2145,11 @@ static int xsk_notifier(struct notifier_block *this,
- 			mutex_unlock(&xs->mutex);
- 		}
- 		mutex_unlock(&net->xdp.lock);
-+		/*
-+		 * A released socket is no longer on xdp.list. Its pool can still
-+		 * hold a device reference on the frozen release workqueue.
-+		 */
-+		xp_clear_dev_all(dev);
- 		break;
- 	}
- 	return NOTIFY_DONE;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 9d2d94f1fb75..5b9dcafd6882 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -173,6 +173,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- 	int err = 0;
- 
- 	ASSERT_RTNL();
-+	netdev_assert_locked_ops_compat(netdev);
- 
- 	force_zc = flags & XDP_ZEROCOPY;
- 	force_copy = flags & XDP_COPY;
-@@ -204,6 +205,11 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- 	pool->cached_need_wakeup = XDP_WAKEUP_TX;
- 
- 	dev_hold(netdev);
-+	/*
-+	 * Socket removal precedes the final pool put. Keep the pool visible to
-+	 * NETDEV_UNREGISTER even while release work is waiting for process thaw.
-+	 */
-+	hlist_add_head(&pool->dev_node, &netdev->xsk_pools);
- 
- 	if (force_copy)
- 		/* For copy-mode, we are done. */
-@@ -244,7 +250,6 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- 	bpf.xsk.pool = pool;
- 	bpf.xsk.queue_id = queue_id;
- 
--	netdev_assert_locked_ops_compat(netdev);
- 	err = netdev->netdev_ops->ndo_bpf(netdev, &bpf);
- 	if (err)
- 		goto err_unreg_pool;
-@@ -265,6 +270,8 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- 		err = 0; /* fallback to copy mode */
- 	if (err) {
- 		xsk_clear_pool_at_qid(netdev, queue_id);
-+		hlist_del(&pool->dev_node);
-+		pool->netdev = NULL;
- 		dev_put(netdev);
- 	}
- 	return err;
-@@ -287,19 +294,40 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
- 	return xp_assign_dev(pool, dev, queue_id, flags);
+diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+index e9943aeeadd3..f74968397798 100644
+--- a/net/core/bpf_ksock.c
++++ b/net/core/bpf_ksock.c
+@@ -37,15 +37,6 @@ static void ksock_release_work_fn(struct work_struct *work)
+ 	kfree(ks);
  }
- 
-+static void __xp_clear_dev(struct xsk_buff_pool *pool)
-+{
-+	struct net_device *netdev = pool->netdev;
-+
-+	netdev_assert_locked_ops_compat(netdev);
-+	xp_disable_drv_zc(pool);
-+	xsk_clear_pool_at_qid(netdev, pool->queue_id);
-+	hlist_del(&pool->dev_node);
-+	pool->netdev = NULL;
-+	dev_put(netdev);
-+}
-+
- void xp_clear_dev(struct xsk_buff_pool *pool)
+
+-static bool bpf_ksock_has_user_task_context(void)
+-{
+-	/*
+-	 * Task work can run from do_exit() after exit_nsproxy_namespaces()
+-	 * cleared current->nsproxy, while current is still not a kthread.
+-	 */
+-	return !(current->flags & PF_KTHREAD) && current->nsproxy;
+-}
+-
+ __bpf_kfunc_start_defs();
+
+ /**
+@@ -59,7 +50,7 @@ __bpf_kfunc_start_defs();
+  * This function may sleep (sock_create), so it can only be used
+  * in sleepable BPF programs (SYSCALL).
+  * It cannot be called from a BPF workqueue callback because that callback
+- * does not retain the invoking task's namespace or security context.
++ * does not retain the invoking task's namespace.
+  *
+  * @opts:	Pointer to struct bpf_ksock_create_opts with socket parameters.
+  * @opts__sz:	Size of the opts struct.
+@@ -73,13 +64,9 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
+ 	struct bpf_ksock *ks;
+ 	int err;
+
+-	/*
+-	 * sock_create() derives the network namespace, credentials, and cgroup
+-	 * from current. Kernel threads, including BPF workqueue callbacks, do
+-	 * not carry the context of the task that invoked the BPF program.
+-	 */
+-	if (!bpf_ksock_has_user_task_context()) {
+-		err = -EOPNOTSUPP;
++	/* sock_create() derives the network namespace from current. */
++	if ((current->flags & PF_KTHREAD) || !current->nsproxy) {
++		err = -EPERM;
+ 		goto err_out;
+ 	}
+
+@@ -165,9 +152,6 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
+ 	struct sockaddr_storage sa;
+ 	int addrlen;
+
+-	if (!bpf_ksock_has_user_task_context())
+-		return -EOPNOTSUPP;
+-
+ 	if (!addr || addr__sz != sizeof(*addr))
+ 		return -EINVAL;
+
+@@ -247,9 +231,6 @@ __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
+ 	};
+ 	int ret;
+
+-	if (!bpf_ksock_has_user_task_context())
+-		return -EOPNOTSUPP;
+-
+ 	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
+
+ 	return ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
+index d6dc20b8f95b..cb50f9a1be2e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
++++ b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
+@@ -4,6 +4,7 @@
+ #include <unistd.h>
+
+ #include "test_progs.h"
++#include "network_helpers.h"
+ #include "ksock_wq.skel.h"
+
+ #define CALLBACK_WAIT_RETRIES 1000
+@@ -13,13 +14,22 @@ void test_ksock_wq(void)
  {
- 	struct net_device *netdev = pool->netdev;
- 
--	if (!pool->netdev)
-+	if (!netdev)
+ 	LIBBPF_OPTS(bpf_test_run_opts, opts);
+ 	struct ksock_wq *skel;
++	char recv_data[sizeof(skel->data->send_data)];
+ 	u32 callback_done;
+-	int err, i;
++	int err, i, port, rfd;
+
+ 	skel = ksock_wq__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "ksock_wq open and load"))
  		return;
- 
- 	netdev_lock_ops(netdev);
--	xp_disable_drv_zc(pool);
--	xsk_clear_pool_at_qid(pool->netdev, pool->queue_id);
--	pool->netdev = NULL;
-+	__xp_clear_dev(pool);
- 	netdev_unlock_ops(netdev);
--	dev_put(netdev);
+
++	rfd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 1000);
++	if (!ASSERT_OK_FD(rfd, "receiver socket"))
++		goto out;
++	port = get_socket_local_port(rfd);
++	if (!ASSERT_GE(port, 0, "receiver port"))
++		goto out;
++	skel->bss->remote_port = port;
++
+ 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.ksock_wq_start),
+ 				     &opts);
+ 	if (!ASSERT_OK(err, "run ksock_wq_start"))
+@@ -28,18 +38,27 @@ void test_ksock_wq(void)
+ 		goto out;
+
+ 	for (i = 0; i < CALLBACK_WAIT_RETRIES; i++) {
+-		if (__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE))
++		if (__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE) == 2)
+ 			break;
+ 		usleep(CALLBACK_WAIT_US);
+ 	}
+ 	callback_done = __atomic_load_n(&skel->bss->callback_done,
+ 					__ATOMIC_ACQUIRE);
+-	if (!ASSERT_EQ(callback_done, 1, "workqueue callback completed"))
++	if (!ASSERT_EQ(callback_done, 2, "workqueue callbacks completed"))
+ 		goto out;
+
+-	ASSERT_EQ(skel->bss->create_err, -EOPNOTSUPP,
+-		  "workqueue create rejected");
++	ASSERT_EQ(skel->bss->create_ret, -EPERM, "workqueue create rejected");
++
++	if (!ASSERT_EQ(skel->bss->connect_send_ret, sizeof(recv_data),
++		       "workqueue send bytes"))
++		goto out;
++	err = recv(rfd, recv_data, sizeof(recv_data), 0);
++	if (ASSERT_EQ(err, sizeof(recv_data), "recv len"))
++		ASSERT_MEMEQ(recv_data, skel->data->send_data, sizeof(recv_data),
++			     "payload match");
+
+ out:
++	if (rfd >= 0)
++		close(rfd);
+ 	ksock_wq__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/ksock_wq.c b/tools/testing/selftests/bpf/progs/ksock_wq.c
+index 16a1873d132e..290736e219e1 100644
+--- a/tools/testing/selftests/bpf/progs/ksock_wq.c
++++ b/tools/testing/selftests/bpf/progs/ksock_wq.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2026 Isovalent */
+
+ #include "vmlinux.h"
++#include <bpf/bpf_endian.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_experimental.h"
+ #include "bpf_tracing_net.h"
+@@ -14,15 +15,19 @@ struct ksock_wq_value {
+
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
++	__uint(max_entries, 2);
+ 	__type(key, u32);
+ 	__type(value, struct ksock_wq_value);
+ } work_map SEC(".maps");
+
+-int create_err;
++char send_data[] = "hello from bpf workqueue";
++
++__be16 remote_port;
++int connect_send_ret;
++int create_ret;
+ u32 callback_done;
+
+-static int ksock_wq_callback(void *map, int *key, void *value)
++static int ksock_wq_create(void *map, int *key, void *value)
+ {
+ 	struct bpf_ksock_create_opts opts = {
+ 		.family = AF_INET,
+@@ -35,7 +40,32 @@ static int ksock_wq_callback(void *map, int *key, void *value)
+ 	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
+ 	if (ks)
+ 		bpf_ksock_release(ks);
+-	create_err = err;
++	create_ret = err;
++	__sync_fetch_and_add(&callback_done, 1);
++	return 0;
 +}
 +
-+void xp_clear_dev_all(struct net_device *dev)
++static int ksock_wq_connect_send(void *map, int *key, void *value)
 +{
-+	struct xsk_buff_pool *pool;
-+	struct hlist_node *next;
++	union bpf_ksock_addr addr = {
++		.sin = {
++			.sin_family = AF_INET,
++			.sin_port = remote_port,
++			.sin_addr.s_addr = bpf_htonl(0x7f000001),
++		},
++	};
++	struct bpf_ksock *ks;
++	int err = -ENOENT;
 +
-+	netdev_lock_ops(dev);
-+	netdev_assert_locked_ops_compat(dev);
-+	hlist_for_each_entry_safe(pool, next, &dev->xsk_pools, dev_node)
-+		__xp_clear_dev(pool);
-+	netdev_unlock_ops(dev);
++	ks = ksock_ctx_get();
++	if (!ks)
++		goto out;
++	err = bpf_ksock_connect(ks, &addr, sizeof(addr));
++	if (!err)
++		err = bpf_ksock_send(ks, send_data, sizeof(send_data));
++	bpf_ksock_release(ks);
++out:
++	connect_send_ret = err;
+ 	__sync_fetch_and_add(&callback_done, 1);
+ 	return 0;
  }
- 
- static void xp_release_deferred(struct work_struct *work)
-@@ -337,7 +365,11 @@ bool xp_put_pool(struct xsk_buff_pool *pool)
- 
- 	if (refcount_dec_and_test(&pool->users)) {
- 		INIT_WORK(&pool->work, xp_release_deferred);
--		schedule_work(&pool->work);
-+		/*
-+		 * Teardown calls ndo_bpf(), which may need powered hardware.
-+		 * RTNL alone does not exclude the device's system PM callbacks.
-+		 */
-+		queue_work(system_freezable_wq, &pool->work);
- 		return true;
- 	}
- 
+@@ -43,20 +73,40 @@ static int ksock_wq_callback(void *map, int *key, void *value)
+ SEC("syscall")
+ int ksock_wq_start(void *ctx)
+ {
++	struct bpf_ksock_create_opts opts = {
++		.family = AF_INET,
++		.type = SOCK_DGRAM,
++		.protocol = IPPROTO_UDP,
++	};
+ 	struct ksock_wq_value *value;
+-	u32 key = 0;
+-	int err;
++	struct bpf_ksock *ks;
++	u64 key = 0;
++	int err = 0;
 
----
-base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
-change-id: 20260930-xsk-suspend-teardown-902f98408c93
+-	value = bpf_map_lookup_elem(&work_map, &key);
+-	if (!value)
+-		return -ENOENT;
+-	err = bpf_wq_init(&value->work, &work_map, 0);
+-	if (err)
++	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
++	if (!ks)
+ 		return err;
+-	err = bpf_wq_set_callback(&value->work, ksock_wq_callback, 0);
++	err = ksock_ctx_insert(ks);
+ 	if (err)
+ 		return err;
+-	return bpf_wq_start(&value->work, 0);
++	for (key = 0; key < 2; key++) {
++		value = bpf_map_lookup_elem(&work_map, &key);
++		if (!value)
++			return -ENOENT;
++		err = bpf_wq_init(&value->work, &work_map, 0);
++		if (err)
++			return err;
++		if (key)
++			err = bpf_wq_set_callback(&value->work, ksock_wq_create, 0);
++		else
++			err = bpf_wq_set_callback(&value->work, ksock_wq_connect_send, 0);
++		if (err)
++			return err;
++		err = bpf_wq_start(&value->work, 0);
++		if (err)
++			return err;
++	}
++	return 0;
+ }
 
-Best regards,
---  
-James Hilliard <james.hilliard1@gmail.com>
+ char __license[] SEC("license") = "GPL";
+--
+2.43.0
 
