@@ -1,449 +1,646 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84596313267
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 18:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29A15349BE;
+	Tue, 13 Oct 2026 18:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791917184; cv=none; b=rsKdokjY6OdYERdw0ByFoj80O9J0ab5bxtboJwWlq6C8b2B3wgvif3fGDedRFX9BWqlC34tk+jHwXEIHx4WT5kd62dqJJwnhvlEWVnQPbJn97MOcHawtF7y0aa6b8byXgvuqdL3Uf7AoOVEzK7dfsKTmD2kTOntzBW1PlE5Gef8=
+	t=1791917447; cv=none; b=d8bTnqNr8MUK65VVVa28XnQNEaMyTkueVEvCQ3AUJYMIKJU95BKO5hMaL4g7p0Zmb69w+pC6QKHIQilDrE9ENo+P6mxuBcb8g/cCJTPD8D1fOZFGebthk+q61gvGrlX+tSJFR+rGnwyyN0RV5yrhzz8pV3HWvsbArdaxq6oGWNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791917184; c=relaxed/simple;
-	bh=STBDSe++wqW2LusJKjTlOyzqUfdCI5g3g/N9BjL62+I=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mzVAOPuaAQClcTuP02n8JbKWBjpTl6UPZdkN/CnJpsdz6S24iLo3W4MEEICxUqBCVO+83pm9QKUaYKXqyEbM+z4U/gPeSMVUyqTwc0kOMFLM4TNZsoAqgM/KAbppu8u4UmVsTBO4S78Hmu/ujcmH5ODB4KZv+TXHUnGz8wFeM/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5e5mC/q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791917447; c=relaxed/simple;
+	bh=5YZ6xukZNAmqlS94iUDKqh51GxcIvb0XLLdhEY3HqPY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=GlRHSSJQFvytbuqZbs6pDRthRzDa8FVTHXwTtWhb+WL3sMRh+GtcovyJ50hukuWQe+jHIXkRpFcY7Wd+R7y3XSkHDieLfgjriq0rclhAx+M4IUW1+2hLgdF1PX33Q3NhRwg+HR4PJ9zR9MKcybLbZBemOeZcUQPog56528iqumA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=EQ4XU1XC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5e5mC/q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D46591F000FF;
-	Tue, 13 Oct 2026 18:46:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791917182;
-	bh=oGfRC8+LTJbuz4XUSr1FzuaB7mHcWpUlGuqgJdD6TIE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Q5e5mC/qQvXBdnUbIQs9FEX8Ve/nLxH3IJXEuFttDx6ohU1gc9B+I8UtyVdhTLqcy
-	 yU8aDjoVNpbaW+42aRueFUn78UNu00VUKzbkL9pG25sjpAfJ+5k6wg3s8WCcbT1m3X
-	 3ZLMjZNvPDtTW3MzmTMPhYXPicamKK7ROo7sIvrxZ00aHWw5EtI58pD1iAwrSYUzxr
-	 3plQltesF59qZkLAv+bF77/fmYs1Ols7Ua/+NjTrDV9YlMv84+Wn20XiXPnZkiE4pF
-	 u0LG6d4F+A/JnUESBFd0krNKkv7dDXjEiezYhEa8YACncwksgXIAvOMLUW12+tY41F
-	 WhO058K76VWCg==
-Content-Type: multipart/mixed; boundary="===============8695117140356268114=="
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="EQ4XU1XC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B161F00898;
+	Tue, 13 Oct 2026 18:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1791917444;
+	bh=MuZf8a4s4KeYVJq+WlBcJeJCEq4B3iFccAJsrfXV9NM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=EQ4XU1XCFoj78Yyeld7YNcnP/9noZdX9lN5UCdmZcoKGQgrlrhgFY+A4mTo+auY+J
+	 3Rac6nV/fZjHnfKTsq26wtuqYJMvkhuUDd/fkVCVq1fYNre1356490QbzZy183nF+c
+	 /ycTbc039NpvwigJiKoRCcMhob/ZU3R3AoCJM5Mw=
+Date: Tue, 13 Oct 2026 11:50:40 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
+ <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, David Hildenbrand <david@kernel.org>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+ <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Dennis Dalessandro
+ <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela
+ <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, Ryan
+ Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
+ <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Usama Arif
+ <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert
+ <dgilbert@interlog.com>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
+ <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, Helge Deller
+ <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, John Hubbard
+ <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra
+ <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo
+ <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
+ <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann
+ <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, Oscar Salvador
+ <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan
+ Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul
+ Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda
+ <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens
+ <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller"
+ <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
+ Matthew Brost <matthew.brost@intel.com>, Joshua Hahn
+ <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park
+ <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, Ying Huang
+ <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, Chris
+ Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, Kemeng Shi
+ <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He
+ <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, Johannes
+ Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt
+ <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>,
+ Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Chengming
+ Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, Miklos
+ Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org,
+ selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ fuse-devel@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>, Bert
+ Karwatzki <spasswolf@web.de>, Takashi Iwai <tiwai@suse.de>, Emil Tsalapatis
+ <emil@etsalapatis.com>
+Subject: Re: [PATCH v6 00/39] mm: make VMA flag semantics explicit,
+ eliminate VM_SPECIAL
+Message-Id: <20261013115040.1583b1d8e85c4b5d65a1ae0e@linux-foundation.org>
+In-Reply-To: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
+References: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <2730fafced4cbfb48a7a5085a19f6dbace8c619a81e6de7f1c2a667a0ed98a7e@mail.kernel.org>
-In-Reply-To: <20261013171230.523677-18-daniel@iogearbox.net>
-References: <20261013171230.523677-18-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next 17/18] selftests/bpf: Add JIT instruction tests
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,alexei.starovoitov@gmail.com
-Cc: memxor@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 13 Oct 2026 18:46:20 +0000 (UTC)
-
---===============8695117140356268114==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Add JIT instruction tests
+On Tue, 13 Oct 2026 16:04:40 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+
+> The VM_SPECIAL / VMA_SPECIAL_FLAGS mask conflates several unrelated
+> properties:
+> 
+> * Is this managed by core mm, or by a driver mapping MMIO, kernel-allocated
+>   pages, or even ordinary pages itself?
+> * Can it be expanded or merged?
+> * Is this a 'weird' case like mlock where migration might race and we
+>   'have' to set invalid flags to notify?
+> * Is it another 'weird' case where we just want to stop GUP from touching
+>   it?
+> 
+> Driver writers have often been confused about this, and who can blame them?
+> 
+> It also interacts badly with the eternal edgecase known as hugetlb - which
+> sets VMA_DONTEXPAND_BIT but doesn't also want to be treated like a
+> 'special' flag.
+> 
+> Another issue is that we cannot make sensible assumptions about flag
+> use. It's not possible to assume VMA_IO_BIT means iommu because drivers
+> abuse it and mlock abuses it.
+> 
+> Special is also an overloaded term in mm. VDSO and VVAR mappings are also
+> called 'special' but they're special in a... special way.
+> 
+> Sometimes things are called special that are a subset of
+> VMA_SPECIAL_FLAGS (VMA_PFNMAP_BIT and VMA_MIXEDMAP_BIT for instance when it
+> comes to zapping or vm_normal_folio()).
+> 
+> There's a specific kind of special for THP too, which considers
+> PFN map, mixed map 'special' but DAX not.
+> 
+> It's all rather a mess.
+> 
+> This series brings some order to things by both limiting what drivers can
+> do with VMA flags and switching to using predicates that describe
+> behaviour, not arbitrary flags.
+
+Thanks, I've updated mm-unstable to this version.
+
+> v6:
+> * Applied tags (thanks David!)
+> * Added 7/39 to split out the vm_insert_page() / vm_insert_pages()
+>   mmap lock assertions and VMA API changes out into their own patch,
+>   as per David.
+> * Updated 8/39 (was 7/38) to collapse the discontig single page case to
+>   a single one and to rename things, as per David.
+> * Updated 9/39 (was 8/38) to update the discontig docs to reflect the
+>   change.
+> * Updated 23/39 (was 22/38) to put expression on single line, as per David.
+> * Updated 25/39 (was 24/38) to mention the open-coding in the commit
+>   message (fixed in next commit), as per discussion with David.
+> * Updated 26/39 (was 25/38) to clarify the commit message around the
+>   removal of the VMA_IO_BIT check in vma_flags_is_mm_managed(), as per
+>   David.
+> * Updated 30/39 (was 30/38) to no longer exclude droppable mappings from
+>   vma_flags_is_mm_backed(), as it doesn't quite fit into the broader
+>   definition, as per David.
+> * Updated 30/39 (was 30/38) to express vma_flags_can_merge() in terms of
+>   vma_flags_is_mm_backed() (with an explicit hugetlb exclusion), and to
+>   no longer use vma_can_merge() in __thp_vma_allowable_orders().
+> * Updated 31/39 (was 29/38) to use vma_is_mm_backed() (with hugetlb
+>   exclusion) rather than vma_can_merge(), as guard regions have nothing to
+>   do with mergeability.
+> * Updated 32/39 (was 31/38) to retain an explicit droppable check in
+>   vma_can_userfault(), as per David.
+> * Updated 33/39 (was 32/38) to use vma_is_mm_backed() with an explicit
+>   hugetlb exclusion, rather than vma_can_merge() which makes no sense here.
+> * Updated 34/39 (was 33/38) to retain explicit droppable checks in
+>   vma_supports_mlock() and ksm_compatible(), as per David.
+> * Updated 34/39 (was 33/38) to use vma_is_mm_backed() in should_skip_vma(),
+>   based on discussion with David.
+> * Updated 35/39 (was 34/38) to use vma_is_mm_backed() in
+>   lru_gen_look_around(), as per David.
+> * Updated 36/39 (was 35/38) to use vma_is_mm_backed() with an explicit
+>   hugetlb exclusion in migrate_vma_setup(), as per David.
+
+Here's how v6 altered mm.git.
+
+
+ Documentation/filesystems/mmap_prepare.rst |    2 
+ include/linux/mm.h                         |  120 +++++++++----------
+ include/linux/mm_types.h                   |    6 
+ mm/huge_memory.c                           |    7 -
+ mm/internal.h                              |    3 
+ mm/ksm.c                                   |    3 
+ mm/madvise.c                               |   11 +
+ mm/memory.c                                |   16 +-
+ mm/migrate_device.c                        |    4 
+ mm/userfaultfd.c                           |    3 
+ mm/vma.c                                   |    4 
+ mm/vmscan.c                                |    7 -
+ tools/testing/vma/include/dup.h            |   44 +++++-
+ 13 files changed, 128 insertions(+), 102 deletions(-)
+
+--- a/Documentation/filesystems/mmap_prepare.rst~b
++++ a/Documentation/filesystems/mmap_prepare.rst
+@@ -240,7 +240,7 @@ In the ``get`` hook, the user must choos
+   compound pages (if the compound page is bigger than the remaining pages in the
+   VMA, then only those pages that fit will be mapped). For a compound page, the
+   head page must be passed.
+-* ``discontig_kernel_map_page_range()`` - Map an array of pages of a specified
++* ``discontig_kernel_map_pages()`` - Map an array of pages of a specified
+   size. As with a compound page, if more pages are specified than remain in
+   the VMA then only those that fit will be mapped.
+ 
+--- a/include/linux/mm.h~b
++++ a/include/linux/mm.h
+@@ -1695,57 +1695,22 @@ static inline bool vma_is_fixed_mapping(
+ }
+ 
+ /**
+- * vma_flags_can_merge() - Do the specified VMA flags permit the VMA to be
+- * merged with another?
+- * @flags: The VMA flags to test.
+- * Returns: true if the flags permit merging, false otherwise.
+- */
+-static inline bool vma_flags_can_merge(const vma_flags_t *flags)
+-{
+-	/*
+-	 * VMA merging assumes that a VMA's flags and fields completely describe
+-	 * its state.
+-	 *
+-	 * However, mappings which are not mm-managed may have established state
+-	 * upon mapping not embodied in any attribute of the VMA.
+-	 *
+-	 * Additionally, private (CoW) PFN maps encode the source PFN of the
+-	 * range in vma->vm_pgoff, which may otherwise cause spurious merges.
+-	 */
+-	if (!vma_flags_is_mm_managed(flags))
+-		return false;
+-	/* VMA explicitly marked as being unmergeable. */
+-	if (vma_flags_is_fixed_mapping(flags))
+-		return false;
+-
+-	return true;
+-}
+-
+-/**
+- * vma_can_merge() - Do @vma's flags permit it to be merged with another VMA?
+- * @vma: The VMA to test.
+- * Returns: true if the flags permit merging, otherwise false.
+- */
+-static inline bool vma_can_merge(const struct vm_area_struct *vma)
+-{
+-	return vma_flags_can_merge(&vma->flags);
+-}
+-
+-/**
+  * vma_flags_is_mm_backed() - Do the specified VMA flags imply the mapping is
+  * backed by core mm?
+  * @flags: The VMA flags to test.
+  *
+  * An mm-backed mapping is one managed by core mm (see
+- * vma_flags_is_mm_managed()) for which two further things are true:
++ * vma_flags_is_mm_managed()) whose contents are established by core mm's own
++ * fault path rather than a custom ->fault handler.
+  *
+- * 1. Everything mapped was placed there by core mm's fault path (no custom
+- *    ->fault).
+- * 2. What is mapped stays there until it is zapped or unmapped by the user.
+- *
+- * These mappings are the only ones which can be sensibly locked, merged, dumped
+- * or be subject to uffd faulting, as all of these assume core mm and core mm
+- * alone manages these, and that the mappings will remain there.
++ * Mappings not managed by core mm are populated by their owner, and fixed
++ * mappings may be mm-managed but have their contents established by a custom
++ * ->fault handler, so neither are mm-backed. hugetlb mappings are fixed, but
++ * core mm owns them entirely, so they are.
++ *
++ * These are the only mappings which can sensibly be merged, locked, dumped or
++ * be subject to uffd faulting, as all of these assume core mm and core mm
++ * alone manages their contents.
+  *
+  * Returns: true if the flags imply an mm-backed mapping, otherwise false.
+  */
+@@ -1761,11 +1726,7 @@ static inline bool vma_flags_is_mm_backe
+ 	 * by a custom ->fault handler, so core mm cannot assume ordinary fault
+ 	 * semantics over them.
+ 	 */
+-	if (!vma_flags_is_mm_managed(flags) ||
+-	    vma_flags_is_fixed_mapping(flags))
+-		return false;
+-	/* Core mm may discard droppable memory at any time. */
+-	return !vma_flags_test_single_mask(flags, VMA_DROPPABLE);
++	return vma_flags_is_mm_managed(flags) && !vma_flags_is_fixed_mapping(flags);
+ }
+ 
+ /**
+@@ -1782,6 +1743,43 @@ static inline bool vma_is_mm_backed(cons
+ }
+ 
+ /**
++ * vma_flags_can_merge() - Do the specified VMA flags permit the VMA to be
++ * merged with another?
++ * @flags: The VMA flags to test.
++ * Returns: true if the flags permit merging, false otherwise.
++ */
++static inline bool vma_flags_can_merge(const vma_flags_t *flags)
++{
++	/*
++	 * VMA merging assumes that a VMA's flags and fields completely describe
++	 * its state, which is only the case for mm-backed mappings.
++	 *
++	 * Mappings which are not mm-managed may have established state upon
++	 * mapping not embodied in any attribute of the VMA.
++	 *
++	 * Additionally, private (CoW) PFN maps encode the source PFN of the
++	 * range in vma->vm_pgoff, which may otherwise cause spurious merges.
++	 */
++	if (!vma_flags_is_mm_backed(flags))
++		return false;
++	/*
++	 * hugetlb mappings contain per-VMA state, so their flags and fields do
++	 * not completely describe them.
++	 */
++	return !vma_flags_is_hugetlb(flags);
++}
++
++/**
++ * vma_can_merge() - Do @vma's flags permit it to be merged with another VMA?
++ * @vma: The VMA to test.
++ * Returns: true if the flags permit merging, otherwise false.
++ */
++static inline bool vma_can_merge(const struct vm_area_struct *vma)
++{
++	return vma_flags_can_merge(&vma->flags);
++}
++
++/**
+  * vma_kernel_pagesize - Default page size granularity for this VMA.
+  * @vma: The user mapping.
+  *
+@@ -4824,28 +4822,26 @@ discontig_kernel_map_abort(struct discon
+ 
+ static inline void
+ discontig_kernel_map_page(struct discontig_kernel_page_state *state,
+-			  struct page *page)
++		struct page *page)
+ {
+ 	struct folio *folio = page_folio(page);
++	unsigned long nr_pages = 1;
+ 
+ 	if (folio_test_large(folio)) {
+ 		VM_WARN_ON_ONCE(page != folio_page(folio, 0));
+-		state->action = DISCONTIG_KERNEL_PAGE_MAP_COMPOUND_PAGE;
+-		state->__folio = folio;
+-		state->__nr_pages = min(state->nr_pages_remain,
+-					folio_nr_pages(folio));
+-	} else {
+-		state->action = DISCONTIG_KERNEL_PAGE_MAP_PAGE;
+-		state->__page = page;
+-		state->__nr_pages = 1;
++		nr_pages = folio_nr_pages(folio);
+ 	}
++
++	state->action = DISCONTIG_KERNEL_PAGE_MAP_CONTIG_PAGES;
++	state->__page = page;
++	state->__nr_pages = min(nr_pages, state->nr_pages_remain);
+ }
+ 
+ static inline void
+-discontig_kernel_map_page_range(struct discontig_kernel_page_state *state,
+-				struct page **page_arr, unsigned long nr_pages)
++discontig_kernel_map_pages(struct discontig_kernel_page_state *state,
++		struct page **page_arr, unsigned long nr_pages)
+ {
+-	state->action = DISCONTIG_KERNEL_PAGE_MAP_PAGE_RANGE;
++	state->action = DISCONTIG_KERNEL_PAGE_MAP_PAGES;
+ 	state->__page_arr = page_arr;
+ 	state->__nr_pages = min(nr_pages, state->nr_pages_remain);
+ }
+--- a/include/linux/mm_types.h~b
++++ a/include/linux/mm_types.h
+@@ -825,9 +825,8 @@ enum mmap_action_type {
+ 
+ enum discontig_kernel_page_action {
+ 	DISCONTIG_KERNEL_PAGE_ABORT,
+-	DISCONTIG_KERNEL_PAGE_MAP_PAGE,
+-	DISCONTIG_KERNEL_PAGE_MAP_COMPOUND_PAGE,
+-	DISCONTIG_KERNEL_PAGE_MAP_PAGE_RANGE,
++	DISCONTIG_KERNEL_PAGE_MAP_PAGES,	/* Array of individual pages. */
++	DISCONTIG_KERNEL_PAGE_MAP_CONTIG_PAGES,	/* 1..N contiguous pages. */
+ };
+ 
+ struct discontig_kernel_page_state {
+@@ -847,7 +846,6 @@ struct discontig_kernel_page_state {
+ 	enum discontig_kernel_page_action action;
+ 	union {
+ 		struct page *__page;
+-		struct folio *__folio;
+ 		struct page **__page_arr;
+ 	};
+ 	unsigned long __nr_pages;
+--- a/mm/huge_memory.c~b
++++ a/mm/huge_memory.c
+@@ -207,11 +207,10 @@ unsigned long __thp_vma_allowable_orders
+ 	 * khugepaged moves data from VMAs once collapsed, after they have been
+ 	 * faulted in, relying on refaulting for file-backed memory.
+ 	 *
+-	 * Mappings not managed by core mm cannot be reliably reconstructed from
+-	 * page faults, and fixed mappings (including hugetlb) may well be
+-	 * mm-managed - precisely the mappings which cannot be merged.
++	 * Only mm-backed mappings can be reliably reconstructed from page
++	 * faults, and hugetlb mappings cannot be collapsed.
+ 	 */
+-	if (!in_pf && !smaps && !vma_can_merge(vma))
++	if (!in_pf && !smaps && (!vma_is_mm_backed(vma) || vma_is_hugetlb(vma)))
+ 		return 0;
+ 
+ 	/*
+--- a/mm/internal.h~b
++++ a/mm/internal.h
+@@ -1114,6 +1114,9 @@ static inline bool vma_supports_mlock(co
+ {
+ 	if (!vma_is_mm_backed(vma))
+ 		return false;
++	/* Core mm may discard droppable memory at any time. */
++	if (vma_test_single_mask(vma, VMA_DROPPABLE))
++		return false;
+ 	if (vma_is_dax(vma) || vma_is_hugetlb(vma))
+ 		return false;
+ 	return vma != get_gate_vma(current->mm);
+--- a/mm/ksm.c~b
++++ a/mm/ksm.c
+@@ -749,6 +749,9 @@ static bool ksm_compatible(const struct
+ 		return false;
+ 	if (!vma_flags_is_mm_backed(&vma_flags))
+ 		return false;
++	/* Core mm may discard droppable memory at any time. */
++	if (vma_flags_test_single_mask(&vma_flags, VMA_DROPPABLE))
++		return false;
+ 	if (file_is_dax(file))
+ 		return false;
+ #ifdef VM_SAO
+--- a/mm/madvise.c~b
++++ a/mm/madvise.c
+@@ -1069,10 +1069,10 @@ static bool is_valid_guard_vma(const str
+ 		return false;
+ 	/*
+ 	 * Guard regions require a VMA whose page tables are managed solely by
+-	 * the core, which is also what merging requires, so disallow any flags
+-	 * that would prevent a merge.
++	 * core mm, so the VMA must be mm-backed (excluding hugetlb, in which
++	 * guard markers cannot be installed).
+ 	 */
+-	if (!vma_can_merge(vma))
++	if (!vma_is_mm_backed(vma) || vma_is_hugetlb(vma))
+ 		return false;
+ 
+ 	return true;
+@@ -1402,7 +1402,7 @@ static int madvise_vma_behavior(struct m
+ 		new_flags |= VM_DONTCOPY;
+ 		break;
+ 	case MADV_DOFORK:
+-		if (!vma_can_merge(vma))
++		if (!vma_is_mm_backed(vma) || vma_is_hugetlb(vma))
+ 			return -EINVAL;
+ 		new_flags &= ~VM_DONTCOPY;
+ 		break;
+@@ -1424,6 +1424,9 @@ static int madvise_vma_behavior(struct m
+ 		/* Only mm-backed memory can be meaningfully dumped. */
+ 		if (!vma_is_mm_backed(vma))
+ 			return -EINVAL;
++		/* Core mm may discard droppable memory at any time. */
++		if (new_flags & VM_DROPPABLE)
++			return -EINVAL;
+ 		new_flags &= ~VM_DONTDUMP;
+ 		break;
+ 	case MADV_MERGEABLE:
+--- a/mm/memory.c~b
++++ a/mm/memory.c
+@@ -2674,26 +2674,24 @@ int map_discontig_kernel_pages_prepare(s
+ }
+ 
+ static int apply_discontig_action(struct vm_area_struct *vma,
+-				  struct discontig_kernel_page_state *state)
++		struct discontig_kernel_page_state *state)
+ {
+ 	unsigned long nr_pages = state->__nr_pages;
+ 	unsigned long addr = state->addr;
+ 	unsigned long i;
+ 
+-	if (state->action == DISCONTIG_KERNEL_PAGE_MAP_PAGE)
+-		return insert_page(vma, addr, state->__page,
+-				   vma->vm_page_prot, /*mkwrite=*/false);
+-	if (state->action == DISCONTIG_KERNEL_PAGE_MAP_PAGE_RANGE)
++	if (state->action == DISCONTIG_KERNEL_PAGE_MAP_PAGES)
+ 		return insert_pages(vma, addr, state->__page_arr,
+-				    &nr_pages, vma->vm_page_prot);
++				&nr_pages, vma->vm_page_prot);
+ 
+-	/* Compound folio - have to iterate through each page. */
++	VM_WARN_ON_ONCE(state->action != DISCONTIG_KERNEL_PAGE_MAP_CONTIG_PAGES);
++	/* Contiguous pages - have to iterate through each one. */
+ 	for (i = 0; i < nr_pages; i++, addr += PAGE_SIZE) {
+-		struct page *page = folio_page(state->__folio, i);
++		struct page *page = state->__page + i;
+ 		int err;
+ 
+ 		err = insert_page(vma, addr, page, vma->vm_page_prot,
+-				  /*mkwrite=*/false);
++				/*mkwrite=*/false);
+ 		if (err)
+ 			return err;
+ 	}
+--- a/mm/migrate_device.c~b
++++ a/mm/migrate_device.c
+@@ -746,8 +746,8 @@ int migrate_vma_setup(struct migrate_vma
+ 	args->end &= PAGE_MASK;
+ 	if (!vma)
+ 		return -EINVAL;
+-	if (!vma_is_mm_managed(vma) || vma_is_fixed_mapping(vma) ||
+-	    vma_is_dax(vma))
++	/* The migrate_vma page walk has no hugetlb support. */
++	if (!vma_is_mm_backed(vma) || vma_is_hugetlb(vma) || vma_is_dax(vma))
+ 		return -EINVAL;
+ 	if (nr_pages <= 0)
+ 		return -EINVAL;
+--- a/mm/userfaultfd.c~b
++++ a/mm/userfaultfd.c
+@@ -2156,6 +2156,9 @@ static bool vma_can_userfault(struct vm_
+ 	/* Only mm-backed memory can have its faults handled by userspace. */
+ 	if (!vma_is_mm_backed(vma))
+ 		return false;
++	/* Core mm may discard droppable memory at any time. */
++	if (vma_test_single_mask(vma, VMA_DROPPABLE))
++		return false;
+ 	/* The shadow stack should not be written to by userspace. */
+ 	if (vma_test_single_mask(vma, VMA_SHADOW_STACK))
+ 		return false;
+--- a/mm/vma.c~b
++++ a/mm/vma.c
+@@ -2654,9 +2654,7 @@ static int __mmap_new_file_vma(struct mm
+ 	 * VMA_LOCKED_BIT and/or VMA_LOCKONFAULT_BIT flags.
+ 	 */
+ 	if (vma_supports_mlock(vma)) {
+-		const vma_flags_t mask =
+-			vma_flags_and_mask(&map->vma_flags,
+-					   VMA_LOCKED_MASK);
++		const vma_flags_t mask = vma_flags_and_mask(&map->vma_flags, VMA_LOCKED_MASK);
+ 
+ 		vma_set_flags_mask(vma, mask);
+ 	}
+--- a/mm/vmscan.c~b
++++ a/mm/vmscan.c
+@@ -3521,8 +3521,7 @@ static int should_skip_vma(unsigned long
+ 	if (!vma_has_recency(vma))
+ 		return true;
+ 
+-	if (vma_test(vma, VMA_LOCKED_BIT) || !vma_is_mm_managed(vma) ||
+-	    vma_is_fixed_mapping(vma))
++	if (vma_test(vma, VMA_LOCKED_BIT) || !vma_is_mm_backed(vma))
+ 		return true;
+ 
+ 	if (vma == get_gate_vma(vma->vm_mm))
+@@ -4462,8 +4461,8 @@ bool lru_gen_look_around(struct page_vma
+ 	if (spin_is_contended(pvmw->ptl))
+ 		return true;
+ 
+-	/* exclude fixed and non-mm-managed VMAs containing anon pages from COW */
+-	if (!vma_is_mm_managed(vma) || vma_is_fixed_mapping(vma))
++	/* exclude non-mm-backed VMAs containing anon pages from COW */
++	if (!vma_is_mm_backed(vma))
+ 		return true;
+ 
+ 	/* avoid taking the LRU lock under the PTL when possible */
+--- a/tools/testing/vma/include/dup.h~b
++++ a/tools/testing/vma/include/dup.h
+@@ -1681,23 +1681,49 @@ static inline bool vma_is_fixed_mapping(
+ 	return vma_flags_is_fixed_mapping(&vma->flags);
+ }
+ 
++static inline bool vma_flags_is_hugetlb(const vma_flags_t *flags)
++{
++	return IS_ENABLED(CONFIG_HUGETLB_PAGE) &&
++	       vma_flags_test(flags, VMA_HUGETLB_BIT);
++}
++
++static inline bool vma_flags_is_mm_backed(const vma_flags_t *flags)
++{
++	/* hugetlb is a fixed mapping, but core mm owns it entirely. */
++	if (vma_flags_is_hugetlb(flags))
++		return true;
++	/*
++	 * Mappings not managed by core mm are populated by their owner.
++	 *
++	 * Fixed mappings may be mm-managed, but their contents are established
++	 * by a custom ->fault handler, so core mm cannot assume ordinary fault
++	 * semantics over them.
++	 */
++	return vma_flags_is_mm_managed(flags) && !vma_flags_is_fixed_mapping(flags);
++}
++
++static inline bool vma_is_mm_backed(const struct vm_area_struct *vma)
++{
++	return vma_flags_is_mm_backed(&vma->flags);
++}
++
+ static inline bool vma_flags_can_merge(const vma_flags_t *flags)
+ {
+ 	/*
+ 	 * VMA merging assumes that a VMA's flags and fields completely describe
+-	 * its state.
++	 * its state, which is only the case for mm-backed mappings.
+ 	 *
+-	 * However, mappings which are not mm-managed may have established state
+-	 * upon mapping not embodied in any attribute of the VMA.
++	 * Mappings which are not mm-managed may have established state upon
++	 * mapping not embodied in any attribute of the VMA.
+ 	 *
+ 	 * Additionally, private (CoW) PFN maps encode the source PFN of the
+ 	 * range in vma->vm_pgoff, which may otherwise cause spurious merges.
+ 	 */
+-	if (!vma_flags_is_mm_managed(flags))
++	if (!vma_flags_is_mm_backed(flags))
+ 		return false;
+-	/* VMA explicitly marked as being unmergeable. */
+-	if (vma_flags_is_fixed_mapping(flags))
+-		return false;
+-
+-	return true;
++	/*
++	 * hugetlb mappings contain per-VMA state, so their flags and fields do
++	 * not completely describe them.
++	 */
++	return !vma_flags_is_hugetlb(flags);
+ }
+_
 
-TL;DR:
-- Test gaps: verifier may fold the staggered jumps away, and mis-targeted
-  jumps may still pass
-- 32-bit cmpxchg compare of a non-zero upper r0 half is no longer covered
-- Missing JIT features may fail instead of skip
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns.c b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-> new file mode 100644
-> index 000000000000..dabf8a4abdfe
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-> @@ -0,0 +1,2433 @@
-
-[ ... ]
-
-> +static void emit_alu_imm(struct batch *b, void *arg, __s64 dst, __s64 imm)
-> +{
-
-[ ... ]
-
-> +	if (!alu_result(&res, dst, (__s32)imm, a->op, a->flags))
-> +		return;
-> +	k = batch_case(b, BPF_REG_3, dst, 0);
-
-Does this record the right second input for the failure message?
-batch_case(b, BPF_REG_3, dst, 0) stores in1 = 0 for every case, but the
-immediate is the only operand that varies within one dst value.
-
-batch_flush() identifies a failing case only by its recorded inputs:
-
-    snprintf(buf, sizeof(buf), "%s: in0=0x%llx in1=0x%llx out%d",
-             b->desc, b->ctx.in[k][0], b->ctx.in[k][1], j);
-
-A wrong "alu64_div_k magnitudes" or "alu64_mul_k magnitudes" result is
-therefore reported as in0=0x4000000000000000 in1=0x0, which cannot tell the
-failing immediate apart from the dozens of others used with the same dst.
-For div and mod it even suggests a zero divisor, which alu_result() never
-lets through.
-
-emit_jmp(), test_shifts() and div_const() all pass their immediate to
-batch_case().  Would this work as:
-
-    k = batch_case(b, BPF_REG_3, dst, (__s32)imm);
-
-in[k][1] is never loaded by this program, so only the diagnostic changes.
-
-[ ... ]
-
-> +static void emit_cmpxchg(struct batch *b, void *arg, __s64 dst, __s64 src)
-> +{
-
-[ ... ]
-
-> +	/* Mismatch: the memory keeps its value, r0 gets it */
-> +	EMIT(b, BPF_MOV64_REG(BPF_REG_0, BPF_REG_1));
-> +	EMIT(b, BPF_ALU64_IMM(BPF_XOR, BPF_REG_0, -1));
-> +	EMIT(b, BPF_ATOMIC_OP(size, BPF_CMPXCHG, BPF_REG_10, BPF_REG_2, MEM_SLOT));
-> +	ST_OUT(b, k, 0, BPF_REG_3, BPF_REG_0);
-> +	/* Match: the memory gets the source, r0 the old value */
-> +	EMIT(b, BPF_ATOMIC_OP(size, BPF_CMPXCHG, BPF_REG_10, BPF_REG_2, MEM_SLOT));
-
-Is the successful 32-bit compare still exercised with a non-zero upper half
-in r0 here?
-
-The matching BPF_CMPXCHG reuses the r0 left behind by the mismatching one,
-and the verifier always zero extends r0 after a BPF_W cmpxchg, so the upper
-32 bits of r0 are zero when the matching compare runs.
-
-The test_bpf version this was ported from (__bpf_emit_cmpxchg32()) reloaded
-r0 with the full 64-bit dst before the matching cmpxchg:
-
-    /* Result successful */
-    i += __bpf_ld_imm64(&insns[i], R0, dst);
-    insns[i++] = BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R2, -4);
-
-so for negative values and magnitudes of 2^32 and up the JIT had to compare
-only the low half.
-
-Nothing else in jit_insns covers this.  atomic_reg_pairs() sets r0 to ~mem
-and only tests the mismatch path, and test_ldst_zero_off() loads r0 with a
-zero extending BPF_LDX_MEM(BPF_W, ...).  A JIT that compares all 64 bits of
-r0 against the zero extended memory value would pass every jit_insns case.
-
-The next commit in the series, 5ba768097e67 ("selftests/bpf: Remove the old
-test_bpf module"), removes test_bpf, and nothing later restores this check.
-
-Would reloading r0 before the matching cmpxchg, for example with
-LD_IN(b, k, 0, BPF_REG_3, BPF_REG_0), work?  The low 32 bits of in0 still
-equal the memory value, so the expected results stay the same.
-
-[ ... ]
-
-> +/*
-> + * Taken jumps over regions of doubling length, forward or backward, up to
-> + * the maximal offset of the jump: 16 bits, or 2^17 for the 32-bit
-> + * unconditional jump. The not taken path of a conditional jump and the
-> + * guard of an unconditional one lead to an exit with the region number, so
-> + * the verifier sees every instruction reachable and a jump landing anywhere
-> + * else than on its target fails the run.
-> + */
-> +static void staggered_jumps(const struct bpf_insn *jmp, __s64 r1, __s64 r2, bool backward,
-> +			    const char *desc)
-
-[ ... ]
-
-> +	insns[i++] = BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8);
-> +	insns[i++] = BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0);
-> +	insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0);
-> +	for (gap = backward ? 4 : 2; gap <= max; gap = gap < max / 2 ? gap * 2 : max) {
-
-Do all the jumps still reach the JIT with long offsets?
-
-r1 and r2 are loaded from the ctx only once, here, and every later region
-reuses the bounds the verifier learned on the taken path of the region
-before it.  For four of the eight kinds that is enough for the verifier to
-decide the branch:
-
-- "staggered jmp_jeq_k": after the taken JEQ r1, 1234, r1 is the constant
-  1234, so every later JEQ is always taken.
-
-- "staggered jmp32_jlt_k": after the taken JLT w1, 0x80000000, the u32 max
-  of w1 is 0x7fffffff, so every later JLT is always taken.
-
-- "staggered ja" and "staggered gotol": the guard JEQ r2, 0, +1 falls
-  through with r2 != 0, so every later guard is never taken.
-
-The skipped paths are never marked seen, and since test_progs runs with
-CAP_BPF the verifier then runs bpf_opt_hard_wire_dead_code_branches(),
-bpf_opt_remove_dead_code() and bpf_opt_remove_nops().
-
-In the forward layout every region after the first is deleted and its jump
-becomes "ja +0", so "staggered ja forward", "staggered gotol forward",
-"staggered jmp_jeq_k forward" and "staggered jmp32_jlt_k forward" each JIT
-only a single 2-instruction jump.
-
-In the backward layout the regions survive, but for jeq_k and jlt32_k every
-conditional jump after the first is rewritten to a plain BPF_JA with the
-same offset.  No JMP32 conditional with an immediate, and no 64-bit JEQ
-with an immediate, reaches the JIT with a long offset.
-
-This seems to contradict "so the verifier sees every instruction reachable"
-in the comment above.  lib/test_bpf.c ran its programs without the
-verifier, so it had no such folding.  Would reloading r1 and r2 from the
-ctx inside each region, right before the guard or jump, stop the refined
-bounds from carrying over?
-
-The same happens in test_jmp_reg_pairs() for rd == rs, since the verifier
-resolves "reg1 == reg2" for every op except JSET, so those register
-combinations never reach the JIT as jumps.
-
-[ ... ]
-
-> +		} else {
-> +			/* An unconditional jump needs a way into its region */
-> +			if (ja)
-> +				insns[i++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, 1);
-> +			insns[i] = *jmp;
-> +			set_jmp_off(&insns[i++], ja32, gap);
-> +			insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, ++n);
-> +			for (k = 0; k < gap - 2; k++)
-> +				insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0);
-> +			insns[i++] = BPF_EXIT_INSN();
-> +		}
-
-Can a jump that lands inside the skipped region be detected here?
-
-The program starts with r0 = 0 and passes when opts.retval is 0.  In the
-forward layout only the "r0 = n" slot right after the jump writes r0.  If a
-JIT miscomputes the target and the jump lands anywhere in the "r3 = 0"
-fillers or on the region's exit, execution reaches an exit with r0 still 0
-and ASSERT_EQ(opts.retval, 0, desc) passes.  All later regions are skipped
-as well, so their jumps never run.
-
-The backward layout has the same weakness.  The region body only holds
-"r3 = 0", so a backward jump that lands short in the body, or a leading
-jump that lands in the body instead of on the guard, still reaches the
-region's exit and continues to the next region.
-
-So the only mis-target that is caught is a landing on the single "r0 = n"
-slot, which in practice means the jump was not taken at all.  That does not
-match "a jump landing anywhere else than on its target fails the run" in
-the comment above.  max_jmp() in the same file ends its skipped region in
-"r0 = 2", so any landing inside it changes the result.
-
-lib/test_bpf.c checked r0 at every hop in __bpf_fill_staggered_jumps(), and
-5ba768097e67 deletes that.  Would filling the skipped forward region with
-"r0 = n" instead of "r3 = 0" close the forward gap?  The backward layout
-would need a check that a short landing cannot get past and that the
-verifier cannot constant-fold.
-
-[ ... ]
-
-> +	fd = load_prog(insns, i, desc);
-> +	if (fd >= 0) {
-> +		if (ASSERT_OK(bpf_prog_test_run_opts(fd, &opts), desc))
-> +			ASSERT_EQ(opts.retval, 0, desc);
-> +		close(fd);
-> +	}
-
-[ ... ]
-
-> +static int prog_load(struct prog *p, const char *desc)
-
-[ ... ]
-
-> +	fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", p->insns, p->cnt, &lopts);
-> +	if (!ASSERT_GE(fd, 0, desc))
-> +		fprintf(stderr, "%s", log);
-> +	return fd;
-
-A subsystem pattern flags this as potentially concerning: the "staggered
-gotol" kinds load through load_prog(), and the cpu v4 sweeps load through
-prog_load() in the same way.  Both treat every load error as a failure
-via ASSERT_GE(fd, 0, desc).
-
-The x86-32, sparc64, parisc and riscv32 JITs have no BPF_JMP32 | BPF_JA
-case.  With CONFIG_BPF_JIT_ALWAYS_ON, __bpf_prog_select_runtime() then sets
-*err = -ENOTSUPP, and the subtest fails instead of skipping with a reason.
-The same file already probes and skips for a missing JIT capability in
-acq_rel_ok() and test_acq_rel().  Should the capability-absent case be a
-skip here?
-
-On the other hand, without JIT_ALWAYS_ON the kernel falls back to the
-interpreter and the load succeeds.  5ba768097e67 says that archs wanting
-BPF JIT support should move over to these selftests, so a hard failure on a
-missing JIT instruction may be intended.
-
-[ ... ]
-
-> +static int off_prog_load(struct off_prog *p, const char *desc, bool quiet)
-
-[ ... ]
-
-> +	if (!ASSERT_GE(fd, 0, desc))
-> +		fprintf(stderr, "%s", log);
-> +	return fd;
-
-[ ... ]
-
-> +static void load_offsets(struct off_mem *m, int kind, int size, int rb, int rd,
-> +			 const int *off, int nr)
-
-[ ... ]
-
-> +		if (kind == K_LDX)
-> +			EMIT(&p, BPF_LDX_MEM(size, rd, rb, off[i]));
-> +		else
-> +			EMIT(&p, BPF_RAW_INSN(BPF_LDX | BPF_MEMSX | size, rd, rb, off[i], 0));
-
-A subsystem pattern flags this as potentially concerning: test_ldst_offsets()
-calls load_offsets(&m, K_LDSX, ...) for B/H/W, which emits BPF_LDX |
-BPF_MEMSX loads, and off_prog_load() asserts on any load failure.
-
-The verifier accepts BPF_MEMSX on every architecture, but the x86-32, mips,
-sparc, parisc and riscv32 JITs have no BPF_MEMSX case.  With
-CONFIG_BPF_JIT_ALWAYS_ON=y, __bpf_prog_select_runtime() then returns
--ENOTSUPP:
-
-    if (!fp->jited && jit_needed) {
-            *err = -ENOTSUPP;
-
-and each LDSX combination is reported as a FAIL instead of a skip.
-
-The same change already probes and gates one missing capability with
-unaligned_ok(), and gates load-acquire/store-release with acq_rel_ok() and
-test__skip().  progs/verifier_ldsx.c also restricts its LDSX tests to the
-JITs that support them.  Would a one-time probe like unaligned_ok() that
-skips the K_LDSX calls, with a message, be appropriate?
-
-That said, failing here may be intended, since the aim is to flag JITs that
-lack the cpu v4 instructions.  Without JIT_ALWAYS_ON the load falls back to
-the interpreter and passes, and the plain LDX/STX/ST programs only use base
-instructions.  test_movsx() behaves the same way.
-
-[ ... ]
-
-> +static void test_probe_mem(void)
-
-[ ... ]
-
-> +			EMIT(&p, BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL,
-> +					      0, kfunc_id));
-
-[ ... ]
-
-> +			fd = prog_load(&p, desc);
-> +			if (fd < 0)
-> +				return;
-
-A subsystem pattern flags this as potentially concerning: every program
-here calls the bpf_rdonly_cast kfunc, and bpf_add_kfunc_call() rejects such
-a program with -ENOTSUPP in two cases:
-
-    if (!env->prog->jit_requested) {
-        verbose(env, "JIT is required for calling kernel function\n");
-        return -ENOTSUPP;
-    }
-    if (!bpf_jit_supports_kfunc_call()) {
-        verbose(env, "JIT does not support calling kernel function\n");
-        return -ENOTSUPP;
-    }
-
-The first case is bpf_jit_enable=0 without CONFIG_BPF_JIT_ALWAYS_ON.  The
-second is any JIT that does not override the weak
-bpf_jit_supports_kfunc_call(); only loongarch, arm64, parisc, powerpc,
-riscv, s390, x86 and x86-32 do, so the 32-bit arm, mips and sparc JITs are
-among those affected.
-
-In both cases prog_load() hits ASSERT_GE(fd, 0, desc) and the probe_mem
-subtest is reported as FAIL, although the -ENOTSUPP only means the
-capability is absent.  Should this skip instead?
-
-5ba768097e67 ("selftests/bpf: Remove the old test_bpf module") makes
-jit_insns the replacement for test_bpf and says that archs wanting BPF JIT
-support should move over to the selftests.  A failure here may be intended,
-since the usual way to exclude a BPF selftest on an arch that lacks a
-feature is a DENYLIST entry.
-
-[ ... ]
-
-> +static bool acq_rel_ok(void)
-
-[ ... ]
-
-> +	fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", p.insns, p.cnt, &lopts);
-> +	if (fd < 0)
-> +		return false;
-
-[ ... ]
-
-> +	if (!acq_rel_ok()) {
-> +		test__skip();
-> +		return;
-> +	}
-
-The opposite case is handled here: acq_rel_ok() returns false for any load
-error, and test_acq_rel() then calls a bare test__skip() without a reason.
-
-Doesn't that treat a capability-absent error (-EOPNOTSUPP for 64-bit on
-32-bit arches, or -ENOTSUPP from a JIT that cannot emit the instruction
-under JIT_ALWAYS_ON) the same as a verifier or JIT regression (-EINVAL,
--EACCES) on a JIT that does support load-acquire?  Such a regression would
-show up as SKIP instead of FAIL.
-
-[ ... ]
-
-> +void test_jit_insns(void)
-> +{
-> +	RUN_TESTS(jit_insns_arena);
-
-A subsystem pattern flags this as potentially concerning: the two arena
-subtests run from here fail, rather than skip, on any JIT without arena
-support.
-
-arena_map_alloc() returns -EOPNOTSUPP when !bpf_jit_supports_arena(), which
-is the case for the arm32, x86_32, mips, parisc, ppc32, riscv32, sparc64
-and arc JITs.  The "arena" map in progs/jit_insns_arena.c then fails to
-create, and test_loader reports "arena access with zero offset" and "cast
-to a user address" as FAIL.  So the whole jit_insns test fails on those
-JITs, although the commit message says the tests run "on every JIT" and
-5ba768097e67 points exactly these architectures at them.
-
-The two arena programs also call a kfunc, and test_jit_insns() deliberately
-does not check is_jit_enabled().  With bpf_jit_enable=0 and no
-CONFIG_BPF_JIT_ALWAYS_ON they fail with "JIT is required for calling kernel
-function" while the raw-instruction subtests pass on the interpreter.
-
-The same file already handles a missing JIT feature by probing and
-skipping in test_acq_rel().  Could the arena programs be gated the same
-way, for example by probing libbpf_probe_bpf_map_type(BPF_MAP_TYPE_ARENA,
-NULL) before RUN_TESTS(jit_insns_arena)?
-
-The header comment of jit_insns_arena.c says a kernel without arena support
-"fails only these programs", and verifier_arena is also run with RUN()
-rather than RUN_JITED(), so failing may be intended.
-
-[ ... ]
-
-> +void serial_test_jit_insns_blinded(void)
-> +{
-
-[ ... ]
-
-> +	if (!is_jit_enabled()) {
-> +		test__skip();
-> +		return;
-> +	}
-
-Relatedly, serial_test_jit_insns_blinded() calls test__skip() here without
-printing a reason when the JIT is disabled.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38442623945
---===============8695117140356268114==--
