@@ -1,216 +1,213 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198AD51FCB3;
-	Tue, 13 Oct 2026 15:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CA75172CA;
+	Tue, 13 Oct 2026 15:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791905230; cv=none; b=CKxIM/q+NdXHwuDdoywuz50Mof+RfG4r+kyytPAiJT+58hEC5gko5jIG9mWuNsERd2wFmWD4xOA6/LKYJVovXKRYhtzWkruI8HT/HzFA4dmoYNoG5yPM9uRH4ncIkJHnDuy/2NFO7QQUjkt1N4tiRx5ROVxynb1d8QKUW04B6gY=
+	t=1791905510; cv=none; b=FItMZ/STMXJ6HGi0usZx3hI2jG4Fuvwg6lh99YqymXnOgnvszGUcY0OiS/mfpGk+DNhFXq525xzfwFJXeYK5Fr4v93Ury0UZqtfQoPoTfOGFHNBWEjcAftFQzb4F1AzRFzua3Y29zbSyL4oB4fYuDtbbU1uhZF0EfU4nTvT6Me8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791905230; c=relaxed/simple;
-	bh=OiyDxKMaWi5WSg9WKDOm7Q1oQh/8coDXTs0lEotlLbA=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=d+7E7z9t7EZa2AzI/jXpUfGEmM71RpiuNtkH53bl+BAckvhA1e1dn4wR1Voh7J6IQyPPkeZboCmsIsAIv4W6ppcf6oKoiFVwQoSJL+Y45aN5+lmTioz/sje0YExX1Bx0/lcCAWqEdECtEzptiisSljyXwMbrEa5/wdVcdpBnpYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n17LqzD5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791905510; c=relaxed/simple;
+	bh=gsmrp0uRtNEEBvwP4Q0pKgs8lFscoCBmjiamKhm7z9Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ld0+EU1tPi9dmooxaYAPuh3lcqDt2mNRsH6i5omaPNKLlWb8MFq9+D4+QngBtNJYLf4yjWzRQyDjwRwgoQhiSU44OH2iFNlAKZG39cfSvUZvB3ZauxOA1dt3StT2+YX3xZ0q0DsSJ9O9UOpYnlgdcm3ohxF+0d0QjK486RuBFWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D5BClKMk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n17LqzD5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C981F000FF;
-	Tue, 13 Oct 2026 15:27:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D5BClKMk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ABA81F000FF;
+	Tue, 13 Oct 2026 15:31:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791905227;
-	bh=R8S3NY57BMMYZek8JXFwtsc6w4ekQrWVkELly8pYpXE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=n17LqzD5siqrk9lbUKaMdGLHDkDLjAjNrOy6Tl9TIfbk62LN/BxzEnxmNOFfNg8hI
-	 9hNxLKLgvS+hQKSwwbQO0Gf++Yh/OvSldoO5/mTcYllIjsnphcPXW46NYVpgAeOxkF
-	 LtHqg/FzeOMjVX6ET9fTHgU/wD7AZMADbdUyyK0S50Vw8IqPfTGUFjXpPwX8QKXk7K
-	 pY9cr00Phjcv3HoeL0/+twYYBfcqUA7gMFKYqkIXnEqYBEZx49S7GoSiSbShdVCMlg
-	 MmKroUPEBahgbnqwsPH4goWJFA3VXDyx98yjPaICvBRwH0EpOE0BRFIlSQ6Efy0Kd1
-	 hpUE1E7KXIYMA==
-Subject: Re: [PATCH net-next 1/2] net: stmmac: fix XDP TX DMA address for
- compound RX pages
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, boon.leong.ong@intel.com, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Date: Tue, 13 Oct 2026 15:27:06 +0000
-Message-ID: <179190522641.434549.12034764335349832312@kernel.org>
-In-Reply-To:
- <20261012-stmmac-xdp-tx-pre-fixes-v1-1-05fd0c90f7e1@oss.qualcomm.com>
-References:
- <20261012-stmmac-xdp-tx-pre-fixes-v1-1-05fd0c90f7e1@oss.qualcomm.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1791905508;
+	bh=ABcU0W+nIwCqZSTy0PPdZy1uyj317pAS/O9WDDdnQZw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=D5BClKMkyjHNOoeNuUKWF6HwQ8es4HwocZa/1vk5hPJxYK0OE2MtOdN0S2gmcH6lC
+	 h2bS5ASLQ2jbvKrWro4RUW2U8G5muKxncrLmF+Jou2z0+IhaAxzQhCEY/LrmDDFWT6
+	 M6xKr2R3fPo+unNvnMZSc2FKExJxWD5IMaBvhhbtafRSFGB4ueb89jIBT5sOdDSJZN
+	 GDOdloqs53ZQ9vDKS7F/ry5KwOabJqSqdFue4yGsWFChcPdcnrWzVPTjRyPqdUgvoo
+	 j9GhCWKrZ4bFEjuUrlQ3XmGuaXcGd+p+mRRvlVf6aiAfRoUGE+Fx6LYN+MBnX0qWdK
+	 WFMXQD15T+n7w==
+Message-ID: <7bf5a2dc-f7be-425b-99e3-75b4546c8e19@kernel.org>
+Date: Tue, 13 Oct 2026 17:31:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 30/39] mm/vma: introduce vma[_flags]_is_mm_backed()
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Paul Moore <paul@paul-moore.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>,
+ Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>,
+ John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
+ <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
+ Ying Huang <ying.huang@linux.alibaba.com>,
+ Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
+ Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>,
+ Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+ Xu Xin <xu.xin@linux.dev>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-rdma@vger.kernel.org, selinux@vger.kernel.org,
+ linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ fuse-devel@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Bert Karwatzki <spasswolf@web.de>
+References: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
+ <20261013-b4-mmap-prepare-vma-flag-sanify-v6-30-1aa3c9b139f9@kernel.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
+ ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
+ AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
+ 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
+ g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
+ ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
+ 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
+ /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
+ jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
+ DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
+ HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
+ 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
+ LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-30-1aa3c9b139f9@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On 10/13/26 17:05, Lorenzo Stoakes (ARM) wrote:
+> Introduce vma[_flags]_is_mm_backed() for the purposes of identifying
+> mappings which are mm-managed and whose contents were placed there by core
+> mm's own fault path - rather than a custom ->fault handler.
+> 
+> Mappings not managed by core mm do not fall into this category, as they are
+> populated by their owner, and nor of course does memory-mapped I/O.
+> 
+> We exclude fixed mappings as these have a layout core mm cannot assume
+> ordinary fault semantics over.
+> 
+> hugetlb mappings are fixed mappings, but core mm owns them entirely, so
+> they are explicitly carved out as mm-backed, as the MADV_DODUMP check
+> already does.
+> 
+> Use this functionality to update the madvise MADV_DODUMP check to test for
+> this rather than open-coding it.
+> 
+> Also update vma_flags_can_merge() so it is written in terms of
+> vma_flags_is_mm_backed() - all mm-backed mappings can be merged except
+> hugetlb mappings, whose flags and fields do not completely describe them.
+> 
+> Also update __thp_vma_allowable_orders() to use vma_is_mm_backed() rather
+> than testing for mergeability, which is irrelevant to this function.
+> 
+> This replaces the VM_SPECIAL check which means it no longer checks for
+> VMA_IO_BIT, however this is safe as we have established the invariant that
+> mm-managed mappings may not set VMA_IO_BIT, so we implicitly include
+> these.
+> 
+> No functional change intended.
+> 
+> Acked-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
 
-Critical: 0 · High: 0 (1) · Medium: 1 · Low: 0
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] The commit message describes a bug that the current driver
-  cannot reach.
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but on cores with
-  normal (non-enhanced) descriptors in ring mode, which is the default…
-
---
-
-net: stmmac: fix XDP TX DMA address for compound RX pages
-
-This commit changes stmmac_xdp_xmit_xdpf() to use virt_to_head_page()
-instead of virt_to_page() when it looks up the page_pool DMA address for
-the XDP_TX head buffer. The goal is that a data pointer sitting in a tail
-page of a compound RX page still resolves to the DMA base of the head page.
-
-> RX pages become compound as soon as dma_buf_sz needs more than one page
-> (pp_params.order = order_base_2(num_pages) > 0), which happens from an
-> MTU around 3000 bytes once dma_buf_sz reaches 4096. If an XDP program
-> moves the data forward with bpf_xdp_adjust_head() by more than about a
-> page, xdpf->data points into a tail page whose struct page has no DMA
-> address: page_pool_get_dma_addr() then returns a bogus bus address, and
-> dma_sync_single_for_device() together with the TX descriptor transmit
-> from the wrong location.
-
-[Severity: Medium]
-
-Can the driver reach this configuration today? stmmac_xdp_set_prog()
-refuses to attach a program when the MTU is above ETH_DATA_LEN:
-
-drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c:stmmac_xdp_set_prog() {
-    ...
-	if (prog && dev->mtu > ETH_DATA_LEN) {
-		/* For now, the driver doesn't support XDP functionality with
-		 * jumbo frames so we return error.
-		 */
-		NL_SET_ERR_MSG_MOD(extack, "Jumbo frames not supported");
-		return -EOPNOTSUPP;
-	}
-    ...
-}
-
-stmmac_change_mtu() blocks the other order too:
-
-	if (stmmac_xdp_is_enabled(priv) && new_mtu > ETH_DATA_LEN) {
-		netdev_dbg(priv->dev, "Jumbo frames not supported for XDP\n");
-		return -EINVAL;
-	}
-
-When XDP is enabled the MTU is at most 1500, so stmmac_set_bfsize() returns
-DEFAULT_BUFSIZE (1536). Then in __alloc_dma_rx_desc_resources():
-
-	dma_buf_sz_pad = stmmac_rx_offset(priv) + dma_conf->dma_buf_sz +
-			 SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-	num_pages = DIV_ROUND_UP(dma_buf_sz_pad, PAGE_SIZE);
-	...
-	pp_params.order = order_base_2(num_pages);
-
-dma_buf_sz_pad stays below PAGE_SIZE, so num_pages is 1 and the order is 0.
-stmmac_rx() also sets frame_sz to a single page.
-
-On an order-0 page, virt_to_page() and virt_to_head_page() return the same
-struct page. Does this change behaviour at runtime in any configuration the
-driver currently allows?
-
-The threshold in the message also looks off. By the driver's own sizing,
-dma_buf_sz reaches 4096 once the MTU goes above roughly 2022, not 3000.
-
-The later patch in the series, "net: stmmac: disable TX checksum offload
-for jumbo frames on bugged cores", only adds a csum override. It does not
-lift the XDP/jumbo restriction, so the described trigger still can't happen
-at the end of the series.
-
-The change is reasonable hardening, and it matches the existing
-virt_to_head_page(ctx.xdp.data) use in stmmac_rx(). Could the message
-describe it as hardening, or as a prerequisite for jumbo or multi-buffer
-XDP? Could the Fixes: tag also be reconsidered? As written, stable will
-treat this as a fix for a reachable DMA corruption bug.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index b8b4de4c5b1a7..ca61ab449e32b 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5301,7 +5301,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
->  			struct page *page;
->  
->  			page = frag ? skb_frag_page(frag)
-> -				    : virt_to_page(xdpf->data);
-> +				    : virt_to_head_page(xdpf->data);
->  			dma_addr = page_pool_get_dma_addr(page);
->  			if (frag)
->  				dma_addr += skb_frag_off(frag);
-
-[Severity: High]
-
-This isn't a bug introduced by this patch, but it has the same symptom.
-On cores with normal (non-enhanced) descriptors in ring mode, the default
-when chain_mode is not set, can the XDP_TX path in stmmac_xdp_xmit_xdpf()
-make the DMA engine fetch part of the frame from an address that was never
-programmed?
-
-stmmac_rx() builds the xdp_buff with a full-page frame_sz:
-
-	bufsz = DIV_ROUND_UP(priv->dma_conf.dma_buf_sz, PAGE_SIZE) * PAGE_SIZE;
-	...
-	xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
-
-That means an XDP program can use bpf_xdp_adjust_tail() to grow the frame
-well past 2047 bytes and return XDP_TX, even with the MTU at 1500.
-
-Further down in stmmac_xdp_xmit_xdpf(), only TDES2 is programmed:
-
-		stmmac_set_desc_addr(priv, desc, dma_addr);
-		stmmac_prepare_tx_desc(priv, desc, !i, len, csum,
-				       priv->descriptor_mode, !!i, last_frame,
-				       xdp_get_frame_len(xdpf));
-
-With normal descriptors, the call chain
-stmmac_prepare_tx_desc()->ndesc_prepare_tx_desc()->norm_set_tx_desc_len_on_ring()
-splits the length between buffer 1 and buffer 2:
-
-	unsigned int buffer1_max_length = BUF_SIZE_2KiB - 1;
-
-	if (unlikely(len > buffer1_max_length)) {
-		p->des1 |= cpu_to_le32(FIELD_PREP(TDES1_BUFFER2_SIZE_MASK,
-						  len - buffer1_max_length) |
-				       FIELD_PREP(TDES1_BUFFER1_SIZE_MASK,
-						  buffer1_max_length));
-
-In ring mode, TDES3 holds the buffer 2 address. That is why jumbo_frm() in
-ring_mode.c sets it explicitly:
-
-	desc->des3 = cpu_to_le32(lower_32_bits(des2) + BUF_SIZE_4KiB);
-
-The XDP path never writes des3, and ndesc_release_tx_desc() only clears
-des0 and des1:
-
-	memset(p, 0, offsetof(struct dma_desc, des2));
-
-So des3 still holds either 0 (from the coherent allocation, or after
-clean_desc3() runs on completion) or a stale buffer address. Would the MAC
-then read len - 2047 bytes from that address and transmit them?
-
-Without an IOMMU, this could send arbitrary memory out on the wire. With
-an IOMMU, the read would fault and TX DMA would be restarted.
-
-ndev->xdp_features is set unconditionally, so nothing blocks XDP on these
-cores. The behaviour goes back to be8b38a722e6, which added XDP_TX.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1%40oss.qualcomm.com
+Cheers,
+
+David
