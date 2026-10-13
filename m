@@ -1,21 +1,21 @@
 Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4C5522EF6
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651C4522EF2
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791911427; cv=none; b=DYrzCzi8oqHX27Kidtw73rAAVYRuxXhDNvcFwEInKKIWUy60MSebgu59/I1OMJhh3KuaQDxE3hRX03B0zY2Vi+Q8BtMkkkmxChe8JOP3dr2otU8nmkzPm4ry7HXTTbyt7aSPiRWO7qsZBc4jz+kKvrNbKGiVxb/0vNTYpflCyqs=
+	t=1791911427; cv=none; b=kU/zkKijOjRkRCt/nsjTk/weVcnY2dCsBafu9VsnKpAlBIxXBEk5Mhs0EDARGJVWUSuAOfQCvQPix225b2mfIlTwItKebYEZ2eD3H4vbllZPVAQiJ3uRuFJ8wGMjwSibiATIwfFV4Yi0hS80LK+qlBQiIpNBhWHYO0kdXgF6JrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791911427; c=relaxed/simple;
-	bh=0OV49xSqDA9obU81wxSc+rVG3vdNtIJf6KKBq3fgOj0=;
+	bh=TERBzyEhBhLGSEwKXm6vV0jKHbjeVzHxV4e5RiYlhi0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m6/rJSA4ZgaUnshAYPi561Khh01F0fCByjaUGLkaOJJ7IRBHOEm5/3YsIMAXz1XFPQIiWuvVBTTJvPkSPuN3T5bkoPOhTFdcn7g1pehAld/9nny6zrKT4qm//G0NxGSxhHhsej2kRVo/RuB9YF+TgbBBFnLg5vHMgp7YI1pDq40=
+	 MIME-Version; b=rP7GHi6qoqYsAU0LVdeu0cFgcSOYQ7pAZVg+RxD+DVAQ53CcJipBd3qm5NRtDGl5+6jryMSlw3AJH8LJRyU/fNj5Jg/7E03gQa3hKDIwEM7tvolR4iWHJZHEu8NzA/kEtBlhLVRzWjez2s9ESYcJgaV2ZHjwcO0sQKV9+mNd+64=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 9DAFC30FB5C5F8; Tue, 13 Oct 2026 10:10:24 -0700 (PDT)
+	id 6D79F30FB5C5A1; Tue, 13 Oct 2026 10:10:16 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 08/11] bpf: Refuse a trampoline on an unreliable static function with stack args
-Date: Tue, 13 Oct 2026 10:10:24 -0700
-Message-ID: <20261013171024.2136303-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 07/11] selftests/bpf: Test trampoline args of a BPF function at an odd slot
+Date: Tue, 13 Oct 2026 10:10:16 -0700
+Message-ID: <20261013171016.2134794-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261013170910.2126673-1-yonghong.song@linux.dev>
 References: <20261013170910.2126673-1-yonghong.song@linux.dev>
@@ -37,91 +37,291 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-When the BTF of a function in the target program is unreliable, the
-model of the function given to its trampoline is MAX_BPF_FUNC_REG_ARGS
-u64 arguments. The verifier takes a static function's stack arguments
-from its BTF before it finds the BTF unreliable, though, so such a
-function can still take more: one with six or more arguments, one of
-them a plain pointer, for example. The trampoline saves and restores
-five registers then. After an fentry program, the rest of the register
-arguments, r9 on x86-64 and x5 to x7 on arm64, hold whatever
-__bpf_prog_exit() left there, and for fexit the stack arguments are not
-copied either, so the function goes on with garbage in arguments the
-verifier checked, pointers included.
+Attach fentry and fexit programs to two functions of another BPF
+program, each taking a struct holding an __int128 at an odd argument
+slot:
 
-Refuse the attach when such a function has more argument slots in its
-BTF than fit in registers. The main program is left alone: it takes only
-its context, and the verifier gives it no stack arguments when its BTF
-is unreliable.
+  - callee_odd(): the struct after a single u64, where arm64 would
+    leave a register empty.
+  - callee_stack(): the struct after seven u64s, where x86-64 would
+    leave a stack slot empty and arm64 a register.
 
-Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+BPF code calls them with the arguments packed in the BPF convention, so
+that is where the trampoline has to take them from. The fentry programs
+read each argument slot from ctx[], and the fexit programs check the
+return value, weighted by slot, which is only right if the function got
+its arguments back where its caller put them. Both take a struct by
+value, which GCC passes by reference instead, so they are only built
+with clang, and callee_stack() only with a clang that supports stack
+arguments.
+
+Describing the functions to the trampoline by the types of their
+arguments, rather than as one u64 per slot, the x86-64 trampoline fails
+the test with:
+
+  test_int128_tgt_prog:FAIL:stack:h.lo unexpected stack:h.lo: actual 9 !=3D=
+ expected 8
+  ...
+  test_int128_tgt_prog:FAIL:stack fexit ret unexpected stack fexit ret: a=
+ctual 34359738697 !=3D expected 385
+
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/tracing_struct.c | 74 +++++++++++++++++++
+ .../bpf/progs/tracing_struct_int128_tgt.c     | 68 +++++++++++++++++
+ .../bpf/progs/tracing_struct_int128_tracer.c  | 56 ++++++++++++++
+ 3 files changed, 198 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tracer.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c7af14a3f0e8..1f24806aeba3 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22028,6 +22028,33 @@ static int flatten_bpf_func_model(struct bpf_ver=
-ifier_log *log, const char *tnam
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
+ols/testing/selftests/bpf/prog_tests/tracing_struct.c
+index a2da219e1476..ad46eabe784f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -5,6 +5,8 @@
+ #include "tracing_struct.skel.h"
+ #include "tracing_struct_many_args.skel.h"
+ #include "tracing_struct_int128.skel.h"
++#include "tracing_struct_int128_tgt.skel.h"
++#include "tracing_struct_int128_tracer.skel.h"
+ #include "tracing_stack_arg_tailcall_tgt.skel.h"
+ #include "tracing_stack_arg_tailcall_tracer.skel.h"
+=20
+@@ -164,6 +166,76 @@ static void test_int128_args(void)
+ #endif
  }
 =20
-+/*
-+ * The verifier lets a static function use stack arguments counted from =
-its
-+ * BTF, even if that BTF turns out unreliable. A trampoline on the funct=
-ion is
-+ * then given only MAX_BPF_FUNC_REG_ARGS u64 arguments and would lose th=
-e
-+ * stack arguments, so such a function cannot be attached to.
-+ */
-+static int check_unreliable_func_args(struct bpf_verifier_log *log, stru=
-ct btf *btf,
-+				      const struct btf_type *func_proto, const char *tname)
++static void test_int128_tgt_prog(void)
 +{
-+	struct btf_func_model m;
-+	u32 i, nslots =3D 0;
++#if defined(__x86_64__) || defined(__aarch64__)
++	struct tracing_struct_int128_tracer *tracer =3D NULL;
++	struct tracing_struct_int128_tgt *tgt;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err, fd;
 +
-+	if (btf_distill_func_proto(NULL, btf, func_proto, tname, &m)) {
-+		/* at least a slot for each argument */
-+		nslots =3D btf_type_vlen(func_proto);
-+	} else {
-+		for (i =3D 0; i < m.nr_args; i++)
-+			nslots +=3D btf_func_model_arg_slots(&m, i);
++	tgt =3D tracing_struct_int128_tgt__open_and_load();
++	if (!ASSERT_OK_PTR(tgt, "tgt__open_and_load"))
++		return;
++	if (!tgt->rodata->has_struct_arg) {
++		test__skip();
++		goto out;
 +	}
-+	if (nslots <=3D MAX_BPF_FUNC_REG_ARGS)
-+		return 0;
++	fd =3D bpf_program__fd(tgt->progs.run);
 +
-+	bpf_log(log, "Cannot attach to static function %s: unreliable BTF and s=
-tack arguments\n",
-+		tname);
-+	return -EINVAL;
++	tracer =3D tracing_struct_int128_tracer__open();
++	if (!ASSERT_OK_PTR(tracer, "tracer__open"))
++		goto out;
++
++	err =3D bpf_program__set_attach_target(tracer->progs.odd_entry, fd, "ca=
+llee_odd");
++	err =3D err ?: bpf_program__set_attach_target(tracer->progs.odd_exit, f=
+d, "callee_odd");
++	if (tgt->rodata->has_stack_arg) {
++		err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_entr=
+y, fd,
++							     "callee_stack");
++		err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_exit=
+, fd,
++							     "callee_stack");
++	} else {
++		bpf_program__set_autoload(tracer->progs.stack_entry, false);
++		bpf_program__set_autoload(tracer->progs.stack_exit, false);
++	}
++	if (!ASSERT_OK(err, "set_attach_target"))
++		goto out;
++
++	err =3D tracing_struct_int128_tracer__load(tracer);
++	if (!ASSERT_OK(err, "tracer__load"))
++		goto out;
++	err =3D tracing_struct_int128_tracer__attach(tracer);
++	if (!ASSERT_OK(err, "tracer__attach"))
++		goto out;
++
++	err =3D bpf_prog_test_run_opts(fd, &topts);
++	if (!ASSERT_OK(err, "test_run") || !ASSERT_EQ(topts.retval, 0, "retval"=
+))
++		goto out;
++
++	ASSERT_EQ(tracer->bss->odd_a, 1, "odd:a");
++	ASSERT_EQ(tracer->bss->odd_lo, 8, "odd:v.lo");
++	ASSERT_EQ(tracer->bss->odd_hi, 9, "odd:v.hi");
++	ASSERT_EQ(tracer->bss->odd_b, 2, "odd:b");
++	ASSERT_EQ(tgt->bss->ret_odd, 52, "odd ret");
++	ASSERT_EQ(tracer->bss->odd_ret, 52, "odd fexit ret");
++
++	if (tgt->rodata->has_stack_arg) {
++		ASSERT_EQ(tracer->bss->stack_g, 7, "stack:g");
++		ASSERT_EQ(tracer->bss->stack_lo, 8, "stack:h.lo");
++		ASSERT_EQ(tracer->bss->stack_hi, 9, "stack:h.hi");
++		ASSERT_EQ(tracer->bss->stack_i, 10, "stack:i");
++		ASSERT_EQ(tgt->bss->ret_stack, 385, "stack ret");
++		ASSERT_EQ(tracer->bss->stack_ret, 385, "stack fexit ret");
++	}
++
++out:
++	tracing_struct_int128_tracer__destroy(tracer);
++	tracing_struct_int128_tgt__destroy(tgt);
++#else
++	test__skip();
++#endif
 +}
 +
- int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			    const struct bpf_prog *prog,
- 			    const struct bpf_prog *tgt_prog,
-@@ -22295,8 +22322,14 @@ int bpf_check_attach_target(struct bpf_verifier_=
-log *log,
- 		     prog->aux->saved_dst_attach_type !=3D tgt_prog->expected_attach_t=
-ype))
- 			return -EINVAL;
-=20
--		if (tgt_prog && conservative)
-+		if (tgt_prog && conservative) {
-+			if (subprog > 0) {
-+				ret =3D check_unreliable_func_args(log, btf, t, tname);
-+				if (ret)
-+					return ret;
-+			}
- 			t =3D NULL;
-+		}
-=20
- 		ret =3D btf_distill_func_proto(log, btf, t, tname, &tgt_info->fmodel);
- 		if (ret < 0)
+ /*
+  * A trampoline on a function of a tail_call_reachable program keeps the=
+ tail
+  * call counter pointer on its stack, and has to hand the function its s=
+tack
+@@ -254,6 +326,8 @@ void test_tracing_struct(void)
+ 		test_struct_many_args();
+ 	if (test__start_subtest("int128_args"))
+ 		test_int128_args();
++	if (test__start_subtest("int128_tgt_prog"))
++		test_int128_tgt_prog();
+ 	if (test__start_subtest("stack_arg_tailcall"))
+ 		test_stack_arg_tailcall();
+ 	if (test__start_subtest("union_args"))
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.=
+c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+new file mode 100644
+index 000000000000..2ec8f741d48b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++struct int128_arg {
++	__int128 v;
++};
++
++__u64 base;
++__u64 ret_odd, ret_stack;
++
++#if defined(__clang__)
++
++const volatile bool has_struct_arg =3D true;
++
++/* arm64 would want v in x2 and x3, and b in x4. */
++__noinline __u64 callee_odd(__u64 a, struct int128_arg v, __u64 b)
++{
++	return a + (__u64)v.v * 2 + (__u64)((unsigned __int128)v.v >> 64) * 3 +
++	       b * 4;
++}
++
++#else
++
++const volatile bool has_struct_arg =3D false;
++
++#endif
++
++#if defined(__clang__) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++const volatile bool has_stack_arg =3D true;
++
++/*
++ * x86-64 would want h in its third and fourth stack slots, and arm64 in
++ * its first and second, leaving x7 empty.
++ */
++static __noinline __u64 callee_stack(__u64 a, __u64 b, __u64 c, __u64 d,
++				     __u64 e, __u64 f, __u64 g,
++				     struct int128_arg h, __u64 i)
++{
++	return a + b * 2 + c * 3 + d * 4 + e * 5 + f * 6 + g * 7 +
++	       (__u64)h.v * 8 + (__u64)((unsigned __int128)h.v >> 64) * 9 +
++	       i * 10;
++}
++
++#else
++
++const volatile bool has_stack_arg =3D false;
++
++#endif
++
++SEC("syscall")
++int run(void *ctx)
++{
++#if defined(__clang__)
++	struct int128_arg v =3D { .v =3D ((__int128)(base + 9) << 64) | (base +=
+ 8) };
++
++	ret_odd =3D callee_odd(base + 1, v, base + 2);
++#if defined(__BPF_FEATURE_STACK_ARGUMENT)
++	ret_stack =3D callee_stack(base + 1, base + 2, base + 3, base + 4,
++				 base + 5, base + 6, base + 7, v, base + 10);
++#endif
++#endif
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_trac=
+er.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
+new file mode 100644
+index 000000000000..e631b6f2378f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++/*
++ * A struct holding an __int128 fills its two slots in memory order, so
++ * which slot holds the low half depends on the byte order.
++ */
++#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
++#define LO 0
++#define HI 1
++#else
++#define LO 1
++#define HI 0
++#endif
++
++long odd_a, odd_lo, odd_hi, odd_b, odd_ret;
++
++SEC("fentry/callee_odd")
++int odd_entry(unsigned long long *ctx)
++{
++	odd_a =3D ctx[0];
++	odd_lo =3D ctx[1 + LO];
++	odd_hi =3D ctx[1 + HI];
++	odd_b =3D ctx[3];
++	return 0;
++}
++
++SEC("fexit/callee_odd")
++int odd_exit(unsigned long long *ctx)
++{
++	odd_ret =3D ctx[4];
++	return 0;
++}
++
++long stack_g, stack_lo, stack_hi, stack_i, stack_ret;
++
++SEC("fentry/callee_stack")
++int stack_entry(unsigned long long *ctx)
++{
++	stack_g =3D ctx[6];
++	stack_lo =3D ctx[7 + LO];
++	stack_hi =3D ctx[7 + HI];
++	stack_i =3D ctx[9];
++	return 0;
++}
++
++SEC("fexit/callee_stack")
++int stack_exit(unsigned long long *ctx)
++{
++	stack_ret =3D ctx[10];
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.53.0-Meta
 
