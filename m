@@ -1,151 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2821953F6BE
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 19:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A004A542EEF;
+	Tue, 13 Oct 2026 19:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791919199; cv=none; b=MfnB3nxKjmFYEwspXHOD30MoKlE2OMaMtmoi1GGk0DFw7wDy6hY45LmjhsEotW6XQkbTGUV6bjClQkg9y+nT0OD0l1LUH+lQKCR0fy5zoZxqWtCxoLtqmj/n/tCjzUXFqeMTNzCBlnFZBhg2D4x0x28FHpldZ0vkgmlCnpTgPwY=
+	t=1791920969; cv=none; b=tnNHwRsiBCydC4BxriQhz4GVCjcSibkVrE1BwI7yB5SE5zsHDNovYaW4D6Lyd3xLeuJLNYbve/0m8rJsTXYtX60DjbwBYsPLAGbvBTD5WpKo6GasLsIAUxdzm/cPPqyYWP1IQcs30zpAERh6um4h+wbwNHDnMkZebispxxBSEY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791919199; c=relaxed/simple;
-	bh=KztZNu5qBs9cVEGD2TdiPH2fRcdnukaTCtn0HNeIciI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=j5k1c+DEPvYRNF8IooTgrTUYeRdRYtollF+OHUMp8I+ubEqKGAsZ7cQEgkubo2AsP1GJxHdzWoJ3qpU1H0ld/gc0/RlRGhmWfTOgRsCT3Y+8JOlKCgIcvwK6gtyz82rSrlfKI1jX0HhckzLhX/3nUAb2QclErKQofONs3sViGQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMInvITB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791920969; c=relaxed/simple;
+	bh=ldwO3cFm64bnrynDvOBlQj8COmsGNqU+riOvCs2Dhm8=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=dP7dZFDWT8dfcdM95yrnbIO1377WotIl0scmQ61UEZ+t7qMIL8X9WcDJnSUFrrZiuzqArxLDiCfbrNjNhvz6BP0ZdTi/PpguWq9jZUYKEu8MYN5EHjqDQbXr5PB9AP4kUvJP0m1n1/v1paR1EJoF5lQ9gtoPzGoD09KYNOcc0sI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yd5yQsQe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMInvITB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6A41F00898;
-	Tue, 13 Oct 2026 19:19:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yd5yQsQe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431CE1F000FF;
+	Tue, 13 Oct 2026 19:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791919196;
-	bh=nBu/SOG7f+fTEFPghCxgukAfv2TSNxFqz02iS2imDx4=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=dMInvITBUWu18BOgzkTbw/0Vdryo36Fo3yGZtzaxxx1y6/LofNQrSRPIXzC+q5iL6
-	 wqTmd2oM7fkI1UAXregmggCMBzjZlm19Cf/g3falKdxWTTnds4ODojjaYvzZo05nOx
-	 oe2KaNDf1fWqKLsBFFBZF18KgK2cGJuHCifjxJDqqZdLJzpz4AlzfcGxih1QlM/ZhC
-	 XYB6n7JgezAbwTVLACvsnvFGHd2ESLhOFwy5t5l6UyBUa3IHB1dtWyUOyMz0GsH9xx
-	 64/amq+7WHP/w70T6DMXAiPbxCb4Y8YtnF+JRxHoLAps8s8ZYcUpOJqIEhyonp8njN
-	 ylt1QWJK7w51A==
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 78B61198003A;
-	Tue, 13 Oct 2026 15:19:53 -0400 (EDT)
-Received: from ams-imap-11 ([10.64.2.31])
-  by ams-compute-02.internal (MEProxy); Tue, 13 Oct 2026 15:19:53 -0400
-X-ME-Sender: <xms:VITOaqKl52pZNHkpPo8vq2Ye6p9_qNQTQrwEclVqNOzPVLDi9QLwdg>
-    <xme:VITOas_lV6zrn9ir2SIeCEGM-ZgWMH1b52xW0_7EwOi2tmCOucdSlq166n12z_HPt
-    Cq8nevjQLAM1ABMHNgVf6hPZJMZ9gPXfItQZ5V2wTDE7wcsjT1H4l0U9Q>
-X-ME-Proxy-Cause: dmFkZTFDzKl0ELp2oEHzVBwWRQODLbH3awXaTOQ8LNvi6ko20mCD786pZgzvu07nYUzJ+8
-    2MHgaTFAqgjwYW6MeoO97VVBr1YqpZJC0eokGoU1j/I30oUO9e/iBPnXoTTIX16Z71AYI9
-    c45wuloWTMqcMuAsXv/W4KQhXF4Fsa4UndNspcE+Jc0YqcA/sypMHrlsBtTlol4j/NW9SV
-    SDH1qFiD2qjcuXK8U3nUQCMVzmcYb8R9+Psu2Ad0mJTucSzvhcI2lq3SsOvuiKtNhTJnMu
-    QytgnVVJTIDecKvNcISUK5DwtblU9PldILdwS2i2PbqxwY2bpFIHAdtt3aT1nwLQMkMpog
-    h1bdN5nODNlnXXY0opAlXgVuG1iItI1C/KrLcbi4McWhBek6qNp0shHQFpZc11x5q9aDhj
-    I5BLAEu52WQgJ3ei/tFr0ucU16OFIGCdJgOfNPXMcv6ze3GibxBp3uKdWsKnQF2m/XPLNl
-    u2d8vL6AVc3LoNG9JPk6dia/M1HmqhVtXcp9LFRKNXx1LnzCYbH4yHw989oJuzyBj+HdiE
-    /fzYK36ZQC+Pc6h9LK8gJioUXDtJNudCvkqhS4tmSUsf2b4cBAD9WrkAPgiDTnTzDqSQjl
-    vd+Y6bsgqWlgdQXIyhIDEW02CfQm0hmp0HPxOyhRWU0mvAWsy4gbJIkbgLdA
-X-ME-Proxy: <xmx:WYTOatddi5Nc9SeJVUrYS8v9xImrZHI8z4U1EbbnLBG3OS9zPftceA>
-    <xmx:WYTOasuHq0ZwguI9tduc6miqTLvnsLXtKbHTSpuqdgJ84yM7A_naHA>
-    <xmx:WYTOarGSPLDt5EiyCXABcgisz3HNzuJSTA0jj03XKZGF4atlgHvihg>
-    <xmx:WYTOamcls9KeR9mv_QJldCIxJ4hb-jHjyM195oAhGDRnCLe9hXMCSA>
-    <xmx:WYTOanvOzC66MmWXMrTwOo692O0xbGrnEkvk_V_5pBjURKLRpg-PVy3h>
-Feedback-ID: ice86485a:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id BD601F80096; Tue, 13 Oct 2026 15:19:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=k20260515; t=1791920967;
+	bh=gSwdcBHqW0LbgQKT6nKt95Qv/QKLGxf35n8p5/QHy1g=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Yd5yQsQePlyWQ/7DLdU6gH+StuyrPQD/dKoim7jIAFNeoMUy3B7UL9iJ3AQNFMk9R
+	 w/PDX3tvsPkuGZDSwA7BXuCgV5kgKR/ws+ak53JxTGzPV908Xte+SAQMscXAzWBvGa
+	 t60g1PLpyOhbcS6O6G9pSKexEk1CvckJECT4sMCGZjsrDcPVgPZKB208rKYdWL/MXe
+	 SpBzZSyfLEYrYOOyx52CXlkgdJ+Vh2KF+6Z9mZe+f96pkhBqUiRPwWule9auoGCYvR
+	 1sr7n5atIA6NUr5bIuEDLyANGMGNPeRZbKbMCPzE7sg56p8sFAioFBqQGdv0G3tgMW
+	 VCqZBhWZh/sgw==
+Message-ID: <sashiko-outbox-170428@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v6 24/39] mm/mlock: eliminate weird VMA_IO_BIT abuse and
+ simplify
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, selinux@vger.kernel.org, bpf@vger.kernel.org, linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-s390@vger.kernel.org, "Oliver
+ Upton" <oupton@kernel.org>, "Marc Zyngier" <maz@kernel.org>, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>
+In-Reply-To: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-24-1aa3c9b139f9@kernel.org>
+References: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
+ <20261013-b4-mmap-prepare-vma-flag-sanify-v6-24-1aa3c9b139f9@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 13 Oct 2026 19:49:25 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Tue, 13 Oct 2026 21:19:28 +0200
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "Jason Gunthorpe" <jgg@nvidia.com>, "Pingfan Liu" <piliu@redhat.com>,
- "Mark Rutland" <mark.rutland@arm.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "Jeremy Linton" <jeremy.linton@arm.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Simon Horman" <horms@kernel.org>, "Gerd Hoffmann" <kraxel@redhat.com>,
- "Vitaly Kuznetsov" <vkuznets@redhat.com>, "Philipp Rudo" <prudo@redhat.com>,
- "Viktor Malik" <vmalik@redhat.com>, "Jan Hendrik Farr" <kernel@jfarr.cc>,
- "Baoquan He" <bhe@redhat.com>, "Dave Young" <dyoung@redhat.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, kexec@lists.infradead.org,
- bpf@vger.kernel.org, systemd-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
-Message-Id: <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
-In-Reply-To: <20261011201325.GA918242@nvidia.com>
-References: <20260322014402.8815-1-piliu@redhat.com>
- <20261011201325.GA918242@nvidia.com>
-Subject: Re: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE format
- boot image
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-Hi Jason,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] mm: TOCTOU race in try_to_migrate_one leaves folio pinned in mlock =
+batch
+--
 
-Thanks for chiming in.
+commit cc15ce19ca95992151b61de2cedb165e4684ba4f
+Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-On Sun, 11 Oct 2026, at 22:13, Jason Gunthorpe wrote:
-> On Sun, Mar 22, 2026 at 09:43:49AM +0800, Pingfan Liu wrote:
->> *** The history ***
->> 
->> Nowadays, UEFI PE bootable images are becoming increasingly popular
->> among distributions. Currently, we have several kinds of image format
->> parsers in user space (kexec-tools). However, this approach breaks the
->> integrity protection of the images. To address this integrity protection
->> concern, several approaches have been proposed to resolve this issue,
->> but none of them have been accepted upstream yet.
->> 
->> The summary of those approaches:
->>   -1. UEFI service emulator for UEFI stub
->>   -2. PE format parser in kernel
->>   -3. Signing the arm64/boot/Image
->
-> I recently had an interesting discussion with Ard around DRTM for
-> kexec and we sort of independently concluded that #1 would be the best
-> (only?) option there.
->
-> All the implementations of DRTM today live in the EFI stub and
-> intercept the boot process as it goes along. After ExitBootServices
-> the DRTM implementation will launch the kernel in a different way.
-> Even worse today's x86 version strongly requires EFI boot services to
-> connect the Linux stub with a trampoline helper provided earlier in
-> the boot chain.
->
-> A kexec flow that only works on decompressed vmlinux, with no option
-> to run any EFI code, is going to be difficult to support. There is
-> enough information and choices involved in DRTM that it is undesirable
-> for the predecessor kernel to try and DRTM launch it on behalf of the
-> successor, let alone trying to get the insane x86 trampolines into a
-> kexec successor kernel.
->
-> Given those constraints entering the successor kernel through the
-> normal EFI entry point is highly desirable. This would allow x86 to
-> continue to provide the DRTM trampolines through an EFI mechanism and
-> means the Linux EFI stub always handles the launch with identical code
-> in all scenarios.
->
+mm/mlock: eliminate weird VMA_IO_BIT abuse and simplify
 
-With some help from my friend Claude, I've prepared a prototype that
-reuses my efiloader Rust crate to boot EFI stub images (bare Image,
-zboot, UKI) in the kernel: the EFI boot phase is invoked at kexec
-load time, and runs under the preceding kernel up until the point
-where ExitBootServices() is called. Then, the actual kexec call
-will return from ExitBootServices() after shutting down the first
-kernel.
+This commit simplifies mlock VMA flag handling by eliminating the use of
+VMA_IO_BIT during mlock operations. It relies on VMA_LOCKONFAULT_BIT to mark
+walks and updates mlock and unmap code paths to test appropriate VMA lock
+flags instead.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efiloader-kexec
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 5332c52909be1..b4a4b3929044c 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
 
-There are some limitations (4k pages only, CONTIG_ALLOC support
-required) but it seems to work as expected.
+[ ... ]
 
-I haven't looked at measured boot or DRTM specifics.
+> @@ -2395,7 +2397,7 @@ static bool try_to_unmap_one(struct folio *folio, s=
+truct vm_area_struct *vma,
+>  		}
+>  finish_unmap:
+>  		folio_remove_rmap_ptes(folio, page, nr_pages, vma);
+> -		if (vma->vm_flags & VM_LOCKED)
+> +		if (vma_test_any_mask(vma, VMA_LOCKED_MASK))
+>  			mlock_drain_local();
 
+[Severity: Low]
+Can this double-check of VMA_LOCKED_MASK lead to a TOCTOU race?
 
+folio_remove_rmap_ptes() calls munlock_vma_folio() internally, which checks
+vma_test_any_mask(vma, VMA_LOCKED_MASK) to decide whether to queue the folio
+in the local CPU's mlock batch.
+
+Immediately after, try_to_unmap_one() re-evaluates the same mask to decide
+whether to call mlock_drain_local(). A concurrent munlock() can clear the
+VMA's locked flags exactly between these two checks.
+
+If this happens, the folio is queued in the batch, but the local drain is
+skipped. The local batch retains a reference to the folio, which permanently
+pins it and can force best-effort migration like compaction to fail for this
+page in a tight loop.
+
+>  		folio_put_refs(folio, nr_pages);
+
+[ ... ]
+
+> @@ -2770,7 +2772,7 @@ static bool try_to_migrate_one(struct folio *folio,=
+ struct vm_area_struct *vma,
+>  			hugetlb_remove_rmap(folio);
+>  		else
+>  			folio_remove_rmap_pte(folio, subpage, vma);
+> -		if (vma->vm_flags & VM_LOCKED)
+> +		if (vma_test_any_mask(vma, VMA_LOCKED_MASK))
+>  			mlock_drain_local();
+
+[Severity: Low]
+Does this path suffer from the same TOCTOU vulnerability?
+
+Like the unmap path above, if the VMA flags are cleared concurrently between
+folio_remove_rmap_pte() and the check for mlock_drain_local(), the folio
+could remain pinned in the local mlock batch.
+
+>  		folio_put(folio);
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013-b4-mmap-pr=
+epare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org?part=3D24
