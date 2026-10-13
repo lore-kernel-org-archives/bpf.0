@@ -1,177 +1,292 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661D548489D
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 16:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791909011; cv=pass; b=a0tkMeTmNjZLelZNN9amv/kH98elmIGMvP1y4TE0feyU3z3rBatbqCckQod0xt8O4YdQjoGS1vQgJ/9GlV8zbX5rtnXpqHUnqyJuKDqnx1rPiqbYIWRL1Eowy9GuB9+e24O0vPzNPSfhyoSfIqorSdWAM4CbEDkk+QU4dKulbSU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791909011; c=relaxed/simple;
-	bh=rr+spJ7n0JW+ovZs/CR2CxF9rmEX93rSF/dATklRBz0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Em3iGQU7T4cYWZtOSdG92qDvSGM+i0Ejoh+8R7QQNZkuCXOLXUkSzN/NwCctELeOCQslLq4f+6JN+09YEabyIK6RPTWcTdmtGHd8m2FDpUE4gtNlkFLU8fNQspqyjss7weIvAdARNXRAE4Cb3KM9/3WYC+Kdmym0pUWvSj46je8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FyYzOoKo; arc=pass smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E1E3C3449
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 16:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791909084; cv=none; b=ULrL33e4yZ6mU0BA8UcQVWQFTcW4Vnqy2JMZbEwo6J/RI2pW8hCnVxfkY2jIFyR2XQgJzYLteKwnG32+DeJPKjw6cItjRZ6Jyvc8UJTo+IP/dmf5wVDuHCQAeczsipXyndXfkTmo2gG1TA8gRaPumqjM46r1wLb3pTUD1wvMB+k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791909084; c=relaxed/simple;
+	bh=oAX3A44Mk4sRd4MJWUHQrnEmkYfaoUhDnCFfhk2S3H8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pSW59BDUICNyqoxc3rwQoHcMrWNdEwBC5KxsgeV5/puMR/wJhPFYdhR8ewWMCrqNWjEYAAYT/UCuV07ju+ci3hoTdyWu7Lz0ceE/b4X6xf8h6Cqsl3d2ufW/4VNDf/oL+y3+A52gzIOdTdinwrDpjCJe1oNthcrrnWmHbycD1Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YabNtB4r; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FyYzOoKo"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6ae14cdc63aso27198a12.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 09:30:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791909007; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jTTG59DmlUBsxCMSVymTZ9VB2zA1cCFDkJMa3473lHAfsMgN5z6fWelgiLMigP67K7
-         QaKlq8odNkFgn+j3rTsb30D+iZWNM6SjkqpIO2tRmfudsXMwlgYmUaXLFFtF+e4Rro0E
-         8FigWOzuN6kjRCyywVQyJklOAP9hjdb8Pudu703kFbmkUWW7n9CE1NyuYQy2tIRKVtH/
-         KpVJQEiz6AIN0XRodxubYefL3U4QQklVizZ71FHbRrchpmvBavX+zFIyUsoyFtknR8f/
-         eSffKY5bu1g7c22QTnxtOFsO34z5xIHf3JVi6HhLVS7pJ8vLaaRfcQVNB4hGiSil+5Mj
-         PEgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=USnWgApP+/1SoteVw2gO1Ar5rEYFG+9nVhj1Ww1rLx0=;
-        fh=VOCgbp5j/oL2LiftGvQfwhIVyFk3Aw91/SEVktnXn1g=;
-        b=i6xwnz4GMMSWD3j8y3y3wIJnsNdIgCq+sOMmagRwutsxE8xPW5B4Gg7XqIiymU32+B
-         OaDqGFlAYOXqotvFNcPMdUkcWiX6s+F68pNaYnLlWxMtVFmBIH2xA56XA6fNk8IvSJ3V
-         cm8J3WiHDmo9xfpWzId5QepqsMLz/Z6iQxPFY2PoVook7lJhQnLGMLrsP38mYZ7uGdGv
-         VykPnyOt9XZ6jD8SBPu9hdw4wglPCN+yG5ngybe/dwGrjlY+EtmcI/XhrgJoYUDleVUh
-         pu/RVeuF/Fq8TFqIpE4+KJnbnpn4Jd5k8mlObPVmaQr2S3z78/j93dkNliRdwnPbLVvA
-         HXVw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YabNtB4r"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a0213948d3so19789825e9.2
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 09:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791909007; x=1792513807; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=USnWgApP+/1SoteVw2gO1Ar5rEYFG+9nVhj1Ww1rLx0=;
-        b=FyYzOoKoP+kSYyrfqeJux3/PlQAJikAsqyNzCaYIJF25L5o6DwSIHZnLvdVmvY5qj+
-         bCWqP2kv9rlJRMbhMPPY4BCG44rtCH+9TB6SjfM/Y3sm0cXsFIxlnubTqnz7F1tkvdaU
-         7xf018W3STozTSJkdhyoq1+TVeidmTRRekSLZoFE7ci68bXgfUhNA8SOaN++mIKZxUYS
-         QFKHKWMkadeJbUccTRK9bB0oo5prWdGCg2xznaRmvy2OTIYXVkzlKrO1qkg0Z/y5blGi
-         cyHDN5p39gaaZHRvts3rnWGekIBMVjx+6G8tDTy4KgnovdRdtk8+LezMYfqlaWmi1Xjo
-         CyNQ==
+        d=gmail.com; s=20251104; t=1791909081; x=1792513881; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+eviUeF31yAbmG9I9BhDWC16fJ5//H+HFd2nuFsGCTA=;
+        b=YabNtB4rKp7Obs6XaOY99orlk1PDh7jtlDQwiSAwwPn488c3yY7x6Breuie8g9y/gd
+         NU7KWnu+0or4PWdyWeiKrqmtFO+yMw8bHZsg9Yh43Ftz1cF29bPtgTEWLXhxOgw/wmu+
+         DbLC27bgnygKHplSLd16goUTmK6lf2KzPfcs+oVolFrXBkIuwz+rrkAl+hat7tZyGrWn
+         kp8Vp5SczW8f8ubV/jPYr/QWmF63sFUOOd1fUOtC/u2VrtAS98jzB3n7Pr+SSXJtFtDj
+         bRFYLLONvRDkGomjXrLHIGBHBWwf6j3p5AU1xBf+UsAIr9xjRHmiuhhxK4c+AEUL19lV
+         FwKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791909007; x=1792513807;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=USnWgApP+/1SoteVw2gO1Ar5rEYFG+9nVhj1Ww1rLx0=;
-        b=izXkuLbNhMbaNq8fiT/GPQ8sSY6NINsOjv/oAjeR8JQUMLIP2IfOewfZ9pgIaYO29X
-         kdlMH16ufgp+mSAUPG+iSYVCytgJ4ulAhBrv7n+fQ/u1yJIAZSoHkyFQLAuZLickaqk7
-         /qXJO3jC+V8wz0R49vQYeu8PEvXr8SYCEoHOhVewxU6xVJp93lpi/iA7GaniexmPNVGL
-         P5dJ1D7sdMnVPHqmlZdukFUd3Sd8ahk626h9rE2wAqw8mHBzjNwy6X347/gCoAlR0zYQ
-         Tw7/++AdX9grHr2KkkFZY2ZGTV3kdw9mdwGRPEt4SYIgkr/2OZKf+hQkJp/ZxmV1HRbi
-         xhUQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwwWz5o2CQb400bjONn21WAukn12i9nwmis1fIihqmzRMIdtV9tAWa4IYX5Q6nSQIhHm9I=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLhOzQolRp2NotyhxfxwNxmUbrdsUQPvLnL7wBHcyzQeSnQfvFx
-	OKGfjA8pPUCWsADfH+uqS493JSuYXVNuPPc/iNaYVyQPY4OU0Cb8AS0+1AF1HUCgwIYM6u4EWDF
-	a3VyHNpY3PHXNccVD7RF1SmRSewhsWudR8bcA9xez
-X-Gm-Gg: AYBFou12npH86dzuYmj9E6I9RIba4WxyKnsMexyoCaw7rvlNKL5GG3EIVUKDYvDYwl5
-	DWl60wJHKx3K6vQZniwtFOFOdrjn1vMNDWTyWzUKjtRowFzz9DoYkLP6RdU3BM7JkEyQRI8pCuz
-	DEdIA9Cq+SB/1vSmdWBKf6T9cE+P6jnRfZhytgiuRngLTkHvloPswLIOgOdTX95ibU/Sb5gRgcx
-	3YoO+NMUCtZ81H+P+KXbgRCt2ali3lrhZTjvrbTS4dlL1DkOsSX+TQnZtVoakdZyaSqbSQkH0ZK
-	144pUI1MZGv65RKvGTq/g+ih8EnHcrCE6drlXvCuKWDxN9b5TxiVKX1zeV30ljYNseQfk/p/c4O
-	jBuDZ3Hkadw==
-X-Received: by 2002:a05:6402:a593:10b0:6b1:d313:16f8 with SMTP id
- 4fb4d7f45d1cf-6b1d3131c5emr113934a12.0.1791909007037; Tue, 13 Oct 2026
- 09:30:07 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791909081; x=1792513881;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+eviUeF31yAbmG9I9BhDWC16fJ5//H+HFd2nuFsGCTA=;
+        b=1t/Zjl2f7L/tyJmzDJgwCwI+Vi9ChrLz4gAnL/wMVUU/TWjcJyCRgs6ujw6cOVYWsb
+         48F34QqdXGWuO5o82/EVS6DbBMPUZZU1IqSIo0hdYdvCWHGJwrmIHC/3WQ+7aRB35+Iq
+         IMniGb7xrnxoAx4jlDiENM0cTE1ofECA4zSSE+PUwr0uLSJ8TABcBLKrLeJTwnTb1JJ4
+         Vuj1Zz/Pnc0foCmZXwmk92xcHWxQHUVOb8HoZGvJxM0nahgxQCmW2I3L17OIHQ2toCrx
+         UW1da131hr4+py78XdvKnvNh58b8RBzdDaEFRyZlXgF1NmJcPtCkZM8cnzySX7wxxFV5
+         X1sw==
+X-Gm-Message-State: AFq9FYKhKggxme+Y9lLy64yVvJQ1RF5uU55RyNhMQWRXZ/4cEVT8jJBw
+	pFJnZMoCj1e1jAHTVfb32+05KiS8gMJwjhCeuhjU7uA10iEWiBLYJPFOr7xWcmT3gNaDjQ==
+X-Gm-Gg: AYBFou2htQO/eJ5hEV0xupIg1CB0fZDWvYXQaYj6i6rU0VNZN4Fph+iCJ1hHrzIr/cv
+	7CazKwBB4dDxdfgkBydquHfONSYi6lw604FvAD1/2HseV9iFVYw7GMNTr7Z40Qg75ec4xL+8XHK
+	B9iP8j0fD58cOuCHPJUu57FMFR5zKegO2/7Q1TWb7Mzr9zsrLyR7cUlb+KOHzZjOcGJ9pMmKuQr
+	H29V6HD+a+2oDHy2+LnCWGSY71KUauAbDolrlsqPHE6ElGal9gE6EiaWjHb/Xe/65w7WgjVt99W
+	4sw/V660NNeHgH+s7I0m1vfwlmQWRDnRBVNs/tW5X5QpJHeMY8psmhTE8CLFBg4GLB79djv2psD
+	ohJdaCwMmvo71NV1nfM2Gon71INjqvVhoeOO4Bg2IBXMiaYfOxlXG2UVeL7fR4/+ay/v+05WGFY
+	DzuO7mL0GbtMJee/20DxT/oXxEY1v+hvxtfsBHvOxQ1T3VY+Ckn10YDMoezgJ9aC6c/bVp+iMQX
+	1LrFI7E5RiomNlMndaEX9UQyhR1QMmJVI1HRmILasmyERqw8yzTSq4i
+X-Received: by 2002:a05:600c:8b64:b0:4a1:7703:e537 with SMTP id 5b1f17b1804b1-4a18e49302emr255108875e9.10.1791909081300;
+        Tue, 13 Oct 2026 09:31:21 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4a18bf135fasm330250915e9.5.2026.10.13.09.31.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 09:31:19 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	eddyz87@gmail.com,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	liamwisehart@meta.com,
+	martin.lau@linux.dev,
+	pabeni@redhat.com,
+	song@kernel.org,
+	netdev@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	ameryhung@gmail.com,
+	kuniyu@google.com,
+	memxor@gmail.com,
+	jiayuan.chen@linux.dev,
+	Mahe Tardy <mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next] bpf: allow ksock kfuncs call from wq
+Date: Tue, 13 Oct 2026 16:31:01 +0000
+Message-ID: <20261013163101.205638-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261012082148.1698596-4-almasrymina@google.com> <179188049412.434549.8105329401807782174@kernel.org>
-In-Reply-To: <179188049412.434549.8105329401807782174@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 13 Oct 2026 09:29:55 -0700
-X-Gm-Features: AclHuK8kCFpm3iyYaxSIjhAo3U-PNi7X2jSQzQnctTkUNfPkNJqv2oqIvvlgRMo
-Message-ID: <CAHS8izOKULOVuav4R-2rcw=38G2oifcSj2EnbVoyEPcW=kLD4A@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/6] net: skbuff: replace skb_page_unref() and
- __skb_frag_unref() with skb_netmem_unref()
-To: netdev-bot+sashiko@kernel.org
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, ayush.sawal@chelsio.com, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, 
-	kuba@kernel.org, pabeni@redhat.com, tariqt@nvidia.com, horms@kernel.org, 
-	steffen.klassert@secunet.com, herbert@gondor.apana.org.au, 
-	ncardwell@google.com, kuniyu@google.com, john.fastabend@gmail.com, 
-	sd@queasysnail.net, ebiggers@kernel.org, kees@kernel.org, 
-	aleksandr.loktionov@intel.com, u.kleine-koenig@baylibre.com, 
-	shaojijie@huawei.com, mgr@kernel.org, j.raczynski@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 13, 2026 at 1:34=E2=80=AFAM <netdev-bot+sashiko@kernel.org> wro=
-te:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
->
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 1
->
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->
-> - [Medium] The patch fixes a real page refcount bug on mlx4's RX error
->   path but has no Fixes: tag, and the fix is folded into a tree-wide API=
-=E2=80=A6
-> - [Low] At this commit, the new kernel-doc for skb_netmem_unref() in
->   include/linux/skbuff_ref.h says it is the "Counterpart to=E2=80=A6
->
-> --
->
-> net: skbuff: replace skb_page_unref() and __skb_frag_unref() with skb_net=
-mem_unref()
->
-> This patch replaces skb_page_unref() and __skb_frag_unref() with a single
-> helper, skb_netmem_unref(netmem, recycle). The SKB-owned fragment unrefs
-> in mlx4, sky2, tls_strp and skb_shift() now use skb_frag_unref(), so they
-> follow skb->pp_recycle. tls_device's destroy_record() now calls
-> put_netmem() directly.
->
-> > diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/e=
-thernet/mellanox/mlx4/en_rx.c
-> > index 96f97fa0f5489..fe18606c2ab55 100644
-> > --- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-> > +++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-> > @@ -497,7 +497,7 @@ static int mlx4_en_complete_rx_desc(struct mlx4_en_=
-priv *priv,
-> >  fail:
-> >       while (nr > 0) {
-> >               nr--;
-> > -             __skb_frag_unref(skb_shinfo(skb)->frags + nr, false);
-> > +             skb_frag_unref(skb, nr);
-> >       }
-> >       return 0;
-> >  }
->
-> [Severity: Medium]
-> This looks like a real fix for mlx4. Should it have a Fixes: tag and go
-> in separately from the API rework?
->
+In the initial implementation in '7ae4eb14c5f9 ("bpf: Add ksock
+kfuncs")', it was decided to let the ksock kfuncs go through the LSM
+hooks instead of by-passing them, and thus to disallow the use of the
+kfuncs from asynchronous workqueues as the credentials would be
+different than the task context that triggered the kfuncs.
 
-I think there were a lot of latent bugs in the refcounting, and if
-possible I'd like to fix them and make the refcounting more consistent
-rather than split them up. A lot of the fixes depend on reworked or
-introduced new consistent and symetric helpers.
+After some discussions, in particular at Plumbers 2026 at the
+presentation introducing this new ksock API[^1], it was agreed that
+by-passing the LSM from socket created by BPF programs should be okay
+and thus that the process context switch from kthread executing the
+workqueues wouldn't be an issue. Note also that in some BPF prog
+execution context in which we could extend the ksock kfuncs, like
+networking executing via softirq, the current task might be some
+unrelated kernel thread.
 
->
-> [Severity: Low]
-> This isn't a bug, but are these kernel-doc references accurate at this
-> point in the series?
->
+For now, the ksock kfuncs still trigger the LSM hooks but we relax the
+constraint on not using the workqueues as it will be useful for users
+triggering send() from non-sleepable programs (like tracing, support
+will be extended in future patches).
 
-Very low prio nit. The comment becomes consistent later.
+Also adapt test_ksock_wq() added in 'c93cbdb13f99 ("selftests/bpf: Add
+ksock test for async callback guard")' to test that the kfuncs are now
+allowed and work when called from workqueues.
 
+[^1]: https://lpc.events/event/20/contributions/2430/
 
---=20
-Thanks,
-Mina
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+---
+ net/core/bpf_ksock.c                          | 25 -------------------
+ .../selftests/bpf/prog_tests/ksock_wq.c       | 23 ++++++++++++++---
+ tools/testing/selftests/bpf/progs/ksock_wq.c  | 24 +++++++++++++++---
+ 3 files changed, 40 insertions(+), 32 deletions(-)
+
+diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+index e9943aeeadd3..21d5fd1eb403 100644
+--- a/net/core/bpf_ksock.c
++++ b/net/core/bpf_ksock.c
+@@ -37,15 +37,6 @@ static void ksock_release_work_fn(struct work_struct *work)
+ 	kfree(ks);
+ }
+
+-static bool bpf_ksock_has_user_task_context(void)
+-{
+-	/*
+-	 * Task work can run from do_exit() after exit_nsproxy_namespaces()
+-	 * cleared current->nsproxy, while current is still not a kthread.
+-	 */
+-	return !(current->flags & PF_KTHREAD) && current->nsproxy;
+-}
+-
+ __bpf_kfunc_start_defs();
+
+ /**
+@@ -73,16 +64,6 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
+ 	struct bpf_ksock *ks;
+ 	int err;
+
+-	/*
+-	 * sock_create() derives the network namespace, credentials, and cgroup
+-	 * from current. Kernel threads, including BPF workqueue callbacks, do
+-	 * not carry the context of the task that invoked the BPF program.
+-	 */
+-	if (!bpf_ksock_has_user_task_context()) {
+-		err = -EOPNOTSUPP;
+-		goto err_out;
+-	}
+-
+ 	if (!opts || opts__sz != sizeof(struct bpf_ksock_create_opts)) {
+ 		err = -EINVAL;
+ 		goto err_out;
+@@ -165,9 +146,6 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
+ 	struct sockaddr_storage sa;
+ 	int addrlen;
+
+-	if (!bpf_ksock_has_user_task_context())
+-		return -EOPNOTSUPP;
+-
+ 	if (!addr || addr__sz != sizeof(*addr))
+ 		return -EINVAL;
+
+@@ -247,9 +225,6 @@ __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
+ 	};
+ 	int ret;
+
+-	if (!bpf_ksock_has_user_task_context())
+-		return -EOPNOTSUPP;
+-
+ 	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
+
+ 	return ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
+index d6dc20b8f95b..708e42abc57e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
++++ b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
+@@ -4,6 +4,7 @@
+ #include <unistd.h>
+
+ #include "test_progs.h"
++#include "network_helpers.h"
+ #include "ksock_wq.skel.h"
+
+ #define CALLBACK_WAIT_RETRIES 1000
+@@ -13,13 +14,22 @@ void test_ksock_wq(void)
+ {
+ 	LIBBPF_OPTS(bpf_test_run_opts, opts);
+ 	struct ksock_wq *skel;
++	char recv_data[sizeof(skel->data->send_data)];
+ 	u32 callback_done;
+-	int err, i;
++	int err, i, port, rfd;
+
+ 	skel = ksock_wq__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "ksock_wq open and load"))
+ 		return;
+
++	rfd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 1000);
++	if (!ASSERT_OK_FD(rfd, "receiver socket"))
++		goto out;
++	port = get_socket_local_port(rfd);
++	if (!ASSERT_GE(port, 0, "receiver port"))
++		goto out;
++	skel->bss->remote_port = port;
++
+ 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.ksock_wq_start),
+ 				     &opts);
+ 	if (!ASSERT_OK(err, "run ksock_wq_start"))
+@@ -37,9 +47,16 @@ void test_ksock_wq(void)
+ 	if (!ASSERT_EQ(callback_done, 1, "workqueue callback completed"))
+ 		goto out;
+
+-	ASSERT_EQ(skel->bss->create_err, -EOPNOTSUPP,
+-		  "workqueue create rejected");
++	if (!ASSERT_EQ(skel->bss->callback_ret, sizeof(recv_data),
++		       "workqueue send bytes"))
++		goto out;
++	err = recv(rfd, recv_data, sizeof(recv_data), 0);
++	if (ASSERT_EQ(err, sizeof(recv_data), "recv len"))
++		ASSERT_MEMEQ(recv_data, skel->data->send_data, sizeof(recv_data),
++			     "payload match");
+
+ out:
++	if (rfd >= 0)
++		close(rfd);
+ 	ksock_wq__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/ksock_wq.c b/tools/testing/selftests/bpf/progs/ksock_wq.c
+index 16a1873d132e..0633ae048518 100644
+--- a/tools/testing/selftests/bpf/progs/ksock_wq.c
++++ b/tools/testing/selftests/bpf/progs/ksock_wq.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2026 Isovalent */
+
+ #include "vmlinux.h"
++#include <bpf/bpf_endian.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_experimental.h"
+ #include "bpf_tracing_net.h"
+@@ -19,7 +20,10 @@ struct {
+ 	__type(value, struct ksock_wq_value);
+ } work_map SEC(".maps");
+
+-int create_err;
++char send_data[] = "hello from bpf workqueue";
++
++__be16 remote_port;
++int callback_ret;
+ u32 callback_done;
+
+ static int ksock_wq_callback(void *map, int *key, void *value)
+@@ -29,13 +33,25 @@ static int ksock_wq_callback(void *map, int *key, void *value)
+ 		.type = SOCK_DGRAM,
+ 		.protocol = IPPROTO_UDP,
+ 	};
++	union bpf_ksock_addr addr = {
++		.sin = {
++			.sin_family = AF_INET,
++			.sin_port = remote_port,
++			.sin_addr.s_addr = bpf_htonl(0x7f000001),
++		},
++	};
+ 	struct bpf_ksock *ks;
+ 	int err = 0;
+
+ 	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
+-	if (ks)
+-		bpf_ksock_release(ks);
+-	create_err = err;
++	if (!ks)
++		goto out;
++	err = bpf_ksock_connect(ks, &addr, sizeof(addr));
++	if (!err)
++		err = bpf_ksock_send(ks, send_data, sizeof(send_data));
++	bpf_ksock_release(ks);
++out:
++	callback_ret = err;
+ 	__sync_fetch_and_add(&callback_done, 1);
+ 	return 0;
+ }
+--
+2.43.0
+
