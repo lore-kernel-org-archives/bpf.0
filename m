@@ -1,151 +1,302 @@
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBF1542EDC
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 20:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791924758; cv=pass; b=RHukz8pbl8ZWr9mwU65Y1nFBU1kIqit6oD5XGpDzYSqU0HnLpirhcgh3mCxQpq4BRXa43AAxIE83GEikKpHiV7qCnVZ1paIBRkiQ5UrzMNevkE0n3VYz5lp0THYpv06YNT3/bHYiWztXytaKFFK2IC1M2lW5hrDwl9ojpE7GL/E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791924758; c=relaxed/simple;
-	bh=/vVh4JekJSXHTPyscsLCDkMqYS00gf29hChLgo3TST4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JiZKZMPT9vQUKkLZApMzAM0v6D345/oKiJPqLaaFZQXD9MiZtNUivt+yQGiIETxlJb7pg6yBXzZaYNTAmMBJ9GdXpBjDJMS9Y0jPVtx5z8kxmoTSsJ5PmAXCOsFyAZS7pFuF/l6DkkYiz10qYtxlgqvp66gZ9rKVViPVaP+TWaM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q2wOCwT+; arc=pass smtp.client-ip=209.85.217.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E865955409A;
+	Tue, 13 Oct 2026 21:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791928193; cv=none; b=YR5s3OtDGBUhVWPv3k/ynEws/0gswX8yLLMNkvBhvn1CP7dFmpB/wuAwG2r8sjhblEzbICZ/KbgnxelFCDIjX8TJ18xX2e0ab8NC5F+Xq/O/sJoY4gTZo6ZFTzUOmvCyMW6I6D6gcRj6ZNVUcQ40yZysY4UKv82fmoLn54bz/pI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791928193; c=relaxed/simple;
+	bh=uafM/k/ZpxIftMCIx+N84qLs/csI8HotPy+mhkiDgIU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E0EsJUzC7Ks2ru89Uu4X7WMetcXWqvo7QJduLGU/JUX/d7MkLqeUOgq5J25wLgrN3qjNUo0UiXVFfz79abc8BMpcgK010bT7a/EH68DSbXulsIFJEQ6eR7wgE6Ou94khZ75IWQJFkNhjNrgJR2njcZLL6WauDijauJLBWTVsblE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=g6dO4B8X; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q2wOCwT+"
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-7c4818e4165so2919273137.0
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 13:52:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791924755; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GretTr2GH+6yneu5O7mWdqdmYNrRzUknzydWUcAe8yrO52EGV5WMYtyhjf+K26WnjM
-         lP/yK6aEWsliWwFe0s0OuUdfP7D1RBy9w6oE6mXrix51DFu/SfuPjS7HZojyNhtJ3SEB
-         TZ8sU0Tm/pqKv/ZrEIE/ns4wJW2ZXaaPJ1DkHHkUrKm8scLHn/c82wS2SVmhfCmS/CyA
-         ggb6srl3DlSMttcZQ115uO/xjqZp/8SPhtIG/ydjjTKtEG8uzydwD5Hg+bZDQsGaYc1t
-         yTB/n+BdiqvcqfT9uGoZ2frEXg7GYeaH0c+3ptn3Qnw9328Z3qlLgiB52Ep3LZ4pR8tn
-         7Brg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rkhVrgc9OmPuX9zRiI9eMYevNzdxLtYphs0y5uGuLPs=;
-        fh=RrXw/OHvpABWawcTOghTqZN+eJRhbOeh80KpkN2+BMk=;
-        b=gzO+ID3Z91CFC7xcJtGwha/xUT7y+ZUtNhCSHnwzymZucBEL/3lr9KB7ZBypZoJ6ha
-         1Le3RGpA2KxB939IVru4xyfFLedY2qe6Sx9bGzdllLZy1JxqPE46c3vnylgsdtmWqQgj
-         FLKY3l/LcS+QQMdSJ/f0QDyNMdYh/Op/X/FVnAqbaQcV3kTcKFJciyT3X8+636j8FdbM
-         178daal0Eoua7LYSjkojisrIp1NSVLGTMn/jqFNjvzEE3i9xBTGCZ2VjuooaCE5KsFlU
-         KXE3OaPYDSrG0F5MsuQt1m6U0L0oCF6Hr0jHLJCG6aKQ5fEBnf6NwFTX4XslF926of4f
-         vlvg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791924755; x=1792529555; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rkhVrgc9OmPuX9zRiI9eMYevNzdxLtYphs0y5uGuLPs=;
-        b=q2wOCwT+ztWfw9vBVnTNVbs79q5S5GB/c6SjAvezCMkrFTmEhD9SK7XFDX2jaI49Xr
-         93ZMp2DP/vhqHSHcI9RWzDh42pl5FL2C+p3VBNzvC9nTMZ+JhujbAwGANk8vK9uHM0Du
-         m7fJyAVlzFJoyfzZAQfQVoZl8i5o6J+tjULOtLqi15hLc1DpjwomKKtzDpmtzfvsyWUz
-         yWzmAh0S19qVANRVnf9dEkTHWwC7JeStlMp6juSitFiiNw9UhXwwBp+jOwFoO6n9O0SQ
-         8lYz6HV2I5IibYp73NCFh28+L+NAwg99/1BJ2nCJhQxQjP7LK5Y1hEvERZN1Dg+Bzv53
-         2Ozg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791924755; x=1792529555;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rkhVrgc9OmPuX9zRiI9eMYevNzdxLtYphs0y5uGuLPs=;
-        b=0wizhr4CB+M0I7PuYnSfQykzJZPFdL6FE0JTKpIX9oqe63RpVEFjUql8VfIrlhvuFW
-         DI/nwQJSE7tkW0GwriyxZWSNGjj/MTm9Bg0ViuNNWeAw/b05eqJt0Q/eY3LsrJr0LXqc
-         qkS1KGuSz16U3qIXcUOi4tAsEuNr586gHrSzoW+llKld8gPBnCbXs0I43p8tXOy6b/5s
-         YAaBdM1HR6BnpulkrDNgoVq0RBeiBxHGful/381gq421nHBCjcu+FGb+lGoZd7ALpWK3
-         5mzYwff/lMNqkVFdTflnwBJyj1kJFr7hhKbLgGSSCsKgKAUFibLokWp3woNSZC0fz2H2
-         l+mw==
-X-Forwarded-Encrypted: i=1; AKwUvBywQaE6BspKcTcyxsig/q/6XsT0R9ecINLKItArMLrTBaUioyPZH4Yt2TvGchzfEHpx17U=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLFsONKS4iUqP+ikOA3XXS5f4NMyl5QGhYFnyRwfElq0ml95x4U
-	g6J18yReEibIch47Mme2uxW2/q6+1koE315SAHB8yerdSfMI9oJcSCdBeI0nZr5e5fmVMR0uuan
-	Bvcwt0A5cO6RM/m3vqFE4rk0Ov8G+HUw=
-X-Gm-Gg: AYBFou0eSJZ9U9D0a6ghjkC1MGM5PJ9rc0D5pRswQYLG/nbESQ5EB1SmcVi8ZJMK9B4
-	Eydp2fekeXD7rXsGAz1OElwBA0FzVxvivkUgh4Lb919Tst8AiOg97LOWXcYWdxB47k7Z9L2Yiwa
-	NJNY7Y6pX/Ly9KAS20sNANBVlI2OD/ltUP/p37C9uPoib2hT09YoBuaVhL5RF45NuxI1Lx/lgt1
-	/xxCNs0lldZpx6AZE9F96elJPL98vkielfebREpU1z2U304Twf0f3arg4mg+q3Mb/pEUrNSp6l5
-	Zk7dnIPkpEaZyD/6IstKrrsM9S3Kgtozop3OuLVFi4FfhOeVoBoRmWRbvQQq4bZJojtZCB3n3yX
-	UR/N8S8u7tT/MNjnlNlU3N5Bm4wWWnKtyr0x+DMCy8X4z4+SaFzVeLlq7eRIQhj2ekPuLVhlF49
-	LcwrQnS4jNdfK1IdoS8XBsRVCKw0wAz2w88WmZrcPi4+pu
-X-Received: by 2002:a05:6102:b11:b0:7b5:8fd9:27e9 with SMTP id
- ada2fe7eead31-7cb42386482mr3026014137.2.1791924755421; Tue, 13 Oct 2026
- 13:52:35 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="g6dO4B8X"
+Received: by linux.microsoft.com (Postfix, from userid 1216)
+	id 4A2D220B7166; Tue, 13 Oct 2026 14:49:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4A2D220B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1791928188;
+	bh=JJsNfB3bYrURaeP+0z1MCT4fNL6QGoZz1pHkN9KStOs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=g6dO4B8XMZx5W+Rf5kEbaLyG0xBYOSY+0LmO7C4lV2oHkcVhJ3N5S8jdrjhB8MEzM
+	 qcVUBTFlycvOPPVYxNaiF7SXrOI5DuCpQEJjXZfzC1e+6IQxBsr86nZd8v/07OJGlu
+	 kwXmUQAtKkEe+Z5qWsdq14TWyzvtd8wApLvUMp0c=
+From: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+To: netdev@vger.kernel.org
+Cc: Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Konstantin Taranov <kotaranov@microsoft.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-hyperv@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+Subject: [PATCH net-next v3] net: mana: add BQL support
+Date: Tue, 13 Oct 2026 17:49:37 -0400
+Message-ID: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261013-submit-stmmac-xsk-tx-completion-v1-v1-1-f21b9d098e62@gmail.com>
- <179192400014.160550.9046457038671470723@kernel.org>
-In-Reply-To: <179192400014.160550.9046457038671470723@kernel.org>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 13 Oct 2026 14:52:22 -0600
-X-Gm-Features: AclHuK-F24utQ7hdbiPLO7cynxwSmEL20qXjDzlC2RlDwy8M8X2Q-IY3WKxAQbk
-Message-ID: <CADvTj4oKGOQ9rgqbqVxxyx=LzzzEwf4xpJas_r9omeU1yS3y_g@mail.gmail.com>
-Subject: Re: [PATCH net] net: stmmac: avoid duplicate XSK TX completions
-To: netdev-bot+sinfo@kernel.org
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 13, 2026 at 2:40=E2=80=AFPM <netdev-bot+sinfo@kernel.org> wrote=
-:
->
-> Hi!
->
-> This is an automated message. This series looks like a fix, but its
-> commit messages seem to be missing some information:
->
->  - How the issue was discovered, e.g. hit in production, hit during
->    development, syzbot report, manual code inspection, LLM or static
->    analysis tool scan.
+MANA doesn't support byte queue limits, so each TX queue can hold 256
+WQEs by default, and up to 16384, of up to 64 KB TSO packets, before the
+qdisc layer sees any backpressure. This adds latency to all the flows
+sharing a queue, and defeats AQM qdiscs such as fq_codel, which rely on
+BQL to keep the driver queues short.
 
-This was flagged during Sashiko review of the larger stmmac recovery
-series, then confirmed by inspecting the existing TX completion and
-teardown paths. The bug exists independently of that series.
+Report the bytes queued and completed to BQL, except for the XDP_TX and
+XDP_REDIRECT frames. These share the SQs, but bypass the qdisc and are
+sent even when the queue is stopped, so BQL can't hold them back.
+Counting them would let sustained XDP traffic keep the queue stopped,
+starving the stack, and the TX watchdog would then either fire while the
+completions still arrive, or, if the XDP sends refreshed trans_start,
+not fire when the completions stop. The XDP SKBs are marked in their
+skb->cb, next to the WQE size, so that their completions are skipped as
+well.
 
->  - Whether the issue was actually triggered, or is only theoretical
->    (e.g. found by code inspection). If it was triggered please include
->    the symptoms, like the stack trace or error messages.
+Reset the BQL state when destroying the queues, once their NAPI is
+disabled, since the SKBs still pending after a drain timeout are freed
+without being completed.
 
-The duplicate accounting was reproduced in a local KUnit test under
-QEMU using the actual driver cleanup functions and AF_XDP completion
-queue code. With three completed XSK descriptors, teardown published
-another three completions on the unpatched code. With the fix, the
-total remained three.
+Lost TX completions can now stop a queue sooner: it also stops when the
+bytes in flight exceed the BQL limit, not only when the SQ is full, and
+the limit may never grow enough to cover the lost bytes. This includes
+the completions skipped by the WARN_ON_ONCE() early returns in
+mana_poll_tx_cq(), which already leak SQ space: completing the SKBs
+already freed there wouldn't reliably balance BQL, since
+mana_gd_poll_cq() has already consumed the CQEs of the rest of the
+batch. The TX watchdog then fires, as nothing refreshes the trans_start
+of a queue stopped by BQL, and its handler resets the queues along with
+their BQL state. The exception, as before this patch, is XDP traffic
+keeping the SQ full: each XDP send then stops the queue again,
+refreshing its trans_start.
 
-The practical trigger is bringing the interface down after AF_XDP
-zero-copy transmission while leaving the socket bound. No allocation
-failure or hardware fault is required.
+Tested on two Standard_D16ds_v6 Azure VMs in a proximity placement
+group, where the throughput is capped at 10.6 Gbps, with the DUT
+alternately booting net-next (c1c1f0a31712) with and without this patch
+applied.
 
->  - What hardware the change was tested on. For driver fixes please
->    mention the device (and if relevant firmware version) used for
->    testing, or say that the change was not tested on real hardware.
+The throughput stays at the cap with 1, 8 and 64 TCP flows, and the idle
+TCP_RR latency doesn't change (p50 of 47 us with vs. without the patch).
+With 16 senders of 64-byte UDP packets, the DUT sends 3.7 to 4.0 Mpps
+without the patch and 3.7 to 4.1 Mpps with it. With bulk TCP flows
+sharing the queues, the netperf TCP_RR latency drops (medians of 6
+runs):
 
-This change has not been tested on physical stmmac hardware. Validation
-used the software regression tests above and ARM64/i386 compile checks.
+  16 queues, 64 flows: p50 4649 -> 2182 us, p99 5621 -> 2677 us
+  1 queue, 8 flows:    p50 2554 ->  418 us, p99 2723 ->  624 us
 
-> Please do not repost the series just to address the above. Instead,
-> reply to this email with the missing information, so that reviewers
-> can take it into account. If the series needs another revision for
-> other reasons, please include the information in the commit messages
-> then.
->
-> The evaluation is done by an LLM so it may be wrong, if you think
-> that is the case please reply and explain.
+The standing queue moves from the SQs to fq_codel, which now drops
+packets: about 2500 qdisc drops and 88K TCP retransmissions per 48 s run
+with 64 flows, against at most 29 retransmissions before. The
+retransmissions are about 0.2% of the segments sent. The TCP_RR flows
+lose no packets, and the packets of the bulk flows are dropped before
+they reach the wire, so the goodput changes by less than 0.01%.
+
+Signed-off-by: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+---
+v2: Only count the bytes of the packets sent on a stopped queue, so that
+    XDP traffic doesn't keep the TX watchdog from firing on a queue
+    stopped by BQL. (Sashiko)
+v3: Leave the XDP frames out of BQL, rather than only counting the bytes
+    of the packets sent on a stopped queue, which let sustained XDP
+    traffic keep a queue stopped and trip the TX watchdog with a large
+    SQ, and let a stack packet past the BQL limit when the SQ filled.
+    Note in the commit message that, as before this patch, XDP traffic
+    keeping the SQ full holds the watchdog off, and why the early
+    returns in mana_poll_tx_cq() are left alone. (Sashiko)
+---
+ .../net/ethernet/microsoft/mana/mana_bpf.c    |  2 +-
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 52 ++++++++++++++++---
+ include/net/mana/mana.h                       |  2 +
+ 3 files changed, 48 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+index 484f061bc75e..7c55f8724441 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+@@ -21,7 +21,7 @@ void mana_xdp_tx(struct sk_buff *skb, struct net_device *ndev)
+ 	ndevtxq = netdev_get_tx_queue(ndev, txq_idx);
+ 	__netif_tx_lock(ndevtxq, smp_processor_id());
+ 
+-	rc = mana_start_xmit(skb, ndev);
++	rc = __mana_start_xmit(skb, ndev, true);
+ 
+ 	__netif_tx_unlock(ndevtxq);
+ 
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+index 489558176a5d..6b7c027e497e 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_en.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+@@ -346,7 +346,14 @@ static void mana_per_port_queue_reset_work_handler(struct work_struct *work)
+ 	rtnl_unlock();
+ }
+ 
+-netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
++/* skb->cb of the SKBs pending a TX completion */
++struct mana_skb_cb {
++	struct gdma_posted_wqe_info wqe_info;
++	bool xdp;
++};
++
++netdev_tx_t __mana_start_xmit(struct sk_buff *skb, struct net_device *ndev,
++			      bool xdp)
+ {
+ 	enum mana_tx_pkt_format pkt_fmt = MANA_SHORT_PKT_FMT;
+ 	struct mana_port_context *apc = netdev_priv(ndev);
+@@ -360,6 +367,7 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 	struct gdma_queue *gdma_sq;
+ 	int err, len, num_gso_seg;
+ 	unsigned int csum_type;
++	struct mana_skb_cb *cb;
+ 	struct mana_txq *txq;
+ 	struct mana_cq *cq;
+ 
+@@ -520,14 +528,16 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 		goto free_sgl_ptr;
+ 	}
+ 
++	cb = (struct mana_skb_cb *)skb->cb;
++	cb->xdp = xdp;
++
+ 	skb_queue_tail(&txq->pending_skbs, skb);
+ 
+ 	len = skb->len;
+ 	num_gso_seg = skb_is_gso(skb) ? skb_shinfo(skb)->gso_segs : 1;
+ 	net_txq = netdev_get_tx_queue(ndev, txq_idx);
+ 
+-	err = mana_gd_post_work_request(gdma_sq, &pkg.wqe_req,
+-					(struct gdma_posted_wqe_info *)skb->cb);
++	err = mana_gd_post_work_request(gdma_sq, &pkg.wqe_req, &cb->wqe_info);
+ 	if (!mana_can_tx(gdma_sq)) {
+ 		netif_tx_stop_queue(net_txq);
+ 		apc->eth_stats.stop_queue++;
+@@ -543,6 +553,14 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 	err = NETDEV_TX_OK;
+ 	atomic_inc(&txq->pending_sends);
+ 
++	/* Account the skb in BQL before the doorbell lets the hardware
++	 * complete it. XDP frames bypass the qdisc and BQL can't hold them
++	 * back, so leave them out: XDP traffic could otherwise keep the
++	 * queue stopped, starving the stack and tripping the TX watchdog.
++	 */
++	if (!xdp)
++		netdev_tx_sent_queue(net_txq, len);
++
+ 	mana_gd_wq_ring_doorbell(gd->gdma_context, gdma_sq);
+ 
+ 	/* skb may be freed after mana_gd_post_work_request. Do not use it. */
+@@ -574,6 +592,11 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 	return NETDEV_TX_OK;
+ }
+ 
++netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
++{
++	return __mana_start_xmit(skb, ndev, false);
++}
++
+ #if (MAX_SKB_FRAGS + 2 > MANA_MAX_TX_WQE_SGL_ENTRIES)
+ static netdev_features_t mana_features_check(struct sk_buff *skb,
+ 					     struct net_device *ndev,
+@@ -1938,9 +1961,10 @@ void mana_unmap_skb(struct sk_buff *skb, struct mana_port_context *apc)
+ static void mana_poll_tx_cq(struct mana_cq *cq)
+ {
+ 	struct gdma_comp *completions = cq->gdma_comp_buf;
+-	struct gdma_posted_wqe_info *wqe_info;
+ 	unsigned int pkt_transmitted = 0;
+ 	unsigned int wqe_unit_cnt = 0;
++	unsigned int bql_bytes = 0;
++	unsigned int bql_pkts = 0;
+ 	unsigned int tx_bytes = 0;
+ 	struct mana_txq *txq = cq->txq;
+ 	struct mana_port_context *apc;
+@@ -1948,6 +1972,7 @@ static void mana_poll_tx_cq(struct mana_cq *cq)
+ 	struct gdma_queue *gdma_wq;
+ 	unsigned int avail_space;
+ 	struct net_device *ndev;
++	struct mana_skb_cb *cb;
+ 	struct sk_buff *skb;
+ 	bool txq_stopped;
+ 	int comp_read;
+@@ -2018,12 +2043,16 @@ static void mana_poll_tx_cq(struct mana_cq *cq)
+ 		if (WARN_ON_ONCE(!skb))
+ 			return;
+ 
+-		wqe_info = (struct gdma_posted_wqe_info *)skb->cb;
+-		wqe_unit_cnt += wqe_info->wqe_size_in_bu;
++		cb = (struct mana_skb_cb *)skb->cb;
++		wqe_unit_cnt += cb->wqe_info.wqe_size_in_bu;
+ 
+ 		mana_unmap_skb(skb, apc);
+ 
+ 		tx_bytes += skb->len;
++		if (!cb->xdp) {
++			bql_pkts++;
++			bql_bytes += skb->len;
++		}
+ 
+ 		napi_consume_skb(skb, cq->budget);
+ 
+@@ -2038,10 +2067,12 @@ static void mana_poll_tx_cq(struct mana_cq *cq)
+ 	gdma_wq = txq->gdma_sq;
+ 	avail_space = mana_gd_wq_avail_space(gdma_wq);
+ 
++	net_txq = txq->net_txq;
++	netdev_tx_completed_queue(net_txq, bql_pkts, bql_bytes);
++
+ 	/* Ensure tail updated before checking q stop */
+ 	smp_mb();
+ 
+-	net_txq = txq->net_txq;
+ 	txq_stopped = netif_tx_queue_stopped(net_txq);
+ 
+ 	/* Ensure checking txq_stopped before apc->port_is_up. */
+@@ -2694,6 +2725,13 @@ static void mana_destroy_txq(struct mana_port_context *apc)
+ 			apc->tx_qp[i]->txq.napi_initialized = false;
+ 		}
+ 
++		/* Forget the SKBs freed without being completed after a drain
++		 * timeout, now that NAPI can't complete any. Doing it here also
++		 * covers the queues that a lower channel count won't recreate,
++		 * which could otherwise stay stopped.
++		 */
++		netdev_tx_reset_queue(apc->tx_qp[i]->txq.net_txq);
++
+ 		if (apc->tx_qp[i]->tx_object != INVALID_MANA_HANDLE)
+ 			mana_destroy_wq_obj(apc, GDMA_SQ, apc->tx_qp[i]->tx_object);
+ 
+diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+index 8c3dc9d0b299..e1fa9131c490 100644
+--- a/include/net/mana/mana.h
++++ b/include/net/mana/mana.h
+@@ -672,6 +672,8 @@ struct mana_port_context {
+ 	u32 steer_cqe_coalescing;
+ };
+ 
++netdev_tx_t __mana_start_xmit(struct sk_buff *skb, struct net_device *ndev,
++			      bool xdp);
+ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev);
+ int mana_config_rss(struct mana_port_context *ac, enum TRI_STATE rx,
+ 		    bool update_hash, bool update_tab);
+-- 
+2.56.0
+
