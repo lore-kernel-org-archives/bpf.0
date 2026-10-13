@@ -1,15 +1,16 @@
 Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FAC4A2A61;
-	Tue, 13 Oct 2026 18:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47D251AEFB;
+	Tue, 13 Oct 2026 18:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791915596; cv=none; b=oyGN6dbJh5s36nwArrcdeyQbTrO/k3wpRueLCrPtx2U6HRlIlB203+KPoAYFCtD8uwZUkpVhyQ/0bZqgIvDRbWh8eTXnmRgwRSCqsldXBVpUkzLpE43WLatDhro+bD0oMUaJuqw66m85+1/UkAIXCvvV3jqul5hAU/3egW2US9I=
+	t=1791915604; cv=none; b=STSPWDdwS6LXjzCGc8Lv57YOziLj0bw/5VKw+Mxav3J1TdjMgc86L4veVuG06Be813y2GF3WihjX/eq/9ovyYVl2dpYW2dHByKtzOEFCSZYwbRJ0lSa+hNFfwWewcKWZKV9IUWn7su+1pAT5KmkmqN2yz6RmcLYdUVCfbTA65m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791915596; c=relaxed/simple;
-	bh=qegGgAzW18JVJXUjtzPA+cHAIkYUYNlEhkizNdaRkZ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=euv8t+wwhU/SMkw/PaSqDPW4UvncD7dKSkq8Js+KRBBHHRu8ajZi7V3UFgchZlbxvE+UyYhs4ZbYBxLM9QHQc1QlBtWhchjAr/94ZngaRWVIIyxHmjDM33OTOhRVRO0en7zba/+l2N/0+ElrOdpqo85cMeBG6nFlPbLqyI74fbA=
+	s=arc-20240116; t=1791915604; c=relaxed/simple;
+	bh=QthxAvg3vp71zztJoboNuaajbqVgRe+8X4cXQhEWJGI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SIbDKn7DzUVwfcxlY/ysMHD6Zsfz23DWoThEEg5YubaAxjxpyF5A/rCxDe7peE4dOCLphG87TrUnNo8K7gnv3icMHGe8XEuJBggj5I6ATdmWkghuVugDr7YUPUWdN5/uPTmU8zh2ykis/meYXMZREtdpJ7ChNBkOWkxUR3/z1Wg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; arc=none smtp.client-ip=80.241.56.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
@@ -17,8 +18,8 @@ Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4j42g91FhRzMlVG;
-	Tue, 13 Oct 2026 20:19:49 +0200 (CEST)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4j42gL0tgdzMlW4;
+	Tue, 13 Oct 2026 20:19:58 +0200 (CEST)
 Authentication-Results: outgoing_mbo_mout;
 	dkim=none;
 	spf=pass (outgoing_mbo_mout: domain of listout@listout.xyz designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=listout@listout.xyz
@@ -42,10 +43,12 @@ Cc: bdas@suse.de,
 	JP Kobryn <jp.kobryn@linux.dev>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 0/2] selftests/bpf: Add tests for memcg kfuncs
-Date: Tue, 13 Oct 2026 23:49:30 +0530
-Message-ID: <20261013181932.1739238-1-listout@listout.xyz>
+Subject: [PATCH bpf-next v4 1/2] selftests/bpf: Move alloc_pagecache() to cgroup_helpers
+Date: Tue, 13 Oct 2026 23:49:31 +0530
+Message-ID: <20261013181932.1739238-2-listout@listout.xyz>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261013181932.1739238-1-listout@listout.xyz>
+References: <20261013181932.1739238-1-listout@listout.xyz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,54 +56,144 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4j42g91FhRzMlVG
+X-Rspamd-Queue-Id: 4j42gL0tgdzMlW4
 
 From: Brahmajit Das <bdas@suse.de>
 
-bpf_get_root_mem_cgroup(), bpf_mem_cgroup_usage(),
-bpf_mem_cgroup_memory_events() and bpf_proactive_reclaim() have no
-selftest coverage. Patch 2 adds a memcg_kfuncs test for them, plus
-verifier tests for their acquire/release, NULL and program type rules.
+arena_memcg has a static alloc_pagecache() that fills the page cache
+with clean, reclaimable pages by reading a sparse O_TMPFILE. The next
+patch needs the same helper for the memcg kfunc tests.
 
-Patch 1 moves the alloc_pagecache() helper from arena_memcg to
-cgroup_helpers so the new test can share it instead of carrying a copy.
+Move it to cgroup_helpers.c, which test_progs already links, so both
+tests share one copy and fixes to the reclaimability detection only
+have to be made once.
 
-Tested on bpf-next with vmtest.sh (x86_64): all memcg_kfuncs and
-memcg_kfuncs_failure subtests pass, and arena_memcg still passes.
+No functional change.
+
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Brahmajit Das <bdas@suse.de>
 ---
-v3 -> v4:
-- Move alloc_pagecache() to cgroup_helpers.c and share it with
-  arena_memcg instead of duplicating it (new patch 1). (CI review)
+ tools/testing/selftests/bpf/cgroup_helpers.c  | 34 +++++++++++++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |  1 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 34 -------------------
+ 3 files changed, 35 insertions(+), 34 deletions(-)
 
-v2 -> v3:
-- Drop the upper bound on the bpf_proactive_reclaim() result; only the
-  request is clamped and reclaim may overshoot. Fix the commit message
-  accordingly. (CI review)
-- Print the reason before skipping. (CI review)
-
-v1 -> v2:
-- Also check that negative indices are rejected by
-  bpf_mem_cgroup_memory_events() and bpf_mem_cgroup_vm_events() (Sashiko)
-
-v3: https://lore.kernel.org/bpf/20261013171211.1661726-1-listout@listout.xyz/
-v2: https://lore.kernel.org/bpf/20261013151621.1526699-1-listout@listout.xyz/
-v1: https://lore.kernel.org/bpf/20261013143853.1379307-1-listout@listout.xyz/
-
-Brahmajit Das (2):
-  selftests/bpf: Move alloc_pagecache() to cgroup_helpers
-  selftests/bpf: Add tests for memcg kfuncs
-
- tools/testing/selftests/bpf/cgroup_helpers.c  |  34 +++
- tools/testing/selftests/bpf/cgroup_helpers.h  |   1 +
- .../selftests/bpf/prog_tests/arena_memcg.c    |  34 ---
- .../selftests/bpf/prog_tests/memcg_kfuncs.c   | 273 ++++++++++++++++++
- .../selftests/bpf/progs/memcg_kfuncs.c        | 106 +++++++
- .../bpf/progs/memcg_kfuncs_failure.c          |  54 ++++
- 6 files changed, 468 insertions(+), 34 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_kfuncs.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_kfuncs_failure.c
-
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 4183ff6150c2..ace15b9cd2e4 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -5,6 +5,8 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/xattr.h>
++#include <sys/vfs.h>
++#include <linux/magic.h>
+ #include <linux/limits.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -613,6 +615,38 @@ int cgroup_setup_and_join(const char *path) {
+ 	return cg_fd;
+ }
+ 
++/*
++ * Fill the page cache with @size bytes of clean, reclaimable pages by
++ * reading a sparse temp file, the way the cgroup selftests do. Returns the
++ * fd, which must stay open: closing it drops the cache. Returns -EOPNOTSUPP
++ * if the working directory cannot back such a file, -1 on error.
++ */
++int alloc_pagecache(size_t size)
++{
++	struct statfs stfs;
++	char buf[4096];
++	size_t off;
++	int fd;
++
++	fd = open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
++	if (fd < 0)
++		return errno == EOPNOTSUPP ? -EOPNOTSUPP : -1;
++	/* tmpfs hands out shmem pages, which are not reclaimable without swap */
++	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC) {
++		close(fd);
++		return -EOPNOTSUPP;
++	}
++	if (ftruncate(fd, size))
++		goto err;
++	for (off = 0; off < size; off += sizeof(buf))
++		if (read(fd, buf, sizeof(buf)) < 0)
++			goto err;
++	return fd;
++err:
++	close(fd);
++	return -1;
++}
++
+ /**
+  * setup_classid_environment() - Setup the cgroupv1 net_cls environment
+  *
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
+index d42d2e13044e..6cc5ccb63fc2 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.h
++++ b/tools/testing/selftests/bpf/cgroup_helpers.h
+@@ -20,6 +20,7 @@ int read_cgroup_file(const char *relative_path, const char *file,
+ int read_cgroup_file_parent(const char *relative_path, const char *file,
+ 			    char *buf, size_t len);
+ int cgroup_setup_and_join(const char *relative_path);
++int alloc_pagecache(size_t size);
+ int get_root_cgroup(void);
+ int create_and_get_cgroup(const char *relative_path);
+ void remove_cgroup(const char *relative_path);
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+index c76a7eb2f01d..55c8db956ff3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+@@ -2,8 +2,6 @@
+ #define _GNU_SOURCE
+ #include <test_progs.h>
+ #include <fcntl.h>
+-#include <linux/magic.h>
+-#include <sys/vfs.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+ #include <sys/user.h>
+@@ -37,38 +35,6 @@ static void dump_memcg(void)
+ 		fprintf(stderr, "memory.events:\n%s", buf);
+ }
+ 
+-/*
+- * Fill the page cache with @size bytes of clean, reclaimable pages by
+- * reading a sparse temp file, the way the cgroup selftests do. Returns the
+- * fd, which must stay open: closing it drops the cache. Returns -EOPNOTSUPP
+- * if the working directory cannot back such a file, -1 on error.
+- */
+-static int alloc_pagecache(size_t size)
+-{
+-	struct statfs stfs;
+-	char buf[4096];
+-	size_t off;
+-	int fd;
+-
+-	fd = open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
+-	if (fd < 0)
+-		return errno == EOPNOTSUPP ? -EOPNOTSUPP : -1;
+-	/* tmpfs hands out shmem pages, which are not reclaimable without swap */
+-	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC) {
+-		close(fd);
+-		return -EOPNOTSUPP;
+-	}
+-	if (ftruncate(fd, size))
+-		goto err;
+-	for (off = 0; off < size; off += sizeof(buf))
+-		if (read(fd, buf, sizeof(buf)) < 0)
+-			goto err;
+-	return fd;
+-err:
+-	close(fd);
+-	return -1;
+-}
+-
+ void serial_test_arena_memcg(void)
+ {
+ 	int cgroup_fd = -1, status, err;
 -- 
 2.56.0
 
