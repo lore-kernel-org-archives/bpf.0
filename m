@@ -1,562 +1,213 @@
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA38D4A204B;
-	Tue, 13 Oct 2026 18:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3830352CCD7
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 18:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791915614; cv=none; b=NgyFGQyi0vAFQokSzCrRsxkchLO12nmt11oH0k/+I55kJkQeLyGcSjwDy6onQcALeTCwvotZmfdU66t93ACgd2Hs6BXz6630J7WGCf8w6HVe3Bt0QW18plYLatHZU2RvT9CEYTzhVb8VFpDOz1iIxdbFUHxOh4vanwviRxk7PN4=
+	t=1791915752; cv=none; b=PACDL2ZKJWhdmIspNQbVgImJZimJMYgJLVilqyend7tfxEUc3Ez9hsug0fGKnt9on71uCNM8S+jHviLRjC6tq+aKlh1Bvk9RdeGjoSDxlMhoi8Gd9EVER8w7s1pW3kyxTfyzxO/6a3ZyBxcBTgpR9gMudhXSec3r86dku2jj0ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791915614; c=relaxed/simple;
-	bh=uZ4S9ptnysh7aY2V27pL2LdIuPdTASMCBVFLBf3neDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f+BQc7k9ZhWaI8L5HnZ9r2M/UD98oK5edU9XdwYIr15aR7zy/v7FrZ14zMt8/ke/9re/7WTIAQ1oFgUSm5s4FaQWnqps4tktxIpD89QLu2xDnvz8mnlGhNhabjZitHpSisRUNaKGMRQSXA4QB04qvp3yTPYm21O7X/u46BGhEkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=listout.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4j42gW6XrszKqLV;
-	Tue, 13 Oct 2026 20:20:07 +0200 (CEST)
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of listout@listout.xyz designates 2001:67c:2050:b231:465::102 as permitted sender) smtp.mailfrom=listout@listout.xyz
-From: listout@listout.xyz
-To: bpf@vger.kernel.org
-Cc: bdas@suse.de,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <jp.kobryn@linux.dev>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add tests for memcg kfuncs
-Date: Tue, 13 Oct 2026 23:49:32 +0530
-Message-ID: <20261013181932.1739238-3-listout@listout.xyz>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261013181932.1739238-1-listout@listout.xyz>
-References: <20261013181932.1739238-1-listout@listout.xyz>
+	s=arc-20240116; t=1791915752; c=relaxed/simple;
+	bh=FUcGpTNl69IjIbl7brNxNSRxvyUJMlB+mXVSdomxf0A=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GYsHa/x/yzgcFOQ5t7T4boimV87O9rqx8uOmQcuEXvnSsOPs60t/95NHlZDV95dbk8gdxmN1FUrBlJEGkWSb6OhcSnhBzRchHYZc8VWVOMWXCLBaJr/UGOBHRQtU0BpZvThDZXmc+RX7FUtKSU1PUihs6UVNsSqXfkdJ59xTeWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3GX4J3R; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3GX4J3R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF831F000FF;
+	Tue, 13 Oct 2026 18:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791915750;
+	bh=RscgrbGtlT536DrddR3MsH+fIRcixgBvZNQy8HRAAz8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=O3GX4J3RmAgpWk0ktFKLK/C2nW+IOO5YtBGfQtouyxYARq2w6Hlffu8i1Rm6A3wUd
+	 0eV2qUHpTGC5sKXKb5d5BlN5O6Qgggm1TKdIIlgE6epn7ex2F16iDwaUoyCuPWlJcd
+	 NPyXwanHKM4zGdvm4jN0sGfQQK4JDwyzRnDCdXy4iEBc5b9+fgjDxsMdDKrHQpDFnn
+	 kc4upZEQijy4xVA395dCFNbJT+ZuSK/HyhzgdUelAZEkLwoKpmkfKc4qsBIqqZ1QPT
+	 T3naUu+1Xtsj89M0/zhd13vRR/DLfKV/8lBo04Jt2VrkN5QzX0BL8X1YTks1tDyerj
+	 gsTGfKfYqe95g==
+Content-Type: multipart/mixed; boundary="===============1441693752770932196=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4j42gW6XrszKqLV
+Message-Id: <d1fd91cd937361d722b8e92b31d083eb9facfb66d387d508b35043b3e6a17d22@mail.kernel.org>
+In-Reply-To: <20261013171230.523677-19-daniel@iogearbox.net>
+References: <20261013171230.523677-19-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next 18/18] selftests/bpf: Remove the old test_bpf module
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,alexei.starovoitov@gmail.com
+Cc: memxor@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 13 Oct 2026 18:22:29 +0000 (UTC)
 
-From: Brahmajit Das <bdas@suse.de>
+--===============1441693752770932196==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The existing cgroup_iter_memcg test covers bpf_get_mem_cgroup(),
-bpf_put_mem_cgroup(), bpf_mem_cgroup_flush_stats(),
-bpf_mem_cgroup_page_state() and bpf_mem_cgroup_vm_events(), but
-bpf_get_root_mem_cgroup(), bpf_mem_cgroup_usage(),
-bpf_mem_cgroup_memory_events() and bpf_proactive_reclaim() have no
-selftest coverage.
+> selftests/bpf: Remove the old test_bpf module
 
-Add a memcg_kfuncs test that drives them from syscall programs against
-a test cgroup:
+TL;DR:
+- Commit message may overstate successors: classic BPF tests (SKF_AD_*
+  converter, sparc32 cBPF JIT) seem to have no replacement
+- The two skb_segment crash-fix tests seem not covered by net_test.c, so
+  regressions may go uncaught
 
- - usage: bpf_mem_cgroup_usage() agrees with memory.current.
- - invalid_idx: out-of-range and negative indices passed to
-   bpf_mem_cgroup_memory_events(), bpf_mem_cgroup_vm_events() and
-   bpf_mem_cgroup_page_state() return (unsigned long)-1.
- - memory_events: after pushing the cgroup over memory.high,
-   MEMCG_HIGH is non-zero and the low/high/max/oom/oom_kill counters
-   match memory.events.
- - root_memcg: bpf_get_root_mem_cgroup() can be acquired and released.
- - reclaim_args: bpf_proactive_reclaim() rejects sizes below PAGE_SIZE
-   and out-of-range swappiness with -EINVAL, and accepts -1, 0,
-   MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY.
- - reclaim: bpf_proactive_reclaim() reclaims clean page cache and
-   returns a page-aligned byte count. The request is clamped to
-   MEMCG_CHARGE_BATCH pages, but reclaim may overshoot its target, so
-   the result is not bounded.
+> diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+> deleted file mode 100644
+> index af6f3340c034..000000000000
+> --- a/lib/test_bpf.c
+> +++ /dev/null
+> @@ -1,15934 +0,0 @@
 
-The page cache subtests use the shared alloc_pagecache() helper and
-skip, with a message, when the working directory cannot back a
-reclaimable O_TMPFILE, as arena_memcg does.
+[ ... ]
 
-Also add memcg_kfuncs_failure with verifier tests for a leaked
-reference from bpf_get_root_mem_cgroup(), a missing NULL check on its
-result, and a call to bpf_proactive_reclaim() from a non-syscall
-program.
+> -enum {
+> -	CLASSIC  = BIT(6),	/* Old BPF instructions only. */
+> -	INTERNAL = BIT(7),	/* Extended instruction set.  */
+> -};
 
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Brahmajit Das <bdas@suse.de>
+The commit message says "The instruction tests of the test_bpf module live
+in the BPF selftests now, as the jit_insns test of test_progs".  Does that
+hold for the tests flagged CLASSIC?
+
+None of the roughly 135 CLASSIC tests in the deleted file appear to have
+been carried over.  tools/testing/selftests/bpf/prog_tests/jit_insns.c has
+no sock_filter, BPF_STMT/BPF_JUMP, BPF_ABS/BPF_IND or SKF_AD_* usage, so
+only the INTERNAL tests seem to have a successor.
+
+The classic tests went through bpf_prog_create(), and that leaves two areas
+without systematic in-tree coverage.
+
+1) The ancillary load handling in convert_bpf_extensions() in
+net/core/filter.c, which is used by every SO_ATTACH_FILTER and seccomp
+filter.  The deleted tests covered SKF_AD_PROTOCOL, HATYPE, IFINDEX, MARK,
+RXHASH, QUEUE, VLAN_TAG, VLAN_TAG_PRESENT, PAY_OFFSET, NLATTR, NLATTR_NEST
+and ALU_XOR_X, each of which has a "case SKF_AD_OFF + SKF_AD_..." in
+convert_bpf_extensions().  The remaining selftests only use SKF_AD_CPU,
+SKF_AD_PKTTYPE and SKF_AD_OFF (toeplitz.c, csum.c, gro.c, psock_lib.h,
+reuseport_bpf_cpu.c, skf_net_off.c).
+
+2) The sparc32 classic JIT.  arch/sparc/Kconfig still has:
+
+    select HAVE_CBPF_JIT if SPARC32
+
+and bpf_jit_compile() in arch/sparc/net/bpf_jit_comp_32.c is only reached
+from cBPF programs.  The advice that archs "move over to the BPF selftests
+for proper coverage" does not seem to apply there, since test_progs only
+loads eBPF programs.
+
+The previous commit (71a5c374fa65) says it carries "only the relevant
+instruction tests", so dropping the classic tests may be deliberate.  Even
+so, could the changelog avoid saying that the instruction tests now live in
+the BPF selftests, and could the lost cBPF converter and extension coverage
+be acknowledged or ported?
+
+
+[ ... ]
+
+> -struct skb_segment_test {
+> -	const char *descr;
+> -	struct sk_buff *(*build_skb)(void);
+> -	netdev_features_t features;
+> -};
+> -
+> -static struct skb_segment_test skb_segment_tests[] __initconst = {
+> -	{
+> -		.descr = "gso_with_rx_frags",
+> -		.build_skb = build_test_skb,
+> -		.features = NETIF_F_SG | NETIF_F_GSO_PARTIAL | NETIF_F_IP_CSUM |
+> -			    NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM
+> -	},
+> -	{
+> -		.descr = "gso_linear_no_head_frag",
+> -		.build_skb = build_test_skb_linear_no_head_frag,
+> -		.features = NETIF_F_SG | NETIF_F_FRAGLIST |
+> -			    NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_GSO |
+> -			    NETIF_F_GRO | NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM |
+> -			    NETIF_F_HW_VLAN_STAG_TX
+> -	}
+> -};
+> -
+
+The commit message says the skb_segment tests "have a KUnit successor in
+net/core/net_test.c".  Are these two cases actually covered there?
+
+They were added as reproducers for BUG_ON crash fixes in skb_segment():
+
+  gso_with_rx_frags (76db8087c4c9) for 13acc94eff12 ("net: permit
+  skb_segment on head_frag frag_list skb")
+
+  gso_linear_no_head_frag (cf204a718357) for 3dcbdb134f32 ("net: gso: Fix
+  skb_segment splat when splitting gso_size mangled skb having
+  linear-headed frag_list")
+
+For gso_linear_no_head_frag, build_test_skb_linear_no_head_frag() builds
+alloc_skb() frag_list members (head_frag = 0, linear data) with
+SKB_GSO_TCPV6 | SKB_GSO_DODGY and a gso_size of 1288 that differs from
+skb_headlen(head_skb).  That is the input needed to reach this block at the
+top of skb_segment():
+
+    if ((skb_shinfo(head_skb)->gso_type & SKB_GSO_DODGY) &&
+        !gso_by_frags && mss != skb_headlen(head_skb)) {
+        ...
+            if (skb_headlen(check_skb) && !check_skb->head_frag) {
+                ...
+                features &= ~NETIF_F_SG;
+
+net/core/net_test.c never reaches it.  gso_test_func() never sets gso_type,
+which stays 0 because __finalize_skb_around() clears the shinfo, and every
+frag_list member is built with build_skb(page_address(page), frag_size +
+shinfo_size), which sets head_frag = 1 whenever frag_size is non-zero.  So
+there is no DODGY skb and no linear non-head_frag frag_list member.
+
+For gso_with_rx_frags, the head skb and its frag_list member are
+dev_alloc_skb() head_frag skbs, each with 8 linear bytes plus a 64-byte rx
+frag, and the features include NETIF_F_SG | NETIF_F_GSO_PARTIAL.  The
+segmentation loop then reaches this code in skb_segment():
+
+    if (!skb_headlen(list_skb)) {
+        BUG_ON(!nfrags);
+    } else {
+        BUG_ON(!list_skb->head_frag);
+        /* to make room for head_frag. */
+        i--;
+        frag--;
+    }
+
+followed by:
+
+    *nskb_frag = (i < 0) ? skb_head_frag_to_page_desc(frag_skb) : *frag;
+
+In the net_test.c cases this path does not seem to be hit:
+
+- frag_list and frag_list_pure have mss-aligned linear frag_list members,
+  so after the head segment every iteration takes the skb_clone(list_skb)
+  path under "hsize <= 0 && i >= nfrags && skb_headlen(list_skb) &&
+  (skb_headlen(list_skb) == len || sg)".
+- frag_list_non_uniform clears NETIF_F_SG and takes the skb_copy_bits()
+  path.
+- gso_by_frags always takes the clone path.
+- frags and gso_partial have no frag_list.
+
+net_test.c's skb_segment test came from b3098d32ed6e ("net: add skb_segment
+kunit test") and was never extended with these two cases, and a search of
+tools/testing/, lib/ and the KUnit files finds no other skb_segment() test.
+After this commit, a regression of either fix would have no in-tree test
+that catches it.
+
+Could the two cases be ported into the gso_test cases[] table in
+net/core/net_test.c, for example a DODGY case with alloc_skb()-backed
+frag_list members and a case with head_frag plus page-frag frag_list
+members, before the module is removed?  Alternatively, could the commit
+message stop describing net_test.c as the successor of these tests?
+
+
 ---
- .../selftests/bpf/prog_tests/memcg_kfuncs.c   | 273 ++++++++++++++++++
- .../selftests/bpf/progs/memcg_kfuncs.c        | 106 +++++++
- .../bpf/progs/memcg_kfuncs_failure.c          |  54 ++++
- 3 files changed, 433 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_kfuncs.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_kfuncs_failure.c
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c
-new file mode 100644
-index 000000000000..90a107c3607d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c
-@@ -0,0 +1,273 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <fcntl.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+
-+#include "cgroup_helpers.h"
-+#include "memcg_kfuncs.skel.h"
-+#include "memcg_kfuncs_failure.skel.h"
-+
-+#define CG_PATH		"/memcg_kfuncs"
-+
-+/* From mm/internal.h, not exposed in BTF. */
-+#define MAX_SWAPPINESS		200
-+#define SWAPPINESS_ANON_ONLY	(MAX_SWAPPINESS + 1)
-+
-+/* bpf_proactive_reclaim() clamps the request to MEMCG_CHARGE_BATCH pages. */
-+#define MEMCG_CHARGE_BATCH	64
-+
-+#define ANON_SIZE		(4 * 1024 * 1024)
-+#define USAGE_SLACK		(1 * 1024 * 1024)
-+#define PAGECACHE_SIZE		(32 * 1024 * 1024)
-+#define HIGH_HEADROOM		(1 * 1024 * 1024)
-+#define RECLAIM_RETRIES		16
-+
-+static long page_size;
-+
-+static int run_prog(struct bpf_program *prog)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+		return -1;
-+	if (!ASSERT_EQ(opts.retval, 0, "retval"))
-+		return -1;
-+	return 0;
-+}
-+
-+static int read_memcg_ulong(const char *file, unsigned long *val)
-+{
-+	char buf[64];
-+
-+	if (read_cgroup_file(CG_PATH, file, buf, sizeof(buf)))
-+		return -1;
-+	*val = strtoul(buf, NULL, 10);
-+	return 0;
-+}
-+
-+static int read_memory_event(const char *key, unsigned long *val)
-+{
-+	char buf[512], name[64], *line, *saveptr;
-+	unsigned long v;
-+
-+	if (read_cgroup_file(CG_PATH, "memory.events", buf, sizeof(buf)))
-+		return -1;
-+
-+	for (line = strtok_r(buf, "\n", &saveptr); line;
-+	     line = strtok_r(NULL, "\n", &saveptr)) {
-+		if (sscanf(line, "%63s %lu", name, &v) != 2)
-+			continue;
-+		if (!strcmp(name, key)) {
-+			*val = v;
-+			return 0;
-+		}
-+	}
-+	return -1;
-+}
-+
-+static int alloc_pagecache_or_skip(size_t size)
-+{
-+	int fd;
-+
-+	fd = alloc_pagecache(size);
-+	if (fd == -EOPNOTSUPP) {
-+		fprintf(stderr, "%s:SKIP:no disk-backed O_TMPFILE in cwd\n", __func__);
-+		test__skip();
-+		return -1;
-+	}
-+	ASSERT_OK_FD(fd, "alloc_pagecache");
-+	return fd;
-+}
-+
-+static void test_usage(struct memcg_kfuncs *skel)
-+{
-+	unsigned long before, after, lo, hi;
-+	void *map;
-+
-+	map = mmap(NULL, ANON_SIZE, PROT_READ | PROT_WRITE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (!ASSERT_NEQ(map, MAP_FAILED, "mmap anon"))
-+		return;
-+	memset(map, 1, ANON_SIZE);
-+
-+	if (!ASSERT_OK(read_memcg_ulong("memory.current", &before), "read before"))
-+		goto out;
-+	if (run_prog(skel->progs.memcg_query))
-+		goto out;
-+	if (!ASSERT_OK(read_memcg_ulong("memory.current", &after), "read after"))
-+		goto out;
-+
-+	/*
-+	 * bpf_mem_cgroup_usage() and memory.current read the same counter,
-+	 * but the cgroup may still be charged or uncharged in between.
-+	 */
-+	lo = (before < after ? before : after) - USAGE_SLACK;
-+	hi = (before < after ? after : before) + USAGE_SLACK;
-+	ASSERT_GE(skel->bss->usage, ANON_SIZE, "usage covers anon");
-+	ASSERT_GE(skel->bss->usage, lo, "usage lower bound");
-+	ASSERT_LE(skel->bss->usage, hi, "usage upper bound");
-+out:
-+	munmap(map, ANON_SIZE);
-+}
-+
-+static void test_invalid_idx(struct memcg_kfuncs *skel)
-+{
-+	if (run_prog(skel->progs.memcg_query))
-+		return;
-+
-+	ASSERT_EQ(skel->bss->bad_memory_event, -1UL, "bad memory event");
-+	ASSERT_EQ(skel->bss->bad_vm_event, -1UL, "bad vm event");
-+	ASSERT_EQ(skel->bss->bad_page_state, -1UL, "bad page state");
-+	ASSERT_EQ(skel->bss->neg_memory_event, -1UL, "negative memory event");
-+	ASSERT_EQ(skel->bss->neg_vm_event, -1UL, "negative vm event");
-+}
-+
-+static void test_memory_events(struct memcg_kfuncs *skel)
-+{
-+	unsigned long cur, val;
-+	char buf[64];
-+	int fd;
-+
-+	if (!ASSERT_OK(read_memcg_ulong("memory.current", &cur), "memory.current"))
-+		return;
-+
-+	/*
-+	 * Push the cgroup over memory.high to raise MEMCG_HIGH. Every charge
-+	 * above the limit reclaims, so only overshoot it slightly.
-+	 */
-+	snprintf(buf, sizeof(buf), "%lu", cur + HIGH_HEADROOM);
-+	if (!ASSERT_OK(write_cgroup_file(CG_PATH, "memory.high", buf), "set memory.high"))
-+		return;
-+	fd = alloc_pagecache_or_skip(2 * HIGH_HEADROOM);
-+	write_cgroup_file(CG_PATH, "memory.high", "max");
-+	if (fd < 0)
-+		return;
-+
-+	if (run_prog(skel->progs.memcg_query))
-+		goto out;
-+
-+	ASSERT_GT(skel->bss->ev_high, 0, "high event raised");
-+
-+	if (ASSERT_OK(read_memory_event("low", &val), "read low"))
-+		ASSERT_EQ(skel->bss->ev_low, val, "low");
-+	if (ASSERT_OK(read_memory_event("high", &val), "read high"))
-+		ASSERT_EQ(skel->bss->ev_high, val, "high");
-+	if (ASSERT_OK(read_memory_event("max", &val), "read max"))
-+		ASSERT_EQ(skel->bss->ev_max, val, "max");
-+	if (ASSERT_OK(read_memory_event("oom", &val), "read oom"))
-+		ASSERT_EQ(skel->bss->ev_oom, val, "oom");
-+	if (ASSERT_OK(read_memory_event("oom_kill", &val), "read oom_kill"))
-+		ASSERT_EQ(skel->bss->ev_oom_kill, val, "oom_kill");
-+out:
-+	close(fd);
-+}
-+
-+static void test_root_memcg(struct memcg_kfuncs *skel)
-+{
-+	if (run_prog(skel->progs.root_memcg_query))
-+		return;
-+
-+	ASSERT_GT(skel->bss->root_usage, 0, "root usage");
-+}
-+
-+static long do_reclaim(struct memcg_kfuncs *skel, unsigned long size,
-+		       int swappiness)
-+{
-+	skel->bss->reclaim_size = size;
-+	skel->bss->reclaim_swappiness = swappiness;
-+	skel->bss->reclaim_ret = 0;
-+	if (run_prog(skel->progs.memcg_reclaim))
-+		return LONG_MIN;
-+	return skel->bss->reclaim_ret;
-+}
-+
-+static void test_reclaim_args(struct memcg_kfuncs *skel)
-+{
-+	ASSERT_EQ(do_reclaim(skel, 0, -1), -EINVAL, "size 0");
-+	ASSERT_EQ(do_reclaim(skel, page_size - 1, -1), -EINVAL, "size < PAGE_SIZE");
-+	ASSERT_EQ(do_reclaim(skel, page_size, -2), -EINVAL, "swappiness -2");
-+	ASSERT_EQ(do_reclaim(skel, page_size, SWAPPINESS_ANON_ONLY + 1), -EINVAL,
-+		  "swappiness too large");
-+
-+	ASSERT_GE(do_reclaim(skel, page_size, -1), 0, "swappiness -1");
-+	ASSERT_GE(do_reclaim(skel, page_size, 0), 0, "swappiness 0");
-+	ASSERT_GE(do_reclaim(skel, page_size, MAX_SWAPPINESS), 0, "swappiness max");
-+	ASSERT_GE(do_reclaim(skel, page_size, SWAPPINESS_ANON_ONLY), 0,
-+		  "swappiness anon only");
-+}
-+
-+static void test_reclaim(struct memcg_kfuncs *skel)
-+{
-+	long ret = 0;
-+	int fd, i;
-+
-+	fd = alloc_pagecache_or_skip(PAGECACHE_SIZE);
-+	if (fd < 0)
-+		return;
-+
-+	/*
-+	 * Ask for more than one batch. The kfunc clamps the request, but
-+	 * reclaim may overshoot its target, so don't bound the result.
-+	 */
-+	for (i = 0; i < RECLAIM_RETRIES && ret <= 0; i++)
-+		ret = do_reclaim(skel, 4 * MEMCG_CHARGE_BATCH * page_size, 0);
-+
-+	ASSERT_GT(ret, 0, "reclaimed");
-+	ASSERT_EQ(ret % page_size, 0, "reclaim page aligned");
-+
-+	close(fd);
-+}
-+
-+void test_memcg_kfuncs(void)
-+{
-+	struct memcg_kfuncs *skel = NULL;
-+	unsigned long cur;
-+	int cgroup_fd;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+
-+	cgroup_fd = cgroup_setup_and_join(CG_PATH);
-+	if (!ASSERT_OK_FD(cgroup_fd, "cgroup_setup_and_join"))
-+		return;
-+
-+	if (read_memcg_ulong("memory.current", &cur)) {
-+		fprintf(stderr, "%s:SKIP:no memory controller\n", __func__);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	skel = memcg_kfuncs__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "memcg_kfuncs__open_and_load"))
-+		goto out;
-+
-+	skel->bss->cgid = get_cgroup_id(CG_PATH);
-+	if (!ASSERT_NEQ(skel->bss->cgid, 0, "get_cgroup_id"))
-+		goto out;
-+
-+	if (test__start_subtest("usage"))
-+		test_usage(skel);
-+	if (test__start_subtest("invalid_idx"))
-+		test_invalid_idx(skel);
-+	if (test__start_subtest("memory_events"))
-+		test_memory_events(skel);
-+	if (test__start_subtest("root_memcg"))
-+		test_root_memcg(skel);
-+	if (test__start_subtest("reclaim_args"))
-+		test_reclaim_args(skel);
-+	if (test__start_subtest("reclaim"))
-+		test_reclaim(skel);
-+
-+out:
-+	memcg_kfuncs__destroy(skel);
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-+
-+void test_memcg_kfuncs_failure(void)
-+{
-+	RUN_TESTS(memcg_kfuncs_failure);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/memcg_kfuncs.c b/tools/testing/selftests/bpf/progs/memcg_kfuncs.c
-new file mode 100644
-index 000000000000..5e2ea19a072d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memcg_kfuncs.c
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
-+void bpf_cgroup_release(struct cgroup *cgrp) __ksym;
-+
-+/* in */
-+u64 cgid;
-+unsigned long reclaim_size;
-+int reclaim_swappiness;
-+
-+/* out */
-+unsigned long usage;
-+unsigned long ev_low, ev_high, ev_max, ev_oom, ev_oom_kill;
-+unsigned long bad_memory_event;
-+unsigned long bad_vm_event;
-+unsigned long bad_page_state;
-+unsigned long neg_memory_event;
-+unsigned long neg_vm_event;
-+unsigned long root_usage;
-+long reclaim_ret;
-+
-+static struct mem_cgroup *memcg_from_cgid(void)
-+{
-+	struct mem_cgroup *memcg;
-+	struct cgroup *cgrp;
-+
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		return NULL;
-+
-+	memcg = bpf_get_mem_cgroup(&cgrp->self);
-+	bpf_cgroup_release(cgrp);
-+	return memcg;
-+}
-+
-+SEC("syscall")
-+int memcg_query(void *ctx)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	memcg = memcg_from_cgid();
-+	if (!memcg)
-+		return 1;
-+
-+	usage = bpf_mem_cgroup_usage(memcg);
-+
-+	ev_low = bpf_mem_cgroup_memory_events(memcg,
-+		bpf_core_enum_value(enum memcg_memory_event, MEMCG_LOW));
-+	ev_high = bpf_mem_cgroup_memory_events(memcg,
-+		bpf_core_enum_value(enum memcg_memory_event, MEMCG_HIGH));
-+	ev_max = bpf_mem_cgroup_memory_events(memcg,
-+		bpf_core_enum_value(enum memcg_memory_event, MEMCG_MAX));
-+	ev_oom = bpf_mem_cgroup_memory_events(memcg,
-+		bpf_core_enum_value(enum memcg_memory_event, MEMCG_OOM));
-+	ev_oom_kill = bpf_mem_cgroup_memory_events(memcg,
-+		bpf_core_enum_value(enum memcg_memory_event, MEMCG_OOM_KILL));
-+
-+	/* Out-of-range indices must be rejected with (unsigned long)-1. */
-+	bad_memory_event = bpf_mem_cgroup_memory_events(memcg,
-+		bpf_core_enum_value(enum memcg_memory_event, MEMCG_NR_MEMORY_EVENTS));
-+	bad_vm_event = bpf_mem_cgroup_vm_events(memcg,
-+		bpf_core_enum_value(enum vm_event_item, NR_VM_EVENT_ITEMS));
-+	bad_page_state = bpf_mem_cgroup_page_state(memcg, -1);
-+	/* Negative indices must not bypass the bounds checks. */
-+	neg_memory_event = bpf_mem_cgroup_memory_events(memcg, -1);
-+	neg_vm_event = bpf_mem_cgroup_vm_events(memcg, -1);
-+
-+	bpf_put_mem_cgroup(memcg);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int root_memcg_query(void *ctx)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	memcg = bpf_get_root_mem_cgroup();
-+	if (!memcg)
-+		return 1;
-+
-+	root_usage = bpf_mem_cgroup_usage(memcg);
-+
-+	bpf_put_mem_cgroup(memcg);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int memcg_reclaim(void *ctx)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	memcg = memcg_from_cgid();
-+	if (!memcg)
-+		return 1;
-+
-+	reclaim_ret = bpf_proactive_reclaim(memcg, reclaim_size,
-+					    reclaim_swappiness);
-+
-+	bpf_put_mem_cgroup(memcg);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/memcg_kfuncs_failure.c b/tools/testing/selftests/bpf/progs/memcg_kfuncs_failure.c
-new file mode 100644
-index 000000000000..3fe9f5a14707
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memcg_kfuncs_failure.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("syscall")
-+__failure __msg("Unreleased reference")
-+int root_memcg_leak(void *ctx)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	memcg = bpf_get_root_mem_cgroup();
-+	if (!memcg)
-+		return 0;
-+
-+	/* Missing bpf_put_mem_cgroup(). */
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__failure __msg("Possibly NULL pointer passed to trusted R1")
-+int root_memcg_no_null_check(void *ctx)
-+{
-+	struct mem_cgroup *memcg;
-+
-+	memcg = bpf_get_root_mem_cgroup();
-+	/* bpf_get_root_mem_cgroup() is KF_RET_NULL. */
-+	bpf_mem_cgroup_usage(memcg);
-+	bpf_put_mem_cgroup(memcg);
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+__failure __msg("calling kernel function bpf_proactive_reclaim is not allowed")
-+int proactive_reclaim_not_syscall(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cgroup *cgrp = ctx->cgroup;
-+	struct mem_cgroup *memcg;
-+
-+	if (!cgrp)
-+		return 0;
-+
-+	memcg = bpf_get_mem_cgroup(&cgrp->self);
-+	if (!memcg)
-+		return 0;
-+
-+	/* Only BPF_PROG_TYPE_SYSCALL may reclaim. */
-+	bpf_proactive_reclaim(memcg, 4096, -1);
-+	bpf_put_mem_cgroup(memcg);
-+	return 0;
-+}
--- 
-2.56.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38442623945
+--===============1441693752770932196==--
