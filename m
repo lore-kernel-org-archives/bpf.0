@@ -1,459 +1,274 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F8247F3A5
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3DF476CF1;
+	Tue, 13 Oct 2026 17:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791912705; cv=none; b=EWNTdBf25yqurtgC1NRmmevtKPv1WJdDYBaxDCdsAtbRDrrymi9/MaUhEfOjUc2oRotXOnlSkSV0GsOm4kS8IXDChEKRZwmMcxxK6VRHo5tCyl1fJGxkpqNDNGrQBBxTThAAFKJ1W/eGVwr0PcZRp7fzt2rl56jvgV63XFrxnQw=
+	t=1791912799; cv=none; b=HBVMZpfpOCmTNkKCC9FXM3UEPJaf3elZjJthL2BBnan5f7U+sOCynHli53wjYdAKvKIZgNsKmyEL5tKne0gviAa3icUYn69XspFyFwuGCHM9ypSEWpDHQQCcEKYomiEbBPL3df7ZItM2cgcdVG/yOfAm4wUOU0nmKr0Bf1iOzT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791912705; c=relaxed/simple;
-	bh=WW+mxK7QRr9SqsEeExR34hyW6tG9sPE4TygU7AQm+DM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kXbVxAjSdLio851QtXsIj3iLQ0i3TeA2R5bwm+D9kwWCd82oQxJx1H3vpwOZEAvexvCGg8lcDJmbf5BCUuvxDT6EiHIzmAx/igRlmi1ivcx0OExcWt7poI/PWLUSboB7Ud2D2rEsEWRv3k52DFwdDifWwOufKLm6xBPpa8ag904=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GMHe7pCH; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791912799; c=relaxed/simple;
+	bh=uSopyzT5gw9alo2WFk3BLl62zeM5ESWwLUUXgdOCXTo=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HYu1kbYNnQeZMbqQRti4lENiiyuKKkASFoz9uyl2LytVCQAzysh29ocWcbwcCqbE1Kd94ANJi4S48MClKN5X/D+Oo1BRgOW7m5qRcwav1YgoKpuj68RhEMnPyTADgurxTH/gHZxDS9k9gjESITvQDCHmmloANrrWmdmhQ7wHQL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mvd5oJeS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GMHe7pCH"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-828f4eeba13so2403310a34.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 10:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791912702; x=1792517502; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ACnJdCVrmaptqY4owXK+MVicpU/I/9HqnPn8Ae728wU=;
-        b=GMHe7pCHE93KCaIn9Zm4/7SQX+MlL+wylqzo8wYafsmveGPjuMpyl/kfUUXTvr7lKz
-         /2u1XzyGD+OzmQCRk2Ph9+qPnZ3BRrYFBB76gOUhgG57pfcpFBNc0EaYOMS41vSFDdQF
-         zvzSF5o60eFmhKmMAKbmkGzkZfOFoP71eU9co/9IKu0JBhMaOwnrMcfGRPYN8QBrSmuo
-         3U02/nxzPPNEgX/H7JDgM5cTrODmNizlFKBD/17P8R952P9zcZG6sVgLqo5nPB/Y3ZR2
-         zOFJeODJULBfsjMZMhLFYk1qJtPXEQXx49com7/9x8DIv8CZEE+vjdBhmZuDYl7j6TS/
-         sfLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791912702; x=1792517502;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ACnJdCVrmaptqY4owXK+MVicpU/I/9HqnPn8Ae728wU=;
-        b=jPJxGnK8bh7qvUBE5xdnAh4+7R0krxcf3H5toi6WOjn8jCIsD4TaUcl5iwJNe4rFVr
-         0objrkPZfqV7ZWPaz1ZLbaaYjoIphQOdhrMOhUybOFiDBHgw1e8dkYnJ3DGpvcI5lb4/
-         u2K/zav7LdGdlSbvg+qsJ0vZlEymsiBXS/crChw+cOQlbS2fcqZqWUSUf5D9x11Wl9nt
-         oSy5N3w+ic5UcnYO41UaMLEQFJRqnZlthh8YR0qAbowJXjBfKVA3EL5Teg48KaoYXMK/
-         y0S+dOU64WcIpwqnonKX+zj9ysfW5uYcuCagvyCOioEWR9dnVGTnMAAuZY2oj5z1XhcX
-         7BbA==
-X-Forwarded-Encrypted: i=1; AKwUvBywDthyeUyrdUOrfSptKja/oQmopxwN3EhxgDsEClJXGhcznm9rFi7rgn1Zv1UM1JoKmRo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLrTdKPcg6qwvYWvPTcO1vEvcO/DwQh+oXrXe4pcT55LUyKfNc+
-	bOhsSQBIezxZqOaqVvHERq2U+UNo6jEO9ZQGTEps165EZ9ut2VYGFj9N
-X-Gm-Gg: AYBFou3LhUVQb1R5bU4A517VIntEW6G6R1ksLnZ7Ojxmn2Q7q2ZcPMAaGzCiIKqehVu
-	UuSfaGByKihWkI5W1FV//OfNJ8rzgLd6F7GdKSFQykS1sYfxiQHmLfqtD+xRlczJg8KeHT2EVFw
-	FxP86g6IoONVao3tIhkQdz9jwnyZ+c7G5GuWzViruQeQGShoM9ok7VI9Myc71mYFvRtAr7JZFDP
-	VZ7CCg8Ty8/gdWb28u1i4hvWqfHwLncmoEg6V2tIg3JgKsYOtmx+6i09gJnFSc9mfS5+fp3bhT5
-	oV5z4rKmz6iWKrw4BFitJgCbEHtUAnMKb8xUGF2+y65pb6rnF2IwHW/7RMUP8Mki4lA3eL+V25V
-	fIwptPcUxzKNn4JZSSyPKk/BIRor7B67TZvCESvoU0RBIdYbFFzq9Y8oEnBXDRDj8TJ8joyHqzE
-	1D9Up2i8aZELdO7UPMov0jQi9BC/PKWD2RlQSoH6AYQA/6kqAlPt8DazBbvBKP4lvTKDk=
-X-Received: by 2002:a05:6830:2107:b0:81f:6e05:c1aa with SMTP id 46e09a7af769-83096fa8197mr13233766a34.18.1791912701506;
-        Tue, 13 Oct 2026 10:31:41 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:a::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-83039a3e024sm12520057a34.16.2026.10.13.10.31.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 10:31:40 -0700 (PDT)
-Date: Tue, 13 Oct 2026 10:31:39 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jia Jia <physicalmtea@gmail.com>
-Cc: stefanha@redhat.com, sgarzare@redhat.com, netdev@vger.kernel.org,
-	virtualization@lists.linux.dev, kvm@vger.kernel.org, mst@redhat.com,
-	jasowangio@gmail.com, eperezma@redhat.com,
-	xuanzhuo@linux.alibaba.com, davem@davemloft.net,
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/5] vsock/virtio: amortize RX socket locking
- for stream packets
-Message-ID: <as5q+7N+wnmi/nOu@devvm29614.prn0.facebook.com>
-References: <20261010142247.99223-1-physicalmtea@gmail.com>
- <20261010142247.99223-3-physicalmtea@gmail.com>
- <as1b8+vIy8K8J5cN@devvm29614.prn0.facebook.com>
- <CAJwVaM+Mht=DiODUJHzokkpGMjcBW9caHh6+Em1+-J-C-_25Yw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mvd5oJeS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AFA81F000FF;
+	Tue, 13 Oct 2026 17:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791912798;
+	bh=EHvNM9ipJklrkpLTY6Oc29cm4UHyMczj/tdT+1/AJpY=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=Mvd5oJeSm6zY2LpzUnsxYwtjaWkPPRyPrTiFJ1qmVC6zbnobpkokLFaeaCgD3rF/S
+	 rRBzKcyVB5JwAMb1kYF8znUsgMzZ2wyO7znqRTDMEsz2an8Hj9FvM94mGZqcn0Rx8r
+	 CK9URNHP8VBAkEHIncreZ/1Z7lVQshO6aQBKyqvroZy5CrBEI1tqVncnlFAsYmoneA
+	 179A2v1I037RitWcYF0MIKwTryx9sdnev9hP2LhwuRlfKaP8wXY2lyftVSYlXf9LIM
+	 OOZzjUefhB3Qrd5dE+goz8NIvJseqtRQ0lI3Tsot7UsEovKlsWarGqYftggdM1ZoBf
+	 q4VbVLWK7K58A==
+Subject: Re: [PATCH net-next v6 2/4] net: stmmac: drop split frames on AF_XDP
+ zero-copy RX
+From: netdev-bot+sashiko@kernel.org
+To: lorenzo.bianconi@oss.qualcomm.com
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
+ netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ bpf@vger.kernel.org
+Date: Tue, 13 Oct 2026 17:33:16 +0000
+Message-ID: <179191279658.434549.18208801431852161087@kernel.org>
+In-Reply-To: <20261012-stmmac-rx-mb-v6-2-2225050915c1@oss.qualcomm.com>
+References: <20261012-stmmac-rx-mb-v6-2-2225050915c1@oss.qualcomm.com>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJwVaM+Mht=DiODUJHzokkpGMjcBW9caHh6+Em1+-J-C-_25Yw@mail.gmail.com>
 
-On Tue, Oct 13, 2026 at 11:28:53AM +0800, Jia Jia wrote:
-> >
-> > On Sat, Oct 10, 2026 at 10:22:44PM +0800, Jia Jia wrote:
-> > > The virtio-vsock RX worker currently acquires and releases the socket lock
-> > > for every received packet. Keep the lock held while processing a bounded
-> > > run of packets that belongs to the same socket.
-> > >
-> > > Only ordinary RW packets for an established STREAM socket whose transport
-> > > and protocol remain unchanged are eligible. Control packets, SEQPACKET
-> > > traffic, state or transport changes, malformed packets, and sockets whose
-> > > protocol has been replaced end the active batch and retain their existing
-> > > handling.
-> > >
-> > > Serialize the initial eligibility check with sk_callback_lock because
-> > > sockmap removal restores the protocol without taking the socket lock.
-> > >
-> > > Limit each batch to 64 packets or 64KB of payload, bounding the work under
-> > > one socket lock. Keep the lookup reference until the batch finishes.
-> > >
-> > > Keep a batch only while another skb metadata charge fits in the receive
-> > > buffer. Share this predicate with virtio_transport_inc_rx_pkt(). When an
-> > > enqueued skb consumes the final metadata slot, finish the batch and release
-> > > the socket lock before processing another packet, restoring the reader's
-> > > scheduling opportunity from the per-packet path.
-> > >
-> > > The virtqueue callback remains a queue_work() callback. Batching runs only
-> > > in the process-context RX worker.
-> > >
-> > > Introduce virtio_transport_rx_batch_finish() to tear down the batch and
-> > > release the socket lock and lookup reference.
-> > >
-> > > Signed-off-by: Jia Jia <physicalmtea@gmail.com>
-> > > ---
-> > >  include/linux/virtio_vsock.h            |  11 ++
-> > >  net/vmw_vsock/virtio_transport.c        |  29 ++++-
-> > >  net/vmw_vsock/virtio_transport_common.c | 147 +++++++++++++++++++++++-
-> > >  3 files changed, 183 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
-> > > index f91704731057..26dde6909c4e 100644
-> > > --- a/include/linux/virtio_vsock.h
-> > > +++ b/include/linux/virtio_vsock.h
-> > > @@ -282,6 +282,17 @@ void virtio_transport_destruct(struct vsock_sock *vsk);
-> > >
-> > >  void virtio_transport_recv_pkt(struct virtio_transport *t,
-> > >                              struct sk_buff *skb, struct net *net);
-> > > +
-> > > +struct virtio_transport_rx_batch {
-> > > +     struct sock *sk;
-> > > +     unsigned int pkts;
-> > > +     size_t bytes;
-> > > +};
-> > > +
-> > > +void virtio_transport_recv_pkt_batch(struct virtio_transport *t,
-> > > +                                  struct sk_buff *skb, struct net *net,
-> > > +                                  struct virtio_transport_rx_batch *batch);
-> > > +void virtio_transport_rx_batch_finish(struct virtio_transport_rx_batch *batch);
-> > >  void virtio_transport_inc_tx_pkt(struct virtio_vsock_sock *vvs, struct sk_buff *skb);
-> > >  u32 virtio_transport_get_credit(struct virtio_vsock_sock *vvs, u32 wanted);
-> > >  void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
-> > > diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> > > index 4f9aa9c4c3aa..ef076732158d 100644
-> > > --- a/net/vmw_vsock/virtio_transport.c
-> > > +++ b/net/vmw_vsock/virtio_transport.c
-> > > @@ -629,8 +629,16 @@ virtio_transport_seqpacket_allow(struct vsock_sock *vsk, u32 remote_cid)
-> > >       return seqpacket_allow;
-> > >  }
-> > >
-> > > +/*
-> > > + * Keep a bounded run of packets for one socket under a single socket lock.
-> > > + * Limit packet count and payload size to bound the work done while locked.
-> > > + */
-> > > +#define VIRTIO_TRANSPORT_RX_BATCH_MAX_PKTS   64
-> > > +#define VIRTIO_TRANSPORT_RX_BATCH_MAX_BYTES  (64 * 1024)
-> >
-> > Why both? Seems like MAX_PKTS would sufficiently bound the lock hold
-> > time.
-> >
-> > > +
-> > >  static void virtio_transport_rx_work(struct work_struct *work)
-> > >  {
-> > > +     struct virtio_transport_rx_batch batch = {};
-> > >       struct virtio_vsock *vsock =
-> > >               container_of(work, struct virtio_vsock, rx_work);
-> > >       struct virtqueue *vq;
-> > > @@ -666,6 +674,7 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > >                       /* Drop short/long packets */
-> > >                       if (unlikely(len < sizeof(*hdr) ||
-> > >                                    len > virtio_vsock_skb_len(skb))) {
-> > > +                             virtio_transport_rx_batch_finish(&batch);
-> > >                               kfree_skb(skb);
-> > >                               continue;
-> > >                       }
-> > > @@ -673,6 +682,7 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > >                       hdr = virtio_vsock_hdr(skb);
-> > >                       payload_len = le32_to_cpu(hdr->len);
-> > >                       if (unlikely(payload_len > len - sizeof(*hdr))) {
-> > > +                             virtio_transport_rx_batch_finish(&batch);
-> > >                               kfree_skb(skb);
-> > >                               continue;
-> > >                       }
-> > > @@ -680,16 +690,33 @@ static void virtio_transport_rx_work(struct work_struct *work)
-> > >                       if (payload_len)
-> > >                               virtio_vsock_skb_put(skb, payload_len);
-> > >
-> > > +                     if (batch.sk &&
-> > > +                         payload_len > VIRTIO_TRANSPORT_RX_BATCH_MAX_BYTES -
-> > > +                                       batch.bytes) {
-> > > +                             virtio_transport_rx_batch_finish(&batch);
-> > > +                     }
-> > > +
-> > >                       virtio_transport_deliver_tap_pkt(skb);
-> > >
-> > >                       /* Force virtio-transport into global mode since it
-> > >                        * does not yet support local-mode namespacing.
-> > >                        */
-> > > -                     virtio_transport_recv_pkt(&virtio_transport, skb, NULL);
-> > > +                     virtio_transport_recv_pkt_batch(&virtio_transport, skb, NULL,
-> > > +                                                     &batch);
-> > > +
-> > > +                     if (batch.sk) {
-> > > +                             batch.pkts++;
-> > > +                             batch.bytes += payload_len;
-> > > +                             if (batch.pkts >= VIRTIO_TRANSPORT_RX_BATCH_MAX_PKTS ||
-> > > +                                 batch.bytes >= VIRTIO_TRANSPORT_RX_BATCH_MAX_BYTES) {
-> > > +                                     virtio_transport_rx_batch_finish(&batch);
-> >
-> > I'm not fundamentally opposed to the batch struct, but I wonder if its
-> > needed?
-> 
-> With the byte limit retained, the batch still needs to carry the
-> socket and both counters across calls. A batch may also be finished
-> inside the receive helper, so
-> keeping that state together avoids having the worker maintain a
-> separate counter that can get out of sync. The later notification
-> patches add their pending state to the
-> same object as well, so I would prefer to keep the batch struct.
-> 
-> > If we can get rid of BATCH_MAX_BYTES, then we only need to do
-> > pkts++ in a local var, and can pass an &sk ptr-ptr to
-> > virtio_transport_recv_pkt_batch()?
-> >
-> 
-> My thinking was that the two limits bound different things. The
-> 64-packet limit bounds per-packet work for small packets, while the
-> 64K limit bounds how much data can
-> be queued while the reader cannot acquire the socket lock. A single
-> packet can carry up to 64K, so a packet-only limit could let one batch
-> cover as much as 4M. Since
-> the receive buffer can be enlarged, I do not think the default 256K
-> buffer is a substitute for the byte limit. I would prefer to keep
-> both.
-> 
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Fair enough, makes sense. Probably good to ensure a timely release of
-credits this way too, which won't happen until the batcher releases.
+Critical: 0 · High: 1 · Medium: 0 · Low: 2 (1)
 
-Best,
-Bobby
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-> >
-> > > +                             }
-> > > +                     }
-> > >               }
-> > >       } while (!virtqueue_enable_cb(vq));
-> > >
-> > >  out:
-> > > +     virtio_transport_rx_batch_finish(&batch);
-> > >       if (vsock->rx_buf_nr < vsock->rx_buf_max_nr / 2)
-> > >               virtio_vsock_rx_fill(vsock);
-> > >  out_nofill:
-> > > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> > > index e3e75e59896f..a73e37b3fa62 100644
-> > > --- a/net/vmw_vsock/virtio_transport_common.c
-> > > +++ b/net/vmw_vsock/virtio_transport_common.c
-> > > @@ -576,10 +576,16 @@ virtio_transport_collapse_rx_queue(struct virtio_vsock_sock *vvs,
-> > >       skb_queue_splice(&new_queue, &vvs->rx_queue);
-> > >  }
-> > >
-> > > +static bool
-> > > +virtio_transport_rx_skb_has_headroom(struct virtio_vsock_sock *vvs)
-> > > +{
-> > > +     return (u64)(skb_queue_len(&vvs->rx_queue) + 1) * SKB_TRUESIZE(0) <=
-> > > +             vvs->buf_alloc;
-> > > +}
-> > > +
-> > >  static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
-> > >                                       u32 len)
-> > >  {
-> > > -     u64 skb_overhead = (skb_queue_len(&vvs->rx_queue) + 1) * SKB_TRUESIZE(0);
-> > >
-> > >       /* Allow at most buf_alloc * 2 total budget (payload + overhead),
-> > >        * similar to how SO_RCVBUF is doubled to reserve space for sk_buff
-> > > @@ -588,7 +594,7 @@ static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
-> > >        * queue growth.
-> > >        */
-> > >       if ((u64)vvs->buf_used + len > vvs->buf_alloc ||
-> > > -         skb_overhead > vvs->buf_alloc)
-> > > +         !virtio_transport_rx_skb_has_headroom(vvs))
-> > >               return false;
-> > >
-> > >       vvs->rx_bytes += len;
-> > > @@ -1834,10 +1840,28 @@ struct virtio_transport_rx_pkt_ctx {
-> > >       struct net *net;
-> > >       const struct sockaddr_vm *src;
-> > >       const struct sockaddr_vm *dst;
-> > > +     bool *batchable;
-> > >  };
-> > >
-> > > +static bool
-> > > +virtio_transport_recv_pkt_batchable(struct virtio_transport *t,
-> > > +                                 struct sock *sk)
-> > > +{
-> > > +     struct vsock_sock *vsk = vsock_sk(sk);
-> > > +     struct virtio_vsock_sock *vvs = vsk->trans;
-> > > +
-> > > +     return sk->sk_state == TCP_ESTABLISHED &&
-> > > +            sk->sk_type == SOCK_STREAM &&
-> > > +            READ_ONCE(sk->sk_prot) == sk->sk_prot_creator &&
-> > > +            !sock_flag(sk, SOCK_DONE) &&
-> > > +            vsk->transport == &t->transport &&
-> > > +            vvs && virtio_transport_rx_skb_has_headroom(vvs);
-> > > +}
-> > > +
-> > >  /*
-> > > - * The caller holds sk's socket lock and must free skb if this returns true.
-> > > + * The caller holds sk's socket lock.  Set @batchable if the socket can remain
-> > > + * locked for another ordinary STREAM/RW packet.  Return true if the caller
-> > > + * must free @skb.
-> > >   */
-> > >  static bool
-> > >  virtio_transport_recv_pkt_locked(struct virtio_transport *t,
-> > > @@ -1850,6 +1874,9 @@ virtio_transport_recv_pkt_locked(struct virtio_transport *t,
-> > >       struct net *net = ctx->net;
-> > >       bool space_available;
-> > >
-> > > +     if (ctx->batchable)
-> > > +             *ctx->batchable = false;
-> > > +
-> > >       /* Check after acquiring the socket lock. Listener sockets accept packets
-> > >        * from any source and are not assigned to a transport.
-> > >        */
-> > > @@ -1891,6 +1918,9 @@ virtio_transport_recv_pkt_locked(struct virtio_transport *t,
-> > >               break;
-> > >       }
-> > >
-> > > +     if (ctx->batchable)
-> > > +             *ctx->batchable = virtio_transport_recv_pkt_batchable(t, sk);
-> > > +
-> > >       return false;
-> > >  }
-> > >
-> > > @@ -1941,6 +1971,117 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt);
-> > >
-> > > +/*
-> > > + * Finish the RX batch.
-> > > + * For a non-empty batch, the caller must hold the socket lock acquired with
-> > > + * lock_sock(). This function releases the lock and the batch's lookup
-> > > + * reference.
-> > > + * An empty batch is a no-op.
-> > > + */
-> > > +void virtio_transport_rx_batch_finish(struct virtio_transport_rx_batch *batch)
-> > > +{
-> > > +     struct sock *sk = batch->sk;
-> > > +
-> > > +     batch->sk = NULL;
-> > > +     batch->pkts = 0;
-> > > +     batch->bytes = 0;
-> > > +
-> > > +     if (!sk)
-> > > +             return;
-> > > +
-> > > +     release_sock(sk);
-> > > +     sock_put(sk);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(virtio_transport_rx_batch_finish);
-> > > +
-> > > +void virtio_transport_recv_pkt_batch(struct virtio_transport *t,
-> > > +                                  struct sk_buff *skb, struct net *net,
-> > > +                                  struct virtio_transport_rx_batch *batch)
-> > > +{
-> > > +     struct virtio_vsock_hdr *hdr = virtio_vsock_hdr(skb);
-> > > +     struct virtio_transport_rx_pkt_ctx ctx;
-> > > +     struct sockaddr_vm src, dst;
-> > > +     bool batchable, start_batch;
-> > > +     struct sock *sk;
-> > > +     bool free_pkt;
-> > > +
-> > > +     /* Only STREAM/RW packets can share a socket lock. */
-> > > +     if (le16_to_cpu(hdr->type) != VIRTIO_VSOCK_TYPE_STREAM ||
-> > > +         le16_to_cpu(hdr->op) != VIRTIO_VSOCK_OP_RW) {
-> > > +             virtio_transport_rx_batch_finish(batch);
-> > > +             virtio_transport_recv_pkt(t, skb, net);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     virtio_transport_recv_pkt_init_addrs(skb, &src, &dst);
-> > > +     virtio_transport_trace_recv_pkt(skb, &src, &dst);
-> > > +
-> > > +     sk = virtio_transport_recv_pkt_find_socket(skb, &src, &dst, net);
-> > > +     if (!sk) {
-> > > +             virtio_transport_rx_batch_finish(batch);
-> > > +             (void)virtio_transport_reset_no_sock(t, skb, net);
-> > > +             kfree_skb(skb);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     if (!skb_set_owner_sk_safe(skb, sk)) {
-> > > +             WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
-> > > +             virtio_transport_rx_batch_finish(batch);
-> > > +             kfree_skb(skb);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     if (batch->sk && batch->sk != sk) {
-> > > +             /* Never acquire a second socket lock. */
-> > > +             virtio_transport_rx_batch_finish(batch);
-> > > +     }
-> > > +
-> > > +     if (batch->sk == sk) {
-> > > +             /* Keep the batch reference; drop this packet's lookup reference. */
-> > > +             sock_put(sk);
-> > > +             ctx = (struct virtio_transport_rx_pkt_ctx) {
-> > > +                     .net = net,
-> > > +                     .src = &src,
-> > > +                     .dst = &dst,
-> > > +                     .batchable = &batchable,
-> > > +             };
-> > > +             free_pkt = virtio_transport_recv_pkt_locked(t, skb, sk, &ctx);
-> > > +             if (!batchable)
-> > > +                     virtio_transport_rx_batch_finish(batch);
-> > > +             if (free_pkt)
-> > > +                     kfree_skb(skb);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     lock_sock(sk);
-> > > +     /*
-> > > +      * Sockmap removal restores the native protocol under sk_callback_lock.
-> > > +      * Serialize this initial eligibility check with that update.
-> > > +      */
-> > > +     read_lock_bh(&sk->sk_callback_lock);
-> > > +     start_batch = virtio_transport_recv_pkt_batchable(t, sk);
-> > > +     read_unlock_bh(&sk->sk_callback_lock);
-> > > +
-> > > +     ctx = (struct virtio_transport_rx_pkt_ctx) {
-> > > +             .net = net,
-> > > +             .src = &src,
-> > > +             .dst = &dst,
-> > > +             .batchable = start_batch ? &batchable : NULL,
-> > > +     };
-> > > +     free_pkt = virtio_transport_recv_pkt_locked(t, skb, sk, &ctx);
-> > > +     if (start_batch && batchable) {
-> > > +             /* Keep the lookup reference until the batch is released. */
-> > > +             batch->sk = sk;
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     release_sock(sk);
-> > > +     sock_put(sk);
-> > > +     if (free_pkt)
-> > > +             kfree_skb(skb);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt_batch);
-> > > +
-> > >  /* Remove skbs found in a queue that have a vsk that matches.
-> > >   *
-> > >   * Each skb is freed.
-> > > --
-> > > 2.34.1
+- [High] The fix is incomplete on cores that use normal or enhanced RX
+  descriptors (dwmac100 and dwmac1000/GMAC 3.x).
+- [Low] On GMAC4/XGMAC, stmmac_rx_zc() now counts a multi-descriptor
+  frame with a hardware error in rx_dropped instead of rx_errors.
+- [Low] The commit message presents the patched code as the existing
+  buggy code.
+
+Pre-existing issues:
+- [Low] Each RX NAPI poll, in stmmac_rx_zc() (stmmac_main.c:5789-5790)
+  and stmmac_rx() (6091-6092), merges its local counts into the device-…
+
+--
+
+net: stmmac: drop split frames on AF_XDP zero-copy RX
+
+This patch changes stmmac_rx_zc() so that, in AF_XDP zero-copy mode, a
+frame spanning more than one RX descriptor sets error on its first
+descriptor. The remaining descriptors, including the last one, are then
+freed instead of being processed as a new frame. It also moves the buffer
+free into the common error block and adjusts the rx_dropped and count
+accounting.
+
+> stmmac_rx_zc() assumes a 1:1 mapping between a received frame and an
+> XSK pool buffer and drops any frame that spans more than one RX
+> descriptor:
+>
+>         /* XSK pool expects RX frame 1:1 mapped to XSK buffer */
+>         if (likely(status & rx_not_ls)) {
+>                 xsk_buff_free(buf->xdp);
+>                 buf->xdp = NULL;
+>                 rx_dropped++;
+>                 error = 1;
+>                 dirty++;
+>                 goto read_again;
+>         }
+>
+> The non-last descriptors are freed and dropped, but the frame is not
+> marked as errored.
+
+[Severity: Low]
+Is this snippet the post-patch version rather than the existing code? It
+contains rx_dropped++ and error = 1 and has no count++. Those are the
+exact lines this patch adds and removes. The pre-patch branch was:
+
+        if (likely(status & rx_not_ls)) {
+                xsk_buff_free(buf->xdp);
+                buf->xdp = NULL;
+                dirty++;
+                count++;
+                goto read_again;
+        }
+
+The next sentence says the frame is not marked as errored. That
+contradicts the error = 1 in the quoted snippet.
+
+Could the snippet be replaced with the original code?
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index f66b796f7725b..426bb68c9bbce 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5701,18 +5701,21 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
+>  		if (priv->extend_desc)
+>  			stmmac_rx_extended_status(priv, &priv->xstats,
+>  						  rx_q->dma_erx + entry);
+> -		if (unlikely(status == discard_frame)) {
+> -			xsk_buff_free(buf->xdp);
+> -			buf->xdp = NULL;
+> -			dirty++;
+> +
+> +		if (unlikely(status == discard_frame) && !error) {
+>  			error = 1;
+>  			if (!priv->hwts_rx_en)
+>  				rx_errors++;
+>  		}
+
+[Severity: Low]
+On GMAC4/XGMAC, does this change how split frames with a hardware error
+are counted?
+
+The first descriptor of a multi-descriptor frame returns rx_not_ls from
+dwmac4_wrback_get_rx_status(). It takes the 1:1 path further down, which
+now does rx_dropped++ and error = 1.
+
+The last descriptor may then return discard_frame because ES is set (CRC,
+overflow, watchdog, giant). In that case the && !error guard here is
+false, so rx_errors++ is skipped.
+
+Before the patch, the 1:1 path did not set error. The last descriptor's
+discard_frame incremented rx_errors, and rx_dropped was not touched.
+
+The per-cause xstats counters are still incremented. However, ip -s link
+now reports the frame as dropped rather than errored. Is that intended?
+The commit message only says the frame is counted once in rx_dropped.
+
+>  
+> -		if (unlikely(error && (status & rx_not_ls)))
+> -			goto read_again;
+>  		if (unlikely(error)) {
+> +			xsk_buff_free(buf->xdp);
+> +			buf->xdp = NULL;
+> +			dirty++;
+> +
+> +			if (status & rx_not_ls)
+> +				goto read_again;
+> +
+>  			count++;
+>  			continue;
+>  		}
+
+[Severity: High]
+Does this fix also cover cores that use normal or enhanced RX descriptors
+(dwmac100 and dwmac1000)? The continuation logic here relies on non-last
+descriptors reporting rx_not_ls. Only dwmac4_wrback_get_rx_status() and
+the dwxgmac2 callback do that.
+
+enh_desc_get_rx_status() and ndesc_get_rx_status() report a non-last
+descriptor like this:
+
+drivers/net/ethernet/stmicro/stmmac/enh_desc.c:enh_desc_get_rx_status() {
+    ...
+	if (unlikely(!(rdes0 & RDES0_LAST_DESCRIPTOR))) {
+		x->rx_length++;
+		return discard_frame;
+	}
+    ...
+}
+
+With that encoding, a frame split across two descriptors goes through
+stmmac_rx_zc() like this:
+
+first descriptor:
+    in_progress = status & rx_not_ls;          /* 0 */
+    status == discard_frame && !error  ->  error = 1
+    error block frees buf->xdp, dirty++
+    (status & rx_not_ls) is 0  ->  count++; continue;
+
+next loop iteration:
+    if (!in_progress) { error = 0; len = 0; }
+
+last descriptor:
+    good status, so it skips the error block and the 1:1 rx_not_ls check
+
+The tail is then processed as a complete new frame. With len == 0,
+stmmac_rx_buf1_len() returns:
+
+	return min_t(unsigned int, priv->dma_conf.dma_buf_sz, plen - len);
+
+That value is dma_buf_sz, but the DMA only wrote the tail remainder into
+that XSK buffer. The tail starts mid-payload and goes to the XDP program,
+to XDP_TX, or to stmmac_dispatch_skb_zc() on XDP_PASS.
+
+Isn't that the same symptom the commit message says this patch removes?
+
+This path looks reachable:
+
+- __stmmac_dvr_probe() advertises NETDEV_XDP_ACT_XSK_ZEROCOPY for every
+  core.
+- stmmac_xdp_enable_pool() only checks the queue indices and the frame
+  size. It does not check the core or the descriptor format.
+- dwmac1000 and dwmac100 have no .set_bfsize op. The buffer size
+  programmed by stmmac_clear_rx_descriptors() is therefore dma_buf_sz,
+  which is 1536 at MTU 1500.
+
+dwmac1000_core_init() only enables the larger frame modes above
+MTU 1500:
+
+	if (mtu > 1500)
+		value |= GMAC_CONTROL_2K;
+	if (mtu > 2000)
+		value |= GMAC_CONTROL_JE;
+
+XDP limits the MTU to 1500, so neither bit is set. It appears an on-link
+peer could still send a frame between 1536 bytes and the 2048-byte
+watchdog limit, and the hardware would split it across two descriptors.
+
+Would it work better to track continuation from the hardware LD/FD bits?
+Other options are to have the enh/norm callbacks report rx_not_ls for
+non-last descriptors, or to refuse XSK zero-copy on these descriptor
+formats.
+
+> @@ -5721,8 +5724,9 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
+>  		if (likely(status & rx_not_ls)) {
+>  			xsk_buff_free(buf->xdp);
+>  			buf->xdp = NULL;
+> +			rx_dropped++;
+> +			error = 1;
+>  			dirty++;
+> -			count++;
+>  			goto read_again;
+>  		}
+
+[Severity: Low]
+This is a pre-existing issue and was not introduced by this patch. The
+new rx_dropped++ feeds into this accumulator at the end of
+stmmac_rx_zc():
+
+	priv->xstats.rx_dropped += rx_dropped;
+	priv->xstats.rx_errors += rx_errors;
+
+stmmac_rx() does the same thing. Each channel has its own NAPI instance.
+RX queues polling on different CPUs can therefore do these non-atomic
+read-modify-writes on the device-wide unsigned long fields at the same
+time. stmmac_get_stats64() also reads them without any synchronization.
+
+Can increments to rx_dropped and rx_errors be lost when two queues finish
+their polls at the same time?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-stmmac-rx-mb-v6-0-2225050915c1%40oss.qualcomm.com
