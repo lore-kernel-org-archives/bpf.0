@@ -1,33 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4935B47AF65;
-	Tue, 13 Oct 2026 12:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4F54FD294;
+	Tue, 13 Oct 2026 12:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791893136; cv=none; b=UYrvnT9M1wO4mpZ8A8kpm8/JV9JwX/iP+ApDhHsb/RiQ6Sr3l2/aGZCZedunzk0HU00GuAaI2TLOq7uCwrWlt5LZHH6wqJflTlDINU+xUsfRvhWLzutRxnKoT6lKuIFrBXCpkPLstbPAXlIH9jSLQM+/Nm6MB6ZrQsIcoOdbe0s=
+	t=1791893138; cv=none; b=NtuRzfIy46DpBNTcn8T9osgLfn0lMH7GRxl6DoOA7KPhGMTZ6GI0rjPbVQeuUT+AYjnq+n/aAZQnYcBzbfKFXqG5nJ6fKxhIpGo5/WaVhFuwFODNerWDIKDUTq7baeArJvJtD9wpQOnc6yhW+hLKOKYjNKpzuHDdyBGwaMdAy3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791893136; c=relaxed/simple;
-	bh=PQ4II6nhtBvPDJ+3q4JAD1E8iUcjUCLSom5R1zpySmQ=;
+	s=arc-20240116; t=1791893138; c=relaxed/simple;
+	bh=RDMRTrW0f3C3n6sfr4GOtlMFWKPHFCkzDNSTMcYfzBA=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=umhp9a2bbEP00NNw5cLxfzcnAQVYiK7w83Q47krWWyrXH72tFwby7tnR7rZYG0Plti01S5G/rX3NEjkh9mqdkbX+RbaZZU/dMmO2rJSUC3iyxVW3BptmrHsvr9quOkmA115xsYTi89BImbtX4uDnxqYjXwgr5Eo6Oe6VvdJEIws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=luYjmTN5; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=HuzHBzXE97svt4uMJqxLwdsPa92KXqJVxcZRmsQmPcffmXgLOOAmMsnENgZjTVXno5C5CEAULEVsswGp/JyudWpGJV4df8a5SX8VTL/bPwagXqa+JAk5kw4y+NHPGHo0atQDS90+QSww5n7OxXkJcFQ6FWOo5c0VtqWaMNqUOaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UYUCUYBu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="luYjmTN5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBED1F00893;
-	Tue, 13 Oct 2026 12:05:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UYUCUYBu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A44081F000FF;
+	Tue, 13 Oct 2026 12:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791893135;
-	bh=qW5uF1ewgX9X0O+/dnLHI3k9D2+B1xbRg9LE/7VgIaU=;
+	s=k20260515; t=1791893136;
+	bh=eLuxRn0HI2+L+S6CnDQ4l8LJp0sYjVvvTXXp9+IBAHo=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=luYjmTN5XY6gBbuqKBAk4kN7gJ/zglLBqHXzan/9wV160NLvLGceS2E6KEXQ/erIP
-	 m9rIL5KlyZBiERi0E8z9pG7upNJYe9ENjowoy7XQppSKgWVQAxAKIzq3u+eG5WrEMB
-	 jUnVU3PKLATrCRtCMAgrJj2DYY7dXgn0p6V1FfG206CwkkwHUGvpxyiT9dwvn2N69s
-	 5DJOy2d076712HHsEFNEtej22sJRdcA6psd2CBJCHHUpqVAXZSghqgtdWkNz9DC/6J
-	 6ijXdNmYVjWmjGbHYpKx/8278eFHvWw1wRmOKupXazmBCokHynClYoKFx7h08OR3Sn
-	 yjEv6TyAUdXAw==
-Subject: Re: [PATCH net-next v2 1/4] eth: mpnic: count packets, bytes, and
- drops per ring
+	b=UYUCUYBuiyIaDPFtO253R/aGLmOqURdE9bx4Xmeo1IwU7pyr7f4mZy3waipQkeLq/
+	 P02AKQBdjt9YhjniVh2YTLHsid5FRMGZMnFFM55Kebr/cm9w8HKONzxyJf1T1B2OeC
+	 2gQ13mS8/xAyrBJwoxvSujWXqNKJ/w2YdCWXOQvNtX5m8BMPwo59louhBkl22ijTGr
+	 ChosmSQtL38e8ayWUX0zBTCsz+ni6qxPuajw3nsC0n0wP7fEPS6HNb+x+pNwdinVnn
+	 /sf8hoXfBa7j43AEvTkChC+7f3E/SMyAPw+flSv+r/518az5eHXiBaHDrH5kgy2JzU
+	 dY+oou8JXsueA==
+Subject: Re: [PATCH net-next v2 2/4] eth: mpnic: report per-queue stats
 From: netdev-bot+sashiko@kernel.org
 To: daniel.zahka@gmail.com
 Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
@@ -35,10 +34,10 @@ Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
  daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
  sdf@fomichev.me, edumazet@kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Tue, 13 Oct 2026 12:05:33 +0000
-Message-ID: <179189313386.434549.472154311742280420@kernel.org>
-In-Reply-To: <20261012-mpnic-counters3-v2-1-8afba81c2d5a@gmail.com>
-References: <20261012-mpnic-counters3-v2-1-8afba81c2d5a@gmail.com>
+Date: Tue, 13 Oct 2026 12:05:35 +0000
+Message-ID: <179189313526.434549.10762925482009523771@kernel.org>
+In-Reply-To: <20261012-mpnic-counters3-v2-2-8afba81c2d5a@gmail.com>
+References: <20261012-mpnic-counters3-v2-2-8afba81c2d5a@gmail.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,113 +59,116 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] In mpnic_clean_rcq()
-  (drivers/net/ethernet/meta/mpnic/mpnic_txrx.c), an Rx frame the driver…
+- [Medium] This patch reports the RCQ `rcq.packets` and `rcq.bytes`
+  counters as the netdev qstats `rx-packets` and `rx-bytes` attributes.
 
 --
 
-eth: mpnic: count packets, bytes, and drops per ring
+eth: mpnic: report per-queue stats
 
-This commit adds packet, byte, drop and error counters to each Tx work,
-Tx completion and Rx completion ring in the mpnic driver. The counters are
-reported through ndo_get_stats64. An RCU-protected base snapshot holds the
-totals folded in from rings that have been torn down.
+This commit exposes the per-ring packet and byte counters through the
+netdev queue stats API. Counters for deactivated rings are reported
+through the base stats.
 
-> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
-> index 5495e9a9aa651..d5185e64f804c 100644
-> --- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
-> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
+> index 5164475a0f943..c2f4a326a8f0f 100644
+> --- a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
+> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
 
 [ ... ]
 
-> @@ -594,13 +612,20 @@ static int mpnic_clean_rcq(struct mpnic_napi_vector *nv,
+> @@ -146,6 +147,77 @@ static const struct net_device_ops mpnic_netdev_ops = {
+>  	.ndo_get_stats64	= mpnic_get_stats64,
+>  };
 >  
->  			if (likely(!(rcd &
->  				     MPNIC_RCD_META_UNCORRECTABLE_ERR_MASK) &&
-> -				   !state->pkt.add_frag_failed))
-> +				   !state->pkt.add_frag_failed)) {
-> +				bytes += xdp_get_buff_len(&state->pkt.buff);
->  				skb = xdp_build_skb_from_buff(&state->pkt.buff);
-> +			}
->  
-> -			if (likely(skb))
-> +			if (likely(skb)) {
->  				napi_gro_receive(&nv->napi, skb);
-> -			else
-> +			} else {
->  				mpnic_put_pkt_buff(&state->pkt, true);
-> +				if (rcd & MPNIC_RCD_META_UNCORRECTABLE_ERR_MASK)
-> +					errors++;
-> +				else
-> +					dropped++;
-> +			}
->  
->  			state->pkt.buff.data_hard_start = NULL;
->  			packets++;
+> +static void mpnic_get_queue_stats_rx(struct net_device *dev, int idx,
+> +				     struct netdev_queue_stats_rx *rx)
+> +{
+> +	struct mpnic_net *mpn = netdev_priv(dev);
+> +	struct mpnic_ring *rxr = mpn->rx[idx];
+> +	struct mpnic_queue_stats *stats;
+> +	unsigned int start;
+> +	u64 bytes, packets;
+> +
+> +	if (!rxr)
+> +		return;
+> +
+> +	stats = &rxr->stats;
+> +	do {
+> +		start = u64_stats_fetch_begin(&stats->syncp);
+> +		bytes = u64_stats_read(&stats->rcq.bytes);
+> +		packets = u64_stats_read(&stats->rcq.packets);
+> +	} while (u64_stats_fetch_retry(&stats->syncp, start));
+> +
+> +	rx->bytes = bytes;
+> +	rx->packets = packets;
+> +}
 
 [Severity: Medium]
-Is rx_bytes undercounted for frames that are dropped because
-state->pkt.add_frag_failed is set?
+Do rcq.packets and rcq.bytes match the qstats meaning of rx-packets and
+rx-bytes?
 
-mpnic_add_rx_frag() sets add_frag_failed when xdp_buff_add_frag() fails.
-That happens once nr_frags reaches MAX_SKB_FRAGS and the fragment cannot
-be coalesced:
+The netdev.yaml spec defines rx-packets as "Number of wire packets
+successfully received and passed to the stack". It defines rx-bytes as
+"Successfully received bytes, see rx-packets".
 
-mpnic_add_rx_frag() {
+In mpnic_clean_rcq() in mpnic_txrx.c, packets++ runs for every META
+completion, including completions where the driver drops the packet:
+
+drivers/net/ethernet/meta/mpnic/mpnic_txrx.c:mpnic_clean_rcq() {
     ...
-	if (!xdp_buff_add_frag(buff, page_to_netmem(page), pg_off, len,
-			       truesz)) {
-		state->payld.pagecnt_bias++;
-		state->pkt.add_frag_failed = true;
-	}
+			if (likely(!(rcd &
+				     MPNIC_RCD_META_UNCORRECTABLE_ERR_MASK) &&
+				   !state->pkt.add_frag_failed)) {
+				bytes += xdp_get_buff_len(&state->pkt.buff);
+				skb = xdp_build_skb_from_buff(&state->pkt.buff);
+			}
+
+			if (likely(skb)) {
+				napi_gro_receive(&nv->napi, skb);
+			} else {
+				mpnic_put_pkt_buff(&state->pkt, true);
+				if (rcd & MPNIC_RCD_META_UNCORRECTABLE_ERR_MASK)
+					errors++;
+				else
+					dropped++;
+			}
+
+			state->pkt.buff.data_hard_start = NULL;
+			packets++;
+    ...
+	u64_stats_add(&rcq->stats.rcq.packets, packets - errors);
+	u64_stats_add(&rcq->stats.rcq.bytes, bytes);
+	u64_stats_add(&rcq->stats.rcq.dropped, dropped);
+    ...
 }
 
-For such a frame the guarded branch above is skipped, so nothing is added
-to bytes. skb stays NULL and the uncorrectable error bit is clear, so
-dropped++ runs. packets++ runs unconditionally.
+Only errors are subtracted from packets. If add_frag_failed is set, or if
+xdp_build_skb_from_buff() returns NULL, the packet is counted in dropped
+and also in rx-packets.
 
-The frame is then counted in rcq.packets through packets - errors, but it
-adds nothing to rcq.bytes:
+The buffer length is also added to bytes before xdp_build_skb_from_buff()
+runs. A failed skb build therefore still counts toward rx-bytes. An
+add_frag_failed drop adds to packets but not to bytes, so the two
+counters also disagree with each other.
 
-> @@ -619,6 +644,13 @@ static int mpnic_clean_rcq(struct mpnic_napi_vector *nv,
->  
->  	rcq->head = head;
->  
-> +	u64_stats_update_begin(&rcq->stats.syncp);
-> +	u64_stats_add(&rcq->stats.rcq.packets, packets - errors);
-> +	u64_stats_add(&rcq->stats.rcq.bytes, bytes);
-> +	u64_stats_add(&rcq->stats.rcq.dropped, dropped);
-> +	u64_stats_add(&rcq->stats.rcq.errors, errors);
-> +	u64_stats_update_end(&rcq->stats.syncp);
+mpnic_get_base_stats() reports the same values once
+mpnic_aggregate_ring_rcq_counters() folds them into base->rx. The
+miscount carries over after a ring is deactivated.
 
-mpnic_get_stats64() and mpnic_stats_fold_rings() report these values as
-rx_packets and rx_bytes. The rtnl_link_stats64 kernel-doc says rx_packets
-includes packets dropped by the driver, and that rx_bytes corresponds to
-rx_packets.
+fbnic_clean_rcq() handles this by jumping to next_dont_count for dropped
+packets, so they are counted in neither packets nor bytes. Could mpnic
+do the same?
 
-The v2 changelog says:
+The counter semantics come from "eth: mpnic: count packets, bytes, and
+drops per ring" earlier in this series. This patch is the one that
+exposes them as qstats rx-packets and rx-bytes.
 
-  - count Rx frames dropped by the driver in rx_packets and rx_bytes
+The later patch "eth: mpnic: count Rx allocation failures" also counts
+skb build failures in alloc_failed. Those packets still stay in packets
+and bytes.
 
-That seems true only for the xdp_build_skb_from_buff() failure path.
-
-The same counters are used by mpnic_get_queue_stats_rx(), which is added
-later in this series in "eth: mpnic: report per-queue stats". The code
-looks the same at the end of the series, apart from the new alloc_failed
-counter.
-
-Moving the bytes += line out of the guarded branch might not be enough by
-itself. __xdp_buff_add_frag() returns before it adds the rejected
-fragment to xdp_frags_size:
-
-	} else if (unlikely(nr_frags == MAX_SKB_FRAGS)) {
-		return false;
-	} else {
-	...
-	sinfo->xdp_frags_size += size;
-
-Would it work to track the lengths reported by the descriptors separately
-here? If not, should the changelog be reworded?
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-mpnic-counters3-v2-0-8afba81c2d5a%40gmail.com
