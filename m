@@ -1,227 +1,227 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010026.outbound.protection.outlook.com [52.101.46.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C715221C0
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791911814; cv=none; b=WQKB0Z7tD/vmwUdQw90Fzkws5d5KF0JS5cq1PAelUxk4iusXk8b1O+Fyjq2dwYJFp9og41Imm2GxHjUA+DJ3HZ5Afi2AkMiNPLY5Jq+2xJmbKjSwwC6rdqxqhsxNq+mK4Fa+6nBMclE8h6a6K/MrNzHD8CWCSUCwO72QIQ83xzI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791911814; c=relaxed/simple;
-	bh=E0y7u+KR3xF/a4fcPKHidebxgCLhqgP2K/Rv6TPbOiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HjpIDPKLQ4mraGpV6aIftJhN9OAW50MJZ2zpUg5JXv8NlkfkvDFiVezqpE129fxRVAy8McmyH5NHBmbDZmY33wY+BEehgZCFCIqn80Z+V4zU9IgcQMGdfSTDWq60i8vet+T27cJ71Eo0lhoTjHDQn38TevBzVQlyOQFl1Jnip9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OngxHnvA; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B3E5208D7;
+	Tue, 13 Oct 2026 17:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.26
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791911878; cv=fail; b=oZr/5Ku4ZCD2VgZ/VfBmzzB67iW8Zei8Gs2JEWZEoH7sCq7YA5JL20MqrCthXWJVT+U7r7qkI7mzA6zhOmZn0bJiAddLCPG72eKJ3NCqnUUN2l0wVTtYRllpvbsu10Xf2zXW2uf5gbkRcEkrc7TcMYRFuEGY3e6xtNpXdrCDZIM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791911878; c=relaxed/simple;
+	bh=MdSNJ9xn/AIltuvpW67ApOACr80tqV4mfYxMTv5rcPU=;
+	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
+	 In-Reply-To:MIME-Version; b=XhdWVeUKpynquSVmaauBc2r+7lC3fNWvS8ohPsjgjEHmFvktw8M3Os5SH28MO7lHqIOXaaRx7l0N4p3xqvAzbqAikjYTdaZnMrhCNjv9HSlPheC7fBrw9jtNxv/99VOZVcxIhyjhDqjeRKYe+oC8vvBCnQ8uu5Cf8RZbly/ys7M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tJ72ARPb; arc=fail smtp.client-ip=52.101.46.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OngxHnvA"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-8249c775215so1796395a34.3
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 10:16:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791911808; x=1792516608; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Rh8zSXbKHc5uCKze2IT1wznFx+pVYTz0bfvRk4C07S4=;
-        b=OngxHnvAA6saR3OBCtEOXWu6BOGRi+0KC/UsGTlv/UJBcnpyFztf00L4tqRe19juF4
-         0NP69aClxJpJWCL6ILli8w+pOqUiUsmk6Q1tSLrbqqHwoxzxu+W9WLegjMmVhm08gXSp
-         7L2iGOIG5qv7GQKjisQZ6xKVY5roN47WTEPrxIXGOf2uelKvAk6dTwEjYgU/prxMy5QQ
-         mDLMTDyB8d1b5a/rDhd3zoWH73f5jtTvQq10X9TXE5zdy8ayYQMDxEB41YgyZlQkDzDu
-         IhI2wBzMYATeYlmeviHi/U5CFKW85GFyhZp5HuLynuitHhWxhOogmdr2izp2Aae8SPT1
-         VrPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791911808; x=1792516608;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Rh8zSXbKHc5uCKze2IT1wznFx+pVYTz0bfvRk4C07S4=;
-        b=JvVafI6CicYDDHKyJdz/90sX8XbxcYsmEIBx6MeHXzBTaSVifHNa/MPyXZglsIrdk9
-         Rz4/A7PZxf0JhNCMk7IwgytJvnpS4mj8MWZejNF7u5u6JcGvFberSdCgy2MQBsdHI001
-         AW+vC3IwBGGkspSUSpihidN6kX1mrPyUQ86v0UEDXODUVRVaPyJH0K0O/JWXdZKY4PQ0
-         XDtet5iIy/3e4XC2Gn6zNOF8Ty8LF/xjWcTqDd8CJDZdUt9Ii6P6J8J9NHkrmHCh5AA2
-         9g+DepRGzeW+LmZwLK7GnJaQ1k2PX2bhGYFFL1IFtFQHcLMHUlAMxC21M5GsnTqV4pQR
-         w5LQ==
-X-Forwarded-Encrypted: i=1; AKwUvByf1z6N3PExA5SKeFMROEMqpo0rPjWhyOue2iX9GNLuJdc6yR6WiFfQYlhkq4tmMJc0Qsc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJcNztv0fv+6ZbqzL/Qp7wxOBkbQTapRQURNzRqzs4ZTLTmqIZS
-	TCCSlTxr4OPAWnDP5dJr5SI3VJvEqR7zdTNKeYVC8IytBMeIh4H1HsLr
-X-Gm-Gg: AYBFou2uj0ABZTnZBsSu3nX9AFgqFopVabxyspbq9xy7wD0/49e4OH7KaHloqPcR6ek
-	RhhgArHQ15aCtgBu/eqY40j9wIdl9xwl6tYOLzTXuUjAserhD4esi2sLJgsJLO7hw17nO5tgJQ/
-	I9jfdRwMqnK9cMFBZQohTzI0l5LHFn3qJhSv2Iaw3vQohSdGt1+9JJGm4XkUC8xlWbM4CeL5mb8
-	USPl+Wmew/+VNRkA5lWofIs0LltjZi4Mp1ec9VGjnr7I+1dY/+VakddYiazrhOFRDM7TRqpu4/0
-	R3fCC5qUdCpqiAu0mdp/4FumYodEBFIPUCS4RXc1eakEf4o7XJbhy0y+BtIwJ+ZRqrYFJCWU9Ft
-	pFyq9qkWS8sZLjV+q2dZSGkPq1pUE0dILOKbRAey3uItXl+TiAUwEoxrA8Gwxsh9nR3qFDl7Ej8
-	BT98zHCCiTuSlC99dRlJePgVv+l4SRja7+wI9FuRR/uqL8hcTindPRzC48lKXwshQ5emM=
-X-Received: by 2002:a05:6808:13c3:b0:4d6:93e2:5bc4 with SMTP id 5614622812f47-50c59f38b43mr14625456b6e.64.1791911808288;
-        Tue, 13 Oct 2026 10:16:48 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:41::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-50c1c0248fbsm15142233b6e.15.2026.10.13.10.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 10:16:46 -0700 (PDT)
-Date: Tue, 13 Oct 2026 10:16:44 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jia Jia <physicalmtea@gmail.com>
-Cc: stefanha@redhat.com, sgarzare@redhat.com, netdev@vger.kernel.org,
-	virtualization@lists.linux.dev, kvm@vger.kernel.org, mst@redhat.com,
-	jasowangio@gmail.com, eperezma@redhat.com,
-	xuanzhuo@linux.alibaba.com, davem@davemloft.net,
-	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/5] vsock/virtio: split socket lookup from
- locked RX processing
-Message-ID: <as5nfI0qfqD64dc1@devvm29614.prn0.facebook.com>
-References: <20261010142247.99223-1-physicalmtea@gmail.com>
- <20261010142247.99223-2-physicalmtea@gmail.com>
- <as1ZCkbya2jn72ip@devvm29614.prn0.facebook.com>
- <CAJwVaMJL4FFYLq523VY014oa4u7RWD0WUY0+seP1xh3GY5peiQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tJ72ARPb"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jQRzIy+O21g5hrFKihTfV5zuDt1JgK5sRXVgte8NiemklFZut/rG1ZIQPLDjVRZlD1loXtdnWgdvdMqq62ycyleK0gi0VnOf+kns6LX0nW4VEg2AUunIDKFaIPSCcooGg/79wtD8NNtJi8yNEqo5AnIJZz0t2k0rKfmsD4vqJb2+X7+VxRAT5Lc2WmezpRSYkLWqL9cytpKM53vYdPOZEDkq2fhBSYH4ungGXnTyv6OVZJdVStc+YByGl4mOw3BPDUTKFvyLIKnT6ai66JxVCfJeX483TFHFSV8Iu9PpkSRmCyNpseswjAFUPFI/V6U4BDteTJxIV1PExSUHlnakrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wH++rHX5RJ8pU1kte9xB9stYVy5Z8Gq/JolXseyDHUA=;
+ b=M3TLkg20gv0YAyVfIpOtfjv1SLgNB0NLU0CqUioWdUTJXRncjJeblFpgjaJ2d9wNNB7+j0N/Mhakovy341ywY3lbf0U2/nO8tTDYGfXfWFW+K2ThEQQ1VDVXPU9aaAwlw2kqHQ/jGKPrTKjdKgy1Ow7USfN+l3KE+WP1w2vJYqI0H57ib83OEVbuKGzIZfi3ToRA/mn6OC3jNLgZPTz+fXeo+VSzIbOZzpenEhoLUr254+9ufPfeTg3XPOyQoPdOOrzFl3OZkcWjo7/KqxfdXJv2RfVbtkcuBfxD0znMqbef+JxocrK8DC8o8pmCYYUsAuY1hsQuBndPv19KcCRmCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wH++rHX5RJ8pU1kte9xB9stYVy5Z8Gq/JolXseyDHUA=;
+ b=tJ72ARPbLa2GG7OMlxdTaHIYiHFYF2jx0+AUaAyKsCWitqy79nc3/m3kjxscuOUrbsIBbvjXD80YVG92UoIYp9S0uZRvrAQpZ5sQzMWcGrwBkIgfNz87FtdbbVjFJcoT2ta+0324EHdWhsYO59u0Su+4gX6nx3P8DPEIRVIVIsABemvBoCp6MriITL8ynsUoAt06uvq+9NtOjYLd+l8DY4wpgwelDglEKR/EU+Gf3UvouJ+i0sJ8TtFLxgacI3QlB5YGYFxg9GlPM3O1BlVC3JxtWcw783y5iSGCPnILraJQaqYoV8uqEaExcsk52KqQzK6oLFS3Z/CxfCcFnK/Kxw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by CH2PR12MB4230.namprd12.prod.outlook.com (2603:10b6:610:aa::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.23; Tue, 13 Oct
+ 2026 17:17:47 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0472.016; Tue, 13 Oct 2026
+ 17:17:46 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 13 Oct 2026 13:17:44 -0400
+Message-Id: <DM3VQQ8KZGGF.FODPE8YAHBE7@nvidia.com>
+Cc: <bpf@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+To: "Zhen Ni" <zhen.ni@easystack.cn>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <akpm@linux-foundation.org>,
+ <vbabka@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
+ <brendan.jackman@linux.dev>, <hannes@cmpxchg.org>, <shuah@kernel.org>
+From: "Zi Yan" <ziy@nvidia.com>
+Subject: Re: [PATCH v2 0/6] mm/page_owner: add bpf_iter and kfuncs
+X-Mailer: aerc 0.22.0
+References: <20261013122125.843451-1-zhen.ni@easystack.cn>
+In-Reply-To: <20261013122125.843451-1-zhen.ni@easystack.cn>
+X-ClientProxiedBy: YQBPR0101CA0259.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:68::20) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJwVaMJL4FFYLq523VY014oa4u7RWD0WUY0+seP1xh3GY5peiQ@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|CH2PR12MB4230:EE_
+X-MS-Office365-Filtering-Correlation-Id: 890d9bdc-a891-45e5-18e8-08df294de663
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|1800799024|7416014|376014|366016|6133799003|22082099003|18002099003|10067099003|11063799006|921020|261009223027099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	VUjnwpW+IBisauPGGqJfjPbCGTagrIF9wrCi4kshjzMC1UADgGhYzbklqyg9+OeWcyJIOb7+7EKcoHsGnzMHVWNEPluOldXj3jXu+IFvOczd8NLt6z8jbatT0Mx7W5PO9ul3o+OUyu/Ve6q80i7OJyOsw5D2gvTDj1it0GAnJ1ilUROFa29Yax6EUKfqV3ZAy8OFjWeQJLM6O7Zwa3qOv2e4TSCz3lIk+bBvX1tio0LQiKJhSwzU8ANTYaUUsxw1+F8+0vVcXXCp25H52b1AUuenJvb8gc8Qx6OOn0bRLB5Ii0E1VlxUHyuTFaeRgPRgAC1ZRB8KT11euZmSHAlkJTWLSmh1fEo+l2r0rjwsXHFAAExxYL9n+cMWLOuIisUg4K3oNQDRJ9HVD4QHzMfn8rlKiYbzdlXQVZrAr1daOetwZW/zIdhu65fWLhvO1rrnR+khgqlKQhAHYBMNyQzS67VA9GrQ4CsFU8WVdftVe3iiHD8ZXuS++SvreOAo1iSfXVS7kYbM7ft4CTGuLIvAHuZT3xk7Asvlz3DR/bpTJG+8AmhJxc4qIHfnqfUopt04W8pE3kP7y0vbTGWyLp6ib0VzdtBoWMAUybGPcAH2VoqPS+UaHGhpTo+b4j1PgXmEC/00fPlDMnAsN1rynKUqOE56A6be3uSyqrHL5PV/ptfrSb5XwIHnOmjVvJvQutOHMZ5fhnflwIC3Clki2VqEqQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(7416014)(376014)(366016)(6133799003)(22082099003)(18002099003)(10067099003)(11063799006)(921020)(261009223027099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cjY2dVdpYitHV3IxZEpvdE5YcVNGMWZycW5TZHVyTi93QlBJZkpNY2t4K096?=
+ =?utf-8?B?NkNaamthbmJ2MXZpRS90M3VSalVlbUhtMWNIQlpaVTRFUnMxeEpqcGh1VVVn?=
+ =?utf-8?B?N0FjOW5uNzIwczc0bTdUem5adHhEb09SbytmTjlFUlNQcERoTndObXhhQlph?=
+ =?utf-8?B?WU0zMUdDejZlZGR5SFRDZXhHdERCVk82SjI3SkExM09FTHdLdTkyOFEvaEZx?=
+ =?utf-8?B?SUYrKzFHa3hTOTlwVlpNUC9qbldaak42WFcraTM0clZISnFkaFQyZ3k3TUM4?=
+ =?utf-8?B?bjU3L2J0ZXQwTEpYb0ZWQ3B5RWN5bEt3L0poS1pQZDk2MnFYMk50QmR4ZUJZ?=
+ =?utf-8?B?VEl2bmxxaStpcXVTaTVkMGVIWm1xWVZFS1JYOWx0RUxLZitiV1RBMEx3QjBn?=
+ =?utf-8?B?ck5HeTBxdUNhRXYzdjVNT0xrL3RwU0xSY1pFUWQybFIrQUF1U0lGTm1BY3BO?=
+ =?utf-8?B?dmFnU2Q1bjJOVVhjMmt3YlNSNVQ0UXNKcm45R1BIMmthclRNOGJIOWZnbWQy?=
+ =?utf-8?B?M1VxeFdFK3M0c1RvcW9mTElwV3BWMmVTNnNRbkdHQjFROTRMK1liNktiNXdX?=
+ =?utf-8?B?T2dwUTZsV0IwVWYybnJCVlA0VTh0SXFZNWZzLzFJV3dCK1RjSHA0TENOTEhh?=
+ =?utf-8?B?R2JyYUI1ZzNTcXdXZ1NDek1Jc3FMSGdDMDlrMEYwMXJaNWVaVHZpL0xCNEdh?=
+ =?utf-8?B?SlVpQjEya1NIclRNTVFKaVgzQ2xEdmRCN0NwR0F0RHVuRmNjcnlhczRuQ3Rv?=
+ =?utf-8?B?emhzaTE1Nkk2WXEyRTZycXRWTzFsVU1pSWVpNmphQ0dzQXZOSHVRNkpOOXJE?=
+ =?utf-8?B?VmJSMlZ3YWY0NkVtRzV4ZjhtV3BHdlIvMlJ0bFF2bjBSdmFhS0FnQVdsTTgy?=
+ =?utf-8?B?aTNNNDA2Z3FqR2JucTkwbHU1Wm5pc1NyaGh5MXNET3JvQ0tiMGQrLzBESXIz?=
+ =?utf-8?B?VkJLZ2NzNlRXS2Ruc1JrQ2tkWVNhYkNhUUlOR0pXSkh2NHJRL2Y2MW5lS2tl?=
+ =?utf-8?B?R3hJVE4xcTE0MUZDZ0VzNDdEV1hYdFQvSG52VlNGQlpaMFJSZFgrZHgzTGRZ?=
+ =?utf-8?B?OS9obmFhKzVFN3hNWERFWE03Tko1QXVOQnJIUmdqV1dOME9BVVoya1pQNUZR?=
+ =?utf-8?B?cFFxUmtkY0VCemluTEI2dTB3MlpGcWhSVE1IT0o0WnA1angzK2RJNit2Snd5?=
+ =?utf-8?B?eXZDM3E1eC9oMjhSTkFVYXhxNGtIR1VPNVRpVVRaMVlndG5iVDFVR3V1ellE?=
+ =?utf-8?B?bGtJRXlzT2d4aDdvTGVDUE5TSWdLbWQ4L2k2UWdzTG1ZamdkUDhIMU0zK0xX?=
+ =?utf-8?B?QmpoTUdCZGhpZ2NhaVRJZkk4TXMvNTVRNFpBRVBDL0NUeDdNdTluM0trbFFo?=
+ =?utf-8?B?QThaakRMMUJkVG1JdVphY1VhNFA4Z2U2UUo4Q2NaMHFCMFdUVzBSM0hOSGZG?=
+ =?utf-8?B?dzN4VzRIVHJDRnNuTTNudkZEeTQvOURoNVpJYmN1emxva041NnFoMEZ4Tk9Z?=
+ =?utf-8?B?WWM5NTFVOG9RTmpRS1g4V01tbWhROWQvdmM0NnE4NHV0MkVNR29ia3ZMcmdj?=
+ =?utf-8?B?Yjg2aHdKUUJReFdrZ1JYenJGOHh2SUpRYnlyLy9sb0wzVnFTd2ZtamIyZlpv?=
+ =?utf-8?B?Sk1NMnc4UjV5S0RJQ3RQVFd5aC94eHM0UENXZ0JlcllSTjlUQXI5a3gzbHNV?=
+ =?utf-8?B?cEFLNmNrZG5SenhZazhzeHcxWGlpMG55U29zQko0VTFENFM4WHNiYjZDaWt0?=
+ =?utf-8?B?MXlQTGJyQThZQlVNaWJWRDlHc0k5VFFSd0JjaWtGUGRGbU5GVEJnU3FKNmJO?=
+ =?utf-8?B?enFjZWJYYzY3b2FSS1I0QWRoMUxRU0syc0Y5Sm9LMDFienNVOFZNVHErYWJ4?=
+ =?utf-8?B?Nm1xQXdZOWwxd0R1ZFQrTFErTXZ2M3FJTnJoQVJRSmQ5RnF5ZmVYT3RzdDhY?=
+ =?utf-8?B?dFpsM3lUWW1KWk85c2JrTzJWbG1ZajJzUDRzUW1WVGtpUzJ0WXVKdXdFWHhs?=
+ =?utf-8?B?NXEvZDQ1UVBjcnhIWDdERFdoRytkSWgwMTZvZ3B3MS8ydTBUdWpUbnFDamxX?=
+ =?utf-8?B?SHZsRW1SVjIwMTZ0UG12dXBGNUZMNUNqbFNSYjd2b0puaG1sYkUyRjYvaWJZ?=
+ =?utf-8?B?b0FpQ3RLMEs1RWVpUzRrVGowa3ZIbWlybWwzUm1OUjhVa3VBOVhUOHNZOGZE?=
+ =?utf-8?B?cWVHcEFiUEo5QjNWb2VvWEZuZFFiMXVOM0NuSjQ4cWk0alJYYUY2RzlXbDhL?=
+ =?utf-8?B?N1RWbUtBRFJpUW1KRklUYXZZVTBjaWhzWS85UlZRZkNiejVYNVNoSXFvb0da?=
+ =?utf-8?Q?iUm+aElHqw0969tiJW?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 890d9bdc-a891-45e5-18e8-08df294de663
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2026 17:17:46.6494
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eMSQfLI8W/dLoQ8aKZLldWjoD9wQPWQJi+Mhc+jM/wKwveFdf/Bu+dGIngCjtS7e
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4230
 
-On Tue, Oct 13, 2026 at 11:26:38AM +0800, Jia Jia wrote:
-> >
-> > On Sat, Oct 10, 2026 at 10:22:43PM +0800, Jia Jia wrote:
-> > > Split virtio_transport_recv_pkt() so socket lookup is separate from the
-> > > receive state machine that runs under the socket lock.
-> > >
-> > > Keep virtio_transport_recv_pkt() on its existing per-packet locking path.
-> > > Pass the source and destination addresses used for lookup to the locked
-> > > receive path so they are decoded only once.
-> > >
-> > > Pass the network namespace and decoded address tuple through a packet
-> > > context to the locked receive path.
-> > >
-> > > Preserve source validation and failure handling. Keep the lookup reference
-> > > separate from the skb owner reference so the locked receive path can manage
-> > > the two lifetimes independently.
-> > >
-> > > Signed-off-by: Jia Jia <physicalmtea@gmail.com>
-> > > ---
-> > >  net/vmw_vsock/virtio_transport_common.c | 139 ++++++++++++++++--------
-> > >  1 file changed, 96 insertions(+), 43 deletions(-)
-> > >
-> >
-> > [...]
-> >
-> > > +/*
-> > > + * The caller holds sk's socket lock and must free skb if this returns true.
-> > > + */
-> > > +static bool
-> > > +virtio_transport_recv_pkt_locked(struct virtio_transport *t,
-> > > +                              struct sk_buff *skb, struct sock *sk,
-> > > +                              const struct virtio_transport_rx_pkt_ctx *ctx)
-> > > +{
-> > > +     const struct sockaddr_vm *src = ctx->src;
-> > > +     const struct sockaddr_vm *dst = ctx->dst;
-> > > +     struct vsock_sock *vsk = vsock_sk(sk);
-> > > +     struct net *net = ctx->net;
-> > > +     bool space_available;
-> > >
-> > > -     /* Check if sk has been closed or assigned to another transport before
-> > > -      * lock_sock (note: listener sockets are not assigned to any transport)
-> > > +     /* Check after acquiring the socket lock. Listener sockets accept packets
-> > > +      * from any source and are not assigned to a transport.
-> > >        */
-> > >       if (sock_flag(sk, SOCK_DONE) ||
-> > >           (sk->sk_state != TCP_LISTEN &&
-> > > -          !vsock_check_source(vsk, &t->transport, &src))) {
-> > > +          !vsock_check_source(vsk, &t->transport, src))) {
-> > >               (void)virtio_transport_reset_no_sock(t, skb, net);
-> > > -             release_sock(sk);
-> > > -             sock_put(sk);
-> > > -             goto free_pkt;
-> > > +             return true;
-> > >       }
-> > >
-> > >       space_available = virtio_transport_space_update(sk, skb);
-> > >
-> > >       /* Update CID in case it has changed after a transport reset event */
-> > >       if (vsk->local_addr.svm_cid != VMADDR_CID_ANY)
-> > > -             vsk->local_addr.svm_cid = dst.svm_cid;
-> > > +             vsk->local_addr.svm_cid = dst->svm_cid;
-> > >
-> > >       if (space_available)
-> > >               sk->sk_write_space(sk);
-> > > @@ -1875,12 +1891,49 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
-> > >               break;
-> > >       }
-> > >
-> > > +     return false;
-> > > +}
-> > > +
-> > > +/* We are under the virtio-vsock's vsock->rx_lock or vhost-vsock's vq->mutex
-> > > + * lock.
-> > > + */
-> > > +void virtio_transport_recv_pkt(struct virtio_transport *t,
-> > > +                            struct sk_buff *skb, struct net *net)
-> > > +{
-> > > +     struct virtio_transport_rx_pkt_ctx ctx;
-> > > +     struct sockaddr_vm src, dst;
-> > > +     struct sock *sk;
-> > > +     bool free_pkt;
-> > > +
-> > > +     virtio_transport_recv_pkt_init_addrs(skb, &src, &dst);
-> > > +     virtio_transport_trace_recv_pkt(skb, &src, &dst);
-> > > +
-> > > +     sk = virtio_transport_recv_pkt_find_socket(skb, &src, &dst, net);
-> > > +     if (!sk) {
-> > > +             (void)virtio_transport_reset_no_sock(t, skb, net);
-> > > +             goto free_pkt;
-> > > +     }
-> > > +
-> > > +     if (!skb_set_owner_sk_safe(skb, sk)) {
-> > > +             WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
-> > > +             goto free_pkt;
-> > > +     }
-> > > +
-> > > +     lock_sock(sk);
-> > > +     ctx = (struct virtio_transport_rx_pkt_ctx) {
-> > > +             .net = net,
-> > > +             .src = &src,
-> > > +             .dst = &dst,
-> > > +     };
-> > > +     free_pkt = virtio_transport_recv_pkt_locked(t, skb, sk, &ctx);
-> >
-> > At this point the socket lookup succeeded with src/dst/net, why not just
-> > pass sk which already has all of them?
-> >
-> 
-> If I understand this correctly, a successful lookup is not enough to
-> recover all of this from sk. The lookup may fall back from the
-> connected table to the bound
-> table, so the packet source must still be validated under the socket
-> lock; otherwise that check would become ineffective. The packet
-> destination is also needed after
-> a transport reset, and the RX namespace used for a reset reply is not
-> necessarily sock_net(sk) in global mode. I’ll remove the context
-> struct and pass src, dst, and
-> net directly.
+On Tue Oct 13, 2026 at 8:21 AM EDT, Zhen Ni wrote:
+> Hi all,
+>
+> Introduction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> page_owner records who allocated every page and is a core memory-debug
+> facility, but it currently reaches userspace as the debugfs flat dump:
+> slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
+> means streaming and parsing the entire file in userspace, which is
+> expensive on large hosts and hard to query live.
+>
+> Exposing the same walk to eBPF lets a program filter and aggregate in
+> the kernel and surface only the records it cares about. This series
+> adds that access as a seq_file bpf_iter target and an open-coded
+> iterator.
+>
+> Implementation
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> The page walk is factored into page_owner_next_eligible(), shared by
+> the read path and the iterators so eligibility stays identical. Two
+> kfuncs expose information that a BPF program cannot decode from the
+> snapshot alone: per-page memcg info including the full cgroup path,
+> and the stack trace behind a stack_depot handle. Each record is
+> snapshotted under the page_ext RCU lock, so consumers read a
+> consistent copy.
+>
+> Testing
+> =3D=3D=3D=3D=3D=3D=3D
+>
+> The selftest exercises the seq_file and open-coded iterators, and
+> validates the stack_snprint and get_memcg_info kfuncs.
+>
+> Changes in v2
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> - Route the zero-handle case through ext_put_continue.
+> - Drop the scan->pfn++.
+> - Fill page/po/pfn only when v is non-NULL.
+> - Implement page_owner_seq_stop().
+> - bpf_page_owner_stack_snprint() now takes the scan cursor.
+> - Buffer args renamed to buf__uninit/buf__sz.
+> - Removes the v1 get_nid() kfunc. The node is now stored in scan->nid.
+> - bpf_page_owner_get_memcg_info() now resolves the page with
+>   pfn_to_online_page() for an offline or removed pfn.
+> - Buffer/info args renamed to info__uninit/buf__uninit/buf__sz.
+> - Drop the get_nid kfunc coverage.
+> - Enable CONFIG_PAGE_OWNER in the bpf selftests config.
 
-True that the lookup may fallback to the bound table, but this begs the
-question, why bother with the bound table here? If a socket hasn't
-landed in the connected table yet, then OP_RW is -EINVAL and we respond
-with RST anyway... so I'd guess we shouldn't even be trying to batch for
-those sockets.
+Hi Zhen,
 
-For connected sockets, the sk has the destination (vsk->remote_addr)
-needed by the reset. And yes, sock_net(sk) does not necessarily equal
-the net ptr used for a reset reply in global mode, but we don't really
-expect that for global mode in vsock, we only expect that
-vsock_net_check_mode() rules are followed. In this case where
-!net_eq(n0, n1), the RST reply will be routed correctly across
-namespaces following global mode rules.
+Thank you for your patches. Review focus is currently on hotfixes and
+patches already in mm tree. Please ping us on this after the merge
+window is close, if no one still has not looked at it by then.
 
-I could certainly be missing something and happy to be pointed to an
-instance of sk being insufficient here. In general, I think its nice to
-avoid new data structures if possible.
+Thanks.
 
-Best,
-Bobby
+>
+> v1: https://lore.kernel.org/linux-mm/20261009112308.240769-1-zhen.ni@easy=
+stack.cn/
+>
+> Zhen Ni (6):
+>   mm/page_owner: extract page_owner_next_eligible() from read loop
+>   mm/page_owner: add bpf_iter target "page_owner"
+>   mm/page_owner: add open-coded page_owner iterator
+>   mm/page_owner: record the NUMA node in the scan cursor
+>   mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
+>   selftests/bpf: add tests for the page_owner bpf_iter target
+>
+>  kernel/bpf/helpers.c                          |   7 +
+>  mm/Makefile                                   |   3 +
+>  mm/page_owner.c                               | 219 +++++++++++-------
+>  mm/page_owner.h                               |  58 +++++
+>  mm/page_owner_iter.c                          | 197 ++++++++++++++++
+>  tools/testing/selftests/bpf/config            |   2 +
+>  .../bpf/prog_tests/page_owner_iter.c          | 193 +++++++++++++++
+>  .../selftests/bpf/progs/bpf_iter_page_owner.c | 159 +++++++++++++
+>  8 files changed, 758 insertions(+), 80 deletions(-)
+>  create mode 100644 mm/page_owner.h
+>  create mode 100644 mm/page_owner_iter.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_ite=
+r.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner=
+.c
+
+
+
+
+--=20
+Best Regards,
+Yan, Zi
+
