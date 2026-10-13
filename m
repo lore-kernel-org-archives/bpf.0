@@ -1,86 +1,36 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-93.mta0.migadu.com [91.218.175.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE923FA5D0
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 14:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD9B3EB80D
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 14:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791900351; cv=none; b=a+B6C9B/mWl+rMRrwRXQc/60YtvkEnnV/0tyAIA/OUmEpK/adF9W+4Z+kERwGG+FRe6k7SUV9ob9u7mzFIcg6elW9SepE8+gs4I4a07VUY9Mj2uDgmDAz9gCtvPXlzupHAHs+corMFvlMpKMdr/epImg0J47pPj7y/QzLx45oGM=
+	t=1791900453; cv=none; b=JCyRn4RrSMQxf1c3FZDvERRW2aAdn/iZshdemR8p6PC2Z3hKUy9kSCK2xCxc+RMH+GuJV8ZH4/WFJydUWNdw0vTwSiS8xM5M+oOh1l9ExrI7OwpDl4F/ay2gb5XvBoTNdAs1Yv76tYEAtsk4c8Jz500iXFMcbeleh5rJoNDNvrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791900351; c=relaxed/simple;
-	bh=IhTLoHrlyl4CrIJgU6a7OH6/1uPW9hR0ITPDoRIiN50=;
+	s=arc-20240116; t=1791900453; c=relaxed/simple;
+	bh=5BlXIF0AyB1kJAXhkN5mj6wdVNbcBMnSUOhsmJfw7hs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MTEShELMHtHtV8TQGcxt63jDkS43jxxbTH7DnupeYfisM1F1Eojayaj42nJbJWZiHpGHfei5NCtnADhc/byPfpaijiBt0LP2DfPD/EqA3NqHPVpqV01O0XCzZRzi3y9dbhJPvd2gXveptgiJhwA8/O+baLmHvXw9ys20rOF+SvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T7qMdfqA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uukf24Os; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=HLue3JPUf6MJPCQDGFTOzSRSLlPJhhXT0z6Fr/nFVROktRSz+heRJcpgndNGZjfUAwEB6Y0MRxTrVPW5hLXkFKMrBP7Da4Tv5d+1kZENGzrptxpxXPKblVCaessV3jgmi4koMopF0A0abjnKNySUM+Iu+ttgLIaggWV5daNpTOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=omcr5yoR; arc=none smtp.client-ip=91.218.175.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T7qMdfqA";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uukf24Os"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791900348;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GbSa4aMX4ZLanyQchu7pWrasbobdd8GQBaOw6y63Ae8=;
-	b=T7qMdfqAE6hChzqqEQwBxKwOUJ/reglytd/s881vXRfLv2dBlj82DPFoz1QkeoDqFMEGX8
-	Vez1M/ilgN5fojXajFrsLhCgsBOFMZZ9LPN82DUwxojyiaXXmYHBJbv4xH8OZSId2U7HkW
-	Q5S/6fimjYRn0rEqMGHqcAMBJ8O9Q+4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-661-bt8IgS1wMfWxJHJ6Se4SCw-1; Tue, 13 Oct 2026 14:05:45 +0000
-X-MC-Unique: bt8IgS1wMfWxJHJ6Se4SCw-1
-X-Mimecast-MFC-AGG-ID: bt8IgS1wMfWxJHJ6Se4SCw_1791900344
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a1ad49096fso6462375e9.0
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 07:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1791900344; x=1792505144; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GbSa4aMX4ZLanyQchu7pWrasbobdd8GQBaOw6y63Ae8=;
-        b=Uukf24Os2aSVACfZ8P/eWG5wGvTwe/X6PH1ykSx/BXZJ48JnXev9xhT0qhk4QWV9SD
-         7VLo7lxtEYRdl3tjKycHEk3yAEgOW8ITHMgJOEsYbzr0YfbFpViQKPGbabhQP6NnVd0j
-         sEwmE7VOtxEQv9TUav++8Tm96Xl6sOxJFMPPQqasvlooSB2YOp99cnvuNnsSL1sRt4LR
-         NuZ8iWKYIGOkwKtMj4/OQsnLSdHM3zw8jHsF2/AfS/firOda/QYSDA4YhiIkoPnkznsB
-         YRAqtXpbPa0WwjXVxtsQUATSRAvXU46GJkZ/Vq6v6XnfMEtzOzJLEG5TCE9EyIHoscyT
-         EKfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791900344; x=1792505144;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GbSa4aMX4ZLanyQchu7pWrasbobdd8GQBaOw6y63Ae8=;
-        b=YIT4NY8/vnH9KLSJK62sJq7tFcb7Z45hpsl97OJU/TfIVh6SpzBnjzGA644iH1mkv9
-         gabmffmpMKiXXtngEv5syQ7FW0/8RwVv+NJ8RGNVDReIlqsSW08pnfDulfR575VAliNB
-         lftmJV9uuEwiyiU9xJUUhPqbmxH05wzlo1ckkfko8XNHcZmPaz/xw2XRNIdlw2DE0MbE
-         uqw36B6FJWHenIpY5Ir43oi71eNM8NpvdITq0Wu4orkKonwm4FG5CqpDSxESp0+V6ULj
-         MRkqsv5xo0qrPATImn9UinkWi5jM2KZMvvSWCdMyKOMXaQ86OUpPqRRnvLxPqrjyb308
-         64Pg==
-X-Gm-Message-State: AFq9FYKOdbVLGoWl8FtAAiCYHyMI979CHSdnxV3CEve5ZFY+cQrVzMuT
-	jiDS8hZazlwlLf0poyytYn/nYr6Ey7SYBY3VoppGQtBbkxpks5tuxSPVaJseNJ41fyU/nJtkXSG
-	3l+6eiJw4UiK+GyYs67r8JFEGbOFGtUcNMPiOChOuE72GTBCNo1DrZA==
-X-Gm-Gg: AYBFou3W9b+fKe3EGbh3FGjniLyVZvK1vy/Ax9EA+CZr7J+D1uwLUKIssCGhQmXe0Vk
-	XVlE6G8j5uuUP4zu4Jo0EXJp0NnyKZpYhjw3s/RSvot9OwvKxF1CZWvNVmLtF5Y8GucQYAg3Ysk
-	OK80FB02NJaJ022uwxOrJEEh639aHHAJtJDvurRcjDLbeLrsrLPb04t8LPW/IljeftKjW9hnSq7
-	4lxwh4nbmMh7iskJABeHteFCYn8m9wRNJt63q8kCu7/WdV+dU+U/0w3bwrldi/2upbdDOo8zBtr
-	NOfUFyupCNA6zE/XZDmoAyLgdLnEF9TOHIMKq8SmqYzGLgn98o7XSduPtZq5wBFTXhF9X4YvGRt
-	0KDchXDxLVC0JoNdXt3OhpQhZBcfwPAGB7csE8ivdw1ET9jA64X+Aoxc1joYL6WEA/n7eQTW4rA
-	==
-X-Received: by 2002:a05:600c:4e92:b0:49e:63cc:6324 with SMTP id 5b1f17b1804b1-4a18e4837e7mr248254395e9.6.1791900343764;
-        Tue, 13 Oct 2026 07:05:43 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e92:b0:49e:63cc:6324 with SMTP id 5b1f17b1804b1-4a18e4837e7mr248253445e9.6.1791900343076;
-        Tue, 13 Oct 2026 07:05:43 -0700 (PDT)
-Received: from [192.168.188.234] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18dd15659sm242588985e9.4.2026.10.13.07.05.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2026 07:05:42 -0700 (PDT)
-Message-ID: <38ae4fa2-29e5-49a7-8653-88f5a73593dd@redhat.com>
-Date: Tue, 13 Oct 2026 16:05:40 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="omcr5yoR"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=5BlXIF0AyB1kJAXhkN5mj6wdVNbcBMnSUOhsmJfw7hs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791900449; v=1; x=1792505249;
+ b=omcr5yoRLuxNp/8lY2PqupyZRLBeff4lfU1Fbq3x0BX+7BHosJ4CuDeDyK5IM6U1ACN0f0aJ
+ Af842HB/sE/pYFRezaA6pQs4zJfYGLyI1rxqHKm3K5cv2fdw6tMjgcgWgEsheREgym9CAJJujgs
+ tvBXR1hlDB7+JSXr5O55Y088=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1dd4546aa31d3090;
+	Tue, 13 Oct 2026 14:07:29 +0000
+X-Mizu-Trace-ID: 1dd4546aa31d3090
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4193e7d0-ce1b-4732-bc8f-00badbfd08fd@linux.dev>
+Date: Tue, 13 Oct 2026 07:07:25 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,48 +38,98 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v19 net-next 2/2] octeontx2: add mqprio bandwidth offload
- for NIX TX schedulers
-To: Ratheesh Kannoth <rkannoth@marvell.com>, netdev-bot+sashiko@kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, andrew+netdev@lunn.ch, ast@kernel.org,
- daniel@iogearbox.net, davem@davemloft.net, edumazet@kernel.org,
- hawk@kernel.org, john.fastabend@gmail.com, kuba@kernel.org, sdf@fomichev.me,
- sgoutham@marvell.com
-References: <20261006094357.840823-3-rkannoth@marvell.com>
- <179162647058.434549.12221340477037180415@kernel.org>
- <asxY6cs5os_q3mAA@rkannoth-OptiPlex-7090>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <asxY6cs5os_q3mAA@rkannoth-OptiPlex-7090>
+Subject: Re: [PATCH bpf-next v2 06/11] selftests/bpf: Test trampoline args
+ around a 16-byte aligned stack arg
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261013003429.1853052-1-yonghong.song@linux.dev>
+ <20261013003459.1857895-1-yonghong.song@linux.dev>
+ <sashiko-outbox-168812@kernel.org>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <sashiko-outbox-168812@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 10/12/26 05:50, Ratheesh Kannoth wrote:
-> On 2026-10-10 at 15:31:10, netdev-bot+sashiko@kernel.org (netdev-bot+sashiko@kernel.org) wrote:
->> Thank you for your contribution! Sashiko AI review found 12 potential
->> issue(s) to consider.
->>
->> Critical: 0 · High: 1 · Medium: 9 (1) · Low: 2 (1)
->>
->> If you believe none of the issues are legitimate, please reply to each
->> issue of Medium severity or higher and explain why the AI is wrong.
->> If any of them are legitimate and you plan to respin, please let patchwork
->> know by including "pw-bot: cr" as a separate line at the end of your reply
->> (one such reply per series is enough).
->>
->> - [High] There is a use-after-free race on the deferred netdev_tc_work
->>    during device removal.
-> 
-> Not addressing this one; the window is theoretical and the impact is nil in practice.
-The number of known valid issues that you intend not address is
-concerning. Beyond the overall driver quality, please note that any
-later patch touching this area will likely report the same issues,
-require more effort from you to waive them and from us to actually
-process the increasingly large wall of text.
 
-I strongly suggest addressing at least the 'high' one and the others
-with more straight-forward solutions.
 
-/P
+On 10/13/26 2:43 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] bpf: endianness assumption causes selftest failure on aarch64 big-endian
+> --
+>
+> commit df1efd6b9c0e934bad453d07e6efe674bda8e1e6
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
+>
+> This commit adds tests for bpf_testmod functions taking a 16-byte aligned
+> struct containing an __int128. It checks that the BPF trampoline packs
+> these arguments correctly according to the BPF calling convention.
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+>> index 8086586d3e196..a2da219e14769 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+> [ ... ]
+>> @@ -141,6 +143,20 @@ static void test_int128_args(void)
+>>   	ASSERT_EQ(skel->bss->t_c, 3, "t:c");
+>>   	ASSERT_EQ(skel->bss->t_ret, 6, "t ret");
+>>   
+>> +	ASSERT_EQ(skel->bss->s_g, 7, "s:g");
+>> +	ASSERT_EQ(skel->bss->s_h_lo, 8, "s:h.lo");
+>> +	ASSERT_EQ(skel->bss->s_h_hi, 9, "s:h.hi");
+> [Severity: Low]
+> Does this code assume a little-endian memory layout for the __int128
+> argument?
+>
+> The test passes a 16-byte struct containing ((__int128)9 << 64) | 8.
+> On big-endian architectures like aarch64 (when configured with
+> CONFIG_CPU_BIG_ENDIAN), the most significant 64 bits (9) are placed at the
+> lowest address, and the least significant bits (8) at the higher address.
+> This hardcoded expectation for the little-endian layout appears to cause the
+> test_int128_args selftest to fail its assertions on big-endian systems.
+
+Ok, will fix due to possible arm64 big endian.
+
+>
+>> +	ASSERT_EQ(skel->bss->s_i, 10, "s:i");
+>> +	ASSERT_EQ(skel->bss->s_ret, 385, "s ret");
+> [ ... ]
+>> diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+>> index 4638dfec1f38e..5520ee500c01d 100644
+>> --- a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+>> +++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+> [ ... ]
+>> @@ -15,4 +15,49 @@ int test_int128_arg_fexit(unsigned long long *ctx)
+>>   	return 0;
+>>   }
+>>   
+>> +/*
+>> + * The arguments come packed in the BPF convention whatever holes the
+>> + * kernel convention left between them: an eightbyte each, and two for the
+>> + * struct holding an __int128.
+>> + */
+>> +long s_g, s_h_lo, s_h_hi, s_i, s_ret;
+>> +
+>> +SEC("fentry/bpf_testmod_test_int128_stack")
+>> +int test_int128_stack_fentry(unsigned long long *ctx)
+>> +{
+>> +	s_g = ctx[6];
+>> +	s_h_lo = ctx[7];
+>> +	s_h_hi = ctx[8];
+> [Severity: Low]
+> Is this direct array indexing in test_int128_stack_fentry() subject to the
+> same endianness assumption?
+>
+> When the BPF trampoline projects the struct onto the u64 ctx[] array on a
+> big-endian system, ctx[7] receives 9 and ctx[8] receives 8, rather than the
+> little-endian projection expected here.
+
+Ok, will fix due to possible arm64 big endian.
+
+>
+>> +	s_i = ctx[9];
+>> +	return 0;
+>> +}
 
