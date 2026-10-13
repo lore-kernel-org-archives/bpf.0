@@ -1,203 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0677951AEF1;
-	Tue, 13 Oct 2026 15:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76003404BE9
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 15:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791904975; cv=none; b=UGhBxUV0HWNAeTQr1TZECOg4B/X6XUNCY+9MS0nX8sRoIARTnQ5h/GGS9cMh0bC48ffK++/5ZX8O/F8r7pwsJ4pnNdOFJcBnrgQMYDipHVMQqsTfcVoWIIM9FZ5SiHkC6XGlP0fHr0ZSP98PSHbK3pB6whIB5xCDsNjQe9mN8iA=
+	t=1791904997; cv=none; b=r+9eeig6GRMtO1O5qf27jkOKwy/nJLPy6vurwuk452Esm/oJzPBO51YhH/2A56QnnbooKB9W4SRa6DCPG+NZ9KtqqIrFQlrrCuKvHMET1yGQFJbRSjYFAWdsnxg82DHIrD03HcA4BbGB4Nwhbj07+JnpTmD60tDWOrimxaNrVkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791904975; c=relaxed/simple;
-	bh=NirFpBJoMJIJty8FHlUeArK6s29xx2Rs0nVWGbo/eGI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MY3LxTZ/ShU3NVx/Xa0Vyz4boOdkhduy3304kGnzmL4ANV9ADJg385PQy1nLFJOsnZdiUAEoo6X90VIlOmEjSjW6XvMomQFNsdVMpkmVCx14maChOyzRYZTBTOBXJKBhOLUnAk7qHpz+1UNYiAMX72X71JmkhjMQUIBzdUT0LWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a7kG8VRD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791904997; c=relaxed/simple;
+	bh=VF+Karj7+DhCDYzNousT6nvAkn3utvHTWt42N/msG5Y=;
+	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
+	 Date; b=q2UId46XETSVyv1fTIspR6x7sGIsGOj6qyUTkefMm9DsWh1dDoeNplaikBldIgdFIpXNK0YGrgf5BJcnttk+VtfMhdpoAT/j7laNbYEc6jhmX1QIXQf+TKvc2vC9/PRLr3sRa8kEtpucguFhufnJ9P30Lv3ShGrVtUJ+OrpKOhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uw9eGrX2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a7kG8VRD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC8F1F0089C;
-	Tue, 13 Oct 2026 15:22:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uw9eGrX2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C3E1F00893;
+	Tue, 13 Oct 2026 15:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791904973;
-	bh=Nu2lIlJoFPKLE+KDwHqBioHzBykS9j6g/3VfcAZiVdE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=a7kG8VRDYlsv3h+0u94q5BK0Msy/mAEkVPHqxzuhpCg+ASw8Em4RgjrXRneGPhpKM
-	 i+UNxxaBtu/vPhzNc9Z35kL28wW4ApEmq5gcW2MtEpVT0jU82WmXaludhh/wUMJMmN
-	 ArVJ1Z4A2aHHWJmQ/HBxmvc7YGic/4Lw1LLrXGayYOmsmQGcslkGfY2Va/SDcJJSK7
-	 X6bBWMK51/CHLc30N3o6XZn/34pbf1IIAStJTSep+kAnORP/dcluCgRiG8eka0v4LG
-	 nV7lo+Uemo6ZUZvpIl5CaJWT+TRDZHXTfyCsHb8dF4MB/qmY0t23MUhlUQPckhf8Ui
-	 LHxhfAUBes1+g==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Tue, 13 Oct 2026 16:05:12 +0100
-Subject: [PATCH v6 32/39] mm/uffd: use predicates for userfaultfd checks
+	s=k20260515; t=1791904996;
+	bh=YpRzDDYCjerQlQNroSXSWKMyZD4YQoAJZC59344o8B0=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=Uw9eGrX2rdM5kTJevn6kYnYFStT6OjE6WoIaOwUt4I0HipWyPnl+6HOwsPTNZtNLa
+	 ubHXj47V60m4w5apJ60FJJ3eL7ScyHG1PoeeH//QaADLhYYLJmm9oDwi1L3EJbK+Bk
+	 EwmpEjt3iBUrzLkl8pVt9vErmo1Xt9k1f7LHeKbBPe8gPyqtHIUjMfLKOojvsciGVA
+	 A9rLVqmx+E4xhn0lFXicgYl2bJQ5+1irZa6n93wZxdXsEkt2lDsUzI4Tff+fbLO6EG
+	 N59XQMHsYotqEzsRoDGehETKrUX7NtmP9yvmF3QKHZfiV+noayDYtfE10m4p9/uBfL
+	 15aPqSG48BNZQ==
+Message-ID: <sashiko-outbox-169989@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add tests for memcg kfuncs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: listout@listout.xyz, bpf@vger.kernel.org
+In-Reply-To: <20261013151621.1526699-1-listout@listout.xyz>
+References: <20261013151621.1526699-1-listout@listout.xyz>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 13 Oct 2026 15:23:15 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-32-1aa3c9b139f9@kernel.org>
-References: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
-In-Reply-To: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
- David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Paul Moore <paul@paul-moore.com>, 
- Stephen Smalley <stephen.smalley.work@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
- Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>, 
- Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, 
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Janosch Frank <frankja@linux.ibm.com>, 
- Claudio Imbrenda <imbrenda@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, 
- Matthew Brost <matthew.brost@intel.com>, 
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
- Ying Huang <ying.huang@linux.alibaba.com>, 
- Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, 
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
- Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
- Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>, 
- Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, 
- Xu Xin <xu.xin@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-rdma@vger.kernel.org, selinux@vger.kernel.org, 
- linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
- fuse-devel@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Bert Karwatzki <spasswolf@web.de>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2582; i=ljs@kernel.org;
- h=from:subject:message-id; bh=NirFpBJoMJIJty8FHlUeArK6s29xx2Rs0nVWGbo/eGI=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLLOeZxx/qY43VC48i6XuOKHXYkc7LKdlzgsQo41/Jhu2
- eK1hb2yo5SFQYyLQVZMkeX5F/H9QSJh8zov+LvBzGFlAhnCwMUpABN59YaR4ZdAqVvUtuy+/89O
- PrcJVufzNtu/+4PM/3mJYRf32P1OfcrwhzdAbMqKvOMFz3pcrVMOccdGRfQGdU0wU66R9lqdeje
- HCQA=
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-Rather than directly checking VMA flags, use the newly introduced
-vma_is_mm_managed() and vma_is_mm_backed() helpers in userfaultfd
-when assessing VMA suitability for userfaultfd and UFFDIO_MOVE.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: Missing negative bounds check in bpf_mem_cgroup_*_events() al=
+lows OOB read
+--
 
-The droppable check is kept explicit, as userfaultfd cannot function
-correctly with droppable mappings.
+commit a4794021755b1042b63dca630dda69e60c099827
+Author: Brahmajit Das <bdas@suse.de>
 
-Update vma_move_compatible() so it's expressed in terms of VMA
-characteristics rather than arbitrary flags.
+selftests/bpf: Add tests for memcg kfuncs
 
-Additionally, update the use of the deprecated VMA flag API when checking
-VMA_SHADOW_STACK_BIT.
+This patch adds new selftest coverage for various memcg kfuncs,
+including bpf_mem_cgroup_usage(), bpf_mem_cgroup_memory_events(),
+and bpf_proactive_reclaim(). It validates their behavior against
+a test cgroup from syscall programs.
 
-A VMA_IO_BIT check is no longer required but that is fine as a hard
-invariant has been established that mm-managed mappings may not set
-VMA_IO_BIT so the check is now redundant.
+Link: https://lore.kernel.org/bpf/20261013143853.1379307-1-listout@listout.=
+xyz/
 
-Acked-by: Zi Yan <ziy@nvidia.com>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- mm/userfaultfd.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+> diff --git a/tools/testing/selftests/bpf/progs/memcg_kfuncs.c b/tools/tes=
+ting/selftests/bpf/progs/memcg_kfuncs.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/memcg_kfuncs.c
+[ ... ]
+> @@ -0,0 +1,106 @@
+[ ... ]
+> +SEC("syscall")
+> +int memcg_query(void *ctx)
+> +{
+[ ... ]
+> +	/* Out-of-range indices must be rejected with (unsigned long)-1. */
+> +	bad_memory_event =3D bpf_mem_cgroup_memory_events(memcg,
+> +		bpf_core_enum_value(enum memcg_memory_event, MEMCG_NR_MEMORY_EVENTS));
+> +	bad_vm_event =3D bpf_mem_cgroup_vm_events(memcg,
+> +		bpf_core_enum_value(enum vm_event_item, NR_VM_EVENT_ITEMS));
+> +	bad_page_state =3D bpf_mem_cgroup_page_state(memcg, -1);
+> +	/* Negative indices must not bypass the bounds checks. */
+> +	neg_memory_event =3D bpf_mem_cgroup_memory_events(memcg, -1);
+> +	neg_vm_event =3D bpf_mem_cgroup_vm_events(memcg, -1);
 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 949017e60608..b3076d4a622a 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -1754,10 +1754,16 @@ static inline bool move_splits_huge_pmd(unsigned long dst_addr,
- }
- #endif
- 
--static inline bool vma_move_compatible(struct vm_area_struct *vma)
-+static inline bool vma_move_compatible(const struct vm_area_struct *vma)
- {
--	return !(vma->vm_flags & (VM_PFNMAP | VM_IO |  VM_HUGETLB |
--				  VM_MIXEDMAP | VM_SHADOW_STACK));
-+	/* uffd is generally incompatible with mappings not managed by core mm. */
-+	if (!vma_is_mm_managed(vma))
-+		return false;
-+	/* The shadow stack should not be written to by userspace. */
-+	if (vma_test_single_mask(vma, VMA_SHADOW_STACK))
-+		return false;
-+	/* hugetlb mappings cannot be safely moved. */
-+	return !vma_is_hugetlb(vma);
- }
- 
- static int validate_move_areas(struct userfaultfd_ctx *ctx,
-@@ -2146,10 +2152,14 @@ static bool vma_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags,
- {
- 	const struct vm_uffd_ops *ops = vma_uffd_ops(vma);
- 
--	if (vma->vm_flags & (VM_DROPPABLE | VM_SHADOW_STACK))
-+	/* Only mm-backed memory can have its faults handled by userspace. */
-+	if (!vma_is_mm_backed(vma))
- 		return false;
--
--	if (!vma_is_hugetlb(vma) && (vma->vm_flags & VM_SPECIAL))
-+	/* Core mm may discard droppable memory at any time. */
-+	if (vma_test_single_mask(vma, VMA_DROPPABLE))
-+		return false;
-+	/* The shadow stack should not be written to by userspace. */
-+	if (vma_test_single_mask(vma, VMA_SHADOW_STACK))
- 		return false;
- 
- 	vm_flags &= __VM_UFFD_FLAGS;
+[Severity: High]
+Can this test sequence inadvertently trigger an out-of-bounds read regressi=
+on
+in the kernel?
 
--- 
-2.55.0
+The BPF verifier does not enforce bounds for enum arguments, so a negative
+value of -1 is passed directly to the kernel kfunc. Looking at
+bpf_mem_cgroup_memory_events() in mm/bpf_memcontrol.c:
 
+        if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
+                return (unsigned long)-1;
+
+        return atomic_long_read(&memcg->memory_events[event]);
+
+Because event is a signed enum, the bounds check uses a signed comparison.
+Passing -1 evaluates as less than MEMCG_NR_MEMORY_EVENTS, bypassing the che=
+ck,
+and proceeds to access the memory_events array with a negative index.
+
+A similar pattern appears to exist for bpf_mem_cgroup_vm_events() which rou=
+tes
+through memcg_vm_event_item_valid() in mm/memcontrol.c and performs a signed
+comparison against NR_VM_EVENT_ITEMS.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013151621.1526=
+699-1-listout@listout.xyz?part=3D1
