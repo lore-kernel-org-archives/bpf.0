@@ -1,134 +1,216 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6EF3BFAE2
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 09:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791882870; cv=none; b=f9PpHBwo80uAFWkbwlgB/ec55tmvlFwDbesTaAYLwgHp2BZFcEFFM/XzroVa23jp5ifsIjRwZG0PdaH+fSYUI8QAXbo1h1MfoLWZHt8MctHxkNsaS4oDIkZJldapqCgWBmH3lB7Rs8R2++poiQyEWUyX7xnPjnd2QzEzOb17k2k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791882870; c=relaxed/simple;
-	bh=GBN4KQvhQYvfJlFkTE9CzR+lL4hxtqGCR3+lfQTl3dQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=j0MSNr2hFwUKmoqsyBVRCPy1gy4vFG3oPKe3127VjznSrKnyUzcDaZ1fmshqXK2KX0w7nfkzwfcz84HBBStxnh3mMAq/vfpNQdZFlubHL0IyNMPH5D8XLlw7mA6F/qqNthka0DC0l5TyDPtnoSwzhH5Gao2jelDD8PvZ01DlmsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNiYW2Hr; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCF331618B
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 09:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791882894; cv=pass; b=CqP8wxjF/XF9TUo9bSlZ0YQdTFuNanB3ZBvlW6ZCRksbLpI7nD4oQJoa1cqtSkRMnVpEdTD2Ipf7LJ+bESnrFZ7fjVQ5X5RWRIRKN446hWufbFl4l3VpbFjOl3eX+nN/iX7+y4R/+MaWcS7s8wRaX2sTJ15rq+XLia+qXlL/G+U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791882894; c=relaxed/simple;
+	bh=/ZDx0qigdFSyCGhZXlqU3OErEYAQKoc8EV1Ldj229UM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EOMa+pqw8Me3M6NgnDb45q3VNPckLkb2D4jg55yCYOYFV/zs7tThHp95p+9+GvaK7VxHbSceMWL5M27jRND1uQCOO2SxIeHM90sFZsmSbUyaZMt7J5IhwnwsaTtwBykRy5Ghyys8Q8m8vnDSi/xqbWuG8tL1YunY+NCGLj2j7kk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FZnJLfpJ; arc=pass smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNiYW2Hr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB1D1F000FF;
-	Tue, 13 Oct 2026 09:14:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791882869;
-	bh=0PDQgcWLeRYtSV93W8Oqy5Ndrqh8YNo4nffq/NvUQ8w=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KNiYW2HrhTIRDjhBmfADSUgnAKOh3Yobv+F0yU+zMo5N1HhCzHoE8Zt31Unzf+jUu
-	 p1vix34Zju3VI4mGFnBHeaRIyKSekvQDPbsrPMvIIjnier6v4SRzVrOVLjmDQmJNb9
-	 PZ6cyR19G63fF+GVWVXwdshBQEsy6JA9moo3FD6iLBbpHOf8ViAQr4RkLq9fro5BgJ
-	 iTUJ/mqob0bmAErDPApb2D/OWhX+cxTOF0C8BFYSxZUVrm6P6L3MW0zG3M5XpCf6sr
-	 BkmrtNzTgWHyGEKLgo2gspMarVW0yiAT6IwTcSLqSfJLcb59PrIFDDADudDwdxdC6n
-	 VwVCWEhLkByug==
-Content-Type: multipart/mixed; boundary="===============2707716416231144659=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FZnJLfpJ"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8565d77c277so16961037b3.0
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 02:14:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791882891; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ddwSBq/xvSOF7lSzPxxIFdhXuVA9qP5hIvaKt8wKxgBJ05ii1NIRBsP9Ihvxpu+EtF
+         xImjRxqxbYeNbIGPbsgW2TbScOczhPunzftOEH5WLaXk+R9ajVDFc5yHW8FmzRPIXt+b
+         cfU7rVA5Ewvcz12b9oqOln8BnZPJe3IWA1XRfACb8tQN8F3xsu9dDcS6ZcWYr72q0qmI
+         NwrYQGaylG3DMKdj8DmdH5+dVN+3XCfoHzwOOYnaSRL3e0ekvbV9fMSZJlKK6S19riGY
+         uI71I/cGq3/Okc5sXAr7VYwbXYz88GLPJfAnXHD6t6IzOs47c+I0mnawiqkvzfxeegkd
+         S3Pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=68MXMWga95CH1/6xessB7F2BXfoCEeSgQgXov6Rw+cY=;
+        fh=y+KI6IXgGn2ZnxBcTHp/oo8KJJ0+7W3QSOzvkA+0QbM=;
+        b=mLzseld0I+zrYqsPdsvo0+wBcgz1vYNWfFGnDJ1FR8eYfFh7mz14VnCbfI0JCsSQcA
+         Lkuzmx+r0Kxo1mu6tgE5ygrJiIgfKuy94poKN8Hse1fOUpqQG5vBejK635aaiBuEOOPs
+         r5pMdB6T/MB0NKH2IIopJxkUmy2E8rIja6fH4SCOvBkTanB9M8OxJlc+7Gu8A4IeKqDX
+         CgtOu/JPTALVAxFJUh+X9uylKwfITKVHPnSAtFMGYpn0QDKl7r/i1Yf0a4PVkkTOQBGb
+         OlRw3Dqw4CsqKU2aDpSPG0AHv+CJlhMpbuJuJQLJO2i99d9tPyWW2dZ6Ne1DdAyf1Jl9
+         5ZJg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791882891; x=1792487691; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=68MXMWga95CH1/6xessB7F2BXfoCEeSgQgXov6Rw+cY=;
+        b=FZnJLfpJ8e3L/C7a9A3Pw6TbT0U3CixM1NRdnXYpbOrg/qJxUzQoq8EBkruxqmk6kg
+         nN2ilGcyPiK91JQJAYktOTGw75qk7Fb/0jsEf8zZtCtmLfd2F2R3kaGq2RE6rRruPiIk
+         aqEVueK46bXUhu0mFn71yHTDpnrAsE017Z+lN5OOjDSYEPciC8lRWGlxbG0Oa9/8H71O
+         4ukjDJmnC4QJLGuQzlPOWYF00rDMOqPDs4hi7RCzqRlo5BG+2XFYgsKcFDJ/DOSfkcBz
+         /sANET4r060IxjbT9BlvH/f1Jl91CUgFh2vB3gGI4VHZmjqvBAe7Lnf+RcPEg1L/np5Y
+         JATQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791882891; x=1792487691;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=68MXMWga95CH1/6xessB7F2BXfoCEeSgQgXov6Rw+cY=;
+        b=2Byb96sYolWW4VXjHzACv4Lvu6nsnZe9+GGdX71xbfRTPFhZj26JMYuBSwx99B1laQ
+         cKDnSg9D080nnM5FSPsWr71gLrq5LOTxF5iHdjSnbQ4pjaIcGUfx/Nmjg/C3XRpxpgjv
+         a+rZNY8js2Bc1cYtgkCsAO4qSQSCUWWFHf7tXvrDadz3cVaDhDkLZdRwr2i1w58INt3V
+         eBk5zQR8Hd8bjDWi/YKBCVstFRD2fQuV23XG/TkSJlS10CAtDjJypTucqrHvVIzugpg7
+         BL4yhi3q9ii3DCnfao6tpbLD8wlze07GtlOPS57W/gu5RHOBbYWOlScCdmuLLJnA851t
+         QpdA==
+X-Forwarded-Encrypted: i=1; AKwUvByKktAnHupXOpurfpvivmuWA6mWiaTx01MTahZCz5Uu2sMbQ6dD2B7jylLU7ASmBBv6hCo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLzyAyj57l1ziVkF9lLkxDi7ZMz0sm5b/TIV9Jo2t0s4RUdzbdi
+	ffC+Ovkxw7A2mKqO+PxNaT/4yk/qeR9fbDvUmpwZ6hh/kQxPOV5222GeMGht54FldDQdP5fui+L
+	xmjqZ4tFXC4bjempUg+n/Fv8iL9tty5s=
+X-Gm-Gg: AYBFou2JMU5lTYnH2C7C1GGgWCeVD4o/0M5gYG0YVFqu2DWLEiw3+H52BheNTutRLzs
+	KmVFfe86+lKtgfQ0cgTZ6GEtML8h+hH/Xk01k5VRT5MaMuZKBBjIrI6kifS7v05k+sddoGHb1pr
+	GCyX9gdwv84FRQfVmRtDmAfvxlIYPhweJ0fwQrc+mOBFf6QY53eSrWpoEpD5KcuOeTRVkXMujGG
+	hkq4bN2x5Nuy4Ce/bGXcz/Jr5cBg64TbnIdBOQrkK8ERb8Icepwk6KyYYqmZOtUCzetkx4qNqLD
+	rqeIynGl2Eytnm0/ooiQhFYIbuT9u2KUoSVjmMeFc0SwUWNJ6WvGYnGHrX0a+3ijYPANY47qZgv
+	f1Vx1Cy7c9g==
+X-Received: by 2002:a05:690e:43c6:b0:675:3d40:3c2c with SMTP id
+ 956f58d0204a3-679362ba7e0mr2295954d50.81.1791882890519; Tue, 13 Oct 2026
+ 02:14:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <19d84db7443c99a6256ac4bda3e1eabefb2a052b231f8aa571dc0628ee2ed2ff@mail.kernel.org>
-In-Reply-To: <20261013082012.1107446-8-memxor@gmail.com>
-References: <20261013082012.1107446-8-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v2 07/13] selftests/bpf: Test __arena pointer members
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 13 Oct 2026 09:14:27 +0000 (UTC)
+References: <20261012120438.52849-1-laoar.shao@gmail.com> <20261012120438.52849-2-laoar.shao@gmail.com>
+ <96324eec-d307-4bbf-975e-3c9b3dd5e190@kernel.org>
+In-Reply-To: <96324eec-d307-4bbf-975e-3c9b3dd5e190@kernel.org>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Tue, 13 Oct 2026 17:14:12 +0800
+X-Gm-Features: AclHuK93g_25NJAT6wXES6RLREaNoHaav4Z0uWW89g_0G4Uh0XP2UqZ1IpTsXuI
+Message-ID: <CALOAHbCOZdYe6E-_atuyT3UvOQt+j01Ru0ErknVutF8kR=L1Fg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] sched: add helpers for numa balancing
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, 
+	gourry@gourry.net, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, 
+	shakeel.butt@linux.dev, roman.gushchin@linux.dev, yu.c.chen@intel.com, 
+	zhao1.liu@intel.com, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============2707716416231144659==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Oct 13, 2026 at 3:38=E2=80=AFPM David Hildenbrand (Arm)
+<david@kernel.org> wrote:
+>
+> On 10/12/26 14:04, Yafang Shao wrote:
+> > Two new helpers task_numab_enabled() and numab_mode_tiering() are
+> > introduced to replace the scattered direct accesses to the
+> > sched_numa_balancing static key and the sysctl_numa_balancing_mode
+> > bitmask.
+> >
+>
+> I'll only comment on the new exposed helpers. Some of these might make se=
+nse
+> even without the bigger series.
+>
+> (obviously, minus the task change)
+>
+> > No functional change.
+> >
+> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> > ---
+> >  include/linux/sched/numa_balancing.h | 31 ++++++++++++++++++++++++++++
+> >  kernel/sched/fair.c                  | 16 +++++++-------
+> >  kernel/sched/sched.h                 |  1 -
+> >  mm/memory-tiers.c                    |  3 ++-
+> >  mm/migrate.c                         |  7 ++++---
+> >  mm/vmscan.c                          |  6 +++---
+> >  6 files changed, 48 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/include/linux/sched/numa_balancing.h b/include/linux/sched=
+/numa_balancing.h
+> > index 52b22c5c396d..353772b49c5f 100644
+> > --- a/include/linux/sched/numa_balancing.h
+> > +++ b/include/linux/sched/numa_balancing.h
+> > @@ -8,6 +8,7 @@
+> >   */
+> >
+> >  #include <linux/sched.h>
+> > +#include <linux/sched/sysctl.h>
+> >
+> >  #define TNF_MIGRATED 0x01
+> >  #define TNF_NO_GROUP 0x02
+> > @@ -32,6 +33,28 @@ extern void set_numabalancing_state(bool enabled);
+> >  extern void task_numa_free(struct task_struct *p, bool final);
+> >  bool should_numa_migrate_memory(struct task_struct *p, struct folio *f=
+olio,
+> >                               int src_nid, int dst_cpu);
+> > +
+> > +extern struct static_key_false sched_numa_balancing;
+> > +
+> > +/*
+> > + * Whether NUMA balancing applies to @p.  The @p argument is unused fo=
+r
+> > + * now: a later patch will consult a per-cgroup BPF policy with it.
+>
+> Talking about later patches in a function doc is ... wrong.
 
-> selftests/bpf: Test __arena pointer members
+Thanks for your guidance.
+I will update it.
 
-TL;DR: Test issue in test_struct_ops_arena.c: if the bpf_testmod BTF lacks the
-"arena" type tag, the new arena member tests are silently dropped,
-test__skip() is never called, and the test still reports OK.
+>
+> > + */
+> > +static inline bool task_numab_enabled(struct task_struct *p)
+> > +{
+> > +     return static_branch_unlikely(&sched_numa_balancing);
+> > +}
+> > +
+> > +/*
+> > + * The global sysctl state, for the system-wide tiering machinery: thi=
+s
+> > + * reflects kernel.numa_balancing_mode only and takes no task.
+>
+> The latter part doesn't make a lot of sense in this documentation.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
+I will update it.
 
-[ ... ]
+>
+> > + */
+> > +static inline bool numab_mode_tiering(void)
+>
+> The function name isn't really intuitive. Should this be
+>
+>         numab_in_tiering_mode
+>
+>
+>         numab_tiering_enabled
+>
+> or something like this.
 
-> +/*
-> + * The tags on the members of struct bpf_testmod_arena_member_args reach the
-> + * module BTF only from a toolchain with btf_type_tag support.
-> + */
-> +static bool testmod_has_type_tag(const char *tag)
-> +{
-> +	struct btf *vmlinux_btf, *module_btf;
-> +	bool found = false;
-> +
-> +	vmlinux_btf = btf__load_vmlinux_btf();
-> +	if (!ASSERT_OK_PTR(vmlinux_btf, "vmlinux_btf"))
-> +		return false;
-> +	module_btf = btf__load_module_btf("bpf_testmod", vmlinux_btf);
-> +	if (ASSERT_OK_PTR(module_btf, "module_btf"))
-> +		found = btf__find_by_name_kind(module_btf, tag, BTF_KIND_TYPE_TAG) > 0;
-> +	if (!found)
-> +		printf("%s:SKIP: no %s type tag in the bpf_testmod BTF\n", __func__, tag);
-> +	btf__free(module_btf);
-> +	btf__free(vmlinux_btf);
-> +	return found;
-> +}
+Agreed, thanks.  I will rename it to numab_in_tiering_mode().
 
-[ ... ]
+>
+> > +{
+> > +     if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING)
+> > +             return true;
+> > +     return false;
+>
+>
+> return sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING;
+>
+> ?
 
-> @@ -122,6 +201,18 @@ void serial_test_struct_ops_arena(void)
->  		arena_arg_fail();
->  	if (test__start_subtest("arena_arg_attach"))
->  		arena_arg_attach();
-> +	if (testmod_has_type_tag("arena")) {
-> +		if (test__start_subtest("arena_member"))
-> +			arena_member();
-> +		if (test__start_subtest("arena_member_render"))
-> +			arena_member_render();
-> +		RUN_TESTS(struct_ops_arena_member_fail__union);
-> +		RUN_TESTS(struct_ops_arena_member_fail__load_acq);
-> +		RUN_TESTS(struct_ops_arena_member_fail__mismatch);
-> +		RUN_TESTS(struct_ops_arena_member_fail__mismatch_mem);
-> +		RUN_TESTS(struct_ops_arena_member_fail__write);
-> +		RUN_TESTS(struct_ops_arena_member_fail__no_arena);
-> +	}
->  #else
->  	test__skip();
->  #endif
+Agreed, will simplify as suggested.
 
-When the bpf_testmod BTF has no "arena" type tag, testmod_has_type_tag()
-prints a SKIP line but never calls test__skip().  Is the skip reported
-anywhere?
+>
+> Both functions could directly have proper kerneldoc if we are already
+> documenting these.
 
-serial_test_struct_ops_arena() then leaves out the arena_member and
-arena_member_render subtests and all six RUN_TESTS() groups, and the parent
-test still reports OK.  test_progs only prints a test's captured stdout when
-the test fails or runs verbose (dump_test_log() uses print_test = verbose()
-|| force_log || test_failed), so in a normal run the message is never shown
-and the skip is never counted.
+Sure. I will update it.
 
-That seems realistic for kernels built with a toolchain that lacks
-btf_type_tag support, where this coverage would be silently dropped.
-prog_tests/btf_tag.c does the same check
-(btf__find_by_name_kind(*module_btf, "user", BTF_KIND_TYPE_TAG) <= 0) and
-pairs the printf with test__skip().
-
-Could the arena_member and arena_member_render subtests still be started
-unconditionally, calling test__skip() from inside each one when the tag is
-missing?  That would keep the arena_arg* results intact while making the
-skip visible.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38370395582
---===============2707716416231144659==--
+--=20
+Regards
+Yafang
