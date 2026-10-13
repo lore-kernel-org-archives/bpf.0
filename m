@@ -1,245 +1,733 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19CF731618C
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 03:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791862290; cv=pass; b=P5wZL+OhIPuu8yzkMlegwM1APo8R+2G5EqI6++bmpein5g8/bKdT8r/fB3xwa04uenWRV3l97wDyqPjT5kV3KpG0EVHiG94AM2QGkQPA8+HMNjio2WeZovQHxVM4UDXXTT9WR5+CFco6HlZQvgOIjI1dBe3j8dOQfvJ+Xcgj2A8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791862290; c=relaxed/simple;
-	bh=zCSEKIAPKVwVSGY4GyE3kxLa1knCjzTA3Y/jvMzWxiw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pL/NjQ2lAdwAc1Be7CD0huL0SRpr/3AIHtIlyCvKPpQu6/HkudxWLc9W5UW2Sz1Ta10mtArbMzfexF1tBYe4krlQpetjM37NgqPtLLPpLT9lmw5r22GdtI03tlfKmckHN/zDZvjFg5kUe+SUa2lNXJIFUajlARyYyRzgaq67oQI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CNRyFkqW; arc=pass smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2675F496D50;
+	Tue, 13 Oct 2026 06:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791871935; cv=none; b=H48Vx4wZqKEeBPg5OEmhJmZvlOWXaVyKAQAKhCWjbt5xoiw+g885ZsgdP+E/P8lm5PgN1Kw8roTw6VpFoqzEC9nOuESNB00gMWo8Mqhnt7EHs0aUhfSwCVtSUOePqi+T0twV2vA7Nb+KRNpQmWJmei6T/O5eI6Sy48+/a0ulPUc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791871935; c=relaxed/simple;
+	bh=OcklgfN6+iH58QEPF1QtOz+aJDX6ub8vvNErqZCPGQY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Bq1Sjvz+1+N+KablNOieplxJ7fkFT4QNjAHbs2rcQPxKlZwjUyDvELjNSwpZQaF7rzJmU1ckOQxdzhybrRz/6euvXMl9/BWlYKqlxi8tKiUuM+4KIxyRnM3iEykfT4+3F22j+pt7ChDicED/0e8joMC6vfutUkUaFaYzgSIGRCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ceKHu7bT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5drMN9du; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CNRyFkqW"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-91986c5cb75so33023446d6.0
-        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 20:31:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791862288; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IgkG636DyMvKIZzE/ZRlJctz8qsbU/ZkSipYYCHYVMOOJciEeIz4183lihm30I9S0S
-         WFx+DNuVsLGSFQ3Jp28lbcHAhGQ34N+AO37jKop6mZ04vLykEycZclz9NBoMe8xISLAY
-         hQpUO1XqzsrApp+sqwn8mnmC2qEpDOY1k60a0MStBeKpWINsL7wJ+zwHo3yDvo/e3JG/
-         DGeBWKMTJY4xaa2Lnygj0c1lWk6xDX80pN0K5KsOfLDLOjOqRtmAcjXquHqpjEqzP569
-         EerXcb8uKerO84Dt0Cxi8jH+JgnTiejRcBqbBNUXfr69VNuoKoezltbsvW9PJ9kijL9M
-         8gJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=oKth/1jAUk8y73FB5cD2ux1SjiU3FjqeBdt11b7UR8k=;
-        fh=6x4D+Ddyc/BHI2NelUVL2umT/uDhyZabln1DRI2/ccU=;
-        b=L4x5lYaoIas4kz0I49MSBUaDoR73V6rnhi92pTuwMf2a1/Z4/JAIw1lbgfXUv5/kYt
-         /Naf+AR8jCqqHAp2cMMftLFE9NUQWzCC8mRyWQXfWIQlnRucsC7lo61tmWbZhT4lr/a7
-         VQraKGZOES/tdMEJ7d3Z3xmWEnZItvueF9C/XveJR/jisy2Vli+wdcC0LXSoPe59GALX
-         y2zUIXIxrtVQYNmAaJ54o71kcFpOw6aN5iepzysYJzU0VyNebPkJiOgc3oIaZ98zIuPK
-         SrxAoF+LBgMaMXQ2g8NRPFz5N89LiFqW9TfWiaajTVhnURjB9Ahg7LT0EaZGjWLDKA15
-         7BdA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791862288; x=1792467088; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oKth/1jAUk8y73FB5cD2ux1SjiU3FjqeBdt11b7UR8k=;
-        b=CNRyFkqWvkphXy4611cQxfWd3tluQ2Ap+aZpYQtlP56Wvf2uIOZtIBNT32f9l64lCL
-         HdERnSWoEgkR/I2ykgmwW9MosDd36LVBYLu6FgpxJZ8CfziAMvs+159cn0FEnD3Wk8vs
-         owf5QJpZW1rBUtUGwT8vcnB3pYZ53gcu4humkw3zPvllA3/lNcsYd9DuB+3stYgwMh0x
-         WzsNiT7bE58HHyvxKNhB6gyxAw17LkLNfWXXnhSE0WUgxAQ5MbNsa9RRuytAk3T19QiY
-         g6OGGZcFuYXaRsFoYjuxyt3UAtI2t/HA/7ciI0OrbqE1t8NO/gP65CGhRi7fSe90KWxZ
-         f/LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791862288; x=1792467088;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=oKth/1jAUk8y73FB5cD2ux1SjiU3FjqeBdt11b7UR8k=;
-        b=yA7AhIz4JmdjHzpBzzWi8f7iW25VFjERpn7PQwlAWX4guW6U92zpyQncH7rC0xc11q
-         L9alWihBA9l6R9iTSlWQlP6F1ar3mfWdhwgfQDbDBddqcA4VpkSq0wRD4bUWJDrxFCc9
-         hoaOhWL7eYVXd1ythLhBIB21/iJ23jrkWO8ImN1dmcDh+uWCPD+wEzA6Zz9Q4EFIiWf1
-         rAXvZOktGHvIDIKYERpTzsH3L60L33tcecbGrN2MehNAMJYf3wtyEj6CpLp44F0a0drK
-         sRNERGguO6GFT8mfRVXIHiyrbcMzU7UVtOZeVjzIH8mKWa1HUd8R83Tf5hjHhJMNNokk
-         H3pg==
-X-Forwarded-Encrypted: i=1; AKwUvBzmMUHPQ59/hcU4RcAEFZ0Q6e7kdmJ6dFWzQpFNqYLGq9kJRCTqmUKVrY1G8W1wYpomjgo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIN1yxjIki/MdMqqNMoC73AkwPUqdT/SEDPpuEOJ10gGotHn0Ft
-	3XDNXJTjWqYzeWNfCGgnOFQO6ODxhDv/hpOFSVPWpgtI8SiPJm9E+kXkp8Gnn4wjx+gIDn/l7ga
-	d9p7U43f4rswDobifDNk8gTa+deMsidE=
-X-Gm-Gg: AYBFou0hSnkXfYEv5JYIJuBxCXV9NntApmyjIx9k1b+oQnukD4ZBrVEmE9Otn0VEMk8
-	npJo6xLAE6q3KSblPGGmCpIgDcBCmtI1x2kr5Ir1nPlabIo5V0jtoUNY6S9HqAiNFGnqlyeYsGr
-	65JvR5MA7xq4kVJNmFWa4LN67qwYIrK9zBSitWXFojgXuiWViLg0Xh4Hy3E4pEpOU48r/LWN6tc
-	eqHYh0yJdLYgkLk/arNrU3Nv6RbPVI/rCltwAzUebmENn+adK8qSOd+lqutWnqp7mHWc5y8Kmma
-	2hR9VRuq2Ywf+8K/SSsZ3YOITZr9x0p5kgdj8Lwt7DFhOSsZpsUGR+k=
-X-Received: by 2002:a05:620a:44c8:b0:939:1222:b9f1 with SMTP id
- af79cd13be357-93ebcd2b3d1mr1818738285a.0.1791862287366; Mon, 12 Oct 2026
- 20:31:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ceKHu7bT";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5drMN9du"
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1791871927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8UWT0gM8Dme1ASvlCUTF41jYvDbeGJH4dFMNy4dRBXM=;
+	b=ceKHu7bToARk9x1EPVk2gcVZLvpK/ok8vJ0TMzM+4M/f94QBm+YFI01qGR94PxM0WGrDWA
+	tEAAqw3/cA2xz44Ndm0MVlKqxjEqZ96xUIoQSlDwu5ZwriVkOdBBKg/dquJ1E9yxTm8ftd
+	uvcvHHML9QWbPYv2vB8ILZkch99u+o6RsadsFwQSP/LSWo0sFW/qAM9VD2YeMlwwSCNRBm
+	qEvhAofL8CoDrVluu3ZuZDyIa8YQPBnvhIN3u07j/pZWoq9KEYU2b0ruPL/hCoB4MOel8m
+	Kg6Lju+BL0YhThqzzNpTP82pYXDtTmYoVxp2Wa9XIJMYX26EtnrYfsuHdSSiJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1791871927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8UWT0gM8Dme1ASvlCUTF41jYvDbeGJH4dFMNy4dRBXM=;
+	b=5drMN9duayjsNAnYh8JzvAm40UuPTSb0EOta2NjwedWbpkRBPixJLW2+U3oeSFkfHuHH5Z
+	tUzYbDj9xYwWZCDQ==
+To: Gabriele Monaco <gmonaco@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Steven Rostedt
+ <rostedt@goodmis.org>, Gabriele Monaco <gmonaco@redhat.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Wen Yang
+ <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>,
+ Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH v2 04/15] rv: Cast result of model_get_*_name()
+In-Reply-To: <20261001152042.124445-5-gmonaco@redhat.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+ <20261001152042.124445-5-gmonaco@redhat.com>
+Date: Tue, 13 Oct 2026 08:14:47 +0200
+Message-ID: <87jynmgm94.fsf@yellow.woof>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261010142247.99223-1-physicalmtea@gmail.com>
- <20261010142247.99223-4-physicalmtea@gmail.com> <as1ciTHT2O40E/Uq@devvm29614.prn0.facebook.com>
-In-Reply-To: <as1ciTHT2O40E/Uq@devvm29614.prn0.facebook.com>
-From: Jia Jia <physicalmtea@gmail.com>
-Date: Tue, 13 Oct 2026 11:30:51 +0800
-X-Gm-Features: AclHuK82x5TMJTU3P4uV1cGGZ695rdTmYCG-meYcWlEm97kH4rrDUYXGHuCS2tM
-Message-ID: <CAJwVaMJxgjbEXk8LW+wYbmfPYA2anNcRtitB=G1=kNv-WXm4TQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/5] vsock/virtio: reuse same-flow socket
- lookup in RX batches
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: stefanha@redhat.com, sgarzare@redhat.com, netdev@vger.kernel.org, 
-	virtualization@lists.linux.dev, kvm@vger.kernel.org, mst@redhat.com, 
-	jasowangio@gmail.com, eperezma@redhat.com, xuanzhuo@linux.alibaba.com, 
-	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
->
-> On Sat, Oct 10, 2026 at 10:22:45PM +0800, Jia Jia wrote:
-> > An RX lock batch still looks up the socket for every packet and takes a
-> > temporary lookup reference, even though the batch already holds a reference
-> > to the locked socket.
-> >
-> > Record the network namespace and packet address tuple when a batch starts.
-> > Reuse the batch socket for later STREAM/RW packets with the same tuple, and
-> > release the batch before looking up a different flow.
-> >
-> > The cached path still traces every packet, takes an skb owner reference,
-> > validates socket state, source and transport, updates credit, and runs the
-> > receive state machine. Only the socket table lookup and its temporary
-> > reference are skipped.
-> >
-> > Signed-off-by: Jia Jia <physicalmtea@gmail.com>
-> > ---
-> >  include/linux/virtio_vsock.h            |  3 ++
-> >  net/vmw_vsock/virtio_transport_common.c | 58 +++++++++++++++----------
-> >  2 files changed, 38 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
-> > index 26dde6909c4e..d6528681e052 100644
-> > --- a/include/linux/virtio_vsock.h
-> > +++ b/include/linux/virtio_vsock.h
-> > @@ -287,6 +287,9 @@ struct virtio_transport_rx_batch {
-> >       struct sock *sk;
-> >       unsigned int pkts;
-> >       size_t bytes;
-> > +     struct net *net;
-> > +     struct sockaddr_vm src;
-> > +     struct sockaddr_vm dst;
-> >  };
-> >
-> >  void virtio_transport_recv_pkt_batch(struct virtio_transport *t,
-> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> > index e67dfcaa279c..73e5c7dfe8b4 100644
-> > --- a/net/vmw_vsock/virtio_transport_common.c
-> > +++ b/net/vmw_vsock/virtio_transport_common.c
-> > @@ -1977,6 +1977,7 @@ void virtio_transport_rx_batch_finish(struct virtio_transport_rx_batch *batch)
-> >       batch->sk = NULL;
-> >       batch->pkts = 0;
-> >       batch->bytes = 0;
-> > +     batch->net = NULL;
-> >
-> >       if (!sk)
-> >               return;
-> > @@ -2008,6 +2009,37 @@ void virtio_transport_recv_pkt_batch(struct virtio_transport *t,
-> >       virtio_transport_recv_pkt_init_addrs(skb, &src, &dst);
-> >       virtio_transport_trace_recv_pkt(skb, &src, &dst);
-> >
-> > +     if (batch->sk) {
-> > +             if (batch->net == net &&
-> > +                 vsock_addr_equals_addr(&batch->src, &src) &&
-> > +                 vsock_addr_equals_addr(&batch->dst, &dst) &&
-> > +                 virtio_transport_recv_pkt_batchable(t, batch->sk)) {
-> > +                     sk = batch->sk;
-> > +                     if (!skb_set_owner_sk_safe(skb, sk)) {
-> > +                             WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
-> > +                             virtio_transport_rx_batch_finish(batch);
-> > +                             kfree_skb(skb);
-> > +                             return;
-> > +                     }
-> > +
-> > +                     ctx = (struct virtio_transport_rx_pkt_ctx) {
-> > +                             .net = net,
-> > +                             .src = &src,
-> > +                             .dst = &dst,
-> > +                             .batchable = &batchable,
-> > +                     };
-> > +                     free_pkt = virtio_transport_recv_pkt_locked(t, skb, sk, &ctx);
-> > +
-> > +                     if (!batchable)
-> > +                             virtio_transport_rx_batch_finish(batch);
-> > +                     if (free_pkt)
-> > +                             kfree_skb(skb);
-> > +                     return;
-> > +             }
-> > +
-> > +             virtio_transport_rx_batch_finish(batch);
-> > +     }
-> > +
-> >       sk = virtio_transport_recv_pkt_find_socket(skb, &src, &dst, net);
-> >       if (!sk) {
-> >               virtio_transport_rx_batch_finish(batch);
-> > @@ -2018,33 +2050,10 @@ void virtio_transport_recv_pkt_batch(struct virtio_transport *t,
-> >
-> >       if (!skb_set_owner_sk_safe(skb, sk)) {
-> >               WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
-> > -             virtio_transport_rx_batch_finish(batch);
-> >               kfree_skb(skb);
-> >               return;
-> >       }
-> >
-> > -     if (batch->sk && batch->sk != sk) {
-> > -             /* Never acquire a second socket lock. */
-> > -             virtio_transport_rx_batch_finish(batch);
-> > -     }
-> > -
-> > -     if (batch->sk == sk) {
-> > -             /* Keep the batch reference; drop this packet's lookup reference. */
-> > -             sock_put(sk);
-> > -             ctx = (struct virtio_transport_rx_pkt_ctx) {
-> > -                     .net = net,
-> > -                     .src = &src,
-> > -                     .dst = &dst,
-> > -                     .batchable = &batchable,
-> > -             };
-> > -             free_pkt = virtio_transport_recv_pkt_locked(t, skb, sk, &ctx);
-> > -             if (!batchable)
-> > -                     virtio_transport_rx_batch_finish(batch);
-> > -             if (free_pkt)
-> > -                     kfree_skb(skb);
-> > -             return;
-> > -     }
-> > -
->
-> Not sure I love adding code and then removing it in the same series.
-> Seems like these are asking to be squashed?
->
+Gabriele Monaco <gmonaco@redhat.com> writes:
 
-I'll fold patch 3 into patch 2 so batching is introduced with
-same-flow lookup reuse from the start.
-
-> >       lock_sock(sk);
-> >       /*
-> >        * Sockmap removal restores the native protocol under sk_callback_lock.
-> > @@ -2063,6 +2072,9 @@ void virtio_transport_recv_pkt_batch(struct virtio_transport *t,
-> >       free_pkt = virtio_transport_recv_pkt_locked(t, skb, sk, &ctx);
-> >       if (start_batch && batchable) {
-> >               /* Keep the lookup reference until the batch is released. */
-> > +             batch->net = net;
-> > +             batch->src = src;
-> > +             batch->dst = dst;
+> Functions like model_get_event_name() and model_get_state_name() are
+> shared with BPF monitors, however those programs don't play nice with
+> string pointers without fixed length and the event_name and state_name
+> arrays need to be defined differently. This gets the compiler to notice
+> those are const char and the above function discard the const qualifier.
 >
-> Similar to my comment in the other patch, seems these are all in sk
-> already?
->
+> Drop the warning by casting the result to (char *). Note, a cleaner
+> solution would require to modify all callers, but that would require
+> changing every single monitor's tracepoint and the advantage is minimal.
 
-For the batch cache, yes. I'll use the locked socket state for the
-same-flow check. The packet values still need to be passed to the
-locked receive path for source validation and reset handling.
+I prefer the cleaner solution. Just mass replace "char *" with
+"const char *", and manually fix up a few errors and we are done.
 
-> Best,
-> Bobby
+diff --git a/include/rv/automata.h b/include/rv/automata.h
+index 4a4eb40cf09a..e4afd5ba1d06 100644
+--- a/include/rv/automata.h
++++ b/include/rv/automata.h
+@@ -22,7 +22,7 @@
+ /*
+  * model_get_state_name - return the (string) name of the given state
+  */
+-static char *model_get_state_name(enum states state)
++static const char *model_get_state_name(enum states state)
+ {
+ 	if ((state < 0) || (state >= STATE_MAX))
+ 		return "INVALID";
+@@ -33,7 +33,7 @@ static char *model_get_state_name(enum states state)
+ /*
+  * model_get_event_name - return the (string) name of the given event
+  */
+-static char *model_get_event_name(enum events event)
++static const char *model_get_event_name(enum events event)
+ {
+ 	if ((event < 0) || (event >= EVENT_MAX))
+ 		return "INVALID";
+diff --git a/include/rv/da_monitor.h b/include/rv/da_monitor.h
+index 6fc5ef8142ac..fc830c9f5046 100644
+--- a/include/rv/da_monitor.h
++++ b/include/rv/da_monitor.h
+@@ -633,8 +633,8 @@ static inline void da_monitor_destroy(void)
+  */
+ 
+ static inline void da_trace_event(struct da_monitor *da_mon,
+-				  char *curr_state, char *event,
+-				  char *next_state, bool is_final,
++				  const char *curr_state, const char *event,
++				  const char *next_state, bool is_final,
+ 				  da_id_type id)
+ {
+ 	CONCATENATE(trace_event_, MONITOR_NAME)(curr_state, event, next_state,
+@@ -642,7 +642,7 @@ static inline void da_trace_event(struct da_monitor *da_mon,
+ }
+ 
+ static inline void da_trace_error(struct da_monitor *da_mon,
+-				  char *curr_state, char *event,
++				  const char *curr_state, const char *event,
+ 				  da_id_type id)
+ {
+ 	CONCATENATE(trace_error_, MONITOR_NAME)(curr_state, event);
+@@ -662,8 +662,8 @@ static inline da_id_type da_get_id(struct da_monitor *da_mon)
+  */
+ 
+ static inline void da_trace_event(struct da_monitor *da_mon,
+-				  char *curr_state, char *event,
+-				  char *next_state, bool is_final,
++				  const char *curr_state, const char *event,
++				  const char *next_state, bool is_final,
+ 				  da_id_type id)
+ {
+ 	CONCATENATE(trace_event_, MONITOR_NAME)(id, curr_state, event,
+@@ -671,7 +671,7 @@ static inline void da_trace_event(struct da_monitor *da_mon,
+ }
+ 
+ static inline void da_trace_error(struct da_monitor *da_mon,
+-				  char *curr_state, char *event,
++				  const char *curr_state, const char *event,
+ 				  da_id_type id)
+ {
+ 	CONCATENATE(trace_error_, MONITOR_NAME)(id, curr_state, event);
+diff --git a/include/rv/ha_monitor.h b/include/rv/ha_monitor.h
+index 6e1c7fe5449a..0952a3f161c3 100644
+--- a/include/rv/ha_monitor.h
++++ b/include/rv/ha_monitor.h
+@@ -87,7 +87,7 @@ _Static_assert(offsetof(struct ha_monitor, da_mon) == 0,
+  * environment constraint is false. This function can be called also with no
+  * event from a timer (state constraints only).
+  */
+-static void ha_react(enum states curr_state, enum events event, char *env)
++static void ha_react(enum states curr_state, enum events event, const char *env)
+ {
+ 	rv_react(&rv_this,
+ 		 "rv: monitor %s does not allow event %s on state %s with env %s\n",
+@@ -98,13 +98,13 @@ static void ha_react(enum states curr_state, enum events event, char *env)
+ 
+ #else /* CONFIG_RV_REACTOR */
+ 
+-static void ha_react(enum states curr_state, enum events event, char *env) { }
++static void ha_react(enum states curr_state, enum events event, const char *env) { }
+ #endif
+ 
+ /*
+  * model_get_state_name - return the (string) name of the given state
+  */
+-static char *model_get_env_name(enum envs env)
++static const char *model_get_env_name(enum envs env)
+ {
+ 	if ((env < 0) || (env >= ENV_MAX))
+ 		return "INVALID";
+@@ -227,7 +227,7 @@ static inline void ha_get_env_string(struct seq_buf *s,
+ 
+ #if RV_MON_TYPE == RV_MON_GLOBAL || RV_MON_TYPE == RV_MON_PER_CPU
+ static inline void ha_trace_error_env(struct ha_monitor *ha_mon,
+-				      char *curr_state, char *event, char *env,
++				      const char *curr_state, const char *event, const char *env,
+ 				      da_id_type id)
+ {
+ 	CONCATENATE(trace_error_env_, MONITOR_NAME)(curr_state, event, env);
+@@ -237,7 +237,7 @@ static inline void ha_trace_error_env(struct ha_monitor *ha_mon,
+ #define ha_get_target(ha_mon) da_get_target(&ha_mon->da_mon)
+ 
+ static inline void ha_trace_error_env(struct ha_monitor *ha_mon,
+-				      char *curr_state, char *event, char *env,
++				      const char *curr_state, const char *event, const char *env,
+ 				      da_id_type id)
+ {
+ 	CONCATENATE(trace_error_env_, MONITOR_NAME)(id, curr_state, event, env);
+diff --git a/kernel/trace/rv/monitors/nomiss/nomiss.h b/kernel/trace/rv/monitors/nomiss/nomiss.h
+index 3d1b436194d7..0e74a27bc38c 100644
+--- a/kernel/trace/rv/monitors/nomiss/nomiss.h
++++ b/kernel/trace/rv/monitors/nomiss/nomiss.h
+@@ -41,9 +41,9 @@ _Static_assert(env_max_stored_nomiss <= MAX_HA_ENV_LEN, "Not enough slots");
+ #define HA_CLK_NS
+ 
+ struct automaton_nomiss {
+-	char *state_names[state_max_nomiss];
+-	char *event_names[event_max_nomiss];
+-	char *env_names[env_max_nomiss];
++	const char *state_names[state_max_nomiss];
++	const char *event_names[event_max_nomiss];
++	const char *env_names[env_max_nomiss];
+ 	unsigned char function[state_max_nomiss][event_max_nomiss];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_nomiss];
+diff --git a/kernel/trace/rv/monitors/nomiss/nomiss_trace.h b/kernel/trace/rv/monitors/nomiss/nomiss_trace.h
+index 42e7efaca4e7..8ad43b6dde6a 100644
+--- a/kernel/trace/rv/monitors/nomiss/nomiss_trace.h
++++ b/kernel/trace/rv/monitors/nomiss/nomiss_trace.h
+@@ -6,14 +6,14 @@
+ 
+ #ifdef CONFIG_RV_MON_NOMISS
+ DEFINE_EVENT(event_da_monitor_id, event_nomiss,
+-	     TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(int id, const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(id, state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor_id, error_nomiss,
+-	     TP_PROTO(int id, char *state, char *event),
++	     TP_PROTO(int id, const char *state, const char *event),
+ 	     TP_ARGS(id, state, event));
+ 
+ DEFINE_EVENT(error_env_da_monitor_id, error_env_nomiss,
+-	     TP_PROTO(int id, char *state, char *event, char *env),
++	     TP_PROTO(int id, const char *state, const char *event, const char *env),
+ 	     TP_ARGS(id, state, event, env));
+ #endif /* CONFIG_RV_MON_NOMISS */
+diff --git a/kernel/trace/rv/monitors/nrp/nrp.h b/kernel/trace/rv/monitors/nrp/nrp.h
+index 3270d4c0139f..f6c1ec62233d 100644
+--- a/kernel/trace/rv/monitors/nrp/nrp.h
++++ b/kernel/trace/rv/monitors/nrp/nrp.h
+@@ -26,8 +26,8 @@ enum events_nrp {
+ };
+ 
+ struct automaton_nrp {
+-	char *state_names[state_max_nrp];
+-	char *event_names[event_max_nrp];
++	const char *state_names[state_max_nrp];
++	const char *event_names[event_max_nrp];
+ 	unsigned char function[state_max_nrp][event_max_nrp];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_nrp];
+diff --git a/kernel/trace/rv/monitors/nrp/nrp_trace.h b/kernel/trace/rv/monitors/nrp/nrp_trace.h
+index 2e13497de3b6..bcdb44c8e1fa 100644
+--- a/kernel/trace/rv/monitors/nrp/nrp_trace.h
++++ b/kernel/trace/rv/monitors/nrp/nrp_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_NRP
+ DEFINE_EVENT(event_da_monitor_id, event_nrp,
+-	     TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(int id, const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(id, state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor_id, error_nrp,
+-	     TP_PROTO(int id, char *state, char *event),
++	     TP_PROTO(int id, const char *state, const char *event),
+ 	     TP_ARGS(id, state, event));
+ #endif /* CONFIG_RV_MON_NRP */
+diff --git a/kernel/trace/rv/monitors/opid/opid.h b/kernel/trace/rv/monitors/opid/opid.h
+index fb0aa4c28aa6..42680aa81f33 100644
+--- a/kernel/trace/rv/monitors/opid/opid.h
++++ b/kernel/trace/rv/monitors/opid/opid.h
+@@ -30,9 +30,9 @@ enum envs_opid {
+ _Static_assert(env_max_stored_opid <= MAX_HA_ENV_LEN, "Not enough slots");
+ 
+ struct automaton_opid {
+-	char *state_names[state_max_opid];
+-	char *event_names[event_max_opid];
+-	char *env_names[env_max_opid];
++	const char *state_names[state_max_opid];
++	const char *event_names[event_max_opid];
++	const char *env_names[env_max_opid];
+ 	unsigned char function[state_max_opid][event_max_opid];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_opid];
+diff --git a/kernel/trace/rv/monitors/opid/opid_trace.h b/kernel/trace/rv/monitors/opid/opid_trace.h
+index b04005b64208..daca1f4a1cd6 100644
+--- a/kernel/trace/rv/monitors/opid/opid_trace.h
++++ b/kernel/trace/rv/monitors/opid/opid_trace.h
+@@ -6,14 +6,14 @@
+ 
+ #ifdef CONFIG_RV_MON_OPID
+ DEFINE_EVENT(event_da_monitor, event_opid,
+-	     TP_PROTO(char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor, error_opid,
+-	     TP_PROTO(char *state, char *event),
++	     TP_PROTO(const char *state, const char *event),
+ 	     TP_ARGS(state, event));
+ 
+ DEFINE_EVENT(error_env_da_monitor, error_env_opid,
+-	     TP_PROTO(char *state, char *event, char *env),
++	     TP_PROTO(const char *state, const char *event, const char *env),
+ 	     TP_ARGS(state, event, env));
+ #endif /* CONFIG_RV_MON_OPID */
+diff --git a/kernel/trace/rv/monitors/pagefault/pagefault_trace.h b/kernel/trace/rv/monitors/pagefault/pagefault_trace.h
+index fe1f82597b1a..cd0915a42c85 100644
+--- a/kernel/trace/rv/monitors/pagefault/pagefault_trace.h
++++ b/kernel/trace/rv/monitors/pagefault/pagefault_trace.h
+@@ -6,7 +6,7 @@
+ 
+ #ifdef CONFIG_RV_MON_PAGEFAULT
+ DEFINE_EVENT(event_ltl_monitor_id, event_pagefault,
+-	     TP_PROTO(struct task_struct *task, char *states, char *atoms, char *next),
++	     TP_PROTO(struct task_struct *task, const char *states, const char *atoms, const char *next),
+ 	     TP_ARGS(task, states, atoms, next));
+ DEFINE_EVENT(error_ltl_monitor_id, error_pagefault,
+ 	     TP_PROTO(struct task_struct *task),
+diff --git a/kernel/trace/rv/monitors/sco/sco.h b/kernel/trace/rv/monitors/sco/sco.h
+index bac3beb51e72..65bcfcb136b7 100644
+--- a/kernel/trace/rv/monitors/sco/sco.h
++++ b/kernel/trace/rv/monitors/sco/sco.h
+@@ -23,8 +23,8 @@ enum events_sco {
+ };
+ 
+ struct automaton_sco {
+-	char *state_names[state_max_sco];
+-	char *event_names[event_max_sco];
++	const char *state_names[state_max_sco];
++	const char *event_names[event_max_sco];
+ 	unsigned char function[state_max_sco][event_max_sco];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_sco];
+diff --git a/kernel/trace/rv/monitors/sco/sco_trace.h b/kernel/trace/rv/monitors/sco/sco_trace.h
+index b711cd9024ec..99bc63873f4a 100644
+--- a/kernel/trace/rv/monitors/sco/sco_trace.h
++++ b/kernel/trace/rv/monitors/sco/sco_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_SCO
+ DEFINE_EVENT(event_da_monitor, event_sco,
+-	     TP_PROTO(char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor, error_sco,
+-	     TP_PROTO(char *state, char *event),
++	     TP_PROTO(const char *state, const char *event),
+ 	     TP_ARGS(state, event));
+ #endif /* CONFIG_RV_MON_SCO */
+diff --git a/kernel/trace/rv/monitors/scpd/scpd.h b/kernel/trace/rv/monitors/scpd/scpd.h
+index d6329da2671b..e9742c2789f7 100644
+--- a/kernel/trace/rv/monitors/scpd/scpd.h
++++ b/kernel/trace/rv/monitors/scpd/scpd.h
+@@ -24,8 +24,8 @@ enum events_scpd {
+ };
+ 
+ struct automaton_scpd {
+-	char *state_names[state_max_scpd];
+-	char *event_names[event_max_scpd];
++	const char *state_names[state_max_scpd];
++	const char *event_names[event_max_scpd];
+ 	unsigned char function[state_max_scpd][event_max_scpd];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_scpd];
+diff --git a/kernel/trace/rv/monitors/scpd/scpd_trace.h b/kernel/trace/rv/monitors/scpd/scpd_trace.h
+index 6b0f4aa4732e..d9013db67f94 100644
+--- a/kernel/trace/rv/monitors/scpd/scpd_trace.h
++++ b/kernel/trace/rv/monitors/scpd/scpd_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_SCPD
+ DEFINE_EVENT(event_da_monitor, event_scpd,
+-	     TP_PROTO(char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor, error_scpd,
+-	     TP_PROTO(char *state, char *event),
++	     TP_PROTO(const char *state, const char *event),
+ 	     TP_ARGS(state, event));
+ #endif /* CONFIG_RV_MON_SCPD */
+diff --git a/kernel/trace/rv/monitors/sleep/sleep_trace.h b/kernel/trace/rv/monitors/sleep/sleep_trace.h
+index 22eaf31da987..446c30c3af36 100644
+--- a/kernel/trace/rv/monitors/sleep/sleep_trace.h
++++ b/kernel/trace/rv/monitors/sleep/sleep_trace.h
+@@ -6,7 +6,7 @@
+ 
+ #ifdef CONFIG_RV_MON_SLEEP
+ DEFINE_EVENT(event_ltl_monitor_id, event_sleep,
+-	     TP_PROTO(struct task_struct *task, char *states, char *atoms, char *next),
++	     TP_PROTO(struct task_struct *task, const char *states, const char *atoms, const char *next),
+ 	     TP_ARGS(task, states, atoms, next));
+ DEFINE_EVENT(error_ltl_monitor_id, error_sleep,
+ 	     TP_PROTO(struct task_struct *task),
+diff --git a/kernel/trace/rv/monitors/snep/snep.h b/kernel/trace/rv/monitors/snep/snep.h
+index 357520a5b3d1..fabc363684d2 100644
+--- a/kernel/trace/rv/monitors/snep/snep.h
++++ b/kernel/trace/rv/monitors/snep/snep.h
+@@ -24,8 +24,8 @@ enum events_snep {
+ };
+ 
+ struct automaton_snep {
+-	char *state_names[state_max_snep];
+-	char *event_names[event_max_snep];
++	const char *state_names[state_max_snep];
++	const char *event_names[event_max_snep];
+ 	unsigned char function[state_max_snep][event_max_snep];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_snep];
+diff --git a/kernel/trace/rv/monitors/snep/snep_trace.h b/kernel/trace/rv/monitors/snep/snep_trace.h
+index 01aad49a949a..d758882e7607 100644
+--- a/kernel/trace/rv/monitors/snep/snep_trace.h
++++ b/kernel/trace/rv/monitors/snep/snep_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_SNEP
+ DEFINE_EVENT(event_da_monitor, event_snep,
+-	     TP_PROTO(char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor, error_snep,
+-	     TP_PROTO(char *state, char *event),
++	     TP_PROTO(const char *state, const char *event),
+ 	     TP_ARGS(state, event));
+ #endif /* CONFIG_RV_MON_SNEP */
+diff --git a/kernel/trace/rv/monitors/snroc/snroc.h b/kernel/trace/rv/monitors/snroc/snroc.h
+index 88b7328ad31a..12aa743e4f19 100644
+--- a/kernel/trace/rv/monitors/snroc/snroc.h
++++ b/kernel/trace/rv/monitors/snroc/snroc.h
+@@ -23,8 +23,8 @@ enum events_snroc {
+ };
+ 
+ struct automaton_snroc {
+-	char *state_names[state_max_snroc];
+-	char *event_names[event_max_snroc];
++	const char *state_names[state_max_snroc];
++	const char *event_names[event_max_snroc];
+ 	unsigned char function[state_max_snroc][event_max_snroc];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_snroc];
+diff --git a/kernel/trace/rv/monitors/snroc/snroc_trace.h b/kernel/trace/rv/monitors/snroc/snroc_trace.h
+index 50114cef5122..aa9162a2d34d 100644
+--- a/kernel/trace/rv/monitors/snroc/snroc_trace.h
++++ b/kernel/trace/rv/monitors/snroc/snroc_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_SNROC
+ DEFINE_EVENT(event_da_monitor_id, event_snroc,
+-	     TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(int id, const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(id, state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor_id, error_snroc,
+-	     TP_PROTO(int id, char *state, char *event),
++	     TP_PROTO(int id, const char *state, const char *event),
+ 	     TP_ARGS(id, state, event));
+ #endif /* CONFIG_RV_MON_SNROC */
+diff --git a/kernel/trace/rv/monitors/sssw/sssw.h b/kernel/trace/rv/monitors/sssw/sssw.h
+index 1a4b806061c3..ad8d7a18c52d 100644
+--- a/kernel/trace/rv/monitors/sssw/sssw.h
++++ b/kernel/trace/rv/monitors/sssw/sssw.h
+@@ -31,8 +31,8 @@ enum events_sssw {
+ };
+ 
+ struct automaton_sssw {
+-	char *state_names[state_max_sssw];
+-	char *event_names[event_max_sssw];
++	const char *state_names[state_max_sssw];
++	const char *event_names[event_max_sssw];
+ 	unsigned char function[state_max_sssw][event_max_sssw];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_sssw];
+diff --git a/kernel/trace/rv/monitors/sssw/sssw_trace.h b/kernel/trace/rv/monitors/sssw/sssw_trace.h
+index 6c03cfc6960b..14d22f793a07 100644
+--- a/kernel/trace/rv/monitors/sssw/sssw_trace.h
++++ b/kernel/trace/rv/monitors/sssw/sssw_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_SSSW
+ DEFINE_EVENT(event_da_monitor_id, event_sssw,
+-	     TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(int id, const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(id, state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor_id, error_sssw,
+-	     TP_PROTO(int id, char *state, char *event),
++	     TP_PROTO(int id, const char *state, const char *event),
+ 	     TP_ARGS(id, state, event));
+ #endif /* CONFIG_RV_MON_SSSW */
+diff --git a/kernel/trace/rv/monitors/stall/stall.h b/kernel/trace/rv/monitors/stall/stall.h
+index 638520cb1082..ce38b6b2311e 100644
+--- a/kernel/trace/rv/monitors/stall/stall.h
++++ b/kernel/trace/rv/monitors/stall/stall.h
+@@ -33,9 +33,9 @@ enum envs_stall {
+ _Static_assert(env_max_stored_stall <= MAX_HA_ENV_LEN, "Not enough slots");
+ 
+ struct automaton_stall {
+-	char *state_names[state_max_stall];
+-	char *event_names[event_max_stall];
+-	char *env_names[env_max_stall];
++	const char *state_names[state_max_stall];
++	const char *event_names[event_max_stall];
++	const char *env_names[env_max_stall];
+ 	unsigned char function[state_max_stall][event_max_stall];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_stall];
+diff --git a/kernel/trace/rv/monitors/stall/stall_trace.h b/kernel/trace/rv/monitors/stall/stall_trace.h
+index 6a7cc1b1d040..30896932a91c 100644
+--- a/kernel/trace/rv/monitors/stall/stall_trace.h
++++ b/kernel/trace/rv/monitors/stall/stall_trace.h
+@@ -6,14 +6,14 @@
+ 
+ #ifdef CONFIG_RV_MON_STALL
+ DEFINE_EVENT(event_da_monitor_id, event_stall,
+-	     TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(int id, const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(id, state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor_id, error_stall,
+-	     TP_PROTO(int id, char *state, char *event),
++	     TP_PROTO(int id, const char *state, const char *event),
+ 	     TP_ARGS(id, state, event));
+ 
+ DEFINE_EVENT(error_env_da_monitor_id, error_env_stall,
+-	     TP_PROTO(int id, char *state, char *event, char *env),
++	     TP_PROTO(int id, const char *state, const char *event, const char *env),
+ 	     TP_ARGS(id, state, event, env));
+ #endif /* CONFIG_RV_MON_STALL */
+diff --git a/kernel/trace/rv/monitors/sts/sts.h b/kernel/trace/rv/monitors/sts/sts.h
+index 6f7b2d9d72e6..74397c37cb0e 100644
+--- a/kernel/trace/rv/monitors/sts/sts.h
++++ b/kernel/trace/rv/monitors/sts/sts.h
+@@ -31,8 +31,8 @@ enum events_sts {
+ };
+ 
+ struct automaton_sts {
+-	char *state_names[state_max_sts];
+-	char *event_names[event_max_sts];
++	const char *state_names[state_max_sts];
++	const char *event_names[event_max_sts];
+ 	unsigned char function[state_max_sts][event_max_sts];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_sts];
+diff --git a/kernel/trace/rv/monitors/sts/sts_trace.h b/kernel/trace/rv/monitors/sts/sts_trace.h
+index d78beb58d5b3..61e8e414627d 100644
+--- a/kernel/trace/rv/monitors/sts/sts_trace.h
++++ b/kernel/trace/rv/monitors/sts/sts_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_STS
+ DEFINE_EVENT(event_da_monitor, event_sts,
+-	     TP_PROTO(char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor, error_sts,
+-	     TP_PROTO(char *state, char *event),
++	     TP_PROTO(const char *state, const char *event),
+ 	     TP_ARGS(state, event));
+ #endif /* CONFIG_RV_MON_STS */
+diff --git a/kernel/trace/rv/monitors/wakeup/wakeup_trace.h b/kernel/trace/rv/monitors/wakeup/wakeup_trace.h
+index 7e056183f920..79bfaf91c912 100644
+--- a/kernel/trace/rv/monitors/wakeup/wakeup_trace.h
++++ b/kernel/trace/rv/monitors/wakeup/wakeup_trace.h
+@@ -6,7 +6,7 @@
+ 
+ #ifdef CONFIG_RV_MON_WAKEUP
+ DEFINE_EVENT(event_ltl_monitor_id, event_wakeup,
+-	     TP_PROTO(struct task_struct *task, char *states, char *atoms, char *next),
++	     TP_PROTO(struct task_struct *task, const char *states, const char *atoms, const char *next),
+ 	     TP_ARGS(task, states, atoms, next));
+ DEFINE_EVENT(error_ltl_monitor_id, error_wakeup,
+ 	     TP_PROTO(struct task_struct *task),
+diff --git a/kernel/trace/rv/monitors/wip/wip.h b/kernel/trace/rv/monitors/wip/wip.h
+index b4c3eea94c86..b65baeae5419 100644
+--- a/kernel/trace/rv/monitors/wip/wip.h
++++ b/kernel/trace/rv/monitors/wip/wip.h
+@@ -23,8 +23,8 @@ enum events_wip {
+ };
+ 
+ struct automaton_wip {
+-	char *state_names[state_max_wip];
+-	char *event_names[event_max_wip];
++	const char *state_names[state_max_wip];
++	const char *event_names[event_max_wip];
+ 	unsigned char function[state_max_wip][event_max_wip];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_wip];
+diff --git a/kernel/trace/rv/monitors/wip/wip_trace.h b/kernel/trace/rv/monitors/wip/wip_trace.h
+index aa2162f47a4c..99cf368a4b03 100644
+--- a/kernel/trace/rv/monitors/wip/wip_trace.h
++++ b/kernel/trace/rv/monitors/wip/wip_trace.h
+@@ -6,10 +6,10 @@
+ 
+ #ifdef CONFIG_RV_MON_WIP
+ DEFINE_EVENT(event_da_monitor, event_wip,
+-	     TP_PROTO(char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor, error_wip,
+-	     TP_PROTO(char *state, char *event),
++	     TP_PROTO(const char *state, const char *event),
+ 	     TP_ARGS(state, event));
+ #endif /* CONFIG_RV_MON_WIP */
+diff --git a/kernel/trace/rv/monitors/wwnr/wwnr.h b/kernel/trace/rv/monitors/wwnr/wwnr.h
+index a28006512c9b..06d724ac1182 100644
+--- a/kernel/trace/rv/monitors/wwnr/wwnr.h
++++ b/kernel/trace/rv/monitors/wwnr/wwnr.h
+@@ -23,8 +23,8 @@ enum events_wwnr {
+ };
+ 
+ struct automaton_wwnr {
+-	char *state_names[state_max_wwnr];
+-	char *event_names[event_max_wwnr];
++	const char *state_names[state_max_wwnr];
++	const char *event_names[event_max_wwnr];
+ 	unsigned char function[state_max_wwnr][event_max_wwnr];
+ 	unsigned char initial_state;
+ 	bool final_states[state_max_wwnr];
+diff --git a/kernel/trace/rv/monitors/wwnr/wwnr_trace.h b/kernel/trace/rv/monitors/wwnr/wwnr_trace.h
+index fc97ec7476ad..c36c8935dce5 100644
+--- a/kernel/trace/rv/monitors/wwnr/wwnr_trace.h
++++ b/kernel/trace/rv/monitors/wwnr/wwnr_trace.h
+@@ -7,10 +7,10 @@
+ #ifdef CONFIG_RV_MON_WWNR
+ /* id is the pid of the task */
+ DEFINE_EVENT(event_da_monitor_id, event_wwnr,
+-	     TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	     TP_PROTO(int id, const char *state, const char *event, const char *next_state, bool final_state),
+ 	     TP_ARGS(id, state, event, next_state, final_state));
+ 
+ DEFINE_EVENT(error_da_monitor_id, error_wwnr,
+-	     TP_PROTO(int id, char *state, char *event),
++	     TP_PROTO(int id, const char *state, const char *event),
+ 	     TP_ARGS(id, state, event));
+ #endif /* CONFIG_RV_MON_WWNR */
+diff --git a/kernel/trace/rv/rv_monitors_test.c b/kernel/trace/rv/rv_monitors_test.c
+index 3ad11195e664..e70ae29da268 100644
+--- a/kernel/trace/rv/rv_monitors_test.c
++++ b/kernel/trace/rv/rv_monitors_test.c
+@@ -21,7 +21,7 @@
+ static struct rv_kunit_ctx *active_ctx;
+ 
+ __printf(1, 0)
+-static void rv_kunit_mock_react(const char *msg, va_list args)
++static void rv_kunit_mock_react(const const char *msg, va_list args)
+ {
+ 	if (active_ctx)
+ 		++active_ctx->reactions;
+diff --git a/kernel/trace/rv/rv_reactors.c b/kernel/trace/rv/rv_reactors.c
+index 2f5fc8d18dea..538fd0d70fc7 100644
+--- a/kernel/trace/rv/rv_reactors.c
++++ b/kernel/trace/rv/rv_reactors.c
+@@ -71,7 +71,7 @@
+  */
+ static LIST_HEAD(rv_reactors_list);
+ 
+-static struct rv_reactor *get_reactor_rdef_by_name(char *name)
++static struct rv_reactor *get_reactor_rdef_by_name(const char *name)
+ {
+ 	struct rv_reactor *r;
+ 
+diff --git a/kernel/trace/rv/rv_trace.h b/kernel/trace/rv/rv_trace.h
+index 2f8a932432c9..a756c7d11755 100644
+--- a/kernel/trace/rv/rv_trace.h
++++ b/kernel/trace/rv/rv_trace.h
+@@ -11,7 +11,7 @@
+ #ifdef CONFIG_DA_MON_EVENTS_IMPLICIT
+ DECLARE_EVENT_CLASS(event_da_monitor,
+ 
+-	TP_PROTO(char *state, char *event, char *next_state, bool final_state),
++	TP_PROTO(const char *state, const char *event, const char *next_state, bool final_state),
+ 
+ 	TP_ARGS(state, event, next_state, final_state),
+ 
+@@ -38,7 +38,7 @@ DECLARE_EVENT_CLASS(event_da_monitor,
+ 
+ DECLARE_EVENT_CLASS(error_da_monitor,
+ 
+-	TP_PROTO(char *state, char *event),
++	TP_PROTO(const char *state, const char *event),
+ 
+ 	TP_ARGS(state, event),
+ 
+@@ -68,7 +68,7 @@ DECLARE_EVENT_CLASS(error_da_monitor,
+ /* For simplicity this class is marked as DA although relevant only for HA */
+ DECLARE_EVENT_CLASS(error_env_da_monitor,
+ 
+-	TP_PROTO(char *state, char *event, char *env),
++	TP_PROTO(const char *state, const char *event, const char *env),
+ 
+ 	TP_ARGS(state, event, env),
+ 
+@@ -100,7 +100,7 @@ DECLARE_EVENT_CLASS(error_env_da_monitor,
+ #ifdef CONFIG_DA_MON_EVENTS_ID
+ DECLARE_EVENT_CLASS(event_da_monitor_id,
+ 
+-	TP_PROTO(int id, char *state, char *event, char *next_state, bool final_state),
++	TP_PROTO(int id, const char *state, const char *event, const char *next_state, bool final_state),
+ 
+ 	TP_ARGS(id, state, event, next_state, final_state),
+ 
+@@ -130,7 +130,7 @@ DECLARE_EVENT_CLASS(event_da_monitor_id,
+ 
+ DECLARE_EVENT_CLASS(error_da_monitor_id,
+ 
+-	TP_PROTO(int id, char *state, char *event),
++	TP_PROTO(int id, const char *state, const char *event),
+ 
+ 	TP_ARGS(id, state, event),
+ 
+@@ -162,7 +162,7 @@ DECLARE_EVENT_CLASS(error_da_monitor_id,
+ /* For simplicity this class is marked as DA although relevant only for HA */
+ DECLARE_EVENT_CLASS(error_env_da_monitor_id,
+ 
+-	TP_PROTO(int id, char *state, char *event, char *env),
++	TP_PROTO(int id, const char *state, const char *event, const char *env),
+ 
+ 	TP_ARGS(id, state, event, env),
+ 
+@@ -197,7 +197,7 @@ DECLARE_EVENT_CLASS(error_env_da_monitor_id,
+ #ifdef CONFIG_LTL_MON_EVENTS_ID
+ DECLARE_EVENT_CLASS(event_ltl_monitor_id,
+ 
+-	TP_PROTO(struct task_struct *task, char *states, char *atoms, char *next),
++	TP_PROTO(struct task_struct *task, const char *states, const char *atoms, const char *next),
+ 
+ 	TP_ARGS(task, states, atoms, next),
+ 
+@@ -249,7 +249,7 @@ DECLARE_EVENT_CLASS(error_ltl_monitor_id,
+ /* Tracepoint useful for monitors development, currenly only used in DA */
+ TRACE_EVENT(rv_retries_error,
+ 
+-	TP_PROTO(char *name, char *event),
++	TP_PROTO(const char *name, const char *event),
+ 
+ 	TP_ARGS(name, event),
+ 
