@@ -1,22 +1,22 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFB1C4FD287;
-	Tue, 13 Oct 2026 12:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82FC550255B;
+	Tue, 13 Oct 2026 12:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791893412; cv=none; b=dK27aWpJMBZBxBEMiy1svbQXv3JYo2M3dU/ED/h6hq2PZe22piBNYGXvo5uVbRTDaMiwi0kXq9uGysz6xd+WoUfSbZF0J0S3RpdHtxTi8Y8/VFaMVXmBXPIpTjFwRn1Bj8+A39nxbEdhYASoA+fU8uFJASM5uFJKL0T8/M0mLWk=
+	t=1791893414; cv=none; b=WKQlA6L5ytOGRFtQXHeKTlajg+jJeMxudmLR9gI1UgGnqVC6f73xjfa1zvELZPV1KKcOqsDpJxdNjlijnWEWQPBIPRmDPeXcgoyNAxCv6lEpy/lhSqtW3d26JlZaXnFnzQUwBN/nTtlmapQ7w9skvZoqxgk2Y4yvGuZbxD9mb74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791893412; c=relaxed/simple;
-	bh=CHwJpinNB7gxyDcTeJHdP7tOF7z4S3pU9j91ZSVVaR8=;
+	s=arc-20240116; t=1791893414; c=relaxed/simple;
+	bh=RuNAc4bBcUaZxqqeAptkyW/18eCLr8gGEiQnMillVko=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SSMLt8meBXUNPOx0TX9i+fy6FekFsTN1VmsKT0HFJqIC+EBCyvAukEzmQexeiuhnZ2Jbu7sfyvTlAHr/9R9gYt+ilFS+gHMeDe31e8Y37w224uH2LtHWoOayz93G4oxxQM2gzfAfXI+bkEjSN3RB3NMZ+F9GqCI4fOCiKfxJApE=
+	 MIME-Version; b=JyqZUqKdiSrNQfczSB9fSPDaF6PQ+FID3QbMjmA0LvfL0Xjmx0xiNeYC8XTt2skE96+PowD43nFSAe1nJcjzm1P8pjHDF0ChRzEQ+t7AdjCAGXDZY4wV9mgJA2dV8BmYnKrE9g17k6ZwgbR9IMdBxQNtK234gCzZQN968YpxY0g=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8AxYdGgH85qHFgVAA--.62683S3;
-	Tue, 13 Oct 2026 20:10:08 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8DxjdKhH85qIVgVAA--.61747S3;
+	Tue, 13 Oct 2026 20:10:09 +0800 (CST)
 Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxg8yeH85q+M4rAA--.64620S3;
+	by front1 (Coremail) with SMTP id qMiowJDxg8yeH85q+M4rAA--.64620S4;
 	Tue, 13 Oct 2026 20:10:08 +0800 (CST)
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
 To: Huacai Chen <chenhuacai@kernel.org>,
@@ -24,9 +24,9 @@ To: Huacai Chen <chenhuacai@kernel.org>,
 Cc: loongarch@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] LoongArch: BPF: Clean up and decouple is32 parameter from move_imm()
-Date: Tue, 13 Oct 2026 20:10:04 +0800
-Message-ID: <20261013121005.626-2-yangtiezhu@loongson.cn>
+Subject: [PATCH v2 2/2] LoongArch: BPF: Optimize 32-bit operations using native instructions
+Date: Tue, 13 Oct 2026 20:10:05 +0800
+Message-ID: <20261013121005.626-3-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20261013121005.626-1-yangtiezhu@loongson.cn>
 References: <20261013121005.626-1-yangtiezhu@loongson.cn>
@@ -37,476 +37,808 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxg8yeH85q+M4rAA--.64620S3
+X-CM-TRANSID:qMiowJDxg8yeH85q+M4rAA--.64620S4
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9fXoWfGFykJr4DAF1kCF18GFy7CFX_yoW8XFWfGo
-	W0qr4vga1fWF1fXay7Gr12yr17ua1kZF4rJrnrC3sYkrWrZr90vrWaqw48Za1Fqrn8KFyj
-	kF1Iq3Wjyr9xZw43l-sFpf9Il3svdjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf
+X-Coremail-Antispam: 1Uk129KBj9fXoWfXw45GF4kWFWUKryxtw13Awc_yoW8KF17Zo
+	W7KrW0ga1kCr1fZ343Kr1YyF1fA3W8ZF4rGwnrZwn5Cr95Z34Ygr43uw47uasYqFn0gFyU
+	Kr9rta4jq3srAr1xl-sFpf9Il3svdjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf
 	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-	UjIYCTnIWjp_UUUY17kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	UjIYCTnIWjp_UUUY87kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
+	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14
 	v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
 	wI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-	aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
+	0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
+	aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28Icx
 	kI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
 	xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42
-	IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
+	IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
 	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-	CY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU2nYFDUUUU
+	CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8gAw7UUUUU==
 
-The current move_imm() relies on the 'is32' parameter for ALU32 and JMP32,
-forcing the helper to internally clear the upper 32 bits. However, this is
-redundant for 64-bit immediate loads. Furthermore, it is even undesirable
-for load/store signed address offset computations.
+Currently, the LoongArch BPF JIT emits numerous redundant zero and sign
+extensions across 32-bit operations, bloating the final JIT image size
+and leading to runtime overhead, particularly in the division and mod
+operations. Thus, it is very necessary to optimize 32-bit operations by
+emitting LoongArch native 32-bit word instructions such as addw, subw,
+mulw, divw.
 
-Clean up move_imm() by removing the 'is32' parameter which allows it to
-focus on loading values, while moving the zero-extension logic outward to
-the explicit callers. For 64-bit and load-store operations, just drop the
-parameter.
+For general ALU32 operations, utilize native 32-bit word instructions
+for core calculations. Given that the BPF spec requires the upper 32
+bits of the destination register to be zero-extended upon completion,
+use a unified 'bstrpickd' instruction to clear the upper 32 bits at
+the common exit of build_insn(), while immediate loads (MOV_K) are
+optimized via (u32) casting to bypass the trailing extension.
 
-This is preparation for later patch, no functional changes.
+For JMP32 conditional branches, the source operands may originate from
+64-bit contexts where the upper 32 bits contain arbitrary data, so use
+6 independent case structures to prevent 64-bit comparison inversions.
+Furthermore, use 'bstrpickd' to mask out upper bits for unsigned JMP32,
+and 'addw' with GPR_ZERO to re-align sign bits for signed JMP32.
+
+With this patch, the JIT helpers emit_{zext, sext}_32() are completely
+wiped out from the header, delivering a native execution stream with a
+reduced JIT image size, especially for division and mod operations.
+
+All of the testcases of test_bpf passed, here are the test results:
+
+$ sudo modprobe test_bpf
+$ dmesg -t | grep Summary
+test_bpf: Summary: 1061 PASSED, 0 FAILED, [1049/1049 JIT'ed]
+test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
+
+For the BPF selftests test_verifier and test_progs, there are no any
+regressions.
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/loongarch/net/bpf_jit.c | 102 +++++++++++++++++++----------------
- arch/loongarch/net/bpf_jit.h |   7 +--
- 2 files changed, 58 insertions(+), 51 deletions(-)
+ arch/loongarch/include/asm/inst.h |   6 +
+ arch/loongarch/net/bpf_jit.c      | 291 ++++++++++++++++--------------
+ arch/loongarch/net/bpf_jit.h      |  18 --
+ 3 files changed, 164 insertions(+), 151 deletions(-)
 
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 585667e361c2..b55aae325300 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -752,11 +752,17 @@ static inline void emit_##NAME(union loongarch_instruction *insn,	\
+ 
+ DEF_EMIT_REG3_FORMAT(addw, addw_op)
+ DEF_EMIT_REG3_FORMAT(addd, addd_op)
++DEF_EMIT_REG3_FORMAT(subw, subw_op)
+ DEF_EMIT_REG3_FORMAT(subd, subd_op)
++DEF_EMIT_REG3_FORMAT(mulw, mulw_op)
+ DEF_EMIT_REG3_FORMAT(muld, muld_op)
++DEF_EMIT_REG3_FORMAT(divw, divw_op)
+ DEF_EMIT_REG3_FORMAT(divd, divd_op)
++DEF_EMIT_REG3_FORMAT(modw, modw_op)
+ DEF_EMIT_REG3_FORMAT(modd, modd_op)
++DEF_EMIT_REG3_FORMAT(divwu, divwu_op)
+ DEF_EMIT_REG3_FORMAT(divdu, divdu_op)
++DEF_EMIT_REG3_FORMAT(modwu, modwu_op)
+ DEF_EMIT_REG3_FORMAT(moddu, moddu_op)
+ DEF_EMIT_REG3_FORMAT(maskeqz, maskeqz_op)
+ DEF_EMIT_REG3_FORMAT(masknez, masknez_op)
 diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index e78eb582c300..77cd96a6f84c 100644
+index 77cd96a6f84c..dea6770d2e10 100644
 --- a/arch/loongarch/net/bpf_jit.c
 +++ b/arch/loongarch/net/bpf_jit.c
-@@ -194,7 +194,7 @@ static void build_prologue(struct jit_ctx *ctx)
- 	ctx->stack_size = stack_adjust;
+@@ -288,7 +288,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
+ 	 * if (index >= array->map.max_entries)
+ 	 *	 goto out;
+ 	 */
+-	emit_zext_32(ctx, a2, true);
++	emit_insn(ctx, bstrpickd, a2, a2, 31, 0);
  
- 	if (ctx->arena_vm_start)
--		move_imm(ctx, REG_ARENA, ctx->arena_vm_start, false);
-+		move_imm(ctx, REG_ARENA, ctx->arena_vm_start);
+ 	off = offsetof(struct bpf_array, map.max_entries);
+ 	emit_insn(ctx, ldwu, t1, a1, off);
+@@ -412,7 +412,6 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 				return -EINVAL;
+ 			}
+ 			emit_insn(ctx, amadddbb, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
+ 			break;
+ 		case BPF_H:
+ 			if (!cpu_has_lam_bh) {
+@@ -420,23 +419,23 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 				return -EINVAL;
+ 			}
+ 			emit_insn(ctx, amadddbh, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
+ 			break;
+ 		case BPF_W:
+ 			emit_insn(ctx, amadddbw, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
+ 			break;
+ 		case BPF_DW:
+ 			emit_insn(ctx, amadddbd, src, t1, t3);
+ 			break;
+ 		}
++		if (!isdw)
++			emit_insn(ctx, bstrpickd, src, src, 31, 0);
+ 		break;
+ 	case BPF_AND | BPF_FETCH:
+ 		if (isdw) {
+ 			emit_insn(ctx, amanddbd, src, t1, t3);
+ 		} else {
+ 			emit_insn(ctx, amanddbw, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
++			emit_insn(ctx, bstrpickd, src, src, 31, 0);
+ 		}
+ 		break;
+ 	case BPF_OR | BPF_FETCH:
+@@ -444,7 +443,7 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 			emit_insn(ctx, amordbd, src, t1, t3);
+ 		} else {
+ 			emit_insn(ctx, amordbw, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
++			emit_insn(ctx, bstrpickd, src, src, 31, 0);
+ 		}
+ 		break;
+ 	case BPF_XOR | BPF_FETCH:
+@@ -452,7 +451,7 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 			emit_insn(ctx, amxordbd, src, t1, t3);
+ 		} else {
+ 			emit_insn(ctx, amxordbw, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
++			emit_insn(ctx, bstrpickd, src, src, 31, 0);
+ 		}
+ 		break;
+ 	/* src = atomic_xchg(dst + off, src); */
+@@ -464,7 +463,6 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 				return -EINVAL;
+ 			}
+ 			emit_insn(ctx, amswapdbb, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
+ 			break;
+ 		case BPF_H:
+ 			if (!cpu_has_lam_bh) {
+@@ -472,16 +470,16 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 				return -EINVAL;
+ 			}
+ 			emit_insn(ctx, amswapdbh, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
+ 			break;
+ 		case BPF_W:
+ 			emit_insn(ctx, amswapdbw, src, t1, t3);
+-			emit_zext_32(ctx, src, true);
+ 			break;
+ 		case BPF_DW:
+ 			emit_insn(ctx, amswapdbd, src, t1, t3);
+ 			break;
+ 		}
++		if (!isdw)
++			emit_insn(ctx, bstrpickd, src, src, 31, 0);
+ 		break;
+ 	/* r0 = atomic_cmpxchg(dst + off, r0, src); */
+ 	case BPF_CMPXCHG:
+@@ -494,13 +492,13 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 			emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -4);
+ 		} else {
+ 			emit_insn(ctx, llw, r0, t1, 0);
+-			emit_zext_32(ctx, t2, true);
+-			emit_zext_32(ctx, r0, true);
++			emit_insn(ctx, bstrpickd, t2, t2, 31, 0);
++			emit_insn(ctx, bstrpickd, r0, r0, 31, 0);
+ 			emit_insn(ctx, bne, t2, r0, 4);
+ 			move_reg(ctx, t3, src);
+ 			emit_insn(ctx, scw, t3, t1, 0);
+ 			emit_insn(ctx, beq, t3, LOONGARCH_GPR_ZERO, -6);
+-			emit_zext_32(ctx, r0, true);
++			emit_insn(ctx, bstrpickd, r0, r0, 31, 0);
+ 		}
+ 		emit_insn(ctx, dbar, DBAR_LLSC_MB);
+ 		break;
+@@ -605,12 +603,6 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 	return 0;
  }
  
- static void __build_epilogue(struct jit_ctx *ctx, bool is_tail_call)
-@@ -339,7 +339,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int insn)
- 
- static void emit_store_stack_imm64(struct jit_ctx *ctx, int reg, int stack_off, u64 imm64)
- {
--	move_imm(ctx, reg, imm64, false);
-+	move_imm(ctx, reg, imm64);
- 	emit_insn(ctx, std, reg, LOONGARCH_GPR_FP, stack_off);
- }
- 
-@@ -355,7 +355,7 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+-static bool is_signed_bpf_cond(u8 cond)
+-{
+-	return cond == BPF_JSGT || cond == BPF_JSLT ||
+-	       cond == BPF_JSGE || cond == BPF_JSLE;
+-}
+-
+ #define BPF_FIXUP_REG_MASK	GENMASK(31, 27)
+ #define BPF_FIXUP_OFFSET_MASK	GENMASK(26, 0)
+ #define REG_DONT_CLEAR_MARKER	0
+@@ -707,7 +699,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	u8 dst = regmap[insn->dst_reg];
+ 	const s16 off = insn->off;
  	const s32 imm = insn->imm;
- 	const bool isdw = BPF_SIZE(insn->code) == BPF_DW;
+-	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU || BPF_CLASS(insn->code) == BPF_JMP32;
++	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU && BPF_OP(insn->code) != BPF_END;
  
--	move_imm(ctx, t1, off, false);
-+	move_imm(ctx, t1, off);
- 	emit_insn(ctx, addd, t1, dst, t1);
- 	move_reg(ctx, t3, src);
- 
-@@ -528,7 +528,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, ldbu, dst, src, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, ldxbu, dst, src, t1);
- 			}
- 			break;
-@@ -536,7 +536,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, ldhu, dst, src, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, ldxhu, dst, src, t1);
- 			}
- 			break;
-@@ -544,7 +544,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, ldwu, dst, src, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, ldxwu, dst, src, t1);
- 			}
- 			break;
-@@ -552,7 +552,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, ldd, dst, src, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, ldxd, dst, src, t1);
- 			}
- 			break;
-@@ -567,7 +567,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stb, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxb, src, dst, t1);
- 			}
- 			break;
-@@ -575,7 +575,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, sth, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxh, src, dst, t1);
- 			}
- 			break;
-@@ -583,7 +583,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stw, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxw, src, dst, t1);
- 			}
- 			break;
-@@ -591,7 +591,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, std, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, false);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxd, src, dst, t1);
- 			}
- 			break;
-@@ -716,7 +716,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	switch (code) {
+ 	/* dst = src */
+@@ -715,7 +707,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	case BPF_ALU64 | BPF_MOV | BPF_X:
  		if (insn_is_cast_user(insn)) {
  			move_reg(ctx, t1, src);
- 			emit_zext_32(ctx, t1, true);
--			move_imm(ctx, dst, (ctx->user_vm_start >> 32) << 32, false);
-+			move_imm(ctx, dst, (ctx->user_vm_start >> 32) << 32);
+-			emit_zext_32(ctx, t1, true);
++			emit_insn(ctx, bstrpickd, t1, t1, 31, 0);
+ 			move_imm(ctx, dst, (ctx->user_vm_start >> 32) << 32);
  			emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 2);
  			emit_insn(ctx, or, t1, dst, t1);
- 			move_reg(ctx, dst, t1);
-@@ -753,7 +753,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+@@ -734,15 +726,12 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		switch (off) {
+ 		case 0:
+ 			move_reg(ctx, dst, src);
+-			emit_zext_32(ctx, dst, is32);
+ 			break;
+ 		case 8:
+ 			emit_insn(ctx, extwb, dst, src);
+-			emit_zext_32(ctx, dst, is32);
+ 			break;
+ 		case 16:
+ 			emit_insn(ctx, extwh, dst, src);
+-			emit_zext_32(ctx, dst, is32);
+ 			break;
+ 		case 32:
+ 			emit_insn(ctx, addw, dst, src, LOONGARCH_GPR_ZERO);
+@@ -752,212 +741,232 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
  	/* dst = imm */
  	case BPF_ALU | BPF_MOV | BPF_K:
++		move_imm(ctx, dst, (u32)imm);
++		return 0;
  	case BPF_ALU64 | BPF_MOV | BPF_K:
--		move_imm(ctx, dst, imm, is32);
-+		move_imm(ctx, dst, imm);
-+		emit_zext_32(ctx, dst, is32);
+ 		move_imm(ctx, dst, imm);
+-		emit_zext_32(ctx, dst, is32);
  		break;
  
  	/* dst = dst + src */
-@@ -769,7 +770,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	case BPF_ALU | BPF_ADD | BPF_X:
++		emit_insn(ctx, addw, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_ADD | BPF_X:
+ 		emit_insn(ctx, addd, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst + imm */
+ 	case BPF_ALU | BPF_ADD | BPF_K:
++		if (is_signed_imm12(imm)) {
++			emit_insn(ctx, addiw, dst, dst, imm);
++		} else {
++			move_imm(ctx, t1, (u32)imm);
++			emit_insn(ctx, addw, dst, dst, t1);
++		}
++		break;
+ 	case BPF_ALU64 | BPF_ADD | BPF_K:
  		if (is_signed_imm12(imm)) {
  			emit_insn(ctx, addid, dst, dst, imm);
  		} else {
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
-+			emit_zext_32(ctx, t1, is32);
+ 			move_imm(ctx, t1, imm);
+-			emit_zext_32(ctx, t1, is32);
  			emit_insn(ctx, addd, dst, dst, t1);
  		}
- 		emit_zext_32(ctx, dst, is32);
-@@ -788,7 +790,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst - src */
+ 	case BPF_ALU | BPF_SUB | BPF_X:
++		emit_insn(ctx, subw, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_SUB | BPF_X:
+ 		emit_insn(ctx, subd, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst - imm */
+ 	case BPF_ALU | BPF_SUB | BPF_K:
++		if (is_signed_imm12(-imm)) {
++			emit_insn(ctx, addiw, dst, dst, -imm);
++		} else {
++			move_imm(ctx, t1, (u32)imm);
++			emit_insn(ctx, subw, dst, dst, t1);
++		}
++		break;
+ 	case BPF_ALU64 | BPF_SUB | BPF_K:
  		if (is_signed_imm12(-imm)) {
  			emit_insn(ctx, addid, dst, dst, -imm);
  		} else {
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
-+			emit_zext_32(ctx, t1, is32);
+ 			move_imm(ctx, t1, imm);
+-			emit_zext_32(ctx, t1, is32);
  			emit_insn(ctx, subd, dst, dst, t1);
  		}
- 		emit_zext_32(ctx, dst, is32);
-@@ -804,7 +807,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst * src */
+ 	case BPF_ALU | BPF_MUL | BPF_X:
++		emit_insn(ctx, mulw, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_MUL | BPF_X:
+ 		emit_insn(ctx, muld, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
  	/* dst = dst * imm */
  	case BPF_ALU | BPF_MUL | BPF_K:
++		move_imm(ctx, t1, (u32)imm);
++		emit_insn(ctx, mulw, dst, dst, t1);
++		break;
  	case BPF_ALU64 | BPF_MUL | BPF_K:
--		move_imm(ctx, t1, imm, is32);
-+		move_imm(ctx, t1, imm);
-+		emit_zext_32(ctx, t1, is32);
+ 		move_imm(ctx, t1, imm);
+-		emit_zext_32(ctx, t1, is32);
  		emit_insn(ctx, muld, dst, dst, t1);
- 		emit_zext_32(ctx, dst, is32);
+-		emit_zext_32(ctx, dst, is32);
  		break;
-@@ -831,12 +835,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 
+ 	/* dst = dst / src */
+ 	case BPF_ALU | BPF_DIV | BPF_X:
++		if (!off)
++			emit_insn(ctx, divwu, dst, dst, src);
++		else
++			emit_insn(ctx, divw, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_DIV | BPF_X:
+-		if (!off) {
+-			emit_zext_32(ctx, dst, is32);
+-			move_reg(ctx, t1, src);
+-			emit_zext_32(ctx, t1, is32);
+-			emit_insn(ctx, divdu, dst, dst, t1);
+-			emit_zext_32(ctx, dst, is32);
+-		} else {
+-			emit_sext_32(ctx, dst, is32);
+-			move_reg(ctx, t1, src);
+-			emit_sext_32(ctx, t1, is32);
+-			emit_insn(ctx, divd, dst, dst, t1);
+-			emit_zext_32(ctx, dst, is32);
+-		}
++		if (!off)
++			emit_insn(ctx, divdu, dst, dst, src);
++		else
++			emit_insn(ctx, divd, dst, dst, src);
+ 		break;
+ 
+ 	/* dst = dst / imm */
  	case BPF_ALU | BPF_DIV | BPF_K:
++		move_imm(ctx, t1, (u32)imm);
++		if (!off)
++			emit_insn(ctx, divwu, dst, dst, t1);
++		else
++			emit_insn(ctx, divw, dst, dst, t1);
++		break;
  	case BPF_ALU64 | BPF_DIV | BPF_K:
- 		if (!off) {
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
-+			emit_zext_32(ctx, t1, is32);
- 			emit_zext_32(ctx, dst, is32);
+-		if (!off) {
+-			move_imm(ctx, t1, imm);
+-			emit_zext_32(ctx, t1, is32);
+-			emit_zext_32(ctx, dst, is32);
++		move_imm(ctx, t1, imm);
++		if (!off)
  			emit_insn(ctx, divdu, dst, dst, t1);
- 			emit_zext_32(ctx, dst, is32);
- 		} else {
--			move_imm(ctx, t1, imm, false);
-+			move_imm(ctx, t1, imm);
- 			emit_sext_32(ctx, t1, is32);
- 			emit_sext_32(ctx, dst, is32);
+-			emit_zext_32(ctx, dst, is32);
+-		} else {
+-			move_imm(ctx, t1, imm);
+-			emit_sext_32(ctx, t1, is32);
+-			emit_sext_32(ctx, dst, is32);
++		else
  			emit_insn(ctx, divd, dst, dst, t1);
-@@ -866,12 +871,13 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+-			emit_zext_32(ctx, dst, is32);
+-		}
+ 		break;
+ 
+ 	/* dst = dst % src */
+ 	case BPF_ALU | BPF_MOD | BPF_X:
++		if (!off)
++			emit_insn(ctx, modwu, dst, dst, src);
++		else
++			emit_insn(ctx, modw, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_MOD | BPF_X:
+-		if (!off) {
+-			emit_zext_32(ctx, dst, is32);
+-			move_reg(ctx, t1, src);
+-			emit_zext_32(ctx, t1, is32);
+-			emit_insn(ctx, moddu, dst, dst, t1);
+-			emit_zext_32(ctx, dst, is32);
+-		} else {
+-			emit_sext_32(ctx, dst, is32);
+-			move_reg(ctx, t1, src);
+-			emit_sext_32(ctx, t1, is32);
+-			emit_insn(ctx, modd, dst, dst, t1);
+-			emit_zext_32(ctx, dst, is32);
+-		}
++		if (!off)
++			emit_insn(ctx, moddu, dst, dst, src);
++		else
++			emit_insn(ctx, modd, dst, dst, src);
+ 		break;
+ 
+ 	/* dst = dst % imm */
  	case BPF_ALU | BPF_MOD | BPF_K:
++		move_imm(ctx, t1, (u32)imm);
++		if (!off)
++			emit_insn(ctx, modwu, dst, dst, t1);
++		else
++			emit_insn(ctx, modw, dst, dst, t1);
++		break;
  	case BPF_ALU64 | BPF_MOD | BPF_K:
- 		if (!off) {
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
-+			emit_zext_32(ctx, t1, is32);
- 			emit_zext_32(ctx, dst, is32);
+-		if (!off) {
+-			move_imm(ctx, t1, imm);
+-			emit_zext_32(ctx, t1, is32);
+-			emit_zext_32(ctx, dst, is32);
++		move_imm(ctx, t1, imm);
++		if (!off)
  			emit_insn(ctx, moddu, dst, dst, t1);
- 			emit_zext_32(ctx, dst, is32);
- 		} else {
--			move_imm(ctx, t1, imm, false);
-+			move_imm(ctx, t1, imm);
- 			emit_sext_32(ctx, t1, is32);
- 			emit_sext_32(ctx, dst, is32);
+-			emit_zext_32(ctx, dst, is32);
+-		} else {
+-			move_imm(ctx, t1, imm);
+-			emit_sext_32(ctx, t1, is32);
+-			emit_sext_32(ctx, dst, is32);
++		else
  			emit_insn(ctx, modd, dst, dst, t1);
-@@ -899,7 +905,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+-			emit_zext_32(ctx, dst, is32);
+-		}
+ 		break;
+ 
+ 	/* dst = -dst */
+ 	case BPF_ALU | BPF_NEG:
++		emit_insn(ctx, subw, dst, LOONGARCH_GPR_ZERO, dst);
++		break;
+ 	case BPF_ALU64 | BPF_NEG:
+ 		emit_insn(ctx, subd, dst, LOONGARCH_GPR_ZERO, dst);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst & src */
+ 	case BPF_ALU | BPF_AND | BPF_X:
++		emit_insn(ctx, and, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_AND | BPF_X:
+ 		emit_insn(ctx, and, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst & imm */
+ 	case BPF_ALU | BPF_AND | BPF_K:
++		if (is_unsigned_imm12(imm)) {
++			emit_insn(ctx, andi, dst, dst, imm);
++		} else {
++			move_imm(ctx, t1, (u32)imm);
++			emit_insn(ctx, and, dst, dst, t1);
++		}
++		break;
+ 	case BPF_ALU64 | BPF_AND | BPF_K:
  		if (is_unsigned_imm12(imm)) {
  			emit_insn(ctx, andi, dst, dst, imm);
  		} else {
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
-+			emit_zext_32(ctx, t1, is32);
+ 			move_imm(ctx, t1, imm);
+-			emit_zext_32(ctx, t1, is32);
  			emit_insn(ctx, and, dst, dst, t1);
  		}
- 		emit_zext_32(ctx, dst, is32);
-@@ -918,7 +925,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst | src */
+ 	case BPF_ALU | BPF_OR | BPF_X:
++		emit_insn(ctx, or, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_OR | BPF_X:
+ 		emit_insn(ctx, or, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst | imm */
+ 	case BPF_ALU | BPF_OR | BPF_K:
++		if (is_unsigned_imm12(imm)) {
++			emit_insn(ctx, ori, dst, dst, imm);
++		} else {
++			move_imm(ctx, t1, (u32)imm);
++			emit_insn(ctx, or, dst, dst, t1);
++		}
++		break;
+ 	case BPF_ALU64 | BPF_OR | BPF_K:
  		if (is_unsigned_imm12(imm)) {
  			emit_insn(ctx, ori, dst, dst, imm);
  		} else {
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
-+			emit_zext_32(ctx, t1, is32);
+ 			move_imm(ctx, t1, imm);
+-			emit_zext_32(ctx, t1, is32);
  			emit_insn(ctx, or, dst, dst, t1);
  		}
- 		emit_zext_32(ctx, dst, is32);
-@@ -937,7 +945,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst ^ src */
+ 	case BPF_ALU | BPF_XOR | BPF_X:
++		emit_insn(ctx, xor, dst, dst, src);
++		break;
+ 	case BPF_ALU64 | BPF_XOR | BPF_X:
+ 		emit_insn(ctx, xor, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst ^ imm */
+ 	case BPF_ALU | BPF_XOR | BPF_K:
++		if (is_unsigned_imm12(imm)) {
++			emit_insn(ctx, xori, dst, dst, imm);
++		} else {
++			move_imm(ctx, t1, (u32)imm);
++			emit_insn(ctx, xor, dst, dst, t1);
++		}
++		break;
+ 	case BPF_ALU64 | BPF_XOR | BPF_K:
  		if (is_unsigned_imm12(imm)) {
  			emit_insn(ctx, xori, dst, dst, imm);
  		} else {
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
-+			emit_zext_32(ctx, t1, is32);
+ 			move_imm(ctx, t1, imm);
+-			emit_zext_32(ctx, t1, is32);
  			emit_insn(ctx, xor, dst, dst, t1);
  		}
- 		emit_zext_32(ctx, dst, is32);
-@@ -1097,7 +1106,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 	case BPF_JMP32 | BPF_JSLE | BPF_K:
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+ 
+ 	/* dst = dst << src (logical) */
+ 	case BPF_ALU | BPF_LSH | BPF_X:
+ 		emit_insn(ctx, sllw, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+-
+ 	case BPF_ALU64 | BPF_LSH | BPF_X:
+ 		emit_insn(ctx, slld, dst, dst, src);
+ 		break;
+@@ -965,9 +974,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	/* dst = dst << imm (logical) */
+ 	case BPF_ALU | BPF_LSH | BPF_K:
+ 		emit_insn(ctx, slliw, dst, dst, imm);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+-
+ 	case BPF_ALU64 | BPF_LSH | BPF_K:
+ 		emit_insn(ctx, sllid, dst, dst, imm);
+ 		break;
+@@ -975,9 +982,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	/* dst = dst >> src (logical) */
+ 	case BPF_ALU | BPF_RSH | BPF_X:
+ 		emit_insn(ctx, srlw, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+-
+ 	case BPF_ALU64 | BPF_RSH | BPF_X:
+ 		emit_insn(ctx, srld, dst, dst, src);
+ 		break;
+@@ -985,9 +990,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	/* dst = dst >> imm (logical) */
+ 	case BPF_ALU | BPF_RSH | BPF_K:
+ 		emit_insn(ctx, srliw, dst, dst, imm);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+-
+ 	case BPF_ALU64 | BPF_RSH | BPF_K:
+ 		emit_insn(ctx, srlid, dst, dst, imm);
+ 		break;
+@@ -995,9 +998,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	/* dst = dst >> src (arithmetic) */
+ 	case BPF_ALU | BPF_ARSH | BPF_X:
+ 		emit_insn(ctx, sraw, dst, dst, src);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+-
+ 	case BPF_ALU64 | BPF_ARSH | BPF_X:
+ 		emit_insn(ctx, srad, dst, dst, src);
+ 		break;
+@@ -1005,9 +1006,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	/* dst = dst >> imm (arithmetic) */
+ 	case BPF_ALU | BPF_ARSH | BPF_K:
+ 		emit_insn(ctx, sraiw, dst, dst, imm);
+-		emit_zext_32(ctx, dst, is32);
+ 		break;
+-
+ 	case BPF_ALU64 | BPF_ARSH | BPF_K:
+ 		emit_insn(ctx, sraid, dst, dst, imm);
+ 		break;
+@@ -1016,12 +1015,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	case BPF_ALU | BPF_END | BPF_FROM_LE:
+ 		switch (imm) {
+ 		case 16:
+-			/* zero-extend 16 bits into 64 bits */
+ 			emit_insn(ctx, bstrpickd, dst, dst, 15, 0);
+ 			break;
+ 		case 32:
+-			/* zero-extend 32 bits into 64 bits */
+-			emit_zext_32(ctx, dst, is32);
++			emit_insn(ctx, bstrpickd, dst, dst, 31, 0);
+ 			break;
+ 		case 64:
+ 			/* do nothing */
+@@ -1034,13 +1031,11 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		switch (imm) {
+ 		case 16:
+ 			emit_insn(ctx, revb2h, dst, dst);
+-			/* zero-extend 16 bits into 64 bits */
+ 			emit_insn(ctx, bstrpickd, dst, dst, 15, 0);
+ 			break;
+ 		case 32:
+ 			emit_insn(ctx, revb2w, dst, dst);
+-			/* clear the upper 32 bits */
+-			emit_zext_32(ctx, dst, true);
++			emit_insn(ctx, bstrpickd, dst, dst, 31, 0);
+ 			break;
+ 		case 64:
+ 			emit_insn(ctx, revbd, dst, dst);
+@@ -1048,7 +1043,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		}
+ 		break;
+ 
+-	/* PC += off if dst cond src */
++	/* PC += off if dst cond src (64-bit) */
+ 	case BPF_JMP | BPF_JEQ | BPF_X:
+ 	case BPF_JMP | BPF_JNE | BPF_X:
+ 	case BPF_JMP | BPF_JGT | BPF_X:
+@@ -1059,31 +1054,38 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	case BPF_JMP | BPF_JSGE | BPF_X:
+ 	case BPF_JMP | BPF_JSLT | BPF_X:
+ 	case BPF_JMP | BPF_JSLE | BPF_X:
++		jmp_offset = bpf2la_offset(i, off, ctx);
++		if (emit_cond_jmp(ctx, cond, dst, src, jmp_offset) < 0)
++			goto toofar;
++		break;
++
++	/* PC += off if dst cond src (32-bit unsigned) */
+ 	case BPF_JMP32 | BPF_JEQ | BPF_X:
+ 	case BPF_JMP32 | BPF_JNE | BPF_X:
+ 	case BPF_JMP32 | BPF_JGT | BPF_X:
+ 	case BPF_JMP32 | BPF_JGE | BPF_X:
+ 	case BPF_JMP32 | BPF_JLT | BPF_X:
+ 	case BPF_JMP32 | BPF_JLE | BPF_X:
++		jmp_offset = bpf2la_offset(i, off, ctx);
++		emit_insn(ctx, bstrpickd, t1, dst, 31, 0);
++		emit_insn(ctx, bstrpickd, t2, src, 31, 0);
++		if (emit_cond_jmp(ctx, cond, t1, t2, jmp_offset) < 0)
++			goto toofar;
++		break;
++
++	/* PC += off if dst cond src (32-bit signed) */
+ 	case BPF_JMP32 | BPF_JSGT | BPF_X:
+ 	case BPF_JMP32 | BPF_JSGE | BPF_X:
+ 	case BPF_JMP32 | BPF_JSLT | BPF_X:
+ 	case BPF_JMP32 | BPF_JSLE | BPF_X:
+ 		jmp_offset = bpf2la_offset(i, off, ctx);
+-		move_reg(ctx, t1, dst);
+-		move_reg(ctx, t2, src);
+-		if (is_signed_bpf_cond(BPF_OP(code))) {
+-			emit_sext_32(ctx, t1, is32);
+-			emit_sext_32(ctx, t2, is32);
+-		} else {
+-			emit_zext_32(ctx, t1, is32);
+-			emit_zext_32(ctx, t2, is32);
+-		}
++		emit_insn(ctx, addw, t1, dst, LOONGARCH_GPR_ZERO);
++		emit_insn(ctx, addw, t2, src, LOONGARCH_GPR_ZERO);
+ 		if (emit_cond_jmp(ctx, cond, t1, t2, jmp_offset) < 0)
+ 			goto toofar;
+ 		break;
+ 
+-	/* PC += off if dst cond imm */
++	/* PC += off if dst cond imm (64-bit) */
+ 	case BPF_JMP | BPF_JEQ | BPF_K:
+ 	case BPF_JMP | BPF_JNE | BPF_K:
+ 	case BPF_JMP | BPF_JGT | BPF_K:
+@@ -1094,12 +1096,38 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	case BPF_JMP | BPF_JSGE | BPF_K:
+ 	case BPF_JMP | BPF_JSLT | BPF_K:
+ 	case BPF_JMP | BPF_JSLE | BPF_K:
++		jmp_offset = bpf2la_offset(i, off, ctx);
++		if (imm) {
++			move_imm(ctx, t1, imm);
++			tm = t1;
++		} else {
++			tm = LOONGARCH_GPR_ZERO;
++		}
++		if (emit_cond_jmp(ctx, cond, dst, tm, jmp_offset) < 0)
++			goto toofar;
++		break;
++
++	/* PC += off if dst cond imm (32-bit unsigned) */
+ 	case BPF_JMP32 | BPF_JEQ | BPF_K:
+ 	case BPF_JMP32 | BPF_JNE | BPF_K:
+ 	case BPF_JMP32 | BPF_JGT | BPF_K:
+ 	case BPF_JMP32 | BPF_JGE | BPF_K:
+ 	case BPF_JMP32 | BPF_JLT | BPF_K:
+ 	case BPF_JMP32 | BPF_JLE | BPF_K:
++		jmp_offset = bpf2la_offset(i, off, ctx);
++		if (imm) {
++			move_imm(ctx, t1, imm);
++			emit_insn(ctx, bstrpickd, t1, t1, 31, 0);
++			tm = t1;
++		} else {
++			tm = LOONGARCH_GPR_ZERO;
++		}
++		emit_insn(ctx, bstrpickd, t2, dst, 31, 0);
++		if (emit_cond_jmp(ctx, cond, t2, tm, jmp_offset) < 0)
++			goto toofar;
++		break;
++
++	/* PC += off if dst cond imm (32-bit signed) */
+ 	case BPF_JMP32 | BPF_JSGT | BPF_K:
+ 	case BPF_JMP32 | BPF_JSGE | BPF_K:
+ 	case BPF_JMP32 | BPF_JSLT | BPF_K:
+@@ -1107,19 +1135,12 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
  		jmp_offset = bpf2la_offset(i, off, ctx);
  		if (imm) {
--			move_imm(ctx, t1, imm, false);
-+			move_imm(ctx, t1, imm);
+ 			move_imm(ctx, t1, imm);
++			emit_insn(ctx, addw, t1, t1, LOONGARCH_GPR_ZERO);
  			tm = t1;
  		} else {
- 			/* If imm is 0, simply use zero register. */
-@@ -1129,7 +1138,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 	case BPF_JMP | BPF_JSET | BPF_K:
+-			/* If imm is 0, simply use zero register. */
+ 			tm = LOONGARCH_GPR_ZERO;
+ 		}
+-		move_reg(ctx, t2, dst);
+-		if (is_signed_bpf_cond(BPF_OP(code))) {
+-			emit_sext_32(ctx, tm, is32);
+-			emit_sext_32(ctx, t2, is32);
+-		} else {
+-			emit_zext_32(ctx, tm, is32);
+-			emit_zext_32(ctx, t2, is32);
+-		}
++		emit_insn(ctx, addw, t2, dst, LOONGARCH_GPR_ZERO);
+ 		if (emit_cond_jmp(ctx, cond, t2, tm, jmp_offset) < 0)
+ 			goto toofar;
+ 		break;
+@@ -1129,7 +1150,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 	case BPF_JMP32 | BPF_JSET | BPF_X:
+ 		jmp_offset = bpf2la_offset(i, off, ctx);
+ 		emit_insn(ctx, and, t1, dst, src);
+-		emit_zext_32(ctx, t1, is32);
++		if (BPF_CLASS(code) == BPF_JMP32)
++			emit_insn(ctx, bstrpickd, t1, t1, 31, 0);
+ 		if (emit_cond_jmp(ctx, cond, t1, LOONGARCH_GPR_ZERO, jmp_offset) < 0)
+ 			goto toofar;
+ 		break;
+@@ -1139,9 +1161,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
  	case BPF_JMP32 | BPF_JSET | BPF_K:
  		jmp_offset = bpf2la_offset(i, off, ctx);
--		move_imm(ctx, t1, imm, is32);
-+		move_imm(ctx, t1, imm);
-+		emit_zext_32(ctx, t1, is32);
+ 		move_imm(ctx, t1, imm);
+-		emit_zext_32(ctx, t1, is32);
  		emit_insn(ctx, and, t1, dst, t1);
- 		emit_zext_32(ctx, t1, is32);
+-		emit_zext_32(ctx, t1, is32);
++		if (BPF_CLASS(code) == BPF_JMP32)
++			emit_insn(ctx, bstrpickd, t1, t1, 31, 0);
  		if (emit_cond_jmp(ctx, cond, t1, LOONGARCH_GPR_ZERO, jmp_offset) < 0)
-@@ -1227,7 +1237,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 		if (bpf_pseudo_func(insn))
- 			move_addr(ctx, dst, imm64);
- 		else
--			move_imm(ctx, dst, imm64, is32);
-+			move_imm(ctx, dst, imm64);
- 		return 1;
+ 			goto toofar;
+ 		break;
+@@ -1468,6 +1490,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 		return -EINVAL;
  	}
  
-@@ -1268,7 +1278,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 				else
- 					emit_insn(ctx, ldbu, dst, src, off);
- 			} else {
--				move_imm(ctx, t1, off, is32);
-+				move_imm(ctx, t1, off);
- 				if (sign_extend)
- 					emit_insn(ctx, ldxb, dst, src, t1);
- 				else
-@@ -1282,7 +1292,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 				else
- 					emit_insn(ctx, ldhu, dst, src, off);
- 			} else {
--				move_imm(ctx, t1, off, is32);
-+				move_imm(ctx, t1, off);
- 				if (sign_extend)
- 					emit_insn(ctx, ldxh, dst, src, t1);
- 				else
-@@ -1296,7 +1306,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 				else
- 					emit_insn(ctx, ldwu, dst, src, off);
- 			} else {
--				move_imm(ctx, t1, off, is32);
-+				move_imm(ctx, t1, off);
- 				if (sign_extend)
- 					emit_insn(ctx, ldxw, dst, src, t1);
- 				else
-@@ -1304,7 +1314,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			}
- 			break;
- 		case BPF_DW:
--			move_imm(ctx, t1, off, is32);
-+			move_imm(ctx, t1, off);
- 			emit_insn(ctx, ldxd, dst, src, t1);
- 			break;
- 		}
-@@ -1331,42 +1341,42 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 
- 		switch (BPF_SIZE(code)) {
- 		case BPF_B:
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stb, t1, dst, off);
- 			} else {
--				move_imm(ctx, t2, off, is32);
-+				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxb, t1, dst, t2);
- 			}
- 			break;
- 		case BPF_H:
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, sth, t1, dst, off);
- 			} else {
--				move_imm(ctx, t2, off, is32);
-+				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxh, t1, dst, t2);
- 			}
- 			break;
- 		case BPF_W:
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stw, t1, dst, off);
- 			} else if (is_signed_imm14(off)) {
- 				emit_insn(ctx, stptrw, t1, dst, off);
- 			} else {
--				move_imm(ctx, t2, off, is32);
-+				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxw, t1, dst, t2);
- 			}
- 			break;
- 		case BPF_DW:
--			move_imm(ctx, t1, imm, is32);
-+			move_imm(ctx, t1, imm);
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, std, t1, dst, off);
- 			} else if (is_signed_imm14(off)) {
- 				emit_insn(ctx, stptrd, t1, dst, off);
- 			} else {
--				move_imm(ctx, t2, off, is32);
-+				move_imm(ctx, t2, off);
- 				emit_insn(ctx, stxd, t1, dst, t2);
- 			}
- 			break;
-@@ -1397,7 +1407,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, stb, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, is32);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxb, src, dst, t1);
- 			}
- 			break;
-@@ -1405,7 +1415,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			if (is_signed_imm12(off)) {
- 				emit_insn(ctx, sth, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, is32);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxh, src, dst, t1);
- 			}
- 			break;
-@@ -1415,7 +1425,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			} else if (is_signed_imm14(off)) {
- 				emit_insn(ctx, stptrw, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, is32);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxw, src, dst, t1);
- 			}
- 			break;
-@@ -1425,7 +1435,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 			} else if (is_signed_imm14(off)) {
- 				emit_insn(ctx, stptrd, src, dst, off);
- 			} else {
--				move_imm(ctx, t1, off, is32);
-+				move_imm(ctx, t1, off);
- 				emit_insn(ctx, stxd, src, dst, t1);
- 			}
- 			break;
-@@ -1537,7 +1547,7 @@ static int emit_jump_and_link(struct jit_ctx *ctx, u8 rd, u64 target)
- 		return -EFAULT;
- 	}
- 
--	move_imm(ctx, LOONGARCH_GPR_T1, target, false);
-+	move_imm(ctx, LOONGARCH_GPR_T1, target);
- 	emit_insn(ctx, jirl, rd, LOONGARCH_GPR_T1, 0);
- 
++	if (is32)
++		emit_insn(ctx, bstrpickd, dst, dst, 31, 0);
++
  	return 0;
-@@ -1734,7 +1744,7 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 		emit_insn(ctx, std, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_FP, -run_ctx_off + cookie_off);
  
- 	/* arg1: prog */
--	move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p, false);
-+	move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p);
- 	/* arg2: &run_ctx */
- 	emit_insn(ctx, addid, LOONGARCH_GPR_A1, LOONGARCH_GPR_FP, -run_ctx_off);
- 	ret = emit_call(ctx, (const u64)bpf_trampoline_enter(p));
-@@ -1755,7 +1765,7 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 	/* arg1: &args_off */
- 	emit_insn(ctx, addid, LOONGARCH_GPR_A0, LOONGARCH_GPR_FP, -args_off);
- 	if (!p->jited)
--		move_imm(ctx, LOONGARCH_GPR_A1, (const s64)p->insnsi, false);
-+		move_imm(ctx, LOONGARCH_GPR_A1, (const s64)p->insnsi);
- 	ret = emit_call(ctx, (const u64)p->bpf_func);
- 	if (ret)
- 		return ret;
-@@ -1772,7 +1782,7 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 	}
- 
- 	/* arg1: prog */
--	move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p, false);
-+	move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p);
- 	/* arg2: prog start time */
- 	move_reg(ctx, LOONGARCH_GPR_A1, LOONGARCH_GPR_S1);
- 	/* arg3: &run_ctx */
+ toofar:
 diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
-index bb58c42c2f2a..57a98f8a055b 100644
+index 57a98f8a055b..2bd0dc5b911c 100644
 --- a/arch/loongarch/net/bpf_jit.h
 +++ b/arch/loongarch/net/bpf_jit.h
-@@ -137,7 +137,7 @@ static inline void move_addr(struct jit_ctx *ctx, enum loongarch_gpr rd, u64 add
- 	emit_insn(ctx, lu52id, rd, rd, imm_63_52);
+@@ -72,24 +72,6 @@ static inline int epilogue_offset(const struct jit_ctx *ctx)
+ 	return (to - from);
  }
  
--static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm, bool is32)
-+static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm)
- {
- 	long imm_11_0, imm_31_12, imm_51_32, imm_63_52, imm_51_0, imm_51_31;
- 
-@@ -150,7 +150,7 @@ static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm
- 	/* addiw rd, $zero, imm_11_0 */
- 	if (is_signed_imm12(imm)) {
- 		emit_insn(ctx, addiw, rd, LOONGARCH_GPR_ZERO, imm);
--		goto zext;
-+		return;
- 	}
- 
- 	/* ori rd, $zero, imm_11_0 */
-@@ -195,9 +195,6 @@ static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, long imm
- 		if (!is_signed_imm52(imm))
- 			emit_insn(ctx, lu52id, rd, rd, imm_63_52);
- 	}
+-/* Zero-extend 32 bits into 64 bits */
+-static inline void emit_zext_32(struct jit_ctx *ctx, enum loongarch_gpr reg, bool is32)
+-{
+-	if (!is32)
+-		return;
 -
--zext:
--	emit_zext_32(ctx, rd, is32);
- }
- 
- static inline void move_reg(struct jit_ctx *ctx, enum loongarch_gpr rd,
+-	emit_insn(ctx, lu32id, reg, 0);
+-}
+-
+-/* Signed-extend 32 bits into 64 bits */
+-static inline void emit_sext_32(struct jit_ctx *ctx, enum loongarch_gpr reg, bool is32)
+-{
+-	if (!is32)
+-		return;
+-
+-	emit_insn(ctx, addiw, reg, reg, 0);
+-}
+-
+ /* Emit proper extension according to ABI requirements.
+  * Note that it requires a value of size `size` already resides in register `reg`.
+  */
 -- 
 2.42.0
 
