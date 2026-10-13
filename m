@@ -1,170 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B18437187B;
-	Tue, 13 Oct 2026 08:34:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC1B3B14B7
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:40:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791880501; cv=none; b=cx76gX7INepW8lrURLDe9RAKGjpMKClcT7EmhT7ifFDtlr8de0IjGjBb65QZuhfUaKuCDgIO+4nIvliXfjp38noVEhjCXGhLrB3lvmWMe67myq/Rp6/e+fkW+O2zs+DtGS/qWHAonB+F5pcnbrqZnyRHYeIzon1B7i9nIw6mfeU=
+	t=1791880859; cv=none; b=euJHrcO7agdKOUqgKMYt3I4gMUjsZqjVUzgQu1RBs+OkXh18sTmNmM3CorAwcJBmdeu/anm6R2SpQrmHEz1/ZflfWufC7NreAK4qmhvncmY1iNzz9oYwpu+hgY8VFvJvmd+CDZW1jRt1LMjKFBWevjNBP4AjODbqY/yEgI4ReBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791880501; c=relaxed/simple;
-	bh=L0KEnA9wUaxKzAGhOm5OumPcQcwrEh3rOjNVOAg6FeU=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oLbRdDoOzf7hkInffAUAB/qyEbnVv+H0IxntpvB+1xhbA2qCwDxHfjWU79ZnIoPL6ZAJdPosomNzLUFruZwgSIepc4XSirZjUrcaDUpcycZd7JJeToXD56TYWpvp/A1YNTM9PF6mMdmm/syVvXowoTWllb3D4vGKp4XJE8Z3ZXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gMWW3uFW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791880859; c=relaxed/simple;
+	bh=VjVG6fhCZ+WPHYhdPwWiKV9IAN8Ykrirnm6ILR2H8L4=;
+	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
+	 Date; b=OyEmT7pwNcyK9RasOHo5LYtd6qilYnOay8xVSvi2KB8M1TH8SZhl708HTbMMOJsEE6ndffr5FQH5d/BKHIuQZGvBVM+Yv3NfwGHsYEBrwU3op7psQ9Xe4D9kymsitkIuRJBeTh/zelVokQWzS0LICdCYoNyK0g0E+kPYTRTNOjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NhghM6aw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gMWW3uFW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82DAC1F00898;
-	Tue, 13 Oct 2026 08:34:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NhghM6aw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D3D1F000FF;
+	Tue, 13 Oct 2026 08:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791880499;
-	bh=4pECVQoEhG1R3WDUdFD3/QePU912uEG/1AhCxV7n1PE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=gMWW3uFWCF5xEuoQirVZ8lPXpcBiZN63VGjKFqyfbQHT/0mr62hh+NRs8USuKmzG4
-	 XqhceX0kblJbxb0uS/CYHxv2ojbno5VdQxuDxffiRWw7cUiViqqe7dvsou2RC0/UUb
-	 a2fRYvzgw88BMPsb5rKEVip21lsE9UQwaz6KZpZmxKbad/LDYWM2btCZdlTy1xVaKB
-	 8Q5AvXxp5SiZKthlKjz3fyxBjvaiwJ8JeZzGzdUaQq0r4hts42cBuFBLOMKcpgaEE6
-	 ag0q0P10OyzeKK26iZDMPbjyR0y8BCCBYPkcbuPWHe+UbrHJpGY14iUJ3bw4v+kS8A
-	 dxQYkJVDAn6tA==
-Subject: Re: [PATCH net-next v2 6/6] net: kunit: test netmem, page_pool, and
- skb frag refcounting
-From: netdev-bot+sashiko@kernel.org
-To: almasrymina@google.com
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, bpf@vger.kernel.org, ayush.sawal@chelsio.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, tariqt@nvidia.com, horms@kernel.org,
- steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
- ncardwell@google.com, kuniyu@google.com, john.fastabend@gmail.com,
- sd@queasysnail.net, ebiggers@kernel.org, kees@kernel.org,
- aleksandr.loktionov@intel.com, u.kleine-koenig@baylibre.com,
- shaojijie@huawei.com, mgr@kernel.org, j.raczynski@samsung.com
-Date: Tue, 13 Oct 2026 08:34:58 +0000
-Message-ID: <179188049811.434549.5158913693996438568@kernel.org>
-In-Reply-To: <20261012082148.1698596-7-almasrymina@google.com>
-References: <20261012082148.1698596-7-almasrymina@google.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1791880858;
+	bh=EaoZsaP6y+jFnEHjQZIhtv31zFL0FQMmIra5+z6iq0Q=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=NhghM6awHVPg65tB9zqmzUJFrEcwGjxR3PW/lixf4bbWuIW2wlM5vLD4g3tCapjuc
+	 lJbsqBRhgPFixSAYZN7z1zGt80hzjYjC9aWcW9gBRhyez2DVOG+uNY704xW7AYqw4S
+	 HQzSAmiK6si/nHvdfpu21jr8Y2zjNto2P0GyJN7SCSPxM9e+N4+gvrJw2rVf5mxz9H
+	 CCUba+CyHO5cNrAUSMSJ4xi9ehtLJgQT72Cr5frylm1cbijSBnPJCBCz+YYt3lYzIc
+	 nN+pjeYUVcGWIX/galDpkUum1GBWKZQEbFjg6DKe6LxE/o5hewKQH4Y5FJmnBwV5zp
+	 1yj6TbjyDhjLg==
+Message-ID: <sashiko-outbox-169266@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 05/13] bpf: Turn loads of __arena pointer
+ members into arena pointers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261013082012.1107446-6-memxor@gmail.com>
+References: <20261013082012.1107446-1-memxor@gmail.com>
+ <20261013082012.1107446-6-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 13 Oct 2026 08:40:57 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
-
-Low priority / nit picks for your consideration:
-
-- [Low] None of the new test cases register KUnit cleanup actions.
-
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: PROBE_MEM fault bypass via non-nullable __arena pointers
 --
 
-net: kunit: test netmem, page_pool, and skb frag refcounting
+commit fdb573c7b91be34110bf569fb46f6159ad42b9b8
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-This adds KUnit cases to net/core/net_test.c. They check that non-pp
-refcounts and page_pool pp_ref_count stay balanced across regular pages,
-page_pool pages, and net_iovs, through the various skb frag helpers. It
-also exports skb_shift() via EXPORT_SYMBOL_IF_KUNIT() so the test links
-when built as a module.
+bpf: Turn loads of __arena pointer members into arena pointers
 
-> diff --git a/net/core/net_test.c b/net/core/net_test.c
-> index 9c3a590865d26..6f21e6baf7fb3 100644
-> --- a/net/core/net_test.c
-> +++ b/net/core/net_test.c
-> @@ -370,10 +370,1213 @@ static void ip_tunnel_flags_test_run(struct kunit *test)
+This commit translates the loads of __arena tagged pointer members in
+kernel structs into arena pointers during verification. If the member
+is also tagged as __nullable, a NULL test is kept before subtracting
+the arena base address.
 
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index b2fa7e8bedf3a..3c95b6c8bbbc5 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
 [ ... ]
-
-> +#ifdef CONFIG_INET
-> +static void netmem_ref_test_tcp_devmem_recv(struct kunit *test)
+> @@ -870,6 +870,36 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_ver=
+ifier_env *env,
+>   *     struct __sk_buff    -> struct sk_buff
+>   *     struct bpf_sock_ops -> struct sock
+>   */
+> +/*
+> + * A load through an __arena pointer member of a kernel struct reads the=
+ kernel
+> + * address of arena memory. Append the conversion to the arena pointer f=
+orm,
+[ ... ]
+> +static int arena_member_fixup(struct bpf_verifier_env *env, int idx, str=
+uct bpf_insn *insn,
+> +			      struct bpf_insn *buf)
 > +{
-
-[ ... ]
-
-> +	KUNIT_ASSERT_EQ(test,
-> +			sock_create_kern(&init_net, AF_INET, SOCK_STREAM,
-> +					 IPPROTO_TCP, &sock),
-> +			0);
-> +	sock->sk->sk_state = TCP_ESTABLISHED;
-> +	inet_csk(sock->sk)->icsk_ack.rcv_mss = 64;
-> +	tcp_sk(sock->sk)->copied_seq = 0;
+> +	struct bpf_insn_aux_data *aux =3D &env->insn_aux_data[idx];
+> +	int cnt =3D 0;
+> +	u32 base;
 > +
-> +	pool = page_pool_create(&pp_params);
-> +	if (IS_ERR(pool)) {
-> +		sock->sk->sk_state = TCP_CLOSE;
-> +		sock_release(sock);
-> +		KUNIT_ASSERT_FALSE(test, IS_ERR(pool));
+> +	if (!aux->arena_member)
+> +		return 0;
+> +	if (aux->non_arena_load) {
+> +		verbose(env, "an insn loads an arena pointer member on one path and so=
+mething else on another\n");
+> +		return -EINVAL;
 > +	}
 > +
-> +	ret = percpu_ref_init(&binding.ref, dummy_percpu_ref_release,
-> +			      PERCPU_REF_INIT_ATOMIC, GFP_KERNEL);
-> +	if (ret) {
-> +		page_pool_destroy(pool);
-> +		sock->sk->sk_state = TCP_CLOSE;
-> +		sock_release(sock);
-> +		KUNIT_ASSERT_EQ(test, ret, 0);
-> +	}
+> +	base =3D bpf_arena_get_kern_vm_start(env->prog->aux->arena);
+> +	buf[cnt++] =3D *insn;
+> +	if (aux->arena_member_nullable)
+> +		buf[cnt++] =3D BPF_JMP_IMM(BPF_JEQ, insn->dst_reg, 0, 1);
+> +	buf[cnt++] =3D BPF_ALU32_IMM(BPF_SUB, insn->dst_reg, (s32)base);
 
-[ ... ]
+[Severity: High]
+Could this allow a bypass of the PROBE_MEM zeroing mechanism when a fault
+occurs on a non-nullable arena pointer?
 
-> +	/* 1. Receive via tcp_recvmsg_dmabuf -> SO_DEVMEM_DONTNEED release */
-> +	skb = alloc_skb(0, GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, skb);
-> +	skb->pp_recycle = 1;
-> +	skb_add_rx_frag_netmem(skb, 0, niov_nm, 0, 64, PAGE_SIZE);
-> +	napi_pp_get_page(niov_nm);
-> +	TCP_SKB_CB(skb)->seq = 0;
-> +	TCP_SKB_CB(skb)->end_seq = 64;
-> +	skb_queue_tail(&sock->sk->sk_receive_queue, skb);
+If a PROBE_MEM read of a non-nullable __arena pointer faults, the exception
+handler zeroes the destination register and resumes execution at the next
+instruction. Because the pointer lacks __nullable, the zero-check branch
+is omitted and the BPF_SUB instruction executes unconditionally.
+
+This executes on the zeroed register, changing its value to -(u32)base.
+Since base (kern_vm_start) is page-aligned but shifted by GUARD_SZ / 2 (32K=
+B),
+the truncated 32-bit offset calculates to 4GB - (base % 4GB). This
+consistently points to the next 4GB-aligned address in the kernel.
+
+Because base % 4GB is at least 32KB, this mathematically guarantees the
+address falls strictly within the 4GB valid, user-mapped bounds of the aren=
+a.
+Could an attacker map this arena offset, populate it with a malicious
+payload, and spoof the BPF program into using attacker-controlled data?
+
+> +	return cnt;
+> +}
 > +
-> +	msg.msg_control = cmsg_buf;
-> +	msg.msg_controllen = sizeof(cmsg_buf);
-> +	ret = kernel_recvmsg(sock, &msg, &iov, 0, 64,
-> +			     MSG_SOCK_DEVMEM | MSG_DONTWAIT);
-> +	KUNIT_ASSERT_EQ(test, ret, 64);
 
-[Severity: Low]
-If this assert fails, is the kernel TCP socket leaked along with the pool
-and the percpu_ref data of the on-stack binding?
-
-The page_pool_create() and percpu_ref_init() failure paths above release
-everything by hand before asserting. The later asserts do not, which
-includes this one, the KUNIT_ASSERT_NOT_NULL(test, skb) checks, and the
-second KUNIT_ASSERT_EQ(test, ret, 64) after the second kernel_recvmsg().
-None of sock_release(), page_pool_destroy() or percpu_ref_exit() run on
-those paths.
-
-The leaked socket's sk_receive_queue or sk_user_frags can still refer to
-the on-stack niov. Nothing touches them afterwards, though, because the
-socket is never released.
-
-Other new cases follow the same pattern:
-
-  netmem_ref_test_page(): the alloc_skb() assert runs while the test
-  still owns the page from alloc_page().
-
-  netmem_ref_test_pp_page(): the page_pool_dev_alloc_pages() assert
-  skips page_pool_destroy().
-
-  netmem_ref_test_release_data(): the percpu_ref_init() assert runs
-  while the pp page still holds extra refs, so the pool and page leak.
-
-  netmem_ref_test_skb_segment(): the reg_page, percpu_ref_init() and
-  skb allocation asserts come after the pool and pp_page are set up,
-  with no cleanup.
-
-Could these use kunit_add_action_or_reset() or similar? Then teardown
-would still happen when an assert aborts the case.
-
-> +	KUNIT_EXPECT_EQ(test, atomic_long_read(&niov.desc.pp_ref_count), 3L);
-> +	KUNIT_EXPECT_EQ(test, atomic_long_read(&binding.ref.data->count),
-> +			base_iov_ref);
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012082148.1698596-1-almasrymina%40google.com
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013082012.1107=
+446-1-memxor@gmail.com?part=3D5
