@@ -1,191 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-m12736.qiye.163.com (mail-m12736.qiye.163.com [115.236.127.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A55D2E06E4;
-	Tue, 13 Oct 2026 12:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE56236B927;
+	Tue, 13 Oct 2026 12:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791896137; cv=none; b=pLReeZU9f7ymOmeLvfpCZmN2hDFnGYbq9BPwDnnPJWsWWczU/4diqJD6ItoV7RIb39L98Pwf9Uy7slfSb1IsMZzigzgwqFaMXLNz9UxbUWRxgCPnawG0lUBw+zJkav0pLbDnmGoB3W25m0yT7vNkPNZL0Jok+d14EkuFjhH/yMw=
+	t=1791896244; cv=none; b=cBLOH24RsNLJ11Fq064KH82DTasMZfaLlY8WaWdDw0mmAb7EemJHK5UUmps9DjhyWCBnAJQEmqJYML/NfEcN8vCAAMszhYlwTQdR2600khOtwGQ8Tdo4iKMiv78Bpfjp6/RZ6tJgMlKJ69m747ymrhm4Sk3ZtPOfJhfv7dxzcaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791896137; c=relaxed/simple;
-	bh=4hOGlWDI5HWkZbDBQRET2Fxee0zSOGc4EjqmuF05r80=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=AjjmhB0HMKJIwU+kUVLzhEV2RXOPMhgNg9D7g0/R7XVdDMzztSzqNVk3pGPohX+vEAhsB60XXeQ2cFAYSDNX5aOmRPEMe2Q42c5nks7wRx/adQV8RL62JOCaB06lKnZqSzG0SghvgluN2V5KXG1PBBMCrVnYleyil/3J2vvvQBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NHxM7vfy; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHxM7vfy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22E141F00893;
-	Tue, 13 Oct 2026 12:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791896136;
-	bh=bLACkm8QjLtvgdrWg5Cs24vdQLpzXUAMiAF017A7tcw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NHxM7vfyD6/R1ywGsksQSG/bJzCAGOWLgbtqvSKmadsfTUEtZe4Crg/GNmPH+iUNj
-	 VLp73GOrkJxRQdcXX6/S1XEPj9Bef5YwlMUsjNSdGprCSD86NsGt/QK2i5wceleiux
-	 /5Lh/Uv5fTT3/CJLa4aIyEU4iJx65qHRfNKk9yYJQVywx/4UzW/vX4QGW0dVGgQ40k
-	 Z2IQefCqUXzd5iKvUt44E3/P4ecAhd6XadbwtD0cbl1LH2+/a2Ga2Lu8NjG7Qg8oca
-	 pobhum4nz6r25Rx4VC/G0auZl0stvLfef6rkIwV0wJdOqfFSO7/t/CnEqsPty+gUNv
-	 8zajDaEGesaVw==
-Content-Type: multipart/mixed; boundary="===============5214291219682700347=="
+	s=arc-20240116; t=1791896244; c=relaxed/simple;
+	bh=7+OQzYzv3SbWX+2533YRdRXLs2xaO0eiv3KbK0o/ZRc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gWnyTbdNcEmXq9ZqD0AWbwpJ1nqjGMvgIUEmcStGjsc5Rc4zsOM9CMkhuB1hCKgLOOKU40ksiZZCoCP1hOQKLJwXKbeVNM4raYsv2vlHgyaOpTOeetyRdb2g7SthNHusB/d5mT8ftaCq86nSfoVz7WSxvzD+juMgqCk/4KCjFd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.127.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 200407ee7;
+	Tue, 13 Oct 2026 20:21:41 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH v2 0/6] mm/page_owner: add bpf_iter and kfuncs
+Date: Tue, 13 Oct 2026 20:21:19 +0800
+Message-Id: <20261013122125.843451-1-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ab9326a4770f9d1ac812e55feb39e34341d84951f3b5d276dee18d5471d8353e@mail.kernel.org>
-In-Reply-To: <20261013121005.626-3-yangtiezhu@loongson.cn>
-References: <20261013121005.626-3-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v2 2/2] LoongArch: BPF: Optimize 32-bit operations using native instructions
-From: bot+bpf-ci@kernel.org
-To: yangtiezhu@loongson.cn,chenhuacai@kernel.org,hengqi.chen@gmail.com
-Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 13 Oct 2026 12:55:35 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa135361ed30229kunm0bc94a6a5244
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCSBlNVh9MGBofTEodGB9LS1YVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
---===============5214291219682700347==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi all,
 
-> LoongArch: BPF: Optimize 32-bit operations using native instructions
+Introduction
+============
 
-TL;DR: LoongArch BPF JIT now feeds non-sign-extended operands to 32-bit
-div/mod; on cores without DIV32 (e.g. 3A5000) results may be wrong, possibly
-breaking verifier-proven bounds.
+page_owner records who allocated every page and is a core memory-debug
+facility, but it currently reaches userspace as the debugfs flat dump:
+slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
+means streaming and parsing the entire file in userspace, which is
+expensive on large hosts and hard to query live.
 
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
+Exposing the same walk to eBPF lets a program filter and aggregate in
+the kernel and surface only the records it cares about. This series
+adds that access as a seq_file bpf_iter target and an open-coded
+iterator.
 
-[ ... ]
+Implementation
+==============
 
-> @@ -752,212 +741,232 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
->
->  	/* dst = imm */
->  	case BPF_ALU | BPF_MOV | BPF_K:
-> +		move_imm(ctx, dst, (u32)imm);
-> +		return 0;
+The page walk is factored into page_owner_next_eligible(), shared by
+the read path and the iterators so eligibility stays identical. Two
+kfuncs expose information that a BPF program cannot decode from the
+snapshot alone: per-page memcg info including the full cgroup path,
+and the stack trace behind a stack_depot handle. Each record is
+snapshotted under the page_ext RCU lock, so consumers read a
+consistent copy.
 
-[ ... ]
+Testing
+=======
 
->  	/* dst = dst / src */
->  	case BPF_ALU | BPF_DIV | BPF_X:
-> +		if (!off)
-> +			emit_insn(ctx, divwu, dst, dst, src);
-> +		else
-> +			emit_insn(ctx, divw, dst, dst, src);
-> +		break;
->  	case BPF_ALU64 | BPF_DIV | BPF_X:
-> -		if (!off) {
-> -			emit_zext_32(ctx, dst, is32);
-> -			move_reg(ctx, t1, src);
-> -			emit_zext_32(ctx, t1, is32);
-> -			emit_insn(ctx, divdu, dst, dst, t1);
-> -			emit_zext_32(ctx, dst, is32);
-> -		} else {
-> -			emit_sext_32(ctx, dst, is32);
-> -			move_reg(ctx, t1, src);
-> -			emit_sext_32(ctx, t1, is32);
-> -			emit_insn(ctx, divd, dst, dst, t1);
-> -			emit_zext_32(ctx, dst, is32);
-> -		}
-> +		if (!off)
-> +			emit_insn(ctx, divdu, dst, dst, src);
-> +		else
-> +			emit_insn(ctx, divd, dst, dst, src);
->  		break;
+The selftest exercises the seq_file and open-coded iterators, and
+validates the stack_snprint and get_memcg_info kfuncs.
 
-Can divw/divwu be used directly on dst and src here?
+Changes in v2
+=============
+- Route the zero-handle case through ext_put_continue.
+- Drop the scan->pfn++.
+- Fill page/po/pfn only when v is non-NULL.
+- Implement page_owner_seq_stop().
+- bpf_page_owner_stack_snprint() now takes the scan cursor.
+- Buffer args renamed to buf__uninit/buf__sz.
+- Removes the v1 get_nid() kfunc. The node is now stored in scan->nid.
+- bpf_page_owner_get_memcg_info() now resolves the page with
+  pfn_to_online_page() for an offline or removed pfn.
+- Buffer/info args renamed to info__uninit/buf__uninit/buf__sz.
+- Drop the get_nid kfunc coverage.
+- Enable CONFIG_PAGE_OWNER in the bpf selftests config.
 
-The LoongArch ISA only defines the result of div.w, div.wu, mod.w and
-mod.wu on LA64 when both rj and rk hold sign-extended 32-bit values.  The
-exception is a core that reports CPUCFG2_DIV32 (BIT(26) in
-arch/loongarch/include/asm/loongarch.h), where the upper 32 bits of the
-inputs are ignored.  Cores without that bit, such as the LA464 in the
-3A5000, may return any value otherwise.  Nothing in the JIT checks for
-CPUCFG2_DIV32.
+v1: https://lore.kernel.org/linux-mm/20261009112308.240769-1-zhen.ni@easystack.cn/
 
-The operands here are often not sign-extended.  Every ALU32 result is now
-zero-extended at the common exit of build_insn():
+Zhen Ni (6):
+  mm/page_owner: extract page_owner_next_eligible() from read loop
+  mm/page_owner: add bpf_iter target "page_owner"
+  mm/page_owner: add open-coded page_owner iterator
+  mm/page_owner: record the NUMA node in the scan cursor
+  mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
+  selftests/bpf: add tests for the page_owner bpf_iter target
 
-> +	if (is32)
-> +		emit_insn(ctx, bstrpickd, dst, dst, 31, 0);
-> +
->  	return 0;
+ kernel/bpf/helpers.c                          |   7 +
+ mm/Makefile                                   |   3 +
+ mm/page_owner.c                               | 219 +++++++++++-------
+ mm/page_owner.h                               |  58 +++++
+ mm/page_owner_iter.c                          | 197 ++++++++++++++++
+ tools/testing/selftests/bpf/config            |   2 +
+ .../bpf/prog_tests/page_owner_iter.c          | 193 +++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_page_owner.c | 159 +++++++++++++
+ 8 files changed, 758 insertions(+), 80 deletions(-)
+ create mode 100644 mm/page_owner.h
+ create mode 100644 mm/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
 
-so any 32-bit value with bit 31 set is left in the register as
-0x00000000xxxxxxxx.  A BPF_LDX | BPF_W load (ldwu) is zero-extended in the
-same way, and src can hold arbitrary upper bits coming from ALU64 ops or
-pointers, since ALU32 only consumes the low 32 bits.
+-- 
+2.20.1
 
-For example, with w0 = -6 followed by w0 s/= 3, rj is 0x00000000fffffffa
-when divw executes, so the quotient is not guaranteed to be -2 on a core
-without DIV32.  Likewise, a ldwu of 0xffffffff followed by w1 %= 16 gives
-modwu a rj that is not a sign-extended value.
-
-The old code widened both operands (zext for unsigned, sext for signed)
-and then used the 64-bit divdu/divd/moddu/modd, which are well defined on
-every LA64 core.  The MIPS64 JIT, which has the same ISA restriction,
-still sign-extends the operands before its 32-bit div/mod.
-
-[ ... ]
-
->  	/* dst = dst / imm */
->  	case BPF_ALU | BPF_DIV | BPF_K:
-> +		move_imm(ctx, t1, (u32)imm);
-> +		if (!off)
-> +			emit_insn(ctx, divwu, dst, dst, t1);
-> +		else
-> +			emit_insn(ctx, divw, dst, dst, t1);
-> +		break;
-
-In the K forms the divisor is built with move_imm(ctx, t1, (u32)imm), so a
-negative signed divisor, or an unsigned divisor of 0x80000000 or above,
-also ends up in t1 as a zero-extended value rather than a sign-extended
-one.
-
-[ ... ]
-
->  	/* dst = dst % src */
->  	case BPF_ALU | BPF_MOD | BPF_X:
-> +		if (!off)
-> +			emit_insn(ctx, modwu, dst, dst, src);
-> +		else
-> +			emit_insn(ctx, modw, dst, dst, src);
-> +		break;
-
-[ ... ]
-
->  	/* dst = dst % imm */
->  	case BPF_ALU | BPF_MOD | BPF_K:
-> +		move_imm(ctx, t1, (u32)imm);
-> +		if (!off)
-> +			emit_insn(ctx, modwu, dst, dst, t1);
-> +		else
-> +			emit_insn(ctx, modw, dst, dst, t1);
-> +		break;
-
-The same question applies to the modwu/modw uses in these two cases.
-
-The verifier narrows 32-bit div/mod results, for example
-scalar32_min_max_umod() bounds the result of w1 %= 16 to [0, 15].  If the
-JITed code returns a different value on a core without DIV32, can the
-program end up with a value outside the range the verifier proved, for
-instance when it is used as a map value offset?
-
-The commit message reports test_bpf, test_verifier and test_progs passing,
-but does not say which CPU was used.  Would those results be reproducible
-on a core without CPUCFG2_DIV32?
-
-Would it be better to sign-extend both operands into temporaries (for
-example addw t, reg, $zero) before divw/divwu/modw/modwu, to gate the
-native 32-bit forms on CPUCFG2_DIV32, or to keep the previous 64-bit
-sequence for these four opcodes?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38397948534
---===============5214291219682700347==--
