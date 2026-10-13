@@ -1,301 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677EF480DF7;
-	Tue, 13 Oct 2026 17:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A8D51FCDC
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791912803; cv=none; b=L/QDy7sev5Lp9Cl80TUNS8vx9/hhfsZpnRmSW7/jC1vfTjiyQXDSGTtayDc6/LMIC99MZqoN9LoL53zUpWEajk/FBdHK2nX/wUlzCfd8fzUAEemjqlI+2LjgI7Vc38l9mggrYhOgDrgYRcTVjhJlu/RWep0k90lNKgWKR26LvsQ=
+	t=1791913016; cv=none; b=FQLBTVpa5F5sK+/DM16uZLXOK89eqbOtBxW0R3EAvdwKsatOnjg7TWlwBe6LsP36tXFRmSKMMYjsG7hZmOhAUimIsr8easZOHoUDdkVQ+wN5Dal5S3y6Fjv6O0poMFIvdCJ0GQSr8FUcUaLOt51WralhGMIC8wkzz0Le+W9YPW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791912803; c=relaxed/simple;
-	bh=HN/u8Q9WI36JC0Kz+NGJtgk9BjLNQANbjWAxhMI0kXs=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mcnnAo/IPuyuLsGxr3vwrtMANsTmwKMy00e23SskJnWlYJXzd42dfh4qWtV5PbpHO4V8QDSvZeNgabx0umxpQI27UvLXcuLgZk7nzb+nNqOGX9aDrmnqtyNseE0DQsATiBToa13/R/dxjjdhqges6zI4kPyHLaq0ARgsharCsFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U36JkaS+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791913016; c=relaxed/simple;
+	bh=FyfN4wBZKxMuKoUdxJs13pE2+Nzo8H0MJpjQB3QRTAI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=J8UXF9Y8A4RyqtKyF6gtRF3CY3RgWuApKAaApChxssqp8vaWsgrqzMWy1wwijMiDA7E8geu/Gg9OQ7bqI5gXmQqOzgqL9a5lxUiNAiFf5eI+f6FhYIDj21bztczi+25ODWCtJFM5OPz7AvhQsAmRzIQfLF985Q3rWUnnooHx2bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=PN6dbqEe; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U36JkaS+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 376651F000FF;
-	Tue, 13 Oct 2026 17:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791912801;
-	bh=zpVULbRYJKU83CTGHL5CwhzORJ7BhBP+deYnB7SA/2g=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=U36JkaS+gfg/tWQkQkHmkOMrP9aMpVn3g5B20hkYlkGSkVX434slElgGX5QfG+E+X
-	 BaP71Qo/vRe+vXrXrML/E+M7rMJIvVRWtbRgwKL3nm7Vo1jPDC7OF+w46JpDD3KKCg
-	 hcSPbphOh+AXmu8frVu2Nl7nD9mATi6uKjf8L56pgAoDakbniO+mI1qxisGhxTinqX
-	 ZmKCNltnUasboTGjSm9viDM4Xnx2dkYKtyGhzYCH4NwRjEkCSkl+GhVdNykQBfjKVF
-	 8zlJ3wWQHpaA8tgn1R6OPH8wPNJ7RDbWDcuTO/8lKj+dJesfcUlWOGFq4E38ryqhIn
-	 H3/yiMy2QTXlQ==
-Subject: Re: [PATCH net-next v6 4/4] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- bpf@vger.kernel.org
-Date: Tue, 13 Oct 2026 17:33:19 +0000
-Message-ID: <179191279975.434549.8306729661220801505@kernel.org>
-In-Reply-To: <20261012-stmmac-rx-mb-v6-4-2225050915c1@oss.qualcomm.com>
-References: <20261012-stmmac-rx-mb-v6-4-2225050915c1@oss.qualcomm.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="PN6dbqEe"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=2eq9JGlljQEd9D8sJXZQ38ivcD5GYVM1m7WXTt+/ez8=; b=PN6dbqEePrVo4I/tgMCHq709vV
+	qUz6fyu0X7edoq1c2H1ZMwpgwQ0XoGCslXp+0v2mOGdTi50XZZqZOrASrsGo2ihYqNaatd6uf3Uw7
+	1tzd+xwfOC8MmA1D+ZQQJT/N85/EAjMTwqM4jyhbsPrU5JU2scRtzsAYzxhNQdPIQPU2BCGhSzSqL
+	k47PoYp22fhjCYwa4owpS2idZgAV726itZ+9lyo04PXxIEdyRHcIz1iIgxxIzAqetuxAi6lqYYO9t
+	sQ5doZBjRQt0H77jo4WZUTGerAiNjMMwciIlOP/axa2DdlpREGw5/ugasGD9NxV0eBpaik5dBDMnq
+	9IGPHKEw==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xGg3F-000PQE-0Y;
+	Tue, 13 Oct 2026 19:12:33 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: alexei.starovoitov@gmail.com
+Cc: memxor@gmail.com,
+	yonghong.song@linux.dev,
+	puranjay@kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next 03/18] bpf, x86: Shorten the stack adjusts and the tail call counter loads
+Date: Tue, 13 Oct 2026 19:12:15 +0200
+Message-ID: <20261013171230.523677-4-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261013171230.523677-1-daniel@iogearbox.net>
+References: <20261013171230.523677-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28152/Tue Oct 13 08:26:14 2026)
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+The prologue and the tail call sequences always used the imm32 forms
+of sub/add rsp and a disp32 load of the tail call counter pointer, even
+when the rounded stack depth fits into a byte. Route them through the
+existing emit_sub_rsp()/emit_add_rsp() and emit_ldx() helpers which pick
+the short forms, and derive the ip adjustment for the counter load in
+front of a subprog call from the emitted length instead of hardcoding
+the 7 bytes. Nothing depends on the size of these instructions: the tail
+call entry offset covers only the code in front of the stack adjustment,
+and the poke targets are computed from the emitted bytes.
 
-Critical: 0 · High: 0 (1) · Medium: 1 (2) · Low: 1
+Before/after for a program with 32 bytes of stack:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+  48 81 ec 20 00 00 00  subq $0x20,%rsp
+  48 83 ec 20           subq $0x20,%rsp
 
-- [Medium] stmmac_build_skb() now calls skb_metadata_set(skb, metasize)
-  (stmmac_main.c:5847), so the XDP metadata sits right before skb->data.
-- [Low] The commit message says the old stmmac_rx() had two bugs on
-  multi-descriptor frames, and that accumulating the frame before…
+  48 8b 85 d0 ff ff ff  movq -0x30(%rbp),%rax
+  48 8b 45 d0           movq -0x30(%rbp),%rax
 
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but this patch
-  fixes it without saying so, and the net portion of the series leaves…
-- [Medium] This problem wasn't introduced by this patch, but
-  stmmac_construct_skb_zc() (AF_XDP zero-copy XDP_PASS path) allocates a…
-- [Medium] This problem wasn't introduced by this patch, but
-  dwmac4_wrback_get_rx_status() loads RDES1 and RDES2 before it loads…
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ arch/x86/net/bpf_jit_comp.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
---
-
-net: stmmac: rework stmmac_rx to support XDP rx multi-buff
-
-This commit reworks stmmac_rx() so that all descriptors of a frame are
-collected into an xdp_buff before the XDP program runs. On XDP_PASS the
-skb is built from that xdp_buff with napi_build_skb() and
-xdp_update_skb_frags_info(). The in-progress xdp_buff is kept in
-rx_q->state across NAPI polls, XDP metadata is passed to the skb, the
-FCS is stripped with a driver-local tail shrink, and
-NETDEV_XDP_ACT_RX_SG is advertised.
-
-> For those multi-descriptor frames the old code was buggy as well: it ran
-> the XDP program once per descriptor buffer, so for a multi-descriptor
-> frame the program was also invoked on continuation buffers holding
-> mid-frame payload. It also subtracted ETH_FCS_LEN from the first buffer
-> even when it was not the last descriptor (its second buffer empty),
-> dropping four bytes from the middle of the frame while marking the FCS as
-> already stripped and skipping the final pskb_trim(). Accumulating the
-> whole frame before running XDP fixes both.
-
-[Severity: Low]
-Does this describe the code being replaced? The parent commit "net:
-stmmac: drop multi-buffer frames in XDP mode" added this check, and this
-patch removes it:
-
-    /* We do not support SG in XDP mode */
-    if (unlikely(!error && (status & rx_not_ls) &&
-                 stmmac_xdp_is_enabled(priv))) {
-        rx_dropped++;
-        error = 1;
-    }
-
-With a program attached, every non-last descriptor is marked as an error
-before it reaches the block that runs the program and does:
-
-    if (stmmac_xdp_is_enabled(priv) && !buf2_len) {
-        buf1_len -= ETH_FCS_LEN;
-        fcs_stripped = true;
-    }
-
-In XDP mode only single-descriptor frames get there. Neither problem
-seems reachable in the parent.
-
-The message also does not say what actually changes relative to the
-parent. Multi-descriptor frames that used to be dropped in XDP mode now
-go to programs loaded with BPF_F_XDP_HAS_FRAGS.
-
-Could the commit message describe that change instead?
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 8c08d44fdbd39..fd04368543c23 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-
-[ ... ]
-
-> @@ -5801,6 +5807,118 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
-
-[ ... ]
-
-> +static struct sk_buff *stmmac_build_skb(struct xdp_buff *xdp)
-> +{
-> +	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-> +	u32 metasize = xdp->data - xdp->data_meta;
-> +	struct sk_buff *skb;
-> +	u8 num_frags = 0;
-> +
-> +	if (unlikely(xdp_buff_has_frags(xdp)))
-> +		num_frags = sinfo->nr_frags;
-> +
-> +	skb = napi_build_skb(xdp->data_hard_start, xdp->frame_sz);
-> +	if (!skb)
-> +		return NULL;
-> +
-> +	skb_mark_for_recycle(skb);
-> +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> +	skb_put(skb, xdp->data_end - xdp->data);
-> +	if (metasize)
-> +		skb_metadata_set(skb, metasize);
-
-[Severity: Medium]
-Now that the regular RX path sets metadata, does the software VLAN
-stripping later in stmmac_rx() corrupt it?
-
-When priv->hw->hw_vlan_en is false (GMAC 3.x and dwmac100 cores),
-stmmac_rx() calls stmmac_rx_vlan(), which does this for a tagged frame:
-
-    memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
-    skb_pull(skb, VLAN_HLEN);
-
-The metadata is not moved. eth_type_trans() then sets mac_header at the
-pulled data, and skb_metadata_end() returns skb_mac_header(skb).
-
-So data_meta as seen by TC/BPF would cover
-[orig_data + 4 - metasize, orig_data + 4). The first 4 metadata bytes
-are lost, and the last 4 bytes are the old start of the destination MAC.
-
-skb_reorder_vlan_header() and the skb_postpull_data_move()/skb_data_move()
-helpers move the metadata together with the data. Should
-stmmac_rx_vlan() do the same?
-
-[Severity: Medium]
-This is a pre-existing issue, not one introduced by this patch. The
-AF_XDP zero-copy counterpart, stmmac_construct_skb_zc(), still sets the
-metadata length without copying the metadata:
-
-    skb = napi_alloc_skb(&ch->rxtx_napi,
-                         xdp->data_end - xdp->data_hard_start);
-    ...
-    skb_reserve(skb, xdp->data - xdp->data_hard_start);
-    memcpy(__skb_put(skb, datasize), xdp->data, datasize);
-    if (metasize)
-        skb_metadata_set(skb, metasize);
-
-The bytes in front of skb->data in the new skb are uninitialized
-headroom, not what the program wrote with bpf_xdp_adjust_meta().
-xdp_build_skb_from_zc() in net/core/xdp.c copies from xdp->data_meta
-before it sets the metadata length.
-
-Should the ZC XDP_PASS path copy the metadata too?
-
-[ ... ]
-
-> @@ -5900,19 +6019,11 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->  				rx_errors++;
->  		}
->  
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but the status used here
-comes from dwmac4_wrback_get_rx_status(). That function loads the other
-descriptor words before the ownership word and has no barrier after the
-OWN check:
-
-    u32 rdes1 = le32_to_cpu(p->des1);
-    u32 rdes2 = le32_to_cpu(p->des2);
-    u32 rdes3 = le32_to_cpu(p->des3);
-    ...
-    if (unlikely(rdes3 & RDES3_OWN))
-        return dma_own;
-
-If the DMA write-back lands between these loads, can a descriptor with
-OWN already clear be paired with stale read-format RDES1/RDES2 contents?
-
-That could give wrong checksum-error bits (and CHECKSUM_UNNECESSARY), a
-spurious discard_frame from the filter-fail bits, or wrong PTP stats.
-The XGMAC descriptor ops use dma_rmb() for this.
-
-Would reading RDES3 first, followed by dma_rmb(), be needed here?
-
-[ ... ]
-
-> @@ -5922,121 +6033,89 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
-
-[ ... ]
-
-> -		if (!skb) {
-> -			unsigned int head_pad_len;
-> -
-> -			/* XDP program may expand or reduce tail */
-> -			buf1_len = ctx.xdp.data_end - ctx.xdp.data;
-> -
-> -			skb = napi_build_skb(page_address(buf->page),
-> -					     rx_q->napi_skb_frag_size);
-> -			if (!skb) {
-> -				page_pool_recycle_direct(rx_q->page_pool,
-> -							 buf->page);
-> -				buf->page = NULL;
-> -				rx_dropped++;
-> -				count++;
-> -				goto drain_data;
-> -			}
-
-[Severity: High]
-This is a pre-existing issue, not one introduced by this patch, but this
-hunk also removes an existing crash path that the commit message does
-not mention.
-
-Without XDP, the old code uses skb == NULL as the only start-of-frame
-marker. If napi_build_skb() fails on the first descriptor of a
-multi-descriptor frame, the code reaches drain_data with skb still NULL
-and error still 0:
-
-    drain_data:
-        if (likely(status & rx_not_ls))
-            goto read_again;
-
-The next continuation descriptor then goes through the if (!skb)
-head-building branch. With no program attached, stmmac_xdp_run_prog()
-returns ERR_PTR(0), which is NULL. A new skb is then built from
-mid-frame payload.
-
-With SPH active, stmmac_rx_buf1_len() returns 0 for non-first
-descriptors:
-
-    if (priv->sph_active && len)
-        return 0;
-
-So the rebuilt skb has an empty linear area and all of its data in
-frags. pskb_trim(skb, len) does nothing because len > skb->len. Can
-that then reach:
-
-stmmac_rx()
-  eth_type_trans()
-    eth_skb_pull_mac()
-      __skb_pull()
-        BUG()    /* skb->len < skb->data_len */
-
-Without SPH, a piece of mid-frame payload is passed up as a standalone
-Ethernet frame.
-
-The new code builds the skb only at the last descriptor and sends a
-stmmac_build_skb() failure to error_free_frag, so the problem is gone
-after this patch. "net: stmmac: drop multi-buffer frames in XDP mode"
-only covers XDP mode, and this rework has no Fixes tag. Backports that
-take only the Fixes-tagged patches would keep the crash.
-
-Should the napi_build_skb() failure path be fixed separately for net,
-for example by setting error so the rest of the frame is drained? Should
-this commit message also mention it?
-
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 70243ccbe423..c6e814f7c806 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -421,7 +421,7 @@ static void pop_callee_regs(u8 **pprog, bool *callee_regs_used)
+ }
+ 
+ /* add rsp, depth */
+-static void emit_add_rsp(u8 **pprog, u16 depth)
++static void emit_add_rsp(u8 **pprog, u32 depth)
+ {
+ 	u8 *prog = *pprog;
+ 
+@@ -435,7 +435,7 @@ static void emit_add_rsp(u8 **pprog, u16 depth)
+ }
+ 
+ /* sub rsp, depth */
+-static void emit_sub_rsp(u8 **pprog, u16 depth)
++static void emit_sub_rsp(u8 **pprog, u32 depth)
+ {
+ 	u8 *prog = *pprog;
+ 
+@@ -472,6 +472,7 @@ static void emit_nops(u8 **pprog, int len)
+  * in arch/x86/kernel/alternative.c
+  */
+ static int emit_call(u8 **prog, void *func, void *ip);
++static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off);
+ 
+ static void emit_fineibt(u8 **pprog, u8 *ip, u32 hash, int arity)
+ {
+@@ -607,8 +608,7 @@ static void emit_prologue(u8 **pprog, u8 *ip, u32 stack_depth, bool ebpf_from_cb
+ 	EMIT_ENDBR();
+ 
+ 	/* sub rsp, rounded_stack_depth */
+-	if (stack_depth)
+-		EMIT3_off32(0x48, 0x81, 0xEC, round_up(stack_depth, 8));
++	emit_sub_rsp(&prog, round_up(stack_depth, 8));
+ 	if (tail_call_reachable)
+ 		emit_prologue_tail_call(&prog, is_subprog);
+ 	*pprog = prog;
+@@ -851,7 +851,8 @@ static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
+ 	 * if ((*tcc_ptr)++ >= MAX_TAIL_CALL_CNT)
+ 	 *	goto out;
+ 	 */
+-	EMIT3_off32(0x48, 0x8B, 0x85, tcc_ptr_off); /* mov rax, qword ptr [rbp - tcc_ptr_off] */
++	/* mov rax, qword ptr [rbp - tcc_ptr_off] */
++	emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, tcc_ptr_off);
+ 	EMIT4(0x48, 0x83, 0x38, MAX_TAIL_CALL_CNT); /* cmp qword ptr [rax], MAX_TAIL_CALL_CNT */
+ 
+ 	offset = ctx->tail_call_indirect_label - (prog + 2 - start);
+@@ -888,9 +889,7 @@ static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
+ 	 * Pop tail_call_cnt_ptr, if it's subprog.
+ 	 */
+ 	EMIT1(0x58);                              /* pop rax */
+-	if (stack_depth)
+-		EMIT3_off32(0x48, 0x81, 0xC4,     /* add rsp, sd */
+-			    round_up(stack_depth, 8));
++	emit_add_rsp(&prog, round_up(stack_depth, 8)); /* add rsp, sd */
+ 
+ 	/* goto *(prog->bpf_func + X86_TAIL_CALL_OFFSET); */
+ 	EMIT4(0x48, 0x8B, 0x49,                   /* mov rcx, qword ptr [rcx + 32] */
+@@ -923,7 +922,8 @@ static void emit_bpf_tail_call_direct(struct bpf_prog *bpf_prog,
+ 	 * if ((*tcc_ptr)++ >= MAX_TAIL_CALL_CNT)
+ 	 *	goto out;
+ 	 */
+-	EMIT3_off32(0x48, 0x8B, 0x85, tcc_ptr_off);   /* mov rax, qword ptr [rbp - tcc_ptr_off] */
++	/* mov rax, qword ptr [rbp - tcc_ptr_off] */
++	emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, tcc_ptr_off);
+ 	EMIT4(0x48, 0x83, 0x38, MAX_TAIL_CALL_CNT);   /* cmp qword ptr [rax], MAX_TAIL_CALL_CNT */
+ 
+ 	offset = ctx->tail_call_direct_label - (prog + 2 - start);
+@@ -955,8 +955,7 @@ static void emit_bpf_tail_call_direct(struct bpf_prog *bpf_prog,
+ 	 * Pop tail_call_cnt_ptr, if it's subprog.
+ 	 */
+ 	EMIT1(0x58);                                  /* pop rax */
+-	if (stack_depth)
+-		EMIT3_off32(0x48, 0x81, 0xC4, round_up(stack_depth, 8));
++	emit_add_rsp(&prog, round_up(stack_depth, 8));
+ 
+ 	emit_nops(&prog, X86_PATCH_SIZE);
+ 
+@@ -1857,7 +1856,7 @@ static void emit_priv_frame_ptr(u8 **pprog, void __percpu *priv_frame_ptr)
+ #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
+ 
+ #define __LOAD_TCC_PTR(off)			\
+-	EMIT3_off32(0x48, 0x8B, 0x85, off)
++	emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, off)
+ /* mov rax, qword ptr [rbp - rounded_stack_depth - 16] */
+ #define LOAD_TAIL_CALL_CNT_PTR(stack)				\
+ 	__LOAD_TCC_PTR(BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack))
+@@ -2958,8 +2957,10 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+ 
+ 			func = (u8 *) __bpf_call_base + imm32;
+ 			if (src_reg == BPF_PSEUDO_CALL && tail_call_reachable) {
++				u8 *tcc_load = prog;
++
+ 				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
+-				ip += 7;
++				ip += prog - tcc_load;
+ 			}
+ 			if (!imm32)
+ 				return -EINVAL;
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261012-stmmac-rx-mb-v6-0-2225050915c1%40oss.qualcomm.com
+2.43.0
+
