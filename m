@@ -1,213 +1,293 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CA75172CA;
-	Tue, 13 Oct 2026 15:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253DE53B5FA
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 15:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791905510; cv=none; b=FItMZ/STMXJ6HGi0usZx3hI2jG4Fuvwg6lh99YqymXnOgnvszGUcY0OiS/mfpGk+DNhFXq525xzfwFJXeYK5Fr4v93Ury0UZqtfQoPoTfOGFHNBWEjcAftFQzb4F1AzRFzua3Y29zbSyL4oB4fYuDtbbU1uhZF0EfU4nTvT6Me8=
+	t=1791905629; cv=none; b=Sgo18zlD3iTv7epS2DN1wr+zwXU34RBDmX7Z0luGSozpHt58Ir9YSwRN9Rri0XvQJ//CHiLNEw6doUmg9R7BPSPL2p+XOSzJoqjgQtWHHW0Tw4fQSvuye9P29EnBtA+bDrONznvBKac8cYEbWvoBpBQYGD+TAJG7qd7/ex7zTl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791905510; c=relaxed/simple;
-	bh=gsmrp0uRtNEEBvwP4Q0pKgs8lFscoCBmjiamKhm7z9Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ld0+EU1tPi9dmooxaYAPuh3lcqDt2mNRsH6i5omaPNKLlWb8MFq9+D4+QngBtNJYLf4yjWzRQyDjwRwgoQhiSU44OH2iFNlAKZG39cfSvUZvB3ZauxOA1dt3StT2+YX3xZ0q0DsSJ9O9UOpYnlgdcm3ohxF+0d0QjK486RuBFWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D5BClKMk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791905629; c=relaxed/simple;
+	bh=hvR4gU+aJ5sFh8b8hiP8dD5N3LG+R73Tho451ruiOm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pMDwegDkR54G3XqcFz51kJPbwYkhS3MC+g32DnO08lVO2FW40iBGWYq7LtL7IXBtPkQA+/bp1Jev/gsx1TfFqD3HwL0ZFdA1lZdc8+31fOz31w00CpYOmdY5YX2YFJTfL2OA7kHkuBenX9nWjIuRIgirtXvk8msnK3dzHeQearI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=J2h8XG1w; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SkHCfuhA; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D5BClKMk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ABA81F000FF;
-	Tue, 13 Oct 2026 15:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791905508;
-	bh=ABcU0W+nIwCqZSTy0PPdZy1uyj317pAS/O9WDDdnQZw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=D5BClKMkyjHNOoeNuUKWF6HwQ8es4HwocZa/1vk5hPJxYK0OE2MtOdN0S2gmcH6lC
-	 h2bS5ASLQ2jbvKrWro4RUW2U8G5muKxncrLmF+Jou2z0+IhaAxzQhCEY/LrmDDFWT6
-	 M6xKr2R3fPo+unNvnMZSc2FKExJxWD5IMaBvhhbtafRSFGB4ueb89jIBT5sOdDSJZN
-	 GDOdloqs53ZQ9vDKS7F/ry5KwOabJqSqdFue4yGsWFChcPdcnrWzVPTjRyPqdUgvoo
-	 j9GhCWKrZ4bFEjuUrlQ3XmGuaXcGd+p+mRRvlVf6aiAfRoUGE+Fx6LYN+MBnX0qWdK
-	 WFMXQD15T+n7w==
-Message-ID: <7bf5a2dc-f7be-425b-99e3-75b4546c8e19@kernel.org>
-Date: Tue, 13 Oct 2026 17:31:13 +0200
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="J2h8XG1w";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SkHCfuhA"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69DEpwf31402906
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 15:33:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=HGeBD3r78PRe46uI+kLHVwNa
+	muj8NRza/V5oim/8S1s=; b=J2h8XG1wsM86CpohKwAVsMYjQidPsCgLchU5wXx8
+	NpEJHWAUg4xi+UmBNYdkc6TKf7j6BobzE47cQ/gdVXUuo+15j8kMGjhCeU9Vi+RL
+	ajEGJqmbP8s/EqvZbU/XqzgMSrXLbN1EgicPh0xdiMlmVnXAZjo9gHJ5Fan19llx
+	yr/Tz67OaktrxJszSPhUeYt5/qjEvjPLG7G4Yy8BpxYQLaL8Y9QsvSEZnMmH9TuN
+	nXCeCE4QxTtBFb6p+w0Zik3fCFZC8W7a+G8/cUHvzKom7ERk52fdIEhOtAy96X6F
+	Qo8TTT1tDONigKD3kIDhlDJZu73HdbpnS7tOzx5TDeccBw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h9psk06hb-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 15:33:44 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93ce7a85f04so704226485a.0
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1791905624; x=1792510424; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HGeBD3r78PRe46uI+kLHVwNamuj8NRza/V5oim/8S1s=;
+        b=SkHCfuhAxIfmDSaUyuFTKVSwurFgQ/cZ9OJWDPURlmiF7iAp/C9cMO4rCVH9kuECfq
+         wBL8e90DjqAK474AzmV1RQ3ixwhbFQ1F+xByXQ7jbToIBPCRyw8ifGOO/dFnEMY07uSb
+         i8QOPFy790IOm5agk5BfI67XJaszkRWmH/Oh9T053j42R8ZIvrHijX9aCTvPSnvz1GS8
+         ztMyPeFdrl4AIX3R7TUBneFK0KBR/ZDg0zavqpEM3jSOlpPUvIFW2D0dP5mJKo41Rl3j
+         DAy6gERR0NtGe8IF1/jXFB+an77TQWVSD4FE3wshMmxPsIb6MeCcA6gh6GC52ORwB6z3
+         bslA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791905624; x=1792510424;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HGeBD3r78PRe46uI+kLHVwNamuj8NRza/V5oim/8S1s=;
+        b=kyHxAxXJKjj8uYIwoPdI7UbTA0RoMbP1wwmnoa3jbFZ37S1OMs0+86Qx0Dhy2HzB5n
+         wfkLO14+Y1YQ5rxsHumg3mO+OrSpkmI480KYxBkgC/H9LCq2CR0eTzOz/1l2JiUFIHrO
+         lG1JaXh8BFypttJnXGuPsSej6iIQa20aypg1bHIPjaD/KKZxqBqGQ9GB0n0rZTC3r6xm
+         jX7n035063k29Tse7u3E062T5inSwXEMQMMawjm1rVNIe9R0i8UR54vl0OBr3WjRQSD2
+         qj+MaebStKLrmqS0MpgWQJOH1mi8O04VF517865NHvHPCnp7rZBYrOQGRAJZEHsDfPO7
+         H2tw==
+X-Forwarded-Encrypted: i=1; AKwUvBxsHCBdT30VAlUKy7xeMI7GmVrssg4lCEQtMJrvaaNhL0B/bX+LZxEZuD8XOedlfkOu5Eo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYITvB1LdyNXxo7515I4YEdxc1BEOgwRIWmAz2l8SCqX+XvEnA7e
+	cK1aHL2NnliGHGzss/kVj+VD4PbBJsLbZcKzUPqY3dQLQtOQ+L84k2ohnoe8A4l6jiLj07w4IjX
+	YdsBXj2gepc1skAFRoXaYflkFV8wLizXy8eEuJXuPohQhMHDjIDIj120=
+X-Gm-Gg: AYBFou03vHHe6U5SQSZOOwr4bTMf0uNJ7w7qvWJ5mYJat+chEESmkOARd2I0W4CP0ij
+	COxeRKxOb9RfTWdl6vMaq8Q2JpN5Shv4b/Po5rR7b+TTWy80NjrfWnEs0z+18F6QjsrTvF2EWMf
+	C78n062els9ijGG1NbKj+0OZ5BhAJlOj3J+tzL/PR1dMVzc1jYWk5o7bZ5mLsgss/Iuhgv4zXHe
+	GuHW5RmZ2FMQWG9i75f9QAPtREFPY3HFvI7ZTfCya0vgl9n76VhnZfi3jWLwWVrT+I+06i9Skh0
+	emKBz1Far/RG6FxZ2WucgVXU3Hln0YuDUh+Aony4WL2CDjAY3T/ytLo707N1ivc6umsXLpi23qQ
+	uXMufT1DYOsvYhg==
+X-Received: by 2002:a05:620a:3711:b0:93e:9292:1bb0 with SMTP id af79cd13be357-93ebd0c08e9mr2039604285a.3.1791905623769;
+        Tue, 13 Oct 2026 08:33:43 -0700 (PDT)
+X-Received: by 2002:a05:620a:3711:b0:93e:9292:1bb0 with SMTP id af79cd13be357-93ebd0c08e9mr2039594885a.3.1791905622602;
+        Tue, 13 Oct 2026 08:33:42 -0700 (PDT)
+Received: from localhost ([188.216.77.92])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0aaabb8sm6621534f8f.15.2026.10.13.08.33.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 08:33:41 -0700 (PDT)
+Date: Tue, 13 Oct 2026 17:33:41 +0200
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+        edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, sdf@fomichev.me, boon.leong.ong@intel.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH net-next 2/2] net: stmmac: disable TX checksum offload
+ for jumbo frames on bugged cores
+Message-ID: <as5PVATLFOcTHbkV@lore-desk>
+References: <20261012-stmmac-xdp-tx-pre-fixes-v1-2-05fd0c90f7e1@oss.qualcomm.com>
+ <179190522792.434549.2113659711683261245@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 30/39] mm/vma: introduce vma[_flags]_is_mm_backed()
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Paul Moore <paul@paul-moore.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <mkp@kernel.org>, Simona Vetter <simona@ffwll.ch>,
- Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
- <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
- Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>,
- Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
- Xu Xin <xu.xin@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-rdma@vger.kernel.org, selinux@vger.kernel.org,
- linux-sound@vger.kernel.org, bpf@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- fuse-devel@lists.linux.dev, Ihor Solodrai <ihor.solodrai@linux.dev>,
- Bert Karwatzki <spasswolf@web.de>
-References: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-0-1aa3c9b139f9@kernel.org>
- <20261013-b4-mmap-prepare-vma-flag-sanify-v6-30-1aa3c9b139f9@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20261013-b4-mmap-prepare-vma-flag-sanify-v6-30-1aa3c9b139f9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LxLLuhv1acDbnu1W"
+Content-Disposition: inline
+In-Reply-To: <179190522792.434549.2113659711683261245@kernel.org>
+X-Proofpoint-ORIG-GUID: 4-1qWUnVYWXcenDzXd91M-TEY4XxVWal
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEzMDA2MSBTYWx0ZWRfX3iffXxylEFKu
+ dJuOluAUNQKytpveOGzqOCUstNPSi8248rbtssFDplspW1+ivQSSLR4NvsnbPIF/k5cZML6PAp0
+ FMPpmy7fFb5QSqUpHJdWu+P9QK95uZ4=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEzMDA2MSBTYWx0ZWRfX4Y+KXiHJDJE6
+ Twm8KSKbWiHlH+qoAmQRmf+GLuFbFKTzxlYQLeMzzH/IoZkLemHTP3WtdM59dbivU2MDbZeawW5
+ Qx4lL9aQxcmKRYT08OgW5mu0zl68Xh7IQ/R+6Mzwfzu/7YiFFwnjUHL0HK/t4wr4QbulScBCHeq
+ Ob0+h+R3Jifhk4sYautRAJ4f14uIj6Z1xRz4p/2Q3LevHgdu/XTKzRy2fWmk8qXtgu2fpTLBjVg
+ WnRfh8HFxvdTHpUSlCqPY8riPZWy/aUVQRSH0/RktEazyPXDSbATfPQq6ia0TEOJihTrwzzj6jS
+ QN0guYDylSIhd+1AiiMFKTpf8THWokZlMLVSWg0UDl+x18slJcrKXDD/tRAaGTwLoQ1G2+l2ItN
+ cSWGhaqHWVBBUzftp+ghGA1HPUoDsQlIiwb4+Sjgxf5mNkXP+apGkESMTH3plK9XcpF332qMqv1
+ xmXh3O4pnZrNlj/y+bg==
+X-Authority-Analysis: v=2.4 cv=cbJHPXDM c=1 sm=1 tr=0 ts=6ace4f58 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
+ a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22 a=9R54UkLUAAAA:8
+ a=EUspDBNiAAAA:8 a=cRO2Fxw6IMYKndE-NWIA:9 a=QEXdDO2ut3YA:10
+ a=R2sLeNz3RpVDkO3zkzYA:9 a=bTQJ7kPSJx9SKPbeHEYW:22 a=YTcpBFlVQWkNscrzJ_Dz:22
+X-Proofpoint-GUID: 4-1qWUnVYWXcenDzXd91M-TEY4XxVWal
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-13_01,2026-10-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610130061
 
-On 10/13/26 17:05, Lorenzo Stoakes (ARM) wrote:
-> Introduce vma[_flags]_is_mm_backed() for the purposes of identifying
-> mappings which are mm-managed and whose contents were placed there by core
-> mm's own fault path - rather than a custom ->fault handler.
-> 
-> Mappings not managed by core mm do not fall into this category, as they are
-> populated by their owner, and nor of course does memory-mapped I/O.
-> 
-> We exclude fixed mappings as these have a layout core mm cannot assume
-> ordinary fault semantics over.
-> 
-> hugetlb mappings are fixed mappings, but core mm owns them entirely, so
-> they are explicitly carved out as mm-backed, as the MADV_DODUMP check
-> already does.
-> 
-> Use this functionality to update the madvise MADV_DODUMP check to test for
-> this rather than open-coding it.
-> 
-> Also update vma_flags_can_merge() so it is written in terms of
-> vma_flags_is_mm_backed() - all mm-backed mappings can be merged except
-> hugetlb mappings, whose flags and fields do not completely describe them.
-> 
-> Also update __thp_vma_allowable_orders() to use vma_is_mm_backed() rather
-> than testing for mergeability, which is irrelevant to this function.
-> 
-> This replaces the VM_SPECIAL check which means it no longer checks for
-> VMA_IO_BIT, however this is safe as we have established the invariant that
-> mm-managed mappings may not set VMA_IO_BIT, so we implicitly include
-> these.
-> 
-> No functional change intended.
-> 
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
+--LxLLuhv1acDbnu1W
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in ca=
+se
+> you want to address the nit picks below when you respin.
+>=20
+> Low priority / nit picks for your consideration:
+>=20
+> - [Low] The commit message's premise doesn't match the tree.
+>=20
+> Pre-existing issues:
+> - [Medium] This problem wasn't introduced by this patch, but
+>   stmmac_xdp_xmit_xdpf() never looks at priv->plat->tx_coe when deciding=
+=E2=80=A6
+>=20
+> --
+>=20
+> net: stmmac: disable TX checksum offload for jumbo frames on bugged cores
+>=20
+> This patch turns off TX checksum insertion in stmmac_xdp_xmit_xdpf() for
+> frames longer than ETH_FRAME_LEN on bugged_jumbo cores. It is meant to
+> match the stmmac_fix_features() workaround that the skb path already uses.
+>=20
+> > The XDP TX
+> > path bypasses that workaround, so once XDP is allowed at MTU >
+> > ETH_DATA_LEN, jumbo frames sent via XDP_TX or redirected into the
+> > device would leave the interface with a full checksum insertion enabled
+> > on those cores - exactly what the workaround is meant to avoid.
+>=20
+> [Severity: Low]
+> Can this scenario happen in the current tree? XDP still can't be used with
+> a jumbo MTU. stmmac_xdp_set_prog() refuses to attach a program when the M=
+TU
+> is above ETH_DATA_LEN:
 
--- 
-Cheers,
+This is actually a preliminary fix needed to remove the MTU limitation when=
+ the
+device is running in XDP mode.
 
-David
+>=20
+> drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c:stmmac_xdp_set_prog() {
+>     ...
+> 	if (prog && dev->mtu > ETH_DATA_LEN) {
+> 		/* For now, the driver doesn't support XDP functionality with
+> 		 * jumbo frames so we return error.
+> 		 */
+> 		NL_SET_ERR_MSG_MOD(extack, "Jumbo frames not supported");
+> 		return -EOPNOTSUPP;
+> 	}
+>     ...
+> }
+>=20
+> stmmac_change_mtu() also refuses a jumbo MTU while XDP is enabled:
+>=20
+> 	if (stmmac_xdp_is_enabled(priv) && new_mtu > ETH_DATA_LEN) {
+> 		netdev_dbg(priv->dev, "Jumbo frames not supported for XDP\n");
+> 		return -EINVAL;
+> 	}
+>=20
+> The redirect case looks limited too. Devmap checks every frame with
+> xdp_ok_fwd_dev(dev, xdp_get_frame_len(xdpf)), which caps the length at
+> mtu + hard_header_len + VLAN_HLEN. At MTU 1500 that is 1518 bytes.
+> Redirected frames therefore reach the new ETH_FRAME_LEN check only when
+> they are 1515 to 1518 bytes long, which is VLAN-tagged normal-size
+> traffic, not jumbo.
+>=20
+> The one path that seems to reach the new check today is XDP_TX after the
+> program grows the frame. At MTU 1500, stmmac_rx() still sets frame_sz to
+> at least PAGE_SIZE:
+>=20
+> 	bufsz =3D DIV_ROUND_UP(priv->dma_conf.dma_buf_sz, PAGE_SIZE) * PAGE_SIZE;
+>=20
+> A program can therefore use bpf_xdp_adjust_tail() to grow a frame past
+> 1514 bytes and return XDP_TX. stmmac_xdp_xmit_xdpf() never checks that
+> length against the MTU.
+>=20
+> Could the commit message describe the trigger that exists today, and say
+> whether the bugged_jumbo erratum covers it? If this patch depends on a
+> separate change that allows XDP at a jumbo MTU, could the message say so?
+> The Fixes: tag reads as if the problem can be hit now.
+>=20
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/driver=
+s/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > index ca61ab449e32b..0e29c5d04714c 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > @@ -5276,6 +5276,14 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_pr=
+iv *priv, int queue,
+> >  		return STMMAC_XDP_CONSUMED;
+> >  	}
+> > =20
+> > +	/* Disable TX checksum offload for jumbo frames on cores where
+> > +	 * checksum insertion is broken for oversized frames, matching the
+> > +	 * stmmac_fix_features() workaround used by the skb path.
+> > +	 */
+> > +	if (priv->plat->bugged_jumbo &&
+> > +	    xdp_get_frame_len(xdpf) > ETH_FRAME_LEN)
+> > +		csum =3D false;
+>=20
+> [Severity: Medium]
+> This is a pre-existing issue, not one introduced by this patch. The
+> comment says this matches stmmac_fix_features(), but that function also
+> turns off TX checksum offload when tx_coe is unset:
+
+since this issue has not been introduced by this patch, it needs to be fixed
+with a dedicated patch.
+
+Regards,
+Lorenzo
+
+>=20
+> drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_fix_features() {
+>     ...
+> 	if (!priv->plat->tx_coe)
+> 		features &=3D ~NETIF_F_CSUM_MASK;
+>     ...
+> }
+>=20
+> In stmmac_xdp_xmit_xdpf(), csum comes only from the per-queue flag:
+>=20
+> 	bool csum =3D !priv->plat->tx_queues_cfg[queue].coe_unsupported;
+>=20
+> stmmac_hw_init() clears tx_coe when threshold DMA mode is forced:
+>=20
+> 		/* TXCOE doesn't work in thresh DMA mode */
+> 		if (priv->plat->force_thresh_dma_mode)
+> 			priv->plat->tx_coe =3D false;
+>=20
+> stmmac_dma_operation_mode() then runs TX in threshold mode
+> (txmode =3D tc).
+>=20
+> On platforms with snps,force_thresh_dma_mode, do XDP_TX and ndo_xdp_xmit
+> frames still request full checksum insertion through
+> stmmac_prepare_tx_desc() in a DMA mode where the driver treats TX COE as
+> broken? Should the XDP path also check priv->plat->tx_coe here?
+>=20
+> >  	while (true) {
+> >  		skb_frag_t *frag =3D i ? &sinfo->frags[i - 1] : NULL;
+> >  		int len =3D frag ? skb_frag_size(frag) : xdpf->len;
+>=20
+> --=20
+> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
+set/20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1%40oss.qualcomm.com
+
+--LxLLuhv1acDbnu1W
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCas5PVAAKCRA6cBh0uS2t
+rBh4AP9zsPqcy5v4MxxUTWhZ0mz6mxVY53by/yLBAIv2hnvqoAD+NV1ihtRAqalp
+oG98y0xYkm4wcIjB5r1EF/ebj3Ig1go=
+=LEQo
+-----END PGP SIGNATURE-----
+
+--LxLLuhv1acDbnu1W--
