@@ -1,241 +1,172 @@
-Received: from mail-m1973198.qiye.163.com (mail-m1973198.qiye.163.com [220.197.31.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DF013D53C;
-	Tue, 13 Oct 2026 12:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783765013A8
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 13:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791896246; cv=none; b=HCVcBussIkwz+T7P3gu7SrXHjKkcJ1DTZR4KjrvlllnEozgi+fb2bj4SX+SRqVY5WA4+VEPmqBYoT5Z6qNvrkDdtBJATb6k52jeArI9FiIl4aibulEVDKoxl0twPWcgztFUJW/iSmPdDSk8ipRHoSF9L2yA2H7Iv4Jl8U0Y9FQo=
+	t=1791896442; cv=none; b=ODOaXw/kSbJB7/CHIZkKbsNtEeXHh3/loXyq0JTGQFyjQZw+6oiciSCznQOEsi7B4o6+QXFtftlAOnDyr+30m8Q1TItthgdXuCuw4FZsjE7jF7cEzZnIeMFy0wgs3hZSXQ9S7KgWOKN9orWZkR6xJFcBltvY8VmMjs2lBKVrqL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791896246; c=relaxed/simple;
-	bh=mCsPqGiqz9PyjMkewqXOYz3BEsU6ovphopKLLemF7Gw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=usw4tkVF03O74JkU/lKL38zZUrQE44OneE1IiTeONsuP1DWD/wmMGH08/ASuM2pZ2gfKae/ySFN7ChYkZ4NRrZzEdgZSwO05MYLhx1XGppQm1GV/XI4gYprh+pZO9xqsnu0qHYMiXCiM9/x33caOlUQJO3KReVkLv59s7uFQTjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=220.197.31.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 200407eea;
-	Tue, 13 Oct 2026 20:21:43 +0800 (GMT+08:00)
-From: Zhen Ni <zhen.ni@easystack.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	akpm@linux-foundation.org,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	brendan.jackman@linux.dev,
-	hannes@cmpxchg.org,
-	ziy@nvidia.com,
-	shuah@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH v2 1/6] mm/page_owner: extract page_owner_next_eligible() from read loop
-Date: Tue, 13 Oct 2026 20:21:20 +0800
-Message-Id: <20261013122125.843451-2-zhen.ni@easystack.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20261013122125.843451-1-zhen.ni@easystack.cn>
-References: <20261013122125.843451-1-zhen.ni@easystack.cn>
+	s=arc-20240116; t=1791896442; c=relaxed/simple;
+	bh=yQEEfCOK4gxCSnswHreCDFy8H0r8GTZ69JS3nEOvTJY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sHWrBLmcZ12PK9emXmhafPzdCMSUiKFXHAjdqU2k1KwTeKoBTeCVpQ1o7XAOn0lGcmLvL5AYu8Cb4a9j9A4DWUzILWepCl7pPmCMlH/9s4FPhyHmhnT06Z5HTArNzUBHyIIMOuHvffK6GpMCaH49PL4T6PwIW4FhvekvItD8878=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LtwEsIMn; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LtwEsIMn"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-49fbb2acc90so25167175e9.2
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 06:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791896438; x=1792501238; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NthVEFHw1ElrKnMw0H8naPta36sjMNg6TdhZjsytLXU=;
+        b=LtwEsIMnouq+efgAzmhwe7OfMDtbBqOTe0Pei7irgAZISHYjm6v+y0fk1wQ9qMrsGT
+         C96itFHmA45e6xDepSZiLh0I3ORrDzLG0NkDLtq3x6TW20EeEQjhS8ddydHLyhbRgQVa
+         bE5/5WyCKS56CrrVln8Scri6DpeAh1Wzs1TdFq62F7mXG1vCe0iwB182TD866y6vCBEa
+         xF+cc8fYytyFkxZefaOHpVSA4nPUTFiEQyIPMiAwlgfTXJ+oPHElwhtMwZH+nt5GkQCa
+         7jiKL6QcDN3/tCVfpC243ZAF4qL153HwmFoI/IBj058a334MsChVza+nczl3emvvmAaG
+         lrBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791896439; x=1792501239;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NthVEFHw1ElrKnMw0H8naPta36sjMNg6TdhZjsytLXU=;
+        b=muotWi9fjdWWkc38FqUFXxRV/dv2WT2LFxGm1oSA20jJQ6Mt3PEV4bkMKX6Tn9Gx1B
+         e8xMHfBNxEDL8nofUmvX3uR4Zdmc88UTk0xGg8slNV5uOYSXOV9uLW07YB2cgbOuxd29
+         X6NW1urhBTLiRK991tdv2UefeemuQs6n1cE4z8H7F1qt2qVccTRY0uEne41Jl81AyQa4
+         v+JwUFZpkJFsQyev44UUfR0kCqSVyQqGkswam8VUQdJiTEUELuLJ0DWpIcCZ8aLTV3OU
+         VtQ4gsnJKFnk1Qe3iedZ8kB7vui7ZWsi2qJNXn9ZcdZnAxbDNN+cJc1/0EWZVrvQo6EU
+         dT0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBybPWdjuW7TrJxitQarrUqAjzBKZsiO46O6ik3kKrmEoyHkVGpnCO4+MIaHbuBqieMOsvY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIo8ZBnKiralMB0FmY8tLcAFyvqvtlclH58wz6uvf3YWhacCSOi
+	dhYI39x1ekPFP4YNpWR5GNxf7q7YwkPLEztmMMR2JC7cBGCLXeDG8lpK
+X-Gm-Gg: AYBFou2B968Wws0srSrnUkSM1wIo15rGaUlywKuGP9IwB8Wt2kqWwpz5Knpk3rPc/Az
+	wf0hd8EpBICSN/Vk97saxsWbJY+fRPylzIWUflZYaooHs2WsoislHNHcN1+I9hbwGM9BpBex068
+	RJ8b4jMERGFSJSE6S8GcjWiex3A+gOSUVRP+amHA0c5xcxvI0Dq02SORUEHPBgzu4IBUMGf+AYS
+	eRFaSYX1OP12aASgCy8WwEB4KP1J12BYr71vpNwO8cyzGkJ1WS/gacgyJm8I0BurCcJT1yRCJqM
+	ke6BODq7pdhoB/QpeGUt5INhLwWp5BsgAgV53SfnbZANPOJ31O41pDLFiUFo+xdpot5Yh2VKVm4
+	Ig74gtouJdbS2Jq4VxK6NPJ5QUHSvoe0SchSarzYF7m/NNnGitxl88HaErRP27xCe06sPy7e5Bp
+	QEqxDs6jNnPjAYfeDt2Sjv3ShVMNKqZNTybfObIMzF/2rihtNFfdxxm5mP5ZuM6u1UZxudvV5BH
+	8YKNvzITFKzsYojFCWvsRYFrftBCK9sO6M=
+X-Received: by 2002:a05:600c:8718:b0:4a1:7259:349e with SMTP id 5b1f17b1804b1-4a18e4e0a33mr241281245e9.27.1791896436656;
+        Tue, 13 Oct 2026 06:00:36 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:d896:14db:43e1:c012? ([2620:10d:c092:500::7:ee1c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18bf15691sm356699465e9.6.2026.10.13.06.00.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Oct 2026 06:00:35 -0700 (PDT)
+Message-ID: <1cfad8b6-1e42-4212-b11f-884c88aabf9d@gmail.com>
+Date: Tue, 13 Oct 2026 14:00:33 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa1353625140229kunm0bc94a6a524c
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaHRhMVklNTUtNSx0YSh9DGFYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
-	lPT09IVUpLS1VKQktLWQY+
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 01/13] libbpf: Keep the fd_array fill index
+ out of bpf_program__clone()
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Tejun Heo <tj@kernel.org>, kkd@meta.com, kernel-team@meta.com
+References: <20261013082012.1107446-1-memxor@gmail.com>
+ <20261013082012.1107446-2-memxor@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20261013082012.1107446-2-memxor@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Move the page scanning logic out of read_page_owner() into a dedicated
-helper, in preparation for using it in the page_owner bpf_iter target.
+On 10/13/26 9:19 AM, Kumar Kartikeya Dwivedi wrote:
+> bpf_program__clone() hands the kernel the fd_array of the object along
+> with obj->fd_array_cnt when the caller supplies neither. That counter is
+> not a count the kernel can use: it is the index of the next free slot
+> of an array built for the sparse fd_array API, where module BTF fds
+> start at slot 1 and slot 0 stays empty, since a kfunc insn with offset
+> 0 names vmlinux BTF rather than a slot. A non-zero fd_array_cnt turns
+> the array into a continuous one, which the kernel resolves slot by
+> slot, and slot 0 holds 0. Cloning a program from an object that calls a
+> module kfunc thus fails with "fd 0 is not pointing to valid bpf_map or
+> btf", for every program of the object, which is what veristat runs into
+> on such an object. bpf_object__load() passes the array without a count.
+> 
+> Do the same in bpf_program__clone(), leaving the count to callers who
+> pass an array of their own, and rename the counter to fd_array_used so
+> that it no longer reads like the uapi field.
+> 
+> Fixes: 970bd2dced35 ("libbpf: Introduce bpf_program__clone()")
+> Cc: Mykyta Yatsenko <yatsenko@meta.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-The helper advances a struct page_owner_scan cursor to the next page
-eligible for page_owner output and returns true on a hit. On a hit it
-takes a snapshot of the page_owner record inside the page_ext RCU
-window.
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-No change to the output is intended. handle is read from the snapshot,
-taken before the non-zero check, so the validated and reported handle
-are the same value.
-
-Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
----
-Changes in v2:
-- Route the zero-handle case through ext_put_continue.
-
-v1: https://lore.kernel.org/linux-mm/20261009112308.240769-2-zhen.ni@easystack.cn/
----
- mm/page_owner.c | 103 ++++++++++++++++++++++++++++++------------------
- 1 file changed, 65 insertions(+), 38 deletions(-)
-
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index fbbda7ba914b..56c75a669a6b 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -36,6 +36,16 @@ struct page_owner {
- 	pid_t free_tgid;
- };
- 
-+/*
-+ * Cursor and per-page result of page_owner_next_eligible().
-+ */
-+struct page_owner_scan {
-+	/* resume point */
-+	unsigned long pfn;
-+	struct page *page;
-+	struct page_owner po_snap;
-+};
-+
- struct stack {
- 	struct stack_record *stack_record;
- 	struct stack *next;
-@@ -725,37 +735,24 @@ void __dump_page_owner(const struct page *page)
- 	page_ext_put(page_ext);
- }
- 
--static ssize_t
--read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
-+/*
-+ * Advance @scan to the next page eligible for page_owner output.
-+ * On a hit, fill scan->pfn/page/po_snap and return true; the caller
-+ * must advance scan->pfn past the hit before calling again to resume
-+ * the scan.
-+ */
-+static bool page_owner_next_eligible(struct page_owner_scan *scan)
- {
--	unsigned long pfn;
--	struct page *page;
--	struct page_ext *page_ext;
--	struct page_owner *page_owner;
--	depot_stack_handle_t handle;
--	struct page_owner_filter_state *state = file->private_data;
-+	unsigned long pfn = scan->pfn;
- 
--	if (!static_branch_unlikely(&page_owner_inited))
--		return -EINVAL;
--
--	page = NULL;
--	if (*ppos == 0)
--		pfn = min_low_pfn;
--	else
--		pfn = *ppos;
- 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
- 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
- 		pfn++;
- 
--	/* Find an allocated page */
- 	for (; pfn < max_pfn; pfn++) {
--		/*
--		 * This temporary page_owner is required so
--		 * that we can avoid the context switches while holding
--		 * the rcu lock and copying the page owner information to
--		 * user through copy_to_user() or GFP_KERNEL allocations.
--		 */
--		struct page_owner page_owner_tmp;
-+		struct page_owner *page_owner;
-+		struct page_ext *page_ext;
-+		struct page *page;
- 
- 		/*
- 		 * If the new page is in a new MAX_ORDER_NR_PAGES area,
-@@ -798,37 +795,67 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 			goto ext_put_continue;
- 
- 		/*
--		 * Access to page_ext->handle isn't synchronous so we should
--		 * be careful to access it.
-+		 * Take a snapshot of the page_owner record inside the RCU
-+		 * window, then validate it, so that print_page_owner()
-+		 * reads the checked handle from the same snapshot.
- 		 */
--		handle = READ_ONCE(page_owner->handle);
--		if (!handle)
-+		scan->pfn = pfn;
-+		scan->page = page;
-+		scan->po_snap = *page_owner;
-+
-+		if (!scan->po_snap.handle)
- 			goto ext_put_continue;
- 
-+		page_ext_put(page_ext);
-+		return true;
-+
-+ext_put_continue:
-+		page_ext_put(page_ext);
-+		cond_resched();
-+	}
-+
-+	return false;
-+}
-+
-+static ssize_t
-+read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
-+{
-+	struct page_owner_scan scan;
-+	struct page_owner_filter_state *state = file->private_data;
-+
-+	if (!static_branch_unlikely(&page_owner_inited))
-+		return -EINVAL;
-+
-+	if (*ppos == 0)
-+		scan.pfn = min_low_pfn;
-+	else
-+		scan.pfn = *ppos;
-+
-+	/* Find an allocated page */
-+	while (page_owner_next_eligible(&scan)) {
- 		if (state->nid_filter_enabled) {
- 			int nid;
--			memdesc_flags_t page_flags = READ_ONCE(page->flags);
-+			memdesc_flags_t page_flags =
-+				READ_ONCE(scan.page->flags);
- 
- 			/*
- 			 * Bypass PF_POISONED_CHECK() in page_to_nid() to avoid
- 			 * VM_BUG_ON when accessing poisoned pages.
- 			 */
- 			if (page_flags.f == PAGE_POISON_PATTERN)
--				goto ext_put_continue;
-+				goto skip_continue;
- 			nid = memdesc_nid(&page_flags);
- 			if (!node_isset(nid, state->nid_filter))
--				goto ext_put_continue;
-+				goto skip_continue;
- 		}
- 
- 		/* Record the next PFN to read in the file offset */
--		*ppos = pfn + 1;
-+		*ppos = scan.pfn + 1;
- 
--		page_owner_tmp = *page_owner;
--		page_ext_put(page_ext);
--		return print_page_owner(buf, count, pfn, page,
--				&page_owner_tmp, handle, state);
--ext_put_continue:
--		page_ext_put(page_ext);
-+		return print_page_owner(buf, count, scan.pfn, scan.page,
-+				&scan.po_snap, scan.po_snap.handle, state);
-+skip_continue:
-+		scan.pfn++;
- 		cond_resched();
- 	}
- 
--- 
-2.20.1
+>  tools/lib/bpf/libbpf.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index cb09ded90773..fcedb78abe00 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -794,7 +794,12 @@ struct bpf_object {
+>  
+>  	int *fd_array;
+>  	size_t fd_array_cap;
+> -	size_t fd_array_cnt;
+> +	/*
+> +	 * Slots handed out so far, slot 0 included. A kfunc insn names a module
+> +	 * BTF slot through its offset, slot 0 stands for vmlinux BTF and stays
+> +	 * empty, so the array goes to the kernel without a count.
+> +	 */
+> +	size_t fd_array_used;
+>  
+>  	struct usdt_manager *usdt_man;
+>  
+> @@ -9716,22 +9721,22 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+>  	/* set index for module BTF fd in fd_array, if unset */
+>  	if (mod_btf && !mod_btf->fd_array_idx) {
+>  		/* insn->off is s16 */
+> -		if (obj->fd_array_cnt == INT16_MAX) {
+> +		if (obj->fd_array_used == INT16_MAX) {
+>  			pr_warn("extern (func ksym) '%s': module BTF fd index %d too big to fit in bpf_insn offset\n",
+>  				ext->name, mod_btf->fd_array_idx);
+>  			return -E2BIG;
+>  		}
+>  		/* Cannot use index 0 for module BTF fd */
+> -		if (!obj->fd_array_cnt)
+> -			obj->fd_array_cnt = 1;
+> +		if (!obj->fd_array_used)
+> +			obj->fd_array_used = 1;
+>  
+>  		ret = libbpf_ensure_mem((void **)&obj->fd_array, &obj->fd_array_cap, sizeof(int),
+> -					obj->fd_array_cnt + 1);
+> +					obj->fd_array_used + 1);
+>  		if (ret)
+>  			return ret;
+> -		mod_btf->fd_array_idx = obj->fd_array_cnt;
+> +		mod_btf->fd_array_idx = obj->fd_array_used;
+>  		/* we assume module BTF FD is always >0 */
+> -		obj->fd_array[obj->fd_array_cnt++] = mod_btf->fd;
+> +		obj->fd_array[obj->fd_array_used++] = mod_btf->fd;
+>  	}
+>  
+>  	ext->is_set = true;
+> @@ -10940,7 +10945,7 @@ int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts
+>  	attr.prog_ifindex = OPTS_GET(opts, prog_ifindex, 0) ?: prog->prog_ifindex;
+>  	attr.kern_version = OPTS_GET(opts, kern_version, 0) ?: obj->kern_version;
+>  	attr.fd_array = OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array;
+> -	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0) ?: obj->fd_array_cnt;
+> +	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
+>  	attr.token_fd = OPTS_GET(opts, token_fd, 0) ?: obj->token_fd;
+>  	if (attr.token_fd)
+>  		attr.prog_flags |= BPF_F_TOKEN_FD;
 
