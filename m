@@ -1,275 +1,232 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f11.google.com (mail-oi2-f11.google.com [74.125.231.203])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185BD3D566E
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D99137A831
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.203
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791879442; cv=none; b=eeOSHgar4BLE60pFR+I7nFj9wXjSfL74NHBSzc8KpwRnWjTXO0ugUhFcsqpBwBnDOw8BND347BpbUvvspHyELMK6hQ0/KlOAMCVbVKdH3SVZNe7mCEogbP7a02WhX+6ScT+2zVlANZa/8Nc0sTJs6011EhB40iE6yq+f5ceFHyk=
+	t=1791879619; cv=none; b=Nogb0PXRhZVOZ+eUXFI0iYAZAjzsUVz0GcMU239Qz02Ch88d+DxRa4oQx20rlHgB/j0fm9HwIr6F2PXc2qtX1srfiTZ19kAEVb6cYeEXhWAXMjuwkloZ1Hy03eidRdzL+DthLyjpwPtLXRGTL5o1cqE1rBgx/ne6yYgFx73yQ/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791879442; c=relaxed/simple;
-	bh=Td6UJVofWCDnQamk5CY5XGtu81PPv/v89CyEdQyhisQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mSnN9vYXzZGApMjGQamHPre0/cXgtUueKl/L+ZUM6lkmxTWdI5vDZn4L8VjsGdS/3YF9Zlhlg3I4hx1edYV8h3Ihb+66hiucQiJqYVPU85ar0tjx3RKG4qGjSnZLMM1TUVnBP314R7SWWhpBoQ8llhOzVl9YRP1SLHp65Mp+KaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TFx4T6s+; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=aJXc2rqg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1791879619; c=relaxed/simple;
+	bh=YMQriRh1ch4lThe/Mdtv77vz7qgOtreBXaRK79lZTK0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KtPjVw8F/RtPLLDnXPYA9/eF80th0gWtOO7Ob0ZJUrbx63ROJUGifBqdlNtzXAoUXOB11HwHGZiChfTQRVxQcqLJ5+XxfNuDx+319/pSj9ivfGvbrAF8oAds7+dgBo/ID41ma379qKTvmH8gemP4H3WQkeD8wY/HyaUWUesvMK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QdvwkAuV; arc=none smtp.client-ip=74.125.231.203
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TFx4T6s+";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="aJXc2rqg"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69D21Jbr4072150
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:17:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=RDFKYb/m924u2VXBFcjCVaMk
-	oZJEVndeSzqMZ0nALvQ=; b=TFx4T6s+vG6c2WLyALwPHKSqjTDtCN7fxBIwwo1J
-	dU7J6toDY3QwVuwovF2S2kEb/grSQqpfCVP88Pj9VauALz8f5p1qZ9Bxp5osc2ph
-	vVnfrKQb6faASfxul4QO1ApJ2kwEWaOGhETfWu2apCrsqyf3TObZqHgWPEOgQLhh
-	Jpnfz0jCHN0kyEdJ1+M5FtNGd0ocJ05actKCyR08YPiN3TVfLRzIwpIZ6lq7Eu3K
-	/BUuuasFa7IVJtOsSdtNiVQdtMTFTakXpwk2ovJmmd944coP1P693ovg32b8VC40
-	5fKQICLfMUU7TMz2R+ZuGa4oQ6HVnMc2/r9FEOVCcyZX1Q==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4h92jjug2e-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:17:19 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-939c30aa9a0so249151785a.0
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 01:17:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QdvwkAuV"
+Received: by mail-oi2-f11.google.com with SMTP id 5614622812f47-4bfec71901fso962726b6e.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 01:20:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1791879436; x=1792484236; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RDFKYb/m924u2VXBFcjCVaMkoZJEVndeSzqMZ0nALvQ=;
-        b=aJXc2rqgZAtWYGJXCckGoC9VBYKZE3uyMfdRO5vpZ6eo89vJkP/wuXjYAYWyxwHCZ+
-         MzwnxFZ15kIkzjU/o1+wxv/iVnN3iqjq7Nve8pexfM0ud5fyeRexkSCzYYSozKLY8j8j
-         YE9DNCLBYNUuVnftaob4l4FPNlMcmaC4Cwhm7pQGohdiwY1JIseZ3tnauz7aDvEI48bG
-         x1QLovel1n84yQ88SudTCRt3crKzf1jp0Zl2gqQaJ0egmK5vTSx/ErjvM8+jyRgnp5mB
-         jFSohFks0ziYhzpMlRKMgYwNU5RykcobGCsLo21V4A2cIJ0awYSH8QfqCELCTOLCglIt
-         onwA==
+        d=gmail.com; s=20251104; t=1791879616; x=1792484416; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6QeuCWN3GaTM3W5UEIwyrfGUSKufTptoJx6qvClJS88=;
+        b=QdvwkAuV9GehhxaGE3+DrROttaVxD69i3OVwA18oZw1qJ71PQVM+JycEfQlxLhIhaF
+         yFDXc3RukyA88lti80ccqRvWMeCHuErrUvntbY1tWDF5gSHP8Sku4/ZK1q9tMl8NGyN8
+         NbLDv7NwOvVulT6hKwpuw7cbx59XxCuvL0LS4GugERR4N0g6Y2+vJrzssRwSbDGvztkS
+         amzdSp0EpYSX/3Mc6u5MZW1fNG80SDVWv/nL+3LERqWixHgkPjJAwRlENYhI1GD+qAMo
+         4NVogpWSGbajs71/qG1Pa4AvyPURuquxtC+hvcT4actgdv+MxyDx62ydlVM7SWvAWFwY
+         z0mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791879436; x=1792484236;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RDFKYb/m924u2VXBFcjCVaMkoZJEVndeSzqMZ0nALvQ=;
-        b=lglG7CYyRFwUH8slt1F/3JqPf0/DMO4Rrr4IG/ntSPmzHlRYRCV9WbCLE3TO0wAtV3
-         B+mmD4k7Sa4lXhwsj8XYQ/2c60+7tAMQ/0cc92EgQgSs7Yv7QsT1/qL6xUAzerw4lAAB
-         RKqD5ofVbBmn01yH9t3SMsQh0UcfXJjASxbrKgiblJ/+3cxq6OIT1ic5r19xqOnTquQ/
-         vjUPyty8p7YI5Bay6XNDHuMl4VNQiB8FVU84v6WUG8wCJ1wxTwwUh5VTabm/9aCiyNYO
-         OyPvQJpDfr3QsRBxBcE2PSjzvvRFMqXzebKbep52rC5gVOtTDnwmU+fNvDJdv/TKcAyB
-         xanw==
-X-Forwarded-Encrypted: i=1; AKwUvByWD/tlChSj6SltQ2HiE1jUTI+Sag3PlOOtr5g+3oNHRuV+A7JEhEwjPjSoKpSnoVhdgS0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI2nUIU9l3nY6F2Y4L7MojYOHT5jRHFweriqsllNkIWW1GHwWXo
-	POYFTlinYMCAmBFCpDM1BbGgBz+02mUj30HS7LNtaXTGnUEKacVDrNJ1YOqvRIHaWexyP0MDqE9
-	zXTpY7aaNZv//4ljrNJAnmCj2daR7PNK53bKR4tK7JFg6FlDgXp1AE7M=
-X-Gm-Gg: AYBFou2FXiMHS0olmCiiK1rvObCr4omzHA8RpFbokr87YfwptpHvpi3k8+V/tWVxu4c
-	o2tqiWkr81D1i9tbHZQvQ43OicIBLPlocJqhXgPRwJUBKt5wN653E1bZia0SGEUSrA8Kv550Uiz
-	7YNhSlbK9MQUvPdumxOwnWwKqIyH67Y4v+zjNxKhBk4HXDIVFUdoslJ7rnoKgfBUmTcDWq5VFT8
-	wOKNcnnQW3LuG8APNTuVheyoY3x9DvE3pai45UJY3YoASiSSNp5QxO+GGZ9mKkzPGj170UHpAqc
-	cgILdggwLDjMq6wnaJy2zrYvjVar+nK2Y2hVGsjeO2AdT695XnAne/48nlxwANGdYUHY9rXca7W
-	HGgPJ3rrvyd0Sog==
-X-Received: by 2002:a05:620a:199e:b0:93c:5872:ef48 with SMTP id af79cd13be357-93ebd273616mr1824175185a.50.1791879435923;
-        Tue, 13 Oct 2026 01:17:15 -0700 (PDT)
-X-Received: by 2002:a05:620a:199e:b0:93c:5872:ef48 with SMTP id af79cd13be357-93ebd273616mr1824171385a.50.1791879435209;
-        Tue, 13 Oct 2026 01:17:15 -0700 (PDT)
-Received: from localhost ([188.216.77.92])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18dcd7dd3sm221979045e9.2.2026.10.13.01.17.11
+        d=1e100.net; s=20260707; t=1791879616; x=1792484416;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6QeuCWN3GaTM3W5UEIwyrfGUSKufTptoJx6qvClJS88=;
+        b=le1tN6t6S75BBWTuOcjDvPtknMwOO2xx6FYeqwZKcF8A6GCu6zpypoQTOxyh1R8tM9
+         Se2DQW7Cjdgp91n961XOkbKH91r4pOl2rleEEQK5E3Hp96Txv9+Da5l2d9H9Wn1ssx0K
+         ScHZ5yM2siU5+Iuhd32K+AJVnLSMLYucqMm55gHp7U1SJftJnT5IeFNR+3LyZH0Mg6Wx
+         gLmRqkditgwrQKPcZsVy3Kj603vC0+A5bvL0G5+XC2cVFfqbktrxIAYuzfjMtcXpWwng
+         RHZ4LRS7whgCcY5+YGiuiETUZNySGJxVwb86v3z9xfqLDAv/3Pev6bUrCqZuMRg1RLJq
+         wUcQ==
+X-Gm-Message-State: AFq9FYL3xxCHL/JCUQbxgpD4pxbShe6MKgVkaOWBavgnzQRy2MwBHkjq
+	1qBHu/5Oas/YbKtKPIKexICzhPX28UQVK7NPxSCXc+UTrA/YE72hGKSja2mc1Hszpu0=
+X-Gm-Gg: AYBFou2Mkz5ioVUqN/A4Qdm7k+5AOPeTqGB1Dcj1Ggz8RjiRpDDeZWx/iMrBkKL85cU
+	tu+/MRwt+IsnUPEsztsRevq2W4kGgAhhrOYZnYWu9bZ+cObtm5u2D05O6U2MWznjlQOWc2PRGnX
+	fR2cNNd37Hq/oluUy28x9vkRZAXw9s0gFU9HB15hfCOG918bBHXZ0O11KHt+4eFjM5ohZZUT7qm
+	SqwnvSEINgo9iDtJubkWnHEqES5sge9LY/o+MbrEGeHpC+nXDIozJjwme7FemLMfmyr3KAb39ct
+	CStuBd9Lcd/NIceJOV2wxFt4tU8m6PzDl7dn84SbR/ByYO6NGSZKgSCrQsJ8s9nXA1BqA4XQgqD
+	PrWJ7F414dzAEYsq8lQR2hn6rtGZwcQtOFfpD/ZXQWr/OMKxERQQGdvFeR95MPNG1tp65V/2l6z
+	sf5j67/NF8Hl0mMxfa0omws85kgIc572hfnSTYKhHRCEJndilZaYkf4Lt83BwjdHGExzBtDyyWH
+	rJRXiHn3Z4ekhEpUshgEjPBzGYEWOa92DThfDj7/tnuKGLndSVgz7SWKieBhGk36FCGYbq6glgB
+	SIKO7g==
+X-Received: by 2002:a05:6808:3384:b0:4c4:79b8:8ad0 with SMTP id 5614622812f47-50c51bb5f4fmr12871550b6e.11.1791879616101;
+        Tue, 13 Oct 2026 01:20:16 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5e::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-518a72a6048sm8294455b6e.5.2026.10.13.01.20.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 01:17:13 -0700 (PDT)
-Date: Tue, 13 Oct 2026 10:17:11 +0200
-From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-To: Nicolai Buchwitz <nb@tipi-net.de>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v6 3/4] net: stmmac: drop multi-buffer frames in
- XDP mode
-Message-ID: <as3pB16af0_QhNyB@lore-desk>
-References: <20261012-stmmac-rx-mb-v6-0-2225050915c1@oss.qualcomm.com>
- <20261012-stmmac-rx-mb-v6-3-2225050915c1@oss.qualcomm.com>
- <b11af7d5d430dcddcc681484b50ae7e2@tipi-net.de>
+        Tue, 13 Oct 2026 01:20:14 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 00/13] Fix some arena paper cuts
+Date: Tue, 13 Oct 2026 10:19:55 +0200
+Message-ID: <20261013082012.1107446-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="KY7hfcVLGCw62j4b"
-Content-Disposition: inline
-In-Reply-To: <b11af7d5d430dcddcc681484b50ae7e2@tipi-net.de>
-X-Proofpoint-GUID: 3er6UijPkER2n3LSVlFjPH2kEXj1ZcLr
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDEzMDAzMiBTYWx0ZWRfXzDt/OVjBu+zi
- 2TqEjN5VH5jSHgUTIYyQ2X/NsYY7J3C9VjbOGcxCUmJIo1SuBCeuPqsYmOWonPTAvmNWWHyKGPI
- 4GF4ehFohySSOtk46hNer1txJ5Aubjk=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDEzMDAzMiBTYWx0ZWRfX7ze1A9dUPobP
- SPSbUsGCHKkCKexW0JFplz/asSx0wi+y7ZxO6AArJnJEcvjAdPCGJoE7nFpYqkZzC58wexTYC0v
- TZguCirZFU2bBTvFelVGiLITKj+/1kB4ih/OnMVOcgiZt0B28Z7nyBEfuzxLiLRklLn6iIr0Ceh
- tEmRO2M2aFElLuv5LKE/lFLMkyNUcAryl6TzsF13yg8z0JQOSun4cPBRBwgPGOhP2KSJyw7iwIw
- Snz3LT21MJfQROl2muEVcbq8x37+v4AJwbYOnM/j8dFO/FiVkvAIVamvmGVEBIF6JhUh7islYf2
- Wn6tS935Pmv7wSEr6wis1UVTcgZV+koCCzsefdc6GpD/oXL16UvZk0w/M2D68ls/5ba5uo2Tqwa
- aKWMlkZv/vSd9tlwoo7nn9yqTva/Pjsg9T0cqxxNFTcOn2i4y4ZHwQLk4C0yqNlJuKTEDIH3DpI
- EmEOoUSbYWxFOAxEheQ==
-X-Authority-Analysis: v=2.4 cv=GfKCDgXL c=1 sm=1 tr=0 ts=6acde90f cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
- a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22 a=EUspDBNiAAAA:8
- a=7PNn2skMB5_rZfgV75sA:9 a=CjuIK1q_8ugA:10 a=nfflnHfShdqUK23c0sYA:9
- a=PEH46H7Ffwr30OY-TuGO:22
-X-Proofpoint-ORIG-GUID: 3er6UijPkER2n3LSVlFjPH2kEXj1ZcLr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-13_01,2026-10-09_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- spamscore=0 adultscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610130032
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8659; h=from:subject; bh=YMQriRh1ch4lThe/Mdtv77vz7qgOtreBXaRK79lZTK0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIevsy3kpf+88rLzNoLja0en9+jiF8pXKa8yCLEWmpbbrb3mt Ynmgo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABOZGcXwT3fKNq/CnRPPc5wJXlk9J0 bztQjPwlunz1re9ty+fuo+OS2G/w4leSbBqlaLXx7bWqFgdEX86uTlNyZmsMVt41/Amztbnx8A
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
---KY7hfcVLGCw62j4b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Kernel code that shares arena memory with BPF programs runs into two
+paper cuts, both visible in sched_ext's cid-form schedulers today.
 
-On Oct 12, Nicolai Buchwitz wrote:
-> Hi Lorenzo
->=20
-> On 12.10.2026 18:44, Lorenzo Bianconi wrote:
-> > stmmac_rx() runs the XDP program once per descriptor buffer and uses
-> > skb =3D=3D NULL as the only marker for the start of a frame. A frame la=
-rger
-> > than one buffer is split by the hardware across several descriptors;
-> > GMAC4 enables jumbo frames unconditionally (GMAC_CONFIG_JE in
-> > GMAC_CORE_INIT), so an on-link peer can deliver such a frame even when
-> > the interface MTU is left at 1500.
-> >=20
-> > When an XDP verdict ends a non-last descriptor, skb is cleared and the
-> > next descriptor of the same hardware frame is parsed as a new frame.
-> > For XDP_CONSUMED this happens via read_again with len preserved, so
-> > stmmac_rx_buf1_len() then returns min(dma_buf_sz, plen - len) for the
-> > last descriptor, which can be as small as 0-3 bytes. buf1_len -=3D
-> > ETH_FCS_LEN underflows and xdp_prepare_buff() puts data_end far past
-> > data; on XDP_PASS this produces an skb whose length is close to 4G that
-> > reaches the network stack (skb->tail and skb->len are 32-bit and wrap
-> > below skb->end, so skb_over_panic() does not fire). A 4+ byte tail is
-> > instead offered to the XDP program and delivered as a standalone
-> > mid-payload Ethernet frame on XDP_PASS. XDP_TX/XDP_REDIRECT instead
-> > falls through to the next iteration, resetting the running length, so
-> > the tail is re-parsed as a full-size new frame.
-> >=20
-> > XDP does not support scatter-gather frames until the multi-buffer
-> > rework, so drop the whole frame instead: mark it as errored as soon as
-> > a non-last descriptor is seen while an XDP program is attached, drain
-> > and release every descriptor - including the last - and account the
-> > frame once in rx_dropped. Removing the re-parse lets both XDP verdict
-> > branches simply complete the packet via next.
-> >=20
-> > Note: the subsequent "net: stmmac: rework stmmac_rx to support XDP rx
-> > multi-buff" accumulates the whole frame into a single xdp_buff and
-> > supersedes this patch; the fix is kept so the net portion of the series
-> > stands on its own.
-> >=20
-> > Fixes: 5fabb01207a2 ("net: stmmac: Add initial XDP support")
-> > Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-> > ---
-> >  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 28
-> > ++++++++++-------------
-> >  1 file changed, 12 insertions(+), 16 deletions(-)
-> >=20
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index 426bb68c9bbc..8c08d44fdbd3 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > @@ -5893,18 +5893,24 @@ static int stmmac_rx(struct stmmac_priv *priv,
-> > int limit, u32 queue)
-> >=20
-> >  		if (priv->extend_desc)
-> >  			stmmac_rx_extended_status(priv, &priv->xstats, rx_q->dma_erx +
-> > entry);
-> > -		if (unlikely(status =3D=3D discard_frame)) {
-> > -			page_pool_put_page(rx_q->page_pool, buf->page, 0, true);
-> > -			buf->page =3D NULL;
-> > +
-> > +		if (unlikely(!error && status =3D=3D discard_frame)) {
-> >  			error =3D 1;
-> >  			if (!priv->hwts_rx_en)
-> >  				rx_errors++;
-> >  		}
-> >=20
-> > -		if (unlikely(error && (status & rx_not_ls)))
-> > -			goto read_again;
-> > +		/* We do not support SG in XDP mode */
-> > +		if (unlikely(!error && (status & rx_not_ls) &&
-> > +			     stmmac_xdp_is_enabled(priv))) {
-> > +			rx_dropped++;
-> > +			error =3D 1;
-> > +		}
->=20
-> AFAIU GMAC4 and XGMAC always use the second buffer of a descriptor. If
-> so, at MTU 1500 a frame of up to 3072 bytes can fit in one descriptor,
-> and this check would not catch it?
->=20
-> The XDP program would then only see the first buffer. With XDP_TX the
-> frame is cut and sent too short. With XDP_PASS the second buffer is added
-> after the program already decided.
->=20
-> Patch 4 fixes this. But if this patch should work on its own, should it
-> also drop the frame when buf2_len is not zero? Or am I missing
-> something?
+A kernel struct cannot publish an arena pointer: a pointer member reaches
+the program typed as a kernel pointer, so sched_ext hands out a plain u64
+holding a pre-translated arena address and every program casts it before
+use. __arena and __nullable become BTF type tags like __user and __rcu.
+A load through an __arena member of a kernel struct yields PTR_TO_ARENA:
+the member holds the kernel address and the fixup pass appends the
+conversion to the arena pointer form that the struct_ops trampoline
+applies to __arena arguments, with a NULL test for __nullable members.
+A __nullable member on its own keeps PTR_MAYBE_NULL on trusted and RCU
+pointers, where NULL would otherwise be assumed away. libbpf renders the
+arena tag with its address space, so the member arrives in a program
+built against vmlinux.h ready to use, without a cast.
 
-Hi Nicolai,
+A program only has an arena when one of its insns refers to the arena
+map, yet the kernel hands programs arena pointers through struct_ops
+arguments, tagged members and kfunc return values, and a struct_ops
+callback that touches nothing but its arguments fails verification until
+it refers to the arena artificially. libbpf binds the arena of an object
+to every program loaded from it, through a continuous fd_array. So that
+programs which never touch the arena pay nothing for it, the verifier
+records which functions have insns that work with the arena base and the
+JITs set it up only for those.
 
-IIUC your comment we are missing the case where we have a single descriptor
-(rx_not_ls is not set in status) but the packet is splitted over buf1 and b=
-uf2,
-right? Something like:
+Tested with sched_ext for-next as well: a typed cmask member next to the
+existing cmask_arena_addr in struct scx_enable_args passes the
+enable_cmask selftest read straight from the member, without a cast and
+without the asm volatile arena reference.
 
-	...
-	buf2_len =3D stmmac_rx_buf2_len(priv, p, status, len);
-	len +=3D buf2_len;
+The series opens with a fix the review of v1 led to: bpf_program__clone()
+passed the fd_array fill index of the object as fd_array_cnt, which made
+every clone from an object with module kfuncs fail.
 
-	if (unlikely(stmmac_xdp_is_enabled(priv) && buf2_len)) {
-		rx_dropped++;
-		dev_kfree_skb(skb);
-		goto next;
-	}
-	...
+See commit logs for details.
 
-Is my understanding correct?
+Changelog:
+----------
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20261012133711.4030594-1-memxor@gmail.com
 
-Regards,
-Lorenzo
+ * Leave the flags of members walked from a map pointer alone: the
+   review found that an __rcu member comes out of that path as MEM_RCU,
+   neither nullable nor probed, which is an older problem of the path
+   and of the bare PTR_TO_BTF_ID results it accepts, left to a separate
+   series after a wider audit. (Sashiko)
+ * Record the non-arena side of a shared load insn for every load, not
+   only for loads through a kernel struct pointer, since a load insn may
+   also serve a memory pointer on another path; test that case. (Sashiko)
+ * Return early in assert_prog_map() when the program lists no map, so a
+   failing check does not read uninitialized memory. (Sashiko)
+ * Mark the __arena argument of a kfunc call where the call is verified,
+   the kfunc pre-pass marked subprogram 0 whatever subprogram held the
+   call, and test a subprogram whose only arena use is such a call.
+   (BPF CI)
+ * Bind the arena only when libbpf creates it, so a program whose arena
+   has autocreate off still loads; leave out an arena exclusive to
+   another program and offloaded programs; reset fd_array_cnt after the
+   load; bind it from bpf_program__clone() as well, so veristat loads
+   what bpf_object__load() loads. (BPF CI)
+ * Stop bpf_program__clone() from passing the fd_array fill index of the
+   object as fd_array_cnt, and rename the index so that it no longer
+   reads like the uapi field, as a fix patch with a selftest: slot 0
+   holds no fd, so every clone from an object with module kfuncs failed.
+ * Skip the __arena and __nullable member tests when the module BTF
+   carries no type tags, as with a GCC build. (BPF CI)
+ * Initialize map_ids in the autobind test for GCC's
+   -Wmaybe-uninitialized. (BPF CI)
+ * Note in the libbpf commit log that every program of an object with an
+   arena now needs the JIT and CAP_PERFMON.
+ * Fix the description of the store failure test. (BPF CI)
 
->=20
-> > [...]
->=20
-> Thanks,
-> Nicolai
+Kumar Kartikeya Dwivedi (13):
+  libbpf: Keep the fd_array fill index out of bpf_program__clone()
+  selftests/bpf: Clone a program that calls a module kfunc
+  compiler_types: Add __arena and __nullable BTF type tag qualifiers
+  bpf: Recognize __nullable on pointer members of kernel structs
+  bpf: Turn loads of __arena pointer members into arena pointers
+  selftests/bpf: Test __nullable pointer members
+  selftests/bpf: Test __arena pointer members
+  libbpf: Bind the arena of an object to every program in it
+  selftests/bpf: Test arena binding by libbpf
+  bpf: Set up the arena base only in functions that use it
+  libbpf: Render the arena type tag with its address space
+  selftests/bpf: Test the address space rendering of the arena type tag
+  selftests/bpf: Test an arena kfunc argument passed from a subprogram
 
---KY7hfcVLGCw62j4b
-Content-Type: application/pgp-signature; name=signature.asc
+ arch/arm64/net/bpf_jit_comp.c                 |   6 +-
+ arch/loongarch/net/bpf_jit.c                  |   6 +-
+ arch/powerpc/net/bpf_jit_comp.c               |   6 +-
+ arch/riscv/net/bpf_jit_core.c                 |   6 +-
+ arch/s390/net/bpf_jit_comp.c                  |   7 +-
+ arch/x86/net/bpf_jit_comp.c                   |  14 +-
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_verifier.h                  |  10 ++
+ include/linux/compiler_types.h                |  10 ++
+ include/linux/filter.h                        |  11 ++
+ kernel/bpf/btf.c                              |  48 +++++-
+ kernel/bpf/fixups.c                           |  51 ++++++-
+ kernel/bpf/verifier.c                         |  75 ++++++++++
+ tools/lib/bpf/btf_dump.c                      |   3 +
+ tools/lib/bpf/features.c                      |  40 +++++
+ tools/lib/bpf/libbpf.c                        |  76 ++++++++--
+ tools/lib/bpf/libbpf_internal.h               |   2 +
+ .../selftests/bpf/prog_tests/btf_dump.c       |  16 +-
+ .../bpf/prog_tests/clone_module_kfunc.c       |  30 ++++
+ .../bpf/prog_tests/test_struct_ops_arena.c    | 139 ++++++++++++++++++
+ .../bpf/prog_tests/test_struct_ops_nullable.c |  68 +++++++++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../testing/selftests/bpf/progs/arena_kfunc.c |  33 ++++-
+ .../selftests/bpf/progs/arena_noarena.c       |  39 +++++
+ .../bpf/progs/struct_ops_arena_autobind.c     |  64 ++++++++
+ .../bpf/progs/struct_ops_arena_member.c       |  92 ++++++++++++
+ .../struct_ops_arena_member_fail__load_acq.c  |  38 +++++
+ .../struct_ops_arena_member_fail__mismatch.c  |  45 ++++++
+ ...ruct_ops_arena_member_fail__mismatch_mem.c |  54 +++++++
+ .../struct_ops_arena_member_fail__no_arena.c  |  23 +++
+ .../struct_ops_arena_member_fail__union.c     |  34 +++++
+ .../struct_ops_arena_member_fail__write.c     |  32 ++++
+ .../progs/struct_ops_arena_member_render.c    |  82 +++++++++++
+ .../selftests/bpf/progs/struct_ops_nullable.c |  45 ++++++
+ .../bpf/progs/struct_ops_nullable_fail.c      |  28 ++++
+ .../bpf/progs/verifier_arena_scalar.c         |  13 --
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  53 +++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.h    |  46 ++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   2 +
+ 39 files changed, 1300 insertions(+), 51 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_nullable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_noarena.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__load_acq.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch_mem.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__no_arena.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__union.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__write.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_fail.c
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCas3pBwAKCRA6cBh0uS2t
-rKv6APsHFZSMX2dOAS1p36e6ZsqIAiOI0NDwoK6myQr0w44IyQEAuyVt58Q+sb1x
-hWYvoUu5yllNvcDzIt78fFC420vYdAw=
-=jWne
------END PGP SIGNATURE-----
+base-commit: 0d5e3fc78a6f2522e6339743b8e5ecc02351a9dd
+-- 
+2.53.0-Meta
 
---KY7hfcVLGCw62j4b--
