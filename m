@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-93.mta0.migadu.com [91.218.175.93])
+Received: from mta0.migadu.com (out-85.mta0.migadu.com [91.218.175.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD9B3EB80D
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 14:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D4050255F
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 14:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.85
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791900453; cv=none; b=JCyRn4RrSMQxf1c3FZDvERRW2aAdn/iZshdemR8p6PC2Z3hKUy9kSCK2xCxc+RMH+GuJV8ZH4/WFJydUWNdw0vTwSiS8xM5M+oOh1l9ExrI7OwpDl4F/ay2gb5XvBoTNdAs1Yv76tYEAtsk4c8Jz500iXFMcbeleh5rJoNDNvrw=
+	t=1791901566; cv=none; b=fuWjyXe3/iPacfQIbxPSeSYzApoLbOrcFwdkfk5atIMmVPYyBgApZYL4XSPuk2+en6o42gDmQI5BgnpjWBNzONnIvnD4mYi/UVVQHUmQnCwIQntolSymJe06Qzpj3yMXDtkz/xkacHaxa/z9NVfcPAdEhNgfUNRXGuquVIRE0WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791900453; c=relaxed/simple;
-	bh=5BlXIF0AyB1kJAXhkN5mj6wdVNbcBMnSUOhsmJfw7hs=;
+	s=arc-20240116; t=1791901566; c=relaxed/simple;
+	bh=NyLlmoJrUzrbPSJQk0ZNFoepQqGUbwDRoFt1ZJcd/EM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HLue3JPUf6MJPCQDGFTOzSRSLlPJhhXT0z6Fr/nFVROktRSz+heRJcpgndNGZjfUAwEB6Y0MRxTrVPW5hLXkFKMrBP7Da4Tv5d+1kZENGzrptxpxXPKblVCaessV3jgmi4koMopF0A0abjnKNySUM+Iu+ttgLIaggWV5daNpTOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=omcr5yoR; arc=none smtp.client-ip=91.218.175.93
+	 In-Reply-To:Content-Type; b=bM3LrsZdjLQxjcDu4Z86I/dG9ry8ZqMfNWvkvAPDzrSMzkU76ubyPOS3IPoNWEANa+LgwIqjBmvW87U4oZhL6bGivNLHHUCiduz3aidjXG9o0/nmTRwlTJUhO9Sj93AEZS08XH20xQ9xciMdEljmKCpDjLSXeta0ThAt/zTMmwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yg+CTecB; arc=none smtp.client-ip=91.218.175.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="omcr5yoR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yg+CTecB"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5BlXIF0AyB1kJAXhkN5mj6wdVNbcBMnSUOhsmJfw7hs=;
+DKIM-Signature: a=rsa-sha256; bh=NyLlmoJrUzrbPSJQk0ZNFoepQqGUbwDRoFt1ZJcd/EM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791900449; v=1; x=1792505249;
- b=omcr5yoRLuxNp/8lY2PqupyZRLBeff4lfU1Fbq3x0BX+7BHosJ4CuDeDyK5IM6U1ACN0f0aJ
- Af842HB/sE/pYFRezaA6pQs4zJfYGLyI1rxqHKm3K5cv2fdw6tMjgcgWgEsheREgym9CAJJujgs
- tvBXR1hlDB7+JSXr5O55Y088=
+ t=1791901561; v=1; x=1792506361;
+ b=Yg+CTecBAyt/B5NexlmwMiE1DkpLv4NKVOOqfBXnmnwplVYiruGJVjX/MqvDf8Fb9n1xssCP
+ kcoV33HZiiVejTap9lMLRGk2GzFHXG5hBa7JnHC/LWUuHCEp7AyBwaWeUGlO7msYHkwer1DFuO1
+ l8jkfBMyZUFOw7pIhMFoNXt8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1dd4546aa31d3090;
-	Tue, 13 Oct 2026 14:07:29 +0000
-X-Mizu-Trace-ID: 1dd4546aa31d3090
+Received: by smtp.migadu.com with ESMTPS id e0d2199c220c93f6;
+	Tue, 13 Oct 2026 14:26:01 +0000
+X-Mizu-Trace-ID: e0d2199c220c93f6
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <4193e7d0-ce1b-4732-bc8f-00badbfd08fd@linux.dev>
-Date: Tue, 13 Oct 2026 07:07:25 -0700
+Message-ID: <4c2cf439-63b2-43c8-87f9-7c51125c3cc7@linux.dev>
+Date: Tue, 13 Oct 2026 07:25:59 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,98 +38,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 06/11] selftests/bpf: Test trampoline args
- around a 16-byte aligned stack arg
+Subject: Re: [PATCH bpf-next v2 09/11] selftests/bpf: Test trampolines on more
+ BPF functions with stack args
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20261013003429.1853052-1-yonghong.song@linux.dev>
- <20261013003459.1857895-1-yonghong.song@linux.dev>
- <sashiko-outbox-168812@kernel.org>
+ <20261013003515.1860439-1-yonghong.song@linux.dev>
+ <sashiko-outbox-168817@kernel.org>
 Content-Language: en-GB
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <sashiko-outbox-168812@kernel.org>
+In-Reply-To: <sashiko-outbox-168817@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 10/13/26 2:43 AM, sashiko-bot@kernel.org wrote:
+On 10/13/26 2:51 AM, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] bpf: endianness assumption causes selftest failure on aarch64 big-endian
+> - [High] bpf: check_unreliable_func_args incorrectly counts slots, allowing corrupting trampoline
 > --
 >
-> commit df1efd6b9c0e934bad453d07e6efe674bda8e1e6
+> commit c87f5bcaff5cc54c864fa434bbfefe8d6bff2bbc
 > Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
+> selftests/bpf: Test trampolines on more BPF functions with stack args
 >
-> This commit adds tests for bpf_testmod functions taking a 16-byte aligned
-> struct containing an __int128. It checks that the BPF trampoline packs
-> these arguments correctly according to the BPF calling convention.
+> Add two functions to the BPF target program of the int128_tgt_prog test.
+> callee_split() takes a struct holding an __int128 after five u64s, so
+> on x86-64 it is passed split between r9 and the stack.
 >
 >> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
->> index 8086586d3e196..a2da219e14769 100644
+>> index ad46eabe784f8..e68fd5627ec1c 100644
 >> --- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
 >> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
 > [ ... ]
->> @@ -141,6 +143,20 @@ static void test_int128_args(void)
->>   	ASSERT_EQ(skel->bss->t_c, 3, "t:c");
->>   	ASSERT_EQ(skel->bss->t_ret, 6, "t ret");
->>   
->> +	ASSERT_EQ(skel->bss->s_g, 7, "s:g");
->> +	ASSERT_EQ(skel->bss->s_h_lo, 8, "s:h.lo");
->> +	ASSERT_EQ(skel->bss->s_h_hi, 9, "s:h.hi");
-> [Severity: Low]
-> Does this code assume a little-endian memory layout for the __int128
-> argument?
->
-> The test passes a 16-byte struct containing ((__int128)9 << 64) | 8.
-> On big-endian architectures like aarch64 (when configured with
-> CONFIG_CPU_BIG_ENDIAN), the most significant 64 bits (9) are placed at the
-> lowest address, and the least significant bits (8) at the higher address.
-> This hardcoded expectation for the little-endian layout appears to cause the
-> test_int128_args selftest to fail its assertions on big-endian systems.
-
-Ok, will fix due to possible arm64 big endian.
-
->
->> +	ASSERT_EQ(skel->bss->s_i, 10, "s:i");
->> +	ASSERT_EQ(skel->bss->s_ret, 385, "s ret");
-> [ ... ]
->> diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
->> index 4638dfec1f38e..5520ee500c01d 100644
->> --- a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
->> +++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-> [ ... ]
->> @@ -15,4 +15,49 @@ int test_int128_arg_fexit(unsigned long long *ctx)
->>   	return 0;
->>   }
->>   
 >> +/*
->> + * The arguments come packed in the BPF convention whatever holes the
->> + * kernel convention left between them: an eightbyte each, and two for the
->> + * struct holding an __int128.
+>> + * A static function whose BTF is unreliable gets a trampoline that only knows
+>> + * of the register arguments, so one taking stack arguments must be refused.
 >> + */
->> +long s_g, s_h_lo, s_h_hi, s_i, s_ret;
->> +
->> +SEC("fentry/bpf_testmod_test_int128_stack")
->> +int test_int128_stack_fentry(unsigned long long *ctx)
+>> +static void test_tgt_prog_unreliable(void)
 >> +{
->> +	s_g = ctx[6];
->> +	s_h_lo = ctx[7];
->> +	s_h_hi = ctx[8];
-> [Severity: Low]
-> Is this direct array indexing in test_int128_stack_fentry() subject to the
-> same endianness assumption?
+> [ ... ]
+>> +	err = bpf_program__set_attach_target(tracer->progs.unreliable_entry, fd,
+>> +					     "callee_unreliable");
+>> +	if (!ASSERT_OK(err, "set_attach_target"))
+>> +		goto out;
+>> +
+>> +	err = tracing_struct_int128_tracer__load(tracer);
+>> +	ASSERT_ERR(err, "tracer__load");
+>> +	ASSERT_HAS_SUBSTR(log_buf, "unreliable BTF and stack arguments", "log");
+> [Severity: High]
+> While this test accurately checks callee_unreliable() which takes 6 scalar
+> arguments, is there a potential issue in the verifier's
+> check_unreliable_func_args() when dealing with struct arguments that occupy
+> multiple slots?
 >
-> When the BPF trampoline projects the struct onto the u64 ctx[] array on a
-> big-endian system, ctx[7] receives 9 and ctx[8] receives 8, rather than the
-> little-endian projection expected here.
+> In kernel/bpf/verifier.c:check_unreliable_func_args(), if
+> btf_distill_func_proto() fails (e.g. because an argument is a struct larger
+> than 16 bytes), the fallback path counts the number of arguments instead
+> of 8-byte slots:
+>
+> 	if (btf_distill_func_proto(NULL, btf, func_proto, tname, &m)) {
+> 		/* at least a slot for each argument */
+> 		nslots = btf_type_vlen(func_proto);
+> 	}
+>
+> For a BPF subprogram taking a 32-byte struct by value and 4 other arguments
+> (5 arguments total), the actual slot count is 1 + 1 + 1 + 1 + 4 = 8 slots
+> (meaning 3 slots are on the stack). But the fallback calculates nslots = 5.
 
-Ok, will fix due to possible arm64 big endian.
+The compiler should already change 32-byte struct to a pointer to struct,
+so the actual slot count should be 5. So we should be okay.
 
 >
->> +	s_i = ctx[9];
->> +	return 0;
->> +}
+> Since 5 <= MAX_BPF_FUNC_REG_ARGS (5), check_unreliable_func_args()
+> incorrectly returns 0, permitting attachment.
+>
+> The generated trampoline will not save or restore the stack arguments.
+>
+> Does this cause the target BPF subprogram to read uninitialized stack
+> memory from the trampoline frame as its arguments, leading to data corruption
+> and undefined behavior?
+>
 
