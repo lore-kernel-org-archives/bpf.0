@@ -1,113 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2F31C84CB
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 01:28:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA8044AB6C;
+	Tue, 13 Oct 2026 02:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791854895; cv=none; b=LZWIOMpxRbaPnmXglW0+Ri/YoOJRn/GIDH6jqwIqYZu9vMjnbo2iDj+LCnAk+bMmnp0eBA+7neblpuuhEmiEtpHDii27HpW5B9IFsq0HoJDzEwphw1FyHb1OP927tH3VDZRibrVBNLI6iGoWybuHF3qXFjnHFSTGExbBukCH67E=
+	t=1791857352; cv=none; b=KPftz5LY+GXtM5qcDk3iEf/4iuej/2Goc6Xyz/IPVhy6dJAJ+CPwZRJdUodYs7g2MSHk2+yCQtxfaniYay3HBi1f3Ny1GjNd/nV/PGYwrPzsowtcmoIOEczmlspmr1c7UAfk9XzB62jf9XunxvTA0J7fj5/68b4lOlarsykvvjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791854895; c=relaxed/simple;
-	bh=qknzAzbo2WIuCDjRAQ59Gwms7EM594cYXnpEUidPcEE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EbXFcfJkcvFKWecW+BSSuF0F8jnP1DF4Eoa45qNYhmp2M78057r8k4F9JXpyZwPZEaSuGgkwWxzNNauin1RdEvZiiwaoTfPGOsAT79j3PUf0de4wwWy2XUqTvOXUAM6RX+vKrHosm/Jt8j8z3hnep6VS9O9ig77VQEf+OCoEF/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dL4s7/kb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791857352; c=relaxed/simple;
+	bh=sDfy9Z5QAMrwsYeCouvZ8Ptc0ebIS8iYhvWWC7F2jsM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hJrtjnq2pO4FhVNq9Zi9vlyIcWPfSp2X3HB0QftU9B6++yHZSSZXO65bWqXu4gwzIvs3XC5/SXlyFhYyXKu7yn1jADmVQSsPGTUcBqfgdfXGrG0+5cK+rkaPZoAFLfbuv36qXyxnBYA29ZccSv4+GHVkmP6CjN2HyquwXeOKcPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FFMga55F; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dL4s7/kb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D641F0089B;
-	Tue, 13 Oct 2026 01:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791854894;
-	bh=6lwwpoverR67IGGxOb14ck6rIR/sMjpim4u6fAjv+4M=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=dL4s7/kbdLmrZ5AjykQjTcjKNEm4H/JMF8CDs7zXkUnt87I1SAWN2PGscvC4k4ktU
-	 8FiYy7afPrxTheG586iJdL1DX2U4jLiVxzIG0GXtEV+w1kfbDEKmNcNpgAhXXp4zi4
-	 VFecb931WDYlZUKZLPgsNKv+CLUU1hi6xITKeEawNw7Ksns6pmf1HQaxBUaDB1a3ov
-	 nbaHXbZu7V+jMw077lrhlGo/BOVl4Gwos40eVaO3y3OsxrAhJi1/aNfW4b+wXrBpIA
-	 rVrHmnaVQ+2Dk57xjs6LOmwfe3e5qLPRo3bIXA7E+NzWXIyyHMoMxTq0K+i1mlNDWe
-	 MGXOnt+VFrHIw==
-Content-Type: multipart/mixed; boundary="===============3818435198422104203=="
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FFMga55F"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=B6gv9uUY5MOvyVWJ/IrxGRZFdVkZuQ0mQIaGycRX9XU=;
+	b=FFMga55FkQcJsg4DK5rabS536AIz3glLytZciLu6YaM2a+SiQ3iieef3Aw866E7BSgezf50hC
+	5TI0eii/yPzYoOyCwKsA39e7TM4mF+k/yAub9FZ5j0hvK8dCW0vIUT5HOl4Q6FDjznKWS+RXApO
+	W7/EFkQc5mzL53W2IoWyqDA=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4j3cs12qVrzRhVS;
+	Tue, 13 Oct 2026 09:56:53 +0800 (CST)
+Received: from kwepemo500007.china.huawei.com (unknown [7.202.195.114])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0C59E20333;
+	Tue, 13 Oct 2026 10:09:07 +0800 (CST)
+Received: from [10.67.120.170] (10.67.120.170) by
+ kwepemo500007.china.huawei.com (7.202.195.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 13 Oct 2026 10:09:06 +0800
+Message-ID: <a8343e1f-92c5-4d20-bc07-1b32f72d8109@huawei.com>
+Date: Tue, 13 Oct 2026 10:09:06 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <27a2eb77876d70e316ad6e4c5d28f5c39a25b339388a29bf46679494268f700b@mail.kernel.org>
-In-Reply-To: <20261013003454.1857445-1-yonghong.song@linux.dev>
-References: <20261013003454.1857445-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v2 05/11] bpf, x86: Place trampoline arguments by the x86-64 calling convention
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 13 Oct 2026 01:28:13 +0000 (UTC)
-
---===============3818435198422104203==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tools/dma: fix building from the top level with O=
+To: Sasha Levin <sashal@kernel.org>, Barry Song <baohua@kernel.org>, Marek
+ Szyprowski <m.szyprowski@samsung.com>
+CC: <stable@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20261011223358.2327625-4-sashal@kernel.org>
+From: Qinxin Xia <xiaqinxin@huawei.com>
+In-Reply-To: <20261011223358.2327625-4-sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-
-> bpf, x86: Place trampoline arguments by the x86-64 calling convention
-
-TL;DR: Nits only: two comments in the x86 trampoline code (save_args() and
-__arch_prepare_bpf_trampoline()) could put the opening /* on its own line.
-
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-
-[ ... ]
-
-> @@ -3472,8 +3479,35 @@ static void save_args(const struct btf_func_model *m, u8 **prog,
-
-[ ... ]
-
-> +		for (j = 0; j < arg_regs; j++, slot++, bargs_off -= 8) {
-> +			u8 pos = pos_of_slot[slot];
-> +			u32 src;
-> +
-> +			if (!x86_arg_on_stack(pos)) {
-> +				/* Only copy the arguments on-stack to
-> +				 * current 'stack_size' and ignore the regs,
-> +				 * used to prepare the arguments on-stack for
-> +				 * origin call.
-> +				 */
-
-This isn't a bug, but this comment is re-wrapped in the new per-slot loop in
-save_args() with text on the same line as the opening /*.  Could it use the
-form with the opening /* on its own line, as is preferred in BPF code?
-
-	/*
-	 * Only copy the arguments on-stack to ...
-	 */
-
-[ ... ]
-
-> @@ -3837,12 +3839,11 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
->  
->  	arena_base = bpf_tramp_arena_base(m, tnodes, flags);
->  
-> -	for (i = 0; i < m->nr_args; i++)
-> -		nr_regs += (m->arg_size[i] + 7) / 8 - 1;
-> -
-> -	/* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
-> -	 * are passed through regs, the remains are through stack.
-> +	/* x86-64 supports up to MAX_BPF_FUNC_ARGS argument slots, six in
-> +	 * registers and the rest on the stack, where bpf_jit_place_args()
-> +	 * puts them.
->  	 */
-> +	nr_regs = bpf_jit_place_args(&x86_arg_abi, m, pos_of_slot);
->  	if (nr_regs > MAX_BPF_FUNC_ARGS)
->  		return -ENOTSUPP;
-
-This isn't a bug, but the same applies to this reworded comment in
-__arch_prepare_bpf_trampoline().  Could it also be changed to the form with
-the opening /* on its own line?
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemo500007.china.huawei.com (7.202.195.114)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38329598343
---===============3818435198422104203==--
+On 2026/10/12 06:33:32, Sasha Levin <sashal@kernel.org> wrote:
+> "make O=<dir> tools/dma" fails:
+> 
+>    Makefile:27: /tools/build/Makefile.include: No such file or directory
+> 
+> tools/Makefile clears srctree, and the dma Makefile only works it out
+> again when building_out_of_srctree is not set, which the top-level
+> Makefile sets for O= builds.
+> 
+> Also work out srctree when it is empty, as tools/bpf/Makefile does
+> since commit a89b2cbf71d64 ("tools, bpf: Fix build for 'make -s
+> tools/bpf O=<dir>'").
+> 
+> Fixes: f74ee32963f1b ("tools/dma: move dma_map_benchmark from selftests to tools/dma")
+> Cc: stable@vger.kernel.org
+> Assisted-by: LLM
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   tools/dma/Makefile | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/dma/Makefile b/tools/dma/Makefile
+> index 0c239a6b9eae5..20ae7f09cd206 100644
+> --- a/tools/dma/Makefile
+> +++ b/tools/dma/Makefile
+> @@ -7,7 +7,13 @@ bindir ?= /usr/bin
+>   # isn't set and when invoked from selftests build, where srctree
+>   # is set to ".". building_out_of_srctree is undefined for in srctree
+>   # builds
+> +ifeq ($(srctree),)
+> +update_srctree := 1
+> +endif
+>   ifndef building_out_of_srctree
+> +update_srctree := 1
+> +endif
+> +ifeq ($(update_srctree),1)
+>   srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+>   srctree := $(patsubst %/,%,$(dir $(srctree)))
+>   endif
+
+Acked-by: Qinxin Xia <xiaqinxin@huawei.com>
+-- 
+Thanks,
+Qinxin
+
