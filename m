@@ -1,63 +1,63 @@
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E7C246774
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 16:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3CD51EE1E
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 16:48:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791910129; cv=none; b=dm1omeBLJIgvw9KYmjOnmxe/0KpLAL+S49mBL7tU8BgLx4nXR84KKtwgSLv15chke9WfDYlLNr4h/Y8j6bnAIrS1AOsPUuQDccJw/sPvaAXiAV7cWZnnEdAK9mTydBJI8N+R5huYDuncai48cvqSbCbpbO9QFdg5WtmqJSLo990=
+	t=1791910133; cv=none; b=cC0Ppqmop1lM2h8mhWeJr6nUtW2F7tFh1iguHaf7uSsXxWadvSD1PnvcBK7jxnlMlQJLI4N/9lSMB9ATvlCemilP0rIRqqnwrr7wsNEJBQycNjKQdSZT/tti22IjaurHkeV1NrUABgWQxlucWOwX1XT/vGO0vVLuYGVAwEDhTlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791910129; c=relaxed/simple;
-	bh=iAkThMvHtNjDu2Samb6uCefkxbJea1QpSFlA+CCsvhs=;
+	s=arc-20240116; t=1791910133; c=relaxed/simple;
+	bh=NbCIiRtXJTnRZUP9mYVlK3VxT9xvOBQ/rJufox/zAsY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RlHzhVL7viIbZj57HASBaAZ2jgJVUQBGtTH3qq1XtL0n7j7JXTXJBke7jXXHdX591slIsO3vQ3d7zzcyOLu7EhnVuY0vMwkLyiZDHMYUWkOdeH1Y2aLdi2xSFnpARzlEz1PsOlvKIzMIodtknkD5JiMroqAnmWIrTW6aJ7Ayc/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OSkoZtCq; arc=none smtp.client-ip=74.125.224.44
+	 MIME-Version; b=aKOk8nW+ZtgA3rsDwFi+cjpoAVg2SZhihZhzm4z59I7tfS4weS8sGxIHA3bY8PAtZRz8azjwgPw+RwkeDbsDVBwjxJpwNxDb42bc/6KmSWPhKQ08wjJbZUF8y/g0UCWfrIq1Scsjzz2rSdOE1h+5s7ruKn2/POsOzojzxIrOKWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6TKsz4Y; arc=none smtp.client-ip=74.125.224.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OSkoZtCq"
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-679334baa1fso2569473d50.2
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 09:48:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6TKsz4Y"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-6768a9fc0e8so2933177d50.2
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 09:48:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791910126; x=1792514926; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791910129; x=1792514929; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+WK3eIXEbQdLQa5Ftj0LRCkTwwV9lN076f3yXpPmj+s=;
-        b=OSkoZtCq6ELmfc0Ga1Ifaorxg9l/1N5n8jHN+hUZWSAHJRmtV2Baa1PYcjspRCsbye
-         orektPjZaRmoasyUoZIlzMQi9zdHgKL6Yesm1utw9NgwENcAt6rUdCjvhmbX23DwrRn7
-         UGHD2nP2Ag6TMXkMHYkVfbxvaGS3M78dp1k++qwHTNFf3wxNAGQwh81m9q39k8KIOclI
-         /h1pJ5x2mVebBkoIsIEHe5VbTm+pXY35yeiFzWxzWFptEykUVF6N6S7wd/9LdKtLWyf1
-         DJez+z1TtJa3PBTNpOXr0Wrgkehjf3HbTThDSOVSGnzVQybvpwHjFVyhuBPWX0d5nBv6
-         uWpQ==
+        bh=TQdBv1gZDU6OUiKnprGOjVbB9OTzfZlS3gUNqTwncjw=;
+        b=c6TKsz4YqZT703ZaQcXqLOwY6z8532NzWxrbxfLrOJhSw9oxX95p7sR7ouVXh1gVEp
+         Dzp89Kh0sME8CnzbrNjNAZIk7gK+y/3QaPno6g/esTjTIrwHtCpp7yota9eEABQJ4UWx
+         DWwK2eYK89EhTCeKRhMbkTxzkseBTk5GtnXENp3bxxtU45CLC2cVkhdHG17HD6WyR7KG
+         pGXSknGCErBMqwdGIfaf+FvL+JiQ1GEfhg3a+Wibvl5IzBLPKQobz5stpVJ8v7PIwsY1
+         4a6Oj6LCDUOcuYRI7oyYfxZGFAj0Tzi8PEEjuSaji3cVp60Z8L8Z+59nebMNvpnHU5+d
+         QNiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791910126; x=1792514926;
+        d=1e100.net; s=20260707; t=1791910129; x=1792514929;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+WK3eIXEbQdLQa5Ftj0LRCkTwwV9lN076f3yXpPmj+s=;
-        b=rEwXYitJtVmN3+/Z5gUPlsHhalELcrIbOYRre3Dr7XkmCHRSOeTdUOtpa7OVE1x4CB
-         V90EQdeTtShm0Mh4Nj2AmXNRF0EnrZSEXKHYcWVc7w3M8rjnbrIKaLAC/G+XreIeQhem
-         ynWmz3vvemZYfw5HRjWat6bxGxVtK/cSAVzKuoBoyP+Os8J3IredQeGqsPiffVkz+qtF
-         zaYXW47s59UgOxzr3olKHw8z6mnM1sknl0bsLF9IR8EUeYzT1pUHM8p89UQ8ARo1ruml
-         WHXoKFeLruSk4nWYoQGY3OgMyX9yz2gW8oj1tp4HX307GIexI2kLhfobekpyslPjXRY2
-         67AA==
-X-Forwarded-Encrypted: i=1; AKwUvBzEh6ItTvhXaTjP1bb+hvfwM5fkhqCByDWZ92SUcRofno4/uoTvC220rzF0Xrg0MP8jhGI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJu6uJPl99WYVNL+cMe2437SKzO8o0XKqa3yTb0NLMpPwXDMECt
-	bmBKorgFGDKD3yhu11bvrILVFTluC6Pb95Pk4TTsDRoSpFfy9/9oBbE2
-X-Gm-Gg: AYBFou0jXmt0pMJnChhOuBh7DvMNS4DIwVOKwBS+nqkgAwYBzxUlFTiL2IlvVi6tOWP
-	UgJrZs7NwFhA4EiqWzQ7DqNQHY6UkhW069UCaalg2QVp7GXDtBlr2U9ryA+wxB47lSWwN7arzfl
-	TeSR0yK+Ux3NhID+yPvaD9oE7buTJszYP7pK/ucUhndkSNNRPBs/YoCXMm11rXstEoORFiqNKil
-	XfMAQOkLF6ydG9kXk6WVJ1d6ABXKyP+zrr2+MqetL0FA9kpQiREt+TsZRoi2UIRLJoLRWYGA1Rd
-	3cdkXaCIyKlM6KS+HhFcANgopG0zb5NlyjLispfoqp3YvmcagZYCP9y9dplAoh1hwrsZq7uSB2d
-	jbR6PhwCpE5mF84q7a4WItdA8Me20UUqPIdJ8RuAiYiMDLWKA5r4A2LCQKkmpWn3pLujN4Mo9hP
-	S18bVcWYey1UCiERwHTycSykwAySPaQBNewD7ttATPeYnubkkEo3QCae5UpBypOLsgeSIjxUGr
-X-Received: by 2002:a05:690e:1188:b0:679:5b52:2597 with SMTP id 956f58d0204a3-6795b522a5bmr2066342d50.99.1791910125831;
-        Tue, 13 Oct 2026 09:48:45 -0700 (PDT)
+        bh=TQdBv1gZDU6OUiKnprGOjVbB9OTzfZlS3gUNqTwncjw=;
+        b=GvY4JRoTI+hlHr283j5GN3XSCtPkrRITweqccmFAZEO05AlJ6gue9EVpnTO7b6Hgqg
+         3bhfnV/WPBR/pnkW3c350OBr44h+Jfrv1ITE7dnIL644oxBpSkDcdeCC/VGkV1zNRqCr
+         90H0x3U3IZhxk5kEEm1fZhOcAz3C4dN0lU3qpDqpvl3vtAAHpzmUnVcuJRzvyNSpyPGM
+         2pZheeeY1WFvYEgdWecvPskjGQYGpnd4ImKf/Ry2YywBlLh9HnxY4RhHMVsY+OVZ5iRz
+         bFxOvQiKjfDuUCJ1gq5J83B+bVGs6qoUXjNom6MVD7rZmK0/Y9FvN8tk8venqEAfmiPj
+         a6Fw==
+X-Forwarded-Encrypted: i=1; AKwUvBy9w+WYTP907tu7cXFB+BaFNNiIM69gdac6KsSwlk1M9IKa7rKNe3E/5n4N2ui9jfSDkEs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJqgDp7cYM7mBc2mZhEJZnQaQBtbWhFhJgLw/TPKc7OF9QyuhLU
+	6JIMQ1KUhrBi2DnqAiEg55qz0UktGVuh43JUa7WJGK00gmvds9tHAgjx
+X-Gm-Gg: AYBFou1m679gTgAMVNgVJxC94cxoU/8kXMafYyeRz+MBIV9JPYtni9Yle9KexSCK9ZS
+	r+VzReBxFU3eUiY8CCsbeZa7WCZZ+wdTiX7kwFiabbjDMwuDXI/4e4AqAy5SfDIRccLEv1UJQR0
+	cPKqSOyUPEH3ibW/QV5fXwknBrq66cQaf9kUUsWtenEXxDG+46mIYvee+qjPyJxADlQ8e2vpA2K
+	VAHASz9AP7jLO8Y9tRwpyhYoRFgxmI1NIDrurxoXoX/Kh3g0ax7oMgZv/LmtaPDCT4nlRn8eomV
+	D+Ji1i+vG+TDewOW571bRy2ztwT4BbNg+5Dc7pGPNRdsl1AfBuP+PB9RA24Bt0jPfCax/J5vRCM
+	tkoFq4IZbBfNl/++kUn6MoJDkGjkRYlzpJNtW2VgpfadjltDzPDbCYs57KaredKXXpaScfUBjAq
+	Lefu0qAtNHRAKIyJfmWMDqPi4fyFQvgSH7ZWDkgZXUDNordRYkkcU2rRDQy1VQvoHhSa5/6gnK
+X-Received: by 2002:a05:690e:14c5:b0:675:3177:bc84 with SMTP id 956f58d0204a3-67936012666mr4188811d50.25.1791910129059;
+        Tue, 13 Oct 2026 09:48:49 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:d326:f863:5ae3:683])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67986a89294sm81136d50.15.2026.10.13.09.48.44
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67986a89294sm81136d50.15.2026.10.13.09.48.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 09:48:45 -0700 (PDT)
+        Tue, 13 Oct 2026 09:48:48 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: Christian Brauner <brauner@kernel.org>,
 	Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -88,9 +88,9 @@ Cc: linux-fsdevel@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	Tingmao Wang <m@maowtm.org>,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next v1 08/11] namei: add an rcu-walk mode to the ancestor walk
-Date: Tue, 13 Oct 2026 12:47:57 -0400
-Message-ID: <20261013164800.2906577-9-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next v1 09/11] bpf: support "__uninit" iterator arguments in generic kfuncs
+Date: Tue, 13 Oct 2026 12:47:58 -0400
+Message-ID: <20261013164800.2906577-10-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261013164800.2906577-1-utilityemal77@gmail.com>
 References: <20261013164800.2906577-1-utilityemal77@gmail.com>
@@ -102,375 +102,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Let the stepwise engine walk lockless, entered with %VFS_WALK_RCU under
-the caller's rcu_read_lock: stepping shares follow_dotdot_rcu()'s core,
-factored into __path_walk_parent_rcu(), with per-step d_seq validation,
-choose_mountpoint_rcu() for crossings and mount_lock revalidation
-before concluding at the real root.  Any lost race surfaces as -ECHILD
-and the caller retries in the referenced mode.
+Iterator constructors are recognised by their KF_ITER_NEW flag, which
+binds them to the bpf_iter_<type>_new() name and so to a single
+constructor per type.  A kfunc that initializes an iterator from inputs
+that naming convention cannot express - e.g. another, already
+initialized iterator - therefore cannot be a constructor.
 
-vfs_walk_handover() continues a lockless walk with references, so that
-a caller can do at a position what no lockless walk can.  It mirrors
-unlazy_walk(): the position is legitimized and becomes the starting
-position of a second, reference-based walk that owns the references
-acquired on it.
+Let such a kfunc mark its destination argument with the "__uninit"
+suffix already used for dynptr out-arguments: process_iter_arg() now
+decides per argument, rather than per kfunc, whether it initializes the
+iterator or operates on an initialized one.  Only iterator-typed
+arguments are reclassified, so dynptr "__uninit" out-arguments are
+unaffected.
 
-Both halves of that are ordered so that nothing has to be put: a failed
-legitimization leaves no partial references, and the one case where
-__legitimize_mnt() obliges a sleepable mntput() goes to
-mnt_undo_legitimize().  Handing the reference straight over rather than
-copying it out and dropping a second one is what keeps the whole
-operation callable inside the caller's RCU read-side critical section,
-where even a path_put() that provably cannot sleep is still a dput()
-and so still a might_sleep().
+The first user is the path ancestor iterator handover added by the next
+patch.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- fs/internal.h         |   7 ++
- fs/namei.c            | 202 ++++++++++++++++++++++++++++++++++++------
- include/linux/namei.h |   3 +
- 3 files changed, 183 insertions(+), 29 deletions(-)
+ kernel/bpf/verifier.c | 37 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 34 insertions(+), 3 deletions(-)
 
-diff --git a/fs/internal.h b/fs/internal.h
-index 3ce2220ff57f..8a5696157121 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -74,9 +74,14 @@ int lookup_noperm_common(struct qstr *qname, struct dentry *base);
- /*
-  * The stepwise engine under vfs_walk_ancestors(); fs-internal so iterating
-  * consumers (BPF) can drive it, with the walk invariants staying in namei.c.
-+ * In rcu mode (%VFS_WALK_RCU) the caller holds rcu_read_lock() over the
-+ * whole walk, no references are held, and vfs_walk_next() returning -ECHILD
-+ * invalidates everything derived from the walk.
-  */
- struct vfs_ancestor_walk {
- 	struct path pos;
-+	unsigned int seq;	/* pos.dentry->d_seq sample (rcu mode) */
-+	unsigned int m_seq;	/* mount_lock sample (rcu mode) */
- 	unsigned int pos_flags;	/* VFS_WALK_POS_* describing pos */
- 	unsigned int flags;	/* VFS_WALK_* */
- };
-@@ -85,6 +90,8 @@ void vfs_walk_start(struct vfs_ancestor_walk *aw, const struct path *path,
- 		    unsigned int flags);
- int vfs_walk_next(struct vfs_ancestor_walk *aw);
- void vfs_walk_end(struct vfs_ancestor_walk *aw);
-+bool vfs_walk_handover(struct vfs_ancestor_walk *to,
-+		       struct vfs_ancestor_walk *from);
- 
- void __init filename_init(void);
- 
-diff --git a/fs/namei.c b/fs/namei.c
-index d6151fa27844..c4083b69c8a8 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -2152,34 +2152,69 @@ static __always_inline const char *step_into(struct nameidata *nd, int flags,
- 	return step_into_slowpath(nd, flags, dentry);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4b3e1d4f8a80..062273f68dd0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8499,6 +8499,24 @@ static bool is_iter_destroy_kfunc(struct bpf_call_arg_meta *meta)
+ 	return meta->kfunc_flags & KF_ITER_DESTROY;
  }
  
--static struct dentry *follow_dotdot_rcu(struct nameidata *nd)
-+/**
-+ * __path_walk_parent_rcu - step towards the parent of the given struct path
-+ * @path: position to step up from; updated in place on a mount crossing,
-+ *        which is first if @path is the root of a mounted tree.  No
-+ *        references are acquired; the callers layer their own bookkeeping
-+ *        (path_connected(), nameidata updates, ...) on top
-+ * @root: boundary as for choose_mountpoint_rcu(); if zero'ed, walk all the
-+ *        way to the global root
-+ * @flags: %LOOKUP_NO_XDEV fails a mount crossing with -ECHILD
-+ * @m_seq: the walk's mount_lock sample
-+ * @seqp: d_seq sample validating @path->dentry; updated to cover the new
-+ *        @path->dentry when a mount is crossed
-+ * @next_seqp: set to the returned parent's d_seq sample
-+ *
-+ * Returns: the parent dentry (which is @path->dentry itself if that is a
-+ * disconnected root), NULL if @path is in the root with nothing to cross
-+ * into, or ERR_PTR(-ECHILD) when a concurrent change was detected.
++/*
++ * An "__uninit"-suffixed iterator argument of a kfunc that is not itself an
++ * iterator method: the kfunc initializes that iterator state, as a
++ * bpf_iter_<type>_new() does, but from inputs the constructor naming
++ * convention cannot express - e.g. another, already-initialized iterator.
++ * Only iterator-typed arguments qualify, so "__uninit" dynptr out-arguments
++ * are not reclassified.
 + */
-+static struct dentry *__path_walk_parent_rcu(struct path *path,
-+					     const struct path *root, int flags,
-+					     unsigned int m_seq, unsigned int *seqp,
-+					     unsigned int *next_seqp)
- {
- 	struct dentry *parent, *old;
- 
--	if (path_equal(&nd->path, &nd->root))
--		goto in_root;
--	if (unlikely(nd->path.dentry == nd->path.mnt->mnt_root)) {
--		struct path path;
--		unsigned seq;
--		if (!choose_mountpoint_rcu(real_mount(nd->path.mnt),
--					   &nd->root, &path, &seq))
--			goto in_root;
--		if (unlikely(nd->flags & LOOKUP_NO_XDEV))
-+	if (unlikely(path->dentry == path->mnt->mnt_root)) {
-+		struct path mounted;
-+		unsigned int seq;
++static bool is_kfunc_arg_iter_init(struct bpf_call_arg_meta *meta, int arg_idx,
++				   const struct btf_param *arg)
++{
++	if (is_iter_kfunc(meta))
++		return false;
 +
-+		if (!choose_mountpoint_rcu(real_mount(path->mnt),
-+					   root, &mounted, &seq))
-+			return NULL;
-+		if (unlikely(flags & LOOKUP_NO_XDEV))
- 			return ERR_PTR(-ECHILD);
--		nd->path = path;
--		nd->inode = path.dentry->d_inode;
--		nd->seq = seq;
-+		*path = mounted;
-+		*seqp = seq;
- 		// makes sure that non-RCU pathwalk could reach this state
--		if (read_seqretry(&mount_lock, nd->m_seq))
-+		if (read_seqretry(&mount_lock, m_seq))
- 			return ERR_PTR(-ECHILD);
- 		/* we know that mountpoint was pinned */
- 	}
--	old = nd->path.dentry;
-+	old = path->dentry;
- 	parent = old->d_parent;
--	nd->next_seq = read_seqcount_begin(&parent->d_seq);
-+	*next_seqp = read_seqcount_begin(&parent->d_seq);
- 	// makes sure that non-RCU pathwalk could reach this state
--	if (read_seqcount_retry(&old->d_seq, nd->seq))
-+	if (read_seqcount_retry(&old->d_seq, *seqp))
- 		return ERR_PTR(-ECHILD);
-+	return parent;
++	return btf_param_match_suffix(meta->btf, arg, "__uninit") &&
++	       btf_check_iter_arg(meta->btf, meta->func_proto, arg_idx) >= 0;
 +}
 +
-+static struct dentry *follow_dotdot_rcu(struct nameidata *nd)
-+{
-+	struct dentry *parent;
-+
-+	if (path_equal(&nd->path, &nd->root))
-+		goto in_root;
-+	parent = __path_walk_parent_rcu(&nd->path, &nd->root, nd->flags,
-+					nd->m_seq, &nd->seq, &nd->next_seq);
-+	if (!parent)
-+		goto in_root;
-+	if (IS_ERR(parent))
-+		return parent;
-+	nd->inode = nd->path.dentry->d_inode;
- 	if (unlikely(!path_connected(nd->path.mnt, parent)))
- 		return ERR_PTR(-ECHILD);
- 	return parent;
-@@ -2247,17 +2282,26 @@ static const struct path vfs_walk_no_root;
-  * vfs_walk_start - begin a stepwise ancestor walk
-  * @aw: walk state, valid until vfs_walk_end()
-  * @path: position to walk up from; never modified
-- * @flags: %VFS_WALK_* flags; none defined yet, pass 0
-+ * @flags: %VFS_WALK_RCU to walk lockless; the caller then holds
-+ *         rcu_read_lock() from before vfs_walk_start() until after
-+ *         vfs_walk_end(), and owns no references on yielded positions.
-  */
- void vfs_walk_start(struct vfs_ancestor_walk *aw, const struct path *path,
- 		    unsigned int flags)
+ static bool is_kfunc_arg_iter(struct bpf_call_arg_meta *meta, int arg_idx,
+ 			      const struct btf_param *arg)
  {
--	if (WARN_ON_ONCE(flags))
--		flags = 0;
-+	if (WARN_ON_ONCE(flags & ~VFS_WALK_RCU))
-+		flags &= VFS_WALK_RCU;
- 	aw->pos = *path;
- 	aw->flags = flags;
- 	aw->pos_flags = 0;
--	path_get(&aw->pos);
-+	if (flags & VFS_WALK_RCU) {
-+		RCU_LOCKDEP_WARN(!rcu_read_lock_held(),
-+				 "rcu-mode ancestor walk outside of RCU read-side critical section");
-+		aw->m_seq = read_seqbegin(&mount_lock);
-+		aw->seq = raw_seqcount_begin(&aw->pos.dentry->d_seq);
-+	} else {
-+		path_get(&aw->pos);
-+	}
+@@ -8509,7 +8527,11 @@ static bool is_kfunc_arg_iter(struct bpf_call_arg_meta *meta, int arg_idx,
+ 		return arg_idx == 0;
+ 
+ 	/* iter passed as an argument to a generic kfunc */
+-	return btf_param_match_suffix(meta->btf, arg, "__iter");
++	if (btf_param_match_suffix(meta->btf, arg, "__iter"))
++		return true;
++
++	/* iter state a generic kfunc initializes */
++	return is_kfunc_arg_iter_init(meta, arg_idx, arg);
  }
  
- static int vfs_walk_step_ref(struct vfs_ancestor_walk *aw)
-@@ -2288,6 +2332,35 @@ static int vfs_walk_step_ref(struct vfs_ancestor_walk *aw)
- 	return 0;
- }
+ static int process_iter_arg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+@@ -8519,6 +8541,7 @@ static int process_iter_arg(struct bpf_verifier_env *env, struct bpf_reg_state *
+ 	struct bpf_func_state *state = bpf_func(env, reg);
+ 	const struct btf_type *t;
+ 	int spi, err, i, nr_slots, btf_id;
++	bool init;
  
-+static int vfs_walk_step_rcu(struct vfs_ancestor_walk *aw)
-+{
-+	struct dentry *parent;
-+	unsigned int next_seq;
-+
-+	if (unlikely(aw->pos_flags & VFS_WALK_POS_DISCONNECTED)) {
-+		/* Resume at the root of the disconnected position's mount. */
-+		aw->pos.dentry = aw->pos.mnt->mnt_root;
-+		aw->seq = raw_seqcount_begin(&aw->pos.dentry->d_seq);
-+		aw->pos_flags = 0;
-+		return read_seqretry(&mount_lock, aw->m_seq) ? -ECHILD : 0;
-+	}
-+
-+	parent = __path_walk_parent_rcu(&aw->pos, &vfs_walk_no_root, 0,
-+					aw->m_seq, &aw->seq, &next_seq);
-+	if (!parent)
-+		/* The real root, unless the mount tree moved. */
-+		return read_seqretry(&mount_lock, aw->m_seq) ? -ECHILD : 1;
-+	if (IS_ERR(parent))
-+		return PTR_ERR(parent);
-+	/* A crossing onto a disconnected root, as in vfs_walk_step_ref(). */
-+	aw->pos_flags = parent == aw->pos.dentry ?
-+		VFS_WALK_POS_DISCONNECTED | VFS_WALK_POS_MOUNTPOINT :
-+		vfs_walk_pos_flags(aw->pos.mnt, parent);
-+	aw->pos.dentry = parent;
-+	aw->seq = next_seq;
-+	return 0;
-+}
-+
- /**
-  * vfs_walk_next - yield the walk's next position in @aw->pos
-  * @aw: the walk
-@@ -2297,12 +2370,14 @@ static int vfs_walk_step_ref(struct vfs_ancestor_walk *aw)
-  * described at vfs_walk_ancestors().
-  *
-  * Returns: 0 with @aw->pos valid, 1 once the walk has passed the real
-- * root.
-+ * root, -ECHILD when an rcu-mode walk lost a race and must be retried
-+ * (typically in the referenced mode).
-  */
- int vfs_walk_next(struct vfs_ancestor_walk *aw)
- {
- 	if (aw->flags & VFS_WALK_STARTED) {
--		int err = vfs_walk_step_ref(aw);
-+		int err = (aw->flags & VFS_WALK_RCU) ?
-+			vfs_walk_step_rcu(aw) : vfs_walk_step_ref(aw);
+ 	if (reg->type != PTR_TO_STACK) {
+ 		verbose(env, "%s expected pointer to an iterator on stack\n",
+@@ -8550,8 +8573,16 @@ static int process_iter_arg(struct bpf_verifier_env *env, struct bpf_reg_state *
+ 	t = btf_type_by_id(meta->btf, btf_id);
+ 	nr_slots = t->size / BPF_REG_SIZE;
  
- 		if (err)
- 			return err;
-@@ -2310,6 +2385,10 @@ int vfs_walk_next(struct vfs_ancestor_walk *aw)
- 		aw->flags |= VFS_WALK_STARTED;
- 		aw->pos_flags |= vfs_walk_pos_flags(aw->pos.mnt, aw->pos.dentry);
- 	}
-+	/* The flags must describe the dentry the seq covers. */
-+	if ((aw->flags & VFS_WALK_RCU) &&
-+	    read_seqcount_retry(&aw->pos.dentry->d_seq, aw->seq))
-+		return -ECHILD;
- 	return 0;
- }
- 
-@@ -2319,7 +2398,59 @@ int vfs_walk_next(struct vfs_ancestor_walk *aw)
-  */
- void vfs_walk_end(struct vfs_ancestor_walk *aw)
- {
--	path_put(&aw->pos);
-+	if (!(aw->flags & VFS_WALK_RCU))
-+		path_put(&aw->pos);
-+}
+-	if (is_iter_new_kfunc(meta)) {
+-		/* bpf_iter_<type>_new() expects pointer to uninit iter state */
++	/*
++	 * Whether this argument is the iterator the call initializes, rather
++	 * than an initialized one it operates on.
++	 */
++	init = is_iter_new_kfunc(meta) ||
++	       is_kfunc_arg_iter_init(meta, arg,
++				      &btf_params(meta->func_proto)[arg]);
 +
-+/**
-+ * vfs_walk_handover - continue an rcu-mode walk with references
-+ * @to: walk state to begin at @from's current position, owning the
-+ *      references acquired on it; valid until vfs_walk_end() either way
-+ * @from: an rcu-mode walk, positioned by a 0 return from vfs_walk_next()
-+ *
-+ * Mirrors unlazy_walk(): @from's current position is legitimized and
-+ * becomes the starting position of the referenced walk @to, which the
-+ * first vfs_walk_next() on it yields.  A failed legitimization leaves no
-+ * partial references behind and a successful one moves straight into @to,
-+ * so nothing is ever put here and the handover is safe within the caller's
-+ * RCU read-side critical section - where a path_put() would not be, dput()
-+ * being allowed to sleep.  @to itself is only usable once the caller has
-+ * left it, its walk being reference-based.
-+ *
-+ * @from is untouched on success and may keep stepping, lockless, from
-+ * where it stands.  The references do not conclude its walk: a concurrent
-+ * rename may relocate the position the instant they are taken, as it may
-+ * during any reference-based walk.
-+ *
-+ * Returns: false iff @from lost a race; it is then dead, as after -ECHILD
-+ * from vfs_walk_next(), and @to is zeroed - safe to vfs_walk_end(), but
-+ * not to step, so the caller has to remember it never started.
-+ */
-+bool vfs_walk_handover(struct vfs_ancestor_walk *to,
-+		       struct vfs_ancestor_walk *from)
-+{
-+	struct path pos = from->pos;
-+	int err;
-+
-+	err = __legitimize_mnt(pos.mnt, from->m_seq);
-+	if (unlikely(err)) {
-+		if (err < 0)
-+			mnt_undo_legitimize(real_mount(pos.mnt));
-+		goto dead;
-+	}
-+	if (unlikely(read_seqcount_retry(&pos.dentry->d_seq, from->seq) ||
-+		     !lockref_get_not_dead(&pos.dentry->d_lockref))) {
-+		mnt_undo_legitimize(real_mount(pos.mnt));
-+		goto dead;
-+	}
-+	to->pos = pos;
-+	to->flags = 0;
-+	to->pos_flags = from->pos_flags;
-+	return true;
-+
-+dead:
-+	memset(to, 0, sizeof(*to));
-+	return false;
- }
- 
- /**
-@@ -2328,18 +2459,27 @@ void vfs_walk_end(struct vfs_ancestor_walk *aw)
-  * @cb: callback invoked on @path, then on each ancestor up to the real
-  *      root, crossing mount boundaries.  @cb must not sleep and returns
-  *      %VFS_WALK_CONTINUE, %VFS_WALK_STOP or a negative errno to abort the
-- *      walk.  @ancestor is only valid during the invocation; @cb must take
-- *      its own references to keep a position.
-+ *      walk; -ECHILD is reserved (see below).  @ancestor is only valid
-+ *      during the invocation; @cb must take its own references to keep a
-+ *      position.
-  *      A position whose dentry is a disconnected root is flagged with
-  *      %VFS_WALK_POS_DISCONNECTED (plus %VFS_WALK_POS_MOUNTPOINT when it
-  *      is a mountpoint a mount crossing landed on rather than a parent);
-  *      if @cb continues over it, the walk resumes at the root of that
-  *      position's mount.
-+ *      With %VFS_WALK_RCU, @cb accepts positions the walk holds no
-+ *      references on: the walk then runs lockless (under rcu_read_lock)
-+ *      and returns -ECHILD when it loses a race, or when @cb returns
-+ *      -ECHILD.  The caller should then discard any state @cb accumulated
-+ *      and retry without %VFS_WALK_RCU.  Positions are seq-validated when
-+ *      yielded; what @cb reads from one races with concurrent changes
-+ *      just as in a referenced walk.
-  * @data: opaque argument passed to @cb
-- * @flags: %VFS_WALK_* flags; none defined yet, pass 0
-+ * @flags: %VFS_WALK_RCU if @cb copes with unreferenced positions
-  *
-- * Returns: 0 once the real root was reached, 1 if @cb stopped the walk, or
-- * the negative errno @cb aborted with.
-+ * Returns: 0 once the real root was reached, 1 if @cb stopped the walk,
-+ * -ECHILD if a lockless walk must be retried with references, or the
-+ * negative errno @cb aborted with.
-  */
- int vfs_walk_ancestors(const struct path *path,
- 		       int (*cb)(const struct path *ancestor,
-@@ -2349,6 +2489,8 @@ int vfs_walk_ancestors(const struct path *path,
- 	struct vfs_ancestor_walk aw;
- 	int ret;
- 
-+	if (flags & VFS_WALK_RCU)
-+		rcu_read_lock();
- 	vfs_walk_start(&aw, path, flags);
- 	for (;;) {
- 		ret = vfs_walk_next(&aw);
-@@ -2366,6 +2508,8 @@ int vfs_walk_ancestors(const struct path *path,
- 		}
- 	}
- 	vfs_walk_end(&aw);
-+	if (flags & VFS_WALK_RCU)
-+		rcu_read_unlock();
- 	return ret;
- }
- 
-diff --git a/include/linux/namei.h b/include/linux/namei.h
-index 3e198de7a0d3..8820a2833213 100644
---- a/include/linux/namei.h
-+++ b/include/linux/namei.h
-@@ -162,6 +162,9 @@ extern int follow_down_one(struct path *);
- extern int follow_down(struct path *path, unsigned int flags);
- extern int follow_up(struct path *);
- 
-+/* vfs_walk_ancestors() flags */
-+#define VFS_WALK_RCU			BIT(0)
-+
- /* per-position flags passed to the vfs_walk_ancestors() callback */
- #define VFS_WALK_POS_DISCONNECTED	BIT(0)
- /* the position is a mountpoint landed on by a mount crossing */
++	if (init) {
++		/* expects a pointer to uninit iter state */
+ 		if (!is_iter_reg_valid_uninit(env, reg, nr_slots)) {
+ 			verbose(env, "expected uninitialized iter_%s as %s\n",
+ 				iter_type_str(meta->btf, btf_id), reg_arg_name(env, argno));
 -- 
 2.55.0
 
