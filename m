@@ -1,68 +1,67 @@
-Received: from mail-oa2-f10.google.com (mail-oa2-f10.google.com [74.125.231.74])
+Received: from mail-oo2-f11.google.com (mail-oo2-f11.google.com [74.125.231.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F283B27C3
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4933B14A3
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 08:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791879625; cv=none; b=F6BngcDs+Pnyl4z/7CQDZvg7gISnApYSr85wONNeUmHjvEDoVerUTF6oUk+ctowmmxbuqlS2eg9MdLO+JXfSiFxEO0Hz5wxbJ6oqiIGser77DsJCb6FIUPgfI1zeDtNSrosnZ52DtGFPnqBUirECNV0oYV0Ekhx6JSXp9dHcX0E=
+	t=1791879628; cv=none; b=ia7F8EaVx5iGVTlXI1iW7IzoFWl5N3XPPQLyzoEpfGuJ841esohuO+xhztEB5lQAUVD/gq/PU1MAqRsppzyxU4U+0oafdF0FlxLIomzlcRcBSZbk85VvSVYICnM7/REwJ4WS6M4uSHz+4MnV4T+DkPALkhGNhoNbWWYy5dSl80c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791879625; c=relaxed/simple;
-	bh=ut2kzaiRvkH38BjwAeA1ltAiR0RHURyaSXCiA2GMOr8=;
+	s=arc-20240116; t=1791879628; c=relaxed/simple;
+	bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RfqCHlBXYSzMqT7cnh9HcPjQniZ1rOQNMxyLgpbdIqfQMkuEB821YHJVioyX6kfHCEfMYvjqO2Am9U9Ee+99sD9YlG9uKuToU7s0iNJsy+Dr4nUCkz0murGbeT6pKf4V5bkTU85T6kyiHlnjDgltvZt5ZSYzNWJRXVYgNJtPB9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OsxhW7r0; arc=none smtp.client-ip=74.125.231.74
+	 MIME-Version; b=WyAuWYtLKA9Cc9rndcV1nkQ1sgsAG25I8fiK7qcYHKMNVwtnaBOoVRUbRBh5Wphw4GcuLOad1W6WmHxd3ZtuKrJbUY4cFm1Mh15vGGHl7UJ2SBJguiJVjJ2hT3RKDasAV0xkMAvQxWW3GHV+KicbI62R4loAu2WI3IbQ4TVXNJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=resH9Avc; arc=none smtp.client-ip=74.125.231.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OsxhW7r0"
-Received: by mail-oa2-f10.google.com with SMTP id 586e51a60fabf-4753ef5108aso1087464fac.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 01:20:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="resH9Avc"
+Received: by mail-oo2-f11.google.com with SMTP id 46e09a7af769-826f42e479dso1809593a34.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 01:20:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791879622; x=1792484422; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791879626; x=1792484426; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Le+JqdNhGZ7FITF3Cabx9gvL5qFNvU6cAFx7z8aQg4c=;
-        b=OsxhW7r0fwSyQkj14MHJP6Kj/ygHp+KYJzdNuEZ7F5hB4F9EPNa9BMTRBQwG4HcJEn
-         3IpUqZoEUFUlUVhq93+JiuPg8+jojQ/zh7XzkzW+eQjAXEhRSLM+ciSgT1XCwMvNioAI
-         n4g5CEIw9yesxXKLeTBHrnKpFi0jkoO09hfP0TEUTwwpugfmEa53vu+EWo6LoxxneOwY
-         O7ZWNa4VMLPWn8HFn//jgShZlZTehQotdShD7sy9wyjyY383B4QXkXulS9Nka7cspVxH
-         TKQF8v4Ja1RYa4dOTHnGBXDhByhQwi7AoaRpdswBGoNvfa2sm8tBjAlA/c9l6M0ZmxKD
-         2ABQ==
+        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
+        b=resH9AvcvCeLInjhNim4kMw6QRkKcrTq/W50gENLKZLM7Bw+qlYWJ0Ar0+09H3jiRE
+         /JUcbpG8obF09/ZnI2SAWRMMjTTwvwoujBiovO6dtY1m9BPNkzqC7kBT2TQ9w1OZH/yp
+         KMgqo8W0GGWZGmCGsGQPzV63SJzNYJZUDr/chHu6d8hSnM35EfZGJtOcQ6m3mLIEJr99
+         EGYb1LMUE9JST8rVfzKHn7Y/Qiqn9ollNF+VqrELzV3GWFhrF1HgxaJkWmjha2i7gtAz
+         b8Lk+7AsfdnggY8WtPa/rYMJteyEqD29VkfD6Qj98pPFZqyg75Y/Qxyfamsfq08tTUJQ
+         XTxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791879622; x=1792484422;
+        d=1e100.net; s=20260707; t=1791879626; x=1792484426;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Le+JqdNhGZ7FITF3Cabx9gvL5qFNvU6cAFx7z8aQg4c=;
-        b=WKwDv63Cz+n6LhG4rca5+oVPu8O9gIthX3+oSYXbg6QwsmtsMhreI2HodKsshJfS8B
-         rEWMH4eNaBKBgRDQZvG/k5F7rce1ERlAhijNJ1H0fB9pFaa7TFmyf8A0uu3d8U+bABAb
-         TJKUlFyhkZ4UiXYldaO/SxQuzlAZsu8kGtinAMja+2R0l5KPZe1H/lCmiU3m4ws/6nPe
-         FiRdaT5/WYZJJTJbGBHauJLotbXowqhc+9UuC35LblSHr/rGMtIvs4dbMWt/5WYIlSNb
-         1yxbYL/0NLNkFqgfjGjjd7Q0pslp0pyzIAjVPX5e9rwgzf49J/ZNH3cGrIa4to1jcKsV
-         DLQA==
-X-Gm-Message-State: AFq9FYLyzg+VQsOyyIml4EAIq6cZk5LzpE/UOWQu39qeN2+YCYjGHPNS
-	I36+XuVat515gJKix/oOZ0XmMJf4tfWoOR3MvgLrCjoBrwDthAdZeKgmHLbUZQ6ir1o=
-X-Gm-Gg: AYBFou1vtfNoxuUPlTpm4Yx1cwYsNJR7Nio1E0x3QtD2CbM5DAdyiG/g+FcBjb58qhA
-	Zw5K5r0WNIiF13ivkUHXSSwWxIbyMuBCu79W4ZPSrqk9zUE5fa0iwyPXEELiT1omwD768vDP2WW
-	pYcfEdZA9Khu2Xcj32KJZzWnfegxqGeFXJ4uXHHLZN8c/xfS/0ioyhPLEz/xPabAfJesVthZmNL
-	K4x24cWtgaOgRngF2HIYcAQCVD5+L3Cu6hbFcoh1fp3xHTxOHHKzHwhTXXykooWu6vjGghY6+Xx
-	edPKJJxEHX4rtB9jQw6Zy727WcvKyOw0AkUk6T/a0f0zi5+UspQYsdhah+VTriOVbfzFJCUs+cK
-	QSgXJlEBw4NrBIDk4/REtIhLHlpIJsXpQVMSVpJ/KrSlGmN4RX0wbqt+KRT8xD0xvPujA958zpS
-	FiZR4iepCbnJRS8bZs2E5ji69oyfeB+T7wgggAgQsIl1tt/4U5f049nQZjE8ETKV9fgrAap/chz
-	rvzeskN6D80I0RHVEGV801P/oeTibOZ40iArZP8l4YuSCWvCuFJ0++GjIENj9lAJzILHcc6aktI
-	n/75
-X-Received: by 2002:a05:6870:16ee:b0:485:d1ab:7936 with SMTP id 586e51a60fabf-4a2a8865700mr10145152fac.23.1791879622512;
-        Tue, 13 Oct 2026 01:20:22 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:a::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a2a7e58c0bsm12309002fac.0.2026.10.13.01.20.19
+        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
+        b=mu7SiNAbTTUQWx4Q7+dCu2Dhzslk1MvSV2vS8lOCv8tnUW+SczDACz8NuTXCDnFH0K
+         TawvjkxiJZrgZHNGofxAoMqZn/6EL19TR3LbjsSrahnaC7AKmDD0Vl6W14mhVrcI9n5Z
+         4ELOS+FRDXEx4lpZLkAP+IJxQw709DNrWIua0cH0wQF/sJLODFITXj1HbiYsgv9eLziZ
+         dxaZN5ICeUdsZPMjpjzZimnrMVL37+0hmBhoQLXKFcsjPYA8bnUxKzqZpz677dpza810
+         HFDYQphOSM+T1boakDLqbjyS3m4nlzxRxUEOBWrit29yqFiWgplKseo3qn/CQDLhwCOn
+         G1fQ==
+X-Gm-Message-State: AFq9FYL9qQOxCqJvm989dPPnSBMBqNsXZzczpReYB48dWeXgnB1VyfJy
+	dIi5slq+mJ95+4II24AloiEMgj7U4UvQvy/5BEbAO7BduXZZgiA4PDEc7WCT4X88kfw=
+X-Gm-Gg: AYBFou3I9/zGIfQXupKaZ9n8GTtc+uXs/jijqHjEAuAHqYdP8mCO9xcQ9WUMdWXuK6h
+	NfkNGS33B+SqDDLf3GZqQQDnQ4T9r59Aez5xevgIV8rvfmQuBq/XN0ChrLEIAUkf1BLCCT1VlWd
+	6dQg+WnLlreSjnWjxH/zsuMluuv+a2oJYvFRKlRubgGaJvWU1y/RJ71n7rUc4STwvLBWoEoYawM
+	DfWr0V50FDm6g4ki2Y9SfWaipwmfiydimX8Zz3wpQeyZtYmGDWFPzyNORur2oZPtqPNsYxS7lEj
+	22ySIP8KSepovZXOT4JRjbM9VkB6G8YceDtwb94F4NlvoiTjX/0odfSuJ/UlGnFJe1YBbIB9Y6i
+	tNsDDhzasskCWhGy+Mvjd8XSq28dMDD+FswtKPjR165B6vEJPQpXhW4FqGmWvvvv1kZHmRnB9MD
+	ggEFGYfI7h78VnVAjE8a0RIjYKIS1yaDBF5lSVCVjozuekG4kAh+JOb9LcHJGT7w43ho1htXOoD
+	Amxinou1RXxLRm95fWIOKX0qcpPKPt3OMOXsIWh0LmdE5Q0a2jdI4MY2koTkze+p3UrpN6JD+CI
+	AZAHTQ==
+X-Received: by 2002:a05:6830:449f:b0:815:40bf:e777 with SMTP id 46e09a7af769-83095d20990mr11430625a34.13.1791879626193;
+        Tue, 13 Oct 2026 01:20:26 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:44::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-830384c4985sm11295972a34.8.2026.10.13.01.20.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 01:20:20 -0700 (PDT)
+        Tue, 13 Oct 2026 01:20:24 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Mykyta Yatsenko <yatsenko@meta.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -71,9 +70,9 @@ Cc: Mykyta Yatsenko <yatsenko@meta.com>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 02/13] selftests/bpf: Clone a program that calls a module kfunc
-Date: Tue, 13 Oct 2026 10:19:57 +0200
-Message-ID: <20261013082012.1107446-3-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 03/13] compiler_types: Add __arena and __nullable BTF type tag qualifiers
+Date: Tue, 13 Oct 2026 10:19:58 +0200
+Message-ID: <20261013082012.1107446-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261013082012.1107446-1-memxor@gmail.com>
 References: <20261013082012.1107446-1-memxor@gmail.com>
@@ -83,60 +82,56 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1924; h=from:subject; bh=ut2kzaiRvkH38BjwAeA1ltAiR0RHURyaSXCiA2GMOr8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIevsy3maRw8ql+SLq0uf9lzw69yBzW29R7Y51W4w4mJfOfXI npaejlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEwk5ynD//Co6CXXny644tg/697uAq uLcadWhZSGv35g0DZPWc7zdQ/DP1vN319kz7XN4L5y+JXHcisbrXgzjkumMvO5b291Edxfww4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2184; h=from:subject; bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIevsy3lnf1a/7q+zTNTm1ntvGSPmlDopfurR/rCKlMQlN2+t my/XUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIns+MnIsL59So1gcOX7XbfEVs9nV5 lWF1He6GjLeHg2z85GEdkaY4Z/BquTs/evbdOT5O2ZZXZO7vt8586Tu3n8Vh2zrJ7V/vwyIwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Prepare an object whose program calls a kfunc of bpf_testmod and load
-the program through bpf_program__clone(), the way veristat loads
-programs. The module BTF fd sits in slot 1 of the fd_array of the
-object and slot 0 is empty; the clone used to pass the fill index of
-that array as fd_array_cnt, which made the kernel resolve slot 0 and
-fail the load with "fd 0 is not pointing to valid bpf_map or btf".
+Kernel structures increasingly want to publish pointers into a BPF arena
+to the BPF programs they are shared with, and some pointer members that
+reach programs as trusted are legitimately NULL at times. Neither can be
+expressed today: a pointer member reaches the program as an ordinary
+kernel pointer, and sched_ext resorts to a plain u64 holding a
+pre-translated arena address that programs cast before use.
 
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
+Define __arena and __nullable as BTF type tags, the way __user, __rcu
+and __percpu already are, so that tagged members survive into vmlinux
+and module BTF and the verifier can act on them. To kernel code and to
+sparse the qualifiers are empty: the pointers are ordinary kernel
+pointers. The verifier side follows in the next patches.
+
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/prog_tests/clone_module_kfunc.c       | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
+ include/linux/compiler_types.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
-new file mode 100644
-index 000000000000..fa6ccbaa7fd9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+#include "kfunc_call_test.skel.h"
-+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index c5921f139007..e97ee2d4d1df 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -51,6 +51,8 @@
+ # define __iomem	__attribute__((noderef, address_space(__iomem)))
+ # define __percpu	__attribute__((noderef, address_space(__percpu)))
+ # define __rcu		__attribute__((noderef, address_space(__rcu)))
++# define __arena
++# define __nullable
+ static inline void __chk_user_ptr(const volatile void __user *ptr) { }
+ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ /* other */
+@@ -70,6 +72,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ # define __iomem
+ # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
+ # define __rcu		BTF_TYPE_TAG(rcu)
 +/*
-+ * bpf_program__clone() loads a program from a prepared object with the
-+ * fd_array of the object, where module BTF fds start at slot 1 and slot 0 is
-+ * empty. It used to pass the fill index of that array as fd_array_cnt, which
-+ * made the kernel resolve slot 0 and fail the load.
++ * Qualifiers for the BPF verifier rather than address spaces: __arena marks
++ * a pointer into a BPF arena, __nullable a pointer that may be NULL. They
++ * reach BPF programs as BTF type tags on kernel struct members; to kernel
++ * code the pointers are ordinary.
 + */
-+void test_clone_module_kfunc(void)
-+{
-+	struct kfunc_call_test *skel;
-+	int err, fd;
-+
-+	skel = kfunc_call_test__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	err = bpf_object__prepare(skel->obj);
-+	if (!ASSERT_OK(err, "prepare"))
-+		goto out;
-+
-+	fd = bpf_program__clone(skel->progs.kfunc_call_test1, NULL);
-+	if (ASSERT_GE(fd, 0, "clone"))
-+		close(fd);
-+out:
-+	kfunc_call_test__destroy(skel);
-+}
++# define __arena	BTF_TYPE_TAG(arena)
++# define __nullable	BTF_TYPE_TAG(nullable)
+ 
+ # define __chk_user_ptr(x)	(void)0
+ # define __chk_io_ptr(x)	(void)0
 -- 
 2.53.0-Meta
 
