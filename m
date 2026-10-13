@@ -1,132 +1,102 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D273F0767
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 02:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791857831; cv=pass; b=c98vlAbD9cVhFNIWvbXXz3ejfs7t6OLgYAzNWE745Ccv3mV4Ady5a7o++EEIk/13CgTn8of7Ju9khiM1wYfEeqRQGFgbSUrS6fe5DyBxFh+D7W/fd0IvD6cwvy7o2oPENNaw61oNDJzZqiHXNt9jiNjmKt+4DBsmFV9DM4fFiyE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791857831; c=relaxed/simple;
-	bh=1e6icdFjU8+9G13mCMkJbMOIoeURTDtn24Q/J9qsd24=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CGN7B+45AXOnuPDb8juVdr2Tc1Dp7A3ZimswvObxbvFiJ/cVH5AdP3zzPPXFkXt7TCt7GPsrDmHqD1tm0cXdJ6e1SkSU1dAjoC1UXSEE9mSxqi4J1ay495G3HHnuso7V/wh8GsGWqYbJtDrEPQHcZ56TQB8kiMF+sD51QpZJgR0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cBl0jKAC; arc=pass smtp.client-ip=74.125.224.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A184528D831;
+	Tue, 13 Oct 2026 03:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791860531; cv=none; b=Tc7CG0kIP4FWIuUYilABE/z2Quphqu5Nypj5zYL5z3L1xfTfnyZbquPliSCT81NqnRGoxUXKdHvXJN1zXHI/NmdyxkLQD5porQbOXBOB3TculjgjhOOgYdjymTpmMCaaHqOOgTofuaMc3N8RCGcdxac/0seFynxc8i2eXKMCVkU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791860531; c=relaxed/simple;
+	bh=2QyfqQcZbn7YmQP8Wh3VjbqXonCtaQaumx758KUVgsc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cN5yZOLvTqQm8p0LQINXbXjbbZAjxnoV4u+cPtqQvFI+aBQHQyd5T8AMUtbAbg5NREY70XWFz5Kd/CgvIBCvOAk5T7152W1Xd0EJ8OAPKCVhauhcqnJ76gioSBTqR6bhkTeDiQJuHW5/6fdmySPZ3VP+HGfrFet7LPbVS6U8u/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=g0ZWGlfV; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cBl0jKAC"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-675617e81f9so2455614d50.3
-        for <bpf@vger.kernel.org>; Mon, 12 Oct 2026 19:17:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791857829; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RRv/yuoeiiAQle/aNoKQvvDbA8P6gqHASUFxDbNbekhZD2gnTvuOP5fy/rg0/Ya29Q
-         JOiTxjZLkSfEnq8SWrmS5JEPqLySDQPv6nutqmr4cOIJ1Ng5mz/8ItFOPUGIHeVJiI8I
-         f9ffw18BTO5Z5Ja4VPZ1fx7nvqG43YM/n+Y8zbzRwp2j5+0vAIueff97IKSuyN0q9zyD
-         yQpaXE58E3o4YmQr18Qrx8b3Ujv9x4OAPnVit2P7om9MyLhw6c/jIBC8frNXx+zLDpRY
-         6YYmZioL+hOlu6IxTgZZU3hc+FA/KrFgmNnmZ2o3huBcFai3fMEICY5F5zgKvmRY7x3R
-         u6+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=yIn2x59SlJfeG2aH0jkfT5zU4fOVP6oTpHe5FuJew3U=;
-        fh=IPL9OK3DjLRfWglgt04M/lB/bGJsmJ1HIiBVCqaVLeQ=;
-        b=niZf6u9vRbNz/egvSiSGpoZBClpoKL+jLN2zxXlJ6t8HVkCV/iUL1pYzJglscTzhXb
-         liq5qIWzfwzDLfAnxedXseBmyRnAb2rMTUOsae1imPLOk8sawKGVpXSdZB/Px8uZ90LK
-         oVFmi1zV3T6alqOC7+gIhQmsdNcZk6Jzb/PvvjywrYRmXdiqEknt/QrSCKRWtJQfFQ+b
-         Aa+KHH3VcuAwf6dKp/ncFgZH0uaaPDLuvX3u2xwbE3V14O6RqT6DcpwVZYFQifROhMTn
-         U52uWvmQ47+E5YMlVXdXbeTlcI1vCbvqK6xgzW36RzLT0qwOjtcpBb6ZCAFARSTeMnlu
-         5sDw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791857829; x=1792462629; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yIn2x59SlJfeG2aH0jkfT5zU4fOVP6oTpHe5FuJew3U=;
-        b=cBl0jKACTBpEhNhNf1f+qVqVSynQf2sZqtgWXf/qEjOzsMjBj512ETrV538exeXIBl
-         qCm9/UpB9Stfx9Jvg37Cop4DDoi5zHoHhfECy1lsvQ2EThZ1H2/JtdI8gFpu57g1aKvB
-         U9OS8ayivO+MKQuhfdTuXe9rdJ5F4o8P7PMhuVsO/Gq+KAWzaa1kiu4zlqPekPnn7ee0
-         2K+EfHmXySJNZEz8OSDNSPvj8Xasm2kybS/Fnz0M50FWWrpSqwir37vlM//eB7vdn+lp
-         mxD66mIjqkzq+YtNjhYF7t4N9fkfKWCFtUkgJYjJw/iv0dvxJ2sGrdBE1bwZlnadn8n9
-         BCww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791857829; x=1792462629;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yIn2x59SlJfeG2aH0jkfT5zU4fOVP6oTpHe5FuJew3U=;
-        b=OVb/bytu1E7pK1kAHGRacpH1FdpzU+/i+E+K/RZoUDg5CpeP5186rmxroRTAXpY5OX
-         QedWQsEaxhcUdztEwTBTOAh87vV02Bh6YCi6ooDgSI1RcQiOAZEVqJtg0kHeV4d1NIkL
-         dJNIF1/KsipjxH959Xsj9+Kh5qcSun3jLCxIEOGxbm23dVyG+FZjSs7N0bZqp4atg0T6
-         TspG8OoiKS3GhezptqrSpOuDkfVshYHEqX+KV4cpx72e3jvgPHRNzlsiYbvQPQjqc02/
-         GzdHgrOM/O3wlJEibK61K3ytJ7fmUbC08VRqSMtbPWHhZXu30nDPuurF2j9U3JWonL0f
-         xStg==
-X-Forwarded-Encrypted: i=1; AKwUvByrzHgSsa4XN5pG9icg81D408NPZ2YvNS76LvNGkbhfbpGbzBSRJ/aS3XMRTvWNGbyhaSk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK4IQVMClEs9YUPjdlt+fUdLLgTh4cQL36nTNkZNd12mwSF6glV
-	frar1cwTodvMHk95Qc9H7Rl7FfnKcXSPGuyks/GIBuLRnpGNEd7GEK5OTwsvWYeHaYgJ1n6WSHU
-	Uzo6HKDoCGQxJJq+cX9XVzGk3m/l8zOg=
-X-Gm-Gg: AYBFou3OS6EEJuHGBzDywqgE+br3YhIvd8v/zLakaRrzhfcKtMmk6DanKQH27yIFfbB
-	rKMpmSw6/sew0CkxmNx46ZlvIAnsV/15MTRSdTbPuSHQvIwB8uBTT4pIrTAyoZZT+8h7kSUp/6R
-	8FB2Q5YPNqynzRmdHdr9x13X9lBNSLiGcfBN4ywH0vNbPynO/WeTxZB1P8Kt2QVl02OYsbWE9is
-	s3FVLWnFi4SUgthr4si7scqGKvWU+R7stjd+3Y4cAy+81faGu3VSmJ+sI8fg6Iw5P4GAmsUeAls
-	v+AczRbOqhs9wJ1oZI8oIZxVGTemhMkO/oipRzefuPVG2cxb5v7UA+b7JmvwBaCD0yPmHzG0Fqc
-	cEgM2UMHCuQ==
-X-Received: by 2002:a05:690e:1383:b0:671:7e90:70f4 with SMTP id
- 956f58d0204a3-6793678d44dmr3771206d50.10.1791857828879; Mon, 12 Oct 2026
- 19:17:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="g0ZWGlfV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ZN
+	TpWmVxNLgmH1u6gSZXhqDxxSQQ0xYZG1cc95j+xjM=; b=g0ZWGlfVdI1NIr25v6
+	lxsy/HzD3QsE9KCqNl8Wqgdr6JwSIGtGFJa311v7WDkkKzI4j2ef2Kq+sJ7pNyRu
+	CqGEQ3eVbdwloYjx2jUL2uY9IX6LJxTezG8c5WAoVpRix3+iE6t94CLmnjuG/znY
+	OIvLDdNSJKFOWN/HlSCNiI930=
+Received: from kylin-ERAZER-H610M.. (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wBXDbwDn81q1bDPEA--.2729S2;
+	Tue, 13 Oct 2026 11:01:25 +0800 (CST)
+From: Yun Lu <luyun_611@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org
+Cc: yatsenko@meta.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Fix map fd leak in no-BTF wq test
+Date: Tue, 13 Oct 2026 11:01:14 +0800
+Message-ID: <20261013030114.292157-1-luyun_611@163.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261012120438.52849-1-laoar.shao@gmail.com> <d9a3367a1852158f60cc2e89677fb12f@kernel.org>
-In-Reply-To: <d9a3367a1852158f60cc2e89677fb12f@kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 13 Oct 2026 10:16:32 +0800
-X-Gm-Features: AclHuK-uH2UB1rAnuK0zhwCfF8NmZTYihTg9_NG0CYh1qo0sK-2XTafwZpGcmUQ
-Message-ID: <CALOAHbBE_1ssK_26c-UY7N6WxhkVNpB6v9WACVGaOiWZ5zchCA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/3] BPF-based per-cgroup NUMA balancing mode selection
-To: Tejun Heo <tj@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, 
-	david@kernel.org, gourry@gourry.net, hannes@cmpxchg.org, mkoutny@suse.com, 
-	shakeel.butt@linux.dev, roman.gushchin@linux.dev, yu.c.chen@intel.com, 
-	zhao1.liu@intel.com, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXDbwDn81q1bDPEA--.2729S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CrWDKw1UAw45Kr1xZFW7XFb_yoW8WF13pa
+	yFk3yjkF95uF1Ut3WfK3y7WrWFka1kXrWayF4Ygr17urn8Jr97tw4fKa13Jas3ZrZ5Zr4Y
+	vw4xt39YvayUZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbzV8UUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wX2xWrNnwXSgAAA3y
 
-On Tue, Oct 13, 2026 at 1:51=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Mon, Oct 12, 2026 at 08:04:35PM +0800, Yafang Shao wrote:
-> > This series adds a bpf_numab_ops struct_ops which attaches to a
-> > cgroup. The kernel consults the policies of the matching cgroup and of
-> > every ancestor and combines what they return.
->
-> The op doesn't compute anything. It returns a fixed mode per cgroup and
-> that's all the series uses it for. BPF is unnecessary here. This is a
-> prctl() feature, not a struct_ops one.
+From: Yun Lu <luyun@kylinos.cn>
 
-Part of the consults are keyed on struct folio rather than struct
-task_struct: the folio surface answers from the folio's memcg, the
-owner's request, not the touching task's. I don't see how to key
-these callsites to a per-task setting.  Please correct me if I'm
-wrong.
+bpf_map__reuse_fd() duplicates the supplied file descriptor instead of
+taking ownership of it. test_failure_map_no_btf() closes the original
+map_fd only when reuse fails, leaking it when reuse succeeds, including
+when the test passes. Destroying the skeleton closes its own descriptor
+but leaves the original descriptor and its map reference alive.
 
-prctl() is also a stable uAPI rather than a kernel-internal
-interface: a new option is frozen the day it merges, which is a
-poor fit for a feature whose semantics are still moving.  The
-struct_ops/kfunc surface is explicitly exempt from the uAPI
-stability rules, which is what lets us experiment with the kernel
-feature rapidly.
+Close map_fd immediately after bpf_map__reuse_fd(), before checking its
+return value, to release the original descriptor on both success and
+failure. The skeleton retains its own descriptor for the subsequent
+program load.
 
---=20
-Regards
-Yafang
+Fixes: bca2b74ea9a8 ("selftests/bpf: Add more bpf_wq tests")
+Reported-by: Jackie Liu <liuyun01@kylinos.cn>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+---
+ tools/testing/selftests/bpf/prog_tests/wq.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
+index 84831eecc935..97926e35aaf2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/wq.c
++++ b/tools/testing/selftests/bpf/prog_tests/wq.c
+@@ -64,10 +64,9 @@ static void test_failure_map_no_btf(void)
+ 		goto out;
+ 
+ 	err = bpf_map__reuse_fd(skel->maps.array, map_fd);
+-	if (!ASSERT_OK(err, "map reuse fd")) {
+-		close(map_fd);
++	close(map_fd);
++	if (!ASSERT_OK(err, "map reuse fd"))
+ 		goto out;
+-	}
+ 
+ 	insns = bpf_program__insns(skel->progs.test_map_no_btf);
+ 	if (!ASSERT_OK_PTR(insns, "insns ptr"))
+
+base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+-- 
+2.43.0
+
