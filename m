@@ -1,133 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6773A33D6D6;
-	Tue, 13 Oct 2026 08:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9B138E5DF;
+	Tue, 13 Oct 2026 08:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791879734; cv=none; b=TLCIWsFXs+QhFFwKtL+0lw22qiGY+4gIXqYUYj3yQUS7pZoIvCUP9PL7GAWyl7aqB5l5tEEEVk4aQK0kw2kF5/HMNDnqP93HRylK5BdQZDKpM/shf/6k/jFNm6ATapUnSky1LLmcbPkxaAR0zvD/WJ9ElnV7Xp1YLolzK8Sjw50=
+	t=1791879912; cv=none; b=tX56V6sTdcLvWuUW5hDoifyPXm308RlCf3l/hfmaXtVRRFQDbCkOwFBBIR8GLFETzvXEntu/8L6UbVL50MBTM94dE8nhzvTArAlXpnLIpTV4OEURfHNCYOQYUH7PbLdJwSf14vCOaPIkpV5jBVMGterbmXoSDa6mq7fHDlmT4ZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791879734; c=relaxed/simple;
-	bh=0es844PUx4svQ45p33PKaAUnZiTU42TXnE0Mhc81baM=;
-	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=rGi/nCLHgJc4Tlxnq28xGPplznCZK17OpnuVR8ORxiBUfL0SmHjy4r/knNGCpPv9nvaOrnLM5lEqW+H044Xcydu9X3ElN5veEI8o+Rv2JFBnt45WHXYA6Iw7v5LhR3FzEnPUTs8Z9JAbbZHdajv5mfWEJEDdn+cOGhnvis8p1mU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K/kPX8SI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791879912; c=relaxed/simple;
+	bh=RbWbzjpqMkedbk8YK4D47wKdcaiIV95H7NKUfCthpPY=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=PvPXoQY5VGV5dXr4WGojNzqcnhImtVwow21QrgRCPCFDdI80SehSInbjKgcYYuAkk8EPsbVHzmJQ4yn0l5iRajD80UJ/oy0s+Y5Ujr8OrlfNpCvKmQqbdMvvVCoiz/KovyG4H42PoPlOXKqDBxXjqO94udnY3zklrgRdZU8/dsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=F1DSAf6Q; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K/kPX8SI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5041F00893;
-	Tue, 13 Oct 2026 08:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791879733;
-	bh=jtJpW3GxHlSyb5/wy2ba0TJw8XBw0a47WmxDIvlUS0U=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=K/kPX8SICntUS/Y4kKzJxmUwGUQQMKRm15Z8jtypmMAR+c4WnHemrjllP86V4qzOP
-	 V9S9tsU8ydI2E3WWOuHUBStb6qKLWvdpp9LlKTN5GCPWX1Is+ZBKRrb7bT2j5p5zo1
-	 V5Mk4YpQ1xbjBZLGhUk8eB8Ona9pUiN4e3e7k8Jhofn+qJUN7DTN/nhV5cWJ4tfZ2Z
-	 8zjPhqOmwYvInrxYmT7/kADVTLpUYnX9R6tjVySgmhIXUs9U5b4nHrM59bm4SFZpLa
-	 bZcOXKTHplt3+Ik40OmIkD3rcxITfqkzxEMTvrOZt9eW37A0QZq5NTU+Q7RKhwHUZK
-	 MejcB57mtxHsA==
-Message-ID: <sashiko-outbox-169237@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 6/6] net: kunit: test netmem, page_pool, and
- skb frag refcounting
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mina Almasry" <almasrymina@google.com>, linux-rdma@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261012082148.1698596-7-almasrymina@google.com>
-References: <20261012082148.1698596-1-almasrymina@google.com>
- <20261012082148.1698596-7-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 13 Oct 2026 08:22:12 +0000
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="F1DSAf6Q"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 02888A157F;
+	Tue, 13 Oct 2026 10:24:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1791879903; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=un+RWDxQ0LzJC8cAfHiPgnBCvaRRs7NxkrufLYrfb0U=;
+	b=F1DSAf6QlLFcxhiZ+os9THDj3f+sbAiNkAbcOvc7wgcb7nYRfw+b5BKQUQQfM3NFfoYab6
+	sqz09NJu3BR+RYkULLhb8xHoBadK/hkQcL5LbLK7ibudtEBUAs/qRtzlf73RbndFGPl4hO
+	bBdSgNVYPyd2NSgw44bR86LH8IZhN1DYOcgYbi9Chw4QkGJA1uK63hPHUMJHcApfzsyzr8
+	iNEc9RcKdjtSr7OXx8DR8JQROrkQvGA74G054NltmY8InbjHHiO6v6IyzmOA+bUrPF0fzO
+	Yf3h6dDDtF4EGjrztPxoxBNISOEvhaziefwpdtkOTOu/krw3ZtnoZKuhz4OSSg==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Date: Tue, 13 Oct 2026 10:24:57 +0200
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre
+ Torgue <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>, Ong Boon
+ Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v6 3/4] net: stmmac: drop multi-buffer frames in
+ XDP mode
+In-Reply-To: <as3pB16af0_QhNyB@lore-desk>
+References: <20261012-stmmac-rx-mb-v6-0-2225050915c1@oss.qualcomm.com>
+ <20261012-stmmac-rx-mb-v6-3-2225050915c1@oss.qualcomm.com>
+ <b11af7d5d430dcddcc681484b50ae7e2@tipi-net.de> <as3pB16af0_QhNyB@lore-desk>
+Message-ID: <3a483a6fbd86f50a02435932fe4a7ea3@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] net/kunit: kernel panic in TCP devmem test due to unset skb->unr=
-eadable
---
+Hi Lorenzo
 
-commit 432a5016a6d079e3237437e79dd79f25313c4f7a
-Author: Mina Almasry <almasrymina@google.com>
+On 13.10.2026 10:17, Lorenzo Bianconi wrote:
+> On Oct 12, Nicolai Buchwitz wrote:
 
-net: kunit: test netmem, page_pool, and skb frag refcounting
-   =20
-Verify that non-pp (page._refcount / binding->ref) and page_pool
-(pp_ref_count) references stay balanced without cross-counter leaks or
-underflows across regular pages, page_pool pages, non-pp net_iovs, and
-page_pool net_iovs with both pp_recycle=3D0 and pp_recycle=3D1.
+> [...]
 
-> diff --git a/net/core/net_test.c b/net/core/net_test.c
-> index 9c3a590865d26..6f21e6baf7fb3 100644
-> --- a/net/core/net_test.c
-> +++ b/net/core/net_test.c
-[ ... ]
-> @@ -370,10 +370,1213 @@ static void ip_tunnel_flags_test_run(struct kunit=
- *test)
-[ ... ]
-> +static void netmem_ref_test_tcp_devmem_recv(struct kunit *test)
-> +{
-[ ... ]
-> +	/* 1. Receive via tcp_recvmsg_dmabuf -> SO_DEVMEM_DONTNEED release */
-> +	skb =3D alloc_skb(0, GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, skb);
-> +	skb->pp_recycle =3D 1;
-> +	skb_add_rx_frag_netmem(skb, 0, niov_nm, 0, 64, PAGE_SIZE);
-> +	napi_pp_get_page(niov_nm);
-> +	TCP_SKB_CB(skb)->seq =3D 0;
-> +	TCP_SKB_CB(skb)->end_seq =3D 64;
-> +	skb_queue_tail(&sock->sk->sk_receive_queue, skb);
+>> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>> > b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>> > index 426bb68c9bbc..8c08d44fdbd3 100644
+>> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>> > @@ -5893,18 +5893,24 @@ static int stmmac_rx(struct stmmac_priv *priv,
+>> > int limit, u32 queue)
+>> >
+>> >  		if (priv->extend_desc)
+>> >  			stmmac_rx_extended_status(priv, &priv->xstats, rx_q->dma_erx +
+>> > entry);
+>> > -		if (unlikely(status == discard_frame)) {
+>> > -			page_pool_put_page(rx_q->page_pool, buf->page, 0, true);
+>> > -			buf->page = NULL;
+>> > +
+>> > +		if (unlikely(!error && status == discard_frame)) {
+>> >  			error = 1;
+>> >  			if (!priv->hwts_rx_en)
+>> >  				rx_errors++;
+>> >  		}
+>> >
+>> > -		if (unlikely(error && (status & rx_not_ls)))
+>> > -			goto read_again;
+>> > +		/* We do not support SG in XDP mode */
+>> > +		if (unlikely(!error && (status & rx_not_ls) &&
+>> > +			     stmmac_xdp_is_enabled(priv))) {
+>> > +			rx_dropped++;
+>> > +			error = 1;
+>> > +		}
+>> 
+>> AFAIU GMAC4 and XGMAC always use the second buffer of a descriptor. If
+>> so, at MTU 1500 a frame of up to 3072 bytes can fit in one descriptor,
+>> and this check would not catch it?
+>> 
+>> The XDP program would then only see the first buffer. With XDP_TX the
+>> frame is cut and sent too short. With XDP_PASS the second buffer is 
+>> added
+>> after the program already decided.
+>> 
+>> Patch 4 fixes this. But if this patch should work on its own, should 
+>> it
+>> also drop the frame when buf2_len is not zero? Or am I missing
+>> something?
+> 
+> Hi Nicolai,
+> 
+> IIUC your comment we are missing the case where we have a single 
+> descriptor
+> (rx_not_ls is not set in status) but the packet is splitted over buf1 
+> and buf2,
+> right? Something like:
+> 
+> 	...
+> 	buf2_len = stmmac_rx_buf2_len(priv, p, status, len);
+> 	len += buf2_len;
+> 
+> 	if (unlikely(stmmac_xdp_is_enabled(priv) && buf2_len)) {
+> 		rx_dropped++;
+> 		dev_kfree_skb(skb);
+> 		goto next;
+> 	}
+> 	...
+> 
+> Is my understanding correct?
 
-[Severity: Medium]
-Does this code need to set skb->unreadable =3D 1 when injecting this devmem
-fragment?
+Yes, exactly.
 
-Without it, tcp_recvmsg_locked() checks skb_frags_readable(skb) and returns
-true. The TCP stack will attempt to copy the payload using
-skb_copy_datagram_msg() instead of processing it via tcp_recvmsg_dmabuf().
+I think skb is always NULL there in XDP mode, so the dev_kfree_skb()
+can go. Both pages stay in the slot and stmmac_rx_refill() reuses them,
+so nothing leaks.
 
-This leads to a kernel panic when __skb_datagram_iter() executes
-skb_frag_foreach_page() and retrieves the page pointer via netmem_to_page().
-Because the underlying memory is a net_iov, netmem_to_page() returns NULL a=
-nd
-the subsequent kmap_local_page(NULL) call crashes the kernel during test
-execution.
+Maybe extend the "We do not support SG in XDP mode" comment to cover
+this case too.
 
-> +
-> +	msg.msg_control =3D cmsg_buf;
-> +	msg.msg_controllen =3D sizeof(cmsg_buf);
-> +	ret =3D kernel_recvmsg(sock, &msg, &iov, 0, 64,
-> +			     MSG_SOCK_DEVMEM | MSG_DONTWAIT);
-> +	KUNIT_ASSERT_EQ(test, ret, 64);
-> +	KUNIT_EXPECT_EQ(test, atomic_long_read(&niov.desc.pp_ref_count), 3L);
-> +	KUNIT_EXPECT_EQ(test, atomic_long_read(&binding.ref.data->count),
-> +			base_iov_ref);
-[ ... ]
-> +	/* 2. Receive second packet & destroy socket to test
-> +	 * tcp_release_user_frags() -> napi_pp_put_page().
-> +	 */
-> +	skb =3D alloc_skb(0, GFP_KERNEL);
-> +	KUNIT_ASSERT_NOT_NULL(test, skb);
-> +	skb->pp_recycle =3D 1;
-> +	skb_add_rx_frag_netmem(skb, 0, niov_nm, 0, 64, PAGE_SIZE);
-> +	napi_pp_get_page(niov_nm);
-> +	TCP_SKB_CB(skb)->seq =3D 64;
-> +	TCP_SKB_CB(skb)->end_seq =3D 128;
-> +	skb_queue_tail(&sock->sk->sk_receive_queue, skb);
+> [...]
 
-[Severity: Medium]
-Will this second injected SKB also trigger the same panic since it lacks
-skb->unreadable =3D 1?
-
-> +
-> +	msg.msg_control =3D cmsg_buf;
-> +	msg.msg_controllen =3D sizeof(cmsg_buf);
-> +	ret =3D kernel_recvmsg(sock, &msg, &iov, 0, 64,
-> +			     MSG_SOCK_DEVMEM | MSG_DONTWAIT);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261012082148.1698=
-596-1-almasrymina@google.com?part=3D6
+Thanks,
+Nicolai
