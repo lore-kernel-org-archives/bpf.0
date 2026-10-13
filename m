@@ -1,127 +1,369 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-m15577.qiye.163.com (mail-m15577.qiye.163.com [101.71.155.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72F54F402E
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 12:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2754D7D4D;
+	Tue, 13 Oct 2026 12:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791894973; cv=none; b=s28cnxWzKlLdMK/+fesRpMN7CJa6/VeWYWqCFahJM03SMiMw0iqiBdcUz82iMp/1a+osdwMFvu4ZhIyqztK9d0BTw/cjb2aNsbjDb3Ay+A476YE0xsIlxm+UAeSglquyWLyitkoUI8OeXAzvHawu2a1159W6+2I6slqZJIfaIQA=
+	t=1791895039; cv=none; b=Eu8fyZQFSzYxQ6BkOtt5kKRKpWIDI5XOtzt+W8QKCsSr8lY8Jd5CAqLMCvv7W4P1pWB1QDBHz/B/wfLv40qhUgVq+pW38ddeQKMSk3k45rhvWc3F++AIbMqV7gyuc0Bl84N+Yz9N/3eUq5FcoE3siSgy0QvzLRY2rTLSUOCYH98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791894973; c=relaxed/simple;
-	bh=AzQaNg0fjQgv6k016+Da5Obiw21oy6b5Rb/Z3eP9AjU=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=hYZsi2CZvdRSKwqAk7q+gMaGIDG/7sQzXAQAk2538+Vy5ifiVMgYMcFTA7/bY5sf3DFFKoV/EN9rZFKKPyG1D5R+zgM69yRLQOk11ycEYZ4KX2LV2d/N8dk98iza2DGAbRaUZTxvpXtfqpthJm/UNc5GJ7rF5sMuRiPc4MAo5k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOn0Ig1W; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOn0Ig1W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8010D1F00893;
-	Tue, 13 Oct 2026 12:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791894972;
-	bh=cxkP7IJS4g7a7R/o0EFsicyWNeVBNJl/PoYJ8Tr8iB0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kOn0Ig1WsBlyyZYyY70JF3g2jb2GCTni0SJtW1/agAZBUadd9Eh59id7ZnJ35wR2B
-	 XYCaqJWdRzkQ3E9W+sOEwgPGh+GOiD20sWYnBtPLlhmR7MsIBOJ2RVR7KtY8y75vVz
-	 ykYGV7Vou5S1+3F4ydaG2/0Al360wDwNnNtXBhK4P3OYeqn+ei9yloeaRsBFGHm05g
-	 Gnz4xBUR09Zc5EZ0AliBbZVfVak2Xaf3hXvmRKzJ7cJ1EqIKzb+yqQDnHOTE5H3h9T
-	 SP26onzZzTAoBaJ/hfTqnaTA3s5t2fmNEYGrQTMZ09QCYUboLsp9l4XxOf6WaF5RxC
-	 d3xGFgkxQ9Pfw==
-Message-ID: <sashiko-outbox-169722@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 4/6] mm/page_owner: record the NUMA node in the scan
- cursor
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhen Ni" <zhen.ni@easystack.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261013122125.843451-5-zhen.ni@easystack.cn>
+	s=arc-20240116; t=1791895039; c=relaxed/simple;
+	bh=CFx7xmpAKJIZOM07VNYWjxmCrTOtQ+dvNe0paVxehCg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CbemBMN1YlV3VD+HS78WABTqJ3okzE7SWGRJQdnAvm/QqO8Lbdjs2B0nDzIocvkDemNJjfsG7XupWScL1syUrKAtIulbv7XdCmhoEpESFlS3JLxpWBugyWMi6GF5QBdnQMN3WK3sFMf0N26HIYC41SIJzcTWwAcaGOlTvWOmkaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=101.71.155.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from localhost.localdomain (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 200407eed;
+	Tue, 13 Oct 2026 20:21:44 +0800 (GMT+08:00)
+From: Zhen Ni <zhen.ni@easystack.cn>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	akpm@linux-foundation.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	brendan.jackman@linux.dev,
+	hannes@cmpxchg.org,
+	ziy@nvidia.com,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zhen Ni <zhen.ni@easystack.cn>
+Subject: [PATCH v2 2/6] mm/page_owner: add bpf_iter target "page_owner"
+Date: Tue, 13 Oct 2026 20:21:21 +0800
+Message-Id: <20261013122125.843451-3-zhen.ni@easystack.cn>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20261013122125.843451-1-zhen.ni@easystack.cn>
 References: <20261013122125.843451-1-zhen.ni@easystack.cn>
- <20261013122125.843451-5-zhen.ni@easystack.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 13 Oct 2026 12:36:12 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa135362adc0229kunm0bc94a6a5251
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCQ0tCVh1LTU8ZSx8ZHklKT1YVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] mm: incomplete fix leaves page_owner vulnerable to unmapped page d=
-ereference
---
+Register a bpf_iter target "page_owner" that walks the pages eligible
+for page_owner output, with the same eligibility rules as the
+/sys/kernel/debug/page_owner read path.
 
-commit 7b174b26adeea5712aaa10bd465514b5ce7dbe36
-Author: Zhen Ni <zhen.ni@easystack.cn>
-Subject: mm/page_owner: record the NUMA node in the scan cursor
+For each eligible page the attached BPF program receives the pfn, the
+page and the page_owner record, and can freely filter and format output.
 
-This commit computes the page's NUMA node in page_owner_next_eligible()
-and stores it in the scan cursor to avoid dereferencing a potentially
-unmapped page later. It updates the debugfs nid filter and BPF program
-to use this stored node value.
+The po_snap record in the scan cursor is taken inside the page_ext
+RCU window and handed to the BPF program as a copy, so no RCU window
+is needed at consumption time. Torn reads remain possible if the
+record is concurrently updated while it is copied, but this is the
+same best-effort behavior as the read path has always had.
 
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 617346a4ab22a..113e4e7e0b3a1 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-[ ... ]
-> @@ -810,18 +824,8 @@ read_page_owner(struct file *file, char __user *buf,=
- size_t count, loff_t *ppos)
->  	/* Find an allocated page */
->  	while (page_owner_next_eligible(&scan)) {
->  		if (state->nid_filter_enabled) {
-> -			int nid;
-> -			memdesc_flags_t page_flags =3D
-> -				READ_ONCE(scan.page->flags);
-> -
-> -			/*
-> -			 * Bypass PF_POISONED_CHECK() in page_to_nid() to avoid
-> -			 * VM_BUG_ON when accessing poisoned pages.
-> -			 */
-> -			if (page_flags.f =3D=3D PAGE_POISON_PATTERN)
-> -				goto skip_continue;
-> -			nid =3D memdesc_nid(&page_flags);
-> -			if (!node_isset(nid, state->nid_filter))
-> +			if (scan.nid < 0 ||
-> +			    !node_isset(scan.nid, state->nid_filter))
->  				goto skip_continue;
->  		}
-> =20
+The target is registered from pageowner_init() when both
+CONFIG_PAGE_OWNER and CONFIG_BPF_SYSCALL are enabled; a registration
+failure only disables the bpf_iter target.
 
-[Severity: High]
-Does this fix leave scan.page vulnerable to an unmapped page dereference
-shortly after this block?
+Userspace tools such as bpftrace can attach to this target like any
+other bpf_iter. For example, to count pages owned by init (pid 1):
 
-Although this patch successfully avoids dereferencing scan.page when checki=
-ng
-the node filter, page_owner_next_eligible() drops the RCU lock via
-page_ext_put() before returning.
+    bpftrace -e 'iter:page_owner / ctx->po->pid == 1 / { @ = count(); }'
 
-Just below the quoted block in read_page_owner(), scan.page is still
-passed directly to print_page_owner():
+Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
+---
+Changes in v2:
+- Drop the scan->pfn++.
+- Fill page/po/pfn only when v is non-NULL.
+- Implement page_owner_seq_stop().
 
-read_page_owner() {
-    ...
-    while (page_owner_next_eligible(&scan)) {
-        ...
-        return print_page_owner(buf, count, scan.pfn, scan.page,
-                                &scan.po_snap, scan.po_snap.handle, state);
-    ...
-}
+v1: https://lore.kernel.org/linux-mm/20261009112308.240769-3-zhen.ni@easystack.cn/
+---
+ mm/Makefile          |   3 ++
+ mm/page_owner.c      |  33 +++---------
+ mm/page_owner.h      |  48 +++++++++++++++++
+ mm/page_owner_iter.c | 124 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 182 insertions(+), 26 deletions(-)
+ create mode 100644 mm/page_owner.h
+ create mode 100644 mm/page_owner_iter.c
 
-Inside print_page_owner(), the pointer is dereferenced by scnprintf using
-the %pGp formatter on &page->flags.f.
+diff --git a/mm/Makefile b/mm/Makefile
+index e7245cb88c66..d7307b5a964c 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -115,6 +115,9 @@ obj-$(CONFIG_DEBUG_KMEMLEAK) += kmemleak.o
+ obj-$(CONFIG_DEBUG_RODATA_TEST) += rodata_test.o
+ obj-$(CONFIG_DEBUG_VM_PGTABLE) += debug_vm_pgtable.o
+ obj-$(CONFIG_PAGE_OWNER) += page_owner.o
++ifdef CONFIG_BPF_SYSCALL
++obj-$(CONFIG_PAGE_OWNER) += page_owner_iter.o
++endif
+ obj-$(CONFIG_MEMORY_ISOLATION) += page_isolation.o
+ obj-$(CONFIG_ZSMALLOC)	+= zsmalloc.o
+ obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 56c75a669a6b..617346a4ab22 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -14,6 +14,7 @@
+ #include <linux/sched/clock.h>
+ 
+ #include "page_alloc.h"
++#include "page_owner.h"
+ 
+ /*
+  * TODO: teach PAGE_OWNER_STACK_DEPTH (__dump_page_owner and save_stack)
+@@ -21,31 +22,6 @@
+  */
+ #define PAGE_OWNER_STACK_DEPTH (16)
+ 
+-struct page_owner {
+-	unsigned short order;
+-	short last_migrate_reason;
+-	gfp_t gfp_mask;
+-	depot_stack_handle_t handle;
+-	depot_stack_handle_t free_handle;
+-	u64 ts_nsec;
+-	u64 free_ts_nsec;
+-	char comm[TASK_COMM_LEN];
+-	pid_t pid;
+-	pid_t tgid;
+-	pid_t free_pid;
+-	pid_t free_tgid;
+-};
+-
+-/*
+- * Cursor and per-page result of page_owner_next_eligible().
+- */
+-struct page_owner_scan {
+-	/* resume point */
+-	unsigned long pfn;
+-	struct page *page;
+-	struct page_owner po_snap;
+-};
+-
+ struct stack {
+ 	struct stack_record *stack_record;
+ 	struct stack *next;
+@@ -741,7 +717,7 @@ void __dump_page_owner(const struct page *page)
+  * must advance scan->pfn past the hit before calling again to resume
+  * the scan.
+  */
+-static bool page_owner_next_eligible(struct page_owner_scan *scan)
++bool page_owner_next_eligible(struct page_owner_scan *scan)
+ {
+ 	unsigned long pfn = scan->pfn;
+ 
+@@ -1196,6 +1172,11 @@ static int __init pageowner_init(void)
+ 			    &stack_fops);
+ 	debugfs_create_file("count_threshold", 0600, dir, NULL,
+ 			    &threshold_fops);
++
++#ifdef CONFIG_BPF_SYSCALL
++	if (page_owner_iter_register())
++		pr_warn("page_owner: failed to register bpf_iter target\n");
++#endif
+ 	return 0;
+ }
+ late_initcall(pageowner_init)
+diff --git a/mm/page_owner.h b/mm/page_owner.h
+new file mode 100644
+index 000000000000..fda83be69275
+--- /dev/null
++++ b/mm/page_owner.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * mm/ internal page_owner and page_owner_iter declarations
++ */
++
++#ifndef __MM_PAGE_OWNER_H
++#define __MM_PAGE_OWNER_H
++
++#include <linux/page_ext.h>
++#include <linux/sched.h>
++#include <linux/stackdepot.h>
++
++/*
++ * mm/page_owner.c
++ */
++struct page_owner {
++	unsigned short order;
++	short last_migrate_reason;
++	gfp_t gfp_mask;
++	depot_stack_handle_t handle;
++	depot_stack_handle_t free_handle;
++	u64 ts_nsec;
++	u64 free_ts_nsec;
++	char comm[TASK_COMM_LEN];
++	pid_t pid;
++	pid_t tgid;
++	pid_t free_pid;
++	pid_t free_tgid;
++};
++
++/*
++ * Cursor and per-page result of page_owner_next_eligible().
++ */
++struct page_owner_scan {
++	/* resume point */
++	unsigned long pfn;
++	struct page *page;
++	struct page_owner po_snap;
++};
++
++bool page_owner_next_eligible(struct page_owner_scan *scan);
++
++/*
++ * mm/page_owner_iter.c
++ */
++int page_owner_iter_register(void);
++
++#endif /* __MM_PAGE_OWNER_H */
+diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
+new file mode 100644
+index 000000000000..938cb42ab7d7
+--- /dev/null
++++ b/mm/page_owner_iter.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/memblock.h>
++#include <linux/mm.h>
++#include <linux/seq_file.h>
++
++#include "page_owner.h"
++
++struct bpf_iter__page_owner {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct page *, page);
++	__bpf_md_ptr(struct page_owner *, po);
++	u64 pfn;
++};
++
++DEFINE_BPF_ITER_FUNC(page_owner, struct bpf_iter_meta *meta,
++		     struct page *page, struct page_owner *po, u64 pfn)
++
++static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
++{
++	struct page_owner_scan *scan = seq->private;
++
++	if (*posp == 0)
++		scan->pfn = min_low_pfn;
++
++	if (!page_owner_next_eligible(scan))
++		return NULL;
++	return scan->page;
++}
++
++static void *page_owner_seq_next(struct seq_file *seq, void *v, loff_t *posp)
++{
++	struct page_owner_scan *scan = seq->private;
++
++	++*posp;
++	scan->pfn++;
++	if (!page_owner_next_eligible(scan))
++		return NULL;
++
++	return scan->page;
++}
++
++static int page_owner_prog_seq_show(struct bpf_prog *prog,
++				    struct bpf_iter_meta *meta, void *v)
++{
++	struct page_owner_scan *scan = meta->seq->private;
++	struct bpf_iter__page_owner ctx = {};
++
++	ctx.meta = meta;
++	if (v) {
++		ctx.page = (struct page *)v;
++		/* @po: hit-time snapshot, no RCU window needed. */
++		ctx.po = &scan->po_snap;
++		ctx.pfn = scan->pfn;
++	}
++
++	return bpf_iter_run_prog(prog, &ctx);
++}
++
++static int page_owner_seq_show(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++
++	meta.seq = seq;
++	prog = bpf_iter_get_info(&meta, false);
++	if (!prog)
++		return 0;
++
++	return page_owner_prog_seq_show(prog, &meta, v);
++}
++
++static void page_owner_seq_stop(struct seq_file *seq, void *v)
++{
++	if (!v) {
++		struct bpf_iter_meta meta = { .seq = seq };
++		struct bpf_prog *prog;
++
++		prog = bpf_iter_get_info(&meta, true);
++		if (prog)
++			page_owner_prog_seq_show(prog, &meta, NULL);
++	}
++}
++
++static const struct seq_operations page_owner_iter_seq_ops = {
++	.start	= page_owner_seq_start,
++	.next	= page_owner_seq_next,
++	.stop	= page_owner_seq_stop,
++	.show	= page_owner_seq_show,
++};
++
++static const struct bpf_iter_seq_info page_owner_iter_seq_info = {
++	.seq_ops		= &page_owner_iter_seq_ops,
++	.init_seq_private	= NULL,
++	.fini_seq_private	= NULL,
++	.seq_priv_size		= sizeof(struct page_owner_scan),
++};
++
++static struct bpf_iter_reg page_owner_iter_reg_info = {
++	.target			= "page_owner",
++	.ctx_arg_info_size	= 2,
++	.ctx_arg_info		= {
++		{ offsetof(struct bpf_iter__page_owner, page),
++		  PTR_TO_BTF_ID_OR_NULL },
++		{ offsetof(struct bpf_iter__page_owner, po),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
++	.seq_info		= &page_owner_iter_seq_info,
++};
++
++BTF_ID_LIST(page_owner_btf_ids)
++BTF_ID(struct, page)
++BTF_ID(struct, page_owner)
++
++int page_owner_iter_register(void)
++{
++	page_owner_iter_reg_info.ctx_arg_info[0].btf_id =
++		page_owner_btf_ids[0];
++	page_owner_iter_reg_info.ctx_arg_info[1].btf_id =
++		page_owner_btf_ids[1];
++
++	return bpf_iter_reg_target(&page_owner_iter_reg_info);
++}
+-- 
+2.20.1
 
-If a concurrent memory hot-remove operation frees the vmemmap backing this
-struct page after the RCU lock is dropped, will this %pGp format access
-trigger a kernel panic?
-
-Additionally, a follow-up patch in this series (Patch 5) appears to introdu=
-ce
-get_page_memcg_info() which also unconditionally dereferences scan.page
-outside the RCU lock from read_page_owner(). Does that face the same
-use-after-free risk?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013122125.8434=
-51-1-zhen.ni@easystack.cn?part=3D4
