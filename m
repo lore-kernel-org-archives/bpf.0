@@ -1,178 +1,130 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2EB37FF50
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 00:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6F938C2A7
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 00:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791851735; cv=none; b=ANXIEJf6ytuJE+pkIZC0rmKShsupYSK0cNwHoM48mN1aClXH8Yg0jYMkENf7tESk9Sg6tRoRKR9cuDXoK2p+pdy/rqg6/34rgP1dDgPvS4zEl19ehXaoM5T6YzOuiBaFWSkC+0EGtL4AkvDNxVdY+6CGxpUzIemQDpaG+i657B4=
+	t=1791852226; cv=none; b=oG5fZ0setiqyKH3Rp/Zu7tNGgGUVe1LQzPppS/KFOJyiG8C01GSnQIsj6UuUt64kTGNKF+cOz+Knf92SscEjjQNanr96hTkDd78DHHjXVlnkUMqmYMzUcFE2tlTxlRn3gS8KpmIo1INwQl+HDxSYAOAuyiGUy27PhcM5fLpRWzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791851735; c=relaxed/simple;
-	bh=unK3H1cfrtt/ZGhDeJGpigY673deRd3otCrhl0NSnSg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g+sFJtgkPK8oA68STte+CgJmUg19+uttDhkpxvvIexknXekDjUR2w8Mg88XmlSle/6m35eU0nUmnueOinyaPr3KCtEBbkBQsGJxd8SdMMZLKQKLcQ7/Us7hgyBzn9viV+kJDtDpLTQV8OaCh973k+EPQvaGS/ZQE1oEoauww5KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 9C2F830D78EDC9; Mon, 12 Oct 2026 17:35:25 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 11/11] selftests/bpf: Test that a kfunc gets a 16-byte aligned __int128 aligned
-Date: Mon, 12 Oct 2026 17:35:25 -0700
-Message-ID: <20261013003525.1861990-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261013003429.1853052-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1791852226; c=relaxed/simple;
+	bh=wRMTFkDO005rbwD+ka9Rl4nsgKZaPQPelwk2rD67wOs=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=SvXwFuFhitCLGoyuQ04izuBBiwtEwbnfmrj/ug80ETZP2dnDyFDHf3qkv+6V8Lok8jmOQgc9SUXbxCMdttCzt2BYcnRUvOa543q14gD+mZLCP6SgUyQhDpFHqbHkSHKfYlus5vclNCvLHFybzwNIxBLl/5PjtEw9M+jGbf4UzS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAQrpwyU; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAQrpwyU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBFFB1F0089B;
+	Tue, 13 Oct 2026 00:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791852225;
+	bh=mY7hr+jXHqJkYMOAhinzAq4O6KyQShobFWI/EnYwDR0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=DAQrpwyUrkRr1dhbZclfSrIoHm2Gkb2MF7FBGzl7EMxdUabr/oVJR4aMWIN853lqh
+	 /K+h9KWO+cKMjdPshS7a0cB8IRwyIF7Azmi6VW9yM9Jh8SqPWFIcn2xiBq0mBaUSR6
+	 Q4BePoWNARM4COqJQFZdAmIB23AMkNUpKSRiVjiR3Ilq8dT0AS5dX2Ogfqp0ZXH0sR
+	 MYxfkt1DMUw3630wm3PMvdCbn+KM92wIvHYzpdtGnkE6cTC3nYm2gXNGtZxxzRIpAS
+	 zfUMmFaFJr7AvkFPNjbg3GLBn64tYrNf+Fu9wCnriT4gL/ID29ao6ZRd53mvC9G9Nw
+	 zL2v3xdLLSfyg==
+Message-ID: <sashiko-outbox-168812@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 06/11] selftests/bpf: Test trampoline args
+ around a 16-byte aligned stack arg
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261013003459.1857895-1-yonghong.song@linux.dev>
 References: <20261013003429.1853052-1-yonghong.song@linux.dev>
+ <20261013003459.1857895-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 13 Oct 2026 00:43:44 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-Add bpf_kfunc_call_test_i128_arg_align(), which takes an __int128 after
-seven u64s, in the stack slot after a hole, and returns the low four
-bits of its address. OPTIMIZER_HIDE_VAR() keeps the compiler from taking
-the alignment the ABI promises for granted and folding them to 0.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: endianness assumption causes selftest failure on aarch64 big-e=
+ndian
+--
 
-Call it from two subprograms whose frames are 8 bytes apart, so that one
-of the calls starts with RSP off by 8 whatever alignment the program
-was given, and check that both find the __int128 16-byte aligned.
-Without the previous patch, the x86-64 JIT fails it with
+commit df1efd6b9c0e934bad453d07e6efe674bda8e1e6
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-	run_subtest:FAIL:1552 Unexpected retval: 2 !=3D 0
-	aggregate_arg/aggregate_arg_kfunc_int128_align:FAIL
+selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/progs/aggregate_arg_kfunc.c | 42 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 15 +++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  2 +
- 3 files changed, 59 insertions(+)
+This commit adds tests for bpf_testmod functions taking a 16-byte aligned
+struct containing an __int128. It checks that the BPF trampoline packs
+these arguments correctly according to the BPF calling convention.
 
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c b/to=
-ols/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
-index c87e886423f4..3c3bcb3a02d5 100644
---- a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
-@@ -222,6 +222,48 @@ int aggregate_arg_kfunc_int128_pad(struct __sk_buff =
-*skb)
- 	return 0;
- }
-=20
-+/*
-+ * The kfunc returns the low four bits of the address of v, which both
-+ * conventions pass in a 16-byte aligned stack slot. A program's frame i=
-s
-+ * only 8-byte aligned on x86-64, so call it from two frames 8 bytes apa=
-rt:
-+ * one of them starts the call off by 8, whatever the program was given.
-+ */
-+static __noinline __u64 int128_align_frame1(__u64 a, __u64 b)
-+{
-+	volatile __u64 pad[1];
-+	u128 v =3D ((u128)a << 64) | b;
-+
-+	pad[0] =3D a;
-+	return bpf_kfunc_call_test_i128_arg_align(1, 2, 3, 4, 5, 6, pad[0], v);
-+}
-+
-+static __noinline __u64 int128_align_frame2(__u64 a, __u64 b)
-+{
-+	volatile __u64 pad[2];
-+	u128 v =3D ((u128)a << 64) | b;
-+
-+	pad[0] =3D a;
-+	pad[1] =3D b;
-+	return bpf_kfunc_call_test_i128_arg_align(1, 2, 3, 4, 5, pad[1], pad[0]=
-, v);
-+}
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__load_if_JITed()
-+__success __retval(0)
-+int aggregate_arg_kfunc_int128_align(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+
-+	if (int128_align_frame1(a, b))
-+		return 1;
-+	if (int128_align_frame2(a, b))
-+		return 2;
-+
-+	return 0;
-+}
-+
- #endif /* __SIZEOF_INT128__ */
-=20
- #endif
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 38edb4addc5b..8550897fdfa6 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1120,6 +1120,20 @@ __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_pad(u=
-64 a, u64 b, u64 c, u64 d, u64
- 	       (u64)v * 8 + (u64)((unsigned __int128)v >> 64) * 9;
- }
-=20
-+/*
-+ * The low four bits of the address of v, which follows a stack slot hol=
-e: 0 if
-+ * the caller passed it in a 16-byte aligned slot, as the x86-64 ABI ask=
-s.
-+ */
-+__bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_align(u64 a, u64 b, u64 c, =
-u64 d, u64 e,
-+						   u64 f, u64 g, __int128 v)
-+{
-+	unsigned long addr =3D (unsigned long)&v;
-+
-+	/* or the compiler takes the alignment the ABI promises for granted */
-+	OPTIMIZER_HIDE_VAR(addr);
-+	return addr & 15;
-+}
-+
- __bpf_kfunc u64 bpf_kfunc_call_test_pair_arg_nofit(u64 a, u64 b, u64 c, =
-u64 d,
- 						   struct prog_test_pair_arg s)
- {
-@@ -1840,6 +1854,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd=
-)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd_many)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_stack_hole)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_pad)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_align)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_nofit)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_tail)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_split8)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index a6a93c901416..da0c9b0c38a4 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -249,6 +249,8 @@ __u64 bpf_kfunc_call_test_i128_arg_stack_hole(__u64 a=
-, __u64 b, __u64 c, __u64 d
- 					      struct prog_test_i128_arg w) __ksym;
- __u64 bpf_kfunc_call_test_i128_arg_pad(__u64 a, __u64 b, __u64 c, __u64 =
-d, __u64 e,
- 				       __u64 f, __u64 g, __int128 v) __ksym;
-+__u64 bpf_kfunc_call_test_i128_arg_align(__u64 a, __u64 b, __u64 c, __u6=
-4 d, __u64 e,
-+					 __u64 f, __u64 g, __int128 v) __ksym;
- #endif
- __u64 bpf_kfunc_call_test_pair_arg_nofit(__u64 a, __u64 b, __u64 c, __u6=
-4 d,
- 					 struct prog_test_pair_arg s) __ksym;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
+ols/testing/selftests/bpf/prog_tests/tracing_struct.c
+> index 8086586d3e196..a2da219e14769 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+[ ... ]
+> @@ -141,6 +143,20 @@ static void test_int128_args(void)
+>  	ASSERT_EQ(skel->bss->t_c, 3, "t:c");
+>  	ASSERT_EQ(skel->bss->t_ret, 6, "t ret");
+> =20
+> +	ASSERT_EQ(skel->bss->s_g, 7, "s:g");
+> +	ASSERT_EQ(skel->bss->s_h_lo, 8, "s:h.lo");
+> +	ASSERT_EQ(skel->bss->s_h_hi, 9, "s:h.hi");
+
+[Severity: Low]
+Does this code assume a little-endian memory layout for the __int128
+argument?
+
+The test passes a 16-byte struct containing ((__int128)9 << 64) | 8.
+On big-endian architectures like aarch64 (when configured with
+CONFIG_CPU_BIG_ENDIAN), the most significant 64 bits (9) are placed at the
+lowest address, and the least significant bits (8) at the higher address.
+This hardcoded expectation for the little-endian layout appears to cause the
+test_int128_args selftest to fail its assertions on big-endian systems.
+
+> +	ASSERT_EQ(skel->bss->s_i, 10, "s:i");
+> +	ASSERT_EQ(skel->bss->s_ret, 385, "s ret");
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c b/=
+tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+> index 4638dfec1f38e..5520ee500c01d 100644
+> --- a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+> +++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
+[ ... ]
+> @@ -15,4 +15,49 @@ int test_int128_arg_fexit(unsigned long long *ctx)
+>  	return 0;
+>  }
+> =20
+> +/*
+> + * The arguments come packed in the BPF convention whatever holes the
+> + * kernel convention left between them: an eightbyte each, and two for t=
+he
+> + * struct holding an __int128.
+> + */
+> +long s_g, s_h_lo, s_h_hi, s_i, s_ret;
+> +
+> +SEC("fentry/bpf_testmod_test_int128_stack")
+> +int test_int128_stack_fentry(unsigned long long *ctx)
+> +{
+> +	s_g =3D ctx[6];
+> +	s_h_lo =3D ctx[7];
+> +	s_h_hi =3D ctx[8];
+
+[Severity: Low]
+Is this direct array indexing in test_int128_stack_fentry() subject to the
+same endianness assumption?
+
+When the BPF trampoline projects the struct onto the u64 ctx[] array on a
+big-endian system, ctx[7] receives 9 and ctx[8] receives 8, rather than the
+little-endian projection expected here.
+
+> +	s_i =3D ctx[9];
+> +	return 0;
+> +}
+
 --=20
-2.53.0-Meta
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013003429.1853=
+052-1-yonghong.song@linux.dev?part=3D6
