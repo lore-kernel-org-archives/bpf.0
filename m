@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60097521892
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F02D519DEC
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791911444; cv=none; b=BTctFB/q5n+ympF5EozLzKo31S5mFQyDKgbaopBRWxTImb09ChtGuxJ9gm60YUTg15aELRNMBIyqNwpiwi/telp5b+2VKAvR19vhvkrwZowbbLIlVVF9mK1a5zDKwUSvZJWIhz2XoBb0BBIXqDJI0It7wlRpxgV3hz/NQ1X2JT8=
+	t=1791911464; cv=none; b=Mt42VP9vbYyJUv26PVu4OZqvTdgTd5mOxLCuleXmK8KK6HUS3r9ubFHpZqnRxji/npn+h+2FC11h7z/XKtupSxO+qJpnsbNE8uAvYK/q9sTwn0t2p284D9nKBm5QKkyJryPI39wGy6g4xy6uhZmmfDIWioVSyWRA1jGo9EQI7yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791911444; c=relaxed/simple;
-	bh=Ubtx9GiB4223MFnp+EJecJAlX383G8Rry+mKp0vxDuA=;
+	s=arc-20240116; t=1791911464; c=relaxed/simple;
+	bh=unK3H1cfrtt/ZGhDeJGpigY673deRd3otCrhl0NSnSg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ll7QB18K3kb/G+RKklcjdqHNIez1+1Oxwd23qua2KzVhG2y/tqfHblI8iuKiJmXUFfsXWTYyaFV+jRNrbp5UFe/vrSFj1mdh1BYBS/nZLa9kBstaOeIHeWzM/eJrUHv9Xbx6wMqzn6rYQS2aWa3Y71S76tHxZI9lGby0zm9tYaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=kQK4sv0VTOebPeWMwjj4iMf7P9G6IDCsVWepUa+JJUYFahYIV2xrbnMjR7kLRvETMB6WwRrb985eehFkCOaWzZ5huNUnGXQYJkx7z1En2DLy4Bim5BCDsR5UYMrcsfDNnxPVrPl0Jw+KFS+x5Bpoz0vii19sOiyGONBZTrZbRXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 2FEF730FB5C65E; Tue, 13 Oct 2026 10:10:29 -0700 (PDT)
+	id E205130FB6598A; Tue, 13 Oct 2026 10:10:59 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 09/11] selftests/bpf: Test trampolines on more BPF functions with stack args
-Date: Tue, 13 Oct 2026 10:10:29 -0700
-Message-ID: <20261013171029.2137070-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 11/11] selftests/bpf: Test that a kfunc gets its __int128 stack argument aligned
+Date: Tue, 13 Oct 2026 10:10:59 -0700
+Message-ID: <20261013171059.2141231-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261013170910.2126673-1-yonghong.song@linux.dev>
 References: <20261013170910.2126673-1-yonghong.song@linux.dev>
@@ -37,230 +37,142 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add two functions to the BPF target program of the int128_tgt_prog test.
+Add bpf_kfunc_call_test_i128_arg_align(), which takes an __int128 after
+seven u64s, in the stack slot after a hole, and returns the low four
+bits of its address. OPTIMIZER_HIDE_VAR() keeps the compiler from taking
+the alignment the ABI promises for granted and folding them to 0.
 
-callee_split() takes a struct holding an __int128 after five u64s, so
-on x86-64 it is passed split between r9 and the stack. fentry and fexit
-programs check that the trampoline takes it from there and hands it back
-there.
+Call it from two subprograms whose frames are 8 bytes apart, so that one
+of the calls starts with RSP off by 8 whatever alignment the program
+was given, and check that both find the __int128 16-byte aligned.
+Without the previous patch, the x86-64 JIT fails it with
 
-callee_unreliable() takes six u64-sized arguments, the first a plain
-pointer, which makes its BTF unreliable while the sixth is still passed
-on the stack. The new tgt_prog_unreliable subtest checks that an fentry
-program cannot be attached to it.
+	run_subtest:FAIL:1552 Unexpected retval: 2 !=3D 0
+	aggregate_arg/aggregate_arg_kfunc_int128_align:FAIL
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/tracing_struct.c | 62 +++++++++++++++++++
- .../bpf/progs/tracing_struct_int128_tgt.c     | 32 +++++++++-
- .../bpf/progs/tracing_struct_int128_tracer.c  | 26 ++++++++
- 3 files changed, 119 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/aggregate_arg_kfunc.c | 42 +++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 15 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  2 +
+ 3 files changed, 59 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
-ols/testing/selftests/bpf/prog_tests/tracing_struct.c
-index ad46eabe784f..4b874ef5e6ba 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -194,9 +194,15 @@ static void test_int128_tgt_prog(void)
- 							     "callee_stack");
- 		err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_exit=
-, fd,
- 							     "callee_stack");
-+		err =3D err ?: bpf_program__set_attach_target(tracer->progs.split_entr=
-y, fd,
-+							     "callee_split");
-+		err =3D err ?: bpf_program__set_attach_target(tracer->progs.split_exit=
-, fd,
-+							     "callee_split");
- 	} else {
- 		bpf_program__set_autoload(tracer->progs.stack_entry, false);
- 		bpf_program__set_autoload(tracer->progs.stack_exit, false);
-+		bpf_program__set_autoload(tracer->progs.split_entry, false);
-+		bpf_program__set_autoload(tracer->progs.split_exit, false);
- 	}
- 	if (!ASSERT_OK(err, "set_attach_target"))
- 		goto out;
-@@ -226,6 +232,13 @@ static void test_int128_tgt_prog(void)
- 		ASSERT_EQ(tracer->bss->stack_i, 10, "stack:i");
- 		ASSERT_EQ(tgt->bss->ret_stack, 385, "stack ret");
- 		ASSERT_EQ(tracer->bss->stack_ret, 385, "stack fexit ret");
-+
-+		ASSERT_EQ(tracer->bss->split_e, 5, "split:e");
-+		ASSERT_EQ(tracer->bss->split_lo, 8, "split:h.lo");
-+		ASSERT_EQ(tracer->bss->split_hi, 9, "split:h.hi");
-+		ASSERT_EQ(tracer->bss->split_i, 10, "split:i");
-+		ASSERT_EQ(tgt->bss->ret_split, 246, "split ret");
-+		ASSERT_EQ(tracer->bss->split_ret, 246, "split fexit ret");
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c b/to=
+ols/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
+index c87e886423f4..3c3bcb3a02d5 100644
+--- a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
+@@ -222,6 +222,48 @@ int aggregate_arg_kfunc_int128_pad(struct __sk_buff =
+*skb)
+ 	return 0;
+ }
 =20
- out:
-@@ -236,6 +249,53 @@ static void test_int128_tgt_prog(void)
++/*
++ * The kfunc returns the low four bits of the address of v, which both
++ * conventions pass in a 16-byte aligned stack slot. A program's frame i=
+s
++ * only 8-byte aligned on x86-64, so call it from two frames 8 bytes apa=
+rt:
++ * one of them starts the call off by 8, whatever the program was given.
++ */
++static __noinline __u64 int128_align_frame1(__u64 a, __u64 b)
++{
++	volatile __u64 pad[1];
++	u128 v =3D ((u128)a << 64) | b;
++
++	pad[0] =3D a;
++	return bpf_kfunc_call_test_i128_arg_align(1, 2, 3, 4, 5, 6, pad[0], v);
++}
++
++static __noinline __u64 int128_align_frame2(__u64 a, __u64 b)
++{
++	volatile __u64 pad[2];
++	u128 v =3D ((u128)a << 64) | b;
++
++	pad[0] =3D a;
++	pad[1] =3D b;
++	return bpf_kfunc_call_test_i128_arg_align(1, 2, 3, 4, 5, pad[1], pad[0]=
+, v);
++}
++
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++int aggregate_arg_kfunc_int128_align(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++
++	if (int128_align_frame1(a, b))
++		return 1;
++	if (int128_align_frame2(a, b))
++		return 2;
++
++	return 0;
++}
++
+ #endif /* __SIZEOF_INT128__ */
+=20
  #endif
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 38edb4addc5b..8550897fdfa6 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1120,6 +1120,20 @@ __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_pad(u=
+64 a, u64 b, u64 c, u64 d, u64
+ 	       (u64)v * 8 + (u64)((unsigned __int128)v >> 64) * 9;
  }
 =20
 +/*
-+ * A static function whose BTF is unreliable gets a trampoline that only=
- knows
-+ * of the register arguments, so one taking stack arguments must be refu=
-sed.
++ * The low four bits of the address of v, which follows a stack slot hol=
+e: 0 if
++ * the caller passed it in a 16-byte aligned slot, as the x86-64 ABI ask=
+s.
 + */
-+static void test_tgt_prog_unreliable(void)
++__bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_align(u64 a, u64 b, u64 c, =
+u64 d, u64 e,
++						   u64 f, u64 g, __int128 v)
 +{
-+#if defined(__x86_64__) || defined(__aarch64__)
-+	struct tracing_struct_int128_tracer *tracer =3D NULL;
-+	struct tracing_struct_int128_tgt *tgt;
-+	char log_buf[4096] =3D {};
-+	struct bpf_program *prog;
-+	int err, fd;
++	unsigned long addr =3D (unsigned long)&v;
 +
-+	tgt =3D tracing_struct_int128_tgt__open_and_load();
-+	if (!ASSERT_OK_PTR(tgt, "tgt__open_and_load"))
-+		return;
-+	if (!tgt->rodata->has_stack_arg) {
-+		test__skip();
-+		goto out;
-+	}
-+	fd =3D bpf_program__fd(tgt->progs.run);
-+
-+	tracer =3D tracing_struct_int128_tracer__open();
-+	if (!ASSERT_OK_PTR(tracer, "tracer__open"))
-+		goto out;
-+
-+	bpf_object__for_each_program(prog, tracer->obj)
-+		bpf_program__set_autoload(prog, false);
-+	bpf_program__set_autoload(tracer->progs.unreliable_entry, true);
-+	bpf_program__set_log_buf(tracer->progs.unreliable_entry, log_buf, sizeo=
-f(log_buf));
-+	err =3D bpf_program__set_attach_target(tracer->progs.unreliable_entry, =
-fd,
-+					     "callee_unreliable");
-+	if (!ASSERT_OK(err, "set_attach_target"))
-+		goto out;
-+
-+	err =3D tracing_struct_int128_tracer__load(tracer);
-+	ASSERT_ERR(err, "tracer__load");
-+	ASSERT_HAS_SUBSTR(log_buf, "unreliable BTF and stack arguments", "log")=
-;
-+
-+out:
-+	tracing_struct_int128_tracer__destroy(tracer);
-+	tracing_struct_int128_tgt__destroy(tgt);
-+#else
-+	test__skip();
-+#endif
++	/* or the compiler takes the alignment the ABI promises for granted */
++	OPTIMIZER_HIDE_VAR(addr);
++	return addr & 15;
 +}
 +
- /*
-  * A trampoline on a function of a tail_call_reachable program keeps the=
- tail
-  * call counter pointer on its stack, and has to hand the function its s=
-tack
-@@ -328,6 +388,8 @@ void test_tracing_struct(void)
- 		test_int128_args();
- 	if (test__start_subtest("int128_tgt_prog"))
- 		test_int128_tgt_prog();
-+	if (test__start_subtest("tgt_prog_unreliable"))
-+		test_tgt_prog_unreliable();
- 	if (test__start_subtest("stack_arg_tailcall"))
- 		test_stack_arg_tailcall();
- 	if (test__start_subtest("union_args"))
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.=
-c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
-index 2ec8f741d48b..8c24f5841bf2 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
-@@ -8,7 +8,7 @@ struct int128_arg {
- };
-=20
- __u64 base;
--__u64 ret_odd, ret_stack;
-+__u64 ret_odd, ret_stack, ret_split, ret_unreliable;
-=20
- #if defined(__clang__)
-=20
-@@ -44,6 +44,28 @@ static __noinline __u64 callee_stack(__u64 a, __u64 b,=
- __u64 c, __u64 d,
- 	       i * 10;
- }
-=20
-+/*
-+ * x86-64 BPF code passes h split between r9 and its first stack slot;
-+ * arm64 passes it in x5 and x6, so nothing is split there.
-+ */
-+static __noinline __u64 callee_split(__u64 a, __u64 b, __u64 c, __u64 d,
-+				     __u64 e, struct int128_arg h, __u64 i)
-+{
-+	return a + b * 2 + c * 3 + d * 4 + e * 5 + (__u64)h.v * 6 +
-+	       (__u64)((unsigned __int128)h.v >> 64) * 7 + i * 8;
-+}
-+
-+/*
-+ * A plain pointer makes the BTF of a static function unreliable, but f =
-is
-+ * still passed on the stack. The store keeps p a pointer.
-+ */
-+static __noinline __u64 callee_unreliable(__u64 *p, __u64 b, __u64 c, __=
+ __bpf_kfunc u64 bpf_kfunc_call_test_pair_arg_nofit(u64 a, u64 b, u64 c, =
 u64 d,
-+					  __u64 e, __u64 f)
-+{
-+	*p +=3D 1;
-+	return *p + b * 2 + c * 3 + d * 4 + e * 5 + f * 6;
-+}
-+
- #else
-=20
- const volatile bool has_stack_arg =3D false;
-@@ -60,6 +82,14 @@ int run(void *ctx)
- #if defined(__BPF_FEATURE_STACK_ARGUMENT)
- 	ret_stack =3D callee_stack(base + 1, base + 2, base + 3, base + 4,
- 				 base + 5, base + 6, base + 7, v, base + 10);
-+	ret_split =3D callee_split(base + 1, base + 2, base + 3, base + 4,
-+				 base + 5, v, base + 10);
-+	{
-+		__u64 x =3D base;
-+
-+		ret_unreliable =3D callee_unreliable(&x, base + 2, base + 3,
-+						   base + 4, base + 5, base + 6);
-+	}
+ 						   struct prog_test_pair_arg s)
+ {
+@@ -1840,6 +1854,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd=
+)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd_many)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_stack_hole)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_pad)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_align)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_nofit)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_tail)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_split8)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
+/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index a6a93c901416..da0c9b0c38a4 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -249,6 +249,8 @@ __u64 bpf_kfunc_call_test_i128_arg_stack_hole(__u64 a=
+, __u64 b, __u64 c, __u64 d
+ 					      struct prog_test_i128_arg w) __ksym;
+ __u64 bpf_kfunc_call_test_i128_arg_pad(__u64 a, __u64 b, __u64 c, __u64 =
+d, __u64 e,
+ 				       __u64 f, __u64 g, __int128 v) __ksym;
++__u64 bpf_kfunc_call_test_i128_arg_align(__u64 a, __u64 b, __u64 c, __u6=
+4 d, __u64 e,
++					 __u64 f, __u64 g, __int128 v) __ksym;
  #endif
- #endif
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_trac=
-er.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
-index e631b6f2378f..fb6172ef2b29 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
-@@ -53,4 +53,30 @@ int stack_exit(unsigned long long *ctx)
- 	return 0;
- }
-=20
-+long split_e, split_lo, split_hi, split_i, split_ret;
-+
-+SEC("fentry/callee_split")
-+int split_entry(unsigned long long *ctx)
-+{
-+	split_e =3D ctx[4];
-+	split_lo =3D ctx[5 + LO];
-+	split_hi =3D ctx[5 + HI];
-+	split_i =3D ctx[7];
-+	return 0;
-+}
-+
-+SEC("fexit/callee_split")
-+int split_exit(unsigned long long *ctx)
-+{
-+	split_ret =3D ctx[8];
-+	return 0;
-+}
-+
-+/* Refused: the trampoline would lose the stack argument. */
-+SEC("?fentry/callee_unreliable")
-+int unreliable_entry(unsigned long long *ctx)
-+{
-+	return 0;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
+ __u64 bpf_kfunc_call_test_pair_arg_nofit(__u64 a, __u64 b, __u64 c, __u6=
+4 d,
+ 					 struct prog_test_pair_arg s) __ksym;
 --=20
 2.53.0-Meta
 
