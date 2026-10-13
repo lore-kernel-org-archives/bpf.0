@@ -1,327 +1,174 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651C4522EF2
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498E9522EF5
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791911427; cv=none; b=kU/zkKijOjRkRCt/nsjTk/weVcnY2dCsBafu9VsnKpAlBIxXBEk5Mhs0EDARGJVWUSuAOfQCvQPix225b2mfIlTwItKebYEZ2eD3H4vbllZPVAQiJ3uRuFJ8wGMjwSibiATIwfFV4Yi0hS80LK+qlBQiIpNBhWHYO0kdXgF6JrQ=
+	t=1791911428; cv=none; b=DKcjh+SLTYMsc15DtB1J71RQ5qrIv5hYk17nKPopimD8uzLR2F0FAqF6Vzi2MRmeYYHyAYTenWBxojZ5sOc4qAQfySk0ItzaTwfjBnienmO1igylREK4Ul+QIy3t/D1cC5xljNinHm31eVJ1IjO4c6KvpSkMYbhBGDwYJc8qVhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791911427; c=relaxed/simple;
-	bh=TERBzyEhBhLGSEwKXm6vV0jKHbjeVzHxV4e5RiYlhi0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rP7GHi6qoqYsAU0LVdeu0cFgcSOYQ7pAZVg+RxD+DVAQ53CcJipBd3qm5NRtDGl5+6jryMSlw3AJH8LJRyU/fNj5Jg/7E03gQa3hKDIwEM7tvolR4iWHJZHEu8NzA/kEtBlhLVRzWjez2s9ESYcJgaV2ZHjwcO0sQKV9+mNd+64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 6D79F30FB5C5A1; Tue, 13 Oct 2026 10:10:16 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 07/11] selftests/bpf: Test trampoline args of a BPF function at an odd slot
-Date: Tue, 13 Oct 2026 10:10:16 -0700
-Message-ID: <20261013171016.2134794-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261013170910.2126673-1-yonghong.song@linux.dev>
-References: <20261013170910.2126673-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1791911428; c=relaxed/simple;
+	bh=8Mnb9rp0/KendOgopy9yG9eEoskvig2agjZXLTmvHSo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kVBTK4UaSYB2vQhsvUiUGpcuvFUvXZLPbVDSMslfcKLVcO5Mb/APfB6VFWcp+dRu7OkX046zIL2sP8q7YIS9WjnmlhQFTPtEY53MRGVo75QUkfXp9zCSzgtB8nezYBKth1R+AiXnX5HtUDAAtDA0wddJrQNMlJPhblTCKcFFT1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzOYc+kd; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzOYc+kd"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48afcd7ba9bso1832600f8f.3
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 10:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791911425; x=1792516225; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=o0KDBwBs4i6tsVXtOM7HjXD+EUyQMAjasdWbMXcJZLA=;
+        b=mzOYc+kdWFeSdJVQFBXti+v74yBmVMNJqS3ISyhau555jpWcUlMugOo46RXrWwUyn7
+         QgStKVpRlz8dxZpG1tB8h6BaFgPPC1AqMsJLSFEFHn8QO6/3CMOyHLOtweBbmKUu1TFq
+         McqOuLU54GJfWpwcgCgvaW+SjrMVUzZyCh0l9FzCq+CWRgg5N6ZWBGWjrGh+HSGcKxVx
+         E9s7qE8zOr9XYR17UnaxiFibfGKe5baDIy2jmhAmpluqrns1QFfGgFY8Og2QTuHiM1Uh
+         HoRECdPEZ/PRarbWZdpfMLMt3Go1042BiLzATvb31r7oGeJs/e5wXMMKdlycRvPrUhky
+         qIuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791911425; x=1792516225;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=o0KDBwBs4i6tsVXtOM7HjXD+EUyQMAjasdWbMXcJZLA=;
+        b=sig+Xd0nnSCjigitkEKC/+RFsOqMpmItgKtPFCN2RWJwLqdboO72ZDP0ZLxkWTPofS
+         v0PNIqXCs2MEzv2vcoPdqHnM3FdOfbz3mVHf7Ry7lHP0i+5nQS9ZFvpTGUb180+yT26u
+         4D6GEhiQGMyr6ra20KWspg/2ZYoIoAGhYJvnY2zkPTPUmFBrfqRvGydwthWHHpHfQ7TR
+         NSwHegH2GRlGV/8hlNVoFdlGSmZhnWTbTzYubhwuSvZAwH1c6bVv/r2FeiTMAYK+iiH0
+         Mhze+K0lBph4ZYsNr36MU9qYTCNmBv4AB1G0pL4QYRBt9XVoacX4QzMrujefP2yAp7xS
+         SVfQ==
+X-Gm-Message-State: AFq9FYLOvkaVHxYMXMobsudQpnNQyZ97SO2WiikiU9dCgSUBr4FzakEr
+	Rirjqz7mz4UFfJY0sR/d62Fe5EwiH9axtb33wJoZzR+9ubuwrSiOK9Yb
+X-Gm-Gg: AYBFou1s8vi9blZERDnEmKwYDm0BQQ/boX/Hjk47XTzXHlaUVUOl55wNqsW7jMMrMdI
+	x1EbrR1wD/R+c7reIOQDVZS5ufEV9RtEQkrvw1uXF5MG82oTgIBmhIcp/XWqPisDf97Ojre3+ud
+	VFGywaT+vpDMpLb4yXl/g4v6yrHTZ+k1BdDMz1lMw/kfsp259/CxTRMeqCs8JO86yjzePXjURAW
+	lN1EuGYwOOt92KQ1EWE/I+HTmDHYysSalRL/FSeMS1MQeotQ4I1w8T5AW3zhp1MSnbwIitPvbpi
+	1Nk0xYIwKED7BXCMAE/4Fydv36LugTQ7x8bwXm6VlYzTYJ7ZOiJC9ZiJM57yzFCia45qJO605dG
+	5EbaaLr1hzg1/isFp3dMnC48T1BMY06kcomZ5IswXBZrwkd5U6kDVd0+yNld7THg/KvkFroVOtR
+	1uMnB8rpcifMuU2F8ZsxNEYG4eaIF+9rV4OiWn0YXsfnZ+Noz0mvgsd0cSYoZ6jH/I1YRGH+nxA
+	feTv2Z7i+dgMJ3UXsgwCxswChki0oJuWi4rgb799/1993A=
+X-Received: by 2002:a05:6000:440e:b0:487:13f:f612 with SMTP id ffacd0b85a97d-48dbacdbd23mr18284968f8f.37.1791911425160;
+        Tue, 13 Oct 2026 10:10:25 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de77b35b5sm599458f8f.21.2026.10.13.10.10.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 10:10:24 -0700 (PDT)
+Date: Tue, 13 Oct 2026 19:10:22 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: allow ksock kfuncs call from wq
+Message-ID: <as5l_nMk7EV_dUs6@gmail.com>
+References: <20261013163101.205638-1-mahe.tardy@gmail.com>
+ <sashiko-outbox-170139@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-170139@kernel.org>
 
-Attach fentry and fexit programs to two functions of another BPF
-program, each taking a struct holding an __int128 at an odd argument
-slot:
+On Tue, Oct 13, 2026 at 04:42:13PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] bpf: bpf_ksock_create causes NULL pointer deref on task exit
+> - [High] bpf: bpf_ksock_create in workqueue escapes network namespace
+> --
+> 
+> commit 34ed977b7943eebacf7e605dc8f26f2576ba2664
+> Author: Mahe Tardy <mahe.tardy@gmail.com>
+> 
+> bpf: allow ksock kfuncs call from wq
+> 
+> This commit relaxes the constraints on ksock kfuncs by removing the check
+> that ensures they are executed in a user task context. This change was
+> made to allow ksock kfuncs to be invoked from asynchronous workqueues,
+> bypassing the original LSM hook considerations.
+> 
+> > diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+> > index e9943aeeadd32..21d5fd1eb403d 100644
+> > --- a/net/core/bpf_ksock.c
+> > +++ b/net/core/bpf_ksock.c
+> > @@ -73,16 +64,6 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
+> >  	struct bpf_ksock *ks;
+> >  	int err;
+> >  
+> > -	/*
+> > -	 * sock_create() derives the network namespace, credentials, and cgroup
+> > -	 * from current. Kernel threads, including BPF workqueue callbacks, do
+> > -	 * not carry the context of the task that invoked the BPF program.
+> > -	 */
+> > -	if (!bpf_ksock_has_user_task_context()) {
+> > -		err = -EOPNOTSUPP;
+> > -		goto err_out;
+> > -	}
+> > -
+> 
+> [Severity: High]
+> Does removing this check expose us to a NULL pointer dereference during task
+> exit?
+> 
+> If a sleepable BPF program running via task_work during do_exit() calls
+> bpf_ksock_create() after exit_nsproxy_namespaces() has cleared
+> current->nsproxy, it appears this could trigger a kernel panic.
+> 
+> Without the bpf_ksock_has_user_task_context() guard, bpf_ksock_create() will
+> now unconditionally call sock_create():
+> 
+> net/socket.c:sock_create() {
+> 	return __sock_create(current->nsproxy->net_ns, family, type, protocol, res, 0);
+> }
+> 
+> Is it safe to allow sock_create() to dereference current->nsproxy here without
+> checking if it is NULL?
 
-  - callee_odd(): the struct after a single u64, where arm64 would
-    leave a register empty.
-  - callee_stack(): the struct after seven u64s, where x86-64 would
-    leave a stack slot empty and arm64 a register.
+Indeed, in do_exit(), it seems we have this ordering:
 
-BPF code calls them with the arguments packed in the BPF convention, so
-that is where the trampoline has to take them from. The fentry programs
-read each argument slot from ctx[], and the fexit programs check the
-return value, weighted by slot, which is only right if the function got
-its arguments back where its caller put them. Both take a struct by
-value, which GCC passes by reference instead, so they are only built
-with clang, and callee_stack() only with a clang that supports stack
-arguments.
+	exit_nsproxy_namespaces(tsk);
+	exit_task_work(tsk);
 
-Describing the functions to the trampoline by the types of their
-arguments, rather than as one u64 per slot, the x86-64 trampoline fails
-the test with:
+The first line will put nsproxy to NULL and the second will schedule any
+remaining work and call the bpf callback set up with the wq. So this is
+valid.
 
-  test_int128_tgt_prog:FAIL:stack:h.lo unexpected stack:h.lo: actual 9 !=3D=
- expected 8
-  ...
-  test_int128_tgt_prog:FAIL:stack fexit ret unexpected stack fexit ret: a=
-ctual 34359738697 !=3D expected 385
+The fix would be to add some NULL check to prevent the panic in this
+specific case (or see the next point).
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/tracing_struct.c | 74 +++++++++++++++++++
- .../bpf/progs/tracing_struct_int128_tgt.c     | 68 +++++++++++++++++
- .../bpf/progs/tracing_struct_int128_tracer.c  | 56 ++++++++++++++
- 3 files changed, 198 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
-28_tgt.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
-28_tracer.c
+> 
+> [Severity: High]
+> Additionally, does this change allow containerized workloads to escape their
+> network namespace?
+> 
+> When bpf_ksock_create() is invoked from a workqueue callback, the executing
+> context is a kthread.
+> 
+> Because sock_create() uses current->nsproxy->net_ns, a kthread will resolve
+> this to the host namespace (init_net), causing the socket to be created in the
+> host namespace rather than the container's netns.
+> 
+> Could this allow BPF programs inside containers to bypass container routing
+> and firewall policies by creating host-namespace sockets?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
-ols/testing/selftests/bpf/prog_tests/tracing_struct.c
-index a2da219e1476..ad46eabe784f 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -5,6 +5,8 @@
- #include "tracing_struct.skel.h"
- #include "tracing_struct_many_args.skel.h"
- #include "tracing_struct_int128.skel.h"
-+#include "tracing_struct_int128_tgt.skel.h"
-+#include "tracing_struct_int128_tracer.skel.h"
- #include "tracing_stack_arg_tailcall_tgt.skel.h"
- #include "tracing_stack_arg_tailcall_tracer.skel.h"
-=20
-@@ -164,6 +166,76 @@ static void test_int128_args(void)
- #endif
- }
-=20
-+static void test_int128_tgt_prog(void)
-+{
-+#if defined(__x86_64__) || defined(__aarch64__)
-+	struct tracing_struct_int128_tracer *tracer =3D NULL;
-+	struct tracing_struct_int128_tgt *tgt;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err, fd;
-+
-+	tgt =3D tracing_struct_int128_tgt__open_and_load();
-+	if (!ASSERT_OK_PTR(tgt, "tgt__open_and_load"))
-+		return;
-+	if (!tgt->rodata->has_struct_arg) {
-+		test__skip();
-+		goto out;
-+	}
-+	fd =3D bpf_program__fd(tgt->progs.run);
-+
-+	tracer =3D tracing_struct_int128_tracer__open();
-+	if (!ASSERT_OK_PTR(tracer, "tracer__open"))
-+		goto out;
-+
-+	err =3D bpf_program__set_attach_target(tracer->progs.odd_entry, fd, "ca=
-llee_odd");
-+	err =3D err ?: bpf_program__set_attach_target(tracer->progs.odd_exit, f=
-d, "callee_odd");
-+	if (tgt->rodata->has_stack_arg) {
-+		err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_entr=
-y, fd,
-+							     "callee_stack");
-+		err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_exit=
-, fd,
-+							     "callee_stack");
-+	} else {
-+		bpf_program__set_autoload(tracer->progs.stack_entry, false);
-+		bpf_program__set_autoload(tracer->progs.stack_exit, false);
-+	}
-+	if (!ASSERT_OK(err, "set_attach_target"))
-+		goto out;
-+
-+	err =3D tracing_struct_int128_tracer__load(tracer);
-+	if (!ASSERT_OK(err, "tracer__load"))
-+		goto out;
-+	err =3D tracing_struct_int128_tracer__attach(tracer);
-+	if (!ASSERT_OK(err, "tracer__attach"))
-+		goto out;
-+
-+	err =3D bpf_prog_test_run_opts(fd, &topts);
-+	if (!ASSERT_OK(err, "test_run") || !ASSERT_EQ(topts.retval, 0, "retval"=
-))
-+		goto out;
-+
-+	ASSERT_EQ(tracer->bss->odd_a, 1, "odd:a");
-+	ASSERT_EQ(tracer->bss->odd_lo, 8, "odd:v.lo");
-+	ASSERT_EQ(tracer->bss->odd_hi, 9, "odd:v.hi");
-+	ASSERT_EQ(tracer->bss->odd_b, 2, "odd:b");
-+	ASSERT_EQ(tgt->bss->ret_odd, 52, "odd ret");
-+	ASSERT_EQ(tracer->bss->odd_ret, 52, "odd fexit ret");
-+
-+	if (tgt->rodata->has_stack_arg) {
-+		ASSERT_EQ(tracer->bss->stack_g, 7, "stack:g");
-+		ASSERT_EQ(tracer->bss->stack_lo, 8, "stack:h.lo");
-+		ASSERT_EQ(tracer->bss->stack_hi, 9, "stack:h.hi");
-+		ASSERT_EQ(tracer->bss->stack_i, 10, "stack:i");
-+		ASSERT_EQ(tgt->bss->ret_stack, 385, "stack ret");
-+		ASSERT_EQ(tracer->bss->stack_ret, 385, "stack fexit ret");
-+	}
-+
-+out:
-+	tracing_struct_int128_tracer__destroy(tracer);
-+	tracing_struct_int128_tgt__destroy(tgt);
-+#else
-+	test__skip();
-+#endif
-+}
-+
- /*
-  * A trampoline on a function of a tail_call_reachable program keeps the=
- tail
-  * call counter pointer on its stack, and has to hand the function its s=
-tack
-@@ -254,6 +326,8 @@ void test_tracing_struct(void)
- 		test_struct_many_args();
- 	if (test__start_subtest("int128_args"))
- 		test_int128_args();
-+	if (test__start_subtest("int128_tgt_prog"))
-+		test_int128_tgt_prog();
- 	if (test__start_subtest("stack_arg_tailcall"))
- 		test_stack_arg_tailcall();
- 	if (test__start_subtest("union_args"))
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.=
-c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
-new file mode 100644
-index 000000000000..2ec8f741d48b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct int128_arg {
-+	__int128 v;
-+};
-+
-+__u64 base;
-+__u64 ret_odd, ret_stack;
-+
-+#if defined(__clang__)
-+
-+const volatile bool has_struct_arg =3D true;
-+
-+/* arm64 would want v in x2 and x3, and b in x4. */
-+__noinline __u64 callee_odd(__u64 a, struct int128_arg v, __u64 b)
-+{
-+	return a + (__u64)v.v * 2 + (__u64)((unsigned __int128)v.v >> 64) * 3 +
-+	       b * 4;
-+}
-+
-+#else
-+
-+const volatile bool has_struct_arg =3D false;
-+
-+#endif
-+
-+#if defined(__clang__) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+const volatile bool has_stack_arg =3D true;
-+
-+/*
-+ * x86-64 would want h in its third and fourth stack slots, and arm64 in
-+ * its first and second, leaving x7 empty.
-+ */
-+static __noinline __u64 callee_stack(__u64 a, __u64 b, __u64 c, __u64 d,
-+				     __u64 e, __u64 f, __u64 g,
-+				     struct int128_arg h, __u64 i)
-+{
-+	return a + b * 2 + c * 3 + d * 4 + e * 5 + f * 6 + g * 7 +
-+	       (__u64)h.v * 8 + (__u64)((unsigned __int128)h.v >> 64) * 9 +
-+	       i * 10;
-+}
-+
-+#else
-+
-+const volatile bool has_stack_arg =3D false;
-+
-+#endif
-+
-+SEC("syscall")
-+int run(void *ctx)
-+{
-+#if defined(__clang__)
-+	struct int128_arg v =3D { .v =3D ((__int128)(base + 9) << 64) | (base +=
- 8) };
-+
-+	ret_odd =3D callee_odd(base + 1, v, base + 2);
-+#if defined(__BPF_FEATURE_STACK_ARGUMENT)
-+	ret_stack =3D callee_stack(base + 1, base + 2, base + 3, base + 4,
-+				 base + 5, base + 6, base + 7, v, base + 10);
-+#endif
-+#endif
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_trac=
-er.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
-new file mode 100644
-index 000000000000..e631b6f2378f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+/*
-+ * A struct holding an __int128 fills its two slots in memory order, so
-+ * which slot holds the low half depends on the byte order.
-+ */
-+#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
-+#define LO 0
-+#define HI 1
-+#else
-+#define LO 1
-+#define HI 0
-+#endif
-+
-+long odd_a, odd_lo, odd_hi, odd_b, odd_ret;
-+
-+SEC("fentry/callee_odd")
-+int odd_entry(unsigned long long *ctx)
-+{
-+	odd_a =3D ctx[0];
-+	odd_lo =3D ctx[1 + LO];
-+	odd_hi =3D ctx[1 + HI];
-+	odd_b =3D ctx[3];
-+	return 0;
-+}
-+
-+SEC("fexit/callee_odd")
-+int odd_exit(unsigned long long *ctx)
-+{
-+	odd_ret =3D ctx[4];
-+	return 0;
-+}
-+
-+long stack_g, stack_lo, stack_hi, stack_i, stack_ret;
-+
-+SEC("fentry/callee_stack")
-+int stack_entry(unsigned long long *ctx)
-+{
-+	stack_g =3D ctx[6];
-+	stack_lo =3D ctx[7 + LO];
-+	stack_hi =3D ctx[7 + HI];
-+	stack_i =3D ctx[9];
-+	return 0;
-+}
-+
-+SEC("fexit/callee_stack")
-+int stack_exit(unsigned long long *ctx)
-+{
-+	stack_ret =3D ctx[10];
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.53.0-Meta
+Also agree, maybe socket creation should still be behind the check, I
+think it's still useful to be able to connect and send from a workqueue
+but preventing to create via workqueues might be a good limitation.
 
+Let me send a v2 with create still using the runtime check, that should
+fix this and the above issue.
+
+> 
+> >  	if (!opts || opts__sz != sizeof(struct bpf_ksock_create_opts)) {
+> >  		err = -EINVAL;
+> >  		goto err_out;
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261013163101.205638-1-mahe.tardy@gmail.com?part=1
