@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B4D156F45
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 00:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1494A25CC74
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 00:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791851689; cv=none; b=D6/dN/Pb3dGma/eH39SlW09muaIFbwh2djGGcsoD8SwRnv+0XC7BvSjoRzGY3OiUmvAS9XBA4VTooTs+yCpTzJ7CLMnyMTQ085HlJceaxCTpzq2bVUzZ6OUSZkcl5UIZdlPbM09fSm7yf1DAvn5Y9DSIGCZfGdRuOFULuUKVykM=
+	t=1791851692; cv=none; b=ZCUI7B5/6LWIunpu2cpxv2JYOlafniGuSeKw6V75k0+XHR/CAQ38hz9lfiQC38zcqwpKYZJdMuHNoQ5LX+nn0cSH4evISvy23LqTZpkcAakD/7ah2N05LTU/h4zAo2cwGo7VLXQiQu9MZQ4uIBVzW7AMIIbBKzb12BspRj6snm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791851689; c=relaxed/simple;
-	bh=zXMLm7/vzPhDyOb2V+/t9dW0Ujl9MRkXLNf+qHnZXns=;
+	s=arc-20240116; t=1791851692; c=relaxed/simple;
+	bh=gREkkisWIwGatiyMUF0+RNeC70n1HBBqFspgpC5s914=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RDCNVbl5ZXyw3QMz/Js2F4ZenfRI4CYuIXA0nAQkYAfsd1m0aWSElB+ebKGpwOvedWC2gBPsUvv23JRYVg3dxSNeBMs+70QqsRzfzzVkFUN/FFPPvIaSw8eSrEVExuOH71XSJ0iqEAghRBo8RAXynDC2hO8a6ApEsstxK2aq+6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=j3nL/XzgCAkbTpQxrOknJYZcYpUhtCmAKZza9Wd8FzHXjvXBt1A1T5C/sKiWQt13/PEGvImnaX7yOjrfA0WarwYeJjBmMLqkN1++EbN/gLjpDasN7svv5OPV6aiJQAQ3HoPfF3ip/HodAVy+rbwk3eYRKESOnpIsUeu8dKuRGHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 6229730D78EA41; Mon, 12 Oct 2026 17:34:34 -0700 (PDT)
+	id 7DD1530D78EA76; Mon, 12 Oct 2026 17:34:39 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 01/11] bpf, x86: Pass a trampoline's stack arguments by the calling convention
-Date: Mon, 12 Oct 2026 17:34:34 -0700
-Message-ID: <20261013003434.1853797-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 02/11] selftests/bpf: Test trampoline stack args in a program that can tail call
+Date: Mon, 12 Oct 2026 17:34:39 -0700
+Message-ID: <20261013003439.1854637-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261013003429.1853052-1-yonghong.song@linux.dev>
 References: <20261013003429.1853052-1-yonghong.song@linux.dev>
@@ -37,130 +37,231 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A trampoline on a function of a program that can tail call keeps the
-tail call counter pointer by pushing rax after allocating its frame.
-When it calls the original function, for fexit, fmod_ret or fsession,
-the push sits between the stack arguments and the return address, which
-the x86-64 calling convention does not allow. For example, in
+Test the previous patch with a target program made of two call chains:
 
 	run() -> call_stack() -> callee_stack(a, b, c, d, e, f, g, h)
 	run() -> subprog_tail() -> bpf_tail_call()
 
-callee_stack() is not on the path to the tail call, so the verifier
-allows its stack arguments g and h. fexit on it builds, with T the
-trampoline's rbp:
+callee_stack() takes eight u64 arguments, so g and h are passed on the
+stack. Because run() can reach a tail call, a trampoline on any function
+of the program keeps the tail call counter pointer. callee_stack()
+itself does not lead to the tail call, which is why the verifier still
+lets it take stack arguments.
 
-	T-120  h                  save_args()
-	T-128  g                  save_args(), RSP after sub rsp, 128
-	T-136  tail_call_cnt_ptr  push rax, RSP at the call
-	T-144  return address     call orig_call
+Attach fentry and fexit programs to callee_stack(). The fentry program
+checks that it sees g and h, and the test checks the value that
+callee_stack() returns when the fexit trampoline calls it.
 
-and callee_stack() finds the counter pointer where g belongs, at 8(%rsp)
-on entry, and g where h belongs.
+Without the previous patch, the function takes the counter pointer for
+its first stack argument:
 
-Keep the pointer in a slot of the frame instead, so that the stack
-arguments sit right above the return address again:
+  test_stack_arg_tailcall:FAIL:stack ret unexpected stack ret: actual -35=
+9789677662885869 !=3D expected 204
+  test_stack_arg_tailcall:FAIL:stack fexit ret unexpected stack fexit ret=
+: actual -359789677662885869 !=3D expected 204
 
-	T-120  tail_call_cnt_ptr  mov [rbp - 120], rax
-	T-128  (pad to 16)
-	T-136  h                  save_args()
-	T-144  g                  save_args(), RSP at the call
-	T-152  return address     call orig_call
-
-Fixes: 324c3ca6eed6 ("bpf,x86: Implement JIT support for stack arguments"=
-)
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
+ .../selftests/bpf/prog_tests/tracing_struct.c | 59 +++++++++++++++++++
+ .../progs/tracing_stack_arg_tailcall_tgt.c    | 59 +++++++++++++++++++
+ .../progs/tracing_stack_arg_tailcall_tracer.c | 23 ++++++++
+ 3 files changed, 141 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_stack_arg_t=
+ailcall_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_stack_arg_t=
+ailcall_tracer.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 083fcd6cf15b..3982507d54ca 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -3743,9 +3743,9 @@ static int invoke_bpf_mod_ret(const struct btf_func=
-_model *m, u8 **pprog,
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
+ols/testing/selftests/bpf/prog_tests/tracing_struct.c
+index 15b95d0235b5..8086586d3e19 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -5,6 +5,8 @@
+ #include "tracing_struct.skel.h"
+ #include "tracing_struct_many_args.skel.h"
+ #include "tracing_struct_int128.skel.h"
++#include "tracing_stack_arg_tailcall_tgt.skel.h"
++#include "tracing_stack_arg_tailcall_tracer.skel.h"
+=20
+ static void test_struct_args(void)
+ {
+@@ -146,6 +148,61 @@ static void test_int128_args(void)
+ #endif
  }
 =20
--/* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
--#define LOAD_TRAMP_TAIL_CALL_CNT_PTR(stack)	\
--	__LOAD_TCC_PTR(-round_up(stack, 8) - 8)
-+/* mov rax, qword ptr [rbp - off] */
-+#define LOAD_TRAMP_TAIL_CALL_CNT_PTR(off)	\
-+	__LOAD_TCC_PTR(-(off))
-=20
- /* Example:
-  * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
-@@ -3815,6 +3815,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- {
- 	int i, ret, nr_regs =3D m->nr_args, stack_size =3D 0;
- 	int regs_off, func_meta_off, ip_off, run_ctx_off, arg_stack_off, rbx_of=
-f;
-+	int tcc_off =3D 0;
- 	struct bpf_tramp_nodes *fentry =3D &tnodes[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_nodes *fexit =3D &tnodes[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_nodes *fmod_ret =3D &tnodes[BPF_TRAMP_MODIFY_RETURN];
-@@ -3865,11 +3866,12 @@ static int __arch_prepare_bpf_trampoline(struct b=
-pf_tramp_image *im, void *rw_im
- 	 *
- 	 * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
- 	 *
-+	 * RBP - tcc_off   [ tail_call_cnt_ptr ]  BPF_TRAMP_F_TAIL_CALL_CTX
-+	 *
- 	 *                     [ stack_argN ]  BPF_TRAMP_F_CALL_ORIG
- 	 *                     [ ...        ]
- 	 *                     [ stack_arg2 ]
- 	 * RBP - arg_stack_off [ stack_arg1 ]
--	 * RSP                 [ tail_call_cnt_ptr ] BPF_TRAMP_F_TAIL_CALL_CTX
- 	 */
-=20
- 	/* room for return value of orig_call or fentry prog */
-@@ -3900,6 +3902,11 @@ static int __arch_prepare_bpf_trampoline(struct bp=
-f_tramp_image *im, void *rw_im
- 	stack_size +=3D (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
- 	run_ctx_off =3D stack_size;
-=20
-+	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX) {
-+		stack_size +=3D 8;
-+		tcc_off =3D stack_size;
-+	}
++/*
++ * A trampoline on a function of a tail_call_reachable program keeps the=
+ tail
++ * call counter pointer on its stack, and has to hand the function its s=
+tack
++ * arguments past it.
++ */
++static void test_stack_arg_tailcall(void)
++{
++#if defined(__x86_64__) || defined(__aarch64__)
++	struct tracing_stack_arg_tailcall_tracer *tracer =3D NULL;
++	struct tracing_stack_arg_tailcall_tgt *tgt;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err, fd;
 +
- 	if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
- 		/* the space that used to pass arguments on-stack */
- 		stack_size +=3D (nr_regs - get_nr_used_regs(m)) * 8;
-@@ -3957,7 +3964,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- 		EMIT4(0x48, 0x83, 0xEC, stack_size);
- 	}
- 	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
--		EMIT1(0x50);		/* push rax */
-+		/* mov QWORD PTR [rbp - tcc_off], rax */
-+		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -tcc_off);
- 	/* mov QWORD PTR [rbp - rbx_off], rbx */
- 	emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_6, -rbx_off);
-=20
-@@ -4018,7 +4026,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- 			/* Before calling the original function, load the
- 			 * tail_call_cnt_ptr from stack to rax.
- 			 */
--			LOAD_TRAMP_TAIL_CALL_CNT_PTR(stack_size);
-+			LOAD_TRAMP_TAIL_CALL_CNT_PTR(tcc_off);
- 		}
-=20
- 		if (flags & BPF_TRAMP_F_ORIG_STACK) {
-@@ -4082,7 +4090,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- 		/* Before running the original function, load the
- 		 * tail_call_cnt_ptr from stack to rax.
- 		 */
--		LOAD_TRAMP_TAIL_CALL_CNT_PTR(stack_size);
-+		LOAD_TRAMP_TAIL_CALL_CNT_PTR(tcc_off);
- 	}
-=20
- 	/* restore return value of orig_call or fentry prog back into RAX */
++	tgt =3D tracing_stack_arg_tailcall_tgt__open_and_load();
++	if (!ASSERT_OK_PTR(tgt, "tgt__open_and_load"))
++		return;
++	if (!tgt->rodata->has_stack_arg) {
++		test__skip();
++		goto out;
++	}
++	fd =3D bpf_program__fd(tgt->progs.run);
++
++	tracer =3D tracing_stack_arg_tailcall_tracer__open();
++	if (!ASSERT_OK_PTR(tracer, "tracer__open"))
++		goto out;
++
++	err =3D bpf_program__set_attach_target(tracer->progs.stack_entry, fd, "=
+callee_stack");
++	err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_exit,=
+ fd, "callee_stack");
++	if (!ASSERT_OK(err, "set_attach_target"))
++		goto out;
++
++	err =3D tracing_stack_arg_tailcall_tracer__load(tracer);
++	if (!ASSERT_OK(err, "tracer__load"))
++		goto out;
++	err =3D tracing_stack_arg_tailcall_tracer__attach(tracer);
++	if (!ASSERT_OK(err, "tracer__attach"))
++		goto out;
++
++	err =3D bpf_prog_test_run_opts(fd, &topts);
++	if (!ASSERT_OK(err, "test_run") || !ASSERT_EQ(topts.retval, 0, "retval"=
+))
++		goto out;
++
++	ASSERT_EQ(tracer->bss->stack_g, 7, "stack:g");
++	ASSERT_EQ(tracer->bss->stack_h, 8, "stack:h");
++	ASSERT_EQ(tgt->bss->ret_stack, 204, "stack ret");
++	ASSERT_EQ(tracer->bss->stack_ret, 204, "stack fexit ret");
++
++out:
++	tracing_stack_arg_tailcall_tracer__destroy(tracer);
++	tracing_stack_arg_tailcall_tgt__destroy(tgt);
++#else
++	test__skip();
++#endif
++}
++
+ static void test_union_args(void)
+ {
+ 	struct tracing_struct *skel;
+@@ -181,6 +238,8 @@ void test_tracing_struct(void)
+ 		test_struct_many_args();
+ 	if (test__start_subtest("int128_args"))
+ 		test_int128_args();
++	if (test__start_subtest("stack_arg_tailcall"))
++		test_stack_arg_tailcall();
+ 	if (test__start_subtest("union_args"))
+ 		test_union_args();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tracing_stack_arg_tailcall=
+_tgt.c b/tools/testing/selftests/bpf/progs/tracing_stack_arg_tailcall_tgt=
+.c
+new file mode 100644
+index 000000000000..5fde710c4e37
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_stack_arg_tailcall_tgt.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++__u64 base;
++__u64 ret_stack;
++
++#if defined(__clang__) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++const volatile bool has_stack_arg =3D true;
++
++/* g and h are on the stack, for the x86-64 kernel convention too. */
++static __noinline __u64 callee_stack(__u64 a, __u64 b, __u64 c, __u64 d,
++				     __u64 e, __u64 f, __u64 g, __u64 h)
++{
++	return a + b * 2 + c * 3 + d * 4 + e * 5 + f * 6 + g * 7 + h * 8;
++}
++
++/* No stack args of its own, so it can share a program with a tail call.=
+ */
++static __noinline __u64 call_stack(__u64 x)
++{
++	return callee_stack(x + 1, x + 2, x + 3, x + 4, x + 5, x + 6, x + 7,
++			    x + 8);
++}
++
++#else
++
++const volatile bool has_stack_arg =3D false;
++
++#endif
++
++/* Makes the program tail_call_reachable, though callee_stack() is not. =
+*/
++static __noinline int subprog_tail(void *ctx)
++{
++	int ret =3D 0;
++
++	bpf_tail_call_static(ctx, &jmp_table, 0);
++	barrier_var(ret);
++	return ret;
++}
++
++SEC("syscall")
++int run(void *ctx)
++{
++#if defined(__clang__) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++	ret_stack =3D call_stack(base);
++#endif
++	return subprog_tail(ctx);
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/tracing_stack_arg_tailcall=
+_tracer.c b/tools/testing/selftests/bpf/progs/tracing_stack_arg_tailcall_=
+tracer.c
+new file mode 100644
+index 000000000000..1800e7b7afe2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_stack_arg_tailcall_tracer=
+.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++long stack_g, stack_h, stack_ret;
++
++SEC("fentry/callee_stack")
++int stack_entry(unsigned long long *ctx)
++{
++	stack_g =3D ctx[6];
++	stack_h =3D ctx[7];
++	return 0;
++}
++
++SEC("fexit/callee_stack")
++int stack_exit(unsigned long long *ctx)
++{
++	stack_ret =3D ctx[8];
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.53.0-Meta
 
