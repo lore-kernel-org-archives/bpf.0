@@ -1,213 +1,301 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3830352CCD7
-	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 18:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD089472783
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 18:24:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791915752; cv=none; b=PACDL2ZKJWhdmIspNQbVgImJZimJMYgJLVilqyend7tfxEUc3Ez9hsug0fGKnt9on71uCNM8S+jHviLRjC6tq+aKlh1Bvk9RdeGjoSDxlMhoi8Gd9EVER8w7s1pW3kyxTfyzxO/6a3ZyBxcBTgpR9gMudhXSec3r86dku2jj0ac=
+	t=1791915865; cv=none; b=DfbexNQ6+ZGeeU003qfh6MLltvd6pTaRRE6p21m0n88e2vGcPghpZXPJcqZH98sqJ9lmBLO8NG9RS4y26Tapq7HQjn+f8qTW00zdLzYY+5qIssNmZ+mO8rk9SBcGw4gBgKO9R4xcuVV3/pDGBZdyl6sgnv9JvCEqA+tdJC8eRVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791915752; c=relaxed/simple;
-	bh=FUcGpTNl69IjIbl7brNxNSRxvyUJMlB+mXVSdomxf0A=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GYsHa/x/yzgcFOQ5t7T4boimV87O9rqx8uOmQcuEXvnSsOPs60t/95NHlZDV95dbk8gdxmN1FUrBlJEGkWSb6OhcSnhBzRchHYZc8VWVOMWXCLBaJr/UGOBHRQtU0BpZvThDZXmc+RX7FUtKSU1PUihs6UVNsSqXfkdJ59xTeWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3GX4J3R; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791915865; c=relaxed/simple;
+	bh=7if6Umjv6zt+eB/TyjHQ2M8+DtW8+u3VSI2lHM1qgmg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=T80FsUa+b/VSoIqvfzKeiEiKsS+JZll+Ds2CZiOjasloIgLL6cX3QubaEYRRw0pUi2H97l7OZ2hfar9G+KNuayp8MJ+UKinSI2bVESTmdO+1Fj4QwFjVelVVQ5HG/9jo5fPEHklDBnbtDk7QmpQXOVUxv93Xs0v/lsHEmNstS24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XqJNxkBs; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3GX4J3R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF831F000FF;
-	Tue, 13 Oct 2026 18:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791915750;
-	bh=RscgrbGtlT536DrddR3MsH+fIRcixgBvZNQy8HRAAz8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=O3GX4J3RmAgpWk0ktFKLK/C2nW+IOO5YtBGfQtouyxYARq2w6Hlffu8i1Rm6A3wUd
-	 0eV2qUHpTGC5sKXKb5d5BlN5O6Qgggm1TKdIIlgE6epn7ex2F16iDwaUoyCuPWlJcd
-	 NPyXwanHKM4zGdvm4jN0sGfQQK4JDwyzRnDCdXy4iEBc5b9+fgjDxsMdDKrHQpDFnn
-	 kc4upZEQijy4xVA395dCFNbJT+ZuSK/HyhzgdUelAZEkLwoKpmkfKc4qsBIqqZ1QPT
-	 T3naUu+1Xtsj89M0/zhd13vRR/DLfKV/8lBo04Jt2VrkN5QzX0BL8X1YTks1tDyerj
-	 gsTGfKfYqe95g==
-Content-Type: multipart/mixed; boundary="===============1441693752770932196=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XqJNxkBs"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6f5a0893610so165234eaf.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 11:24:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791915862; x=1792520662; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CrakmgXMtdoVnoNgswFtoyyOjaZ8kjF18Znv/ag/z9w=;
+        b=XqJNxkBsJHmlkDK7nYs+PNCHCQJa23Y7cWpCHDeNvhK7Es7tLulS6PKfJB02UK7Bxg
+         nIbnXoO2DYtt7D6NT5r000Fu8/dAVduYFnVNLN4s8sLGY/r8EjpHrDYxenEHrC4zC+i5
+         UE04Trw2u4fBsa9XtSSVgRpw6mMzWPYC+de3xee7m180tNvJOXzhtQvr7RhUJmjcX7hn
+         QAMAbtV/GpyepXnGNPqiTCUtdNT+iTMAB1L1VPckO7Tu9apF/hSW9WZFq8fQUwvQ+/8E
+         +1v5G5ZO+N6zZpOV2EOCRdUam5Q0zcbOR6ns5xnsigKTakc8a/82Eb6Wre2taNNNMv3G
+         GRIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791915862; x=1792520662;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=CrakmgXMtdoVnoNgswFtoyyOjaZ8kjF18Znv/ag/z9w=;
+        b=ZeQfvO/hGROp/d40s2UpwRhN00rzqzldPtk7m+pz/B+uU5A+KOiWIiNXh6llBIgPeP
+         tpYh8/vz2+n4S1NXwendE2UWKKaHJJC7HQJH8MKxMNwZx5QGn3fuFMd9MVaNqZRlvBBL
+         IQsjdpaIFy1QksfGaAZ5GmC9hO1sqGWUhR+i8M1qySRyTdU4GotHfAw6IkBr0RFwx7FY
+         yzZrtazob/ryqeTdbvG0o5q+KdFPdg+q5oUa5WEQbikQRDEz37tsU20HIY6HTeRKbsPH
+         79ozulSKpUUGgdiPIdir2qdzhhO5mCep9pnxOFewrfDqwEktiTwr+EoN7oAXZHv6RsNr
+         v5sw==
+X-Gm-Message-State: AFq9FYKGPszSmgIt6QPFUK7uJ+qv9KmoCb7NE+ye3+BpXAfK49PYWxys
+	TapoiO7Luye2w92jJVpsGqG//2y4gIUT1DTaNhpohPMAWB3rFs/wY4Wc
+X-Gm-Gg: AYBFou2MefYnHOY83QENJF3VJbzGXh3AR5bILQJyLJj8LDCwo71EXvUwOaaKzZAeNZi
+	0rQ8NtPCS84RKXKB692v0jYB3jX8n7Sk+9BipZkZ/4fYEOi6+GIjF+cwGcLslHs1bEFkwP5iWj7
+	E88RLvhmAzUcO3zre1k3RCKkBZGqsstCiLm/13/xaufYBeS86CARcbk01qCD27S7YFVAhkRVBho
+	FKNiOIpqb7YQgx3G4WkWA6DlNfSCVswW5e9Al+DNj7lo+Ey7IF9XGg7+ZupIw681jBaz+T1gclg
+	Zh9Sc5z3EnEL62k/ywpRsVo5rTNrYC22msEglhkunBg0qNq2I1Vl4t4PAcU0nhtDVD/djdfTDy1
+	npqgbGJp1xObuy8LeIFFT/yTf68X9TXM6oj1picaiBHlyCTtTb9FjlNr5gslr/IvNExCyN+vXDQ
+	JskSh0GLKsgpr6fXOdCdJKygv61bAaNX+a9+NuwKpqXuX0qBXdp5IUl7Dts5H4bF4/rTrIQIeRW
+	pJlx/iMcCLc4P1Swtb8y3tO+KrinYFDQfe6kXjzk488nZyex8ZJk0UfSHtwihenfDimSdHBT+Os
+	ZODU5SlcH3eyFaEllBOihUW1UhtswG4P9nJoZqGplKGqmEmq0ar6o82EJ2fC05BARI3avkrDW+Z
+	0gnxOMCtKu8dlVo1DJn2NSw==
+X-Received: by 2002:a05:6820:4c13:b0:6d7:4142:8b8c with SMTP id 006d021491bc7-6ef0fa9d818mr9965327eaf.64.1791915861931;
+        Tue, 13 Oct 2026 11:24:21 -0700 (PDT)
+Received: from [127.0.1.1] (174-29-1-49.hlrn.qwest.net. [174.29.1.49])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6eef6e22b46sm12627103eaf.0.2026.10.13.11.24.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 11:24:21 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 13 Oct 2026 12:24:19 -0600
+Subject: [PATCH net v3] xsk: freeze deferred pool teardown without blocking
+ unregister
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d1fd91cd937361d722b8e92b31d083eb9facfb66d387d508b35043b3e6a17d22@mail.kernel.org>
-In-Reply-To: <20261013171230.523677-19-daniel@iogearbox.net>
-References: <20261013171230.523677-19-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next 18/18] selftests/bpf: Remove the old test_bpf module
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,alexei.starovoitov@gmail.com
-Cc: memxor@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 13 Oct 2026 18:22:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20261013-xsk-suspend-teardown-v3-1-2d6be7602947@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/33NQQ7CIBAF0Ks0rMVMh1rBlfcwLhCmLVFpAxVrm
+ t5d0oVxo8s/P/P+zCIFR5EdipkFSi663ucgNgUznfYtcWdzZghYgxLAp3jl8REH8paPpIPtn54
+ rwEbJCqRRguXXIVDjppU9MU8jO+dj5+LYh9c6lcq1+q+mkpdc10YbaUDAhY7tXbvb1vT3FUz4Q
+ UqA3Q8EM4JW7hFlUwlU38iyLG/bi9SeAgEAAA==
+X-Change-ID: 20260930-xsk-suspend-teardown-902f98408c93
+To: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>
+Cc: bpf@vger.kernel.org, Eric Dumazet <edumazet@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ linux-kernel@vger.kernel.org, James Hilliard <james.hilliard1@gmail.com>
+X-Mailer: b4 0.15.2
 
---===============1441693752770932196==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Deferred pool destruction calls ndo_bpf() under RTNL. system_wq is
+not frozen during system sleep, so that callback can run after a
+device has suspended and gated its clocks. Use system_freezable_wq
+so running destruction finishes before device suspend and new work
+waits until process thaw.
 
-> selftests/bpf: Remove the old test_bpf module
+Keep assigned pools visible to NETDEV_UNREGISTER independently of
+the socket list. A released socket has already left that list, but
+its final pool put can queue destruction after workqueues freeze.
+A resume-time unregister would then wait for a device reference
+whose release cannot run until the resume completes.
 
-TL;DR:
-- Commit message may overstate successors: classic BPF tests (SKF_AD_*
-  converter, sparc32 cBPF JIT) seem to have no replacement
-- The two skb_segment crash-fix tests seem not covered by net_test.c, so
-  regressions may go uncaught
+Track assigned pools per netdev with netdev operations locking and detach
+remaining pools after the notifier socket walk, including copy-mode pools.
+This also covers leased queues without scanning pools from unrelated
+devices or network namespaces. Remove the entry on assignment failure and
+normal teardown. The deferred worker still owns the pool and later observes
+the cleared device pointer, avoiding a second driver detach or put.
 
-> diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-> deleted file mode 100644
-> index af6f3340c034..000000000000
-> --- a/lib/test_bpf.c
-> +++ /dev/null
-> @@ -1,15934 +0,0 @@
+The lifetime problem was identified by code inspection of the deferred
+release and system-sleep paths.
 
-[ ... ]
+Fixes: 1c1efc2af158 ("xsk: Create and free buffer pool independently from umem")
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes in v3:
+- Protect the per-netdev pool list with netdev operations locking, as
+  requested by Stanislav Fomichev and Björn Töpel.
+- Assert operations locking for copy-mode assignment too, and share a
+  locked detach helper so unregister holds the lock across the pool walk.
+- Rebase onto current net.
+- Link to v2: https://patch.msgid.link/20261005-xsk-suspend-teardown-v2-1-2d87228f4329@gmail.com
 
-> -enum {
-> -	CLASSIC  = BIT(6),	/* Old BPF instructions only. */
-> -	INTERNAL = BIT(7),	/* Extended instruction set.  */
-> -};
+Changes in v2:
+- Track assigned pools per netdev instead of scanning a global pool list.
+- Keep deferred releases visible across queue changes and queue leases.
+- Rebase onto current net.
+- Link to v1: https://patch.msgid.link/20260930-xsk-suspend-teardown-v1-1-a6cac8c030be@gmail.com
+---
+ include/linux/netdevice.h   |  5 +++++
+ include/net/xsk_buff_pool.h |  3 +++
+ net/xdp/xsk.c               |  5 +++++
+ net/xdp/xsk_buff_pool.c     | 46 ++++++++++++++++++++++++++++++++++++++-------
+ 4 files changed, 52 insertions(+), 7 deletions(-)
 
-The commit message says "The instruction tests of the test_bpf module live
-in the BPF selftests now, as the jit_insns test of test_progs".  Does that
-hold for the tests flagged CLASSIC?
-
-None of the roughly 135 CLASSIC tests in the deleted file appear to have
-been carried over.  tools/testing/selftests/bpf/prog_tests/jit_insns.c has
-no sock_filter, BPF_STMT/BPF_JUMP, BPF_ABS/BPF_IND or SKF_AD_* usage, so
-only the INTERNAL tests seem to have a successor.
-
-The classic tests went through bpf_prog_create(), and that leaves two areas
-without systematic in-tree coverage.
-
-1) The ancillary load handling in convert_bpf_extensions() in
-net/core/filter.c, which is used by every SO_ATTACH_FILTER and seccomp
-filter.  The deleted tests covered SKF_AD_PROTOCOL, HATYPE, IFINDEX, MARK,
-RXHASH, QUEUE, VLAN_TAG, VLAN_TAG_PRESENT, PAY_OFFSET, NLATTR, NLATTR_NEST
-and ALU_XOR_X, each of which has a "case SKF_AD_OFF + SKF_AD_..." in
-convert_bpf_extensions().  The remaining selftests only use SKF_AD_CPU,
-SKF_AD_PKTTYPE and SKF_AD_OFF (toeplitz.c, csum.c, gro.c, psock_lib.h,
-reuseport_bpf_cpu.c, skf_net_off.c).
-
-2) The sparc32 classic JIT.  arch/sparc/Kconfig still has:
-
-    select HAVE_CBPF_JIT if SPARC32
-
-and bpf_jit_compile() in arch/sparc/net/bpf_jit_comp_32.c is only reached
-from cBPF programs.  The advice that archs "move over to the BPF selftests
-for proper coverage" does not seem to apply there, since test_progs only
-loads eBPF programs.
-
-The previous commit (71a5c374fa65) says it carries "only the relevant
-instruction tests", so dropping the classic tests may be deliberate.  Even
-so, could the changelog avoid saying that the instruction tests now live in
-the BPF selftests, and could the lost cBPF converter and extension coverage
-be acknowledged or ported?
-
-
-[ ... ]
-
-> -struct skb_segment_test {
-> -	const char *descr;
-> -	struct sk_buff *(*build_skb)(void);
-> -	netdev_features_t features;
-> -};
-> -
-> -static struct skb_segment_test skb_segment_tests[] __initconst = {
-> -	{
-> -		.descr = "gso_with_rx_frags",
-> -		.build_skb = build_test_skb,
-> -		.features = NETIF_F_SG | NETIF_F_GSO_PARTIAL | NETIF_F_IP_CSUM |
-> -			    NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM
-> -	},
-> -	{
-> -		.descr = "gso_linear_no_head_frag",
-> -		.build_skb = build_test_skb_linear_no_head_frag,
-> -		.features = NETIF_F_SG | NETIF_F_FRAGLIST |
-> -			    NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_GSO |
-> -			    NETIF_F_GRO | NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM |
-> -			    NETIF_F_HW_VLAN_STAG_TX
-> -	}
-> -};
-> -
-
-The commit message says the skb_segment tests "have a KUnit successor in
-net/core/net_test.c".  Are these two cases actually covered there?
-
-They were added as reproducers for BUG_ON crash fixes in skb_segment():
-
-  gso_with_rx_frags (76db8087c4c9) for 13acc94eff12 ("net: permit
-  skb_segment on head_frag frag_list skb")
-
-  gso_linear_no_head_frag (cf204a718357) for 3dcbdb134f32 ("net: gso: Fix
-  skb_segment splat when splitting gso_size mangled skb having
-  linear-headed frag_list")
-
-For gso_linear_no_head_frag, build_test_skb_linear_no_head_frag() builds
-alloc_skb() frag_list members (head_frag = 0, linear data) with
-SKB_GSO_TCPV6 | SKB_GSO_DODGY and a gso_size of 1288 that differs from
-skb_headlen(head_skb).  That is the input needed to reach this block at the
-top of skb_segment():
-
-    if ((skb_shinfo(head_skb)->gso_type & SKB_GSO_DODGY) &&
-        !gso_by_frags && mss != skb_headlen(head_skb)) {
-        ...
-            if (skb_headlen(check_skb) && !check_skb->head_frag) {
-                ...
-                features &= ~NETIF_F_SG;
-
-net/core/net_test.c never reaches it.  gso_test_func() never sets gso_type,
-which stays 0 because __finalize_skb_around() clears the shinfo, and every
-frag_list member is built with build_skb(page_address(page), frag_size +
-shinfo_size), which sets head_frag = 1 whenever frag_size is non-zero.  So
-there is no DODGY skb and no linear non-head_frag frag_list member.
-
-For gso_with_rx_frags, the head skb and its frag_list member are
-dev_alloc_skb() head_frag skbs, each with 8 linear bytes plus a 64-byte rx
-frag, and the features include NETIF_F_SG | NETIF_F_GSO_PARTIAL.  The
-segmentation loop then reaches this code in skb_segment():
-
-    if (!skb_headlen(list_skb)) {
-        BUG_ON(!nfrags);
-    } else {
-        BUG_ON(!list_skb->head_frag);
-        /* to make room for head_frag. */
-        i--;
-        frag--;
-    }
-
-followed by:
-
-    *nskb_frag = (i < 0) ? skb_head_frag_to_page_desc(frag_skb) : *frag;
-
-In the net_test.c cases this path does not seem to be hit:
-
-- frag_list and frag_list_pure have mss-aligned linear frag_list members,
-  so after the head segment every iteration takes the skb_clone(list_skb)
-  path under "hsize <= 0 && i >= nfrags && skb_headlen(list_skb) &&
-  (skb_headlen(list_skb) == len || sg)".
-- frag_list_non_uniform clears NETIF_F_SG and takes the skb_copy_bits()
-  path.
-- gso_by_frags always takes the clone path.
-- frags and gso_partial have no frag_list.
-
-net_test.c's skb_segment test came from b3098d32ed6e ("net: add skb_segment
-kunit test") and was never extended with these two cases, and a search of
-tools/testing/, lib/ and the KUnit files finds no other skb_segment() test.
-After this commit, a regression of either fix would have no in-tree test
-that catches it.
-
-Could the two cases be ported into the gso_test cases[] table in
-net/core/net_test.c, for example a DODGY case with alloc_skb()-backed
-frag_list members and a case with head_frag plus page-frag frag_list
-members, before the module is removed?  Alternatively, could the commit
-message stop describing net_test.c as the successor of these tests?
-
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 3cff2174dc03..ac257221c7c5 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -2545,6 +2545,11 @@ struct net_device {
+ 	/* protected by rtnl_lock */
+ 	struct bpf_xdp_entity	xdp_state[__MAX_XDP_MODE];
+ 
++#ifdef CONFIG_XDP_SOCKETS
++	/** @xsk_pools: assigned AF_XDP pools, ops protected */
++	struct hlist_head	xsk_pools;
++#endif
++
+ 	u8 dev_addr_shadow[MAX_ADDR_LEN];
+ 	netdevice_tracker	linkwatch_dev_tracker;
+ 	netdevice_tracker	watchdog_dev_tracker;
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index a7df573784fd..02e89350faf9 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -48,6 +48,8 @@ struct xsk_buff_pool {
+ 	struct device *dev;
+ 	struct net_device *netdev;
+ 	struct list_head xsk_tx_list;
++	/* Assigned pools, including deferred releases; ops protected. */
++	struct hlist_node dev_node;
+ 	/* Protects modifications to the xsk_tx_list */
+ 	spinlock_t xsk_tx_list_lock;
+ 	refcount_t users;
+@@ -119,6 +121,7 @@ bool xp_put_pool(struct xsk_buff_pool *pool);
+ void xp_clear_dev(struct xsk_buff_pool *pool);
+ void xp_add_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
+ void xp_del_xsk(struct xsk_buff_pool *pool, struct xdp_sock *xs);
++void xp_clear_dev_all(struct net_device *dev);
+ 
+ /* AF_XDP, and XDP core. */
+ void xp_free(struct xdp_buff_xsk *xskb);
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..781ba46eb152 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -2145,6 +2145,11 @@ static int xsk_notifier(struct notifier_block *this,
+ 			mutex_unlock(&xs->mutex);
+ 		}
+ 		mutex_unlock(&net->xdp.lock);
++		/*
++		 * A released socket is no longer on xdp.list. Its pool can still
++		 * hold a device reference on the frozen release workqueue.
++		 */
++		xp_clear_dev_all(dev);
+ 		break;
+ 	}
+ 	return NOTIFY_DONE;
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 9d2d94f1fb75..5b9dcafd6882 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -173,6 +173,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 	int err = 0;
+ 
+ 	ASSERT_RTNL();
++	netdev_assert_locked_ops_compat(netdev);
+ 
+ 	force_zc = flags & XDP_ZEROCOPY;
+ 	force_copy = flags & XDP_COPY;
+@@ -204,6 +205,11 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 	pool->cached_need_wakeup = XDP_WAKEUP_TX;
+ 
+ 	dev_hold(netdev);
++	/*
++	 * Socket removal precedes the final pool put. Keep the pool visible to
++	 * NETDEV_UNREGISTER even while release work is waiting for process thaw.
++	 */
++	hlist_add_head(&pool->dev_node, &netdev->xsk_pools);
+ 
+ 	if (force_copy)
+ 		/* For copy-mode, we are done. */
+@@ -244,7 +250,6 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 	bpf.xsk.pool = pool;
+ 	bpf.xsk.queue_id = queue_id;
+ 
+-	netdev_assert_locked_ops_compat(netdev);
+ 	err = netdev->netdev_ops->ndo_bpf(netdev, &bpf);
+ 	if (err)
+ 		goto err_unreg_pool;
+@@ -265,6 +270,8 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 		err = 0; /* fallback to copy mode */
+ 	if (err) {
+ 		xsk_clear_pool_at_qid(netdev, queue_id);
++		hlist_del(&pool->dev_node);
++		pool->netdev = NULL;
+ 		dev_put(netdev);
+ 	}
+ 	return err;
+@@ -287,19 +294,40 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
+ 	return xp_assign_dev(pool, dev, queue_id, flags);
+ }
+ 
++static void __xp_clear_dev(struct xsk_buff_pool *pool)
++{
++	struct net_device *netdev = pool->netdev;
++
++	netdev_assert_locked_ops_compat(netdev);
++	xp_disable_drv_zc(pool);
++	xsk_clear_pool_at_qid(netdev, pool->queue_id);
++	hlist_del(&pool->dev_node);
++	pool->netdev = NULL;
++	dev_put(netdev);
++}
++
+ void xp_clear_dev(struct xsk_buff_pool *pool)
+ {
+ 	struct net_device *netdev = pool->netdev;
+ 
+-	if (!pool->netdev)
++	if (!netdev)
+ 		return;
+ 
+ 	netdev_lock_ops(netdev);
+-	xp_disable_drv_zc(pool);
+-	xsk_clear_pool_at_qid(pool->netdev, pool->queue_id);
+-	pool->netdev = NULL;
++	__xp_clear_dev(pool);
+ 	netdev_unlock_ops(netdev);
+-	dev_put(netdev);
++}
++
++void xp_clear_dev_all(struct net_device *dev)
++{
++	struct xsk_buff_pool *pool;
++	struct hlist_node *next;
++
++	netdev_lock_ops(dev);
++	netdev_assert_locked_ops_compat(dev);
++	hlist_for_each_entry_safe(pool, next, &dev->xsk_pools, dev_node)
++		__xp_clear_dev(pool);
++	netdev_unlock_ops(dev);
+ }
+ 
+ static void xp_release_deferred(struct work_struct *work)
+@@ -337,7 +365,11 @@ bool xp_put_pool(struct xsk_buff_pool *pool)
+ 
+ 	if (refcount_dec_and_test(&pool->users)) {
+ 		INIT_WORK(&pool->work, xp_release_deferred);
+-		schedule_work(&pool->work);
++		/*
++		 * Teardown calls ndo_bpf(), which may need powered hardware.
++		 * RTNL alone does not exclude the device's system PM callbacks.
++		 */
++		queue_work(system_freezable_wq, &pool->work);
+ 		return true;
+ 	}
+ 
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: 513444cc62e231a11c9b15ea88de0890da9b2b4f
+change-id: 20260930-xsk-suspend-teardown-902f98408c93
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38442623945
---===============1441693752770932196==--
+Best regards,
+--  
+James Hilliard <james.hilliard1@gmail.com>
+
