@@ -1,118 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF8352ED34;
-	Tue, 13 Oct 2026 17:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76534E36F8
+	for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 17:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791913839; cv=none; b=fHoHUIB+3DaEPExc/TPIjU+4JSgOvsCVFxJfG0KWdz+acl0LWwAZKNCUmVuyVuy5qK+w9pTgdjj9mfcF+rpaIxZY/KJ8BKhG+sKUsMLQcnBibOGQoqzM7dFntzz3NrKpUJysyFmkvB6bLOUzUaWWeVH65chR1+ojD9O8PWUJjk8=
+	t=1791914213; cv=none; b=HGI9UTmSsCWCXPw1ZUkEj63URYr351nFy3OFeeBfH1SuPz33FHaWUW1MDqy04bntALWHTviC5pea+VB6FQEa7yNbDf2hqbvlRQoTk34aC4L9pAoFROmUM7ZgT5YLSFkCwSsOXjAm96+eajQsx1TDdDdbc5z6OQ/9AZFO/JLG1fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791913839; c=relaxed/simple;
-	bh=tJBYIPty0wZGKXBsahlACcs5kyHe8Wvd8z8QWxPslsU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=AwfriYWYEneVBf9y6dWkrceXeqo3yrwT3I6wolcg/infS937LSeWxMbzUZK31n32V6Q+Li0Ywx2kiHRnrEnpDM0jdb8uoGeo12asLaoMTLYUp/WeFo6uu5KJAF+AC9Hs4VHt1+z+6zKUV0GX5hNui2aqMixJHSgy7p+TyLvIg/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PUdwukG5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791914213; c=relaxed/simple;
+	bh=9+xzVzStH5jySgGJiobWKMn8FjA+vNjP/UnkeGKkeQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ba8f6ihdKhS96u3VIwyFo1gxKAalENcZoWqkK5mAenuJoh7+eVqQrHHN/A+4cdEoM4Kv667qKUXvHZP5sZhuNeX910ScgOiTaYxLM7ksrog+OWGvh+p2rrekbyfVZQVB/liGkDfBfwUuCmeGtTJhSCt7CkizQIDYqvcvGe8IZX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KS/v49wQ; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PUdwukG5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1631F000FF;
-	Tue, 13 Oct 2026 17:50:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791913837;
-	bh=zUjjV6Cmbrjfwa6o9ObEk59OU11hEIqLuHXUcxmn06Y=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=PUdwukG53RfJVa6mSXZi8k8hkxiRShU8DwbxTwH1C9cLJxjgeP+zMCq5chpwzahRn
-	 b9oCdwBBKFFEA5HxZ8/HOw6dmH0OBXlhxbXKjTzMKfmCRMnf2vgIvm2mVHoMuyjmHR
-	 3pds3LFkkKmIp//yz+mhtQ09o2bDv+GW0nUcrEVqxMhWA2Ke/fs20Ay6ApmI7/462X
-	 8DvhrayWSLyhOOx8bNO3tvorpn474FVntvKX2OtOx4rCMOnphmoSmDYKLm0MznvxhX
-	 WQ7pzfC/z3qae7AvfB45dhh79oguNU3ae/fW9npOGBSDPyWNEw3mMlnVaTpHvQQOV0
-	 Gryn+innZJhyA==
-Content-Type: multipart/mixed; boundary="===============0643839994356313088=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KS/v49wQ"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-8b0af2aae63so15915887b3.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 10:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791914211; x=1792519011; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=I3urwFIjeTZMI3nHLcO9T0M+7OUsQOTZbc1ClGXMTLY=;
+        b=KS/v49wQtLRLZZAlQ1bqq2v8qBx0YzbFBZizFvOrznpwGsTKv5wyAYiDJ014m91Y0G
+         D+ATBHnlMiC5tyRQ7F4BfSOOQPVLo43U8pbp3dNLUJA+iaB82NT0dR1pl8je+Nx2kYVb
+         BzQm5634DxkZpDi+jSMGTZkSO7aZ3Bn/cExU3VaDATz6YVx6I1zVN087HN6gHg2LBrl8
+         6ni8oFem8r+vA+0UrQwTWD1NQ8R0NJlFnwktCIl0qCwWvKACU2wloeM3IIpf07MxTSAq
+         kYQ4T4jFkalzhg04TmEL0PlQrzjatgcWReuukDr60DccjSUWVgO0wLSsG2IJzKkuKMXw
+         uzwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791914211; x=1792519011;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=I3urwFIjeTZMI3nHLcO9T0M+7OUsQOTZbc1ClGXMTLY=;
+        b=qREewg44NKKhHEqOEGu8olFZQp6XggPigsSO9MZ9xj1WFIajdwJNiRVX4nehgoJ6BM
+         /U+k6h16ZnvzefDQxmeySGPQ7UkvKqjmYen0Yqh4vc5ei1EGzZL0nVWzKNUQ9oZ3bet9
+         37zTxeATEIWUiPwc+cY6T4jeaZld/xEd20ks38HjhaIYiS3SOdOGWQCYCPsWoCwCxzUG
+         vpxUZw9lp2GPM+1qokW/Vx+QklrVsLN/n8Wy7Z/HH97IXdhiY0zCOkOYmAJxaXL1UXYI
+         cR1euJrN57CXZB2N9dcAWcGONCTzk6WURJP5XAdKOY3FYhOIPmnaOf1WADoLhdl4N0KD
+         XCWQ==
+X-Gm-Message-State: AFq9FYLFtPbQAgymbQEdm+58PepA0iBPR2QsMCydoicAnB3+Oa4IbLTY
+	QefpaN0AZHML6O/S+reLuab88rs8VtU6PdktPsuBjYaGXAUKpFRdt5Mw4I4XGQ==
+X-Gm-Gg: AYBFou3riFgy4o9zbsj3BjEMu/iBCmT8wV+RJrhDJfVFe/aJjm8DDCfJOCg97zCcQ76
+	4taXn7ee7ZfnghsjgGnRJxvtDyWwfikERIxvM5PJuAw2pre24akwm4fqaab5pBD9RKA43pFfig1
+	0kmtjCjeFCGgbGjUKswSAPKBUvMDWRi9V8IS3z7DjbsKQnHRPDjtoDfLQSmjMhkf9TR4mCgwYsx
+	CvgTgUeYDfJsVzCdfkU3UUbzYUd9l1Ds/2n7Lcg141XFWG1epLtIuOCED00GAB2E1ofPkYcMUl9
+	5P6f4fQdEIrjCr6s5WhbmhLvECLjR7qFfPtNT38RxRAHW69hg4IvwX5jiL8JzukSZFCLNxBXJod
+	P/Jlyo1WbGGO/JBGMOaegtHXZKMtfr76Ds3WHzBZ9ABJuBlZqK8FkInC7cC2qzntFopDlb76Qu5
+	/JcEuet1vruojH93GLho3qgkfsPCZVIf7FuS+AnpKYr186xoF1VRxlkCscDBOQBIH6GDxuAZ4=
+X-Received: by 2002:a05:690c:c505:b0:8b0:a957:80c4 with SMTP id 00721157ae682-8b0a95786f5mr22590897b3.45.1791914210764;
+        Tue, 13 Oct 2026 10:56:50 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:d326:f863:5ae3:683])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b07f2508e0sm48386227b3.38.2026.10.13.10.56.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 10:56:50 -0700 (PDT)
+Date: Tue, 13 Oct 2026 13:56:49 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 08/11] namei: add an rcu-walk mode to the
+ ancestor walk
+Message-ID: <as5v6B-8O2QQw3zC@zenbox>
+References: <20261013164800.2906577-1-utilityemal77@gmail.com>
+ <20261013164800.2906577-9-utilityemal77@gmail.com>
+ <sashiko-outbox-170183@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0dda1ea4bbfdccac43ee6f9912def948628faa95450bc7b5a0cc6543838f3ee2@mail.kernel.org>
-In-Reply-To: <20261013171211.1661726-1-listout@listout.xyz>
-References: <20261013171211.1661726-1-listout@listout.xyz>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Add tests for memcg kfuncs
-From: bot+bpf-ci@kernel.org
-To: listout@listout.xyz,bpf@vger.kernel.org
-Cc: bdas@suse.de,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,jp.kobryn@linux.dev,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 13 Oct 2026 17:50:35 +0000 (UTC)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-170183@kernel.org>
 
---===============0643839994356313088==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Oct 13, 2026 at 05:01:26PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] vfs: TOCTOU race in vfs_walk_handover() sequence validation
+> --
+> 
+> commit 1f35bee40e8028ac4b024dd5a54b6bbdbb5b8521
+> Author: Justin Suess <utilityemal77@gmail.com>
+> 
+> namei: add an rcu-walk mode to the ancestor walk
+> 
+> This commit introduces an rcu-walk mode for the stepwise ancestor walk.
+> It adds lockless progression using sequence validation and provides
+> vfs_walk_handover() to transition an unreferenced RCU walk into a
+> referenced walk.
+> 
+> > diff --git a/fs/namei.c b/fs/namei.c
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> 
+> [ ... ]
+> 
+> > +bool vfs_walk_handover(struct vfs_ancestor_walk *to,
+> > +		       struct vfs_ancestor_walk *from)
+> > +{
+> > +	struct path pos = from->pos;
+> > +	int err;
+> > +
+> > +	err = __legitimize_mnt(pos.mnt, from->m_seq);
+> > +	if (unlikely(err)) {
+> > +		if (err < 0)
+> > +			mnt_undo_legitimize(real_mount(pos.mnt));
+> > +		goto dead;
+> > +	}
+> > +	if (unlikely(read_seqcount_retry(&pos.dentry->d_seq, from->seq) ||
+> > +		     !lockref_get_not_dead(&pos.dentry->d_lockref))) {
+> 
+> [Severity: High]
+> Is there a time-of-check to time-of-use race window here due to the
+> validation order?
+> 
+> Evaluating read_seqcount_retry() before lockref_get_not_dead() seems to leave
+> a gap. If a concurrent rename or unlink mutates the dentry and increments the
+> seqcount right after the sequence check, the subsequent lockref_get_not_dead()
+> might still blindly succeed on the active d_count.
+> 
+> This would yield a stale and unvalidated path position to the referenced
+> walk. Should the lockref acquisition strictly precede sequence validation to
+> ensure the sequence hasn't changed during the reference acquisition?
+>
+This is intended and explained in the cover letter note,
+"stuff not changed" bullet one.
 
-> selftests/bpf: Add tests for memcg kfuncs
-
-TL;DR: Test-only nit: alloc_pagecache() in memcg_kfuncs.c duplicates the copy
-in arena_memcg.c, so fixes must be made twice; consider moving it to a shared
-helper such as cgroup_helpers.c.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c
-> new file mode 100644
-> index 000000000000..4527000ae408
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_kfuncs.c
-> @@ -0,0 +1,306 @@
-
-[ ... ]
-
-> +/*
-> + * Fill the page cache with @size bytes of clean, reclaimable pages by
-> + * reading a sparse temp file. Returns the fd, which must stay open, or
-> + * -EOPNOTSUPP if the working directory cannot back such a file, -1 on error.
-> + */
-> +static int alloc_pagecache(size_t size)
-> +{
-> +	struct statfs stfs;
-> +	char buf[4096];
-> +	size_t off;
-> +	int fd;
-> +
-> +	fd = open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
-> +	if (fd < 0)
-> +		return errno == EOPNOTSUPP ? -EOPNOTSUPP : -1;
-> +	/* tmpfs hands out shmem pages, which are not reclaimable without swap */
-> +	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC) {
-> +		close(fd);
-> +		return -EOPNOTSUPP;
-> +	}
-> +	if (ftruncate(fd, size))
-> +		goto err;
-> +	for (off = 0; off < size; off += sizeof(buf))
-> +		if (read(fd, buf, sizeof(buf)) < 0)
-> +			goto err;
-> +	return fd;
-> +err:
-> +	close(fd);
-> +	return -1;
-> +}
-
-this isn't a bug, but alloc_pagecache() here looks like a line-for-line
-copy of the static alloc_pagecache() in prog_tests/arena_memcg.c.
-
-Both versions have the same open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600),
-the same fstatfs()/TMPFS_MAGIC check, the same ftruncate() plus 4096-byte
-read() loop, and the same -EOPNOTSUPP / -1 return contract.  The skip
-message that goes with it, "no disk-backed O_TMPFILE in cwd", is also the
-same string used in serial_test_arena_memcg().
-
-If the reclaimability detection ever needs fixing, the fix has to be made
-in both copies.  For example, ramfs also supports O_TMPFILE and its pages
-are unevictable, but only TMPFS_MAGIC is checked.
-
-Could alloc_pagecache() move to cgroup_helpers.c (or testing_helpers.c),
-which test_progs already links, so both tests share one copy?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38438128349
---===============0643839994356313088==--
+Justin
+> > +		mnt_undo_legitimize(real_mount(pos.mnt));
+> > +		goto dead;
+> > +	}
+> > +	to->pos = pos;
+> > +	to->flags = 0;
+> > +	to->pos_flags = from->pos_flags;
+> > +	return true;
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20261013164800.2906577-1-utilityemal77@gmail.com?part=8
