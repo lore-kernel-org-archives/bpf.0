@@ -1,41 +1,40 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3213F1FDA61
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 10:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922B3450415
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 10:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791974365; cv=none; b=ls4E0UAvWjLD28Wssh8d3V/SOOqZnTKGeH+BR4jRfaw61yrrjU/Zblc6IF2dwOdd7W56iQetaTyR22hqY94/pQhnjRR8j29d0Yw8ZVyY/PcW5knIqFfYc1QSKY1VztNqMJZQNmjvgHdCtWfJIVZZSm7noV6F2UCKGMjNbmhiMDU=
+	t=1791974365; cv=none; b=rqr0z1Y/LAZxlDKuG2d/f2qeOS8vPBxCKtClp8iPXeAqw512tYFk+2gZjaSfC0CwnGp3BNvcm9pPSb9XX/O50K0OItnMo3bP0cDfhwGvKmni+Qg7fXPZ0RO5a6QTCXWu7b3Uhj6Mrl4iMLJdhyQzrZg75g5G4sH1aC2QU3u3oFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791974365; c=relaxed/simple;
-	bh=L8f7fIFMUWeTKAulMy9VC73H6Y5kfiBzTTyuMXylsXc=;
+	bh=cJx+IdEUu8yh4fLjqkD0IluljpwFkPnxObVaaS2yr8Y=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=touUX+Al0NtUgO71rpr3YwWR7WskvswKG/Ne2FRrWyPg8IzuIjKm8MrMsdb3ZD0Bw30ujGXMFh9AJL7zyx/H3xrKNh0XVA8fTdACRCKQ+YfjjhaAYUPNdd9BYOAZanDSjku1uPQygMe3y9wNTiOBlyKmgQcpCL7fKDYr09uMsLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJvFLIrp; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=JsaWqnLFhmlkwOTQ4bNGN/QS3oGkbrTZDvkJ4yxWEZdA15l6fIMa4YlNEQDsPyqXnNFCdRnmVdcw9sinwWnCIOPa2K/Cl3nEXgy1g7h/HK770VwI65tC+8OPo3ouSHHEKB7fhOcUMaIcjIjDWhyd73/HBgjeXcDoM7AKuEMjM3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqLK8fF4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJvFLIrp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D8BB1F000FF;
-	Wed, 14 Oct 2026 10:39:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqLK8fF4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D4C1F00893;
+	Wed, 14 Oct 2026 10:39:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791974363;
-	bh=SfQToFvXazNbxq2C59xH0F9QTETRf74jP+goHD0KMKs=;
+	s=k20260515; t=1791974364;
+	bh=bvozk3r+DlQO0juGxWTv3O0K0VuoeeLH+uKVBCADwIc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BJvFLIrpX6f+upblwXacCdQFYRUxR7fScV0IqnhUTe1QBlVAj7ftXiPIaYvBAzB3q
-	 85asus04sHg4/dTaScYUsoo4WJAb31Ww7BFl66cFkMvrgP4Bkf7x9xIVHTIIJ7SvTt
-	 gRdYGY2jzC4hRvJXEy5cQiJbI7mT7CEfwgQ4QrJElfOZniAcfmLBMS7y16KaubmvjQ
-	 o1VDb5GR2NvW6LDohhGLETRRLKNbqNfCb04sDlN2rnH7clkFf2tpwoEwL/zsFCjS7o
-	 xSAJpOvQAqfOMWztUD2dHtu84hA+UMETdZ+9ZOnZe5AUIcG2pr2+ZGaa34vnakVme/
-	 SLfO1hyzww5Vw==
-Message-ID: <sashiko-outbox-171146@kernel.org>
+	b=MqLK8fF4zKUXwO3KAJ4mraxItqStAbi6/2fvCiKbhdD0vS6tcMfi5HRyZryNPKVNA
+	 hobCrNCQlPabpEcrS0ziNydyCOghgWJFH83AHuDp9NQAPyHERG9FBtw2A1/d87TQFA
+	 2nbSEgYFT+5MTmyTf9s6g8Bzx2/zmOWEeb5osl+8R/620izmP77yoK6TTPMbtUoD2k
+	 0RU1uVHtiG2QkdPBKDuWA41Y/VgNjodKYTjIPr3ok371qzfe4+FSsycKTTMXU7Rz0Q
+	 uDnZ5ew7vAMCGvGOHlyrWHKoDf5ISI5IECZrFB0/WCMD71pPu55s8UV85CiwmP4zHu
+	 RHBwEahZynHog==
+Message-ID: <sashiko-outbox-171147@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH net-next 2/4] tcp: add BPF_SOCK_OPS_TCP_TS_ID_CB to
- assign a TSval identifier
+Subject: Re: [RFC PATCH net-next 3/4] tcp: add TCP_TS_ID socket option
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Willem Ferguson" <wferguson@cloudflare.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261013103906.2660384-3-wferguson@cloudflare.com>
+In-Reply-To: <20261013103906.2660384-4-wferguson@cloudflare.com>
 References: <20261013103906.2660384-1-wferguson@cloudflare.com>
- <20261013103906.2660384-3-wferguson@cloudflare.com>
+ <20261013103906.2660384-4-wferguson@cloudflare.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Wed, 14 Oct 2026 10:39:23 +0000
@@ -45,89 +44,60 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: bpf_load_hdr_opt() returns -EOPNOTSUPP for BPF_SOCK_OPS_TCP=
-_TS_ID_CB
-- [Low] bpf: UAPI multi-line comments violate subsystem guidelines
+- [Low] tcp: lockless data race in do_tcp_getsockopt for TCP_TS_ID
 --
 
-commit 5e1ec68deb60daa79748ce9bcb640700acc7dd70
+commit 7c66b48d6e891deb8097ef54e673d4be713fb65b
 Author: Willem Ferguson <wferguson@cloudflare.com>
-   =20
-tcp: add BPF_SOCK_OPS_TCP_TS_ID_CB to assign a TSval identifier
-   =20
-Let a sock_ops program pick the identifier that the previous patch
-encodes in the low bits of TSval, for passively opened connections.
 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 732b35cc08d1c..b440a3fd96d0e 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-[ ... ]
-> @@ -7137,8 +7138,12 @@ enum {
->  	 * options first before the BPF program does.
->  	 */
->  	BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG =3D (1<<6),
-> +	/* Call bpf to select a TCP timestamp connection ID for a passive
-> +	 * connection before sending the SYN-ACK.
-> +	 */
-> +	BPF_SOCK_OPS_TCP_TS_ID_CB_FLAG =3D (1 << 7),
+tcp: add TCP_TS_ID socket option
 
-[Severity: Low]
-Does this multi-line comment violate the BPF subsystem guidelines?
-The guidelines strictly require multi-line comments to have the opening /* =
-on
-its own line, with the comment text starting on the next line.
+Add a read-only TCP_TS_ID socket option so applications and tests can see
+which TSval identifier was assigned to a connection. The value packs the
+identifier width and the identifier itself, chosen by BPF when the SYN
+arrives.
 
->  /* Mask of all currently supported cb flags */
-> -	BPF_SOCK_OPS_ALL_CB_FLAGS       =3D 0x7F,
-> +	BPF_SOCK_OPS_ALL_CB_FLAGS       =3D 0xFF,
->  };
-> =20
->  enum {
-> @@ -7282,6 +7287,14 @@ enum {
->  					 * sendmsg timestamp with corresponding
->  					 * tskey.
->  					 */
-> +	BPF_SOCK_OPS_TCP_TS_ID_CB,	/* Called after a passive SYN created a
-> +					 * request socket and before the SYN-ACK is
-> +					 * sent. Not called for SYN cookies. Arg2 is
-> +					 * the number of low timestamp bits available
-> +					 * for an identifier. Set reply to an identifier
-> +					 * that fits in Arg2 bits. Replies are ignored
-> +					 * for usec timestamps.
-> +					 */
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index af994edde7f73..5991b16396b9f 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -4711,6 +4711,9 @@ int do_tcp_getsockopt(struct sock *sk, int level,
+>  		else
+>  			val &=3D ~1;
+>  		break;
+> +	case TCP_TS_ID:
+> +		val =3D ((u32)tp->ts_id_bits << TCP_TS_ID_BITS_SHIFT) | tp->ts_id;
+> +		break;
 
 [Severity: Low]
-Similar to the above, does this multi-line comment violate the BPF subsystem
-guidelines by starting text on the same line as the opening /*?
+Is it possible for tp->ts_id and tp->ts_id_bits to be concurrently modified
+here without the socket lock?
 
-[Severity: Medium]
-The commit message claims that the BPF program can use bpf_load_hdr_opt() to
-inspect the incoming SYN packet during the BPF_SOCK_OPS_TCP_TS_ID_CB callba=
-ck.
+Looking at do_tcp_getsockopt(), these fields are read locklessly.
+If the socket is concurrently disconnected (for example, by calling
+connect() with AF_UNSPEC, which calls tcp_disconnect()), the fields are
+zeroed out:
 
-However, the backing kernel helper bpf_sock_ops_load_hdr_opt() restricts ac=
-cess
-by calling is_locked_tcp_sock_ops():
-
-net/core/filter.c:is_locked_tcp_sock_ops() {
-	return bpf_sock->op <=3D BPF_SOCK_OPS_WRITE_HDR_OPT_CB;
+net/ipv4/tcp.c:tcp_disconnect() {
+    ...
+    tp->ts_id =3D 0;
+    tp->ts_id_bits =3D 0;
+    ...
 }
 
-Because BPF_SOCK_OPS_TCP_TS_ID_CB is appended to the bpf_sock_ops enum here=
-, it
-has a higher integer value than BPF_SOCK_OPS_WRITE_HDR_OPT_CB and fails this
-check.
+Could this concurrent modification trigger a KCSAN data race warning or
+result in returning an inconsistent or torn value to userspace?
 
-Does this cause bpf_load_hdr_opt() to unconditionally return -EOPNOTSUPP,
-silently breaking the documented feature capability?
+Other locklessly accessed fields in this switch statement use READ_ONCE(),
+like tp->notsent_lowat right below this. Would it make sense to use
+READ_ONCE() here and WRITE_ONCE() in tcp_disconnect() to prevent this?
 
->  };
-> =20
->  /* List of TCP states. There is a build check in net/ipv4/tcp.c to detect
+>  	case TCP_NOTSENT_LOWAT:
+>  		val =3D READ_ONCE(tp->notsent_lowat);
+>  		break;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013103906.2660=
-384-1-wferguson@cloudflare.com?part=3D2
+384-1-wferguson@cloudflare.com?part=3D3
