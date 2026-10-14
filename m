@@ -1,136 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A879502795
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 13:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EC25372C2
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 13:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791984192; cv=none; b=jCXryXH0l4cTSTcNMwEMT0/ZaDl44jdiGV8bdOBJ6YAos9A+QAt7QO5WFZ3Dauo0o2bLQjRv19G+hIjkoIqx+/xe2BnC3z0QYTjP+obkaeB4Dz3+4crNdSTiUWN1UL2iqNB18DsbfeW3rkiUQyHT/UYOj5yXVaLMNJAgUlxXHHA=
+	t=1791984779; cv=none; b=fuPErFLQqsJtIoPcPs0vkOZGxCtFbeLXU2xem2qS5FnulsCcJoM5jIEPLF+UDirRhDDBcZU7ZEsqt5Mh3xktTS97i+bntRVnq1jgIxTVmYv7brI8iRN3BrzMG1zE208AreB/NwJfSfETAQhmIwairNkNbxYfYxdKH38xxBXUu5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791984192; c=relaxed/simple;
-	bh=+jYV/F/7k9Rbt8gtneZcL+MW6DO9f9SRJlbn+JGwMMg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=jx4nK+TS3PdHQjQuCVTA3U36ucKd+uEMQoDoDpxcEWCP2Ad6jDLyQJQbFeqgBK9OPdmRoTrHLHIw8/In2cYq6PHdC0kuy8SIKoh7pvD64zsdAYu3EgZlAdkB8VOBBQaEtyP6bxqhROrDWgPX4kvwIaMhvZ6a0RtRgk/v/HZ2Kns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BPChpP8p; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791984779; c=relaxed/simple;
+	bh=0L4Nbu8du58reQkSm3StrgE48it0YJU1Ueyadr49Vfw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c9jAgzX1GTH5VDR/GPWVUYcCMQvuHtqcFEdSfPsjzfnr5iKT/KzPB3ptFwBa9dz7/a7MRpPMGqihWQkPA/AdZDa6m3qrwYqt5tvlNjOQu07vrcUzB7kIpliDHmGzCAsVwYxt5YJEgOWkUyC9p+xMfeparTa5Xl7MRR3v9qZTkrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UnfABSKF; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=H7HuHbIp; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BPChpP8p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03F81F000FF;
-	Wed, 14 Oct 2026 13:23:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791984189;
-	bh=p9MgGpJgVno8P781i2bxUY2cOhWiWOlywpir4KRWi8Q=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=BPChpP8p/V7umgOLv7WudluwmQa0l2CthBogKyF8UcLDyMMOcqBNgqSzI3451D7WQ
-	 R6JTPJzAuc6xXm+PMuF5Csj2SikA67a4V/AIPX6dKLB3ysQMIbLvVkg2NpR3FuoSx0
-	 d0+FjBp7fVpPQnP8kM9q/oKiEgSAqB93zs1lwYOixK30YQMZ2dRWfA+3ziDQDqxlZW
-	 +gKjQlbrdBkJBGu/DnaAN+G2rWbgZ8ovdk9cgrr8+jMqSJbpnuVYv6k+nsN1cv6rYz
-	 2sbQLiqU2/N3a1PX1XfY+i+WnMZLRMZbp/UMSzISUPnGrXeJ7xECBs54x6NJxwm7el
-	 D6XdQeWOGaeMg==
-Content-Type: multipart/mixed; boundary="===============2179720693399677536=="
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UnfABSKF";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="H7HuHbIp"
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69EBOsn72515923
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 13:32:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=Sqq3d4Um/1FzAW/kUe6wQksJ
+	qVemNCXMK7vcu4NUvaE=; b=UnfABSKF4JG68NRDS67n6FE6AnekBQykOL4dXwyE
+	Lyv7SfAq92MSxg/NrlbJV+N22FkwrRfz1rvxBk56npO9QdUUq/VpujtVZEIRl2Ta
+	nYctr+D9MFQKQ7eN9JOqCUogOh+OQC8JeUOiI9pCW9roWtHj5GlmcnsCP05PTpii
+	5GRxY4+zhnTqgZdlksK+Qjb29bFX8A8MYjCvwAgbXr78RAb52zHSYJMCiJHPrfL3
+	oNlOsNFMMq9MXzjw67mbd4gMyk7ImLGh/5DZwJAhXP/P5rImYvy1xtETZIjoZD0X
+	4ut88kZXLGxS4yDQ95V+egmivq9706ssobJbZhFmUxoncA==
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com [209.85.221.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ha4709s5f-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 13:32:50 +0000 (GMT)
+Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-5d9f5706703so90438e0c.2
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1791984770; x=1792589570; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Sqq3d4Um/1FzAW/kUe6wQksJqVemNCXMK7vcu4NUvaE=;
+        b=H7HuHbIpDSoqQRtXoS17ySlkA6yJT+LLziqgm2+A4RkVd3S3g6uiw0BWSQLfhYDLTG
+         C4mFIQydKZxm5YZhIFxB6d7uRBbOEcLGC4wrk0oR57+qao22pggT5nfg8vTgX2EW9SRy
+         j5x3EldNd42zQxDyl109gKXE6bX1Uu2H2+ZU6RLHv1mSKJCzZHlGqmk91h3iOgZT6qm7
+         Xh+uH+Q8V6pcfJuDHGlRWSKDuiksnf2y5ZcwQ9YE3lQ3w0lu+bzbpkuZBrh9/s2XP3t0
+         svmSj0JPllzZ3Ui1NknuBT2GXNbf4Ox0HhUOv5bunySoHlrRvyLLsjgWAdFDi2FfpjSK
+         2C3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791984770; x=1792589570;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Sqq3d4Um/1FzAW/kUe6wQksJqVemNCXMK7vcu4NUvaE=;
+        b=vOHFvrbCShQN+qw2o/LFgdVJcXvetx8qimbvtm9fFfENy8JMfBdwK1bJQM/C5Entsx
+         c7Z1q0f1Mbqzx7Z7NywkzVmu6QFUtWVyG0uwmLQUTurV2gLebmMaXrcteFLqS0IzQKV9
+         rA7hUcvs1OpGggUelaQSKZH3et0aiCGfJyMmY6q5MAvNPF5l8tlcRiIGsaW+VufxAzms
+         jmtqc6UNW2SeFE8d6XsIxMhZJKqmEHpyOcaD+4Hqtva3laHc4EQBsn3uFDMMpMK6JawV
+         oBtvPf5LT2eZA6iMMUAgFQdJT1w3JOdxZHK2a7u2RZlJxqM2oICCp9aUXemUmACP0alx
+         tbtg==
+X-Forwarded-Encrypted: i=1; AKwUvBw2JD0KWb6harsxvYstPGOlC5ANGpYPZNW5rabtiA9druWr4RKCQztv9nPCCubIW1Skvg8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKVJ+0Zmja9ltHoeBsNlaj1AjW9VShLVP1QwSYYls/nikFWCBkv
+	gb0f29LIGqM/ZCkXf3ElVoiA7gG3PPgC3c0Na8JaRGAiR5MwCtMN5cWhRgQRXE1fq0mMjmsJ8a+
+	ZcUlzytGw6uiFcs1xw5379lZoOdS/D3hr7o5fQO5NVptSw82+cs1MeAM=
+X-Gm-Gg: AYBFou1EitrER+z/WD+C8bceDYvUgT8CjN6eHUF8R04Q56cyQkF/tKYI0HwoNnyVY9U
+	BNUjUa7rbN7zOUkEiwXBCrl54Dy0V9Jnm5BrEgnZymriQ5AiAE/LTbWF2xdXybuIl1N2vuPFvyT
+	WdX8RoPL6S8f8T0/i2QR0/oVx2L+PiMKI8S441xnXnd2tJSEhzhfO16f6z71rL0FKNOrVhT5dnr
+	FcqLeHgkbG+zvv+R4vzexgxQTisS+g+E5VnvhdPxkysa8fLOm9yMiNHnSFVJ8XDr/0BFiVQ5ar4
+	9Bgv9C24EWN2iUG1ycmBosG7HYerhojNTkA1JkpBR9e0K+7+ILf/vup+/JlRKRC57e7rMPaZ5fn
+	8Q/c9MofXE6/pyA==
+X-Received: by 2002:a05:6122:20a8:b0:5c9:a60b:e5bd with SMTP id 71dfb90a1353d-5e91f48b6b8mr4332955e0c.13.1791984769691;
+        Wed, 14 Oct 2026 06:32:49 -0700 (PDT)
+X-Received: by 2002:a05:6122:20a8:b0:5c9:a60b:e5bd with SMTP id 71dfb90a1353d-5e91f48b6b8mr4332918e0c.13.1791984769035;
+        Wed, 14 Oct 2026 06:32:49 -0700 (PDT)
+Received: from localhost ([188.216.77.92])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bd07c276sm416225e9.13.2026.10.14.06.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 06:32:48 -0700 (PDT)
+Date: Wed, 14 Oct 2026 15:32:47 +0200
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+To: netdev-bot+sinfo@kernel.org
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+        James Hilliard <james.hilliard1@gmail.com>,
+        Nicolai Buchwitz <nb@tipi-net.de>
+Subject: Re: [PATCH net-next v7 0/4] net: stmmac: introduce XDP rx multi-buff
+ support
+Message-ID: <as-Ef22VEKQcZ9QQ@lore-desk>
+References: <20261014-stmmac-rx-mb-v7-0-5d2d70f052cd@oss.qualcomm.com>
+ <179198374828.320699.17103999780938670424@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <355b273a4b679e2549bdb7356695d9f31ced9419697a7b94ae472b49a453e1f3@mail.kernel.org>
-In-Reply-To: <20261014125017.1426212-4-puranjay@kernel.org>
-References: <20261014125017.1426212-4-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v4 3/3] sched_ext: Use fetching atomics for cmask instead of a cmpxchg loop
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,tj@kernel.org,void@manifault.com,arighi@nvidia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 14 Oct 2026 13:23:07 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="q3kgqRgL7mAsQ/qT"
+Content-Disposition: inline
+In-Reply-To: <179198374828.320699.17103999780938670424@kernel.org>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE0MDA1MyBTYWx0ZWRfX6YoEE+EyW//K
+ fcPYzu4Zyi5PmBgg7/WgIzrclrHmhOrcpNcUTkFXoeATMVZ2TnLjfJXvpUVjhotOUGyKo6yYndP
+ oa7KbUGil/FnDBMSm8KJlM74Sh3Sfdt0cJ6pMa9fgRQUqy6+uz1HGC/F/7EzIhl41kyIDQMLWk9
+ xmWCL5wAfC15ybW4xBJVnw1OZ8oxeSv74kfq29DP/GjUY8AlA5QW3y0iazNJnDNVUejIYEU17PJ
+ G88uCMy0jnol9+ZEVAv+AvdUd7FAjUHTUW3rGN28JhOvgtRi24lYjg9RfzAfWac6EIvRR+VcLjA
+ Y+UKN8P6LV9dgzu2vMdkXrNvHtZXl6hYV0roqT/3XH6x7uDQRf/FJ2odFFkpqss037Sqnk7QzCs
+ AzkCt3AF8EKhLqV8hd6JqT78ddLyGP4X0l91kWuMkTDjIK8lJs/KKOojAU0JAEKQKFXI7pS4Q0a
+ 2ebfXSTJ7+WI7ep77mg==
+X-Proofpoint-GUID: CHtk4F1hPBu5ilWyVFS0a9akiTg4J6jx
+X-Authority-Analysis: v=2.4 cv=P6avFSAu c=1 sm=1 tr=0 ts=6acf8482 cx=c_pps
+ a=JIY1xp/sjQ9K5JH4t62bdg==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
+ a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=jeKYxtEjmYGD5WCmXysA:9
+ a=CjuIK1q_8ugA:10 a=cApNwXssEwYNTDXMzu4A:9 a=tNoRWFLymzeba-QzToBc:22
+X-Proofpoint-ORIG-GUID: CHtk4F1hPBu5ilWyVFS0a9akiTg4J6jx
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE0MDA1MyBTYWx0ZWRfX4nqvuY2K45TV
+ Nl0fZEzrKSYv7kLe7QWJl4pZm8C5JSoAsTaLsjd/udNSkLGAicK0oBB8AFCy9URM8S3VI81r6wI
+ mGGNbMbL/xmM66TzTY2SGYL5yYpsj7o=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-13_01,2026-10-09_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 clxscore=1015 impostorscore=0 malwarescore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610140053
 
---===============2179720693399677536==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+--q3kgqRgL7mAsQ/qT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> sched_ext: Use fetching atomics for cmask instead of a cmpxchg loop
+> Hi!
+>=20
+> This is an automated message. This series looks like a fix, but its
+> commit messages seem to be missing some information:
+>=20
+>  - How the issue was discovered, e.g. hit in production, hit during
+>    development, syzbot report, manual code inspection, LLM or static
+>    analysis tool scan.
 
-TL;DR: Commit message only: the riscv-without-Zacas claim looks impossible
-since arena needs Zacas, and "all four helpers" needing new JIT support holds
-only for LLVM >= 20.
+The issues have been reported by sashiko.
 
-> sched_ext: Use fetching atomics for cmask instead of a cmpxchg loop
->
-> cid.bpf.h implements cmask_set(), cmask_clear() and the test_and_
-> variants with a bounded cmpxchg loop, because the x86 BPF JIT used to
-> reject BPF_OR | BPF_FETCH and BPF_AND | BPF_FETCH on arena pointers.
->
-> The x86 JIT accepts them now, and the loop was only ever an x86
-> workaround, not a fallback for the JITs that still reject these. arm64
-> without LSE rejects every arena read-modify-write, CMPXCHG included, and
-> riscv without Zacas rejects only CMPXCHG, where a fetching OR or AND is
-> accepted and the loop is not.
->
-> Use the fetching atomics directly, and drop CMASK_CAS_TRIES along with
-> the error paths that could only be reached from the loop.
->
-> Clang emits the fetching form even when the result is unused, so all four
-> helpers now need an x86-64 kernel whose JIT accepts fetching AND/OR/XOR in
-> an arena; schedulers built from this header no longer load on older
-> x86-64 kernels. When the bit is already as wanted, the helpers now also
-> do a locked write of the unchanged value where the loop returned after a
-> plain load.
->
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+>=20
+>  - Whether the issue was actually triggered, or is only theoretical
+>    (e.g. found by code inspection). If it was triggered please include
+>    the symptoms, like the stack trace or error messages.
 
-The changelog says "riscv without Zacas rejects only CMPXCHG, where a
-fetching OR or AND is accepted and the loop is not."  Can that configuration
-exist?
+The issues are real bugs spotted by sashiko.
 
-On riscv, bpf_jit_supports_arena() returns system_has_cmpxchg128(), which is
-only defined with CONFIG_RISCV_ISA_ZACAS && CONFIG_TOOLCHAIN_HAS_ZACAS and
-expands to riscv_has_extension_unlikely(RISCV_ISA_EXT_ZACAS).  Since commit
-536b523b4073 ("bpf, riscv: Make arena support depend on ZACAS"), without
-Zacas arena_map_alloc() returns -EOPNOTSUPP and the verifier rejects the
-program with "JIT doesn't support arena".
+>=20
+>  - What hardware the change was tested on. For driver fixes please
+>    mention the device (and if relevant firmware version) used for
+>    testing, or say that the change was not tested on real hardware.
 
-Before that commit, arena creation on non-Zacas riscv already failed with
--ENOMEM because of f8c67d8550ee ("bpf: Use kmalloc_nolock() in range tree").
-That predates the cmask helpers (a58e6b79b432), so no arena program loads on
-riscv without Zacas, and a fetching OR or AND is not accepted there either.
+I tested them on a Qualcomm RB3-gen2 board.
 
-The "if (insn->imm == BPF_CMPXCHG) return rv_ext_enabled(ZACAS);" check in
-riscv's bpf_jit_supports_insn() tests the same extension, so it cannot reject
-an arena CMPXCHG once arena is available.
+Regards,
+Lorenzo
 
-The main point, that the loop was never a fallback for other JITs, still
-looks right.  Should the riscv sentence be dropped, or reworded to say that
-riscv needs Zacas for arena at all?
+>=20
+> Please do not repost the series just to address the above. Instead,
+> reply to this email with the missing information, so that reviewers
+> can take it into account. If the series needs another revision for
+> other reasons, please include the information in the commit messages
+> then.
+>=20
+> The evaluation is done by an LLM so it may be wrong, if you think
+> that is the case please reply and explain.
 
-The changelog also says "Clang emits the fetching form even when the result
-is unused, so all four helpers now need an x86-64 kernel whose JIT accepts
-fetching AND/OR/XOR in an arena."  Is that true for every supported clang?
+--q3kgqRgL7mAsQ/qT
+Content-Type: application/pgp-signature; name=signature.asc
 
-Commit 2897b1e2a2f4 ("selftests/bpf: Fix arena_atomics failure due to llvm
-change") records that only LLVM PR 106494 (LLVM 20) made
-__sync_fetch_and_{and,or,xor}() emit atomic_fetch_*() when the return value
-is unused.  Older LLVM, including LLVM 19 which already has the
-addr_space_cast support that __arena needs, rewrites unused-result fetches
-into the non-fetching BPF_AND/BPF_OR atomics, and tools/sched_ext/README.md
-still lists clang >= 16.0.0.
+-----BEGIN PGP SIGNATURE-----
 
-With such a clang, cmask_set() and cmask_clear() would compile to the
-non-fetching form:
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCas+EfwAKCRA6cBh0uS2t
+rHLiAPoDfKUfclyNbJe2zYWQCf+joNgROzCH1Sw+dJSGo0Hy/wD+JduogxPwQFL2
+qb5cuv1UhjwryPGYdH+CM1gOy0VEIAw=
+=E36V
+-----END PGP SIGNATURE-----
 
-    __sync_fetch_and_or(__cmask_word(cid, m), BIT_U64(cid & 63));
-
-which the x86 JIT already accepted in an arena before this series.  Only
-the test_and_set and test_and_clear helpers would strictly need the new
-JIT support on those toolchains.
-
-The "schedulers no longer load on older x86-64 kernels" conclusion still
-holds for scx_qmap, which uses cmask_test_and_clear() in
-pick_direct_dispatch_cid().  Would it be more accurate to say "with
-LLVM >= 20" before "all four helpers"?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38567454417
---===============2179720693399677536==--
+--q3kgqRgL7mAsQ/qT--
