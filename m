@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C6956C639;
-	Wed, 14 Oct 2026 18:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987FC56E05B;
+	Wed, 14 Oct 2026 18:46:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792003590; cv=none; b=lPV/om55gG1j16sH23PLFgAT61Vo52xViMRdDWBFjfEWo8yIy8DWWTxqPaiPbLBCIoQMqESp18m6KctFIX+LfdmoaCzntSr1Ls95YYzcgs6aUhfCOmZoZxpX3fKrMXUjd3I3YXw8ZrvQf8n6PSDmp7LSqlbKWwFbWCLtWj9PHwA=
+	t=1792003592; cv=none; b=nroVVvYoZUSb8qTyS1XqD5Y+4AHPBp7wbRch/82g1e13k4abtiy3qG3nSkhn8I1JYbPaCY5Rb9HNimhPnr9I6RaKqA16DGcPweVpVVjYkl5ztXDtA+LNlMVso8CqhrUpJq7KTN5hlXQ74ujDcDeFzZkxiypkb/EMJQoCFfLJTZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792003590; c=relaxed/simple;
-	bh=lUE8XQtoWyQkuuiiT1EGHZoucZ6Tx3SUwt543PkYV04=;
+	s=arc-20240116; t=1792003592; c=relaxed/simple;
+	bh=vH5TAa1UL+7nwRAZ3OOnSb3h7bgtZeCuuPZfCxaqL9E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LQTYrKpTR56gLzjh72FcCW6qOYbA2CRRQe8jr1R713C3uzg3adcH+YySNrrFQaWqnZ4QWqHGCv2KQzOccaHCDnnk986G+yMxi4GMDDLa967eS63IzbXZQIInJOWpNqoB2QBetFxL1vGLFHCBhXbNQ1HfqV1t5tlLJ5i2xnGlc4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SftybW+B; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=a/8k/twXwSxVQvIsFVoKAJNJ1qhLbe8eVOI09HSyEjE8dv8GADv/qDsi5FqX9zSlo0YSjqIO7EeviD4nTPHY2KoWD3X0OR9hRhoBXwklW/P6myUmmh3Ukam8c8VhsJsVOykDiVz9iFhf62Zl4ByIC6UldsHPtMlCw89CdybAkLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MaOoQ6iZ; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SftybW+B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MaOoQ6iZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792003588; x=1823539588;
+  t=1792003591; x=1823539591;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lUE8XQtoWyQkuuiiT1EGHZoucZ6Tx3SUwt543PkYV04=;
-  b=SftybW+BuRMH1AW0169LvdNfpwPyzySUC3gHXB2OTU8Xtgv2Mwxy+Y0+
-   2b7+23QHMfItG0McfJ1BorcU8eg4sBYmVI+5QU+71he1arO02CIkIQBLn
-   YrYdUKpCtD1W9ewSrGh9KAaJHvQ7pkj0DEgCoe5EtGriaiQnzC8no4RLZ
-   yvVpGdnKAMi5poGf1SrPOgQ6wtFMlxJPLLxb2C4/DtoWXD9GX2iIFnhu+
-   58al4W0RJCuGxYO7Ns1zFopgbaqwNiV5FBy3mHQpz/s6oL/eul3zBAxO2
-   VkcxyMNhRquc10x/dv+KTNlbrAW7gf3kZbekyQnxChE+cdnO5mOQsviYG
-   A==;
-X-CSE-ConnectionGUID: cDBu22XbRVi/0uv4Z99Vgw==
-X-CSE-MsgGUID: hBbK99tARA+5fQzuh9cuxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="767374"
+  bh=vH5TAa1UL+7nwRAZ3OOnSb3h7bgtZeCuuPZfCxaqL9E=;
+  b=MaOoQ6iZYP8/siFdYuuIjhunxO9sffmC+vNYM84Lr/Aqoa6c5PrGtg30
+   TvAlwDmPQMfiDjqlOMS1pLdsykvXYSqK+xpbGVFicWQa87B5m8zu+gi4M
+   mFwID9dohix3FeKOBpF3U03vh2RPUxtB5cqgTwy+j0jVDI6go8PGf4frO
+   d4rKzSK9sBlWmyJZ3yNM0+KmLeu1rxSX944ORX0aUL/dPfwAvNyArgB2U
+   TgecbbyNoeAjZiJNYMnzrWr5cWj/7lOStpl+gdv66IkLY4NTAF22y5xns
+   s9VzdwFmIVGvmW+XRH37jbkGM2MfINEYJvfGwfR4vqIoDDfkGM96cYfRm
+   w==;
+X-CSE-ConnectionGUID: zQjwvVDPRoaWdvqa56vvDQ==
+X-CSE-MsgGUID: 5tescyB8T52jfijzXOAqAw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="767402"
 X-IronPort-AV: E=Sophos;i="6.27,158,1787036400"; 
-   d="scan'208";a="767374"
+   d="scan'208";a="767402"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 11:46:28 -0700
-X-CSE-ConnectionGUID: +ohTrm2DSI2oTK4jW8LYbg==
-X-CSE-MsgGUID: 8XpEYVoxQ3mETyKePQVrdg==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 11:46:30 -0700
+X-CSE-ConnectionGUID: HwR12hI9Q0SFaKTOhYkBaQ==
+X-CSE-MsgGUID: VFkXaNZ0T6+EJROxS0UBvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,158,1787036400"; 
-   d="scan'208";a="1420846"
+   d="scan'208";a="1420853"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa009.jf.intel.com with ESMTP; 14 Oct 2026 11:46:25 -0700
+  by orviesa009.jf.intel.com with ESMTP; 14 Oct 2026 11:46:28 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: bpf@vger.kernel.org,
 	kerneljasonxing@gmail.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v3 net-next 13/15] selftests: xsk: list the hardware test cases
-Date: Wed, 14 Oct 2026 20:45:37 +0200
-Message-Id: <20261014184539.774708-14-maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 net-next 14/15] selftests: drv-net: test AF_XDP zero-copy with an SKB peer
+Date: Wed, 14 Oct 2026 20:45:38 +0200
+Message-Id: <20261014184539.774708-15-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20261014184539.774708-1-maciej.fijalkowski@intel.com>
 References: <20261014184539.774708-1-maciej.fijalkowski@intel.com>
@@ -68,237 +68,410 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The hardware test that the next patch adds runs each case with its
-zero-copy endpoint as RX, as TX or as both. A list of the cases by ID
-in that runner would repeat the test table and silently go stale when a
-case is added or moved.
+Run the AF_XDP cases that a physical link can carry as pairs of
+xskxceiver processes: a zero-copy endpoint on the DUT and an SKB-mode
+endpoint on the remote, which needs no zero-copy support. xsk.py runs
+the cases that xskxceiver -L lists, in the DUT directions listed with
+them, as KTAP variants named <rx|tx>_<CASE>. test_xsk runs them with
+the DUT socket driven by interrupts and test_xsk_busy_poll with it busy
+polling, after xsk_setup_busy_poll() sets napi_defer_hard_irqs and
+gro_flush_timeout on the DUT so that SO_PREFER_BUSY_POLL keeps its IRQs
+masked, as on veth.
 
-Split tests[] into the tests that check both endpoint roles, those that
-check the RX endpoint, those that check the TX endpoint, and the
-generic ones, which a hardware run does not do: BIDIRECTIONAL swaps the
-directions, and the others skip in hardware mode. The test IDs follow
-the order of these arrays, so they change, and the runners take them
-from xskxceiver. The notes that came with ci_skip_tests[] go.
+main() sets up what the cases share once and undoes it after them, as
+defer() works only within a case, so xsk.py rejects -l and -h, on which
+ksft_run() exits without returning:
 
--L lists each hardware test once per role that it tests, as
-"ID: NAME rx" or "ID: NAME tx", while -l still lists every test by ID.
+- the DUT endpoint binds the last queue with both an RX and a TX ring,
+  which is taken out of RSS with ethtool -X equal and handed back with
+  ethtool -X default; a TX endpoint fills no RX buffers, so in
+  zero-copy mode its queue drops what it receives and TX cases need the
+  queue out of RSS as much as RX cases do. A DUT with fewer than two
+  such queues skips
+- an ntuple rule on each host steers the test UDP flow to the receiving
+  endpoint: the DUT queue in RX cases and queue 0 of the remote, where
+  its endpoint binds, in TX cases. A host without ntuple support skips.
+  Setting the rules once spares each TX case the ssh round trips of a
+  remote rule and toggles ntuple-filters, which resets some NICs, once
+  per run rather than per case
+- huge pages are reserved on both hosts, and the UNALIGNED cases are
+  left out without them
+- both endpoints get the DUT's xdp-zc-max-segs for TOO_MANY_FRAGS,
+  which is left out without multi-buffer zero-copy
+
+A DUT that does not advertise AF_XDP zero-copy skips the run.
+
+The remote endpoint listens on REMOTE_V4, and the DUT endpoint connects
+once the remote says on stderr that it listens. The control connection
+shares the tested link, where the XDP programs pass it to the stack.
+Killing an ssh client does not stop the command it runs, so timeout(1)
+bounds the remote endpoint, and the runner waits for it to exit before
+the case ends. The endpoints are waited for with the test_xsk.py
+helpers, so the output of one that does not pass is logged, timeouts
+included.
+
+The endpoints detach their XDP programs and restore the MTU and ring
+sizes when they exit; the runner detaches the programs and restores the
+MTU only after one fails or is killed. Each endpoint sees only its own
+device and mode, so one may skip a case that the other runs and then
+fails once its peer is gone; such a case is reported as skipped.
+
+xsk.py runs the xskxceiver that net/lib builds, which drv-net already
+installs, and copies it to the remote with cfg.remote.deploy(). Add
+xsk.py to TEST_PROGS and to the AF_XDP entry in MAINTAINERS,
+CONFIG_XDP_SOCKETS to the drivers/net/hw config, and the xskxceiver
+helpers to the drivers/net/hw library exports.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- .../testing/selftests/net/lib/xsk/test_xsk.h  | 67 +++++++++++++------
- .../selftests/net/lib/xsk/xskxceiver.c        | 47 ++++++++++---
- 2 files changed, 83 insertions(+), 31 deletions(-)
+ MAINTAINERS                                   |   1 +
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ tools/testing/selftests/drivers/net/hw/config |   1 +
+ .../drivers/net/hw/lib/py/__init__.py         |   5 +
+ tools/testing/selftests/drivers/net/hw/xsk.py | 263 ++++++++++++++++++
+ tools/testing/selftests/net/lib/Makefile      |   2 +-
+ 6 files changed, 272 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/xsk.py
 
-diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.h b/tools/testing/selftests/net/lib/xsk/test_xsk.h
-index 85c1eabbe7f0..f80e16d84a51 100644
---- a/tools/testing/selftests/net/lib/xsk/test_xsk.h
-+++ b/tools/testing/selftests/net/lib/xsk/test_xsk.h
-@@ -308,49 +308,72 @@ int testapp_xdp_shared_umem(struct test_spec *test);
- int worker_testapp_validate_rx(struct test_spec *test);
- int worker_testapp_validate_tx(struct test_spec *test);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6985a42bc09c..69c158d42877 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -29783,6 +29783,7 @@ F:	include/net/xsk_buff_pool.h
+ F:	include/uapi/linux/if_xdp.h
+ F:	include/uapi/linux/xdp_diag.h
+ F:	net/xdp/
++F:	tools/testing/selftests/drivers/net/hw/xsk.py
+ F:	tools/testing/selftests/net/*xsk*
+ F:	tools/testing/selftests/net/lib/py/xsk.py
+ F:	tools/testing/selftests/net/lib/xsk/
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index 18ce235a77f8..02e48e74f6c6 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -52,6 +52,7 @@ TEST_PROGS = \
+ 	uso.py \
+ 	vlan.py \
+ 	xdp_metadata.py \
++	xsk.py \
+ 	xsk_reconfig.py \
+ 	#
  
--static const struct test_spec tests[] = {
-+/* Tests by the role of the endpoint that they check. A hardware run, see
-+ * xskxceiver -L, gives that role to its zero-copy endpoint. It does not do
-+ * the generic tests: they swap the directions, which drivers/net/hw/xsk.py
-+ * sets up one at a time, or skip in hardware mode.
-+ */
-+static const struct test_spec hw_rx_tx_tests[] = {
- 	{.name = "SEND_RECEIVE", .test_func = testapp_send_receive},
- 	{.name = "SEND_RECEIVE_2K_FRAME", .test_func = testapp_send_receive_2k_frame},
- 	{.name = "SEND_RECEIVE_SINGLE_PKT", .test_func = testapp_single_pkt},
-+	{.name = "SEND_RECEIVE_9K_PACKETS", .test_func = testapp_send_receive_mb},
-+	{.name = "SEND_RECEIVE_UNALIGNED", .test_func = testapp_send_receive_unaligned},
-+	{.name = "SEND_RECEIVE_UNALIGNED_9K_PACKETS",
-+	 .test_func = testapp_send_receive_unaligned_mb},
-+	{.name = "HW_SW_MAX_RING_SIZE", .test_func = testapp_hw_sw_max_ring_size},
-+	{.name = "TEARDOWN", .test_func = testapp_teardown},
-+};
+diff --git a/tools/testing/selftests/drivers/net/hw/config b/tools/testing/selftests/drivers/net/hw/config
+index c6c2b64bb712..f28335170d6b 100644
+--- a/tools/testing/selftests/drivers/net/hw/config
++++ b/tools/testing/selftests/drivers/net/hw/config
+@@ -26,4 +26,5 @@ CONFIG_UDMABUF=y
+ CONFIG_USER_NS=y
+ CONFIG_VLAN_8021Q=m
+ CONFIG_VXLAN=y
++CONFIG_XDP_SOCKETS=y
+ CONFIG_XFRM_USER=y
+diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+index 4077f5f1a1be..aee6cdb4575b 100644
+--- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+@@ -26,6 +26,8 @@ try:
+         fd_read_timeout, ip, rand_port, rand_ports, wait_port_listen, \
+         wait_file, ctl_file_write, tool
+     from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
++    from net.lib.py import xsk_reserve_hugepages, xsk_release_hugepages, \
++        xsk_setup_busy_poll, xsk_wait_endpoint_exit, xsk_wait_listen
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+         ksft_setup, ksft_variants, KsftNamedVariant
+@@ -43,6 +45,9 @@ try:
+                "fd_read_timeout", "ip", "rand_port", "rand_ports",
+                "wait_port_listen", "wait_file", "ctl_file_write", "tool",
+                "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
++               "xsk_reserve_hugepages", "xsk_release_hugepages",
++               "xsk_setup_busy_poll", "xsk_wait_endpoint_exit",
++               "xsk_wait_listen",
+                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
+                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
+                "ksft_setup", "ksft_variants", "KsftNamedVariant",
+diff --git a/tools/testing/selftests/drivers/net/hw/xsk.py b/tools/testing/selftests/drivers/net/hw/xsk.py
+new file mode 100755
+index 000000000000..fd708bb3420d
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/xsk.py
+@@ -0,0 +1,263 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-+static const struct test_spec hw_rx_tests[] = {
- 	{.name = "POLL_RX", .test_func = testapp_poll_rx},
--	{.name = "POLL_TX", .test_func = testapp_poll_tx},
- 	{.name = "POLL_RXQ_FULL", .test_func = testapp_poll_rxq_tmout},
--	{.name = "POLL_TXQ_FULL", .test_func = testapp_poll_txq_tmout},
--	{.name = "ALIGNED_INV_DESC", .test_func = testapp_aligned_inv_desc},
--	{.name = "ALIGNED_INV_DESC_2K_FRAME_SIZE", .test_func = testapp_aligned_inv_desc_2k_frame},
- 	{.name = "UMEM_HEADROOM", .test_func = testapp_headroom},
--	{.name = "BIDIRECTIONAL", .test_func = testapp_bidirectional},
--	{.name = "STAT_RX_DROPPED", .test_func = testapp_stats_rx_dropped},
--	{.name = "STAT_TX_INVALID", .test_func = testapp_stats_tx_invalid_descs},
- 	{.name = "STAT_RX_FULL", .test_func = testapp_stats_rx_full},
- 	{.name = "STAT_FILL_EMPTY", .test_func = testapp_stats_fill_empty},
- 	{.name = "XDP_PROG_CLEANUP", .test_func = testapp_xdp_prog_cleanup},
- 	{.name = "XDP_DROP_HALF", .test_func = testapp_xdp_drop},
--	{.name = "XDP_SHARED_UMEM", .test_func = testapp_xdp_shared_umem},
- 	{.name = "XDP_METADATA_COPY", .test_func = testapp_xdp_metadata},
- 	{.name = "XDP_METADATA_COPY_MULTI_BUFF", .test_func = testapp_xdp_metadata_mb},
--	{.name = "ALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_aligned_inv_desc_mb},
--	{.name = "TOO_MANY_FRAGS", .test_func = testapp_too_many_frags},
- 	{.name = "XDP_ADJUST_TAIL_SHRINK", .test_func = testapp_adjust_tail_shrink},
--	{.name = "TX_QUEUE_CONSUMER", .test_func = testapp_tx_queue_consumer},
--	/* Flaky tests */
- 	{.name = "XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF", .test_func = testapp_adjust_tail_shrink_mb},
- 	{.name = "XDP_ADJUST_TAIL_GROW", .test_func = testapp_adjust_tail_grow},
- 	{.name = "XDP_ADJUST_TAIL_GROW_MULTI_BUFF", .test_func = testapp_adjust_tail_grow_mb},
--	{.name = "SEND_RECEIVE_9K_PACKETS", .test_func = testapp_send_receive_mb},
--	/* Tests with huge page dependency */
--	{.name = "SEND_RECEIVE_UNALIGNED", .test_func = testapp_send_receive_unaligned},
-+};
++"""
++AF_XDP zero-copy tests against an SKB-mode peer.
 +
-+static const struct test_spec hw_tx_tests[] = {
-+	{.name = "POLL_TX", .test_func = testapp_poll_tx},
-+	{.name = "POLL_TXQ_FULL", .test_func = testapp_poll_txq_tmout},
-+	{.name = "ALIGNED_INV_DESC", .test_func = testapp_aligned_inv_desc},
-+	{.name = "ALIGNED_INV_DESC_2K_FRAME_SIZE", .test_func = testapp_aligned_inv_desc_2k_frame},
-+	{.name = "STAT_TX_INVALID", .test_func = testapp_stats_tx_invalid_descs},
-+	{.name = "ALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_aligned_inv_desc_mb},
-+	{.name = "TOO_MANY_FRAGS", .test_func = testapp_too_many_frags},
- 	{.name = "UNALIGNED_INV_DESC", .test_func = testapp_unaligned_inv_desc},
- 	{.name = "UNALIGNED_INV_DESC_4001_FRAME_SIZE",
- 	 .test_func = testapp_unaligned_inv_desc_4001_frame},
--	{.name = "SEND_RECEIVE_UNALIGNED_9K_PACKETS",
--	 .test_func = testapp_send_receive_unaligned_mb},
- 	{.name = "UNALIGNED_INV_DESC_MULTI_BUFF", .test_func = testapp_unaligned_inv_desc_mb},
--	/* Test with HW ring size dependency */
- 	{.name = "HW_SW_MIN_RING_SIZE", .test_func = testapp_hw_sw_min_ring_size},
--	{.name = "HW_SW_MAX_RING_SIZE", .test_func = testapp_hw_sw_max_ring_size},
--	/* Too long test */
--	{.name = "TEARDOWN", .test_func = testapp_teardown},
-+};
++Each case runs a zero-copy xskxceiver endpoint on NETIF and an SKB-mode one
++on the remote interface. The remote endpoint listens on a TCP control port
++on REMOTE_V4, and the DUT endpoint connects to it once the remote says on
++stderr that it listens. The control connection shares the tested link, and
++the XDP programs of both endpoints pass it to the stack.
 +
-+static const struct test_spec generic_tests[] = {
-+	{.name = "BIDIRECTIONAL", .test_func = testapp_bidirectional},
-+	{.name = "STAT_RX_DROPPED", .test_func = testapp_stats_rx_dropped},
-+	{.name = "XDP_SHARED_UMEM", .test_func = testapp_xdp_shared_umem},
-+	{.name = "TX_QUEUE_CONSUMER", .test_func = testapp_tx_queue_consumer},
-+};
++The DUT endpoint binds to the last queue and the remote endpoint to queue
++0. Before the cases run, main() takes the DUT queue out of RSS and adds an
++ntuple filter on each host that steers the test UDP flow to the queue of
++the receiving endpoint, and it undoes that after them.
 +
-+/* A test ID is the index of the test in these arrays taken in order. */
-+static const struct test_group {
-+	const struct test_spec *tests;
-+	u32 nb_tests;
-+	bool hw_rx;
-+	bool hw_tx;
-+} test_groups[] = {
-+	{hw_rx_tx_tests, ARRAY_SIZE(hw_rx_tx_tests), true, true},
-+	{hw_rx_tests, ARRAY_SIZE(hw_rx_tests), true, false},
-+	{hw_tx_tests, ARRAY_SIZE(hw_tx_tests), false, true},
-+	{generic_tests, ARRAY_SIZE(generic_tests), false, false},
- };
- 
- 
-diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-index 7044822f23c0..7705a9f2b7a1 100644
---- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-+++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-@@ -193,6 +193,7 @@ static struct option long_options[] = {
- 	{"verbose", no_argument, 0, 'v'},
- 	{"mode", required_argument, 0, 'm'},
- 	{"list", no_argument, 0, 'l'},
-+	{"list-hw", no_argument, 0, 'L'},
- 	{"test", required_argument, 0, 't'},
- 	{"endpoint", required_argument, 0, 'e'},
- 	{"peer", required_argument, 0, 'p'},
-@@ -219,6 +220,7 @@ static void print_usage(char **argv)
- 		"  -b, --busy-poll      Enable busy poll\n"
- 		"  -m, --mode           Mode to run: skb, drv or zc\n"
- 		"  -l, --list           List all available tests\n"
-+		"  -L, --list-hw        List hardware tests and the roles they test\n"
- 		"  -t, --test           Test case to run, a number from -l\n"
- 		"  -e, --endpoint       Role of this endpoint: rx or tx\n"
- 		"  -p, --peer           Control host: IPv4/IPv6 address or hostname\n"
-@@ -263,13 +265,38 @@ static void bind_iface(struct ifobject *ifobj, const char *ifname, char **argv)
- 	ifobj->orig_mtu = ifobj->dev_mtu;
- }
- 
--static void print_tests(void)
-+/* List each test, or each hardware test once per role it tests. */
-+static void print_tests(bool hw)
-+{
-+	const struct test_group *group;
-+	u32 i, j, id = 0;
++test_xsk runs each case that "xskxceiver -L" lists, in each DUT direction
++listed with it, with the DUT endpoint driven by interrupts, and
++test_xsk_busy_poll runs them again with the DUT endpoint busy polling. The
++variant name starts with the direction of the DUT endpoint. UNALIGNED cases
++are left out without huge pages on both hosts, and TOO_MANY_FRAGS without
++multi-buffer zero-copy on the DUT.
++"""
 +
-+	printf("%s:\n", hw ? "Hardware tests" : "Tests");
-+	for (i = 0; i < ARRAY_SIZE(test_groups); i++) {
-+		group = &test_groups[i];
-+		for (j = 0; j < group->nb_tests; j++, id++) {
-+			const char *name = group->tests[j].name;
++import re
++import shlex
++import sys
 +
-+			if (!hw)
-+				printf("%u: %s\n", id, name);
-+			if (hw && group->hw_rx)
-+				printf("%u: %s rx\n", id, name);
-+			if (hw && group->hw_tx)
-+				printf("%u: %s tx\n", id, name);
-+		}
-+	}
-+}
++from lib.py import (EthtoolFamily, KsftFailEx, KsftNamedVariant, KsftSkipEx,
++                    NetdevFamily, NetDrvEpEnv, cmd, defer, ethtool, ip,
++                    ksft_eq, ksft_exit, ksft_run, ksft_variants, rand_port,
++                    xsk_release_hugepages, xsk_reserve_hugepages,
++                    xsk_setup_busy_poll, xsk_wait_endpoint_exit,
++                    xsk_wait_listen)
 +
-+static const struct test_spec *find_test(u32 id)
- {
- 	u32 i;
++CASE_TIMEOUT = 120
++# xskxceiver waits as long for its peer to connect.
++LISTEN_TIMEOUT = 30
++# Killing ssh leaves the remote endpoint running, so timeout(1) bounds it.
++REMOTE_TIMEOUT = LISTEN_TIMEOUT + CASE_TIMEOUT
++SKIP_CODE = 4
++
++
++def _get_cases(cfg):
++    """
++    each test case from xskxceiver -L comes out in a form below:
++    0: SEND_RECEIVE rx
++    0: SEND_RECEIVE tx
++    """
++    ret = []
++    out = cmd([str(cfg.bin_local), "-L"]).stdout
++    cases = re.findall(r"^(\d+): (\w+) (rx|tx)$", out, re.MULTILINE)
++    for test_id, name, direction in cases:
++        if "UNALIGNED" in name and not cfg.hugepages:
++            continue
++        if "TOO_MANY_FRAGS" in name and cfg.max_frags <= 1:
++            continue
++        ret.append(KsftNamedVariant(f"{direction}_{name}", direction,
++                                    int(test_id)))
++    return ret
++
++
++def _reserve_queue(cfg):
++    """Take the last queue with both an RX and a TX ring out of RSS. A TX
++    endpoint fills no RX buffers, so in zero-copy mode its queue drops what
++    it receives, the control connection included."""
++    ch = cfg.ethnl.channels_get({"header": {"dev-index": cfg.ifindex}})
++    count = ch.get("combined-count", 0) + min(ch.get("rx-count", 0),
++                                              ch.get("tx-count", 0))
++    if count < 2:
++        return None
++    queue = count - 1
++    ethtool(f"-X {cfg.ifname} equal {queue}")
++    return queue
++
++
++def _steer_udp(cfg, ifname, port, queue, host=None):
++    """Steer the test flow to queue, return False if ifname cannot."""
++    ntuple = ethtool(f"-k {ifname}", json=True, host=host)[0]["ntuple-filters"]
++    if not ntuple["active"]:
++        if ntuple["fixed"]:
++            print(f"1..0 # SKIP {ifname} does not support ntuple-filters")
++            return False
++
++        ethtool(f"-K {ifname} ntuple-filters on", host=host)
++
++    out = ethtool(f"-N {ifname} flow-type udp4 dst-port {port} action {queue}",
++                  host=host).stdout
++    rule = re.search(r"ID (\d+)", out).group(1)
++    cfg.rules.append((host, ifname, rule, ntuple["active"]))
++    return True
++
++
++def _unsteer_udp(cfg):
++    for host, ifname, rule, ntuple in cfg.rules:
++        ethtool(f"-N {ifname} delete {rule}", host=host)
++        if not ntuple:
++            ethtool(f"-K {ifname} ntuple-filters off", host=host)
++
++
++def _setup(cfg, busy_poll):
++    for link in (cfg.dev, cfg.remote_dev):
++        if "xdp" in link:
++            raise KsftSkipEx(f"{link['ifname']} already has an XDP program")
++    if busy_poll:
++        xsk_setup_busy_poll(cfg.ifname)
++
++    # Defers run in reverse, so the XDP programs, which can cap the MTU, go
++    # first.
++    fallbacks = [
++        defer(ip, f"link set dev {cfg.ifname} mtu {cfg.dev['mtu']}"),
++        defer(ip, f"link set dev {cfg.remote_ifname} "
++                  f"mtu {cfg.remote_dev['mtu']}", host=cfg.remote),
++        defer(ip, f"link set dev {cfg.ifname} xdpdrv off"),
++        defer(ip, f"link set dev {cfg.remote_ifname} xdpgeneric off",
++              host=cfg.remote),
++    ]
++    return fallbacks
++
++
++def _fixup_args(cfg, direction, test_id, ctrl_port):
++    src, dst = cfg.addr_v["4"], cfg.remote_addr_v["4"]
++    if direction == "rx":
++        src, dst = dst, src
++    cfg.args[cfg.args.index("-t") + 1] = str(test_id)
++    cfg.args[cfg.args.index("-P") + 1] = str(ctrl_port)
++    cfg.args[cfg.args.index("--udp-src") + 1] = src
++    cfg.args[cfg.args.index("--udp-dst") + 1] = dst
++
++
++def _run(cfg, local_args, remote_args, ctrl_port):
++    """Start the remote endpoint, and the DUT one once the remote listens.
++    Return their exit codes, None for a DUT endpoint that did not start."""
++    remote = cmd(shlex.join(remote_args), host=cfg.remote, background=True,
++                 fail=False)
++    head = ""
++    dut_ret = None
++    try:
++        head, listening = xsk_wait_listen(remote, ctrl_port, LISTEN_TIMEOUT)
++        if listening:
++            local = cmd(local_args, background=True, fail=False)
++            dut_ret = xsk_wait_endpoint_exit(local, "dut", CASE_TIMEOUT)
++    finally:
++        # Even if the DUT endpoint did not run, so that the remote one is
++        # gone before the next case starts.
++        remote_ret = xsk_wait_endpoint_exit(remote, "remote", REMOTE_TIMEOUT,
++                                            head)
++    return dut_ret, remote_ret
++
++
++def _test(cfg, direction, test_id, busy_poll):
++    cfg.require_ipver("4")
++    ctrl_port = rand_port()
++
++    fallbacks = _setup(cfg, busy_poll)
++    _fixup_args(cfg, direction, test_id, ctrl_port)
++
++    remote = [*cfg.remote_args,
++              "-e", "tx" if direction == "rx" else "rx",
++              *cfg.args]
++    local = [*cfg.local_args,
++             "-e", direction,
++             *(["-b"] if busy_poll else []),
++             *cfg.args]
++
++    dut_ret, remote_ret = _run(cfg, local, remote, ctrl_port)
++    if dut_ret is None:
++        raise KsftFailEx(f"remote endpoint did not listen on port {ctrl_port}")
++    if {dut_ret, remote_ret} <= {0, SKIP_CODE}:
++        # Both endpoints detached their XDP programs and restored the MTU.
++        for fallback in fallbacks:
++            fallback.cancel()
++    # Each endpoint sees only its own device and mode, so one of them can
++    # skip a case that the other runs, which then fails as its peer is gone.
++    if SKIP_CODE in (dut_ret, remote_ret):
++        raise KsftSkipEx("xskxceiver skipped the case")
++    ksft_eq(dut_ret, 0, "DUT endpoint exit code")
++    ksft_eq(remote_ret, 0, "remote endpoint exit code")
++
++
++def test_xsk(cfg, direction, test_id):
++    _test(cfg, direction, test_id, busy_poll=False)
++
++
++def test_xsk_busy_poll(cfg, direction, test_id):
++    _test(cfg, direction, test_id, busy_poll=True)
++
++
++def main():
++    # ksft_run() exits on -l and -h before main() can undo the setup.
++    if "-l" in sys.argv or "-h" in sys.argv:
++        sys.exit(f"{sys.argv[0]}: -l and -h are not supported")
++
++    with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
++        cfg.bin_local = cfg.net_lib_dir / "xskxceiver"
++        if not cfg.bin_local.exists():
++            print(f"1..0 # SKIP {cfg.bin_local} was not built")
++            sys.exit(SKIP_CODE)
++
++        cfg.ethnl = EthtoolFamily()
++        cfg.netnl = NetdevFamily()
++
++        dev = cfg.netnl.dev_get({"ifindex": cfg.ifindex})
++        if "xsk-zerocopy" not in dev["xdp-features"]:
++            print("1..0 # SKIP NIC does not advertise AF_XDP zero-copy")
++            sys.exit(SKIP_CODE)
++
++        cfg.max_frags = dev.get("xdp-zc-max-segs", 1)
++        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
++
++        cfg.queue = _reserve_queue(cfg)
++        if cfg.queue is None:
++            print("1..0 # SKIP Test requires NETIF with at least 2 channels")
++            sys.exit(SKIP_CODE)
++        cfg.udp_port = rand_port()
++        cfg.rules = []
++
++        if not _steer_udp(cfg, cfg.ifname, cfg.udp_port, cfg.queue) or \
++           not _steer_udp(cfg, cfg.remote_ifname, cfg.udp_port, 0, cfg.remote):
++            _unsteer_udp(cfg)
++            ethtool(f"-X {cfg.ifname} default")
++            sys.exit(SKIP_CODE)
++
++        saved_hugepages = []
++        cfg.hugepages = (xsk_reserve_hugepages(saved_hugepages) and
++                         xsk_reserve_hugepages(saved_hugepages, cfg.remote))
++
++        cases = _get_cases(cfg)
++
++        # _fixup_args() sets the options that differ between the cases.
++        cfg.args = ["--hw",
++                    "-p", cfg.remote_addr_v["4"],
++                    "--max-frags", str(cfg.max_frags),
++                    "--udp-src", cfg.addr_v["4"],
++                    "--udp-dst", cfg.remote_addr_v["4"],
++                    "--udp-port", str(cfg.udp_port),
++                    "-t", "0",
++                    "-P", "0"]
++        cfg.remote_args = ["timeout", str(REMOTE_TIMEOUT),
++                           str(cfg.bin_remote),
++                           "-i", cfg.remote_ifname,
++                           "-m", "skb",
++                           "--listen",
++                           "--queue", "0",
++                           "--peer-mac", cfg.dev["address"]]
++        cfg.local_args = [str(cfg.bin_local),
++                          "-i", cfg.ifname,
++                          "-m", "zc",
++                          "--queue", str(cfg.queue),
++                          "--peer-mac", cfg.remote_dev["address"]]
++
++        ksft_run([ksft_variants(cases)(test_xsk),
++                  ksft_variants(cases)(test_xsk_busy_poll)], args=(cfg,))
++
++        xsk_release_hugepages(saved_hugepages)
++        _unsteer_udp(cfg)
++        ethtool(f"-X {cfg.ifname} default")
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
+index 49dac776202b..c2524cacffd3 100644
+--- a/tools/testing/selftests/net/lib/Makefile
++++ b/tools/testing/selftests/net/lib/Makefile
+@@ -34,7 +34,7 @@ include ../../lib.mk
  
--	printf("Tests:\n");
--	for (i = 0; i < ARRAY_SIZE(tests); i++)
--		printf("%u: %s\n", i, tests[i].name);
-+	for (i = 0; i < ARRAY_SIZE(test_groups); i++) {
-+		if (id < test_groups[i].nb_tests)
-+			return &test_groups[i].tests[id];
-+		id -= test_groups[i].nb_tests;
-+	}
-+	return NULL;
- }
+ include ../bpf.mk
  
- static u32 parse_u32(const char *arg, u32 min, u32 max, char **argv)
-@@ -292,7 +319,7 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
- 	opterr = 0;
- 
- 	for (;;) {
--		c = getopt_long(argc, argv, "i:vbm:lt:e:p:P:", long_options, &option_index);
-+		c = getopt_long(argc, argv, "i:vbm:lLt:e:p:P:", long_options, &option_index);
- 		if (c == -1)
- 			break;
- 
-@@ -318,7 +345,8 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
- 				print_usage(argv);
- 			break;
- 		case 'l':
--			print_tests();
-+		case 'L':
-+			print_tests(c == 'L');
- 			ksft_exit_pass();
- 			break;
- 		case 't':
-@@ -529,8 +557,8 @@ static int setup_peer(struct ifobject *local, struct ifobject *shadow,
- int main(int argc, char **argv)
- {
- 	u32 cache_line_size, max_frags, umem_tailroom;
--	const size_t total_tests = ARRAY_SIZE(tests);
- 	struct ifobject *ifobj_tx, *ifobj_rx;
-+	const struct test_spec *test_to_run;
- 	struct ifobject *shadow_ifobj;
- 	struct ifobject *local_ifobj;
- 	struct xsk_peer *peer = NULL;
-@@ -576,7 +604,8 @@ int main(int argc, char **argv)
- 	ifobj_tx->caps.umem_tailroom = umem_tailroom;
- 	ifobj_rx->caps.umem_tailroom = umem_tailroom;
- 
--	if (opt_run_test != RUN_ALL_TESTS && opt_run_test >= total_tests) {
-+	test_to_run = find_test(opt_run_test);
-+	if (!test_to_run) {
- 		ksft_print_msg("Error: test %u does not exist.\n", opt_run_test);
- 		ksft_exit_xfail();
- 	}
-@@ -619,7 +648,7 @@ int main(int argc, char **argv)
- 	}
- 
- 	ksft_set_plan(1);
--	test_init(&test, ifobj_tx, ifobj_rx, opt_mode, &tests[opt_run_test]);
-+	test_init(&test, ifobj_tx, ifobj_rx, opt_mode, test_to_run);
- 	ret = run_pkt_test(&test);
- 
- out:
+-# AF_XDP test engine used by net/test_xsk.py.
++# AF_XDP test engine shared by net/test_xsk.py and drivers/net/hw/xsk.py.
+ XSK_DIR := xsk
+ XSK_BPF_OBJ := $(OUTPUT)/xsk_xdp_progs.bpf.o
+ XSK_SKEL := $(OUTPUT)/xsk_xdp_progs.skel.h
 -- 
 2.43.0
 
