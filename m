@@ -1,385 +1,253 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2126930567B
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 09:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7FE47CC85;
+	Wed, 14 Oct 2026 09:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791969309; cv=none; b=Mk4umibABxdyAaz2Ovl7J1m74rxI4XlpKtii/mDt1vmftKxqFI45E8M5nLEV7nf06JYmpvIWD3wQvJqXaD/hXL18LIOgRCRxJ/MS86z4XmJCYMUX5zgiSDc8jZgEKiQ7ZnSJjcXaBwELcS0RrwC0/4zDw9TsdhR9b6WKofwSJXM=
+	t=1791969339; cv=none; b=BMhmTi98J1XEBM+3MJ+tsOnGDTveZ7XWLp0K4irYzzFKEkES2xLTo0hG7hYughqkkYAQW08pvO6lr6JdGc811ACzxUWnoAhPyGMQXpqaroISxKs7XnrxBCfUyzBDAzM7Nk19LcwrC2peX1qt296hk7cwXTucxg7x5xgD4GBvafM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791969309; c=relaxed/simple;
-	bh=n/9RWL+fef8SAhMiLYWfXVdWkCY58HAIxy22NsSosKU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jjye7cLkVe+3ENbNx70xE2DLIn6U6pXikA5Fy2fLqvIyY+/07G0gXtPdUeWn0ODh+2kpEKg0VUkdiRWdM4zU2qynEsX5dPviaKc1n0vjYplvSUoXJVvu6Rrg2sMnLIhld1DeXZDWDwfyj3gAy3QReACyI5o745or+bZlxawyBUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c/kuUkk4; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791969339; c=relaxed/simple;
+	bh=Bv8Dph7SjRk/vgI14x3F23k11zlE4wv2Dx3a0aCy45s=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PJptIHF6+UNKl0T9dZGMr4SSZMhKMpASdxE0sEFKbG+6Idsyp9Hiw5CrZKzM3MVe9U3K/4q6XTD+3Ta99AQUupxGtecLAKQwldzGiJk8V2yRA25gguszytTWkY9uZ6PvqIpXRySVCUvQjwzkFBO3GRgIG6OwODtB7faZpCQdwQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JgGCTGs+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c/kuUkk4"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-48870973bddso2298948f8f.1
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 02:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791969299; x=1792574099; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lGzMW0CtEG0NM6Y2SKTe2qhn9I32+IUrcIo6b1kNe9c=;
-        b=c/kuUkk4PEguPMlEXx7u01dPI2FrlB52lfk809vSRl086xK9uQ7ci7ZLy/KFMcLRsd
-         XEtX7ArSzZbaNKn7PUlsvQto7Kdg8OeArVNapanyXWh8xgbvcxLjJdMDg26p/K9tix60
-         D2e+aym+v860/GnVylRmPghrDxtdADm2bpV2COfZlXGyUr6R+YL/3QpiK7vos6aiOOno
-         IyO3tlo9jfHdtrEF2ulklaHftt+p1WTwbr/LtFPTBbaxaS7oM5fK7OhiLBD8jxU+MODQ
-         UMcNKw5mnLMZocjJGDGLRM3D4f1CAAUOpvgkew8o7XmoXQ2Y1+HTxWr1+B3olmqaYEmy
-         9fyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791969299; x=1792574099;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lGzMW0CtEG0NM6Y2SKTe2qhn9I32+IUrcIo6b1kNe9c=;
-        b=DCwnMC4Iv1aWq3aOke+B3yKWZEplO8Yf/fPB42BganRWZeUKW0lewjvAhdDRzRGdhn
-         ZHECMCKvS8m97F7ebfHOXnEbGitG528eQJt7fuCcfIIiI1skVomXT8MIjNQeTs6JONJC
-         96tyz0dPqRY2DuFYJcGlhIkT8zBcJXuBkvUib69TIdx/X3aPwen0ngZp4TUEwZ0D/JG3
-         QtxAjDxNrsIGc5Gv8pTYKJZVGuqBqrEEgmt9h38uoDhejYgmIC1QQLXagfmDahiRIpSU
-         R39nTyfdhRmah5j2H7Ojaa/qtZ3H3Axk2bz6yjp2gm2EYQiU4HV94Tj5MJAU/HtmQwto
-         pl2A==
-X-Gm-Message-State: AFq9FYJkSC+0lB01kpYB8uQPrvLCXWgDsm0v/zE63YkJW4Zi5vnvL5KY
-	T/DP8De9FoDCY1I9goTQ7aPpHJRNZXIdIHHUrjSVoPU66MwVytkh+MjDxK+KE4M4/fvybw==
-X-Gm-Gg: AYBFou0hT4hX+rWMSAlKPgW0lqtS+ousWjonsNCbcXFpgWRwnMz0OgWEgdgRLipo6G7
-	qMC/aXhs1xPIvhZY65t+D9v50AmXb40S+vbDAG9mrMIWIzWmKzbEZ/ZSn+l/anJehjNPEZCI3n4
-	QQeHrbApAq1sMGZ3hMuZq+4+NdiwS9cYQ/7ErwER8iOVi8kAOi9rpM1lvtFIOl2paxClHDDGeUV
-	c7SJ2ntVqQHLIAZyLAiTsrBKoULUodHuGpC2VRxPF2dC5P0ysT6Bj0v4CGYs2eskaN7H5Td+zFs
-	AvJ9gP7FvLGffC9KTIVqlWK0oi1j1wCGBbvu+xEqCop+158nTkI5ag8ErscTtdbRn+5fv0DyLD5
-	tHcZC0e4R4zsqxdDBvHAAt2wkXJllx0PdYavRw9voUSiVpX7F4XYKVrOkJN2BAcKMisfSfsnCea
-	WdF25pFJeKtcgfAMIEq0HYetag6VGi9beRm0wNsDwDgxEyl4eMRKgz/R7C3j9pilace1NzhpZAx
-	7HSMMcTQgM/PLTul9rhN72yzbDiFSkfljvKjv47s7JEEg==
-X-Received: by 2002:a5d:6f08:0:b0:48d:bae5:41c with SMTP id ffacd0b85a97d-48dbae50634mr29150867f8f.17.1791969299086;
-        Wed, 14 Oct 2026 02:14:59 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48de0967beasm11592680f8f.7.2026.10.14.02.14.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 02:14:58 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	liamwisehart@meta.com,
-	martin.lau@linux.dev,
-	pabeni@redhat.com,
-	song@kernel.org,
-	netdev@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	ameryhung@gmail.com,
-	kuniyu@google.com,
-	memxor@gmail.com,
-	jiayuan.chen@linux.dev,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v3] bpf: allow ksock connect/send calls from wq
-Date: Wed, 14 Oct 2026 09:14:50 +0000
-Message-ID: <20261014091450.19107-1-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgGCTGs+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C894E1F000FF;
+	Wed, 14 Oct 2026 09:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791969336;
+	bh=dQGv2L9oxDJkrezTAHdZSn33xAxZl6B7e87tsu4RiJ4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=JgGCTGs+CNnovDIl5ImQr5GgxZ6Om8MVRlkzfZsSZ+APztc0DP/4st/hQ4tVmx9Gd
+	 ohFiw0Oo6PTMF50FO5rDIGpdjjdBIbNvIz/nR5WIJDPsw0uhAIyDwDqmAGiMcoiN7k
+	 gQlf0wBYihzQUZqCYqFEvN91QslAa3Lyx3ekyBw/3L7dNodyvEjxILHYzUY5+1FgAP
+	 Pt3KbZ94dfIkZGglKNSNZyNj0oMeKQDhf91ahX0zp83JlkEil5GlWu1UNGzGzyos7B
+	 U765zFiYqx90ryZ3h0jjsfr3QKUrAaWQ5Avv5EUZZ43sD/Dfie1XfsWU2GD6cebYcr
+	 f6NzSvWF5Exjg==
+Subject: Re: [PATCH net v3 1/2] net: stmmac: Disable NAPI before stopping Tx
+ queues in stmmac_xdp_release()
+From: netdev-bot+sashiko@kernel.org
+To: kurt@linutronix.de
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, edumazet@kernel.org,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, yoong.siang.song@intel.com, faizal.abdul.rahim@intel.com,
+ boon.leong.ong@intel.com, bigeasy@linutronix.de, maciej.fijalkowski@intel.com,
+ nb@tipi-net.de, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Date: Wed, 14 Oct 2026 09:15:34 +0000
+Message-ID: <179196933433.434549.18379831611245411576@kernel.org>
+In-Reply-To: <20261013-stmmac_xsk_crashes-v3-1-50fca7790af2@linutronix.de>
+References: <20261013-stmmac_xsk_crashes-v3-1-50fca7790af2@linutronix.de>
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-In the initial implementation in '7ae4eb14c5f9 ("bpf: Add ksock
-kfuncs")', it was decided to let the ksock kfuncs go through the LSM
-hooks instead of by-passing them, and thus to disallow the use of the
-kfuncs from asynchronous workqueues as the credentials would be
-different than the task context that triggered the kfuncs.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-After some discussions, in particular at Plumbers 2026 at the
-presentation introducing this new ksock API[^1], it was agreed that
-by-passing the LSM from socket created by BPF programs should be okay
-and thus that the process context switch from kthread executing the
-workqueues wouldn't be an issue.
+Critical: 0 · High: 1 · Medium: 1 · Low: 1 (1)
 
-For now, the ksock kfuncs still trigger the LSM hooks but we relax the
-constraint on not using the workqueues as it will be useful for users
-triggering connect() or send() from non-sleepable programs (like
-tracing, support will be extended in future patches).
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Also adapt test_ksock_wq() added in 'c93cbdb13f99 ("selftests/bpf: Add
-ksock test for async callback guard")' to test that the connect() and
-send() kfuncs are now allowed and work when called from workqueues.
+- [High] This patch adds a new race in stmmac_xdp_release()
+  (drivers/net/ethernet/stmicro/stmmac/stmmac_main.c).
+- [Medium] The fix still leaves a waker that runs after
+  netif_tx_disable().
+- [Low] Concern: the same Tx-ring free during an active stmmac_xmit() is
+  reachable through stmmac_xdp_enable_pool()/stmmac_xdp_disable_pool().
 
-Note that bpf_ksock_create() still checks for workqueue context
-execution and makes sure the current->nsproxy is defined as we rely on
-the network namespace to be defined (could be NULL in the case do_exit()
-was called on the task before the wq was scheduled) and to be the one
-from the task that triggered the SYSCALL bpf prog.
+Pre-existing issues:
+- [Low] Concern: stmmac_xdp_xmit() (ndo_xdp_xmit), driven by remote
+  devmap flushes, ignores the queue-stopped state and only checks…
 
-[^1]: https://lpc.events/event/20/contributions/2430/
-
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
-v2: https://lore.kernel.org/bpf/sashiko-outbox-170341@kernel.org/
-
- net/core/bpf_ksock.c                          | 27 +------
- .../selftests/bpf/prog_tests/ksock_wq.c       | 29 +++++--
- tools/testing/selftests/bpf/progs/ksock_wq.c  | 76 +++++++++++++++----
- 3 files changed, 91 insertions(+), 41 deletions(-)
-
-diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-index e9943aeeadd3..f74968397798 100644
---- a/net/core/bpf_ksock.c
-+++ b/net/core/bpf_ksock.c
-@@ -37,15 +37,6 @@ static void ksock_release_work_fn(struct work_struct *work)
- 	kfree(ks);
- }
-
--static bool bpf_ksock_has_user_task_context(void)
--{
--	/*
--	 * Task work can run from do_exit() after exit_nsproxy_namespaces()
--	 * cleared current->nsproxy, while current is still not a kthread.
--	 */
--	return !(current->flags & PF_KTHREAD) && current->nsproxy;
--}
--
- __bpf_kfunc_start_defs();
-
- /**
-@@ -59,7 +50,7 @@ __bpf_kfunc_start_defs();
-  * This function may sleep (sock_create), so it can only be used
-  * in sleepable BPF programs (SYSCALL).
-  * It cannot be called from a BPF workqueue callback because that callback
-- * does not retain the invoking task's namespace or security context.
-+ * does not retain the invoking task's namespace.
-  *
-  * @opts:	Pointer to struct bpf_ksock_create_opts with socket parameters.
-  * @opts__sz:	Size of the opts struct.
-@@ -73,13 +64,9 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
- 	struct bpf_ksock *ks;
- 	int err;
-
--	/*
--	 * sock_create() derives the network namespace, credentials, and cgroup
--	 * from current. Kernel threads, including BPF workqueue callbacks, do
--	 * not carry the context of the task that invoked the BPF program.
--	 */
--	if (!bpf_ksock_has_user_task_context()) {
--		err = -EOPNOTSUPP;
-+	/* sock_create() derives the network namespace from current. */
-+	if ((current->flags & PF_KTHREAD) || !current->nsproxy) {
-+		err = -EPERM;
- 		goto err_out;
- 	}
-
-@@ -165,9 +152,6 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
- 	struct sockaddr_storage sa;
- 	int addrlen;
-
--	if (!bpf_ksock_has_user_task_context())
--		return -EOPNOTSUPP;
--
- 	if (!addr || addr__sz != sizeof(*addr))
- 		return -EINVAL;
-
-@@ -247,9 +231,6 @@ __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
- 	};
- 	int ret;
-
--	if (!bpf_ksock_has_user_task_context())
--		return -EOPNOTSUPP;
--
- 	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
-
- 	return ret;
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-index d6dc20b8f95b..cb50f9a1be2e 100644
---- a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-@@ -4,6 +4,7 @@
- #include <unistd.h>
-
- #include "test_progs.h"
-+#include "network_helpers.h"
- #include "ksock_wq.skel.h"
-
- #define CALLBACK_WAIT_RETRIES 1000
-@@ -13,13 +14,22 @@ void test_ksock_wq(void)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, opts);
- 	struct ksock_wq *skel;
-+	char recv_data[sizeof(skel->data->send_data)];
- 	u32 callback_done;
--	int err, i;
-+	int err, i, port, rfd;
-
- 	skel = ksock_wq__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "ksock_wq open and load"))
- 		return;
-
-+	rfd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 1000);
-+	if (!ASSERT_OK_FD(rfd, "receiver socket"))
-+		goto out;
-+	port = get_socket_local_port(rfd);
-+	if (!ASSERT_GE(port, 0, "receiver port"))
-+		goto out;
-+	skel->bss->remote_port = port;
-+
- 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.ksock_wq_start),
- 				     &opts);
- 	if (!ASSERT_OK(err, "run ksock_wq_start"))
-@@ -28,18 +38,27 @@ void test_ksock_wq(void)
- 		goto out;
-
- 	for (i = 0; i < CALLBACK_WAIT_RETRIES; i++) {
--		if (__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE))
-+		if (__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE) == 2)
- 			break;
- 		usleep(CALLBACK_WAIT_US);
- 	}
- 	callback_done = __atomic_load_n(&skel->bss->callback_done,
- 					__ATOMIC_ACQUIRE);
--	if (!ASSERT_EQ(callback_done, 1, "workqueue callback completed"))
-+	if (!ASSERT_EQ(callback_done, 2, "workqueue callbacks completed"))
- 		goto out;
-
--	ASSERT_EQ(skel->bss->create_err, -EOPNOTSUPP,
--		  "workqueue create rejected");
-+	ASSERT_EQ(skel->bss->create_ret, -EPERM, "workqueue create rejected");
-+
-+	if (!ASSERT_EQ(skel->bss->connect_send_ret, sizeof(recv_data),
-+		       "workqueue send bytes"))
-+		goto out;
-+	err = recv(rfd, recv_data, sizeof(recv_data), 0);
-+	if (ASSERT_EQ(err, sizeof(recv_data), "recv len"))
-+		ASSERT_MEMEQ(recv_data, skel->data->send_data, sizeof(recv_data),
-+			     "payload match");
-
- out:
-+	if (rfd >= 0)
-+		close(rfd);
- 	ksock_wq__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/ksock_wq.c b/tools/testing/selftests/bpf/progs/ksock_wq.c
-index 16a1873d132e..290736e219e1 100644
---- a/tools/testing/selftests/bpf/progs/ksock_wq.c
-+++ b/tools/testing/selftests/bpf/progs/ksock_wq.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2026 Isovalent */
-
- #include "vmlinux.h"
-+#include <bpf/bpf_endian.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_experimental.h"
- #include "bpf_tracing_net.h"
-@@ -14,15 +15,19 @@ struct ksock_wq_value {
-
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__uint(max_entries, 1);
-+	__uint(max_entries, 2);
- 	__type(key, u32);
- 	__type(value, struct ksock_wq_value);
- } work_map SEC(".maps");
-
--int create_err;
-+char send_data[] = "hello from bpf workqueue";
-+
-+__be16 remote_port;
-+int connect_send_ret;
-+int create_ret;
- u32 callback_done;
-
--static int ksock_wq_callback(void *map, int *key, void *value)
-+static int ksock_wq_create(void *map, int *key, void *value)
- {
- 	struct bpf_ksock_create_opts opts = {
- 		.family = AF_INET,
-@@ -35,7 +40,32 @@ static int ksock_wq_callback(void *map, int *key, void *value)
- 	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
- 	if (ks)
- 		bpf_ksock_release(ks);
--	create_err = err;
-+	create_ret = err;
-+	__sync_fetch_and_add(&callback_done, 1);
-+	return 0;
-+}
-+
-+static int ksock_wq_connect_send(void *map, int *key, void *value)
-+{
-+	union bpf_ksock_addr addr = {
-+		.sin = {
-+			.sin_family = AF_INET,
-+			.sin_port = remote_port,
-+			.sin_addr.s_addr = bpf_htonl(0x7f000001),
-+		},
-+	};
-+	struct bpf_ksock *ks;
-+	int err = -ENOENT;
-+
-+	ks = ksock_ctx_get();
-+	if (!ks)
-+		goto out;
-+	err = bpf_ksock_connect(ks, &addr, sizeof(addr));
-+	if (!err)
-+		err = bpf_ksock_send(ks, send_data, sizeof(send_data));
-+	bpf_ksock_release(ks);
-+out:
-+	connect_send_ret = err;
- 	__sync_fetch_and_add(&callback_done, 1);
- 	return 0;
- }
-@@ -43,20 +73,40 @@ static int ksock_wq_callback(void *map, int *key, void *value)
- SEC("syscall")
- int ksock_wq_start(void *ctx)
- {
-+	struct bpf_ksock_create_opts opts = {
-+		.family = AF_INET,
-+		.type = SOCK_DGRAM,
-+		.protocol = IPPROTO_UDP,
-+	};
- 	struct ksock_wq_value *value;
--	u32 key = 0;
--	int err;
-+	struct bpf_ksock *ks;
-+	u64 key = 0;
-+	int err = 0;
-
--	value = bpf_map_lookup_elem(&work_map, &key);
--	if (!value)
--		return -ENOENT;
--	err = bpf_wq_init(&value->work, &work_map, 0);
--	if (err)
-+	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
-+	if (!ks)
- 		return err;
--	err = bpf_wq_set_callback(&value->work, ksock_wq_callback, 0);
-+	err = ksock_ctx_insert(ks);
- 	if (err)
- 		return err;
--	return bpf_wq_start(&value->work, 0);
-+	for (key = 0; key < 2; key++) {
-+		value = bpf_map_lookup_elem(&work_map, &key);
-+		if (!value)
-+			return -ENOENT;
-+		err = bpf_wq_init(&value->work, &work_map, 0);
-+		if (err)
-+			return err;
-+		if (key)
-+			err = bpf_wq_set_callback(&value->work, ksock_wq_create, 0);
-+		else
-+			err = bpf_wq_set_callback(&value->work, ksock_wq_connect_send, 0);
-+		if (err)
-+			return err;
-+		err = bpf_wq_start(&value->work, 0);
-+		if (err)
-+			return err;
-+	}
-+	return 0;
- }
-
- char __license[] SEC("license") = "GPL";
 --
-2.43.0
 
+net: stmmac: Disable NAPI before stopping Tx queues in stmmac_xdp_release()
+
+This patch reorders stmmac_xdp_release() so that NAPI is disabled and
+the Tx coalescing hrtimers are cancelled before netif_tx_disable() runs.
+The goal is to stop an in-flight Tx NAPI poll from waking the Tx queue
+via stmmac_tx_clean() while free_dma_desc_resources() releases the
+descriptor rings.
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index b837e8e27a352..2aa5a26954731 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -7132,15 +7132,15 @@ void stmmac_xdp_release(struct net_device *dev)
+>  	struct stmmac_priv *priv = netdev_priv(dev);
+>  	u8 chan;
+>  
+> -	/* Ensure tx function is not running */
+> -	netif_tx_disable(dev);
+> -
+>  	/* Disable NAPI process */
+>  	stmmac_disable_all_queues(priv);
+>  
+>  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+>  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+>  
+> +	/* Ensure tx function is not running */
+> +	netif_tx_disable(dev);
+
+[Severity: High]
+
+hrtimer_cancel() now runs before netif_tx_disable(). Can a concurrent
+stmmac_xmit() or stmmac_tso_xmit() re-arm txtimer after it has been
+cancelled?
+
+Both xmit paths end in stmmac_tx_timer_arm(). The check and the start
+there are not serialized against napi_disable() or hrtimer_cancel():
+
+stmmac_tx_timer_arm() {
+    ...
+	if (unlikely(!napi_is_scheduled(napi))) {
+		if (unlikely(!(hrtimer_active(&tx_q->txtimer))))
+			hrtimer_start(&tx_q->txtimer,
+				      STMMAC_COAL_TIMER(tx_coal_timer),
+				      HRTIMER_MODE_REL);
+    ...
+}
+
+One possible interleaving:
+
+CPU1 (stmmac_xmit, holds txq lock)    CPU0 (stmmac_xdp_release)
+napi_is_scheduled() == false
+                                      stmmac_disable_all_queues()
+                                      hrtimer_cancel() (timer inactive)
+hrtimer_active() == false
+hrtimer_start()
+                                      netif_tx_disable()
+                                        only waits for the txq lock
+
+The timer then stays armed. The default is 5000us, and ethtool allows
+up to 100000us.
+
+stmmac_xdp_set_prog() then calls stmmac_xdp_open(), which sets up the
+timer again without cancelling it first:
+
+stmmac_xdp_open() {
+    ...
+		hrtimer_setup(&tx_q->txtimer, stmmac_tx_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+    ...
+}
+
+__hrtimer_setup() does memset(timer, 0, sizeof(struct hrtimer)). Could
+that corrupt the per-CPU hrtimer base rbtree while the node is still
+enqueued?
+
+Before this patch, netif_tx_disable() ran first, so no regular xmit
+could run during the cancel loop. The later patch in this series does
+not touch stmmac_xdp_release(), so the window seems to remain at the
+end of the series.
+
+Would moving the hrtimer_cancel() loop after netif_tx_disable() close
+this race and still keep NAPI disabled before Tx is stopped?
+
+> +
+>  	/* Free the IRQ lines */
+>  	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+
+[Severity: Medium]
+
+Can the error interrupt path still wake the Tx queue after
+netif_tx_disable()?
+
+The IRQ handlers stay registered until stmmac_free_irq().
+stmmac_xdp_set_prog() never sets STMMAC_DOWN, so the STMMAC_DOWN checks
+in stmmac_interrupt() and stmmac_msi_intr_tx() let these interrupts
+through.
+
+On tx_hard_error, stmmac_dma_interrupt() and stmmac_msi_intr_tx() call
+stmmac_tx_err(), which ends with:
+
+stmmac_tx_err() {
+    ...
+	priv->xstats.tx_errors++;
+	netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, chan));
+}
+
+free_irq() only waits for a running handler to finish. Nothing stops
+the queue again before stmmac_stop_all_dma() and
+free_dma_desc_resources().
+
+Could stmmac_xmit() then run on rings that are being freed and hit the
+same dwmac4_set_addr() fault?
+
+The netif_tx_queue_stopped() check that the later patch in the series
+adds to stmmac_xdp_xmit_xdpf() would not help here, because the queue
+has already been woken.
+
+The commit message says:
+
+  Nothing stops the queue afterwards, so the Tx path resumes while
+  free_dma_desc_resources() releases the descriptor rings underneath it.
+
+The reordering only handles the NAPI waker, though. Would stopping Tx
+after stmmac_free_irq(), or having stmmac_tx_err() skip the wake during
+teardown, cover this case as well?
+
+[Severity: Low]
+
+This is a pre-existing issue and was not introduced by this patch. Can
+stmmac_xdp_xmit() (ndo_xdp_xmit), driven by remote devmap flushes,
+write into rings freed by free_dma_desc_resources() during an XDP
+detach?
+
+At this commit, stmmac_xdp_xmit() ignores the queue stopped state and
+only checks STMMAC_DOWN, which the XDP release path never sets. So it
+could write tx_q->xdpf[] and descriptors into the freed rings.
+
+The later patch "net: stmmac: Stop Tx queue when (en|dis)abling XSK
+pools" adds this check at the start of stmmac_xdp_xmit_xdpf():
+
+	/* Ring may be torn down for an XSK pool switch */
+	if (netif_tx_queue_stopped(netdev_get_tx_queue(priv->dev, queue)))
+		return STMMAC_XDP_CONSUMED;
+
+stmmac_xdp_xmit() calls that function under __netif_tx_lock(nq), the
+same per-queue lock that netif_tx_disable() takes. After
+netif_tx_disable() has run, later ndo_xdp_xmit calls are rejected
+before they touch descriptor memory.
+
+That still leaves the case where the queue is woken again through
+stmmac_tx_err(), described above.
+
+[Severity: Low]
+
+stmmac_xdp_enable_pool() and stmmac_xdp_disable_pool() in stmmac_xdp.c
+seem to have the same problem. Both call stmmac_disable_tx_queue(),
+which frees the Tx ring without stopping the netdev Tx queue:
+
+stmmac_disable_tx_queue() {
+    ...
+	stmmac_stop_tx_dma(priv, queue);
+	__free_dma_tx_desc_resources(priv, &priv->dma_conf, queue);
+}
+
+At this commit, can stmmac_xmit() fault on that freed descriptor
+memory?
+
+The next patch in the series, "net: stmmac: Stop Tx queue when
+(en|dis)abling XSK pools", appears to fix this. In both functions it
+calls stmmac_xdp_stop_tx_queue() before stmmac_disable_rx_queue() and
+stmmac_disable_tx_queue(). It also wakes the queue again after
+stmmac_enable_tx_queue().
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261013-stmmac_xsk_crashes-v3-0-50fca7790af2%40linutronix.de
