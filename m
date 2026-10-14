@@ -1,200 +1,103 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF10E4457C6
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 21:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDB5190462;
+	Wed, 14 Oct 2026 21:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792014313; cv=none; b=f7fDZgsN1XfwPBLqLyvKMxijzRLq4Az7bfK3JNFH9SkZwdjWvRXh+D1lnl1SpE6BEQ7cz9Dg7Td3ZaZVzXVPIJoOkag9wP5nfrkVTzI7QRSJ52BliQnLTT6TsikgHHrn2bEb5XitMIR31brJlmwdp8fpjTp6CTxrXkFaSoD+bDA=
+	t=1792014595; cv=none; b=i53uWDCO2cnwuvw74f2/6KLf0nyeqbNfrIZqp6TQMVotAyN38RVEYa+sSBzN+oiQ2SuDQWJoYrlnwKEAutPjEU4XFkZnKkbSWaSYf4wa5fdreRZYQhsKBdccInfgIeuZhtiYgb4WWcmBj5XCbCsDHkYgWMjOz57REH0CGO2Tdko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792014313; c=relaxed/simple;
-	bh=0ZTSOvLPpcGRwqyN5BDZjWGpfTwuRbDfqUoQiVm6QnM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V4pgMSlyHjpFAATNfpg6p/NitjljChhKP0JREs3o7XNv6TzwF82Cx9rhB275b/+HgpGPnQBA66lM3wfe3W0m2eZIfp6kstEAP0O8tvIlBrtbXoSlgezE2LZqoCswOzSTSqFNfjn0o30/DPGFbna5dXz07UT7Hp1ZEkxI7aAqOcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m8e8L0hB; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792014595; c=relaxed/simple;
+	bh=FcAzgEWftwEGhdFlkl1X5UznVkEfO6u8HS6WESVFXgY=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=LkReTRFJzaBzU/4f+Eus0WkvzJLJm5Lkvhy+9oLkcKZqBHZ0W5g2ve+sr7Z7/k8JRtUWsNhIv4i2SkwXq2eVzwgJuGncfJBJcM+LyXnOlowpd2/bE5Zs4adhuwNUQ9GdL+pEzTdWwef6272o+Uf848+Mgy5V9R0KY6dqF4QJsiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCdS201q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m8e8L0hB"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48afe75f055so860319f8f.2
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 14:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792014310; x=1792619110; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DYwmofQDCDn8korfzzaOGpjDzGREvYtvvSRPaGLYBs4=;
-        b=m8e8L0hBlfEHnHvgXcPV1GkVMzjSyVPjEtxx6TFqKwbY5VDtgk8+iWpTVp4WxYKwaV
-         vN46WE69yXf4FXxSyCU+KmpNms37zDVcHKJuNNVUpTfCHvvTunyg5w5iuOPMwLyY+0bo
-         wVGwkjYNeAqt8eBGfwLliW5i2HEy91xXcB7HX+BjtWbYJ7aEt9UKm46is0HhCEu5LdMp
-         MIGulu0aVMtLlkEI9pr/v/wlhBOAr+3XPejxKuXPLzVLlCv0Wl/WAt6Uh+pET9jH2LQ+
-         PmymPGJop0y2VzOfWb0bkrSqXe9Gsu6M7Ro4JfzZZoIBANHz1KcLAXItQRXxgsK/8yio
-         dsNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792014310; x=1792619110;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DYwmofQDCDn8korfzzaOGpjDzGREvYtvvSRPaGLYBs4=;
-        b=0s9kkNpCaWCmhl6vg5Kl6XUR2rV71pLa5yA5KKSciKPVVEE9cm4nEMtpGpssfqPccy
-         50OUE2NpUtkt95OMacG/Riln823j51hx641BaypAtsiZlkOBdSlkmbMehiQpRi41Ukj/
-         Nk505s+hjnnBKLOl/nnobHYbkp3/yNZTOrpsgBjFg5WruD0n0kd+J8+C2Kv/NuWeVp8i
-         ljf5CTqg6i9+xQEc2Tg/CEH5y4xhp8U92gNwtC7jskInOKPXvv8X12DgCrUGnmwFyvGX
-         /V5zFuH7rRVT/fFsOr6OMWxZSn97eFlLc7j4zfqJPSj3w8mc/mkmHMxoo0iX7+KLtT8p
-         2zkg==
-X-Gm-Message-State: AFq9FYJbfCdZFVclDICHXIFguXPqJMOaod2S3/d4483KopHiJ35GlIki
-	sMlbcjdCqtIaU+OBSJ0Je5UY8BvaA7Bi3rmwmrGcC836KjBbv4gWztot
-X-Gm-Gg: AYBFou38W1K317V7pUvskYXH5S5wvBOC4YxCbwWzL+Q3ZoCBHm60spY66UIfYoZkjRp
-	KT9X1DQidoH7C4bgFjgefOOpHoswlQpS7x9Lx+10I/hRGPnK1v/3KOPBwJfoSLvsNCi9NBWTHQR
-	PIhjXT2MR646msmSxXzhUnMqDuFe++TAg/b5GbZKd5g1F6dpYq2bIluvVDq+z1Igln8nHs0/n1U
-	0vOUgPLbVBZaIsOKWU1EMTtG3Q9+ckXWXFkVSQ7p1ZvnHdHWRXp5iJRVJ+mOXnU+6LDFdh90X1U
-	BT21KyS3PTU2cQCkNfLZUye7boT4lIxiX7iNAePghAZ6h0nJk2oeImVY+2UGCMYgW1t7NlW7feh
-	iyAAN8wdneyzq+tdqdrkOyw2TgQriRr4ldT1jo7ZIvSM+G9Xjis/W/4nNcwVFbme3RPbexYvzDo
-	FpdzxUUdEunA9RcGAOk6misOcla+oSZcK7QyaKBOf5nkPfp0fskmHVuCf8wQ==
-X-Received: by 2002:adf:f549:0:b0:487:489:7af0 with SMTP id ffacd0b85a97d-48dbaadde34mr25680625f8f.17.1792014309866;
-        Wed, 14 Oct 2026 14:45:09 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0514ab1sm18967193f8f.0.2026.10.14.14.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 14:45:09 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 14 Oct 2026 23:45:07 +0200
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Avinash Duduskar <avinash.duduskar@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
-	Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
-	Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 11/21] bpf: Add tracing_multi link support
- for bpf progs
-Message-ID: <as_349cckxgUQM2U@krava>
-References: <20261012154024.29423-1-leon.hwang@linux.dev>
- <20261012154024.29423-12-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCdS201q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E541F000C4;
+	Wed, 14 Oct 2026 21:49:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792014594;
+	bh=44kLSpkPqQ2M5rJSUeF0/Z/StfM9XZgXXcVH8xX3Rvc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZCdS201qs4HIRA0rzvqUc8lT25OvqY5AMHo7hOyKRhrCAo/v6iZ2K/REF+kGOSUAV
+	 WJ8z6vJ8ytrqDV2388/e4jHg78yPDBzGmmg2f9NXYRM1lfRTl9jcLlKldrj2thO5OH
+	 JGC7TUolyxTXvsQusJk6zPI2fHvtWU+wNsck+O/cVRUzmqqvfOqLA4KCPnRSQEBTP/
+	 1hmWUKrJBE0NJcXEVPsYUiteUqFra55CUTDiUTBwx5HJSnSOmhbFzV3wXTGhsROgDe
+	 AGHO8Fn7BOLZWRnzRuzTOMpx2EH26cjLe0T7EpPGgfsC1laihqI7v6D9BgdbkALH8j
+	 qfRvBytgWHT3w==
+Message-ID: <sashiko-outbox-171939@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v3] net: mana: add BQL support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hamza Mahfooz" <hamzamahfooz@linux.microsoft.com>
+Cc: linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
+References: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 14 Oct 2026 21:49:54 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261012154024.29423-12-leon.hwang@linux.dev>
 
-On Mon, Oct 12, 2026 at 11:40:13PM +0800, Leon Hwang wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] mana: unratelimited netdev_warn in __mana_start_xmit causes log sp=
+am under XDP load
+--
 
-SNIP
+commit a6a9466a25f553494605c439f140071b9b0b7068
+Author: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
 
-> @@ -3787,64 +3796,129 @@ static const struct bpf_link_ops bpf_tracing_multi_link_lops = {
->  #endif
->  };
->  
-> -static int ids_cmp_r(const void *pa, const void *pb, const void *priv __maybe_unused)
-> +struct tracing_multi_sort_data {
-> +	u64 *keys;
-> +	struct bpf_prog **progs;
-> +	u32 *ids;
-> +	u64 *cookies;
-> +};
-> +
-> +static int keys_cmp_r(const void *pa, const void *pb, const void *priv __maybe_unused)
->  {
-> -	u32 a = *(u32 *) pa;
-> -	u32 b = *(u32 *) pb;
+net: mana: add BQL support
 
-I think you could just s/32/64/ and keep the rest in here and have simpler diff
+MANA doesn't support byte queue limits, so each TX queue can hold 256
+WQEs by default, and up to 16384, of up to 64 KB TSO packets, before the
+qdisc layer sees any backpressure. This adds latency to all the flows
+sharing a queue, and defeats AQM qdiscs such as fq_codel. This patch
+adds BQL support by reporting the bytes queued and completed to BQL,
+except for XDP_TX and XDP_REDIRECT frames.
 
-> +	const u64 *key_a = pa, *key_b = pb;
->  
-> -	return (a > b) - (a < b);
-> +	return (*key_a > *key_b) - (*key_a < *key_b);
->  }
->  
-> -static void ids_swap_r(void *a, void *b, int size __maybe_unused,
-> -		       const void *priv __maybe_unused)
-> +static void keys_swap_r(void *a, void *b, int size __maybe_unused,
-> +			const void *priv __maybe_unused)
->  {
-> +	const struct tracing_multi_sort_data *data = priv;
-> +	struct bpf_prog **prog_a, **prog_b;
->  	u64 *cookie_a, *cookie_b, *cookies;
-> -	u32 *id_a = a, *id_b = b, *ids;
-> -	void **data = (void **) priv;
-> +	u64 *key_a = a, *key_b = b, *keys;
-> +	u32 *id_a, *id_b, *ids;
-> +
-> +	keys    = data->keys;
-> +	ids     = data->ids;
-> +	cookies = data->cookies;
-> +	id_a    = ids + (key_a - keys);
-> +	id_b    = ids + (key_b - keys);
->  
-> -	ids     = data[0];
-> -	cookies = data[1];
-> +	if (data->progs) {
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net=
+/ethernet/microsoft/mana/mana_bpf.c
+> index 484f061bc75e4..7c55f8724441d 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> @@ -21,7 +21,7 @@ void mana_xdp_tx(struct sk_buff *skb, struct net_device=
+ *ndev)
+>  	ndevtxq =3D netdev_get_tx_queue(ndev, txq_idx);
+>  	__netif_tx_lock(ndevtxq, smp_processor_id());
+> =20
+> -	rc =3D mana_start_xmit(skb, ndev);
+> +	rc =3D __mana_start_xmit(skb, ndev, true);
 
-nit, let's unify with the rest of the code and have progs variable for data->progs ?
+[Severity: High]
+Does this allow unratelimited log spam under heavy XDP load?
 
-SNIP
+XDP traffic directly calls the transmit path here without checking or
+honoring the stopped queue state. If the Send Queue fills up,
+__mana_start_xmit() unconditionally calls mana_gd_post_work_request(),
+which can return -ENOSPC.
 
-> -	err = check_dup_ids(ids, cookies, cnt);
-> +	keys = kvmalloc_objs(*keys, cnt);
-> +	if (!keys) {
-> +		err = -ENOMEM;
-> +		goto error;
-> +	}
-> +
-> +	for (int i = 0; i < cnt; i++)
-> +		keys[i] = bpf_trampoline_compute_key(progs ? progs[i] : NULL, btf, ids[i]);
-> +
-> +	err = check_dup_keys(keys, progs, ids, cookies, cnt);
->  	if (err)
->  		goto error;
->  
-> @@ -3908,19 +4022,32 @@ int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
->  	link->nodes_cnt = cnt;
->  	link->cookies = cookies;
->  	link->fexits = fexits;
-> +	link->tgt_progs = progs;
-> +	link->pokes = pokes;
->  
-> -	err = bpf_trampoline_multi_attach(prog, ids, link);
-> +	if (progs)
-> +		err = bpf_trampoline_multi_prog_attach(prog, ids, keys, link);
+When it fails, __mana_start_xmit() prints an unratelimited warning:
 
-you need keys computed ahead for dups check, so let's the above
-bpf_trampoline_compute_key calls be the single place we compute keys
-and pass keys to bpf_trampoline_multi_attach below as well?
+	if (err) {
+		(void)skb_dequeue_tail(&txq->pending_skbs);
+		mana_unmap_skb(skb, apc);
+		netdev_warn(ndev, "Failed to post TX OOB: %d\n", err);
+		goto free_sgl_ptr;
+	}
 
-> +	else
-> +		err = bpf_trampoline_multi_attach(prog, ids, link);
+If XDP blasts packets into a full queue, could this print for every dropped
+packet and cause severe log spew?
 
-nit, let's add empty line in here?
+>  	__netif_tx_unlock(ndevtxq);
 
->  	kvfree(ids);
-> +	kvfree(keys);
-> +	kvfree(fds);
->  	if (err) {
-> +		bpf_put_progs(progs, cnt);
->  		bpf_link_cleanup(&link_primer);
->  		return err;
->  	}
->  	return bpf_link_settle(&link_primer);
+[ ... ]
 
-thanks,
-jirka
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013214937.1453=
+12-1-hamzamahfooz@linux.microsoft.com?part=3D1
