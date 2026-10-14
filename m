@@ -1,103 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDB5190462;
-	Wed, 14 Oct 2026 21:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADC238B122
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 21:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792014595; cv=none; b=i53uWDCO2cnwuvw74f2/6KLf0nyeqbNfrIZqp6TQMVotAyN38RVEYa+sSBzN+oiQ2SuDQWJoYrlnwKEAutPjEU4XFkZnKkbSWaSYf4wa5fdreRZYQhsKBdccInfgIeuZhtiYgb4WWcmBj5XCbCsDHkYgWMjOz57REH0CGO2Tdko=
+	t=1792015148; cv=none; b=Pgxfz+B9nBQKz+1jZSzzzdyQ2CtI0QXfM+IWpTbyNEah8oloo9hk4dKgdlqiPeaRKx56Ran0mFUjl50e46dKNNrh99jJcTdDZglgvCnVC+gxhAqpeKjwY7t+xrsAV6WIkYM/2H1rl2OPhTnFduoKJEyy4ejYqRYBX9Yn4x07MjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792014595; c=relaxed/simple;
-	bh=FcAzgEWftwEGhdFlkl1X5UznVkEfO6u8HS6WESVFXgY=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=LkReTRFJzaBzU/4f+Eus0WkvzJLJm5Lkvhy+9oLkcKZqBHZ0W5g2ve+sr7Z7/k8JRtUWsNhIv4i2SkwXq2eVzwgJuGncfJBJcM+LyXnOlowpd2/bE5Zs4adhuwNUQ9GdL+pEzTdWwef6272o+Uf848+Mgy5V9R0KY6dqF4QJsiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCdS201q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792015148; c=relaxed/simple;
+	bh=lVVVSYdqUQHEhiWkMmwbDnl8vMUmQFMlde93Alzh5Uk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G5M9fhn9+X4TkBM3WFjJXAy8DmD2WL00xpbei/V4nVU8pBsU8tRMwbzmwkd4O6q4iqrCIgSc2G+Jk5GoZZllFJu5YXagWtVOip3e8Kf21X35kMb10p2OuRmPg1F9Igkq6GE8Un0Bb0P7UU56bMR9DVJsILUrsMKrepX6bXOyDWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEFzft3C; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCdS201q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E541F000C4;
-	Wed, 14 Oct 2026 21:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792014594;
-	bh=44kLSpkPqQ2M5rJSUeF0/Z/StfM9XZgXXcVH8xX3Rvc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZCdS201qs4HIRA0rzvqUc8lT25OvqY5AMHo7hOyKRhrCAo/v6iZ2K/REF+kGOSUAV
-	 WJ8z6vJ8ytrqDV2388/e4jHg78yPDBzGmmg2f9NXYRM1lfRTl9jcLlKldrj2thO5OH
-	 JGC7TUolyxTXvsQusJk6zPI2fHvtWU+wNsck+O/cVRUzmqqvfOqLA4KCPnRSQEBTP/
-	 1hmWUKrJBE0NJcXEVPsYUiteUqFra55CUTDiUTBwx5HJSnSOmhbFzV3wXTGhsROgDe
-	 AGHO8Fn7BOLZWRnzRuzTOMpx2EH26cjLe0T7EpPGgfsC1laihqI7v6D9BgdbkALH8j
-	 qfRvBytgWHT3w==
-Message-ID: <sashiko-outbox-171939@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3] net: mana: add BQL support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hamza Mahfooz" <hamzamahfooz@linux.microsoft.com>
-Cc: linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
-References: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 14 Oct 2026 21:49:54 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEFzft3C"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-49ff680331aso16320185e9.3
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 14:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792015145; x=1792619945; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ti2mUXDOBJkgxGD4GenKqWSBX8JAxIFlYVCE3uNCcx0=;
+        b=CEFzft3CbjBh1vQH2RxGCr8zN/+KtCzpchOJJf+SXJ6NSo8/r0unKNsed4OVKigw0Y
+         TOlke2jVS/hjiybj7PPkrnQdWPJ3gb0ijJOBmfLDvBzWN00E04z58bm940ATZfxE/ZZ4
+         HpQt0+ZYocHQA4TWH2JGD+thzPmROvTshNI5yq1UrDUpvZG0UNNgDrP71Uf7jfuGRktG
+         Gkm5bHyrPW8OQdpoeNPL1E58nJOA7A9GiYXdtKlkMfiQKhUbMiFn/V+V/BC+a9Ss5jMD
+         wmTwTd0EHfTQ0Xpfnbzr0V5WFWKGiTe1ihNSRbCTfmZa2w1fwteUAeRe36tZ2sgKrAWJ
+         uOwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792015145; x=1792619945;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ti2mUXDOBJkgxGD4GenKqWSBX8JAxIFlYVCE3uNCcx0=;
+        b=TZ7ZuPx7Sy9rf5M6BcmetYDBdITk+rLjr4zQx/IkOXhMtyG/FFIdkUE57JHqE0ZtZP
+         7pYU7bCDJ8Orer50fw9Q5RIikEQtn8kUV/S6uuakRDaPbWMMccPcO9aE/W5k2cuojdmq
+         R2RlIc4Hv6M5JNCRCc7Wke7PG5nfV/RhMlZEVlh3khM4SYdFArme8Ky55uVhC7biDJ8B
+         4bBzsIFl6E7q97Fv1jRipgLaB409BKTeL9s4azEKOoKEiPRAUNXJynAfqrACULRe4ZkM
+         2Trl+YuCyb/ouRMxzGZzWaw6NDTb7EVlp8Zq8CWFotzSZ8buwB/dOfioDXJATPShrnfb
+         p4Sw==
+X-Gm-Message-State: AFq9FYKxlqLoYnAvY09kCtRZPqlpN7Ru7u76wzx6P1sPJdEWu3PFtfYo
+	yKgCTaAos9ILlvjn6rhEowGQzAYzrUdsDz9wmrfFCexkpID8bnHijb+V
+X-Gm-Gg: AYBFou1u4e1vP2bNPHOZtBLdDAFvTLdZa/YErjvVvm/I/W5cPVI/ThMEJljF/Yv0lG7
+	bffDuu8aKu2bTr0Nfmx3gq0kGLDez/GXLPQkX+2yZsZv5UlrXH3wq+nqfoIqexDfZywUFRLU+2H
+	FNbw3J1z2nlUgZN9I6j1W1lfltBc3GzScIddgE5mFL8RTtmvZj3M0H+aAj/2hx84uAE9LIh/N99
+	UELW/o3BcOZx0ATWbHui4TejXYv5STudnWcmWlmv7R+hfwKNDqZwYcZHykivj3ksJbTTj5945vS
+	LK2M2exUoQGWUP9NNHmv9xD1A4rw231kE/MIV6yvDTEVX7BvM2f755jWqtME9Levg6okWFQ5jij
+	wUsDuAs/Mibl427qKLP2Jvp1WEbfJVTfcvtr0GEOb2m7ai67Y0EDoXjxxZ9QemErDl5wlwuk8e2
+	EInL8gLnHM02ayytk1MK3yuaNIgYlfrF8hMPQL+I0sGDazkvWr/i8ZfLigMA==
+X-Received: by 2002:a05:600c:4e89:b0:4a0:12d7:4c88 with SMTP id 5b1f17b1804b1-4a18e4ac77amr380628185e9.30.1792015144752;
+        Wed, 14 Oct 2026 14:59:04 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bd993f34sm22742055e9.11.2026.10.14.14.59.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 14:59:04 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 14 Oct 2026 23:59:02 +0200
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Avinash Duduskar <avinash.duduskar@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
+	Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
+	Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
+	Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 00/21] bpf: Add tracing_multi link support
+ for bpf progs
+Message-ID: <as_7Jgy_sdTE9M5O@krava>
+References: <20261012154024.29423-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261012154024.29423-1-leon.hwang@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] mana: unratelimited netdev_warn in __mana_start_xmit causes log sp=
-am under XDP load
---
+On Mon, Oct 12, 2026 at 11:40:02PM +0800, Leon Hwang wrote:
+> Similar to the tracing_multi link support for kernel functions [1], add
+> support for bpf progs.
+> 
+> With this support, I'll be able to enhance the function-graph feature of
+> bpfsnoop [2]. It will trace all bpf progs, including their subprogs, to
+> draw a full function call graph including bpf prog call sites.
+> 
+> The attachment could speed-up when there are hundreds of targets. For
+> example, on high CPU core count servers, it probably runs 200 tc-bpf
+> progs as Kubernetes CNI, and each tc-bpf prog might have 4 subprogs.
+> Hence, there will be 1000 targets to trace for bpfsnoop's function-graph
+> feature.
+> 
+> With tracing_multi link support for bpf progs, bpfsnoop will be able to
+> attach to all targets quickly.
+> 
+> When attaching to 1000 targets, fentry.multi is much faster than fentry
+> on a 16c16g QEMU VM on an AMD EPYC 9745 server.
+> 
+> ./bench tracing-multi-attach-progs
+> Setting up benchmark 'tracing-multi-attach-progs'...
+> tracing-multi-attach-progs: prepared 1000 identical BPF program targets
+> tracing-multi-attach-progs: fentry created and attached 1000 programs/links in 338.171ms
+> tracing-multi-attach-progs: fentry.multi created one program and attached one 1000-target link in 47.345ms
+> tracing-multi-attach-progs: fentry.multi creation/attachment speedup is 7.14x
 
-commit a6a9466a25f553494605c439f140071b9b0b7068
-Author: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+it's faster, but the original attachment is under 1s,
+so not really a problem imo
 
-net: mana: add BQL support
+I guess the api is better for your use case, like having
+less file descriptors open ?
 
-MANA doesn't support byte queue limits, so each TX queue can hold 256
-WQEs by default, and up to 16384, of up to 64 KB TSO packets, before the
-qdisc layer sees any backpressure. This adds latency to all the flows
-sharing a queue, and defeats AQM qdiscs such as fq_codel. This patch
-adds BQL support by reporting the bytes queued and completed to BQL,
-except for XDP_TX and XDP_REDIRECT frames.
-
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net=
-/ethernet/microsoft/mana/mana_bpf.c
-> index 484f061bc75e4..7c55f8724441d 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> @@ -21,7 +21,7 @@ void mana_xdp_tx(struct sk_buff *skb, struct net_device=
- *ndev)
->  	ndevtxq =3D netdev_get_tx_queue(ndev, txq_idx);
->  	__netif_tx_lock(ndevtxq, smp_processor_id());
-> =20
-> -	rc =3D mana_start_xmit(skb, ndev);
-> +	rc =3D __mana_start_xmit(skb, ndev, true);
-
-[Severity: High]
-Does this allow unratelimited log spam under heavy XDP load?
-
-XDP traffic directly calls the transmit path here without checking or
-honoring the stopped queue state. If the Send Queue fills up,
-__mana_start_xmit() unconditionally calls mana_gd_post_work_request(),
-which can return -ENOSPC.
-
-When it fails, __mana_start_xmit() prints an unratelimited warning:
-
-	if (err) {
-		(void)skb_dequeue_tail(&txq->pending_skbs);
-		mana_unmap_skb(skb, apc);
-		netdev_warn(ndev, "Failed to post TX OOB: %d\n", err);
-		goto free_sgl_ptr;
-	}
-
-If XDP blasts packets into a full queue, could this print for every dropped
-packet and cause severe log spew?
-
->  	__netif_tx_unlock(ndevtxq);
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013214937.1453=
-12-1-hamzamahfooz@linux.microsoft.com?part=3D1
+jirka
