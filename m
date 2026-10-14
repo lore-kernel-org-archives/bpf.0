@@ -1,175 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86384E73A2
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 12:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D8E12F9C37;
+	Wed, 14 Oct 2026 13:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791982322; cv=none; b=Q5MAG9+wpX6x54KtR3+kdycTDXyH7Y2m6X77FzazggiiuPW1KBSySIX5LwECUZBwXq79GO9E6ZIIMLXgwDYGfbIiBwBQ3GsdwpOVBBmGFCYXxJV5BU2IHEYGyIm9Dbib6pG9uvfeEeWfFOvK7UowIu+R+ncjYP3YVMUin4AgjlM=
+	t=1791983318; cv=none; b=P6jDfO6gV0tHWk9ZoAxS8jgTkg9/RSJoOtMhBbBXENAuj4FZFXS33ufCQTYuKQnWV3IyJX1rgNGi12VjDl0OIs8kReXm2ODjx84mskV7QLQ3H3MWZuiJOpZyVOWShTWXQD5v1Wqga/CVtmOAi1aq97l5a1KzLbi+/NL6OPcJZyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791982322; c=relaxed/simple;
-	bh=MO5ZxOTQCPd/kTMNCt3GZdS/IDFt1KgT9kHV67fGjUY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k/uYqJPosGMr5aMO7kGxzwkfTD4e8DmZObCQuaYzAvozzAb4OfDeoZjV0MSKy6Ldr2d9DZ8YDxl5qfcQ1xDWk0PEIs6V3KFRZdn7FW74dH6C5uWZr0l+j05kMogQacqnQL676+ngQpfefaia5snIAaQePBLfExM9layNT8H+CzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EPf4zuzX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791983318; c=relaxed/simple;
+	bh=qpDVtITf3q8Ifbj2iEUKwlnz+d7HVCX5OeHwbVW15bw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V8IMuRp6Dx2hjivTFFJi9/D8PWFMltS549AshIpD9W2O99TBw/+/UQdgWdOpiC6w+NC62amCx6hZfr8jiKFAYNW6oydCCZSshAMRuE8TQfvKowshc3wii46EvKi6fvHEZSTcFD+EMLfA42m2idBJOdYfiBAMXHXJHiHUqotHWxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=UfOmPQFf; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EPf4zuzX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B63D11F000FF;
-	Wed, 14 Oct 2026 12:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791982226;
-	bh=i6Xc0wTFcpJyRBg5L2dkW+TAXT7uTgJrjsL4ATaiISI=;
-	h=From:To:Cc:Subject:Date;
-	b=EPf4zuzXWK1c4U0w+LCQzyv+HkUGYeJJ5b6c/Yw4TNoUWEQ8NU9vr5IjPAqW1u+Mh
-	 32gmWbnGLc0nSvZLcOHDwKFrMu2YmI8Df1glGwUkmPqdG8yMCXtqQsvYnwtK9ThRbg
-	 r3Jjysbt8AOr0/4TkuXp3VBWrQM+uhGgtSacm6E7ZBwi/dKesMqID5ToM6z6LyWPcS
-	 KAgG8BUasmth8tJ5nhMgCRCnpebVSxRZE4JGUzEpFtLj6GY1Vo/TmLj6se18//suQE
-	 Eq3+xvsHZy01vsP5g0SH6FMABUTsfbDouCiX/bp/dnWzJ1fuMFW8VQErG+Sz15XKl0
-	 09WsggTkkxoqA==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>,
-	"Tejun Heo" <tj@kernel.org>,
-	"David Vernet" <void@manifault.com>,
-	"Andrea Righi" <arighi@nvidia.com>
-Subject: [PATCH bpf-next v4 0/3] bpf, x86: Support fetching AND/OR/XOR atomics in arena
-Date: Wed, 14 Oct 2026 05:50:10 -0700
-Message-ID: <20261014125017.1426212-1-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UfOmPQFf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=qpDVtITf3q8Ifbj2iEUKwlnz+d7HVCX5OeHwbVW15bw=; b=UfOmPQFfXG9yQ7V+vbm7oiZOGW
+	NkkZDTPdShRGr1WZwDjypGTA7zupgTteD6J1yBpVPpbVLHJTv0YV7Zl/Nabgk+fVnfYN4E58omPO1
+	yf/zzdLKDeqzn7lKGFMsQ9OlIxVB6lipNntBqNlOK0FbScSBo8NoGe/qQBqnyZN8sfvTDo8+QlZ83
+	rn9JWN0qxxqWnYagLnPikr7k8ZB1IeCiDBFZ+EOzfNVwhMAQqEBdYov75Y7E0BD8Gx6BY1zscNr3S
+	DowBcc+dAVyNZTBi0iPpA4jytlU+03GZu34ZslvnXA4wVweNjUhWII+52gjtmFPlz8lwC2OlIncTd
+	//Xt9exA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1xGydP-00000003mxp-317m;
+	Wed, 14 Oct 2026 13:03:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 6EC9C302FBC; Wed, 14 Oct 2026 15:03:06 +0200 (CEST)
+Date: Wed, 14 Oct 2026 15:03:06 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: "Christoph Lameter (Ampere)" <cl@gentwo.org>,
+	Ankur Arora <ankur.a.arora@oracle.com>,
+	Haris Okanovic <harisokn@amazon.com>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
+	will@kernel.org, akpm@linux-foundation.org, mark.rutland@arm.com,
+	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, rdunlap@infradead.org,
+	david.laight.linux@gmail.com, broonie@kernel.org,
+	joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+	konrad.wilk@oracle.com, ashok.bhat@arm.com
+Subject: Re: [PATCH v15 12/16] cpuidle/poll_state: Wait for need-resched via
+ tif_need_resched_relaxed_wait()
+Message-ID: <20261014130306.GK2009045@noisy.programming.kicks-ass.net>
+References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
+ <20260831202251.305046-13-ankur.a.arora@oracle.com>
+ <178908146776.2725577.2613699832033292946.b4-review@b4>
+ <878q58z2ej.fsf@oracle.com>
+ <3e8bda45-0aa7-d0be-8aad-dab95902dcde@gentwo.org>
+ <as9EospGcR2e1mpO@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <as9EospGcR2e1mpO@arm.com>
 
-Changelog:
-v1: https://lore.kernel.org/all/20260923165301.3463007-1-puranjay@kernel.org/
-v2: https://lore.kernel.org/all/20260924160354.531101-1-puranjay@kernel.org/
-v3: https://lore.kernel.org/all/20260925134828.2012199-2-puranjay@kernel.org/
+On Wed, Oct 14, 2026 at 10:00:18AM +0100, Catalin Marinas wrote:
+> It
+> would also be nice to get some acks from the atomic infrastructure
+> maintainers.
 
-Changes in v4:
-- Patch 1: go back to the v1 lowering, keeping the load of the old value
-  and giving it a second exception table entry, per Tejun's review. v2 and
-  v3 dropped the load so that the CMPXCHG was the only faulting insn, but
-  the first CMPXCHG then almost always loses, so every operation paid for
-  an extra locked CMPXCHG and the fetching insn ended up more expensive on
-  x86 than the load and CMPXCHG loop it is meant to replace. The extra
-  entry is accounted for in bpf_int_jit_compile() again, as in v1. The
-  cleanups from v2 stay.
-- Patch 1: refuse these ops when dst_reg is BPF_REG_AX. Accesses through a
-  number (BPF_F_ARENA_SCALAR, which arena_scalar_access() rewrites to use
-  BPF_REG_AX as the address) leave the loop no register to save R0 in, and
-  dropping the bpf_jit_supports_insn() rejection would otherwise let them
-  through. Such programs fail to load, as they did before. This only became
-  reachable after rebasing over BPF_F_ARENA_SCALAR.
-- Patch 1: correct the commit message, which claimed to add the
-  reg2pt_regs[BPF_REG_AX] entry that BPF_F_ARENA_SCALAR already added, and
-  update the extable sizing comment.
-- Patch 2: keep each *_noreturn_value in its operation's block and the or
-  block's u32s first. v3 grouped them, leaving two 4-byte holes in
-  .addr_space.1 that clang-17 fails to build.
-- Patch 2: check the register state after the r0 forms in uaf fault: the
-  fetched register is cleared and the address register is untouched. Use
-  values with high bits set in fetch_r0, and add fetching and/or/xor
-  through a number to verifier_arena_scalar (works on arm64, refused on
-  x86-64). Correct the comment about which spelling selects the
-  non-fetching insn.
-- Patch 3: say in the commit message that x86-64 schedulers built from this
-  header need a kernel whose JIT accepts these ops, and that already-set
-  bits now cost a locked write. Describe the comment that is actually being
-  removed.
+That'd be Mark and me I suppose. I don't see anything substantial
+happening, just plumbing the new function.
 
-Changes in v3:
-- Patch 2: keep the 32-bit non-fetching and/or/xor as well.
-- Patch 2: guard the new uaf asm on __BPF_FEATURE_ADDR_SPACE_CAST, since
-  textual addr_space_cast needs LLVM 19.
-- Patch 3: use __sync_fetch_and_or/and in cid.bpf.h and delete the cmpxchg
-  loop, rather than only rewording the comment that justified it.
-
-Changes in v2:
-- Patch 1: drop the initial load in the arena lowering instead of adding a
-  second exception table entry (reverted in v4).
-- Patch 1: note the dropped bpf_jit_supports_insn() rejection in the
-  changelog, rename the shared "mem32 extable bug" message, let the
-  non-arena caller pass NULL for the out-params, correct the INSN_LEN
-  comment, and drop an unrelated whitespace hunk.
-- Patch 2: keep non-fetching coverage, add the R0-aliased forms to uaf,
-  and correct the comment about why arm64 stays out of uaf.
-- Patch 3: new.
-
-A fetching AND/OR/XOR against arena memory is rejected on x86-64:
-
-  BPF_ATOMIC stores into R1 arena is not allowed
-
-x86-64 has no single instruction for these, so the JIT lowers them to a
-CMPXCHG loop. The loop performs two memory accesses, the load of the old
-value and the CMPXCHG itself, and either can fault when the arena page
-goes away. The verifier reserves one exception table entry per
-instruction, so there was nowhere to record the second one and
-bpf_jit_supports_insn() refused the three opcodes instead.
-
-x86-64 is the only architecture that needs this. riscv64 has native
-AMOAND/AMOOR/AMOXOR with fetch, s390 has LAN/LAO/LAX, and arm64 with LSE
-has LDCLRAL/LDSETAL/LDEORAL, so these already work in an
-arena, as does powerpc64. arm64 without LSE and loongarch reject every arena
-RMW atomic, CMPXCHG included, so nothing can be lowered there either way.
-
-Patch 1 emits the loop with R12-indexed addressing and gives the load and
-the CMPXCHG an exception table entry each. Both resume past the whole loop
-rather than past the faulting instruction, with the fetch destination
-cleared, so a fault cannot re-enter the loop. The JIT accounts for the
-extra entry by rescanning the instruction stream in bpf_int_jit_compile()
-before the extable is sized; s390 does the same in bpf_jit_alloc() for
-its BPF_XCHG lowering. The resulting code is the same load and CMPXCHG
-loop as the non-arena lowering, which is what programs hand-roll today,
-minus the early exit a hand-rolled loop can take when the value is
-already as wanted. Accesses through a number are the exception: they keep
-their address in BPF_REG_AX, where the loop would have to save R0, so the
-JIT refuses them and such programs fail to load, as before the series.
-
-Patch 2 makes the selftests cover this. The existing arena and/or/xor tests
-discarded the returned value, so clang emitted the non-fetching instruction
-and the fetching one was never exercised. That was deliberate:
-commit 2897b1e2a2f4 ("selftests/bpf: Fix arena_atomics failure due to llvm
-change") switched them to __c11_atomic_fetch_*() with memory_order_relaxed
-to dodge the limitation patch 1 removes. They now check the old value via
-__sync_fetch_and_*(), while keeping a __c11_atomic_fetch_*() of each width
-per operation with the result discarded so the non-fetching lowering keeps
-its coverage. A new fetch_r0 test pins the two register assignments the
-JIT special-cases, and both also go into the uaf test, since the
-BPF_REG_AX substitution only reaches the exception table when such an
-access faults. x86 is dropped from the uaf exclusion list.
-
-Patch 3 drops the hand-rolled cmpxchg loop in sched_ext's cid.bpf.h, which
-only existed because of the x86 restriction patch 1 removes, and uses the
-fetching atomics directly. The loop was not a portability fallback either:
-arm64 without LSE rejects every arena read-modify-write including CMPXCHG,
-and riscv without Zacas rejects only CMPXCHG, so the loop is strictly
-worse than a fetching OR there.
-
-Puranjay Mohan (3):
-  bpf, x86: Support fetching AND/OR/XOR atomics in arena
-  selftests/bpf: Test fetching AND/OR/XOR atomics in arena
-  sched_ext: Use fetching atomics for cmask instead of a cmpxchg loop
-
- arch/x86/net/bpf_jit_comp.c                   | 269 +++++++++++++-----
- tools/sched_ext/include/scx/cid.bpf.h         |  79 +----
- .../selftests/bpf/prog_tests/arena_atomics.c  |  47 +++
- .../selftests/bpf/progs/arena_atomics.c       | 184 +++++++++---
- .../bpf/progs/verifier_arena_scalar.c         |  98 +++++++
- 5 files changed, 491 insertions(+), 186 deletions(-)
-
-
-base-commit: 763187dbbf83764a57d5811168ef9de7b9a60e2d
--- 
-2.53.0-Meta
-
+Now, I really rather dislike timeout based schemes, but given we have
+users, I suppose this does improve things. We should however be weary of
+new ones I suppose.
