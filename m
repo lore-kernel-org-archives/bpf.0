@@ -1,66 +1,66 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD968409279
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1EB377ABE
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791959241; cv=none; b=mIujGOs61sVapRCrX9TcxbFH66gq1g/N6Hcs/022nzmYlqvsMvxMWifvFd4YfzO+BkR3SH3qEUoBzu+7zD9Y+oyu1At5Uu10q0vQQTGZmf1Q624wh+Ocl07xdhjMeZm3gZe5JJ+L0prYPsul5lPYzSo/u7inyg6SOX4wtqnlSlc=
+	t=1791959242; cv=none; b=hhkUJcTXpYAYlAaaQzxvZCBjrih01pSSU4X9CZkE0N5PmFNbf0Q7VBij78K5vKcL/gU/3Smfi5DC2JXxvHyx+AHNuTXCGbe3kIDtoa7NY0T4EXX/Foi1NrQtEUJOHDbU7EznEsEBG2HDgj4EGodSAF4MQuiA8AuGb8oTKd6r/K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791959241; c=relaxed/simple;
-	bh=NEEsEWJzvXXKw1U5i3R6qVwNEZ7+58VweQO0x61IjVs=;
+	s=arc-20240116; t=1791959242; c=relaxed/simple;
+	bh=RFL89FGKefYovGeBgZ3CB4+xWGgb3vNqaJKhk5dNQjQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lNkoOPBaPXXMeirjrBF2bpMcrgNnLd1si5LZ1zKs50bwh6wtvFstezviGDctUI8/61F72r4KkZaybeK5s99zSXZRKOK4qaqY2kMj9GXS3cRJ7Sx/n4VrzjVBE3BNRWTotIeNYM/1iYrYTkZVrfJbi6sudzGHAGqI7ZwLsjCKq3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Km4uLm93; arc=none smtp.client-ip=209.85.221.50
+	 MIME-Version; b=fYrvhnx98CoRsjYkSWGI9piWIWGMwjNZxWge4kwwPgvqwMssnScGcYKLly6koDTjislUu1mfQbGXqxAZt+tmrsF3n2dpvrj5yksHsoH7eiy8Qu2Y0MA8/64wts7qAsO+gh5trrNYiwknprOQ7JaTrXB4N5zd4t04aycYcdb4e/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pqmQ2mq6; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Km4uLm93"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-48441a2ba1bso31431f8f.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:27:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pqmQ2mq6"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a0213948d3so22400085e9.2
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:27:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791959237; x=1792564037; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791959239; x=1792564039; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FcCs3sohxCHYV561RCxP42Zr6CFjBiLneuemdbNXbEY=;
-        b=Km4uLm93F2xKEXVmpyWTD1Nky7ueWakHbgHwoz0HLskOTG7r/i1lZYs4m1DF0EDHoY
-         u6w496J2kcwRbn5nrllSqaowKJkHrwkK+vX/qZtfEy7KAp5sPw0oFkL+WDaBmAhthH9q
-         BjSExUFd++yyVuT1YRIBi6XxJSKTzQOKl1URkoK8L000tUhw6Hey9yzeJ9jt0d5WX9r6
-         AygqDuynb55hE1v3OKv00Qwd9ccmpDLTjt0pbtp66JKED9X0KpMXQLg0WAaiTobDjsxD
-         GSKrwTc8gsHFpMgVENUmzIJDL1UvznoX805UfpTsTBgG2Iv9aw1RzDBTQhd//wR2d4XC
-         yYDQ==
+        bh=jOeaatzk9bhuYpSzqiCT8rOTWkQH4urpPw2fjdSr5Ec=;
+        b=pqmQ2mq66RojAANIF5bwWk/pRlXcTIptjkcEvmoBYeri1kmR3iMW1AH8XGBZJe/ZHb
+         uc3ks1PY2X6iC6x2Fg0Ej28dlF7aA1rPvObgoVTfoJIF87UpaFztHY4z8ZgdDbRnp+iu
+         fD+SRLMgiHp/B6it15XHmTdxJlSv/JFTfkegiNH1dXEQu/i0RSjWbdWlyo2sUK7TaQn2
+         nfm5CNoJw+7DGHojgOLmOQzWwQ23hthXvSkBJp44wBixD3fv8y9Jpe7S1jqao8CA17f8
+         q5BmBE028Zj8YHaTJGOTZRnPhcILHAAZx0zmSXuUXf7wADcstaX0yu5OSrd1DEvKe0qn
+         aVnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791959237; x=1792564037;
+        d=1e100.net; s=20260707; t=1791959239; x=1792564039;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FcCs3sohxCHYV561RCxP42Zr6CFjBiLneuemdbNXbEY=;
-        b=CTOslobX8mB0IpA3oDkOoLJ42dIbV1NpTYOEaUFyOOtzPi8fN+zeot2X2V/pyOe5GN
-         kxLL+UUjCR4NRj/Bs9QdzvYUw8p2rVG0d9EKG7kwWbSX730PssZ5h0vdQ4Kb0nAXQvzy
-         f4q9cJbdfe6BGMtO3S1blLzDBsYgM/WIbh5SLyNfIkbdH4SItMMq1ERpL8COTGnIjYxs
-         jZnqskij8/vF42Q35dmE+CarrlONqRa/fSC/qxWp4fCw7Jy/A6OeyScaf3Q0jg9RYa2G
-         M0yBnat+PR2kMzcvWubk5wtNxzmw6pPRGOdwGS+wt1Ssp0fh1mmjTcFLe5w0fzFHvykC
-         hO/w==
-X-Forwarded-Encrypted: i=1; AKwUvBw4c+J57dhvAhop4RUVaGIMarm2gsnMik87eloyBGxY3v0YGHPAYiyiaiSbx9Rn21hCbU8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL6cLLAfmg5onp0M2qLv3/eJzpr2692CRXX9KFFW7RGWZTrL8S5
-	TJYVxQk1i+HcVNBiCrHBHJQfUCfz34jlLEOsumLouMuCMBW8pxxvtO4D
-X-Gm-Gg: AYBFou2X5ZuEAD4H7d5Vw+YzT0dDG/K/4gbOpgiM+zYCZdm2/IITeZG/g8q2AjDDKqK
-	wILVAM+j7Bile/aQrrppIjFcqIZha7bbxCPhK327t52IQvo7sYfQINFtVQbyQxPexoKqx8/P+4M
-	2OXBWY2Mgs2c/lOJ8wEULKEKLq2EJo6pZEUgO8GQANu6RWrkRPmM/lycMk+b212CHrzTGOKW3ss
-	1dO6jzBc/a1DEvoArYcpEi7B7z51P5PNoTSlbwCVn5PKNjvc8v7QfUz/PPGS5o8jtw64JeDppR0
-	uL5HTKdO9YuKGQpxCg+sEODyuCPir/ENbnpyBFnRY0ebm429OuqLpXRL4Gx2PtZLUW9SX2THGQj
-	sWiXVNgK6aUhcrtws87f66o9ZY/PlKT7M4Z0Y21U8HgRVtvw11oRS0CMPw5uXBo+AmXWT48X0jQ
-	5MDKtPmG6b4T1NYPqpAJvw+ELStuY+mlasOli3qZi76by3ZeBAFl9KqFb8zRyHPS4p2O+hYcl+m
-	Qr82LI3/ki8FrI1Q9obSF04uZGcHRBkWS3EZa1I4gNItl7y6kmCpCURUZgyBWLmdqlrVmoV6rd+
-	Pm/2Bimy0Q5takPa4QEVyJKbTvr8SiVm8pE80U4+jIdLYahUkN55Pn34FUm60actuyRaFGl+OfB
-	OPw==
-X-Received: by 2002:a05:600c:4747:b0:4a1:77db:45d9 with SMTP id 5b1f17b1804b1-4a18e47aa9amr307794635e9.6.1791959237236;
-        Tue, 13 Oct 2026 23:27:17 -0700 (PDT)
+        bh=jOeaatzk9bhuYpSzqiCT8rOTWkQH4urpPw2fjdSr5Ec=;
+        b=UYM+Xmx0x8eXtGXhVe9BGUzPIW+/+ReSH/0XtF0/ngzQ7XuprUYzogPAFOdn7CDChP
+         xFfTbl8peOicMMWVDqnBAHu7K7pHS6ZFikBHIU5D9HanK9RxwLIjeRlKDnFJIpq3CySq
+         sA3xAvuj7CmhjADi4VjF08StOEGxfS79siQ/5o3NXcTbKp+XZfw3GTUkLp19Ki+o1hKc
+         1AMUGvLrX/GGfB67P50fYdBHjvTUictfcqUK3QhLitjpkTK9mxmlWKkR2KbpP34qNZJd
+         Zc4xn0ZB1ur9SlgMQF+w5mI+mPj5J1Ri+XGApYC/+xJyvdicN6uUVwHWclwiwS+s/8jm
+         tASA==
+X-Forwarded-Encrypted: i=1; AKwUvBzqF888Q7WZCLuFoc/okkcpenGJtPNy/9gHyUzBVOoRHbY0F3d9YFEaEgWyYMMy1G7+SVk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIoR3cueam6kNJ5PTeWeaD1t/bvWHNxf3ZdnKL34LqXaACu8Sew
+	f7LnoRmnP8zmQAYz6bmXKKMEIPujhxkhEEjZtvQ2IkGvHJBt07GMiLfD
+X-Gm-Gg: AYBFou13Ml5IXZycygy64owpl0VhDqMi+o3xTe2MnYjCTbLFjglXH9pGzg9lpNwWQtE
+	LC2OMysE1vT+viOG18LDYI7j1yxflrF8xcTERtz/RyBe2rMtAUjEU2JP8N4sTfxwhrEC/Bx4JrK
+	8lfsH1x4KiWeqdHdJtc8t67GeRtWVn0uE/0JFJaN6a6LQ5+2sOJaAy3irDySj0JfJMaKVE2Nj9C
+	VtUZWl7Rh91WxNWjbBCc7uA28IEY8g1je5yaf9EnVfDo4GuDsUuRiQZdSKgnXe+z5CAhQcDUN+3
+	2BIv4DK4vQFhKeZcOfRfvpVSJZl0eTviEt1ldHikMLSGrq/E6g/SrxiR/+Vi7LB15GvEs3rL95e
+	Cnv4nDZqrBA1dtTBJv9KqZ/KcTj0oponBq6rQi5RVxqpjpvbea2/R5lOZkGBwER/0evITpdpuTt
+	+Z7mUT1SaK2SIeqDB4dm6yLjBTryA9w5V4V8KppkIgY52mVg/9FmpxfPTEVrS0EHlOHSpmi9KF5
+	scVitdm07gwd7qW2z7R0WlWQHqhZ8NSzDFpJEFvHCgrg7M46VHAKlTQVFfTuvwPQYTxQtgP2mtk
+	YOEFE+kfRuRDRYRkC0JEYUtoYZLCM+a3YxtSaNKDVScJMV0IXhfdhWtbDaiE0tfcRCHwWUAp1bL
+	XW6WmxSZaFYlH6g==
+X-Received: by 2002:a05:600c:1c1f:b0:4a1:a484:2c37 with SMTP id 5b1f17b1804b1-4a1a4842caemr152491245e9.25.1791959238943;
+        Tue, 13 Oct 2026 23:27:18 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-aed1-da01-ddff-863b-8308-ab16.310.pool.telefonica.de. [2a02:3100:aed1:da01:ddff:863b:8308:ab16])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be8c5e7sm528846745e9.4.2026.10.13.23.27.15
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be8c5e7sm528846745e9.4.2026.10.13.23.27.17
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 13 Oct 2026 23:27:16 -0700 (PDT)
+        Tue, 13 Oct 2026 23:27:18 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -85,9 +85,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net 1/3] net: stmmac: handle partially allocated DMA queues
-Date: Wed, 14 Oct 2026 08:26:59 +0200
-Message-Id: <3537f9a4f3e875291812486982b907b3b02bec15.1791958735.git.kmehltretter@gmail.com>
+Subject: [PATCH net 2/3] net: stmmac: free RX resources when TX allocation fails
+Date: Wed, 14 Oct 2026 08:27:00 +0200
+Message-Id: <e7a5380aabfbc03bd560ab08f37ea255d11d528a.1791958735.git.kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <cover.1791958735.git.kmehltretter@gmail.com>
 References: <cover.1791958735.git.kmehltretter@gmail.com>
@@ -99,90 +99,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-DMA allocation failure unwinds every configured queue, including the
-failed queue and queues not yet allocated. The cleanup helpers then
-dereference buffer arrays that may not exist.
+alloc_dma_desc_resources() allocates every RX queue before allocating
+TX queues. If TX allocation fails, its error path only frees TX
+resources and leaks all RX resources.
 
-Only traverse allocated buffer arrays. Clear freed pointers because the
-queue structures persist and XDP reconfiguration can reuse them.
+Free the RX resources after the TX allocator unwinds its queues.
 
-Found by inspection. On a BeagleV Ahead (TH1520), fault injection at
-the RX buffer metadata and TX DMA metadata allocations reached these
-invalid cleanup paths before a test guard stopped them. With this
-change, cleanup completed without the guard.
+Found by inspection. On a BeagleV Ahead (TH1520), forcing TX DMA
+metadata allocation to fail left the RX cleanup event absent. With this
+change, both TX and RX resources were released.
 
-Fixes: 54139cf3bb33 ("net: stmmac: adding multiple buffers for rx")
-Fixes: ce736788e8a9 ("net: stmmac: adding multiple buffers for TX")
+Fixes: 71fedb0198cb ("net: stmmac: break some functions into RX and TX scopes")
 Assisted-by: LLM
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 22 ++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index b837e8e27..495ff7aef 100644
+index 495ff7aef..8fd7d2173 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2144,10 +2144,12 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	void *addr;
+@@ -2425,6 +2425,8 @@ static int alloc_dma_desc_resources(struct stmmac_priv *priv,
+ 		return ret;
  
- 	/* Release the DMA RX socket buffers */
--	if (rx_q->xsk_pool)
--		dma_free_rx_xskbufs(priv, dma_conf, queue);
--	else
--		dma_free_rx_skbufs(priv, dma_conf, queue);
-+	if (rx_q->buf_pool) {
-+		if (rx_q->xsk_pool)
-+			dma_free_rx_xskbufs(priv, dma_conf, queue);
-+		else
-+			dma_free_rx_skbufs(priv, dma_conf, queue);
-+	}
+ 	ret = alloc_dma_tx_desc_resources(priv, dma_conf);
++	if (ret)
++		free_dma_rx_desc_resources(priv, dma_conf);
  
- 	rx_q->buf_alloc_num = 0;
- 	rx_q->xsk_pool = NULL;
-@@ -2161,13 +2163,17 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	size = stmmac_get_rx_desc_size(priv) * dma_conf->dma_rx_size;
- 
- 	dma_free_coherent(priv->device, size, addr, rx_q->dma_rx_phy);
-+	rx_q->dma_erx = NULL;
-+	rx_q->dma_rx = NULL;
- 
- 	if (xdp_rxq_info_is_reg(&rx_q->xdp_rxq))
- 		xdp_rxq_info_unreg(&rx_q->xdp_rxq);
- 
- 	kfree(rx_q->buf_pool);
-+	rx_q->buf_pool = NULL;
- 	if (rx_q->page_pool)
- 		page_pool_destroy(rx_q->page_pool);
-+	rx_q->page_pool = NULL;
+ 	return ret;
  }
- 
- static void free_dma_rx_desc_resources(struct stmmac_priv *priv,
-@@ -2196,7 +2202,8 @@ static void __free_dma_tx_desc_resources(struct stmmac_priv *priv,
- 	void *addr;
- 
- 	/* Release the DMA TX socket buffers */
--	dma_free_tx_skbufs(priv, dma_conf, queue);
-+	if (tx_q->tx_skbuff_dma && tx_q->tx_skbuff)
-+		dma_free_tx_skbufs(priv, dma_conf, queue);
- 
- 	if (priv->extend_desc) {
- 		addr = tx_q->dma_etx;
-@@ -2209,9 +2216,14 @@ static void __free_dma_tx_desc_resources(struct stmmac_priv *priv,
- 	size = stmmac_get_tx_desc_size(priv, tx_q) * dma_conf->dma_tx_size;
- 
- 	dma_free_coherent(priv->device, size, addr, tx_q->dma_tx_phy);
-+	tx_q->dma_etx = NULL;
-+	tx_q->dma_entx = NULL;
-+	tx_q->dma_tx = NULL;
- 
- 	kfree(tx_q->tx_skbuff_dma);
-+	tx_q->tx_skbuff_dma = NULL;
- 	kfree(tx_q->tx_skbuff);
-+	tx_q->tx_skbuff = NULL;
- }
- 
- static void free_dma_tx_desc_resources(struct stmmac_priv *priv,
 -- 
 2.39.5 (Apple Git-154)
 
