@@ -1,167 +1,118 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E284E0B74;
-	Wed, 14 Oct 2026 16:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBBF3A254A
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 17:31:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791996564; cv=none; b=mEAPMVBTnIbnCJijCc/E8F9vEaNUbfxAZ0Dr9LxtCw+wh2UWoyoJazGau/D7fU20S2A4DNRVfLl4whT5jt4KGkXkhq2/59pG/GNe4Upcro1es3PkbIJFsT3ClN3uwqjJ1VzXthwLZG/0H3IWZZt5X8Hr9KIDjXzwbmBb4Q/C/QY=
+	t=1791999069; cv=none; b=USuKSUiKCHKXKCugtMpbshSYhw0uf8Y0LNk7iGF2NQnh7Gf6G/O8edpake0ra38tTzhM6uuJbgVy47fY8Ay8xhvV86lfpnZAwHrJV2ft+J+Ix9mk4oRVbyVbbvIvYi/vJhMu1nfAIXbx3LgxkwsQCzD7GcOhIkMRn6i4PXzfvNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791996564; c=relaxed/simple;
-	bh=iSzaasvYvUiPzay+T0vJl6ArYMMDfH1SvrRmE73kiCI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RQPeWrldQfgV680T1cIwcYIGp9M20MmeYyNPyShdXDmJ1VEuc4GWgVKaQroH8+gBomYM7uqNn9l5IzK8wu2LxAJ2TdUv8ykyhOYpLDc1TxF6WuesptIeOrrGb2TUaMyrYhcMtIDUAhjIXjxDvr0uTGW09GG++qqSfpXTrV2k3c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=ZDjXae7y; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	s=arc-20240116; t=1791999069; c=relaxed/simple;
+	bh=5gH41Eld6XDJSNRPPJ47rSFC5gY4AbROBdKPmpEQegY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pJamrEkjF5FgIpydr5ES6iTyUcoCjo+PyxmT/rYFuOROyFRxA6OqzGpk49bqrixHQDubycbF8mXjW9nrdkA/0Ao+B4375y3/3VYGIS0anMj2sxLAal3vZSPqZ0AHtR7rQlWcwULelweEX+fuC1CE8XOvIWU7XgQAmE7oZ7DFFmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GiGQsps/; arc=none smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="ZDjXae7y"
-Received: from omf03.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 02FCF8066A;
-	Wed, 14 Oct 2026 16:49:17 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id AE89A6000A;
-	Wed, 14 Oct 2026 16:49:12 +0000 (UTC)
-Date: Wed, 14 Oct 2026 12:49:14 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Ridong Chen <ridong.chen@linux.dev>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Johannes Weiner
- <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, Roman Gushchin
- <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Andrew
- Morton <akpm@linux-foundation.org>, Dave Chinner <david@fromorbit.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Muchun Song
- <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>, David Hildenbrand
- <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, Kairui Song
- <kasong@tencent.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
- <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
- <weixugc@google.com>, Baoquan He <baoquan.he@linux.dev>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, cgroups@vger.kernel.org (open
- list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)),
- linux-mm@kvack.org (open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER
- (MEMCG)), bpf@vger.kernel.org (open list:BPF
- [MISC]:Keyword:(?:\b|_)bpf(?:\b|_)), Ridong Chen <chenridong@xiaomi.com>
-Subject: Re: [PATCH RFC v3 2/7] mm/vmscan: move vmscan tracepoints to a
- local header
-Message-ID: <20261014124914.21c21559@gandalf.local.home>
-In-Reply-To: <20261013131309.2790253-3-ridong.chen@linux.dev>
-References: <20261013131309.2790253-1-ridong.chen@linux.dev>
-	<20261013131309.2790253-3-ridong.chen@linux.dev>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GiGQsps/"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-67489c8202cso760142d50.3
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 10:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791999066; x=1792603866; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=N7mD7i3rFzvjW84wt5tuC9mVD16eLoOhWlZom11I0I0=;
+        b=GiGQsps/IUNZZ17Evvgk7hYaNZ+kOSYF7uTKeJotJridASKpnaMDIKR+2gykKf2z+n
+         5pLyjF5wQEHmUk4Ss3OLxoOKeW2G/X1yh9C5ol/C+AJdEHMe17mRbSFxWe0tc2zyNnsd
+         VLXuXy3BGrMgi3kEnYVrCmYujhogogbwToDm+QK0Z93FXeErpB/zzc9ZEXdlp0FxFD7Z
+         mtP8xc0IWovp1dI7qgXDQw5VZqLvk9ye0sBht5oO4LuMoC6S1WGrOAcp7xYyfxR2Uy6H
+         ziBbz/5/omja8qWuihR/YajXiitcaggTUuIVdzVdEtPWUv/nvmL19MgxcjoI5Fex/ZYw
+         /W+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791999066; x=1792603866;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=N7mD7i3rFzvjW84wt5tuC9mVD16eLoOhWlZom11I0I0=;
+        b=OzNrTsvxVDipG/MgWIz9yJ8adcKFZb66osLNidlteACHqBOVd4ZhPWM7YwWgUPe/Jl
+         hMPPZgw4onXaXEszmtXEtaJ8JDIi7OHCChK1OIW5KC59hKQPGZxCi4iA/FYvLkkaBDjx
+         KurwdKf2COpFJ0sLJmtipd9+UmQwWX1ULA6/r6kRSMynuZgM8zGIR7jn3txp0T+X4ODV
+         r8vomxZ3bK54422v5O3Bkg2JFOIEZYGJsuy5TG4yETooA0S8I3m8VzVIFHYv4Aw+Qd6W
+         kJ2S2tCHplvgv4m4maM8aIkYdqSvNxu6YLPzNrj8Q4+szVSejfGDDkzGNBEWUeqzuTYh
+         cOxQ==
+X-Gm-Message-State: AFq9FYLr6iClZbBgiUf9ijlCMTzHlPpWk293TjTjTVFWG6TMSIhcosaL
+	H+EybbQ37HHupcNNSJyj1+55k2H2KWD21eM1sKoJnAQDQQ8S7cCqBZzR
+X-Gm-Gg: AYBFou3juaHvXVgUbJYQvfc3yWMNZnFqCc8m+EfiwIkyoYGqPqbwx44bD1SP2JK/grE
+	m3gKAeJ/KymMqYaWJpGzEVXt5v4oux0L/YX8jMsA2mUx8eCF9hG4QVhOyMzaMm7+HVlvWqsXaaZ
+	Spo0TBHkq4km59A0hfu/eY66jfLhiUkh1MAciVY9ick8ThAvmeLbzlBQeSuiRgtATLHygxGQjqd
+	SRuSHOJlDvKGoQOPZM7KPVKpyRJEu1MTHO10/Oyj+1SyG0UmQJZ0PDQKpjzK8gS8cVyjQO46Y9n
+	dmyfbWTYSCZ5cA3Id0sxRmRthoiR/Mc7sTuoggOu5fTwDo6JITd9S4zfdz2gvkKRjNHHWDJpNBW
+	ki7vXkVdRGSpIX5IzVuTxF4jKaixkFOjebWyJaJG1a0rFa8DWZK6FO3FOwr5WT7A5Cgaa+bXZrB
+	HZNjPordkvbJWkdJwJ6jmq8iKbS3GFvDcPLXsiJyH5WYyacMMXdcNB3qM4JYr1ZV1Alygkx/5J
+X-Received: by 2002:a05:690e:bc9:b0:679:9063:c4d4 with SMTP id 956f58d0204a3-6799063cfc0mr875355d50.87.1791999065270;
+        Wed, 14 Oct 2026 10:31:05 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:8784:7d62:1705:ef5f])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67986a66262sm1277803d50.11.2026.10.14.10.31.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 10:31:04 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [PATCH bpf-next v1 1/4] bpf: Carry MEM_RCU for trusted fields with MEM_RCU parents
+Date: Wed, 14 Oct 2026 13:30:36 -0400
+Message-ID: <20261014173039.3666415-2-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261014173039.3666415-1-utilityemal77@gmail.com>
+References: <20261014173039.3666415-1-utilityemal77@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: AE89A6000A
-X-Stat-Signature: m7phkurr8zpyipefydjfncabm6u6cuns
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+2sabA8ApyQWp0KnP/HFLarVznZroqxp8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=a+jcCItmaVXvg0z3J5thFi2DsdWgCqN1j0EvdcEpj+w=; b=ZDjXae7yuY6daMhM/4jUFORVKfWrh7M3m7I1np8JJtIWO0CX68GmjeT7EEVC1ueFMeDDVtX+N0muCfk5WRWHbSgc3XbOFNIkK4Nj34ba3mrfYqHMKXppwgYEcaSgfHzFG3iN+YEgpe7FhA3ei48+cNoN4yD25t67Ejic1h5NyCw=
-X-HE-Tag: 1791996552-398790
-X-HE-Meta: U2FsdGVkX19WVIU50DbwQWQ1335aLD0DaAIUgIjNIvQ8PuHEzItAimjZ4jWFcbqXC2uQEeUl7OKKLjZZpqhlsOaTbjlt0g5JFPmtMPCLWd9sgUdQcyxnOwQ9CrJywM/QBRoqk8hbQOdJ5cDAQ38RYSlBz42nBJ9pNyLbe1tCYpApGPKp22Oa2OjUc3CRjYiV0EMElzxmGb+AOBSJE1PpBYmHO62axI0wg8DN/AGB2Fz/pcSXsN9QshQLIDo4IsZLu842OjTboQLK+3/GThFKibADAVexEZE1mMy7lMzdC84/ITa6ABJ7EBW9GFfPexV4kY5mT03a2mPMNhzIeu716uT2F3rGLy6OzmbqiER2EFUx9vVE/uNHHDyOU4TQUvYUCeaVChZwsFA4sPdaMEuwILWLuKMZRRdliS2SdjRcvmM=
+Content-Transfer-Encoding: 8bit
 
-On Tue, 13 Oct 2026 21:13:04 +0800
-Ridong Chen <ridong.chen@linux.dev> wrote:
+Substitute MEM_RCU instead of PTR_TRUSTED for fields declared as trusted
+when the parent pointer is MEM_RCU.
 
-> From: Ridong Chen <chenridong@xiaomi.com>
-> 
-> Move include/trace/events/vmscan.h to mm/trace_vmscan.h so that the
-> tracepoints can be extended to reference vmscan-internal structures such
-> as struct scan_control, which is not visible outside mm/.  This mirrors
-> what several other subsystems already do with their trace headers (e.g.
-> arch/x86/kvm/trace.h, drivers/gpu/drm/drm_trace.h, net/xfrm/trace_iptfs.h).
-> As they do, use a relative TRACE_INCLUDE_PATH so that no Makefile change
-> is needed.
-> 
-> No functional change.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
-> ---
->  MAINTAINERS                                        | 2 ++
->  mm/shrinker.c                                      | 2 +-
->  include/trace/events/vmscan.h => mm/trace_vmscan.h | 4 ++++
->  mm/vmscan.c                                        | 2 +-
->  4 files changed, 8 insertions(+), 2 deletions(-)
->  rename include/trace/events/vmscan.h => mm/trace_vmscan.h (99%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c5519d67b6f4..80d2a9dd0525 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17575,6 +17575,7 @@ F:	Documentation/admin-guide/mm/multigen_lru.rst
->  F:	Documentation/mm/multigen_lru.rst
->  F:	include/linux/mm_inline.h
->  F:	include/linux/mmzone.h
-> +F:	mm/trace_vmscan.h
->  F:	mm/vmscan.c
->  F:	mm/workingset.c
->  
-> @@ -17722,6 +17723,7 @@ R:	Shakeel Butt <shakeel.butt@linux.dev>
->  R:	Lorenzo Stoakes <ljs@kernel.org>
->  L:	linux-mm@kvack.org
->  S:	Maintained
-> +F:	mm/trace_vmscan.h
->  F:	mm/vmscan.c
->  F:	mm/workingset.c
->  
-> diff --git a/mm/shrinker.c b/mm/shrinker.c
-> index 7ec2a9704f6f..3c3e87c4b61c 100644
-> --- a/mm/shrinker.c
-> +++ b/mm/shrinker.c
-> @@ -3,7 +3,7 @@
->  #include <linux/rwsem.h>
->  #include <linux/shrinker.h>
->  #include <linux/rculist.h>
-> -#include <trace/events/vmscan.h>
-> +#include "trace_vmscan.h"
->  
->  #include "internal.h"
->  
-> diff --git a/include/trace/events/vmscan.h b/mm/trace_vmscan.h
-> similarity index 99%
-> rename from include/trace/events/vmscan.h
-> rename to mm/trace_vmscan.h
-> index 8a872990b4be..c5d824fef554 100644
-> --- a/include/trace/events/vmscan.h
-> +++ b/mm/trace_vmscan.h
-> @@ -648,4 +648,8 @@ TRACE_EVENT(mm_vmscan_kswapd_clear_hopeless,
->  #endif /* _TRACE_VMSCAN_H */
->  
->  /* This part must be outside protection */
-> +#undef TRACE_INCLUDE_FILE
-> +#undef TRACE_INCLUDE_PATH
-> +#define TRACE_INCLUDE_PATH ../../mm
+Today, walking a field in the __safe_trusted or __safe_trusted_or_null
+set invariably yields PTR_TRUSTED if its parent is trusted. If the
+parent is instead RCU protected, the resulting pointer survives
+bpf_rcu_read_unlock() as fully trusted: it can be dereferenced without
+PROBE_MEM and passed to kfuncs expecting trusted arguments after the
+parent's RCU grace period, e.g. mm->exe_file (MEM_RCU) followed by
+file->f_inode escapes the RCU CS as a trusted inode. Limit the child
+field's lifetime to that of the parent.
 
-The proper way to do this is to have:
+Fixes: 6fcd486b3a0a ("bpf: Refactor RCU enforcement in the verifier.")
+Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+---
+ kernel/bpf/verifier.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-#define TRACE_INCLUDE_PATH .
-
-And update the Makefile with:
-
-CFLAGS_vmscan.o := -I$(src)
-
--- Steve
-
-
-
-> +#define TRACE_INCLUDE_FILE trace_vmscan
->  #include <trace/define_trace.h>
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 29b31446fc11..6207dad9e644 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -71,7 +71,7 @@
->  #include "swap.h"
->  
->  #define CREATE_TRACE_POINTS
-> -#include <trace/events/vmscan.h>
-> +#include "trace_vmscan.h"
->  
->  struct scan_control {
->  	/* How many pages shrink_list() should reclaim */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2f190abe3448..20ca8591a0fe 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6684,9 +6684,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		 * trusted if we are in an RCU CS. Such pointer can be NULL.
+ 		 */
+ 		if (type_is_trusted(env, reg, field_name, btf_id)) {
+-			flag |= PTR_TRUSTED;
++			flag |= is_rcu_reg(reg) ? MEM_RCU : PTR_TRUSTED;
+ 		} else if (type_is_trusted_or_null(env, reg, field_name, btf_id)) {
+-			flag |= PTR_TRUSTED | PTR_MAYBE_NULL;
++			flag |= (is_rcu_reg(reg) ? MEM_RCU : PTR_TRUSTED) | PTR_MAYBE_NULL;
+ 		} else if (in_rcu_cs(env) && !type_may_be_null(reg->type)) {
+ 			if (type_is_rcu(env, reg, field_name, btf_id)) {
+ 				/* ignore __rcu tag and mark it MEM_RCU */
+-- 
+2.55.0
 
