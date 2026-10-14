@@ -1,37 +1,37 @@
-Received: from mta1.migadu.com (out-199.mta1.migadu.com [95.215.58.199])
+Received: from mta1.migadu.com (out-222.mta1.migadu.com [95.215.58.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAB55592E6
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 15:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2B955C1D1
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 16:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791992511; cv=none; b=Ys5wrglFGgwk1LCyBPSxX/T2AoYDQGe7LW612jj8CoTIBUdtn1GVlW+SCwtyafHxLrD+vtluewmPqTI2TktE0U0vc5koQg0UZUyISRu5KTpGxGfuL0JHO60xig0sSHArH77IaD6Vdi73vgODaCN7e7G2HNc17+DfqswJSbf1Sc4=
+	t=1791994858; cv=none; b=sO1e9YutEMLAy0kbHtUZXn0yVhW5SToTpiMr0O4YuWDtEbfDz7MHqaNm3rD3yogfl8MsQad7yyMyjCu2DzZsifpwNdZsfqC7o9CiUnlO+QsMYHAQEkQrb7QEkklUpqSQhMjsGJqRc3Agv7Fz6pmNCNHNwZeAHeZYaYI3Td0rT0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791992511; c=relaxed/simple;
-	bh=fxGczMJhHljOujxhYbdBhhKrQIgb8++In36E8MAL/N8=;
+	s=arc-20240116; t=1791994858; c=relaxed/simple;
+	bh=rKvGD/uQgvEu1y9QYyQ3BOrlGUecI24T5itI4gKAr8A=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jdQBsfMUmMvDE3owTICJPJu/xO1ZAm0Z8q7xHmKzp2x+o9zsnhs/Mwhg2pHIsA0TfFfev5hsYkiYpyBQVmqZAqagDAYSOkUiWoPUBNzY+msmambYoIKHvOPeJHdgowCU+92H+5+QYj2AtoAmhD1kYjbbPv9wYJ/uoRR+x7jA6EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X2pa5/KI; arc=none smtp.client-ip=95.215.58.199
+	 Content-Type:MIME-Version; b=jdMa71DlAHtGizoJ7uXXnPx6o4SRvZxvv4TJkIkrn8kmfX8X5zb05iIX7nTP13e8elMl7W7Wq9TTkIiZAMrKiYmNuRazucWiFge8gC2UFJxRgwy/HWODV6Cd+w31oXYoicAGiYE2k3iTN4A/qv/rfGzMje4xBiGsXXM4m0TKnsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ih/ZlP0B; arc=none smtp.client-ip=95.215.58.222
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X2pa5/KI"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ih/ZlP0B"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=fxGczMJhHljOujxhYbdBhhKrQIgb8++In36E8MAL/N8=;
+DKIM-Signature: a=rsa-sha256; bh=rKvGD/uQgvEu1y9QYyQ3BOrlGUecI24T5itI4gKAr8A=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791992507; v=1; x=1792597307;
- b=X2pa5/KI/ugN2Few4+7wXaVhnKlcX2IcutYKDSv6kN7R/jF+mtIZfiOvVq13/hYwdKnLqXXK
- aY8FDf4xJiziyEEe7i1Xb+BXz83eSg8ffOeg4MRNJZxA/Th2ER8YDmVbr86MBadJtL34gsBRihG
- C+HEo55a6HLOtv6U2T3+6Bgo=
+ t=1791994853; v=1; x=1792599653;
+ b=ih/ZlP0BMkDZDRlvf+S1KeZwWaUhrpp2qQQb8IROHURJ8N76LQjAtPEQ/a/HZmpvdxss1rAJ
+ VuVmcOCfj/MUP2pvlQCJFaVmfdEJ9PD8IXLVbcnTVahF1MRnWS32eWawNXNjn35ggp0bNRy+HtX
+ rmOOiTX4Fh3/IvGRraBCinPs=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id face5b178b893870;
-	Wed, 14 Oct 2026 15:41:47 +0000
-X-Mizu-Trace-ID: face5b178b893870
+Received: by smtp.migadu.com with ESMTPS id 1e510aac7886c557;
+	Wed, 14 Oct 2026 16:20:53 +0000
+X-Mizu-Trace-ID: 1e510aac7886c557
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <0db65f50adf251e210b6fdda44b5706f641ef4fe.camel@linux.dev>
-Subject: Re: [PATCH bpf-next v2 6/7] selftests/bpf: Skip expected_msgs
- subtests when stdout is not saved
+Message-ID: <b6ca5327e6263cc3b6c0e381d502ce8b5570d413.camel@linux.dev>
+Subject: Re: [PATCH bpf-next v2 7/7] selftests/bpf: Skip compare_text
+ subtest when stdout is not saved
 From: KaFai Wan <kafai.wan@linux.dev>
 To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
  john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
@@ -45,10 +45,10 @@ To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
  mykolal@fb.com, bpf@vger.kernel.org,  linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org,  llvm@lists.linux.dev
 Cc: martin.lau@kernel.org, mason@kernel.org
-Date: Wed, 14 Oct 2026 23:41:30 +0800
-In-Reply-To: <7b00556c5b846e17d2f940c8b007b64b37dc24219d9c0a31ebbfbedb02f74ea3@mail.kernel.org>
-References: <20261014113043.640435-7-kafai.wan@linux.dev>
-	 <7b00556c5b846e17d2f940c8b007b64b37dc24219d9c0a31ebbfbedb02f74ea3@mail.kernel.org>
+Date: Thu, 15 Oct 2026 00:20:30 +0800
+In-Reply-To: <b66b343a0a91711a6a520e11b284941771cbb23ad8c8f1bd5f831594b567b5fa@mail.kernel.org>
+References: <20261014113043.640435-8-kafai.wan@linux.dev>
+	 <b66b343a0a91711a6a520e11b284941771cbb23ad8c8f1bd5f831594b567b5fa@mail.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.3-0ubuntu1.1 
@@ -60,71 +60,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Wed, 2026-10-14 at 12:08 +0000, bot+bpf-ci@kernel.org wrote:
-> > selftests/bpf: Skip expected_msgs subtests when stdout is not saved
+> > selftests/bpf: Skip compare_text subtest when stdout is not saved
 >=20
-> TL;DR: Nit only: the new test__skip() in the expected_msgs selftest is si=
-lent,
-> so -v output doesn't say why subtests were skipped; the review asks wheth=
-er to
-> print a short reason. The skip logic itself looks correct.
+> TL;DR: Nit only: the new test__skip() in the compare_text_mismatch subtes=
+t
+> gives no reason for skipping; a short comment or stderr message might hel=
+p.
+> The skip logic itself looks correct.
 >=20
 > > diff --git a/tools/testing/selftests/bpf/prog_tests/prog_tests_framewor=
 k.c
 > > b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-> > index 53347f379924..b4cd7c7ff439 100644
+> > index b4cd7c7ff439..ddb6cdc1579f 100644
 > > --- a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
 > > +++ b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
 >=20
 > [ ... ]
 >=20
-> > @@ -169,6 +169,12 @@ void test_prog_tests_framework_expected_msgs(void)
+> > @@ -203,14 +203,18 @@ void test_prog_tests_framework_compare_text(void)
+> > =C2=A0	}
 > >=20
-> > =C2=A0	for (i =3D 0; i < ARRAY_SIZE(cases); i++) {
-> > =C2=A0		if (test__start_subtest(cases[i].name)) {
-> > +			if (!env.subtest_state->stdout_saved) {
-> > +				test__skip();
-> > +				test__end_subtest();
-> > +				continue;
-> > +			}
-> > +
+> > =C2=A0	if (test__start_subtest("compare_text_mismatch")) {
+> > -		err =3D compare_text_to_expected("line two\n", "line one\n");
+> > -		fflush(stdout);
+> > +		if (!env.subtest_state->stdout_saved) {
+> > +			test__skip();
+> > +		} else {
+> > +			err =3D compare_text_to_expected("line two\n", "line one\n");
+> > +			fflush(stdout);
+> >=20
+> > -		ASSERT_EQ(err, -1, "mismatch_rc");
+> > -		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
+> > -				=C2=A0 "diff_has_expected");
+> > -		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
+> > -				=C2=A0 "diff_has_actual");
+> > +			ASSERT_EQ(err, -1, "mismatch_rc");
+> > +			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
+> > +					=C2=A0 "diff_has_expected");
+> > +			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
+> > +					=C2=A0 "diff_has_actual");
+> > +		}
+> > =C2=A0		test__end_subtest();
+> > =C2=A0	}
+> > =C2=A0}
 >=20
-> This isn't a bug, but a subsystem guideline flags a test__skip() that is
-> issued silently, with no message.
+> This isn't a bug, but could the skip in the compare_text_mismatch subtest
+> carry an explanation?
 >=20
-> test__skip() here is called without any explanation, so a -v run only sho=
-ws
-> the generic "#N/M <subtest>:SKIP" line from test__end_subtest().=C2=A0 So=
-meone
-> reading that output has to look at the code or the commit message to lear=
-n
-> the subtests were skipped because stdout is not captured in non-parallel
-> verbose mode.
+> 	if (!env.subtest_state->stdout_saved) {
+> 		test__skip();
+> 	}
 >=20
-> The skip itself looks correct, since stdio_hijack_init() returns early wh=
-en
-> verbose() && env.worker_id =3D=3D -1 and leaves subtest_state->stdout_sav=
-ed and
-> log_buf unset.=C2=A0 test__skip() takes no reason argument, and many othe=
-r
-> test__skip() callers in prog_tests are also bare.
+> A subsystem guideline flags selftests that skip silently with no message,
+> and test__skip() here prints nothing about why the subtest was skipped.
+> The same condition covers -v in non-parallel mode, a libc without
+> open_memstream() support, and an open_memstream() failure, so the reason =
+is
+> not obvious from the test output alone.
 >=20
-> Would it be worth printing a short reason before test__skip(), for exampl=
-e:
+> For context, the skip itself looks correct: env.subtest_state is non-NULL
+> inside the subtest, test__skip() sets subtest_state->skipped, and
+> test__end_subtest() handles a NULL stdout_saved.
 >=20
-> =C2=A0=C2=A0=C2=A0 fprintf(stderr, "SKIP: stdout is not saved in non-para=
-llel verbose mode\n");
-
-I don't think we need this. for two reasons:
-a) -v is mainly used for debugging, showing details; this is a test for the=
- framework, not the real
-bpf test, all tests should pass, no need to debug;
-b) this is a loop. if we keep adding this message, it could repeat for 9 li=
-nes.
+> The other skips in this file are also bare test__skip() calls, and
+> test__skip() takes no reason argument, so the guideline may not map clean=
+ly
+> onto test_progs.=C2=A0 If a reason is wanted, would a short comment above=
+ the
+> test__skip() call, or a separate message printed to env.stderr_saved, be
+> appropriate?
 >=20
-> > =C2=A0			error_cnt =3D env.subtest_state->error_cnt;
-> > =C2=A0			msgs.patterns =3D cases[i].pats;
-> > =C2=A0			msgs.cnt =3D 0;
->=20
+just one line for this, we can print why the test skipped. and short commen=
+t for patch#6
 >=20
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a =
