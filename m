@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F02569F16;
-	Wed, 14 Oct 2026 18:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD26F56C654;
+	Wed, 14 Oct 2026 18:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792003579; cv=none; b=r0KdohvCHLzY/4H9oN/XMvGUZtgM9lZAq+ZdzR0/Ab/tyRPJebDAOkhvL++vRvYI0npHDidoMFhfDAmg42Y3JxndP6ccEGhrbiS+FvPDZJrAgyuBo2o+vZMMskQ9VfFBibB81+bJE+u1tZZa9YFbpcugBjF41T5IOl28YTYyd+g=
+	t=1792003582; cv=none; b=dwqxsv1zIBBD3OgcUDRvmwKCJSfxDibUey+0j0D/Iswfe4e1X1fy7hz7pSsoloIv8GeQnI2Oy3u3j4HIh/jfMKJGqLMd+MspyntaE8nWj0+F5D5I02U9afYoonGNwZqlA4VSO0hI6IAUe8Fkt8gNCngZsUPaHTJlNHEOxmgWBOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792003579; c=relaxed/simple;
-	bh=9O6/Jei09/yBpRZfVJS4ANQAOfsB1zdonhHyvaP2C+s=;
+	s=arc-20240116; t=1792003582; c=relaxed/simple;
+	bh=freynhT4vQyIUmxLc1f6goeJAooDBW3T9tkCsXCU+KM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qJI89MigZEVNU6SpoDXY2Rgvsq76fyiPMZiflRTZ2a40YyFa3gosvPfbNv3VQCRe9Y44uBjqcofHjNH2Pr07gboIj8P30Y0Guk3w3+rXDW0Ltp5mYTDA/Y7jHhHrDf8NZeyY6q26rT6EIrSU6UL05uPY7cHilXOyC6zfoTxO3rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IWmoqysB; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=YqUYlQUDvip/HF6gF3NZWZQWNk5dkRI9FOSIh3lY8Ko1CdcjAd3x83VJ2h8XegenIp2eXcOBiq1Q5bpCY/UdEGN6OF+Nh7FqRg6NVaHITDBFbJ3x+tDgYQWLEQen06bDHM1Cc+N5gEIP9ZYEMGUNAwQE+kY64ptuiCNhPmmQgu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WKazYuAA; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IWmoqysB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WKazYuAA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792003577; x=1823539577;
+  t=1792003580; x=1823539580;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9O6/Jei09/yBpRZfVJS4ANQAOfsB1zdonhHyvaP2C+s=;
-  b=IWmoqysBEHZpjfTGgSbaulvTCfx95BS44MwNcneaw444QZ5RHPYQ5tu+
-   sJRn3UHpqln0Xzh9DztXPlN2656swrmJ+rbBsmpBRacpQTIlAmdGa97WT
-   QSEupzrkNq3NxlOdahDVMOlubSf48dnwHw0AWn3eSctUvjrzcu1+Gdi2m
-   SUwhi6dXKFL5cjgKVxUBsGby89PjU7DQZWV4SK9fcOytBcopUJKnHJnjw
-   3O2tH73912BMBnhLJFMQYF3QAQxLxI5SqY+FppE9IbgQBGSesxrkJzDUd
-   bj7iesRl56oz00xwJQq1md/O/JKpjrIbWnG3yCv+UzqACSt+syaS4g2ST
+  bh=freynhT4vQyIUmxLc1f6goeJAooDBW3T9tkCsXCU+KM=;
+  b=WKazYuAAIAjSrZFcRC8H4f40WRS9evD2QybE+O1tFDxt23nSq7UNRzjV
+   1/V8OxRawDyrdtJVQbJ6eBRi1jtmlKsARA5yZF2/Xr/9TphBnjd86Cn77
+   SHL4XwUHYckhOVKgac40MvG+TmCjbtyfWKqECRNAz1ZoNaGX9bltes8dt
+   OWc3qpLt53rYJwK+PL2p6XuseuvoZ0IRLIkaPpJZdj6xiwibzcun8O4T5
+   wp6K3VYeEse642/wo2OSsJbFTT0xtKwXcF/9AtVYjcqKyIBUzWXW7qa/R
+   ysB9bA2vjDhKAaWOo1rkxZ8dRPW1DYZV4ORMx3MVW6UpjtjFSo+4aACHw
    A==;
-X-CSE-ConnectionGUID: +Ut+XfGRQKif32DoMAzghA==
-X-CSE-MsgGUID: vnN7RQUnSc2EsBGM+8pd5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="767330"
+X-CSE-ConnectionGUID: 7xjhGBscSjaDnK1a2Ki4OQ==
+X-CSE-MsgGUID: UCzt18GwQRuOkL3JaUT23w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="767336"
 X-IronPort-AV: E=Sophos;i="6.27,158,1787036400"; 
-   d="scan'208";a="767330"
+   d="scan'208";a="767336"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 11:46:17 -0700
-X-CSE-ConnectionGUID: 5Xti1leQQOa2YfyBCcXCLg==
-X-CSE-MsgGUID: Q8SzRXcbSaW7yKZio5WBEg==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 11:46:20 -0700
+X-CSE-ConnectionGUID: BiYBHUTxQkO72p/1SAbKJA==
+X-CSE-MsgGUID: vCZXD8WDRqSkmRuTX1sg0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,158,1787036400"; 
-   d="scan'208";a="1420788"
+   d="scan'208";a="1420799"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa009.jf.intel.com with ESMTP; 14 Oct 2026 11:46:14 -0700
+  by orviesa009.jf.intel.com with ESMTP; 14 Oct 2026 11:46:17 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: bpf@vger.kernel.org,
 	kerneljasonxing@gmail.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v3 net-next 09/15] selftests: xsk: run one test case per xskxceiver invocation
-Date: Wed, 14 Oct 2026 20:45:33 +0200
-Message-Id: <20261014184539.774708-10-maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 net-next 10/15] selftests: xsk: run the RX and TX endpoints in separate processes
+Date: Wed, 14 Oct 2026 20:45:34 +0200
+Message-Id: <20261014184539.774708-11-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20261014184539.774708-1-maciej.fijalkowski@intel.com>
 References: <20261014184539.774708-1-maciej.fijalkowski@intel.com>
@@ -66,804 +66,1353 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Replace test_xsk.sh and xsk_prereqs.sh with test_xsk.py, which runs
-xskxceiver once per mode and case, so that every case starts from a
-fresh process and a crash fails only its own case. A single case is
-also the unit that the next patch splits into RX and TX processes.
+Run the two endpoints of a test case as separate xskxceiver processes,
+so that a later patch can run them on two hosts. A process binds only
+the interface given with -i, takes its role from -e rx|tx and meets the
+other endpoint over a small TCP control channel (-p HOST -P PORT). The
+other side is represented by a shadow ifobject that mirrors the local
+capabilities and holds a loaded copy of the XDP skeleton, so the shared
+test code keeps addressing both sides while only the local interface is
+programmed. Once BIDIRECTIONAL swaps the directions, the local
+interface runs the shadow's programs.
 
-xskxceiver now requires -m and -t, runs exactly that case, reports one
-KTAP result and exits with its verdict. An unsupported mode skips the
-case instead of exiting with XFAIL.
+The pthreads, the barrier, test->fail and -lpthread go away. Each
+process runs the worker of its local ifobject, and the endpoints
+exchange three fixed-size messages:
 
-test_xsk.py uses the networking selftests Python library, as does the
-hardware test added later, so every case is a KTAP case of its own:
-test_xsk runs each case that xskxceiver -l lists in skb and drv mode,
-e.g. test_xsk.drv_SEND_RECEIVE, and test_xsk_busy_poll runs them again
-with busy polling. The usual -t and -T options select cases in place of
-the script's -l, -m and -t, and -v and -d go away, as the output of a
-run that does not pass is logged. Each case runs on a veth pair of its
-own, so an MTU or an XDP program that a crashed case leaves behind
-cannot reach the next one. The pair stays in the current network
-namespace, as only the initial one has the net.core.max_skb_frags
-sysctl that xskxceiver reads. A case is killed and fails after two
-minutes, and the test skips when xskxceiver was not built.
+- READY, exchanged before each step, works as a barrier; TCP ordering
+  puts all progress of the previous step before it
+- PROGRESS carries the number of packets RX consumed, which TX
+  subtracts from its in-flight count so as not to overrun the RX UMEM
+- ABORT tells the other endpoint to stop waiting after a failure
 
-test_xsk.py reserves 32 huge pages for the UNALIGNED cases, restores
-the count when it ends and leaves those cases out when it cannot
-reserve them. ksft_run() exits on -l and -h before the count is
-restored, so test_xsk.py rejects both. The huge page, busy-poll and
-endpoint wait helpers, which the hardware test shares, go to
-net/lib/py/xsk.py, which joins the AF_XDP entry in MAINTAINERS.
+TX listens and RX connects. The listener says on stderr when it
+listens, so the launcher starts the connector then rather than polling
+for the port, which could also find a foreign listener. The listener
+waits 30s for the connector, and -P takes a port number. As with the
+control channels of other selftests, the hosts are trusted and the
+channel is not authenticated. Test selection, interface capabilities
+and verdicts stay with the launcher.
 
-test_xsk.py leaves out two cases that test_progs skipped as flaky:
-
-- XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF: bpf_xdp_adjust_tail() frees the
-  trimmed fragment as the memory type of the XDP RX queue, which veth
-  and generic XDP leave at MEM_TYPE_PAGE_SHARED for frames that they
-  copy into page_pool pages, so the page leaks from its pool and the
-  pool's shutdown stalls
-- XDP_ADJUST_TAIL_GROW: it skips in skb mode, and in drv mode veth
-  copies each frame into a page_pool fragment that leaves no room to
-  grow the 128-byte frames of the case unless it is the last one of its
-  page, so the XDP program drops most frames
-
-Drop the xskxceiver.c note on enabling packet dumps with -D in
-test_xsk.sh; xskxceiver has no such option and dumps packets on
-validation errors.
+test_xsk.py starts TX on a random control port on 127.0.0.1 and RX
+once TX listens, and kills TX and fails the case when it does not
+listen within 30s. The case passes when both endpoints pass, and is
+skipped when one skips and neither fails. Only the output of an
+endpoint that does not pass is logged, prefixed with its role.
+xsk_wait_listen(), which reads the TX stderr up to the listen line,
+joins the library helpers, and xsk_wait_endpoint_exit() logs that
+output along with the rest.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/net/Makefile          |   3 +-
- tools/testing/selftests/net/lib/Makefile      |   2 +-
- .../testing/selftests/net/lib/py/__init__.py  |   4 +
- tools/testing/selftests/net/lib/py/xsk.py     |  58 +++++
- .../selftests/net/lib/xsk/xskxceiver.c        |  63 ++---
- tools/testing/selftests/net/test_xsk.py       | 140 +++++++++++
- tools/testing/selftests/net/test_xsk.sh       | 230 ------------------
- tools/testing/selftests/net/xsk_prereqs.sh    |  86 -------
- 9 files changed, 227 insertions(+), 360 deletions(-)
- create mode 100644 tools/testing/selftests/net/lib/py/xsk.py
- create mode 100755 tools/testing/selftests/net/test_xsk.py
- delete mode 100755 tools/testing/selftests/net/test_xsk.sh
- delete mode 100755 tools/testing/selftests/net/xsk_prereqs.sh
+ tools/testing/selftests/net/lib/Makefile      |   3 +-
+ .../testing/selftests/net/lib/py/__init__.py  |   4 +-
+ tools/testing/selftests/net/lib/py/xsk.py     |  35 ++-
+ .../testing/selftests/net/lib/xsk/test_xsk.c  | 205 +++++++-----
+ .../testing/selftests/net/lib/xsk/test_xsk.h  |  23 +-
+ .../testing/selftests/net/lib/xsk/xsk_peer.c  | 293 ++++++++++++++++++
+ .../testing/selftests/net/lib/xsk/xsk_peer.h  |  19 ++
+ .../selftests/net/lib/xsk/xskxceiver.c        | 136 ++++++--
+ tools/testing/selftests/net/test_xsk.py       |  68 ++--
+ 9 files changed, 633 insertions(+), 153 deletions(-)
+ create mode 100644 tools/testing/selftests/net/lib/xsk/xsk_peer.c
+ create mode 100644 tools/testing/selftests/net/lib/xsk/xsk_peer.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1fc9eaedd744..6985a42bc09c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -29784,6 +29784,7 @@ F:	include/uapi/linux/if_xdp.h
- F:	include/uapi/linux/xdp_diag.h
- F:	net/xdp/
- F:	tools/testing/selftests/net/*xsk*
-+F:	tools/testing/selftests/net/lib/py/xsk.py
- F:	tools/testing/selftests/net/lib/xsk/
- 
- XEN BLOCK SUBSYSTEM
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index aa31b6216dd1..8c8219703bd7 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -118,7 +118,7 @@ TEST_PROGS := \
- 	test_vxlan_under_vrf.sh \
- 	test_vxlan_vnifilter_notify.sh \
- 	test_vxlan_vnifiltering.sh \
--	test_xsk.sh \
-+	test_xsk.py \
- 	tfo_passive.sh \
- 	traceroute.sh \
- 	txtimestamp.sh \
-@@ -210,7 +210,6 @@ TEST_FILES := \
- 	in_netns.sh \
- 	lib.sh \
- 	settings \
--	xsk_prereqs.sh \
- # end of TEST_FILES
- 
- # YNL files, must be before "include ..lib.mk"
 diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
-index c26088da0489..5c1612315062 100644
+index 5c1612315062..49dac776202b 100644
 --- a/tools/testing/selftests/net/lib/Makefile
 +++ b/tools/testing/selftests/net/lib/Makefile
-@@ -34,7 +34,7 @@ include ../../lib.mk
- 
- include ../bpf.mk
- 
--# AF_XDP test engine used by net/test_xsk.sh.
-+# AF_XDP test engine used by net/test_xsk.py.
+@@ -38,13 +38,12 @@ include ../bpf.mk
  XSK_DIR := xsk
  XSK_BPF_OBJ := $(OUTPUT)/xsk_xdp_progs.bpf.o
  XSK_SKEL := $(OUTPUT)/xsk_xdp_progs.skel.h
+-XSK_SOURCES := $(addprefix $(XSK_DIR)/,xskxceiver.c xsk.c test_xsk.c) \
++XSK_SOURCES := $(addprefix $(XSK_DIR)/,xskxceiver.c xsk.c test_xsk.c xsk_peer.c) \
+ 	$(top_srcdir)/tools/lib/find_bit.c
+ XSK_HEADERS := $(wildcard $(XSK_DIR)/*.h)
+ 
+ PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+ XSK_LDLIBS := $(shell $(PKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf) -lz
+-XSK_LDLIBS += -lpthread
+ 
+ $(XSK_BPF_OBJ): $(XSK_DIR)/xsk_xdp_progs.bpf.c $(XSK_DIR)/xsk_xdp_common.h $(BPFOBJ)
+ 	$(call msg,BPF_PROG,,$@)
 diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
-index 71df5880b356..1a93ab8b1e60 100644
+index 1a93ab8b1e60..a82bac8a6b47 100644
 --- a/tools/testing/selftests/net/lib/py/__init__.py
 +++ b/tools/testing/selftests/net/lib/py/__init__.py
-@@ -16,6 +16,8 @@ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
-     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
+@@ -17,7 +17,7 @@ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
      ctl_file_write, wait_file, tool, tc
  from .bpf import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
-+from .xsk import xsk_reserve_hugepages, xsk_release_hugepages, \
-+    xsk_setup_busy_poll, xsk_wait_endpoint_exit
+ from .xsk import xsk_reserve_hugepages, xsk_release_hugepages, \
+-    xsk_setup_busy_poll, xsk_wait_endpoint_exit
++    xsk_setup_busy_poll, xsk_wait_endpoint_exit, xsk_wait_listen
  from .ynl import NlError, NlctrlFamily, YnlFamily, \
      EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily, RtnlRouteFamily
  from .ynl import NetshaperFamily, DevlinkFamily, PSPFamily, Netlink
-@@ -31,6 +33,8 @@ __all__ = ["KSRC",
-            "bpftool", "ip", "ethtool", "bpftrace", "rand_port", "rand_ports",
+@@ -34,7 +34,7 @@ __all__ = ["KSRC",
             "wait_port_listen", "ctl_file_write", "wait_file", "tool", "tc",
             "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
-+           "xsk_reserve_hugepages", "xsk_release_hugepages",
-+           "xsk_setup_busy_poll", "xsk_wait_endpoint_exit",
+            "xsk_reserve_hugepages", "xsk_release_hugepages",
+-           "xsk_setup_busy_poll", "xsk_wait_endpoint_exit",
++           "xsk_setup_busy_poll", "xsk_wait_endpoint_exit", "xsk_wait_listen",
             "NetdevSim", "NetdevSimDev",
             "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
             "YnlFamily", "EthtoolFamily", "NetdevFamily", "RtnlFamily",
 diff --git a/tools/testing/selftests/net/lib/py/xsk.py b/tools/testing/selftests/net/lib/py/xsk.py
-new file mode 100644
-index 000000000000..50985bcb5b80
---- /dev/null
+index 50985bcb5b80..6f4ffc4786d2 100644
+--- a/tools/testing/selftests/net/lib/py/xsk.py
 +++ b/tools/testing/selftests/net/lib/py/xsk.py
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Helpers to run xskxceiver, the AF_XDP test program in net/lib/xsk.
-+"""
-+
-+import subprocess
-+
-+from .ksft import ksft_pr
-+from .utils import cmd, ctl_file_write
-+
-+NR_HUGEPAGES = 32
-+
-+
-+def xsk_reserve_hugepages(saved, host=None):
-+    """Raise vm.nr_hugepages on host to what the UNALIGNED cases need, and
-+    return whether it has that many. Add the count to restore to saved, a
-+    list for xsk_release_hugepages()."""
-+    have = int(cmd("sysctl -n vm.nr_hugepages", host=host).stdout)
-+    if have >= NR_HUGEPAGES:
-+        return True
-+    cmd(f"sysctl -qw vm.nr_hugepages={NR_HUGEPAGES}", host=host)
-+    saved.append((host, have))
-+    got = int(cmd("sysctl -n vm.nr_hugepages", host=host).stdout)
-+    return got >= NR_HUGEPAGES
-+
-+
-+def xsk_release_hugepages(saved):
-+    """Restore the counts that xsk_reserve_hugepages() added to saved, the
-+    last one first, as two hosts can share the sysctl."""
-+    for host, have in reversed(saved):
-+        cmd(f"sysctl -qw vm.nr_hugepages={have}", host=host)
-+
-+
-+def xsk_setup_busy_poll(ifname):
-+    """Set napi_defer_hard_irqs and gro_flush_timeout of ifname until the
-+    case ends, so that SO_PREFER_BUSY_POLL of xskxceiver -b keeps the IRQs
-+    masked."""
-+    sysfs = f"/sys/class/net/{ifname}"
-+    ctl_file_write(f"{sysfs}/napi_defer_hard_irqs", 2)
-+    ctl_file_write(f"{sysfs}/gro_flush_timeout", 200000)
+@@ -5,9 +5,10 @@ Helpers to run xskxceiver, the AF_XDP test program in net/lib/xsk.
+ """
+ 
+ import subprocess
++import time
+ 
+ from .ksft import ksft_pr
+-from .utils import cmd, ctl_file_write
++from .utils import cmd, ctl_file_write, fd_read_timeout
+ 
+ NR_HUGEPAGES = 32
+ 
+@@ -41,10 +42,32 @@ def xsk_setup_busy_poll(ifname):
+     ctl_file_write(f"{sysfs}/gro_flush_timeout", 200000)
+ 
+ 
+-def xsk_wait_endpoint_exit(endpoint, label, timeout):
+-    """Wait up to timeout seconds for xskxceiver to exit, kill it if it does
+-    not, and return its exit code. Log its output, a KTAP stream of its own,
+-    prefixed with label, only if it did not pass."""
++def xsk_wait_listen(endpoint, port, timeout):
++    """Wait up to timeout seconds for an xskxceiver endpoint to print on
++    stderr that it listens on the control port. Unlike polling for the port,
++    this never takes a foreign listener for it and costs no SSH login per
++    try on a remote host. Return the stderr read so far and whether that
++    line came."""
++    line = f"Listening for XSK peer on port {port}\n".encode()
++    fd = endpoint.proc.stderr.fileno()
++    head = b""
++    deadline = time.monotonic() + timeout
++    while line not in head:
++        try:
++            data = fd_read_timeout(fd, max(deadline - time.monotonic(), 0))
++        except TimeoutError:
++            break
++        if not data:
++            break
++        head += data
++    return head.decode(), line in head
 +
 +
-+def xsk_wait_endpoint_exit(endpoint, label, timeout):
-+    """Wait up to timeout seconds for xskxceiver to exit, kill it if it does
-+    not, and return its exit code. Log its output, a KTAP stream of its own,
-+    prefixed with label, only if it did not pass."""
-+    try:
-+        endpoint.process(terminate=False, fail=False, timeout=timeout)
-+    except subprocess.TimeoutExpired:
-+        endpoint.proc.kill()
-+        endpoint.process(terminate=False, fail=False)
-+        ksft_pr(f"killed after {timeout}s", line_pfx=f"{label}|")
-+    if endpoint.ret:
-+        for out in (endpoint.stdout, endpoint.stderr):
-+            if out:
-+                ksft_pr(out.rstrip(), line_pfx=f"{label}|")
-+    return endpoint.ret
++def xsk_wait_endpoint_exit(endpoint, label, timeout, head=""):
++    """Wait up to timeout seconds for an xskxceiver endpoint to exit, kill it
++    if it does not, and return its exit code. Log its output, a KTAP stream
++    of its own, prefixed with label, only if it did not pass. head is the
++    start of its stderr, if xsk_wait_listen() took it off the pipe."""
+     try:
+         endpoint.process(terminate=False, fail=False, timeout=timeout)
+     except subprocess.TimeoutExpired:
+@@ -52,7 +75,7 @@ def xsk_wait_endpoint_exit(endpoint, label, timeout):
+         endpoint.process(terminate=False, fail=False)
+         ksft_pr(f"killed after {timeout}s", line_pfx=f"{label}|")
+     if endpoint.ret:
+-        for out in (endpoint.stdout, endpoint.stderr):
++        for out in (endpoint.stdout, head + endpoint.stderr):
+             if out:
+                 ksft_pr(out.rstrip(), line_pfx=f"{label}|")
+     return endpoint.ret
+diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testing/selftests/net/lib/xsk/test_xsk.c
+index e4e0d4dfab5a..f67a32c0260a 100644
+--- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
++++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
+@@ -7,7 +7,6 @@
+ #include <linux/mman.h>
+ #include <linux/netdev.h>
+ #include <poll.h>
+-#include <pthread.h>
+ #include <string.h>
+ #include <sys/mman.h>
+ #include <sys/socket.h>
+@@ -15,6 +14,7 @@
+ #include <unistd.h>
+ 
+ #include "test_xsk.h"
++#include "xsk_peer.h"
+ #include "xsk_xdp_common.h"
+ #include "xsk_xdp_progs.skel.h"
+ 
+@@ -38,10 +38,37 @@
+ static const u8 g_mac[ETH_ALEN] = {0x55, 0x44, 0x33, 0x22, 0x11, 0x00};
+ 
+ bool opt_verbose;
+-pthread_barrier_t barr;
+-pthread_mutex_t pacing_mutex = PTHREAD_MUTEX_INITIALIZER;
+ 
+ int pkts_in_flight;
++static struct xsk_peer *ctrl_peer;
++
++void xsk_set_endpoint(struct xsk_peer *peer)
++{
++	ctrl_peer = peer;
++}
++
++static int pacing_rx_progress(u32 pkts)
++{
++	int err = xsk_peer_rx_progress(ctrl_peer, pkts);
++
++	if (err)
++		ksft_print_msg("RX control channel failed: %d (%s)\n", err,
++			       strerror(-err));
++	return err;
++}
++
++static int pacing_tx_sync(void)
++{
++	int acked = xsk_peer_tx_sync(ctrl_peer);
++
++	if (acked < 0) {
++		ksft_print_msg("TX control channel failed: %d (%s)\n", acked,
++			       strerror(-acked));
++		return acked;
++	}
++	pkts_in_flight -= acked;
++	return 0;
++}
+ 
+ /* The payload is a word consisting of a packet sequence number in the upper
+  * 16-bits and a intra packet data sequence number in the lower 16 bits. So the 3rd packet's
+@@ -256,7 +283,8 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 		ifobj->xsk->umem->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ 	}
+ 
+-	if (ifobj_has_cap(ifobj_tx, XSK_CAP_HW_RING))
++	if (ifobj_has_cap(ifobj_tx, XSK_CAP_HW_RING) &&
++	    ifobj_is_local(ifobj_tx))
+ 		hw_ring_size_reset(ifobj_tx);
+ 
+ 	test->ifobj_tx = ifobj_tx;
+@@ -264,7 +292,6 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 	test->current_step = 0;
+ 	test->total_steps = 1;
+ 	test->nb_sockets = 1;
+-	test->fail = false;
+ 	test->set_ring = false;
+ 	test->adjust_tail = false;
+ 	test->adjust_tail_support = false;
+@@ -332,26 +359,31 @@ static void test_spec_set_xdp_prog(struct test_spec *test, struct bpf_program *x
+ 	test->xskmap_tx = xskmap_tx;
+ }
+ 
+-static int test_spec_set_mtu(struct test_spec *test, int mtu)
++static int test_spec_set_mtu_ifobj(struct ifobject *ifobj, int mtu)
+ {
+ 	int err;
+ 
+-	if (test->ifobj_rx->mtu != mtu) {
+-		err = xsk_set_mtu(test->ifobj_rx->ifindex, mtu);
++	if (ifobj_is_local(ifobj) && ifobj->mtu != mtu) {
++		err = xsk_set_mtu(ifobj->ifindex, mtu);
+ 		if (err)
+ 			return err;
+-		test->ifobj_rx->mtu = mtu;
+-	}
+-	if (test->ifobj_tx->mtu != mtu) {
+-		err = xsk_set_mtu(test->ifobj_tx->ifindex, mtu);
+-		if (err)
+-			return err;
+-		test->ifobj_tx->mtu = mtu;
+ 	}
+ 
++	ifobj->mtu = mtu;
+ 	return 0;
+ }
+ 
++static int test_spec_set_mtu(struct test_spec *test, int mtu)
++{
++	int err;
++
++	err = test_spec_set_mtu_ifobj(test->ifobj_rx, mtu);
++	if (err)
++		return err;
++
++	return test_spec_set_mtu_ifobj(test->ifobj_tx, mtu);
++}
++
+ void pkt_stream_reset(struct pkt_stream *pkt_stream)
+ {
+ 	if (pkt_stream) {
+@@ -1001,6 +1033,9 @@ static int __receive_pkts(struct test_spec *test, struct xsk_socket_info *xsk)
+ 	fds.fd = xsk_socket__fd(xsk->xsk);
+ 	fds.events = POLLIN;
+ 
++	if (pacing_rx_progress(0))
++		return TEST_FAILURE;
++
+ 	ret = kick_rx(xsk);
+ 	if (ret)
+ 		return TEST_FAILURE;
+@@ -1100,9 +1135,8 @@ static int __receive_pkts(struct test_spec *test, struct xsk_socket_info *xsk)
+ 	if (ifobj->release_rx)
+ 		xsk_ring_cons__release(&xsk->rx, frags_processed);
+ 
+-	pthread_mutex_lock(&pacing_mutex);
+-	pkts_in_flight -= pkts_sent;
+-	pthread_mutex_unlock(&pacing_mutex);
++	if (pacing_rx_progress(pkts_sent))
++		return TEST_FAILURE;
+ 	pkts_sent = 0;
+ 
+ 	return TEST_CONTINUE;
+@@ -1178,9 +1212,18 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
+ 	int ret;
+ 
+ 	buffer_len = pkt_get_buffer_len(umem, pkt_stream->max_pkt_len);
++	if (pacing_tx_sync())
++		return TEST_FAILURE;
++
+ 	/* pkts_in_flight might be negative if many invalid packets are sent */
+ 	if (pkts_in_flight >= (int)((umem_size(umem) - xsk->batch_size * buffer_len) /
+ 	    buffer_len) && !test_timeout) {
++		/* Only RX progress reports can lower pkts_in_flight. */
++		if (xsk_peer_closed(ctrl_peer)) {
++			ksft_print_msg("ERROR: [%s] RX exited with %d packets in flight\n",
++				       __func__, pkts_in_flight);
++			return TEST_FAILURE;
++		}
+ 		ret = kick_tx(xsk);
+ 		if (ret)
+ 			return TEST_FAILURE;
+@@ -1262,9 +1305,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
+ 		valid_frags += nb_frags;
+ 	}
+ 
+-	pthread_mutex_lock(&pacing_mutex);
+ 	pkts_in_flight += valid_pkts;
+-	pthread_mutex_unlock(&pacing_mutex);
+ 
+ 	xsk_ring_prod__submit(&xsk->tx, i);
+ 	xsk->outstanding_tx += valid_frags;
+@@ -1341,9 +1382,6 @@ static int send_pkts(struct test_spec *test, struct ifobject *ifobject)
+ 			if (ret != TEST_CONTINUE)
+ 				return ret;
+ 
+-			if (test->fail)
+-				return TEST_FAILURE;
+-
+ 			if (!test->poll_tmout) {
+ 				ret = wait_for_tx_completion(&ifobject->xsk_arr[i]);
+ 				if (ret)
+@@ -1665,36 +1703,57 @@ static int testapp_validate_rx_endpoint(struct test_spec *test,
+ 	return err;
+ }
+ 
+-void *worker_testapp_validate_tx(void *arg)
++static int sync_endpoints(struct test_spec *test)
++{
++	int err = xsk_peer_ready(ctrl_peer);
++
++	if (err)
++		ksft_print_msg("Endpoint synchronization failed at step %u: %d (%s)\n",
++			       test->current_step, err, strerror(-err));
++	return err;
++}
++
++int worker_testapp_validate_tx(struct test_spec *test)
+ {
+-	struct test_spec *test = (struct test_spec *)arg;
+ 	int err;
+ 
+-	err = testapp_validate_tx_endpoint(test, test->ifobj_tx);
++	err = sync_endpoints(test);
+ 	if (err)
+-		test->fail = true;
++		return err;
+ 
+-	pthread_exit(NULL);
++	err = testapp_validate_tx_endpoint(test, test->ifobj_tx);
++	if (err) {
++		ksft_print_msg("TX endpoint traffic failed at step %u: %d\n",
++			       test->current_step, err);
++		xsk_peer_abort(ctrl_peer);
++	}
++	return err;
+ }
+ 
+-void *worker_testapp_validate_rx(void *arg)
++int worker_testapp_validate_rx(struct test_spec *test)
+ {
+-	struct test_spec *test = (struct test_spec *)arg;
+ 	struct ifobject *ifobject = test->ifobj_rx;
+ 	int err;
+ 
+ 	err = testapp_prepare_rx_endpoint(test, ifobject);
++	if (err) {
++		ksft_print_msg("RX endpoint setup failed at step %u: %d\n",
++			       test->current_step, err);
++		xsk_peer_abort(ctrl_peer);
++		return err;
++	}
+ 
+-	if (test->use_barrier)
+-		pthread_barrier_wait(&barr);
+-
+-	/* We leave only now in case of error to avoid getting stuck in the barrier */
+-	if (!err)
+-		err = testapp_validate_rx_endpoint(test, ifobject);
++	err = sync_endpoints(test);
+ 	if (err)
+-		test->fail = true;
++		return err;
+ 
+-	pthread_exit(NULL);
++	err = testapp_validate_rx_endpoint(test, ifobject);
++	if (err) {
++		ksft_print_msg("RX endpoint traffic failed at step %u: %d\n",
++			       test->current_step, err);
++		xsk_peer_abort(ctrl_peer);
++	}
++	return err;
+ }
+ 
+ static void testapp_clean_xsk_umem(struct ifobject *ifobj)
+@@ -1749,13 +1808,13 @@ static int xsk_attach_xdp_progs(struct test_spec *test, struct ifobject *ifobj_r
+ {
+ 	int err = 0;
+ 
+-	if (xdp_prog_changed_rx(test)) {
++	if (ifobj_is_local(ifobj_rx) && xdp_prog_changed_rx(test)) {
+ 		err = xsk_reattach_xdp(ifobj_rx, test->xdp_prog_rx, test->xskmap_rx, test->mode);
+ 		if (err)
+ 			return err;
+ 	}
+ 
+-	if (!ifobj_tx)
++	if (!ifobj_tx || !ifobj_is_local(ifobj_tx))
+ 		return 0;
+ 
+ 	if (xdp_prog_changed_tx(test))
+@@ -1768,7 +1827,7 @@ static void clean_sockets(struct test_spec *test, struct ifobject *ifobj)
+ {
+ 	u32 i;
+ 
+-	if (!ifobj || !test)
++	if (!ifobj || !test || !ifobj_is_local(ifobj))
+ 		return;
+ 
+ 	for (i = 0; i < test->nb_sockets; i++)
+@@ -1780,15 +1839,15 @@ static void clean_umem(struct test_spec *test, struct ifobject *ifobj1, struct i
+ 	if (!ifobj1)
+ 		return;
+ 
+-	testapp_clean_xsk_umem(ifobj1);
+-	if (ifobj2)
++	if (ifobj_is_local(ifobj1))
++		testapp_clean_xsk_umem(ifobj1);
++	if (ifobj2 && ifobj_is_local(ifobj2))
+ 		testapp_clean_xsk_umem(ifobj2);
+ }
+ 
+ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *ifobj1,
+ 				      struct ifobject *ifobj2)
+ {
+-	pthread_t t0, t1;
+ 	u32 mbuf_cap;
+ 	int err;
+ 
+@@ -1819,51 +1878,27 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
+ 			       err, strerror(-err));
+ 		return TEST_FAILURE;
+ 	}
+-	test->use_barrier = !!ifobj2;
+-
+-	if (test->use_barrier) {
+-		if (pthread_barrier_init(&barr, NULL, 2))
+-			return TEST_FAILURE;
+ 
++	if (ifobj2)
+ 		pkt_stream_reset(ifobj2->xsk->pkt_stream);
+-	}
+-
+ 	test->current_step++;
+ 	pkt_stream_reset(ifobj1->xsk->pkt_stream);
+ 	pkts_in_flight = 0;
+ 
+-	/*Spawn RX thread */
+-	pthread_create(&t0, NULL, ifobj1->func_ptr, test);
+-
+-	if (test->use_barrier) {
+-		pthread_barrier_wait(&barr);
+-		if (pthread_barrier_destroy(&barr)) {
+-			test->use_barrier = false;
+-			pthread_join(t0, NULL);
+-			clean_sockets(test, ifobj1);
+-			clean_umem(test, ifobj1, NULL);
+-			return TEST_FAILURE;
+-		}
+-	}
+-
+-	if (ifobj2) {
+-		/*Spawn TX thread */
+-		pthread_create(&t1, NULL, ifobj2->func_ptr, test);
+-		pthread_join(t1, NULL);
+-	}
+-
+-	pthread_join(t0, NULL);
+-
+-	if (test->total_steps == test->current_step || test->fail) {
++	/* In a one-sided step, the idle endpoint only keeps in step. */
++	if (ifobj_is_local(ifobj1))
++		err = ifobj1->func_ptr(test);
++	else if (ifobj2 && ifobj_is_local(ifobj2))
++		err = ifobj2->func_ptr(test);
++	else
++		err = sync_endpoints(test);
++	if (test->total_steps == test->current_step || err) {
+ 		clean_sockets(test, ifobj1);
+ 		clean_sockets(test, ifobj2);
+ 		clean_umem(test, ifobj1, ifobj2);
+ 	}
+ 
+-	if (test->fail)
+-		return TEST_FAILURE;
+-
+-	return TEST_PASS;
++	return err ? TEST_FAILURE : TEST_PASS;
+ }
+ 
+ static int testapp_validate_traffic(struct test_spec *test)
+@@ -1879,7 +1914,8 @@ static int testapp_validate_traffic(struct test_spec *test)
+ 
+ 	if (test->set_ring) {
+ 		if (ifobj_has_cap(ifobj_tx, XSK_CAP_HW_RING)) {
+-			if (set_ring_size(ifobj_tx)) {
++			if (ifobj_is_local(ifobj_tx) &&
++			    set_ring_size(ifobj_tx)) {
+ 				ksft_print_msg("Failed to change HW ring size.\n");
+ 				return TEST_FAILURE;
+ 			}
+@@ -1912,7 +1948,7 @@ int testapp_teardown(struct test_spec *test)
+ 
+ static void swap_directions(struct ifobject **ifobj1, struct ifobject **ifobj2)
+ {
+-	thread_func_t tmp_func_ptr = (*ifobj1)->func_ptr;
++	test_func_t tmp_func_ptr = (*ifobj1)->func_ptr;
+ 	struct ifobject *tmp_ifobj = (*ifobj1);
+ 
+ 	(*ifobj1)->func_ptr = (*ifobj2)->func_ptr;
+@@ -1951,6 +1987,9 @@ static int swap_xsk_resources(struct test_spec *test)
+ 	test->ifobj_tx->xsk = &test->ifobj_tx->xsk_arr[1];
+ 	test->ifobj_rx->xsk = &test->ifobj_rx->xsk_arr[1];
+ 
++	if (!ifobj_is_local(test->ifobj_rx))
++		return TEST_PASS;
++
+ 	ret = xsk_update_xskmap(test->ifobj_rx->xskmap, test->ifobj_rx->xsk->xsk, 0);
+ 	if (ret)
+ 		return TEST_FAILURE;
+@@ -2299,7 +2338,7 @@ int testapp_too_many_frags(struct test_spec *test)
+ 	return ret;
+ }
+ 
+-static int xsk_load_xdp_programs(struct ifobject *ifobj)
++int xsk_load_xdp_programs(struct ifobject *ifobj)
+ {
+ 	ifobj->xdp_progs = xsk_xdp_progs__open_and_load();
+ 	if (libbpf_get_error(ifobj->xdp_progs))
+@@ -2357,12 +2396,10 @@ static int detect_ifobj_caps(struct ifobject *ifobj)
+ 	return 0;
+ }
+ 
+-int init_iface(struct ifobject *ifobj, thread_func_t func_ptr)
++int init_iface(struct ifobject *ifobj)
+ {
+ 	int err;
+ 
+-	ifobj->func_ptr = func_ptr;
+-
+ 	err = xsk_load_xdp_programs(ifobj);
+ 	if (err) {
+ 		ksft_print_msg("Error loading XDP program\n");
+diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.h b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+index 861a2ee3b8e1..53e5032510a0 100644
+--- a/tools/testing/selftests/net/lib/xsk/test_xsk.h
++++ b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+@@ -77,9 +77,13 @@ enum test_mode {
+ struct ifobject;
+ struct test_spec;
+ typedef int (*validation_func_t)(struct ifobject *ifobj);
+-typedef void *(*thread_func_t)(void *arg);
+ typedef int (*test_func_t)(struct test_spec *test);
+ 
++struct xsk_peer;
++
++/* The control channel to the other endpoint. */
++void xsk_set_endpoint(struct xsk_peer *peer);
++
+ struct xsk_socket_info {
+ 	struct xsk_ring_cons rx;
+ 	struct xsk_ring_prod tx;
+@@ -139,7 +143,7 @@ struct ifobject {
+ 	struct xsk_caps caps;
+ 	struct xsk_socket_info *xsk;
+ 	struct xsk_socket_info *xsk_arr;
+-	thread_func_t func_ptr;
++	test_func_t func_ptr;
+ 	validation_func_t validation_func;
+ 	struct xsk_xdp_progs *xdp_progs;
+ 	struct bpf_map *xskmap;
+@@ -169,11 +173,18 @@ static inline void ifobj_set_cap(struct ifobject *ifobj, u32 cap)
+ 	ifobj->caps.flags |= cap;
+ }
+ 
++/* The shadow of the peer's ifobject is never bound to an interface. */
++static inline bool ifobj_is_local(const struct ifobject *ifobj)
++{
++	return ifobj->ifindex;
++}
++
+ #define xsk_get_cap(test, cap) ((test)->ifobj_tx->caps.cap)
+ 
+ struct ifobject *ifobject_create(void);
+ void ifobject_delete(struct ifobject *ifobj);
+-int init_iface(struct ifobject *ifobj, thread_func_t func_ptr);
++int init_iface(struct ifobject *ifobj);
++int xsk_load_xdp_programs(struct ifobject *ifobj);
+ 
+ int xsk_configure_umem(struct ifobject *ifobj, struct xsk_umem_info *umem, void *buffer, u64 size);
+ int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_info *umem,
+@@ -222,12 +233,10 @@ struct test_spec {
+ 	u16 total_steps;
+ 	u16 current_step;
+ 	u16 nb_sockets;
+-	bool fail;
+ 	bool set_ring;
+ 	bool adjust_tail;
+ 	bool adjust_tail_support;
+ 	bool poll_tmout;
+-	bool use_barrier;
+ 	enum test_mode mode;
+ 	char name[MAX_TEST_NAME_SIZE];
+ };
+@@ -288,8 +297,8 @@ int testapp_xdp_metadata_mb(struct test_spec *test);
+ int testapp_xdp_prog_cleanup(struct test_spec *test);
+ int testapp_xdp_shared_umem(struct test_spec *test);
+ 
+-void *worker_testapp_validate_rx(void *arg);
+-void *worker_testapp_validate_tx(void *arg);
++int worker_testapp_validate_rx(struct test_spec *test);
++int worker_testapp_validate_tx(struct test_spec *test);
+ 
+ static const struct test_spec tests[] = {
+ 	{.name = "SEND_RECEIVE", .test_func = testapp_send_receive},
+diff --git a/tools/testing/selftests/net/lib/xsk/xsk_peer.c b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
+new file mode 100644
+index 000000000000..e3e353d6abd9
+--- /dev/null
++++ b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
+@@ -0,0 +1,293 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <arpa/inet.h>
++#include <errno.h>
++#include <limits.h>
++#include <netdb.h>
++#include <netinet/tcp.h>
++#include <poll.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/socket.h>
++#include <unistd.h>
++
++#include "xsk_peer.h"
++
++#define XSK_PEER_MAGIC			0x58534b50
++#define XSK_PEER_ACCEPT_TMOUT_MS	30000
++
++/*
++ * One case per connection; the launcher owns the verdict. As with the control
++ * channels of other selftests, the test hosts are trusted: nothing
++ * authenticates the peer.
++ */
++enum xsk_peer_msg_type {
++	XSK_PEER_READY = 1,
++	XSK_PEER_PROGRESS,
++	XSK_PEER_ABORT,
++};
++
++struct xsk_peer_msg {
++	u32 magic;
++	u32 type;
++	u32 pkts;
++};
++
++struct xsk_peer {
++	int fd;
++	u32 acked;
++	bool ready_seen;
++	bool closed;
++};
++
++static int io_full(int fd, void *buf, size_t len, bool write_op)
++{
++	size_t done = 0;
++	ssize_t ret;
++
++	while (done < len) {
++		if (write_op)
++			ret = send(fd, (char *)buf + done, len - done, MSG_NOSIGNAL);
++		else
++			ret = read(fd, (char *)buf + done, len - done);
++		if (ret < 0 && errno == EINTR)
++			continue;
++		if (ret < 0)
++			return -errno;
++		if (!ret)
++			return -EPIPE;
++		done += ret;
++	}
++	return 0;
++}
++
++/*
++ * Past its last barrier the peer may exit at any time, and it resets the
++ * connection if our progress reports are still unread.
++ */
++static bool peer_gone(int err)
++{
++	return err == -EPIPE || err == -ECONNRESET;
++}
++
++static int peer_send(struct xsk_peer *peer, u32 type, u32 pkts)
++{
++	struct xsk_peer_msg msg = {
++		.magic = htonl(XSK_PEER_MAGIC),
++		.type = htonl(type),
++		.pkts = htonl(pkts),
++	};
++
++	return io_full(peer->fd, &msg, sizeof(msg), true);
++}
++
++static int peer_recv_one(struct xsk_peer *peer)
++{
++	struct xsk_peer_msg msg;
++	u32 pkts;
++	int err;
++
++	err = io_full(peer->fd, &msg, sizeof(msg), false);
++	if (peer_gone(err))
++		peer->closed = true;
++	if (err)
++		return err;
++	if (ntohl(msg.magic) != XSK_PEER_MAGIC)
++		return -EPROTO;
++
++	switch (ntohl(msg.type)) {
++	case XSK_PEER_READY:
++		/* The peer waits for our READY, so it is at most one step ahead. */
++		if (peer->ready_seen)
++			return -EPROTO;
++		peer->ready_seen = true;
++		return 0;
++	case XSK_PEER_PROGRESS:
++		/* xsk_peer_tx_sync() returns the sum as an int. */
++		pkts = ntohl(msg.pkts);
++		if (pkts > INT_MAX - peer->acked)
++			return -EPROTO;
++		peer->acked += pkts;
++		return 0;
++	case XSK_PEER_ABORT:
++		return -ECANCELED;
++	default:
++		return -EPROTO;
++	}
++}
++
++/*
++ * Consume what the peer has sent so far without blocking. A closed connection
++ * is not an error here, see peer_gone(); xsk_peer_closed() reports it.
++ */
++static int peer_drain(struct xsk_peer *peer)
++{
++	struct pollfd pfd = { .fd = peer->fd, .events = POLLIN };
++	int ret;
++
++	while (!peer->closed) {
++		ret = poll(&pfd, 1, 0);
++		if (ret < 0 && errno == EINTR)
++			continue;
++		if (ret < 0)
++			return -errno;
++		if (!ret)
++			break;
++		ret = peer_recv_one(peer);
++		if (ret && !peer->closed)
++			return ret;
++	}
++	return 0;
++}
++
++/* Return once both endpoints are set up for the next step. */
++int xsk_peer_ready(struct xsk_peer *peer)
++{
++	int err;
++
++	err = peer_send(peer, XSK_PEER_READY, 0);
++	while (!err && !peer->ready_seen)
++		err = peer_recv_one(peer);
++	if (err)
++		return err;
++
++	/* TCP ordering puts all progress of the previous step before READY. */
++	peer->ready_seen = false;
++	peer->acked = 0;
++	return 0;
++}
++
++void xsk_peer_abort(struct xsk_peer *peer)
++{
++	if (peer && !peer->closed)
++		peer_send(peer, XSK_PEER_ABORT, 0);
++}
++
++int xsk_peer_rx_progress(struct xsk_peer *peer, u32 pkts)
++{
++	int err;
++
++	if (pkts && !peer->closed) {
++		err = peer_send(peer, XSK_PEER_PROGRESS, pkts);
++		/*
++		 * Leave closed to peer_drain(), which first reads what the
++		 * peer sent before it went away, such as an ABORT.
++		 */
++		if (err && !peer_gone(err))
++			return err;
++	}
++	return peer_drain(peer);
++}
++
++/* Return the packets RX reported consumed since the last call, or -errno. */
++int xsk_peer_tx_sync(struct xsk_peer *peer)
++{
++	int err = peer_drain(peer);
++	u32 acked = peer->acked;
++
++	if (err)
++		return err;
++	peer->acked = 0;
++	return acked;
++}
++
++bool xsk_peer_closed(struct xsk_peer *peer)
++{
++	return peer->closed;
++}
++
++static int accept_tmout(int lfd)
++{
++	struct pollfd pfd = { .fd = lfd, .events = POLLIN };
++	int ret;
++
++	do {
++		ret = poll(&pfd, 1, XSK_PEER_ACCEPT_TMOUT_MS);
++	} while (ret < 0 && errno == EINTR);
++	if (!ret)
++		errno = ETIMEDOUT;
++	return ret > 0 ? accept(lfd, NULL, NULL) : -1;
++}
++
++/*
++ * The listener says on stderr when it listens, and the launcher waits for
++ * that line before it starts the connector, so connect() needs no retry.
++ * accept() is bounded in case the connector exits before it gets that far.
++ */
++static int peer_open_tcp(const char *host, const char *port, bool listen_side)
++{
++	struct addrinfo hints = {
++		.ai_family = AF_UNSPEC,
++		.ai_socktype = SOCK_STREAM,
++		.ai_flags = AI_NUMERICSERV,
++	};
++	int fd = -1, lfd, saved = ECONNREFUSED, one = 1, err;
++	struct addrinfo *res, *ai;
++
++	err = getaddrinfo(host, port, &hints, &res);
++	if (err)
++		return -EINVAL;
++
++	if (!listen_side)
++		goto conn;
++
++	for (ai = res; ai; ai = ai->ai_next) {
++		lfd = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
++		if (lfd < 0)
++			continue;
++		setsockopt(lfd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one));
++		if (!bind(lfd, ai->ai_addr, ai->ai_addrlen) && !listen(lfd, 1)) {
++			fprintf(stderr, "Listening for XSK peer on port %s\n", port);
++			fd = accept_tmout(lfd);
++			saved = errno;
++			close(lfd);
++			break;
++		}
++		saved = errno;
++		close(lfd);
++	}
++	freeaddrinfo(res);
++	return fd >= 0 ? fd : -saved;
++
++conn:
++	for (ai = res; ai; ai = ai->ai_next) {
++		fd = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
++		if (fd < 0)
++			continue;
++		if (!connect(fd, ai->ai_addr, ai->ai_addrlen))
++			break;
++		saved = errno;
++		close(fd);
++		fd = -1;
++	}
++	freeaddrinfo(res);
++	return fd >= 0 ? fd : -saved;
++}
++
++struct xsk_peer *xsk_peer_open(const char *host, const char *port,
++			       bool listen_side)
++{
++	int fd = peer_open_tcp(host, port, listen_side);
++	struct xsk_peer *peer;
++	int one = 1;
++
++	if (fd < 0) {
++		errno = -fd;
++		return NULL;
++	}
++	peer = calloc(1, sizeof(*peer));
++	if (!peer) {
++		close(fd);
++		return NULL;
++	}
++	peer->fd = fd;
++	setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &one, sizeof(one));
++	return peer;
++}
++
++void xsk_peer_close(struct xsk_peer *peer)
++{
++	if (peer) {
++		close(peer->fd);
++		free(peer);
++	}
++}
+diff --git a/tools/testing/selftests/net/lib/xsk/xsk_peer.h b/tools/testing/selftests/net/lib/xsk/xsk_peer.h
+new file mode 100644
+index 000000000000..da4462192994
+--- /dev/null
++++ b/tools/testing/selftests/net/lib/xsk/xsk_peer.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef XSK_PEER_H_
++#define XSK_PEER_H_
++
++#include <linux/types.h>
++
++struct xsk_peer;
++
++struct xsk_peer *xsk_peer_open(const char *host, const char *port,
++			       bool listen_side);
++void xsk_peer_close(struct xsk_peer *peer);
++
++int xsk_peer_ready(struct xsk_peer *peer);
++void xsk_peer_abort(struct xsk_peer *peer);
++int xsk_peer_rx_progress(struct xsk_peer *peer, u32 pkts);
++int xsk_peer_tx_sync(struct xsk_peer *peer);
++bool xsk_peer_closed(struct xsk_peer *peer);
++
++#endif /* XSK_PEER_H_ */
 diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-index 02e54b026806..09ad623333be 100644
+index 09ad623333be..769718cad8cd 100644
 --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
 +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-@@ -6,7 +6,7 @@
-  * Linux kernel samples/bpf/xdpsock* and modified
-  * for use.
-  *
-- * See test_xsk.sh for detailed information on test topology
-+ * See test_xsk.py for detailed information on test topology
+@@ -9,9 +9,9 @@
+  * See test_xsk.py for detailed information on test topology
   * and prerequisite network setup.
   *
-  * This test program contains two threads, each thread is single socket with
-@@ -64,11 +64,6 @@
-  * - Tx thread Transmits a number of packets from veth<xxxx> to veth<yyyy>
-  * - Rx thread verifies if all packets were received and delivered in-order,
+- * This test program contains two threads, each thread is single socket with
+- * a unique UMEM. It validates in-order packet delivery and packet content
+- * by sending packets to each other.
++ * Each instance of this test program runs one endpoint, Tx or Rx, with a
++ * single socket and a unique UMEM. Two instances validate in-order packet
++ * delivery and packet content by sending packets to each other.
+  *
+  * Tests Information:
+  * ------------------
+@@ -57,12 +57,14 @@
+  *
+  * Flow:
+  * -----
+- * - Single process spawns two threads: Tx and Rx
+- * - Each of these two threads attach to a veth interface
+- * - Each thread creates one AF_XDP socket connected to a unique umem for each
++ * - test_xsk.py starts two processes: Tx and Rx
++ * - Each of these two processes attach to a veth interface
++ * - Each process creates one AF_XDP socket connected to a unique umem for each
+  *   veth interface
+- * - Tx thread Transmits a number of packets from veth<xxxx> to veth<yyyy>
+- * - Rx thread verifies if all packets were received and delivered in-order,
++ * - Tx process listens on a TCP control port, Rx process connects to it and
++ *   the two synchronize each test step over that connection
++ * - Tx process Transmits a number of packets from veth<xxxx> to veth<yyyy>
++ * - Rx process verifies if all packets were received and delivered in-order,
   *   and have the right content
-- *
-- * Enable/disable packet dump mode:
-- * --------------------------
-- * To enable L2 - L4 headers and payload dump of each packet on STDOUT, add
-- * parameter -D to params array in test_xsk.sh, i.e. params=("-S" "-D")
   */
  
- #define _GNU_SOURCE
-@@ -169,14 +164,14 @@ static struct option long_options[] = {
+@@ -87,6 +89,7 @@
+ #include <sys/types.h>
+ 
+ #include "test_xsk.h"
++#include "xsk_peer.h"
+ #include "xsk_xdp_progs.skel.h"
+ #include "xsk.h"
+ #include "xskxceiver.h"
+@@ -95,8 +98,18 @@
+ #include "kselftest.h"
+ #include "xsk_xdp_common.h"
+ 
++enum xsk_endpoint_role {
++	XSK_ENDPOINT_NONE,
++	XSK_ENDPOINT_RX,
++	XSK_ENDPOINT_TX,
++};
++
+ static enum test_mode opt_mode = TEST_MODE_ALL;
+ static u32 opt_run_test = RUN_ALL_TESTS;
++static enum xsk_endpoint_role opt_endpoint_role = XSK_ENDPOINT_NONE;
++static const char *opt_peer_host;
++static const char *opt_peer_port;
++static const char *opt_ifname;
+ 
+ static void __exit_with_error(int error, const char *file, const char *func, int line)
+ {
+@@ -157,6 +170,9 @@ static struct option long_options[] = {
+ 	{"mode", required_argument, 0, 'm'},
+ 	{"list", no_argument, 0, 'l'},
+ 	{"test", required_argument, 0, 't'},
++	{"endpoint", required_argument, 0, 'e'},
++	{"peer", required_argument, 0, 'p'},
++	{"peer-port", required_argument, 0, 'P'},
+ 	{"help", no_argument, 0, 'h'},
+ 	{0, 0, 0, 0}
+ };
+@@ -164,7 +180,7 @@ static struct option long_options[] = {
  static void print_usage(char **argv)
  {
  	const char *str =
--		"  Usage: xskxceiver [OPTIONS]\n"
-+		"  Usage: xskxceiver -i TX_IFACE -i RX_IFACE -m MODE -t TEST [OPTIONS]\n"
+-		"  Usage: xskxceiver -i TX_IFACE -i RX_IFACE -m MODE -t TEST [OPTIONS]\n"
++		"  Usage: xskxceiver -i IFACE -e rx|tx -m MODE -t TEST -p HOST -P PORT [OPTIONS]\n"
  		"  Options:\n"
  		"  -i, --interface      Use interface\n"
  		"  -v, --verbose        Verbose output\n"
- 		"  -b, --busy-poll      Enable busy poll\n"
--		"  -m, --mode           Run only mode skb, drv, or zc\n"
-+		"  -m, --mode           Mode to run: skb, drv or zc\n"
+@@ -172,16 +188,18 @@ static void print_usage(char **argv)
+ 		"  -m, --mode           Mode to run: skb, drv or zc\n"
  		"  -l, --list           List all available tests\n"
--		"  -t, --test           Run a specific test. Enter number from -l option.\n"
-+		"  -t, --test           Test case to run, a number from -l\n"
+ 		"  -t, --test           Test case to run, a number from -l\n"
++		"  -e, --endpoint       Role of this endpoint: rx or tx\n"
++		"  -p, --peer           Control host: IPv4/IPv6 address or hostname\n"
++		"  -P, --peer-port      Control TCP port (1-65535)\n"
  		"  -h, --help           Display this help and exit\n";
  
  	ksft_print_msg(str, basename(argv[0]));
-@@ -267,6 +262,9 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+ 	ksft_exit_xfail();
+ }
+ 
+-static void bind_iface(struct ifobject *ifobj, const char *ifname, thread_func_t func,
+-		       char **argv)
++static void bind_iface(struct ifobject *ifobj, const char *ifname, char **argv)
+ {
+-	size_t len = ifname ? strlen(ifname) : 0;
++	size_t len = strlen(ifname);
+ 
+ 	if (!len || len >= sizeof(ifobj->ifname))
+ 		print_usage(argv);
+@@ -193,7 +211,7 @@ static void bind_iface(struct ifobject *ifobj, const char *ifname, thread_func_t
+ 		ksft_exit_fail();
+ 	}
+ 
+-	if (init_iface(ifobj, func)) {
++	if (init_iface(ifobj)) {
+ 		ksft_print_msg("Error: cannot initialize interface %s\n", ifobj->ifname);
+ 		ksft_exit_fail();
+ 	}
+@@ -208,26 +226,33 @@ static void print_tests(void)
+ 		printf("%u: %s\n", i, tests[i].name);
+ }
+ 
++static u32 parse_u32(const char *arg, u32 min, u32 max, char **argv)
++{
++	unsigned long val;
++	char *end;
++
++	errno = 0;
++	val = strtoul(arg, &end, 10);
++	if (arg[0] < '0' || arg[0] > '9' || errno || *end || val < min || val > max)
++		print_usage(argv);
++	return val;
++}
++
+ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj_rx, int argc,
+ 			       char **argv)
+ {
+-	const char *ifname[2] = {};
+-	u32 interface_nb = 0;
+ 	int option_index, c;
+ 
+ 	opterr = 0;
+ 
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "i:vbm:lt:", long_options, &option_index);
++		c = getopt_long(argc, argv, "i:vbm:lt:e:p:P:", long_options, &option_index);
+ 		if (c == -1)
+ 			break;
+ 
+ 		switch (c) {
+ 		case 'i':
+-			if (interface_nb >= ARRAY_SIZE(ifname))
+-				break;
+-
+-			ifname[interface_nb++] = optarg;
++			opt_ifname = optarg;
+ 			break;
+ 		case 'v':
+ 			opt_verbose = true;
+@@ -256,17 +281,31 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+ 			if (errno)
+ 				print_usage(argv);
+ 			break;
++		case 'e':
++			if (!strcmp(optarg, "rx"))
++				opt_endpoint_role = XSK_ENDPOINT_RX;
++			else if (!strcmp(optarg, "tx"))
++				opt_endpoint_role = XSK_ENDPOINT_TX;
++			else
++				print_usage(argv);
++			break;
++		case 'p':
++			opt_peer_host = optarg;
++			break;
++		case 'P':
++			parse_u32(optarg, 1, UINT16_MAX, argv);
++			opt_peer_port = optarg;
++			break;
+ 		case 'h':
+ 		default:
+ 			print_usage(argv);
  		}
  	}
  
-+	if (opt_run_test == RUN_ALL_TESTS || opt_mode == TEST_MODE_ALL)
-+		print_usage(argv);
-+
- 	bind_iface(ifobj_tx, ifname[0], worker_testapp_validate_tx, argv);
- 	bind_iface(ifobj_rx, ifname[1], worker_testapp_validate_rx, argv);
+-	if (opt_run_test == RUN_ALL_TESTS || opt_mode == TEST_MODE_ALL)
++	if (!opt_ifname || opt_endpoint_role == XSK_ENDPOINT_NONE || !opt_peer_host ||
++	    !*opt_peer_host || !opt_peer_port || opt_run_test == RUN_ALL_TESTS ||
++	    opt_mode == TEST_MODE_ALL)
+ 		print_usage(argv);
+-
+-	bind_iface(ifobj_tx, ifname[0], worker_testapp_validate_tx, argv);
+-	bind_iface(ifobj_rx, ifname[1], worker_testapp_validate_rx, argv);
  }
-@@ -368,10 +366,9 @@ int main(int argc, char **argv)
+ 
+ static void xsk_unload_xdp_programs(struct ifobject *ifobj)
+@@ -352,20 +391,51 @@ static bool mode_supported(enum test_mode mode, u32 caps)
+ 
+ static void cleanup_iface(struct ifobject *ifobj)
+ {
++	/* A peer shadow has a skeleton but no bound interface. */
++	if (!ifobj_is_local(ifobj))
++		goto unload;
++
+ 	if (ifobj_has_cap(ifobj, XSK_CAP_HW_RING))
+ 		hw_ring_size_reset(ifobj);
+ 	if (ifobj->xdp_prog)
+ 		xsk_detach_xdp_program(ifobj->ifindex,
+ 				       ifobj->mode == TEST_MODE_SKB ?
+ 				       XDP_FLAGS_SKB_MODE : XDP_FLAGS_DRV_MODE);
++unload:
+ 	xsk_unload_xdp_programs(ifobj);
+ }
+ 
++/* Connect the two endpoints without negotiating the remote NIC's capabilities. */
++static int setup_peer(struct ifobject *local, struct ifobject *shadow,
++		      struct xsk_peer **peer)
++{
++	/* Once BIDIRECTIONAL swaps the directions, the local side attaches the
++	 * shadow's programs, so the shadow needs a skeleton of its own.
++	 */
++	if (xsk_load_xdp_programs(shadow))
++		return TEST_FAILURE;
++
++	/* TX listens and RX connects. */
++	*peer = xsk_peer_open(opt_peer_host, opt_peer_port,
++			      opt_endpoint_role == XSK_ENDPOINT_TX);
++	if (!*peer) {
++		ksft_print_msg("Failed to connect XSK peer: %s\n", strerror(errno));
++		return TEST_FAILURE;
++	}
++
++	shadow->caps = local->caps;
++	xsk_set_endpoint(*peer);
++	return TEST_PASS;
++}
++
+ int main(int argc, char **argv)
+ {
  	u32 cache_line_size, max_frags, umem_tailroom;
  	const size_t total_tests = ARRAY_SIZE(tests);
  	struct ifobject *ifobj_tx, *ifobj_rx;
--	u32 i, j, failed_tests = 0, nb_tests;
++	struct ifobject *shadow_ifobj;
++	struct ifobject *local_ifobj;
++	struct xsk_peer *peer = NULL;
  	struct test_spec test = {};
  	int ret = TEST_FAILURE;
--	u32 caps, modes = 0;
-+	u32 caps;
- 
- 	/* Use libbpf 1.0 API mode */
- 	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-@@ -422,40 +419,18 @@ int main(int argc, char **argv)
- 
- 	caps = detect_mode_caps(ifobj_tx);
- 
--	if (opt_mode != TEST_MODE_ALL && !mode_supported(opt_mode, caps)) {
-+	if (!mode_supported(opt_mode, caps)) {
- 		if (opt_mode == TEST_MODE_DRV)
--			ksft_print_msg("Error: XDP_DRV mode not supported.\n");
-+			ksft_print_msg("XDP_DRV mode not supported.\n");
- 		else
--			ksft_print_msg("Error: zero-copy mode not supported.\n");
--		ksft_exit_xfail();
-+			ksft_print_msg("zero-copy mode not supported.\n");
-+		ret = TEST_SKIP;
-+		goto out;
+ 	u32 caps;
+@@ -412,12 +482,26 @@ int main(int argc, char **argv)
+ 		ksft_exit_xfail();
  	}
  
--	for (i = TEST_MODE_SKB; i <= TEST_MODE_ZC; i++)
--		if ((opt_mode == TEST_MODE_ALL || i == opt_mode) && mode_supported(i, caps))
--			modes++;
--	if (opt_run_test == RUN_ALL_TESTS)
--		nb_tests = total_tests;
--	else
--		nb_tests = 1;
--	ksft_set_plan(modes * nb_tests);
--
--	for (i = TEST_MODE_SKB; i <= TEST_MODE_ZC; i++) {
--		if (opt_mode != TEST_MODE_ALL && i != opt_mode)
--			continue;
--		if (!mode_supported(i, caps))
--			continue;
--
--		for (j = 0; j < total_tests; j++) {
--			if (opt_run_test != RUN_ALL_TESTS && j != opt_run_test)
--				continue;
--
--			test_init(&test, ifobj_tx, ifobj_rx, i, &tests[j]);
--			if (run_pkt_test(&test) == TEST_FAILURE)
--				failed_tests++;
--			usleep(USLEEP_MAX);
--		}
--	}
--	ret = failed_tests ? TEST_FAILURE : TEST_PASS;
-+	ksft_set_plan(1);
-+	test_init(&test, ifobj_tx, ifobj_rx, opt_mode, &tests[opt_run_test]);
-+	ret = run_pkt_test(&test);
++	/* swap_directions() swaps the workers, so the shadow needs one too. */
++	ifobj_tx->func_ptr = worker_testapp_validate_tx;
++	ifobj_rx->func_ptr = worker_testapp_validate_rx;
++	if (opt_endpoint_role == XSK_ENDPOINT_TX) {
++		local_ifobj = ifobj_tx;
++		shadow_ifobj = ifobj_rx;
++	} else {
++		local_ifobj = ifobj_rx;
++		shadow_ifobj = ifobj_tx;
++	}
++	bind_iface(local_ifobj, opt_ifname, argv);
++	caps = detect_mode_caps(local_ifobj);
++
+ 	test.tx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
+ 	test.rx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
+ 	if (!test.tx_pkt_stream_default || !test.rx_pkt_stream_default)
+ 		goto out;
+ 
+-	caps = detect_mode_caps(ifobj_tx);
++	if (setup_peer(local_ifobj, shadow_ifobj, &peer))
++		goto out;
+ 
+ 	if (!mode_supported(opt_mode, caps)) {
+ 		if (opt_mode == TEST_MODE_DRV)
+@@ -433,8 +517,10 @@ int main(int argc, char **argv)
+ 	ret = run_pkt_test(&test);
  
  out:
++	xsk_set_endpoint(NULL);
  	cleanup_iface(ifobj_tx);
-@@ -465,6 +440,12 @@ int main(int argc, char **argv)
+ 	cleanup_iface(ifobj_rx);
++	xsk_peer_close(peer);
+ 	pkt_stream_delete(test.tx_pkt_stream_default);
+ 	pkt_stream_delete(test.rx_pkt_stream_default);
  	ifobject_delete(ifobj_tx);
- 	ifobject_delete(ifobj_rx);
- 
-+	if (ret == TEST_SKIP && ksft_test_num()) {
-+		ksft_print_cnts();
-+		return KSFT_SKIP;
-+	}
-+	if (ret == TEST_SKIP)
-+		ksft_exit_skip("mode not supported\n");
- 	if (ret)
- 		ksft_exit_fail();
- 	else
 diff --git a/tools/testing/selftests/net/test_xsk.py b/tools/testing/selftests/net/test_xsk.py
-new file mode 100755
-index 000000000000..acfdba55fbae
---- /dev/null
+index acfdba55fbae..8bf18b913c93 100755
+--- a/tools/testing/selftests/net/test_xsk.py
 +++ b/tools/testing/selftests/net/test_xsk.py
-@@ -0,0 +1,140 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
+@@ -6,25 +6,22 @@ AF_XDP tests over veth.
+ 
+ Topology:
+ 
+-                 -----------
+-               _ | Process | _
+-              /  -----------  \
+-             /        |        \
+-            /         |         \
+-      -----------     |     -----------
+-      | Thread1 |     |     | Thread2 |
+-      -----------     |     -----------
+-           |          |          |
+-      -----------     |     -----------
+-      |  xskX   |     |     |  xskY   |
+-      -----------     |     -----------
+-           |          |          |
+-      -----------     |     ----------
+-      |  vethX  | --------- |  vethY |
+-      -----------   peer    ----------
+-
+-Each case runs an xskxceiver process of its own on a veth pair that the case
+-creates in the current network namespace and deletes when it ends.
++      -----------   control    -----------
++      | TX proc | ------------ | RX proc |
++      -----------  (TCP, lo)   -----------
++           |                        |
++      -----------              -----------
++      |  xskX   |              |  xskY   |
++      -----------              -----------
++           |                        |
++      -----------              ----------
++      |  vethX  | ------------ |  vethY |
++      -----------     peer     ----------
 +
-+r"""
-+AF_XDP tests over veth.
-+
-+Topology:
-+
-+                 -----------
-+               _ | Process | _
-+              /  -----------  \
-+             /        |        \
-+            /         |         \
-+      -----------     |     -----------
-+      | Thread1 |     |     | Thread2 |
-+      -----------     |     -----------
-+           |          |          |
-+      -----------     |     -----------
-+      |  xskX   |     |     |  xskY   |
-+      -----------     |     -----------
-+           |          |          |
-+      -----------     |     ----------
-+      |  vethX  | --------- |  vethY |
-+      -----------   peer    ----------
-+
-+Each case runs an xskxceiver process of its own on a veth pair that the case
-+creates in the current network namespace and deletes when it ends.
-+
-+test_xsk runs every case that "xskxceiver -l" lists but EXCLUDED_CASES in SKB
-+and DRV mode, and test_xsk_busy_poll runs them again with busy polling.
-+UNALIGNED cases are left out without huge pages. Use -t or -T to select
-+cases, e.g. -t 'test_xsk.drv_*'. See lib/xsk/xskxceiver.c for what each case
-+tests.
-+"""
-+
-+import random
-+import re
-+import sys
-+from pathlib import Path
-+
-+from lib.py import (KsftNamedVariant, KsftSkipEx, cmd, defer, ip, ksft_eq,
-+                    ksft_exit, ksft_run, ksft_variants, xsk_release_hugepages,
-+                    xsk_reserve_hugepages, xsk_setup_busy_poll,
-+                    xsk_wait_endpoint_exit)
-+
-+XSK_BIN = Path(__file__).parent / "lib/xskxceiver"
-+CASE_TIMEOUT = 120
-+SKIP_CODE = 4
-+EXCLUDED_CASES = {
-+    # bpf_xdp_adjust_tail() frees a frag that it trims off as the memory type
-+    # of the XDP RX queue, which veth and generic XDP leave at
-+    # MEM_TYPE_PAGE_SHARED for frames they copy into page_pool pages, so the
-+    # page leaks from its pool.
-+    "XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF",
-+    # The case skips in SKB mode. In DRV mode, veth copies each frame into a
-+    # page_pool fragment that leaves no room to grow the 128-byte frames of
-+    # the case unless it is the last one of its page, so the XDP program
-+    # drops most frames.
-+    "XDP_ADJUST_TAIL_GROW",
-+}
-+
-+
-+def _get_cases(hugepages):
-+    """
-+    each test case from xskxceiver -l comes out in a form below:
-+    0: SEND_RECEIVE
-+    """
-+    ret = []
-+    out = cmd([str(XSK_BIN), "-l"]).stdout
-+    cases = re.findall(r"^(\d+): (\w+)$", out, re.MULTILINE)
-+    for mode in ("skb", "drv"):
-+        for test_id, name in cases:
-+            if name in EXCLUDED_CASES:
-+                continue
-+            if "UNALIGNED" in name and not hugepages:
-+                continue
-+            ret.append(KsftNamedVariant(f"{mode}_{name}", mode, int(test_id)))
-+    return ret
-+
-+
-+def _veth_pair(busy_poll):
-+    pfx = f"xsk{random.randrange(1 << 20):05x}"
-+    veths = (pfx + "a", pfx + "b")
-+    ip(f"link add {veths[0]} numtxqueues 4 numrxqueues 4 type veth "
-+       f"peer name {veths[1]} numtxqueues 4 numrxqueues 4")
-+    defer(ip, f"link del {veths[0]}")
-+    for dev in veths:
-+        # The XDP program redirects all traffic, keep IPv6 off the link.
-+        ipv6 = Path("/proc/sys/net/ipv6/conf", dev, "disable_ipv6")
-+        if ipv6.exists():
-+            ipv6.write_text("1", encoding="utf-8")
-+        if busy_poll:
-+            xsk_setup_busy_poll(dev)
-+    for dev in veths:
-+        ip(f"link set {dev} up")
-+    return veths
-+
-+
-+def _start(args):
-+    return cmd([str(XSK_BIN), *args], background=True, fail=False)
-+
-+
-+def _test(mode, test_id, busy_poll):
-+    tx_if, rx_if = _veth_pair(busy_poll)
-+    args = ["-m", mode,
-+            "-t", str(test_id),
-+            *(["-b"] if busy_poll else [])]
-+    ret = xsk_wait_endpoint_exit(_start(["-i", tx_if, "-i", rx_if, *args]),
-+                                 "xsk", CASE_TIMEOUT)
-+    if ret == SKIP_CODE:
-+        raise KsftSkipEx("xskxceiver skipped the case")
-+    ksft_eq(ret, 0, "xskxceiver exit code")
-+
-+
-+def test_xsk(mode, test_id):
-+    _test(mode, test_id, busy_poll=False)
-+
-+
-+def test_xsk_busy_poll(mode, test_id):
-+    _test(mode, test_id, busy_poll=True)
-+
-+
-+def main():
-+    # ksft_run() exits on -l and -h before main() restores the huge pages.
-+    if "-l" in sys.argv or "-h" in sys.argv:
-+        sys.exit(f"{sys.argv[0]}: -l and -h are not supported")
-+    if not XSK_BIN.exists():
-+        print(f"1..0 # SKIP {XSK_BIN} was not built")
-+        sys.exit(SKIP_CODE)
-+    saved_hugepages = []
-+    hugepages = xsk_reserve_hugepages(saved_hugepages)
-+    cases = _get_cases(hugepages)
-+    ksft_run([ksft_variants(cases)(test_xsk),
-+              ksft_variants(cases)(test_xsk_busy_poll)])
-+    xsk_release_hugepages(saved_hugepages)
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/net/test_xsk.sh b/tools/testing/selftests/net/test_xsk.sh
-deleted file mode 100755
-index fbf4551d596a..000000000000
---- a/tools/testing/selftests/net/test_xsk.sh
-+++ /dev/null
-@@ -1,230 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--# Copyright(c) 2020 Intel Corporation, Weqaar Janjua <weqaar.a.janjua@intel.com>
--
--# AF_XDP selftests based on veth
--#
--# End-to-end AF_XDP over Veth test
--#
--# Topology:
--# ---------
--#                 -----------
--#               _ | Process | _
--#              /  -----------  \
--#             /        |        \
--#            /         |         \
--#      -----------     |     -----------
--#      | Thread1 |     |     | Thread2 |
--#      -----------     |     -----------
--#           |          |          |
--#      -----------     |     -----------
--#      |  xskX   |     |     |  xskY   |
--#      -----------     |     -----------
--#           |          |          |
--#      -----------     |     ----------
--#      |  vethX  | --------- |  vethY |
--#      -----------   peer    ----------
--#
--# AF_XDP is an address family optimized for high performance packet processing,
--# it is XDP’s user-space interface.
--#
--# An AF_XDP socket is linked to a single UMEM which is a region of virtual
--# contiguous memory, divided into equal-sized frames.
--#
--# Refer to AF_XDP Kernel Documentation for detailed information:
--# https://www.kernel.org/doc/html/latest/networking/af_xdp.html
--#
--# Prerequisites setup by script:
--#
--#   Set up veth interfaces as per the topology shown ^^:
--#   * setup two veth interfaces
--#   ** veth<xxxx>
--#   ** veth<yyyy>
--#   *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
--#       conflict with any existing interface
--#   * tests the veth and xsk layers of the topology
--#
--# See the source xskxceiver.c for information on each test
--#
--# Kernel configuration:
--# ---------------------
--# See "config" file for recommended kernel config options.
--#
--# Turn on XDP sockets and veth support when compiling i.e.
--# 	Networking support -->
--# 		Networking options -->
--# 			[ * ] XDP sockets
--#
--# Executing Tests:
--# ----------------
--# Must run with CAP_NET_ADMIN capability.
--#
--# Run:
--#   sudo ./test_xsk.sh
--#
--# If running from kselftests:
--#   sudo make run_tests
--#
--# Run with verbose output:
--#   sudo ./test_xsk.sh -v
--#
--# Set up veth interfaces and leave them up so xskxceiver can be launched in a debugger:
--#   sudo ./test_xsk.sh -d
--#
--# Run test suite in a specific mode only [skb,drv,zc]
--#   sudo ./test_xsk.sh -m MODE
--#
--# List available tests
--#   ./test_xsk.sh -l
--#
--# Run a specific test from the test suite
--#   sudo ./test_xsk.sh -t TEST_NAME
--#
--# Display the available command line options
--#   ./test_xsk.sh -h
--
--. xsk_prereqs.sh
--
--while getopts "vdm:lt:h" flag
--do
--	case "${flag}" in
--		v) verbose=1;;
--		d) debug=1;;
--		m) MODE=${OPTARG};;
--		l) list=1;;
--		t) TEST=${OPTARG};;
--		h) help=1;;
--	esac
--done
--
--if [ ! -x "./${XSKOBJ}" ]; then
--	echo "xskxceiver was not built; skipping"
--	exit $ksft_skip
--fi
--
--TEST_NAME="PREREQUISITES"
--
--URANDOM=/dev/urandom
--[ ! -e "${URANDOM}" ] && { echo "${URANDOM} not found. Skipping tests."; test_exit $ksft_fail; }
--
--VETH0_POSTFIX=$(cat ${URANDOM} | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 4)
--VETH0=ve${VETH0_POSTFIX}
--VETH1_POSTFIX=$(cat ${URANDOM} | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 4)
--VETH1=ve${VETH1_POSTFIX}
--MTU=1500
--
--trap ctrl_c INT
--
--function ctrl_c() {
--        cleanup_exit ${VETH0} ${VETH1}
--	exit 1
--}
--
--setup_vethPairs() {
--	if [[ $verbose -eq 1 ]]; then
--	        echo "setting up ${VETH0}"
--	fi
--	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
--	if [ -f /proc/net/if_inet6 ]; then
--		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
--		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
--	fi
--	if [[ $verbose -eq 1 ]]; then
--	        echo "setting up ${VETH1}"
--	fi
--
--	if [[ $busy_poll -eq 1 ]]; then
--	        echo 2 > /sys/class/net/${VETH0}/napi_defer_hard_irqs
--		echo 200000 > /sys/class/net/${VETH0}/gro_flush_timeout
--		echo 2 > /sys/class/net/${VETH1}/napi_defer_hard_irqs
--		echo 200000 > /sys/class/net/${VETH1}/gro_flush_timeout
--	fi
--
--	ip link set ${VETH1} mtu ${MTU}
--	ip link set ${VETH0} mtu ${MTU}
--	ip link set ${VETH1} up
--	ip link set ${VETH0} up
--}
--
--if [[ $list -eq 1 ]]; then
--        ./${XSKOBJ} -l
--        exit
--fi
--
--if [[ $help -eq 1 ]]; then
--	./${XSKOBJ}
--        exit
--fi
--
--validate_root_exec
--validate_veth_support ${VETH0}
--validate_ip_utility
--setup_vethPairs
--
--retval=$?
--if [ $retval -ne 0 ]; then
--	test_status $retval "${TEST_NAME}"
--	cleanup_exit ${VETH0} ${VETH1}
--	exit $retval
--fi
--
--
--if [[ $verbose -eq 1 ]]; then
--	ARGS+="-v "
--fi
--
--if [ -n "$MODE" ]; then
--	ARGS+="-m ${MODE} "
--fi
--
--if [ -n "$TEST" ]; then
--	ARGS+="-t ${TEST} "
--fi
--
--retval=$?
--test_status $retval "${TEST_NAME}"
--
--## START TESTS
--
--statusList=()
--
--TEST_NAME="XSK_SELFTESTS_${VETH0}_SOFTIRQ"
--
--if [[ $debug -eq 1 ]]; then
--    echo "-i" ${VETH0} "-i" ${VETH1}
--    exit
--fi
--
--exec_xskxceiver
--
--cleanup_exit ${VETH0} ${VETH1}
--
--if [[ $list -eq 1 ]]; then
--    exit
--fi
--
--TEST_NAME="XSK_SELFTESTS_${VETH0}_BUSY_POLL"
--busy_poll=1
--
--setup_vethPairs
--exec_xskxceiver
--
--## END TESTS
--
--cleanup_exit ${VETH0} ${VETH1}
--
--failures=0
--echo -e "\nSummary:"
--for i in "${!statusList[@]}"
--do
--	if [ ${statusList[$i]} -ne 0 ]; then
--	        test_status ${statusList[$i]} ${nameList[$i]}
--		failures=1
--	fi
--done
--
--if [ $failures -eq 0 ]; then
--        echo "All tests successful!"
--else
--	exit 1
--fi
-diff --git a/tools/testing/selftests/net/xsk_prereqs.sh b/tools/testing/selftests/net/xsk_prereqs.sh
-deleted file mode 100755
-index 5e5c8ef3fff2..000000000000
---- a/tools/testing/selftests/net/xsk_prereqs.sh
-+++ /dev/null
-@@ -1,86 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--# Copyright(c) 2020 Intel Corporation.
--
--ksft_pass=0
--ksft_fail=1
--ksft_xfail=2
--ksft_xpass=3
--ksft_skip=4
--
--XSKOBJ=lib/xskxceiver
--
--validate_root_exec()
--{
--	msg="skip all tests:"
--	if [ $UID != 0 ]; then
--		echo $msg must be run as root >&2
--		test_exit $ksft_fail
--	else
--		return $ksft_pass
--	fi
--}
--
--validate_veth_support()
--{
--	msg="skip all tests:"
--	if [ $(ip link add $1 type veth 2>/dev/null; echo $?;) != 0 ]; then
--		echo $msg veth kernel support not available >&2
--		test_exit $ksft_skip
--	else
--		ip link del $1
--		return $ksft_pass
--	fi
--}
--
--test_status()
--{
--	statusval=$1
--	if [ $statusval -eq $ksft_fail ]; then
--		echo "$2: [ FAIL ]"
--	elif [ $statusval -eq $ksft_skip ]; then
--		echo "$2: [ SKIPPED ]"
--	elif [ $statusval -eq $ksft_pass ]; then
--		echo "$2: [ PASS ]"
--	fi
--}
--
--test_exit()
--{
--	if [ $1 -ne 0 ]; then
--		test_status $1 $(basename $0)
--	fi
--	exit 1
--}
--
--clear_configs()
--{
--	[ $(ip link show $1 &>/dev/null; echo $?;) == 0 ] &&
--		{ ip link del $1; }
--}
--
--cleanup_exit()
--{
--	clear_configs $1 $2
--}
--
--validate_ip_utility()
--{
--	[ ! $(type -P ip) ] && { echo "'ip' not found. Skipping tests."; test_exit $ksft_skip; }
--}
--
--exec_xskxceiver()
--{
--        if [[ $busy_poll -eq 1 ]]; then
--	        ARGS+="-b "
--	fi
--
--	./${XSKOBJ} -i ${VETH0} -i ${VETH1} ${ARGS}
--	retval=$?
--
--	if [[ $list -ne 1 ]]; then
--	    test_status $retval "${TEST_NAME}"
--	    statusList+=($retval)
--	    nameList+=(${TEST_NAME})
--	fi
--}
++Each case runs a TX and an RX xskxceiver process on a veth pair that the case
++creates in the current network namespace and deletes when it ends. The TX
++process listens on a TCP control port on 127.0.0.1, and the RX process
++connects to it once TX says on stderr that it listens.
+ 
+ test_xsk runs every case that "xskxceiver -l" lists but EXCLUDED_CASES in SKB
+ and DRV mode, and test_xsk_busy_poll runs them again with busy polling.
+@@ -38,13 +35,16 @@ import re
+ import sys
+ from pathlib import Path
+ 
+-from lib.py import (KsftNamedVariant, KsftSkipEx, cmd, defer, ip, ksft_eq,
+-                    ksft_exit, ksft_run, ksft_variants, xsk_release_hugepages,
+-                    xsk_reserve_hugepages, xsk_setup_busy_poll,
+-                    xsk_wait_endpoint_exit)
++from lib.py import (KsftFailEx, KsftNamedVariant, KsftSkipEx, cmd, defer, ip,
++                    ksft_exit, ksft_in, ksft_run, ksft_variants, rand_port,
++                    xsk_release_hugepages, xsk_reserve_hugepages,
++                    xsk_setup_busy_poll, xsk_wait_endpoint_exit,
++                    xsk_wait_listen)
+ 
+ XSK_BIN = Path(__file__).parent / "lib/xskxceiver"
+ CASE_TIMEOUT = 120
++# xskxceiver waits as long for its peer to connect.
++LISTEN_TIMEOUT = 30
+ SKIP_CODE = 4
+ EXCLUDED_CASES = {
+     # bpf_xdp_adjust_tail() frees a frag that it trims off as the memory type
+@@ -102,14 +102,28 @@ def _start(args):
+ 
+ def _test(mode, test_id, busy_poll):
+     tx_if, rx_if = _veth_pair(busy_poll)
++    port = rand_port()
+     args = ["-m", mode,
+             "-t", str(test_id),
++            "-p", "127.0.0.1",
++            "-P", str(port),
+             *(["-b"] if busy_poll else [])]
+-    ret = xsk_wait_endpoint_exit(_start(["-i", tx_if, "-i", rx_if, *args]),
+-                                 "xsk", CASE_TIMEOUT)
+-    if ret == SKIP_CODE:
++    tx = _start(["-i", tx_if, "-e", "tx", *args])
++    head = ""
++    try:
++        head, listening = xsk_wait_listen(tx, port, LISTEN_TIMEOUT)
++        if not listening:
++            tx.proc.kill()
++            raise KsftFailEx(f"TX endpoint did not listen on port {port}")
++        rx = _start(["-i", rx_if, "-e", "rx", *args])
++        rx_ret = xsk_wait_endpoint_exit(rx, "rx", CASE_TIMEOUT)
++    finally:
++        tx_ret = xsk_wait_endpoint_exit(tx, "tx", CASE_TIMEOUT, head)
++    rets = {tx_ret, rx_ret}
++    if SKIP_CODE in rets and rets <= {0, SKIP_CODE}:
+         raise KsftSkipEx("xskxceiver skipped the case")
+-    ksft_eq(ret, 0, "xskxceiver exit code")
++    ksft_in(tx_ret, (0, SKIP_CODE), "TX endpoint exit code")
++    ksft_in(rx_ret, (0, SKIP_CODE), "RX endpoint exit code")
+ 
+ 
+ def test_xsk(mode, test_id):
 -- 
 2.43.0
 
