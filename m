@@ -1,64 +1,64 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC4F06AD4
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684A72F6577
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791959093; cv=none; b=VjizuwTMfA6WQjv4bXEj7BhRPCwuLQSH0kYfDUs5X00/ysuVUXLq+TtWRXz6u36+OCKsiVRk3dFKi6MDYvy82Yybl0grJxgevSEMji6VnByfpbsPOVA8auKg4Kjj8VBCrKYKNj86VgMBzR6/sZmAfD2lZ/IkAQVbXRxGPQTPFIw=
+	t=1791959094; cv=none; b=SJlNhKdawQpM/T+GJSoCD1uG0e6Dg7hckZbobLlX5IAVUUdQ0mYT6uaRD+8aeqvZRt5YRiFaSQR7bV/cd9eK7vgxiJQsmYKYbMAyq6Yn6ybLCIzWlvImiNZvcrRnr/yW1PxOQXxLVY5OLlVURc1ACfr+jdfnMHyvFOl4vaB8Xuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791959093; c=relaxed/simple;
-	bh=6M2X33BxbD9hd2lq8egqnXqvoqQ8qP5zvkkr3DbP5v8=;
+	s=arc-20240116; t=1791959094; c=relaxed/simple;
+	bh=WoMKbK/shvv7dtB9ERHXZ7guafdnMz10qKnwMijY9w8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fEV7A0TtLFT8pHPCVdzMsVqw+Ac3r0RoJ9/W2nUyVokYRYBWCigTq6byDG6c6edvg0vZxbpnYyIPsTH2c9lSZf6ztdEbSheqZjRQ0iObMl4SZHX2tuoRTWpCzWCqC4Sd4VxkJga+IwrfT6dCQnXzQ2zefRYiLvOOefCS5mJDApE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E7FL6zNx; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version:Content-Type; b=etbYhQe6Uc0bxcvFhAyIARMNOhkF90welEb0BrnqsI6CncOjTTQi/xNUDLTVI4/ifUKBldzAhIrJr6p1GMv/jA+wwKKOwtIXPhY5uarIfKcK83QCTIQlfhDXOGOm56qZ+k/swEUDCvmuPVZGN7cE+tlT2gYc/b7rwxwlvfQDtDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aTMKpuOa; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E7FL6zNx"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ab752f6244so25288a91.2
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:24:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTMKpuOa"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cc4aa18f9afso287164a12.3
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791959092; x=1792563892; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791959093; x=1792563893; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=gjI5tQrqx4e9HFlKGcx9/y7HJq2pwX9ri3/KBkLonxE=;
-        b=E7FL6zNxAvxBmbmJiV/uBOntPzF/YjKKN/GUT60GvkPUfiWRfWP7qLkyRwplE1o36I
-         voE1wKrmNOwRiUZevMIXuQs5RSQOg7/X7tgtkaQ534sFKUen3+nDp0puBBWqA0FjfaIR
-         KcKRNeVl/rNyyzTrFl65pqd2d7ySDHawmPl4gNhV1mH/GChQNG0CAZdiTehK8QYUsONu
-         PkU1dtckMig24lSzBJDGJseOuur/xaMOC2Q2uZzfPMwqBTAEYGdV5StKgpLYbh4SCHoJ
-         wHQ3N/wVjbiJcgoP4E8zbofKDf/Rv02ELy1+nff6Mgx4MnBZS3m2xBLFMO6t1FUIOEZB
-         5/VQ==
+        bh=9D8gIqXwpYYUxEnfLEa/uqumetlZw8cgYsoRE/cLh5k=;
+        b=aTMKpuOaptzickO2yc3q08TvA4VNkZ5pIYthTrZjmmbNHe5YQ/O6IZo6iwPu9bctCj
+         lR6qQSEnOYohXis90wHO9h5Fx7n9rQgQxRU4uQzsmmajBIpr0NRxPJTAM4GO/whke3oz
+         0oXmn88zuPgzh7XI2pnwiP1hX5RBkFS2ehivT9jFzGz1YS1geXCTjnwvoO3lXVzjetr2
+         gKZ41DsHAuinW/EySDEoNP4a23sUZIFi8WP07W+dxOGNr0Fu2dIqGaw93kYfAq+9zFMQ
+         NFLU500b+O45zurtbzddBThMKSmV4RxKwHHfzSh9h2XNaXeyW5k1s6VP6SRML/12wU4X
+         G5bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791959092; x=1792563892;
+        d=1e100.net; s=20260707; t=1791959093; x=1792563893;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gjI5tQrqx4e9HFlKGcx9/y7HJq2pwX9ri3/KBkLonxE=;
-        b=gqqYFXYm06nroZp20qvOJm4CUvxCniXeas7L60VCAnI3vikHXwQj2i3D+nSG1pZv/f
-         62ucEd/XAibDAk9iBo12VZ+FPyV6+DpMAhKfhCnEYTaWf53QU+JPJIr2fYVp+8l764ar
-         4nhnr05n8tNBgmdKXH0jWJ3Y92jy/u49L4JFJ4dVPLKJE41JS/pWLlKRvU+MXcE33dJk
-         TzKO7rr7Q5HJeb6jvbrUBSb4wz+fJr9f0K9YaDYgVRnhptfjv5GSNFqTfh/U43NOLo45
-         W3Ani1VzSnJZxcBQWYkJsgg0Ju+QROqyKrVkVm082TonbQqPyXpzJ8gfQEP9IRwbKxcS
-         VZJg==
-X-Gm-Message-State: AFq9FYJVzaMcqjuMYdPuAoz+qnTHi/RcmN/mtYHcBV9Sr11rYuQ5mT8Y
-	e3zi8ACc30MBBGMRsMmnOHSnfHnV6pctrsd6B9wWKYR237HCGc2ZIsHITVqaWA==
-X-Gm-Gg: AYBFou3J6IdrOwfpxHwUolB6/XtI9Fw8zFTXM9iezqE10lg+ScRR6Cft1Fa1fWVjESX
-	hVmeaMvdkSDNVDVTyUMySZOe/k1DarAWQ01K56ycUvxtxhOK+cDJiHKR5ZxFSS/jd151tlMBuf8
-	gCPRmbCAWQ54DWteAhcXU064LCcSYXUJFNKjXeM0XoWEBS2xj7g6HcYDZwEjQDWntIjJkRHPXgo
-	wOk1EgBXRN7unuoZ+dFZSXXlObAuWgV9a/wP2DwfH6fCIEZk9xIsIg3SXZjWcWjfyLc7we253Pr
-	8bryhgidYftvQJMs0xmjWTBk9wphDBn9CFRf4TNiUsHfY/abuiAeSJL7aV+jGuEOYsIVPOWRfuu
-	S9J3mFaK1RXUwK1nfqWO+9pqR92jyt1d7tY/7qnAvjvqStLpEpVpLoylqkdk4yGuGFqps7YgDsl
-	l9ramac+LELadHTuQKm/4pgsva2u3Q6f08Z7YrzcJ6vBISIeJq8LVlq5k/y6pEPqMlFuQ5brSc9
-	+Y77veeZMlNph0=
-X-Received: by 2002:a17:90a:51a7:b0:3ab:3e1c:3c34 with SMTP id 98e67ed59e1d1-3ab3e1c3dc8mr9666079a91.51.1791959092033;
+        bh=9D8gIqXwpYYUxEnfLEa/uqumetlZw8cgYsoRE/cLh5k=;
+        b=tdizCR+LNiPsTP+yNbjH/wYyED9+Vlu3E19asheOdNPr96Va+HG9oSgnaaBFO+6x3K
+         e0kX6SgyROaHaklAmC2mqpm425jwzBd3Z5eApO7fe8MAjlNxowahMIxAbZXQP5koRiaJ
+         +xnQjxwuD0HUxfW8FOc5kgtHaHHwWvRU0TMxCxCvj4vsXTB00taXjeNZ0cDL6ON/nTFL
+         GYkZnJmWtrHIU+fqZdETeyC3GpAV8iMPga0zUwJkIhvc2IXQZuOD4PWtMENHWj0vQjUs
+         BY3uaVyhNeQ36ocOT0/wO8fmwAEcSxG6rW+GxyBa1JhfViKV0ifbpg4BlkcTinumYgN8
+         vyQg==
+X-Gm-Message-State: AFq9FYJ2T9agnJrgqo33U+5TfroLcKyCvvhV2T7woFLVI+f4fY7iK84u
+	rqVRJ1QaGe8Rj5JxAgH1AOxz10k+0LBGfMwzcUnOo18hjnzeoXly61jlEz3opg==
+X-Gm-Gg: AYBFou2P4nifRtCq2LfHa93EmsgW8Mmjj/XVEvjRrB8OzBxW0viC8k08nmf5Q5UqcLP
+	YDC45jEkBQbqyLm8stkx4JnmJoh9GVRY20fkOBkbd5ypvnfxm0z6rte+Dqvvn6VUd1QpLVM4gz/
+	T6eQMJdBBV/dknVo/sqiUJ6hi2RY10HWcdDbmMUqmeJMO/RsuAHHUSNeMUdqWbx6HAuqzHbe7tf
+	niFtFHjYlWOz80geIkf/hvCOy/JdJWA72yULvXV3V8XNCF2WZywJ835v0dwQfSxwRg03dUhKFSZ
+	QHQOpzNVxqHNW3xwlDmn5xgiMYlWvZR1b6LiyWOxKQ0W3FoZpiIBH5ErHL6WJHaj9T17xFudRYV
+	Jw/6MMoGacZUihnR4esvtwCALPDnv7IATaln6w5iTKOv6uUlbY9kWuWaeUbsPUUcI3yQFKayGLm
+	iPcSazMQklpnohxVajcykNJP5jR4CdXNF6WSP66JKJkUaYW5Jb+5VOQvtBb6Ah2fNvGR7wePL4A
+	jkPFGnF8+/fGD4=
+X-Received: by 2002:a05:6a20:3d1a:b0:3e1:bb65:7959 with SMTP id adf61e73a8af0-3e1bb657a4amr5191876637.46.1791959092625;
         Tue, 13 Oct 2026 23:24:52 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd3d9e41126sm6614238a12.23.2026.10.13.23.24.51
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd3d9e41126sm6614238a12.23.2026.10.13.23.24.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 23:24:51 -0700 (PDT)
+        Tue, 13 Oct 2026 23:24:52 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -67,9 +67,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 1/7] bpf: more precise stack liveness effects for global func params
-Date: Tue, 13 Oct 2026 23:24:36 -0700
-Message-ID: <20261013-scev-minimal-v3-followups-v2-1-6d9d61965486@gmail.com>
+Subject: [PATCH bpf-next v2 2/7] bpf: avoid duplicate declaration for BPF_SCEV_REGS_NUM
+Date: Tue, 13 Oct 2026 23:24:37 -0700
+Message-ID: <20261013-scev-minimal-v3-followups-v2-2-6d9d61965486@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261013-scev-minimal-v3-followups-v2-0-6d9d61965486@gmail.com>
 References: <20261013-scev-minimal-v3-followups-v2-0-6d9d61965486@gmail.com>
@@ -82,58 +82,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The following types can be returned by the btf_prepare_func_args():
-- ARG_PTR_TO_CTX
-- ARG_PTR_TO_BTF_ID (+ flags)
-- ARG_PTR_TO_MEM (+ flags)
-- ARG_PTR_TO_ARENA
-- ARG_PTR_TO_DYNPTR
-- ARG_SCALAR
+The "bpf: Use SCEV to widen bounded loops" commit introduced a
+second (identical and unnecessary) definition for the
+BPF_SCEV_REGS_NUM macro.
 
-Of these, valid programs can pass frame pointer only as
-ARG_PTR_TO_{MEM,BTF_ID,DYNPTR}. Additionally, pointer arithmetic
-allows the following trick:
-
-  0: (bf) r1 = r10
-  1: (07) r1 += -8
-  2: (1f) r1 -= r10
-  3: (85) call pc+1 // r1=fp0 ?
-  4: (95) exit
-
-This commit changes bpf_global_subprog_stack_access_bytes() to handle
-ARG_SCALAR and ARG_PTR_TO_DYNPTR, thus addressing the full set of
-possible returned values.
-
-Fixes: 8212c1c2986d ("bpf: Derive global subprog stack liveness from BTF signatures")
+Fixes: 088a5477a9bd ("bpf: Avoid widening registers that hinder exact stack-slot tracking")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/linux/bpf_verifier.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2f190abe3448..e477ef4465d5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14871,7 +14871,7 @@ bpf_global_subprog_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_i
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 54cb6d3d0653..791398e14962 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -708,9 +708,6 @@ struct bpf_loop_exit {
+ 	int to; /* instruction outside the loop */
+ };
  
- 	switch (base_type(sub->args[arg].arg_type)) {
- 	case ARG_UNUSED:	/* Not an argument slot. */
--	case ARG_ANYTHING:	/* A scalar, the callee can't dereference it. */
-+	case ARG_SCALAR:	/* A scalar, the callee can't dereference it. */
- 		return (struct arg_access_info) {};
- 	case ARG_PTR_TO_BTF_ID:
- 		/*
-@@ -14887,6 +14887,10 @@ bpf_global_subprog_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_i
- 			info.must_write = true;
- 		}
- 		return info;
-+	case ARG_PTR_TO_DYNPTR:
-+		/* The callee may adjust the view, but cannot reinitialize the dynptr. */
-+		info.size = BPF_DYNPTR_SIZE;
-+		return info;
- 	default:
- 		return info;
- 	}
+-/* SCEV/widening register space: r0..r10 plus every stack slot of a frame. */
+-#define BPF_SCEV_REGS_NUM (MAX_BPF_REG + MAX_BPF_STACK_SLOTS)
+-
+ struct bpf_loop {
+ 	struct bpf_backedge backedges[MAX_BACKEDGES];
+ 	/* edges exiting from this loop, includes edges from nested loops */
 
 -- 
 2.53.0
