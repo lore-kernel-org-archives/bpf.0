@@ -1,56 +1,56 @@
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF4D3F485E
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 17:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC7B566C75
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 17:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791999595; cv=none; b=UugMULwnht5nY9OhcVPgqAfBav8JFABBsVfmowqqlQW9wmMRGFEUxpDHOVj+KrvyEBiRKfXGWVkpVRncQKC2RTIRWDkgJNbzrCMsFuhOX+1a0FBLlrlyYYFHdzbQshXkMrc7PxljHQ7IVSflY2Qd5f9wzb+yaQuB3Zcdk+0oyBg=
+	t=1791999600; cv=none; b=L9219Nay9JAnQkW9pyCQ3+mvZPp6qBFcD2swHus1+xyu4K+Ronr5OMMeozL2NdzRnwLuGEdcaFe2uLibzH0cz+ooxLkw6KSZr2vGzqveYygPmfSizfBtBm82tSWsOHfF+5byjUhG1nqXsl9YmiifHehhF+jHARufMh7g1/mmCR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791999595; c=relaxed/simple;
-	bh=YFdQEoWDdeGWa/TWsgMs/pBKXtuXfzL+LdXOVde+pIM=;
+	s=arc-20240116; t=1791999600; c=relaxed/simple;
+	bh=fG7/fP7pi3tm5Pq73QbzOTTMy8STSFMf9ElUBX+08pc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=H3cJG70fTwnwY2h8QxKG7p1JBs1Uj5m9zyOA346VUPBg0e7JTYmDFJsHihqg3Q0dJjIRt4foG+fP5TL9/W5uqvohAgfKzYAV+80G0/SMrZvtJ6oMf9iMYAa6K4GFx+b8/qVvvW2bkLMA862mOJuYAG97DfSZOxP1y10Ts0s5oe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZhD1KS+y; arc=none smtp.client-ip=74.125.82.198
+	 To:Cc:Content-Type; b=Uj/YIq6U5/f9l0aXXYcOfT469WTvJM3E2gRyKeKNtMrB3spzerPiw/jipr3SatheJ6agUliwCDcgWZf37bkjABgZ0JyDaxowQoTNIB+U1inP3MXgPgc7AJkZlqwPf/mANwXMHBUnVnEr8ADIrw750eGAOIW0x0GAbeou1OMs6ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XWriHRUv; arc=none smtp.client-ip=74.125.82.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZhD1KS+y"
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-35cbea41088so1840483eec.1
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 10:39:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XWriHRUv"
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-35a4d2e39acso4654002eec.1
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 10:39:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791999589; x=1792604389; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1791999591; x=1792604391; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bRbC+uzuGq379sOHpsPue+EBr06ngtqseW1XBOx8dXc=;
-        b=ZhD1KS+y9mMl3wo8qaGOk4r2Fnm2swoJYACbfS5U5Rl5NyJtvqqE7RtRyTqgiMB1nq
-         Rup5g1oElK3tU4RD4KMJkp21WfusUpdoBdf8bioNnltk71GKr3vYhSTFPcZza/60Zrab
-         ifrKB40cdMxUv//JvH2Wqz8joIoqa1u70UT7Y9zBnhAk9yjzUpBYIXAVXhWON3XFLh0A
-         1VEm8YlYgAP1ZL7sMIgUZa9xH1m4gNJu9ntwryqUeB6wmX5+iKDtsHwMOX2//HkSiPRN
-         eAantnyUe1X2v/jODpt9hB7ldDAkp3zPXn7bGKFKNjo8xHn5GMlgNVM8KrsUEgaEG9X4
-         T+iA==
+        bh=zgeJJ6nz9G6HsKtPd/C98X0YtcYl3yRWAWvu2AIxGIk=;
+        b=XWriHRUva/aIiHZvXFgAYF2nDHQbS8r4GvJEOiKEVtxUXyZlNoymDVPspAxJ/XM644
+         oylPQqB88IAVDc0F0P5YkgB1MmvoSi6f1Dn7qg/Nt9pOv2AiJcnYNMKxRie7D5rJCMtp
+         DRP9MfZ04JNPn6m81o7CehRwphaI6TdmAmJRKkUP+dF3L0Un8mn7x7b1iQMBBKIYDln4
+         esGNnbDf4Ak/eRMp1FSCjqdD8IJA4ZmI6ArId04RCGxps8AezBWFP7nWeJfIhGwk1Rl3
+         Selm3GrH7PPwXvpb9hiiatY4MFJAFPX83X8Rd5Y3/8FHM7I7KBZVDl/prQv8GO/5Zae3
+         G2IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791999589; x=1792604389;
+        d=1e100.net; s=20260707; t=1791999591; x=1792604391;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=bRbC+uzuGq379sOHpsPue+EBr06ngtqseW1XBOx8dXc=;
-        b=UXLiUEXpHKiJmUV0y1TcWwG6+wHlLDVUT1IB6osWrBh3e3Wk66OpTvDUmqSE4GKLcZ
-         jDmaw0/baNIDiR9NptMw6KVwhUsohWb57GVfRHxPKD1cpXYln2zs4rkzhYwmK0Fovjsr
-         9975dqE6Tr//eSyeY9m2u7P8FpBvGP8k78bGHHs/zKJ1cKj23R3NYZjaUrpxg2dl2qLN
-         N7JNer0C6F9NTHd1ZP+vDM4qvG6FqewCjFdFlFH/pY95aHc8IDaUR6JyYcSMbE1oH00E
-         apKuneCbJYyQmZosdzD/bheFdeCiC5xLJ0u82MM58k+QrqsC9YuILxlSC30Ab0FAxOg1
-         5v1A==
-X-Forwarded-Encrypted: i=1; AKwUvBxURcNfRBxomwtY2qJa+38yEfocyusntHJuj/i1iVY7wFgsAbpZWE5h/EEhZ01q/VSAj6Q=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKjJ3ILAh1bS3JJSRqnJqHHiLnfih86dse8E/XASFZhLUkmBKcB
-	HCzh+izEi4EjAmNoBhzrhNH2LySE7dVrMYgP8X+oPOBU6Ao2ESLOn3wDK3hD6bBhVtZnILiHU8L
-	SAxhkuw38Xz1oGkabMq7/1/GhYw==
-X-Received: from dycaq4.prod.google.com ([2002:a05:7301:7e04:b0:359:198a:8046])
+        bh=zgeJJ6nz9G6HsKtPd/C98X0YtcYl3yRWAWvu2AIxGIk=;
+        b=OupU3r/jsUrsvGahUUJvUUL2ZPsAeBgSxR7WQfyBJiLcuOWqnQ/+21HDTdqZJlBirW
+         9nLVTSF4VdvNcq0XrvtZ6kkjapTM7OTAC/vFuAQyWKXrEAGYSGZCnWoaBhIU5KsANmHh
+         DndPhXPiCvLLv8LMfToUvLsqNY/jwHZz/nnrpsh/ygtGz0rCTZ7f56BcMFiw5ahzMS/w
+         fSWWPACMZq6O53kLfeH6CFjMQ6jYe1RO0BQ1tMReVIs9Y535+j3A002NDXe8juDBYszd
+         o0nMqdHIbP8KZl4ZKqt1hQrTa7qEnnWdvnMCWu42ARe1V7KhAcAlFCV8spKbOEIV8n9e
+         sGZQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwO65dpUcj80HBXGKpq4G7pNabUxHwXjJ+LNL9gp7uvoi3wta83kCpfpNxSEhPZig1XpSc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJr78u0fKPy/P3tYKVNHVpGZJaRthyOEmttsAoWU6wq0EoG20Ta
+	vQZOpC4bFPtkHmiZMIUg+FM7/s/w1DmzUkX7m9aXKMBKayS740w8qfNfZnRjiPy+DaiSOwJzt/k
+	8ythaeZCxWh2xWu38V5MtygU4AA==
+X-Received: from dyfv5.prod.google.com ([2002:a05:7300:8245:b0:350:9a68:218d])
  (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:f643:b0:35d:4e41:d2c2 with SMTP id 5a478bee46e88-35d4e41d4c4mr5062722eec.33.1791999589085;
- Wed, 14 Oct 2026 10:39:49 -0700 (PDT)
-Date: Wed, 14 Oct 2026 17:37:17 +0000
+ 2002:a05:693c:69c3:b0:358:3426:d606 with SMTP id 5a478bee46e88-3583426df51mr21121341eec.32.1791999590184;
+ Wed, 14 Oct 2026 10:39:50 -0700 (PDT)
+Date: Wed, 14 Oct 2026 17:37:18 +0000
 In-Reply-To: <20261014173945.373295-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,9 +60,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20261014173945.373295-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.56.0.212.g129ede20d9-goog
-Message-ID: <20261014173945.373295-4-almasrymina@google.com>
-Subject: [PATCH net-next v3 3/6] net: skbuff: replace skb_page_unref() and
- __skb_frag_unref() with skb_netmem_unref()
+Message-ID: <20261014173945.373295-5-almasrymina@google.com>
+Subject: [PATCH net-next v3 4/6] net: skbuff: replace __skb_frag_ref() with
+ symmetric skb_netmem_ref()
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-rdma@vger.kernel.org, bpf@vger.kernel.org
@@ -76,221 +76,349 @@ Cc: Mina Almasry <almasrymina@google.com>, Ayush Sawal <ayush.sawal@chelsio.com>
 	Eric Biggers <ebiggers@kernel.org>, Kees Cook <kees@kernel.org>, 
 	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Petr Machata <petrm@nvidia.com>, 
 	"=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig=20=28The=20Capable=20Hub=29?=" <u.kleine-koenig@baylibre.com>, Jakub Raczynski <j.raczynski@samsung.com>, 
-	Wang Zhan <wang.zhan@smartx.com>, Willem de Bruijn <willemb@google.com>
+	Wang Zhan <wang.zhan@smartx.com>, Willem de Bruijn <willemb@google.com>, 
+	Antony Antony <antony.antony@secunet.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-Unreferencing a page_pool fragment with recycle=false decrements the
-non-pp backing refcount instead of pp_ref_count, underflowing the page
-refcount when the fragment was owned via page_pool (as on mlx4's RX
-error path). Having both skb_page_unref() and __skb_frag_unref(frag,
-recycle) made it easy for callers to pass hardcoded recycle=false on
-SKB-owned fragments.
+Previously, __skb_frag_ref() and skb_frag_ref() unconditionally
+incremented the non-pp backing refcount via get_netmem(), while
+skb_frag_unref() decremented pp_ref_count whenever skb->pp_recycle was
+set. Ref-ing a page_pool fragment into a pp_recycle=1 SKB (or clearing
+pp_recycle=0 on an uncloned SKB while clones still held pp_recycle=1)
+leaked the backing non-pp refcount and underflowed pp_ref_count across
+IP-TFS, skb_split(), skb_shift(), and cloned unclone paths.
 
-Replace skb_page_unref() and __skb_frag_unref() with
-skb_netmem_unref(netmem, recycle), which dispatches to
-napi_pp_put_page() when recycle is true and put_netmem() otherwise:
+Replace __skb_frag_ref() with skb_netmem_ref(netmem, recycle) as the
+exact counterpart to skb_netmem_unref(netmem, recycle):
 
-- Use skb_frag_unref(skb, ...) on SKB-owned fragments in mlx4, sky2,
-  tls_strp, and skb_shift() so unrefs always match skb->pp_recycle.
-- Use put_netmem() directly in tls_device's destroy_record(), which
-  releases raw non-pp page references outside an SKB.
+- Keep skb->pp_recycle intact in skb_release_data() so uncloning paths
+  (pskb_expand_head() and pskb_carve_inside_{header,nonlinear}()) keep
+  trading pp_ref_count references symmetrically across clones.
+- Propagate pp_recycle and call skb_frag_ref() on the destination SKB in
+  __pskb_copy_fclone(), skb_zerocopy(), skb_split(), skb_shift(), and
+  skb_segment().
+- Linearize an output segment's existing frags in skb_segment() before
+  attaching frags from a frag_list SKB with a different pp_recycle bit,
+  since each output segment carries a single pp_recycle bit.
+- Use skb_frag_ref() in xfrm_iptfs, chcr_ktls, and cassini, and call
+  get_netmem() directly in veth and tls_device_fallback where callers
+  explicitly take a raw non-pp reference.
 
-Found by code inspection and confirmed with the KUnit tests added later
-in this series; not observed in production. The mlx4, sky2, and TLS
-call-site changes are compile-tested only.
+Found by code inspection while reviewing the IP-TFS pp_ref_count fix [1]
+and confirmed with the KUnit tests added later in this series; not
+observed in production. The xfrm_iptfs, chcr_ktls, cassini, veth, and
+tls_device_fallback changes are compile-tested only.
 
+Link: https://lore.kernel.org/netdev/xfrm-iptfs-pp_ref_count-underflow-v4-1-912fa72106f0@secunet.com/ [1]
+Cc: Antony Antony <antony.antony@secunet.com>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: bpf@vger.kernel.org
 Assisted-by: LLM
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 ---
-v2:
-- Note how the issue was found and how the change was tested.
-- Link to v1: https://lore.kernel.org/netdev/20261010083935.3274178-4-almasrymina@google.com/
----
- drivers/net/ethernet/marvell/sky2.c        |  2 +-
- drivers/net/ethernet/mellanox/mlx4/en_rx.c |  2 +-
- include/linux/skbuff_ref.h                 | 34 +++++++++++-----------
- net/core/skbuff.c                          |  7 +++--
- net/ipv4/esp4.c                            |  4 +--
- net/ipv6/esp6.c                            |  4 +--
- net/tls/tls_device.c                       |  2 +-
- net/tls/tls_strp.c                         |  2 +-
- 8 files changed, 29 insertions(+), 28 deletions(-)
+v3:
+- Linearize straddling output segments in skb_segment() when frag_list
+  SKBs mix pp_recycle flags instead of clearing NETIF_F_SG (Sashiko).
+- Link to v2: https://lore.kernel.org/netdev/20261012082148.1698596-5-almasrymina@google.com/
 
-diff --git a/drivers/net/ethernet/marvell/sky2.c b/drivers/net/ethernet/marvell/sky2.c
-index 30facdece3e29..1d42a82db8f2b 100644
---- a/drivers/net/ethernet/marvell/sky2.c
-+++ b/drivers/net/ethernet/marvell/sky2.c
-@@ -2501,7 +2501,7 @@ static void skb_put_frags(struct sk_buff *skb, unsigned int hdr_space,
- 
- 		if (length == 0) {
- 			/* don't need this page */
--			__skb_frag_unref(frag, false);
-+			skb_frag_unref(skb, i);
- 			--skb_shinfo(skb)->nr_frags;
- 		} else {
- 			size = min(length, (unsigned) PAGE_SIZE);
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-index 96f97fa0f5489..fe18606c2ab55 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-@@ -497,7 +497,7 @@ static int mlx4_en_complete_rx_desc(struct mlx4_en_priv *priv,
- fail:
- 	while (nr > 0) {
- 		nr--;
--		__skb_frag_unref(skb_shinfo(skb)->frags + nr, false);
-+		skb_frag_unref(skb, nr);
+v2:
+- Clear NETIF_F_SG in skb_segment() when frag_list SKBs mix pp_recycle
+  flags.
+- Note how the issue was found and how the change was tested.
+- Link to v1: https://lore.kernel.org/netdev/20261010083935.3274178-5-almasrymina@google.com/
+---
+ .../chelsio/inline_crypto/ch_ktls/chcr_ktls.c |  2 +-
+ drivers/net/ethernet/sun/cassini.c            |  4 +-
+ drivers/net/veth.c                            |  2 +-
+ include/linux/skbuff_ref.h                    | 28 +++++++----
+ net/core/skbuff.c                             | 48 ++++++++++---------
+ net/tls/tls_device_fallback.c                 |  2 +-
+ net/xfrm/xfrm_iptfs.c                         |  3 +-
+ 7 files changed, 51 insertions(+), 38 deletions(-)
+
+diff --git a/drivers/net/ethernet/chelsio/inline_crypto/ch_ktls/chcr_ktls.c b/drivers/net/ethernet/chelsio/inline_crypto/ch_ktls/chcr_ktls.c
+index dbec95b497773..4d645771596a8 100644
+--- a/drivers/net/ethernet/chelsio/inline_crypto/ch_ktls/chcr_ktls.c
++++ b/drivers/net/ethernet/chelsio/inline_crypto/ch_ktls/chcr_ktls.c
+@@ -1660,7 +1660,7 @@ static void chcr_ktls_copy_record_in_skb(struct sk_buff *nskb,
+ 	for (i = 0; i < record->num_frags; i++) {
+ 		skb_shinfo(nskb)->frags[i] = record->frags[i];
+ 		/* increase the frag ref count */
+-		__skb_frag_ref(&skb_shinfo(nskb)->frags[i]);
++		skb_frag_ref(nskb, i);
  	}
- 	return 0;
+ 
+ 	skb_shinfo(nskb)->nr_frags = record->num_frags;
+diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
+index 9a8b5cf2d6485..02158a1bb2f70 100644
+--- a/drivers/net/ethernet/sun/cassini.c
++++ b/drivers/net/ethernet/sun/cassini.c
+@@ -1998,7 +1998,7 @@ static int cas_rx_process_pkt(struct cas *cp, struct cas_rx_comp *rxc,
+ 		skb->len      += hlen - swivel;
+ 
+ 		skb_frag_fill_page_desc(frag, page->buffer, off, hlen - swivel);
+-		__skb_frag_ref(frag);
++		skb_frag_ref(skb, 0);
+ 
+ 		/* any more data? */
+ 		if ((words[0] & RX_COMP1_SPLIT_PKT) && ((dlen -= hlen) > 0)) {
+@@ -2022,7 +2022,7 @@ static int cas_rx_process_pkt(struct cas *cp, struct cas_rx_comp *rxc,
+ 			frag++;
+ 
+ 			skb_frag_fill_page_desc(frag, page->buffer, 0, hlen);
+-			__skb_frag_ref(frag);
++			skb_frag_ref(skb, 1);
+ 			RX_USED_ADD(page, hlen + cp->crc_size);
+ 		}
+ 
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 643b97dc52456..90a333ebab683 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -746,7 +746,7 @@ static void veth_xdp_get(struct xdp_buff *xdp)
+ 		return;
+ 
+ 	for (i = 0; i < sinfo->nr_frags; i++)
+-		__skb_frag_ref(&sinfo->frags[i]);
++		get_netmem(skb_frag_netmem(&sinfo->frags[i]));
  }
+ 
+ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
 diff --git a/include/linux/skbuff_ref.h b/include/linux/skbuff_ref.h
-index 0441c220fdbdf..04114c64dad99 100644
+index 04114c64dad99..f768a3fa1d606 100644
 --- a/include/linux/skbuff_ref.h
 +++ b/include/linux/skbuff_ref.h
-@@ -36,7 +36,16 @@ static __always_inline void skb_frag_ref(struct sk_buff *skb, int f)
+@@ -12,26 +12,36 @@
+ bool napi_pp_get_page(netmem_ref netmem);
  
- bool napi_pp_put_page(netmem_ref netmem);
- 
--static __always_inline void skb_page_unref(netmem_ref netmem, bool recycle)
-+/**
-+ * skb_netmem_unref - release a fragment reference on a netmem
-+ * @netmem: netmem to unreference
+ /**
+- * __skb_frag_ref - take an addition reference on a paged fragment.
+- * @frag: the paged fragment
++ * skb_netmem_ref - acquire a fragment reference on a netmem
++ * @netmem: netmem to reference
 + * @recycle: whether page_pool recycling is enabled (e.g. skb->pp_recycle)
-+ *
-+ * Drops pp_ref_count via napi_pp_put_page() if @recycle is true and @netmem
-+ * belongs to a page_pool; otherwise drops a non-pp backing reference via
-+ * put_netmem(). Counterpart to skb_netmem_ref().
-+ */
-+static __always_inline void skb_netmem_unref(netmem_ref netmem, bool recycle)
+  *
+- * Takes an additional reference on the paged fragment @frag.
++ * Acquires pp_ref_count via napi_pp_get_page() if @recycle is true and
++ * @netmem belongs to a page_pool; otherwise acquires a non-pp backing
++ * reference via get_netmem(). Counterpart to skb_netmem_unref().
+  */
+-static __always_inline void __skb_frag_ref(skb_frag_t *frag)
++static __always_inline void skb_netmem_ref(netmem_ref netmem, bool recycle)
  {
- #ifdef CONFIG_PAGE_POOL
- 	if (recycle && napi_pp_put_page(netmem))
-@@ -46,31 +55,22 @@ static __always_inline void skb_page_unref(netmem_ref netmem, bool recycle)
+-	get_netmem(skb_frag_netmem(frag));
++#ifdef CONFIG_PAGE_POOL
++	if (recycle && napi_pp_get_page(netmem))
++		return;
++#endif
++	get_netmem(netmem);
  }
  
  /**
-- * __skb_frag_unref - release a reference on a paged fragment.
-- * @frag: the paged fragment
-- * @recycle: recycle the page if allocated via page_pool
-- *
-- * Releases a reference on the paged fragment @frag
-- * or recycles the page via the page_pool API.
-- */
--static __always_inline void __skb_frag_unref(skb_frag_t *frag, bool recycle)
--{
--	skb_page_unref(skb_frag_netmem(frag), recycle);
--}
--
--/**
-- * skb_frag_unref - release a reference on a paged fragment of an skb.
-+ * skb_frag_unref - release a reference on a paged fragment of an skb
+- * skb_frag_ref - take an addition reference on a paged fragment of an skb.
++ * skb_frag_ref - acquire a reference on a paged fragment of an skb
   * @skb: the buffer
-  * @f: the fragment offset
+- * @f: the fragment offset.
++ * @f: the fragment offset
   *
-- * Releases a reference on the @f'th paged fragment of @skb.
-+ * Drops a reference on the @f'th fragment of @skb via skb_netmem_unref()
+- * Takes an additional reference on the @f'th paged fragment of @skb.
++ * Acquires a reference on the @f'th fragment of @skb via skb_netmem_ref()
 + * (pp_ref_count if skb->pp_recycle and page_pool-backed, else non-pp
-+ * backing refcount), skipping managed zerocopy fragments. Counterpart to
-+ * skb_frag_ref().
++ * backing refcount). Counterpart to skb_frag_unref().
   */
- static __always_inline void skb_frag_unref(struct sk_buff *skb, int f)
+ static __always_inline void skb_frag_ref(struct sk_buff *skb, int f)
  {
- 	struct skb_shared_info *shinfo = skb_shinfo(skb);
- 
- 	if (!skb_zcopy_managed(skb))
--		__skb_frag_unref(&shinfo->frags[f], skb->pp_recycle);
-+		skb_netmem_unref(skb_frag_netmem(&shinfo->frags[f]),
-+				 skb->pp_recycle);
+-	__skb_frag_ref(&skb_shinfo(skb)->frags[f]);
++	skb_netmem_ref(skb_frag_netmem(&skb_shinfo(skb)->frags[f]),
++		       skb->pp_recycle);
  }
  
- #endif	/* _LINUX_SKBUFF_REF_H */
+ bool napi_pp_put_page(netmem_ref netmem);
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 76a42c60508d9..980bbe9166393 100644
+index 980bbe9166393..96088289c234d 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
-@@ -1144,7 +1144,8 @@ static void skb_release_data(struct sk_buff *skb, enum skb_drop_reason reason)
- 	}
- 
- 	for (i = 0; i < shinfo->nr_frags; i++)
--		__skb_frag_unref(&shinfo->frags[i], skb->pp_recycle);
-+		skb_netmem_unref(skb_frag_netmem(&shinfo->frags[i]),
-+				 skb->pp_recycle);
- 
- free_head:
- 	if (shinfo->frag_list)
-@@ -1154,7 +1155,7 @@ static void skb_release_data(struct sk_buff *skb, enum skb_drop_reason reason)
- exit:
- 	/* When we clone an SKB we copy the reycling bit. The pp_recycle
- 	 * bit is only set on the head though, so in order to avoid races
--	 * while trying to recycle fragments on __skb_frag_unref() we need
-+	 * while trying to recycle fragments on skb_netmem_unref() we need
- 	 * to make one SKB responsible for triggering the recycle path.
- 	 * So disable the recycling bit if an SKB is cloned and we have
- 	 * additional references to the fragmented part of the SKB.
-@@ -4412,7 +4413,7 @@ int skb_shift(struct sk_buff *tgt, struct sk_buff *skb, int shiftlen)
- 		fragto = &skb_shinfo(tgt)->frags[merge];
- 
- 		skb_frag_size_add(fragto, skb_frag_size(fragfrom));
--		__skb_frag_unref(fragfrom, skb->pp_recycle);
-+		skb_frag_unref(skb, 0);
- 	}
- 
- 	/* Reposition in the original skb */
-diff --git a/net/ipv4/esp4.c b/net/ipv4/esp4.c
-index e76db5817e78e..ae701561d9f12 100644
---- a/net/ipv4/esp4.c
-+++ b/net/ipv4/esp4.c
-@@ -117,8 +117,8 @@ static void esp_ssg_unref(struct xfrm_state *x, void *tmp, struct sk_buff *skb,
- 		struct scatterlist *src = already_unref ? esp_req_sg(aead, req) : req->src;
- 
- 		for (sg = sg_next(src); sg; sg = sg_next(sg))
--			skb_page_unref(page_to_netmem(sg_page(sg)),
--				       skb->pp_recycle);
-+			skb_netmem_unref(page_to_netmem(sg_page(sg)),
-+					 skb->pp_recycle);
- 	}
- }
- 
-diff --git a/net/ipv6/esp6.c b/net/ipv6/esp6.c
-index b1c9b36f76dc4..d654f0f442388 100644
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -134,8 +134,8 @@ static void esp_ssg_unref(struct xfrm_state *x, void *tmp, struct sk_buff *skb,
- 		struct scatterlist *src = already_unref ? esp_req_sg(aead, req) : req->src;
- 
- 		for (sg = sg_next(src); sg; sg = sg_next(sg))
--			skb_page_unref(page_to_netmem(sg_page(sg)),
--				       skb->pp_recycle);
-+			skb_netmem_unref(page_to_netmem(sg_page(sg)),
-+					 skb->pp_recycle);
- 	}
- }
- 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index f11d0528fc431..b333a9a72cdae 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -143,7 +143,7 @@ static void destroy_record(struct tls_record_info *record)
+@@ -1133,7 +1133,7 @@ static void skb_release_data(struct sk_buff *skb, enum skb_drop_reason reason)
  	int i;
  
- 	for (i = 0; i < record->num_frags; i++)
--		__skb_frag_unref(&record->frags[i], false);
-+		put_netmem(skb_frag_netmem(&record->frags[i]));
- 	kfree(record);
+ 	if (!skb_data_unref(skb, shinfo))
+-		goto exit;
++		return;
+ 
+ 	if (skb_zcopy(skb)) {
+ 		bool skip_unref = shinfo->flags & SKBFL_MANAGED_FRAG_REFS;
+@@ -1152,17 +1152,6 @@ static void skb_release_data(struct sk_buff *skb, enum skb_drop_reason reason)
+ 		kfree_skb_list_reason(shinfo->frag_list, reason);
+ 
+ 	skb_free_head(skb);
+-exit:
+-	/* When we clone an SKB we copy the reycling bit. The pp_recycle
+-	 * bit is only set on the head though, so in order to avoid races
+-	 * while trying to recycle fragments on skb_netmem_unref() we need
+-	 * to make one SKB responsible for triggering the recycle path.
+-	 * So disable the recycling bit if an SKB is cloned and we have
+-	 * additional references to the fragmented part of the SKB.
+-	 * Eventually the last SKB will have the recycling bit set and it's
+-	 * dataref set to 0, which will trigger the recycling
+-	 */
+-	skb->pp_recycle = 0;
  }
  
-diff --git a/net/tls/tls_strp.c b/net/tls/tls_strp.c
-index 6cc222008d95c..53d3256d0114a 100644
---- a/net/tls/tls_strp.c
-+++ b/net/tls/tls_strp.c
-@@ -197,7 +197,7 @@ static void tls_strp_flush_anchor_copy(struct tls_strparser *strp)
- 	DEBUG_NET_WARN_ON_ONCE(atomic_read(&shinfo->dataref) != 1);
+ /*
+@@ -2287,9 +2276,10 @@ struct sk_buff *__pskb_copy_fclone(struct sk_buff *skb, int headroom,
+ 			n = NULL;
+ 			goto out;
+ 		}
++		n->pp_recycle = skb->pp_recycle;
+ 		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 			skb_shinfo(n)->frags[i] = skb_shinfo(skb)->frags[i];
+-			skb_frag_ref(skb, i);
++			skb_frag_ref(n, i);
+ 		}
+ 		skb_shinfo(n)->nr_frags = i;
+ 		skb_shinfo(n)->flags |= skb_shinfo(skb)->flags & SKBFL_SHARED_FRAG;
+@@ -3927,6 +3917,7 @@ skb_zerocopy(struct sk_buff *to, struct sk_buff *from, int len, int hlen)
+ 	if (len <= skb_tailroom(to))
+ 		return skb_copy_bits(from, 0, skb_put(to, len), len);
  
- 	for (i = 0; i < shinfo->nr_frags; i++)
--		__skb_frag_unref(&shinfo->frags[i], false);
-+		skb_frag_unref(strp->anchor, i);
- 	shinfo->nr_frags = 0;
- 	if (strp->copy_mode) {
- 		kfree_skb_list(shinfo->frag_list);
++	to->pp_recycle = from->pp_recycle;
+ 	if (hlen) {
+ 		ret = skb_copy_bits(from, 0, skb_put(to, hlen), hlen);
+ 		if (unlikely(ret))
+@@ -3939,14 +3930,14 @@ skb_zerocopy(struct sk_buff *to, struct sk_buff *from, int len, int hlen)
+ 			offset = from->data - (unsigned char *)page_address(page);
+ 			__skb_fill_netmem_desc(to, 0, page_to_netmem(page),
+ 					       offset, plen);
+-			get_page(page);
++			skb_frag_ref(to, 0);
+ 			j = 1;
+ 			len -= plen;
+ 		}
+ 	}
+ 
+ 	if (!skb_frags_readable(from) && j > 0 && len) {
+-		put_page(page);
++		skb_frag_unref(to, 0);
+ 		return -EFAULT;
+ 	}
+ 
+@@ -3954,7 +3945,7 @@ skb_zerocopy(struct sk_buff *to, struct sk_buff *from, int len, int hlen)
+ 
+ 	if (unlikely(skb_orphan_frags(from, GFP_ATOMIC))) {
+ 		if (j > 0)
+-			put_page(page);
++			skb_frag_unref(to, 0);
+ 		return -ENOMEM;
+ 	}
+ 	skb_zerocopy_clone(to, from, GFP_ATOMIC);
+@@ -4255,7 +4246,7 @@ static inline void skb_split_no_header(struct sk_buff *skb,
+ 				 *    where splitting is expensive.
+ 				 * 2. Split is accurately. We make this.
+ 				 */
+-				skb_frag_ref(skb, i);
++				skb_frag_ref(skb1, k);
+ 				skb_frag_off_add(&skb_shinfo(skb1)->frags[0], len - pos);
+ 				skb_frag_size_sub(&skb_shinfo(skb1)->frags[0], len - pos);
+ 				skb_frag_size_set(&skb_shinfo(skb)->frags[i], len - pos);
+@@ -4286,6 +4277,7 @@ void skb_split(struct sk_buff *skb, struct sk_buff *skb1, const u32 len)
+ 
+ 	skb_shinfo(skb1)->flags |= skb_shinfo(skb)->flags & zc_flags;
+ 	skb_zerocopy_clone(skb1, skb, 0);
++	skb1->pp_recycle = skb->pp_recycle;
+ 	if (len < pos)	/* Split line is inside header. */
+ 		skb_split_inside_header(skb, skb1, len, pos);
+ 	else		/* Second chunk has no header, nothing to copy. */
+@@ -4343,8 +4335,8 @@ int skb_shift(struct sk_buff *tgt, struct sk_buff *skb, int shiftlen)
+ 	/* Actual merge is delayed until the point when we know we can
+ 	 * commit all, so that we don't have to undo partial changes
+ 	 */
+-	if (!skb_can_coalesce(tgt, to, skb_frag_page(fragfrom),
+-			      skb_frag_off(fragfrom))) {
++	if (!skb_can_coalesce_netmem(tgt, to, skb_frag_netmem(fragfrom),
++				     skb_frag_off(fragfrom))) {
+ 		merge = -1;
+ 	} else {
+ 		merge = to - 1;
+@@ -4391,8 +4383,8 @@ int skb_shift(struct sk_buff *tgt, struct sk_buff *skb, int shiftlen)
+ 			to++;
+ 
+ 		} else {
+-			__skb_frag_ref(fragfrom);
+ 			skb_frag_page_copy(fragto, fragfrom);
++			skb_frag_ref(tgt, to);
+ 			skb_frag_off_copy(fragto, fragfrom);
+ 			skb_frag_size_set(fragto, todo);
+ 
+@@ -5057,6 +5049,16 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
+ 
+ 		while (pos < offset + len) {
+ 			if (i >= nfrags) {
++				if (skb_shinfo(nskb)->nr_frags &&
++				    nskb->pp_recycle != list_skb->pp_recycle) {
++					nskb->data_len = pos - offset - hsize;
++					nskb->len += nskb->data_len;
++					nskb->truesize += nskb->data_len;
++					if (__skb_linearize(nskb))
++						goto err;
++					hsize = pos - offset;
++					nskb_frag = skb_shinfo(nskb)->frags;
++				}
+ 				if (skb_orphan_frags(list_skb, GFP_ATOMIC) ||
+ 				    skb_zerocopy_clone(nskb, list_skb,
+ 						       GFP_ATOMIC))
+@@ -5091,8 +5093,10 @@ struct sk_buff *skb_segment(struct sk_buff *head_skb,
+ 				goto err;
+ 			}
+ 
++			if (!skb_shinfo(nskb)->nr_frags)
++				nskb->pp_recycle = frag_skb->pp_recycle;
+ 			*nskb_frag = (i < 0) ? skb_head_frag_to_page_desc(frag_skb) : *frag;
+-			__skb_frag_ref(nskb_frag);
++			skb_frag_ref(nskb, skb_shinfo(nskb)->nr_frags);
+ 			size = skb_frag_size(nskb_frag);
+ 
+ 			if (pos < offset) {
+@@ -6307,7 +6311,7 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
+ 	 */
+ 	if (skb_pp_frag_ref(from)) {
+ 		for (i = 0; i < from_shinfo->nr_frags; i++)
+-			__skb_frag_ref(&from_shinfo->frags[i]);
++			get_netmem(skb_frag_netmem(&from_shinfo->frags[i]));
+ 	}
+ 
+ 	to->truesize += delta;
+diff --git a/net/tls/tls_device_fallback.c b/net/tls/tls_device_fallback.c
+index 3b7d0ab2bcf17..35cc510db4321 100644
+--- a/net/tls/tls_device_fallback.c
++++ b/net/tls/tls_device_fallback.c
+@@ -256,7 +256,7 @@ static int fill_sg_in(struct scatterlist *sg_in,
+ 	for (i = 0; remaining > 0; i++) {
+ 		skb_frag_t *frag = &record->frags[i];
+ 
+-		__skb_frag_ref(frag);
++		get_netmem(skb_frag_netmem(frag));
+ 		sg_set_page(sg_in + i, skb_frag_page(frag),
+ 			    skb_frag_size(frag), skb_frag_off(frag));
+ 
+diff --git a/net/xfrm/xfrm_iptfs.c b/net/xfrm/xfrm_iptfs.c
+index 6920940a35b49..103cf7c5dbfb9 100644
+--- a/net/xfrm/xfrm_iptfs.c
++++ b/net/xfrm/xfrm_iptfs.c
+@@ -486,8 +486,7 @@ static int iptfs_skb_add_frags(struct sk_buff *skb,
+ 			tofrag->len -= offset;
+ 			offset = 0;
+ 		}
+-		__skb_frag_ref(tofrag);
+-		shinfo->nr_frags++;
++		skb_frag_ref(skb, shinfo->nr_frags++);
+ 		shinfo->flags |= SKBFL_SHARED_FRAG;
+ 
+ 		/* see if we are done */
 -- 
 2.56.0.212.g129ede20d9-goog
 
