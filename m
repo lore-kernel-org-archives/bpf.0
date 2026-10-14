@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
+Received: from mta1.migadu.com (out-210.mta1.migadu.com [95.215.58.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149E447D95C
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 11:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F80B4C33E1
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 11:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791977546; cv=none; b=QIjnZ4DUnsYGmouzheUB64Jz0zjNjwDVnOynThFWwahrE5TivU4sBtCd/MqhLl/CgWK2bs8miXeltSVl0/sId2HqpF6mck/rLk9nrJ6y6xI78nywEPSacK+rZrWDiqEtX06SxUcDu5cY60mCO4Ms8lQB04cQP07fbh5HrtczUA8=
+	t=1791977553; cv=none; b=TR/Lq/uHYGFa0Jxf7N8E+ySOn33apM6+LdTlhsQ83HFskIU9pCM+8372bhM3W/UKsFYWDhPf07WPKQGLGYwzrGOqiOeXO40CoqMuzr2Sbh6O3/Vn2qTH6qVC3l8w7nbP6P4Z6XEEwmrMjMsOv7yxGqUghuCikr6gkuOlHqrb1yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791977546; c=relaxed/simple;
-	bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
+	s=arc-20240116; t=1791977553; c=relaxed/simple;
+	bh=TyPPOwItSaDlf4TkZfOdgVWrpgx12V89501xfmwsMX4=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fckeI/JBs1py+SoXYHykjAiFLsO+kQUIRAA4hkP5m1n2WUJ+ZaDBEiehZjz4g+SgMFLMjfCZt7u6MANRJd5GIXPohZOhOeIS1auGDRwrH6+AkLkvmhdbZ++37QgyYU9Zxj7F1QDLuyxfko8XrbDo2UXPswxDe1Vk+36Cr4p2seI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lyXiVX0m; arc=none smtp.client-ip=91.218.175.105
+	 MIME-Version; b=T7tMKbV8Ze9ORNFvQGlnTICnFfXv3xiXLnNFDY7SSyyFe1PcaLrxFKSMOLEzGwmbMMe1D/hYDdgQOCg7VvJLBBeoO2atk1EfwVU4I3FbSAa4xG6R0jsThJGGwfPHctQeZ/buFQc7OrcMIAf8H7MN4XIoN6gOC+ZZGyO0euO5vz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XqCX0ojm; arc=none smtp.client-ip=95.215.58.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lyXiVX0m"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XqCX0ojm"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
+DKIM-Signature: a=rsa-sha256; bh=TyPPOwItSaDlf4TkZfOdgVWrpgx12V89501xfmwsMX4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791977541; v=1; x=1792582341;
- b=lyXiVX0m3l/Nve+FeMQknNPQdcOrP2LouF6GKz9Oph16HcOLq/PWcxJWi9PfN8fjtddBFKCx
- GuESX3rb3MYOJ6BqbtMPXDsImgpc0gxe/lj2mLwydPyDPb/hvqAWWKP4LNqgePTPB7nt4cwlxbP
- 6vzUmeSKS33JioFVLu9zhYHE=
+ t=1791977550; v=1; x=1792582350;
+ b=XqCX0ojmnZclNX7wDHWMOYx2lQnDmz4SXzLOT+4kfTU35kTdekPAY0HwoVm224Gbfp4MwS2t
+ 33bV84krAe2LHEt+mUgIAzhaE6tKMlr/F4H9jGpCL4mHvUD7qXpmmlEJ7qXwSkxIYOBWfi6L1ak
+ XAxQVTsuo7ZFQ04vvnBGNPb8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id cd36cf2322652c1b;
-	Wed, 14 Oct 2026 11:32:20 +0000
-X-Mizu-Trace-ID: cd36cf2322652c1b
+Received: by mta12.migadu.com with ESMTPS id 6e9e8d5fdee6a166;
+	Wed, 14 Oct 2026 11:32:29 +0000
+X-Mizu-Trace-ID: 6e9e8d5fdee6a166
 X-Migadu-Flow: FLOW_OUT
 From: KaFai Wan <kafai.wan@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -61,9 +61,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v2 4/7] selftests/bpf: Use _exit() in uprobe_multi_test clone-ed child
-Date: Wed, 14 Oct 2026 19:30:40 +0800
-Message-ID: <20261014113043.640435-5-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next v2 5/7] selftests/bpf: Fix prog_tests framework subtest count checks
+Date: Wed, 14 Oct 2026 19:30:41 +0800
+Message-ID: <20261014113043.640435-6-kafai.wan@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261014113043.640435-1-kafai.wan@linux.dev>
 References: <20261014113043.640435-1-kafai.wan@linux.dev>
@@ -75,57 +75,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-child_func() terminates with exit(), but spawn_child_flag() also starts
-it via clone(CLONE_VM), which shares the parent's address space. That
-exit() then runs atexit handlers and static destructors against globals
-the parent is still using.
+The hardcoded expected skip_cnt/error_cnt in test_prog_tests_framework()
+mismatch the real count when the binary is run with -t or -n filters,
+since some subtests are not selected. Count the executed subtests and
+compare against that value instead.
 
-LLVM commit `3c3ed59c6a2a ("[llvm] Add format check for
-MCSubtargetFeatures")` [1], included in the LLVM 23.1 releases, added
-Target::isValidFeatureListFormat() with a function-local static holding
-the compiled regex:
-
-	static const llvm::Regex pattern("^([+-][^,]+)(,[+-][^,]+)*,?$");
-	return pattern.match(Features);
-
-The child exit destroys that static while its guard variable still marks
-it as initialized, so the regex is never rebuilt in the parent. From that
-point on, get_jited_program_text() gets NULL from
-LLVMCreateDisasmCPUFeatures(), so every jited program text check in the
-tests running after filter_clone_vm fails, e.g. "verifier_jit_convergence",
-"verifier_private_stack", "verifier_tailcall_jit" and "verifier_jit_inline".
-
-Use _exit(), which runs neither atexit handlers nor static destructors, as
-uprobe_syscall.c already does for its own CLONE_VM child.
-
-[1] https://github.com/llvm/llvm-project/pull/180943
-Fixes: d2520bdb1932f ("selftests/bpf: Add uprobe multi pid filter test for clone-ed processes")
+Fixes: 2324257dbd68 ("selftests/bpf: Refactor prog_tests logging and test execution")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/prog_tests_framework.c    | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-index f0baf5738b751..7fbcfddc3cc36 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-@@ -94,14 +94,14 @@ static int child_func(void *arg)
- 	/* wait for parent's kick */
- 	err = read(child->go[0], &c, 1);
- 	if (err != 1)
--		exit(err);
-+		_exit(err);
+diff --git a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
+index d111fe1054476..53347f3799245 100644
+--- a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
++++ b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
+@@ -13,6 +13,7 @@ static void clear_test_state(struct test_state *state)
+ void test_prog_tests_framework(void)
+ {
+ 	struct test_state *state = env.test_state;
++	int subtest_cnt;
  
- 	uprobe_multi_func_1();
- 	uprobe_multi_func_2();
- 	uprobe_multi_func_3();
- 	usdt_trigger();
+ 	/* in all the ASSERT calls below we need to return on the first
+ 	 * error due to the fact that we are cleaning the test state after
+@@ -30,25 +31,30 @@ void test_prog_tests_framework(void)
+ 		return;
+ 	clear_test_state(state);
  
--	exit(errno);
-+	_exit(errno);
- }
++	subtest_cnt = 0;
+ 	if (test__start_subtest("test_skip_subtest")) {
+ 		test__skip();
+ 		test__end_subtest();
++		subtest_cnt++;
+ 	}
+ 	if (test__start_subtest("test_skip_subtest")) {
+ 		test__skip();
+ 		test__end_subtest();
++		subtest_cnt++;
+ 	}
+-	if (!ASSERT_EQ(state->skip_cnt, 2, "skip_cnt_check"))
++	if (!ASSERT_EQ(state->skip_cnt, subtest_cnt, "skip_cnt_check"))
+ 		return;
+ 	if (!ASSERT_EQ(state->subtest_num, 3, "subtest_num_check"))
+ 		return;
+ 	clear_test_state(state);
  
- static int spawn_child_flag(struct child *child, bool clone_vm)
++	subtest_cnt = 0;
+ 	if (test__start_subtest("test_fail_subtest")) {
+ 		test__fail();
+ 		test__end_subtest();
++		subtest_cnt++;
+ 	}
+-	if (!ASSERT_EQ(state->error_cnt, 1, "error_cnt_check"))
++	if (!ASSERT_EQ(state->error_cnt, subtest_cnt, "error_cnt_check"))
+ 		return;
+ 	if (!ASSERT_EQ(state->subtest_num, 4, "subtest_num_check"))
+ 		return;
 -- 
 2.43.0
 
