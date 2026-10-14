@@ -1,279 +1,122 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8412FE074
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 04:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791951482; cv=pass; b=j4oKrCaCaStie1/HJRbHPKsEl5LYlpHuWpbjE9TmkQIKkvbtSrLD7jaC0gY80VbzoW9jpjLjRLu0X9QmGj49lohBUNSxK7uAabqvGobqm6qArRUDwdgMZWksB41W77mK6TlCQOqCfLHBIn6/JuacayZY9BXZWjlV3J3hfLfcQMg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791951482; c=relaxed/simple;
-	bh=FCFoyOy4qvXMnUzHelNH4AHBinUUgJXQyV47QXx+bBQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sS2D3ai0YLiG4goMMHBqY0HKR7ehGNkqJACMmuWGkSo+g2B8ZTuodmpijj3jsdHbxNBUL642GJ3KJhZBfP1AmcQheBEDfDGFg8XfJ5n4olofO4OMQhSjOM4k1h9djkhp/OeBL7k6NdOeOzb8Q05fvuD/r9ysCRTKnOoZRlaromU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SdI2p6LC; arc=pass smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E40411A10
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 04:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791952783; cv=none; b=PWBfd8YtRgYUOs/db+024Czyjj/NXfGg/OFRCbYb2Q4FPDBCo4Ysie4Qpplu+HNjBYxpUoVkvWknO4lYGzTmeZN+6r8w7zigZaRwSRuMGMfPZMQWU5NjZ63uoyqrDaWh4LoVrq9KI6oE5i3d/mMHoyTrJ8W33UUGgSMWHxTpgXQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791952783; c=relaxed/simple;
+	bh=DZaRy/akjBHf9ZrR0eHy04lM1SxePYwM0arX+/4ffzc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=iaGYFF9/9o62ESlSw8BnbmWs8iExyTT1bj6iexa79dQUMEkrzwx21lC58drNFgwyX0m2D60/Z14Gbznj12ZZxCGsykV4dl2aVkQtyF0P0CU6hRh4Oe0F7J0plcTehkTzWZhpSomP2dmsjoeltIQbjBwzHhQWhh6AR8WjNuvKQ+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ve4t7EcL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SdI2p6LC"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-91791ec1b83so30908426d6.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 21:18:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791951479; cv=none;
-        d=google.com; s=arc-20260327;
-        b=h4cEn/82Hi8JZUGx+hq95j3dpqNAPpgrizp4/Bnnrz2eYMGGP0wmWjqvaJFIQ+XCdS
-         lm93qFNCYhWrUGd2hxktzMaE0FyyN+FQmqWpktQfw7tUXB7v+wMpfEDuQcI+dEI4ZKGw
-         x+UCooq825M2ru4EVk9egdywFuEGIaLPBQswhNQFBgS0MXV7tp0GCOAbhtOA6uW2B6Q2
-         4j1NCriLRZUjUcrAbBSASGp28VGSfO8Y/vGG5zl9b1/PuD/jJHOTIbwf7FkQZNMrcJhf
-         cHghndw78qKSK4H1AVHagb4/e9K8WuGnMo9f/u/6yuMt9gMET7RWwRxNAeXyR7ivjpZP
-         ugDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5ZCjIb9MTs997peH+Jf+AEs7X4vp3T30edvZQYk3nBA=;
-        fh=bFYRQfMsi4n0nqQ7ahF1dGFa6A89a4z8PvhS4y8dZCc=;
-        b=OKGNDnz5L4qY9W4vCChPgwC0gp6KDA8Fg4P34RMOJOlRjfU/u6LyvPo2zAwConB3rf
-         CsAvmJ4/PKn6RJZyvlnluR2wEOrTF10axAln5GuZnc3HL68NDSfxjt9qj4i5yZ6cAAM8
-         sbX3Lc7harRRRsfKdajO2XRBahAuswZznVPXm73kqWZVsnDbdP7CVtRUfK8qLfT9Nn4s
-         2y59Kr7bKhWJQQgl8sdyDWxBnmOhXCHDLZZvvGWVQjdMK5oI7dXOU5jFZ6QkXLlv8Q48
-         c0mLh+RioKtrkEyyfD9S1Y8eoO1CasatSfNK0YPOmzrYS7XtmSI/+wifZPOSprcMEyY0
-         DwQQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791951479; x=1792556279; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5ZCjIb9MTs997peH+Jf+AEs7X4vp3T30edvZQYk3nBA=;
-        b=SdI2p6LCQ4aWaQPT6dillp92RI21bwsURrLkqh9CawHgTGt5ayFDz9YWLEYw+caXN6
-         bTiaZhpDOG9II7LcivZaGyhxCF/Thd/6I9z7+R5vOPKcGAcXtZ0fPJLAslYG+p1tZXR7
-         +NGiiP+A0bMWJtThoWCsVUpB5vveeEB9YM1RTB0tFMq8FNHvDwuZRywH8etLN1VzuD6a
-         +AAaaORC27I23AXDgY9K+YNqlS4hRoUX7d90LU1GugjnmvZgbpjQzo0dCTDnxgPSQ9m9
-         w9S3M9EAYyAkRCchj1URaqUEbYehTc7s/YnKtgT/DNv3RMfBcFcRTlu+9OQeV5DEAOnt
-         UaGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791951479; x=1792556279;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5ZCjIb9MTs997peH+Jf+AEs7X4vp3T30edvZQYk3nBA=;
-        b=AeAZh2o2WiOxY6sHIGSocQkrAa79Fo9RQJA4C5i6Gxdz8g8HrLBdMH4GTD6Bia3PrT
-         m2jVvjdpApwOvKi3Vp1BhaCg9BedgKIFRNYvEQY6PsAB9k6zjmKcRXQWu8RYCwNzeJKq
-         0R4u8XNR7v5GyvsePo+tBQf5YUk2yNykttngQLEflwZ0eb1JnfFl+av+qiRh5IcQLHGk
-         IZgcb5aA5LNkf5VmQNYtB2zz83fvuhjO4G3GrcbeDlmPGWh/TsFvKcD/igvpoRX8srhb
-         nvswz69fUuJ917R8xdZW2q/U6Fj4NlNub3UoD0B6FX68YHGopEp6CzEj7LZw2Qvz1G2s
-         vaOg==
-X-Forwarded-Encrypted: i=1; AKwUvBx4rr4sFaEb3UqiUvQDKq1JzH8UpZhMJRj+Np1t2cat1XWkDmq7n1LhtsMahpEP2QBZOWY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYL8rVXvIg5UCIlAlSBXVvAcMZzMY+n/Zl3LKkJ+FaBCxlLib7Ih
-	PhZJt536e+E1YsVPhuhZFFgjZjtQbQLq+mYGdefx5zGBiUzO6GO+1ce02Os5qxOT52LFYYGP9U0
-	k3/O8/YFV/DgmXigScBzAEYYBC/UQIjA=
-X-Gm-Gg: AYBFou2RI8Y44IeT2QwUsHQI1A+hs7VoeHWiXZf2G+BrzDb2zMtl1bDIW7ohS7ii8zI
-	VFR5h1LuVq630gNlt/ueD8w6fqPJ9tztxpQaANzkcjAQko8Y4u6p2CuT/DDQRzflZuLTZ2PsaPr
-	OYYyebvXC4X/YaI2eKlBztHhbN64Y1J64zZb6TMjKDyRVOqCKVwdBT4P5CBX1LVorLTetgqhKmb
-	jFVDU26pvdeFHLPLcQ9hByRep2B8EX/W+pfumdpQ9nPxanzjVPWiFeCFiKECNT+zs2ywUAMG1nO
-	CrKhgsqRuzG2SWQTMqhYVkpF8CLD4/RRlj1ZhK8Pk4kZIfF79mG8vKo=
-X-Received: by 2002:a05:620a:4449:b0:93b:e9db:1bab with SMTP id
- af79cd13be357-93ebd27cc75mr2258515585a.56.1791951478672; Tue, 13 Oct 2026
- 21:17:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ve4t7EcL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA5E1F000FF;
+	Wed, 14 Oct 2026 04:39:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791952782;
+	bh=mVKkCeEdC/Z3bV5+Gj0QiuZvl6B9f0qk36QBoeLCgSw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=Ve4t7EcLOnzBpcI1YE0/Db/F1QU0KCzu8pjxRHF19QIufyy4I3/TRuZaq2ELtAzt8
+	 GfCAB2fUjoONolJxsJ+1F5Gtmz0yztKMOjHTgqRemlHuHrDMOiP6643ZSBx9Py0qKX
+	 O+scu1BR6iCqPztQz8QgwjTKpjqpujy+oP1cEYzwLs/JsaLqn7BUQLB5uySXTeAV1f
+	 chdAoBd+fqN/fzxdM8rj03xEtKaPpdOfp2t9FcPXZQCp66QID+/PPriT1uvpBACUUN
+	 TdpNc4ZBMqm4ECzgu02nuEkuWyCDzqOEkIiM1BjJ6USZqmmDag+xwBGdLIcsBQ0hH8
+	 DUl1YN7tuCGDg==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id 07529198003A;
+	Wed, 14 Oct 2026 00:39:39 -0400 (EDT)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Wed, 14 Oct 2026 00:39:39 -0400
+X-ME-Sender: <xms:hwfPagdIJmelWczr7He8n9KRTjGUR-fo9YTa5G_szGq2dn-OK-yeFA>
+    <xme:hwfPatDIBaRejOSh-km9hQyHvEnn1xC9sD9FZ06z2kHkmj4sDtwTBA92ZqbCeHJn8
+    8zpS7vEzfaCjp4EHJzyhiFPHzewKvVa_xA0KqmYjn5DudIBukDn34eY>
+X-ME-Proxy-Cause: dmFkZTE6pBDUsJEPr0X2GlKwrjjE+OE5kUEHvpuPEEl0/V6y+5kxMhe+G35Lr3HmkzZN1n
+    1lFFtYXYC2zAIFzuXWsk+8iOHgzKsSLuzGH5cnMle49tSzmY4aUJkM5eZBDt2pkFqtSNJC
+    TpsJbwj5DMMioB4ofwJ5JZYJg7X5HLdDvwP6S8efsLSiaRJXVavguBZeGE4D1OAqIV6XKo
+    mVTi3yjX66ip85F6m8Tzbz7LN/y5SOftKGYu2319JkGv8n4sficapx7VyFzw+UBQ+didy6
+    vhAXhECdzhApuikAv5Oh9j0j3YjzEhe36ocpkiExpU21r90LwjF6Wzj+4VCwfDn5BqJFFK
+    JND3vloSJzRw+u3SkcdjK8yHAjYo+fbUy5Ho4F8OP1HP4z+jHQDr8lYZJrygElaGQm05SK
+    JuR5z4C/W44eMwOAFQyyTY2COeXVQDRyt+pxPROFg6V+By4LaEhKQ/KP69wafWMQ1qRc3K
+    nZw0hP0JA68yPYYC/zkwYkpYedjazidjAxmf282AYUKVVUoadYes5U34DDJwN3fYTWVQ76
+    VDYxc1JP8EzGqR9ICTjhoIbcV0WUPX7bAyjWmGz3xHJ5lSUoueeztvQKWxL6d0yAvoDLip
+    HXB3K9f0nPH1ZCiqUUxpq7dOobhlQG8zN6ankyBF/K04OKkt81SMVwfXaj8w
+X-ME-Proxy: <xmx:igfPatadCwlNeP-f7qFvfF2T21Y-b5awskS_Q9cwafrJNmbL13TdGA>
+    <xmx:igfPavaI5NBgoPWMt7PTB__VRt23F7eLY4Ng9ebzf0FACZLh_Mv4ZA>
+    <xmx:igfPammn66nNiMEmtdjxGJGTXyh82YjU4f22HRaxAF3s5ypjKV_GbQ>
+    <xmx:igfPapSv03MzL7AkAKMPLEHBu1nwNc9kSB4a8SBCWaMqh1ortoprdQ>
+    <xmx:igfPajXgQQXszY5jntE4jDgiT2r-VHw3AdfJRA8CgBi4yq1sXz3Rb_Di>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 23539F8008E; Wed, 14 Oct 2026 00:39:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261010142247.99223-1-physicalmtea@gmail.com>
- <20261010142247.99223-2-physicalmtea@gmail.com> <as1ZCkbya2jn72ip@devvm29614.prn0.facebook.com>
- <CAJwVaMJL4FFYLq523VY014oa4u7RWD0WUY0+seP1xh3GY5peiQ@mail.gmail.com> <as5nfI0qfqD64dc1@devvm29614.prn0.facebook.com>
-In-Reply-To: <as5nfI0qfqD64dc1@devvm29614.prn0.facebook.com>
-From: Jia Jia <physicalmtea@gmail.com>
-Date: Wed, 14 Oct 2026 12:17:22 +0800
-X-Gm-Features: AclHuK-Tjj0vL8jiV-17JnHCHultMYwdnuqEsTpaVilZ25EnMCMFZNG1gR08W4M
-Message-ID: <CAJwVaM+SHuidjUeKD8-MX2ErbkaBUKE8cPYH2fzNJR+jH-oWZw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/5] vsock/virtio: split socket lookup from
- locked RX processing
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: stefanha@redhat.com, sgarzare@redhat.com, netdev@vger.kernel.org, 
-	virtualization@lists.linux.dev, kvm@vger.kernel.org, mst@redhat.com, 
-	jasowangio@gmail.com, eperezma@redhat.com, xuanzhuo@linux.alibaba.com, 
-	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date: Wed, 14 Oct 2026 06:39:14 +0200
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Jason Gunthorpe" <jgg@nvidia.com>
+Cc: "Mark Rutland" <mark.rutland@arm.com>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jeremy Linton" <jeremy.linton@arm.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Simon Horman" <horms@kernel.org>, "Gerd Hoffmann" <kraxel@redhat.com>,
+ "Vitaly Kuznetsov" <vkuznets@redhat.com>, "Philipp Rudo" <prudo@redhat.com>,
+ "Viktor Malik" <vmalik@redhat.com>, "Jan Hendrik Farr" <kernel@jfarr.cc>,
+ "Andrew Morton" <akpm@linux-foundation.org>, kexec@lists.infradead.org,
+ bpf@vger.kernel.org, systemd-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <8fb05f13-e770-41a4-af66-d239b4c95201@app.fastmail.com>
+In-Reply-To: <20261014000227.GV13920@nvidia.com>
+References: <20260322014402.8815-1-piliu@redhat.com>
+ <20261011201325.GA918242@nvidia.com>
+ <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
+ <20261014000227.GV13920@nvidia.com>
+Subject: Re: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE format
+ boot image
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
+(removed some bouncing cc'ees)
+
+On Wed, 14 Oct 2026, at 02:02, Jason Gunthorpe wrote:
+> On Tue, Oct 13, 2026 at 09:19:28PM +0200, Ard Biesheuvel wrote:
+>> > Given those constraints entering the successor kernel through the
+>> > normal EFI entry point is highly desirable. This would allow x86 to
+>> > continue to provide the DRTM trampolines through an EFI mechanism and
+>> > means the Linux EFI stub always handles the launch with identical code
+>> > in all scenarios.
+>> 
+>> With some help from my friend Claude, I've prepared a prototype that
+>> reuses my efiloader Rust crate to boot EFI stub images (bare Image,
+>> zboot, UKI) in the kernel: the EFI boot phase is invoked at kexec
+>> load time, and runs under the preceding kernel up until the point
+>> where ExitBootServices() is called. Then, the actual kexec call
+>> will return from ExitBootServices() after shutting down the first
+>> kernel.
 >
-> On Tue, Oct 13, 2026 at 11:26:38AM +0800, Jia Jia wrote:
-> > >
-> > > On Sat, Oct 10, 2026 at 10:22:43PM +0800, Jia Jia wrote:
-> > > > Split virtio_transport_recv_pkt() so socket lookup is separate from=
- the
-> > > > receive state machine that runs under the socket lock.
-> > > >
-> > > > Keep virtio_transport_recv_pkt() on its existing per-packet locking=
- path.
-> > > > Pass the source and destination addresses used for lookup to the lo=
-cked
-> > > > receive path so they are decoded only once.
-> > > >
-> > > > Pass the network namespace and decoded address tuple through a pack=
-et
-> > > > context to the locked receive path.
-> > > >
-> > > > Preserve source validation and failure handling. Keep the lookup re=
-ference
-> > > > separate from the skb owner reference so the locked receive path ca=
-n manage
-> > > > the two lifetimes independently.
-> > > >
-> > > > Signed-off-by: Jia Jia <physicalmtea@gmail.com>
-> > > > ---
-> > > >  net/vmw_vsock/virtio_transport_common.c | 139 ++++++++++++++++----=
-----
-> > > >  1 file changed, 96 insertions(+), 43 deletions(-)
-> > > >
-> > >
-> > > [...]
-> > >
-> > > > +/*
-> > > > + * The caller holds sk's socket lock and must free skb if this ret=
-urns true.
-> > > > + */
-> > > > +static bool
-> > > > +virtio_transport_recv_pkt_locked(struct virtio_transport *t,
-> > > > +                              struct sk_buff *skb, struct sock *sk=
-,
-> > > > +                              const struct virtio_transport_rx_pkt=
-_ctx *ctx)
-> > > > +{
-> > > > +     const struct sockaddr_vm *src =3D ctx->src;
-> > > > +     const struct sockaddr_vm *dst =3D ctx->dst;
-> > > > +     struct vsock_sock *vsk =3D vsock_sk(sk);
-> > > > +     struct net *net =3D ctx->net;
-> > > > +     bool space_available;
-> > > >
-> > > > -     /* Check if sk has been closed or assigned to another transpo=
-rt before
-> > > > -      * lock_sock (note: listener sockets are not assigned to any =
-transport)
-> > > > +     /* Check after acquiring the socket lock. Listener sockets ac=
-cept packets
-> > > > +      * from any source and are not assigned to a transport.
-> > > >        */
-> > > >       if (sock_flag(sk, SOCK_DONE) ||
-> > > >           (sk->sk_state !=3D TCP_LISTEN &&
-> > > > -          !vsock_check_source(vsk, &t->transport, &src))) {
-> > > > +          !vsock_check_source(vsk, &t->transport, src))) {
-> > > >               (void)virtio_transport_reset_no_sock(t, skb, net);
-> > > > -             release_sock(sk);
-> > > > -             sock_put(sk);
-> > > > -             goto free_pkt;
-> > > > +             return true;
-> > > >       }
-> > > >
-> > > >       space_available =3D virtio_transport_space_update(sk, skb);
-> > > >
-> > > >       /* Update CID in case it has changed after a transport reset =
-event */
-> > > >       if (vsk->local_addr.svm_cid !=3D VMADDR_CID_ANY)
-> > > > -             vsk->local_addr.svm_cid =3D dst.svm_cid;
-> > > > +             vsk->local_addr.svm_cid =3D dst->svm_cid;
-> > > >
-> > > >       if (space_available)
-> > > >               sk->sk_write_space(sk);
-> > > > @@ -1875,12 +1891,49 @@ void virtio_transport_recv_pkt(struct virti=
-o_transport *t,
-> > > >               break;
-> > > >       }
-> > > >
-> > > > +     return false;
-> > > > +}
-> > > > +
-> > > > +/* We are under the virtio-vsock's vsock->rx_lock or vhost-vsock's=
- vq->mutex
-> > > > + * lock.
-> > > > + */
-> > > > +void virtio_transport_recv_pkt(struct virtio_transport *t,
-> > > > +                            struct sk_buff *skb, struct net *net)
-> > > > +{
-> > > > +     struct virtio_transport_rx_pkt_ctx ctx;
-> > > > +     struct sockaddr_vm src, dst;
-> > > > +     struct sock *sk;
-> > > > +     bool free_pkt;
-> > > > +
-> > > > +     virtio_transport_recv_pkt_init_addrs(skb, &src, &dst);
-> > > > +     virtio_transport_trace_recv_pkt(skb, &src, &dst);
-> > > > +
-> > > > +     sk =3D virtio_transport_recv_pkt_find_socket(skb, &src, &dst,=
- net);
-> > > > +     if (!sk) {
-> > > > +             (void)virtio_transport_reset_no_sock(t, skb, net);
-> > > > +             goto free_pkt;
-> > > > +     }
-> > > > +
-> > > > +     if (!skb_set_owner_sk_safe(skb, sk)) {
-> > > > +             WARN_ONCE(1, "receiving vsock socket has sk_refcnt =
-=3D=3D 0\n");
-> > > > +             goto free_pkt;
-> > > > +     }
-> > > > +
-> > > > +     lock_sock(sk);
-> > > > +     ctx =3D (struct virtio_transport_rx_pkt_ctx) {
-> > > > +             .net =3D net,
-> > > > +             .src =3D &src,
-> > > > +             .dst =3D &dst,
-> > > > +     };
-> > > > +     free_pkt =3D virtio_transport_recv_pkt_locked(t, skb, sk, &ct=
-x);
-> > >
-> > > At this point the socket lookup succeeded with src/dst/net, why not j=
-ust
-> > > pass sk which already has all of them?
-> > >
-> >
-> > If I understand this correctly, a successful lookup is not enough to
-> > recover all of this from sk. The lookup may fall back from the
-> > connected table to the bound
-> > table, so the packet source must still be validated under the socket
-> > lock; otherwise that check would become ineffective. The packet
-> > destination is also needed after
-> > a transport reset, and the RX namespace used for a reset reply is not
-> > necessarily sock_net(sk) in global mode. I=E2=80=99ll remove the contex=
-t
-> > struct and pass src, dst, and
-> > net directly.
+> Running it inside a kthread is such a novel idea, I would have never
+> thought to attempt that!
 >
-> True that the lookup may fallback to the bound table, but this begs the
-> question, why bother with the bound table here? If a socket hasn't
-> landed in the connected table yet, then OP_RW is -EINVAL and we respond
-> with RST anyway... so I'd guess we shouldn't even be trying to batch for
-> those sockets.
->
-> For connected sockets, the sk has the destination (vsk->remote_addr)
-> needed by the reset. And yes, sock_net(sk) does not necessarily equal
-> the net ptr used for a reset reply in global mode, but we don't really
-> expect that for global mode in vsock, we only expect that
-> vsock_net_check_mode() rules are followed. In this case where
-> !net_eq(n0, n1), the RST reply will be routed correctly across
-> namespaces following global mode rules.
->
-> I could certainly be missing something and happy to be pointed to an
-> instance of sk being insufficient here. In general, I think its nice to
-> avoid new data structures if possible.
+> I've asked some folks here to take a look and try to test this with
+> real DRTM capable HW. It seems very promising that it will work to me,
+> and I surmize this is also close to boot a UKI?
 >
 
-You're right. Although virtio_transport_recv_pkt_batchable() requires
-TCP_ESTABLISHED and excludes other states from batching, the
-bound-table fallback is
-unnecessary there; batch admission can use only the connected lookup
-and leave a miss to the normal path.
+It already works for UKIs as well.
 
-I also overlooked what the existing vsock_net_check_mode(sock_net(sk),
-net) check guarantees. If the namespaces differ and the lookup
-succeeds, both are
-in global mode, so sock_net(sk) is sufficient for routing the RST. The
-extra context is therefore unnecessary. Thanks for pointing this out.
+The next step is to run it deprivileged - I think the arm64 stub code
+is already very close to being runnable in that manner.
 
-I'll update this in the next version.
-
-> Best,
-> Bobby
