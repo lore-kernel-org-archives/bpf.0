@@ -1,119 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-m127170.xmail.ntesmail.com (mail-m127170.xmail.ntesmail.com [115.236.127.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8183F4CEE4B
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 08:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC03331A63
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 08:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791968269; cv=none; b=dzuRJaPV5L2VpnoOaLz2PgPd+heIut6tn4ssQetw7eD6jERBFwReGGPn1QnsCK3rTwVK5d1+BhzayWfdHqMHvM/P9rikiTO+inh8MmFx2DKJrR/6+caNuIC12z9rvY72YsvAN4AWYWDA/zvUPe06eiR52g/rNJluXySwSgMEE/s=
+	t=1791968324; cv=none; b=e915tMROFCzKXUVqn5a830rrQ/vtq31jPGWwX1Xi3k6w+Ednm0gyau2w9oJ+BLf1Qe6OhOEkU3lvpzDVUOdvdUwo5x1eTrfokPHv9I51V0K1WZpG9BFSRbNE7fQPxK2OU+D3zofZwHrUjcy2VCDWaiKTIBwlLFvQmL+alTEDpLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791968269; c=relaxed/simple;
-	bh=0ZXEJaYbkUwQutY4qt4EydbiFZqJCeyaoNd2NGNwwgA=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=DoFZy/Y0wi0d6yjGgc1Bli0F9cDefA5/2oXInxhEJWeczvAbwfxkFCybraFI4chRUJ0d0mGirOQBzMKqn3Hkhgdnvbv8SqwD7EDNycr4lEVKPbfz72kLRxKjNaCv1lOKWqflnxYiWyjdaxgYr5XMxWPox+Vbf5Pj4UNKVHoudFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXm/6V67; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXm/6V67"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7191F000FF;
-	Wed, 14 Oct 2026 08:57:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791968266;
-	bh=5kaMqEsXC2ndeaD4OSY+E11/RcBCY7fzLa20XI0kwC8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lXm/6V67SWj04g5s+PTjukb1mmwzE4+6/tEbbcb8wDYlKu0Ut1OEs9y+G6EJkt2U2
-	 pVAYgzjw8D5xUdqLVHZCmwUVUGA0L+lrifrfdMRuySTicmqduMTrixiMw/SECipFt3
-	 RzDb0dAgoyrT+NKabaqxpYtxzjfAzOKQTMGK5btAgmg0sNY9YpoeZOm4YK3F01iISw
-	 bZ8zEY+M4pe53dcaR3e3GCkx1abOiOV5YhUTZ28ma+UT39yW+pVz9Agkt9kDOGl0YZ
-	 4P9VrNTn52EqwJq/PPtm5kS/r1qSuLH6/2iJS5y6M1cYcOOAeXawU2D3npsDmNstr3
-	 OEgc3zxu88jRg==
-Message-ID: <sashiko-outbox-171051@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3 2/2] net: stmmac: Stop Tx queue when
- (en|dis)abling XSK pools
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kurt Kanzenbach" <kurt@linutronix.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261013-stmmac_xsk_crashes-v3-2-50fca7790af2@linutronix.de>
-References: <20261013-stmmac_xsk_crashes-v3-0-50fca7790af2@linutronix.de>
- <20261013-stmmac_xsk_crashes-v3-2-50fca7790af2@linutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 14 Oct 2026 08:57:46 +0000
+	s=arc-20240116; t=1791968324; c=relaxed/simple;
+	bh=JCu+SmE7DaT4V8bV1ux3Fq22uikv5xMskoz7V+kge5o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BK+cpLFf79Cv0w/wmaSwKS99Ti1kArTZL1vEH/R3QdNApyeOHWo3664aDzmAKiqrVtMfHBdqGqqJdU0Kyvbpt0sWNMNjz33PPmrd1pOWItH0iKoZgc5IqVkHo8TkEW2xHc8UkqW9w8daioniKsTrzhwk/vIEQ/MfWQ0tXMVXY6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.127.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from [192.168.0.59] (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 200da6bab;
+	Wed, 14 Oct 2026 16:53:19 +0800 (GMT+08:00)
+Message-ID: <3856c10f-6e18-4dda-8b3a-085f246e3bbd@easystack.cn>
+Date: Wed, 14 Oct 2026 16:53:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/6] selftests/bpf: add tests for the page_owner
+ bpf_iter target
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261013122125.843451-1-zhen.ni@easystack.cn>
+ <20261013122125.843451-7-zhen.ni@easystack.cn>
+ <sashiko-outbox-169725@kernel.org>
+From: "zhen.ni" <zhen.ni@easystack.cn>
+In-Reply-To: <sashiko-outbox-169725@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa1399db6500229kunm51b7ee5849e2b
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaTkofVkhCH09KTU9DGUkYQ1YVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVCQk
+	lOS1VKS0tVSkJLQlkG
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] net: stmmac: hardware UAF due to unconditional flush on stopped qu=
-eue
---
 
-commit ef870c171b8f7f53a01cef2bdd086a9bc0f02d35
-Author: Kurt Kanzenbach <kurt@linutronix.de>
 
-net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
+在 2026/10/13 20:38, sashiko-bot@kernel.org 写道:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] bpf/selftests: hardcoded errno values break architecture portability
+> --
+> 
+> commit d63d4254b64f243f696e8d9b4ca8b07f371d8139
+> Author: Zhen Ni <zhen.ni@easystack.cn>
+> 
+> selftests/bpf: add tests for the page_owner bpf_iter target
+> 
+> This commit adds a sleepable BPF program and a userspace runner to test
+> the seq_file and open-coded page_owner iterators. It verifies iterator
+> parity, output matching, and kfunc contracts including memcg classification.
+> 
+>> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+>> new file mode 100644
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
+> [ ... ]
+>> +char memcg_pathbuf[4096];
+>> +char memcg_first_path[4096];
+>> +char memcg_first_name[80];
+>> +
+>> +#define MEMCG_ENODATA 61
+>> +#define MEMCG_EOPNOTSUPP 95
+>> +
+>> +#define MEMCG_F_ONLINE	(1 << 0)
+>> +#define MEMCG_F_OBJCG	(1 << 1)
+> 
+> [Severity: Medium]
+> Will these hardcoded errno values cause a regression in the selftests on
+> certain architectures?
+> 
+> The bpf_page_owner_get_memcg_info() kfunc returns standard kernel error
+> codes like -ENODATA and -EOPNOTSUPP. However, these error codes vary by
+> architecture. For example, ENODATA is 111 on SPARC and 86 on Alpha, while
+> EOPNOTSUPP is 122 on MIPS.
+> 
+> When the test runs on these architectures, the kfunc will return the
+> architecture-specific error code. This will fail the hardcoded comparison
+> in check_memcg(), incorrectly incrementing memcg_bad and causing the
+> selftest to fail.
+> 
 
-When enabling or disabling XSK pools in parallel to Tx traffic, kernel
-crashes occur. This patch adds stopping of the Tx queue during the enabling
-and disabling of XSK pools to prevent accessing freed Tx DMA descriptors.
+I'll use `-ENODATA`/`-EOPNOTSUPP` instead of the hardcoded.
+Will fix it.
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 2aa5a26954731..0e8ab2bd8f3e8 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5216,6 +5216,10 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv=
- *priv, int queue,
->  	dma_addr_t dma_addr;
->  	bool set_ic;
-> =20
-> +	/* Ring may be torn down for an XSK pool switch */
-> +	if (netif_tx_queue_stopped(netdev_get_tx_queue(priv->dev, queue)))
-> +		return STMMAC_XDP_CONSUMED;
-> +
 
-[Severity: High]
-Could this unconditional flush cause a hardware use-after-free regression?
-
-While this protects stmmac_xdp_xmit_xdpf() from accessing descriptors when =
-the
-queue is stopped, stmmac_xdp_xmit() calls it in a loop and then uncondition=
-ally
-flushes if XDP_XMIT_FLUSH is set:
-
-drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_xdp_xmit() {
-    ...
-	for (i =3D 0; i < num_frames; i++) {
-		...
-		res =3D stmmac_xdp_xmit_xdpf(priv, queue, frames[i], true);
-		if (res =3D=3D STMMAC_XDP_CONSUMED)
-			break;
-		nxmit++;
-	}
-
-	if (flags & XDP_XMIT_FLUSH) {
-		stmmac_flush_tx_descriptors(priv, queue);
-		stmmac_tx_timer_arm(priv, queue);
-	}
-    ...
-}
-
-If stmmac_xdp_xmit() is called with XDP_XMIT_FLUSH during an AF_XDP pool sw=
-itch,
-it will break out of the loop but still call stmmac_flush_tx_descriptors().
-
-Since stmmac_flush_tx_descriptors() calls stmmac_set_queue_tx_tail_ptr(), c=
-ould
-this write a stale physical address to the hardware DMA tail pointer while
-stmmac_enable_tx_queue() is allocating new descriptors, causing the DMA eng=
-ine
-to fetch from freed memory?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013-stmmac_xsk=
-_crashes-v3-0-50fca7790af2@linutronix.de?part=3D2
+Thanks,
+Zhen
