@@ -1,125 +1,121 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-66.mta0.migadu.com [91.218.175.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2D54FD799;
-	Wed, 14 Oct 2026 11:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54D139D6E7
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 11:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791977358; cv=none; b=aBR8Fps0dJgTkWND99P/VD86euPaWmBPBx6YwPGrdEmUHjnnx1KKtaEZ4QJggLpuUVpu+Tb1XV4/qN++FfWvgdqn+jWznEx0zyZegEuBjjbwnMK979KKrR/qeZ7mGDWO4WyJG9XDAET2uiah5uyWyBeGWNjhHpVgxGslh3pHa5Y=
+	t=1791977507; cv=none; b=UB1QuSkrYT+cT71Tby2+gvTq9wysteswBzPl2XXJSC5jpcrIL1ZPVjMKSR2CKCQKSEv8zSySJvA64CsZrbQY7+ReTIVKiyYSuHVfevHSCVaSoSXga5x7fD9e6bhFzTMTIyhW+rVFXZjcBgPK/wHVikCBnkBrpvyfxgIxUzLikSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791977358; c=relaxed/simple;
-	bh=AMxI6xjPLXgL60o9TjfB2lYUdKc2uiqhILt0euv+65k=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X+gU595QaxRPXzjb3+W4STWNM0jnQJ86pjMA2sgtnibhODIE0Q60GXTue3h61x5IgzVpDnsGeJhTpT9Lgbg5bV5Z+/2G/VUECjG4H5vM6qvXyU1S/zgEoyu5/7FptFkmN8XWoej+/VeC+67aka294M+EuGvZjTHhwGeqCpWDkVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=LQL9USjl; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1791977507; c=relaxed/simple;
+	bh=00nVKVTPaYWz3INyxq/SritoKgZREtUBG4wGIzclx6A=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=a+4rt24RLVY2Lh0ADan4jGNeTA1HqKX/uSbmpLa3KI9kOMW/Z5KVpOO8UWg+vicn8QDXzD4Pf9USnnluepnGruB4mUqGT4ej4aY7PA/ngKSpp4MTlizIRk4fSrzRZRh6SjRrCCoYUp9hJVTu9cJWsQIrBwENmO4WxaT8H63PN2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kzRsHqrX; arc=none smtp.client-ip=91.218.175.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="LQL9USjl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1791977357; x=1823513357;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AMxI6xjPLXgL60o9TjfB2lYUdKc2uiqhILt0euv+65k=;
-  b=LQL9USjlpuJZJgjrEm5FZ/dKzM6wkNwiR2DHjq7pCaxl2QvXvhOS8rSF
-   uhHYEKroHYQR0c2cLjsre855eIgk1WzWY+WdutgLZL+WWRyXG+yqY0A8Z
-   8aqZLGZfh1o3mcqvIv6JEa74qgdkjAjDPGSaebDjOTwyZWg7eofh0dbhb
-   VvcKUjYA3FIgS8ElJYlvhu035E4sOdeKjXqOK45zCTndxz+0fch3+qXLp
-   xpNi0TBOtnVEB9MwOgIx1dU54Qp8R+P+L/B8wfYWLEl0yKJMUW6VL5SZc
-   31siliuqL+CMbtIcoOgOoYP1rwp9vcrt80efXNNzaEK0G+UeKLW4yh/zd
-   A==;
-X-CSE-ConnectionGUID: xLoVMOOZRiyv16RTtLxe+w==
-X-CSE-MsgGUID: 4pCQEFWfQvGQNii/bNe3QQ==
-X-IronPort-AV: E=Sophos;i="6.27,157,1787036400"; 
-   d="scan'208";a="232114399"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 04:29:16 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.49; Wed, 14 Oct 2026 04:29:15 -0700
-Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Wed, 14 Oct 2026 04:29:11 -0700
-Date: Wed, 14 Oct 2026 13:29:11 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-CC: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, <netdev@vger.kernel.org>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Joao Pinto
-	<Joao.Pinto@synopsys.com>, Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Srinivas Kandagatla <srini@kernel.org>, Ong Boon Leong
-	<boon.leong.ong@intel.com>, <bpf@vger.kernel.org>,
-	<linux-stm32@st-md-mailman.stormreply.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net 3/3] net: stmmac: stop DMA when IRQ registration fails
-Message-ID: <20261014112911.endm5wgbvl6rvn5k@DEN-DL-M70577>
-References: <cover.1791958735.git.kmehltretter@gmail.com>
- <2b70886410b5e9207ef170a48aca1d2d7ce24a68.1791958735.git.kmehltretter@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kzRsHqrX"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=00nVKVTPaYWz3INyxq/SritoKgZREtUBG4wGIzclx6A=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1791977502; v=1; x=1792582302;
+ b=kzRsHqrX8QEttM0rLMzyUYtQSSeaSBr2n6XCpsIpJgxFeBNkzSTOX4VfB8kvR11Hlg/UnZFz
+ gVnprbxjq4zY7AzqkO5xl4CNL3Eygo/VcmWhOPGV0uuxS/Q+l5Jgi1TkY4n/lhOoZDOGsN0CVo3
+ 3+zlsp2Au1kavDc3bbGce7os=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id e5216cf033832cf1;
+	Wed, 14 Oct 2026 11:31:42 +0000
+X-Mizu-Trace-ID: e5216cf033832cf1
+X-Migadu-Flow: FLOW_OUT
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	KaFai Wan <kafai.wan@linux.dev>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Feng Jiang <jiangfeng@kylinos.cn>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Vineet Gupta <vineet.gupta@linux.dev>,
+	Mykola Lysenko <mykolal@fb.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v2 0/7] selftests/bpf: Fix selftests failures with LLVM 23
+Date: Wed, 14 Oct 2026 19:30:36 +0800
+Message-ID: <20261014113043.640435-1-kafai.wan@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2b70886410b5e9207ef170a48aca1d2d7ce24a68.1791958735.git.kmehltretter@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Building with clang/LLVM 23 breaks several selftests. Patches #1 to #4 fix
+those failures.
 
-> Both __stmmac_open() and stmmac_xdp_open() start DMA before requesting
-> IRQs. If IRQ registration fails, their error paths release descriptors
-> and packet buffers while the DMA channels remain active.
-> 
-> Stop all DMA channels before releasing those resources, matching the
-> normal close paths.
-> 
-> Found by inspection. On a BeagleV Ahead (TH1520), fault injection in
-> both normal-open and native-XDP-open paths reached IRQ unwind with DMA
-> active on the baseline kernel. With this change, the DMA process states
-> were idle before unwind and resource cleanup in both paths.
+The following self-tests also fail under specific invocations of
+test_progs:
 
-This fix looks suspiciously similar to a fix already accepted into net-next [1].
+- ./test_progs -t prog_tests_framework/test_fail -v
+ test_prog_tests_framework:FAIL:skip_cnt_check
+ unexpected skip_cnt_check: actual 0 != expected 2
 
-> 
-> Fixes: 523f11b5d4fd ("net: stmmac: move hardware setup for stmmac_open to new function")
-> Fixes: ac746c8520d9 ("net: stmmac: enhance XDP ZC driver level switching performance")
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-> ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 8fd7d2173..5c4df26a6 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -4206,6 +4206,7 @@ irq_error:
->  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
->  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
->  
-> +	stmmac_stop_all_dma(priv);
->  	stmmac_release_ptp(priv);
->  init_error:
->  	return ret;
-> @@ -7259,6 +7260,7 @@ int stmmac_xdp_open(struct net_device *dev)
->  irq_error:
->  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
->  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
-> +	stmmac_stop_all_dma(priv);
->  
->  init_error:
->  	free_dma_desc_resources(priv, &priv->dma_conf);
-> -- 
-> 2.39.5 (Apple Git-154)
-> 
+- ./test_progs -t prog_tests_framework_expected_msgs -v
+ Caught signal #11!
 
-[1] https://lore.kernel.org/netdev/32EB352EB66D74E7+20260827025415.2684733-1-zhaojinming@uniontech.com/
+- ./test_progs -t prog_tests_framework_compare_text -v
+ Caught signal #11!
+
+Patches #5 to #7 fix these.
+
+Changes in v2:
+ - Collect the selftest fixes from the two patches in v1
+   patches: #1, #5, #6 and #7.
+ - Add three new patches: #2, #3 and #4.
+
+Changes in v1:
+ - https://lore.kernel.org/bpf/20261012135624.2749743-1-kafai.wan@linux.dev/T/
+ - https://lore.kernel.org/bpf/20261012140202.2754552-1-kafai.wan@linux.dev/T/
+
+---
+KaFai Wan (7):
+  bpf: Determine freplace staticness from BTF linkage
+  selftests/bpf: Fix stack_arg precision backtracking log expectation
+  selftests/bpf: Fix stack arg pruning test JOIN log expectation
+  selftests/bpf: Use _exit() in uprobe_multi_test clone-ed child
+  selftests/bpf: Fix prog_tests framework subtest count checks
+  selftests/bpf: Skip expected_msgs subtests when stdout is not saved
+  selftests/bpf: Skip compare_text subtest when stdout is not saved
+
+ kernel/bpf/verifier.c                         |  3 +-
+ .../selftests/bpf/prog_tests/exceptions.c     |  2 +-
+ .../bpf/prog_tests/prog_tests_framework.c     | 34 ++++++++++++++-----
+ .../bpf/prog_tests/uprobe_multi_test.c        |  4 +--
+ .../selftests/bpf/progs/stack_arg_precision.c |  4 +--
+ .../selftests/bpf/progs/verifier_stack_arg.c  |  4 +--
+ 6 files changed, 34 insertions(+), 17 deletions(-)
+
+-- 
+2.43.0
