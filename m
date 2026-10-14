@@ -1,147 +1,167 @@
-Received: from mta1.migadu.com (out-222.mta1.migadu.com [95.215.58.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2B955C1D1
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 16:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E284E0B74;
+	Wed, 14 Oct 2026 16:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791994858; cv=none; b=sO1e9YutEMLAy0kbHtUZXn0yVhW5SToTpiMr0O4YuWDtEbfDz7MHqaNm3rD3yogfl8MsQad7yyMyjCu2DzZsifpwNdZsfqC7o9CiUnlO+QsMYHAQEkQrb7QEkklUpqSQhMjsGJqRc3Agv7Fz6pmNCNHNwZeAHeZYaYI3Td0rT0w=
+	t=1791996564; cv=none; b=mEAPMVBTnIbnCJijCc/E8F9vEaNUbfxAZ0Dr9LxtCw+wh2UWoyoJazGau/D7fU20S2A4DNRVfLl4whT5jt4KGkXkhq2/59pG/GNe4Upcro1es3PkbIJFsT3ClN3uwqjJ1VzXthwLZG/0H3IWZZt5X8Hr9KIDjXzwbmBb4Q/C/QY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791994858; c=relaxed/simple;
-	bh=rKvGD/uQgvEu1y9QYyQ3BOrlGUecI24T5itI4gKAr8A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jdMa71DlAHtGizoJ7uXXnPx6o4SRvZxvv4TJkIkrn8kmfX8X5zb05iIX7nTP13e8elMl7W7Wq9TTkIiZAMrKiYmNuRazucWiFge8gC2UFJxRgwy/HWODV6Cd+w31oXYoicAGiYE2k3iTN4A/qv/rfGzMje4xBiGsXXM4m0TKnsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ih/ZlP0B; arc=none smtp.client-ip=95.215.58.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791996564; c=relaxed/simple;
+	bh=iSzaasvYvUiPzay+T0vJl6ArYMMDfH1SvrRmE73kiCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RQPeWrldQfgV680T1cIwcYIGp9M20MmeYyNPyShdXDmJ1VEuc4GWgVKaQroH8+gBomYM7uqNn9l5IzK8wu2LxAJ2TdUv8ykyhOYpLDc1TxF6WuesptIeOrrGb2TUaMyrYhcMtIDUAhjIXjxDvr0uTGW09GG++qqSfpXTrV2k3c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=ZDjXae7y; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ih/ZlP0B"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=rKvGD/uQgvEu1y9QYyQ3BOrlGUecI24T5itI4gKAr8A=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791994853; v=1; x=1792599653;
- b=ih/ZlP0BMkDZDRlvf+S1KeZwWaUhrpp2qQQb8IROHURJ8N76LQjAtPEQ/a/HZmpvdxss1rAJ
- VuVmcOCfj/MUP2pvlQCJFaVmfdEJ9PD8IXLVbcnTVahF1MRnWS32eWawNXNjn35ggp0bNRy+HtX
- rmOOiTX4Fh3/IvGRraBCinPs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1e510aac7886c557;
-	Wed, 14 Oct 2026 16:20:53 +0000
-X-Mizu-Trace-ID: 1e510aac7886c557
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b6ca5327e6263cc3b6c0e381d502ce8b5570d413.camel@linux.dev>
-Subject: Re: [PATCH bpf-next v2 7/7] selftests/bpf: Skip compare_text
- subtest when stdout is not saved
-From: KaFai Wan <kafai.wan@linux.dev>
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
- john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com,  martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org,  emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, nathan@kernel.org, 
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
- donggeunyoo.kernel@gmail.com, leon.hwang@linux.dev,
- menglong8.dong@gmail.com,  yatsenko@meta.com, jiangfeng@kylinos.cn,
- bjorn@kernel.org, puranjay@kernel.org,  vineet.gupta@linux.dev,
- mykolal@fb.com, bpf@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org,  llvm@lists.linux.dev
-Cc: martin.lau@kernel.org, mason@kernel.org
-Date: Thu, 15 Oct 2026 00:20:30 +0800
-In-Reply-To: <b66b343a0a91711a6a520e11b284941771cbb23ad8c8f1bd5f831594b567b5fa@mail.kernel.org>
-References: <20261014113043.640435-8-kafai.wan@linux.dev>
-	 <b66b343a0a91711a6a520e11b284941771cbb23ad8c8f1bd5f831594b567b5fa@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="ZDjXae7y"
+Received: from omf03.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 02FCF8066A;
+	Wed, 14 Oct 2026 16:49:17 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id AE89A6000A;
+	Wed, 14 Oct 2026 16:49:12 +0000 (UTC)
+Date: Wed, 14 Oct 2026 12:49:14 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Ridong Chen <ridong.chen@linux.dev>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Johannes Weiner
+ <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, Roman Gushchin
+ <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Andrew
+ Morton <akpm@linux-foundation.org>, Dave Chinner <david@fromorbit.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Muchun Song
+ <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>, David Hildenbrand
+ <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, Kairui Song
+ <kasong@tencent.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
+ <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
+ <weixugc@google.com>, Baoquan He <baoquan.he@linux.dev>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, cgroups@vger.kernel.org (open
+ list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)),
+ linux-mm@kvack.org (open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER
+ (MEMCG)), bpf@vger.kernel.org (open list:BPF
+ [MISC]:Keyword:(?:\b|_)bpf(?:\b|_)), Ridong Chen <chenridong@xiaomi.com>
+Subject: Re: [PATCH RFC v3 2/7] mm/vmscan: move vmscan tracepoints to a
+ local header
+Message-ID: <20261014124914.21c21559@gandalf.local.home>
+In-Reply-To: <20261013131309.2790253-3-ridong.chen@linux.dev>
+References: <20261013131309.2790253-1-ridong.chen@linux.dev>
+	<20261013131309.2790253-3-ridong.chen@linux.dev>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: AE89A6000A
+X-Stat-Signature: m7phkurr8zpyipefydjfncabm6u6cuns
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+2sabA8ApyQWp0KnP/HFLarVznZroqxp8=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=a+jcCItmaVXvg0z3J5thFi2DsdWgCqN1j0EvdcEpj+w=; b=ZDjXae7yuY6daMhM/4jUFORVKfWrh7M3m7I1np8JJtIWO0CX68GmjeT7EEVC1ueFMeDDVtX+N0muCfk5WRWHbSgc3XbOFNIkK4Nj34ba3mrfYqHMKXppwgYEcaSgfHzFG3iN+YEgpe7FhA3ei48+cNoN4yD25t67Ejic1h5NyCw=
+X-HE-Tag: 1791996552-398790
+X-HE-Meta: U2FsdGVkX19WVIU50DbwQWQ1335aLD0DaAIUgIjNIvQ8PuHEzItAimjZ4jWFcbqXC2uQEeUl7OKKLjZZpqhlsOaTbjlt0g5JFPmtMPCLWd9sgUdQcyxnOwQ9CrJywM/QBRoqk8hbQOdJ5cDAQ38RYSlBz42nBJ9pNyLbe1tCYpApGPKp22Oa2OjUc3CRjYiV0EMElzxmGb+AOBSJE1PpBYmHO62axI0wg8DN/AGB2Fz/pcSXsN9QshQLIDo4IsZLu842OjTboQLK+3/GThFKibADAVexEZE1mMy7lMzdC84/ITa6ABJ7EBW9GFfPexV4kY5mT03a2mPMNhzIeu716uT2F3rGLy6OzmbqiER2EFUx9vVE/uNHHDyOU4TQUvYUCeaVChZwsFA4sPdaMEuwILWLuKMZRRdliS2SdjRcvmM=
 
-On Wed, 2026-10-14 at 12:08 +0000, bot+bpf-ci@kernel.org wrote:
-> > selftests/bpf: Skip compare_text subtest when stdout is not saved
->=20
-> TL;DR: Nit only: the new test__skip() in the compare_text_mismatch subtes=
-t
-> gives no reason for skipping; a short comment or stderr message might hel=
-p.
-> The skip logic itself looks correct.
->=20
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/prog_tests_framewor=
-k.c
-> > b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-> > index b4cd7c7ff439..ddb6cdc1579f 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
->=20
-> [ ... ]
->=20
-> > @@ -203,14 +203,18 @@ void test_prog_tests_framework_compare_text(void)
-> > =C2=A0	}
-> >=20
-> > =C2=A0	if (test__start_subtest("compare_text_mismatch")) {
-> > -		err =3D compare_text_to_expected("line two\n", "line one\n");
-> > -		fflush(stdout);
-> > +		if (!env.subtest_state->stdout_saved) {
-> > +			test__skip();
-> > +		} else {
-> > +			err =3D compare_text_to_expected("line two\n", "line one\n");
-> > +			fflush(stdout);
-> >=20
-> > -		ASSERT_EQ(err, -1, "mismatch_rc");
-> > -		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
-> > -				=C2=A0 "diff_has_expected");
-> > -		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
-> > -				=C2=A0 "diff_has_actual");
-> > +			ASSERT_EQ(err, -1, "mismatch_rc");
-> > +			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
-> > +					=C2=A0 "diff_has_expected");
-> > +			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
-> > +					=C2=A0 "diff_has_actual");
-> > +		}
-> > =C2=A0		test__end_subtest();
-> > =C2=A0	}
-> > =C2=A0}
->=20
-> This isn't a bug, but could the skip in the compare_text_mismatch subtest
-> carry an explanation?
->=20
-> 	if (!env.subtest_state->stdout_saved) {
-> 		test__skip();
-> 	}
->=20
-> A subsystem guideline flags selftests that skip silently with no message,
-> and test__skip() here prints nothing about why the subtest was skipped.
-> The same condition covers -v in non-parallel mode, a libc without
-> open_memstream() support, and an open_memstream() failure, so the reason =
-is
-> not obvious from the test output alone.
->=20
-> For context, the skip itself looks correct: env.subtest_state is non-NULL
-> inside the subtest, test__skip() sets subtest_state->skipped, and
-> test__end_subtest() handles a NULL stdout_saved.
->=20
-> The other skips in this file are also bare test__skip() calls, and
-> test__skip() takes no reason argument, so the guideline may not map clean=
-ly
-> onto test_progs.=C2=A0 If a reason is wanted, would a short comment above=
- the
-> test__skip() call, or a separate message printed to env.stderr_saved, be
-> appropriate?
->=20
-just one line for this, we can print why the test skipped. and short commen=
-t for patch#6
->=20
+On Tue, 13 Oct 2026 21:13:04 +0800
+Ridong Chen <ridong.chen@linux.dev> wrote:
+
+> From: Ridong Chen <chenridong@xiaomi.com>
+> 
+> Move include/trace/events/vmscan.h to mm/trace_vmscan.h so that the
+> tracepoints can be extended to reference vmscan-internal structures such
+> as struct scan_control, which is not visible outside mm/.  This mirrors
+> what several other subsystems already do with their trace headers (e.g.
+> arch/x86/kvm/trace.h, drivers/gpu/drm/drm_trace.h, net/xfrm/trace_iptfs.h).
+> As they do, use a relative TRACE_INCLUDE_PATH so that no Makefile change
+> is needed.
+> 
+> No functional change.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->=20
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/385595=
-67568
+>  MAINTAINERS                                        | 2 ++
+>  mm/shrinker.c                                      | 2 +-
+>  include/trace/events/vmscan.h => mm/trace_vmscan.h | 4 ++++
+>  mm/vmscan.c                                        | 2 +-
+>  4 files changed, 8 insertions(+), 2 deletions(-)
+>  rename include/trace/events/vmscan.h => mm/trace_vmscan.h (99%)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c5519d67b6f4..80d2a9dd0525 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17575,6 +17575,7 @@ F:	Documentation/admin-guide/mm/multigen_lru.rst
+>  F:	Documentation/mm/multigen_lru.rst
+>  F:	include/linux/mm_inline.h
+>  F:	include/linux/mmzone.h
+> +F:	mm/trace_vmscan.h
+>  F:	mm/vmscan.c
+>  F:	mm/workingset.c
+>  
+> @@ -17722,6 +17723,7 @@ R:	Shakeel Butt <shakeel.butt@linux.dev>
+>  R:	Lorenzo Stoakes <ljs@kernel.org>
+>  L:	linux-mm@kvack.org
+>  S:	Maintained
+> +F:	mm/trace_vmscan.h
+>  F:	mm/vmscan.c
+>  F:	mm/workingset.c
+>  
+> diff --git a/mm/shrinker.c b/mm/shrinker.c
+> index 7ec2a9704f6f..3c3e87c4b61c 100644
+> --- a/mm/shrinker.c
+> +++ b/mm/shrinker.c
+> @@ -3,7 +3,7 @@
+>  #include <linux/rwsem.h>
+>  #include <linux/shrinker.h>
+>  #include <linux/rculist.h>
+> -#include <trace/events/vmscan.h>
+> +#include "trace_vmscan.h"
+>  
+>  #include "internal.h"
+>  
+> diff --git a/include/trace/events/vmscan.h b/mm/trace_vmscan.h
+> similarity index 99%
+> rename from include/trace/events/vmscan.h
+> rename to mm/trace_vmscan.h
+> index 8a872990b4be..c5d824fef554 100644
+> --- a/include/trace/events/vmscan.h
+> +++ b/mm/trace_vmscan.h
+> @@ -648,4 +648,8 @@ TRACE_EVENT(mm_vmscan_kswapd_clear_hopeless,
+>  #endif /* _TRACE_VMSCAN_H */
+>  
+>  /* This part must be outside protection */
+> +#undef TRACE_INCLUDE_FILE
+> +#undef TRACE_INCLUDE_PATH
+> +#define TRACE_INCLUDE_PATH ../../mm
 
---=20
-Thanks,
-KaFai
+The proper way to do this is to have:
+
+#define TRACE_INCLUDE_PATH .
+
+And update the Makefile with:
+
+CFLAGS_vmscan.o := -I$(src)
+
+-- Steve
+
+
+
+> +#define TRACE_INCLUDE_FILE trace_vmscan
+>  #include <trace/define_trace.h>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 29b31446fc11..6207dad9e644 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -71,7 +71,7 @@
+>  #include "swap.h"
+>  
+>  #define CREATE_TRACE_POINTS
+> -#include <trace/events/vmscan.h>
+> +#include "trace_vmscan.h"
+>  
+>  struct scan_control {
+>  	/* How many pages shrink_list() should reclaim */
+
