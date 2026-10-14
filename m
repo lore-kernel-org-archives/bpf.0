@@ -1,134 +1,224 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B85F2C11EE
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 01:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2116230B529;
+	Wed, 14 Oct 2026 02:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791939977; cv=none; b=IU4hjYUqIwxjWNy2XRr0Hv1P0OJ/lNpaoB1/wheSQ7V/Y0aRJefolhU/UkWsoQu7qlRQ9X515a+yY3ljWV8z2Qw/H3g5DUDEDOgvfA486BWcLJPiUHbGE8mrGdekM1tF9L4aNB5AejPkbChsbirQY2AXq8ZlWVuAeUpvm0xA/RI=
+	t=1791943211; cv=none; b=q0x8Sl23vySxc2q8yADAPb8eLWyFm3rpKSNbaFBMZ8z5YnUygF80seTxeC6FgIL1Mry7PoAVBek/jWvoSc751iNFyYf1SJd0IDLuxtPMgruwB0jjkIhyBrpr13ybHCt3TPPAbjT2NeFKG2MgljPjjpnAArzltnduNFF+E0pSAf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791939977; c=relaxed/simple;
-	bh=71/PvvAb7WSmpjfyFsK5RUK37uILXm+z52T/Z/Dn6Dc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pB6bBduzjwVGlpZiCB4bE6WB7PTzsswY9EFLe1llAUzoUcWfEhmtryxV/mPXJKrRkqnp055WWkHO18o8wQF0UYle/ajPQ/NqEjRyiEXP3zjBh/byBC5tjj/+tTo1I9dKWTHilzRqbjjmKO30ldyvGwn84PWyJJMELthKloz+/vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YnTSesYZ; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791943211; c=relaxed/simple;
+	bh=5U1YDhIstSb2u90nPExKtqvd4Bycp2giVa6FItnlVoM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=At7FD63ECNDgCAuUpRCGypoDwCjIZ1Kypu4oZIi6FKb2ONEnLFO9omMcusbd6sWFbE0MuAUfwl5k0jKbxl0Puc/I9VJ2wgTLKNbms8B/Zx4v94axrOxUGlefQh8cVtgqiTd7o7KBs6yhZOjz5xggWW36KNXz+0fcLR409qGHff0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pmicwg0A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YnTSesYZ"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3a4b3ac8fb7so1629326a91.0
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 18:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791939975; x=1792544775; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=a017O8OGvPiZ3PtcPvdafG3s+KiqjGCu5jaYmz2r3MI=;
-        b=YnTSesYZmUPxDL3ZOX7iQEscaZgAns5xYVIi6KODVK3mDQmXAAZNCeot9rcy5jlQNy
-         CG5JDtBbAGwzKqIdraaQ6a1yAG4JTNQ2EDqxo7cBOvUdlvDPtvQZoPe8P7TzjNBjs3qA
-         TWglIuNKC0aEXYerTn2Lu9ixmjiUXjWwIsRGF58tEbAX5Na/aBALqsdcWX/Xabm93JbK
-         xjEn/h5kxbuAUJ1bS8J+ey40o5KJ+BgrHDtmTd1W0OOo35JcZOWGkl2WYw/D0735g4Ho
-         mziLdmtVML8klkHigrOAa1Q+OC4umQGXf8qysFzVG2zBHQvrsklmapZbVNizW/lKpldL
-         jtrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791939975; x=1792544775;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=a017O8OGvPiZ3PtcPvdafG3s+KiqjGCu5jaYmz2r3MI=;
-        b=IUg2A/Oq963BQuxhhKNUEZicY0BaBWtEi0F2nPeBX41/hoZTEwKKSWs+eKkj+7dKrX
-         c0hboUEuzkw59Qu4byx+OW0jGn/Zxv3uROJrMme8PxNW3GDGw93rFhfH8yr4ML2RuV/2
-         QH24AZl3Frv8Zo767/SSgkoyBajy0IljxWyQP1T4X8T2OdU0eBR6EVNnxX9jbjHSy7ZL
-         3SZLTmafoprOtxkoGuVqwDRAp7ZUIjfOzzQdVASWnxoO0OdGzuj/qNZ8JedXl5JMECE9
-         JUYcdSYICBJHZtT7Yr6tTT5oAMRgog4h/LbcVAOowJTzhcWmlvrqa7ekTWvbWJXvOYvc
-         pwfg==
-X-Forwarded-Encrypted: i=1; AKwUvBzEuLwOAi8NG4tGS7+tDavLwg7unpay1Mn2giJOxsWNIOlxHmwagZYUVxrey7mRdq1SDcs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKeSR/yENMQb8wwy2kIYnNBnl1BmnRcZEWVy4HTwegOYGTkp+HZ
-	3cZjIPScXvSrQ3l6MLNcaqIgO8dI5/NjHZRzvczzGMtzoEGzWMU+8+pMLBDmPA==
-X-Gm-Gg: AYBFou2NhHFCtT5+8Wre5/G3yNKVvQXD1CgAWQRG6ZBot+cH0oqzj6jm3wFCGRC6Ljb
-	hZhZZY3HUP+FQJz/fDQ+R6XqgsfBGOTXuw2EUO/VPY1GEPW6JcjQVAO0XlOYvyx1VubtTkzCYCK
-	mCEgDDjA2UTvVtM2jybX+TcQH86wPGWDYdNUDvLZuLow3e1dPO8ZIIqRhM+Gjky8Vs0DkEfo9Pk
-	YP/9mWfk+vbRnIJ1VaOZhhpItvmXMXiC/+86FMSeFcwLaCYh8aBoVcsaeOxhp/Es82/QQB4yxX1
-	jGWG4gVLV4DBgMpI4ebMXdyQ7xxXAXnWYTeXyUmirhFGqb6FY+et8EW/OJuGzr12zUf34lF0X4G
-	wWtDv0+E/efBW9iAJ2QgO2qqf3jSbMecB7gm/YqtwIxlmlD0fH8tAaQe4bKgGAP1SDFsUbtYQnj
-	n2OCZz4Y23omkrhCaLuzegW/S0AUcjw99HC2u9vo9sCZBnKyspJ4o8ertk44951XCzkTp9uClj2
-	Czos3BLv1ucxa8Whnbl9F6H7g==
-X-Received: by 2002:a17:90b:1d4f:b0:3a4:a592:4cfa with SMTP id 98e67ed59e1d1-3ab3a79d9f8mr11670070a91.45.1791939975320;
-        Tue, 13 Oct 2026 18:06:15 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac60e83ccdsm1867436a91.15.2026.10.13.18.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 18:06:14 -0700 (PDT)
-Message-ID: <e55e3220b1dc438bf3ba3363730bb1d927c2a27a.camel@gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Fix state pruning regression in bpf_loop()
- callbacks
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: David Windsor <dwindsor@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, 	kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, 	shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	yunwei356@gmail.com
-Date: Tue, 13 Oct 2026 18:06:12 -0700
-In-Reply-To: <20261008233623.4011127-1-dwindsor@gmail.com>
-References: <20261008233623.4011127-1-dwindsor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pmicwg0A"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 96652C2BCF4;
+	Wed, 14 Oct 2026 02:00:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1791943210;
+	bh=5U1YDhIstSb2u90nPExKtqvd4Bycp2giVa6FItnlVoM=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=Pmicwg0A4MYuoXAAHximuSuthJ3GeRAQ2XBXmJy+JwuNaW0uK8aWecIO5F25KAT9z
+	 EEatbMjgV7VDOy+pPVDSxeQfwePNXDATFCuFI+jO+tX76XO/I2V1k4CVB5r/0xytEw
+	 uc4zg+c/Lha6iBNc6skzcGhYKVMvEGvLzyPyWROphEYOtb7zSt3KKGTp3RGiPt/oyu
+	 Lmo0C/YdCArbw/DQJouMz8Ytrqj+VmmENfh5/gU0w9PMP1+j2OPp0eUp3e4EN0AnCt
+	 harY10C9WUSzSqRqtC7dM82QSUFLlB1RYZ1KbN4otxU7ozmNEaYc6tSJn7Y9BwkHUv
+	 4mmewkk0b0URw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E612CC6B1F;
+	Wed, 14 Oct 2026 02:00:10 +0000 (UTC)
+From: Nicholas Velten via B4 Relay <devnull+nicholasfvelten.gmail.com@kernel.org>
+Date: Tue, 13 Oct 2026 23:00:08 -0300
+Subject: [PATCH bpf-next] bpf: Annotate data races on bpf_lru_node type
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261013-fix-lru-node-type-kcsan-v1-1-0b743f5af2f3@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACfizmoC/yWMQQ7CMAwEv1L5jKUkpYD4CuohSV0wIDeKU1RU9
+ e8EOI52Z1ZQykwK52aFTC9WnqSC3TUQb16uhDxUBmfcwRrb4sgLPvOMMg2E5Z0IH1G94N61XTS
+ nLhyDh2qnTPX6K18gpBGFlgL9f9E53CmWbxi27QO54VVRhQAAAA==
+X-Change-ID: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com, 
+ Nicholas Velten <nicholasfvelten@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1791943208; l=5845;
+ i=nicholasfvelten@gmail.com; s=20261014; h=from:subject:message-id;
+ bh=WM3jG1qGFgTy5qrm7atN2qIeOxz8lgQ0gTs8dQ4l6AA=;
+ b=bgMTrFCubT71XavVs+ksvwRRK7NsZFVbtOic7XxImNEoFWp1uJYCmUOnOIW/1StCjeileGEvT
+ wn3Z65qP5X9ASeyGonyR/LHliHmufb2EDmu3MRqTtyPqM5B4EDUSHHG
+X-Developer-Key: i=nicholasfvelten@gmail.com; a=ed25519;
+ pk=WVTZgm6yXQ+XrhULAObg4lwcHPhhxAXrAY+YY6svXzg=
+X-Endpoint-Received: by B4 Relay for nicholasfvelten@gmail.com/20261014
+ with auth_id=1173
+X-Original-From: Nicholas Velten <nicholasfvelten@gmail.com>
+Reply-To: nicholasfvelten@gmail.com
 
-On Thu, 2026-10-08 at 19:36 -0400, David Windsor wrote:
-> Commit f597664454bd ("bpf: bpf_scc_visit instance and backedges
-> accumulation for bpf_loop()") left dead stack slots in cached callback
-> states while SCC backedges were pending, defeating state pruning and
-> causing previously valid programs to hit the verifier instruction limit. =
-On
-> affected kernels, ActPlane fails to load with -E2BIG.
->=20
-> Removing the incomplete_read_marks() check from clean_live_states() is
-> safe because zero-branch states have already had their stack read/write
-> effects propagated into the liveness masks consumed by
-> clean_verifier_state(). Pending SCC backedges only defer verifier-state
-> precision propagation and cannot add stack-liveness requirements after
-> cleanup.
+From: Nicholas Velten <nicholasfvelten@gmail.com>
 
-The patch does not apply, clean_live_states() no longer exists.
-Also, before submitting v2, please re-read the series [1] in order to
-understand the motivation for the change. States w/o branches can
-still contribute their precision marks to their parent states,
-in case if these states form a loop on a state graph.
-The loops are formed on e.g. iterator or callback-based loops convergence.
+KCSAN reports a data race on bpf_lru_node::type between the LRU list
+rotation and the free path of the common LRU:
 
-[1] https://lore.kernel.org/bpf/20251229-scc-for-callbacks-v1-0-ceadfe67990=
-0@gmail.com/
+  BUG: KCSAN: data-race in __bpf_lru_list_rotate / bpf_lru_push_free
 
-pw-bot: cr.
+  write to 0xffff88811b758022 of 1 bytes by task 4756 on cpu 1:
+   __bpf_lru_node_move
+   __bpf_lru_list_rotate_active
+   __bpf_lru_list_rotate
+   bpf_lru_list_pop_free_to_local
+   bpf_common_lru_pop_free
+   bpf_lru_pop_free
+   htab_lru_map_update_elem
 
->=20
-> Fixes: f597664454bd ("bpf: bpf_scc_visit instance and backedges accumulat=
-ion for bpf_loop()")
->=20
-> Signed-off-by: David Windsor <dwindsor@gmail.com>
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e3814152b52f8139a5565b2e4ac1b80d82d1ea65..1e300ca71a8a833eb4c2a340b=
-4f94342f54af5f2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19791,8 +19791,6 @@ static void clean_live_states(struct bpf_verifier=
-_env *env, int insn,
-> =C2=A0		if (sl->state.cleaned)
-> =C2=A0			/* all regs in this state in all frames were already marked */
-> =C2=A0			continue;
-> -		if (incomplete_read_marks(env, &sl->state))
-> -			continue;
-> =C2=A0		clean_verifier_state(env, &sl->state);
-> =C2=A0	}
-> =C2=A0}
+  read to 0xffff88811b758022 of 1 bytes by task 4752 on cpu 0:
+   bpf_lru_list_push_free
+   bpf_common_lru_push_free
+   bpf_lru_push_free
+   htab_lru_push_free
+   htab_lru_map_update_elem
+
+  value changed: 0x00 -> 0x01
+
+node->type is written under the global l->lock when a node moves between
+the active, inactive and free lists, and under the per-CPU loc_l->lock
+when it moves to or from a local list. It is read in two places that do
+not hold the lock the writer holds:
+
+ - bpf_lru_list_push_free() reads it for a WARN_ON_ONCE() sanity check
+   before taking l->lock.
+ - bpf_common_lru_push_free() re-checks it under loc_l->lock after the
+   lockless READ_ONCE() at function entry, while a concurrent rotation
+   may be changing it under l->lock.
+
+Both races are benign: the type is a single byte, the sanity check only
+feeds a warning, and the re-check exists precisely because the value can
+change concurrently (any change sends the node down the check_lru_list
+path, which revalidates under l->lock). Mark the two reads with
+READ_ONCE() and the runtime writers with WRITE_ONCE(), following
+commit 6df8fb83301d ("bpf_lru_list: Read double-checked variable once
+without lock") and commit ee9fd0ac3017 ("bpf: Address KCSAN report on
+bpf_lru_list"), which did the same for the entry read of node->type and
+for node->ref. The writers in the *_populate() functions run before the
+map is visible and are left alone.
+
+Tested on bpf-next with CONFIG_KCSAN=y in a 4-vCPU virtme-ng guest,
+using a reproducer that runs 8 threads issuing BPF_MAP_UPDATE_BATCH
+on a 64-entry BPF_MAP_TYPE_LRU_HASH with overlapping keys: 110 KCSAN
+reports for this race per run before the change, 0 in two runs after.
+test_lru_map passes before and after.
+
+Fixes: 3a08c2fd7634 ("bpf: LRU List")
+Reported-by: syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=1ea4f564bf6f1f3d1dc4
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Nicholas Velten <nicholasfvelten@gmail.com>
+---
+The reproducer used for testing is a small userspace program (8 threads
+issuing BPF_MAP_UPDATE_BATCH on a 64-entry BPF_MAP_TYPE_LRU_HASH with
+overlapping keys). I can post it, or turn it into a selftest, if that
+would be useful.
+
+Not tested: architectures other than x86_64, sparse, and the full
+test_maps / test_progs suites (only test_lru_map was run).
+---
+ kernel/bpf/bpf_lru_list.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+index 5ed7cb4b9..db8051193 100644
+--- a/kernel/bpf/bpf_lru_list.c
++++ b/kernel/bpf/bpf_lru_list.c
+@@ -56,7 +56,7 @@ static void __bpf_lru_node_move_to_free(struct bpf_lru_list *l,
+ 
+ 	bpf_lru_list_count_dec(l, node->type);
+ 
+-	node->type = tgt_free_type;
++	WRITE_ONCE(node->type, tgt_free_type);
+ 	WRITE_ONCE(node->pending_free, 0);
+ 	list_move(&node->list, free_list);
+ }
+@@ -71,7 +71,7 @@ static void __bpf_lru_node_move_in(struct bpf_lru_list *l,
+ 		return;
+ 
+ 	bpf_lru_list_count_inc(l, tgt_type);
+-	node->type = tgt_type;
++	WRITE_ONCE(node->type, tgt_type);
+ 	bpf_lru_node_clear_ref(node);
+ 	/* Reset pending_free only when moving to the free list */
+ 	if (tgt_type == BPF_LRU_LIST_T_FREE)
+@@ -94,7 +94,7 @@ static void __bpf_lru_node_move(struct bpf_lru_list *l,
+ 	if (node->type != tgt_type) {
+ 		bpf_lru_list_count_dec(l, node->type);
+ 		bpf_lru_list_count_inc(l, tgt_type);
+-		node->type = tgt_type;
++		WRITE_ONCE(node->type, tgt_type);
+ 	}
+ 	bpf_lru_node_clear_ref(node);
+ 
+@@ -298,7 +298,7 @@ static void bpf_lru_list_push_free(struct bpf_lru_list *l,
+ {
+ 	unsigned long flags;
+ 
+-	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(node->type)))
++	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(READ_ONCE(node->type))))
+ 		return;
+ 
+ 	if (raw_res_spin_lock_irqsave(&l->lock, flags)) {
+@@ -357,7 +357,7 @@ static void __local_list_add_pending(struct bpf_lru *lru,
+ {
+ 	*(u32 *)((void *)node + lru->hash_offset) = hash;
+ 	node->cpu = cpu;
+-	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
++	WRITE_ONCE(node->type, BPF_LRU_LOCAL_LIST_T_PENDING);
+ 	WRITE_ONCE(node->pending_free, 0);
+ 	bpf_lru_node_clear_ref(node);
+ 	list_add(&node->list, &loc_l->pending_list);
+@@ -502,7 +502,7 @@ static struct bpf_lru_node *bpf_common_lru_pop_free(struct bpf_lru *lru,
+ 		 * free_llist instead of orphaning it; the next pop_free on
+ 		 * this CPU will pick it up.
+ 		 */
+-		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
++		WRITE_ONCE(node->type, BPF_LRU_LOCAL_LIST_T_FREE);
+ 		bpf_lru_node_clear_ref(node);
+ 		WRITE_ONCE(node->pending_free, 0);
+ 		llist_add(&node->llist, &loc_l->free_llist);
+@@ -542,13 +542,13 @@ static void bpf_common_lru_push_free(struct bpf_lru *lru,
+ 			return;
+ 		}
+ 
+-		if (unlikely(node->type != BPF_LRU_LOCAL_LIST_T_PENDING)) {
++		if (unlikely(READ_ONCE(node->type) != BPF_LRU_LOCAL_LIST_T_PENDING)) {
+ 			raw_res_spin_unlock_irqrestore(&loc_l->lock,
+ 						       flags);
+ 			goto check_lru_list;
+ 		}
+ 
+-		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
++		WRITE_ONCE(node->type, BPF_LRU_LOCAL_LIST_T_FREE);
+ 		bpf_lru_node_clear_ref(node);
+ 		list_del(&node->list);
+ 
+
+---
+base-commit: 763187dbbf83764a57d5811168ef9de7b9a60e2d
+change-id: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
+
+Best regards,
+--  
+Nicholas Velten <nicholasfvelten@gmail.com>
+
+
