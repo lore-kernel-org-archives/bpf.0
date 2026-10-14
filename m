@@ -1,98 +1,268 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from eggs.gnu.org (eggs.gnu.org [209.51.188.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70762F7F05
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBCB46E017;
+	Wed, 14 Oct 2026 06:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.51.188.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791959880; cv=none; b=qaZw8Jh4M+2I53sDux8lF04ffQluK7hwBDstyA/Adkeo1Sef6/wVOpC1kJj1SUSXg6Ayl8R/1HDkAdUL9k0pg8GeyvxCFCKd+mLu05G7+laqsBt86FUcNjXsqi7wfzig4BK2VKEVB29l68rGnk/h0PZLKE5EjPtAg/yQSJutjYY=
+	t=1791960114; cv=none; b=oEdJjCw+6/UUWi5hNYwJLlvdPpS8Qi7uUEERVqKoFavZOdYv7TiCclgfUEH8l0u3dOuqb4Komei43mk0GmRqPrKPRL71c57UOwAW8b3y+yrABsQyBSokt5weeZLtCHvGfMQ7g6ImOQr2tMviJ6TP4ivo6T7LSXFdo4CGEnEoHko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791959880; c=relaxed/simple;
-	bh=ECV3oaqJGPxfzOxcf2JSzP0Ld5kVQ0Hhq3CGs653n94=;
-	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=Qbyqb4zZSrZFf9lZiHkrfG363fdDN7PZ3llpyCy7TMKTTO6D3JCaEt/U5XaClS+oBTYnGeqjRvVP4e2HEOw1m5ptM65kr/PgLBQRilwtLlckAV60dDH4nXYnq1PBO6D6NWIF7kqnjL0F1nZrmxhkkILd2RdWJx3KaFKnD4S5ir8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AvQQ/ooQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791960114; c=relaxed/simple;
+	bh=8JsaAJac8exDRiLZP+WuvxCaODlXs92VDBMSGrrj0ec=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Cf37GVIO07B9Dty2DMQANqN4/NZ07EFmDMMgd4ENiMUOb+zlMq093IloEArXSlGq5blOfLq77dzDCNNkP9i7u8L0Ge0JQXA1bI/Wnx/tDMAV+0CkIh09eGigcxA9EMvYuF42e3/o80++gHqk9KTdp6ngBvxwFDYM99cAedwItJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gnu.org; spf=pass smtp.mailfrom=gnu.org; dkim=pass (2048-bit key) header.d=gnu.org header.i=@gnu.org header.b=emA7JWci; arc=none smtp.client-ip=209.51.188.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gnu.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnu.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AvQQ/ooQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E86BC1F000FF;
-	Wed, 14 Oct 2026 06:37:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791959875;
-	bh=WYRJtx7FR7sEVv8Ahd72/ILi+f3pwTJZlJTmXSJVJbw=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=AvQQ/ooQ5scZbFK+oTeq0UyDB70DpkSxtFx/yVDITCQ8SQSv6QUWlIsl9w9WLefc7
-	 QyxC4eW/g5EZ5jZSR4cy1fbLqPcyhoDDeEsObNjG4OE/EYK2AYNsPiiUiQJP1R05jX
-	 /6w1Uiv7SclU9ZQYJG8FPMhZ1q91bSRy62YyKWvjklV14q6KzPyJ44bykISWfcJ409
-	 q6k10y9n4N1Vnw0KDkY0dQBjh929XF+BIwllnAVtPZZ7Tz3s1Z8cCGD7zCJxVicoPF
-	 3LHtjzfhcpiEYOmDAUeyDTspvobwNDFlA9yCdPM4zy1Uls/QhrW2pmLAEWUvv6epIT
-	 HWXdsVsNcD/Zw==
-Message-ID: <sashiko-outbox-170874@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 6/7] selftests/bpf: harden __msg patterns
- for step_movsx_bounds_on_line
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261013-scev-minimal-v3-followups-v2-6-6d9d61965486@gmail.com>
-References: <20261013-scev-minimal-v3-followups-v2-0-6d9d61965486@gmail.com>
- <20261013-scev-minimal-v3-followups-v2-6-6d9d61965486@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 14 Oct 2026 06:37:54 +0000
+	dkim=pass (2048-bit key) header.d=gnu.org header.i=@gnu.org header.b="emA7JWci"
+Received: from fencepost.gnu.org ([2001:470:142:3::e])
+	by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.90_1)
+	(envelope-from <jemarch@gnu.org>)
+	id 1xGsgF-000071-Rn; Wed, 14 Oct 2026 02:41:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
+	s=fencepost-gnu-org; h=MIME-Version:Date:References:In-Reply-To:Subject:To:
+	From; bh=TfdvLz23jbZAN8dixlMbudWM2BjDMFngjYqKr62cQ6w=; b=emA7JWciClgsXW/uXwnv
+	adVQgBfxDgdDmCzUD5stngOjVpsFjJNFNrtHGNezxbz4D8dFnhO9zOqGFJzEYMqZw12q74/+zOPLU
+	ri81KPpZVnWdT5TbLVdA144/XjNPrRWRpPQ/kjzL3LTjwhPQH41+RtAgoTggzHMQAF3oW50x9luX9
+	cqW2L0G3oYfpR9ylSX7TIzxat7DfeIRsizWTF3+RDLIjU8//sBjTTYAdXfENu+UQWJubHTg1apS/O
+	kviyfP4CJf6ckC/b2gs4IqEcJVJ5FVjlVh+FoP4fkDXmXYqJaAblJXi4U8cZqJrZIIA8NLhmGPKEj
+	ZKjc8Psq92GxZA==;
+From: "Jose E. Marchesi" <jemarch@gnu.org>
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>,  Alexander Viro
+ <viro@zeniv.linux.org.uk>,  Jan Kara <jack@suse.cz>,  NeilBrown
+ <neil@brown.name>,  =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+  Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Andrii
+ Nakryiko <andrii@kernel.org>,  Song Liu <song@kernel.org>,
+  linux-fsdevel@vger.kernel.org,  bpf@vger.kernel.org,
+  linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,  Paul Moore
+ <paul@paul-moore.com>,
+  James Morris <jmorris@namei.org>,  "Serge E . Hallyn" <serge@hallyn.com>,
+  Martin KaFai Lau <martin.lau@linux.dev>,  Eduard Zingerman
+ <eddyz87@gmail.com>,  Yonghong Song <yonghong.song@linux.dev>,  John
+ Fastabend <john.fastabend@gmail.com>,  Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>,  Jiri Olsa <jolsa@kernel.org>,  Jeff Layton
+ <jlayton@kernel.org>,  Amir Goldstein <amir73il@gmail.com>,  Mateusz Guzik
+ <mjguzik@gmail.com>,  Shuah Khan <shuah@kernel.org>,  Tingmao Wang
+ <m@maowtm.org>,  jose.marchesi@oracle.com
+Subject: Re: [PATCH bpf-next v1 06/11] selftests/bpf: exercise the path
+ ancestor iterator
+In-Reply-To: <as6GG4NMzLrnpKXK@zenbox>
+References: <20261013164800.2906577-1-utilityemal77@gmail.com>
+	<20261013164800.2906577-7-utilityemal77@gmail.com>
+	<as6GG4NMzLrnpKXK@zenbox>
+Date: Wed, 14 Oct 2026 08:41:12 +0200
+Message-ID: <875wz43htj.fsf@gnu.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] bpf/selftests: missing closing parenthesis in regex pattern allows =
-test to pass incorrectly
---
 
-commit 0cba693bc29a347d1c334a9ea3f7803ac49d1bab
-Author: Eduard Zingerman <eddyz87@gmail.com>
+> On Tue, Oct 13, 2026 at 12:=E2=80=8A47:=E2=80=8A55PM -0400, Justin Suess =
+wrote: >
+> Walk the ancestry of a mkdir's parent directory from a sleepable LSM
+>> program and check that the iteration reaches the root: the
+> temporary > directory, its parent and
+> ZjQcmQRYFpfptBannerStart
+> This Message Is From an External Sender
+> This message came from outside your organization.
+> Report Suspicious
+>=20=20
+> ZjQcmQRYFpfptBannerEnd
+>
+> On Tue, Oct 13, 2026 at 12:47:55PM -0400, Justin Suess wrote:
+>> Walk the ancestry of a mkdir's parent directory from a sleepable LSM
+>> program and check that the iteration reaches the root: the temporary
+>> directory, its parent and / are visited, no position comes back
+>> flagged, and the flags read back after the loop show it ended at the
+>> root rather than on a failed allocation.
+>>=20
+>> Hold the first position across the rest of the walk and resolve its
+>> pathname only once the loop is done and the iterator destroyed: the
+>> acquired reference, not the walk's, is then all that keeps the
+>> position alive.
+>>=20
+>> Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+>> ---
+>>  .../selftests/bpf/prog_tests/path_ancestors.c | 57 ++++++++++++++
+>>  .../selftests/bpf/progs/path_ancestors.c      | 74 +++++++++++++++++++
+>>  2 files changed, 131 insertions(+)
+>>  create mode 100644 tools/testing/selftests/bpf/prog_tests/path_ancestor=
+s.c
+>>  create mode 100644 tools/testing/selftests/bpf/progs/path_ancestors.c
+>>=20
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/path_ancestors.c b/t=
+ools/testing/selftests/bpf/prog_tests/path_ancestors.c
+>> new file mode 100644
+>> index 000000000000..d1bd26bce10b
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/path_ancestors.c
+>> @@ -0,0 +1,57 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright (c) 2026 Justin Suess */
+>> +
+>> +#include <sys/stat.h>
+>> +#include <stdlib.h>
+>> +#include <unistd.h>
+>> +#include <test_progs.h>
+>> +#include "path_ancestors.skel.h"
+>> +
+>> +void test_path_ancestors(void)
+>> +{
+>> +     char base[] =3D "/tmp/path_ancestors_XXXXXX";
+>> +     struct path_ancestors *skel =3D NULL;
+>> +     char suba[280], subb[280];
+>> +
+>> +     if (!ASSERT_OK_PTR(mkdtemp(base), "mkdtemp"))
+>> +             return;
+>> +     snprintf(suba, sizeof(suba), "%s/a", base);
+>> +     snprintf(subb, sizeof(subb), "%s/a/b", base);
+>> +     if (!ASSERT_OK(mkdir(suba, 0755), "mkdir_a"))
+>> +             goto out_rm;
+>> +
+>> +     skel =3D path_ancestors__open_and_load();
+>> +     if (!ASSERT_OK_PTR(skel, "open_and_load"))
+>> +             goto out_rm;
+>> +     skel->bss->monitored_pid =3D getpid();
+>> +     if (!ASSERT_OK(path_ancestors__attach(skel), "attach"))
+>> +             goto out;
+>> +
+>> +     /* mkdir b: the hook sees dir =3D=3D suba, whose ancestry is walke=
+d. */
+>> +     if (!ASSERT_OK(mkdir(subb, 0755), "mkdir_b"))
+>> +             goto out;
+>> +
+>> +     /* suba, base, /tmp, / at least. */
+>> +     ASSERT_GE(skel->bss->ref_count, 4, "ref_count");
+>> +     ASSERT_EQ(skel->bss->ref_flags, 0, "ref_flags");
+>> +     /*
+>> +      * The referenced loop ended at the root, not on an allocation
+>> +      * failure.
+>> +      */
+>> +     ASSERT_EQ(skel->bss->end_flags, 0, "end_flags");
+>> +
+>> +     /* The acquired second position, used after its step was taken. */
+>> +     ASSERT_STREQ(skel->bss->second_path, base, "second_path");
+>> +     ASSERT_EQ(skel->bss->second_len, strlen(base) + 1, "second_len");
+>> +
+>> +     /* The first position, used only after the walk itself was gone. */
+>> +     ASSERT_STREQ(skel->bss->first_path, suba, "first_path");
+>> +     ASSERT_EQ(skel->bss->first_len, strlen(suba) + 1, "first_len");
+>> +
+>> +out:
+>> +     path_ancestors__destroy(skel);
+>> +out_rm:
+>> +     rmdir(subb);
+>> +     rmdir(suba);
+>> +     rmdir(base);
+>> +}
+>> diff --git a/tools/testing/selftests/bpf/progs/path_ancestors.c b/tools/=
+testing/selftests/bpf/progs/path_ancestors.c
+>> new file mode 100644
+>> index 000000000000..6287f5099a18
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/path_ancestors.c
+>> @@ -0,0 +1,74 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright (c) 2026 Justin Suess */
+>> +
+>> +#include "vmlinux.h"
+>> +#include <errno.h>
+>> +#include <bpf/bpf_helpers.h>
+>> +#include <bpf/bpf_tracing.h>
+>> +#include "bpf_kfuncs.h"
+>> +
+>> +char _license[] SEC("license") =3D "GPL";
+>> +
+>> +__u32 monitored_pid;
+>> +
+>> +int ref_count;               /* positions seen by the pure referenced w=
+alk */
+>> +int ref_flags;               /* pos flags seen by the referenced walk */
+>> +int end_flags;               /* flags after a referenced loop ended: 0 =
+unless NOMEM */
+>> +int second_len;              /* d_path length of the walk's second posi=
+tion */
+>> +int first_len;               /* d_path length of the first position, af=
+ter the walk */
+>> +char second_path[256];
+>> +char first_path[256];
+>> +
+>> +static bool monitored(void)
+>> +{
+>> +     return (bpf_get_current_pid_tgid() >> 32) =3D=3D monitored_pid;
+>> +}
+>> +
+>> +SEC("lsm.s/path_mkdir")
+>> +int BPF_PROG(walk_modes, const struct path *dir, struct dentry *dentry,
+>> +          umode_t mode)
+>> +{
+>> +     struct bpf_iter_path_ancestors it;
+>> +     struct path *pos, *first =3D NULL;
+>> +
+>> +     /*
+>> +      * Keep first's init opaque: gcc-bpf otherwise folds it into a
+>> +      * preceding loop's exit value, which the verifier cannot track.
+>> +      */
+>> +     barrier_var(first);
+>> +
+> cc'ing Eduard Zingerman + Jose Marchesi
+>
+> This barrier_var line was necessary for this selftest to pass
+> under GCC BPF.
+>
+> Othwise it will be rejected by the verifier:
+>
+>   84: (85) call bpf_iter_path_ancestors_rcu_next#63514
+>   85: R0=3Drcu_ptr_path(id=3D30) ... depth=3D9
+>   86: (bf) r6 =3D r0              ; R6=3Drcu_ptr_path(id=3D30)
+>   88: (55) if r0 !=3D 0x0 goto pc-64
+>   ...
+>   101: (85) call bpf_rcu_read_unlock#64876
+>        ^-- R6 downgraded rcu_ptr_ -> untrusted_ptr_
+>   ...
+>   146: (15) if r6 =3D=3D 0x0 goto pc+10     ; R6=3Duntrusted_ptr_path(id=
+=3D30)
+>   147: (bf) r1 =3D r6
+>   151: (85) call bpf_path_d_path#64649
+>   R1 must be referenced or trusted
+>
+> I think it's trying to optimize out the "struct path* first" and make it
+> use the r6 register. It tries reusing the R6 register between the two
+> loops, and doing so causes the program to fail to verify because it doesn=
+'t
+> understand that the path was reinitialized with r6=3D0 from the previous
+> exit.
+>
+> So I had to add the memory barrier to force struct path to be
+> instantiated outside the register.
+>
+> There's nothing wrong from a *correctness* perspective with the code
+> generated by GCC-BPF. But I'm not sure if this is a GCC-BPF bug or a
+> bug in the SCEV widening series (merge 15b578b1715d). It depends on
+> the contract BPF bytecode is supposed to meet.
+>
+> But clang works without the barrier, it's only GCC-BPF that produces
+> this issue requiring the barrier.
+>
+> I can give more details if needed.
 
-selftests/bpf: harden __msg patterns for step_movsx_bounds_on_line
+Please open a bugzilla at https://gcc.gnu.org/bugzilla so we can keep
+track of this.  It would help to have a preprocessed reproducer based on
+the selftest that could be used as a testcase in the GCC testsuite.
 
-The commit drops the __no_step annotations and replaces them with full
-expected logs to prevent {{.*}} from matching and hiding step=3D... logging.
+Thanks!
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c b/t=
-ools/testing/selftests/bpf/progs/verifier_bounds_step.c
-> index c9ee1c7efcbb8..d824a5d48a394 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds_step.c
-> @@ -338,9 +338,9 @@ SEC("socket")
->  __success __log_level(2)
->  __msg("r1 =3D (s16)r0 {{.*}}R1=3Dscalar(id=3D{{[0-9]+}},smin=3Dsmin32=3D=
-0,smax=3Dumax=3Dsmax32=3Dumax32=3D168,{{.*}}step=3D0+24)")
->  __msg("r2 =3D (s16)r0 {{.*}}R2=3Dscalar(smin=3Dsmin32=3D-24,smax=3Dsmax3=
-2=3D144,{{.*}}step=3D0+24)")
-> -__msg("r3 =3D (s8)r0 {{.*}}R3=3Dscalar(smin=3Dsmin32=3D-128,smax=3Dsmax3=
-2=3D127)") __no_step
-> +__msg("r3 =3D (s8)r0 {{.*}}R3=3Dscalar(smin=3Dsmin32=3D-128,smax=3Dsmax3=
-2=3D127)")
-
-[Severity: Low]
-Is this string literal missing a closing parenthesis after 127?
-
-Since the explicit __no_step check was removed, and the test_loader uses
-unanchored regex matching for patterns containing {{.*}}, matching as a
-prefix allows the test to silently succeed even if the verifier incorrectly
-appends step=3D... to the log.
-
-Should the pattern be 127)) to strictly match the end of the scalar state
-and preserve the intended test coverage?
-
->  __msg("w4 =3D (s16)w1 {{.*}}R4=3Dscalar(id=3D{{[0-9]+}},smin=3Dsmin32=3D=
-0,smax=3Dumax=3Dsmax32=3Dumax32=3D168,{{.*}}step=3D0+24)")
-> -__msg("w5 =3D (s8)w1 {{.*}}R5=3Dscalar({{.*}}smin32=3D-128,smax32=3D127,=
-{{.*}})") __no_step
-> +__msg("w5 =3D (s8)w1 {{.*}}R5=3Dscalar({{.*}}smin32=3D-128,smax32=3D127,=
-var_off=3D(0x0; 0xffffffff))")
->  __naked void step_movsx_bounds_on_line(void)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013-scev-minim=
-al-v3-followups-v2-0-6d9d61965486@gmail.com?part=3D6
+>
+> Justin
+>> [...]
