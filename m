@@ -1,64 +1,64 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49024A6CF6
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 23:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7791FC0
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 23:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792020899; cv=none; b=sgGmY3XuGCIQilUUN3GJqFsrYXwB+Fa93Xc13VWhcL0+KEOI8iZZ53jQm3Y1btbWTGsdlyppCZouICBmc9Wc5lpMBVBNcB/gzniDMVwpqNS+snxIs9vHnjG9EvpBuAL+YCxVsC80bl+asMzPtK4lqYhApiUlDKmF3GNvgtiwU8o=
+	t=1792020900; cv=none; b=PxrPCM44HmBi+hIHnaQccUqRF8WTS88x1cP8tIssSGax9odqs/I6jWb6ONs2w0x/HE3bKQnQ5vtyHIvMBVAEHv2e22SB8XARAP5WqtuVdxJRqJwdrCvmFfGLRb87ePbmVA6KGVJtVWZVEyTp1GJoT2y/vZeUYKvO9my7x4UoMiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792020899; c=relaxed/simple;
-	bh=jUofOGxGZA3HuZ33Y4uqZnWc1VDlQ5Ma2vut94VZ8b4=;
+	s=arc-20240116; t=1792020900; c=relaxed/simple;
+	bh=wCnQK381YJoDxp76XrJtJw2htZlIiCoUCnThGSIDKm8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MMT4HR0uy+1ff+CMLCELAR3RivC+g8DiTHqZ55m+YQn85jbE8WIzvPC6ICMRqDa/4VkhPmoVWeaqT5SEAQMvsq881qOJ+BVHYzyKqHqnZNpuD3/JxUG/RsdGU42dOlZXncfcUI7rxQhJGghAOS3owaSIO2uoStOd21vp+WVxp9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Kt5X0ekI; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version; b=JjvSCQk4NnKiYzMRVGvsM6KyZEOUsMy/d5IA9rIFxT4SXXFbEucIbqhyKoF8zMwhzuh7Lxvo/Xl362HJSfpFjWW12GqUU1/FEyXDCTUyqfCzGu159OR2l9KanBNzcrhxjqOuRxBrMoTrpk23JXLU83/lkzfFtnITJxL5XVRzYbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Zm7AWYM1; arc=none smtp.client-ip=209.85.215.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Kt5X0ekI"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc1c9879395so1801549a12.1
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 16:34:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Zm7AWYM1"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc4dbcf2b85so774914a12.3
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 16:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792020897; x=1792625697; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792020898; x=1792625698; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=E3IhoDmHcfledCdyk9cR6tigyOFxbA68aFA8WohaFRs=;
-        b=Kt5X0ekINs8weypi3QWYbDZ/9hewvskPIu9zmTu6m8hbJLRPxORprza/PiOJHhR8aj
-         7t4s3bUflT6WVWKKvW7I/H+7m4KNRsD5bdgb2+/fwBail05UYGxtnXN1weqq6qIUBo2s
-         k8qKTaLwg75Lew5r8gu6bF839Ax9x4Y5g4O8C5VBniRQbur2pJlHzWr8HvsWXcF2Frst
-         AF3DVWWiYcmSm2Do8VqG/VoRxt8fFD0ym4Q8PMZaESSohw+Ug+Pf/MV5We1BrXiEmnJ2
-         XgcDwv/EM3e7UZZ8kSkVUUGMxxaCW0+d0cDvmVV8dCt63H5V3DJqF1KOryUin8Nqzq4W
-         Swbw==
+        bh=9QgIEGkJdsi/u3vj5rmuCqXgKBULEvPw6UmBty+Ejcw=;
+        b=Zm7AWYM1lN+3BLPFc9EyPBZD2zX5+iYc+wLlKiByczsT7FGXUuQtjWnL18Lj5wcB1S
+         DZO3CHDYrYlq3jD8qCXD1QdGw8bfoYfTFfIflFc0fZOcA8591l/XISbdkX620dKM5f0h
+         gz1pjo3tNAeuUIRcOPerXNzcOoZFqRnjOPrr5OJLj695OjyTWPk6FYhrxb1cC7VWN9cL
+         kLDaR2Ez5VhUmhM1fZoKWrNsI62FJgNgEkdlkUGSn3wlNuE07cbUz6pRdkh4HgAUGIDb
+         hrweJ2eXVkCq/a056f1xhretvU+aQN8jmcdFPX4X2Mo7/rnx5A+yN2kE47Q0PSjU47fw
+         CfAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792020897; x=1792625697;
+        d=1e100.net; s=20260707; t=1792020898; x=1792625698;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=E3IhoDmHcfledCdyk9cR6tigyOFxbA68aFA8WohaFRs=;
-        b=WNfTCXBHjWWDek2DW/fLq0GCwtR4Ivq5L0Tx88VIRlnSVkaSxzAO2HE/iQDQUY+Mc4
-         zlVY+Gc6balgGETvQsy3lMfAQoZOv8gCNN3heQaX3uMvDzsAQbws1YUa02NJ1/qIEFH0
-         vgvd6LSeCqx7+hWKTK+UwQTlK/zdurAyZZ2xQBV8pxMX8+R1oYw8c6vVdPqp/YYaB37B
-         Lc+npZ9sk900koSlgpQxRD1qwdKzCWH8JY+V1bIqlI60HtygLo8bpvKtNZ5X0hCVYIrI
-         FYWlVWDKQxkj4AVeTHtJRyGpvSurqhZXdG8bpesSYC8uTGvEQpMk8Gn+J1bdQ1UyoUa/
-         MIng==
-X-Gm-Message-State: AFq9FYJPlAokniie/WTzEO6jwmN8piFJf6TP7mz8Xfhy+2oHwgWmFYmK
-	81ANjvLFa3kvrRPNMcBliQ06UoEKvnY56bSdP3F/knCDWlwY1NZj4Bp99StnXON7P8O860xyWEZ
-	jQIu1
-X-Gm-Gg: AYBFou2JCKBUh7dMFulHHNtkOI0ytE+x/s4Y90/QTdX5bpE/+182FK1cQ9x41db0a69
-	aY1SV/Egq64l5DwTMttII37T0f6Ne+GLCzI3og8tCY/iid2fWqvOCZG7WqiWQuyufI2qJtLbs7P
-	FKEZNuhzBZBWY/Me/y+j3rAe+OxAliZ30mXjj0e/XKReA8vYbfYT8PmZTgWj7UTe51RfYwK+0+K
-	6MjsOHtLs1eBs1zQMq2mIZ9aoKg+wNu93EMAZux/3XDqaIqmfFswOYlWwm1nS1f42GtQu97lzz5
-	BzmS5K0gqZpZfy6xd29qYuPHu6QCT3V+T3OKI0mjVEjqUWHg8QCg5E1opkIXRJWCR8jY1cmyDex
-	B3sD2wzaEs1AXeFjOZQFjVG0j8+/4NOu8CwagZPgdq6kG4ngAUK86UGhuQ6yebgbB6EUlR63OUi
-	Q/IsNxf1mKmXO13rBbsh+6As1oMUXrVAjBMC3AmGmZAtlWIXtj2aYcJnYQIKs/mHi8RxEq5Mcml
-	griOy5NlrGk2uWK5KPW5NKIqGGAMXJe9GgG
-X-Received: by 2002:a17:90b:224c:b0:3aa:f4af:1e0f with SMTP id 98e67ed59e1d1-3ab3a4875c0mr15320025a91.8.1792020896878;
-        Wed, 14 Oct 2026 16:34:56 -0700 (PDT)
+        bh=9QgIEGkJdsi/u3vj5rmuCqXgKBULEvPw6UmBty+Ejcw=;
+        b=djZA8xWzvTLFzHAwQontCraZCvD5bQkv8ipsfZ1AIY+iN7/c60eb+W5d0Qp8Eocesy
+         mMxg6Shfq7i/keZkSnNbKxS6OAzMoU5/6oZaK7IO87rKrIUW9qTySQgIRChA6LNguEj3
+         nnyVRQGqpAhkymp9591oUFFSqafte19krdJLiz9i1YyAKCWu1hEtFxbKBrKa80eqAghQ
+         k2gvn9nhLnConNxOxiLK6r/08WfOCh8l7M9IjSwTvDr/267ohZqDZYu54bJaPlaw60dh
+         BanMBennzXSXb/vxX0ojFDWL33PSbam97uRt+SHbpJ0wCWUTbebhPIvz+JpcKGVkt0qf
+         XXfg==
+X-Gm-Message-State: AFq9FYKq2yQjFNr2C4TNa7D0lJ5+mm8CS4C5LhkLazrsgm62FdxJcXgh
+	kao562ynqGJv4LhaGE13+MxsTjf5VrNgjESzzIDCPmI1AUhEAWYG9d7Z6IslY2b/HZoDt0CL+xb
+	A322o
+X-Gm-Gg: AYBFou3dY7xtepHYp3pjctnYY5bLhdUQBDMfLQ6+XfSItUH2UaUkmAay3VQOC5GaxwY
+	HAMWQZywyMpAQkTFnROFIQTme60plTA4X1xtHJrmIi3cGnzmY9QRGB5GNCjMr7hZv9DmErRjElY
+	7xla2jkq1EkqCfRrDVZvHmvMuBAHVSOE1/2sbsPOEigqxZCXHzWdkS7K8ZuDnJoDJHCDGvMSOcp
+	QONHbQTaA8Ttj70GX6u0Hs1iTnj4IpFv+Tqo7Tz15W4iyM2Zp9CV5VSfF1skxv4frsT+wukoqIf
+	/YokCE6AfVJs9jHPzNILzAVDaJQ3czwZhCk/Q64+p1bmY4sOuprqdIJYWZl0wscc8waxQfOpnrC
+	/IZ1wsNYZ5gS6M7AK2BiVb1oSaWWu7BCN578j2e0cJxoO5hqOGtzrnMmqgP3hxvYBK9jJNlqaBJ
+	SraPpHt+Bjt72D+euJAdAPm89e8ncwxrW2hDwlD7fZv5P4x8HvfyoTKhLiETyP6yCBOoLTNBWiS
+	6rBmh8rYRIMZi/lDdKGoK5TfaIZH+GwFz1o
+X-Received: by 2002:a17:90b:3c08:b0:3ac:7116:434a with SMTP id 98e67ed59e1d1-3ac71164429mr2963854a91.15.1792020897921;
+        Wed, 14 Oct 2026 16:34:57 -0700 (PDT)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac943e7a98sm1385177a91.6.2026.10.14.16.34.55
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac943e7a98sm1385177a91.6.2026.10.14.16.34.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 16:34:56 -0700 (PDT)
+        Wed, 14 Oct 2026 16:34:57 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v4 7/8] bpf: Synchronize arena page faults with page freeing
-Date: Wed, 14 Oct 2026 23:34:41 +0000
-Message-ID: <20261014233442.8392-8-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v4 8/8] selftests/bpf: Add arena allocation race tests
+Date: Wed, 14 Oct 2026 23:34:42 +0000
+Message-ID: <20261014233442.8392-9-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261014233442.8392-1-emil@etsalapatis.com>
 References: <20261014233442.8392-1-emil@etsalapatis.com>
@@ -81,309 +81,475 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A fault can obtain page A, then a free/reallocation can replace it with
-page B before the fault installs A in the user page table. Userspace
-then sees A while BPF sees B. This also affects faults on existing pages.
+Add selftests for arena allocation, teardown and fault races.
 
-Prevent the arena VM fault handler from running in parallel with arena free
-operations. This is similar to the policy for file-backed mappings. Use a
-per-arena reference counter to exclude faults from synchronous and deferred
-page teardown, and vice versa. Faults and frees can each run concurrently
-with operations of the same type.
+Cover unavailable ranges and kernel/user mapping coherence during
+synchronous and deferred frees and concurrent faults.
 
-Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- kernel/bpf/arena.c | 123 +++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 102 insertions(+), 21 deletions(-)
+ .../selftests/bpf/prog_tests/arena_race.c     | 285 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_race.c  | 159 ++++++++++
+ 2 files changed, 444 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_race.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_race.c
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 07e19f406ceb..899ad275ac7f 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
- #include <linux/anon_inodes.h>
-+#include <linux/atomic.h>
- #include <linux/bits.h>
- #include <linux/bpf.h>
- #include <linux/btf.h>
-@@ -13,6 +14,7 @@
- #include <linux/btf_ids.h>
- #include <linux/vmalloc.h>
- #include <linux/pagemap.h>
-+#include <linux/wait.h>
- #include <asm/tlbflush.h>
- #include "range_tree.h"
- 
-@@ -61,6 +63,8 @@ struct bpf_arena {
- 	struct range_tree rt;
- 	/* protects rt and nr_pages */
- 	rqspinlock_t spinlock;
-+	atomic_t opref;
-+	wait_queue_head_t opwait;
- 	/* number of pages currently populated in the arena */
- 	u64 nr_pages;
- 	struct list_head vma_list;
-@@ -74,6 +78,29 @@ struct bpf_arena {
- static void arena_free_worker(struct work_struct *work);
- static void arena_free_irq(struct irq_work *iw);
- 
-+/* Positive references admit frees, negative references admit faults. */
-+enum arena_opref {
-+	ARENA_OPREF_FREE = 1,
-+	ARENA_OPREF_FAULT = -1,
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_race.c b/tools/testing/selftests/bpf/prog_tests/arena_race.c
+new file mode 100644
+index 000000000000..301f4dff28f9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_race.c
+@@ -0,0 +1,285 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <sched.h>
++#include <sys/syscall.h>
++#include <test_progs.h>
++
++#include "arena_race.skel.h"
++
++struct free_thread_ctx {
++	struct arena_race *skel;
++	int err;
++	__u32 retval;
 +};
 +
-+static bool arena_opref_get(struct bpf_arena *arena, enum arena_opref ref)
-+{
-+	int users = atomic_read(&arena->opref);
++struct fault_thread_ctx {
++	__u64 *addr;
++	int stop;
++};
 +
-+	do {
-+		if (users && (users ^ ref) < 0)
-+			return false;
-+	} while (!atomic_try_cmpxchg_acquire(&arena->opref, &users, users + ref));
-+	return true;
++static int run_prog(struct bpf_program *prog, const char *name)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int err;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++	return ASSERT_OK(err, name) && ASSERT_OK(opts.retval, name) ? 0 : -1;
 +}
 +
-+static void arena_opref_put(struct bpf_arena *arena, enum arena_opref ref)
++/* Trigger the sleepable free page path. */
++static void *run_free_thread(void *arg)
 +{
-+	if (atomic_fetch_sub_release(ref, &arena->opref) == ref)
-+		wake_up_all(&arena->opwait);
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct free_thread_ctx *ctx = arg;
++
++	ctx->skel->bss->target_tid = sys_gettid();
++	ctx->err = bpf_prog_test_run_opts(
++		bpf_program__fd(ctx->skel->progs.free_page), &opts);
++	ctx->retval = opts.retval;
++	return NULL;
 +}
 +
- /*
-  * Zero flags denote an unstarted free. ZAPPED implies CLEARED, and FAILED
-  * is a terminal pre-clear failure set alone. RESERVED tracks ownership
-@@ -361,6 +388,8 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
- 		goto err_free_scratch;
- 	mutex_init(&arena->lock);
- 	raw_res_spin_lock_init(&arena->spinlock);
-+	atomic_set(&arena->opref, 0);
-+	init_waitqueue_head(&arena->opwait);
- 	err = populate_pgtable_except_pte(arena);
- 	if (err)
- 		goto err_destroy_rt;
-@@ -545,13 +574,22 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
- 	struct mem_cgroup *new_memcg, *old_memcg;
- 	LLIST_HEAD(pages);
--	struct page *page, *new_page = NULL;
- 	struct apply_range_data data;
- 	vm_fault_t fault_ret;
-+	struct page *page, *new_page = NULL;
- 	long kbase, kaddr;
- 	unsigned long flags;
- 	int ret;
- 
-+	if (!arena_opref_get(arena, ARENA_OPREF_FAULT)) {
-+		if (vmf->flags & FAULT_FLAG_ALLOW_RETRY)
-+			goto retry;
-+		/* zap_pages() does not need the fault caller's mmap_lock. */
-+		wait_event(arena->opwait, arena_opref_get(arena, ARENA_OPREF_FAULT));
-+	}
-+	/* folio_lock_or_retry() may drop the VMA lock before we release opref. */
-+	bpf_map_inc(map);
-+
- 	kbase = bpf_arena_get_kern_vm_start(arena);
- 	kaddr = kbase + (u32)(vmf->address);
- 
-@@ -569,15 +607,15 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 		bpf_map_memcg_exit(old_memcg, new_memcg);
- 	}
- 
--	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
--		/*
--		 * A failed lock means a possible deadlock was detected. Don't
--		 * return VM_FAULT_RETRY: this handler never took mmap_lock, but
--		 * the fault path would re-take it on retry and deadlock. Fail.
--		 */
--		if (new_page)
--			free_pages_nolock(new_page, 0);
--		return VM_FAULT_SIGBUS;
-+	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
-+	if (ret) {
-+		/* If we are deadlocking somehow, no way to ensure forward progress. */
-+		if (ret == -EDEADLK) {
-+			fault_ret = VM_FAULT_SIGBUS;
-+			goto out_err;
-+		}
-+
-+		goto retry_admitted;
- 	}
- 
- 	page = vmalloc_to_page((void *)kaddr);
-@@ -605,8 +643,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 
- 	if (!new_page) {
- 		/*
--		 * The probed page was freed meanwhile or preallocation failed;
--		 * try the non-blocking allocator, we cannot sleep here.
-+		 * Preallocation failed; try the non-blocking allocator since
-+		 * we cannot sleep here.
- 		 */
- 		new_page = bpf_alloc_page(map->numa_node, false);
- 		if (!new_page) {
-@@ -624,7 +662,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 			goto out_err_locked_memcg;
- 		}
- 		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
--		goto retry;
-+		goto retry_memcg;
- 	} else if (ret) {
- 		fault_ret = VM_FAULT_SIGBUS;
- 		goto out_err_locked_memcg;
-@@ -647,23 +685,42 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	page = new_page;
- 	new_page = NULL;
- out:
--	page_ref_add(page, 1);
-+	/* Hand fault admission over to the folio lock before returning to MM. */
-+	get_page(page);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
--	if (new_page)
-+
-+	if (new_page) {
- 		free_pages_nolock(new_page, 0);
--	vmf->page = page;
--	return 0;
-+		new_page = NULL;
-+	}
-+
-+	fault_ret = folio_lock_or_retry(page_folio(page), vmf);
-+	if (fault_ret) {
-+		put_page(page);
-+	} else {
-+		vmf->page = page;
-+		fault_ret = VM_FAULT_LOCKED;
-+	}
-+	goto out_put;
- 
- out_err_locked_memcg:
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- out_err_locked:
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+out_err:
- 	if (new_page)
- 		free_pages_nolock(new_page, 0);
-+out_put:
-+	arena_opref_put(arena, ARENA_OPREF_FAULT);
-+	bpf_map_put(map);
- 	return fault_ret;
- 
--retry:
-+retry_memcg:
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
-+retry_admitted:
-+	arena_opref_put(arena, ARENA_OPREF_FAULT);
-+	bpf_map_put(map);
-+retry:
- 	if (new_page)
- 		free_pages_nolock(new_page, 0);
- 
-@@ -947,6 +1004,14 @@ static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
- 	i_mmap_unlock_read(mapping);
- }
- 
-+static void wait_for_faults(struct llist_head *pages)
++/* Continuously fault in the address. */
++static void *fault_reader_thread(void *arg)
 +{
-+	struct page *page;
++	struct fault_thread_ctx *ctx = arg;
++	__u64 *addr;
 +
-+	llist_for_each_entry(page, pages->first, pcp_llist)
-+		folio_wait_locked(page_folio(page));
++	while (!READ_ONCE(ctx->stop)) {
++		addr = __atomic_load_n(&ctx->addr, __ATOMIC_ACQUIRE);
++		(void)READ_ONCE(*addr);
++	}
++	return NULL;
 +}
 +
- static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt, bool sleepable)
- {
- 	struct mem_cgroup *new_memcg, *old_memcg;
-@@ -979,12 +1044,14 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 
- 	if (!sleepable)
- 		goto defer;
-+	if (!arena_opref_get(arena, ARENA_OPREF_FREE))
-+		goto defer;
- 
- 	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
- 
- 	/* Can't proceed without holding the spinlock so defer the free */
- 	if (ret)
--		goto defer;
-+		goto defer_admitted;
- 
- 	unavail_node = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
- 	if (IS_ERR(unavail_node)) {
-@@ -993,8 +1060,9 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 		/* If overlapping free in progress or out of memory, defer. */
- 		ret = PTR_ERR(unavail_node);
- 		if (ret == -ENOMEM || ret == -EAGAIN)
--			goto defer;
-+			goto defer_admitted;
- 		WARN_ON_ONCE(ret);
-+		arena_opref_put(arena, ARENA_OPREF_FREE);
- 		bpf_map_memcg_exit(old_memcg, new_memcg);
- 		return;
- 	}
-@@ -1009,6 +1077,8 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	/* drop the lock to do the tlb flush and zap pages */
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
-+	wait_for_faults(&free_pages);
++static int wait_for(int *p)
++{
++	__u64 deadline = get_time_ns() + 5ULL * 1000 * 1000 * 1000;
 +
- 	/* ensure no stale TLB entries */
- 	flush_tlb_kernel_range(kaddr, kaddr + (page_cnt * PAGE_SIZE));
- 
-@@ -1031,16 +1101,19 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
- 	if (ret) {
- 		release_only = true;
--		goto defer;
-+		goto defer_admitted;
- 	}
- 
- 	ret = range_tree_make_avail(&arena->rt, pgoff, page_cnt);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 	WARN_ON_ONCE(ret);
-+	arena_opref_put(arena, ARENA_OPREF_FREE);
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 
- 	return;
- 
-+defer_admitted:
-+	arena_opref_put(arena, ARENA_OPREF_FREE);
- defer:
- 	s = kmalloc_nolock(sizeof(struct arena_free_span), __GFP_ACCOUNT, -1);
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
-@@ -1133,7 +1206,12 @@ static void arena_free_worker(struct work_struct *work)
- 	bool retry = false;
- 	int ret;
- 
-+	if (!arena_opref_get(arena, ARENA_OPREF_FREE)) {
-+		schedule_work(work);
++	while (!READ_ONCE(*p)) {
++		if (get_time_ns() > deadline)
++			return -ETIMEDOUT;
++	}
++	return 0;
++}
++
++static struct arena_race *setup_arena(__u64 **addr, bool trace_flush)
++{
++	struct arena_race *skel;
++	size_t arena_sz;
++	char *base;
++	int err;
++
++	skel = arena_race__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return NULL;
++	err = bpf_program__set_autoload(skel->progs.trace_flush, trace_flush);
++	if (!ASSERT_OK(err, "trace_flush_autoload"))
++		goto err_out;
++
++	err = arena_race__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto err_out;
++	err = arena_race__attach(skel);
++	if (!ASSERT_OK(err, "attach"))
++		goto err_out;
++
++	if (run_prog(skel->progs.alloc_old, "alloc_old"))
++		goto err_out;
++	if (skel->bss->skip) {
++		test__skip();
++		goto err_out;
++	}
++
++	base = bpf_map__initial_value(skel->maps.arena, &arena_sz);
++	if (!ASSERT_OK_PTR(base, "arena_base"))
++		goto err_out;
++	*addr = (__u64 *)(base + getpagesize());
++	if (!ASSERT_EQ((unsigned long)skel->bss->ptr, (unsigned long)*addr,
++		       "arena_ptr"))
++		goto err_out;
++	return skel;
++
++err_out:
++	arena_race__destroy(skel);
++	return NULL;
++}
++
++static void test_free_before_flush(bool deferred)
++{
++	struct free_thread_ctx ctx = {};
++	struct arena_race *skel;
++	pthread_t thread;
++	__u64 *addr;
++	bool thread_created = false, flush_seen = false, completed = false;
++	int err;
++
++	if (libbpf_find_vmlinux_btf_id("flush_tlb_kernel_range",
++					BPF_TRACE_FENTRY) <= 0) {
++		printf("%s:SKIP: flush_tlb_kernel_range is not an fentry target\n",
++		       __func__);
++		test__skip();
 +		return;
 +	}
- 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
-+		arena_opref_put(arena, ARENA_OPREF_FREE);
- 		schedule_work(work);
- 		return;
- 	}
-@@ -1185,6 +1263,8 @@ static void arena_free_worker(struct work_struct *work)
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
-+	wait_for_faults(&free_pages);
 +
- 	/* Remove stale translations before freeing the collected pages. */
- 	llist_for_each_safe(pos, t, list) {
- 		s = llist_entry(pos, struct arena_free_span, node);
-@@ -1259,6 +1339,7 @@ static void arena_free_worker(struct work_struct *work)
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
- done:
-+	arena_opref_put(arena, ARENA_OPREF_FREE);
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 
- 	if (retry)
++	skel = setup_arena(&addr, true);
++	if (!skel)
++		return;
++
++	/* Pause during a TLB flush to widen the race window. */
++	skel->bss->pause_on_flush = 1;
++
++	if (deferred) {
++		/*
++		 * Test the nonsleepable free path that gets
++		 * deferred to a worker in the kernel. We do
++		 * so by triggering the arena operation from
++		 * a nonsleepable tracepoint context.
++		 */
++		skel->bss->trigger_pid_tgid =
++			((__u64)getpid() << 32) | (__u32)sys_gettid();
++		skel->bss->trigger_syscall = SYS_getpgid;
++		skel->bss->deferred_free = 1;
++		if (!ASSERT_GE(syscall(SYS_getpgid, 0), 0, "deferred_free"))
++			goto release;
++	} else {
++		/*
++		 * Test the sleepable arena free path through a
++		 * syscall test prog.
++		 */
++		ctx.skel = skel;
++		err = pthread_create(&thread, NULL, run_free_thread, &ctx);
++		if (!ASSERT_OK(err, "pthread_create")) {
++			skel->bss->release = 1;
++			goto out;
++		}
++		thread_created = true;
++	}
++
++	/* Wait until the worker thread triggers a flush. */
++	err = wait_for(&skel->bss->flush_entered);
++	if (!ASSERT_OK(err, "flush_entered"))
++		goto release;
++
++	flush_seen = true;
++
++	/* Force a reallocation during the flush. */
++	run_prog(skel->progs.try_realloc, "realloc_before_flush");
++	ASSERT_NULL(skel->bss->realloc_ptr, "realloc_before_flush");
++
++release:
++	skel->bss->release = 1;
++	if (thread_created) {
++		ASSERT_OK(pthread_join(thread, NULL), "pthread_join");
++		thread_created = false;
++		completed = ASSERT_OK(ctx.err, "free_run") &&
++			    ASSERT_OK(ctx.retval, "free_retval");
++	} else if (skel->bss->target_tid) {
++		err = wait_for(&skel->bss->worker_exited);
++		completed = ASSERT_OK(err, "worker_exited");
++	}
++	ASSERT_FALSE(skel->bss->timed_out, "flush_timed_out");
++
++	if (flush_seen && completed &&
++	    !run_prog(skel->progs.try_realloc, "realloc_after_flush")) {
++		ASSERT_EQ((unsigned long)skel->bss->realloc_ptr,
++			  (unsigned long)addr, "realloc_after_flush");
++		ASSERT_EQ(*addr, skel->rodata->new_marker, "new_marker");
++	}
++out:
++	arena_race__destroy(skel);
++}
++
++/*
++ * Force a race between a faulting thread in userspace and a
++ * free operation on the arena.
++ */
++static void test_fault_free_realloc(void)
++{
++	struct fault_thread_ctx fault = {};
++	struct arena_race *skel;
++	pthread_t fault_thread;
++	bool fault_created = false;
++	__u64 *addr;
++	__u64 expected, value;
++	int err, i;
++
++	skel = setup_arena(&addr, false);
++	if (!skel)
++		return;
++
++	skel->bss->realloc_after_free = 1;
++
++	fault.addr = addr;
++	err = pthread_create(&fault_thread, NULL, fault_reader_thread, &fault);
++	if (!ASSERT_OK(err, "pthread_create_fault"))
++		goto out;
++	fault_created = true;
++
++	for (i = 0; i < 1000; i++) {
++		LIBBPF_OPTS(bpf_test_run_opts, opts);
++
++		/* Keep deferred frees from earlier iterations on separate slots. */
++		if (i) {
++			skel->bss->page_idx = i;
++			if (run_prog(skel->progs.alloc_old, "alloc_next"))
++				goto out;
++			addr = (__u64 *)(unsigned long)skel->bss->ptr;
++			__atomic_store_n(&fault.addr, addr, __ATOMIC_RELEASE);
++		}
++
++		err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.free_page),
++					     &opts);
++		if (err) {
++			ASSERT_OK(err, "free_realloc");
++			break;
++		}
++		if (opts.retval) {
++			ASSERT_OK(opts.retval, "free_realloc");
++			break;
++		}
++		/* The reader may populate the slot first, or free may defer. */
++		if (!skel->bss->realloc_ptr)
++			continue;
++		value = *addr;
++		expected = skel->bss->current_marker;
++		if (value != expected) {
++			ASSERT_EQ(value, expected, "marker_after_realloc");
++			break;
++		}
++	}
++
++	WRITE_ONCE(fault.stop, 1);
++	if (fault_created) {
++		ASSERT_OK(pthread_join(fault_thread, NULL), "pthread_join_fault");
++		fault_created = false;
++	}
++out:
++	WRITE_ONCE(fault.stop, 1);
++	if (fault_created)
++		pthread_join(fault_thread, NULL);
++	arena_race__destroy(skel);
++}
++
++void serial_test_arena_race(void)
++{
++	cpu_set_t cpuset;
++	int err;
++
++	err = sched_getaffinity(0, sizeof(cpuset), &cpuset);
++	if (!ASSERT_OK(err, "sched_getaffinity"))
++		return;
++	if (CPU_COUNT(&cpuset) < 2) {
++		printf("%s:SKIP: at least two runnable CPUs are required\n", __func__);
++		test__skip();
++		return;
++	}
++
++	if (test__start_subtest("free_before_flush"))
++		test_free_before_flush(false);
++	if (test__start_subtest("deferred_free_before_flush"))
++		test_free_before_flush(true);
++	if (test__start_subtest("fault_free_realloc"))
++		test_fault_free_realloc();
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_race.c b/tools/testing/selftests/bpf/progs/arena_race.c
+new file mode 100644
+index 000000000000..6d1675ba2395
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_race.c
+@@ -0,0 +1,159 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++
++const volatile __u64 old_marker = 0x1111222233334444ULL;
++const volatile __u64 new_marker = 0x5555666677778888ULL;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1024);
++#ifdef __TARGET_ARCH_arm64
++	__ulong(map_extra, 0x1ull << 32);
++#else
++	__ulong(map_extra, 0x1ull << 44);
++#endif
++} arena SEC(".maps");
++
++bool skip;
++int page_idx;
++
++void __arena *ptr;
++void __arena *realloc_ptr;
++bool realloc_after_free;
++__u64 current_marker;
++__u64 marker_seq;
++
++int target_tid;
++int pause_on_flush;
++int flush_entered;
++int release;
++int timed_out;
++
++__u64 trigger_pid_tgid;
++long trigger_syscall;
++int deferred_free;
++int worker_armed;
++int worker_exited;
++
++static __always_inline void wait_for_release(void)
++{
++	while (!*(volatile int *)&release && can_loop)
++		;
++	if (!*(volatile int *)&release)
++		timed_out = 1;
++}
++
++SEC("syscall")
++int alloc_old(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++	char __arena *base = arena_base(&arena);
++
++	realloc_ptr = NULL;
++	ptr = bpf_arena_alloc_pages(&arena, base + (page_idx + 1) * __PAGE_SIZE, 1,
++				    NUMA_NO_NODE, 0);
++	if (!ptr)
++		return 1;
++	p = (__u64 __arena *)ptr;
++	*p = old_marker;
++	current_marker = old_marker;
++#else
++	skip = true;
++#endif
++	return 0;
++}
++
++SEC("syscall")
++int free_page(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++	__u64 marker;
++
++	if (!ptr)
++		return 1;
++	bpf_arena_free_pages(&arena, ptr, 1);
++	if (!realloc_after_free)
++		return 0;
++
++	marker = new_marker + ++marker_seq;
++	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
++	if (!realloc_ptr)
++		return 0;
++	ptr = realloc_ptr;
++	p = (__u64 __arena *)ptr;
++	*p = marker;
++	current_marker = marker;
++#endif
++	return 0;
++}
++
++SEC("syscall")
++int try_realloc(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++
++	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
++	if (realloc_ptr) {
++		ptr = realloc_ptr;
++		p = (__u64 __arena *)realloc_ptr;
++		*p = new_marker;
++		current_marker = new_marker;
++	}
++#endif
++	return 0;
++}
++
++SEC("tp_btf/sys_enter")
++int BPF_PROG(deferred_free_prog, struct pt_regs *regs, long id)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	if (!deferred_free || bpf_get_current_pid_tgid() != trigger_pid_tgid ||
++	    id != trigger_syscall)
++		return 0;
++
++	deferred_free = 0;
++	/* The worker can run on another CPU before the kfunc returns. */
++	worker_armed = 1;
++	bpf_arena_free_pages(&arena, ptr, 1);
++#endif
++	return 0;
++}
++
++SEC("fentry/arena_free_worker")
++int BPF_PROG(trace_free_worker, struct work_struct *work)
++{
++	if (worker_armed && !target_tid)
++		target_tid = (__u32)bpf_get_current_pid_tgid();
++	return 0;
++}
++
++SEC("fexit/arena_free_worker")
++int BPF_PROG(trace_free_worker_ret, struct work_struct *work)
++{
++	if ((__u32)bpf_get_current_pid_tgid() == target_tid)
++		worker_exited = 1;
++	return 0;
++}
++
++SEC("?fentry/flush_tlb_kernel_range")
++int BPF_PROG(trace_flush, unsigned long start, unsigned long end)
++{
++	if (!pause_on_flush ||
++	    (__u32)bpf_get_current_pid_tgid() != target_tid)
++		return 0;
++	flush_entered = 1;
++	wait_for_release();
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.52.0
 
