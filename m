@@ -1,138 +1,186 @@
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1665237B015
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 03:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791948271; cv=pass; b=ULyDIO4ylmdlTrb1dwmmgT/rUYGPBbufYnCKuk2Z/AWUzXZUExNK6BrCmQ9N5aIDrc3JVnLWZo3pJKesZw2w00YQ6/RH+FgFxq+zZTwCIT2fVAXMv+owfsCCifs63p+dMxxHyM1+hY3E+zjX+BerDwZHBt7owiZwtElgTOjb3dA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791948271; c=relaxed/simple;
-	bh=7WV/PgD0jc90ZfW5o6KBecMjjiz2ATBD8Ix0KIOuLqM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qtc/qnfs+H7mIXfDmR7DMuEod7bMwSsex92w0VDpgcEjFmaZ/HcG8K5i12r0ojheo9QgJaBwlaD8iPFgK0nwUyPKXpIHIZg8tuVEIQMFXIfrJ3SUCOo+KW1MzMGoW0hVyTLgKN1ayhSVvZwQ9BwD701W2C9+3Tp3FyR4kETcMEU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oEri3Ohl; arc=pass smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78322411A02
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 03:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791950250; cv=none; b=KGW3vV9p/SPOBlMdY0SCcKxaZmFpZDRwIQspehgS+JZxlj+Uxfk9cL55gFkjtoF7vOyqefZUGJg27wCNAP9swWTe2YoJz8/u/OgAW7d5vxB9d3ExcnRh8IfTmLGeVp2bn9e1LeGz+Fxw5WO4Az9cee1hdQNaI/EPsH05HV3McXk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791950250; c=relaxed/simple;
+	bh=MLwF7pW89Z10Z3ijbuJAM26nNg92PmXPvXeN31R4Ceo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HWfskTOvERDi7IyKcB85cqp+yfec5KYzUv2oLrGau6tsTLjVGHu6n+zGOAFC3FIpHu+jv+jp0tIh5m086sW40zGgcFuVCnF6hdrWIavCcNe2/boc4faaO+9OBAvzo9MG3K+VJzkGYU+lsq867PeGXiSlMoSeG7G+usv4IEsGeu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=plThjvKC; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oEri3Ohl"
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-6740e7ae219so2833957d50.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 20:24:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791948269; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KTYSPWUwIGFNAr959677ob8Ho331GVKI/CoPCtfGTFTl4f2/FCZIw/VFPQcsXItJ+n
-         c/wAuRo+eqFTkGDP9kgcmucud58T7WkMWyV14/msb1riQa7GrLh89N0/8lzWABh11tKh
-         VdVTKochIWLffnoyxoeOnagT8s5RgNasPfzJ0Bupts7fK/qs9nlyVGpakpFHLF381qm6
-         SL0FOE7vS6KCLidmsGt7trzzmJ270d1/LUUNgKQz+wdriPGSiQ+Bn63BWyUD7gJDIv9p
-         DdVLWAJzIlKnsYOw7P30UvsmLvl9SvTn7A57kHpAaHuqgPk2oeuts8ckTnWvKLP3dw9Z
-         A+Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5W3Yp3oK6NosuISWrK7hbNW+ZeNBXIIyZITKoeVCL+k=;
-        fh=edEn6Yiwk9FbvGiNFpfoBQNmM3iwRpHMtyJCQ7z76W8=;
-        b=HMixCYboAoxPG0sb293QGlhr8afciim1P3KRKaXsCn6DwVDr6VqyXw4/YdhlrBLIL/
-         5amkGq8lISzSKgJwb8bVtVJkihtdNc58iOPpcwvTPAe6MpwsAq+bAq0tdkfQNMiOESV6
-         Po/29OmF394hq2wsujCs9NQiyfHa5jZYNJwYF9NsuEOgFR/j9RPh83FypA0IKtdSYbJ0
-         ae/NQy6dVAsH31wo2yxAY16G/CLM2M2XJEFNqKHTmmNmaYbnthpQ76L4y04+gv5gJQg+
-         VPPgHqungnbDpi6JA0qhuHWvf8I/Na5aexSSJU1fBunY+SJDQXTy7JHJe1Bwj74b6aVO
-         XfjA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="plThjvKC"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2df8c28a0b1so17498105ad.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 20:57:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791948269; x=1792553069; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5W3Yp3oK6NosuISWrK7hbNW+ZeNBXIIyZITKoeVCL+k=;
-        b=oEri3Ohl69azgqvvm+qtmq20bwVL9rDPFvQSroQ/unXcByBKp25wv8wHPbUB7o/E0P
-         Xjgrg5/XhIbfTuAghG2FbNfdmOHuR5+1eyX63dAqh3kVdRanbtTyJMkCb8v/sExJkEKl
-         HpaoGXUdnDEiK3QaZ6Zm11gMLVXH8uMr7IDqTIF8zCSTBKE1tm4HX7RJm72GL4i2pMMg
-         Q1TtxhsbvYDtYEtUXQDlss0r86VHX7pgGRKMZ9w2WaP12e5ERUlwJjDV/smzrsJLkR3M
-         dQu3i6MDGoAHPh4QRtkYvCWg7KoYJolCie6Y2P1Hzl31B5reEiBu07jiohnRwY/Ppe++
-         THtA==
+        d=gmail.com; s=20251104; t=1791950239; x=1792555039; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=k0bTkD8K8xUoPPDZx50q45dONTFFqUAwdvOQtIhdOcU=;
+        b=plThjvKCMI6gYCbCA+t84mjBuLus/VAA0OmbQzMrgmXGoW0Kb8bgx8pCCvWhVYbNHH
+         0Bbyqp0PaS1pqzVTqmqIhEPgXpRoaxD8SMNiIuiEldGltXSAZbkbEN6I4Au7HUaifA38
+         t+FLQ7QOpA118Rs3SLWTBa3JX+qAD7X0MiMYett6jAsR/Oos6ITXsmIf/Z7xmukUGJ+P
+         CC6Cwg6/SMYlbaSqtPITsUslLDbVePvbU6+X8NThilg/jLN3XkM50eAw/zBNUNQIIvPb
+         JjGh17YgLmVNQ+cpBubviWUYmVho6mkBefTtDL0CShlZRq7pSOIBrPofm73SmKTfXwy4
+         XXtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791948269; x=1792553069;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1791950239; x=1792555039;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5W3Yp3oK6NosuISWrK7hbNW+ZeNBXIIyZITKoeVCL+k=;
-        b=gzFTNhxTc+Jms6vNyQMDnrWveC0CxMJrgDihg505K5OxhUxXLqn77GFqLgpvv7D/+D
-         B5xJYAIYMUjGhLB2Yakl8+fCO3plj6bqeLXD2+6GOxb4kQa09h4t3Jg0e+0XGMPewZYh
-         CoyqZift+ggg1JarZE6S+Aij1fmYjWVDbKL8R+uR6hAXIreZ7Xnn75FfFrBcTlhdhGvk
-         PmHURtfSrLJU1v+X+GRy6Gb3PdW4iSl7hr3Fu1loDapCXkTtxhoTCsmQALEHB/HutSJp
-         rmtFh7UmV8QSEiPm+S4TsY90+zPh7Hp4PAjoKW9oZZi6I0jzwJI9G9YdVAyL9F7Blbc6
-         UKqg==
-X-Forwarded-Encrypted: i=1; AKwUvBwMcw909zBHKZP8PEFfeqrZ+gXtAZDMCzwaX2xbwYGzftWrPDlXD+PETbB+kVDa71rAzLc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJtqNRu+HIYogleF++1bNlWSeMIwRXoTkMk82kWLqI3IPVOf1/3
-	TaeCNO+nLtirHsScBn5KDSDo+LeWUOt3adsLPlJPpORp6kur01uZWUXkGTXRRm/9MPWHg+NaAk+
-	/EhP45Hk4ifQWxEOJh0+KmKSxe4emKMw=
-X-Gm-Gg: AYBFou39vjttoHDr3qLNcK01EiqbWwAqdZsJrQturWdcBbXdc2NIxioyI5fDB22vd6p
-	2b+6L2WvhnzWGu5Pix3VfycK3lNC8pPAiB2l1w2uA/SE2oEv4SaGCh6Bc2Wq4M3IfeWGLYWwdiR
-	2ELqHiGL+nfzejXMw6/O7VVauX5H3UAdNqf2fN5J4F8BY8ZV1XahSg3GZQ8GyLIbplmHCe5kGkX
-	W3dMGvijI4YJu2W1wg4PUQ+lN3nOQ2FsUSjuzg3DG7QoDY8kmUt2uPoW1TbRSqiQedPKBKp/q+J
-	wdvvm3wMQaS9xmeZTUiw0OHedVqcUls7s9tLx8Ohthu1zOcSr5gVCr96fW0o5oK/wlJ6q2g0ncP
-	OVzSqs5SvpQ==
-X-Received: by 2002:a53:d017:0:b0:675:74c6:79d with SMTP id
- 956f58d0204a3-679362ac182mr3741120d50.122.1791948268949; Tue, 13 Oct 2026
- 20:24:28 -0700 (PDT)
+        bh=k0bTkD8K8xUoPPDZx50q45dONTFFqUAwdvOQtIhdOcU=;
+        b=vbYhivDixbNbAGBLYObVtCvvhD1aJQQK/cSAJSRuiqvnV8cK5X95d4MG/m7f8SWRXb
+         xqMdcJ9oYGNKAoeh9g68fpTP7R6zcZv0lZgX68QLUEm8Mfgrpgnka76rrGxsix7MRASH
+         RnitIomFOlNaFwTbf06tuUlViRBw0pfw3Hen90B1EINk5198B4Qz0ocuzW6SB0SgAc7w
+         6qewP6O8GZoi3ItBuSvuJlTg2D5d0YXbU4IYLiZNIWxpPck58UQF6L2iBQ1Xm6yi48dK
+         suTpBpRi4uy5DHtuuH3TZsAN76fWoOmLpl2Jq0Y55cDMniGglafz0MguEnoJl47Faupu
+         jrvA==
+X-Forwarded-Encrypted: i=1; AKwUvBz54YL3hAuRVXxGS+4C+WvVcjreaCmQQ3/5ShUKVHyWD3ufMspeZwl2Egp0Axr5d2SD33c=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI66+F//XjGLCuZ0kyIXhC1omkU6F30p/0K7AYWRttlrnBzfQkY
+	tUepLO7j6oC98WZUeqzzLugqMo2b2hVKaPyNcJiS5/5kS1bLJO2YcC5dOYJWZQ==
+X-Gm-Gg: AYBFou3DAzYHNvblcyi6Zgb0P272JgZrumWT8HPH78Pg60HH28CJ4ImidrHQHyBX2EV
+	Yjj6C0plVv2qJ+MKdzB1J/jeabQ6jz5998MAijLpZ84EHDvvrxeGhy2lbl1Q609L86TzD6LqRYU
+	j+PwcDhnSM3G/WrDKFLti7ZLiCskifzWL5EzuQTvpKR3HpcaV0voh6b+7QQ1ZwRozS0Ngr1VQ9K
+	h4qBGgUluvXsrrqzjVUkdbKOY9+T5yyJN7IEfA8/6zQxvQhJk+DgHKAAuKBxqUaGQ+LeFz+vrAH
+	uVcn4j735+6k9RY2zRb55ZNxNzDIQZ0JwcAYilbisZ2SWDnzb0WW2Le/c/1YXIrON8SxcPG5gfY
+	R8ojC3fyk0znHO7G8KhK0VVAoWir8qhkQGMQAHmq7ZRThSUu+JP990b20+s+POebqvJXy0e8GEf
+	bJ2zwzJSgS5pjZ9wTZvq5D0XWLRTR2+1nxrtUHbiJ6ar0+QTOboc///JzKmnhiwpJgTcxiYrrn9
+	m2BlqwmyL8m6d4ibovxoNkFSg==
+X-Received: by 2002:a17:903:2309:b0:2df:3b0c:a6a5 with SMTP id d9443c01a7336-2e8427f7723mr117547495ad.9.1791950238609;
+        Tue, 13 Oct 2026 20:57:18 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e8422b8dd5sm65898635ad.55.2026.10.13.20.57.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 20:57:18 -0700 (PDT)
+Message-ID: <2f19a48d9b2026fb5867d0f18ec3858f0169feb7.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/9] bpf: static subprogram arguments liveness
+ should use BTF type info
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com, 
+	yonghong.song@linux.dev
+Date: Tue, 13 Oct 2026 20:57:16 -0700
+In-Reply-To: <DM21MY4LE3MC.RAS8LM9O12RE@gmail.com>
+References: <20261010-scev-minimal-v3-followups-v1-0-6000e95ef993@gmail.com>
+	 <20261010-scev-minimal-v3-followups-v1-1-6000e95ef993@gmail.com>
+	 <DM21MY4LE3MC.RAS8LM9O12RE@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261012120438.52849-1-laoar.shao@gmail.com> <d9a3367a1852158f60cc2e89677fb12f@kernel.org>
- <CALOAHbBE_1ssK_26c-UY7N6WxhkVNpB6v9WACVGaOiWZ5zchCA@mail.gmail.com> <3eda489898ebf7c848ce61760af745d9@kernel.org>
-In-Reply-To: <3eda489898ebf7c848ce61760af745d9@kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 14 Oct 2026 11:23:45 +0800
-X-Gm-Features: AclHuK8rh2AW6bZVG8ZqRjg04D-kUz_OaCPBeR9yqJbXuPX4vDKYFO4Wi9z6gLo
-Message-ID: <CALOAHbB58xLBdBOZCwJ=4yeKyvGvSsX1wfeAXehD2SGHSmB1+A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/3] BPF-based per-cgroup NUMA balancing mode selection
-To: Tejun Heo <tj@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, 
-	david@kernel.org, gourry@gourry.net, hannes@cmpxchg.org, mkoutny@suse.com, 
-	shakeel.butt@linux.dev, roman.gushchin@linux.dev, yu.c.chen@intel.com, 
-	zhao1.liu@intel.com, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 14, 2026 at 2:02=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Tue, Oct 13, 2026 at 10:16:32AM +0800, Yafang Shao wrote:
-> > Part of the consults are keyed on struct folio rather than struct
-> > task_struct: the folio surface answers from the folio's memcg, the
-> > owner's request, not the touching task's.
->
-> Right, and I take the prctl() point too. It's stable uAPI and too rigid
-> a bar for this.
->
-> My suggestion is to start smaller. The op doesn't compute anything
-> from its inputs. It returns a fixed mode per cgroup, and you don't
-> need struct_ops for that.
->
-> A kfunc that takes a cgid and a value would do: -1 for the system
-> setting, otherwise the existing NUMA_BALANCING_* bitmask stored per
-> cgroup. Task callsites read it through the task's cgroup, folio
-> callsites through folio_memcg(). Same capability for the use case in
-> the cover letter, a per-cgroup field and minimal plumbing, and the
-> kfunc can grow later if a real decision-time policy shows up.
+On Sun, 2026-10-11 at 13:29 +0000, Alexei Starovoitov wrote:
+> On Sat, Oct 10, 2026 at 11:21 PM Eduard Zingerman <eddyz87@gmail.com> wro=
+te:
+> > @@ -8829,10 +8828,13 @@ int btf_prepare_func_args(struct bpf_verifier_e=
+nv *env, int subprog)
+> > =C2=A0		return -EINVAL;
+> > =C2=A0	}
+> >=20
+> > -	err =3D btf_check_arg_slots(log, tname, is_global, slots_used, sub);
+> > +	if (verifier_bug_if(slots_used !=3D sub->arg_slot_cnt, env,
+> > +			=C2=A0=C2=A0=C2=A0 "func#%d argument slot count mismatch: %u !=3D %=
+u",
+> > +			=C2=A0=C2=A0=C2=A0 subprog, slots_used, sub->arg_slot_cnt))
+> > +		return -EFAULT;
+> > +	err =3D btf_check_arg_slots(log, tname, is_global, sub->arg_slot_cnt,=
+ sub);
+> > =C2=A0	if (err)
+> > =C2=A0		return err;
+> > -	sub->arg_slot_cnt =3D slots_used;
+>=20
+> [...]
+>=20
+> > +		/* BTF validation guarantees FUNC -> FUNC_PROTO. */
+> > +		t =3D btf_type_by_id(aux->btf, aux->func_info[i].type_id);
+> > +		t =3D btf_type_by_id(aux->btf, t->type);
+> > +		env->subprog_info[i].arg_slot_cnt =3D min_t(u32, btf_proto_slots(aux=
+->btf, t),
+> > +							=C2=A0 MAX_BPF_FUNC_ARGS);
+>=20
+> Consider the following...
+>=20
+> arg_slot_cnt is not only for liveness.
+> bpf_in_stack_arg_cnt() is derived from it and it has to be in sync
+> with sub->stack_arg_cnt, which is still set by btf_check_arg_slots() only=
+.
+> For example:
+>=20
+> =C2=A0 struct with_ptr { void *p; u64 x; };
+> =C2=A0 static u64 f(int a, int b, int c, int d, struct with_ptr s)
+>=20
+> nargs =3D=3D 5, so the first btf_check_arg_slots() does nothing.
+> Then btf_prepare_func_args() returns -EINVAL on 's' and
+> the second btf_check_arg_slots() is not reached.
+> Before this patch arg_slot_cnt was 5 and r11 + 8 load in f()
+> was rejected.
+> Now arg_slot_cnt =3D=3D 6 and stack_arg_cnt =3D=3D 0.
+> The load is accepted, bpf_jit_supports_stack_args() is not checked,
+> and bpf_out_stack_arg_cnt() returns (u16)(0 - 1).
+> x86 JIT emits 'sub rsp, 65520' in the prologue of f().
 
-That's a good suggestion.
+Valid point, thanks.
 
-I believe that will be a good start for other per-cgroup memory
-management features as well, such as per-cgroup THP.  Also, it is
-much easier to backport to older kernels and rapidly deploy them.
+> This scenario looks bad enough.
+>=20
+> Also btf_arg_slots() returns (size + 7) / 8 for a struct of any size.
+> BTF has the source signature. The compiler passes 48 byte struct by
+> reference or promotes its fields, but here it's 6 slots, so
+> check_outgoing_stack_args() returns -EFAULT and the prog is rejected.
+> It was loading fine with this subprog marked as unreliable.
+>=20
+> Why is this rewrite needed?
+> prepare_subprog_args() was calling btf_prepare_func_args() for static
+> subprogs already. When it succeeds arg_slot_cnt is exact.
+> When it fails the first call marks the subprog as unreliable
+> regardless of what is in the registers.
+> So the liveness.c hunk alone should be enough?
 
-I will draft it soon.
+I guess I over-complicated things unnecessarily.
+The problem was with prepare_subprog_args(), which I initially
+modified as:
 
---=20
-Regards
-Yafang
+  /* Prepare argument metadata for liveness; the main program is handled se=
+parately. */
+  static void prepare_subprog_args(struct bpf_verifier_env *env)
+  {
+	int i;
+
+	for (i =3D 1; i < env->subprog_cnt; i++) {
+		if (!try_btf_prepare_func_args(env, i)) // removed `&& bpf_subprog_is_glo=
+bal(env, i)` here
+			/* Keep all argument registers live if the prototype is unavailable. */
+here ->			env->subprog_info[i].arg_slot_cnt =3D MAX_BPF_FUNC_REG_ARGS;
+	}
+  }
+
+The MAX_BPF_FUNC_REG_ARGS was too pessimistic.
+
+However, I think the following is valid and sufficient:
+
+  static void prepare_subprog_args(struct bpf_verifier_env *env)
+  {
+	for (int i =3D 1; i < env->subprog_cnt; i++)
+		try_btf_prepare_func_args(env, i);
+  }
+
+No fallback is necessary:
+- if btf_prepare_func_args() succeeds, arg_slot_cnt and friends are
+  set correctly;
+- otherwise, the subprogram is marked as unreliable and detecting live
+  parameters from usage alone should be fine.
+
+I'll add a comment and respin.
