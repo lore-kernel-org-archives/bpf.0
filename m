@@ -1,186 +1,279 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78322411A02
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 03:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791950250; cv=none; b=KGW3vV9p/SPOBlMdY0SCcKxaZmFpZDRwIQspehgS+JZxlj+Uxfk9cL55gFkjtoF7vOyqefZUGJg27wCNAP9swWTe2YoJz8/u/OgAW7d5vxB9d3ExcnRh8IfTmLGeVp2bn9e1LeGz+Fxw5WO4Az9cee1hdQNaI/EPsH05HV3McXk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791950250; c=relaxed/simple;
-	bh=MLwF7pW89Z10Z3ijbuJAM26nNg92PmXPvXeN31R4Ceo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HWfskTOvERDi7IyKcB85cqp+yfec5KYzUv2oLrGau6tsTLjVGHu6n+zGOAFC3FIpHu+jv+jp0tIh5m086sW40zGgcFuVCnF6hdrWIavCcNe2/boc4faaO+9OBAvzo9MG3K+VJzkGYU+lsq867PeGXiSlMoSeG7G+usv4IEsGeu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=plThjvKC; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8412FE074
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 04:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791951482; cv=pass; b=j4oKrCaCaStie1/HJRbHPKsEl5LYlpHuWpbjE9TmkQIKkvbtSrLD7jaC0gY80VbzoW9jpjLjRLu0X9QmGj49lohBUNSxK7uAabqvGobqm6qArRUDwdgMZWksB41W77mK6TlCQOqCfLHBIn6/JuacayZY9BXZWjlV3J3hfLfcQMg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791951482; c=relaxed/simple;
+	bh=FCFoyOy4qvXMnUzHelNH4AHBinUUgJXQyV47QXx+bBQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sS2D3ai0YLiG4goMMHBqY0HKR7ehGNkqJACMmuWGkSo+g2B8ZTuodmpijj3jsdHbxNBUL642GJ3KJhZBfP1AmcQheBEDfDGFg8XfJ5n4olofO4OMQhSjOM4k1h9djkhp/OeBL7k6NdOeOzb8Q05fvuD/r9ysCRTKnOoZRlaromU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SdI2p6LC; arc=pass smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="plThjvKC"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2df8c28a0b1so17498105ad.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 20:57:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SdI2p6LC"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-91791ec1b83so30908426d6.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 21:18:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791951479; cv=none;
+        d=google.com; s=arc-20260327;
+        b=h4cEn/82Hi8JZUGx+hq95j3dpqNAPpgrizp4/Bnnrz2eYMGGP0wmWjqvaJFIQ+XCdS
+         lm93qFNCYhWrUGd2hxktzMaE0FyyN+FQmqWpktQfw7tUXB7v+wMpfEDuQcI+dEI4ZKGw
+         x+UCooq825M2ru4EVk9egdywFuEGIaLPBQswhNQFBgS0MXV7tp0GCOAbhtOA6uW2B6Q2
+         4j1NCriLRZUjUcrAbBSASGp28VGSfO8Y/vGG5zl9b1/PuD/jJHOTIbwf7FkQZNMrcJhf
+         cHghndw78qKSK4H1AVHagb4/e9K8WuGnMo9f/u/6yuMt9gMET7RWwRxNAeXyR7ivjpZP
+         ugDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5ZCjIb9MTs997peH+Jf+AEs7X4vp3T30edvZQYk3nBA=;
+        fh=bFYRQfMsi4n0nqQ7ahF1dGFa6A89a4z8PvhS4y8dZCc=;
+        b=OKGNDnz5L4qY9W4vCChPgwC0gp6KDA8Fg4P34RMOJOlRjfU/u6LyvPo2zAwConB3rf
+         CsAvmJ4/PKn6RJZyvlnluR2wEOrTF10axAln5GuZnc3HL68NDSfxjt9qj4i5yZ6cAAM8
+         sbX3Lc7harRRRsfKdajO2XRBahAuswZznVPXm73kqWZVsnDbdP7CVtRUfK8qLfT9Nn4s
+         2y59Kr7bKhWJQQgl8sdyDWxBnmOhXCHDLZZvvGWVQjdMK5oI7dXOU5jFZ6QkXLlv8Q48
+         c0mLh+RioKtrkEyyfD9S1Y8eoO1CasatSfNK0YPOmzrYS7XtmSI/+wifZPOSprcMEyY0
+         DwQQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791950239; x=1792555039; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=k0bTkD8K8xUoPPDZx50q45dONTFFqUAwdvOQtIhdOcU=;
-        b=plThjvKCMI6gYCbCA+t84mjBuLus/VAA0OmbQzMrgmXGoW0Kb8bgx8pCCvWhVYbNHH
-         0Bbyqp0PaS1pqzVTqmqIhEPgXpRoaxD8SMNiIuiEldGltXSAZbkbEN6I4Au7HUaifA38
-         t+FLQ7QOpA118Rs3SLWTBa3JX+qAD7X0MiMYett6jAsR/Oos6ITXsmIf/Z7xmukUGJ+P
-         CC6Cwg6/SMYlbaSqtPITsUslLDbVePvbU6+X8NThilg/jLN3XkM50eAw/zBNUNQIIvPb
-         JjGh17YgLmVNQ+cpBubviWUYmVho6mkBefTtDL0CShlZRq7pSOIBrPofm73SmKTfXwy4
-         XXtA==
+        d=gmail.com; s=20251104; t=1791951479; x=1792556279; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5ZCjIb9MTs997peH+Jf+AEs7X4vp3T30edvZQYk3nBA=;
+        b=SdI2p6LCQ4aWaQPT6dillp92RI21bwsURrLkqh9CawHgTGt5ayFDz9YWLEYw+caXN6
+         bTiaZhpDOG9II7LcivZaGyhxCF/Thd/6I9z7+R5vOPKcGAcXtZ0fPJLAslYG+p1tZXR7
+         +NGiiP+A0bMWJtThoWCsVUpB5vveeEB9YM1RTB0tFMq8FNHvDwuZRywH8etLN1VzuD6a
+         +AAaaORC27I23AXDgY9K+YNqlS4hRoUX7d90LU1GugjnmvZgbpjQzo0dCTDnxgPSQ9m9
+         w9S3M9EAYyAkRCchj1URaqUEbYehTc7s/YnKtgT/DNv3RMfBcFcRTlu+9OQeV5DEAOnt
+         UaGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791950239; x=1792555039;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1791951479; x=1792556279;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=k0bTkD8K8xUoPPDZx50q45dONTFFqUAwdvOQtIhdOcU=;
-        b=vbYhivDixbNbAGBLYObVtCvvhD1aJQQK/cSAJSRuiqvnV8cK5X95d4MG/m7f8SWRXb
-         xqMdcJ9oYGNKAoeh9g68fpTP7R6zcZv0lZgX68QLUEm8Mfgrpgnka76rrGxsix7MRASH
-         RnitIomFOlNaFwTbf06tuUlViRBw0pfw3Hen90B1EINk5198B4Qz0ocuzW6SB0SgAc7w
-         6qewP6O8GZoi3ItBuSvuJlTg2D5d0YXbU4IYLiZNIWxpPck58UQF6L2iBQ1Xm6yi48dK
-         suTpBpRi4uy5DHtuuH3TZsAN76fWoOmLpl2Jq0Y55cDMniGglafz0MguEnoJl47Faupu
-         jrvA==
-X-Forwarded-Encrypted: i=1; AKwUvBz54YL3hAuRVXxGS+4C+WvVcjreaCmQQ3/5ShUKVHyWD3ufMspeZwl2Egp0Axr5d2SD33c=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI66+F//XjGLCuZ0kyIXhC1omkU6F30p/0K7AYWRttlrnBzfQkY
-	tUepLO7j6oC98WZUeqzzLugqMo2b2hVKaPyNcJiS5/5kS1bLJO2YcC5dOYJWZQ==
-X-Gm-Gg: AYBFou3DAzYHNvblcyi6Zgb0P272JgZrumWT8HPH78Pg60HH28CJ4ImidrHQHyBX2EV
-	Yjj6C0plVv2qJ+MKdzB1J/jeabQ6jz5998MAijLpZ84EHDvvrxeGhy2lbl1Q609L86TzD6LqRYU
-	j+PwcDhnSM3G/WrDKFLti7ZLiCskifzWL5EzuQTvpKR3HpcaV0voh6b+7QQ1ZwRozS0Ngr1VQ9K
-	h4qBGgUluvXsrrqzjVUkdbKOY9+T5yyJN7IEfA8/6zQxvQhJk+DgHKAAuKBxqUaGQ+LeFz+vrAH
-	uVcn4j735+6k9RY2zRb55ZNxNzDIQZ0JwcAYilbisZ2SWDnzb0WW2Le/c/1YXIrON8SxcPG5gfY
-	R8ojC3fyk0znHO7G8KhK0VVAoWir8qhkQGMQAHmq7ZRThSUu+JP990b20+s+POebqvJXy0e8GEf
-	bJ2zwzJSgS5pjZ9wTZvq5D0XWLRTR2+1nxrtUHbiJ6ar0+QTOboc///JzKmnhiwpJgTcxiYrrn9
-	m2BlqwmyL8m6d4ibovxoNkFSg==
-X-Received: by 2002:a17:903:2309:b0:2df:3b0c:a6a5 with SMTP id d9443c01a7336-2e8427f7723mr117547495ad.9.1791950238609;
-        Tue, 13 Oct 2026 20:57:18 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e8422b8dd5sm65898635ad.55.2026.10.13.20.57.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 20:57:18 -0700 (PDT)
-Message-ID: <2f19a48d9b2026fb5867d0f18ec3858f0169feb7.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/9] bpf: static subprogram arguments liveness
- should use BTF type info
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com, 
-	yonghong.song@linux.dev
-Date: Tue, 13 Oct 2026 20:57:16 -0700
-In-Reply-To: <DM21MY4LE3MC.RAS8LM9O12RE@gmail.com>
-References: <20261010-scev-minimal-v3-followups-v1-0-6000e95ef993@gmail.com>
-	 <20261010-scev-minimal-v3-followups-v1-1-6000e95ef993@gmail.com>
-	 <DM21MY4LE3MC.RAS8LM9O12RE@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+        bh=5ZCjIb9MTs997peH+Jf+AEs7X4vp3T30edvZQYk3nBA=;
+        b=AeAZh2o2WiOxY6sHIGSocQkrAa79Fo9RQJA4C5i6Gxdz8g8HrLBdMH4GTD6Bia3PrT
+         m2jVvjdpApwOvKi3Vp1BhaCg9BedgKIFRNYvEQY6PsAB9k6zjmKcRXQWu8RYCwNzeJKq
+         0R4u8XNR7v5GyvsePo+tBQf5YUk2yNykttngQLEflwZ0eb1JnfFl+av+qiRh5IcQLHGk
+         IZgcb5aA5LNkf5VmQNYtB2zz83fvuhjO4G3GrcbeDlmPGWh/TsFvKcD/igvpoRX8srhb
+         nvswz69fUuJ917R8xdZW2q/U6Fj4NlNub3UoD0B6FX68YHGopEp6CzEj7LZw2Qvz1G2s
+         vaOg==
+X-Forwarded-Encrypted: i=1; AKwUvBx4rr4sFaEb3UqiUvQDKq1JzH8UpZhMJRj+Np1t2cat1XWkDmq7n1LhtsMahpEP2QBZOWY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL8rVXvIg5UCIlAlSBXVvAcMZzMY+n/Zl3LKkJ+FaBCxlLib7Ih
+	PhZJt536e+E1YsVPhuhZFFgjZjtQbQLq+mYGdefx5zGBiUzO6GO+1ce02Os5qxOT52LFYYGP9U0
+	k3/O8/YFV/DgmXigScBzAEYYBC/UQIjA=
+X-Gm-Gg: AYBFou2RI8Y44IeT2QwUsHQI1A+hs7VoeHWiXZf2G+BrzDb2zMtl1bDIW7ohS7ii8zI
+	VFR5h1LuVq630gNlt/ueD8w6fqPJ9tztxpQaANzkcjAQko8Y4u6p2CuT/DDQRzflZuLTZ2PsaPr
+	OYYyebvXC4X/YaI2eKlBztHhbN64Y1J64zZb6TMjKDyRVOqCKVwdBT4P5CBX1LVorLTetgqhKmb
+	jFVDU26pvdeFHLPLcQ9hByRep2B8EX/W+pfumdpQ9nPxanzjVPWiFeCFiKECNT+zs2ywUAMG1nO
+	CrKhgsqRuzG2SWQTMqhYVkpF8CLD4/RRlj1ZhK8Pk4kZIfF79mG8vKo=
+X-Received: by 2002:a05:620a:4449:b0:93b:e9db:1bab with SMTP id
+ af79cd13be357-93ebd27cc75mr2258515585a.56.1791951478672; Tue, 13 Oct 2026
+ 21:17:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20261010142247.99223-1-physicalmtea@gmail.com>
+ <20261010142247.99223-2-physicalmtea@gmail.com> <as1ZCkbya2jn72ip@devvm29614.prn0.facebook.com>
+ <CAJwVaMJL4FFYLq523VY014oa4u7RWD0WUY0+seP1xh3GY5peiQ@mail.gmail.com> <as5nfI0qfqD64dc1@devvm29614.prn0.facebook.com>
+In-Reply-To: <as5nfI0qfqD64dc1@devvm29614.prn0.facebook.com>
+From: Jia Jia <physicalmtea@gmail.com>
+Date: Wed, 14 Oct 2026 12:17:22 +0800
+X-Gm-Features: AclHuK-Tjj0vL8jiV-17JnHCHultMYwdnuqEsTpaVilZ25EnMCMFZNG1gR08W4M
+Message-ID: <CAJwVaM+SHuidjUeKD8-MX2ErbkaBUKE8cPYH2fzNJR+jH-oWZw@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/5] vsock/virtio: split socket lookup from
+ locked RX processing
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: stefanha@redhat.com, sgarzare@redhat.com, netdev@vger.kernel.org, 
+	virtualization@lists.linux.dev, kvm@vger.kernel.org, mst@redhat.com, 
+	jasowangio@gmail.com, eperezma@redhat.com, xuanzhuo@linux.alibaba.com, 
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 2026-10-11 at 13:29 +0000, Alexei Starovoitov wrote:
-> On Sat, Oct 10, 2026 at 11:21 PM Eduard Zingerman <eddyz87@gmail.com> wro=
-te:
-> > @@ -8829,10 +8828,13 @@ int btf_prepare_func_args(struct bpf_verifier_e=
-nv *env, int subprog)
-> > =C2=A0		return -EINVAL;
-> > =C2=A0	}
-> >=20
-> > -	err =3D btf_check_arg_slots(log, tname, is_global, slots_used, sub);
-> > +	if (verifier_bug_if(slots_used !=3D sub->arg_slot_cnt, env,
-> > +			=C2=A0=C2=A0=C2=A0 "func#%d argument slot count mismatch: %u !=3D %=
-u",
-> > +			=C2=A0=C2=A0=C2=A0 subprog, slots_used, sub->arg_slot_cnt))
-> > +		return -EFAULT;
-> > +	err =3D btf_check_arg_slots(log, tname, is_global, sub->arg_slot_cnt,=
- sub);
-> > =C2=A0	if (err)
-> > =C2=A0		return err;
-> > -	sub->arg_slot_cnt =3D slots_used;
->=20
-> [...]
->=20
-> > +		/* BTF validation guarantees FUNC -> FUNC_PROTO. */
-> > +		t =3D btf_type_by_id(aux->btf, aux->func_info[i].type_id);
-> > +		t =3D btf_type_by_id(aux->btf, t->type);
-> > +		env->subprog_info[i].arg_slot_cnt =3D min_t(u32, btf_proto_slots(aux=
-->btf, t),
-> > +							=C2=A0 MAX_BPF_FUNC_ARGS);
->=20
-> Consider the following...
->=20
-> arg_slot_cnt is not only for liveness.
-> bpf_in_stack_arg_cnt() is derived from it and it has to be in sync
-> with sub->stack_arg_cnt, which is still set by btf_check_arg_slots() only=
-.
-> For example:
->=20
-> =C2=A0 struct with_ptr { void *p; u64 x; };
-> =C2=A0 static u64 f(int a, int b, int c, int d, struct with_ptr s)
->=20
-> nargs =3D=3D 5, so the first btf_check_arg_slots() does nothing.
-> Then btf_prepare_func_args() returns -EINVAL on 's' and
-> the second btf_check_arg_slots() is not reached.
-> Before this patch arg_slot_cnt was 5 and r11 + 8 load in f()
-> was rejected.
-> Now arg_slot_cnt =3D=3D 6 and stack_arg_cnt =3D=3D 0.
-> The load is accepted, bpf_jit_supports_stack_args() is not checked,
-> and bpf_out_stack_arg_cnt() returns (u16)(0 - 1).
-> x86 JIT emits 'sub rsp, 65520' in the prologue of f().
+>
+> On Tue, Oct 13, 2026 at 11:26:38AM +0800, Jia Jia wrote:
+> > >
+> > > On Sat, Oct 10, 2026 at 10:22:43PM +0800, Jia Jia wrote:
+> > > > Split virtio_transport_recv_pkt() so socket lookup is separate from=
+ the
+> > > > receive state machine that runs under the socket lock.
+> > > >
+> > > > Keep virtio_transport_recv_pkt() on its existing per-packet locking=
+ path.
+> > > > Pass the source and destination addresses used for lookup to the lo=
+cked
+> > > > receive path so they are decoded only once.
+> > > >
+> > > > Pass the network namespace and decoded address tuple through a pack=
+et
+> > > > context to the locked receive path.
+> > > >
+> > > > Preserve source validation and failure handling. Keep the lookup re=
+ference
+> > > > separate from the skb owner reference so the locked receive path ca=
+n manage
+> > > > the two lifetimes independently.
+> > > >
+> > > > Signed-off-by: Jia Jia <physicalmtea@gmail.com>
+> > > > ---
+> > > >  net/vmw_vsock/virtio_transport_common.c | 139 ++++++++++++++++----=
+----
+> > > >  1 file changed, 96 insertions(+), 43 deletions(-)
+> > > >
+> > >
+> > > [...]
+> > >
+> > > > +/*
+> > > > + * The caller holds sk's socket lock and must free skb if this ret=
+urns true.
+> > > > + */
+> > > > +static bool
+> > > > +virtio_transport_recv_pkt_locked(struct virtio_transport *t,
+> > > > +                              struct sk_buff *skb, struct sock *sk=
+,
+> > > > +                              const struct virtio_transport_rx_pkt=
+_ctx *ctx)
+> > > > +{
+> > > > +     const struct sockaddr_vm *src =3D ctx->src;
+> > > > +     const struct sockaddr_vm *dst =3D ctx->dst;
+> > > > +     struct vsock_sock *vsk =3D vsock_sk(sk);
+> > > > +     struct net *net =3D ctx->net;
+> > > > +     bool space_available;
+> > > >
+> > > > -     /* Check if sk has been closed or assigned to another transpo=
+rt before
+> > > > -      * lock_sock (note: listener sockets are not assigned to any =
+transport)
+> > > > +     /* Check after acquiring the socket lock. Listener sockets ac=
+cept packets
+> > > > +      * from any source and are not assigned to a transport.
+> > > >        */
+> > > >       if (sock_flag(sk, SOCK_DONE) ||
+> > > >           (sk->sk_state !=3D TCP_LISTEN &&
+> > > > -          !vsock_check_source(vsk, &t->transport, &src))) {
+> > > > +          !vsock_check_source(vsk, &t->transport, src))) {
+> > > >               (void)virtio_transport_reset_no_sock(t, skb, net);
+> > > > -             release_sock(sk);
+> > > > -             sock_put(sk);
+> > > > -             goto free_pkt;
+> > > > +             return true;
+> > > >       }
+> > > >
+> > > >       space_available =3D virtio_transport_space_update(sk, skb);
+> > > >
+> > > >       /* Update CID in case it has changed after a transport reset =
+event */
+> > > >       if (vsk->local_addr.svm_cid !=3D VMADDR_CID_ANY)
+> > > > -             vsk->local_addr.svm_cid =3D dst.svm_cid;
+> > > > +             vsk->local_addr.svm_cid =3D dst->svm_cid;
+> > > >
+> > > >       if (space_available)
+> > > >               sk->sk_write_space(sk);
+> > > > @@ -1875,12 +1891,49 @@ void virtio_transport_recv_pkt(struct virti=
+o_transport *t,
+> > > >               break;
+> > > >       }
+> > > >
+> > > > +     return false;
+> > > > +}
+> > > > +
+> > > > +/* We are under the virtio-vsock's vsock->rx_lock or vhost-vsock's=
+ vq->mutex
+> > > > + * lock.
+> > > > + */
+> > > > +void virtio_transport_recv_pkt(struct virtio_transport *t,
+> > > > +                            struct sk_buff *skb, struct net *net)
+> > > > +{
+> > > > +     struct virtio_transport_rx_pkt_ctx ctx;
+> > > > +     struct sockaddr_vm src, dst;
+> > > > +     struct sock *sk;
+> > > > +     bool free_pkt;
+> > > > +
+> > > > +     virtio_transport_recv_pkt_init_addrs(skb, &src, &dst);
+> > > > +     virtio_transport_trace_recv_pkt(skb, &src, &dst);
+> > > > +
+> > > > +     sk =3D virtio_transport_recv_pkt_find_socket(skb, &src, &dst,=
+ net);
+> > > > +     if (!sk) {
+> > > > +             (void)virtio_transport_reset_no_sock(t, skb, net);
+> > > > +             goto free_pkt;
+> > > > +     }
+> > > > +
+> > > > +     if (!skb_set_owner_sk_safe(skb, sk)) {
+> > > > +             WARN_ONCE(1, "receiving vsock socket has sk_refcnt =
+=3D=3D 0\n");
+> > > > +             goto free_pkt;
+> > > > +     }
+> > > > +
+> > > > +     lock_sock(sk);
+> > > > +     ctx =3D (struct virtio_transport_rx_pkt_ctx) {
+> > > > +             .net =3D net,
+> > > > +             .src =3D &src,
+> > > > +             .dst =3D &dst,
+> > > > +     };
+> > > > +     free_pkt =3D virtio_transport_recv_pkt_locked(t, skb, sk, &ct=
+x);
+> > >
+> > > At this point the socket lookup succeeded with src/dst/net, why not j=
+ust
+> > > pass sk which already has all of them?
+> > >
+> >
+> > If I understand this correctly, a successful lookup is not enough to
+> > recover all of this from sk. The lookup may fall back from the
+> > connected table to the bound
+> > table, so the packet source must still be validated under the socket
+> > lock; otherwise that check would become ineffective. The packet
+> > destination is also needed after
+> > a transport reset, and the RX namespace used for a reset reply is not
+> > necessarily sock_net(sk) in global mode. I=E2=80=99ll remove the contex=
+t
+> > struct and pass src, dst, and
+> > net directly.
+>
+> True that the lookup may fallback to the bound table, but this begs the
+> question, why bother with the bound table here? If a socket hasn't
+> landed in the connected table yet, then OP_RW is -EINVAL and we respond
+> with RST anyway... so I'd guess we shouldn't even be trying to batch for
+> those sockets.
+>
+> For connected sockets, the sk has the destination (vsk->remote_addr)
+> needed by the reset. And yes, sock_net(sk) does not necessarily equal
+> the net ptr used for a reset reply in global mode, but we don't really
+> expect that for global mode in vsock, we only expect that
+> vsock_net_check_mode() rules are followed. In this case where
+> !net_eq(n0, n1), the RST reply will be routed correctly across
+> namespaces following global mode rules.
+>
+> I could certainly be missing something and happy to be pointed to an
+> instance of sk being insufficient here. In general, I think its nice to
+> avoid new data structures if possible.
+>
 
-Valid point, thanks.
+You're right. Although virtio_transport_recv_pkt_batchable() requires
+TCP_ESTABLISHED and excludes other states from batching, the
+bound-table fallback is
+unnecessary there; batch admission can use only the connected lookup
+and leave a miss to the normal path.
 
-> This scenario looks bad enough.
->=20
-> Also btf_arg_slots() returns (size + 7) / 8 for a struct of any size.
-> BTF has the source signature. The compiler passes 48 byte struct by
-> reference or promotes its fields, but here it's 6 slots, so
-> check_outgoing_stack_args() returns -EFAULT and the prog is rejected.
-> It was loading fine with this subprog marked as unreliable.
->=20
-> Why is this rewrite needed?
-> prepare_subprog_args() was calling btf_prepare_func_args() for static
-> subprogs already. When it succeeds arg_slot_cnt is exact.
-> When it fails the first call marks the subprog as unreliable
-> regardless of what is in the registers.
-> So the liveness.c hunk alone should be enough?
+I also overlooked what the existing vsock_net_check_mode(sock_net(sk),
+net) check guarantees. If the namespaces differ and the lookup
+succeeds, both are
+in global mode, so sock_net(sk) is sufficient for routing the RST. The
+extra context is therefore unnecessary. Thanks for pointing this out.
 
-I guess I over-complicated things unnecessarily.
-The problem was with prepare_subprog_args(), which I initially
-modified as:
+I'll update this in the next version.
 
-  /* Prepare argument metadata for liveness; the main program is handled se=
-parately. */
-  static void prepare_subprog_args(struct bpf_verifier_env *env)
-  {
-	int i;
-
-	for (i =3D 1; i < env->subprog_cnt; i++) {
-		if (!try_btf_prepare_func_args(env, i)) // removed `&& bpf_subprog_is_glo=
-bal(env, i)` here
-			/* Keep all argument registers live if the prototype is unavailable. */
-here ->			env->subprog_info[i].arg_slot_cnt =3D MAX_BPF_FUNC_REG_ARGS;
-	}
-  }
-
-The MAX_BPF_FUNC_REG_ARGS was too pessimistic.
-
-However, I think the following is valid and sufficient:
-
-  static void prepare_subprog_args(struct bpf_verifier_env *env)
-  {
-	for (int i =3D 1; i < env->subprog_cnt; i++)
-		try_btf_prepare_func_args(env, i);
-  }
-
-No fallback is necessary:
-- if btf_prepare_func_args() succeeds, arg_slot_cnt and friends are
-  set correctly;
-- otherwise, the subprogram is marked as unreliable and detecting live
-  parameters from usage alone should be fine.
-
-I'll add a comment and respin.
+> Best,
+> Bobby
