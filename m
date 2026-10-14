@@ -1,131 +1,119 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7929C4D2ECD;
-	Wed, 14 Oct 2026 08:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8183F4CEE4B
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 08:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791968156; cv=none; b=BU/nUwMlQkXlHhhfuUzITkbieSafQZI6ase/ZBWD/Be9LJ1FAdzhqljLnxaS+ukCgRYWHGYnJQ3buypXUXgrPZhRbJBKmlxi7yWde3Y09JmKCyuKEFwNMrQmGn4IJtyO6A/xEJJ7NGHOIz0kmsXZ4kJGz+2YlFc0YH9G5t1XNu4=
+	t=1791968269; cv=none; b=dzuRJaPV5L2VpnoOaLz2PgPd+heIut6tn4ssQetw7eD6jERBFwReGGPn1QnsCK3rTwVK5d1+BhzayWfdHqMHvM/P9rikiTO+inh8MmFx2DKJrR/6+caNuIC12z9rvY72YsvAN4AWYWDA/zvUPe06eiR52g/rNJluXySwSgMEE/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791968156; c=relaxed/simple;
-	bh=lm+iu5n5093iTPvAm4b/0xhVRpxk5O455f+QlfZJK5A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=KU35halQKjj+NeZoTlZiqSpA4eh7+iTGDMM6xSnsEKdi44aR4LbuaZuBsmyNlyZdoLCU2p1V5XcgXIwv0/SCDXIuxVieWKc8NsvG59F+xSBCTOhWDFXagbq+uoi3sp+DypxxbJ6o9nkxt4DZXMs3Q+5dIov8AQyWSmv5zjotArU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lYtlYW6n; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1791968269; c=relaxed/simple;
+	bh=0ZXEJaYbkUwQutY4qt4EydbiFZqJCeyaoNd2NGNwwgA=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=DoFZy/Y0wi0d6yjGgc1Bli0F9cDefA5/2oXInxhEJWeczvAbwfxkFCybraFI4chRUJ0d0mGirOQBzMKqn3Hkhgdnvbv8SqwD7EDNycr4lEVKPbfz72kLRxKjNaCv1lOKWqflnxYiWyjdaxgYr5XMxWPox+Vbf5Pj4UNKVHoudFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXm/6V67; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lYtlYW6n"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id A45441A1225;
-	Wed, 14 Oct 2026 08:55:46 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 74C7C60368;
-	Wed, 14 Oct 2026 08:55:46 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B33A2103286A7;
-	Wed, 14 Oct 2026 10:55:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1791968145; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Fr2cUfVwHpS0gQAAl2BplVTlMggZNGW5Syq9UOyYYuE=;
-	b=lYtlYW6nORzpeaJOtJht7lLWf43BPtnqtMLzsgVNyfMHTq9m+bIgkUzR6OZeiBVEA8KlxQ
-	LiL2EIB/WOTrDWmeU7IYhX8RpwMZnd+ZhjTBG4SJFWBV7porEQiBKbh96pTI/ab8J+5a45
-	Gnl9A3I7/SZGYV52CFkwdIUG3HV1eAQFL5ZEDquFaDGmdPh5diiwGnnoK2zoQGewvbOVMj
-	KoaKHp5F1xijoWOX0grGfWVojZ0yspqKBSJZVxN35qF9uDXKnzmlZR8GuRFBKsZUATdrlN
-	5jxYvnVESKhByR9tzm+w+qGICFxLveCsGd+xVFqpFzppzoXO6dvjIgUn9sMXTQ==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXm/6V67"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7191F000FF;
+	Wed, 14 Oct 2026 08:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791968266;
+	bh=5kaMqEsXC2ndeaD4OSY+E11/RcBCY7fzLa20XI0kwC8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lXm/6V67SWj04g5s+PTjukb1mmwzE4+6/tEbbcb8wDYlKu0Ut1OEs9y+G6EJkt2U2
+	 pVAYgzjw8D5xUdqLVHZCmwUVUGA0L+lrifrfdMRuySTicmqduMTrixiMw/SECipFt3
+	 RzDb0dAgoyrT+NKabaqxpYtxzjfAzOKQTMGK5btAgmg0sNY9YpoeZOm4YK3F01iISw
+	 bZ8zEY+M4pe53dcaR3e3GCkx1abOiOV5YhUTZ28ma+UT39yW+pVz9Agkt9kDOGl0YZ
+	 4P9VrNTn52EqwJq/PPtm5kS/r1qSuLH6/2iJS5y6M1cYcOOAeXawU2D3npsDmNstr3
+	 OEgc3zxu88jRg==
+Message-ID: <sashiko-outbox-171051@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v3 2/2] net: stmmac: Stop Tx queue when
+ (en|dis)abling XSK pools
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kurt Kanzenbach" <kurt@linutronix.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261013-stmmac_xsk_crashes-v3-2-50fca7790af2@linutronix.de>
+References: <20261013-stmmac_xsk_crashes-v3-0-50fca7790af2@linutronix.de>
+ <20261013-stmmac_xsk_crashes-v3-2-50fca7790af2@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 14 Oct 2026 08:57:46 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 14 Oct 2026 10:55:40 +0200
-Message-Id: <DM4FOVA9PW2E.1WIY5HRJWA1QP@bootlin.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Run tc_edt serially
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Qiliang Yuan" <odys.yuan@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.22.0-0-gc2f86b7abde3
-References: <20261009-selftests-bpf-tc-edt-serial-v1-1-f72e045f2465@gmail.com>
-In-Reply-To: <20261009-selftests-bpf-tc-edt-serial-v1-1-f72e045f2465@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Qiliang,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] net: stmmac: hardware UAF due to unconditional flush on stopped qu=
+eue
+--
 
-On Fri Oct 9, 2026 at 3:50 AM CEST, Qiliang Yuan wrote:
-> tc_edt shapes the traffic of a TCP connection between two netns to
-> 5Mbps with a BPF program, and checks that the rate it measures from the
-> userspace sender and receiver is within 2% of the target.
->
-> The measured time includes the time the sender and the receiver take to
-> run. When test_progs runs other tests in parallel, the sender and the
-> receiver compete with those for the CPUs, the transfer takes longer,
-> and the measured rate falls outside of the 2% margin.
->
-> Make tc_edt a serial test.
->
-> Fixes: b0f82e7ab6fb ("selftests/bpf: integrate test_tc_edt into test_prog=
-s")
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+commit ef870c171b8f7f53a01cef2bdd086a9bc0f02d35
+Author: Kurt Kanzenbach <kurt@linutronix.de>
 
-I don't know how to feel about the proposed fix. As a test involving
-bandwith measurement, I get that such things could happen, but:
-- I did not see this failure in the recent CI runs (but I could have
-  missed it)
-- if you see it in your setup, how sure are we that it is due to high
-  CPU usage ? I guess it is very likely, but worth asking
-- any idea about how much we are missing the 2% margin ? If this is only
-  by a little, I would rather increase the margin and keep the tests
-  parallel, there's not much point being too restrictive on the target
-  bandwith, if we get something close enough, this is a good proof that
-  the BPF rate limiter is triggered and running correctly
+net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
 
-Thanks,
+When enabling or disabling XSK pools in parallel to Tx traffic, kernel
+crashes occur. This patch adds stopping of the Tx queue during the enabling
+and disabling of XSK pools to prevent accessing freed Tx DMA descriptors.
 
-Alexis
-> ---
->  tools/testing/selftests/bpf/prog_tests/test_tc_edt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c b/tools=
-/testing/selftests/bpf/prog_tests/test_tc_edt.c
-> index 462512fb191f1..1e82d88c987a7 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
-> @@ -127,7 +127,7 @@ static void run_test(void)
->  		  "rate error is lower than threshold");
->  }
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 2aa5a26954731..0e8ab2bd8f3e8 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5216,6 +5216,10 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv=
+ *priv, int queue,
+>  	dma_addr_t dma_addr;
+>  	bool set_ic;
 > =20
-> -void test_tc_edt(void)
-> +void serial_test_tc_edt(void)
->  {
->  	struct test_tc_edt *skel;
-> =20
->
-> ---
-> base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
-> change-id: 20261009-selftests-bpf-tc-edt-serial-9c65af71f845
->
-> Best regards,
+> +	/* Ring may be torn down for an XSK pool switch */
+> +	if (netif_tx_queue_stopped(netdev_get_tx_queue(priv->dev, queue)))
+> +		return STMMAC_XDP_CONSUMED;
+> +
 
+[Severity: High]
+Could this unconditional flush cause a hardware use-after-free regression?
 
+While this protects stmmac_xdp_xmit_xdpf() from accessing descriptors when =
+the
+queue is stopped, stmmac_xdp_xmit() calls it in a loop and then uncondition=
+ally
+flushes if XDP_XMIT_FLUSH is set:
 
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_xdp_xmit() {
+    ...
+	for (i =3D 0; i < num_frames; i++) {
+		...
+		res =3D stmmac_xdp_xmit_xdpf(priv, queue, frames[i], true);
+		if (res =3D=3D STMMAC_XDP_CONSUMED)
+			break;
+		nxmit++;
+	}
 
+	if (flags & XDP_XMIT_FLUSH) {
+		stmmac_flush_tx_descriptors(priv, queue);
+		stmmac_tx_timer_arm(priv, queue);
+	}
+    ...
+}
+
+If stmmac_xdp_xmit() is called with XDP_XMIT_FLUSH during an AF_XDP pool sw=
+itch,
+it will break out of the loop but still call stmmac_flush_tx_descriptors().
+
+Since stmmac_flush_tx_descriptors() calls stmmac_set_queue_tx_tail_ptr(), c=
+ould
+this write a stale physical address to the hardware DMA tail pointer while
+stmmac_enable_tx_queue() is allocating new descriptors, causing the DMA eng=
+ine
+to fetch from freed memory?
+
+[ ... ]
 
 --=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261013-stmmac_xsk=
+_crashes-v3-0-50fca7790af2@linutronix.de?part=3D2
