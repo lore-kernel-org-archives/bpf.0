@@ -1,121 +1,134 @@
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7344B37AA78
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 18:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63462417BD2;
+	Wed, 14 Oct 2026 19:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792004352; cv=none; b=fPGkxVtKhk0u6CUQWNxqz5F3EVi/v36yiJncLGdAfvm0M1kXDkf/IZP8eETvtpr5Wno78xa6RRwDjLKkG5Tn9zuySbUWhZz2WrW/nYaKIi0nRVt0mFcgoTZpcjrZZa/kJbGiMDy+L/0nQ8x534Q+RrcECCRfHYSVVCpUwuJ9djQ=
+	t=1792007253; cv=none; b=YWSQGia525AwHC+TMiRmdgBESwwMsgmDRWbFjnHMFIAHX4ncZyzhlWHZgigTcis3JLvSuC6pZ6lNOrty+jtd9nH8AOi5/ULUtL/LhevwDQLlLDzeELqAZviIGnyMFVQotfnHH9I6qXu1EqJvTCRea58mNRd9cVoJ7MlPetrk3X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792004352; c=relaxed/simple;
-	bh=Rk54IAaE6VVUUw2LLHOVHkQVqBe3J7+3RvRWEEH/U2c=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=gNY+fq2i1SQ2Zl3AChM7LZBtslcVt3dnax0De7+cnWfpe6rRXTl2udpT8DOmJy0J448eJ/CH/SeJR4Pdd5H8AUrdmlufWT5wIWNaOEbtA0I7AClLvRB6ZHHgpyZCdgMWBVu+5ObsP5b7rofyQIZK0S0aEAgfmZSJFNRvuNVCE3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ACUdX9uh; arc=none smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792007253; c=relaxed/simple;
+	bh=yYvRJQWooZPkyh9026YoIQwZ3ItaEUGQX0mfusD29q8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bZdfjwk+ZuS1BxhAVd5V4Tf0sTo8y6Y2Fw9y/HDhUpkWzbCED5VrbRGFgCYA3taaFlwjOQlRhQYJckQhXqDfyhkZ5vxggI1D9Pn2AIAnpHuAvECDXEqKzRVqpxnNEIFc0X14tOOP3x1XVY9z3FW8B7Cbq1AGXU+SJPN92UVcWYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=YSvAytu4; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ACUdX9uh"
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-5e91e422859so2241808e0c.2
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 11:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792004350; x=1792609150; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=LubmNDov+kRdJeSgDmNkTIoCyYOuN6AaFESo8XksX+A=;
-        b=ACUdX9uhrjCQKOJNqny++2sBR8t9Y6CrMAgUBfktaL/EF9F1nnfYH5IMEf/GDjjFGt
-         QA5VTDoOGMvg3vJybBlg56rMVFd5NkHgVijKVbD8i51daSkxfMwtLEjgQy0lpF5UBdmI
-         VMlVOXW8oEgddav0TP9GZT5Mr3ycKRToI9WhY7BOSbApSNCS10G+etk+v6HUFcau5Kqf
-         2nGjWFB/i6zxDoQGqUMD7BNaif120D1yDDUzvaV3PB40SglQZnkaMYWi6BTkEGxNSU6E
-         yIsb2stFBpB747PFuJRhoV3q60H20gP6xU1cMrAXEMbJ4vqMcX3+8UofL5iE4FiAiqtz
-         2uWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792004350; x=1792609150;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LubmNDov+kRdJeSgDmNkTIoCyYOuN6AaFESo8XksX+A=;
-        b=XHJU4E+yf3w+PyHfXgHLMsys3mdoyFl0fkzQykGS12ECstJA/RBKGpsCXzGrx2bRcS
-         4G4ospWsYBYriasnHhu+L8njVvKk40rSNJRIyLv0VITmalDWwa14llWHkAvOlYSb9UzI
-         jYvZ/+LDeFDAVNxezbUhinCcFmWTz160+RcIDkMNMpW/+drh8CG0uZ+HZ/1TJeQcbiW4
-         RWWkBFB9e5VcD2iSGVYn1JpKKGCR6vgEWs/9BgSJg7BArAhw48lMJqqpHkqj6YBIB0lq
-         HlkxQzGOxV534DTL4+J8Y6u6LpKAZto/9Wxe0uxyofWygMe7jUHa4DOiMI7RdX2xvUOk
-         00gA==
-X-Forwarded-Encrypted: i=1; AKwUvBwSXUZ6dDVUxXozx48nOtbMWIegwHMPc0QTDriq8hYiQy1y8wQDkP6/h4Sriht5SZit6cg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJRoQuuUf9ygc+eeYGrcZfKL1311rgreQPziX+RixEk5b9hEnJO
-	+GssFGkd3STIctrbod2nV5u6v0GVXsVev0cuNF0MuAs/KA9wEupmUZ+M
-X-Gm-Gg: AYBFou3FakoLvwaJ00Wa3RPSAGfQQp5lPCH2EI2mV/uOFnyvE2ZyyVJ2j+F4AOGGMqT
-	biQPP/6hQGStnUEj4lfNoyJojHHC8w0x7UuvHWC+MJtSn1ykQfyQWnC/wXhlP2aW23yT5OWmiv/
-	rJvw5Uh/FuZlryVCtrx4NQO6IgxXA4fxb9W/CcGTJ1mV3GAcW17VZfmaSJMhtoR3JaxEu7tIG/T
-	3aHd37mmcmQtVdT5YgX4dCz5hIP+BKMGbRoOZKnbAccG5hBYZeBhtWIoN1poasgSCvSfcrsgoCS
-	CJViJi+2ZsnYg6ith8/QyayToyWAwIgG3l65UQASXxJ/EQuP7eU82vt8VDqkus6q6sGC4p0dx6K
-	LwKX0mZshgi5x68nnK9sg6GnuruUtvXAuCJ/Rgv6yzrVAHCsy4MeK6uXen6Fab82LnO2eUAvRTA
-	hRn2vLkLuhPrqFoT1vOLApkab44SBQS14n9p2nXuj7ylvM+PaS62M5t8gw/7tVUzCNRWz4oWOSP
-	NBA9fWrUi9WCaEDUptqBnyDTZAhKSXOQvvKD8sn+bJr631pgF38IUdPHNsliEXTmFRGlv7Pym+U
-	nj1oWCLhtP0JdLr3fj6eUkeOXdf6ctO2qmWdFQ==
-X-Received: by 2002:a05:6122:4f9d:b0:5e1:c1c8:9ff9 with SMTP id 71dfb90a1353d-5e91f28cd89mr6035507e0c.2.1792004350298;
-        Wed, 14 Oct 2026 11:59:10 -0700 (PDT)
-Received: from gmail.com (111.46.245.35.bc.googleusercontent.com. [35.245.46.111])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5e91cc14668sm11985603e0c.16.2026.10.14.11.59.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 11:59:09 -0700 (PDT)
-Date: Wed, 14 Oct 2026 14:59:09 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Josef Bacik <josef@toxicpanda.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Kaiyuan Zhang <kaiyuanz@google.com>, 
- Mina Almasry <almasrymina@google.com>, 
- Willem de Bruijn <willemb@google.com>
-Cc: netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, 
- Josef Bacik <josef@toxicpanda.com>
-Message-ID: <willemdebruijn.kernel.1725d296e3ac6@gmail.com>
-In-Reply-To: <willemdebruijn.kernel.140f4eac91ab3@gmail.com>
-References: <20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com>
- <willemdebruijn.kernel.140f4eac91ab3@gmail.com>
-Subject: Re: [PATCH net-next 0/9] net: skbuff: convert most BUG_ON()s to
- WARN_ON_ONCE() and an error
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="YSvAytu4"
+Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69EJjIcM1792058;
+	Wed, 14 Oct 2026 19:46:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:message-id:mime-version:subject:to; s=default; bh=V13y94AcoZxdA
+	Vvt6ubPxV3JNockmJO2nu+raArkXRo=; b=YSvAytu4sB3JeS4AuJjMlUCNY2wQc
+	8FrEVswUslv351PmrW0umrtAAbMBK/SXwm2nNYdnbdfyJn+XDnaPOQM7rGQDthI1
+	51pE6efqZ2PiR9GA5A+25mGim67Z71QRJfGsBuEJnkcXW+eN+uyPcbrLa1ymcq89
+	2TQ0IPjAv1rYdlre5z3wAlDHmOm7cWXZBPl+r8+PMy5LWwlVm+5Hn4fduXs2YMod
+	R54byYRzzrHr9ObV8FaTzbUU+LoccKZf538q0lbSkuikUt3hfjn3uVg9kvbNGQlg
+	4LV76C2vVAAGJC3RRcMHVQsK3FVWHi5vBooQXiw3ryWX5O4GXui6yO9sw==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4h9ytj3e10-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Oct 2026 19:46:39 +0000 (GMT)
+Received: from LL-DZB4774.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Wed, 14 Oct 2026 19:46:36 +0000
+From: Marco Vedovati <marco.vedovati@crowdstrike.com>
+To: <bpf@vger.kernel.org>
+CC: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song
+	<yonghong.song@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+        <linux-spdx@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-open-source@crowdstrike.com>,
+        Marco Vedovati
+	<marco.vedovati@crowdstrike.com>
+Subject: [PATCH bpf-next] tools/include: Add Linux-syscall-note to uapi/linux/types.h
+Date: Wed, 14 Oct 2026 21:45:16 +0200
+Message-ID: <20261014194516.3030362-1-marco.vedovati@crowdstrike.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Proofpoint-ORIG-GUID: ZE0_nQZ5oiM0X2zxo2-YbHoObRN2WX-b
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE0MDA3OCBTYWx0ZWRfX5365wyYRk/Ls
+ KH3hgpBDFLy/7W4JLD2nfOpE+S8Ll5gBH9TLop6Zh1b14wflRn5QeyS1XZFEGjLoBEiqrmQ9/3/
+ 5Vdz2u1Tmx7pFmIBuYgICFc5j1ony6QN4bcMURQ0vol5Rj5HrS34e2oVa8k+CLpwMMe5tx0AvFq
+ 2V2Wb+X2bAJihwb+ZBm7R+cj96MvYL1sWFt51Bdzjd/uWAwiA1uTkQH6xgBXRg9PmVme4sExGZz
+ e85/Z27jakSlrzQORvYl7gRwHo+46L3OtKCXZSV2J8lv0AxZmOZ/dCtkA0YQyU97jEOYndgBonr
+ 0C7cB8daVvDAivB80GSOSEvcErbEK+chmPUlz1h8iM57GW2n01X3mK3rxHyTOHvOmdBQg4NcOVj
+ GTBxVcVTMwzSpEH0kenrEenxaF08ZfXviTd9pOH9vO1bAVKAw9/q0gdWXaKRy4xPEfUKmop832n
+ oAgmJdvySU8thFDjSCg==
+X-Proofpoint-GUID: ZE0_nQZ5oiM0X2zxo2-YbHoObRN2WX-b
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE0MDA3OCBTYWx0ZWRfX3STbxRgO937N
+ uMrFG1QWbR4Er7urnEWa813YkwWLPzH39xNsu1/07kPxwqHzLVD8lJ5x3B1uxkPk1/z84H63s6P
+ iCnFmi8Rc+OqZns4EwFHhWmWb/2Z48i1zy9yYjvyxsGggcyCCWaN
+X-Authority-Analysis: v=2.4 cv=U9wHnuru c=1 sm=1 tr=0 ts=6acfdc1f cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=R_n4Uisa8axJ7jemP0ek:22 a=pl6vuDidAAAA:8
+ a=LSAfqMpvtffKtK7BL-AA:9
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11935
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 clxscore=1011 impostorscore=0 priorityscore=1501 suspectscore=0
+ bulkscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610140078
 
-Willem de Bruijn wrote:
-> Josef Bacik wrote:
-> > I'm going through and reducing BUG_ON() usage in areas that have created
-> > the most problems for us.  89 commits in the tree quote "kernel BUG at
-> > net/core/skbuff.c", 31 of them since 2024, and some of those could be
-> > triggered from inside a user namespace.
-> > 
-> > The first patch is a fix: skb_copy_and_csum_bits() leaves stale bytes
-> > in a buffer headed for the wire when it hits unreadable frags.  The
-> > BUG_ON() conversion of the same function needs the same handling, so
-> > it's here rather than sent separately.
-> > 
-> > The rest of the series converts 17 of the 19 BUG_ON()s in skbuff.c.
-> > Each one becomes
-> > 
-> > 	if (WARN_ON_ONCE(cond))
-> > 		<error path>;
-> 
-> Good idea. I was thinking of doing exactly this sweep after addressing
-> one case recently in commit ee1972def665 ("net: downgrade BUG_ON
-> EIOCBQUEUED in sock_sendmsg_nosec")
-> 
-> Instead of WARN_ON_ONCE, which still triggers a panic on systems with
-> panic_on_warn, DEBUG_NET_WARN_ON_ONCE?
+tools/include/uapi/linux/types.h is the only header under
+tools/include/uapi/linux/ whose SPDX identifier lacks the
+Linux-syscall-note exception.
 
-Just to understand: do you plan to resubmit with this change?
+The file was originally added as
+tools/testing/selftests/bpf/include/uapi/linux/types.h by
+commit 0a5539f66133 ("bpf: Provide a linux/types.h override for bpf
+selftests.") without any license header. Then
+commit 579f1d926c66 ("selftests/bpf: fix broken build due to types.h")
+added type definitions copied from include/uapi/linux/types.h, which
+is licensed under GPL-2.0 WITH Linux-syscall-note.
+
+Commit b24413180f56 ("License cleanup: add SPDX GPL-2.0 license
+identifier to files with no license") tagged it GPL-2.0, along with
+other headers under tools/include/uapi/. Those other headers were
+switched to GPL-2.0 WITH Linux-syscall-note shortly after by
+commit fb7df12d645c ("tools/headers: Synchronize kernel ABI headers"),
+when they were synchronized with their kernel counterparts. This file
+is only a partial copy of include/uapi/linux/types.h, not kept in sync
+with it, so it kept the GPL-2.0 identifier, also after
+commit bcd66b10b5e9 ("tools/bpf: Move linux/types.h for selftests and
+bpftool") moved it to its current location.
+
+Use the same identifier as include/uapi/linux/types.h.
+
+Signed-off-by: Marco Vedovati <marco.vedovati@crowdstrike.com>
+---
+ tools/include/uapi/linux/types.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/include/uapi/linux/types.h b/tools/include/uapi/linux/types.h
+index 85aa327245c6..6acf2059085a 100644
+--- a/tools/include/uapi/linux/types.h
++++ b/tools/include/uapi/linux/types.h
+@@ -1,4 +1,4 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+ #ifndef _UAPI_LINUX_TYPES_H
+ #define _UAPI_LINUX_TYPES_H
+ 
+-- 
+2.55.0
+
