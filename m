@@ -1,66 +1,64 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1EB377ABE
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3692571A9
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791959242; cv=none; b=hhkUJcTXpYAYlAaaQzxvZCBjrih01pSSU4X9CZkE0N5PmFNbf0Q7VBij78K5vKcL/gU/3Smfi5DC2JXxvHyx+AHNuTXCGbe3kIDtoa7NY0T4EXX/Foi1NrQtEUJOHDbU7EznEsEBG2HDgj4EGodSAF4MQuiA8AuGb8oTKd6r/K0=
+	t=1791959242; cv=none; b=EKMZ8mg1E6j7YPAju//4/LMGYOMVw0FlVQdirCuw8LFn5m0MEZB/a9tXanR678elIV+BpESO7nbeEvvH1+oH88HGMWOq1TaPgdmDhHrxY5wpGg/BC9niVCpBMZ/Lwdn+VFjSQIl9QCQ9SsJ2LCRUpfVJ/yu2nsb2/VgLaQXNiKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791959242; c=relaxed/simple;
-	bh=RFL89FGKefYovGeBgZ3CB4+xWGgb3vNqaJKhk5dNQjQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fYrvhnx98CoRsjYkSWGI9piWIWGMwjNZxWge4kwwPgvqwMssnScGcYKLly6koDTjislUu1mfQbGXqxAZt+tmrsF3n2dpvrj5yksHsoH7eiy8Qu2Y0MA8/64wts7qAsO+gh5trrNYiwknprOQ7JaTrXB4N5zd4t04aycYcdb4e/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pqmQ2mq6; arc=none smtp.client-ip=209.85.128.51
+	bh=f+qohAJuN1F6Q1Y0tiY5g2sfEJf7RRk9kbfAPocR7c8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gvVMYI5vjnVErc8p1tdac3fKZAmo1KOkICnC5KxC+YNDnxdKOoGZ7YjG3o9ShIDXwEhz9Jwh5z0bv1qTom03uMVBzTb84YMMH3YSfl1CPr5BCvicwGhIv6fAmdqCQi6pfSpVbp9Sz0HOmNF+xRNE6pxKtotqa4FpOGlDnNVe+Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mINMR+5P; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pqmQ2mq6"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a0213948d3so22400085e9.2
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:27:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mINMR+5P"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a1635f7c89so5612165e9.2
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:27:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791959239; x=1792564039; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jOeaatzk9bhuYpSzqiCT8rOTWkQH4urpPw2fjdSr5Ec=;
-        b=pqmQ2mq66RojAANIF5bwWk/pRlXcTIptjkcEvmoBYeri1kmR3iMW1AH8XGBZJe/ZHb
-         uc3ks1PY2X6iC6x2Fg0Ej28dlF7aA1rPvObgoVTfoJIF87UpaFztHY4z8ZgdDbRnp+iu
-         fD+SRLMgiHp/B6it15XHmTdxJlSv/JFTfkegiNH1dXEQu/i0RSjWbdWlyo2sUK7TaQn2
-         nfm5CNoJw+7DGHojgOLmOQzWwQ23hthXvSkBJp44wBixD3fv8y9Jpe7S1jqao8CA17f8
-         q5BmBE028Zj8YHaTJGOTZRnPhcILHAAZx0zmSXuUXf7wADcstaX0yu5OSrd1DEvKe0qn
-         aVnQ==
+        d=gmail.com; s=20251104; t=1791959236; x=1792564036; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/WrZ4/u4jJEQM0ZlZpxNQ2Z1WiaeNhYEi18x7PW/q/M=;
+        b=mINMR+5PXWd43jUHM9EHjImQt/B6OVF2YoYXSwNTes307c2+t9+qN5I/9U4hx5l5UP
+         sh5GYLsCuhwnJzQzRf5T38jihxTgh/AOZY+c2IK9Wyq6+oASoNXH6sucSdr/d5rkQ3IN
+         aaQmjzJHZNB/GKnwKKR5CymeFs+8LowxixRLXr73UvRliZZPWiZRKxAZX8VEXHQrysPp
+         rqBBmJCbsjecn01wC8VyEdzysL7wzIQFq7MWpsu86hLGZAd9Wo8G96/P7PAlEK98dtYH
+         FPILoK1lEhEBhyNl/c2x2/Vcmh57jwVqEpYx+5QCvDbuNGiMyQNEoKBArEdLsrjJOS/A
+         xrhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791959239; x=1792564039;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jOeaatzk9bhuYpSzqiCT8rOTWkQH4urpPw2fjdSr5Ec=;
-        b=UYM+Xmx0x8eXtGXhVe9BGUzPIW+/+ReSH/0XtF0/ngzQ7XuprUYzogPAFOdn7CDChP
-         xFfTbl8peOicMMWVDqnBAHu7K7pHS6ZFikBHIU5D9HanK9RxwLIjeRlKDnFJIpq3CySq
-         sA3xAvuj7CmhjADi4VjF08StOEGxfS79siQ/5o3NXcTbKp+XZfw3GTUkLp19Ki+o1hKc
-         1AMUGvLrX/GGfB67P50fYdBHjvTUictfcqUK3QhLitjpkTK9mxmlWKkR2KbpP34qNZJd
-         Zc4xn0ZB1ur9SlgMQF+w5mI+mPj5J1Ri+XGApYC/+xJyvdicN6uUVwHWclwiwS+s/8jm
-         tASA==
-X-Forwarded-Encrypted: i=1; AKwUvBzqF888Q7WZCLuFoc/okkcpenGJtPNy/9gHyUzBVOoRHbY0F3d9YFEaEgWyYMMy1G7+SVk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIoR3cueam6kNJ5PTeWeaD1t/bvWHNxf3ZdnKL34LqXaACu8Sew
-	f7LnoRmnP8zmQAYz6bmXKKMEIPujhxkhEEjZtvQ2IkGvHJBt07GMiLfD
-X-Gm-Gg: AYBFou13Ml5IXZycygy64owpl0VhDqMi+o3xTe2MnYjCTbLFjglXH9pGzg9lpNwWQtE
-	LC2OMysE1vT+viOG18LDYI7j1yxflrF8xcTERtz/RyBe2rMtAUjEU2JP8N4sTfxwhrEC/Bx4JrK
-	8lfsH1x4KiWeqdHdJtc8t67GeRtWVn0uE/0JFJaN6a6LQ5+2sOJaAy3irDySj0JfJMaKVE2Nj9C
-	VtUZWl7Rh91WxNWjbBCc7uA28IEY8g1je5yaf9EnVfDo4GuDsUuRiQZdSKgnXe+z5CAhQcDUN+3
-	2BIv4DK4vQFhKeZcOfRfvpVSJZl0eTviEt1ldHikMLSGrq/E6g/SrxiR/+Vi7LB15GvEs3rL95e
-	Cnv4nDZqrBA1dtTBJv9KqZ/KcTj0oponBq6rQi5RVxqpjpvbea2/R5lOZkGBwER/0evITpdpuTt
-	+Z7mUT1SaK2SIeqDB4dm6yLjBTryA9w5V4V8KppkIgY52mVg/9FmpxfPTEVrS0EHlOHSpmi9KF5
-	scVitdm07gwd7qW2z7R0WlWQHqhZ8NSzDFpJEFvHCgrg7M46VHAKlTQVFfTuvwPQYTxQtgP2mtk
-	YOEFE+kfRuRDRYRkC0JEYUtoYZLCM+a3YxtSaNKDVScJMV0IXhfdhWtbDaiE0tfcRCHwWUAp1bL
-	XW6WmxSZaFYlH6g==
-X-Received: by 2002:a05:600c:1c1f:b0:4a1:a484:2c37 with SMTP id 5b1f17b1804b1-4a1a4842caemr152491245e9.25.1791959238943;
-        Tue, 13 Oct 2026 23:27:18 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791959236; x=1792564036;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/WrZ4/u4jJEQM0ZlZpxNQ2Z1WiaeNhYEi18x7PW/q/M=;
+        b=LxT2qZvg32VnGHD36wYhtz0bltFiv24dQtmPbeNdcOcN9/Euq3+knwtQ/X5MsOB5TE
+         16L91GWG1yQtZh6EJ6IYfQAOwWFz1jUn19UCcipQzEm1k35YpYP8OdvXvGpIxaNw82zz
+         bQJqALwcHRQT76CIuUtszm7FnNqBjdZo13aWotVNosLKhirSLyxlRUFgMEhdpMxdKK9Z
+         jaBQn+kqvaVNq3ohwjkJ7QFhpetunV24FvmvGi5UTn3+kq7FkPQmmxpdbVazZSHrZX0g
+         25TZcWnWTugRdFnycAtrOLVoHLTtNtfnNxSOHf35vZaxocJ9Izsav7U0LgawTvAB5IKH
+         yS1w==
+X-Forwarded-Encrypted: i=1; AKwUvBz/wtuYzmAqA9Jq5JyVkwNgH2qPBeEaJHB+q9cwV8P6/0h4Pxe7UXtde00MnEIEXkh9b00=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIO/vUv2JTGhqQ8lCGhA4eftIAc34OcEsD+Orkc1vdvjKZWoxvS
+	Qsh7n6k0WQ3VpkXXimuqHbf0cC1e9SY2GnDXhRf7Woi8iH+Qm0cDoV/q
+X-Gm-Gg: AYBFou3geijrvmpSrZvrt8abDs1NQIETmzN4p6k93qSTZ1lvcTRdMpQeTlee8KwJu9X
+	0KYz+hdg1+D8C5OdXJOPF8KGzqVR9GN+ro7I41nL0fUvjhvxz8nD61RU4QznS2NdIq8KaWtjl1z
+	IgZjhlrC0rKLhHm2Zptco3NgLW6nzHMTKnJNDLZ8UKJD49AFHv9iHLPyoFdp1ktviM4BDWTwtsC
+	aR+8ikIhsM6qTB994LrLlEBIbl+9DNRnmztFuLx1jlaFkvBSSuhqJ1+Ms/z4vQsD/NKDOgIhxOC
+	pyqsd5nQp+sSAzJURLTOpEySghhn+6n9+kDdczbHKUGf/8yPmJq2SKkcAblSihLl+vFpEZrEyRZ
+	zpg3Hz/+Y55T0jgnXy+FcW/KKL/Whxr5Mj86DXUjhFBzlWUvJkeP1UbzsPF0yoxHFfPdMBd15WS
+	88Vu6J0xc4fgQ/LfpVJSU7W1e74PkLjYtatANrkBO8WLdOnEiUqQAsbiF9QvvH9FNJPakaDVtY8
+	7uQmEQEQe1IOde5cgdtRMogtHLxQgWcXAnJmuzrgLlFwt90I8fp8WQQ8ZOQdGJRzJbMUaRGyzAv
+	WHpmioXx28Rr9ElTm89H33cq4Y4o8iqSJr30w6nWzwr3dFBxXG8kdt4Ju9qaGm94oQfUMqVTX6A
+	6m8DkgsrEiH0x
+X-Received: by 2002:a05:600c:19ca:b0:49d:10d6:fd55 with SMTP id 5b1f17b1804b1-4a18e4487b5mr298737055e9.1.1791959235651;
+        Tue, 13 Oct 2026 23:27:15 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-aed1-da01-ddff-863b-8308-ab16.310.pool.telefonica.de. [2a02:3100:aed1:da01:ddff:863b:8308:ab16])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be8c5e7sm528846745e9.4.2026.10.13.23.27.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be8c5e7sm528846745e9.4.2026.10.13.23.27.12
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 13 Oct 2026 23:27:18 -0700 (PDT)
+        Tue, 13 Oct 2026 23:27:15 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -85,12 +83,10 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net 2/3] net: stmmac: free RX resources when TX allocation fails
-Date: Wed, 14 Oct 2026 08:27:00 +0200
-Message-Id: <e7a5380aabfbc03bd560ab08f37ea255d11d528a.1791958735.git.kmehltretter@gmail.com>
+Subject: [PATCH net 0/3] net: stmmac: fix DMA allocation and IRQ failure cleanup
+Date: Wed, 14 Oct 2026 08:26:58 +0200
+Message-Id: <cover.1791958735.git.kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <cover.1791958735.git.kmehltretter@gmail.com>
-References: <cover.1791958735.git.kmehltretter@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -99,36 +95,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-alloc_dma_desc_resources() allocates every RX queue before allocating
-TX queues. If TX allocation fails, its error path only frees TX
-resources and leaks all RX resources.
+A DMA error-path review for the BeagleV Ahead found three bugs in the
+common STMMAC code. Partial allocation can call buffer cleanup without
+the metadata it indexes. A later TX allocation failure leaks the RX
+resources allocated first. IRQ registration failure can release
+descriptors and packet buffers while DMA remains active.
 
-Free the RX resources after the TX allocator unwinds its queues.
+Patches 1 and 2 fix allocation cleanup. Patch 3 fixes the IRQ failure
+unwind independently.
 
-Found by inspection. On a BeagleV Ahead (TH1520), forcing TX DMA
-metadata allocation to fail left the RX cleanup event absent. With this
-change, both TX and RX resources were released.
+Testing:
 
-Fixes: 71fedb0198cb ("net: stmmac: break some functions into RX and TX scopes")
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 ++
- 1 file changed, 2 insertions(+)
+- BeagleV Ahead, TH1520 DWMAC 3.70a: guarded baseline/fixed boots for RX
+  and TX allocation failures and normal-open IRQ failure. Baseline runs
+  reached the guarded unsafe boundaries. Fixed runs cleared the tracked
+  resources and stopped DMA before cleanup.
+- A matched follow-up applied the same RTL8211F-VD resume repair to all
+  baseline and fixed kernels. At both 100 and 1000 Mbit/s, each variant
+  passed eight close/open cycles (32 total), delay-register checks,
+  pings and bidirectional 1 MiB SHA-256 transfers with no RX CRC or
+  DMA-API errors.
+- Native-XDP IRQ failure was exercised on the same board. The baseline
+  reached IRQ unwind with DMA active and required a test-only rescue;
+  the fixed kernel stopped DMA before unwind. Both reached descriptor
+  cleanup with DMA inactive and no DMA-API errors.
+- The physical native-XDP pair used CONFIG_BPF_JIT=n in both variants
+  to bypass an independent RISC-V execmem Oops after the STMMAC unwind.
+  The default configuration's XDP-open path remains covered by the QEMU
+  fault-injection matrix.
+- The exact combined code passed 24 of 24 checked 64 MiB transfers on
+  fresh BeagleV Ahead boots with no DMA-API errors.
+- QEMU orangepi-pc/dwmac-sun8i: 36 of 36 cold boots passed across the
+  allocation and IRQ matrices, including XDP-open IRQ failure.
+- The exact combined code cross-built the STMMAC objects and BeagleV
+  Ahead DTB with a RISC-V defconfig and DWMAC_THEAD enabled.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 495ff7aef..8fd7d2173 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2425,6 +2425,8 @@ static int alloc_dma_desc_resources(struct stmmac_priv *priv,
- 		return ret;
- 
- 	ret = alloc_dma_tx_desc_resources(priv, dma_conf);
-+	if (ret)
-+		free_dma_rx_desc_resources(priv, dma_conf);
- 
- 	return ret;
- }
+The guards and fault-injection hooks are test-only and are not in this
+series. The RTL8211F-VD repair is being submitted separately.
+
+Based on 24a19b953e2a (Linux 7.3-rc7).
+
+Karl Mehltretter (3):
+  net: stmmac: handle partially allocated DMA queues
+  net: stmmac: free RX resources when TX allocation fails
+  net: stmmac: stop DMA when IRQ registration fails
+
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 26 +++++++++++++++----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+
+base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
 -- 
 2.39.5 (Apple Git-154)
 
