@@ -1,122 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E40411A10
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 04:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7393EFFA6
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 05:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791952783; cv=none; b=PWBfd8YtRgYUOs/db+024Czyjj/NXfGg/OFRCbYb2Q4FPDBCo4Ysie4Qpplu+HNjBYxpUoVkvWknO4lYGzTmeZN+6r8w7zigZaRwSRuMGMfPZMQWU5NjZ63uoyqrDaWh4LoVrq9KI6oE5i3d/mMHoyTrJ8W33UUGgSMWHxTpgXQ=
+	t=1791956526; cv=none; b=QZc5I8EL94Yta3xsIRJMX9/VLBLoI5plKsOBCagk9WnnBGG1QviTgJO6qH9qlREzxMweZysIT6Q/BugVM/6AtQEsky2XxmkEcgw0t2bkVyxbbcWAjtCCQDkwPcdlvBNM4XtWHsqcWuGiDIQU+OeU9/tpj1KAFrmppzoV0/UYVY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791952783; c=relaxed/simple;
-	bh=DZaRy/akjBHf9ZrR0eHy04lM1SxePYwM0arX+/4ffzc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=iaGYFF9/9o62ESlSw8BnbmWs8iExyTT1bj6iexa79dQUMEkrzwx21lC58drNFgwyX0m2D60/Z14Gbznj12ZZxCGsykV4dl2aVkQtyF0P0CU6hRh4Oe0F7J0plcTehkTzWZhpSomP2dmsjoeltIQbjBwzHhQWhh6AR8WjNuvKQ+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ve4t7EcL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791956526; c=relaxed/simple;
+	bh=fi2H5O/L0wXEXwRsfF6DzFqzunO4KzffYx7Bn4J6UmI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZtuXiFvYItb+A15vEi3+49lLXHHsW74YUFvym9hOY4fmE6hGpXgMd2paFCi5rLxxXUkt/HFwYPLoPyrIuX2+oupfQwaG/ikZh/7TTOBX2g7nndSWlApWMIVUAmDOsrZREHY2FQTzUOAcIERhzV/GxRFMfPn22RBQoEh+pCK0AUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p9F65P4/; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ve4t7EcL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA5E1F000FF;
-	Wed, 14 Oct 2026 04:39:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791952782;
-	bh=mVKkCeEdC/Z3bV5+Gj0QiuZvl6B9f0qk36QBoeLCgSw=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=Ve4t7EcLOnzBpcI1YE0/Db/F1QU0KCzu8pjxRHF19QIufyy4I3/TRuZaq2ELtAzt8
-	 GfCAB2fUjoONolJxsJ+1F5Gtmz0yztKMOjHTgqRemlHuHrDMOiP6643ZSBx9Py0qKX
-	 O+scu1BR6iCqPztQz8QgwjTKpjqpujy+oP1cEYzwLs/JsaLqn7BUQLB5uySXTeAV1f
-	 chdAoBd+fqN/fzxdM8rj03xEtKaPpdOfp2t9FcPXZQCp66QID+/PPriT1uvpBACUUN
-	 TdpNc4ZBMqm4ECzgu02nuEkuWyCDzqOEkIiM1BjJ6USZqmmDag+xwBGdLIcsBQ0hH8
-	 DUl1YN7tuCGDg==
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 07529198003A;
-	Wed, 14 Oct 2026 00:39:39 -0400 (EDT)
-Received: from ams-imap-11 ([10.64.2.31])
-  by ams-compute-02.internal (MEProxy); Wed, 14 Oct 2026 00:39:39 -0400
-X-ME-Sender: <xms:hwfPagdIJmelWczr7He8n9KRTjGUR-fo9YTa5G_szGq2dn-OK-yeFA>
-    <xme:hwfPatDIBaRejOSh-km9hQyHvEnn1xC9sD9FZ06z2kHkmj4sDtwTBA92ZqbCeHJn8
-    8zpS7vEzfaCjp4EHJzyhiFPHzewKvVa_xA0KqmYjn5DudIBukDn34eY>
-X-ME-Proxy-Cause: dmFkZTE6pBDUsJEPr0X2GlKwrjjE+OE5kUEHvpuPEEl0/V6y+5kxMhe+G35Lr3HmkzZN1n
-    1lFFtYXYC2zAIFzuXWsk+8iOHgzKsSLuzGH5cnMle49tSzmY4aUJkM5eZBDt2pkFqtSNJC
-    TpsJbwj5DMMioB4ofwJ5JZYJg7X5HLdDvwP6S8efsLSiaRJXVavguBZeGE4D1OAqIV6XKo
-    mVTi3yjX66ip85F6m8Tzbz7LN/y5SOftKGYu2319JkGv8n4sficapx7VyFzw+UBQ+didy6
-    vhAXhECdzhApuikAv5Oh9j0j3YjzEhe36ocpkiExpU21r90LwjF6Wzj+4VCwfDn5BqJFFK
-    JND3vloSJzRw+u3SkcdjK8yHAjYo+fbUy5Ho4F8OP1HP4z+jHQDr8lYZJrygElaGQm05SK
-    JuR5z4C/W44eMwOAFQyyTY2COeXVQDRyt+pxPROFg6V+By4LaEhKQ/KP69wafWMQ1qRc3K
-    nZw0hP0JA68yPYYC/zkwYkpYedjazidjAxmf282AYUKVVUoadYes5U34DDJwN3fYTWVQ76
-    VDYxc1JP8EzGqR9ICTjhoIbcV0WUPX7bAyjWmGz3xHJ5lSUoueeztvQKWxL6d0yAvoDLip
-    HXB3K9f0nPH1ZCiqUUxpq7dOobhlQG8zN6ankyBF/K04OKkt81SMVwfXaj8w
-X-ME-Proxy: <xmx:igfPatadCwlNeP-f7qFvfF2T21Y-b5awskS_Q9cwafrJNmbL13TdGA>
-    <xmx:igfPavaI5NBgoPWMt7PTB__VRt23F7eLY4Ng9ebzf0FACZLh_Mv4ZA>
-    <xmx:igfPammn66nNiMEmtdjxGJGTXyh82YjU4f22HRaxAF3s5ypjKV_GbQ>
-    <xmx:igfPapSv03MzL7AkAKMPLEHBu1nwNc9kSB4a8SBCWaMqh1ortoprdQ>
-    <xmx:igfPajXgQQXszY5jntE4jDgiT2r-VHw3AdfJRA8CgBi4yq1sXz3Rb_Di>
-Feedback-ID: ice86485a:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 23539F8008E; Wed, 14 Oct 2026 00:39:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p9F65P4/"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso2940a91.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 22:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791956524; x=1792561324; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=y3wJVoR8C+C/uFpiwT5CQlIXp56xtNDcOdEblkW29SM=;
+        b=p9F65P4/2QkKyznzeVzgoHqv3DwMtV9nIrMap0ptCWouaGc7RQg9Z7753ffEaKerWA
+         IAgz3/Qaqr3jbjKh07qLSibKkIURgVkFvdf19cZ/Opjf43gyZ6FyYKw+XDemYcCS/7h3
+         eyxRuTsMtaUvolAM56QoiKHbLG/3qYtiq70FdX9ZlTvqNUPkXuiqKmMw9TErwsZ/QWEr
+         JiYltg10qmWITIRJlNMmRxejaI2plSs4mbO6LtVdKoaz9h/aguTvCFmhwdmN/BhBeO8Y
+         HsHbB/hXfiATzdwksdodohaGIFO0N5Dh5ODTAycjd+5nZTOXmDtpp8DuE4Q1WrNogjFo
+         8Bog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791956524; x=1792561324;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=y3wJVoR8C+C/uFpiwT5CQlIXp56xtNDcOdEblkW29SM=;
+        b=pX/Sx9o4wDAtTIk+1FzvGxLgzH1O0dWJrNGe294Fw9jYevZr0v5QOi8Lv/5dNKtDg4
+         vDspkap/jRYZzbWxteFXEDKYQ8z/eOyzs/lJzGwZ8GB6Pf56BcfFUg/KAC6LVMfENijg
+         keb/rSeJuVimGlWYqdVgY37j1CsNXsmmTdOCNrcQUR2WCiQnIeF6f8LL1zSuGgeLyWxT
+         jsF2K8uWeu978I2pXGIV2VSPzKV2/hHP91rnmqkXo8hfzbvTio3wYXoiISgQ55iYKOKu
+         yonHcLaR6zRGN06r8gxnypGiDCUERN4sFoVV5HxOcivCaabqEm++pzYeXoS0bNuMW5wo
+         ZXDQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxh0H94irK++qK+wgFFEoZUryibjVlMtAVGf+kKvH1Zf2ESdiGdvd0RMNNAmLZJoIWgT1o=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL5dM+WQ0F0F5W6wuOE0iPeYdXEl4hyI3mGxUNDmch90K1MLqtv
+	qTdFsDrr1W+y7+pXLbV8SS+09s/igBT/pIHV/xZ/ayCS14vaWSwutDPI
+X-Gm-Gg: AYBFou2fOtrW1gOZIRw1mxBaGRZmymqRuevd3OZliDacVb9HQoH7tmue6p3Qu8/ZLpI
+	6gmdLOi2uSWTGTrdkdFAzPUneSkJOnZpIwcQ8E2fpzpaLlTjZYuTbsreXZPWu5+2b1IgMC8gxS8
+	r2pRkPjf0bmh2eFSUAoR/eD27KXB5CH5SdrsQbOrTqH068ojTNZppyNPY5vTItdmAvpK/JyRbb+
+	bGcEQr/s108ZAWYrH+PX157rgw106sAgKEFIOBIECPkI0LzpGFsr+vgbFPfxb7sEQu++GekwW1t
+	BvUs+e+XXb9eb389B3DolbsZCy7rkl2byePPsKQn3tLaOuCfHDYj3LM7coVqjYWlK2iDd5TlCC8
+	pZ9HgLG1v1tAIIVN+XSErPIA3VZiod/K1heqqNkyiUBoOIEuEyfgrUag8bWDE987GGyC+L1zTzr
+	6bjDA7uSPeZ5ThR1JPo+ARQbS9FlgRrTipEd0ZLJJe7/wu/JCdHALw+gahNif/QA4bSwCTJRKts
+	NUY1+xCjwKs9XdZqstVVh/lzA==
+X-Received: by 2002:a17:90b:2e0c:b0:3ac:7872:d1b7 with SMTP id 98e67ed59e1d1-3ac7872d292mr234888a91.32.1791956523643;
+        Tue, 13 Oct 2026 22:42:03 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac5f27d573sm2962927a91.11.2026.10.13.22.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 22:42:03 -0700 (PDT)
+Message-ID: <275c14be55e81c9c809b015cb0c5ee3099bfebfc.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/9] bpf: static subprogram arguments liveness
+ should use BTF type info
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com, 
+	yonghong.song@linux.dev
+Date: Tue, 13 Oct 2026 22:42:01 -0700
+In-Reply-To: <2f19a48d9b2026fb5867d0f18ec3858f0169feb7.camel@gmail.com>
+References: <20261010-scev-minimal-v3-followups-v1-0-6000e95ef993@gmail.com>
+		 <20261010-scev-minimal-v3-followups-v1-1-6000e95ef993@gmail.com>
+		 <DM21MY4LE3MC.RAS8LM9O12RE@gmail.com>
+	 <2f19a48d9b2026fb5867d0f18ec3858f0169feb7.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 14 Oct 2026 06:39:14 +0200
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "Jason Gunthorpe" <jgg@nvidia.com>
-Cc: "Mark Rutland" <mark.rutland@arm.com>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "Jeremy Linton" <jeremy.linton@arm.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Simon Horman" <horms@kernel.org>, "Gerd Hoffmann" <kraxel@redhat.com>,
- "Vitaly Kuznetsov" <vkuznets@redhat.com>, "Philipp Rudo" <prudo@redhat.com>,
- "Viktor Malik" <vmalik@redhat.com>, "Jan Hendrik Farr" <kernel@jfarr.cc>,
- "Andrew Morton" <akpm@linux-foundation.org>, kexec@lists.infradead.org,
- bpf@vger.kernel.org, systemd-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org
-Message-Id: <8fb05f13-e770-41a4-af66-d239b4c95201@app.fastmail.com>
-In-Reply-To: <20261014000227.GV13920@nvidia.com>
-References: <20260322014402.8815-1-piliu@redhat.com>
- <20261011201325.GA918242@nvidia.com>
- <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
- <20261014000227.GV13920@nvidia.com>
-Subject: Re: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE format
- boot image
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-(removed some bouncing cc'ees)
+On Tue, 2026-10-13 at 20:57 -0700, Eduard Zingerman wrote:
+> On Sun, 2026-10-11 at 13:29 +0000, Alexei Starovoitov wrote:
+> > On Sat, Oct 10, 2026 at 11:21 PM Eduard Zingerman <eddyz87@gmail.com> w=
+rote:
+> > > @@ -8829,10 +8828,13 @@ int btf_prepare_func_args(struct bpf_verifier=
+_env *env, int subprog)
+> > > =C2=A0		return -EINVAL;
+> > > =C2=A0	}
+> > >=20
+> > > -	err =3D btf_check_arg_slots(log, tname, is_global, slots_used, sub)=
+;
+> > > +	if (verifier_bug_if(slots_used !=3D sub->arg_slot_cnt, env,
+> > > +			=C2=A0=C2=A0=C2=A0 "func#%d argument slot count mismatch: %u !=3D=
+ %u",
+> > > +			=C2=A0=C2=A0=C2=A0 subprog, slots_used, sub->arg_slot_cnt))
+> > > +		return -EFAULT;
+> > > +	err =3D btf_check_arg_slots(log, tname, is_global, sub->arg_slot_cn=
+t, sub);
+> > > =C2=A0	if (err)
+> > > =C2=A0		return err;
+> > > -	sub->arg_slot_cnt =3D slots_used;
+> >=20
+> > [...]
+> >=20
+> > > +		/* BTF validation guarantees FUNC -> FUNC_PROTO. */
+> > > +		t =3D btf_type_by_id(aux->btf, aux->func_info[i].type_id);
+> > > +		t =3D btf_type_by_id(aux->btf, t->type);
+> > > +		env->subprog_info[i].arg_slot_cnt =3D min_t(u32, btf_proto_slots(a=
+ux->btf, t),
+> > > +							=C2=A0 MAX_BPF_FUNC_ARGS);
+> >=20
+> > Consider the following...
+> >=20
+> > arg_slot_cnt is not only for liveness.
+> > bpf_in_stack_arg_cnt() is derived from it and it has to be in sync
+> > with sub->stack_arg_cnt, which is still set by btf_check_arg_slots() on=
+ly.
+> > For example:
+> >=20
+> > =C2=A0 struct with_ptr { void *p; u64 x; };
+> > =C2=A0 static u64 f(int a, int b, int c, int d, struct with_ptr s)
+> >=20
+> > nargs =3D=3D 5, so the first btf_check_arg_slots() does nothing.
+> > Then btf_prepare_func_args() returns -EINVAL on 's' and
+> > the second btf_check_arg_slots() is not reached.
+> > Before this patch arg_slot_cnt was 5 and r11 + 8 load in f()
+> > was rejected.
+> > Now arg_slot_cnt =3D=3D 6 and stack_arg_cnt =3D=3D 0.
+> > The load is accepted, bpf_jit_supports_stack_args() is not checked,
+> > and bpf_out_stack_arg_cnt() returns (u16)(0 - 1).
+> > x86 JIT emits 'sub rsp, 65520' in the prologue of f().
+>=20
+> Valid point, thanks.
+>=20
+> > This scenario looks bad enough.
+> >=20
+> > Also btf_arg_slots() returns (size + 7) / 8 for a struct of any size.
+> > BTF has the source signature. The compiler passes 48 byte struct by
+> > reference or promotes its fields, but here it's 6 slots, so
+> > check_outgoing_stack_args() returns -EFAULT and the prog is rejected.
+> > It was loading fine with this subprog marked as unreliable.
+> >=20
+> > Why is this rewrite needed?
+> > prepare_subprog_args() was calling btf_prepare_func_args() for static
+> > subprogs already. When it succeeds arg_slot_cnt is exact.
+> > When it fails the first call marks the subprog as unreliable
+> > regardless of what is in the registers.
+> > So the liveness.c hunk alone should be enough?
 
-On Wed, 14 Oct 2026, at 02:02, Jason Gunthorpe wrote:
-> On Tue, Oct 13, 2026 at 09:19:28PM +0200, Ard Biesheuvel wrote:
->> > Given those constraints entering the successor kernel through the
->> > normal EFI entry point is highly desirable. This would allow x86 to
->> > continue to provide the DRTM trampolines through an EFI mechanism and
->> > means the Linux EFI stub always handles the launch with identical code
->> > in all scenarios.
->> 
->> With some help from my friend Claude, I've prepared a prototype that
->> reuses my efiloader Rust crate to boot EFI stub images (bare Image,
->> zboot, UKI) in the kernel: the EFI boot phase is invoked at kexec
->> load time, and runs under the preceding kernel up until the point
->> where ExitBootServices() is called. Then, the actual kexec call
->> will return from ExitBootServices() after shutting down the first
->> kernel.
->
-> Running it inside a kthread is such a novel idea, I would have never
-> thought to attempt that!
->
-> I've asked some folks here to take a look and try to test this with
-> real DRTM capable HW. It seems very promising that it will work to me,
-> and I surmize this is also close to boot a UKI?
->
+Actually, thinking some more, I think that the original sashiko claim
+in [1] is bogus. states.c:clean_verifier_state() is called for the
+current state unconditionally, and it resets dead registers to
+NOT_INIT. Meaning that a pruning mismatch sashiko describes is
+impossible.
 
-It already works for UKIs as well.
+Additionally, btf_check_func_type_match() prohibits freplacing static
+functions.
 
-The next step is to run it deprivileged - I think the arm64 stub code
-is already very close to being runnable in that manner.
+I will drop this patch.
 
+[1] https://lore.kernel.org/bpf/sashiko-outbox-165368@kernel.org/#t
