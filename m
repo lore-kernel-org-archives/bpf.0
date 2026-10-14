@@ -1,149 +1,180 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AD4379EE7
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 09:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791971535; cv=none; b=qFKXVbU3zqSWGfv+QmyKeoGGUH8XNw6n/P0OAUNQsqiVshq+TbMTFFEO7/ew79YSebBq+7hmj25NQlBK4PeXDQs0F/yWU6DUXdyDSUFLSlageEr4iwoS/GGxoQHkSnKz++Pzj3LCy2m4ORvMINQf+Kh8ijFHmBWLwf27fWz89fw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791971535; c=relaxed/simple;
-	bh=uXYzMefJOP+aHO3bNqIlMQmN18rqz1b+wDrH65TOCEE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pUQ3L7VUkF2QEp755xeQWrdDf7Tp5nIx86LW7uPgB56La1a6wPHD5o/iPkhyOdl+CbwIf5g1hERENRBQlCJ7PqVuVpG0xGz9ezqTjZnWMb05NjWYqjtv1qEQV/A/7O1LytQ4+t2Xa6DdVP2srjLqJlt/vVWfhOekUtFl5lqSG7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QNiHo/+v; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=P3yOk370; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF504D7948
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 09:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791971826; cv=pass; b=qZJH46kc2cQY4pXFWdEi6ZliwP2cOwco5N2pM9JJeSLDYB/gTOQdW+/F7DKjbpL+/vQYcO5G6yKpY7E8+lDK6yeNSMK7Y2qjy1G+Ug3WQUC8mE5FngrJiVt9nJ4skuZTYlR/Y+P00kW68+sM9wPqdxPY+eZvuJuJp1sNRRhxeZQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791971826; c=relaxed/simple;
+	bh=pES0DDjBr7lNbZcv4EttsrEqsZlgoprgnuuUAEr6uzg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qNRY2CTgGKY0MGVoVZQ8+hUoinGZpvsF/rSjSk8NIAybnRxX5So3vKQuTuj2kygjoqNuxWiwyLkXSgLyu0oVn8AQ1jfdTZxc6lug9DFpC1Y41wJ8AfqfAzNDBT+g9NytfxmV/6luTCXffLHyMe80UhgLKxkMO1EKlSom+gM1XpY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=NzDRS6hZ; arc=pass smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QNiHo/+v";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="P3yOk370"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1791971532;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ew/yEA9efwsEsgTzBND1D0weZnW/cI9Jw/YyC/suOs8=;
-	b=QNiHo/+vzy0HQPpJOnuwxaetnoPbgfqAB1WX2EOLPLdLjr5llFTdj8SEPpkMdtUj4TmlI3
-	xXbmkzTGmUi3KSDfpeHAhTl48GUIRtB/uq+R8hsRhz516XtwZKSIU3dTyp7qGqAK90dYMz
-	xKduoozd2JwK4K/fqO2EJTVBoSOhDm4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-643-3bkGwKDfNkOMahHGBKFAEw-1; Wed, 14 Oct 2026 09:52:11 +0000
-X-MC-Unique: 3bkGwKDfNkOMahHGBKFAEw-1
-X-Mimecast-MFC-AGG-ID: 3bkGwKDfNkOMahHGBKFAEw_1791971530
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-4870142f030so2321105f8f.2
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 02:52:11 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="NzDRS6hZ"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-88bc25fcd0eso212136b3a.2
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 02:57:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791971824; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rOf70snJyAGXqoOWnUwkkRrpl74F+Zxokeru2NGRhNMucWmc76/4XadEimUu0zAAou
+         Tjdl8VVnUJmzVwVnTmnd5Hh2Im2SxN+fqHPx4GY+gDHAxvnVYYjD8YGd15IBKWxrKKbV
+         do6ztOtfwHoJQtXpzy0w9eEJvnops3vvDGZuZMr8Ziq3Rx1orqbA+p9S2RFbhV9XxgBt
+         l7hK2F1IlZVQV8f7cfKQ+VTjlQ91ueHHnP+5SS84dQqJH1bzqnacYuKbcYo2vSFHGz0X
+         fiL9R/9VVemnMqPGjA6A6JP7I8zY8ESN4Fs1En7ksjysxCpiKBTS0P+lD81TpR5CcATD
+         8S5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=x9rvRSpojIVM87li0yF5q9R69waCFTVPzWFGm69CD+o=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=osxkdZMLmO+aczJBmHvcA5xchc2AcNa0r/aLofCPlDAm/jT9ZnCwBrGDN00yUeu8Sp
+         UU38O9lTS9xX8DT9Xj0ACfipag4bc191wLSSC1+EAqIk4iuOcAqXEvBkPqEMCEUO3A65
+         sHgE30B7kjS17+5FnAERxGhd2k42zz8EwSyFGGzHWasvO4aJDcow25mnZTM0O300U6LO
+         fTi10c+maOmAodnqoHqJT8uPYDHgThexezNf5lcroTOgoYU2lu5zCql3zdcRklqHJUK3
+         d/RvQuGW9tzG78FuB4GM3raSXHulRk8KECeWNZ/iCHz6Qtj1+gxZLr0rY+bydldJxG4d
+         2fmA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1791971530; x=1792576330; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ew/yEA9efwsEsgTzBND1D0weZnW/cI9Jw/YyC/suOs8=;
-        b=P3yOk370FYz3ds2ok6YIQppHaZwq2rD3XJE+j7bvH/HbBvVGIPHc5NBeH9tVfjAnvT
-         4ZE5hsW5Eovx8S28G7YXtHRAvdnsVpMihc1M7h1T6v4axXNCTc/BdYdI3DFW9BYb8hJO
-         GWWYU4DLNemNyb/uj+sOVQgouIaAU34wHhxOK0yU+OoErewWWHN8gtNVA1vR2tXGPXH1
-         n6BcF0IOt+deQUSlIZzswmBeWQRQway1VnLArZWTvMKGX+VpNBvKstJmPLRU4RkCqNoQ
-         mXM6IQEZJX5y20Fi5m5304HrJdkDRxwH49h9zv4rBauENbjsRRRcOwny2BU/ZRCzPoNt
-         XZmQ==
+        d=mojatatu.com; s=google; t=1791971824; x=1792576624; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=x9rvRSpojIVM87li0yF5q9R69waCFTVPzWFGm69CD+o=;
+        b=NzDRS6hZ4cGKZueOsec0EdGmv2PaAaydt2Cb8mnCAdh/8DrgzzvdM+QcNkFUo8hFkJ
+         nvQE6qXwmMA4T5PIPOFM5WFciLeU6G/2N6gQnAEji7EIT4UGdLVLOL214weLbekHAzc8
+         9oQFnQ1E++ISCVrpF8fg4QYShincVWsIbeY1s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791971530; x=1792576330;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=ew/yEA9efwsEsgTzBND1D0weZnW/cI9Jw/YyC/suOs8=;
-        b=xQvsmaTBukgMFFZFsjX0PNQZkUi+k7xMWuAW9Iv69O1u6csRmnPvYjWpuKq2CsF2/r
-         Lj3DKbuupL+OEHKv5a43QfpZ4CVPTz+OY+/ZdrUymEiSCLjybo1s+m7aqEwiPoYb9QgK
-         +hMy8cDuq3Y3gUAkOded1AyToAi8DQt+SHKf2xN3BXqGDBKS2zzEkpK55BToIprp/1mG
-         RfXWDva5OdtL4QH+zAoQLqNKmBmPg1HvOPNBX2A8u6RNpmH9q9cxMXQpc3pvHHwOv6Wo
-         ja3RHID3dOt1pM4SP7UiuRhTQiXE1VCLwB7JSJ+uo+k7QksnOvSDPXJbbi7rqnZ+u+J0
-         dbXA==
-X-Forwarded-Encrypted: i=1; AKwUvBw/hYOd89Jsx0HUqlx2C4rRIeZ8juFiusrrSxlWeyEtSg8FplRJha2oRf4nRXzZLeeKqgI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI/vjp/WZsq+IMrDTjGUF+65J1Dlmpm0OaJnzWe+DWVEfvtTyVQ
-	3qnOkjZ0b08N760pEoni8369kTakVKqaPdNLuERoEDp5PfZ3zhykyCiwfwfZNlb1qVbL6aK6bji
-	al1sqv+xS04DPnStpYHP0EqrSNxSRx4Tlk+Crx864LzBi0/B0BO4DdQ==
-X-Gm-Gg: AYBFou11yYriuxIX9BhKyaJWdllqEXCR3L1g7zYwv0+z2r9ab88Ym2EPo9EvkUwjwbX
-	TiyEVVO44TAGIytNdtoLmy6aSeY3GoMAEwEvDcA/7D91ceevDt10XVGtMP55cDUvzVzyZWo6Xs/
-	cDYkQOeVIa3PlInfK0//B2yh9o3mvcCiTeTPaN4sBaZgFL97IfeBl7Y5LJQlZkkdqRAPH4G9V1C
-	jIfS6mtvSWseKgmTI8qHqAsJQuHNevnuDUbqHdiFG4NAaQjL1DBoCJK5HVjZPk2KwX+NIjM5rof
-	mjrncj82nN7QkR83YW86TCSw8MLnorUZC0LB4jmTtJb8piDr3mavGelXsCOlPbeCj+wsLRMGkYp
-	QVbJHLVdwhZLfkbnxDHYNqSa/ugO0
-X-Received: by 2002:a05:600c:8b70:b0:49f:e701:51c8 with SMTP id 5b1f17b1804b1-4a18e4a01acmr312576245e9.9.1791971530368;
-        Wed, 14 Oct 2026 02:52:10 -0700 (PDT)
-X-Received: by 2002:a05:600c:8b70:b0:49f:e701:51c8 with SMTP id 5b1f17b1804b1-4a18e4a01acmr312575565e9.9.1791971529966;
-        Wed, 14 Oct 2026 02:52:09 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([195.174.135.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be97d1esm679092125e9.8.2026.10.14.02.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 02:52:09 -0700 (PDT)
-Message-ID: <1ff1999324ecbbfe9a36f8c088d7d4122ae59177.camel@redhat.com>
-Subject: Re: [PATCH v2 04/15] rv: Cast result of model_get_*_name()
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Nam Cao <namcao@linutronix.de>, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Steven Rostedt
-	 <rostedt@goodmis.org>
-Cc: Wen Yang <wen.yang@linux.dev>, Tobias Schaffner
-	 <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
-Date: Wed, 14 Oct 2026 11:52:08 +0200
-In-Reply-To: <87jynmgm94.fsf@yellow.woof>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
-	 <20261001152042.124445-5-gmonaco@redhat.com> <87jynmgm94.fsf@yellow.woof>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
- cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
- T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
- eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
- 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        d=1e100.net; s=20260707; t=1791971824; x=1792576624;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=x9rvRSpojIVM87li0yF5q9R69waCFTVPzWFGm69CD+o=;
+        b=bmtT7FUl95VDNxl9N8fioJ+yLnWnHbvQYqTrTsvt54ykRbZ26FO64kiahp7VKd71qW
+         RLl7ipiZyNKSapXYPM5o2pmd45DB4vZ0NjsNr+4Lj/XvPPymRtSWWobyzcnHNbyTE8u5
+         RHBwb3KStDQwOytXnubEfwSvUEE7aQNpQGNb0zkoXaMUmZr8sCMvQhuCgFfQwIEdpgic
+         YGCoA5WVLGwp8tpmUG1ptM1rp3LpMEMyjDiGktseF9APJ6xgGpfdxuRKS1h0S6doVsNH
+         hVT6b5Nnujwj/zaN35YTTujGe/PjfaDBatumuZs6KTmpigyv+A1YuJjY7O0jYIn4CHrx
+         OfvA==
+X-Gm-Message-State: AFq9FYL1VBYT9q6XGUBgW4hRMeiE/kz4yk7+YP4mU0KyPv5EKqMzHNgb
+	V3JoMVfsjZnOUjxqVwK0wwNsKVMWIz5rmChppQzhIWD3fEsSgOdcbL6ZDLRyh8e+YEEhXlAF1UE
+	U0jkSKC1z0LP5OtsV4AWUOp0dH9LaglJIejVt+Ii7XqBCkuyUifQ=
+X-Gm-Gg: AYBFou1qEcLYat4Yg3MRD9v4POicT+zCYG1P24MAU+dc2KmphJPicyKixMUuu8SJD2G
+	40Dt4+/rEFjWnZ5oQHaLb/G4WpHs7GjmE+HPZESp5BEe8irxXIIUFLoEz/pOi36xHqEicqXkdsG
+	xmv1a5RB0u5zU+U3GORMikXHTXV3HxTSGIBKzZJRxO9c/7q4YHH/7fOACh6ReI+ZpUIwU2jzJwv
+	QF0Wz3NjzxLz9FaiA8WoJuUOpsNgOoJ1BE98DHf97hXt1B/4+4HvGPqyg1vG/lddqfRyU5A82JY
+	xdVtZuG9pxQDSR8WwrbfwWgPRPfr/gbNxPCbgaRfYynKho9kepwFmY3ycIZroaapvpHla7DKjZB
+	GYjVhuANAzbMXGJU/Muc0oQASGETW6l4PwQ==
+X-Received: by 2002:a05:6a00:3e12:b0:883:71f6:5fb with SMTP id
+ d2e1a72fcca58-897c6e1b608mr14580422b3a.13.1791971824324; Wed, 14 Oct 2026
+ 02:57:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <QDISC-H19Z.v3.r0.20261012193813@mojatatu.com> <QDISC-H19Z.v3.r0.20261012193813-1@mojatatu.com>
+ <sashiko-outbox-171044@kernel.org>
+In-Reply-To: <sashiko-outbox-171044@kernel.org>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Wed, 14 Oct 2026 05:56:53 -0400
+X-Gm-Features: AclHuK-NLE3qfsWeit2n79z3ZCol8KGxRxDpPaAT__Uoa9Kdg3NPnm2-yKHy-cg
+Message-ID: <CAM0EoMnwMw-tOJWp19WWwrmkxivYQ0iYaZRgkOZmndn0hA3szw@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/5] net/sched: act_gate: reject oversized
+ dumps instead of wrapping them
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-10-13 at 08:14 +0200, Nam Cao wrote:
-> Gabriele Monaco <gmonaco@redhat.com> writes:
->=20
-> > Functions like model_get_event_name() and model_get_state_name() are
-> > shared with BPF monitors, however those programs don't play nice with
-> > string pointers without fixed length and the event_name and state_name
-> > arrays need to be defined differently. This gets the compiler to notice
-> > those are const char and the above function discard the const qualifier=
-.
-> >=20
-> > Drop the warning by casting the result to (char *). Note, a cleaner
-> > solution would require to modify all callers, but that would require
-> > changing every single monitor's tracepoint and the advantage is minimal=
-.
->=20
-> I prefer the cleaner solution. Just mass replace "char *" with
-> "const char *", and manually fix up a few errors and we are done.
+On Wed, Oct 14, 2026 at 4:54=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Low] net/sched: missing error propagation and wrong extack in tcf_get_=
+notify
+> --
 
-The reason I initially didn't do this was that some lines get beyond 100
-characters adding the const, so I'd need to break them and make rvgen even =
-more
-complicated to generate things (TL;DR still laziness).
 
-I'm actually taking a different approach and storing everything in macros l=
-ike:
+I will not make this change unless something more substantial shows up
+in othre reviews.
 
-#define DEFINE_DA_EVENT(name)						\
-	DEFINE_EVENT(event_da_monitor, name,				\
-		TP_PROTO(char *state, char *event,			\
-			 char *next_state, bool final_state),		\
-		TP_ARGS(state, event, next_state, final_state))
 
-So both per-monitor trace headers and rvgen get simpler and if we ever need=
- to
-change something again, it comes for free.
-
-Gabriele
-
+cheers,
+jamal
+> commit 98a2c073503c58fa744586844b669ba5ddd1bfc0
+> Author: Jamal Hadi Salim <jhs@mojatatu.com>
+>
+> net/sched: act_gate: reject oversized dumps instead of wrapping them
+>
+> This commit fixes an issue where oversized action dumps wrap their u16 ne=
+st
+> lengths, resulting in structurally corrupt netlink messages. It uses
+> nla_nest_end_safe() to report -EMSGSIZE instead, preventing unrepresentab=
+le
+> dumps from vetoing deletes and allowing correct handling.
+>
+> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260824153903.=
+4143642-1-victor@mojatatu.com
+> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-H19Z.v2.2=
+0261007062551%40mojatatu.com
+> Link: https://lore.kernel.org/netdev/QDISC-H19Z.v2.20261007062551@mojatat=
+u.com/
+> Link: https://lore.kernel.org/netdev/QDISC-H19Z.v1.20261001053234@mojatat=
+u.com/
+> Link: https://lore.kernel.org/netdev/179111893181.434549.1344966067026704=
+8994@kernel.org/
+>
+> > diff --git a/net/sched/act_api.c b/net/sched/act_api.c
+> > index 6e48b4bc2d75d..4b4b5d37d2206 100644
+> > --- a/net/sched/act_api.c
+> > +++ b/net/sched/act_api.c
+>
+> [ ... ]
+>
+> > @@ -1701,7 +1719,7 @@ static int tca_get_fill(struct sk_buff *skb, stru=
+ct tc_action *actions[],
+> >
+> >  out_nlmsg_trim:
+> >       nlmsg_trim(skb, b);
+> > -     return -1;
+> > +     return err;
+> >  }
+> >
+> >  static int
+> >  tcf_get_notify(struct net *net, u32 portid, struct nlmsghdr *n,
+> >              struct tc_action *actions[], size_t attr_size, int event,
+> >              struct netlink_ext_ack *extack)
+> >  {
+> >       struct sk_buff *skb;
+> >
+> >       skb =3D alloc_skb(max(attr_size, NLMSG_GOODSIZE), GFP_KERNEL);
+> >       if (!skb)
+> >               return -ENOBUFS;
+> >       if (tca_get_fill(skb, actions, portid, n->nlmsg_seq, 0, event,
+> >                        0, 1, NULL) <=3D 0) {
+> >               NL_SET_ERR_MSG(extack, "Failed to fill netlink attributes=
+ while adding TC action");
+> >               kfree_skb(skb);
+> >               return -EINVAL;
+> >       }
+>
+> [Severity: Low]
+> Since tca_get_fill() now returns actual error codes like -EMSGSIZE instea=
+d of
+> just -1, shouldn't tcf_get_notify() also be updated to propagate these er=
+rors?
+>
+> If an oversized RTM_GETACTION request fails with -EMSGSIZE, it appears it
+> will incorrectly return -EINVAL to userspace and display an inaccurate
+> extack message ("while adding TC action").
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/QDISC-H19Z.v3.r0.=
+20261012193813@mojatatu.com?part=3D1
