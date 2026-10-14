@@ -1,109 +1,188 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA01937BE81
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD968409279
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 06:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791959100; cv=none; b=YfNnklzjfuCUw55s9XaLh7aMliR0NnfPQsgccpVdPqK8K9DbCrhaHUTAi83dsmjcMXtsc/GyMTfDp49yulaGJTrYdnZJtw97DnboxejxViX8TsHzoVrFvu6i3WFjBYqHcyP9pOCmgfre/0SB57wXo1eN8LCUZbBij2R1UGrOboI=
+	t=1791959241; cv=none; b=mIujGOs61sVapRCrX9TcxbFH66gq1g/N6Hcs/022nzmYlqvsMvxMWifvFd4YfzO+BkR3SH3qEUoBzu+7zD9Y+oyu1At5Uu10q0vQQTGZmf1Q624wh+Ocl07xdhjMeZm3gZe5JJ+L0prYPsul5lPYzSo/u7inyg6SOX4wtqnlSlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791959100; c=relaxed/simple;
-	bh=wT9KfUxDTOAu89c4sxAb8wXWXUXJ/Df7bwfvcjApo4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Nb1CnEwLUxFJ8MvVZmu9HQA7tGDp4Vyd9BhzIbYebD7AE5RrWghK4OEbVUVJ1DQa76eTC8L/nRa/LnKGBMJz2BSEk0Aanf4jWb8fZ9kOlT6xzM9FxOx3fUehfdX2JZh+/afgijn+g1rOILT2fGQfLUnhY/XxaDVtMMmTmCZnVYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J2/j8RAz; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1791959241; c=relaxed/simple;
+	bh=NEEsEWJzvXXKw1U5i3R6qVwNEZ7+58VweQO0x61IjVs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=lNkoOPBaPXXMeirjrBF2bpMcrgNnLd1si5LZ1zKs50bwh6wtvFstezviGDctUI8/61F72r4KkZaybeK5s99zSXZRKOK4qaqY2kMj9GXS3cRJ7Sx/n4VrzjVBE3BNRWTotIeNYM/1iYrYTkZVrfJbi6sudzGHAGqI7ZwLsjCKq3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Km4uLm93; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J2/j8RAz"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso47967a91.1
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:24:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Km4uLm93"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-48441a2ba1bso31431f8f.1
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2026 23:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791959099; x=1792563899; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=O77XLMAdbvfeLp1j1TgVELADlqP4W7JqNL9jlyw258M=;
-        b=J2/j8RAzN3/N3XzP6EvnuCaPcCZ7GfAJb4lEBga3k7HofUB5Un22H45IkyL06tVzlP
-         1xEn+NgfCGyZJ0i/84DBDw/XZpchpt7SXEVZPhwOQc/g8UxL5YeeaN27OrdcNDZad2HT
-         UITCJBGIhut10agqNHB2pUlmo1HXcgTN4hYBuKlurtG1w4YHn5L8Hnrv0l5l91qde6DE
-         3z3pfSL5YQLkclYzesqI2XVnwN3l32lDnEhBkQ+or+KptHvuI53AVvX+2VGQNdFyrz8o
-         UgBKrKYM8WTLOje0+HS2YvnklvZSFiml1C1abm6zv9PHvXVR+3GIJncxbuS/4Z1/hqxk
-         CZew==
+        d=gmail.com; s=20251104; t=1791959237; x=1792564037; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FcCs3sohxCHYV561RCxP42Zr6CFjBiLneuemdbNXbEY=;
+        b=Km4uLm93F2xKEXVmpyWTD1Nky7ueWakHbgHwoz0HLskOTG7r/i1lZYs4m1DF0EDHoY
+         u6w496J2kcwRbn5nrllSqaowKJkHrwkK+vX/qZtfEy7KAp5sPw0oFkL+WDaBmAhthH9q
+         BjSExUFd++yyVuT1YRIBi6XxJSKTzQOKl1URkoK8L000tUhw6Hey9yzeJ9jt0d5WX9r6
+         AygqDuynb55hE1v3OKv00Qwd9ccmpDLTjt0pbtp66JKED9X0KpMXQLg0WAaiTobDjsxD
+         GSKrwTc8gsHFpMgVENUmzIJDL1UvznoX805UfpTsTBgG2Iv9aw1RzDBTQhd//wR2d4XC
+         yYDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791959099; x=1792563899;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=O77XLMAdbvfeLp1j1TgVELADlqP4W7JqNL9jlyw258M=;
-        b=qxrbnKIrTRd2xhwwz0Zx0TzERpDwUv+WlgIni7upZbvckweJSChDQP3ki2OG10K6WK
-         QvOdyrMstK+BjlZFblaXqFueYcC2xr5SSGqeCwKCIBUze/aLsQW1Z1nQZ4y9P5LO3l8e
-         cbf3txDbwT3Y0SJIM+DpAHL8iueNHGCjxYuW+EiB7ZdD5gvyjkhG6uby30m+mUFzURUd
-         n3wnWO+/gCzXgi/Eoy5QoStL0Lb2+E+NCSNpRkD6sDev7djBEtdnDRnaRvlwsu8ejvlj
-         I9yda4/O3O+yQjNwQKuNXJtmVO2Rr8gYIWhXme5n2XW+chMkhpIworoA7/uV60I4M0AW
-         o1BA==
-X-Gm-Message-State: AFq9FYLYZKImsUU3OVJK24OoL84+c4J6PmlrRHDoTZWBRom9P8pdkKcY
-	24OoD/TZM2nBA3rWiyp7CrFIfM0BNQ4RmtK46yA4ajQkINpL6SfAnLKtijGGzg==
-X-Gm-Gg: AYBFou09uVvAMogj9g/Gb+Edu1b5wKZnbkk8sFmNvwGhHwE5rADEL/Ucg6v8BuslO2H
-	DLxmGIeCNyv+l5WlDKYHTiu0+6kQwTC5jqpqATYi0uJ5ibkJq4g710hx4DQcE3aUF0iGtBvlV+a
-	VfZEJ/fRmufaiaAiUOhZwTcy+VTlvXEh6TndUHQUDKAFC02BAFld97bHPHYuT5WeAoo6wokRwSF
-	Vbbs4zqTxXLI4h3bxGGFGyBxmGcHwxSAjPluEMf/+uu0HUKvNO71nw1hVKanoAgel34qGM9I9dT
-	pNLTfBw0zmET7F8gZaMyI0tl2gzf39zyH1NvW16/dm3v1gnuk6bJYjEXNELUYakeLoPRkvjXTIM
-	2f2izWvb5sayYnuvjRVT+1D1CifC76y1o39g9rHGRx/9I7/6xdVkBmxIw62tT4AzPAIxQFvnERB
-	fhmuqQ8h1lRyGDjS0vY77F0PFXrmbzugHSuekaSGvoogGZhlZLzQfjza5ca74uMmj0lCUnVJ40L
-	IlmVUMSez6bXoVj
-X-Received: by 2002:a17:90b:3b84:b0:3aa:f4af:1e16 with SMTP id 98e67ed59e1d1-3ab3a4871e5mr12385990a91.7.1791959099129;
-        Tue, 13 Oct 2026 23:24:59 -0700 (PDT)
-Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd3d9e41126sm6614238a12.23.2026.10.13.23.24.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2026 23:24:57 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 7/7] selftests/bpf: BPF_F_ANY_ALIGNMENT for byte_array_size_spanning()
-Date: Tue, 13 Oct 2026 23:24:42 -0700
-Message-ID: <20261013-scev-minimal-v3-followups-v2-7-6d9d61965486@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261013-scev-minimal-v3-followups-v2-0-6d9d61965486@gmail.com>
-References: <20261013-scev-minimal-v3-followups-v2-0-6d9d61965486@gmail.com>
+        d=1e100.net; s=20260707; t=1791959237; x=1792564037;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FcCs3sohxCHYV561RCxP42Zr6CFjBiLneuemdbNXbEY=;
+        b=CTOslobX8mB0IpA3oDkOoLJ42dIbV1NpTYOEaUFyOOtzPi8fN+zeot2X2V/pyOe5GN
+         kxLL+UUjCR4NRj/Bs9QdzvYUw8p2rVG0d9EKG7kwWbSX730PssZ5h0vdQ4Kb0nAXQvzy
+         f4q9cJbdfe6BGMtO3S1blLzDBsYgM/WIbh5SLyNfIkbdH4SItMMq1ERpL8COTGnIjYxs
+         jZnqskij8/vF42Q35dmE+CarrlONqRa/fSC/qxWp4fCw7Jy/A6OeyScaf3Q0jg9RYa2G
+         M0yBnat+PR2kMzcvWubk5wtNxzmw6pPRGOdwGS+wt1Ssp0fh1mmjTcFLe5w0fzFHvykC
+         hO/w==
+X-Forwarded-Encrypted: i=1; AKwUvBw4c+J57dhvAhop4RUVaGIMarm2gsnMik87eloyBGxY3v0YGHPAYiyiaiSbx9Rn21hCbU8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL6cLLAfmg5onp0M2qLv3/eJzpr2692CRXX9KFFW7RGWZTrL8S5
+	TJYVxQk1i+HcVNBiCrHBHJQfUCfz34jlLEOsumLouMuCMBW8pxxvtO4D
+X-Gm-Gg: AYBFou2X5ZuEAD4H7d5Vw+YzT0dDG/K/4gbOpgiM+zYCZdm2/IITeZG/g8q2AjDDKqK
+	wILVAM+j7Bile/aQrrppIjFcqIZha7bbxCPhK327t52IQvo7sYfQINFtVQbyQxPexoKqx8/P+4M
+	2OXBWY2Mgs2c/lOJ8wEULKEKLq2EJo6pZEUgO8GQANu6RWrkRPmM/lycMk+b212CHrzTGOKW3ss
+	1dO6jzBc/a1DEvoArYcpEi7B7z51P5PNoTSlbwCVn5PKNjvc8v7QfUz/PPGS5o8jtw64JeDppR0
+	uL5HTKdO9YuKGQpxCg+sEODyuCPir/ENbnpyBFnRY0ebm429OuqLpXRL4Gx2PtZLUW9SX2THGQj
+	sWiXVNgK6aUhcrtws87f66o9ZY/PlKT7M4Z0Y21U8HgRVtvw11oRS0CMPw5uXBo+AmXWT48X0jQ
+	5MDKtPmG6b4T1NYPqpAJvw+ELStuY+mlasOli3qZi76by3ZeBAFl9KqFb8zRyHPS4p2O+hYcl+m
+	Qr82LI3/ki8FrI1Q9obSF04uZGcHRBkWS3EZa1I4gNItl7y6kmCpCURUZgyBWLmdqlrVmoV6rd+
+	Pm/2Bimy0Q5takPa4QEVyJKbTvr8SiVm8pE80U4+jIdLYahUkN55Pn34FUm60actuyRaFGl+OfB
+	OPw==
+X-Received: by 2002:a05:600c:4747:b0:4a1:77db:45d9 with SMTP id 5b1f17b1804b1-4a18e47aa9amr307794635e9.6.1791959237236;
+        Tue, 13 Oct 2026 23:27:17 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-aed1-da01-ddff-863b-8308-ab16.310.pool.telefonica.de. [2a02:3100:aed1:da01:ddff:863b:8308:ab16])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be8c5e7sm528846745e9.4.2026.10.13.23.27.15
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 13 Oct 2026 23:27:16 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	netdev@vger.kernel.org
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Joao Pinto <Joao.Pinto@synopsys.com>,
+	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Ong Boon Leong <boon.leong.ong@intel.com>,
+	bpf@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net 1/3] net: stmmac: handle partially allocated DMA queues
+Date: Wed, 14 Oct 2026 08:26:59 +0200
+Message-Id: <3537f9a4f3e875291812486982b907b3b02bec15.1791958735.git.kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <cover.1791958735.git.kmehltretter@gmail.com>
+References: <cover.1791958735.git.kmehltretter@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The test case indexes inside `char bytes[32]` array with unaligned
-offset. Use BPF_F_ANY_ALIGNMENT flag to avoid the test rejection for
-unrelated reason.
+DMA allocation failure unwinds every configured queue, including the
+failed queue and queues not yet allocated. The cleanup helpers then
+dereference buffer arrays that may not exist.
 
-Fixes: e187fac8ac6b ("selftests/bpf: Tests for varying offset access to PTR_TO_BTF_ID")
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Only traverse allocated buffer arrays. Clear freed pointers because the
+queue structures persist and XDP reconfiguration can reuse them.
+
+Found by inspection. On a BeagleV Ahead (TH1520), fault injection at
+the RX buffer metadata and TX DMA metadata allocations reached these
+invalid cleanup paths before a test guard stopped them. With this
+change, cleanup completed without the guard.
+
+Fixes: 54139cf3bb33 ("net: stmmac: adding multiple buffers for rx")
+Fixes: ce736788e8a9 ("net: stmmac: adding multiple buffers for TX")
+Assisted-by: LLM
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_btf_array_access.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 22 ++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
-index be001cc77f81..9dc2c9a5f8b7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_btf_array_access.c
-@@ -114,6 +114,7 @@ int long_array_in_bounds(void *ctx)
-  */
- SEC("syscall")
- __failure
-+__flag(BPF_F_ANY_ALIGNMENT)
- __msg("invalid variable offset access into struct outer")
- int byte_array_size_spanning(void *ctx)
- {
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index b837e8e27..495ff7aef 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -2144,10 +2144,12 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
+ 	void *addr;
+ 
+ 	/* Release the DMA RX socket buffers */
+-	if (rx_q->xsk_pool)
+-		dma_free_rx_xskbufs(priv, dma_conf, queue);
+-	else
+-		dma_free_rx_skbufs(priv, dma_conf, queue);
++	if (rx_q->buf_pool) {
++		if (rx_q->xsk_pool)
++			dma_free_rx_xskbufs(priv, dma_conf, queue);
++		else
++			dma_free_rx_skbufs(priv, dma_conf, queue);
++	}
+ 
+ 	rx_q->buf_alloc_num = 0;
+ 	rx_q->xsk_pool = NULL;
+@@ -2161,13 +2163,17 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
+ 	size = stmmac_get_rx_desc_size(priv) * dma_conf->dma_rx_size;
+ 
+ 	dma_free_coherent(priv->device, size, addr, rx_q->dma_rx_phy);
++	rx_q->dma_erx = NULL;
++	rx_q->dma_rx = NULL;
+ 
+ 	if (xdp_rxq_info_is_reg(&rx_q->xdp_rxq))
+ 		xdp_rxq_info_unreg(&rx_q->xdp_rxq);
+ 
+ 	kfree(rx_q->buf_pool);
++	rx_q->buf_pool = NULL;
+ 	if (rx_q->page_pool)
+ 		page_pool_destroy(rx_q->page_pool);
++	rx_q->page_pool = NULL;
+ }
+ 
+ static void free_dma_rx_desc_resources(struct stmmac_priv *priv,
+@@ -2196,7 +2202,8 @@ static void __free_dma_tx_desc_resources(struct stmmac_priv *priv,
+ 	void *addr;
+ 
+ 	/* Release the DMA TX socket buffers */
+-	dma_free_tx_skbufs(priv, dma_conf, queue);
++	if (tx_q->tx_skbuff_dma && tx_q->tx_skbuff)
++		dma_free_tx_skbufs(priv, dma_conf, queue);
+ 
+ 	if (priv->extend_desc) {
+ 		addr = tx_q->dma_etx;
+@@ -2209,9 +2216,14 @@ static void __free_dma_tx_desc_resources(struct stmmac_priv *priv,
+ 	size = stmmac_get_tx_desc_size(priv, tx_q) * dma_conf->dma_tx_size;
+ 
+ 	dma_free_coherent(priv->device, size, addr, tx_q->dma_tx_phy);
++	tx_q->dma_etx = NULL;
++	tx_q->dma_entx = NULL;
++	tx_q->dma_tx = NULL;
+ 
+ 	kfree(tx_q->tx_skbuff_dma);
++	tx_q->tx_skbuff_dma = NULL;
+ 	kfree(tx_q->tx_skbuff);
++	tx_q->tx_skbuff = NULL;
+ }
+ 
+ static void free_dma_tx_desc_resources(struct stmmac_priv *priv,
 -- 
-2.53.0
+2.39.5 (Apple Git-154)
+
