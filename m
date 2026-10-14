@@ -1,224 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2116230B529;
-	Wed, 14 Oct 2026 02:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE803438A1;
+	Wed, 14 Oct 2026 02:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791943211; cv=none; b=q0x8Sl23vySxc2q8yADAPb8eLWyFm3rpKSNbaFBMZ8z5YnUygF80seTxeC6FgIL1Mry7PoAVBek/jWvoSc751iNFyYf1SJd0IDLuxtPMgruwB0jjkIhyBrpr13ybHCt3TPPAbjT2NeFKG2MgljPjjpnAArzltnduNFF+E0pSAf8=
+	t=1791944695; cv=none; b=qK2vaTPDvALsMiup3qgmuH5bslFrS7jj5/F3TCS5x3M8sQhzpTD7tpcdoCx3BhIotS5kZASJYMFh9kBYf3bn8MIvnHS7ISNFstlkArcCNW5bswdnJfCRkCJkRNvE1LBaOxoeHK0C6oR7T0V7KV1eTOg7fypQahRyEXBHmjA/QbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791943211; c=relaxed/simple;
-	bh=5U1YDhIstSb2u90nPExKtqvd4Bycp2giVa6FItnlVoM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=At7FD63ECNDgCAuUpRCGypoDwCjIZ1Kypu4oZIi6FKb2ONEnLFO9omMcusbd6sWFbE0MuAUfwl5k0jKbxl0Puc/I9VJ2wgTLKNbms8B/Zx4v94axrOxUGlefQh8cVtgqiTd7o7KBs6yhZOjz5xggWW36KNXz+0fcLR409qGHff0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pmicwg0A; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pmicwg0A"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 96652C2BCF4;
-	Wed, 14 Oct 2026 02:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1791943210;
-	bh=5U1YDhIstSb2u90nPExKtqvd4Bycp2giVa6FItnlVoM=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=Pmicwg0A4MYuoXAAHximuSuthJ3GeRAQ2XBXmJy+JwuNaW0uK8aWecIO5F25KAT9z
-	 EEatbMjgV7VDOy+pPVDSxeQfwePNXDATFCuFI+jO+tX76XO/I2V1k4CVB5r/0xytEw
-	 uc4zg+c/Lha6iBNc6skzcGhYKVMvEGvLzyPyWROphEYOtb7zSt3KKGTp3RGiPt/oyu
-	 Lmo0C/YdCArbw/DQJouMz8Ytrqj+VmmENfh5/gU0w9PMP1+j2OPp0eUp3e4EN0AnCt
-	 harY10C9WUSzSqRqtC7dM82QSUFLlB1RYZ1KbN4otxU7ozmNEaYc6tSJn7Y9BwkHUv
-	 4mmewkk0b0URw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E612CC6B1F;
-	Wed, 14 Oct 2026 02:00:10 +0000 (UTC)
-From: Nicholas Velten via B4 Relay <devnull+nicholasfvelten.gmail.com@kernel.org>
-Date: Tue, 13 Oct 2026 23:00:08 -0300
-Subject: [PATCH bpf-next] bpf: Annotate data races on bpf_lru_node type
+	s=arc-20240116; t=1791944695; c=relaxed/simple;
+	bh=54HD4aWvf6er3plKu5EPRAeqkt1EkhUAEvOlSqVw+UQ=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=frZSSZaWUZWx1jO7Q6vKyIpeVO+QlAvzGiw2R1IIR3/xZzHrdPqVH+eqqNExS6mNi+QVLsmTRQWWzKqtBs4WMmIgKIIiv5XQ4IWu872+4vN1dz1tnDfgMs0X2iu8aTkIoe93FHzKZh/f9MlkUjTmuohPv11vchxlFs5AIMJ9tbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8CxQNHn585qmpsVAA--.63416S3;
+	Wed, 14 Oct 2026 10:24:39 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCxPs_f585qZwwsAA--.26964S2;
+	Wed, 14 Oct 2026 10:24:33 +0800 (CST)
+Subject: Re: [PATCH v2 2/2] LoongArch: BPF: Optimize 32-bit operations using
+ native instructions
+To: bot+bpf-ci@kernel.org, chenhuacai@kernel.org, hengqi.chen@gmail.com
+Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+ yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261013121005.626-3-yangtiezhu@loongson.cn>
+ <ab9326a4770f9d1ac812e55feb39e34341d84951f3b5d276dee18d5471d8353e@mail.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d5f6eb99-faf5-1aa7-1f1c-f216611d8082@loongson.cn>
+Date: Wed, 14 Oct 2026 10:24:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261013-fix-lru-node-type-kcsan-v1-1-0b743f5af2f3@gmail.com>
-X-B4-Tracking: v=1; b=H4sIACfizmoC/yWMQQ7CMAwEv1L5jKUkpYD4CuohSV0wIDeKU1RU9
- e8EOI52Z1ZQykwK52aFTC9WnqSC3TUQb16uhDxUBmfcwRrb4sgLPvOMMg2E5Z0IH1G94N61XTS
- nLhyDh2qnTPX6K18gpBGFlgL9f9E53CmWbxi27QO54VVRhQAAAA==
-X-Change-ID: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com, 
- Nicholas Velten <nicholasfvelten@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1791943208; l=5845;
- i=nicholasfvelten@gmail.com; s=20261014; h=from:subject:message-id;
- bh=WM3jG1qGFgTy5qrm7atN2qIeOxz8lgQ0gTs8dQ4l6AA=;
- b=bgMTrFCubT71XavVs+ksvwRRK7NsZFVbtOic7XxImNEoFWp1uJYCmUOnOIW/1StCjeileGEvT
- wn3Z65qP5X9ASeyGonyR/LHliHmufb2EDmu3MRqTtyPqM5B4EDUSHHG
-X-Developer-Key: i=nicholasfvelten@gmail.com; a=ed25519;
- pk=WVTZgm6yXQ+XrhULAObg4lwcHPhhxAXrAY+YY6svXzg=
-X-Endpoint-Received: by B4 Relay for nicholasfvelten@gmail.com/20261014
- with auth_id=1173
-X-Original-From: Nicholas Velten <nicholasfvelten@gmail.com>
-Reply-To: nicholasfvelten@gmail.com
+In-Reply-To: <ab9326a4770f9d1ac812e55feb39e34341d84951f3b5d276dee18d5471d8353e@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxPs_f585qZwwsAA--.26964S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxCF4DGw47CrWUJFyfuFy3trc_yoW7JrWUpF
+	ZrKF4Fkr4UJFy7ta48J39rXr42yw4akayrXF1UJrWkC39Iqr1fKF13Kr4S9asxArs3ZF92
+	qF1qvwnxXFWUK3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUUUU=
 
-From: Nicholas Velten <nicholasfvelten@gmail.com>
+On 2026/10/13 下午8:55, bot+bpf-ci@kernel.org wrote:
+>> LoongArch: BPF: Optimize 32-bit operations using native instructions
+> 
+> TL;DR: LoongArch BPF JIT now feeds non-sign-extended operands to 32-bit
+> div/mod; on cores without DIV32 (e.g. 3A5000) results may be wrong, possibly
+> breaking verifier-proven bounds.
+> 
+>> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+>> --- a/arch/loongarch/net/bpf_jit.c
+>> +++ b/arch/loongarch/net/bpf_jit.c
+> 
+> [ ... ]
+> 
+>> @@ -752,212 +741,232 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+>>
+>>   	/* dst = imm */
+>>   	case BPF_ALU | BPF_MOV | BPF_K:
+>> +		move_imm(ctx, dst, (u32)imm);
+>> +		return 0;
+> 
+> [ ... ]
+> 
+>>   	/* dst = dst / src */
+>>   	case BPF_ALU | BPF_DIV | BPF_X:
+>> +		if (!off)
+>> +			emit_insn(ctx, divwu, dst, dst, src);
+>> +		else
+>> +			emit_insn(ctx, divw, dst, dst, src);
+>> +		break;
+>>   	case BPF_ALU64 | BPF_DIV | BPF_X:
+>> -		if (!off) {
+>> -			emit_zext_32(ctx, dst, is32);
+>> -			move_reg(ctx, t1, src);
+>> -			emit_zext_32(ctx, t1, is32);
+>> -			emit_insn(ctx, divdu, dst, dst, t1);
+>> -			emit_zext_32(ctx, dst, is32);
+>> -		} else {
+>> -			emit_sext_32(ctx, dst, is32);
+>> -			move_reg(ctx, t1, src);
+>> -			emit_sext_32(ctx, t1, is32);
+>> -			emit_insn(ctx, divd, dst, dst, t1);
+>> -			emit_zext_32(ctx, dst, is32);
+>> -		}
+>> +		if (!off)
+>> +			emit_insn(ctx, divdu, dst, dst, src);
+>> +		else
+>> +			emit_insn(ctx, divd, dst, dst, src);
+>>   		break;
+> 
+> Can divw/divwu be used directly on dst and src here?
+> 
+> The LoongArch ISA only defines the result of div.w, div.wu, mod.w and
+> mod.wu on LA64 when both rj and rk hold sign-extended 32-bit values.  The
+> exception is a core that reports CPUCFG2_DIV32 (BIT(26) in
+> arch/loongarch/include/asm/loongarch.h), where the upper 32 bits of the
+> inputs are ignored.  Cores without that bit, such as the LA464 in the
+> 3A5000, may return any value otherwise.  Nothing in the JIT checks for
+> CPUCFG2_DIV32.
+> 
+> The operands here are often not sign-extended.  Every ALU32 result is now
+> zero-extended at the common exit of build_insn():
+> 
+>> +	if (is32)
+>> +		emit_insn(ctx, bstrpickd, dst, dst, 31, 0);
+>> +
+>>   	return 0;
+> 
+> so any 32-bit value with bit 31 set is left in the register as
+> 0x00000000xxxxxxxx.  A BPF_LDX | BPF_W load (ldwu) is zero-extended in the
+> same way, and src can hold arbitrary upper bits coming from ALU64 ops or
+> pointers, since ALU32 only consumes the low 32 bits.
+> 
+> For example, with w0 = -6 followed by w0 s/= 3, rj is 0x00000000fffffffa
+> when divw executes, so the quotient is not guaranteed to be -2 on a core
+> without DIV32.  Likewise, a ldwu of 0xffffffff followed by w1 %= 16 gives
+> modwu a rj that is not a sign-extended value.
+> 
+> The old code widened both operands (zext for unsigned, sext for signed)
+> and then used the 64-bit divdu/divd/moddu/modd, which are well defined on
+> every LA64 core.  The MIPS64 JIT, which has the same ISA restriction,
+> still sign-extends the operands before its 32-bit div/mod.
+> 
+> [ ... ]
+> 
+>>   	/* dst = dst / imm */
+>>   	case BPF_ALU | BPF_DIV | BPF_K:
+>> +		move_imm(ctx, t1, (u32)imm);
+>> +		if (!off)
+>> +			emit_insn(ctx, divwu, dst, dst, t1);
+>> +		else
+>> +			emit_insn(ctx, divw, dst, dst, t1);
+>> +		break;
+> 
+> In the K forms the divisor is built with move_imm(ctx, t1, (u32)imm), so a
+> negative signed divisor, or an unsigned divisor of 0x80000000 or above,
+> also ends up in t1 as a zero-extended value rather than a sign-extended
+> one.
+> 
+> [ ... ]
+> 
+>>   	/* dst = dst % src */
+>>   	case BPF_ALU | BPF_MOD | BPF_X:
+>> +		if (!off)
+>> +			emit_insn(ctx, modwu, dst, dst, src);
+>> +		else
+>> +			emit_insn(ctx, modw, dst, dst, src);
+>> +		break;
+> 
+> [ ... ]
+> 
+>>   	/* dst = dst % imm */
+>>   	case BPF_ALU | BPF_MOD | BPF_K:
+>> +		move_imm(ctx, t1, (u32)imm);
+>> +		if (!off)
+>> +			emit_insn(ctx, modwu, dst, dst, t1);
+>> +		else
+>> +			emit_insn(ctx, modw, dst, dst, t1);
+>> +		break;
+> 
+> The same question applies to the modwu/modw uses in these two cases.
+> 
+> The verifier narrows 32-bit div/mod results, for example
+> scalar32_min_max_umod() bounds the result of w1 %= 16 to [0, 15].  If the
+> JITed code returns a different value on a core without DIV32, can the
+> program end up with a value outside the range the verifier proved, for
+> instance when it is used as a map value offset?
+> 
+> The commit message reports test_bpf, test_verifier and test_progs passing,
+> but does not say which CPU was used.  Would those results be reproducible
+> on a core without CPUCFG2_DIV32?
+> 
+> Would it be better to sign-extend both operands into temporaries (for
+> example addw t, reg, $zero) before divw/divwu/modw/modwu, to gate the
+> native 32-bit forms on CPUCFG2_DIV32, or to keep the previous 64-bit
+> sequence for these four opcodes?
 
-KCSAN reports a data race on bpf_lru_node::type between the LRU list
-rotation and the free path of the common LRU:
+I will modify the code to adapt to the actual CPU hardware capabilities
+dynamically. After testing the patch on CPU cores both with and without
+CPUCFG2_DIV32, I will send out the v3 series.
 
-  BUG: KCSAN: data-race in __bpf_lru_list_rotate / bpf_lru_push_free
-
-  write to 0xffff88811b758022 of 1 bytes by task 4756 on cpu 1:
-   __bpf_lru_node_move
-   __bpf_lru_list_rotate_active
-   __bpf_lru_list_rotate
-   bpf_lru_list_pop_free_to_local
-   bpf_common_lru_pop_free
-   bpf_lru_pop_free
-   htab_lru_map_update_elem
-
-  read to 0xffff88811b758022 of 1 bytes by task 4752 on cpu 0:
-   bpf_lru_list_push_free
-   bpf_common_lru_push_free
-   bpf_lru_push_free
-   htab_lru_push_free
-   htab_lru_map_update_elem
-
-  value changed: 0x00 -> 0x01
-
-node->type is written under the global l->lock when a node moves between
-the active, inactive and free lists, and under the per-CPU loc_l->lock
-when it moves to or from a local list. It is read in two places that do
-not hold the lock the writer holds:
-
- - bpf_lru_list_push_free() reads it for a WARN_ON_ONCE() sanity check
-   before taking l->lock.
- - bpf_common_lru_push_free() re-checks it under loc_l->lock after the
-   lockless READ_ONCE() at function entry, while a concurrent rotation
-   may be changing it under l->lock.
-
-Both races are benign: the type is a single byte, the sanity check only
-feeds a warning, and the re-check exists precisely because the value can
-change concurrently (any change sends the node down the check_lru_list
-path, which revalidates under l->lock). Mark the two reads with
-READ_ONCE() and the runtime writers with WRITE_ONCE(), following
-commit 6df8fb83301d ("bpf_lru_list: Read double-checked variable once
-without lock") and commit ee9fd0ac3017 ("bpf: Address KCSAN report on
-bpf_lru_list"), which did the same for the entry read of node->type and
-for node->ref. The writers in the *_populate() functions run before the
-map is visible and are left alone.
-
-Tested on bpf-next with CONFIG_KCSAN=y in a 4-vCPU virtme-ng guest,
-using a reproducer that runs 8 threads issuing BPF_MAP_UPDATE_BATCH
-on a 64-entry BPF_MAP_TYPE_LRU_HASH with overlapping keys: 110 KCSAN
-reports for this race per run before the change, 0 in two runs after.
-test_lru_map passes before and after.
-
-Fixes: 3a08c2fd7634 ("bpf: LRU List")
-Reported-by: syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=1ea4f564bf6f1f3d1dc4
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Nicholas Velten <nicholasfvelten@gmail.com>
----
-The reproducer used for testing is a small userspace program (8 threads
-issuing BPF_MAP_UPDATE_BATCH on a 64-entry BPF_MAP_TYPE_LRU_HASH with
-overlapping keys). I can post it, or turn it into a selftest, if that
-would be useful.
-
-Not tested: architectures other than x86_64, sparse, and the full
-test_maps / test_progs suites (only test_lru_map was run).
----
- kernel/bpf/bpf_lru_list.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
-index 5ed7cb4b9..db8051193 100644
---- a/kernel/bpf/bpf_lru_list.c
-+++ b/kernel/bpf/bpf_lru_list.c
-@@ -56,7 +56,7 @@ static void __bpf_lru_node_move_to_free(struct bpf_lru_list *l,
- 
- 	bpf_lru_list_count_dec(l, node->type);
- 
--	node->type = tgt_free_type;
-+	WRITE_ONCE(node->type, tgt_free_type);
- 	WRITE_ONCE(node->pending_free, 0);
- 	list_move(&node->list, free_list);
- }
-@@ -71,7 +71,7 @@ static void __bpf_lru_node_move_in(struct bpf_lru_list *l,
- 		return;
- 
- 	bpf_lru_list_count_inc(l, tgt_type);
--	node->type = tgt_type;
-+	WRITE_ONCE(node->type, tgt_type);
- 	bpf_lru_node_clear_ref(node);
- 	/* Reset pending_free only when moving to the free list */
- 	if (tgt_type == BPF_LRU_LIST_T_FREE)
-@@ -94,7 +94,7 @@ static void __bpf_lru_node_move(struct bpf_lru_list *l,
- 	if (node->type != tgt_type) {
- 		bpf_lru_list_count_dec(l, node->type);
- 		bpf_lru_list_count_inc(l, tgt_type);
--		node->type = tgt_type;
-+		WRITE_ONCE(node->type, tgt_type);
- 	}
- 	bpf_lru_node_clear_ref(node);
- 
-@@ -298,7 +298,7 @@ static void bpf_lru_list_push_free(struct bpf_lru_list *l,
- {
- 	unsigned long flags;
- 
--	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(node->type)))
-+	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(READ_ONCE(node->type))))
- 		return;
- 
- 	if (raw_res_spin_lock_irqsave(&l->lock, flags)) {
-@@ -357,7 +357,7 @@ static void __local_list_add_pending(struct bpf_lru *lru,
- {
- 	*(u32 *)((void *)node + lru->hash_offset) = hash;
- 	node->cpu = cpu;
--	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
-+	WRITE_ONCE(node->type, BPF_LRU_LOCAL_LIST_T_PENDING);
- 	WRITE_ONCE(node->pending_free, 0);
- 	bpf_lru_node_clear_ref(node);
- 	list_add(&node->list, &loc_l->pending_list);
-@@ -502,7 +502,7 @@ static struct bpf_lru_node *bpf_common_lru_pop_free(struct bpf_lru *lru,
- 		 * free_llist instead of orphaning it; the next pop_free on
- 		 * this CPU will pick it up.
- 		 */
--		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
-+		WRITE_ONCE(node->type, BPF_LRU_LOCAL_LIST_T_FREE);
- 		bpf_lru_node_clear_ref(node);
- 		WRITE_ONCE(node->pending_free, 0);
- 		llist_add(&node->llist, &loc_l->free_llist);
-@@ -542,13 +542,13 @@ static void bpf_common_lru_push_free(struct bpf_lru *lru,
- 			return;
- 		}
- 
--		if (unlikely(node->type != BPF_LRU_LOCAL_LIST_T_PENDING)) {
-+		if (unlikely(READ_ONCE(node->type) != BPF_LRU_LOCAL_LIST_T_PENDING)) {
- 			raw_res_spin_unlock_irqrestore(&loc_l->lock,
- 						       flags);
- 			goto check_lru_list;
- 		}
- 
--		node->type = BPF_LRU_LOCAL_LIST_T_FREE;
-+		WRITE_ONCE(node->type, BPF_LRU_LOCAL_LIST_T_FREE);
- 		bpf_lru_node_clear_ref(node);
- 		list_del(&node->list);
- 
-
----
-base-commit: 763187dbbf83764a57d5811168ef9de7b9a60e2d
-change-id: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
-
-Best regards,
---  
-Nicholas Velten <nicholasfvelten@gmail.com>
-
+Thanks,
+Tiezhu
 
