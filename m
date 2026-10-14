@@ -1,132 +1,119 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E1841C2F2
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 12:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81644E4C38
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 12:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791980670; cv=none; b=QzUc514AkjcGp5JI/P0Re49+dSknqGwzxUiPdI6ljdbnBV5vZOwSi3adeA2qjZlZPcDm0eNgPKWrr/oW802SIbK8HDjuj/ds+BQwxlBVutnDkYL9xA6MGwPYOm3cLeGK151muhHTN5sR98ieCcaXMnN/P+oWr2Bp1t598LLXNNo=
+	t=1791981316; cv=none; b=ig6Waa/IshqJ9ubYRcVOH/wMPfqmDi4zTBGfwcijzGQQIBj2X412/G/lOjmnsXYVoGQ+bQg+kpPFxL4fXMkKrx8V3d4l+30m3RTxP2OPnyZfrESWl5cJF9wsfraecVcSJysRbCXs+BFQuGb88Hc/XGw/80YfWIvRBx76G8G97Ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791980670; c=relaxed/simple;
-	bh=krNlRx7LWfz/eytdqpmzY0MvXdkYvcEi0uORY137LHk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sdfg7lszqU8k0P9yLu2qFvcIrYmepVwBNwnjV1LANzZUnVhP/gbXfrrxD2WPFhMdpfoBGDpzt70Jhb4cZ6Nd9zKM9J1jbU9sdBjxaeZ/U8q2i6wTmqgfZnWcgqPIiB8dti3ZCweCepDZ6AJzpQwEmH3IBjLP6OajqLdwbKHZ6qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=rdhF4f1x; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	s=arc-20240116; t=1791981316; c=relaxed/simple;
+	bh=JID+5g3N2NzMm5veKoBPvH2ibg+eIuVR2toHlHU5Pb4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=km3nXdJ6ppzx6+fXHRVzpoy70zARpLUtE+35jK1CVCSGMUljVTutGxUxqfoyMWNDBF4ACBb2zpNlJkSov4DzGUsUeNv72dmaaUjWVvW5PpH4vHzl3tqW5H1YQQMzX9ZNfprveY16PUCuIl/MltsaQhoUaBg9OZTvsQ2ih+72HxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=cUBpl6wn; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="rdhF4f1x"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-3550c917fd3so1238627eec.0
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 05:24:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="cUBpl6wn"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-91054f537ccso46107766d6.1
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 05:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1791980669; x=1792585469; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=l6i5RL9EhIEkzGd5o1z6sDf7iTmDAEE0DknjVLQl/+s=;
-        b=rdhF4f1xNNEolpukEM/XkZgVGg2df0U7nF5Lg7hsnoxEX9tN/ruNSIqxXpKeFz3sRY
-         ekdx5GPbPmBAwSxUtvWnfM8yVQuKJ9GkjzYCTLuYwvUdEE/bzwUXqqVdjCHCg1Z5FhZk
-         Bh5TZ0hNBmw2CjdNOEL97ynFdrb0uWg37PumqNSeJF+ArePT+nw5Uz0/zEMiVwDTv1ws
-         dRRADVNodSeRy9kE96S+vy+ZbSiPW12m51H1TyRrFTAWz3CusBr+0Y5CnIwRy67tVFB0
-         zOkvgFYxbB+LyNv92EXdpNJ3lvYvbuLwtICqWhjLh3KGit30x3chj3Tu97dckl0FGFkG
-         C0og==
+        d=gourry.net; s=google; t=1791981312; x=1792586112; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=QmQpU9PI8un7KuCGa3rKdlGVWqm4zvZIc3vocEo9k9Q=;
+        b=cUBpl6wnmz0vitD8q+khvWzYLa+T9q1Nw88RWxGVwIl8bWmDCPTX8p3OccB+U+21J5
+         YAfFXCaE7q4Z5WX7GC7/rJYRXoWWBfXjhaa6WIn8c+0O4RsAN5QjoYVQ8KqKKIszunMN
+         3MYE6HaGGoon1IA+FXJDV45pAnX+g6Kfegm15lpDQxGV8nigGIuZ2B6n4whp7jt5xXCN
+         DvPPtSdaYdi7C2JBkf0yjgaJxLkg21ahkDXX9QJZNz6JeT4V1XCGku/nrJ6kXG+LeyHj
+         x2mTch2RKGEMJcWpr/nrSzL66emPTsklWtjx+4MhUmLce8B+uoDcv9CN2P1lY89MT91E
+         PTCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791980669; x=1792585469;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=l6i5RL9EhIEkzGd5o1z6sDf7iTmDAEE0DknjVLQl/+s=;
-        b=p1P0WzYD69V7W/x1IgZoRiebXEZ9+igwyD5crkf52/f036bhuVbaHQ5oP+hPuTbZMw
-         nR9mGx0GcSiHlmN0bSQprWEzGAyZ24jdXTE1IxrU/8sXg5xoVFIAsW8q+x0jHxcH4Wje
-         0SVyRYe2PYDP8fk2APZ7pHr7yFz4oqJX7v/CW5R872aQEX8B68VlOq6Ww3ubbYc8/7od
-         p7KjtJ9lblQDJTv9nlvy5rS4CIJAB7JTwRaalgcnF+uOPEePjswFNwPbn0c/xJhm+XrE
-         flulFnOp/paO+hMGlZZdhkpTjn7lFM2NkTHovw4NacSWGaLMbSCkeavQx4ebR4EAiGDI
-         GYZA==
-X-Forwarded-Encrypted: i=1; AKwUvBxCvIXYZXSvgWvwc9IJ2o7ksCuZBr4lDiQDoztsOKAdfizg6nK1Rhg9Omny1+jIYp49tGg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKf2pL0VA4sR2nrwz9dShlww0YSLzpwHlAj654sk5NB8GjI7Wj1
-	JrdB9kn1xbvT11YpcrJFdeuV0Ax7VUX0MjtHknKV+jD3ImlQeNwap/ssW2/vBeTz2nrb
-X-Gm-Gg: AYBFou1a7Yn2WyvyIHjNJ5bMAtjxmPPmpqprJxVAwRYNwWPUuQBAj69WXMWY0FLyecM
-	w+XasT6hIMbKEf/fAKfRDbWyJrMhMQ4pu8gFzMVg8sPDxe45GwpGY9J5KeIHDD3hmHEdpBCuSR9
-	uSy4kMWrazCi101nvKxV+WWCOKVIn+wOcEytFg0ISGjhP5Qig9BIbTJ4/gESuH8p2Q7w1Uguz+S
-	9LdZdpFvZoOADhdP7JqVd39J5KZFbQzEjE8Frwte4/cRMxmoWRJj5qcpaTC5s2D4C+LiwcVcyKg
-	AM27mGaI947zZCrfVmqt2SWMRr2qw6lj2Kej/Kl1MUWkxAe0pQJPWwSG7/HqRggvZ5d7I1E4ETy
-	g7jh22o8UiKJMDlCmYxgFKMrkNJiIXzHTKpP/H449DAyf1ysb9WlyNlgw2hqMiUop8pWyrL24Jp
-	7kpz7Y4tOO1ERvN8H5A/yiZDPH0P4dWZKDdYOcAkfXMrkL5dSyOyiZsoSxeQtpngTa8MM6qVJii
-	TZGSzzhYdp4V5RALA==
-X-Received: by 2002:a05:693c:2289:b0:34b:5ab2:e200 with SMTP id 5a478bee46e88-3537e0788bemr29312073eec.14.1791980668633;
-        Wed, 14 Oct 2026 05:24:28 -0700 (PDT)
-Received: from Roxy.sysu.edu.cn ([2602:feda:30:ae86:295:dff:fe84:68f4])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-358ee8a3387sm43357994eec.15.2026.10.14.05.24.23
+        d=1e100.net; s=20260707; t=1791981312; x=1792586112;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QmQpU9PI8un7KuCGa3rKdlGVWqm4zvZIc3vocEo9k9Q=;
+        b=P47r/a8DWnwnL5BclopiqTphrOXQlz73wsUCModrWmf43f5B9wdW0bcgGtCf0RuzNM
+         ZcmmhnUmzs9aqKflmASMn96pAbaoI9XBWgIfaXejodFqN/rhxSJTx0asYxqnf63liPvB
+         o0weghJwq4MhiVfwChp2qepHAcWvZyFz1/ib1C3wDwfBYd/Xh8DLyhU+2ZHNW+XIzgrk
+         BQqChY8kcMbgtthYuy6AdD0i4VODuoY0rmsAafQ+vF/gVlP6zMIzq27qHhMS7q0TrdCT
+         iVy6GAeLSZ3lSNghWf1iG0nPnTj/MIhY8TrrIBwKAU/+KooMmGD5r/eOQWOpCoyFoJDS
+         4l7g==
+X-Forwarded-Encrypted: i=1; AKwUvByfym0flcMre6VxRtb101kWM+YcLqR1fnEqBRFUsgq6q6UqugdKVVYz2PgXKWOOr5MrGig=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIo1MGrbtZ92WmkRU1X6awYrX6blIfR0K0BjlIp/d3Bv3YEZIQD
+	oD2hGbV/T8eXQV2x1p6if6pKTYHhHxZdUKqIw/nNQmfJHFCt3XeAwdnBksbD8PygQ0c=
+X-Gm-Gg: AYBFou1NNKKeL9z4Hmqtpe6F+EDjz4bWojanYN9N6YhyPZnH2h2yLRyIlFyzjyPipqa
+	aIiIedaCyk9ZbJjZAJ44zMdFUI+8hRFWlk+Du5bMkVoqBsTIkwCj9d+ERkcvmyc4mqNjhbN4oDv
+	HwLnlI5XOuJanr2w2BxHuN0hU6ba7vvNihFPVdTth3+8UCL3r8zM+1uhgMwBbCdRfXp0nlYpM85
+	3XnlBANMfu3biQNunnmFLb0kVrgtxBjSpQybOKMI+TwqmxfUdtFvq8DplA+Iyk6g7VTtkKXSvGm
+	kwNVG/YF8R7a1oZzzmfT895JnzGO/ElSveekgPfGHSlf6JjJtng7XbxYMJxaUq343ZmOfoF0iB3
+	TiAK+utf5jNw8h62J+D2h7n6+ctniL9luPiNiXGiIaxSPQocYREtWBwcVeq0RMXa+8kvpnl9iuI
+	djtJJsWdOXkL6n3mHFlaPYqC9XnCE8N8bFFuEBEbKsFxVwI3AuF7BT2lgRiM+ujmFI7U5pZj4M3
+	Qfm3Pf7DCyTyX7d27QLhnIt0q7eMT0lX4lY/K7EIRyo8g419J2mqObq
+X-Received: by 2002:a05:620a:d95:b0:93e:e376:9b1d with SMTP id af79cd13be357-93ee376b37cmr1452850885a.9.1791981312473;
+        Wed, 14 Oct 2026 05:35:12 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93ef502608bsm483806485a.25.2026.10.14.05.35.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 05:24:28 -0700 (PDT)
-From: Zhiling Zou <zhilinz@nebusec.ai>
-To: netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ameryhung@gmail.com,
-	ast@kernel.org,
-	martin.lau@kernel.org,
-	daniel@iogearbox.net,
-	leon.hwang@linux.dev,
-	mattbobrowski@google.com,
-	zhilinz@nebusec.ai,
-	menglong8.dong@gmail.com,
-	kees@kernel.org,
-	bestswngs@gmail.com,
-	memxor@gmail.com,
-	vega@nebusec.ai
-Subject: [PATCH net 1/1] bpf: reject raw iteration over managed sk_storage values
-Date: Wed, 14 Oct 2026 20:24:07 +0800
-Message-ID: <1fa798d444efac579e91ee0716e228902a8f9afe.1791980149.git.zhilinz@nebusec.ai>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1791980149.git.zhilinz@nebusec.ai>
-References: <cover.1791980149.git.zhilinz@nebusec.ai>
+        Wed, 14 Oct 2026 05:35:12 -0700 (PDT)
+Date: Wed, 14 Oct 2026 08:35:09 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, 
+	david@kernel.org, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, 
+	shakeel.butt@linux.dev, roman.gushchin@linux.dev, yu.c.chen@intel.com, 
+	zhao1.liu@intel.com, bpf@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/3] BPF-based per-cgroup NUMA balancing mode
+ selection
+Message-ID: <as92ra-Ko2c7OdRS@gourry-fedora-PF4VCD3F>
+References: <20261012120438.52849-1-laoar.shao@gmail.com>
+ <as5RFhW1Ch8ta5nZ@gourry-fedora-PF4VCD3F>
+ <CALOAHbCOTSOPTzoSqKoBJZ56o0pfW_dGQ7ZM_e1jT9N16z3VPQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALOAHbCOTSOPTzoSqKoBJZ56o0pfW_dGQ7ZM_e1jT9N16z3VPQ@mail.gmail.com>
 
-The sk_storage iterator exposes values as raw PTR_TO_BUF memory. Attach
-validation checks only the maximum access against value_size, so BPF
-programs can read or overwrite BTF-managed fields such as __kptr without
-the verifier's ownership checks.
+On Wed, Oct 14, 2026 at 11:08:40AM +0800, Yafang Shao wrote:
+> >
+> > I also concur with Tejun that ops seems like overkill for this feature,
+> > this seems like something that can already be managed.
+> 
+> Tejun also suggested starting with a smaller kfunc rather than the
+> heavyweight struct_ops, in a separate mailing list thread. I agree
+> that this would be a good starting point.
+> 
+> >
+> > For example, why not add a new numa balancing mode bit that says
+> > "enabled but only for explicitly opted in tasks" and then ignore the
+> > global default mempolicy, e.g.:
+> >
+> >   if (numab_mode & NUMA_BALANCING_OPT_IN &&
+> >       mpol != default &&
+> >       mpol.flags & MPOL_F_NUMA_BALANCING)
+> >       /* do balancing */
+> 
+> Another option would be to add a cgroup::numab_mode field (without
+> exposing a cgroupfs interface file for now) to implement per-cgroup
+> numab mode. I will think it over, considering both your suggestion and
+> Tejun's.
+> 
 
-Reject value accesses when the storage map has a BTF record containing
-managed fields. Iterators that do not access values, and maps without
-managed fields, retain their existing behavior.
+I don't have a strong feeling either way, if Tejun thinks a kfunc is
+acceptable here then that's probably preferable to any new UAPI changes
+until the value is proven.
 
-Fixes: 9db44fdd8105 ("bpf: Support kptrs in local storage maps")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Assisted-by: LLM
-Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
----
- net/core/bpf_sk_storage.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index 1d295a8769fa..b54fd90d4bde 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -863,6 +863,12 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
- 		goto put_map;
- 
-+	/* The iterator exposes values as raw buffers, bypassing field checks. */
-+	if (map->record && prog->aux->max_rdwr_access) {
-+		err = -EACCES;
-+		goto put_map;
-+	}
-+
- 	if (prog->aux->max_rdwr_access > map->value_size) {
- 		err = -EACCES;
- 		goto put_map;
--- 
-2.55.0
-
+Thank you for the consideration,
+~Gregory
