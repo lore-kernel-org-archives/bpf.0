@@ -1,160 +1,121 @@
-Received: from mail-m19731110.qiye.163.com (mail-m19731110.qiye.163.com [220.197.31.110])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6436B347505
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 07:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE0F47DD50
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 08:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791964391; cv=none; b=f61mOKLMmNSZFVhYJBZXchHeTuIwchwq0BvNb5l9SHMU05lOifTlgkChw+WnOPrebUlvnw7qFK+79KSQqmf0XipFBVexotpfUNCLls/T8wYTtyw1FWCUo7mqf1Kk/nhgjnX/2BbBesM1DgM47yQeWbR02+SUyVyFOTrB71q565k=
+	t=1791965112; cv=none; b=TYuYJzlpsS/iZPrilfdaskhZ2crOqq6ibOonmyN+69lj4ESYDnCdU2rOhHKFAKD9lvKPu7Ar4Bc/JiNptBfNRCaqKi5unMfqZiT5nLj59abjBp+1CBBw3geqB44X1DgF/V29Df9Ewy0aAr/dOc+51lWonb3XRypW8ONJDydzMAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791964391; c=relaxed/simple;
-	bh=nJZBGhEUFLqdeoEdfpk2eQt5LVvAlCH8oD3JwwCKG6Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pqKDjcYrKx+eOca1GCjkN03dZjSWvXJ+W+bu/arewNz5lWwQJe+DadwkJsugYqynrUlJbfvgzrA0xrjUEAAGZNWppVJg/9nBAok/j03NytF0lJnGJ1hpJGB2ni0zVeDAV96puwNZai3yHD2FQQDk2zEbF+dst9hLJfPEwSxtNUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=220.197.31.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from [192.168.0.59] (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 200ca9f7c;
-	Wed, 14 Oct 2026 15:47:45 +0800 (GMT+08:00)
-Message-ID: <774f27c4-8c73-47d1-831d-0b827c0f3be5@easystack.cn>
-Date: Wed, 14 Oct 2026 15:47:44 +0800
+	s=arc-20240116; t=1791965112; c=relaxed/simple;
+	bh=I37h8tli3u2cUswjNi8bGkFErCKEFwbjTdiH8F64x4Q=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=nas06GVrXvwiFmp3m3hw0dOIqV4G065nBfNYmzBT7YHqAboZyZFiqpicnlOK/tAhCMf7YfoVL1uBPGchZ6HRIbnw6+79udzWSjUcIfWainruh7lsz17l0h/6iN4/55mspiXa6OA07f1IPKYSqEIhqB8BZCoYbF8OaVWBEoKLrBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DsNz3MYU; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DsNz3MYU"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id EBE9D4E41224;
+	Wed, 14 Oct 2026 08:05:08 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id B65A660368;
+	Wed, 14 Oct 2026 08:05:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 987BD1032852B;
+	Wed, 14 Oct 2026 10:05:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1791965107; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=q9eklIDiJSWQCPdkn0nXsZc5X/aS57OChnWV3Hi6Tjo=;
+	b=DsNz3MYUacZKjDJ0RiSUgChGjReJvGGkEL6wjrhrs7WipFL+eJq1QfIrngnQHKlovAUaD2
+	ZpFdhhwHt3No6J7WbaVQEf5/sEmOHSILYcM6H9Gr74BT9CIjIpADYGudnU1sVSiUZXUKcx
+	wF50RH1FhGKnQ5ZCX7RENJN6JNTD33Y5jv5l425gN9adF1f/4hut0ikA1nd7hGqw94U4Nu
+	CecnWHZigTRKGxHYmUIb8ijE56HspQ6zGw5KyZX/BPIBvkhlMbEmc8mSDYNU/A+TBVuHQE
+	6TeoZHZhc4ob4vORYUJ8JQwpd8Zu2Lb6BGEWGdXoJFNvwm6GcWPfpg6meYz2OA==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/6] mm/page_owner: add bpf_page_owner_get_memcg_info()
- kfunc
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261013122125.843451-1-zhen.ni@easystack.cn>
- <20261013122125.843451-6-zhen.ni@easystack.cn>
- <sashiko-outbox-169738@kernel.org>
-From: "zhen.ni" <zhen.ni@easystack.cn>
-In-Reply-To: <sashiko-outbox-169738@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa13961ad3c0229kunm6bb54fc9449bf
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCSxlKVh0ZSh1OTR1OS09DSFYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVCQk
-	lOS1VKS0tVSkJLQlkG
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 14 Oct 2026 10:05:03 +0200
+Message-Id: <DM4EM3OM2GQ8.3IWQMARN78YRV@bootlin.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Use its own netns in
+ flow_dissector_skb_less_direct_attach
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Qiliang Yuan" <odys.yuan@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.22.0-0-gc2f86b7abde3
+References: <20261008-selftests-bpf-flow-dissector-netns-v1-1-5d9889aaad84@gmail.com>
+In-Reply-To: <20261008-selftests-bpf-flow-dissector-netns-v1-1-5d9889aaad84@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
+
+On Thu Oct 8, 2026 at 4:02 PM CEST, Qiliang Yuan wrote:
+> test_flow_dissector_skb_less_direct_attach() and
+> test_flow_dissector_skb_less_indirect_attach() each create a netns to run
+> in, and test_progs may run the two at the same time.
+>
+> Both name their netns flow_dissector_skb_less_indirect_attach_ns. When
+> the two tests overlap, one of them fails to create or open the netns, or
+> loses it to the cleanup of the other one.
+>
+> Name the netns of the direct attach test after that test.
+>
+> Fixes: 2b044dd186f0 ("selftests/bpf: re-split main function into dedicate=
+d tests")
+> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+
+Indeed, faulty copy-paste when the original test has been split, thanks
+for the fix.
+
+Reviewed-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.=
+com>
+
+> ---
+>  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/to=
+ols/testing/selftests/bpf/prog_tests/flow_dissector.c
+> index fb48926814647..f6fefb14cda3c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> @@ -706,7 +706,7 @@ void test_flow_dissector_skb_less_direct_attach(void)
+>  	struct bpf_flow *skel;
+>  	struct netns_obj *ns;
+> =20
+> -	ns =3D netns_new("flow_dissector_skb_less_indirect_attach_ns", true);
+> +	ns =3D netns_new("flow_dissector_skb_less_direct_attach_ns", true);
+>  	if (!ASSERT_OK_PTR(ns, "create and open netns"))
+>  		return;
+> =20
+>
+> ---
+> base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+> change-id: 20261008-selftests-bpf-flow-dissector-netns-c347cf31e5f1
+>
+> Best regards,
 
 
 
-在 2026/10/13 20:49, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] bpf: TOCTOU race in bpf_page_owner_get_memcg_info() leads to page fault
-> - [High] mm: wild pointer dereference in get_page_memcg_info() for tail pages
-> --
-> 
-> commit ab0ccc33a4ab8ccdaacb5f6b2dca8722bf6d6123
-> Author: Zhen Ni <zhen.ni@easystack.cn>
-> 
-> mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
-> 
-> This commit exposes per-page memcg information to BPF programs.
-> It splits memcg info collection out of print_page_owner_memcg() into
-> a new get_page_memcg_info() function and adds the
-> bpf_page_owner_get_memcg_info() kfunc.
-> 
-> Link: https://lore.kernel.org/linux-mm/20261009112308.240769-6-zhen.ni@easystack.cn/
-> 
->> diff --git a/mm/page_owner.c b/mm/page_owner.c
->> index 113e4e7e0b3a1..664121be66863 100644
->> --- a/mm/page_owner.c
->> +++ b/mm/page_owner.c
->> @@ -538,16 +538,22 @@ void pagetypeinfo_showmixedcount_print(struct seq_file *m,
-> 
-> [ ... ]
-> 
->> +int get_page_memcg_info(struct page *page, struct memcg_info *info,
->> +			char *buf, int size)
->>   {
->>   	unsigned long memcg_data;
->>   	struct obj_cgroup *objcg;
->>   	struct mem_cgroup *memcg;
->> +	int ret = -ENODATA;
->> +
->> +	*info = (struct memcg_info){};
->>   
->>   	rcu_read_lock();
->>   	memcg_data = READ_ONCE(page->memcg_data);
->> +	if (!memcg_data)
->> +		goto out_unlock;
-> 
-> [Severity: High]
-> Does removing the PageTail() guard here expose a wild pointer dereference?
-> 
-> In struct folio, the first tail page's _nr_pages field aliases exactly with
-> the memcg_data offset when CONFIG_MEMCG is enabled. Due to a lack of memory
-> barriers in __update_page_owner_handle(), page_owner_next_eligible() can
-> observe PAGE_EXT_OWNER_ALLOCATED before page_owner->order is updated,
-> yielding a tail page.
-> 
-> If a tail page is passed here, the non-zero _nr_pages value (e.g., 512 for a
-> large folio) will bypass the !memcg_data check and be dereferenced as an
-> obj_cgroup pointer later in the function, leading to a kernel panic.
-> 
-
-The `PageTail(page)` check is not removed. get_page_memcg_info() still
-reads:
-
-         memcg_data = READ_ONCE(page->memcg_data);
-         if (!memcg_data || PageTail(page))
-                 goto out_unlock;
-
-Won't fix.
-> [ ... ]
-> 
->> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
->> index a2b90c8748520..86e0b4b52bfc7 100644
->> --- a/mm/page_owner_iter.c
->> +++ b/mm/page_owner_iter.c
->> @@ -177,4 +177,21 @@ __bpf_kfunc int bpf_page_owner_stack_snprint(struct page_owner_scan *scan,
->>   				   0);
->>   }
->>   
->> +__bpf_kfunc int bpf_page_owner_get_memcg_info(struct page_owner_scan *scan,
->> +					      struct memcg_info *info__uninit,
->> +					      char *buf__uninit, u32 buf__sz)
->> +{
->> +	/* Guard against the section being offlined after scan. */
->> +	struct page *page = pfn_to_online_page(scan->pfn);
->> +
->> +	if (!page) {
->> +		*info__uninit = (struct memcg_info){};
->> +		if (buf__uninit && buf__sz)
->> +			buf__uninit[0] = '\0';
->> +		return -ENODATA;
->> +	}
->> +
->> +	return get_page_memcg_info(page, info__uninit, buf__uninit, buf__sz);
->> +}
-> 
-> [Severity: High]
-> Is this vulnerable to a time-of-check to time-of-use race with memory
-> hot-remove?
-> 
-> The pfn_to_online_page() check and subsequent get_page_memcg_info()
-> dereference occur without holding get_online_mems(). Because this is a
-> sleepable BPF kfunc (KF_SLEEPABLE), the thread can be preempted between the
-> check and the dereference.
-> 
-> If memory hot-remove offlines and removes the memory section concurrently, it
-> tears down the vmemmap backing the struct page. When the thread resumes and
-> get_page_memcg_info() attempts to read page->memcg_data, it will fault on the
-> unmapped address.
-> 
-
-pfn_to_online_page() here is meant to close a window that the iterator
-would otherwise widen, not to fully serialize against memory hot-remove.
 
 
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-Thanks,
-Zhen
