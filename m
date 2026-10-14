@@ -1,121 +1,131 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400D223E325
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 19:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2286534EF07;
+	Wed, 14 Oct 2026 20:56:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792007490; cv=none; b=bv2JMgDJZ+BV+Zu0lsiBwYNG/O4xmVUkm/kM8fnFWzgm4ae0cai0LAjSaa0QHxAVtuahPcDlHoHUjM9Wo6vy6fxWGAjmhBtc5wmYXBqZSw+TdVO+R5xfMypWloDEpAVdGBpHm/0Hg3DlXVUjk4rKSr/Z3Qk5++/0is0nLu9cus8=
+	t=1792011411; cv=none; b=F1BR1k1J5WOv1YzWycg7ru1uN9s+8Ez/GaIY/6oq8Ip9ptITplNe8Oss+Hhd1/M/Wzsz0PJzu7OPNMFKnU2Rm+/dFHP2xZRWthX8mlLuSteMhWX/HszcNsR3uEWmGenCANUwBE1tZZSd9X5GQw4OX28sP2ZrTxQ5mh5vc/tJAcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792007490; c=relaxed/simple;
-	bh=C4QdF0kfD5I7YkBEnXi8MMrfwuUCiXACZGR7/E2177Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Di3v54m/cHGKa3gOLIahrc3P50JzzUc6bkxTNvwDGLoPC/Wb4y2gNMBSgamy5koaXYTTGVSZ2REScaY/gKfxQIm2dWvcxh9ojLu/MhmnvYGHflDJBFcFEGOMjhbWXp7LPK/pQ2aanTDNPeP6VKT/ooyeWElHoK4Pm+iqlL5skgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=vnwsjeH0; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1792011411; c=relaxed/simple;
+	bh=KDOUJs0C3uYitpaFWMJOypNbAlgV3q5tkqutP2G8roo=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lIJM17yPPtKN6WVQbu45ObNNZBiHBaT6xkUyuuUUgw1mixhAwOjR1S2yL/1lKlBKogAqpSAaFUQaNLaQn67MStrgaMt6i2OTaO4ExepiNETiuipPx9ktPie5g19OIacrq0D+0YUpuOYPUUkzqceD1U2aWeBFjTZJG8daAfxcQfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K/h1eecC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="vnwsjeH0"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2dd76b1361dso9699665ad.1
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 12:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792007488; x=1792612288; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=hzofueAYnlurj6BhEZgw1n60GJllU6UFAaFK5QM85x4=;
-        b=vnwsjeH0ud4Xcj59MsVrDXMvnx9aPp3zwZST2da6sxMyWEJTTHumk3twuFHtadTPZp
-         +3gnNTnMbSLRlzGV7t7B3EjlzjyIZOwlth6nD6xmQ7KeSFT4dkSEbZ+4prkrfvqEP/Mb
-         x6wdFxhvF4l560eTuxAj0SNJXojKn+5uI+mYY2DD65xPb3REEwO2KhtOWNAueGI+jxU7
-         eRe2T7opGKoYHSPWuNhryLrnJsEtVzQDPtNrhf2gdcWRJUFkpIhQ4paLUdaAYsZnGdjV
-         +Waz8LdVK0jVFyZfl3RfRXW+MBRe1RsR4vXFPy37DvjU6M/vRghPVXj+qk81514ViQX+
-         RXGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792007488; x=1792612288;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hzofueAYnlurj6BhEZgw1n60GJllU6UFAaFK5QM85x4=;
-        b=MTzEQvhHfhafA+DSTwFg+bbcquKqplengrG8u7Qx00lxDoeJ1R7iIr6ZDsuzhdmdbz
-         EToE8yLQLPa4wBEPioejuGkaWaYaqF0w2R+XBBstmPK04PF/gPtrms0iOywunumCFcuE
-         rquaZpukUkoAlyMe6zZV5wllGmptYm13jcRNEE7168os8XcR19wH4zCVWJL12n8fyFKK
-         xYAjR1hNGkB7ZBUNQFLkaqS94ilJ+6uOgJPV7wvgFVHBk1KQRJrGNGq6X8zIblTeNLW2
-         KKjwMMKcAGZ4iG4k2jWP5ADqpGMQmYpvy5D8Lp4nZQhRIKvRNmO5/kIIYr4arQopJ0zP
-         3mCQ==
-X-Gm-Message-State: AFq9FYIdpytiRHQ0dfMmzc1FreCjAypQIeCTZdIB8f5MYuDrMna9+6nf
-	HLlHHSOKvs0ojpjMTXjDQtY/sA6TJkMGAZocX+snsvF/M3dikGQjqKbUNfFbDBOaSeY=
-X-Gm-Gg: AYBFou0yUG5gpI0fyR3tzHHGL9SvjdhkOSKrlSc5lDPat0Hvm4lvm0RZVSC8jgPcCO6
-	2P2qph+r0OcJAqLxgKMsbr6fS6nhHIGq/+5IksJOfkEDMWM7JF/+zdSWxLn997dJXRUJGmh7nl0
-	JSdl+rKKm1iggUpEgLStPWwxe+eaye+B2P3oakET5vZg1S0Ok2YcJUZUgzIajXp1w5tHpGwVBKN
-	pgqgNf3s/zH+eBpesT72PmJWrq+bpxWdvXKPcBRK/bEiiDCsusW90li65dPIO762OZVt1YEJMi6
-	r87v0ZI9T9mY0D347q/DXZhsv515m3jpkUeoAsVGDa5qWWfeViaPb4JsJ7SDrLa5mdd2GMtLuiV
-	iHsxVwoffHj0VeTmbmZvpZfziZzWg8FdC71hEATkTp94qwVxNo1sm/908lOMX3e2n0/wGhIJjv3
-	B3+vEaClC2ZVMEssyZGUEZ0ItGiHviLbjyY48aI0mju+JoqyVEoDR/Zd71cvxKXUbxyvn03zKd9
-	EZYwrBUmTzl2Jd/HNSQnisQGmVj
-X-Received: by 2002:a17:903:38c4:b0:2dd:c100:4257 with SMTP id d9443c01a7336-2e842f11875mr141177635ad.59.1792007488455;
-        Wed, 14 Oct 2026 12:51:28 -0700 (PDT)
-Received: from localhost (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e84219e8c9sm72720135ad.23.2026.10.14.12.51.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Oct 2026 12:51:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K/h1eecC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8BF1F000C4;
+	Wed, 14 Oct 2026 20:56:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792011409;
+	bh=9iR4CHLMGZ4aDi692nqAlwhqkY/qmfz7HVjcsaRcdM0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=K/h1eecCBXuvC4BXFKFa6jCsLZW+LYl//n+sdLGytWj3rxut7nECfCUjC7x3f6cHg
+	 gdn2h2WY05ux6cFRxQHRtDMrci2417utQXAqy7xCxV0QSMzEeMrFFMVagcJc2vq87u
+	 I3x9DG3mWsGZnKPw1aFEpbI2ZUuqTZUYLjqtBDNsmy6h2kfcGI8qGsVsuJKCufuLWY
+	 cJgasS6IdSkYYrjVZ/cfUyBff8sFgA7V2Y+AEXGflobU/m/fHp737RK+BafzTNdJip
+	 tnKo6QICRv37sgsHHsN0mcvjkgz3A5KbqbqYdeEl/FmXzIZRxcBo6OHnVWuHy67Fy2
+	 thj2SW31pOzyg==
+Subject: Re: [PATCH net-next 3/4] selftests: mptcp: convert iptables to
+ nftables for mptcp_sockopt.sh
+From: netdev-bot+sashiko@kernel.org
+To: matttbe@kernel.org
+Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ cpaasch@openai.com, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kernel@vger.kernel.org, liuhangbin@kylinos.cn, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+Date: Wed, 14 Oct 2026 20:56:48 +0000
+Message-ID: <179201140828.434549.10971881913720826839@kernel.org>
+In-Reply-To:
+ <20261013-net-next-mptcp-misc-feat-7-4-part2-v1-3-1181e5d2fda4@kernel.org>
+References:
+ <20261013-net-next-mptcp-misc-feat-7-4-part2-v1-3-1181e5d2fda4@kernel.org>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 14 Oct 2026 19:51:26 +0000
-Message-Id: <DM4TMYJX3BXY.15067Y489FKUR@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 0/2] selftests/bpf: Skip libarena when arena
- spin locks are unsupported
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Qiliang Yuan" <odys.yuan@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20261009-selftests-bpf-libarena-nr-cpus-v1-0-e726ccc66fc6@gmail.com>
-In-Reply-To: <20261009-selftests-bpf-libarena-nr-cpus-v1-0-e726ccc66fc6@gmail.com>
+MIME-Version: 1.0
 
-On Fri Oct 9, 2026 at 1:49 AM UTC, Qiliang Yuan wrote:
-> serial_test_libarena runs the test programs of libarena, whose buddy
-> allocator serializes its operations with an arena spin lock.
->
-> arena_spin_lock() fails with -EOPNOTSUPP on kernels built with more
-> than 1024 possible CPUs, as distributions commonly configure them.
-> buddy_init() reports that as -EINVAL, and every test then fails at
-> arena_buddy_reset.
->
-> Patch 1 makes buddy_init() return the error of the lock, patch 2 skips
-> the tests when resetting the allocator fails with -EOPNOTSUPP.
->
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-If new kernels expect more than 1024 CPUs, we should update libarena and
-arena_spin_lock() to support them instead of returning EOPNOTSUPP.
+Low priority / nit picks for your consideration:
 
-pw-bot: cr
+- [Low] The commit message does not mention two new runtime requirements
+  added by this patch.
 
-> Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
-> ---
-> Qiliang Yuan (2):
->       selftests/bpf: Return the lock error from buddy_init() of libarena
->       selftests/bpf: Skip libarena on kernels with too many possible CPUs
->
->  tools/testing/selftests/bpf/libarena/src/buddy.bpf.c | 5 +++--
->  tools/testing/selftests/bpf/prog_tests/libarena.c    | 9 +++++++++
->  2 files changed, 12 insertions(+), 2 deletions(-)
-> ---
-> base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
-> change-id: 20261009-selftests-bpf-libarena-nr-cpus-50fc5dd00fe2
->
-> Best regards,
+--
 
+selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+
+This patch moves the mark rules in mptcp_sockopt.sh from iptables/ip6tables
+to nftables and keeps the same table and chain names. check_mark() now reads
+the drop counter from nft JSON output and parses it with jq.
+mptcp_lib_check_tools() gets new checks for nft and jq.
+
+> diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+> index b9d14647f4019..20853d0198ffc 100644
+> --- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+> +++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+> @@ -528,7 +528,14 @@ mptcp_lib_check_tools() {
+>  				exit ${KSFT_SKIP}
+>  			fi
+>  			;;
+> -		"iptables"* | "ip6tables"*)
+> +		"nft")
+> +			if ! nft --version &> /dev/null || \
+> +			   ! nft -j list ruleset &> /dev/null; then
+> +				mptcp_lib_pr_skip "Could not run all tests without nft -j"
+> +				exit ${KSFT_SKIP}
+> +			fi
+> +			;;
+> +		"iptables"* | "ip6tables"* | "jq")
+>  			if ! "${tool}" -V &> /dev/null; then
+>  				mptcp_lib_pr_skip "Could not run all tests without ${tool}"
+>  				exit ${KSFT_SKIP}
+> diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+> index e850a87429b61..ef2738720e249 100755
+> --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+> +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+
+[ ... ]
+
+> @@ -105,32 +109,31 @@ cleanup()
+>  
+>  mptcp_lib_check_mptcp
+>  mptcp_lib_check_kallsyms
+> -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
+> +mptcp_lib_check_tools ip nft jq
+
+[Severity: Low]
+This isn't a bug, but should the commit message list the new runtime
+requirements? The script now needs jq and an nft built with JSON support
+(nft -j list ruleset). The shared mptcp_lib_check_tools() helper in
+mptcp_lib.sh also gets new "nft" and "jq" cases.
+
+The commit message only says:
+
+    After conversion, the generated output matches the original
+    iptables/ip6tables behavior.
+
+The reason for using JSON and jq appears only in the v2 notes below the
+--- line, and those notes are dropped when the patch is applied.
+
+This check runs at top level, before any subtest. So a system that has
+iptables but no jq, or an nft without JSON support, now skips the whole
+script. That includes do_mptcp_sockopt_tests and do_tcpinq_tests, which
+don't use netfilter.
+
+Could the commit message mention the jq and nft JSON dependencies and the
+mptcp_lib.sh change?
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261013-net-next-mptcp-misc-feat-7-4-part2-v1-0-1181e5d2fda4%40kernel.org
