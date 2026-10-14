@@ -1,115 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A9F32F75B;
-	Wed, 14 Oct 2026 02:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A25335BDC2
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 03:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791946442; cv=none; b=bylnP8EZerMZkcGIcmX1YMhcAcDWAte5L3HrFu3j8SndMQTtWqQGNQGvo52+sEeEdon9C7TCrqodvcmneGCnoXnp4dx0+plL3RxXMbm2M7YEzdtdEFztl5auMRAxS9A5nC3bIXOTJvOgpqVt+cJoB49AAd4I6Em+P7E3RgH0veA=
+	t=1791947282; cv=none; b=IlkofgTAfsSm9oK0NJU3wdzT+8sHvRchSrsRGtFsGAslIn+ee1oavDpNvEftEO+Ue6rdi2Qs6ZecQTGHHpzNyD+6L70eMMPWyz6XPGkpcG5XGyrhu6UUGX1U8YTL0KJH9ZOjJRcAABYrnje8Rw4KpjKObRvNnBpf6mmnnvCGe1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791946442; c=relaxed/simple;
-	bh=UOUMOjQCN34mEMkC15zOKtQhiGH8pPrI/2Hy8y06+LI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GT2lfXwIlWEMTxs8yQlWSlo8mJESsSeSaKyLNjRsbuu3q5OXf162SG+nioB5BjhHsKWScJOLCjLQqMts4W32WlwwLTm0Jy0RjkWK1f47t9sigKF71SkP2JXJLMw0pCGQfXz4fW+J+6tukUjfe+SUdu3kIVSJd/GzYHgoP2nYAVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mugsJNRL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791947282; c=relaxed/simple;
+	bh=qkvwYBHEY8tnKbKt621Drhbco2Nap7blGioKoBbzOtg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aoPV8BbCgy0x1GTLxLPiiKESyIOvIn6m+CywANYeTxXeE178XcPOiu5C/VQTjrxViJqukoP6AAYpXbXmtEt5VN57imu4NnbTZxOglbh3Cr4DGGSOSLw2ftM9TopyM6oAB1xepdT8Gbc1XN7obPmBMC6F55rDzVDaqH/yfun3CT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=NOL+/0Q9; arc=none smtp.client-ip=202.38.64.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mugsJNRL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4B51F00893;
-	Wed, 14 Oct 2026 02:53:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791946441;
-	bh=z/36UB7zLZVKfT7/izGBmFoBpzWxmAReGZgGNu4qmXk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mugsJNRLnJaf2w3ynSpKL9ypOP8bS2lAQgEjSoSxtF+PaJqFbnVa0vjX2QNRY3NRE
-	 Iap1lQY71KCZjLMhaxAtLVpzMCn/my8g0RCxWFjP29QuxMKWGVlOeiY1km+u8Z4qXV
-	 wH+hQcvVId3PGsz4t7LP7lZzBI5k8/hxQpuBodNNkjnIblwwZQK5i853M5hVofjGr9
-	 Gzvu3aCiCW8k16ZwDBF9XZHEuQC/LVN1KflZF1nmmPVeQE7lAJQJy6QIH2OIBAS6ss
-	 LjILXK3H2P080adjGcjHttNBXh85wUExQ7ELccxO93tJxY8+qOb3i7VzsX5VHB40vH
-	 dMd6VKK2kgz2g==
-Content-Type: multipart/mixed; boundary="===============7992559996201943304=="
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="NOL+/0Q9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+	Message-ID:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=qkvwYBHEY8tnKbKt621Drhbco2Nap7blGi
+	oKoBbzOtg=; b=NOL+/0Q9PV4+DUfGzG18KA6TWtyEf61XIMrfiabAkxjdR+c7ry
+	aL6BgYqYaAmGrogDHg7UUV+DDEu87vPelVyU/IEBl1vYlee5nwSSJpovxs01WPQA
+	1QP/ieiRi7zrVXXsWU+8zbXxVTpz+b6BPFr2upmnnCsNPR/Bx8wcn9JBc=
+Received: from localhost (unknown [222.195.81.103])
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgBnYikC8s5qd3jnAQ--.117S2;
+	Wed, 14 Oct 2026 11:07:46 +0800 (CST)
+From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	ameryhung@gmail.com,
+	yonghong.song@linux.dev,
+	puranjay@kernel.org
+Subject: Re: [PATCH bpf-next v6 0/2] bpf: Track borrowed iterator result lifetimes
+Date: Wed, 14 Oct 2026 11:07:45 +0800
+Message-ID: <20261014030745.2614437-1-xyx2021@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260927120406.1041915-1-xyx2021@mail.ustc.edu.cn>
+References: <20260927120406.1041915-1-xyx2021@mail.ustc.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f8c821cc97a2e46cae72802b781429ebbc0e6c4213c6f93e586b77255fa2abf5@mail.kernel.org>
-In-Reply-To: <20261013-fix-lru-node-type-kcsan-v1-1-0b743f5af2f3@gmail.com>
-References: <20261013-fix-lru-node-type-kcsan-v1-1-0b743f5af2f3@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Annotate data races on bpf_lru_node type
-From: bot+bpf-ci@kernel.org
-To: nicholasfvelten@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com,nicholasfvelten@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 14 Oct 2026 02:53:59 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:3pYKCgBnYikC8s5qd3jnAQ--.117S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtrW3Wr43CF1rAry8KF45Jrb_yoW3CrX_ur
+	92grZ8K3W7t3ya9F47GrsxArnI9393GFyrtr4kKr13Ar1kZr4UJFsxJrZxJryxAFWrJas8
+	twnFq397tw1DKjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbakYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+	6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+	8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0
+	cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+	8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x2
+	0xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMc
+	Ij6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l
+	c7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026x
+	CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+	JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+	1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
+	Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8Jb
+	IYCTnIWIevJa73UjIFyTuYvjxUx8sqDUUUU
+X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
---===============7992559996201943304==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi all,
 
-> bpf: Annotate data races on bpf_lru_node type
+Just following up on this series. v6 implements the opt-out approach
+discussed in the v5 review.
 
-TL;DR: Commit message only: it may be inaccurate about the locking for the
-node->type writes, and "the sanity check only feeds a warning" is questionable
-since the check also causes an early return.
+I also noticed a Patchwork grouping issue: the iterator series [1]
+contains only patch 2/2, while patch 1/2 is listed under the separate
+returned-slice series [2].
 
-> bpf: Annotate data races on bpf_lru_node type
+Both iterator patches are present on lore, with In-Reply-To and
+References correctly pointing to this cover letter. The reported CI
+run [3] contains the test patch but not the implementation, so it did
+not test the complete iterator series.
 
-[ ... ]
+I'm not sure whether a resend of v6 is needed in this situation.
 
-> node->type is written under the global l->lock when a node moves between
-> the active, inactive and free lists, and under the per-CPU loc_l->lock
-> when it moves to or from a local list. It is read in two places that do
-> not hold the lock the writer holds:
+Thanks,
+Yunxiang
 
-The commit message says node->type is written under the per-CPU
-loc_l->lock when it moves to or from a local list.  Is that complete for
-the writers this patch converts to WRITE_ONCE()?
+[1] https://patchwork.kernel.org/series/1174319/
+[2] https://patchwork.kernel.org/series/1174317/
+[3] https://github.com/kernel-patches/bpf/actions/runs/36346633709
 
-The failure path in bpf_common_lru_pop_free() writes node->type after
-taking loc_l->lock has failed:
-
-kernel/bpf/bpf_lru_list.c:bpf_common_lru_pop_free() {
-    ...
-	if (raw_res_spin_lock_irqsave(&loc_l->lock, flags)) {
-		/* ... */
-		WRITE_ONCE(node->type, BPF_LRU_LOCAL_LIST_T_FREE);
-    ...
-}
-
-so no lock is held for that write.  Could the commit message mention
-that this write is safe because the stolen node is not on any list and
-is owned by the current CPU at that point?
-
-[ ... ]
-
-> Both races are benign: the type is a single byte, the sanity check only
-> feeds a warning, and the re-check exists precisely because the value can
-> change concurrently (any change sends the node down the check_lru_list
-> path, which revalidates under l->lock). Mark the two reads with
-
-Is "the sanity check only feeds a warning" accurate?  In
-bpf_lru_list_push_free() the WARN_ON_ONCE() condition also controls an
-early return:
-
-kernel/bpf/bpf_lru_list.c:bpf_lru_list_push_free() {
-    ...
-	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(READ_ONCE(node->type))))
-		return;
-    ...
-}
-
-so the racy value affects control flow and not only the warning.
-
-Would it be more precise to say the race is benign because a concurrent
-writer can only store BPF_LRU_LIST_T_ACTIVE or BPF_LRU_LIST_T_INACTIVE
-for a node being pushed free, so IS_LOCAL_LIST_TYPE() gives the same
-result for any value the read can observe?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38500297852
---===============7992559996201943304==--
