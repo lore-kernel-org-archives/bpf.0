@@ -1,120 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2D952940B
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 17:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2648155C1D3
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 17:50:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791999817; cv=none; b=cg/zWKPXbWQVS45uunArkq0oGqTKfqzJVdAtSZAxXiFRcga+pC23eGxjV3gGw168/zxm+nJdco0/exwKy2sYqBbd0lFy8+Xm+8IguyuWWd4gk3umLre49MOQJhx3VCktKCyXoGO1J0czSVQ19K5m8yYDdXYIk61RPVryRYTeJr0=
+	t=1792000235; cv=none; b=qnrIdWtwXxYcZ/YycuXPG1clyrXk1WCLmAfWFeWhivG+adA7YM2u0CJP841K6ecCvzTC9RH5EBWf+IY5Zhpv60JjnY1cf1wiy4+ikSN8IzQxQiAqcQZU0rRDQIV9uLP1MWEZFYn8sQ7NQgXdRC1UYpCNxNDsoVtcDrs+XPab3NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791999817; c=relaxed/simple;
-	bh=Ve3ncIJfsqYjab+Wfioxyq9D7g5PGbboMcwsDLTpIeA=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=ebWwmvTBYGEc3JlO4cjwO2UAl3mVsJp0wS5jaOqI/8dGIvLuEZpc1XOKhvDq+py8dOogzNA3rWXOol5gWVJhkcYZTBaHsmfOqrog+c4GfwvzWXQypXbYQar0O5EZ58J4h+whqg2UsovTi6DXNUmjV8zPm0VBad8rrHgjikInhQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2yi/X1K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792000235; c=relaxed/simple;
+	bh=jOEgE+7hZGq23m4Kwf1DaF7fI9X9TN6cpMzxIR01eQE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Iun7Hvu7Juiwru4wR27M0jJy/SL/qWsTlxgm/j2nGs+HDRrWC82+XNCJh228L7kJuu929NH/vWOYm3ePQHD6kb+rvGiCLnM3BQFkaA9rusbquUzgeLwnvzIZc6nfju1jKiF+j4LrnKuSUzLXBoM/Pxj9tnfebeetspb1eggGSYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Y5QLkfFY; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2yi/X1K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D021F000C4;
-	Wed, 14 Oct 2026 17:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791999815;
-	bh=E0Dd6dI929XYeJBjbIDPyRXusUwQ6UKp7v7aZe6QWX4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=o2yi/X1KGZWnM3tWWtM5VlixosLRHUgYidK9FDk0QlfbRAdyrJk3NpF6qBp6bVIQ0
-	 iXvU2gIuxSEr0vvpvTuwZlbbotrwjYjNwYjnHk52HjTs/CC/VPRaGPNRYxT9QcN8Cv
-	 Io/iSde+sAX4pOezOlO9e79uvP+N1aVk8lrXxTCUyLGX/r3oWwvlXN74NQdY6r/9VD
-	 Q3LH2N4XlnElwKpd5CJOotw0N6yUDEsEbEo4ZxD3KN7FUqQis292heQ6O4FVyIYYFT
-	 XV4L22TVhrcWiTe2cVyNOIHAUsn3bh5Bxu5aHluCc/FHolVWqzzTySiF5qIxRj+Lcg
-	 lxM3n+0eDjOjA==
-Message-ID: <sashiko-outbox-171590@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 2/4] selftests/bpf: Test MEM_RCU carry-over
- for trusted fields
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Justin Suess" <utilityemal77@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261014173039.3666415-3-utilityemal77@gmail.com>
-References: <20261014173039.3666415-1-utilityemal77@gmail.com>
- <20261014173039.3666415-3-utilityemal77@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 14 Oct 2026 17:43:34 +0000
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Y5QLkfFY"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c3156e7705cso224737466b.1
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 10:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1792000231; x=1792605031; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=jOEgE+7hZGq23m4Kwf1DaF7fI9X9TN6cpMzxIR01eQE=;
+        b=Y5QLkfFYSxuogsDX4uu/tbPvzVjdCeKaqy7iLif0uAul8WBT456ad1lf9GLSP5JRrE
+         OXzeKf3uF6vndKe5lsL56e8/Payw2YXccq0GECvDERhQpvQV+PAaVhrwyAK+t0Ziq868
+         fWBxvNKsM5q32VCqttcYHUQp+pOHm1cYnq6Mdw5DMiecJ99xer+Pw0zzRYzrdfeS+LcV
+         q1dCYm49/w9rToog9UyQVE2hDmcZVGjQ4O8TUKNh7ZEDDD69ZoopuR64Wxfzh8lyb5Ot
+         STFCb9Q/QUlaPIlWj9tX2REcR9azHVASrUA3+/W2v65FlYxaChE6tz15YPKE0FAKPLYx
+         DQYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792000231; x=1792605031;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=jOEgE+7hZGq23m4Kwf1DaF7fI9X9TN6cpMzxIR01eQE=;
+        b=CzrE1ZxaVaArQS+HIfb51OfD6D93E2I0jLxUAT39T4+Fvu4+E/ELJvG0JSwXFVlTsa
+         DAYIvOlGoVymemj25vHy9AClPSeUKLll6GPQt3+6Dp5uhvBl0USEb4V/JI2XH7QnJycC
+         kMlB6FikvCjso9y6eMlARmeDVF+m5vEtBhCFz7z11SbEKe2+38hgMLAG25vCW5F11RIB
+         HfthKEku8ozuhnZlCR5gldPOhUxUl/T74Wjx4QUUl5+lLvOYr3/HMCQrRxvrXrDZD+60
+         bkBuuwbzKp1XmKH+YT/w/hmOFdpXDn1j962IIxPlWVbbWQRJl2Q1CRAWGR/dxEmE3pAV
+         k1mg==
+X-Forwarded-Encrypted: i=1; AKwUvBygNQjVFEO0ecdGxQG0SgkfytqURFsSqQNMKwbXxkwXAIWyegNC/3gWpOlnXXv92/CfnXg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK90kGmynV5EN+fU/T5r9Vo7radGFYPdK38p5fA2KnESh0lc/H3
+	yXWNSL3iAtuuwc2dFe/Lc0Y2BQTp7nm8RCB8oXQi7El8kcgyA+vgpcJ60LmQMqrUfes=
+X-Gm-Gg: AYBFou0tqhKezb8ZohiX90XgEXgHQXrkIJ2ubxYb48olU4ETU0PNAsAxNuQ3KAgiZg0
+	GzyMPkD8tEbtLkXhH6pXch8XaR+brtr/i9fqXg25ZQes++e7qGkIuL+RF3A6MBNVNGs4JcL7HsS
+	qXkU16OihR5ke+dCj3FWNrH1Le2cipt895qLu8d7HGpZ1wJcBUs9lww03t7GBtkCrXIP3PnxXBX
+	ds9i8rqxBMesXDo5Ix7G2l7lX4YOvlGuauzbgm2NyiE1LaAVHsiB5GTS1M0YqRKTXiK98HWKTp8
+	r6aNKdWv+SZIQmpDQ2dMP0XsgQrAbxGWPxbvraABWaQTPppRzB2xzMK3HSq+oSO2ykGrvl29q9t
+	TMIg3+sC7IB66D32GXN4xf9+ww+fXHGoZVZ7nenrHE0c/31i+QYB9I/3+/FQZy0yY6zg7MHhFfn
+	FFRfvEBWNJfp3ALsT2Yhd+N18pTI+f8gwBm7osZ/vBn25LSFnK9sn78Lr4Wi3K
+X-Received: by 2002:a17:906:f59f:b0:c2e:4b90:3c56 with SMTP id a640c23a62f3a-c31a9fcf0c2mr1509659066b.13.1792000231355;
+        Wed, 14 Oct 2026 10:50:31 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac6:5067:2dc::49:1e5])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3eda433582sm10353666b.64.2026.10.14.10.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 10:50:30 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Willem Ferguson <wferguson@cloudflare.com>
+Cc: netdev@vger.kernel.org,  davem@davemloft.net,  edumazet@kernel.org,
+  kuba@kernel.org,  pabeni@redhat.com,  ncardwell@google.com,
+  bpf@vger.kernel.org,  ast@kernel.org,  daniel@iogearbox.net,
+  andrii@kernel.org,  eddyz87@gmail.com,  memxor@gmail.com,
+  linux-doc@vger.kernel.org,  corbet@lwn.net,
+  linux-kselftest@vger.kernel.org,  shuah@kernel.org,
+  linux-kernel@vger.kernel.org,  kernel-team@cloudflare.com
+Subject: Re: [RFC PATCH net-next 2/4] tcp: add BPF_SOCK_OPS_TCP_TS_ID_CB to
+ assign a TSval identifier
+In-Reply-To: <20261013103906.2660384-3-wferguson@cloudflare.com> (Willem
+	Ferguson's message of "Tue, 13 Oct 2026 10:39:04 +0000")
+References: <20261013103906.2660384-1-wferguson@cloudflare.com>
+	<20261013103906.2660384-3-wferguson@cloudflare.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Wed, 14 Oct 2026 19:50:29 +0200
+Message-ID: <877bjk893u.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: unhandled NULL deref of f_inode due to SLAB_TYPESAFE_BY_RCU
---
+On Tue, Oct 13, 2026 at 10:39 AM GMT, Willem Ferguson wrote:
+> Let a sock_ops program pick the identifier that the previous patch
+> encodes in the low bits of TSval, for passively opened connections.
+>
+> The width is set per network namespace by the new tcp_ts_id_bits sysctl
+> (0 to 8, default 0). A listener opts in by setting
+> BPF_SOCK_OPS_TCP_TS_ID_CB_FLAG, typically from BPF_SOCK_OPS_TCP_LISTEN_CB.
+> tcp_conn_request() then runs BPF_SOCK_OPS_TCP_TS_ID_CB once the request
+> socket exists and before the SYN-ACK is built, so the SYN-ACK already
+> carries the identifier. The program sees the request socket, the SYN
+> (bpf_load_hdr_opt() works on it) and the available width in args[1]. A
+> reply that fits in that width is stored with the width in the request
+> socket and is inherited by the child, including Fast Open children; any
+> other reply leaves the connection unencoded.
+>
+> The callback is not run for SYN cookies, which have nowhere to keep the
+> identifier, or when the peer did not negotiate timestamps. It is skipped
+> for connections using microsecond timestamps and while the sysctl is 0.
+> The width is captured per connection, so changing the sysctl does not
+> affect existing connections.
+>
+> New /proc/net/netstat counters report how often an identifier was
+> assigned, declined by the program or skipped. TCPTSIdEchoMismatch counts
+> third ACKs whose TSecr no longer carries the identifier, which shows the
+> echo was rewritten in flight.
+>
+> BPF_SOCK_OPS_ALL_CB_FLAGS grows from 0x7f to 0xff. The tcpbpf selftest
+> used 0x80 as an example of an unsupported flag, so move it to 0x100.
+>
+> Encoding makes the timestamp clock appear 2^bits times faster to the
+> peer. That shrinks the real-time span of the peer's PAWS window, and
+> peers that keep ts_recent for the RFC 7323 24 days stall connections
+> idle for longer than 24.8/2^bits days. ip-sysctl.rst documents both,
+> along with the lack of TCP_REPAIR support.
+>
+> Signed-off-by: Willem Ferguson <wferguson@cloudflare.com>
+> ---
 
-commit 3b6fbe50569bfdf0fb6b88ab1c38f2e6056c0f68
-Author: Justin Suess <utilityemal77@gmail.com>
+I think SOCK_OPS are considered legacy.
+We probably want bpf_tcp_ops struct_ops.
+See [1] for an example.
 
-selftests/bpf: Test MEM_RCU carry-over for trusted fields
-
-This commit adds selftests to verify the behavior of the BPF verifier when
-accessing fields from RCU-protected pointers. It includes an accept test
-for dereferencing an inode within an RCU critical section, and a reject test
-for using it after the critical section ends.
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c b/to=
-ols/testing/selftests/bpf/progs/verifier_vfs_accept.c
-> index 55398c04290a8..f519ba5f4ea20 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
-[ ... ]
-> +SEC("lsm.s/bprm_committed_creds")
-> +__success
-> +int BPF_PROG(trusted_field_used_in_rcu_cs, struct linux_binprm *bprm)
-> +{
-> +	struct mm_struct *mm =3D bprm->mm;
-> +	struct inode *inode;
-> +	struct file *file;
-> +	ino_t ino =3D 0;
-> +
-> +	if (!mm)
-> +		return 0;
-> +
-> +	bpf_rcu_read_lock();
-> +	file =3D mm->exe_file;
-> +	if (file) {
-> +		inode =3D file->f_inode;
-> +		ino =3D inode->i_ino;
-
-[Severity: High]
-Can this result in an unhandled NULL pointer dereference leading to a
-kernel Oops?
-
-Because struct file is allocated with SLAB_TYPESAFE_BY_RCU in files_init()=
-=20
-in fs/file_table.c, the file object can be concurrently freed and reallocat=
-ed
-while an RCU reader holds a pointer to it. During this reallocation process,
-alloc_empty_file() calls init_file(), which zeroes out f_inode.
-
-In check_ptr_to_btf_access() in the verifier, the PTR_MAYBE_NULL flag is om=
-itted
-for trusted fields read from MEM_RCU pointers. This prevents the verifier f=
-rom
-enforcing a NULL check on the resulting inode pointer. Additionally, the
-dereference bypasses the exception table rewrite that would normally handle
-memory faults for untrusted pointers.
-
-If a file is closed and reallocated concurrently while the BPF program runs,
-could inode be NULL when inode->i_ino is accessed? Is it safe to codify this
-pattern as an accept test without requiring a NULL check for f_inode?
-
-> +	}
-> +	bpf_rcu_read_unlock();
-> +	__sink(ino);
-> +	return 0;
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261014173039.3666=
-415-1-utilityemal77@gmail.com?part=3D2
+[1] https://lore.kernel.org/all/20261006192601.1875100-11-kuniyu@google.com/
