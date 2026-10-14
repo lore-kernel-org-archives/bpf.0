@@ -1,196 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CFC4B26F8;
-	Wed, 14 Oct 2026 09:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA1F4349A2
+	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 09:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791968500; cv=none; b=S9tbZT4fuKqMJ1UWgMbVgsGkcgxDDt20ESGzhBylLaYsj3ccEFraQgaj+4h60IYq6HAYJdDxkWREca+xlMeJ9ixbz7XrJOZD/QHs9bfHHWYeznTtC9O+N5dRiNYYIavvJMA4nWgeyO3gQHy8JqP+6270sdRTBNVDAUUura8hXNI=
+	t=1791968903; cv=none; b=SZ7IJegvMN0CSHMZFuR21Tt9JF2wSRwvFOTLh1ZZA8CUrANLmeVdrXxCro9ZJEa0HyUDn2XVpbP5nnceO6p834ZRabwFY1xEqlA4VOO/1MTRvjze5jARGnVt8bftdN9QO1escx+i8goxtbRPBuSfkdXJ2T7kPG/BP1qbs7YGnZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791968500; c=relaxed/simple;
-	bh=nrXWFJqDvnKa+L3lKJ12jqTvm6csARDqXZ85Q9WA68E=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=gStIug3HjUXcpB7NpuWyoR1/u7e7FWRkOfNKLOhUR+9Uh4MbUNw5XnE9akbtKD0hAcM85ypq+drEx3Veo3cTlweEnkqnMCC4GRkPigZ1WwWNfcxsGqCl0xPd/SGWeeKZVx80GYhybNTnCDfS4/caR7lNDPlFdOqDLwYQa3kMi9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MeFlV/pr; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1791968903; c=relaxed/simple;
+	bh=t3WPcOBQXBUjthn81UKd7oXqWoABg309HZeVAhQJHA4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sjljoq5S76wd/f2GXI0S4dI5DPdlELkzeXaFjB9p0TtRuRNMINMnl/U2UXjfTbYhLbNcQanbrxHJRavR5KI0km8CBnWzoWH0Yg4W9xDmkugHRevoe9V219JU0bsaBCUtampEzpbPVRhnCN4eKA0v3PEyYjvZZzMjbLT5R+NU8B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XTc6ibn5; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MeFlV/pr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791968497; x=1823504497;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=nrXWFJqDvnKa+L3lKJ12jqTvm6csARDqXZ85Q9WA68E=;
-  b=MeFlV/pr2EZJytj7gxlVpuLgqCqoNCirnK8lyevSbUOCcWe85LeVq3+p
-   RHu0z455vlDM3H3HwhBwHDCHfW8wc5WxxEAsnUGTO7t9CMWHB7s859VlZ
-   X1hFPjFwPkXSpiLQbAussixnBAnoVz8c964tiBH/VpovW01t+iVFKj6wv
-   fKdzvTAWATCY6lkcsaELC3a7opjlRTfJgwoJriYKeU47Xts+6122YchXI
-   1W1biQfy8sbmVrStbEzfhISS4q6p9yyDQWOAUBbdJHdaqaxU4OtN6zD33
-   fXlBjyE9xp5pKYiA55ENIBOWe4rtf7ItTiVWjXntOHOXvjvSDbJ5qHT+E
-   g==;
-X-CSE-ConnectionGUID: ugK7h37+R5GXh1IMaoTspQ==
-X-CSE-MsgGUID: 8ZE0/iJvRk6B4AOsVd03OQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11934"; a="609193"
-X-IronPort-AV: E=Sophos;i="6.27,157,1787036400"; 
-   d="scan'208";a="609193"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 02:01:35 -0700
-X-CSE-ConnectionGUID: zqhIqvLzQcy6BxXW1mPqwA==
-X-CSE-MsgGUID: l6hnnZDtR/yQ+9aP4Gym2w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,157,1787036400"; 
-   d="scan'208";a="1307833"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.241.239]) ([10.124.241.239])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 02:01:31 -0700
-Message-ID: <eb6c7bda-0dcf-4fac-ad69-9f5b24abc21b@linux.intel.com>
-Date: Wed, 14 Oct 2026 17:01:27 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XTc6ibn5"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-48deeadb3fdso210852f8f.0
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 02:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791968900; x=1792573700; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EKVSeE4bjA6cQl42EhHNb5mQnnjAquRALU0RVbJrsQM=;
+        b=XTc6ibn5qUvTZnlDx3v+86tWKoT5IWQDEgrUim8pSFNcrgCVxz5sRES10e3kUVLtJF
+         ddI2PFntBrzOgwoM8JG/1oQR3PeKNAmeyUT63fiEwcl8ZApgr/ZPRixGu6nKfPALLdrb
+         NeIZH3GoBwHUc0iV6v0ADrIAZT4fEAJHAJOuuKS6Gm4tUIzmVpLsPdyrnLHOQ52gRKWc
+         xlLb2wnZHkPKainyRtkBuWDrlnjRgziLoDGC/u/voxjyf0ajiMMyw3UNM6yZ2r6EacEB
+         WbHkgvVQXcyEdZBPvo7mfdLS0gvrBgjsX96OYgzLdiNB4pTyVgY+mMwIrAWb0KWnlR16
+         i39A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791968900; x=1792573700;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=EKVSeE4bjA6cQl42EhHNb5mQnnjAquRALU0RVbJrsQM=;
+        b=Kr+ZAwCW6LecrmCpDPYtgcKrlQHvdKCLJQqlhYRh1UYU1cGduWxNcJthdQnAOia2vG
+         sp9Kwa3mLYmCrP6O2e39SHjAwtZQC3e5J5NOiDevHTuk8BirxEilyMkSJ7q98pvk+jSL
+         xKyvRXaAHpTw8A9UvMQLpDLJnNCghQ4dSfoB01L5CuJJFVsRSiraU47AT0ckCG6zvQx6
+         ofXsgtBrJsmngJPhCOfekglzff9xduJRpua6eZXmBxEqPe7+s/qIduK+AD6mVYYpWb3G
+         63iuc8WuALhevdUTf5WUth+N3WX9IqyBAHjUa3F/ZeuE1L3b6NQGiwJXk99B2JZP7iZs
+         gysQ==
+X-Gm-Message-State: AFq9FYLtK6PZU74zAg0gR6liQJWi6GK9G6TuCeyk1KnLIx7xSl9RSRz2
+	c5+BxDqj/PF9ixQzAOXkFKYYbJMV1V3J4hHVZ9Za11ZJ1boz/7p1RsJkOErZ/d5KBsY=
+X-Gm-Gg: AYBFou1a2jNsldnYbE02leeAY0N8yhlSpsUKU45bHi3GkirfcM2zBYqrgzFHXczky7Z
+	sZ46DLozj3EswGx2cF2aM9oloJPWJsTh3ZfoQNu3RYHYju0ODj32EbRx+WBOZCwiBWp6Lw5PWDe
+	50MwyOh9mBPPwORJHqWNPe2s0yxf/Wb7258o9wIICkovIw+lkJJcVJMK4LT2GB4yMfq98QB8QGg
+	aoFCAgobCpdery671hGOqu2wlFqgsHJPwXwVjBTNBpLqJLOuWQ6AP7FauBr5ZUBLy/WZFvZmfud
+	kYUjAqVt2iPRKbPgnSsYlbPrKbSquNnAA2p2gyQQn3hP+d5TJtR7ubpC7lAVhVufTJqoeyCiIuf
+	gmr2L0htyClAR6hjcgNNPtq+GcNrx7e2wmVKJJHwLQGF0zPfLK8vALKU9x+qWNZ5WFdED8LsH1V
+	91Sf6WeKTPt3Gs7UfERs+WC86dGvxrsIzC/0VITiiRm5inR+3IJX7W2T32CHZjNYB/oc5UYUaPZ
+	omB6fMzpsdVYTRBJ9Tg0pZbQ29bJfxwL9ui
+X-Received: by 2002:a05:6000:41c5:b0:48c:4274:20d7 with SMTP id ffacd0b85a97d-48db9466102mr30472816f8f.6.1791968899468;
+        Wed, 14 Oct 2026 02:08:19 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de77606fbsm4343080f8f.53.2026.10.14.02.08.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2026 02:08:19 -0700 (PDT)
+Date: Wed, 14 Oct 2026 11:08:17 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] bpf: allow ksock connect/send calls from wq
+Message-ID: <as9GgXQ_K5UrW9g7@gmail.com>
+References: <20261013182726.276372-1-mahe.tardy@gmail.com>
+ <sashiko-outbox-170341@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] perf/x86/amd/lbr: Limit branch snapshots to valid entries
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>, Sandipan Das <sandipan.das@amd.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Thomas Gleixner <tglx@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
- Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
- Ravi Bangoria <ravi.bangoria@amd.com>,
- Ananth Narayan <ananth.narayan@amd.com>
-References: <20261007181002.4005262-1-sandipan.das@amd.com>
- <20261012153014.GU4121339@noisy.programming.kicks-ass.net>
- <94d387f2-ff07-4895-a722-e8ded4203309@amd.com>
- <20261013074625.GC2009045@noisy.programming.kicks-ass.net>
- <becc5593-69ef-4800-bc2b-0fb217165910@linux.intel.com>
-Content-Language: en-US
-In-Reply-To: <becc5593-69ef-4800-bc2b-0fb217165910@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <sashiko-outbox-170341@kernel.org>
 
+On Tue, Oct 13, 2026 at 06:35:59PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] selftests/bpf: u64 map key causes workqueue double-init on big-endian
+> --
+> 
+> commit 5eb6c40a460d2cca2d0dee2b208a0164f311d369
+> Author: Mahe Tardy <mahe.tardy@gmail.com>
+> 
+> bpf: allow ksock connect/send calls from wq
+> 
+> This commit relaxes the constraint preventing the use of ksock kfuncs from
+> asynchronous workqueues. It also updates the ksock_wq selftest to verify
+> that connect() and send() function properly when called from workqueues.
+> 
+> > diff --git a/tools/testing/selftests/bpf/progs/ksock_wq.c b/tools/testing/selftests/bpf/progs/ksock_wq.c
+> > index 16a1873d132ed..290736e219e1d 100644
+> > --- a/tools/testing/selftests/bpf/progs/ksock_wq.c
+> > +++ b/tools/testing/selftests/bpf/progs/ksock_wq.c
+> [ ... ]
+> > @@ -43,20 +73,40 @@ static int ksock_wq_callback(void *map, int *key, void *value)
+> >  SEC("syscall")
+> >  int ksock_wq_start(void *ctx)
+> >  {
+> > +	struct bpf_ksock_create_opts opts = {
+> > +		.family = AF_INET,
+> > +		.type = SOCK_DGRAM,
+> > +		.protocol = IPPROTO_UDP,
+> > +	};
+> >  	struct ksock_wq_value *value;
+> > -	u32 key = 0;
+> > -	int err;
+> > +	struct bpf_ksock *ks;
+> > +	u64 key = 0;
+> > +	int err = 0;
+> >  
+> > -	value = bpf_map_lookup_elem(&work_map, &key);
+> > -	if (!value)
+> > -		return -ENOENT;
+> > -	err = bpf_wq_init(&value->work, &work_map, 0);
+> > -	if (err)
+> > +	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
+> > +	if (!ks)
+> >  		return err;
+> > -	err = bpf_wq_set_callback(&value->work, ksock_wq_callback, 0);
+> > +	err = ksock_ctx_insert(ks);
+> >  	if (err)
+> >  		return err;
+> > -	return bpf_wq_start(&value->work, 0);
+> > +	for (key = 0; key < 2; key++) {
+> > +		value = bpf_map_lookup_elem(&work_map, &key);
+> 
+> [Severity: Medium]
+> Can this cause a workqueue double-init on big-endian architectures?
+> 
+> The work_map map is defined with a u32 key, but the key variable here was
+> changed to u64. On big-endian systems, passing &key to bpf_map_lookup_elem()
+> will read the most significant 32 bits, which will evaluate to 0 for both
+> key = 0 and key = 1.
+> 
+> Because of this, the loop would fetch the map element for index 0 twice.
+> During the second iteration, bpf_wq_init() would be called on value->work
+> while it may already be actively queued from the first iteration. Does
+> re-initializing an active work_struct without serialization run the risk
+> of corrupting the global workqueue list and crashing?
 
-On 10/13/2026 8:53 PM, Mi, Dapeng wrote:
-> On 10/13/2026 3:46 PM, Peter Zijlstra wrote:
->> On Tue, Oct 13, 2026 at 12:14:58PM +0530, Sandipan Das wrote:
->>> On 12-10-2026 21:00, Peter Zijlstra wrote:
->>>> On Wed, Oct 07, 2026 at 11:40:02PM +0530, Sandipan Das wrote:
->>>>> The branch snapshot callback used by bpf_get_branch_snapshot() copies
->>>>> up to x86_pmu.lbr_nr entries from cpuc->lbr_entries[], even when the
->>>>> last LBR read kept fewer branches. The entries past lbr_stack.nr are
->>>>> invalid, but they end up reaching BPF programs.
->>>>>
->>>>> Limit copying to lbr_stack.nr entries and also reset lbr_stack.nr when
->>>>> amd_pmu_lbr_read() skips reading the registers, so that a stale count
->>>>> is never reused.
->>>>>
->>>>> Fixes: a4d18112e531 ("perf/x86/amd: Support capturing LBR from software events")
->>>>> Reported-by: Sashiko <sashiko-bot@kernel.org>
->>>>> Closes: https://lore.kernel.org/all/sashiko-outbox-163130@kernel.org/
->>>>> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
->>>>> ---
->>>>>  arch/x86/events/amd/core.c | 2 +-
->>>>>  arch/x86/events/amd/lbr.c  | 4 +++-
->>>>>  2 files changed, 4 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
->>>>> index 49b6b8fce566..bf631f60757c 100644
->>>>> --- a/arch/x86/events/amd/core.c
->>>>> +++ b/arch/x86/events/amd/core.c
->>>>> @@ -944,7 +944,7 @@ static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, u
->>>>>  	cpuc = this_cpu_ptr(&cpu_hw_events);
->>>>>  
->>>>>  	amd_pmu_lbr_read();
->>>>> -	cnt = min(cnt, x86_pmu.lbr_nr);
->>>>> +	cnt = min(cnt, cpuc->lbr_stack.nr);
->>>>>  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
->>>>>  
->>>>>  	amd_pmu_v2_enable_all(0);
->>>>> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
->>>>> index 1e1b2f08cb51..a00d3850c4a8 100644
->>>>> --- a/arch/x86/events/amd/lbr.c
->>>>> +++ b/arch/x86/events/amd/lbr.c
->>>>> @@ -165,8 +165,10 @@ void amd_pmu_lbr_read(void)
->>>>>  	struct branch_entry entry;
->>>>>  	int out = 0, idx, i;
->>>>>  
->>>>> -	if (!cpuc->lbr_users)
->>>>> +	if (!cpuc->lbr_users) {
->>>>> +		cpuc->lbr_stack.nr = 0;
->>>>>  		return;
->>>>> +	}
->>>>>  
->>>>>  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
->>>>>  		entry.from.full	= amd_pmu_lbr_get_from(i);
->>>> You now seem to deviate from what the Intel code does. Please clarify.
->>> Yes, it is a deviation. I thought of proposing the following but didn't
->>> proceed because I was not sure about the if condition in the second hunk
->>> which considers things other than cpuc->lbr_users for an early return.
->> Dapeng, can you look into this? I would really like to keep behaviour
->> consistent where possible.
-> Sure.
->
->
->>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
->>> index 0a34d674df59..5dfb9e9156e8 100644
->>> --- a/arch/x86/events/intel/core.c
->>> +++ b/arch/x86/events/intel/core.c
->>> @@ -2822,7 +2822,7 @@ __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
->>>         struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
->>>
->>>         intel_pmu_lbr_read();
->>> -       cnt = min_t(unsigned int, cnt, x86_pmu.lbr_nr);
->>> +       cnt = min_t(unsigned int, cnt, cpuc->lbr_stack.nr);
->>>
->>>         memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
->>>         intel_pmu_enable_all(0);
->>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->>> index 0b446d8912e4..6b070490f461 100644
->>> --- a/arch/x86/events/intel/lbr.c
->>> +++ b/arch/x86/events/intel/lbr.c
->>> @@ -1026,8 +1026,10 @@ void intel_pmu_lbr_read(void)
->>>          * but this simple approach seems to work for now.
->>>          */
->>>         if (!cpuc->lbr_users || vlbr_exclude_host() ||
->>> -           cpuc->lbr_users == cpuc->lbr_pebs_users)
->>> +           cpuc->lbr_users == cpuc->lbr_pebs_users) {
->>> +               cpuc->lbr_stack.nr = 0;
-> I checked the code, and it looks safe to clear cpuc->lbr_stack.nr here. For
-> PEBS events with the LBR group, the LBR stack is populated again for each
-> PEBS record, so this should not affect the LBR trace for PEBS events.
+Yeah key should have been a u32 but when doing so the verifier loose
+track of its value because it's only taking 4 bytes on the stack and
+then it detects an infinite loop for my two iterations, I'll do:
 
-I test the changes on SPR for the 3 cases, pure LBR PEBS sampling, pure LBR
-non-PEBS sampling and the PEBS/non-PEBS mixed LBR sampling. No issue is
-found for the LBR stack sampling.
+	u32 key __attribute__((aligned(8))) = 0;
 
-Sandipan, would you mind to post the fixes for Intel LBR with the AMD fixes
-together? Thanks.
+So that the verifier can properly track the value in the for loop.
 
-
->
-> But I’m not fully sure if it's intentional for the
-> bpf_get_branch_snapshot() helper. Clearing lbr_stack.nr to 0 prevents the
-> BPF helper from reading LBR data from PEBS although the LBR data could be
-> stale since it comes from the past PEBS record instead of the runtime
-> hardware LBR state. That seems reasonable and correct, but the side effect
-> is that the BPF helper can't read the LBR stack when all LBR events are
-> PEBS events. Not sure if it's intentional and expected. 
->
-> I’d like to run some tests for this change tomorrow to confirm the
-> behavior. Thanks.
->
->
->>>                 return;
->>> +       }
->>>
->>>         x86_pmu.lbr_read(cpuc);
->>>
+> 
+> > +		if (!value)
+> > +			return -ENOENT;
+> > +		err = bpf_wq_init(&value->work, &work_map, 0);
+> > +		if (err)
+> > +			return err;
+> > +		if (key)
+> > +			err = bpf_wq_set_callback(&value->work, ksock_wq_create, 0);
+> > +		else
+> > +			err = bpf_wq_set_callback(&value->work, ksock_wq_connect_send, 0);
+> > +		if (err)
+> > +			return err;
+> > +		err = bpf_wq_start(&value->work, 0);
+> > +		if (err)
+> > +			return err;
+> > +	}
+> > +	return 0;
+> >  }
+> 
+> -- 
+> Sashiko AI review � https://sashiko.dev/#/patchset/20261013182726.276372-1-mahe.tardy@gmail.com?part=1
