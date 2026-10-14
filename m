@@ -1,98 +1,86 @@
-Received: from mail-m127170.xmail.ntesmail.com (mail-m127170.xmail.ntesmail.com [115.236.127.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC03331A63
-	for <bpf@vger.kernel.org>; Wed, 14 Oct 2026 08:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0966C485511;
+	Wed, 14 Oct 2026 09:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791968324; cv=none; b=e915tMROFCzKXUVqn5a830rrQ/vtq31jPGWwX1Xi3k6w+Ednm0gyau2w9oJ+BLf1Qe6OhOEkU3lvpzDVUOdvdUwo5x1eTrfokPHv9I51V0K1WZpG9BFSRbNE7fQPxK2OU+D3zofZwHrUjcy2VCDWaiKTIBwlLFvQmL+alTEDpLs=
+	t=1791968431; cv=none; b=fzfVxNrXN8Lyr0V1YNpzP3BCrCg0lCFnddhQB0ZDw6j6+/WTo663MOrN4dmNZ1T19GJ5buXYdIV4aayIy9PTUHYsaY5f1qroDv01dSfcnhijHC9EAIGVkqhP8Ro+dMhUtxZMLg+ZDEMUv2pXkWrn4dgmF70BEBmvxT9iQYTx3nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791968324; c=relaxed/simple;
-	bh=JCu+SmE7DaT4V8bV1ux3Fq22uikv5xMskoz7V+kge5o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BK+cpLFf79Cv0w/wmaSwKS99Ti1kArTZL1vEH/R3QdNApyeOHWo3664aDzmAKiqrVtMfHBdqGqqJdU0Kyvbpt0sWNMNjz33PPmrd1pOWItH0iKoZgc5IqVkHo8TkEW2xHc8UkqW9w8daioniKsTrzhwk/vIEQ/MfWQ0tXMVXY6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn; spf=pass smtp.mailfrom=easystack.cn; arc=none smtp.client-ip=115.236.127.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from [192.168.0.59] (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 200da6bab;
-	Wed, 14 Oct 2026 16:53:19 +0800 (GMT+08:00)
-Message-ID: <3856c10f-6e18-4dda-8b3a-085f246e3bbd@easystack.cn>
-Date: Wed, 14 Oct 2026 16:53:19 +0800
+	s=arc-20240116; t=1791968431; c=relaxed/simple;
+	bh=QHHb0DZxd6vJXZJdg7EynMfshzf8IQQprxwja0EOQwM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uHWKQwmPHEDgPLpb8M+a3dCTSW6qjJ7kwJ3KPxsAMOJfwG9cVYBgy1c7SX9xTpTkYu8tsMCM4ixAnzaUn9xRs0+v/TuPgPYnLLRnldQvBw+4irQ0SoMmEcdL0b+Fbx5FaGXur1uxRwg+yMIxbXEz5vxmQo2foTwurTkyWD47sJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jQIYGdPm; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jQIYGdPm"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3F361596;
+	Wed, 14 Oct 2026 02:00:24 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4A1513F7B4;
+	Wed, 14 Oct 2026 02:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791968428; bh=QHHb0DZxd6vJXZJdg7EynMfshzf8IQQprxwja0EOQwM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jQIYGdPm3y0xRuJPv+eARHLw4283SpruBCAt7f+uNiNtj2bLUJLZJqiMiEptorMth
+	 AHcohvXT/YR/v9xWV1xT5HGMk0lUPOhXuCoCas3fKXKz/oDeBsKz7dZ8C0EbaUTwuA
+	 w7TvbAkKZuVD54ELwmQUaWMe7kRy40smDfYLxXLA=
+Date: Wed, 14 Oct 2026 10:00:18 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>,
+	Haris Okanovic <harisokn@amazon.com>, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
+	will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+	mark.rutland@arm.com, ast@kernel.org, rafael@kernel.org,
+	daniel.lezcano@linaro.org, memxor@gmail.com,
+	zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
+	rdunlap@infradead.org, david.laight.linux@gmail.com,
+	broonie@kernel.org, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+	ashok.bhat@arm.com
+Subject: Re: [PATCH v15 12/16] cpuidle/poll_state: Wait for need-resched via
+ tif_need_resched_relaxed_wait()
+Message-ID: <as9EospGcR2e1mpO@arm.com>
+References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
+ <20260831202251.305046-13-ankur.a.arora@oracle.com>
+ <178908146776.2725577.2613699832033292946.b4-review@b4>
+ <878q58z2ej.fsf@oracle.com>
+ <3e8bda45-0aa7-d0be-8aad-dab95902dcde@gentwo.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] selftests/bpf: add tests for the page_owner
- bpf_iter target
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261013122125.843451-1-zhen.ni@easystack.cn>
- <20261013122125.843451-7-zhen.ni@easystack.cn>
- <sashiko-outbox-169725@kernel.org>
-From: "zhen.ni" <zhen.ni@easystack.cn>
-In-Reply-To: <sashiko-outbox-169725@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa1399db6500229kunm51b7ee5849e2b
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaTkofVkhCH09KTU9DGUkYQ1YVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVCQk
-	lOS1VKS0tVSkJLQlkG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e8bda45-0aa7-d0be-8aad-dab95902dcde@gentwo.org>
 
+On Mon, Sep 21, 2026 at 10:47:13AM -0700, Christoph Lameter (Ampere) wrote:
+> On Fri, 11 Sep 2026, Ankur Arora wrote:
+> > Thanks for retesting.
+> >
+> > > The new unit tests all pass on both metal and virt variants of the same machines.
+> > >
+> > > I hope we can merge this soon.
+> >
+> > Yes indeed. I'll send out one more version which addresses a few minor
+> > bot comments (and patch-1 needs a re-review because of changes.)
+> >
+> > But other than that this is as mergeable as it will ever be.
+> 
+> I dont see it anywhere. Is this patchset scheduled to be merged?
 
+Not as far as I'm aware. There were some minor issues raised by Sashiko.
+Ankur said he'll respin a v16 but I guess his spare time is fairly
+limited.
 
-在 2026/10/13 20:38, sashiko-bot@kernel.org 写道:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] bpf/selftests: hardcoded errno values break architecture portability
-> --
-> 
-> commit d63d4254b64f243f696e8d9b4ca8b07f371d8139
-> Author: Zhen Ni <zhen.ni@easystack.cn>
-> 
-> selftests/bpf: add tests for the page_owner bpf_iter target
-> 
-> This commit adds a sleepable BPF program and a userspace runner to test
-> the seq_file and open-coded page_owner iterators. It verifies iterator
-> parity, output matching, and kfunc contracts including memcg classification.
-> 
->> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
->> new file mode 100644
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
-> [ ... ]
->> +char memcg_pathbuf[4096];
->> +char memcg_first_path[4096];
->> +char memcg_first_name[80];
->> +
->> +#define MEMCG_ENODATA 61
->> +#define MEMCG_EOPNOTSUPP 95
->> +
->> +#define MEMCG_F_ONLINE	(1 << 0)
->> +#define MEMCG_F_OBJCG	(1 << 1)
-> 
-> [Severity: Medium]
-> Will these hardcoded errno values cause a regression in the selftests on
-> certain architectures?
-> 
-> The bpf_page_owner_get_memcg_info() kfunc returns standard kernel error
-> codes like -ENODATA and -EOPNOTSUPP. However, these error codes vary by
-> architecture. For example, ENODATA is 111 on SPARC and 86 on Alpha, while
-> EOPNOTSUPP is 122 on MIPS.
-> 
-> When the test runs on these architectures, the kfunc will return the
-> architecture-specific error code. This will fail the hardcoded comparison
-> in check_memcg(), incorrectly incrementing memcg_bad and causing the
-> selftest to fail.
-> 
+If any interesting party wants to take it over, that would be great. It
+would also be nice to get some acks from the atomic infrastructure
+maintainers.
 
-I'll use `-ENODATA`/`-EOPNOTSUPP` instead of the hardcoded.
-Will fix it.
-
-
-Thanks,
-Zhen
+-- 
+Catalin
