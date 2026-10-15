@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DE341F5D7
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 04:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0942DBF75
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 04:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792037640; cv=none; b=nlSb3/AQr4EchMiqrHnkn3G/owl0XOwkI45jKq/+wGAfwJRnay2fSUZZMX+Bs0moAFKSRDHwXu8k3wgtSumQCnRFuJXgqUrA9GPmU+10XieBnUAbdSZj6b5nh/yHjGXfvF9TPNWqdBb8Gma+9NNtQ0QHIGKR0X848MHrffCx78c=
+	t=1792037763; cv=none; b=JWGKwIoYHTnDHABrLWdq2DcyxMv/z417L6Am+RF93M31CLosyrYtbL8cBkUhp1Mo7W6eOsMvAbSrQ8E43PSohPJsXub5jl++p1wq01r7D+0t9MnoRS9N5SSRQKdBNes/YbX65Aw1WzfnjBzjR58zNS9DFJ3qUFTzxYn+glTwhS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792037640; c=relaxed/simple;
-	bh=IqO5Hf27WC60eA0uZHpXPAGjybW/9K1DOkRvW1FktxA=;
+	s=arc-20240116; t=1792037763; c=relaxed/simple;
+	bh=o+SWFjnPKb4ZaKaJNbX+74jgeg5lDFHZAG15i3dcMdc=;
 	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=AI4qB2GfPcBGv4KS4Mc1c9QEGQeasnXYa/Jc9r0WWZShndSacPEcR4bxRFZsdGfkGnrJnLBF44kUAdDbLA/WAoCfi9TEgLWbPQO+7t5gXZaApd3M99koEsLDxiRtNod7dF+F/gzkS7z8+kjmq+ePtICseOdzih64Jxx1n4J2EHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WwhB9XRa; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=umn2NQ98fVGQm/Cp7Vvo8+2RmJLNO5tG8V/suVU0RzN1QDlCQ3lfGb5iICpe+0C91zyMYqeI+uPvDvVXlwfLkmjshuTY2y33Kl6iY+ywPepFplRu0q6FhPpupZFUMGpmxsz9mvOTCfD8nb4pQXHZnuRbAZ10jRHNMwoEFTWeA8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5+iINnq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WwhB9XRa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92CF01F000C4;
-	Thu, 15 Oct 2026 04:13:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5+iINnq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458B01F000C4;
+	Thu, 15 Oct 2026 04:16:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792037635;
-	bh=X/NBIbzu5Egv/A8dxtHyEA8F1qZJjjb9X7Vs0hcIciY=;
+	s=k20260515; t=1792037762;
+	bh=YFV0lQR+wERl7HIPNURym/a2mIAd11NlT4Bb3EeV30I=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=WwhB9XRaCM1NdDiA+0BUsJ+wZSLMN5xpBZc4GCU9gKiXyu+5/3ayz+03uAOqGYeVb
-	 MW80H77IHLtI2q97CbQ3QBEw1cssICq8YsMEwlJy9Cht45vM9Bzc4r3K6/nVRnV7vz
-	 wcAQKKTymS3xVF1GTQgAyG0x6AuIU67iqO0bHz/QmZIi8JAtNHnX//eJFmlGWaZTTT
-	 pfjM7kG0FJUvXPXn/RruYXD4LOJ5jR5u2jeBL3toum3FUi5s/NiSBVpY1WK+HTQRFG
-	 19ARtRiwK1CnHegiAir3CPvHtyPQVke2igMNYy2Z8jNAkaEC9U8xZ/v/mYO4DWHynz
-	 ADRqTJaECR9mw==
-Message-ID: <sashiko-outbox-172238@kernel.org>
+	b=e5+iINnqtIzdGb3YvcNQaD1wDO7Jr8U16sZnMGwIdwWRvOvOtgHrayvxloMX4bKOg
+	 rXqsZzBPRffuUkXyIIv830ibhPx74FdNYaWYND+1BODeQWlyjuo4OzP1nOhg/LWXQU
+	 aPe+QYy17sdKD+Z/JpMf/yCSSB9EcxapzU+VT7bB2cr4yCmAzx2rd3QkB6TKT2S6wb
+	 4JHtHaHtqeeJHz2peyXJXe7qxKfrf6Vb4HVrIO+2Uk5r2Y9FWZ75/Ka5+vorMknOGO
+	 eMTy0XNWcwiZydWjODHYe7z9/dTvit5qGl9v8ovNHDWEKOsX9nrYGSykD8Y300SPyl
+	 drlQeWdz1/Ksg==
+Message-ID: <sashiko-outbox-172243@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v11 19/26] libbpf: Add cleanup_info to
- bpf_prog_load_opts
+Subject: Re: [PATCH bpf-next v11 04/26] bpf: Keep a call site's landing pad
+ in insn_aux_data, add lookups
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
-In-Reply-To: <20261015040321.864586-1-yonghong.song@linux.dev>
+In-Reply-To: <20261015040204.856062-1-yonghong.song@linux.dev>
 References: <20261015040143.854070-1-yonghong.song@linux.dev>
- <20261015040321.864586-1-yonghong.song@linux.dev>
+ <20261015040204.856062-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Oct 2026 04:13:54 +0000
+Date: Thu, 15 Oct 2026 04:16:01 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,53 +46,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] bpf: multi-line comment style violation in bpf_prog_load_opts
+- [High] bpf: adjust_insn_aux_data misses cleanup_pad on BPF_PATCH_MOVE_TAR=
+GET
 --
 
-commit 7622c492adc459370a78a700a25047031969a083
+commit 407d61973b5e3b7df47dda20c8cb86db0ad2e4ca
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-libbpf: Add cleanup_info to bpf_prog_load_opts
+bpf: Keep a call site's landing pad in insn_aux_data, add lookups
 
-This commit expands bpf_prog_load_opts to include an exception cleanup
-table. It adds cleanup_info_cnt, cleanup_info, and cleanup_info_rec_size
-fields, which are then passed to the kernel via bpf_prog_load.
+A call site's landing pad, if any, is kept in insn_aux_data as
+cleanup_pad. adjust_insn_aux_data(), which every instruction patch goes
+through, and verifier_remove_insns() keep it in step, and
+bpf_opt_remove_nops() moves a pad off a nop to the next instruction
+before removing the nop. Add lookups for it and for calls to
+bpf_unwind() and bpf_unwind_resume(); their users come in later patches.
 
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index b2fa7e8bedf3a..18c563abd988f 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
 [ ... ]
-
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 826d9cc9ab65d..64699e0e4e1a8 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -128,9 +128,17 @@ struct bpf_prog_load_opts {
+> @@ -244,11 +244,18 @@ static void adjust_insn_aux_data(struct bpf_verifie=
+r_env *env,
+>  			data[i].non_stack_access =3D
+>  				data[off + cnt - 1].non_stack_access;
+>  			data[off + cnt - 1].non_stack_access =3D false;
+> +			data[i].cleanup_pad =3D data[off + cnt - 1].cleanup_pad;
+> +			data[off + cnt - 1].cleanup_pad =3D 0;
+>  		} else if (bpf_is_mem_insn(insn + i)) {
+>  			data[i].non_stack_access =3D true;
+>  		}
+>  	}
 > =20
->  	/* if set, provides the length of fd_array */
->  	__u32 fd_array_cnt;
+> +	if (env->cleanup_info_cnt)
+> +		for (i =3D 0; i < prog_len; i++)
+> +			if (data[i].cleanup_pad > off + 1)
+> +				data[i].cleanup_pad +=3D cnt - 1;
 > +
-> +	/* exception cleanup table: cleanup_info_cnt records of
-> +	 * cleanup_info_rec_size bytes each (struct bpf_cleanup_info),
-> +	 * holding instruction indices into insns
-> +	 */
 
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred
-BPF subsystem style? The subsystem guidelines strictly require that the
-opening /* for multi-line comments be placed on its own line.
+[Severity: High]
+If bpf_convert_ctx_accesses() inserts a prologue at the start of a subprogr=
+am
+(offset 0) by calling __bpf_patch_insn_data() with BPF_PATCH_MOVE_TARGET,
+the original instruction shifts from index 0 down to index cnt - 1.
 
-Could this be formatted as follows to match the standard?
+Because of the strictly greater-than condition here (> off + 1), if a call
+site's landing pad is exactly at offset 0 (cleanup_pad =3D=3D 1), the condi=
+tion
+evaluates to false and the index won't be shifted.
 
-/*
- * exception cleanup table: cleanup_info_cnt records of
- * cleanup_info_rec_size bytes each (struct bpf_cleanup_info),
- * holding instruction indices into insns
- */
-
-> +	__u32 cleanup_info_cnt;
-> +	const void *cleanup_info;
-> +	__u32 cleanup_info_rec_size;
->  	size_t :0;
->  };
+Could this cause the cleanup pad to point to the newly inserted prologue
+instead of the intended instruction, potentially leading to stack or
+context corruption during an exception unwind?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261015040143.8540=
-70-1-yonghong.song@linux.dev?part=3D19
+70-1-yonghong.song@linux.dev?part=3D4
