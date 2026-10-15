@@ -1,190 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from www1.rhinostone.net (www1.rhinostone.net [95.142.169.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B8E5293E9;
-	Thu, 15 Oct 2026 12:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824C230C177;
+	Thu, 15 Oct 2026 13:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.142.169.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792069109; cv=none; b=m3BXZcz364DHgoAr41LuDbVqJ3N28uHw7LvalM9YXFKgWTiHV1JDDg3++/vLnqkPme93J3+FYM7X1TwnIy04jUFBQDFY3Du/qiZM2fttUjJwu5rwKh8hjH86SZfhDad1MQsfUg5GiDzTKQB6XdOIOIRMUSB14HOl5Hi5Bap9px4=
+	t=1792071055; cv=none; b=VeRE4mwbAWbQDnli/UAdNQ77AO+YuRvAbW6tI08TpIxKctNhHWYQtHOUrTzY42cer8T34ElOe/paon+ZtpU2XCoLO5hoeiDV1KOtfzj41yVUsppIZKuyHZsXsxn8Jeg2TkqpDwXOeYAHwJm7C63QLvYPUs61Qii24g8XdbZKfHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792069109; c=relaxed/simple;
-	bh=O2+1GwEE0AsDmP5QqMiPLXgMPBGGavsO6FmACr+IRVI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IbFaTdrpOBzAJbu4Sjr7sL2EGo+z0Zdv+OsHZvYYqvIZvrjcgq6mDWvdk8cyv2v+k3Hg48wwciTpCelCsrh12kT+yxcWhBknFlcqI8TeYVpbn59slpHQnn6wMt/vNBmkSKHlSvQK4bwCPntNlMS5I2COpEbYtnd0f9hnA/nGEdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnQPqeck; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792071055; c=relaxed/simple;
+	bh=VwpyHI9FINANPgMLd6EKXXWPl6Nehgrjk8sldgoKxkc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=TkTI3txr9NKzYVCItndk9PviwLKsDM06m2XTF9wY0SwyRqOGUHSUKl1M6Khg4B2xKtk54JCCfRITHenPW6Pa8QTTRGXPDsfgPDzQNd0jWkvn8WSLMA80buftkR34V7xeaz/vyMgtISIBx2n5wOH077OdRRac5AfEa4iBL9AeQwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rhinostone.com; spf=pass smtp.mailfrom=rhinostone.com; dkim=pass (1024-bit key) header.d=rhinostone.com header.i=@rhinostone.com header.b=xL81Ufvy; arc=none smtp.client-ip=95.142.169.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rhinostone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rhinostone.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnQPqeck"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506601F000C4;
-	Thu, 15 Oct 2026 12:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792069106;
-	bh=c+hYfQRfw/vcaP+SdQuPcP8r55bXq9Rsby8ykddfBB8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BnQPqeckA/+14E1ejZnXfCGBkUgNzXeDijJXXHFi7106QQUDRv0FDiHRMrKMsriL3
-	 3rQCNWIC/fmJbV+/+MJWLofyiiktBd+2/CDkUeLfg7OKWtqj2t+EqiiOWUCnsDsf2B
-	 Z7xRLseQa/bfv9u/etIaR1Me2HjqAGSO2xtOezJNkrQHhnu6hVXEOSQllqoiNSGuLh
-	 /0XS4KxcQ6F0Qn5ZsVqQ/aCsfEZwFW4O5pLv2FkXtlEelC2DZnkE8DrV5QxKHPTNCJ
-	 BzNvRKd2TWCrboJCDc6I0SGHT1uj/IcwZYLuCX5bxdkYW7UL5lZH43uCqH2zwaV365
-	 2PMz3ZybAy+bQ==
-Date: Thu, 15 Oct 2026 13:58:22 +0100
-From: Simon Horman <horms@kernel.org>
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: netdev@vger.kernel.org, Victor Nogueira <victor@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Sashiko <sashiko-bot@kernel.org>, bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH net v2] net/sched: clamp skb->queue_mapping before
- indexing the tx queue
-Message-ID: <20261015125822.GH83879@horms.kernel.org>
-References: <QDISC-MD1X.v2.20261009135842@mojatatu.com>
+	dkim=pass (1024-bit key) header.d=rhinostone.com header.i=@rhinostone.com header.b="xL81Ufvy"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by www1.rhinostone.net (Postfix) with ESMTP id 8842843F3C;
+	Thu, 15 Oct 2026 15:22:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rhinostone.com;
+	 h=content-transfer-encoding:content-type:content-type:subject
+	:subject:from:from:content-language:user-agent:mime-version:date
+	:date:message-id; s=1476224331601; t=1792070574; x=1793884975;
+	 bh=VwpyHI9FINANPgMLd6EKXXWPl6Nehgrjk8sldgoKxkc=; b=xL81UfvyTUc4
+	Srx5TBF+v8UbYKYYR3720ZO4rgnBja8lsn9JueJT9RZJ6IjLJBSWEAmfxw5OE/6W
+	vEWMgR0gnE77IN1q4qJHUl83Ils3p+7cZx2qNYviqNgZOj6HE2wANh6pOMGM3ncb
+	5rDmf8mcqGMeqaYfdg+Atxj+Ve8ZDmY=
+X-Virus-Scanned: Debian amavis at www1.rhinostone.net
+Received: from www1.rhinostone.net ([127.0.0.1])
+ by localhost (www1.rhinostone.net [127.0.0.1]) (amavis, port 10026) with LMTP
+ id LdAlKxSdL4wc; Thu, 15 Oct 2026 15:22:54 +0200 (CEST)
+Received: from [IPV6:2605:59c0:1e76:6110:c969:a728:bdd4:1496] (unknown [IPv6:2605:59c0:1e76:6110:c969:a728:bdd4:1496])
+	(Authenticated sender: m.etouman@rhinostone.com)
+	by www1.rhinostone.net (Postfix) with ESMTPA id 48A5643F34;
+	Thu, 15 Oct 2026 15:22:53 +0200 (CEST)
+Message-ID: <d8f91886-6b07-4dfb-8d9f-a1424fe8c572@rhinostone.com>
+Date: Thu, 15 Oct 2026 14:22:51 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <QDISC-MD1X.v2.20261009135842@mojatatu.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US, fr
+To: stable@vger.kernel.org
+Cc: Mattia Meleleo <mattia.meleleo@coralogix.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ "Jakub Sitnicki," <jakub@cloudflare.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
+ netdev@vger.kernel.org
+From: Martin Luther ETOUMAN <m.etouman@rhinostone.com>
+Subject: Request: 04af4efde58a ("bpf, sockmap: Account for receive queue in
+ FIONREAD without a verdict program") for 6.12.y
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 09, 2026 at 02:09:03PM -0400, Jamal Hadi Salim wrote:
-> This issue was caught by Sashiko (nipa). A producer-side path cap is
-> already merged (ea4d4b5dddb5); this patch adds the matching consumer-side
-> cap.
-> 
-> The issue:
-> The tx queue is picked and capped in netdev_core_pick_tx(), before the
-> __dev_xmit_skb() qdisc enqueue path. A tc BPF program running inside
-> egress qdisc (not clsact) can then change __sk_buff->queue_mapping;
-> that store is never re-checked. bpf_convert_ctx_access() bounds it only
-> by NO_QUEUE_MAPPING, not by the device's queue count.
-> 
-> On dequeue, qdisc_restart() calls netdev_get_tx_queue(), which
-> indexes dev->_tx[] with that value. netdev_get_tx_queue() guards it with
-> just a DEBUG_NET_WARN_ON_ONCE, so sch_direct_xmit() takes the out-of-bounds
-> txq->_xmit_lock and writes txq->xmit_lock_owner past the end of the
-> allocation on non-lltx devices such as ifb. Drivers that index their rings
-> from skb_get_queue_mapping() (ex: ifb) go out of range the same way.
-> 
-> The Fix:
-> Cap the mapping at the consumer and write the capped value back, so both
-> the qdisc's _tx[] lookup and any later driver read stay in range. The cap
-> folds into the dequeue path instead of a separate walk over the returned
-> list: dequeue_skb() caps the head, and each bulk helper caps the element it
-> appends. netdev_cap_txqueue() already logs a ratelimited notice and selects
-> queue 0. The single-packet case pays one extra compare against
-> real_num_tx_queues.
-> 
-> A bulk-dequeued list is transmitted under the single tx queue lock of the
-> head skb, so every element must belong to that same queue. The fast bulk
-> helper (TCQ_F_ONETXQUEUE, taken on BQL devices by the per-queue children
-> of mq, mqprio, taprio and htb, and by any qdisc on a single-queue device
-> such as the prio root in the reproducer) must therefore compare each
-> capped follower against the head and requeue a mismatch, exactly as the
-> slow helper already does; appending a follower that caps to a different
-> queue would send it under the wrong _xmit_lock.
-> 
-> Conditions to recreate the bug:
-> Load a SCHED_CLS or SCHED_ACT program that stores __sk_buff->queue_mapping
-> (a tc BPF action is enough), attach it to a transmit qdisc (for example a
-> matchall filter on a prio root), and send a packet. With a 1-queue device a
-> store of 1 indexes one past dev->_tx[]. Under KASAN with panic_on_warn=1
-> the unfixed kernel faults with "BUG: KASAN: slab-out-of-bounds in
-> sch_direct_xmit". Loading the program needs CAP_BPF/CAP_SYS_ADMIN, so the
-> trigger is root.
-> 
-> Fixes: 74e31ca850c1 ("bpf: add skb->queue_mapping write access from tc clsact")
-> Reported-by: Sashiko (nipa) <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/netdev/179033713973.2160803.4914570693994398206@kernel.org/
-> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-9R8V.v2.20260924072708%40mojatatu.com
-> Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v1.20261005193231%40mojatatu.com
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Victor Nogueira <victor@mojatatu.com>
-> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> ---
-> v1 -> v2:
-> - try_bulk_dequeue_skb(): the fast bulk helper (TCQ_F_ONETXQUEUE) capped
->   each follower but appended it without comparing it against the head, so
->   a mismatched follower was still sent under the head's txq lock. Compare
->   the capped follower with the head and requeue a mismatch to skb_bad_txq,
->   matching try_bulk_dequeue_skb_slow(). Reported by Sashiko (nipa).
-> ---
->  net/sched/sch_generic.c | 53 ++++++++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 48 insertions(+), 5 deletions(-)
+Hello,
 
-Hi Jamal,
+Please consider commit 04af4efde58a ("bpf, sockmap: Account for receive
+queue in FIONREAD without a verdict program"), merged for v7.2, for the
+6.12.y stable tree.
 
-Weirdly, this patch is mangled and does not apply.
+It fixes 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap"), which
+reached 6.12.y in 6.12.75 (as c2681ce178a2). Since then, ioctl(FIONREAD)
+on a TCP socket that sits in a sockhash with no stream or skb verdict
+program returns 0 while data waits in sk_receive_queue. 04af4efde58a
+carries a Fixes: tag for 929e30f93125 but no Cc: stable, and it is in
+neither 6.12.113 nor the current queue-6.12.
 
-> 
-> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-> index 6f6a6f0d5eb0..b65bec7e2643 100644
-> --- a/net/sched/sch_generic.c
-> +++ b/net/sched/sch_generic.c
-> @@ -96,9 +96,33 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
+How we hit it: a Kubernetes cluster running Calico v3.30 with sidecar
+acceleration enabled (FelixConfiguration sidecarAccelerationEnabled:
+true). Calico's sock_ops program puts every established TCP socket of a
+local pod in a sockhash; only an sk_msg program is attached, no verdict
+program. On Debian's 6.12.111, nginx 1.29.8 proxying a plain-HTTP
+upstream stops partway through responses of a few hundred KB: its
+FIONREAD reads on the upstream socket return 0 while the receive queue
+still holds data, and no new epoll event comes.
 
-This hunk results in 31 lines, not 33.
+Measured with one nginx pod on one node (6.12.111), 8 fetches of a
+250577-byte file per path:
+   - upstream socket in Calico's sockhash: 0 of 8 complete; nginx-debug
+     logs 23 FIONREAD results on it, all 0;
+   - upstream over 127.0.0.1 (not in the sockhash): 8 of 8 complete.
+The same test on 6.12.69 completes 8 of 8 on both paths, and on 6.12.111
+with sidecar acceleration turned off (no sockhash) it completes 8 of 8
+on both paths.
 
->  
->  #define SKB_XOFF_MAGIC ((struct sk_buff *)1UL)
->  
-> +/* A tc BPF program on a transmit qdisc can change __sk_buff->queue_mapping
-> + * after the tx queue was picked. Re-cap it against the device and write it
-> + * back, so a driver that re-reads skb_get_queue_mapping() stays in range.
-> + */
-> +static u16 qdisc_cap_skb_tx_queue(struct net_device *dev, struct sk_buff *skb)
-> +{
-> +	u16 queue = skb_get_queue_mapping(skb);
-> +	u16 capped;
-> +
-> +	capped = netdev_cap_txqueue(dev, queue);
-> +	if (unlikely(capped != queue))
-> +		skb_set_queue_mapping(skb, capped);
-> +
-> +	return capped;
-> +}
-> +
-> +static struct netdev_queue *skb_cap_tx_queue(struct net_device *dev,
-> +					     struct sk_buff *skb)
-> +{
-> +	return netdev_get_tx_queue(dev, qdisc_cap_skb_tx_queue(dev, skb));
-> +}
-> +
->  static inline struct sk_buff *__skb_dequeue_bad_txq(struct Qdisc *q)
->  {
-> -	const struct netdev_queue *txq = q->dev_queue;
-> +	const struct netdev_queue *txq;
->  	spinlock_t *lock = NULL;
->  	struct sk_buff *skb;
->  
+On applying it: against v6.12.113 the net/ipv4/tcp_bpf.c hunks apply
+(offset 1 line), but the include/linux/skmsg.h hunk does not apply as is
+(it fails at line 551), so the backport needs an adjustment. We have not
+built or tested a backported patch.
 
-...
+The patch series:
+https://lore.kernel.org/bpf/20260708-fionread-no-verdict-v3-1-b4ee31b3af53@coralogix.com
 
-> @@ -216,6 +242,17 @@ static void try_bulk_dequeue_skb(struct Qdisc *q,
+Thanks,
+Martin Luther ETOUMAN NDAMBWE
+Hello,
 
-And this hunk results in 15 lines, not 17.
+Please consider commit 04af4efde58a ("bpf, sockmap: Account for receive
+queue in FIONREAD without a verdict program"), merged for v7.2, for the
+6.12.y stable tree.
 
->  		if (!nskb)
->  			break;
->  
-> +		/* Re-cap a mapping changed after pick; requeue a
-> +		 * follower that no longer matches the head, which owns
-> +		 * the _xmit_lock for the whole list.
-> +		 */
-> +		if (unlikely(qdisc_cap_skb_tx_queue(dev, nskb) !=
-> +			     skb_get_queue_mapping(skb))) {
-> +			qdisc_enqueue_skb_bad_txq(q, nskb);
-> +			break;
-> +		}
->  		bytelimit -= nskb->len; /* covers GSO len */
->  		skb->next = nskb;
->  		skb = nskb;
+It fixes 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap"), which
+reached 6.12.y in 6.12.75 (as c2681ce178a2). Since then, ioctl(FIONREAD)
+on a TCP socket that sits in a sockhash with no stream or skb verdict
+program returns 0 while data waits in sk_receive_queue. 04af4efde58a
+carries a Fixes: tag for 929e30f93125 but no Cc: stable, and it is in
+neither 6.12.113 nor the current queue-6.12.
 
-...
+How we hit it: a Kubernetes cluster running Calico v3.30 with sidecar
+acceleration enabled (FelixConfiguration sidecarAccelerationEnabled:
+true). Calico's sock_ops program puts every established TCP socket of a
+local pod in a sockhash; only an sk_msg program is attached, no verdict
+program. On Debian's 6.12.111, nginx 1.29.8 proxying a plain-HTTP
+upstream stops partway through responses of a few hundred KB: its
+FIONREAD reads on the upstream socket return 0 while the receive queue
+still holds data, and no new epoll event comes.
 
-pw-bot: changes-requested
+Measured with one nginx pod on one node (6.12.111), 8 fetches of a
+250577-byte file per path:
+   - upstream socket in Calico's sockhash: 0 of 8 complete; nginx-debug
+     logs 23 FIONREAD results on it, all 0;
+   - upstream over 127.0.0.1 (not in the sockhash): 8 of 8 complete.
+The same test on 6.12.69 completes 8 of 8 on both paths, and on 6.12.111
+with sidecar acceleration turned off (no sockhash) it completes 8 of 8
+on both paths.
+
+On applying it: against v6.12.113 the net/ipv4/tcp_bpf.c hunks apply
+(offset 1 line), but the include/linux/skmsg.h hunk does not apply as is
+(it fails at line 551), so the backport needs an adjustment. We have not
+built or tested a backported patch.
+
+The patch series:
+https://lore.kernel.org/bpf/20260708-fionread-no-verdict-v3-1-b4ee31b3af53@coralogix.com
+
+Thanks,
+Martin Luther ETOUMAN NDAMBWE
+
