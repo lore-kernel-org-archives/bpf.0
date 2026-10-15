@@ -1,21 +1,21 @@
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AF81A704B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84373BBFD0
 	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 04:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792036994; cv=none; b=S5IA6GstjxlxWvtfop6nzmKHk4GnnoAh9KSN3lNCOJAGj8eXY8ejnpFxbgKKP4WZr8g4Oo/Q0kWe+oVhc7ZOdyEjO8HK0pGsaV4sBrm6Yi8A7okDsBTJKnH6rUYY0r57Ot/8STIxGWu+I4nJR5o18v2O/HI/KslAajn7LoC6Xos=
+	t=1792036994; cv=none; b=pjvaV/CzKBgZ66yAmRmhE+HRBdrwRYIHucbgFnqvmQ5XNZ8vl4G+BhdTstHPNQjuHqs4mnqtR4XraryQRccQEENB9I8rcZ2JQ8h69zYXyvfX/Mf4fWDnT7eWxPCk8rHP+frVkb4Um3zG4GNCUvJ3yJsC+GF9dwLMqybzbDwxwoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792036994; c=relaxed/simple;
-	bh=raNbR0mXfww8vQQXDL/O4k0kcVV3dcCFHuzPUjs9BwE=;
+	bh=nMZJLiymU4FgA8jxCbkGiRaNxUYhTHELCiW7ibTOiJg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c+vCde3HmKKS4Rf1DVl4o+rf1X6JUcufGe5/bKnnqWj9OR9ZH26hpMI/iknE093CEl/tXVVqnnX5Uk3ReH8gzeC3li5Sy0jRlhCkveMxZ5sOp971xxmk7bwK5wMYJdTRdEpuVnLoPanpsHrauL5eg7otiFrPnzn9CqrCJIaNnvQ=
+	 MIME-Version; b=YVOi30HbI0zyeJn9SVTEXpRAev2F06rFYOxp/fZtI2/wbDB7NzIbNadHdZ7KZ0lQJjAfcodROp3fbWgJ+I0qTYv8/ZNrJqraN0+Js5KBwambqDl/uUFaOFRbMRjVUcX9wCSq0nKI3m7dd7bL8yxT2DnB9p0tmDBMBS3ep9+ycAo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id C45B73149957F4; Wed, 14 Oct 2026 21:03:10 -0700 (PDT)
+	id A9CB23149957B7; Wed, 14 Oct 2026 21:03:05 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v11 17/26] bpf, arm64: Dispatch exception cleanup pads at run time
-Date: Wed, 14 Oct 2026 21:03:10 -0700
-Message-ID: <20261015040310.864133-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v11 16/26] bpf, x86: Dispatch exception cleanup pads at run time
+Date: Wed, 14 Oct 2026 21:03:05 -0700
+Message-ID: <20261015040305.862714-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261015040143.854070-1-yonghong.song@linux.dev>
 References: <20261015040143.854070-1-yonghong.song@linux.dev>
@@ -38,168 +38,105 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
 Add what bpf_unwind() relies on to send each frame of a program to its
-landing pad or its epilogue on arm64, as the previous patch does for
-x86-64:
+landing pad or its epilogue on x86-64:
 
- - arch_bpf_stack_walk_ra(): walks the frame records with the kernel
-   unwinder, handing each return address to the consumer and storing a
-   new one back into the record it was read from. The first frame, whose
-   return into bpf_unwind() comes from the walk's own record, is
-   skipped.
- - With CONFIG_ARM64_PTR_AUTH_KERNEL and a CPU that supports address
-   authentication, the new address is signed the way the BPF prologue's
-   PACIASP signs the link register, key IA with the record + 16 as
-   modifier, using PACIA1716 so that no assembler support for pointer
-   authentication is needed.
- - Once the image is final, the JIT fills in the native cleanup table
-   and records each function's epilogue address in aux->epilogue_ip,
-   where an unwind sends a frame with no pad.
- - bpf_jit_supports_cleanup_pads() says yes, also with a shadow call
-   stack: only JITed frames' records are written, and JITed code keeps
-   no x18 copy of its return address.
+ - arch_bpf_stack_walk_ra(): the ORC walk, handing out each frame's
+   return address, state.ip, and the slot it was read from,
+   unwind_get_return_address_ptr(). A BPF frame is unwound through its
+   frame pointer, which the JIT always sets up.
+ - aux->epilogue_ip: the address of the one epilogue the JIT emits per
+   function, at the offset it keeps as ctx->cleanup_addr.
+ - Once the image is final, the JIT fills in the native cleanup table.
+ - bpf_jit_supports_cleanup_pads() says yes with CONFIG_UNWINDER_ORC, as
+   bpf_jit_supports_exceptions() does.
 
-A pad needs no BTI: it is only reached as a return address.
+A pad needs no ENDBR: it is only reached as a return address.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/arm64/kernel/stacktrace.c | 77 ++++++++++++++++++++++++++++++++++
- arch/arm64/net/bpf_jit_comp.c  | 16 +++++++
- 2 files changed, 93 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrac=
-e.c
-index 3ebcf8c53fb0..6ff485280da5 100644
---- a/arch/arm64/kernel/stacktrace.c
-+++ b/arch/arm64/kernel/stacktrace.c
-@@ -445,6 +445,83 @@ noinline noinstr void arch_bpf_stack_walk(bool (*con=
-sume_entry)(void *cookie, u6
- 	kunwind_stack_walk(arch_bpf_unwind_consume_entry, &data, current, NULL)=
-;
- }
-=20
-+struct bpf_unwind_ra_consume_entry_data {
-+	bool (*consume_entry)(void *cookie, u64 ip, u64 sp, u64 fp, u64 *ra);
-+	void *cookie;
-+	unsigned long record;
-+	bool seen_first;
-+};
-+
-+/* PACIA1716 (hint #8): sign x17 with the modifier in x16, under key IA.=
- */
-+static u64 bpf_unwind_sign_ra(u64 ra, u64 modifier)
-+{
-+	register u64 x17 asm("x17") =3D ra;
-+	register u64 x16 asm("x16") =3D modifier;
-+
-+	asm volatile(ARM64_ASM_PREAMBLE
-+		     "	hint	#8\n"
-+		     : "+r" (x17) : "r" (x16));
-+	return x17;
-+}
-+
-+/* PACIASP's modifier is the entry sp, record + 16 for a BPF prologue. *=
-/
-+static void bpf_unwind_store_ra(unsigned long record, u64 ra)
-+{
-+	struct frame_record *rec =3D (struct frame_record *)record;
-+
-+	/*
-+	 * Whether the slot holds a signed address is a property of the build,
-+	 * not one to be read off the value: a PAC can come out equal to the
-+	 * bits stripping puts back, and a signed address would then be taken
-+	 * for an unsigned one. What signs is CONFIG_ARM64_PTR_AUTH_KERNEL --
-+	 * the prologue here, and -mbranch-protection for everything the
-+	 * compiler emits.
-+	 */
-+	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
-+	    system_supports_address_auth())
-+		ra =3D bpf_unwind_sign_ra(ra, record + sizeof(struct frame_record));
-+	WRITE_ONCE(rec->lr, ra);
-+}
-+
-+static bool
-+arch_bpf_unwind_ra_consume_entry(const struct kunwind_state *state, void=
- *cookie)
-+{
-+	struct bpf_unwind_ra_consume_entry_data *data =3D cookie;
-+	unsigned long record =3D data->record;
-+	bool seen_first =3D data->seen_first;
-+	u64 ra =3D state->common.pc;
-+	bool cont;
-+
-+	/* The record this frame's return address will have come out of. */
-+	data->record =3D state->common.fp;
-+	data->seen_first =3D true;
-+
-+	/*
-+	 * The first pc returns into bpf_unwind(), from this walk's own frame
-+	 * record: not a BPF frame, and not one to redirect.
-+	 */
-+	if (!seen_first)
-+		return true;
-+	/* A consumer that stops still gets to redirect the frame it stopped on=
-. */
-+	cont =3D data->consume_entry(data->cookie, state->common.pc, 0,
-+				   state->common.fp, &ra);
-+	if (ra !=3D state->common.pc)
-+		bpf_unwind_store_ra(record, ra);
-+	return cont;
-+}
-+
-+noinline noinstr void arch_bpf_stack_walk_ra(bool (*consume_entry)(void =
-*cookie, u64 ip, u64 sp,
-+								   u64 fp, u64 *ra),
-+					     void *cookie)
-+{
-+	struct bpf_unwind_ra_consume_entry_data data =3D {
-+		.consume_entry =3D consume_entry,
-+		.cookie =3D cookie,
-+	};
-+
-+	kunwind_stack_walk(arch_bpf_unwind_ra_consume_entry, &data, current, NU=
-LL);
-+}
-+
- static const char *state_source_string(const struct kunwind_state *state=
-)
- {
- 	switch (state->source) {
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-index 506c4201fec8..c8c0328b3219 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2422,6 +2422,17 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 3975a94ac812..538c47e6e207 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -15,6 +15,7 @@
+ #include <linux/memory.h>
+ #include <linux/sort.h>
+ #include <linux/execmem.h>
++#include <linux/kprobes.h>
+ #include <asm/extable.h>
+ #include <asm/ftrace.h>
+ #include <asm/set_memory.h>
+@@ -3638,6 +3639,8 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+ 			seen_exit =3D true;
+ 			/* Update cleanup_addr */
+ 			ctx->cleanup_addr =3D proglen;
++			/* Where an unwind sends a frame with no pad. */
++			bpf_prog->aux->epilogue_ip =3D (u64)image + proglen;
+ 			if (bpf_prog_was_classic(bpf_prog) &&
+ 			    !ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN)) {
+ 				if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
+@@ -4816,6 +4819,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
 rifier_env *env, struct bpf_pr
- 		 * reasons, expects to point to the next instruction)
  		 */
- 		bpf_prog_update_insn_ptrs(prog, ctx.offset, ctx.ro_image);
-+
+ 		bpf_prog_update_insn_ptrs(prog, addrs, image);
+=20
 +		/*
-+		 * Same byte offsets, consumed by the bpf_unwind() walk:
-+		 * turn the cleanup records into native address ranges now that
-+		 * the image is final.
++		 * Same mapping, consumed by the bpf_unwind() walk:
++		 * turn the cleanup records into native address ranges now
++		 * that the image is final.
 +		 */
-+		bpf_exc_fill_native_ranges(prog, ctx.offset, ctx.ro_image);
++		bpf_exc_fill_native_ranges(prog, addrs, image);
 +
-+		/* Where an unwind sends a frame with no pad. */
-+		prog->aux->epilogue_ip =3D (u64)ctx.ro_image +
-+					 ctx.epilogue_offset * AARCH64_INSN_SIZE;
- out_off:
- 		if (!ro_header && priv_stack_ptr) {
- 			free_percpu(priv_stack_ptr);
-@@ -3415,6 +3426,11 @@ bool bpf_jit_supports_exceptions(void)
- 	return true;
+ 		/*
+ 		 * ctx.prog_offset is used when CFI preambles put code *before*
+ 		 * the function. See emit_cfi(). For FineIBT specifically this code
+@@ -4954,6 +4964,11 @@ bool bpf_jit_supports_exceptions(void)
+ 	return IS_ENABLED(CONFIG_UNWINDER_ORC);
  }
 =20
 +bool bpf_jit_supports_cleanup_pads(void)
 +{
-+	return true;
++	return IS_ENABLED(CONFIG_UNWINDER_ORC);
 +}
 +
- bool bpf_jit_supports_arena(void)
+ bool bpf_jit_supports_private_stack(void)
  {
  	return true;
+@@ -4975,6 +4990,27 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *=
+cookie, u64 ip, u64 sp, u64 bp
+ #endif
+ }
+=20
++notrace void arch_bpf_stack_walk_ra(bool (*consume_fn)(void *cookie, u64=
+ ip, u64 sp, u64 bp,
++							u64 *ra),
++				    void *cookie)
++{
++#if defined(CONFIG_UNWINDER_ORC)
++	struct unwind_state state;
++	unsigned long addr, *ra;
++
++	for (unwind_start(&state, current, NULL, NULL); !unwind_done(&state);
++	     unwind_next_frame(&state)) {
++		addr =3D state.ip;
++		ra =3D unwind_get_return_address_ptr(&state);
++		if (!ra)
++			break;
++		if (!consume_fn(cookie, (u64)addr, (u64)state.sp, (u64)state.bp, (u64 =
+*)ra))
++			break;
++	}
++#endif
++}
++NOKPROBE_SYMBOL(arch_bpf_stack_walk_ra);
++
+ void bpf_arch_poke_desc_update(struct bpf_jit_poke_descriptor *poke,
+ 			       struct bpf_prog *new, struct bpf_prog *old)
+ {
 --=20
 2.53.0-Meta
 
