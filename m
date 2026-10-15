@@ -1,105 +1,61 @@
-Received: from mta1.migadu.com (out-245.mta1.migadu.com [95.215.58.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD353D6493
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 15:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56DE33644CB;
+	Thu, 15 Oct 2026 16:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792079162; cv=none; b=H0jZ+bK+a+HJSAaUbEKDReWgbMJCm7Q5QYagq/aswMs880YPHM+W0zPbBpnSi19UN6asLPq9Ae90K7115xWhNH+Fgjcx2vQhv+9f9gEWS3hkAc9fXo1daTNupmEVrhQQHAqXeNU9O6IV2fBbjsRAPOYMHDA3BQ9FdIloPtm3QaY=
+	t=1792080249; cv=none; b=N9S+6+Q52yUYPTNf7YG/D/O1pG0BtNksbOrAtJgtho4z9U5X+7b6baH8t8SghahKfGPJA0xl0PoET7Z1U//xP/TYJcYGilhon+25VMRZY85NH6MV4+UsLu9i62G89bHSeRMF1jJ+EVLhkh8UV5AD3fq5gXw0mQeIX0+0QsD6R98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792079162; c=relaxed/simple;
-	bh=POooulujnIkLHWEyPmLNc//oQqLDg4iHcaq7ZUi7onw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=GRHG+7qVg5cBwSorvyIHgHPQFXnUS98aEzevlbKm5qT0GLo1hlsRiM+WPdMTU23myAxWpjLkof4dyjHfevKA1HqAtIX+Prz5EOZj4vSkZawpg/23DG2zcraU8aI89Mr5c/jqfD12tMnIniP7GJMD7NJ105I7azNtsM3BS+P6Op8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qrBNjyln; arc=none smtp.client-ip=95.215.58.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792080249; c=relaxed/simple;
+	bh=JXM+VqSUBfb1UKfsMN68G3v6uX6sD69SXf+u/Pdtfyk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Om1HRmnmTZmbYzAVlr6JBAaYcJgipFAkqXU24TpUSKPC/O4rQ0o6wBfGULrSvm93q1vrm0Uiyvsb1P0wWQgZORnrD7cxAEqDr0TSfnopMrws46+O3IUy77ST3WjEziwv7df8621TmCyaduVz+Ke8MTjlH560OXZMrhLV/FipoUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V9KMCfUC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qrBNjyln"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=POooulujnIkLHWEyPmLNc//oQqLDg4iHcaq7ZUi7onw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792079147; v=1; x=1792683947;
- b=qrBNjylneTTsj9cWh5m/wsxAXeIaXWCxKX/8LaPtfawJfKtDlwG2amGCUQeTdgm5PwyPq6av
- haMlvvif3qq0Xwd0FfQgPHBiRtd1GWczfdtPX8x82nBTuN0bouh/6qrc/643G2T8peTNxuFiTYc
- lRexhRmWzcRVeGtyMV3iSG+4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a8122fc183ca982b;
-	Thu, 15 Oct 2026 15:45:31 +0000
-X-Mizu-Trace-ID: a8122fc183ca982b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <9562d352-61f6-43c3-8ed3-3dc89140d317@linux.dev>
-Date: Thu, 15 Oct 2026 08:45:25 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V9KMCfUC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AEAD1F000C4;
+	Thu, 15 Oct 2026 16:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792080236;
+	bh=JXM+VqSUBfb1UKfsMN68G3v6uX6sD69SXf+u/Pdtfyk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=V9KMCfUCZ6F0KoeujJEbYGuemhvcYXxbk2AfOnLo5wI0mNbzulReLYIal8HpwIAVN
+	 a5anXuey+odjFkiLbgli8Gj7rxk6MuYpOrFfTJOQXQifSJ6LXwz1Ml0mZGtFW6JK2z
+	 qJXm2B0Mj0eHUD6Lm+cSmUFpCPUVoOANlMQUZV7YzQXcWKWwek/J/EOvLFdGTUAUvu
+	 Usa2Ibs09ak2XJlCFVUwRKt2ZTq/5CmplNFjIt3EoMVd1dNE1Iar10ivfYZCa6rXs3
+	 7xPI0AZtI1j9LmMN/bBU0LVoVIcD6ffBO1Uhr4RvjYngfOQog86DlcWpo+AjLSxsOj
+	 sknNGTUByScqg==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+ stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
+ tushar.vyavahare@intel.com, kerneljasonxing@gmail.com
+Subject: Re: [PATCH v3 net-next 11/15] selftests: xsk: add a hardware mode
+ to xskxceiver
+In-Reply-To: <atCxD0EJHCRBR+pI@boxer>
+References: <20261014184539.774708-1-maciej.fijalkowski@intel.com>
+ <20261014184539.774708-12-maciej.fijalkowski@intel.com>
+ <87tsmn5mg4.fsf@all.your.base.are.belong.to.us> <atCxD0EJHCRBR+pI@boxer>
+Date: Thu, 15 Oct 2026 18:03:53 +0200
+Message-ID: <87fqy754t2.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v11 19/26] libbpf: Add cleanup_info to
- bpf_prog_load_opts
-To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
-References: <20261015040143.854070-1-yonghong.song@linux.dev>
- <20261015040321.864586-1-yonghong.song@linux.dev>
- <sashiko-outbox-172238@kernel.org>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <sashiko-outbox-172238@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
+>> Also, we need IPv6 support here in addition to IPv4. You can't assume
+>> that the DUT is onlink or IPv4.
+>
+> Is that currently a show-stopper? That is another left-over from old
+> architecture where data path was rather on a local and isolated
+> environment... /me finding excuses ;)
 
-On 10/14/26 9:13 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] bpf: multi-line comment style violation in bpf_prog_load_opts
-> --
->
-> commit 7622c492adc459370a78a700a25047031969a083
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> libbpf: Add cleanup_info to bpf_prog_load_opts
->
-> This commit expands bpf_prog_load_opts to include an exception cleanup
-> table. It adds cleanup_info_cnt, cleanup_info, and cleanup_info_rec_size
-> fields, which are then passed to the kernel via bpf_prog_load.
->
-> [ ... ]
->
->> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
->> index 826d9cc9ab65d..64699e0e4e1a8 100644
->> --- a/tools/lib/bpf/bpf.h
->> +++ b/tools/lib/bpf/bpf.h
->> @@ -128,9 +128,17 @@ struct bpf_prog_load_opts {
->>   
->>   	/* if set, provides the length of fd_array */
->>   	__u32 fd_array_cnt;
->> +
->> +	/* exception cleanup table: cleanup_info_cnt records of
->> +	 * cleanup_info_rec_size bytes each (struct bpf_cleanup_info),
->> +	 * holding instruction indices into insns
->> +	 */
-> [Severity: Low]
-> This isn't a bug, but does this multi-line comment follow the preferred
-> BPF subsystem style? The subsystem guidelines strictly require that the
-> opening /* for multi-line comments be placed on its own line.
->
-> Could this be formatted as follows to match the standard?
->
-> /*
->   * exception cleanup table: cleanup_info_cnt records of
->   * cleanup_info_rec_size bytes each (struct bpf_cleanup_info),
->   * holding instruction indices into insns
->   */
+People still run that legacy IP protocol? :-P
 
-This is a format issue. Can be a follow up or as is.
-
->
->> +	__u32 cleanup_info_cnt;
->> +	const void *cleanup_info;
->> +	__u32 cleanup_info_rec_size;
->>   	size_t :0;
->>   };
-
+More seriously -- my homelab, and our internal labs are v6 only...
