@@ -1,106 +1,163 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6770D4FDA60;
-	Thu, 15 Oct 2026 15:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CCE306B3D
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 15:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792076798; cv=none; b=LngeJsd7YZPnon3PTRQ/pudVYOBk9WMNsdB+P3Vp+ln1IH9+1TYeyDPUE4KKnCoWtWGCyq0KY+anWvtWI6v36oaBjyq+RFTSyIE8QvA+DyV7GpvfqSO3BevZldipJ+XZgpvEWaNv5XimQb0HdNyovGzPctQBi8O6IyFASGKuv+M=
+	t=1792077356; cv=none; b=TyStN52SYKrqangAcnOWx4gw4N51ydlmXlwub7WCWEXszrHFqfatt0SIty+RVNl7/67CX/csPPeLEJuAwxOajSrdQfNTAWh+5EK+pi8R9+gILeBccB3Zs50s+Nm66NrXFUNTPm6A6Klr4OobUnvXfckkodvMTw70aSXGfn+qw2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792076798; c=relaxed/simple;
-	bh=Qy3XlC7H1RX5gRzf+kTtG4AQLQfNz26R9LxgVU51t6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uaUByNfHLqB+e5vE7LAIqw5uPZTIz1P6ldveZ0DU+wRI/hI8+9WubVPgdgVO7hqYyF9nQHee8x6Cjy+Yfz0+EZrUW1nAiIGINMneywBuR2+RAKISHZDT3A5RZN865L/dZOioNlxYPnwxRf4A3JWqQHoJY8nOL3KU2t0dqFHlPNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=YR9oiabI; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1792077356; c=relaxed/simple;
+	bh=8ObtmiXxUW0QYBKwMksxElhRQHOEDgL0OR2XCBFcIxg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=T9EXPE9oxXl+rPnA3eyp1AACM/t5yZ9WzzcMw4QDjJwdazsgiFy7nxO7mxIwsbaMa6Ts2P0ODNfrsJK8FOilx1Aptl3euWl0xV8gHiXr4uj0537E4fk98++Gkg+4xwWdRXdsbhS1vOW/I+vStw3YkfbemfV2T0ExfkbK0asvNhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=wsNMLSfs; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="YR9oiabI"
-Received: by linux.microsoft.com (Postfix, from userid 1216)
-	id E98F520B7168; Thu, 15 Oct 2026 08:06:26 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E98F520B7168
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1792076786;
-	bh=t9yJuPZYOp7kfNBAAUzqrGwuy5HDp7aYaQvrx20rA4E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YR9oiabIeBdQcgeISYzdhDrRZePemIBoXr1xdjINFrY5SqwpGZ0xtKHkYJiWL4poy
-	 zqfxhjvBUdDu70gaxQBdD0HQmB4kTDWe5oKV75MWjUWO2nwqTWETOqgla22xq2pFqF
-	 Vjw2nZ+/qsJ5eTOI4MNvEV9TqyLxMsHEjyCSdLcM=
-Date: Thu, 15 Oct 2026 11:06:26 -0400
-From: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net: mana: add BQL support
-Message-ID: <atDr8rbZuz97xCTo@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
- <sashiko-outbox-171939@kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="wsNMLSfs"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c2acc1e170cso924334666b.1
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 08:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792077353; x=1792682153; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:message-id:date:content-type
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/1fIDtIhk7OY8zkMZnxFxkhA3Vz85iLRRDcbIuJn6NY=;
+        b=wsNMLSfsCUwhN/WPuuLsbcjhJjC/20n3JW5T4OjGRhDghl3PoKpmPtbjvsu752tFEs
+         5anqEZYsfQ3IejuXIex6n/uiw55GaI5iyiLaCFE3eiE3q/baWdXOwzZ3PIPpblrhZ8Wh
+         me7KSAPrk2DKuMTB/cxsPZ3QzP68WTb7WyMpB5pSgL4WVURgDHreVYwptSiO9bPgTXSX
+         GCinhFiqXf210Z/kdaJQqMSh340MaFLsHOfbzl/mMnsUM3oS35j+KJaQ74z6/Bq0g4No
+         u3F/lO0jRIhzvLDocfDAJJ3gFMnWAg9hNJ21dTZWUsRns9UpfrtVwBWr71f7UOPqIdVL
+         k2bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792077353; x=1792682153;
+        h=in-reply-to:references:to:from:subject:message-id:date:content-type
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/1fIDtIhk7OY8zkMZnxFxkhA3Vz85iLRRDcbIuJn6NY=;
+        b=HWF3+ydYURpkw9vZIynEGRDTfaxmtUs7DhTnVIRWa7qhlGaylQTI/lYuCnKwF2fIrY
+         FWT+lBomnOn+QjcfzvCjBFcjyo2dDu9c2AIi1AqCfsQuQGjW3GUuQSaq6jhak0OicLjB
+         bjI3Z9/MTtFcfinTo44dib+7lwuLPdj0vlnDsjMalae04sKSuX7jMO4wCSJxq/F7TBGJ
+         5r+U022C/szy70QktowLM6bOhCKFxQqlj5lVCyV36k9UUnZg2eX6cW3P14mBcFHf0Yq/
+         mk36wmXxp6Lvw2WLl0uP3OrHbEzVBpHZ5TAusFc3lrERV0tIoX1HGtj+YFbowy93WNkO
+         T1tQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzDdqAZKpoULMrbwQl+I5kMOytv2fmVDeiGDqEMEAGTBMJRU47PYZk3BAoV6otye4sGzFQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIq5lF00MHouwbTn+HYksNSK59FM044d4KYwwOxvUTMFZ6o8dPN
+	XEWnfsAYYZqJU4GPIrhJOmMSo9COIe6kOhcRAia0qoGwV4w3iAndGEtNqyJQtctACmkM8ZG+yt8
+	UyVaUN4vpsA==
+X-Gm-Gg: AYBFou020WnJh2B2vr/4DlSk+Q3KkPttjrwZKCCq13hu7Pu68J3ql+uWUJqjDOqA5Ea
+	3HOILsBFst4BZlpcpzrWpOs8M/fShSEtqr+j6MwV7kbuoH297Qg5ym8Tp0QFooLaxOhAKmgkw/e
+	y5e1B7tROo8uv9nDmdZGwnMLKneubN/wKiZZj16v/SWDKb2ykzFybFt1az6uV7mdzqHCKMsE/Il
+	7/bxiTRgnmQsdC388VbPm/Ng8MsxGJmimFyMoWqNiuKvR6msB31TxGnCTSJDAosIo6nM4aof3p6
+	7VvmAMAmF72LupSrkAYorgiWmmdtv+GFgzjgRZnCIu0Qfm4FpKiQDxiCHRSONGBRnGqMSaeMrvU
+	23uZqjQhYJhh1b8mG+NUmLPol86YMFmsi85BWWjBMAE2n5B2i+DW1JVb/STpA+xAi+O1lUnmdNV
+	FN+NI6dSosxIUWZuFgsCdUaUic1aE5e0YdAwrsdPojTcjN37CsAdY=
+X-Received: by 2002:a17:906:7948:b0:c2e:7fe7:288e with SMTP id a640c23a62f3a-c31aa082a00mr1715848566b.32.1792077352413;
+        Thu, 15 Oct 2026 08:15:52 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::1:2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c3ed2e822f6sm144542566b.0.2026.10.15.08.15.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2026 08:15:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <sashiko-outbox-171939@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 15 Oct 2026 15:15:40 +0000
+Message-Id: <DM5IECVK7EOP.2BSY4WBREGEA8@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v4 2/8] bpf: Associate arena pages with their
+ mapping
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <sashiko-reviews@lists.linux.dev>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20261014233442.8392-1-emil@etsalapatis.com>
+ <20261014233442.8392-3-emil@etsalapatis.com>
+ <sashiko-outbox-172042@kernel.org>
+In-Reply-To: <sashiko-outbox-172042@kernel.org>
 
-On Wed, Oct 14, 2026 at 09:49:54PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] mana: unratelimited netdev_warn in __mana_start_xmit causes log spam under XDP load
+qn Thu Oct 15, 2026 at 12:01 AM UTC, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] bpf: sleeping lock_page() called under PTL spinlock in existing_=
+page_cb()
 > --
-> 
-> commit a6a9466a25f553494605c439f140071b9b0b7068
-> Author: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-> 
-> net: mana: add BQL support
-> 
-> MANA doesn't support byte queue limits, so each TX queue can hold 256
-> WQEs by default, and up to 16384, of up to 64 KB TSO packets, before the
-> qdisc layer sees any backpressure. This adds latency to all the flows
-> sharing a queue, and defeats AQM qdiscs such as fq_codel. This patch
-> adds BQL support by reporting the bytes queued and completed to BQL,
-> except for XDP_TX and XDP_REDIRECT frames.
-> 
-> > diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> > index 484f061bc75e4..7c55f8724441d 100644
-> > --- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> > +++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-> > @@ -21,7 +21,7 @@ void mana_xdp_tx(struct sk_buff *skb, struct net_device *ndev)
-> >  	ndevtxq = netdev_get_tx_queue(ndev, txq_idx);
-> >  	__netif_tx_lock(ndevtxq, smp_processor_id());
-> >  
-> > -	rc = mana_start_xmit(skb, ndev);
-> > +	rc = __mana_start_xmit(skb, ndev, true);
-> 
-> [Severity: High]
-> Does this allow unratelimited log spam under heavy XDP load?
-> 
-> XDP traffic directly calls the transmit path here without checking or
-> honoring the stopped queue state. If the Send Queue fills up,
-> __mana_start_xmit() unconditionally calls mana_gd_post_work_request(),
-> which can return -ENOSPC.
-> 
-> When it fails, __mana_start_xmit() prints an unratelimited warning:
-> 
-> 	if (err) {
-> 		(void)skb_dequeue_tail(&txq->pending_skbs);
-> 		mana_unmap_skb(skb, apc);
-> 		netdev_warn(ndev, "Failed to post TX OOB: %d\n", err);
-> 		goto free_sgl_ptr;
-> 	}
-> 
-> If XDP blasts packets into a full queue, could this print for every dropped
-> packet and cause severe log spew?
-> 
-
-This issue predates this patch (it was actually introduced when XDP
-support was first added with commit ed5356b53f07 ("net: mana: Add XDP
-support")), so it should be fixed as a seperate patch directed at the
-net tree.
-
-> >  	__netif_tx_unlock(ndevtxq);
-> 
+>
+> commit 06bc77555d3cf904ccf154edab307819785c3c2b
+> Author: Emil Tsalapatis <emil@etsalapatis.com>
+> Subject: bpf: Associate arena pages with their mapping
+>
+> This commit associates arena backing pages with the arena's private mappi=
+ng
+> and sets their page offsets. This allows the fault handler to delegate us=
+er
+> PTE installation to generic MM code, helping avoid races with kfunc-relat=
+ed
+> arena operations.
+>
+>> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+>> index b95ffdb14417a..650baa09fcb5a 100644
+>> --- a/kernel/bpf/arena.c
+>> +++ b/kernel/bpf/arena.c
 > [ ... ]
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20261013214937.145312-1-hamzamahfooz@linux.microsoft.com?part=1
+>> @@ -355,6 +371,14 @@ static struct bpf_map *arena_map_alloc(union bpf_at=
+tr *attr)
+>>  	return ERR_PTR(err);
+>>  }
+>> =20
+>> +static void arena_put_page(struct page *page)
+>> +{
+>> +	lock_page(page);
+>> +	page->mapping =3D NULL;
+>> +	unlock_page(page);
+>> +	__free_page(page);
+>> +}
+>> +
+>>  static int existing_page_cb(pte_t *ptep, unsigned long addr, void *data=
+)
+>>  {
+>>  	struct bpf_arena *arena =3D data;
+>> @@ -378,7 +402,7 @@ static int existing_page_cb(pte_t *ptep, unsigned lo=
+ng addr, void *data)
+>>  	 * the TLB entries can stick around and continue to permit access to
+>>  	 * the freed page. So it all relies on 1.
+>>  	 */
+>> -	__free_page(page);
+>> +	arena_put_page(page);
+>
+> [Severity: High]
+> Does this code call a sleepable function under a spinlock?
+>
+> existing_page_cb() is passed as a callback to apply_to_existing_page_rang=
+e()
+> during map destruction. The MM core function apply_to_pte_range() acquire=
+s
+> the Page Table Lock (PTL) spinlock via pte_offset_map_lock() before
+> iterating over PTEs and invoking the callback.
+>
+> The new arena_put_page() function calls lock_page(), which contains a
+> might_sleep() check and waits on a bitlock that can sleep.
+>
+> Sleeping while holding the PTL spinlock will lead to a 'scheduling while
+> atomic' panic or deadlock.
+>
+
+We always call apply_to_existing_page_range() with init_mm, so there's no P=
+TL
+taken. That being said, the call is made with lazy MMU mode enabled that re=
+quires
+us not to sleep. We can collect the pages during the page table walk, remov=
+e the
+kernel mapping, and then free the pages outside of the callback where we ca=
+n take
+the lock. We pretty much already do that everywhere else apart from arena_m=
+ap_free
+anyway.
+
+>>  	return 0;
+>>  }
+
