@@ -1,257 +1,257 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D02541E7D;
-	Thu, 15 Oct 2026 18:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792087390; cv=fail; b=Ho+fAkIV9P/3m1foXsf1o3o1zyhj/NlEiyTHwKt1L/LCa+JvxNclCyXoNxkQbTRf8Of6bixZmdhAC6tKEf7RDPB1xKXBEKKrb4DL4yyJQ3IIdLiGg84i8E/O14ShQLfrmgmtixS29vbfsLNnPbAkJs1aUeKZcO9i6iyN04/z11k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792087390; c=relaxed/simple;
-	bh=ncbnQ+iakl9vM5hTrct+vETuelrzzZWTpzlY2BdVizc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=oXHP5yCMlFhwn0hu9uW/kcE2pt1wSMfp0XUpQ/TRinGms2otjgZJ384xSV/MoyEhC+vrJ0CL54qHgaUC5uH08tveWmxxYo/yHRtWA1Td+5+fQ4vFcCmL6liZ3dCaoQsj56KoF+XYO+NMuXR2OBHzBQKkokrbW+IHdGYRbzW5vMA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lqGIRxhn; arc=fail smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961A63BF677
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792087745; cv=none; b=e9fNyrPnv/hl3irWgKPSYefUDIkVEFDw9kg73l0Ez02x1UmOAQq577MqjqFq66cc29MADdm0K0+3v/48tmrhw06DdFxbcI0Wb5id9b6X86JkaZOnjefCcOwEJK1MUV/n8q8JpXi4wn1ypRYTtWpZbZNO1njhdVOxni5riWcDer8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792087745; c=relaxed/simple;
+	bh=pCwLO9KL7+4t7ull3XRtDGLL4YyzP3Od2pLrTHa5pwA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pcjXYafvseKcPgZmjtMifp9tzsPdqyQDGdP7A/ApoukKMEJ4RhyI2QJkGG2LBHNTMi5M5Y+hKcimurMkb3gjbol0ZrBanIM2RGTUdPEXu7heQGgRuIG7gCVjH8zUkTzynsq9W0Tg9aeMtoh+UTR9uvo3J0Mz/jWF2+VmfPNzdHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgUWpmKq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lqGIRxhn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792087386; x=1823623386;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=ncbnQ+iakl9vM5hTrct+vETuelrzzZWTpzlY2BdVizc=;
-  b=lqGIRxhnV7C+Msy2tS2N7P1E+BTJS2H8mx4ZhAF00OkkyyQn3DIGI3rb
-   XDTowJ2NYH84BPrhp1daYyD4PIh038kq9dJlsFVAXrKZdkGGZu7sHLBxq
-   MMFDMtfySOOuvWN6DHCQQbWIWuKM+ejIuIMCoHUCN2BzjZIThfpz3tJOQ
-   JUn0lxe5PqJZFGTMU3mAQgU5Koq53M3/3s+/tm/Df3UHSqev3wnNntQpn
-   2ZLKvYRCt7jJevQAxwrHuSF3/Ubp6/WBwjCTbjKvP0siflQaJrmlkIVKu
-   +cwWGINnZf4ugGKipzt+MhdJd9c+axO4bpgYb980gb5bSfsc0NjXoGnE8
-   Q==;
-X-CSE-ConnectionGUID: xkULKGPBRTGfT7IaDaf4sA==
-X-CSE-MsgGUID: 4YmdXPyqSp+fb/dWGYN7bA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="877709"
-X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
-   d="scan'208";a="877709"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 11:03:04 -0700
-X-CSE-ConnectionGUID: dF/gCt35RzizeyF52ptl0g==
-X-CSE-MsgGUID: 2FzpDoBUTSeqcv9JyrRKKQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
-   d="scan'208";a="2177613"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 11:03:03 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Thu, 15 Oct 2026 11:03:02 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49 via Frontend Transport; Thu, 15 Oct 2026 11:03:02 -0700
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (40.93.195.5) by
- edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.49; Thu, 15 Oct 2026 11:03:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oC4mVOn4ZrTdXl2K19hsNoNkqwz8Z2lVstZalOEfdC60J6SArN4l78SjtYUcracuyZGB8Va6IrGg5Fb0DzbIScktwNfN7L4ABSED3ATJL5mOsAtkrXkzMop4/Tem/pVH6zR4k18fxlpk3BV58xqla2t/dmTQ7x7Q99C6mXdcDNie38lvG2jbLscuVHE3l03cUsDnN7KrceyL3FXtl3wXFHv+DK30wOa0/foScHUk6Vj6n38ld6bdNcdL9fsibtEl0cGZ2o2CWaYE8O3ckP1BcbUgaPTYBoQd2OvsjU6fhjyjUXzx3GHVu9W5KeS3uBzT/ww/RETFHD4Dbs3jV1fVqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L4lUSwTLKL0ryEPYFejWWtjjbmRlZY99cNxP9YD7KkU=;
- b=SXc03L/huBG7NW/Wv1+UJ4dhMG+c2MK+3cN7/OvZyoG8JG/C4Aub6+QEaCKSfLBmWQQv9u7gbEsdOo7LILlPBcVAooDQnV7aKZeDEebiwtNRqDpTH6qAFIDplanwIDfoZNkVp/JbfXhhHt9kIr0cPsRvKOjr3r/gUBbNs7muJUJCkREAcZmPp5JwJR5bhSQKXgc9BqmT0hnp+8U5hX1b2pJ+WmlZ4tPgSN49mnSwriM8n2FvQPgKhXKdA5RPmLZE4HooPefyLABeXuYSHkcCu8H697/oOxS7seAb+5Z8wfW8jraanDJakKHvrbjGW0tsPegB5yp5k3pT/9O77VMQVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- DS4PPF3FCD980E2.namprd11.prod.outlook.com (2603:10b6:f:fc02::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.13; Thu, 15 Oct
- 2026 18:02:53 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0522.012; Thu, 15 Oct 2026
- 18:02:53 +0000
-Date: Thu, 15 Oct 2026 20:02:41 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-CC: Magnus Karlsson <magnus.karlsson@intel.com>, Stanislav Fomichev
-	<sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
-	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
-	<rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
-	<kernel-team@meta.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>, Pavel Begunkov
-	<asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii Nakryiko
-	<andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, "Kumar Kartikeya
- Dwivedi" <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	<jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
-	<ihor.solodrai@linux.dev>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<io-uring@vger.kernel.org>, "Mike Marciniszyn (Meta)"
-	<mike.marciniszyn@gmail.com>, Weiming Shi <bestswngs@gmail.com>, "Nikolay
- Aleksandrov" <razor@blackwall.org>, David Wei <dw@davidwei.uk>, "Alexander
- Lobakin" <aleksander.lobakin@intel.com>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Mina Almasry <almasrymina@google.com>,
-	<clecigne@google.com>
-Subject: Re: [RFC net-next 01/15] xdp: Size zero-copy skb heads by their
- contents
-Message-ID: <atEVQXajVzoWSFzc@boxer>
-References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-2-bjorn@kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261002190018.696925-2-bjorn@kernel.org>
-X-ClientProxiedBy: VI1PR06CA0141.eurprd06.prod.outlook.com
- (2603:10a6:803:a0::34) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgUWpmKq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E59E1F000C4;
+	Thu, 15 Oct 2026 18:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792087735;
+	bh=E8vqjZEjKdmczuyYd5aag6gd+uA112nlhG1I/pzwjSA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=KgUWpmKq8CyZW2lT3rT1Podlq1BSwZ+LRzJIz74NN+Mb+46uEXsiDcIS+xNadIq1u
+	 GAZoMNzfiuczD/J/U57ro3VnEaUxEIGuOUL2YMi+29RPbxglfEtYui+3PF/5trOrwa
+	 mGvy9U/GTd4vdgDWinBudrynvRrKHwYwK0q6wtXQ2KqL65dyXPdWKTJPih8uwa/Jog
+	 evSGBVP2kzvt7tBWuAe6oH6XWJvROn8Wsr2wjNmyfijFNvkZgYQqDiXmEEEVBxGXrU
+	 E9ilzCmacseW4DURME1vJGKgKBVFUcf3uRBPnounMMqoHtM1kIBzHH1pVZoChaiNCb
+	 rsJUE4QOmsYFQ==
+Content-Type: multipart/mixed; boundary="===============5756007415653613052=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DS4PPF3FCD980E2:EE_
-X-MS-Office365-Filtering-Correlation-Id: bfbb244c-67e7-44cc-6156-08df2ae68856
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|56012099006|5023799004|11063799006|261009223027099003|4143699003|18002099003|10067099003|22082099003;
-X-Microsoft-Antispam-Message-Info: 9w66xkZpAoi/ffTsEJ9Gy6fJxhUbxKWySGbEBa1xTB5PEqrWWfsN7N94Jk4UCZ2imsbC6Z6+6Z1l+tk402Axs1ce1npJ7t45tJMArU+WUQ6kxR2lylO5Q3wTabRbGFLMggQtZEff436UvcwKLFmTfLihTGVpK1Cer4nrTh+D+iEwGfVuNMnwW3lt+0Jy7W3qDuYpmj7yh1P/0w+u9Fii5JUwpv+URpl/zK6NpIAMSgT4N81Ph2F/s6f2J/Bh3ISI6mANQT25AtgTn4enIYgOp33bRAForm8y0ElhzcDjYvst9kKhntSSWD/E8jNlGEC24OM4z0Kvsn/mijR4xRE/ZtPNkKwAyJu/ZAhG6xS0zTLSr+s4OyFp1gNB/RMxvXNZUVPG/kEw9y2XsX4iWanddNOY1D/sydLqNsNOUzIUj0hD7XJZjqf7HRjkWHFjIItp8uu3QSkiVElyipPQ7PlogcJa79Y+Eauf5V2OkQUBEEEvxEo1H9275oFpfWckOWqEwKT3hkayk5c9xv4Ju+8QG98EwpPY0SwrMW5Uk2yGclBJMKDlIG6c/e1BrbVMcOm4MeFoLBWxtBn7KFBodMR1Wi3pG025bOC+VzK9OEHjIXONwLgjtINvBcKdrC3IaI2Z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(56012099006)(5023799004)(11063799006)(261009223027099003)(4143699003)(18002099003)(10067099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?6wR6kfN18rzSxVhktSGcDL6lCPpVySWiputJbBDN2EPKjQaNBNvc+jveJ+?=
- =?iso-8859-1?Q?fbL/pAFpVx4coMfFy36YsHBE+HyjpaCrbS9dy7K151n4COTG8STNw07kNi?=
- =?iso-8859-1?Q?ekdOiHfpyeebSkAPnU/rt+UGsfNV+5NvpTitqAAqaeKIg4sqshz18z7tG/?=
- =?iso-8859-1?Q?gjdJjRTTvaPAgx6YWDVRxOfwL3O93LB9DuO2gwqWcWajsqwAp+92aktZ9B?=
- =?iso-8859-1?Q?soPrDVFgCz3Lr62CZfjWUU9w1vZsdlSYcxwcTnH7c4WmDfRfvmm1Lda1ZA?=
- =?iso-8859-1?Q?Z9nloprjpeP3gjLqk7ea/chhWPH4Um15mV++5ci788mW16mopNcu9ueVDy?=
- =?iso-8859-1?Q?cYM4n0w9gy8D/33MgjS0Ovc6wAFfqN9h4XO+LqWM3CASstzuR1DfR1p+Xe?=
- =?iso-8859-1?Q?8PZkmakoeWGoPP3LD1/sqMeaxr8gVPxQOZUy8PtSBiI5f/UBkHKr76IURk?=
- =?iso-8859-1?Q?7v8nDQK8WTGvmsK+p8DTItG8KqGeW98DeUDPR7lNGxaOvX467OPRYp2N1f?=
- =?iso-8859-1?Q?t1TljpRatCxtckPHZBxwO1X6cYkWgZhC6tw5xMxIZ1LqVE72cpIVuapDsY?=
- =?iso-8859-1?Q?EX35U50WOnyx/AUGPm8VwssW/aqK5qqBKIgnbUy7AsW/1m+Q3yvavHf4Vi?=
- =?iso-8859-1?Q?+U3v8tXKOjDYVR8PGb1YK780bx8SBhg5pwLPYa55x75SgmSIvIqYYNwIYE?=
- =?iso-8859-1?Q?f37L4eyDjMdo2F0ska6LU0KSLFnqW5XqXlQVngdZQwp6oSqysX2I6Zcrho?=
- =?iso-8859-1?Q?bEL+Ft3shp0JB1qdM4Oa4JEN8YkZCDGjnosDNUCZu0DiShNWjZ5JQcfWm3?=
- =?iso-8859-1?Q?MweceYdT4ygPGOhKa05va5+cFR0m2s5rTa8/q6peDLh4s9H6sNGLPyQ+2p?=
- =?iso-8859-1?Q?sXu1vwUX4o2ZirqW8uSSxY/fTBkygeoVEx/rHVPriybr3MwHlvqIb5ZJnr?=
- =?iso-8859-1?Q?lZ31X9DUdcDaDP5+2RZ1dBiFPc2Gq6JTvSvVrGjSreMrfEhgrcVbB/t025?=
- =?iso-8859-1?Q?3nJ/STms5XRPb9g23g6cG7p+gCRIJXeuiFqgr9rhggEv6x0T48+wAulz1U?=
- =?iso-8859-1?Q?skQNGTR/1IoNRiRf1TQGw5qWnMgf8WqaCMoQn6vGoLMOii952GixrRFS6H?=
- =?iso-8859-1?Q?1v5Oj05pMsOHcQcRg/jPTOCuFR+m1fnTA4xyswipJYTBteBKD7zbcPfzhO?=
- =?iso-8859-1?Q?zbGCSWS57XpPOCQ/K6SJuz82pIT9KTjGLui4yNkt9W7pkxyhr41ujF+T6+?=
- =?iso-8859-1?Q?tKlYAlTQjZOFypHpWbuvyeMt4DPkaRS+D0yedvulpdwy71SVaREg+Karep?=
- =?iso-8859-1?Q?x/+ogig2iumbOBFOZDCI1jqzGHWjM47PmHGB6z8QnFrHVzr2ARI2NSOtgk?=
- =?iso-8859-1?Q?LmMvF+vVYhnkf9bHUxyH6oiZppCrol7lhBRYVKoS3x08DXoq3ECByzdsn5?=
- =?iso-8859-1?Q?0iYf5E67/COvgBEyCOQcobfUF1QK9EUxruYqar9hmuoficEM2DYTdK2nne?=
- =?iso-8859-1?Q?oMsErrTKUSEf93ET3X7sFDp40JCzXQtBbIBCQq4Dr3q32b39o/5j3vLxuR?=
- =?iso-8859-1?Q?gTYQNNlI5zSDU76Eor6TDayQGbM0Nqd6lEi4MKrO1SS9X5a+oIltR4tI7f?=
- =?iso-8859-1?Q?RbAjpCEzQm1iucZLqU3vTVlVCzdR4/qhumvm9GcqkYp6brnAOWb/20vwL1?=
- =?iso-8859-1?Q?ePN4R1YaCTk1Y9l58e1q+pvLm2KUUP0lxsKzYWkLcFMhUw+RGKGOslfVZe?=
- =?iso-8859-1?Q?sc3ZgPwr1UBurqmKnVTZNfi59OLS5z8lRwtdAluFe+tRIa/7HmEYZbCZVI?=
- =?iso-8859-1?Q?86jgnSF90iECqylS+TEyjxfFEVnmjLc=3D?=
-X-Exchange-RoutingPolicyChecked: W4E10VDg5iADnoT9//Nu1o9wdw0qnKAAGsJI1IiAYU6NtyzynbYdphr/LqVUxPTzLm7kifqyx1latRypjnWSryEp8bhUMq/82Lsnfi3GyuXu/nBLS3CrIopkDWRvU24iwk5MXT87sI+i8XEqXsZfzrjzzSM6DMSpPZcEPNf1ubqn7trcoNxC6Qk4ToapIlwUEmRmdZOMNTZD+fkcV/LLf5irKSCyT1Ghu6a+yJurC74W8saqJglJFkFAYtHmGJG8cDzCWiNiewWP8d3GvOveISelbWBxIKiIJ4+F2S8kq8A7+d7Qy6HbvPzvUsZZekGfJChypr/oV+tSRvpRToBbwA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfbb244c-67e7-44cc-6156-08df2ae68856
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2026 18:02:53.0255
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +pl0eBHR48Mhdd9/f68lpqdfOYbeT/cD1L0He27+jR1CkG0go+I7VYKiKvmxBO/yT4hUKgZx30hVt9gxxY1sIGqb2uXk4P8tzE1mB/qq1ek=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPF3FCD980E2
-X-OriginatorOrg: intel.com
+Message-Id: <5ac7a3c96c75413b180c435b15401c2f6435824eff44de5df2fd4942da603f46@mail.kernel.org>
+In-Reply-To: <20261015171917.599025-1-daniel@iogearbox.net>
+References: <20261015171917.599025-1-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Follow-up coverage to JIT instruction tests
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,memxor@gmail.com
+Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 15 Oct 2026 18:08:54 +0000 (UTC)
 
-On Fri, Oct 02, 2026 at 09:00:02PM +0200, Björn Töpel wrote:
-> xdp_build_skb_from_zc() sizes the skb head by the XSK frame size,
-> which leaves no room for skb_shared_info. With 2 KiB chunks, a
-> 1514 byte frame overwrites 48 bytes of it. Both copies also round
-> the length up to LARGEST_ALIGN, past the end of the new buffers.
-> 
-> Size the head from headroom plus data, copy exactly the data, and
-> drop frames whose head does not fit in a page.
-> 
-> Discovered by an AI code review agent. Reproduced on fbnic in QEMU
-> with AF_XDP zero-copy from the page-pool series: an XDP program that
-> adds metadata, grows the frame to its end and passes it gets UMEM
-> bytes in the skb's shared info. A new xskxceiver test,
-> XDP_PASS_FULL_FRAME, checks this and passes with the fix. The test
-> will be posted separately.
-> 
-> Fixes: 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
+--===============5756007415653613052==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Late on the ball here, but I believe this is the case Clement reported and
-we rejected it as the reproducer was OOT module.
+> selftests/bpf: Follow-up coverage to JIT instruction tests
 
-https://lore.kernel.org/bpf/20260629072300.1664622-1-clecigne@google.com/
+TL;DR:
+- New selftests may fail on s390x/powerpc: shift-count edges assume masking
+  those JITs may not do
+- calls subtest may fail to load on JITs without large stack (512-byte limit)
+- stale comment and redundant div_result() special case (nits)
 
-Should we proceed with Clement's fix then?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns.c b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
+> index dabf8a4abdfe..86fb43484f07 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/jit_insns.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
 
-> ---
->  net/core/xdp.c | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 1d679e8fd649..386240bd24c9 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -709,7 +709,7 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
->  		}
+> @@ -192,9 +251,10 @@ static const char *jmp_name(int op)
+>  /* ALU result computation, false when the operands are not valid */
+>  enum { F_ALU32 = 1, F_SIGNED = 2 };
 >  
->  		memcpy(page_address(page) + offset, skb_frag_address(frag),
-> -		       LARGEST_ALIGN(len));
-> +		       len);
->  		__skb_fill_page_desc_noacc(sinfo, i, page, offset, len);
->  
->  		tsize += truesize;
-> @@ -738,17 +738,23 @@ static noinline bool xdp_copy_frags_from_zc(struct sk_buff *skb,
->   */
->  struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
+> -static bool alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
+> +static void alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
 >  {
-> +	u32 headroom = xdp->data_meta - xdp->data_hard_start;
->  	const struct xdp_rxq_info *rxq = xdp->rxq;
->  	u32 len = xdp->data_end - xdp->data_meta;
-> -	u32 truesize = xdp->frame_sz;
->  	struct sk_buff *skb = NULL;
->  	struct page_pool *pp;
-> +	u32 truesize;
->  	int metalen;
->  	void *data;
+>  	bool is_signed = flags & F_SIGNED;
+> +	int mask = flags & F_ALU32 ? 31 : 63;
 >  
->  	if (!IS_ENABLED(CONFIG_PAGE_POOL))
->  		return NULL;
->  
-> +	/* The XSK frame size leaves no room for skb_shared_info. */
-> +	truesize = SKB_HEAD_ALIGN(headroom + len);
-> +	if (unlikely(truesize > PAGE_SIZE))
-> +		return NULL;
-> +
->  	local_lock_nested_bh(&system_page_pool.bh_lock);
->  	pp = this_cpu_read(system_page_pool.pool);
->  	data = page_pool_dev_alloc_va(pp, &truesize);
-> @@ -762,9 +768,9 @@ struct sk_buff *xdp_build_skb_from_zc(struct xdp_buff *xdp)
->  	}
->  
->  	skb_mark_for_recycle(skb);
-> -	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
-> +	skb_reserve(skb, headroom);
->  
-> -	memcpy(__skb_put(skb, len), xdp->data_meta, LARGEST_ALIGN(len));
-> +	memcpy(__skb_put(skb, len), xdp->data_meta, len);
->  
->  	metalen = xdp->data - xdp->data_meta;
->  	if (metalen > 0) {
-> -- 
-> 2.55.0
-> 
+>  	/* Narrow operands for ALU32 */
+>  	if (flags & F_ALU32) {
+
+This isn't a bug, but the comment above the enum still describes the old
+contract:
+
+/* ALU result computation, false when the operands are not valid */
+
+alu_result() now returns void and gives a defined result for every operand,
+including zero divisors, signed division by -1 and out of range shift
+counts, so it has no false return any more.  Could the comment be updated
+to say that it models the ISA result for all operands?
+
+Also, div_result() still special-cases the signed -1 divisor:
+
+static __u64 div_result(int op, __u32 flags, __s32 imm, __u64 n)
+{
+	__u64 res;
+
+	/* LLONG_MIN / -1 == LLONG_MIN, LLONG_MIN % -1 == 0, same for INT_MIN */
+	if ((flags & F_SIGNED) && imm == -1)
+		res = op == BPF_MOD ? 0 : -n;
+	else
+		alu_result(&res, n, (__s32)imm, op, flags);
+	return flags & F_ALU32 ? (__u32)res : res;
+}
+
+alu_result() now handles that case itself (-v1 for BPF_DIV, 0 for BPF_MOD),
+and the results are identical after truncation.  Is the special case in
+div_result() still needed?
+
+[ ... ]
+
+> @@ -398,6 +486,41 @@ static void test_alu_reg(void)
+
+[ ... ]
+
+> +			for (r = 0; r < (a.op == BPF_NEG ? 1 : 2); r++) {
+> +				snprintf(b.desc, sizeof(b.desc), "alu%d_%s%s_%c edges",
+> +					 f ? 32 : 64, a.flags & F_SIGNED ? "s" : "", alu_name(a.op),
+> +					 r ? 'x' : 'k');
+> +				if (a.op == BPF_NEG) {
+> +					for (i = 0; i < ARRAY_SIZE(edges); i++)
+> +						emit_alu_imm(&b, &a, edges[i], 0);
+> +					batch_flush(&b);
+> +				} else if (r) {
+> +					fill_edges(&b, &a, false, emit_alu_reg);
+> +				} else {
+> +					fill_edges(&b, &a, true, emit_alu_imm);
+> +				}
+
+Do these edge sweeps pass shift counts that not every JIT masks?
+
+fill_edges() feeds every value in edges[] (0x7f, 0xff, 0x7fffffff,
+0xffffffff, ...) as the register count for BPF_LSH, BPF_RSH and BPF_ARSH,
+and the expected result comes from alu_result(), which now masks the count
+by the width:
+
+	int mask = flags & F_ALU32 ? 31 : 63;
+	...
+	case BPF_LSH:
+		*res = v1 << (v2 & mask);
+
+That matches the interpreter in kernel/bpf/core.c
+(DST = (u32) DST OP ((u32) SRC & 31)) and instruction-set.rst.  The
+verifier, however, calls these shifts undefined
+("Shifts greater than 31 or 63 are undefined" in
+is_safe_to_compute_dst_reg_range()), and nothing masks the count before the
+JIT runs.
+
+Not every JIT masks it.  In arch/s390/net/bpf_jit_comp.c, BPF_ALU | BPF_LSH |
+BPF_X emits "sll %dst,0(%src)" (and srl for BPF_RSH).  SLL/SRL use only the
+low six bits of the address as the count, so a 32-bit shift by 32..63 gives
+0 rather than a shift by count & 31.  In arch/powerpc/net/bpf_jit_comp64.c,
+PPC_RAW_SLW has a 6-bit count for ALU32 and PPC_RAW_SLD a 7-bit count for
+ALU64.
+
+On s390x, "alu32_lsh_x edges" with in0=0x1 and in1=0x7f expects
+(u32)(1 << 31) = 0x80000000, but the JIT shifts by 63 and stores 0.
+"alu32_rsh_x edges" with in0=0x80000000 and in1=0x7f expects 1 but gets 0.
+On ppc64, "alu64_lsh_x edges" with in1=0x7f expects v1 << 63 but gets 0.
+batch_flush() would then fail ASSERT_EQ, and jit_insns/alu_edges and
+jit_insns_blinded/alu_edges fail.
+
+jit_insns is not in tools/testing/selftests/bpf/DENYLIST.s390x, the commit
+message shows only an x86 run, and nothing in the series changes a JIT.
+
+The new counts[] in test_shifts() has the same dependency:
+
+> @@ -632,8 +764,10 @@ static void test_shifts(void)
+>  		0x0123458967abcdefLL, /* dword > 0, word > 0 */
+>  	};
+>  	static const int ops[] = { BPF_LSH, BPF_RSH, BPF_ARSH };
+> +	/* Counts at and above the width and negative ones, masked by the width */
+> +	static const __s64 counts[] = { 32, 33, 63, 64, 65, 127, -1, -3, 1LL << 32 | 3 };
+>  	struct batch b;
+> -	int o, f, v, imm, k;
+> +	int o, f, v, c, imm, k;
+
+Should the series fix the s390 and powerpc JITs to mask the count first, or
+should the register count edges for shifts stay within the width until they
+do?
+
+[ ... ]
+
+> @@ -2340,6 +2522,168 @@ static void test_max_jmp(void)
+
+[ ... ]
+
+> +static void test_calls(void)
+
+[ ... ]
+
+> +			insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8);
+
+[ ... ]
+
+> +			/* Clobber the rest, sum the arguments through the deepest slot */
+> +			for (r = 0; r < 4; r++)
+> +				if ((nested ? ~mask : mask) & (1 << r))
+> +					insns[n++] = BPF_MOV64_IMM(BPF_REG_6 + r, 0);
+> +			insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -512);
+
+[ ... ]
+
+> +			fd = load_prog(insns, n, desc);
+> +			if (fd < 0)
+> +				return;
+
+Can the calls subtest load on JITs without large stack support?
+
+The main frame spills ctx to the stack:
+
+	insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8);
+
+and the deepest callee (the direct callee, or the second level one when
+nested) then writes the deepest slot:
+
+	insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -512);
+
+check_max_stack_depth_subprog() adds up the rounded frame depths along the
+call chain and compares the total with env->stack_limit.  With the JIT that
+is round_up(8, 16) + round_up(512, 16) = 528.  With the interpreter it is
+round_up(8, 32) + 512 = 544.
+
+env->stack_limit comes from bpf_prog_stack_limit():
+
+	if (prog->jit_requested && !bpf_prog_is_offloaded(prog->aux) &&
+	    bpf_jit_supports_large_stack() && bpf_jit_supports_subprog_tailcalls())
+		return MAX_BPF_STACK_JIT;
+	return MAX_BPF_STACK;	/* 512 */
+
+Only arch/x86 and arch/arm64 override the weak
+bpf_jit_supports_large_stack(), which returns false otherwise.
+BPF_PROG_TYPE_SYSCALL gets no private stack either, since
+bpf_enable_priv_stack() returns NO_PRIV_STACK for it.
+
+So on s390x, riscv64, powerpc64 and loongarch64, and on any run with
+bpf_jit_enable=0, the limit is 512 and the first case already fails with:
+
+	combined stack size of 2 calls is 528. Too large
+
+load_prog()'s ASSERT_GE(fd, 0) then fails the jit_insns/calls subtest.
+Those JITs support bpf2bpf calls and a -512 slot in a single frame, so the
+failure says nothing about them.  jit_insns is not in DENYLIST.s390x, and
+the commit message shows only an x86 run.  The later commit in the series,
+"selftests/bpf: Add JIT cBPF-related instruction tests", does not touch
+this code.
+
+Also, -512 is not the deepest slot on JITs that do have the 2048 byte
+budget, and on 512 byte JITs it cannot be combined with the caller's frame.
+The tree already has is_large_stack_supported() in testing_helpers.c and
+__load_if_large_stack()/__load_if_no_large_stack() for this situation.
+
+Could the leaf slot be picked from the available budget, for example
+-(512 - 16) when is_large_stack_supported() is false, or the subtest be
+skipped on such kernels?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38779093397
+--===============5756007415653613052==--
