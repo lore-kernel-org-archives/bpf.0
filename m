@@ -1,106 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775D32AE76
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 01:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B131C3AB5C3;
+	Thu, 15 Oct 2026 02:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792029066; cv=none; b=tBTeAGai/PBA6ESs7D7CHxjfRgmsg3HKs4u2NRJldXOIZ54l1BjL6POs838bQjcrEOtpANX+kOUCXD+wBIl6SzCbMs1mCCIJE2Z1tf4/oNvWSZyEttGIlMktSt6xCYyuZBvZ4RQMfp24Q01Fs9xuBvStPh+75qdsCy4C/RTHHRs=
+	t=1792030396; cv=none; b=SgwsYx3+JMhbAMkgL5iDBlYyDFgImtMC1DUFcTEHM/3PKmGfynD3zAWnciNb1bHDrl7tXDdxmLoTk5z4d4Ms0uQRzi4O0WO1iERtNC10nGM50Ymg7ANMT4sk3/ZZmh5T6b+i8rd8EwGNIWLxNu2F1/K7peDdki47T8G0iYkgqp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792029066; c=relaxed/simple;
-	bh=9zjS5P6OXqycVI6ZXdoP5QjFVdv5GRhQKy92tkoflhE=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=X3RCABd1pxu9PrhTJCh45cuYb7GyxPPx+8RwiXViTIeF+hOgaE5O4NygFXtg8/mtlefLtzZd95i5NVLk9nD88WA0s8XBlTkhoPabIge3etR770LPOY1utBBI0I4yFlADT7z4a8/KTqtDcqepLCu/Uik326xueMjE9Qukaw/Njhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D45BOFYM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792030396; c=relaxed/simple;
+	bh=FKA2jSXqX0dagfIFgcM698bHdO4XEa7qsIc/R/FB9Xs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=urzV9mWt0lS0w4Os2LVgEkJb+df7CuvN2VohVgFuH1zvoTXaSmEqvygpzwvawNeq3LMX9bbrvmbbeoO0EAxnHtZQoXpOykvRuskFa4cczsHQcRl2oAHhc6j1N7hsfkPyiruYvN1sa2DzNZIg6tEGJWPtK2iB0dp5JM91Qi7obFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=vD0/0J66; arc=none smtp.client-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D45BOFYM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E5C1F000C4;
-	Thu, 15 Oct 2026 01:51:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792029065;
-	bh=hIBM9jLkTrEBoCpY8GWYSY3J8towiOKzUkirGhlWbOQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D45BOFYMnDx6STXp1vax8JsssBVBgt4NOkpE4RC/YS+SA0TKCjT2IfrMrDdzVDRwF
-	 UCDGZW5y7VgY5D6P61yLAbjFpSdjcmXGeFpw7iqCVngb/X10DFuIIwhT5RRGekrI5y
-	 klZIJiXRQDX55Y40zAlU10rSq0NwvKMszKObCNJXApc1JWkVYOyhXRneXRjtvHcwZj
-	 jqQEIt7riw2B3Z3QFx+h7geDclwK0dPMX1BZ6Mt6NIIviSqLtgqxr5LlQ0TSTau4qB
-	 mdqunJzO2Qfc64dDJCHa+9y2REpK61iub2A1GUOPnACFUS4HJkNizYNSfblFa4KPsg
-	 4oQ4aFk0P7Xew==
-Message-ID: <sashiko-outbox-172124@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: Test freeing a
- struct_ops map under a running prog
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Qiliang Yuan" <odys.yuan@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261015-selftests-bpf-struct-ops-assoc-timer-v3-2-efe643d4b2a3@gmail.com>
-References: <20261015-selftests-bpf-struct-ops-assoc-timer-v3-0-efe643d4b2a3@gmail.com>
- <20261015-selftests-bpf-struct-ops-assoc-timer-v3-2-efe643d4b2a3@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Oct 2026 01:51:04 +0000
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="vD0/0J66"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1792030388; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=fmE+Ta62ZCw4xFw2n1IQJCmp7u5EmXNXXoXF3v2gT1Q=;
+	b=vD0/0J66FDnfVABLLXRqe7I4corEEyoHcHMp60VVbyftKDSsJ3lzQs9UUjvh7WsV4J0f4XwaQlembW1HsISYQyHcnATO/ttWrNSfF/AzjpoNAOLl+TAhtClvLcWuy6v3+taJxtoJbeRd6PEclJY+n4dc9XFdhqzLjJ/ofYzS3Bg=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0XCqJ087_1792030385;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XCqJ087_1792030385 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Oct 2026 10:13:06 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	puranjay@kernel.org
+Cc: eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	pulehui@huawei.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	shuah@kernel.org,
+	rgbi3307@gmail.com,
+	guoren@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Enable private stack tests for riscv64
+Date: Thu, 15 Oct 2026 10:12:37 +0800
+Message-ID: <20261015021238.5657-3-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261015021238.5657-1-cp0613@linux.alibaba.com>
+References: <20261015021238.5657-1-cp0613@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: Infinite loop in selftest on bpf_prog_test_run_opts failure
---
+The RV64 JIT now supports the private stack. Allow the existing
+verifier and struct_ops private-stack tests to run on riscv64 and add
+the expected RV64 JITed instruction patterns.
 
-commit baed672ead379b019d7064743fc22c2ee377b163
-Author: Qiliang Yuan <odys.yuan@gmail.com>
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+---
+ .../bpf/prog_tests/struct_ops_private_stack.c |  3 +-
+ .../bpf/progs/verifier_private_stack.c        | 41 ++++++++++++++++++-
+ 2 files changed, 42 insertions(+), 2 deletions(-)
 
-    selftests/bpf: Test freeing a struct_ops map under a running prog
-   =20
-    st_ops_assoc_in_timer_no_uref drops every reference to the struct_ops
-    map while a timer callback of its prog calls .test_1 through the
-    association, and checks that the callback ends up with no struct_ops.
+diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+index 2b3ec2b79091..103179ff8733 100644
+--- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
++++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+@@ -6,7 +6,8 @@
+ #include "struct_ops_private_stack_recur.skel.h"
+ #include "struct_ops_private_stack_large.skel.h"
+ 
+-#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
++#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__) || \
++	(defined(__riscv) && __riscv_xlen == 64)
+ static void test_private_stack(void)
+ {
+ 	struct struct_ops_private_stack *skel;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+index 3d9994a52464..d9cebbc7355d 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+@@ -8,7 +8,8 @@
+ /* From include/linux/filter.h */
+ #define MAX_BPF_STACK    512
+ 
+-#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
++#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
+ 
+ struct elem {
+ 	struct bpf_timer t;
+@@ -42,6 +43,14 @@ __jited("	mov	x0, #0x2a")
+ __jited("	str	x0, [x27]")
+ __jited("...")
+ __jited("	ldp	x25, x27, [sp], {{.*}}")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x10(sp)")
++__jited("...")
++__jited("	sd	a0, -0x100(s5)")
++__jited("...")
++__jited("	ld	s5, 0x10(sp)")
+ __naked void private_stack_single_prog(void)
+ {
+ 	asm volatile ("			\
+@@ -60,6 +69,10 @@ __jited("	subq	$0x8, %rsp")
+ __arch_arm64
+ __jited("	mov	x25, sp")
+ __jited("	sub	sp, sp, #0x10")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x30")
++__jited("...")
++__jited("	addi	s5, sp, 0x10")
+ __naked void no_private_stack_nested(void)
+ {
+ 	asm volatile ("			\
+@@ -113,6 +126,14 @@ __jited("	str	x0, [x27]")
+ __jited("	bl	{{.*}}")
+ __jited("...")
+ __jited("	ldp	x25, x27, [sp], {{.*}}")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x8(sp)")
++__jited("...")
++__jited("	sd	a0, -0x200(s5)")
++__jited("...")
++__jited("	ld	s5, 0x8(sp)")
+ __naked void private_stack_nested_1(void)
+ {
+ 	asm volatile ("				\
+@@ -183,6 +204,16 @@ __jited("	bl	0x{{.*}}")
+ __jited("	mov	x8, x0")
+ __jited("	mov	x8, #0x0")
+ __jited("	ldp	x25, x27, [sp], {{.*}}")
++__arch_riscv64
++__jited("func #1")
++__jited("...")
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x8(sp)")
++__jited("...")
++__jited("	sd	a0, -0x200(s5)")
++__jited("...")
++__jited("	ld	s5, 0x8(sp)")
+ __naked void private_stack_callback(void)
+ {
+ 	asm volatile ("			\
+@@ -313,6 +344,10 @@ __arch_arm64
+ __jited("	mrs	x10, TPIDR_EL{{[0-1]}}")
+ __jited("	add	x27, x27, x10")
+ __jited("	add	x25, x27, {{.*}}")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x20")
++__jited("...")
++__jited("	sd	s5, 0x8(sp)")
+ int private_stack_async_callback_1(void)
+ {
+ 	struct bpf_timer *arr_timer;
+@@ -342,6 +377,10 @@ __arch_x86_64
+ __jited("	subq	$0x100, %rsp")
+ __arch_arm64
+ __jited("	sub	sp, sp, #0x100")
++__arch_riscv64
++__jited("	addi	sp, sp, -0x120")
++__jited("...")
++__jited("	addi	s5, sp, 0x100")
+ int private_stack_async_callback_2(void)
+ {
+ 	struct bpf_timer *arr_timer;
+-- 
+2.50.1
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc=
-.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-> index 461ded7223515..987117091c676 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_assoc.c
-> @@ -157,10 +158,13 @@ static void test_st_ops_assoc_in_timer_no_uref(void)
->  	/*
->  	 * Run .test_1 by calling kfunc bpf_kfunc_multi_st_ops_test_1_prog_arg(=
-) and checks
->  	 * the return value. .test_1 will also schedule timer_cb that runs .tes=
-t_1 again.
-> -	 * timer_cb will run 500ms after syscall_prog runs, when the user space=
- no longer
-> -	 * holds a reference to st_ops_map.
-> +	 * timer_cb will run timer_ns after syscall_prog runs and, with wait_ma=
-p_free, every
-> +	 * timer_ns after that until the map is freed. With 500ms, it first run=
-s when the
-> +	 * user space no longer holds a reference to st_ops_map.
->  	 */
-> -	skel->bss->timer_ns =3D 500000000;
-> +	skel->bss->timer_ns =3D timer_ns;
-> +	skel->bss->wait_map_free =3D wait_map_free;
-> +	skel->bss->spin_loops =3D spin_loops;
->  	err =3D bpf_prog_test_run_opts(bpf_program__fd(skel->progs.syscall_prog=
-), NULL);
->  	ASSERT_OK(err, "bpf_prog_test_run_opts");
-
-[Severity: Medium]
-Will this lead to an infinite loop if bpf_prog_test_run_opts() fails?
-
-The ASSERT_OK macro merely logs errors without aborting execution.
-If bpf_prog_test_run_opts() fails to execute the test program, the code will
-continue to the loop further down in run_st_ops_assoc_in_timer_no_uref():
-
-	/* Check the return of the kfunc after timer_cb runs */
-	while (!READ_ONCE(skel->bss->timer_cb_run))
-		sched_yield();
-
-Since the program never executed, timer_cb_run will remain 0, and the test
-suite will hang indefinitely instead of failing cleanly.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261015-selftests-=
-bpf-struct-ops-assoc-timer-v3-0-efe643d4b2a3@gmail.com?part=3D2
