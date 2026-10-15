@@ -1,141 +1,154 @@
-Received: from www1.rhinostone.net (www1.rhinostone.net [95.142.169.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824C230C177;
-	Thu, 15 Oct 2026 13:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.142.169.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD6252FE49;
+	Thu, 15 Oct 2026 14:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792071055; cv=none; b=VeRE4mwbAWbQDnli/UAdNQ77AO+YuRvAbW6tI08TpIxKctNhHWYQtHOUrTzY42cer8T34ElOe/paon+ZtpU2XCoLO5hoeiDV1KOtfzj41yVUsppIZKuyHZsXsxn8Jeg2TkqpDwXOeYAHwJm7C63QLvYPUs61Qii24g8XdbZKfHo=
+	t=1792072882; cv=none; b=Oq3a9e/t6P0kE0iWcO8FZsnmDBsXBo9O2puwqq7XGhjAQyeDgrpeew7fXIeF2m/MgJtt7m62KuZNMwRlJL2AXdIcMM7Jk0SY3DIrwaUPU+AadZglT/gRv8ghTpVrSYqbd6UkubhKB8de2tGu6821n8hiTqPZXUSgXVkymTphUg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792071055; c=relaxed/simple;
-	bh=VwpyHI9FINANPgMLd6EKXXWPl6Nehgrjk8sldgoKxkc=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=TkTI3txr9NKzYVCItndk9PviwLKsDM06m2XTF9wY0SwyRqOGUHSUKl1M6Khg4B2xKtk54JCCfRITHenPW6Pa8QTTRGXPDsfgPDzQNd0jWkvn8WSLMA80buftkR34V7xeaz/vyMgtISIBx2n5wOH077OdRRac5AfEa4iBL9AeQwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rhinostone.com; spf=pass smtp.mailfrom=rhinostone.com; dkim=pass (1024-bit key) header.d=rhinostone.com header.i=@rhinostone.com header.b=xL81Ufvy; arc=none smtp.client-ip=95.142.169.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=rhinostone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rhinostone.com
+	s=arc-20240116; t=1792072882; c=relaxed/simple;
+	bh=zQL3qSUowu0rrs8+iZQGoZGjL/KOJYqqe1X0AwjWNIM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bKCeg3HWoQnGpqOmq0/EuedS1ixqG/Mbbo3y7YjrWlwRpPzI3aOEqeF3YNTI/swqnBxgkiK8gsAD4QC+BXpvCTRJ3wa2wsWhBlMttSs1rqTgiO7PWTzQEHVtdpmxBGBQ1oRlCorMHmQUZKdbM3ggCz7QkrTbHEAXv7ChE03dtLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtT5lg5R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rhinostone.com header.i=@rhinostone.com header.b="xL81Ufvy"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by www1.rhinostone.net (Postfix) with ESMTP id 8842843F3C;
-	Thu, 15 Oct 2026 15:22:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rhinostone.com;
-	 h=content-transfer-encoding:content-type:content-type:subject
-	:subject:from:from:content-language:user-agent:mime-version:date
-	:date:message-id; s=1476224331601; t=1792070574; x=1793884975;
-	 bh=VwpyHI9FINANPgMLd6EKXXWPl6Nehgrjk8sldgoKxkc=; b=xL81UfvyTUc4
-	Srx5TBF+v8UbYKYYR3720ZO4rgnBja8lsn9JueJT9RZJ6IjLJBSWEAmfxw5OE/6W
-	vEWMgR0gnE77IN1q4qJHUl83Ils3p+7cZx2qNYviqNgZOj6HE2wANh6pOMGM3ncb
-	5rDmf8mcqGMeqaYfdg+Atxj+Ve8ZDmY=
-X-Virus-Scanned: Debian amavis at www1.rhinostone.net
-Received: from www1.rhinostone.net ([127.0.0.1])
- by localhost (www1.rhinostone.net [127.0.0.1]) (amavis, port 10026) with LMTP
- id LdAlKxSdL4wc; Thu, 15 Oct 2026 15:22:54 +0200 (CEST)
-Received: from [IPV6:2605:59c0:1e76:6110:c969:a728:bdd4:1496] (unknown [IPv6:2605:59c0:1e76:6110:c969:a728:bdd4:1496])
-	(Authenticated sender: m.etouman@rhinostone.com)
-	by www1.rhinostone.net (Postfix) with ESMTPA id 48A5643F34;
-	Thu, 15 Oct 2026 15:22:53 +0200 (CEST)
-Message-ID: <d8f91886-6b07-4dfb-8d9f-a1424fe8c572@rhinostone.com>
-Date: Thu, 15 Oct 2026 14:22:51 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtT5lg5R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 071241F000C5;
+	Thu, 15 Oct 2026 14:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792072880;
+	bh=klUThUGZ1hiPn8RzG4E3smXlt9xowrUvd+yKdXtjHsw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=mtT5lg5R6WFY8oSxtTTjl2OW7U8LwGFcmqn2Qp+jo2BGmt6+cx1krXuS0BAWSIoVn
+	 QZVoNp+4l+OCPvKYnXh5DmYLhZM4se+u0H9MJHpK04bdJVBRAtG8MMZvHWvo5aEn9W
+	 3k6eWsLtr7NasHsJTqXHQkU6z2WeZiYl9LiVWK8z5lrWn3lRJIG2wZZpl89M1+rSkd
+	 +QaYzJMlGbu7OHLxpsjgCSnm3SdVi5zdnxOD5XhGEUNZv0KV9560F3LL6I1FHI15q2
+	 3HxWdzUNxwtLjdeL8BTBnA4mnG6l2XW+gru8HL3+0IJzkjrbPz3yr4pjD5jtnkGoXc
+	 fM5F1EkF5dX8g==
+Message-ID: <a3bd583f-f942-4636-8057-593357f10ec0@kernel.org>
+Date: Thu, 15 Oct 2026 16:01:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, fr
-To: stable@vger.kernel.org
-Cc: Mattia Meleleo <mattia.meleleo@coralogix.com>,
- John Fastabend <john.fastabend@gmail.com>,
- "Jakub Sitnicki," <jakub@cloudflare.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
- netdev@vger.kernel.org
-From: Martin Luther ETOUMAN <m.etouman@rhinostone.com>
-Subject: Request: 04af4efde58a ("bpf, sockmap: Account for receive queue in
- FIONREAD without a verdict program") for 6.12.y
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net-next 3/4] selftests: mptcp: convert iptables to
+ nftables for mptcp_sockopt.sh
+Content-Language: fr
+To: netdev-bot+sashiko@kernel.org
+Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ cpaasch@openai.com, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kernel@vger.kernel.org, liuhangbin@kylinos.cn, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ Hangbin Liu <hangbin.liu@linux.dev>
+References: <20261013-net-next-mptcp-misc-feat-7-4-part2-v1-3-1181e5d2fda4@kernel.org>
+ <179201140828.434549.10971881913720826839@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <179201140828.434549.10971881913720826839@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 14/10/2026 22:56, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in case
+> you want to address the nit picks below when you respin.
+> 
+> Low priority / nit picks for your consideration:
+> 
+> - [Low] The commit message does not mention two new runtime requirements
+>   added by this patch.
 
-Please consider commit 04af4efde58a ("bpf, sockmap: Account for receive
-queue in FIONREAD without a verdict program"), merged for v7.2, for the
-6.12.y stable tree.
+(...)
 
-It fixes 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap"), which
-reached 6.12.y in 6.12.75 (as c2681ce178a2). Since then, ioctl(FIONREAD)
-on a TCP socket that sits in a sockhash with no stream or skb verdict
-program returns 0 while data waits in sk_receive_queue. 04af4efde58a
-carries a Fixes: tag for 929e30f93125 but no Cc: stable, and it is in
-neither 6.12.113 nor the current queue-6.12.
+>> diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+>> index e850a87429b61..ef2738720e249 100755
+>> --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+>> +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+> 
+> [ ... ]
+> 
+>> @@ -105,32 +109,31 @@ cleanup()
+>>  
+>>  mptcp_lib_check_mptcp
+>>  mptcp_lib_check_kallsyms
+>> -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
+>> +mptcp_lib_check_tools ip nft jq
+> 
+> [Severity: Low]
+> This isn't a bug, but should the commit message list the new runtime
+> requirements? The script now needs jq and an nft built with JSON support
+> (nft -j list ruleset). The shared mptcp_lib_check_tools() helper in
+> mptcp_lib.sh also gets new "nft" and "jq" cases.
+> 
+> The commit message only says:
+> 
+>     After conversion, the generated output matches the original
+>     iptables/ip6tables behavior.
+> 
+> The reason for using JSON and jq appears only in the v2 notes below the
+> --- line, and those notes are dropped when the patch is applied.
+> 
+> This check runs at top level, before any subtest. So a system that has
+> iptables but no jq, or an nft without JSON support, now skips the whole
+> script. That includes do_mptcp_sockopt_tests and do_tcpinq_tests, which
+> don't use netfilter.
+> 
+> Could the commit message mention the jq and nft JSON dependencies and the
+> mptcp_lib.sh change?
 
-How we hit it: a Kubernetes cluster running Calico v3.30 with sidecar
-acceleration enabled (FelixConfiguration sidecarAccelerationEnabled:
-true). Calico's sock_ops program puts every established TCP socket of a
-local pod in a sockhash; only an sk_msg program is attached, no verdict
-program. On Debian's 6.12.111, nginx 1.29.8 proxying a plain-HTTP
-upstream stops partway through responses of a few hundred KB: its
-FIONREAD reads on the upstream socket return 0 while the receive queue
-still holds data, and no new epoll event comes.
+nft is implicit. 'jq' is used in many other selftests. No need to
+re-spin (but if we do, yes we can mention it just to please Clashiko).
 
-Measured with one nginx pod on one node (6.12.111), 8 fetches of a
-250577-byte file per path:
-   - upstream socket in Calico's sockhash: 0 of 8 complete; nginx-debug
-     logs 23 FIONREAD results on it, all 0;
-   - upstream over 127.0.0.1 (not in the sockhash): 8 of 8 complete.
-The same test on 6.12.69 completes 8 of 8 on both paths, and on 6.12.111
-with sidecar acceleration turned off (no sockhash) it completes 8 of 8
-on both paths.
-
-On applying it: against v6.12.113 the net/ipv4/tcp_bpf.c hunks apply
-(offset 1 line), but the include/linux/skmsg.h hunk does not apply as is
-(it fails at line 551), so the backport needs an adjustment. We have not
-built or tested a backported patch.
-
-The patch series:
-https://lore.kernel.org/bpf/20260708-fionread-no-verdict-v3-1-b4ee31b3af53@coralogix.com
-
-Thanks,
-Martin Luther ETOUMAN NDAMBWE
-Hello,
-
-Please consider commit 04af4efde58a ("bpf, sockmap: Account for receive
-queue in FIONREAD without a verdict program"), merged for v7.2, for the
-6.12.y stable tree.
-
-It fixes 929e30f93125 ("bpf, sockmap: Fix FIONREAD for sockmap"), which
-reached 6.12.y in 6.12.75 (as c2681ce178a2). Since then, ioctl(FIONREAD)
-on a TCP socket that sits in a sockhash with no stream or skb verdict
-program returns 0 while data waits in sk_receive_queue. 04af4efde58a
-carries a Fixes: tag for 929e30f93125 but no Cc: stable, and it is in
-neither 6.12.113 nor the current queue-6.12.
-
-How we hit it: a Kubernetes cluster running Calico v3.30 with sidecar
-acceleration enabled (FelixConfiguration sidecarAccelerationEnabled:
-true). Calico's sock_ops program puts every established TCP socket of a
-local pod in a sockhash; only an sk_msg program is attached, no verdict
-program. On Debian's 6.12.111, nginx 1.29.8 proxying a plain-HTTP
-upstream stops partway through responses of a few hundred KB: its
-FIONREAD reads on the upstream socket return 0 while the receive queue
-still holds data, and no new epoll event comes.
-
-Measured with one nginx pod on one node (6.12.111), 8 fetches of a
-250577-byte file per path:
-   - upstream socket in Calico's sockhash: 0 of 8 complete; nginx-debug
-     logs 23 FIONREAD results on it, all 0;
-   - upstream over 127.0.0.1 (not in the sockhash): 8 of 8 complete.
-The same test on 6.12.69 completes 8 of 8 on both paths, and on 6.12.111
-with sidecar acceleration turned off (no sockhash) it completes 8 of 8
-on both paths.
-
-On applying it: against v6.12.113 the net/ipv4/tcp_bpf.c hunks apply
-(offset 1 line), but the include/linux/skmsg.h hunk does not apply as is
-(it fails at line 551), so the backport needs an adjustment. We have not
-built or tested a backported patch.
-
-The patch series:
-https://lore.kernel.org/bpf/20260708-fionread-no-verdict-v3-1-b4ee31b3af53@coralogix.com
-
-Thanks,
-Martin Luther ETOUMAN NDAMBWE
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
