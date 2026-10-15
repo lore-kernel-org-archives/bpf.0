@@ -1,64 +1,64 @@
-Received: from mail-oi2-f10.google.com (mail-oi2-f10.google.com [74.125.231.202])
+Received: from mail-oo2-f6.google.com (mail-oo2-f6.google.com [74.125.231.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26314F798D
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 23:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF4F4FE2F5
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 23:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792107714; cv=none; b=GXjMmZoJtyhC+PkY5AWMhZmLya16EbqdKzYGq+VVxwpShIUV+Z5CiCZpCc87bHb9884PgLA2Fb2UeGuV72lp/SzPrU5rDug7IuYTkExxOWO56Q2o+TbpRbDGKuYFJM26mgpQRp7gCXLJ8rIW1c9p8eoUV7X7p9l63T65ORSRBaA=
+	t=1792107715; cv=none; b=cO+u3a6GHiMyfFT2R3gM85Jhz35jSdEzJBB/HP5qjMELxmhR1k/jh3jm3xJYstUsoRLQXGbx32nV3eWk+597+vtZMDv7z6BpUwSrHCvdML/GolZj7Zwj5DwU9Gd3WmJRPGl5ei97j+QddjwKG4nj92RkgWpTL1hv1MSVqTc7ydc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792107714; c=relaxed/simple;
-	bh=ZVI5vbG0AdzPFy3fTZmw9XjfwjRRLmZhJC4PgubwiL4=;
+	s=arc-20240116; t=1792107715; c=relaxed/simple;
+	bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n+b5qJ7USFe8+wlzcB2MQdUPQ04+BBMFeV1lNtkKTz0kQnmam0Kx5ZV7qMMcG8PH3AVIVB04Isaz7um69k4ySlTe7VLv3aFRwPyaYuI30e6M56cv5nDZWYJ3e9wOzy3yQvJjsd2kpVfsTGivGUO4C1OjaL6R+BM28ThWohmvjtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YJ1fgeXx; arc=none smtp.client-ip=74.125.231.202
+	 MIME-Version; b=kEYR1suySxUgAHMmnfL0rzxqDu51VPu3l93dOWK2rlNdwqts4Oa/B7qbk2akVz4B09kbwNCoVHJfP2NGM2WSzGF4hJ8XO7TBUslLijnLeOCMNC+nOC+dkkyRA7QxREsweThsj5n5OxGSHzA0ZwcW5BeoUUotmWvG0OGVvbeh3w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PlZHqvJb; arc=none smtp.client-ip=74.125.231.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YJ1fgeXx"
-Received: by mail-oi2-f10.google.com with SMTP id 5614622812f47-515166dfd77so2539008b6e.1
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 16:41:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PlZHqvJb"
+Received: by mail-oo2-f6.google.com with SMTP id 006d021491bc7-6d7c77aa543so102068eaf.0
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 16:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792107711; x=1792712511; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792107709; x=1792712509; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=q3ki+DporVcLjTMz8gD0IU9BqW7MtInlmHHXIcWJElA=;
-        b=YJ1fgeXxRbaPXmLyivxPQNbHwERcGfPcrNRcuIk3MY6v4vqoTpTuOXq4V9hOCAJyDv
-         oTLkbfhUMwbH2wAzLbkhnVt8O2jHkJpzVExW0gVAUjXG+rjEyk/hOfGnBGh+TTgVJdV5
-         ST4nEMUZOrwuDsR5CHNystu1WZBP5zJ0U7GTQ2lrmFbiRcXsiABLLLUXxrON1Bg2ppcv
-         D+OpmuIha0j0RqYPn4eWlpXre/4C836YdWV1mlr1XlTcnyxR/kp//u+4smJK5oL6CsSf
-         z1n55VW76D8AkyrK9YueqQSvFLQioK7C8oUUMwlammTOQojCg+QrT4e9IZHudCFh8i0t
-         gW/g==
+        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
+        b=PlZHqvJblVVVJrlNQ73J5D4lh0ORVuVXIjCKG7xKHVHficsyXhfCVXqj+1S1i0eTuQ
+         yJA9CHXz7hDZRlRXL1ceSzmAToTyq18X/akRyuxrGFkcATIe0JWyqo4HZ69n/PPedyQh
+         TXuQ6xL4ayVH/cQCvKi4Lat4w1bbJsrpL2BVCEBPSyVtZ6fyyX2O5TUocq6LOL3QyzBj
+         +WOJ9Ur3BrKSHd+LoBN/0MeSyEMj+uiyyYy9wEYiM0I4L+5qzuC3SxEbXHoD9fff/lih
+         4Y17sRBnsXtt8HlHdWBgqRdOyTMkW8b3XUjQLYONYOMAd3g0KNCIRrMBcxFRAnynKKPY
+         AjTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792107711; x=1792712511;
+        d=1e100.net; s=20260707; t=1792107709; x=1792712509;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=q3ki+DporVcLjTMz8gD0IU9BqW7MtInlmHHXIcWJElA=;
-        b=ASGpHDk73rcra8dPoSGHTDeLOUQ1eFEO/9gZ3aLpoqVVawAMQC8UFlN/vsNDuP718l
-         Otm4Pgd8rMwM8A1lkJoziEjwTQNslrLQDfIdKL4K3CiYmp0m0MUrS6gtCEq+uBNf2EhV
-         7UjRTBN6CNZ6pMqEiPQN4eeKBivEsZkeU+ludbSTzwf2OKl4aEHTDn5UkbbitVo9z2Ot
-         JsqiOTrSxyZrx+0voSc7mU4iNJ1atBR43SLalqTM6WQcZlNdF7F+k6MLeHLkz1Bwihui
-         R28//9JjL4J6TXEc6haw2qNuZXFu6YgeOH11IRGOFp/5Ai3llTkgmBRbOkHPZ+3sra5+
-         CYxg==
-X-Gm-Message-State: AFq9FYLKPEoprkQAjrjsox3o8ZBKZ/ef3O2Lk03hKPh5Y3TV6l3N+OQt
-	8R7sL7Duz+hXT1Cky6mKPtO1KFQF4xdsPCTtQ4SMTEZHREpnSDk3ixsYu2c21/uIbYE=
-X-Gm-Gg: AYBFou0i9+1K8/80saHYomTr7EVZxV7lUaCml4vDvIdPIISJqxV+SlkvtdIof2ppsF2
-	3ksIceiZfHqzf4S07wcKh9FwMDE5AXqRqjVp3dbnIF8rPFlo4wjAKX6Dr1MbvrQT7nEfI/fhoQT
-	rbl3qd4h5EbKdK9Pkl8H5Iu6qAQosTtCrvEpJoYs/VMI0cPMdpz/g459a43luxHKA/+kGXyfIlc
-	c1tgwgZ5a81yfZuY/08MI8af2S5tnFKfveKofVZfmBv61PgWgW3epr4SRu529MFlFTUgbGJzJsa
-	6kLDhKJ/NUyBFKXFoEuxNXC9iDHKLqVoGhwrjHrqrGxsGg3MDKlKGv/94J8aRKnlLYGCH+9wITL
-	yyvkvcarSaw4h1wdom/197bIoJN4J6ud15DzoS7bQiUi/DB9HCERFPXYyIN2vZyCQORiWOGPw4a
-	LUH4u1EB1R5S/BUL0jVlLwbexCttB+idauygyEYyz3i9Z5b4np+KdxhN4mpTxaulOStSYLxft4c
-	R2mthSMumfObFxpIFmVOGLfXuV49nsaNckhRoee/DDZ2oG+DixiFMzjeliGVQFBYhssGutnJdzD
-	nwg5
-X-Received: by 2002:a05:6808:23ca:b0:4d6:92b3:5c88 with SMTP id 5614622812f47-50c5b27c212mr22306610b6e.64.1792107711464;
-        Thu, 15 Oct 2026 16:41:51 -0700 (PDT)
+        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
+        b=EcD83tmZfhyY4US2GNAiXaQNpTTLybesbddsrx8yRbtsHr2tptHQKksku72Wlp2lH2
+         qlA5/nAUBKoS7pCJms7CqoXtHQYQGDGFcAR9FfCbWjYRKyQ6AwdDGajNgXs9+Vy7l2RW
+         htcFNXYESrBDxeKI1/ZkMwN1CuZP/w1AxQ2K6Fu+8oH5lTBxE7S1lCpg6QYyXgx7Bpzk
+         u7mqbMTmhhDz6PTkmXshS9wpXKqBooei1SRky4q2vILtzvf9mc2I8U5chHuguUGuGf+a
+         4hQl5Sv8lQ5xeGvn78VCbrLiOrHXbukP655+o8Cew2dmmMjrGq1lr7wQ6IkhrhihU5CI
+         Jrow==
+X-Gm-Message-State: AFq9FYK1jOqcJaFcPIZgLCMvi0dCo+M545ayC41JxqtZBGO1L/r0mG52
+	5ME1V5P9wpeVxWOQQRMX/8fmTw7h0sAlBZrAUe9b6Z2Sb3Uyzx3Hj4M4J504nbESh2Q=
+X-Gm-Gg: AYBFou1i8jOoeRg83DUnOcdC6d6unYMRP6dNmDP171+d0rRGIvbmJFyngbiBaEG1uuo
+	WMeHrenjIr5Rju453hgCUp7kHduw1nSsmflB9H+7dNyb9OldV1mtqC6cSpSpgqCcEp8jdFP7+nU
+	Xws3Kz6kQMxRf2LVBexd90I0Lh7VpMr5WowPrVdXnYtk2QgoXdNOUJpPuUrIu215gWmQJuAXOxx
+	NSftC+3G8i6CIfYLrD9A3yftzeMAcDxC2x9BLo+vZ4/ZfushdOKUB3JE3kiQW96bb8M5LhXh8Oe
+	YM9HyTOzvDFaLdz33YlzLGDAAJUAXUHPtWt1rdY9VjDBgKCLSvcl4rWOe3RS0wdG48sPA0yMot9
+	oUWxvdF/gfCstm0zSg+R4mzhU86S49UMudt5fwB9LScppxaNJoftwKloSiw9FcuYfRegvw6EqM9
+	dGuaAjCev7uhTMozgqEc6xB8PTxV1GdMFa/mM614TQBcf39jX8uJ8pPhkGF128U2st4WmB4PgzH
+	JFBRI0VRfmsrZ6OjHDUKqRVs/w4sVRo+REV+vi8tr6D7N0uUwRfv6Uw2Rhekv/NnV3b9appmQBy
+	p4OA
+X-Received: by 2002:a05:6820:f006:b0:6f4:fb85:5e42 with SMTP id 006d021491bc7-7010e4edc6emr987299eaf.21.1792107708924;
+        Thu, 15 Oct 2026 16:41:48 -0700 (PDT)
 Received: from localhost ([2a03:2880:10ff:1::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-5388c16d862sm269240b6e.9.2026.10.15.16.41.49
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-70190e07568sm485154eaf.14.2026.10.15.16.41.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 16:41:50 -0700 (PDT)
+        Thu, 15 Oct 2026 16:41:47 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 06/15] bpf: Recognize __nullable on pointer members of kernel structs
-Date: Fri, 16 Oct 2026 01:41:12 +0200
-Message-ID: <20261015234125.3152346-7-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 05/15] compiler_types: Add __arena and __nullable BTF type tag qualifiers
+Date: Fri, 16 Oct 2026 01:41:11 +0200
+Message-ID: <20261015234125.3152346-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261015234125.3152346-1-memxor@gmail.com>
 References: <20261015234125.3152346-1-memxor@gmail.com>
@@ -82,126 +82,56 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4524; h=from:subject; bh=ZVI5vbG0AdzPFy3fTZmw9XjfwjRRLmZhJC4PgubwiL4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeti3OuY+1M9z6xRtlKsSD7ZeG/7cqfLWyX6c7+yPpv5Jqgg /+erjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExk2XOG/47S7H+3/Dn2M3G3sbiWgX uZ9jXz3XETd8mxzDpYMm96jSUjw42lm/fHuOmyz/vq+ayPxfdP5xotTlmD7HkiZ0o1ed5P4QEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2184; h=from:subject; bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeti3OuzP6tf99dZJmpz6723jBFzSp0UP/Vof1hFSuKSm7fW zZfrKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQuLGVkeNPmwsjyhKk7o619zqYDFz 9PKRM+EbLfXiIrY2Ye8+63FxkZXsy8Ym730oDt5mP1ufLXl3d7mT7gLD118Epcn4XciqRH/AA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A pointer member of a kernel struct that the verifier derives as trusted
-or RCU-protected is assumed to be non-NULL, so a load through it is a
-plain dereference. The BTF_TYPE_SAFE_*_OR_NULL lists exist for members
-known to be NULL at times, but they live in the verifier and have to be
-extended by hand.
+Kernel structures increasingly want to publish pointers into a BPF arena
+to the BPF programs they are shared with, and some pointer members that
+reach programs as trusted are legitimately NULL at times. Neither can be
+expressed today: a pointer member reaches the program as an ordinary
+kernel pointer, and sched_ext resorts to a plain u64 holding a
+pre-translated arena address that programs cast before use.
 
-Teach btf_struct_walk() to report the "nullable" BTF type tag on a
-pointer member as PTR_MAYBE_NULL. The tag combines with any other tag
-on the member; it only says that the pointer may be NULL. The verifier
-keeps the flag whatever the pointer the member is read through, so a
-program has to check such a pointer before dereferencing it or passing
-it on, as the tag says. A tagged member of an existing struct thus asks
-every program that reads it for a check, including one that reads it
-through a probed pointer and relied on a NULL dereference reading as
-zero.
-
-The next patch uses the tag on __arena members to decide whether the
-injected address translation has to preserve NULL.
+Define __arena and __nullable as BTF type tags, the way __user, __rcu
+and __percpu already are, so that tagged members survive into vmlinux
+and module BTF and the verifier can act on them. To kernel code and to
+sparse the qualifiers are empty: the pointers are ordinary kernel
+pointers. The verifier side follows in the next patches.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/btf.c      | 21 ++++++++++++++++++---
- kernel/bpf/verifier.c |  6 ++++--
- 2 files changed, 22 insertions(+), 5 deletions(-)
+ include/linux/compiler_types.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 64c78434fa05..3c01618694a4 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3557,7 +3557,8 @@ static int btf_type_tag_walk(const struct btf *btf,
- 	return 0;
- }
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index c5921f139007..e97ee2d4d1df 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -51,6 +51,8 @@
+ # define __iomem	__attribute__((noderef, address_space(__iomem)))
+ # define __percpu	__attribute__((noderef, address_space(__percpu)))
+ # define __rcu		__attribute__((noderef, address_space(__rcu)))
++# define __arena
++# define __nullable
+ static inline void __chk_user_ptr(const volatile void __user *ptr) { }
+ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ /* other */
+@@ -70,6 +72,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ # define __iomem
+ # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
+ # define __rcu		BTF_TYPE_TAG(rcu)
++/*
++ * Qualifiers for the BPF verifier rather than address spaces: __arena marks
++ * a pointer into a BPF arena, __nullable a pointer that may be NULL. They
++ * reach BPF programs as BTF type tags on kernel struct members; to kernel
++ * code the pointers are ordinary.
++ */
++# define __arena	BTF_TYPE_TAG(arena)
++# define __nullable	BTF_TYPE_TAG(nullable)
  
--bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type *t)
-+/* Whether the pointee of pointer type @t carries the type tag @name */
-+static bool btf_ptr_has_type_tag(const struct btf *btf, const struct btf_type *t, const char *name)
- {
- 	if (!btf_type_is_ptr(t))
- 		return false;
-@@ -3566,13 +3567,18 @@ bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type *t)
- 	     t = btf_type_by_id(btf, t->type)) {
- 		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
- 			continue;
--		if (!strcmp(__btf_name_by_offset(btf, t->name_off), "arena"))
-+		if (!strcmp(__btf_name_by_offset(btf, t->name_off), name))
- 			return true;
- 	}
- 
- 	return false;
- }
- 
-+bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type *t)
-+{
-+	return btf_ptr_has_type_tag(btf, t, "arena");
-+}
-+
- static int btf_find_kptr(const struct btf *btf, const struct btf_type *t,
- 			 u32 off, int sz, struct btf_field_info *info, u32 field_mask)
- {
-@@ -7961,6 +7967,14 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 			id = ctx.id;
- 			stype = ctx.t;
- 
-+			/*
-+			 * __nullable combines with any of the above: it only says
-+			 * that the pointer may be NULL, and every result of the
-+			 * walk keeps that.
-+			 */
-+			if (btf_ptr_has_type_tag(btf, mtype, "nullable"))
-+				tmp_flag |= PTR_MAYBE_NULL;
-+
- 			if (btf_type_is_struct(stype)) {
- 				*next_btf_id = id;
- 				*flag |= tmp_flag;
-@@ -7969,6 +7983,7 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
- 				return WALK_PTR;
- 			}
- 
-+			*flag |= tmp_flag & PTR_MAYBE_NULL;
- 			return WALK_PTR_UNTRUSTED;
- 		}
- 
-@@ -8060,7 +8075,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 			ret = PTR_TO_BTF_ID;
- 			goto check_variable_offset;
- 		case WALK_PTR_UNTRUSTED:
--			*flag = MEM_RDONLY | PTR_UNTRUSTED;
-+			*flag = MEM_RDONLY | PTR_UNTRUSTED | (tmp_flag & PTR_MAYBE_NULL);
- 			ret = PTR_TO_MEM;
- 			goto check_variable_offset;
- 		case WALK_SCALAR:
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f143b1b18b5c..b4d9ad3ca966 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2497,6 +2497,8 @@ static int mark_btf_ld_reg(struct bpf_verifier_env *env,
- 		mark_reg_known_zero(env, regs, regno);
- 		regs[regno].type = PTR_TO_MEM | flag;
- 		regs[regno].mem_size = 0;
-+		if (type_may_be_null(flag))
-+			regs[regno].id = ++env->id_gen;
- 		return 0;
- 	default:
- 		verifier_bug(env, "unexpected reg_type %d in %s\n", reg_type, __func__);
-@@ -6712,9 +6714,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 			 * aggressively mark as untrusted otherwise such
- 			 * pointers will be plain PTR_TO_BTF_ID without flags
- 			 * and will be allowed to be passed into helpers for
--			 * compat reasons.
-+			 * compat reasons. A __nullable member stays nullable.
- 			 */
--			flag = PTR_UNTRUSTED;
-+			flag = PTR_UNTRUSTED | (flag & PTR_MAYBE_NULL);
- 		}
- 	} else {
- 		/* Old compat. Deprecated */
+ # define __chk_user_ptr(x)	(void)0
+ # define __chk_io_ptr(x)	(void)0
 -- 
 2.53.0-Meta
 
