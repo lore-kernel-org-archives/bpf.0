@@ -1,64 +1,64 @@
-Received: from mail-oo2-f6.google.com (mail-oo2-f6.google.com [74.125.231.134])
+Received: from mail-oa2-f9.google.com (mail-oa2-f9.google.com [74.125.231.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF4F4FE2F5
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 23:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4731E509EFB
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 23:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792107715; cv=none; b=cO+u3a6GHiMyfFT2R3gM85Jhz35jSdEzJBB/HP5qjMELxmhR1k/jh3jm3xJYstUsoRLQXGbx32nV3eWk+597+vtZMDv7z6BpUwSrHCvdML/GolZj7Zwj5DwU9Gd3WmJRPGl5ei97j+QddjwKG4nj92RkgWpTL1hv1MSVqTc7ydc=
+	t=1792107717; cv=none; b=hUad72IASCSZoBFX5VIGZ0RYrYM+313q2vZtAbnPgUr6OjfB5iktN7fnqTs0TuOP+6gOtTELPrbLBT0iPyZf5vyeNVQIKqjkx7BFGDRNc7Nxzo0FczT9kRclEPGt7kmFjJ3QlM/PKDhuDGtHFlhDiWBHOnIv+bQoAqfPZP3VLHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792107715; c=relaxed/simple;
-	bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=;
+	s=arc-20240116; t=1792107717; c=relaxed/simple;
+	bh=C76DSz0kyLViuhN3zhLUgUhWf6198NbRXmomIz+3yYw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kEYR1suySxUgAHMmnfL0rzxqDu51VPu3l93dOWK2rlNdwqts4Oa/B7qbk2akVz4B09kbwNCoVHJfP2NGM2WSzGF4hJ8XO7TBUslLijnLeOCMNC+nOC+dkkyRA7QxREsweThsj5n5OxGSHzA0ZwcW5BeoUUotmWvG0OGVvbeh3w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PlZHqvJb; arc=none smtp.client-ip=74.125.231.134
+	 MIME-Version; b=qnlRCOtRbWQfYPxeGd4bOuCS92Wqsj97NjJsbPPUOnRcC6Hc74GOmVgsACXxagNmuZTjTyXnDf/WTYOVpGR0DKaumOqtSUNPQRmOYPLQQijbTsmFAdHudLpTecafZ3QVxn7m9LOWjCWPplGTZNVEoyAHzIHdsiyThbpHBlCct+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vd99SaXF; arc=none smtp.client-ip=74.125.231.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PlZHqvJb"
-Received: by mail-oo2-f6.google.com with SMTP id 006d021491bc7-6d7c77aa543so102068eaf.0
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 16:41:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vd99SaXF"
+Received: by mail-oa2-f9.google.com with SMTP id 586e51a60fabf-47bb3ddaaf6so2667637fac.0
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 16:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792107709; x=1792712509; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792107714; x=1792712514; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
-        b=PlZHqvJblVVVJrlNQ73J5D4lh0ORVuVXIjCKG7xKHVHficsyXhfCVXqj+1S1i0eTuQ
-         yJA9CHXz7hDZRlRXL1ceSzmAToTyq18X/akRyuxrGFkcATIe0JWyqo4HZ69n/PPedyQh
-         TXuQ6xL4ayVH/cQCvKi4Lat4w1bbJsrpL2BVCEBPSyVtZ6fyyX2O5TUocq6LOL3QyzBj
-         +WOJ9Ur3BrKSHd+LoBN/0MeSyEMj+uiyyYy9wEYiM0I4L+5qzuC3SxEbXHoD9fff/lih
-         4Y17sRBnsXtt8HlHdWBgqRdOyTMkW8b3XUjQLYONYOMAd3g0KNCIRrMBcxFRAnynKKPY
-         AjTw==
+        bh=1vM0bJkC5QSknrzOghn7pYec2lg8rcy6db6rk8aeirc=;
+        b=Vd99SaXFEoaL5JHghOZimrjqPwmA26lOrI8HKexY1A+y3dFPqZ0JibRZ97sRhhRw1O
+         f4wVnyXLPZ3oCw2N3rnP3DY4VS2PnUrGtaf4MnmJlr0xeeT+Wtf/efuLgnisS4OIsq5Y
+         316UIzzbsYkXR+lwJIM/oHd1bPyihLdnGL2JZCJLeDykxsFSoT7pPzRvv6kjATcZ6ON9
+         nK7qP3sN6Wb0HuM51iY6gfBEUwiRttUSzO3EX5g3dY1eedaVre99oeCyK0lchQO2CdKg
+         aYXf6nPqJZOT0L4E0jFsHDGy7/XIdaY0MW1ssNpCZta69jkL+7AJcNrvDtEnZsLnHVI/
+         JehA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792107709; x=1792712509;
+        d=1e100.net; s=20260707; t=1792107714; x=1792712514;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2+xEAs8Cym1k7nPLCuR91MjLbRNFmHcnKdg4A6RMQbg=;
-        b=EcD83tmZfhyY4US2GNAiXaQNpTTLybesbddsrx8yRbtsHr2tptHQKksku72Wlp2lH2
-         qlA5/nAUBKoS7pCJms7CqoXtHQYQGDGFcAR9FfCbWjYRKyQ6AwdDGajNgXs9+Vy7l2RW
-         htcFNXYESrBDxeKI1/ZkMwN1CuZP/w1AxQ2K6Fu+8oH5lTBxE7S1lCpg6QYyXgx7Bpzk
-         u7mqbMTmhhDz6PTkmXshS9wpXKqBooei1SRky4q2vILtzvf9mc2I8U5chHuguUGuGf+a
-         4hQl5Sv8lQ5xeGvn78VCbrLiOrHXbukP655+o8Cew2dmmMjrGq1lr7wQ6IkhrhihU5CI
-         Jrow==
-X-Gm-Message-State: AFq9FYK1jOqcJaFcPIZgLCMvi0dCo+M545ayC41JxqtZBGO1L/r0mG52
-	5ME1V5P9wpeVxWOQQRMX/8fmTw7h0sAlBZrAUe9b6Z2Sb3Uyzx3Hj4M4J504nbESh2Q=
-X-Gm-Gg: AYBFou1i8jOoeRg83DUnOcdC6d6unYMRP6dNmDP171+d0rRGIvbmJFyngbiBaEG1uuo
-	WMeHrenjIr5Rju453hgCUp7kHduw1nSsmflB9H+7dNyb9OldV1mtqC6cSpSpgqCcEp8jdFP7+nU
-	Xws3Kz6kQMxRf2LVBexd90I0Lh7VpMr5WowPrVdXnYtk2QgoXdNOUJpPuUrIu215gWmQJuAXOxx
-	NSftC+3G8i6CIfYLrD9A3yftzeMAcDxC2x9BLo+vZ4/ZfushdOKUB3JE3kiQW96bb8M5LhXh8Oe
-	YM9HyTOzvDFaLdz33YlzLGDAAJUAXUHPtWt1rdY9VjDBgKCLSvcl4rWOe3RS0wdG48sPA0yMot9
-	oUWxvdF/gfCstm0zSg+R4mzhU86S49UMudt5fwB9LScppxaNJoftwKloSiw9FcuYfRegvw6EqM9
-	dGuaAjCev7uhTMozgqEc6xB8PTxV1GdMFa/mM614TQBcf39jX8uJ8pPhkGF128U2st4WmB4PgzH
-	JFBRI0VRfmsrZ6OjHDUKqRVs/w4sVRo+REV+vi8tr6D7N0uUwRfv6Uw2Rhekv/NnV3b9appmQBy
-	p4OA
-X-Received: by 2002:a05:6820:f006:b0:6f4:fb85:5e42 with SMTP id 006d021491bc7-7010e4edc6emr987299eaf.21.1792107708924;
-        Thu, 15 Oct 2026 16:41:48 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:1::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-70190e07568sm485154eaf.14.2026.10.15.16.41.46
+        bh=1vM0bJkC5QSknrzOghn7pYec2lg8rcy6db6rk8aeirc=;
+        b=e/CkzD5bgkTGjr7nOqlzbUEBPZZLBjDgfyRG5xWp2QP1gUTAHEdzVdoX7BorrqGpBH
+         E7woqQJkl/0reJ/w9I6B9xbRo2fEGhRT5xeBeHwQbm5gXyBxGiRtD1IXikbwXhmq+IHL
+         Tck6P6zMxDxWNkMfRAiOHKhGu3V8P2JPCypsIMScwriMsVuzUfFUJDufjBYDL19EP/Ef
+         RyJOkq5GisvETHYFpf5HVnycBSsoi2BE/hYXSJV2Bio5xXwlXI9ZZj9EdBKGpjM49TS+
+         uCCtSwta8UCBz2zZb0/SLF1MBSMjKKBqCpFaefcn7ZiCpm5jZY4mo9h9yRlxsnre3rlj
+         9xMw==
+X-Gm-Message-State: AFq9FYLynDwJ5YFSaL5xA2BoFAGboRCWFuf5ahrCSC/ZEGpZq3XpypMa
+	dsUYFTs5cV6tW6IsWdWV0McPQGI9NmjNWYtHsVzvM1SNsGiwj3ig7lmIXBlx9IRo85U=
+X-Gm-Gg: AYBFou32JT/VyNWIxh8E+dOfhBSTn3UW2BYnEk7uHBxSKcSdR2a5IWbnE6GvHvwFLdD
+	94k3tUm2SewqxfSCItUfgxS7QdEG+iG+qsvpBtR0C791yfT4F/mWEsibrlcad41sR2S32LP3w/Q
+	Bxa/lnABcNaLe5oFgClBzNZpsqXMbDGm9ZjlCk/LLsEmtycRlQee1cl93VQf1RsdXFmOT+LAzSm
+	xWgyE0ayi9DcoUBAFnNC5eaAsg1BucPxG1CCgPS4Ly+bid93/fop0MccuZh7D7LRxk6j4oy+iA5
+	ocA4NBDNoZlMBHyIS6GwWGwSjIEfLaws0XT0Is/zgcvyM5MZeB9QJfLSy57bfGSxjXboop912JJ
+	mcUM+rlnjcJjDtxK+x1YbHaFHuUWWN7DFo5nczI5MrJIbXuPNwMEJjNhWAd+9/wPIGb+DAJBOAQ
+	IKE827z6BsegpAfMCZkeswI/nhpmWuu08xRRvkWc692G16850XWAllr9VlkNzm4BUP4KcCOdvSZ
+	VOrKiKFCp+vdlj94iZXi8x7T8+xVckmWQ2zX2MrqZRorpGDM4Tym8xD5H8DOHkKXQx4VXQn8HAd
+	ZU9a8g==
+X-Received: by 2002:a05:6820:f00a:b0:6dc:83de:fcac with SMTP id 006d021491bc7-6ef0fdb10c1mr17265421eaf.40.1792107714053;
+        Thu, 15 Oct 2026 16:41:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:70::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-842a6358dfdsm415199a34.20.2026.10.15.16.41.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 16:41:47 -0700 (PDT)
+        Thu, 15 Oct 2026 16:41:53 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 05/15] compiler_types: Add __arena and __nullable BTF type tag qualifiers
-Date: Fri, 16 Oct 2026 01:41:11 +0200
-Message-ID: <20261015234125.3152346-6-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 07/15] bpf: Turn loads of __arena pointer members into arena pointers
+Date: Fri, 16 Oct 2026 01:41:13 +0200
+Message-ID: <20261015234125.3152346-8-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261015234125.3152346-1-memxor@gmail.com>
 References: <20261015234125.3152346-1-memxor@gmail.com>
@@ -82,56 +82,275 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2184; h=from:subject; bh=t7Ln/IuDVwV2Gh/NYDdesfc2WRWqWh0L7iicESGQ0i0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeti3OuzP6tf99dZJmpz6723jBFzSp0UP/Vof1hFSuKSm7fW zZfrKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQuLGVkeNPmwsjyhKk7o619zqYDFz 9PKRM+EbLfXiIrY2Ye8+63FxkZXsy8Ym730oDt5mP1ufLXl3d7mT7gLD118Epcn4XciqRH/AA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10669; h=from:subject; bh=C76DSz0kyLViuhN3zhLUgUhWf6198NbRXmomIz+3yYw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeti3OsdJnuWNh7es0LrwJuKA7MYp/mLKJ2/3F948oN1k8Pe GU+ndJSyMIhxMciKKbKU/N/HZHyi8neg7TJumDmsTCBDGLg4BWAiHi8Z/jtU66X2T3fh2bJznVFS0K KoOwcu89adF0lfo3TLY9b1lPcM/+MqpVf3iB5NbDi/ZN5X+7kVNz4V8oiFS133LnB6a/pkGx8A
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Kernel structures increasingly want to publish pointers into a BPF arena
-to the BPF programs they are shared with, and some pointer members that
-reach programs as trusted are legitimately NULL at times. Neither can be
-expressed today: a pointer member reaches the program as an ordinary
-kernel pointer, and sched_ext resorts to a plain u64 holding a
-pre-translated arena address that programs cast before use.
+A kernel struct shared with BPF programs may want to point at arena
+memory, e.g. a sched_ext argument struct that the kernel builds in the
+scheduler's arena and that refers to another arena object. A pointer
+member reaches the program typed as a kernel pointer, so sched_ext
+publishes a plain u64 holding a pre-translated arena address that the
+program casts before use.
 
-Define __arena and __nullable as BTF type tags, the way __user, __rcu
-and __percpu already are, so that tagged members survive into vmlinux
-and module BTF and the verifier can act on them. To kernel code and to
-sparse the qualifiers are empty: the pointers are ordinary kernel
-pointers. The verifier side follows in the next patches.
+Translate in the verifier instead. When a load through a kernel struct
+pointer lands on a member tagged __arena, btf_struct_walk() reports it
+and the destination register becomes PTR_TO_ARENA. The member holds the
+kernel address of the arena memory; the fixup pass appends the
+conversion to the arena pointer form that the struct_ops trampoline
+applies to __arena arguments:
+
+  r1 = *(u64 *)(r2 + off)
+  if r1 == 0 goto +1         // __nullable members and probed loads
+  w1 -= lo32(kern_vm_start)
+
+A probed load, through a plain or an untrusted pointer, keeps the NULL
+test as well: it reads as 0 when it faults, and the subtraction must
+not turn that into an arena pointer.
+
+Stores to kernel structs are rejected as before, and so are atomic
+loads of such a member, which the fixup pass does not rewrite. A member
+inside a multi-member union is rejected too: an offset into a union
+resolves to its first member, so a program reading another member there
+would receive an arena pointer it did not ask for. Loads through
+program-allocated objects and program BTF are unaffected, there the tag
+is what the compiler emits for the arena address space.
+
+The rewrite is per insn while verification is per path, so the aux data
+records what an insn loaded on any path: an insn that loaded an arena
+pointer member on one path and a different member on another is
+rejected by the fixup pass, while paths disagreeing only on __nullable
+keep the NULL test, which a never-NULL member can afford. As for
+__arena arguments, the program needs an associated arena, which also
+supplies the base to subtract.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/compiler_types.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ include/linux/bpf_verifier.h |  8 ++++++
+ kernel/bpf/btf.c             | 30 +++++++++++++++++++++
+ kernel/bpf/fixups.c          | 51 +++++++++++++++++++++++++++++++++---
+ kernel/bpf/verifier.c        | 50 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 135 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index c5921f139007..e97ee2d4d1df 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -51,6 +51,8 @@
- # define __iomem	__attribute__((noderef, address_space(__iomem)))
- # define __percpu	__attribute__((noderef, address_space(__percpu)))
- # define __rcu		__attribute__((noderef, address_space(__rcu)))
-+# define __arena
-+# define __nullable
- static inline void __chk_user_ptr(const volatile void __user *ptr) { }
- static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
- /* other */
-@@ -70,6 +72,14 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
- # define __iomem
- # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
- # define __rcu		BTF_TYPE_TAG(rcu)
-+/*
-+ * Qualifiers for the BPF verifier rather than address spaces: __arena marks
-+ * a pointer into a BPF arena, __nullable a pointer that may be NULL. They
-+ * reach BPF programs as BTF type tags on kernel struct members; to kernel
-+ * code the pointers are ordinary.
-+ */
-+# define __arena	BTF_TYPE_TAG(arena)
-+# define __nullable	BTF_TYPE_TAG(nullable)
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 791398e14962..af59166a3b27 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -788,6 +788,14 @@ struct bpf_insn_aux_data {
+ 	 */
+ 	u8 fastcall_spills_num:3;
+ 	u8 arg_prog:4;
++	/*
++	 * What a load found, on any path: an __arena pointer member of a
++	 * kernel struct, which arena_member_fixup() rewrites, one that is
++	 * __nullable as well, or anything else through any pointer.
++	 */
++	u8 arena_member:1;
++	u8 arena_member_nullable:1;
++	u8 non_arena_load:1;
  
- # define __chk_user_ptr(x)	(void)0
- # define __chk_io_ptr(x)	(void)0
+ 	/* below fields are initialized once */
+ 	unsigned int orig_idx; /* original instruction index */
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 3c01618694a4..0650b32aec08 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7695,6 +7695,7 @@ enum bpf_struct_walk_result {
+ 	WALK_SCALAR = 0,
+ 	WALK_PTR,
+ 	WALK_PTR_UNTRUSTED,
++	WALK_PTR_ARENA,
+ 	WALK_STRUCT,
+ };
+ 
+@@ -7975,6 +7976,30 @@ static int btf_struct_walk(struct bpf_verifier_log *log, const struct btf *btf,
+ 			if (btf_ptr_has_type_tag(btf, mtype, "nullable"))
+ 				tmp_flag |= PTR_MAYBE_NULL;
+ 
++			/*
++			 * An __arena member of a kernel struct holds the kernel
++			 * address of arena memory, which the verifier turns into
++			 * an arena pointer on load. Program BTF is not affected:
++			 * there the tag is what the compiler emits for the arena
++			 * address space. An offset into a union resolves to its
++			 * first member, so a program reading another member there
++			 * would get an arena pointer it did not ask for; the walk
++			 * marked such a union untrusted.
++			 */
++			if (btf_is_kernel(btf) && btf_type_is_arena_ptr(btf, mtype)) {
++				if (*flag & PTR_UNTRUSTED) {
++					bpf_log(log,
++						"arena pointer member %s of %s is inside a union\n",
++						mname, tname);
++					return -EACCES;
++				}
++				*next_btf_id = id;
++				*flag |= tmp_flag & PTR_MAYBE_NULL;
++				if (field_name)
++					*field_name = mname;
++				return WALK_PTR_ARENA;
++			}
++
+ 			if (btf_type_is_struct(stype)) {
+ 				*next_btf_id = id;
+ 				*flag |= tmp_flag;
+@@ -8078,6 +8103,11 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 			*flag = MEM_RDONLY | PTR_UNTRUSTED | (tmp_flag & PTR_MAYBE_NULL);
+ 			ret = PTR_TO_MEM;
+ 			goto check_variable_offset;
++		case WALK_PTR_ARENA:
++			*next_btf_id = id;
++			*flag = tmp_flag;
++			ret = PTR_TO_ARENA;
++			goto check_variable_offset;
+ 		case WALK_SCALAR:
+ 			ret = SCALAR_VALUE;
+ 			goto check_variable_offset;
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index b2fa7e8bedf3..dcc4111343ca 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -870,6 +870,37 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+  *     struct __sk_buff    -> struct sk_buff
+  *     struct bpf_sock_ops -> struct sock
+  */
++/*
++ * A load through an __arena pointer member of a kernel struct reads the kernel
++ * address of arena memory. Append the conversion to the arena pointer form,
++ * (u32)(kaddr - kern_vm_start), that the struct_ops trampoline applies to
++ * __arena arguments. A __nullable member keeps NULL as NULL, tested on the
++ * full kernel address, and so does a probed load, which reads as 0 when it
++ * faults. Returns the number of insns in @buf, 0 when the insn loads no such
++ * member, or an error when it does so on some paths only.
++ */
++static int arena_member_fixup(struct bpf_verifier_env *env, int idx, struct bpf_insn *insn,
++			      struct bpf_insn *buf)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
++	int cnt = 0;
++	u32 base;
++
++	if (!aux->arena_member)
++		return 0;
++	if (aux->non_arena_load) {
++		verbose(env, "an insn loads an arena pointer member on one path and something else on another\n");
++		return -EINVAL;
++	}
++
++	base = bpf_arena_get_kern_vm_start(env->prog->aux->arena);
++	buf[cnt++] = *insn;
++	if (aux->arena_member_nullable || BPF_MODE(insn->code) == BPF_PROBE_MEM)
++		buf[cnt++] = BPF_JMP_IMM(BPF_JEQ, insn->dst_reg, 0, 1);
++	buf[cnt++] = BPF_ALU32_IMM(BPF_SUB, insn->dst_reg, (s32)base);
++	return cnt;
++}
++
+ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *subprogs = env->subprog_info;
+@@ -1093,11 +1124,23 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 					insn->code = BPF_LDX | BPF_PROBE_MEMSX |
+ 						     BPF_SIZE(insn->code);
+ 				env->prog->aux->num_exentries++;
+-				continue;
+-			}
+-			if (verifier_bug_if(bpf_may_fault_on_deref(ptr_type), env,
+-					    "access to a fault prone pointer is not rewritten as a probed one"))
++			} else if (verifier_bug_if(bpf_may_fault_on_deref(ptr_type), env,
++						   "access to a fault prone pointer is not rewritten as a probed one")) {
+ 				return -EFAULT;
++			}
++
++			cnt = arena_member_fixup(env, i + delta, insn, insn_buf);
++			if (cnt < 0)
++				return cnt;
++			if (!cnt)
++				continue;
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta    += cnt - 1;
++			env->prog = new_prog;
++			insn      = new_prog->insnsi + i + delta;
+ 			continue;
+ 		}
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b4d9ad3ca966..7199674f6a46 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6554,6 +6554,42 @@ static bool type_is_trusted_or_null(struct bpf_verifier_env *env,
+ 					  "__safe_trusted_or_null");
+ }
+ 
++/*
++ * The member holds the kernel address of arena memory, which the rewritten
++ * load turns into an arena pointer, see arena_member_fixup(). NULL needs no
++ * tracking, PTR_TO_ARENA covers it.
++ */
++static int check_arena_member_load(struct bpf_verifier_env *env, struct bpf_reg_state *regs,
++				   int value_regno, enum bpf_type_flag flag, const char *tname,
++				   const char *field_name)
++{
++	struct bpf_insn_aux_data *aux = &env->insn_aux_data[env->insn_idx];
++
++	/* a helper reading the member as bytes needs no rewrite */
++	if (value_regno < 0)
++		return 0;
++	if (!env->prog->aux->arena) {
++		verbose(env,
++			"arena pointer member %s of struct %s requires a program with an associated arena\n",
++			field_name, tname);
++		return -EINVAL;
++	}
++	/* only a plain load is rewritten */
++	if (BPF_CLASS(env->prog->insnsi[env->insn_idx].code) != BPF_LDX) {
++		verbose(env,
++			"arena pointer member %s of struct %s can only be read with a plain load\n",
++			field_name, tname);
++		return -EACCES;
++	}
++
++	aux->arena_member = true;
++	if (flag & PTR_MAYBE_NULL)
++		aux->arena_member_nullable = true;
++	mark_reg_unknown(env, regs, value_regno);
++	regs[value_regno].type = PTR_TO_ARENA;
++	return 0;
++}
++
+ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 				   struct bpf_reg_state *regs, struct bpf_reg_state *reg,
+ 				   argno_t argno, int off, int size,
+@@ -6663,6 +6699,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	if (ret == PTR_TO_ARENA)
++		return check_arena_member_load(env, regs, value_regno, flag, tname, field_name);
++
+ 	if (ret != PTR_TO_BTF_ID) {
+ 		/* just mark; */
+ 
+@@ -7434,6 +7473,17 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	err = check_mem_access(env, env->insn_idx, src_reg, argno_from_reg(insn->src_reg),
+ 			       insn->off, BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
+ 			       strict_alignment_once, is_ldsx);
++	/*
++	 * Paths through a kernel struct pointer and through other pointers
++	 * may share the insn, see save_aux_ptr_type(). Record a load that did
++	 * not produce an arena pointer from an __arena member, the only load
++	 * through a kernel struct pointer that does, next to the one
++	 * check_arena_member_load() records, so that arena_member_fixup() can
++	 * tell when the paths disagree.
++	 */
++	if (!err && !(base_type(src_reg_type) == PTR_TO_BTF_ID &&
++		      regs[insn->dst_reg].type == PTR_TO_ARENA))
++		env->insn_aux_data[env->insn_idx].non_arena_load = true;
+ 	err = err ?: save_aux_ptr_type(env, src_reg_type,
+ 				       allow_trust_mismatch);
+ 	err = err ?: reg_bounds_sanity_check(env, &regs[insn->dst_reg], ctx);
 -- 
 2.53.0-Meta
 
