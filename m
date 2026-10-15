@@ -1,108 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E011D483811
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC92374A12
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792090004; cv=none; b=U0ZM5zfO5nfF1KPZTejpijCSEAjX2BimLaQo6v1+IJpV34KBNUoG/ssZGwqticoIgQHkzKzDvwLp1Q3c2Lt+dfKE3DXdOoWJcqUaYv4ZNWQBhfriTZaXFMyU8O4qwnaUIJ6jfk6EzFfKvKwg62DgDbmDi0UmrgC2vn3O7VArYWw=
+	t=1792090006; cv=none; b=OCESj7vuxIg3cBF7ONPznSld7LeE+xptdcg6qkSHxUFWzUGbyTKS/TJAGfpKz22rGDWk7CA3OTO/2jcE8NpG8LcbaZReCZZNBAayumy0r8g5lUZiTbKXjLgTJT+MgsxU0I6JtwyRwZH+PO1GpI+JWTgjlnRQ3WI5bFFo1iBcOBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792090004; c=relaxed/simple;
-	bh=MBOAz85IXj7EzneVE2ipmMNG8/lWzsIuQlAOh4e3jQQ=;
+	s=arc-20240116; t=1792090006; c=relaxed/simple;
+	bh=OMrrimaCvV8ecAAb4VROvxt7F07fomEW41CZS4YlorM=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=r7ewXGl+GkPbz+RzplgGVFSo3vcOHMmw8MdjPlYmF8EDJ5geM1CoPJwT0Dp3a0mn+cT/iCsgwGrg0pFVhnol2qNUKe6BnTE+B2bkGFaGL2J8Pizn+/7/IE4z59GnbkkdojHJTEl/l63hrWJSuEyCWw/+moml4r80nCkdL8Jfwd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7DFP/kJ; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=CTF4YoSPxbf3lsfAS++anPElHkOL5jrnzzAbbyUR8xZf3stLSIT4h5e2uoV/QTw0161Ep5raE3CltXL90S8VOKxTcsCIhXNaPeIk2x9XMvVqeicZcnvR8K8VraqSDgObrTT6fCXClMsTaXgxv0ooDX597RkKKNaR7TcF+uMGbdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YiCobKV9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7DFP/kJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74ABC1F000C4;
-	Thu, 15 Oct 2026 18:46:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YiCobKV9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE0D1F000C5;
+	Thu, 15 Oct 2026 18:46:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792090002;
-	bh=Hxl8Kj0iAcZTFyYpokQdxD2Jj456tuqzaITWaTlTOz4=;
+	s=k20260515; t=1792090003;
+	bh=5MgkI2yGcG6BSMVD+XVC/HPcbg9XULdbG81UW475TLM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=h7DFP/kJH68NSIrZyKgRxL3sUNEUHRI/4aK48kduuQ8Shg5a7YTfQoa0W7iTi6Zur
-	 UlSdSNISOnk/y8omfZ5ssFE7Ukna7/u+zwi85zIin9d4jBIYWsUZ1JmRrPoPh++d/g
-	 2KhZdp78+gykDvuLGf21kfOeR2SDXZdfnzRLWpZy45bG12JYiVibCbGUwNfMWSoGH2
-	 Kloqp1mfj+XC1hPq7ttnRjJfhVlDpCLSSimHQ5kBV3gqLnp7z6DWDmjbNjlrqBR+T9
-	 lkxbrCM60ZVt+TlzUjhpnrAiP4n/DJaox++56NL7awubV35YRwwDFFUUMUUNGG/bWR
-	 +E/a+WvrTjrPw==
-Message-ID: <sashiko-outbox-173325@kernel.org>
+	b=YiCobKV9spylcd353ytzRsZSGdzS0mhn4JuCABuTPo5izumnSSHyOhEOv19N1Z0Fm
+	 jzc/HZUe0jZn0HgXJpOV7b9kyRske/UyUWuJX8vAe5xpIZ69b+irlm+ki6LPSiKaCR
+	 7Cfx/r83aEMKtdF1P9mXXnhctg98LFVkme18isTEuWTqJwMkL5GQmPMqSbkUCLXB87
+	 N4UdvfG/+oyL6e79YgNUyVjS91sRrbR9VZPpvh2kZFhapInU6I3OB1paZ3Xb745Ead
+	 36SGl91pGgxklWAklKQO5uwUfmbq9Wb8ifWsNtQVGhVMImJfInhh4+EIyY3jPugiD9
+	 uzAxtkBvETsdg==
+Message-ID: <sashiko-outbox-173329@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 net-next 02/15] selftests: xsk: size the TX UMEM in
- HW_SW_MAX_RING_SIZE
+Subject: Re: [PATCH v3 net-next 09/15] selftests: xsk: run one test case per
+ xskxceiver invocation
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261014184539.774708-3-maciej.fijalkowski@intel.com>
+In-Reply-To: <20261014184539.774708-10-maciej.fijalkowski@intel.com>
 References: <20261014184539.774708-1-maciej.fijalkowski@intel.com>
- <20261014184539.774708-3-maciej.fijalkowski@intel.com>
+ <20261014184539.774708-10-maciej.fijalkowski@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Oct 2026 18:46:41 +0000
+Date: Thu, 15 Oct 2026 18:46:42 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] selftests: xsk: infinite loop if hardware TX ring > 8200
+- [Medium] selftests: sysctl leak of vm.nr_hugepages on exception
+- [Low] selftests: unused argument in ksft_print_msg() format string
 --
 
-commit 183d9676e829720fbcf94af5e89e100b2685ba42
+commit 7acec71c768966e15c22ec5e2e55704dfaf4978e
 Author: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-selftests: xsk: size the TX UMEM in HW_SW_MAX_RING_SIZE
+selftests: xsk: run one test case per xskxceiver invocation
 
-This patch configures the TX UMEM sizes in the testapp_hw_sw_max_ring_size
-selftest to match the RX UMEM sizing. It addresses an issue where TX
-would fail in two-interface mode due to the default UMEM being too small
-for the batch sizes used in this test.
+This commit replaces test_xsk.sh and xsk_prereqs.sh with test_xsk.py to run
+xskxceiver once per mode and case. This ensures that every test case runs i=
+n a
+fresh process and crashes only fail the specific test.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/te=
-sting/selftests/bpf/prog_tests/test_xsk.c
-> index 2a13628740924..16fe32e5afc06 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -2513,6 +2513,9 @@ int testapp_hw_sw_max_ring_size(struct test_spec *t=
-est)
->  	test->ifobj_rx->xsk->umem->num_frames =3D max_descs;
->  	test->ifobj_rx->xsk->umem->fill_size =3D max_descs;
->  	test->ifobj_rx->xsk->umem->comp_size =3D max_descs;
-> +	test->ifobj_tx->xsk->umem->num_frames =3D max_descs;
-> +	test->ifobj_tx->xsk->umem->fill_size =3D max_descs;
-> +	test->ifobj_tx->xsk->umem->comp_size =3D max_descs;
+> diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/tes=
+ting/selftests/net/lib/xsk/xskxceiver.c
+> index 02e54b026806b..09ad623333be5 100644
+> --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+> +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+> @@ -169,14 +164,14 @@ static struct option long_options[] =3D {
+>  static void print_usage(char **argv)
+>  {
+>  	const char *str =3D
+> -		"  Usage: xskxceiver [OPTIONS]\n"
+> +		"  Usage: xskxceiver -i TX_IFACE -i RX_IFACE -m MODE -t TEST [OPTIONS]=
+\n"
+>  		"  Options:\n"
+>  		"  -i, --interface      Use interface\n"
+>  		"  -v, --verbose        Verbose output\n"
+>  		"  -b, --busy-poll      Enable busy poll\n"
+> -		"  -m, --mode           Run only mode skb, drv, or zc\n"
+> +		"  -m, --mode           Mode to run: skb, drv or zc\n"
+>  		"  -l, --list           List all available tests\n"
+> -		"  -t, --test           Run a specific test. Enter number from -l opti=
+on.\n"
+> +		"  -t, --test           Test case to run, a number from -l\n"
+>  		"  -h, --help           Display this help and exit\n";
+> =20
+>  	ksft_print_msg(str, basename(argv[0]));
+
+[Severity: Low]
+Does this code silently ignore the executable name argument? The format str=
+ing
+in 'str' does not contain a '%s' specifier, so basename(argv[0]) is not pri=
+nted
+when print_usage() is called.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/net/test_xsk.py b/tools/testing/self=
+tests/net/test_xsk.py
+> new file mode 100755
+> index 0000000000000..acfdba55fbae8
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/test_xsk.py
+> @@ -0,0 +1,140 @@
+
+[ ... ]
+
+> +def main():
+> +    # ksft_run() exits on -l and -h before main() restores the huge page=
+s.
+> +    if "-l" in sys.argv or "-h" in sys.argv:
+> +        sys.exit(f"{sys.argv[0]}: -l and -h are not supported")
+> +    if not XSK_BIN.exists():
+> +        print(f"1..0 # SKIP {XSK_BIN} was not built")
+> +        sys.exit(SKIP_CODE)
+> +    saved_hugepages =3D []
+> +    hugepages =3D xsk_reserve_hugepages(saved_hugepages)
+> +    cases =3D _get_cases(hugepages)
+> +    ksft_run([ksft_variants(cases)(test_xsk),
+> +              ksft_variants(cases)(test_xsk_busy_poll)])
+> +    xsk_release_hugepages(saved_hugepages)
+> +    ksft_exit()
 
 [Severity: Medium]
-Since max_descs is fixed to 8192 (XSK_RING_PROD__DEFAULT_NUM_DESCS * 4), can
-this cause an infinite loop in __send_pkts() on hardware with large rings?
+Can this leak the host's vm.nr_hugepages sysctl modifications if an excepti=
+on
+occurs?
 
-Further down in testapp_hw_sw_max_ring_size(), the batch size is explicitly=
- set
-based on the raw hardware maximums:
+If _get_cases() or ksft_run() raise an unhandled exception (such as a
+CmdExitFailure if the executable crashes, or a KeyboardInterrupt), execution
+will terminate before reaching xsk_release_hugepages().=20
 
-    test->ifobj_tx->xsk->batch_size =3D test->ifobj_tx->ring.tx_max_pending=
- - 8;
-
-If a NIC supports a maximum TX ring size greater than 8200 (such as some ml=
-x5
-or bnxt cards), the calculated batch_size will strictly exceed the software
-ring capacity (max_descs =3D 8192) configured here.
-
-When that happens, __send_pkts() will enter an infinite loop:
-
-    while (xsk_ring_prod__reserve(&xsk->tx, xsk->batch_size, &idx) < xsk->b=
-atch_size) {
-        ...
-        complete_pkts(xsk, xsk->batch_size);
-    }
-
-Because xsk_ring_prod__reserve() can never grant a reservation larger than =
-the
-total ring capacity, this loop will spin indefinitely waiting for space that
-can never exist.
+Should these calls be wrapped in a try/finally block to ensure hugepages are
+properly restored?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261014184539.7747=
-08-1-maciej.fijalkowski@intel.com?part=3D2
+08-1-maciej.fijalkowski@intel.com?part=3D9
