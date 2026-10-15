@@ -1,42 +1,64 @@
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221205013BC;
-	Thu, 15 Oct 2026 10:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82578513564;
+	Thu, 15 Oct 2026 10:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792060758; cv=none; b=L9d9pz/TlzRjLCWIrz56w5MywlTy/SGG1FzaE7FvWGl6dRJVQDGMTNTtshKLoBzXM5HD9xU47oNt4ZRfw1UCxrRI6eHuDztRAEjSkZmsX3a8vl9taaxiBVS9ogD54sDbRPP6oT1GPIZv1fTo6U7uSehY46h0lIFzlXyfAk6Esp8=
+	t=1792060864; cv=none; b=Pbdrh+41R2AP4dtZbaPZqry/cee7J98TnJe4Yve/pN20zqDpvLQDrLwlR8arWhIrYgNRNkFroUiXdTjDSSIAlGsTAGCw2pIwsjbJFvdKOi4XDH1aCd9PO6IaubZeogsQ+FludYewKddna7+8Ut3Poo+HGfxBp+yYG9+QAYx8NZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792060758; c=relaxed/simple;
-	bh=uBijJrZM4mnefoRvItG7+mBcA6wx00llHnG2gvGYJU8=;
+	s=arc-20240116; t=1792060864; c=relaxed/simple;
+	bh=ScXbcgoSotmOrGMQXkrBDfhNkZYnKfm02o8V/VmFAlY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t4NofZJRcx6wNvw3QN3NklDcmUwVS7Ox3lIg8hV3D7U9MjByJxeCuFLDT36Yp3Xbv2q02Bfp21wB7gIXWc/fsbh2H/YUYKLY3eL9YAj18fnj5UUCCJn/Ps5gclo89h/8NPt/KwSLeXnqwtZr+F3EpoCX/A05VEIJnyJB+n1Z/+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id 13087606E2; Thu, 15 Oct 2026 12:39:13 +0200 (CEST)
-Date: Thu, 15 Oct 2026 12:39:12 +0200
-From: Florian Westphal <fw@strlen.de>
-To: Zihan Xi <zihanx@nebusec.ai>
-Cc: netfilter-devel@vger.kernel.org, virtualization@lists.linux.dev,
-	intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org,
-	pablo@netfilter.org, phil@nwl.cc, davem@davemloft.net,
-	edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	kaber@trash.net, jengelh@medozas.de, andrew+netdev@lunn.ch,
-	mst@redhat.com, jasowangio@gmail.com, eperezma@redhat.com,
-	xuanzhuo@linux.alibaba.com, aleksander.lobakin@intel.com,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me,
-	magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-	willemb@google.com, alice.kernel@fastmail.im,
-	eilaimemedsnaimel@gmail.com, imv4bel@gmail.com,
-	shiming.cheng@mediatek.com, sd@queasysnail.net, vega@nebusec.ai,
-	root@tr0jan.top
-Subject: Re: [PATCH nf v8 0/3] netfilter: bound asynchronous packet
- duplication
-Message-ID: <atCtUFcG9b4ykXY3@strlen.de>
-References: <cover.1792048855.git.zihanx@nebusec.ai>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nriFmED36d08HdthtSZZONLGIU3pAxeyVWaMoGNS2x/vQGOquNKcAp7wd1mdsQ8sh0sAqQR5HXHzeLlUD19cBt8USDg75Sev88LZm7StPDmVfQh7PwaQ1wRkdoXv0ULdLO0qG2dc48hgF602sUPLrN7zhuZwoGt9w6e7NFVqJ5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VTyvizd0; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VTyvizd0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=k519mSkHitpZvxCm5lMKw2mYcRI2vBvy+ZCjclepCjo=; b=VTyvizd0GEhvWz7vbKVFob2vzH
+	3Xgyho9kYMZCKqfNGeXmWNijxbLvFmq61YLoWNWYX1PolPFKCHtVS3TUBmYYTgIPyUxXR3+w4rOC5
+	aFa7aorubIevwlqkFix7KhlPwFhuZv5xkwS8xJT+gW6fOuZsNJ1jpK9iNi/xm565Yjyqv32DrA1Kf
+	XfiMbjo7x0hAY5K25za/aL4UEjeWKN0dWTQoHn73iauEj24M0t4IZGZ1k7gmYh3AUeOiXdfBFt+4W
+	hZ/dpdRBhKMuOZte96F3U+ayuHb6EV133XciqNvsKMzluONdCQnHLqaatfN0Ku2ZeoYs6TVQnfGzr
+	Cc2KBLlg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
+	id 1xHIt7-00000000G8V-1oLD;
+	Thu, 15 Oct 2026 10:40:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 84CC63006DD; Thu, 15 Oct 2026 12:40:39 +0200 (CEST)
+Date: Thu, 15 Oct 2026 12:40:39 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Thorsten Leemhuis <regressions@leemhuis.info>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"David Hildenbrand (Arm)" <david@kernel.org>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org, regressions@lists.linux.dev,
+	Sasha Levin <sashal@kernel.org>,
+	Alexander Motin <alexander.motin@truenas.com>,
+	Ameer Hamza <ameer.hamza@truenas.com>,
+	"Caleb St. John" <caleb.stjohn@truenas.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] perf/core: track the perf mlock gift separately
+Message-ID: <20261015104039.GP2009045@noisy.programming.kicks-ass.net>
+References: <20261003-perf-locked-vm-fix-v1-1-d214dcaf0d76@kernel.org>
+ <20261015075817.GO2009045@noisy.programming.kicks-ass.net>
+ <atCYFpm63elRyuw7@gremlin>
+ <e51025a5-8106-41b3-90fc-53e51891ea9c@leemhuis.info>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,73 +67,30 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1792048855.git.zihanx@nebusec.ai>
+In-Reply-To: <e51025a5-8106-41b3-90fc-53e51891ea9c@leemhuis.info>
 
-Zihan Xi <zihanx@nebusec.ai> wrote:
-> Hi Linux kernel maintainers,
-> 
-> We found and validated an issue in netfilter packet duplication. The bug
-> is reachable by an unprivileged user in user and network namespaces.
-> Bounded tests exercised the fixes. Non-duplication packet semantics are
-> intended to remain unchanged. MIRRED flow offload for affected netdev dup
-> rules is rejected because it cannot enforce the duplication-depth limit.
-> 
-> We will provide detailed information about the bug
-> in this email, along with a PoC to trigger it.
+On Thu, Oct 15, 2026 at 11:27:59AM +0200, Thorsten Leemhuis wrote:
+> On 10/15/26 11:09, Lorenzo Stoakes (ARM) wrote:
+> > On Thu, Oct 15, 2026 at 09:58:17AM +0200, Peter Zijlstra wrote:
+> >> On Sat, Oct 03, 2026 at 05:29:07PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > 
+> >>> Resolve the issue by simply giving perf its own field separate from the
+> >>> rest.
+> >> So I'm a little confused by all this -- perf introduced this field,
+> >> others jumped on and shit broke, so we fix perf instead of the others?
+> > Yeah I think the blame really lies with the later users, and that send a trend
+> > that led to further confusion (including myself, mea culpa!)
+> > 
+> >> Anyway, patch seems straight forward enough; and you added comment to
+> >> the fields, which I suppose does clarify things some.
+> >> I'll take it. Thanks!
+> > Thanks, much appreciated! :)
+> Just wondering: how urgent is this fix? Is this something we should try
+> to get into 7.3 given that this was noticed in a regression report that
+> blamed it on an 7.3-rc commit[1]? That commit also made it to many
+> stable series now, which might be another reason to get in mainlined
+> rather sooner than later.
 
-Series makes no sense to me, sorry.  I dislike the 2nd patch, I see no
-reason why we need to make changes all over the place for this...?
+I have it lined up for tip/perf/urgent. I'll try and push it out later
+today. For now it lives in queue.git/perf/urgent.
 
-Also, if we go with 2nd patch, why do we still need the first?
-
-> The IPv4 and IPv6 duplication helpers use a task-local guard while a cloned
-> packet traverses output hooks. If NFQUEUE suspends that traversal, the
-> output call can return and clear the guard before a later verdict resumes
-> the remaining hooks. The resumed packet can reach another duplication
-> consumer without the original guard. This can cause repeated packet
-> processing and consume CPU and network resources.
-
-"Don't do that, then"?
-
-I think the kernel should not crash when misused, but I don't think
-kernel should have to do extreme stunts to detect such loops.
-
-There are probably many other ways to make kernel allocate lots of
-memory or waste cpu cycles.
-
-E.g. via create use of veth and bridges, sched plug, teql, ...
-
-> Patch 1 records the
-> guard in the queue entry and restores it during reinjection. It keeps
-> bottom halves disabled during the reinjection traversal, restoring the
-> verdict task state before reenabling them.
-
-Its small enough, so I have no objections to this patch.
-
-> The netdev nft dup path has a separate synchronous transmit recursion
-> counter. It does not accompany a duplicated skb through asynchronous
-> software receive paths. Patch 2 carries a bounded duplication depth through
-> skb and supported XDP conversions, resets it on reused buffers, and rejects
-> MIRRED flow offload where the software depth cannot be enforced. This scope
-> covers software skb/XDP continuity, not packet loops through physical
-> hardware or userspace device round trips.
-
-I think it would be better to first go to the drawing board and make ONE
-facility that governs the recursion part.
-
-From a quick glance, the difference is historical from time when
-per-module pcpu counters were used, so nf_dup netdev could not see the state
-of nft_dup toggle.  Now that its in task struct anyway, maybe its time to
-just zap the egress recursion counter and first make a patch that
-uses the bool toggle for both egress and normal dup?
-
-I would like to remove code, not add more.
-
-> At PRE_ROUTING and LOCAL_IN, the IPv4 and IPv6 helpers decrement TTL or
-> hop limit on the copy. Patch 3 stops creating copies when the value is
-> <= 1, so the decrement cannot reach zero or wrap a zero value to the
-> maximum.
-
-Thats unrelated problem.  There are other places that do TTL/HL
-decrements.  I think it makes sense to clean this up in -next and
-add common helpers and then use those.
