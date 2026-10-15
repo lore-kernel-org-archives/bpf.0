@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7169424DCF6
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 04:29:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973633A9615
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 06:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792038575; cv=none; b=pnD270jxa+AVfycXfizzfXkUFFccCy529JYNTIl07NJFkVFlsCCLDdaPCJOJKzuonTT1Daqbaiq0HpJfJTuZTScm8IRsud92CI9tq4a8ahXeysWkIvX5P5swwgRx/QMgMRdkG0QHtsSLERxeuhYsLO7O/USvJCPOZEdAisnwTKo=
+	t=1792045653; cv=none; b=tPr7+BvhteMYWGEmUdUmcoIKHoph6zjlaKT54keYUejQv4vHLq5NzjpKuvB/sBw7twkdOoSiFM9n6MC9fAaJ3WvZGBbTt4gVSqkJCQIXO4+cnwWrN6not8Ef6EhYH7nvkJ3qhEcZmMUdTCl9orTPOgW/YmV2I5JxkR4FDQ19sTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792038575; c=relaxed/simple;
-	bh=8WeGjJFnowc4eJ/OkoCWV+a99+94gpT8UuJCjjFkSqY=;
-	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=jrTJIVGZ2sIVhcgrYQQx01DFj675FJHcZuc176IoFJMLVy8Af2WCPb9ysFzaTk0h4ohlKoRocoVpysBe5rhNhGUvlQ3P9CyrdL+ufXS0bJS2LHKFdH1IiCmxl47mYUjXr/lKtEQPcd+NrrrGSaDRrjaensyTQKmTPZjoPlqFfZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FeuyqJGm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792045653; c=relaxed/simple;
+	bh=+8MkJgrLqJzrUkXgAfHiflNQxC0Z5XY0jmQKvVhOEmw=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=WvKaeAhqfekw4oMM3peLFAhm7/h9HBlkXj8NeJqhfnDVfV0ia5t+/5byDuxctqwSiyGz/j6Cq7BFalEpELO5/AgP/dBSnByRxHw1M9lAhn0aj/zbPpxZENGDxgK3iOWXHy6Ab8tIzq5cOcXehlJLYydRXh2QJ1ixyHW5LJsTiBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iq4RqxKK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FeuyqJGm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38111F000C4;
-	Thu, 15 Oct 2026 04:29:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iq4RqxKK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087EA1F000C4;
+	Thu, 15 Oct 2026 06:27:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792038574;
-	bh=s/scWWKju9wfjMYZsRJtZYi3ov89wH/61Kn1wrM5bJg=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=FeuyqJGmomufQqkhterZPcUy0ByxyeV8iwWnM+wFt3KMvP7Snar/Iu2V5eMGg+FUG
-	 LiHYxpWw7vJPOa+UtZzvYnksKgAOyuqJxPDEpJnJ3tGD25SDUvguXH42HUoKSMQ8iz
-	 ox2RRl4x8w6e8hNFMueJcPAeZkAunGaLqmWnr8uJFgsyAlwwmHhYV6mOGnWrLX4U3X
-	 JtfETKRPyqLuUZ30V1lzorChJpj4kcXwB8qyCpYnb3tN+IdSY4U4BY4qZhXgf8gPJK
-	 DcJjQ23Fzt9/ZampgdF4js5lv7nPcxKaGrrPOGHm5tDZiIVSTo5+oWbWMWtfjYL78M
-	 IVBYXp54N792A==
-Message-ID: <sashiko-outbox-172270@kernel.org>
+	s=k20260515; t=1792045652;
+	bh=VdTpIHra/JzMGZebneaPv4GvgNdPjScvSxz+QTnYyII=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iq4RqxKKj6Iav0Q8RU0uen2q6rX5ru8eK0HiHvO2fSLL6bCPD3cqEA79aHsYrQ+8b
+	 gRkmyxaw6lmyyGfwvhWwzd+IgILjg3NvKMQ/OVbKXESZtRAbaPROCf03hHbDoZllAR
+	 wSnq0ZrIVIdALhYXompEt3A3MCbZ1DXDoSuIK8fio2/fDSBGFKFzdc6656WWpxC2jd
+	 yfkG5KTdHAH3AoGIId8ZjGMWOxIGAk1xmUIYb6YDUJ+6gZhvW2q96mxMuSeukB5MG8
+	 L45d46ESVvNTaUplrtBqbnfc3vUpEicolxn+DIaQEuziID18tccJbHH3tvjR49A89N
+	 2ftt76MJM2tXA==
+Message-ID: <sashiko-outbox-172342@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v11 07/26] bpf: Verify an unwind through
- landing pads and epilogues
+Subject: Re: [PATCH net 3/3] net: stmmac: stop DMA when IRQ registration
+ fails
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
-In-Reply-To: <20261015040219.858407-1-yonghong.song@linux.dev>
-References: <20261015040143.854070-1-yonghong.song@linux.dev>
- <20261015040219.858407-1-yonghong.song@linux.dev>
+To: "Karl Mehltretter" <kmehltretter@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <2b70886410b5e9207ef170a48aca1d2d7ce24a68.1791958735.git.kmehltretter@gmail.com>
+References: <cover.1791958735.git.kmehltretter@gmail.com>
+ <2b70886410b5e9207ef170a48aca1d2d7ce24a68.1791958735.git.kmehltretter@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Oct 2026 04:29:33 +0000
+Date: Thu, 15 Oct 2026 06:27:31 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,162 +47,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: precision tracking fails to backtrack from unwind landing pad
-- [High] bpf: global subprogram unwind pad bypassed if might_throw is true
+- [High] net/stmmac: stmmac_xdp_set_prog() ignores stmmac_xdp_open() failure
+- [Medium] net: stmmac: MAC Rx/Tx left enabled on open error paths
 --
 
-commit d697ce1fb72f895b857d6e1eeaa219cab7a013bc
-Author: Yonghong Song <yonghong.song@linux.dev>
+commit 7ffd7d4ee658f5d19fab03ed54e7532669eeea56
+Author: Karl Mehltretter <kmehltretter@gmail.com>
 
-bpf: Verify an unwind through landing pads and epilogues
+net: stmmac: stop DMA when IRQ registration fails
 
-The commit adds support for verifying bpf_unwind() through landing pads and
-epilogues. It updates verifier control flow, state tracking, and precision
-backtracking to understand these non-linear execution paths.
+Both __stmmac_open() and stmmac_xdp_open() start DMA before requesting
+IRQs. If IRQ registration fails, their error paths release descriptors
+and packet buffers while the DMA channels remain active.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 96f5ea8ea8bf8..fe24291260a0e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -19674,6 +19682,133 @@ enum {
->  	INSN_IDX_UPDATED =3D 2,
->  };
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 8fd7d21730911..5c4df26a64bd6 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -4206,6 +4206,7 @@ static int __stmmac_open(struct net_device *dev,
+>  	for (chan =3D 0; chan < priv->plat->tx_queues_to_use; chan++)
+>  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
 > =20
-> +static int unwind_frames(struct bpf_verifier_env *env, bool *do_print_st=
-ate)
-> +{
-[ ... ]
-> +		/*
-> +		 * Mark the unwinding insn with the frame it ran in: backtracking
-> +		 * from the pad comes back to that insn and goes on in that frame.
-> +		 */
-> +		err =3D bpf_push_jmp_history(env, state, INSN_F_UNWIND, 0, frameno, NU=
-LL, 0);
-> +		if (err)
-> +			return err;
-> +		clear_caller_saved_regs(env, caller->regs);
-> +		mark_reg_unknown(env, caller->regs, BPF_REG_0);
-> +		env->insn_idx =3D pad;
-> +		if (do_print_state)
-> +			*do_print_state =3D true;
-> +		return INSN_IDX_UPDATED;
+> +	stmmac_stop_all_dma(priv);
+
+[Severity: Medium]
+In this error path, phylink_stop() is called just above this snippet, but it
+only invokes the driver's mac_link_down callback if the link is considered
+logically UP.
+
+If the link was never UP, the MAC hardware is left active since it was
+enabled earlier during stmmac_hw_setup().
+
+Should the MAC be explicitly disabled here so it doesn't remain permanently
+active?
+
+>  	stmmac_release_ptp(priv);
+>  init_error:
+>  	return ret;
+> @@ -7259,6 +7260,7 @@ int stmmac_xdp_open(struct net_device *dev)
+>  irq_error:
+>  	for (chan =3D 0; chan < priv->plat->tx_queues_to_use; chan++)
+>  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+> +	stmmac_stop_all_dma(priv);
+
+[Severity: Medium]
+Earlier in stmmac_xdp_open(), the MAC is explicitly enabled with
+stmmac_mac_set(..., true).
+
+However, this error cleanup path lacks the corresponding
+stmmac_mac_set(..., false).
+
+Will the MAC continue to process incoming packets and potentially overflow
+the internal MTL FIFOs while the DMA and IRQs are stopped?
 
 [Severity: High]
-Does this code break precision backtracking?
+If we hit this error path, stmmac_xdp_open() cleans up its descriptors
+and returns an error.
 
-The jmp_history entry is pushed before env->insn_idx is updated to pad. This
-means the entry's idx will record the unwinding instruction instead of the =
-pad
-target.
+However, its caller stmmac_xdp_set_prog() ignores this return value:
 
-During backtracking, when the verifier reaches pad, it calls
-get_prev_insn_idx() which uses st->jmp_history entries where idx matches the
-jump target. Because idx was recorded as the unwinding instruction,
-get_prev_insn_idx() will fail to find it and fall back to linear backtracki=
-ng
-(pad - 1) instead of jumping back to the source instruction.=20
-
-Since exception landing pads are typically emitted out-of-line by the compi=
-ler,
-backtracking into pad - 1 jumps into completely unrelated code, corrupting
-precision tracking.
-
-[ ... ]
-> +static int process_global_call_unwind(struct bpf_verifier_env *env,
-> +				      int call_idx, bool *do_print_state)
-> +{
-> +	const struct bpf_insn *insn =3D &env->prog->insnsi[call_idx];
-> +	int subprog =3D bpf_find_subprog(env, call_idx + insn->imm + 1);
-> +	struct bpf_verifier_state *branch;
-> +	struct bpf_func_state *frame;
-> +	int pad;
-> +
-> +	if (!bpf_subprog_is_global(env, subprog) ||
-> +	    !env->subprog_info[subprog].might_unwind)
-> +		return 0;
-> +
-> +	/* The call returning normally is walked later. */
-> +	branch =3D push_stack(env, call_idx + 1, call_idx, false);
-> +	if (IS_ERR(branch))
-> +		return PTR_ERR(branch);
-> +
-> +	pad =3D bpf_exc_pad_of_call(env, call_idx);
-> +	if (pad < 0)
-> +		return unwind_frames(env, do_print_state);
-> +	frame =3D cur_func(env);
-> +	clear_caller_saved_regs(env, frame->regs);
-> +	mark_reg_unknown(env, frame->regs, BPF_REG_0);
-> +	env->insn_idx =3D pad;
-> +	*do_print_state =3D true;
-> +	return INSN_IDX_UPDATED;
-> +}
-
-[Severity: High]
-Can this fail to record the non-linear edge for backtracking?
-
-If a landing pad is found (pad >=3D 0), env->insn_idx is directly set to pa=
-d and
-the function returns. However, it seems a jmp_history entry linking pad bac=
-k to
-call_idx is never pushed.
-
-Just like in unwind_frames(), this missing history entry causes
-get_prev_insn_idx() to fall back to linear backtracking (pad - 1) during the
-backtrack walk, which jumps into unrelated code and can severely corrupt
-precision tracking.
-
-[ ... ]
-> @@ -19935,8 +20070,14 @@ static int do_check_insn(struct bpf_verifier_env=
- *env, bool *do_print_state)
->  				cur_func(env)->no_stack_arg_load =3D true;
->  			if (bpf_is_callx(insn))
->  				return check_func_callx(env, insn, &env->insn_idx);
-> -			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
-> -				return check_func_call(env, insn, &env->insn_idx);
-> +			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL) {
-> +				int call_idx =3D env->insn_idx;
-> +
-> +				err =3D check_func_call(env, insn, &env->insn_idx);
-> +				if (err)
-> +					return err;
-> +				return process_global_call_unwind(env, call_idx, do_print_state);
-> +			}
-
-[Severity: High]
-Does this check inadvertently bypass the unwind pad if the global subprogram
-can also throw?
-
-A global subprogram can be marked with both might_throw =3D true and
-might_unwind =3D true if it can call both bpf_throw() and bpf_unwind().
-
-When verifying a call to such a global subprogram, check_func_call() checks
-might_throw, pushes the normal return branch, and returns PROCESS_BPF_EXIT
-(which is non-zero) to simulate the exception exit:
-
-check_func_call() {
+drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c:stmmac_xdp_set_prog() {
     ...
-    if (env->subprog_info[subprog].might_throw) {
-        ...
-        return process_bpf_exit_full(env, NULL, true);
-    }
-    ...
+	if (if_running && need_update)
+		stmmac_xdp_open(dev);
+
+	if (prog)
+		xdp_features_set_redirect_target(dev, false);
+
+	return 0;
 }
 
-Because check_func_call() returns PROCESS_BPF_EXIT, if (err) evaluates to t=
-rue
-here, causing the verifier to return immediately and skip
-process_global_call_unwind().
+If an error occurs here, does this leave the interface functionally dead
+while still reporting success to userspace?
 
-As a result, the unwind landing pad for this call is never pushed or explor=
-ed.
-Dead code sanitization will replace the unvisited pad with a jump to itself
-(an infinite loop). If the global subprogram unwinds at runtime, it will ju=
-mp
-to this unverified pad and enter an infinite loop, causing a kernel denial =
-of
-service.
+> =20
+>  init_error:
+>  	free_dma_desc_resources(priv, &priv->dma_conf);
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261015040143.8540=
-70-1-yonghong.song@linux.dev?part=3D7
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1791958735.gi=
+t.kmehltretter@gmail.com?part=3D3
