@@ -1,113 +1,88 @@
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de [188.68.61.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253D64A3D4C;
-	Thu, 15 Oct 2026 09:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.68.61.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC71449EB2;
+	Thu, 15 Oct 2026 09:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792056489; cv=none; b=P7B2mWE2rBybe5bTpDvbyz54KOLl6dr434ZxiiB/lRKepLztT2O4mcTMDfndlxADvpPY7vxnMNJJgwd+yRihRxPKVfpuxHmG76eh/wJvNz6ANTGNvSwBlbfVugMe9pSY3+4fuNh9h7JEZAIawZFhOm5G1HAcf0ksW58+j0Zj1B4=
+	t=1792057377; cv=none; b=FGwlNYt39s9cgr87iIqztjr6tid8Js3qZHanx3TpjomEtO7hmqqGnMSnJFgzwCnDLCEdYD1EZg5RE+Rt3/WhGJ/lz2D1UcrIWpg7Jj5TlGy0zR3GZz5bUu3+PlAVLBwDuWjXdE+hU/idbbctIVSBnTQtTamVh1ZlELuVPufnJS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792056489; c=relaxed/simple;
-	bh=JrB6BaUJjw5NITp5DDMkWpNKvqBppRg+vr4TEGuH+5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X40E+KqLlzo2T+aBZ8i3NIF2UxWoDJywksrzivTZ0GGpiTbFSnWMAaGN5bunO5LwtpBs/WT9ekO1mqUptMCmNIsmcVwRFe6b61ic4ZMdUFXkxnLkYDLerl03YXDVxe9M92P2DI68bq9KimYcP6UlGJQqlK6Owca4zTiNKetxAGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=gseBVCMq; arc=none smtp.client-ip=188.68.61.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+	s=arc-20240116; t=1792057377; c=relaxed/simple;
+	bh=znfCEwm3GWzKszFbNl1kkrBKuTB5GL0Po6X0Khp3RVQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lpAZN9BO6lP0vrx6WjUXdfE+x/MWeI29qLpKiR1mVtFeDgidM1JTOYIEeLulATdcASR61bwW4vJthHfuHk4hYBE0jKaFxLFrqWwzTd9E+6loqrVf3Mc36xj/dNasqWdQV9oyHSV+eUVAXPw83TsX9cvqSozKOCcu9k75edqx1N0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfIxfCLp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="gseBVCMq"
-Received: from mors-relay-8405.netcup.net (localhost [127.0.0.1])
-	by mors-relay-8405.netcup.net (Postfix) with ESMTPS id 4j52mj1Bgxz76Xf;
-	Thu, 15 Oct 2026 11:28:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=leemhuis.info;
-	s=key2; t=1792056485;
-	bh=JrB6BaUJjw5NITp5DDMkWpNKvqBppRg+vr4TEGuH+5A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gseBVCMqoKYVz5ylGfE/cnqQag4SoKFOIaWbu1F9Xbpvz7AD8wGSPQUjnlr3iwS7g
-	 vZXyGFBHUevgehe/sl254CkjY4JJdFuxok5D4H8YRAujnpRf9wo/q8iFKattz8lndB
-	 FzcZ81iZz4wak3WKoCTZPJHw86D4HITwb+Bbcqwzw3NBnFvzsVJQA0+M/12OuKI9Qn
-	 EVEENRtIKCAp5oi8YanERXRPmc5h1i6XzjKmoK/f1yeeBpbcR0APaITvka/dHeslmO
-	 ZvmNQBFBkfsL+okPTOpgfJZIELpp7HTij4ePrC8nAu0RaqjR6ApjUK2I2cc2w5hNbe
-	 Oe5Y2iCiJcD8Q==
-Received: from policy01-mors.netcup.net (unknown [46.38.225.35])
-	by mors-relay-8405.netcup.net (Postfix) with ESMTPS id 4j52mj0RZnz76XY;
-	Thu, 15 Oct 2026 11:28:05 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at policy01-mors.netcup.net
-X-Spam-Flag: NO
-X-Spam-Score: -2.901
-X-Spam-Level: 
-Received: from mxe9fb.netcup.net (unknown [10.243.12.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by policy01-mors.netcup.net (Postfix) with ESMTPS id 4j52mf2xdYz8tf5;
-	Thu, 15 Oct 2026 11:28:02 +0200 (CEST)
-Received: from [IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f] (unknown [IPv6:2a02:8108:8984:1d00:a0cf:1912:4be:477f])
-	by mxe9fb.netcup.net (Postfix) with ESMTPSA id 90FF15F9A7;
-	Thu, 15 Oct 2026 11:28:00 +0200 (CEST)
-Authentication-Results: mxe9fb;
-        spf=pass (sender IP is 2a02:8108:8984:1d00:a0cf:1912:4be:477f) smtp.mailfrom=regressions@leemhuis.info smtp.helo=[IPV6:2a02:8108:8984:1d00:a0cf:1912:4be:477f]
-Received-SPF: pass (mxe9fb: connection is authenticated)
-Message-ID: <e51025a5-8106-41b3-90fc-53e51891ea9c@leemhuis.info>
-Date: Thu, 15 Oct 2026 11:27:59 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfIxfCLp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 824A61F000C4;
+	Thu, 15 Oct 2026 09:42:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792057375;
+	bh=g4clIODsEca1+J5TLAYhHXBcWbPQe9okPUAhZ7vXAa8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=GfIxfCLp1ln7ZfLbUFRZ+biNEr58KuMWvP1gmR4En3e3MCyrVI2aEu4fJ7i4PmlPU
+	 SsQQYi2JNbl3Oje3w4ArGmyr+VHQSNzRh5vwicSr1JCqCFhuPUqVlNuqQ/GAa0078X
+	 9xfn9sMhDX/GZGm0XkGBGoF9SffRMI9Du/viCR3VJUcapwh0Bd8i+msqrY2pSD+t8k
+	 OtPubR9bozTX2zFWIYChvLUzE/+eUcXE16g2bcY9gDE0Apkuz+IyTkOzESiwQ+qiXN
+	 REJDjzjyDpiH8ooivpDIVIMBPRYi3Vvm+JoWicJCqpEMrWsMg/dUJjEGF72q5NNbvQ
+	 7vB0Y+Qu/wnnQ==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, stfomichev@gmail.com,
+ kuba@kernel.org, pabeni@redhat.com, tushar.vyavahare@intel.com,
+ kerneljasonxing@gmail.com, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH v3 net-next 11/15] selftests: xsk: add a hardware mode
+ to xskxceiver
+In-Reply-To: <20261014184539.774708-12-maciej.fijalkowski@intel.com>
+References: <20261014184539.774708-1-maciej.fijalkowski@intel.com>
+ <20261014184539.774708-12-maciej.fijalkowski@intel.com>
+Date: Thu, 15 Oct 2026 11:42:51 +0200
+Message-ID: <87tsmn5mg4.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] perf/core: track the perf mlock gift separately
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo
- <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Andrew Morton <akpm@linux-foundation.org>,
- "David Hildenbrand (Arm)" <david@kernel.org>,
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
- regressions@lists.linux.dev, Sasha Levin <sashal@kernel.org>,
- Alexander Motin <alexander.motin@truenas.com>,
- Ameer Hamza <ameer.hamza@truenas.com>,
- "Caleb St. John" <caleb.stjohn@truenas.com>, stable@vger.kernel.org,
- Linux kernel regressions list <regressions@lists.linux.dev>
-References: <20261003-perf-locked-vm-fix-v1-1-d214dcaf0d76@kernel.org>
- <20261015075817.GO2009045@noisy.programming.kicks-ass.net>
- <atCYFpm63elRyuw7@gremlin>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Language: de-DE, en-US
-In-Reply-To: <atCYFpm63elRyuw7@gremlin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-PPP-Message-ID: 
- <179205648162.3507777.14501017423963775184@mxe9fb.netcup.net>
-X-NC-CID: C05WCq3tRTscu+zR3z0ATbzEno476my1YXpBYGDUjkpMVOchz8c=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 10/15/26 11:09, Lorenzo Stoakes (ARM) wrote:
-> On Thu, Oct 15, 2026 at 09:58:17AM +0200, Peter Zijlstra wrote:
->> On Sat, Oct 03, 2026 at 05:29:07PM +0100, Lorenzo Stoakes (ARM) wrote:
-> 
->>> Resolve the issue by simply giving perf its own field separate from the
->>> rest.
->> So I'm a little confused by all this -- perf introduced this field,
->> others jumped on and shit broke, so we fix perf instead of the others?
-> Yeah I think the blame really lies with the later users, and that send a trend
-> that led to further confusion (including myself, mea culpa!)
-> 
->> Anyway, patch seems straight forward enough; and you added comment to
->> the fields, which I suppose does clarify things some.
->> I'll take it. Thanks!
-> Thanks, much appreciated! :)
-Just wondering: how urgent is this fix? Is this something we should try
-to get into 7.3 given that this was noticed in a regression report that
-blamed it on an 7.3-rc commit[1]? That commit also made it to many
-stable series now, which might be another reason to get in mainlined
-rather sooner than later.
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-Ciao, Thorsten
+> drivers/net/hw/xsk.py, added later in this series, runs each hardware
+> AF_XDP case as a zero-copy DUT endpoint and an SKB-mode remote endpoint
+> over a physical link, without negotiating capabilities between them.
+> Add what such a run needs to xskxceiver:
+>
+> - --hw sends UDP/IPv4 test packets (--udp-src, --udp-dst, --udp-port)
+>   between the real interface MACs (--peer-mac); XDP_SHARED_UMEM, whose
+>   program picks the socket by a synthetic destination MAC, skips
 
-[1] https://lore.kernel.org/all/asEllR7if-J3wteg@gremlin/
+This reads weird to me.
+
+I wonder if we can avoid introducing a separate "hardware" mode here? It
+seems to bundle packet format, link handling, and assumptions about the
+endpoint modes. Those are separate concerns, and much of this should
+work with veth too, no?
+
+Could we first make the real MAC addresses and IPv4/UDP format common to
+both veth and physical-device runs?
+
+Then --listen could work independently, timeouts could be configurable,
+and test selection could reflect the actual endpoint modes and
+capabilities. For example, skipping TX_QUEUE_CONSUMER because hw_test
+implies mixed ZC/SKB endpoints seems to encode the launcher's current
+configuration into the test itself. "Real" endpoints could also run the
+same mode.
+
+If we need to keep both packet formats, something like
+--packet-format=3Dudp would maybe describe it better. I'd prefer keeping
+these behaviors independent rather than giving the combined mode another
+name.
+
+Also, we need IPv6 support here in addition to IPv4. You can't assume
+that the DUT is onlink or IPv4.
+
+
+Bj=C3=B6rn
