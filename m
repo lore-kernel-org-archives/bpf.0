@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC563372049
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 02:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B3E3B6C0E
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 02:23:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792030934; cv=none; b=qJ6MukYTvBSUlLsz6NyQEjWac4bMqbZq1SW0Y1xq3LK5AlRt1eKN8bbQAyIOCWpJykQemO2a8SLTSSuR402ZyBpBr/D/jFin2Qubekbm81kW729wrGzRLWpu3vHwI38qYT6NwG4KEQi9VSnxx1Vkg0mlx2Ue0mEkIs7Kpqs+YZc=
+	t=1792031019; cv=none; b=CfjFhDJTw5RWTIfp2uQL7cApnPzwDljo+h8Kn6MjyD1wDYzDedV3Yo6vrILpiDPv8ZWlew4qHWwJhEJXI7G2Xejf0ekAbgGuGz9kFXubHBIBw5mhCVatpsJmtX5K4JJmc5q7vpBJtxYW4o1FN42iq/IJt9v4Dx9wkwTXAvfmJb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792030934; c=relaxed/simple;
-	bh=wKWoGLlq+4mfh4pvYBkRnt/SbcaIvU/Ynv3IEz5edZs=;
+	s=arc-20240116; t=1792031019; c=relaxed/simple;
+	bh=mC3nudLPrjM6WRt7shbO4oTgaNvbA+nyF2WGUhKktXk=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=YgtaPR36cbPhMZ/V48mmDDlfeKbyEm3ZybpyOwBTnM7TdoFf091uyQNcrwj2xKNeIGKr9o5ZzMVThaKBWmwFwQOPXP7vmUbc8Qv5emdNvkkC5FnewvmsusfGnymMr8ZRvMZphWwebAnXG+w5coi6JBq2oaduA+FgpNLIw+WaXzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mUiub0ku; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=Mjm6S1BmCi9+cYNYBLt6VGMQAIIPUIwOmtKj6520EavXxkCAEMfUEQeNsviWzXAkaMIE52Jx2my062zmdpPZf7WTse1/KuzrVz5RJmKvmBxTaGecppvehY3NblpK4OtIK8nGnvP285YxhlRJ0NjlZr3N9VAxbNxgXA8HVJShNQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jnVHRAhK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mUiub0ku"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0801F000C4;
-	Thu, 15 Oct 2026 02:22:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jnVHRAhK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C891F000C4;
+	Thu, 15 Oct 2026 02:23:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792030932;
-	bh=wKWoGLlq+4mfh4pvYBkRnt/SbcaIvU/Ynv3IEz5edZs=;
+	s=k20260515; t=1792031018;
+	bh=ynWpw2DZsdJ2j8gFvl++6JNfnWhfoGbfsuba6rQmEaA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mUiub0kulLjwUmptjOLdAT1uS/dvM9rL9r4uezVRq5m+1tg9mX5lKbt2c5FjlNQzK
-	 Rdj2T7rpYFgQ0dhf9gS8zbjZ3C1UNiRewX0P3pzPgWXyZGmQ2Ujc1YPMGB1ukxJ7ty
-	 nYuWA8qC5ehDufkEfFCVRYqsjKNt6DRGvbPJ05uDjJUdOyvlDEdwrAX15494PjsXUH
-	 rdG6PRDAxFySXW0q63x01w5+qKtAqOYmCAxwV1Zp9ybp7mcW9/T+urk9FGR4GDK/0M
-	 ddtXufUfT7hWM7F7by3RrWhoBRGrkIrQuRvfK29vLrXuJX81J2jxaBdmfuih49j0SS
-	 LGIeO+JeQgIug==
-Message-ID: <sashiko-outbox-172140@kernel.org>
+	b=jnVHRAhKt+lqsCcMQS9S9Y+ZhThK2SWl9X9wAUkHL1L2PNAkskRhjJgLN7GKlLZry
+	 CEaC9wb8mI1DCxHqKINfbtqQrx+41OTtkGMdcwPse8LbvolnLZdVovqFzfzwnPS8Mi
+	 FOPs3oACtcwQuV1uwXTgxgDN4kagf7CBNxH/ZlsycNF0lYiLBy2FwLuKWjWxnynns1
+	 qiZNsrs6ImLZodYifCp/7v22qBJtLno5bK6K09TFhQCt0yoY+DYOB3DMvZyGvgiIrn
+	 UY4JMUccVyvXXCdzQqN5XK4fWUI3VmhgjS48nEjhbi30o+kRftMYDpxA1fX7XNo/iu
+	 5UyE6pwv9ckGw==
+Message-ID: <sashiko-outbox-172145@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: Enable private stack tests
- for riscv64
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add a runtime test for
+ private stack and stack arguments
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Chen Pei" <cp0613@linux.alibaba.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261015021238.5657-3-cp0613@linux.alibaba.com>
+In-Reply-To: <20261015021238.5657-4-cp0613@linux.alibaba.com>
 References: <20261015021238.5657-1-cp0613@linux.alibaba.com>
- <20261015021238.5657-3-cp0613@linux.alibaba.com>
+ <20261015021238.5657-4-cp0613@linux.alibaba.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Oct 2026 02:22:11 +0000
+Date: Thu, 15 Oct 2026 02:23:38 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,47 +47,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: Missing enablement for private stack test in verifier_large=
-_stack.c for riscv64
+- [Medium] bpf: test flakiness due to parallel struct_ops attachment
 --
 
-commit 6110b152bad2869b21761f9abd7de948a19afdbf
+commit 30217e3723f8427977b857ce4b668a913d8e6da3
 Author: Chen Pei <cp0613@linux.alibaba.com>
+selftests/bpf: Add a runtime test for private stack and stack arguments
 
-selftests/bpf: Enable private stack tests for riscv64
+This commit adds a runtime test for combining private stacks with outgoing
+stack arguments. It validates the structural layout via disassembly patterns
+and checks runtime execution context across CPUs. It also includes a
+struct_ops test to act as a kernel stack control case.
 
-This commit enables the verifier and struct_ops private-stack tests to
-run on riscv64 by adding the expected RV64 JITed instruction patterns.
-
-> selftests/bpf: Enable private stack tests for riscv64
->
-> The RV64 JIT now supports the private stack. Allow the existing
-> verifier and struct_ops private-stack tests to run on riscv64 and add
-> the expected RV64 JITed instruction patterns.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/private_stack_runtime=
+.c b/tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c
+> new file mode 100644
+> index 0000000000000..3af24ca8009f4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/private_stack_runtime.c
+> @@ -0,0 +1,83 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <network_helpers.h>
+> +#include "private_stack_runtime.h"
+> +#include "private_stack_runtime.skel.h"
+> +
+> +void test_private_stack_runtime(void)
+> +{
 
 [Severity: Medium]
-Was the private_stack_two_frames test in verifier_large_stack.c missed
-in this patch?
+Will this cause test flakiness in CI due to parallel execution?
 
-The commit enables private-stack tests in verifier_private_stack.c and
-struct_ops_private_stack.c, but verifier_large_stack.c contains a test
-that explicitly validates the verifier log messages for a 2048-byte large
-stack (private stack) setup, which is currently restricted to x86_64 and
-arm64:
+The test function lacks the serial_ prefix, so it will run concurrently in
+the test_progs worker threads rather than in isolation.
 
-tools/testing/selftests/bpf/progs/verifier_large_stack.c:
-__arch_x86_64
-__arch_arm64
-__success __log_level(4)
-__msg("stack depth max 2048")
-__msg("subprog 0 (private_stack_two_frames) main {{.*}} stack 2048")
-__msg("subprog 1 (priv_stack_frame_2048) static {{.*}} stack 2048")
-__naked void private_stack_two_frames(void)
+[ ... ]
 
-Since the RV64 JIT now supports the private stack, should __arch_riscv64
-be added to this test as well so that the riscv64 architecture receives
-this large stack test coverage?
+> +	ASSERT_GT(tested, 0, "tested_cpus");
+> +
+> +	ops =3D bpf_map__attach_struct_ops(skel->maps.zero_stack_ops);
+> +	if (!ASSERT_OK_PTR(ops, "attach_zero_stack"))
+> +		goto out;
+
+[Severity: Medium]
+Since zero_stack_ops targets the singleton bpf_testmod_ops3 in bpf_testmod,
+executing this concurrently with other non-serial tests that attach to the
+same struct_ops (such as test_struct_ops_private_stack) can cause random
+-EEXIST failures.
+
+st_ops3_reg() in bpf_testmod.c enforces a single active attachment:
+
+    if (st_ops3)
+        ... err =3D -EEXIST
+
+Could this function be renamed to serial_test_private_stack_runtime to avoid
+resource conflicts with other tests?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261015021238.5657=
--1-cp0613@linux.alibaba.com?part=3D2
+-1-cp0613@linux.alibaba.com?part=3D3
