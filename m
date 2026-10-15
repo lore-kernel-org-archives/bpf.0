@@ -1,252 +1,197 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961A63BF677
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:08:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C810B55C1A6
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792087745; cv=none; b=e9fNyrPnv/hl3irWgKPSYefUDIkVEFDw9kg73l0Ez02x1UmOAQq577MqjqFq66cc29MADdm0K0+3v/48tmrhw06DdFxbcI0Wb5id9b6X86JkaZOnjefCcOwEJK1MUV/n8q8JpXi4wn1ypRYTtWpZbZNO1njhdVOxni5riWcDer8=
+	t=1792087750; cv=none; b=AqnMo2130nosrMpQHjyJ8kRTCRxSeUsIOjjOtrmH2NBWNh58NmBcjBfGwO/0DXaCcjUWUOR9N/dyVyvQWhxVhPM9kbZ3tRKZR58JG6ztVhTPfQisUKDYXuqauimx8JoAqWWrWh/5uHU1LpkYPIqQPE/FPFaTRCjGgPCkkM8oVYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792087745; c=relaxed/simple;
-	bh=pCwLO9KL7+4t7ull3XRtDGLL4YyzP3Od2pLrTHa5pwA=;
+	s=arc-20240116; t=1792087750; c=relaxed/simple;
+	bh=Krc7OIN6OGfz1+MXYnfl6dz7HcGZHERCMp0IOQrtlOM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pcjXYafvseKcPgZmjtMifp9tzsPdqyQDGdP7A/ApoukKMEJ4RhyI2QJkGG2LBHNTMi5M5Y+hKcimurMkb3gjbol0ZrBanIM2RGTUdPEXu7heQGgRuIG7gCVjH8zUkTzynsq9W0Tg9aeMtoh+UTR9uvo3J0Mz/jWF2+VmfPNzdHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgUWpmKq; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=klH3bpIoreIQz9vi+CG2Kbg30G0I1jcN8OdTZPUwAe4YkZRxUK+jR6tHtjQm5tEiiXcJHUpBxh0hKR3tvaCWHtvLkq/f8oR5z1NExP+4WuMKgiZVeh4bBaZdxPVg/uA7pn0XVN4BqRREv5JA+00UZliZtSNX3oJiZ2DkVmV4S0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FKnhyoKw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgUWpmKq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E59E1F000C4;
-	Thu, 15 Oct 2026 18:08:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FKnhyoKw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 180EF1F000C5;
+	Thu, 15 Oct 2026 18:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792087735;
-	bh=E8vqjZEjKdmczuyYd5aag6gd+uA112nlhG1I/pzwjSA=;
+	s=k20260515; t=1792087738;
+	bh=z9SKNL+qwtokUMn+mo0n4grGnLvK6rNf29EQn0lgshU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KgUWpmKq8CyZW2lT3rT1Podlq1BSwZ+LRzJIz74NN+Mb+46uEXsiDcIS+xNadIq1u
-	 GAZoMNzfiuczD/J/U57ro3VnEaUxEIGuOUL2YMi+29RPbxglfEtYui+3PF/5trOrwa
-	 mGvy9U/GTd4vdgDWinBudrynvRrKHwYwK0q6wtXQ2KqL65dyXPdWKTJPih8uwa/Jog
-	 evSGBVP2kzvt7tBWuAe6oH6XWJvROn8Wsr2wjNmyfijFNvkZgYQqDiXmEEEVBxGXrU
-	 E9ilzCmacseW4DURME1vJGKgKBVFUcf3uRBPnounMMqoHtM1kIBzHH1pVZoChaiNCb
-	 rsJUE4QOmsYFQ==
-Content-Type: multipart/mixed; boundary="===============5756007415653613052=="
+	b=FKnhyoKwxathH3poc5M/AcQS/cAHz633hRD527Ik/DOEWmFF7kcJFcTMwuw8QiSXd
+	 WNAUsJijDrs0ZtwlBsVaT21vK+WrnzXkVTk1qiY938DoXLQ0Z4IyCFeO7QtuHpwJI1
+	 Ik9sBNNKBFPByVluZAXdRlfHIob49uPwWjRqwMtHi6mrBG4zj5nC7AmcDb6C/lk7XU
+	 J68AtubgghW3dIJuJjfRl9q8sTGQSL3eP5eB0XZSpMTJ60pIAAwpXLANp8LcxEQ2VI
+	 CNwa4ZBNotWg9VRxr47ZDNowVxTMkMiEge1kEtcths9gaNK3b+jkHldsw6jC/MCcCW
+	 pgL/bpxDpS2eQ==
+Content-Type: multipart/mixed; boundary="===============0059690514135417836=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5ac7a3c96c75413b180c435b15401c2f6435824eff44de5df2fd4942da603f46@mail.kernel.org>
-In-Reply-To: <20261015171917.599025-1-daniel@iogearbox.net>
-References: <20261015171917.599025-1-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Follow-up coverage to JIT instruction tests
+Message-Id: <05ad306999c7990c577cbd4335f942f4eb8b385698af9144e2565878b0636a6d@mail.kernel.org>
+In-Reply-To: <20261015171917.599025-2-daniel@iogearbox.net>
+References: <20261015171917.599025-2-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add JIT cBPF-related instruction tests
 From: bot+bpf-ci@kernel.org
 To: daniel@iogearbox.net,memxor@gmail.com
 Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 15 Oct 2026 18:08:54 +0000 (UTC)
+Date: Thu, 15 Oct 2026 18:08:57 +0000 (UTC)
 
---===============5756007415653613052==
+--===============0059690514135417836==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Follow-up coverage to JIT instruction tests
+> selftests/bpf: Add JIT cBPF-related instruction tests
 
 TL;DR:
-- New selftests may fail on s390x/powerpc: shift-count edges assume masking
-  those JITs may not do
-- calls subtest may fail to load on JITs without large stack (512-byte limit)
-- stale comment and redundant div_result() special case (nits)
+- Test issue: the 1820-MSH jump case may not catch a JIT that mis-encodes the
+  far jump
+- Nits: hand-rolled netns setup loses -m traffic capture; silent skip
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns.c b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-> index dabf8a4abdfe..86fb43484f07 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-
-> @@ -192,9 +251,10 @@ static const char *jmp_name(int op)
->  /* ALU result computation, false when the operands are not valid */
->  enum { F_ALU32 = 1, F_SIGNED = 2 };
->  
-> -static bool alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
-> +static void alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
->  {
->  	bool is_signed = flags & F_SIGNED;
-> +	int mask = flags & F_ALU32 ? 31 : 63;
->  
->  	/* Narrow operands for ALU32 */
->  	if (flags & F_ALU32) {
-
-This isn't a bug, but the comment above the enum still describes the old
-contract:
-
-/* ALU result computation, false when the operands are not valid */
-
-alu_result() now returns void and gives a defined result for every operand,
-including zero divisors, signed division by -1 and out of range shift
-counts, so it has no false return any more.  Could the comment be updated
-to say that it models the ISA result for all operands?
-
-Also, div_result() still special-cases the signed -1 divisor:
-
-static __u64 div_result(int op, __u32 flags, __s32 imm, __u64 n)
-{
-	__u64 res;
-
-	/* LLONG_MIN / -1 == LLONG_MIN, LLONG_MIN % -1 == 0, same for INT_MIN */
-	if ((flags & F_SIGNED) && imm == -1)
-		res = op == BPF_MOD ? 0 : -n;
-	else
-		alu_result(&res, n, (__s32)imm, op, flags);
-	return flags & F_ALU32 ? (__u32)res : res;
-}
-
-alu_result() now handles that case itself (-v1 for BPF_DIV, 0 for BPF_MOD),
-and the results are identical after truncation.  Is the special case in
-div_result() still needed?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns_cbpf.c b/tools/testing/selftests/bpf/prog_tests/jit_insns_cbpf.c
+> new file mode 100644
+> index 000000000000..5471c06605fe
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/jit_insns_cbpf.c
+> @@ -0,0 +1,2620 @@
 
 [ ... ]
 
-> @@ -398,6 +486,41 @@ static void test_alu_reg(void)
+> +/*
+> + * A jump over MSH loads, each of which becomes 18 instructions: the
+> + * converted offset has to fit 16 bits, which 1820 of them do.
+> + */
+> +static int fill_jump_over_msh(struct sock_filter *insns, int nr)
+> +{
+> +	int i;
+> +
+> +	insns[0] = JUMP(BPF_JMP | BPF_JA, nr, 0, 0);
+> +	for (i = 1; i <= nr; i++)
+> +		insns[i] = STMT(BPF_LDX | BPF_B | BPF_MSH, 0);
+> +	insns[nr + 1] = STMT(BPF_RET | BPF_K, 0xabababab);
+> +	return nr + 2;
+> +}
 
 [ ... ]
 
-> +			for (r = 0; r < (a.op == BPF_NEG ? 1 : 2); r++) {
-> +				snprintf(b.desc, sizeof(b.desc), "alu%d_%s%s_%c edges",
-> +					 f ? 32 : 64, a.flags & F_SIGNED ? "s" : "", alu_name(a.op),
-> +					 r ? 'x' : 'k');
-> +				if (a.op == BPF_NEG) {
-> +					for (i = 0; i < ARRAY_SIZE(edges); i++)
-> +						emit_alu_imm(&b, &a, edges[i], 0);
-> +					batch_flush(&b);
-> +				} else if (r) {
-> +					fill_edges(&b, &a, false, emit_alu_reg);
-> +				} else {
-> +					fill_edges(&b, &a, true, emit_alu_imm);
-> +				}
+> +	{
+> +		.descr = "BPF_MAXINSNS: jump over 1820 MSH",
+> +		.fill = fill_jump_over_1820_msh,
+> +		.data = DATA(0xfa, 0xfb, 0xfc, 0xfd),
+> +		.runs = RUNS({ 4, 0xabababab }),
+> +		.flags = CB_NOBLIND,
+> +	},
 
-Do these edge sweeps pass shift counts that not every JIT masks?
+Can this case detect a JIT that mis-encodes the jump it is meant to
+exercise?
 
-fill_edges() feeds every value in edges[] (0x7f, 0xff, 0x7fffffff,
-0xffffffff, ...) as the register count for BPF_LSH, BPF_RSH and BPF_ARSH,
-and the expected result comes from alu_result(), which now masks the count
-by the width:
+fill_jump_over_msh() emits a JA over nr MSH loads to a RET K 0xabababab.  An
+MSH load only writes X, so neither A nor the return value depend on it.  If a
+JIT emits the JA short, or drops it, the MSH loads run harmlessly on the
+4-byte DATA(0xfa, ...) and the program still reaches the same RET K.
 
-	int mask = flags & F_ALU32 ? 31 : 63;
-	...
-	case BPF_LSH:
-		*res = v1 << (v2 & mask);
+rewrite_returns() leaves RET K 0xabababab as is, and run_case() expects
+min(0xabababab, 4) = 4 bytes either way.  So the run of the 1820 case can
+only fail if the JIT crashes or jumps past the RET.
 
-That matches the interpreter in kernel/bpf/core.c
-(DST = (u32) DST OP ((u32) SRC & 31)) and instruction-set.rst.  The
-verifier, however, calls these shifts undefined
-("Shifts greater than 31 or 63 are undefined" in
-is_safe_to_compute_dst_reg_range()), and nothing masks the count before the
-JIT runs.
+The bound itself (1820 accepted, 1821 rejected) is checked by the converter,
+and the 1821 CB_FAIL case covers that alone.  The 1820 program is converted
+with off = (8 + 1820 * 18) - 7 - 1 = 32760, which is the kind of far branch
+where arch JITs get offsets wrong.
 
-Not every JIT masks it.  In arch/s390/net/bpf_jit_comp.c, BPF_ALU | BPF_LSH |
-BPF_X emits "sll %dst,0(%src)" (and srl for BPF_RSH).  SLL/SRL use only the
-low six bits of the address as the count, so a 32-bit shift by 32..63 gives
-0 rather than a shift by count & 31.  In arch/powerpc/net/bpf_jit_comp64.c,
-PPC_RAW_SLW has a 6-bit count for ALU32 and PPC_RAW_SLD a 7-bit count for
-ALU64.
+The previous patch in this series fixed the same gap in the eBPF tests ("a
+landing short of the target passed with r0 at zero"), and
+fill_jump_over_ld_abs() avoids it by returning 2 vs 3, so a wrong landing is
+a drop.
 
-On s390x, "alu32_lsh_x edges" with in0=0x1 and in1=0x7f expects
-(u32)(1 << 31) = 0x80000000, but the JIT shifts by 63 and stores 0.
-"alu32_rsh_x edges" with in0=0x80000000 and in1=0x7f expects 1 but gets 0.
-On ppc64, "alu64_lsh_x edges" with in1=0x7f expects v1 << 63 but gets 0.
-batch_flush() would then fail ASSERT_EQ, and jit_insns/alu_edges and
-jit_insns_blinded/alu_edges fail.
-
-jit_insns is not in tools/testing/selftests/bpf/DENYLIST.s390x, the commit
-message shows only an x86 run, and nothing in the series changes a JIT.
-
-The new counts[] in test_shifts() has the same dependency:
-
-> @@ -632,8 +764,10 @@ static void test_shifts(void)
->  		0x0123458967abcdefLL, /* dword > 0, word > 0 */
->  	};
->  	static const int ops[] = { BPF_LSH, BPF_RSH, BPF_ARSH };
-> +	/* Counts at and above the width and negative ones, masked by the width */
-> +	static const __s64 counts[] = { 32, 33, 63, 64, 65, 127, -1, -3, 1LL << 32 | 3 };
->  	struct batch b;
-> -	int o, f, v, imm, k;
-> +	int o, f, v, c, imm, k;
-
-Should the series fix the s390 and powerpc JITs to mask the count first, or
-should the register count edges for shifts stay within the width until they
-do?
+Would it work to make the skipped loads observable?  For example, load X
+with a known nonzero value before the JA and end with TXA; RET A under
+CB_RAW, so that any MSH that runs changes the kept length.  CB_RAW would be
+needed because a rewritten RET A would itself be a forward jump past 32K
+converted instructions, which the converter rejects.
 
 [ ... ]
 
-> @@ -2340,6 +2522,168 @@ static void test_max_jmp(void)
+> +static int net_setup(void)
+> +{
+> +	struct ifreq ifr = {};
+> +	int mark = SKB_MARK;
+> +
+> +	net.tx = -1;
+> +	if (!ASSERT_OK(make_netns(NETNS), "netns"))
+> +		return -1;
+> +	net.tok = open_netns(NETNS);
+> +	if (!ASSERT_OK_PTR(net.tok, "open netns"))
+> +		return -1;
 
 [ ... ]
 
-> +static void test_calls(void)
+> +static void net_teardown(void)
+> +{
+> +	if (net.tx >= 0)
+> +		close(net.tx);
+> +	if (net.tok)
+> +		close_netns(net.tok);
+> +	remove_netns(NETNS);
+> +}
+
+A subsystem pattern flags this as potentially concerning: a test that
+hand-rolls namespace setup and teardown instead of using the existing
+test-util helpers for something they already provide.
+
+net_setup() and net_teardown() pair make_netns() + open_netns() and
+close_netns() + remove_netns() by hand and keep the nstoken in a static
+struct.  test_progs.h already provides that pairing:
+
+    struct netns_obj *netns_new(const char *nsname, bool open);
+
+netns_new() calls make_netns(), starts the traffic monitor when the test or
+subtest matches the -m option of test_progs, and then calls open_netns().
+netns_free() stops the monitor, closes the token and removes the namespace.
+
+With the open-coded version, './test_progs -t jit_insns_cbpf -m packets'
+does not capture the veth traffic of the packets subtest.  That traffic is
+what one would want when a CB_PKT case fails, for example to inspect the
+VLAN-tagged and metadata frames.
+
+Could net_teardown() reduce to netns_free(), with net.tok and the NETNS
+bookkeeping going away?
+
+The failure paths here are correct (tok is NULL before open_netns()
+succeeds, tx is set to -1 first, and net_teardown() restores the original
+netns before remove_netns()), and seven other prog_tests still call
+make_netns() directly, so this looks like a reuse and consistency point
+rather than a functional bug.  The concrete loss is the -m traffic monitor
+integration that netns_new() and netns_free() provide.
 
 [ ... ]
 
-> +			insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8);
+> +	/* The constants of the conversion blinded, which takes a JIT */
+> +	if (test__start_subtest("blinded")) {
+> +		if (!is_jit_enabled()) {
+> +			test__skip();
+> +		} else if (!sysctl_set_or_fail(harden, old, "2")) {
 
-[ ... ]
+A subsystem pattern flags this as potentially concerning: a test that skips
+silently with no message.
 
-> +			/* Clobber the rest, sum the arguments through the deepest slot */
-> +			for (r = 0; r < 4; r++)
-> +				if ((nested ? ~mask : mask) & (1 << r))
-> +					insns[n++] = BPF_MOV64_IMM(BPF_REG_6 + r, 0);
-> +			insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -512);
+The blinded subtest calls test__skip() without a reason when the JIT is
+disabled, so test_progs prints only 'jit_insns_cbpf/blinded:SKIP', with
+nothing saying that bpf_jit_enable is 0 and that constant blinding needs a
+JIT.  Would a short message before test__skip() help, for example:
 
-[ ... ]
+    printf("%s:SKIP: blinding needs bpf_jit_enable\n", __func__);
 
-> +			fd = load_prog(insns, n, desc);
-> +			if (fd < 0)
-> +				return;
-
-Can the calls subtest load on JITs without large stack support?
-
-The main frame spills ctx to the stack:
-
-	insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8);
-
-and the deepest callee (the direct callee, or the second level one when
-nested) then writes the deepest slot:
-
-	insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -512);
-
-check_max_stack_depth_subprog() adds up the rounded frame depths along the
-call chain and compares the total with env->stack_limit.  With the JIT that
-is round_up(8, 16) + round_up(512, 16) = 528.  With the interpreter it is
-round_up(8, 32) + 512 = 544.
-
-env->stack_limit comes from bpf_prog_stack_limit():
-
-	if (prog->jit_requested && !bpf_prog_is_offloaded(prog->aux) &&
-	    bpf_jit_supports_large_stack() && bpf_jit_supports_subprog_tailcalls())
-		return MAX_BPF_STACK_JIT;
-	return MAX_BPF_STACK;	/* 512 */
-
-Only arch/x86 and arch/arm64 override the weak
-bpf_jit_supports_large_stack(), which returns false otherwise.
-BPF_PROG_TYPE_SYSCALL gets no private stack either, since
-bpf_enable_priv_stack() returns NO_PRIV_STACK for it.
-
-So on s390x, riscv64, powerpc64 and loongarch64, and on any run with
-bpf_jit_enable=0, the limit is 512 and the first case already fails with:
-
-	combined stack size of 2 calls is 528. Too large
-
-load_prog()'s ASSERT_GE(fd, 0) then fails the jit_insns/calls subtest.
-Those JITs support bpf2bpf calls and a -512 slot in a single frame, so the
-failure says nothing about them.  jit_insns is not in DENYLIST.s390x, and
-the commit message shows only an x86 run.  The later commit in the series,
-"selftests/bpf: Add JIT cBPF-related instruction tests", does not touch
-this code.
-
-Also, -512 is not the deepest slot on JITs that do have the 2048 byte
-budget, and on 512 byte JITs it cannot be combined with the caller's frame.
-The tree already has is_large_stack_supported() in testing_helpers.c and
-__load_if_large_stack()/__load_if_no_large_stack() for this situation.
-
-Could the leaf slot be picked from the available budget, for example
--(512 - 16) when is_large_stack_supported() is false, or the subtest be
-skipped on such kernels?
+A bare test__skip() is a common idiom in test_progs (jit_insns.c,
+arena_scalar_blinded.c, callx_rodata_lskel.c and kasan.c do the same), and
+the harness still reports the subtest as SKIP, so this is a diagnostics
+point with no functional impact.
 
 
 ---
@@ -254,4 +199,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38779093397
---===============5756007415653613052==--
+--===============0059690514135417836==--
