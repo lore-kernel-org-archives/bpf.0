@@ -1,44 +1,47 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7CB55C31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC6E372673
 	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 17:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792084777; cv=none; b=ZeXWS2xiw2DebSfvcIoVQDA+ueDZS+yPmmh+b8/EvMd0YMx3g8fqTbIifQiuidGUUgUoyRkHteeuWMrGNVAMsiWtcVkGDbBjTPTGiTxpCLTDVSLTqX7GoVRMnkYNCGwYzN2I+RRh7WOi3v5o57wRVtObKEmVfpy9zpUFETVPD7g=
+	t=1792084777; cv=none; b=XqBfsWpF20HPJXno5N3GpAITMohgrd0vxiljgH4uOaTmlhvBLx6WqnzlPYkwZS2NnpIyI793dmEN4JD6k2jkNULxipjZ/akRoLcptk1HA+fcnriR7QCkf4dn8iITX5VFJvOjabbC5+esf0is53ui+O38YOwlNRxOmMtTEoe8jHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792084777; c=relaxed/simple;
-	bh=NwJ6eUpg2Ml/owEivslCQLkuzMya3rbrlRKVxpS/YRI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C34H/j+ipyyPtpUKxnRRMUP1UtrvJ6BfaGjvdSO5iFJVKCTZbofbBXUj2rjrnrLNIzpPGPFizHqI7oaNTrFtUfRenKx+JUfxBBS38gmJETV3+wQ+mtagrdapfKMZhPTWyCITIUpposHHiDLUXFbq1Kc+o0uSoEtj3RkJY+obK2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hcA3fD3g; arc=none smtp.client-ip=213.133.104.62
+	bh=GSkWPUNgGfT/BQDbOIpxg2F9ayNf261BC8zxGEGZJP8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YwKyLVJWsbNWJaON+xdSX78ufejKtv1SsFbOhZACHUyk1rIr3rVpwxg6udLMVAVtP067wjw64WwkSfm1CGqEMA+l+OvfS32UIzRYty6U/JRI+AydGlw1uNbVJNcVM49v3YOFBvEMZAhdHcTCjOoRDelSSHm4SpLA+8ZqAguebwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RHK+DWmh; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hcA3fD3g"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RHK+DWmh"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=MpDJe1dJYnOOj31h8YyStwpIvspS2G5jYq8Fn8Iiu8g=; b=hcA3fD3gQ0ChcazsuR9ffpsD/1
-	W2p3sg2vG6WH4dvALdXgoX3xHKmVbgpUo0D3aHTMS1QCo4dNhFd6Q8e1zHkzR8+z0MA6ZTmxZTFed
-	Sg+oMGK4Qjfs0NekIOmw27yyTJomgwn/KcAHjOnRTztvi/ard3O7Cb4SD6cYhTvh59hYdTDvxGpBj
-	qshQxbjokSaziLVpGt/MCqN+EHkWPdRcdJEH730hI3NEZCs7lub28OyBSoCxq2Hs2Mg7wiPlPtfre
-	sepW+oTklCJG4YCznoVip5Mij0ZRt6NDXVJRDzI1Ij5i+Tf5AKiWkulg35fDU2YHAj2VV3VugkLz8
-	XEcjFycg==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=PGSocC/gRmU1I6x0+bDNC5nDKr1w2DXGhCsJoSMjlqM=; b=RHK+DWmhV/AOYwuRPA+DTynliJ
+	dAIDv3+bE2C60Q8+vtdPYQBD1QAmpAuacXOJHDfkXSbF8RO/PA806ao9/RKpCgVFGZgKz895d2mWF
+	FCXcEkGZP5ziMLWD9M4ge1adgfpGqXWKQnPULR7ImagqzAeAzD07yB3RKPFRe6sfsZSui3/4A8YCK
+	fHuqI1ugKYRNhoDebzd5+nkNrP5cqftcj35GitjUPZ1r6vCmQhO8K5bboMYlKXt1Wsf+Lczl6irhr
+	3FGwTyQWIWxagFRMDr627hnw+admZ9HCAU7tzFo7xvNXsj/ltt5hJC0Ve+F2wyyUfaEyZ+wzLh8IB
+	O7Ev3cNg==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xHP6s-0005ak-1Q;
-	Thu, 15 Oct 2026 19:19:18 +0200
+	id 1xHP6t-0005b1-0D;
+	Thu, 15 Oct 2026 19:19:19 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: memxor@gmail.com
 Cc: bpf@vger.kernel.org
-Subject: [PATCH bpf-next 1/2] selftests/bpf: Follow-up coverage to JIT instruction tests
-Date: Thu, 15 Oct 2026 19:19:16 +0200
-Message-ID: <20261015171917.599025-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add JIT cBPF-related instruction tests
+Date: Thu, 15 Oct 2026 19:19:17 +0200
+Message-ID: <20261015171917.599025-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261015171917.599025-1-daniel@iogearbox.net>
+References: <20261015171917.599025-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,1227 +51,2657 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28154/Thu Oct 15 08:24:22 2026)
 
-Close gaps in the JIT instruction tests found by earlier Sashiko review,
-by comparing the programs with what reaches the JIT, and by a sweep
-through rfc9669. Non-exhaustive list:
+The classic BPF cases of the removed test_bpf module ran their programs
+on a hand-built skb. Run them as socket filters instead via jit_insns_cbpf
+test suite. This covers all previous test_bpf cases as well as a few corner
+cases beyond that.
 
-- The staggered jumps loaded their operands once, so the verifier decided
-  every jump after the first, and a landing short of the target passed
-  with r0 at zero. Reload the operands per region and let r0 carry the
-  region number from the jump to its target.
-- The matching 32-bit cmpxchg compared an r0 the mismatching one had zero
-  extended. Reload r0 with the full value first and check that the source
-  register keeps its upper half, as test_bpf did.
-- The 32-bit atomics wrote and read back only their word, so a JIT touching
-  all 64 bits passed when the other half was zero. Fill and read back the
-  whole slot.
-- The sub-word loads of the zero offset, offsets and probe_mem tests landed
-  in a register holding nothing in particular. Set it to all ones first.
-- Let probe_mem load every size, sign extending too, and run ld_imm64 into
-  every register, not only r1.
-- Drop the load-acquire probe: a JIT without the instruction fails like for
-  any other one instead of skipping.
-
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t jit_insns
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t jit_insns_cbpf
   [...]
-  #191/1   jit_insns/arena access with zero offset:OK
-  #191/2   jit_insns/cast to a user address:OK
-  #191/3   jit_insns/alu_imm:OK
-  #191/4   jit_insns/alu_reg:OK
-  #191/5   jit_insns/alu_imm_regs:OK
-  #191/6   jit_insns/div_const:OK
-  #191/7   jit_insns/alu_reg_pairs:OK
-  #191/8   jit_insns/alu_edges:OK
-  #191/9   jit_insns/shifts:OK
-  #191/10  jit_insns/atomics:OK
-  #191/11  jit_insns/atomic_reg_pairs:OK
-  #191/12  jit_insns/xadd_chain:OK
-  #191/13  jit_insns/ld_imm64:OK
-  #191/14  jit_insns/jmp_imm:OK
-  #191/15  jit_insns/jmp_reg:OK
-  #191/16  jit_insns/jmp_reg_pairs:OK
-  #191/17  jit_insns/jmp_edges:OK
-  #191/18  jit_insns/staggered_jumps:OK
-  #191/19  jit_insns/max_jmp:OK
-  #191/20  jit_insns/calls:OK
-  #191/21  jit_insns/helper_calls:OK
-  #191/22  jit_insns/ldst_zero_off:OK
-  #191/23  jit_insns/ldst_offsets:OK
-  #191/24  jit_insns/acq_rel:OK
-  #191/25  jit_insns/movsx:OK
-  #191/26  jit_insns/jset_imm:OK
-  #191/27  jit_insns/cmp_imm:OK
-  #191/28  jit_insns/alu_consts:OK
-  #191/29  jit_insns/bswap:OK
-  #191/30  jit_insns/probe_mem:OK
-  #191     jit_insns:OK
-  #192/1   jit_insns_blinded/alu_imm:OK
-  #192/2   jit_insns_blinded/alu_imm_regs:OK
-  #192/3   jit_insns_blinded/alu_edges:OK
-  #192/4   jit_insns_blinded/div_const:OK
-  #192/5   jit_insns_blinded/shifts:OK
-  #192/6   jit_insns_blinded/xadd_chain:OK
-  #192/7   jit_insns_blinded/ld_imm64:OK
-  #192/8   jit_insns_blinded/jmp_imm:OK
-  #192/9   jit_insns_blinded/jmp_edges:OK
-  #192/10  jit_insns_blinded/ldst_zero_off:OK
-  #192/11  jit_insns_blinded/ldst_offsets:OK
-  #192/12  jit_insns_blinded/jset_imm:OK
-  #192/13  jit_insns_blinded/cmp_imm:OK
-  #192/14  jit_insns_blinded/alu_consts:OK
-  #192     jit_insns_blinded:OK
-  Summary: 2/44 PASSED, 0 SKIPPED, 0/0 FAILED
+  #193/1   jit_insns_cbpf/classic:OK
+  #193/2   jit_insns_cbpf/checker:OK
+  #193/3   jit_insns_cbpf/frags:OK
+  #193/4   jit_insns_cbpf/packets:OK
+  #193/5   jit_insns_cbpf/blinded:OK
+  #193     jit_insns_cbpf:OK
+  Summary: 1/5 PASSED, 0 SKIPPED, 0/0 FAILED
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- .../selftests/bpf/prog_tests/jit_insns.c      | 704 +++++++++++++-----
- 1 file changed, 530 insertions(+), 174 deletions(-)
+ [ Small fyi, the gso related tests I pushed here for net-next
+   https://lore.kernel.org/netdev/20261015151033.591439-1-daniel@iogearbox.net/
+   thus this concludes all of old test_bpf. ]
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns.c b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-index dabf8a4abdfe..86fb43484f07 100644
---- a/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-+++ b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-@@ -16,18 +16,18 @@
- 
- struct sweep_ctx {
- 	__u64 in[NR_CASES][2];
--	__u64 out[NR_CASES][3];
-+	__u64 out[NR_CASES][4];
- };
- 
- #define IN_OFF(k, j)	(offsetof(struct sweep_ctx, in) + ((k) * 2 + (j)) * 8)
--#define OUT_OFF(k, j)	(offsetof(struct sweep_ctx, out) + ((k) * 3 + (j)) * 8)
-+#define OUT_OFF(k, j)	(offsetof(struct sweep_ctx, out) + ((k) * 4 + (j)) * 8)
- 
- /* The cases of one program: operands in, results out, expected results */
- struct batch {
- 	struct bpf_insn *insns;
- 	int cnt, cap;
- 	struct sweep_ctx ctx;
--	__u64 exp[NR_CASES][3];
-+	__u64 exp[NR_CASES][4];
- 	__u8 nr_out[NR_CASES];
- 	int nr;
- 	char desc[80];
-@@ -149,6 +149,65 @@ static int scratch_reg(int r1, int r2)
- 	return BPF_REG_9;
- }
- 
-+static int size_bits(int size)
-+{
-+	switch (size) {
-+	case BPF_B:
-+		return 8;
-+	case BPF_H:
-+		return 16;
-+	case BPF_W:
-+		return 32;
-+	default:
-+		return 64;
-+	}
-+}
-+
-+/* The first size bytes of v in memory, as a load of that size reads them */
-+static __u64 head_bytes(__u64 v, int size)
-+{
-+	int bits = size_bits(size);
-+
-+	if (bits == 64)
-+		return v;
-+#if __BYTE_ORDER == __BIG_ENDIAN
-+	return v >> (64 - bits);
-+#else
-+	return v & ((1ULL << bits) - 1);
-+#endif
-+}
-+
-+/* v with its first size bytes in memory replaced by those of w */
-+static __u64 head_merge(__u64 v, __u64 w, int size)
-+{
-+	int bits = size_bits(size);
-+	__u64 mask;
-+
-+	if (bits == 64)
-+		return w;
-+	mask = (1ULL << bits) - 1;
-+#if __BYTE_ORDER == __BIG_ENDIAN
-+	return (v & ~(mask << (64 - bits))) | ((w & mask) << (64 - bits));
-+#else
-+	return (v & ~mask) | (w & mask);
-+#endif
-+}
-+
-+/* v as a sign extending load of that size reads it */
-+static __s64 sign_extend(__u64 v, int size)
-+{
-+	switch (size) {
-+	case BPF_B:
-+		return (__s8)v;
-+	case BPF_H:
-+		return (__s16)v;
-+	case BPF_W:
-+		return (__s32)v;
-+	default:
-+		return v;
-+	}
-+}
-+
- static const char *alu_name(int op)
- {
- 	switch (BPF_OP(op)) {
-@@ -192,9 +251,10 @@ static const char *jmp_name(int op)
- /* ALU result computation, false when the operands are not valid */
- enum { F_ALU32 = 1, F_SIGNED = 2 };
- 
--static bool alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
-+static void alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
- {
- 	bool is_signed = flags & F_SIGNED;
-+	int mask = flags & F_ALU32 ? 31 : 63;
- 
- 	/* Narrow operands for ALU32 */
- 	if (flags & F_ALU32) {
-@@ -225,12 +285,15 @@ static bool alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
- 		*res = v1 ^ v2;
- 		break;
- 	case BPF_LSH:
--		*res = v1 << v2;
-+		*res = v1 << (v2 & mask);
- 		break;
- 	case BPF_RSH:
--		*res = v1 >> v2;
-+		*res = v1 >> (v2 & mask);
- 		break;
- 	case BPF_ARSH:
-+		if (flags & F_ALU32)
-+			v1 = (__u64)(__s32)v1;
-+		v2 &= mask;
- 		*res = v1 >> v2;
- 		if (v2 > 0 && v1 > INT64_MAX)
- 			*res |= ~0ULL << (64 - v2);
-@@ -244,30 +307,28 @@ static bool alu_result(__u64 *res, __u64 v1, __u64 v2, __u8 op, __u32 flags)
- 	case BPF_MUL:
- 		*res = v1 * v2;
- 		break;
-+	/* By zero: the quotient is zero and the dividend keeps, by -1: negation and zero */
- 	case BPF_DIV:
- 		if (v2 == 0)
--			return false;
--		if (!is_signed) {
-+			*res = 0;
-+		else if (!is_signed)
- 			*res = v1 / v2;
--		} else {
--			if ((__s64)v2 == -1) /* Handled by the verifier */
--				return false;
-+		else if ((__s64)v2 == -1)
-+			*res = -v1;
-+		else
- 			*res = (__u64)((__s64)v1 / (__s64)v2);
--		}
- 		break;
- 	case BPF_MOD:
- 		if (v2 == 0)
--			return false;
--		if (!is_signed) {
-+			*res = v1;
-+		else if (!is_signed)
- 			*res = v1 % v2;
--		} else {
--			if ((__s64)v2 == -1)
--				return false;
-+		else if ((__s64)v2 == -1)
-+			*res = 0;
-+		else
- 			*res = (__u64)((__s64)v1 % (__s64)v2);
--		}
- 		break;
- 	}
--	return true;
- }
- 
- /*
-@@ -311,6 +372,27 @@ static void fill_pattern(struct batch *b, void *arg, int dbits, int sbits,
- 	batch_flush(b);
- }
- 
-+/* Operands at the edges: zero, one and the limits of every width */
-+static const __u64 edges[] = {
-+	0, 1, 0x7f, 0x80, 0xff, 0x7fff, 0x8000, 0xffff, 0x7fffffff, 0x80000000,
-+	0xffffffff, 0x100000000ULL, 0x7fffffffffffffffULL, 0x8000000000000000ULL,
-+	0xffffffff80000000ULL, 0xffffffff7fffffffULL, 0xffffffffffffffffULL,
-+};
-+
-+static void fill_edges(struct batch *b, void *arg, bool imm, emit_fn emit)
-+{
-+	int i, j;
-+
-+	for (i = 0; i < ARRAY_SIZE(edges); i++)
-+		for (j = 0; j < ARRAY_SIZE(edges); j++) {
-+			/* The immediate has to fit its 32 bits */
-+			if (imm && (__s64)edges[j] != (__s32)edges[j])
-+				continue;
-+			emit(b, arg, edges[i], edges[j]);
-+		}
-+	batch_flush(b);
-+}
-+
- /* ALU operations with an immediate and with a register for all magnitudes */
- static const int alu_ops[] = {
- 	BPF_MOV, BPF_AND, BPF_OR, BPF_XOR, BPF_ADD, BPF_SUB, BPF_MUL, BPF_DIV, BPF_MOD,
-@@ -328,9 +410,16 @@ static void emit_alu_imm(struct batch *b, void *arg, __s64 dst, __s64 imm)
- 	__u64 res;
- 	int k;
- 
--	if (!alu_result(&res, dst, (__s32)imm, a->op, a->flags))
-+	/* The verifier rejects a zero divisor and a shift count beyond the width */
-+	if ((a->op == BPF_DIV || a->op == BPF_MOD) && !imm)
-+		return;
-+	if ((a->op == BPF_LSH || a->op == BPF_RSH || a->op == BPF_ARSH) &&
-+	    (__u64)imm >= (alu32 ? 32 : 64))
- 		return;
--	k = batch_case(b, BPF_REG_3, dst, 0);
-+	if (a->op == BPF_NEG)
-+		imm = 0;
-+	alu_result(&res, dst, (__s32)imm, a->op, a->flags);
-+	k = batch_case(b, BPF_REG_3, dst, (__s32)imm);
- 	LD_IN(b, k, 0, BPF_REG_3, BPF_REG_1);
- 	EMIT(b, BPF_RAW_INSN((alu32 ? BPF_ALU : BPF_ALU64) | BPF_OP(a->op) | BPF_K,
- 			     BPF_REG_1, 0, a->flags & F_SIGNED ? 1 : 0, imm));
-@@ -345,8 +434,7 @@ static void emit_alu_reg(struct batch *b, void *arg, __s64 dst, __s64 src)
- 	__u64 res;
- 	int k;
- 
--	if (!alu_result(&res, dst, src, a->op, a->flags))
--		return;
-+	alu_result(&res, dst, src, a->op, a->flags);
- 	k = batch_case(b, BPF_REG_3, dst, src);
- 	LD_IN(b, k, 0, BPF_REG_3, BPF_REG_1);
- 	LD_IN(b, k, 1, BPF_REG_3, BPF_REG_2);
-@@ -398,6 +486,41 @@ static void test_alu_reg(void)
- 	test_alu_magnitudes(true);
- }
- 
-+static void test_alu_edges(void)
-+{
-+	static const struct alu_arg ops[] = {
-+		{ BPF_MOV }, { BPF_AND }, { BPF_OR }, { BPF_XOR }, { BPF_LSH }, { BPF_RSH },
-+		{ BPF_ARSH }, { BPF_ADD }, { BPF_SUB }, { BPF_MUL }, { BPF_DIV }, { BPF_MOD },
-+		{ BPF_DIV, F_SIGNED }, { BPF_MOD, F_SIGNED }, { BPF_NEG },
-+	};
-+	struct batch b;
-+	int o, f, r, i;
-+
-+	if (!batch_init(&b))
-+		return;
-+	for (f = 0; f < 2; f++) {
-+		for (o = 0; o < ARRAY_SIZE(ops); o++) {
-+			struct alu_arg a = { ops[o].op, ops[o].flags | (f ? F_ALU32 : 0) };
-+
-+			for (r = 0; r < (a.op == BPF_NEG ? 1 : 2); r++) {
-+				snprintf(b.desc, sizeof(b.desc), "alu%d_%s%s_%c edges",
-+					 f ? 32 : 64, a.flags & F_SIGNED ? "s" : "", alu_name(a.op),
-+					 r ? 'x' : 'k');
-+				if (a.op == BPF_NEG) {
-+					for (i = 0; i < ARRAY_SIZE(edges); i++)
-+						emit_alu_imm(&b, &a, edges[i], 0);
-+					batch_flush(&b);
-+				} else if (r) {
-+					fill_edges(&b, &a, false, emit_alu_reg);
-+				} else {
-+					fill_edges(&b, &a, true, emit_alu_imm);
-+				}
-+			}
-+		}
-+	}
-+	batch_fini(&b);
-+}
-+
- /* ALU operations with an immediate for every destination register */
- static const int alu_reg_ops[] = {
- 	BPF_MOV, BPF_AND, BPF_OR, BPF_XOR, BPF_LSH, BPF_RSH, BPF_ARSH,
-@@ -570,37 +693,46 @@ static void test_div_const(void)
- /* ALU operations for all combinations of operand registers */
- static void alu_reg_pairs(struct batch *b, int op, __u32 flags)
- {
--	bool alu32 = flags & F_ALU32;
--	__u64 dst, src, res, same;
--	int rd, rs, rc, k;
-+	bool alu32 = flags & F_ALU32, divmod = op == BPF_DIV || op == BPF_MOD;
-+	int code = (alu32 ? BPF_ALU : BPF_ALU64) | BPF_OP(op) | BPF_X;
-+	int off = flags & F_SIGNED ? 1 : 0, rd, rs, rc, k, n, nr = 1;
-+	__u64 dst, srcs[3], src, res, same;
- 
- 	if (flags & F_SIGNED)
- 		dst = alu32 ? (__u64)-76543210LL : (__u64)-7654321076543210LL;
- 	else
- 		dst = alu32 ? 0x76543210ULL : 0x7edcba9876543210ULL;
--	src = alu32 ? 0x01234567ULL : 0x0123456789abcdefULL;
-+	srcs[0] = alu32 ? 0x01234567ULL : 0x0123456789abcdefULL;
- 	if (op == BPF_LSH || op == BPF_RSH || op == BPF_ARSH)
--		src &= 31;
--	alu_result(&res, dst, src, op, flags);
--	alu_result(&same, src, src, op, flags);
--	if (alu32) {
--		res = (__u32)res;
--		same = (__u32)same;
-+		srcs[0] &= 31;
-+	/* A zero divisor, in 32 bits also one with only the upper half set */
-+	if (divmod) {
-+		srcs[nr++] = 0;
-+		if (alu32)
-+			srcs[nr++] = 1ULL << 32;
- 	}
- 
- 	snprintf(b->desc, sizeof(b->desc), "alu%d_%s%s_x register pairs", alu32 ? 32 : 64,
- 		 flags & F_SIGNED ? "s" : "", alu_name(op));
--	for (rd = BPF_REG_0; rd <= BPF_REG_9; rd++) {
--		for (rs = BPF_REG_0; rs <= BPF_REG_9; rs++) {
--			rc = scratch_reg(rd, rs);
--			k = batch_case(b, rc, rd == rs ? src : dst, src);
--			LD_IN(b, k, 0, rc, rd);
--			if (rs != rd)
--				LD_IN(b, k, 1, rc, rs);
--			EMIT(b, BPF_RAW_INSN((alu32 ? BPF_ALU : BPF_ALU64) | BPF_OP(op) | BPF_X,
--					     rd, rs, flags & F_SIGNED ? 1 : 0, 0));
--			ST_OUT(b, k, 0, rc, rd);
--			batch_expect(b, k, 0, rd == rs ? same : res);
-+	for (n = 0; n < nr; n++) {
-+		src = srcs[n];
-+		alu_result(&res, dst, src, op, flags);
-+		alu_result(&same, src, src, op, flags);
-+		if (alu32) {
-+			res = (__u32)res;
-+			same = (__u32)same;
-+		}
-+		for (rd = BPF_REG_0; rd <= BPF_REG_9; rd++) {
-+			for (rs = BPF_REG_0; rs <= BPF_REG_9; rs++) {
-+				rc = scratch_reg(rd, rs);
-+				k = batch_case(b, rc, rd == rs ? src : dst, src);
-+				LD_IN(b, k, 0, rc, rd);
-+				if (rs != rd)
-+					LD_IN(b, k, 1, rc, rs);
-+				EMIT(b, BPF_RAW_INSN(code, rd, rs, off, 0));
-+				ST_OUT(b, k, 0, rc, rd);
-+				batch_expect(b, k, 0, rd == rs ? same : res);
-+			}
- 		}
- 	}
- 	batch_flush(b);
-@@ -632,8 +764,10 @@ static void test_shifts(void)
- 		0x0123458967abcdefLL, /* dword > 0, word > 0 */
- 	};
- 	static const int ops[] = { BPF_LSH, BPF_RSH, BPF_ARSH };
-+	/* Counts at and above the width and negative ones, masked by the width */
-+	static const __s64 counts[] = { 32, 33, 63, 64, 65, 127, -1, -3, 1LL << 32 | 3 };
- 	struct batch b;
--	int o, f, v, imm, k;
-+	int o, f, v, c, imm, k;
- 
- 	if (!batch_init(&b))
- 		return;
-@@ -690,6 +824,27 @@ static void test_shifts(void)
- 				ST_OUT(&b, k, 0, BPF_REG_3, BPF_REG_1);
- 				batch_expect(&b, k, 0, f ? (__u32)res : res);
- 			}
-+			for (c = 0; c < ARRAY_SIZE(counts); c++) {
-+				__u64 cnt = f ? (__u32)counts[c] : counts[c];
-+
-+				for (v = 0; v < ARRAY_SIZE(vals); v++) {
-+					__u64 reg = vals[v], res;
-+
-+					if (f)
-+						reg = op == BPF_ARSH ? (__u64)(__s32)reg :
-+						      (__u32)reg;
-+					alu_result(&res, reg, cnt & (bits - 1), op, 0);
-+					k = batch_case(&b, BPF_REG_3, vals[v], counts[c]);
-+					LD_IN(&b, k, 0, BPF_REG_3, BPF_REG_1);
-+					LD_IN(&b, k, 1, BPF_REG_3, BPF_REG_2);
-+					if (f)
-+						EMIT(&b, BPF_ALU32_REG(op, BPF_REG_1, BPF_REG_2));
-+					else
-+						EMIT(&b, BPF_ALU64_REG(op, BPF_REG_1, BPF_REG_2));
-+					ST_OUT(&b, k, 0, BPF_REG_3, BPF_REG_1);
-+					batch_expect(&b, k, 0, f ? (__u32)res : res);
-+				}
-+			}
- 			batch_flush(&b);
- 		}
- 	}
-@@ -723,16 +878,18 @@ static void emit_atomic(struct batch *b, void *arg, __s64 dst, __s64 src)
- 	fetch = a->op & BPF_FETCH ? (w ? (__u32)dst : dst) : src;
- 
- 	k = batch_case(b, BPF_REG_3, dst, src);
-+	/* The kept value fills the slot, a 32-bit operation leaves the other half alone */
-+	emit_ld_imm64(b, BPF_REG_0, keep);
-+	EMIT(b, BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, MEM_SLOT));
- 	LD_IN(b, k, 0, BPF_REG_3, BPF_REG_1);
- 	EMIT(b, BPF_STX_MEM(a->size, BPF_REG_10, BPF_REG_1, MEM_SLOT));
- 	LD_IN(b, k, 1, BPF_REG_3, BPF_REG_2);
--	emit_ld_imm64(b, BPF_REG_0, keep);
- 	EMIT(b, BPF_ATOMIC_OP(a->size, a->op, BPF_REG_10, BPF_REG_2, MEM_SLOT));
--	EMIT(b, BPF_LDX_MEM(a->size, BPF_REG_1, BPF_REG_10, MEM_SLOT));
-+	EMIT(b, BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, MEM_SLOT));
- 	ST_OUT(b, k, 0, BPF_REG_3, BPF_REG_1);
- 	ST_OUT(b, k, 1, BPF_REG_3, BPF_REG_2);
- 	ST_OUT(b, k, 2, BPF_REG_3, BPF_REG_0);
--	batch_expect(b, k, 0, w ? (__u32)res : res);
-+	batch_expect(b, k, 0, head_merge(keep, w ? (__u32)res : res, a->size));
- 	batch_expect(b, k, 1, fetch);
- 	batch_expect(b, k, 2, keep);
- }
-@@ -746,21 +903,30 @@ static void emit_cmpxchg(struct batch *b, void *arg, __s64 dst, __s64 src)
- 
- 	k = batch_case(b, BPF_REG_3, dst, src);
- 	LD_IN(b, k, 0, BPF_REG_3, BPF_REG_1);
-+	/* The inverted value fills the slot, a 32-bit operation leaves the other half alone */
-+	EMIT(b, BPF_MOV64_REG(BPF_REG_0, BPF_REG_1));
-+	EMIT(b, BPF_ALU64_IMM(BPF_XOR, BPF_REG_0, -1));
-+	EMIT(b, BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, MEM_SLOT));
- 	EMIT(b, BPF_STX_MEM(size, BPF_REG_10, BPF_REG_1, MEM_SLOT));
- 	LD_IN(b, k, 1, BPF_REG_3, BPF_REG_2);
- 	/* Mismatch: the memory keeps its value, r0 gets it */
--	EMIT(b, BPF_MOV64_REG(BPF_REG_0, BPF_REG_1));
--	EMIT(b, BPF_ALU64_IMM(BPF_XOR, BPF_REG_0, -1));
- 	EMIT(b, BPF_ATOMIC_OP(size, BPF_CMPXCHG, BPF_REG_10, BPF_REG_2, MEM_SLOT));
- 	ST_OUT(b, k, 0, BPF_REG_3, BPF_REG_0);
--	/* Match: the memory gets the source, r0 the old value */
-+	/*
-+	 * Match: the memory gets the source, r0 the old value. r0 holds the
-+	 * full value, so the 32-bit compare has to ignore its upper half, and
-+	 * the source register has to keep its own.
-+	 */
-+	LD_IN(b, k, 0, BPF_REG_3, BPF_REG_0);
- 	EMIT(b, BPF_ATOMIC_OP(size, BPF_CMPXCHG, BPF_REG_10, BPF_REG_2, MEM_SLOT));
--	EMIT(b, BPF_LDX_MEM(size, BPF_REG_1, BPF_REG_10, MEM_SLOT));
-+	EMIT(b, BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, MEM_SLOT));
- 	ST_OUT(b, k, 1, BPF_REG_3, BPF_REG_1);
- 	ST_OUT(b, k, 2, BPF_REG_3, BPF_REG_0);
-+	ST_OUT(b, k, 3, BPF_REG_3, BPF_REG_2);
- 	batch_expect(b, k, 0, old);
--	batch_expect(b, k, 1, w ? (__u32)src : src);
-+	batch_expect(b, k, 1, head_merge(~(__u64)dst, w ? (__u32)src : src, size));
- 	batch_expect(b, k, 2, old);
-+	batch_expect(b, k, 3, src);
- }
- 
- static void test_atomics(void)
-@@ -797,7 +963,7 @@ static void atomic_reg_pairs(struct batch *b, int size, int op)
- 	int rd, rs, rc, k, n;
- 
- 	if (w) {
--		mem = 0x01234567U;
-+		mem = 0xfedcba9801234567ULL;
- 		upd = 0x76543210U;
- 	} else {
- 		mem = 0x0123456789abcdefULL;
-@@ -809,18 +975,19 @@ static void atomic_reg_pairs(struct batch *b, int size, int op)
- 		 op & BPF_FETCH ? "_fetch" : "");
- 	for (rd = BPF_REG_0; rd <= BPF_REG_9; rd++) {
- 		for (rs = BPF_REG_0; rs <= BPF_REG_9; rs++) {
--			__u64 regs[10], old = mem, new, src, cmp;
-+			__u64 regs[10], old = w ? (__u32)mem : mem, new, src, cmp;
- 
- 			/* The source would be the pointer, r0 the compare value */
- 			if (rs == rd || (op == BPF_CMPXCHG && rd == BPF_REG_0))
- 				continue;
- 			rc = scratch_reg(rd, rs);
- 			k = batch_case(b, rc, mem, upd);
--			/* Memory from in0, r0 inverted, source from in1, pointer */
--			LD_IN(b, k, 0, rc, rs);
--			EMIT(b, BPF_STX_MEM(size, BPF_REG_10, rs, MEM_SLOT));
-+			/* r0 inverted into the slot, memory from in0, source from in1, pointer */
- 			LD_IN(b, k, 0, rc, BPF_REG_0);
- 			EMIT(b, BPF_ALU64_IMM(BPF_XOR, BPF_REG_0, -1));
-+			EMIT(b, BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, MEM_SLOT));
-+			LD_IN(b, k, 0, rc, rs);
-+			EMIT(b, BPF_STX_MEM(size, BPF_REG_10, rs, MEM_SLOT));
- 			LD_IN(b, k, 1, rc, rs);
- 			EMIT(b, BPF_MOV64_REG(rd, BPF_REG_10));
- 			EMIT(b, BPF_ATOMIC_OP(size, op, rd, rs, MEM_SLOT));
-@@ -829,7 +996,7 @@ static void atomic_reg_pairs(struct batch *b, int size, int op)
- 			if (rd != BPF_REG_0)
- 				ST_OUT(b, k, n++, rc, BPF_REG_0);
- 			ST_OUT(b, k, n++, rc, rs);
--			EMIT(b, BPF_LDX_MEM(size, rs, BPF_REG_10, MEM_SLOT));
-+			EMIT(b, BPF_LDX_MEM(BPF_DW, rs, BPF_REG_10, MEM_SLOT));
- 			ST_OUT(b, k, n, rc, rs);
- 
- 			/* Model with the register aliasing of r0 */
-@@ -854,7 +1021,7 @@ static void atomic_reg_pairs(struct batch *b, int size, int op)
- 			if (rd != BPF_REG_0)
- 				batch_expect(b, k, n++, regs[BPF_REG_0]);
- 			batch_expect(b, k, n++, regs[rs]);
--			batch_expect(b, k, n, new);
-+			batch_expect(b, k, n, head_merge(~mem, new, size));
- 		}
- 	}
- 	batch_flush(b);
-@@ -905,13 +1072,14 @@ static void test_xadd_chain(void)
- 	free(insns);
- }
- 
--/* 64-bit immediate loads for all magnitudes and byte patterns */
--static void ld_imm64_case(struct batch *b, __u64 imm)
-+/* 64-bit immediate loads for all magnitudes, byte patterns and registers */
-+static void ld_imm64_case(struct batch *b, int rd, __u64 imm)
- {
--	int k = batch_case(b, BPF_REG_3, imm, 0);
-+	int rc = scratch_reg(rd, rd);
-+	int k = batch_case(b, rc, imm, 0);
- 
--	emit_ld_imm64(b, BPF_REG_1, imm);
--	ST_OUT(b, k, 0, BPF_REG_3, BPF_REG_1);
-+	emit_ld_imm64(b, rd, imm);
-+	ST_OUT(b, k, 0, rc, rd);
- 	batch_expect(b, k, 0, imm);
- }
- 
-@@ -925,7 +1093,13 @@ static void test_ld_imm64(void)
- 		{ 1, 0x81, 0, 0xff },		/* positive and zero */
- 		{ 0x80, 0x80, 0, 0xff },	/* negative and zero */
- 	};
--	int block = 64, bit, adj, sign, p, pattern, index;
-+	/* Zero, a 32-bit, a sign extended 32-bit and a full immediate for every register */
-+	static const __u64 imms[] = {
-+		0, 1, 0x7fffffff, 0x80000000, 0xffffffff, 0x100000000ULL,
-+		0xffffffffffffffffULL, 0xffffffff80000000ULL, 0xffffffff7fffffffULL,
-+		0x0123456789abcdefULL,
-+	};
-+	int block = 64, bit, adj, sign, p, pattern, index, rd, i;
- 	struct batch b;
- 
- 	if (!batch_init(&b))
-@@ -934,7 +1108,7 @@ static void test_ld_imm64(void)
- 	for (bit = 0; bit <= 62; bit++)
- 		for (adj = -block / 2; adj < block / 2; adj++)
- 			for (sign = -1; sign <= 1; sign += 2)
--				ld_imm64_case(&b, sign * ((1LL << bit) + adj));
-+				ld_imm64_case(&b, BPF_REG_1, sign * ((1LL << bit) + adj));
- 	batch_flush(&b);
- 
- 	for (p = 0; p < ARRAY_SIZE(bytes); p++) {
-@@ -956,10 +1130,15 @@ static void test_ld_imm64(void)
- 				imm = (imm << 8) | (__u8)byte;
- 			}
- 			rand = rand * 1664525 + 1013904223;
--			ld_imm64_case(&b, imm);
-+			ld_imm64_case(&b, BPF_REG_1, imm);
- 		}
- 		batch_flush(&b);
- 	}
-+	snprintf(b.desc, sizeof(b.desc), "ld_imm64 registers");
-+	for (rd = BPF_REG_0; rd <= BPF_REG_9; rd++)
-+		for (i = 0; i < ARRAY_SIZE(imms); i++)
-+			ld_imm64_case(&b, rd, imms[i]);
-+	batch_flush(&b);
- 	batch_fini(&b);
- }
- 
-@@ -1066,6 +1245,27 @@ static void test_jmp_reg(void)
- 	test_jmp_magnitudes(true);
- }
- 
-+static void test_jmp_edges(void)
-+{
-+	struct batch b;
-+	int o, f, r;
-+
-+	if (!batch_init(&b))
-+		return;
-+	for (f = 0; f < 2; f++) {
-+		for (o = 0; o < ARRAY_SIZE(jmp_ops); o++) {
-+			for (r = 0; r < 2; r++) {
-+				struct jmp_arg a = { jmp_ops[o], f, r };
-+
-+				snprintf(b.desc, sizeof(b.desc), "jmp%s_%s_%c edges", f ? "32" : "",
-+					 jmp_name(a.op), r ? 'x' : 'k');
-+				fill_edges(&b, &a, !r, emit_jmp);
-+			}
-+		}
-+	}
-+	batch_fini(&b);
-+}
-+
- /* A conditional jump on two registers, with the operands swapped for n == 1 */
- static void jmp_reg_pair(struct batch *b, bool is32, int op, int rd, int rs, int n)
- {
-@@ -1136,10 +1336,12 @@ static struct bpf_insn jmp_insn(bool ja32)
- /*
-  * Taken jumps over regions of doubling length, forward or backward, up to
-  * the maximal offset of the jump: 16 bits, or 2^17 for the 32-bit
-- * unconditional jump. The not taken path of a conditional jump and the
-- * guard of an unconditional one lead to an exit with the region number, so
-- * the verifier sees every instruction reachable and a jump landing anywhere
-- * else than on its target fails the run.
-+ * unconditional jump. The operands are reloaded in every region, so that
-+ * the verifier cannot decide the jumps from the bounds of the region
-+ * before and fold the regions away. r0 gains the region number before the
-+ * jump and loses it again only on the target, so the not taken path of a
-+ * conditional jump, the guard of an unconditional one and a jump landing
-+ * anywhere else than on its target exit with a nonzero r0.
-  */
- static void staggered_jumps(const struct bpf_insn *jmp, __s64 r1, __s64 r2, bool backward,
- 			    const char *desc)
-@@ -1152,18 +1354,20 @@ static void staggered_jumps(const struct bpf_insn *jmp, __s64 r1, __s64 r2, bool
- 		.ctx_size_in = sizeof(ctx),
- 	);
- 	int max = ja32 ? 1 << 17 : INT16_MAX;
--	int len = 128 + 2 * max, i = 0, n = 0, gap, fd;
-+	int len = 256 + 2 * max, i = 0, n = 0, gap, fd;
- 	struct bpf_insn *insns;
- 
- 	insns = malloc(len * sizeof(*insns));
- 	if (!ASSERT_OK_PTR(insns, "insns"))
- 		return;
--	insns[i++] = BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 8);
--	insns[i++] = BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0);
-+	insns[i++] = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
- 	insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0);
- 	for (gap = backward ? 4 : 2; gap <= max; gap = gap < max / 2 ? gap * 2 : max) {
- 		int k, a, t, x, g, j;
- 
-+		insns[i++] = BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_6, 0);
-+		insns[i++] = BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 8);
-+		insns[i++] = BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, ++n);
- 		if (backward) {
- 			/*
- 			 * Over the region to its guard and jump, which comes back
-@@ -1172,7 +1376,8 @@ static void staggered_jumps(const struct bpf_insn *jmp, __s64 r1, __s64 r2, bool
- 			 */
- 			a = i++;
- 			t = i;
--			for (k = 0; k < gap - 3; k++)
-+			insns[i++] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, n);
-+			for (k = 0; k < gap - 3 - ja; k++)
- 				insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0);
- 			x = i++;
- 			g = i;
-@@ -1181,7 +1386,6 @@ static void staggered_jumps(const struct bpf_insn *jmp, __s64 r1, __s64 r2, bool
- 			j = i;
- 			insns[i] = *jmp;
- 			set_jmp_off(&insns[i++], ja32, t - (j + 1));
--			insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, ++n);
- 			insns[i++] = BPF_EXIT_INSN();
- 			insns[a] = jmp_insn(ja32);
- 			set_jmp_off(&insns[a], ja32, g - (a + 1));
-@@ -1193,10 +1397,10 @@ static void staggered_jumps(const struct bpf_insn *jmp, __s64 r1, __s64 r2, bool
- 				insns[i++] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_2, 0, 1);
- 			insns[i] = *jmp;
- 			set_jmp_off(&insns[i++], ja32, gap);
--			insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, ++n);
--			for (k = 0; k < gap - 2; k++)
-+			for (k = 0; k < gap - 1; k++)
- 				insns[i++] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0);
- 			insns[i++] = BPF_EXIT_INSN();
-+			insns[i++] = BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, n);
- 		}
- 		if (gap == max)
- 			break;
-@@ -1334,50 +1538,6 @@ static void prog_run(int fd, __u64 in0, __u64 in1, __u64 expected, const char *d
- 		ASSERT_EQ(ctx.res, expected, buf);
- }
- 
--static int size_bits(int size)
--{
--	switch (size) {
--	case BPF_B:
--		return 8;
--	case BPF_H:
--		return 16;
--	case BPF_W:
--		return 32;
--	default:
--		return 64;
--	}
--}
--
--/* The first size bytes of v in memory, as a load of that size reads them */
--static __u64 head_bytes(__u64 v, int size)
--{
--	int bits = size_bits(size);
--
--	if (bits == 64)
--		return v;
--#if __BYTE_ORDER == __BIG_ENDIAN
--	return v >> (64 - bits);
--#else
--	return v & ((1ULL << bits) - 1);
--#endif
--}
--
--/* v with its first size bytes in memory replaced by those of w */
--static __u64 head_merge(__u64 v, __u64 w, int size)
--{
--	int bits = size_bits(size);
--	__u64 mask;
--
--	if (bits == 64)
--		return w;
--	mask = (1ULL << bits) - 1;
--#if __BYTE_ORDER == __BIG_ENDIAN
--	return (v & ~(mask << (64 - bits))) | ((w & mask) << (64 - bits));
--#else
--	return (v & ~mask) | (w & mask);
--#endif
--}
--
- static void test_ldst_zero_off(void)
- {
- 	static const int sizes[] = { BPF_B, BPF_H, BPF_W, BPF_DW };
-@@ -1398,8 +1558,9 @@ static void test_ldst_zero_off(void)
- 			for (k = 0; k < NR_PAIRS; k++) {
- 				int rd = pair_reg(b, k);
- 
--				/* Load with a zero offset, also into the base */
-+				/* Load with a zero offset over all ones, also into the base */
- 				prog_start(&p);
-+				EMIT(&p, BPF_MOV64_IMM(rd, -1));
- 				EMIT(&p, BPF_MOV64_REG(rb, BPF_REG_6));
- 				EMIT(&p, BPF_LDX_MEM(size, rd, rb, 0));
- 				prog_end(&p, rd);
-@@ -1431,8 +1592,7 @@ static void test_ldst_zero_off(void)
- 					for (j = 0; j < ARRAY_SIZE(inputs); j++) {
- 						__s64 v = head_bytes(inputs[j], size);
- 
--						v = size == BPF_B ? (__s8)v :
--						    size == BPF_H ? (__s16)v : (__s32)v;
-+						v = sign_extend(v, size);
- 						prog_run(fd, inputs[j], 0, v, desc);
- 					}
- 					close(fd);
-@@ -1614,6 +1774,12 @@ static int other_reg(int r1, int r2)
- 	return BPF_REG_9;
- }
- 
-+static void off_prog_ld_imm64(struct off_prog *p, int reg, __u64 imm)
-+{
-+	EMIT(p, BPF_RAW_INSN(BPF_LD | BPF_DW | BPF_IMM, reg, 0, 0, (__u32)imm));
-+	EMIT(p, BPF_RAW_INSN(0, 0, 0, 0, imm >> 32));
-+}
-+
- /* Look up the value of key into r0, exit with 1 when the lookup fails */
- static void off_prog_lookup(struct off_prog *p, int map_fd, int key)
- {
-@@ -1700,8 +1866,11 @@ static void load_offsets(struct off_mem *m, int kind, int size, int rb, int rd,
- 
- 	off_prog_start(&p, map_fd, rb);
- 	for (i = 0; i < nr; i++) {
-+		/* The base gets reloaded when it is the destination, all ones otherwise */
- 		if (rd == rb)
- 			EMIT(&p, BPF_LDX_MEM(BPF_DW, rb, BPF_REG_10, SLOT_BASE));
-+		else
-+			EMIT(&p, BPF_MOV64_IMM(rd, -1));
- 		if (kind == K_LDX)
- 			EMIT(&p, BPF_LDX_MEM(size, rd, rb, off[i]));
- 		else
-@@ -1722,7 +1891,7 @@ static void load_offsets(struct off_mem *m, int kind, int size, int rb, int rd,
- 		__u64 v = load_bytes(m->mem + MEM_BASE + off[i], size);
- 
- 		if (kind == K_LDSX)
--			v = size == BPF_B ? (__s8)v : size == BPF_H ? (__s16)v : (__s32)v;
-+			v = sign_extend(v, size);
- 		if (res[i] != v) {
- 			snprintf(desc, sizeof(desc), "%s size=%d base=r%d dst=r%d off=%d",
- 				 kind == K_LDX ? "ldx" : "ldsx", size, rb, rd, off[i]);
-@@ -1873,7 +2042,7 @@ static void test_movsx(void)
- }
- 
- /* Branch on dst and imm, with 1 in res when taken and 0 otherwise */
--static void jmp_prog(struct prog *p, bool is64, int op, int d, __s32 imm)
-+static void jmp_prog(struct prog *p, bool is64, int op, int d, __s32 imm, int off)
- {
- 	int rd = pat_regs[d], rt = pair_reg(d, 1);
- 
-@@ -1881,9 +2050,9 @@ static void jmp_prog(struct prog *p, bool is64, int op, int d, __s32 imm)
- 	EMIT(p, BPF_LDX_MEM(BPF_DW, rd, BPF_REG_6, IN0));
- 	EMIT(p, BPF_MOV64_IMM(rt, 1));
- 	if (is64)
--		EMIT(p, BPF_JMP_IMM(op, rd, imm, 1));
-+		EMIT(p, BPF_JMP_IMM(op, rd, imm, off));
- 	else
--		EMIT(p, BPF_JMP32_IMM(op, rd, imm, 1));
-+		EMIT(p, BPF_JMP32_IMM(op, rd, imm, off));
- 	EMIT(p, BPF_MOV64_IMM(rt, 0));
- 	prog_end(p, rt);
- }
-@@ -1903,7 +2072,7 @@ static void test_jset_imm(void)
- 
- 		for (is64 = false; ; is64 = true) {
- 			for (m = 0; m < ARRAY_SIZE(masks); m++) {
--				jmp_prog(&p, is64, BPF_JSET, d, masks[m]);
-+				jmp_prog(&p, is64, BPF_JSET, d, masks[m], 1);
- 				snprintf(desc, sizeof(desc), "jset%d dst=r%d mask=0x%x",
- 					 is64 ? 64 : 32, rd, masks[m]);
- 				fd = prog_load(&p, desc);
-@@ -1975,7 +2144,7 @@ static void test_cmp_imm(void)
- 		for (is64 = false; ; is64 = true) {
- 			for (o = 0; o < ARRAY_SIZE(ops); o++) {
- 				for (m = 0; m < ARRAY_SIZE(imms); m++) {
--					jmp_prog(&p, is64, ops[o], d, imms[m]);
-+					jmp_prog(&p, is64, ops[o], d, imms[m], 1);
- 					snprintf(desc, sizeof(desc), "jmp%d op=0x%x dst=r%d imm=%d",
- 						 is64 ? 64 : 32, ops[o], rd, imms[m]);
- 					fd = prog_load(&p, desc);
-@@ -1990,6 +2159,18 @@ static void test_cmp_imm(void)
- 						prog_run(fd, inputs[j], 0, taken, desc);
- 					}
- 					close(fd);
-+					if (m)
-+						continue;
-+					/* A jump over nothing lands on the same path either way */
-+					jmp_prog(&p, is64, ops[o], d, imms[m], 0);
-+					snprintf(desc, sizeof(desc), "jmp%d op=0x%x dst=r%d off=0",
-+						 is64 ? 64 : 32, ops[o], rd);
-+					fd = prog_load(&p, desc);
-+					if (fd < 0)
-+						return;
-+					for (j = 0; j < ARRAY_SIZE(inputs); j++)
-+						prog_run(fd, inputs[j], 0, 0, desc);
-+					close(fd);
- 				}
- 			}
- 			if (is64)
-@@ -2122,7 +2303,15 @@ static void test_bswap(void)
- 
- static void test_probe_mem(void)
- {
--	int kfunc_id, type_id, b, k, j, fd;
-+	static const struct {
-+		int size;
-+		bool sx;
-+	} loads[] = {
-+		{ BPF_B, false }, { BPF_H, false }, { BPF_W, false }, { BPF_DW, false },
-+		{ BPF_B, true }, { BPF_H, true }, { BPF_W, true },
-+	};
-+	int kfunc_id, type_id, b, k, l, j, fd;
-+	struct bpf_insn call;
- 	struct btf *btf;
- 	struct prog p;
- 	char desc[64];
-@@ -2136,30 +2325,46 @@ static void test_probe_mem(void)
- 	if (!ASSERT_GT(kfunc_id, 0, "bpf_rdonly_cast id") ||
- 	    !ASSERT_GT(type_id, 0, "timespec64 id"))
- 		return;
-+	call = BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, kfunc_id);
- 
--	/* The kernel copy of the ctx through an untrusted pointer in every register */
-+	/*
-+	 * The kernel copy of the ctx through an untrusted pointer in every
-+	 * register, in every size, zero and sign extending over all ones
-+	 */
- 	for (b = 0; b < ARRAY_SIZE(pat_regs); b++) {
- 		int rb = pat_regs[b];
- 
- 		for (k = 0; k < NR_PAIRS; k++) {
- 			int rd = pair_reg(b, k);
- 
--			prog_start(&p);
--			EMIT(&p, BPF_MOV64_REG(BPF_REG_1, BPF_REG_6));
--			EMIT(&p, BPF_MOV32_IMM(BPF_REG_2, type_id));
--			EMIT(&p, BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL,
--					      0, kfunc_id));
--			if (rb != BPF_REG_0)
--				EMIT(&p, BPF_MOV64_REG(rb, BPF_REG_0));
--			EMIT(&p, BPF_LDX_MEM(BPF_DW, rd, rb, 0));
--			prog_end(&p, rd);
--			snprintf(desc, sizeof(desc), "probe_mem base=r%d dst=r%d", rb, rd);
--			fd = prog_load(&p, desc);
--			if (fd < 0)
--				return;
--			for (j = 0; j < ARRAY_SIZE(inputs); j++)
--				prog_run(fd, inputs[j], 0, inputs[j], desc);
--			close(fd);
-+			for (l = 0; l < ARRAY_SIZE(loads); l++) {
-+				int size = loads[l].size, mode = loads[l].sx ? BPF_MEMSX : BPF_MEM;
-+
-+				prog_start(&p);
-+				EMIT(&p, BPF_MOV64_REG(BPF_REG_1, BPF_REG_6));
-+				EMIT(&p, BPF_MOV32_IMM(BPF_REG_2, type_id));
-+				EMIT(&p, call);
-+				if (rb != BPF_REG_0)
-+					EMIT(&p, BPF_MOV64_REG(rb, BPF_REG_0));
-+				if (rd != rb)
-+					EMIT(&p, BPF_MOV64_IMM(rd, -1));
-+				EMIT(&p, BPF_RAW_INSN(BPF_LDX | mode | size, rd, rb, 0, 0));
-+				prog_end(&p, rd);
-+				snprintf(desc, sizeof(desc),
-+					 "probe_mem%s size=%d base=r%d dst=r%d",
-+					 loads[l].sx ? "sx" : "", size, rb, rd);
-+				fd = prog_load(&p, desc);
-+				if (fd < 0)
-+					return;
-+				for (j = 0; j < ARRAY_SIZE(inputs); j++) {
-+					__s64 v = head_bytes(inputs[j], size);
-+
-+					if (loads[l].sx)
-+						v = sign_extend(v, size);
-+					prog_run(fd, inputs[j], 0, v, desc);
-+				}
-+				close(fd);
-+			}
- 		}
- 	}
- 
-@@ -2171,8 +2376,7 @@ static void test_probe_mem(void)
- 		EMIT(&p, BPF_RAW_INSN(BPF_LD | BPF_DW | BPF_IMM, BPF_REG_1, 0, 0, (__u32)addr));
- 		EMIT(&p, BPF_RAW_INSN(0, 0, 0, 0, addr >> 32));
- 		EMIT(&p, BPF_MOV32_IMM(BPF_REG_2, type_id));
--		EMIT(&p, BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL,
--				      0, kfunc_id));
-+		EMIT(&p, call);
- 		EMIT(&p, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_0, 0));
- 		prog_end(&p, BPF_REG_3);
- 		snprintf(desc, sizeof(desc), "probe_mem addr=0x%llx", addr);
-@@ -2184,24 +2388,6 @@ static void test_probe_mem(void)
- 	}
- }
- 
--/* Whether the JIT supports load-acquire and store-release */
--static bool acq_rel_ok(void)
--{
--	LIBBPF_OPTS(bpf_prog_load_opts, lopts, .prog_flags = BPF_F_SLEEPABLE);
--	struct prog p;
--	int fd;
--
--	prog_start(&p);
--	EMIT(&p, BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0));
--	EMIT(&p, BPF_ATOMIC_OP(BPF_DW, BPF_LOAD_ACQ, BPF_REG_0, BPF_REG_10, -8));
--	prog_end(&p, BPF_REG_0);
--	fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", p.insns, p.cnt, &lopts);
--	if (fd < 0)
--		return false;
--	close(fd);
--	return true;
--}
--
- /*
-  * Load-acquire and store-release of every size with every register as
-  * base, on a stack slot holding in0: the loads zero extend like the plain
-@@ -2215,10 +2401,6 @@ static void test_acq_rel(void)
- 	char desc[64];
- 	int b, k, s, j, fd;
- 
--	if (!acq_rel_ok()) {
--		test__skip();
--		return;
--	}
- 	for (b = 0; b < ARRAY_SIZE(pat_regs); b++) {
- 		int rb = pat_regs[b];
- 
-@@ -2340,6 +2522,168 @@ static void test_max_jmp(void)
- 	max_jmp(true, false);
- }
- 
+ .../selftests/bpf/prog_tests/jit_insns_cbpf.c | 2620 +++++++++++++++++
+ 1 file changed, 2620 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/jit_insns_cbpf.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns_cbpf.c b/tools/testing/selftests/bpf/prog_tests/jit_insns_cbpf.c
+new file mode 100644
+index 000000000000..5471c06605fe
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/jit_insns_cbpf.c
+@@ -0,0 +1,2620 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Isovalent */
 +/*
-+ * Calls into a subprogram with all five arguments, which clobbers a subset
-+ * of r6-r9 and uses the deepest stack slot, directly or through another one
-+ * clobbering the rest, so the JIT has to save and restore what it uses.
++ * The classic BPF cases of the former test_bpf module, run as socket
++ * filters: the data cases on an AF_UNIX datagram pair, which takes any
++ * length down to zero and puts the tail of a long datagram into page
++ * frags, the cases reading the link layer or the metadata of a packet on
++ * a veth pair in their own netns. The return of a filter decides over the
++ * packet, zero drops it and any other value truncates it to that length,
++ * so the returns of a program get rewritten: the expected result stays,
++ * any other constant becomes zero and a returned accumulator is compared
++ * at the end, so that a wrong result shows as a dropped packet.
 + */
-+/* Values to keep in r6-r9 across calls */
-+static const __u64 kept[] = {
-+	0x1111111111111111ULL, 0x2222222222222222ULL,
-+	0x3333333333333333ULL, 0x4444444444444444ULL,
++#include <test_progs.h>
++#include <poll.h>
++#include <sys/ioctl.h>
++#include <linux/filter.h>
++
++#include "network_helpers.h"
++#include "sysctl_helpers.h"
++
++#define MAX_K		0xffffffff
++#define SKB_TYPE	PACKET_OTHERHOST	/* the frames go to a foreign MAC */
++#define SKB_MARK	0x1234aaaa		/* the mark of the sending socket */
++#define SKB_VLAN_TCI	0xffff
++#define SKB_VLAN_PRESENT 1
++#define SKB_DEV_IFINDEX	0			/* that of the receiving veth */
++#define SKB_DEV_TYPE	1			/* ARPHRD_ETHER, that of a veth */
++/*
++ * A datagram of four pages splits into three pages of head and one page of
++ * frag data: what exceeds SKB_MAX_ALLOC, four pages less the shared info,
++ * goes into frags, rounded up to a page. The table cases take 4K pages, a
++ * larger page keeps their datagram linear; the sweep goes by the page size.
++ */
++#define FRAG_OFF	(3 * 4096)		/* the frag data starts here */
++#define SWEEP_SPAN	16			/* offsets swept either side of it */
++#define NETNS		"jit_insns_cbpf"
++
++static int page_size;
++static int dgram_max;				/* four pages */
++
++enum {
++	CB_FAIL		= 1,	/* the attach has to fail */
++	CB_PKT		= 2,	/* needs the link layer or the metadata of a packet */
++	CB_VLAN		= 4,	/* a tagged frame, the stack pulls the tag out */
++	CB_FRAG		= 8,	/* the length is the head, the frag data goes at its end */
++	CB_IFINDEX	= 16,	/* the result is the ifindex of the receiving veth */
++	CB_DSTMAC	= 32,	/* the frame goes to the MAC of the receiving veth */
++	CB_NOBLIND	= 64,	/* blinding grows the converted jump past 16 bits */
++	CB_RAW		= 128,	/* the returns stay, the kept length shows the result */
 +};
 +
-+static void test_calls(void)
++struct cbpf_run {
++	int len;
++	__u32 result;
++};
++
++struct cbpf_case {
++	const char *descr;
++	const struct sock_filter *insns;
++	int cnt;
++	int (*fill)(struct sock_filter *insns);
++	const __u8 *data;
++	int data_len;
++	const __u8 *frag;
++	int frag_len;
++	const struct cbpf_run *runs;
++	int nr_runs;
++	unsigned int flags;
++};
++
++#define INSNS(...)							\
++	(const struct sock_filter[]){ __VA_ARGS__ },			\
++	.cnt = ARRAY_SIZE(((const struct sock_filter[]){ __VA_ARGS__ }))
++#define DATA(...)							\
++	(const __u8[]){ __VA_ARGS__ },					\
++	.data_len = sizeof((const __u8[]){ __VA_ARGS__ })
++#define FRAG(...)							\
++	(const __u8[]){ __VA_ARGS__ },					\
++	.frag_len = sizeof((const __u8[]){ __VA_ARGS__ })
++#define RUNS(...)							\
++	(const struct cbpf_run[]){ __VA_ARGS__ },			\
++	.nr_runs = ARRAY_SIZE(((const struct cbpf_run[]){ __VA_ARGS__ }))
++
++/* The uapi forms are initializers, these are values */
++#define STMT(code, k)		((struct sock_filter)BPF_STMT(code, k))
++#define JUMP(code, k, jt, jf)	((struct sock_filter)BPF_JUMP(code, k, jt, jf))
++
++/* Jumps with gaps in between, the former __bpf_fill_ja() */
++static int fill_ja(struct sock_filter *insns, int len, int plen)
 +{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	__u64 expected = 1 + 2 + 3 + 4 + 5;
-+	struct bpf_insn insns[64];
-+	struct pat_ctx ctx;
-+	char desc[64];
-+	int nested, mask, n, call, r, fd;
++	int rlen = (len % plen) - 1, i, j;
 +
-+	for (r = 0; r < 4; r++)
-+		expected += kept[r];
-+	opts.ctx_in = &ctx;
-+	opts.ctx_size_in = sizeof(ctx);
-+	for (nested = 0; nested < 2; nested++) {
-+		for (mask = 0; mask < 16; mask++) {
-+			n = 0;
-+			insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8);
-+			for (r = 0; r < 4; r++) {
-+				insns[n++] = BPF_RAW_INSN(BPF_LD | BPF_DW | BPF_IMM, BPF_REG_6 + r,
-+							  0, 0, (__u32)kept[r]);
-+				insns[n++] = BPF_RAW_INSN(0, 0, 0, 0, kept[r] >> 32);
-+			}
-+			for (r = 1; r <= 5; r++)
-+				insns[n++] = BPF_MOV64_IMM(r, r);
-+			call = n++;
-+			for (r = 6; r <= 9; r++)
-+				insns[n++] = BPF_ALU64_REG(BPF_ADD, BPF_REG_0, r);
-+			insns[n++] = BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -8);
-+			insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, RES);
-+			insns[n++] = BPF_MOV64_IMM(BPF_REG_0, 0);
-+			insns[n++] = BPF_EXIT_INSN();
-+			insns[call] = BPF_CALL_REL(n - call - 1);
-+			if (nested) {
-+				/* Clobber the subset, pass the arguments on */
-+				for (r = 0; r < 4; r++)
-+					if (mask & (1 << r))
-+						insns[n++] = BPF_MOV64_IMM(BPF_REG_6 + r, 0);
-+				call = n++;
-+				insns[n++] = BPF_EXIT_INSN();
-+				insns[call] = BPF_CALL_REL(n - call - 1);
-+			}
-+			/* Clobber the rest, sum the arguments through the deepest slot */
-+			for (r = 0; r < 4; r++)
-+				if ((nested ? ~mask : mask) & (1 << r))
-+					insns[n++] = BPF_MOV64_IMM(BPF_REG_6 + r, 0);
-+			insns[n++] = BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -512);
-+			insns[n++] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_2);
-+			for (r = 3; r <= 5; r++)
-+				insns[n++] = BPF_ALU64_REG(BPF_ADD, BPF_REG_0, r);
-+			insns[n++] = BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -512);
-+			insns[n++] = BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1);
-+			insns[n++] = BPF_EXIT_INSN();
++	for (i = 0; i + plen < len; i += plen)
++		for (j = 0; j < plen; j++)
++			insns[i + j] = JUMP(BPF_JMP | BPF_JA, plen - 1 - j, 0, 0);
++	for (j = 0; j < rlen; j++)
++		insns[i + j] = JUMP(BPF_JMP | BPF_JA, rlen - 1 - j, 0, 0);
++	insns[len - 1] = STMT(BPF_RET | BPF_K, 0xababcbac);
++	return len;
++}
 +
-+			snprintf(desc, sizeof(desc), "call%s clobbering 0x%x",
-+				 nested ? " nested" : "", mask);
-+			fd = load_prog(insns, n, desc);
-+			if (fd < 0)
-+				return;
-+			memset(&ctx, 0, sizeof(ctx));
-+			if (ASSERT_OK(bpf_prog_test_run_opts(fd, &opts), desc))
-+				ASSERT_EQ(ctx.res, expected, desc);
-+			close(fd);
-+		}
-+	}
++static int fill_ja_short(struct sock_filter *insns)
++{
++	return fill_ja(insns, 12, 9);
++}
++
++static int fill_ja_long(struct sock_filter *insns)
++{
++	return fill_ja(insns, BPF_MAXINSNS, 68);
++}
++
++static int fill_too_many(struct sock_filter *insns)
++{
++	int i;
++
++	for (i = 0; i <= BPF_MAXINSNS; i++)
++		insns[i] = STMT(BPF_RET | BPF_K, 0xfefefefe);
++	return BPF_MAXINSNS + 1;
 +}
 +
 +/*
-+ * Helper calls with up to five arguments and a kfunc call: a dynptr over a
-+ * map value, a read from it into the stack and its size, with r6-r9 live
-+ * across the calls. The returns, the bytes read, the size and r6-r9 add up.
++ * A jump over MSH loads, each of which becomes 18 instructions: the
++ * converted offset has to fit 16 bits, which 1820 of them do.
 + */
-+static void test_helper_calls(void)
++static int fill_jump_over_msh(struct sock_filter *insns, int nr)
 +{
-+	static const int offs[] = { 0, 8, 1000, 4088 };
-+	struct off_prog p;
-+	struct btf *btf;
-+	__u8 mem[4096];
-+	__u64 expected;
-+	__u32 key = 0;
-+	char desc[64];
-+	int map_fd, kfunc_id, i, r, fd;
++	int i;
 +
-+	btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(btf, "vmlinux btf"))
-+		return;
-+	kfunc_id = btf__find_by_name_kind(btf, "bpf_dynptr_size", BTF_KIND_FUNC);
-+	btf__free(btf);
-+	if (!ASSERT_GT(kfunc_id, 0, "bpf_dynptr_size id"))
-+		return;
-+	for (i = 0; i < sizeof(mem); i++)
-+		mem[i] = i * 7 + 3;
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "helper_mem", sizeof(key), sizeof(mem), 1,
-+				NULL);
-+	if (!ASSERT_GE(map_fd, 0, "helper_mem map"))
-+		return;
-+	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key, mem, 0), "helper_mem update"))
++	insns[0] = JUMP(BPF_JMP | BPF_JA, nr, 0, 0);
++	for (i = 1; i <= nr; i++)
++		insns[i] = STMT(BPF_LDX | BPF_B | BPF_MSH, 0);
++	insns[nr + 1] = STMT(BPF_RET | BPF_K, 0xabababab);
++	return nr + 2;
++}
++
++static int fill_jump_over_all_msh(struct sock_filter *insns)
++{
++	return fill_jump_over_msh(insns, BPF_MAXINSNS - 2);
++}
++
++static int fill_jump_over_1821_msh(struct sock_filter *insns)
++{
++	return fill_jump_over_msh(insns, 1821);
++}
++
++static int fill_jump_over_1820_msh(struct sock_filter *insns)
++{
++	return fill_jump_over_msh(insns, 1820);
++}
++
++static int fill_empty(struct sock_filter *insns)
++{
++	return 0;
++}
++
++/* A conditional jump past 32K converted instructions */
++static int fill_late_jump(struct sock_filter *insns)
++{
++	int i;
++
++	for (i = 0; i < 2000; i++)
++		insns[i] = STMT(BPF_LDX | BPF_B | BPF_MSH, 0);
++	insns[2000] = STMT(BPF_LD | BPF_IMM, 1);
++	insns[2001] = JUMP(BPF_JMP | BPF_JEQ | BPF_K, 1, 0, 1);
++	insns[2002] = STMT(BPF_RET | BPF_K, 1);
++	insns[2003] = STMT(BPF_RET | BPF_K, 2);
++	return 2004;
++}
++
++/* A conditional jump over 254 loads, which expand to 12 instructions each */
++static int fill_jump_over_ld_abs(struct sock_filter *insns, bool taken)
++{
++	int i;
++
++	insns[0] = STMT(BPF_LD | BPF_B | BPF_ABS, 0);
++	insns[1] = JUMP(BPF_JMP | BPF_JEQ | BPF_K, 1, taken ? 255 : 0, taken ? 0 : 255);
++	for (i = 2; i < 256; i++)
++		insns[i] = STMT(BPF_LD | BPF_B | BPF_ABS, 0);
++	insns[256] = STMT(BPF_RET | BPF_K, 2);
++	insns[257] = STMT(BPF_RET | BPF_K, 3);
++	return 258;
++}
++
++static int fill_jt_over_ld_abs(struct sock_filter *insns)
++{
++	return fill_jump_over_ld_abs(insns, true);
++}
++
++static int fill_jf_over_ld_abs(struct sock_filter *insns)
++{
++	return fill_jump_over_ld_abs(insns, false);
++}
++
++/* The result is small enough for the kept length to show it as is */
++static int fill_all_msh(struct sock_filter *insns)
++{
++	int len = BPF_MAXINSNS, i;
++
++	for (i = 0; i < len - 3; i++)
++		insns[i] = STMT(BPF_LDX | BPF_B | BPF_MSH, 0);
++	insns[len - 3] = STMT(BPF_LD | BPF_IMM, 0x2a);
++	insns[len - 2] = STMT(BPF_ALU | BPF_XOR | BPF_X, 0);
++	insns[len - 1] = STMT(BPF_RET | BPF_A, 0);
++	return len;
++}
++
++static int fill_ld_abs_cpu(struct sock_filter *insns)
++{
++	int len = BPF_MAXINSNS, i;
++
++	for (i = 0; i < len - 1; i += 2) {
++		insns[i] = STMT(BPF_LD | BPF_B | BPF_ABS, 0);
++		insns[i + 1] = STMT(BPF_LD | BPF_W | BPF_ABS, SKF_AD_OFF + SKF_AD_CPU);
++	}
++	insns[len - 1] = STMT(BPF_RET | BPF_K, 0xbee);
++	return len;
++}
++
++static const struct cbpf_case cases[] = {
++	{
++		.descr = "TAX",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 1),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_ALU | BPF_NEG, 0), /* A == -3 */
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_LEN, 0),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0), /* X == len - 3 */
++			BPF_STMT(BPF_LD | BPF_B | BPF_IND, 1),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(10, 20, 30, 40, 50),
++		.runs = RUNS({ 2, 10 }, { 3, 20 }, { 4, 30 }),
++	},
++	{
++		.descr = "TXA",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0) /* A == len * 2 */
++		),
++		.data = DATA(10, 20, 30, 40, 50),
++		.runs = RUNS({ 1, 2 }, { 3, 6 }, { 4, 8 }),
++	},
++	{
++		.descr = "ADD_SUB_MUL_K",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 1),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_K, 2),
++			BPF_STMT(BPF_LDX | BPF_IMM, 3),
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_X, 0),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_K, 0xffffffff),
++			BPF_STMT(BPF_ALU | BPF_MUL | BPF_K, 3),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 0, 0xfffffffd }),
++	},
++	{
++		.descr = "DIV_MOD_KX",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 8),
++			BPF_STMT(BPF_ALU | BPF_DIV | BPF_K, 2),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffffffff),
++			BPF_STMT(BPF_ALU | BPF_DIV | BPF_X, 0),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffffffff),
++			BPF_STMT(BPF_ALU | BPF_DIV | BPF_K, 0x70000000),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffffffff),
++			BPF_STMT(BPF_ALU | BPF_MOD | BPF_X, 0),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffffffff),
++			BPF_STMT(BPF_ALU | BPF_MOD | BPF_K, 0x70000000),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 0, 0x20000000 }),
++	},
++	{
++		.descr = "AND_OR_LSH_K",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xff),
++			BPF_STMT(BPF_ALU | BPF_AND | BPF_K, 0xf0),
++			BPF_STMT(BPF_ALU | BPF_LSH | BPF_K, 27),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 0xf),
++			BPF_STMT(BPF_ALU | BPF_OR | BPF_K, 0xf0),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 0, 0x800000ff }, { 1, 0x800000ff }),
++	},
++	{
++		.descr = "LD_IMM_0",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0), /* ld #0 */
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 1 }),
++	},
++	{
++		.descr = "LD_IND",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_IND, MAX_K),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0 }, { 10, 0 }, { 60, 0 }),
++	},
++	{
++		.descr = "LD_ABS",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS, 1000),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0 }, { 10, 0 }, { 60, 0 }),
++	},
++	{
++		.descr = "LD_ABS_NET",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, SKF_NET_OFF),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, SKF_NET_OFF + 1),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3),
++		.runs = RUNS({ 15, 0 }, { 16, 3 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_IND_NET",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, SKF_NET_OFF - 15),
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_IND, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3),
++		.runs = RUNS({ 14, 0 }, { 15, 1 }, { 17, 3 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_PKTTYPE",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PKTTYPE),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SKB_TYPE, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PKTTYPE),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SKB_TYPE, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PKTTYPE),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, SKB_TYPE, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 1, 3 }, { 10, 3 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_MARK",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_MARK),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 1, SKB_MARK}, { 10, SKB_MARK}),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_IFINDEX",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_IFINDEX),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 1, SKB_DEV_IFINDEX }, { 10, SKB_DEV_IFINDEX }),
++		.flags = CB_PKT | CB_IFINDEX,
++	},
++	{
++		.descr = "LD_HATYPE",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_HATYPE),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 1, SKB_DEV_TYPE }, { 10, SKB_DEV_TYPE }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_CPU",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_CPU),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_CPU),
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 1, 0 }, { 10, 0 }),
++	},
++	{
++		.descr = "LD_NLATTR",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 2),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_LDX | BPF_IMM, 3),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++#if __BYTE_ORDER == __BIG_ENDIAN
++		.data = DATA(0xff, 0xff, 0, 4, 0, 2, 0, 4, 0, 3),
++#else
++		.data = DATA(0xff, 0xff, 4, 0, 2, 0, 4, 0, 3, 0),
++#endif
++		.runs = RUNS({ 4, 0 }, { 20, 6 }),
++	},
++	{
++		.descr = "LD_NLATTR_NEST",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LDX | BPF_IMM, 3),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_NLATTR_NEST),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++#if __BYTE_ORDER == __BIG_ENDIAN
++		.data = DATA(0xff, 0xff, 0, 12, 0, 1, 0, 4, 0, 2, 0, 4, 0, 3),
++#else
++		.data = DATA(0xff, 0xff, 12, 0, 1, 0, 4, 0, 2, 0, 4, 0, 3, 0),
++#endif
++		.runs = RUNS({ 4, 0 }, { 20, 10 }),
++	},
++	{
++		.descr = "LD_PAYLOAD_OFF",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PAY_OFFSET),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PAY_OFFSET),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PAY_OFFSET),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PAY_OFFSET),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PAY_OFFSET),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x45, 0x00,
++			     0x00, 0x54, 0xac, 0x8b, 0x40, 0x00, 0x40, 0x01,
++			     0x90, 0x1b, 0x7f, 0x00, 0x00, 0x01),
++		.runs = RUNS({ 30, 0 }, { 100, 42 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_ANC_XOR",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 10),
++			BPF_STMT(BPF_LDX | BPF_IMM, 300),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_ALU_XOR_X),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 4, 0xA ^ 300 }, { 20, 0xA ^ 300 }),
++	},
++	{
++		.descr = "SPILL_FILL",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 2),
++			BPF_STMT(BPF_ALU | BPF_RSH, 1),
++			BPF_STMT(BPF_ALU | BPF_XOR | BPF_X, 0),
++			BPF_STMT(BPF_ST, 1), /* M1 = 1 ^ len */
++			BPF_STMT(BPF_ALU | BPF_XOR | BPF_K, 0x80000000),
++			BPF_STMT(BPF_ST, 2), /* M2 = 1 ^ len ^ 0x80000000 */
++			BPF_STMT(BPF_STX, 15), /* M3 = len */
++			BPF_STMT(BPF_LDX | BPF_MEM, 1),
++			BPF_STMT(BPF_LD | BPF_MEM, 2),
++			BPF_STMT(BPF_ALU | BPF_XOR | BPF_X, 0),
++			BPF_STMT(BPF_LDX | BPF_MEM, 15),
++			BPF_STMT(BPF_ALU | BPF_XOR | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 1, 0x80000001 }, { 2, 0x80000002 }, { 60, 0x80000000 ^ 60 }),
++	},
++	{
++		.descr = "JEQ",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 2),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_X, 0, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, MAX_K)
++		),
++		.data = DATA(3, 3, 3, 3, 3),
++		.runs = RUNS({ 1, 0 }, { 3, 1 }, { 4, MAX_K }),
++	},
++	{
++		.descr = "JGT",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 2),
++			BPF_JUMP(BPF_JMP | BPF_JGT | BPF_X, 0, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, MAX_K)
++		),
++		.data = DATA(4, 4, 4, 3, 3),
++		.runs = RUNS({ 2, 0 }, { 3, 1 }, { 4, MAX_K }),
++	},
++	{
++		.descr = "JGE (jt 0), test 1",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 2),
++			BPF_JUMP(BPF_JMP | BPF_JGE | BPF_X, 0, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, MAX_K)
++		),
++		.data = DATA(4, 4, 4, 3, 3),
++		.runs = RUNS({ 2, 0 }, { 3, 1 }, { 4, 1 }),
++	},
++	{
++		.descr = "JGE (jt 0), test 2",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 2),
++			BPF_JUMP(BPF_JMP | BPF_JGE | BPF_X, 0, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, MAX_K)
++		),
++		.data = DATA(4, 4, 5, 3, 3),
++		.runs = RUNS({ 4, 1 }, { 5, 1 }, { 6, MAX_K }),
++	},
++	{
++		.descr = "JGE",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_IND, MAX_K),
++			BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 1, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 10),
++			BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 2, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 20),
++			BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 3, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 30),
++			BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 4, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 40),
++			BPF_STMT(BPF_RET | BPF_K, MAX_K)
++		),
++		.data = DATA(1, 2, 3, 4, 5),
++		.runs = RUNS({ 1, 20 }, { 3, 40 }, { 5, MAX_K }),
++	},
++	{
++		.descr = "JSET",
++		.insns = INSNS(
++			BPF_JUMP(BPF_JMP | BPF_JA, 0, 0, 0),
++			BPF_JUMP(BPF_JMP | BPF_JA, 1, 1, 1),
++			BPF_JUMP(BPF_JMP | BPF_JA, 0, 0, 0),
++			BPF_JUMP(BPF_JMP | BPF_JA, 0, 0, 0),
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_K, 4),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_W | BPF_IND, 0),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 1, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 10),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0x80000000, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 20),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0xffffff, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 30),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0xffffff, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 30),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0xffffff, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 30),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0xffffff, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 30),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0xffffff, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 30),
++			BPF_STMT(BPF_RET | BPF_K, MAX_K)
++		),
++		.data = DATA(0, 0xAA, 0x55, 1),
++		.runs = RUNS({ 4, 10 }, { 5, 20 }, { 6, MAX_K }),
++	},
++	{
++		.descr = "tcpdump port 22",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 12),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x86dd, 0, 8), /* IPv6 */
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 20),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x84, 2, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x6, 1, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x11, 0, 17),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 54),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 22, 14, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 56),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 22, 12, 13),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x0800, 0, 12), /* IPv4 */
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 23),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x84, 2, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x6, 1, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x11, 0, 8),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 20),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0x1fff, 6, 0),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 14),
++			BPF_STMT(BPF_LD | BPF_H | BPF_IND, 14),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 22, 2, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_IND, 16),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 22, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 0xffff),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.data = DATA(0x10, 0xbf, 0x48, 0xd6, 0x43, 0xd6, 0x3c, 0x07,
++			     0x54, 0x43, 0xe5, 0x76, 0x08, 0x00, 0x45, 0x10,
++			     0x00, 0x64, 0x75, 0xb5, 0x40, 0x00, 0x40, 0x06,
++			     0xad, 0x2e, 0x0a, 0x01, 0x01, 0x95, 0x0a, 0x01,
++			     0x02, 0x0a, 0xc2, 0x24, 0x00, 0x16),
++		.runs = RUNS({ 10, 0 }, { 30, 0 }, { 100, 65535 }),
++	},
++	{
++		.descr = "tcpdump complex",
++		.insns = INSNS(
++			/* tcpdump -nei eth0 'tcp port 22 and (((ip[2:2] -
++			 * ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0) and
++			 * (len > 115 or len < 30000000000)' -d
++			 */
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 12),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x86dd, 30, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x800, 0, 29),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 23),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x6, 0, 27),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 20),
++			BPF_JUMP(BPF_JMP | BPF_JSET | BPF_K, 0x1fff, 25, 0),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 14),
++			BPF_STMT(BPF_LD | BPF_H | BPF_IND, 14),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 22, 2, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_IND, 16),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 22, 0, 20),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 16),
++			BPF_STMT(BPF_ST, 1),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 14),
++			BPF_STMT(BPF_ALU | BPF_AND | BPF_K, 0xf),
++			BPF_STMT(BPF_ALU | BPF_LSH | BPF_K, 2),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0x5), /* libpcap emits K on TAX */
++			BPF_STMT(BPF_LD | BPF_MEM, 1),
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_X, 0),
++			BPF_STMT(BPF_ST, 5),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 14),
++			BPF_STMT(BPF_LD | BPF_B | BPF_IND, 26),
++			BPF_STMT(BPF_ALU | BPF_AND | BPF_K, 0xf0),
++			BPF_STMT(BPF_ALU | BPF_RSH | BPF_K, 2),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0x9), /* libpcap emits K on TAX */
++			BPF_STMT(BPF_LD | BPF_MEM, 5),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_X, 0, 4, 0),
++			BPF_STMT(BPF_LD | BPF_LEN, 0),
++			BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, 0x73, 1, 0),
++			BPF_JUMP(BPF_JMP | BPF_JGE | BPF_K, 0xfc23ac00, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0xffff),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.data = DATA(0x10, 0xbf, 0x48, 0xd6, 0x43, 0xd6,
++			     0x3c, 0x07, 0x54, 0x43, 0xe5, 0x76,
++			     0x08, 0x00,
++			     0x45, 0x10, 0x00, 0x64, 0x75, 0xb5,
++			     0x40, 0x00, 0x40, 0x06, 0xad, 0x2e, /* IP header */
++			     0x0a, 0x01, 0x01, 0x95, /* ip src */
++			     0x0a, 0x01, 0x02, 0x0a, /* ip dst */
++			     0xc2, 0x24,
++			     0x00, 0x16 /* dst port */),
++		.runs = RUNS({ 10, 0 }, { 30, 0 }, { 100, 65535 }),
++	},
++	{
++		.descr = "RET_A",
++		.insns = INSNS(
++			/* check that uninitialized X and A contain zeros */
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({1, 0}, {2, 0}),
++	},
++	{
++		.descr = "check: missing ret",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 1)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: div_k_0",
++		.insns = INSNS(
++			BPF_STMT(BPF_ALU | BPF_DIV | BPF_K, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: unknown insn",
++		.insns = INSNS(
++			/* seccomp insn, rejected in socket filter */
++			BPF_STMT(BPF_LDX | BPF_W | BPF_ABS, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: out of range spill/fill",
++		.insns = INSNS(
++			BPF_STMT(BPF_STX, 16),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "JUMPS + HOLES",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_JUMP(BPF_JMP | BPF_JGE, 0, 13, 15),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ, 0x90c2894d, 3, 4),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ, 0x90c2894d, 1, 2),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_JUMP(BPF_JMP | BPF_JGE, 0, 14, 15),
++			BPF_JUMP(BPF_JMP | BPF_JGE, 0, 13, 14),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ, 0x2ac28349, 2, 3),
++			BPF_JUMP(BPF_JMP | BPF_JEQ, 0x2ac28349, 1, 2),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_JUMP(BPF_JMP | BPF_JGE, 0, 14, 15),
++			BPF_JUMP(BPF_JMP | BPF_JGE, 0, 13, 14),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ, 0x90d2ff41, 2, 3),
++			BPF_JUMP(BPF_JMP | BPF_JEQ, 0x90d2ff41, 1, 2),
++			BPF_STMT(BPF_LD | BPF_H | BPF_ABS, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0x00, 0x1b, 0x21, 0x3c, 0x9d, 0xf8,
++			     0x90, 0xe2, 0xba, 0x0a, 0x56, 0xb4,
++			     0x08, 0x00,
++			     0x45, 0x00, 0x00, 0x28, 0x00, 0x00,
++			     0x20, 0x00, 0x40, 0x11, 0x00, 0x00, /* IP header */
++			     0xc0, 0xa8, 0x33, 0x01,
++			     0xc0, 0xa8, 0x33, 0x02,
++			     0xbb, 0xb6,
++			     0xa9, 0xfa,
++			     0x00, 0x14, 0x00, 0x00,
++			     0xcc, 0xcc, 0xcc, 0xcc, 0xcc, 0xcc,
++			     0xcc, 0xcc, 0xcc, 0xcc, 0xcc, 0xcc,
++			     0xcc, 0xcc, 0xcc, 0xcc, 0xcc, 0xcc,
++			     0xcc, 0xcc, 0xcc, 0xcc, 0xcc, 0xcc,
++			     0xcc, 0xcc, 0xcc, 0xcc, 0xcc, 0xcc,
++			     0xcc, 0xcc, 0xcc, 0xcc, 0xcc, 0xcc,
++			     0xcc, 0xcc, 0xcc, 0xcc, 0xcc, 0xcc,
++			     0xcc, 0xcc, 0xcc, 0xcc),
++		.runs = RUNS({ 88, 0x001b }),
++	},
++	{
++		.descr = "check: RET X",
++		.insns = INSNS(
++			BPF_STMT(BPF_RET | BPF_X, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: LDX + RET X",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 42),
++			BPF_STMT(BPF_RET | BPF_X, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: SKF_AD_MAX",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_MAX),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "JMP_JA: Jump, gap, jump, ...",
++		.fill = fill_ja_short,
++		.runs = RUNS({ 0, 0xababcbac }),
++	},
++	{
++		.descr = "BPF_MAXINSNS: Too many instructions",
++		.fill = fill_too_many,
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "BPF_MAXINSNS: Jump, gap, jump, ...",
++		.fill = fill_ja_long,
++		.runs = RUNS({ 0, 0xababcbac }),
++	},
++	{
++		.descr = "BPF_MAXINSNS: jump over MSH",
++		.fill = fill_jump_over_all_msh,
++		.data = DATA(0xfa, 0xfb, 0xfc, 0xfd),
++		.flags = CB_FAIL,
++	},
++	{
++		/* A rewritten return would be a jump past 32K converted instructions */
++		.descr = "BPF_MAXINSNS: exec all MSH",
++		.fill = fill_all_msh,
++		.data = DATA(0xfa, 0xfb, 0xfc, 0xfd),
++		.runs = RUNS({ 4, 2 }),
++		.flags = CB_RAW,
++	},
++	{
++		.descr = "BPF_MAXINSNS: ld_abs+get_processor_id",
++		.fill = fill_ld_abs_cpu,
++		.runs = RUNS({ 1, 0xbee }),
++	},
++	{
++		.descr = "LD_IND byte positive offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x82 }),
++	},
++	{
++		.descr = "LD_IND byte negative offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, -0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x05 }),
++	},
++	{
++		.descr = "LD_IND byte positive offset, all ff",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0xff, [0x3d] = 0xff,  [0x3e] = 0xff, [0x3f] = 0xff),
++		.runs = RUNS({0x40, 0xff }),
++	},
++	{
++		.descr = "LD_IND byte positive offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_IND byte negative offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, -0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_IND byte negative offset, multiple calls",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3b),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, SKF_LL_OFF + 1),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, SKF_LL_OFF + 2),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, SKF_LL_OFF + 3),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, SKF_LL_OFF + 4),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x82 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_IND halfword positive offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, 0x2),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88),
++		.runs = RUNS({0x40, 0xdd88 }),
++	},
++	{
++		.descr = "LD_IND halfword negative offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, -0x2),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88),
++		.runs = RUNS({0x40, 0xbb66 }),
++	},
++	{
++		.descr = "LD_IND halfword unaligned",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, -0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88),
++		.runs = RUNS({0x40, 0x66cc }),
++	},
++	{
++		.descr = "LD_IND halfword positive offset, all ff",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3d),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0xff, [0x3d] = 0xff,  [0x3e] = 0xff, [0x3f] = 0xff),
++		.runs = RUNS({0x40, 0xffff }),
++	},
++	{
++		.descr = "LD_IND halfword positive offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_IND halfword negative offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, -0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_IND word positive offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, 0x4),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0xee99ffaa }),
++	},
++	{
++		.descr = "LD_IND word negative offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, -0x4),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0xaa55bb66 }),
++	},
++	{
++		.descr = "LD_IND word unaligned (addr & 3 == 2)",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, -0x2),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0xbb66cc77 }),
++	},
++	{
++		.descr = "LD_IND word unaligned (addr & 3 == 1)",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, -0x3),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0x55bb66cc }),
++	},
++	{
++		.descr = "LD_IND word unaligned (addr & 3 == 3)",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x20),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, -0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0x66cc77dd }),
++	},
++	{
++		.descr = "LD_IND word positive offset, all ff",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3b),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0xff, [0x3d] = 0xff,  [0x3e] = 0xff, [0x3f] = 0xff),
++		.runs = RUNS({0x40, 0xffffffff }),
++	},
++	{
++		.descr = "LD_IND word positive offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_IND word negative offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0x3e),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, -0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_ABS byte",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, 0x20),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0xcc }),
++	},
++	{
++		.descr = "LD_ABS byte positive offset, all ff",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0xff, [0x3d] = 0xff,  [0x3e] = 0xff, [0x3f] = 0xff),
++		.runs = RUNS({0x40, 0xff }),
++	},
++	{
++		.descr = "LD_ABS byte positive offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_ABS byte negative offset, out of bounds load",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, -1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "LD_ABS byte negative offset, in bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, SKF_LL_OFF + 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x82 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_ABS byte negative offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, SKF_LL_OFF + 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_ABS byte negative offset, multiple calls",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, SKF_LL_OFF + 0x3c),
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, SKF_LL_OFF + 0x3d),
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, SKF_LL_OFF + 0x3e),
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, SKF_LL_OFF + 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x82 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_ABS halfword",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, 0x22),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0xdd88 }),
++	},
++	{
++		.descr = "LD_ABS halfword unaligned",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, 0x25),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0x99ff }),
++	},
++	{
++		.descr = "LD_ABS halfword positive offset, all ff",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, 0x3e),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0xff, [0x3d] = 0xff,  [0x3e] = 0xff, [0x3f] = 0xff),
++		.runs = RUNS({0x40, 0xffff }),
++	},
++	{
++		.descr = "LD_ABS halfword positive offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_ABS halfword negative offset, out of bounds load",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, -1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "LD_ABS halfword negative offset, in bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, SKF_LL_OFF + 0x3e),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x1982 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_ABS halfword negative offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, SKF_LL_OFF + 0x3e),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_ABS word",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, 0x1c),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0xaa55bb66 }),
++	},
++	{
++		.descr = "LD_ABS word unaligned (addr & 3 == 2)",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, 0x22),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0xdd88ee99 }),
++	},
++	{
++		.descr = "LD_ABS word unaligned (addr & 3 == 1)",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, 0x21),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0x77dd88ee }),
++	},
++	{
++		.descr = "LD_ABS word unaligned (addr & 3 == 3)",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, 0x23),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x1c] = 0xaa, [0x1d] = 0x55,
++			     [0x1e] = 0xbb, [0x1f] = 0x66,
++			     [0x20] = 0xcc, [0x21] = 0x77,
++			     [0x22] = 0xdd, [0x23] = 0x88,
++			     [0x24] = 0xee, [0x25] = 0x99,
++			     [0x26] = 0xff, [0x27] = 0xaa),
++		.runs = RUNS({0x40, 0x88ee99ff }),
++	},
++	{
++		.descr = "LD_ABS word positive offset, all ff",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, 0x3c),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0xff, [0x3d] = 0xff,  [0x3e] = 0xff, [0x3f] = 0xff),
++		.runs = RUNS({0x40, 0xffffffff }),
++	},
++	{
++		.descr = "LD_ABS word positive offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++	},
++	{
++		.descr = "LD_ABS word negative offset, out of bounds load",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, -1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "LD_ABS word negative offset, in bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, SKF_LL_OFF + 0x3c),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x25051982 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_ABS word negative offset, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, SKF_LL_OFF + 0x3c),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x3f, 0 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LDX_MSH standalone, preserved A",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffeebbaa),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x3c),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0xffeebbaa }),
++	},
++	{
++		.descr = "LDX_MSH standalone, preserved A 2",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0x175e9d63),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x3c),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x3d),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x3e),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x3f),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x175e9d63 }),
++	},
++	{
++		.descr = "LDX_MSH standalone, test result 1",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffeebbaa),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x3c),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x14 }),
++	},
++	{
++		.descr = "LDX_MSH standalone, test result 2",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffeebbaa),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x3e),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x24 }),
++	},
++	{
++		.descr = "LDX_MSH standalone, negative offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffeebbaa),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, -1),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0 }),
++	},
++	{
++		.descr = "LDX_MSH standalone, negative offset 2",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffeebbaa),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, SKF_LL_OFF + 0x3e),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0x24 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LDX_MSH standalone, out of bounds",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffeebbaa),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH, 0x40),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3c] = 0x25, [0x3d] = 0x05,  [0x3e] = 0x19, [0x3f] = 0x82),
++		.runs = RUNS({0x40, 0 }),
++	},
++	{
++		.descr = "ADD default X",
++		.insns = INSNS(
++			/*
++			 * A = 0x42
++			 * A = A + X
++			 * ret A
++			 */
++			BPF_STMT(BPF_LD | BPF_IMM, 0x42),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x42 }),
++	},
++	{
++		.descr = "ADD default A",
++		.insns = INSNS(
++			/*
++			 * A = A + 0x42
++			 * ret A
++			 */
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_K, 0x42),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x42 }),
++	},
++	{
++		.descr = "SUB default X",
++		.insns = INSNS(
++			/*
++			 * A = 0x66
++			 * A = A - X
++			 * ret A
++			 */
++			BPF_STMT(BPF_LD | BPF_IMM, 0x66),
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x66 }),
++	},
++	{
++		.descr = "SUB default A",
++		.insns = INSNS(
++			/*
++			 * A = A - -0x66
++			 * ret A
++			 */
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_K, -0x66),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x66 }),
++	},
++	{
++		.descr = "MUL default X",
++		.insns = INSNS(
++			/*
++			 * A = 0x42
++			 * A = A * X
++			 * ret A
++			 */
++			BPF_STMT(BPF_LD | BPF_IMM, 0x42),
++			BPF_STMT(BPF_ALU | BPF_MUL | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x0 }),
++	},
++	{
++		.descr = "MUL default A",
++		.insns = INSNS(
++			/*
++			 * A = A * 0x66
++			 * ret A
++			 */
++			BPF_STMT(BPF_ALU | BPF_MUL | BPF_K, 0x66),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x0 }),
++	},
++	{
++		.descr = "DIV default X",
++		.insns = INSNS(
++			/*
++			 * A = 0x42
++			 * A = A / X ; this halt the filter execution if X is 0
++			 * ret 0x42
++			 */
++			BPF_STMT(BPF_LD | BPF_IMM, 0x42),
++			BPF_STMT(BPF_ALU | BPF_DIV | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0x42)
++		),
++		.runs = RUNS({0x1, 0x0 }),
++	},
++	{
++		.descr = "DIV default A",
++		.insns = INSNS(
++			/*
++			 * A = A / 1
++			 * ret A
++			 */
++			BPF_STMT(BPF_ALU | BPF_DIV | BPF_K, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x0 }),
++	},
++	{
++		.descr = "MOD default X",
++		.insns = INSNS(
++			/*
++			 * A = 0x42
++			 * A = A mod X ; this halt the filter execution if X is 0
++			 * ret 0x42
++			 */
++			BPF_STMT(BPF_LD | BPF_IMM, 0x42),
++			BPF_STMT(BPF_ALU | BPF_MOD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0x42)
++		),
++		.runs = RUNS({0x1, 0x0 }),
++	},
++	{
++		.descr = "MOD default A",
++		.insns = INSNS(
++			/*
++			 * A = A mod 1
++			 * ret A
++			 */
++			BPF_STMT(BPF_ALU | BPF_MOD | BPF_K, 0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.runs = RUNS({0x1, 0x0 }),
++	},
++	{
++		.descr = "JMP EQ default A",
++		.insns = INSNS(
++			/*
++			 * cmp A, 0x0, 0, 1
++			 * ret 0x42
++			 * ret 0x66
++			 */
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0x0, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 0x42),
++			BPF_STMT(BPF_RET | BPF_K, 0x66)
++		),
++		.runs = RUNS({0x1, 0x42 }),
++	},
++	{
++		.descr = "JMP EQ default X",
++		.insns = INSNS(
++			/*
++			 * A = 0x0
++			 * cmp A, X, 0, 1
++			 * ret 0x42
++			 * ret 0x66
++			 */
++			BPF_STMT(BPF_LD | BPF_IMM, 0x0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_X, 0x0, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 0x42),
++			BPF_STMT(BPF_RET | BPF_K, 0x66)
++		),
++		.runs = RUNS({0x1, 0x42 }),
++	},
++	{
++		.descr = "JNE signed compare, test 7",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0xffff0000),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_IMM, 0xfefbbc12),
++			BPF_STMT(BPF_ALU | BPF_AND | BPF_X, 0),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0xfefb0000, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, 2)
++		),
++		.runs = RUNS({ 0, 2 }),
++	},
++	/*
++	 * The corner cases of the conversion: a division by a zero X returns
++	 * zero from the program, a device extension without a device returns
++	 * the accumulator as is, an indirect load never is an extension, and
++	 * the offset of a converted jump has to fit 16 bits.
++	 */
++	{
++		.descr = "DIV_X by zero",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 8),
++			BPF_STMT(BPF_LDX | BPF_IMM, 0),
++			BPF_STMT(BPF_ALU | BPF_DIV | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0 }),
++	},
++	{
++		.descr = "MOD_X by zero",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 8),
++			BPF_STMT(BPF_LDX | BPF_IMM, 0),
++			BPF_STMT(BPF_ALU | BPF_MOD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0 }),
++	},
++	{
++		.descr = "LD_IFINDEX without a device",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0x1234),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_IFINDEX),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0x1234 }),
++	},
++	{
++		.descr = "LD_HATYPE without a device",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_HATYPE),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0 }),
++	},
++	{
++		.descr = "LD_IND with an ancillary offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, 0),
++			BPF_STMT(BPF_LD | BPF_W | BPF_IND,
++				 SKF_AD_OFF + SKF_AD_ALU_XOR_X),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0 }),
++	},
++	{
++		.descr = "LDX_MSH with an ancillary offset",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 0x1234),
++			BPF_STMT(BPF_LDX | BPF_B | BPF_MSH,
++				 SKF_AD_OFF + SKF_AD_ALU_XOR_X),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 0 }),
++	},
++	{
++		.descr = "BPF_MAXINSNS: jump over 1820 MSH",
++		.fill = fill_jump_over_1820_msh,
++		.data = DATA(0xfa, 0xfb, 0xfc, 0xfd),
++		.runs = RUNS({ 4, 0xabababab }),
++		.flags = CB_NOBLIND,
++	},
++	/*
++	 * The first pass of the conversion knows no target ahead of a jump
++	 * yet and takes minus the jump's own address for the offset, which
++	 * falls out of range past 32K converted instructions. A classic
++	 * program of that length is broken anyway, so this stays as it is.
++	 */
++	{
++		.descr = "check: jump past 32K converted instructions",
++		.fill = fill_late_jump,
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "BPF_MAXINSNS: jump over 1821 MSH",
++		.fill = fill_jump_over_1821_msh,
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "jump taken over 254 LD_ABS",
++		.fill = fill_jt_over_ld_abs,
++		.data = DATA(1),
++		.runs = RUNS({ 1, 3 }),
++	},
++	{
++		.descr = "jump not taken over 254 LD_ABS",
++		.fill = fill_jt_over_ld_abs,
++		.data = DATA(0),
++		.runs = RUNS({ 1, 2 }),
++	},
++	{
++		.descr = "inverted jump taken over 254 LD_ABS",
++		.fill = fill_jf_over_ld_abs,
++		.data = DATA(0),
++		.runs = RUNS({ 1, 3 }),
++	},
++	{
++		.descr = "inverted jump not taken over 254 LD_ABS",
++		.fill = fill_jf_over_ld_abs,
++		.data = DATA(1),
++		.runs = RUNS({ 1, 2 }),
++	},
++	{
++		.descr = "check: empty program",
++		.fill = fill_empty,
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: lsh by 32",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 1),
++			BPF_STMT(BPF_ALU | BPF_LSH | BPF_K, 32),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: rsh by 32",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, 1),
++			BPF_STMT(BPF_ALU | BPF_RSH | BPF_K, 32),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: ja out of range",
++		.insns = INSNS(
++			BPF_JUMP(BPF_JMP | BPF_JA, 1, 0, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: jt out of range",
++		.insns = INSNS(
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: jf out of range",
++		.insns = INSNS(
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: load of an unwritten M[]",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_MEM, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "check: M[] written on one path only",
++		.insns = INSNS(
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 0, 1, 0),
++			BPF_STMT(BPF_ST, 0),
++			BPF_STMT(BPF_LD | BPF_MEM, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.flags = CB_FAIL,
++	},
++	{
++		.descr = "LD_PKTTYPE host",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PKTTYPE),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, PACKET_HOST, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, 2)
++		),
++		.runs = RUNS({ 14, 1 }),
++		.flags = CB_PKT | CB_DSTMAC,
++	},
++	{
++		.descr = "LD_PKTTYPE broadcast",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PKTTYPE),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, PACKET_BROADCAST, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, 2)
++		),
++		.data = DATA(0xff, 0xff, 0xff, 0xff, 0xff, 0xff),
++		.runs = RUNS({ 14, 1 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_PKTTYPE multicast",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PKTTYPE),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, PACKET_MULTICAST, 0, 1),
++			BPF_STMT(BPF_RET | BPF_K, 1),
++			BPF_STMT(BPF_RET | BPF_K, 2)
++		),
++		.data = DATA(0x01, 0x00, 0x5e, 0x00, 0x00, 0x01),
++		.runs = RUNS({ 14, 1 }),
++		.flags = CB_PKT,
++	},
++	/*
++	 * The metadata the module put into its skb comes from the frames and
++	 * the sending socket here: the protocol from the frame, the mark from
++	 * the socket, the hash and the queue are whatever the stack picks and
++	 * only compared with themselves, the device is a veth.
++	 */
++	{
++		.descr = "LD_PROTOCOL",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 1),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 20, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_PROTOCOL),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, 2),
++			BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, 30, 1, 0),
++			BPF_STMT(BPF_RET | BPF_K, 0),
++			BPF_STMT(BPF_MISC | BPF_TXA, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(10, 20, 30, [12] = 0x08, [13] = 0x00),
++		.runs = RUNS({ 14, ETH_P_IP }, { 100, ETH_P_IP }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_RXHASH",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_RXHASH),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_RXHASH),
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x08, 0x00,
++			     0x45, 0x00, 0x00, 0x54, 0xac, 0x8b, 0x40, 0x00, 0x40,
++			     0x01, 0x90, 0x1b, 0x7f, 0x00, 0x00, 0x01),
++		.runs = RUNS({ 100, 0 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_QUEUE",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_QUEUE),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_QUEUE),
++			BPF_STMT(BPF_ALU | BPF_SUB | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 14, 0 }, { 100, 0 }),
++		.flags = CB_PKT,
++	},
++	/*
++	 * The tagged frames are full size: skb_vlan_untag() pulls two bytes
++	 * behind the tag for its 802.3 check and frees a frame without them
++	 * before any tap sees it, so 18 bytes never arrive while 20 do.
++	 */
++	{
++		.descr = "LD_VLAN_TAG",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_VLAN_TAG),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x81, 0x00, 0xff, 0xff, 0x08, 0x00),
++		.runs = RUNS({ 64, SKB_VLAN_TCI }, { 100, SKB_VLAN_TCI }),
++		.flags = CB_PKT | CB_VLAN,
++	},
++	{
++		.descr = "LD_VLAN_TAG_PRESENT",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_VLAN_TAG_PRESENT),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x81, 0x00, 0xff, 0xff, 0x08, 0x00),
++		.runs = RUNS({ 64, SKB_VLAN_PRESENT }, { 100, SKB_VLAN_PRESENT }),
++		.flags = CB_PKT | CB_VLAN,
++	},
++	{
++		.descr = "LD_LEN of a tagged frame",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_LEN, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x81, 0x00, 0xff, 0xff, 0x08, 0x00),
++		.runs = RUNS({ 64, 60 }, { 100, 96 }),
++		.flags = CB_PKT | CB_VLAN,
++	},
++	{
++		.descr = "LD_VLAN_TAG_PRESENT, untagged",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_VLAN_TAG_PRESENT),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.runs = RUNS({ 14, 0 }, { 100, 0 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_VLAN_TPID",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_VLAN_TPID),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++			     0x81, 0x00, 0xff, 0xff, 0x08, 0x00),
++		.runs = RUNS({ 64, ETH_P_8021Q }, { 100, ETH_P_8021Q }),
++		.flags = CB_PKT | CB_VLAN,
++	},
++	{
++		.descr = "LD_RANDOM",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
++				 SKF_AD_OFF + SKF_AD_RANDOM),
++			BPF_STMT(BPF_RET | BPF_K, 1)
++		),
++		.runs = RUNS({ 1, 1 }),
++	},
++	/* A frame has at least its header: the loads of the module's short ones */
++	{
++		.descr = "LD_ABS_LL",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, SKF_LL_OFF),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_ABS, SKF_LL_OFF + 1),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(1, 2, 3),
++		.runs = RUNS({ 14, 3 }, { 100, 3 }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_IND_LL",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_IMM, SKF_LL_OFF - 1),
++			BPF_STMT(BPF_LDX | BPF_LEN, 0),
++			BPF_STMT(BPF_ALU | BPF_ADD | BPF_X, 0),
++			BPF_STMT(BPF_MISC | BPF_TAX, 0),
++			BPF_STMT(BPF_LD | BPF_B | BPF_IND, 0),
++			BPF_STMT(BPF_RET | BPF_A, 0)
++		),
++		.data = DATA(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0xff),
++		.runs = RUNS({ 14, 14 }, { 15, 15 }, { 16, 0xff }),
++		.flags = CB_PKT,
++	},
++	{
++		.descr = "LD_IND byte frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, FRAG_OFF),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_B, 0x0),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.frag = FRAG(0x42, 0x00, 0x00, 0x00, 0x43, 0x44, 0x00, 0x00,
++			     0x21, 0x07, 0x19, 0x83),
++		.runs = RUNS({ FRAG_OFF, 0x42 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_IND halfword frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, FRAG_OFF),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, 0x4),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.frag = FRAG(0x42, 0x00, 0x00, 0x00, 0x43, 0x44, 0x00, 0x00,
++			     0x21, 0x07, 0x19, 0x83),
++		.runs = RUNS({ FRAG_OFF, 0x4344 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_IND word frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, FRAG_OFF),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, 0x8),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.frag = FRAG(0x42, 0x00, 0x00, 0x00, 0x43, 0x44, 0x00, 0x00,
++			     0x21, 0x07, 0x19, 0x83),
++		.runs = RUNS({ FRAG_OFF, 0x21071983 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_IND halfword mixed head/frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, FRAG_OFF),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_H, -0x1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3e] = 0x25, [0x3f] = 0x05),
++		.frag = FRAG(0x19, 0x82),
++		.runs = RUNS({ FRAG_OFF, 0x0519 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_IND word mixed head/frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LDX | BPF_IMM, FRAG_OFF),
++			BPF_STMT(BPF_LD | BPF_IND | BPF_W, -0x2),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3e] = 0x25, [0x3f] = 0x05),
++		.frag = FRAG(0x19, 0x82),
++		.runs = RUNS({ FRAG_OFF, 0x25051982 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_ABS byte frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_B, FRAG_OFF),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.frag = FRAG(0x42, 0x00, 0x00, 0x00, 0x43, 0x44, 0x00, 0x00,
++			     0x21, 0x07, 0x19, 0x83),
++		.runs = RUNS({ FRAG_OFF, 0x42 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_ABS halfword frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, FRAG_OFF + 4),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.frag = FRAG(0x42, 0x00, 0x00, 0x00, 0x43, 0x44, 0x00, 0x00,
++			     0x21, 0x07, 0x19, 0x83),
++		.runs = RUNS({ FRAG_OFF, 0x4344 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_ABS word frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, FRAG_OFF + 8),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.frag = FRAG(0x42, 0x00, 0x00, 0x00, 0x43, 0x44, 0x00, 0x00,
++			     0x21, 0x07, 0x19, 0x83),
++		.runs = RUNS({ FRAG_OFF, 0x21071983 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_ABS halfword mixed head/frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_H, FRAG_OFF - 1),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3e] = 0x25, [0x3f] = 0x05),
++		.frag = FRAG(0x19, 0x82),
++		.runs = RUNS({ FRAG_OFF, 0x0519 }),
++		.flags = CB_FRAG,
++	},
++	{
++		.descr = "LD_ABS word mixed head/frag",
++		.insns = INSNS(
++			BPF_STMT(BPF_LD | BPF_ABS | BPF_W, FRAG_OFF - 2),
++			BPF_STMT(BPF_RET | BPF_A, 0x0)
++		),
++		.data = DATA([0x3e] = 0x25, [0x3f] = 0x05),
++		.frag = FRAG(0x19, 0x82),
++		.runs = RUNS({ FRAG_OFF, 0x25051982 }),
++		.flags = CB_FRAG,
++	},
++};
++
++/*
++ * Rewrite the returns for the expected result: it stays, every other
++ * constant becomes zero and a returned accumulator gets compared at the
++ * end, so that a wrong result drops the packet. A result of zero is a
++ * drop as is.
++ */
++static int rewrite_returns(struct sock_filter *insns, int cnt, __u32 result)
++{
++	bool ret_a = false;
++	int i, n = cnt;
++
++	if (!result)
++		return cnt;
++	for (i = 0; i < cnt; i++) {
++		if (insns[i].code == (BPF_RET | BPF_K)) {
++			insns[i].k = insns[i].k == result ? result : 0;
++		} else if (insns[i].code == (BPF_RET | BPF_A)) {
++			insns[i] = JUMP(BPF_JMP | BPF_JA, cnt - i - 1, 0, 0);
++			ret_a = true;
++		}
++	}
++	if (!ret_a)
++		return cnt;
++	insns[n++] = JUMP(BPF_JMP | BPF_JEQ | BPF_K, result, 0, 1);
++	insns[n++] = STMT(BPF_RET | BPF_K, result);
++	insns[n++] = STMT(BPF_RET | BPF_K, 0);
++	return n;
++}
++
++static int attach_filter(int fd, struct sock_filter *insns, int cnt)
++{
++	struct sock_fprog fprog = { .len = cnt, .filter = insns };
++
++	return setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &fprog, sizeof(fprog));
++}
++
++/* -1 for a dropped datagram, -2 for a failure, else the length received */
++static int run_unix(struct sock_filter *insns, int cnt, const __u8 *pkt, int len, __u8 *buf,
++		    const char *desc)
++{
++	int sv[2], n = -2;
++
++	if (!ASSERT_OK(socketpair(AF_UNIX, SOCK_DGRAM, 0, sv), "socketpair"))
++		return -2;
++	/* Room for dgram_max, which the kernel doubles: four 64K pages exceed the default */
++	if (!ASSERT_OK(setsockopt(sv[0], SOL_SOCKET, SO_SNDBUFFORCE, &dgram_max,
++				  sizeof(dgram_max)), "sndbuf") ||
++	    !ASSERT_OK(attach_filter(sv[1], insns, cnt), desc))
 +		goto out;
-+
-+	for (i = 0; i < ARRAY_SIZE(offs); i++) {
-+		p.cnt = 0;
-+		EMIT(&p, BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -64));
-+		for (r = 0; r < 4; r++)
-+			off_prog_ld_imm64(&p, BPF_REG_6 + r, kept[r]);
-+		off_prog_lookup(&p, map_fd, key);
-+		/* The dynptr at -80 over the value, the returns summed at -96 */
-+		EMIT(&p, BPF_MOV64_REG(BPF_REG_1, BPF_REG_0));
-+		EMIT(&p, BPF_MOV64_IMM(BPF_REG_2, sizeof(mem)));
-+		EMIT(&p, BPF_MOV64_IMM(BPF_REG_3, 0));
-+		EMIT(&p, BPF_MOV64_REG(BPF_REG_4, BPF_REG_10));
-+		EMIT(&p, BPF_ALU64_IMM(BPF_ADD, BPF_REG_4, -80));
-+		EMIT(&p, BPF_EMIT_CALL(BPF_FUNC_dynptr_from_mem));
-+		EMIT(&p, BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -96));
-+		/* Eight bytes from the offset into -88 */
-+		EMIT(&p, BPF_MOV64_REG(BPF_REG_1, BPF_REG_10));
-+		EMIT(&p, BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -88));
-+		EMIT(&p, BPF_MOV64_IMM(BPF_REG_2, 8));
-+		EMIT(&p, BPF_MOV64_REG(BPF_REG_3, BPF_REG_10));
-+		EMIT(&p, BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, -80));
-+		EMIT(&p, BPF_MOV64_IMM(BPF_REG_4, offs[i]));
-+		EMIT(&p, BPF_MOV64_IMM(BPF_REG_5, 0));
-+		EMIT(&p, BPF_EMIT_CALL(BPF_FUNC_dynptr_read));
-+		EMIT(&p, BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -96));
-+		EMIT(&p, BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1));
-+		EMIT(&p, BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -96));
-+		/* The size through the kfunc */
-+		EMIT(&p, BPF_MOV64_REG(BPF_REG_1, BPF_REG_10));
-+		EMIT(&p, BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -80));
-+		EMIT(&p, BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0,
-+				      kfunc_id));
-+		EMIT(&p, BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -88));
-+		EMIT(&p, BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1));
-+		EMIT(&p, BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -96));
-+		EMIT(&p, BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_1));
-+		for (r = BPF_REG_6; r <= BPF_REG_9; r++)
-+			EMIT(&p, BPF_ALU64_REG(BPF_ADD, BPF_REG_0, r));
-+		EMIT(&p, BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -64));
-+		EMIT(&p, BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, RES));
-+		snprintf(desc, sizeof(desc), "helper calls off=%d", offs[i]);
-+		fd = off_prog_load(&p, desc, false);
-+		if (fd < 0)
-+			goto out;
-+		expected = sizeof(mem) + load_bytes(mem + offs[i], BPF_DW);
-+		for (r = 0; r < 4; r++)
-+			expected += kept[r];
-+		prog_run(fd, 0, 0, expected, desc);
-+		close(fd);
-+	}
++	if (!ASSERT_EQ(send(sv[0], pkt, len, 0), len, desc))
++		goto out;
++	n = recv(sv[1], buf, dgram_max, MSG_DONTWAIT);
++	if (n < 0 && ASSERT_EQ(errno, EAGAIN, desc))
++		n = -1;
 +out:
-+	close(map_fd);
++	close(sv[0]);
++	close(sv[1]);
++	return n;
 +}
 +
- void test_jit_insns(void)
- {
- 	RUN_TESTS(jit_insns_arena);
-@@ -2353,6 +2697,8 @@ void test_jit_insns(void)
- 		test_div_const();
- 	if (test__start_subtest("alu_reg_pairs"))
- 		test_alu_reg_pairs();
-+	if (test__start_subtest("alu_edges"))
-+		test_alu_edges();
- 	if (test__start_subtest("shifts"))
- 		test_shifts();
- 	if (test__start_subtest("atomics"))
-@@ -2369,10 +2715,16 @@ void test_jit_insns(void)
- 		test_jmp_reg();
- 	if (test__start_subtest("jmp_reg_pairs"))
- 		test_jmp_reg_pairs();
-+	if (test__start_subtest("jmp_edges"))
-+		test_jmp_edges();
- 	if (test__start_subtest("staggered_jumps"))
- 		test_staggered_jumps();
- 	if (test__start_subtest("max_jmp"))
- 		test_max_jmp();
-+	if (test__start_subtest("calls"))
-+		test_calls();
-+	if (test__start_subtest("helper_calls"))
-+		test_helper_calls();
- 	if (test__start_subtest("ldst_zero_off"))
- 		test_ldst_zero_off();
- 	if (test__start_subtest("ldst_offsets"))
-@@ -2409,6 +2761,8 @@ void serial_test_jit_insns_blinded(void)
- 		test_alu_imm();
- 	if (test__start_subtest("alu_imm_regs"))
- 		test_alu_imm_regs();
-+	if (test__start_subtest("alu_edges"))
-+		test_alu_edges();
- 	if (test__start_subtest("div_const"))
- 		test_div_const();
- 	if (test__start_subtest("shifts"))
-@@ -2419,6 +2773,8 @@ void serial_test_jit_insns_blinded(void)
- 		test_ld_imm64();
- 	if (test__start_subtest("jmp_imm"))
- 		test_jmp_imm();
-+	if (test__start_subtest("jmp_edges"))
-+		test_jmp_edges();
- 	if (test__start_subtest("ldst_zero_off"))
- 		test_ldst_zero_off();
- 	if (test__start_subtest("ldst_offsets"))
++static struct {
++	struct nstoken *tok;
++	int tx, v0, v1;
++	__u8 v1_mac[ETH_ALEN];
++} net;
++
++static int net_setup(void)
++{
++	struct ifreq ifr = {};
++	int mark = SKB_MARK;
++
++	net.tx = -1;
++	if (!ASSERT_OK(make_netns(NETNS), "netns"))
++		return -1;
++	net.tok = open_netns(NETNS);
++	if (!ASSERT_OK_PTR(net.tok, "open netns"))
++		return -1;
++	SYS(fail, "ip link add v0 type veth peer name v1");
++	SYS(fail, "sysctl -qw net.ipv6.conf.v0.disable_ipv6=1 net.ipv6.conf.v1.disable_ipv6=1");
++	SYS(fail, "ip link set v0 up");
++	SYS(fail, "ip link set v1 up");
++	net.v0 = if_nametoindex("v0");
++	net.v1 = if_nametoindex("v1");
++	net.tx = socket(AF_PACKET, SOCK_RAW, 0);
++	if (!ASSERT_GE(net.tx, 0, "tx socket") ||
++	    !ASSERT_OK(setsockopt(net.tx, SOL_SOCKET, SO_MARK, &mark, sizeof(mark)), "mark"))
++		goto fail;
++	strcpy(ifr.ifr_name, "v1");
++	if (!ASSERT_OK(ioctl(net.tx, SIOCGIFHWADDR, &ifr), "v1 mac"))
++		goto fail;
++	memcpy(net.v1_mac, ifr.ifr_hwaddr.sa_data, ETH_ALEN);
++	return 0;
++fail:
++	return -1;
++}
++
++static void net_teardown(void)
++{
++	if (net.tx >= 0)
++		close(net.tx);
++	if (net.tok)
++		close_netns(net.tok);
++	remove_netns(NETNS);
++}
++
++/* The same, for a frame from v0 to v1 */
++static int run_packet(struct sock_filter *insns, int cnt, const __u8 *frame, int len, __u8 *buf,
++		      const char *desc)
++{
++	struct sockaddr_ll sll = {
++		.sll_family = AF_PACKET,
++		.sll_protocol = htons(ETH_P_ALL),
++		.sll_ifindex = net.v1,
++	};
++	struct pollfd pfd;
++	int rx, n = -2;
++
++	rx = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
++	if (!ASSERT_GE(rx, 0, "rx socket"))
++		return -2;
++	if (!ASSERT_OK(bind(rx, (struct sockaddr *)&sll, sizeof(sll)), "bind") ||
++	    !ASSERT_OK(attach_filter(rx, insns, cnt), desc))
++		goto out;
++	sll.sll_protocol = 0;
++	sll.sll_ifindex = net.v0;
++	sll.sll_halen = ETH_ALEN;
++	if (!ASSERT_EQ(sendto(net.tx, frame, len, 0, (struct sockaddr *)&sll, sizeof(sll)), len,
++		       desc))
++		goto out;
++	pfd = (struct pollfd){ .fd = rx, .events = POLLIN };
++	if (poll(&pfd, 1, 200) <= 0) {
++		n = -1;
++		goto out;
++	}
++	n = recv(rx, buf, dgram_max, MSG_DONTWAIT);
++	if (n < 0 && ASSERT_EQ(errno, EAGAIN, desc))
++		n = -1;
++out:
++	close(rx);
++	return n;
++}
++
++static void run_case(const struct cbpf_case *c, struct sock_filter *orig, struct sock_filter *insns,
++		     __u8 *pkt, __u8 *buf)
++{
++	int cnt, nr, i, len, seen, n, want;
++	char desc[96];
++
++	if (c->fill) {
++		cnt = c->fill(orig);
++	} else {
++		cnt = c->cnt;
++		memcpy(orig, c->insns, cnt * sizeof(*orig));
++	}
++	if (c->flags & CB_FAIL) {
++		int sv[2];
++
++		if (!ASSERT_OK(socketpair(AF_UNIX, SOCK_DGRAM, 0, sv), "socketpair"))
++			return;
++		if (ASSERT_ERR(attach_filter(sv[1], orig, cnt), c->descr))
++			ASSERT_EQ(errno, EINVAL, c->descr);
++		close(sv[0]);
++		close(sv[1]);
++		return;
++	}
++	for (i = 0; i < c->nr_runs; i++) {
++		__u32 result = c->runs[i].result;
++
++		len = c->runs[i].len;
++		memset(pkt, 0, dgram_max);
++		if (c->flags & CB_FRAG) {
++			/* The data ends with the head, the frag data starts there, a page of it */
++			if (c->data_len)
++				memcpy(pkt + len - 0x40, c->data, c->data_len);
++			memcpy(pkt + len, c->frag, c->frag_len);
++			len += page_size;
++		} else if (c->data_len) {
++			memcpy(pkt, c->data, c->data_len < len ? c->data_len : len);
++		}
++		if (c->flags & CB_IFINDEX)
++			result = net.v1;
++		if (c->flags & CB_DSTMAC)
++			memcpy(pkt, net.v1_mac, ETH_ALEN);
++		memcpy(insns, orig, cnt * sizeof(*insns));
++		nr = c->flags & CB_RAW ? cnt : rewrite_returns(insns, cnt, result);
++		snprintf(desc, sizeof(desc), "%s len=%d", c->descr, len);
++		if (c->flags & CB_PKT) {
++			if (len < ETH_HLEN)
++				len = ETH_HLEN;
++			n = run_packet(insns, nr, pkt, len, buf, desc);
++			/* The stack pulled the four bytes of the tag out */
++			seen = len - (c->flags & CB_VLAN ? 4 : 0);
++		} else {
++			n = run_unix(insns, nr, pkt, len, buf, desc);
++			seen = len;
++		}
++		if (n == -2)
++			return;
++		want = !result ? -1 : result < seen ? (int)result : seen;
++		ASSERT_EQ(n, want, desc);
++	}
++}
++
++/*
++ * Loads of every width at every offset around the end of the head of a
++ * four page datagram: short of it they read the head, past it the frag
++ * data and in between they straddle the two. The same through an index.
++ */
++static void sweep_boundary(struct sock_filter *insns, __u8 *pkt, __u8 *buf)
++{
++	static const int sizes[] = { BPF_B, BPF_H, BPF_W };
++	int s, ind, off, n, len = 4 * page_size, head = 3 * page_size;
++	char desc[64];
++
++	/* Odd bytes, so that no load reads zero, which is a drop */
++	for (off = 0; off < len; off++)
++		pkt[off] = ((off * 7 + 3) ^ (off >> 8)) | 1;
++	for (s = 0; s < ARRAY_SIZE(sizes); s++) {
++		int width = 1 << s;
++
++		for (off = head - SWEEP_SPAN; off + width <= head + SWEEP_SPAN; off++) {
++			__u32 v = 0;
++			int b;
++
++			for (b = 0; b < width; b++)
++				v = v << 8 | pkt[off + b];
++			for (ind = 0; ind < 2; ind++) {
++				n = 0;
++				if (ind) {
++					insns[n++] = STMT(BPF_LDX | BPF_IMM, head);
++					insns[n++] = STMT(BPF_LD | BPF_IND | sizes[s], off - head);
++				} else {
++					insns[n++] = STMT(BPF_LD | BPF_ABS | sizes[s], off);
++				}
++				insns[n++] = STMT(BPF_RET | BPF_A, 0);
++				snprintf(desc, sizeof(desc), "boundary %s width=%d off=%d",
++					 ind ? "ind" : "abs", width, off - head);
++				n = rewrite_returns(insns, n, v);
++				n = run_unix(insns, n, pkt, len, buf, desc);
++				ASSERT_EQ(n, v < (__u32)len ? (int)v : len, desc);
++			}
++		}
++	}
++}
++
++/* What the forms return when taken and not: the true target, the next insn, the false target */
++static __u32 jump_result(int form, bool taken)
++{
++	if (form == 0)
++		return taken ? 2 : 1;
++	if (form == 1)
++		return taken ? 1 : 3;
++	return taken ? 2 : 3;
++}
++
++static bool cmp32(int op, __u32 a, __u32 k)
++{
++	switch (op) {
++	case BPF_JEQ:
++		return a == k;
++	case BPF_JGT:
++		return a > k;
++	case BPF_JGE:
++		return a >= k;
++	default:
++		return a & k;
++	}
++}
++
++/*
++ * The conditional jumps in their three forms, which the conversion emits
++ * differently: only a true target, only a false one, which inverts the
++ * condition, and both. The immediates with the sign bit go through a
++ * register, as the accumulator compares unsigned in 32 bits.
++ */
++static void sweep_jumps(struct sock_filter *insns, __u8 *pkt, __u8 *buf)
++{
++	static const int ops[] = { BPF_JEQ, BPF_JGT, BPF_JGE, BPF_JSET };
++	static const __u32 vals[] = { 0, 1, 0x7fffffff, 0x80000000, 0x80000001, 0xffffffff };
++	int o, src, form, a, k, n;
++	char desc[80];
++
++	for (o = 0; o < ARRAY_SIZE(ops); o++) {
++		for (src = 0; src < 2; src++) {
++			for (form = 0; form < 3; form++) {
++				for (a = 0; a < ARRAY_SIZE(vals); a++) {
++					for (k = 0; k < ARRAY_SIZE(vals); k++) {
++						bool taken = cmp32(ops[o], vals[a], vals[k]);
++						__u32 result = jump_result(form, taken);
++
++						insns[0] = STMT(BPF_LD | BPF_IMM, vals[a]);
++						insns[1] = STMT(BPF_LDX | BPF_IMM, vals[k]);
++						insns[2] = JUMP(BPF_JMP | ops[o] |
++								    (src ? BPF_X : BPF_K),
++								    src ? 0 : vals[k],
++								    form == 1 ? 0 : 1,
++								    form == 0 ? 0 : 2);
++						insns[3] = STMT(BPF_RET | BPF_K, 1);
++						insns[4] = STMT(BPF_RET | BPF_K, 2);
++						insns[5] = STMT(BPF_RET | BPF_K, 3);
++						snprintf(desc, sizeof(desc),
++							 "jump op=0x%x %c a=0x%x k=0x%x form=%d",
++							 ops[o], src ? 'x' : 'k', vals[a], vals[k],
++							 form);
++						n = rewrite_returns(insns, 6, result);
++						n = run_unix(insns, n, pkt, 4, buf, desc);
++						ASSERT_EQ(n, (int)result, desc);
++					}
++				}
++			}
++		}
++	}
++}
++
++static __u32 alu32(int op, __u32 a, __u32 k)
++{
++	switch (op) {
++	case BPF_ADD:
++		return a + k;
++	case BPF_SUB:
++		return a - k;
++	case BPF_MUL:
++		return a * k;
++	case BPF_DIV:
++		return k ? a / k : 0;
++	case BPF_OR:
++		return a | k;
++	case BPF_AND:
++		return a & k;
++	case BPF_LSH:
++		return a << (k & 31);
++	case BPF_RSH:
++		return a >> (k & 31);
++	case BPF_XOR:
++		return a ^ k;
++	default:
++		return k ? a % k : 0;
++	}
++}
++
++/*
++ * The arithmetic on operands with the sign bit, 32 bits wide and unsigned
++ * whatever the immediate looks like, and the counts a shift masks.
++ */
++static void sweep_alu(struct sock_filter *insns, __u8 *pkt, __u8 *buf)
++{
++	static const int ops[] = {
++		BPF_ADD, BPF_SUB, BPF_MUL, BPF_DIV, BPF_OR, BPF_AND, BPF_LSH, BPF_RSH, BPF_XOR,
++		BPF_MOD,
++	};
++	static const __u32 vals[] = { 0, 1, 31, 32, 33, 0x7fffffff, 0x80000000, 0xffffffff };
++	int o, src, a, k, n;
++	char desc[80];
++
++	for (o = 0; o < ARRAY_SIZE(ops); o++) {
++		bool shift = ops[o] == BPF_LSH || ops[o] == BPF_RSH;
++		bool div = ops[o] == BPF_DIV || ops[o] == BPF_MOD;
++
++		for (src = 0; src < 2; src++) {
++			for (a = 0; a < ARRAY_SIZE(vals); a++) {
++				for (k = 0; k < ARRAY_SIZE(vals); k++) {
++					__u32 result = alu32(ops[o], vals[a], vals[k]);
++
++					/* The checker rejects these immediates */
++					if (!src && ((shift && vals[k] >= 32) || (div && !vals[k])))
++						continue;
++					insns[0] = STMT(BPF_LD | BPF_IMM, vals[a]);
++					insns[1] = STMT(BPF_LDX | BPF_IMM, vals[k]);
++					insns[2] = STMT(BPF_ALU | ops[o] | (src ? BPF_X : BPF_K),
++							src ? 0 : vals[k]);
++					insns[3] = STMT(BPF_RET | BPF_A, 0);
++					snprintf(desc, sizeof(desc), "alu op=0x%x %c a=0x%x k=0x%x",
++						 ops[o], src ? 'x' : 'k', vals[a], vals[k]);
++					n = rewrite_returns(insns, 4, result);
++					n = run_unix(insns, n, pkt, 4, buf, desc);
++					ASSERT_EQ(n, !result ? -1 : result < 4 ? (int)result : 4,
++						  desc);
++				}
++			}
++		}
++	}
++	for (a = 0; a < ARRAY_SIZE(vals); a++) {
++		insns[0] = STMT(BPF_LD | BPF_IMM, vals[a]);
++		insns[1] = STMT(BPF_ALU | BPF_NEG, 0);
++		insns[2] = STMT(BPF_RET | BPF_A, 0);
++		snprintf(desc, sizeof(desc), "alu neg a=0x%x", vals[a]);
++		n = rewrite_returns(insns, 3, -vals[a]);
++		n = run_unix(insns, n, pkt, 4, buf, desc);
++		ASSERT_EQ(n, !vals[a] ? -1 : -vals[a] < 4 ? (int)-vals[a] : 4, desc);
++	}
++}
++
++/* Every M[] slot written from A and X and read back into A and X, summed up */
++static void sweep_mem(struct sock_filter *insns, __u8 *pkt, __u8 *buf)
++{
++	__u32 sum = 0;
++	int k, n = 0;
++
++	for (k = 0; k < BPF_MEMWORDS; k++) {
++		__u32 v = 0x01010101 * (k + 1);
++
++		insns[n++] = STMT(BPF_LD | BPF_IMM, v);
++		if (k & 1) {
++			insns[n++] = STMT(BPF_MISC | BPF_TAX, 0);
++			insns[n++] = STMT(BPF_STX, k);
++		} else {
++			insns[n++] = STMT(BPF_ST, k);
++		}
++		sum += v;
++	}
++	insns[n++] = STMT(BPF_LD | BPF_IMM, 0);
++	for (k = 0; k < BPF_MEMWORDS; k++) {
++		if (k & 1) {
++			insns[n++] = STMT(BPF_LDX | BPF_MEM, k);
++			insns[n++] = STMT(BPF_ALU | BPF_ADD | BPF_X, 0);
++		} else {
++			insns[n++] = STMT(BPF_MISC | BPF_TAX, 0);
++			insns[n++] = STMT(BPF_LD | BPF_MEM, k);
++			insns[n++] = STMT(BPF_ALU | BPF_ADD | BPF_X, 0);
++		}
++	}
++	insns[n++] = STMT(BPF_RET | BPF_A, 0);
++	n = rewrite_returns(insns, n, sum);
++	n = run_unix(insns, n, pkt, 4, buf, "M[] slots");
++	ASSERT_EQ(n, 4, "M[] slots");
++}
++
++static bool blinded;
++
++static void run_group(unsigned int group, struct sock_filter *orig, struct sock_filter *insns,
++		      __u8 *pkt, __u8 *buf)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(cases); i++)
++		if ((cases[i].flags & (CB_FAIL | CB_PKT | CB_FRAG)) == group &&
++		    !(blinded && cases[i].flags & CB_NOBLIND))
++			run_case(&cases[i], orig, insns, pkt, buf);
++}
++
++static void run_unix_groups(struct sock_filter *orig, struct sock_filter *insns, __u8 *pkt,
++			    __u8 *buf)
++{
++	run_group(0, orig, insns, pkt, buf);
++	sweep_jumps(insns, pkt, buf);
++	sweep_alu(insns, pkt, buf);
++	sweep_mem(insns, pkt, buf);
++}
++
++void serial_test_jit_insns_cbpf(void)
++{
++	const char *harden = "/proc/sys/net/core/bpf_jit_harden";
++	const char *optmem = "/proc/sys/net/core/optmem_max";
++	char old[16] = {}, old_optmem[16] = {};
++	struct sock_filter *orig, *insns;
++	__u8 *pkt, *buf;
++
++	page_size = getpagesize();
++	dgram_max = 4 * page_size;
++	orig = calloc(BPF_MAXINSNS + 4, sizeof(*orig));
++	insns = calloc(BPF_MAXINSNS + 4, sizeof(*insns));
++	pkt = calloc(1, dgram_max);
++	buf = calloc(1, dgram_max);
++	if (!ASSERT_OK_PTR(orig, "orig") || !ASSERT_OK_PTR(insns, "insns") ||
++	    !ASSERT_OK_PTR(pkt, "pkt") || !ASSERT_OK_PTR(buf, "buf"))
++		goto out;
++	/* The longest programs convert to over half a megabyte */
++	if (sysctl_set_or_fail(optmem, old_optmem, "4194304"))
++		goto out;
++	if (test__start_subtest("classic"))
++		run_unix_groups(orig, insns, pkt, buf);
++	if (test__start_subtest("checker"))
++		run_group(CB_FAIL, orig, insns, pkt, buf);
++	if (test__start_subtest("frags")) {
++		run_group(CB_FRAG, orig, insns, pkt, buf);
++		sweep_boundary(insns, pkt, buf);
++	}
++	if (test__start_subtest("packets")) {
++		if (!net_setup())
++			run_group(CB_PKT, orig, insns, pkt, buf);
++		net_teardown();
++	}
++	/* The constants of the conversion blinded, which takes a JIT */
++	if (test__start_subtest("blinded")) {
++		if (!is_jit_enabled()) {
++			test__skip();
++		} else if (!sysctl_set_or_fail(harden, old, "2")) {
++			blinded = true;
++			run_unix_groups(orig, insns, pkt, buf);
++			run_group(CB_FRAG, orig, insns, pkt, buf);
++			blinded = false;
++			sysctl_set_or_fail(harden, NULL, old);
++		}
++	}
++	sysctl_set_or_fail(optmem, NULL, old_optmem);
++out:
++	free(buf);
++	free(pkt);
++	free(insns);
++	free(orig);
++}
 -- 
 2.43.0
 
