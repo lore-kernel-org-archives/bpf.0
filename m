@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BD9390229
-	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 04:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AF81A704B
+	for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 04:03:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792036983; cv=none; b=XGgJwDyTRRPQ/n7Wp8v3p5BMa3cXUfajSmdR1VZzx15iMSWp7L1BQolLKY4J1L9nb+0cnoBpNyEU1R0FPem/bZtNhbtS0NulteobmG5GTNTcXZPoO8ON9qS6fcW8fKQHaL62M9LvUonD3BLQmWRnBOgKnW95R8S1aUpRSrRCLNE=
+	t=1792036994; cv=none; b=S5IA6GstjxlxWvtfop6nzmKHk4GnnoAh9KSN3lNCOJAGj8eXY8ejnpFxbgKKP4WZr8g4Oo/Q0kWe+oVhc7ZOdyEjO8HK0pGsaV4sBrm6Yi8A7okDsBTJKnH6rUYY0r57Ot/8STIxGWu+I4nJR5o18v2O/HI/KslAajn7LoC6Xos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792036983; c=relaxed/simple;
-	bh=pbJgWDqCxWQMKbbU0tLr5jmhhKl2vSrOM4mF6KiLfVY=;
+	s=arc-20240116; t=1792036994; c=relaxed/simple;
+	bh=raNbR0mXfww8vQQXDL/O4k0kcVV3dcCFHuzPUjs9BwE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LP0v66P43egkovXQeJ2vqS+S6mY4YWg33CI6wB42OaGD4+jkxar/a8QQzJvD9rl9KLf4CRRwKeUZs6sZ1Z0qJFV9GVhi5VP64A7SP8TqOXoSDCnhiki0yBus2g9F5RmcRSjyVDy9EfPPBBGhagiB5JXd9ycTOsS4lmim8DE5gwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=c+vCde3HmKKS4Rf1DVl4o+rf1X6JUcufGe5/bKnnqWj9OR9ZH26hpMI/iknE093CEl/tXVVqnnX5Uk3ReH8gzeC3li5Sy0jRlhCkveMxZ5sOp971xxmk7bwK5wMYJdTRdEpuVnLoPanpsHrauL5eg7otiFrPnzn9CqrCJIaNnvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 8E60231499579F; Wed, 14 Oct 2026 21:03:00 -0700 (PDT)
+	id C45B73149957F4; Wed, 14 Oct 2026 21:03:10 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v11 15/26] bpf: Refuse a trampoline that calls a subprog that can unwind
-Date: Wed, 14 Oct 2026 21:03:00 -0700
-Message-ID: <20261015040300.862173-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v11 17/26] bpf, arm64: Dispatch exception cleanup pads at run time
+Date: Wed, 14 Oct 2026 21:03:10 -0700
+Message-ID: <20261015040310.864133-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261015040143.854070-1-yonghong.song@linux.dev>
 References: <20261015040143.854070-1-yonghong.song@linux.dev>
@@ -37,89 +37,169 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-bpf_unwind() walks up the stack rewriting return addresses. It expects
-every frame up to the main function to be one of the program's own BPF
-functions, and stops at the first frame that is not. A trampoline
-attached to a subprog with fexit, fmod_ret or fsession is such a frame:
-it calls the subprog, so it sits between the subprog and its caller:
+Add what bpf_unwind() relies on to send each frame of a program to its
+landing pad or its epilogue on arm64, as the previous patch does for
+x86-64:
 
-  main -> A -> trampoline -> B -> C          C calls bpf_unwind()
+ - arch_bpf_stack_walk_ra(): walks the frame records with the kernel
+   unwinder, handing each return address to the consumer and storing a
+   new one back into the record it was read from. The first frame, whose
+   return into bpf_unwind() comes from the walk's own record, is
+   skipped.
+ - With CONFIG_ARM64_PTR_AUTH_KERNEL and a CPU that supports address
+   authentication, the new address is signed the way the BPF prologue's
+   PACIASP signs the link register, key IA with the record + 16 as
+   modifier, using PACIA1716 so that no assembler support for pointer
+   authentication is needed.
+ - Once the image is final, the JIT fills in the native cleanup table
+   and records each function's epilogue address in aux->epilogue_ip,
+   where an unwind sends a frame with no pad.
+ - bpf_jit_supports_cleanup_pads() says yes, also with a shadow call
+   stack: only JITed frames' records are written, and JITed code keeps
+   no x18 copy of its return address.
 
-The walk rewrites the return into B but stops at the trampoline, so B
-returns through it to A after its call, instead of to A's pad or
-epilogue: a path the verifier never walked for an unwind.
-
-Refuse such an attachment to a subprog marked might_unwind, now copied
-into each function's aux. Nothing else puts a frame between two of a
-program's frames: fentry leaves none, a trampoline on main is above
-where the walk stops, freplace is a program of its own whose unwind ends
-as a normal return to its caller, a callback that can unwind is refused,
-kprobes and fgraph cannot hook JIT code, and a tail call replaces a
-frame.
+A pad needs no BTI: it is only reached as a return address.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h   |  1 +
- kernel/bpf/fixups.c   |  1 +
- kernel/bpf/verifier.c | 17 +++++++++++++++++
- 3 files changed, 19 insertions(+)
+ arch/arm64/kernel/stacktrace.c | 77 ++++++++++++++++++++++++++++++++++
+ arch/arm64/net/bpf_jit_comp.c  | 16 +++++++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7f23f4efde01..1b3b6ee05c09 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1910,6 +1910,7 @@ struct bpf_prog_aux {
- 	bool priv_stack_requested;
- 	bool changes_pkt_data;
- 	bool might_sleep;
-+	bool might_unwind;
- 	bool kprobe_write_ctx;
- 	struct {
- 		s32 keyring_serial;
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 1a87a0268fce..5b2612da7add 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1505,6 +1505,7 @@ static int jit_subprogs(struct bpf_verifier_env *en=
-v)
- 		func[i]->aux->exception_cb =3D env->subprog_info[i].is_exception_cb;
- 		func[i]->aux->changes_pkt_data =3D env->subprog_info[i].changes_pkt_da=
-ta;
- 		func[i]->aux->might_sleep =3D env->subprog_info[i].might_sleep;
-+		func[i]->aux->might_unwind =3D env->subprog_info[i].might_unwind;
- 		func[i]->aux->token =3D prog->aux->token;
- 		if (!i)
- 			func[i]->aux->exception_boundary =3D env->seen_exception;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 63f0fec6ddb8..d776db386d65 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22302,6 +22302,23 @@ int bpf_check_attach_target(struct bpf_verifier_=
-log *log,
- 				prog_extension ? "Extension" : "Tracing");
- 			return -EINVAL;
- 		}
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrac=
+e.c
+index 3ebcf8c53fb0..6ff485280da5 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -445,6 +445,83 @@ noinline noinstr void arch_bpf_stack_walk(bool (*con=
+sume_entry)(void *cookie, u6
+ 	kunwind_stack_walk(arch_bpf_unwind_consume_entry, &data, current, NULL)=
+;
+ }
+=20
++struct bpf_unwind_ra_consume_entry_data {
++	bool (*consume_entry)(void *cookie, u64 ip, u64 sp, u64 fp, u64 *ra);
++	void *cookie;
++	unsigned long record;
++	bool seen_first;
++};
++
++/* PACIA1716 (hint #8): sign x17 with the modifier in x16, under key IA.=
+ */
++static u64 bpf_unwind_sign_ra(u64 ra, u64 modifier)
++{
++	register u64 x17 asm("x17") =3D ra;
++	register u64 x16 asm("x16") =3D modifier;
++
++	asm volatile(ARM64_ASM_PREAMBLE
++		     "	hint	#8\n"
++		     : "+r" (x17) : "r" (x16));
++	return x17;
++}
++
++/* PACIASP's modifier is the entry sp, record + 16 for a BPF prologue. *=
+/
++static void bpf_unwind_store_ra(unsigned long record, u64 ra)
++{
++	struct frame_record *rec =3D (struct frame_record *)record;
++
++	/*
++	 * Whether the slot holds a signed address is a property of the build,
++	 * not one to be read off the value: a PAC can come out equal to the
++	 * bits stripping puts back, and a signed address would then be taken
++	 * for an unsigned one. What signs is CONFIG_ARM64_PTR_AUTH_KERNEL --
++	 * the prologue here, and -mbranch-protection for everything the
++	 * compiler emits.
++	 */
++	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
++	    system_supports_address_auth())
++		ra =3D bpf_unwind_sign_ra(ra, record + sizeof(struct frame_record));
++	WRITE_ONCE(rec->lr, ra);
++}
++
++static bool
++arch_bpf_unwind_ra_consume_entry(const struct kunwind_state *state, void=
+ *cookie)
++{
++	struct bpf_unwind_ra_consume_entry_data *data =3D cookie;
++	unsigned long record =3D data->record;
++	bool seen_first =3D data->seen_first;
++	u64 ra =3D state->common.pc;
++	bool cont;
++
++	/* The record this frame's return address will have come out of. */
++	data->record =3D state->common.fp;
++	data->seen_first =3D true;
++
++	/*
++	 * The first pc returns into bpf_unwind(), from this walk's own frame
++	 * record: not a BPF frame, and not one to redirect.
++	 */
++	if (!seen_first)
++		return true;
++	/* A consumer that stops still gets to redirect the frame it stopped on=
+. */
++	cont =3D data->consume_entry(data->cookie, state->common.pc, 0,
++				   state->common.fp, &ra);
++	if (ra !=3D state->common.pc)
++		bpf_unwind_store_ra(record, ra);
++	return cont;
++}
++
++noinline noinstr void arch_bpf_stack_walk_ra(bool (*consume_entry)(void =
+*cookie, u64 ip, u64 sp,
++								   u64 fp, u64 *ra),
++					     void *cookie)
++{
++	struct bpf_unwind_ra_consume_entry_data data =3D {
++		.consume_entry =3D consume_entry,
++		.cookie =3D cookie,
++	};
++
++	kunwind_stack_walk(arch_bpf_unwind_ra_consume_entry, &data, current, NU=
+LL);
++}
++
+ static const char *state_source_string(const struct kunwind_state *state=
+)
+ {
+ 	switch (state->source) {
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+index 506c4201fec8..c8c0328b3219 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2422,6 +2422,17 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
+rifier_env *env, struct bpf_pr
+ 		 * reasons, expects to point to the next instruction)
+ 		 */
+ 		bpf_prog_update_insn_ptrs(prog, ctx.offset, ctx.ro_image);
++
 +		/*
-+		 * A trampoline that calls its target stays as a frame between a
-+		 * subprog and its caller, and bpf_unwind() cannot walk past it:
-+		 * the frames above it would carry on after their calls rather
-+		 * than at their landing pads or epilogues. fentry leaves no
-+		 * frame, and the main program's caller is above where the walk
-+		 * stops.
++		 * Same byte offsets, consumed by the bpf_unwind() walk:
++		 * turn the cleanup records into native address ranges now that
++		 * the image is final.
 +		 */
-+		if (aux->func && subprog && aux->func[subprog]->aux->might_unwind &&
-+		    (prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT ||
-+		     prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN ||
-+		     prog->expected_attach_type =3D=3D BPF_TRACE_FSESSION)) {
-+			bpf_log(log,
-+				"Cannot attach fexit, fmod_ret or fsession to %s, which can unwind\n=
-",
-+				tname);
-+			return -EINVAL;
-+		}
- 		conservative =3D aux->func_info_aux[subprog].unreliable;
- 		if (prog_extension) {
- 			if (conservative) {
++		bpf_exc_fill_native_ranges(prog, ctx.offset, ctx.ro_image);
++
++		/* Where an unwind sends a frame with no pad. */
++		prog->aux->epilogue_ip =3D (u64)ctx.ro_image +
++					 ctx.epilogue_offset * AARCH64_INSN_SIZE;
+ out_off:
+ 		if (!ro_header && priv_stack_ptr) {
+ 			free_percpu(priv_stack_ptr);
+@@ -3415,6 +3426,11 @@ bool bpf_jit_supports_exceptions(void)
+ 	return true;
+ }
+=20
++bool bpf_jit_supports_cleanup_pads(void)
++{
++	return true;
++}
++
+ bool bpf_jit_supports_arena(void)
+ {
+ 	return true;
 --=20
 2.53.0-Meta
 
