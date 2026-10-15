@@ -1,102 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9828930BBB1;
-	Thu, 15 Oct 2026 12:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6E7154425;
+	Thu, 15 Oct 2026 12:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792067992; cv=none; b=oI2HSFGnoKIhkMiXZEB3lc9gOTSUYfHWdj2Z8r5U3/+w2h66vxCbAA/oYoutiqCMAaqauSE2FD6zbGRQh+tmEb62yJJNeiW+scYOySYXDSS+YwfuSV2Pm6ZpkGhC2KZZtvkzY/B4WzLLB2p3yblZMZKJAkeubh6HkHm07BMISvw=
+	t=1792068394; cv=none; b=UzVAwSkfTnlEjhOuE5tCg7O3aO8jZPrYKKBbLFIMM3SUlou5PlDqxA+/WmTuMe4Rr3VIeYc16BWZKiAhRWv5G3qKi3MKVE+s/grP30P/zDIp3/cGrOmTPsEGhmm8CDHJUsenUf7M0ODqCtdr66NfQWezsLCPFaONGNn+TOgAso4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792067992; c=relaxed/simple;
-	bh=AE2/yoYhkqAS0x6CFKBByGroSum+FzNB8vNnE+mBSWs=;
+	s=arc-20240116; t=1792068394; c=relaxed/simple;
+	bh=UOPthWoU6vTrRhoY6+yql2QUYF59fWMykBfO1SrtK8c=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=kX4zo53+7HGzteNH2GpyBqz4vS/zujEnyM+w3Q60GOokF2r6HCZh1Ji2b3zmrlUAcHJxS3u9Bg9qvoh4PVCcKz85cCVDvluH6m7cwAuYEUZsd1GJnV4nP9nXtO0W+Jw46odnl6Wigj0k2oPWZMHCC3Qwf+2jLhoq5Y0cAED3yPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=af8zDVjF; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=CRbufFLoUeH0agEKDKjzrn/v1tsdOjahmhyUsZGQ+yb3u+eIPRPTCftaQnOkQBREjanbRzlNzsXaHrNn9x9dlDiEa4wp/agxyR7Kz3c2AtWU5VzhQS/4PfxTrz//Rzjh4qXCBJw2cpYxcbgSScFiVcP82GVC77+4OSZb2z/GZPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bY0frMGD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="af8zDVjF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8C41F000C5;
-	Thu, 15 Oct 2026 12:39:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bY0frMGD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294B21F000C4;
+	Thu, 15 Oct 2026 12:46:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792067991;
-	bh=1K+l7oHTsRSVGW0EAoQEFweeHkw3d0xMxZTaZVWvwg8=;
+	s=k20260515; t=1792068392;
+	bh=VWcJq9INiAuVzwdCjQBu5vBURcRDe4u4t6rDjXko4oU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=af8zDVjFxNfKvcrNKZi3C/r7JKJiaFd3kN5wqvORZm5ALMXJ/dXaigQBF8nP+o6ql
-	 WrHxTj7uKuChdio3zOwqxloU5x/C5rto31RwKIk43oHdc3o1BTVgxrIOnmOSMZ4/mN
-	 9MiNZHBtPZxzUyATfnnmd7FsOKCxI8s5QNey4DvG4E7pqGf5q9FonJa39cL8bEn7f5
-	 dFUBDGnFkt1gq20O2uM9i2y9ntyhj6qBBRh6H2HtPkbwRf/D9MdSH0NaHW+x0EQYGZ
-	 BcutS7Ncy/J8ulB3kUqJyM+0Oa5nNkoC+3SJZhQFWoimQtBcGHLd0zZkilVcFN9FLQ
-	 xE2rtFMlkRlJw==
-Message-ID: <sashiko-outbox-172823@kernel.org>
+	b=bY0frMGDK+tWU4/S7veUx2bL+tOHPgiju0MwdufELxaI4MVrW9Sef5thaSVpLIEOm
+	 pL6hi8EpX3q/IBa3WHVD6rDY5sSfJPLOjmHFEzfJW5Fm8qX5sSMSITTyJqZ8qLNVp1
+	 G/ixe7uidq38KxQrL9zKLLr3FWvzG7emXofsV15885j6trY8ndxbWinCpMu65brF9J
+	 OiEWlfYxgfIIOIwbMUDsklLpuhOZ6zRb690+CTURR9e34rsEcjqS0ZcEMyjgKRgm1R
+	 iD+lXJShyiiHFEuqfJmUPnWoBpoGaPEgqDzzjdlfkuD7xohI5oQe59cmWNsUmY/Jub
+	 iDwN6vb1CX92A==
+Message-ID: <sashiko-outbox-172860@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 -next 13/18] LSM: rename the inode posix acl hooks to
- path_*_acl hooks
+Subject: Re: [PATCH v2 -next 16/18] selftests/landlock: Add tests for
+ metadata access rights
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Cai Xinchen" <caixinchen1@huawei.com>
 Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, selinux@vger.kernel.org, "Chuck
  Lever" <cel@kernel.org>, "Jeff Layton" <jlayton@kernel.org>, "Anna
  Schumaker" <anna@kernel.org>
-In-Reply-To: <20261015125425.3246251-14-caixinchen1@huawei.com>
+In-Reply-To: <20261015125425.3246251-17-caixinchen1@huawei.com>
 References: <20261015125425.3246251-1-caixinchen1@huawei.com>
- <20261015125425.3246251-14-caixinchen1@huawei.com>
+ <20261015125425.3246251-17-caixinchen1@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 15 Oct 2026 12:39:50 +0000
+Date: Thu, 15 Oct 2026 12:46:31 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] smack: stale kernel-doc parameters in smack_path_set_acl
+- [Medium] selftests/landlock: test logic and commit message contradiction =
+in fileattr_write_only
+- [Medium] selftests: hardcoded syscall fallbacks 468/469 are incorrect on =
+Alpha
 --
 
-commit 86b58223ea4147721a6935310d93abd33d140861
+commit 14e6c962c9835f4d2f9d99bb2bfea0e277c3117a
 Author: Cai Xinchen <caixinchen1@huawei.com>
 
-LSM: rename the inode posix acl hooks to path_*_acl hooks
+selftests/landlock: Add tests for metadata access rights
 
-This commit renames the inode_set_acl, inode_get_acl, and inode_remove_acl
-hooks to follow the path_* naming convention used for other hooks that take
-a struct path. It also updates the inline wrappers and the LSM
-implementations accordingly.
+This commit adds layout1 and layout2 tests for the newly introduced
+LANDLOCK_ACCESS_FS_READ_METADATA and LANDLOCK_ACCESS_FS_WRITE_METADATA
+access rights. It verifies metadata restriction behaviors for various
+system calls and fileattr interfaces, including overlayfs scenarios.
 
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 95799afbb5c9f..1a1e9f11939eb 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
+> --- a/tools/testing/selftests/landlock/fs_test.c
+> +++ b/tools/testing/selftests/landlock/fs_test.c
 
 [ ... ]
 
-> @@ -1540,7 +1540,7 @@ static int smack_path_removexattr(const struct path=
- *path,
->  }
-> =20
->  /**
-> - * smack_inode_set_acl - Smack check for setting posix acls
-> + * smack_path_set_acl - Smack check for setting posix acls
->   * @idmap: idmap of the mnt this request came from
->   * @dentry: the object
->   * @acl_name: name of the posix acl
-> @@ -1548,7 +1548,7 @@ static int smack_path_removexattr(const struct path=
- *path,
->   *
->   * Returns 0 if access is permitted, an error code otherwise
->   */
-> -static int smack_inode_set_acl(const struct path *path,
-> +static int smack_path_set_acl(const struct path *path,
->  			       const char *acl_name, struct posix_acl *kacl)
->  {
+> +#ifndef __NR_file_getattr
+> +#define __NR_file_getattr 468
+> +#endif
+> +#ifndef __NR_file_setattr
+> +#define __NR_file_setattr 469
+> +#endif
 
-[Severity: Low]
-This isn't a bug, but the kernel-doc parameters for smack_path_set_acl do
-not match the function signature. The function takes a const struct path
-pointer, but the documentation still lists idmap and dentry.
+[Severity: Medium]
+Are these hardcoded syscall fallbacks correct for all architectures?
 
-Should these stale parameters be updated to document the path parameter and
-prevent kernel-doc build warnings?
+The assumption that syscalls post-424 are unified across all
+architectures is incorrect for Alpha, which uses 578 and 579 for
+these syscalls.=20
+
+If the selftests are built on an Alpha platform with older host headers,
+it will invoke incorrect system calls (such as splice and sync_file_range),
+leading to failures or undefined behavior.
+
+[ ... ]
+
+> +TEST_F_FORK(layout1, fileattr_write_only)
+> +{
+> +	const struct rule rules[] =3D {
+> +		{
+> +			.path =3D file1_s1d1,
+> +			.access =3D LANDLOCK_ACCESS_FS_WRITE_METADATA,
+> +		},
+> +		{},
+> +	};
+> +	unsigned int flags;
+> +	int fd, ruleset_fd;
+> +
+> +	ruleset_fd =3D create_ruleset(_metadata,
+> +				    LANDLOCK_ACCESS_FS_WRITE_METADATA, rules);
+> +	ASSERT_LE(0, ruleset_fd);
+> +
+> +	fd =3D open(file1_s1d1, O_RDONLY | O_CLOEXEC);
+> +	ASSERT_LE(0, fd);
+> +
+> +	enforce_ruleset(_metadata, ruleset_fd);
+> +	ASSERT_EQ(0, close(ruleset_fd));
+> +
+> +	/*
+> +	 * WRITE_METADATA alone must be enough to set flags: the kernel-side
+> +	 * read of the old flags must not require READ_METADATA.
+> +	 */
+> +	EXPECT_EQ(0, test_setflags(fd, FS_NODUMP_FL));
+> +	flags =3D 0;
+> +	/* READ_METADATA is not handled: reading is allowed. */
+> +	EXPECT_EQ(0, test_getflags(fd, &flags));
+
+[Severity: Medium]
+Does this test logic contradict the commit message?
+
+The commit message states that for fileattr_write_only: "metadata
+reads (ioctl(FS_IOC_GETFLAGS)) are still denied".=20
+
+However, the test explicitly creates a ruleset that only handles
+LANDLOCK_ACCESS_FS_WRITE_METADATA. Because
+LANDLOCK_ACCESS_FS_READ_METADATA is unhandled, reading metadata is globally
+permitted, and the test expects test_getflags() to succeed.
+
+Additionally, by leaving READ_METADATA unhandled, does this test fail to
+effectively verify that FS_IOC_SETFLAGS (which internally reads metadata)
+works when READ_METADATA is actively restricted?
+
+> +	EXPECT_EQ(FS_NODUMP_FL, flags & FS_NODUMP_FL);
+> +	EXPECT_EQ(0, test_setflags(fd, 0));
+> +
+> +	ASSERT_EQ(0, close(fd));
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261015125425.3246=
-251-1-caixinchen1@huawei.com?part=3D13
+251-1-caixinchen1@huawei.com?part=3D16
