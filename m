@@ -1,82 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-6.mta1.migadu.com [95.215.58.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724F54E66C9;
-	Fri, 16 Oct 2026 16:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC42E52ED33
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 16:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792169408; cv=none; b=TD4hv5Q5ywg25/2swJoRxJnSYlRdufxcvJPTXkOMKlwinomUXo4QXJZdaVSRY5tQepmxdsdGhZBvImgr+vWnC5KKrSsUJODB2d+T4hYeHOQMbYtGRsbGNVVLL7UE8zUIYNysB+wFHdEZIwODHa8jSoFJQ25zJ6iHzbdYX5Ofuk8=
+	t=1792169806; cv=none; b=GgBPm1hjlJ+MDeZQQ/UVQSvxMr1elOCyxa2PPY/125lldB5IXYK/3kpsLDdzJcQdjjxFFW+5p5gZXhlvI/ssx1TkCD5A68dAcScgNozLvsvrL+jWr+KxWtnIXcX3LrmG7vHVXvtPu0bRGU7nGUeVh4XrrUQLJLgM/N5Ny0lq0AY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792169408; c=relaxed/simple;
-	bh=CUgMP96DLWQFyTmIzRJKec6OZNXfYQSXAg0KladlZuc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HqwUB+hYunrw0f4dvKtdSlp0nYN74z56oMtmFybP/NCSGfOIqqxBQxPjFt2DQSq/Sj4GJH4u4IZ/wlQmBOpyGskq/ZtoBhau68dHfc7vVu32TNOEIHyXh1WMrzB40Ohx8L+5eZZHp+CeaDllKFHoTGU1qn+NXJyiI11JQw5PJAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBjfUSeD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792169806; c=relaxed/simple;
+	bh=21nlTXF1Ye0xW4Rhf8DSUPZD0UBWhSD2gXLELUgsPxc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m6q+tbS2+GjlzEMlQdiA/XbyR6n+iS1Tvm5jtJVKdzhlbeaCC9bD8qiZyLegF4dIEjqNYUl6a1oIgDjLoYuM6eqrIrfZYYt1lSiHhu7Awz8AzNNXISAKyuOdiCxmhda3lgwTxyrc2RzyT5WHbbJ4JG1WOQcRcLA9NhgKhG5LxHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c2aDv7Vv; arc=none smtp.client-ip=95.215.58.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBjfUSeD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47FC11F000C6;
-	Fri, 16 Oct 2026 16:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792169407;
-	bh=5fx8eg5gTmDU5Z/9d3tGezQ02ds6dzT1pbZkF+XQKeg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UBjfUSeD2KpdsyGCPPasRHccNQ4hrAU1ceiwQDSKrmzeoOv9KeNiCc7FXY4GycFl9
-	 W/QUWNbki7ky+NiB8qHgX8f4/a8No63B0Y5buLl7oZxB6KQFUaHbaG/pkz+F3WSfc+
-	 0rrUaMNNhntztWHuH0R8zVv3M1MBSQFCp5zTl5LJhRIqXCe2YH6WcVmBK0nSzC6ZPY
-	 EnXWFo/PrYfySv1yzznddBGFJCWZO7f63umsvZinlmr9AtCo3NyS0OT+Y7rBWR2IIo
-	 tjFagmmtPMClgxlEGm4eTLwNSkp8I3klr2P5YTfDopupJ22dyrqynVgH9M3vomvFUP
-	 Qlp5VdhYZJ4fg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3AB7B380AA4C;
-	Fri, 16 Oct 2026 16:50:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c2aDv7Vv"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=21nlTXF1Ye0xW4Rhf8DSUPZD0UBWhSD2gXLELUgsPxc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792169802; v=1; x=1792774602;
+ b=c2aDv7Vv9gjRR48uf4jj8BPJ0a2RmWy0A+4dRVQBEoCq4/okeIiXgOvfQlHoHXQRqVfbuyE0
+ wRIRlb6d/oRa6Nf97ASrrrHQVqMAd/YQ7k+C1qPphtvwZeWI+ccG+8UxdgR/DvbK2EEQUGAKwMC
+ 3TWOO+e4bNaD5L8J+hHl9650=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id eac7551d6365e4cb;
+	Fri, 16 Oct 2026 16:56:42 +0000
+X-Mizu-Trace-ID: eac7551d6365e4cb
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <3bf3d88d-bc40-40d8-a8ef-5d139aa38318@linux.dev>
+Date: Fri, 16 Oct 2026 09:56:39 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/2] bpf: Two trampoline cleanups
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179216940603.871030.5244441859189245098.git-patchwork-notify@kernel.org>
-Date: Fri, 16 Oct 2026 16:50:06 +0000
-References: <20261016142014.12420-1-leon.hwang@linux.dev>
-In-Reply-To: <20261016142014.12420-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 00/11] bpf: Follow up by-value struct and
+ __int128 argument support
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, kernel-team@fb.com
+References: <20261013170910.2126673-1-yonghong.song@linux.dev>
+ <DM5X4L58MG5M.2AK0D6DRZ5ERF@gmail.com>
+ <a420e9de-4546-4be8-9fc0-d9e9c9fa6fb3@linux.dev>
+ <DM6DYYV4XVKO.G5S77C0FGIYG@gmail.com>
+ <dfa562d4-23fb-46ff-bbf9-5a56d2e51860@linux.dev>
+ <DM6EOZ20E9ON.3KR4R7QU4SOJR@gmail.com>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DM6EOZ20E9ON.3KR4R7QU4SOJR@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 16 Oct 2026 22:20:12 +0800 you wrote:
-> Split these two cleanups for trampoline from the series
-> "[PATCH bpf-next v2 00/21] bpf: Add tracing_multi link support for bpf progs" [1].
-> 
-> Since the tr->ip is ftrace_location()-ed in bpf_trampoline_lookup(), no
-> need to call ftrace_location(tr->ip) again in
-> register/unregister/modify_fentry_multi(). Also no need to call
-> ftrace_location() for the target addr in register_fentry(), when
-> initialize ftrace_managed in bpf_trampoline_get().
-> 
-> [...]
+On 10/16/26 9:34 AM, Alexei Starovoitov wrote:
+> On Fri, Oct 16, 2026 at 09:22 AM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> This one can exercise for s390x, x86_64 and arm64. Do you think it is worthwhile?
+> ohh. makes sense then.
+> Patch 4 fixes s390 too. Without it s390 trampoline sees arg_size 16
+> for v, does mvc 16 bytes from 0(%r3) and restores r2-r4 only.
+> callee_odd() will be the only test for that and CI runs s390x.
+> Then LO/HI has a user in tracing_struct_int128_tracer.c. Keep it there
+> and drop it from tracing_struct_int128.c.
 
-Here is the summary with links:
-  - [bpf-next,1/2] bpf: Initialize ftrace_managed in bpf_trampoline_get()
-    https://git.kernel.org/bpf/bpf-next/c/09ec92d70723
-  - [bpf-next,2/2] bpf: Drop unnecessary ftrace_location() in register/unregister/modify_fentry_multi()
-    https://git.kernel.org/bpf/bpf-next/c/b443a4578a0d
+I will use BPF_PROG2 macro which sounds better to have LO/HI thing.
+See progs/tracing_struct.c.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+>> Two other bpf functions, which has stack arguments, need rejection with
+>>     ... && !defined(__TARGET_ARCH_s390)
+> Same #if as in progs/stack_arg.c ?
+>
+> If it turns out to be more than that it can be a follow up too.
 
+I will do a follow-up for this since I didn't test riscv yet.
 
