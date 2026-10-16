@@ -1,108 +1,141 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB5812E1DC
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5B226299
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792111095; cv=none; b=Ay6kOfBTzKwmIgitkbxuAfOx7pIZCa9CM+5/2vvuZEjPA3hklaRhPUJoBJzZJN4zTcStBm6ZvNVS57RakEnNIdSFFrQIQtCCzFBTJuKBiroBXRNPV7oO38UJ1vx6qZbXvVwp4WAhkSA4Re6AzaU72yzZcDK4rBC4mvd6e2QXOlg=
+	t=1792111152; cv=none; b=iIGY91HKpkmpSeesCAk9Auw31bflbcK0O6/vtmiRAjDNDXEJL4O80eoiuyFjFuY/YB7a3kWf5Se1wzZbpMjM2S0025+PKpkjgplV5Q6Y48EUMUlL/aDRaKJph3B9Yew8lbtOBYtEb8mKCJqTdWZEdeKlhUMK9xAI4JiFPHVo/5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792111095; c=relaxed/simple;
-	bh=wJv6Oy02ZyVpQIEV4S+JLl2ZMXIUTlylj7/wOCMhJJY=;
-	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:MIME-Version; b=JyT9NNJp04fXgsteNWen4vbJIq4xqjjY4RVKaIreVEXLWm3D/zZUF9uO3+pB7VwKx9sEpihrvaxm2q9jSw4rKmEHR6L0lKbVRH1Cj7E+zx0wL6Kv1qZ4vN+g3unEJLzMSoow4vaBd1k15oXfNOuUXqjJ1U6Bg6fiZpZFtXGVQc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a3bkIh7E; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792111152; c=relaxed/simple;
+	bh=kNU+gTfXnBSkZb4pwRNNzld4Kr5uJFWio2koLy2jfW4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AsmBjDbDPUVWFInpHfTsJJlVp2hjVL1Un/EbDKgsPMFqCA6/Fh1oYpRiIc7XIOHyGpj7jXBhQ1585HitVG4e8azsINrm1JcfslXDDk/5ejKhyywUfb3rSlFglP6tkZYu6lcTLRRIPAe+jlk1Q9Y3XKzH9asnEdZEVCnIYq2QG0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BN39ypMb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a3bkIh7E"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ab9268d90eso3188821a91.3
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 17:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792111094; x=1792715894; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wJv6Oy02ZyVpQIEV4S+JLl2ZMXIUTlylj7/wOCMhJJY=;
-        b=a3bkIh7Ee8Kg3CriNDEwX8oGdI8Qdq5fV8e7jXfgg0J1TidIHQ4ixKF3GGM/J9uPaU
-         e9p3Qhm0hYO6htG8BQo38S6WoWM17XaFGJgXz52hh0QoGrW0FDwdFx014NgxccrzmPDu
-         tgbpiLo9zoTQFGvOXV/dtf2i06sLTA0NjLV7QioPqD/w0Lj9OfYijzAFuzNuiRYVAi6d
-         N0MAhUGZZgq6jxOVaP4SUrgfmC9X+wf0hf06uCR2fckrgo66IiFyfvGxl1JjLyDrCPO/
-         S/vw5NXyrspYxKUnw5D8+EHgJ2a0J83wCznPI/OO3Clz8nc6Gz2YW1YzxBTBClAAqsCa
-         L4Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792111094; x=1792715894;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wJv6Oy02ZyVpQIEV4S+JLl2ZMXIUTlylj7/wOCMhJJY=;
-        b=mGoQa4HK9h6Jkyk5fj37wXimHLOXvNVUBluqH2EUmBaM2QPAVoKMRNHdgkFzDZxPUZ
-         467K7cljWsPNXqxgeLh9kTpkSobk5lxxmOP4JZEZtfGmmhhPuhnzxQoEi3vksShLkpzK
-         6SF47rBQGB8uxUJRB7Gh0m404mV18Vx9trEKlWNfWfL+m51IwghDRNwP2fEi7JFhtDWQ
-         TzdSvZqoKAvVzS+LA2SiS3vCFjQIvl6MJzWMSut31LT3byBgeQTdxjcWlDnJhfnUgVDk
-         poJ+lvK7oJn4Gm1sI7Qw8JYAoLSbowAaNvuZ4rGpUb/ZnVyNmu5BFV0UZfZSZXZoDCNU
-         vFdw==
-X-Forwarded-Encrypted: i=1; AKwUvBwJ5u9NwFDy4XqlxzXiAiP/nBfJYNhRkvz5oB6TshLN0xp2WySbYSbbQDidCFim0x26O2s=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIqsuDrVbhGUBs/3XNkg93UmhRYsLAZPNfImXqkUSHh180X90OR
-	T9Gqod06kZse2rJEKNGsdLBLdRO3D9XkohOmST+esPZNxaAQiVM6PgfT
-X-Gm-Gg: AYBFou2z6hSF5LlG0mKb2wi6Q726XkoVG8ylb8Lhjdd5Oy5sBaJ0kA3PUgWx1Ui5t7c
-	aLw1xFoMqqN/P87MXK9eaYXzTHUrenxCl/2ho0YYuA8vj9D4lf9CghVt7c+GNf8FUvkajB4pmb8
-	aLco+m7DQ/gu+sqCBwfpAj7J/zThThauDUqP97Vr8CvKvsS5ObW6qpdglsD98wpK2+prc7Tx3pM
-	YOU0Qx9Icvs+YOJaUKUvOoSTUT1wAOTm+hdWdPy5u1eZIv33TBZ9Yr9kmh3YItJ8DoYuUTilo62
-	1zvc0WJxFa3p5vlt/FbX8dSctqkDfL23FXaFIaDvcNOUFfEGLDedZWVcTTzVW/tNy3n206RTeni
-	fHrTZZzYc/oeonZUdESccDLZb9tG2U2Yw7iIjrJ+8AcOmzLmjeKiB+GjvnQvd3nKvTkRUkXhi0p
-	vYKeWmkCfBiNf5ld1jJrfvpEwI05Kc+7uoVEBfS9eWYr85lL3GZndC9Rn//59yEHC1CjL4HY46A
-	Pvpl8gFKygQBxLKVGwIrckgxqx8pQUaDDwPb5Exl0x6Sp/MyvzRRm+DyMkz76nNBXqvPD4blHLC
-	vkw=
-X-Received: by 2002:a17:90b:1d4f:b0:3ab:c80:936f with SMTP id 98e67ed59e1d1-3ab3a94ffa7mr15824328a91.16.1792111093664;
-        Thu, 15 Oct 2026 17:38:13 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac947dfa00sm6462107a91.17.2026.10.15.17.38.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 17:38:12 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 00:38:11 +0000
-Message-Id: <DM5UD20248FG.3BXPS76LK06F5@gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/3] keys: Add well known IDs for
- fs-verity/dm-verity keys
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Christian Brauner" <brauner@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Alasdair
- Kergon" <agk@redhat.com>, "Mike Snitzer" <snitzer@kernel.org>, "Mikulas
- Patocka" <mpatocka@redhat.com>, "Benjamin Marzinski" <bmarzins@redhat.com>,
- "David Howells" <dhowells@redhat.com>, "Jarkko Sakkinen"
- <jarkko@kernel.org>, "Paul Moore" <paul@paul-moore.com>, "James Morris"
- <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Eric Biggers"
- <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, "Jonathan
- Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Andrew Halaney" <andrew@amutable.com>
-Cc: <dm-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
- <keyrings@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <bpf@vger.kernel.org>, <fsverity@lists.linux.dev>,
- <linux-doc@vger.kernel.org>
-In-Reply-To: <20261012-broschen-inanspruchnahme-gebilde-d72cf2b99cda@brauner>
-References: <20261008-ajhalaney-dmverity-key-identifier-v2-0-008456d189cb@amutable.com> <20261012-broschen-inanspruchnahme-gebilde-d72cf2b99cda@brauner>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BN39ypMb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041EC1F000C4;
+	Fri, 16 Oct 2026 00:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792111150;
+	bh=Q2x4JciZ+vOU+AbdWCZUGkcXM4xILaeiPxnKuCZ3ArM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BN39ypMbP5qldk56VlVngsmSVKRgXaus04F6EdKU1Xkie8YZvQ98WNpRC79U2zU3y
+	 1O8Ad6tLMH/Z8vX0J1kZ+XG/OyZKFlsdo9M+zQ55l1mjrkrmboMY9WtdW/rkktKQWC
+	 lzjQcmYcP+Mc1/7U9aqphH+s9tUNAJJ+BfYESHQIPN9fMp6+uNP3y4pa669cAWAozg
+	 mkULGpoiLL0LDypxwLbgZhXCbV33rl/T9D4vo5mIfdTOEpAAjiOw9WRhJEXQvmXDsj
+	 ruAL8xJrkIokBgMvPsZJULFm2m7/z2ka28SvFq4pwmvcQipukbr/LNpbI2IhmgrL8c
+	 mkB2s9PKwmwXA==
+Content-Type: multipart/mixed; boundary="===============0743669683247930264=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <ec5b341e8c10307ac92670b90d16d0e6997611a1fd3c217c9d6972ee6632deae@mail.kernel.org>
+In-Reply-To: <20261016000012.2232059-4-ihor.solodrai@linux.dev>
+References: <20261016000012.2232059-4-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v1 3/8] bpftool: Apply __bpf_core_pai per record on BTF dump
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,qmo@kernel.org
+Cc: bpf@vger.kernel.org,alan.maguire@oracle.com,cupertino.miranda@oracle.com,david.faust@oracle.com,irogers@google.com,jose.marchesi@oracle.com,vineet.gupta@linux.dev,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 16 Oct 2026 00:39:08 +0000 (UTC)
 
-On Mon, Oct 12, 2026 at 12:38 PM Christian Brauner <brauner@kernel.org> wrote:
-> Applied to the vfs-7.4.keyring branch of the vfs/vfs.git tree.
-> Patches in the vfs-7.4.keyring branch should appear in linux-next soon.
+--===============0743669683247930264==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-What is this branch based on ?
-v2 was sent against bpf-next, because
-commit 264d8fd2794f ("bpf, keys: Add a bpf keyring for program signature validation")
-is only there.
-All hunks in keyctl.h, key.h and process_keys.c have its lines as
-context, so the patches don't apply to -rc as-is.
-And patch 3 documents KEY_SPEC_BPF_KEYRING.
+> bpftool: Apply __bpf_core_pai per record on BTF dump
 
-I'm confused.
+TL;DR: Tagging every struct with __bpf_core_pai may make GCC-BPF programs'
+narrow ctx accesses (e.g. skb->mark) be rejected by the verifier at this
+patch; later patches fix it, so bisection may regress. Fold fix in or reorder?
 
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+
+[ ... ]
+
+> @@ -1121,6 +1121,24 @@ static struct btf *btf_c_detached_copy(const struct btf *src)
+>  	return copy;
+>  }
+>
+> +static int btf_c_annotate_records(struct btf *btf)
+> +{
+> +	__u32 i, cnt = btf__type_cnt(btf);
+> +	int err;
+> +
+> +	for (i = 1; i < cnt; i++) {
+> +		const struct btf_type *t = btf__type_by_id(btf, i);
+> +
+> +		if (!btf_is_composite(t))
+> +			continue;
+> +		err = btf__add_decl_attr(btf, "__bpf_core_pai", i, -1);
+
+Can this tag on every struct and union break GCC-BPF programs that access
+verifier-rewritten context types through vmlinux.h?
+
+The tagged types include __sk_buff, xdp_md, bpf_sock, bpf_sock_ops,
+sk_msg_md and similar UAPI context types.  In dump_btf_c(), __bpf_core_pai
+now expands to preserve_access_index whenever:
+
+    !defined(BPF_NO_PRESERVE_ACCESS_INDEX) &&
+    __has_attribute(preserve_access_index)
+
+GCC-BPF ignored the old "#pragma clang attribute push", but it does have the
+attribute, so with this patch it emits CO-RE relocated accesses for these
+types for the first time.
+
+check_ctx_access() in kernel/bpf/verifier.c calls
+
+    __check_ptr_off_reg(env, reg, argno, fixed_off_ok)
+
+with fixed_off_ok = !env->ops->convert_ctx_access, so a ctx pointer with an
+adjusted offset is rejected.  libbpf can only patch an LDX whose offset
+equals the original field offset (relo_core.c reports "unexpected insn
+(LDX/ST/STX) value" otherwise).
+
+A narrow access such as ((__u8 *)&skb->mark)[1] therefore cannot become a
+single "ldxb [r1 + 9]" any more.  It turns into pointer arithmetic on the
+ctx register, which the verifier then rejects.  The same GCC program built
+before this patch uses a constant offset that the verifier accepts.
+
+Clang is unaffected, since the old pragma already behaved this way.  The
+in-tree GCC selftest flavor passes -DBPF_NO_PRESERVE_ACCESS_INDEX (see
+tools/testing/selftests/bpf/Makefile), so it does not exercise this.
+
+Later patches in this series address it:
+
+  59158e0d2295 ("bpftool: Skip __bpf_core_pai on verifier-rewritten context
+  types") removes the attribute from these 13 types and their nested
+  anonymous records.
+
+  d7ea54ed605e ("bpftool: Emit __bpf_core_pso on verifier-rewritten context
+  types") adds preserve_static_offset to them.
+
+  57ae13c435b8 ("selftests/bpf: Cover context and socket accesses through
+  vmlinux.h") adds tests for the narrow skb->mark load.
+
+If the series is applied in order, this patch is a bisection point where
+GCC-BPF ctx accesses regress.  Should the exclusion be folded into this
+patch, or should the patch order be changed?
+
+> +		if (err < 0)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38828475934
+--===============0743669683247930264==--
