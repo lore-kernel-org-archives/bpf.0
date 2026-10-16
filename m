@@ -1,107 +1,92 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B1025A645
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 02:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C30A322C88
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 02:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792117507; cv=none; b=TyYcjcoWAXkNuBtDls43Ek+zoCKudGk9MVcUw2qUguEyAVNzUNPfErQRL4SLhbPfeesOhgF8jXM7S/IWswKpSDnUjL/7wDX6DVE7pKT+CLVU0B7zwPVIbJof2DPe0lePyD7G2Z8eD6mO8edfw1aIRe0P6RlNUypP4FdjA/SZxp0=
+	t=1792117782; cv=none; b=QNvSdRN8g232MPOpGTNv8OWUddij+bXobYaFfIP3AEt315rSChf4udk56fZUoqP8XSnkzX1bb5mEDaLzxrIe6ZVfd1hgQYRyQMQJKn/ZupE6T/7bf6stZsTTEVrVlnMuxhQBcXVwEWs77N5xq3pvNmt9D4sFeVNs3VNMoHvdRrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792117507; c=relaxed/simple;
-	bh=AyterXBWCVPT7LWW00QKlA6CPhNcYODV1naWiLjndBQ=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=pJtNck3+zDlal44YcUkK2WQv03mAZ1hfAXnjRd8PArnKM5vQg8b75sFaTrld8aFFz0HHH/U7T5LrXaw55VfkmHEI3E3oRh28HIl4ENN+4YksfOeV7YFcihY+JUSG+zbFUrSVXmTvHalbuC5Tvs2u9wpdhcpzb0f49pvUH73SDgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B40vBSux; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792117782; c=relaxed/simple;
+	bh=lsxLilNNIzCC8+6prGZ5iKziybvNJHYV+ur5CW1xkAE=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=PCXFPValMpo8+ROvKLC10bCTVE4Fqo6F3QDu0RALIqTolyP+uf3jbrh9UDTWf+dBF8bzMFNNbZWi5uEXvObZ9Uig7bAVbsq7Ijd9f6Lf5Wv8u/wfdnVGZjNPSwfupw/aRN+2+X1vSiN0tB77nEGs1INXgplUhKAEh6mwTN+09So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsuymDR5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B40vBSux"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3acd4850f40so37250a91.0
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 19:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792117506; x=1792722306; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AyterXBWCVPT7LWW00QKlA6CPhNcYODV1naWiLjndBQ=;
-        b=B40vBSuxAFki8+Spad1RLfyc/QjPdjaxKElIcAdNibS7LRYBDImoHBdazG5G/riGOx
-         5QZ3kGoQB/wDKLliVDrH0/lpbguuXVJkI4cvn8TSJa5eV8SDBhqTKu1r7Egoj7uXf2hZ
-         zf7kgGl9QtN6slSsuv1RnlI84Wb632Myp6oxKSYglhH3w48OGD918EzuyromyvOGl/bX
-         +NeavTIP9LpUR4gQfTEuGPwKTltU7RbbrofiBVfoV8hyy62rf5UGkTglzbDciam/SZUF
-         1aYQS9m7WdZ0Qir9tgpp3A1Vadw+baFhIlCWD4x/MjK2ZseH0IPFUKy6nVwJz/euGGtH
-         3iFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792117506; x=1792722306;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=AyterXBWCVPT7LWW00QKlA6CPhNcYODV1naWiLjndBQ=;
-        b=PwdAhP35pmkZ9DaRkLMxtXKrS6kAQzh8kzmYU8zVW9Xo7yZ7Ig5VSOwZIvIcy3PYf4
-         QAyBdofXVX29g41TC7eGx+hCo9TsPkWKDiqfKeQgbpJAe82HzuWzvh/JTjY+8WC+BKOu
-         Dd96o/UeJRPNe+VoiNrn+WSG3wDGt5BekXF+muIOZnaqKMuH9ckaaaB4M6TjECACvspo
-         oGhz1PQ2kqhtA4nP8Lp1L82oJQOaPQO4zPlm9Yi2Rq3rNM3lPsjKANKnBThtTFdu8H0+
-         bdqJpXn/VBqrv7cbU+hwo35doHNbNdLty/ObffDbvwMWtb2/lhhmL/JFGefF1KY8uwAv
-         wzCA==
-X-Forwarded-Encrypted: i=1; AKwUvByJLsxT24cH4QZI77jHhqqCzX5IqBDbcEVteyeTA0eXYWpA20Wy6038p2lcWYlv2URJbqo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI7SuZ9FIuNInZbrSx+zlNxD7/jyRKQ+RH1moaNfWuTt6JDych+
-	Mpuuh/Z3TKN1yijvqBlemgQLIlqOQB7oUqVBPmVKapuUTvmNEUF7Vbpj
-X-Gm-Gg: AYBFou06d8USz1v9FsX8KRkU50xBlgKRWfJlatnyClJX7lIi/CA/aSjFjcmVSuoul1H
-	aidMLMgnLQSxgFiskOGWnZHEVpjcXHLzMOcQtnmakuvIUqyHqoP8Wr2/IQgW7bXHyySuq+SqNp7
-	KJZ+0V69J0Uk9DUG79iPI6lGUw85PZxl3Uq+QkRjO4tVgI22cWiRvumA1XgN0S+ipDH21gklGcK
-	cjDA0DiwqobtohayMajxBAW4/tBDw0h+4C4t45tHSscfRwqNjId0LGvXkTEFtGAjLVk9FYBVllg
-	nKon1COJiVwpFH0DHrrhuyUNwF7GO/CKRmlqGwbqBBsZXSoHoohnCBxJ+jD6tCSaUtbgNma1YFD
-	Jq1kFgI47h3WDY+4CZVo3Cl19zdw2ag2F5jCoNWIHsHQhbRV4CftAR6MqzcalWkQjQzkbvr6Es1
-	NhuT9qryJydczkvGU6C7AwPEsD16bW+hXmLwkmwiSO0vde/bdEgMS/MgRI34RO9xegZ9dnkb2m0
-	T0/JJ93Ia3l+LgzGHvX6fQJLk3uftDTiAl8yRWLhl5aZ1srAb5XqXJ283LFMKKMwSf33JjvBPxN
-	jTI=
-X-Received: by 2002:a17:90b:1d4f:b0:3a8:699f:959d with SMTP id 98e67ed59e1d1-3ab3a955988mr17668032a91.31.1792117505849;
-        Thu, 15 Oct 2026 19:25:05 -0700 (PDT)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc496f4basm1717174a91.14.2026.10.15.19.25.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 19:25:05 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 02:25:04 +0000
-Message-Id: <DM5WMW2M6YYO.2X4FN4OPSQGJH@gmail.com>
-Cc: <davem@davemloft.net>, <edumazet@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <martin.lau@kernel.org>, <kafai.wan@linux.dev>,
- <yhs@fb.com>, <vega@nebusec.ai>
-Subject: Re: [PATCH net 1/1] bpf: reject unsafe pointers in TCP congestion
- control access
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Zhiling Zou" <zhilinz@nebusec.ai>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>
-In-Reply-To: <ae0f5aedfff54432f75c7bd4d369166c028497b0.1791978740.git.zhilinz@nebusec.ai>
-References: <cover.1791978740.git.zhilinz@nebusec.ai> <ae0f5aedfff54432f75c7bd4d369166c028497b0.1791978740.git.zhilinz@nebusec.ai>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsuymDR5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6971F000C4;
+	Fri, 16 Oct 2026 02:29:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792117780;
+	bh=oTkU132A3n4dehqj2Jd0zmT9IdtWWbVeE8y2gxIGFsw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=EsuymDR5U1nIRUN5efSvvJSomWO+qAzyjdeylyyYgCNhKo05kNtQiWzlOqGDyawRv
+	 syMBb/zY4DLYgMO9U+uhga/qrH8gVsd+g5VvKaLvtSY6s0wCuArePJkqnFcjScPjbo
+	 o69Gk1SKeYXb2fKub1NT+f4avJjLkAg0+IsQJQypmrlV7MVOduBP0uhzI/TR5FM5Ne
+	 wH8o5cV0LsN8OooeB+BCyqPVGgM6IPP/wclCKglMz5VKmKMzh1rmFqGYGW+vpZv0TA
+	 MQmwbOibF8N5cuOsM2NdnjF7eUn5bt4LaYJFErkxSk9slMDbeJvYtXNV+yp4cgdVB4
+	 2xgTCOIN9Va3g==
+Message-ID: <sashiko-outbox-173630@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 6.6.y] bpf: Check the helper function is valid in
+ get_helper_proto
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Artem Dinaburg" <artem@trailofbits.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261016022203.17034-1-artem@trailofbits.com>
+References: <20261016022203.17034-1-artem@trailofbits.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 16 Oct 2026 02:29:40 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, Oct 14, 2026 at 07:57 PM Zhiling Zou <zhilinz@nebusec.ai> wrote:
-> bpf_tcp_ca_btf_struct_access() authorizes writes based on the BTF type
-> and member offset, but does not check pointer modifiers. A BPF program
-> can use bpf_rdonly_cast() to create an untrusted tcp_sock pointer and
-> write through an allowlisted member, bypassing the read-only cast.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: multi-line comment style violation in bpf_tail_call_proto
+--
 
-Not anymore. It was fixed in July. See
-commit ac65c710cc64 ("bpf: Reject writes through untrusted BTF pointers")
-and the follow up
-commit ee9ad135b208 ("bpf: Reject a store through a fault prone pointer").
-check_ptr_to_btf_access() rejects such store with
-"only read is supported" before it calls any btf_struct_access callback.
-progs/tcp_ca_untrusted_btf_write.c is the same prog as your PoC.
-All of that is in 7.3-rc1, so net tree has it and this hunk is dead code.
+commit f05c559892f9e9f36efa93c44d19d9d526404f49
+Author: Jiri Olsa <olsajiri@gmail.com>
 
-The splat in the cover letter is from 6.12.95.
-6.18.y and 7.2.y have ac65c710cc64. 6.12.y and 6.6.y don't.
-nf_conn, sched_ext and hid-bpf callbacks in 6.12.y have the same issue,
-so patching tcp_ca alone doesn't help there either.
-Pls send the backport of ac65c710cc64 to stable instead.
+bpf: Check the helper function is valid in get_helper_proto
 
-pw-bot: cr
+This commit adds a check in check_helper_call() to ensure the helper functi=
+on
+pointer is not NULL, preventing a verifier bug when config options are disa=
+bled.
+It also sets the unused tail_call helper function to BPF_PTR_POISON.
+
+Link: https://lore.kernel.org/bpf/20250814200655.945632-1-jolsa@kernel.org
+
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 9fa984ee076bc..bec8876f12375 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2959,7 +2959,10 @@ EXPORT_SYMBOL_GPL(bpf_event_output);
+> =20
+>  /* Always built-in helper functions. */
+>  const struct bpf_func_proto bpf_tail_call_proto =3D {
+> -	.func		=3D NULL,
+> +	/* func is unused for tail_call, we set it to pass the
+> +	 * get_func_proto check
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the BPF subsystem=
+'s
+formatting rules? It seems the opening /* should be on its own line, with t=
+he
+comment text starting on the next line.
+
+> +	.func		=3D BPF_PTR_POISON,
+>  	.gpl_only	=3D false,
+>  	.ret_type	=3D RET_VOID,
+>  	.arg1_type	=3D ARG_PTR_TO_CTX,
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261016022203.1703=
+4-1-artem@trailofbits.com?part=3D1
