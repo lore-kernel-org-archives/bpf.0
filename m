@@ -1,114 +1,96 @@
-Received: from mta0.migadu.com (out-57.mta0.migadu.com [91.218.175.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB54238F64D
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 11:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A553D812D;
+	Fri, 16 Oct 2026 11:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792149423; cv=none; b=r4hMnbMRIzsJ05/Ix4kX+R4r7JHcuo3gqrBHcU6ytt0/+tZyJrB0yZcZRZMx1q61uQ/+RqlMiN+AuXg97F8UW/ahkwdG41YJ+6BRhEuKI96EXqJ1raxMhYTJmymSgLUTgvhCzE2bo5Ok3iZBisdpSnynXVzagBwlQPzmSkt9UQI=
+	t=1792149579; cv=none; b=V6isaUECN2eawckCSQFwl0olVajrF7ITQ/VOp+/AQjWcidfdaZggQEvOp2o9qOM+OqTuv9bItLZV8YrENMvUtawnK12OZSBJjv1EwX3+txSTc1BwdOOxb1Wt1uE1WrX9jyGyC9h4fwfRQVETkKfB5FeiC5ZhONs8awGhoXuubY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792149423; c=relaxed/simple;
-	bh=WZ6dLcgrQjwdEPJGDFfYZRVQIr0dB7OD7+Bd/3cCH8k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ud4MrL4DWqubOFanCd6zdvZUnWVt65JT1SjE82zmd7eGpF/xz9UvVsQPkI7rRV0wCAxH8QrMzk41+JUvgNkvgjpjUdvMw5lXIQQ56ihK0uMOSDPd1qL8YJidmfUUC8taJs+kMFyvglij5IK0FbT5ux6+jmhx3kDUUktiWODnSWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OeMMXyzT; arc=none smtp.client-ip=91.218.175.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792149579; c=relaxed/simple;
+	bh=bISYE32Keboph/NFLD7Q56AYqXzzo4A+4qsxWw0jSfc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=EvcDhhNaJx81OPGUrAbUQ/5qZiWzvM6ConcaoIDrlhQ4gZlBPOOYSUYaW/thhSkDkzaD+OpKf4JmSrGJdBCNdYHiED4+SfWzOUoddNVvxbrWTz5X6pOXMNjac8tiTmsBDO9BBIDIV5G4YNoTT42QrZk/DWeM9tGv3nEwMiU4mD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GSZ/aODB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OeMMXyzT"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=WZ6dLcgrQjwdEPJGDFfYZRVQIr0dB7OD7+Bd/3cCH8k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792149418; v=1; x=1792754218;
- b=OeMMXyzTDIop3AzZOaNY4CwfOsebZLkr1rUB3Md96Sqdb4IjuPjb2Ze6fbnFeqceS6Tbcdpo
- 3Aklpw6M7vBprnBBSYPmsPkkSYrKset75kvv2Pm0dxP11Wruc+C3er0h2y4CRTgNoMhSkzjpQBw
- Sv9rWf9sGIx+SGCMyq8l/mfg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8fa13fae177cef9b;
-	Fri, 16 Oct 2026 11:16:58 +0000
-X-Mizu-Trace-ID: 8fa13fae177cef9b
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Kaiyan Mei <M202472210@hust.edu.cn>,
-	Yinhao Hu <dddddd@hust.edu.cn>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf: Fix verifier WARN on narrow read of bpf_tcp_sock u64 fields
-Date: Fri, 16 Oct 2026 19:16:42 +0800
-Message-ID: <20261016111643.247553-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GSZ/aODB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF8141F000C4;
+	Fri, 16 Oct 2026 11:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792149578;
+	bh=miFPUobfnaeUFZw7U7GalciH9GRDPp4unu/aa9PhnKE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=GSZ/aODBboUbiYkksQCGe0Lc331lPG6ylfhUjH9mf4IrJL7JL60l+wppkr1u2qCJF
+	 qkhd098NKAKFf7sIkiDnxofGPrRlVW8xwRJqE55NBaJlj+etNWiXeKoJNCdEORp9RA
+	 Vwo/m2xF6ZtjOLg7tseNh3oiIzJXkMh4KPWKGphgLFUhQs40E6VkjMpJ41SZE09xks
+	 sPwREe2sr+iJlnIP1V3f0j8fhCDnDMWR8riDM4+zYazw0VcEY51o33XgB9DB89Il8A
+	 b0nkcOwoAmYOgl9cDgGDDwiQbvoPvIu2euUH5RDVdTrjS4BLiuPCiS4sWzsuIrOlUo
+	 XzpAu+uQXplEw==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Clement Lecigne <clecigne@google.com>, aleksander.lobakin@intel.com,
+ edumazet@google.com, netdev@vger.kernel.org, maciej.fijalkowski@intel.com
+Cc: clecigne@google.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kuba@kernel.org, sdf@fomichev.me, horms@kernel.org,
+ john.fastabend@gmail.com, ast@kernel.org, daniel@iogearbox.net
+Subject: Re: [PATCH v3] xsk: fix memory corruptions in net/core/xdp.c
+In-Reply-To: <20260629072300.1664622-1-clecigne@google.com>
+References: <20260629072300.1664622-1-clecigne@google.com>
+Date: Fri, 16 Oct 2026 13:19:35 +0200
+Message-ID: <87qzhp51vc.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-A BPF program can read the middle of a u64 field in struct bpf_tcp_sock:
+Waking a dead thread: RISE FROM YOUR GRAVE!
 
-	tp = bpf_tcp_sock(listener);
-	/* +0x54 is in the middle of the u64 bytes_received */
-	unsigned hi = *(unsigned *)((char *)tp + 0x54);
+Clement Lecigne <clecigne@google.com> writes:
 
-bpf_tcp_sock_is_valid_access() allows this 4-byte read (the default case
-only checks size == 4), but bpf_tcp_sock_convert_ctx_access() only knows
-the field starts and has no idea how to handle such an offset. It emits
-no instruction, cnt stays 0 and the fixup pass trips verifier_bug():
+> From: Cl=C3=A9ment Lecigne <clecigne@google.com>
+>
+> Commit 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+> introduced a vulnerability in the handling of XDP_PASS for AF_XDP zero-co=
+py
+> frames.
 
-	verifier bug: error during ctx access conversion (0)
+Hmm, I acually hit this in my WIP for UMEM page pool provider hack.
 
-Just disallow the narrower access by matching the whole u64 range of the
-two fields, so it is turned down at check time:
+> Note: Currently, this specific AF_XDP zero-copy conversion path is only
+> reachable from the drivers/net/ethernet/intel/ice and
+> drivers/net/ethernet/intel/idpf drivers.
+>
+> When building an skb, xdp_build_skb_from_zc() uses the chunk size
+> (xdp->frame_sz) for the allocation. However, napi_build_skb() automatical=
+ly
+> reserves space at the end of the allocation for the skb_shared_info
+> structure.=20
+>
+> Most high performance UMEM applications use 4K chunks, where the
+> corruption cannot happen.
 
-	invalid tcp_sock access off=84 size=4
+I think this can also happen with 4K UMEM chunks.
 
-Fixes: 655a51e536c0 ("bpf: Add struct bpf_tcp_sock and BPF_FUNC_tcp_sock")
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
-Closes: https://lore.kernel.org/bpf/7a8ff335.1024c.1a14395f3e5.Coremail.kaiyanm@hust.edu.cn/
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- net/core/filter.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+For example, on ice, use MTU 3800, 4K chunks, and no extra UMEM
+headroom. Attach an xdp.frags program that returns XDP_PASS, and bind
+the socket without XDP_USE_SG.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ba536be2915f..f0eae1c14b2f 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7600,8 +7600,8 @@ bool bpf_tcp_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 		return false;
- 
- 	switch (off) {
--	case offsetof(struct bpf_tcp_sock, bytes_received):
--	case offsetof(struct bpf_tcp_sock, bytes_acked):
-+	case bpf_ctx_range(struct bpf_tcp_sock, bytes_received):
-+	case bpf_ctx_range(struct bpf_tcp_sock, bytes_acked):
- 		return size == sizeof(__u64);
- 	default:
- 		return size == sizeof(__u32);
--- 
-2.43.0
+A 3814-byte Ethernet frame fits in the UMEM chunk:
 
+  256 headroom + 3814 packet =3D 4070 bytes
+
+But the copied skb also needs space for skb_shared_info. Using
+the 320-byte size from your example:
+
+  256 headroom + 3814 packet + 320 shared info =3D 4390 bytes
+
+The old code allocates only 4096 bytes, so the packet copy
+overwrites skb_shared_info.
+
+Am I missing something?
+
+
+Bj=C3=B6rn
