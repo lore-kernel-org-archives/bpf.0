@@ -1,78 +1,83 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC743B8921
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 19:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2509F4CF47D
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 19:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792179451; cv=none; b=cha0sMN9KQG60fGsAZ/glbpptNnjHOOy06/L0Qxkl3Th0VtPVnwEAoFUna5BPWxs9aDDqOMHENv+MCvk7lT+w7skpUzFj0J9zZj2+2UuK5ZIYTJh84/qiuWqvWqUvEktRMvrc2gK1M42SoNAMEVlr5f67TnoRFDPtSUlNPG1/Bo=
+	t=1792180124; cv=none; b=WOnF0zKpmiqaNQUlQQfIaXUrAEcyf30pk0V9+7eN+l8lS3klDD0IiYO7fC958mLIFqCnSuNoO9EyDEBseB+e/onE+226O+oHKAnsLGiWLIM55fRR2WIzWrrnBCfiaoFKFe7RciGOu5sUUUpJtKdmWDPi+8XYeVFODgg56zdTPl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792179451; c=relaxed/simple;
-	bh=P3T7yVZCfw010pVSsNaymFOtCBiBgYqS+NH4ltZ6GfE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rmr+VOeeyfIVoWimO5xT+jbpZa6d5vTzZP+qNEAcmIBkCgZSzmZnvk9E2ZIpQp6XrWnvW6UCyzy9zM9W6ucEF2NzlYyumf5LxDEo8PSZPRsMKi+1NesniTBNdVoSxofbJSXPAPNB73sdjKg9zj0xGORiz0ZdziqrTbmuxspMzi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Pgwu1Knq; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1792180124; c=relaxed/simple;
+	bh=WiKNW/PdZA6AsaEUnVk4RvU+IxiJoDI+wIAVqyvgIvM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nMPD6E1wL3Oy3qyZ1YP9mqHDgzzby/xG3I0AODiIo7dOdIHxCm6SgAUs5kgfTmaTs3SObnN78CKAtAy7AuK/rWezT30X5tnAXEXzlIPgf/ftfuN9gDDy+So6vBNXj0ndA3SF53vmOH6LA21AgUAxMVM739y6DBd0Br79MWIqwSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LqP+xRmy; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Pgwu1Knq"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e9995ce866so1506665ad.0
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 12:37:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqP+xRmy"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3a87e23860cso3989211fa.0
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 12:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792179433; x=1792784233; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=aTPtWymi9zdwDJM+3urHno8w3H1cvHLVIpkldRRaktc=;
-        b=Pgwu1KnqrKKJcqPgbgBs+lPS8n+0FBPp+8lg8yK3qjhnGI6tc+S6SAIL8xmzci54U+
-         i2Zwnwb31kJ52icJ9WNU8JoafmwY1kjcnFmZYOcCGA1A3QX0Mex8UuD7ysSqV3llOPTW
-         QHiFndWJiWvs8jmGPCY9STqRruZWb/h+kco5+lSr7A7Me+XwNZgAqlOs7L1oiI/f1RC4
-         AwScwUD/IMbY/cvbPAhyJifXBekDlsFgMGRqLeDkhkOrzT9GiR2vB+A4xNM4gQ9sgftB
-         fquRsszfAN+3ctc834TOcJLSv1+UOtNM5FocQfX2oO3vc286DuyE91ed4NuNva5RBr4G
-         4GuQ==
+        d=gmail.com; s=20251104; t=1792180121; x=1792784921; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=0hoxXb4s3UEidbFXZi/a4D2GBpFbA4+399URLR3r0/A=;
+        b=LqP+xRmyoZjlOGbfkLxhOZll98LV3Ohn7GatOx7CwSIqbbRnWfvMw2Fp6yvAO1ADjO
+         oaomxRsdif5cAP872mbOfhfZXCvVKumQui4/9xqVi+tWvcRDAC7QqiV3+wdy8soKcJ9G
+         vrswl8xcqZZ1D5C0PKGCWxChw/1V0/wFz5TFq0jc4p8KNJwCxd6CUMYnJ/EJ5mByQy5F
+         V+/wfHFXz8nt7dEaqSAj7xMu/EZs3LzKJFGbYARUPo3GQVlibo0is5sFpU9YtVnXElu7
+         Otns6wH3FxiPMGs3hkWutn7ElT3a9dHDCxESuB0hSlw5KMUsvUAVV/5w3MAJO47/9IdM
+         J2ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792179433; x=1792784233;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=aTPtWymi9zdwDJM+3urHno8w3H1cvHLVIpkldRRaktc=;
-        b=IoFZW6zKfj8tnKRnjZ+mIztAOrweLhgnwQm/YQHQSB/f4M1HxtP71ziiD7NuN9i+IL
-         FSaw785PfZeWH55PCmi9/3N0q96b7/3pVs2O/uCbCjC/vm565sdS/RMhiBNJS40bogUF
-         FkV1FeUUejZBZD4CtLAPZwbgc/9UahXMI6nqgZpRtjD3pWNDBsxCS74EPIbhYoiVX77A
-         mn6bpIXZEldmziTPz8rB+0+P9xIKw/mex9wkhpJee9ZUXmC8j5br6vv6hFNqnD93knub
-         6Fi5UrheQZEqxyYjQiXpRJq5/+WcwsSargL+jzLlA8NpJisRChX2shUtsrrqTRHEhwMC
-         A/oQ==
-X-Gm-Message-State: AFq9FYLLxdifdkKuiInrwyZ4tBGscD9YsQM07NoH9JNV918XWUjBKxHx
-	186sm77ngpREnPJNt0I/oskJ7n6EHr2kwiV1ZnMHBHluOEjmC/vc1I/oChkvNdtR7rnmzY6sIpu
-	oGHTeiZwuGQ==
-X-Gm-Gg: AYBFou3y8W3BDLoxDnu3aXfwVRiOWC9XAS3pjq2ONnvIAyf8WfdUhIny9dluCZjoZyY
-	9OeOwjFBcqcOpQjZAWBPorvXK1pZFHd5AYQP4vCWalQMO9DtdwDIqNFaCB8QpOiDtCP1Af9dgUk
-	haOZEn12LhQZkPL5nM8f1ni3SCPVZRgPDSGspk8ycEDnwo9kvxdgBytkODXXk0OitNF0sZ8RIs6
-	64Zlk9x6ws8MaryWydekOOJqULBwuegsUbhqqhJ5WAnlIpwTOL6TCLhqE6uGZ7zWCRm8dGBhj05
-	8BW7SEpRx5YsVGh+xo5YWJYpmHSS4b//HfMFLbaJCFwlsKsPPuHKQ4rXd/Mi+6Cw9v1CAp8elTS
-	LJwZ3SgF+sGsjTp2mHyn+WM6S83QtD4L4OvYzGh0eaHC7Q6DPtdqEWgirQj2o7pDpXactUOBkaj
-	C+vtC8XGHQ1e+bfqlkkjXGOkdewr86S0VKE0QLPBiEa57elY16GtQ1N927CF6PADsfseAfQj+6g
-	uHNa2kJwDa7FioGFy0VOtMOAWMaMn3x+uIZ
-X-Received: by 2002:a17:903:110c:b0:2e8:30dd:523d with SMTP id d9443c01a7336-2e9a68e6985mr9267785ad.13.1792179433392;
-        Fri, 16 Oct 2026 12:37:13 -0700 (PDT)
-Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8b1f0asm14970045ad.68.2026.10.16.12.37.12
+        d=1e100.net; s=20260707; t=1792180121; x=1792784921;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=0hoxXb4s3UEidbFXZi/a4D2GBpFbA4+399URLR3r0/A=;
+        b=uSpnqA2qABWibqFq3BoKhr0M+5eMHQoRA1zYxpjtJoDOjdwPRc0PFB+feA9JA1qY17
+         StstOz1F+IE6zSzKqtifYD9cjPthAU8h6z96wpP2aLbmg+JoH4A9mz5lSxapOYgJsZ8L
+         xRjrNwNxWN4LUxfnmgSIHwn+1FNxQLC0J2HFR+Z3tQgLY3L4HW6E2uektwKTxCASdfAm
+         r7DCKUP3Vm/SXIkU1lbBt4l6Am/EcarKNcfGeaQnl/3oUNTNRdHh6Pn1IWUYNQqQpr/0
+         BIMJxU3BusnD7yDkTQ23Gf1H/gKu0HTF+/JaDliOYu6yVZIr/uklIgBnn7ZNL6udcIQA
+         51KQ==
+X-Gm-Message-State: AFq9FYJUgXejfTie+iICNiUnqfPNwX7gnGNKBvShlfCGhKp2FvGqX7eu
+	rq9O2Sjv3v5lmYU9DuVDu5IFrF/vU2Wr9DZcEG65JMDJnH6Wy2a9CxzS9mymYLQNT5c=
+X-Gm-Gg: AYBFou14WQy7CjgV+Q0hD8Zy9S+YVYT6an+0WXp5xdLYkjH26DB+ggINvpMvnJoxjJw
+	kgOCb39Tmph/GU1J2AmXzQ9cr8SVub72dFTZu+d5hdWPsvpx6XByOU3JS7ZDkfLWAeaXrqyCOjB
+	R53Wq9z+IHJq/cD3+QJ8bES9Zxl6T/FB9hBwQTf0i9BnlEdBilZajD/lcwkXvQ4sf6Shtu1r3nc
+	VCZPgavxRt3TIIp/UoQF6iEbvmU2KcBr8iqWco6dL2gu2tjws9VEz4W6Yi70LwLrVaTBDmCUGUN
+	yqvuk9pgACxpR4tsZJWRj5xS9eHE2D37AkzeGQ9XRj7JDyJp/A70Dc5GY/tG9hai95Z9DgLNkOY
+	PdM0CCn4O+/RD3izUxeokcWPM0oiTBLp+IvwwWqDktDU0oNFmxtUv1QnSC05GC+M9BZtOW91oGo
+	ls1XonCt24mtluGRTCReWSxPXoviGQfJ3vIQ3M5eMNNMoggXK71PkCNAOVvRfWFgXsgnvC0qW9J
+	Fuzm+si7GvsendRAQk4iF/0cxGQs9tnoLpDkXGzbCzYo8YWOVah
+X-Received: by 2002:a2e:a988:0:b0:3a8:7caa:cd4e with SMTP id 38308e7fff4ca-3ab147c819dmr9590771fa.13.1792180120831;
+        Fri, 16 Oct 2026 12:48:40 -0700 (PDT)
+Received: from localhost.localdomain (95-24-167-79.broadband.corbina.ru. [95.24.167.79])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3ab2a4691f2sm1179411fa.19.2026.10.16.12.48.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 12:37:13 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
+        Fri, 16 Oct 2026 12:48:40 -0700 (PDT)
+From: Maxim Skokov <skokovmaksimevg@gmail.com>
 To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
+Cc: qmo@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
-	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v5 5/5] selftests/bpf: Add arena allocation race tests
-Date: Fri, 16 Oct 2026 19:37:03 +0000
-Message-ID: <20261016193703.9203-6-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261016193703.9203-1-emil@etsalapatis.com>
-References: <20261016193703.9203-1-emil@etsalapatis.com>
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	kuba@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	hi@tychen.cc
+Subject: [PATCH bpf-next v5 0/3] bpftool: Fail map dump for maps that can't be iterated
+Date: Fri, 16 Oct 2026 22:47:55 +0300
+Message-ID: <20261016194825.230433-1-skokovmaksimevg@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,496 +86,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add selftests for races between arena frees, reallocation and user
-faults:
+"bpftool map dump" treats only ENOENT from bpf_map_get_next_key() as the
+end of the map. Map types that can't be iterated (local storage, ringbuf,
+bloom filter, arena, queue, stack) fail on the first key, and bpftool
+prints an empty dump, "[]" or "Found 0 elements", with only a non-zero
+exit status.
 
-- realloc_during_free, realloc_during_deferred_free: a synchronous
-  or deferred free keeps its range allocated until it completes.
-- fault_free_realloc: user and BPF views of a page stay coherent
-  while it is repeatedly faulted, freed and reallocated.
+Patch 1 adds a helper that prints ENOTSUPP (524), which the kernel
+returns from some BPF commands, as "Operation not supported" instead of
+"Unknown error 524", and uses it for map create, map element
+operations, map freeze and prog run. Patch 2 asks for the first key
+before printing anything and fails with the map type and the error.
+Patch 3 adds a test_progs case on a socket storage map, and on a queue
+map without BTF for the plain output path.
 
-Pause frees in zap_vma_range(), after the range's kernel mappings are
-gone. Unlike flush_tlb_kernel_range(), which is inline on arm64, it is
-generic MM code that fentry can attach to. Print why a subtest is
-skipped when a tracing target is missing.
+The new test fails without patches 1-2 and passes with them; the other
+bpftool_* selftests pass. v5 was tested on x86_64 under a bpf-next
+kernel (d2141481a764e). The ENOTSUPP message was also checked by hand
+for map getnext, lookup and dump on ringbuf and socket storage maps,
+map create of an LRU hash without preallocation, and prog run on a
+kprobe program; map delete, pop and freeze use the same helper but
+were not checked by hand.
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- .../selftests/bpf/prog_tests/arena_race.c     | 291 ++++++++++++++++++
- .../testing/selftests/bpf/progs/arena_race.c  | 166 ++++++++++
- 2 files changed, 457 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_race.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_race.c
+Changes in v5 (patches 1-2 of v4 are now patches 2-3):
+- new patch 1: helper for ENOTSUPP, used in map dump and the other
+  places where bpftool prints the result of a command that can return
+  it (Daniel)
+- patch 2 (map dump) uses the helper; kept Quentin's Acked-by as the
+  change is only the error string
+- selftests: check the full error text for socket storage
+- rebase on current bpf-next
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_race.c b/tools/testing/selftests/bpf/prog_tests/arena_race.c
-new file mode 100644
-index 000000000000..c759211407ef
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_race.c
-@@ -0,0 +1,291 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+
-+#include "arena_race.skel.h"
-+
-+struct free_thread_ctx {
-+	struct arena_race *skel;
-+	int err;
-+	__u32 retval;
-+};
-+
-+struct fault_thread_ctx {
-+	__u64 *addr;
-+	int stop;
-+};
-+
-+static int run_prog(struct bpf_program *prog, const char *name)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	return ASSERT_OK(err, name) && ASSERT_OK(opts.retval, name) ? 0 : -1;
-+}
-+
-+/* Trigger the sleepable free page path. */
-+static void *run_free_thread(void *arg)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct free_thread_ctx *ctx = arg;
-+
-+	ctx->skel->bss->target_tid = sys_gettid();
-+	ctx->err = bpf_prog_test_run_opts(
-+		bpf_program__fd(ctx->skel->progs.free_page), &opts);
-+	ctx->retval = opts.retval;
-+	return NULL;
-+}
-+
-+/* Continuously fault in the address. */
-+static void *fault_reader_thread(void *arg)
-+{
-+	struct fault_thread_ctx *ctx = arg;
-+	__u64 *addr;
-+
-+	while (!READ_ONCE(ctx->stop)) {
-+		addr = __atomic_load_n(&ctx->addr, __ATOMIC_ACQUIRE);
-+		(void)READ_ONCE(*addr);
-+	}
-+	return NULL;
-+}
-+
-+static int wait_for(int *p)
-+{
-+	__u64 deadline = get_time_ns() + 5ULL * 1000 * 1000 * 1000;
-+
-+	while (!READ_ONCE(*p)) {
-+		if (get_time_ns() > deadline)
-+			return -ETIMEDOUT;
-+	}
-+	return 0;
-+}
-+
-+/* Skip the subtest, saying why, if @func cannot be traced with fentry. */
-+static bool require_fentry_target(const char *test, const char *func)
-+{
-+	if (libbpf_find_vmlinux_btf_id(func, BPF_TRACE_FENTRY) > 0)
-+		return true;
-+	printf("%s:SKIP: %s is not an fentry target\n", test, func);
-+	test__skip();
-+	return false;
-+}
-+
-+static struct arena_race *setup_arena(__u64 **addr, bool trace_zap)
-+{
-+	struct arena_race *skel;
-+	size_t arena_sz;
-+	char *base;
-+	int err;
-+
-+	skel = arena_race__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return NULL;
-+	err = bpf_program__set_autoload(skel->progs.trace_zap, trace_zap);
-+	if (!ASSERT_OK(err, "trace_zap_autoload"))
-+		goto err_out;
-+
-+	err = arena_race__load(skel);
-+	if (!ASSERT_OK(err, "load"))
-+		goto err_out;
-+	err = arena_race__attach(skel);
-+	if (!ASSERT_OK(err, "attach"))
-+		goto err_out;
-+
-+	if (run_prog(skel->progs.alloc_old, "alloc_old"))
-+		goto err_out;
-+	if (skel->bss->skip) {
-+		printf("%s:SKIP: compiler doesn't support arena_cast\n", __func__);
-+		test__skip();
-+		goto err_out;
-+	}
-+
-+	base = bpf_map__initial_value(skel->maps.arena, &arena_sz);
-+	if (!ASSERT_OK_PTR(base, "arena_base"))
-+		goto err_out;
-+	*addr = (__u64 *)(base + getpagesize());
-+	if (!ASSERT_EQ((unsigned long)skel->bss->ptr, (unsigned long)*addr,
-+		       "arena_ptr"))
-+		goto err_out;
-+	return skel;
-+
-+err_out:
-+	arena_race__destroy(skel);
-+	return NULL;
-+}
-+
-+static void test_realloc_during_free(bool deferred)
-+{
-+	struct free_thread_ctx ctx = {};
-+	struct arena_race *skel;
-+	pthread_t thread;
-+	__u64 *addr;
-+	bool thread_created = false, zap_seen = false, completed = false;
-+	int err;
-+
-+	if (!require_fentry_target(__func__, "zap_vma_range"))
-+		return;
-+
-+	skel = setup_arena(&addr, true);
-+	if (!skel)
-+		return;
-+
-+	/* Pause the free after its TLB flush, before it releases the range. */
-+	skel->bss->pause_on_zap = 1;
-+
-+	if (deferred) {
-+		/*
-+		 * Test the nonsleepable free path that gets
-+		 * deferred to a worker in the kernel. We do
-+		 * so by triggering the arena operation from
-+		 * a nonsleepable tracepoint context.
-+		 */
-+		skel->bss->trigger_pid_tgid =
-+			((__u64)getpid() << 32) | (__u32)sys_gettid();
-+		skel->bss->trigger_syscall = SYS_getpgid;
-+		skel->bss->deferred_free = 1;
-+		if (!ASSERT_GE(syscall(SYS_getpgid, 0), 0, "deferred_free"))
-+			goto release;
-+	} else {
-+		/*
-+		 * Test the sleepable arena free path through a
-+		 * syscall test prog.
-+		 */
-+		ctx.skel = skel;
-+		err = pthread_create(&thread, NULL, run_free_thread, &ctx);
-+		if (!ASSERT_OK(err, "pthread_create")) {
-+			skel->bss->release = 1;
-+			goto out;
-+		}
-+		thread_created = true;
-+	}
-+
-+	/* Wait until the free reaches the user zap. */
-+	err = wait_for(&skel->bss->zap_entered);
-+	if (!ASSERT_OK(err, "zap_entered"))
-+		goto release;
-+
-+	zap_seen = true;
-+
-+	/* The range must stay allocated until the free completes. */
-+	run_prog(skel->progs.try_realloc, "realloc_during_free");
-+	ASSERT_NULL(skel->bss->realloc_ptr, "realloc_during_free");
-+
-+release:
-+	skel->bss->release = 1;
-+	if (thread_created) {
-+		ASSERT_OK(pthread_join(thread, NULL), "pthread_join");
-+		thread_created = false;
-+		completed = ASSERT_OK(ctx.err, "free_run") &&
-+			    ASSERT_OK(ctx.retval, "free_retval");
-+	} else if (skel->bss->target_tid) {
-+		err = wait_for(&skel->bss->worker_exited);
-+		completed = ASSERT_OK(err, "worker_exited");
-+	}
-+	ASSERT_FALSE(skel->bss->timed_out, "zap_timed_out");
-+
-+	if (zap_seen && completed &&
-+	    !run_prog(skel->progs.try_realloc, "realloc_after_free")) {
-+		ASSERT_EQ((unsigned long)skel->bss->realloc_ptr,
-+			  (unsigned long)addr, "realloc_after_free");
-+		ASSERT_EQ(*addr, skel->rodata->new_marker, "new_marker");
-+	}
-+out:
-+	arena_race__destroy(skel);
-+}
-+
-+/*
-+ * Force a race between a faulting thread in userspace and a
-+ * free operation on the arena.
-+ */
-+static void test_fault_free_realloc(void)
-+{
-+	struct fault_thread_ctx fault = {};
-+	struct arena_race *skel;
-+	pthread_t fault_thread;
-+	bool fault_created = false;
-+	__u64 *addr;
-+	__u64 expected, value;
-+	int err, i;
-+
-+	skel = setup_arena(&addr, false);
-+	if (!skel)
-+		return;
-+
-+	skel->bss->realloc_after_free = 1;
-+
-+	fault.addr = addr;
-+	err = pthread_create(&fault_thread, NULL, fault_reader_thread, &fault);
-+	if (!ASSERT_OK(err, "pthread_create_fault"))
-+		goto out;
-+	fault_created = true;
-+
-+	for (i = 0; i < 1000; i++) {
-+		LIBBPF_OPTS(bpf_test_run_opts, opts);
-+
-+		/* Keep deferred frees from earlier iterations on separate slots. */
-+		if (i) {
-+			skel->bss->page_idx = i;
-+			if (run_prog(skel->progs.alloc_old, "alloc_next"))
-+				goto out;
-+			addr = (__u64 *)(unsigned long)skel->bss->ptr;
-+			__atomic_store_n(&fault.addr, addr, __ATOMIC_RELEASE);
-+		}
-+
-+		err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.free_page),
-+					     &opts);
-+		if (err) {
-+			ASSERT_OK(err, "free_realloc");
-+			break;
-+		}
-+		if (opts.retval) {
-+			ASSERT_OK(opts.retval, "free_realloc");
-+			break;
-+		}
-+		/* The reader may populate the slot first, or free may defer. */
-+		if (!skel->bss->realloc_ptr)
-+			continue;
-+		value = *addr;
-+		expected = skel->bss->current_marker;
-+		if (value != expected) {
-+			ASSERT_EQ(value, expected, "marker_after_realloc");
-+			break;
-+		}
-+	}
-+
-+	WRITE_ONCE(fault.stop, 1);
-+	if (fault_created) {
-+		ASSERT_OK(pthread_join(fault_thread, NULL), "pthread_join_fault");
-+		fault_created = false;
-+	}
-+out:
-+	WRITE_ONCE(fault.stop, 1);
-+	if (fault_created)
-+		pthread_join(fault_thread, NULL);
-+	arena_race__destroy(skel);
-+}
-+
-+void serial_test_arena_race(void)
-+{
-+	cpu_set_t cpuset;
-+	int err;
-+
-+	err = sched_getaffinity(0, sizeof(cpuset), &cpuset);
-+	if (!ASSERT_OK(err, "sched_getaffinity"))
-+		return;
-+	if (CPU_COUNT(&cpuset) < 2) {
-+		printf("%s:SKIP: at least two runnable CPUs are required\n", __func__);
-+		test__skip();
-+		return;
-+	}
-+
-+	if (test__start_subtest("realloc_during_free"))
-+		test_realloc_during_free(false);
-+	if (test__start_subtest("realloc_during_deferred_free"))
-+		test_realloc_during_free(true);
-+	if (test__start_subtest("fault_free_realloc"))
-+		test_fault_free_realloc();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/arena_race.c b/tools/testing/selftests/bpf/progs/arena_race.c
-new file mode 100644
-index 000000000000..54dbd662ca70
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_race.c
-@@ -0,0 +1,166 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_experimental.h"
-+#include <bpf_arena_common.h>
-+
-+const volatile __u64 old_marker = 0x1111222233334444ULL;
-+const volatile __u64 new_marker = 0x5555666677778888ULL;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1024);
-+#ifdef __TARGET_ARCH_arm64
-+	__ulong(map_extra, 0x1ull << 32);
-+#else
-+	__ulong(map_extra, 0x1ull << 44);
-+#endif
-+} arena SEC(".maps");
-+
-+bool skip;
-+int page_idx;
-+
-+void __arena *ptr;
-+void __arena *realloc_ptr;
-+bool realloc_after_free;
-+__u64 current_marker;
-+__u64 marker_seq;
-+
-+int target_tid;
-+int pause_on_zap;
-+int zap_entered;
-+int release;
-+int timed_out;
-+
-+__u64 trigger_pid_tgid;
-+long trigger_syscall;
-+int deferred_free;
-+int worker_armed;
-+int worker_exited;
-+
-+static __always_inline void wait_for_release(void)
-+{
-+	while (!*(volatile int *)&release && can_loop)
-+		;
-+	if (!*(volatile int *)&release)
-+		timed_out = 1;
-+}
-+
-+SEC("syscall")
-+int alloc_old(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
-+	__u64 __arena *p;
-+	char __arena *base = arena_base(&arena);
-+
-+	realloc_ptr = NULL;
-+	ptr = bpf_arena_alloc_pages(&arena, base + (page_idx + 1) * __PAGE_SIZE, 1,
-+				    NUMA_NO_NODE, 0);
-+	if (!ptr)
-+		return 1;
-+	p = (__u64 __arena *)ptr;
-+	*p = old_marker;
-+	current_marker = old_marker;
-+#else
-+	skip = true;
-+#endif
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int free_page(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
-+	__u64 __arena *p;
-+	__u64 marker;
-+
-+	if (!ptr)
-+		return 1;
-+	bpf_arena_free_pages(&arena, ptr, 1);
-+	if (!realloc_after_free)
-+		return 0;
-+
-+	marker = new_marker + ++marker_seq;
-+	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
-+	if (!realloc_ptr)
-+		return 0;
-+	ptr = realloc_ptr;
-+	p = (__u64 __arena *)ptr;
-+	*p = marker;
-+	current_marker = marker;
-+#endif
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int try_realloc(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
-+	__u64 __arena *p;
-+
-+	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
-+	if (realloc_ptr) {
-+		ptr = realloc_ptr;
-+		p = (__u64 __arena *)realloc_ptr;
-+		*p = new_marker;
-+		current_marker = new_marker;
-+	}
-+#endif
-+	return 0;
-+}
-+
-+SEC("tp_btf/sys_enter")
-+int BPF_PROG(deferred_free_prog, struct pt_regs *regs, long id)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
-+	if (!deferred_free || bpf_get_current_pid_tgid() != trigger_pid_tgid ||
-+	    id != trigger_syscall)
-+		return 0;
-+
-+	deferred_free = 0;
-+	/* The worker can run on another CPU before the kfunc returns. */
-+	worker_armed = 1;
-+	bpf_arena_free_pages(&arena, ptr, 1);
-+#endif
-+	return 0;
-+}
-+
-+SEC("fentry/arena_free_worker")
-+int BPF_PROG(trace_free_worker, struct work_struct *work)
-+{
-+	if (worker_armed && !target_tid)
-+		target_tid = (__u32)bpf_get_current_pid_tgid();
-+	return 0;
-+}
-+
-+SEC("fexit/arena_free_worker")
-+int BPF_PROG(trace_free_worker_ret, struct work_struct *work)
-+{
-+	if ((__u32)bpf_get_current_pid_tgid() == target_tid)
-+		worker_exited = 1;
-+	return 0;
-+}
-+
-+/*
-+ * Pause a free while it zaps user mappings: after it cleared the kernel PTEs
-+ * and flushed the TLB, but before it releases the range. zap_vma_range() is
-+ * generic MM code, so it is an fentry target even where
-+ * flush_tlb_kernel_range() is inline (arm64).
-+ */
-+SEC("?fentry/zap_vma_range")
-+int BPF_PROG(trace_zap, struct vm_area_struct *vma, unsigned long address,
-+	     unsigned long size)
-+{
-+	if ((__u32)bpf_get_current_pid_tgid() != target_tid)
-+		return 0;
-+	zap_entered = 1;
-+	if (pause_on_zap)
-+		wait_for_release();
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Changes in v4:
+- selftests: socket storage always has BTF, so the "Found" check could
+  never fail there; check the count on a queue map without BTF instead,
+  and fix the comment on create_sk_storage_map() (bpf-ci)
+- selftests: split into sk_storage and queue subtests, new subject
+- rebase on current bpf-next, patch 1 unchanged
+
+Changes in v3:
+- shorter comment on the probe (Quentin)
+- selftests: unlink the pin on every exit path, so a killed run doesn't
+  leave a stale pin that fails every later run with EEXIST (Sashiko)
+- collect Acked-by on patch 1
+
+Changes in v2:
+- probe the first key before any output instead of printing a hint for
+  ENOTSUPP only, so every non-iterable type gets an error and stdout gets
+  no "[]" (Alexei)
+- drop the Fixes tag and use a neutral example map (Alexei)
+- selftests: check that JSON output is only the error object and plain
+  stdout has no elements or count; clear the output buffer before each
+  run (Sashiko)
+- multi-line comment style (bpf-ci)
+
+v4: https://lore.kernel.org/bpf/20260928001513.7072-1-skokovmaksimevg@gmail.com/
+v3: https://lore.kernel.org/bpf/20260926170149.541352-1-skokovmaksimevg@gmail.com/
+v2: https://lore.kernel.org/bpf/20260925162031.27259-1-skokovmaksimevg@gmail.com/
+v1: https://lore.kernel.org/bpf/20260924160732.485650-1-skokovmaksimevg@gmail.com/
+
+Maxim Skokov (3):
+  bpftool: Print ENOTSUPP as "Operation not supported"
+  bpftool: Fail map dump for maps that can't be iterated
+  selftests/bpf: Test bpftool map dump on maps that can't be iterated
+
+ tools/bpf/bpftool/common.c                    |  11 ++
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/bpf/bpftool/map.c                       |  40 ++++--
+ tools/bpf/bpftool/prog.c                      |   2 +-
+ .../bpf/prog_tests/bpftool_map_dump.c         | 133 ++++++++++++++++++
+ 5 files changed, 175 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+
+
+base-commit: d2141481a764efdfaac70965ea28e8925f6a6b80
 -- 
-2.52.0
+2.47.3
 
