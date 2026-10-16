@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A3526299
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42DC2E175F;
+	Fri, 16 Oct 2026 01:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792111816; cv=none; b=FYIyqu67Qj6K7ckuoTRgIUxRfSpck261tfw0RwoWuLaScI2Gny6F5+qvVefYEo11ScUuPg06WfDykip9YW+Az1xtmSqhSWf0GM8qrX/4bnUlAI5CFqy5rLDOSBKJOm0zsuGWBMA5gPVyrOgUkHkHomiWAcviFNmZvld1PE7JuZs=
+	t=1792112412; cv=none; b=UltUboHER57Kf6kiI2saI3HBiCdrgaVpfSyIvtkRctkdK33uaZFmfkJ0lIJweJQwYNXuGpxJyNzMAbwJpbER+3kafJgkvq+BnQJ4bbFLQXEwsVTR0mLVyvd3wfVClU/ueJuiV+TSrX+OJW2cgwn6qZT3KgToQqVT88goxEYwaCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792111816; c=relaxed/simple;
-	bh=G7cWEJSbxL/M5ICsFFyskH+xpI4hxCH2GO3lTHKpi7c=;
+	s=arc-20240116; t=1792112412; c=relaxed/simple;
+	bh=27dUxT796tRpoD1PbzV+LMPAYMYVDTEOtfZDtP/nDzg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ja1L4JFtGxN/MPqemiohzXt1e9XrN0h9mlnApR5IcEfgviDziiNZjwAoGWGC87KDn8Q9xBB1loV/DqbkO8GjAaNFnFjFAOlTKUV+OWX7pHM9qVOcjuwkAqk1GE8ugV3mi9Rb4cupyuBgyVISOMsoccAlfam5f+9b8hx06pe9rhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuZkD3yK; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=IcFD54bwUESgNxKT3W/3JMG9B5dT0soq6x51/pGetQ06HjvRmXT1UKIdQX6QSwfHRavdg1cli8GAgZEbymPUxEzipqqdB4p3xkdfaWm8IZyFlvncVXyrjjf76kYMXHVpAJZO4RplwJBI6EjLc723bMuSRf6fw2A29ghtBf+dnwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h9mhMcKe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuZkD3yK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D161F000C4;
-	Fri, 16 Oct 2026 00:50:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h9mhMcKe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FAA1F000C4;
+	Fri, 16 Oct 2026 01:00:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792111815;
-	bh=Q00lJHDWC5p/RitVOvwkyFusAai2/tvQdHPkZ2wFbg0=;
+	s=k20260515; t=1792112411;
+	bh=bKEfWzAFkBWQwDCvKBQu3c2cYHNsOiRQvEAMVtC7ihY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=cuZkD3yKSRxosZwoCjLncULlw7MUD98xdHhqjxJNRVFp9hasP9SB2PnLx7zytLNdR
-	 UwVj7CslhXZ9JBsfds/+kiNmybY7DqSpbHbZFvaIL7jIXnX2p7YfN39DmoxN0jq7uK
-	 AL6zuuBVNtz3GGBerbVpqRB6P83HhvJs9DxugMImHTGnFI/y7f4q7tCwb6cXqjLO8G
-	 SvlXKCroIQ3r3MBl31p6K3q4qvmvSlSwUiJrvhwdbhk24pX4XQS7pYyTNvRK2BR4gb
-	 CLhRq5Sr/p1MTSHn0+aEwwDC5Oebew3SN+Xw3GiNk91/NM/8QO55Qo4pOZMxGT6GKz
-	 HiByEh/uinZgA==
+	b=h9mhMcKeoCTFM5sEJLzAXA9Ml9uwNhPwklbNItLhsNKThdJSXC6LtE43b6Omk7KHk
+	 BWXrHIeAgAEF3Kwxe0xw7Ajvwj2cgR1W/zupw1VOtpaSjLE4bFobkAefmOTlYIoN5H
+	 INp/oSjpsXnZJeh1g8E0vhLpEqLplfhuqw7jbqbXVBxfIPFevWi+hHcPMSYP9AdoQc
+	 kYosP7+88Hh1aF/Pb2OhRUV7AmRregqSl78eotjK4pF5gJzcCZ4jhvRKqK9Cj8tw0J
+	 mS88L9N9/K+9PA1vm2AOfLD2m6qcKZR8axr4cBeKz2stLYUbiLyMJjChloDTEhokme
+	 c96Je0LTR+R3A==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F14C43808209;
-	Fri, 16 Oct 2026 00:50:14 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 773FC3808209;
+	Fri, 16 Oct 2026 01:00:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,46 +37,55 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v7 0/4] bpf: Fix task work scheduling races
+Subject: Re: [PATCH net-next v2 0/8] net: skbuff: replace most BUG_ON()s with
+ error returns
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179211181351.4179746.9574390540438023653.git-patchwork-notify@kernel.org>
-Date: Fri, 16 Oct 2026 00:50:13 +0000
-References: <20261012061915.231254-1-luyun_611@163.com>
-In-Reply-To: <20261012061915.231254-1-luyun_611@163.com>
-To: luyun <luyun_611@163.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, yatsenko@meta.com, bpf@vger.kernel.org
+ <179211241001.4182913.5200516611523638723.git-patchwork-notify@kernel.org>
+Date: Fri, 16 Oct 2026 01:00:10 +0000
+References: <20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b@toxicpanda.com>
+In-Reply-To: <20261007-b4-skbuff-bug-on-v2-0-b9a5f732895b@toxicpanda.com>
+To: Josef Bacik <josef@toxicpanda.com>
+Cc: davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 12 Oct 2026 14:19:11 +0800 you wrote:
-> From: Yun Lu <luyun@kylinos.cn>
+On Wed, 07 Oct 2026 17:35:59 +0000 you wrote:
+> v1: https://lore.kernel.org/all/20261006-b4-skbuff-bug-on-v1-0-1b4434c5357c@toxicpanda.com/
 > 
-> This series fixes two races in the bpf_task_work scheduling kfuncs and
-> adds a regression test for each.  Each fix is followed by its test.
-> 
-> Patch 1 captures the task pointer before publishing the callback, which
-> can clear ctx->task before the scheduling handler attempts cancellation.
-> The existing RCU read-side section keeps the captured task alive because
-> bpf_task_release() is put_task_struct_rcu_user().
+> v1->v2:
+> - Use DEBUG_NET_WARN_ON_ONCE() instead of WARN_ON_ONCE(), so
+>   panic_on_warn systems take the error path instead of panicking
+>   (Willem, Fernando).
+> - Split out the skb_copy_and_csum_bits() unreadable-frags fix and sent
+>   it to net on its own with Cc: stable (Willem):
+>   https://lore.kernel.org/all/20261007-b4-skb-copy-csum-stale-bytes-v1-1-adbbde033fb3@toxicpanda.com/
+> - Rebased onto current net-next.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v7,1/4] bpf: Fix NULL task dereference in task work cancellation
-    https://git.kernel.org/bpf/bpf-next/c/c961f7b41a10
-  - [bpf-next,v7,2/4] selftests/bpf: Add task work cancellation race test
-    https://git.kernel.org/bpf/bpf-next/c/6674dcb2785d
-  - [bpf-next,v7,3/4] bpf: Prevent task work context reuse while irq_work is busy
-    https://git.kernel.org/bpf/bpf-next/c/a36d9afe8d92
-  - [bpf-next,v7,4/4] selftests/bpf: Add task work BUSY window test
-    https://git.kernel.org/bpf/bpf-next/c/33b2c64f073c
+  - [net-next,v2,1/8] net: skbuff: don't BUG() on bad arguments to pskb_expand_head()
+    https://git.kernel.org/netdev/net-next/c/c7d8bc3dd511
+  - [net-next,v2,2/8] net: skbuff: don't BUG() on a bad frag_list layout in skb_segment()
+    https://git.kernel.org/netdev/net-next/c/7b32bee7db82
+  - [net-next,v2,3/8] net: skbuff: don't BUG() when skb_copy_bits() fails in copy helpers
+    https://git.kernel.org/netdev/net-next/c/279877d86c82
+  - [net-next,v2,4/8] net: skbuff: don't BUG() on leftover length in skb_checksum() and friends
+    https://git.kernel.org/netdev/net-next/c/20ddd0fd2fcd
+  - [net-next,v2,5/8] net: skbuff: don't BUG() on a bad csum_start in skb_copy_and_csum_dev()
+    https://git.kernel.org/netdev/net-next/c/56453199d28f
+  - [net-next,v2,6/8] net: skbuff: don't BUG() on leftover length in skb_copy_and_csum_bits()
+    https://git.kernel.org/netdev/net-next/c/417261779eab
+  - [net-next,v2,7/8] net: skbuff: don't BUG() on a missing head_frag in skb_zerocopy()
+    https://git.kernel.org/netdev/net-next/c/433380f5ab8f
+  - [net-next,v2,8/8] net: skbuff: remove the BUG_ON()s from skb_shift()
+    https://git.kernel.org/netdev/net-next/c/e6974aad4bd7
 
 You are awesome, thank you!
 -- 
