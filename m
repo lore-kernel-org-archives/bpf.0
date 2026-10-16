@@ -1,78 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC57599A43;
-	Fri, 16 Oct 2026 17:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5548E4E2F10
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 17:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792173000; cv=none; b=FsVhNILpihLRFDWigmeQqPi45DEzBahdPXlZRSxOlKk/12A1k9bT4V9+e/yOjUuRR5D5ikidrQKM52WOmBtvIq070+/4jBL4Mw0xHYiumIm7WwTD3NkJmomizXxni9Pgy099TdxCPFayfNA3nfF9Ktpe1TbWHv6VJCTmF47wjQY=
+	t=1792173020; cv=none; b=s2xGzHW4WVGAspPaNaXKnKv3urHE4uNzApYZ8L6vTFCo8ugaZipxIjzCve84bNEGKJhlSNaYzCt/Vbw4lOs9NgblFxEji5ZEUAdgm6E2ZZveHm7V33xRbyS6L+VGgtibK4WheJuh9FjpD0m+6PDM7p333mbsZrX/dYSZ2jwkFmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792173000; c=relaxed/simple;
-	bh=sU4pZhbT1lb+nddSv3Vgs9evB7fIVdFzKSbtU/yz+Ig=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=poLehVPlGEu9E2r5vIThbco+p3JyiwlIhr0FqYu1ewpdW9QBV4vb0f6SpcLAVopMrGii3NaF0ttRZJSQqXeJT/UygPboOqI2N6lVoDcFfKKETufdv5UpnX0X9+/TE6y3UODylzhumETlKZC4zPz/4riYyH19o+fVe4ngJCXC6ZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bSpb6G4r; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792173020; c=relaxed/simple;
+	bh=OduHUoaGajHSnojOfnwkJNlccgNGaq5N/6thyyORm6s=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=eP3lbw0WvhrJe/tQtp+Y1FGu6SrCH71716RjG1LwcgBQTtu4zxefMMVPrLvQzdWaXkLL220CXazbWwsw1RyeDwBmRdDAI71OxB7OTYzIIn8Sg5sGDqqcD44q4/IjjYd9H+I4E53cbfCPP0kHVKTD5FlLc3FEQLJN3DPxrEP/H88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mmAn+2pP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bSpb6G4r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA7701F000C4;
-	Fri, 16 Oct 2026 17:49:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mmAn+2pP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 068D91F000C4;
+	Fri, 16 Oct 2026 17:50:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792172999;
-	bh=xZAgAHLdYRRI5hQx62O9uzg561Z0UyCRFefGSVMPztc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=bSpb6G4rhiiKoVfyTfkTKOPs7nQOnArsPl/jclUJSS1MOTcMcisEcHtAYktKC/ewL
-	 ol3u8VwnvBIU985ghi6jVLGYTqlpKGANX/9vxIg/Ma8cERZdGPN6+sCfY3HClZXfRR
-	 HzFJrIXo62WIR1le20BRrW5V0hw9uAFyZ9M11wTvogI9kfBAUixCVN1XlUw7l0F39t
-	 khTyRRQyniMoNMg+cTkj3Oo+M7BmPO76Kw7QQ3jbRMF8pzcL6Z7LfMxDPtO1QafyWK
-	 3LS6siXOk+DCPQq+rHulXNljc7VSlSbQ4UTQl1K3WFpCuRejkchIGCD6EL/XuTkEdg
-	 L3e7NkUNm96Uw==
-Date: Fri, 16 Oct 2026 07:49:58 -1000
-Message-ID: <eae39daec12cf6f121cc5010574a6c03@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: josef@toxicopanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
- Tao Cui <cuitao@kylinos.cn>, ameryhung@gmail.com,
- alexei.starovoitov@gmail.com
-Subject: Re: [RFC PATCH v10 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
-In-Reply-To: <20261003124045.1289305-5-cui.tao@linux.dev>
-References: <20261003124045.1289305-1-cui.tao@linux.dev>
- <20261003124045.1289305-5-cui.tao@linux.dev>
+	s=k20260515; t=1792173019;
+	bh=cEdQgYi71W48VS49T0f+myWJmE2vIihpr3f7xBMPGUE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=mmAn+2pPep7ApZiesg90BHrj7H9a+36oWn/y3K7CXH5YjTfur6zNdZK2AYFD9SRSZ
+	 lBFVSZEXPcf3drLBLWyuQe/TVpDAOfPCSNJ4Pp7ILLUAIaabFpoafeg1uvE4GRopE1
+	 ll80cb+9TdB5lsXL33iDTZ+dCY2y17UqFPeKRYHeKKWeqUVjQFVKUfUpoIEO7+IbyR
+	 2Vqtlh1ehLqv6x8389vuNzmNY091gT9K/7F22R4JA3R4IeWC/RTthaTNdmEhVFEAOA
+	 6Wbs3j2xFXD0bpARAtHIIF7MDWIFaSeIX753yDGW1V49tVHJraC/uEB27kHuQi1soL
+	 o1ocMAkLnPySw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F1354380AA60;
+	Fri, 16 Oct 2026 17:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Free the subprog jump tables once the CFG
+ passes are done
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179217301777.897417.11449085919420198009.git-patchwork-notify@kernel.org>
+Date: Fri, 16 Oct 2026 17:50:17 +0000
+References: <20261016155559.652461-1-daniel@iogearbox.net>
+In-Reply-To: <20261016155559.652461-1-daniel@iogearbox.net>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: alexei.starovoitov@gmail.com, bpf@vger.kernel.org, ast@kernel.org
 
-Hello, Tao.
+Hello:
 
-On Sat, 03 Oct 2026 20:40:45 +0800, Tao Cui wrote:
->  	  model		The cost model in use - "linear"
-> +			or "bpf" while the BPF model
-> +			is in use
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-"linear" or "bpf" is enough here.
+On Fri, 16 Oct 2026 17:55:59 +0200 you wrote:
+> The jump tables which compute_subprog_jts() builds are only read through
+> bpf_insn_successors() once CFG discovery is done. Its last caller is
+> bpf_compute_scev(), which runs after bpf_compute_live_registers(), so
+> free the tables right after it instead of keeping them until the verifier
+> environment is torn down. With large insn_array maps, this also drops them
+> before do_check() starts to allocate states.
+> 
+> [...]
 
-> +	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost model
-> +	can be bound to a device by attaching an "iocost_model_ops"
-> +	struct_ops carrying the whole disk's major:minor in its "dev"
-> +	member (a partition's major:minor is rejected).  Attaching
-> +	creates the controller if needed, like an io.cost.model write
-> +	does, and
-> +	switches the device's pricing to the model; enabling and
+Here is the summary with links:
+  - [bpf-next] bpf: Free the subprog jump tables once the CFG passes are done
+    https://git.kernel.org/bpf/bpf-next/c/d2141481a764
 
-Attaching now also populates the device's line, so the existing sentence
-saying the line is populated on the first write to "io.cost.qos" or
-"io.cost.model" needs updating. The paragraph also runs 21 lines with a
-leftover break after "does, and". Can it be split into three, attaching,
-model= selection and detaching, and removal and ctrl?
-
-Thanks.
-
+You are awesome, thank you!
 -- 
-tejun
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
