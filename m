@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BEA8551998
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 17:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91605581F3
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 17:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792170824; cv=none; b=u/4RIi6MkbVNfE5iQNF7j9q5SqO4ugyhZjYPC87ohPUMTKp/FfGGur44zjYD2D+r1qkAJ/HF4yPu30mGVfcb07huVLyGu/+TZNE4l21Y6gMAVUQNdutQhAuZKOKtNGkD9Z1qbT3usevg8RStVFuEhMZQHZ5J99JmAekYTNlY86g=
+	t=1792170827; cv=none; b=Gy7pVqsWsSx5+cT3chVd8Q4fw5E6i2d5Z+/arYozMm99XcwSgRlmdjUBo+VzgWZWjNQJwZDUQEZkKLBmifZ8KflK/9h6KlLXUusi+kIlTEV5e04ukkJCOKbaiRtu8NN50uTOLC6ojM2YpIo3hVpc3H3KCf5CpuI52T/w0pTTL2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792170824; c=relaxed/simple;
-	bh=j6qiw+GMqA/4PabflaReKcnY+AJDw7o1qDcXK5WkDaw=;
+	s=arc-20240116; t=1792170827; c=relaxed/simple;
+	bh=qLEtLV2gcZIJkWcgTQYm4zAlkFYhrwGaUPlXVcd6gDI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KMhwXnW9SiQaCEcdtTrVR791Klfqjdf+p+iuOLhx0q1jtCOKujDOBkpuBH6+CwitHGMS7DEJQhn0NoBaonOgGwt9+I9+eHDuwIyVPJwkThiXY1ZViV//nJHSWybSQMvK0sq4crmaci35xinYYK/1JS2wg4CQc6tGi+uTxXbgD0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J2jnZkrz; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=HWo80XvxYEOKqiNY1U7+EMUIh/8z4OnfPBMt8G6EtqL+j1PlSdfWqStgBrfDTB+Fr3f79dz8nARbMBYlrrbwi/J8DwjHeuBtsZUQ2mnKrF7JgcTSjRF3EOGivEAEl1tOR3UWAAJN/S6Sx6zavCIEe4mh4sX0hxk6iCBrdVTCPY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGQJVlke; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J2jnZkrz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C15831F000C8;
-	Fri, 16 Oct 2026 17:13:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGQJVlke"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 453261F000C4;
+	Fri, 16 Oct 2026 17:13:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792170820;
-	bh=VLnl8+ONdcLawhqOLYUcRDTRO3ocw2xBtazJrBnrX+4=;
+	s=k20260515; t=1792170823;
+	bh=LvlRZvi1D0HGQD/Ksi9xdJr/RyAiq3pxGxHCN3f4eRM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=J2jnZkrzKLL3pKSKG0WQuRpNVXuCyj8AGo1FPwv6f4HeVBwhYnCMKXiHJYYB9P0z4
-	 SzPmTOr5wQ/sPmFp+apnohgGAUsILtKz72aMF6pRIRB9CMUnUflNUgTFENVjgOR1Nx
-	 GCNUs1QBH5NZcogoC5FoVwp/c46VfkyzcaDOOlub+ZnosmoRjMvcJZFziv7UxU+Rsd
-	 0e5Q2Fd5HSdhMTyP8TM74nhRofHcIjZeH1JCi/elvzLxDkjbdXRddIE0l5KSFdvlwN
-	 eDCBZo+jOvhIJyGTbYCyYY3QP/l9lnBE7ePKdt+osQ16oDPOv4NsPhfs0mf3O+ljiD
-	 el7IxRJR9tb3A==
+	b=JGQJVlkeze1LtUv4OONrWy6P71a2fqSijXkc/fveOeWLm1CtN9Yba6jChFaRTOLBl
+	 B6D+ZgZBo8Rysxpch1SQjt8lpU1ad3WGdnfNS+I4vS/7545+lRIG1lpUWda2TzCP2C
+	 +G4pyxo7aym+weTahJShERFuL2WjQxQ/NoWeQdsYA7y3reZ1Muu5SJ/zqe5sDyOHQJ
+	 Y/aJwtj5axKDVKgtLWN7lHSxPc8LnpDfUXunpllCnmuEY73SSqKWdKLnnadmy9MmdN
+	 eACoqyT4mqUqGFgIpNwI4/DaO64jbK6/Ns4Lq7bQJz0WEVXbOB1ANETJPol1tl295X
+	 lpetHKusOrAJg==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	"Song Liu" <song@kernel.org>,
 	"Yonghong Song" <yonghong.song@linux.dev>,
 	"Tejun Heo" <tj@kernel.org>
-Subject: [PATCH bpf-next v5 1/3] bpf, x86: Support fetching AND/OR/XOR atomics in arena
-Date: Fri, 16 Oct 2026 10:13:12 -0700
-Message-ID: <20261016171319.1623447-2-puranjay@kernel.org>
+Subject: [PATCH bpf-next v5 2/3] selftests/bpf: Test fetching AND/OR/XOR atomics in arena
+Date: Fri, 16 Oct 2026 10:13:13 -0700
+Message-ID: <20261016171319.1623447-3-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261016171319.1623447-1-puranjay@kernel.org>
 References: <20261016171319.1623447-1-puranjay@kernel.org>
@@ -52,455 +52,737 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-x86-64 has no single instruction for a fetching AND/OR/XOR, so the JIT
-lowers them to a CMPXCHG loop. That loop could not be used against arena
-memory: it contains two memory accesses, the load of the old value and
-the CMPXCHG itself, either of which can fault when the arena page goes
-away, while the verifier reserves only one exception table entry per
-instruction. bpf_jit_supports_insn() therefore rejected the three opcodes
-and such programs failed to load with
+The arena and/or/xor tests never exercised the fetching form of the
+instruction. Commit 2897b1e2a2f4 ("selftests/bpf: Fix arena_atomics
+failure due to llvm change") deliberately switched them to
+__c11_atomic_fetch_*() with memory_order_relaxed, which clang lowers to a
+non-fetching locked instruction when the result is unused, because
+x86-64 could not JIT the fetching one against an arena.
 
-  BPF_ATOMIC stores into R1 arena is not allowed
+It can now, so check the returned old value with __sync_fetch_and_*().
+Keep a __c11_atomic_fetch_*() of each width per operation with the result
+discarded: that spelling is what selects the non-fetching insn, which
+would otherwise lose its only coverage, on every architecture rather than
+just x86. Compiling the prog with clang 22 before and after confirms the
+split: 6 non-fetching and no fetching arena and/or/xor before, 6 and 22
+after.
 
-Emit the same loop with R12-indexed addressing and give each of the two
-accesses its own exception table entry. The verifier still reserves one
-per instruction, so the JIT accounts for the extra entry itself by
-rescanning the instruction stream in bpf_int_jit_compile() before the
-extable is sized, as s390 does in bpf_jit_alloc() for its BPF_XCHG
-lowering. The rescan sits after the extra-pass early exit, so a program
-is counted exactly once. Drop the bpf_jit_supports_insn() rejection.
+The new globals go in their operation's block, and the or block keeps its
+u32s first, so .addr_space.1 stays free of the padding holes that clang
+before 18 cannot fill when it is built without address space casts.
 
-A loop without the load would need only one entry, since a CMPXCHG that
-loses the comparison reloads RAX, but its first CMPXCHG would then almost
-always lose. Every operation would pay for a second locked CMPXCHG, which
-makes the fetching insn more expensive than the load and CMPXCHG loop
-programs write by hand today. The second entry is paid for once, in the
-JIT.
+Add a fetch_r0 test for the two register assignments the x86 JIT has to
+special-case, where the operand and where the arena pointer is R0 and
+BPF_REG_AX is substituted for it. Clang picks its own registers and will
+not reliably produce either, so spell the instructions out. The values
+have bits set above 32 so that a truncating move on that path shows up.
+Add both forms to the uaf test as well, since the substitution only
+reaches the exception table when such an access faults, and check that
+the fault cleared the fetched register and left the address alone. They
+fault on the page after the freed one: the freed page is the first of the
+arena, whose 32-bit address is 0, which would make the address check
+empty. The address is read back afterwards, which gives 0 if the JIT's
+exception table entry recovered the fault, but not if the arena had
+mapped its zeroed scratch page and let the access succeed. The powerpc64
+JIT does not clear the register of a faulting atomic yet, so those checks
+are skipped there.
 
-Both entries resume past the whole loop rather than past the faulting
-instruction alone, with the fetch destination cleared, so a fault cannot
-re-enter the loop, and both are reported as writes since the BPF insn is
-a read-modify-write. This repurposes the INSN_LEN field of the fixup as a
-resume distance rather than an instruction length; a sequence long enough
-to overflow its 8 bits would first have to exceed BPF_MAX_INSN_SIZE, which
-do_jit() rejects before the image is used.
+Both spell addr_space_cast textually, which needs LLVM 19, so uaf gains
+the __BPF_FEATURE_ADDR_SPACE_CAST guard that every other textual use in
+the file already has. It was plain C before and built on older clang.
 
-The loop needs RAX for CMPXCHG and saves R0 in BPF_REG_AX, which it also
-substitutes for R0 when either operand is R0. ex_handler_bpf() may then
-have to name r10 as the register holding the arena address or the one to
-clear on fault; reg2pt_regs[] already has that entry.
+Drop x86 from the exclusion list of the uaf test, which covers the fault
+path. Its page is gone before the first access, so it faults on the load;
+the CMPXCHG entry is only reached when the page goes away between the two
+accesses, which a test cannot arrange.
 
-An access through a number, made by a program loaded with
-BPF_F_ARENA_SCALAR, keeps its address in BPF_REG_AX itself (see
-arena_scalar_access()), which is where the loop would save R0. Save R0 on
-the stack in that case, as the div and mod lowering does. An R0 operand
-stays in that stack slot: the new value is built from it, RAX ends up
-holding the old value that R0 is to return, and the slot is dropped
-instead of popped. Both entries resume before that pop or drop, so a
-fault leaves the stack balanced.
+Finally cover fetching AND/OR/XOR through a number in
+verifier_arena_scalar, on x86-64 and arm64. Both widths are run with the
+operand in a register and in R0, which is where the x86-64 JIT keeps the
+operand on the stack because BPF_REG_AX holds the address. The 32-bit
+operands have bits set above 32 so that a missing zero-extension shows.
+The page is also freed first, after storing a nonzero value in it so that
+an access which did not fault would show, and the test checks that the
+fetched register comes back 0 and R0 is left alone, and that reading the
+address back gives 0. R0 is compared with a value derived from the page
+address: the verifier would decide a comparison with a constant at load
+time and drop it.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c | 295 ++++++++++++++++++++++++++----------
- 1 file changed, 217 insertions(+), 78 deletions(-)
+ .../selftests/bpf/prog_tests/arena_atomics.c  |  53 ++++
+ .../selftests/bpf/progs/arena_atomics.c       | 211 ++++++++++++---
+ .../bpf/progs/verifier_arena_scalar.c         | 256 ++++++++++++++++++
+ 3 files changed, 482 insertions(+), 38 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 3975a94ac812d..004e2ddeb4f62 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -239,6 +239,13 @@ static const int reg2pt_regs[] = {
- 	[BPF_REG_AX] = offsetof(struct pt_regs, r10),
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
+index 1ad5d03d07adb..222c63b15de03 100644
+--- a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
++++ b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
+@@ -68,6 +68,12 @@ static void test_and(struct arena_atomics *skel)
  
-+static bool is_atomic_fetch_op(const struct bpf_insn *insn)
+ 	ASSERT_EQ(skel->arena->and64_value, 0x010ull << 32, "and64_value");
+ 	ASSERT_EQ(skel->arena->and32_value, 0x010, "and32_value");
++
++	ASSERT_EQ(skel->arena->and64_result, 0x110ull << 32, "and64_result");
++	ASSERT_EQ(skel->arena->and32_result, 0x110, "and32_result");
++
++	ASSERT_EQ(skel->arena->and64_noreturn_value, 0x010ull << 32, "and64_noreturn_value");
++	ASSERT_EQ(skel->arena->and32_noreturn_value, 0x010, "and32_noreturn_value");
+ }
+ 
+ static void test_or(struct arena_atomics *skel)
+@@ -85,6 +91,12 @@ static void test_or(struct arena_atomics *skel)
+ 
+ 	ASSERT_EQ(skel->arena->or64_value, 0x111ull << 32, "or64_value");
+ 	ASSERT_EQ(skel->arena->or32_value, 0x111, "or32_value");
++
++	ASSERT_EQ(skel->arena->or64_result, 0x110ull << 32, "or64_result");
++	ASSERT_EQ(skel->arena->or32_result, 0x110, "or32_result");
++
++	ASSERT_EQ(skel->arena->or64_noreturn_value, 0x111ull << 32, "or64_noreturn_value");
++	ASSERT_EQ(skel->arena->or32_noreturn_value, 0x111, "or32_noreturn_value");
+ }
+ 
+ static void test_xor(struct arena_atomics *skel)
+@@ -102,6 +114,12 @@ static void test_xor(struct arena_atomics *skel)
+ 
+ 	ASSERT_EQ(skel->arena->xor64_value, 0x101ull << 32, "xor64_value");
+ 	ASSERT_EQ(skel->arena->xor32_value, 0x101, "xor32_value");
++
++	ASSERT_EQ(skel->arena->xor64_result, 0x110ull << 32, "xor64_result");
++	ASSERT_EQ(skel->arena->xor32_result, 0x110, "xor32_result");
++
++	ASSERT_EQ(skel->arena->xor64_noreturn_value, 0x101ull << 32, "xor64_noreturn_value");
++	ASSERT_EQ(skel->arena->xor32_noreturn_value, 0x101, "xor32_noreturn_value");
+ }
+ 
+ static void test_cmpxchg(struct arena_atomics *skel)
+@@ -146,6 +164,27 @@ static void test_xchg(struct arena_atomics *skel)
+ 	ASSERT_EQ(skel->arena->xchg32_result, 1, "xchg32_result");
+ }
+ 
++static void test_fetch_r0(struct arena_atomics *skel)
 +{
-+	return insn->imm == (BPF_AND | BPF_FETCH) ||
-+	       insn->imm == (BPF_OR | BPF_FETCH) ||
-+	       insn->imm == (BPF_XOR | BPF_FETCH);
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err, prog_fd;
++
++	/* No need to attach it, just run it directly */
++	prog_fd = bpf_program__fd(skel->progs.fetch_r0);
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	if (!ASSERT_OK(err, "test_run_opts err"))
++		return;
++	if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
++		return;
++
++	ASSERT_EQ(skel->arena->fetch_src_r0_value, 0x11100000111ull, "fetch_src_r0_value");
++	ASSERT_EQ(skel->arena->fetch_src_r0_result, 0x11000000110ull, "fetch_src_r0_result");
++
++	ASSERT_EQ(skel->arena->fetch_dst_r0_value, 0x11100000111ull, "fetch_dst_r0_value");
++	ASSERT_EQ(skel->arena->fetch_dst_r0_result, 0x11000000110ull, "fetch_dst_r0_result");
++	ASSERT_EQ(skel->arena->fetch_dst_r0_readback, 0x11100000111ull, "fetch_dst_r0_readback");
 +}
 +
- /*
-  * is_ereg() == true if BPF register 'reg' maps to x86-64 r8..r15
-  * which need extra byte of encoding.
-@@ -1784,6 +1791,93 @@ static int emit_atomic_ld_st_index(u8 **pprog, u32 atomic_op, u32 size,
+ static void test_uaf(struct arena_atomics *skel)
+ {
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts);
+@@ -160,6 +199,18 @@ static void test_uaf(struct arena_atomics *skel)
+ 		return;
+ 
+ 	ASSERT_EQ(skel->arena->uaf_recovery_fails, 0, "uaf_recovery_fails");
++
++#ifndef __powerpc64__
++	/*
++	 * A fault clears the fetched register and leaves the address alone. The
++	 * powerpc64 JIT does not clear the register of a faulting atomic yet.
++	 */
++	ASSERT_EQ(skel->arena->uaf_r1_after_dst_r0, 0, "uaf_r1_after_dst_r0");
++	ASSERT_EQ(skel->arena->uaf_r0_after_dst_r0, skel->arena->uaf_r0_before_dst_r0,
++		  "uaf_r0_after_dst_r0");
++	ASSERT_EQ(skel->arena->uaf_r0_after_src_r0, 0, "uaf_r0_after_src_r0");
++	ASSERT_EQ(skel->arena->uaf_reread, 0, "uaf_reread");
++#endif
+ }
+ 
+ static void test_load_acquire(struct arena_atomics *skel)
+@@ -256,6 +307,8 @@ void serial_test_arena_atomics(void)
+ 		test_cmpxchg(skel);
+ 	if (test__start_subtest("xchg"))
+ 		test_xchg(skel);
++	if (test__start_subtest("fetch_r0"))
++		test_fetch_r0(skel);
+ 	if (test__start_subtest("uaf"))
+ 		test_uaf(skel);
+ 	if (test__start_subtest("load_acquire"))
+diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
+index 73bc2b835f3fe..ce76a73d197bb 100644
+--- a/tools/testing/selftests/bpf/progs/arena_atomics.c
++++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
+@@ -91,13 +91,17 @@ int sub(const void *ctx)
  	return 0;
  }
  
+-#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
+-_Atomic __u64 __arena_global and64_value = (0x110ull << 32);
+-_Atomic __u32 __arena_global and32_value = 0x110;
+-#else
 +/*
-+ * A fetching AND/OR/XOR can't be implemented with a single x86 insn, so do a
-+ * CMPXCHG loop. @index_reg is X86_REG_R12 for an arena access or -1 otherwise.
-+ * Unless @r0_on_stack, the caller has substituted BPF_REG_AX for R0 in
-+ * @dst_reg and @src_reg.
-+ *
-+ * Both the load and the CMPXCHG can fault when accessing the arena, so their
-+ * addresses are handed back in @fault[0] and @fault[1]. A fault has to resume
-+ * at @resume, which is past the loop and past the move that delivers the old
-+ * value, but before R0 is restored. Both are NULL for the non-arena case,
-+ * which needs no fixup.
-+ *
-+ * R0 is expected to be saved in BPF_REG_AX by the caller, or pushed on the
-+ * stack if @r0_on_stack. In that case an R0 operand stays in the stack slot,
-+ * RAX ends up holding the old value that R0 is to return, and the slot is
-+ * dropped rather than popped.
++ * A relaxed __c11_atomic_fetch_*() whose result is discarded is what selects
++ * the non-fetching insn, so each operation keeps a *_noreturn_value of each
++ * width to cover that lowering as well.
 + */
-+static int emit_atomic_fetch_rmw(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
-+				 u32 src_reg, int index_reg, bool r0_on_stack,
-+				 u8 **fault, u8 **resume)
-+{
-+	bool is64 = BPF_SIZE(insn->code) == BPF_DW;
-+	bool operand_on_stack = r0_on_stack && src_reg == BPF_REG_0;
-+	u8 *branch_target, *prog = *pprog;
-+	int err;
-+
-+	branch_target = prog;
-+
-+	/* Load old value */
-+	if (fault)
-+		fault[0] = prog;
-+	if (index_reg < 0)
-+		emit_ldx(&prog, BPF_SIZE(insn->code), BPF_REG_0, dst_reg, insn->off);
-+	else
-+		emit_ldx_index(&prog, BPF_SIZE(insn->code), BPF_REG_0, dst_reg,
-+			       index_reg, insn->off);
-+
-+	/*
-+	 * Perform the (commutative) operation locally, put the result in
-+	 * the AUX_REG.
-+	 */
-+	if (operand_on_stack) {
-+		/* mov r11, [rsp]: the operand is the R0 saved there, RAX is the old value */
-+		if (is64)
-+			EMIT4(0x4C, 0x8B, 0x1C, 0x24);
-+		else
-+			EMIT4(0x44, 0x8B, 0x1C, 0x24);
-+	} else {
-+		emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
-+	}
-+	maybe_emit_mod(&prog, AUX_REG, src_reg, is64);
-+	EMIT2(simple_alu_opcodes[BPF_OP(insn->imm)],
-+	      add_2reg(0xC0, AUX_REG, src_reg));
-+
-+	/* Attempt to swap in new value */
-+	if (fault)
-+		fault[1] = prog;
-+	if (index_reg < 0)
-+		err = emit_atomic_rmw(&prog, BPF_CMPXCHG, dst_reg, AUX_REG,
-+				      insn->off, BPF_SIZE(insn->code));
-+	else
-+		err = emit_atomic_rmw_index(&prog, BPF_CMPXCHG, BPF_SIZE(insn->code),
-+					    dst_reg, AUX_REG, index_reg, insn->off);
-+	if (WARN_ON(err))
-+		return err;
-+
-+	/* ZF tells us whether we won the race. If it's cleared we need to try again. */
-+	EMIT2(X86_JNE, -(prog - branch_target) - 2);
-+	/* Return the pre-modification value, which RAX already is for R0 */
-+	if (!operand_on_stack)
-+		emit_mov_reg(&prog, is64, src_reg, BPF_REG_0);
-+
-+	if (resume)
-+		*resume = prog;
-+
-+	/* Restore R0 after clobbering RAX */
-+	if (!r0_on_stack)
-+		emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
-+	else if (operand_on_stack)
-+		EMIT2(0x41, 0x5B); /* pop r11, dropping the operand */
-+	else
-+		EMIT1(0x58); /* pop rax */
-+
-+	*pprog = prog;
-+	return 0;
-+}
-+
- /*
-  * Metadata encoding for exception handling in JITed code.
-  *
-@@ -1797,7 +1891,12 @@ static int emit_atomic_ld_st_index(u8 **pprog, u32 atomic_op, u32 size,
-  * | ARENA_ACC | ARENA_WRITE | Unused | ARENA_REG | DST_REG | INSN_LEN |
-  * +-----------+-------------+--------+-----------+---------+----------+
-  *
-- * - INSN_LEN (8 bits): Length of faulting insn (max x86 insn = 15 bytes (fits in 8 bits)).
-+ * - INSN_LEN (8 bits): How far past the faulting insn to resume. That is its own length
-+ *                      for a single-insn access, but the distance to the end of the whole
-+ *                      sequence where one BPF insn became several, as for the CMPXCHG loop
-+ *                      of a fetching AND/OR/XOR. A sequence long enough to overflow this
-+ *                      field would first have to exceed BPF_MAX_INSN_SIZE, which do_jit()
-+ *                      rejects with -EFAULT before the image is used.
-  * - DST_REG  (8 bits): Offset of dst_reg from reg2pt_regs[] (max offset = 112 (fits in 8 bits)).
-  *                      This is set to DONT_CLEAR if the insn does not read into a register.
-  * - ARENA_REG (8 bits): Offset of the register that is used to calculate the
-@@ -1844,7 +1943,7 @@ bool ex_handler_bpf(const struct exception_table_entry *x, struct pt_regs *regs)
- 		bpf_prog_report_arena_violation(is_write, addr, regs->ip);
- 	}
+ __u64 __arena_global and64_value = (0x110ull << 32);
++__u64 __arena_global and64_result = 0;
++_Atomic __u64 __arena_global and64_noreturn_value = (0x110ull << 32);
+ __u32 __arena_global and32_value = 0x110;
+-#endif
++__u32 __arena_global and32_result = 0;
++_Atomic __u32 __arena_global and32_noreturn_value = 0x110;
  
--	/* jump over faulting load and clear dest register */
-+	/* jump over the faulting access, or the sequence it is part of, and clear dest register */
- 	if (reg != DONT_CLEAR)
- 		*(unsigned long *)((void *)regs + reg) = 0;
- 	regs->ip += insn_len;
-@@ -1852,6 +1951,44 @@ bool ex_handler_bpf(const struct exception_table_entry *x, struct pt_regs *regs)
- 	return true;
+ SEC("raw_tp/sys_enter")
+ int and(const void *ctx)
+@@ -105,25 +109,22 @@ int and(const void *ctx)
+ 	if (pid != (bpf_get_current_pid_tgid() >> 32))
+ 		return 0;
+ #ifdef ENABLE_ATOMICS_TESTS
+-#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
+-	__c11_atomic_fetch_and(&and64_value, 0x011ull << 32, memory_order_relaxed);
+-	__c11_atomic_fetch_and(&and32_value, 0x011, memory_order_relaxed);
+-#else
+-	__sync_fetch_and_and(&and64_value, 0x011ull << 32);
+-	__sync_fetch_and_and(&and32_value, 0x011);
+-#endif
++	and64_result = __sync_fetch_and_and(&and64_value, 0x011ull << 32);
++	and32_result = __sync_fetch_and_and(&and32_value, 0x011);
++	__c11_atomic_fetch_and(&and64_noreturn_value, 0x011ull << 32, memory_order_relaxed);
++	__c11_atomic_fetch_and(&and32_noreturn_value, 0x011, memory_order_relaxed);
+ #endif
+ 
+ 	return 0;
  }
  
-+/*
-+ * Record an arena access that may fault. @fault_ip is the address of the
-+ * faulting insn in the RO image, @resume_off how far past it execution has to
-+ * resume: for a multi-insn lowering that is the end of the whole sequence, not
-+ * the end of the one insn.
-+ */
-+static int emit_arena_exentry(struct bpf_prog *bpf_prog, u8 *image, u8 *rw_image,
-+			      int *excnt, u8 *fault_ip, u32 resume_off,
-+			      u32 fixup_reg, u32 arena_reg, bool is_write, s16 off)
-+{
-+	struct exception_table_entry *ex;
-+	s64 delta;
+-#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
+-_Atomic __u32 __arena_global or32_value = 0x110;
+-_Atomic __u64 __arena_global or64_value = (0x110ull << 32);
+-#else
++/* u32s first: .addr_space.1 must not have holes, see the clang-17 note below */
+ __u32 __arena_global or32_value = 0x110;
++__u32 __arena_global or32_result = 0;
++_Atomic __u32 __arena_global or32_noreturn_value = 0x110;
+ __u64 __arena_global or64_value = (0x110ull << 32);
+-#endif
++__u64 __arena_global or64_result = 0;
++_Atomic __u64 __arena_global or64_noreturn_value = (0x110ull << 32);
+ 
+ SEC("raw_tp/sys_enter")
+ int or(const void *ctx)
+@@ -131,25 +132,21 @@ int or(const void *ctx)
+ 	if (pid != (bpf_get_current_pid_tgid() >> 32))
+ 		return 0;
+ #ifdef ENABLE_ATOMICS_TESTS
+-#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
+-	__c11_atomic_fetch_or(&or64_value, 0x011ull << 32, memory_order_relaxed);
+-	__c11_atomic_fetch_or(&or32_value, 0x011, memory_order_relaxed);
+-#else
+-	__sync_fetch_and_or(&or64_value, 0x011ull << 32);
+-	__sync_fetch_and_or(&or32_value, 0x011);
+-#endif
++	or64_result = __sync_fetch_and_or(&or64_value, 0x011ull << 32);
++	or32_result = __sync_fetch_and_or(&or32_value, 0x011);
++	__c11_atomic_fetch_or(&or64_noreturn_value, 0x011ull << 32, memory_order_relaxed);
++	__c11_atomic_fetch_or(&or32_noreturn_value, 0x011, memory_order_relaxed);
+ #endif
+ 
+ 	return 0;
+ }
+ 
+-#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
+-_Atomic __u64 __arena_global xor64_value = (0x110ull << 32);
+-_Atomic __u32 __arena_global xor32_value = 0x110;
+-#else
+ __u64 __arena_global xor64_value = (0x110ull << 32);
++__u64 __arena_global xor64_result = 0;
++_Atomic __u64 __arena_global xor64_noreturn_value = (0x110ull << 32);
+ __u32 __arena_global xor32_value = 0x110;
+-#endif
++__u32 __arena_global xor32_result = 0;
++_Atomic __u32 __arena_global xor32_noreturn_value = 0x110;
+ 
+ SEC("raw_tp/sys_enter")
+ int xor(const void *ctx)
+@@ -157,13 +154,10 @@ int xor(const void *ctx)
+ 	if (pid != (bpf_get_current_pid_tgid() >> 32))
+ 		return 0;
+ #ifdef ENABLE_ATOMICS_TESTS
+-#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
+-	__c11_atomic_fetch_xor(&xor64_value, 0x011ull << 32, memory_order_relaxed);
+-	__c11_atomic_fetch_xor(&xor32_value, 0x011, memory_order_relaxed);
+-#else
+-	__sync_fetch_and_xor(&xor64_value, 0x011ull << 32);
+-	__sync_fetch_and_xor(&xor32_value, 0x011);
+-#endif
++	xor64_result = __sync_fetch_and_xor(&xor64_value, 0x011ull << 32);
++	xor32_result = __sync_fetch_and_xor(&xor32_value, 0x011);
++	__c11_atomic_fetch_xor(&xor64_noreturn_value, 0x011ull << 32, memory_order_relaxed);
++	__c11_atomic_fetch_xor(&xor32_noreturn_value, 0x011, memory_order_relaxed);
+ #endif
+ 
+ 	return 0;
+@@ -213,23 +207,96 @@ int xchg(const void *ctx)
+ 	return 0;
+ }
+ 
++__u64 __arena_global fetch_src_r0_value = 0x11000000110ull;
++__u64 __arena_global fetch_src_r0_result = 0;
++__u64 __arena_global fetch_dst_r0_value = 0x11000000110ull;
++__u64 __arena_global fetch_dst_r0_result = 0;
++__u64 __arena_global fetch_dst_r0_readback = 0;
 +
-+	if (!bpf_prog->aux->extable)
++/*
++ * A fetching OR with the operand in r0, and one with the arena pointer in r0.
++ * The x86 JIT needs RAX for its CMPXCHG loop and substitutes BPF_REG_AX for
++ * whichever of the two is r0, so both have to keep working. Hand-written
++ * because clang picks its own registers and will not reliably emit either.
++ */
++SEC("raw_tp/sys_enter")
++int fetch_r0(const void *ctx)
++{
++	if (pid != (bpf_get_current_pid_tgid() >> 32))
 +		return 0;
++#if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++	asm volatile (
++	"r1 = %[fetch_src_r0_value] ll;"
++	"r1 = addr_space_cast(r1, 0x0, 0x1);"
++	"r0 = 0x1100000011 ll;"
++	".8byte %[fetch_src_r0_insn];"
++	"r2 = %[fetch_src_r0_result] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r0;"
++	:
++	: __imm_addr(fetch_src_r0_value),
++	  __imm_insn(fetch_src_r0_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH, BPF_REG_1, BPF_REG_0, 0)),
++	  __imm_addr(fetch_src_r0_result)
++	: __clobber_all);
 +
-+	if (*excnt >= bpf_prog->aux->num_exentries) {
-+		pr_err("arena extable bug\n");
-+		return -EFAULT;
-+	}
-+	ex = &bpf_prog->aux->extable[(*excnt)++];
-+
-+	delta = fault_ip - (u8 *)&ex->insn;
-+	/* switch ex to rw buffer for writes */
-+	ex = (void *)rw_image + ((void *)ex - (void *)image);
-+
-+	ex->insn = delta;
-+	ex->data = EX_TYPE_BPF | FIELD_PREP(DATA_ARENA_OFFSET_MASK, off);
-+	ex->fixup = FIELD_PREP(FIXUP_INSN_LEN_MASK, resume_off) |
-+		    FIELD_PREP(FIXUP_ARENA_REG_MASK, arena_reg) |
-+		    FIELD_PREP(FIXUP_REG_MASK, fixup_reg) |
-+		    FIXUP_ARENA_ACCESS;
-+	if (is_write)
-+		ex->fixup |= FIXUP_ARENA_WRITE;
++	asm volatile (
++	"r0 = %[fetch_dst_r0_value] ll;"
++	"r0 = addr_space_cast(r0, 0x0, 0x1);"
++	"r1 = 0x1100000011 ll;"
++	".8byte %[fetch_dst_r0_insn];"
++	"r2 = %[fetch_dst_r0_result] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r1;"
++	/* r0 is only read by the atomic, so it must still be the pointer. */
++	"r3 = *(u64 *)(r0 + 0);"
++	"r2 = %[fetch_dst_r0_readback] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r3;"
++	:
++	: __imm_addr(fetch_dst_r0_value),
++	  __imm_insn(fetch_dst_r0_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH, BPF_REG_0, BPF_REG_1, 0)),
++	  __imm_addr(fetch_dst_r0_result),
++	  __imm_addr(fetch_dst_r0_readback)
++	: __clobber_all);
++#endif
 +
 +	return 0;
 +}
 +
- static void detect_reg_usage(struct bpf_insn *insn, int insn_cnt,
- 			     bool *regs_used)
+ __u64 __arena_global uaf_sink;
+ volatile __u64 __arena_global uaf_recovery_fails;
++/* Register state after the r0 forms below fault, checked by the test */
++__u64 __arena_global uaf_r1_after_dst_r0;
++__u64 __arena_global uaf_r0_before_dst_r0;
++__u64 __arena_global uaf_r0_after_dst_r0;
++__u64 __arena_global uaf_r0_after_src_r0;
++/* What reading the faulted address again gives, see the end of uaf() */
++__u64 __arena_global uaf_reread;
+ 
+ SEC("syscall")
+ int uaf(const void *ctx)
  {
-@@ -2967,28 +3104,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			}
- populate_extable:
- 			{
--				struct exception_table_entry *ex;
--				u8 *_insn = image + proglen + (start_of_ldx - temp);
- 				u32 arena_reg, fixup_reg;
- 				bool is_write;
--				s64 delta;
--
--				if (!bpf_prog->aux->extable)
--					break;
--
--				if (excnt >= bpf_prog->aux->num_exentries) {
--					pr_err("mem32 extable bug\n");
--					return -EFAULT;
--				}
--				ex = &bpf_prog->aux->extable[excnt++];
--
--				delta = _insn - (u8 *)&ex->insn;
--				/* switch ex to rw buffer for writes */
--				ex = (void *)rw_image + ((void *)ex - (void *)image);
--
--				ex->insn = delta;
--
--				ex->data = EX_TYPE_BPF;
+ 	if (pid != (bpf_get_current_pid_tgid() >> 32))
+ 		return 0;
++/*
++ * __BPF_FEATURE_ADDR_SPACE_CAST is required by the asm below, which spells
++ * addr_space_cast textually. That and the mnemonic both arrived in LLVM 19.
++ */
+ #if defined(ENABLE_ATOMICS_TESTS) && !defined(__TARGET_ARCH_arm64) && \
+-    !defined(__TARGET_ARCH_x86)
++	defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ 	__u32 __arena *page32;
+ 	__u64 __arena *page64;
+ 	void __arena *page;
  
- 				/*
- 				 * src_reg/dst_reg holds the address in the arena region with upper
-@@ -3024,14 +3141,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 					is_write = true;
- 				}
+ 	page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+ 	bpf_arena_free_pages(&arena, page, 1);
+-	uaf_recovery_fails = 24;
++	uaf_recovery_fails = 26;
++	uaf_r1_after_dst_r0 = 1;
++	uaf_r0_after_dst_r0 = 1;
++	uaf_r0_after_src_r0 = 1;
++	uaf_reread = 1;
  
--				ex->fixup = FIELD_PREP(FIXUP_INSN_LEN_MASK, prog - start_of_ldx) |
--					    FIELD_PREP(FIXUP_ARENA_REG_MASK, arena_reg) |
--					    FIELD_PREP(FIXUP_REG_MASK, fixup_reg);
--				ex->fixup |= FIXUP_ARENA_ACCESS;
--				if (is_write)
--					ex->fixup |= FIXUP_ARENA_WRITE;
--
--				ex->data |= FIELD_PREP(DATA_ARENA_OFFSET_MASK, insn->off);
-+				err = emit_arena_exentry(bpf_prog, image, rw_image, &excnt,
-+							 image + proglen + (start_of_ldx - temp),
-+							 prog - start_of_ldx, fixup_reg,
-+							 arena_reg, is_write, insn->off);
-+				if (err)
-+					return err;
- 			}
- 			break;
- 
-@@ -3177,20 +3292,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			fallthrough;
- 		case BPF_STX | BPF_ATOMIC | BPF_W:
- 		case BPF_STX | BPF_ATOMIC | BPF_DW: {
--			bool is64 = BPF_SIZE(insn->code) == BPF_DW;
- 			u32 real_src_reg = src_reg;
- 			u32 real_dst_reg = dst_reg;
-+			bool is_atomic_fetch = is_atomic_fetch_op(insn);
- 			u8 *old_prog;
--			bool is_atomic_fetch =
--				(insn->imm == (BPF_AND | BPF_FETCH) ||
--				 insn->imm == (BPF_OR | BPF_FETCH) ||
--				 insn->imm == (BPF_XOR | BPF_FETCH));
--			if (is_atomic_fetch) {
--				/*
--				 * Can't be implemented with a single x86 insn.
--				 * Need to do a CMPXCHG loop.
--				 */
- 
-+			if (is_atomic_fetch) {
- 				/* Will need RAX as a CMPXCHG operand so save R0 */
- 				old_prog = prog;
- 				emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
-@@ -3211,34 +3318,11 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 				}
- 			}
- 			if (is_atomic_fetch) {
--				u8 *branch_target = prog;
--				/* Load old value */
--				emit_ldx(&prog, BPF_SIZE(insn->code),
--					 BPF_REG_0, real_dst_reg, insn->off);
--				/*
--				 * Perform the (commutative) operation locally,
--				 * put the result in the AUX_REG.
--				 */
--				emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
--				maybe_emit_mod(&prog, AUX_REG, real_src_reg, is64);
--				EMIT2(simple_alu_opcodes[BPF_OP(insn->imm)],
--				      add_2reg(0xC0, AUX_REG, real_src_reg));
--				/* Attempt to swap in new value */
--				err = emit_atomic_rmw(&prog, BPF_CMPXCHG,
--						      real_dst_reg, AUX_REG,
--						      insn->off,
--						      BPF_SIZE(insn->code));
--				if (WARN_ON(err))
-+				err = emit_atomic_fetch_rmw(&prog, insn, real_dst_reg,
-+							    real_src_reg, -1, false,
-+							    NULL, NULL);
-+				if (err)
- 					return err;
--				/*
--				 * ZF tells us whether we won the race. If it's
--				 * cleared we need to try again.
--				 */
--				EMIT2(X86_JNE, -(prog - branch_target) - 2);
--				/* Return the pre-modification value */
--				emit_mov_reg(&prog, is64, real_src_reg, BPF_REG_0);
--				/* Restore R0 after clobbering RAX */
--				emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
- 				break;
- 			}
- 
-@@ -3262,6 +3346,53 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			fallthrough;
- 		case BPF_STX | BPF_PROBE_ATOMIC | BPF_W:
- 		case BPF_STX | BPF_PROBE_ATOMIC | BPF_DW:
-+			if (is_atomic_fetch_op(insn)) {
-+				u32 real_src_reg = src_reg, real_dst_reg = dst_reg;
-+				/*
-+				 * An access through a number has its address in
-+				 * BPF_REG_AX (see arena_scalar_access()), so R0 is
-+				 * saved on the stack instead, as div and mod do.
-+				 */
-+				bool r0_on_stack = dst_reg == BPF_REG_AX;
-+				u8 *fault[2], *resume;
-+				int j;
-+
-+				/* Will need RAX as a CMPXCHG operand so save R0 */
-+				if (r0_on_stack) {
-+					EMIT1(0x50); /* push rax */
-+				} else {
-+					emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
-+					if (src_reg == BPF_REG_0)
-+						real_src_reg = BPF_REG_AX;
-+					if (dst_reg == BPF_REG_0)
-+						real_dst_reg = BPF_REG_AX;
-+				}
-+
-+				err = emit_atomic_fetch_rmw(&prog, insn, real_dst_reg,
-+							    real_src_reg, X86_REG_R12,
-+							    r0_on_stack, fault, &resume);
-+				if (err)
-+					return err;
-+
-+				/*
-+				 * The page may be unmapped between the load and the
-+				 * CMPXCHG, so both need an entry. Both report a write,
-+				 * since the BPF insn is a read-modify-write.
-+				 */
-+				for (j = 0; j < 2; j++) {
-+					err = emit_arena_exentry(bpf_prog, image, rw_image,
-+								 &excnt,
-+								 image + proglen +
-+									 (fault[j] - temp),
-+								 resume - fault[j],
-+								 reg2pt_regs[real_src_reg],
-+								 reg2pt_regs[real_dst_reg],
-+								 true, insn->off);
-+					if (err)
-+						return err;
-+				}
-+				break;
-+			}
- 			start_of_ldx = prog;
- 
- 			if (bpf_atomic_is_load_store(insn))
-@@ -4707,6 +4838,22 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 		padding = true;
- 		goto skip_init_addrs;
- 	}
+ 	page32 = (__u32 __arena *)page;
+ 	uaf_sink += __sync_fetch_and_add(page32, 1);
+@@ -282,6 +349,74 @@ int uaf(const void *ctx)
+ 	uaf_recovery_fails -= 1;
+ 	uaf_sink += __sync_lock_test_and_set(page64, 1);
+ 	uaf_recovery_fails -= 1;
 +
 +	/*
-+	 * An arena fetching AND/OR/XOR is lowered to a CMPXCHG loop whose load
-+	 * and CMPXCHG can both fault, one more entry than the verifier reserved.
-+	 * The extra pass of a program with subprograms returned above, so the
-+	 * count is adjusted once.
++	 * The x86 JIT needs RAX for the CMPXCHG loop it lowers a fetching
++	 * AND/OR/XOR into, and substitutes BPF_REG_AX for r0 when r0 is either
++	 * operand. Only then does the fault fixup have to name that register,
++	 * so spell both forms out: clang picks its own and never produces them.
++	 *
++	 * The freed page is the first of the arena, whose 32-bit address is 0,
++	 * which would make "the address register was left alone" an empty
++	 * check. Use the page after it, which is unmapped as well.
 +	 */
-+	for (i = 0; prog->aux->arena && i < prog->len; i++) {
-+		const struct bpf_insn *insn = &prog->insnsi[i];
++	asm volatile (
++	"r0 = %[page];"
++	"r0 += 4096;"
++	"r0 = addr_space_cast(r0, 0x0, 0x1);"
++	"r1 = 1;"
++	"r2 = %[uaf_r0_before_dst_r0] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r0;"
++	".8byte %[fetch_dst_r0];"
++	"r2 = %[uaf_r0_after_dst_r0] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r0;"
++	"r2 = %[uaf_r1_after_dst_r0] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r1;"
++	: : [page]"r"(page64),
++	    __imm_insn(fetch_dst_r0,
++		       BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH, BPF_REG_0, BPF_REG_1, 0)),
++	    __imm_addr(uaf_r0_before_dst_r0),
++	    __imm_addr(uaf_r0_after_dst_r0),
++	    __imm_addr(uaf_r1_after_dst_r0)
++	: "r0", "r1", "r2", "memory");
++	uaf_recovery_fails -= 1;
 +
-+		if (BPF_CLASS(insn->code) == BPF_STX &&
-+		    BPF_MODE(insn->code) == BPF_PROBE_ATOMIC &&
-+		    is_atomic_fetch_op(insn))
-+			prog->aux->num_exentries++;
-+	}
++	asm volatile (
++	"r1 = %[page];"
++	"r1 += 4096;"
++	"r1 = addr_space_cast(r1, 0x0, 0x1);"
++	"r0 = 1;"
++	".8byte %[fetch_src_r0];"
++	"r2 = %[uaf_r0_after_src_r0] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r0;"
++	: : [page]"r"(page64),
++	    __imm_insn(fetch_src_r0,
++		       BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH, BPF_REG_1, BPF_REG_0, 0)),
++	    __imm_addr(uaf_r0_after_src_r0)
++	: "r0", "r1", "r2", "memory");
++	uaf_recovery_fails -= 1;
 +
- 	addrs = kvmalloc_objs(*addrs, prog->len + 1);
- 	if (!addrs)
- 		goto out_addrs;
-@@ -4761,7 +4908,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 			 * The number of entries in extable is the number of BPF_LDX
- 			 * insns that access kernel memory via "pointer to BTF type".
- 			 * The verifier changed their opcode from LDX|MEM|size
--			 * to LDX|PROBE_MEM|size to make JITing easier.
-+			 * to LDX|PROBE_MEM|size to make JITing easier. Arena
-+			 * accesses add one each, and an arena fetching AND/OR/XOR
-+			 * one more, see the adjustment of num_exentries above.
- 			 */
- 			u32 align = __alignof__(struct exception_table_entry);
- 			u32 extable_size = prog->aux->num_exentries *
-@@ -5035,16 +5184,6 @@ bool bpf_jit_supports_arena_scalar(void)
++	/*
++	 * If a fault were recovered by the arena mapping its zeroed scratch
++	 * page rather than by the JIT's exception table entry, the access above
++	 * would have succeeded and written there. The page has to still be
++	 * unmapped, so that the read faults and gives 0.
++	 */
++	asm volatile (
++	"r1 = %[page];"
++	"r1 += 4096;"
++	"r1 = addr_space_cast(r1, 0x0, 0x1);"
++	"r3 = *(u64 *)(r1 + 0);"
++	"r2 = %[uaf_reread] ll;"
++	"r2 = addr_space_cast(r2, 0x0, 0x1);"
++	"*(u64 *)(r2 + 0) = r3;"
++	: : [page]"r"(page64),
++	    __imm_addr(uaf_reread)
++	: "r1", "r2", "r3", "memory");
+ #endif
  
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c b/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
+index bebc37f501b7e..ecfc6873ffa95 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
+@@ -7,6 +7,7 @@
+ 
+ void *bpf_arena_alloc_pages(void *map, void *addr, __u32 page_cnt, int node_id,
+ 			    __u64 flags) __ksym;
++void bpf_arena_free_pages(void *map, void *ptr, __u32 page_cnt) __ksym;
+ 
+ #ifdef __TARGET_ARCH_arm64
+ #define ARENA_VM_START (1ull << 32)
+@@ -35,6 +36,7 @@ struct {
+ void __kfunc_btf_root(void)
  {
--	if (!in_arena)
--		return true;
--	switch (insn->code) {
--	case BPF_STX | BPF_ATOMIC | BPF_W:
--	case BPF_STX | BPF_ATOMIC | BPF_DW:
--		if (insn->imm == (BPF_AND | BPF_FETCH) ||
--		    insn->imm == (BPF_OR | BPF_FETCH) ||
--		    insn->imm == (BPF_XOR | BPF_FETCH))
--			return false;
--	}
- 	return true;
+ 	bpf_arena_alloc_pages(0, 0, 0, 0, 0);
++	bpf_arena_free_pages(0, 0, 0);
  }
  
+ /* Tests start with r6 = address of a new page as the user space sees it, a number */
+@@ -256,6 +258,260 @@ __naked void atomics(void)
+ 	: __clobber_all);
+ }
+ 
++SEC("syscall")
++__arena_scalar
++__description("arena_scalar: fetching and/or/xor")
++__success __retval(0)
++__load_if_JITed()
++__naked void fetch_and_or_xor(void)
++{
++	asm volatile ("					\
++	r1 = %[arena] ll;				\
++	r2 = 0;						\
++	r3 = 1;						\
++	r4 = -1;					\
++	r5 = 0;						\
++	call %[bpf_arena_alloc_pages];			\
++	r6 = r0;					\
++	r0 = 100;					\
++	if r6 == 0 goto 9f;				\
++	r7 = 0x11000000110 ll;				\
++	*(u64 *)(r6 + 8) = r7;				\
++	r0 = r6;					\
++	r0 ^= 0x55;					\
++	r1 = 0x1100000011 ll;				\
++	.8byte %[fetch_or_dw]; /* r1 = atomic_fetch_or((u64 *)(r6 + 8), r1) */ \
++	r2 = r6;					\
++	r2 ^= 0x55;					\
++	if r0 == r2 goto 1f;				\
++	r0 = 99;					\
++	goto 9f;					\
++1:	r0 = 1;						\
++	if r1 != r7 goto 9f;				\
++	r7 = 0x11100000111 ll;				\
++	r1 = 0x11000000111 ll;				\
++	.8byte %[fetch_and_dw]; /* r1 = atomic_fetch_and((u64 *)(r6 + 8), r1) */ \
++	r0 = 2;						\
++	if r1 != r7 goto 9f;				\
++	r7 = 0x11000000111 ll;				\
++	r1 = 0x101 ll;					\
++	.8byte %[fetch_xor_dw]; /* r1 = atomic_fetch_xor((u64 *)(r6 + 8), r1) */ \
++	r0 = 3;						\
++	if r1 != r7 goto 9f;				\
++	r7 = 0x11000000010 ll;				\
++	r2 = *(u64 *)(r6 + 8);				\
++	r0 = 4;						\
++	if r2 != r7 goto 9f;				\
++	*(u32 *)(r6 + 16) = 0x110;			\
++	r1 = 0xdead000000000011 ll;			\
++	.8byte %[fetch_or_w]; /* r1 = atomic_fetch_or((u32 *)(r6 + 16), r1) */ \
++	r0 = 5;						\
++	if r1 != 0x110 goto 9f;				\
++	r1 = 0xdead000000000101 ll;			\
++	.8byte %[fetch_and_w]; /* r1 = atomic_fetch_and((u32 *)(r6 + 16), r1) */ \
++	r0 = 6;						\
++	if r1 != 0x111 goto 9f;				\
++	r1 = 0xdead000000000011 ll;			\
++	.8byte %[fetch_xor_w]; /* r1 = atomic_fetch_xor((u32 *)(r6 + 16), r1) */ \
++	r0 = 7;						\
++	if r1 != 0x101 goto 9f;				\
++	r2 = *(u32 *)(r6 + 16);				\
++	r0 = 8;						\
++	if r2 != 0x110 goto 9f;				\
++	r0 = 0;						\
++9:	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_arena_alloc_pages),
++	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
++						BPF_REG_6, BPF_REG_1, 8)),
++	  __imm_insn(fetch_and_dw, BPF_ATOMIC_OP(BPF_DW, BPF_AND | BPF_FETCH,
++						 BPF_REG_6, BPF_REG_1, 8)),
++	  __imm_insn(fetch_xor_dw, BPF_ATOMIC_OP(BPF_DW, BPF_XOR | BPF_FETCH,
++						 BPF_REG_6, BPF_REG_1, 8)),
++	  __imm_insn(fetch_or_w, BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH,
++					       BPF_REG_6, BPF_REG_1, 16)),
++	  __imm_insn(fetch_and_w, BPF_ATOMIC_OP(BPF_W, BPF_AND | BPF_FETCH,
++						BPF_REG_6, BPF_REG_1, 16)),
++	  __imm_insn(fetch_xor_w, BPF_ATOMIC_OP(BPF_W, BPF_XOR | BPF_FETCH,
++						BPF_REG_6, BPF_REG_1, 16))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__arena_scalar
++__description("arena_scalar: fetching and/or/xor with the operand in r0")
++__success __retval(0)
++__load_if_JITed()
++__naked void fetch_and_or_xor_r0(void)
++{
++	asm volatile ("					\
++	r1 = %[arena] ll;				\
++	r2 = 0;						\
++	r3 = 1;						\
++	r4 = -1;					\
++	r5 = 0;						\
++	call %[bpf_arena_alloc_pages];			\
++	r6 = r0;					\
++	r0 = 100;					\
++	if r6 == 0 goto 9f;				\
++	r7 = 0x11000000110 ll;				\
++	*(u64 *)(r6 + 8) = r7;				\
++	r0 = 0x1100000011 ll;				\
++	.8byte %[fetch_or_dw]; /* r0 = atomic_fetch_or((u64 *)(r6 + 8), r0) */ \
++	r2 = r0;					\
++	r0 = 1;						\
++	if r2 != r7 goto 9f;				\
++	r7 = 0x11100000111 ll;				\
++	r0 = 0x11000000111 ll;				\
++	.8byte %[fetch_and_dw]; /* r0 = atomic_fetch_and((u64 *)(r6 + 8), r0) */ \
++	r2 = r0;					\
++	r0 = 2;						\
++	if r2 != r7 goto 9f;				\
++	r7 = 0x11000000111 ll;				\
++	r0 = 0x101 ll;					\
++	.8byte %[fetch_xor_dw]; /* r0 = atomic_fetch_xor((u64 *)(r6 + 8), r0) */ \
++	r2 = r0;					\
++	r0 = 3;						\
++	if r2 != r7 goto 9f;				\
++	r7 = 0x11000000010 ll;				\
++	r2 = *(u64 *)(r6 + 8);				\
++	r0 = 4;						\
++	if r2 != r7 goto 9f;				\
++	*(u32 *)(r6 + 16) = 0x110;			\
++	r0 = 0xdead000000000011 ll;			\
++	.8byte %[fetch_or_w]; /* r0 = atomic_fetch_or((u32 *)(r6 + 16), r0) */ \
++	r2 = r0;					\
++	r0 = 5;						\
++	if r2 != 0x110 goto 9f;				\
++	r0 = 0xdead000000000101 ll;			\
++	.8byte %[fetch_and_w]; /* r0 = atomic_fetch_and((u32 *)(r6 + 16), r0) */ \
++	r2 = r0;					\
++	r0 = 6;						\
++	if r2 != 0x111 goto 9f;				\
++	r0 = 0xdead000000000011 ll;			\
++	.8byte %[fetch_xor_w]; /* r0 = atomic_fetch_xor((u32 *)(r6 + 16), r0) */ \
++	r2 = r0;					\
++	r0 = 7;						\
++	if r2 != 0x101 goto 9f;				\
++	r2 = *(u32 *)(r6 + 16);				\
++	r0 = 8;						\
++	if r2 != 0x110 goto 9f;				\
++	r0 = 0;						\
++9:	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_arena_alloc_pages),
++	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
++						BPF_REG_6, BPF_REG_0, 8)),
++	  __imm_insn(fetch_and_dw, BPF_ATOMIC_OP(BPF_DW, BPF_AND | BPF_FETCH,
++						 BPF_REG_6, BPF_REG_0, 8)),
++	  __imm_insn(fetch_xor_dw, BPF_ATOMIC_OP(BPF_DW, BPF_XOR | BPF_FETCH,
++						 BPF_REG_6, BPF_REG_0, 8)),
++	  __imm_insn(fetch_or_w, BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH,
++					       BPF_REG_6, BPF_REG_0, 16)),
++	  __imm_insn(fetch_and_w, BPF_ATOMIC_OP(BPF_W, BPF_AND | BPF_FETCH,
++						BPF_REG_6, BPF_REG_0, 16)),
++	  __imm_insn(fetch_xor_w, BPF_ATOMIC_OP(BPF_W, BPF_XOR | BPF_FETCH,
++						BPF_REG_6, BPF_REG_0, 16))
++	: __clobber_all);
++}
++
++/*
++ * The page is gone, so the access faults. The fetched register has to come back
++ * 0 and everything else has to be left alone, r0 included. Reading the address
++ * again has to give 0 as well: had the fault been recovered by the arena mapping
++ * its zeroed scratch page instead of by the JIT's exception table entry, the
++ * access would have succeeded and left a 1 there.
++ */
++SEC("syscall")
++__arena_scalar
++__description("arena_scalar: fetching or through a number to a freed page")
++__success __retval(0)
++__load_if_JITed()
++__naked void fetch_or_freed_page(void)
++{
++	asm volatile ("					\
++	r1 = %[arena] ll;				\
++	r2 = 0;						\
++	r3 = 1;						\
++	r4 = -1;					\
++	r5 = 0;						\
++	call %[bpf_arena_alloc_pages];			\
++	r6 = r0;					\
++	r0 = 100;					\
++	if r6 == 0 goto 9f;				\
++	*(u64 *)(r6 + 8) = 0x55;			\
++	r1 = %[arena] ll;				\
++	r2 = r6;					\
++	r3 = 1;						\
++	call %[bpf_arena_free_pages];			\
++	r0 = r6;					\
++	r0 ^= 0x55;					\
++	r1 = 1;						\
++	.8byte %[fetch_or_dw]; /* faults: r1 = atomic_fetch_or((u64 *)(r6 + 8), r1) */ \
++	r2 = r6;					\
++	r2 ^= 0x55;					\
++	if r0 == r2 goto 1f;				\
++	r0 = 1;						\
++	goto 9f;					\
++1:	r0 = 2;						\
++	if r1 != 0 goto 9f;				\
++	r3 = *(u64 *)(r6 + 8);				\
++	r0 = 3;						\
++	if r3 != 0 goto 9f;				\
++	r0 = 0;						\
++9:	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_arena_alloc_pages),
++	  __imm(bpf_arena_free_pages),
++	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
++						BPF_REG_6, BPF_REG_1, 8))
++	: __clobber_all);
++}
++
++SEC("syscall")
++__arena_scalar
++__description("arena_scalar: fetching or with the operand in r0 to a freed page")
++__success __retval(0)
++__load_if_JITed()
++__naked void fetch_or_r0_freed_page(void)
++{
++	asm volatile ("					\
++	r1 = %[arena] ll;				\
++	r2 = 0;						\
++	r3 = 1;						\
++	r4 = -1;					\
++	r5 = 0;						\
++	call %[bpf_arena_alloc_pages];			\
++	r6 = r0;					\
++	r0 = 100;					\
++	if r6 == 0 goto 9f;				\
++	*(u64 *)(r6 + 8) = 0x55;			\
++	r1 = %[arena] ll;				\
++	r2 = r6;					\
++	r3 = 1;						\
++	call %[bpf_arena_free_pages];			\
++	r0 = 1;						\
++	.8byte %[fetch_or_dw]; /* faults: r0 = atomic_fetch_or((u64 *)(r6 + 8), r0) */ \
++	r2 = r0;					\
++	r0 = 1;						\
++	if r2 != 0 goto 9f;				\
++	r3 = *(u64 *)(r6 + 8);				\
++	r0 = 2;						\
++	if r3 != 0 goto 9f;				\
++	r0 = 0;						\
++9:	exit;						\
++"	:
++	: __imm_addr(arena),
++	  __imm(bpf_arena_alloc_pages),
++	  __imm(bpf_arena_free_pages),
++	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
++						BPF_REG_6, BPF_REG_0, 8))
++	: __clobber_all);
++}
++
+ SEC("syscall")
+ __arena_scalar
+ __description("arena_scalar: cmpxchg through r0")
 -- 
 2.53.0-Meta
 
