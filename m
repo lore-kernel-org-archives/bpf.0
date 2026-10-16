@@ -1,65 +1,65 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCBD37F33B
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 19:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDBD4CF476
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 19:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792178281; cv=none; b=QX4QS3Yp0XpuFL8dubrUFX1Dv6sHWwJDBu3dKAbfT/zRPJcLEBGoaLhgRCxslOXO1RoIR8Q/m9iQHqWUOB4HXUNOgmaMcJIxk9MXV72L2M2JRCRGHVli+y/JRxDnXZjzIZgzyxafOqhltNVaiImkGgy15BHddT6Sp1QxcmPeRXA=
+	t=1792178386; cv=none; b=tL8W9SeeaZBdZ9JfLkZ0ee+imZbGAFGDnvGESSkTyQiPAXOsRQj5rkuGMTqW/mzdQn4/dMqUR33IsYI/GF4HnkdNcKTBUH60cGOmbm67pd8u/sHhINdwkW0jOUXG5lRnymOfC5uB2z6CjIvan/M0SBoPL+QyzECHE+3w18zUfto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792178281; c=relaxed/simple;
-	bh=kj6iazxl2pEmTduChN9pCz61Cw7fdC1TKLeAVjzB60E=;
+	s=arc-20240116; t=1792178386; c=relaxed/simple;
+	bh=JB5wm0nwOiFQqduTpLKkrLDQYyG74lSZhVzOqVoZMXI=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hm54j25YGjRXXdhlgcoAUaBJep2Ot4heLi6crFtNccCTkoIK6wuL55uNYzwie7J6c4PBkaiRjGkXYufsopcsLyO3oREFwkOzP3wIcmJ8ySIgmFnLNzsPF+kZn5UI9kxg+Y8KnAKIrt0/ozAkwK7mNeEVwAqFCtPDRRhhsPOroDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VmaJOqTt; arc=none smtp.client-ip=209.85.210.182
+	 References:In-Reply-To; b=j3hJYj7j/63wMDXlypxf7KkUY9p0UqGk2CqdtQAytNuKosNFiT0T7hxFHInlV4lYB+dZs4uaoC6BgpIKHlo2M5n/6zajjQ8VQEjxVandmUKSWCzl+o9hXW1kBVFbh56hDodGpDDC0cUhpDDaVmdZKMVeNzHUDFPyhT9xnKyPfQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Kp8w7mJ4; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VmaJOqTt"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-878b44611ffso200197b3a.3
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 12:17:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Kp8w7mJ4"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd3310348d2so728330a12.1
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 12:19:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792178279; x=1792783079; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792178384; x=1792783184; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=RVj03Ehys4DFDEAuhhoNP6gBmlrE5KOErmc+6xJMi0o=;
-        b=VmaJOqTtcpQ3Kz86vuDc4eP8QkIGt3EPxL0daE0vgEaHMoP7DKJF8CntePJCZgsTwv
-         OlxOVjUFYYoKfaFO9bQq69suC6ItGkdP++DN5BL3cILKVl8aBqe/VzEK6Ahhv54a3/UY
-         a6wci5mGob+LFYEfFPBxSJLC+9FEB+DYtLljvLlDqNG79rO8PjLJxKglfNZLS2ZZzYLb
-         OOcup9QnO3rcuQfWXgjx3ngPM2k/KFA8FCS2OLMVecZLSVXC5LMGPLKQ7b+c2FisMw4Z
-         JssD+fIHh3pB+QZ92XLgQoY+68EGwp+6oS7JFJWUgeSFZApZ8lUjv3uGmzv5V9dWleB6
-         Wvkg==
+        bh=wk3QGo2Xm63rFj/G+OW3dy0tNhbTuuvWGwhG2nAQauc=;
+        b=Kp8w7mJ4RHSQxgbHK4CAPiR+J5iGUKYBF7rYg25KZTneFCBv510IyfDoos9vBwK8gf
+         LxO2YWJ+7BHIe+xlfJ/h8OwSwDAa473iayMKYde3+W53c4AjY8y9M1RxIuXhOf5L1v2T
+         f/M9YPOXuBw2rRLzfmMEJFzzoGhEhVRxpDgGOVR6BBG4S9hQ9b8rYf2kk2Lc/OVqeyiq
+         8POgDzldHwYpX1cEnFtHEQLmcuIzxKpGzW7Mzf8NsfXqtZMjPKtzEThk7P1i4GBVzxca
+         QeydiG709UcP+VNgNvFNEnINeXYlxJFzzB+Vc77KciOALfvMa+VLN8ws7ebA85TnHPr3
+         xyJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792178279; x=1792783079;
+        d=1e100.net; s=20260707; t=1792178384; x=1792783184;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=RVj03Ehys4DFDEAuhhoNP6gBmlrE5KOErmc+6xJMi0o=;
-        b=uWRBRuCNbFNrNZv/FyRP0VEwCs3V87jxnhNU4ftw7jDSRfisbIKHaEVkdqJagup1W2
-         79vkdgGWrzI8keb/wI9F8oIy06BKV9iOQeXXKe9gzqQc7IoR5Yzpi73C5rnU7glqHgCS
-         c3ILKoFiUwMWAwSYgZ+fovvqS2TmhKX0YIZXarqTYR9J/a7OmzFAGbJwWh3mZjfU+bqC
-         FB2Nu4imIsi7W6f3+2htHNBmWn9V3YOUm2ATToEBpG5SHKsnvuOz1IULe7A9vlWzcy4q
-         0RCHSkVr7UDn7hv7PgNRnDQuJ/u3HiNHp7jEKPyyd2dVSyFs1C0yn5dLZX7p4hl6m9Q1
-         cUtQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwKRcbxWIe3pBeJSOA78SRHpQIUpQimPE2ARQO6TNJRTIMCneFL1y+sxCHKUdoWWAeMq1Y=@vger.kernel.org
-X-Gm-Message-State: AFq9FYILDEZXEjLBfJZN2yzIyPt2Cs1So9LiBr/BLJ2pMFny4T0vf1s5
-	j2ke1rAWvgEEhnlOi/sjIxLGCGlV0Q25F3kcoLv+FJxFNRGmhb25JV21cCMiqNtYNQ8=
-X-Gm-Gg: AYBFou1DLPmS8A5c9O9sgTZtGQj4UO2nCecLlcDs5jzv3ZrMrRw27ie48PCABZBbFwt
-	KmDgTtK5HpBAJq4pT7yvoYFb26jmvzt9ZfVQI0N6ci4iAwZ+QxmO7EEyOeSuC31MO9Jl2/aId3Q
-	XYnl4MwJim6+tRxwcsFCa8Zk6u5AwH4PaT2RIdpmnLSi+m2cvEy+VjzTx7ty6nMrDuJcgAT+K67
-	6ZccZv9Qix7EEP/22F49wQqZozBsZoOjmnoSy0FSNfyNCLfxl2mxpN/mrVS5dSs10RWntDPQ6aV
-	ACmkctOpijDJebqy/hLd3FbsOX6SMmhEZBWMgakbBb/jasGZvxBD3cebz8Qdxh0gZjZ5d3Bn3bA
-	ERUsTOvgeG5TeBItftviMus7b0JxKeoo0G0I7AHgpjD7uJEmpQZJKDKVGbNlV09iCkqVp7VyrXx
-	b84K/sMpiRvCxtiraNk8oJ3IhD5GQHplAc9wZdhrvl31YmSNazGf5tfjUGFVYLFgFB25XLBr/cU
-	sUjnpFSS5XwwGsgwxJ6KX+9uofb
-X-Received: by 2002:a05:6a00:2386:b0:89d:eb23:4e83 with SMTP id d2e1a72fcca58-8a04bc2f0e4mr488410b3a.30.1792178278972;
-        Fri, 16 Oct 2026 12:17:58 -0700 (PDT)
+        bh=wk3QGo2Xm63rFj/G+OW3dy0tNhbTuuvWGwhG2nAQauc=;
+        b=tgBK6k2kPI8WxNOWUVJ6x4P5q91ZzgXILTXdkeJzrCErwyIgCxt02zowbffxwya7eV
+         EuzvxwY+/GGMVdT4LG4XJNPRaLj2TGSn7dpnPzscA5RrlxTKy7lRMora74Fxb3O88+qh
+         MKjCseYkmZ+al/l8mDYlSmoIjC+/25qn/v4l/paUHLqyvbZGad+EM89Cy8tt5NHH50vp
+         h/b0MsrfsJbgmf6LtCK3eXR4wVa+vytJimIrNfkOEb7R4Y6MRLE9bOVJW1VWdn0u7Cd/
+         dYdFvlM6DMn/5J8AMhbzAInrjTJpwdJwDoNOaN5gcRH2ElpvFzSV+QnMjkKS0th7EYYE
+         SWxg==
+X-Forwarded-Encrypted: i=1; AKwUvBxtgoy4zPeMqb+RTmqjIHx3QnxwQsQoodQy75WJbVREM+YFMj6/T5L+zU8m5bVSa/vEJSY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIHtUOHiuA8nOcxnHQ3htDyMdbDHzyvVOufN74+lGTEhuTIGQxH
+	XV+Cp5XAMH23SyGI/SpYT3nkAIUC+NffSeKc79yc5OYY+D3V6LWJUmvfoi1vIgkMdDk=
+X-Gm-Gg: AYBFou3Ng5SSU5U+F7Zv73hr20dcpiIlmObwiVhh6BEdayAmidRsxOhRYsC4JVfaAYM
+	9KL6gUjcMQkx4KvNTieN/TGfYzgdfxILoqasJGvWFQXX9tlWX+avY/ktIqx2z1F1KBDKUX+JzRI
+	ChpITIihfefHBZA7DK1cz0XyjgmT5mVdLIIzxxa+VyeYgFwnEw9gkkCFx2m2Nt0+leozbNzn03H
+	YEYFBjS2b/8sMsVijFnxMSS8oDRNTq5y/tfXhxHsyms6WDyEJ/DdmJDds5coMN2IC4pUktj7u36
+	yILHlWawkTTy8T5IsS/RZ7OKW4cI4Jf+IasaS+anVSl5/sMixs5rCe9Ukh5ivqxrkgNZ6oovax4
+	+NCcn0+8M5OcBpFlzSOuCx7sxF1cfTrhD/kBt3ZnTHzlum4J2ueu81FCMDWL01y15wX2jPl3OLo
+	ddemqRwztYwdoWzS1OFq0R3LlKwgi2fk+L9zmq/IFQOqIM8awiGd9qs4FL3+2FkiNNu0ezYBIBo
+	U91KT9pSzSvt0aNqKT7GhDYGhkD26+9ybwiew==
+X-Received: by 2002:a17:90b:1f8f:b0:3a0:d82b:237b with SMTP id 98e67ed59e1d1-3acef29d02bmr408364a91.25.1792178384468;
+        Fri, 16 Oct 2026 12:19:44 -0700 (PDT)
 Received: from localhost (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f54b3199dsm1666297b3a.3.2026.10.16.12.17.58
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc46ebe40sm5341663a91.6.2026.10.16.12.19.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Oct 2026 12:17:58 -0700 (PDT)
+        Fri, 16 Oct 2026 12:19:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,64 +68,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 19:17:57 +0000
-Message-Id: <DM6I6ERQ4DJA.25JXLLIZJ75E9@etsalapatis.com>
+Date: Fri, 16 Oct 2026 19:19:42 +0000
+Message-Id: <DM6I7R3QQ1QO.269JGZBC9VTPW@etsalapatis.com>
 Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next v4 2/8] bpf: Associate arena pages with their
- mapping
+ <daniel@iogearbox.net>, "Mykola Lysenko" <nickolay.lysenko@gmail.com>
+Subject: Re: [PATCH bpf-next v4 6/8] bpf: Fix arena race between page free
+ and alloc leading to incoherency
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Emil Tsalapatis"
  <emil@etsalapatis.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
 References: <20261014233442.8392-1-emil@etsalapatis.com>
- <20261014233442.8392-3-emil@etsalapatis.com>
- <DM5W5RGVPBAW.2F70WVQ24HT6W@gmail.com>
-In-Reply-To: <DM5W5RGVPBAW.2F70WVQ24HT6W@gmail.com>
+ <20261014233442.8392-7-emil@etsalapatis.com>
+ <DM5W5UNBV54W.LJ1K9VUN2S3S@gmail.com>
+In-Reply-To: <DM5W5UNBV54W.LJ1K9VUN2S3S@gmail.com>
 
 On Fri Oct 16, 2026 at 2:02 AM UTC, Alexei Starovoitov wrote:
 > On Wed, Oct 14, 2026 at 11:34 PM Emil Tsalapatis <emil@etsalapatis.com> w=
 rote:
->> Associate arena backing pages with the arena's private mapping and set
->> their page offsets. This allows the fault handler to delegate user PTE
->> installation to generic MM code, which is itself useful for avoiding
->> races with kfunc-related arena operations.
->
-> arena_vm_fault() returns vmf->page and finish_fault() installs the pte
-> today. That doesn't need page->mapping. VM_FAULT_LOCKED doesn't either.
-> tcmu_vma_fault() returns it for alloc_page()-ed pages.
-> mm folks were removing page->mapping and index from drivers. See
-> commit 6cdef2ddce2b ("fb_defio: do not use deprecated page->mapping, inde=
-x fields").
->
+>> @@ -1063,23 +1147,51 @@ static void arena_free_worker(struct work_struct=
+ *work)
 > [...]
->> +/* Arena pages are not page-cache entries and must not be evicted by MM=
-. */
->> +static bool arena_release_folio(struct folio *folio, gfp_t gfp)
->> +{
->> +	return false;
->> +}
+>> +		unavail_node =3D range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
+>> +		if (!IS_ERR(unavail_node)) {
+>> +			s->flags |=3D ARENA_FREE_SPAN_RESERVED;
+>> +			goto clear_ptes;
+>> +		}
+>> +
+>> +		ret =3D PTR_ERR(unavail_node);
+>> +		/* Retry without starting teardown. */
+>> +		if (ret =3D=3D -EAGAIN || ret =3D=3D -ENOMEM)
+>> +			continue;
 >
-> The only place that looks at folio->mapping because of VM_FAULT_LOCKED
-> is PageHWPoison() branch in __do_fault().
-> If that's the reason for this patch then check PageHWPoison() in
-> arena_vm_fault() and return VM_FAULT_HWPOISON.
-> Drop this patch.
+> v3 dropped the span here. v4 puts it back into free_spans and
+> the worker does schedule_work() on itself until kmalloc_nolock()
+> succeeds. It's __GFP_ACCOUNT and it cannot reclaim.
+> At memory.max the arena cannot free its pages, because it cannot
+> allocate a range node, and those pages are charged to the same memcg.
+> The kworker burns cpu in the meantime.
+> In arena_free_pages() -ENOMEM goes to defer: where kmalloc_nolock()
+> of the span fails for the same reason and the pages stay mapped until
+> map free. Same as v3.
+> The free path shouldn't allocate before the ptes are cleared.
 
+The next version drops the unavailable state, so the free no longer
+allocates a range node before it clears the ptes. range_tree_clear()
+only allocates when the whole range is free, and then there is nothing
+to free, so the free is done. The worker no longer requeues itself
+either. It waits for arena->lock and for a contended mmap_lock instead.
 
-Agreed on dropping it, but the check in arena_vm_fault() does not close
-the hole. memory_failure() sets PG_hwpoison before it takes the folio
-lock, so the page can become poisoned after arena_vm_fault() checks it
-and before __do_fault() does. __do_fault() then sees VM_FAULT_LOCKED on
-a poisoned page. If another process that maps the arena already has the
-page mapped, it calls unmap_mapping_folio(), which takes i_mmap_rwsem
-of a NULL mapping.
-
-The next version doesn't return VM_FAULT_LOCKED. arena_vm_fault()
-locks the page, rechecks vmalloc_to_page() under arena->spinlock, and
-installs the pte itself with finish_fault() before it unlocks the page.
-It checks for poison before finish_fault() and again after it, zapping
-the new pte if the page got poisoned in between. It returns
-VM_FAULT_NOPAGE, so __do_fault() never reaches its poison branch, and no
-page->mapping is needed. As you suggested, the free waits for the page
-lock before zap_pages().
+The one allocation left before clearing is the span for a deferred
+free, when a sleepable free fails to trylock arena->lock or one of the
+mmap locks (see my reply to patch 7 for the mmap locks). It uses
+GFP_KERNEL_ACCOUNT | __GFP_RETRY_MAYFAIL, so it can reclaim. If it
+still fails, the free has not touched anything yet. The pages stay
+mapped for both BPF and user space and are freed with the map, as when
+kmalloc_nolock() fails in the non-sleepable path today. Allocating
+after clearing would be worse. The pages could not be freed then,
+because user ptes may still map them and the page table walk in
+arena_map_free() no longer finds them.
