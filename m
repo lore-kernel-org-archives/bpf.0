@@ -1,99 +1,127 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152522EEE61
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 01:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3983290BD
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 01:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792113099; cv=none; b=fmJ2V/j5dtWU33LmfsjkvsIG6PyMx+l+g67oxFfsSpCQNgZoyR59oo333I/jHsnmGWtOYVl6kKI923Dx00nayMCfbgRlUwimqs7ynXsKtIKFVoh5gn9vlVSS5JqivA8a3Xd+333R1HXkMBc3Ts/khvK4KLew9USRJhgTrOIDQSw=
+	t=1792113219; cv=none; b=peOjuoajLyNxlWgObrnJUviQ+m//NKpncRDfCISnhU5b3b3WZj2K0yFXdLkW4PQRd5BZnRFji11fafX3NeVxBPLwGm96y377S22IyOPGOki0I6o679yWrknCYH+2ExAWJewjuUlyOeX1zGZ92c4iELPmlqcJsL7xK9d2RDE7GZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792113099; c=relaxed/simple;
-	bh=sLnYbktuT1g1g/LjqgU2Z9M3b7lTLh+tW2NCmQ5QERo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hN5Di2hrNNb4pjBj/L8JcUb6yEMZAcuHnLvri1U0KD9oZuIUqghi8/MjEMvxvLXkAbAFvon4ukix2meOJHZkK/SsIjIg0uK3LLVJQpqrWmsyanxh8VLcgX9NdzrmbjNiwMyU5KVvLCIWl6B/sB92D27mEN5OkhmgAP9M99c6F4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dIQLIHTe; arc=none smtp.client-ip=209.85.215.181
+	s=arc-20240116; t=1792113219; c=relaxed/simple;
+	bh=gQSiYggHqMUqGohAfLOyOool24qZAxosvnwlJbtZ34I=;
+	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:MIME-Version; b=UjwigSaMr3nD0Ct/QqjMfdY4Kvt4O3+05Sk8X90Bk+P77SvjqJbxgFfyQReXXCbgx5X1AGydlLiD8IixWtauHqBxBHX4snu4241Pv17hR1xv9sCJtlc8RsTcwFifI97EMSRjd0gTXjUBPXkvEDQy5YSrHq4h0798nCfEyAIozTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J1ccmYhX; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dIQLIHTe"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cd6028ff33fso2536718a12.0
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:11:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J1ccmYhX"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3a813079a55so385260a91.0
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:13:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792113097; x=1792717897; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=sgvWF4fy+Zfo0uM9S9tFOKwb3/yr+Ndnr70noKK8doY=;
-        b=dIQLIHTeG/8cPvsvgdrdiSaRxuCUcY6V+k20FPrQmCj24demV/StNSDu3oQTJn0NHV
-         M3E1yRfiOcGvWjYqapkz1vIyzp+7QnDpIhMSfrJ6x6kLw4+2AypTlHfSZIwAamUJfpLv
-         amnlrfWM9IwlwUo1MBC0GwnDtS4Jc+eZOrtpa0Y8Eb10fVOnFnDft7sxNlB4UTy9QeJD
-         hgfMRHIHyetEDlCK0Jo4QqbB/kl6ifkcaIdBXYSKZUFRh0M5oUJGQPABiXLroFR2UdIH
-         NT8Ne4Ozzakhup6j2vYQ0HRKmtB1yt8XUTjOFavjDLqhA3hiGIf0FTbgKbtsVGbBLAOE
-         Arvg==
+        d=gmail.com; s=20251104; t=1792113217; x=1792718017; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=plr37+AdqLwY15XVGk53zlbtl1djLuK/QOjHd4r9Mjw=;
+        b=J1ccmYhXX7YIHhLhfvPfw/uUbQ4W7JMXL9d3HlcKEvByCkoNWSYIHFDc7WeDXv0sNf
+         JeJGlXpJUYqMx4j5gfB1T+a6c+SxxRlIdBzBnlzCtJG2Q/CEkUWlSSLi5zq2kz6eDxeY
+         EK5kB98kYmkrMiOyuR0gT+akJ8XHrJTrE+AQ96enUStl+v1EvPMJLWk4GZoRU+rl6oSK
+         PkzIEo2+MvVBavUMRm5LsAo+Kp3aRaPdpucu7HsyfN7y+VcF/cpuBtCf+wW373QaK+Ml
+         hGfbe3Z7HRxW6F7hrE+7plNW+ud5PoRbEZ2KGowOUxZ/t/2Bo+5rF3Eksv3fblVj1+AQ
+         /APQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792113097; x=1792717897;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792113217; x=1792718017;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=sgvWF4fy+Zfo0uM9S9tFOKwb3/yr+Ndnr70noKK8doY=;
-        b=rIEGnldOtLsb+0WDrquMIoO8KUt4D/4mMbouIc5rwa9VrmfLXHAT1zMAuaOOfedTVx
-         duiy+aRrRl7EdV5W1bMTZhN+UL97S/eYSYcLDurhzxBRelA0Cloup+rTUB/11rXomeBF
-         f9Xbk/Y/0q7BDxXqFEIyFmPkXpbVeSaX+8R0GXPCajaAS1SAJyqfCG0CjQGQaZEwCX8s
-         E8QUmo7/vub+5D0ThelLkyMgbhNQkRmCxfEnlp2B4/siJPP3lnMq6YRHkuOi5KX+7Flk
-         MQY1NOzSpYuCQg+YePYAbMbVkvEfS7wUqiAGLUj95Pv4YD29dLzx1z0a1Wgh6kRgn/jq
-         HL5A==
-X-Forwarded-Encrypted: i=1; AKwUvBzExD/cQW9hzP43DJ6V5b7YM8/MpTlvJghKj6icC9oJVpKu8T8W54ullfvToiiGbBCiqAA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLEycss75SY2FwTKpPs6rIq3B3dqeVgJinN2T8KGgMIisRYjyZF
-	K1yGcdqMsZn5y1KDsU4WgO1y2vZlUMmSLnXvYSmKI0gRRW10iDJPaxMq
-X-Gm-Gg: AYBFou31j8Nx/X63Z9K/e6VeHgN6vVF/0Mov7q8aGRlSGVKua73psGB+4R9ZnPqEOMp
-	ml3oUulaHycMQJegcjOZMwtP8uCdl+1TgKKKV9QQ7CgC3Z+3L9HL/KRjtVO1SbbZ85T22gYhk86
-	reAQ5w+JWuyYm09wLWuu3cR6g0orbaarW28uM74EkJisNxlSEeTclWzCkFY5d2kLHvayMOsh0Bd
-	lOtP9xuxRV+9GHP1Xy6wQc1ae9LXase0PiBidDu56RGxXn4iFPMBaBKI3ct3N+ZssW3Srj4isjR
-	Ks1ofNIBV8lDuNmw4b8NYjy7eXD07oLS0PhlbtCMo83Px6MtzaPF4Rgp59Mkn2nx6JvZYTpmwK3
-	Z2xxhTINaVaXJeKwGS6JiQtp5sScADJzQW1Rpwr6tFJWq/xSh6R1eRs5o3xxZ6vgvA4X8sARqu+
-	10i28HTmHihyVawib6oa/9Mg4Aee/YLQ69mUwjTWGl166Z5xFaBJ8cSveZt8hDApFvMzZcG8eCX
-	KZFijXo0KatDx+ePL05w8bT8bqfyCW7sBerUTW629fBHSlOB2MYSHbPVWe90RHJW2/mg88D0+OQ
-	qNaf
-X-Received: by 2002:a17:90b:538c:b0:3ac:80dc:f406 with SMTP id 98e67ed59e1d1-3ac80dd0135mr5944732a91.50.1792113097193;
-        Thu, 15 Oct 2026 18:11:37 -0700 (PDT)
-Received: from localhost ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac9474b52fsm7471432a91.9.2026.10.15.18.11.36
+        bh=plr37+AdqLwY15XVGk53zlbtl1djLuK/QOjHd4r9Mjw=;
+        b=zpK0RhIyTG2UoDPxF4S4nxjT9seiJNuuq51E2lfUWUmY/bXCPmk3m0ykBej8c9a1dJ
+         Sw7MetcVnhONy/EkDXBNo3301ZYi2+X0QOIpjuOz7aVPI7qK+32LiZda0AAJsMEVfRhU
+         +OoqWu3QpjG07FK04Y4T786k9YSF3yaWHI0t8VzkIIMiAP5nrPJ+a7hMHfA6DfZsD5CZ
+         IPpRvP2Y3HjSw0Jq1qNQDecsOqFkrfaZM0HtlwgFfaGpS87zp48Z+d0SkNsE5MeTwFyC
+         fw+sF1pOFZJSjQaHdVF+nYFB8+PGDPPBstM1j45tI3C24nXvGesocFIK4+IMvwojtTiU
+         5ELQ==
+X-Forwarded-Encrypted: i=1; AKwUvBypClyte6L0KiGhRAarkKmIhswj+EHL2lA8o0xG3ctVO7ercADSQtdXXEX9qJmp/vbMND0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKoF0t10uqQJgjVqx/g6tsbTERPU6DO3OmyzOvCWwEpg9Q4dFjF
+	VQDkuLBrS2sWjkHwXZioF9tm23hYPXHSWwvaLEbGuNC5cuKz1Y3CWbs+
+X-Gm-Gg: AYBFou3TPF0j0MzLc+Po3lcwMO+PD+/TFL53kab7J7GmK3GGyxT27djxZhEGDdy9cj2
+	I3+45S3RxZCGMxLZZYHoynVn3/klJZBqDMypXpO+qS8Lom7FFRuZ3f5YbO9LSHCtsJ5qUCk/bub
+	pOhQFFsvLBILv3wvVNQVnjDb7jnMl8v0tSneuUG8uf9RJa3JwPm5+X9sQkDeWUlcL47p65fV98F
+	MMIS0iyqAev9moZp26HA1xOZD+uG6bJzkEuffU/Vv+NSJ+XkUkd6whkH4Y63DkQVHfXtGIhHKGS
+	S9zchQByPi5g69cM6SP2S+qg/iewkntL7pOfzVFfHKHdYTnkS25PIubfr4izysuaFhP+vqv3B3W
+	Jc0Mo8b7nQkP8jiAfVPOQ2T0aqGPUZhtvCWxgpJ4RQgMhHpCz0fXuMQl+FM3OZdlSP0kJAN8WWE
+	7NoL2UvmgxWXOG/AG2cYxFDMKVrZkhKolNZI58vEcBnlLohHkh4Yqj5LEqiXvgtSOnk8xH+YcTh
+	I9SRcsBZVhWb07QmkP+b0OkuIF/8o5jjplYgcghsUUsERBRlw4ihbtHF1N5jiKw3u2n+MAT5Fts
+	5X4=
+X-Received: by 2002:a17:90b:4d8e:b0:3a8:786a:cfed with SMTP id 98e67ed59e1d1-3acbb8bf8cfmr1168741a91.37.1792113217090;
+        Thu, 15 Oct 2026 18:13:37 -0700 (PDT)
+Received: from localhost ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd3c8e2c9sm130697a91.2.2026.10.15.18.13.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 18:11:36 -0700 (PDT)
+        Thu, 15 Oct 2026 18:13:36 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 16 Oct 2026 01:13:36 +0000
+Message-Id: <DM5V45Y5ZYRA.17X2LC1YRCS1N@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Tejun Heo" <tj@kernel.org>, <kkd@meta.com>,
+ <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 12/15] bpf: Set up the arena base only in
+ functions that use it
+In-Reply-To: <20261015234125.3152346-13-memxor@gmail.com>
+References: <20261015234125.3152346-1-memxor@gmail.com> <20261015234125.3152346-13-memxor@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 01:11:36 +0000
-Message-Id: <DM5V2MT14QRH.1HNZAXBA35LX6@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Tejun Heo" <tj@kernel.org>,
- <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v3 09/15] selftests/bpf: Test __arena pointer
- members
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20261015234125.3152346-1-memxor@gmail.com>
- <20261015234125.3152346-10-memxor@gmail.com>
-In-Reply-To: <20261015234125.3152346-10-memxor@gmail.com>
+MIME-Version: 1.0
 
-On Thu Oct 15, 2026 at 11:41 PM UTC, Kumar Kartikeya Dwivedi wrote:
-> +struct bpf_testmod_arena_member_args {
-> +	__u64 __attribute__((btf_type_tag("arena"))) *ptr;
-> +	__u64 __attribute__((btf_type_tag("arena"))) __attribute__((btf_type_ta=
-g("nullable"))) *null_ptr;
-> +	struct {
-> +		__u64 __attribute__((btf_type_tag("arena"))) *ptr;
-> +	} nested;
-> +} __attribute__((preserve_access_index));
+On Fri, Oct 16, 2026 at 01:41 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> @@ -9919,6 +9933,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
+>  		}
+>  		break;
+>  	case ARG_PTR_TO_ARENA:
+> +		/* the JIT rebases the __arena argument of a kfunc on the arena base */
+> +		if (is_kfunc(meta))
+> +			mark_uses_arena_insn(env);
+>  		break;
 
-why __attribute__-s are open coded?
+This mark is not reached when the prog passes 0.
+is_kfunc_arg_nullable() is true for both __arena and __arena__nullable,
+so arg_type is ARG_PTR_TO_ARENA | PTR_MAYBE_NULL and
+check_func_arg() returns at
 
+	if (bpf_register_is_null(reg) && type_may_be_null(arg_type)) {
+
+before the switch.
+
+  SEC("syscall")
+  int prog(void *ctx)
+  {
+	return bpf_kfunc_arena_cap_test(NULL) != 0;
+  }
+
+is not marked, but the func model has BTF_FMODEL_ARENA_ARG, so
+emit_kfunc_arena_args() hits
+WARN_ON_ONCE(!bpf_prog_uses_arena_insns(bpf_prog))
+and the prog is rejected.
+
+v1 was marking the wrong subprog in the same spot.
+This spot has a WARN. When a mark is missed for ldx or stx
+JIT emits [r12 + reg] with r12 of the caller.
+
+Can bpf_prog_uses_arena_insns() look at the final insns instead?
+Like detect_reg_usage() does for callee saved regs.
+jit_subprogs() already looks for PROBE_MEM32 and PROBE_ATOMIC
+in every func to count exentries.
+Then no marks in the verifier.
+
+pw-bot: cr
