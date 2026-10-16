@@ -1,90 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DCA529B20A
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB022C3245
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792110511; cv=none; b=WgdiOgV5vWeNsfXLQbr8pUq6HXWPPqgOGowMwC7LGFxDtYCEU0hX4CQGHI4OvJH7/+Vr2pP+QADtVt1/+CyQLVTm5OR9M/NPeke8JuYr9/XeEmCQ+XR1WpThnqipWdRRBaLSxtEGmmEhMW/1jQBPTB/URyO0dXflIJZ8UV7EG24=
+	t=1792110514; cv=none; b=jJRKaUpFCTKgTlmDH/DMDyLtLDuzZm3h+3aYX78Px0siTqF5xoljY7eX5sHaNVdgl8sA8ZtabO9Su8ow/RFDglq9aNuhbthXjw8Uy1Ah1f0iRW65iUqUbwc3WpehleCZvGJkRARY9gug1DlTk0IMgy1Ez0gzRDbwSRWCxEb6VPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792110511; c=relaxed/simple;
-	bh=4Km7bpvPTgsUVURMOKi1XAIM42zeErfWNEK1EzVrG34=;
+	s=arc-20240116; t=1792110514; c=relaxed/simple;
+	bh=SyvjCCcswG5j9RQbiZBTnLIFTCbTYO1U7oXHLDnER2s=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=kC/UTnE4pa5N1+x2jl6251lO1SqGm7Qvp1YhSMMV8VAiR+2S+E1HQFxaRxbR5wNHhdX3yBSnnbx6Gf2/3EuibiKlvXt+lfX8M++L1ngqbNUFYYZuK1ytzaHhu2HH9pnlMVS6ZPCn1h5Wq12Cb7uOJfGfilx+/7luV34IXkrcnyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eIq/cQut; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=soeO6W65lWR/4RR5BEm26xH1O3K2iLmpHshcZdqKZcEfLMAxca2HdsI+dUu1ZU54pnKY3T+e7kPFlh7mXdJ8XhUaYz090Ma+Va9dLx3JnxNs5ft7Sq1KTresWZ2jqhk6hrl7X4vWPJpqdF6xmTSzdMKPPfQKNRaSZquc0HxEcrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGr8Ufbd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eIq/cQut"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D5EF1F000C4;
-	Fri, 16 Oct 2026 00:28:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGr8Ufbd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E357D1F000C4;
+	Fri, 16 Oct 2026 00:28:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792110510;
-	bh=hq4IzmZKS4aOy/k/zGlgVzeyNCD9mlEyRaQ5AxiFkA8=;
+	s=k20260515; t=1792110513;
+	bh=pSJLjUILzb5hyXXJM1k6OxhVcoSGe1lp5Gv+nrBBZYY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eIq/cQutmXTflrBQyNOsf4BGQDf4aPV0vIMuNIHkhiNrMOQSAphSs3m3g4BTQ1xTA
-	 91eBZavyxDfmJe0lpShYjAD9PE7ppKZjp3/2MyY+RcdyPGq+ChAqTpxRTHstsFLYoC
-	 qeXY7ov628jC2rIWRcDCOW4643gG76aM6D0vSH3V3cifjTYQi5bXjiBOKBPsKXxEz6
-	 lq67KiuzDORuuTbgKVywKLN6fIqikFx9V3yaOkq5we66WbJdgQKnhap956GApZZQ9E
-	 JNRBBb524c7xf3ogXbClOPdOCVKMWTjal57sUVqspeT3t4lePyEynCs+ySLJZMp1ak
-	 XZvBbCWv0mXkA==
-Content-Type: multipart/mixed; boundary="===============9100725291623905389=="
+	b=mGr8UfbdHo9/HbAtHM1Yb7co38MR4iKmagXMCY3UP2FXIRyCQJK5rUXKPA4325jDO
+	 1t0x1JNEnEviM7ifwhaoWIG7BgzxvIXFrVW3x+rSa2yGumm1mwuYnGp8EfEGhbSTO0
+	 ednc4c27jimjuuUmsecdDYw3C0XoF+Wdzl7KPqVwaCEBqqTBJSG03K08CNcWWN0RKA
+	 tVGTk61m9VyN8Da4JdKraV34O/3PhtWhZcGGrl5Nv4arDNc/Qrt/3zTWWlrnzJbzbM
+	 JoVWNShLPEfAqjNNh9VDTmEpIqFn+CtdQjG7oQhsUzI1a5j1anYn3vhmAi3n8wWeos
+	 yL5fkcSyaDnqw==
+Content-Type: multipart/mixed; boundary="===============6294980444073911556=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7684ce5e6a2e64826c4bac6d84b4001610e88e4bd9587560e654be9f3b0361bb@mail.kernel.org>
-In-Reply-To: <20261015234125.3152346-12-memxor@gmail.com>
-References: <20261015234125.3152346-12-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 11/15] selftests/bpf: Test arena binding by libbpf
+Message-Id: <33fa4fbf4a2047c0af0a6b729a16b7684dd742665f5afedc92ea5ffc01c0c8b8@mail.kernel.org>
+In-Reply-To: <20261015234125.3152346-11-memxor@gmail.com>
+References: <20261015234125.3152346-11-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v3 10/15] libbpf: Bind the arena of an object to every program in it
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 16 Oct 2026 00:28:28 +0000 (UTC)
+Date: Fri, 16 Oct 2026 00:28:31 +0000 (UTC)
 
---===============9100725291623905389==
+--===============6294980444073911556==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Test arena binding by libbpf
+> libbpf: Bind the arena of an object to every program in it
 
-TL;DR: Commit message only: it says the object's programs never refer to the
-arena, but the trigger program in struct_ops_arena_autobind.c uses it; only
-the callback and unrelated program avoid it.
+TL;DR: Binding the arena to every program in libbpf may make the arena_kfunc
+and verifier_arena_scalar no-arena selftests fail at this commit, breaking
+bisectability until a later patch; fold the selftest changes in?
 
->     selftests/bpf: Test arena binding by libbpf
->
->     Attach a struct_ops callback with an __arena argument from an object
->     whose programs never refer to the arena and drive it through the kernel,
->     and check that an unrelated program of the object got the arena among
->     its maps as well. Load the same object through bpf_object__prepare()
->     and bpf_program__clone() too, the way veristat loads programs.
->     Two existing programs expected to fail for want of an arena while living
->     next to an arena map, the kfunc argument case in arena_kfunc.c and the
->     scalar access case in verifier_arena_scalar.c. They load now, so move
->     them to an object without an arena map, where the kernel checks still
->     apply.
->     Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index fcedb78abe00..bd4df22a8a95 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
-The commit message says the struct_ops callback is attached "from an object
-whose programs never refer to the arena", but is that accurate for every
-program in the object?
+[ ... ]
 
-In progs/struct_ops_arena_autobind.c, the trigger program uses the arena
-directly:
+> @@ -8804,6 +8805,47 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
 
-    val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-    ...
-    bpf_arena_free_pages(&arena, (void __arena *)val, 1);
+[ ... ]
 
-The comment in the source file describes this correctly: "Neither the
-callback nor the unrelated program refers to the arena".  Only test_arena_cb
-and unrelated avoid the arena, and those are the two programs whose binding
-the test checks.
+> +static int bpf_object__bind_arena(struct bpf_object *obj, struct bpf_program *prog,
+> +				  struct bpf_prog_load_opts *load_attr)
+> +{
 
-Could the changelog say that the callback (and the unrelated program) never
-refer to the arena, rather than all of the object's programs?
+[ ... ]
+
+> +	obj->fd_array[0] = map->fd;
+> +	load_attr->fd_array = obj->fd_array;
+> +	/* with slot 0 filled every slot handed out is valid, so the array can go with a count */
+> +	load_attr->fd_array_cnt = obj->fd_array_used;
+> +	return 0;
+> +}
+
+With the arena now bound to every program of an object that has an arena
+map, do the selftests that rely on a program in such an object having no
+arena still pass at this commit?
+
+Two programs look affected.  In progs/arena_kfunc.c:
+
+	SEC("syscall")
+	__arch_x86_64
+	__arch_arm64
+	__failure __msg("arena pointer requires a program with an associated arena")
+	int arena_arg_no_arena(void *ctx)
+	{
+		bpf_kfunc_arena_arg_test((u64 *)1);
+		return 0;
+	}
+
+The object declares an arena map, so on a kernel with fd_array_cnt this
+program now gets the arena and no longer fails with that message.
+
+In progs/verifier_arena_scalar.c, no_arena() expects:
+
+	__failure __msg("R6 invalid mem access 'scalar'")
+
+That object declares an arena map too, so this program should now load as
+well.
+
+Both programs are moved to a new object without an arena map by 02f4766a965c
+("selftests/bpf: Test arena binding by libbpf"), later in the series.  Until
+then test_arena_kfunc and the verifier_arena_scalar tests would fail, so the
+series is not bisectable for them.
+
+Could those selftest changes be folded into this commit, so that each step
+stays green?
 
 
 ---
@@ -92,4 +117,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38826834739
---===============9100725291623905389==--
+--===============6294980444073911556==--
