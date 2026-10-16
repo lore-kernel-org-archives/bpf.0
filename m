@@ -1,82 +1,86 @@
-Received: from mta1.migadu.com (out-6.mta1.migadu.com [95.215.58.6])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC42E52ED33
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 16:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611862D0614;
+	Fri, 16 Oct 2026 17:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792169806; cv=none; b=GgBPm1hjlJ+MDeZQQ/UVQSvxMr1elOCyxa2PPY/125lldB5IXYK/3kpsLDdzJcQdjjxFFW+5p5gZXhlvI/ssx1TkCD5A68dAcScgNozLvsvrL+jWr+KxWtnIXcX3LrmG7vHVXvtPu0bRGU7nGUeVh4XrrUQLJLgM/N5Ny0lq0AY=
+	t=1792170012; cv=none; b=PdP8jtK91faw0gUSKCqSTrkI31Zti7AdaIJbHZlKwzhQkL75xRTYLb6GngUGXAgZpw/aG9PEQUoWGwdLjZByE1eCzKecLB2QIuHsQp3r4YpipvRYQldUgM74pFHdp9Z99X1y08SDNKU5FfVXK8uLcaTubFeEFQ9xWkLHcPdwcvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792169806; c=relaxed/simple;
-	bh=21nlTXF1Ye0xW4Rhf8DSUPZD0UBWhSD2gXLELUgsPxc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m6q+tbS2+GjlzEMlQdiA/XbyR6n+iS1Tvm5jtJVKdzhlbeaCC9bD8qiZyLegF4dIEjqNYUl6a1oIgDjLoYuM6eqrIrfZYYt1lSiHhu7Awz8AzNNXISAKyuOdiCxmhda3lgwTxyrc2RzyT5WHbbJ4JG1WOQcRcLA9NhgKhG5LxHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c2aDv7Vv; arc=none smtp.client-ip=95.215.58.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792170012; c=relaxed/simple;
+	bh=AsFZhgB21QxgMaccGaPIY6BeLC3vaHprBIeC0TEDAmk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=p7OGN2NM2BCKVjuEFblhUcfMZwHgJXs0jhjEvzFc1tH7suzq1LLMIeYSa3QMdK+F9SUo20mcdZeucrczNDHZRWzXBZ0O6aFvpnheHbiQjO+a5jZjn8L7F1KWAs2RvRXGP9XMsBmtp7795dDUDBFfIE91IJd5c1aTTBv8TJojyxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sq7BaDvw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c2aDv7Vv"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=21nlTXF1Ye0xW4Rhf8DSUPZD0UBWhSD2gXLELUgsPxc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792169802; v=1; x=1792774602;
- b=c2aDv7Vv9gjRR48uf4jj8BPJ0a2RmWy0A+4dRVQBEoCq4/okeIiXgOvfQlHoHXQRqVfbuyE0
- wRIRlb6d/oRa6Nf97ASrrrHQVqMAd/YQ7k+C1qPphtvwZeWI+ccG+8UxdgR/DvbK2EEQUGAKwMC
- 3TWOO+e4bNaD5L8J+hHl9650=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id eac7551d6365e4cb;
-	Fri, 16 Oct 2026 16:56:42 +0000
-X-Mizu-Trace-ID: eac7551d6365e4cb
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <3bf3d88d-bc40-40d8-a8ef-5d139aa38318@linux.dev>
-Date: Fri, 16 Oct 2026 09:56:39 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sq7BaDvw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AFD61F000C6;
+	Fri, 16 Oct 2026 17:00:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792170006;
+	bh=VmLjeuHdZ9AD3s/Vxb4MAnUdqD9kSYMiZXXClv/vstk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Sq7BaDvwXsdyRVCjUnJV8umLptTR/Nk4x3FBZJ+tSyNO4k38J8ATJnkWPKiCDoDQ5
+	 O+4FLi4nanJfT/qxzFPmbi8mi3NN2YmZ/Yc45nb5VbBep4BgSGte95febGofyA/x23
+	 BQR/WcqsouxWndUhB7uYb84+gdO8GgltsqbhhWq9XLTs+AmkTjuyBBouFFxW06HUK2
+	 YgdKYnQlc2/Re4ZVWhnem4UmY4erW10rjjVo0dk0+QxQmJF1TQsnNidoN881iJCl+M
+	 po3EFTgl5r+GRI3cVaNoksEj6IFSlQNR1Z6sjKIQJccgiMJOtxSD5GGVSybB+WCir2
+	 jMQqLYutWOIzA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 25EE1380AA4C;
+	Fri, 16 Oct 2026 17:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 00/11] bpf: Follow up by-value struct and
- __int128 argument support
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, kernel-team@fb.com
-References: <20261013170910.2126673-1-yonghong.song@linux.dev>
- <DM5X4L58MG5M.2AK0D6DRZ5ERF@gmail.com>
- <a420e9de-4546-4be8-9fc0-d9e9c9fa6fb3@linux.dev>
- <DM6DYYV4XVKO.G5S77C0FGIYG@gmail.com>
- <dfa562d4-23fb-46ff-bbf9-5a56d2e51860@linux.dev>
- <DM6EOZ20E9ON.3KR4R7QU4SOJR@gmail.com>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DM6EOZ20E9ON.3KR4R7QU4SOJR@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v7 1/2] bpf: Allow ksock connect/send calls from
+ wq
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179217000494.875581.6270942748112870456.git-patchwork-notify@kernel.org>
+Date: Fri, 16 Oct 2026 17:00:04 +0000
+References: <20261016133318.33999-1-mahe.tardy@gmail.com>
+In-Reply-To: <20261016133318.33999-1-mahe.tardy@gmail.com>
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
+ edumazet@google.com, john.fastabend@gmail.com, kuba@kernel.org,
+ liamwisehart@meta.com, martin.lau@linux.dev, pabeni@redhat.com,
+ song@kernel.org, netdev@vger.kernel.org, sdf.kernel@gmail.com,
+ ameryhung@gmail.com, kuniyu@google.com, memxor@gmail.com,
+ jiayuan.chen@linux.dev, almagui@kernel.org
 
+Hello:
 
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-On 10/16/26 9:34 AM, Alexei Starovoitov wrote:
-> On Fri, Oct 16, 2026 at 09:22 AM Yonghong Song <yonghong.song@linux.dev> wrote:
->> This one can exercise for s390x, x86_64 and arm64. Do you think it is worthwhile?
-> ohh. makes sense then.
-> Patch 4 fixes s390 too. Without it s390 trampoline sees arg_size 16
-> for v, does mvc 16 bytes from 0(%r3) and restores r2-r4 only.
-> callee_odd() will be the only test for that and CI runs s390x.
-> Then LO/HI has a user in tracing_struct_int128_tracer.c. Keep it there
-> and drop it from tracing_struct_int128.c.
+On Fri, 16 Oct 2026 13:33:17 +0000 you wrote:
+> The initial ksock implementation, commit 7ae4eb14c5f9 ("bpf: Add ksock
+> kfuncs"), kept LSM checks from the kfunc calls and disallowed
+> asynchronous workqueues because worker credentials differ from those of
+> the triggering task. However, discussions at Plumbers 2026[^1] revealed
+> that bypassing LSM checks for BPF-created sockets could be acceptable.
+> 
+> This patch allows workqueue use while retaining LSM checks for now,
+> paving the way to call bpf_ksock_connect() and bpf_ksock_send() from
+> non-sleepable programs, such as tracing programs, in future patches.
+> 
+> [...]
 
-I will use BPF_PROG2 macro which sounds better to have LO/HI thing.
-See progs/tracing_struct.c.
+Here is the summary with links:
+  - [bpf-next,v7,1/2] bpf: Allow ksock connect/send calls from wq
+    https://git.kernel.org/bpf/bpf-next/c/60bbe76a3f9e
+  - [bpf-next,v7,2/2] selftests/bpf: Test ksock connect/send calls from wq
+    https://git.kernel.org/bpf/bpf-next/c/242d8416f60c
 
->
->> Two other bpf functions, which has stack arguments, need rejection with
->>     ... && !defined(__TARGET_ARCH_s390)
-> Same #if as in progs/stack_arg.c ?
->
-> If it turns out to be more than that it can be a follow up too.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I will do a follow-up for this since I didn't test riscv yet.
 
