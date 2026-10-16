@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D5D58B6BD;
-	Fri, 16 Oct 2026 17:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B28859574B;
+	Fri, 16 Oct 2026 17:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792172658; cv=none; b=SIBSI/aRDl4dvjodIQ4y7T6wcX8120s/rHoCb8o/4gWyxmV6OQzfXZLWbnpCD0uuuvj8ZSGTgj32FUaGRw+OyAlMQNQLuevFyDsoqXWuVSH+JZ2ZCMuF+WqZZo/MxY6WhPE4Jj5wG1+e8Lc5f74Q+nDbTiS74OH/wB4RE8uN+oo=
+	t=1792172663; cv=none; b=kpsiABP5HrITHhLu3B0Ph84bjG8OB9P+Fco6U3kFTT1TzUZUE/cUM43mo/KtSKDwCYCvEn9s2BN1hszV+hUMoVZSy2G2XqF6yK1SCfyMD55WyGB35LUSwZupD2CTG32bferirVD/kp2c7iwaRPGA8vZk95vr0DKD6NnMetblxik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792172658; c=relaxed/simple;
-	bh=YntjSzI/OW2XGeRyIFzIM9oBNlyn1DkhVlMeWVyYIMo=;
+	s=arc-20240116; t=1792172663; c=relaxed/simple;
+	bh=4lO/EkVACHgm02j3/fk6sLfADVH4h6L9sCHO/kXy6qU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BRRLCPIFciQIlEV7a7r4cqlWO7n8GCLK23p4+h0K/q0tUewtYvw1NhpTUNK0ABAd+JrWyIQcqAUfUKmoN5AhZDMLOT7+P7gthu2OoLemO0+y5jUN3O9es7PuTnHmS5R8udzA20whc1/1GBbZ88v80o1wyWkS5FgzGgKzhl1KHrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LwhxpD1u; arc=none smtp.client-ip=198.175.65.17
+	 MIME-Version; b=U6C+dZ8lXeteN9JbS/fOzM/Jp5nDv6WFPNsCpaGWAweHkoItlk83MNACTsSC1aCUN+eXMvvftGmCRME0QkqtxaC37SkIZGnnMMyw00Cu2w3hMwHdOxGxyfatV/nKWxV6myfc2hw+bh4Od+ekJGZr+rKwqOH4tk8c2fEqFgl2S+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bsOGb+92; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LwhxpD1u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bsOGb+92"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792172652; x=1823708652;
+  t=1792172657; x=1823708657;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=YntjSzI/OW2XGeRyIFzIM9oBNlyn1DkhVlMeWVyYIMo=;
-  b=LwhxpD1uVlbgM/1+NSNDBlB3kRCu2+T9ONn35dJiQgbtkLjIwrUcQi4A
-   oCf0e2Za8KNe3d6jxoBeGrEOFIrLj7a4LyfiQOuLcD0tbc5HEz3Cc1KHW
-   SMEJUDuBML7eG5VJfCbVj+uzSeqitpWk1ZdS6n8Lhimpnyh3H40Gcglo2
-   gBt0/1+cGkoKySUz3bLKXhG6or/M5NkE+75GMqMhQ8bPWkjA9TjlTPwSi
-   wpvXZcLiH9eqWocQO0ws+Vp1cL4MMMX+XOpQNzkXzhEWCcuo8L6lb8pcu
-   5vp3bxk6v8SJPQBpJs3W01rIinF898IwdhirU7lXDfRSeNZC7WE0GEylw
+  bh=4lO/EkVACHgm02j3/fk6sLfADVH4h6L9sCHO/kXy6qU=;
+  b=bsOGb+92O/kWy/vHx6QhfUDn9+oppo2KbmpnOMOb5I5MskEK+oQoLREH
+   l1wS1U4S15lJNc5jr3Tv+J8D7oNq9gh7SR8I5/jZsOhtKUlUmFIi3FQ3K
+   BTs12V3o3bP+052lSNeMesTEKgPSzDBhDpvCR9Y7VyvoUgqGQLcvSvuiP
+   jFoSaZhd5jqAwPb5EG+rWfdzXZG8fY+yXO6wbWKqeJFrXHZhXEptZMr4p
+   n0JxTYY2+WOHx4T8TpKg/DANEisI6UmOAueWaajBGD4F0W5BnTpgUgAx7
+   sMKzU6woh0cDLNv1V8MVNwR52wQarzWFburhdRxgNxtPPnw0JLFxmUeOg
    g==;
-X-CSE-ConnectionGUID: yd/ej9uUQnOemnhojB7dCg==
-X-CSE-MsgGUID: HsMM3HI1Rx6KRrjiXXy0rw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11937"; a="972377"
+X-CSE-ConnectionGUID: mmjeH21VRQmIaGdk158TSg==
+X-CSE-MsgGUID: u331v02HQluYEC8+1fW2Kw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11937"; a="972393"
 X-IronPort-AV: E=Sophos;i="6.27,162,1787036400"; 
-   d="scan'208";a="972377"
+   d="scan'208";a="972393"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2026 10:44:11 -0700
-X-CSE-ConnectionGUID: JKm4wfCKRB6QmRBYoThS3Q==
-X-CSE-MsgGUID: oxScu+5vRduJRIJk3mz9ow==
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2026 10:44:17 -0700
+X-CSE-ConnectionGUID: qDuUgcg8Sx++jU3eoQUl1w==
+X-CSE-MsgGUID: KNmnpqsOQpu2QnZYQHk8wA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,162,1787036400"; 
-   d="scan'208";a="2425212"
+   d="scan'208";a="2425228"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orviesa010.jf.intel.com with ESMTP; 16 Oct 2026 10:44:09 -0700
+  by orviesa010.jf.intel.com with ESMTP; 16 Oct 2026 10:44:15 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: bpf@vger.kernel.org,
 	kerneljasonxing@gmail.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v4 net-next 09/15] selftests: xsk: run one test case per xskxceiver invocation
-Date: Fri, 16 Oct 2026 19:43:32 +0200
-Message-Id: <20261016174338.787135-10-maciej.fijalkowski@intel.com>
+Subject: [PATCH v4 net-next 11/15] selftests: xsk: send UDP over IPv4 or IPv6 between the interface MACs
+Date: Fri, 16 Oct 2026 19:43:34 +0200
+Message-Id: <20261016174338.787135-12-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20261016174338.787135-1-maciej.fijalkowski@intel.com>
 References: <20261016174338.787135-1-maciej.fijalkowski@intel.com>
@@ -66,822 +66,975 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Replace test_xsk.sh and xsk_prereqs.sh with test_xsk.py, which runs
-xskxceiver once per mode and case, so that every case starts from a
-fresh process and a crash fails only its own case. A single case is
-also the unit that the next patch splits into RX and TX processes.
+xskxceiver sends frames of the loopback ethertype between made-up MAC
+addresses, and its XDP programs redirect every frame to the XSKMAP.
+That suits a veth pair that carries nothing else, but not a physical
+link, where the peer NIC filters out the made-up addresses and the
+programs take neighbour discovery, LLDP or SSH away from the stack.
 
-xskxceiver now requires -m and -t, runs exactly that case, reports one
-KTAP result and exits with its verdict. An unsupported mode skips the
-case instead of exiting with XFAIL.
+Send the test packets as UDP between the MAC addresses of the two
+interfaces on any link. Each endpoint takes the IPv4 or IPv6 addresses
+of the flow (--src-ip, --dst-ip), the MAC address of its peer
+(--dst-mac) and the UDP port (--udp-port), and reads its own MAC
+address from the interface. Over IPv4 the UDP checksum is left at zero,
+as IPv4 allows; over IPv6 it is computed from the known payload.
+PKT_HDR_SIZE and MIN_PKT_SIZE now stand for variables that
+xsk_set_flow() sets, so the smallest packet grows with the headers to
+64 bytes over IPv4 and 88 over IPv6, and a verbatim stream adds up the
+descriptors of a packet for its IP and UDP lengths.
 
-test_xsk.py uses the networking selftests Python library, as does the
-hardware test added later, so every case is a KTAP case of its own:
-test_xsk runs each case that xskxceiver -l lists in skb and drv mode,
-e.g. test_xsk.drv_SEND_RECEIVE, and test_xsk_busy_poll runs them again
-with busy polling. The usual -t and -T options select cases in place of
-the script's -l, -m and -t, and -v and -d go away, as the output of a
-run that does not pass is logged. Each case runs on a veth pair of its
-own, so an MTU or an XDP program that a crashed case leaves behind
-cannot reach the next one. The pair stays in the current network
-namespace, as only the initial one has the net.core.max_skb_frags
-sysctl that xskxceiver reads. A case is killed and fails after 20s, so
-that the run ends within the net timeout even if all cases hang.
-xskxceiver is also killed if the wait for it is interrupted, and the
-test skips when xskxceiver was not built.
+The XDP programs redirect only the UDP packets to the test port and
+pass everything else to the stack, all IPv4 fragments included. The port
+is written when a skeleton is loaded, so it also reaches the shadow
+endpoint's copy, whose programs the local side attaches once
+BIDIRECTIONAL swaps the directions. XDP_SHARED_UMEM picks the socket by
+the UDP source port, the test port plus the socket index, rather than by
+a made-up destination MAC, and xsk_xdp_adjust_tail() numbers a grown
+tail after the UDP header.
 
-test_xsk.py reserves 32 huge pages of 2 MiB, the size that xskxceiver
-maps the UNALIGNED UMEMs with, and restores the count however the run
-ends, -l and -h included. When it cannot, as without hugetlb or root,
-it restores the count at once and leaves the UNALIGNED cases out. The
-huge page, busy-poll and endpoint wait helpers, which the hardware
-test shares, go to net/lib/py/xsk.py, which joins the AF_XDP entry in
-MAINTAINERS.
+test_xsk.py sends from 2001:db8::1 to 2001:db8::2 between the MAC
+addresses of the veth pair. The veths need not have the addresses, as
+the XDP program takes the packets before the stack, and IPv6 stays on.
 
-test_xsk.py leaves out two cases that test_progs skipped as flaky:
+is_adjust_tail_supported() copied all of .bss into an int with
+bpf_map_lookup_elem(), past the end of the int even before the port
+grew .bss; read adjust_value through the skeleton instead.
+is_frag_valid() now rejects a fragment too short for the words it
+reads, and pkt_dump() prints only the words within the length it is
+given, which is_pkt_valid() gives as the first fragment's length.
+write_payload() zeroes the bytes after the last full word, which the
+IPv6 UDP checksum counts.
 
-- XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF: bpf_xdp_adjust_tail() frees the
-  trimmed fragment as the memory type of the XDP RX queue, which veth
-  and generic XDP leave at MEM_TYPE_PAGE_SHARED for frames that they
-  copy into page_pool pages, so the page leaks from its pool and the
-  pool's shutdown stalls
-- XDP_ADJUST_TAIL_GROW: it skips in skb mode, and in drv mode veth
-  copies each frame into a page_pool fragment that leaves no room to
-  grow the 128-byte frames of the case unless it is the last one of its
-  page, so the XDP program drops most frames
-
-Drop the xskxceiver.c note on enabling packet dumps with -D in
-test_xsk.sh; xskxceiver has no such option and dumps packets on
-validation errors.
-
-Reviewed-by: Björn Töpel <bjorn@kernel.org>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/net/Makefile          |   3 +-
- tools/testing/selftests/net/lib/Makefile      |   2 +-
- .../testing/selftests/net/lib/py/__init__.py  |   4 +
- tools/testing/selftests/net/lib/py/xsk.py     |  73 ++++++
- .../selftests/net/lib/xsk/xskxceiver.c        |  63 ++---
- tools/testing/selftests/net/test_xsk.py       | 139 +++++++++++
- tools/testing/selftests/net/test_xsk.sh       | 230 ------------------
- tools/testing/selftests/net/xsk_prereqs.sh    |  86 -------
- 9 files changed, 241 insertions(+), 360 deletions(-)
- create mode 100644 tools/testing/selftests/net/lib/py/xsk.py
- create mode 100755 tools/testing/selftests/net/test_xsk.py
- delete mode 100755 tools/testing/selftests/net/test_xsk.sh
- delete mode 100755 tools/testing/selftests/net/xsk_prereqs.sh
+ .../testing/selftests/net/lib/xsk/test_xsk.c  | 240 ++++++++++++++----
+ .../testing/selftests/net/lib/xsk/test_xsk.h  |   7 +-
+ tools/testing/selftests/net/lib/xsk/xsk.c     |  26 ++
+ tools/testing/selftests/net/lib/xsk/xsk.h     |   1 +
+ .../selftests/net/lib/xsk/xsk_xdp_common.h    |   3 +-
+ .../selftests/net/lib/xsk/xsk_xdp_progs.bpf.c |  91 ++++++-
+ .../selftests/net/lib/xsk/xskxceiver.c        |  48 +++-
+ tools/testing/selftests/net/test_xsk.py       |  30 ++-
+ 8 files changed, 368 insertions(+), 78 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1fc9eaedd744..6985a42bc09c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -29784,6 +29784,7 @@ F:	include/uapi/linux/if_xdp.h
- F:	include/uapi/linux/xdp_diag.h
- F:	net/xdp/
- F:	tools/testing/selftests/net/*xsk*
-+F:	tools/testing/selftests/net/lib/py/xsk.py
- F:	tools/testing/selftests/net/lib/xsk/
+diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testing/selftests/net/lib/xsk/test_xsk.c
+index ce88218fef00..9c401a43da43 100644
+--- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
++++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
+@@ -3,10 +3,14 @@
+ #include <bpf/bpf.h>
+ #include <errno.h>
+ #include <limits.h>
++#include <linux/align.h>
+ #include <linux/bitmap.h>
+ #include <linux/if_link.h>
+ #include <linux/mman.h>
+ #include <linux/netdev.h>
++#include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/udp.h>
+ #include <poll.h>
+ #include <string.h>
+ #include <sys/mman.h>
+@@ -20,14 +24,14 @@
+ #include "xsk_xdp_progs.skel.h"
  
- XEN BLOCK SUBSYSTEM
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index aa31b6216dd1..8c8219703bd7 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -118,7 +118,7 @@ TEST_PROGS := \
- 	test_vxlan_under_vrf.sh \
- 	test_vxlan_vnifilter_notify.sh \
- 	test_vxlan_vnifiltering.sh \
--	test_xsk.sh \
-+	test_xsk.py \
- 	tfo_passive.sh \
- 	traceroute.sh \
- 	txtimestamp.sh \
-@@ -210,7 +210,6 @@ TEST_FILES := \
- 	in_netns.sh \
- 	lib.sh \
- 	settings \
--	xsk_prereqs.sh \
- # end of TEST_FILES
+ #define DEFAULT_BATCH_SIZE		64
+-#define MIN_PKT_SIZE			64
++/* Payload of the smallest packet, which is 64 bytes over IPv4 */
++#define MIN_PAYLOAD_SIZE		20
+ #define MAX_ETH_JUMBO_SIZE		9000
+ #define MAX_INTERFACES			2
+ #define MAX_TEARDOWN_ITER		10
+ #define MAX_TX_BUDGET_DEFAULT		32
+ #define PKT_DUMP_NB_TO_PRINT		16
+-/* Just to align the data in the packet */
+-#define PKT_HDR_SIZE			(sizeof(struct ethhdr) + 2)
++#define PKT_HDR_SIZE			pkt_hdr_size
+ #define POLL_TMOUT			1000
+ #define THREAD_TMOUT			3
+ #define UMEM_HEADROOM_TEST_SIZE		128
+@@ -36,9 +40,17 @@
+ #define XSK_UMEM__LARGE_FRAME_SIZE	(3 * 1024)
+ #define XSK_UMEM__MAX_FRAME_SIZE	(4 * 1024)
  
- # YNL files, must be before "include ..lib.mk"
-diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
-index c26088da0489..5c1612315062 100644
---- a/tools/testing/selftests/net/lib/Makefile
-+++ b/tools/testing/selftests/net/lib/Makefile
-@@ -34,7 +34,7 @@ include ../../lib.mk
+-static const u8 g_mac[ETH_ALEN] = {0x55, 0x44, 0x33, 0x22, 0x11, 0x00};
++/* The test flow, UDP over IPv4 or IPv6 */
++static int flow_family;
++static union {
++	struct in_addr v4;
++	struct in6_addr v6;
++} flow_src, flow_dst;
++static u16 udp_port;
++static u32 pkt_hdr_size;
  
- include ../bpf.mk
+ bool opt_verbose;
++int min_pkt_size;
  
--# AF_XDP test engine used by net/test_xsk.sh.
-+# AF_XDP test engine used by net/test_xsk.py.
- XSK_DIR := xsk
- XSK_BPF_OBJ := $(OUTPUT)/xsk_xdp_progs.bpf.o
- XSK_SKEL := $(OUTPUT)/xsk_xdp_progs.skel.h
-diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
-index 71df5880b356..1a93ab8b1e60 100644
---- a/tools/testing/selftests/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/net/lib/py/__init__.py
-@@ -16,6 +16,8 @@ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
-     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
-     ctl_file_write, wait_file, tool, tc
- from .bpf import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
-+from .xsk import xsk_reserve_hugepages, xsk_release_hugepages, \
-+    xsk_setup_busy_poll, xsk_wait_endpoint_exit
- from .ynl import NlError, NlctrlFamily, YnlFamily, \
-     EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily, RtnlRouteFamily
- from .ynl import NetshaperFamily, DevlinkFamily, PSPFamily, Netlink
-@@ -31,6 +33,8 @@ __all__ = ["KSRC",
-            "bpftool", "ip", "ethtool", "bpftrace", "rand_port", "rand_ports",
-            "wait_port_listen", "ctl_file_write", "wait_file", "tool", "tc",
-            "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
-+           "xsk_reserve_hugepages", "xsk_release_hugepages",
-+           "xsk_setup_busy_poll", "xsk_wait_endpoint_exit",
-            "NetdevSim", "NetdevSimDev",
-            "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
-            "YnlFamily", "EthtoolFamily", "NetdevFamily", "RtnlFamily",
-diff --git a/tools/testing/selftests/net/lib/py/xsk.py b/tools/testing/selftests/net/lib/py/xsk.py
-new file mode 100644
-index 000000000000..ffaf4b2d35b9
---- /dev/null
-+++ b/tools/testing/selftests/net/lib/py/xsk.py
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: GPL-2.0
+ int pkts_in_flight;
+ static struct xsk_peer *ctrl_peer;
+@@ -80,19 +92,132 @@ static int pacing_tx_sync(void)
+  */
+ static void write_payload(void *dest, u32 pkt_nb, u32 start, u32 size)
+ {
+-	u32 *ptr = (u32 *)dest, i;
++	u32 *ptr = (u32 *)dest, i, words = size / sizeof(*ptr);
+ 
+ 	start /= sizeof(*ptr);
+-	size /= sizeof(*ptr);
+-	for (i = 0; i < size; i++)
++	for (i = 0; i < words; i++)
+ 		ptr[i] = htonl(pkt_nb << 16 | (i + start));
++	/* The UDP checksum counts a partial last word as zero. */
++	memset(ptr + words, 0, size % sizeof(*ptr));
+ }
+ 
+-static void gen_eth_hdr(struct xsk_socket_info *xsk, struct ethhdr *eth_hdr)
++int xsk_set_flow(const char *src_ip, const char *dst_ip, u16 port)
+ {
++	u32 ip_hdr_size;
 +
-+"""
-+Helpers to run xskxceiver, the AF_XDP test program in net/lib/xsk.
-+"""
++	if (inet_pton(AF_INET, src_ip, &flow_src) == 1 &&
++	    inet_pton(AF_INET, dst_ip, &flow_dst) == 1) {
++		flow_family = AF_INET;
++		ip_hdr_size = sizeof(struct iphdr);
++	} else if (inet_pton(AF_INET6, src_ip, &flow_src) == 1 &&
++		   inet_pton(AF_INET6, dst_ip, &flow_dst) == 1) {
++		flow_family = AF_INET6;
++		ip_hdr_size = sizeof(struct ipv6hdr);
++	} else {
++		return -EINVAL;
++	}
++	if (!port)
++		return -EINVAL;
 +
-+import subprocess
++	udp_port = port;
++	pkt_hdr_size = sizeof(struct ethhdr) + ip_hdr_size +
++		       sizeof(struct udphdr) + PKT_HDR_PAD;
++	/* A multiple of 8, so that a packet that a case puts MIN_PKT_SIZE / 2
++	 * before a boundary keeps its payload 4-byte aligned.
++	 */
++	min_pkt_size = ALIGN(pkt_hdr_size + MIN_PAYLOAD_SIZE, 8);
++	return 0;
++}
 +
-+from .ksft import ksft_pr
-+from .utils import cmd, ctl_file_write
++/* Add up buf as big-endian 16-bit words, len being even. */
++static u32 csum_add(u32 sum, const void *buf, size_t len)
++{
++	const u8 *pos = buf;
 +
-+NR_HUGEPAGES = 32
-+# xskxceiver maps the UMEMs of the UNALIGNED cases with MAP_HUGE_2MB.
-+HUGEPAGES = "/sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages"
++	for (; len > 1; len -= 2, pos += 2)
++		sum += pos[0] << 8 | pos[1];
++	return sum;
++}
 +
++static u16 csum_fold(u32 sum)
++{
++	while (sum >> 16)
++		sum = (sum & 0xffff) + (sum >> 16);
++	return htons((u16)~sum);
++}
 +
-+def xsk_reserve_hugepages(saved, host=None):
-+    """Raise the count of 2 MiB huge pages on host to what the UNALIGNED
-+    cases need, and return whether it has that many. Add the count to
-+    restore to saved, a list for xsk_release_hugepages(), or restore it
-+    right away if the host falls short. A host without the pool or the
-+    rights to resize it has no huge pages for the cases."""
-+    have = cmd(f"cat {HUGEPAGES}", fail=False, host=host)
-+    if have.ret:
-+        return False
-+    have = int(have.stdout)
-+    if have >= NR_HUGEPAGES:
-+        return True
-+    saved.append((host, have))
-+    cmd(f"echo {NR_HUGEPAGES} > {HUGEPAGES}", shell=True, fail=False,
-+        host=host)
-+    if int(cmd(f"cat {HUGEPAGES}", host=host).stdout) >= NR_HUGEPAGES:
-+        return True
-+    xsk_release_hugepages([saved.pop()])
-+    return False
++/* The sum of the payload of len bytes that write_payload() writes: each
++ * word holds pkt_nb and the index of the word in its two 16-bit halves.
++ */
++static u32 payload_csum(u32 pkt_nb, u32 len)
++{
++	u32 words = len / sizeof(u32);
 +
++	return words * (pkt_nb & 0xffff) + words * (words - 1) / 2;
++}
 +
-+def xsk_release_hugepages(saved):
-+    """Restore the counts that xsk_reserve_hugepages() added to saved, the
-+    last one first, as two hosts can share the pool."""
-+    for host, have in reversed(saved):
-+        cmd(f"echo {have} > {HUGEPAGES}", shell=True, fail=False, host=host)
++static u16 udp6_csum(const struct ipv6hdr *ip6, const struct udphdr *udp, u32 pkt_nb)
++{
++	u32 len = ntohs(udp->len), sum;
 +
++	sum = csum_add(0, &ip6->saddr, sizeof(ip6->saddr));
++	sum = csum_add(sum, &ip6->daddr, sizeof(ip6->daddr));
++	sum += len + IPPROTO_UDP;
++	sum = csum_add(sum, udp, sizeof(*udp));
++	/* The pad in front of the payload is zero. */
++	sum += payload_csum(pkt_nb, len - sizeof(*udp) - PKT_HDR_PAD);
++	return csum_fold(sum) ?: 0xffff;
++}
 +
-+def xsk_setup_busy_poll(ifname):
-+    """Set napi_defer_hard_irqs and gro_flush_timeout of ifname until the
-+    case ends, so that SO_PREFER_BUSY_POLL of xskxceiver -b keeps the IRQs
-+    masked."""
-+    sysfs = f"/sys/class/net/{ifname}"
-+    ctl_file_write(f"{sysfs}/napi_defer_hard_irqs", 2)
-+    ctl_file_write(f"{sysfs}/gro_flush_timeout", 200000)
++static void gen_pkt_hdr(struct xsk_socket_info *xsk, void *data, u32 pkt_nb, u32 total_len)
++{
++	u32 ip_len = total_len - sizeof(struct ethhdr);
++	struct ethhdr *eth_hdr = data;
++	struct udphdr udp = {
++		.source = htons(xsk->src_port),
++		.dest = htons(udp_port),
++	};
++	void *ptr = eth_hdr + 1;
 +
+ 	memcpy(eth_hdr->h_dest, xsk->dst_mac, ETH_ALEN);
+ 	memcpy(eth_hdr->h_source, xsk->src_mac, ETH_ALEN);
+-	eth_hdr->h_proto = htons(ETH_P_LOOPBACK);
 +
-+def xsk_wait_endpoint_exit(endpoint, label, timeout):
-+    """Wait up to timeout seconds for xskxceiver to exit, kill it if it does
-+    not or if the wait is interrupted, and return its exit code. Log its
-+    output, a KTAP stream of its own, prefixed with label, only if it did
-+    not pass."""
-+    try:
-+        endpoint.process(terminate=False, fail=False, timeout=timeout)
-+    except subprocess.TimeoutExpired:
-+        endpoint.proc.kill()
-+        endpoint.process(terminate=False, fail=False)
-+        ksft_pr(f"killed after {timeout}s", line_pfx=f"{label}|")
-+    except BaseException:
-+        endpoint.proc.kill()
-+        endpoint.proc.wait()
-+        raise
-+    if endpoint.ret:
-+        for out in (endpoint.stdout, endpoint.stderr):
-+            if out:
-+                ksft_pr(out.rstrip(), line_pfx=f"{label}|")
-+    return endpoint.ret
++	if (flow_family == AF_INET6) {
++		struct ipv6hdr ip6 = {
++			.version = 6,
++			.payload_len = htons(ip_len - sizeof(ip6)),
++			.nexthdr = IPPROTO_UDP,
++			.hop_limit = 64,
++			.saddr = flow_src.v6,
++			.daddr = flow_dst.v6,
++		};
++
++		eth_hdr->h_proto = htons(ETH_P_IPV6);
++		udp.len = ip6.payload_len;
++		udp.check = udp6_csum(&ip6, &udp, pkt_nb);
++		memcpy(ptr, &ip6, sizeof(ip6));
++		ptr += sizeof(ip6);
++	} else {
++		/* Without a checksum, which UDP over IPv4 does not require */
++		struct iphdr ip = {
++			.version = 4,
++			.ihl = 5,
++			.ttl = 64,
++			.protocol = IPPROTO_UDP,
++			.tot_len = htons(ip_len),
++			.saddr = flow_src.v4.s_addr,
++			.daddr = flow_dst.v4.s_addr,
++		};
++
++		eth_hdr->h_proto = htons(ETH_P_IP);
++		udp.len = htons(ip_len - sizeof(ip));
++		ip.check = csum_fold(csum_add(0, &ip, sizeof(ip)));
++		memcpy(ptr, &ip, sizeof(ip));
++		ptr += sizeof(ip);
++	}
++
++	memcpy(ptr, &udp, sizeof(udp));
++	memset(ptr + sizeof(udp), 0, PKT_HDR_PAD);
+ }
+ 
+ u32 mode_to_xdp_flags(enum test_mode mode)
+@@ -207,6 +332,7 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 
+ 	for (i = 0; i < MAX_INTERFACES; i++) {
+ 		struct ifobject *ifobj = i ? ifobj_rx : ifobj_tx;
++		struct ifobject *peer = i ? ifobj_tx : ifobj_rx;
+ 		struct xsk_umem_info *umem;
+ 
+ 		ifobj->xsk = &ifobj->xsk_arr[0];
+@@ -238,10 +364,10 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 			else
+ 				xsk->pkt_stream = test->rx_pkt_stream_default;
+ 
+-			memcpy(xsk->src_mac, g_mac, ETH_ALEN);
+-			memcpy(xsk->dst_mac, g_mac, ETH_ALEN);
+-			xsk->src_mac[5] += ((j * 2) + 0);
+-			xsk->dst_mac[5] += ((j * 2) + 1);
++			memcpy(xsk->src_mac, ifobj->caps.mac, ETH_ALEN);
++			memcpy(xsk->dst_mac, peer->caps.mac, ETH_ALEN);
++			/* xsk_xdp_shared_umem() picks the socket by it. */
++			xsk->src_port = udp_port + j;
+ 		}
+ 
+ 		ifobj->xsk->umem->num_frames = DEFAULT_UMEM_BUFFERS;
+@@ -442,6 +568,19 @@ static u32 pkt_nb_frags(u32 frame_size, struct pkt_stream *pkt_stream, struct pk
+ 	return nb_frags;
+ }
+ 
++/* A verbatim stream has one entry per descriptor, so add up the packet's. */
++static u32 pkt_total_len(struct pkt_stream *pkt_stream, struct pkt *pkt, u32 nb_frags)
++{
++	u32 i, len = 0;
++
++	if (!pkt_stream->verbatim)
++		return pkt->len;
++
++	for (i = 0; i < nb_frags; i++)
++		len += pkt[i].len;
++	return len;
++}
++
+ static bool set_pkt_valid(int offset, u32 len)
+ {
+ 	return len <= MAX_ETH_JUMBO_SIZE;
+@@ -626,7 +765,7 @@ static void pkt_stream_cancel(struct pkt_stream *pkt_stream)
+ }
+ 
+ static void pkt_generate(struct xsk_socket_info *xsk, struct xsk_umem_info *umem, u64 addr, u32 len,
+-			 u32 pkt_nb, u32 bytes_written)
++			 u32 total_len, u32 pkt_nb, u32 bytes_written)
+ {
+ 	void *data = xsk_umem__get_data(umem->buffer, addr);
+ 
+@@ -634,7 +773,7 @@ static void pkt_generate(struct xsk_socket_info *xsk, struct xsk_umem_info *umem
+ 		return;
+ 
+ 	if (!bytes_written) {
+-		gen_eth_hdr(xsk, data);
++		gen_pkt_hdr(xsk, data, pkt_nb, total_len);
+ 
+ 		len -= PKT_HDR_SIZE;
+ 		data += PKT_HDR_SIZE;
+@@ -727,10 +866,11 @@ static void pkt_print_data(u32 *data, u32 cnt)
+ 	}
+ }
+ 
++/* With eth_header, len counts the bytes after the test header. */
+ static void pkt_dump(void *pkt, u32 len, bool eth_header)
+ {
+ 	struct ethhdr *ethhdr = pkt;
+-	u32 i, *data;
++	u32 i, words, *data;
+ 
+ 	if (eth_header) {
+ 		/*extract L2 frame */
+@@ -748,12 +888,13 @@ static void pkt_dump(void *pkt, u32 len, bool eth_header)
+ 	}
+ 
+ 	/*extract L5 frame */
++	words = len / sizeof(u32);
+ 	ksft_print_msg("\nDEBUG>> L5: seqnum: ");
+-	pkt_print_data(data, PKT_DUMP_NB_TO_PRINT);
++	pkt_print_data(data, min_t(u32, words, PKT_DUMP_NB_TO_PRINT));
+ 	ksft_print_msg("....");
+-	if (len > PKT_DUMP_NB_TO_PRINT * sizeof(u32)) {
++	if (words > PKT_DUMP_NB_TO_PRINT) {
+ 		ksft_print_msg("\n.... ");
+-		pkt_print_data(data + len / sizeof(u32) - PKT_DUMP_NB_TO_PRINT,
++		pkt_print_data(data + words - PKT_DUMP_NB_TO_PRINT,
+ 			       PKT_DUMP_NB_TO_PRINT);
+ 	}
+ 	ksft_print_msg("\n---------------------------------------\n");
+@@ -792,31 +933,12 @@ static bool is_metadata_correct(struct pkt *pkt, void *buffer, u64 addr)
+ 	return true;
+ }
+ 
+-static int is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx, bool *supported)
++static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
+ {
+-	struct bpf_map *data_map;
+-	int adjust_value = 0;
+-	int key = 0;
+-	int ret;
+-
+-	data_map = bpf_object__find_map_by_name(skel_rx->obj, "xsk_xdp_.bss");
+-	if (!data_map || !bpf_map__is_internal(data_map)) {
+-		ksft_print_msg("Error: could not find bss section of XDP program\n");
+-		return -EINVAL;
+-	}
+-
+-	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
+-	if (ret) {
+-		ksft_print_msg("Error: bpf_map_lookup_elem failed with error %d\n", ret);
+-		return ret;
+-	}
+-
+ 	/* Set the 'adjust_value' variable to -EOPNOTSUPP in the XDP program if the adjust_tail
+ 	 * helper is not supported. Skip the adjust_tail test case in this scenario.
+ 	 */
+-	*supported = adjust_value != -EOPNOTSUPP;
+-
+-	return 0;
++	return skel_rx->bss->adjust_value != -EOPNOTSUPP;
+ }
+ 
+ static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 expected_pkt_nb,
+@@ -836,6 +958,11 @@ static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 exp
+ 			       (unsigned long long)addr, len);
+ 		return false;
+ 	}
++	if (len < (bytes_processed ? 0 : PKT_HDR_SIZE) + sizeof(*pkt_data)) {
++		ksft_print_msg("Frag too short addr: %llx len: %u\n",
++			       (unsigned long long)addr, len);
++		return false;
++	}
+ 
+ 	pkt_data = data;
+ 	if (!bytes_processed) {
+@@ -877,12 +1004,13 @@ static bool is_frag_valid(struct xsk_umem_info *umem, u64 addr, u32 len, u32 exp
+ 	return false;
+ }
+ 
+-static bool is_pkt_valid(struct pkt *pkt, void *buffer, u64 addr, u32 len)
++static bool is_pkt_valid(struct pkt *pkt, void *buffer, u64 addr, u32 frag_len, u32 len)
+ {
+ 	if (pkt->len != len) {
+ 		ksft_print_msg("[%s] expected packet length [%d], got length [%d]\n",
+ 			       __func__, pkt->len, len);
+-		pkt_dump(xsk_umem__get_data(buffer, addr), len, true);
++		/* Only the first fragment, which holds the header, is at addr. */
++		pkt_dump(xsk_umem__get_data(buffer, addr), frag_len - PKT_HDR_SIZE, true);
+ 		return false;
+ 	}
+ 
+@@ -980,7 +1108,7 @@ static int complete_pkts(struct xsk_socket_info *xsk, int batch_size)
+ 
+ static int __receive_pkts(struct test_spec *test, struct xsk_socket_info *xsk)
+ {
+-	u32 frags_processed = 0, nb_frags = 0, pkt_len = 0;
++	u32 frags_processed = 0, nb_frags = 0, pkt_len = 0, first_len = 0;
+ 	u32 idx_rx = 0, idx_fq = 0, rcvd, pkts_sent = 0;
+ 	struct pkt_stream *pkt_stream = xsk->pkt_stream;
+ 	struct ifobject *ifobj = test->ifobj_rx;
+@@ -1057,8 +1185,10 @@ static int __receive_pkts(struct test_spec *test, struct xsk_socket_info *xsk)
+ 		    !is_metadata_correct(pkt, umem->buffer, addr)))
+ 			return TEST_FAILURE;
+ 
+-		if (!nb_frags++)
++		if (!nb_frags++) {
+ 			first_addr = addr;
++			first_len = desc->len;
++		}
+ 		frags_processed++;
+ 		pkt_len += desc->len;
+ 		if (ifobj->use_fill_ring)
+@@ -1068,7 +1198,7 @@ static int __receive_pkts(struct test_spec *test, struct xsk_socket_info *xsk)
+ 			continue;
+ 
+ 		/* The complete packet has been received */
+-		if (!is_pkt_valid(pkt, umem->buffer, first_addr, pkt_len) ||
++		if (!is_pkt_valid(pkt, umem->buffer, first_addr, first_len, pkt_len) ||
+ 		    !is_offset_correct(umem, pkt, addr))
+ 			return TEST_FAILURE;
+ 
+@@ -1218,7 +1348,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
+ 
+ 	for (i = 0; i < xsk->batch_size; i++) {
+ 		struct pkt *pkt = pkt_stream_get_next_tx_pkt(pkt_stream);
+-		u32 nb_frags_left, nb_frags, bytes_written = 0;
++		u32 nb_frags_left, nb_frags, total_len, bytes_written = 0;
+ 
+ 		if (!pkt)
+ 			break;
+@@ -1230,6 +1360,7 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
+ 			break;
+ 		}
+ 		nb_frags_left = nb_frags;
++		total_len = pkt_total_len(pkt_stream, pkt, nb_frags);
+ 
+ 		while (nb_frags_left--) {
+ 			struct xdp_desc *tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx + i);
+@@ -1246,8 +1377,8 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk,
+ 				tx_desc->options = 0;
+ 			}
+ 			if (pkt->valid)
+-				pkt_generate(xsk, umem, tx_desc->addr, tx_desc->len, pkt->pkt_nb,
+-					     bytes_written);
++				pkt_generate(xsk, umem, tx_desc->addr, tx_desc->len, total_len,
++					     pkt->pkt_nb, bytes_written);
+ 			bytes_written += tx_desc->len;
+ 
+ 			print_verbose("Tx addr: %llx len: %u options: %u pkt_nb: %u\n",
+@@ -1640,7 +1771,6 @@ static int testapp_prepare_rx_endpoint(struct test_spec *test,
+ static int testapp_validate_rx_endpoint(struct test_spec *test,
+ 					struct ifobject *ifobject)
+ {
+-	bool supported;
+ 	int err;
+ 
+ 	err = receive_pkts(test);
+@@ -1653,9 +1783,7 @@ static int testapp_validate_rx_endpoint(struct test_spec *test,
+ 	if (!test->adjust_tail)
+ 		return err;
+ 
+-	if (is_adjust_tail_supported(ifobject->xdp_progs, &supported))
+-		return TEST_FAILURE;
+-	if (!supported) {
++	if (!is_adjust_tail_supported(ifobject->xdp_progs)) {
+ 		test->adjust_tail_support = false;
+ 		return TEST_PASS;
+ 	}
+@@ -2293,6 +2421,8 @@ int xsk_load_xdp_programs(struct ifobject *ifobj)
+ 	if (libbpf_get_error(ifobj->xdp_progs))
+ 		return libbpf_get_error(ifobj->xdp_progs);
+ 
++	/* The shadow's copy too, swapped directions attach its programs. */
++	ifobj->xdp_progs->bss->test_port = udp_port;
+ 	return 0;
+ }
+ 
+@@ -2353,6 +2483,12 @@ int init_iface(struct ifobject *ifobj)
+ 		return err;
+ 	}
+ 
++	err = xsk_get_mac(ifobj->ifname, ifobj->caps.mac);
++	if (err) {
++		ksft_print_msg("Error reading interface MAC address\n");
++		return err;
++	}
++
+ 	return detect_ifobj_caps(ifobj);
+ }
+ 
+diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.h b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+index f1fafae2d140..4690ae2ad9c6 100644
+--- a/tools/testing/selftests/net/lib/xsk/test_xsk.h
++++ b/tools/testing/selftests/net/lib/xsk/test_xsk.h
+@@ -24,7 +24,7 @@
+ #define DEFAULT_PKT_CNT			(4 * 1024)
+ #define DEFAULT_UMEM_BUFFERS		(DEFAULT_PKT_CNT / 4)
+ #define HUGEPAGE_SIZE			(2 * 1024 * 1024)
+-#define MIN_PKT_SIZE			64
++#define MIN_PKT_SIZE			min_pkt_size
+ #define MAX_ETH_PKT_SIZE		1518
+ #define MAX_INTERFACE_NAME_CHARS	16
+ #define MAX_TEST_NAME_SIZE		48
+@@ -35,6 +35,8 @@
+ #define SMP_CACHE_BYTES_PATH "/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size"
+ 
+ extern bool opt_verbose;
++/* The smallest test packet, set by xsk_set_flow() */
++extern int min_pkt_size;
+ #define print_verbose(x...) do { if (opt_verbose) ksft_print_msg(x); } while (0)
+ 
+ 
+@@ -83,6 +85,7 @@ struct xsk_peer;
+ 
+ /* The control channel to the other endpoint. */
+ void xsk_set_endpoint(struct xsk_peer *peer);
++int xsk_set_flow(const char *src_ip, const char *dst_ip, u16 port);
+ 
+ struct xsk_socket_info {
+ 	struct xsk_ring_cons rx;
+@@ -95,6 +98,7 @@ struct xsk_socket_info {
+ 	u32 batch_size;
+ 	u8 dst_mac[ETH_ALEN];
+ 	u8 src_mac[ETH_ALEN];
++	u16 src_port;
+ 	bool check_consumer;
+ };
+ 
+@@ -129,6 +133,7 @@ struct xsk_caps {
+ 	u32 max_skb_frags;
+ 	u32 umem_tailroom;
+ 	u32 tx_max_pending;
++	u8 mac[ETH_ALEN];
+ };
+ 
+ struct ifobject {
+diff --git a/tools/testing/selftests/net/lib/xsk/xsk.c b/tools/testing/selftests/net/lib/xsk/xsk.c
+index 660540efc46e..54e6808e3fe4 100644
+--- a/tools/testing/selftests/net/lib/xsk/xsk.c
++++ b/tools/testing/selftests/net/lib/xsk/xsk.c
+@@ -802,3 +802,29 @@ int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
+ 	close(sockfd);
+ 	return 0;
+ }
++
++static int xsk_ifreq_ioctl(const char *ifname, unsigned long req, struct ifreq *ifr)
++{
++	int fd, err = 0;
++
++	fd = socket(AF_INET, SOCK_DGRAM, 0);
++	if (fd < 0)
++		return -errno;
++
++	strncpy(ifr->ifr_name, ifname, sizeof(ifr->ifr_name) - 1);
++	if (ioctl(fd, req, ifr) < 0)
++		err = -errno;
++	close(fd);
++	return err;
++}
++
++int xsk_get_mac(const char *ifname, u8 mac[ETH_ALEN])
++{
++	struct ifreq ifr = {};
++	int err;
++
++	err = xsk_ifreq_ioctl(ifname, SIOCGIFHWADDR, &ifr);
++	if (!err)
++		memcpy(mac, ifr.ifr_hwaddr.sa_data, ETH_ALEN);
++	return err;
++}
+diff --git a/tools/testing/selftests/net/lib/xsk/xsk.h b/tools/testing/selftests/net/lib/xsk/xsk.h
+index 94a56dd43f2e..263971a57e1e 100644
+--- a/tools/testing/selftests/net/lib/xsk/xsk.h
++++ b/tools/testing/selftests/net/lib/xsk/xsk.h
+@@ -244,6 +244,7 @@ void xsk_socket__delete(struct xsk_socket *xsk);
+ int xsk_set_mtu(int ifindex, int mtu);
+ 
+ int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param);
++int xsk_get_mac(const char *ifname, u8 mac[ETH_ALEN]);
+ 
+ #ifdef __cplusplus
+ } /* extern "C" */
+diff --git a/tools/testing/selftests/net/lib/xsk/xsk_xdp_common.h b/tools/testing/selftests/net/lib/xsk/xsk_xdp_common.h
+index 45810ff552da..47cbceea402d 100644
+--- a/tools/testing/selftests/net/lib/xsk/xsk_xdp_common.h
++++ b/tools/testing/selftests/net/lib/xsk/xsk_xdp_common.h
+@@ -4,7 +4,8 @@
+ #define XSK_XDP_COMMON_H_
+ 
+ #define MAX_SOCKETS 2
+-#define PKT_HDR_ALIGN (sizeof(struct ethhdr) + 2) /* Just to align the data in the packet */
++/* Pads the UDP header of a test packet so that the payload is 4-byte aligned */
++#define PKT_HDR_PAD 2
+ 
+ struct xdp_info {
+ 	__u64 count;
+diff --git a/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c b/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c
+index 023d8befd4ca..2b55dbaf13b2 100644
+--- a/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c
++++ b/tools/testing/selftests/net/lib/xsk/xsk_xdp_progs.bpf.c
+@@ -5,9 +5,17 @@
+ #include <bpf/bpf_helpers.h>
+ #include <linux/if_ether.h>
+ #include <linux/ip.h>
++#include <linux/ipv6.h>
++#include <linux/udp.h>
++#include <linux/in.h>
+ #include <linux/errno.h>
++#include <bpf/bpf_endian.h>
++#include <stdbool.h>
+ #include "xsk_xdp_common.h"
+ 
++#define IP_MF		0x2000
++#define IP_OFFSET	0x1fff
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_XSKMAP);
+ 	__uint(max_entries, 2);
+@@ -15,12 +23,64 @@ struct {
+ 	__uint(value_size, sizeof(int));
+ } xsk SEC(".maps");
+ 
+-static unsigned int idx;
+ int adjust_value = 0;
+ int count = 0;
++/* UDP destination port of the test flow, other traffic goes to the stack */
++__u16 test_port;
++
++/* Return the UDP header of a test packet, and in hdr_len the size of the
++ * headers in front of its payload, or NULL for any other packet.
++ */
++static __always_inline struct udphdr *test_udp_hdr(struct xdp_md *xdp,
++						   __u32 *hdr_len)
++{
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	struct ethhdr *eth = data;
++	struct ipv6hdr *ip6;
++	struct udphdr *udp;
++	struct iphdr *ip;
++
++	if ((void *)(eth + 1) > data_end)
++		return NULL;
++
++	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
++		ip = (void *)(eth + 1);
++		/* Fragments go to the stack, which reassembles them. */
++		if ((void *)(ip + 1) > data_end || ip->ihl != 5 ||
++		    ip->protocol != IPPROTO_UDP ||
++		    ip->frag_off & bpf_htons(IP_MF | IP_OFFSET))
++			return NULL;
++		udp = (void *)(ip + 1);
++		*hdr_len = sizeof(*eth) + sizeof(*ip);
++	} else if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
++		ip6 = (void *)(eth + 1);
++		/* The test flow carries no extension headers. */
++		if ((void *)(ip6 + 1) > data_end || ip6->nexthdr != IPPROTO_UDP)
++			return NULL;
++		udp = (void *)(ip6 + 1);
++		*hdr_len = sizeof(*eth) + sizeof(*ip6);
++	} else {
++		return NULL;
++	}
++
++	if ((void *)(udp + 1) > data_end || udp->dest != bpf_htons(test_port))
++		return NULL;
++	*hdr_len += sizeof(*udp) + PKT_HDR_PAD;
++	return udp;
++}
++
++static __always_inline bool is_test_packet(struct xdp_md *xdp)
++{
++	__u32 hdr_len;
++
++	return test_udp_hdr(xdp, &hdr_len);
++}
+ 
+ SEC("xdp.frags") int xsk_def_prog(struct xdp_md *xdp)
+ {
++	if (!is_test_packet(xdp))
++		return XDP_PASS;
+ 	return bpf_redirect_map(&xsk, 0, XDP_DROP);
+ }
+ 
+@@ -28,6 +88,8 @@ SEC("xdp.frags") int xsk_xdp_drop(struct xdp_md *xdp)
+ {
+ 	static unsigned int drop_idx;
+ 
++	if (!is_test_packet(xdp))
++		return XDP_PASS;
+ 	/* Drop every other packet */
+ 	if (drop_idx++ % 2)
+ 		return XDP_DROP;
+@@ -41,6 +103,9 @@ SEC("xdp.frags") int xsk_xdp_populate_metadata(struct xdp_md *xdp)
+ 	struct xdp_info *meta;
+ 	int err;
+ 
++	if (!is_test_packet(xdp))
++		return XDP_PASS;
++
+ 	/* Reserve enough for all custom metadata. */
+ 	err = bpf_xdp_adjust_meta(xdp, -(int)sizeof(struct xdp_info));
+ 	if (err)
+@@ -60,16 +125,17 @@ SEC("xdp.frags") int xsk_xdp_populate_metadata(struct xdp_md *xdp)
+ 
+ SEC("xdp") int xsk_xdp_shared_umem(struct xdp_md *xdp)
+ {
+-	void *data = (void *)(long)xdp->data;
+-	void *data_end = (void *)(long)xdp->data_end;
+-	struct ethhdr *eth = data;
++	struct udphdr *udp;
++	__u32 hdr_len;
++	__u16 idx;
+ 
+-	if (eth + 1 > data_end)
+-		return XDP_DROP;
++	udp = test_udp_hdr(xdp, &hdr_len);
++	if (!udp)
++		return XDP_PASS;
+ 
+-	/* Redirecting packets based on the destination MAC address */
+-	idx = ((unsigned int)(eth->h_dest[5])) / 2;
+-	if (idx > MAX_SOCKETS)
++	/* Socket N sends from test_port + N */
++	idx = bpf_ntohs(udp->source) - test_port;
++	if (idx >= MAX_SOCKETS)
+ 		return XDP_DROP;
+ 
+ 	return bpf_redirect_map(&xsk, idx, XDP_DROP);
+@@ -77,9 +143,12 @@ SEC("xdp") int xsk_xdp_shared_umem(struct xdp_md *xdp)
+ 
+ SEC("xdp.frags") int xsk_xdp_adjust_tail(struct xdp_md *xdp)
+ {
+-	__u32 buff_len, curr_buff_len;
++	__u32 buff_len, curr_buff_len, hdr_len;
+ 	int ret;
+ 
++	if (!test_udp_hdr(xdp, &hdr_len))
++		return XDP_PASS;
++
+ 	buff_len = bpf_xdp_get_buff_len(xdp);
+ 	if (buff_len == 0)
+ 		return XDP_DROP;
+@@ -106,7 +175,7 @@ SEC("xdp.frags") int xsk_xdp_adjust_tail(struct xdp_md *xdp)
+ 		__u32 *pkt_data = (void *)(long)xdp->data;
+ 		__u32 len, words_to_end, seq_num;
+ 
+-		len = curr_buff_len - PKT_HDR_ALIGN;
++		len = curr_buff_len - hdr_len;
+ 		words_to_end = len / sizeof(*pkt_data) - 1;
+ 		seq_num = words_to_end;
+ 
 diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-index 97eece4c57f8..b4f9cd371503 100644
+index fbfff586e0e5..9704702f60fc 100644
 --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
 +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-@@ -6,7 +6,7 @@
-  * Linux kernel samples/bpf/xdpsock* and modified
-  * for use.
-  *
-- * See test_xsk.sh for detailed information on test topology
-+ * See test_xsk.py for detailed information on test topology
-  * and prerequisite network setup.
-  *
-  * This test program contains two threads, each thread is single socket with
-@@ -64,11 +64,6 @@
-  * - Tx thread Transmits a number of packets from veth<xxxx> to veth<yyyy>
-  * - Rx thread verifies if all packets were received and delivered in-order,
+@@ -63,7 +63,9 @@
+  *   veth interface
+  * - Tx process listens on a TCP control port (--listen), Rx process connects
+  *   to it and the two synchronize each test step over that connection
+- * - Tx process Transmits a number of packets from veth<xxxx> to veth<yyyy>
++ * - Tx process transmits a number of UDP packets over IPv4 or IPv6 from
++ *   veth<xxxx> to veth<yyyy>, and the XDP program of Rx passes other traffic
++ *   to the stack
+  * - Rx process verifies if all packets were received and delivered in-order,
   *   and have the right content
-- *
-- * Enable/disable packet dump mode:
-- * --------------------------
-- * To enable L2 - L4 headers and payload dump of each packet on STDOUT, add
-- * parameter -D to params array in test_xsk.sh, i.e. params=("-S" "-D")
   */
+@@ -80,6 +82,7 @@
+ #include <linux/align.h>
+ #include <arpa/inet.h>
+ #include <net/if.h>
++#include <netinet/ether.h>
+ #include <locale.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -111,9 +114,18 @@ static bool opt_listen;
+ static const char *opt_peer_host;
+ static const char *opt_peer_port;
+ static const char *opt_ifname;
++static const char *opt_src_ip;
++static const char *opt_dst_ip;
++static const struct ether_addr *opt_dst_mac;
++static struct ether_addr dst_mac;
++static u16 opt_udp_port;
  
- #define _GNU_SOURCE
-@@ -169,14 +164,14 @@ static struct option long_options[] = {
+ enum {
+ 	OPT_LISTEN = 256,
++	OPT_SRC_IP,
++	OPT_DST_IP,
++	OPT_DST_MAC,
++	OPT_UDP_PORT,
+ };
+ 
+ static void __exit_with_error(int error, const char *file, const char *func, int line)
+@@ -179,6 +191,10 @@ static struct option long_options[] = {
+ 	{"peer", required_argument, 0, 'p'},
+ 	{"peer-port", required_argument, 0, 'P'},
+ 	{"listen", no_argument, 0, OPT_LISTEN},
++	{"src-ip", required_argument, 0, OPT_SRC_IP},
++	{"dst-ip", required_argument, 0, OPT_DST_IP},
++	{"dst-mac", required_argument, 0, OPT_DST_MAC},
++	{"udp-port", required_argument, 0, OPT_UDP_PORT},
+ 	{"help", no_argument, 0, 'h'},
+ 	{0, 0, 0, 0}
+ };
+@@ -186,7 +202,8 @@ static struct option long_options[] = {
  static void print_usage(char **argv)
  {
  	const char *str =
--		"  Usage: xskxceiver [OPTIONS]\n"
-+		"  Usage: %s -i TX_IFACE -i RX_IFACE -m MODE -t TEST [OPTIONS]\n"
+-		"  Usage: %s -i IFACE -e rx|tx -m MODE -t TEST -p HOST -P PORT [OPTIONS]\n"
++		"  Usage: %s -i IFACE -e rx|tx -m MODE -t TEST -p HOST -P PORT\n"
++		"                    --src-ip IP --dst-ip IP --dst-mac MAC --udp-port PORT [OPTIONS]\n"
  		"  Options:\n"
  		"  -i, --interface      Use interface\n"
  		"  -v, --verbose        Verbose output\n"
- 		"  -b, --busy-poll      Enable busy poll\n"
--		"  -m, --mode           Run only mode skb, drv, or zc\n"
-+		"  -m, --mode           Mode to run: skb, drv or zc\n"
- 		"  -l, --list           List all available tests\n"
--		"  -t, --test           Run a specific test. Enter number from -l option.\n"
-+		"  -t, --test           Test case to run, a number from -l\n"
+@@ -198,6 +215,10 @@ static void print_usage(char **argv)
+ 		"  -p, --peer           Control host: IPv4/IPv6 address or hostname\n"
+ 		"  -P, --peer-port      Control TCP port\n"
+ 		"      --listen         Listen on the control port instead of connecting\n"
++		"      --src-ip IP      IPv4 or IPv6 source address of the test packets\n"
++		"      --dst-ip IP      Destination address, of the same family\n"
++		"      --dst-mac MAC    Destination MAC address of the test packets\n"
++		"      --udp-port PORT  UDP destination port, and source port of socket 0\n"
  		"  -h, --help           Display this help and exit\n";
  
  	ksft_print_msg(str, basename(argv[0]));
-@@ -267,6 +262,9 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
- 		}
+@@ -293,6 +314,20 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+ 		case OPT_LISTEN:
+ 			opt_listen = true;
+ 			break;
++		case OPT_SRC_IP:
++			opt_src_ip = optarg;
++			break;
++		case OPT_DST_IP:
++			opt_dst_ip = optarg;
++			break;
++		case OPT_DST_MAC:
++			opt_dst_mac = ether_aton_r(optarg, &dst_mac);
++			if (!opt_dst_mac)
++				print_usage(argv);
++			break;
++		case OPT_UDP_PORT:
++			opt_udp_port = strtoul(optarg, NULL, 10);
++			break;
+ 		case 'h':
+ 		default:
+ 			print_usage(argv);
+@@ -301,7 +336,8 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+ 
+ 	if (!opt_ifname || opt_endpoint_role == XSK_ENDPOINT_NONE || !opt_peer_host ||
+ 	    !*opt_peer_host || !opt_peer_port || opt_run_test == RUN_ALL_TESTS ||
+-	    opt_mode == TEST_MODE_ALL)
++	    opt_mode == TEST_MODE_ALL || !opt_src_ip || !opt_dst_ip || !opt_dst_mac ||
++	    !opt_udp_port)
+ 		print_usage(argv);
+ }
+ 
+@@ -416,6 +452,8 @@ static int setup_peer(struct ifobject *local, struct ifobject *shadow,
  	}
  
-+	if (opt_run_test == RUN_ALL_TESTS || opt_mode == TEST_MODE_ALL)
+ 	shadow->caps = local->caps;
++	memcpy(shadow->caps.mac, opt_dst_mac->ether_addr_octet, ETH_ALEN);
++
+ 	xsk_set_endpoint(*peer);
+ 	return TEST_PASS;
+ }
+@@ -474,6 +512,10 @@ int main(int argc, char **argv)
+ 		ksft_exit_xfail();
+ 	}
+ 
++	/* Before the default packet streams, which have its minimum size. */
++	if (xsk_set_flow(opt_src_ip, opt_dst_ip, opt_udp_port))
 +		print_usage(argv);
 +
- 	bind_iface(ifobj_tx, ifname[0], worker_testapp_validate_tx, argv);
- 	bind_iface(ifobj_rx, ifname[1], worker_testapp_validate_rx, argv);
- }
-@@ -365,10 +363,9 @@ int main(int argc, char **argv)
- 	u32 cache_line_size, max_frags, umem_tailroom;
- 	const size_t total_tests = ARRAY_SIZE(tests);
- 	struct ifobject *ifobj_tx, *ifobj_rx;
--	u32 i, j, failed_tests = 0, nb_tests;
- 	struct test_spec test = {};
- 	int ret = TEST_FAILURE;
--	u32 caps, modes = 0;
-+	u32 caps;
- 
- 	/* Use libbpf 1.0 API mode */
- 	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-@@ -419,40 +416,18 @@ int main(int argc, char **argv)
- 
- 	caps = detect_mode_caps(ifobj_tx);
- 
--	if (opt_mode != TEST_MODE_ALL && !mode_supported(opt_mode, caps)) {
-+	if (!mode_supported(opt_mode, caps)) {
- 		if (opt_mode == TEST_MODE_DRV)
--			ksft_print_msg("Error: XDP_DRV mode not supported.\n");
-+			ksft_print_msg("XDP_DRV mode not supported.\n");
- 		else
--			ksft_print_msg("Error: zero-copy mode not supported.\n");
--		ksft_exit_xfail();
-+			ksft_print_msg("zero-copy mode not supported.\n");
-+		ret = TEST_SKIP;
-+		goto out;
- 	}
- 
--	for (i = TEST_MODE_SKB; i <= TEST_MODE_ZC; i++)
--		if ((opt_mode == TEST_MODE_ALL || i == opt_mode) && mode_supported(i, caps))
--			modes++;
--	if (opt_run_test == RUN_ALL_TESTS)
--		nb_tests = total_tests;
--	else
--		nb_tests = 1;
--	ksft_set_plan(modes * nb_tests);
--
--	for (i = TEST_MODE_SKB; i <= TEST_MODE_ZC; i++) {
--		if (opt_mode != TEST_MODE_ALL && i != opt_mode)
--			continue;
--		if (!mode_supported(i, caps))
--			continue;
--
--		for (j = 0; j < total_tests; j++) {
--			if (opt_run_test != RUN_ALL_TESTS && j != opt_run_test)
--				continue;
--
--			test_init(&test, ifobj_tx, ifobj_rx, i, &tests[j]);
--			if (run_pkt_test(&test) == TEST_FAILURE)
--				failed_tests++;
--			usleep(USLEEP_MAX);
--		}
--	}
--	ret = failed_tests ? TEST_FAILURE : TEST_PASS;
-+	ksft_set_plan(1);
-+	test_init(&test, ifobj_tx, ifobj_rx, opt_mode, &tests[opt_run_test]);
-+	ret = run_pkt_test(&test);
- 
- out:
- 	cleanup_iface(ifobj_tx);
-@@ -462,6 +437,12 @@ int main(int argc, char **argv)
- 	ifobject_delete(ifobj_tx);
- 	ifobject_delete(ifobj_rx);
- 
-+	if (ret == TEST_SKIP && ksft_test_num()) {
-+		ksft_print_cnts();
-+		return KSFT_SKIP;
-+	}
-+	if (ret == TEST_SKIP)
-+		ksft_exit_skip("mode not supported\n");
- 	if (ret)
- 		ksft_exit_fail();
- 	else
+ 	/* swap_directions() swaps the workers, so the shadow needs one too. */
+ 	ifobj_tx->func_ptr = worker_testapp_validate_tx;
+ 	ifobj_rx->func_ptr = worker_testapp_validate_rx;
 diff --git a/tools/testing/selftests/net/test_xsk.py b/tools/testing/selftests/net/test_xsk.py
-new file mode 100755
-index 000000000000..80ac67cdebb6
---- /dev/null
+index 7f9d2c04f0e5..6ca54bafc03d 100755
+--- a/tools/testing/selftests/net/test_xsk.py
 +++ b/tools/testing/selftests/net/test_xsk.py
-@@ -0,0 +1,139 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+r"""
-+AF_XDP tests over veth.
-+
-+Topology:
-+
-+                 -----------
-+               _ | Process | _
-+              /  -----------  \
-+             /        |        \
-+            /         |         \
-+      -----------     |     -----------
-+      | Thread1 |     |     | Thread2 |
-+      -----------     |     -----------
-+           |          |          |
-+      -----------     |     -----------
-+      |  xskX   |     |     |  xskY   |
-+      -----------     |     -----------
-+           |          |          |
-+      -----------     |     ----------
-+      |  vethX  | --------- |  vethY |
-+      -----------   peer    ----------
-+
-+Each case runs an xskxceiver process of its own on a veth pair that the case
-+creates in the current network namespace and deletes when it ends.
-+
-+test_xsk runs every case that "xskxceiver -l" lists but EXCLUDED_CASES in SKB
-+and DRV mode, and test_xsk_busy_poll runs them again with busy polling.
-+UNALIGNED cases are left out without huge pages. Use -t or -T to select
-+cases, e.g. -t 'test_xsk.drv_*'. See lib/xsk/xskxceiver.c for what each case
-+tests.
-+"""
-+
-+import random
-+import re
-+import sys
-+from pathlib import Path
-+
-+from lib.py import (KsftNamedVariant, KsftSkipEx, cmd, defer, ip, ksft_eq,
-+                    ksft_exit, ksft_run, ksft_variants, xsk_release_hugepages,
-+                    xsk_reserve_hugepages, xsk_setup_busy_poll,
-+                    xsk_wait_endpoint_exit)
-+
-+XSK_BIN = Path(__file__).parent / "lib/xskxceiver"
-+CASE_TIMEOUT = 20
-+SKIP_CODE = 4
-+EXCLUDED_CASES = {
-+    # bpf_xdp_adjust_tail() frees a frag that it trims off as the memory type
-+    # of the XDP RX queue, which veth and generic XDP leave at
-+    # MEM_TYPE_PAGE_SHARED for frames they copy into page_pool pages, so the
-+    # page leaks from its pool.
-+    "XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF",
-+    # The case skips in SKB mode. In DRV mode, veth copies each frame into a
-+    # page_pool fragment that leaves no room to grow the 128-byte frames of
-+    # the case unless it is the last one of its page, so the XDP program
-+    # drops most frames.
-+    "XDP_ADJUST_TAIL_GROW",
-+}
+@@ -21,7 +21,9 @@ Topology:
+ Each case runs a TX and an RX xskxceiver process on a veth pair that the case
+ creates in the current network namespace and deletes when it ends. The TX
+ process listens (--listen) on a TCP control port on 127.0.0.1, and the RX
+-process connects to it once TX says on stderr that it listens.
++process connects to it once TX says on stderr that it listens. The test
++packets are UDP over IPv6 between the MAC addresses of the veth pair, and the
++XDP programs pass other traffic to the stack.
+ 
+ test_xsk runs every case that "xskxceiver -l" lists but EXCLUDED_CASES in SKB
+ and DRV mode, and test_xsk_busy_poll runs them again with busy polling.
+@@ -46,6 +48,9 @@ CASE_TIMEOUT = 20
+ # xskxceiver waits as long for its peer to connect.
+ LISTEN_TIMEOUT = 30
+ SKIP_CODE = 4
++# Source addresses of the TX and RX endpoints, which the veths do not have.
++TX_ADDR = "2001:db8::1"
++RX_ADDR = "2001:db8::2"
+ EXCLUDED_CASES = {
+     # bpf_xdp_adjust_tail() frees a frag that it trims off as the memory type
+     # of the XDP RX queue, which veth and generic XDP leave at
+@@ -53,9 +58,9 @@ EXCLUDED_CASES = {
+     # page leaks from its pool.
+     "XDP_ADJUST_TAIL_SHRINK_MULTI_BUFF",
+     # The case skips in SKB mode. In DRV mode, veth copies each frame into a
+-    # page_pool fragment that leaves no room to grow the 128-byte frames of
+-    # the case unless it is the last one of its page, so the XDP program
+-    # drops most frames.
++    # page_pool fragment that leaves no room to grow the small frames of the
++    # case unless it is the last one of its page, so the XDP program drops
++    # most frames.
+     "XDP_ADJUST_TAIL_GROW",
+ }
+ 
+@@ -85,10 +90,6 @@ def _veth_pair(busy_poll):
+        f"peer name {veths[1]} numtxqueues 4 numrxqueues 4")
+     defer(ip, f"link del {veths[0]}")
+     for dev in veths:
+-        # The XDP program redirects all traffic, keep IPv6 off the link.
+-        ipv6 = Path("/proc/sys/net/ipv6/conf", dev, "disable_ipv6")
+-        if ipv6.exists():
+-            ipv6.write_text("1", encoding="utf-8")
+         if busy_poll:
+             xsk_setup_busy_poll(dev)
+     for dev in veths:
+@@ -96,6 +97,10 @@ def _veth_pair(busy_poll):
+     return veths
+ 
+ 
++def _mac(dev):
++    return ip(f"link show dev {dev}", json=True)[0]["address"]
 +
 +
-+def _get_cases(hugepages):
-+    """
-+    each test case from xskxceiver -l comes out in a form below:
-+    0: SEND_RECEIVE
-+    """
-+    ret = []
-+    out = cmd([str(XSK_BIN), "-l"]).stdout
-+    cases = re.findall(r"^(\d+): (\w+)$", out, re.MULTILINE)
-+    for mode in ("skb", "drv"):
-+        for test_id, name in cases:
-+            if name in EXCLUDED_CASES:
-+                continue
-+            if "UNALIGNED" in name and not hugepages:
-+                continue
-+            ret.append(KsftNamedVariant(f"{mode}_{name}", mode, int(test_id)))
-+    return ret
-+
-+
-+def _veth_pair(busy_poll):
-+    pfx = f"xsk{random.randrange(1 << 20):05x}"
-+    veths = (pfx + "a", pfx + "b")
-+    ip(f"link add {veths[0]} numtxqueues 4 numrxqueues 4 type veth "
-+       f"peer name {veths[1]} numtxqueues 4 numrxqueues 4")
-+    defer(ip, f"link del {veths[0]}")
-+    for dev in veths:
-+        # The XDP program redirects all traffic, keep IPv6 off the link.
-+        ipv6 = Path("/proc/sys/net/ipv6/conf", dev, "disable_ipv6")
-+        if ipv6.exists():
-+            ipv6.write_text("1", encoding="utf-8")
-+        if busy_poll:
-+            xsk_setup_busy_poll(dev)
-+    for dev in veths:
-+        ip(f"link set {dev} up")
-+    return veths
-+
-+
-+def _start(args):
-+    return cmd([str(XSK_BIN), *args], background=True, fail=False)
-+
-+
-+def _test(mode, test_id, busy_poll):
-+    tx_if, rx_if = _veth_pair(busy_poll)
-+    args = ["-m", mode,
-+            "-t", str(test_id),
-+            *(["-b"] if busy_poll else [])]
-+    ret = xsk_wait_endpoint_exit(_start(["-i", tx_if, "-i", rx_if, *args]),
-+                                 "xsk", CASE_TIMEOUT)
-+    if ret == SKIP_CODE:
-+        raise KsftSkipEx("xskxceiver skipped the case")
-+    ksft_eq(ret, 0, "xskxceiver exit code")
-+
-+
-+def test_xsk(mode, test_id):
-+    _test(mode, test_id, busy_poll=False)
-+
-+
-+def test_xsk_busy_poll(mode, test_id):
-+    _test(mode, test_id, busy_poll=True)
-+
-+
-+def main():
-+    if not XSK_BIN.exists():
-+        print(f"1..0 # SKIP {XSK_BIN} was not built")
-+        sys.exit(SKIP_CODE)
-+    saved_hugepages = []
-+    try:
-+        hugepages = xsk_reserve_hugepages(saved_hugepages)
-+        cases = _get_cases(hugepages)
-+        ksft_run([ksft_variants(cases)(test_xsk),
-+                  ksft_variants(cases)(test_xsk_busy_poll)])
-+    finally:
-+        xsk_release_hugepages(saved_hugepages)
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/net/test_xsk.sh b/tools/testing/selftests/net/test_xsk.sh
-deleted file mode 100755
-index fbf4551d596a..000000000000
---- a/tools/testing/selftests/net/test_xsk.sh
-+++ /dev/null
-@@ -1,230 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--# Copyright(c) 2020 Intel Corporation, Weqaar Janjua <weqaar.a.janjua@intel.com>
--
--# AF_XDP selftests based on veth
--#
--# End-to-end AF_XDP over Veth test
--#
--# Topology:
--# ---------
--#                 -----------
--#               _ | Process | _
--#              /  -----------  \
--#             /        |        \
--#            /         |         \
--#      -----------     |     -----------
--#      | Thread1 |     |     | Thread2 |
--#      -----------     |     -----------
--#           |          |          |
--#      -----------     |     -----------
--#      |  xskX   |     |     |  xskY   |
--#      -----------     |     -----------
--#           |          |          |
--#      -----------     |     ----------
--#      |  vethX  | --------- |  vethY |
--#      -----------   peer    ----------
--#
--# AF_XDP is an address family optimized for high performance packet processing,
--# it is XDP’s user-space interface.
--#
--# An AF_XDP socket is linked to a single UMEM which is a region of virtual
--# contiguous memory, divided into equal-sized frames.
--#
--# Refer to AF_XDP Kernel Documentation for detailed information:
--# https://www.kernel.org/doc/html/latest/networking/af_xdp.html
--#
--# Prerequisites setup by script:
--#
--#   Set up veth interfaces as per the topology shown ^^:
--#   * setup two veth interfaces
--#   ** veth<xxxx>
--#   ** veth<yyyy>
--#   *** xxxx and yyyy are randomly generated 4 digit numbers used to avoid
--#       conflict with any existing interface
--#   * tests the veth and xsk layers of the topology
--#
--# See the source xskxceiver.c for information on each test
--#
--# Kernel configuration:
--# ---------------------
--# See "config" file for recommended kernel config options.
--#
--# Turn on XDP sockets and veth support when compiling i.e.
--# 	Networking support -->
--# 		Networking options -->
--# 			[ * ] XDP sockets
--#
--# Executing Tests:
--# ----------------
--# Must run with CAP_NET_ADMIN capability.
--#
--# Run:
--#   sudo ./test_xsk.sh
--#
--# If running from kselftests:
--#   sudo make run_tests
--#
--# Run with verbose output:
--#   sudo ./test_xsk.sh -v
--#
--# Set up veth interfaces and leave them up so xskxceiver can be launched in a debugger:
--#   sudo ./test_xsk.sh -d
--#
--# Run test suite in a specific mode only [skb,drv,zc]
--#   sudo ./test_xsk.sh -m MODE
--#
--# List available tests
--#   ./test_xsk.sh -l
--#
--# Run a specific test from the test suite
--#   sudo ./test_xsk.sh -t TEST_NAME
--#
--# Display the available command line options
--#   ./test_xsk.sh -h
--
--. xsk_prereqs.sh
--
--while getopts "vdm:lt:h" flag
--do
--	case "${flag}" in
--		v) verbose=1;;
--		d) debug=1;;
--		m) MODE=${OPTARG};;
--		l) list=1;;
--		t) TEST=${OPTARG};;
--		h) help=1;;
--	esac
--done
--
--if [ ! -x "./${XSKOBJ}" ]; then
--	echo "xskxceiver was not built; skipping"
--	exit $ksft_skip
--fi
--
--TEST_NAME="PREREQUISITES"
--
--URANDOM=/dev/urandom
--[ ! -e "${URANDOM}" ] && { echo "${URANDOM} not found. Skipping tests."; test_exit $ksft_fail; }
--
--VETH0_POSTFIX=$(cat ${URANDOM} | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 4)
--VETH0=ve${VETH0_POSTFIX}
--VETH1_POSTFIX=$(cat ${URANDOM} | tr -dc '0-9' | fold -w 256 | head -n 1 | head --bytes 4)
--VETH1=ve${VETH1_POSTFIX}
--MTU=1500
--
--trap ctrl_c INT
--
--function ctrl_c() {
--        cleanup_exit ${VETH0} ${VETH1}
--	exit 1
--}
--
--setup_vethPairs() {
--	if [[ $verbose -eq 1 ]]; then
--	        echo "setting up ${VETH0}"
--	fi
--	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
--	if [ -f /proc/net/if_inet6 ]; then
--		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
--		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
--	fi
--	if [[ $verbose -eq 1 ]]; then
--	        echo "setting up ${VETH1}"
--	fi
--
--	if [[ $busy_poll -eq 1 ]]; then
--	        echo 2 > /sys/class/net/${VETH0}/napi_defer_hard_irqs
--		echo 200000 > /sys/class/net/${VETH0}/gro_flush_timeout
--		echo 2 > /sys/class/net/${VETH1}/napi_defer_hard_irqs
--		echo 200000 > /sys/class/net/${VETH1}/gro_flush_timeout
--	fi
--
--	ip link set ${VETH1} mtu ${MTU}
--	ip link set ${VETH0} mtu ${MTU}
--	ip link set ${VETH1} up
--	ip link set ${VETH0} up
--}
--
--if [[ $list -eq 1 ]]; then
--        ./${XSKOBJ} -l
--        exit
--fi
--
--if [[ $help -eq 1 ]]; then
--	./${XSKOBJ}
--        exit
--fi
--
--validate_root_exec
--validate_veth_support ${VETH0}
--validate_ip_utility
--setup_vethPairs
--
--retval=$?
--if [ $retval -ne 0 ]; then
--	test_status $retval "${TEST_NAME}"
--	cleanup_exit ${VETH0} ${VETH1}
--	exit $retval
--fi
--
--
--if [[ $verbose -eq 1 ]]; then
--	ARGS+="-v "
--fi
--
--if [ -n "$MODE" ]; then
--	ARGS+="-m ${MODE} "
--fi
--
--if [ -n "$TEST" ]; then
--	ARGS+="-t ${TEST} "
--fi
--
--retval=$?
--test_status $retval "${TEST_NAME}"
--
--## START TESTS
--
--statusList=()
--
--TEST_NAME="XSK_SELFTESTS_${VETH0}_SOFTIRQ"
--
--if [[ $debug -eq 1 ]]; then
--    echo "-i" ${VETH0} "-i" ${VETH1}
--    exit
--fi
--
--exec_xskxceiver
--
--cleanup_exit ${VETH0} ${VETH1}
--
--if [[ $list -eq 1 ]]; then
--    exit
--fi
--
--TEST_NAME="XSK_SELFTESTS_${VETH0}_BUSY_POLL"
--busy_poll=1
--
--setup_vethPairs
--exec_xskxceiver
--
--## END TESTS
--
--cleanup_exit ${VETH0} ${VETH1}
--
--failures=0
--echo -e "\nSummary:"
--for i in "${!statusList[@]}"
--do
--	if [ ${statusList[$i]} -ne 0 ]; then
--	        test_status ${statusList[$i]} ${nameList[$i]}
--		failures=1
--	fi
--done
--
--if [ $failures -eq 0 ]; then
--        echo "All tests successful!"
--else
--	exit 1
--fi
-diff --git a/tools/testing/selftests/net/xsk_prereqs.sh b/tools/testing/selftests/net/xsk_prereqs.sh
-deleted file mode 100755
-index 5e5c8ef3fff2..000000000000
---- a/tools/testing/selftests/net/xsk_prereqs.sh
-+++ /dev/null
-@@ -1,86 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--# Copyright(c) 2020 Intel Corporation.
--
--ksft_pass=0
--ksft_fail=1
--ksft_xfail=2
--ksft_xpass=3
--ksft_skip=4
--
--XSKOBJ=lib/xskxceiver
--
--validate_root_exec()
--{
--	msg="skip all tests:"
--	if [ $UID != 0 ]; then
--		echo $msg must be run as root >&2
--		test_exit $ksft_fail
--	else
--		return $ksft_pass
--	fi
--}
--
--validate_veth_support()
--{
--	msg="skip all tests:"
--	if [ $(ip link add $1 type veth 2>/dev/null; echo $?;) != 0 ]; then
--		echo $msg veth kernel support not available >&2
--		test_exit $ksft_skip
--	else
--		ip link del $1
--		return $ksft_pass
--	fi
--}
--
--test_status()
--{
--	statusval=$1
--	if [ $statusval -eq $ksft_fail ]; then
--		echo "$2: [ FAIL ]"
--	elif [ $statusval -eq $ksft_skip ]; then
--		echo "$2: [ SKIPPED ]"
--	elif [ $statusval -eq $ksft_pass ]; then
--		echo "$2: [ PASS ]"
--	fi
--}
--
--test_exit()
--{
--	if [ $1 -ne 0 ]; then
--		test_status $1 $(basename $0)
--	fi
--	exit 1
--}
--
--clear_configs()
--{
--	[ $(ip link show $1 &>/dev/null; echo $?;) == 0 ] &&
--		{ ip link del $1; }
--}
--
--cleanup_exit()
--{
--	clear_configs $1 $2
--}
--
--validate_ip_utility()
--{
--	[ ! $(type -P ip) ] && { echo "'ip' not found. Skipping tests."; test_exit $ksft_skip; }
--}
--
--exec_xskxceiver()
--{
--        if [[ $busy_poll -eq 1 ]]; then
--	        ARGS+="-b "
--	fi
--
--	./${XSKOBJ} -i ${VETH0} -i ${VETH1} ${ARGS}
--	retval=$?
--
--	if [[ $list -ne 1 ]]; then
--	    test_status $retval "${TEST_NAME}"
--	    statusList+=($retval)
--	    nameList+=(${TEST_NAME})
--	fi
--}
+ def _start(args):
+     return cmd([str(XSK_BIN), *args], background=True, fail=False)
+ 
+@@ -107,15 +112,20 @@ def _test(mode, test_id, busy_poll):
+             "-t", str(test_id),
+             "-p", "127.0.0.1",
+             "-P", str(port),
++            "--udp-port", str(rand_port()),
+             *(["-b"] if busy_poll else [])]
+-    tx = _start(["-i", tx_if, "-e", "tx", "--listen", *args])
++    tx = _start(["-i", tx_if, "-e", "tx", "--listen",
++                 "--src-ip", TX_ADDR, "--dst-ip", RX_ADDR,
++                 "--dst-mac", _mac(rx_if), *args])
+     head = ""
+     try:
+         head, listening = xsk_wait_listen(tx, port, LISTEN_TIMEOUT)
+         if not listening:
+             tx.proc.kill()
+             raise KsftFailEx(f"TX endpoint did not listen on port {port}")
+-        rx = _start(["-i", rx_if, "-e", "rx", *args])
++        rx = _start(["-i", rx_if, "-e", "rx",
++                     "--src-ip", RX_ADDR, "--dst-ip", TX_ADDR,
++                     "--dst-mac", _mac(tx_if), *args])
+         rx_ret = xsk_wait_endpoint_exit(rx, "rx", CASE_TIMEOUT)
+     finally:
+         tx_ret = xsk_wait_endpoint_exit(tx, "tx", CASE_TIMEOUT, head)
 -- 
 2.43.0
 
