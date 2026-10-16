@@ -1,64 +1,64 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8541A38735A
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 19:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC743B8921
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 19:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792179446; cv=none; b=MLMOVtKA1XCsIBvzrTuXTJeb9dDzVqEHRIODRObZai/x5m1T6CKIn1Sh++zQsayTtTf+kv8gYhIWIi89W7zWfaXZyumvP+x02vEGjDyr+e9aW5keLlYT0d1IQtdM7tLtzwqXi/ov43iLYuidfDGL+IR9eaa+frN2idGf+Fqhjq0=
+	t=1792179451; cv=none; b=cha0sMN9KQG60fGsAZ/glbpptNnjHOOy06/L0Qxkl3Th0VtPVnwEAoFUna5BPWxs9aDDqOMHENv+MCvk7lT+w7skpUzFj0J9zZj2+2UuK5ZIYTJh84/qiuWqvWqUvEktRMvrc2gK1M42SoNAMEVlr5f67TnoRFDPtSUlNPG1/Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792179446; c=relaxed/simple;
-	bh=kV80vEeurDyXJ2y4OLr9CvXN+qwEHvMaUJFuA+XobTs=;
+	s=arc-20240116; t=1792179451; c=relaxed/simple;
+	bh=P3T7yVZCfw010pVSsNaymFOtCBiBgYqS+NH4ltZ6GfE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VLOo4Xdhc2PtETRnetz8f2ozZXDNwK/RRq5QJX8mFvkFlpWRR/EUlc5ulKRXATiJ15FVz0IyK/aDebCUZkHUwG2bC9q8UBZPLd29mdck2ITxY8NMyMLR7CHUpwsc0UVlLKZT/wh/Oxdr7ONfXmjs1AHUDxlHB0WDYa9j0SDS8kE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=QhUoBHmH; arc=none smtp.client-ip=209.85.214.173
+	 MIME-Version; b=Rmr+VOeeyfIVoWimO5xT+jbpZa6d5vTzZP+qNEAcmIBkCgZSzmZnvk9E2ZIpQp6XrWnvW6UCyzy9zM9W6ucEF2NzlYyumf5LxDEo8PSZPRsMKi+1NesniTBNdVoSxofbJSXPAPNB73sdjKg9zj0xGORiz0ZdziqrTbmuxspMzi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Pgwu1Knq; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="QhUoBHmH"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2e946155442so1344425ad.3
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 12:37:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Pgwu1Knq"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e9995ce866so1506665ad.0
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 12:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792179432; x=1792784232; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792179433; x=1792784233; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nBOMhYve2+j0dlG366cYMYKS/fXbtkTGxYn90sK+L7g=;
-        b=QhUoBHmHBY5IpUely9EhTvUDrFaATlSkufG6MlS7KB5sWOp2OG2IWrFOqHaWNeU7ub
-         wS2Q2HQXv7JCYO42UBjvgoUbs7PZhc4LmJo72HIiOvXanQxj05cEElekRRaZtf5bbaOW
-         O3L9aBjj+7uPMBsGkCDwSnkW+PG2pjugR4v113Vv+NM1P9kkfpWYAglKa+/q8vQF7sms
-         TL0VBUlIm7qzG6taOdz+uKmlUrVIwfphUcwV6w+GIy5H2pCBmzylzMvU3j8Upic6G6Ug
-         g9fndJMAuhE7DnzLkijfDt5ikIb6NqbhfEei4XrwbIld5tSfo+8oxpe4lQMT920t8lzK
-         PCQA==
+        bh=aTPtWymi9zdwDJM+3urHno8w3H1cvHLVIpkldRRaktc=;
+        b=Pgwu1KnqrKKJcqPgbgBs+lPS8n+0FBPp+8lg8yK3qjhnGI6tc+S6SAIL8xmzci54U+
+         i2Zwnwb31kJ52icJ9WNU8JoafmwY1kjcnFmZYOcCGA1A3QX0Mex8UuD7ysSqV3llOPTW
+         QHiFndWJiWvs8jmGPCY9STqRruZWb/h+kco5+lSr7A7Me+XwNZgAqlOs7L1oiI/f1RC4
+         AwScwUD/IMbY/cvbPAhyJifXBekDlsFgMGRqLeDkhkOrzT9GiR2vB+A4xNM4gQ9sgftB
+         fquRsszfAN+3ctc834TOcJLSv1+UOtNM5FocQfX2oO3vc286DuyE91ed4NuNva5RBr4G
+         4GuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792179432; x=1792784232;
+        d=1e100.net; s=20260707; t=1792179433; x=1792784233;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nBOMhYve2+j0dlG366cYMYKS/fXbtkTGxYn90sK+L7g=;
-        b=vRBhBFx62phBfFpXB7yvZY5Lmb/kGuiAdel1AmSRAWe9d/e5j6KQIgaciO/iZVtNdd
-         gTeGiBbDOpAkGMzlGz43UODq/xnAds8OrAt/4vMDa6tS0AMjN/qPdSfSbVNSHymMxm02
-         +j3nHTrYkqywL16UtAAOziAkKhCoxDgYoRietp0HkZjADeQiYzbPLmcFI/r1QXOUu+ai
-         4pWxw+kQcb/u/USqv5OUxnj1Z6B7fkvJJ669vHCKYW888+SFyhS1V2z4qOeOa5MijYQn
-         3e0sqJn5e0ONku0I+oHeLTXEKInIWksAfGraouWaGezyn++zJaEbPXlDYItH6CYSnlCd
-         HijQ==
-X-Gm-Message-State: AFq9FYJd/N/KSbKxYgTlYo+BVjUtr+jinNzKm1ccr5y08Sf2FZMkSkni
-	btI7+C3U4iqaWh7MP9PRvAyIB3lMh9wK3nHIwSgGN1GXdYRcy0TBH1Cl6v8cpxSjpvsEB5JvGHc
-	aPEKhTptoIg==
-X-Gm-Gg: AYBFou2A+CWjrPBjj9TRdBIjU+pG4yZdCBEDlFsgxZUCHV9iMvVR7u7bF6cPRSL5Y9O
-	sRl4X1XbUzhAutOd+/m1hT0gzIthxy+65rielrUbpshbKBWrS5QA0EzoxGHLa3CQn0GBnQs5auM
-	ysuUEJAdP/ylKAQ3X99t3BuZl7nNfY+vTXG02XHewcB5/nlb/WwVXEV5KiJC7zRgDu/q4230XZb
-	hGy/1GAAfaIpW5l1la2mlV839ZdeDqNDQUFdPUrzZ88qBuL+Y+OPwtMidgMcG+49grwzulh9gIG
-	iFzEfNB9f9E348JDV54YWvFKAfSc4SqN4JrVCAA6OxnxJnBPlFe2urXKZgNQw0t2JW0kGvdpuR2
-	9epSSPZYkjdKUU5QjERiGkJ4h7tEf/vP2R3MnBEgPprydoV21pEohwGIqbYH2sBnxXI7TUnmrSi
-	rfIiRtOHTOSw0v7uN1z4/yHK08Xqm+rTW41bFNA0fBrclpbWxh6ugl2xbB54adRqSdu5VSQTWw2
-	HHJn72tUaTjBQFKNThli5QXAVQ9Agu/iara
-X-Received: by 2002:a17:902:f792:b0:2e9:73db:3c78 with SMTP id d9443c01a7336-2e9a6d1d84emr7893515ad.17.1792179431203;
-        Fri, 16 Oct 2026 12:37:11 -0700 (PDT)
+        bh=aTPtWymi9zdwDJM+3urHno8w3H1cvHLVIpkldRRaktc=;
+        b=IoFZW6zKfj8tnKRnjZ+mIztAOrweLhgnwQm/YQHQSB/f4M1HxtP71ziiD7NuN9i+IL
+         FSaw785PfZeWH55PCmi9/3N0q96b7/3pVs2O/uCbCjC/vm565sdS/RMhiBNJS40bogUF
+         FkV1FeUUejZBZD4CtLAPZwbgc/9UahXMI6nqgZpRtjD3pWNDBsxCS74EPIbhYoiVX77A
+         mn6bpIXZEldmziTPz8rB+0+P9xIKw/mex9wkhpJee9ZUXmC8j5br6vv6hFNqnD93knub
+         6Fi5UrheQZEqxyYjQiXpRJq5/+WcwsSargL+jzLlA8NpJisRChX2shUtsrrqTRHEhwMC
+         A/oQ==
+X-Gm-Message-State: AFq9FYLLxdifdkKuiInrwyZ4tBGscD9YsQM07NoH9JNV918XWUjBKxHx
+	186sm77ngpREnPJNt0I/oskJ7n6EHr2kwiV1ZnMHBHluOEjmC/vc1I/oChkvNdtR7rnmzY6sIpu
+	oGHTeiZwuGQ==
+X-Gm-Gg: AYBFou3y8W3BDLoxDnu3aXfwVRiOWC9XAS3pjq2ONnvIAyf8WfdUhIny9dluCZjoZyY
+	9OeOwjFBcqcOpQjZAWBPorvXK1pZFHd5AYQP4vCWalQMO9DtdwDIqNFaCB8QpOiDtCP1Af9dgUk
+	haOZEn12LhQZkPL5nM8f1ni3SCPVZRgPDSGspk8ycEDnwo9kvxdgBytkODXXk0OitNF0sZ8RIs6
+	64Zlk9x6ws8MaryWydekOOJqULBwuegsUbhqqhJ5WAnlIpwTOL6TCLhqE6uGZ7zWCRm8dGBhj05
+	8BW7SEpRx5YsVGh+xo5YWJYpmHSS4b//HfMFLbaJCFwlsKsPPuHKQ4rXd/Mi+6Cw9v1CAp8elTS
+	LJwZ3SgF+sGsjTp2mHyn+WM6S83QtD4L4OvYzGh0eaHC7Q6DPtdqEWgirQj2o7pDpXactUOBkaj
+	C+vtC8XGHQ1e+bfqlkkjXGOkdewr86S0VKE0QLPBiEa57elY16GtQ1N927CF6PADsfseAfQj+6g
+	uHNa2kJwDa7FioGFy0VOtMOAWMaMn3x+uIZ
+X-Received: by 2002:a17:903:110c:b0:2e8:30dd:523d with SMTP id d9443c01a7336-2e9a68e6985mr9267785ad.13.1792179433392;
+        Fri, 16 Oct 2026 12:37:13 -0700 (PDT)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8b1f0asm14970045ad.68.2026.10.16.12.37.09
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8b1f0asm14970045ad.68.2026.10.16.12.37.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 12:37:10 -0700 (PDT)
+        Fri, 16 Oct 2026 12:37:13 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -66,11 +66,10 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Mykola Lysenko <nickolay.lysenko@gmail.com>
-Subject: [PATCH bpf-next v5 3/5] bpf: Fix arena race between page free and alloc leading to incoherency
-Date: Fri, 16 Oct 2026 19:37:01 +0000
-Message-ID: <20261016193703.9203-4-emil@etsalapatis.com>
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v5 5/5] selftests/bpf: Add arena allocation race tests
+Date: Fri, 16 Oct 2026 19:37:03 +0000
+Message-ID: <20261016193703.9203-6-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261016193703.9203-1-emil@etsalapatis.com>
 References: <20261016193703.9203-1-emil@etsalapatis.com>
@@ -82,845 +81,496 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Existing arena kfunc code has an underlying race condition
-that can lead to writes being lost from the BPF program's
-point of view:
+Add selftests for races between arena frees, reallocation and user
+faults:
 
-a) A memory range gets freed by operation (1), and its range
-is added back to the arena range tree.
+- realloc_during_free, realloc_during_deferred_free: a synchronous
+  or deferred free keeps its range allocated until it completes.
+- fault_free_realloc: user and BPF views of a page stay coherent
+  while it is repeatedly faulted, freed and reallocated.
 
-b) A concurrent allocation (2) reallocates the range, and does
-writes to it. Writes from that CPU may follow the stale TLB
-entries into the pages that are about to be freed.
+Pause frees in zap_vma_range(), after the range's kernel mappings are
+gone. Unlike flush_tlb_kernel_range(), which is inline on arm64, it is
+generic MM code that fentry can attach to. Print why a subtest is
+skipped when a tracing target is missing.
 
-c) (1) invalidates the TLB. The old pages, and any writes done
-to them, are now inaccessible. zap_pages() similarly removes the
-mappings for userspace threads.
-
-This can be triggered by particularly demanding BPF arena data
-structures that constantly allocate and deallocate memory, like
-hash table allocations.
-
-Solve this ABA problem by keeping the range allocated until TLB
-invalidation and unmapping are complete. Under the arena spinlock,
-claim any free pages in the range, record it as retiring and clear
-its kernel PTEs. Then drop the spinlock, wait on the folio lock of
-each cleared page for faults that are still installing a user PTE,
-flush the kernel TLB and zap the user page tables. Finally, retake
-the spinlock to release the range. The arena mutex serializes frees,
-so at most one range retires at a time.
-
-User faults on a retiring range wait for the free to complete. They
-sleep until arena->retire_seq, which the free bumps when it releases the
-range, changes, so they never take the arena mutex and cannot make a
-concurrent free fail to trylock it. This is safe with mmap_lock held,
-because frees only trylock mmap_lock and never wait for a waiting fault.
-Faults that allow retry drop the fault lock first and return
-VM_FAULT_RETRY. Faults without FAULT_FLAG_ALLOW_RETRY return
-VM_FAULT_NOPAGE so GUP can recheck the PTE while retaining mmap_lock.
-User faults on a range that is allocated without a page, such as one
-reserved with bpf_arena_reserve_pages(), now raise SIGBUS instead of
-populating it.
-
-Ranges without kernel PTEs, such as reserved ones, have nothing to
-flush or zap and are released immediately under the arena spinlock.
-A free of a range that is already entirely free has nothing to do,
-even if claiming it in the range tree fails. Frees of populated
-ranges now always zap the user mappings. The single-page shortcut
-that skipped the zap when the page reference count showed no user
-mapping is gone.
-
-Take the arena mutex and mmap read locks with trylocks before retiring
-a range. If preparation fails, drop all MM references and defer the
-free. The deferred free worker instead sleeps on the arena mutex and
-on the contended mmap_lock, rather than requeueing itself. Drop MM
-references asynchronously so the last put cannot run arena_vm_close()
-while the arena mutex is held. Sleepable callers allocate the
-deferred span with __GFP_RETRY_MAYFAIL, like bpf_alloc_page(), so
-that a contended free at memory.max fails the allocation instead of
-invoking the memcg OOM killer in the map's cgroup. Spans are only
-freed from process context, so free them all with kfree(), which also
-handles objects from kmalloc_nolock().
-
-Reported-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Fixes: b8467290edab ("bpf: arena: make arena kfuncs any context safe")
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- kernel/bpf/arena.c | 594 ++++++++++++++++++++++++++++++---------------
- 1 file changed, 401 insertions(+), 193 deletions(-)
+ .../selftests/bpf/prog_tests/arena_race.c     | 291 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_race.c  | 166 ++++++++++
+ 2 files changed, 457 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_race.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_race.c
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index dde887dac596..dd9f322ad57f 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -12,6 +12,7 @@
- #include <linux/vmalloc.h>
- #include <linux/pagemap.h>
- #include <linux/sched/mm.h>
-+#include <linux/wait_bit.h>
- #include <asm/tlbflush.h>
- #include "range_tree.h"
- 
-@@ -57,15 +58,22 @@ struct bpf_arena {
- 	struct vm_struct *kern_vm;
- 	struct page *scratch_page;
- 	struct range_tree rt;
--	/* protects rt and nr_pages */
-+	/* Protects rt, retire_*, real kernel mappings, and nr_pages. */
- 	rqspinlock_t spinlock;
-+	/*
-+	 * Range whose kernel PTEs a free has cleared but whose user mappings
-+	 * may still be live. Faults on it wait until the free completes.
-+	 * Frees hold arena->lock while retiring, so at most one range retires.
-+	 */
-+	u32 retire_pgoff;
-+	u32 retire_cnt;
-+	/* Bumped when a free stops retiring. Faults wait for it to change. */
-+	u32 retire_seq;
- 	/* number of pages currently populated in the arena */
- 	u64 nr_pages;
- 	struct list_head vma_list;
- 	/* protects vma_list */
- 	struct mutex lock;
--	u64 zap_gen;
--	struct mutex zap_mutex;
- 	struct irq_work     free_irq;
- 	struct work_struct  free_work;
- 	struct llist_head   free_spans;
-@@ -146,6 +154,15 @@ static long compute_pgoff(struct bpf_arena *arena, long uaddr)
- 	return (u32)(uaddr - (u32)arena->user_vm_start) >> PAGE_SHIFT;
- }
- 
-+/* Is a free retiring any of these pages? Caller holds arena->spinlock. */
-+static bool arena_range_retiring(struct bpf_arena *arena, unsigned long pgoff,
-+				 unsigned long cnt)
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_race.c b/tools/testing/selftests/bpf/prog_tests/arena_race.c
+new file mode 100644
+index 000000000000..c759211407ef
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_race.c
+@@ -0,0 +1,291 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <sched.h>
++#include <sys/syscall.h>
++#include <test_progs.h>
++
++#include "arena_race.skel.h"
++
++struct free_thread_ctx {
++	struct arena_race *skel;
++	int err;
++	__u32 retval;
++};
++
++struct fault_thread_ctx {
++	__u64 *addr;
++	int stop;
++};
++
++static int run_prog(struct bpf_program *prog, const char *name)
 +{
-+	return arena->retire_cnt &&
-+	       pgoff < arena->retire_pgoff + arena->retire_cnt &&
-+	       arena->retire_pgoff < pgoff + cnt;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int err;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++	return ASSERT_OK(err, name) && ASSERT_OK(opts.retval, name) ? 0 : -1;
 +}
 +
- struct apply_range_data {
- 	struct bpf_arena *arena;
- 	struct llist_head *pages;
-@@ -328,7 +345,6 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
- 	if (err)
- 		goto err_free_scratch;
- 	mutex_init(&arena->lock);
--	mutex_init(&arena->zap_mutex);
- 	raw_res_spin_lock_init(&arena->spinlock);
- 	err = populate_pgtable_except_pte(arena);
- 	if (err)
-@@ -390,8 +406,8 @@ static void arena_map_free(struct bpf_map *map)
- 		return;
- 
- 	/*
--	 * No callers remain. Drain the IRQ callback, then stop the worker,
--	 * including any attempts to requeue itself during teardown.
-+	 * No callers remain. Drain the IRQ callback, then wait for the worker
-+	 * and keep it from running again.
- 	 */
- 	irq_work_sync(&arena->free_irq);
- 	disable_work_sync(&arena->free_work);
-@@ -399,7 +415,7 @@ static void arena_map_free(struct bpf_map *map)
- 	/* Remaining mapped pages are reclaimed by the page-table walk below. */
- 	llist_for_each_safe(pos, next, llist_del_all(&arena->free_spans)) {
- 		s = llist_entry(pos, struct arena_free_span, node);
--		kfree_nolock(s);
-+		kfree(s);
- 	}
- 
- 	/*
-@@ -441,10 +457,11 @@ static u64 arena_map_mem_usage(const struct bpf_map *map)
- }
- 
- struct vma_list {
--	struct vm_area_struct *vma;
- 	struct list_head head;
- 	refcount_t mmap_count;
--	u64 zap_gen;
-+	struct vm_area_struct *vma;
-+	/* Temporary MM pins and locks, protected by arena->lock. */
-+	struct mm_struct *mm;
- };
- 
- static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
-@@ -455,9 +472,9 @@ static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
- 	if (!vml)
- 		return -ENOMEM;
- 	refcount_set(&vml->mmap_count, 1);
--	vma->vm_private_data = vml;
- 	vml->vma = vma;
--	vml->zap_gen = 0;
-+	vml->mm = NULL;
-+	vma->vm_private_data = vml;
- 	list_add(&vml->head, &arena->vma_list);
- 	return 0;
- }
-@@ -540,10 +557,12 @@ static vm_fault_t arena_install_page(struct vm_fault *vmf, struct page *page)
-  * The page reference protects lifetime; the folio lock protects installation.
-  * Validate after locking: a free may have removed this page while we waited.
-  * Keep the folio locked until arena_install_page() has installed the user PTE.
-+ *
-+ * Returns true with the fault result in *retp, or false if the fault must be
-+ * retried.
-  */
--static vm_fault_t arena_fault_page(struct bpf_arena *arena,
--				   struct vm_fault *vmf,
--				   struct page *page, long kaddr)
-+static bool arena_fault_page(struct bpf_arena *arena, struct vm_fault *vmf,
-+			     struct page *page, long kaddr, vm_fault_t *retp)
- {
- 	struct folio *folio = page_folio(page);
- 	unsigned long flags;
-@@ -554,26 +573,70 @@ static vm_fault_t arena_fault_page(struct bpf_arena *arena,
- 	if (ret) {
- 		/* The fault lock may be gone; do not access the arena here. */
- 		put_page(page);
--		return ret;
-+		*retp = ret;
-+		return true;
- 	}
- 
- 	err = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
- 	if (!err) {
- 		if (vmalloc_to_page((void *)kaddr) == page) {
- 			raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
--			return arena_install_page(vmf, page);
-+			*retp = arena_install_page(vmf, page);
-+			return true;
- 		}
- 		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 	}
- 
- 	folio_unlock(folio);
- 	put_page(page);
--	if (err)
--		return VM_FAULT_SIGBUS;
--	if (!(vmf->flags & FAULT_FLAG_ALLOW_RETRY))
--		return VM_FAULT_NOPAGE;
--	if (!(vmf->flags & FAULT_FLAG_RETRY_NOWAIT))
-+	if (err) {
-+		*retp = VM_FAULT_SIGBUS;
-+		return true;
-+	}
++/* Trigger the sleepable free page path. */
++static void *run_free_thread(void *arg)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct free_thread_ctx *ctx = arg;
 +
++	ctx->skel->bss->target_tid = sys_gettid();
++	ctx->err = bpf_prog_test_run_opts(
++		bpf_program__fd(ctx->skel->progs.free_page), &opts);
++	ctx->retval = opts.retval;
++	return NULL;
++}
++
++/* Continuously fault in the address. */
++static void *fault_reader_thread(void *arg)
++{
++	struct fault_thread_ctx *ctx = arg;
++	__u64 *addr;
++
++	while (!READ_ONCE(ctx->stop)) {
++		addr = __atomic_load_n(&ctx->addr, __ATOMIC_ACQUIRE);
++		(void)READ_ONCE(*addr);
++	}
++	return NULL;
++}
++
++static int wait_for(int *p)
++{
++	__u64 deadline = get_time_ns() + 5ULL * 1000 * 1000 * 1000;
++
++	while (!READ_ONCE(*p)) {
++		if (get_time_ns() > deadline)
++			return -ETIMEDOUT;
++	}
++	return 0;
++}
++
++/* Skip the subtest, saying why, if @func cannot be traced with fentry. */
++static bool require_fentry_target(const char *test, const char *func)
++{
++	if (libbpf_find_vmlinux_btf_id(func, BPF_TRACE_FENTRY) > 0)
++		return true;
++	printf("%s:SKIP: %s is not an fentry target\n", test, func);
++	test__skip();
 +	return false;
 +}
 +
-+/*
-+ * A free is retiring the faulting page. Wait for it instead of failing the
-+ * fault, until @seq, read while the range was retiring, changes. The free
-+ * only trylocks mmap_lock and never waits for a fault that is waiting here,
-+ * so waiting is safe with or without the fault lock held. It does not take
-+ * arena->lock, so it cannot make a concurrent free fail to trylock it.
-+ */
-+static vm_fault_t arena_wait_for_free(struct bpf_arena *arena, struct vm_fault *vmf,
-+				      u32 seq)
++static struct arena_race *setup_arena(__u64 **addr, bool trace_zap)
 +{
-+	bool retry = vmf->flags & FAULT_FLAG_ALLOW_RETRY;
++	struct arena_race *skel;
++	size_t arena_sz;
++	char *base;
++	int err;
 +
-+	/* The caller keeps the fault lock and retries later. */
-+	if (retry && (vmf->flags & FAULT_FLAG_RETRY_NOWAIT))
-+		return VM_FAULT_RETRY;
++	skel = arena_race__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return NULL;
++	err = bpf_program__set_autoload(skel->progs.trace_zap, trace_zap);
++	if (!ASSERT_OK(err, "trace_zap_autoload"))
++		goto err_out;
 +
-+	if (retry) {
-+		/* Once the fault lock is gone, only this reference pins the map. */
-+		bpf_map_inc(&arena->map);
- 		release_fault_lock(vmf);
++	err = arena_race__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto err_out;
++	err = arena_race__attach(skel);
++	if (!ASSERT_OK(err, "attach"))
++		goto err_out;
++
++	if (run_prog(skel->progs.alloc_old, "alloc_old"))
++		goto err_out;
++	if (skel->bss->skip) {
++		printf("%s:SKIP: compiler doesn't support arena_cast\n", __func__);
++		test__skip();
++		goto err_out;
 +	}
 +
-+	/*
-+	 * The retried fault rechecks everything under arena->spinlock, so
-+	 * READ_ONCE() without acquire ordering is enough. FAULT_FLAG_KILLABLE
-+	 * always comes with FAULT_FLAG_ALLOW_RETRY: a fatal signal ends the
-+	 * wait, and the caller checks for it on VM_FAULT_RETRY.
-+	 */
-+	if (vmf->flags & FAULT_FLAG_KILLABLE)
-+		wait_var_event_killable(&arena->retire_seq,
-+					READ_ONCE(arena->retire_seq) != seq);
-+	else
-+		wait_var_event(&arena->retire_seq,
-+			       READ_ONCE(arena->retire_seq) != seq);
++	base = bpf_map__initial_value(skel->maps.arena, &arena_sz);
++	if (!ASSERT_OK_PTR(base, "arena_base"))
++		goto err_out;
++	*addr = (__u64 *)(base + getpagesize());
++	if (!ASSERT_EQ((unsigned long)skel->bss->ptr, (unsigned long)*addr,
++		       "arena_ptr"))
++		goto err_out;
++	return skel;
 +
-+	/* GUP callers that cannot retry recheck the PTE on NOPAGE. */
-+	if (!retry)
-+		return VM_FAULT_NOPAGE;
-+
-+	bpf_map_put(&arena->map);
- 	return VM_FAULT_RETRY;
- }
- 
-@@ -634,12 +697,31 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 		goto out_err_locked;
- 	}
- 
-+	/* A free is retiring this page; wait for it, then retry. */
-+	if (arena_range_retiring(arena, vmf->pgoff, 1)) {
-+		u32 seq = arena->retire_seq;
-+
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+		if (new_page)
-+			free_pages_nolock(new_page, 0);
-+		return arena_wait_for_free(arena, vmf, seq);
-+	}
-+
-+	/*
-+	 * Allocated without a page and not being freed: the page is reserved.
-+	 * Fail like the scratch page above instead of populating it.
-+	 */
-+	if (is_range_tree_set(&arena->rt, vmf->pgoff, 1)) {
-+		fault_ret = VM_FAULT_SIGBUS;
-+		goto out_err_locked;
-+	}
-+
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
- 
- 	if (!new_page) {
- 		/*
--		 * The probed page was freed meanwhile or preallocation failed;
--		 * try the non-blocking allocator, we cannot sleep here.
-+		 * Preallocation failed; try the non-blocking allocator since
-+		 * we cannot sleep here.
- 		 */
- 		new_page = bpf_alloc_page(map->numa_node, false);
- 		if (!new_page) {
-@@ -680,7 +762,10 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 		new_page = NULL;
- 	}
- 
--	return arena_fault_page(arena, vmf, page, kaddr);
-+	if (arena_fault_page(arena, vmf, page, kaddr, &fault_ret))
-+		return fault_ret;
-+
-+	goto retry;
- 
- out_err_locked_memcg:
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
-@@ -690,9 +775,24 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	if (new_page)
- 		free_pages_nolock(new_page, 0);
- 	return fault_ret;
-+
-+retry:
-+	/* Non-retryable GUP callers recheck the PTE on NOPAGE. */
-+	if (!(vmf->flags & FAULT_FLAG_ALLOW_RETRY))
-+		return VM_FAULT_NOPAGE;
-+
-+	if (!(vmf->flags & FAULT_FLAG_RETRY_NOWAIT))
-+		release_fault_lock(vmf);
-+
-+	return VM_FAULT_RETRY;
- }
- 
- static const struct vm_operations_struct arena_vm_ops = {
-+	/*
-+	 * No ->map_pages: MM falls back from per-VMA locking to mmap_lock.
-+	 * No ->page_mkwrite: arena_install_page() completes shared write faults.
-+	 * Adding either hook requires revisiting the retirement protocol.
-+	 */
- 	.open		= arena_vm_open,
- 	.may_split	= arena_vm_may_split,
- 	.mremap		= arena_vm_mremap,
-@@ -925,154 +1025,301 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- }
- 
- /*
-- * If page is present in vmalloc area, unmap it from vmalloc area,
-- * unmap it from all user space vma-s,
-- * and free it.
-+ * The mmap read locks keep VMAs that are still in their mm's tree mapped until
-+ * the zap completes. munmap() can isolate a VMA before arena_vm_close()
-+ * unlinks its vml, so zap_pages() must recheck the tree. Locks are tried, never
-+ * waited for, before marking any range as retiring. In particular, recursively
-+ * taking an mmap read lock can fail when a writer is queued behind the caller.
-  */
--static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
-+static void arena_finish_zap(struct bpf_arena *arena, bool unlock)
- {
--	unsigned long size = (unsigned long)page_cnt << PAGE_SHIFT;
--	struct vm_area_struct *vma;
--	struct mm_struct *mm;
- 	struct vma_list *vml;
--	unsigned long vm_start;
--	u64 my_gen;
- 
--	/*
--	 * Taking mmap_read_lock() under arena->lock would deadlock against
--	 * arena_vm_close(), which runs with mmap_write_lock held and then
--	 * acquires arena->lock. Drop arena->lock for mmap_read_lock().
--	 *
--	 * Use per-call my_gen, recorded in vml->zap_gen, to remember which
--	 * vmls this invocation has already processed across the lock drop.
--	 * Hold zap_mutex around the whole walk so concurrent zap_pages()
--	 * callers cannot overwrite each other's marks on shared vmls --
--	 * otherwise call B's mark would make call A skip a vml that A has
--	 * not yet zapped for A's uaddr range.
--	 */
--	mutex_lock(&arena->zap_mutex);
--	mutex_lock(&arena->lock);
--	my_gen = ++arena->zap_gen;
--	for (;;) {
--		mm = NULL;
--		list_for_each_entry(vml, &arena->vma_list, head) {
--			if (vml->zap_gen >= my_gen)
--				continue;
--			vml->zap_gen = my_gen;
--			if (!mmget_not_zero(vml->vma->vm_mm))
--				continue;
--			mm = vml->vma->vm_mm;
--			vm_start = vml->vma->vm_start;
--			break;
--		}
--		if (!mm)
--			break;
-+	lockdep_assert_held(&arena->lock);
-+	list_for_each_entry(vml, &arena->vma_list, head) {
-+		if (!vml->mm)
-+			continue;
-+		mmap_read_unlock(vml->mm);
-+		/*
-+		 * The last mmput() can run exit_mmap(), which calls
-+		 * arena_vm_close() and takes arena->lock.
-+		 */
-+		mmput_async(vml->mm);
-+		vml->mm = NULL;
-+	}
-+
-+	if (unlock)
- 		mutex_unlock(&arena->lock);
++err_out:
++	arena_race__destroy(skel);
++	return NULL;
 +}
 +
-+/*
-+ * Prepare the arena to zap user mappings during a free. The arena
-+ * mutex protects against arena_vm_close(), per-mm state, and
-+ * serializes frees. The mm locks protect the PTEs from being
-+ * replaced while the page table walks are in progress.
-+ *
-+ * A BPF program can get here while tracing a free that holds arena->lock,
-+ * and while holding an mmap_lock itself, so it only trylocks. The deferred
-+ * free worker does neither. It passes @busy and waits for arena->lock, and
-+ * gets back the pinned mm of a contended mmap_lock to wait on once it holds
-+ * nothing.
-+ */
-+static bool arena_prepare_zap(struct bpf_arena *arena, struct mm_struct **busy)
++static void test_realloc_during_free(bool deferred)
 +{
-+	struct vma_list *vml;
-+	struct mm_struct *mm;
++	struct free_thread_ctx ctx = {};
++	struct arena_race *skel;
++	pthread_t thread;
++	__u64 *addr;
++	bool thread_created = false, zap_seen = false, completed = false;
++	int err;
 +
-+	if (busy)
-+		mutex_lock(&arena->lock);
-+	else if (!mutex_trylock(&arena->lock))
-+		return false;
-+
-+	/* We can only have a single VMA per mm for the arena. */
-+	list_for_each_entry(vml, &arena->vma_list, head) {
-+		mm = vml->vma->vm_mm;
-+		/* Exiting MMs cannot start faults; exit_mmap() drops their PTEs. */
-+		if (!mmget_not_zero(mm))
-+			continue;
- 
--		mmap_read_lock(mm);
- 		/*
--		 * Re-resolve: while we waited the VMA could have been unmapped
--		 * and a different mapping installed at the same address.
-+		 * Do trylock to avoid ABBA with arena_vm_close()
-+		 * (arena lock->mmap read lock vs mmap write lock -> arena lock).
- 		 */
--		vma = find_vma(mm, vm_start);
--		if (vma && vma->vm_start == vm_start &&
--		    vma->vm_file && vma->vm_file->private_data == &arena->map)
--			zap_vma_range(vma, uaddr, size);
--		mmap_read_unlock(mm);
--		mmput(mm);
-+		if (!mmap_read_trylock(mm)) {
-+			if (busy)
-+				*busy = mm;
-+			else
-+				mmput_async(mm);
-+			arena_finish_zap(arena, true);
-+			return false;
-+		}
- 
--		mutex_lock(&arena->lock);
-+		vml->mm = mm;
- 	}
--	mutex_unlock(&arena->lock);
--	mutex_unlock(&arena->zap_mutex);
-+
-+	return true;
- }
- 
--static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt, bool sleepable)
-+/* All mmap locks were acquired before clearing kernel PTEs. Never reacquire. */
-+static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
- {
--	struct mem_cgroup *new_memcg, *old_memcg;
--	u64 full_uaddr, uaddr_end;
--	long kaddr, pgoff;
--	struct page *page;
--	struct llist_head free_pages;
--	struct llist_node *pos, *t;
--	struct arena_free_span *s;
--	struct clear_range_data cdata;
--	unsigned long flags;
--	int ret = 0;
-+	struct vma_list *vml;
-+	unsigned long size = (unsigned long)page_cnt << PAGE_SHIFT;
- 
--	/* only aligned lower 32-bit are relevant */
--	uaddr = (u32)uaddr;
--	uaddr &= PAGE_MASK;
--	kaddr = bpf_arena_get_kern_vm_start(arena) + uaddr;
--	full_uaddr = clear_lo32(arena->user_vm_start) + uaddr;
--	if (full_uaddr < arena->user_vm_start)
--		return;
--	uaddr_end = min(arena->user_vm_end, full_uaddr + (page_cnt << PAGE_SHIFT));
--	if (full_uaddr >= uaddr_end)
--		return;
-+	lockdep_assert_held(&arena->lock);
-+	list_for_each_entry(vml, &arena->vma_list, head) {
-+		if (!vml->mm)
-+			continue;
-+		mmap_assert_locked(vml->mm);
-+		/*
-+		 * munmap() removes the VMA from the tree and downgrades mmap_lock
-+		 * before arena_vm_close() unlinks the vml, then frees the VMA's
-+		 * page tables under the read lock. Skip VMAs that have left the
-+		 * tree; munmap() zaps their PTEs itself.
-+		 */
-+		if (vma_lookup(vml->mm, vml->vma->vm_start) != vml->vma)
-+			continue;
-+		zap_vma_range(vml->vma, uaddr, size);
-+	}
-+}
- 
--	page_cnt = (uaddr_end - full_uaddr) >> PAGE_SHIFT;
--	pgoff = compute_pgoff(arena, uaddr);
--	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-+static void wait_for_faults(struct llist_head *pages)
-+{
-+	struct page *page;
- 
--	if (!sleepable)
--		goto defer;
-+	llist_for_each_entry(page, pages->first, pcp_llist)
-+		folio_wait_locked(page_folio(page));
-+}
- 
--	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
-+/*
-+ * Release the retired range and let faults on it proceed. This must finish
-+ * before arena->lock is dropped, so that at most one range retires at a time.
-+ * Retry the resilient spinlock in place: callers can sleep and hold no other
-+ * resilient spinlock, so acquisition can only time out.
-+ */
-+static void arena_finish_range(struct bpf_arena *arena, u32 pgoff, u32 page_cnt,
-+			       bool release)
-+{
-+	unsigned long flags;
- 
--	/* Can't proceed without holding the spinlock so defer the free */
--	if (ret)
--		goto defer;
-+	/*
-+	 * Can only fail due to timeouts. Code is only reachable from a sleepable
-+	 * context and no other res_spinlocks are held (so AA and ABBA are ruled out).
-+	 * It's safe to try and take the lock till we succeed.
-+	 */
-+	while (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
-+		cond_resched();
-+	/*
-+	 * If the tree cannot allocate a node for the range, the range stays
-+	 * allocated, as on any other range_tree_set() failure.
-+	 */
-+	if (release)
-+		range_tree_set(&arena->rt, pgoff, page_cnt);
-+	arena->retire_cnt = 0;
-+	WRITE_ONCE(arena->retire_seq, arena->retire_seq + 1);
-+	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
--	range_tree_set(&arena->rt, pgoff, page_cnt);
-+	/*
-+	 * Order the store above before wake_up_var() checks for waiters. Pairs
-+	 * with the barrier in set_current_state() in prepare_to_wait_event().
-+	 */
-+	smp_mb();
-+	wake_up_var(&arena->retire_seq);
-+}
- 
--	init_llist_head(&free_pages);
--	cdata.arena = arena;
--	cdata.free_pages = &free_pages;
--	/* clear ptes and collect struct pages */
--	apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
--				     apply_range_clear_cb, &cdata);
-+/* Called only for PTEs that are not none: a page or the scratch page. */
-+static int apply_range_mapped_cb(pte_t *pte, unsigned long addr, void *data)
-+{
-+	return -EEXIST;
-+}
- 
--	/* drop the lock to do the tlb flush and zap pages */
-+/*
-+ * Release a range without kernel PTEs, such as a reserved one, right away,
-+ * without arena->lock or mmap_lock. Unless a free is still retiring it, it
-+ * has nothing to flush or zap: frees flush and zap before they stop
-+ * retiring, and faults map pages to user space only while their kernel PTE
-+ * is present. Allocations and faults install PTEs under arena->spinlock, so
-+ * the check and the release are atomic. A scratch PTE takes the full path,
-+ * which flushes it, since an allocation may replace it without a TLB flush.
-+ */
-+static bool arena_free_unpopulated(struct bpf_arena *arena, u32 pgoff, long kaddr,
-+				   u32 page_cnt)
-+{
-+	unsigned long flags;
-+	bool release;
-+
-+	/* As in arena_finish_range(), acquisition can only time out. */
-+	while (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
-+		cond_resched();
-+
-+	release = !arena_range_retiring(arena, pgoff, page_cnt) &&
-+		  !apply_to_existing_page_range(&init_mm, kaddr,
-+						(unsigned long)page_cnt << PAGE_SHIFT,
-+						apply_range_mapped_cb, NULL);
-+	/* If the tree cannot allocate a node, the range stays allocated. */
-+	if (release)
-+		range_tree_set(&arena->rt, pgoff, page_cnt);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+	return release;
-+}
- 
--	/* ensure no stale TLB entries */
--	flush_tlb_kernel_range(kaddr, kaddr + (page_cnt * PAGE_SIZE));
-+static bool arena_free_span(struct bpf_arena *arena, struct arena_free_span *s,
-+			    struct mm_struct **busy)
-+{
-+	LLIST_HEAD(pages);
-+	struct clear_range_data cdata = {
-+		.arena = arena,
-+		.free_pages = &pages,
-+	};
-+	struct llist_node *pos, *next;
-+	struct page *page;
-+	unsigned long flags;
-+	long pgoff = compute_pgoff(arena, s->uaddr);
-+	long kaddr = bpf_arena_get_kern_vm_start(arena) + s->uaddr;
-+	unsigned long uaddr = clear_lo32(arena->user_vm_start) + s->uaddr;
-+	bool failed;
-+	int ret;
-+
-+	if (arena_free_unpopulated(arena, pgoff, kaddr, s->page_cnt))
-+		return true;
-+
-+	if (!arena_prepare_zap(arena, busy))
-+		return false;
-+
-+	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
-+	if (ret) {
-+		arena_finish_zap(arena, true);
-+		return false;
-+	}
- 
--	if (page_cnt > 1)
--		/* bulk zap if multiple pages being freed */
--		zap_pages(arena, full_uaddr, page_cnt);
-+	/*
-+	 * Claim any free pages in the range so allocations cannot land in it
-+	 * while it retires. This only allocates a node when one free range
-+	 * covers the whole range, and leaves the tree unchanged if that fails.
-+	 * Such a range is entirely free, so it holds no pages and there is
-+	 * nothing to free. Any scratch PTEs stay, as in other free ranges.
-+	 */
-+	ret = range_tree_clear(&arena->rt, pgoff, s->page_cnt);
-+	if (ret) {
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+		arena_finish_zap(arena, true);
-+		return true;
-+	}
-+	arena->retire_pgoff = pgoff;
-+	arena->retire_cnt = s->page_cnt;
-+
-+	ret = apply_to_existing_page_range(&init_mm, kaddr,
-+					  (unsigned long)s->page_cnt << PAGE_SHIFT,
-+					  apply_range_clear_cb, &cdata);
-+	/* If clearing fails, the range stays allocated with its remaining pages. */
-+	failed = WARN_ON_ONCE(ret);
-+	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
--	llist_for_each_safe(pos, t, __llist_del_all(&free_pages)) {
-+	/*
-+	 * A fault validated before clearing holds its folio locked through
-+	 * arena_install_page(). A later fault fails its kernel-PTE recheck.
-+	 */
-+	wait_for_faults(&pages);
-+	flush_tlb_kernel_range(kaddr, kaddr + ((unsigned long)s->page_cnt << PAGE_SHIFT));
-+	zap_pages(arena, uaddr, s->page_cnt);
-+	llist_for_each_safe(pos, next, __llist_del_all(&pages)) {
- 		page = llist_entry(pos, struct page, pcp_llist);
--		if (page_cnt == 1 && page_ref_count(page) > 1) /* maybe mapped by user space */
--			/* Optimization for the common case of page_cnt==1:
--			 * If page wasn't mapped into some user vma there
--			 * is no need to call zap_pages which is slow. When
--			 * page_cnt is big it's faster to do the batched zap.
--			 */
--			zap_pages(arena, full_uaddr, 1);
- 		__free_page(page);
- 	}
--	bpf_map_memcg_exit(old_memcg, new_memcg);
- 
--	return;
-+	/* Finalization needs no mmap locks, so drop them before spinning. */
-+	arena_finish_zap(arena, false);
-+	arena_finish_range(arena, pgoff, s->page_cnt, !failed);
-+	mutex_unlock(&arena->lock);
-+	return true;
-+}
- 
--defer:
--	s = kmalloc_nolock(sizeof(struct arena_free_span), __GFP_ACCOUNT, -1);
--	bpf_map_memcg_exit(old_memcg, new_memcg);
--	if (!s)
-+static void arena_queue_free_span(struct bpf_arena *arena, struct arena_free_span *s)
-+{
-+	llist_add(&s->node, &arena->free_spans);
-+	irq_work_queue(&arena->free_irq);
-+}
-+
-+static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt, bool sleepable)
-+{
-+	struct mem_cgroup *new_memcg, *old_memcg;
-+	struct arena_free_span span = {};
-+	struct arena_free_span *s;
-+	u64 full_uaddr, uaddr_end;
-+
-+	/* Only aligned lower 32 bits are relevant. */
-+	uaddr = (u32)uaddr & PAGE_MASK;
-+	full_uaddr = clear_lo32(arena->user_vm_start) + uaddr;
-+	if (full_uaddr < arena->user_vm_start)
-+		return;
-+	uaddr_end = min(arena->user_vm_end, full_uaddr + (page_cnt << PAGE_SHIFT));
-+	if (full_uaddr >= uaddr_end)
++	if (!require_fentry_target(__func__, "zap_vma_range"))
 +		return;
 +
-+	span.uaddr = uaddr;
-+	span.page_cnt = (uaddr_end - full_uaddr) >> PAGE_SHIFT;
-+	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-+	if (sleepable) {
-+		if (arena_free_span(arena, &span, NULL))
-+			goto out;
- 		/*
--		 * If allocation fails in non-sleepable context, pages are intentionally left
--		 * inaccessible (leaked) until the arena is destroyed. Cleanup or retries are not
--		 * possible here, so we intentionally omit them for safety.
-+		 * No arena locks remain, and nothing was retired yet. Like
-+		 * bpf_alloc_page(), let a charge to the map's memcg at
-+		 * memory.max fail instead of invoking the memcg OOM killer.
- 		 */
--		return;
-+		s = kmalloc_obj(*s, GFP_KERNEL_ACCOUNT | __GFP_RETRY_MAYFAIL | __GFP_NOWARN);
++	skel = setup_arena(&addr, true);
++	if (!skel)
++		return;
++
++	/* Pause the free after its TLB flush, before it releases the range. */
++	skel->bss->pause_on_zap = 1;
++
++	if (deferred) {
++		/*
++		 * Test the nonsleepable free path that gets
++		 * deferred to a worker in the kernel. We do
++		 * so by triggering the arena operation from
++		 * a nonsleepable tracepoint context.
++		 */
++		skel->bss->trigger_pid_tgid =
++			((__u64)getpid() << 32) | (__u32)sys_gettid();
++		skel->bss->trigger_syscall = SYS_getpgid;
++		skel->bss->deferred_free = 1;
++		if (!ASSERT_GE(syscall(SYS_getpgid, 0), 0, "deferred_free"))
++			goto release;
 +	} else {
-+		/* No mutex/MM/folio locking or TLB zapping in this context. */
-+		s = kmalloc_nolock(sizeof(*s), __GFP_ACCOUNT, NUMA_NO_NODE);
-+	}
-+	/* Without retry storage, the pages stay mapped until map free. */
-+	if (!s)
-+		goto out;
-+	*s = span;
- 
--	s->page_cnt = page_cnt;
--	s->uaddr = uaddr;
--	llist_add(&s->node, &arena->free_spans);
--	irq_work_queue(&arena->free_irq);
-+	arena_queue_free_span(arena, s);
-+out:
-+	bpf_map_memcg_exit(old_memcg, new_memcg);
- }
- 
- /*
-@@ -1117,66 +1364,27 @@ static void arena_free_worker(struct work_struct *work)
- {
- 	struct bpf_arena *arena = container_of(work, struct bpf_arena, free_work);
- 	struct mem_cgroup *new_memcg, *old_memcg;
--	struct llist_node *list, *pos, *t;
-+	struct llist_node *list, *pos, *next;
-+	struct mm_struct *busy = NULL;
- 	struct arena_free_span *s;
--	u64 arena_vm_start, user_vm_start;
--	struct llist_head free_pages;
--	struct clear_range_data cdata;
--	struct page *page;
--	unsigned long full_uaddr;
--	long kaddr, page_cnt, pgoff;
--	unsigned long flags;
--
--	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
--		schedule_work(work);
--		return;
--	}
- 
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
--
--	init_llist_head(&free_pages);
--	cdata.arena = arena;
--	cdata.free_pages = &free_pages;
--	arena_vm_start = bpf_arena_get_kern_vm_start(arena);
--	user_vm_start = bpf_arena_get_user_vm_start(arena);
--
- 	list = llist_del_all(&arena->free_spans);
--	llist_for_each(pos, list) {
--		s = llist_entry(pos, struct arena_free_span, node);
--		page_cnt = s->page_cnt;
--		kaddr = arena_vm_start + s->uaddr;
--		pgoff = compute_pgoff(arena, s->uaddr);
--
--		/* clear ptes and collect pages in free_pages llist */
--		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
--					     apply_range_clear_cb, &cdata);
--
--		range_tree_set(&arena->rt, pgoff, page_cnt);
--	}
--	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
--
--	/* Iterate the list again without holding spinlock to do the tlb flush and zap_pages */
--	llist_for_each_safe(pos, t, list) {
-+	llist_for_each_safe(pos, next, list) {
- 		s = llist_entry(pos, struct arena_free_span, node);
--		page_cnt = s->page_cnt;
--		full_uaddr = clear_lo32(user_vm_start) + s->uaddr;
--		kaddr = arena_vm_start + s->uaddr;
--
--		/* ensure no stale TLB entries */
--		flush_tlb_kernel_range(kaddr, kaddr + (page_cnt * PAGE_SIZE));
--
--		/* remove pages from user vmas */
--		zap_pages(arena, full_uaddr, page_cnt);
--
--		kfree_nolock(s);
--	}
--
--	/* free all pages collected by apply_to_existing_page_range() in the first loop */
--	llist_for_each_safe(pos, t, __llist_del_all(&free_pages)) {
--		page = llist_entry(pos, struct page, pcp_llist);
--		__free_page(page);
-+		while (!arena_free_span(arena, s, &busy)) {
-+			/* Holding nothing else, wait out the contended mmap_lock. */
-+			if (busy) {
-+				mmap_read_lock(busy);
-+				mmap_read_unlock(busy);
-+				mmput_async(busy);
-+				busy = NULL;
-+			}
-+			cond_resched();
++		/*
++		 * Test the sleepable arena free path through a
++		 * syscall test prog.
++		 */
++		ctx.skel = skel;
++		err = pthread_create(&thread, NULL, run_free_thread, &ctx);
++		if (!ASSERT_OK(err, "pthread_create")) {
++			skel->bss->release = 1;
++			goto out;
 +		}
-+		kfree(s);
-+		cond_resched();
- 	}
--
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- }
- 
++		thread_created = true;
++	}
++
++	/* Wait until the free reaches the user zap. */
++	err = wait_for(&skel->bss->zap_entered);
++	if (!ASSERT_OK(err, "zap_entered"))
++		goto release;
++
++	zap_seen = true;
++
++	/* The range must stay allocated until the free completes. */
++	run_prog(skel->progs.try_realloc, "realloc_during_free");
++	ASSERT_NULL(skel->bss->realloc_ptr, "realloc_during_free");
++
++release:
++	skel->bss->release = 1;
++	if (thread_created) {
++		ASSERT_OK(pthread_join(thread, NULL), "pthread_join");
++		thread_created = false;
++		completed = ASSERT_OK(ctx.err, "free_run") &&
++			    ASSERT_OK(ctx.retval, "free_retval");
++	} else if (skel->bss->target_tid) {
++		err = wait_for(&skel->bss->worker_exited);
++		completed = ASSERT_OK(err, "worker_exited");
++	}
++	ASSERT_FALSE(skel->bss->timed_out, "zap_timed_out");
++
++	if (zap_seen && completed &&
++	    !run_prog(skel->progs.try_realloc, "realloc_after_free")) {
++		ASSERT_EQ((unsigned long)skel->bss->realloc_ptr,
++			  (unsigned long)addr, "realloc_after_free");
++		ASSERT_EQ(*addr, skel->rodata->new_marker, "new_marker");
++	}
++out:
++	arena_race__destroy(skel);
++}
++
++/*
++ * Force a race between a faulting thread in userspace and a
++ * free operation on the arena.
++ */
++static void test_fault_free_realloc(void)
++{
++	struct fault_thread_ctx fault = {};
++	struct arena_race *skel;
++	pthread_t fault_thread;
++	bool fault_created = false;
++	__u64 *addr;
++	__u64 expected, value;
++	int err, i;
++
++	skel = setup_arena(&addr, false);
++	if (!skel)
++		return;
++
++	skel->bss->realloc_after_free = 1;
++
++	fault.addr = addr;
++	err = pthread_create(&fault_thread, NULL, fault_reader_thread, &fault);
++	if (!ASSERT_OK(err, "pthread_create_fault"))
++		goto out;
++	fault_created = true;
++
++	for (i = 0; i < 1000; i++) {
++		LIBBPF_OPTS(bpf_test_run_opts, opts);
++
++		/* Keep deferred frees from earlier iterations on separate slots. */
++		if (i) {
++			skel->bss->page_idx = i;
++			if (run_prog(skel->progs.alloc_old, "alloc_next"))
++				goto out;
++			addr = (__u64 *)(unsigned long)skel->bss->ptr;
++			__atomic_store_n(&fault.addr, addr, __ATOMIC_RELEASE);
++		}
++
++		err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.free_page),
++					     &opts);
++		if (err) {
++			ASSERT_OK(err, "free_realloc");
++			break;
++		}
++		if (opts.retval) {
++			ASSERT_OK(opts.retval, "free_realloc");
++			break;
++		}
++		/* The reader may populate the slot first, or free may defer. */
++		if (!skel->bss->realloc_ptr)
++			continue;
++		value = *addr;
++		expected = skel->bss->current_marker;
++		if (value != expected) {
++			ASSERT_EQ(value, expected, "marker_after_realloc");
++			break;
++		}
++	}
++
++	WRITE_ONCE(fault.stop, 1);
++	if (fault_created) {
++		ASSERT_OK(pthread_join(fault_thread, NULL), "pthread_join_fault");
++		fault_created = false;
++	}
++out:
++	WRITE_ONCE(fault.stop, 1);
++	if (fault_created)
++		pthread_join(fault_thread, NULL);
++	arena_race__destroy(skel);
++}
++
++void serial_test_arena_race(void)
++{
++	cpu_set_t cpuset;
++	int err;
++
++	err = sched_getaffinity(0, sizeof(cpuset), &cpuset);
++	if (!ASSERT_OK(err, "sched_getaffinity"))
++		return;
++	if (CPU_COUNT(&cpuset) < 2) {
++		printf("%s:SKIP: at least two runnable CPUs are required\n", __func__);
++		test__skip();
++		return;
++	}
++
++	if (test__start_subtest("realloc_during_free"))
++		test_realloc_during_free(false);
++	if (test__start_subtest("realloc_during_deferred_free"))
++		test_realloc_during_free(true);
++	if (test__start_subtest("fault_free_realloc"))
++		test_fault_free_realloc();
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_race.c b/tools/testing/selftests/bpf/progs/arena_race.c
+new file mode 100644
+index 000000000000..54dbd662ca70
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_race.c
+@@ -0,0 +1,166 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++
++const volatile __u64 old_marker = 0x1111222233334444ULL;
++const volatile __u64 new_marker = 0x5555666677778888ULL;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1024);
++#ifdef __TARGET_ARCH_arm64
++	__ulong(map_extra, 0x1ull << 32);
++#else
++	__ulong(map_extra, 0x1ull << 44);
++#endif
++} arena SEC(".maps");
++
++bool skip;
++int page_idx;
++
++void __arena *ptr;
++void __arena *realloc_ptr;
++bool realloc_after_free;
++__u64 current_marker;
++__u64 marker_seq;
++
++int target_tid;
++int pause_on_zap;
++int zap_entered;
++int release;
++int timed_out;
++
++__u64 trigger_pid_tgid;
++long trigger_syscall;
++int deferred_free;
++int worker_armed;
++int worker_exited;
++
++static __always_inline void wait_for_release(void)
++{
++	while (!*(volatile int *)&release && can_loop)
++		;
++	if (!*(volatile int *)&release)
++		timed_out = 1;
++}
++
++SEC("syscall")
++int alloc_old(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++	char __arena *base = arena_base(&arena);
++
++	realloc_ptr = NULL;
++	ptr = bpf_arena_alloc_pages(&arena, base + (page_idx + 1) * __PAGE_SIZE, 1,
++				    NUMA_NO_NODE, 0);
++	if (!ptr)
++		return 1;
++	p = (__u64 __arena *)ptr;
++	*p = old_marker;
++	current_marker = old_marker;
++#else
++	skip = true;
++#endif
++	return 0;
++}
++
++SEC("syscall")
++int free_page(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++	__u64 marker;
++
++	if (!ptr)
++		return 1;
++	bpf_arena_free_pages(&arena, ptr, 1);
++	if (!realloc_after_free)
++		return 0;
++
++	marker = new_marker + ++marker_seq;
++	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
++	if (!realloc_ptr)
++		return 0;
++	ptr = realloc_ptr;
++	p = (__u64 __arena *)ptr;
++	*p = marker;
++	current_marker = marker;
++#endif
++	return 0;
++}
++
++SEC("syscall")
++int try_realloc(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++
++	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
++	if (realloc_ptr) {
++		ptr = realloc_ptr;
++		p = (__u64 __arena *)realloc_ptr;
++		*p = new_marker;
++		current_marker = new_marker;
++	}
++#endif
++	return 0;
++}
++
++SEC("tp_btf/sys_enter")
++int BPF_PROG(deferred_free_prog, struct pt_regs *regs, long id)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	if (!deferred_free || bpf_get_current_pid_tgid() != trigger_pid_tgid ||
++	    id != trigger_syscall)
++		return 0;
++
++	deferred_free = 0;
++	/* The worker can run on another CPU before the kfunc returns. */
++	worker_armed = 1;
++	bpf_arena_free_pages(&arena, ptr, 1);
++#endif
++	return 0;
++}
++
++SEC("fentry/arena_free_worker")
++int BPF_PROG(trace_free_worker, struct work_struct *work)
++{
++	if (worker_armed && !target_tid)
++		target_tid = (__u32)bpf_get_current_pid_tgid();
++	return 0;
++}
++
++SEC("fexit/arena_free_worker")
++int BPF_PROG(trace_free_worker_ret, struct work_struct *work)
++{
++	if ((__u32)bpf_get_current_pid_tgid() == target_tid)
++		worker_exited = 1;
++	return 0;
++}
++
++/*
++ * Pause a free while it zaps user mappings: after it cleared the kernel PTEs
++ * and flushed the TLB, but before it releases the range. zap_vma_range() is
++ * generic MM code, so it is an fentry target even where
++ * flush_tlb_kernel_range() is inline (arm64).
++ */
++SEC("?fentry/zap_vma_range")
++int BPF_PROG(trace_zap, struct vm_area_struct *vma, unsigned long address,
++	     unsigned long size)
++{
++	if ((__u32)bpf_get_current_pid_tgid() != target_tid)
++		return 0;
++	zap_entered = 1;
++	if (pause_on_zap)
++		wait_for_release();
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.52.0
 
