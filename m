@@ -1,91 +1,100 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857AD55C326;
-	Fri, 16 Oct 2026 17:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F2352ED34;
+	Fri, 16 Oct 2026 17:49:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792172966; cv=none; b=PxVakZSjPH2X1VuORmMM/T2O7t/FBc4FmQBKV7jrgMjaExeHoEcKmcZt1h6t2G55acrJxg49qCuhT3k7LRriy1jPopBzIWNPC64LXTBMAtMCqFmPJKKypQbuZKQXxDJOregHI9JDfIBAcy7CvIEFFPOT5IcMWnCOhHXUovzFLwk=
+	t=1792172968; cv=none; b=CYeWbonYVMymdTjed7o80+Ob1SxsOkStyGkdSy+XOIalu0YmTn7yU18LmDE+/DFTvPU954zkgzviNmeMyO7bkTWSCGX4ggHlYsr5wPHeEVM7bw/sPommhfJ/YiDp1hlwQgTu8/ek5fD+PDMOFl+UWH/i5w5ENcU2vDxlRBVfVxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792172966; c=relaxed/simple;
-	bh=dWRQ2aF4/VaPlp0h4V3RSLl+xiCisBrJ5hzbd5rHqiM=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=cj2Bg88VBkpUW6TD92zbGFvkA6taeHY0U40Eba0wm935jKHJu6GEMoFugkRv8VqG5qky0N/4VhRjfKFmSBWah5Ra5PgZiUcStVSGGEjrqZo10fBza8P/y+c0rEWK6tbkUwYn7rrjM9dygOQ4ALmeEYhiN7iMr0BP5uauoqiuiOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WoV1rqKn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792172968; c=relaxed/simple;
+	bh=UyBJX0/0KzYg8qyPNHJutHM78POcNnYCsxWzSCjVgzA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=hGfLKm2IoGpg9fBAo0rAhEdb7fTrL4FqmKn5EY8BAhCQb+o/1CVXdYg3bwJw8lODWV0RJFZ1k+rbxLnEKd7z5cdz/wPdeX0v34CIqJG6HdeVQWv0QmTEeresstDFRCY7/2HCu3yH7S+IX9QcRcaAyyBuCZjswOfUEN+ogNd+mRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jedKCDaW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WoV1rqKn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC0001F000C4;
-	Fri, 16 Oct 2026 17:49:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jedKCDaW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EB91F000C5;
+	Fri, 16 Oct 2026 17:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792172965;
-	bh=khC4eyWshOpMfKEOEAE78FZ5zFD7AWn5w7V2kZ90LUA=;
+	s=k20260515; t=1792172966;
+	bh=c+Q2WRyX9uvFEt5WnU72kmonNKdTPES+k9xnAuTMxLw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=WoV1rqKnq9Ci8pyOvu0kcUDfVS8vcTn8PMPFnCXP3Zmz2wWWg71ONLHdcHx+/VRnr
-	 cjE6GSrmeUr2JDRPuOZer26Hsj+yVlwTz5Bvl4Z3wAlW75uLrR/+CgmQQNpMj7yrNp
-	 EB57BD2EhfY3p15VaW2/+SQ5U1Tc3zmtWn5ndalh0/DHm2ehWyTOtbSsrW6yTdE1L5
-	 qEbtAL3mo+bFRSt5WKY4kouUuwm0eXz48OwKzobnRfButMecoWpzvp9HyB0xk4PxX4
-	 zESNV/S2W9lCkbntty/HKpg2dLUzsKLtQhDxyG/6CiADEo9qWqFva/SaNHE9jd0jXD
-	 j/6OvZ0KfimEg==
-Date: Fri, 16 Oct 2026 07:49:23 -1000
-Message-ID: <6780de9ee6208d26065d42ec10c23efa@kernel.org>
+	b=jedKCDaWnotORQcDppEZx2vU+TyHE0ZVlpHL1KaVzTzdRFQJ5UnzWqA0LdY6LMoTn
+	 PvSIOdtukh3p0mUHym8Muk/SKDpaJDIxmENbphQCoV75J+wS8MGGvhQM63Lluang1A
+	 WK5q7axsfvmrMUI9+Qo8LXp+g1jESuFV/B2eKdEjdSifW0+wBEsywzgt8k5rD3sFjE
+	 hH3ikQGMYhSL1upnVJZI5rJcugKCqQGtb4iq6aVVpA1UgB024rNN+VaRWXx8ucMQCk
+	 E896EYUx5TSogAcVI5SvSeJaVJzIPYh5Vgpo2b5s+5YyyFsEyEz0zYVB6QXz/M4z5r
+	 6GtCRO1GOLP0w==
+Date: Fri, 16 Oct 2026 07:49:25 -1000
+Message-ID: <d0d742e7dcb71676a8a37ebd4e53feef@kernel.org>
 From: Tejun Heo <tj@kernel.org>
 To: Puranjay Mohan <puranjay@kernel.org>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 1/3] bpf, x86: Support fetching AND/OR/XOR atomics in arena
-In-Reply-To: <20261016171319.1623447-2-puranjay@kernel.org>
-References: <20261016171319.1623447-1-puranjay@kernel.org> <20261016171319.1623447-2-puranjay@kernel.org>
+Subject: Re: [PATCH bpf-next v5 2/3] selftests/bpf: Test fetching AND/OR/XOR atomics in arena
+In-Reply-To: <20261016171319.1623447-3-puranjay@kernel.org>
+References: <20261016171319.1623447-1-puranjay@kernel.org> <20261016171319.1623447-3-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-On Fri, Oct 16, 2026 at 10:13:12AM -0700, Puranjay Mohan wrote:
-> x86-64 has no single instruction for a fetching AND/OR/XOR, so the JIT
-> lowers them to a CMPXCHG loop. That loop could not be used against arena
-> memory: it contains two memory accesses, the load of the old value and
-> the CMPXCHG itself, either of which can fault when the arena page goes
-> away, while the verifier reserves only one exception table entry per
-> instruction. bpf_jit_supports_insn() therefore rejected the three opcodes
-> and such programs failed to load with
+On Fri, Oct 16, 2026 at 10:13:13AM -0700, Puranjay Mohan wrote:
+> The arena and/or/xor tests never exercised the fetching form of the
+> instruction. Commit 2897b1e2a2f4 ("selftests/bpf: Fix arena_atomics
+> failure due to llvm change") deliberately switched them to
+> __c11_atomic_fetch_*() with memory_order_relaxed, which clang lowers to a
+> non-fetching locked instruction when the result is unused, because
+> x86-64 could not JIT the fetching one against an arena.
 >
->   BPF_ATOMIC stores into R1 arena is not allowed
+> It can now, so check the returned old value with __sync_fetch_and_*().
+> Keep a __c11_atomic_fetch_*() of each width per operation with the result
+> discarded: that spelling is what selects the non-fetching insn, which
+> would otherwise lose its only coverage, on every architecture rather than
+> just x86. Compiling the prog with clang 22 before and after confirms the
+> split: 6 non-fetching and no fetching arena and/or/xor before, 6 and 22
+> after.
 >
-> Emit the same loop with R12-indexed addressing and give each of the two
-> accesses its own exception table entry. The verifier still reserves one
-> per instruction, so the JIT accounts for the extra entry itself by
-> rescanning the instruction stream in bpf_int_jit_compile() before the
-> extable is sized, as s390 does in bpf_jit_alloc() for its BPF_XCHG
-> lowering. The rescan sits after the extra-pass early exit, so a program
-> is counted exactly once. Drop the bpf_jit_supports_insn() rejection.
+> The new globals go in their operation's block, and the or block keeps its
+> u32s first, so .addr_space.1 stays free of the padding holes that clang
+> before 18 cannot fill when it is built without address space casts.
 >
-> A loop without the load would need only one entry, since a CMPXCHG that
-> loses the comparison reloads RAX, but its first CMPXCHG would then almost
-> always lose. Every operation would pay for a second locked CMPXCHG, which
-> makes the fetching insn more expensive than the load and CMPXCHG loop
-> programs write by hand today. The second entry is paid for once, in the
-> JIT.
+> Add a fetch_r0 test for the two register assignments the x86 JIT has to
+> special-case, where the operand and where the arena pointer is R0 and
+> BPF_REG_AX is substituted for it. Clang picks its own registers and will
+> not reliably produce either, so spell the instructions out. The values
+> have bits set above 32 so that a truncating move on that path shows up.
+> Add both forms to the uaf test as well, since the substitution only
+> reaches the exception table when such an access faults, and check that
+> the fault cleared the fetched register and left the address alone. They
+> fault on the page after the freed one: the freed page is the first of the
+> arena, whose 32-bit address is 0, which would make the address check
+> empty. The address is read back afterwards, which gives 0 if the JIT's
+> exception table entry recovered the fault, but not if the arena had
+> mapped its zeroed scratch page and let the access succeed. The powerpc64
+> JIT does not clear the register of a faulting atomic yet, so those checks
+> are skipped there.
 >
-> Both entries resume past the whole loop rather than past the faulting
-> instruction alone, with the fetch destination cleared, so a fault cannot
-> re-enter the loop, and both are reported as writes since the BPF insn is
-> a read-modify-write. This repurposes the INSN_LEN field of the fixup as a
-> resume distance rather than an instruction length; a sequence long enough
-> to overflow its 8 bits would first have to exceed BPF_MAX_INSN_SIZE, which
-> do_jit() rejects before the image is used.
+> Both spell addr_space_cast textually, which needs LLVM 19, so uaf gains
+> the __BPF_FEATURE_ADDR_SPACE_CAST guard that every other textual use in
+> the file already has. It was plain C before and built on older clang.
 >
-> The loop needs RAX for CMPXCHG and saves R0 in BPF_REG_AX, which it also
-> substitutes for R0 when either operand is R0. ex_handler_bpf() may then
-> have to name r10 as the register holding the arena address or the one to
-> clear on fault; reg2pt_regs[] already has that entry.
+> Drop x86 from the exclusion list of the uaf test, which covers the fault
+> path. Its page is gone before the first access, so it faults on the load;
+> the CMPXCHG entry is only reached when the page goes away between the two
+> accesses, which a test cannot arrange.
 >
-> An access through a number, made by a program loaded with
-> BPF_F_ARENA_SCALAR, keeps its address in BPF_REG_AX itself (see
-> arena_scalar_access()), which is where the loop would save R0. Save R0 on
-> the stack in that case, as the div and mod lowering does. An R0 operand
-> stays in that stack slot: the new value is built from it, RAX ends up
-> holding the old value that R0 is to return, and the slot is dropped
-> instead of popped. Both entries resume before that pop or drop, so a
-> fault leaves the stack balanced.
+> Finally cover fetching AND/OR/XOR through a number in
+> verifier_arena_scalar, on x86-64 and arm64. Both widths are run with the
+> operand in a register and in R0, which is where the x86-64 JIT keeps the
+> operand on the stack because BPF_REG_AX holds the address. The 32-bit
+> operands have bits set above 32 so that a missing zero-extension shows.
+> The page is also freed first, after storing a nonzero value in it so that
+> an access which did not fault would show, and the test checks that the
+> fetched register comes back 0 and R0 is left alone, and that reading the
+> address back gives 0. R0 is compared with a value derived from the page
+> address: the verifier would decide a comparison with a constant at load
+> time and drop it.
 >
 > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 
