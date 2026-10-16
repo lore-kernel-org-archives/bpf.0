@@ -1,119 +1,98 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3FC4772B8;
-	Fri, 16 Oct 2026 12:22:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573CF41DDF0;
+	Fri, 16 Oct 2026 12:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792153344; cv=none; b=mLTxKEs5k0qHjvdnK7UGt6i/JElzaVaW/mxo6mxkqkIuOrRKjFckjoca1R/w31Od/CXh2+PelQLY7JOBzOyQbCMNFGpaHIdBYyKdm5vGWL2cgfHSTUEqE9qeuhP4mAvTN1OJtphHMTfLIU+3ak4KpIGy76mLA+dZIx5NtsOfp9Y=
+	t=1792155186; cv=none; b=mJ0TTBq28pPySqIdQ5d8fCe0KgLEeeaoIrelsAwdvoBVWnkr9xZ5/lLfMyZVXWDUUzAiqpon+ivb+wZafVe+IXdn5uMoFXHGWd3/ry0HKmAl+mw3s/ijXMZ1QHFYAyRukw1sp46ETs+upPombJptE9yxqtLzyMeKeRuqCOKzNcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792153344; c=relaxed/simple;
-	bh=NULbTvIQZ/oHcmP/aTrGATa4IJHfneiO9zb4SUFhYOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tqnnVB4rLz8rEIDGb2O/sgXNEqg+8LAm5G3cHxL1tG1rOasPb+Bfgvb8x8lzMcWE6rvqazE14ZLhaMHDbaRkb8g48cFezRLZNq3Jzi1LT85bjoQgVjEV4IYysip8u/Zy+eGygtFbQL+/RLKpsFqLgqVO9rc9KmP2YjdriM4431k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=shhqUlli; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1792155186; c=relaxed/simple;
+	bh=p5phTgyJAy4x6Y0ZYrc7ihJGiwnNB0nlCFH4bMB+PBI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HF6XK2Vd6JTk2nTgtq+oJpQ5wG5Zof1WlG0cu9Xl/q2CRxvKEsU3XYDM+hdRhTHJ6d6PGCGbvz42wXow8Z6odXJgMGKP6YO4sOJCnZYD8pfPS9ct0rhMCz8JH2BsMddxgHWqOTYOBJMJf9kSAcSEo4typKr9zbnBdUUxUvhl6n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YTfArEgo; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="shhqUlli"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE4C914BF;
-	Fri, 16 Oct 2026 05:22:18 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1F923F871;
-	Fri, 16 Oct 2026 05:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1792153342; bh=NULbTvIQZ/oHcmP/aTrGATa4IJHfneiO9zb4SUFhYOw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=shhqUlli7w1Npoly5BGrBS9Jy9AZY2n6Qb6sU26nBEEnyq71sbkEQEBxvCyhG8TkX
-	 g9tiyckxqyXXZraYz+0AqS9HqbmBj0vPQm+YEl3Fp3yPWsjb16Hsdua5atbQo6HLCb
-	 /BewOKm9GMLZuErY0jpDtTffJNkkLeQHDbyrauGg=
-Date: Fri, 16 Oct 2026 13:22:16 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	bpf@vger.kernel.org, arnd@arndb.de, will@kernel.org,
-	peterz@infradead.org, akpm@linux-foundation.org,
-	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
-	ast@kernel.org, rafael@kernel.org, daniel.lezcano@kernel.org,
-	memxor@gmail.com, zhenglifeng1@huawei.com,
-	xueshuai@linux.alibaba.com, rdunlap@infradead.org,
-	david.laight.linux@gmail.com, broonie@kernel.org,
-	boris.ostrovsky@oracle.com, ashok.bhat@arm.com,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Christoph Lameter <cl@linux.com>
-Subject: Re: [PATCH v16 03/16] arm64/delay: move, fixup usecs_to_cycles()
-Message-ID: <atIW-GIWaN6-w44R@arm.com>
-References: <20261016070837.440748-1-ankur.a.arora@oracle.com>
- <20261016070837.440748-4-ankur.a.arora@oracle.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YTfArEgo"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=SVO7i3/Ny73slpjewLG09xplK0/4WWpT2rzBA73OteQ=; b=YTfArEgoGjqQWrVldiJhedd/lR
+	CumQBCw0R0dXctcZrKOStF5r1JQBVB+E/wEO9CZfLxk0gzzGRaa0uyMDCIZdSP+TV/706Flzywn0N
+	Q2HfI8JKNkZKa0bG1wjFc6BJX4slTSeZYmlg01AdVJtsFBgxwg5qB7xWFLrLT4Xp/hTCCVumO3zk0
+	BLzDsNIbnwWtAqLRo9dMl9eyYrbHGr7l+4amh+ZcFhgvIgsPVZFip6MgIHBgQYJMZxwrdBwQG0vfg
+	Taek0o+cgRFJNpIfpt30lCJN4kRCAfKEHaa0XyRj3WE1wXwjomj5F8nR8cQLSnICC4DIUXXBEQFHM
+	Vtpdio4g==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHhQJ-000KNw-1q;
+	Fri, 16 Oct 2026 14:52:35 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHhQI-000Min-1v;
+	Fri, 16 Oct 2026 14:52:34 +0200
+Message-ID: <61f7315e-c835-425e-a99b-d2470ba9a875@iogearbox.net>
+Date: Fri, 16 Oct 2026 14:52:34 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261016070837.440748-4-ankur.a.arora@oracle.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf: Fix packet length loads into X in bpf_dbg
+To: yanxia <yanxia@cmss.chinamobile.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ linux-kernel@vger.kernel.org
+References: <20261015135702.352284-1-yanxia@cmss.chinamobile.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+In-Reply-To: <20261015135702.352284-1-yanxia@cmss.chinamobile.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28155/Fri Oct 16 08:24:17 2026)
 
-On Fri, Oct 16, 2026 at 12:08:24AM -0700, Ankur Arora wrote:
-> diff --git a/arch/arm64/include/asm/delay-const.h b/arch/arm64/include/asm/delay-const.h
-> new file mode 100644
-> index 000000000000..6ccdfe0a4130
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/delay-const.h
-> @@ -0,0 +1,35 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef _ASM_DELAY_CONST_H
-> +#define _ASM_DELAY_CONST_H
-> +
-> +#include <linux/math64.h>
-> +#include <linux/types.h>
-> +#include <asm/param.h>	/* For HZ */
-> +
-> +/* 2**32 / 1000000 (rounded up) */
-> +#define __usecs_to_xloops_mult	0x10C7UL
-> +
-> +/* 2**32 / 1000000000 (rounded up) */
-> +#define __nsecs_to_xloops_mult	0x5UL
-> +
-> +extern unsigned long loops_per_jiffy;
-> +static inline u64 xloops_to_cycles(u64 xloops)
-> +{
-> +	u64 loops_per_sec = (u64)loops_per_jiffy * HZ;
-> +
-> +	return mul_u64_u64_shr(xloops, loops_per_sec, 32);
-> +}
-> +
-> +static inline u64 usecs_to_cycles(u64 time_usecs)
-> +{
-> +	return xloops_to_cycles(time_usecs * __usecs_to_xloops_mult);
-> +}
-> +
-> +static inline u64 nsecs_to_cycles(u64 time_nsecs)
-> +{
-> +	return xloops_to_cycles((time_nsecs) * __nsecs_to_xloops_mult);
-> +}
-> +
-> +u64 notrace __delay_cycles(void);
-> +
-> +#endif	/* _ASM_DELAY_CONST_H */
+On 10/15/26 3:57 PM, yanxia wrote:
+> bpf_single_step() handles BPF_LDX | BPF_W | BPF_LEN by assigning the
+> packet length to A instead of X. This leaves X unchanged and clobbers A,
+> so bpf_dbg can report the opposite verdict from the kernel for a valid
+> classic BPF filter.
+> 
+> For example, load the following filter and run it on a nonempty pcap:
+> 
+>    load bpf 3,0 0 0 0,129 0 0 0,22 0 0 0
+> 
+> The filter initializes A to zero, loads the packet length into X and
+> returns A. The kernel rejects the packet, but bpf_dbg reports it as
+> passing because the length load overwrites A.
+> 
+> Write the length to X, as required by the instruction, preserving A.
+> 
+> The issue was found by reviewing the load cases in bpf_single_step()
+> and comparing them with bpf_convert_filter(). Tested the complete
+> bpf_dbg executable before and after the fix with GCC 12.3.1 on x86-64
+> Linux 6.6. The fixed tool agrees with SO_ATTACH_FILTER on 21 cases
+> covering X updates, preservation of A, and LD LEN, LDX IMM and LDX MEM
+> controls, including a truncated capture with a larger original length.
+> The original tool disagrees on 12 cases; the nine controls pass with
+> both versions.
+> 
+> Fixes: fd981e3c321a ("filter: bpf_dbg: add minimal bpf debugger")
+> Signed-off-by: yanxia <yanxia@cmss.chinamobile.com>
+I don't think anybody uses this anymore. At this point, we should just
+remove bpf_asm.c, bpf_dbg.c, bpf_exp.l, bpf_exp.y, bpf_jit_disasm.c
+from the tree. Only bpftool and resolve_btfids is needed. Could you
+respin with that?
 
-The bot reports are valid, moving these into headers pulled elsewhere
-will clash with existing functions with the same name. You fixed one but
-there's another. Isn't it easier to just add an arm64_ prefix to these?
-
-Alternatively, I think we only need nsecs_to_cycles(). We have an out of
-line call to __delay_cycles() already, so can we not just add a new
-function to use directly and avoid polluting the headers:
-
-u64 arm64_wfet_deadline(u64 timeout_ns)
-{
-        return __delay_cycles() + nsecs_to_cycles(timeout_ns);
-}
-EXPORT_SYMBOL_GPL(arm64_wfet_deadline);
-
-I prefer the latter if it works.
-
--- 
-Catalin
+Thanks,
+Daniel
