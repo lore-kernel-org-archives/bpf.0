@@ -1,101 +1,97 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A784D52ED59
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 17:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857AD55C326;
+	Fri, 16 Oct 2026 17:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792172840; cv=none; b=GVu7pR0dAhts3PCFHG5sStKFTAvs3RpuU81mZ86fPc6ZAFcHQxQS5icwgpqVm0Qr13jiuBkMHVdar6efDQEG9I0dEbQ7wOi7aDZn+ar8OzG31r0KLUo9J8ijWEPIIC6NcKS8L0tWPeGk2He/rRNUJi8lhUvrSStp2ru7qminiK4=
+	t=1792172966; cv=none; b=PxVakZSjPH2X1VuORmMM/T2O7t/FBc4FmQBKV7jrgMjaExeHoEcKmcZt1h6t2G55acrJxg49qCuhT3k7LRriy1jPopBzIWNPC64LXTBMAtMCqFmPJKKypQbuZKQXxDJOregHI9JDfIBAcy7CvIEFFPOT5IcMWnCOhHXUovzFLwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792172840; c=relaxed/simple;
-	bh=hsEHc6PboCBsybhgnIk+yO3imfxQQUsJbE04dekMpGE=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=pPh8OKYg42+iUKdihahaCP6EqzGVILF7F1Vs0dMlp3MLV0aWPVwxCCunKtWjkF5EYxeHhPFmssga8LHvQeAHgG9fdL5bPJwymZN9iwn/T2zMIskW5vhNV3jYv/ROPV5AOiUvHSPxxdyvAj0eHxSexd09emZgUINzNJq+hObe3Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FPGrtjCo; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792172966; c=relaxed/simple;
+	bh=dWRQ2aF4/VaPlp0h4V3RSLl+xiCisBrJ5hzbd5rHqiM=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=cj2Bg88VBkpUW6TD92zbGFvkA6taeHY0U40Eba0wm935jKHJu6GEMoFugkRv8VqG5qky0N/4VhRjfKFmSBWah5Ra5PgZiUcStVSGGEjrqZo10fBza8P/y+c0rEWK6tbkUwYn7rrjM9dygOQ4ALmeEYhiN7iMr0BP5uauoqiuiOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WoV1rqKn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPGrtjCo"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3a706146559so208499a91.2
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 10:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792172839; x=1792777639; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=4F7AU58QnM5AeXT9qv4SNQh8POIabV7G5qxZdGawoTw=;
-        b=FPGrtjCo4lJ0Y+cYoMCGva7Tn6RHBYVij0XFJ4IAaoSesEbngH560zpSyilRKlxU5b
-         LZ3qfCUrRUekUeoLxZjrgaRHxkkSqVgH5ECAzEks0fKbWahUnh38PHnP2JfvJB0P1G64
-         sg0vXhhDV1r6MS58G0Td4ldHxB4d8NtwITstp2a0jKG//c4bcgOk1+ikiNQBrzX8QBMW
-         2tqSPJ50HZhOTXkqZR8mpErkSDZfbrGpsBCXsnvs5uWCrDQW+Ph/p05/oLDyuCMgmYJq
-         hZdLC8ifK18T5f/UDo9UdSPCy/nQwZVdRo+9ZH6jTUn0n3sIku0mcuau28wsk/1EPwLu
-         0kGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792172839; x=1792777639;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4F7AU58QnM5AeXT9qv4SNQh8POIabV7G5qxZdGawoTw=;
-        b=WPKSHZ0E2P4b+5v+WFSiokuMfk8Igyl5Pl2M2HwbMDPAomfp+wAL7LCE+UilACfivB
-         D95iFWPX7Qy2bzPohLiTveOEVhAAIBkY2zpL+hu9SolJUI1gcgBBQNn0v+IyJOBMYKa/
-         C2Vg+qbcC/iEMyvYa5Bb93vqjlGIlGpMX4eRYyv8Ez+FINg+5Sl8gdg3xtlQbLgQxBiM
-         qHIN40VlOzxKCfPCZVLRrYoPkCX3duvPyF7ESPZWSTxFgdynxnPfBkz4QOnC9yCV/Qxp
-         UwsGcNDqkkw75tqLX5xWcS5OmzAaY3F11h2MuWX0jtXAK6VOGdJBKbTHGsyIfmWnGs8O
-         Xklg==
-X-Gm-Message-State: AFq9FYJtb1BUOagU2RrOD1PoDtAZ3jpTSPBwmFBsLLGpJcvo/a72vnXo
-	TcWCSk+Eh36mXYCiQmgbj8rEz3guFJDxc6l04i2+u/MAnkPbeeRar/u0
-X-Gm-Gg: AYBFou1RANOT7k7VD86TIOuqhM/YhPpQygbV3lXnOw+hpy7Hpsd6EGF2FyONK3U4Ov+
-	POtWu+YyBOH9uBmuo+XZKKN4qsvG1870oFtqV83qjcyjYIJg3yjz5OUhGai0W1A0z+65RWeXeR0
-	nrp/k9DfBUnQ0liSKJYdDZmITGvD9epf6wGDQhFul7qCf3Hdrlcbr6p/GPa0o7dbMMduuiz0rKm
-	SyWZaBeMHWWNgnP54LKi8l5nofWOND6p3+j57x1F1f6GeaA2qUkOhhEGSMj4G0vnwzkuRAiqEqB
-	ya20zRy+KdkfP6FztOCzvbqMXMdFqKz3AyW4v5h4K6USwGiAkVjdxlRbKrq7/xw8zHyfp4A37w6
-	L43dQHVnCuzacLcO6l72nXsJTLUMQGl4JAxavALJeZqRLMAuHWeNpJBzd1KEU9fJTRH4U4Ne0Mi
-	HeumcEODlIvX5WkldhRF9lO1ulOvjeTGeG0cWvpZ2ReD7o/6ddF75RYHWcjbRa8Kr9dxpnRhmpS
-	5+BanrInk6YRsfdr5L2wpjeS0ij+pz+oOhJDZgseOTPBkiQsfW3itCBN5omR7JtN+lqqkS9aThG
-	YmEz
-X-Received: by 2002:a17:90b:3c04:b0:3ac:acf5:6daf with SMTP id 98e67ed59e1d1-3acef667156mr476345a91.66.1792172838872;
-        Fri, 16 Oct 2026 10:47:18 -0700 (PDT)
-Received: from localhost ([153.61.198.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac94792925sm9835712a91.13.2026.10.16.10.47.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Oct 2026 10:47:18 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 17:47:18 +0000
-Message-Id: <DM6G8ZUKITW8.A0II2HNX8268@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Quentin Monnet" <qmo@kernel.org>, "Tianyi Chen"
- <hi@tychen.cc>, "KP Singh" <kpsingh@kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: Don't echo user-supplied map info fields
- back to userspace
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-In-Reply-To: <20261016164153.656430-1-daniel@iogearbox.net>
-References: <20261016164153.656430-1-daniel@iogearbox.net>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WoV1rqKn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC0001F000C4;
+	Fri, 16 Oct 2026 17:49:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792172965;
+	bh=khC4eyWshOpMfKEOEAE78FZ5zFD7AWn5w7V2kZ90LUA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=WoV1rqKnq9Ci8pyOvu0kcUDfVS8vcTn8PMPFnCXP3Zmz2wWWg71ONLHdcHx+/VRnr
+	 cjE6GSrmeUr2JDRPuOZer26Hsj+yVlwTz5Bvl4Z3wAlW75uLrR/+CgmQQNpMj7yrNp
+	 EB57BD2EhfY3p15VaW2/+SQ5U1Tc3zmtWn5ndalh0/DHm2ehWyTOtbSsrW6yTdE1L5
+	 qEbtAL3mo+bFRSt5WKY4kouUuwm0eXz48OwKzobnRfButMecoWpzvp9HyB0xk4PxX4
+	 zESNV/S2W9lCkbntty/HKpg2dLUzsKLtQhDxyG/6CiADEo9qWqFva/SaNHE9jd0jXD
+	 j/6OvZ0KfimEg==
+Date: Fri, 16 Oct 2026 07:49:23 -1000
+Message-ID: <6780de9ee6208d26065d42ec10c23efa@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 1/3] bpf, x86: Support fetching AND/OR/XOR atomics in arena
+In-Reply-To: <20261016171319.1623447-2-puranjay@kernel.org>
+References: <20261016171319.1623447-1-puranjay@kernel.org> <20261016171319.1623447-2-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Fri, Oct 16, 2026 at 06:41 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> @@ -5450,7 +5451,11 @@ static int bpf_map_get_info_by_fd(struct file *file,
->  	memset(&info, 0, sizeof(info));
->  	if (copy_from_user(&info, uinfo, info_len))
->  		return -EFAULT;
-> -
-> +	hash = info.hash;
-> +	hash_size = info.hash_size;
-> +	memset(&info, 0, sizeof(info));
-> +	info.hash = hash;
-> +	info.hash_size = hash_size;
+On Fri, Oct 16, 2026 at 10:13:12AM -0700, Puranjay Mohan wrote:
+> x86-64 has no single instruction for a fetching AND/OR/XOR, so the JIT
+> lowers them to a CMPXCHG loop. That loop could not be used against arena
+> memory: it contains two memory accesses, the load of the old value and
+> the CMPXCHG itself, either of which can fault when the arena page goes
+> away, while the verifier reserves only one exception table entry per
+> instruction. bpf_jit_supports_insn() therefore rejected the three opcodes
+> and such programs failed to load with
+>
+>   BPF_ATOMIC stores into R1 arena is not allowed
+>
+> Emit the same loop with R12-indexed addressing and give each of the two
+> accesses its own exception table entry. The verifier still reserves one
+> per instruction, so the JIT accounts for the extra entry itself by
+> rescanning the instruction stream in bpf_int_jit_compile() before the
+> extable is sized, as s390 does in bpf_jit_alloc() for its BPF_XCHG
+> lowering. The rescan sits after the extra-pass early exit, so a program
+> is counted exactly once. Drop the bpf_jit_supports_insn() rejection.
+>
+> A loop without the load would need only one entry, since a CMPXCHG that
+> loses the comparison reloads RAX, but its first CMPXCHG would then almost
+> always lose. Every operation would pay for a second locked CMPXCHG, which
+> makes the fetching insn more expensive than the load and CMPXCHG loop
+> programs write by hand today. The second entry is paid for once, in the
+> JIT.
+>
+> Both entries resume past the whole loop rather than past the faulting
+> instruction alone, with the fetch destination cleared, so a fault cannot
+> re-enter the loop, and both are reported as writes since the BPF insn is
+> a read-modify-write. This repurposes the INSN_LEN field of the fixup as a
+> resume distance rather than an instruction length; a sequence long enough
+> to overflow its 8 bits would first have to exceed BPF_MAX_INSN_SIZE, which
+> do_jit() rejects before the image is used.
+>
+> The loop needs RAX for CMPXCHG and saves R0 in BPF_REG_AX, which it also
+> substitutes for R0 when either operand is R0. ex_handler_bpf() may then
+> have to name r10 as the register holding the arena address or the one to
+> clear on fault; reg2pt_regs[] already has that entry.
+>
+> An access through a number, made by a program loaded with
+> BPF_F_ARENA_SCALAR, keeps its address in BPF_REG_AX itself (see
+> arena_scalar_access()), which is where the loop would save R0. Save R0 on
+> the stack in that case, as the div and mod lowering does. An R0 operand
+> stays in that stack slot: the new value is built from it, RAX ends up
+> holding the old value that R0 is to return, and the slot is dropped
+> instead of popped. Both entries resume before that pop or drop, so a
+> fault leaves the stack balanced.
+>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 
-can we do
-	memset(&info, 0, offsetof(struct bpf_map_info, hash));
-here instead ?
-hash and hash_size are the last two fields and the padding after them
-is checked by bpf_check_uarg_tail_zero() above.
-Then no need for two extra variables and the 2nd full memset.
+Acked-by: Tejun Heo <tj@kernel.org>
 
+Thanks.
+
+-- 
+tejun
