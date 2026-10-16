@@ -1,119 +1,129 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E65A8287E
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E74E25B0BD;
+	Fri, 16 Oct 2026 00:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792110018; cv=none; b=FQAGF7MKsXFD67CWJxq5Z4jSM3kuUKtqBGWD6c+kz4hRsUlOZVB6x3MUp5NtvrWLvQldDPESfhmi5/uQ2QHEygBxFwztTFYaJ6IR125m6+I++d5tOnFRp7sqEBY+vzNvJU8YLAvRw5wpQtkqLT6R1PyUhH0QHtfGrBbCL0PgyFc=
+	t=1792110081; cv=none; b=Eheu1l6mfHlLgtvg8UQpuG/BC/v6ieWgDJrUGMcqwMPYhDWXtb7148NPGCEzkaE82iRUzXnN6prf7B58aisRr9SttVDQrf+oE7M8AABEtTm4ruTnxLvq6cpKWC56y97Jdb6jae04ondhguxNORj4cPglu5yHoXo0Kmzyjg21c6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792110018; c=relaxed/simple;
-	bh=qfQkaCmAtrF6fLptfvedEtqsxeWKnfeEPQN+//clhHw=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=FVzjXd0qMB63T1MthgRsHF8Q5qAuNcMofQzxW/hSFgd/XpqJMRZxNqKrGV2u36STh+NPcJqRrXO1ZV7mPr0BrM+2LZjpOxMmnNTJv2HAE5pF/lMAGefKBEv67qmC7YUYn4VTmlqiba2Nlkpoa38rB2X+0ATJIHYWoc03QxPA/Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sWw+hCds; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792110081; c=relaxed/simple;
+	bh=0N7/MGPm/18++p920/0/dH+k0mxW5aoBjt1LcCYGDhs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Nz8s7Z5Omejt9oQ31GqYoSxlkvSGfI2U85gKp7iVafAwn7L0bfixSzhdVIR68QJuwEtKNzy5HRf3Tss4xcs4obGZHUTUzet+U1AtThD7nZQuf4h/T3YfWJfVhAdZ1iRRKKgjpw0pHgiJJUI1TebM8JltMCWrKtLzlyxjVn5LdnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJk+V2GR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sWw+hCds"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-89f639ba307so83645b3a.3
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 17:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792110016; x=1792714816; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=W0iK5P6eTmpc3TiP0RQIIzF7dztCJ14ZlhlTgdOQnDQ=;
-        b=sWw+hCdsnguAVZwW7EcTxqJefweDbxsWIRvvUsYWYs8ymnfWoIY3sYMoFb9+sa12kE
-         D2jYApb8n35fCTuEfAflvmn1uTTGVfDDXdZBMBKbSeNcvDAt1/xN3xnKJZAa8Lu/TLc3
-         jkcTD2eCvuN9vfh0yg1Q4vOPwYMsHFPglHKclGUX44DQfKq0Orzl2/jt7nXdkhSIBB2N
-         tmMZtNkbMt+LHAis/P57nz2JcOCcPHx2R8SemgyMC2tLW/rOgA2NfFo/mCCVxDREVUVJ
-         ecXGJo1y2VbhRzf3PxLrykgQfRchdGCz/SlXE69HNjXpwfII7sYlqFXDgGRKEwk2IU93
-         Dnzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792110016; x=1792714816;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=W0iK5P6eTmpc3TiP0RQIIzF7dztCJ14ZlhlTgdOQnDQ=;
-        b=tfgPzdeV0yYaQ9odrips2p19o7dMrI8MsAzCZCISJ1CbVmkiDDHNA3HqQ3fdcRDqsE
-         UWSiKnBWuM2hOsKALN7WjaEr3t0a/60yVIcmpdyrJ/mK1oyKQr2XS46F8UFnKPMPlpAp
-         nP2EZQ3S8gsu2oEKUmXuD/qgU0LX/eVK0PY1U3vZdgrDV3zodm5aOualxUp+2KPf4kHN
-         pXl+X+zactkuKpK5ySqdsygdaDTl7cuOqGQ43o42kP3wEkpxAKta9Mim9M08hYCgWHjg
-         K7WpQ0AT5awY1KjNgVYPGRpxK87y/QlNOgFmiQfFW6gnQuWBAu+7500TyPiFYD+NNywf
-         /mwA==
-X-Forwarded-Encrypted: i=1; AKwUvBxAtELWj0KDO7bcNP8A2Nby/IvgCPQWExURV59R7UXcUoHxbrWZiizscYI6JoV+Riv5fko=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ6XODzY/m7i13h4jOKW3IjroCfBhd1xDlD2fcfz3EZnWW2owQ2
-	BcnZ+N0yQe5N5glNKhj8nLQbutsFfws88rWPbIM6iMBw6bkTDo/g5hHuWYt2+w==
-X-Gm-Gg: AYBFou0QxpEKxUyF/8rPCfkgk8aLLC6YGMR7Yh/xJBQRKgSiRobB9ogape0phTn635t
-	JIz8lENTM0fhGe6//86lvDOL9khftUEwh7HZM4YfVcsxWdLIbW5SwaW+LZBH8QmMaVAONS/mh1w
-	hlxDWGPjwvefDJu10Lnz2HG0ne6H4n/brYk7Stn7xvqNsa2N+b0VF3OUC7fjyR7T+oIZBWwSd2u
-	gkByqkzVTEGiszzR4IgNriimAySHo2jPPcUI1SWGaeVQTPfbf+3HLExLP3xyQB0OF1n0QLJC7zu
-	5yLfIKGM8/dSS04YSg7i2pf0RSs2hzcBtJFHdlFalLwdl6Le5SOq2wAlL/ptXVD00jOqVKuQXA4
-	+2TAMlEX1+KCMzPefzhTsIa6+2LVeKjxtEs9ng8nglMD2nk+bK8RxrPhB2U/H7qU67Mai5tUYKp
-	YKU5ghVJYn+9+nylFFT88gDa9n4Mb0Z4oj8AdglMpFjBdrB3fdE8mzzdgFa4ZWgKznYRnPmtGbS
-	1q1f7wWMNqba5A1ZSnOjFRxFjKqCZdA0r3Yzut3RpFW3nBGaFGeJDVfeUcz8lOXnAZ6WRUTEjJt
-	uiZQ
-X-Received: by 2002:a05:6a00:893:b0:881:fffd:26af with SMTP id d2e1a72fcca58-897c78ddee0mr17844265b3a.44.1792110016137;
-        Thu, 15 Oct 2026 17:20:16 -0700 (PDT)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f57452b16sm269840b3a.29.2026.10.15.17.20.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 17:20:15 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 00:20:14 +0000
-Message-Id: <DM5TZB39B3HK.10G7EQ8CFNLJO@gmail.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Tejun Heo" <tj@kernel.org>, "David Vernet"
- <void@manifault.com>, "Andrea Righi" <arighi@nvidia.com>
-Subject: Re: [PATCH bpf-next v4 1/3] bpf, x86: Support fetching AND/OR/XOR
- atomics in arena
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>
-In-Reply-To: <20261014125017.1426212-2-puranjay@kernel.org>
-References: <20261014125017.1426212-1-puranjay@kernel.org> <20261014125017.1426212-2-puranjay@kernel.org>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJk+V2GR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E621F000C4;
+	Fri, 16 Oct 2026 00:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792110079;
+	bh=XeyTc9n/9HfHLJ3yCVcyJ8dfyeOw0NBSEeSIkVV0MyM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=JJk+V2GR2y9HWcercu95PciZJHqFaDUCh/wNqcROeKls+DBSpLV5gSiwMTZmPDyAC
+	 uv+R1IHvxd7lQtv2/BPSAybUXr4XiBrEKgmGb8Jlu33wTUUFd2WcAXknG2g6dgZOx9
+	 AftMVC0bwVp/p9Vx/iAcW0JS9VvR2AmJnH52wB3uVEdLltRFrabFVcBN0WthrvugJE
+	 Uizqz11W+CiTTTkmhYoyvUUm2zdABjhE8EYUu567Fc6W3+QZjmxyibusAxQ2xYBXY7
+	 foHIqPT8P0cosHZZuUz9YWC//8FC5uMqyOlaj42LMufigp80czSQV56329h2NhRtGN
+	 mMuDRlH1AmUNg==
+Content-Type: multipart/mixed; boundary="===============2096954798088473371=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <9ef8c1f496a9dca33792c7c3978e24208fe67d87688d5356b5e54e77eb009747@mail.kernel.org>
+In-Reply-To: <7f611dcd599d6d65325d8c40566a1fc35b447ea2.1792064123.git.sandipan.das@amd.com>
+References: <7f611dcd599d6d65325d8c40566a1fc35b447ea2.1792064123.git.sandipan.das@amd.com>
+Subject: Re: [PATCH v2 2/2] perf/x86/intel/lbr: Limit branch snapshots to valid entries
+From: bot+bpf-ci@kernel.org
+To: sandipan.das@amd.com,linux-perf-users@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org
+Cc: peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,mark.rutland@arm.com,alexander.shishkin@linux.intel.com,jolsa@kernel.org,irogers@google.com,adrian.hunter@intel.com,james.clark@linaro.org,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,dapeng1.mi@linux.intel.com,andrii@kernel.org,song@kernel.org,ravi.bangoria@amd.com,ananth.narayan@amd.com,sandipan.das@amd.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 16 Oct 2026 00:21:17 +0000 (UTC)
 
-On Wed, Oct 14, 2026 at 05:50 AM Puranjay Mohan <puranjay@kernel.org> wrote:
-> @@ -2926,6 +2989,51 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
->  			fallthrough;
->  		case BPF_STX | BPF_PROBE_ATOMIC | BPF_W:
->  		case BPF_STX | BPF_PROBE_ATOMIC | BPF_DW:
-> +			if (is_atomic_fetch_op(insn)) {
-[...]
-> +				/*
-> +				 * An access through a number has its address in
-> +				 * BPF_REG_AX (see arena_scalar_access()), where the
-> +				 * loop below has to save R0.
-> +				 */
-> +				if (dst_reg == BPF_REG_AX)
-> +					return -EOPNOTSUPP;
+--===============2096954798088473371==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reiterating TJ's point differently
+> perf/x86/intel/lbr: Limit branch snapshots to valid entries
 
-can it save R0 with push rax / pop rax in this case, like div/mod do ?
-When src_reg is R0 the operand is on the stack: 'or r11, [rsp]'.
+TL;DR: Resetting cpuc->lbr_stack.nr in intel_pmu_lbr_read() may clobber an
+in-flight adaptive PEBS sample if a BPF program calls
+bpf_get_branch_snapshot(), possibly yielding a PERF_RECORD_SAMPLE without
+branch records and with leftover bytes.
 
-Every arena access in Rust is through a number, so after this patch
-fetch_or() works in C and doesn't work in Rust.
+> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+> index 22e2a06d5786..2fe858d99979 100644
+> --- a/arch/x86/events/intel/lbr.c
+> +++ b/arch/x86/events/intel/lbr.c
 
-It's not "as they did before" either.
-The verifier used to say
-"BPF_ATOMIC stores into R6 scalar is not allowed".
-Now the verifier accepts the prog and the load fails with ENOTSUPP
-and nothing in the log.
+[ ... ]
 
-Pls fix and respin patche 1 and 2.
+> @@ -1026,8 +1026,10 @@ void intel_pmu_lbr_read(void)
+>  	 * but this simple approach seems to work for now.
+>  	 */
+>  	if (!cpuc->lbr_users || vlbr_exclude_host() ||
+> -	    cpuc->lbr_users == cpuc->lbr_pebs_users)
+> +	    cpuc->lbr_users == cpuc->lbr_pebs_users) {
+> +		cpuc->lbr_stack.nr = 0;
+                 ^^^^
+Can this clobber the branch stack of a PEBS sample that is still being
+built?
 
-pw-bot: cr
+Before this patch the early return had no side effects.  Now it writes to
+cpuc->lbr_stack, which is shared with the adaptive PEBS path.
+
+If every LBR user on the CPU is an adaptive PEBS event, then
+cpuc->lbr_users == cpuc->lbr_pebs_users, and the PEBS drain points the
+sample at the per-CPU stack:
+
+setup_pebs_adaptive_sample_data()
+    intel_pmu_store_pebs_lbrs(lbr);         /* cpuc->lbr_stack.nr = N */
+    intel_pmu_lbr_save_brstack(data, cpuc, event);
+        perf_sample_save_brstack(data, event, &cpuc->lbr_stack, ...);
+            data->br_stack = brs;           /* points at cpuc->lbr_stack */
+            data->dyn_size += ... + brs->nr * sizeof(struct perf_branch_entry);
+
+__intel_pmu_pebs_last_event() then calls perf_event_overflow(), and
+__perf_event_overflow() runs bpf_overflow_handler() before the sample is
+written.  A perf event BPF program attached to that event can call
+bpf_get_branch_snapshot(), which is in bpf_base_func_proto:
+
+intel_pmu_snapshot_branch_stack()
+    __intel_pmu_snapshot_branch_stack()
+        intel_pmu_lbr_read()
+            /* lbr_users == lbr_pebs_users, early return taken */
+            cpuc->lbr_stack.nr = 0;
+
+When the program returns, data->br_stack still points at cpuc->lbr_stack,
+but nr is now 0.  A later bpf_read_branch_records() in the same program
+reads ctx->data->br_stack->nr and returns 0 bytes.
+
+perf_output_sample() then writes nr = 0 and no entries, while header.size was
+already computed by perf_prepare_header() from data->dyn_size, which counted
+N entries.  Doesn't that leave the PERF_RECORD_SAMPLE without its branch
+records and followed by N * sizeof(struct perf_branch_entry) bytes of
+leftover ring buffer content?
+
+Before the patch, the early return left cpuc->lbr_stack untouched and this
+sample came out intact.
+
+Would it be better to leave cpuc->lbr_stack alone in the snapshot path, for
+example by checking the skip condition in __intel_pmu_snapshot_branch_stack()
+and returning 0 there, instead of resetting the shared nr inside
+intel_pmu_lbr_read() for every caller?
+
+>  		return;
+> +	}
+>
+>  	x86_pmu.lbr_read(cpuc);
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38827450009
+--===============2096954798088473371==--
