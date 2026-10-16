@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+Received: from mta0.migadu.com (out-246.mta0.migadu.com [91.218.175.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0226A1DED42
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D04F25B0BB
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792108845; cv=none; b=t7ymXBInkQQORD10l1pfvJNs+/0zZrJ9rn8qL/BmJeBNHwPygPz/+H3s0McYY6lgP3okyTuTmAZXuTZ3evr3i4EnkG3LzM5DuwYte79eP3xqwaYQA42saVyL3m3UAV/GrKI+SbvDoS7qy2jJIy+DfSLbdiAngWs7Tgil6hRvHAs=
+	t=1792108849; cv=none; b=a7JOIZx+iq5yVbwq6kQ17VWU3PO4J5jDCIX0D0QaRK4F9ybrOzee3jFQlG/sppgAEBUCOpUxD3yQ+mQwUCjUn2NhP0xx3LRBSccv7nbYWZ/EaV30sM69gwcRWVBaX9ndkRqr/3RKE78A75m2B8IWiVA+tQ7isJ3SuSkKeef1Apc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792108845; c=relaxed/simple;
-	bh=vZa/xrWs9QoQ6aT53YrWKgOl/YAIzzcX6eNpuC6TPLo=;
+	s=arc-20240116; t=1792108849; c=relaxed/simple;
+	bh=7Lwl4CAU39voS+YeM77V+Rm05A3fQvpYZ3YKKsnmmIo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P38Vr4aY5U3fR0Psjn+wpW4y1HvegHTi/SBGwb9VC24HETHTsgYQftYN+y3oHcNPYecvoYAQAMWdR8RJblGn4GGbbp0VBnw6o4G3J22Uzjk4bebsbshU/sG9SPIH8YpqTDcXl42a0gC1JgVMUu1FTOn7mzxOjJ5/7VI2ZO6Tl8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=K/PFVT3p; arc=none smtp.client-ip=95.215.58.185
+	 MIME-Version; b=XTVny1ZIZ8CSYNlbrG9Es2iIc9RTSnrSwK9NpzmQYDDJPbwNObSDzJh/KgkVCSP8+tvR0T7y39Pv2VTweaQtUwHJKwMIS4wyNkHD005pahrt+30+pjFQVNwrxJS6x/Qp09GYA5qWt9+uRrJFSIunvtIuo7w6iNDXxfjE2/wjcSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cx2Avi3u; arc=none smtp.client-ip=91.218.175.246
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="K/PFVT3p"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cx2Avi3u"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vZa/xrWs9QoQ6aT53YrWKgOl/YAIzzcX6eNpuC6TPLo=;
+DKIM-Signature: a=rsa-sha256; bh=7Lwl4CAU39voS+YeM77V+Rm05A3fQvpYZ3YKKsnmmIo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792108842; v=1; x=1792713642;
- b=K/PFVT3p6zXB0kPAxLc3A0WkDOnJKlB3Bn1F+oPL55Rtxz9HFUlEtYmZzjpFnL8ypG33m+tp
- 2g3uj08zq2G3k+vuiTqJ6AaJwGDwVSzRlGDMio06+4qIxnRriFArdym2/w3CW6vmZy3laAF+NsG
- lGt/W5U+lx9aJzKvOufSHvsU=
+ t=1792108846; v=1; x=1792713646;
+ b=cx2Avi3uh104xO13R6DTG8jcGHaUwYlayJnEOvLWVGRo0A5FBGZ7kTm/q7dDDLm86kim0t0g
+ 2IOUN/vfRWbraiCbT9E+jr0NPstkTpqM99d/GdQIvbf2XbGe/JlZBDRvHXYK0NZ2HiAL2S/s5cq
+ h0/HtdtweXbSxQRKjj4cc6EU=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 4bb065713b7707c9;
-	Fri, 16 Oct 2026 00:00:34 +0000
-X-Mizu-Trace-ID: 4bb065713b7707c9
+Received: by mta12.migadu.com with ESMTPS id 8a96208c3063a254;
+	Fri, 16 Oct 2026 00:00:45 +0000
+X-Mizu-Trace-ID: 8a96208c3063a254
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v1 2/8] selftests/bpf: Cover unknown BTF header-extension bytes in btf dump
-Date: Thu, 15 Oct 2026 17:00:06 -0700
-Message-ID: <20261016000012.2232059-3-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 3/8] bpftool: Apply __bpf_core_pai per record on BTF dump
+Date: Thu, 15 Oct 2026 17:00:07 -0700
+Message-ID: <20261016000012.2232059-4-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261016000012.2232059-1-ihor.solodrai@linux.dev>
 References: <20261016000012.2232059-1-ihor.solodrai@linux.dev>
@@ -58,111 +58,186 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-libbpf can parse BTF with a header carrying unknown nonzero extension
-bytes, but refuses to modify it. bpftool dumps C from a detached copy
-so that it can modify BTF before dump.
+bpftool wraps the C dump in a clang attribute pragma that applies
+preserve_access_index to every struct and union, so field accesses
+through vmlinux.h types get CO-RE relocations. GCC-BPF supports the
+attribute but not the pragma, so it gets no CO-RE from the header.
 
-It is expected for a C dump of a BTF with extension bytes to match the
-dump of the same BTF without them, but there is no test for this.
+Jose proposed replacing the Clang pragmas with per-record attributes
+in May 2024 [1]. The declaration attribute support in btf_dump [2]
+now provides the per-type control discussed in that thread.
 
-Add a test case to bpftool_btf_dump to cover it.
+Apply the attribute to each struct and union definition instead, as
+kflagged decl tags on the detached BTF copy, rendered by btf_dump. The
+tags use the __bpf_core_pai macro, which expands to
+preserve_access_index where supported and to nothing under
+BPF_NO_PRESERVE_ACCESS_INDEX.
+
+The attribute covers the same records as the pragma, so Clang output
+is unchanged.
+
+[1]: https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@oracle.com/
+[2]: https://lore.kernel.org/bpf/20260929234608.48503-1-ihor.solodrai@linux.dev/
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../bpf/prog_tests/bpftool_btf_dump.c         | 55 ++++++++++++++++---
- 1 file changed, 48 insertions(+), 7 deletions(-)
+ tools/bpf/bpftool/btf.c                       | 34 +++++++++++++++----
+ .../bpf/bpftool_btf_dump_sorted.expected      | 16 ++++-----
+ .../bpf/bpftool_btf_dump_unsorted.expected    | 16 ++++-----
+ 3 files changed, 44 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-index 534aa79a4278..9104c059a315 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-@@ -109,17 +109,11 @@ static struct btf *mk_loc_btf(void)
- 	return btf;
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index cc15989643cf..6182f2c41db0 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -1121,6 +1121,24 @@ static struct btf *btf_c_detached_copy(const struct btf *src)
+ 	return copy;
  }
  
--static int btf_to_tmpfile(const struct btf *btf, char *path)
-+static int raw_to_tmpfile(const void *raw, __u32 sz, char *path)
- {
- 	ssize_t written;
--	const void *raw;
--	__u32 sz;
- 	int fd;
- 
--	raw = btf__raw_data(btf, &sz);
--	if (!ASSERT_OK_PTR(raw, "raw_data"))
--		return -1;
--
- 	snprintf(path, PATH_MAX, "/tmp/bpftool_btf_dump.XXXXXX");
- 	fd = mkstemp(path);
- 	if (!ASSERT_OK_FD(fd, "mkstemp_btf"))
-@@ -135,6 +129,18 @@ static int btf_to_tmpfile(const struct btf *btf, char *path)
- 	return 0;
- }
- 
-+static int btf_to_tmpfile(const struct btf *btf, char *path)
++static int btf_c_annotate_records(struct btf *btf)
 +{
-+	const void *raw;
-+	__u32 sz;
-+
-+	raw = btf__raw_data(btf, &sz);
-+	if (!ASSERT_OK_PTR(raw, "raw_data"))
-+		return -1;
-+
-+	return raw_to_tmpfile(raw, sz, path);
-+}
-+
- static char *dump_c(const char *btf_path, bool sorted)
- {
- 	char args[MAX_BPFTOOL_CMD_LEN];
-@@ -262,6 +268,39 @@ static void test_loc_dump(const char *btf_path)
- 	free(dump);
- }
- 
-+static void test_hdr_extra(const struct btf *btf)
-+{
-+	const __u32 extra_sz = 4;
-+	char path[PATH_MAX];
-+	__u32 hdr_len, sz;
-+	const void *raw;
-+	char *ext;
++	__u32 i, cnt = btf__type_cnt(btf);
 +	int err;
 +
-+	raw = btf__raw_data(btf, &sz);
-+	if (!ASSERT_OK_PTR(raw, "raw_data"))
-+		return;
++	for (i = 1; i < cnt; i++) {
++		const struct btf_type *t = btf__type_by_id(btf, i);
 +
-+	hdr_len = ((const struct btf_header *)raw)->hdr_len;
++		if (!btf_is_composite(t))
++			continue;
++		err = btf__add_decl_attr(btf, "__bpf_core_pai", i, -1);
++		if (err < 0)
++			return err;
++	}
 +
-+	ext = calloc(1, sz + extra_sz);
-+	if (!ASSERT_OK_PTR(ext, "alloc_ext"))
-+		return;
-+
-+	memcpy(ext, raw, hdr_len);
-+	ext[hdr_len] = 0xA5; /* any nonzero value */
-+	memcpy(ext + hdr_len + extra_sz, raw + hdr_len, sz - hdr_len);
-+	((struct btf_header *)ext)->hdr_len = hdr_len + extra_sz;
-+
-+	err = raw_to_tmpfile(ext, sz + extra_sz, path);
-+	free(ext);
-+	if (err)
-+		return;
-+
-+	test_dump(path, true);
-+	unlink(path);
++	return 0;
 +}
 +
- void test_bpftool_btf_dump(void)
+ static int dump_btf_c(const struct btf *btf,
+ 		      __u32 *root_type_ids, int root_type_cnt, bool sort_dump)
  {
- 	char path[PATH_MAX];
-@@ -278,6 +317,8 @@ void test_bpftool_btf_dump(void)
- 		test_dump(path, true);
- 	if (test__start_subtest("c_unsorted"))
- 		test_dump(path, false);
-+	if (test__start_subtest("hdr_extra"))
-+		test_hdr_extra(btf);
- 	unlink(path);
+@@ -1133,6 +1151,10 @@ static int dump_btf_c(const struct btf *btf,
+ 	if (!copy)
+ 		return -errno;
  
- 	btf__free(btf);
++	err = btf_c_annotate_records(copy);
++	if (err)
++		goto done_free;
++
+ 	d = btf_dump__new(copy, btf_dump_printf, NULL, NULL);
+ 	if (!d) {
+ 		err = -errno;
+@@ -1142,8 +1164,12 @@ static int dump_btf_c(const struct btf *btf,
+ 	printf("#ifndef __VMLINUX_H__\n");
+ 	printf("#define __VMLINUX_H__\n");
+ 	printf("\n");
+-	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
+-	printf("#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)\n");
++	printf("#ifndef __bpf_core_pai\n");
++	printf("#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)\n");
++	printf("#define __bpf_core_pai preserve_access_index\n");
++	printf("#else\n");
++	printf("#define __bpf_core_pai\n");
++	printf("#endif\n");
+ 	printf("#endif\n\n");
+ 	printf("#ifndef __ksym\n");
+ 	printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
+@@ -1187,10 +1213,6 @@ static int dump_btf_c(const struct btf *btf,
+ 			goto done;
+ 	}
+ 
+-	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
+-	printf("#pragma clang attribute pop\n");
+-	printf("#endif\n");
+-	printf("\n");
+ 	printf("#endif /* __VMLINUX_H__ */\n");
+ 
+ done:
+diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
+index 5470b2b43229..02c8fe8b4859 100644
+--- a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
++++ b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
+@@ -1,8 +1,12 @@
+ #ifndef __VMLINUX_H__
+ #define __VMLINUX_H__
+ 
+-#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+-#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
++#ifndef __bpf_core_pai
++#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
++#define __bpf_core_pai preserve_access_index
++#else
++#define __bpf_core_pai
++#endif
+ #endif
+ 
+ #ifndef __ksym
+@@ -30,19 +34,15 @@ struct holey {
+ 	long: 32;
+ 	long: 32;
+ 	int tail;
+-};
++} __attribute__((__bpf_core_pai));
+ 
+ struct s {
+ 	int f;
+-};
++} __attribute__((__bpf_core_pai));
+ 
+ 
+ /* BPF kfuncs */
+ #ifndef BPF_NO_KFUNC_PROTOTYPES
+ #endif
+ 
+-#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+-#pragma clang attribute pop
+-#endif
+-
+ #endif /* __VMLINUX_H__ */
+diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
+index 4310adc2ed51..9b6589d2bda3 100644
+--- a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
++++ b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
+@@ -1,8 +1,12 @@
+ #ifndef __VMLINUX_H__
+ #define __VMLINUX_H__
+ 
+-#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+-#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
++#ifndef __bpf_core_pai
++#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
++#define __bpf_core_pai preserve_access_index
++#else
++#define __bpf_core_pai
++#endif
+ #endif
+ 
+ #ifndef __ksym
+@@ -26,7 +30,7 @@ struct holey {
+ 	long: 32;
+ 	long: 32;
+ 	int tail;
+-};
++} __attribute__((__bpf_core_pai));
+ 
+ enum {
+ 	E0 = 1,
+@@ -34,15 +38,11 @@ enum {
+ 
+ struct s {
+ 	int f;
+-};
++} __attribute__((__bpf_core_pai));
+ 
+ 
+ /* BPF kfuncs */
+ #ifndef BPF_NO_KFUNC_PROTOTYPES
+ #endif
+ 
+-#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+-#pragma clang attribute pop
+-#endif
+-
+ #endif /* __VMLINUX_H__ */
 -- 
 2.56.0
 
