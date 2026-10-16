@@ -1,120 +1,176 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D594DD3C6
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 14:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9067A4D7D51
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 14:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792160021; cv=none; b=E3j/QfH71MbjdyxtdhIbzuXmea2GnzhgKO8/nFQPFA75qMzzi+YcgXsmDG0JeMFRU3soeBQoGcVK+Mt0A+BHP4oT1c7CsTZCrOR7Gc1DrRWh2qeLyquAEnwx4Lr3P6UOoMOZCGS6qIXHDzdnv48P+5YAeswjweAY3cez+8Ax8CY=
+	t=1792160026; cv=none; b=MT4BrFH2Jq7xqgAO2lexoxpcbmy/M6yCgSEc4m0+9l3t7081kqBqlKyKFlus1SEhyK7MU4Yf6nXWxJAzkl/zBLMj6k5/twetjOjC5c7Gu+qKKFH8BikgTwyvqrLxMU3zeqFtgktKf5J5zYKXa/qQqbwon/ZbtUXW7/reXLsJK/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792160021; c=relaxed/simple;
-	bh=KJgCaBKgzhlQ6j4VpKM2iFyUAr1RpvtkySGD+mGP2zI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iG6VjmV1Roln68K4smUER1CUV3Uf1uxgFqKQiJfg6EcwX9lr8Gc2HsCqhn1S1/d4rOGqBSIaMqO0FgxXCjSGXZFDKFhFquB7qRxgDphJh0+zwuOevjUfTuDqumA2scikC4732YWmNHNA/7M8DtFAyjJGsRPx5SpNAKWNXZv7Fk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JFRXNfY/; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1792160026; c=relaxed/simple;
+	bh=MznHK4k+jXw1Q8CLiUhFRY4nSzKzfvRRwP5cLMaCGpE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RUFu0p5HAyOQ8i5siRf2k/Gxn8Zw1lrZ//cd7d2/PWw4osYiQfJ0JgO3RKY8/SQ081RE292YPBRzavzwa7bWsWxcagON9dSNgX9zHlxvIfpH4weXNI4mZRkddEtDfvp28KsZfHV+Z52iBhXgGb1la+empEBSlKVm4kIgwB2XiVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UsiYYTaj; arc=none smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JFRXNfY/"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id A42DFC62214;
-	Fri, 16 Oct 2026 14:14:28 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BF8F06075D;
-	Fri, 16 Oct 2026 14:13:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C4AF1103281F4;
-	Fri, 16 Oct 2026 16:13:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1792160010; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=blwq1pXBCQjTGMl+JWvwWp+PQ7nHppX+egLYS89xJeg=;
-	b=JFRXNfY/cQ7P5wBnYY3ft07I0gMR2s634u1n99dDArTUzg20EF9olCxy8ILqkbo0repWYr
-	i+RrkZdPbVFBgH55Aqc1KO+IXoxfihLwqJsuAYnJ86Xjor29wt8YmkhHh4DjIdxTIQq3lL
-	uLQBczkD04IIx3RGgqLe0Jogt5UcIlwv2LTduSz15I27CbTwUNkNOqBlH2M9NgFAvD2z1B
-	ig27IjqWg5Wp8kzHYklPqM5rW4wvVPq6QFNJnSf6PBQV7tPHgdXy3JuAPbyoRt1xqt85Mq
-	f7JsigUmSzMK3tcvmm4b93soNc46q7k2pfSvC/zMV0DTgz1MlnKzLOVXsA3JOg==
-Message-ID: <84af909c-a94e-4408-a24d-d3fd729cd90e@bootlin.com>
-Date: Fri, 16 Oct 2026 16:13:24 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UsiYYTaj"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-6798af41644so17818d50.2
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 07:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792160020; x=1792764820; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kicPn9pLyqUB4uQFYtxQb96ov4ppi766ZrD8qiHNydk=;
+        b=UsiYYTajPusR8T/Q4eECPb30eyuYd56nZyZINtWjbZ9UYHGSkC/g/a/77BdtFbzk6M
+         AyXdHR/X9pekUuCjoBQbCHclhMXFnWAAHOcTEug7CyBD8HDSgHDUeYn8bhRuIacTUc1x
+         wS126bytu9oXHqfUBj/KmQwywu5ob5uFOLb8SUlbjasCX9CqeRkw3URI7FKnvkH1Sdae
+         j27MyZUXEubz53QGorBSZIfomaohQ5x/7VQ9+BrawVYz8RHkgTEcn9/+EBnLKEmDRtAG
+         7gnzwm2ecZgXJmsO1qmLcslPJZFRHckxxlwWuQHpD17RDHQRmGqp7uVyKEb0xdX9XReQ
+         KeCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792160020; x=1792764820;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kicPn9pLyqUB4uQFYtxQb96ov4ppi766ZrD8qiHNydk=;
+        b=Gx/5FoXH6J5mNrbZu1Bs5F4dRx21GF39gBK0g2XtE3OwSrPFOqmfMOWIkWHExxyqib
+         BMtMTZ8/PRQi0DFq6c9BIcWFzMJhCRD6cHAlpW/WRyrAoserRFXmDjDN6iHTwo0ppo9J
+         1efYVKqLh66spapjzHM+yMm+G4eSbG2oTv73mh/hF3VwZaPiqTKqsx2X4qfCKYrA/eKv
+         XKCLRL6SsUqNxuGIxO3RaFL61+sxuQURFWKUWMowPzi25MfRaywoGql7kMrWOezC8/l7
+         9SRB393cgI+Q+kTcolu5NQqy6BUd6ZEYycq5AXbf6AvM3jiqDbfUR8RocXBZZ66kouOZ
+         IrPQ==
+X-Gm-Message-State: AFq9FYLPoWg3h3gJwtXpeGmjYWWx86Z8aYnYXW4qcL1IP01nxfql4J+s
+	dBXlkl1IzzO5HIA1gI5Mmhpgrkf7bAm1ZP1wIcd4ySuQTgOjYvjoyOs6
+X-Gm-Gg: AYBFou0tsivSO8/vkQuLqbN0rp+13eOM5N4nA9bT3h/T0gyznftz7Ra+IupSjTMzubs
+	K6xI5jHhrdtnneTNmMm6jo4jqLYPnVOH5iHHLFa2YJ6aViLzIIrcWJMtLgwWDFyIYPIxOOEF0uP
+	owLA5Q+2yTHQwga269JsvzEMNMfCIkiyJQmWeyVMMkr7oCyi/VgwGaGDP5ax3oQ6Ibo8w2fxAzF
+	eClEXkOecU5VyX+aZc/4XZGZGdY/PWjlf15pNUETSff/XCyYt9FHV+wEhVzo+JY2BMC53EB0bSL
+	V9OplWFHXqW8k32l2VzIbVrUXysx2xv9vLG/+OL0cmaUa9tBQf1mrmId7ADYprnmNh48FuDSkWp
+	bG603Bu2uFiLevqhTrRf1MtTvqceOAhYvsSQ646ThqZBhwEkjtiKmjoO7iZaTTrc5szIJJWtN+9
+	wzdFnj/HuHdur6yu6/vQ2QJFslII15F34IWT02T2+6lfYgrm4Wk9JdYrxWlR6dut3eciJZqQ8q
+X-Received: by 2002:a05:690e:168f:b0:679:8ba4:e917 with SMTP id 956f58d0204a3-6798ba4fc0emr3321211d50.99.1792160020411;
+        Fri, 16 Oct 2026 07:13:40 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:1002:ecef:6e38:613d])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679b1e408bcsm1116711d50.10.2026.10.16.07.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2026 07:13:39 -0700 (PDT)
+Date: Fri, 16 Oct 2026 10:13:39 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: chenyuan_fl@163.com
+Cc: bpf@vger.kernel.org, Yuan Chen <chenyuan@kylinos.cn>, 
+	Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Mykyta Yatsenko <yatsenko@meta.com>, 
+	Menglong Dong <menglong8.dong@gmail.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpftool: Print verified instruction count in
+ prog show
+Message-ID: <atIk2wLkzW8KcyGV@zenbox>
+References: <20261016071700.280539-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 1/2] net: stmmac: fix XDP TX DMA address for
- compound RX pages
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Ong Boon Leong <boon.leong.ong@intel.com>
-Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- bpf@vger.kernel.org
-References: <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
- <20261012-stmmac-xdp-tx-pre-fixes-v1-1-05fd0c90f7e1@oss.qualcomm.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20261012-stmmac-xdp-tx-pre-fixes-v1-1-05fd0c90f7e1@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261016071700.280539-1-chenyuan_fl@163.com>
 
-Hi Lorenzo,
-
-On 10/12/26 17:24, Lorenzo Bianconi wrote:
-> When RX buffers are compound pages (order > 0), only the head page
-> carries the DMA address programmed by the page pool
-> (page_pool_get_dma_addr()). stmmac_xdp_xmit_xdpf() computed the head
-> buffer's bus address from the page that happens to contain the data:
+On Fri, Oct 16, 2026 at 03:16:57PM +0800, chenyuan_fl@163.com wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
 > 
-> 	page = frag ? skb_frag_page(frag)
-> 		    : virt_to_page(xdpf->data);
-> 	dma_addr = page_pool_get_dma_addr(page);
-> 	...
+> The number of instructions processed by the verifier is available
+> through bpf_prog_info::verified_insns and the program's fdinfo since
+> commit aba64c7da983 ("bpf: Add verified_insns to bpf_prog_info and
+> fdinfo"), but bpftool does not display it, leaving no convenient way
+> to check a program's verifier cost.
 > 
-> RX pages become compound as soon as dma_buf_sz needs more than one page
-> (pp_params.order = order_base_2(num_pages) > 0), which happens from an
-> MTU around 3000 bytes once dma_buf_sz reaches 4096. If an XDP program
-> moves the data forward with bpf_xdp_adjust_head() by more than about a
-> page, xdpf->data points into a tail page whose struct page has no DMA
-> address: page_pool_get_dma_addr() then returns a bogus bus address, and
-> dma_sync_single_for_device() together with the TX descriptor transmit
-> from the wrong location.
-> 
-> Use virt_to_head_page() to read the DMA base of the buffer and keep the
-> offset relative to the head page (sizeof(*xdpf) + xdpf->headroom), which
-> is correct no matter which page the data ends up in.
-> 
-> Fixes: be8b38a722e6 ("net: stmmac: Add support for XDP_TX action")
-> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+> Print the count in the plain and JSON output of bpftool prog show,
+> following the convention of the other conditional stats
+> (run_time_ns, run_cnt, recursion_misses): kernels that do not fill
+> the field leave it zeroed and nothing is printed.
+>
+Reviewed-by: Justin Suess <utilityemal77@gmail.com>
 
-Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+This patch on it's own looks good to me.
 
-Maxime
+Maybe it would be useful to print subprog count as well? Useful for
+analyzing programs.
 
+This looks like it would work to get subprog count regardless of whether
+JIT was enabled.
+
+  static __u32 prog_subprog_cnt(const struct bpf_prog_info *info)
+  {
+          if (info->jited_prog_len)
+                  return info->nr_jited_ksyms;    /* exact, BTF or not */
+          return info->nr_func_info;              /* interpreter: only BTF knows; 0 = unknown */
+  }
+
+Completely optional / don't have to include this if you don't want, just
+a suggestion for another patch that could help show how many functions
+are being subprog'd or inlined :)
+
+Justin
+> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 > ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/bpf/bpftool/Documentation/bpftool-prog.rst | 3 ++-
+>  tools/bpf/bpftool/prog.c                         | 4 ++++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index b8b4de4c5b1a..ca61ab449e32 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5301,7 +5301,7 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
->  			struct page *page;
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> index 8dbd34ef3d8b..d4a94e0737a9 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> @@ -285,7 +285,7 @@ EXAMPLES
 >  
->  			page = frag ? skb_frag_page(frag)
-> -				    : virt_to_page(xdpf->data);
-> +				    : virt_to_head_page(xdpf->data);
->  			dma_addr = page_pool_get_dma_addr(page);
->  			if (frag)
->  				dma_addr += skb_frag_off(frag);
+>  ::
+>  
+> -    10: xdp  name some_prog  tag 005a3d2123620c8b  gpl run_time_ns 81632 run_cnt 10
+> +    10: xdp  name some_prog  tag 005a3d2123620c8b  gpl run_time_ns 81632 run_cnt 10 verified_insns 528
+>              loaded_at 2017-09-29T20:11:00+0000  uid 0
+>              xlated 528B  jited 370B  memlock 4096B  map_ids 10
+>              pids systemd(1)
+> @@ -301,6 +301,7 @@ EXAMPLES
+>              "gpl_compatible": true,
+>              "run_time_ns": 81632,
+>              "run_cnt": 10,
+> +            "verified_insns": 528,
+>              "loaded_at": 1506715860,
+>              "uid": 0,
+>              "bytes_xlated": 528,
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index eb077236d2ea..c77e871b8859 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -441,6 +441,8 @@ static void print_prog_header_json(struct bpf_prog_info *info, int fd)
+>  	}
+>  	if (info->recursion_misses)
+>  		jsonw_uint_field(json_wtr, "recursion_misses", info->recursion_misses);
+> +	if (info->verified_insns)
+> +		jsonw_uint_field(json_wtr, "verified_insns", info->verified_insns);
+>  }
+>  
+>  static void print_prog_json(struct bpf_prog_info *info, int fd, bool orphaned)
+> @@ -526,6 +528,8 @@ static void print_prog_header_plain(struct bpf_prog_info *info, int fd)
+>  		       info->run_time_ns, info->run_cnt);
+>  	if (info->recursion_misses)
+>  		printf(" recursion_misses %llu", info->recursion_misses);
+> +	if (info->verified_insns)
+> +		printf(" verified_insns %u", info->verified_insns);
+>  	printf("\n");
+>  }
+>  
+> -- 
+> 2.54.0
 > 
-
