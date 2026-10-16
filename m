@@ -1,92 +1,132 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A583546DE
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 15:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62AA4E06E4;
+	Fri, 16 Oct 2026 15:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792163916; cv=none; b=muIDq7UmuxaKjbPowUDScCznXVMXgBmRi4LSDRMCOGsTXGIHD/VZRefLfQedenRIAbvCmu1YBf64+rvXAGfIwIZVW65nQh8AVSaxImNID2MOc1m7nmOIDWI3ExjlzTAOAURmdkBUYEwJaf/met+pLR79DahsU1HG7Lv8qT3+Xwk=
+	t=1792164647; cv=none; b=mNxaadQZrGMvKVWFKwu4cwbNwI8qhI9evK1qtBS2E04xOPDQiQx8MpvJanDC3E/ZfPENJLLDVDDU/LpvOmJlDXX9jEtj1YCtBPTWdLuTRKAYvpd2wMISVV88Wne0FWvDwbMicukwyG6Llu5py4/qidP94YBQ/XDTDz1axM9yvL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792163916; c=relaxed/simple;
-	bh=O2RzggFs1bjfXctsFTnmjze2UQnPIPO+HIGT6FFRaHE=;
-	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:MIME-Version; b=IE0+eB7g4GRPBaLyqZn8475TWGdsD83oF4pCvhw5CCTI5FWTPoShGnq5OiH2EealXEyR6AKSA6K9yQun9Jji0c99mmuDl7qVmIggopsiCTTMoQXrchQqGxV0wvN5yPczYxZFYI7iXxoqDR3AsIBt01YJb01GOXuBc/WCZLaYzlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUs9YMzp; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792164647; c=relaxed/simple;
+	bh=GAQ6FCGhR6t9hjtL6x6Bg8PdWLpONS1NImJlys08QuE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O2mWz5qymOGeqxY8Q8TzNWj+WxTvmLXC3BlXc3XJrLE52M4Wj5YA4CZa8Znmb+E8lCMJ0v+hDvVWF1kkOpsHP+g5YhZ2cx1tZ7nnZsjQxcJiBEItCZbn/3WQfDApMqtGXn2Yp6GK5k09NBOgrbnVIOO9AMElKPf8x6dR3IAXdyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RqPigvLz; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUs9YMzp"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc1bc88a20eso48401a12.3
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 08:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792163915; x=1792768715; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=O2RzggFs1bjfXctsFTnmjze2UQnPIPO+HIGT6FFRaHE=;
-        b=UUs9YMzpTMxJGRaAfWa3CFRnVugUED4ewzMEYAs+15Pf7d71gdu9iah62xjNMquUKn
-         Jva0nXHGi2nIfX9DG6u7hNZePma7dJc1emBTS9apc6vNpApbi90hEyrIlNn3MiYxo9Fc
-         pEZdHxZtXaMXl/O+/EP9fjMQpcpe8jaDWpP7/mXAyVdvqNef/cVNHTtaQ5XMFuHcwzED
-         dUneqJtM4MYFrDqMlPuOoDYo3h66T+pR+f52Gy21IoWyfJgnl99672s2GJNn5Q6CAl2l
-         Q6nserenSMSc+UEpCP3n4JBlVwLVsRdfsW0H3W197X1C+kHO8I5k2PCaT5g0VnJxzxbO
-         DBOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792163915; x=1792768715;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=O2RzggFs1bjfXctsFTnmjze2UQnPIPO+HIGT6FFRaHE=;
-        b=F65jlJZfhZmQl3IjhfhkJOdNkiCQrUzxa8Kk3x3OD2twPsKtbSBw6kkqrxGES29M9O
-         3m3l1wreIVLUKJuS/DI3DOGvvOvyblOiKAk352KULsZUh0KZhP9cPMzfGSeh9jndmMMk
-         QBDKrv3ZiQKnUw1blhIiYyLzq7AZ5Xsn4jsCkJH5wRVpMr8YuLbajUDiljuGBHDW0FJM
-         SNofukBUCV/UVD/EkmjZuiOiBV8+pSLJbosplhPXpZhlQ9T2J65+ZNgckhaG8pHAB+wP
-         wMwa22RzmgMBEEFFBEmdezd5bFf5W4KjFUuCuqgY2D8wXvpEoOcm49ewpzJ6NTpPyFOZ
-         8ndg==
-X-Forwarded-Encrypted: i=1; AKwUvBxGaA8y1pQp8KHtkImgP4wbqKswPfF6UMX0NHYrFqhxrCsp27QLWLEGxWjdfOJIrcre5lA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKHHzufqEQW7yRWbmJXyLf+c0BIq2xHeeMAjNoO5oWxoDk5v2Jm
-	IUTeTiQZPj1RPPIre9q7H7UdYfGWBSu0q43+HSkNTneK3LiTwCI1CdIJ
-X-Gm-Gg: AYBFou0lt2z9cCp6rU3P49g9sKyBI3CruK45bZbfMX7+KPTF7CW0UbFb575QjVE3Yjt
-	zD+rp68khSQYV3PiFN+4e0GEFpbFcltxMxzWUugcKJIa4FeB3H1eWiH/Y7C0skWPWR7udLEuTeo
-	F324q4wFTig9Lk+rxB4xPS8tYPkBJYxXFYDpHDPhWHxFcaf2LOFsojoOPJmau9t8QEHh1ikEBuP
-	i20zW7b4EL42sNxgytOi/M4s/9gDayyfxa9WkuH5J42okbVfPXARr7+WtcAX+pQs/Lj7kBYlH3z
-	mYr/EtGPMGoXmD8MRowtbSdD6q4+bQZHZLDC7fi2HosLgSWHpKE4Yayr1dxOUwanXJFf5op8Ngw
-	t1jnNhcPKd2tXv2MVyNsrFK6lePhSyaWd4LnUkb61wXC0/zJ1FZVxrcNEELZizSbFfcbmxsq2q/
-	hFu3H1mxrlyh0/XDnAk9074LCuJXNbOux5MvdgUmyZPZuBaM8MECBTRPNYvRLELrOqEPLOLvIoH
-	8PD23EHtiUbEshAmALIK6a8E0uQLNT5z8noAJshgIfmo4AtQ42HPywlvd1pNcCX/meElbw8W60I
-	xK4=
-X-Received: by 2002:a17:90b:3889:b0:3ac:95d7:2fa5 with SMTP id 98e67ed59e1d1-3acef1545d3mr137430a91.44.1792163914509;
-        Fri, 16 Oct 2026 08:18:34 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd403c212sm1472146a91.4.2026.10.16.08.18.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Oct 2026 08:18:33 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 15:18:33 +0000
-Message-Id: <DM6D33SL63BR.HOFSY6JUHO44@gmail.com>
-Subject: Re: [PATCH v3 3/3] LoongArch: BPF: Optimize 32-bit operations using
- native instructions
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Huacai Chen"
- <chenhuacai@kernel.org>, "Hengqi Chen" <hengqi.chen@gmail.com>
-Cc: <loongarch@lists.linux.dev>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-In-Reply-To: <20261016081006.26069-4-yangtiezhu@loongson.cn>
-References: <20261016081006.26069-1-yangtiezhu@loongson.cn> <20261016081006.26069-4-yangtiezhu@loongson.cn>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RqPigvLz"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=XfKJ58eXOnKZEwOh226rdcvJbApA7j6ZlU6iAG3GTgw=; b=RqPigvLzuWwjtBDhfaD9aCs0Xw
+	J2/ISFkHJyzvdLWL8uHXKhAqCMLkdtkUlitP6PizVVmF15vkReyY8oCL1zuotUK4Bl90B+cgQs3YB
+	tT3kFjnjuE9Xl7V6ii+Et8kAzt9RBjWm70P2y6dF6srRyH4SnTAmBj3OViWcT5cKJwcw6kvv+5gwv
+	lPier1a+Uo4Q83urfkJmNHHnaaoavnxS34DZe/ZSXSsB9TDLRaMlJdMjceTaMTfDx/fvfjoV0Z3Hz
+	L/njx9hZi84M/4USAbgFNlO3y4hPXIBaTKmiIZ18IMbH1Zr6wHbcV+J93Mz9jx2dNurpPk/w1CnjP
+	SyAe0rPQ==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHjtE-0005oE-2B;
+	Fri, 16 Oct 2026 17:30:36 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHjtD-0008mO-0W;
+	Fri, 16 Oct 2026 17:30:35 +0200
+Message-ID: <334d2c0c-9ef9-4a20-91b0-73d1a3804f31@iogearbox.net>
+Date: Fri, 16 Oct 2026 17:30:34 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 1/2] bpftool: Fail map dump for maps that
+ can't be iterated
+To: Maxim Skokov <skokovmaksimevg@gmail.com>, bpf@vger.kernel.org
+Cc: qmo@kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, kuba@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, hi@tychen.cc
+References: <20260928001513.7072-1-skokovmaksimevg@gmail.com>
+ <20260928001513.7072-2-skokovmaksimevg@gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+In-Reply-To: <20260928001513.7072-2-skokovmaksimevg@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28155/Fri Oct 16 08:24:17 2026)
 
-On Fri, Oct 16, 2026 at 04:10 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+On 9/28/26 2:15 AM, Maxim Skokov wrote:
+> "bpftool map dump" walks the map with bpf_map_get_next_key() and treats
+> ENOENT as the end of the map. Map types that can't be iterated fail that
+> call on the very first key: local storage and ringbuf with ENOTSUPP,
+> bloom filter and arena with EOPNOTSUPP, queue and stack with EINVAL.
+> bpftool then ends the walk without a word and prints what it prints for
+> an empty map, "[]" with BTF or "Found 0 elements" without, and only the
+> exit status tells that the map was not read. On a socket storage map
+> that holds storage for a socket:
+> 
+>    # bpftool map dump pinned /sys/fs/bpf/sk_storage
+>    []
+> 
+> Ask for the first key before printing anything, and when that fails with
+> anything but ENOENT, fail with the map type and the error instead of a
+> dump:
+> 
+>    # bpftool map dump pinned /sys/fs/bpf/sk_storage
+>    Error: can't dump sk_storage map: Unknown error 524
+>    # bpftool -j map dump pinned /sys/fs/bpf/sk_storage
+>    {"error":"can't dump sk_storage map: Unknown error 524"}
+> 
+> An error later in the walk is now reported too, as "bpftool map getnext"
+> reports it, and the element count is printed only after a complete walk.
+> 
+> Assisted-by: LLM
+> Signed-off-by: Maxim Skokov <skokovmaksimevg@gmail.com>
+> Acked-by: Quentin Monnet <qmo@kernel.org>
 
-> All of the testcases of test_bpf passed on Loongson-3A6000 (with DIV32)
-> and Loongson-3A5000 (without DIV32), here are the test results:
+Sorry for the delay, could you fold this in to make the 524 a bit more user
+friendly? Maybe its also worth to check other areas in bpftool for similar
+case and then do this as a small helper?
 
-fyi test_bpf is gone. See
-commit 4532e525b286 ("selftests/bpf: Remove the old test_bpf module").
-Pls run test_progs
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index b7f62fcbb6fc..b656f176bcaf 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -858,16 +858,21 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+  
+         /* Fail early to avoid an empty dump if map type cannot be iterated */
+         if (bpf_map_get_next_key(fd, NULL, key) && errno != ENOENT) {
+-               const char *map_type_str;
++               const char *map_type_str, *err_str;
+                 int saved_errno = errno;
+  
++               /* ENOTSUPP is kernel internal, strerror() doesn't know it */
++               if (saved_errno == 524 /* ENOTSUPP */)
++                       err_str = "Operation not supported";
++               else
++                       err_str = strerror(saved_errno);
++
+                 map_type_str = libbpf_bpf_map_type_str(info->type);
+                 if (map_type_str)
+-                       p_err("can't dump %s map: %s", map_type_str,
+-                             strerror(saved_errno));
++                       p_err("can't dump %s map: %s", map_type_str, err_str);
+                 else
+                         p_err("can't dump map of type %u: %s", info->type,
+-                             strerror(saved_errno));
++                             err_str);
+                 err = -1;
+                 goto exit_free;
+         }
+
+
