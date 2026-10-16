@@ -1,33 +1,36 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-206.mta0.migadu.com [91.218.175.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C073F9F5B
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 09:44:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADDB3BA244
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 10:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792143895; cv=none; b=UUyNQXlEMAZ9FpkTpARXecAjcghEx2y+93Gy9JxiQyD0k3vz4NzAguSKILlKuhyFJ4sIwapbP4FGiv6XMDve+/35lMCi+xtg6ZRJe4g6vI9+CvJed6a/zRyOeT0DCsKwJJ68LJCQvk+eeoiY/0t/o2g27+52/e6Prf9Wv33CN30=
+	t=1792145335; cv=none; b=WqN8APQlrwKXURvIhb+TjAEvM3n+M5K8gMqnWrqEE+CFfwIogjBZkmyIszuO6BI4elKk9ofKCeFGMQSMREHbL7oLHFMoceY4c4wylW60VNIfH0busTTzc+dsiMkTaQhkoEdJYDdHG7afszb+Sk6RDxueRSutZk4Upo2uyNRI+Oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792143895; c=relaxed/simple;
-	bh=pOJg4bE2iXJWDgZAd1CLbs24z3vH2truCTy9zkn+zPY=;
+	s=arc-20240116; t=1792145335; c=relaxed/simple;
+	bh=04VesoL9K07t23PCsT244kiVR/YSIrrH1qqvuw0S7zk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OMYjjrGX2jGHna+w+dd8ZZjkru7mJorX7Q7I78qAlxoFvpcZDlL4M8YcngLz1KQg2TuGaG0h+fMWY1d7m/1tQDzSj4gBNLQHygp6apAdlYtYXQg7zQtIzX+W9yOm/H4u94NAqEuUAVnsnorihTyIv5Zz6UKGdY9P7BzxnBxLvPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZBqXXS9z; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=TTuD+2A1eC1/rUB/KSHZXX8LrLBNI1VVIXwvjsRxNmCBk5c2eiZrEp7TTOuWwCZcYlBs5kDkPs8KNQUAoKgCKZzDvxeB+WVXQa+mjW48ZF1kr7GNjq0qJZdhF0W3cmjuFsTvreZ+uihT24sJVO4Rms5R8F08xPYIPqZMc9jxuPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WdBglEyV; arc=none smtp.client-ip=91.218.175.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZBqXXS9z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA371F000C4;
-	Fri, 16 Oct 2026 09:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792143894;
-	bh=8O2UWqRPaWzy05KK+6MXx1lL8jbA2Dl5vUCn0jpfpbA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=ZBqXXS9zWBvuDFSYWAYPI9WA8LRIqitYck498gMMUdPXSDiiJl4ya/gJGVxTpX/4f
-	 fl8cywIvpySQoydBrwDCZnkIH86SjHMhulS1OoSM6Ra8VV4YKHNtxyUuaKKkb+EoEs
-	 mDor8pLBMZzs95OHqZzfbF3CaaBPF4uCG4qFfXVK/lgKsoZZLECZlq4sujBN7o44LF
-	 g3Rt2z64hcOw7hld1SE/NN/uwSJ4fzjVr9Jot1ctaHWp9YKEg1BU0Ee2VrUi6/i6zH
-	 XikWAbnCR0X82YVbz5CwdvmxLGWdNWIvTClUe5VgjG94BY50WdVtUwM8Z2ixx6uei0
-	 oI++OU92fgbxQ==
-Message-ID: <f59b81f4-74e6-46c5-bc0a-ad12ce2ecb53@kernel.org>
-Date: Fri, 16 Oct 2026 10:44:49 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WdBglEyV"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=04VesoL9K07t23PCsT244kiVR/YSIrrH1qqvuw0S7zk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792145332; v=1; x=1792750132;
+ b=WdBglEyVCK+X/mKqSiCCDut4GRVKb+L9ofT8djCagZ6KYBDRRaV9mi9a4hsNByUPMIc50kIj
+ 1zCNRTrOCUeW3vyOUGSiiJNT0jaMAhmE4ioBkehyTLv6p8hk93fX4dlMz7AE3pW2sN7GpPYeccK
+ caZME/6J+8SFM5al4eTxjlyk=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e276db02176eba05;
+	Fri, 16 Oct 2026 10:08:52 +0000
+X-Mizu-Trace-ID: e276db02176eba05
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <118feacc-7f1b-42bf-8951-986e4d37319d@linux.dev>
+Date: Fri, 16 Oct 2026 18:08:47 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,42 +38,96 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 1/8] bpftool: Dump C from a detached BTF copy
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Andrii Nakryiko
- <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Quentin Monnet <qmo@kernel.org>
-Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Cupertino Miranda <cupertino.miranda@oracle.com>,
- David Faust <david.faust@oracle.com>, Ian Rogers <irogers@google.com>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>,
- Vineet Gupta <vineet.gupta@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20261016000012.2232059-1-ihor.solodrai@linux.dev>
- <20261016000012.2232059-2-ihor.solodrai@linux.dev>
- <DM5V83GMXC13.B0KDKO805LCG@gmail.com>
-Content-Language: en-GB
-From: Alan Maguire <almagui@kernel.org>
-In-Reply-To: <DM5V83GMXC13.B0KDKO805LCG@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: BUG: WARNING in bpf_convert_ctx_accesses on narrow loads of
+ bpf_tcp_sock u64 fields
+To: =?UTF-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>,
+ =?UTF-8?B?YnBm6YKu5Lu25YiX6KGo?= <bpf@vger.kernel.org>
+Cc: "dzm91@hust.edu.cn" <dzm91@hust.edu.cn>,
+ "dddddd@hust.edu.cn" <dddddd@hust.edu.cn>,
+ "hust-os-kernel-patches@googlegroups.com"
+ <hust-os-kernel-patches@googlegroups.com>
+References: <7a8ff335.1024c.1a14395f3e5.Coremail.kaiyanm@hust.edu.cn>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <7a8ff335.1024c.1a14395f3e5.Coremail.kaiyanm@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 10/16/26 2:18 AM, Alexei Starovoitov wrote:
-> On Thu, Oct 15, 2026 at 05:00 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->> Modifying the parsed BTF fails for some valid input: libbpf refuses to
->> modify BTF whose header carries unknown nonzero extension bytes, so
->> such a dump would stop with -EOPNOTSUPP.
->>
->> Dump from a flat copy built with btf__add_type(), which only requires
->> the destination to be modifiable.
-> 
-> can we do btf__new_empty_split(btf) and add decl attrs there
-> instead of copying all types ?
-> It fails on such BTF only because btf__add_str() does
-> btf__find_str(base) and that calls btf_ensure_modifiable(base).
-> The lookup shouldn't need it.
 
-+1 on using split BTF for new decl tags; even in the case of module
-BTF we can use multi-split BTF to cover decl tags for vmlinux and
-module BTF I think.
+On 10/16/26 3:21 PM, 梅开彦 wrote:
+> Our fuzzer tool discovered a verifier-bug (WARNING) vulnerability in the BPF
+> subsystem. `bpf_tcp_sock_is_valid_access()` accepts a 4-byte load at offset
+> 0x54/0x5c — the middle of the u64 fields `bytes_received`/`bytes_acked` —
+> and forwards the instruction unchanged to
+> `bpf_tcp_sock_convert_ctx_access()`. The converter has no case for these
+> offsets, so it returns 0 and the verifier trips
+> `verifier_bug("error during ctx access conversion (0)")`.
+>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+>
+> ## Root Cause
+>
+> A ctx load on a `PTR_TO_TCP_SOCK` register is validated by
+> `bpf_tcp_sock_is_valid_access()` (net/core/filter.c) and rewritten by
+> `bpf_tcp_sock_convert_ctx_access()` — and the two disagree on which
+> offsets exist.
+>
+> The validator's switch only special-cases the u64 field starts
+> `bytes_received` (0x50) and `bytes_acked` (0x58), which require
+> `size == 8`; every other offset falls to the default case, which
+> accepts any 4-byte-aligned offset in the struct with `size == 4`:
+>
+> ```c
+> 	switch (off) {
+> 	case offsetof(struct bpf_tcp_sock, bytes_received):	/* 0x50 */
+> 	case offsetof(struct bpf_tcp_sock, bytes_acked):	/* 0x58 */
+> 		return size == sizeof(__u64);
+> 	default:
+> 		return size == sizeof(__u32);
+> 	}
+> ```
+>
+> The converter, in contrast, only knows the exact field starts: its
+> switch covers every field of `struct bpf_tcp_sock` and has no default
+> case — an unmatched offset generates no instructions and returns
+> `cnt = 0`, which the fixup pass treats as a verifier-internal error
+> (`verifier_bug("error during ctx access conversion (0)")`).
+
+
+
+Thanks for your report !
+
+
+
+I think the issue is that a program can do:
+'''
+     tp = bpf_tcp_sock(listener);
+     /* +0x54 is in the middle of the u64 bytes_received */
+     unsigned hi = *(unsigned *)((char *)tp + 0x54);
+'''
+
+
+bpf_tcp_sock_is_valid_access() allows this, but
+bpf_tcp_sock_convert_ctx_access() has no idea how to handle such an
+offset.
+
+I think we can just disallow the narrower access:
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index ba536be2915f..f0eae1c14b2f 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7600,8 +7600,8 @@ bool bpf_tcp_sock_is_valid_access(int off, int 
+size, enum bpf_access_type type,
+                 return false;
+
+         switch (off) {
+-       case offsetof(struct bpf_tcp_sock, bytes_received):
+-       case offsetof(struct bpf_tcp_sock, bytes_acked):
++       case bpf_ctx_range(struct bpf_tcp_sock, bytes_received):
++       case bpf_ctx_range(struct bpf_tcp_sock, bytes_acked):
+                 return size == sizeof(__u64);
+         default:
+                 return size == sizeof(__u32);
+
