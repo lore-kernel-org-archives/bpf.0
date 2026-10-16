@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-246.mta0.migadu.com [91.218.175.246])
+Received: from mta0.migadu.com (out-249.mta0.migadu.com [91.218.175.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D04F25B0BB
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:00:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E8F19644B
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792108849; cv=none; b=a7JOIZx+iq5yVbwq6kQ17VWU3PO4J5jDCIX0D0QaRK4F9ybrOzee3jFQlG/sppgAEBUCOpUxD3yQ+mQwUCjUn2NhP0xx3LRBSccv7nbYWZ/EaV30sM69gwcRWVBaX9ndkRqr/3RKE78A75m2B8IWiVA+tQ7isJ3SuSkKeef1Apc=
+	t=1792108854; cv=none; b=XZITUQa13fA348el9ntVzw7VZICcfoExl3VUsQg5iqO9Pgwzev8bWsu/AblLU77/9yzRyulUfxO61rOg4GBQrioBPqW9h7uvLnr3p96UflzkEygZfFeEFj7RRb1ErGsYNc5+V3xU+YnMtJbHZI1LA9AGD/lPJN1jy1oYW2uk/QY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792108849; c=relaxed/simple;
-	bh=7Lwl4CAU39voS+YeM77V+Rm05A3fQvpYZ3YKKsnmmIo=;
+	s=arc-20240116; t=1792108854; c=relaxed/simple;
+	bh=dvEx6SL18Q+Zv4szki/ZGBeNSRi697D0FmDmKbmAcAs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XTVny1ZIZ8CSYNlbrG9Es2iIc9RTSnrSwK9NpzmQYDDJPbwNObSDzJh/KgkVCSP8+tvR0T7y39Pv2VTweaQtUwHJKwMIS4wyNkHD005pahrt+30+pjFQVNwrxJS6x/Qp09GYA5qWt9+uRrJFSIunvtIuo7w6iNDXxfjE2/wjcSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cx2Avi3u; arc=none smtp.client-ip=91.218.175.246
+	 MIME-Version; b=nsYNqzgEEoR0pOPe+dvVNwGHBDKmhW2R2NPDXrj5qQ7SixYDFBarYiQaJyQg1F1ANu87ElswPp16zhhH7m6V1zNrM8RwtPc3rFj7r7AX9UebNreVmHeXIVtJbN7VaQZOC11sBcSkLPc999lwfrVIlkgvhsyo5y2Hpe6TXaxPnnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CXVWIj6p; arc=none smtp.client-ip=91.218.175.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cx2Avi3u"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CXVWIj6p"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7Lwl4CAU39voS+YeM77V+Rm05A3fQvpYZ3YKKsnmmIo=;
+DKIM-Signature: a=rsa-sha256; bh=dvEx6SL18Q+Zv4szki/ZGBeNSRi697D0FmDmKbmAcAs=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792108846; v=1; x=1792713646;
- b=cx2Avi3uh104xO13R6DTG8jcGHaUwYlayJnEOvLWVGRo0A5FBGZ7kTm/q7dDDLm86kim0t0g
- 2IOUN/vfRWbraiCbT9E+jr0NPstkTpqM99d/GdQIvbf2XbGe/JlZBDRvHXYK0NZ2HiAL2S/s5cq
- h0/HtdtweXbSxQRKjj4cc6EU=
+ t=1792108850; v=1; x=1792713650;
+ b=CXVWIj6pl0+8855SxBMN6+hnNiQsfAHgcmanaEjzjyX6yn/v7XjvvqNtWLRYzqp6OqkZZKSW
+ 7wSbW91StuF/1+5ZUWacIDrCHDPWruBSV6v3aVEvaHl0oEyoVLrWQnMmrIG4H1VElKl6JfwZoNL
+ FDp1njhmSxO2ANb/+bLeasIM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id 8a96208c3063a254;
-	Fri, 16 Oct 2026 00:00:45 +0000
-X-Mizu-Trace-ID: 8a96208c3063a254
+Received: by mta12.migadu.com with ESMTPS id c5f887b31030722c;
+	Fri, 16 Oct 2026 00:00:50 +0000
+X-Mizu-Trace-ID: c5f887b31030722c
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v1 3/8] bpftool: Apply __bpf_core_pai per record on BTF dump
-Date: Thu, 15 Oct 2026 17:00:07 -0700
-Message-ID: <20261016000012.2232059-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 4/8] bpftool: Skip __bpf_core_pai on verifier-rewritten context types
+Date: Thu, 15 Oct 2026 17:00:08 -0700
+Message-ID: <20261016000012.2232059-5-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261016000012.2232059-1-ihor.solodrai@linux.dev>
 References: <20261016000012.2232059-1-ihor.solodrai@linux.dev>
@@ -58,186 +58,157 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpftool wraps the C dump in a clang attribute pragma that applies
-preserve_access_index to every struct and union, so field accesses
-through vmlinux.h types get CO-RE relocations. GCC-BPF supports the
-attribute but not the pragma, so it gets no CO-RE from the header.
+The verifier translates accesses to UAPI context and socket types,
+such as __sk_buff and bpf_sock, into accesses to kernel structures.
+It picks the kernel field by the instruction's offset and keeps the
+base register. For example, in bpf_convert_ctx_access() [1]:
 
-Jose proposed replacing the Clang pragmas with per-record attributes
-in May 2024 [1]. The declaration attribute support in btf_dump [2]
-now provides the per-type control discussed in that thread.
+	switch (si->off) {
+	...
+	case offsetof(struct __sk_buff, mark):
+		...
+		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
+				      bpf_target_off(struct sk_buff, mark,
+						     4, target_size));
 
-Apply the attribute to each struct and union definition instead, as
-kflagged decl tags on the detached BTF copy, rendered by btf_dump. The
-tags use the __bpf_core_pai macro, which expands to
-preserve_access_index where supported and to nothing under
-BPF_NO_PRESERVE_ACCESS_INDEX.
+So these accesses require a load or store with an immediate offset from
+an unmodified pointer. Their UAPI field offsets are fixed, so CO-RE
+relocation is unnecessary. With preserve_access_index, Clang can instead
+emit pointer arithmetic, for example for ((u8 *)&skb->mark)[1]. The
+verifier then rejects an otherwise valid program.
 
-The attribute covers the same records as the pragma, so Clang output
-is unchanged.
+Omit the attribute from the 13 such types when dumping C. Also omit it
+from their nested anonymous records: keeping it there can root
+relocations at an unnamed type, which libbpf cannot resolve.
 
-[1]: https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@oracle.com/
-[2]: https://lore.kernel.org/bpf/20260929234608.48503-1-ihor.solodrai@linux.dev/
+The last addition to this set was bpf_sk_lookup, introduced in 2020 by
+commit e9ddbb7707ff ("bpf: Introduce SK_LOOKUP program type with a
+dedicated attach point"). Keep the set hardcoded in bpftool so the
+exclusion also works with older kernels.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/filter.c?h=v7.2#n9939
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/bpf/bpftool/btf.c                       | 34 +++++++++++++++----
- .../bpf/bpftool_btf_dump_sorted.expected      | 16 ++++-----
- .../bpf/bpftool_btf_dump_unsorted.expected    | 16 ++++-----
- 3 files changed, 44 insertions(+), 22 deletions(-)
+ tools/bpf/bpftool/btf.c | 84 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 82 insertions(+), 2 deletions(-)
 
 diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index cc15989643cf..6182f2c41db0 100644
+index 6182f2c41db0..30f30314ec29 100644
 --- a/tools/bpf/bpftool/btf.c
 +++ b/tools/bpf/bpftool/btf.c
-@@ -1121,6 +1121,24 @@ static struct btf *btf_c_detached_copy(const struct btf *src)
+@@ -6,6 +6,7 @@
+ #endif
+ #include <errno.h>
+ #include <fcntl.h>
++#include <linux/bitmap.h>
+ #include <linux/err.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+@@ -1121,22 +1122,101 @@ static struct btf *btf_c_detached_copy(const struct btf *src)
  	return copy;
  }
  
-+static int btf_c_annotate_records(struct btf *btf)
++/*
++ * The verifier translates field accesses of some types into accesses
++ * to kernel structures, see bpf_convert_ctx_accesses().
++ * The translation keys on the immediate offset of each load or store,
++ * so offsets into these types must stay immediates.
++ */
++static const char * const btf_c_static_offset_types[] = {
++	"__sk_buff",
++	"bpf_perf_event_data",
++	"bpf_sk_lookup",
++	"bpf_sock",
++	"bpf_sock_addr",
++	"bpf_sock_ops",
++	"bpf_sockopt",
++	"bpf_sysctl",
++	"bpf_tcp_sock",
++	"bpf_xdp_sock",
++	"sk_msg_md",
++	"sk_reuseport_md",
++	"xdp_md",
++};
++
++static bool btf_c_needs_static_offset(const struct btf *btf, const struct btf_type *t)
 +{
-+	__u32 i, cnt = btf__type_cnt(btf);
-+	int err;
++	const char *name;
++	size_t i;
 +
-+	for (i = 1; i < cnt; i++) {
-+		const struct btf_type *t = btf__type_by_id(btf, i);
++	if (!btf_is_struct(t))
++		return false;
 +
-+		if (!btf_is_composite(t))
-+			continue;
-+		err = btf__add_decl_attr(btf, "__bpf_core_pai", i, -1);
-+		if (err < 0)
-+			return err;
++	name = btf__name_by_offset(btf, t->name_off);
++	for (i = 0; i < ARRAY_SIZE(btf_c_static_offset_types); i++) {
++		if (!strcmp(name, btf_c_static_offset_types[i]))
++			return true;
 +	}
-+
-+	return 0;
++	return false;
 +}
 +
- static int dump_btf_c(const struct btf *btf,
- 		      __u32 *root_type_ids, int root_type_cnt, bool sort_dump)
- {
-@@ -1133,6 +1151,10 @@ static int dump_btf_c(const struct btf *btf,
- 	if (!copy)
- 		return -errno;
- 
-+	err = btf_c_annotate_records(copy);
-+	if (err)
-+		goto done_free;
++/*
++ * Anonymous records within types that need static offsets must not start
++ * CO-RE access chains. Named records, typedefs and pointer targets are
++ * separate types.
++ */
++static void btf_c_mark_no_pai(const struct btf *btf, __u32 id, unsigned long *no_pai)
++{
++	const struct btf_type *t = btf__type_by_id(btf, id);
++	const struct btf_member *m = btf_members(t);
++	__u32 i;
 +
- 	d = btf_dump__new(copy, btf_dump_printf, NULL, NULL);
- 	if (!d) {
- 		err = -errno;
-@@ -1142,8 +1164,12 @@ static int dump_btf_c(const struct btf *btf,
- 	printf("#ifndef __VMLINUX_H__\n");
- 	printf("#define __VMLINUX_H__\n");
- 	printf("\n");
--	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
--	printf("#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)\n");
-+	printf("#ifndef __bpf_core_pai\n");
-+	printf("#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)\n");
-+	printf("#define __bpf_core_pai preserve_access_index\n");
-+	printf("#else\n");
-+	printf("#define __bpf_core_pai\n");
-+	printf("#endif\n");
- 	printf("#endif\n\n");
- 	printf("#ifndef __ksym\n");
- 	printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
-@@ -1187,10 +1213,6 @@ static int dump_btf_c(const struct btf *btf,
- 			goto done;
++	__set_bit(id, no_pai);
++	for (i = 0; i < btf_vlen(t); i++, m++) {
++		const struct btf_type *mt;
++		__u32 mid = m->type;
++
++		mt = btf__type_by_id(btf, mid);
++		while (btf_is_array(mt) || btf_is_mod(mt)) {
++			mid = btf_is_array(mt) ? btf_array(mt)->type : mt->type;
++			mt = btf__type_by_id(btf, mid);
++		}
++		if (btf_is_composite(mt) && !mt->name_off && !test_bit(mid, no_pai))
++			btf_c_mark_no_pai(btf, mid, no_pai);
++	}
++}
++
+ static int btf_c_annotate_records(struct btf *btf)
+ {
+ 	__u32 i, cnt = btf__type_cnt(btf);
++	unsigned long *no_pai;
+ 	int err;
+ 
++	no_pai = bitmap_zalloc(cnt);
++	if (!no_pai)
++		return -ENOMEM;
++
++	for (i = 1; i < cnt; i++) {
++		if (btf_c_needs_static_offset(btf, btf__type_by_id(btf, i)))
++			btf_c_mark_no_pai(btf, i, no_pai);
++	}
++
+ 	for (i = 1; i < cnt; i++) {
+ 		const struct btf_type *t = btf__type_by_id(btf, i);
+ 
+ 		if (!btf_is_composite(t))
+ 			continue;
++		if (test_bit(i, no_pai))
++			continue;
+ 		err = btf__add_decl_attr(btf, "__bpf_core_pai", i, -1);
+ 		if (err < 0)
+-			return err;
++			goto out;
  	}
  
--	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
--	printf("#pragma clang attribute pop\n");
--	printf("#endif\n");
--	printf("\n");
- 	printf("#endif /* __VMLINUX_H__ */\n");
+-	return 0;
++	err = 0;
++out:
++	bitmap_free(no_pai);
++	return err;
+ }
  
- done:
-diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-index 5470b2b43229..02c8fe8b4859 100644
---- a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-+++ b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-@@ -1,8 +1,12 @@
- #ifndef __VMLINUX_H__
- #define __VMLINUX_H__
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
-+#ifndef __bpf_core_pai
-+#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
-+#define __bpf_core_pai preserve_access_index
-+#else
-+#define __bpf_core_pai
-+#endif
- #endif
- 
- #ifndef __ksym
-@@ -30,19 +34,15 @@ struct holey {
- 	long: 32;
- 	long: 32;
- 	int tail;
--};
-+} __attribute__((__bpf_core_pai));
- 
- struct s {
- 	int f;
--};
-+} __attribute__((__bpf_core_pai));
- 
- 
- /* BPF kfuncs */
- #ifndef BPF_NO_KFUNC_PROTOTYPES
- #endif
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute pop
--#endif
--
- #endif /* __VMLINUX_H__ */
-diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-index 4310adc2ed51..9b6589d2bda3 100644
---- a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-+++ b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-@@ -1,8 +1,12 @@
- #ifndef __VMLINUX_H__
- #define __VMLINUX_H__
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
-+#ifndef __bpf_core_pai
-+#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
-+#define __bpf_core_pai preserve_access_index
-+#else
-+#define __bpf_core_pai
-+#endif
- #endif
- 
- #ifndef __ksym
-@@ -26,7 +30,7 @@ struct holey {
- 	long: 32;
- 	long: 32;
- 	int tail;
--};
-+} __attribute__((__bpf_core_pai));
- 
- enum {
- 	E0 = 1,
-@@ -34,15 +38,11 @@ enum {
- 
- struct s {
- 	int f;
--};
-+} __attribute__((__bpf_core_pai));
- 
- 
- /* BPF kfuncs */
- #ifndef BPF_NO_KFUNC_PROTOTYPES
- #endif
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute pop
--#endif
--
- #endif /* __VMLINUX_H__ */
+ static int dump_btf_c(const struct btf *btf,
 -- 
 2.56.0
 
