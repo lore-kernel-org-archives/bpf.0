@@ -1,145 +1,105 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3F3175A6C
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 02:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792116319; cv=pass; b=ZRRUj+3KpRLPVG21nQLyUlQ/6r+gH5GwwgUejMSeyA3Jfqm8pPRqwOt4sQLj5y/pgjJxZxMkC57pW/gHj9lEGmWoA+i2i1F1nNnl1rNNFG6ccPpcrvqa+tpE4lvRzBHp48wWpRy+u4dCFW5Rm1K4/t4jFakbziLjB0mKH4Oy3kI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792116319; c=relaxed/simple;
-	bh=V1RHkZWGIsZPUYNuKoM8AB1AdnrpuIi9xIHrxtjsVz8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IGG/X+Z+GG+W3tArla1y10Aqs5F2J0/2AH0ZADXdwSeXe2cfwQcYhD/l9Q3WuKMFCi2fR8fUWdRJYl/tY6fgQK2rUoiCZawVz++maiVLtFyU+SnXD46gcLmQdPeYCH4pKw1Ep0LCDBwSUfteXdFimeQPMCRwbR2DdDuVXDXIE00=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ss5v8H6u; arc=pass smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C360534D3B0
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 02:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792116762; cv=none; b=sgIhkf15lWd6wogUHT7Gd7VXjbIB489azKuo+1HOHDSOISMiLTgy5MYqCQMnaOyMgW3iAIXUrvsiJNgIpSFMs2eekaTTsj83KGMfqWhoPVxkJbq573pMfx1SgScCAQURpBhD7NaNo8WxikJy3eA2cEcutqMZpGeUL7PCsRolPKU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792116762; c=relaxed/simple;
+	bh=dBvwVO4ackLCLCxKZbUlFj+08D8GjgWMgNNWIi+NiB4=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:MIME-Version; b=ncZGQ2ocCvnDpW1YuDZYE9g/J2XLiaQkq/8QLx/KpExfW4MJpBJCKe3S8GASj8E09EflTfPEYAVd57Di88bTGZdc3KJewYL1GQ3YoD1b61/OyZBAyZRZ4FyPHcoOOo4pbB1gHDVRC1nmqHeU4fQpaK+0oDJ3ZX0pJKjS/95MGfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QX7GhEsu; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ss5v8H6u"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48c688a7cd9so1672733f8f.0
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 19:05:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792116317; cv=none;
-        d=google.com; s=arc-20260327;
-        b=PVeKJzOyWrTN/+T5SthKsWW9qrJsY1IiciGcymKoUWQddBMGkSKFoql1/5Bay2Em9J
-         1JVMtxHGbZwoZoPQCcEPvd9ehsZ/niw4E5E6iMTQU3c9texr6qIyyTAajxE8qyP6AQiX
-         JeUGrLzXNQTqYubW0dVg4EMXdqdISh2H50YXHXT4mbWXkJeeg+o8OwPI0vdQKa0RZJgc
-         LvdVrXUTRpuO+X68QO/ewPequCA+oMDfEj/AojXsGcisuGKf7cERjivVJZ+fIb3/dA/W
-         /5ct3AyiMqagFnegTL46ThefUfsUJtwkuarMqKJwuoEgFMPTgsEriIBcoIy9PmValoE0
-         Jjhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=lD019ja7KlBNN+ZZOPdqrM9A3SGTnHnx7QfDozK2kS0=;
-        fh=XRb9Qb+KyVvM3PB+53gjUzCWf1FO/OLJrYfCzoUflUM=;
-        b=BnRB4mRTy5CLwjXd3hh1reptm5MJwbkUoO+3zjnnwQC2RGQ0jrQb5xlAklnTvllYB0
-         +XUOXGwpFKXO5nl2B2sso5su0FEjUraMw2Xw4epTl5yXDOkR9jMpQxs0SpBy5hCKxyAa
-         hrWI7Duwe6wX+nNT7gfnaS0SvrW5aIR42oLXaD7CNOt7Gpv7HH+hzOVzh9jfM3XNfZ3y
-         ArchzTRGGZCNYT3p1wjJB6g5GZJ7kruGjHmY6FpM3p7l09bhk2mx97LE5V/3KGU2A4VV
-         /uqWPuud6wUE9wgHer/sMX4CtWLwrYSGV95yiiFdftAPopZC96YNf3/qYo+sa0xeItD3
-         jngQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QX7GhEsu"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e901e114fdso25764465ad.2
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 19:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792116317; x=1792721117; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lD019ja7KlBNN+ZZOPdqrM9A3SGTnHnx7QfDozK2kS0=;
-        b=ss5v8H6ukTB+Jj/aKwaK+QnqefE5HlZb23XqofdKxd5kBJVIdKfZn9DPlaC55FUt7D
-         fJFNq10ggfGVNRxcatxdqi+TYXVRhlgHZ0l/gJt6sAidHmT9JQFkcrWe1Pylf3DkTyEA
-         UPfSMIilqQbbb/j0ipLUZmoiETbNWQi/FYK51uK7jqOJjav8KjoeUfQ3OBOJ9uW7LlMZ
-         tK8P0kcmeylM5GAWhBqYHiaaThQ4NMpJCdNTWnAhLzclRMjBozz1ajcomJLYFvT3W98C
-         yY2Na3y2KOiJj2adU75vyrsvb0fkcrZWzAogT+cczgpI6eyLpkKT+imKPqGgm/Nk96eE
-         jGbg==
+        d=gmail.com; s=20251104; t=1792116761; x=1792721561; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=SAV9AIYPkjHseS+zBUGJlwhUSVxUufsLG2L3xvTTNVA=;
+        b=QX7GhEsum9c5cIS5c2lqRiL48NLHPNPZYI7KHvyhjBIvU4klDR3Hxr2Zy/t24KNiP2
+         J1B0cp+03CV8X9j8M6xEgm4/a92w3KiIm0CjKYuR2nUgAsGAXJSXsdV0IfpGf7fSOiwL
+         LbpgW5k3ETe0wZcQBKsyzdxtfhBjhUh28wmMtpMjZTXcqSpUSnfIFFPyCcAcRhSuk5xF
+         8Eo2NfJ4k9Tt0yo6KIA/92F4pbxZrvXTYCxBA7KQPuAyHuDCSuAmPjUdFuoQzJ4Y5g84
+         nRCnrFZ9AS/hW6bxfovlRnbN+ok/LVrhvyRQJzov/Bn6w3g0rqr8IShaYIWqxCfIskwX
+         IFfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792116317; x=1792721117;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=lD019ja7KlBNN+ZZOPdqrM9A3SGTnHnx7QfDozK2kS0=;
-        b=kYlvHoA2BywJrCeNLNIS9IllK1YLFeeoUi5oh+b1OuLp7YQ6MTH+n9050vzAxm8hOt
-         ww2svdr5Ti3CHoM4vg9fmfZoIbahTUwVVUhakJd65RTZuRgzpL7K7jnuEWz4bQ4Pw/XK
-         hVwKjiPdTkiRpXBvnjdI7PVXe3gHd/lPf0Dhu77owmpQSow90k7h3HOnRx2O/4J38JNO
-         dWvhBgP/y48DzgoMOpaPjxFQUT3I9fnlnoY+E6uIbbWccwgx5hUUsTZ72XcsqIrEAvyd
-         EfFpHw7FcNuUvJknqlPxFPodgPox+NX/Ozxwh4yoGxJ6gT/ung70xBV8ReXxzBLEWKjN
-         0xQQ==
-X-Gm-Message-State: AFq9FYK0HpCcYrOUf+2lMe/g01DonOcwuxkQ7IvRvM6zNrtqWjatELO4
-	gHDg73AQF36nfTUfRCMeFqFuG/geiUXmk4gqM013HxrTqZGOwyle0ZaUsLBOW7cV5AYgnqkiT/p
-	UklLYVBGtJioicRWLBBkdkozlAKXlZss=
-X-Gm-Gg: AYBFou0aK+C+fYS4vOfRmS7262hZCvNnavhJdYjJZc2A3YBMI6SmPNu524/Xzs9E5mh
-	9NrTjVagxTtK3T0ZO/+i6pFAQo97MVPIdMtPVr1CDIjsK8uwUjIjeO6dP6vk29/F15sx8xcej9e
-	MqZj06OZ8hZZ17qBC8BVCNjE6ahQoMwMWB0WLDAx36UuA8s4l49DEbOli3y+L5eaZ3r3ATmyqZP
-	iV8iZaijjeKvXCY6/UKGQA0ZGnaA43hHhDraKJaYNyw6XvL5Xox3GEcFsMyMujQWB1mAItFIq6o
-	fyFOfGvniXRNChlXLthNwPfXC3mujvZcz4z6wwcwqufiv8WLYzKTPxuEnYkGOUNQOA+iuI9gLrP
-	kUFI+FVcEUSED/ydZKtToTvTZ0VzkQ1hykiOTuv2TpEfAsKUYhD2pJuQUh2pGP90/avCfyQMJ7f
-	FIWcYU7xXTxBbVI++MJJcKKLI2CopcEEY2rZZI75/ulw==
-X-Received: by 2002:a5d:64e3:0:b0:48d:fd4d:7fbe with SMTP id
- ffacd0b85a97d-48dfd4d818cmr1777578f8f.2.1792116316728; Thu, 15 Oct 2026
- 19:05:16 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792116761; x=1792721561;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SAV9AIYPkjHseS+zBUGJlwhUSVxUufsLG2L3xvTTNVA=;
+        b=1BZi9KvCI1eGAfNOUJkpw8FKNXGN6jN/FjW2BrkD058/6xdHc/JlgZ7QUJX52o3979
+         UcMjvY1UAF1aRfGpAFMDh9aMeMPHAdKnEwIwPfV1Z+nzjAMajNzzThvcnwU7m0OqyxX8
+         6o9KlHpKLfrbuDwuhvgVkFTgeodAzAyBwAoGKj86THKRCpr8orcAFfbV/LgxxJdtvRvY
+         MzaEdkut9g0F/oyxJwZJnaZKP5+sI/HIgDbnQYw5yVeuDH4bZzINUwYJXv+4RZ6vyzMl
+         uPNh0NBumn5QoWCdOZW6CgfvKc6xR+SfKNp0TchXS0t8zzrHVUq1aEimXGGqNXpj2++P
+         05DQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzjIYAfqGW6KLE8B3ObZupLtk7+jedV6plJAidrLGI42qEmjxDCB6OBp0lX8cQG3Il/FXk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKQLuG3w7DmEvGfY2Vy6H27lhrJyX7y+hkiSPC30xt+Om3kSzyM
+	D0jh2a8RIeKdwnePJIxhXWe4LuT+s5bJPk15n+q8P/rvV6/c5c2IbIfJ
+X-Gm-Gg: AYBFou2E78VWBcCbcU/sSrslv0CCHOU5kkdXaxPMR9suZ71uE0BO7M8bWUQKK5e5STX
+	/Pvken3mrr8r1T34nyQy8/6TE3vobyVhxUIHBrVRs5Ua4wfcH0AyWQmJbvrGVk9nUNuT5e2g6FR
+	EK6cVhkv8QlXAcAmWfh3MnUtmD7ZIMKKLW/rPCcurt03MMoN3bapGAXc5fZs9Iv1uOv6sYGN+oX
+	d0v/zikPJViD4bvNvzbFb/xJdJVXxsz8CQhfgKaCUquI6dvR5IhsKRFq1pbyeHjMGznBwiQaIJb
+	JrUndQ35emrTQUQmeamyI/KE7yPFH2dru+i4ZBwMbkbO1hHNn/MJu6plP1auVK6sleBMBcj9i6r
+	D+2S7Eac8CXvo9iR3lW/0CPXM/sIy0Z6czGysxr27kgV0GCvtD11fEWN2SyTRJ+nX4b8jq3bqCG
+	LtdnPKpC1d0osvbcEm1pP+lxnNlhw0QgdEzbXUEMYmtUX5BjQmGmj8wMkA2zSl7yJmeVkVIRleY
+	h6fmrQj2+NESqaq5jaX6s3zaXNM6rQzYrxgmpgwL/gpAzaOSyo6TfGZTSK5msLkm2sqT7HPzU2/
+	eak=
+X-Received: by 2002:a17:903:41cb:b0:2e9:66c4:1711 with SMTP id d9443c01a7336-2e966c417f1mr31710645ad.52.1792116760965;
+        Thu, 15 Oct 2026 19:12:40 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e878bf6sm3044545ad.57.2026.10.15.19.12.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2026 19:12:40 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 16 Oct 2026 02:12:39 +0000
+Message-Id: <DM5WDDT1HM2C.BQULK4DXMUU2@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next v11 13/26] bpf: Allow a subprog to end with a
+ call that does not return
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20261015040250.860960-1-yonghong.song@linux.dev>
+References: <20261015040143.854070-1-yonghong.song@linux.dev> <20261015040250.860960-1-yonghong.song@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261015234125.3152346-1-memxor@gmail.com> <20261015234125.3152346-7-memxor@gmail.com>
- <DM5V1EIGVJEG.1IIPS4R40HPA0@gmail.com> <CAP01T743a5wuvP=5cc8Aqb=PHGhSFWcir0sCSWMvMT_=gk8Kjw@mail.gmail.com>
- <DM5VHTPNK75L.25IC5ASG1QDJ9@gmail.com> <CAP01T77q9Q-kj1gjsm1U2Nd7QaqjjSrNhF232-dt7cehrWw+uw@mail.gmail.com>
- <DM5VYE2LA9E2.28YJ11VXX558P@gmail.com>
-In-Reply-To: <DM5VYE2LA9E2.28YJ11VXX558P@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 16 Oct 2026 04:04:38 +0200
-X-Gm-Features: AclHuK8O8RQBqFIYxjAnFTPmYtiBXBrSoxOa9z0H_m9_lyPzJDLPSX8l0nG0hzQ
-Message-ID: <CAP01T77Rt=2feJ_HgAW2eq5GntJ6-UNwAh-1cWUCsP6zJ1PQMw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 06/15] bpf: Recognize __nullable on pointer
- members of kernel structs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Tejun Heo <tj@kernel.org>, kkd@meta.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 16 Oct 2026 at 03:53, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Oct 16, 2026 at 03:39 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> >> > Well, BTF_TYPE_SAFE_*_OR_NULL also enforces a NULL check, so not clear
-> >> > to me how using the annotation over that will break a program (see
-> >> > type_is_trusted_or_null() usage). The only difference is that this
-> >> > annotation works with type tags applied directly on the struct.
-> >>
-> >> Got it.
-> >> Can we start moving into this direction?
-> >> At least for clang compiled kernels we can drop BTF_TYPE_SAFE_*_OR_NULL ?
-> >
-> > Yeah, makes sense, I will send a set doing the conversion.
->
-> There is one more difference to sort out first.
-> type_is_trusted_or_null() and type_is_rcu_or_null() are called only
-> when the parent is trusted or rcu.
-> fentry/fexit args are plain PTR_TO_BTF_ID, so with __nullable on
-> socket->sk
->
->   SEC("fentry/smc_release")
->   int BPF_PROG(bpf_smc_release, struct socket *sock)
->   {
->         if (sock->sk->__sk_common.skc_state == BPF_SMC_LISTEN)
->
-> in progs/bpf_smc.c will be rejected with
-> invalid mem access 'ptr_or_null_'.
-> what should we do?
->
+On Wed, Oct 14, 2026 at 09:02 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+> Let a call to a subprog or to a kfunc be the last insn of a subprog, and
+> give it no fall-through edge in the CFG walk or in bpf_insn_successors().
 
-The right thing might be to just strip or_null_ when walking pointers
-where bpf_may_fault_on_deref() is true (plain PTR_TO_BTF_ID and those
-with PTR_UNTRUSTED flag). That should prevent regressions for this
-case, and match behavior of the macros. It is also okay since the
-fault is handled.
+[...]
 
-The plain PTR_TO_BTF_ID can also be passed into helpers, and may be
-NULL, but that's an older problem. I have plans to revisit it at some
-point and close the issue, but it requires figuring out how we can
-annotate and prevent breaking correct cases, and provide some low
-effort path for incorrect ones. This conversion can be first step in
-that process.
+>  include/linux/bpf_verifier.h | 10 +++++
+>  kernel/bpf/backtrack.c       |  6 ++-
+>  kernel/bpf/cfg.c             |  5 +++
+>  kernel/bpf/liveness.c        |  9 ++---
+>  kernel/bpf/verifier.c        | 74 ++++++++++++++++++++++++++++++------
+>  5 files changed, 85 insertions(+), 19 deletions(-)
+
+This is quite heavy.
+keep_subprog_exits() in the previous patch adds 'exit' after the last
+insn with bpf_patch_insn_data().
+Can we do the same for a subprog that ends with a call
+before bpf_check_cfg() ?
+Then cfg, liveness, backtracking, fastcall and prepare_func_exit()
+don't need to know about it. Only the check_subprogs() hunk stays.
+
