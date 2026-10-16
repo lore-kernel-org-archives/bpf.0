@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-8.mta0.migadu.com [91.218.175.8])
+Received: from mta1.migadu.com (out-228.mta1.migadu.com [95.215.58.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D429A24336D
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B7B1F192E
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792108862; cv=none; b=tNmZtEBZihqxhY0YduQDFpkSOMWuroBCKoHuu1hbkMzhG+oewMCP3BCDSUkSAGsx0cJ1jzUZ2NAe3XXiMXNzZlpKAyjhk6JtvhWzvwp9H3/+G/rNRWrc45zzx9HzBFiKNmtg6hMefY8c6NvwwZRttZtKlNz8OlRQBUczNJJPPLE=
+	t=1792108866; cv=none; b=adMlgguqJsuQcJtTswzCu5+TAl+oMxhGU1/gcFF5z0WSSvL7Rsu9eH+KLHDEP6WIhmBRfPElNteFv9sgMnhoLtBxtP006jxD3GA0sKlwsVcC0hzd3s5EAoz+oMrC5KtMEtV9lQor1rtJlP63Xf7awGWbNMf18p/yHIBbxcBVbxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792108862; c=relaxed/simple;
-	bh=1ZtSQRZJ4JaUF1Qwh9nUshVVCgLh8ALLDgOYACvwh5s=;
+	s=arc-20240116; t=1792108866; c=relaxed/simple;
+	bh=yxwsJEqi8nYCo0cg779ZelmFtbMjAfxwy1kFREOOtBg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o60Yqewv9pntYw3HC34PxDCIdyR+iBRlSV3cOpLx4n4iGyJPujJqFeU35nntnI+VVXM++0cnO9cfscxYxqvhHzWFT5vexTWTMKgbM7Tjs4KVEgenaZKtE5UA/1F9TE5iDzBuhr4LvF6Lh8vn1Dh32b/Z2OzkAUB7BplotEcKX6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nnI6YVkm; arc=none smtp.client-ip=91.218.175.8
+	 MIME-Version; b=khLKrgEfcgRZgPd0WmkbHAw2sSaMC/YO/xTGGe6/f3TmLpShKB6PU6R2H8vCf/ciKlC2uOHu407pAKFNrz/WMJrSXmGzVi7qJQ5O5RfFRFcqMS6t0PyOLBd1vKqkDjUryGgBUk3f5luGwGdd4aGHWXxHLtV0xzdt/UcFiLEqnME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CSnGnf8/; arc=none smtp.client-ip=95.215.58.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nnI6YVkm"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CSnGnf8/"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1ZtSQRZJ4JaUF1Qwh9nUshVVCgLh8ALLDgOYACvwh5s=;
+DKIM-Signature: a=rsa-sha256; bh=yxwsJEqi8nYCo0cg779ZelmFtbMjAfxwy1kFREOOtBg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792108858; v=1; x=1792713658;
- b=nnI6YVkmEXyZ1n+TM4ClkVggz6K2zybrxOH0nLYl1eEw4ybrbZow4iHE8onF704ubSRHJ51V
- XN0dqW+k0zzWEuiWojtV6DQNswHNXOGZrLwo0XfLH88tz8shOOFLzoXlRBlt7uWIO/ZKT6dvGLX
- /TQEtti+564am570s9xRxnx4=
+ t=1792108863; v=1; x=1792713663;
+ b=CSnGnf8/RVgsSQmRxap8gFGcWQprehGMNOIGMw4S+Bxq/aAZyhf/GrlQOr/d9vV4WVQGByFb
+ xZWc+VUymArt7jZ2EfmHDOrCYuqH0LZHPLWJCSx92cyTTiBHFYgBEHktNgwP+f45h/823JNxnjR
+ XVqU0NjltJhmN1IKapHZZdQs=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id f550892c26fb11cf;
-	Fri, 16 Oct 2026 00:00:58 +0000
-X-Mizu-Trace-ID: f550892c26fb11cf
+Received: by mta12.migadu.com with ESMTPS id 036ccca360243c76;
+	Fri, 16 Oct 2026 00:01:02 +0000
+X-Mizu-Trace-ID: 036ccca360243c76
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +44,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v1 6/8] selftests/bpf: Cover record attributes in bpftool BTF dumps
-Date: Thu, 15 Oct 2026 17:00:10 -0700
-Message-ID: <20261016000012.2232059-7-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 7/8] selftests/bpf: Cover context and socket accesses through vmlinux.h
+Date: Thu, 15 Oct 2026 17:00:11 -0700
+Message-ID: <20261016000012.2232059-8-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261016000012.2232059-1-ihor.solodrai@linux.dev>
 References: <20261016000012.2232059-1-ihor.solodrai@linux.dev>
@@ -58,163 +58,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Types whose field accesses need static offsets carry __bpf_core_pso,
-while their nested anonymous records must stay unannotated. Other
-records retain __bpf_core_pai, including context types such as
-bpf_nf_ctx whose accesses do not need static offsets.
+The generated vmlinux.h leaves __bpf_core_pai off the types whose field
+accesses need static offsets and off their nested anonymous records,
+and marks these types with __bpf_core_pso.
 
-Extend the existing C dump test fixture with selected context and
-socket types and recursively nested anonymous unions.
+Some accesses fail to load if any part is missing. With __bpf_core_pai
+on an anonymous member but not on its enclosing type, Clang roots the
+CO-RE relocation at an unnamed type that libbpf cannot resolve. With
+__bpf_core_pai on the type, a narrow field load can become pointer
+arithmetic on the context pointer, which the verifier rejects. Without
+__bpf_core_pso, merging field loads from two branches into one does the
+same.
+
+Cover each case with programs loaded through the generated header:
+accesses through the anonymous unions of four context types, a narrow
+skb->mark load, and a merged load where the compiler supports
+preserve_static_offset.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../bpf/bpftool_btf_dump_sorted.expected      | 24 ++++++++++
- .../bpf/bpftool_btf_dump_unsorted.expected    | 24 ++++++++++
- .../bpf/prog_tests/bpftool_btf_dump.c         | 47 +++++++++++++++++++
- 3 files changed, 95 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_ctx_rewritten.c        | 59 +++++++++++++++++++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
 
-diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-index 7da4df1da207..ee093f08d123 100644
---- a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-+++ b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-@@ -37,6 +37,30 @@ enum {
- 	E0 = 1,
- };
- 
-+struct __sk_buff {
-+	int len;
-+	union {
-+		int sk;
-+	};
-+} __attribute__((__bpf_core_pso));
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index c69c0f7e9cc8..56b626419ab6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -41,6 +41,7 @@
+ #include "verifier_const.skel.h"
+ #include "verifier_const_or.skel.h"
+ #include "verifier_ctx.skel.h"
++#include "verifier_ctx_rewritten.skel.h"
+ #include "verifier_ctx_sk_msg.skel.h"
+ #include "verifier_d_path.skel.h"
+ #include "verifier_default_trusted_ptr.skel.h"
+@@ -231,6 +232,7 @@ void test_verifier_cgroup_storage(void)       { RUN(verifier_cgroup_storage); }
+ void test_verifier_const(void)                { RUN(verifier_const); }
+ void test_verifier_const_or(void)             { RUN(verifier_const_or); }
+ void test_verifier_ctx(void)                  { RUN_TESTS(verifier_ctx); }
++void test_verifier_ctx_rewritten(void)        { RUN_TESTS(verifier_ctx_rewritten); }
+ void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
+ void test_verifier_d_path(void)               { RUN(verifier_d_path); }
+ void test_verifier_default_trusted_ptr(void)  { RUN_TESTS(verifier_default_trusted_ptr); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c b/tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
+new file mode 100644
+index 000000000000..33eb975a170a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
-+struct bpf_nf_ctx {
-+	int f;
-+} __attribute__((__bpf_core_pai));
++SEC("tc")
++__success
++int skb_socket(struct __sk_buff *skb)
++{
++	struct bpf_sock *sk = skb->sk;
 +
-+struct bpf_sk_lookup {
-+	union {
-+		union {
-+			int cookie;
-+		};
-+		int family;
-+	};
-+} __attribute__((__bpf_core_pso));
++	return sk ? sk->family : 0;
++}
 +
-+struct bpf_tcp_sock {
-+	int snd_cwnd;
-+} __attribute__((__bpf_core_pso));
++SEC("sockops")
++__success
++int sockops_args_reply(struct bpf_sock_ops *skops)
++{
++	skops->reply = skops->args[1];
++	return 0;
++}
 +
- struct holey {
- 	int c;
- 	long: 32;
-diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-index f082da51d630..42233e435a04 100644
---- a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-+++ b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-@@ -48,6 +48,30 @@ struct s {
- 	int f;
- } __attribute__((__bpf_core_pai));
- 
-+struct __sk_buff {
-+	int len;
-+	union {
-+		int sk;
-+	};
-+} __attribute__((__bpf_core_pso));
++SEC("sk_msg")
++__success
++int sk_msg_data(struct sk_msg_md *msg)
++{
++	return msg->data < msg->data_end;
++}
 +
-+struct bpf_sk_lookup {
-+	union {
-+		union {
-+			int cookie;
-+		};
-+		int family;
-+	};
-+} __attribute__((__bpf_core_pso));
++SEC("cgroup/getsockopt")
++__success
++int sockopt_optval(struct bpf_sockopt *ctx)
++{
++	return ctx->optval < ctx->optval_end;
++}
 +
-+struct bpf_tcp_sock {
-+	int snd_cwnd;
-+} __attribute__((__bpf_core_pso));
++SEC("tc")
++__success
++int skb_narrow_field(struct __sk_buff *skb)
++{
++	return ((__u8 *)&skb->mark)[1];
++}
 +
-+struct bpf_nf_ctx {
-+	int f;
-+} __attribute__((__bpf_core_pai));
++#if __has_attribute(preserve_static_offset)
++SEC("tc")
++__success
++int skb_merge_loads(struct __sk_buff *skb)
++{
++	__u32 value;
 +
- 
- /* BPF kfuncs */
- #ifndef BPF_NO_KFUNC_PROTOTYPES
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-index 9104c059a315..0277f054410c 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-@@ -20,6 +20,18 @@
-  *	};
-  *	enum { E0 = 1 };
-  *	struct s { int f; };
-+ *	struct __sk_buff {
-+ *		int len;
-+ *		union { int sk; };
-+ *	};
-+ *	struct bpf_sk_lookup {
-+ *		union {
-+ *			union { int cookie; };
-+ *			int family;
-+ *		};
-+ *	};
-+ *	struct bpf_tcp_sock { int snd_cwnd; };
-+ *	struct bpf_nf_ctx { int f; };
-  */
- static struct btf *mk_btf(void)
- {
-@@ -42,6 +54,25 @@ static struct btf *mk_btf(void)
- 	btf__add_struct(btf, "s", 4);
- 	btf__add_field(btf, "f", 1, 0, 0);
- 
-+	btf__add_union(btf, NULL, 4);
-+	btf__add_field(btf, "sk", 1, 0, 0);
-+	btf__add_struct(btf, "__sk_buff", 8);
-+	btf__add_field(btf, "len", 1, 0, 0);
-+	btf__add_field(btf, NULL, 6, 32, 0);
++	if (skb->len)
++		value = skb->pkt_type;
++	else
++		value = skb->mark;
++	return value;
++}
++#endif
 +
-+	btf__add_union(btf, NULL, 4);
-+	btf__add_field(btf, "cookie", 1, 0, 0);
-+	btf__add_union(btf, NULL, 4);
-+	btf__add_field(btf, NULL, 8, 0, 0);
-+	btf__add_field(btf, "family", 1, 0, 0);
-+	btf__add_struct(btf, "bpf_sk_lookup", 4);
-+	btf__add_field(btf, NULL, 9, 0, 0);
-+
-+	btf__add_struct(btf, "bpf_tcp_sock", 4);
-+	btf__add_field(btf, "snd_cwnd", 1, 0, 0);
-+	btf__add_struct(btf, "bpf_nf_ctx", 4);
-+	btf__add_field(btf, "f", 1, 0, 0);
-+
- 	VALIDATE_RAW_BTF(
- 		btf,
- 		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-@@ -52,6 +83,22 @@ static struct btf *mk_btf(void)
- 		"[4] ENUM '(anon)' encoding=UNSIGNED size=4 vlen=1\n"
- 		"\t'E0' val=1",
- 		"[5] STRUCT 's' size=4 vlen=1\n"
-+		"\t'f' type_id=1 bits_offset=0",
-+		"[6] UNION '(anon)' size=4 vlen=1\n"
-+		"\t'sk' type_id=1 bits_offset=0",
-+		"[7] STRUCT '__sk_buff' size=8 vlen=2\n"
-+		"\t'len' type_id=1 bits_offset=0\n"
-+		"\t'(anon)' type_id=6 bits_offset=32",
-+		"[8] UNION '(anon)' size=4 vlen=1\n"
-+		"\t'cookie' type_id=1 bits_offset=0",
-+		"[9] UNION '(anon)' size=4 vlen=2\n"
-+		"\t'(anon)' type_id=8 bits_offset=0\n"
-+		"\t'family' type_id=1 bits_offset=0",
-+		"[10] STRUCT 'bpf_sk_lookup' size=4 vlen=1\n"
-+		"\t'(anon)' type_id=9 bits_offset=0",
-+		"[11] STRUCT 'bpf_tcp_sock' size=4 vlen=1\n"
-+		"\t'snd_cwnd' type_id=1 bits_offset=0",
-+		"[12] STRUCT 'bpf_nf_ctx' size=4 vlen=1\n"
- 		"\t'f' type_id=1 bits_offset=0");
- 
- 	return btf;
++char _license[] SEC("license") = "GPL";
 -- 
 2.56.0
 
