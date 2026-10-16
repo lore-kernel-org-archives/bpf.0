@@ -1,121 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73D317D6
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B152CCB5;
+	Fri, 16 Oct 2026 00:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792109540; cv=none; b=M2nMWGAM53INWHQqWTN3HFYsJwAhcLA40PLFx1i/TBthUswe1wM1RtHjeLub/VuwOkt3KmnZtEnYMW7/WA50VynnF6HbN9LbXvg4sDFbsVukyy8NNRGhFpvgZPmuMVZTrBWVWJ3H2TwjPN5Lv+teWIBkLfUj4mzNMisAFAtBcZQ=
+	t=1792109655; cv=none; b=ilt5nnmwHjVQeJUm5BiZ/ge3s9krUHrGiV8gUP27iaUyhUpVOqm3PhTFf+vbiaVYP4NeUOKU1Lx/0sKHv72lZkJjeayMxNyBxrD6nGqZYhHcYKJqrPiLK2U5U6IQTXykLJEJ/s2Ukh81RzNf0NyL7FBYCkeQqwDfEZ+VTakPeN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792109540; c=relaxed/simple;
-	bh=863TEG21esQeZ001LTsJU8zAqH1YK4E+9xI+dUgUPBE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=DvGJwLn00FmuUxf8cLgx5fvy11RVz8R4R+xQIKHhKmbbabt6IWSZGeYX6686jmMUktIBOXzrRRW1npzPdx4DYw2EEqBuRXEEpCuxKykzAUWKflm06bo/ypeZjBy1pVCEt8+Xh542K0ycMMP1tSVF+CvbfP1rrhWJEkM7zkLB/Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mradwwFh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792109655; c=relaxed/simple;
+	bh=U9Orm4nOHuyJymi4NI9f7YSIcR+1QTrHP8U/nZRzaw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DClZ34Y4FG1PLPbKC+wKTpMh7MO+IaP4GeI7Hd2JEPWCcjexF2721hn4gtdzptR5P8g2rdbDhkCyhQt7ctkbsRqujEjFe0sE9qTm+5hH2Ak6mw/fnCD9tE+4R2UTOWDf2YHxZoFi0l7DykMMIP9/4CdbXN1XcDdWFZDMi2c1+Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U9+CnYCj; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mradwwFh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0176F1F000C4;
-	Fri, 16 Oct 2026 00:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792109539;
-	bh=qv7NoB7Vfe/gtBjs1oIl8e5YRq2N8GUMaQTz7B3IFXY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mradwwFhDhmqxs88K9WB+LIHcTZvXTVqabOszNeINa2zJLZ2bCGITsynMY1s/f6jn
-	 +NdJ32bZkcDTDLmJlZnmZBNaS01U2bj8NHB4fNyJjjCY55h++hC2wXCukDBSaAm2MC
-	 JDTQ60hSyfqHKpCC40SPfjjV7UmcU1Y/oz+rYF8+ve7j9W8LBhMLJOz+6gf+lrtzDu
-	 11cn47F6MJHLqfBVUv0jgsWDGuGPpaVL9p+as/THY1OdBwlQZ9shT2zhY1OVBthb7W
-	 FQKhG6mG1AkimVwxy8uJ1aUcvC1xWmSOTYjn52H76tulTH3qgQig0XZd7D0A1GGNbU
-	 RCkpQKlAWjTew==
-Content-Type: multipart/mixed; boundary="===============7080161416199133746=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U9+CnYCj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792109653; x=1823645653;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=U9Orm4nOHuyJymi4NI9f7YSIcR+1QTrHP8U/nZRzaw4=;
+  b=U9+CnYCjb+8+O9QnppL3bDK5vc8l1WSPFoJ/m7Xw/NsVQ0bNbUiJ6SyG
+   7RUDJ0sG30G9YPHkZxEpV7hwRe5+lMdOOXXb2wQMmyw1oAalxW3MWl+2d
+   mFcZ4J9V9ycBnnGbquCA64eIySKY/8gSG8TNNlie88MqLw2Gy0DeLRVbt
+   YT1esx0OdAZSwTYAhp32EXYXoQc3y6p+oLF4kPlM3QI5diWsb8en3vhfL
+   sHrflGhRWdK1P3j0sJiEEECJ2MUU1mGIO/AxiUq6m/YoKjHDKA7LyLcrm
+   FI1GEpWaB4YKQDHPMtTn+UYFa83dzLvcp7La68NoRvPe2xK6HHViaHq0P
+   A==;
+X-CSE-ConnectionGUID: 2xJ86AB0R1atHwHeUqKpqw==
+X-CSE-MsgGUID: FkBBMR7rTMmjSAUMXl/lxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="790278"
+X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
+   d="scan'208";a="790278"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 17:14:12 -0700
+X-CSE-ConnectionGUID: dwoc/oV7RjuCbSYGJPTTQA==
+X-CSE-MsgGUID: siMVLyqlS8acEDzzKq3Mow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
+   d="scan'208";a="1751809"
+Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.241.239]) ([10.124.241.239])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 17:14:07 -0700
+Message-ID: <21f5386f-52c1-4687-a35c-54fb3783c12e@linux.intel.com>
+Date: Fri, 16 Oct 2026 08:14:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <09ff65e702dbde27dbdcda03069714faf85a6f5d98c860082177e8def01ac7f1@mail.kernel.org>
-In-Reply-To: <20261015234125.3152346-5-memxor@gmail.com>
-References: <20261015234125.3152346-5-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v3 04/15] selftests/bpf: Clone a program that calls a module kfunc
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 16 Oct 2026 00:12:17 +0000 (UTC)
-
---===============7080161416199133746==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] perf/x86/amd/lbr: Limit branch snapshots to valid
+ entries
+To: Sandipan Das <sandipan.das@amd.com>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Thomas Gleixner <tglx@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+ Ravi Bangoria <ravi.bangoria@amd.com>,
+ Ananth Narayan <ananth.narayan@amd.com>
+References: <cover.1792064123.git.sandipan.das@amd.com>
+ <21b52422864cea9f768ddee6be48102954cef984.1792064123.git.sandipan.das@amd.com>
+Content-Language: en-US
+From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
+In-Reply-To: <21b52422864cea9f768ddee6be48102954cef984.1792064123.git.sandipan.das@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Clone a program that calls a module kfunc
+LGTM. Thanks.
 
-TL;DR: Test issue: the new selftest may hard-fail instead of skipping when
-bpf_testmod.ko isn't loaded, since it lacks an env.has_testmod check; the
-review rates practical impact as low.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
-> new file mode 100644
-> index 000000000000..fa6ccbaa7fd9
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
-
-[ ... ]
-
-> +void test_clone_module_kfunc(void)
-> +{
-> +	struct kfunc_call_test *skel;
-> +	int err, fd;
-> +
-> +	skel = kfunc_call_test__open();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		return;
-> +
-> +	err = bpf_object__prepare(skel->obj);
-> +	if (!ASSERT_OK(err, "prepare"))
-> +		goto out;
-
-A subsystem pattern flags this as potentially concerning: the selftests
-guidance says a test that fails because a capability or prerequisite is
-absent should skip instead of fail.
-
-This test depends on bpf_testmod.ko, since the kfunc_call_test programs call
-module kfuncs such as bpf_testmod_test_mod_kfunc() and bpf_kfunc_call_test1(),
-and the module BTF fd in slot 1 of the fd_array is the point of the test.
-When test_progs cannot load the module it sets env.has_testmod to false and
-prints that selftests relying on bpf_testmod.ko will be skipped.  Other
-module-dependent tests such as ksyms_module.c, btf_module.c and tp_btf_ids.c
-start with:
-
-    if (!env.has_testmod) {
-        test__skip();
-        return;
-    }
-
-Without the module, bpf_object__prepare() would fail in
-bpf_object__resolve_externs() with -ESRCH because the non-weak module kfunc
-extern is not found, and ASSERT_OK(err, "prepare") reports a hard failure.
-
-Should test_clone_module_kfunc() check env.has_testmod and call test__skip()
-before opening the skeleton?
-
-For context, the guidance names errno values like EOPNOTSUPP and ENOSYS, and
-this test checks no errno, so the match is by spirit rather than by letter.
-The sibling prog_tests/kfunc_call.c uses the same skeleton without a
-has_testmod check, and the failure only appears where the module is not
-available, so the practical impact looks low.
-
-> +
-> +	fd = bpf_program__clone(skel->progs.kfunc_call_test1, NULL);
-> +	if (ASSERT_GE(fd, 0, "clone"))
-> +		close(fd);
-> +out:
-> +	kfunc_call_test__destroy(skel);
-> +}
+Reviewed-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38826834739
---===============7080161416199133746==--
+On 10/15/2026 7:46 PM, Sandipan Das wrote:
+> The branch snapshot callback used by bpf_get_branch_snapshot() copies
+> up to x86_pmu.lbr_nr entries from cpuc->lbr_entries[], even when the
+> last LBR read kept fewer branches. The entries past lbr_stack.nr are
+> invalid, but they end up reaching BPF programs.
+>
+> Limit copying to lbr_stack.nr entries and also reset lbr_stack.nr when
+> amd_pmu_lbr_read() skips reading the registers, so that a stale count
+> is never reused.
+>
+> Fixes: a4d18112e531 ("perf/x86/amd: Support capturing LBR from software events")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://lore.kernel.org/all/sashiko-outbox-163130@kernel.org/
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> ---
+>  arch/x86/events/amd/core.c | 2 +-
+>  arch/x86/events/amd/lbr.c  | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+> index 49b6b8fce566..bf631f60757c 100644
+> --- a/arch/x86/events/amd/core.c
+> +++ b/arch/x86/events/amd/core.c
+> @@ -944,7 +944,7 @@ static int amd_pmu_v2_snapshot_branch_stack(struct perf_branch_entry *entries, u
+>  	cpuc = this_cpu_ptr(&cpu_hw_events);
+>  
+>  	amd_pmu_lbr_read();
+> -	cnt = min(cnt, x86_pmu.lbr_nr);
+> +	cnt = min(cnt, cpuc->lbr_stack.nr);
+>  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
+>  
+>  	amd_pmu_v2_enable_all(0);
+> diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
+> index 1e1b2f08cb51..a00d3850c4a8 100644
+> --- a/arch/x86/events/amd/lbr.c
+> +++ b/arch/x86/events/amd/lbr.c
+> @@ -165,8 +165,10 @@ void amd_pmu_lbr_read(void)
+>  	struct branch_entry entry;
+>  	int out = 0, idx, i;
+>  
+> -	if (!cpuc->lbr_users)
+> +	if (!cpuc->lbr_users) {
+> +		cpuc->lbr_stack.nr = 0;
+>  		return;
+> +	}
+>  
+>  	for (i = 0; i < x86_pmu.lbr_nr; i++) {
+>  		entry.from.full	= amd_pmu_lbr_get_from(i);
