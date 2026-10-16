@@ -1,21 +1,20 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F57525A62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DFF39449C
 	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:30:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792175453; cv=none; b=Qw38g6TMBxwXwpmvHLSRFBn32eai+/O+4eGR/FgpTZwo+LBGm1CKFloXD9rQoHZY92HNLPrfkiH2t2UlHV6OMqACuy34NOQacmnUsboQ4rB6eHqjZu/mzbcJiywaNJhF3XG9jvY/7q4ESoVzx38z4z2oR+Pcu9/y0PcZA4bX8sw=
+	t=1792175453; cv=none; b=lhfu5f8WC2PcBBhS5EZxKg3R8zDf4y8HOZDY74y6rKr/GzptT+IY3ayDybylT5vfSFQDcVRBVbCGJMbmOevU8tvoMFI+0KB4UjJKI4oRyFDjDt0HaZPh1HwsMxm34PWBCuYiRgPEQz7DLxLOTqXmPxS4SJ1zArcOv9BTPBom8p4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792175453; c=relaxed/simple;
-	bh=RPZHFiYPky4F9o+QG9gVYg598mjFwAdUYppMWdtSGBc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X5085Hsne1fVEgmh4RpBm9wi0DQXBKXHWnpBtDX9qgarCCfigMWcjgFcgmauszwNEgq2JTRa4NxG1JdLuxP//b161ELZURk6rTMNAb0QXKjvIGJPoCxFEeks2BCAdkasUucO+VDtVFp4CCJqSJPUhcgxVhfFxLasBxiKcjgCWKU=
+	bh=SN7pmNV1Ffe9hqUEYftciwWiPZsVEA/wYBPEisdEOiA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pio7C1xoY2Sz6lf61mU2iCc9y/+pY24e0y/gpsmtuqNrqdX1TZ3EHEaSRRx5Jk6csNMHutM73NEzcoD9YP5G2ApUUcJ5ChbkLOQPjsrNOLNMFU6Esp3dTU52CrG8hyhgJQIGAX+XojZY1nyyeHTYS+g4vOVRsjAl7HQV+wGqopE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 8993231A0D4A18; Fri, 16 Oct 2026 11:30:44 -0700 (PDT)
+	id 6EA5331A0D41EE; Fri, 16 Oct 2026 11:30:39 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,12 +22,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v4 1/9] bpf, x86: Pass a trampoline's stack arguments by the calling convention
-Date: Fri, 16 Oct 2026 11:30:44 -0700
-Message-ID: <20261016183044.1132751-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 0/9] bpf: Follow up by-value struct and __int128 argument support
+Date: Fri, 16 Oct 2026 11:30:39 -0700
+Message-ID: <20261016183039.1132126-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261016183039.1132126-1-yonghong.song@linux.dev>
-References: <20261016183039.1132126-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,130 +34,134 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A trampoline on a function of a program that can tail call keeps the
-tail call counter pointer by pushing rax after allocating its frame.
-When it calls the original function, for fexit, fmod_ret or fsession,
-the push sits between the stack arguments and the return address, which
-the x86-64 calling convention does not allow. For example, in
+This is a follow-up to the series "bpf: Support by-value struct and
+__int128 arguments" [1], which placed kfunc arguments by the kernel
+calling convention in the x86-64 and arm64 JITs, and made the arm64
+trampoline place an argument aligned to 16 bytes: an __int128, or an
+aggregate holding one. This series covers what was left, and a few
+problems found on the way:
 
-	run() -> call_stack() -> callee_stack(a, b, c, d, e, f, g, h)
-	run() -> subprog_tail() -> bpf_tail_call()
+  - The x86-64 trampoline. x86-64 starts such an argument passed on the
+    stack at a 16-byte aligned slot, which can leave an empty slot
+    before it, but the trampoline copied the stack arguments as if
+    there were none. A bpf program attached to such a function read the
+    wrong values from the empty slot on, and with fexit, where the
+    trampoline calls the traced function itself, that function got its
+    stack arguments one slot off as well.
 
-callee_stack() is not on the path to the tail call, so the verifier
-allows its stack arguments g and h. fexit on it builds, with T the
-trampoline's rbp:
+  - A trampoline on a BPF function. BPF code calls one with argument
+    slot N where the kernel convention passes its Nth u64 argument, but
+    the trampolines placed the arguments by their types: arm64 left a
+    register empty before a 16-byte argument, x86-64 would not split one
+    between r9 and the stack, and s390 took one as a pointer to it. Such
+    a function is now described to its trampoline as one u64 per slot.
 
-	T-120  h                  save_args()
-	T-128  g                  save_args(), RSP after sub rsp, 128
-	T-136  tail_call_cnt_ptr  push rax, RSP at the call
-	T-144  return address     call orig_call
+  - The x86-64 trampoline on a function of a program that can tail call
+    pushed the tail call counter pointer between the stack arguments and
+    the return address.
 
-and callee_stack() finds the counter pointer where g belongs, at 8(%rsp)
-on entry, and g where h belongs.
+  - A static function whose BTF is unreliable could still take stack
+    arguments, while its trampoline saved and restored only five
+    registers. Attaching to such a function is now refused.
 
-Keep the pointer in a slot of the frame instead, so that the stack
-arguments sit right above the return address again:
+  - Tests with an __int128 at an odd slot, where arm64 leaves a register
+    or a stack slot empty. On arm64 such a kfunc gets BTF only with the
+    pahole patch [2], now in pahole master after v1.32, so these tests
+    were not part of [1].
 
-	T-120  tail_call_cnt_ptr  mov [rbp - 120], rax
-	T-128  (pad to 16)
-	T-136  h                  save_args()
-	T-144  g                  save_args(), RSP at the call
-	T-152  return address     call orig_call
+Patch 1 keeps the x86-64 trampoline's tail call counter pointer clear of
+the stack arguments, and patch 2 tests it. Patch 3 adds the odd-slot
+kfunc tests. Patch 4 describes a BPF function to its trampoline as one
+u64 per slot, and patch 5 places the x86-64 trampoline arguments by the
+calling convention. Patches 6 and 7 test trampolines on kernel functions
+and on BPF functions with an argument after a 16-byte aligned one, the
+latter on s390x as well. Patch 8 refuses a trampoline on an unreliable
+static function with stack arguments, and patch 9 tests it, along with a
+BPF function whose 16-byte argument x86-64 splits between r9 and the
+stack.
 
-Fixes: 324c3ca6eed6 ("bpf,x86: Implement JIT support for stack arguments"=
-)
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- arch/x86/net/bpf_jit_comp.c | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
+  [1] https://lore.kernel.org/bpf/20260912195156.980886-1-yonghong.song@l=
+inux.dev/
+  [2] https://lore.kernel.org/dwarves/20260917164043.1577508-1-yonghong.s=
+ong@linux.dev/
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 3975a94ac812..fc4c67fc201c 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -4102,9 +4102,9 @@ static int invoke_bpf_mod_ret(const struct btf_func=
-_model *m, u8 **pprog,
- 	return 0;
- }
-=20
--/* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
--#define LOAD_TRAMP_TAIL_CALL_CNT_PTR(stack)	\
--	__LOAD_TCC_PTR(-round_up(stack, 8) - 8)
-+/* mov rax, qword ptr [rbp - off] */
-+#define LOAD_TRAMP_TAIL_CALL_CNT_PTR(off)	\
-+	__LOAD_TCC_PTR(-(off))
-=20
- /* Example:
-  * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
-@@ -4174,6 +4174,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- {
- 	int i, ret, nr_regs =3D m->nr_args, stack_size =3D 0;
- 	int regs_off, func_meta_off, ip_off, run_ctx_off, arg_stack_off, rbx_of=
-f;
-+	int tcc_off =3D 0;
- 	struct bpf_tramp_nodes *fentry =3D &tnodes[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_nodes *fexit =3D &tnodes[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_nodes *fmod_ret =3D &tnodes[BPF_TRAMP_MODIFY_RETURN];
-@@ -4224,11 +4225,12 @@ static int __arch_prepare_bpf_trampoline(struct b=
-pf_tramp_image *im, void *rw_im
- 	 *
- 	 * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
- 	 *
-+	 * RBP - tcc_off   [ tail_call_cnt_ptr ]  BPF_TRAMP_F_TAIL_CALL_CTX
-+	 *
- 	 *                     [ stack_argN ]  BPF_TRAMP_F_CALL_ORIG
- 	 *                     [ ...        ]
- 	 *                     [ stack_arg2 ]
- 	 * RBP - arg_stack_off [ stack_arg1 ]
--	 * RSP                 [ tail_call_cnt_ptr ] BPF_TRAMP_F_TAIL_CALL_CTX
- 	 */
-=20
- 	/* room for return value of orig_call or fentry prog */
-@@ -4259,6 +4261,11 @@ static int __arch_prepare_bpf_trampoline(struct bp=
-f_tramp_image *im, void *rw_im
- 	stack_size +=3D (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
- 	run_ctx_off =3D stack_size;
-=20
-+	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX) {
-+		stack_size +=3D 8;
-+		tcc_off =3D stack_size;
-+	}
-+
- 	if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
- 		/* the space that used to pass arguments on-stack */
- 		stack_size +=3D (nr_regs - get_nr_used_regs(m)) * 8;
-@@ -4311,7 +4318,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- 	/* sub rsp, stack_size */
- 	emit_sub_rsp(&prog, stack_size);
- 	if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
--		EMIT1(0x50);		/* push rax */
-+		/* mov QWORD PTR [rbp - tcc_off], rax */
-+		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -tcc_off);
- 	/* mov QWORD PTR [rbp - rbx_off], rbx */
- 	emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_6, -rbx_off);
-=20
-@@ -4372,7 +4380,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- 			/* Before calling the original function, load the
- 			 * tail_call_cnt_ptr from stack to rax.
- 			 */
--			LOAD_TRAMP_TAIL_CALL_CNT_PTR(stack_size);
-+			LOAD_TRAMP_TAIL_CALL_CNT_PTR(tcc_off);
- 		}
-=20
- 		if (flags & BPF_TRAMP_F_ORIG_STACK) {
-@@ -4436,7 +4444,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf=
-_tramp_image *im, void *rw_im
- 		/* Before running the original function, load the
- 		 * tail_call_cnt_ptr from stack to rax.
- 		 */
--		LOAD_TRAMP_TAIL_CALL_CNT_PTR(stack_size);
-+		LOAD_TRAMP_TAIL_CALL_CNT_PTR(tcc_off);
- 	}
-=20
- 	/* restore return value of orig_call or fentry prog back into RAX */
+Changelogs:
+  v3 -> v4:
+    - v3: https://lore.kernel.org/bpf/20261013170910.2126673-1-yonghong.s=
+ong@linux.dev/
+    - Drop v3 patches 10 and 11 (16-byte aligned kfunc stack argument
+      on x86-64); no kfunc in the tree needs it.
+    - Drop byte-order based ctx indexing for the __int128 struct
+      argument; tests on BPF functions use BPF_PROG2(). (patches 6, 7
+      and 9)
+    - Run the test on BPF functions on s390x too. The functions taking
+      stack arguments are built only for x86 and arm64. (patch 7)
+    - Say that patch 4 also fixes the s390 trampoline on a BPF function
+      taking a 16-byte argument. (patch 4)
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20261013003429.1853052-1-yonghong.s=
+ong@linux.dev/
+    - Index the two halves of a struct holding an __int128 in ctx by the
+      byte order, so the tracing tests also hold on a big-endian
+      kernel. (patches 6, 7 and 9)
+    - Say that only x86-64 BPF code splits a 16-byte argument between r9
+      and the stack; on arm64 nothing is split. (patches 4 and 9)
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20261009064206.1238047-1-yonghong.s=
+ong@linux.dev/
+    - Replace the bpf_tgt_prog flag of v1 patch 2, which only
+      bpf_jit_place_args() looked at, with a model of one u64 per
+      argument slot for a BPF function, built in
+      bpf_check_attach_target(). This also fixes the arm64 trampoline,
+      which took a 16-byte argument split between x7 and the stack as
+      wholly in registers, without any arch change. (patch 4)
+    - Refuse a trampoline on a static function whose BTF is unreliable
+      but which takes stack arguments. (patches 8 and 9)
+    - New: keep the x86-64 trampoline's tail call counter pointer in a
+      slot of its frame instead of pushing it between the stack
+      arguments and the return address. (patches 1 and 2)
+    - New: pass a kfunc's 16-byte aligned stack argument 16-byte aligned
+      in the x86-64 JIT, with bpf_jit_stack_slots_to_align() and
+      bpf_jit_plan_slot_moves() in kernel/bpf/core.c. (patches 10 and
+      11)
+    - Reword the x86-64 placement patch and the BPF function test for
+      the new model. (patches 5 and 7)
+
+Yonghong Song (9):
+  bpf, x86: Pass a trampoline's stack arguments by the calling
+    convention
+  selftests/bpf: Test trampoline stack args in a program that can tail
+    call
+  selftests/bpf: Test by-value __int128 kfunc arguments at an odd slot
+  bpf: Describe a BPF function to its trampoline as one u64 per slot
+  bpf, x86: Place trampoline arguments by the x86-64 calling convention
+  selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
+  selftests/bpf: Test trampoline args of a BPF function at an odd slot
+  bpf: Refuse a trampoline on an unreliable static function with stack
+    args
+  selftests/bpf: Test trampolines on more BPF functions with stack args
+
+ arch/x86/net/bpf_jit_comp.c                   | 211 +++++++++--------
+ kernel/bpf/verifier.c                         |  66 +++++-
+ .../selftests/bpf/prog_tests/tracing_struct.c | 217 +++++++++++++++++-
+ .../selftests/bpf/progs/aggregate_arg_kfunc.c |  71 ++++++
+ .../progs/tracing_stack_arg_tailcall_tgt.c    |  59 +++++
+ .../progs/tracing_stack_arg_tailcall_tracer.c |  23 ++
+ .../bpf/progs/tracing_struct_int128.c         |  45 ++++
+ .../bpf/progs/tracing_struct_int128_tgt.c     | 101 ++++++++
+ .../bpf/progs/tracing_struct_int128_tracer.c  |  77 +++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  69 ++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  13 ++
+ 11 files changed, 848 insertions(+), 104 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_stack_arg_t=
+ailcall_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_stack_arg_t=
+ailcall_tracer.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tracer.c
+
 --=20
 2.53.0-Meta
 
