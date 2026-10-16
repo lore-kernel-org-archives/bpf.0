@@ -1,141 +1,98 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C96257827
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 01:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D68322A1F
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 01:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792112907; cv=none; b=rCWq0vlYUjGcL2niANR906MuQNS/FhIzlXWwayO9b6C+lFOtgvd0+mbK4mK7l1ZZBh7VVT0/nd0F1FTnynvdbtbSfTOQxjjm8yc2VQRUFmqXziZ4W0L/I0xFFMasNQTvq2j0GcMc8prTCK34B9K3ypu8mac96dbIOYAaBUmzBC8=
+	t=1792113003; cv=none; b=YFtslis4E99v2ouFC5+yXplDx52WtL5JkK1JrFtsr13htkH+25GtK147Nk6A+jjL/x7foqP7LRd+5sUVZ1cZYZhvBmjaQ21DWCB+NOoNhe0+n9k7sB/Yq/g3RVIJCU8Ce6YEFNoLSFgRkiOzUDAYKXjzgqz06ukI0q/751pOL8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792112907; c=relaxed/simple;
-	bh=Iz4YOTsmD7veUO3iudU+wuEJxP/eGedm4I6vX5uI78g=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=mfLABODnl0LmyoFksA2UgpAS3+q4Yrrx2dyGkZHc2I11h7rKsBGBWuFVY1PRJ+gbXST0YvzIbmj3X5hCkTJrlDBW9u5NBLzhxa+ge0JCeOxu3NdcUSl0fzSaKTlQApsWSmG1l7QTecQE5Dq8FsK5O2ZRTaUz8FXV0VrqbCw1oj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s4qz5wwK; arc=none smtp.client-ip=209.85.215.175
+	s=arc-20240116; t=1792113003; c=relaxed/simple;
+	bh=jUUm2iRYcjaZSF2K8MfCBUO9E0Vvnx4q1k+mEDTtDl8=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=BT1mcMlm5+MlyrpTkylbaWK0XP0Z2/REhx3ontHbI46ymyHjsE3jSukUuUY4N7F/PlJm9n7we65Q+KeavugWrqwdVyUK5QA4thfeclh3SDYnCTEEy4hlPZK8h4QIfOtmWWC2E8Yvf8Ehu28gTJjSNvFcSOyY0tdsQVpOt/4hvII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=erOkb++w; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s4qz5wwK"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cd6028ff33fso2535968a12.0
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:08:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="erOkb++w"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e8ad5b31c7so35259975ad.3
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 18:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792112905; x=1792717705; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=w0+spJL5C4C3eiHVSz7CuLh5ZhYnqXc1ZEKa8rDfKBE=;
-        b=s4qz5wwKYLHvykWMyp118Ti2tpSzamYSYWPyPiCD2X3v6rtDI2u75jJoi8BP70Gze+
-         2rTfuFho30dRAH0i8TaNltf93TaOL8VmVBET+5X+hJ7LltE+aGpst0VaEZyU/1K+e3lQ
-         AroKl04sJ78FSbaQMCge0ggJIE1p4x3vMwqCOa+dvINlsW+z9j+QAK8wkgVsTiKINwmM
-         rL1kACHqtnBpgBdcrZyg0OgeWBMciah31zlF8ywUa7X2wCz7YT8uoBj6E5xVFAanlnT6
-         kJdGL5X8cS39kC0erIlX0+Ac0dl4G7HINPRYfu9cBNUQNcREVkEup8MHV4NbxHD9j9OC
-         1r2g==
+        d=gmail.com; s=20251104; t=1792113001; x=1792717801; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jUUm2iRYcjaZSF2K8MfCBUO9E0Vvnx4q1k+mEDTtDl8=;
+        b=erOkb++wQfVlODqLraUkIlPMtsDwqowUaVL5uWizK8+sgL+qvQpjq3OfRDiRhgU8lr
+         1k63YjYF9jkAo0Qe5kJgm5u81ar0LjC1C2PLW/HUO2ne54xR1oBKRyilHusFwS/9bQ/r
+         fEFfrOrA2Tfg7aZQDASQF7CW3whPt9PwxVk7xQqtekILqoHMJq5SsIs9mQlOzAXPJQFw
+         G9qTJrqFYvx29DG9QLU/O5/egRrB1ZLNp9WvRvS0S6AYk2dX+QQD69K6CH8gLY2UQ29s
+         gQSg5ksj9YcEyVAFHSFNLnGhrUII0K5tsukUljR9P/hQo8bbgmZ4Kmf8PBM1VpxjrPme
+         92zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792112905; x=1792717705;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792113001; x=1792717801;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=w0+spJL5C4C3eiHVSz7CuLh5ZhYnqXc1ZEKa8rDfKBE=;
-        b=gXtt3anQOfqRSRkBmbU0z89fRbHSejHP8mOu6a76creNQNKC8GNJA5MyzHx6hPJmzk
-         XHYtsbzNMe+SGalhzEH8sRboSSu+nyUvYTq4hiCwVY2B26x6FJ+ILv+G4xBocP9Yu9dK
-         TRARAsM/cP7gEg19pnl2MfQU9ekkUQmnroNBBLa+6p07atbH46Gb+1kSUDHYnFCePId4
-         YszFB8lo/BOPsD/Kt1NqzEpAQ7OTDIHsan2iT8w/McWoVzWQc3yd56WGXCd5KCwZuD7o
-         o/YN+o+uqeCWhdTWH4HF893jFnurwzOeDR/i2jaB9Y5Jc60PuG0fhUeOSn/W0o8louUg
-         PeMQ==
-X-Forwarded-Encrypted: i=1; AKwUvByVmr6gUdQemLAqfnq/SuEGI1lMiAEQVVp+jJb81aX58a6IPxIdb6jhb4nOZchBwVxGET4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIOqgH1quJcSbQKd0nUg95N/Yq0dwBCdRTj4WhcqVSQUGfV3SaN
-	pVOoqyJ7EIKcLdyY1cRpzRiglKoCHicEWI19io8nSK08DlYfhgb2qGxT
-X-Gm-Gg: AYBFou15UwyIhe2q3DOyJh0HoVYuiYma1/dvbH/PU3AM9coKbAHCtQwExoiBTVB+tu6
-	+XWG3psPssEBOs1yVTSHDet8/eaKMuLST5UOQ7s/OrdvVVcEfkz53BMjwOF2fJye1NyU+ZqDwWz
-	iP9MRin73ZuhrDZdC8rMajcooYte+gQpMhO1VrQDE5T2VZeJIw0ujcwdCrHEx7YzwsH31oWrclc
-	Md/VGqdInUsK2n5ZboeqeROI99q4PXRN6kUKcNI6KVbzz45novmrkjMoBceghkxq/IGgjc5Uo8G
-	ICozJSh0u1kS8WJsThDa0CytSoqpIh319jrHtemB0CAvASoTvOmEAHY5T2VZuw2r9buau6QcOh4
-	2TNQUQ4XhDpoCtVMO1TnmnHjuWeppKa0ttq3BZgiQG2B5KPqsjnH6RL1n5zdeAYFeRdI7QQl4t8
-	gPRKAISK9LRpVxLFnyscebtZrAZhTfiObzod/8RZFAl0vUh6QlX5V6uBRErY+sSCB/GzO0eNqC9
-	hv0G8Tjmg0X0ebQPDXYysGISi+q80Yb7fwU0l3VijQ6tH5gaYlJ8PJ6pgRcL4lqWkdcoIt/Fx99
-	GyE=
-X-Received: by 2002:a17:90b:17d1:b0:3a6:f1d2:57f8 with SMTP id 98e67ed59e1d1-3ac53df025cmr8318460a91.2.1792112905049;
-        Thu, 15 Oct 2026 18:08:25 -0700 (PDT)
+        bh=jUUm2iRYcjaZSF2K8MfCBUO9E0Vvnx4q1k+mEDTtDl8=;
+        b=y72KMgvM5S0N+WTr9Gdw6uf682du4s9sUPwFx2k/ChIjlTaHHf9oKtvgrFrkQFBjzD
+         M/UwfqFTb0I0mQRJ2YofKJpTvFWjHNyjqgBq2wSWiFmMgBGCgcBQSAlAVAGFqxWAdDMd
+         S1nrsmffln4fhjnuEZCGF2N3DyLG683fYHFN04f59VZFaSIIeF3025tYGfPhDYW+3hy4
+         ztjdwTtpdhvWBSwFDTv1/KaXNAfMq+2l4B3uB52ur1cD9Pd7gaceC70oAIpe/nYLhI+6
+         V9xdbsoVSceHF/epFrMEGdRxkVEcssWPNzkE1nt1cOZAxAKUhq3MnHph5pmCwsTWIL7E
+         S9aw==
+X-Forwarded-Encrypted: i=1; AKwUvBw2qqXdOQSD/o0EE0mEoSQsvfz7Lvi8n6+/RmAGlz5HFAjsgZiPix6TRJ2lkcXoomTNaq4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJQ+tLjdzD8hyQUTGvYtk6s5wXkgnm64fABZVLz/rqq1JJIb6m5
+	Jp2LuEXaifTcHRC2AWTGGOu6AekQkxu0StVh7FFCeqCBuQJ4DNj2Lebv
+X-Gm-Gg: AYBFou1fOvYOIyFoOTTaWdWT2saEnlg8TO/jMW89V4R5N7ELrWbR6jl1KovYw7jFdpb
+	G+pg5j/5yH3gS2Gru9Hqgm2W/BJm4sSpoqjWfmW6HFph3cUkKVTeE7EuHXmNK/+FOhC4fnoF25I
+	b5Va5C2aqob99CbnIvWLBHxrznU+HbzCPqdOeq8+E0OzACJZK2m1WTeWc8AqqV/1/C6WUwlrxnU
+	2w2ybTiHFgBQkn9oZjkAiTqJk6eCbzg7XORwbf+vRyl21yt/qeTJb+p9CV4oJZWK4y0QwQnldLb
+	yHXNABU735HzVPJkmj6DIIpVti0ISassnAl2kb/e8ETW8zcuGfxOJMvQBPPFhiUZqmRfJ2Ask9q
+	KRR+52yGFVV4X8t3lpJI6OlwVtTmcl7W2lNlbsXIMWxOtwhXBC7YsTyV75zJNGO3w03yBBTxrOF
+	zR3BfFI3VeePzWS2UmOLQfTdKZkL0+t5D0yuLnPO0YRmfWQ8RMixZ8Fd+7kkaf/aeMdOqOLHTLX
+	wDRrwAsH7d8Tt3jn61EcgH/HGVU0XsjIYvxr+z8XpCetRc52t6dWx7XB691kard2zcEugq2Chhc
+	G4U=
+X-Received: by 2002:a17:902:cec2:b0:2e8:2f95:764d with SMTP id d9443c01a7336-2e842dfd299mr187176415ad.59.1792113000672;
+        Thu, 15 Oct 2026 18:10:00 -0700 (PDT)
 Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd6549b42b8sm244951a12.12.2026.10.15.18.08.24
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e5d4e51sm2604795ad.1.2026.10.15.18.10.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 18:08:24 -0700 (PDT)
+        Thu, 15 Oct 2026 18:10:00 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 16 Oct 2026 01:09:59 +0000
+Message-Id: <DM5V1EIGVJEG.1IIPS4R40HPA0@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Tejun Heo" <tj@kernel.org>, <kkd@meta.com>,
+ <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 06/15] bpf: Recognize __nullable on pointer
+ members of kernel structs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20261015234125.3152346-7-memxor@gmail.com>
+References: <20261015234125.3152346-1-memxor@gmail.com> <20261015234125.3152346-7-memxor@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 01:08:24 +0000
-Message-Id: <DM5V06J7GLXR.2BJ4ZJ3IN5TT@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Tejun Heo" <tj@kernel.org>,
- <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v3 05/15] compiler_types: Add __arena and
- __nullable BTF type tag qualifiers
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20261015234125.3152346-1-memxor@gmail.com>
- <20261015234125.3152346-6-memxor@gmail.com>
-In-Reply-To: <20261015234125.3152346-6-memxor@gmail.com>
+MIME-Version: 1.0
 
-On Thu Oct 15, 2026 at 11:41 PM UTC, Kumar Kartikeya Dwivedi wrote:
-> Kernel structures increasingly want to publish pointers into a BPF arena
-> to the BPF programs they are shared with, and some pointer members that
-> reach programs as trusted are legitimately NULL at times. Neither can be
-> expressed today: a pointer member reaches the program as an ordinary
-> kernel pointer, and sched_ext resorts to a plain u64 holding a
-> pre-translated arena address that programs cast before use.
->
-> Define __arena and __nullable as BTF type tags, the way __user, __rcu
-> and __percpu already are, so that tagged members survive into vmlinux
-> and module BTF and the verifier can act on them. To kernel code and to
-> sparse the qualifiers are empty: the pointers are ordinary kernel
-> pointers. The verifier side follows in the next patches.
->
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  include/linux/compiler_types.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_type=
-s.h
-> index c5921f139007..e97ee2d4d1df 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -51,6 +51,8 @@
->  # define __iomem	__attribute__((noderef, address_space(__iomem)))
->  # define __percpu	__attribute__((noderef, address_space(__percpu)))
->  # define __rcu		__attribute__((noderef, address_space(__rcu)))
-> +# define __arena
-> +# define __nullable
->  static inline void __chk_user_ptr(const volatile void __user *ptr) { }
->  static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
->  /* other */
-> @@ -70,6 +72,14 @@ static inline void __chk_io_ptr(const volatile void __=
-iomem *ptr) { }
->  # define __iomem
->  # define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
->  # define __rcu		BTF_TYPE_TAG(rcu)
-> +/*
-> + * Qualifiers for the BPF verifier rather than address spaces: __arena m=
-arks
-> + * a pointer into a BPF arena, __nullable a pointer that may be NULL. Th=
-ey
-> + * reach BPF programs as BTF type tags on kernel struct members; to kern=
-el
-> + * code the pointers are ordinary.
-> + */
-> +# define __arena	BTF_TYPE_TAG(arena)
-> +# define __nullable	BTF_TYPE_TAG(nullable)
+On Fri, Oct 16, 2026 at 01:41 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> it on, as the tag says. A tagged member of an existing struct thus asks
+> every program that reads it for a check, including one that reads it
+> through a probed pointer and relied on a NULL dereference reading as
+> zero.
 
-I feel this is too early to put this for the whole kernel to use.
-Only couple fields in sched-ext need it, right?
-So sched-ext can define them locally.
+Commit log reads like BTF_TYPE_SAFE_*() can go away one day,
+but with this change adding __nullable to a member of task_struct
+breaks every tracing prog that walks through it without a check.
+So the tag cannot be added to existing structs and
+BTF_TYPE_SAFE_*_OR_NULL lists are here to stay, right?
 
