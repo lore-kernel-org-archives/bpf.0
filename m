@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652D625393E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0C635836E;
 	Fri, 16 Oct 2026 14:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792162710; cv=none; b=a4j8EPqD53DMp4zwTIVEaLkneDKLvi36uQCJgc7mrdCafQajjJNXX3cHv6XmQlONOeAGXfCJnV/0o30h9qXpZpUGQ4vZ7W8C4jxLMNs0CKlAMo6vP+zloM8e7OWq3rQifqLFzcijmx9tJp8zdjtwVN68OJxuhUvHOFuYxIIiggU=
+	t=1792162711; cv=none; b=aiWXDJgJnswaGHjG5E/tmb7U7v8Z7+ipcHix+AaV8CgL6ixMnGll2OeE/Ropc+xyePdlKESl75PE5dbVV2j2Q27ZxZAZ/Qy3OWNtlIEOlseXFKHrjQXz8sF6bW2LSAu6sTHX9j3hLt8GI6s6BkTcMtEkMBYB80wCTFbImN4bjIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792162710; c=relaxed/simple;
-	bh=P+i/1P6kAVyRCsimt7I10I57QvG7dcXXak0hAzw9nPE=;
+	s=arc-20240116; t=1792162711; c=relaxed/simple;
+	bh=G+SPmLkBW1fXUjGyTjP32KXJfHC9PjVmZm3aijMhdBU=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=luGD8Xcj5bq4rVYXFQK9GlEBxJLhNSp0KHIE6HJmkB2Kb//ou6S4V/pAYpUIdOXjEDP55y9tZtCFRu+imzNh/LuURN7dLiETGoxcCHZERlHoVfoZvwGif7OmVGdg0FGBwH8zW5mgw7cpdmX9z2EqofLvGW+L9qfhqmd/XuKZohI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BofuF3E0; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=MksEEudDVO+4RaEMlkBNQRgbjkY4ImbOrwjZEYXDl/LyOickhVFqxAFKlXtyBnISiXIoVZwcuJ9wBV0wziVCgwSVy5eblotemq0e+YVKazQrMIVqQtQ/DAkZ1nOnECxLnkv0EBYZK2I/1KR/bLnvnJbW3NdO+sqOt9WF6o4q+S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVCcudLy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BofuF3E0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56C51F000C4;
-	Fri, 16 Oct 2026 14:58:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVCcudLy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D8E71F000C5;
+	Fri, 16 Oct 2026 14:58:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1792162709;
-	bh=NloS2JQ8zk67r6FG92N8ouwpSmvC4h1LM3iGLYFZXbE=;
+	bh=WJb5qae4lmzBx/9CbIcNr6fNsbl7w9tJ+X/B74jHhtI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BofuF3E0SnbBZba+pwhXjPk7yrZ6vFxvkZ03LaQczA3hqzlKAxeE+UUqVYg6yvIU6
-	 ksPW6Q8Dfp6tDYzqYWE8uF2tGIU9QGKA6OLT6mXraF4n1e2ralk4yDH/8lgaRuLBFU
-	 xj9Hvpoq2q2xRcZNzBZL31x7DnGCIywuiqPkOKh9nhSzr/k7npzpDWo62QB4QZUpau
-	 F2gmqx7VU7UToeaygWpidh5IQc66mxn5JviO+ghTX4QpyzFn1JwjKAiB4MYf3jISNh
-	 IT1sOkcnrTHFL0ZV8/LPYnaBDaLC0YjPHQAAFy5KZG+E6UeNvFokQh454VgKxR+rww
-	 FiAQ89Q0bkLEQ==
-Message-ID: <sashiko-outbox-174508@kernel.org>
+	b=WVCcudLyAo9to0gzS0jX6T3rO1Gh2NfJ8lLL2VMvOQ1VAhYewylVTj0Q3NnIcU/wx
+	 6s+okYtWe/Xb54JcrXDJR5Q+VDS5dM3cYse3H+7lyAIiyOq2fYt0vnLuFRv9FymV5s
+	 tittv+gAjiUG26aMaAChI6W0OeEYP0eBOwU/ttPwCiwEH/SpeenmYzMMlvkQ/RPILk
+	 aKz9tytxvpwEAZJ6dfs2ywcNjyK50Xfhvu6n6RaT5wet8V0oaRB5/d/z2fpAzmY9Vg
+	 Aybmz/+CG2h+qe4bAuzmMBWn1DnQptop2KQt+vh8ud22JM1ORdOpK9ZfyAWlmTDRe+
+	 FUwy0Vy+DCQaQ==
+Message-ID: <sashiko-outbox-174509@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v3 1/2] net: stmmac: Introduce group arguments
- for enable/disable_dma_irq
+Subject: Re: [PATCH net-next v3 2/2] net: stmmac: Avoid freeing and
+ re-requesting IRQ during XDP set prog
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Thompson" <daniel@riscstar.com>
 Cc: bpf@vger.kernel.org, linux-sunxi@lists.linux.dev
-In-Reply-To: <20261015-tc956x-stmmac-no_irq_teardown-v3-1-8189870be545@riscstar.com>
+In-Reply-To: <20261015-tc956x-stmmac-no_irq_teardown-v3-2-8189870be545@riscstar.com>
 References: <20261015-tc956x-stmmac-no_irq_teardown-v3-0-8189870be545@riscstar.com>
- <20261015-tc956x-stmmac-no_irq_teardown-v3-1-8189870be545@riscstar.com>
+ <20261015-tc956x-stmmac-no_irq_teardown-v3-2-8189870be545@riscstar.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 16 Oct 2026 14:58:28 +0000
+Date: Fri, 16 Oct 2026 14:58:29 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,88 +47,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] net: stmmac: hardcoded generic OTHER masks break variant-specific =
-IRQs
+- [High] net: stmmac: Use-After-Free in stmmac_tx_err() due to active ISR a=
+fter DMA descriptors freed
 --
 
-commit 6b53d33b472c115af2d55abc75c5663ee8048b05
+commit 4c2320440039ed3235615c60f92cbcfdc0584d5a
 Author: Daniel Thompson <daniel@riscstar.com>
 
-net: stmmac: Introduce group arguments for enable/disable_dma_irq
+net: stmmac: Avoid freeing and re-requesting IRQ during XDP set prog
 
-The enable_dma_irq/disable_dma_irq functions take two booleans, rx and tx,
-that identify which interrupts should be disabled. Replace these with a sin=
-gle
-bitflag argument, group. This allows a third group to be added which is use=
-d to
-enable/disable other sources of DMA interrupt.
+This commit changes the XDP setup process to avoid completely freeing and
+re-requesting IRQs, which disrupts TSN thread tuning. Instead of calling
+stmmac_free_irq(), it masks the DMA interrupts and synchronizes them during
+XDP release.
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c b/drivers/n=
-et/ethernet/stmicro/stmmac/dwmac4_lib.c
-> index a0249715fafaf..7c5881ca61e8b 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 7b80fe66cf199..f1359637007e2 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 [ ... ]
-> @@ -109,30 +109,39 @@ void dwmac4_set_rx_ring_len(struct stmmac_priv *pri=
-v, void __iomem *ioaddr,
->  	writel(len, ioaddr + DMA_CHAN_RX_RING_LEN(dwmac4_addrs, chan));
->  }
+> @@ -7141,8 +7186,9 @@ void stmmac_xdp_release(struct net_device *dev)
+>  	for (chan =3D 0; chan < priv->plat->tx_queues_to_use; chan++)
+>  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
 > =20
-> +static u32 dwmac4_enable_dma_mask(u32 group)
-> +{
-> +	u32 mask =3D 0;
-> +
-> +	if (group & STMMAC_DMA_IRQ_RX)
-> +		mask |=3D DMA_CHAN_INTR_ENA_RIE;
-> +	if (group & STMMAC_DMA_IRQ_TX)
-> +		mask |=3D DMA_CHAN_INTR_ENA_TIE;
-> +	if (group & STMMAC_DMA_IRQ_OTHER)
-> +		mask |=3D DMA_CHAN_INTR_DEFAULT_MASK &
-> +			~(DMA_CHAN_INTR_ENA_RIE | DMA_CHAN_INTR_ENA_TIE);
-> +
-> +	return mask;
-> +}
+> -	/* Free the IRQ lines */
+> -	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+> +	/* Silence DMA interrupts */
+> +	stmmac_disable_all_dma_irq(priv);
+> +	stmmac_synchronize_irq(dev);
+> =20
+>  	/* Stop TX/RX DMA channels */
+>  	stmmac_stop_all_dma(priv);
 
 [Severity: High]
-Does hardcoding DMA_CHAN_INTR_DEFAULT_MASK here cause a regression for
-hardware variants that require different bit layouts for summary and abnorm=
-al
-interrupts?
+Could this change introduce a use-after-free when setting up an XDP program?
 
-For example, 4.10a uses a different mask DMA_CHAN_INTR_DEFAULT_MASK_4_10
-during channel initialization, where AIE is BIT 14 rather than BIT 15. Since
-the generic mask is used here, an attempt to disable STMMAC_DMA_IRQ_OTHER
-interrupts could fail to clear the AIE bit on 4.10a hardware, potentially
-causing an interrupt storm or use-after-free if unmasked interrupts fire
-during XDP ring reconfiguration.
+Since the ISR stmmac_interrupt() remains registered after replacing
+stmmac_free_irq(), the interrupt handler can still run if a shared IRQ or
+unmasked MAC interrupt fires.
 
-[ ... ]
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c b/drivers/ne=
-t/ethernet/stmicro/stmmac/dwmac_lib.c
-> index a0383f9486c2d..d746527198546 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac_lib.c
-[ ... ]
-> +static u32 dwmac_enable_dma_mask(u32 group)
-> +{
-> +	u32 mask =3D 0;
-> +
-> +	if (group & STMMAC_DMA_IRQ_RX)
-> +		mask |=3D DMA_INTR_DEFAULT_RX;
-> +	if (group & STMMAC_DMA_IRQ_TX)
-> +		mask |=3D DMA_INTR_DEFAULT_TX;
-> +	if (group & STMMAC_DMA_IRQ_OTHER)
-> +		mask |=3D DMA_INTR_DEFAULT_MASK &
-> +			~(DMA_INTR_DEFAULT_RX | DMA_INTR_DEFAULT_TX);
+When stmmac_stop_all_dma() stops the TX DMA, it sets the TPS (Tx Process
+Stopped) bit in the hardware DMA status register.
 
-[Severity: High]
-Could this hardcoded mask also cause a regression for Loongson MACs?
+Immediately after this in stmmac_xdp_release(), free_dma_desc_resources()
+is called, which frees the descriptor memory without assigning NULL.
 
-Loongson hardware uses a custom mask layout DMA_INTR_DEFAULT_MASK_LOONGSON
-because it has specific bits like NIS_TX (BIT 18) and NIS_RX (BIT 17). This
-generic mask does not cover those bits, meaning they might remain enabled
-when attempting to mask STMMAC_DMA_IRQ_OTHER interrupts.
+If an interrupt fires at this point, stmmac_interrupt() reads the raw DMA
+status and evaluates TPS regardless of whether DMA interrupts are masked:
+
+drivers/net/ethernet/stmicro/stmmac/dwmac4_lib.c:dwmac4_dma_interrupt() {
+    ...
+    if (unlikely(intr_status & DMA_CHAN_STATUS_TPS)) {
+        x->tx_process_stopped_irq++;
+        ret =3D tx_hard_error;
+    }
+    ...
+}
+
+This unconditionally returns tx_hard_error, which then triggers
+stmmac_tx_err() to execute.
+
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_tx_err() {
+    ...
+    dma_free_tx_skbufs(priv, &priv->dma_conf, chan);
+    stmmac_clear_tx_descriptors(priv, &priv->dma_conf, chan);
+    ...
+}
+
+Will stmmac_tx_err() then try to clear and re-free the already freed
+descriptors, resulting in a use-after-free?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261015-tc956x-stm=
-mac-no_irq_teardown-v3-0-8189870be545@riscstar.com?part=3D1
+mac-no_irq_teardown-v3-0-8189870be545@riscstar.com?part=3D2
