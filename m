@@ -1,76 +1,77 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED3B34D91F
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 02:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96586324B31
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 02:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792116157; cv=none; b=l0G8HGk16OT74hxXRN3MT6jQ/4TQrTDjJCk0W6QdOXWEtP3jovmQEMUIiDX5I7R9rT/G/Ze/oWGIKEzFIIgMMjitIoSqFpDP40aHt6HUzMtWFUOboKcI79JGS8qdEgbeRxRUUye7HGCfUXDEJgPnBJDfRqfle9nBpFWaf3kSCDw=
+	t=1792116165; cv=none; b=l4e0TzntpgXQiKmY2rSIaaY16i1IaHa50peNr30RlLLNftnv00LrtfXxlNRDG7OLj5+NbMMsdCsaSX4BlmJ9VN2tkiG9M7w0x9vN/nAmynjs4x/h28hRJT+r0iA4quBIlFoAfDa1dFKpDnVWzAiDWUHXEG2zLTg097aDoR3BJu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792116157; c=relaxed/simple;
-	bh=XeCC+QwADRgBYYy+sV3a0cmsO7MHwysfHbiWbHS7/p4=;
+	s=arc-20240116; t=1792116165; c=relaxed/simple;
+	bh=jYNw7adbE4cRLooeTB8sLnNjqjm9gd59EFh12T2XtSo=;
 	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=dCeREDjGAe70VTHJBKq1JrmKsZBN6SyAlOYCokQOFE8Tk7yooM3s8G49/J3PAftInDuO0/4yV6jHzbgBdkWHf+5BEdQtN8E9oBd84BxIIod7vSDGiTqMRBSSWUb3VeH4M7NcmA2W/fcZ+uZC9i5hjoL6xsvMJ0W4568ivB7RBaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvPN2pih; arc=none smtp.client-ip=209.85.215.176
+	 References:MIME-Version; b=WXIBdfE/qC9VzVwCUbKMokaxGP+gekU57oJTss3GS50br4CbqCwq7zoK++DGve8q85LxS+fPPX472vNEuTxI+BD/8ILYWFWT/4i9RA1mGuS6PBFU1MchwjUn9bPH9bsm4ukrSD5y1L8PCuIChffPwzW52eb0qHWBw2OdAtneuP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqRJmKU3; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvPN2pih"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cd6028ff33fso2548962a12.0
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 19:02:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqRJmKU3"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2e98798cbddso673835ad.0
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 19:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792116156; x=1792720956; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792116164; x=1792720964; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=hnHIBEYcvc+7lyURaq4Sd45WKeYqlYDHTj/eD/bNuQo=;
-        b=OvPN2pih9i+U/HeSGOFm9RRU6HAVG6xX8BU5ZKmewuBe1oG/uEqQKAveyyUWa4rEVY
-         PAKk4AE27nhv3HGN+hSNHC0yVngsMBKR95MYtxwUlIL+HHrhZZyAH3NrpLXJF9a8h2HN
-         BXENRq+taChhj9xasmn1Vg0lZLhaRS5iQ5Jp0MfNANMmc5iAFvtE/c6SdfXCEt546n09
-         9HLj7AlQ1bdjcwq93bXniab93poAiCS20ta4Urcx7Ukf0Cq75b4vp9VNb2FtNIIsB7V5
-         bfJpOEgO6sh+c68rbkSvyVGZxsWkA0Tq5xYS+qXQFiyedCApJ72Vcllw1KZFleGPLcgE
-         46Ig==
+        bh=XakjnQV5KhC+GbjpZOTFq6I9UHFSJAvipWtebZMTM6k=;
+        b=jqRJmKU34/QOWFVAcCp/cVVgSkV+NacflHxpzc23CuQ7HSES3gT1gO5kubIuHqJ4N8
+         BS7d+OGaoB2FhgXQGS0BRlUmvUOE+UhyojvIc+ou9McoAcBFZWAFFw+HdqC2akUIGrpY
+         /3Cf+ftgo2QYHBZ/GRQq9bWfKVi3v53Q8ertQNl/87yxMWxe0Q2Ob9hxMFFEd3i+HKKV
+         kxBdXgsEsJkfJJEpkAh64fEGGjWvXMx+1FAfgo4z831093izrPePy1Oc5GAUhaKW3z+c
+         h9y2cqD6uz2+9WCcMYdf0wt34nq48K+q7VJbUYzfq/PVU0X6Mxh2HR3avzFaMbrX6ZWa
+         +Y8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792116156; x=1792720956;
+        d=1e100.net; s=20260707; t=1792116164; x=1792720964;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hnHIBEYcvc+7lyURaq4Sd45WKeYqlYDHTj/eD/bNuQo=;
-        b=LIYTW0fD3L0iy7J1kYg+ps71A7UqK9gVzgZJYC4bvBmQtYGQneAXsghLXtPmQRHnOr
-         NKI1SnyJUrS+1boLDkPJEjn+7R0gRNDAJlJDSq1Lmojk3F1u/4Q0XNlJ2IDAURUSq+nj
-         +NaPJyX2ya8IrMIH8XjxfNACQF6XVNU3f4gXWREHla6iJnL2T0Et/IJXDWhXAhQaq8RP
-         HtXwTgRquyGL+BnUGSwqSgia2GRVqQAKwEVTpaLp5hJAXKbfWwGYI3cKr7e+IdB9kVhQ
-         fZRH8yvmr5ijvRKpaqnZLtpp2XKAhzd8dNVM0RkBPkjuotes6qT4/CE0gHuPc6NVesuI
-         qWbQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzh3tisXGFA+ri92U/R/dAjeu5FG03h3dhcS4bv0ipW2cLlzVfzgQKvlsZqf7OYdVPVN8s=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ9tyfDh+D2zWnfdp9+2aXHJ8p839PP8x+MWfidf9By1xyvs+lE
-	hfZM1T72btsS/qfZ+T+xomUeYQBozjicLxsdE/o/HKOACNxrRNViuNvXOpkGfA==
-X-Gm-Gg: AYBFou3JOZUhuzT9tqiu+/KXKWzf3FEG8Wo4HtJg5RLyQ5yvj1E2PibNi/5aNZeSroP
-	Q73UuXrzCBUU6sItMIyzSWkihxtvIqIz4FVKOj9HlUIhgiHll4zW1W1JPMk3BOUSgUV7ZBBv8of
-	4iWn7G0Q9NowJq0NXLGY1gzs0jA7PhoAoP3g+UCMxTnsOhCrbY7OkT25aIPkvnD3vCQ9ZB4xNfZ
-	5xXav4Go38Z4cCZekps/umGzM9mi2KuWKYSRPmbudTWA/dK5fkKb7TqL0VQZP7Vai5vVeF+zf35
-	lwgF2QuiSVNa9azVHe0Qyy+n/lA0oOxSsXTviACKh/+qa0RRmLFJ1hn8PXre0hCO0CBibkyGp2h
-	wsVpP05+U06TjFcu57w4pUUj2ddvuTLzlFztP49i3gpi/S0y+kZIp8Wf3wmsBkEnEA0PGI7arL0
-	vDw/TyhIfvq1oLbw3JWBqfIXSvTfPkztzwazk+KWCgh2uJ+/4QKszXnKtJoXt5RY4baf9mjM46z
-	0z5rfOOnQ3TlWNlkjvTofam/J4rSUZG1wEzktIYTjoajZpig6SMEUmh/nIrCF80+RyYu6leaJPH
-	dVQ=
-X-Received: by 2002:a17:90a:38e3:b0:3ab:a188:b8ab with SMTP id 98e67ed59e1d1-3aba188be6emr9607436a91.1.1792116155979;
-        Thu, 15 Oct 2026 19:02:35 -0700 (PDT)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac9474b52fsm7661513a91.9.2026.10.15.19.02.34
+        bh=XakjnQV5KhC+GbjpZOTFq6I9UHFSJAvipWtebZMTM6k=;
+        b=izHfycg+jIIDpAgH9luQ3eMcR4V75lJ89BZYoC3L0NVy11EFcILCxnrmxTlWSyID/G
+         goqYtCH6nN6RlEXlvHt7Bp7kpHrbCmahtQ8jcoXGmqtXC/dM+JQwi9SbInH8+ylNGlVg
+         F1tHPoGlVO7vQndR8hkqmqG5/Ug1bl/ET1ABhzM3mhu0xn9PCQRwO9kcH+kLsKA6ktvz
+         GIGZHLWAIMzyoajgWCj+qchO3FKNNp79NlpDxzIxs8DGVmHi8rYL5qtD/nU2tpWlW67R
+         Dtklr4oROWjQ6eb8aibY6qgAvj3yzKZ/xbA3fK6SGcvAGKrOw2WdRMTT1PKFppCHj11I
+         5xLg==
+X-Forwarded-Encrypted: i=1; AKwUvBxJKVHaKLidGj+kEacLm5D5LFbKyOecnNpn0XstjU1LT1tvtltfdhr+lQpZHoGYEpJqs7c=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIhHKixcEP66aFxghq0wh4v8n1bVrGF+emKOeoju33wFevVbtzl
+	Fz1+EuCxUELcK7iQKgfCTpD6e9KBIuMHnYB+Z56wOrMZaSmH6+0x2U2W
+X-Gm-Gg: AYBFou3JBvH2QDlqdfI7lwr3xzVZiCoJQf9U6lEIgzhSXT46uUMhVMZAaORz8Uiu6m8
+	vDiTmsQxdKl2M+W7ihOwz2f2ljz5kbVeHa4WjK04lGpIPMaBdo+2pAy3fFjaHqmfFSfjs7tptev
+	uH46w1T7VOvqMr3yS9pdEeFZfkoRm/FI18bUrgwR7GTxL2xukw0oz6iLcTYOtxC8OXlcMq+qlOz
+	oZPwN8a5jSB5kiWK0XXSZA7QTrXShTR2PhaubUkfcaq3+tyRsmkI005HgDKBIKXV3O5/FlM+iOK
+	taohaH4aDlFQSoFl0N9huIf1Y4+MeY9lPPcxMa2mnR63UBymPkkApQJ7WCsMTMf//kTXh66U97v
+	02WbgQ1X4avXtjKsmOIYJYhctZZHxu+vuAE8GpMYbr+supXhCEBsP4nQE3ihVcbULe6MhFOGb0k
+	m4w+3ozarimOFHXi9UGXrg3jAAIs3kcN4zj86jvylj2YGp82hDgKKajIC+IZNC/av6Cergn8ve1
+	gPJufK7vDaj7kk8CPJ0tUMrRc/ape8vEeOY1S5e1kXCW2kT8UzOGsv7WfW/DFUPwPeT9hQ9Bnsv
+	jY4=
+X-Received: by 2002:a17:903:244d:b0:2d8:d4d0:7930 with SMTP id d9443c01a7336-2e8429a7c65mr172744735ad.20.1792116163799;
+        Thu, 15 Oct 2026 19:02:43 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e86925csm2955595ad.52.2026.10.15.19.02.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 19:02:34 -0700 (PDT)
+        Thu, 15 Oct 2026 19:02:43 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 16 Oct 2026 02:02:34 +0000
-Message-Id: <DM5W5NS8V9ER.34N5H0EAW44K5@gmail.com>
+Date: Fri, 16 Oct 2026 02:02:42 +0000
+Message-Id: <DM5W5RGVPBAW.2F70WVQ24HT6W@gmail.com>
 Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
  <daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next v4 1/8] bpf: Use mapping tree to zap arena VMAs
+Subject: Re: [PATCH bpf-next v4 2/8] bpf: Associate arena pages with their
+ mapping
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 To: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20261014233442.8392-2-emil@etsalapatis.com>
-References: <20261014233442.8392-1-emil@etsalapatis.com> <20261014233442.8392-2-emil@etsalapatis.com>
+In-Reply-To: <20261014233442.8392-3-emil@etsalapatis.com>
+References: <20261014233442.8392-1-emil@etsalapatis.com> <20261014233442.8392-3-emil@etsalapatis.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -81,16 +82,26 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Wed, Oct 14, 2026 at 11:34 PM Emil Tsalapatis <emil@etsalapatis.com> wrote:
-> This refactoring is necessary to avoid deadlocks between arena_vm_fault
-> and page zapping in subsequent patches.
+> Associate arena backing pages with the arena's private mapping and set
+> their page offsets. This allows the fault handler to delegate user PTE
+> installation to generic MM code, which is itself useful for avoiding
+> races with kfunc-related arena operations.
+
+arena_vm_fault() returns vmf->page and finish_fault() installs the pte
+today. That doesn't need page->mapping. VM_FAULT_LOCKED doesn't either.
+tcmu_vma_fault() returns it for alloc_page()-ed pages.
+mm folks were removing page->mapping and index from drivers. See
+commit 6cdef2ddce2b ("fb_defio: do not use deprecated page->mapping, index fields").
 
 [...]
-> @@ -89,6 +89,7 @@ struct bpf_map_ops {
->  	/* funcs callable from userspace (via syscall) */
->  	int (*map_alloc_check)(union bpf_attr *attr);
->  	struct bpf_map *(*map_alloc)(union bpf_attr *attr);
-> +	struct file *(*map_get_file)(struct bpf_map *map, int flags);
+> +/* Arena pages are not page-cache entries and must not be evicted by MM. */
+> +static bool arena_release_folio(struct folio *folio, gfp_t gfp)
+> +{
+> +	return false;
+> +}
 
-This is quite heavy.
-The deadlock is there only because arena_vm_fault() in patch 7 sleeps
-on opref with mmap_lock held. See my reply there.
+The only place that looks at folio->mapping because of VM_FAULT_LOCKED
+is PageHWPoison() branch in __do_fault().
+If that's the reason for this patch then check PageHWPoison() in
+arena_vm_fault() and return VM_FAULT_HWPOISON.
+Drop this patch.
