@@ -1,118 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB62443C32;
-	Fri, 16 Oct 2026 07:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010AF3C0A04;
+	Fri, 16 Oct 2026 08:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792137352; cv=none; b=tV5Kii1kbRPMq7hCqOJufArcuKVAGDmAeiXwiX8OfbKVLwIUU9/e9yHdb86oEB5ZIN4qxRzjZE36Zmt+WRBtOUoztoqEdO+sA8JcddljM6+3fNyeM0nw9BSrhloUn/sWya37pP6EcEIZJCXR3Rtc8r+rhbrYjoGjjwdueUffCHc=
+	t=1792138228; cv=none; b=cPJCZP2G8y79am6T39zQD2m+kbZBsjiyBV2v3AdDBHJKlnirL+jwuActX+a9NOv2NEus33qu+alam7fW9U1XeTq5206wOucpgdzHCaw81vUjWQiJ4pgI22nwpJrKeVNAzaOAXP+oUyPvu5WE0HVYJi2X6y0b3Ob369LCSp20Sg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792137352; c=relaxed/simple;
-	bh=bbXnBjOMLoUFMUW/PbmA12pnO04WnrRGpNpDsUHGWE8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Bw18H+I/8w+2UQpBMMFoQu1WlynroDU67ZySjSGgYQBzrj9Qg4/UwMiHtsgQwFviKFlXhmIqf87+dp6CZ6BQ/SlyHKdgsMb5rDlULJKulG+TwZCJYS017LXIuch2V4QpIozgBbVJkzEU/xCKxQMsF12X5DIeqo2SNiPrd9xN4gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NwrH0AcT; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwrH0AcT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092881F000C5;
-	Fri, 16 Oct 2026 07:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792137349;
-	bh=KCKGc1h3JuJ4XsRCss0FTfTKjcZRv6QTRQ+XtcBdPNA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NwrH0AcTPiVX5vUvCVczRIw4WfrsxvozuDI0Gn5OuBTjM6wESPqJg50kAL5Gz41w1
-	 VFzhaNnMpy6zfPMqtjQv0s9oRcC3XMJb6dNMOz0DD8ANIHkHo5PNJsS+iuScc3WXip
-	 5OqkowMfjyzWwYnPtstJGHF2wizwg70s/TxL4/PmlhCPwsn5JTY7P5JMuGTmfq1UUc
-	 dqg/iXoubZlla1oO8/wXpWKPv6FRMjVnqKAGaxDcs2/i16m6RWbd5tzvdx1is5n/Hr
-	 K8OAqkjkjtNG6epXDHiEgYcTfas0jtMxseJF1J1v7+Wdb1oJTzgMs4wKlmcLinWuis
-	 Ny869A5cn941w==
-Content-Type: multipart/mixed; boundary="===============8960242286083874251=="
+	s=arc-20240116; t=1792138228; c=relaxed/simple;
+	bh=EworvDPRsWhd9IFYTOb23xuCpZRyTVLzaVPkgA1nJjE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n5d0ohPAJDPEA3DcXRj7NdV/dIcigu1YrFWAcQ9kTzU8WpH0e+edmKiwLaUgwefk/x+wnQHPIh8FJZw++4UnZGZfVX+WHwqq6JMAceh4XsScDVS117ZHmGSPkBpP/keaWbbt8kgP6ZCQOATIq1UiCNeQs2OzN2pbDjKmOs88tEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxD9Pt29FqK3AWAA--.65316S3;
+	Fri, 16 Oct 2026 16:10:21 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJBx5czi29FqOAwtAA--.2269S2;
+	Fri, 16 Oct 2026 16:10:15 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] LoongArch: BPF: Refine move_imm() and optimize 32-bit operations
+Date: Fri, 16 Oct 2026 16:10:03 +0800
+Message-ID: <20261016081006.26069-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1b0e8ca62af5ba9b15ad83c3f4a2e78f0c50e17adf28cb7979a4c8f8ad6294a8@mail.kernel.org>
-In-Reply-To: <20261016070837.440748-2-ankur.a.arora@oracle.com>
-References: <20261016070837.440748-2-ankur.a.arora@oracle.com>
-Subject: Re: [PATCH v16 01/16] asm-generic: barrier: Add smp_cond_load_relaxed_timeout()
-From: bot+bpf-ci@kernel.org
-To: ankur.a.arora@oracle.com,linux-kernel@vger.kernel.org,linux-arch@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org
-Cc: arnd@arndb.de,catalin.marinas@arm.com,will@kernel.org,peterz@infradead.org,akpm@linux-foundation.org,mark.rutland@arm.com,harisokn@amazon.com,cl@gentwo.org,ast@kernel.org,rafael@kernel.org,daniel.lezcano@kernel.org,memxor@gmail.com,zhenglifeng1@huawei.com,xueshuai@linux.alibaba.com,rdunlap@infradead.org,david.laight.linux@gmail.com,broonie@kernel.org,boris.ostrovsky@oracle.com,ashok.bhat@arm.com,ankur.a.arora@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 16 Oct 2026 07:55:46 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBx5czi29FqOAwtAA--.2269S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tF43GF4xKFykJF13Xr47GFX_yoW8Gw48pF
+	ZxArn3Kr4UGFyfZF10yay8Zr15Ka1fCwnFqayYk34UJFn5XF1jqF18KF4kXFyDt3yFqryF
+	qrykGw4YgFWDXacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j8yCJUUUUU=
 
---===============8960242286083874251==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+v3:
+  -- Add a prerequisite patch to detect CPUCFG2_DIV32 feature.
+  -- Fix a hardware compatibility bug by checking cpu_has_div32
+     before emitting native 32-bit div/mod instructions.
 
-> asm-generic: barrier: Add smp_cond_load_relaxed_timeout()
+This version is based on v7.3-rc7 and has been tested on Loongson-3A6000
+and Loongson-3A5000 physical machines.
 
-TL;DR: Nit only: the kernel-doc comment in asm-generic/barrier.h binds to the
-internal __smp_cond_load_relaxed_timeout() helper, causing a new kernel-doc
-warning; it should move above the public macro.
+All of the testcases of test_bpf passed on Loongson-3A6000 (with DIV32)
+and Loongson-3A5000 (without DIV32), here are the test results:
 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index b99cb57dfccc..ac0a8b5e0ffe 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
+$ sudo modprobe test_bpf
+$ dmesg -t | grep Summary
+test_bpf: Summary: 1061 PASSED, 0 FAILED, [1049/1049 JIT'ed]
+test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
 
-[ ... ]
+For the BPF selftests test_verifier and test_progs, there are no any
+regressions.
 
-> @@ -273,6 +274,115 @@ do {									\
->  })
->  #endif
->
+Tiezhu Yang (3):
+  LoongArch: Add CPUCFG2 DIV32 feature detection
+  LoongArch: BPF: Clean up and decouple is32 parameter from move_imm()
+  LoongArch: BPF: Optimize 32-bit operations using native instructions
 
-[ ... ]
+ arch/loongarch/include/asm/cpu-features.h |   1 +
+ arch/loongarch/include/asm/cpu.h          |   2 +
+ arch/loongarch/include/asm/inst.h         |   6 +
+ arch/loongarch/include/uapi/asm/hwcap.h   |   1 +
+ arch/loongarch/kernel/cpu-probe.c         |   4 +
+ arch/loongarch/kernel/proc.c              |   2 +
+ arch/loongarch/net/bpf_jit.c              | 381 ++++++++++++----------
+ arch/loongarch/net/bpf_jit.h              |  25 +-
+ 8 files changed, 234 insertions(+), 188 deletions(-)
 
-> +/**
-> + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
-> + * guarantees until a timeout expires.
-> + * @ptr: pointer to the variable to wait on.
-> + * @cond_expr: boolean expression to wait for.
+-- 
+2.42.0
 
-[ ... ]
-
-> + * dependent ways.
-> + */
-> +#ifndef smp_cond_load_relaxed_timeout
-> +#define __smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-
-[ ... ]
-
-> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-
-[ ... ]
-
-Does the kernel-doc comment above attach to the right macro?  It sits
-directly above "#ifndef smp_cond_load_relaxed_timeout" followed by the
-"#define __smp_cond_load_relaxed_timeout(" helper, so kernel-doc skips the
-#ifndef and binds the comment to the internal helper:
-
-  $ tools/docs/kernel-doc -none include/asm-generic/barrier.h
-  Warning: include/asm-generic/barrier.h expecting prototype for
-  smp_cond_load_relaxed_timeout(). Prototype was for
-  __smp_cond_load_relaxed_timeout() instead
-
-The parent commit produces no kernel-doc warnings for this header, and the
-warning is still present at the end of the series, so no later patch
-addresses it.  The public smp_cond_load_relaxed_timeout() macro ends up
-with no kernel-doc.
-
-Could the /** block be moved down so it sits directly above
-"#define smp_cond_load_relaxed_timeout(", with the
-__smp_cond_load_relaxed_timeout() helper getting a plain /* comment?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38867477666
---===============8960242286083874251==--
