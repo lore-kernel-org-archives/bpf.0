@@ -1,94 +1,95 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2439F399D08
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 03:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F3432B110
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 03:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792122269; cv=pass; b=GNdLYrbG4ei3R4qPzSgC9oaoHdF1HMBn0j5p42FQ13MWad0AWj640LCmg4dUEGI4XfTtmzilwxp/jhU333skfGXcJL7EopopQtjrRXSR9maOktLnEOeHqwNG7ZPkvZVsx9hYU4mmlu6JtB0fuOkyM5lRhqxNwnAChTot168C6Tw=
+	t=1792122451; cv=pass; b=pBBh21bC0tN+AsURELQaF0JYr7DPnjC/7fSxbKPQ+yVWcdvxAthAoNHY2yIj4lW2zaM8p0FDk7+f/ZLvvgdUESfZstfpQEmJvKhH7jgG6KKdYK+Tc/iSGTvksEmni6BpJEOLGHC2pfJzkGQ4mNnfU+I4DKIPPjXfvOApDNX6Cak=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792122269; c=relaxed/simple;
-	bh=YYI72lySTmWGCOX7Pagi7+kqJl1I9aBv6sQuY8k0tgc=;
+	s=arc-20240116; t=1792122451; c=relaxed/simple;
+	bh=yIqaxTNLPE/vMy/0DU9sa+0IDVj0xY6z4OXgkTYvMWU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SLY9v5HibVOGlMs48VFBzdjWNnplkpv5MsxyVDu0DOl09Q/KFrwxVKtxN7WVGneHvdnl647FsqJ8sNtjzMsj0d6/CgVuikcO+gd7yHSfwVGE3GP+W9KlWcG0JGbSn72lbEhuOMNwz37BNFdmFofFxUiPyvuPWE5A9yKj/Au/MDU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YUJiQtqk; arc=pass smtp.client-ip=209.85.208.41
+	 To:Cc:Content-Type; b=lU8M/aFM5IFl/xklGcwtO8oOZREYYjklplRfRAFAuwXUj1bCt01Ek2PjkN3TaSLLNmFbPie0E1G+Vhz0lKyPSh8aB3AVlBQW4eO8ljJVn88160EPTZMF+ORpytucEoYSt0wkj7ir/UM+DGQGUFugPBpGkCezGHBtosMJ1IIqZQ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WmSBu35N; arc=pass smtp.client-ip=74.125.82.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YUJiQtqk"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6ae14cdc63aso3865a12.1
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 20:44:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792122263; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WmSBu35N"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-150ef97e790so3715c88.1
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 20:47:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792122447; cv=none;
         d=google.com; s=arc-20260327;
-        b=LRMEGq0LKXCNKnDiVw7qMPhgftGtoVlKOD86DKNozSy+6niIFVKewT4UA7/+WXpS4u
-         5FGHulEjMxkqyXh6f8nJj57+iGCo3bfeb/3u8BiWpB5HqPQbne8jjiYKDeNV8eT5OS7U
-         4CFlV1W/MJXtF7Dy+/cpd6RWncqZuzPI0x2M4RCMZbdYYEFh8YLKJGaHMP9aFFC32EZg
-         Az8yl27ZxP9KpxD9XST7aPOb8+8k/RssEe4ejxmtrnc34dPcQ1Kng8KUF5zruNzwJVKl
-         9nh0zwPIqZEtIJole2A8Kz63F+pEJSSRJe6OXE+A1SUxlUA4T1tfvMNTil29RUTxGq+A
-         jwWQ==
+        b=no4kmeUsKBY8rGxXCOHsp/AA82i/g55Ss4xOtVONrAv/n+bHwe/cLIAy8gYSzZlZpN
+         j8P3rViZFJADWTCgxAFEHtZ02kkCHhHnAvRO4zvJAyLyUimMawYIx3UOeEaPr1FAskmJ
+         4wM7KUsmDmmp71etRG5kxehq7P3N8fykMySQrA776Lln1PW2uqT/k11EGDJV/IpiXebM
+         G7xdMyLCqnKwTiIEdGMEwjwUipmS3kjmKu6lqLzeDH0U0/81UWf2hyKZMuTTmryUV/rx
+         Ck+JIaudpLnUiaXZAYa2BzUjnIbOPxXG7/Pc5C8kRXz1FpezHKlm2QUSaqVOO4RfHKSL
+         wlnA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9ARhpOy9hpz9ipUHAeNJOJtGmLehX9Lp4TUcEpx4ik4=;
-        fh=cEjW5lkruEuJdJrkM/yQea6GKBUyDjhBofWiCXV8SrE=;
-        b=nyRjyQRlP53zj4qVQ+14Ag3Jk432pCvuTddd3qPhwDzGYbaEjYGu0IpPIFLfuHC9iO
-         uGRAY0dV8KIqWEnfbDH+Qn9ob1WBnHAWdPr3dIqoK4Xi5ChpZ1lyycgEe6RXWgpwKNgv
-         ghVaw72W9PEFndrCY4NchKQjqIDWCkA2Fl6eVgsR/CHyZEKdQd+MmCNM4WAjfEVkxE5i
-         i1Tl9Ad/C1p0bY8GIulWKVviyqStwiSAaxkyaA9sbK/fmAmrlves4ARc1X2kOtIUYZ0X
-         2ahV7LesBIFPGZyOnyYOzz+aJ9Xeybvgdcw7D+3BdhqT3sqB2KH+jqZiTgtIeiEfMOWI
-         Xk/Q==;
+        bh=Gh+SJsV9qd4zf8kFfRpYPnxqBTL6SxzjJrawXU6GjJ0=;
+        fh=T0yY5ykO7n1DEx9DCkmbvUVhesaWqaokjr9qVM0PxmM=;
+        b=nPMC5RunjfnqDeybYe3VTojU8nGrv7LHZ5leEu7C0bkF4j1ffvUrqlPMFgMrI8VdfF
+         qujc7eT87+GvuZSRQKTQQBAOaBIBJY6ya4SzJodFk6eA096vfDHgB8jw/ynWEj2+1N0I
+         dpcr8drsOIWJ2//Oc5clTQCJVqHeo5elIEQkb7Xm17XjqV9+xQRuE8YttIkkEq652R66
+         jyXt7UHlp1b0rEwl7ZC+PiUoTm2UUl7ThkM2K5o0h0ENeRrU882mmZ9qzxfwOOm78m52
+         h+wmAEK7no38/5wcAZvXWaRDMiARdDikLodR2G0uZR69BZIF0Ss0pXGi5KdolsysD51C
+         Tn0w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792122263; x=1792727063; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1792122447; x=1792727247; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=9ARhpOy9hpz9ipUHAeNJOJtGmLehX9Lp4TUcEpx4ik4=;
-        b=YUJiQtqkTrt6feVFqGQCGwLB2qnZzADg3Uis52z7J89aQEYaMq1kKAOU8qcHkFIcsh
-         LZIojymcHxwSB1La3faXjnniNLv9ZiyXbyXyhGgBwDcj53KUdARL0HvKxJGO0gTGlng2
-         Y/7gjdjHbQ7b6PUpEp8cGY4Cvg/ejEB+dh2M4oAPciEOK24iZ/VRr4YtlYRoWjru5GzZ
-         WNv1L2XYmuxe0tVGPng0NARj+1duoN1gz0O6REMOvVfLHDHyE7gf0Vuww70eHRT0viZX
-         MDk4KLvBeC6A4RolcRtxVlIjS9g2E74Be1J6mlUdRbPf1ORVYLl110adQpWfuozeDAs8
-         teLg==
+        bh=Gh+SJsV9qd4zf8kFfRpYPnxqBTL6SxzjJrawXU6GjJ0=;
+        b=WmSBu35NVeiQu31QNlzjhikocheGgXNjWUJNOfTnocjmaa9dLJL7rjYmck7Yb1z+U+
+         7F/BcQN9418cJFFWZhiN289klcAdf7vY8RP6332r/zLY1eDQR3QDdxhuZpxo2G/g7aZa
+         v5rtZxY/E5Y21UZmGxBMeG8ox/f0nEfZpgpNvnxMR10va55ZlfCLtmjRq1avhlVq78yu
+         FDILCBHBPklvY5onHmwaR6NR/BOznHWKN7qnvyqNIBobtefQODk1/1rS3FsbRoks6qay
+         uh6HOUzTvsNyYoVU+csC8enaQ5SbuNJ0SfX1ww1FJ/D0eVCBC9tcI7/RCsBopWWAD692
+         YhYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792122263; x=1792727063;
+        d=1e100.net; s=20260707; t=1792122447; x=1792727247;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9ARhpOy9hpz9ipUHAeNJOJtGmLehX9Lp4TUcEpx4ik4=;
-        b=At96vv95nFCHr7Ci1yYtG/065ki03CEnyTfOCZ7kmlqh5npb4phhXxn3DfoozIsj7y
-         254WSplprprqP/D+b3LcbBffgyg6aP037gLkbn1YZ+HmjKgbckHxIZRll9wKETfbgDLK
-         FtEkiefbpRNjecRKpNyyM7iWZsXaeZOzHJdoBN7JTcqHAm6sHY2+fy/YJte0pO0dGPcs
-         RZpD4ECF0Jhtw2+gS1h3Y4ycFeGFFMTtLs4L4yNNfDM0jkWwqPSgE3yfySX4JGwfrJxJ
-         kue585/0vdUZ3fU6ufONZnCtB++y7MfBLp/W8wl5svFBCrD7yH+nitOMMn6jBdsLUGqs
-         ErqA==
-X-Forwarded-Encrypted: i=1; AKwUvBxL2ywcvqfCipE7lwo8qi4rhJrO6LybnhfTni2utl/Yw/BwoXdFWoc0zURXrc2qHoT6KOY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJo0B3LfxpnJJzozi7WHBYXUm5f8dqwxysi+q/M/z8Y5di7Oh/7
-	l2ZQaPs9fjGKzFBH0Ywd/tYiICNepEvz17Nr9KCf7ABWy+6uT/j+kA3ThccYKbYBac+nEjbHTLy
-	rzTATdmA4kcfT7k0VFbE2pDvN5iEenUF5z2PtLQvS
-X-Gm-Gg: AYBFou1iJ2khMpC8wxgWdKo5FesMszchuvlR7tDdUgmYmuQ4GLEZGQYuCt+szP5xfWf
-	cbbjjOvARZm0QeZiymSDDJs2hjh6N+Y0LzxwesLd8txgIUqKuD9TnCDTJ/pnVB2lc23c5oPkHpu
-	YKlr+SCBG2oBLof8r85TlH7aEXltRyuCX6BklmyoJHU8bd8vdWTs3VZo2a0SozfkLoFEcrxnG7h
-	BZglv7L04E0TyaOyZz0ptfFaxzie5Ynm8+ZJunpmY5o0KYwDcTBe/Zlg6ZqdvInC6Vckoi3CcO4
-	yaJ8v1YljffXHPLW8mHA8LNp6hTGJXx7+fn+Byk582HFEeOAvJMkzQ==
-X-Received: by 2002:a05:6402:5168:b0:6a6:7385:3eac with SMTP id
- 4fb4d7f45d1cf-6b38c3c0061mr20821a12.11.1792122262666; Thu, 15 Oct 2026
- 20:44:22 -0700 (PDT)
+        bh=Gh+SJsV9qd4zf8kFfRpYPnxqBTL6SxzjJrawXU6GjJ0=;
+        b=kihu2B9zAkrHv4eqvGjlZwyvr0Rro+dewmVic81QfHcz3olrCyFGIri6j+7vXpDRBS
+         IfzxC9dPaGhPz3ZV4LyNy7LwBk8XW3mlfACQa6A0Rd908AeZj4QyIHjMa1C5fmUXZUjJ
+         bhld9TIQwSxJ/FotMTPwYpIIIGDcmuz8hIjGVKHPkSBQynsyX7+gh/Sozwdh4Gmz0VfQ
+         Q6ZeqJBPUqnsUjX+5IleSUcumD6iosL4msW1XrdbTXYQaQtwM2vU3UNy4ZMCmWytc9ic
+         tnaTAgosHsrCKMky1ZiQlqLYM5i1XG8zuDP6Wa7nVSt99tJcWg5PZOJfgxI4SndEVoW1
+         H9Gg==
+X-Forwarded-Encrypted: i=1; AKwUvBxyNQGtt7f4hacLw8u3lZ6h9RxNr7qO7OKR0EPayB3+UXBBP3TLrqud+n6/ksb6JueJ75I=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIK+3GaZxoAN94roRQwuOh8gf3rk4AFRIpZAvH+q75jQbyONu7H
+	ceVlHjAQPee05DJekORY4qHZfh5cLAzx9SE4KQnkxHb/oEUecu9svg+ALj/Lx6RBKFYLRh3tbrL
+	tgooo+3jjXZrGhbPLzdw4TKmkqjQMX9r2aLtkdQPA
+X-Gm-Gg: AYBFou2JsWXpHoatngTbK8XrtKAd0cD4P6jU+Ab/yVJpqSrhgfm7oMMHAdJd1sy4MDQ
+	JOT/v+n35XfIRqLBwDQhpkrUPmBZWFEcqMpJXenrmm7VcIHyYyv4isAEQQrN+1sdhLvHN7W2GC7
+	iqQvxrW+YpFjzg1odP6bzcAMM2HqerCC/+lR/ZAvePrVEaK1dNogdQW7yd0Kwk7vZET1rjvKR5U
+	KIp0tSQFE335DikWo5pBAO+iZAQy0vA8Uddl7kJj2oNQpegD2tAGv/uf/Q3mXrtRiE/3PWkfWre
+	lVGXhsy8nOckzHbOhjYgHLAik86i5QggvHAQfcpPZHiXXmePjCLQKQ==
+X-Received: by 2002:a05:7022:170c:b0:17f:fbc9:996a with SMTP id
+ a92af1059eb24-182bbde9b6amr279955c88.3.1792122446355; Thu, 15 Oct 2026
+ 20:47:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261014173945.373295-2-almasrymina@google.com> <179209665647.434549.4410094840593695015@kernel.org>
-In-Reply-To: <179209665647.434549.4410094840593695015@kernel.org>
+References: <20261014173945.373295-3-almasrymina@google.com> <179209665863.434549.6637198029989888049@kernel.org>
+In-Reply-To: <179209665863.434549.6637198029989888049@kernel.org>
 From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 15 Oct 2026 20:44:10 -0700
-X-Gm-Features: AclHuK_AY7S3EHhUJkVZl3m_UeQ2fg420IBocWoHLNeVVf6pF9O3oqXG1dOFVmw
-Message-ID: <CAHS8izN47FP2nuY26hZSCekf2vB1SXqz59h66NOWA_C6T8+vCQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/6] netmem: rename __get/__put_netmem() to get/put_net_iov()
+Date: Thu, 15 Oct 2026 20:47:09 -0700
+X-Gm-Features: AclHuK_vtqKDxgWFbxG4BSVZCPmFFjYvhXzuIZSuzOmkSqaPQBtSf8jQ4Wou4a0
+Message-ID: <CAHS8izMnj6t5CX3THvGoorPa8krD1RvouXzKQpgZOkUMs8Bzow@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 2/6] net: skbuff: add napi_pp_get_page() and
+ use it in tcp_recvmsg_dmabuf()
 To: netdev-bot+sashiko@kernel.org
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, ayush.sawal@chelsio.com, 
@@ -105,168 +106,66 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Oct 15, 2026 at 1:37=E2=80=AFPM <netdev-bot+sashiko@kernel.org> wro=
 te:
 >
-> Thank you for your contribution! Sashiko AI review found 2 potential
-> issue(s) to consider.
+> Thank you for your contribution! Sashiko AI review found more severe
+> issue(s) in other patches of this series. This mail is only an FYI, in ca=
+se
+> you want to address the nit picks below when you respin.
 >
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 1 =C2=B7 Low: 1
+> Low priority / nit picks for your consideration:
 >
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->
-> - [Medium] At this commit, generic RX skb handling can reach the new
->   else-branch DEBUG_NET_WARN_ON_ONCE(true) in get_net_iov()=E2=80=A6
-> - [Low] The new kerneldoc for get_netmem()/put_netmem() in
->   include/net/netmem.h says they always take or drop a non-pp backing=E2=
-=80=A6
+> - [Low] The commit message says that "no symmetric helper existed to
+>   acquire" a page_pool reference, "forcing callers like=E2=80=A6
 >
 > --
 >
-> netmem: rename __get/__put_netmem() to get/put_net_iov()
+> net: skbuff: add napi_pp_get_page() and use it in tcp_recvmsg_dmabuf()
 >
-> This commit renames __get_netmem()/__put_netmem() to get_net_iov() and
-> put_net_iov(), which now take a struct net_iov directly. It adds kerneldo=
-c
-> for get_netmem()/put_netmem() and the new helpers. It also adds a
-> DEBUG_NET_WARN_ON_ONCE() for net_iov types that do not support non-pp
-> references.
+> This commit adds napi_pp_get_page(), which takes a page_pool pp_ref_count
+> reference on a netmem if it belongs to a page_pool, as the counterpart to
+> napi_pp_put_page(). It also converts tcp_recvmsg_dmabuf() to use it,
+> wrapped in WARN_ON_ONCE(), in place of the open-coded atomic_long_inc().
 >
-> > diff --git a/include/net/netmem.h b/include/net/netmem.h
-> > index 0cc8572f62caf..697d50c51a5ee 100644
-> > --- a/include/net/netmem.h
-> > +++ b/include/net/netmem.h
-> > @@ -399,21 +399,37 @@ static inline bool net_is_devmem_iov(const struct=
- net_iov *niov)
-> >  }
-> >  #endif
-> >
-> > -void __get_netmem(netmem_ref netmem);
-> > -void __put_netmem(netmem_ref netmem);
-> > +void get_net_iov(struct net_iov *niov);
-> > +void put_net_iov(struct net_iov *niov);
-> >
-> > +/**
-> > + * get_netmem - acquire a non-page_pool reference on a netmem
-> > + * @netmem: netmem to reference
-> > + *
-> > + * Acquires a non-pp backing reference (page._refcount via get_page() =
-or
-> > + * binding->ref via get_net_iov()) regardless of page_pool membership.
-> > + * Counterpart to put_netmem().
-> > + */
+> > While napi_pp_put_page() releases a page_pool pp_ref_count reference on
+> > a netmem, no symmetric helper existed to acquire one, forcing callers
+> > like tcp_recvmsg_dmabuf() to open-code atomic_long_inc() on
+> > niov->desc.pp_ref_count.
 >
 > [Severity: Low]
-> Does this description hold for every net_iov type?
+> Is this description accurate? A helper for this increment already exists
+> in include/net/page_pool/helpers.h:
 >
-> io_uring zcrx sets up its net_iovs with net_iov_init(..., NET_IOV_IOURING=
-)
-> in io_uring/zcrx.c, so net_is_devmem_iov() returns false for them. For
-> those niovs, get_net_iov() and put_net_iov() don't change any refcount:
->
-> net/core/skbuff.c:get_net_iov() {
->         if (net_is_devmem_iov(niov))
->                 net_devmem_get_net_iov(niov);
->         else
->                 DEBUG_NET_WARN_ON_ONCE(true);
+> static inline void page_pool_ref_netmem(netmem_ref netmem)
+> {
+>         atomic_long_inc(netmem_get_pp_ref_count_ref(netmem));
 > }
 >
-> Without CONFIG_DEBUG_NET, the else branch compiles to
-> BUILD_BUG_ON_INVALID(). The same is true for every net_iov when
-> CONFIG_NET_DEVMEM=3Dn.
+> io_uring/zcrx.c already calls it in a similar zero-copy rx handoff:
 >
-> The kerneldoc for get_net_iov() does mention the warning. get_netmem() is
-> the public entry point, though, and its kerneldoc doesn't mention this
-> limit.
+>         page_pool_ref_netmem(net_iov_to_netmem(niov));
 >
-> The put_netmem() kerneldoc below uses the same wording. So does the commi=
-t
-> message:
+> Documentation/networking/netmem.rst also names page_pool_ref_netmem() as
+> the API for holding a page_pool reference. The new napi_pp_get_page()
+> calls it internally too.
 >
->     always acquiring or releasing a non-pp reference regardless of
->     page_pool membership.
+> Compared with page_pool_ref_netmem(), napi_pp_get_page() adds the
+> netmem_compound_head() lookup and a netmem_is_pp() check whose bool
+> result tells the caller whether the netmem is page_pool backed. Later
+> patches in the series seem to depend on that result, for example in
+> skb_netmem_ref(), which falls back to get_netmem() when it is false.
 >
-> The skb_netmem_ref()/skb_netmem_unref() kerneldoc added later in the seri=
-es
-> repeats the claim ("otherwise acquires a non-pp backing reference via
-> get_netmem()").
+> Could the commit message explain the page_pool membership check and
+> return value, rather than saying no helper existed? As written, it is
+> not clear why tcp_recvmsg_dmabuf() doesn't just call
+> page_pool_ref_netmem().
 >
-> Could these comments say that only pages and devmem net_iovs get a
-> reference here?
->
-> >  static __always_inline void get_netmem(netmem_ref netmem)
-> >  {
-> >       if (netmem_is_net_iov(netmem))
-> > -             __get_netmem(netmem);
-> > +             get_net_iov(netmem_to_net_iov(netmem));
-> >       else
-> >               get_page(netmem_to_page(netmem));
-> >  }
->
-> [ ... ]
->
-> > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> > index b25d8e2c9aafe..23a40e1ec2b15 100644
-> > --- a/net/core/skbuff.c
-> > +++ b/net/core/skbuff.c
-> > @@ -7555,23 +7555,39 @@ bool csum_and_copy_from_iter_full(void *addr, s=
-ize_t bytes,
->
-> [ ... ]
->
-> > +void get_net_iov(struct net_iov *niov)
-> >  {
-> > -     struct net_iov *niov =3D netmem_to_net_iov(netmem);
-> > -
-> >       if (net_is_devmem_iov(niov))
-> > -             net_devmem_get_net_iov(netmem_to_net_iov(netmem));
-> > +             net_devmem_get_net_iov(niov);
-> > +     else
-> > +             DEBUG_NET_WARN_ON_ONCE(true);
->
-> [Severity: Medium]
-> At this point in the series, can generic RX skb handling hit this warning
-> for io_uring zcrx niovs?
->
-> packet_rcv() accepts unreadable skbs and clones shared ones, so the
-> original skb is left cloned. If pskb_expand_head() later runs on that skb=
-,
-> for example from ___pskb_trim() or from skb_ensure_writable() in netfilte=
-r
-> or tc, it takes a reference on every frag:
->
-> pskb_expand_head()
->   skb_frag_ref()
->     __skb_frag_ref()
->       get_netmem()
->         get_net_iov()
->           DEBUG_NET_WARN_ON_ONCE(true)
->
-> skb_release_data() then sets skb->pp_recycle =3D 0. The final free theref=
-ore
-> goes through put_netmem()->put_net_iov() and hits the same warning in
-> put_net_iov().
->
-> Before this patch, both calls were silent no-ops for these niovs. With
-> CONFIG_DEBUG_NET this gives a WARN splat, or a panic with panic_on_warn.
-> The trigger is RX traffic on a zcrx queue while a packet socket tap is
-> active.
->
-> The later patch in this series, "net: skbuff: replace __skb_frag_ref() wi=
-th
-> symmetric skb_netmem_ref()", seems to fix this. It changes skb_frag_ref()
-> to use napi_pp_get_page() when pp_recycle is set. It also stops
-> skb_release_data() from clearing pp_recycle, and it carries pp_recycle
-> through the copy, split and segment paths.
->
-> Could the series be reordered so this warning can't be reached at
-> intermediate commits, which would help bisection?
 >
 
-It cannot be re-ordered easily no. This is a very minor concern IMO.
+Commit message is accurate. There is no helper that mirror
+napi_pp_put_page(), only a hepler that unconditionally increaments
+pp-ref and barfs if you give it a non-pp-page.
+
+I think we're meant to ignore low (and sometimes medium) comments,
+unless they're obviously correct?
 
 --=20
 Thanks,
