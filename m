@@ -1,49 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7148F329E5A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71529387361
 	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 10:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792145908; cv=none; b=NJzO1mNRKkKjPkQNBj1yiwurSODbwsKeVP7zHWu+Ia5TAqkhTMqDD96HYxfPVKtxUEG6gCcGHZF5Yb/FYD1TGuvHCUxWjfRfQiY3BMHGCZePmxup2sVj/Y+d5YNnFWb+0V7G+ybtJc9BmpavHuWM1xQ5PiRFsfkhCt4M8RBkzfA=
+	t=1792145909; cv=none; b=UZIyidlFEaMYXjaZ3y3/CGR+b9Y3YGbblEsIk/fdiqQN+4sQg9GkJAVh4H8KVSr4X1NuYMyzDmDn5ca2ggo/PrMprjxQqniyyc3J3TXxhtiH+qtkZjjLAbjuMIWK5+HOpXz2UPI0A/HKYfTly9LhVm9cTG+NnZMhbq4GQYaMdFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792145908; c=relaxed/simple;
-	bh=EKZNaCUoVsloJrR0ctZ5NuUakQh3rpQH3ohwly6jIjU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=McHlIHeQfwM/4S6YGbVEkggeWiqJdRgbd0plspAnTBRz/7SVOO2ej0b/EBv/JJBpwLxJxSJjW0Zy57YhOo9/Mgu+sMP8AQazzaSxGD8hjuzuL1tb5ov2J57Iq7OrpjpLMhUlzAWd0twVshRDHhKe95uip8rlodrs0PWiWhzuEkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=doN8hzlo; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1792145909; c=relaxed/simple;
+	bh=rtCmYci7EucdOvGEhTH9iuLe0M0/Gsg15HBT11KEw7U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I+c1gJQOOQqMDzL4s6edUuGjCok/0LIM7wJJIiL2QkVPUXrSdEINpKIPbCFgf7PTOfKk9cChOw4wkefuj+z95+rpE1a6PC6vltE+e4M/LY0K+dv8L1kPp3rGr0kXXqAbGbOxkjQosXboqgbxBgvmgJLHrezxNEng4YKALpO2vKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=THYC/7UA; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="doN8hzlo"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="THYC/7UA"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=9MAel8xEdgMxoz8sMR/FGI9bWpXYQxXgdG3/38Heakk=; b=doN8hzloQ9Z4k7ZDPgczxKugHm
-	wnPGgf7i/1YInhbcpQYyqjv6asW8tJBqWlw6ppcgWF1m/NA+LSjElIVUhjkbZSiOMutMrsBxm5EZO
-	KJa8V8Lu+Vj3evTRnQ7LTMgMFOZzteiKGhCvV6C/N8K87e6sfXt1sOw4FO/SYtC57fWIFdkA3JaXR
-	s+30CzKGLoX9pS3ILAZX0XGFYzJdwTtMMOtrYEkpNrhwHy6G66jNTlxY/Kd7gAZ4Q/IEfx0+XV2FC
-	dH2bP4O+CJKgSs4C+SreQ7mWZ0kKkHfsm8ApAwgYVrW9JpJ9VFeFQlS1gFxDEJF+vSY1VqLMxD9vF
-	n5/9YhZw==;
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=tdf/x513yF/ZkawHceDioeU6RHO0Woxmmb2q/MqNTNQ=; b=THYC/7UA2KgmTTbEvzvhSa7lJ/
+	oG1/W1+0U0ubS0aIlI8nbyi7HWKlJl+pMcw5KxCJ/C5nWKRIV5xZdoCSF4b3fHfTu8yU4LAqB0Q6n
+	qabS7Ryo4Xet1QCZGdzVxJA08mXgsuxak+9kVM00lpXwzM8hZVC0xA+2o7py+nZFS4ePmygZpEKFI
+	V6f+IVG+To77jj7lObDQsVu02K+kz6nlgNI7SJMSWJ6Jb+dqRu22ZU4RAvyaN1p3L6awKvaS/QM0a
+	0ItETcRcnVylEasO5N6WukgN5Ec0AvxqqGHe5pSgDh7NSnEpy2iU7PeMOpqBFSbdY2qGJCjWFfu54
+	EO623aEw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xHf15-0009jf-22;
+	id 1xHf14-0009jW-35;
 	Fri, 16 Oct 2026 12:18:23 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: alexei.starovoitov@gmail.com
 Cc: memxor@gmail.com,
 	bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH bpf-next v2 2/3] selftests/bpf: Restore the je <-> jmp distance in convergence check
-Date: Fri, 16 Oct 2026 12:18:21 +0200
-Message-ID: <20261016101822.632891-2-daniel@iogearbox.net>
+	Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 1/3] bpf, s390: Mask the count of 32-bit shifts by register
+Date: Fri, 16 Oct 2026 12:18:20 +0200
+Message-ID: <20261016101822.632891-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261016101822.632891-1-daniel@iogearbox.net>
-References: <20261016101822.632891-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,58 +50,110 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28155/Fri Oct 16 08:24:17 2026)
 
-The bpf_jit_convergence je <-> jmp test reproduces the cycle fixed by
-commit c8831bdbfbab ("bpf, x64: Fix a jit convergence issue") with 125
-bytes of x86-64 code between the je to l0 and l0 when the last goto l9 is
-two bytes and 128 when it is five, so that the je fits into an imm8 only
-while the jmp does not and the two flip each other's size from pass to
-pass.
+RFC9669 defines the shifts as dst <<= (src & mask), dst >>= (src & mask)
+and sign extending dst >>= (src & mask), where "shift operations use a mask
+of 0x3F (63) for 64-bit operations and 0x1F (31) for 32-bit operations"
+(Section 4.1), which the interpreter implements. On x86-64 and arm64 the
+hardware does so by itself, so both JITs emit the shift alone and conform.
 
-The recent JIT changes shortened that code by five bytes: the three loads
-and stores with a zero offset lost their displacement byte with commit
-44df4d88aa63 ("bpf, x86: Omit the displacement byte for zero offsets"),
-and r2 += 0x1 became an inc and r3 &= 0x1 an and without REX.W with commit
-d59f47e031ae ("bpf, x86: Use shorter and faster forms for some ALU
-immediates"). At 120 and 123 bytes the je fits either way, nothing flips,
-and the test passes without exercising the fix.
+The 32-bit shifts by register of the s390x JIT do not conform to the spec.
+They emit sll, srl and sra with the count in the address of the second
+operand, of which the "rightmost six bits indicate the number of bit
+positions to be shifted" (z/Architecture Principles of Operation,
+SA22-7832-13), so a count of 32 to 63 clears the register, or fills it
+with the sign for sra, instead of shifting by the count masked with 31.
+The 64-bit sllg, srlg and srag take six bits as well, which is the mask
+there, so only the 32-bit forms differ.
 
-Add a five byte mov to the region to get the distance back. The je is
-forced into its long form again as the fix intends:
+Put the count masked with 31 into %w1 and shift by that. A single risbg
+does the copy and the mask: it inserts bits 59 to 63 of the source into
+the same positions of %w1 and zeroes the rest, available since the
+general-instructions-extension facility of z10, below the z196 the JIT
+requires. One instruction more per shift by register, shifts by immediate
+are not affected since the verifier rejects a count at or beyond the
+width.
 
-  # ./vmtest.sh -- ./test_progs -v -t verifier_jit_convergence
+  # KERNEL_CMDLINE_EXTRA=nokaslr PLATFORM=s390x CROSS_COMPILE=s390x-linux-gnu- ./vmtest.sh -- \
+    ./test_progs -t jit_insns/shift_counts,jit_insns/shifts,jit_insns/alu_edges,jit_insns/calls
   [...]
-  96:	0f 84 7d 00 00 00 	je	L14
-  117:	eb 83 	jmp	L6
-  119:	bf 03 00 00 00 L14:	movl	$0x3, %edi
-  [...]
-  #668/1   verifier_jit_convergence/bpf_jit_convergence je <-> jmp:OK
-  #668     verifier_jit_convergence:OK
-  Summary: 1/1 PASSED, 0 SKIPPED, 0/0 FAILED
+  #191/8   jit_insns/alu_edges:OK
+  #191/9   jit_insns/shifts:OK
+  #191/10  jit_insns/shift_counts:OK
+  #191/21  jit_insns/calls:OK
+  #191/22  jit_insns/helper_calls:OK
+  #191     jit_insns:OK
+  #192/3   jit_insns_blinded/alu_edges:OK
+  #192/5   jit_insns_blinded/shifts:OK
+  #192     jit_insns_blinded:OK
+  Summary: 2/7 PASSED, 0 SKIPPED, 0/0 FAILED
 
-Reported-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- .../testing/selftests/bpf/progs/verifier_jit_convergence.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/s390/net/bpf_jit_comp.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_jit_convergence.c b/tools/testing/selftests/bpf/progs/verifier_jit_convergence.c
-index 9f3f2b7db450..4fd717334858 100644
---- a/tools/testing/selftests/bpf/progs/verifier_jit_convergence.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_jit_convergence.c
-@@ -68,6 +68,13 @@ __naked void btf_jit_convergence_je_jmp(void)
- 	"r3 &= 0x1;"
- 	"r2 *= 0xa8;"
- 	"if r3 == 0x0 goto l2_%=;"
-+	/*
-+	 * The x86-64 code from the je to l0 up to l0 has to be 125 bytes with
-+	 * the last goto l9 at two bytes and 128 with it at five, so that the
-+	 * je fits into an imm8 only while the jmp does not and the two keep
-+	 * flipping each other's size. The mov pads the region to that.
-+	 */
-+	"r3 = 0x1234;"
- 	"r1 += r2;"
- 	"r1 -= r7;"
- 	"r1 += 0x8;"
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 1b2566012b63..14c905697352 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -859,6 +859,14 @@ static int bpf_jit_probe_post(struct bpf_jit *jit, struct bpf_prog *fp,
+ 	return 0;
+ }
+ 
++static void emit_shift_count32(struct bpf_jit *jit, u32 src_reg)
++{
++	/* risbg %w1,%src,59,128+63,0 */
++	_EMIT6(0xec000000 | reg(REG_W1, src_reg) << 16 | 59 << 8 | (0x80 | 63), 0x0055);
++	REG_SET_SEEN(REG_W1);
++	REG_SET_SEEN(src_reg);
++}
++
+ static int emit_ldx(struct bpf_jit *jit, struct bpf_prog *fp, struct bpf_insn *insn)
+ {
+ 	struct bpf_jit_probe probe;
+@@ -1431,9 +1439,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 	/*
+ 	 * BPF_LSH
+ 	 */
+-	case BPF_ALU | BPF_LSH | BPF_X: /* dst = (u32) dst << (u32) src */
+-		/* sll %dst,0(%src) */
+-		EMIT4_DISP(0x89000000, dst_reg, src_reg, 0);
++	case BPF_ALU | BPF_LSH | BPF_X: /* dst = (u32) dst << ((u32) src & 31) */
++		emit_shift_count32(jit, src_reg);
++		/* sll %dst,0(%w1) */
++		EMIT4_DISP(0x89000000, dst_reg, REG_W1, 0);
+ 		EMIT_ZERO(dst_reg);
+ 		break;
+ 	case BPF_ALU64 | BPF_LSH | BPF_X: /* dst = dst << src */
+@@ -1456,9 +1465,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 	/*
+ 	 * BPF_RSH
+ 	 */
+-	case BPF_ALU | BPF_RSH | BPF_X: /* dst = (u32) dst >> (u32) src */
+-		/* srl %dst,0(%src) */
+-		EMIT4_DISP(0x88000000, dst_reg, src_reg, 0);
++	case BPF_ALU | BPF_RSH | BPF_X: /* dst = (u32) dst >> ((u32) src & 31) */
++		emit_shift_count32(jit, src_reg);
++		/* srl %dst,0(%w1) */
++		EMIT4_DISP(0x88000000, dst_reg, REG_W1, 0);
+ 		EMIT_ZERO(dst_reg);
+ 		break;
+ 	case BPF_ALU64 | BPF_RSH | BPF_X: /* dst = dst >> src */
+@@ -1481,9 +1491,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 	/*
+ 	 * BPF_ARSH
+ 	 */
+-	case BPF_ALU | BPF_ARSH | BPF_X: /* ((s32) dst) >>= src */
+-		/* sra %dst,%dst,0(%src) */
+-		EMIT4_DISP(0x8a000000, dst_reg, src_reg, 0);
++	case BPF_ALU | BPF_ARSH | BPF_X: /* ((s32) dst) >>= (u32) src & 31 */
++		emit_shift_count32(jit, src_reg);
++		/* sra %dst,0(%w1) */
++		EMIT4_DISP(0x8a000000, dst_reg, REG_W1, 0);
+ 		EMIT_ZERO(dst_reg);
+ 		break;
+ 	case BPF_ALU64 | BPF_ARSH | BPF_X: /* ((s64) dst) >>= src */
 -- 
 2.43.0
 
