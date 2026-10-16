@@ -1,131 +1,108 @@
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44DDF257827
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB5812E1DC
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 00:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792110870; cv=none; b=CaZPniYIcTZTk1RdGlBH3mT+GcFdFbqOCfS9juc73TlShTLkfLaSWWeyHXlj7MTPrRyzD2Y71K4LM8cLHVyes2yc7ybx6rmVCTZs4HV96z5jdqxWUatUAwgRigd9yzryUPxvpigASGVgUkGFmFMgxkbiQ4UYY4NXlmaXEuQWSBs=
+	t=1792111095; cv=none; b=Ay6kOfBTzKwmIgitkbxuAfOx7pIZCa9CM+5/2vvuZEjPA3hklaRhPUJoBJzZJN4zTcStBm6ZvNVS57RakEnNIdSFFrQIQtCCzFBTJuKBiroBXRNPV7oO38UJ1vx6qZbXvVwp4WAhkSA4Re6AzaU72yzZcDK4rBC4mvd6e2QXOlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792110870; c=relaxed/simple;
-	bh=KAyye0S/j0Cj2j7YQI8ACm6RlaORGm1yCDYWqO2MoG4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EyGgsOpWZZkqwzsqKMSKShU4s5uGh/C4EpHaCZMEnxRtWVRciMTQGuGZfstpeRNM+XLArC2ZCgPl83atQffrJVqiHg22fzvUBHTWnK4LisCrYUF5UvbwY6yL2SQcO0a+9DtiRBwXg953x9014hLdgkZ27LSDf8zvqmgEkP5tHJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D7G0YH/s; arc=none smtp.client-ip=74.125.224.43
+	s=arc-20240116; t=1792111095; c=relaxed/simple;
+	bh=wJv6Oy02ZyVpQIEV4S+JLl2ZMXIUTlylj7/wOCMhJJY=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:MIME-Version; b=JyT9NNJp04fXgsteNWen4vbJIq4xqjjY4RVKaIreVEXLWm3D/zZUF9uO3+pB7VwKx9sEpihrvaxm2q9jSw4rKmEHR6L0lKbVRH1Cj7E+zx0wL6Kv1qZ4vN+g3unEJLzMSoow4vaBd1k15oXfNOuUXqjJ1U6Bg6fiZpZFtXGVQc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a3bkIh7E; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D7G0YH/s"
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-6798d4ab549so2448988d50.0
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 17:34:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a3bkIh7E"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ab9268d90eso3188821a91.3
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2026 17:38:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792110868; x=1792715668; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792111094; x=1792715894; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=u1tD54QZ8gXmMt0UvyLjGMVeM4XPBHYfkYhcWssb2jg=;
-        b=D7G0YH/sp7RwuuswRi4YL1ePBzhIxM9Ci3/gwzLHjp2PUUMuilpGLUDtSuV2JDS4YM
-         TSSCp569I7KkEY0pFlXcZNGfozMqBAfAcJZk3HHT3qpIBQq6gewnw7u6WBwPCDD7JSFV
-         4lzWp5rx/7ekkj+E3qW/Iwln+1mjBuHfuh3HByGkU8Q3Sj9cHXgobRMo4xB8sxter11B
-         agOuQ+l+iwCuZqX2UUSO+tfBoIxq0aoabuBD7n0iA73qYfTlkZ49+A88ZbVNk6On6kZA
-         VlSAxtCTFKI7IuxSCOTqgICmj+27HLjffBQCM9Yv671K8Ybm3Yun8cVjtP1Tq2/sfu1j
-         mOFA==
+        bh=wJv6Oy02ZyVpQIEV4S+JLl2ZMXIUTlylj7/wOCMhJJY=;
+        b=a3bkIh7Ee8Kg3CriNDEwX8oGdI8Qdq5fV8e7jXfgg0J1TidIHQ4ixKF3GGM/J9uPaU
+         e9p3Qhm0hYO6htG8BQo38S6WoWM17XaFGJgXz52hh0QoGrW0FDwdFx014NgxccrzmPDu
+         tgbpiLo9zoTQFGvOXV/dtf2i06sLTA0NjLV7QioPqD/w0Lj9OfYijzAFuzNuiRYVAi6d
+         N0MAhUGZZgq6jxOVaP4SUrgfmC9X+wf0hf06uCR2fckrgo66IiFyfvGxl1JjLyDrCPO/
+         S/vw5NXyrspYxKUnw5D8+EHgJ2a0J83wCznPI/OO3Clz8nc6Gz2YW1YzxBTBClAAqsCa
+         L4Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792110868; x=1792715668;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=u1tD54QZ8gXmMt0UvyLjGMVeM4XPBHYfkYhcWssb2jg=;
-        b=zXLXmmO2w4BHMm0djW4nDGirv2aqH2dIGXveCh4PaSkb0YvEHdTKCsEFbWLFZGvPVn
-         ogvxFWd8vdDJ8+f35s8JRlgxHml+1CW+CehpcvlFFg7lYnU1PZrUJUMMalfJN2jNQhnT
-         mPc+7gzDCvuGvpLLU/RLiuw2/Q5/mDuZT1Az7xCwt6eChf9lEDXd7y5KaHlu99IrR7oM
-         c3ooBBnCceLteSphPCbmBBiKgQsqWcwFiE8zVONwf1Ky3ejZhY6en0wH2Z+QmTCfk8NU
-         W5a56fbTCuu1vX8yEXP5XgTdtFPQGvLcdGxbQlKege4jizxqSGMB48H4OUBOD7AxwakI
-         VVDQ==
-X-Gm-Message-State: AFq9FYIx/QGhRROiyaxKdyB2CXdmiLA/XPvpGRucarA1gbHX12wDcmMz
-	s/xt8qcNg1t9U8STPnetOTejyPs6tJND5tm2dmSzMLzNAFTmieuEv61RTCEneQTI1q8=
-X-Gm-Gg: AYBFou3jix1Kk6s6+CmIwxZ63GE9GgIyW6PXWgApJtTefQwBLBvmPU1CDxnS8qEY14n
-	oX6+6Zdrl6AhfwlbS3oGr3dr+MO8uCweuq3AtDX0R2NEUxL2I/OVAqIKgrsZI7+DohSwi+zniiy
-	dI9UVUB55MSpVon1q8NH9dTr08pEMEw0XNstHh7rwPA3wQB6ThtwZqQ2iNLR39UgAydgY8KR7mN
-	GsFbg8WrF/SVuVXfXFpB9+NajsQqKEgp4QjCaF91/yXMkXK5/gcgfkA6f2Ngic8Gs8SQZbsPynG
-	XQzv9gesgsAmgMEiQUYiSyz3tp2JOAnsQrYQGHSFnlAGR5PzXx6xwiSzG+tD++FtqGq/f8dNq5J
-	ly6id8VsbXRduQMl9IWXdYk8ZOA2adFO4itI+rR4huSE2/zoFQHmUYgK+O7MlZmYtl750DZv7eZ
-	PX0Qppony9WaThpGoOv4xfXczh3GlP8gt954fFG71t8blHI8zy8VE=
-X-Received: by 2002:a05:690c:6d84:b0:8b0:d8f1:79c4 with SMTP id 00721157ae682-8b0d8f180b1mr15763367b3.55.1792110867985;
-        Thu, 15 Oct 2026 17:34:27 -0700 (PDT)
-Received: from corey ([2600:1702:5081:b900::49])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b0e58892cfsm2982937b3.10.2026.10.15.17.34.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 17:34:26 -0700 (PDT)
-From: Igor Malovitsa <igor.malovitsa@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	memxor@gmail.com,
-	linux-kernel@vger.kernel.org,
-	Igor Malovitsa <igor.malovitsa@gmail.com>
-Subject: [PATCH bpf 2/2] bpf: Fix user ringbuf empty check on 32-bit position wrap
-Date: Fri, 16 Oct 2026 00:33:18 +0000
-Message-ID: <20261016003318.529860-3-igor.malovitsa@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261016003318.529860-1-igor.malovitsa@gmail.com>
-References: <20261016003318.529860-1-igor.malovitsa@gmail.com>
+        d=1e100.net; s=20260707; t=1792111094; x=1792715894;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wJv6Oy02ZyVpQIEV4S+JLl2ZMXIUTlylj7/wOCMhJJY=;
+        b=mGoQa4HK9h6Jkyk5fj37wXimHLOXvNVUBluqH2EUmBaM2QPAVoKMRNHdgkFzDZxPUZ
+         467K7cljWsPNXqxgeLh9kTpkSobk5lxxmOP4JZEZtfGmmhhPuhnzxQoEi3vksShLkpzK
+         6SF47rBQGB8uxUJRB7Gh0m404mV18Vx9trEKlWNfWfL+m51IwghDRNwP2fEi7JFhtDWQ
+         TzdSvZqoKAvVzS+LA2SiS3vCFjQIvl6MJzWMSut31LT3byBgeQTdxjcWlDnJhfnUgVDk
+         poJ+lvK7oJn4Gm1sI7Qw8JYAoLSbowAaNvuZ4rGpUb/ZnVyNmu5BFV0UZfZSZXZoDCNU
+         vFdw==
+X-Forwarded-Encrypted: i=1; AKwUvBwJ5u9NwFDy4XqlxzXiAiP/nBfJYNhRkvz5oB6TshLN0xp2WySbYSbbQDidCFim0x26O2s=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIqsuDrVbhGUBs/3XNkg93UmhRYsLAZPNfImXqkUSHh180X90OR
+	T9Gqod06kZse2rJEKNGsdLBLdRO3D9XkohOmST+esPZNxaAQiVM6PgfT
+X-Gm-Gg: AYBFou2z6hSF5LlG0mKb2wi6Q726XkoVG8ylb8Lhjdd5Oy5sBaJ0kA3PUgWx1Ui5t7c
+	aLw1xFoMqqN/P87MXK9eaYXzTHUrenxCl/2ho0YYuA8vj9D4lf9CghVt7c+GNf8FUvkajB4pmb8
+	aLco+m7DQ/gu+sqCBwfpAj7J/zThThauDUqP97Vr8CvKvsS5ObW6qpdglsD98wpK2+prc7Tx3pM
+	YOU0Qx9Icvs+YOJaUKUvOoSTUT1wAOTm+hdWdPy5u1eZIv33TBZ9Yr9kmh3YItJ8DoYuUTilo62
+	1zvc0WJxFa3p5vlt/FbX8dSctqkDfL23FXaFIaDvcNOUFfEGLDedZWVcTTzVW/tNy3n206RTeni
+	fHrTZZzYc/oeonZUdESccDLZb9tG2U2Yw7iIjrJ+8AcOmzLmjeKiB+GjvnQvd3nKvTkRUkXhi0p
+	vYKeWmkCfBiNf5ld1jJrfvpEwI05Kc+7uoVEBfS9eWYr85lL3GZndC9Rn//59yEHC1CjL4HY46A
+	Pvpl8gFKygQBxLKVGwIrckgxqx8pQUaDDwPb5Exl0x6Sp/MyvzRRm+DyMkz76nNBXqvPD4blHLC
+	vkw=
+X-Received: by 2002:a17:90b:1d4f:b0:3ab:c80:936f with SMTP id 98e67ed59e1d1-3ab3a94ffa7mr15824328a91.16.1792111093664;
+        Thu, 15 Oct 2026 17:38:13 -0700 (PDT)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac947dfa00sm6462107a91.17.2026.10.15.17.38.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2026 17:38:12 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 16 Oct 2026 00:38:11 +0000
+Message-Id: <DM5UD20248FG.3BXPS76LK06F5@gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/3] keys: Add well known IDs for
+ fs-verity/dm-verity keys
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Christian Brauner" <brauner@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Alasdair
+ Kergon" <agk@redhat.com>, "Mike Snitzer" <snitzer@kernel.org>, "Mikulas
+ Patocka" <mpatocka@redhat.com>, "Benjamin Marzinski" <bmarzins@redhat.com>,
+ "David Howells" <dhowells@redhat.com>, "Jarkko Sakkinen"
+ <jarkko@kernel.org>, "Paul Moore" <paul@paul-moore.com>, "James Morris"
+ <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "Eric Biggers"
+ <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, "Jonathan
+ Corbet" <corbet@lwn.net>, "Shuah Khan" <skhan@linuxfoundation.org>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Andrew Halaney" <andrew@amutable.com>
+Cc: <dm-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+ <keyrings@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <fsverity@lists.linux.dev>,
+ <linux-doc@vger.kernel.org>
+In-Reply-To: <20261012-broschen-inanspruchnahme-gebilde-d72cf2b99cda@brauner>
+References: <20261008-ajhalaney-dmverity-key-identifier-v2-0-008456d189cb@amutable.com> <20261012-broschen-inanspruchnahme-gebilde-d72cf2b99cda@brauner>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-__bpf_user_ringbuf_peek() copies the unsigned long producer_pos and
-consumer_pos into u64 locals and tests cons_pos >= prod_pos for an
-empty ring. On 32-bit, once producer_pos wraps past 2^32 and
-consumer_pos has not, every drain sees an empty ring and the user-space
-producer gets -ENOSPC from then on. The fit check total_len >
-prod_pos - cons_pos is wrong in the same state.
+On Mon, Oct 12, 2026 at 12:38 PM Christian Brauner <brauner@kernel.org> wrote:
+> Applied to the vfs-7.4.keyring branch of the vfs/vfs.git tree.
+> Patches in the vfs-7.4.keyring branch should appear in linux-next soon.
 
-Keep the positions in unsigned long and test emptiness through their
-difference, as the kernel-producer side does since commit 6ff5b56a50c5
-("bpf: Fix pending_pos walk on 32-bit ring position wrap"). On 64-bit
-nothing changes: unsigned long is u64, and the signed test differs from
-cons_pos >= prod_pos only for positions 2^63 bytes apart.
+What is this branch based on ?
+v2 was sent against bpf-next, because
+commit 264d8fd2794f ("bpf, keys: Add a bpf keyring for program signature validation")
+is only there.
+All hunks in keyctl.h, key.h and process_keys.c have its lines as
+context, so the patches don't apply to -rc as-is.
+And patch 3 documents KEY_SPEC_BPF_KEYRING.
 
-Fixes: 205715673844 ("bpf: Add bpf_user_ringbuf_drain() helper")
-Assisted-by: LLM
-Signed-off-by: Igor Malovitsa <igor.malovitsa@gmail.com>
----
- kernel/bpf/ringbuf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index 6b86c4db5108..b79cc433d2c6 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -750,7 +750,7 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf *rb, void **sample, u32 *s
- {
- 	int err;
- 	u32 hdr_len, sample_len, total_len, flags, *hdr;
--	u64 cons_pos, prod_pos;
-+	unsigned long cons_pos, prod_pos;
- 
- 	/* Synchronizes with smp_store_release() in user-space producer. */
- 	prod_pos = smp_load_acquire(&rb->producer_pos);
-@@ -759,7 +759,7 @@ static int __bpf_user_ringbuf_peek(struct bpf_ringbuf *rb, void **sample, u32 *s
- 
- 	/* Synchronizes with smp_store_release() in __bpf_user_ringbuf_sample_release() */
- 	cons_pos = smp_load_acquire(&rb->consumer_pos);
--	if (cons_pos >= prod_pos)
-+	if ((long)(prod_pos - cons_pos) <= 0)
- 		return -ENODATA;
- 
- 	hdr = (u32 *)((uintptr_t)rb->data + (uintptr_t)(cons_pos & rb->mask));
--- 
-2.53.0
+I'm confused.
 
