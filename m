@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B78539449C
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B1F49BB52
+	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792175476; cv=none; b=NL+rek6lbQo7zvYl5YJKxlBj5cxSfDsbkHr0JVnw/uUA0DL0543fI6kUavUixkDLZMH+IZHnKeS0lVoJDpCCMdWzCcq4guAuxcrdJMcKJLfaHGfnXPnrJI/8cRf+htVzlUxqMw8YcTh2HgonOg29D59exZmxj8asXstHst4Xe8c=
+	t=1792175488; cv=none; b=CRVcsQuIRIUoOOA1MlrQXZhkmPtYBB3phpfw4tbAvXaor5oBcdBpqIO3XjAad5n+uTyUGern+jWjCPmO7OzQ2RtkJSw7+xJ+GW5jPM/FntmM+dg5m1iCVw9odOoqkmmspk9sC5VXjWxXfnLVv1an0xWt11HutyqwMpowjZTMBso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792175476; c=relaxed/simple;
-	bh=GGkU6dOT8CnCdYyDgVROD1NhIdi/rdgEGe1Ubqhd4PQ=;
+	s=arc-20240116; t=1792175488; c=relaxed/simple;
+	bh=jiMxWbDIAUx8yrdQhrBWVSjW5pKYSKuAqXspDzkKz1Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C2dS4KYWpvcJkh/mPupbkHbkA0lL6+M3dWfgm48HR8s9Eee4ShZc+D5N6Av+z5Oe89Pm1tKWWrnUdKH8D7bg0AXsBTZpM0lyOfnJjYuHADHQ5sEt5I+6XGgCJwbBbRyX+0l4q8j/kOyDrfvIS9HpxuP8HRtSUjEDUZ31F2zkZ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=dWpTU0zN7lrCKDPATRLhYN52a657FvHjkAUna7BjbhaOKMn0JApK1X/ykD0N9kwD1VOuoI7wA4l0RRyFxV+ihd5hVCatGynjDXKmKZPxL35Dc+/sL7c5lY3+c+aYu7HYvZzfqgst5Mo5Vf/q8KnvV41BElWxdXsNVTzWRUnhbqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 4184231A0DA9D0; Fri, 16 Oct 2026 11:31:10 -0700 (PDT)
+	id 5D02E31A0DA9EA; Fri, 16 Oct 2026 11:31:15 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v4 6/9] selftests/bpf: Test trampoline args around a 16-byte aligned stack arg
-Date: Fri, 16 Oct 2026 11:31:10 -0700
-Message-ID: <20261016183110.1135597-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 7/9] selftests/bpf: Test trampoline args of a BPF function at an odd slot
+Date: Fri, 16 Oct 2026 11:31:15 -0700
+Message-ID: <20261016183115.1135762-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261016183039.1132126-1-yonghong.song@linux.dev>
 References: <20261016183039.1132126-1-yonghong.song@linux.dev>
@@ -37,208 +37,296 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add two bpf_testmod functions whose 16-byte aligned argument, a struct
-holding an __int128, is passed on the stack after a hole:
+Attach fentry and fexit programs to two functions of another BPF
+program, each taking a struct holding an __int128 at an odd argument
+slot:
 
-  - bpf_testmod_test_int128_stack(): seven u64s before the struct, so it
-    leaves a register empty on arm64 and a stack slot empty on x86-64.
-  - bpf_testmod_test_int128_backfill(): a 16-byte struct of two longs
-    moves to the x86-64 stack and gives R9 back to the next argument; the
-    struct then leaves a stack slot empty on both x86-64 and arm64.
+  - callee_odd(): the struct after a single u64, where arm64 would
+    leave a register empty.
+  - callee_stack(): the struct after seven u64s, where x86-64 would
+    leave a stack slot empty and arm64 a register.
 
-The __int128 is wrapped in a struct because btf_ctx_access() refuses a
-program reading an integer argument wider than eight bytes, while it
-lets the program read each slot of a struct argument.
+BPF code calls them with the arguments packed in the BPF convention, so
+that is where the trampoline has to take them from. The fentry programs
+take the arguments with BPF_PROG2(), which reads each from its slots in
+ctx[], and the fexit programs check the return value, weighted by slot,
+which is only right if the function got its arguments back where its
+caller put them. Both take a struct by value, which GCC passes by
+reference instead, so they are only built with clang, and callee_stack()
+only with a clang that supports stack arguments.
 
-The fentry programs read each argument slot from ctx[] and check that
-the trampoline packs them in the BPF convention, and the fexit programs
-check the return value, weighted by argument slot, which is only right
-if the original function got its arguments back where its convention
-wants them.
+Unlike a kernel function taking an __int128, which s390x passes by
+reference, nothing in the test depends on how the arch passes a 16-byte
+value, so it runs on s390x as well as on x86_64 and arm64. BPF_PROG2()
+reads the struct from its two context slots the way BPF code passed it,
+so its halves come out right on big-endian s390x too. The s390 JIT does
+not take stack arguments, so callee_stack() is only built for x86 and
+arm64, and only callee_odd() is traced on s390x.
 
-Without the preceding x86 fix the test fails with:
+Describing the functions to the trampoline by the types of their
+arguments, rather than as one u64 per slot, the x86-64 trampoline fails
+the test with:
 
-  test_int128_args:FAIL:s:h.lo unexpected s:h.lo: actual 2 !=3D expected =
-8
-  ...
-  test_int128_args:FAIL:s ret unexpected s ret: actual 285 !=3D expected =
-385
+  test_int128_tgt_prog:FAIL:stack:h.lo unexpected stack:h.lo: actual 9 !=3D=
+ expected 8
+  test_int128_tgt_prog:FAIL:stack:h.hi unexpected stack:h.hi: actual 10 !=
+=3D expected 9
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/tracing_struct.c | 22 +++++++--
- .../bpf/progs/tracing_struct_int128.c         | 45 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 43 ++++++++++++++++++
- 3 files changed, 107 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/tracing_struct.c | 74 +++++++++++++++++++
+ .../bpf/progs/tracing_struct_int128_tgt.c     | 71 ++++++++++++++++++
+ .../bpf/progs/tracing_struct_int128_tracer.c  | 50 +++++++++++++
+ 3 files changed, 195 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tgt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_struct_int1=
+28_tracer.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/to=
 ols/testing/selftests/bpf/prog_tests/tracing_struct.c
-index 8086586d3e19..a2da219e1476 100644
+index a2da219e1476..a02731bc6573 100644
 --- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
 +++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
-@@ -119,9 +119,11 @@ static void test_int128_args(void)
- {
- 	/*
- 	 * __int128 arguments are passed in a register pair on x86_64 and
--	 * arm64, which the trampoline packs into two context slots. Other
--	 * architectures pass a __int128 differently (e.g. s390x passes larger
--	 * arguments by reference), so only exercise this on x86_64 and arm64.
-+	 * arm64, which the trampoline packs into two context slots. Past the
-+	 * registers, both start an argument aligned to 16 bytes at an even
-+	 * stack slot, which the trampoline packs too. Other architectures
-+	 * pass a __int128 differently (e.g. s390x passes larger arguments by
-+	 * reference), so only exercise this on x86_64 and arm64.
- 	 */
- #if defined(__x86_64__) || defined(__aarch64__)
- 	struct tracing_struct_int128 *skel;
-@@ -141,6 +143,20 @@ static void test_int128_args(void)
- 	ASSERT_EQ(skel->bss->t_c, 3, "t:c");
- 	ASSERT_EQ(skel->bss->t_ret, 6, "t ret");
+@@ -5,6 +5,8 @@
+ #include "tracing_struct.skel.h"
+ #include "tracing_struct_many_args.skel.h"
+ #include "tracing_struct_int128.skel.h"
++#include "tracing_struct_int128_tgt.skel.h"
++#include "tracing_struct_int128_tracer.skel.h"
+ #include "tracing_stack_arg_tailcall_tgt.skel.h"
+ #include "tracing_stack_arg_tailcall_tracer.skel.h"
 =20
-+	ASSERT_EQ(skel->bss->s_g, 7, "s:g");
-+	ASSERT_EQ(skel->bss->s_h_lo, 8, "s:h.lo");
-+	ASSERT_EQ(skel->bss->s_h_hi, 9, "s:h.hi");
-+	ASSERT_EQ(skel->bss->s_i, 10, "s:i");
-+	ASSERT_EQ(skel->bss->s_ret, 385, "s ret");
-+
-+	ASSERT_EQ(skel->bss->b_f_a, 6, "b:f.a");
-+	ASSERT_EQ(skel->bss->b_f_b, 7, "b:f.b");
-+	ASSERT_EQ(skel->bss->b_g, 8, "b:g");
-+	ASSERT_EQ(skel->bss->b_h, 9, "b:h");
-+	ASSERT_EQ(skel->bss->b_i_lo, 10, "b:i.lo");
-+	ASSERT_EQ(skel->bss->b_i_hi, 11, "b:i.hi");
-+	ASSERT_EQ(skel->bss->b_ret, 506, "b ret");
-+
- destroy_skel:
- 	tracing_struct_int128__destroy(skel);
- #else
-diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c b/=
-tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-index 4638dfec1f38..5520ee500c01 100644
---- a/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128.c
-@@ -15,4 +15,49 @@ int test_int128_arg_fexit(unsigned long long *ctx)
- 	return 0;
+@@ -164,6 +166,76 @@ static void test_int128_args(void)
+ #endif
  }
 =20
-+/*
-+ * The arguments come packed in the BPF convention whatever holes the
-+ * kernel convention left between them: an eightbyte each, and two for t=
-he
-+ * struct holding an __int128.
-+ */
-+long s_g, s_h_lo, s_h_hi, s_i, s_ret;
-+
-+SEC("fentry/bpf_testmod_test_int128_stack")
-+int test_int128_stack_fentry(unsigned long long *ctx)
++static void test_int128_tgt_prog(void)
 +{
-+	s_g =3D ctx[6];
-+	s_h_lo =3D ctx[7];
-+	s_h_hi =3D ctx[8];
-+	s_i =3D ctx[9];
-+	return 0;
++#if defined(__x86_64__) || defined(__aarch64__) || defined(__s390x__)
++	struct tracing_struct_int128_tracer *tracer =3D NULL;
++	struct tracing_struct_int128_tgt *tgt;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err, fd;
++
++	tgt =3D tracing_struct_int128_tgt__open_and_load();
++	if (!ASSERT_OK_PTR(tgt, "tgt__open_and_load"))
++		return;
++	if (!tgt->rodata->has_struct_arg) {
++		test__skip();
++		goto out;
++	}
++	fd =3D bpf_program__fd(tgt->progs.run);
++
++	tracer =3D tracing_struct_int128_tracer__open();
++	if (!ASSERT_OK_PTR(tracer, "tracer__open"))
++		goto out;
++
++	err =3D bpf_program__set_attach_target(tracer->progs.odd_entry, fd, "ca=
+llee_odd");
++	err =3D err ?: bpf_program__set_attach_target(tracer->progs.odd_exit, f=
+d, "callee_odd");
++	if (tgt->rodata->has_stack_arg) {
++		err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_entr=
+y, fd,
++							     "callee_stack");
++		err =3D err ?: bpf_program__set_attach_target(tracer->progs.stack_exit=
+, fd,
++							     "callee_stack");
++	} else {
++		bpf_program__set_autoload(tracer->progs.stack_entry, false);
++		bpf_program__set_autoload(tracer->progs.stack_exit, false);
++	}
++	if (!ASSERT_OK(err, "set_attach_target"))
++		goto out;
++
++	err =3D tracing_struct_int128_tracer__load(tracer);
++	if (!ASSERT_OK(err, "tracer__load"))
++		goto out;
++	err =3D tracing_struct_int128_tracer__attach(tracer);
++	if (!ASSERT_OK(err, "tracer__attach"))
++		goto out;
++
++	err =3D bpf_prog_test_run_opts(fd, &topts);
++	if (!ASSERT_OK(err, "test_run") || !ASSERT_EQ(topts.retval, 0, "retval"=
+))
++		goto out;
++
++	ASSERT_EQ(tracer->bss->odd_a, 1, "odd:a");
++	ASSERT_EQ(tracer->bss->odd_lo, 8, "odd:v.lo");
++	ASSERT_EQ(tracer->bss->odd_hi, 9, "odd:v.hi");
++	ASSERT_EQ(tracer->bss->odd_b, 2, "odd:b");
++	ASSERT_EQ(tgt->bss->ret_odd, 52, "odd ret");
++	ASSERT_EQ(tracer->bss->odd_ret, 52, "odd fexit ret");
++
++	if (tgt->rodata->has_stack_arg) {
++		ASSERT_EQ(tracer->bss->stack_g, 7, "stack:g");
++		ASSERT_EQ(tracer->bss->stack_lo, 8, "stack:h.lo");
++		ASSERT_EQ(tracer->bss->stack_hi, 9, "stack:h.hi");
++		ASSERT_EQ(tracer->bss->stack_i, 10, "stack:i");
++		ASSERT_EQ(tgt->bss->ret_stack, 385, "stack ret");
++		ASSERT_EQ(tracer->bss->stack_ret, 385, "stack fexit ret");
++	}
++
++out:
++	tracing_struct_int128_tracer__destroy(tracer);
++	tracing_struct_int128_tgt__destroy(tgt);
++#else
++	test__skip();
++#endif
 +}
 +
-+SEC("fexit/bpf_testmod_test_int128_stack")
-+int test_int128_stack_fexit(unsigned long long *ctx)
-+{
-+	s_ret =3D ctx[10];
-+	return 0;
-+}
+ /*
+  * A trampoline on a function of a tail_call_reachable program keeps the=
+ tail
+  * call counter pointer on its stack, and has to hand the function its s=
+tack
+@@ -254,6 +326,8 @@ void test_tracing_struct(void)
+ 		test_struct_many_args();
+ 	if (test__start_subtest("int128_args"))
+ 		test_int128_args();
++	if (test__start_subtest("int128_tgt_prog"))
++		test_int128_tgt_prog();
+ 	if (test__start_subtest("stack_arg_tailcall"))
+ 		test_stack_arg_tailcall();
+ 	if (test__start_subtest("union_args"))
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.=
+c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+new file mode 100644
+index 000000000000..60e997470b59
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tgt.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
 +
-+long b_f_a, b_f_b, b_g, b_h, b_i_lo, b_i_hi, b_ret;
-+
-+SEC("fentry/bpf_testmod_test_int128_backfill")
-+int test_int128_backfill_fentry(unsigned long long *ctx)
-+{
-+	b_f_a =3D ctx[5];
-+	b_f_b =3D ctx[6];
-+	b_g =3D ctx[7];
-+	b_h =3D ctx[8];
-+	b_i_lo =3D ctx[9];
-+	b_i_hi =3D ctx[10];
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_test_int128_backfill")
-+int test_int128_backfill_fexit(unsigned long long *ctx)
-+{
-+	b_ret =3D ctx[11];
-+	return 0;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 00641d597f95..38edb4addc5b 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -197,6 +197,43 @@ bpf_testmod_test_int128_arg(__int128 a, int b, long =
-c)
- 	bpf_testmod_test_struct_arg_result =3D (long)a + b + c;
- 	return bpf_testmod_test_struct_arg_result;
- }
-+
-+struct bpf_testmod_struct_int128 {
-+	__int128 a;
++struct int128_arg {
++	__int128 v;
 +};
 +
-+/*
-+ * x86-64 puts g in the first stack slot and h, aligned to 16 bytes, in
-+ * the third and fourth, leaving a hole. arm64 leaves x7 empty and puts =
-h
-+ * in the first two stack slots. Either way h and i are not where the BP=
-F
-+ * convention packs them, right after g.
-+ */
-+noinline long
-+bpf_testmod_test_int128_stack(u64 a, u64 b, u64 c, u64 d, u64 e, u64 f,
-+			      u64 g, struct bpf_testmod_struct_int128 h, u64 i)
++__u64 base;
++__u64 ret_odd, ret_stack;
++
++#if defined(__clang__)
++
++const volatile bool has_struct_arg =3D true;
++
++/* arm64 would want v in x2 and x3, and b in x4. */
++__noinline __u64 callee_odd(__u64 a, struct int128_arg v, __u64 b)
 +{
-+	bpf_testmod_test_struct_arg_result =3D a + b * 2 + c * 3 + d * 4 + e * =
-5 +
-+		f * 6 + g * 7 + (u64)h.a * 8 +
-+		(u64)((unsigned __int128)h.a >> 64) * 9 + i * 10;
-+	return bpf_testmod_test_struct_arg_result;
++	return a + (__u64)v.v * 2 + (__u64)((unsigned __int128)v.v >> 64) * 3 +
++	       b * 4;
 +}
 +
++#else
++
++const volatile bool has_struct_arg =3D false;
++
++#endif
++
++#if defined(__clang__) && \
++	(defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++const volatile bool has_stack_arg =3D true;
++
 +/*
-+ * x86-64 has no register left for f after e, so f goes to the stack and=
- g
-+ * takes R9 back; h goes to the third stack slot and i, aligned to 16
-+ * bytes, to the fifth and sixth. arm64 has registers up to g, puts h in
-+ * the first stack slot and i in the third and fourth.
++ * x86-64 would want h in its third and fourth stack slots, and arm64 in
++ * its first and second, leaving x7 empty.
 + */
-+noinline long
-+bpf_testmod_test_int128_backfill(u64 a, u64 b, u64 c, u64 d, u64 e,
-+				 struct bpf_testmod_struct_arg_2 f, u64 g, u64 h,
-+				 struct bpf_testmod_struct_int128 i)
++static __noinline __u64 callee_stack(__u64 a, __u64 b, __u64 c, __u64 d,
++				     __u64 e, __u64 f, __u64 g,
++				     struct int128_arg h, __u64 i)
 +{
-+	bpf_testmod_test_struct_arg_result =3D a + b * 2 + c * 3 + d * 4 + e * =
-5 +
-+		f.a * 6 + f.b * 7 + g * 8 + h * 9 + (u64)i.a * 10 +
-+		(u64)((unsigned __int128)i.a >> 64) * 11;
-+	return bpf_testmod_test_struct_arg_result;
++	return a + b * 2 + c * 3 + d * 4 + e * 5 + f * 6 + g * 7 +
++	       (__u64)h.v * 8 + (__u64)((unsigned __int128)h.v >> 64) * 9 +
++	       i * 10;
 +}
- #endif
-=20
- __weak noinline void bpf_testmod_looooooooooooooooooooooooooooooong_name=
-(void)
-@@ -683,6 +720,12 @@ bpf_testmod_test_read(struct file *file, struct kobj=
-ect *kobj,
- #ifdef __SIZEOF_INT128__
- 	(void)bpf_testmod_test_int128_ret(i);
- 	(void)bpf_testmod_test_int128_arg((__int128)1, 2, 3);
-+	(void)bpf_testmod_test_int128_stack(1, 2, 3, 4, 5, 6, 7,
-+		(struct bpf_testmod_struct_int128){ .a =3D ((__int128)9 << 64) | 8 },
-+		10);
-+	(void)bpf_testmod_test_int128_backfill(1, 2, 3, 4, 5,
-+		(struct bpf_testmod_struct_arg_2){ .a =3D 6, .b =3D 7 }, 8, 9,
-+		(struct bpf_testmod_struct_int128){ .a =3D ((__int128)11 << 64) | 10 }=
-);
- #endif
-=20
- 	(void)trace_bpf_testmod_test_raw_tp_null_tp(NULL);
++
++#else
++
++const volatile bool has_stack_arg =3D false;
++
++#endif
++
++SEC("syscall")
++int run(void *ctx)
++{
++#if defined(__clang__)
++	struct int128_arg v =3D { .v =3D ((__int128)(base + 9) << 64) | (base +=
+ 8) };
++
++	ret_odd =3D callee_odd(base + 1, v, base + 2);
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++	defined(__BPF_FEATURE_STACK_ARGUMENT)
++	ret_stack =3D callee_stack(base + 1, base + 2, base + 3, base + 4,
++				 base + 5, base + 6, base + 7, v, base + 10);
++#endif
++#endif
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_int128_trac=
+er.c b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
+new file mode 100644
+index 000000000000..5843dc5af9cf
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_int128_tracer.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++struct int128_arg {
++	__int128 v;
++};
++
++long odd_a, odd_lo, odd_hi, odd_b, odd_ret;
++
++SEC("fentry/callee_odd")
++int BPF_PROG2(odd_entry, __u64, a, struct int128_arg, v, __u64, b)
++{
++	odd_a =3D a;
++	odd_lo =3D (__u64)v.v;
++	odd_hi =3D (unsigned __int128)v.v >> 64;
++	odd_b =3D b;
++	return 0;
++}
++
++SEC("fexit/callee_odd")
++int odd_exit(unsigned long long *ctx)
++{
++	odd_ret =3D ctx[4];
++	return 0;
++}
++
++long stack_g, stack_lo, stack_hi, stack_i, stack_ret;
++
++SEC("fentry/callee_stack")
++int BPF_PROG2(stack_entry, __u64, a, __u64, b, __u64, c, __u64, d, __u64=
+, e,
++	      __u64, f, __u64, g, struct int128_arg, h, __u64, i)
++{
++	stack_g =3D g;
++	stack_lo =3D (__u64)h.v;
++	stack_hi =3D (unsigned __int128)h.v >> 64;
++	stack_i =3D i;
++	return 0;
++}
++
++SEC("fexit/callee_stack")
++int stack_exit(unsigned long long *ctx)
++{
++	stack_ret =3D ctx[10];
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.53.0-Meta
 
