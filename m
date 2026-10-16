@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB154480DE9;
-	Fri, 16 Oct 2026 13:40:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7850B4CDDC3;
+	Fri, 16 Oct 2026 13:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792158012; cv=none; b=HXYgZICUxGuACyicMIY4COrULPk9cQCjvJSHtTGzsZPrfxnGZHx0rXUKhb9jt2A8jTAmUy3ACPhc2qBidBUsPHkr014pk/SpCw8+qV5HFUdZ3CbHDtTNGRCCpi3o709Df5P+qqdv9BbSp8r1HdFHPHrtJZLzLBNY2qyoy/whSh0=
+	t=1792158014; cv=none; b=t2xRGpdsGorM0cs7Rw5ZGkrbqSaQhAspBm7+Qe8iX2+S0iOpOmFJ3jj9BS7I/WgH7sDXb5WNoY8kMG91pCE3pyAbMH9I9q4ChVhC+koopnSs8Ag4X+YXqVCXUJKtkBX1usAsIe7hGg6Oj8wR+K0iWch+MOuRnKXV5voz4pmcjXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792158012; c=relaxed/simple;
-	bh=WoEJFX5LfScTO/M47xw+wJ9Y3H9ZLYo2vGzWBxrFMBc=;
+	s=arc-20240116; t=1792158014; c=relaxed/simple;
+	bh=0IHTEs+pvAYa+7vQMln3xlEfDIWWNKsBpDvOnwo8Yrk=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=oqc6rR0D/axiGGYOIdUr7WTfKh6waizV1y7GGmnYSWA17LS+A/y7AkGmMRCLQzG5WiRLsvTIljaieDWvD9ZeogDJ1zQlBo3+uCerf+m4z4bjr47cYbEsRBfWsuJwENZ9uSIa0ga3H3ljh0ILD8/+tKaMKeAg6lt6WWLKdOzR7ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ORVDW+UW; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=IP+lYaYe6rdq+NCcW6+bHYNpS+uxv/E+b0zJjSyEQWylAxfVgpzdlA5sm5ctfLhX+FtOxBDFL410GVbXZCexfJMWP3Xu0/5xf8jCA1Wc/PBhmSoVHTS42MxZzEwvsJaIvVu1H51KVoIlCQiItAVN4MmQG159yBBhUTjGvVUPNmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N54YhCq3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ORVDW+UW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C54511F000C4;
-	Fri, 16 Oct 2026 13:40:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N54YhCq3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472591F000C4;
+	Fri, 16 Oct 2026 13:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792158011;
-	bh=C/IUVK8DHOjit4GMkeRrGajEhcmovgoB82GVqSNM1zI=;
+	s=k20260515; t=1792158013;
+	bh=q4+yFQ1RMTVGxRi4ZRN5qNEa/3n1uEqLEnZJnPJw83o=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ORVDW+UWUiYrsQHp8o44PblSJjepVsFQ//KYSCsLm71lFF6kpmeNsohM4EPpw7jAr
-	 qy2TZH/cxlpjqxnqN+B7yDP9P/8wPAR6607EnqNNA+vu0mOt/ZPO+b+MOSfo+2BXjv
-	 o4XJcwAERRBJmzMvPDaMm6yKxcnWapB+ZEL1m1U9Tq4rq3GFdf20/aq0dxgHuAVwdB
-	 j0vAzAxe07GsaLlbhaq650jVC2kb2Uhc9KwOnzQYRhBI1Z/DCOfOoKPjjw7ls8UEqD
-	 S0yFGoAgSo0fEOPU96sIhQv5kiXkoshlnGRKc2yJ4i7Ll0wFIuKIvivn2twCQUxl++
-	 wxQ5u6lEPh4Xg==
+	b=N54YhCq3dbbNJlVWMM/Celw4+UppRffTa1ak3EhneeVTs5wiAwXZuhvvSIy6cnGbY
+	 e1HdMV+dtZpHGo3bydHFIIjAB8xwr2S3jqpwJav/Bp5rG3htkMjbfVJ2O6GHcyxJNF
+	 eSV+omXdybqfjbYM4khcDGghAFpM8KYAV6xtUuCDrAUN2TAtR4/1rDkqEqxU3oIfo7
+	 WRZFBCidF8eMjoM5j2AJkhv/QRMl99015z+DVgWLbS7g7BdQzmNynU9HPt+aP+wPho
+	 xM0XdXQJlvSHNurvsGlW7VdozKs3DSOR2a7VXZXWKcsxcWXoGaY5VbHZ6epobORtxM
+	 aTYwsQOQfEu/w==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B6BCC380A95C;
-	Fri, 16 Oct 2026 13:40:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3AC13380A95C;
+	Fri, 16 Oct 2026 13:40:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,40 +37,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/bpf: Fix spelling mistakes in descr literal
- strings
+Subject: Re: [PATCH bpf-next] bpftool: Fix inverted tracefs validation when
+ scanning /proc/mounts
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179215801028.300760.16314134678598570739.git-patchwork-notify@kernel.org>
-Date: Fri, 16 Oct 2026 13:40:10 +0000
-References: <20261012212334.183116-1-colin.i.king@gmail.com>
-In-Reply-To: <20261012212334.183116-1-colin.i.king@gmail.com>
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, sdf@fomichev.me,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+ <179215801179.300760.9186201876116142523.git-patchwork-notify@kernel.org>
+Date: Fri, 16 Oct 2026 13:40:11 +0000
+References: <20261016015057.127061-1-chenyuan_fl@163.com>
+In-Reply-To: <20261016015057.127061-1-chenyuan_fl@163.com>
+To: chenyuan <chenyuan_fl@163.com>
+Cc: bpf@vger.kernel.org, chenyuan@kylinos.cn, qmo@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ kuba@kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Mon, 12 Oct 2026 22:23:34 +0100 you wrote:
-> There are spelling mistakes in the descr literal strings. Fix them.
+On Fri, 16 Oct 2026 09:50:57 +0800 you wrote:
+> From: Yuan Chen <chenyuan@kylinos.cn>
 > 
-> Fixes: 095ddb501b39 ("selftests/bpf: Add sockopt case to verify prog_type")
+> The /proc/mounts fallback in get_tracefs_pipe() accepts only
+> non-tracefs mount points, so a tracefs mounted outside the default
+> locations is ignored: bpftool prog tracelog then mounts a second
+> tracefs, or exits silently with --nomount. Negate the condition.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/sockopt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> [...]
 
 Here is the summary with links:
-  - selftests/bpf: Fix spelling mistakes in descr literal strings
-    https://git.kernel.org/bpf/bpf-next/c/760c953525ba
+  - [bpf-next] bpftool: Fix inverted tracefs validation when scanning /proc/mounts
+    https://git.kernel.org/bpf/bpf-next/c/21c755efaab1
 
 You are awesome, thank you!
 -- 
