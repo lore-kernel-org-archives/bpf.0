@@ -1,112 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91DA4B99AC
-	for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 19:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61FC34CF462;
+	Fri, 16 Oct 2026 19:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792177208; cv=none; b=OBVE2NBcZuGYWi4Fv6CkOsP6Nwbxy+RmUzsqlCTydcqw9RWTzLnlEgHwExbIfCBob9FiYg44d10rbDCkReQJVnrdVzYy9Hv1gnqgNuokTjYw8jpodspQFRyWUIR/ziV2HB8hGUlmM5E3SDgUL8MQOlJNwQhxrkEmv+eND+Ht8rc=
+	t=1792177273; cv=none; b=nOj5B7mRL0526gzFtFztjv5w5jv6XnsLkEzPatjDEryiC3Prf1VBu7di7Ytb5n+meL1sekjATGtv6WGGbgo+QJUkV1IBguu2KYX3IYJiC08o7wJV9OEsCjhUJTsuzwiFmtXM7gUH4eGstAD8dNvW0sehhg4d6b0PpPqKJ2ZiOkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792177208; c=relaxed/simple;
-	bh=4LcGGiLogWwNVDadJ9b1YoAHzLFgMDRu5kJs8DXhk50=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=i+jp7+eSfymISRQY0oAiFiI5Gzvzw4sbti+jYREIAYvF9EuWdCq3FhBoWf+JIch+CT/ippjqA4E/uiQFGFSFQGInlnJvE3vVuH3NxJGzBBBy309vU84okOw+pxwlDxvhFGiWwKuNcqQtz/GyV2XNxZdMrMp9ym92wMrffTceGIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvj2SQrp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792177273; c=relaxed/simple;
+	bh=y/Tka1nU8/Q78MTF3y1OR8RQ5+1zMlPLmR72fIp6atg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t/2FvRyO01wUZyTukJK4MfuxC9YhvWF9PjEkREaCyp47cUbO6KKe/4T1enDc1LAfA9d4GgG2GFrQ2QbyRt6NIeH9aeNLjIfkq2FwM0KsZiNWg/2QvIZdvD0GxS9hmY0oSweyef/+zsqgJb9U2pmwbjzRlAAHKmJnUtyYqhiOnlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=qpZAlarf; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvj2SQrp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8326E1F000C4;
-	Fri, 16 Oct 2026 19:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792177206;
-	bh=KeUYqPyIIWa7MSzRV/q/XhtqBkhGqTjndKtZAy4HOvM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=cvj2SQrpbb/IQdncNS3eK+vAfmt59c55Vbif6LIPe5Gsw4kasc2voIG00gyru06dy
-	 DVQSss3e6x5D5OqV1Mv2+hCseidxw8LwvOa+Dz10LLeMQ/LZa3AOoYF2q7u3ktJ2F7
-	 OmWNTapsiiBrHGA988nDzfrkgWPlVifQoyc04eZPISSRIdsurQYu2b9y6mOTa74NIP
-	 Xk0LkfNz374jsggj3iZ7u/TspMCIrmPAD7s7yBl9IwuG/5IQXBRZH7Q8GlAfCudKRM
-	 uhTCrmqzB05JXqCYnY6kY9esMX7CY17bSmzFLBm9mEWusiKdRsgdLXPkFTCrs0Q748
-	 oBvngPqGSTthw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 77534380AA66;
-	Fri, 16 Oct 2026 19:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="qpZAlarf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=sKQfbbu2a1i//FLpsUtsi4Xzn/bWTFUH9/zyd4KERFQ=; b=qpZAlarfALa+dQcNhp9LxR3rp6
+	t1pUYvejwZupTuFnfRHWeOZBRc85nMdkAAy5IwgZ8spT23Blb2M9hhUW3xv6ugQaz4GxovAi8sRW2
+	92ed5fy9f09pdIR7jUQNGWX8r6Evsybd6jvdnrlCbjJcNCwjDPYDUsuofB71UeyJwIpG43cynRHoL
+	2DtD2KfFL7zUdjRuTtZD6gcKlq1OPO7HnOusvTOOkGwyVpGHw6ITT9DY4m9+x4hZo9OwHoGZmDg2M
+	VcIl2PrRL58gcacP8Ufc2PSQLP2u7aCZ3E9dTH0wB4vLfIs2QXoaUo0KJ9hdkz3UiP+/mV1avMLou
+	jCMrB8vg==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHnAz-000OdO-00;
+	Fri, 16 Oct 2026 21:01:09 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xHnAx-000O4J-21;
+	Fri, 16 Oct 2026 21:01:07 +0200
+Message-ID: <a8f2f84e-7dc0-473d-afb1-af710d621f69@iogearbox.net>
+Date: Fri, 16 Oct 2026 21:01:07 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC net-next 0/6] net: configurable extra TX headroom for local
+ egress
+To: Dragos Tatulea <dtatulea@nvidia.com>,
+ David Woodhouse <dwmw2@infradead.org>, David Keogh <dkeogh@amazon.com>,
+ netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>,
+ Alasdair McWilliam <alasdair@mcwilliam.dev>,
+ "open list:BPF [RINGBUF]" <bpf@vger.kernel.org>
+Cc: Nimrod Oren <noren@nvidia.com>, nh-open-source@amazon.com,
+ linux-kernel@vger.kernel.org
+References: <20261015235335.4162993-1-dkeogh@amazon.com>
+ <b8914a523b4a6b80424c5001d3d8012c6a98fd04.camel@infradead.org>
+ <bba453eb-769e-458b-88f7-8cc9bcafc1db@nvidia.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+In-Reply-To: <bba453eb-769e-458b-88f7-8cc9bcafc1db@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 0/3] bpf,
- x86: Support fetching AND/OR/XOR atomics in arena
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179217720501.923903.6746374630856915617.git-patchwork-notify@kernel.org>
-Date: Fri, 16 Oct 2026 19:00:05 +0000
-References: <20261016171319.1623447-1-puranjay@kernel.org>
-In-Reply-To: <20261016171319.1623447-1-puranjay@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, tj@kernel.org
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28155/Fri Oct 16 08:24:17 2026)
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Fri, 16 Oct 2026 10:13:11 -0700 you wrote:
-> Changelog:
-> v1: https://lore.kernel.org/all/20260923165301.3463007-1-puranjay@kernel.org/
-> v2: https://lore.kernel.org/all/20260924160354.531101-1-puranjay@kernel.org/
-> v3: https://lore.kernel.org/all/20260925134828.2012199-2-puranjay@kernel.org/
-> v4: https://lore.kernel.org/all/20261014125017.1426212-1-puranjay@kernel.org/
+On 10/16/26 8:48 PM, Dragos Tatulea wrote:
+> On 16.10.26 10:02, David Woodhouse wrote:
+>> On Thu, 2026-10-15 at 23:53 +0000, David Keogh wrote:
+>>>
+>>> Measurements (net-next at commit 05b5019b0, veth, 500000 UDP datagrams, a
+>>> 20-byte ip-in-ip push attached at TC egress, only tx_extra_headroom varied):
+>>>
+>>>    tx_extra_headroom   pskb_expand_head reallocs / 500k
+>>>    0 (off)             500003   (~1 per packet)
+>>>    64                  4        (background)
+>>>    128                 2        (background)
+>>
+>> I remember frowning at this years ago, in the context of PPPoE.
+>>
+>> I have the same question I had back then: why, if *every* packet ends
+>> up having to call pskb_expand_head() because it didn't have enough
+>> headroom, does our kernel need to be *told* by userspace that it needs
+>> to expand the allocations?
+>>
+>> We gained dev->needed_headroom and ip_tunnel_adj_headroom() since then,
+>> and the kernel doesn't actually need to be told.
+>>
+>> You explained why you don't want to use dev->needed_headroom; I don't
+>> have much of an opinion on that front. But if you do want to introduce
+>> a new tx_extra_headroom, could we try really hard to have it auto-
+>> tuning?
+> For TC-BPF I suppose only the BPF program knows how much extra
+> headroom is needed.
 > 
-> Changes in v5:
-> - Patch 1: support these ops for accesses through a number too, instead of
->   refusing them, per Alexei. BPF_F_ARENA_SCALAR accesses keep their
->   address in BPF_REG_AX, where the loop saves R0, so for those R0 is
->   saved on the stack with push and pop, as the div and mod lowering does.
->   An R0 operand stays in that stack slot: the new value is built from it,
->   RAX ends up holding the old value that R0 is to return, and the slot is
->   dropped instead of popped. Both exception table entries resume before
->   the pop, so a fault leaves the stack balanced. Accesses through an
->   arena pointer are emitted exactly as in v4. The refusal in v4 also hid
->   the reason: programs passed the verifier and then failed to load with
->   ENOTSUPP and an empty log, where the verifier used to say the atomic is
->   not allowed.
-> - Patch 2: the fetching and/or/xor tests in verifier_arena_scalar now
->   have to load and pass on x86-64 as well as arm64, at both widths and
->   with the operand in a register and in R0. Two more run a fetching or
->   against a freed page, with the operand in a register and in R0, so that
->   the access faults, and check that the fetched register comes back 0 and
->   that R0 is left alone. The page holds a nonzero value first, so that an
->   access which did not fault would show, and R0 is compared with a value
->   derived from the page address, as a constant comparison would be decided
->   by the verifier and dropped. The 32-bit operands have bits set above 32.
-> - Patch 2: read the address back after the faulting access, in both the
->   freed-page tests and uaf. A fault that missed the JIT's exception table
->   entry would be recovered by the arena mapping its zeroed scratch page and
->   the access would succeed, which the checks on the registers alone could
->   not tell apart. uaf now faults on the page after the freed one, as the
->   freed page's 32-bit address is 0 and the address check was empty.
-> - Patch 2: skip the uaf register checks on powerpc64, whose JIT does not
->   clear the fetched register of a faulting atomic yet.
-> - Rebased.
-> 
-> [...]
+> Maybe this tx_extra_headroom could be declared as a BTF decl tag
+> in the program. If this is the only usecase there's no need for a
+> rtnetlink uAPI.
+Fwiw, there was some work in this area here in the past ...
 
-Here is the summary with links:
-  - [bpf-next,v5,1/3] bpf, x86: Support fetching AND/OR/XOR atomics in arena
-    https://git.kernel.org/bpf/bpf-next/c/d9efbaed7e61
-  - [bpf-next,v5,2/3] selftests/bpf: Test fetching AND/OR/XOR atomics in arena
-    https://git.kernel.org/bpf/bpf-next/c/9e35f216e5c5
-  - [bpf-next,v5,3/3] sched_ext: Use fetching atomics for cmask instead of a cmpxchg loop
-    (no matching commit)
+   - b9ed315d3c4c ("netkit: Allow for configuring needed_{head,tail}room")
+   - b73b8146d7ff ("rtnetlink: add needed_{head,tail}room attributes")
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+... which we've integrated into Cilium which orchestrates the K8s
+Pods + BPF progs, so it can calc needed headroom for the Pod's netdev
+based on the config/needs in the hostns (e.g. tunneling).
 
-
+Cheers,
+Daniel
