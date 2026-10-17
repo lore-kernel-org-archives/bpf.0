@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5459B13B293;
-	Sat, 17 Oct 2026 03:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5CD10A26;
+	Sat, 17 Oct 2026 03:06:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792206367; cv=none; b=J6GHiIcjagKXuTs7YrbbsHsB3pPUpWHlJhQX2LCk4b1eOmBnbIlsSv+IzKrbXv/KyJFHbcpctdi9matgHlg9qJCxJcoPWxxpYx/T08+/bWRrCTA4rnaQMKOMs9iUJ6/q7r0fIey4jZ6Wz45K1RpvGvFuylkDGgphZa/4qbChXZ8=
+	t=1792206368; cv=none; b=Y8Xc+a9NjvbNe/hmpujp+BnS6KG04kQkOtv7/++CG/4vHKIEi8NSyJQ7VlfvygapTxCzp/VKNBs0WQd428FK2zi0rk2LVGLpPbgKxsDhd1W2C/6sX7b3//MKwkW/W2nkuHtXKZW3IDZKyNKMZSlS9v5ncbKct4h7OeF+Ul8Gm30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792206367; c=relaxed/simple;
-	bh=TxsrQoeReuVkkJcppcYZgfKFM9i+zHch/GwTbDaqao0=;
+	s=arc-20240116; t=1792206368; c=relaxed/simple;
+	bh=hNEBPtH9DsYtS1QLvKGBmlXocPMl8ez5R6AIIKVGAKU=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BlzcTTtAiJ8T6MtaWjQDMHBqqycDY2UUqpHM3W1A53dpqiRdqqxth67jnPnba5yO28+sq+d5uUmtrSTnGQzeZLN+pjfuY0eZSP2YCiwdxGm5vtFxBAmZYGNiuA8Oh6K+YobXfP9b9cvmHLq6ulzI4fmZlM26vnsOaUm5yuiUlvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S5UAUUCW; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=UUMGFQLgqTSraNInOqJns+9rLOu/Gv0Y6CIKYzT4/sbEf/qnflpnIqI1y1B8ZuCptwbTP94SmPT3JeMbbKzrZrYCalRkR88Cfr3AsQmhSDxU1gTDJsGYfR+fF1PnaYD5eO+ykSVRtZ5ow160JR3dnDn/lZrA3fYekT8GO9L5RS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eenhnnWx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S5UAUUCW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826E51F000C5;
-	Sat, 17 Oct 2026 03:06:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eenhnnWx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E8E1F000C4;
+	Sat, 17 Oct 2026 03:06:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792206366;
-	bh=QiNpr66aF8Jt67mP0DHy47o/5RmozCu5BZxGXMVE/fM=;
+	s=k20260515; t=1792206367;
+	bh=BTtCptD0pvGP1BY0ygYsRtsJTGomV4GR/bbVNX4XPj4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=S5UAUUCWFv52Bsf5xD9FJeNkgo/GRdraPw89vUcgXL1BNbBlmTu9dnvLYYVWK28uy
-	 sA2Q5ydPFAyR+A9AWngFKezoINX+Y491QcX5cA7/zH2t5Wp7Zy1lqWgt9h0fxwL5/1
-	 3eJuR4FKb8etVmXz31LhW5PdOvnbScEq/DEsl3IdAc/HLSgEVrkIFgkEmZAZ7Oj/Qj
-	 2cneDR8OKyFezDhbpLJh92WgF1qlTtMH/dOFUvDQfwIZ0pdq24ySekuFZ+KtZNs4+a
-	 aDn8qYoTXOJJrjq9ltuAbwVJ54arOxEzt/1DkyuObqLEtjhTpHEfPZlRaID80SR0TH
-	 ZDRWAWazGuwDQ==
-Subject: Re: [PATCH v3 net-next 03/15] selftests: xsk: drop the
- single-interface loopback mode
+	b=eenhnnWx+N7+/shknbv8DmZpYb60ZZD5T3T6vabhov+kg/VSXArEoZibDS30z//Yf
+	 8CqjvTC5lCWcRuP2ILVPdHpO5uaaf/kiLKchEloAXpecHXOL6TXzWFDKxc/U29CDfv
+	 OPwdgD4Cgy5BEQLsHPt7pU7CKjNagoo9+IC6sIiqMVFnDAmLpRU/63V5F0M2NpUe/7
+	 PeZtW3A+d8yRaESud7ChdLNxRHT81rrjY9a0MiDUIAAaCEYlRkTL8aH8g6R2wANv78
+	 USYCeCXR+iyY+Q+Per6Cfb7nlnLYgFwAakLNRKPagyx600mH+A7bU1fWICzg1BrRmz
+	 TFJa5hdwRwDgA==
+Subject: Re: [PATCH v3 net-next 06/15] selftests: xsk: move the AF_XDP test
+ suite to selftests/net
 From: netdev-bot+sashiko@kernel.org
 To: maciej.fijalkowski@intel.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
  stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
  tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Sat, 17 Oct 2026 03:06:05 +0000
-Message-ID: <179220636510.434549.7705519903366245411@kernel.org>
-In-Reply-To: <20261014184539.774708-4-maciej.fijalkowski@intel.com>
-References: <20261014184539.774708-4-maciej.fijalkowski@intel.com>
+Date: Sat, 17 Oct 2026 03:06:06 +0000
+Message-ID: <179220636618.434549.11404278084536397224@kernel.org>
+In-Reply-To: <20261014184539.774708-7-maciej.fijalkowski@intel.com>
+References: <20261014184539.774708-7-maciej.fijalkowski@intel.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -47,10 +47,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Critical: 0 · High: 0 · Medium: 1 · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -58,101 +58,144 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] Old single-interface invocations are now misread instead of
-  being rejected.
+- [Medium] Undisclosed relicensing.
+- [Low] In tools/testing/selftests/net/lib/Makefile, the xskxceiver
+  binary is only removed by `make clean` when bpftool happens to work at…
 
 --
 
-selftests: xsk: drop the single-interface loopback mode
+selftests: xsk: move the AF_XDP test suite to selftests/net
 
-This commit removes the xskxceiver mode where the TX and RX sockets were
-bound to queue 0 of one interface with a shared UMEM. It also removes the
-split UMEM addressing and the POLL_TXQ_FULL workaround that mode needed.
-The -i IFACE option of test_xsk.sh is dropped as well.
+This commit moves the xskxceiver engine, the xsk userspace library, the
+test definitions and the XDP program from selftests/bpf to
+selftests/net/lib/xsk. It also moves test_xsk.sh and xsk_prereqs.sh to
+selftests/net, and net/lib now builds xskxceiver only when a working
+bpftool is found. The two ethtool ring helpers move from
+bpf/network_helpers.c into xsk.c.
 
-> diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-> index 62db060298a4a..69fac65f073c5 100755
-> --- a/tools/testing/selftests/bpf/test_xsk.sh
-> +++ b/tools/testing/selftests/bpf/test_xsk.sh
+> diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
+> index ff83603397d06..c26088da04892 100644
+> --- a/tools/testing/selftests/net/lib/Makefile
+> +++ b/tools/testing/selftests/net/lib/Makefile
+> @@ -5,6 +5,15 @@ CFLAGS += -I../../../../../usr/include/ $(KHDR_INCLUDES)
+>  # Additional include paths needed by kselftest.h
+>  CFLAGS += -I../../
+>  
+> +# xskxceiver needs a working bpftool to generate its skeleton
+> +BPFTOOL ?= bpftool
+> +HAS_BPFTOOL := $(shell $(BPFTOOL) version >/dev/null 2>&1 && echo y)
+> +ifeq ($(HAS_BPFTOOL),y)
+> +COND_GEN_FILES += xskxceiver
+> +else
+> +$(warning excluding xskxceiver, bpftool not installed or not working)
+> +endif
+> +
 
 [ ... ]
 
-> @@ -88,14 +85,11 @@
+> @@ -13,6 +22,7 @@ TEST_FILES := \
 >  
->  . xsk_prereqs.sh
->  
-> -ETH=""
-> -
-> -while getopts "vi:dm:lt:h" flag
-> +while getopts "vdm:lt:h" flag
->  do
->  	case "${flag}" in
->  		v) verbose=1;;
->  		d) debug=1;;
-> -		i) ETH=${OPTARG};;
->  		m) MODE=${OPTARG};;
->  		l) list=1;;
->  		t) TEST=${OPTARG};;
+>  TEST_GEN_FILES := \
+>  	$(patsubst %.c,%.o,$(wildcard *.bpf.c)) \
+> +	$(COND_GEN_FILES) \
+>  	csum \
+>  	gro \
+>  	xdp_helper \
+> @@ -23,3 +33,28 @@ TEST_INCLUDES := $(wildcard py/*.py sh/*.sh)
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-> index 7dad8556a722e..24109dd7264e2 100644
-> --- a/tools/testing/selftests/bpf/xskxceiver.c
-> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> +$(OUTPUT)/xskxceiver: $(XSK_SOURCES) $(XSK_HEADERS) $(XSK_SKEL) $(BPFOBJ)
+> +	$(call msg,CC,,$@)
+> +	$(Q)$(CC) -I$(top_srcdir)/tools/include $(CFLAGS) -I$(OUTPUT) \
+> +		-I$(SCRATCH_DIR)/include \
+> +		$(XSK_SOURCES) $(BPFOBJ) $(LDLIBS) $(XSK_LDLIBS) -o $@
+> +
+> +EXTRA_CLEAN += $(XSK_BPF_OBJ) $(XSK_SKEL)
+
+[Severity: Low]
+Will make clean leave lib/xskxceiver behind if bpftool can't be used
+when clean runs?
+
+HAS_BPFTOOL is evaluated when the Makefile is parsed. xskxceiver only
+ends up in TEST_GEN_FILES if "$(BPFTOOL) version" succeeds during that
+same make invocation.
+
+The clean target in lib.mk removes:
+
+	$(RM) -r $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(EXTRA_CLEAN)
+
+Here EXTRA_CLEAN only lists the .bpf.o and the skeleton.
+
+Say the binary was built with a working bpftool, and make clean later
+runs where bpftool doesn't work. That can happen with a different PATH,
+a BPFTOOL= override, or a cross environment. The intermediates get
+removed, but $(OUTPUT)/xskxceiver stays.
+
+test_xsk.sh only checks:
+
+	if [ ! -x "./${XSKOBJ}" ]; then
+
+So it would run the stale binary instead of skipping.
+
+Would it work to add $(OUTPUT)/xskxceiver to EXTRA_CLEAN
+unconditionally? The same Makefile logic is still there at the end of
+the series.
+
+> diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/net/lib/xsk/xsk.c
+> similarity index 95%
+> rename from tools/testing/selftests/bpf/xsk.c
+> rename to tools/testing/selftests/net/lib/xsk/xsk.c
+> index 25d568abf0f20..6bd32caf5d085 100644
+> --- a/tools/testing/selftests/bpf/xsk.c
+> +++ b/tools/testing/selftests/net/lib/xsk/xsk.c
 
 [ ... ]
 
-> @@ -388,10 +387,6 @@ int main(int argc, char **argv)
->  		ksft_exit_xfail();
->  	}
->  
-> -	shared_netdev = (ifobj_tx->ifindex == ifobj_rx->ifindex);
-> -	ifobj_tx->shared_umem = shared_netdev;
-> -	ifobj_rx->shared_umem = shared_netdev;
-> -
->  	if (!validate_interface(ifobj_tx) || !validate_interface(ifobj_rx))
->  		print_usage(argv);
+> @@ -779,3 +778,51 @@ void xsk_socket__delete(struct xsk_socket *xsk)
+>  		close(xsk->fd);
+>  	free(xsk);
+>  }
+> +
+> +int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
+> +{
 
 [Severity: Medium]
-Now that shared_netdev is gone, what rejects the old
-"xskxceiver -i ethX -i ethX" invocation?
+Does this move change the licence of these helpers?
 
-parse_command_line() still sets ifobj_tx and ifobj_rx from the first two
--i options. validate_interface() only rejects an empty name. As a result,
-TX and RX can use the same ifindex and nothing reports it.
+get_hw_ring_size() and set_hw_ring_size() come from
+tools/testing/selftests/bpf/network_helpers.c, which has:
 
-When that happens, each endpoint binds its own UMEM to queue 0 of the same
-netdev, because xsk_configure() now does:
+	// SPDX-License-Identifier: GPL-2.0-only
 
-	bool shared = !!i;
+xsk.c starts with:
 
-The TX bind cannot succeed without XDP_SHARED_UMEM. xsk_configure()
-retries SOCK_RECONF_CTR times, and then every test fails. Nothing tells
-the user that the mode was removed.
+	// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
 
-xsk_attach_xdp_progs() has also lost its early return for a shared-netdev
-TX side, so the TX attach replaces the RX program on the same ifindex.
+Tushar Vyavahare added both helpers in commits 90a695c3d31e1c and
+bee3a7b0762422 under GPL-2.0-only. After the move they are unchanged,
+but they now sit in a file that offers its contents under LGPL-2.1 or
+BSD-2-Clause, with no per-function licence note.
 
-Should main() exit with a usage error when
-ifobj_tx->ifindex == ifobj_rx->ifindex?
+The commit message only says "Move the two ethtool ring helpers from
+network_helpers into xsk.c". It doesn't mention the licence change, and
+there is no Ack from the original author. This is still true at the end
+of the series.
 
-test_xsk.sh has a related problem. 'i' is no longer in the getopts string,
-and the case statement has no '?' arm. Running "test_xsk.sh -i ethX"
-prints an illegal option warning and then runs the veth suite, which could
-be mistaken for a hardware result.
+Could the helpers go into one of the GPL-2.0 files in the same
+directory instead, such as test_xsk.c or xskxceiver.c? If they need to
+stay in xsk.c, could the relicensing be stated explicitly, with an Ack
+from the copyright holder?
 
-Later patches in this series look like they resolve this:
+> +	struct ifreq ifr = {0};
+> +	int sockfd, err;
 
-- "selftests: xsk: run one test case per xskxceiver invocation" removes
-  test_xsk.sh and xsk_prereqs.sh in favour of test_xsk.py.
+[ ... ]
 
-- "selftests: xsk: run the RX and TX endpoints in separate processes"
-  makes parse_command_line() take a single interface. It calls
-  print_usage() when the role, peer host, peer port, test or mode is
-  missing.
+> +int set_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
+> +{
 
-So the problem seems limited to this commit, for example while bisecting.
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014184539.774708-1-maciej.fijalkowski%40intel.com
