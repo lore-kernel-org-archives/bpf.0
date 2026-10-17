@@ -1,127 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C98893939A4;
-	Sat, 17 Oct 2026 17:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BE13B961B;
+	Sat, 17 Oct 2026 17:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792257432; cv=none; b=OTZ9V7VyXJqYTj2VLNUckWPikNC5v3Lz2nFaEUjAmHM71XqoWS2LJIn9EnoGdkuvZMhDc3H18eZALGcOoAlO9Yq0d3yJy3KJJ55p/j56DIFFmH4s0bGu/+3iRDFkFGkcDV16tKlpEKlSoXnRF053PVqaWuW6NcU1g5+9Z5vGmdU=
+	t=1792257436; cv=none; b=hf3E7jJp1fcfWAEAByd9RUieIWk35Ob/p1PsEm+yqlDjsY17cKvJY70DJ8S95EBbmbb8fJIa5au3aZ8ZZpx4nevQp17n2Pkxz/lZ+ux47L1jTEMUye7fxzIoC8bGUTYnHIlmke2gODLnYP7L7nl+ku/DmFnr4/VaAprn/UCUv6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792257432; c=relaxed/simple;
-	bh=+UMkhZlKP+53Zedn1FweZE7bdjUDdByfB+7t/dNu5a4=;
+	s=arc-20240116; t=1792257436; c=relaxed/simple;
+	bh=dpbVacTCih9lAevxcQgl4BwwWvfS58dLjmD2+ajG0xY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rsoNiRy26EOpohc1YzNETqKuB190kHv0QhZC7pSHEeVZzCSbzR6ef+oReqFfM3ubEoyzAMWH7f+gHI6FMMaNN9n3KgRUidkUeQP6NlPcwpUCBYIIIWnEqKaQLIexZO1BpSaHQFCXKpplvm/g7GLKZEFhNiM+0vKYu5J0hF/LjyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGd6BB7s; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=QIg6yllkUy2FQ7xuNnFsGjr6W0I6SuiHlH6YErHe+z5txf+5KvFubvI7Gakc/IuiMoPNp3Qj3F+Kq1O52BctD+t3EZopw/VkM9SLm+yv5DdRo2nLYEarqkV7tcJ66QfhBbou+tzAyif31nKfztzqp6aukR/mdnAy3jQVgGPlSPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WuDhvFbG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KGd6BB7s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED2D1F000C4;
-	Sat, 17 Oct 2026 17:17:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WuDhvFbG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD6F1F000C4;
+	Sat, 17 Oct 2026 17:17:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792257431;
-	bh=EJNR5K+W76SOP8eD3TWI1W34xOeqGBMNv8XIRZynEyc=;
+	s=k20260515; t=1792257434;
+	bh=Edpli9n4lHiurARNXlpLFP1Zik77VFnizkT9GBmCgEs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KGd6BB7svaYa75s3jgt14JDbKXgwB7TR/bLrBxq+7/O3Msrr4MhfAkfO8o9S4vsVD
-	 5zcZZD0rC4Uwv4biZ0lD/BcBkve296vEdua5PnTW6/NEoEdZAAqQhC2ZbuQW1wFjvL
-	 H41eTc/kbA10yZGagmg/7B4cbOi9sb9auV2677KTansjsKSa3JR02dXuMJoRWRnu8k
-	 FsPtb/FnfP7mjgztidbZ/JuDvdrO0d80K3+NtSGfUKL/8PQomuJbTveSbIyhLQziij
-	 o2U8V7C3pq7LdzDMk1JcEI3ZAfyAh48mX/dIVWgJnA9hIEAnDNIFlPjPHatyIUQWPr
-	 OnDfE7cwgwbrg==
-Content-Type: multipart/mixed; boundary="===============2037395697687729854=="
+	b=WuDhvFbGdfXxaUGqwo5Tfp7MmF9FBjzlPIcGzeXsTFCEKj3FawT475YVAxIkpYoL7
+	 0eWWG41Mw5lcbCb6Wuey435I7gRjF6X98sQzdQEkPBUcjdYAB7UqbnbMq1DoSdoTrs
+	 249HvcTNuRo+WkdGXBxhGJFEDP4Mo00SGn59LL3MDqSyaKXONTGpJ0lga08MKbPtpy
+	 CN7D8wQo2zeLd3U/H0CE5yXTi4XSLV/sulhV6o7hblEB0LC09wHNMhsZFUZzzd+UYH
+	 Ivcjl2KNzQEINbz9yG/VgI/EEMzk4/vqFgMULsaOduGDbrfS95ot+tmWSn6LoFi8xr
+	 J8C+FLiqchxGA==
+Content-Type: multipart/mixed; boundary="===============5053280035690465242=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5ed879575ebbfbb3da9c8c6922ac0a3c13e01637c1d6a01d13c001bf15eff8cc@mail.kernel.org>
-In-Reply-To: <20261017163745.3341787-44-alexei.starovoitov@gmail.com>
-References: <20261017163745.3341787-44-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 43/43] bpf: Refuse packet slices for packet-changing helpers
+Message-Id: <bc2698a797d32d2eced91c2bf78cea931076300bba801e67d2bf1e348eb7626a@mail.kernel.org>
+In-Reply-To: <20261017163745.3341787-41-alexei.starovoitov@gmail.com>
+References: <20261017163745.3341787-41-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 40/43] bpf: Unclone the skb for kfuncs that write through a dynptr
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 17:17:10 +0000 (UTC)
+Date: Sat, 17 Oct 2026 17:17:13 +0000 (UTC)
 
---===============2037395697687729854==
+--===============5053280035690465242==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Refuse packet slices for packet-changing helpers
+> bpf: Unclone the skb for kfuncs that write through a dynptr
 
-TL;DR: Refusing slices for bpf_skb_store_bytes() may be unneeded after the
-previous patch and would newly reject previously safe programs with -EACCES;
-the commit message's freed-head claim may be stale.
+TL;DR: Dynptr-writing kfuncs may set seen_direct_write for programs with no
+skb (XDP, global functions, callbacks), so freplace extensions with non-scalar
+args that loaded before may now fail with -EINVAL.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index d384b9ec3d93..47e2969928a4 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -9693,6 +9693,16 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
->  	if (err)
->  		return err;
+> @@ -15689,6 +15689,14 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  	    bpf_is_kfunc_pkt_changing(&meta))
+>  		clear_all_pkt_pointers(env);
 >
 > +	/*
-> +	 * A slice of a packet is packet data under another name. A helper which
-> +	 * may reallocate the packet must not go on reading from the old one.
+> +	 * These kfuncs write to the head of the skb in place if what they write
+> +	 * to is linear. Like a direct write that takes bpf_unclone_prologue().
 > +	 */
-> +	if (is_helper(meta) && reg_is_dynptr_slice_pkt(reg) &&
-> +	    bpf_helper_changes_pkt_data(meta->func_id)) {
-> +		verbose(env, "function access to the packet is not allowed\n");
-> +		return -EACCES;
-> +	}
-> +
->  	if (arg_type_is_raw_mem(arg_type))
->  		meta->arg_raw_mem.mask |= BIT(slot);
->
+> +	if (is_kfunc_dynptr_write(&meta) &&
+> +	    dynptr_write_changes_pkt_data(meta.dynptr_write_type))
+> +		may_access_direct_pkt_data(env, NULL, BPF_WRITE);
 
-The commit message says of bpf_skb_store_bytes() that "the helper then reads
-the old head, which has been freed".  Is that still true after the previous
-patch in this series, 0bd8e7a834ac ("bpf: Follow the head if an skb is
-written from a slice")?
+Can this set env->seen_direct_write for a program that has no skb to
+write to, and make an extension fail to load?
 
-That patch changed the helper to:
+Since commit 19b8e38bcd08 ("bpf: Don't take a dynptr argument for a local
+dynptr"), process_dynptr_func() reports every CONST_PTR_TO_DYNPTR argument
+as an skb dynptr:
 
-    BPF_CALL_5(bpf_skb_store_bytes, ...)
-    {
-        ...
-        if (unlikely(bpf_try_make_writable_from(skb, offset + len, &from)))
-            return -EFAULT;
-        ...
-        memmove(ptr, from, len);
+    meta->dynptr.type = is_arg ? BPF_DYNPTR_TYPE_SKB : reg->dynptr.type;
 
-and bpf_try_make_writable_from() moves 'from' to the new head when it points
-into [skb->head, skb_end_pointer(skb)).  So bpf_skb_store_bytes() no longer
-reads the old head after a reallocation.  Only bpf_lwt_push_encap(),
-bpf_lwt_seg6_store_bytes() and bpf_lwt_seg6_action() still read their
-hdr/from/param after skb_cow_head() or bpf_try_make_writable() without
-following the head.
+That covers dynptr arguments of global functions and extensions, and
+callback dynptrs, in any program type.
 
-The result also looks inconsistent with the suggested alternative.  The
-commit message recommends bpf_dynptr_write(), and the verifier still accepts
-a slice as its source.  For an skb dynptr that ends up in the same code:
+may_access_direct_pkt_data(env, NULL, BPF_WRITE) also sets seen_direct_write
+for XDP, SK_MSG and CGROUP_SOCKOPT.  None of those can hold an skb or
+skb_meta dynptr, since bpf_kfunc_set_skb and bpf_kfunc_set_skb_meta are not
+registered for them.  Their gen_prologue is bpf_noop_prologue() or
+cg_sockopt_get_prologue(), which emit nothing.
 
-    case BPF_DYNPTR_TYPE_SKB:
-        return __bpf_skb_store_bytes(dst->data, dst->offset + offset, src, len, flags);
+seen_direct_write is now also read by the extension check that commit
+222dc092c64e ("bpf: Refuse the prologue for an extension that cannot take
+it") added to bpf_convert_ctx_accesses():
 
-A program in tc, sk_skb or lwt_xmit that does:
+    if (env->seen_direct_write &&
+        env->prog->type == BPF_PROG_TYPE_EXT &&
+        !ext_prog_takes_prologue(env)) {
+            verbose(env, "Extension writing packet data must take ctx and scalars only\n");
+            return -EINVAL;
+    }
 
-    p = bpf_dynptr_slice(&ptr, off, buf, n);
-    bpf_skb_store_bytes(skb, off2, p, n, 0);
+This runs before gen_prologue(), so it fires even when the prologue would be
+empty.
 
-has been accepted since 2012c867c800 and is safe with the previous patch
-applied.  With this patch it fails to load with -EACCES ("function access to
-the packet is not allowed"), via check_helper_call() -> check_func_args() ->
-check_func_arg() with is_helper(meta) true, reg typed
-PTR_TO_MEM|DYNPTR_TYPE_SKB, and bpf_helper_changes_pkt_data(BPF_FUNC_skb_store_bytes)
-returning true.
+For example, take an XDP target with a global function:
 
-Should the refusal be limited to the helpers that still read the source
-after reallocating the head (or should those helpers follow the head too),
-so that bpf_skb_store_bytes() keeps accepting slices?  Either way, should the
-commit message stop listing bpf_skb_store_bytes() as reading freed memory?
+    int f(struct xdp_md *ctx, struct bpf_dynptr *d)
+
+that calls bpf_dynptr_memset(d, ...), and an freplace program for f that
+does the same.  In the extension R2 is CONST_PTR_TO_DYNPTR, so
+meta.dynptr_write_type becomes BPF_DYNPTR_TYPE_SKB and the new code sets
+seen_direct_write.  ext_prog_takes_prologue() then fails because args[1] is
+ARG_PTR_TO_DYNPTR and not ARG_SCALAR, and the load fails with -EINVAL.
+Before this patch the program loaded, and nothing in it can touch an skb.
+
+The same applies to bpf_dynptr_copy() and the probe_read/copy_from_user
+dynptr kfuncs, and to callback dynptrs (for example bpf_user_ringbuf_drain())
+in an extension whose signature has a non-scalar argument.  Extensions on tc
+programs with such signatures are refused as well, even when every caller
+passes a local dynptr.
+
+Commit 19b8e38bcd08 says "nothing becomes forbidden for the dynptr itself",
+but this makes the load fail for those programs.
+
+Should seen_direct_write only be set for program types whose skb dynptr is
+writable?  Alternatively, could the extension refusal depend on
+gen_prologue() actually emitting instructions?
+
+I did not find a later patch in this series that changes this.
 
 
 ---
@@ -129,4 +136,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39051545464
---===============2037395697687729854==--
+--===============5053280035690465242==--
