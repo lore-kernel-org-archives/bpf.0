@@ -1,64 +1,64 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DE01E520A
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9773B19CF
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792255302; cv=none; b=NB3D7tY/v4GnGUfVR0rcAZQzj/Pmwq5H2rNNxNhnpme+WK69CBK8kMEbw0KJnkS478TzzjL19prRWH4awR0ziqPxBYfwN30Qbio9N0xrEOwibG688nkypv07UVGYs3gRsbK4g2V0jaoMwY/Skk5ei8mNBHgia1IPwxj07QuuuyY=
+	t=1792255309; cv=none; b=WQz1YZ/k8LFlL1yRt16IbgOrntgzS79NOXSheev9BSIAqhSGzjsDZoE/6JC8u0cy5qGn4frdWljGe7r1y3DHJleWn+9SvLmzGsZ/hP6JUAI59ukAqzTaMcnySnH0pYgQ502+Kv2CzJZGDuXyVprEye56BLrBSHUa1f0vFCxWE1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792255302; c=relaxed/simple;
-	bh=tJigTw0JH8PMkS+hFVeAA3nZT+Ia4ZT+mat4RhnpN/0=;
+	s=arc-20240116; t=1792255309; c=relaxed/simple;
+	bh=vtzRMlYWrVUFGImrGa6pKSIaWK0o77pm550E+QX1aBI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ey1xlxMlB3VWc1XFQ4SJxoviE+SRnGLk1UqYyRnbT8EclgpQlIOhtl5dugZOT7mQEVdE/yKiJmv9ALNfE8Hdt01gi/9S+TWJ9x96uS63LJ4ZFuE+XizdaHVpgajSayp0oB8H1563/yDGNaIlfTbFUwnHUwM8WcVB0z4Up1pTFS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q3gZZSoA; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=lM1AQRqrWP8Hh3bGA0gUTcq+TJDRpKYuezqB/e7uPV889kuJs/7NQA8/HJa+M0WIILBa64w5s2C3odIuDxx3N1Mg/qaKSMZPNLpMq3AUKREfsJwrGCvhXRLcpmFSoSrKenCDBkK1XOuM06eHPPfxv3NCDN6wtgblfS/YPm7Irw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TX9EfQY2; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q3gZZSoA"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3a706146559so708313a91.2
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:41:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TX9EfQY2"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso413651a91.1
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792255301; x=1792860101; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792255307; x=1792860107; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zFKA1h6lBnJi01euuLf1SIEyyzMcQm/kiIVNIE10hfU=;
-        b=Q3gZZSoAoiryygmvXMeoO6i8Q7nWpfZX8YwLINhQEzoCDFkYOoke8+RqwuOJ/WLuFL
-         /eiAI8OA2BTHE6yXEb7b7cNies2iX0QTEh6HMgPUXcKyrv6do1STEHW1hOtdWnqrwDs9
-         PoB+sTFIJgbwfIdGEaxK4dUXHEhaAzZBJM12s8OGUfxgIQPppSXgoZb/PY6DlJr/SA+k
-         ZyuXr+7czGh3cHaZ7Omx22tdlYn+6c2Sk14ifciRSrQe08pf5HnNs6XCkbfd3hdP4dJS
-         WqbmqoLSGwp13GjdaQsYXzLW0z/IJ5V1r5gldHLReixWhuRtGjoa627CapLJ2nIxzBXM
-         ImFw==
+        bh=WX9A5FgatI9/iBdXsBlHi3tZ5RBdWBYmZQ1Rjaj24QE=;
+        b=TX9EfQY2rerbx9YCHDfwtKArfAkKi7w7bP4TwtgQxOnYSWtE3/bIT+2o2xlFsN4p74
+         A5gTPkbb0UWDqkUlWUR0RK9Pc2kYPWjskUvsZIZxe1VIVNkh3kCTGhqRMNRJXbQdEMNc
+         o/oObsX4Lr0VNUP0jMiJwk8mQTfwhS824le/7ii3RdwXXEqn+m4TrO33FgPvI88wyY1M
+         rNf6/5bjCGvqQfZNGsKm7PFkceVkXTDz9XdoN7LfbEby9PGCuN4u0ZRLhAo4CMT5uMyB
+         gHXi5jzH8a6zfteD4tS36oLVEBQPUd4PF1OOHNq9nN73yF/NvedRC9jC1EHTzmfh/uy5
+         rWKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792255301; x=1792860101;
+        d=1e100.net; s=20260707; t=1792255307; x=1792860107;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zFKA1h6lBnJi01euuLf1SIEyyzMcQm/kiIVNIE10hfU=;
-        b=Zd9TpfM1XqP+VjjsKN7uMutyKzceBBtbKf2RkqBsRX5Q9ws/1Ll3uBNFKQKZwC+Lix
-         OrwaRNAg+ZtmxRDafFZHoaSEGVXyF7xAU3YWhPKtGcVIbmmKbz6862zEn9Hv/gyQwdWa
-         GTOIK7M0er7CwkCCywmOYK9fo1FXcINv0D47j/Nt/6JmUTwPcp2KkiVaCpAwts0Oyf66
-         SI9+CtfcN7ZK5ZXzmIywLkkgg4VeFRY1M4QYW03/2o38YItes7anoTBohCWByyKir/7c
-         dYc3CT7lLjRzcLS3+vShwwrEkWaThzRSO67q+tp8KS/Ura2JNFh1te6KAK/pkCPk9WDy
-         Fb+A==
-X-Gm-Message-State: AFq9FYJyTow38/G2q4FCsnlxbfJa96y/VgyGhSakcRfSrZTm/5a0hYSO
-	db66PdmqjJGE9ttw593hJg2RuRJdOUmUZ281UWlIHaBJWzHGKXLjlrjE8zH/DA==
-X-Gm-Gg: AYBFou3I5OfAP1vnRHQbcPIsJTRLxnDdWUdRKe9EwmeXuzyelgBLR/9+Mi3uifK4IGS
-	uWGASsFWNPlE0n805lqiGSV95xg9dy19gJzqZkGFZQJ1b6aJrk0sIEh815ONdrKAetn77nxZY9x
-	GqBq2YtvmCqSZmgpaw1F5LeRed/Ve+RkZSp9JtxF5sbIwiq4UtjVAqTsUD4IWG0gsOm5DLT+Drp
-	CPMOZHhmaFrWZPJ2/hemjgOfsZ0g9kU4s5RAZcR4/g9imIMtn4NrMMafsMlEk0TKFxj++UCNVxt
-	60ct0KclKGqxCX2ValxwDAyxqSJ+ZiefyZLVqvInDmqnezoQfp2djH09HeRzuZ5BImF9WYgFZ7H
-	Xb8dxOuu/bGmjwLwfJYQR0+MDTr5x8des5/80TDDC1HYJj/mMtquclSpCGMHAL1o4BwWCHPNVIV
-	Om+m0EcNVR3Z0uwGOZvCnPjNe5wiV4LNoQqylZ21AJYiokqcSi/SIrt7uHLSyZm2wENkMUth5TE
-	x9cSWMJ+AjO0YQpworHDnYj4IG0UR80CS5+kK5FBAou/xpnHb4G631/xICV78CIy4iSGpN2jMxw
-	3GgVw1L2qYUTr1Cj2DyTWIiIfjzTMKamjWFTPVwx1f5vHUafJSO70MI=
-X-Received: by 2002:a17:90b:2e90:b0:3ac:8ee9:c8ed with SMTP id 98e67ed59e1d1-3acef101ea9mr2886999a91.13.1792255301041;
-        Sat, 17 Oct 2026 09:41:41 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc487e509sm8699361a91.9.2026.10.17.09.41.40
+        bh=WX9A5FgatI9/iBdXsBlHi3tZ5RBdWBYmZQ1Rjaj24QE=;
+        b=A5/ZlDMX8fORpUR3cDRfywGDb54f5AqPVB5dmSk2oFLfywtKIdr/6U/nvUetjM0hF8
+         k8nQBeT5VLDVkwveR1yza4SZNXPuUhONtXFD7KxOO8BgWt9vCD7UG1GHCOkg4MWttCPQ
+         po4xHWPgoVgqwNzr240gRFVRHcedj41VO1NCzy1u8T+b+IpHnbVP5Gr+yujG5FhNpZ/b
+         e/aRhLheERoCoVG9zAGF7FTt0wsl/KeSkAd1sgoE+C4xiGtwNr7Loh6Hr/SBLblKWsRE
+         4EeDUSPrhvNjGreYQQhn7LrOuM7ixBk41gyJbToX0deepvOvEpLYVOvvmIRp2prP9NEJ
+         BrcA==
+X-Gm-Message-State: AFq9FYLsu+ZkCnmov0nNHyXAcslGfEoXvk9jcT4t5Mp/NfZaWwkeTWb/
+	xY83GhZBg+Pvl7tV4oHd/pxvCodGguiYjcRlBzp0CXAZbNa/oLiJ/fRoK4roTg==
+X-Gm-Gg: AYBFou11ZDTbhIOkzAJpwCGm8wgPKeJ/Pjo67OEd9aaRalVMpbGiLOVV2lnZKnxqDGF
+	v/pVraXOTeRvpwF4BpCidX6AV6Ejh7sGWCGNxLzN9rMj+Kh/u2oap2WawjTJtZGb9WX2FBGIH2d
+	p/2VOqMfjiC/q65pqn32pB5nlPRWVBwx+IlARRggNY4dwDvmmBTd3xW4+EsAWs4fcJ2eyYzV9ns
+	macWZXAX8/IWbfiOpIeA8hHoHbcLZxVFdXQ2HN9Rl6XcjowuGuMnsQs0G0mRCea928hZtXLCcct
+	RBP2HB6lt9B9EoBxUNMa0cXHbL/xAdZF31nDvg5zbOtHX4QAJhH9RdPlm1EbQNpVwT1cEh6zHUG
+	UzSDMQhQeana+szDR3Pyz3SuVqTXHKg5NDupgIjwv6AztytF2k7iDB3eBK/SO4+VZHT9jpYh1q/
+	Saijr9PUrxvpdePYw+ort7+x1xMkjRW3GTLcXbsYbGePOWIbQyCSW6xnFMUTH275RKxOW7XLln5
+	RKy8SZtzMH57LVX0WmChUsrejC7iQ5MZZwUMtinOGJW9frHdZrwbtrXkdzkDR5nWsN4gY5VcI/X
+	VttTDH54rMq6yDCebR9vmWrFaowPO1vPInqkh919wMZIDR50+rBHfA==
+X-Received: by 2002:a17:90b:28c5:b0:3ac:4e18:237c with SMTP id 98e67ed59e1d1-3aced87290fmr2713831a91.0.1792255306961;
+        Sat, 17 Oct 2026 09:41:46 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac943e7548sm13855935a91.1.2026.10.17.09.41.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 09:41:40 -0700 (PDT)
+        Sat, 17 Oct 2026 09:41:46 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v2 38/43] bpf: Don't take a dynptr argument for a local dynptr
-Date: Sat, 17 Oct 2026 16:37:40 +0000
-Message-ID: <20261017163745.3341787-39-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 39/43] bpf: Refuse the prologue for an extension that cannot take it
+Date: Sat, 17 Oct 2026 16:37:41 +0000
+Message-ID: <20261017163745.3341787-40-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
 References: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
@@ -82,56 +82,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-A global function is verified on its own. A dynptr which it gets as an
-argument is assumed to be of type BPF_DYNPTR_TYPE_LOCAL, but the callers
-may pass one of any type, that of an skb for example.
+A program that writes to packet data starts with bpf_unclone_prologue().
+It takes the skb from R1, and if the skb is cloned it calls
+bpf_skb_pull_data() and restores R1 only.
 
-The type decides whether a write through the dynptr invalidates packet
-pointers, and whether a slice of it is invalidated together with them.
-Inside of the function neither happens. It can take a packet pointer from
-its context argument, or a slice from the dynptr, write through the dynptr
-and go on using the pointer, although the write may have reallocated the
-head of the skb.
+That suits the main function of a program.  An extension gets the prologue
+too, but it starts with the arguments of the function that it replaces.
+If the first one is not the context, something else is taken for an skb:
 
-Report such a dynptr as that of an skb to whoever asks for the type of the
-argument of a call. The type in the register stays as it is, nothing
-becomes forbidden for the dynptr itself. A clone inherits the caution.
+  BUG: KASAN: stack-out-of-bounds in skb_ensure_writable+0x84/0x1a0
+  Read of size 8 at addr ffffc90000270ad0 by task uncl/105
+   skb_ensure_writable+0x84/0x1a0
+   bpf_skb_pull_data+0x32/0xf0
+   bpf_prog_853eb1991d35e093_ext_slice+0x4f/0x321
+   bpf_prog_9eb18752b5d0959a_t_glob+0x2ac/0x2de
+  BUG: unable to handle page fault for address: 0000000082298821
 
-Fixes: a64bfe618665 ("bpf: add support for passing dynptr pointer to global subprog")
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+And whatever R2-R5 held is lost, while the verifier goes on trusting
+pointers in them.
+
+Refuse an extension that writes to packet data unless it gets the context
+as its first argument and scalars beside it.  A scalar is still clobbered
+if the skb is cloned, which the verifier can cope with.
+
+Fixes: be8704ff07d2 ("bpf: Introduce dynamic program extensions")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ kernel/bpf/fixups.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 597302cf7086..d384b9ec3d93 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8416,6 +8416,7 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
- 			       argno_t argno, int insn_idx, enum bpf_arg_type arg_type,
- 			       struct bpf_call_arg_meta *meta)
- {
-+	bool is_arg = reg->type == CONST_PTR_TO_DYNPTR;
- 	int spi, err = 0;
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index fe59e3114d82..32911d7f494c 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -858,6 +858,25 @@ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+ 	return 0;
+ }
  
- 	/*  MEM_UNINIT - Points to memory that is an appropriate candidate for
-@@ -8502,7 +8503,12 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
- 			reg = &bpf_stack_slot(state, spi)->spilled_ptr;
++/*
++ * The prologue takes the context from R1, and it can clobber R2-R5. An
++ * extension gets the arguments of the function that it replaces.
++ */
++static bool ext_prog_takes_prologue(const struct bpf_verifier_env *env)
++{
++	const struct bpf_subprog_info *sub = &env->subprog_info[0];
++	int i, cnt = min_t(int, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS);
++
++	if (!cnt || sub->args[0].arg_type != ARG_PTR_TO_CTX)
++		return false;
++
++	for (i = 1; i < cnt; i++)
++		if (sub->args[i].arg_type != ARG_SCALAR)
++			return false;
++
++	return true;
++}
++
+ /* convert load instructions that access fields of a context type into a
+  * sequence of instructions that access fields of the underlying structure:
+  *     struct __sk_buff    -> struct sk_buff
+@@ -909,6 +928,13 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 			verifier_bug(env, "gen_prologue is null");
+ 			return -EFAULT;
  		}
- 
--		meta->dynptr.type = reg->dynptr.type;
-+		/*
-+		 * The callers of a global function may hand in a dynptr of any
-+		 * type. Take it for that of an skb, so that a write through it
-+		 * and its slices are treated with care.
-+		 */
-+		meta->dynptr.type = is_arg ? BPF_DYNPTR_TYPE_SKB : reg->dynptr.type;
- 		meta->dynptr.id = reg->id;
- 		meta->dynptr.parent_id = reg->parent_id;
- 	}
++		if (env->seen_direct_write &&
++		    env->prog->type == BPF_PROG_TYPE_EXT &&
++		    !ext_prog_takes_prologue(env)) {
++			verbose(env,
++				"Extension writing packet data must take ctx and scalars only\n");
++			return -EINVAL;
++		}
+ 		cnt = ops->gen_prologue(insn_buf, env->seen_direct_write,
+ 					env->prog);
+ 		if (cnt >= INSN_BUF_SIZE) {
 -- 
 2.55.0
 
