@@ -1,203 +1,237 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574A44854FE
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 11:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792238346; cv=none; b=tAIPmk825aa09iCFDSenccpChXkEHu8VNz25wIh2MtzA4huVzOlHayHZH/B7zeGYqbje6eq8orLvrI7L1UiYjnos2HDNUfEsIJ+whGxwqq7ftGTT4Cwo/rgKMBe5j8gH6Ohtp34PVb6j+KgsE3wSqQ8XJF3Av5/hLja6siC0LnM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792238346; c=relaxed/simple;
-	bh=/5W7yfQWUjlhg2PznHzgMrn3QOe0WSW70S1frAhCr9g=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QOjHj0jaEFo76gUKHWyT2hOqUZhC+uki8w4iiwmNf3OLtzYbmnkGJa1ZpN0SEQispVuepJWDbMQo2xREAZtlXBxjXJYT/Rm+EVvSZS4+QR55uc3SliO/lP9bFz2liDkhpo/iEITBCNZwwBeEnxQuE/qK72UufIqD8xua5rmG/3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L8/qKdxg; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F3B288C81;
+	Sat, 17 Oct 2026 14:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792246187; cv=fail; b=rFM77wAqa/UOme6GCCZ33q/rGfVbAr9wszJG6rh7uPnWdj2h1X/nOrLtTDi1DZLXgkHgMkxBbi+Gh1lGhcI9CCwc/zgrHt1GfVDvODMhfRFBwqg9TvF2DCqUitGnaXYxROLdL6Ac5nDk1QT9yPxO8Qe1FaMnVBr0bLeI1/73uPI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792246187; c=relaxed/simple;
+	bh=QTyl2XgTnz/IFx6q5AkEbJrKZAWmbOjMldSapj9tLfY=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YMhdADoGsGrl7JDA7uYnYDYrcw6ILz6O3eFM9w2zok4t8zRLaHfvhO+zCxI+sYC8BQ3JVIBRDI7H29iSEAzSqJhCSVjJk3RyJcKU4Jad9BJz+2cb1aQ8acL7BRuZAz3dlf7IRWcKyCdFLarwbPrUpkiSo44LbrNzJFi0NRbYKqU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QB0/zA6g; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L8/qKdxg"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a01933b584so5759425e9.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 04:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792238342; x=1792843142; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=F292idQfENMQMCSk/GPruM0KbknrhB8tHsls8DaLCOg=;
-        b=L8/qKdxgS2/C3FT+FudZ0elNUze86D5NBHuVTdbeWPAm7wrzx2g4d3Dc7LWKWzpzE5
-         K7gblef1szJfk0EPgwSRhxWsqsTKg3yh8mHshzfEPX8PukvXVPwFTWwzZH1El8/6CpIE
-         ChupKjWsX+dAvRJXCBZc5p1ttrRVH3A96+c7WoyxmmkucdBEUi3ga/UP2+uAcktUsFon
-         rL+KJBCYjI58NlXNWv9lyg6h6CI73KVEmC1YFYGSZW14WqpDiEpxqsU83GJJlxeLgVmc
-         Q8qVq91In6VAlknB9+/mu7eiTjMFc9wmOBfUntIM6Gydz//wOh4v41oLa4oroVdPDVvs
-         wHIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792238342; x=1792843142;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=F292idQfENMQMCSk/GPruM0KbknrhB8tHsls8DaLCOg=;
-        b=hC/gmWCNbxl1VfHMpUXAyuBGM0TRgM3J+W64j4jCOEKXqg+FTs+QlqkV7Pht3jdV03
-         KCnK1lB9+Ft35EipUO/ONLgiz3S/+WcK04XXWT+aVIgpYEsRoKClfkycuPMGjuuZboDs
-         v/H0++BXktJZRlpjEMKU3duZyGVkLfVtzOdqE7KmYoZvejQYUfJDmz9hotk3iM26nJBv
-         JbdHSUArTe5EcZEMJtOck5ARX78U1Mh0RgnUx7ltDJJTdCQtKzJ9iNAze0N3ej6qtze5
-         jjVlYYxQmXxHdULNK0Q3vNR8EcUF55kGDZ9IAhHgRR2SjAr/4wfHcLMR4L6gn2jAshw+
-         Yd+A==
-X-Gm-Message-State: AFq9FYKQffxPtJNUmWLvY5wwb5NjxeiGrSNTV4K7Nvent5+wlqCG20qi
-	3o1bLiebu22NqYIj7egYdmgUmhgtodbgAVA2LkMg4OLTIeEM/dZTdlnA
-X-Gm-Gg: AYBFou24WmuhW8r7ssPjx4jw46yQKB89z/37XczgMoA3dKkwkn0w9dmg0M6N1sl8B0V
-	gUXgLWjnEvjAHcqL7tFH7FJPSUVxuzCrqQuHGeNAoPLihiLAaWXIqUwaAHEpIBaP5jMJBYXym53
-	6iJWO3HJbRxgtObuQX3e9kxG0deFilk4vOrnEOUrK2TJtbiCyHYt/LFGtYXINsu3Fcavjx3/h5A
-	cppMSgSPGc9Hvl/2QwkLhfoJnmsl8qP9bqVBB0Ekri4rQZzqUJIpVwEu9Es3ZF/IhC+9JutK01G
-	6fDIA/ff8TxFS3U1u3jxK5/sImWvz3wMcXYFIhowIxQVhGk7whgQJnYBat3jheXuDQJy5EzVFYh
-	ROpWQAatckEA3f1UPXxeTGpiz8Z3AFGDXXnMS2JzuzRhFjni3dduMJiYnvRndPudcRJlA6+6nkf
-	bKknfYGef1hFRsludbR+tkExrwP4fAeuFQuf1gtekSd8hT
-X-Received: by 2002:a05:600c:4503:b0:4a1:985b:83a9 with SMTP id 5b1f17b1804b1-4a1d75acb11mr60015615e9.4.1792238342202;
-        Sat, 17 Oct 2026 04:59:02 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::25dc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1d7659805sm76775585e9.7.2026.10.17.04.58.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 04:59:01 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 17 Oct 2026 13:58:58 +0200
-To: Woojin Ji <random6.xyz@gmail.com>
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: Zero-extend the index in inlined
- bpf_get_func_arg()
-Message-ID: <atNjAqRLEIlZsmvp@krava>
-References: <179221432098.1890560.17043109037413683447.get-func-arg-index@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QB0/zA6g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792246185; x=1823782185;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=QTyl2XgTnz/IFx6q5AkEbJrKZAWmbOjMldSapj9tLfY=;
+  b=QB0/zA6gOSVCndyejizm21Mt+cBIdKvAueeGcT3jlzaEMBA9xzgbmNPz
+   +1SaHILiD3tLsRjjbsL3tF+xNLREHO69dD1hSEY8UI7Q5OxO7vQNmlWHM
+   Cja3gihdE0DBuVLCAHyA4krK2hLp13zC0hzuAIRBzhwSJlWN+2+d7akPO
+   n4WHmG5jg4uPoen97N0UOQ1Zgm49MCSsZH9CvvpdFbenMSAS7R9+kKSyZ
+   iVsIyUAQdxZ+7r/7G1wmfGeO4+B1wnU9XUApRdxY0kPvA8akWEQ21pDZi
+   OrOgFNivtGLzdXuUNJtVEDnDHRduRF7eipTzxydkg/JPKN/+rkcimw/1q
+   A==;
+X-CSE-ConnectionGUID: YWsi309zTrm3y5hohAbR+g==
+X-CSE-MsgGUID: KtRJLjipQT+iFA77/EXZ9A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11937"; a="1009019"
+X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
+   d="scan'208";a="1009019"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 07:09:44 -0700
+X-CSE-ConnectionGUID: 3gWPiDCCT8qa7ravo42Z7w==
+X-CSE-MsgGUID: rTO9z/XKQIKY9jTgGX9z3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
+   d="scan'208";a="2161989"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 07:09:44 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Sat, 17 Oct 2026 07:09:43 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49 via Frontend Transport; Sat, 17 Oct 2026 07:09:43 -0700
+Received: from BYAPR05CU005.outbound.protection.outlook.com (52.101.85.50) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Sat, 17 Oct 2026 07:09:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=j0odvtL09qtHNvbQq6FWbwoTo+Ud88vL/Amzy33GEqTGRR+h/aSIBNYN0qh6t80RchjyKbi4GbMWwfarfZgKjZqBF5pwiFWmT56/1QpET0GPaWsmhA58TGI/iwaeQ8Pz0d+oUcqJTa33v8E3u47W+BBGhK+F44gTLfyUp7PHi7yBjwx0Se7YHyVN7AyxHpDXV7Yv7FmM8eQDEtoCg1bMOa7iPHo4ppjFwVosyd54zh+5WxE9kXPck7JNtWm4fW1245RfyyYPZPNuyNofkl1p3yBLO+qnw+UZn/EhMeesJv5UVSZasixXBBu1ILl3mguWwUNb0bveCQjmWBkBtZfi2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7uT9a+FYmMaV089hyYf35SgPUJmIqj2aEx7GcKtrGLw=;
+ b=axYL4j/TvltYB8/brO43DA5kifZ8TWS2yGHNMlrJPRYdsuBWJlqs7rbWBLUumw2u7sHn2UdHeyk5VQPv5DWO+6TA7VFjH0D1bKyvPsfoWwa6vLOx5kYOdQxclEbuuFtNmAZRDg4m1frYVFDByiUrxyURFSlBVMTNDeW18A7fUSgyny9D9QW+7fLHmH/3QYugrmkCshC4oSq5RM2gl7R0xU2UIa3/MDEmGNDj1nriSH4mZ9jtHXmEKFC0/dgHsdFGZ9pvhGSoJlS8f3PHXeQ/ze4V2MpSnkCr642owBBJ+ELDXp0FHrdA0F3bGgMiIDXrs1Dy8MxLG2F8wrNNwnpC5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ DSVPR11MB736929.namprd11.prod.outlook.com (2603:10b6:8:3e9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.17; Sat, 17 Oct
+ 2026 14:09:41 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0522.012; Sat, 17 Oct 2026
+ 14:09:41 +0000
+Date: Sat, 17 Oct 2026 16:09:34 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+CC: Clement Lecigne <clecigne@google.com>, <aleksander.lobakin@intel.com>,
+	<edumazet@google.com>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <kuba@kernel.org>, <sdf@fomichev.me>,
+	<horms@kernel.org>, <john.fastabend@gmail.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>
+Subject: Re: [PATCH v3] xsk: fix memory corruptions in net/core/xdp.c
+Message-ID: <atOBnjNbppL02n8/@boxer>
+References: <20260629072300.1664622-1-clecigne@google.com>
+ <87qzhp51vc.fsf@all.your.base.are.belong.to.us>
+ <atIfJAKqp3dZdY4M@boxer>
+ <87cxt94d1t.fsf@all.your.base.are.belong.to.us>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87cxt94d1t.fsf@all.your.base.are.belong.to.us>
+X-ClientProxiedBy: VI1PR06CA0156.eurprd06.prod.outlook.com
+ (2603:10a6:803:a0::49) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <179221432098.1890560.17043109037413683447.get-func-arg-index@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DSVPR11MB736929:EE_
+X-MS-Office365-Filtering-Correlation-Id: 624b0d0d-c00e-4cff-4c4a-08df2c58497a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|4143699003|11063799006|56012099006|261009223027099003|10067099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info: XqreCj2xOq9sb+2JAMlSJFU1i5Rd8r90z23dMUKJSzT71t+lD1aSxNSob6afbdAYHzrorGV/yBMy8X65trwqgmX5eR+bLCzZkHCQpyeZiEseDPy+aBpTZd8z9hMug1WhRXKrQ3SaIdFkFfZnnJmuDBAkh1/NoALX8m/+yzxi6X1BMs9UT5qapPPD7riOziW3huDmTpW3es9YXM38evV5f98sVvNbfiArz2tGPJSQqz1X/J8iRjToWMZW1/Z8gg7s/lkud9Tkm+5xy/UoGzAdsPtuVkZVCpQRzifb9Q9LpyDG5cYEgRX46UmKhtng5y27K7aTFNTLuk+bAfCdpE4Ua2Vfh1WnTrBT+La2OczzQmQZSuJcXMNdhCx0LQEof+2VGmgeF7+qHYH26gtEYD95e3+KyhDVqrEJvBeQzcFY1EMmtBbDYlOPgjpm/hMP7gKHLKHPjP4JIisu2aaPoAyrAOyRZ0/ZtnIF0L4c5zTsItFsAeVY7Uhg7Yg4Q3PuwTAj/6ZzLbO0Z7YAQg9FXxxPVY+lp/paVgsaorf/ctRXaeviRzJaE5i13dDhcqthzRfwnwQy71S9Vip2ozsQEcgP6FTXicEql5nCUp+Qj5b+UbkqvtuaOmgvqBOHsegJ3ENEpxQAGFPugd88Amyz2LEMc7zXDwP5nZbDs8cXwmnD2b0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(4143699003)(11063799006)(56012099006)(261009223027099003)(10067099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?Ai8nGDwgQAMBj30I/ewuXlVBnj2chH1RKd00PovBc7XJRoDqQxh9X8wjX1?=
+ =?iso-8859-1?Q?k7PomU35ZVBwSqsNNdQVr4UE+yPNpQ4RstIetBL5CB7eC/Pz2ZtbhZEOG5?=
+ =?iso-8859-1?Q?Wfbk79JkC88IvY1bnexglgtCspT0zYrCJAXskPVPtf6CPsjnWN5fMwBRMU?=
+ =?iso-8859-1?Q?wft6T6njQvv0u0lbt8kY6H4MHZ9WRhmjNRslYMByIkxK9jt2ZEZKisnsNP?=
+ =?iso-8859-1?Q?nmvXzEyaa8sy31EUKfnK9UhjSJZQ1FsQhY9C1TqlNJ4/RZRxrQw+7qD8xc?=
+ =?iso-8859-1?Q?CjtBWQtx23Bd6k8xb5EumHntoaMQ5hTz9ak1lvD+GWGjOf0nwGjvct1fy0?=
+ =?iso-8859-1?Q?Pys7szM6J5RZldIqXWbWHQH2xbla/X/3y7/ajmZwL0rMZ9H28bpbYjGM9/?=
+ =?iso-8859-1?Q?hqhxN7RsnkM1qjOJfM4TXwW4ZWyPyta3ApgHtN98L2Mc0XtzvwEufmdd36?=
+ =?iso-8859-1?Q?9qm4svp9z5KTvCVs93VGlMdmxFhX+XAI5viX6y52uB5hDHUtHyawt6qJZA?=
+ =?iso-8859-1?Q?Jbtv07J9afdP2QKTdzCIK90oIyHeeFS5ihHuMhz35/w6KzVLrolvpkPlDs?=
+ =?iso-8859-1?Q?dxMFgyQbqldtfWeie/xasBNlMrzDIhmpXCMoYQUv9Hr36TilEO0IbLAgqf?=
+ =?iso-8859-1?Q?4TiRS9nqR22cyWVm9Jilkgzv4vcERWqyt9J5ZMquKeGKfwRTVjD3gzgo/D?=
+ =?iso-8859-1?Q?Nj2cs4R/eL4zTsGk3L+sptVI5VaL6h2mIM5H+HHZXg/Z39LwO43zGyBVYT?=
+ =?iso-8859-1?Q?lE8HCTtFgtmYkpW0dNFrKhLtG2FYVwJXsS8TzB2/ONJelBK8cWQ7geMOZh?=
+ =?iso-8859-1?Q?7lri0CWy15m9AABqMGZwsCIZMZ/XwS+rRYJT9wRf2Dk0Hd/llE2Esny99q?=
+ =?iso-8859-1?Q?8pCcC+tGASCj1CZEDdjML+P3o+vtoEYJv+wBN80Nr9lhqBjZd+JHWGJnDK?=
+ =?iso-8859-1?Q?0rjnVkDIRzz7Nhep7S3QH5W918BDENApBNoIKK23s2VfXZ4gvIVorSGGyX?=
+ =?iso-8859-1?Q?waD0g1wOqCWgUbBwOUM6BLN5ORT+Xa2rwj/7MvuGxq+zMDgbbSjOP887/L?=
+ =?iso-8859-1?Q?LD97iOzRFZ+wHkUfoI9L3AWkXudQOBO24+MGeSs34eyh5KDs/a0aId47Aq?=
+ =?iso-8859-1?Q?UIr5T8qIu6r4FdknzQJHu0Vp9cRc3aPxFYIas9GcSEL6CxxgE5l9+GLzzK?=
+ =?iso-8859-1?Q?dZjvtbnFgjCjRUFB0gkJl/JWddeheAOPex3H5i0DR1Oo+L4PZgSr2bd+Jw?=
+ =?iso-8859-1?Q?wDdj3fWc3mZeuVhVeWjvYaDwdV1iWfmj0puv4z5ezMEBSO/qb0OaTwm2YI?=
+ =?iso-8859-1?Q?ndyiWFQBFViuR1YiP3dXC0/21BuNHWF0oRpy4Nx2KEMD9XT+rg3UTe6Jkb?=
+ =?iso-8859-1?Q?4HsiHEykpFuvYyM+fD0W9qU69o/AJdgE20ARo44bmRE29Wm9rNAdAsjmmt?=
+ =?iso-8859-1?Q?YAO/XkbosAmYaVeZoUav0nvI/ZfMEZ0CYMOsGfooUNIn+GiqVhN++u5XpP?=
+ =?iso-8859-1?Q?SJpDLMP5lVlb5I1gVamxRyHOU3QIuCuoKC6n9YcNk8hEMfSST/UO9Z/m23?=
+ =?iso-8859-1?Q?HQwIjkUFphWL2eMEUvNdZFp47VJ7CXar5yJwXzfpmZ/QWKFgf8r2yAi9Cm?=
+ =?iso-8859-1?Q?HHygWxiyGBIcjiEVb7VMvpsWjJKb7r0LQJc2DBUWpwj5JMlCJqKFo7z0n5?=
+ =?iso-8859-1?Q?xNcbiwoUZ2udYdqH0Q+5DiTp5eCocVBNWwRxItRW0UtwzBTd3jnl6e/Qv5?=
+ =?iso-8859-1?Q?r5izlfa1OoJkqdl2u1G7NvfNoVCP4ks2V2+0nW6uWnfWyk2mg1Urjg1GAp?=
+ =?iso-8859-1?Q?Dug1n7wyGRN7nn84K80dAHTH45wqEUk=3D?=
+X-Exchange-RoutingPolicyChecked: tk8JHyVn8XMpcOv14K358pVdSXsPUo/YAdZKzSKJEqybCbLiV0Ff9wIn9dkxD6zm6Jy8NWPMLD7PpbORXLjFTtABTsyFb2HTD3h9ZUSLV8g+UPwJI2hFwPAygKGBN7WaBsntKg0w9kYbKRU8vELCzDMbw2fVAqB6W4SZc0McBBmQk7aQ/HSkytuH29t+MmGkF9PYXzPkZS+BYWQyln9GEpllvXu30xoA8Oqo+2NePo69+5jSAoyTigqqonodifEzsJn/ajNab+Q01ENOKvquKPfExdO0pON+2ZhiDFO7Ng8FJXM+JkT0WLFdmSN9XCmWNdUPKw0WLLTnKv/buI3LZw==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 624b0d0d-c00e-4cff-4c4a-08df2c58497a
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2026 14:09:41.3630
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jQIU0xTYAaKPRrDlEM8642CgEG9HXUdeEZqLUnXNYoYHrTfIySIxv8wUpv3ZL+uxcVxV1jezHa038SejM5gg5Sxb1Qr7Qbku/+vSPDXIGEM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSVPR11MB736929
+X-OriginatorOrg: intel.com
 
-On Sat, Oct 17, 2026 at 02:42:24PM +0900, Woojin Ji wrote:
-> bpf_get_func_arg() takes a u32 index, but the inlined expansion compares
-> only the low 32 bits of R2 with the argument count and then shifts the
-> full 64-bit register to compute the context address. R2 is ARG_ANYTHING,
-> so nothing guarantees that its upper bits are zero: an index of
-> 1ULL << 32 passes the bounds check as index zero while the load is
-> performed at ctx + (1ULL << 35).
+On Fri, Oct 16, 2026 at 10:15:42PM +0200, Björn Töpel wrote:
+> Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 > 
-> Zero-extend R2 to the u32 index the helper takes, which is what the C
-> implementation does; that path is still reachable because LSM programs
-> with BPF_LSM_MAC are not inlined. Widening the comparison instead would
-> reject indices whose low 32 bits are valid. Since the check is 32-bit,
-> this cannot change which programs are accepted, only the address.
+> > On Fri, Oct 16, 2026 at 01:19:35PM +0200, Björn Töpel wrote:
+> >> Waking a dead thread: RISE FROM YOUR GRAVE!
+> >> 
+> >> Clement Lecigne <clecigne@google.com> writes:
+> >> 
+> >> > From: Clément Lecigne <clecigne@google.com>
+> >> >
+> >> > Commit 560d958c6c68 ("xsk: add generic XSk &xdp_buff -> skb conversion")
+> >> > introduced a vulnerability in the handling of XDP_PASS for AF_XDP zero-copy
+> >> > frames.
+> >> 
+> >> Hmm, I acually hit this in my WIP for UMEM page pool provider hack.
+> >> 
+> >> > Note: Currently, this specific AF_XDP zero-copy conversion path is only
+> >> > reachable from the drivers/net/ethernet/intel/ice and
+> >> > drivers/net/ethernet/intel/idpf drivers.
+> >> >
+> >> > When building an skb, xdp_build_skb_from_zc() uses the chunk size
+> >> > (xdp->frame_sz) for the allocation. However, napi_build_skb() automatically
+> >> > reserves space at the end of the allocation for the skb_shared_info
+> >> > structure. 
+> >> >
+> >> > Most high performance UMEM applications use 4K chunks, where the
+> >> > corruption cannot happen.
+> >> 
+> >> I think this can also happen with 4K UMEM chunks.
+> >> 
+> >> For example, on ice, use MTU 3800, 4K chunks, and no extra UMEM
+> >> headroom. Attach an xdp.frags program that returns XDP_PASS, and bind
+> >> the socket without XDP_USE_SG.
+> >> 
+> >> A 3814-byte Ethernet frame fits in the UMEM chunk:
+> >> 
+> >>   256 headroom + 3814 packet = 4070 bytes
+> >> 
+> >> But the copied skb also needs space for skb_shared_info. Using
+> >> the 320-byte size from your example:
+> >> 
+> >>   256 headroom + 3814 packet + 320 shared info = 4390 bytes
+> >> 
+> >> The old code allocates only 4096 bytes, so the packet copy
+> >> overwrites skb_shared_info.
+> >> 
+> >> Am I missing something?
+> >
+> > I was pushing back on relying on scenario above as we respect the tailroom
+> > now since some time:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a315e022a72d95ef5f1d4e58e903cb492b0ad931
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1ee1605138fc94cc8f8f273321dd2471c64977f9
 > 
-> Extend the existing fexit and tp_btf tests with a 64-bit helper
-> prototype so the upper index bits reach the expansion.
+> Hmm, isn't that only with XDP_USE_SG? My example binds without it.
 > 
-> Assisted-by: LLM
-> Fixes: f92c1e183604 ("bpf: Add get_func_[arg|ret|arg_cnt] helpers")
-> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
-> ---
-> Validation:
->   - Built the modified objects and both affected test programs.
->   - Disposable x86_64 QEMU guest, clang-22 kernel with BTF, tracing and
->     bpf_testmod: both tests pass (2/0 PASSED, 0 SKIPPED, 0 FAILED) and
->     the guest dmesg is clean.
->   - Same tests on unpatched ff47652a4b66: the wide index faults in the
->     inline sequence and the guest panics.
+> Then xsk_pool_get_rx_frame_size() returns 3840. XDP_PASS still builds an
+> skb with skb_shared_info, even if it's linear. So we only have 4096 -
+> 256 - 320 = 3520 bytes for the packet.
 > 
->  kernel/bpf/fixups.c                                |  5 +++
->  .../selftests/bpf/progs/get_func_args_test.c       | 36 ++++++++++++++++++++++
->  2 files changed, 41 insertions(+)
+> Or am I missing another check?
 
-nice, please split kernel and test into separate patches
+I missed your trick with xdp.frags on prog side. Get this fixed then! :D I
+had a thought like 'who cares if we overwrite struct not used in linear
+traffic' but as Clement said somewhere destructor_arg overwrite would make
+a mess.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Side note is ice currently still only allows 3k buffers for linear XDP
+progs but it currently works with page_pool not with magic page split
+mechanism, so the limit should be lifted.
 
-thanks,
-jirka
+I might take this as an AR but anyone reading this in future feel free to
+pick it up.
 
+Bjorn, let us see if Clement responses in some nearby future, otherwise
+please go forward and submit a standalone fix out of your series.
 
-> 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index d6f83521fc78e6c6a82d1969662f1eb52f64f4c3..005ed9279ebab60a8a774c4e6937232ab4f38962 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -2255,6 +2255,11 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
->  				insn_buf[1] = BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 0xFF);
->  				cnt = 2;
->  			}
-> +			/*
-> +			 * The helper takes a u32 index; zero-extend it before
-> +			 * the bounds check and the 64-bit address math below.
-> +			 */
-> +			insn_buf[cnt++] = BPF_MOV32_REG(BPF_REG_2, BPF_REG_2);
->  			insn_buf[cnt++] = BPF_JMP32_REG(BPF_JGE, BPF_REG_2, BPF_REG_0, 6);
->  			insn_buf[cnt++] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 3);
->  			insn_buf[cnt++] = BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_1);
-> diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-> index 1bf47f64d0967a3543739841201b58b14b4036a7..9b0beb58d88d5bcf1a36a0598695fd02a2cebbcf 100644
-> --- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
-> +++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-> @@ -6,6 +6,40 @@
->  
->  char _license[] SEC("license") = "GPL";
->  
-> +/* Keep the upper index bits: the inlined expansion must truncate them. */
-> +static long (*bpf_get_func_arg_wide)(void *ctx, __u64 n, __u64 *value) =
-> +	(void *)BPF_FUNC_get_func_arg;
-> +
-> +/* Both traced functions are called with arguments 2 and 3. */
-> +static __always_inline int check_wide_index(void *ctx)
-> +{
-> +	__u64 a = 0, z = 0xdeadbeefdeadbeefULL;
-> +	__s64 err;
-> +	int ok = 1;
-> +
-> +	/* The index is truncated to u32, so these select arguments 0 and 1. */
-> +	err = bpf_get_func_arg_wide(ctx, 1ULL << 32, &a);
-> +	ok &= err == 0 && ((int)a == 2);
-> +	err = bpf_get_func_arg_wide(ctx, (1ULL << 32) | 1, &a);
-> +	ok &= err == 0 && a == 3;
-> +	err = bpf_get_func_arg_wide(ctx, 1ULL << 59, &a);
-> +	ok &= err == 0 && ((int)a == 2);
-> +	err = bpf_get_func_arg_wide(ctx, (1ULL << 59) | 1, &a);
-> +	ok &= err == 0 && a == 3;
-> +
-> +	/* Out of range: -EINVAL and no store into the destination. */
-> +	err = bpf_get_func_arg_wide(ctx, (1ULL << 32) | 2, &z);
-> +	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-> +	err = bpf_get_func_arg_wide(ctx, (1ULL << 32) | 0xffffffffULL, &z);
-> +	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-> +	err = bpf_get_func_arg_wide(ctx, (1ULL << 59) | 2, &z);
-> +	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-> +	err = bpf_get_func_arg_wide(ctx, (1ULL << 59) | 0xffffffffULL, &z);
-> +	ok &= err == -EINVAL && z == 0xdeadbeefdeadbeefULL;
-> +
-> +	return ok;
-> +}
-> +
->  __u64 test1_result = 0;
->  SEC("fentry/bpf_fentry_test1")
->  int BPF_PROG(test1)
-> @@ -63,6 +97,7 @@ int BPF_PROG(test2)
->  	/* return value */
->  	err = bpf_get_func_ret(ctx, &ret);
->  	test2_result &= err == 0 && ret == 5;
-> +	test2_result &= check_wide_index(ctx);
->  	return 0;
->  }
->  
-> @@ -162,6 +197,7 @@ int BPF_PROG(tp_test2)
->  	/* not valid argument */
->  	err = bpf_get_func_arg(ctx, 2, &z);
->  	test6_result &= err == -EINVAL;
-> +	test6_result &= check_wide_index(ctx);
->  
->  	return 0;
->  }
-> 
-> base-commit: ff47652a4b66c067c765a7ad464d930b5a9367cc
-> -- 
-> 2.47.3
-> 
+Thanks!
