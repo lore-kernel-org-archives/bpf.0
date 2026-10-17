@@ -1,64 +1,64 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF4C13B293
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B01B265621
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792200066; cv=none; b=RWwVCtTxV+td0raYE+e0COT3qZUP0Oj1D6PZT1T19UAmnpp9NWa5+FXcgZcgMPUCs3+tVcgHbbRs+MBw2FwURXfU/GSyka2HySERT7cE38jOiQKpJEJhLOVDo2WNyBYGDDlfoQsSBlxq2trS3ZzbHIGu7T7ywChb3UCLFfjYlwo=
+	t=1792200069; cv=none; b=hvbEIodAcL5L1om2NcTC/1+W38uktHMPXfIhRoJy2jq8rqNCLxiyphgl6reKZlTKmF0Y1MuamSMoMKaT32UV9Nct/AATql4uSbcqXQSqvggldKmhczd8GxTt8n9MfttmP+TTS5ayUiBFfQG2nu0P17GWrXUt9hKnZ2k3s6yZp48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792200066; c=relaxed/simple;
-	bh=xr/G1io/jcMfHrR984t0P/qxqDapvYkztkruKBNwPW4=;
+	s=arc-20240116; t=1792200069; c=relaxed/simple;
+	bh=FKqteCSXO1CbRVOSlk9/EvC/7gM2fsr0/PRO0BW8AjQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mlWktriNRnI8b/fNZTaRgzPLetljGfrOvAbBFuPJywGR3U3JRDZiRVQhBrWzy+HYoPkJ7fLooFMIdE0sPGHcrBAea5kux/f/LArHFMgljxDER3kiwK1ayRDBkDt11+zjTKOAGRfGleuRlFtBL5d/g0WpUtcw4c0YyyrIJjQtYuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gD+Z0EdU; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=ZJuc/5LXxLwJb/vyJP+njNUgCqP3Z6OQPbWY8bldgffXxPZSBoV98zHJlHcmEW4tTbMpE24I4zZE8fc5CKySOijsPjnTWarY2SusWh4+FQ3gEIkELxTaHUC+xbQMArOANuMmQgHcfXjilXGYQMtSDa9LofADMJ1td5nryHDlNzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTIEAFUp; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gD+Z0EdU"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8897e83332fso974671b3a.1
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:21:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTIEAFUp"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd5e2d696e0so399697a12.1
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792200064; x=1792804864; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792200067; x=1792804867; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=dvPXxhxftG/h1Xzj+1bIi+SrjJdEQHzmOQDpnqTY+d4=;
-        b=gD+Z0EdU6fpgg+8WlHmQfx1Arv9j82qmjQZvTcZY2R/3H0Clr3YpoppCxntA0w31EL
-         PMf8RbaziZhCkYjqrmS0rsrOzYCIMf5KbUircphdMEBO+7LntesK3xB30MG6dFuN5rZg
-         UONajiqAiYc5zUjJRq+wtzTUOV2M5Q/dwrSqst3/6GnHY7pIPG+3fxdTx4qb/uck9vd9
-         x7hW1PJjEuXPg25lQdt1NuC8sy9JGkA5XXZl9kHuF3jJW5xgrKeuebrzJaZ5dl7Z9sAU
-         IXvE+8iNrH8pYYTqnPcqyVc7Zj8dakwxxSDi1KazOgQU2vY4sXhJjRDcgRo5Q0Z/5XHF
-         rTcw==
+        bh=zLOTcel4mG6H6gLmD7SemEC02pAxD8Wu1dMrbttEvSQ=;
+        b=hTIEAFUp6S1DOyCNO3Cuy4C16n5oS3Cnvwt9YpbHBScXeDVQDOIPkqPmZs7hHUxedm
+         AcOIjdzfGUpWJO+wNkjzVQk7+0oZ5qn1+d+62uU62+4NNf/U2VG2hMZw9dXLi7vgGr5h
+         GW78NBVHOEbOgwcKwLcPH3/UpwtTlAlmsGEGWTPDW/5e7d5145x7doJLC/zvrZo0e+EI
+         vugF7y4+E7xPZ5/S4Ag53hDvxhSE5HY7wMp+gL2uXp0uZiUiNaBhdRGyWUWcIOawXKoR
+         +SNBdqMnOdVsObvFUsjR7JzbaidB2rhW06OEwI4rmfLQ4bb76xcpKZX8ME6siV635uvn
+         E4Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792200064; x=1792804864;
+        d=1e100.net; s=20260707; t=1792200067; x=1792804867;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dvPXxhxftG/h1Xzj+1bIi+SrjJdEQHzmOQDpnqTY+d4=;
-        b=qDYHDEzUWTBJ4mfGzsMLrfwj2Y9mXhcob094A183TMzSK3bZUVejwVsE95J5c9dD/0
-         UevNrKQFB5+y0RUPuyLUx8PYJesE0w+jp9IRNGAPaLyPk3bnEP7LJ4Oe8yJBSfVGS0i+
-         yN9/BTGcCiN9A00ZGbzR272yMERM/1wDK1geeUYyZ+tIPKn12NEjnDBPurI5aSo1WH2+
-         aORr2Ry6k0u5b/NaTphpGuYqKLods40njBVqMhRfGSAhluhuUcVCoVt922GGi6gORKkH
-         ZIaFXSzls3v4NS7PTjiOQj/Lt7+H90M3sia5e7D48ma5lZh1vj7moZ7ZoMtzAuXsvm+z
-         PnLQ==
-X-Gm-Message-State: AFq9FYK2a661G+7J0cYvfj2jxMPKQ4X4zLZeCCs0mk66aTd7HBP02xh7
-	BTGKzwPuKMRQ4wwbSTdf5y/J1foz4FRufzuzTBXbNii8I8PddYctpTgrnPysHzuU
-X-Gm-Gg: AYBFou0vOGJxuL8k4GQkNNjvzyN74VzzVL84BgMbgdpHK+73X9ZAXn6FM5HkcK4KGHz
-	OkiAu5C4nkmb/Qh94DcAtQz1+6x3wjexSEgcuLr7UcqVmbjWzLAoIT9IyKX1cxBUGjoU88PwsEN
-	hl6cYCHSyl5GLr93blMpbburfnAIRoyVl24x9vJYUMtV4LT8WjE0HnPYsiZpSNVkizYfmWSEyY4
-	ACW/enGBGBvQ9gScZVVf0ALLiV45D1bOhjFH88q65hJK1fdCNc35h2R/alxTnNaqUcWmntthWKZ
-	jB8YnVLTvQxU+v8uQF48XEztCAGPpwR66vAu1QxoVhvF+lHm8B2z8qs0KZ2sUu5c488i4ULhIur
-	/5vBDeY0WMGbTJQoZaXbbiO8QLILQnysppZGrz3bq1mHpqAmcwTqGZyM5VjLzdtggpeYCSnfEnq
-	fVas4E6gm2lHpg3RWhKEsxEw1sF8iTG+hUjmpRPN6VBQgjPAwh3x4cgW0Fe/DTaCsgiX4qyJ52T
-	W+6dRW6T8PwVBKkm6HwqKjw7A76lunIS9QCUzVnRgd5sV7k1ThTYt27EuFk4nEbA+nvt6QS0iM/
-	qMTLLGs7vDwuMYCy++tx3yov71rKfgYZs3Lx0gIF+qk=
-X-Received: by 2002:a05:6a00:7542:b0:886:ecc9:555e with SMTP id d2e1a72fcca58-89f208021a0mr2911530b3a.8.1792200064435;
-        Fri, 16 Oct 2026 18:21:04 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89febdc2209sm1301970b3a.33.2026.10.16.18.21.03
+        bh=zLOTcel4mG6H6gLmD7SemEC02pAxD8Wu1dMrbttEvSQ=;
+        b=IgXRlaPI+rfQgC2QnIdTfAmp6/KZgW5bJ8416qUYIX35Uub7xAM2KReWMg5DhwZHyl
+         fo99GjisTZnt4Y/C6F4GiD3nyptPM+8RSUGOnHmcBRDS1/gV45LdkGomlEIJgYXNOovx
+         Z1Fl6WvoQ6+796bO97fnrgboRuLJJzsGhh5xiJxxyp14rtBJyh0jTTvyHNu75FugBdWW
+         ISDkjuIh13TTdY6iJZhQn6QBxzDjzTxIchXGm0N3IPBldDfLcgNxCZVOy0HJS//RzlS1
+         NEj9fNpBt8Dfx7Ys5IM3veDWDugVAk6rvOXbZe+fOQ9atslrXGjrs07x8eN5iCQeWN9m
+         Z8mQ==
+X-Gm-Message-State: AFq9FYKssHGtBV9wV0lQ+rmwL7631PceaskO1J3v5OtvFS9mcxnsFxWD
+	1dWiOasjZD22m5oDYaZlGjPhYHAZMqOJzJZgqDK4AOjBRsnp+NEOsJGIFuRgr8mt
+X-Gm-Gg: AYBFou2slSC5YafYiyjg2svMz2Rqf2bi5n1o6mYseoIZwKmRG7xk07QM6TTOf+8j8qy
+	GYCznX6u1NiibRbcfzblo6LP1xfDifTU+Wv9DTZ03AOPYjZjegPJuYfjilhB5bcz4EwpE+PbiBg
+	BDySgmOzW1OSNnceRbPTmqJAUooQgQ5/wES7ahtxCWSKiUMz3dpgFryjDwcqfjv1Zt9TlpMtYUr
+	LmoUkvx5lttwuQsiRl5Q0CebzEZzb/Yuw0JvSU8EbbfitjX9JBv/9GLj2Li6eanciehL/R6LSly
+	7tWvI8vefZCCdQURhjHR7jImiidOCsutZQ79FeJEvutF8SA56DhgsHMTB4cWPvgdXcYXLCR08av
+	0lAJPd0+ONeGPt4GT5wCORrera3lNItsDBvVyRSNRFEapXZryI6dw9eBFxLT4IAoRofZoGzh0fi
+	j0shMpdPflPsp1APpv0j425yPghdPa0+cR+rLZWC5UbnZUckHoUFVYcfNzHbI9MBcE/gWPK+bqi
+	W5KM+YI5YGumru2Cv7CeE/UtswvCEnAFOciaylqfruEQ71CHu+0CgvCbI8jk0fop3vbfDTwHbzc
+	uqUWdMKAK0lzgXylpTvdst/QkPFVmMcZFl1UXgWm98s=
+X-Received: by 2002:a05:6a20:ac44:b0:3d3:ae50:97ce with SMTP id adf61e73a8af0-3e22629e2dbmr846324637.27.1792200067394;
+        Fri, 16 Oct 2026 18:21:07 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd6549eea48sm1848788a12.19.2026.10.16.18.21.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 18:21:03 -0700 (PDT)
+        Fri, 16 Oct 2026 18:21:07 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next 01/38] bpf: use the frame mem type in devmap egress XDP
-Date: Sat, 17 Oct 2026 01:20:21 +0000
-Message-ID: <20261017012058.355787-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 02/38] bpf: forbid sleeping in hash map for_each callbacks
+Date: Sat, 17 Oct 2026 01:20:22 +0000
+Message-ID: <20261017012058.355787-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
 References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
@@ -84,67 +84,146 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-A devmap egress program that removes a whole fragment of a redirected
-xdp_frame with bpf_xdp_adjust_tail() or bpf_xdp_pull_data() frees it
-with page_frag_free() whatever the frame's memory type is. For a
-MEM_TYPE_PAGE_POOL frame from a page_pool based driver this drops the
-page reference owned by the pool while the pool still accounts the
-fragment ("page_pool leak" bad page, leaked pp reference).
+A sleepable program (e.g. SEC("syscall"), lsm.s, fentry.s) can pass a
+callback to bpf_for_each_map_elem() on a hash map and call a sleepable
+helper or kfunc such as bpf_copy_from_user() from it. The verifier
+accepts this, but at run time the callback is invoked from inside an RCU
+read-side critical section:
 
-kernel/bpf/devmap.c:dev_map_bpf_prog_run() points xdp.rxq at an
-on-stack
+    bpf_for_each_hash_elem()
+      rcu_read_lock();
+      callback_fn(map, key, val, ctx, 0);
+        bpf_copy_from_user()       <- may fault and sleep
+      rcu_read_unlock();
 
-    struct xdp_rxq_info rxq = { .dev = rx_dev };
+bpf_each_rhash_elem() does the same for BPF_MAP_TYPE_RHASH. Sleeping
+there triggers the "Voluntary context switch within RCU read-side
+critical section!" warning, delays grace periods, and with
+CONFIG_PREEMPT_RCU=n silently ends the read-side critical section that
+the bucket walk relies on.
 
-whose mem.type is 0, i.e. MEM_TYPE_PAGE_SHARED, and
-net/core/filter.c:bpf_xdp_shrink_data() releases frags according to
-rxq->mem.type. cpumap, which runs programs on xdp_frames the same way,
-already copies xdpf->mem_type into its private rxq for each frame.
+Synchronous callbacks are verified with the caller's state, so
+kernel/bpf/verifier.c:in_sleepable_context() only looks at the program's
+sleepability and the locks the program took itself, and does not know
+that the helper holds rcu_read_lock() around the callback.
 
-With 9000 byte frames from virtio_net and an egress program that cuts the
-fragments off:
+With a SEC("syscall") program whose callback reads a page that has to be
+read from disk first:
 
-  BUG: Bad page state in process swapper/3  pfn:10660b
-  page dumped because: page_pool leak
-   bad_page+0xbd/0x190
-   __free_frozen_pages+0x5c7/0x900
-   bpf_xdp_adjust_tail+0x3be/0x480
-   bpf_prog_dad43f894a3faff7_egress+0x15c/0x1cd
-   dev_map_bpf_prog_run+0x288/0x610
+  BUG: sleeping function called from invalid context at include/linux/uaccess.h:169
+  RCU nest depth: 1, expected: 0
+   __might_fault+0x29/0x80
+   _copy_from_user+0x26/0x90
+   bpf_copy_from_user+0x23/0x60
+   bpf_prog_17d44fa39eebd6cc_cb+0x35/0x46
+   bpf_for_each_hash_elem+0xdb/0x280
 
-The pool waits for these pages for ever when its device is gone. That is
-the harmless case. A page of the pool can hold more than one fragment
-while its refcount is 1: the first page_frag_free() frees it under the
-fragment which is still in use, and the second one runs into
+Fix by marking the callback frame of hash map iteration as running under
+RCU and making in_sleepable_context() false while such a frame is on the
+call stack, so sleepable helpers, kfuncs and global functions are
+rejected there as inside bpf_rcu_read_lock(). The rules for trusting RCU
+protected pointers are left alone, which is conservative and keeps
+callbacks that verify today and do not sleep working. The flag is
+compared in func_states_equal() so that pruning never mixes the two
+contexts. Array map callbacks run without any lock and keep the caller's
+context.
 
-  page dumped because: VM_BUG_ON_PAGE(page_ref_count(page) == 0)
-  kernel BUG at include/linux/mm.h:1846!
-
-veth is not affected. It takes references of its own on the pages and
-redirects the frame as MEM_TYPE_PAGE_SHARED.
-
-Fix by setting rxq.mem.type from each frame before running the devmap
-program, as cpu_map_bpf_prog_run_xdp() does.
-
-Fixes: ca9984c5f0ab ("bpf: devmap: provide rxq after redirect")
+Fixes: 314ee05e2fc6 ("bpf: Add hashtab support for bpf_for_each_map_elem() helper")
+Fixes: 818e00848227 ("bpf: Implement iteration ops for resizable hashtab")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/devmap.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/bpf_verifier.h |  5 +++++
+ kernel/bpf/states.c          |  3 +++
+ kernel/bpf/verifier.c        | 28 +++++++++++++++++++++++++++-
+ 3 files changed, 35 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index dc7b859e8bbf..1b8f0d7f8455 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -350,6 +350,7 @@ static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 112ca1511da4..816948df8fff 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -379,6 +379,11 @@ struct bpf_func_state {
+ 	bool in_async_callback_fn;
+ 	bool in_exception_callback_fn;
+ 	bool no_stack_arg_load;
++	/*
++	 * The helper invokes this callback under rcu_read_lock(), so the
++	 * callback and its callees run in an RCU read-side critical section.
++	 */
++	bool in_rcu_callback_fn;
+ 	/* For callback calling functions that limit number of possible
+ 	 * callback executions (e.g. bpf_loop) keeps track of current
+ 	 * simulated iteration number.
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 953700822fa7..b3d250caaaa6 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -995,6 +995,9 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
+ 	if (!old->no_stack_arg_load && cur->no_stack_arg_load)
+ 		return false;
  
- 		xdp_convert_frame_to_buff(xdpf, &xdp);
- 		xdp.txq = &txq;
-+		rxq.mem.type = xdpf->mem_type;
- 		xdp.rxq = &rxq;
++	if (old->in_rcu_callback_fn != cur->in_rcu_callback_fn)
++		return false;
++
+ 	for (i = 0; i < MAX_BPF_REG; i++)
+ 		if (((1 << i) & live_regs) &&
+ 		    !regsafe(env, &old->regs[i], &cur->regs[i],
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ddfa0c6d2755..883cf148235c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11530,6 +11530,19 @@ static int set_map_elem_callback_state(struct bpf_verifier_env *env,
+ 	if (err)
+ 		return err;
  
- 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
++	switch (map->map_type) {
++	case BPF_MAP_TYPE_HASH:
++	case BPF_MAP_TYPE_PERCPU_HASH:
++	case BPF_MAP_TYPE_LRU_HASH:
++	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
++	case BPF_MAP_TYPE_RHASH:
++		/* Hash tables run the callback under rcu_read_lock(). */
++		callee->in_rcu_callback_fn = true;
++		break;
++	default:
++		break;
++	}
++
+ 	callee->in_callback_fn = true;
+ 	callee->callback_ret_range = retval_range(0, 1);
+ 	return 0;
+@@ -12273,10 +12286,22 @@ int bpf_get_helper_proto(struct bpf_verifier_env *env, int func_id,
+ 	return *ptr && (*ptr)->func ? 0 : -EINVAL;
+ }
+ 
++/* Is any frame on the current path a callback that runs under RCU? */
++static bool in_rcu_callback(struct bpf_verifier_env *env)
++{
++	struct bpf_verifier_state *state = env->cur_state;
++	int i;
++
++	for (i = 0; i <= state->curframe; i++)
++		if (state->frame[i]->in_rcu_callback_fn)
++			return true;
++	return false;
++}
++
+ /* Check if we're in a sleepable context. */
+ static inline bool in_sleepable_context(struct bpf_verifier_env *env)
+ {
+-	return !in_rcu_cs(env);
++	return !in_rcu_cs(env) && !in_rcu_callback(env);
+ }
+ 
+ static const char *non_sleepable_context_description(struct bpf_verifier_env *env)
+@@ -12290,6 +12315,7 @@ static const char *non_sleepable_context_description(struct bpf_verifier_env *en
+ 			return "IRQ-disabled region";
+ 		if (env->cur_state->active_locks)
+ 			return "lock region";
++		return "callback running under rcu_read_lock";
+ 	}
+ 	return "non-sleepable prog";
+ }
 -- 
 2.55.0
 
