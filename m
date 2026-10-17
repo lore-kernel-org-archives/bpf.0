@@ -1,128 +1,123 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29AA440A32
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E8F36F41C
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792279966; cv=none; b=uYqEcD4K/at2GCiqYmLYBTOszJ6g9FuG60J6gQwnMPiYrfGdHFoHiJk2102NVUFdJLto48EYwlIBTh9zhd9shoFJZXOUC9m3USCoiNLuoAHShTIEferCqVmT/IuE/Z/1Jz7HDEhyUwHwhAKnZbX+BDkTIXEuBYtIvQaeJB9p2wo=
+	t=1792280505; cv=none; b=slsmapOXQAN3Cb6k4auSUlFi96SHFkL2mz7uFQtAOKiU5R9eI/sPu8aKfeROGwFTKEi7BsYTSrQKxtVnrEWxPcDpJiTGfm1xF70PLNThJRkYRI6ZxSaDCWSvAfPXhsIiwQ9MNf3QBmpNMS9HE9gHrWh8rQjLHT6l7WJjUptfwYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792279966; c=relaxed/simple;
-	bh=L50P2pMw33pTp3sRzxNv0eBE6m4qJyngdUpOBnnDTkc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WLieDprWINSNcSUC9gS+r1TXRIQpGO8hYUAIAxMdLIgrphB/9/tYy2j9ttcLpidCScMPwl9eva4lpfQes/Qdl/n+ku2nuX/Mu6gosqzAXkSC0rUjPMbGXxGFza6OJX1KiNQkxG9YDZPbvmzlHZ3mCcVwhgKyhjJ1Z6wKQ174eMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WwsGwIIy; arc=none smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792280505; c=relaxed/simple;
+	bh=OHbFX0mZvPkqfgZ/eJKMdzt88GSSSm12y27p9mWhGcc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GExkAyh0qpcOJ9C4t+45yCLiKZ37p7f9utTf0SgIo1sISPbLwjvFPiTBGxvMksXTzHtQyYfyOlwagZglK42oj2qnC5+GLub3UuA85A2CBq+QW4kFJWcsxnkpDAN6kApqq+eA0anNvfpuA9TNg+laCuLbCpSdFx98EBsDXymJAzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RAznOx19; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WwsGwIIy"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-35943f55c06so1416230eec.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792279964; x=1792884764; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HZoGjmkdHdSYCxVMQUZJAUx+X9gAQBvlPFs22BIjZ94=;
-        b=WwsGwIIyiGe0ic4SQYrsZmOcOynscObSSECpOZuTsj9F/YUw1eNns1JVizfk1aatrQ
-         HjnVsaDumV4NSTAV96Z1mNdDXtLQ1WaD1T6VGn0DsvMW00N7KFC6uIeoAr1ElcZGsUH+
-         MUXpi6sX4tv1MffVTODhIu5+7yvBs8pX2s7vilicycjtIYue8Xg0v8piZfCmOdH0C0Qs
-         7+ad/wTjM0puAsN+xtuB5qnPLU0FoHcYJjwNJKEr6Wbmj2+/HNwejcJJB5GzA13N0wIL
-         u6afkSRrhGWTMGFq8B386eg06Fdnkg/1QnuXpl29QDkXUiUdpnBedlhN1AQsT9GMkQLs
-         ZPJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792279964; x=1792884764;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=HZoGjmkdHdSYCxVMQUZJAUx+X9gAQBvlPFs22BIjZ94=;
-        b=ScZPueUjT1z4m/s/pHIwEF3g1g05EgIkapo8E6011LKjhvt5ApXq1XaY/qcObxzz9J
-         DTlG8cZtb5KCaQ/7/+VwVTS85WrveUCLK6joaab/NMvEM8VdNxw3azBReOgKXJtxkGIV
-         VOFF6xHhW+x58cAW0Qv7GByx9ZKlyb4e/Qym6F+Tfhn7uK/DjuQ5vyc7Hr6WeSCvwxzj
-         EwCxixqd6kHqeUZsB3jzON6KKZfB9cbvbOXMva0ZYv4vG3jzGuFNTxcYTqJpF2p0ZtWm
-         /dQ4P8/cRgQTtxA5Yy4XgCSxBVk1g7NZZ7ZY0yNmEZ/ebJxlLuB59NR5Vl/HU/AqMVln
-         SREw==
-X-Forwarded-Encrypted: i=1; AKwUvBzbGLsDvCm5vxrY4dGuDno4H3/tD+Lme30+ccBRiBfyRixxE4V1kAIT3GKhtd00NeXCBK0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLS4Ve9eGXx2g5EspXK08F+HZNBCPk0IDChwhDo7SZpXv2KumMe
-	BlUIt4FmqC6s5Zhf1WWSnMGDJQuApFOkLtd8O6O28HnWMXIdME9/ucMO
-X-Gm-Gg: AYBFou1jyVC3chGXZeUAb+LWzaMW//GoU4P0KusAZ3PXkmdBBXOvBxSMZ2C9aBRuWwb
-	JWi9rdZJAq4wBF5u/FUgiQ7zadent8q0BBw6hiuO0xjQKmZApR3Tamr4gAuqzi9G1HYYWuEaByx
-	+2e1/7uvrupjoaxaxhW6If8aoM69qOfFMwzABgOO+k6pvpBwe5F8qsNeYGa6qW7YzRDeeCgc3To
-	4rHnhdCg1rSyxgpq+TLgoxY39BXtYZ5Kix4o2nZa7SPRj/rQniadVelmPgWW+FR/ZVXgPrBcyXc
-	OFtSFgBzM7q1/9NOiQaif93yij+//Uz0d6MKNsL4tc/VUVrjyEaGf4PDrNiRurumX7vM6qVpcf9
-	3BzuBBKs8qbjgYv6vPpnhGQKK1KnCQDqQLB2FuxuK3ddps9JT1IDrfVCIr22Ltdm7Jzz4wSzvBW
-	DEfHr80/2CqJXi2q1zawfJDbU69Qy7HOb3BcYLgwJsf2FsPX9tve06n8lLyHGNbZBw9OdSp4FMZ
-	Ey13PzYvmV7evTe9OqQnRMyuWDhO4Ld8kCW
-X-Received: by 2002:a05:7301:5406:b0:355:29c0:9cac with SMTP id 5a478bee46e88-3602dcda842mr9448327eec.10.1792279963653;
-        Sat, 17 Oct 2026 16:32:43 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c085:21c8::1139? ([2620:10d:c090:400::5:8b32])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-360813b63e1sm20549691eec.8.2026.10.17.16.32.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Oct 2026 16:32:43 -0700 (PDT)
-Message-ID: <52539be1-2eeb-410a-83cf-0c79d1ca40ef@gmail.com>
-Date: Sat, 17 Oct 2026 16:32:41 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RAznOx19"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B59A41F000C4;
+	Sat, 17 Oct 2026 23:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792280504;
+	bh=tQAAuYjO3b/nr6hz41zDC7EDYKMnx9YZKnBEJqQTp/0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=RAznOx19lDUaMFrJMhKDgIs3QqnnAgU4caKHH2t7C5Fscmwb9XoNCkyKqzQC4jyNx
+	 q6b01HyJ4Il5HgEgXgrOUk3KbKrHG63I8pCA9+6NWIXA1wHhT2+3rkOQINkT4bsthw
+	 rgbsvWuTE1ifFiIBS2ciepZN2v6BYLUDupddk9s2bDuWU+6OSHCACbwonf6fWLtwlK
+	 NVkn2xVsJegY4UNv7yYQ/ubqmQWSzBZ2ZkvJF9IfkRyzgLkjSZcUlmM7JsHBvZctyY
+	 GwBf1Pl1vQY0HGnirv8KOR0czcevFEWS9Q6VTIr8oH83moFhuFnUsofTz3HnN9NThr
+	 DWfxUglLB+zBw==
+Content-Type: multipart/mixed; boundary="===============8570596444813883407=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/2] veth: schedule the peer's NAPI after XDP_TX when
- only GRO is enabled
-To: Tianyi Gao <tianyi@cloudflare.com>, netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, toke@redhat.com, horms@kernel.org,
- bpf@vger.kernel.org, shuah@kernel.org, hawk@kernel.org,
- kernel-team@cloudflare.com, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, sdf@fomichev.me, linux-kselftest@vger.kernel.org,
- bochaolucky@gmail.com, toshiaki.makita1@gmail.com, lorenzo@kernel.org
-References: <20261016214217.16942-1-tianyi@cloudflare.com>
- <20261016214217.16942-2-tianyi@cloudflare.com>
-Content-Language: en-US
-From: Mohsin Bashir <mohsin.bashr@gmail.com>
-In-Reply-To: <20261016214217.16942-2-tianyi@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <07767b15f635ea35ad4ad69114b1bd1de43b40d5c359e54e96799996dfdf6740@mail.kernel.org>
+In-Reply-To: <20261017230950.802052-12-alexei.starovoitov@gmail.com>
+References: <20261017230950.802052-12-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v3 11/16] bpf: Refuse the prologue for an extension that cannot take it
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 17 Oct 2026 23:41:42 +0000 (UTC)
+
+--===============8570596444813883407==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> bpf: Refuse the prologue for an extension that cannot take it
+
+TL;DR: Commit message only: the Fixes: tag may point at the wrong commit,
+since extensions could not write packet data (or get the prologue) until
+7e40781cc8b7, though be8704ff07d2 may be defensible.
+
+> bpf: Refuse the prologue for an extension that cannot take it
+>
+> A tc, lwt_xmit or sk_skb program that writes to packet data starts with
+> bpf_unclone_prologue().  It takes the skb from R1, and if the skb is cloned
+> it calls bpf_skb_pull_data() and restores R1 only.
+>
+> That suits the main function of a program.  An extension gets the prologue
+> too, but it starts with the arguments of the function that it replaces.
+> If the first one is not the context, something else is taken for an skb:
+>
+>   BUG: KASAN: stack-out-of-bounds in skb_ensure_writable+0x84/0x1a0
+>   Read of size 8 at addr ffffc90000270ad0 by task uncl/105
+>    skb_ensure_writable+0x84/0x1a0
+>    bpf_skb_pull_data+0x32/0xf0
+>    bpf_prog_853eb1991d35e093_ext_slice+0x4f/0x321
+>    bpf_prog_9eb18752b5d0959a_t_glob+0x2ac/0x2de
+>   BUG: unable to handle page fault for address: 0000000082298821
+>
+> And whatever R2-R5 held is lost, while the verifier goes on trusting
+> pointers in them.
+>
+> Refuse an extension that needs a prologue unless it gets the context as
+> its first argument and scalars beside it.  A scalar is still clobbered if
+> the skb is cloned, which the verifier can cope with.  Extensions of XDP,
+> sk_msg and sockopt programs get no prologue and load as before.
+>
+> Fixes: be8704ff07d2 ("bpf: Introduce dynamic program extensions")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Is the Fixes: tag pointing at the right commit?
+
+At be8704ff07d2, the prologue could not be reached from an extension.  The
+prologue is only generated when env->seen_direct_write is set, and at that
+commit the flag was only set via may_access_direct_pkt_data(), which
+switched on env->prog->type:
+
+    switch (env->prog->type) {
+    ...
+    default:
+        return false;
+    }
+
+BPF_PROG_TYPE_EXT fell into the default case, so an extension could not
+write packet data directly.  bpf_unclone_prologue() returns 0 when
+!direct_write, so no prologue was patched in and R1-R5 of the extension
+were never clobbered.
+
+Direct packet writes from an extension, and therefore the prologue, first
+became possible with 7e40781cc8b7 ("bpf: verifier: Use target program's
+type for access verifications").  That commit introduced
+resolve_prog_type() and made may_access_direct_pkt_data() use the target
+program's type, so an extension replacing a tc, lwt_xmit or sk_skb global
+function could set seen_direct_write.
+
+That said, the tag may still be defensible, since be8704ff07d2 is what
+copied the target's ops into env->ops, which supplies gen_prologue.
+
+Should this include:
+
+  Fixes: 7e40781cc8b7 ("bpf: verifier: Use target program's type for access verifications")
 
 
-On 10/16/26 2:42 PM, Tianyi Gao wrote:
-> veth_xdp_xmit() queues XDP_TX frames on the peer's ring if the peer has
-> NAPI. A peer with GRO enabled and no XDP program also has NAPI.
-> 
-> veth_xdp_flush() then schedules the peer's NAPI, but only if the peer's
-> xdp_prog is set, so for such a peer the frames are never processed.
-> Nothing else schedules that NAPI by default.
-> 
-> Once the ring is full, every XDP_TX frame is dropped, and so are the
-> skbs that veth_xmit() queues on the same ring.
-> 
-> Commit 0e672f306a28 ("veth: check for NAPI instead of xdp_prog before
-> xmit of XDP frame") changed the check in veth_xdp_xmit() but not the one
-> in veth_xdp_flush(). Make veth_xdp_flush() check the napi pointer
-> instead of xdp_prog, as veth_xdp_xmit() does.
-> 
-> Fixes: 0e672f306a28 ("veth: check for NAPI instead of xdp_prog before xmit of XDP frame")
-> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
-> ---
->   drivers/net/veth.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 643b97dc5245..9405ffac598a 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -612,7 +612,7 @@ static void veth_xdp_flush(struct veth_rq *rq, struct veth_xdp_tx_bq *bq)
->   	rcv_priv = netdev_priv(rcv);
->   	rcv_rq = &rcv_priv->rq[veth_select_rxq(rcv)];
->   	/* xdp_ring is initialized on receive side? */
-> -	if (unlikely(!rcu_access_pointer(rcv_rq->xdp_prog)))
-> +	if (unlikely(!rcu_access_pointer(rcv_rq->napi)))
->   		goto out;
->   
->   	__veth_xdp_flush(rcv_rq);
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Reviewed-by: Mohsin Bashir <hmohsin@meta.com>
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39078926044
+--===============8570596444813883407==--
