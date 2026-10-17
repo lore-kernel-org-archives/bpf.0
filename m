@@ -1,160 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049583939A4;
-	Sat, 17 Oct 2026 17:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EF83939A4;
+	Sat, 17 Oct 2026 17:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792257439; cv=none; b=RBH0E+yFdksTs4fikom2CtRH/J9sGcStvxEnhgilGhuMD9gkIxZ2rT8kbJ/XFInr8JrtRXrMl218X2IhBxMCzkvvoYm1KjqE0IOMSFNl3YRN7d2j3oeLdscKRtFUik1fYCA9Gt5jsXImXtUZc4ylmWJtTIDxPaHCSkqW6scR+Tg=
+	t=1792257442; cv=none; b=IShM2FAhWlcSFZmaskz5XBeKj6Nb/KU4xYbdMnsoCeBNnpvO9s9aSgiWCMlWFiQ7TINrZp3T8r149L02EKI3HLl72kWWJAqFzGyCQmvE7n36NnB38UQ3fgKAtajK4b3s/PL458QrQE412apgjGSbW33z6/tjNriaJP4zDa1olOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792257439; c=relaxed/simple;
-	bh=fDwfYTdff5syWVefNisnVN/E/0oSEprZLDnd3J1Y8o8=;
+	s=arc-20240116; t=1792257442; c=relaxed/simple;
+	bh=93xnn34tD+1XhQ9yTePvda+bIbodSFjxFxIIFWJvP7g=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=cBbpwy0qkUdjdJLASVOUhP8SDdhhRN+cf3hjb1cS9Y9e1Apctcwg6JL7p0JWqYpFxH+fB9enfmCNMrB6dfJ2DDCNzrStwyYfE9StnT3F9V4m2+Byv+sMtS8sMnIqmxm6vVpriuLzx+fZn9Ay2lRdPpcr0JfvcFxFjw5F8+cTEDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MPOFLojG; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=j+9h+GpVOw9BGu3dFvHHrSwBIQHQQWJIHgheLkE/TImhYyKeebVKOXaLxjp01BZDg2giy46QBTZ7has4ufWa8zNzjIkMZkdC5H5tIh8FmCXVojgcJBvUS+tTB94l80YMVKsoWM2X8Q1yXyaTt+lnNOoByVLh4iVTKmq7wd3jJdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y4HVdP2h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MPOFLojG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AEA41F000C4;
-	Sat, 17 Oct 2026 17:17:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y4HVdP2h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980951F000C4;
+	Sat, 17 Oct 2026 17:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792257437;
-	bh=3+2eKBEa3pvaVsKTiJ6bETRA9I5BKp+BTqn8EgT8sN4=;
+	s=k20260515; t=1792257440;
+	bh=clYl2oitVIcGRNdQXZuYf5YrawBK2Fa9489eSey5IDs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=MPOFLojGbL3tdAgGB8/Bry/fqmE69fm0o4zT0LZ3CliT05jz3slu+860/ehTjxVaK
-	 YbcQuuqOXKNo4fhIgWNMPt1fpjK9OGF5bm79y1OPbokyWONkZaV+40ZNkp4CrE4tgn
-	 laV/y2ZOSCF6P58qCHTDZ90Dl9unhkc63F2sqRreiMZTjar2NJPhecjJGZHBWkxzOi
-	 w6O7agMzqffpJT/V50LGQVDrgfnte1YS1D9PmO6EShO1mrk0UnyH6DHeNmSD5j8ZYz
-	 ok2GZh5uAMDm/3oooe2z2S+Wis2Xn3KCU4ZgJiOoEyPYZJiS+hvh4JATEYDz8GRAEg
-	 Hds9iWWeZ8now==
-Content-Type: multipart/mixed; boundary="===============0096483132692541398=="
+	b=Y4HVdP2hXsu0SNMKUOZ6ku7d4JFdFjzdO+Aiq9xqYut6ACmJ6pcmOhMC88nL2GLqa
+	 298RwTWIhLkqlqATf0ju3STimjE0+T66/bgTiytcne15UcLnYo8lj5V7wInKprORHo
+	 tTc7k7bPcCICQjAMz+yGUrt13cpVA9beEjGlUf0DmZxtiQNRTTx4vYr6JxnWjrkAH1
+	 bVi3Lp2w8WZ55H8JvuNHH9NRp4YCZu4weCcRS2UYHGQBqZW7k7JjqwZn+sgUvPecHG
+	 PMOKR/SIz4UF2kP2UJMF7DoN8OsEI/L0YR//UvIpI+KF+8FV5U6rzN4wnrbwWrGUSg
+	 OaUclVs0/XCXA==
+Content-Type: multipart/mixed; boundary="===============8715040808449314494=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4656e25df00e93dfb992cd78b48c76aa1af8ddd22cd500c070aa7cb4c549d80c@mail.kernel.org>
-In-Reply-To: <20261017163745.3341787-36-alexei.starovoitov@gmail.com>
-References: <20261017163745.3341787-36-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 35/43] bpf, cpumap: Hold the device of frames in the queue
+Message-Id: <c329f56d6d0f92d47cea5feebeba1ff70e395d3dec507f6073db340a41e943c9@mail.kernel.org>
+In-Reply-To: <20261017163745.3341787-39-alexei.starovoitov@gmail.com>
+References: <20261017163745.3341787-39-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 38/43] bpf: Don't take a dynptr argument for a local dynptr
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 17:17:16 +0000 (UTC)
+Date: Sat, 17 Oct 2026 17:17:19 +0000 (UTC)
 
---===============0096483132692541398==
+--===============8715040808449314494==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf, cpumap: Hold the device of frames in the queue
+> bpf: Don't take a dynptr argument for a local dynptr
 
-TL;DR:
-- The 2048-pointer held[] array in struct bpf_cpu_map_entry makes each entry a
-  ~32 KiB order-3 allocation, which may fail under fragmentation
-- Stale comments and parameter name in the GRO flush code (nit)
+TL;DR: Treating every CONST_PTR_TO_DYNPTR as an skb dynptr also hits the
+bpf_user_ringbuf_drain() callback's local dynptr, so the verifier may falsely
+reject valid programs; nothing unsafe.
 
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-
-[ ... ]
-
-> @@ -45,6 +45,7 @@
->   */
->
->  #define CPU_MAP_BULK_SIZE 8  /* 8 == one cacheline on 64-bit archs */
-> +#define CPU_MAP_HELD_DEVS 2048
->  struct bpf_cpu_map_entry;
->  struct bpf_cpu_map;
->
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -74,6 +75,13 @@ struct bpf_cpu_map_entry {
->
->  	struct completion kthread_running;
->  	struct rcu_work free_work;
-> +
-> +	/*
-> +	 * Every frame and skb in the queue holds a reference to its device.
-> +	 * The kthread keeps it until nothing is left in GRO.
-> +	 */
-> +	struct net_device *held[CPU_MAP_HELD_DEVS];
-> +	u32 nr_held;
->  };
-
-Does embedding held[CPU_MAP_HELD_DEVS] in struct bpf_cpu_map_entry make the
-entry too large for a slab object?
-
-That is 2048 pointers, 16384 bytes on 64-bit, so the entry grows from about
-360 bytes to about 16.7 KiB.  __cpu_map_entry_alloc() allocates it with:
-
-    rcpu = bpf_map_kmalloc_node(map, sizeof(*rcpu), gfp | __GFP_ZERO, numa);
-
-At that size the request is above KMALLOC_MAX_CACHE_SIZE (2 * PAGE_SIZE with
-4K pages), so __do_kmalloc_node() sends it to __kmalloc_large_node_noprof().
-That is an order-3 (32 KiB) physically contiguous page allocation, and about
-half of it is never used.
-
-Every cpumap entry, including each BPF_MAP_UPDATE_ELEM that changes qsize
-(which reallocates the entry), now costs 32 KiB of order-3 memory charged to
-the map's memcg, where it used to be a small kmalloc object.  A cpumap that
-covers all CPUs on a large machine would add megabytes.
-
-Under fragmentation the GFP_KERNEL | __GFP_NOWARN order-3 request has to go
-through compaction or reclaim, or it fails with -ENOMEM where the old
-allocation would have succeeded.  The commit message does not mention this
-cost.
-
-The array only bounds how many references the kthread keeps between full GRO
-flushes.  Would a smaller CPU_MAP_HELD_DEVS, or allocating held[] separately
-(for example with kvmalloc), avoid the large contiguous allocation?
+> @@ -8416,6 +8416,7 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
+>  			       argno_t argno, int insn_idx, enum bpf_arg_type arg_type,
+>  			       struct bpf_call_arg_meta *meta)
+>  {
+> +	bool is_arg = reg->type == CONST_PTR_TO_DYNPTR;
+>  	int spi, err = 0;
 
 [ ... ]
 
-> @@ -398,10 +410,13 @@ static int cpu_map_kthread_run(void *data)
->  		/* Flush either every 64 packets or in case of empty ring */
->  		packets += n;
->  		empty = __ptr_ring_empty(rcpu->queue);
-> -		if (packets >= NAPI_POLL_WEIGHT || empty) {
-> -			cpu_map_gro_flush(rcpu, empty);
-> +		full = empty || rcpu->nr_held > CPU_MAP_HELD_DEVS - CPUMAP_BATCH;
-> +		if (packets >= NAPI_POLL_WEIGHT || full) {
-> +			cpu_map_gro_flush(rcpu, full);
->  			packets = 0;
+> @@ -8502,7 +8503,12 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
+>  			reg = &bpf_stack_slot(state, spi)->spilled_ptr;
 >  		}
-> +		while (full && rcpu->nr_held)
-> +			dev_put(rcpu->held[--rcpu->nr_held]);
 >
->  		local_bh_enable(); /* resched point, may call do_softirq() */
+> -		meta->dynptr.type = reg->dynptr.type;
+> +		/*
+> +		 * The callers of a global function may hand in a dynptr of any
+> +		 * type. Take it for that of an skb, so that a write through it
+> +		 * and its slices are treated with care.
+> +		 */
+> +		meta->dynptr.type = is_arg ? BPF_DYNPTR_TYPE_SKB : reg->dynptr.type;
+>  		meta->dynptr.id = reg->id;
+>  		meta->dynptr.parent_id = reg->parent_id;
 >  	}
 
-This isn't a bug, but are the comments describing this flush still accurate?
+Is is_arg limited to global function arguments?
 
-The full flush is now also forced when nr_held exceeds CPU_MAP_HELD_DEVS -
-CPUMAP_BATCH (2040), even while the ring is non-empty, yet the comment above
-still says:
+It is just reg->type == CONST_PTR_TO_DYNPTR, and global subprog arguments
+are not the only registers of that type.  set_user_ringbuf_callback_state()
+also creates one for the bpf_user_ringbuf_drain() callback:
 
-    /* Flush either every 64 packets or in case of empty ring */
+    mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE_LOCAL);
 
-Also, cpu_map_gro_flush() still names its parameter 'empty' and still says:
+and the type of that dynptr is known.  bpf_user_ringbuf_drain() always
+passes a local dynptr over the ring sample (kernel/bpf/ringbuf.c):
 
-    /*
-     * If the ring is not empty, there'll be a new iteration soon, and we
-     * only need to do a full flush if a tick is long (> 1 ms).
-     * If the ring is empty, to not hold GRO packets in the stack for too
-     * long, do a full flush.
-     * ...
-     */
+    bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL, 0, size);
 
-It is now called with 'full', which can be true for a non-empty ring, so
-both comments describe the old behaviour.  The reason for the extra full
-flush (bounding how long the device references are held) is not visible
-where the flush decision is made.
+After this patch, every consumer of meta->dynptr.type seems to treat the
+callback sample as an skb dynptr:
 
-Would renaming the parameter (for example 'flush_all') and updating both
-comments keep them in line with the code?
+- bpf_dynptr_write(sample, ...) in the callback hits
+
+      if (dynptr_write_changes_pkt_data(dynptr_type))
+              changes_data = true;
+
+  in check_helper_call(), which ends up in clear_all_pkt_pointers().  The
+  callback is a sync callback verified inside the caller's state, and
+  bpf_for_each_reg_in_vstate() walks every frame, so packet pointers held
+  by a calling tc/XDP program across bpf_user_ringbuf_drain() would be
+  invalidated.  The dynptr-writing kfuncs (bpf_dynptr_memset(),
+  bpf_dynptr_copy() on the sample) go through dynptr_write_type and behave
+  the same way.
+
+- bpf_dynptr_slice(sample, ...) now returns PTR_TO_MEM | DYNPTR_TYPE_SKB,
+  which makes reg_is_dynptr_slice_pkt() true.  In any program type, that
+  slice is then invalidated by a call to a global function marked
+  changes_pkt_data.  Since c84400f5fe42 earlier in this series, that mark
+  covers any global function that calls bpf_dynptr_write(), even just to
+  fill a ringbuf record.  Passing the slice to such a function is also
+  refused ("cannot pass packet pointer ... function may change packet
+  data").
+
+- bpf_dynptr_clone(sample, &c) now makes an SKB-typed clone, which carries
+  the same effects.
+
+For example, a syscall or tracing program whose drain callback does:
+
+    m = bpf_dynptr_slice(d, 0, &buf, sizeof(buf));
+    if (m)
+            handle(m);
+
+where handle(const struct msg *) is a global function that copies *m into
+a ringbuf with bpf_dynptr_write(), was accepted before this patch and
+looks like it is rejected after it, although no skb is involved.  Nothing
+is unsafe here, but it is a false rejection of valid programs that the
+commit message does not describe.
+
+Could the SKB assumption be applied only to dynptrs set up as global
+subprog arguments, for example by marking them differently where the
+subprog argument setup currently calls:
+
+    __mark_dynptr_reg(reg, BPF_DYNPTR_TYPE_LOCAL, true, ++env->id_gen, 0)
+
+and leaving the type of the callback dynptr as BPF_DYNPTR_TYPE_LOCAL?  That
+would also make the new comment match the code.
+
+None of the later commits in this series (222dc092c64e, e17707d54c68,
+0bd8e7a834ac, c04474b8dc8d, 64e0b112d688) change this, and e17707d54c68
+and 64e0b112d688 add more consumers of the SKB classification.
 
 
 ---
@@ -162,4 +155,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39051545464
---===============0096483132692541398==--
+--===============8715040808449314494==--
