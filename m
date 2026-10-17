@@ -1,164 +1,193 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2575A38839F
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA5535AC0C;
+	Sat, 17 Oct 2026 02:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792202286; cv=none; b=etmgbrbD2lU5SoJAibz7DhOLquGkIZNxFkkh4kiYr5MlifSvO5wb2Tw1Kcp1WpvLt75cBL4Mshv1hwhf+OMRKFSqklDbRB0CRLm+NjlnHIUkMNk+Nf1KvYe145x40ASoIYV51VbaJU0jWAphas7WEDwpydhCyYkcJuzOgn2SBbE=
+	t=1792202569; cv=none; b=nHEtkw0CGQPGJ99Rgxs+iDyMMqwJTU6Zx/wL6LO1cgg7tMrlp2b8Dbj4a1sHCnGB668XvySua2qf4fvd8hd0PHW7SQsyaZR66nbWnk9/vJGqkpAZcHxARYYuH+BvqTPa/kz6PiVbZEOemvU51+vdHps9wtK+Ln879iozc7V93BE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792202286; c=relaxed/simple;
-	bh=GAuId5vYB76oKPHC15e/H+difcXGRL3/40F1i4lczVU=;
-	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=L5yW+XS5UANyfreNGRN0HCez1FhJsCXr0RxGAuEMJm1HiZjsgZyuYD7d8+kKsoE7W1FTObE6S3MztawN6fkEfKdwcKdqcgPSBQrPa84GSkhbiFUNel/XhL9vY6P4DbwQPAVPTQUpyLgDYnxmxtvzALQFiB5P+L3so/1e9R3w+AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3mfPJQ8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792202569; c=relaxed/simple;
+	bh=sybnFe4dTdlTV3ojHQOJbxV3NWBCoOzfeAqN5qwqrFI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=HwGCDInmq6D2ghOG6CQHqZb8Ld9UQW22I+VwFeU+e3wNo9o9hMAr2UeT3aYbm5EgcZnV/lsU5hMIZIl3yjjt7BAByV06fPMAu9DCtOqvHO0ziNVlUTbTacVVootPZupqp5yBEtRgF2PxiI17Kp5yRR4LIrDeFwQnFdy69wb/1is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZ1N9EFg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3mfPJQ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539ED1F000C4;
-	Sat, 17 Oct 2026 01:58:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZ1N9EFg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523721F000C4;
+	Sat, 17 Oct 2026 02:02:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792202282;
-	bh=X8p1B+OvOO8rykc8VeWKFleYYX8us6Z2nXv6gC/RvCw=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=L3mfPJQ8O0PDgoyovm96Z5FF+/mWsd0nG/7YCrFNyBW1aAV/AaIl6LrZDd0aP+q6l
-	 p2lC9bcm9BYjqWZzgPYD9cw2vCJd7cV77P3lyf7T9D8QadTTfHR0k152nTvRwUChQI
-	 kN5jOx8m3LjqExx/GdIM5WUJUtHiv1ABBJTBOLSVtgWETKGp2rWT3N1TNG1uENw30L
-	 itbKrgm6CDpoFN5ZA9clTj62zvGU8/KRf8MMA+E5EFWZxskdv6pQp3p3gOhwI6YIiA
-	 e0C7sho7S4siiG2O2Er2MZ3KgY7iB6ZeEvxscPXn66CFCLblZTnhBFTOJ4xziUWryo
-	 JZJ9+9MMH2icw==
-Message-ID: <sashiko-outbox-175168@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 23/38] bpf: Check the maps that sleepable
- callbacks use
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261017012451.364800-15-alexei.starovoitov@gmail.com>
-References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
- <20261017012451.364800-15-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 17 Oct 2026 01:58:01 +0000
+	s=k20260515; t=1792202567;
+	bh=22vIGT1gsGhrl96tCEJy/Hhx44CrK2sdH3n02xQ64YM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=SZ1N9EFgZY3F0CoLKYzR5A6mTYK2YsinllX+oY5gFQil0qoyhXw4I/pWCPLzaYOaZ
+	 D40I3lnyBqCb4BPvhAAiYHnU65+fL7pd89Ph6HtMbyaf/lOEyYn1Kmw2zIqXzXEdOl
+	 TaBQpzuJ+VylkoS60XeJXzENxj0M7fC609HzYJ1hsaezs0bawobF/u+MZ9cTflP/Bz
+	 JSvr8qLEWIYj8hKUQ2k/AFHqBfdu7hty8pK2le58pSJydW7sQ1yvKJOZkchN5OUbLH
+	 pgwTkfLltNnFfXfAaN95U54on04HhnjUtkMyh8lY82VNJij5MX73FVUNlKVQooOIeQ
+	 E2AUqT8WIUa4A==
+Content-Type: multipart/mixed; boundary="===============6554122423929033199=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <d48ced398b4fe0e5a849fccbc303c03f3508ef50c75bf7fbebc2326b2b51bc42@mail.kernel.org>
+In-Reply-To: <20261017012451.364800-8-alexei.starovoitov@gmail.com>
+References: <20261017012451.364800-8-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 16/38] bpf: Hold the socket in the sk_storage map iterator
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 17 Oct 2026 02:02:46 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: global subprog call under preempt/irq disable bypasses map RC=
-U check
---
+--===============6554122423929033199==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 44c0901fdd3a21bde77f64657ef1a8f91005cd05
-Author: Josef Bacik <josef@toxicpanda.com>
+> bpf: Hold the socket in the sk_storage map iterator
 
-bpf: Check the maps that sleepable callbacks use
+TL;DR: The sk_storage iterator's new owner check may not hold for a storage
+that lost the publish race in bpf_local_storage_alloc(), so it could take a
+reference on a freed socket (use-after-free). The window is narrow.
 
-This commit restricts map helper calls in sleepable contexts (such as bpf_wq
-or bpf_task_work callbacks, or with inner maps) to maps that do not require=
- an
-RCU read-side lock unless bpf_rcu_read_lock() is held or the helper runs in=
-side
-an RCU callback. It also adds bloom filters to the list of maps usable with=
-out
-RCU.
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1f2a846ae415f..09173d1d66d39 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
 [ ... ]
-> @@ -10379,12 +10380,57 @@ bool bpf_allow_tail_call_in_subprogs(struct bpf=
-_verifier_env *env)
->  	       bpf_jit_supports_subprog_tailcalls();
->  }
-> =20
-> +/* May the map be used outside of an RCU read side critical section? */
-> +static bool map_needs_no_rcu(const struct bpf_map *map)
+
+> @@ -796,12 +826,44 @@ DEFINE_BPF_ITER_FUNC(bpf_sk_storage_map, struct bpf_iter_meta *meta,
+>  		     struct bpf_map *map, struct sock *sk,
+>  		     void *value)
+>
+> +/*
+> + * Take a reference on the socket which owns @selem. RCU keeps the element, not
+> + * its owner. As long as the element is linked under the lock of the storage,
+> + * the owner has not got past bpf_sk_storage_free(), unless that has given up
+> + * on the lock. Then it still waits for owner_refcnt.
+> + */
+> +static struct sock *
+> +bpf_sk_storage_selem_get_sk(struct bpf_local_storage_elem *selem)
 > +{
-[ ... ]
-> +}
+> +	struct bpf_local_storage *sk_storage;
+> +	struct sock *sk = NULL;
+> +	unsigned long flags;
 > +
->  static int check_map_func_compatibility(struct bpf_verifier_env *env,
->  					struct bpf_map *map, int func_id)
->  {
->  	if (!map)
->  		return 0;
-> =20
-> +	/*
-> +	 * check_map_prog_compatibility() asks the program.  That misses the
-> +	 * sleepable callback of another program, and an inner map.  They may
-> +	 * use any map under the RCU read lock.  Disabled preemption or
-> +	 * interrupts will not do: the maps ask for rcu_read_lock_held().
-> +	 */
-> +	if (in_sleepable(env) && !env->cur_state->active_rcu_locks &&
-> +	    !in_rcu_callback(env) && !map_needs_no_rcu(map)) {
-> +		verbose(env, "map '%s' needs bpf_rcu_read_lock() in sleepable context\=
-n",
-> +			map->name);
-> +		return -EINVAL;
-> +	}
+> +	sk_storage = rcu_dereference(selem->local_storage);
+> +	/* reset since ->next() looked: the socket goes away */
+> +	if (!sk_storage)
+> +		return NULL;
+> +
+> +	if (raw_res_spin_lock_irqsave(&sk_storage->lock, flags))
+> +		return NULL;
+> +
+> +	if (!hlist_unhashed(&selem->snode) &&
+> +	    refcount_inc_not_zero(&sk_storage->owner_refcnt)) {
+> +		sk = sk_storage->owner;
+                  ^^^^
 
-[Severity: High]
-Can this check be bypassed if a sleepable callback or sleepable program
-disables preemption or local IRQs and then calls a global subprogram that
-accesses the map?
+Does the invariant in the comment above hold for every storage that can be
+reached from a bucket list?
 
-When a global subprogram is called in check_func_call(), the verifier recor=
-ds
-the calling context using in_sleepable_context(env):
+"As long as the element is linked under the lock of the storage, the owner
+has not got past bpf_sk_storage_free()" is true for the storage published
+in sk->sk_bpf_storage, since that is the only storage
+bpf_local_storage_destroy() runs on and waits for.
 
-kernel/bpf/verifier.c:check_func_call() {
-	...
-	if (sub_aux->func_info_aux =3D=3D BPF_FUNC_GLOBAL) {
-		...
-		sub_aux->called[in_sleepable_context(env)] =3D true;
-		...
+It does not seem to hold for a storage that lost the publish race in
+bpf_local_storage_alloc():
+
+kernel/bpf/bpf_local_storage.c:bpf_local_storage_alloc() {
+    ...
+	prev_storage = cmpxchg(owner_storage_ptr, NULL, storage);
+	if (unlikely(prev_storage)) {
+		bpf_selem_unlink_map_nolock(first_selem);
+		raw_res_spin_unlock_irqrestore(&b->lock, flags);
+		err = -EAGAIN;
+		goto uncharge;
 	}
+    ...
 }
 
-However, in_sleepable_context() checks in_rcu_cs(), which treats disabled
-preemption (active_preempt_locks) and disabled local IRQs (active_irq_id) a=
-s an
-RCU critical section even when active_rcu_locks is zero:
+bpf_selem_link_map_nolock() has already put first_selem at the head of the
+bucket list, so an RCU reader can see it.  On failure the element is
+unlinked from the map only.  It stays on storage->list, so snode is still
+hashed, first_selem->local_storage still points at the storage,
+storage->owner is the socket, and owner_refcnt stays at 1.  Both are then
+freed through kfree_rcu().
 
-kernel/bpf/verifier.c:in_rcu_cs() {
-	return env->cur_state->active_rcu_locks ||
-	       env->cur_state->active_preempt_locks ||
-	       env->cur_state->active_locks ||
-	       env->cur_state->active_irq_id ||
-	       !in_sleepable(env);
-}
+Consider this sequence.
 
-kernel/bpf/verifier.c:in_sleepable_context() {
-	return !in_rcu_cs(env) && !in_rcu_callback(env);
-}
+CPU0 and CPU1 each create the first storage of the same socket at the same
+time (bpf_sk_storage_get() with BPF_SK_STORAGE_GET_F_CREATE, or a map
+update, for the same map or for two different maps).  CPU0 loses the
+cmpxchg.
 
-If a bpf_wq or bpf_task_work callback calls bpf_preempt_disable() or
-bpf_local_irq_save() without bpf_rcu_read_lock() and then calls a global
-subprogram, in_sleepable_context(env) returns false and sets
-sub_aux->called[0] =3D true.
+CPU2 is reading the iterator.  Under rcu_read_lock(),
+bpf_sk_storage_map_seq_find_next() reads b->list while CPU0's element E is
+linked there, sees E->local_storage != NULL and returns E.  CPU2 is then
+delayed before ->show(), for example by preemption under
+CONFIG_PREEMPT_RCU.
 
-When do_check_subprogs() later verifies that global subprogram via
-do_check_common(env, i, 0), state->in_sleepable is initialized to false. In=
-side
-the global subprogram, in_sleepable(env) evaluates to false in
-check_map_func_compatibility(), allowing helpers such as bpf_map_lookup_ele=
-m()
-on a sockhash or an inner RCU-requiring map without holding rcu_read_lock()=
- and
-triggering the WARN_ON_ONCE(!rcu_read_lock_held()) in __sock_hash_lookup_el=
-em()
-at runtime.
+The socket is closed:
+
+sock_put()
+  sk_free()
+    __sk_destruct()
+      bpf_sk_storage_free()
+        /* destroys only the winning storage, never waits on the losing
+           storage's owner_refcnt */
+    sk_prot_free()
+      /* for AF_UNIX or AF_PACKET this is an immediate kmem_cache_free(),
+         and the open RCU read section does not delay it */
+
+CPU2 then runs bpf_sk_storage_selem_get_sk(E):
+
+    if (!hlist_unhashed(&selem->snode) &&
+        refcount_inc_not_zero(&sk_storage->owner_refcnt)) {
+        sk = sk_storage->owner;
+        if (!refcount_inc_not_zero(&sk->sk_refcnt))
+
+The losing storage is still RCU-valid, so the lock is taken.
+hlist_unhashed(&E->snode) is false, and refcount_inc_not_zero() on
+owner_refcnt goes from 1 to 2.  sk is the freed socket, and
+refcount_inc_not_zero(&sk->sk_refcnt) operates on freed memory.
+
+If it succeeds, the program runs on the freed socket, and
+bpf_sk_storage_map_seq_put_sk() later calls refcount_dec_and_test() on it
+and may queue it for sk_free().  For TCP (SLAB_TYPESAFE_BY_RCU), the
+iterator can instead take a reference on an unrelated socket that has
+reused the object.
+
+This window was already there before the patch, since the old code passed
+storage->owner to the program without any check.  It is also narrow, since
+E is in the bucket only for a few instructions under b->lock.  But the new
+check is meant to make ctx->sk safe, and the iterator now also writes to
+the stale owner itself.
+
+Does bpf_local_storage_alloc() need to make the losing storage look dead
+before it is freed, for example by dropping its owner_refcnt (or unlinking
+first_selem->snode) under storage->lock in the cmpxchg failure path, so that
+the iterator's check holds for every storage?
+
+> +		if (!refcount_inc_not_zero(&sk->sk_refcnt))
+> +			sk = NULL;
+> +		bpf_local_storage_unpin_owner(sk_storage);
+> +	}
+> +	raw_res_spin_unlock_irqrestore(&sk_storage->lock, flags);
+> +
+> +	return sk;
+> +}
 
 [ ... ]
 
->
->
->
->
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261017012058.3557=
-87-1-alexei.starovoitov@gmail.com?part=3D23
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38991548713
+--===============6554122423929033199==--
