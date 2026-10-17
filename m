@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656CB4CF474
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 03:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54ADE1F30BB
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 03:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792207171; cv=none; b=pMNGKDbBivpk5aRgLeUZk+sgHmMmWiNP/Evvj2q3SE5eeWeVg5mUUe0cj1BOy7utcsgAmu2XVXSw4SKFxRgkL0vcxhadEm5axdYrSdbEYeZYWuiJTwCNHd+q+WzXVY9d6+UNFKt586pu3k0+DyYoLeXtXW3hw9mjxfQbgAUxzfo=
+	t=1792207635; cv=none; b=FKb1MdR68wL1weITKhNo3pfFyJsc316483LuVtggztt3qwp3XlH5SLaMuKKJSncaJVP2t7JUksrACkIGTpOe6MKsLryp3eyHaIq+KfH7XEsp1/KIHGsZPbZA6n5oxA143ViMLath8BUgb7Q8X/0zaFkReBGhqKSakyt2slxd1zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792207171; c=relaxed/simple;
-	bh=5BJH5nE45dY7fJWeG35zv1LStMLzQqcA3Ycit8Ilc7Q=;
+	s=arc-20240116; t=1792207635; c=relaxed/simple;
+	bh=bE7kqAZ3H8VF4M0guYKlcua6c4aVqMBbqGctmr0woVM=;
 	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=NI9Aed5o4FDIYa7Fw320iVrfhTXbQ/zqOU94ll6JxS1WOUEjdOVBqGPFZVLCv4maZqm0b9XaY/FKo6+Zrv8RJE6AeMEb/ZTSpl9aczjIUP3zZaDegLilOtX+Ilzmqy4tw0GUZShN74SPk5NY41hLZg6In8y59r1fbiDNairazH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5rBePLF; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=Jak3L+diUNdvNGHor6RCT4FLOjsJg0DNUTbjS+v3KMxfehI0wfvyV2OLV7e/Zcf3SElaNIKYPYcXlLeUVIGWGF77yOvAWM3PEmRpyGFJ+TBrdU2rksiYoMsoIxTv4hOAx9E3eiW+Jbw7L7rUDJCDn4KWqpvISBuPxWacEJGKMo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdMlHIbS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5rBePLF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6EDF1F000C4;
-	Sat, 17 Oct 2026 03:19:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdMlHIbS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EB41F000C4;
+	Sat, 17 Oct 2026 03:27:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792207170;
-	bh=nC8x7Y1vSvwv/dBmx/rIAmTse5U8XWiJscD2gRjjy9M=;
+	s=k20260515; t=1792207634;
+	bh=A/9ADCZhjRJStxAslK6Mw4jUK+JvScYvQREHjOELtQ4=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=a5rBePLFtd5wVEfmJJ+0SGpY4dC3xLmhh8kDxN5Ub/cZzjFzSJBPHtxwywtZ+4lY9
-	 q7ENmSgOVjBiEFJ1rwq2VHeho9n8GSepNTlltDNA0/cYGvEu34+5BnBP795MznVgxw
-	 TsoajvlLFSdxVB4hjEWezaqSf5x+vxBO9/et00E74zBJhnAA1dFB8LjwFdWpKhIfc0
-	 Xa3XI08p+X1m4FYjIu9feKd1P6Nrzi7ouRtGhg8yzATb4hVL96a0T7uFCuya6sO/6a
-	 ukFIzy++U47F5HdI6YZ03FeVtAG0YB9AiRqvlOX2RqGPWgOq5LcdH9JmHiymZNAU5J
-	 Jd1GZWryd/WRA==
-Message-ID: <sashiko-outbox-175238@kernel.org>
+	b=CdMlHIbSyV3Gop5v+Al23kLyLlSw8RbeEUfyFo+nP0j37oqNtt51GKsAl6FBEXQ0i
+	 +2RNx8gvP/TYah8PiG1tCESeLgVlsHSaY2piPa/sokmm2g8jYhS1e8SGFiwkYv7Ci9
+	 56OF+epZhW6DWCXfYwNEFZxCmvep4RKkeHMEcCxvZR+VtAziLzQ7X3CfEgG1SU9n1u
+	 8+DCPt3XK4J8p13LXw5zV0beQXvYk4lzUvZlo/mc7orT6F8kd3cgGlJqS6/vWjEn7b
+	 FSLvVNK/1/264/bzw4kDghs06/QTkoDeCH92BBdrVupCJFOYsftmJPApddqSlkDq/4
+	 bJaJXBjKCMJsA==
+Message-ID: <sashiko-outbox-175243@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v12 07/25] bpf: Refuse a callback that can
- unwind
+Subject: Re: [PATCH bpf-next v12 06/25] bpf: Verify an unwind through
+ landing pads and epilogues
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>, bpf@vger.kernel.org
-In-Reply-To: <20261017025206.1920523-1-yonghong.song@linux.dev>
+In-Reply-To: <20261017025201.1919939-1-yonghong.song@linux.dev>
 References: <20261017025129.1914859-1-yonghong.song@linux.dev>
- <20261017025206.1920523-1-yonghong.song@linux.dev>
+ <20261017025201.1919939-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 17 Oct 2026 03:19:29 +0000
+Date: Sat, 17 Oct 2026 03:27:13 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,100 +46,163 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] bpf: missing might_unwind propagation to callback in bpf_check_cfg=
-()
+- [High] bpf: missing might_unwind propagation in mark_callx_might_unwind()
 --
 
-commit 1785732c5b5ae17b86f08f6a94449da36fb9c958
+commit c4002615f0bb137c4f685915b07888fb1dc5bbea
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Refuse a callback that can unwind
+bpf: Verify an unwind through landing pads and epilogues
 
-This commit adds bpf_exc_check_callback() and calls it in
-push_callback_call() to reject callback subprograms that have
-might_unwind set.
+This commit teaches the BPF verifier to follow stack unwinds from
+bpf_unwind(), bpf_unwind_resume(), and unwinding global subprograms
+through caller landing pads and epilogues, including CFG effect
+propagation and precision backtracking.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fce2baa6272d1..fcf0d0fe0f2ff 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11191,6 +11191,10 @@ static int push_callback_call(struct bpf_verifie=
-r_env *env, struct bpf_insn *ins
->  	 * callbacks
->  	 */
->  	env->subprog_info[subprog].is_cb =3D true;
-> +	err =3D bpf_exc_check_callback(env, subprog);
-> +	if (err)
-> +		return err;
+> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+> index ad7ea08f3b15e..9608293bdc069 100644
+> --- a/kernel/bpf/cfg.c
+> +++ b/kernel/bpf/cfg.c
+
+[ ... ]
+
+> @@ -91,6 +99,7 @@ static void merge_callee_effects(struct bpf_verifier_en=
+v *env, int t, int w)
+>  	caller->changes_pkt_data |=3D callee->changes_pkt_data;
+>  	caller->might_sleep |=3D callee->might_sleep;
+>  	caller->might_throw |=3D callee->might_throw;
+> +	caller->might_unwind |=3D callee->might_unwind;
+>  }
+> =20
+>  enum {
+
+[ ... ]
+
+> @@ -705,6 +716,82 @@ static int visit_insn(int t, struct bpf_verifier_env=
+ *env)
+>  	}
+>  }
+> =20
+> +static bool addr_taken_subprog_might_unwind(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_insn *insns =3D env->prog->insnsi;
+> +	struct bpf_subprog_info *callee;
+> +	struct bpf_func_ptr *ptrs;
+> +	u32 cnt, j;
+> +	int i;
 > +
->  	if (bpf_pseudo_kfunc_call(insn) &&
->  	    !is_callback_calling_kfunc(insn->imm)) {
->  		verifier_bug(env, "kfunc %s#%d not marked as callback-calling",
+> +	for (i =3D 0; i < env->prog->len; i++) {
+> +		if (bpf_pseudo_func(&insns[i])) {
+> +			callee =3D bpf_find_containing_subprog(env, i + insns[i].imm + 1);
+> +			if (callee->might_unwind)
+> +				return true;
+> +			continue;
+> +		}
+> +		ptrs =3D insn_func_ptrs(env, i, &cnt);
+> +		for (j =3D 0; j < cnt; j++) {
+> +			callee =3D bpf_find_containing_subprog(env, ptrs[j].xlated_off);
+> +			if (callee->might_unwind)
+> +				return true;
+> +		}
+> +	}
+> +	return false;
+> +}
+> +
+> +/*
+> + * merge_callee_effects() does not carry might_unwind to a subprog that =
+calls
+> + * through a pointer it was handed. So if any subprog a callx can reach =
+may
+> + * unwind, mark every subprog with a callx, and its callers.
+> + *
+> + * This is conservative: a subprog with a callx is marked even when noth=
+ing it
+> + * calls unwinds. The main walk knows each callx's target and could tell=
+ those
+> + * apart.
+> + */
+> +static void mark_callx_might_unwind(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_insn *insns =3D env->prog->insnsi;
+> +	struct bpf_subprog_info *caller, *callee;
+> +	int i, j, len =3D env->prog->len;
+> +	struct bpf_func_ptr *ptrs;
+> +	bool changed;
+> +	u32 cnt;
+> +
+> +	if (!addr_taken_subprog_might_unwind(env))
+> +		return;
 
 [Severity: High]
-Can a callback subprogram that transitively calls bpf_unwind() bypass
-bpf_exc_check_callback() with env->subprog_info[subprog].might_unwind
-still false?
+Can addr_taken_subprog_might_unwind() return false prematurely here when an
+address-taken subprogram calls back into an unwinding subprogram whose
+entry instruction is still in the DISCOVERED state during the CFG walk?
 
-In bpf_check_cfg(), direct calls (BPF_PSEUDO_CALL), function address
-loads (BPF_PSEUDO_FUNC), and read-only map function pointer loads
-(insn_func_ptrs()) are explored in a single DFS sharing
-env->cfg.insn_state[]:
+In bpf_check_cfg(), visit_insn() traverses insn_func_ptrs() (for example,
+an ld_imm64 referencing a read-only map such as .rodata that holds function
+pointers) and bpf_pseudo_func() as CFG edges. Because neither
+sort_subprogs_topo() nor check_max_stack_depth_subprog() rejects cycles
+through insn_func_ptrs() or async callback bpf_pseudo_func() edges, a
+subprogram cb whose address is in .rodata or taken via bpf_pseudo_func()
+can call a subprogram G via BPF_PSEUDO_CALL while G references .rodata or
+&cb on one branch and calls bpf_unwind() on a second branch.
 
-kernel/bpf/cfg.c:merge_callee_effects() {
-	caller =3D bpf_find_containing_subprog(env, t);
-	callee =3D bpf_find_containing_subprog(env, w);
-	caller->changes_pkt_data |=3D callee->changes_pkt_data;
-	caller->might_sleep |=3D callee->might_sleep;
-	caller->might_throw |=3D callee->might_throw;
-	caller->might_unwind |=3D callee->might_unwind;
-}
+If bpf_check_cfg() explores G before cb:
 
-merge_callee_effects() relies on callee w already being EXPLORED when
-returning to caller t. However, if subprogram H has a conditional branch
-whose fallthrough loads a read-only map containing the address of
-callback cb via insn_func_ptrs() (or loads cb via BPF_PSEUDO_FUNC when H
-is explored from a cleanup pad before main's fallthrough) and whose jump
-target calls bpf_unwind(), while cb calls H via BPF_PSEUDO_CALL:
+1. G's entry instruction is marked DISCOVERED and pushes branch 1 onto
+   insn_stack while G->might_unwind is still false.
+2. Branch 1's insn_func_ptrs() or bpf_pseudo_func() edge pushes cb onto
+   insn_stack.
+3. cb's BPF_PSEUDO_CALL to G runs merge_callee_effects() while
+   G->might_unwind is still false, and push_insn() sees G's entry is
+   already DISCOVERED and returns DONE_EXPLORING, so cb finishes exploration
+   with cb->might_unwind =3D=3D false.
+4. bpf_check_cfg() later explores branch 2 of G and sets
+   G->might_unwind =3D true.
 
-1. bpf_check_cfg() enters H (marking insn_state[w_H] =3D DISCOVERED) and
-   explores H's fallthrough first, before visiting H's bpf_unwind()
-   branch, so H->might_unwind is still false.
+When mark_callx_might_unwind() then runs, addr_taken_subprog_might_unwind()
+sees cb->might_unwind =3D=3D false and returns early before the fixed-point=
+ loop
+below can propagate G->might_unwind to cb and its callers.
 
-2. H's fallthrough visits cb via visit_func_ptrs_insn() or
-   visit_func_call_insn().
+As a result, a global subprogram calling cb (via callx or BPF_PSEUDO_CALL)
+will have might_unwind =3D=3D false, causing process_global_call_unwind() to
+skip verifying the unwind path at the caller and allowing acquired
+references or locks to leak on unwind.
 
-3. When cb visits its BPF_PSEUDO_CALL to H, merge_callee_effects() sees
-   H->might_unwind =3D=3D false, and push_insn() sees
-   (insn_state[w_H] & 0xF0) =3D=3D DISCOVERED and returns DONE_EXPLORING.
-   Thus cb finishes CFG exploration with cb->might_unwind =3D=3D false
-   before H explores its bpf_unwind() branch and sets
-   H->might_unwind =3D true.
+> +
+> +	for (i =3D 0; i < len; i++)
+> +		if (bpf_is_callx(&insns[i]))
+> +			bpf_find_containing_subprog(env, i)->might_unwind =3D true;
+> +
+> +	do {
+> +		changed =3D false;
+> +		for (i =3D 0; i < len; i++) {
+> +			caller =3D bpf_find_containing_subprog(env, i);
+> +			if (caller->might_unwind)
+> +				continue;
+> +			if (bpf_pseudo_call(&insns[i]) || bpf_pseudo_func(&insns[i])) {
+> +				callee =3D bpf_find_containing_subprog(env, i + insns[i].imm + 1);
+> +				if (!callee->might_unwind)
+> +					continue;
+> +				caller->might_unwind =3D true;
+> +				changed =3D true;
+> +				continue;
+> +			}
+> +			ptrs =3D insn_func_ptrs(env, i, &cnt);
+> +			for (j =3D 0; j < cnt; j++) {
+> +				callee =3D bpf_find_containing_subprog(env, ptrs[j].xlated_off);
+> +				if (!callee->might_unwind)
+> +					continue;
+> +				caller->might_unwind =3D true;
+> +				changed =3D true;
+> +			}
+> +		}
+> +	} while (changed);
+> +}
 
-4. At the end of bpf_check_cfg(), mark_callx_might_unwind() checks
-   addr_taken_subprog_might_unwind():
-
-kernel/bpf/cfg.c:mark_callx_might_unwind() {
-	if (!addr_taken_subprog_might_unwind(env))
-		return;
-    ...
-}
-
-   Because the address-taken subprogram cb still has might_unwind =3D=3D fa=
-lse,
-   addr_taken_subprog_might_unwind() returns false and skips the
-   fixed-point propagation loop.
-
-5. Neither sort_subprogs_topo() nor check_max_stack_depth() rejects the
-   program because insn_func_ptrs() edges are not call edges and async
-   BPF_PSEUDO_FUNC callbacks are skipped in stack depth checks.
-
-When push_callback_call() then calls bpf_exc_check_callback(env, cb),
-env->subprog_info[cb].might_unwind is false, allowing the unwinding
-callback to pass verification and cause a verifier/runtime control-flow
-mismatch or jump to a zero epilogue_ip when bpf_unwind() is invoked at
-runtime.
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261017025129.1914=
-859-1-yonghong.song@linux.dev?part=3D7
+859-1-yonghong.song@linux.dev?part=3D6
