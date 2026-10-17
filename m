@@ -1,64 +1,64 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC60C2D73A6
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0232D73A6
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792255161; cv=none; b=SMbORxumv1m9jraQz01/xysz8gR1sNtapsdg5PSonROVbw7kRqaQKQtvjUpFlGM1Rm8nUpRL3TpLbhDsf4V/Ggz2j9QB+jW2JwsBkWDRWFMm0eLZPxLqEAqIyaLw0r6RjpV+c8n/llhIL7JczTR4zaNTgWlbuQgSKcpNy/T/OsQ=
+	t=1792255168; cv=none; b=Y4Y3+13HLOVf3Vzg0trFm7BlDZ/OCsDQ/Bm69OnekuKLsbcYCW1I1bYZWRUxqgaLENAukIMegaS18W65Ednn2PTTjcWo34b1Qk0OwRYHaTzhqRgHFHbrtSW8vcX5cfodDAbNsZ84c7VbxnB7tm/E9oL6O/WcWVVobBLxublZzfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792255161; c=relaxed/simple;
-	bh=zgAncej2VMKtRTstMEpHtZxGPB+wKyq/+2Fwhv76YLA=;
+	s=arc-20240116; t=1792255168; c=relaxed/simple;
+	bh=ONRSxOv0WIrGtolvtQu6QhHo0/j3DkO3AplhmnSjVaw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WpZWyHQlvOfkIr28Etskr3+a1q42knSyTNP6P5M+YlYpdh9Ho3yIvOvVNTPrZakNz98554Z6cciczHtmzxGhGpou/dzl7NpVqfhu8kufNWu9nXr/7r0f3w9hIljCWuvSzNkTBlr4k2aE/usAZcmly1HfCOltOBLO81ny7Okt2v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ccQ8Xth2; arc=none smtp.client-ip=209.85.214.171
+	 MIME-Version; b=ImAYnRWU4PsZm4ijK0k71dmUQ+3V/fT2A9gx1hIH1DoxGAPJODYVwa4tEuZHN+M+lslyMWTZ2E4GpfTr9U58LProZTliBNMoDiVP7frG0QpfGdx+Ns4YSkHvsE1L6mC7NlOjhoM39Pp/ycl9LKyoJMWMXNMsimFREicZNCllOGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amYb7yBy; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ccQ8Xth2"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e5fb79ce82so4041985ad.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:39:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amYb7yBy"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd62c570b5dso561615a12.2
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792255160; x=1792859960; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792255166; x=1792859966; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2c71ftOjOMZN/elNUQWQLQS3OBsPaj6ABPEs543IIw4=;
-        b=ccQ8Xth2tvbO6FAGHCSQJO/wPKr/t4JyzUeKx6RXeZn8u4KCGKRGgqkmB/2R5WTSBf
-         hOFp9vEyQhctswgIGzPVzNklaWd+04ACGCK+W5tFQ9nwYNKpH+fOFsXfz69EGQqgQrbZ
-         12nioGVcD00iZvzu4jZO1tzK/Xp//ia2SeYNcds6M+BMqbwZI7XcsIPaLK+uI4M64M3p
-         bHWccqWZ8kHxf4UqlzYlZ6Zd3vNw4sUxS43+nSDeLDux+yuqgoiGBg58NIWGFfRL0n0b
-         K4cvTyQR3zHafOJfgj2KGQTMXGyot823mt1tZgEiYv/MUNxGwVS10phXKRIStWqFB2d6
-         tYRg==
+        bh=V4vQJUQQucPpz0qllVj00ZgJScSPlEDGHaCFRbM3iA4=;
+        b=amYb7yByQ20vyz2zGeyWLnbL5uz2DhRfIb9EO7eu8u+2fOoorQMhNA30gwYVZZpV9G
+         ZOkBPUJJnMumuK9+4kEWFjWB1awEdFdNpUfSsx7pcX94POtwwD4gM/2KWRRb9gDOQPqn
+         NdFh5qNmGnIYphJe1SSnqWckO6lwNj+MD0R90gvv/APLIYZa0Hw7eDNsicyunwy3PwyL
+         y7si+V5B4R90ZrL6gU0Q5UixY/lqh879jeZeJPJDLqOBzX/7F11C/rbd1o2drTnSNob0
+         44rJB82QMJ0di32Ie6ptxlHIn3+Qkv07kxfA8zyFLy2UmLtYZwvXRPHy3hqeY6oYMr6j
+         gXHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792255160; x=1792859960;
+        d=1e100.net; s=20260707; t=1792255166; x=1792859966;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2c71ftOjOMZN/elNUQWQLQS3OBsPaj6ABPEs543IIw4=;
-        b=ESuXlPu+mEOXVmQ5yUyWgb3ye48j+9IVPI7vLRO29iVMdsAKzWFfHqvMz1so08kBLS
-         QFeC6FRSfdAg6OkfgQY1JjVLU6EUBYOu08xrGPpMjw+y5xbEzHQfvHxRZbVMSkhXmSux
-         QyZNKhOnbM0bvDVbV6HpV7MInHQVPesc4Nz0N4lnelC41A+qlIoJXcRiYma2pcgzXxTr
-         jOMCsFfygKrgD+TtBYUVUKmbb4hO118QP9w60Prxzz4+6MoWHuhP8NxC2vht+5BtUPD6
-         WsZyfH6rgoLW1wFXNtFzDiEDp5kk1cOsDg5D7xfY9QhjHpNIIJ0mxPIVSSGKAaA02OqU
-         x+bA==
-X-Gm-Message-State: AFq9FYJVQev8ob6yJ7uqe7thIPTtdrU/rSjkbRPHeDXG9MQoo6TlhKkx
-	4MdR0RjWhQHCzmRoqREkISyl4usCtWWHK/Glnh8fxkUVnJXsWJ3Cu3i2zqb7MA==
-X-Gm-Gg: AYBFou3F4LRP6TXjdHTsADBdYTjI88y+7yj+LUgb3wjE/kDxCbh0wT0Ch1U94m+bQzU
-	SjKn8CZr5X3H+G01/aOfr+AF1sImNz9pjnLDzvHpefDrhApWRDOHsbED3mXM+UsYS942R3uS+K+
-	OBvwrKwp42SM+MdALBmo816pel0qjb/uYAcIL1yGkSC7d/RbWtw+QMIHflm6YJH9/XhtU0kAILG
-	ZcmepMPnQY3sJBYhD+fYGQpfF+HuJiOB7RbKtiniLiRBY9sukiGs9zcTT6BF1cgwi2SoRf4K9rp
-	dGhQ3V3I+ONkA58s9EmvnzVj2o++/g7NhWeJo+YDipUk4P+X/diAspxkqIVdOqqDQ07A0P61AHJ
-	OBk6e9W8AFmn0+EgTbv7qtjH3UitE8oWDAR3mEAs0U8lrwyaeNYROOvBxTfkMrgKoNSQeM90oRC
-	v3/XfWFk9jsluUlPiEB7LafdUiYwOZ2N6cVD1jZXpFOZbwf1ySllD3mJQBh8Dgz/5n3PA7Oe5pG
-	E2CTdF9uDOUdghNtWPdMh/Qxm9sKJ6iF1Pfi8IFBI/e9JNaRx1fsVFqpYlWmr+OMLYpR7AgTD5b
-	H21fJGJrEhZe+yOUyPYJ/xTTSwa4Pi0GQ8gUdc7VIZM=
-X-Received: by 2002:a17:903:2a86:b0:2e9:69ef:ff38 with SMTP id d9443c01a7336-2e9a6d1d163mr28164385ad.55.1792255159958;
-        Sat, 17 Oct 2026 09:39:19 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e5c311bsm22577835ad.10.2026.10.17.09.39.19
+        bh=V4vQJUQQucPpz0qllVj00ZgJScSPlEDGHaCFRbM3iA4=;
+        b=e2g82vHMGou5aD2obdbIfsmrF5kl1Gw3l8HwfhIx7ep+drc4diCvRvlsUMJCnd1KLS
+         Sgsp4KMyWOi0tZ7TDuRFjbKjubh8RlCy/YvM+hiHe6r5qyHMhlHK0/yMoqVtMqrncrAz
+         EzSsEBbIxINt8vhN+oEEtWDNMvQr7GmqfLccvYx7xtOJ8qMI36+vvK/GMorkoHhiX6c8
+         J6OLpRyDo/s0KrQZZk41CfFgQRwjSOLgGWMM31QuIHHqtRFx2iN2u2GfuESrlvycs6x3
+         uWd3ewCyvONZFL2Z4u29UYdlHo/E+3z/Op4kXw4DzgHdVZdZ8W0fSMXqrHjLMMtwm5+l
+         z3Zw==
+X-Gm-Message-State: AFq9FYLqYhDwz6hs839S6CfM4Sd+vjO+DFM88ZiKA9Z//JeRQhsFTrgD
+	RoTc0mkssp0JykC1aIihiaIgYoh0YL5S7iw66zBoq4FhA1HXXX7JuWzkl/SsWg==
+X-Gm-Gg: AYBFou11YAALXQ9KhE7bgRbqWozjvjzRVyY6Yn588bfs0pl/9qqJUgAqiMsQYdvt3ES
+	S9f/tR2TOyjhaNp/UYt0XJI6CSErAiywHUzZIKLYbkDmOhAJE2UK65sVFpXCWPOddxEaLMwgwhA
+	h+WfQ5WtSqiE/EJK0v8mUcHHs1at3LC6EosWlHTb2N8J1a28G69LXRD5pkXRQHFOhcr8R5iyLh+
+	SIJNzyTK0aGSfkgleGkDNZz/T5UMY9O2w2+Sqlsa8xo2goc9YvqQqjABMVZVzpjluFmlaEXzodH
+	G9t8iM5SrUrU21nxkph/X5MiPYpsW+Glh4iKkwZbW1Un5OiwEvvRWlJaNGCPA0jp/7/AnvQ4T8p
+	RVevtqVAr0YebNWKp9D6JSTz9yjQ+geFBDWMcCiRED7wNvzbvroPrwDAptJTHd8RUxpmLJMkE7w
+	NDRK2I1q0Wq4xL3hKNhRx6wK2KbmEb3HJeQo6+ORo3KY74C8sOZl8X15+/VRmP37l21Gkfe2l5j
+	LSQ2Svgl8EGBAKJz48NBArnG11JpvHrzGQloxCmE0uYhqW2QbHEnYXFJDIk2B8mCAaYB+tbnMQx
+	Yl0uDjDSuy2muE36ZXzbAmNXz6yG1arX7VeV9C+8pFE=
+X-Received: by 2002:a05:6a21:4514:b0:3dd:a007:cb2d with SMTP id adf61e73a8af0-3e22607836emr2260481637.41.1792255166073;
+        Sat, 17 Oct 2026 09:39:26 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f5735e508sm2401682b3a.28.2026.10.17.09.39.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 09:39:19 -0700 (PDT)
+        Sat, 17 Oct 2026 09:39:25 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v2 15/43] bpf: Fix NULL deref in the sk_storage map iterator
-Date: Sat, 17 Oct 2026 16:37:17 +0000
-Message-ID: <20261017163745.3341787-16-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 16/43] bpf: Link the first element after its storage is published
+Date: Sat, 17 Oct 2026 16:37:18 +0000
+Message-ID: <20261017163745.3341787-17-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
 References: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
@@ -82,44 +82,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_sk_storage_map_seq_find_next() hands out an element only if its
-local_storage pointer is set. __bpf_sk_storage_map_seq_show() then reads
-the pointer a second time and dereferences it without a test.
+bpf_local_storage_alloc() links the first element of a new storage to the
+bucket of its map, and then publishes the storage in the owner with
+cmpxchg().  If another cpu has been faster, the element is taken out of
+the bucket again and is freed together with the storage.
 
-Since bpf_local_storage_destroy() unlinks the elements with
-bpf_selem_unlink_nofail(), the pointer is reset to NULL when the socket
-which owns the element is destroyed, so it can change between the two
-reads. Reading the iterator while sockets with an element in the map are
-closed ends in a NULL pointer dereference. The sockets need not belong to
-the reader: where a program gives every new socket an element, an
-unprivileged user who opens and closes sockets is enough.
+In between the iterator over a sk_storage map can find the element.  It
+stays linked to a storage that points to the socket, but the socket knows
+nothing of that storage: bpf_sk_storage_free() neither unlinks the element
+nor waits for anybody who uses the storage.  So nothing tells the iterator
+that the socket has gone away.
 
-Skip such an element, as the TCP and UDP iterators skip a socket which
-has been unhashed.
+Three cpus that create the first storage of a new AF_UNIX socket at the
+same time, and a fourth that reads the iterator, are enough: in 20 seconds
+its program was shown some 4000 elements of storages that had lost.  If the
+socket is closed in time, the program is handed a freed socket.
 
-Fixes: 0be08389c7f2 ("bpf: Switch to bpf_selem_unlink_nofail in bpf_local_storage_{map_free, destroy}")
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Link the element once the storage is published.  Both happens under the
+lock of the bucket, which holds off whoever finds the element through the
+owner and wants to unlink it.
+
+Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/bpf_sk_storage.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/bpf/bpf_local_storage.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index b5349bec5695..aea67b446c7c 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -813,6 +813,9 @@ static int __bpf_sk_storage_map_seq_show(struct seq_file *seq,
- 		ctx.map = info->map;
- 		if (selem) {
- 			sk_storage = rcu_dereference(selem->local_storage);
-+			/* reset since ->next() looked: the socket goes away */
-+			if (!sk_storage)
-+				return SEQ_SKIP;
- 			ctx.sk = sk_storage->owner;
- 			ctx.value = SDATA(selem)->data;
- 		}
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index 7721834e4bff..c08afb33d038 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -509,8 +509,6 @@ int bpf_local_storage_alloc(void *owner,
+ 	if (err)
+ 		goto uncharge;
+ 
+-	bpf_selem_link_map_nolock(b, first_selem);
+-
+ 	owner_storage_ptr =
+ 		(struct bpf_local_storage **)owner_storage(smap, owner);
+ 	/* Publish storage to the owner.
+@@ -525,11 +523,17 @@ int bpf_local_storage_alloc(void *owner,
+ 	 */
+ 	prev_storage = cmpxchg(owner_storage_ptr, NULL, storage);
+ 	if (unlikely(prev_storage)) {
+-		bpf_selem_unlink_map_nolock(first_selem);
+ 		raw_res_spin_unlock_irqrestore(&b->lock, flags);
+ 		err = -EAGAIN;
+ 		goto uncharge;
+ 	}
++	/*
++	 * Not before the storage is published: the owner does not wait for
++	 * users of a storage that it knows nothing of, so that nobody may find
++	 * such a storage through the map. b->lock holds off those who find
++	 * first_selem through the owner and want to unlink it.
++	 */
++	bpf_selem_link_map_nolock(b, first_selem);
+ 	raw_res_spin_unlock_irqrestore(&b->lock, flags);
+ 
+ 	return 0;
 -- 
 2.55.0
 
