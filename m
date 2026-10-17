@@ -1,64 +1,64 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC28F36A350
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594E421D5B0
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792200770; cv=none; b=A+yKCED17h3WfH+uj6SaM7irp+l5e2aWBWQ6u6SYbmrUrjbmFrIq1ZjASnJDNlQa0y2seSrtmsCsO+g4n0usLr60IgP3Vhz7ez/PPerak0XxQly/pkBsHEpYaH5SWA4QwYKCyXohuDXkQgM3X+ssfGRX1ytKNpt90n0V4VreqrY=
+	t=1792200792; cv=none; b=pdH+pfVlKk6PU0/9C2MAM+Eaagi1JD47tF5rcLDtgAb8zdqi2vEyyVkcf0DswLCTE9SRz7vunRYZwD5ZkYHiDbBBRyqyWpnXz+fZdOCuVh4MSwpjDA1ORGA2yzd/p37Gl6g8gBq8IL3Ig1dH/zQgmtE6s5iGMoEOskV6XigTATU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792200770; c=relaxed/simple;
-	bh=On30PjEO6J1ruL3q/hkvb5tuhhy8lM0xd8Kj4HfM0CE=;
+	s=arc-20240116; t=1792200792; c=relaxed/simple;
+	bh=3NNCGH5ryw+BpbquvEdcLuzcP9h3hRy3kqLMJgFGGJc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BOVEAiQMC6keEQBTCyx2BLkahwHxQmbW6H7lc8WVWBHu9vdN9c9XusXi/V6u/cxRakalGszRc9PnphSUg1EDVKCeHY6p52I/hIlNwLjMGbKUrUKWUxv4an+ux+r+OW81YJXuaZeuF7rDrCFk+UxWNBJc3VsJRY5N466VB6BEwE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JqIl4yrL; arc=none smtp.client-ip=209.85.215.175
+	 MIME-Version; b=Zq6W9T3ZoDjkN1k9sYgQfrxtKFNkuF/EHdUQnv2Atf0n6QckT/UwWGT+U10ho6wNaJObMdVeWqMk71sjjVgR7VxmvVk6kMIfXcUgW2FX2Z5vOmwvOCPc2iyZM4i5o7faWsXHYLmcO6omIzJwc+pMpGbJs1pOjYUaqWWO85ZLRpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GMma02vy; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JqIl4yrL"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cc4aa0246b7so244332a12.3
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:32:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GMma02vy"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e99b1e5b4cso2150125ad.0
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:33:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792200769; x=1792805569; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792200791; x=1792805591; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HIcM5wreYA6XtufTFK2gEH3CtqCVUiXfm+uw2U6jSRk=;
-        b=JqIl4yrLmFLyG05DFf/Ntw6JquMcgZqDS1X6eVJhg/VNpwXE2OJ33rU1LVkrvNF93e
-         TxJtNp4sV2hufv5zPLWf6PKG3elRooPygGUaNmYbh+Bz8ogc9eKv8Q37j0AqEeiTy7gN
-         HUOtT0uLtLrvio88iNzAZJclFBKOd49/3hy2ZxP4BCd5ABhK4wqVf6ZGSiiPQpWwtZ+k
-         PAlPnwNKQ1ryO93xW3y3qgU/RQNP25Aa66WQ7bWseyA14O8KaotJOmHIVT57Xl8I6/Rm
-         9uVvOSkujTS9LadORk3zn/UZfjLZ3c/70SEbuUaPXiAb9/g4Wx+/uw8pD/CROJxq9h1M
-         UELQ==
+        bh=WG4JK4jcwaSqli0Rkxkj+xPO6Y6Xri8N8nem+swVpHc=;
+        b=GMma02vysLaGsBDOf9eyE7/Ofsi3NbYCGhSScHVg96vDhZV1YZAEhk/sKgybqQNBJ1
+         e7rgvhKdUeR9dYHheSb/i1CM/Bwdiz6eJjVCDyjetr6kqFj5/YASNuhjJBm9BWKZS1C6
+         AK+/JhdIrVz0fNtp1MjLPdD2nOW/e54/a/DxoLju/ga5u7HMkEJ9Fe5R5wB0UQUUHWKn
+         BUSMY9YbpcG2wk5IqgJUbIfwNhQaLY4Ovs7qqjez5SRUIBv7eGPh5ltinPrlyJXJkjSN
+         xYE73poyrErFnPFEACajOuLXURMs2xYblBYrrlByLjIMmkRLppjIfDSa1Lg/O83+Znzz
+         gigQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792200769; x=1792805569;
+        d=1e100.net; s=20260707; t=1792200791; x=1792805591;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HIcM5wreYA6XtufTFK2gEH3CtqCVUiXfm+uw2U6jSRk=;
-        b=nPd6QiGixlKoDos4SPD4fIoF1mQ+O8Z/mlsMkM8kAljx7p80rQToXHHu4hr8jEJ1Oy
-         6LdqZbiFePgQxyKYcwLKoALNMlLBenM2RE/dHrPtRRrjFNBA5ZjiqRhQaTihVG16Y3L5
-         2JHK/WFcJ4+9hlVo1OoRoBlg9HSG5r/uJhGemPsGEOHICwxpZAqA1fEFfs9/Sqij9Qu/
-         EoLaMkRq0+MwUbb9gdpoD+sbwc94EqyWP5JTbad7JSK786CYZ/vIsFRFz/41FX/V+5Z2
-         PsxJ1trTJEQAomMitTmozyaU1UOMtinPWNO7/wQGXWF4/p0p5FpM8+tu9yKIJ7CPGoWm
-         O0ZQ==
-X-Gm-Message-State: AFq9FYLInpATQdEWylIRV6R/evhYFag0qelkRbBguo1KD5G4f7kNk9Cc
-	AphQZzhiPh8yp2gpF/VJl7ZShJlzSMJQT2f7GZdbi7Ia+o7VDpYOUufNlN6JV39c
-X-Gm-Gg: AYBFou3EtObxUDXQJr3YDtp7pEB6kI2nn8a46cBgvAFQFaWv36/9i+T3NqX1DsSQMdE
-	zukdrdPxWUpQ3czXO6huQmFEs2+4ceawZ23gu1syOFcyBmtN0Nj81wvibh7WMgFtptGf8etoA3R
-	eykMtu+cXCuwAwHiAKZC74vVLsPc7wgL7oGKt5tjwJw95aow7Dy30mBxM4YkHKMsJpPiK3YQRsX
-	T8kNwNPvMQxwrMtxwa2CRRx1FW3IxDMgNFUTpeRA8yRK2GIoU+6tWrHfghGW92vHDpNLXKzoUKW
-	EqpD3xZ/mcJgflCTzd42mgF1aYiu6OYfyacTRymedgDcj4+M83IvVeFj9JEWuBBtOTOX5avhpbM
-	uvMnGeWUKYg5MBlyhTplpnEci4ADfD8WBc435DLdCv3ra3TMtQSXbdtYPU2r0j9LrGVJofXnaFr
-	S/eLgsXCpM5CFLQcjXk2Cq1OPYsyX2IRu4sd6HpzEQYRDPa1+PvLwwlVyCpcnBSjVNj7mP43nWc
-	Jmutxlqs8K/Xec1WD08rxGt9O1zm/P1ML6wtPhu6bWrTgFXtXj9oeyW/O4ASC52Q6TGsKtzHH2C
-	VgK/pk15XYmciL0pkRR8k9JVuw6pQ+QchG/cvTV9wpRh
-X-Received: by 2002:a17:90b:3d87:b0:3ac:9599:a689 with SMTP id 98e67ed59e1d1-3acef154517mr1174222a91.34.1792200769146;
-        Fri, 16 Oct 2026 18:32:49 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd05fb680sm3578215a91.2.2026.10.16.18.32.48
+        bh=WG4JK4jcwaSqli0Rkxkj+xPO6Y6Xri8N8nem+swVpHc=;
+        b=wpUzC8mi8A31xtoz1ItLkJFR2hLmaTmiJXRsWeL8mtKehHy5hbtgdKfWRz/rirl2G/
+         Elu13rY5NELL2ISYr+NpDBDAOng2hUTK1yG+h8QerS/xCn1awc1CmDTQ8cdqKeM3Cw5S
+         bIy8m77b9Gtgx/uZ61oTGmg97PRkxvGBZSUZ26S37oVyI0FbgEdcUKJHDW8TEHP/ZRJh
+         1afN5iEuDIHEonvnLwntU7iPNdMZo9oUHxznLkltKIuFXghbkUBJYrFUf/VtmKX9yvs4
+         wsC8CT6983BqhEjwRqxJMQ5+sZ0ipFBXNWvoTw3bXHXyssUN8pLUcg/WhMM1lGhKxIwO
+         WNeA==
+X-Gm-Message-State: AFq9FYLA8yOJ71kBJNhlnwIwAd4VWnCa7Z8dXUGG6gnU94gftJQmTHtk
+	6bVQxY10QDbTo6C5y1N4vRFMUfKoteslI9xZmZkWspkvp80SnpZj/2j8W6uZwlyf
+X-Gm-Gg: AYBFou2nCRKnCt2EXezlhisXCYKBL1jsMkRlUxE9oTx1EmkRNMT/f5eEelWjiDAIi3e
+	oFPqeRG8mdzUIcGm4OEInPVqXVjJzEpBIlKQDGWTKBQ9etYBM/c4SdMuT1sXtOA1LqYDukwXZUP
+	tdeviJPkfsSPPYwKK61zyeAKCHmcz17aV8/dTREYDbiKiSUtITlUWK9KcGV8PU+LfB6kUmxHJAU
+	QRS8ohzscrqjsXQAkJpoHJKJymKveSxeHIjsSSdDP+/9UN/2ERlN0NVLnb/AgvSpf6DUXlb0Q7N
+	qkCRCG/nIKYVr9Un/3aFi0f6wnb+WdGRJ42cXmdt8fR2HvOJX7Z3SvGpVj20k/GeyMbTN194Ocu
+	RfIsDswpd7Kw2npADv1Q1BXitE+YbqOQ49TOEEZ5VXweLd8DC/HecURNivU8M1NowjY6EY2xMoG
+	5sR8px/A3/FGMzrzqHY6xDB6ygNE1Ran8/kkkGvm52lyrbBYUNp20IH6zcVdjaUY9dWsJKhIquC
+	W5VwfBgBqdLSIX+C6PRoS++lhUidyvMetVdwhtsuvxTQmwD7qZboqvwczxS5zefCJ177mjk8Igb
+	VPqUAgqsreY3KIo+WEZFodJ6HQUhN8iwyoLClctNiSA=
+X-Received: by 2002:a17:903:2f88:b0:2e9:5ed2:c3a3 with SMTP id d9443c01a7336-2e9a6c1f257mr13693255ad.37.1792200790499;
+        Fri, 16 Oct 2026 18:33:10 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8b98a9sm17657715ad.74.2026.10.16.18.33.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 18:32:48 -0700 (PDT)
+        Fri, 16 Oct 2026 18:33:09 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next 31/38] bpf: Use the socket of a sk_lookup test run under RCU
-Date: Sat, 17 Oct 2026 01:24:44 +0000
-Message-ID: <20261017012451.364800-23-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 32/38] bpf, cpumap: Hold the device of frames in the queue
+Date: Sat, 17 Oct 2026 01:24:45 +0000
+Message-ID: <20261017012451.364800-24-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
 References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
@@ -84,56 +84,146 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-bpf_sk_lookup_assign() accepts only sockets which are freed by RCU, and
-takes no reference. bpf_prog_test_run_sk_lookup() looks at sk_reuseport of
-the selected socket and generates its cookie, which is a write, behind
-bpf_test_timer_leave(), that is outside of the RCU read side critical
-section in which the program ran. If the socket is closed in the meantime
-it may be gone.
+A frame that is redirected to another CPU waits in the queue of the cpumap
+entry with a plain pointer to the device it came from, and an skb from
+generic XDP with skb->dev.  Nothing keeps that device.  Closing and
+unregistering it waits for its NAPI and for RCU, but not for the kthread
+of the entry.  If the kthread is late by more than that, since its CPU is
+busy with something of a higher priority, it builds skbs for a device that
+has been freed and hands them to the stack:
 
-Do both before the section ends.
+  BUG: KASAN: use-after-free in dev_gro_receive+0x1f51/0x2b30
+  Read of size 8 at addr ffff88800a7340b0 by task cpumap/1/map:1/54
 
-Fixes: 7c32e8f8bc33 ("bpf: Add PROG_TEST_RUN support for sk_lookup programs")
+Take a reference to the device for each entry of the queue.  The kthread
+cannot drop it at the end of the batch, since its GRO node may keep the skb
+for longer.  Let it note the devices and drop the references behind a full
+GRO flush, which it does whenever the queue is empty, and from now on also
+when it has noted about 2048 of them.
+
+A device whose frames are stuck in a queue is now unregistered only when
+the kthread has got to them.  RTNL is not held meanwhile, but if the device
+goes with its network namespace, the cleanup of all namespaces waits.
+
+Fixes: 1c601d829ab0 ("bpf: cpumap xdp_buff to skb conversion and allocation")
+Fixes: 11941f8a8536 ("bpf: cpumap: Implement generic cpumap")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/bpf/test_run.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ kernel/bpf/cpumap.c | 35 ++++++++++++++++++++++++++++-------
+ 1 file changed, 28 insertions(+), 7 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index d73cd247f8cd..3043a7393c29 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1656,20 +1656,19 @@ int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kat
- 		ctx.selected_sk = NULL;
- 		retval = BPF_PROG_SK_LOOKUP_RUN_ARRAY(progs, ctx, bpf_prog_run);
- 	} while (bpf_test_timer_continue(&t, 1, repeat, &ret, &duration));
--	bpf_test_timer_leave(&t);
--
--	if (ret < 0)
--		goto out;
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 5e59ab896f05..eb87131b1bef 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -45,6 +45,7 @@
+  */
  
-+	/* Nothing but RCU keeps the selected socket */
- 	user_ctx->cookie = 0;
--	if (ctx.selected_sk) {
--		if (ctx.selected_sk->sk_reuseport && !ctx.no_reuseport) {
-+	if (!ret && ctx.selected_sk) {
-+		if (ctx.selected_sk->sk_reuseport && !ctx.no_reuseport)
- 			ret = -EOPNOTSUPP;
--			goto out;
--		}
--
--		user_ctx->cookie = sock_gen_cookie(ctx.selected_sk);
-+		else
-+			user_ctx->cookie = sock_gen_cookie(ctx.selected_sk);
- 	}
-+	bpf_test_timer_leave(&t);
+ #define CPU_MAP_BULK_SIZE 8  /* 8 == one cacheline on 64-bit archs */
++#define CPU_MAP_HELD_DEVS 2048
+ struct bpf_cpu_map_entry;
+ struct bpf_cpu_map;
+ 
+@@ -74,6 +75,13 @@ struct bpf_cpu_map_entry {
+ 
+ 	struct completion kthread_running;
+ 	struct rcu_work free_work;
 +
-+	if (ret < 0)
-+		goto out;
++	/*
++	 * Every frame and skb in the queue holds a reference to its device.
++	 * The kthread keeps it until nothing is left in GRO.
++	 */
++	struct net_device *held[CPU_MAP_HELD_DEVS];
++	u32 nr_held;
+ };
  
- 	ret = bpf_test_finish(kattr, uattr, NULL, NULL, 0, 0, retval, duration);
- 	if (!ret)
+ struct bpf_cpu_map {
+@@ -129,9 +137,11 @@ static void __cpu_map_ring_cleanup(struct ptr_ring *ring)
+ 		WARN_ON_ONCE(1);
+ 		if (unlikely(__ptr_test_bit(0, &ptr))) {
+ 			__ptr_clear_bit(0, &ptr);
++			dev_put(((struct sk_buff *)ptr)->dev);
+ 			kfree_skb(ptr);
+ 			continue;
+ 		}
++		dev_put(((struct xdp_frame *)ptr)->dev_rx);
+ 		xdp_return_frame(ptr);
+ 	}
+ }
+@@ -311,7 +321,7 @@ static int cpu_map_kthread_run(void *data)
+ 		void *frames[CPUMAP_BATCH];
+ 		void *skbs[CPUMAP_BATCH];
+ 		u32 i, n, m;
+-		bool empty;
++		bool empty, full;
+ 
+ 		/* Release CPU reschedule checks */
+ 		if (__ptr_ring_empty(rcpu->queue)) {
+@@ -344,10 +354,12 @@ static int cpu_map_kthread_run(void *data)
+ 				struct sk_buff *skb = f;
+ 
+ 				__ptr_clear_bit(0, &skb);
++				rcpu->held[rcpu->nr_held++] = skb->dev;
+ 				skbs[ret.skb_n++] = skb;
+ 				continue;
+ 			}
+ 
++			rcpu->held[rcpu->nr_held++] = ((struct xdp_frame *)f)->dev_rx;
+ 			frames[ret.xdp_n++] = f;
+ 			page = virt_to_page(f);
+ 
+@@ -398,10 +410,13 @@ static int cpu_map_kthread_run(void *data)
+ 		/* Flush either every 64 packets or in case of empty ring */
+ 		packets += n;
+ 		empty = __ptr_ring_empty(rcpu->queue);
+-		if (packets >= NAPI_POLL_WEIGHT || empty) {
+-			cpu_map_gro_flush(rcpu, empty);
++		full = empty || rcpu->nr_held > CPU_MAP_HELD_DEVS - CPUMAP_BATCH;
++		if (packets >= NAPI_POLL_WEIGHT || full) {
++			cpu_map_gro_flush(rcpu, full);
+ 			packets = 0;
+ 		}
++		while (full && rcpu->nr_held)
++			dev_put(rcpu->held[--rcpu->nr_held]);
+ 
+ 		local_bh_enable(); /* resched point, may call do_softirq() */
+ 	}
+@@ -738,12 +753,14 @@ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
+ 
+ 	for (i = 0; i < bq->count; i++) {
+ 		struct xdp_frame *xdpf = bq->q[i];
+-		int err;
+ 
+-		err = __ptr_ring_produce(q, xdpf);
+-		if (err) {
++		if (__ptr_ring_full(q)) {
+ 			drops++;
+ 			xdp_return_frame_rx_napi(xdpf);
++		} else {
++			/* The device cannot go before the flush, from now on it can */
++			dev_hold(xdpf->dev_rx);
++			__ptr_ring_produce(q, xdpf);
+ 		}
+ 		processed++;
+ 	}
+@@ -807,11 +824,15 @@ int cpu_map_generic_redirect(struct bpf_cpu_map_entry *rcpu,
+ 
+ 	__skb_pull(skb, skb->mac_len);
+ 	skb_set_redirected(skb, false);
++	dev_hold(skb->dev);
+ 	__ptr_set_bit(0, &skb);
+ 
+ 	ret = ptr_ring_produce(rcpu->queue, skb);
+-	if (ret < 0)
++	if (ret < 0) {
++		__ptr_clear_bit(0, &skb);
++		dev_put(skb->dev);
+ 		goto trace;
++	}
+ 
+ 	wake_up_process(rcpu->kthread);
+ trace:
 -- 
 2.55.0
 
