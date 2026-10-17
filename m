@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67903B14AA
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1E73B19BA
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792205561; cv=none; b=udVAmhkurBSJzeCycM9P4NLXo5Q4JWQryysptwxZeXs2sCw9oO4P+6eZNOk/6dG23AG/8EDyCVNSFO8bAn7RU+dYIUC4IzzpOsWry8Hva+c97VTim9UIoJMUWQUrxJUrlJk//Eya4hRGg4S6YqQGfVYGdJ4WovDyc+l+KJsTayg=
+	t=1792205576; cv=none; b=fbxkFEHIa/NOTyXxeiGniUMjkN2HKnc0cbHnfwyjPcyEir8zlIyLTpDxXTeoxoswmsMmYvOmBy8dh+fMvOZstRqqv9e0LnFw8SSWC5HbPmSYh2Z3hNeD6UPYveoBgfk9nsX7O7gAXd/ecPO08fA3cNR7/XJhnn3FBx1Z3aWW0g8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792205561; c=relaxed/simple;
-	bh=TFnUOA77dNWjhypV9w1n/cU0B5lCpmPxaM51hBmIGes=;
+	s=arc-20240116; t=1792205576; c=relaxed/simple;
+	bh=FNGHCtp9K0U1YVJVhjW5xiakuXtlk2CBaokb0epNodQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MOT2Q+xhl30r46AfudByRpWSHnEBwkL7uhg9VATgJI4cZALx/bVPPGtdubbU0VwWzcBAB49TKiLxkmDJ7yc7Ngi4OoDdlpM/ChEzoSuGS36CciirjeUW3LgwEP39eY/Lsr1GIXGamIQy1RQYtv4EOPlULZK74ft7RpMxwne60YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=EAYX9e6tR/Y9Gy6EXS3P1K9ctuAjizsbOu80Nklr0cp/UmK08WXT/ERF7IB2AZViiudOeMOl23Oa/XRDk4TXNfht0P++3Vrfec1p7WL8MA5CvQxK3xh3SjAw4hlXLmr9qp0t/4K+q0QsyRfSjcL+3Zp7uF6aBmxVK/7iGcaRDmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CD83631B3B003A; Fri, 16 Oct 2026 19:52:32 -0700 (PDT)
+	id E8E0231B3B0064; Fri, 16 Oct 2026 19:52:37 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v12 12/25] bpf: Allow a subprog to end with a call that does not return
-Date: Fri, 16 Oct 2026 19:52:32 -0700
-Message-ID: <20261017025232.1925266-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v12 13/25] bpf: Dispatch cleanup pads by rewriting return addresses
+Date: Fri, 16 Oct 2026 19:52:37 -0700
+Message-ID: <20261017025237.1925807-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261017025129.1914859-1-yonghong.song@linux.dev>
 References: <20261017025129.1914859-1-yonghong.song@linux.dev>
@@ -37,225 +37,169 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A compiler emits nothing after a call it knows does not return: a cleanup
-pad's call to _Unwind_Resume, which libbpf resolves to bpf_unwind_resume(=
-),
-or a call to a Rust function that returns `!` because it unwinds. Built
-with panic=3Dunwind, rustc gives for example
+bpf_unwind() now walks the BPF frames through arch_bpf_stack_walk_ra()
+and rewrites the saved return address of each frame above the one that
+called it: to the pad where a record covers the call, else to the
+frame's epilogue. The walk stops after the main function. For the
+verifier patch's example, main -> A -> B -> C with only A's call to B
+covered:
 
-        fail:
-                call bpf_unwind
-        L0:     goto L0
-        check:
-                if w1 > 0x7 goto L0
-                w0 =3D w1
-                exit
-        L0:     call fail
-        prog:
-                ...
-                r1 =3D r6
-                call _Unwind_Resume
+  slot                    points into               rewritten to
+  ----------------------  ------------------------  ---------------------
+  bpf_unwind()'s return   C, after its unwind call  left alone
+  C's return              B, after 'call C'         B's epilogue
+  B's return              A, after 'call B'         P, A's pad
+  A's return              main, after 'call A'      main's epilogue
+  main's return           the kernel                left alone
 
-and check_subprogs() refuses prog() and check(): "last insn is not an exi=
-t
-or jmp".
+Each frame then just returns: C through the 'r0 =3D 0; exit' after its
+bpf_unwind(), B and main through their epilogues, A through its pad P
+and P's resume.
 
-Let check_subprogs() accept a final call that never returns: to
-bpf_unwind() or bpf_unwind_resume(), or to a static subprog with neither
-an exit insn nor the hidden exit of a tail call or of a
-BPF_LD_[ABS|IND]. Any other final call is still refused, including one
-to a global subprog, which do_check() takes to return.
-bpf_unwind_resume() is lowered to 'r0 =3D 0; exit' as before.
+The walk finds the frames in the calling program, not with
+bpf_prog_ksym_find(). A running instance holds no reference to its
+program, so user space can drop the last one, by closing the program's
+fds and links, while the instance still runs: the kallsyms entries go at
+once, and only freeing the program waits for the RCU or RCU Tasks Trace
+grace period. An unwind in between, say in a sleepable program blocked
+in bpf_copy_from_user(), would find none of its frames, so no pad would
+run. So bpf_unwind() takes the program's aux as a KF_IMPLICIT_ARGS
+argument, which keeps its BTF prototype void(void), and matches each
+return address against aux->func[], or the program itself. To get the
+implicit argument loaded, adjust_insn_aux_data() moves arg_prog, as it
+moves cleanup_pad, to the slot the original instruction kept: the unwind
+call stays first in its patch.
 
-Then, as keep_subprog_exits() does for a subprog with no exit, put an
-exit after each such call before the CFG walk. From then on the call
-simply falls through to an exit, so liveness, backtracking, fastcall and
-prepare_func_exit() need not know about it, and do_check() never reaches
-the exit. For a subprog that can unwind, keep_subprog_exits() keeps it
-as the epilogue the walk can send the frame to.
-
-add_exits_after_final_calls() runs after add_kfuncs(), once insn array
-maps and the function pointers in read-only maps have recorded the insn
-offsets the patch adjusts, and before an offloaded program's per-insn
-state is set up. It also adjusts the call's own offset to a callee after
-it and the exit_idx of each later subprog. explored_states is sized by
-the program length, so it is now allocated after the exits are put in.
+Both kfuncs become callable here. bpf_unwind() is notrace and NOKPROBE,
+so that only plain kernel frames sit between it and the frame that called
+it, and the walk does not have to get through a trampoline or a kretprobe
+return on its way there.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 113 +++++++++++++++++++++++++++++++++++-------
- 1 file changed, 94 insertions(+), 19 deletions(-)
+ kernel/bpf/fixups.c  |  2 ++
+ kernel/bpf/helpers.c | 67 +++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 68 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 85542afcc369..804a6835c56f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3317,6 +3317,54 @@ static void find_subprog_properties(struct bpf_ver=
-ifier_env *env)
- 	}
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index a73c52b543e9..6c2e5e544124 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -247,6 +247,8 @@ static void adjust_insn_aux_data(struct bpf_verifier_=
+env *env,
+ 			data[off + cnt - 1].non_stack_access =3D false;
+ 			data[i].cleanup_pad =3D data[off + cnt - 1].cleanup_pad;
+ 			data[off + cnt - 1].cleanup_pad =3D 0;
++			data[i].arg_prog =3D data[off + cnt - 1].arg_prog;
++			data[off + cnt - 1].arg_prog =3D 0;
+ 		} else if (bpf_is_mem_insn(insn + i)) {
+ 			data[i].non_stack_access =3D true;
+ 		}
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 8df3f4746b68..1cf7b712854b 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -29,8 +29,10 @@
+ #include <linux/task_work.h>
+ #include <linux/irq_work.h>
+ #include <linux/buildid.h>
++#include <linux/kprobes.h>
+=20
+ #include "../../lib/kstrtox.h"
++#include "exception.h"
+=20
+ /* If kernel subsystem is allowing eBPF programs to call this function,
+  * inside its own verifier_ops->get_func_proto() callback it should retu=
+rn
+@@ -3424,9 +3426,70 @@ static bool bpf_stack_walker(void *cookie, u64 ip,=
+ u64 sp, u64 bp)
+ 	return false;
  }
 =20
-+static int subprog_falls_through(struct bpf_verifier_env *env, int subpr=
-og, int idx)
+-__bpf_kfunc void bpf_unwind(void)
++struct bpf_unwind_ctx {
++	const struct bpf_prog_aux *aux;
++	u32 cnt;
++};
++
++static bool bpf_unwind_ip_in(const struct bpf_prog *prog, u64 ip)
 +{
-+	verbose(env, "last insn is not an exit or jmp\n");
-+	bpf_diag_program_structure(
-+		env, idx, "subprogram can fall through",
-+		"End each subprogram with an exit or an explicit jump that keeps contr=
-ol flow inside the subprogram.",
-+		"Subprogram %d reaches its last instruction %d without an exit or jump=
-, so control could continue into the next subprogram.",
-+		subprog, idx);
-+	return -EINVAL;
++	u64 start =3D (u64)(long)prog->bpf_func;
++
++	return ip > start && ip <=3D start + prog->jited_len;
 +}
 +
 +/*
-+ * Put an exit after a call that ends a subprog, so that nothing from th=
-e CFG
-+ * walk on has to know a subprog can end that way. check_subprogs() only=
- lets
-+ * such a call be to a callee that never returns, so do_check() never re=
-aches
-+ * the exit.
++ * The function of the calling program that @ip returns into, looked up =
+in the
++ * program itself: its kallsyms entries can go while an instance still r=
+uns.
++ * The main function is the outer program, which holds its table and epi=
+logue.
 + */
-+static int add_exits_after_final_calls(struct bpf_verifier_env *env)
++static struct bpf_prog *bpf_unwind_find_prog(const struct bpf_prog_aux *=
+aux, u64 ip)
 +{
-+	struct bpf_insn patch[2] =3D { {}, BPF_EXIT_INSN() };
-+	struct bpf_prog *new_prog;
-+	int i, j;
++	u32 i;
 +
-+	for (i =3D 0; i < env->subprog_cnt; i++) {
-+		int last =3D env->subprog_info[i + 1].start - 1;
-+		struct bpf_insn *insn =3D &env->prog->insnsi[last];
-+
-+		if (!bpf_pseudo_call(insn) && !bpf_pseudo_kfunc_call(insn))
-+			continue;
-+		patch[0] =3D *insn;
-+		new_prog =3D bpf_patch_insn_data(env, last, patch, 2);
-+		if (!new_prog)
-+			return -ENOMEM;
-+		env->prog =3D new_prog;
-+		/* The patch moved the call's aux data, orig_idx included, to the exit=
-. */
-+		env->insn_aux_data[last].orig_idx =3D env->insn_aux_data[last + 1].ori=
-g_idx;
-+		/* The patch does not adjust the call itself for a callee after it. */
-+		insn =3D &new_prog->insnsi[last];
-+		if (bpf_pseudo_call(insn) && insn->imm >=3D 0)
-+			insn->imm++;
-+		/* Nor does it move the exits check_subprogs() found after it. */
-+		for (j =3D i + 1; j < env->subprog_cnt; j++)
-+			if (env->subprog_info[j].exit_idx !=3D U32_MAX)
-+				env->subprog_info[j].exit_idx++;
-+	}
-+	return 0;
++	for (i =3D 1; i < aux->func_cnt; i++)
++		if (bpf_unwind_ip_in(aux->func[i], ip))
++			return aux->func[i];
++	return bpf_unwind_ip_in(aux->prog, ip) ? aux->prog : NULL;
 +}
 +
- static int check_subprogs(struct bpf_verifier_env *env)
++static bool bpf_unwind_rewrite(void *cookie, u64 ip, u64 sp, u64 bp, u64=
+ *ra)
++{
++	const struct bpf_cleanup_range *rec;
++	struct bpf_unwind_ctx *ctx =3D cookie;
++	struct bpf_prog *prog;
++
++	prog =3D bpf_unwind_find_prog(ctx->aux, ip);
++	if (!prog)
++		return !ctx->cnt;
++	ctx->cnt++;
++
++	/*
++	 * The frame that called bpf_unwind(): bpf_exc_patch_unwind_calls()
++	 * put 'r0 =3D 0' and a jump to its pad, or an exit, after the call,
++	 * so leave its return address alone and let it go on there. The pad
++	 * then starts with r0 at a known zero.
++	 */
++	if (ctx->cnt =3D=3D 1)
++		return bpf_is_subprog(prog);
++
++	rec =3D bpf_exc_pad_for_ip(prog, ip);
++	*ra =3D rec ? rec->pad : prog->aux->epilogue_ip;
++
++	return bpf_is_subprog(prog);
++}
++
++/*
++ * @aux is the calling program's, supplied by the verifier (KF_IMPLICIT_=
+ARGS):
++ * programs call bpf_unwind() with no arguments.
++ */
++__bpf_kfunc notrace void bpf_unwind(struct bpf_prog_aux *aux)
  {
- 	int i, subprog_start, subprog_end, off, cur_subprog =3D 0;
-@@ -3356,26 +3404,44 @@ static int check_subprogs(struct bpf_verifier_env=
- *env)
- 			/*
- 			 * To avoid fall-through from one subprog into another,
- 			 * the last insn of the subprog should be either exit
--			 * or unconditional jump back or bpf_throw call.
-+			 * or unconditional jump back or a call that does not
-+			 * return, checked below.
- 			 */
- 			if (code !=3D (BPF_JMP | BPF_EXIT) &&
- 			    code !=3D (BPF_JMP32 | BPF_JA) &&
- 			    code !=3D (BPF_JMP | BPF_JA) &&
--			    !insn_is_gotox(&insn[i])) {
--				verbose(env, "last insn is not an exit or jmp\n");
--				bpf_diag_program_structure(
--					env, i, "subprogram can fall through",
--					"End each subprogram with an exit or an explicit jump that keeps co=
-ntrol flow inside the subprogram.",
--					"Subprogram %d reaches its last instruction %d without an exit or j=
-ump, so control could continue into the next subprogram.",
--					cur_subprog, i);
--				return -EINVAL;
--			}
-+			    !insn_is_gotox(&insn[i]) &&
-+			    !bpf_pseudo_call(&insn[i]) &&
-+			    !bpf_pseudo_kfunc_call(&insn[i]))
-+				return subprog_falls_through(env, cur_subprog, i);
- 			subprog_start =3D subprog_end;
- 			cur_subprog++;
- 			if (cur_subprog < env->subprog_cnt)
- 				subprog_end =3D subprog[cur_subprog + 1].start;
- 		}
- 	}
++	struct bpf_unwind_ctx ctx =3D { .aux =3D aux };
 +
-+	/*
-+	 * A compiler ends a subprog with a call only if the callee never
-+	 * returns. Refuse any other final call.
-+	 */
-+	for (i =3D 0; i < env->subprog_cnt; i++) {
-+		int last =3D subprog[i + 1].start - 1, callee;
-+
-+		if (bpf_pseudo_kfunc_call(&insn[last])) {
-+			if (!bpf_is_unwind_kfunc(&insn[last]) &&
-+			    !bpf_is_unwind_resume_kfunc(&insn[last]))
-+				return subprog_falls_through(env, i, last);
-+			continue;
-+		}
-+		if (!bpf_pseudo_call(&insn[last]))
-+			continue;
-+		callee =3D bpf_find_subprog(env, last + insn[last].imm + 1);
-+		if (bpf_subprog_is_global(env, callee) ||
-+		    subprog[callee].exit_idx !=3D U32_MAX ||
-+		    subprog[callee].has_tail_call || subprog[callee].has_ld_abs)
-+			return subprog_falls_through(env, i, last);
-+	}
- 	return 0;
++	arch_bpf_stack_walk_ra(bpf_unwind_rewrite, &ctx);
  }
++NOKPROBE_SYMBOL(bpf_unwind);
 =20
-@@ -23602,15 +23668,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr,
- 	env->test_reg_invariants =3D attr->prog_flags & BPF_F_TEST_REG_INVARIAN=
-TS;
- 	env->arena_scalar =3D attr->prog_flags & BPF_F_ARENA_SCALAR;
-=20
--	env->explored_states =3D kvzalloc_objs(struct list_head,
--					     state_htab_size(env),
--					     GFP_KERNEL_ACCOUNT);
--	ret =3D -ENOMEM;
--	if (!env->explored_states)
--		goto skip_full_check;
--
--	for (i =3D 0; i < state_htab_size(env); i++)
--		INIT_LIST_HEAD(&env->explored_states[i]);
- 	INIT_LIST_HEAD(&env->free_list);
-=20
- 	/* Prepare BTF and func_info needed to discover all subprograms. */
-@@ -23661,6 +23718,24 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
-=20
-+	/*
-+	 * After everything above has recorded insn offsets, so the patch
-+	 * adjusts them, and before an offloaded program's per-insn state.
-+	 */
-+	ret =3D add_exits_after_final_calls(env);
-+	if (ret < 0)
-+		goto skip_full_check;
-+
-+	env->explored_states =3D kvzalloc_objs(struct list_head,
-+					     state_htab_size(env),
-+					     GFP_KERNEL_ACCOUNT);
-+	ret =3D -ENOMEM;
-+	if (!env->explored_states)
-+		goto skip_full_check;
-+
-+	for (i =3D 0; i < state_htab_size(env); i++)
-+		INIT_LIST_HEAD(&env->explored_states[i]);
-+
- 	if (bpf_prog_is_offloaded(env->prog->aux)) {
- 		ret =3D bpf_prog_offload_verifier_prep(env->prog);
- 		if (ret)
+ __bpf_kfunc void bpf_throw(u64 cookie)
+ {
+@@ -5128,6 +5191,8 @@ BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE=
+ | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_throw)
++BTF_ID_FLAGS(func, bpf_unwind, KF_IMPLICIT_ARGS)
++BTF_ID_FLAGS(func, bpf_unwind_resume)
+ #ifdef CONFIG_BPF_EVENTS
+ BTF_ID_FLAGS(func, bpf_send_signal_task)
+ #endif
 --=20
 2.53.0-Meta
 
