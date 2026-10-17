@@ -1,42 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D8A3B1031;
-	Sat, 17 Oct 2026 03:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5459B13B293;
+	Sat, 17 Oct 2026 03:06:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792206366; cv=none; b=uGvUJMyxyGPBLmTYPSIeM3RvB8U7IDQKZPAotTEtq+rWs2oynuW7tYc7bRn7gfahwO2CFl6sBLPEcRc5NQ2SkPemLjK+GnOWHkQsj61QDqSU1iB+wX6lRf0Ihn+z3pKLS003KVtxZRzztAc2T4hK3fzTZPnDThLhmO95sYpdhmE=
+	t=1792206367; cv=none; b=J6GHiIcjagKXuTs7YrbbsHsB3pPUpWHlJhQX2LCk4b1eOmBnbIlsSv+IzKrbXv/KyJFHbcpctdi9matgHlg9qJCxJcoPWxxpYx/T08+/bWRrCTA4rnaQMKOMs9iUJ6/q7r0fIey4jZ6Wz45K1RpvGvFuylkDGgphZa/4qbChXZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792206366; c=relaxed/simple;
-	bh=k/puwnAmtqKwwrMShtfogE1faF0/dMxv9JkaSQwrdrQ=;
+	s=arc-20240116; t=1792206367; c=relaxed/simple;
+	bh=TxsrQoeReuVkkJcppcYZgfKFM9i+zHch/GwTbDaqao0=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=J1+dJgA1iqv0Bn+q/JZnQaIO5mZgHFf2SDWlm+AjdeiWdHgsLwXvUUmAxrksZnLiV3MlXQGSicLZ2V9VI5B/GNG9fI+YjK/qYzhM4ukh26LVEqB1Wrte1PhE0Y6Y0TcSeTIAV+AO4aUz/xiXKl7qojAVdSEqyx0AORdBCT0yxTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lwrchEVE; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=BlzcTTtAiJ8T6MtaWjQDMHBqqycDY2UUqpHM3W1A53dpqiRdqqxth67jnPnba5yO28+sq+d5uUmtrSTnGQzeZLN+pjfuY0eZSP2YCiwdxGm5vtFxBAmZYGNiuA8Oh6K+YobXfP9b9cvmHLq6ulzI4fmZlM26vnsOaUm5yuiUlvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S5UAUUCW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lwrchEVE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E6191F000C4;
-	Sat, 17 Oct 2026 03:06:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S5UAUUCW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 826E51F000C5;
+	Sat, 17 Oct 2026 03:06:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792206364;
-	bh=HT1f83y0Ex2+cmXeAgKuiIjyX6eBMtAEaBDH0huDTuU=;
+	s=k20260515; t=1792206366;
+	bh=QiNpr66aF8Jt67mP0DHy47o/5RmozCu5BZxGXMVE/fM=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=lwrchEVElWKIA0yKYbDNf9Gct+TaVLEt+vjvkRGAOL8UvCAsfLqFaOQX4o8SvDcZL
-	 tJDexzMaPL/qPcgkP6LPWVwGN9X6mz6BfSMnF2iMxIsYpipii+Ey6nK3AC6v6RXy9L
-	 Hp9aiBGd5sz3Zyvh2hG20pulbeRmNduC3+4eHQC1BADh1GqxD7mkw0Qf0wrTgx2KZB
-	 JsM8v1UO21Bfii3pYqOPszWMr5JlT8Pn+TwLQ9r/fx6j5LfvfqSry09vFUR4jpjLbb
-	 h5DZjvT0yXXMvAMZVvGZgKitgHfOeGhAV1L5fR1gbZuaiMZpofjGHoBMhE9ZuRfbu2
-	 MddTQ1fupZrzA==
-Subject: Re: [PATCH v3 net-next 02/15] selftests: xsk: size the TX UMEM in
- HW_SW_MAX_RING_SIZE
+	b=S5UAUUCWFv52Bsf5xD9FJeNkgo/GRdraPw89vUcgXL1BNbBlmTu9dnvLYYVWK28uy
+	 sA2Q5ydPFAyR+A9AWngFKezoINX+Y491QcX5cA7/zH2t5Wp7Zy1lqWgt9h0fxwL5/1
+	 3eJuR4FKb8etVmXz31LhW5PdOvnbScEq/DEsl3IdAc/HLSgEVrkIFgkEmZAZ7Oj/Qj
+	 2cneDR8OKyFezDhbpLJh92WgF1qlTtMH/dOFUvDQfwIZ0pdq24ySekuFZ+KtZNs4+a
+	 aDn8qYoTXOJJrjq9ltuAbwVJ54arOxEzt/1DkyuObqLEtjhTpHEfPZlRaID80SR0TH
+	 ZDRWAWazGuwDQ==
+Subject: Re: [PATCH v3 net-next 03/15] selftests: xsk: drop the
+ single-interface loopback mode
 From: netdev-bot+sashiko@kernel.org
 To: maciej.fijalkowski@intel.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
  stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
  tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Sat, 17 Oct 2026 03:06:03 +0000
-Message-ID: <179220636394.434549.14546514468412075500@kernel.org>
-In-Reply-To: <20261014184539.774708-3-maciej.fijalkowski@intel.com>
-References: <20261014184539.774708-3-maciej.fijalkowski@intel.com>
+Date: Sat, 17 Oct 2026 03:06:05 +0000
+Message-ID: <179220636510.434549.7705519903366245411@kernel.org>
+In-Reply-To: <20261014184539.774708-4-maciej.fijalkowski@intel.com>
+References: <20261014184539.774708-4-maciej.fijalkowski@intel.com>
 X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,80 +58,101 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [Medium] In testapp_hw_sw_max_ring_size()
-  (tools/testing/selftests/bpf/prog_tests/test_xsk.c), the patch gives…
+- [Medium] Old single-interface invocations are now misread instead of
+  being rejected.
 
 --
 
-selftests: xsk: size the TX UMEM in HW_SW_MAX_RING_SIZE
+selftests: xsk: drop the single-interface loopback mode
 
-In testapp_hw_sw_max_ring_size(), this patch gives the TX UMEM the same
-8k frames, fill ring and completion ring as the RX UMEM. In two-interface
-mode the TX UMEM has only 1k frames, so the 2k batch stalls in
-__send_pkts(). The patch prepares for removing the single-interface mode
-in the next patch.
+This commit removes the xskxceiver mode where the TX and RX sockets were
+bound to queue 0 of one interface with a shared UMEM. It also removes the
+split UMEM addressing and the POLL_TXQ_FULL workaround that mode needed.
+The -i IFACE option of test_xsk.sh is dropped as well.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> index 2a13628740924..16fe32e5afc06 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-> @@ -2513,6 +2513,9 @@ int testapp_hw_sw_max_ring_size(struct test_spec *test)
->  	test->ifobj_rx->xsk->umem->num_frames = max_descs;
->  	test->ifobj_rx->xsk->umem->fill_size = max_descs;
->  	test->ifobj_rx->xsk->umem->comp_size = max_descs;
-> +	test->ifobj_tx->xsk->umem->num_frames = max_descs;
-> +	test->ifobj_tx->xsk->umem->fill_size = max_descs;
-> +	test->ifobj_tx->xsk->umem->comp_size = max_descs;
-
-[Severity: Medium]
-Does the second step still stall on NICs that report a tx_max_pending of
-8200 or more?
-
-max_descs is fixed at 4 * XSK_RING_PROD__DEFAULT_NUM_DESCS, which is 8192.
-The step-2 batch later in testapp_hw_sw_max_ring_size() still comes from
-the maximum the driver reports:
-
-	test->ifobj_tx->xsk->batch_size = test->ifobj_tx->ring.tx_max_pending - 8;
-
-Here is the in-flight limit check in __send_pkts():
-
-	if (pkts_in_flight >= (int)((umem_size(umem) - xsk->batch_size * buffer_len) /
-	    buffer_len) && !test_timeout) {
-
-With batch_size == 8192 the limit is 0. With batch_size > 8192 the u64
-subtraction wraps, and the truncated int is 8192 - batch_size, which is
-negative. In both cases TX only kicks and returns TEST_CONTINUE.
-
-Even if that check passed, xsk_ring_prod__reserve(&xsk->tx, batch_size,
-...) can never reserve more than the 8192 slots of the TX ring. This is
-because xsk_configure_socket() sets cfg.tx_size = umem->comp_size.
-
-Some hardware that supports AF_XDP reports larger maximums:
-
-- octeontx2: otx2_get_ringparam() reports tx_max_pending =
-  Q_COUNT(Q_SIZE_MAX), which is 1048576. The batch is 1048568 and the
-  limit is -1040376.
-- hns3: reports HNS3_RING_MAX_PENDING, which is 32760. The batch is 32752
-  and the limit is -24560.
-
-ice (8160) and mlx5 (8192) fit within the limit.
-
-On the larger NICs, TX never sends and RX times out. That seems to be the
-same failure the commit message describes:
-
-  "the in-flight limit in __send_pkts() turns negative for a 2k batch,
-  so TX never sends and RX times out, and the second batch would not fit
-  in the TX ring anyway."
-
-At the end of the series, tools/testing/selftests/net/lib/xsk/test_xsk.c
-still uses the fixed 8192 and xsk_get_cap(test, tx_max_pending) - 8. Once
-the single-interface mode is gone, two-interface mode is the only one
-left, so this case would keep failing on those NICs.
-
-A 1M-frame UMEM would need 4 GiB. Could the step-2 batch be clamped to
-the software ring instead, for example min(tx_max_pending, max_descs) - 8?
+> diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+> index 62db060298a4a..69fac65f073c5 100755
+> --- a/tools/testing/selftests/bpf/test_xsk.sh
+> +++ b/tools/testing/selftests/bpf/test_xsk.sh
 
 [ ... ]
+
+> @@ -88,14 +85,11 @@
+>  
+>  . xsk_prereqs.sh
+>  
+> -ETH=""
+> -
+> -while getopts "vi:dm:lt:h" flag
+> +while getopts "vdm:lt:h" flag
+>  do
+>  	case "${flag}" in
+>  		v) verbose=1;;
+>  		d) debug=1;;
+> -		i) ETH=${OPTARG};;
+>  		m) MODE=${OPTARG};;
+>  		l) list=1;;
+>  		t) TEST=${OPTARG};;
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> index 7dad8556a722e..24109dd7264e2 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.c
+> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+
+[ ... ]
+
+> @@ -388,10 +387,6 @@ int main(int argc, char **argv)
+>  		ksft_exit_xfail();
+>  	}
+>  
+> -	shared_netdev = (ifobj_tx->ifindex == ifobj_rx->ifindex);
+> -	ifobj_tx->shared_umem = shared_netdev;
+> -	ifobj_rx->shared_umem = shared_netdev;
+> -
+>  	if (!validate_interface(ifobj_tx) || !validate_interface(ifobj_rx))
+>  		print_usage(argv);
+
+[Severity: Medium]
+Now that shared_netdev is gone, what rejects the old
+"xskxceiver -i ethX -i ethX" invocation?
+
+parse_command_line() still sets ifobj_tx and ifobj_rx from the first two
+-i options. validate_interface() only rejects an empty name. As a result,
+TX and RX can use the same ifindex and nothing reports it.
+
+When that happens, each endpoint binds its own UMEM to queue 0 of the same
+netdev, because xsk_configure() now does:
+
+	bool shared = !!i;
+
+The TX bind cannot succeed without XDP_SHARED_UMEM. xsk_configure()
+retries SOCK_RECONF_CTR times, and then every test fails. Nothing tells
+the user that the mode was removed.
+
+xsk_attach_xdp_progs() has also lost its early return for a shared-netdev
+TX side, so the TX attach replaces the RX program on the same ifindex.
+
+Should main() exit with a usage error when
+ifobj_tx->ifindex == ifobj_rx->ifindex?
+
+test_xsk.sh has a related problem. 'i' is no longer in the getopts string,
+and the case statement has no '?' arm. Running "test_xsk.sh -i ethX"
+prints an illegal option warning and then runs the veth suite, which could
+be mistaken for a hardware result.
+
+Later patches in this series look like they resolve this:
+
+- "selftests: xsk: run one test case per xskxceiver invocation" removes
+  test_xsk.sh and xsk_prereqs.sh in favour of test_xsk.py.
+
+- "selftests: xsk: run the RX and TX endpoints in separate processes"
+  makes parse_command_line() take a single interface. It calls
+  print_usage() when the role, peer host, peer port, test or mode is
+  missing.
+
+So the problem seems limited to this commit, for example while bisecting.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014184539.774708-1-maciej.fijalkowski%40intel.com
