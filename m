@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2143B7757;
-	Sat, 17 Oct 2026 03:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A143C0606;
+	Sat, 17 Oct 2026 03:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792206372; cv=none; b=emSCkKywLAuY6YlRY3g4mgIxebAEx3OpzaLnAqmNTZzuSATBEwzBoabekHxMzaEHH1+5JmUD8PKPD3rBaL7Z1NhPQEU3Nd3WaqycBakKDIWK9c51Vlw4fhbsB/HnNUzDhEiEw4P/frcqIzRqXnGD4HZX0bSt5WTK6vOdmIjyhVE=
+	t=1792206372; cv=none; b=JW4c/Zqg4c7Tt6fJqDA13Szc9Lgb7egb/e/IcxSUg+MKsIJVCT5jbsWsShKTL7KxiVA2wyKThRbYSEOzLagRPTjaE3F+8bYufKWXQpAd3c7CJ0I+JBh9co9KXSSCAzZfneRkcWHY8wy7sShIuAbihgYKCxbjJ3CEPLgG/Su5FQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1792206372; c=relaxed/simple;
-	bh=CTQzq/tkK0XXS79LAUo/HkswB+c3kXs61hCo5IZtGnQ=;
+	bh=S+YzpH0+29EbYNufSbiYub4Qo7e+bez8KN/HNh83Zx4=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Kp4Rkw1jHwsWiZEL+gp7PGPVNT27xO2drQyTAXuuKf/3dclqwTnLt0LJTZP0kN8bb3vzUtr0eI8ThlcINqZcLQwzJb2uAHrakqQdTUf1IK2UHaiTkainmoKB6UJV9a28Ic5H9FnlQDoIcmNZ4d5ddcxq8L+aYH0uzOFXF48ynLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HPqfJcGX; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=GBgFq4280yK4UPPf8E0+VNCxIqhilGWubCCLlskBoKVduU8wjOKR7LF8Nb/jOLwjAUN9z8/6Y8V7cXM/5tdW0jiCQCmgbCrgVEwb/Lp1CjWkAThERnTJnH7EVrY0+UOkMW93sn1ZUmTNAubeJXKpszpQ5loGJULHbNE84ormgM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDmtOVft; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPqfJcGX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A3F1F000C5;
-	Sat, 17 Oct 2026 03:06:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDmtOVft"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C211F000C4;
+	Sat, 17 Oct 2026 03:06:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792206370;
-	bh=eeCGLO3Ik5E4Qxb/7ymqiy+n1Z+grV3svHvOZnm+e64=;
+	s=k20260515; t=1792206371;
+	bh=jEM5HYuSKh2YpDnBuUc1gpKMIww/0cE9Hw3ioFtu/jA=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=HPqfJcGXSwBAykQ/NkVesG+ujJFH1B0B8+GQI7IxbFjtkH7ii6tkpM+A0caD7sXS5
-	 28CDsPosEQ29kaDAvluxPXhLMuKkcDJUx7v6Hu+BCMkJT1q8MEFx1NXe2uMcsb6pQN
-	 C1IPR9jjROSxNV5OquIxUbrHd4enEeUB7KmMRbXgDBaFqtEcu+wHa9qRjGekN6KRS3
-	 YZO8cycYcm8DggZ2gYMNckXP94IP6xVXpzpnpuQ0InPMj8ua5BSdyxax2mCRqGf3KO
-	 jZ1CaRV0uP04Vua3/+WZw6jebcjossL44PWExrWg/rT/KyNZ59RFitlb4qZhj3IdaD
-	 Wmtu9yu2e1eGg==
-Subject: Re: [PATCH v3 net-next 11/15] selftests: xsk: add a hardware mode to
- xskxceiver
+	b=TDmtOVfthXwM4AJ8EEUpskU3IK1aTrnGONEk5D9Tqi48iBUDXU9FKgae1/aHEYZEg
+	 wMBk7F2ojMw3BosJkXuqAYEhr+ZrbpMvm1JKmKl5Eh+u2LL5DbnxKEBAQg1Q9Yhfzn
+	 68ATxv93O7FtI41H8tnpQYXvoRwrNo/zhC+lLbljyvr81MV5RlMNumCOTowbgsKqcA
+	 RhtqksHAL+xbE9l6e+5e0B53tvPwVLOBXtyB0pi+OPqiM/faS5ys0yURFQBhbvUhhF
+	 5c+X1jiGM38b9injDT0vE6wHMHNBvoyteNr/QTeJSRKgeQKovSrRP7ktMSn9Cwmizw
+	 n7JOm6cVHch9w==
+Subject: Re: [PATCH v3 net-next 12/15] selftests: xsk: pass non-test traffic
+ to the stack in hardware mode
 From: netdev-bot+sashiko@kernel.org
 To: maciej.fijalkowski@intel.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
  stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
  tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Sat, 17 Oct 2026 03:06:09 +0000
-Message-ID: <179220636945.434549.3726298644003511435@kernel.org>
-In-Reply-To: <20261014184539.774708-12-maciej.fijalkowski@intel.com>
-References: <20261014184539.774708-12-maciej.fijalkowski@intel.com>
-X-sashiko-severity: Medium
+Date: Sat, 17 Oct 2026 03:06:10 +0000
+Message-ID: <179220637066.434549.1580492265406805082@kernel.org>
+In-Reply-To: <20261014184539.774708-13-maciej.fijalkowski@intel.com>
+References: <20261014184539.774708-13-maciej.fijalkowski@intel.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -47,291 +47,159 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 7 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 0 · Medium: 3 · Low: 4
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] A hardware SKB-mode endpoint still gates every multi-buffer
-  case on XSK_CAP_MBUF.
-- [Medium] The comment in wait_link_up() says 'Each endpoint makes its
-  changes before it is ready', but the TX endpoint creates its UMEM and…
-- [Medium] cleanup_iface() in xskxceiver.c now fails the endpoint when
-  xsk_set_mtu() cannot restore orig_mtu, but it still ignores the return…
-- [Low] At this commit, hardware mode switches the test frames to
-  UDP/IPv4, but the XDP programs (xsk_def_prog, xsk_xdp_drop,…
-- [Low] testapp_too_many_frags() builds the stream from
-  max_frags_override no matter which mode the local TX endpoint runs in.
-- [Low] parse_command_line() rejects --listen and --max-frags without
-  --hw, but it silently accepts --udp-src, --udp-dst, --udp-port and…
-- [Low] In hardware mode, sync_endpoints() exchanges READY and then each
-  endpoint calls wait_link_up() on its own interface only, once.
+- [Low] In hardware mode, adjust_tail_grow_skip()
+  (tools/testing/selftests/net/lib/xsk/test_xsk.c) can make the two…
+- [Low] This feature patch also carries the only fix for a real userspace
+  stack buffer overflow, without a Fixes: tag.
 
 --
 
-selftests: xsk: add a hardware mode to xskxceiver
+selftests: xsk: pass non-test traffic to the stack in hardware mode
 
-This commit adds a --hw mode to xskxceiver. In this mode,
-drivers/net/hw/xsk.py can run AF_XDP cases between a zero-copy DUT and an
-SKB-mode remote over a physical link, using UDP/IPv4 frames between the
-real MACs. It also adds --queue, --listen and --max-frags, waits for the
-link after endpoint synchronization, defaults cases to ETH_DATA_LEN, and
-restores the original MTU in cleanup_iface().
+In hardware mode, the xskxceiver XDP programs now redirect only the
+UDP/IPv4 packets sent to the test port and pass everything else to the
+stack. xsk_xdp_adjust_tail() now accounts for the IPv4 and UDP headers,
+so the XDP_ADJUST_TAIL_GROW cases can run with --hw. is_adjust_tail_supported()
+now reads adjust_value through the skeleton instead of copying all of
+.bss into an int.
 
 > diff --git a/tools/testing/selftests/net/lib/xsk/test_xsk.c b/tools/testing/selftests/net/lib/xsk/test_xsk.c
-> index f67a32c0260a3..a280956d53f4a 100644
+> index a280956d53f4..b70dbefe9729 100644
 > --- a/tools/testing/selftests/net/lib/xsk/test_xsk.c
 > +++ b/tools/testing/selftests/net/lib/xsk/test_xsk.c
-
-[ ... ]
-
-> @@ -84,11 +97,72 @@ static void write_payload(void *dest, u32 pkt_nb, u32 start, u32 size)
-
-[ ... ]
-
->  	memcpy(eth_hdr->h_dest, xsk->dst_mac, ETH_ALEN);
->  	memcpy(eth_hdr->h_source, xsk->src_mac, ETH_ALEN);
-> -	eth_hdr->h_proto = htons(ETH_P_LOOPBACK);
-> +	if (!udp_packets) {
-> +		eth_hdr->h_proto = htons(ETH_P_LOOPBACK);
-> +		return;
-> +	}
-> +
-> +	eth_hdr->h_proto = htons(ETH_P_IP);
-
-[Severity: Low]
-At this commit hardware mode sends UDP/IPv4 test frames, but xsk_def_prog,
-xsk_xdp_drop and xsk_xdp_populate_metadata in xsk_xdp_progs.bpf.c still act
-on every frame received on the queue:
-
-    return bpf_redirect_map(&xsk, 0, XDP_DROP);
-
-On a physical link, could non-test traffic such as IPv6 ND/MLD or LLDP
-reach the socket on the bound queue? Could it also shift drop_idx or the
-metadata count?
-
-This is resolved later in the series. The commit "selftests: xsk: pass
-non-test traffic to the stack in hardware mode" adds is_test_packet(), and
-xsk.py adds ntuple steering. drivers/net/hw/xsk.py does not exist yet at
-this commit, so no runner can hit the gap here.
-
-[ ... ]
-
-> @@ -1703,14 +1829,36 @@ static int testapp_validate_rx_endpoint(struct test_spec *test,
-
-[ ... ]
-
-> +/* An MTU or XDP change can reset a NIC, which takes the link down on both
-> + * hosts. Each endpoint makes its changes before it is ready, so once both are,
-> + * wait for the local link before any traffic.
-> + */
-
-[Severity: Medium]
-Does this hold for the TX endpoint? worker_testapp_validate_tx() runs the
-barrier first, and only creates the UMEM and the XDP_ZEROCOPY socket after
-it:
-
-worker_testapp_validate_tx()
-  sync_endpoints()
-    xsk_peer_ready()
-    wait_link_up()
-  testapp_validate_tx_endpoint()
-    thread_common_ops()
-      xsk_configure()
-        xsk_socket__create()
-    send_pkts()
-
-The RX side binds in testapp_prepare_rx_endpoint() before sync_endpoints(),
-so only the TX bind happens after the barrier.
-
-On some zero-copy drivers the pool setup restarts the interface. For
-example, dpaa2_xsk_enable_pool() in dpaa2-xsk.c does:
-
-	up = netif_running(dev);
-	if (up)
-		dev_close(dev);
-	...
-	if (up)
-		dev_open(dev, NULL);
-
-dpaa2 advertises NETDEV_XDP_ACT_XSK_ZEROCOPY. Can send_pkts() then
-transmit while the carrier is still coming back? That would lose the
-frames and leave RX to hit the 20s timeout in hardware TX-role cases. The
-code is the same at the end of the series.
-
-> +static int wait_link_up(struct test_spec *test)
-
-[ ... ]
-
->  static int sync_endpoints(struct test_spec *test)
+> @@ -944,31 +944,12 @@ static bool is_metadata_correct(struct pkt *pkt, void *buffer, u64 addr)
+>  	return true;
+>  }
+>  
+> -static int is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx, bool *supported)
+> +static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
 >  {
->  	int err = xsk_peer_ready(ctrl_peer);
->  
-> -	if (err)
-> +	if (err) {
->  		ksft_print_msg("Endpoint synchronization failed at step %u: %d (%s)\n",
->  			       test->current_step, err, strerror(-err));
-> -	return err;
-> +		return err;
-> +	}
-> +	return hw_test ? wait_link_up(test) : 0;
+> -	struct bpf_map *data_map;
+> -	int adjust_value = 0;
+> -	int key = 0;
+> -	int ret;
+> -
+> -	data_map = bpf_object__find_map_by_name(skel_rx->obj, "xsk_xdp_.bss");
+> -	if (!data_map || !bpf_map__is_internal(data_map)) {
+> -		ksft_print_msg("Error: could not find bss section of XDP program\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
 
 [Severity: Low]
-Each endpoint checks only its own interface here, and nothing comes after
-the link check. TX goes into send_pkts() as soon as its own ETHTOOL_GLINK
-reads up, and pacing_tx_sync() does not block. xsk_wait_link_up() returns
-on the first sample that reads up:
+The replacement below looks correct. Should this part go out as its own
+fix with a Fixes: tag, though?
 
-		if (err || edata.data)
-			return err;
+The removed bpf_map_lookup_elem() copies the whole value_size of the
+internal "xsk_xdp_.bss" map into the 4-byte stack int adjust_value.
+Before hw_port was added, .bss already held idx, adjust_value, count and
+drop_idx. So the copy writes at least 12 bytes and overwrites nearby
+stack slots such as key, ret and data_map.
 
-Suppose the RX host's driver applies an MTU, XDP or ring change through an
-asynchronous reset, and the link drops only after READY was delivered.
-Could TX then act on a stale up state and transmit into the reset?
+The commit message mentions the overrun. However, the fix is bundled
+with the hardware-mode feature and depends on the move to selftests/net.
+The same code is still in tools/testing/selftests/bpf/prog_tests/test_xsk.c,
+which test_progs runs in trees without this series.
 
-At the end of the series the control connection runs over the tested link.
-That covers drivers that reset synchronously, which is what ice, i40e,
-mlx5, igb and ixgbe do. No mainline driver with an asynchronous reset was
-identified, so this may only be theoretical.
+A standalone patch carrying:
+
+Fixes: 4b302092553c ("selftests/xsk: Add tail adjustment tests and support check")
+
+would let the fix be backported to net and stable.
+
+> -	if (ret) {
 
 [ ... ]
 
-> @@ -2284,7 +2444,9 @@ int testapp_too_many_frags(struct test_spec *test)
->  	u32 max_frags, i;
->  	int ret = TEST_FAILURE;
->  
-> -	if (test->mode == TEST_MODE_ZC) {
-> +	if (max_frags_override) {
-> +		max_frags = max_frags_override;
-> +	} else if (test->mode == TEST_MODE_ZC) {
-
-[Severity: Low]
-The override replaces the limit no matter which mode the transmitting
-endpoint runs in. If the SKB-mode remote were TX with the DUT's zero-copy
-limit, wouldn't the copy-mode TX path send the "too many" packet anyway?
-
-At the end of the series TOO_MANY_FRAGS is listed only in hw_tx_tests[].
-xsk.py always runs it with the zero-copy DUT as TX, so the mismatch does
-not appear reachable there. Would a short comment noting that assumption
-next to the override help?
+> +	return skel_rx->bss->adjust_value != -EOPNOTSUPP;
+>  }
 
 [ ... ]
 
-> @@ -2378,6 +2540,7 @@ static int detect_ifobj_caps(struct ifobject *ifobj)
->  	if (query_opts.feature_flags & NETDEV_XDP_ACT_RX_SG)
->  		ifobj_set_cap(ifobj, XSK_CAP_MBUF);
->  	if (query_opts.feature_flags & NETDEV_XDP_ACT_XSK_ZEROCOPY) {
-> +		ifobj_set_cap(ifobj, XSK_CAP_ZC_ADVERTISED);
+> @@ -2774,10 +2754,20 @@ int testapp_adjust_tail_shrink_mb(struct test_spec *test)
+>  	return testapp_adjust_tail(test, -XSK_UMEM__MAX_FRAME_SIZE, XSK_UMEM__LARGE_FRAME_SIZE * 2);
+>  }
+>  
+> +/* Generic XDP leaves no room to grow the tail. Only the RX endpoint runs the
+> + * program on the test flow, and a hardware TX endpoint, which does not know
+> + * the mode of its peer, leaves that skip to the RX endpoint.
+> + */
+> +static bool adjust_tail_grow_skip(struct test_spec *test)
+> +{
+> +	if (hw_test && !ifobj_is_local(test->ifobj_rx))
+> +		return false;
 
-[Severity: Medium]
-A hardware SKB-mode endpoint still gates every multi-buffer case on
-XSK_CAP_MBUF. That cap comes from the native driver NETDEV_XDP_ACT_RX_SG
-flag, queried with XDP_FLAGS_DRV_MODE. In __testapp_validate_traffic():
+[Severity: Low]
+Can the two hardware endpoints disagree on the skip here?
 
-	mbuf_cap = test->mode == TEST_MODE_ZC ? XSK_CAP_MBUF_ZC :
-						XSK_CAP_MBUF;
+With --hw and a local RX endpoint in SKB mode, testapp_adjust_tail_grow()
+and testapp_adjust_tail_grow_mb() return TEST_SKIP before
+sync_endpoints() is reached. The RX side then closes the control
+connection.
 
-	if (!ifobj_has_cap(ifobj1, mbuf_cap) ||
-	    (ifobj2 && !ifobj_has_cap(ifobj2, mbuf_cap))) {
-		...
+On the TX side, ifobj_rx is the non-local shadow. adjust_tail_grow_skip()
+therefore always returns false, and TX continues:
+
+testapp_adjust_tail()->worker_testapp_validate_tx()->sync_endpoints()
+  ->xsk_peer_ready()
+
+worker_testapp_validate_tx() {
+    ...
+	err = sync_endpoints(test);
+	if (err)
+		return err;
+    ...
+}
+
+xsk_peer_ready() in xsk_peer.c {
+    ...
+	err = peer_send(peer, XSK_PEER_READY, 0);
+	while (!err && !peer->ready_seen)
+		err = peer_recv_one(peer);
+    ...
+}
+
+There is no "peer skipped" message, so TX gets EPIPE or ECONNRESET.
+The run ends with TX failing and RX skipping.
+
+The old check (test->mode == TEST_MODE_SKB || hw_test) skipped on both
+sides. That matches the existing convention in testapp_stats_rx_dropped():
+
+	/* Hardware endpoints run different modes, so ZC would skip on one only. */
+	if (hw_test)
 		return TEST_SKIP;
-	}
 
-Generic XDP does not need native RX_SG for xdp.frags programs.
-netif_receive_generic_xdp() handles non-linear skbs through
-skb_cow_data_for_xdp().
+Later in the series, "selftests: drv-net: test AF_XDP zero-copy with an
+SKB peer" adds drivers/net/hw/xsk.py. Its _test() reports the case as a
+skip when either side returns SKIP_CODE:
 
-Take a remote NIC that does not set NETDEV_XDP_ACT_RX_SG, such as igb, igc
-or ixgbe. The remote then skips SEND_RECEIVE_9K_PACKETS, UNALIGNED_9K,
-XDP_METADATA_COPY_MULTI_BUFF, the ADJUST_TAIL_*_MULTI_BUFF and
-*_INV_DESC_MULTI_BUFF cases, and TOO_MANY_FRAGS. The zero-copy DUT checks
-XSK_CAP_MBUF_ZC instead and continues.
+    if SKIP_CODE in (dut_ret, remote_ret):
+        raise KsftSkipEx("xskxceiver skipped the case")
 
-Does the DUT then fail in sync_endpoints() once the remote closes the
-control channel? At the end of the series xsk.py reports this one-sided
-skip as SKIP, so multi-buffer coverage is lost whenever the remote is a
-non-SG NIC.
+Also, "selftests: xsk: list the hardware test cases" puts the grow cases
+only in hw_rx_tests, where the SKB remote is the TX side.
 
-The commit message says:
+At this commit, no in-tree runner drives --hw. Is the one-sided failure
+the intended result for manual xskxceiver --hw runs?
 
-    - a hardware endpoint probes only the mode it runs in, taking zero-copy
-      support from NETDEV_XDP_ACT_XSK_ZEROCOPY
-
-Should XSK_CAP_MBUF follow the same rule for an SKB-mode endpoint?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-> index 769718cad8cd7..7044822f23c0a 100644
-> --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-> +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+> +	return test->mode == TEST_MODE_SKB;
+> +}
+> +
+>  int testapp_adjust_tail_grow(struct test_spec *test)
+>  {
+> -	/* The XDP program numbers the grown tail after a non-UDP header. */
+> -	if (test->mode == TEST_MODE_SKB || hw_test)
+> +	if (adjust_tail_grow_skip(test))
+>  		return TEST_SKIP;
 
 [ ... ]
-
-> @@ -306,6 +378,10 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
->  	    !*opt_peer_host || !opt_peer_port || opt_run_test == RUN_ALL_TESTS ||
->  	    opt_mode == TEST_MODE_ALL)
->  		print_usage(argv);
-> +	if (opt_hw && (!opt_udp_src || !opt_udp_dst || !opt_udp_port || !opt_peer_mac))
-> +		print_usage(argv);
-> +	if ((opt_listen || opt_max_frags) && !opt_hw)
-> +		print_usage(argv);
->  }
-
-[Severity: Low]
-This isn't a bug, but --udp-src, --udp-dst, --udp-port and --peer-mac are
-accepted without --hw and then silently ignored. main() calls
-xsk_set_udp_packet_format() only under opt_hw, and setup_peer() copies
-opt_peer_mac only under opt_hw.
-
-Should these options be rejected without --hw, like --listen and
---max-frags are? print_usage() also describes them as if they always apply.
-
-[ ... ]
-
-> @@ -401,8 +487,16 @@ static void cleanup_iface(struct ifobject *ifobj)
->  		xsk_detach_xdp_program(ifobj->ifindex,
->  				       ifobj->mode == TEST_MODE_SKB ?
->  				       XDP_FLAGS_SKB_MODE : XDP_FLAGS_DRV_MODE);
-> +	/* After the detach, as an attached program can cap the MTU. */
-> +	if (ifobj->dev_mtu != ifobj->orig_mtu) {
-> +		err = xsk_set_mtu(ifobj->ifindex, ifobj->orig_mtu);
-> +		if (err)
-> +			ksft_print_msg("Failed to restore MTU %d on %s\n",
-> +				       ifobj->orig_mtu, ifobj->ifname);
-> +	}
->  unload:
->  	xsk_unload_xdp_programs(ifobj);
-> +	return err;
->  }
-
-[Severity: Medium]
-A failed MTU restore now fails the endpoint. The ring restore just above
-this hunk still ignores its return value:
-
-	if (ifobj_has_cap(ifobj, XSK_CAP_HW_RING))
-		hw_ring_size_reset(ifobj);
-
-set_hw_ring_size() can fail with a non-EBUSY error, or after the EBUSY
-retries run out. In that case hw_ring_size_reset() keeps the changed sizes
-for a later reset. No later reset happens, because the process exits, and
-the endpoint still reports PASS.
-
-This patch makes that more likely. __test_spec_init() now resets rings on
-any local ifobj, and testapp_hw_sw_max_ring_size() now sets the receiver's
-rx_pending to rx_max_pending. The final xsk.py relies on the endpoints to
-restore ring sizes.
-
-Can a failed restore leave the NIC with enlarged rings? The next run's
-detect_ifobj_caps() would then record those as set_ring.default_tx and
-set_ring.default_rx. Should the result of hw_ring_size_reset() also feed
-err here?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014184539.774708-1-maciej.fijalkowski%40intel.com
