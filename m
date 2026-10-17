@@ -1,148 +1,161 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5703E1692;
-	Sat, 17 Oct 2026 10:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C36643F4C2
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 11:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792234707; cv=none; b=HM8G++vRbVM73Qw5fLtGBHh75oV+VQBNhAkvjzaivs3h+uH2Lv+C2sG/3XLUgTwaicWeiqYw/5NqsZUsc26FjVfBi2SzybHm1CqXlUk6mLpNQ710fZ+aAQPcpo6PpXCT/lRCYeTofAMGd4cEHr5YpNW2PtaOuoBEw2oNnAcIoLg=
+	t=1792235007; cv=none; b=U60PZVY1qg67t5tnvh/a4UCftN4rJAZX+7M6H3jvgdmRHpZH7MuEfk0iMN4m3MT0lRIYzDuzf+/XGwVgebCqSYp3xbnuTTgo6mZ5/P62zdBoe4+ld7eAAYNdnA+Df07JMnqe+b/G/MWopfpk9+SfjLZCPPPH2ScPNeQHlHaVAqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792234707; c=relaxed/simple;
-	bh=i5Nuk1yzuLP1jBUjm1Q0HVfm1BE0asN2mliPT/+MHOg=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=gYl9JTrc0JRs+YP/8uf9FPka+mdd0qwtLh2cbcnCJnOPzNqyMy1zqFuOIG4cAuTNhjxUy3rLjM1W5Fiv1ccVGEC+F5pW5iCsHBRy5rqqSxsf8nFq8vll9IOo4pZX9A3MeshlKr/LezTqOB76ERDFgq/WGQlYNI1guqC2oIiLheQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8AxX9PPVNNqdcgWAA--.780S3;
-	Sat, 17 Oct 2026 18:58:23 +0800 (CST)
-Received: from [10.130.40.83] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxRs3OVNNqJW8tAA--.16816S2;
-	Sat, 17 Oct 2026 18:58:23 +0800 (CST)
-Subject: Re: [PATCH v3 3/3] LoongArch: BPF: Optimize 32-bit operations using
- native instructions
+	s=arc-20240116; t=1792235007; c=relaxed/simple;
+	bh=ZfdFL+mOgr8C5/Q5zBQQ/lVzqfgyNXnS/9dewaQPMiQ=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=g4BScsd8Y9FF19d33phGax5Alt5ukU+znJbu3PETQsYUvdhtJyD4row6ZI4GAQZAUpoMwvfzUsjeTUGGsQCAwIb++dFUJMCQMjrud5L0MzqpPLHvyqQbw93UuHMBuuJJyz3bj+2X9dvkz40iDTxfOy9msqc4MJXeZCoLJqTDi2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MboZPP5B; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=j57Plmlr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MboZPP5B";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="j57Plmlr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792235005;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZfdFL+mOgr8C5/Q5zBQQ/lVzqfgyNXnS/9dewaQPMiQ=;
+	b=MboZPP5B4KBUubf64rj8/J4RM9oZ8hRBtMR+0g/8Wk5YKm+rW0E1oOIqy1R+7UutkkTh4L
+	3+GOb6WU46DLd2m5JR8kbK5Rc+x3VOl35t8c7Qi5FtjdydOQegBgdyQNF8sc5NcvtK13pB
+	NhoJhX1FuQQrJysIBH73kVMswjNKHvs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-259-wsrSGXhIPUSVnDDSLAK0Fg-1; Sat, 17 Oct 2026 11:03:23 +0000
+X-MC-Unique: wsrSGXhIPUSVnDDSLAK0Fg-1
+X-Mimecast-MFC-AGG-ID: wsrSGXhIPUSVnDDSLAK0Fg_1792235002
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-48dfdc0f491so274427f8f.1
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 04:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1792235002; x=1792839802; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZfdFL+mOgr8C5/Q5zBQQ/lVzqfgyNXnS/9dewaQPMiQ=;
+        b=j57Plmlrj5Dex8EbJmEMzgHh3/3Ui59HX5d0utzFWQmIdMSoCwNW8IUekstQ82J9Qk
+         /7BW/UyuUv1I1LvotQOdCly9TjqoOrr4F1qvbJjPBJodI83dyINHdkQW50un/YzrP30g
+         ZjhcgMb2Guf0Red0rBAXyTg7OFfdKRYIxTWyLVr0e1yCVwJR0OJJ2ojNx4Px8NVtl1Yf
+         yIy4iyL/g3RDIXaYeFElS0H4Ou2SMmkunW+IwEKznOeHNr48neWv0gguswwmhPOoQEyz
+         gDRpObvs8GQS9y/X1rh8S41YQ+Mj7GGDM0ZmoYJS+ycxGd777vqf75zKkEspCiQLy7Gz
+         NAEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792235002; x=1792839802;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZfdFL+mOgr8C5/Q5zBQQ/lVzqfgyNXnS/9dewaQPMiQ=;
+        b=1TWlDSLTRwg0CDGaTkGs7s3liZohNxuAKR5Hx/EdD2J29x3/R9m3zS/dFLfgoEN69h
+         ltfw0mvCP2eTw084re/XT6v+SODJx6guC0vGwZjoAlsscKjFjEqLSyoW2nECRpv4NhS3
+         /GL85Fqu8dZvlT5hOhoUPsvknlMei3qf7NqZpu0RGnR/2Z5/xasEyPXdP/qq7HbuPrIS
+         W/KoeLrpoIqdq2DCFR4NCi5xgfg5QaQwLIrx0tY4XWr9/JW2EalV5IS7uzZORZNO98cS
+         iVyTPvWCf7T945/vmbyP2upMDG7ZlqpeZRvRB8euzVIPGYPJEEhIJx8Kw/LsX6xWSc+k
+         gBQg==
+X-Forwarded-Encrypted: i=1; AKwUvBwuKOfFxUqxeL1kU9U95ntyyO/mxSCvdRTmVRZPt7nBq5+dv327GLPxzWmfYh1WX7Xu3PE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKl+T7BbJ/VIKY4njSRLfPoL8Kjphb50cnbrWhBU0FTgmTVlk91
+	fT3yvyu+bD9mWk4jn9FzqQggetnbUsb2aMnO9VSHrTuw2AUNMxYfjPntvm17+8J5Fv4pCMarWXT
+	AB239HM0RnDWhSubkywE4tvWIw9xcAdqQxLP2W4SVDnJAWYlQVTVt1w==
+X-Gm-Gg: AYBFou0Af8EU6Ml8x5FW3jwSO4aqTeVLswGBatb/tSpd1FN+PUlF6V1GUYtX8BOkR+Y
+	uFYHeSSA2hVk1YAdycCGBbaedAC2iZAodXZ875lQDBodO52QG184S9FXNXcy54CgXj5SW+zgnTA
+	EM92lHWZTXvDVjJje7UGnip0xzbU6trB+2ahkV98jmMcN23CuseNUkySwXHdYCPH6PGdir9zeO0
+	6uKiK765e/5dWvd5wfgf3rXFxCdPmRPIgPhPZBXKTVfo3IZzDZZAc98MeXyGqdJntgw/9cziEby
+	SkMMweJd7+ma9fW9LTGHBmKRxBpqY0XqgpUOQqD2rLmhh6P55g4j5M5w28G7u0rodcgfTa51Tvt
+	iQZ/SwHHC
+X-Received: by 2002:a05:600c:a4b:b0:4a0:eae0:b30e with SMTP id 5b1f17b1804b1-4a1d7604051mr52205215e9.22.1792235002059;
+        Sat, 17 Oct 2026 04:03:22 -0700 (PDT)
+X-Received: by 2002:a05:600c:a4b:b0:4a0:eae0:b30e with SMTP id 5b1f17b1804b1-4a1d7604051mr52204745e9.22.1792235001686;
+        Sat, 17 Oct 2026 04:03:21 -0700 (PDT)
+Received: from ehlo.thunderbird.net ([195.174.135.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48dfd4feb6bsm11345521f8f.41.2026.10.17.04.03.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Oct 2026 04:03:21 -0700 (PDT)
+Date: Sat, 17 Oct 2026 10:48:30 +0000
+From: Gabriele Monaco <gmonaco@redhat.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Huacai Chen <chenhuacai@kernel.org>, Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261016081006.26069-1-yangtiezhu@loongson.cn>
- <20261016081006.26069-4-yangtiezhu@loongson.cn>
- <DM6D33SL63BR.HOFSY6JUHO44@gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <c6a049d4-80c1-c3a4-e4de-87b582864e01@loongson.cn>
-Date: Sat, 17 Oct 2026 18:58:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+CC: Nam Cao <namcao@linutronix.de>, Wen Yang <wen.yang@linux.dev>,
+ Tobias Schaffner <tobias.schaffner@siemens.com>,
+ Viktor Malik <vmalik@redhat.com>, John Ogness <john.ogness@linutronix.de>
+Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
+In-Reply-To: <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com> <20261001152042.124445-11-gmonaco@redhat.com> <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com> <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com> <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
+Message-ID: <5A1AB76E-E338-4B88-8FDD-947BA0C5A294@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <DM6D33SL63BR.HOFSY6JUHO44@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxRs3OVNNqJW8tAA--.16816S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXF1DZw1ruFyfuFy3tFy3KFX_yoW5tr13pF
-	WqgF1fKw4UXFnavan7AF1DJa4DuF4DG3WDXrW3Xr43Grn8Arn5Xry0krsIvFWqgrWSvw45
-	Ar1ayr92qFyDJrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
-	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8wNVDUU
-	UUU==
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/10/16 下午11:18, Alexei Starovoitov wrote:
-> On Fri, Oct 16, 2026 at 04:10 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> 
->> All of the testcases of test_bpf passed on Loongson-3A6000 (with DIV32)
->> and Loongson-3A5000 (without DIV32), here are the test results:
-> 
-> fyi test_bpf is gone. See
-> commit 4532e525b286 ("selftests/bpf: Remove the old test_bpf module").
-> Pls run test_progs
 
-I tested this series based on bpf-next tree with "./test_progs -a jit_insns"
-and "./test_progs -a jit_insns_blinded", there are 3 pre-existing failures:
-(1) #191/1   jit_insns/arena access with zero offset:FAIL
-(2) #191/25  jit_insns/ldst_offsets:FAIL
-(3) #192/11  jit_insns_blinded/ldst_offsets:FAIL
 
-These 3 failures are entirely unrelated to this series; they still fail on
-the clean, original bpf-next tree without this series.
+Il 16 ottobre 2026 18:32:44 UTC, Alexei Starovoitov <alexei=2Estarovoitov@=
+gmail=2Ecom> ha scritto:
+>On Thu, Oct 08, 2026 at 11:54 AM Gabriele Monaco <gmonaco@redhat=2Ecom> w=
+rote:
+>> Reactors in this patch use bpf_printk(), which is in fact a trace_print=
+k()
+>> instead of a real printk, is there a technical limitation forbidding us=
+ to
+>> create a kfunc using some flavour of printk_deferred()? Or am I missing=
+ an
+>> existing one? (this need was brought up by John, Cc'd here)
+>
+>No technical limitation, and there is no such kfunc today=2E
+>printk_deferred() is a lockless store into the ring buffer plus irq_work=
+=2E
+>It's ok in any context where tracing progs run=2E
+>The closest we have is bpf_stream_vprintk()=2E That's stdout/stderr of
+>the prog=2E User space has to read it=2E
+>rv tool is around for as long as the monitor is loaded, so it can read
+>the stream and log it anywhere like /dev/kmsg=2E
+>If the message has to reach the console when user space cannot run
+>then the kfunc makes sense, but using bpf_stream is imo much cleaner=2E
+>
 
-The root cause is that LoongArch BPF JIT support for arena atomics and
-sign-extending loads from arena is still a work-in-progress.
+Thanks for the answer, I'd expect a mildly higher overhead in doing that, =
+but since it's only on violations we can probably accept it=2E
 
-IIUC, there are already two patches to fix them, but need revisions:
-https://lore.kernel.org/loongarch/20260702022322.51033-8-dongtai.guo@linux.dev/
-https://lore.kernel.org/loongarch/20260702022322.51033-7-dongtai.guo@linux.dev/
+I'm going to have a look at that=2E User space should be able to run for a=
+t least most models, I'd say, but I'm not sure how fast it can pick up=2E
 
-Bypassing these known architectural gaps using the blacklist (-b) option
-allows the remaining subtests under jit_insns and jit_insns_blinded to pass:
+>> Not needed in this patch but potentially required for more complex moni=
+tors=2E In
+>> kernel, when timers are required, we allow monitors to use hrtimers (pr=
+ecise but
+>> heavy), or the timer_wheel (lightweight but less precise)=2E
+>> I'm not aware of any wrapper of the wheel in BPF, but I think a few kfu=
+ncs for
+>> these could be useful, in general, also for other programs needing a lo=
+t of
+>> timer instances or simply light timeouts=2E
+>> What do you think?
+>
+>I don't think it's needed=2E
+>bpf_timer is hrtimer only, but hrtimer vs wheel is not where the cost is=
+=2E
+>bpf_timer_start() cannot call hrtimer_start() directly=2E
+>bpf_async_schedule_op() does kmalloc_nolock()
+>and irq_work_queue() instead=2E
+>I don't think timer wheel will help=2E
+>
 
-$ sudo ./test_progs -a jit_insns -b "jit_insns/arena access with zero 
-offset,jit_insns/ldst_offsets"
-#191/2   jit_insns/cast to a user address:OK
-#191/3   jit_insns/alu_imm:OK
-#191/4   jit_insns/alu_reg:OK
-#191/5   jit_insns/alu_imm_regs:OK
-#191/6   jit_insns/div_const:OK
-#191/7   jit_insns/alu_reg_pairs:OK
-#191/8   jit_insns/alu_edges:OK
-#191/9   jit_insns/shifts:OK
-#191/10  jit_insns/shift_counts:OK
-#191/11  jit_insns/atomics:OK
-#191/12  jit_insns/atomic_reg_pairs:OK
-#191/13  jit_insns/xadd_chain:OK
-#191/14  jit_insns/ld_imm64:OK
-#191/15  jit_insns/jmp_imm:OK
-#191/16  jit_insns/jmp_reg:OK
-#191/17  jit_insns/jmp_reg_pairs:OK
-#191/18  jit_insns/jmp_edges:OK
-#191/19  jit_insns/staggered_jumps:OK
-#191/20  jit_insns/max_jmp:OK
-#191/21  jit_insns/convergence:OK
-#191/22  jit_insns/calls:OK
-#191/23  jit_insns/helper_calls:OK
-#191/24  jit_insns/ldst_zero_off:OK
-#191/26  jit_insns/acq_rel:OK
-#191/27  jit_insns/movsx:OK
-#191/28  jit_insns/jset_imm:OK
-#191/29  jit_insns/cmp_imm:OK
-#191/30  jit_insns/alu_consts:OK
-#191/31  jit_insns/bswap:OK
-#191/32  jit_insns/probe_mem:OK
-#191     jit_insns:OK
-Summary: 1/30 PASSED, 0 SKIPPED, 0/0 FAILED
-
-$ sudo ./test_progs -a jit_insns_blinded -b jit_insns_blinded/ldst_offsets
-#192/1   jit_insns_blinded/alu_imm:OK
-#192/2   jit_insns_blinded/alu_imm_regs:OK
-#192/3   jit_insns_blinded/alu_edges:OK
-#192/4   jit_insns_blinded/div_const:OK
-#192/5   jit_insns_blinded/shifts:OK
-#192/6   jit_insns_blinded/xadd_chain:OK
-#192/7   jit_insns_blinded/ld_imm64:OK
-#192/8   jit_insns_blinded/jmp_imm:OK
-#192/9   jit_insns_blinded/jmp_edges:OK
-#192/10  jit_insns_blinded/ldst_zero_off:OK
-#192/12  jit_insns_blinded/jset_imm:OK
-#192/13  jit_insns_blinded/cmp_imm:OK
-#192/14  jit_insns_blinded/alu_consts:OK
-#192     jit_insns_blinded:OK
-Summary: 1/13 PASSED, 0 SKIPPED, 0/0 FAILED
+Alright, I'm going to keep that in mind once I get to work with timed auto=
+mata=2E
 
 Thanks,
-Tiezhu
+Gabriele
 
