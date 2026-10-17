@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10863B8D79
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0348A2D0C7E
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792205592; cv=none; b=hF1W9AnaPYZAlCFiavZzW06mpaaQ8JamTkmHFyLHy7u3McObWBxfg2q6WTsBJmrpGF54VRllFIT7H7E29BX2IS4w5YuKH7W4YKuTuACbeud8RDrwNEFXKEk9/vER2LarxblhczcXhPCYF4W2tHAKB5alDVlS8Sw7a3wF4zfheOI=
+	t=1792205598; cv=none; b=ZkKxQ+Paz0fbY0gIfpO5AlNoYDjk5paufp+gAeGArjItg7FoZlfSVEhqBs9vJCxbvnGGkd4yl0TJ7mMiJ8wVG6dLzUwa/pVvbcPvPBnLvtjk/xT65y98E62ViWtixgud+AUed/n6C1cBEcKEY2Cz2NNdSNA9vDY18yG+CrYhB4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792205592; c=relaxed/simple;
-	bh=raNbR0mXfww8vQQXDL/O4k0kcVV3dcCFHuzPUjs9BwE=;
+	s=arc-20240116; t=1792205598; c=relaxed/simple;
+	bh=icNQKYQcou7O/bX52vvM8vUzTIh5qY5BQQCjbvQfiKY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ORo7DZp8v7/LU/YAgBxaBgLJ8c5eMYVz3MBgx1hKlhgPqn/2XB/bQIgZqaXk/NaYdX2BxosMMhu7WtTZl4PrGbdwFe8leEYEApphKXfmBtIcvQhn6AXw24/2nkNKf5dhlJgZYSxXX7YRDlcKgd0kvWKYc9oB6LimFvhcGu4VAKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=m0mM63EUmDuRNd7dLv+J7fyQfaA0dwbKOvAB6BMzUuKUcG+HmUYmTzFLgNlwt3n+FMRaw8DuO4PCB78RI5PWMgPTYZpFhvi/s/Kns0VoroaNgw0W9Hvwt3urjIgHXjiVVJXFaq1fUbjR0qIyxo4t6riGAS16VYhWxVoCrtCorWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 4713C31B3B00BC; Fri, 16 Oct 2026 19:52:53 -0700 (PDT)
+	id 6181A31B3B00D4; Fri, 16 Oct 2026 19:52:58 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v12 16/25] bpf, arm64: Dispatch exception cleanup pads at run time
-Date: Fri, 16 Oct 2026 19:52:53 -0700
-Message-ID: <20261017025253.1926817-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v12 17/25] libbpf: Resolve the compiler's _Unwind_Resume to the kernel's kfunc
+Date: Fri, 16 Oct 2026 19:52:58 -0700
+Message-ID: <20261017025258.1927910-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261017025129.1914859-1-yonghong.song@linux.dev>
 References: <20261017025129.1914859-1-yonghong.song@linux.dev>
@@ -37,169 +37,142 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add what bpf_unwind() relies on to send each frame of a program to its
-landing pad or its epilogue on arm64, as the previous patch does for
-x86-64:
+LLVM ends a cleanup landing pad with a call to _Unwind_Resume, the
+unwind ABI's name for carrying an unwind on. The kernel's kfunc is
+bpf_unwind_resume: _Unwind_Resume in the kernel's own symbol table, for a
+function whose body never runs, would only confuse.
 
- - arch_bpf_stack_walk_ra(): walks the frame records with the kernel
-   unwinder, handing each return address to the consumer and storing a
-   new one back into the record it was read from. The first frame, whose
-   return into bpf_unwind() comes from the walk's own record, is
-   skipped.
- - With CONFIG_ARM64_PTR_AUTH_KERNEL and a CPU that supports address
-   authentication, the new address is signed the way the BPF prologue's
-   PACIASP signs the link register, key IA with the record + 16 as
-   modifier, using PACIA1716 so that no assembler support for pointer
-   authentication is needed.
- - Once the image is final, the JIT fills in the native cleanup table
-   and records each function's epilogue address in aux->epilogue_ip,
-   where an unwind sends a frame with no pad.
- - bpf_jit_supports_cleanup_pads() says yes, also with a shadow call
-   stack: only JITed frames' records are written, and JITed code keeps
-   no x18 copy of its return address.
-
-A pad needs no BTI: it is only reached as a return address.
+The compiler emits the call but no declaration, and libbpf refuses an
+extern it has no BTF for, so the program declares it itself (extern void
+_Unwind_Resume(void *) __ksym;), as a language runtime has to. libbpf
+only translates the name, both where it resolves the kfunc itself and
+where it records the name for a light skeleton's loader to resolve.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/arm64/kernel/stacktrace.c | 77 ++++++++++++++++++++++++++++++++++
- arch/arm64/net/bpf_jit_comp.c  | 16 +++++++
- 2 files changed, 93 insertions(+)
+ tools/lib/bpf/libbpf.c | 56 ++++++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 13 deletions(-)
 
-diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrac=
-e.c
-index 3ebcf8c53fb0..6ff485280da5 100644
---- a/arch/arm64/kernel/stacktrace.c
-+++ b/arch/arm64/kernel/stacktrace.c
-@@ -445,6 +445,83 @@ noinline noinstr void arch_bpf_stack_walk(bool (*con=
-sume_entry)(void *cookie, u6
- 	kunwind_stack_walk(arch_bpf_unwind_consume_entry, &data, current, NULL)=
-;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index cb09ded90773..b3cfd7c58776 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9187,6 +9187,23 @@ static void fixup_verifier_log(struct bpf_program =
+*prog, char *buf, size_t buf_s
+ 	}
  }
 =20
-+struct bpf_unwind_ra_consume_entry_data {
-+	bool (*consume_entry)(void *cookie, u64 ip, u64 sp, u64 fp, u64 *ra);
-+	void *cookie;
-+	unsigned long record;
-+	bool seen_first;
-+};
-+
-+/* PACIA1716 (hint #8): sign x17 with the modifier in x16, under key IA.=
- */
-+static u64 bpf_unwind_sign_ra(u64 ra, u64 modifier)
++/*
++ * LLVM terminates a cleanup landing pad with a call to _Unwind_Resume, =
+the
++ * base unwind ABI's entry point for carrying an unwind on once a frame'=
+s
++ * cleanups have run. The kernel knows it as bpf_unwind_resume. Any othe=
+r
++ * extern, and a variable of that name, is looked up by @name unchanged.
++ */
++static const char *kern_extern_name(const struct bpf_object *obj,
++				    const struct extern_desc *ext, const char *name)
 +{
-+	register u64 x17 asm("x17") =3D ra;
-+	register u64 x16 asm("x16") =3D modifier;
++	const char *essent =3D ext->essent_name ?: ext->name;
 +
-+	asm volatile(ARM64_ASM_PREAMBLE
-+		     "	hint	#8\n"
-+		     : "+r" (x17) : "r" (x16));
-+	return x17;
++	if (!btf_is_func(btf__type_by_id(obj->btf, ext->btf_id)) ||
++	    strcmp(essent, "_Unwind_Resume"))
++		return name;
++	return "bpf_unwind_resume";
 +}
 +
-+/* PACIASP's modifier is the entry sp, record + 16 for a BPF prologue. *=
-/
-+static void bpf_unwind_store_ra(unsigned long record, u64 ra)
-+{
-+	struct frame_record *rec =3D (struct frame_record *)record;
-+
-+	/*
-+	 * Whether the slot holds a signed address is a property of the build,
-+	 * not one to be read off the value: a PAC can come out equal to the
-+	 * bits stripping puts back, and a signed address would then be taken
-+	 * for an unsigned one. What signs is CONFIG_ARM64_PTR_AUTH_KERNEL --
-+	 * the prologue here, and -mbranch-protection for everything the
-+	 * compiler emits.
-+	 */
-+	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
-+	    system_supports_address_auth())
-+		ra =3D bpf_unwind_sign_ra(ra, record + sizeof(struct frame_record));
-+	WRITE_ONCE(rec->lr, ra);
-+}
-+
-+static bool
-+arch_bpf_unwind_ra_consume_entry(const struct kunwind_state *state, void=
- *cookie)
-+{
-+	struct bpf_unwind_ra_consume_entry_data *data =3D cookie;
-+	unsigned long record =3D data->record;
-+	bool seen_first =3D data->seen_first;
-+	u64 ra =3D state->common.pc;
-+	bool cont;
-+
-+	/* The record this frame's return address will have come out of. */
-+	data->record =3D state->common.fp;
-+	data->seen_first =3D true;
-+
-+	/*
-+	 * The first pc returns into bpf_unwind(), from this walk's own frame
-+	 * record: not a BPF frame, and not one to redirect.
-+	 */
-+	if (!seen_first)
-+		return true;
-+	/* A consumer that stops still gets to redirect the frame it stopped on=
-. */
-+	cont =3D data->consume_entry(data->cookie, state->common.pc, 0,
-+				   state->common.fp, &ra);
-+	if (ra !=3D state->common.pc)
-+		bpf_unwind_store_ra(record, ra);
-+	return cont;
-+}
-+
-+noinline noinstr void arch_bpf_stack_walk_ra(bool (*consume_entry)(void =
-*cookie, u64 ip, u64 sp,
-+								   u64 fp, u64 *ra),
-+					     void *cookie)
-+{
-+	struct bpf_unwind_ra_consume_entry_data data =3D {
-+		.consume_entry =3D consume_entry,
-+		.cookie =3D cookie,
-+	};
-+
-+	kunwind_stack_walk(arch_bpf_unwind_ra_consume_entry, &data, current, NU=
-LL);
-+}
-+
- static const char *state_source_string(const struct kunwind_state *state=
-)
+ static int bpf_program_record_relos(struct bpf_program *prog)
  {
- 	switch (state->source) {
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-index 506c4201fec8..c8c0328b3219 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2422,6 +2422,17 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
-rifier_env *env, struct bpf_pr
- 		 * reasons, expects to point to the next instruction)
- 		 */
- 		bpf_prog_update_insn_ptrs(prog, ctx.offset, ctx.ro_image);
-+
-+		/*
-+		 * Same byte offsets, consumed by the bpf_unwind() walk:
-+		 * turn the cleanup records into native address ranges now that
-+		 * the image is final.
-+		 */
-+		bpf_exc_fill_native_ranges(prog, ctx.offset, ctx.ro_image);
-+
-+		/* Where an unwind sends a frame with no pad. */
-+		prog->aux->epilogue_ip =3D (u64)ctx.ro_image +
-+					 ctx.epilogue_offset * AARCH64_INSN_SIZE;
- out_off:
- 		if (!ro_header && priv_stack_ptr) {
- 			free_percpu(priv_stack_ptr);
-@@ -3415,6 +3426,11 @@ bool bpf_jit_supports_exceptions(void)
- 	return true;
- }
+ 	struct bpf_object *obj =3D prog->obj;
+@@ -9195,6 +9212,7 @@ static int bpf_program_record_relos(struct bpf_prog=
+ram *prog)
+ 	for (i =3D 0; i < prog->nr_reloc; i++) {
+ 		struct reloc_desc *relo =3D &prog->reloc_desc[i];
+ 		struct extern_desc *ext =3D &obj->externs[relo->ext_idx];
++		const char *name;
+ 		int kind;
 =20
-+bool bpf_jit_supports_cleanup_pads(void)
-+{
-+	return true;
-+}
+ 		switch (relo->type) {
+@@ -9203,14 +9221,14 @@ static int bpf_program_record_relos(struct bpf_pr=
+ogram *prog)
+ 				continue;
+ 			kind =3D btf_is_var(btf__type_by_id(obj->btf, ext->btf_id)) ?
+ 				BTF_KIND_VAR : BTF_KIND_FUNC;
+-			bpf_gen__record_extern(obj->gen_loader, ext->name,
+-					       ext->is_weak, !ext->ksym.type_id,
+-					       true, kind, relo->insn_idx);
++			name =3D kern_extern_name(obj, ext, ext->name);
++			bpf_gen__record_extern(obj->gen_loader, name, ext->is_weak,
++					       !ext->ksym.type_id, true, kind, relo->insn_idx);
+ 			break;
+ 		case RELO_EXTERN_CALL:
+-			bpf_gen__record_extern(obj->gen_loader, ext->name,
+-					       ext->is_weak, false, false, BTF_KIND_FUNC,
+-					       relo->insn_idx);
++			name =3D kern_extern_name(obj, ext, ext->name);
++			bpf_gen__record_extern(obj->gen_loader, name, ext->is_weak, false,
++					       false, BTF_KIND_FUNC, relo->insn_idx);
+ 			break;
+ 		case RELO_CORE: {
+ 			struct bpf_core_relo cr =3D {
+@@ -9684,17 +9702,24 @@ static int bpf_object__resolve_ksym_func_btf_id(s=
+truct bpf_object *obj,
+ 	struct module_btf *mod_btf =3D NULL;
+ 	const struct btf_type *kern_func;
+ 	struct btf *kern_btf =3D NULL;
++	const char *local_name, *kern_name;
+ 	int ret;
+=20
+ 	local_func_proto_id =3D ext->ksym.type_id;
+=20
+-	kfunc_id =3D find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_K=
+IND_FUNC, &kern_btf,
+-				    &mod_btf);
++	local_name =3D ext->essent_name ?: ext->name;
++	kern_name =3D kern_extern_name(obj, ext, local_name);
 +
- bool bpf_jit_supports_arena(void)
- {
- 	return true;
++	kfunc_id =3D find_ksym_btf_id(obj, kern_name, BTF_KIND_FUNC, &kern_btf,=
+ &mod_btf);
+ 	if (kfunc_id < 0) {
+ 		if (kfunc_id =3D=3D -ESRCH && ext->is_weak)
+ 			return 0;
+-		pr_warn("extern (func ksym) '%s': not found in kernel or module BTFs\n=
+",
+-			ext->name);
++		if (kern_name !=3D local_name)
++			pr_warn("extern (func ksym) '%s' ('%s' in the kernel): not found in k=
+ernel or module BTFs\n",
++				ext->name, kern_name);
++		else
++			pr_warn("extern (func ksym) '%s': not found in kernel or module BTFs\=
+n",
++				ext->name);
+ 		return kfunc_id;
+ 	}
+=20
+@@ -9707,9 +9732,14 @@ static int bpf_object__resolve_ksym_func_btf_id(st=
+ruct bpf_object *obj,
+ 		if (ext->is_weak)
+ 			return 0;
+=20
+-		pr_warn("extern (func ksym) '%s': func_proto [%d] incompatible with %s=
+ [%d]\n",
+-			ext->name, local_func_proto_id,
+-			mod_btf ? mod_btf->name : "vmlinux", kfunc_proto_id);
++		if (kern_name !=3D local_name)
++			pr_warn("extern (func ksym) '%s': func_proto [%d] incompatible with '=
+%s' in %s [%d]\n",
++				ext->name, local_func_proto_id, kern_name,
++				mod_btf ? mod_btf->name : "vmlinux", kfunc_proto_id);
++		else
++			pr_warn("extern (func ksym) '%s': func_proto [%d] incompatible with %=
+s [%d]\n",
++				ext->name, local_func_proto_id,
++				mod_btf ? mod_btf->name : "vmlinux", kfunc_proto_id);
+ 		return -EINVAL;
+ 	}
+=20
 --=20
 2.53.0-Meta
 
