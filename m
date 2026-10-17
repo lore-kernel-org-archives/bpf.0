@@ -1,143 +1,164 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D34C303A04;
-	Sat, 17 Oct 2026 01:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2575A38839F
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:58:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792201968; cv=none; b=HGX32hZyFF2tQk3YWC7+upvRYSj/JkIyClRJeoUIDIyCdO69nT46Cj/LvjGy4fRLDWCAF8KsT5rHlUXgLSoG8W9zBusQ/tIqDHJhtiQlTM4dSuksdMfolhMseUbhpqnVBnrhHldrBLW/EpO1OX07lJ75s2L9jtVbyxkPILfiYdw=
+	t=1792202286; cv=none; b=etmgbrbD2lU5SoJAibz7DhOLquGkIZNxFkkh4kiYr5MlifSvO5wb2Tw1Kcp1WpvLt75cBL4Mshv1hwhf+OMRKFSqklDbRB0CRLm+NjlnHIUkMNk+Nf1KvYe145x40ASoIYV51VbaJU0jWAphas7WEDwpydhCyYkcJuzOgn2SBbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792201968; c=relaxed/simple;
-	bh=+bZI8wly5eDGayryvsGqobJTAS+537SL6h1SyJlRTIE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LHg6uabnaKNsLmbp/wHQNyxgi3AFU6OVD0rLGSRxUY5vEna48dqVoMnEYCQZT+s+9n5y5JCXJMBG2hXqXYKstNUjipUpW7qqQfcXECGNYXF0r1sdumSepESZ88ZTqH+m4nYXntXLR9EnsQ3+W9dxw0JD30T/FfUT88C4jjZdDHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e4X/eiZB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792202286; c=relaxed/simple;
+	bh=GAuId5vYB76oKPHC15e/H+difcXGRL3/40F1i4lczVU=;
+	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
+	 Date; b=L5yW+XS5UANyfreNGRN0HCez1FhJsCXr0RxGAuEMJm1HiZjsgZyuYD7d8+kKsoE7W1FTObE6S3MztawN6fkEfKdwcKdqcgPSBQrPa84GSkhbiFUNel/XhL9vY6P4DbwQPAVPTQUpyLgDYnxmxtvzALQFiB5P+L3so/1e9R3w+AI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L3mfPJQ8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e4X/eiZB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D5131F000C4;
-	Sat, 17 Oct 2026 01:52:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3mfPJQ8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539ED1F000C4;
+	Sat, 17 Oct 2026 01:58:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792201966;
-	bh=NPwlg68vom/2k1L+SuKMG8v4a0E3d3PLIOOfY4gmI/c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=e4X/eiZBdsTNlRz0aeltuH2MfViOeRX9D3vOX+4SFXm0C35Lu3T72YWtdl40wdlDu
-	 aCR1WbOQh6H9PNgBjyhKCnBxb9x4jAox6FxuGuMsCcwsTAAWyNEEyZOp6AkGrBPErl
-	 YtTwlr8zitHAbylSkjMYTXniJoXQZtPhPdSdVgqRjZTsglu1WYHM2ItQlXQns9MPn2
-	 pqfSt5uNpozj98vkCvKZ3hOoCZ4TyqbQW5RTJSQgA1Uz2pLnUPQiUeQckHMPFeXxto
-	 gfLawOwxoOTBrpgPiFeglpb7QsywHj8MmjYEuaLQrRAg0OkVrFj/k3AL5CpdiW+BYJ
-	 2xu1x86RSYV8A==
-Content-Type: multipart/mixed; boundary="===============0001666948501514510=="
+	s=k20260515; t=1792202282;
+	bh=X8p1B+OvOO8rykc8VeWKFleYYX8us6Z2nXv6gC/RvCw=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=L3mfPJQ8O0PDgoyovm96Z5FF+/mWsd0nG/7YCrFNyBW1aAV/AaIl6LrZDd0aP+q6l
+	 p2lC9bcm9BYjqWZzgPYD9cw2vCJd7cV77P3lyf7T9D8QadTTfHR0k152nTvRwUChQI
+	 kN5jOx8m3LjqExx/GdIM5WUJUtHiv1ABBJTBOLSVtgWETKGp2rWT3N1TNG1uENw30L
+	 itbKrgm6CDpoFN5ZA9clTj62zvGU8/KRf8MMA+E5EFWZxskdv6pQp3p3gOhwI6YIiA
+	 e0C7sho7S4siiG2O2Er2MZ3KgY7iB6ZeEvxscPXn66CFCLblZTnhBFTOJ4xziUWryo
+	 JZJ9+9MMH2icw==
+Message-ID: <sashiko-outbox-175168@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 23/38] bpf: Check the maps that sleepable
+ callbacks use
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261017012451.364800-15-alexei.starovoitov@gmail.com>
+References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
+ <20261017012451.364800-15-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 17 Oct 2026 01:58:01 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <c6e3cf4c8e650803377f900f18c4ffc183e5883781dcd2015c0898d598928f53@mail.kernel.org>
-In-Reply-To: <20261017012058.355787-5-alexei.starovoitov@gmail.com>
-References: <20261017012058.355787-5-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 04/38] bpf: don't hand out a linked element as extra element
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 01:52:45 +0000 (UTC)
 
---===============0001666948501514510==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: global subprog call under preempt/irq disable bypasses map RC=
+U check
+--
 
-> bpf: don't hand out a linked element as extra element
+commit 44c0901fdd3a21bde77f64657ef1a8f91005cd05
+Author: Josef Bacik <josef@toxicpanda.com>
 
-TL;DR:
-- htab_map_update_elem() fills the extra-elem slot before cancelling l_old's
-  fields; a nested update may reuse it, so a live element's timer could be
-  cancelled (not memory-unsafe)
-- comment style nit
+bpf: Check the maps that sleepable callbacks use
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 9d4791ee1741..923fec694747 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
+This commit restricts map helper calls in sleepable contexts (such as bpf_wq
+or bpf_task_work callbacks, or with inner maps) to maps that do not require=
+ an
+RCU read-side lock unless bpf_rcu_read_lock() is held or the helper runs in=
+side
+an RCU callback. It also adds bloom filters to the list of maps usable with=
+out
+RCU.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1f2a846ae415f..09173d1d66d39 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -10379,12 +10380,57 @@ bool bpf_allow_tail_call_in_subprogs(struct bpf=
+_verifier_env *env)
+>  	       bpf_jit_supports_subprog_tailcalls();
+>  }
+> =20
+> +/* May the map be used outside of an RCU read side critical section? */
+> +static bool map_needs_no_rcu(const struct bpf_map *map)
+> +{
+[ ... ]
+> +}
+> +
+>  static int check_map_func_compatibility(struct bpf_verifier_env *env,
+>  					struct bpf_map *map, int func_id)
+>  {
+>  	if (!map)
+>  		return 0;
+> =20
+> +	/*
+> +	 * check_map_prog_compatibility() asks the program.  That misses the
+> +	 * sleepable callback of another program, and an inner map.  They may
+> +	 * use any map under the RCU read lock.  Disabled preemption or
+> +	 * interrupts will not do: the maps ask for rcu_read_lock_held().
+> +	 */
+> +	if (in_sleepable(env) && !env->cur_state->active_rcu_locks &&
+> +	    !in_rcu_callback(env) && !map_needs_no_rcu(map)) {
+> +		verbose(env, "map '%s' needs bpf_rcu_read_lock() in sleepable context\=
+n",
+> +			map->name);
+> +		return -EINVAL;
+> +	}
+
+[Severity: High]
+Can this check be bypassed if a sleepable callback or sleepable program
+disables preemption or local IRQs and then calls a global subprogram that
+accesses the map?
+
+When a global subprogram is called in check_func_call(), the verifier recor=
+ds
+the calling context using in_sleepable_context(env):
+
+kernel/bpf/verifier.c:check_func_call() {
+	...
+	if (sub_aux->func_info_aux =3D=3D BPF_FUNC_GLOBAL) {
+		...
+		sub_aux->called[in_sleepable_context(env)] =3D true;
+		...
+	}
+}
+
+However, in_sleepable_context() checks in_rcu_cs(), which treats disabled
+preemption (active_preempt_locks) and disabled local IRQs (active_irq_id) a=
+s an
+RCU critical section even when active_rcu_locks is zero:
+
+kernel/bpf/verifier.c:in_rcu_cs() {
+	return env->cur_state->active_rcu_locks ||
+	       env->cur_state->active_preempt_locks ||
+	       env->cur_state->active_locks ||
+	       env->cur_state->active_irq_id ||
+	       !in_sleepable(env);
+}
+
+kernel/bpf/verifier.c:in_sleepable_context() {
+	return !in_rcu_cs(env) && !in_rcu_callback(env);
+}
+
+If a bpf_wq or bpf_task_work callback calls bpf_preempt_disable() or
+bpf_local_irq_save() without bpf_rcu_read_lock() and then calls a global
+subprogram, in_sleepable_context(env) returns false and sets
+sub_aux->called[0] =3D true.
+
+When do_check_subprogs() later verifies that global subprogram via
+do_check_common(env, i, 0), state->in_sleepable is initialized to false. In=
+side
+the global subprogram, in_sleepable(env) evaluates to false in
+check_map_func_compatibility(), allowing helpers such as bpf_map_lookup_ele=
+m()
+on a sockhash or an inner RCU-requiring map without holding rcu_read_lock()=
+ and
+triggering the WARN_ON_ONCE(!rcu_read_lock_held()) in __sock_hash_lookup_el=
+em()
+at runtime.
 
 [ ... ]
 
-> @@ -1459,11 +1465,14 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
->  	if (l_old) {
->  		hlist_nulls_del_rcu(&l_old->hash_node);
->  
-> -		/* l_old has already been stashed in htab->extra_elems, cancel
-> -		 * its reusable special fields before it is available for reuse.
-> +		/* l_old replaces the extra element that alloc_htab_elem() took,
-> +		 * cancel its reusable special fields before the next update on
-> +		 * this cpu reuses it.
->  		 */
+>
+>
+>
+>
 
-this isn't a bug, but this comment is rewritten completely and still keeps
-its text on the opening line.  Could the opening /* go on its own line, as
-is preferred in kernel/bpf/?
-
-  /*
-   * l_old replaces the extra element that alloc_htab_elem() took,
-   * cancel its reusable special fields before the next update on
-   * this cpu reuses it.
-   */
-
-> -		if (htab_is_prealloc(htab))
-> +		if (htab_is_prealloc(htab)) {
-> +			WRITE_ONCE(*this_cpu_ptr(htab->extra_elems), l_old);
->  			check_and_cancel_fields(htab, l_old);
-
-The new comment says l_old's special fields are cancelled before the next
-update on this cpu reuses it.  Is that what this code does?  The slot is
-filled first and the fields are cancelled afterwards:
-
-    WRITE_ONCE(*this_cpu_ptr(htab->extra_elems), l_old);
-    check_and_cancel_fields(htab, l_old);
-
-Can a nested update on this cpu run between these two calls?  That could be
-an NMI (perf_event program), or an fentry program on bpf_obj_cancel_fields(),
-which check_and_cancel_fields() calls after the slot is filled and which
-tools/testing/selftests/bpf/progs/htab_update.c already attaches an updating
-program to.
-
-If that nested htab_map_update_elem() updates an existing key k2 in another
-bucket, alloc_htab_elem() takes l_old from the slot.  copy_map_value() skips
-the special fields, so the new element still carries the bpf_timer/bpf_wq/
-task_work state of k1's replaced value.
-
-The nested update then links l_old into k2's bucket.  When the outer update
-resumes, check_and_cancel_fields(htab, l_old) runs:
-
-    bpf_obj_free_timer() -> bpf_async_cancel_and_free()
-
-on what is now k2's live element.
-
-Timers are allowed in hash maps used by tracing/perf_event/fentry programs
-(check_map_prog_compatibility() only restricts spin_lock and graph roots), so
-this looks reachable.  In that window bpf_timer_init() on k2 returns -EBUSY
-(__bpf_async_init() finds the stale async->cb), and any timer armed through
-k2 is cancelled and freed right after.  This doesn't look memory-unsafe, and
-it is narrower than before the patch, where the slot was filled in
-alloc_htab_elem().
-
-The order is also the reverse of free_htab_elem(), which cancels before
-pcpu_freelist_push().  Would swapping the two statements (cancel first, then
-WRITE_ONCE) make the comment true?  A nested update in that window would then
-fail with -EBUSY, like the rest of the window this patch closes.
-
-If the current order is intended, to keep the -EBUSY window short, should the
-comment say that cancellation can happen after a nested reuse?
-
-> +		}
->  	}
->  	htab_unlock_bucket(b, flags);
->  	if (l_old && !htab_is_prealloc(htab))
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38991548713
---===============0001666948501514510==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261017012058.3557=
+87-1-alexei.starovoitov@gmail.com?part=3D23
