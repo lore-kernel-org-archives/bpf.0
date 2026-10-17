@@ -1,21 +1,21 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF5D3AB5CA
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF062D0C7E
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792205543; cv=none; b=DHzUQxl2iIdxUiDfyUnYEObzqqbqv4yKAuWxWKuqfHsnvsib87TeSNtPUqDEgwW5traAp3iBZRzDuB0OU92EihPmZU0TifF2Gx7IGgrKAUXiT6VOqwY+Fvp7Fbl524hwqbgNqDlQ6xWpjjAJIFOE6P3iEeoNURipoSoTZnRhjtA=
+	t=1792205546; cv=none; b=ASKk6inRRsav/p4W632mGfW3AvqyXu3mp1kQrml3BlvN7XnUB5/IEYoQvJu0SpH9nQwjMvtLj/Dwf5e/VKmso7ULpFFxQB+x5Ad8FxNpN7sgw2snYeo6mCsCDwb6ndiLvnG8b8+eZQEKCAn3nOwk0T1uzVAZhhWta1/7XLKLgHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792205543; c=relaxed/simple;
-	bh=S6eGA0/hO6BgsTg3YDqChZAgnS4geayFhi4CAxLv2Ig=;
+	s=arc-20240116; t=1792205546; c=relaxed/simple;
+	bh=ZpZSuGgQttRkPAJePqRZDCkJhklzMp3WEGBbCJTQR4o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=huanrZbwsG4t+Hpi24QKEaJ6TwFHCUR/Sks8wGOXJfJSeryXdxM2l/k979sljMHe+A68zguM3IhjV9pcG7PNAaEBCHnPyEYItrq19eReBxc4Noxch7OE2Zd1QMWmvbRJlOYxNVNnxMXI9UrL6Wq6UEx+5WKcNsAk8YQLXkztiTU=
+	 MIME-Version; b=JdrHeltrZ9YYjyOsIsLwNBQT0X8RarDxve5AWzeB2epB1LMiCpcEHG/Ta1OGxzDWIuUqOoywo+yFarqKSmb0XFgFIj0eZAN1pA2kQIf10ZbIlhA51NDbVF/5eqUo7ucWhapTHmPrQ6MUy07WT9lYrZHbfTPSIzBV5EffkpP7PUw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 2E5A731B3AFECC; Fri, 16 Oct 2026 19:52:17 -0700 (PDT)
+	id 137FA31B3AFEB0; Fri, 16 Oct 2026 19:52:12 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v12 09/25] bpf: Do not use a private stack for a program that can unwind
-Date: Fri, 16 Oct 2026 19:52:17 -0700
-Message-ID: <20261017025217.1921560-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v12 08/25] bpf: Refuse a landing pad that does not resume
+Date: Fri, 16 Oct 2026 19:52:12 -0700
+Message-ID: <20261017025212.1921180-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261017025129.1914859-1-yonghong.song@linux.dev>
 References: <20261017025129.1914859-1-yonghong.song@linux.dev>
@@ -37,79 +37,218 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A private stack keeps its frame pointer in %r9 on x86-64, saved and
-restored around every call. An unwind skips the restore: a frame resumed
-at its pad then addresses its stack through a stale pointer, and one sent
-to its epilogue pops its callee-saved registers one slot off.
+A cleanup pad runs drop glue and calls bpf_unwind_resume(), so its frame
+returns and the unwind goes on. A catch pad carries on in its frame
+instead. Only the first is supported: bpf_unwind() rewrites every frame's
+return address in one pass, so a catch pad's caller would still resume
+at a pad.
 
-So force NO_PRIV_STACK for a program that has a table or can unwind, on
-every arch for now.
+Nothing in the record says which kind a pad is, but the code does: a
+cleanup pad reaches _Unwind_Resume, a catch pad a return. So the unwind
+marks the frame whose pad it enters, and refuses in the marked code:
+
+  refused                                  where
+  ---------------------------------------  ----------------------------
+  an exit: how a catch pad ends            the pad's own frame
+  a tail call: it replaces the frame       the pad's own frame
+  a BPF_LD_[ABS|IND]: it leaves through    the pad's own frame
+    an exit on a failed load
+  an indirect jump: nothing a compiler     the pad's own frame
+    frontend emits in a pad needs one
+  a bpf_unwind(), a call to a global       the pad and its callees
+    subprog that might_unwind
+  a bpf_unwind_resume() outside a pad      any program
+
+The first three are refused only in the pad's own frame: a subprog the
+pad calls may do them and still come back.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/exception.c | 10 ++++++++++
- kernel/bpf/exception.h |  1 +
- kernel/bpf/verifier.c  | 11 +++++++++++
- 3 files changed, 22 insertions(+)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/exception.c       | 58 ++++++++++++++++++++++++++++++++++++
+ kernel/bpf/exception.h       |  1 +
+ kernel/bpf/states.c          |  3 ++
+ kernel/bpf/verifier.c        | 16 +++++++++-
+ 5 files changed, 78 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index cc95d2ad015c..4ca943c37e3c 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -379,6 +379,7 @@ struct bpf_func_state {
+ 	bool in_async_callback_fn;
+ 	bool in_exception_callback_fn;
+ 	bool no_stack_arg_load;
++	bool in_pad;
+ 	/* For callback calling functions that limit number of possible
+ 	 * callback executions (e.g. bpf_loop) keeps track of current
+ 	 * simulated iteration number.
 diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
-index 43e01d0be44f..5945fdf5f75c 100644
+index 316ae9e4d7c7..43e01d0be44f 100644
 --- a/kernel/bpf/exception.c
 +++ b/kernel/bpf/exception.c
-@@ -183,6 +183,16 @@ void bpf_exc_mark_call_sites(struct bpf_verifier_env=
- *env)
- 	}
+@@ -226,6 +226,64 @@ bool bpf_is_unwind_resume_kfunc(const struct bpf_ins=
+n *insn)
+ 	       insn->imm =3D=3D bpf_unwind_resume_id[0];
  }
 =20
-+bool bpf_prog_may_unwind(const struct bpf_verifier_env *env)
++static bool unwinding(const struct bpf_verifier_state *state)
 +{
 +	u32 i;
 +
-+	for (i =3D 0; i < env->subprog_cnt; i++)
-+		if (env->subprog_info[i].might_unwind)
++	for (i =3D 0; i <=3D state->curframe; i++)
++		if (state->frame[i]->in_pad)
 +			return true;
 +	return false;
 +}
 +
- int bpf_exc_check_prog(struct bpf_verifier_env *env)
++int bpf_exc_check_insn(struct bpf_verifier_env *env, struct bpf_insn *in=
+sn)
++{
++	bool in_pad =3D cur_func(env)->in_pad;
++	u32 i =3D env->insn_idx;
++	const char *why =3D NULL;
++
++	if (unwinding(env->cur_state)) {
++		if (bpf_is_unwind_kfunc(insn)) {
++			verbose(env, "insn %u starts a second unwind while one is in flight\n=
+", i);
++			return -EINVAL;
++		}
++		if (bpf_pseudo_call(insn)) {
++			int subprog =3D bpf_find_subprog(env, i + insn->imm + 1);
++
++			if (bpf_subprog_is_global(env, subprog) &&
++			    env->subprog_info[subprog].might_unwind) {
++				verbose(env,
++					"insn %u calls global subprog %d, which can unwind while an unwind =
+is in flight\n",
++					i, subprog);
++				return -EINVAL;
++			}
++		}
++	}
++
++	if (!in_pad)
++		return 0;
++
++	if (insn->code =3D=3D (BPF_JMP | BPF_EXIT)) {
++		verbose(env,
++			"exit at insn %u ends a landing pad: a catch pad is not supported yet=
+, only cleanup pads that resume\n",
++			i);
++		return -EINVAL;
++	}
++	if (bpf_helper_call(insn) && insn->imm =3D=3D BPF_FUNC_tail_call)
++		why =3D "is a tail call, which replaces the frame";
++	else if (BPF_CLASS(insn->code) =3D=3D BPF_LD &&
++		 (BPF_MODE(insn->code) =3D=3D BPF_ABS || BPF_MODE(insn->code) =3D=3D B=
+PF_IND))
++		why =3D "is a BPF_LD_[ABS|IND], which can leave through the epilogue";
++	else if (insn_is_gotox(insn))
++		why =3D "is an indirect jump, which nothing a compiler frontend emits =
+in a pad needs";
++
++	if (!why)
++		return 0;
++
++	verbose(env, "insn %u %s, and is in a landing pad\n", i, why);
++	return -EINVAL;
++}
++
+ int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx)
  {
- 	int err;
+ 	u32 pad =3D env->insn_aux_data[idx].cleanup_pad;
 diff --git a/kernel/bpf/exception.h b/kernel/bpf/exception.h
-index 6d6550daa98e..ecbca25dabef 100644
+index 49d4685c297a..6d6550daa98e 100644
 --- a/kernel/bpf/exception.h
 +++ b/kernel/bpf/exception.h
-@@ -14,6 +14,7 @@ int bpf_exc_check_info(struct bpf_verifier_env *env, co=
-nst union bpf_attr *attr,
- 		       bpfptr_t uattr);
- void bpf_exc_mark_call_sites(struct bpf_verifier_env *env);
- int bpf_exc_check_prog(struct bpf_verifier_env *env);
-+bool bpf_prog_may_unwind(const struct bpf_verifier_env *env);
- int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u32 idx);
+@@ -18,5 +18,6 @@ int bpf_exc_pad_of_call(struct bpf_verifier_env *env, u=
+32 idx);
  bool bpf_is_unwind_kfunc(const struct bpf_insn *insn);
  bool bpf_is_unwind_resume_kfunc(const struct bpf_insn *insn);
+ int bpf_exc_check_callback(struct bpf_verifier_env *env, int subprog);
++int bpf_exc_check_insn(struct bpf_verifier_env *env, struct bpf_insn *in=
+sn);
+=20
+ #endif /* __BPF_EXCEPTION_H */
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index a3dd2f5712e7..93b5cc3a2f02 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -999,6 +999,9 @@ static bool func_states_equal(struct bpf_verifier_env=
+ *env, struct bpf_func_stat
+ 	if (!old->no_stack_arg_load && cur->no_stack_arg_load)
+ 		return false;
+=20
++	if (old->in_pad !=3D cur->in_pad)
++		return false;
++
+ 	for (i =3D 0; i < MAX_BPF_REG; i++)
+ 		if (((1 << i) & live_regs) &&
+ 		    !regsafe(env, &old->regs[i], &cur->regs[i],
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e73492144e29..9c512ed5d1dc 100644
+index fcf0d0fe0f2f..e73492144e29 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -5956,6 +5956,17 @@ static int check_max_stack_depth(struct bpf_verifi=
-er_env *env)
- 		}
- 	}
+@@ -15573,8 +15573,13 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
 =20
-+	/*
-+	 * A private stack keeps its frame pointer in %r9 on x86-64, restored
-+	 * by a pop after the call that an unwind skips. A frame resumed at a
-+	 * pad then addresses its stack through a stale pointer, and a frame
-+	 * sent to its epilogue instead pops its callee-saved registers one
-+	 * slot off. Do not use a private stack for any program that can
-+	 * unwind, on every arch for now.
-+	 */
-+	if (env->cleanup_info_cnt || bpf_prog_may_unwind(env))
-+		priv_stack_mode =3D NO_PRIV_STACK;
+ 	if (bpf_is_unwind_kfunc(insn))
+ 		return process_bpf_unwind(env, insn_idx_p);
+-	if (bpf_is_unwind_resume_kfunc(insn))
++	if (bpf_is_unwind_resume_kfunc(insn)) {
++		if (!cur_func(env)->in_pad) {
++			verbose(env, "resume at insn %d is not in a landing pad\n", insn_idx)=
+;
++			return -EINVAL;
++		}
+ 		return unwind_frames(env, NULL);
++	}
+=20
+ 	return 0;
+ }
+@@ -19721,6 +19726,7 @@ static int unwind_frames(struct bpf_verifier_env =
+*env, bool *do_print_state)
+ 			return err;
+ 		clear_caller_saved_regs(env, caller->regs);
+ 		mark_reg_unknown(env, caller->regs, BPF_REG_0);
++		caller->in_pad =3D true;
+ 		env->insn_idx =3D pad;
+ 		if (do_print_state)
+ 			*do_print_state =3D true;
+@@ -19795,6 +19801,7 @@ static int process_global_call_unwind(struct bpf_=
+verifier_env *env,
+ 	frame =3D cur_func(env);
+ 	clear_caller_saved_regs(env, frame->regs);
+ 	mark_reg_unknown(env, frame->regs, BPF_REG_0);
++	frame->in_pad =3D true;
+ 	env->insn_idx =3D pad;
+ 	*do_print_state =3D true;
+ 	return INSN_IDX_UPDATED;
+@@ -19809,6 +19816,7 @@ static int process_bpf_unwind(struct bpf_verifier=
+_env *env, int *insn_idx)
+ 		return unwind_frames(env, NULL);
+ 	clear_caller_saved_regs(env, frame->regs);
+ 	mark_reg_unknown(env, frame->regs, BPF_REG_0);
++	frame->in_pad =3D true;
+ 	*insn_idx =3D pad;
+ 	return INSN_IDX_UPDATED;
+ }
+@@ -20004,6 +20012,12 @@ static int do_check_insn(struct bpf_verifier_env=
+ *env, bool *do_print_state)
+ 	struct bpf_insn *insn =3D &env->prog->insnsi[env->insn_idx];
+ 	u8 class =3D BPF_CLASS(insn->code);
+=20
++	if (unlikely(env->cleanup_info_cnt)) {
++		err =3D bpf_exc_check_insn(env, insn);
++		if (err)
++			return err;
++	}
 +
- 	if (priv_stack_mode =3D=3D PRIV_STACK_UNKNOWN)
- 		priv_stack_mode =3D bpf_enable_priv_stack(env->prog);
-=20
+ 	switch (class) {
+ 	case BPF_ALU:
+ 	case BPF_ALU64:
 --=20
 2.53.0-Meta
 
