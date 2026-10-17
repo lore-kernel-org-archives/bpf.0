@@ -1,64 +1,64 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8544423507B
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12C033F8AD
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792200089; cv=none; b=JrNHOoKTvghTqlHLZRL2+sL748kPjxSOi4Lsv9Ezc6YjLtYcm9Q8zV0DPCo21AqIsKGw2+eRwV/7lFdXJBul+D5odHpTy0Qm4/Ax3Nl3ovwlU3pEz509fSZQuyNkHED8iV8VjlM1B/8RQb9u6Pvob0kLKMeUOIFFsawrvHPKFoI=
+	t=1792200299; cv=none; b=C0kBktcyciFejv1leQmYws1swl/EfSfF8xap5lMA7r9Ord4ESvfjE9UjyXjLWZn8pwrw3NHSGc1wze33KIzvcED67yhbDgPcR6Zcra3BELEmCIMAUn1pw/7n74TM6MXO81+aZojI0aT2+qxEr8xaHa1yqVY1IjIOas82pdxle3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792200089; c=relaxed/simple;
-	bh=eUvssHMgi9uWImtjEOl39Yas/phByQHZ1Ucu+8DH/Jg=;
+	s=arc-20240116; t=1792200299; c=relaxed/simple;
+	bh=uNhcfOVvO5EyhAEQvhBee7dTOn4Fd/svgh9qOCa/V5k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ONJU84C94EJmd0RQEK6YpNBzzuQvBKZoNzkw7O0IZL7Bg9g+aQW2UamCRnxsXTtqecc+HtQJGGABshRO4yMLqFffjhsUlPCmk9Qf2tLHW2MioP32+Hwx1cC/sydq/TRlRMNx8WD2zdYWHOmpp9hmfqbqxI6GD6Y7D9UsIYULgD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i8/eBX37; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=Ps1skn4qbz2QJgB8dak7fEmNwDYL7VSMp6TeSTwzFqIhdRDZYIyIcnJ36Qb/DJZrutqFkMnQHYsdTUMd5y4M0QPNFlIukCUT6jP36XJa9LNJaLIZi7/XBTxZIC6H2J8w5eTQ3ombkJJYtuOknO/8WcwEw4IxUQfC+F2c5FprWmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ho4kGXLM; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i8/eBX37"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ac91ac8924so345716a91.1
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:21:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ho4kGXLM"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e8f2c3ad6bso2177625ad.1
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:24:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792200088; x=1792804888; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792200296; x=1792805096; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qND9eoVfb23NMeltyU+Z7QueTQJ5SyLaDy+fo2vIfdI=;
-        b=i8/eBX376sQI2qnNsMQud1Yl0KWqUKrRADPpYborfswq7SCK0JTyE3fjZZeHMQdpao
-         cvGNOopvoOqapXTHLU6dVUKt1rG2rsxVgo6plkXIzxmX8SkufPZis10+gnySEXtA6ULB
-         B7m4tGDFq7gYy2A1M4cGB+KtLIBVUf76AdyZ0AFr9vCG9VMccxUc8sLfApquQEx7EZQJ
-         juo77h30bkn+IP/aBwPE2Ie4WeqclcIanAcKVTHlvdKvc4nvXd/FMfvhEtx92nCk496K
-         pMPGQ6J9vFyX6DadmvBM8nJdq0n25hZDVxW2lTXZe4pXBsZdC6Pw2i0w7OvPzutRMJJu
-         4bVA==
+        bh=fQ5o6CAkHnui4iB7g1UmuXabwwcLJv9UBtrsrOaE95E=;
+        b=Ho4kGXLMKTEtNjKCKRho59Vtva+xYm46uXAJt2nSVZINP8u/xjLa9/yBm1NbpGK9jN
+         WMAJXmkX4xd00HpJX55cjWHRfKfeR/ur5anIlOXNqxEO41dFjDyAxzRUUJPosHvBgG1o
+         SodsNZBexTZn3jmlE0RPrIx4m76E7/tWnWSFj4qGAmbGXWpvz9Dx9B/VIsk/PN6kPCSM
+         DCwq8o+9EKg3clcfVX19vP8w61f8BGq8WVf0cUbduAMtFTbZiqMcVNs0xuYxZMnS8vFb
+         cL4UWgDfrIUYmbVUU2+Ri+MctlOrM/TU36Nk9TYJ8y/OhTbqzglhCP8BUdOSACQgIVqh
+         KRzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792200088; x=1792804888;
+        d=1e100.net; s=20260707; t=1792200296; x=1792805096;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qND9eoVfb23NMeltyU+Z7QueTQJ5SyLaDy+fo2vIfdI=;
-        b=F4UA4iT0PRS+iWMIjxQbt23BX8nOW1KU2sjXUwadTeml8CxZ3zt/4G07Awg2irBNWF
-         aIH6prZKH1fLzkvXkpk3zK5W0GqPBEkbYnwa14BVMKGv/Cs1hhKp0gJ2QZ4jAYsNGent
-         bGUVXXZ9F+ADkY15e3eGX8mFTBanI8ecgpPKBV1bfU3P3HrHlCIKk5I1YrL35lIm38Yf
-         6FCiFZuOQK3PYdF2lOonOMyugI2IcDGj7w7eMsf9ad9RBI6yykfampsOWNQTywwH1ZuE
-         wH83acNNzy4kjaRhkjziCWQboiLYkeMVNom/VE5EA0+uxH1k0/JYLLM150QJ02U7WwpM
-         8kWg==
-X-Gm-Message-State: AFq9FYKqNCBuFTKEda8lL64ZsRDLlMpeo0Zcy/9TUya2tiqT4cOEDm+B
-	ssz+1a6t0L5bKKrcoSHoNYGMSJ6+cohO9dgNPnkJqLzByG/0HbwQEOiXCkVIGhW6
-X-Gm-Gg: AYBFou08oZCTRs68jV/iP/Z2L//tutN5w8EYU9/DkjBJG7qFalbp547+h8IACM5gXFJ
-	xDqE4Q0wwOC5DTzC4m2hnJOw7F/IaXGbP2qptZiaYVhokPNoVB+Yb5FC5Zijbuj1+Tx8A6c6Jf4
-	SMq4fx9gcuScQ52uIFbD1NfNjSH/ncdW6NjpSr7nRpAXscNzHZ3dGQ8IDy+sB5SQIJRZ9X1IKWs
-	YK8wZbiiXckBSWCY3D72twMTj62EUbh9CBdSa7lg6r4ou0+tzouKRtfsIT+Sd9e2nLialU03pFJ
-	BD4dxNvpPn789D/kqVneeFp5OicV333lLceAuR7QwPA/Gp4mXk2MeQkTgBKdIsb3Maxej0r4MBz
-	bAJ3kHo3JSMbMwVsmHUwSL/z3aIYObCuaVQBpAw2KzvPouUrzjYD6izVgJA9cco4a+HVNPNJP52
-	90W+9/cjwiUiF59JHA6yEtqjYDclvZd+K1K8IovOUWEl6ZeITQ1JYaxjO+GBg7ZEOzycayPT8Ny
-	wYpBf74hdlQrOHhYA6tzjQT75fAEV5mXQrjzpehFq2wIEv9+8bNXwY/EPht1OUuHUKUfpSpMObF
-	+dI+8Mx2yttX1otxNBLn6YI2u3ePING8JET0jMc1+PE=
-X-Received: by 2002:a17:90b:4d88:b0:3a8:cb54:e135 with SMTP id 98e67ed59e1d1-3acef134c30mr1497740a91.19.1792200087871;
-        Fri, 16 Oct 2026 18:21:27 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc9e47588sm3341060a91.1.2026.10.16.18.21.25
+        bh=fQ5o6CAkHnui4iB7g1UmuXabwwcLJv9UBtrsrOaE95E=;
+        b=ZYgylUhICjQ4FBaeE9L/gMuYjulCiQ+GRYE/E0CmpXM0EMke+WWJe7rjz1XtVNklGn
+         moXYV0O24CDglJkuHuph+oiRz9wvrD06br96EHUaJ/13BJH6BiDtRAhBo0cYdMUixoE1
+         FKtTHrFzPASX7gb/FgInKrPT+Lzu/2C6Ec5FKdc3b5gQpcQ6ZhoaY/a/iVAxAVRrkjl/
+         7RTBBpnC2k/JBkScJj5ikb9XgFnEzCD8mJ3P31EE/toIyA6vk37hCP2qUp72lVvpx3u1
+         +fWpuWEbadz4kA/Jgycnar5G+6O2FfrDmN7olTSFLHk5y5w41+DpxSnw/A23KWZQZ6rn
+         w7EQ==
+X-Gm-Message-State: AFq9FYJ97jHqAHNzTUqD5VQz8vWU/J5EL1p2ONG17h6ci6Gs+cMMfk9y
+	ThYsh8DpJb82v/PLWr7SgddIzA5AXbyWmR/4yLInK6DBfnf4m68sYoG9Ena3qEyQ
+X-Gm-Gg: AYBFou2ZYMNQVZ5NBVjDOlp0SMlKrSBt11nne+A1eVOUuHbY81dzFy0K4bVVz+mj5ws
+	wd+Xlrdwh8aEpCNvnQUlCcu1X6uEDS4nXpFOK1TugSPEU9k8WcqXD2rzdHjxCqM56h99tS9ajqr
+	KWNrDzM+uAFum07YjBybXjFpoBhBvA+rHceRWJnGKzRLHl1VV5r/hhV9SjsrO4ivsoYHzXP823b
+	AEQzFgrvKyUW2I6VfwX8T/5ixt7pbb4VjcjAblrXiKjOzhAfiEVq0qwP4VFqXxhej/xl3IJ3Mlj
+	MBWh14CzTq5S0W80pM13+7/odpDt3YRkZ4hzVU45FLm8QQ7gY4eq908U9tpu02SD/58kar/ISp9
+	SA0b2onNlxX2FxTXz0qj+QHrNDJ1IQWCcCVmHpRStTrVfeXBFpEjScokHWwmVnuuHivEMO/U0WJ
+	S/n0hQjn9gyNOyYyKiRhkXVkO4Hvk/SjdVH+r2BzHfNUUKmLM2DL+4n7tF27COC559hOSQ2Kww5
+	wy7UUjtAoVyH9w9j1n+S/wMSdDtKVJ02tUR+0juGKkkWiS65LB1ETegv0voEEY1OS15G77JomXb
+	vSeAPSXeZq9acldXM6AKa4H5iSSf5OvaXnhZvDSIaLPB
+X-Received: by 2002:a17:902:e544:b0:2db:3b35:1ac6 with SMTP id d9443c01a7336-2e9a6833d88mr14646305ad.5.1792200296138;
+        Fri, 16 Oct 2026 18:24:56 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e834ef9sm17723785ad.42.2026.10.16.18.24.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 18:21:25 -0700 (PDT)
+        Fri, 16 Oct 2026 18:24:54 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next 08/38] bpf: don't let bpf_skb_adjust_room() use up the MSS
-Date: Sat, 17 Oct 2026 01:20:28 +0000
-Message-ID: <20261017012058.355787-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 09/38] bpf: Read the probe of a perf event under event_mutex
+Date: Sat, 17 Oct 2026 01:24:22 +0000
+Message-ID: <20261017012451.364800-1-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
 References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
@@ -84,53 +84,141 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-When bpf_skb_adjust_room() grows a TCP GSO packet without
-BPF_F_ADJ_ROOM_FIXED_GSO, gso_size is lowered by the number of bytes
-added. Nothing looks at how large it is.
+For a perf event on a kprobe or uprobe event which was made in tracefs,
+bpf_get_kprobe_info() and bpf_get_uprobe_info() look the probe up by
+name in the list of dynamic events, and hand a pointer to its symbol or
+file name back to the caller. None of the callers holds event_mutex.
 
-gso_size is the size of the segments the peer has sent if the packet
-comes out of GRO, and what the sender has written into the virtio header
-if it comes from a tun device or a packet socket. If it equals len_diff
-the result is 0, and a packet of up to 64 KB is no GSO packet any more. If
-it is smaller, the 16 bit value wraps around.
+The perf event keeps its trace event alive, nothing else. Other dynamic
+events are removed from the list and freed during the walk. And a probe
+which shares its event with other probes can be deleted while the event
+is in use, so even the probe which is found can be freed, together with
+the string, before the caller has measured and copied it. The result is
+a use-after-free in the walk, in strlen() and in the copy to user space,
+or a NULL pointer dereference.
 
-One less than len_diff gives GSO_BY_FRAGS. skb_segment() then takes the
-length of each segment from the frag_list. A packet with more than 64 KB
-of payload gets that far, and one from a tun device has no frag_list:
+The readers are BPF_OBJ_GET_INFO_BY_FD and fdinfo of a perf link, for
+whoever holds a descriptor of the link, and BPF_TASK_FD_QUERY. The other
+side is anybody who may write to dynamic_events, kprobe_events or
+uprobe_events.
 
-  BUG: KASAN: null-ptr-deref in skb_segment+0xcf1/0x1a90
-  BUG: kernel NULL pointer dereference, address: 0000000000000070
-   tcp_gso_segment+0x1be/0x9f0
-   inet_gso_segment+0x288/0x740
-   inet_gso_segment+0x288/0x740
-   skb_mac_gso_segment+0x179/0x2e0
+Take event_mutex in bpf_get_perf_event_info() and give the caller a copy
+of the name, which it has to free.
 
-Refuse to grow such a packet, with the error that other packets which
-cannot be adjusted get.
-
-Fixes: 2be7e212d541 ("bpf: add bpf_skb_adjust_room helper")
+Fixes: 41bdc4b40ed6 ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/filter.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ kernel/bpf/syscall.c     | 17 +++++++++++------
+ kernel/trace/bpf_trace.c | 13 +++++++++++++
+ 2 files changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ba536be2915f..a18702f89feb 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3612,6 +3612,11 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
- 			return -ENOTSUPP;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 654f896af265..4a9f28131791 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4020,19 +4020,19 @@ static int bpf_perf_link_fill_common(const struct perf_event *event,
+ 		*ulenp = 1;
+ 	}
+ 	if (!uname)
+-		return 0;
++		goto out;
+ 
+ 	if (buf) {
+ 		err = bpf_copy_to_user(uname, buf, ulen, len);
+-		if (err)
+-			return err;
+ 	} else {
+ 		char zero = '\0';
+ 
+ 		if (put_user(zero, uname))
+-			return -EFAULT;
++			err = -EFAULT;
+ 	}
+-	return 0;
++out:
++	kfree_const(buf);
++	return err;
+ }
+ 
+ #ifdef CONFIG_KPROBE_EVENTS
+@@ -4089,6 +4089,7 @@ static void bpf_perf_link_fdinfo_kprobe(const struct perf_event *event,
+ 		   name, offset, missed, addr,
+ 		   type == BPF_FD_TYPE_KRETPROBE ?  "kretprobe" : "kprobe",
+ 		   event->bpf_cookie);
++	kfree_const(name);
+ }
+ #endif
+ 
+@@ -4142,6 +4143,7 @@ static void bpf_perf_link_fdinfo_uprobe(const struct perf_event *event,
+ 		   name, offset, ref_ctr_offset,
+ 		   type == BPF_FD_TYPE_URETPROBE ?  "uretprobe" : "uprobe",
+ 		   event->bpf_cookie);
++	kfree_const(name);
+ }
+ #endif
+ 
+@@ -4240,6 +4242,7 @@ static void bpf_tracepoint_link_show_fdinfo(const struct perf_event *event,
+ 		   "event_type:\t%s\n"
+ 		   "cookie:\t%llu\n",
+ 		   name, "tracepoint", event->bpf_cookie);
++	kfree_const(name);
+ }
+ 
+ static void bpf_probe_link_show_fdinfo(const struct perf_event *event,
+@@ -5763,11 +5766,13 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+ 		err = bpf_get_perf_event_info(event, &prog_id, &fd_type,
+ 					      &buf, &probe_offset,
+ 					      &probe_addr, NULL);
+-		if (!err)
++		if (!err) {
+ 			err = bpf_task_fd_query_copy(attr, uattr, prog_id,
+ 						     fd_type, buf,
+ 						     probe_offset,
+ 						     probe_addr);
++			kfree_const(buf);
++		}
+ 		goto put_file;
  	}
  
-+	/* The MSS is lowered by len_diff: something has to be left of it. */
-+	if (skb_is_gso(skb) && !(flags & BPF_F_ADJ_ROOM_FIXED_GSO) &&
-+	    skb_shinfo(skb)->gso_size <= len_diff)
-+		return -ENOTSUPP;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 5465e7eba238..304b426bd44d 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2209,6 +2209,7 @@ int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_raw_tp_link *
+ 	return tracepoint_probe_unregister(btp->tp, (void *)btp->bpf_func, link);
+ }
+ 
++/* On success the caller releases *buf with kfree_const() */
+ int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id,
+ 			    u32 *fd_type, const char **buf,
+ 			    u64 *probe_offset, u64 *probe_addr,
+@@ -2218,6 +2219,12 @@ int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id,
+ 	struct bpf_prog *prog;
+ 	int flags, err = 0;
+ 
++	/*
++	 * The list of dynamic events is walked, and a probe which has siblings
++	 * can be deleted, with its strings, while its event is in use.
++	 */
++	guard(mutex)(&event_mutex);
 +
- 	ret = skb_cow_head(skb, meta_len + len_diff);
- 	if (unlikely(ret < 0))
- 		return ret;
+ 	prog = event->prog;
+ 	if (!prog)
+ 		return -ENOENT;
+@@ -2258,6 +2265,12 @@ int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id,
+ #endif
+ 	}
+ 
++	if (!err && *buf) {
++		*buf = kstrdup_const(*buf, GFP_KERNEL);
++		if (!*buf)
++			err = -ENOMEM;
++	}
++
+ 	return err;
+ }
+ 
 -- 
 2.55.0
 
