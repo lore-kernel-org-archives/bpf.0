@@ -1,64 +1,64 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2A93AD538
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC70B3ACF0E
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792255186; cv=none; b=hgqc7wyC2++UgcuehUosmWD2nQ/FNA6ttVQ0Yyqah6UX6MxcFQjcRtIMxyJ0L26xKz2Mm5PzOZiamTcyD5C+Oo0bFEF0sc6DiY3fe5DqPVEimVga1X6ZzFS5pLo2FpGzdeXzJV1De32AI/k8B05F4lsEqp75fywwFo8IQDffsOo=
+	t=1792255192; cv=none; b=fqwt6+MXBmBua8KHcv0oUr4DGYOK78nGMLc5sUPnnxxkZmXSvcBKpv5SM/p/7QuXKnjVQPx3BQgl5SstY9pa4iJVWkaUKVYBytfbJ33ARWJT8nS5dDoENp9yTq9f8sf4Hl9Ks0nKbnhp8HuyR8D70n34muOZK0P61dTyJ2GKT7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792255186; c=relaxed/simple;
-	bh=Wci1AUQRP0O6zqFQ6ZZ+EeXSWDbKK0xYZRP4naVP85E=;
+	s=arc-20240116; t=1792255192; c=relaxed/simple;
+	bh=Ut+NdclNGKz5bIYdrV1R2RnVE2fF5BOTrGLUGrVbPAc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jDRC5LOqkLuyUOKBAEUguvAjbI1NKRLzSgcEiTsATvlicqE0NyvWP8fIBsSJT9hxqXUQWCSvPmJr/f4cNWM30HJVCqCrs6tc6JOwE9mBdb7SG/tWnt4iqEOQSLHmApASUsptIOmrhRRot4+N8JxdCo9tMjK0ypMwYEGC+EAmnK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XaswrGnn; arc=none smtp.client-ip=209.85.215.174
+	 MIME-Version; b=BvUrixptfapvpy8Ohx/MSSEprzshAXO/wuW6qyVBUE/7YJfA3Mq7YN1CKU2U68Tm8ES/EY6xY4gxi8kwIN3yHMCJcNiJLeynMII7n/S1uNGNlXCg/5CMiDV4gnF6Z4SploNkqTLx42DWVzNOwVJcYC2jKRBfZLN10AknEM66cmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yf8W2zlT; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XaswrGnn"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc4dbcf2b85so371947a12.3
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:39:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yf8W2zlT"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ac451e128cso565764a91.1
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792255184; x=1792859984; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792255190; x=1792859990; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IHfvh1ufufjL6pvwM565xof/cBXe43GsfSLo8UXkYQY=;
-        b=XaswrGnnsqsgR7/qQFZjXPHFa+h8LK6UOiZ18kk/zNdzPyiRqc7Oa2Bm7hgCo5UGLp
-         RssE6NdY72CoW0kOG5RBhSML5FgwQAWILlmf9VZMYoFW6BArL5NCx5LDI2WQj1L/OkN2
-         fC3mb+c4ca3KsdLRGQYXM1g4CEeSF5+Qy7O9t/6HhBt69/5d6gYxtbz3obkSq3toXOGb
-         SocetpALZOayKmA3MXtgT1LdhRzGF+hHnIoQWzjw4cdqObJZrIRz2XIGIIZQSiQQkiuV
-         ZSuL/+62u7tT7qmaS4IB0CdyG73na20p85/s8PXE0pVW54RvIHndtmCl5ZPVF9pb8FLO
-         gpQA==
+        bh=Ky0pnVFs2cki3JnG83UpHBKIb6uY7pCVzDIYJIyzmjE=;
+        b=Yf8W2zlT8niiMhj4Ei6Ea2RVaKBMdm6RLAjLhA/2t+ptd0tDkAA0KkPpjx6IZuaEbh
+         q8pHdxXsW2YdYP6WQCi75yXbMxP7z4Zp94DqvjmWITPmCie4nURIkHCo7hLNJJ+PCHVd
+         D/hefzcyVNizQ78LY4mcUY8fe+focZ3XQcuUX6KmKs2jXuebtX/kH3RwdZzJubPrn1eZ
+         lqqUEGtrcwzq+ikUx1JJ/nttYk1BfwY+Ylq0RrTNXsJGlb8fVc/9aESwYAxAxWjNMNrM
+         nyAgy0uMe5dDM4AUU1TG2bY/hF+pnpc37HzMffOQx0UF5Fcosi1KDJWVGsX+R/+K88sO
+         82dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792255184; x=1792859984;
+        d=1e100.net; s=20260707; t=1792255190; x=1792859990;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IHfvh1ufufjL6pvwM565xof/cBXe43GsfSLo8UXkYQY=;
-        b=BDIkHBiuAYa6jFKLAmF+1OO2UhxsIHiFmxMbKidMGsHjGYuXQU2pOFtYcdLaeYuFHf
-         UX5/8slAMbeXHtCJ9OBpve+gAiwQZiIPoNgve2UH24wE8RwmnUzvoaMkyHDR5xlf22LW
-         /UfYgVi/BHbvmNtm7wSW33aC8zSlCXvzEyQV5J5p38JXIbOEBYbfjrxQLq72Q+i3xCTp
-         GyGOBHIs8eEpD0pvmBAXEPNdbKwcdj7N1JTp2FHGvMxXHuO124PHyOu0H9hLAzEM0Ycn
-         qj+rBw9CVP8KxDv6zJjr/Dc3iNH+grA7PLoUVZhEshLV66WOJOxIIvTFU78oKB+lOPhN
-         R7tw==
-X-Gm-Message-State: AFq9FYL7ocYgIFlXJL9muCljSJqemsWJhmqFfmLGV5WJxPUuqqtSQ9dZ
-	Pgv9/lTGE4uPL9DXttZsFSsG+wzLFRo3kEu6032yyFyxFuB3BpcO1Ry0UQwpBw==
-X-Gm-Gg: AYBFou29yTOTnEvImMBnZ8vvQZ26/W7751m6xnvaCKPD0bqVOfheRBVOCvyExDD7oMJ
-	rPhe391YIvy27OlsiYFiQI37DeLxuPw/hpYGEmyE7l3hAsDRowSjqH/nObGA8JvKyzS2zWzh9ZC
-	AoxeHgTAzDgQONyExShRgpc6B4Z01qz/5GEWE0EkAK8ovBw9ZxqVLRLl8U8mGqwB87mJ1PjzwdT
-	6HPIhd5F05Lql6m+cN3YrYag2NCLPSUHJOVVPA6BC3rlhKM7lb4MtG9rIR3b851F/vwR6d6pau2
-	A2O9+EE0xYBXpSRZFWbpnqRB04uBR5HXONFet8fPpUNqB1gZwE0wtycDxIhvxI8+VirCnnV0fgY
-	Gr6YJT8dUQaHPvJYEgfSlHeyZdgOLYRaPo4Az9po49gunMkZ65aR1UQY8lygGk9pl+rXxDGy04b
-	spvAFdmEGVyiGRCdmhvaXTNbr8jIhWPLA0/Vc+7N9NCjy+qGtm0wfxHmoPYszRywyMqvfs5nnyT
-	jQB+jPwKMSYXQDoLwxNiJa0aaqXKpWcGWZN3lP1Y+edwH4rTsY8MLi2OdxXkRTI9RGAc/c15yp1
-	0vPeUU1pxGo01j/I6P0qJ7PtP1TrQ779lTwGNiz40xyc
-X-Received: by 2002:a05:6a20:2448:b0:3e0:b445:560d with SMTP id adf61e73a8af0-3e225f0e715mr2265200637.21.1792255184204;
-        Sat, 17 Oct 2026 09:39:44 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd654a3a592sm2514128a12.30.2026.10.17.09.39.43
+        bh=Ky0pnVFs2cki3JnG83UpHBKIb6uY7pCVzDIYJIyzmjE=;
+        b=ZKMiv1o+r/VrYbVWKlpkGiB7PJc6QyRb3EjowMOmytCfvi2b7ctXBnvSp+NFs4VO0e
+         CFbHhoH/Grtw4/WyOHZ4+JbJVSFwEXmuoEAdMW+/KcwfVKlqFycz/uEDmufXmOAyoSSS
+         V0mlqK6D4H9Jok58v0PGwdHQb13lAKEMLd+yqcwZ3Ycj5Bx0FweJbzFP2ypuRxJPDaXT
+         h3AsWkDv1EoO2ASkCrb8YA/bNoyORPrff5aIv5dO4Wm2AGhCcxwTmqnG2mN6X5uX/CrA
+         /sGKKqBau9+8a9gR5YLm6msNL5ZSyGF06jmCdTrcxwbDkKNfvR2l3HEkdrl34Jn0b3W8
+         /y/w==
+X-Gm-Message-State: AFq9FYJh7Jdaoo4KBl5ynXyOx86ywd2ohYz0blWtx9mwIvKbJbPoSSPF
+	ARiXagPCWJNN77NsDLbkMG6Xy0ZJGNXoOkpdAOOeJLO3vlv9sZaNI36RoSjKZA==
+X-Gm-Gg: AYBFou0wYo0+GIMH5F590sST7RkzireDnyG5bTVmrT1BvXICpEYHuxCvKibI0WTisFe
+	u2PUe2GTR/vplpu5VaORYsfDJzFbYtm8RKjXvoSEWRk6jf9ykQnzKTTcCetiySzrFpQgeXHXTz3
+	az+vHYcHnhxDztqmf98+GkgKMiRTQMy2lUGP3qs5wn1f13F1vT5/DQFUK1zVK85GA4+NybeIP03
+	OgElqMO9WCuHqP43+5cgAmladnJ+xegko3iA6jeuPVDUUcVNamgEFzV2OXW8zqPImrxZ6B5E7nm
+	ChY6TKKmAUE1eRgUrQI+mDwTQ44Qjb3y5t7arZr1FXdhPTXA3/PleFeVl35murJCUGMda4y+xMb
+	/FtB7Ma2aciucnzDjjvzQ33bUmz6O3Q+gVmxIgeJoBVg2eEyaWibf7zxPmv/luufgfJc6OxtK2Q
+	Y6l96npbdFIb/J9oZ+lcSq6DAZ5Yx5bec8Gc/oa7YeA00g1Unpab/9pWQDurtUgrriXpyeF+6pR
+	+TwcRTf9pLiBQKxlYZzS07y1/PTFQ+fvt1A8brKzebIBXilNj3wPXZmmZoEpXHf4cFetuLdQ25k
+	+bOOI6HGjbouC6o1VDB4PFhQwcZOC6xZjsHawg9Mvi9+
+X-Received: by 2002:a17:90b:3851:b0:3ac:9e76:aa93 with SMTP id 98e67ed59e1d1-3acee2939b1mr2314386a91.7.1792255190138;
+        Sat, 17 Oct 2026 09:39:50 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac947928b4sm13322867a91.11.2026.10.17.09.39.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 09:39:43 -0700 (PDT)
+        Sat, 17 Oct 2026 09:39:49 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v2 19/43] bpf: Check the new program of an iterator link update
-Date: Sat, 17 Oct 2026 16:37:21 +0000
-Message-ID: <20261017163745.3341787-20-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 20/43] bpf: Fix stale offload->prog pointer after realloc
+Date: Sat, 17 Oct 2026 16:37:22 +0000
+Message-ID: <20261017163745.3341787-21-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
 References: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
@@ -84,246 +84,111 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-The bpf_map_elem, bpf_sk_storage_map and sockmap iterators hand the key
-and the value of an element to the program as buffers.  The verifier only
-records how far a program reaches into them, and ->attach_target()
-compares that with the key and value size of the map.
+bpf_prog_realloc() moves a program that the rewrites of the verifier make
+outgrow its pages.  It updates aux->prog, but not the offload->prog of a
+device-bound program.  When the device is unregistered,
+__bpf_offload_dev_netdev_unregister() hands the stale pointer to
+__bpf_prog_offload_destroy(), which faults on the freed program:
 
-bpf_iter_link_replace() does not.  BPF_LINK_UPDATE installs a program that
-an attach refuses with -EACCES, and the program then reads, and for a
-value writes, behind every element that the iterator visits.  It takes
-CAP_BPF and CAP_PERFMON, or a BPF token.
+  BUG: unable to handle page fault for address: ffffc90000071050
+  RIP: 0010:__bpf_prog_offload_destroy+0x3f/0x310
 
-Split the test out of the three ->attach_target() and ask it, as
-->check_prog(), for the new program of an update as well.  Targets without
-such a test take every program of their kind, as before.
+It takes the right to load a device-bound XDP program, CAP_BPF and
+CAP_NET_ADMIN or a BPF token, and a device that can be removed.
 
-Fixes: d6c4503cc296 ("bpf: Implement bpf iterator for hash maps")
-Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
-Fixes: 0365351524d7 ("net: Allow iterating sockmap and sockhash")
+Commit a1aa9ef47c29 ("bpf: Fix stale offload->prog pointer after constant
+blinding") repaired the other place that replaces a program.  Do the same
+here.
+
+Nothing keeps the device while a program is loaded, so it can also be
+unregistered at that very moment.  That frees the offload, and it may have
+read offload->prog already when the old copy of the program is freed.  In
+both places update the pointer under bpf_devs_lock, before the old copy
+goes.
+
+Fixes: ab3f0063c48c ("bpf: offload: add infrastructure for loading programs for a specific netdev")
+Fixes: 2b3486bc2d23 ("bpf: Introduce device-bound XDP programs")
+Fixes: a1aa9ef47c29 ("bpf: Fix stale offload->prog pointer after constant blinding")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h       |  4 +++
- kernel/bpf/bpf_iter.c     |  7 ++++++
- kernel/bpf/map_iter.c     | 51 ++++++++++++++++++++++-----------------
- net/core/bpf_sk_storage.c | 17 ++++++++++---
- net/core/sock_map.c       | 17 ++++++++++---
- 5 files changed, 66 insertions(+), 30 deletions(-)
+ include/linux/bpf.h  |  5 +++++
+ kernel/bpf/core.c    |  4 ++--
+ kernel/bpf/offload.c | 16 ++++++++++++++++
+ 3 files changed, 23 insertions(+), 2 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 46d325aa178e..3fb3c7d22d99 100644
+index 3fb3c7d22d99..0de5947dceaa 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -3128,6 +3128,8 @@ typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
- 					union bpf_iter_link_info *linfo,
- 					struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_detach_target_t)(struct bpf_iter_aux_info *aux);
-+typedef int (*bpf_iter_check_prog_t)(const struct bpf_prog *prog,
-+				     const struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_show_fdinfo_t) (const struct bpf_iter_aux_info *aux,
- 					struct seq_file *seq);
- typedef int (*bpf_iter_fill_link_info_t)(const struct bpf_iter_aux_info *aux,
-@@ -3146,6 +3148,8 @@ struct bpf_iter_reg {
- 	const char *target;
- 	bpf_iter_attach_target_t attach_target;
- 	bpf_iter_detach_target_t detach_target;
-+	/* may the program run on what the link is attached to? */
-+	bpf_iter_check_prog_t check_prog;
- 	bpf_iter_show_fdinfo_t show_fdinfo;
- 	bpf_iter_fill_link_info_t fill_link_info;
- 	bpf_iter_get_func_proto_t get_func_proto;
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index fc3a75684ef7..4668c1696a08 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -436,6 +436,13 @@ static int bpf_iter_link_replace(struct bpf_link *link,
- 		goto out_unlock;
- 	}
+@@ -3792,6 +3792,7 @@ int bpf_dev_bound_kfunc_check(struct bpf_verifier_log *log,
+ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id);
+ int bpf_prog_dev_bound_init(struct bpf_prog *prog, union bpf_attr *attr);
+ int bpf_prog_dev_bound_inherit(struct bpf_prog *new_prog, struct bpf_prog *old_prog);
++void bpf_prog_dev_bound_moved(struct bpf_prog *prog);
+ void bpf_dev_bound_netdev_unregister(struct net_device *dev);
  
-+	if (iter_link->tinfo->reg_info->check_prog) {
-+		ret = iter_link->tinfo->reg_info->check_prog(new_prog,
-+							     &iter_link->aux);
-+		if (ret)
-+			goto out_unlock;
-+	}
-+
- 	old_prog = xchg(&link->prog, new_prog);
- 	bpf_prog_put(old_prog);
+ static inline bool bpf_prog_is_dev_bound(const struct bpf_prog_aux *aux)
+@@ -3853,6 +3854,10 @@ static inline int bpf_prog_dev_bound_inherit(struct bpf_prog *new_prog,
+ 	return -EOPNOTSUPP;
+ }
  
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index 2077d46d167c..16537356c1a2 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -97,13 +97,29 @@ static struct bpf_iter_reg bpf_map_reg_info = {
- 	.seq_info		= &bpf_map_seq_info,
- };
- 
-+static int bpf_iter_map_check_prog(const struct bpf_prog *prog,
-+				   const struct bpf_iter_aux_info *aux)
++static inline void bpf_prog_dev_bound_moved(struct bpf_prog *prog)
 +{
-+	const struct bpf_map *map = aux->map;
-+	u32 value_size = map->value_size;
-+
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
-+	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
-+		value_size = round_up(value_size, 8) * num_possible_cpus();
-+
-+	if (prog->aux->max_rdonly_access > map->key_size ||
-+	    prog->aux->max_rdwr_access > value_size)
-+		return -EACCES;
-+
-+	return 0;
 +}
 +
- static int bpf_iter_attach_map(struct bpf_prog *prog,
- 			       union bpf_iter_link_info *linfo,
- 			       struct bpf_iter_aux_info *aux)
+ static inline void bpf_dev_bound_netdev_unregister(struct net_device *dev)
  {
--	u32 key_acc_size, value_acc_size, key_size, value_size;
- 	struct bpf_map *map;
--	bool is_percpu = false;
- 	int err = -EINVAL;
+ }
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 642f0ab8eb2d..69285abcf594 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -269,6 +269,7 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
+ 		memcpy(fp, fp_old, fp_old->pages * PAGE_SIZE);
+ 		fp->pages = pages;
+ 		fp->aux->prog = fp;
++		bpf_prog_dev_bound_moved(fp);
  
- 	if (!linfo->map.map_fd)
-@@ -123,30 +139,20 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 		goto put_map;
- 	}
- 
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY)
--		is_percpu = true;
--	else if (map->map_type != BPF_MAP_TYPE_HASH &&
--		 map->map_type != BPF_MAP_TYPE_LRU_HASH &&
--		 map->map_type != BPF_MAP_TYPE_ARRAY &&
--		 map->map_type != BPF_MAP_TYPE_RHASH)
-+	if (map->map_type != BPF_MAP_TYPE_PERCPU_HASH &&
-+	    map->map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH &&
-+	    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY &&
-+	    map->map_type != BPF_MAP_TYPE_HASH &&
-+	    map->map_type != BPF_MAP_TYPE_LRU_HASH &&
-+	    map->map_type != BPF_MAP_TYPE_ARRAY &&
-+	    map->map_type != BPF_MAP_TYPE_RHASH)
- 		goto put_map;
- 
--	key_acc_size = prog->aux->max_rdonly_access;
--	value_acc_size = prog->aux->max_rdwr_access;
--	key_size = map->key_size;
--	if (!is_percpu)
--		value_size = map->value_size;
--	else
--		value_size = round_up(map->value_size, 8) * num_possible_cpus();
--
--	if (key_acc_size > key_size || value_acc_size > value_size) {
--		err = -EACCES;
-+	aux->map = map;
-+	err = bpf_iter_map_check_prog(prog, aux);
-+	if (err)
- 		goto put_map;
--	}
- 
--	aux->map = map;
- 	return 0;
- 
- put_map:
-@@ -179,6 +185,7 @@ static const struct bpf_iter_reg bpf_map_elem_reg_info = {
- 	.target			= "bpf_map_elem",
- 	.attach_target		= bpf_iter_attach_map,
- 	.detach_target		= bpf_iter_detach_map,
-+	.check_prog		= bpf_iter_map_check_prog,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
- 	.ctx_arg_info_size	= 2,
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index ea22ec5ef5b1..72b9ee4c98de 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -919,6 +919,15 @@ static void bpf_iter_fini_sk_storage_map(void *priv_data)
- 	bpf_map_put_with_uref(seq_info->map);
+ 		/* We keep fp->aux from fp_old around in the new
+ 		 * reallocated structure.
+@@ -1558,8 +1559,7 @@ void bpf_jit_prog_release_other(struct bpf_prog *fp, struct bpf_prog *fp_other)
+ 	 * know whether fp here is the clone or the original.
+ 	 */
+ 	fp->aux->prog = fp;
+-	if (fp->aux->offload)
+-		fp->aux->offload->prog = fp;
++	bpf_prog_dev_bound_moved(fp);
+ 	bpf_prog_clone_free(fp_other);
  }
  
-+static int bpf_iter_map_check_prog(const struct bpf_prog *prog,
-+				   const struct bpf_iter_aux_info *aux)
-+{
-+	if (prog->aux->max_rdwr_access > aux->map->value_size)
-+		return -EACCES;
-+
-+	return 0;
-+}
-+
- static int bpf_iter_attach_map(struct bpf_prog *prog,
- 			       union bpf_iter_link_info *linfo,
- 			       struct bpf_iter_aux_info *aux)
-@@ -936,12 +945,11 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
- 		goto put_map;
- 
--	if (prog->aux->max_rdwr_access > map->value_size) {
--		err = -EACCES;
-+	aux->map = map;
-+	err = bpf_iter_map_check_prog(prog, aux);
-+	if (err)
- 		goto put_map;
--	}
- 
--	aux->map = map;
- 	return 0;
- 
- put_map:
-@@ -972,6 +980,7 @@ static struct bpf_iter_reg bpf_sk_storage_map_reg_info = {
- 	.target			= "bpf_sk_storage_map",
- 	.attach_target		= bpf_iter_attach_map,
- 	.detach_target		= bpf_iter_detach_map,
-+	.check_prog		= bpf_iter_map_check_prog,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
- 	.ctx_arg_info_size	= 2,
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 38df84284328..057e2f3c0265 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1933,6 +1933,15 @@ int sock_map_link_create(const union bpf_attr *attr, struct bpf_prog *prog)
- 	return ret;
+diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
+index d855399812ee..5a10f40a7831 100644
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@ -96,6 +96,22 @@ static int __bpf_offload_dev_netdev_register(struct bpf_offload_dev *offdev,
+ 	return err;
  }
  
-+static int sock_map_iter_check_prog(const struct bpf_prog *prog,
-+				    const struct bpf_iter_aux_info *aux)
++/*
++ * @prog takes the place of a copy that the caller is about to free. Nothing
++ * keeps the netdev while a program is loaded: once the lock is dropped, no
++ * unregistration is left that has got the old copy from offload->prog.
++ */
++void bpf_prog_dev_bound_moved(struct bpf_prog *prog)
 +{
-+	if (prog->aux->max_rdonly_access > aux->map->key_size)
-+		return -EACCES;
++	if (!bpf_prog_is_dev_bound(prog->aux))
++		return;
 +
-+	return 0;
++	down_read(&bpf_devs_lock);
++	if (prog->aux->offload)
++		prog->aux->offload->prog = prog;
++	up_read(&bpf_devs_lock);
 +}
 +
- static int sock_map_iter_attach_target(struct bpf_prog *prog,
- 				       union bpf_iter_link_info *linfo,
- 				       struct bpf_iter_aux_info *aux)
-@@ -1951,12 +1960,11 @@ static int sock_map_iter_attach_target(struct bpf_prog *prog,
- 	    map->map_type != BPF_MAP_TYPE_SOCKHASH)
- 		goto put_map;
- 
--	if (prog->aux->max_rdonly_access > map->key_size) {
--		err = -EACCES;
-+	aux->map = map;
-+	err = sock_map_iter_check_prog(prog, aux);
-+	if (err)
- 		goto put_map;
--	}
- 
--	aux->map = map;
- 	return 0;
- 
- put_map:
-@@ -1973,6 +1981,7 @@ static struct bpf_iter_reg sock_map_iter_reg = {
- 	.target			= "sockmap",
- 	.attach_target		= sock_map_iter_attach_target,
- 	.detach_target		= sock_map_iter_detach_target,
-+	.check_prog		= sock_map_iter_check_prog,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
- 	.ctx_arg_info_size	= 2,
+ static void __bpf_prog_offload_destroy(struct bpf_prog *prog)
+ {
+ 	struct bpf_prog_offload *offload = prog->aux->offload;
 -- 
 2.55.0
 
