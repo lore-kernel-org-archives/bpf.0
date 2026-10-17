@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E615239E6C
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854FC36D51B
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:05:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792202739; cv=none; b=s+3TcCB//mfjXGkI1JByJNw/5ROBm45z10lkJB0p2AU2u1uQxSU5zrPpco37yssCi4I/SvxFE0UHhedCJzmKaWawy4NhbQZHwqz/Y06z6gH4Oom+wcS/oh+nZlEvPv8vjma9PwpXZ/AiawqK6otmhg5uwlJXcxDg8KcZjbHOwEw=
+	t=1792202750; cv=none; b=K4samT8YfvOd3ZT4U6JBqV5doFu4OyMh+13AdmZtkVAAlzTFmie5yGI1BETcsSCpJB6MQK/Of8I4SlARHK5xRl03MPPfXr6jqDhyiu12VmaeYNQ98UUn4t5DkiR4MFLY3UO4hl2kKcAZQ8EX/Bbj+WyiLvh27SzgDFNcXfwFU8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792202739; c=relaxed/simple;
-	bh=zt58rHOmJFV1gcAqwHHvv3hqqVu+mXB/xLM5Gh93Lj4=;
+	s=arc-20240116; t=1792202750; c=relaxed/simple;
+	bh=4toXYb0eeK2tXIJYi0odjZCiG5UMArvUNKNmuPqeDC4=;
 	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=CtmcPVXiCwIK4GQddhGCAwM388esVyJek4d+7orT0+359cdA45j8Zc0M2EoJAEjmobPNkEBK57CHfG3Gt+b9eQsYiVl7FLzBfE/LjtX6j4vzheQgSQStLvb2kPUd4Ndsx7zYfTkNgjjUjjrUHwlNw0WO7xh90kKOotAMY0Yke6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQu58jxk; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=ouHurG1b5QH19ufgVrRRUxodhabDPhkjqahhCt7wkKTsZW2+e1i8Y02TEbFpZxs7No7cB9whR79hl367UsZK17VnLCcwvWQEOC1WJy4TTzhKZB1miZxmgrsRug7TjPoKdAp8gzq96tHxYXI4BIDXbwt8AxqSfNgtT97atRgHLQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAYzYvRT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQu58jxk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FEF1F000C8;
-	Sat, 17 Oct 2026 02:05:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAYzYvRT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10BF31F000C4;
+	Sat, 17 Oct 2026 02:05:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792202737;
-	bh=/c+kWbWJpSo4s2AWkJKhgYsjXJTCe8paa/lG1TGS6dI=;
+	s=k20260515; t=1792202749;
+	bh=vDtxz7fUXozxGW4XUpfJRqZT54NdygM/HAW9nV9W7bU=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=YQu58jxkYOgkKWABeM+PyJyiyqhGotT1//rrxF3+O5BOks/kQ6SGCdAKZ7f2qiZB6
-	 y/BKz0fuSw4m22kFrWIwWa01YPjW9w0AGcu9cWZ7liW5nr1wuYFn7AfZvgmdDP+uLd
-	 z2q0nqywO9sfMtUysc1l0uo7Ki2mnJu6aL29ol+80+9QwovnBzKfG35I9XC/J4OQpM
-	 7PyCoAEPufJaI6lRrjf+8WMWU/b8sst2q7S03aZtCUepysln757hDVV/s7Zz4oEbEK
-	 tizzx7E57QtHzsKQlYDtZPOuKnsiJz/zGO0XaPRCBKpqUW67reDeoHPzTwVIA23EBv
-	 XPYx2kCboMeeQ==
-Message-ID: <sashiko-outbox-175184@kernel.org>
+	b=AAYzYvRTU4rc5d+FfhDQCvpxTr8Fza614hUXSe+qDjSEk2hGwzC4QWEnDVhTd1v6W
+	 sn2Ey7rBfnTQdcgLWgfpiDLuoy8HPt6J12n85jG+pJ0cu7KToaFeQATbZvcBygxdk1
+	 +OP7f6cLEGjQP4l8h8THehsstcX05SqgOT8OzSYYy8Vtp+CRV6ewHZ0NwZ2DZ4iOWr
+	 Zhdulpb1UeISwiflETM8OZ54l9ZxvcLolPtCAgdoFPw6uHojYyFeihhIwem43Mxf/f
+	 h4q1t5Omqy4dSBSHTSlQydSJ6nnFmPMDP380lQ0jAH/viYIdLWcxPmI2aISp9J6Vbg
+	 MDAQA/almuVgw==
+Message-ID: <sashiko-outbox-175187@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 36/38] bpf: Follow the head if an skb is
- written from a slice
+Subject: Re: [PATCH bpf-next 26/38] bpf: Assume no bounds for a writable tp
+ with tail calls
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261017012451.364800-28-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261017012451.364800-18-alexei.starovoitov@gmail.com>
 References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
- <20261017012451.364800-28-alexei.starovoitov@gmail.com>
+ <20261017012451.364800-18-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 17 Oct 2026 02:05:37 +0000
+Date: Sat, 17 Oct 2026 02:05:48 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,121 +46,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: duplicate bpf_try_make_writable() call in __bpf_skb_store_b=
-ytes()
+- [High] bpf: max_tp_access check bypassed via BPF_PROG_TYPE_EXT on writabl=
+e raw tp
 --
 
-commit cd64e2e5d6a96038e5e37496663c8035d9bcd26c
+commit 467f1021d59430c1b54a88fe6072cc36e60eb149
 Author: Josef Bacik <josef@toxicpanda.com>
 
-bpf: Follow the head if an skb is written from a slice
+bpf: Assume no bounds for a writable tp with tail calls
 
-This commit introduces bpf_try_make_writable_from() and updates
-__bpf_skb_store_bytes() and __bpf_skb_meta_store_bytes() to adjust the sour=
-ce
-pointer when making an skb writable reallocates its head.
+This commit sets max_tp_access to U32_MAX when a
+BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE program performs a tail call,
+preventing it from attaching to a writable raw tracepoint and tail-calling a
+program that accesses beyond the tracepoint buffer bounds.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index bf01152d0cf9a..54e9084b9263a 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -1752,9 +1752,32 @@ static const struct bpf_func_proto bpf_skb_store_b=
-ytes_proto =3D {
->  	.arg5_type	=3D ARG_ANYTHING,
->  };
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 002c3935a8eb0..fe59e3114d828 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -2153,6 +2153,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+>  			prog->aux->max_pkt_offset =3D MAX_PACKET_OFF;
+>  			prog->aux->max_rdonly_access =3D U32_MAX;
+>  			prog->aux->max_rdwr_access =3D U32_MAX;
+> +			if (prog->type =3D=3D BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE)
+> +				prog->aux->max_tp_access =3D U32_MAX;
+
+[Severity: High]
+Can the max_tp_access check still be bypassed using a BPF_PROG_TYPE_EXT
+(freplace) program attached to a BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE
+target program?
+
+A target program (tgt_prog) of type BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE
+with prototype int prog(struct bpf_raw_tracepoint_args *ctx) (or a global
+subprogram taking struct bpf_raw_tracepoint_args *ctx) that does not access
+ctx->args[0] or call bpf_tail_call() is loaded with
+tgt_prog->aux->max_tp_access =3D=3D 0. Because
+find_canonical_prog_ctx_type(BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) resolves
+to struct bpf_raw_tracepoint_args, btf_prepare_func_args() marks its BTF
+signature as reliable.
+
+When attaching tgt_prog, bpf_probe_register() in kernel/trace/bpf_trace.c
+only validates max_tp_access on the root attached program:
+
+kernel/trace/bpf_trace.c:bpf_probe_register() {
+    ...
+	if (prog->aux->max_tp_access > btp->writable_size)
+		return -EINVAL;
+    ...
+}
+
+This succeeds for any raw tracepoint (even when btp->writable_size is 0)
+since tgt_prog->aux->max_tp_access is 0.
+
+Meanwhile, a BPF_PROG_TYPE_EXT program (ext_prog) targeting tgt_prog or its
+global subprogram passes bpf_check_attach_target(), inherits
+raw_tracepoint_writable_verifier_ops in check_attach_btf_id(), and has its
+struct bpf_raw_tracepoint_args *ctx argument typed as PTR_TO_CTX in
+btf_prepare_func_args():
+
+kernel/bpf/verifier.c:check_attach_btf_id() {
+    ...
+	if (tgt_prog && prog->type =3D=3D BPF_PROG_TYPE_EXT) {
+		/* to make freplace equivalent to their targets, they need to
+		 * inherit env->ops and expected_attach_type for the rest of the
+		 * verification
+		 */
+		env->ops =3D bpf_verifier_ops[tgt_prog->type];
+		prog->expected_attach_type =3D tgt_prog->expected_attach_type;
+	}
+    ...
+}
+
+In bpf_do_misc_fixups(), the check added here tests
+prog->type =3D=3D BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE rather than
+resolve_prog_type(prog), so it does not match when ext_prog
+(prog->type =3D=3D BPF_PROG_TYPE_EXT) calls bpf_tail_call() (which is permi=
+tted
+when the replaced function has changes_pkt_data set, such as via
+bpf_dynptr_write() or bpf_dynptr_memset() on a local dynptr, or when
+CONFIG_NET=3Dn). However, __bpf_prog_map_compatible() in kernel/bpf/core.c
+uses resolve_prog_type(fp):
+
+kernel/bpf/core.c:__bpf_prog_map_compatible() {
+    ...
+	enum bpf_prog_type prog_type =3D resolve_prog_type(fp);
+    ...
+}
+
+This allows ext_prog to tail-call into a BPF_MAP_TYPE_PROG_ARRAY of
+BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE programs that read and write past
+btp->writable_size.
+
+Furthermore, even if ext_prog directly accesses ctx->args[0] (which
+raw_tp_writable_prog_is_valid_access() types as PTR_TO_TP_BUFFER) or has
+ext_prog->aux->max_tp_access set to U32_MAX, check_tp_buffer_access() only
+updates ext_prog->aux->max_tp_access, which is never validated against
+btp->writable_size or propagated to tgt_prog.
+
+Should BPF_PROG_TYPE_EXT programs be disallowed from targeting
+BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE programs (similar to how iterator
+programs reject extensions in commit "bpf: Don't take an extension for an
+iterator program")?
+
 > =20
-> +/*
-> + * The source of a write through a dynptr may be a slice of the same skb.
-> + * Making the skb writable can move its head: follow the move.
-> + */
-> +static int bpf_try_make_writable_from(struct sk_buff *skb, u32 write_len,
-> +				      const void **from)
-> +{
-> +	const void *head =3D skb->head;
-> +	bool in_head =3D *from >=3D head &&
-> +		       *from < (const void *)skb_end_pointer(skb);
-> +	int err;
-> +
-> +	err =3D bpf_try_make_writable(skb, write_len);
-> +	if (!err && in_head)
-> +		*from =3D skb->head + (*from - head);
-> +	return err;
-> +}
-> +
->  int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *f=
-rom,
->  			  u32 len, u64 flags)
->  {
-> +	if (unlikely(offset > INT_MAX))
-> +		return -EFAULT;
-> +	if (unlikely(bpf_try_make_writable_from(skb, offset + len, &from)))
-> +		return -EFAULT;
-> +
->  	return ____bpf_skb_store_bytes(skb, offset, from, len, flags);
->  }
-
-[Severity: Medium]
-Does calling ____bpf_skb_store_bytes() after bpf_try_make_writable_from() e=
-nd
-up calling bpf_try_make_writable() a second time without updating from?
-
-Looking at ____bpf_skb_store_bytes() in net/core/filter.c:
-
-    BPF_CALL_5(bpf_skb_store_bytes, struct sk_buff *, skb, u32, offset,
-               const void *, from, u32, len, u64, flags)
-    {
-        void *ptr;
-
-        if (unlikely(flags & ~(BPF_F_RECOMPUTE_CSUM | BPF_F_INVALIDATE_HASH=
-)))
-            return -EINVAL;
-        if (unlikely(offset > INT_MAX))
-            return -EFAULT;
-        if (unlikely(bpf_try_make_writable(skb, offset + len)))
-            return -EFAULT;
-
-        ptr =3D skb->data + offset;
-        if (flags & BPF_F_RECOMPUTE_CSUM)
-            __skb_postpull_rcsum(skb, ptr, len, offset);
-
-        memcpy(ptr, from, len);
-
-When a BPF program calls bpf_dynptr_write() or bpf_dynptr_copy() on a
-BPF_DYNPTR_TYPE_SKB dynptr using a slice of the same skb as the source,
-__bpf_skb_store_bytes() calls bpf_try_make_writable_from() and then calls
-____bpf_skb_store_bytes().
-
-Inside ____bpf_skb_store_bytes(), the second bpf_try_make_writable() call
-follows the chain:
-
-    bpf_try_make_writable()
-      __bpf_try_make_writable()
-        skb_ensure_writable()
-          pskb_may_pull()
-            pskb_may_pull_reason()
-              skb_might_realloc()
-                pskb_expand_head()
-
-When CONFIG_FAIL_SKB_REALLOC triggers, skb_might_realloc() reallocates and
-frees skb->head during that second call without updating from, leaving from
-pointing to the freed head before copying into ptr.
-
-Also, because __bpf_skb_store_bytes() calls bpf_try_make_writable_from()
-before ____bpf_skb_store_bytes() checks flags, invalid flags will only be
-rejected after the skb has already been uncloned or pulled (and will return
--EFAULT instead of -EINVAL if skb_ensure_writable() fails, unlike
-__bpf_skb_meta_store_bytes() which checks flags first).
-
-Note that passing packet slices directly to the bpf_skb_store_bytes() or
-bpf_lwt_seg6_store_bytes() helpers is prevented later in the series by comm=
-it
-"bpf: Refuse packet slices for packet-changing helpers", so could
-bpf_try_make_writable_from() be used directly inside ____bpf_skb_store_byte=
-s()
-instead of duplicating the checks in __bpf_skb_store_bytes()?
-
-[ ... ]
+>  			/* mark bpf_tail_call as different opcode to avoid
+>  			 * conditional branch in the interpreter for every normal
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261017012058.3557=
-87-1-alexei.starovoitov@gmail.com?part=3D36
+87-1-alexei.starovoitov@gmail.com?part=3D26
