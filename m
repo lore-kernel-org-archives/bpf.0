@@ -1,95 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA603A7F41;
-	Sat, 17 Oct 2026 17:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF093B19BF;
+	Sat, 17 Oct 2026 17:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792257420; cv=none; b=hI30vFSiwwOqw/RRfhgjCWY1XZdv5Zfx8ZoVGQ4ocXldH3glVCYxxUVYC4/OxnVuRoYA3QzrPy83taR45DD4ReXWw1ajlvr2yd/aMQfPiuvSb6Hqha1BJWCZKHeKJcDIoGV/k5YmCkS02y6babetzMmBVrW8YJ7CN0bs7hxWx5Q=
+	t=1792257424; cv=none; b=CMeEuuRq+OzWRo5r/UOJ/fg/9VjJik76z2v1m+3hLjAcMk1FHtU/Y/eJyW0Zaf/WOaehXnOe8CTDbLfpC0Qo4O1XUdPvUHIhO+ejKivrdaQb60hbhkp0fZzpZFrxG3N9x/h14zKAKuaoiqb8BW3rWMYZtK/l8NYZ+oJAPyCL69Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792257420; c=relaxed/simple;
-	bh=DPD/9R0avB6FY2jFkU1uGCRHhUmkd4Avmaw0OjrEAPk=;
+	s=arc-20240116; t=1792257424; c=relaxed/simple;
+	bh=lmCGI0UVH6C257EB2gLt+HExUqo9MsRLUWuY6BmhihY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mHPjaEeMS/uiCSpzHiZnPK8Mkzr0StnLV9um5N5rDAgdcDhdU+i5TVptqOS/ixZ/LAEwKt95G0c8mgBSoLY1WBKdgBAD29S2wblfDudmofcuwPdBrTCveoVrfYmTRdiwpC2sxhHo0ugbc/eyEfzVIOKXnaR7yEpTORYqGQ1eqzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UjE0taz9; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=XQYFYMDRnnv/tRJWBcLANBsRVjTYSj5G1+eYGoYytdv2Yiiv0qwngqySV31K2ErlDGf2qkTFWTURdWmjmQfO6FkLNtkzv8/ZDpe2m71LAez5PKY0LxCQyCLJ8gvrXdSR/8oes2Z1t0oVjo7/iZzH638YYKa0es4MBr6xrymuhGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GVpmexDq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UjE0taz9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3A01F000C4;
-	Sat, 17 Oct 2026 17:16:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GVpmexDq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA371F000C4;
+	Sat, 17 Oct 2026 17:17:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792257418;
-	bh=xBwu32tRzgrEuq9JG8gaNOJtBWCZK5VnaCyLTc2t8Co=;
+	s=k20260515; t=1792257422;
+	bh=BCxBXkOer72wuV3IMYghcCTFoUc4gdg138tWi5fuVSE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UjE0taz9oIbJfxRWo86qXoHrOqTFGBEDLkLrwMQXV5ZoOYmSiVozU7ibpkeJPFgYe
-	 S94j16lnF1DKaX3btssLz55WjgrTaYPNWSjEns2NBkESlCowvHBwIe8MG9V+2ssAX7
-	 /j2FqklYeWnvY7PQ25SUbk95p0VP5Ux9rhs2EdG8HbZiOpSF6Z7OSDPNuTH78ZjY/T
-	 j1fw7Xy2FPnYMElkR2YIEuxV3E9s3RVosv0LcB+nIqNVFDlV3hQXuuRSa7yYcfU//Q
-	 XkW0JazqpU51UkcqWhX6NS0rLKogog7YOVSPWTSt0HzPQrr5dBpraHG5QwoS9E8I7n
-	 tNRzj+DEYB+OQ==
-Content-Type: multipart/mixed; boundary="===============0189043960274367041=="
+	b=GVpmexDqCRVd/eNJV0bZTS6unyTVySHgFsvwO1FPtKypVKMNfv2ZGHD/ZuTWyT7+C
+	 JG1KGWr1jItl0iW2M9l3fH0vC8aVzoadNdNDBpgbUfp6uh2mfKJHkhphfxSoHGfcnS
+	 w/jAjcgAVqz5jaBBuvPabtdjaCs52X3rkouH4lIVEVMgIyQHHsuucWw4KK/vrGmh0R
+	 T919IBpXgeDwX3DXvZQVRqNRO4EeCuy8pacxFIcTJkhQdsI2c568R74+/XRMCb8RAK
+	 NyX+fngEZOi47EhiQYNWva58hoxoK2GGmZJpf4wLB5K+Eck8yNYY+RTrr4GoVCOmHI
+	 9mNnduowCgyew==
+Content-Type: multipart/mixed; boundary="===============1420937528216665879=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9e4f2779a5571380e019033e4d1c30a14ed609bffcd34faf2074b3a9c437703d@mail.kernel.org>
-In-Reply-To: <20261017163745.3341787-6-alexei.starovoitov@gmail.com>
-References: <20261017163745.3341787-6-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 05/43] bpf: reject sleepable programs for task_vma iterator
+Message-Id: <6331891dcb060c5a201d786033b1b9b948aaa8b776c6f81122ee5e0c6b990736@mail.kernel.org>
+In-Reply-To: <20261017163745.3341787-17-alexei.starovoitov@gmail.com>
+References: <20261017163745.3341787-17-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 16/43] bpf: Link the first element after its storage is published
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 17:16:57 +0000 (UTC)
+Date: Sat, 17 Oct 2026 17:17:01 +0000 (UTC)
 
---===============0189043960274367041==
+--===============1420937528216665879==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: reject sleepable programs for task_vma iterator
+> bpf: Link the first element after its storage is published
 
-TL;DR: Documentation nit only: bpf_iterators.rst still says only
-BPF_ITER_RESCHED is supported and doesn't mention the new BPF_ITER_NOSLEEP
-flag. No code problems raised.
+TL;DR: Commit message only: the Fixes: tag may point at the wrong commit; the
+lockless iterator exposure looks introduced by c69d2ddb2072, not 5ce6e77c7edf.
+The code change itself isn't questioned.
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 54144372281c..46d325aa178e 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -3137,7 +3137,8 @@ typedef const struct bpf_func_proto *
->  			     const struct bpf_prog *prog);
+>     bpf: Link the first element after its storage is published
 >
->  enum bpf_iter_feature {
-> -	BPF_ITER_RESCHED	= BIT(0),
-> +	BPF_ITER_RESCHED	= BIT(0),	/* may cond_resched() between objects */
-> +	BPF_ITER_NOSLEEP	= BIT(1),	/* ->show() can't run sleepable progs */
->  };
+>     bpf_local_storage_alloc() links the first element of a new storage to the
+>     bucket of its map, and then publishes the storage in the owner with
+>     cmpxchg().  If another cpu has been faster, the element is taken out of
+>     the bucket again and is freed together with the storage.
 >
->  #define BPF_ITER_CTX_ARG_MAX 2
+>     In between the iterator over a sk_storage map can find the element.  It
+>     stays linked to a storage that points to the socket, but the socket knows
+>     nothing of that storage: bpf_sk_storage_free() neither unlinks the element
+>     nor waits for anybody who uses the storage.  So nothing tells the iterator
+>     that the socket has gone away.
+>
+>     Three cpus that create the first storage of a new AF_UNIX socket at the
+>     same time, and a fourth that reads the iterator, are enough: in 20 seconds
+>     its program was shown some 4000 elements of storages that had lost.  If the
+>     socket is closed in time, the program is handed a freed socket.
+>
+>     Link the element once the storage is published.  Both happens under the
+>     lock of the bucket, which holds off whoever finds the element through the
+>     owner and wants to unlink it.
+>
+>     Fixes: 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
+>     Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-This isn't a bug, but should Documentation/bpf/bpf_iterators.rst be updated
-for the new flag?
+Is this the right commit for the Fixes: tag?
 
-The description of the feature field in struct bpf_iter_reg still reads:
+5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map")
+held the bucket lock (raw_spin_lock_bh(&b->lock)) for the whole time it
+handed an element to the program.  The losing sk_storage_alloc() could
+therefore not run selem_unlink_map() and free the storage until the
+iterator had moved on, and the socket stayed alive because the allocating
+caller still held it.
 
-   * - feature
-     - Specifies certain action requests in the kernel BPF iterator
-       infrastructure. Currently, only BPF_ITER_RESCHED is supported. This
-       means that the kernel function cond_resched() is called to avoid other
-       kernel subsystem (e.g., rcu) misbehaving.
+The element was already linked before the cmpxchg() back then, but nothing
+walked the bucket list locklessly.  The old comment in the alloc path even
+says that nobody accesses first_selem from the bucket list under
+rcu_read_lock().
 
-With BPF_ITER_NOSLEEP added, "only BPF_ITER_RESCHED is supported" is no
-longer accurate.
+The lockless exposure looks like it came from c69d2ddb2072 ("bpf: Using
+rcu_read_lock for bpf_sk_storage_map iterator"), which replaced the bucket
+lock in bpf_sk_storage_map_seq_find_next()/seq_stop() with rcu_read_lock().
+From then on the iterator can see the transiently linked first_selem of a
+losing storage without excluding its unlink and free.
 
-The text also doesn't say that BPF_ITER_RESCHED is what allows a target to
-accept sleepable (iter.s/) programs, or that a target whose ->show() runs
-under a lock that a faulting program would need to take again (as task_vma
-does with mmap_lock) has to set BPF_ITER_NOSLEEP as well.
+Should this be:
 
-Someone adding a new iterator target from that document would not learn
-about the flag.  None of the later patches in this series touch
-bpf_iterators.rst.
+  Fixes: c69d2ddb2072 ("bpf: Using rcu_read_lock for bpf_sk_storage_map iterator")
 
 
 ---
@@ -97,4 +108,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39051545464
---===============0189043960274367041==--
+--===============1420937528216665879==--
