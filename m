@@ -1,146 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765E4303A04;
-	Sat, 17 Oct 2026 01:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D34C303A04;
+	Sat, 17 Oct 2026 01:52:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792201964; cv=none; b=s05ImI7rlPICOSuJyXmnCykvTNzhB6D4txL/LF8uzMB6HN4Ig3UBvl6qzy0GWEyKr6bwuG9Rx2DwIYjJkM8/hIz914vmyP99Ljse5eM1S5C1+RAGepdjxZariMvPmPF+i+uxD9MQ/JNz40b7BorY3P2HGgBwkrHIgRD3j7TRHYg=
+	t=1792201968; cv=none; b=HGX32hZyFF2tQk3YWC7+upvRYSj/JkIyClRJeoUIDIyCdO69nT46Cj/LvjGy4fRLDWCAF8KsT5rHlUXgLSoG8W9zBusQ/tIqDHJhtiQlTM4dSuksdMfolhMseUbhpqnVBnrhHldrBLW/EpO1OX07lJ75s2L9jtVbyxkPILfiYdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792201964; c=relaxed/simple;
-	bh=dqJPs/ZSq+kEm9qmjKvO2q+zx+GE1CvNmoK28eKIJeU=;
+	s=arc-20240116; t=1792201968; c=relaxed/simple;
+	bh=+bZI8wly5eDGayryvsGqobJTAS+537SL6h1SyJlRTIE=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ptzsLoIzpNOojyVCjp47kE/xPoZTB6YUZkqBvvBnjOsUBTQ4v+wKtDDeCDS7s/TtZ0hzfcvOt6WgLVvPFdxYLW6pOu2sXPkE4tLpqnqO4pKigVGqI9/WDqfFxJakXdlIWbm1Qg/wVC82xYheERisBwpTHtAnO+gmXHjWTdWyA34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GeJY+/aE; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=LHg6uabnaKNsLmbp/wHQNyxgi3AFU6OVD0rLGSRxUY5vEna48dqVoMnEYCQZT+s+9n5y5JCXJMBG2hXqXYKstNUjipUpW7qqQfcXECGNYXF0r1sdumSepESZ88ZTqH+m4nYXntXLR9EnsQ3+W9dxw0JD30T/FfUT88C4jjZdDHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e4X/eiZB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeJY+/aE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078561F000C4;
-	Sat, 17 Oct 2026 01:52:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e4X/eiZB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D5131F000C4;
+	Sat, 17 Oct 2026 01:52:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792201963;
-	bh=XglLirrsez4yqv8n/eRTAa92pQ5gI64vJicukpL4zU0=;
+	s=k20260515; t=1792201966;
+	bh=NPwlg68vom/2k1L+SuKMG8v4a0E3d3PLIOOfY4gmI/c=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=GeJY+/aEwBJVA5qAY61vdwMRJJkW/gqPkS+IqoX4zRzGMcIHvxb8VzDCPOBz/H2OS
-	 5vUtm2vXkcv+lSy9KhPhQKeQCDlm1AADXZI+JXKnW6xo2gAZwD9YYEW3TkkJultkhn
-	 ij6i6m6WG86WmQxjt20/uSebVCaqrjnezQg979S4yoM3ayDc4Fzk08fHXe5ysiRHg5
-	 O2wJv5sF5yBHawHcpKW6ScGVnZhyo8tU1cDYYQjsdOmwhu59jeYpHb10mpy4ICFTEs
-	 B5Vd18LMlo344vu3PWSZn2H90V7t4iuSi0+ktb7/95cLSwp4Nlar0CoyPfIpSqC2UL
-	 a8p1M0HMsLz+w==
-Content-Type: multipart/mixed; boundary="===============5453475719898273485=="
+	b=e4X/eiZBdsTNlRz0aeltuH2MfViOeRX9D3vOX+4SFXm0C35Lu3T72YWtdl40wdlDu
+	 aCR1WbOQh6H9PNgBjyhKCnBxb9x4jAox6FxuGuMsCcwsTAAWyNEEyZOp6AkGrBPErl
+	 YtTwlr8zitHAbylSkjMYTXniJoXQZtPhPdSdVgqRjZTsglu1WYHM2ItQlXQns9MPn2
+	 pqfSt5uNpozj98vkCvKZ3hOoCZ4TyqbQW5RTJSQgA1Uz2pLnUPQiUeQckHMPFeXxto
+	 gfLawOwxoOTBrpgPiFeglpb7QsywHj8MmjYEuaLQrRAg0OkVrFj/k3AL5CpdiW+BYJ
+	 2xu1x86RSYV8A==
+Content-Type: multipart/mixed; boundary="===============0001666948501514510=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8dd7ea54f619380d7dd025e485a6d9d1bb8073daa7fc6b9de339e020c46d4d70@mail.kernel.org>
-In-Reply-To: <20261017012451.364800-11-alexei.starovoitov@gmail.com>
-References: <20261017012451.364800-11-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 19/38] bpf: Fix stale offload->prog pointer after realloc
+Message-Id: <c6e3cf4c8e650803377f900f18c4ffc183e5883781dcd2015c0898d598928f53@mail.kernel.org>
+In-Reply-To: <20261017012058.355787-5-alexei.starovoitov@gmail.com>
+References: <20261017012058.355787-5-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 04/38] bpf: don't hand out a linked element as extra element
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 01:52:41 +0000 (UTC)
+Date: Sat, 17 Oct 2026 01:52:45 +0000 (UTC)
 
---===============5453475719898273485==
+--===============0001666948501514510==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Fix stale offload->prog pointer after realloc
+> bpf: don't hand out a linked element as extra element
 
-TL;DR: The new offload->prog update in bpf_prog_realloc() runs without
-bpf_devs_lock, so it may race with device unregistration: possible write to
-freed memory, and the stale-pointer use-after-free is only narrowed.
+TL;DR:
+- htab_map_update_elem() fills the extra-elem slot before cancelling l_old's
+  fields; a nested update may reuse it, so a live element's timer could be
+  cancelled (not memory-unsafe)
+- comment style nit
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 642f0ab8eb2d..2154c18a5a4d 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -269,6 +269,8 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
->  		memcpy(fp, fp_old, fp_old->pages * PAGE_SIZE);
->  		fp->pages = pages;
->  		fp->aux->prog = fp;
-> +		if (fp->aux->offload)
-> +			fp->aux->offload->prog = fp;
->
->  		/* We keep fp->aux from fp_old around in the new
->  		 * reallocated structure.
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 9d4791ee1741..923fec694747 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
 
-Can this race with device unregistration?  The new lines read
-fp->aux->offload and write offload->prog without holding bpf_devs_lock, and
-unregistration can free that offload at the same moment, so the store may
-land in freed memory.
+[ ... ]
 
-bpf_prog_load() calls bpf_prog_dev_bound_init() before bpf_check().
-bpf_prog_dev_bound_init() adds the offload to ondev->progs, then drops
-bpf_devs_lock and does dev_put(netdev).  After that nothing holds off
-unregistration while the verifier runs:
+> @@ -1459,11 +1465,14 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+>  	if (l_old) {
+>  		hlist_nulls_del_rcu(&l_old->hash_node);
+>  
+> -		/* l_old has already been stashed in htab->extra_elems, cancel
+> -		 * its reusable special fields before it is available for reuse.
+> +		/* l_old replaces the extra element that alloc_htab_elem() took,
+> +		 * cancel its reusable special fields before the next update on
+> +		 * this cpu reuses it.
+>  		 */
 
-bpf_check()
-  ...
-  __bpf_patch_insn_data()
-    bpf_patch_insn_single()
-      bpf_prog_realloc()
+this isn't a bug, but this comment is rewritten completely and still keeps
+its text on the opening line.  Could the opening /* go on its own line, as
+is preferred in kernel/bpf/?
 
-At the same time unregister_netdevice_many_notify() ->
-bpf_dev_bound_netdev_unregister() takes only rtnl and
-down_write(&bpf_devs_lock) and runs:
+  /*
+   * l_old replaces the extra element that alloc_htab_elem() took,
+   * cancel its reusable special fields before the next update on
+   * this cpu reuses it.
+   */
 
-    list_for_each_entry_safe(offload, ptmp, &ondev->progs, offloads)
-        __bpf_prog_offload_destroy(offload->prog);
+> -		if (htab_is_prealloc(htab))
+> +		if (htab_is_prealloc(htab)) {
+> +			WRITE_ONCE(*this_cpu_ptr(htab->extra_elems), l_old);
+>  			check_and_cancel_fields(htab, l_old);
 
-where __bpf_prog_offload_destroy() does:
+The new comment says l_old's special fields are cancelled before the next
+update on this cpu reuses it.  Is that what this code does?  The slot is
+filled first and the fields are cancelled afterwards:
 
-    struct bpf_prog_offload *offload = prog->aux->offload;
-    ...
-    list_del_init(&offload->offloads);
-    kfree(offload);
-    prog->aux->offload = NULL;
+    WRITE_ONCE(*this_cpu_ptr(htab->extra_elems), l_old);
+    check_and_cancel_fields(htab, l_old);
 
-Timeline 1, write to freed memory:
+Can a nested update on this cpu run between these two calls?  That could be
+an NMI (perf_event program), or an fentry program on bpf_obj_cancel_fields(),
+which check_and_cancel_fields() calls after the slot is filled and which
+tools/testing/selftests/bpf/progs/htab_update.c already attaches an updating
+program to.
 
-  CPU0 bpf_prog_realloc():
-    if (fp->aux->offload)          <- sees offload O, not NULL
-  CPU1 bpf_dev_bound_netdev_unregister():
-    down_write(&bpf_devs_lock);
-    __bpf_prog_offload_destroy(fp_old);   <- kfree(O), aux->offload = NULL
-    up_write(&bpf_devs_lock);
-  CPU0:
-    fp->aux->offload->prog = fp;   <- 8-byte write at offset 0 of freed
-                                      struct bpf_prog_offload
+If that nested htab_map_update_elem() updates an existing key k2 in another
+bucket, alloc_htab_elem() takes l_old from the slot.  copy_map_value() skips
+the special fields, so the new element still carries the bpf_timer/bpf_wq/
+task_work state of k1's replaced value.
 
-If the compiler reloads aux->offload instead of reusing the value it
-tested, this becomes a NULL pointer write.
+The nested update then links l_old into k2's bucket.  When the outer update
+resumes, check_and_cancel_fields(htab, l_old) runs:
 
-Timeline 2, the stale pointer is narrowed but not closed:
+    bpf_obj_free_timer() -> bpf_async_cancel_and_free()
 
-  CPU1 (under bpf_devs_lock) reads offload->prog == fp_old
-  CPU0 stores fp into offload->prog, sets fp_old->aux = NULL, and calls
-       __bpf_prog_free(fp_old), which ends in vfree(fp_old)
-  CPU1 __bpf_prog_offload_destroy(fp_old) then reads fp_old->aux from
-       vfree'd memory (or reads NULL)
+on what is now k2's live element.
 
-That is the same fault quoted in the commit message.
+Timers are allowed in hash maps used by tracing/perf_event/fentry programs
+(check_map_prog_compatibility() only restricts spin_lock and graph roots), so
+this looks reachable.  In that window bpf_timer_init() on k2 returns -EBUSY
+(__bpf_async_init() finds the stale async->cb), and any timer armed through
+k2 is cancelled and freed right after.  This doesn't look memory-unsafe, and
+it is narrower than before the patch, where the slot was filled in
+alloc_htab_elem().
 
-Every other place that touches prog->aux->offload during verification takes
-bpf_devs_lock and rechecks the pointer under it, because unregistration can
-race with verification: bpf_prog_offload_replace_insn(),
-bpf_prog_offload_verify_insn(), bpf_prog_offload_finalize(),
-bpf_prog_offload_remove_insns() and bpf_dev_bound_resolve_kfunc().  The last
-one carries the comment "We don't hold bpf_devs_lock while resolving several
-kfuncs and can race with the unregister_netdevice()".  The new code does not
-follow that pattern.
+The order is also the reverse of free_htab_elem(), which cancels before
+pcpu_freelist_push().  Would swapping the two statements (cancel first, then
+WRITE_ONCE) make the comment true?  A nested update in that window would then
+fail with -EBUSY, like the rest of the window this patch closes.
 
-bpf_prog_realloc() can already sleep (__vmalloc with GFP_KERNEL), so could
-the check and the store be done under down_read(&bpf_devs_lock), held until
-before fp_old is freed?  bpf_devs_lock is static in kernel/bpf/offload.c, so
-that would need a small helper there, with a stub for
-!CONFIG_NET || !CONFIG_BPF_SYSCALL.  The unregister side holds the lock for
-writing for its whole scan-and-destroy, so this would exclude both timelines.
+If the current order is intended, to keep the -EBUSY window short, should the
+comment say that cancellation can happen after a nested reuse?
 
-The sibling fix a1aa9ef47c29 in bpf_jit_prog_release_other() has the same
-unlocked pattern.  No later commit in the series range changes this code.
+> +		}
+>  	}
+>  	htab_unlock_bucket(b, flags);
+>  	if (l_old && !htab_is_prealloc(htab))
 
 
 ---
@@ -148,4 +140,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38991548713
---===============5453475719898273485==--
+--===============0001666948501514510==--
