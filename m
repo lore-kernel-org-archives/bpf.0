@@ -1,185 +1,72 @@
-Received: from mta1.migadu.com (out-31.mta1.migadu.com [95.215.58.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-24430.protonmail.ch (mail-24430.protonmail.ch [109.224.244.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41D44CF49C
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 05:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38FE3769F4
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 05:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792215526; cv=none; b=mO2epbMxuBSv/NcCjd2arCaLejYbiz8vAkCt326XvwJtCHyIpvfmN37ae9rmwPEHU9wYT9Kaav91xd8qWt9sjLslmVP8G/s5HbOiaJl1Wbdh4MNHh8w4molsS5edF8w7Wm3kJpsWB9e28+z36gmlSHZUdypvTiSPgMsK/s8Tkqs=
+	t=1792215715; cv=none; b=bOyYm/H+FjcjVjor22qlLdW0aYFxyVBeE9m8bV1Ov008o27v4mZ+uN010xQeYWYE6lscijgrpQn4NalPS2qGyqRUvRIvUNlCxXcoiAfdvngly7GmWXscUJsKnWhIk5lNODaR+zSOiN/pqzHY6a50+YA08Rrg7dzRJ2rqU9DwNQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792215526; c=relaxed/simple;
-	bh=/MMgUEomUt3Slmm0K00jtTvAyfsiXxPh+UVR6CCYvb4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TX4iIm+iTzzA3xsD2Shv6zCikRpas16HFJ4iX+0U5DzYIolRTo7Y/cxW0MukZdEA47bAHwYdvbM3m0wbRRUKUuYW73E7cJW95xjA+052iKF1SKRUXnKvbnu1V4RJDEQ+LvfpZuROOzhudKpRGjSmMJ+JjqU1vOmRtB0+u8Dk8Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q9Pj5HU2; arc=none smtp.client-ip=95.215.58.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792215715; c=relaxed/simple;
+	bh=oWP3CqfdKkrmUn2Fd9aCN1Hyf60aN5vW+HfRq/d7rFE=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Oh7t/ple9//jaWZ/JneJskYbCXdwhTfifARwgeOTjcSYrvYz9quxSi3SwP7UZ6O7gL8va2o1KsX32xHj6GK1PE5xyUpeakBXYBxegn4LaadkkB+gmLHcI3WZ6gfx9qR4HmN6Jyl24de7zBWIVGdiFY4jOj+P9vGOs+fF112LKtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=D6/E31TR; arc=none smtp.client-ip=109.224.244.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q9Pj5HU2"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/MMgUEomUt3Slmm0K00jtTvAyfsiXxPh+UVR6CCYvb4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792215522; v=1; x=1792820322;
- b=q9Pj5HU2WCMBo8Pmqis0vWJAoQYF9vJu1IlNihsyRZNCtQWKRf5WYnTx20KfbgbyFk6OvOhP
- x4K9Tq1xXAHJj/pLlsgyfz5z3UsB8Y1oJg/ezM0aXcv5l9hz+Nbef3kn9VJ6a6+uvfj5BkgFuwf
- yHNyBqr5IDtM1aezz4szKHd8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a8c2c243e1971762;
-	Sat, 17 Oct 2026 05:38:42 +0000
-X-Mizu-Trace-ID: a8c2c243e1971762
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4a7080f0-1b1c-4375-b25b-f5a2dd94bbd1@linux.dev>
-Date: Fri, 16 Oct 2026 22:38:38 -0700
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="D6/E31TR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail2; t=1792215702; x=1792474902;
+	bh=oWP3CqfdKkrmUn2Fd9aCN1Hyf60aN5vW+HfRq/d7rFE=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=D6/E31TRwTP1tAd5S/DtmzkSI+rEA9VnjMTkn4h349sXjZzcM82r5Q4LaOynE5j61
+	 CdPLqqCGlt6Brfcp24j8/PHrUinuTZeeVV9r2HpyrsuEIazjyUJqs0YsfJ7MAzqJT4
+	 OavgscVzOW5afc7p9+UXFNSVwYoH1XqnLbzNrv069RYX92SREz15Z1xnqPN7r7ffxn
+	 uDoMf9l9rvD9JHlEtpAG+mBP/MayOTm3L0y+Yhr9bS/JJTTN29fYs8dxVU+AIgrXVp
+	 9pCA0A+tw47DZKWVpET0hILd3LbNmhy9AP0vQ0hrF/lJ1GVirF3Yfj66OL3dwkLwZM
+	 UZF7QzxEh5zxg==
+Date: Sat, 17 Oct 2026 05:41:39 +0000
+To: sashiko-reviews@lists.linux.dev
+From: quanyeyang <quanyeyang@proton.me>
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v4 1/2] tls: annotate lockless access to sk->sk_err
+Message-ID: <0f_f65bKzWrIKpD02o0Zog8DXgvCojjB6E0_p64jFcUQXJf6eKe3LZ_r2AyAMoKP5m0rnzWidmndN0la2vYX7POrm0tVKb1QZJlj_FcCXGs=@proton.me>
+In-Reply-To: <sashiko-outbox-175251@kernel.org>
+References: <20261015-tls-fix-sk-kcsan-err-v4-0-391d788327f3@proton.me> <20261015-tls-fix-sk-kcsan-err-v4-1-391d788327f3@proton.me> <sashiko-outbox-175251@kernel.org>
+Feedback-ID: 206494642:user:proton
+X-Pm-Message-ID: 97b58392f95c42aed3c0916396b98545d01989af
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v12 12/25] bpf: Allow a subprog to end with a
- call that does not return
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261017025232.1925266-1-yonghong.song@linux.dev>
- <c0fca81fb0b00da256b581c75751323967d8e48a600694286fea6e46ba8f811a@mail.kernel.org>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <c0fca81fb0b00da256b581c75751323967d8e48a600694286fea6e46ba8f811a@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On Friday, October 16th, 2026 at PM 8:31, sashiko-bot@kernel.org <sashiko-b=
+ot@kernel.org> wrote:
 
+> Can a concurrent lockless call to getsockopt(SO_ERROR) clear the
+> error state here?
 
-On 10/16/26 8:35 PM, bot+bpf-ci@kernel.org wrote:
->> bpf: Allow a subprog to end with a call that does not return
-> TL;DR: Inserting exits after final calls may shift verifier log instruction
-> indices for newly accepted programs, which could make libbpf's CO-RE
-> relocation lookup miss or name the wrong field. Was this intended?
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> @@ -3317,6 +3317,54 @@ static void find_subprog_properties(struct bpf_verifier_env *env)
->>   	}
->>   }
->>
->> +/*
->> + * Put an exit after a call that ends a subprog, so that nothing from the CFG
->> + * walk on has to know a subprog can end that way. check_subprogs() only lets
->> + * such a call be to a callee that never returns, so do_check() never reaches
->> + * the exit.
->> + */
->> +static int add_exits_after_final_calls(struct bpf_verifier_env *env)
->> +{
-> [ ... ]
->
->> +		patch[0] = *insn;
->> +		new_prog = bpf_patch_insn_data(env, last, patch, 2);
->> +		if (!new_prog)
->> +			return -ENOMEM;
->> +		env->prog = new_prog;
->> +		/* The patch moved the call's aux data, orig_idx included, to the exit. */
->> +		env->insn_aux_data[last].orig_idx = env->insn_aux_data[last + 1].orig_idx;
-> [ ... ]
->
->> +	}
->> +	return 0;
->> +}
-> [ ... ]
->
->> @@ -23661,6 +23718,24 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->>   	if (ret < 0)
->>   		goto skip_full_check;
->>
->> +	/*
->> +	 * After everything above has recorded insn offsets, so the patch
->> +	 * adjusts them, and before an offloaded program's per-insn state.
->> +	 */
->> +	ret = add_exits_after_final_calls(env);
->> +	if (ret < 0)
->> +		goto skip_full_check;
->> +
-> Does inserting these exits before bpf_check_cfg() and do_check() shift the
-> instruction indices that the verifier log reports?
+Yes, sock_error() can xchg() sk_err to 0 without the socket lock.
+That window is pre-existing. tls_encrypt_done() still keys off the
+crypto completion's err for this record's own failure; a stolen
+prior abort is the same as the old unmarked load seeing 0.
 
-I think this is indeed an issue, esp. for verifier log reporting.
+> If a concurrent lockless call to getsockopt(SO_ERROR) consumes
+> and clears the error, the READ_ONCE() here might return 0
+> instead of EBADMSG.
 
-For example, the original function:
-    0: call foo
-    1: call bpf_unwind
-    2: call bpf_unwind_resume
-
-After add_exits_after_final_calls, we will have
-    idx  orig_idx
-    0    0         call foo
-    1    1         bpf_unwind
-    2    1         exit
-    3    2         call bpf_unwind_resume
-    4    2         exit
-
-When verifier trying to report error message, we cannot use 'idx'
-any more, we have to use orig_idx. For example, we have
-    verbose_linfo(env, env->insn_idx, "; ");
-    ...
-    verbose(env, "%d: ", env->insn_idx);
-
-here env->insn_idx refers to 'idx' in the above,
-but they do not correspond to the original idx.
-
-The actual one may be replacing env->insn_idx to corresponding
-orig_idx.
-
-We could have a helper to map idx->orig_idx. This should work.
-Do we have a better solution for this?
-
->
-> Until now no pass changed the instruction count before verification, so the
-> indices in the log matched the instructions user space loaded.  With this
-> patch, every insn behind a subprog that ends with a call moves down by one
-> for each exit added in front of it.  The CFG walk and do_check() print
-> env->insn_idx, so every message about those insns now carries an index that
-> is not in the loaded program.  insn_aux_data[].orig_idx exists for this kind
-> of mismatch, but only a few messages use it.
->
-> This has a concrete effect on libbpf.  fixup_log_failed_core_relo() in
-> tools/lib/bpf/libbpf.c reads the index from the log and uses it to find the
-> relocation:
->
->      if (sscanf(line1, "%d: (%*d) call unknown#195896080\n", &insn_idx) != 1)
->          return;
->      relo = find_relo_core(prog, insn_idx);
->
-> find_relo_core() needs an exact relo->insn_idx match.  Take a program whose
-> main subprog ends with "call _Unwind_Resume" (the prog() example in the
-> commit message) and that has a poisoned CO-RE relocation at index N in a
-> later subprog.  The kernel now logs that instruction as N+1, so libbpf
-> either finds no relocation and leaves the raw "unknown#195896080" message,
-> or picks up a different CO-RE relocation sitting at N+1 and names the wrong
-> field.
->
-> The cleanup-record messages are affected as well.  "resume at insn %d is not
-> in a landing pad" and "insn %u ... is in a landing pad" now print shifted
-> indices, while bpf_exc_check_info() reports the user's own offsets.
->
-> Only programs that this patch newly accepts are affected, since
-> add_exits_after_final_calls() patches nothing otherwise.  The commit message
-> says the exits are put in "before the CFG walk" but does not mention the
-> effect on the log indices.
->
-> Was this intended?  Would it make sense to report orig_idx in the do_check()
-> messages, or to handle a final call without inserting instructions until
-> after verification?
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38997507726
+Also pre-existing. tls_push_record() still reports a synchronous
+encrypt failure only by tls_err_abort() and returns the raw crypto
+rc. The caller then peeks sk_err =3D=3D EBADMSG to free the chained
+open record. Folding the two loads into one READ_ONCE() does not
+open that steal; closing it means returning the failure to the
+caller instead of round-tripping through sk_err, which is a
+separate change.
 
