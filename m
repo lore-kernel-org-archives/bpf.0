@@ -1,64 +1,64 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F16039B4A5
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C8946C841
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792278613; cv=none; b=On2BAhhx1vf9T36mMS9W3clHRGyi5zdwIUvsoBQ7MQx8HGZCFJpZUDWWUpHKwAj0nk1OPNLxeQcZa/PzZoEW3ewmw6ZkFU02qERXut9EqGTOTjiBYWZN6fphT6bt1Pdx9exAtauPj9dXdUcD6XhumbbwLTiFQfkFU9Cz4gHmvVo=
+	t=1792278619; cv=none; b=gd5VfbUMBmZFNpk3M9ofOnIfhKUkTlAPmlJxdxJeJoYBiwhTau3xTnbbr9lDbX7ZduN6eXjPPdlICBI8Lulh7eKfVp7LTnpKoiaUsm0HElS/yznK7sMXqiYsfrqtfEQEW9yTgVbUe31tUwiFSy2081vQ3NQH5FO2671LXrE6tSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792278613; c=relaxed/simple;
-	bh=MqH/aLA9uf0MMTPSmglwEbQ6/sKhCFOsaRTd4NdmppM=;
+	s=arc-20240116; t=1792278619; c=relaxed/simple;
+	bh=9aByiuY6uviIXExgY+w0sYV157gG0bi2Of4rSv4eqIo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H/Yr2El2wmU7Q7R1xCxyOBwxpC6PXwdzk1oi2HSoJcWK3ZtURxq0l4dCaWPghXl9NuaJwwLSmdGGmHYbetCSk8Za2C6DwFZC/YN4RUadF52PO/76cOfohQR1nAO1fAKkdvgB6WgGSRUHat3jPiWhDg06T+kkMVl649+vo4kxdD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XvXX/2IT; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version; b=B1/e89nZaEDrcfDDVzLcf8+NrY4CauMUG/qMNVmiYInZ8zdtfFzVyJpOskB1w9mYCz5zmaHoRBDiMJOTWHGTsLSIYQd6lj8HtXTU2qziR88vNL739wlzxz1VQQYYhJZhcxBhnhTfsbj6EtVOHrF+6vsdOoKsCXQtYueFpj0bTRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMAwS/CH; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XvXX/2IT"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ac6794fe45so918372a91.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:10:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMAwS/CH"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e5d0ee1951so6483185ad.0
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:10:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792278611; x=1792883411; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792278617; x=1792883417; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=9d+/3whG8o8YhiyXw+wnus5vIWRzb6dBmVCgcM6IHiM=;
-        b=XvXX/2ITyoPB47SWoYwvCD6ItzMcfz/8Qw52pXklSmR00eCtc0tzWThKcdq7pTVvTp
-         /sJrsw+t2Qgx6VL07mR+cJo+v2l0CwaZEqGl3+HRrEC8p9JI0W2C0NH9F9tlHtAhvBxv
-         sUVvJJTl1fSvmGmn16++0z/v+UFoWeYo1a6vjd0QRmk5h+4OUpfwCfHw8XB1AX6C8lmQ
-         vkNCug3IYwxJfJhVzcuW6x7+OhV/JNufUwXIeT+nZvVoxGgsUgUjVQvPQ3HzEaDD/ID5
-         OIlN10C8yfF/kRCVcStJpkpnEfIbvgibKlyHWzUT7BMqe7FHcms2PLHDSovOD6Plmypf
-         Hqtg==
+        bh=A/qciBoMPYJlnJRP8tFkm767/AyPbCuLkauH7cTHL5k=;
+        b=XMAwS/CHGX/FWulieEwPxkrlOS2+1oJTchdl0N8ckw6flrjneb5QAFXz28hVrXp6d5
+         rkBha9wnlw4UBevu8WU3png5KL8W755s4cksJdDBHXUfbqPBOsJwJvOIyWjlcJXrR/Mq
+         5QM3kb9wmeNPaVMXNIZDVmqyCvNShVvd63TvueWZkHRgRti2MlgQ6T48aFtpc29iRqry
+         R8iwmCk5Yweh7gZUZHRQoJIbwokySJ/fAJ0thck8OP6PtdgThnocII8xLXS44mcni1+d
+         EwbC3atkFPCncsU9cGsjipX4f2WgV7bqpCpzGNDvLWcSlEIp53Z9jxSCfHpSCZLEzbnO
+         f3Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792278611; x=1792883411;
+        d=1e100.net; s=20260707; t=1792278617; x=1792883417;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9d+/3whG8o8YhiyXw+wnus5vIWRzb6dBmVCgcM6IHiM=;
-        b=VNBHswnNuYoldKVwJtMZSdzHgKqLosc6gRNGGs2UYp/yJHjZVjvLkBcmTe44qhsDZU
-         AE/Fo+apGM79vUtnhXuzPVr1EOQ0eLqSYJO9fkefXoxq+HyuyKjmb0hoBUBFHXvShvYW
-         4wZppOzwR+9rABXukc+8vi0aMM83mz8rYaSuKBG1dM9VaGkSfYzJbFbXLYnSQR6nqP+6
-         jWruxuO0ey5t3tJIN3Y0ZP8O22jhp9KFJjje7jQcsOALlSsaFE9ot2XshbBfV1k1qmlC
-         nGvByzDSfximmEC3IFC5v4Y6XPPJj6cAVkfQiFNo3+9oMA8wlk7ZVH3VXP08eU6nVMLx
-         EYOQ==
-X-Gm-Message-State: AFq9FYKnjJYeUCYvRMonmNH88I+mnEjN0+YIgC1MRnMMbhvgbrH3E0xb
-	64cOGU5OXbnjtDXqhMZUQqw0wiI50pPUIDYIh8ikiVt2XHg1aVNzI7S24jaAKA==
-X-Gm-Gg: AYBFou2Y2e+fUeWvOU8Cl5lDQ7g5hYjvdag7Ip0VAnYVR4ZIKU0OtiefVxDyt/SE0PJ
-	KQnlbHje/Ra1YbWWjpptyCNOelne+WIU8E0VxL0QU9gWPwaxvXO3/6Io2KsSyQrhGRNAhSDKPWL
-	VJHZQz/E3/YIwW51j0CT6eHvFZ4oIKkwi95kgbX4QAaG76r9OEpvLDPqakAYhW+etK4NswdugSZ
-	uEzM/sWjzqigihqJ5X2NOfvHIzZNAyI8Cyhhym6tE4z+an8Fuf1tBWxMbewY1m6jklOc3UjdwDI
-	aH3Us4Lvkq321u/AJiCnjpLbNezNXKpuOCEnwgCBrsLJEPeKRA4+Twjd10MN8mmOWpuWvkRNRN/
-	gdk1BkkbDIXRUVF1KAtYTQVinR2SylB/aZb8Dxl0FxlYdx0Snu/lumBaC/VpmtRCxvgMP20YxBB
-	chYiqb9zqnibX7hc/6KJgEdPyBO/J2gOv+kiVrwI/vuqaXxdyqbo1EPZT8vpyO2BuD6zkPxZTKi
-	G+IAueN/e2Y1BlAPvMk0xRH6+VnqGkdxlYm94Cg6dSu1KMKqNRgxEqNwCv2mtKDjYFoXp0hgt6E
-	x2iG+5h5c8LWn/cFuVM5RBD0ekdiwi+lnR5K/M6n+Ms=
-X-Received: by 2002:a17:90a:d44d:b0:3ac:b3c7:de0a with SMTP id 98e67ed59e1d1-3acef14bed8mr3292079a91.40.1792278611409;
-        Sat, 17 Oct 2026 16:10:11 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc980a548sm4817359a91.0.2026.10.17.16.10.10
+        bh=A/qciBoMPYJlnJRP8tFkm767/AyPbCuLkauH7cTHL5k=;
+        b=zNQmnN3PeZPeKQVy+UqY1gXkx+6k8RZ7wXNn3v45FKQGIDFx09jQvfKwP6ijxMgHeX
+         akWvE643T/p4L+VgO4AMA4pMzOaSNss/A3tapdUtsnecLCoKrIba0IszQ9yi4kxAOsqO
+         MZCvSBBocAcxIIgbwA/D587/9GGaeipII2cUuHfHUGxNSjT9KXfxROgMG20FeGbHVTpn
+         pIF1cvjxBKEAt60C62Fw3dxTzF/uXwwaVnIrwrwa4OYeI34MMNDTAvwUtOk7w45BJAT4
+         c8/UJhEcgUwuWpYJhYDVFbhWgDtGJaV7R22AkoMdSyijyQd0f5IDvHcMRJ2qSfdmPn+R
+         KRdw==
+X-Gm-Message-State: AFq9FYJxqy1sdg+XQR4ksXc6LUaJdfwrZW4IMnEmJxr4Li59FwC2piob
+	laL+GAiZx1slCg/S8+JcK3y1Lfc+rB6LmEX86lDj5T9zuq4EORMmKTVSE4SIiA==
+X-Gm-Gg: AYBFou3fsLr1/cobnKUG5Y9y/LXHAhmbrdR5Q1kd3LvXuLwUI7S1BoES3/i8MVYj01Z
+	WcuZoJidv4li+9ojXQhAHrZRoLvOW88GEYXUf1OscRLeSWZeinOBkYcmfjUEckBPF2k0fU8AHVK
+	f6sCrr+VqJAMj81b3+YG0yLlrfdu0O/7c9ljBr1uJq9Bj95fqPfr2Gu6HdcgUHqtTa5+vjk311R
+	ntAcTucj33/B50Nr0NaOsZe5ik4xknq7K7kTdAZbhkSd7lxDM7davy4wRFa4MhCuoQHamk+4dH8
+	MNzG28gI+s0i5rcf0NZBZksvyZfm1evPF3Ix7bLkGi/AFS7A+D8Ax8R4ZEK2mUSn1vSKriJEIrq
+	fAGVVyRFo3FUxWu8QZVTQXyFLjvnpe5ojs8e0hRWgrRYL1I54j1jXm2xbT7pbeD4SkeDYnnplKB
+	/TPnomtUd5JyX9cH0oOZn5yK2FntXe928rqzQOyo/bI9vvAeu7XK2CCJ+t+VQHE9ME4plqmCAdC
+	v1Zg7gK/GJIDsDr+A/IKVyNUMpC547xoa255e2rFA7xiS6RxFalBzY5gVLZcVLS1UbqCXGk59F0
+	rE7K1pczPY+gto1QfFBD+qgxPARHala9wYqZ5Md56kY=
+X-Received: by 2002:a17:902:cecb:b0:2e9:8ef0:cf6c with SMTP id d9443c01a7336-2e9a6d40b8cmr34714555ad.26.1792278617413;
+        Sat, 17 Oct 2026 16:10:17 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8b35eesm23391515ad.73.2026.10.17.16.10.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 16:10:11 -0700 (PDT)
+        Sat, 17 Oct 2026 16:10:16 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -67,9 +67,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v3 03/16] bpf: Keep values of a dead owner for sleepable programs
-Date: Sat, 17 Oct 2026 23:09:37 +0000
-Message-ID: <20261017230950.802052-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 04/16] bpf: Don't take an extension for a function that runs sleepable
+Date: Sat, 17 Oct 2026 23:09:38 +0000
+Message-ID: <20261017230950.802052-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017230950.802052-1-alexei.starovoitov@gmail.com>
 References: <20261017230950.802052-1-alexei.starovoitov@gmail.com>
@@ -81,156 +81,128 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_local_storage_destroy() frees the elements of an owner behind a plain
-RCU grace period, on the ground that no program can refer to an owner that
-goes away.  But the pointer that bpf_task_storage_get() and its like
-return stays valid for the verifier after the program has released the
-owner, or has left the bpf_rcu_read_lock() section it had the owner from.
-A sleepable program is in no RCU read side critical section, so it can
-write to the value after the owner has died and the element was freed:
+An extension cannot be sleepable, and it is verified as a program that
+runs under the RCU read lock.  But it runs in the context of the function
+that it replaces.  For a sleepable program, or a function that is called
+from a bpf_wq or bpf_task_work callback, that is rcu_read_lock_trace().
 
-  BUG: KASAN: slab-use-after-free in _copy_from_user+0x42/0xa0
-  Write of size 8 at addr ffff8880074404a8 by task lsuaf/55
+The verifier lets such an extension use maps and pointers that rely on
+RCU.  Its maps are not counted as maps with sleepable users either, so
+that what it got from them is freed behind a plain RCU grace period:
 
-Free the element behind an RCU Tasks Trace grace period if sleepable code
-may use the map.  A program that a map is bound to was loaded, and counted
-in map->sleepable_refcnt, before it got a value from the live owner, and
-stays counted until a grace period behind its last run.
+  WARNING: net/core/sock_map.c:903 at __sock_hash_lookup_elem+0xe8/0xf0
 
-A program can also get at a storage map by a lookup in an outer map.  Then
-only the outer map is counted, its programs can come after the inner map
-was put into it, and can hold on to the inner map after it was taken out.
-So note in a map that it has been an inner map, and treat it like one with
-sleepable users from then on.
+  BUG: KASAN: slab-use-after-free in bpf_prog_b3bad285227d855b_ext_storage+0x245/0x297
+  Write of size 8 at addr ffff888108717a50 by task fr/955
 
-The same goes for what the special fields of the value hold.  The page of
-a uptr has to stay pinned, and a kptr which the program stores after the
-owner has died has to be released.  Leave the fields, and the smap that it
-takes to free them, to bpf_selem_free_trace_rcu(), as bpf_selem_unlink()
-does.  bpf_local_storage_map_free() waits for that callback, and leaves
-smap alone if it comes across such an element.
+The verifier knows the contexts that a global function is called in.
+Refuse to replace one that is called without the RCU read lock, and the
+main function of a sleepable program.  A function that sleepable code only
+calls under bpf_rcu_read_lock() can still be replaced.
 
-Elements of such maps now wait for sleepable programs that are running
-when their owner dies.  Other maps are freed as before.
+The summarization test has replaced functions of sleepable programs by
+ones that do not sleep.  Expect that to fail.
 
-Fixes: dcf456c9a095 ("bpf: Fix usage of trace RCU in local storage.")
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Fixes: 1e6c62a88215 ("bpf: Introduce sleepable BPF programs")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h            |  1 +
- kernel/bpf/bpf_local_storage.c | 31 +++++++++++++++++++++++++------
- kernel/bpf/map_in_map.c        |  7 +++++--
- 3 files changed, 31 insertions(+), 8 deletions(-)
+ kernel/bpf/verifier.c                         | 20 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/summarization.c  | 21 +++++--------------
+ 2 files changed, 25 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 22947fa192e4..a10af47978a4 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -341,6 +341,7 @@ struct bpf_map {
- 	bool frozen; /* write-once; write-protected by freeze_mutex */
- 	bool free_after_mult_rcu_gp;
- 	bool free_after_rcu_gp;
-+	bool was_inner_map;
- 	atomic64_t sleepable_refcnt;
- 	s64 __percpu *elem_count;
- 	u64 cookie; /* write-once */
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 49ea00c99390..b12fcec47ffa 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -352,7 +352,8 @@ int bpf_selem_unlink(struct bpf_local_storage_elem *selem)
- static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
- 				    struct bpf_local_storage_map_bucket *b)
- {
--	bool in_map_free = !!b, free_storage = false;
-+	bool in_map_free = !!b, free_storage = false, sleepable_users = false;
-+	bool keep_fields = false;
- 	struct bpf_local_storage *local_storage;
- 	struct bpf_local_storage_map *smap;
- 	unsigned long flags;
-@@ -362,17 +363,26 @@ static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
- 	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
- 
- 	if (smap) {
-+		/* A map that is freed, or NULL here, has no program left. */
-+		sleepable_users = !in_map_free &&
-+				  (atomic64_read(&smap->map.sleepable_refcnt) ||
-+				   READ_ONCE(smap->map.was_inner_map));
- 		b = b ? : select_bucket(smap, local_storage);
- 		err = raw_res_spin_lock_irqsave(&b->lock, flags);
- 		if (!err) {
- 			/*
- 			 * Call bpf_obj_free_fields() under b->lock to make sure it is done
- 			 * exactly once for an selem. Safe to free special fields immediately
--			 * as no BPF program should be referencing the selem.
-+			 * as no BPF program should be referencing the selem, unless it
-+			 * is sleepable: see below.
- 			 */
- 			if (likely(selem_linked_to_map(selem))) {
- 				hlist_del_init_rcu(&selem->map_node);
--				bpf_obj_free_fields(smap->map.record, SDATA(selem)->data);
-+				if (sleepable_users)
-+					keep_fields = true;
-+				else
-+					bpf_obj_free_fields(smap->map.record,
-+							    SDATA(selem)->data);
- 				unlink++;
- 			}
- 			raw_res_spin_unlock_irqrestore(&b->lock, flags);
-@@ -387,7 +397,15 @@ static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
- 		 * with selem1 as raw_res_spin_lock_irqsave() returns -ETIMEDOUT.
- 		 */
- 		WARN_ON_ONCE(err && in_map_free);
--		if (!err || in_map_free)
-+		/*
-+		 * A sleepable program can still use, and fill, the fields of a value
-+		 * that it got before it let go of the owner. As for bpf_selem_unlink(),
-+		 * bpf_selem_free_trace_rcu() frees them, and takes smap for that:
-+		 * map_free() waits for this RCU read side critical section and then
-+		 * for the callback. It must not take smap away from an selem that
-+		 * destroy() has unlinked from the map.
-+		 */
-+		if (in_map_free ? err || unlink : !err && !keep_fields)
- 			RCU_INIT_POINTER(SDATA(selem)->smap, NULL);
- 	}
- 
-@@ -434,11 +452,12 @@ static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
- 	 *
- 	 * The owner that map_free() takes an selem from is alive: sleepable code, which
- 	 * is in no RCU read side critical section, may be walking its list for another
--	 * map.
-+	 * map.  And it can still use a value that it got before it let go of an owner
-+	 * that destroy() is called for.
- 	 */
- 	if (unlink == 2 ||
- 	    atomic_cmpxchg(&selem->state, SELEM_UNLINKED, SELEM_TOFREE) == SELEM_UNLINKED)
--		bpf_selem_free(selem, !in_map_free);
-+		bpf_selem_free(selem, !in_map_free && !sleepable_users);
- 
- 	if (free_storage)
- 		bpf_local_storage_free(local_storage, !in_map_free);
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index 5ee8aae7435b..0fa3f2ac0f99 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -110,10 +110,13 @@ void *bpf_map_fd_get_ptr(struct bpf_map *map,
- 		return ERR_PTR(-ENOTSUPP);
- 
- 	inner_map_meta = map->inner_map_meta;
--	if (inner_map_meta->ops->map_meta_equal(inner_map_meta, inner_map))
-+	if (inner_map_meta->ops->map_meta_equal(inner_map_meta, inner_map)) {
- 		bpf_map_inc(inner_map);
--	else
-+		/* Its users are those of the outer maps from now on */
-+		WRITE_ONCE(inner_map->was_inner_map, true);
-+	} else {
- 		inner_map = ERR_PTR(-EINVAL);
-+	}
- 
- 	return inner_map;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2c812a5f1da8..d738ce6e7428 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -22151,6 +22151,21 @@ static int check_unreliable_func_args(struct bpf_verifier_log *log, struct btf *
+ 	return -EINVAL;
  }
+ 
++/*
++ * An extension is verified as a program that runs under the RCU read lock. Does
++ * the function that it is to replace?
++ */
++static bool func_has_rcu_read_lock(const struct bpf_prog *prog, int subprog)
++{
++	const struct bpf_func_info_aux *sub_aux = &prog->aux->func_info_aux[subprog];
++
++	if (!subprog)
++		return !prog->sleepable;
++
++	return !sub_aux->called[BPF_FUNC_CTX_SLEEPABLE] &&
++	       !sub_aux->called[BPF_FUNC_CTX_NO_RCU_LOCK];
++}
++
+ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			    const struct bpf_prog *prog,
+ 			    const struct bpf_prog *tgt_prog,
+@@ -22247,6 +22262,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 					"Cannot extend a writable raw tracepoint program\n");
+ 				return -EINVAL;
+ 			}
++			if (!func_has_rcu_read_lock(tgt_prog, subprog)) {
++				bpf_log(log,
++					"Cannot extend a function that runs without RCU read lock\n");
++				return -EINVAL;
++			}
+ 			tgt_changes_pkt_data = aux->func
+ 					       ? aux->func[subprog]->aux->changes_pkt_data
+ 					       : aux->changes_pkt_data;
+diff --git a/tools/testing/selftests/bpf/prog_tests/summarization.c b/tools/testing/selftests/bpf/prog_tests/summarization.c
+index 6951786044ca..3e4bcf071735 100644
+--- a/tools/testing/selftests/bpf/prog_tests/summarization.c
++++ b/tools/testing/selftests/bpf/prog_tests/summarization.c
+@@ -53,17 +53,6 @@ static void test_aux(const char *main_prog_name,
+ 	err = summarization_freplace__load(freplace);
+ 	print_verifier_log(log);
+ 
+-	/* The might_sleep extension doesn't work yet as sleepable calls are not
+-	 * allowed, but preserve the check in case it's supported later and then
+-	 * this particular combination can be enabled.
+-	 */
+-	if (!strcmp("might_sleep", replacement) && err) {
+-		ASSERT_HAS_SUBSTR(log, "sleepable helper bpf_copy_from_user#", "error log");
+-		ASSERT_EQ(err, -EINVAL, "err");
+-		test__skip();
+-		goto out;
+-	}
+-
+ 	if (expect_load) {
+ 		ASSERT_OK(err, "summarization_freplace__load");
+ 	} else {
+@@ -86,9 +75,8 @@ static void test_aux(const char *main_prog_name,
+  * Also test a case when main subprogram itself is replaced and is a single
+  * subprogram in a program.
+  *
+- * This holds for might_sleep programs. It is ok to replace might_sleep with
+- * might_sleep and with does_not_sleep, but does_not_sleep cannot be replaced
+- * with might_sleep.
++ * An extension is verified as a non-sleepable program, hence nothing that runs
++ * sleepable can be replaced.
+  */
+ void test_summarization_freplace(void)
+ {
+@@ -111,7 +99,7 @@ void test_summarization_freplace(void)
+ 		},
+ 	};
+ 	const char *pkt_err = "Extension program changes packet data";
+-	const char *slp_err = "Extension program may sleep";
++	const char *slp_err = "Cannot extend a function that runs without RCU read lock";
+ 	struct {
+ 		const char *func;
+ 		bool has_side_effect;
+@@ -136,7 +124,8 @@ void test_summarization_freplace(void)
+ 				if (!test__start_subtest(buf))
+ 					continue;
+ 				test_aux(mains[t][i].main, mains[t][i].to_be_replaced, replacements[t][j].func,
+-					 mains[t][i].has_side_effect || !replacements[t][j].has_side_effect,
++					 t == 0 &&
++					 (mains[t][i].has_side_effect || !replacements[t][j].has_side_effect),
+ 					 replacements[t][j].err_msg);
+ 			}
+ 		}
 -- 
 2.55.0
 
