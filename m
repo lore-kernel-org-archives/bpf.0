@@ -1,64 +1,64 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D34C37C925
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EDEB2EEE8C
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:27:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792200449; cv=none; b=rrB2Qa1b2GtkNkBHT32kuytgkKn2N+3Er08k1Hnsahb2hk5pyig/AyYwgWInhXUN1qEe390FaPHjnhNAc2yfY8SY2tkugQXlZ+6qzY8x8E9aAy5oSoy4h3Zzd0WC/cm93CtCcoVMWv1Ool+uLKYEWz7KZkVazaasKy+jFLpGKAg=
+	t=1792200470; cv=none; b=TAd5w6Qi0wndRy76rBruaBt7aPgBGHdtKF1wkriGoAFVmKFx7scPi8KxcWs7vofR/lpOyVF4stugLmspJcMBMg41xlvmLRhPRfXFAPTIA6PDITNvqHyNuhKDrjmZZdnpDLfcBWZ5gGy1wRO32kT2iH6vflWzPRZC7EaLJmp0tAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792200449; c=relaxed/simple;
-	bh=M8ES0kL0OPES6hbTArznFgO3NVcCTS5zVjhh6KSPQtg=;
+	s=arc-20240116; t=1792200470; c=relaxed/simple;
+	bh=jqT5Ab18KbkMPLG5nuVmKYwi9/htcEz1suyx38WJeRk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KC3ZvKMAxbM4RoTZ3+UKCL+i2ARJIBw6V5olKqn1opuU2TGC007xfuoOIS8gWzTdWtDVMBIOYO+fPrU3RLiOTIEuroAXftECO8UouOTHpO9FmUET3tKk3x/bdITn4yWvp0Z6ccsC8OVmXeElgYcPXy7xVwvVfyTcNM8OVwMxPjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r2cGTRNM; arc=none smtp.client-ip=209.85.216.52
+	 MIME-Version; b=dszYAq//x0k1QIlpcU+zqByLE/F8pityKDz3woCHNRtWITiIcuECdo3IqwTLbOBTtzRA7/BkBHSS8x/k6DH0CQYFM+4+nteiUgI08OyEoQhkLJ+edIVQlV3uegeG/muB0tlPfZl19wGAf35mXof3buxOg/HyFw54FIiol4k0cVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzXbxCNP; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r2cGTRNM"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso271278a91.1
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:27:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzXbxCNP"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-398a4dcf289so317771a91.2
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792200448; x=1792805248; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792200469; x=1792805269; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4LioG1TfRbQbbPeFWnF473ae+LrllOtiRpu5PoIzCrE=;
-        b=r2cGTRNMaBYoc1wKb7mTH5zmcgDxi1ioMn3ZjzMmdxGIpef4Acg55t6RZLuHKS44yI
-         Jyx1ICXi9LWbV29dbUpahebPA9ASMctEzaggAM3XHRHiFLA1gmC0auR040D7VBtZFxxd
-         lfVkaWHVoQd9jDPjGym5GCUmc5K+Bn7K1tgW2kYygqZTOLHpPbUjK+HH+flME3UfHUoL
-         qqLZMktcdvTe3og5YrbAqcHNwMJbCLP7pt3v8GneM2wX3rwffEgDrhbvN+MYAvR2QDzY
-         AjIFNL5gLHCJMHLJkcTYGspuPOxxMGK/tWQLq3lP9KoYC6ZlmOpjUvQIb31A+JTHhC5P
-         Qr2A==
+        bh=nIpcC7WsRUsfob/M32I+w1LmmQqZv3hP9zFFPAjnTx0=;
+        b=kzXbxCNPf34WSlNfqlfLUj1nuQbgGCGNRw0+s4Bk32bA6KWXB0IXzqT3l6gdPacCGG
+         fNOR9FLRmakhstZKNSWL+Nah4gvsVrBh44v8Jpp5WdTZbrLfW+Sr0OaS5aGURnapK3Zj
+         gAvd0j4rZ4GOwQXXJMEo70xOxKXT38FAhdPkjPc6gIx/fCfZneBYve3S1j7tJKM7KM9M
+         HITBrW4n7jP9J0XIO1+b73rMFkNhgGFCjBrHk2jFY0lEUzUUOcNTap8l86xMbPPTTvnd
+         +hk9Tah8e2VYADqkg6PRc9BK6n8c6hdG+Q94Gv2gslt6bqKARfWVwxaEkDxOmNmHdiiU
+         D2lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792200448; x=1792805248;
+        d=1e100.net; s=20260707; t=1792200469; x=1792805269;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4LioG1TfRbQbbPeFWnF473ae+LrllOtiRpu5PoIzCrE=;
-        b=YXX1/m7YcvDiz3n2SeaupwMy1zDZE+txaRSVRf+uvvJnaq9Z9NSDLYYiKYLbjIP7vc
-         LRqsg5Dl9TuxbCghkhs9ialMFlxMcA28htK8Ds4fb7jYKj4fWMnE3nvyHzTD+LFFClgw
-         Gm/ysxA99cXAuT1nMtVzyEBuMk+r+HsAkdBqUw2z02xvOdqd+4Df9tGqCfO85C4Rrb2a
-         PhMBzhp/b4voBDIpQDcbB649ZdLc3MLtq6aalOLMMrUM6NirdQ6Al/1uCJ1utubT2Zy6
-         CnkNqba3M74QjiVQ1WHlMUs9D9raq2mRh2irONurq6ANZtCNmDEjFcVk6UkwqymcQh0m
-         q2FQ==
-X-Gm-Message-State: AFq9FYL6p61DuedGBUIzf8F35u1TkNB4ZmTVAisnS1tUjkVUIe2maZuQ
-	q49wPqGMZDvBjX2z5wPi//jWRU5Tna32SFa5FUf9Pk3+8TMCzNUWFuzXI/59FXCa
-X-Gm-Gg: AYBFou2Kvb/iMPRGzd68E2pbuRsBMxd8NcYZqwWjz0gc4V05LqTOUPuqA/MuJRhitbr
-	qHBtrJPGzPUewmHXTnzONbbrNg7v3QuyMK9sGuDMw4CUoGCPRG+097QIUvjoFFWvdoMZE2hLj7f
-	J9FDE7/weOf32x003zCEwCQp7R9hVi7GoboXmPc7XiqXgw8Jvsqt/08OodcWFhhSrNKjQYL270w
-	BpRzLk4g2ZGx1khUsQV1t/erAdEtSmNIWquTz8KvhmrHIiPoYYbVY6wUARz7RKsxFzpCAZ1HyuP
-	vKskMhN6op45vdLu9HfhdJ2subbPJYbcrhmdVHENVZTlnAhNvyE1tsGrwHvVyWogjM17DRvRNU8
-	98pHXLXEQwvbPqu/ZsQ5m7bHSfK7vUjCh4y+g9YMpqHa1+BUnkdF9cMl2sFhkfnxW/ospiujuGh
-	bxcr4PGytkEjdWgtwF26Plcaqvy4FQ8cQfX/mKOSAz5d4kEclY3TAU8iIN6eZwq0bnwzfHoa6Us
-	7Q0OLx2IEQokuIgV8bEVAnDScyqY46CEGBB/WCHZcoutjchL0PhAftN+B9U1YrI+BuBE28AM6iJ
-	pfNyciMgwxGYWXwCdecntcHs9VADv+fmSMmPfKGLh7s=
-X-Received: by 2002:a17:90b:4c49:b0:3ab:c674:cad1 with SMTP id 98e67ed59e1d1-3acef51ec78mr1289943a91.50.1792200447558;
-        Fri, 16 Oct 2026 18:27:27 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc487e509sm6188375a91.9.2026.10.16.18.27.26
+        bh=nIpcC7WsRUsfob/M32I+w1LmmQqZv3hP9zFFPAjnTx0=;
+        b=iItuSKqyVtLciuQKfKOhdUhyjpldj9qUWyGum71hKl0INEtltgeIvDfCds4UWAzQJg
+         AqhX5lNnbeu85g8oZlUL3z2Osg79n5NdFe67MR4kBdGB36LW62exWdkonBaz3nbnDG85
+         tBpGPWHRxnJcBmPfdPRjXUi1TF6OMSTrZhHqVc8mmh3835rRvGLX8o6pOHcOjhomD1Iv
+         DAtyAZF3dTT+T6TdVqUs4kh5f8dNZwKumsadIofwKuMQBQH8P+juYRbSAdDMssFdyq1O
+         cTsAcRsnFTIEOBjgwwXpP/SpRui7D1kMRRnBCvymMCTB1K6uTT0PjnkmPaC3lgq4i4kn
+         M/HQ==
+X-Gm-Message-State: AFq9FYKLlFl1Wh/I92dRlqcRxUQXJMuHz4fb3AEXn4JCqfjfrFUHqeKW
+	Sh3VnGiIvJ0vXuGkmsI8XuougD3R6i1Jdl79cz2AeaCQ3I1rFDc1nm+gpAuvchID
+X-Gm-Gg: AYBFou23BjNhAfmtlGUkB+NBh9MCAZKJrBpfEJ6WvrcTZ3RShqVfpeO0JfmJ3WfdIm8
+	RQzL4EiyG2QvCgJtsOjfDwaG3JwaYEa50wXXGLgx5TTtFbh7AMomIOSgVRqHGW1xpOFUmlZX9+A
+	6M0p4alSj0A91Bhc38gV7PbdCNnsboXtJk7mvllJnN6XgG8Rud/xQhKWu8ZSVnC7tcSdiMx/Jwo
+	rX23uKM09/ZKraC1gnJ4yPvmzZrhk9A5nbhWQUq/B1fk9goUayETwSPEwb6tVbTZyIthO+3t+u0
+	jQNcnSCPbGkoqBQTp0lVvHkp/v+ijUK1Md3/GQSZ1s0c5mijIjsMReYJuh+1utVXkV2tWCp2joT
+	F1BZcd1MQ5YncwrMOjUhdSIYrv5Z+392lCFXDxQMKH7P/jmRP6u9cgEBK+l9bchKf2IHo8hk56n
+	c9nea9teTeX4JldDkNkWLeSi89tSJIO7Sk0zCTGeCPeXRlkIWop4qVlUax0urPU26y1otQAse74
+	K9SOh0fwHwMEPJDef/HrsmDsH4e8I6P/u6D+Yopvv9fwnUjD0B5mrF4waoMKWJxZh+jGp9xhgBM
+	XzAEs9JZkwwCM95VLTfdTnkt+cahnzhLudM3BcQrA1Mc
+X-Received: by 2002:a17:90b:39ad:b0:3ac:a7ee:678c with SMTP id 98e67ed59e1d1-3acee2796fdmr1139235a91.2.1792200468922;
+        Fri, 16 Oct 2026 18:27:48 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac9461d71esm11282572a91.7.2026.10.16.18.27.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 18:27:26 -0700 (PDT)
+        Fri, 16 Oct 2026 18:27:48 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next 16/38] bpf: Hold the socket in the sk_storage map iterator
-Date: Sat, 17 Oct 2026 01:24:29 +0000
-Message-ID: <20261017012451.364800-8-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 17/38] bpf: Bound the nesting that the BTF show code follows
+Date: Sat, 17 Oct 2026 01:24:30 +0000
+Message-ID: <20261017012451.364800-9-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
 References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
@@ -84,162 +84,63 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-The iterator over a sk_storage map passes the owner of an element to its
-program as ctx->sk, without a reference. All that it holds is the RCU read
-lock, which keeps the element and the storage, not the socket.
+btf_struct_show() and btf_array_show() recurse for every nested struct
+and array.  MAX_RESOLVE_DEPTH bounds one resolve walk when BTF is loaded,
+not the nesting: a member whose type is resolved already is not walked
+again, so BTF that defines its types from the inside out can nest them as
+deep as it has types.
 
-An element is unlinked by bpf_sk_storage_free(), which __sk_destruct()
-calls right before it frees the socket. That is no better for a socket
-with SOCK_RCU_FREE: the grace period comes in front of __sk_destruct(),
-so a reader which starts behind call_rcu() still finds the element. The
-program and the helpers it hands ctx->sk to, such as
-bpf_sk_storage_get() or bpf_sk_storage_delete(), use a socket which is
-being freed on another CPU. It takes nothing but reading the iterator
-while sockets with an element in the map are closed, by whomever.
+Whoever may load BTF, with CAP_BPF or a BPF token, can give such a type
+to the value of a map.  Reading the file of that map in bpffs then
+overruns the kernel stack: with a few hundred levels the stack guard page
+is hit and the kernel panics.
 
-Take a reference for the time of the program, and skip the element if
-there is none to be had. To look at the owner at all, do what
-bpf_selem_unlink_nofail() does for bpf_local_storage_map_free(): as long
-as the element is linked under the lock of the storage,
-bpf_local_storage_destroy() has not got past it, unless it has given up
-on the lock, and then it waits for owner_refcnt.
+Stop at 32 levels.  That is MAX_RESOLVE_DEPTH, and __btf_show_indent()
+has as many columns.  Nothing is shown for a member that lies deeper, and
+the status becomes -E2BIG, which bpf_snprintf_btf() and
+bpf_seq_printf_btf() return.  The types of an x86_64 defconfig kernel nest
+14 deep.
 
-The last reference may now be dropped by the iterator. The end of a socket
-may want process context: rfcomm_sock_destruct() takes a mutex. So only
-drop the reference under RCU, and free a socket whose last one it was when
-the RCU read lock has been released, which is at the end of a bucket and
-of every read() at the latest.
-
-Fixes: c69d2ddb2072 ("bpf: Using rcu_read_lock for bpf_sk_storage_map iterator")
+Fixes: b00b8daec828 ("bpf: btf: Add pretty print capability for data with BTF type info")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- net/core/bpf_sk_storage.c | 73 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 68 insertions(+), 5 deletions(-)
+ kernel/bpf/btf.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index aea67b446c7c..ea22ec5ef5b1 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -699,8 +699,37 @@ struct bpf_iter_seq_sk_storage_map_info {
- 	struct bpf_map *map;
- 	unsigned int bucket_id;
- 	unsigned skip_elems;
-+	struct rcu_head *dead_sks;
- };
- 
-+/*
-+ * sock_put() in two halves. The end of a socket may want process context:
-+ * rfcomm_sock_destruct() takes a mutex. If the iterator drops the last
-+ * reference, it keeps the socket until it has left the RCU read side critical
-+ * section. Nobody uses sk_rcu before sk_destruct().
-+ */
-+static void
-+bpf_sk_storage_map_seq_put_sk(struct bpf_iter_seq_sk_storage_map_info *info,
-+			      struct sock *sk)
-+{
-+	if (refcount_dec_and_test(&sk->sk_refcnt)) {
-+		sk->sk_rcu.next = info->dead_sks;
-+		info->dead_sks = &sk->sk_rcu;
-+	}
-+}
-+
-+static void
-+bpf_sk_storage_map_seq_free_sks(struct bpf_iter_seq_sk_storage_map_info *info)
-+{
-+	struct sock *sk;
-+
-+	while (info->dead_sks) {
-+		sk = container_of(info->dead_sks, struct sock, sk_rcu);
-+		info->dead_sks = sk->sk_rcu.next;
-+		sk_free(sk);
-+	}
-+}
-+
- static struct bpf_local_storage_elem *
- bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info *info,
- 				 struct bpf_local_storage_elem *prev_selem)
-@@ -729,6 +758,7 @@ bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info *info,
- 			/* not found, unlock and go to the next bucket */
- 			b = &smap->buckets[bucket_id++];
- 			rcu_read_unlock();
-+			bpf_sk_storage_map_seq_free_sks(info);
- 			skip_elems = 0;
- 			break;
- 		}
-@@ -796,12 +826,44 @@ DEFINE_BPF_ITER_FUNC(bpf_sk_storage_map, struct bpf_iter_meta *meta,
- 		     struct bpf_map *map, struct sock *sk,
- 		     void *value)
- 
-+/*
-+ * Take a reference on the socket which owns @selem. RCU keeps the element, not
-+ * its owner. As long as the element is linked under the lock of the storage,
-+ * the owner has not got past bpf_sk_storage_free(), unless that has given up
-+ * on the lock. Then it still waits for owner_refcnt.
-+ */
-+static struct sock *
-+bpf_sk_storage_selem_get_sk(struct bpf_local_storage_elem *selem)
-+{
-+	struct bpf_local_storage *sk_storage;
-+	struct sock *sk = NULL;
-+	unsigned long flags;
-+
-+	sk_storage = rcu_dereference(selem->local_storage);
-+	/* reset since ->next() looked: the socket goes away */
-+	if (!sk_storage)
-+		return NULL;
-+
-+	if (raw_res_spin_lock_irqsave(&sk_storage->lock, flags))
-+		return NULL;
-+
-+	if (!hlist_unhashed(&selem->snode) &&
-+	    refcount_inc_not_zero(&sk_storage->owner_refcnt)) {
-+		sk = sk_storage->owner;
-+		if (!refcount_inc_not_zero(&sk->sk_refcnt))
-+			sk = NULL;
-+		bpf_local_storage_unpin_owner(sk_storage);
-+	}
-+	raw_res_spin_unlock_irqrestore(&sk_storage->lock, flags);
-+
-+	return sk;
-+}
-+
- static int __bpf_sk_storage_map_seq_show(struct seq_file *seq,
- 					 struct bpf_local_storage_elem *selem)
- {
- 	struct bpf_iter_seq_sk_storage_map_info *info = seq->private;
- 	struct bpf_iter__bpf_sk_storage_map ctx = {};
--	struct bpf_local_storage *sk_storage;
- 	struct bpf_iter_meta meta;
- 	struct bpf_prog *prog;
- 	int ret = 0;
-@@ -812,14 +874,14 @@ static int __bpf_sk_storage_map_seq_show(struct seq_file *seq,
- 		ctx.meta = &meta;
- 		ctx.map = info->map;
- 		if (selem) {
--			sk_storage = rcu_dereference(selem->local_storage);
--			/* reset since ->next() looked: the socket goes away */
--			if (!sk_storage)
-+			ctx.sk = bpf_sk_storage_selem_get_sk(selem);
-+			if (!ctx.sk)
- 				return SEQ_SKIP;
--			ctx.sk = sk_storage->owner;
- 			ctx.value = SDATA(selem)->data;
- 		}
- 		ret = bpf_iter_run_prog(prog, &ctx);
-+		if (ctx.sk)
-+			bpf_sk_storage_map_seq_put_sk(info, ctx.sk);
- 	}
- 
- 	return ret;
-@@ -837,6 +899,7 @@ static void bpf_sk_storage_map_seq_stop(struct seq_file *seq, void *v)
- 		(void)__bpf_sk_storage_map_seq_show(seq, v);
- 	else
- 		rcu_read_unlock();
-+	bpf_sk_storage_map_seq_free_sks(seq->private);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 64c78434fa05..a9bf4c3c0a27 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1081,6 +1081,8 @@ static const struct btf_type *btf_type_skip_qualifiers(const struct btf *btf,
  }
  
- static int bpf_iter_init_sk_storage_map(void *priv_data,
+ #define BTF_SHOW_MAX_ITER	10
++/* nested structs and arrays shown; __btf_show_indent() has as many columns */
++#define BTF_SHOW_MAX_DEPTH	32
+ 
+ #define BTF_KIND_BIT(kind)	(1ULL << kind)
+ 
+@@ -1474,8 +1476,18 @@ static void *btf_show_start_aggr_type(struct btf_show *show,
+ 				      const struct btf_type *t,
+ 				      u32 type_id, void *data)
+ {
+-	void *safe_data = btf_show_start_type(show, t, type_id, data);
++	void *safe_data;
+ 
++	/*
++	 * Structs and arrays are shown by recursion.  BTF loading bounds the
++	 * depth of one resolve walk, not how deep resolved types may nest.
++	 */
++	if (show->state.depth >= BTF_SHOW_MAX_DEPTH) {
++		show->state.status = -E2BIG;
++		return NULL;
++	}
++
++	safe_data = btf_show_start_type(show, t, type_id, data);
+ 	if (!safe_data)
+ 		return safe_data;
+ 
 -- 
 2.55.0
 
