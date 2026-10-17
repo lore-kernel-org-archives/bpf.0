@@ -1,21 +1,21 @@
 Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1E73B19BA
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B1B3AE707
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792205576; cv=none; b=fbxkFEHIa/NOTyXxeiGniUMjkN2HKnc0cbHnfwyjPcyEir8zlIyLTpDxXTeoxoswmsMmYvOmBy8dh+fMvOZstRqqv9e0LnFw8SSWC5HbPmSYh2Z3hNeD6UPYveoBgfk9nsX7O7gAXd/ecPO08fA3cNR7/XJhnn3FBx1Z3aWW0g8=
+	t=1792205587; cv=none; b=je28N8fO1g67CxZWEFNq/tPwXv7WyhT8DEWe6UKyum1K9CsxDZJewX+465qMDDeDhBzfeFvLh1ix8WdZ62Sz416ASUEswpENKgRT2Lqb94auM2JBIMXH2hvgKtAk+wMCrH0s5krxpba+iswv7Ku1SCubcxNTfwyW4JckdAkzoU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792205576; c=relaxed/simple;
-	bh=FNGHCtp9K0U1YVJVhjW5xiakuXtlk2CBaokb0epNodQ=;
+	s=arc-20240116; t=1792205587; c=relaxed/simple;
+	bh=KWpf4p7rf1vub/opBvIoqrLN1AttO/XNZqOTfVFU2bY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EAYX9e6tR/Y9Gy6EXS3P1K9ctuAjizsbOu80Nklr0cp/UmK08WXT/ERF7IB2AZViiudOeMOl23Oa/XRDk4TXNfht0P++3Vrfec1p7WL8MA5CvQxK3xh3SjAw4hlXLmr9qp0t/4K+q0QsyRfSjcL+3Zp7uF6aBmxVK/7iGcaRDmU=
+	 MIME-Version; b=nSO5S31RRVZp1KcAwhpSz5l+Y/ULLPm4xDrPvq2HPyNgIGRboRPcvGPgz6uNcwrcmn05BV5zys2AhMjNHnprpwMMV4hluZnQHJH814RQhQVdH2CJuiaTT0Ssqvh+a41KvwSesgBG0xe/iXybxTvCs0XgB33rlWTIK+fmJQ0TtYI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id E8E0231B3B0064; Fri, 16 Oct 2026 19:52:37 -0700 (PDT)
+	id 0F97E31B3B0089; Fri, 16 Oct 2026 19:52:43 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v12 13/25] bpf: Dispatch cleanup pads by rewriting return addresses
-Date: Fri, 16 Oct 2026 19:52:37 -0700
-Message-ID: <20261017025237.1925807-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v12 14/25] bpf: Refuse a trampoline that calls a subprog that can unwind
+Date: Fri, 16 Oct 2026 19:52:43 -0700
+Message-ID: <20261017025243.1926040-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261017025129.1914859-1-yonghong.song@linux.dev>
 References: <20261017025129.1914859-1-yonghong.song@linux.dev>
@@ -37,169 +37,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-bpf_unwind() now walks the BPF frames through arch_bpf_stack_walk_ra()
-and rewrites the saved return address of each frame above the one that
-called it: to the pad where a record covers the call, else to the
-frame's epilogue. The walk stops after the main function. For the
-verifier patch's example, main -> A -> B -> C with only A's call to B
-covered:
+bpf_unwind() walks up the stack rewriting return addresses. It expects
+every frame up to the main function to be one of the program's own BPF
+functions, and stops at the first frame that is not. A trampoline
+attached to a subprog with fexit, fmod_ret or fsession is such a frame:
+it calls the subprog, so it sits between the subprog and its caller:
 
-  slot                    points into               rewritten to
-  ----------------------  ------------------------  ---------------------
-  bpf_unwind()'s return   C, after its unwind call  left alone
-  C's return              B, after 'call C'         B's epilogue
-  B's return              A, after 'call B'         P, A's pad
-  A's return              main, after 'call A'      main's epilogue
-  main's return           the kernel                left alone
+  main -> A -> trampoline -> B -> C          C calls bpf_unwind()
 
-Each frame then just returns: C through the 'r0 =3D 0; exit' after its
-bpf_unwind(), B and main through their epilogues, A through its pad P
-and P's resume.
+The walk rewrites the return into B but stops at the trampoline, so B
+returns through it to A after its call, instead of to A's pad or
+epilogue: a path the verifier never walked for an unwind.
 
-The walk finds the frames in the calling program, not with
-bpf_prog_ksym_find(). A running instance holds no reference to its
-program, so user space can drop the last one, by closing the program's
-fds and links, while the instance still runs: the kallsyms entries go at
-once, and only freeing the program waits for the RCU or RCU Tasks Trace
-grace period. An unwind in between, say in a sleepable program blocked
-in bpf_copy_from_user(), would find none of its frames, so no pad would
-run. So bpf_unwind() takes the program's aux as a KF_IMPLICIT_ARGS
-argument, which keeps its BTF prototype void(void), and matches each
-return address against aux->func[], or the program itself. To get the
-implicit argument loaded, adjust_insn_aux_data() moves arg_prog, as it
-moves cleanup_pad, to the slot the original instruction kept: the unwind
-call stays first in its patch.
-
-Both kfuncs become callable here. bpf_unwind() is notrace and NOKPROBE,
-so that only plain kernel frames sit between it and the frame that called
-it, and the walk does not have to get through a trampoline or a kretprobe
-return on its way there.
+Refuse such an attachment to a subprog marked might_unwind, now copied
+into each function's aux. Nothing else puts a frame between two of a
+program's frames: fentry leaves none, a trampoline on main is above
+where the walk stops, freplace is a program of its own whose unwind ends
+as a normal return to its caller, a callback that can unwind is refused,
+kprobes and fgraph cannot hook JIT code, and a tail call replaces a
+frame.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/fixups.c  |  2 ++
- kernel/bpf/helpers.c | 67 +++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 68 insertions(+), 1 deletion(-)
+ include/linux/bpf.h   |  1 +
+ kernel/bpf/fixups.c   |  1 +
+ kernel/bpf/verifier.c | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7f23f4efde01..1b3b6ee05c09 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1910,6 +1910,7 @@ struct bpf_prog_aux {
+ 	bool priv_stack_requested;
+ 	bool changes_pkt_data;
+ 	bool might_sleep;
++	bool might_unwind;
+ 	bool kprobe_write_ctx;
+ 	struct {
+ 		s32 keyring_serial;
 diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index a73c52b543e9..6c2e5e544124 100644
+index 6c2e5e544124..dd29ead32cf3 100644
 --- a/kernel/bpf/fixups.c
 +++ b/kernel/bpf/fixups.c
-@@ -247,6 +247,8 @@ static void adjust_insn_aux_data(struct bpf_verifier_=
-env *env,
- 			data[off + cnt - 1].non_stack_access =3D false;
- 			data[i].cleanup_pad =3D data[off + cnt - 1].cleanup_pad;
- 			data[off + cnt - 1].cleanup_pad =3D 0;
-+			data[i].arg_prog =3D data[off + cnt - 1].arg_prog;
-+			data[off + cnt - 1].arg_prog =3D 0;
- 		} else if (bpf_is_mem_insn(insn + i)) {
- 			data[i].non_stack_access =3D true;
+@@ -1494,6 +1494,7 @@ static int jit_subprogs(struct bpf_verifier_env *en=
+v)
+ 		func[i]->aux->exception_cb =3D env->subprog_info[i].is_exception_cb;
+ 		func[i]->aux->changes_pkt_data =3D env->subprog_info[i].changes_pkt_da=
+ta;
+ 		func[i]->aux->might_sleep =3D env->subprog_info[i].might_sleep;
++		func[i]->aux->might_unwind =3D env->subprog_info[i].might_unwind;
+ 		func[i]->aux->token =3D prog->aux->token;
+ 		if (!i)
+ 			func[i]->aux->exception_boundary =3D env->seen_exception;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 804a6835c56f..505ecb8de221 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -22371,6 +22371,23 @@ int bpf_check_attach_target(struct bpf_verifier_=
+log *log,
+ 				prog_extension ? "Extension" : "Tracing");
+ 			return -EINVAL;
  		}
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 8df3f4746b68..1cf7b712854b 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -29,8 +29,10 @@
- #include <linux/task_work.h>
- #include <linux/irq_work.h>
- #include <linux/buildid.h>
-+#include <linux/kprobes.h>
-=20
- #include "../../lib/kstrtox.h"
-+#include "exception.h"
-=20
- /* If kernel subsystem is allowing eBPF programs to call this function,
-  * inside its own verifier_ops->get_func_proto() callback it should retu=
-rn
-@@ -3424,9 +3426,70 @@ static bool bpf_stack_walker(void *cookie, u64 ip,=
- u64 sp, u64 bp)
- 	return false;
- }
-=20
--__bpf_kfunc void bpf_unwind(void)
-+struct bpf_unwind_ctx {
-+	const struct bpf_prog_aux *aux;
-+	u32 cnt;
-+};
-+
-+static bool bpf_unwind_ip_in(const struct bpf_prog *prog, u64 ip)
-+{
-+	u64 start =3D (u64)(long)prog->bpf_func;
-+
-+	return ip > start && ip <=3D start + prog->jited_len;
-+}
-+
-+/*
-+ * The function of the calling program that @ip returns into, looked up =
-in the
-+ * program itself: its kallsyms entries can go while an instance still r=
-uns.
-+ * The main function is the outer program, which holds its table and epi=
-logue.
-+ */
-+static struct bpf_prog *bpf_unwind_find_prog(const struct bpf_prog_aux *=
-aux, u64 ip)
-+{
-+	u32 i;
-+
-+	for (i =3D 1; i < aux->func_cnt; i++)
-+		if (bpf_unwind_ip_in(aux->func[i], ip))
-+			return aux->func[i];
-+	return bpf_unwind_ip_in(aux->prog, ip) ? aux->prog : NULL;
-+}
-+
-+static bool bpf_unwind_rewrite(void *cookie, u64 ip, u64 sp, u64 bp, u64=
- *ra)
-+{
-+	const struct bpf_cleanup_range *rec;
-+	struct bpf_unwind_ctx *ctx =3D cookie;
-+	struct bpf_prog *prog;
-+
-+	prog =3D bpf_unwind_find_prog(ctx->aux, ip);
-+	if (!prog)
-+		return !ctx->cnt;
-+	ctx->cnt++;
-+
-+	/*
-+	 * The frame that called bpf_unwind(): bpf_exc_patch_unwind_calls()
-+	 * put 'r0 =3D 0' and a jump to its pad, or an exit, after the call,
-+	 * so leave its return address alone and let it go on there. The pad
-+	 * then starts with r0 at a known zero.
-+	 */
-+	if (ctx->cnt =3D=3D 1)
-+		return bpf_is_subprog(prog);
-+
-+	rec =3D bpf_exc_pad_for_ip(prog, ip);
-+	*ra =3D rec ? rec->pad : prog->aux->epilogue_ip;
-+
-+	return bpf_is_subprog(prog);
-+}
-+
-+/*
-+ * @aux is the calling program's, supplied by the verifier (KF_IMPLICIT_=
-ARGS):
-+ * programs call bpf_unwind() with no arguments.
-+ */
-+__bpf_kfunc notrace void bpf_unwind(struct bpf_prog_aux *aux)
- {
-+	struct bpf_unwind_ctx ctx =3D { .aux =3D aux };
-+
-+	arch_bpf_stack_walk_ra(bpf_unwind_rewrite, &ctx);
- }
-+NOKPROBE_SYMBOL(bpf_unwind);
-=20
- __bpf_kfunc void bpf_throw(u64 cookie)
- {
-@@ -5128,6 +5191,8 @@ BTF_ID_FLAGS(func, bpf_task_get_cgroup1, KF_ACQUIRE=
- | KF_RCU | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_from_pid, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_task_from_vpid, KF_ACQUIRE | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_throw)
-+BTF_ID_FLAGS(func, bpf_unwind, KF_IMPLICIT_ARGS)
-+BTF_ID_FLAGS(func, bpf_unwind_resume)
- #ifdef CONFIG_BPF_EVENTS
- BTF_ID_FLAGS(func, bpf_send_signal_task)
- #endif
++		/*
++		 * A trampoline that calls its target stays as a frame between a
++		 * subprog and its caller, and bpf_unwind() cannot walk past it:
++		 * the frames above it would carry on after their calls rather
++		 * than at their landing pads or epilogues. fentry leaves no
++		 * frame, and the main program's caller is above where the walk
++		 * stops.
++		 */
++		if (aux->func && subprog && aux->func[subprog]->aux->might_unwind &&
++		    (prog->expected_attach_type =3D=3D BPF_TRACE_FEXIT ||
++		     prog->expected_attach_type =3D=3D BPF_MODIFY_RETURN ||
++		     prog->expected_attach_type =3D=3D BPF_TRACE_FSESSION)) {
++			bpf_log(log,
++				"Cannot attach fexit, fmod_ret or fsession to %s, which can unwind\n=
+",
++				tname);
++			return -EINVAL;
++		}
+ 		conservative =3D aux->func_info_aux[subprog].unreliable;
+ 		if (prog_extension) {
+ 			if (conservative) {
 --=20
 2.53.0-Meta
 
