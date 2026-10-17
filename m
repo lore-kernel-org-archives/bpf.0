@@ -1,64 +1,64 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5E246C841
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172ED37C109
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792278637; cv=none; b=UBAlV91zZFKgKqJGzBH2UYRmtCl9wXqA82Pc1hhoFJoMyflbGyXRWH11qJsR5YNdvMoY2ktCrG8t2+V/xI87BG5HxMWZe3Cm5tE9y7turDysdr1kbrpMh/G2EPtV5p1wZ/I6+wDr+l2tGgzVxaUVKt+JlMhkvlIoZIABzkF24+o=
+	t=1792278643; cv=none; b=oiHBNi+E6tH/49JRQ1ouu4Xzevlkek7rVZNK7ujRSInUxc5xpQklqsIgjttjycepcnc+NxLyQa6+PSwxmgJibGYJIewmo/znY7532IFVSLUnxzQ8SEU/R3tteZSFG3jspF+XgMBIEGgMNEsgLKf/K1CbgP2QBNC7FLlk+z2wur0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792278637; c=relaxed/simple;
-	bh=3NNCGH5ryw+BpbquvEdcLuzcP9h3hRy3kqLMJgFGGJc=;
+	s=arc-20240116; t=1792278643; c=relaxed/simple;
+	bh=zxMcO3KW7mfTMH72pmnJujlVJ0F8nZ4lfhOvYg80FAk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PzS+qQweDOQwxPVYchpK4Gzf6nkFKIgTfcm1ZBm+ZEZxNMY1JYJ8iQsYftiuNskak1HNHb3BPTGxh2ZRPsDZoHEDMz2/33UpYnWcYiKimLs3/Fi5UVyFLdB9wCY555lLZ5n54jGh6RN+b87Hq68ZlC5bZlhtpBX8xSMhaiqIfCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/3w4+yN; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=RgwijDmZeBW+Kxh8/4/SkUYr2JmKI6MOQ8+vvEucVeRIjHRpGu6+qe9BEB5b4rEd7XEadmxZU/J+AekYblzupoxGUYCRh50TrSEGQG0vqVAWrTF4gZQ4CxLMG2DV0J2E/UZ5iBk1p3mquqHKEavb10ghwvzPjLpHgnqzK2UB48k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jFz14+Lt; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/3w4+yN"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e5378b281aso4014125ad.2
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:10:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jFz14+Lt"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3a4b9732d5aso929662a91.3
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792278635; x=1792883435; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792278641; x=1792883441; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WG4JK4jcwaSqli0Rkxkj+xPO6Y6Xri8N8nem+swVpHc=;
-        b=H/3w4+yNqxNvcTWlEZ7B9vhAKhjN0fQEgKd4o+UF9vgdcDwXJk6o9swH6U1etAjcs0
-         XBwCXEl4S+dtGLwS6REBvlLyMc8gedN6E0R+eouWQhWtOJvdlTP2zzucZ0b1IV2q6UOR
-         RgWLpnZ8tMJvang0oREbcV+0ssqu+yte4Y7ObrDj2P1qYkuzuqiv7sAu0KH+7viR+KvW
-         dxeaxHdX+p8Qago9ij8QX8gEjOCxcJyF4xKAvUdsIVAdB7r9Gf+qsHEOA8KyyFkUwMGS
-         e0cIAHInCPOXAAq8hc4MXHI+8oapOr5BoA+wepue59dChS2cJBcEkiBqeuJOswiKYbnh
-         o4tg==
+        bh=BHgWxTVtHSyaO9uDsTzhWmrIO/F/owCnu99e0CLIMwk=;
+        b=jFz14+LtBKs4G3CC1EOFhLgxS5H11C6xOqgMtqKKjJdXK0ZodfpNLcikjEzCDEB37L
+         d4j1B76cPVP3QIQhXo5UyKtAOI3Yo+0JRcOZFs6uYkP3c2rz8regWjqdMhx6CYHXfPR8
+         Tmyex/2CxULQLi1vRBGvqNTDC/oTg+8x2WiViaITUvEfWtbZc4ryOBrPefWS3dZ8Duuh
+         +QSFs4/0GKsJSQ7I9AHsPBr2OTO0HlPFo4esSU1mwZSlIt2p/F1CGN6FCQHvwYxN63kp
+         zHaSXYoVFyW5TOk7/I0wBl353/9UF6TQMN7ywpdJd/IvRW8DRxJ84AHs+BGlGXzcZ7si
+         FgoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792278635; x=1792883435;
+        d=1e100.net; s=20260707; t=1792278641; x=1792883441;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WG4JK4jcwaSqli0Rkxkj+xPO6Y6Xri8N8nem+swVpHc=;
-        b=bferlArztTqd7gFzzkFWiQd4Na/h6Aaw29nfhw94h8wTly6YOSdjKPO6/RbE3TSbsB
-         kWNrU0ZE4Kg1AZQZNV62pkMtGr30GUiyh6q6Arjf05hEIxO1H3B5i0yUOFN6JqQ8WU2D
-         AZUlSaKsT+mmYvn8WdRsJmlbsICDAU2NdyB//c+ggQc2NfuDvwfzTtkmTWGu2YouyFMX
-         fXtAPcotZOX1XYWeXBgJRhnwwPiut5ziPOw1f4hdSkYeaOAvRZnio7sPgJTVYumHkFnM
-         hRsnTVttTOYBb+VBUafesnEdSYG/gVC1unPdq1YLLxqM5NNuvY8ts7dVTJ4E0hdQctDA
-         NCyQ==
-X-Gm-Message-State: AFq9FYKxNbt7lwZDFJX5+zwkyzyAfcXeytVHpzxKtjq539NedLj5aP/f
-	XuDp4F7E/I3YheX57TBzys5f5TgQC+HHZto6dTd7x+laOPg3b1FgEfKZlYQU6g==
-X-Gm-Gg: AYBFou3qeXhgjwaEJpW0KBxftVKPhdQJgdGRggbSiUuOLqjsoLUsiIpFSR7imhSiqsR
-	su7XKgNoh7pxEhBe70+xdcNWd0KuxdEcBwRGzLr1mwIvLQNPY+vrqj1Z9Blm7qQwn+bVXDsYnch
-	WAyUnOFJTEgpcoVstaPw/eV5SYYNvBzmF+eqC7anfPNFrzGxyd4vEtCLpQRyeJ7/zsvmXQy4pDG
-	tVzSYEmRIRyDdzZb427ePZ1G7Ja+9uVUtzAMr/2zWm9ereiCMRL1qQhvxAo7Jno7JdM39RqPffM
-	qfwX+wyx0TrqlaHtNurvRmrCvCmt1tAHj1bccVZlXGZRRbBiW2PxSo2rSbrEBdQI0VU02WOA6FA
-	ELylHOl9Gogd2LxsP6FKDQkCzpDcLRe7Cc5QJr1N+ZBzw8EJH4ye9otDirV0nq9BF1Z2C477/1l
-	O0zSZydXGAvZjGHNCnBXEPMqO1hMJkrlahM822KpMdHfIilRjNWmW0aqHP6EAFNQ3VxZzu5a0En
-	dBh279Ooq87xruTyJ2mx3uFZ8CGU/q7/zfKnTNUv7jVWutySXNA80Pi6a6ZT+YV0Oj/8E04alph
-	7PMymn9xLOZLEVBkLIGl68VAYgCK0JyqmtadwWbjIgTqkhjah7RxXwM=
-X-Received: by 2002:a17:902:f641:b0:2e6:7c6:8d40 with SMTP id d9443c01a7336-2e9a69e8f85mr34941425ad.27.1792278635391;
-        Sat, 17 Oct 2026 16:10:35 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8775besm23860955ad.51.2026.10.17.16.10.34
+        bh=BHgWxTVtHSyaO9uDsTzhWmrIO/F/owCnu99e0CLIMwk=;
+        b=RqBNFr2ZU0Ybtn3ED4b9Q8KuPtOwlU8TICoCNiZOoH4rlKH2hndWPET2foMoIwFFpE
+         mwXRi39nFuSVu1ISRCpnxITXp70pjHIUUH2Osyw2vs/apcKrqysNrwti3Q3GLE4Nv3v5
+         eptttY9sZGomTbMyDfbZWW3bhX7zumTrhUzPi0cTHrSByn+Qxm/khAZ0F2sWmPt7KSdK
+         9XjE8Kp6D/8kQfwldXuA+6/gYqynnuogsxoWOSATGIyG9XgUd2aM6TbQ4vm4T/WIvtsB
+         PtB7LJm7mouSfgg5lHfMyGCX6KfTm831PgjkhVOY3LstNPMygPbn3ZHfDll/O/LOQiPL
+         FGBA==
+X-Gm-Message-State: AFq9FYIQc1OXrKIFiouqwOyNhZjTl1fnLyrn/Nfj+KLcFZhII7IKn+pd
+	N8lxTc+truKfl90Uv9lVmRVwhOOLLUZSkIu1ei68VIjRw6pb2EXQACCda7EpMQ==
+X-Gm-Gg: AYBFou1nZN5x3MD7F8aGxOOP/c02XqsQ3frhatc+CLQHT65mtIBpVHbChN/Nr+WKO3E
+	0aXHLLqb2Hlg6/TkwTx3UAEFQmnI6MGnTcBHM3d9zsQWQxvYDVJTNZEcsN0u+x0OuuCPCw8YN+1
+	HU4IlAR6q+fg8iRYahzDp/DUb2p4H2V9GdtrJHbLg7bYrSlin+HB9v3P6+EHsMArwqv3bzPXFDl
+	W2J2m5yq4+FsMoOQWI4go+tQgGxdFzAX9Y3RPcC8dcOY1+1I3rJveEzZvB7OXsiQjtHWpotlzoi
+	uFjchPZbr2+WQlTCQXX4AQl79Rka20ZcHNIzlD4z8beywVAeQNp06+38uxVaZrpI6jyUxO4oQzr
+	Wh67lFAZwfYUIoJxrDjiXkwm+HEGxo4i9yflseGUDkGfCP3iO1x+9d/iDoSsfzg4QqCxTSI+UfV
+	dvyQZCbqJXsco49MDdtRQR7r9T+ZOgA6Ao2VHct8pfs1NxUEgV8Q6nlVV4O26RmSxzwNSCT0KcB
+	WEYIrWOuGUwE7+YPJp5ll5sturkBMVu74eX+FmQvbI6LBeMRR9Km7CCkxj2cI40YKvUWwzOG9uE
+	Op5iG3YC4A7mpxTX/MhpAiqOR/n/xUTmHZWrjkS7gdg=
+X-Received: by 2002:a17:90b:4a0e:b0:3a4:b0f3:6597 with SMTP id 98e67ed59e1d1-3aced88dc1fmr3955905a91.0.1792278641381;
+        Sat, 17 Oct 2026 16:10:41 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac94748c6csm14833344a91.10.2026.10.17.16.10.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 16:10:35 -0700 (PDT)
+        Sat, 17 Oct 2026 16:10:41 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -67,9 +67,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v3 07/16] bpf, cpumap: Hold the device of frames in the queue
-Date: Sat, 17 Oct 2026 23:09:41 +0000
-Message-ID: <20261017230950.802052-8-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 08/16] bpf: Drop packet pointers behind kfuncs writing an skb
+Date: Sat, 17 Oct 2026 23:09:42 +0000
+Message-ID: <20261017230950.802052-9-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017230950.802052-1-alexei.starovoitov@gmail.com>
 References: <20261017230950.802052-1-alexei.starovoitov@gmail.com>
@@ -83,146 +83,139 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-A frame that is redirected to another CPU waits in the queue of the cpumap
-entry with a plain pointer to the device it came from, and an skb from
-generic XDP with skb->dev.  Nothing keeps that device.  Closing and
-unregistering it waits for its NAPI and for RCU, but not for the kthread
-of the entry.  If the kthread is late by more than that, since its CPU is
-busy with something of a higher priority, it builds skbs for a device that
-has been freed and hands them to the stack:
+bpf_dynptr_write() to the dynptr of an skb ends in
+__bpf_skb_store_bytes(), which makes the range writable first. That pulls
+data into the head or unclones it, and either can reallocate the head. So
+check_helper_call() invalidates all packet pointers and all slices of the
+skb behind the helper.
 
-  BUG: KASAN: use-after-free in dev_gro_receive+0x1f51/0x2b30
-  Read of size 8 at addr ffff88800a7340b0 by task cpumap/1/map:1/54
+Several kfuncs take the same road: bpf_dynptr_copy() and
+bpf_dynptr_memset(), if they get no writable slice of the destination
+because it is not linear, and bpf_probe_read_{user,kernel}[_str]_dynptr()
+and bpf_copy_from_user[_task][_str]_dynptr() likewise. The verifier does
+not know. A program can keep a packet pointer or a slice across such a
+call and read and write the old head, which has been freed.
 
-Take a reference to the device for each entry of the queue.  The kthread
-cannot drop it at the end of the batch, since its GRO node may keep the skb
-for longer.  Let it note the devices and drop the references behind a full
-GRO flush, which it does whenever the queue is empty, and from now on also
-when it has noted about 2048 of them.
+Treat a kfunc of that kind as bpf_dynptr_write() is treated, by the type
+of the dynptr it writes to, which is the first argument of all of them.
+Where a global function is only scanned for what it may do, the type is
+not known yet. There any call of these kfuncs counts, as a tail call does.
 
-A device whose frames are stuck in a queue is now unregistered only when
-the kthread has got to them.  RTNL is not held meanwhile, but if the device
-goes with its network namespace, the cleanup of all namespaces waits.
-
-Fixes: 1c601d829ab0 ("bpf: cpumap xdp_buff to skb conversion and allocation")
-Fixes: 11941f8a8536 ("bpf: cpumap: Implement generic cpumap")
+Fixes: daec295a7094 ("bpf/helpers: Introduce bpf_dynptr_copy kfunc")
+Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
+Fixes: 5fc5d8fded57 ("bpf: Add bpf_dynptr_memset() kfunc")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/cpumap.c | 35 ++++++++++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 7 deletions(-)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/verifier.c        | 44 ++++++++++++++++++++++++++++++++----
+ 2 files changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 5e59ab896f05..eb87131b1bef 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -45,6 +45,7 @@
-  */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index e420d211f423..7a72bb06fe56 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1803,6 +1803,8 @@ struct bpf_call_arg_meta {
+ 	u32 kfunc_flags;
+ 	const char *func_name;
+ 	struct arg_constant_desc arg_constant;
++	/* The type of the dynptr that the kfunc writes through */
++	enum bpf_dynptr_type dynptr_write_type;
  
- #define CPU_MAP_BULK_SIZE 8  /* 8 == one cacheline on 64-bit archs */
-+#define CPU_MAP_HELD_DEVS 2048
- struct bpf_cpu_map_entry;
- struct bpf_cpu_map;
- 
-@@ -74,6 +75,13 @@ struct bpf_cpu_map_entry {
- 
- 	struct completion kthread_running;
- 	struct rcu_work free_work;
-+
-+	/*
-+	 * Every frame and skb in the queue holds a reference to its device.
-+	 * The kthread keeps it until nothing is left in GRO.
-+	 */
-+	struct net_device *held[CPU_MAP_HELD_DEVS];
-+	u32 nr_held;
- };
- 
- struct bpf_cpu_map {
-@@ -129,9 +137,11 @@ static void __cpu_map_ring_cleanup(struct ptr_ring *ring)
- 		WARN_ON_ONCE(1);
- 		if (unlikely(__ptr_test_bit(0, &ptr))) {
- 			__ptr_clear_bit(0, &ptr);
-+			dev_put(((struct sk_buff *)ptr)->dev);
- 			kfree_skb(ptr);
- 			continue;
- 		}
-+		dev_put(((struct xdp_frame *)ptr)->dev_rx);
- 		xdp_return_frame(ptr);
- 	}
+ 	/* arg_{btf,btf_id,owning_ref} are used by kfunc-specific handling,
+ 	 * generally to pass info about user-defined local kptr types to later
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d738ce6e7428..597302cf7086 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1002,6 +1002,11 @@ static enum bpf_dynptr_type dynptr_reg_type(struct bpf_verifier_env *env, struct
+ 	return bpf_stack_slot(state, spi)->spilled_ptr.dynptr.type;
  }
-@@ -311,7 +321,7 @@ static int cpu_map_kthread_run(void *data)
- 		void *frames[CPUMAP_BATCH];
- 		void *skbs[CPUMAP_BATCH];
- 		u32 i, n, m;
--		bool empty;
-+		bool empty, full;
  
- 		/* Release CPU reschedule checks */
- 		if (__ptr_ring_empty(rcpu->queue)) {
-@@ -344,10 +354,12 @@ static int cpu_map_kthread_run(void *data)
- 				struct sk_buff *skb = f;
- 
- 				__ptr_clear_bit(0, &skb);
-+				rcpu->held[rcpu->nr_held++] = skb->dev;
- 				skbs[ret.skb_n++] = skb;
- 				continue;
- 			}
- 
-+			rcpu->held[rcpu->nr_held++] = ((struct xdp_frame *)f)->dev_rx;
- 			frames[ret.xdp_n++] = f;
- 			page = virt_to_page(f);
- 
-@@ -398,10 +410,13 @@ static int cpu_map_kthread_run(void *data)
- 		/* Flush either every 64 packets or in case of empty ring */
- 		packets += n;
- 		empty = __ptr_ring_empty(rcpu->queue);
--		if (packets >= NAPI_POLL_WEIGHT || empty) {
--			cpu_map_gro_flush(rcpu, empty);
-+		full = empty || rcpu->nr_held > CPU_MAP_HELD_DEVS - CPUMAP_BATCH;
-+		if (packets >= NAPI_POLL_WEIGHT || full) {
-+			cpu_map_gro_flush(rcpu, full);
- 			packets = 0;
- 		}
-+		while (full && rcpu->nr_held)
-+			dev_put(rcpu->held[--rcpu->nr_held]);
- 
- 		local_bh_enable(); /* resched point, may call do_softirq() */
++static bool dynptr_write_changes_pkt_data(enum bpf_dynptr_type type)
++{
++	return type == BPF_DYNPTR_TYPE_SKB || type == BPF_DYNPTR_TYPE_SKB_META;
++}
++
+ static bool is_dynptr_type_expected(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 				    enum bpf_arg_type arg_type)
+ {
+@@ -8976,6 +8981,7 @@ static bool is_kfunc_arg_scalar_with_name(const struct btf *btf,
+ static bool is_bpf_cast_to_kern_ctx_kfunc(const struct bpf_call_arg_meta *meta);
+ static bool is_bpf_dynptr_clone_kfunc(const struct bpf_call_arg_meta *meta);
+ static bool is_bpf_iter_css_task_new_kfunc(const struct bpf_call_arg_meta *meta);
++static bool is_kfunc_dynptr_write(struct bpf_call_arg_meta *meta);
+ static bool is_bpf_obj_drop_kfunc(u32 func_id);
+ static bool is_bpf_percpu_obj_drop_kfunc(u32 func_id);
+ static bool is_bpf_rbtree_add_kfunc(u32 func_id);
+@@ -10040,6 +10046,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
+ 		err = process_dynptr_func(env, reg, argno, insn_idx, arg_type, meta);
+ 		if (err)
+ 			return err;
++		if (!arg && is_kfunc_dynptr_write(meta))
++			meta->dynptr_write_type = meta->dynptr.type;
+ 		break;
  	}
-@@ -738,12 +753,14 @@ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
+ 	case ARG_PTR_TO_ITER:
+@@ -12654,8 +12662,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		if (dynptr_type == BPF_DYNPTR_TYPE_INVALID)
+ 			return -EFAULT;
  
- 	for (i = 0; i < bq->count; i++) {
- 		struct xdp_frame *xdpf = bq->q[i];
--		int err;
+-		if (dynptr_type == BPF_DYNPTR_TYPE_SKB ||
+-		    dynptr_type == BPF_DYNPTR_TYPE_SKB_META)
++		if (dynptr_write_changes_pkt_data(dynptr_type))
+ 			/* this will trigger clear_all_pkt_pointers(), which will
+ 			 * invalidate all dynptr slices associated with the skb
+ 			 */
+@@ -13704,9 +13711,36 @@ static bool is_kfunc_bpf_preempt_enable(struct bpf_call_arg_meta *meta)
+ 	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_preempt_enable]);
+ }
  
--		err = __ptr_ring_produce(q, xdpf);
--		if (err) {
-+		if (__ptr_ring_full(q)) {
- 			drops++;
- 			xdp_return_frame_rx_napi(xdpf);
-+		} else {
-+			/* The device cannot go before the flush, from now on it can */
-+			dev_hold(xdpf->dev_rx);
-+			__ptr_ring_produce(q, xdpf);
++/* These write to what their first argument, a dynptr, points to */
++BTF_SET_START(dynptr_write_kfuncs)
++BTF_ID(func, bpf_dynptr_copy)
++BTF_ID(func, bpf_dynptr_memset)
++#ifdef CONFIG_BPF_EVENTS
++BTF_ID(func, bpf_probe_read_user_dynptr)
++BTF_ID(func, bpf_probe_read_kernel_dynptr)
++BTF_ID(func, bpf_probe_read_user_str_dynptr)
++BTF_ID(func, bpf_probe_read_kernel_str_dynptr)
++BTF_ID(func, bpf_copy_from_user_dynptr)
++BTF_ID(func, bpf_copy_from_user_str_dynptr)
++BTF_ID(func, bpf_copy_from_user_task_dynptr)
++BTF_ID(func, bpf_copy_from_user_task_str_dynptr)
++#endif
++BTF_SET_END(dynptr_write_kfuncs)
++
++static bool is_kfunc_dynptr_write(struct bpf_call_arg_meta *meta)
++{
++	return meta->btf == btf_vmlinux &&
++	       btf_id_set_contains(&dynptr_write_kfuncs, meta->func_id);
++}
++
++/*
++ * A write through the dynptr of an skb may reallocate its head. Before the
++ * arguments are checked nobody knows what kind of dynptr it is.
++ */
+ bool bpf_is_kfunc_pkt_changing(struct bpf_call_arg_meta *meta)
+ {
+-	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_xdp_pull_data]);
++	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_xdp_pull_data]) ||
++	       is_kfunc_dynptr_write(meta);
+ }
+ 
+ static u32 kfunc_abi_slots(const struct btf_func_model *fm)
+@@ -15644,7 +15678,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
  		}
- 		processed++;
  	}
-@@ -807,11 +824,15 @@ int cpu_map_generic_redirect(struct bpf_cpu_map_entry *rcpu,
  
- 	__skb_pull(skb, skb->mac_len);
- 	skb_set_redirected(skb, false);
-+	dev_hold(skb->dev);
- 	__ptr_set_bit(0, &skb);
+-	if (bpf_is_kfunc_pkt_changing(&meta))
++	if (is_kfunc_dynptr_write(&meta) ?
++	    dynptr_write_changes_pkt_data(meta.dynptr_write_type) :
++	    bpf_is_kfunc_pkt_changing(&meta))
+ 		clear_all_pkt_pointers(env);
  
- 	ret = ptr_ring_produce(rcpu->queue, skb);
--	if (ret < 0)
-+	if (ret < 0) {
-+		__ptr_clear_bit(0, &skb);
-+		dev_put(skb->dev);
- 		goto trace;
-+	}
- 
- 	wake_up_process(rcpu->kthread);
- trace:
+ 	proto_slots = kfunc_abi_slots(&desc->func_model);
 -- 
 2.55.0
 
