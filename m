@@ -1,64 +1,64 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C8946C841
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BA7395240
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792278619; cv=none; b=gd5VfbUMBmZFNpk3M9ofOnIfhKUkTlAPmlJxdxJeJoYBiwhTau3xTnbbr9lDbX7ZduN6eXjPPdlICBI8Lulh7eKfVp7LTnpKoiaUsm0HElS/yznK7sMXqiYsfrqtfEQEW9yTgVbUe31tUwiFSy2081vQ3NQH5FO2671LXrE6tSc=
+	t=1792278625; cv=none; b=J65RX/dg/7AU44xRI1O4eW9KVd+/7RgrP7sYFR7THanxEHlLfOjfM9jhLCr3YYsNYO2s3prigo1lkm3oG53UgS79HEiozBd7NieeD+5aYhI/J+2f0CHJ0No5ZFLtribXS6k62KUJj1rYGsm094FfRMOdntsa6rRHIlVv6/osnCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792278619; c=relaxed/simple;
-	bh=9aByiuY6uviIXExgY+w0sYV157gG0bi2Of4rSv4eqIo=;
+	s=arc-20240116; t=1792278625; c=relaxed/simple;
+	bh=JqcqHdBn5tsuQnc7ZwG/G5kNLWAhhu0aVgdJKW9K5E8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B1/e89nZaEDrcfDDVzLcf8+NrY4CauMUG/qMNVmiYInZ8zdtfFzVyJpOskB1w9mYCz5zmaHoRBDiMJOTWHGTsLSIYQd6lj8HtXTU2qziR88vNL739wlzxz1VQQYYhJZhcxBhnhTfsbj6EtVOHrF+6vsdOoKsCXQtYueFpj0bTRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XMAwS/CH; arc=none smtp.client-ip=209.85.214.171
+	 MIME-Version; b=kel+PF+J2wzj8Ah+KxB0ODe//YB/yTfNz0myP6WoQjQcqpv0aiSXnA9bKtDP1L2isHItve8NJLoGVdKExsp7eZL3ArOjL++5HoaOTV9H2WmSy7xLddezB7Cv98wRYNiEZFDMEUFo3+RNw6ZpY0sJ5GIWfN/rAfy3fPRtdfi0wnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j2C1iCdV; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XMAwS/CH"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e5d0ee1951so6483185ad.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:10:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j2C1iCdV"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ac451e128cso657428a91.1
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:10:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792278617; x=1792883417; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792278623; x=1792883423; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=A/qciBoMPYJlnJRP8tFkm767/AyPbCuLkauH7cTHL5k=;
-        b=XMAwS/CHGX/FWulieEwPxkrlOS2+1oJTchdl0N8ckw6flrjneb5QAFXz28hVrXp6d5
-         rkBha9wnlw4UBevu8WU3png5KL8W755s4cksJdDBHXUfbqPBOsJwJvOIyWjlcJXrR/Mq
-         5QM3kb9wmeNPaVMXNIZDVmqyCvNShVvd63TvueWZkHRgRti2MlgQ6T48aFtpc29iRqry
-         R8iwmCk5Yweh7gZUZHRQoJIbwokySJ/fAJ0thck8OP6PtdgThnocII8xLXS44mcni1+d
-         EwbC3atkFPCncsU9cGsjipX4f2WgV7bqpCpzGNDvLWcSlEIp53Z9jxSCfHpSCZLEzbnO
-         f3Bg==
+        bh=CAWL+6VZJHdjnc8VEKgQH0h2WRZ6E/79pEmf7BXtx0k=;
+        b=j2C1iCdV56Hi50AQSkmqvkRavD3eTfIwmPkn53n/GG9qWo8LnxJGYmERfv7e/CFvDU
+         4F1Jjn8ARV7Upj25COtm4cgXGGvZ6ixYkWufUl+Xvmkm0e49fuAy0E82gf/Yb/E7Y0Gr
+         pQ+OjCmyr3gP/XHcH8m5qdiJIeFHsVOc6ypPQEMWPXF5KRa5ScLKfVYy2XimwheD8bEd
+         4Kkyi7dALAS8ACFFpKDmdCMqa7gjpjIdWOJHgKk1syZJ6g+uDjcdowWjS2eMo2Fb5Q/D
+         yt0ZBohNa6CeW2i3BgVZKJdOrlG8PlSpXZNa/htSVkbvrhQZ9CxRjjZM5GGUXvaFZb5u
+         +x5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792278617; x=1792883417;
+        d=1e100.net; s=20260707; t=1792278623; x=1792883423;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A/qciBoMPYJlnJRP8tFkm767/AyPbCuLkauH7cTHL5k=;
-        b=zNQmnN3PeZPeKQVy+UqY1gXkx+6k8RZ7wXNn3v45FKQGIDFx09jQvfKwP6ijxMgHeX
-         akWvE643T/p4L+VgO4AMA4pMzOaSNss/A3tapdUtsnecLCoKrIba0IszQ9yi4kxAOsqO
-         MZCvSBBocAcxIIgbwA/D587/9GGaeipII2cUuHfHUGxNSjT9KXfxROgMG20FeGbHVTpn
-         pIF1cvjxBKEAt60C62Fw3dxTzF/uXwwaVnIrwrwa4OYeI34MMNDTAvwUtOk7w45BJAT4
-         c8/UJhEcgUwuWpYJhYDVFbhWgDtGJaV7R22AkoMdSyijyQd0f5IDvHcMRJ2qSfdmPn+R
-         KRdw==
-X-Gm-Message-State: AFq9FYJxqy1sdg+XQR4ksXc6LUaJdfwrZW4IMnEmJxr4Li59FwC2piob
-	laL+GAiZx1slCg/S8+JcK3y1Lfc+rB6LmEX86lDj5T9zuq4EORMmKTVSE4SIiA==
-X-Gm-Gg: AYBFou3fsLr1/cobnKUG5Y9y/LXHAhmbrdR5Q1kd3LvXuLwUI7S1BoES3/i8MVYj01Z
-	WcuZoJidv4li+9ojXQhAHrZRoLvOW88GEYXUf1OscRLeSWZeinOBkYcmfjUEckBPF2k0fU8AHVK
-	f6sCrr+VqJAMj81b3+YG0yLlrfdu0O/7c9ljBr1uJq9Bj95fqPfr2Gu6HdcgUHqtTa5+vjk311R
-	ntAcTucj33/B50Nr0NaOsZe5ik4xknq7K7kTdAZbhkSd7lxDM7davy4wRFa4MhCuoQHamk+4dH8
-	MNzG28gI+s0i5rcf0NZBZksvyZfm1evPF3Ix7bLkGi/AFS7A+D8Ax8R4ZEK2mUSn1vSKriJEIrq
-	fAGVVyRFo3FUxWu8QZVTQXyFLjvnpe5ojs8e0hRWgrRYL1I54j1jXm2xbT7pbeD4SkeDYnnplKB
-	/TPnomtUd5JyX9cH0oOZn5yK2FntXe928rqzQOyo/bI9vvAeu7XK2CCJ+t+VQHE9ME4plqmCAdC
-	v1Zg7gK/GJIDsDr+A/IKVyNUMpC547xoa255e2rFA7xiS6RxFalBzY5gVLZcVLS1UbqCXGk59F0
-	rE7K1pczPY+gto1QfFBD+qgxPARHala9wYqZ5Md56kY=
-X-Received: by 2002:a17:902:cecb:b0:2e9:8ef0:cf6c with SMTP id d9443c01a7336-2e9a6d40b8cmr34714555ad.26.1792278617413;
-        Sat, 17 Oct 2026 16:10:17 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8b35eesm23391515ad.73.2026.10.17.16.10.16
+        bh=CAWL+6VZJHdjnc8VEKgQH0h2WRZ6E/79pEmf7BXtx0k=;
+        b=p8MOJ0Thm2f5vm7n/m0tif5kNah9FWbau4n/ruG6K5EhUyfe5J5jbgVdflXfLsCp5q
+         Pd69Yn+9UrS0Ezd3UzsbUG3B3Hd2pV8B0WaYMSdpN/Sxgo/mUWI+cxgClgsykjsW13aE
+         Je0UJlpiwbnG6IqawmKXoKiTWLb0vUhqIklbKMQ5bXySnOTSMEsbvYP8dMuM9EVZbPgt
+         2wKDxnUof5mQQDowznRFmFT6lsYk744q0sX1bUXqgVK/111E0Q76uS55OGjOXn5ZlGwY
+         dyQz5pP5Vx0T9gZDtHFIBLDoC6c+DZM472Ibtv633acJ6s7ht8WmzlcSINKq9CX4VCEw
+         x+sA==
+X-Gm-Message-State: AFq9FYLjF8xP+sx+jHJtys2bizpus3S6UP4qnM688n3sJJwn65Z6fogc
+	d17v14ljmVXh4cuYFNda1F+P+vfhX/WhGR2WsMgMd7CcayT2UNlyB57AN2wOWg==
+X-Gm-Gg: AYBFou2A4emze+dnRbj5E+Cpx7PPFsY7lu840890TX6Tm7e5pWIoZ8z7qajJCkid0kV
+	cxDJ3d+IkwP3rFSi/Xh/RFdAShUwkascSB2j4rPJnniYQiPnJ0KuVkHqT5b1bxb/K46wRY40Qnq
+	jJkVYTYl24CPqrDqI6A082eygz7Wj60ZZHW0ZnweqgLd5SRC3KsLiWvLzuiM3Bd6+Bebw3mtLUL
+	T8lbHZWeYAursoB8ZzcfQTC7D/kYPUe3PjfYOI7CENrE6gQ3+H928+YrlinfaHm7wp5cwDHAaDQ
+	Oj4paH36pkNLUzb7JYuZ/PvS102T2r/OGiPD/0uwZMYn3L3E4YxpAyoysanXWBijyqScIWT5giV
+	MlOaLnzKlo/STtagpdAen9QXlSHuxLlS+02hQjYBd1PfByyKbPS8OiYgyOe2ciowPYUmx2Lc4Ir
+	HH+89b7Jr5Ql+PeS6x6xZFAIOWfUPsoiob0ULADV2iGg0MJaZjzhSs6tSQvAvKsZhUbUup7sHV3
+	pR49anwtuKIXDbZrk69Uc2sbsQWNqrMXa2R2ggAO9SqNHWRYTwjWPLd+Zq5UNug1+xUTe5LyNaA
+	wYX+sb51FSkK1PHecxfo8kCnZfL7JkvgHv1IZxGTDwA=
+X-Received: by 2002:a17:90b:57ec:b0:3ac:6fcf:81a2 with SMTP id 98e67ed59e1d1-3acef5c49bbmr3233314a91.57.1792278623350;
+        Sat, 17 Oct 2026 16:10:23 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc46ee274sm9452278a91.4.2026.10.17.16.10.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 16:10:16 -0700 (PDT)
+        Sat, 17 Oct 2026 16:10:22 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -67,9 +67,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v3 04/16] bpf: Don't take an extension for a function that runs sleepable
-Date: Sat, 17 Oct 2026 23:09:38 +0000
-Message-ID: <20261017230950.802052-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v3 05/16] bpf: Keep the symbols of a program until it has ended
+Date: Sat, 17 Oct 2026 23:09:39 +0000
+Message-ID: <20261017230950.802052-6-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017230950.802052-1-alexei.starovoitov@gmail.com>
 References: <20261017230950.802052-1-alexei.starovoitov@gmail.com>
@@ -81,128 +81,153 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Josef Bacik <josef@toxicpanda.com>
 
-An extension cannot be sleepable, and it is verified as a program that
-runs under the RCU read lock.  But it runs in the context of the function
-that it replaces.  For a sleepable program, or a function that is called
-from a bpf_wq or bpf_task_work callback, that is rcu_read_lock_trace().
+When the last reference to a program goes, __bpf_prog_put_noref() takes
+its symbols out of the kallsyms tree and frees its line info at once, and
+waits for the grace periods only with the rest.  But the program may still
+be running: the link or the array it was called from is gone, the call is
+not over.
 
-The verifier lets such an extension use maps and pointers that rely on
-RCU.  Its maps are not counted as maps with sleepable users either, so
-that what it got from them is freed behind a plain RCU grace period:
+search_bpf_extables() finds the exception table of a program by its
+symbol.  A load that faults, and that the table is there to fix up, is
+fatal from then on:
 
-  WARNING: net/core/sock_map.c:903 at __sock_hash_lookup_elem+0xe8/0xf0
+  Oops: general protection fault, probably for non-canonical address
+  0xdead0000000006f8: 0000 [#1] SMP NOPTI
+  RIP: 0010:0xffffffffc06008f6
 
-  BUG: KASAN: slab-use-after-free in bpf_prog_b3bad285227d855b_ext_storage+0x245/0x297
-  Write of size 8 at addr ffff888108717a50 by task fr/955
+It takes a program that is detached and closed on one CPU while it runs on
+another.  Unwinders and bpf_prog_find_from_stack() do not know the program
+any more either, and the stack dump of a BPF stream reads the freed line
+info.
 
-The verifier knows the contexts that a global function is called in.
-Refuse to replace one that is called without the RCU read lock, and the
-main function of a sleepable program.  A function that sleepable code only
-calls under bpf_rcu_read_lock() can still be replaced.
+Free the line info behind the grace periods the program needs, as it is
+done with the BTF that its text comes from.  Remove the symbols in
+bpf_prog_free_deferred(), which runs behind them as well.  The symbols are
+looked up under rcu_read_lock(), so the images and the program itself are
+freed one more grace period later.  All that the program refers to is
+released when it was before.
 
-The summarization test has replaced functions of sleepable programs by
-ones that do not sleep.  Expect that to fail.
-
-Fixes: 1e6c62a88215 ("bpf: Introduce sleepable BPF programs")
+Fixes: 3dec541b2e63 ("bpf: Add support for BTF pointers to x86 JIT")
+Fixes: d7c431cafcb4 ("bpf: Add dump_stack() analogue to print to BPF stderr")
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c                         | 20 ++++++++++++++++++
- .../selftests/bpf/prog_tests/summarization.c  | 21 +++++--------------
- 2 files changed, 25 insertions(+), 16 deletions(-)
+ include/linux/bpf.h  |  1 +
+ kernel/bpf/core.c    | 50 +++++++++++++++++++++++++++++++-------------
+ kernel/bpf/syscall.c |  5 ++---
+ 3 files changed, 38 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2c812a5f1da8..d738ce6e7428 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22151,6 +22151,21 @@ static int check_unreliable_func_args(struct bpf_verifier_log *log, struct btf *
- 	return -EINVAL;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a10af47978a4..feb7de6483e3 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1971,6 +1971,7 @@ struct bpf_prog_aux {
+ 	union {
+ 		struct work_struct work;
+ 		struct rcu_head	rcu;
++		struct rcu_work rwork;
+ 	};
+ 	struct bpf_stream *stream[2];
+ 	struct mutex st_ops_assoc_mutex;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index e1216927373a..6e32db9777c2 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3085,12 +3085,40 @@ static void bpf_free_used_btfs(struct bpf_prog_aux *aux)
+ 	kfree(aux->used_btfs);
  }
  
-+/*
-+ * An extension is verified as a program that runs under the RCU read lock. Does
-+ * the function that it is to replace?
-+ */
-+static bool func_has_rcu_read_lock(const struct bpf_prog *prog, int subprog)
-+{
-+	const struct bpf_func_info_aux *sub_aux = &prog->aux->func_info_aux[subprog];
-+
-+	if (!subprog)
-+		return !prog->sleepable;
-+
-+	return !sub_aux->called[BPF_FUNC_CTX_SLEEPABLE] &&
-+	       !sub_aux->called[BPF_FUNC_CTX_NO_RCU_LOCK];
+-static void bpf_prog_free_deferred(struct work_struct *work)
++static void bpf_prog_free_images(struct work_struct *work)
+ {
+ 	struct bpf_prog_aux *aux;
+ 	int i;
+ 
++	aux = container_of(to_rcu_work(work), struct bpf_prog_aux, rwork);
++	for (i = 0; i < aux->real_func_cnt; i++) {
++		/* We can just unlink the subprog poke descriptor table as
++		 * it was originally linked to the main program and is also
++		 * released along with it.
++		 */
++		aux->func[i]->aux->poke_tab = NULL;
++		bpf_jit_free(aux->func[i]);
++	}
++	if (aux->real_func_cnt) {
++		kfree(aux->func);
++		bpf_prog_unlock_free(aux->prog);
++	} else {
++		bpf_jit_free(aux->prog);
++	}
 +}
 +
- int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			    const struct bpf_prog *prog,
- 			    const struct bpf_prog *tgt_prog,
-@@ -22247,6 +22262,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 					"Cannot extend a writable raw tracepoint program\n");
- 				return -EINVAL;
- 			}
-+			if (!func_has_rcu_read_lock(tgt_prog, subprog)) {
-+				bpf_log(log,
-+					"Cannot extend a function that runs without RCU read lock\n");
-+				return -EINVAL;
-+			}
- 			tgt_changes_pkt_data = aux->func
- 					       ? aux->func[subprog]->aux->changes_pkt_data
- 					       : aux->changes_pkt_data;
-diff --git a/tools/testing/selftests/bpf/prog_tests/summarization.c b/tools/testing/selftests/bpf/prog_tests/summarization.c
-index 6951786044ca..3e4bcf071735 100644
---- a/tools/testing/selftests/bpf/prog_tests/summarization.c
-+++ b/tools/testing/selftests/bpf/prog_tests/summarization.c
-@@ -53,17 +53,6 @@ static void test_aux(const char *main_prog_name,
- 	err = summarization_freplace__load(freplace);
- 	print_verifier_log(log);
- 
--	/* The might_sleep extension doesn't work yet as sleepable calls are not
--	 * allowed, but preserve the check in case it's supported later and then
--	 * this particular combination can be enabled.
--	 */
--	if (!strcmp("might_sleep", replacement) && err) {
--		ASSERT_HAS_SUBSTR(log, "sleepable helper bpf_copy_from_user#", "error log");
--		ASSERT_EQ(err, -EINVAL, "err");
--		test__skip();
--		goto out;
++static void bpf_prog_free_deferred(struct work_struct *work)
++{
++	struct bpf_prog_aux *aux;
++	bool ksyms;
++
+ 	aux = container_of(work, struct bpf_prog_aux, work);
++	/*
++	 * A prog that still runs when its last reference goes needs its symbols,
++	 * by which its exception table is found.  It has ended by now.
++	 */
++	ksyms = aux->real_func_cnt || !list_empty(&aux->ksym.lnode);
++	bpf_prog_kallsyms_del_all(aux->prog);
+ #ifdef CONFIG_BPF_SYSCALL
+ 	bpf_free_kfunc_btf_tab(aux->kfunc_btf_tab);
+ #endif
+@@ -3109,20 +3137,12 @@ static void bpf_prog_free_deferred(struct work_struct *work)
+ #endif
+ 	if (aux->dst_trampoline)
+ 		bpf_trampoline_put(aux->dst_trampoline);
+-	for (i = 0; i < aux->real_func_cnt; i++) {
+-		/* We can just unlink the subprog poke descriptor table as
+-		 * it was originally linked to the main program and is also
+-		 * released along with it.
+-		 */
+-		aux->func[i]->aux->poke_tab = NULL;
+-		bpf_jit_free(aux->func[i]);
 -	}
--
- 	if (expect_load) {
- 		ASSERT_OK(err, "summarization_freplace__load");
- 	} else {
-@@ -86,9 +75,8 @@ static void test_aux(const char *main_prog_name,
-  * Also test a case when main subprogram itself is replaced and is a single
-  * subprogram in a program.
-  *
-- * This holds for might_sleep programs. It is ok to replace might_sleep with
-- * might_sleep and with does_not_sleep, but does_not_sleep cannot be replaced
-- * with might_sleep.
-+ * An extension is verified as a non-sleepable program, hence nothing that runs
-+ * sleepable can be replaced.
-  */
- void test_summarization_freplace(void)
+-	if (aux->real_func_cnt) {
+-		kfree(aux->func);
+-		bpf_prog_unlock_free(aux->prog);
+-	} else {
+-		bpf_jit_free(aux->prog);
+-	}
++	/* The symbols are looked up under rcu_read_lock() */
++	INIT_RCU_WORK(&aux->rwork, bpf_prog_free_images);
++	if (ksyms)
++		queue_rcu_work(system_percpu_wq, &aux->rwork);
++	else
++		bpf_prog_free_images(&aux->rwork.work);
+ }
+ 
+ void bpf_prog_free(struct bpf_prog *fp)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index d026ab779ce8..849bc9136299 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2461,6 +2461,8 @@ static void __bpf_prog_put_rcu(struct rcu_head *rcu)
+ 	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
+ 
+ 	btf_put(aux->btf);
++	kvfree(aux->jited_linfo);
++	kvfree(aux->linfo);
+ 	kvfree(aux->func_info);
+ 	kfree(aux->func_info_aux);
+ 	free_uid(aux->user);
+@@ -2485,10 +2487,7 @@ static void __bpf_prog_put_rcu_tasks(struct rcu_head *rcu)
+ 
+ static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
  {
-@@ -111,7 +99,7 @@ void test_summarization_freplace(void)
- 		},
- 	};
- 	const char *pkt_err = "Extension program changes packet data";
--	const char *slp_err = "Extension program may sleep";
-+	const char *slp_err = "Cannot extend a function that runs without RCU read lock";
- 	struct {
- 		const char *func;
- 		bool has_side_effect;
-@@ -136,7 +124,8 @@ void test_summarization_freplace(void)
- 				if (!test__start_subtest(buf))
- 					continue;
- 				test_aux(mains[t][i].main, mains[t][i].to_be_replaced, replacements[t][j].func,
--					 mains[t][i].has_side_effect || !replacements[t][j].has_side_effect,
-+					 t == 0 &&
-+					 (mains[t][i].has_side_effect || !replacements[t][j].has_side_effect),
- 					 replacements[t][j].err_msg);
- 			}
- 		}
+-	bpf_prog_kallsyms_del_all(prog);
+ 	module_put(prog->aux->mod);
+-	kvfree(prog->aux->jited_linfo);
+-	kvfree(prog->aux->linfo);
+ 	kfree(prog->aux->kfunc_tab);
+ 	kfree(prog->aux->ctx_arg_info);
+ 	if (prog->aux->attach_btf)
 -- 
 2.55.0
 
