@@ -1,125 +1,151 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CCC2FB084
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765E4303A04;
+	Sat, 17 Oct 2026 01:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792201904; cv=none; b=cnzVSxFJ8CX347NIAeVZN2aIxONRDn9fPaS9Ttlqsrx+z1+Ohbb6i6Vbh7+mPId+iSzFEAz7rNlX3ZHVuP7/GtGMJrkXN0TkQpfw/qVc0KLKQsE52zUdGvxR+y0SEJV0jti/8LV4XK/V4cXLe567S4v81MNPF/buxxReO1pIwN0=
+	t=1792201964; cv=none; b=s05ImI7rlPICOSuJyXmnCykvTNzhB6D4txL/LF8uzMB6HN4Ig3UBvl6qzy0GWEyKr6bwuG9Rx2DwIYjJkM8/hIz914vmyP99Ljse5eM1S5C1+RAGepdjxZariMvPmPF+i+uxD9MQ/JNz40b7BorY3P2HGgBwkrHIgRD3j7TRHYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792201904; c=relaxed/simple;
-	bh=rzKespywRnFTsvonOwJrWP8RWIZkSziWZVx2Cqkin4A=;
-	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=UtiV6QIv8lA/1Bf7qYi+iSYcpfA/Nu3II5OfinS0DO0cKAmL6tRHz/L6PVLhXlnZAp++KOh5/9GKyuW8UjMYv/bLyWZjVlnDL75bc2DRgXF/OI1O2jOXnXNN244/iK5JZYvVjE1aKP3N+WzyJna1pWQMu4ckDLIjMiJmIpuB15I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1xBNS5K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792201964; c=relaxed/simple;
+	bh=dqJPs/ZSq+kEm9qmjKvO2q+zx+GE1CvNmoK28eKIJeU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ptzsLoIzpNOojyVCjp47kE/xPoZTB6YUZkqBvvBnjOsUBTQ4v+wKtDDeCDS7s/TtZ0hzfcvOt6WgLVvPFdxYLW6pOu2sXPkE4tLpqnqO4pKigVGqI9/WDqfFxJakXdlIWbm1Qg/wVC82xYheERisBwpTHtAnO+gmXHjWTdWyA34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GeJY+/aE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1xBNS5K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF3A1F000C4;
-	Sat, 17 Oct 2026 01:51:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeJY+/aE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078561F000C4;
+	Sat, 17 Oct 2026 01:52:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792201903;
-	bh=MDf3o09XMAc1+lspRm0z2ROdI/P+AAX4QaLJskbbLJY=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=G1xBNS5KBtV42lEWkilAN+LWictO++f3IdNphwuoQa7cb6rYdCTQ72i7cp4LnxK84
-	 mddOMJvm3caBo/JxQLukWNjIabS/K4rf7TLTJkVGlICQSbGWMbuxALcI380hOjgMub
-	 IFtaAXaYPlQzbdovEVt5XzQ6eXNbb5sIkZ0N0Vc1Kl0xD0aisTzi8cbUIpNreqVUkH
-	 cmUBDJVJ79zEM6xsRWsyBZhR9h6ClmguHQN9Kwz0lFahl3+EAW5R/psI2u1ROdVNgy
-	 bixcVeHlMPf62w6xlKvjW0s/djRi1Oe5kR/l0K/HtPvOGmcxjmSdZX+//8zKqzcZpe
-	 6Ql2r5FAS6z+g==
-Message-ID: <sashiko-outbox-175161@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 08/38] bpf: don't let bpf_skb_adjust_room() use
- up the MSS
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261017012058.355787-9-alexei.starovoitov@gmail.com>
-References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
- <20261017012058.355787-9-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 17 Oct 2026 01:51:42 +0000
+	s=k20260515; t=1792201963;
+	bh=XglLirrsez4yqv8n/eRTAa92pQ5gI64vJicukpL4zU0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=GeJY+/aEwBJVA5qAY61vdwMRJJkW/gqPkS+IqoX4zRzGMcIHvxb8VzDCPOBz/H2OS
+	 5vUtm2vXkcv+lSy9KhPhQKeQCDlm1AADXZI+JXKnW6xo2gAZwD9YYEW3TkkJultkhn
+	 ij6i6m6WG86WmQxjt20/uSebVCaqrjnezQg979S4yoM3ayDc4Fzk08fHXe5ysiRHg5
+	 O2wJv5sF5yBHawHcpKW6ScGVnZhyo8tU1cDYYQjsdOmwhu59jeYpHb10mpy4ICFTEs
+	 B5Vd18LMlo344vu3PWSZn2H90V7t4iuSi0+ktb7/95cLSwp4Nlar0CoyPfIpSqC2UL
+	 a8p1M0HMsLz+w==
+Content-Type: multipart/mixed; boundary="===============5453475719898273485=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <8dd7ea54f619380d7dd025e485a6d9d1bb8073daa7fc6b9de339e020c46d4d70@mail.kernel.org>
+In-Reply-To: <20261017012451.364800-11-alexei.starovoitov@gmail.com>
+References: <20261017012451.364800-11-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 19/38] bpf: Fix stale offload->prog pointer after realloc
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 17 Oct 2026 01:52:41 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: bpf_skb_net_grow() allows reducing TCP gso_size below TCP_MIN=
-_GSO_SIZE
---
+--===============5453475719898273485==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 0100f53f10670aa140c2329e248e324eafa85486
-Author: Josef Bacik <josef@toxicpanda.com>
+> bpf: Fix stale offload->prog pointer after realloc
 
-bpf: don't let bpf_skb_adjust_room() use up the MSS
+TL;DR: The new offload->prog update in bpf_prog_realloc() runs without
+bpf_devs_lock, so it may race with device unregistration: possible write to
+freed memory, and the stale-pointer use-after-free is only narrowed.
 
-This commit prevents bpf_skb_adjust_room() from growing a TCP GSO packet
-when len_diff is greater than or equal to gso_size and
-BPF_F_ADJ_ROOM_FIXED_GSO is not set. This avoids reducing gso_size to 0 or
-wrapping the 16-bit value around (including to GSO_BY_FRAGS).
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 642f0ab8eb2d..2154c18a5a4d 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -269,6 +269,8 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
+>  		memcpy(fp, fp_old, fp_old->pages * PAGE_SIZE);
+>  		fp->pages = pages;
+>  		fp->aux->prog = fp;
+> +		if (fp->aux->offload)
+> +			fp->aux->offload->prog = fp;
+>
+>  		/* We keep fp->aux from fp_old around in the new
+>  		 * reallocated structure.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index ba536be2915fb..a18702f89feb3 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3612,6 +3612,11 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u=
-32 off, u32 len_diff,
->  			return -ENOTSUPP;
->  	}
-> =20
-> +	/* The MSS is lowered by len_diff: something has to be left of it. */
-> +	if (skb_is_gso(skb) && !(flags & BPF_F_ADJ_ROOM_FIXED_GSO) &&
-> +	    skb_shinfo(skb)->gso_size <=3D len_diff)
-> +		return -ENOTSUPP;
+Can this race with device unregistration?  The new lines read
+fp->aux->offload and write offload->prog without holding bpf_devs_lock, and
+unregistration can free that offload at the same moment, so the store may
+land in freed memory.
 
-[Severity: High]
-Should this check ensure that the remaining gso_size is at least
-TCP_MIN_GSO_SIZE rather than just greater than zero?
+bpf_prog_load() calls bpf_prog_dev_bound_init() before bpf_check().
+bpf_prog_dev_bound_init() adds the offload to ondev->progs, then drops
+bpf_devs_lock and does dev_put(netdev).  After that nothing holds off
+unregistration while the verifier runs:
 
-In bpf_skb_net_grow(), non-TCP GSO packets without BPF_F_ADJ_ROOM_FIXED_GSO
-are already rejected just above, so any packet matching this condition is a
-TCP GSO packet. The networking stack relies on TCP GSO packets having
-gso_size >=3D TCP_MIN_GSO_SIZE (8) so that the segment count fits in the
-16-bit gso_segs field:
+bpf_check()
+  ...
+  __bpf_patch_insn_data()
+    bpf_patch_insn_single()
+      bpf_prog_realloc()
 
-include/linux/virtio_net.h:__virtio_net_hdr_to_skb() {
+At the same time unregister_netdevice_many_notify() ->
+bpf_dev_bound_netdev_unregister() takes only rtnl and
+down_write(&bpf_devs_lock) and runs:
+
+    list_for_each_entry_safe(offload, ptmp, &ondev->progs, offloads)
+        __bpf_prog_offload_destroy(offload->prog);
+
+where __bpf_prog_offload_destroy() does:
+
+    struct bpf_prog_offload *offload = prog->aux->offload;
     ...
-			BUILD_BUG_ON(TCP_MIN_GSO_SIZE * GSO_MAX_SEGS < GSO_MAX_SIZE);
-			gso_size =3D max(gso_size, TCP_MIN_GSO_SIZE);
-    ...
-}
+    list_del_init(&offload->offloads);
+    kfree(offload);
+    prog->aux->offload = NULL;
 
-With skb_shinfo(skb)->gso_size <=3D len_diff, bpf_skb_net_grow() still allo=
-ws
-skb_decrease_gso_size() to reduce gso_size into the range 1..7 while setting
-SKB_GSO_DODGY and resetting gso_segs to 0. If a large TCP GSO packet (where
-skb->len exceeds 65535 * gso_size) is then transmitted, can this overflow t=
-he
-16-bit gso_segs field and corrupt qdisc_skb_cb(skb)->pkt_len in
-qdisc_pkt_len_segs_init():
+Timeline 1, write to freed memory:
 
-net/core/dev.c:qdisc_pkt_len_segs_init() {
-    ...
-		gso_segs =3D DIV_ROUND_UP(payload, shinfo->gso_size);
-		shinfo->gso_segs =3D gso_segs;
-		qdisc_skb_cb(skb)->pkt_segs =3D gso_segs;
-	}
-	qdisc_skb_cb(skb)->pkt_len +=3D (gso_segs - 1) * hdr_len;
-}
+  CPU0 bpf_prog_realloc():
+    if (fp->aux->offload)          <- sees offload O, not NULL
+  CPU1 bpf_dev_bound_netdev_unregister():
+    down_write(&bpf_devs_lock);
+    __bpf_prog_offload_destroy(fp_old);   <- kfree(O), aux->offload = NULL
+    up_write(&bpf_devs_lock);
+  CPU0:
+    fp->aux->offload->prog = fp;   <- 8-byte write at offset 0 of freed
+                                      struct bpf_prog_offload
 
-as well as overflow skb_shinfo(skb)->gso_segs in tcp_gso_segment() or trigg=
-er
-DEBUG_NET_WARN_ON_ONCE(len / mss > GSO_MAX_SEGS) in skb_segment()?
+If the compiler reloads aux->offload instead of reusing the value it
+tested, this becomes a NULL pointer write.
 
-> +
->  	ret =3D skb_cow_head(skb, meta_len + len_diff);
->  	if (unlikely(ret < 0))
->  		return ret;
+Timeline 2, the stale pointer is narrowed but not closed:
 
-endasi
+  CPU1 (under bpf_devs_lock) reads offload->prog == fp_old
+  CPU0 stores fp into offload->prog, sets fp_old->aux = NULL, and calls
+       __bpf_prog_free(fp_old), which ends in vfree(fp_old)
+  CPU1 __bpf_prog_offload_destroy(fp_old) then reads fp_old->aux from
+       vfree'd memory (or reads NULL)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261017012058.3557=
-87-1-alexei.starovoitov@gmail.com?part=3D8
+That is the same fault quoted in the commit message.
+
+Every other place that touches prog->aux->offload during verification takes
+bpf_devs_lock and rechecks the pointer under it, because unregistration can
+race with verification: bpf_prog_offload_replace_insn(),
+bpf_prog_offload_verify_insn(), bpf_prog_offload_finalize(),
+bpf_prog_offload_remove_insns() and bpf_dev_bound_resolve_kfunc().  The last
+one carries the comment "We don't hold bpf_devs_lock while resolving several
+kfuncs and can race with the unregister_netdevice()".  The new code does not
+follow that pattern.
+
+bpf_prog_realloc() can already sleep (__vmalloc with GFP_KERNEL), so could
+the check and the store be done under down_read(&bpf_devs_lock), held until
+before fp_old is freed?  bpf_devs_lock is static in kernel/bpf/offload.c, so
+that would need a small helper there, with a stub for
+!CONFIG_NET || !CONFIG_BPF_SYSCALL.  The unregister side holds the lock for
+writing for its whole scan-and-destroy, so this would exclude both timelines.
+
+The sibling fix a1aa9ef47c29 in bpf_jit_prog_release_other() has the same
+unlocked pattern.  No later commit in the series range changes this code.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38991548713
+--===============5453475719898273485==--
