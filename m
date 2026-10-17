@@ -1,64 +1,64 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2E431E83B
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065D537C929
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792200082; cv=none; b=awUZpgw6NCsP+Rtzn0AFPz83e+IctLn8L3NDTUTt2bb/eI0WoMIK8P9zBRJfZBv1FfM2mSEGghhwqoCELBbwj6B30XRn6stSqvM65VPqm5+rL5cs1R9ei2e2RorNDDBVeBbTnd0qxfDr5DfkuI8+4ds0uRCDrcT963i6WEJbUZQ=
+	t=1792200085; cv=none; b=D9qRHOWaV6PJV3FG2QlUeP9KDu/xXb7jlC1wESM4PTzNNTL8FBtFrjl+8l24snk5pOHv4V/C1Ur0ZcaOPh3y8lwybIJP+bcK160tH67LyQO1uplQizhKURxtdIdR/lFNd7marBXdH0zyWdD2OAiEbq30I1+Mju4qK776kZHQqkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792200082; c=relaxed/simple;
-	bh=pZ33VTUUIdr3Id42qBrlx9WaCFhb+RHlrLGHiyQcfmo=;
+	s=arc-20240116; t=1792200085; c=relaxed/simple;
+	bh=OQc7ovHnX081mUlFOYqUF0sNSICI9EspyAQcDauXQNM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EkNDFCw6qTPEa3wN50NxpJ6l3n2YUA7vbpqm9RByRXCQIhPEC1QdJWRQT40galtHC7MMQNqSda3twm3u30OZ1BCYvQXMPNkJdVgy131CPstYpvaGeIouu8VmSjmE1qnRkfiyI8/aD68HR+yh4Gtxo6iws+lJPlaaPOoOxKJs4w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ko4juwK/; arc=none smtp.client-ip=209.85.210.171
+	 MIME-Version; b=rV0yR414HWFoJacQtE6vBKFL7I9xQKWAafIMW46Bhq/PZRQlsGcmT9ocLcO91FLpe8xjq89yhqKBIi8dfvf1lZ59N+B5oX6Pp7CxWkMMnI3aXnIUvDYLbsinEr34XxHPJ9zRYeykdEEa0psFA/3awDXjtcvgfy6MrF2EoE6yUBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RKL961tj; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ko4juwK/"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-885cd98d226so273653b3a.1
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:21:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RKL961tj"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc758830601so385941a12.2
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792200080; x=1792804880; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792200083; x=1792804883; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=i7Y25xFI3opj7OoI+d09/Ii/VGS2yIeOd9lXy3hmv0k=;
-        b=Ko4juwK/ZuFLPUUK1kDXVxxiHrMQF69AswYiXm1RMUDtncIQDTHm34NydLQHHmwirx
-         raTVgMicHjgsanRSXb20bhU2Urkcon7WbPqkuNmAHg3aW9tXeeD4UwHfO+4DVBhf86ol
-         QwJKG97ReejLP3ms/fYfinCEBF+8TBD0utCVIH+oMXI5vM/QCGJXsco9xNJ+dLI3wqBh
-         cGrK0Hz/05YglwdU3G7svcMe2ZFsWk7OJVC+CQWShXcVFWGx8Cxde4TJPWk2sH2hQoql
-         e80wVEB/lEPCp96KozMEW6X6xl+FqR3LH6bbjSr8CPPv3eKOu6rNE1XMziYwtvmW4vyD
-         upkg==
+        bh=ty8oBQC8ZzmKhKgO/ClpXA/s1qlF/mePfz8ntL+VDOA=;
+        b=RKL961tjpeUHYLPIQmaJZzrQwHOpD0o0FEioTd6GUHTPYDJlIw8TzqsCXxcVCUS1GD
+         9I1cHbVukjAqKLU3oUfUgePNLGG/TrnfXzbuR+O2jVzGEVJAHuhQTAmLvNz5OGXcJUuH
+         bcmw7WfqUanCWmUjoG2airrVdev7BVd/R2JloZSSv5Q5GqWhYL117Pi935BOw4ntgfTl
+         Z7IdUp1Bk2WATkTZIfolJELp+2ZDOCP3Uo0j2T0VerFgoEjYSF2maqWnpFjGcdBLr4Iq
+         /91A6FilGx9/WgwaL//SVBF/ld5GO9itB9J0K5wtnh/MCpwakVfR+YTFwWUkeX+BLIop
+         4ppg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792200080; x=1792804880;
+        d=1e100.net; s=20260707; t=1792200083; x=1792804883;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=i7Y25xFI3opj7OoI+d09/Ii/VGS2yIeOd9lXy3hmv0k=;
-        b=TZAXWnwAt3jEodFaVeuPmDXNi6l8sqz/2lURZft221P+1u+r75OF1vPAye/cdKokxJ
-         bjDUDEVHIxWzfEfHXbXKSc1fQWjRXFmv0oxc4XT7F96p44WQe5tZoZlg26pQrsfxXS8M
-         yAZlingya37mkRFITUo/K+RAPuiWR1gS6EUihscLwYRTPXOTE+kkgjOwnVKbQdLq8t/8
-         Z44msvT7i5LamiOvDnQl2o1UvZdI1seD5qmaDrnYpQ95ATWL9mxq+aViWyzE4ZBctK1D
-         vQKoA7E2/4dv+4XHWFESA4n4JkNQLZCphAXulEMC+BC6dTLbtLFdix49CZFvL9vcwm0Z
-         oOnA==
-X-Gm-Message-State: AFq9FYIVGIKBdPK093ZwJs00MWsU9Dk7uCrzlSzAVHnaqrRelHQ9S58B
-	2+5tFvGbhJNTEaT4YnA7ZUXwqzP4yFA6yu8h+KBZtNLQ+utbP6o0DfT/w3PAvwqq
-X-Gm-Gg: AYBFou0x9pPq6flbIh+5e5BGFmK+cwC5lkC921i9VzVQuCe8aF4Q1vJ49ZBoz9FZhKE
-	Q4LxQmBh1Kuv3MbjwggzeUVgx7tVumf1qLA13cgrtr5M1A1GwitRNZu0whb+UKHEmYJFTkwSLUX
-	PFvZ15icgsfNNlXUzJWjTt+aj+Na3Jg44kKx0wDTrCjEno+Q/R8aKvVqgVOfZbIWI0I1/z1js9A
-	+uD76tSlLU5GFpSntNc6u2pwEVtHLEVEp3frxKZ0tZW3Un3+T+2xp/qG88DpEizUmbqORF4pC60
-	dTw9J1tuvRGFbosZf5lyoWeBICNWayzov6Noc2c/P6HL4DsqVTPJh10bgh2L6ggtp9Z6yp1lpBg
-	e/6WI1JjxIy6sCT05ycy8AaENG0DkUGP23zoRGuWO9uQM/kJpFy3DH9cEiNL92eG5X2S/Es8AYU
-	tVHr1Dz4YJkf+M2M9dGvKqSPqVHWJg0tGfGdgYdfuogU/9RDk+vxWtBd6v1jQfPpSTBeS0bGscK
-	TLtbNHsvMPNEDhltSdmURIo+XjKEXr9iPGzXY/nYxseh5Rk9bIq/bJsE/UowBl/7TqCiAiILiix
-	ZXDnje3UZCi2P9SY+A7rHpEfZ6O5jZAyCeWNDpR6riftTXjtGEyc7A==
-X-Received: by 2002:a05:6a00:22cb:b0:886:f833:1649 with SMTP id d2e1a72fcca58-89f20dd89c5mr3210259b3a.19.1792200080196;
-        Fri, 16 Oct 2026 18:21:20 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f58017c70sm1840215b3a.48.2026.10.16.18.21.18
+        bh=ty8oBQC8ZzmKhKgO/ClpXA/s1qlF/mePfz8ntL+VDOA=;
+        b=YPNMQrfsI1hgErBjAztmRDIhL7+Qm6x0N9L5WeVMc6SUneMT7NzEaWG24m8vL6DYn4
+         pydwl2nfo5F1PlTkxyrRes0PQ1ksCOSIB/cJAAT7SNy0SI7+bo0o25/ywEnW/XlscpD0
+         2H/ZZRphSZNaKzdCcrWnaKKPZzkIuSDPAoz0Lf8zJ0BdfbhTww187pUXm/w7+bCVDMup
+         kzA4zCpYQIF10vhq7oPgQ92prwA4BvCzef40GbaTxf9gTVxdC3+4KXA2Zi8jpR5+qdjS
+         lhN4sLK0m5VREsXXzn0eK13nLJcm7Wu0w5/JjelEVwEnKEfaYa7VQ1yf1YAujmEVkhlG
+         JsEw==
+X-Gm-Message-State: AFq9FYISNgrtgGa30HgGcaqU0wI3JSUt9VOxrOjKPS0bW0KMc550Koe7
+	Wqm4uMcBC+NtB24mvRfaKrDjOiaAgnp4GHNhxIOhKCCzIeFxBnFraIAtNwkWwfqm
+X-Gm-Gg: AYBFou39B7UQpGY0vsZpubkYV+ES0sBn0NDlHQhO2jOO24WWF4nZGVum8om0rHuYnvE
+	6Gxo1KXnU9nS1HY8gcXmUHVd1VQGedfBHGAYCX7wJvyNz7IClQey5Q1BYu37mZzrkJePpmR4lA+
+	XS9wfaOIbti6YnZisF8JFnNBg9P0hOeKjsMoT1rXeHxgcR8J4JMKD1XP9Rh8aVng5vLWVP3axgp
+	QWYwUWaOWfJ+8nfKdi6epRHxbw+x5ttl3HkScsEE66bvE6fT3BurbjXlSRtVqIjBwdJhSEkJkpF
+	rVscRZxIa8KAvHzmuNEOLwNU1g7S2+I5MNA8uLhzopupQ5/B4ca5PPOgAopzTC6cvS9UaTnVWey
+	WhUFqaVcKLiGOBqTpMqtqcQO73sS7S+GhfedudP49XfYv/rC/tO8V38U6Rn9YwC6OdqQGNRFkAL
+	+7fPZL+tQ1eWkaqmrEhWpy8QHJmZizOiXk0kOe4okbWLzuaxftVD0vaOpb6iTf+m5bJqkxdkW5v
+	i/n/J9zYzL+rz1X+lfY/owhuKCwLlQT3zJxh0GQUjBArpWpfMyDS084/cQAndZ/CJuco2VnombZ
+	qgeJOVaeNxIKzSlU5GVjqDAqYY3NhtOA8zLWh7Cb6Hk=
+X-Received: by 2002:a17:90b:5448:b0:3ac:7c52:fae5 with SMTP id 98e67ed59e1d1-3acef2b5beamr1228025a91.50.1792200083201;
+        Fri, 16 Oct 2026 18:21:23 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd3b16c2asm2651789a91.2.2026.10.16.18.21.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 18:21:19 -0700 (PDT)
+        Fri, 16 Oct 2026 18:21:22 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next 06/38] bpf: forbid sleeping in bpf_find_vma() callbacks
-Date: Sat, 17 Oct 2026 01:20:26 +0000
-Message-ID: <20261017012058.355787-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 07/38] bpf: look at all 64 bits of a BPF_JSET mask on 32-bit
+Date: Sat, 17 Oct 2026 01:20:27 +0000
+Message-ID: <20261017012058.355787-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
 References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
@@ -84,79 +84,59 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-A sleepable program can call bpf_find_vma() and use a sleepable helper
-such as bpf_copy_from_user() or bpf_copy_from_user_task() in the
-callback. The verifier accepts this, but bpf_find_vma() runs the callback
-with the mmap_lock of the mm held for read. If the user copy faults on
-that mm, the fault handler has to take mmap_lock again. Lockdep reports
-recursive locking, and if a writer queued up in between, the fault blocks
-behind the writer, which waits for the read lock the helper already
-holds:
+In the branch of a BPF_JSET which is taken, the verifier can learn
+something about the register only if the mask has a single bit: then this
+bit is set. regs_refine_cond_op() tests this with is_power_of_2(val) and
+then ORs val into var_off.
 
-    sleepable prog                  other thread of the same mm
-    bpf_find_vma(current, ...)
-      mmap_read_trylock(mm)
-                                    mmap_write_lock(mm)  <- waits
-      callback: copy_from_user()
-        page fault
-          mmap_read_lock(mm)        <- queued behind the writer
+val is a u64, but is_power_of_2() takes an unsigned long. On a 32-bit
+kernel it only sees the lower half of the mask. For
 
-This is the same problem as with sleepable task_vma iterator programs.
-The verifier checks synchronous callbacks in the caller's context, so
-in_sleepable_context() is true in the callback of a sleepable program.
+	if r1 & 0xffffffff80000000 goto l
 
-Verify the callback like a hash map for_each callback, as running in an
-RCU read-side critical section where sleeping is not allowed, and actually
-hold rcu_read_lock() around it, so that global functions the callback
-calls, which are then verified for a non-sleepable context, see the RCU
-protection they are verified with.
+which is a BPF_JSET | BPF_K with an immediate of 0x80000000, the lower
+half is a power of two. So the verifier takes all 33 bits for set at l,
+while the branch is taken if any of them is. A mask of 0x100000001 from a
+register does the same for bit 0.
 
-Non-sleepable programs already run the callback under RCU, nothing changes
-for them. A sleepable program whose bpf_find_vma() callback calls any
-helper, kfunc or global function that may sleep is now rejected by the
-verifier, including ones that would be harmless under mmap_lock as they
-don't touch user memory.
+The log of an i386 kernel, for r6 = bpf_get_prandom_u32() << 31:
 
-Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
+	3: (45) if r6 & 0x80000000 goto pc+2
+	from 3 to 6: R6=0xffffffff80000000 R10=fp0
+	6: (77) r6 >>= 63                     ; R6=1
+
+When the program runs, r6 >> 63 is 0.
+
+From then on the verifier works with known bits which the register does
+not have at run time. It accepts, for example, an offset into a map value
+which it derives from these bits and believes to be constant, and the
+program can access memory outside of the map value.
+
+Count the bits of the whole value.
+
+Only 32-bit kernels are affected. On a 64-bit kernel unsigned long holds
+the whole mask, and this patch changes nothing.
+
+Fixes: 960ea056561a ("bpf: verifier: teach the verifier to reason about the BPF_JSET instruction")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/task_iter.c | 6 ++++++
- kernel/bpf/verifier.c  | 2 ++
- 2 files changed, 8 insertions(+)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index cf2bf388e181..2fa6b8dae8c4 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -810,8 +810,14 @@ BPF_CALL_5(bpf_find_vma, struct task_struct *, task, u64, start,
- 	vma = find_vma(mm, start);
- 
- 	if (vma && vma->vm_start <= start && vma->vm_end > start) {
-+		/*
-+		 * The callback must not sleep while mmap_lock is held, and the
-+		 * verifier checks it as an RCU read-side critical section.
-+		 */
-+		rcu_read_lock();
- 		callback_fn((u64)(long)task, (u64)(long)vma,
- 			    (u64)(long)callback_ctx, 0, 0);
-+		rcu_read_unlock();
- 		ret = 0;
- 	}
- 	bpf_mmap_unlock_mm(work, mm);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 883cf148235c..430d5309eb5c 100644
+index 430d5309eb5c..d0ba7156ba4f 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11629,6 +11629,8 @@ static int set_find_vma_callback_state(struct bpf_verifier_env *env,
- 	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
- 	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
- 	callee->in_callback_fn = true;
-+	/* bpf_find_vma() runs the callback under mmap_lock and RCU. */
-+	callee->in_rcu_callback_fn = true;
- 	callee->callback_ret_range = retval_range(0, 1);
- 	return 0;
- }
+@@ -18145,7 +18145,7 @@ static void regs_refine_cond_op(struct bpf_reg_state *reg1, struct bpf_reg_state
+ 		 * this restriction. I.e., !(r1 & 0x3) means neither bit 0 nor
+ 		 * bit 1 is set, which we can readily use in adjustments.
+ 		 */
+-		if (!is_power_of_2(val))
++		if (hweight64(val) != 1)
+ 			break;
+ 		if (is_jmp32) {
+ 			t = tnum_or(tnum_subreg(reg1->var_off), tnum_const(val));
 -- 
 2.55.0
 
