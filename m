@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-60.mta0.migadu.com [91.218.175.60])
+Received: from mta1.migadu.com (out-31.mta1.migadu.com [95.215.58.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD28F4CF465
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 05:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.60
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41D44CF49C
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 05:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792214645; cv=none; b=cosDewg0ipoqXn9nyamM251N+RvkdAZ3h113s3Sl1E7gBqlo5rsZcUDHU/9XqIy53rFH4E0YiLgeUg6hJNb1CLxBkC7ZNz3B7bqfFatNeVp5g+lKWydrqIBfRZ67bAtvqxR04m5JJXuNtSMFL87ICg+z7IE11vp/8kL1xQCaT/o=
+	t=1792215526; cv=none; b=mO2epbMxuBSv/NcCjd2arCaLejYbiz8vAkCt326XvwJtCHyIpvfmN37ae9rmwPEHU9wYT9Kaav91xd8qWt9sjLslmVP8G/s5HbOiaJl1Wbdh4MNHh8w4molsS5edF8w7Wm3kJpsWB9e28+z36gmlSHZUdypvTiSPgMsK/s8Tkqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792214645; c=relaxed/simple;
-	bh=V71HwRlcRmnhrJOuBbvoS0H+bd9OgyZZDE0JcqZgMpU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=sF2tICf5FpNPA8W+lxNClIi+4X93MiiK0ttJjCM9h02Hku+3sxQZAkLdAJz6ATnQ9/WhNwbFJobs3NP+/RWL4O31G8mYgeF1pYYmmkrhEqla2xNnLlN5NeW6azDBZ6WeQ5P4eJGfwcwMVEnAef+dJUX/8h6gCshtHzut1yZgkSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tRE97Lal; arc=none smtp.client-ip=91.218.175.60
+	s=arc-20240116; t=1792215526; c=relaxed/simple;
+	bh=/MMgUEomUt3Slmm0K00jtTvAyfsiXxPh+UVR6CCYvb4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TX4iIm+iTzzA3xsD2Shv6zCikRpas16HFJ4iX+0U5DzYIolRTo7Y/cxW0MukZdEA47bAHwYdvbM3m0wbRRUKUuYW73E7cJW95xjA+052iKF1SKRUXnKvbnu1V4RJDEQ+LvfpZuROOzhudKpRGjSmMJ+JjqU1vOmRtB0+u8Dk8Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q9Pj5HU2; arc=none smtp.client-ip=95.215.58.31
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tRE97Lal"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q9Pj5HU2"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=V71HwRlcRmnhrJOuBbvoS0H+bd9OgyZZDE0JcqZgMpU=;
+DKIM-Signature: a=rsa-sha256; bh=/MMgUEomUt3Slmm0K00jtTvAyfsiXxPh+UVR6CCYvb4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792214640; v=1; x=1792819440;
- b=tRE97LaluRTgCsNeh9EqlZGAyr1nt73KdSCMJVpbO1FwMkP9CUMe9fBP6o93APrUMg45hoC7
- PRCP/Hv/dDT1Mu42hKhS7uDBa6Vv4+SLKFdUvDT3IOF3FkQq29cBq/JmPgBZ5zqQ6ERrmi4Q1k/
- wwaPXaUqLkyppNU8Kvy+ps1U=
+ t=1792215522; v=1; x=1792820322;
+ b=q9Pj5HU2WCMBo8Pmqis0vWJAoQYF9vJu1IlNihsyRZNCtQWKRf5WYnTx20KfbgbyFk6OvOhP
+ x4K9Tq1xXAHJj/pLlsgyfz5z3UsB8Y1oJg/ezM0aXcv5l9hz+Nbef3kn9VJ6a6+uvfj5BkgFuwf
+ yHNyBqr5IDtM1aezz4szKHd8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6f4c53a09c9c65fa;
-	Sat, 17 Oct 2026 05:24:00 +0000
-X-Mizu-Trace-ID: 6f4c53a09c9c65fa
+Received: by smtp.migadu.com with ESMTPS id a8c2c243e1971762;
+	Sat, 17 Oct 2026 05:38:42 +0000
+X-Mizu-Trace-ID: a8c2c243e1971762
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <05918478-1564-4e6f-874a-1a3c4c084097@linux.dev>
-Date: Fri, 16 Oct 2026 22:23:58 -0700
+Message-ID: <4a7080f0-1b1c-4375-b25b-f5a2dd94bbd1@linux.dev>
+Date: Fri, 16 Oct 2026 22:38:38 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,114 +38,148 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v12 07/25] bpf: Refuse a callback that can unwind
-To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
-References: <20261017025129.1914859-1-yonghong.song@linux.dev>
- <20261017025206.1920523-1-yonghong.song@linux.dev>
- <sashiko-outbox-175238@kernel.org>
+Subject: Re: [PATCH bpf-next v12 12/25] bpf: Allow a subprog to end with a
+ call that does not return
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261017025232.1925266-1-yonghong.song@linux.dev>
+ <c0fca81fb0b00da256b581c75751323967d8e48a600694286fea6e46ba8f811a@mail.kernel.org>
 Content-Language: en-GB
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <sashiko-outbox-175238@kernel.org>
+In-Reply-To: <c0fca81fb0b00da256b581c75751323967d8e48a600694286fea6e46ba8f811a@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 10/16/26 8:19 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] bpf: missing might_unwind propagation to callback in bpf_check_cfg()
-> --
->
-> commit 1785732c5b5ae17b86f08f6a94449da36fb9c958
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Refuse a callback that can unwind
->
-> This commit adds bpf_exc_check_callback() and calls it in
-> push_callback_call() to reject callback subprograms that have
-> might_unwind set.
+On 10/16/26 8:35 PM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Allow a subprog to end with a call that does not return
+> TL;DR: Inserting exits after final calls may shift verifier log instruction
+> indices for newly accepted programs, which could make libbpf's CO-RE
+> relocation lookup miss or name the wrong field. Was this intended?
 >
 >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index fce2baa6272d1..fcf0d0fe0f2ff 100644
 >> --- a/kernel/bpf/verifier.c
 >> +++ b/kernel/bpf/verifier.c
->> @@ -11191,6 +11191,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
->>   	 * callbacks
->>   	 */
->>   	env->subprog_info[subprog].is_cb = true;
->> +	err = bpf_exc_check_callback(env, subprog);
->> +	if (err)
->> +		return err;
+> [ ... ]
+>
+>> @@ -3317,6 +3317,54 @@ static void find_subprog_properties(struct bpf_verifier_env *env)
+>>   	}
+>>   }
+>>
+>> +/*
+>> + * Put an exit after a call that ends a subprog, so that nothing from the CFG
+>> + * walk on has to know a subprog can end that way. check_subprogs() only lets
+>> + * such a call be to a callee that never returns, so do_check() never reaches
+>> + * the exit.
+>> + */
+>> +static int add_exits_after_final_calls(struct bpf_verifier_env *env)
+>> +{
+> [ ... ]
+>
+>> +		patch[0] = *insn;
+>> +		new_prog = bpf_patch_insn_data(env, last, patch, 2);
+>> +		if (!new_prog)
+>> +			return -ENOMEM;
+>> +		env->prog = new_prog;
+>> +		/* The patch moved the call's aux data, orig_idx included, to the exit. */
+>> +		env->insn_aux_data[last].orig_idx = env->insn_aux_data[last + 1].orig_idx;
+> [ ... ]
+>
+>> +	}
+>> +	return 0;
+>> +}
+> [ ... ]
+>
+>> @@ -23661,6 +23718,24 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+>>   	if (ret < 0)
+>>   		goto skip_full_check;
+>>
+>> +	/*
+>> +	 * After everything above has recorded insn offsets, so the patch
+>> +	 * adjusts them, and before an offloaded program's per-insn state.
+>> +	 */
+>> +	ret = add_exits_after_final_calls(env);
+>> +	if (ret < 0)
+>> +		goto skip_full_check;
 >> +
->>   	if (bpf_pseudo_kfunc_call(insn) &&
->>   	    !is_callback_calling_kfunc(insn->imm)) {
->>   		verifier_bug(env, "kfunc %s#%d not marked as callback-calling",
-> [Severity: High]
-> Can a callback subprogram that transitively calls bpf_unwind() bypass
-> bpf_exc_check_callback() with env->subprog_info[subprog].might_unwind
-> still false?
->
-> In bpf_check_cfg(), direct calls (BPF_PSEUDO_CALL), function address
-> loads (BPF_PSEUDO_FUNC), and read-only map function pointer loads
-> (insn_func_ptrs()) are explored in a single DFS sharing
-> env->cfg.insn_state[]:
->
-> kernel/bpf/cfg.c:merge_callee_effects() {
-> 	caller = bpf_find_containing_subprog(env, t);
-> 	callee = bpf_find_containing_subprog(env, w);
-> 	caller->changes_pkt_data |= callee->changes_pkt_data;
-> 	caller->might_sleep |= callee->might_sleep;
-> 	caller->might_throw |= callee->might_throw;
-> 	caller->might_unwind |= callee->might_unwind;
-> }
->
-> merge_callee_effects() relies on callee w already being EXPLORED when
-> returning to caller t. However, if subprogram H has a conditional branch
-> whose fallthrough loads a read-only map containing the address of
-> callback cb via insn_func_ptrs() (or loads cb via BPF_PSEUDO_FUNC when H
-> is explored from a cleanup pad before main's fallthrough) and whose jump
-> target calls bpf_unwind(), while cb calls H via BPF_PSEUDO_CALL:
->
-> 1. bpf_check_cfg() enters H (marking insn_state[w_H] = DISCOVERED) and
->     explores H's fallthrough first, before visiting H's bpf_unwind()
->     branch, so H->might_unwind is still false.
->
-> 2. H's fallthrough visits cb via visit_func_ptrs_insn() or
->     visit_func_call_insn().
->
-> 3. When cb visits its BPF_PSEUDO_CALL to H, merge_callee_effects() sees
->     H->might_unwind == false, and push_insn() sees
->     (insn_state[w_H] & 0xF0) == DISCOVERED and returns DONE_EXPLORING.
->     Thus cb finishes CFG exploration with cb->might_unwind == false
->     before H explores its bpf_unwind() branch and sets
->     H->might_unwind = true.
->
-> 4. At the end of bpf_check_cfg(), mark_callx_might_unwind() checks
->     addr_taken_subprog_might_unwind():
->
-> kernel/bpf/cfg.c:mark_callx_might_unwind() {
-> 	if (!addr_taken_subprog_might_unwind(env))
-> 		return;
->      ...
-> }
->
->     Because the address-taken subprogram cb still has might_unwind == false,
->     addr_taken_subprog_might_unwind() returns false and skips the
->     fixed-point propagation loop.
+> Does inserting these exits before bpf_check_cfg() and do_check() shift the
+> instruction indices that the verifier log reports?
 
-The previous patch 6 indeed has a bug and this may cause
-addr_taken_subprog_might)unwind() return false and this will cause
-issues. Fixing patch 6 issue should fix the issue.
+I think this is indeed an issue, esp. for verifier log reporting.
+
+For example, the original function:
+    0: call foo
+    1: call bpf_unwind
+    2: call bpf_unwind_resume
+
+After add_exits_after_final_calls, we will have
+    idx  orig_idx
+    0    0         call foo
+    1    1         bpf_unwind
+    2    1         exit
+    3    2         call bpf_unwind_resume
+    4    2         exit
+
+When verifier trying to report error message, we cannot use 'idx'
+any more, we have to use orig_idx. For example, we have
+    verbose_linfo(env, env->insn_idx, "; ");
+    ...
+    verbose(env, "%d: ", env->insn_idx);
+
+here env->insn_idx refers to 'idx' in the above,
+but they do not correspond to the original idx.
+
+The actual one may be replacing env->insn_idx to corresponding
+orig_idx.
+
+We could have a helper to map idx->orig_idx. This should work.
+Do we have a better solution for this?
 
 >
-> 5. Neither sort_subprogs_topo() nor check_max_stack_depth() rejects the
->     program because insn_func_ptrs() edges are not call edges and async
->     BPF_PSEUDO_FUNC callbacks are skipped in stack depth checks.
+> Until now no pass changed the instruction count before verification, so the
+> indices in the log matched the instructions user space loaded.  With this
+> patch, every insn behind a subprog that ends with a call moves down by one
+> for each exit added in front of it.  The CFG walk and do_check() print
+> env->insn_idx, so every message about those insns now carries an index that
+> is not in the loaded program.  insn_aux_data[].orig_idx exists for this kind
+> of mismatch, but only a few messages use it.
 >
-> When push_callback_call() then calls bpf_exc_check_callback(env, cb),
-> env->subprog_info[cb].might_unwind is false, allowing the unwinding
-> callback to pass verification and cause a verifier/runtime control-flow
-> mismatch or jump to a zero epilogue_ip when bpf_unwind() is invoked at
-> runtime.
+> This has a concrete effect on libbpf.  fixup_log_failed_core_relo() in
+> tools/lib/bpf/libbpf.c reads the index from the log and uses it to find the
+> relocation:
 >
+>      if (sscanf(line1, "%d: (%*d) call unknown#195896080\n", &insn_idx) != 1)
+>          return;
+>      relo = find_relo_core(prog, insn_idx);
+>
+> find_relo_core() needs an exact relo->insn_idx match.  Take a program whose
+> main subprog ends with "call _Unwind_Resume" (the prog() example in the
+> commit message) and that has a poisoned CO-RE relocation at index N in a
+> later subprog.  The kernel now logs that instruction as N+1, so libbpf
+> either finds no relocation and leaves the raw "unknown#195896080" message,
+> or picks up a different CO-RE relocation sitting at N+1 and names the wrong
+> field.
+>
+> The cleanup-record messages are affected as well.  "resume at insn %d is not
+> in a landing pad" and "insn %u ... is in a landing pad" now print shifted
+> indices, while bpf_exc_check_info() reports the user's own offsets.
+>
+> Only programs that this patch newly accepts are affected, since
+> add_exits_after_final_calls() patches nothing otherwise.  The commit message
+> says the exits are put in "before the CFG walk" but does not mention the
+> effect on the log indices.
+>
+> Was this intended?  Would it make sense to report orig_idx in the do_check()
+> messages, or to handle a final call without inserting instructions until
+> after verification?
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38997507726
 
