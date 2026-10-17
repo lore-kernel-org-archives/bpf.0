@@ -1,153 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EF83939A4;
-	Sat, 17 Oct 2026 17:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761652E266C;
+	Sat, 17 Oct 2026 17:17:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792257442; cv=none; b=IShM2FAhWlcSFZmaskz5XBeKj6Nb/KU4xYbdMnsoCeBNnpvO9s9aSgiWCMlWFiQ7TINrZp3T8r149L02EKI3HLl72kWWJAqFzGyCQmvE7n36NnB38UQ3fgKAtajK4b3s/PL458QrQE412apgjGSbW33z6/tjNriaJP4zDa1olOE=
+	t=1792257445; cv=none; b=orvlUxbz9OpRRx5apE9QEzRvedrK2YIz5M7OIy1iCrYtULXRfkX6Ip7JfJsWFs4GTitkcnerUeR+RlytDgVxdf+4HIcq9T1TPDCQrMfrH4xxyvFvjSLAgDlMbPg7ycFjYjiU2j4nx3WVLFtSYSe2tazlEaRfCU8QDIbKuw0GmsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792257442; c=relaxed/simple;
-	bh=93xnn34tD+1XhQ9yTePvda+bIbodSFjxFxIIFWJvP7g=;
+	s=arc-20240116; t=1792257445; c=relaxed/simple;
+	bh=agg6kSA5A1TJKFbdCXfcyeVtWdACev3CUNtBFxbiGPw=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=j+9h+GpVOw9BGu3dFvHHrSwBIQHQQWJIHgheLkE/TImhYyKeebVKOXaLxjp01BZDg2giy46QBTZ7has4ufWa8zNzjIkMZkdC5H5tIh8FmCXVojgcJBvUS+tTB94l80YMVKsoWM2X8Q1yXyaTt+lnNOoByVLh4iVTKmq7wd3jJdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y4HVdP2h; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=hQm15e2LahHXyTEdHMpOB/X/impf4fiO1SJPqCVNdnzzByTICI2UJj7f6+Yzt5C3cum9bjCSZYQ36ZiIh5a0o4afNnF+MR7L9k2KT7E2wRaTiv7UoCulCjl+rBuLuN2ar69A58D/v++04VudSCo+anGAJAdkbdYNOjtjBkqSeMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjojCDGa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y4HVdP2h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980951F000C4;
-	Sat, 17 Oct 2026 17:17:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjojCDGa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9E1B1F000C4;
+	Sat, 17 Oct 2026 17:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792257440;
-	bh=clYl2oitVIcGRNdQXZuYf5YrawBK2Fa9489eSey5IDs=;
+	s=k20260515; t=1792257444;
+	bh=DdtFdMm6CuE8z0aS3OG6NS2bFb3i4ms5iebYVmRrVQ4=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Y4HVdP2hXsu0SNMKUOZ6ku7d4JFdFjzdO+Aiq9xqYut6ACmJ6pcmOhMC88nL2GLqa
-	 298RwTWIhLkqlqATf0ju3STimjE0+T66/bgTiytcne15UcLnYo8lj5V7wInKprORHo
-	 tTc7k7bPcCICQjAMz+yGUrt13cpVA9beEjGlUf0DmZxtiQNRTTx4vYr6JxnWjrkAH1
-	 bVi3Lp2w8WZ55H8JvuNHH9NRp4YCZu4weCcRS2UYHGQBqZW7k7JjqwZn+sgUvPecHG
-	 PMOKR/SIz4UF2kP2UJMF7DoN8OsEI/L0YR//UvIpI+KF+8FV5U6rzN4wnrbwWrGUSg
-	 OaUclVs0/XCXA==
-Content-Type: multipart/mixed; boundary="===============8715040808449314494=="
+	b=mjojCDGaLyZIXU1mklqTRSaGs3FUEPw4kuqhqJkoWg83v9UVWYnd0GloWWHNlCLSp
+	 zH14Kx9iaf6196vlyY6x3g9NWt+HnXs+KCLg5AQkJMXqQipAYjxapcAIQemt6A4Mg2
+	 VIuUykMc1HQuxdMpNTzsfROEwtrcx/GhnxGUYQwRwbPiRMtRNZzRXxiLgypk5sxo1T
+	 CoNDytEYbQJbqMQJbOLuZrYlzAyCUKo2ujtDorh7qlDJFRBWnpQtF/8tb/tznQx9zO
+	 Kfq5+UbQ/NoFhG3SdlyeA/9vLa+Dc931O8QlSKdMzcqwNT5vf83aVgaUAiN1HJLtN2
+	 N4SMghaOOZUUQ==
+Content-Type: multipart/mixed; boundary="===============0715484792088937103=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c329f56d6d0f92d47cea5feebeba1ff70e395d3dec507f6073db340a41e943c9@mail.kernel.org>
-In-Reply-To: <20261017163745.3341787-39-alexei.starovoitov@gmail.com>
-References: <20261017163745.3341787-39-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 38/43] bpf: Don't take a dynptr argument for a local dynptr
+Message-Id: <57305a277662e379e842afdc22aeb380e4114f06b5f0f7d9db1e16f8edaa6f45@mail.kernel.org>
+In-Reply-To: <20261017163745.3341787-34-alexei.starovoitov@gmail.com>
+References: <20261017163745.3341787-34-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 33/43] bpf: Keep the symbols of a program until it has ended
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 17:17:19 +0000 (UTC)
+Date: Sat, 17 Oct 2026 17:17:22 +0000 (UTC)
 
---===============8715040808449314494==
+--===============0715484792088937103==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Don't take a dynptr argument for a local dynptr
+> bpf: Keep the symbols of a program until it has ended
 
-TL;DR: Treating every CONST_PTR_TO_DYNPTR as an skb dynptr also hits the
-bpf_user_ringbuf_drain() callback's local dynptr, so the verifier may falsely
-reject valid programs; nothing unsafe.
+TL;DR: Design question: kallsyms removal now happens after the RCU callback
+frees btf and linfo, so a symbol lookup in that window might touch freed
+memory. The review found no such reader.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index e1216927373a..6e32db9777c2 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -3085,12 +3085,40 @@ static void bpf_free_used_btfs(struct bpf_prog_aux *aux)
 
 [ ... ]
 
-> @@ -8416,6 +8416,7 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
->  			       argno_t argno, int insn_idx, enum bpf_arg_type arg_type,
->  			       struct bpf_call_arg_meta *meta)
+> +static void bpf_prog_free_deferred(struct work_struct *work)
+> +{
+> +	struct bpf_prog_aux *aux;
+> +	bool ksyms;
+> +
+>  	aux = container_of(work, struct bpf_prog_aux, work);
+> +	/*
+> +	 * A prog that still runs when its last reference goes needs its symbols,
+> +	 * by which its exception table is found.  It has ended by now.
+> +	 */
+> +	ksyms = aux->real_func_cnt || !list_empty(&aux->ksym.lnode);
+> +	bpf_prog_kallsyms_del_all(aux->prog);
+>  #ifdef CONFIG_BPF_SYSCALL
+>  	bpf_free_kfunc_btf_tab(aux->kfunc_btf_tab);
+>  #endif
+
+[ ... ]
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index c412bcd1903f..ddb986324f2f 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -2461,6 +2461,8 @@ static void __bpf_prog_put_rcu(struct rcu_head *rcu)
+>  	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
+>  
+>  	btf_put(aux->btf);
+> +	kvfree(aux->jited_linfo);
+> +	kvfree(aux->linfo);
+>  	kvfree(aux->func_info);
+>  	kfree(aux->func_info_aux);
+>  	free_uid(aux->user);
+> @@ -2485,10 +2487,7 @@ static void __bpf_prog_put_rcu_tasks(struct rcu_head *rcu)
+>  
+>  static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
 >  {
-> +	bool is_arg = reg->type == CONST_PTR_TO_DYNPTR;
->  	int spi, err = 0;
+> -	bpf_prog_kallsyms_del_all(prog);
+>  	module_put(prog->aux->mod);
+> -	kvfree(prog->aux->jited_linfo);
+> -	kvfree(prog->aux->linfo);
+>  	kfree(prog->aux->kfunc_tab);
+>  	kfree(prog->aux->ctx_arg_info);
+>  	if (prog->aux->attach_btf)
 
-[ ... ]
+A subsystem pattern flags the ordering here as potentially concerning, so
+this is a question rather than a confirmed bug.
 
-> @@ -8502,7 +8503,12 @@ static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_reg_stat
->  			reg = &bpf_stack_slot(state, spi)->spilled_ptr;
->  		}
->
-> -		meta->dynptr.type = reg->dynptr.type;
-> +		/*
-> +		 * The callers of a global function may hand in a dynptr of any
-> +		 * type. Take it for that of an skb, so that a write through it
-> +		 * and its slices are treated with care.
-> +		 */
-> +		meta->dynptr.type = is_arg ? BPF_DYNPTR_TYPE_SKB : reg->dynptr.type;
->  		meta->dynptr.id = reg->id;
->  		meta->dynptr.parent_id = reg->parent_id;
->  	}
+__bpf_prog_put_noref() still issues call_rcu() (or call_rcu_tasks() or
+call_rcu_tasks_trace()) on &prog->aux->rcu:
 
-Is is_arg limited to global function arguments?
+	if (deferred) {
+		if (IS_ENABLED(CONFIG_TASKS_RCU) && prog->aux->tramp_linked)
+			call_rcu_tasks(&prog->aux->rcu, __bpf_prog_put_rcu_tasks);
+		else if (bpf_prog_runs_sleepable(prog))
+			call_rcu_tasks_trace(&prog->aux->rcu, __bpf_prog_put_rcu);
+		else
+			call_rcu(&prog->aux->rcu, __bpf_prog_put_rcu);
+	}
 
-It is just reg->type == CONST_PTR_TO_DYNPTR, and global subprog arguments
-are not the only registers of that type.  set_user_ringbuf_callback_state()
-also creates one for the bpf_user_ringbuf_drain() callback:
+but with bpf_prog_kallsyms_del_all() gone from this function, aux->ksym is
+still linked in the RCU-protected bpf_tree latch tree and the bpf_kallsyms
+list when the callback is queued.
 
-    mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE_LOCAL);
+The removal now happens in bpf_prog_free_deferred(), which is a work item
+scheduled from inside the callback chain:
 
-and the type of that dynptr is known.  bpf_user_ringbuf_drain() always
-passes a local dynptr over the ring sample (kernel/bpf/ringbuf.c):
+__bpf_prog_put_rcu()
+  bpf_prog_free()
+    schedule_work()
+      bpf_prog_free_deferred()
+        bpf_prog_kallsyms_del_all()
 
-    bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL, 0, size);
+In between, __bpf_prog_put_rcu() has already done:
 
-After this patch, every consumer of meta->dynptr.type seems to treat the
-callback sample as an skb dynptr:
+	btf_put(aux->btf);
+	kvfree(aux->jited_linfo);
+	kvfree(aux->linfo);
+	kvfree(aux->func_info);
+	kfree(aux->func_info_aux);
 
-- bpf_dynptr_write(sample, ...) in the callback hits
+and bpf_prog_free() has dropped aux->dst_prog and aux->token.
 
-      if (dynptr_write_changes_pkt_data(dynptr_type))
-              changes_data = true;
+Can a tree reader that runs after the grace period but before
+bpf_prog_free_deferred() still get the prog from bpf_prog_ksym_find() and
+then dereference those fields?  For example:
 
-  in check_helper_call(), which ends up in clear_all_pkt_pointers().  The
-  callback is a sync callback verified inside the caller's state, and
-  bpf_for_each_reg_in_vstate() walks every frame, so packet pointers held
-  by a calling tc/XDP program across bpf_user_ringbuf_drain() would be
-  invalidated.  The dynptr-writing kfuncs (bpf_dynptr_memset(),
-  bpf_dynptr_copy() on the sample) go through dynptr_write_type and behave
-  the same way.
+dump_stack_cb()
+  bpf_prog_get_file_line()
+    prog->aux->btf, prog->aux->linfo, prog->aux->jited_linfo
 
-- bpf_dynptr_slice(sample, ...) now returns PTR_TO_MEM | DYNPTR_TYPE_SKB,
-  which makes reg_is_dynptr_slice_pkt() true.  In any program type, that
-  slice is then invalidated by a call to a global function marked
-  changes_pkt_data.  Since c84400f5fe42 earlier in this series, that mark
-  covers any global function that calls bpf_dynptr_write(), even just to
-  fill a ringbuf record.  Passing the slice to such a function is also
-  refused ("cannot pass packet pointer ... function may change packet
-  data").
+The final free of aux and of the JIT images does look to be behind the
+second grace period from queue_rcu_work(), so the exposure would only cover
+the fields freed in __bpf_prog_put_rcu().
 
-- bpf_dynptr_clone(sample, &c) now makes an SKB-typed clone, which carries
-  the same effects.
+Looking at the callers of bpf_prog_ksym_find() that go past the ksym
+fields (search_bpf_extables(), dump_stack_cb(), find_from_stack_cb(),
+bpf_stack_walker(), bpf_prog_report_arena_violation()), they resolve
+either the IP of a frame on the current stack through arch_bpf_stack_walk()
+or the faulting IP.  In both cases the program is still running, so the
+grace period chosen in __bpf_prog_put_noref() should not have finished.
 
-For example, a syscall or tracing program whose drain callback does:
+The name-only readers (bpf_address_lookup(), bpf_get_kallsym(),
+is_bpf_text_address(), bpf_has_frame_pointer()) read only aux->ksym, which
+stays valid until the extra grace period.  I did not find a reader that
+reaches the freed linfo or btf for a program that is not running.
 
-    m = bpf_dynptr_slice(d, 0, &buf, sizeof(buf));
-    if (m)
-            handle(m);
-
-where handle(const struct msg *) is a global function that copies *m into
-a ringbuf with bpf_dynptr_write(), was accepted before this patch and
-looks like it is rejected after it, although no skb is involved.  Nothing
-is unsafe here, but it is a false rejection of valid programs that the
-commit message does not describe.
-
-Could the SKB assumption be applied only to dynptrs set up as global
-subprog arguments, for example by marking them differently where the
-subprog argument setup currently calls:
-
-    __mark_dynptr_reg(reg, BPF_DYNPTR_TYPE_LOCAL, true, ++env->id_gen, 0)
-
-and leaving the type of the callback dynptr as BPF_DYNPTR_TYPE_LOCAL?  That
-would also make the new comment match the code.
-
-None of the later commits in this series (222dc092c64e, e17707d54c68,
-0bd8e7a834ac, c04474b8dc8d, 64e0b112d688) change this, and e17707d54c68
-and 64e0b112d688 add more consumers of the SKB classification.
+Is the ordering of call_rcu() before the ksym removal intended, given that
+the pattern of queueing an RCU callback on an object that is still
+reachable through an RCU-protected structure is normally treated as a bug?
 
 
 ---
@@ -155,4 +176,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39051545464
---===============8715040808449314494==--
+--===============0715484792088937103==--
