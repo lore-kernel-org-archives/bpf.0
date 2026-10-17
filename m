@@ -1,64 +1,64 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB1B303A04
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C32379EC1
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 01:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792200578; cv=none; b=PC2i3qzedxYf4kUODWPbTprcPhFk1mnrsK2wmXz+L4l9I2oU5f/tBAJiBjY4pxZGFSTF7Z/lWmecVDzVx+Vl7zgVEDU9ip+xxmgSnYvUTNMCbfPwglrCqpivYY1F8U9kIjHKxzDvYFmPiHUBS7YWSaoQ9VfzrkWX+QGbpiVnHdY=
+	t=1792200599; cv=none; b=jY2MyNNq7/vnQxQNhRjiEFrw+iL86f8SGFrgQbyQm4V5PSd26YI7lk/NBh+yKZlv4t0fJYfg8ltBiXgJ8kwHMQeZ2BFbrMeiVd1jQSpzQtgpq1zeXiLIqxDjkdb/g3FwirqfqsU6LIR+N9hAQ9EBmujOnK7XyX7o2+R2rc9syd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792200578; c=relaxed/simple;
-	bh=y55QZuB+jWL7YRU5PCkD2HxfmFhEhzDjX+1PIEhsJLc=;
+	s=arc-20240116; t=1792200599; c=relaxed/simple;
+	bh=+Q9C8oe3hqWcJoDTtj0AHpR5cMx2KWUkdcqLZdsQkvw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NoE1+yFwBnHYLqkaxVyHjVLvpRLrYlkkALN8G+ZN/AOewMkYT5Cbm1kjlxnsO07DuDfKN4ZpZ/MdU7rIndAgcSbfvwahcHlCPYWbIrfxTehLrl1e2wTO+Y+KekakHGS93cZ1dndCiW9kdpFlSbXG/TNzQO2Ws401w86mBa4KJ1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fagrZ5KX; arc=none smtp.client-ip=209.85.216.49
+	 MIME-Version; b=VIxbKQBufH70LIDlpO0Q4B6uztRU5qQJ7f5cnZnjE+/q7CtJzYNLgPXAdAGZVb4XixMkptOe/fsNrnAK+72JOZbZascIdtyrdfnMXJLpcGNJXjxijDaxE9hApJjy2KvQQDIa6t/9iLOkgM6atH5Vq5B3BIyHXvuyIl/cLXz2XvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tHEtqHAU; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fagrZ5KX"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3a4cdc9025bso398716a91.0
-        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:29:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tHEtqHAU"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e49fbf92aaso2315905ad.0
+        for <bpf@vger.kernel.org>; Fri, 16 Oct 2026 18:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792200576; x=1792805376; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792200598; x=1792805398; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yu+nw0DnZBOPglmG7aC0UEDpISgGOuyD+cGc5tX2Utw=;
-        b=fagrZ5KXz9QS9MRbjyhHnlf7zqeY9p7yKGLn9GRiydt8ewv5sbiL1pI18R3b71WVlJ
-         rYptjYb7W13Iqwl/yLzjTn7nWF9mketXJ0IKfhZ3Gae67mg9NoosIK3gLBuntDWvfhUa
-         sSLwXACOeUhNCRSu2NX2Jc8emiXoVytoXrTTL9ZUDmbqRjVR8G6LXcj6uiTRzRP23eig
-         MOONLzuofNv4iHJUufngPJ3FXJ2VmP6M9aZz2SbcU2W4KWTodna2JoQUmCyDahlA2tyl
-         2Cv5YAmz0KSrKrJFC+jgRyAarLY/PC4VRMBgS5OrHPBVqHG4iuhWAJND1+bzdKmDlyT7
-         m7Ag==
+        bh=Ro7OdpQEd8MQYPcU23BKt9hO5HQKv8OL+xjogw/2Zck=;
+        b=tHEtqHAUgQOxxm/UPe90orpdXjGBQBTNYDt4oUoN6DqquFguAEJYuSIeX82Pd7QyPh
+         tsZaU4WL4vax2Yy7Hg0VUpQnBytvCBMuZTOacWOc3j9DFV3gsFms9mtRW+M4WfuVtA9G
+         k38I7ha6r7alljKocirr1vm5FqyfKzPRQ2b06CPnhPMid/qHl7WZJ3SQtBsFfFB6VCBP
+         ZmbzwXcMRkpqKi/LuSFCuGa3XuNDDFw/aNxeR229p+LjwmU6QVcycjAxLKr/z81E05R6
+         9eyJEDpRmBE4hNMk/8mg6ErvTP1fKzNZQfnl+2EmMXUstrvZuN3Atk+vDTwN9P6HPDc8
+         mISA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792200576; x=1792805376;
+        d=1e100.net; s=20260707; t=1792200598; x=1792805398;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yu+nw0DnZBOPglmG7aC0UEDpISgGOuyD+cGc5tX2Utw=;
-        b=DCMSNQ7cbwR4X5lpjxr4DJC18ZA6XBgDnFw9MIghNPePpNIRssvt2FNv9SFCbUkBQl
-         nQF4Svm05zgXdEp/0jYJl6guERkD/JSIVXb3do32hIhUqqOukOoJJC2hgrPBIcQ+UF4t
-         1zlXRgzC8YR9Bzkriy01cfWMAxuP1MydWfnrSgYD+LZQ+Abiq3H3FxGScqQDfdCWu95j
-         ZgXd5XSt+m1gFtOCJMgPJbDdx8UA8xaXLfnBhbg18uEj+uyeciUS5ipaz+ipx3u1yZHt
-         oLA53CNldQvIlDoaIM3qKJ78mchr92aygBb7sIORTS7Jydk4Fxx+yIRMgxciGcB+kOu3
-         66xw==
-X-Gm-Message-State: AFq9FYIj5J2Cg0R62jLudoeLWzQLrObqp0hI7taLufNwt5u/mwSP8sNA
-	xxP8fO+laeOu+pwHvDAo27WMGjUXO/grCtyXkkckbui8lxwKoCHTsUK6RLUFTWXw
-X-Gm-Gg: AYBFou3yHDrU18nOkC/pgppgcDzTWXuBHbndeKOXqOvn/DRwX5udbF8QGpDJN5l+n1i
-	9RKXrXEyvxIU1Y4EB5FLHbApEJzBqK6lFjn2Yhe4j+O7QZhPtNYtsR9z1DvJnJ0sa3yqYqZ30Kl
-	fYA/BmfshgMWFBhIX5V7mSbWs7MFPud3GG0NSCHibnK0+5HmY5NkBFn5EJeYBKD+mpzZRmqkMtU
-	bnOmq6wM7jdA6NaN58Hg3r4H5XuvQ10CNp2psSgWM6wkzJSdAGq4D1AU7ugLJhmH50nWs7Mhc99
-	bYFGtcbFrC70imww080mpD0NakjuwFtpCS5znGQdOzYfuYDH/lSSgARRdskgFzCSgTe3YFfn/sI
-	Q0dmXajQNkhZVYO3iZBQLSg847HhC5aF+zX+Z1cuUW0jhMKPNyxsUkxfwjr3n4IDp3qHQr12FVc
-	u70CxQido1FdhUGFfOC6A0IqzSi8kOrLkpGJjs/S+3RaPo+M+HcP2csyaU0o4z2q82P3zD4ybgR
-	HM2fot6kdRtrP0npFHxxExPIrQ6ZpMZ5l3Y4nkZoTjhjrW3QDtkIe5tQWBbuevqRy8yE/ntMOWk
-	ID6ixR8uExzME9J9ct7I1w/H6LPhAEBPFvrky0X+IT30
-X-Received: by 2002:a17:90b:4acb:b0:3ac:adce:60ad with SMTP id 98e67ed59e1d1-3aceefbf7dfmr1099441a91.22.1792200576099;
-        Fri, 16 Oct 2026 18:29:36 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac94748c6csm11470622a91.10.2026.10.16.18.29.34
+        bh=Ro7OdpQEd8MQYPcU23BKt9hO5HQKv8OL+xjogw/2Zck=;
+        b=Mgr/QejrCy0DkMfEPXKrb6XiLRGE/xBZBqtzLtPcueetqwbh2EnvZ/koKDI+2DJ6DU
+         UaAXZZ3CBANsjiICosbwU0g/Fk7EKkQCp+t3EtWogp7XZrs6rXxsWIPAq6k/47O9AEco
+         mjN2yZdXnYUfBu9vVHmBnAG+2e64B7hbr1tpI16P0nzz9/2FSLsPla0tufd4uMXaYQXn
+         Xhtv1NWeMyXrh63RZxr5Rj8+rOCO4V70wkHyr7hdfM0owa6O3fY+9S0C2j5zHsHJ+bbi
+         RVKmLD2x+R8BhphUEbxizhooRQUQn73PxuHremJbNtgLimb2RaQwEzZDF+GT72tc9XbI
+         Cg4w==
+X-Gm-Message-State: AFq9FYLoRDOV8CMM/iCoRXA2K1VyijVBfnbMz8cnpmm089xyXExVi/k3
+	YATNtTAae0aJjgclltjwNKqdeDYA4TX9dJXSNKUSR+9+mUMTaLXuKB7vYGBmzwZA
+X-Gm-Gg: AYBFou2xeU+PCTctkQ6ig1ruYb3XREKL2aGufnntcHinm6ee17apWHzjUiF7ocPs5oO
+	w1H6YQ8JGTS6xJssZXRMZGfaBlEmQH2mX67vHopSKmU991doP7jJArwKVyAN1x8Q9Nv19igU6UW
+	DuK4X9pXGjMU5XRqs2BQuyvDS+H7pame4aQz+ugl2IuLWU3aVUkkSsbJ7OTrBwMbBCS8BqclBYU
+	PS/UuWppWGGpLQA4RuB5UfItigPNmja9ITOfUbFgS5FHoTrFnkmqB4jSAMSMIFKJOlKKT2gBur7
+	lGMklwkMe/5xTsBXfNLfpr0pngjMebd1Batj0Bx9BXOwCngSDeTnhAVvyB6AATOvcqJVNJJjmM0
+	Fkgjcge+gywwlRXjXzdjgbffKNX3c3bU8KS6sYptk6B6w05UomRrBaggY0uAiudd8DS2ThY0UwN
+	fX4tWDrjO9k5BwdL1piO4ctUxiK1PUPaALngMMVHtu4Pn/eKi79nQX7PxtwgBHaPDQ0cRE/mJ68
+	ZgZikl2KNIhyhP7BLivbwszLXFOLFJeFhQKcd/e3GhoogfeueU2rPPcoQyzorG7+EJL/bTe2DD/
+	0axTflw4q95TDwLA+70P1MTlHtiKEwPRCdE7JmzJKpje
+X-Received: by 2002:a17:902:e844:b0:2e9:9a19:c5b with SMTP id d9443c01a7336-2e9a6e558admr14366835ad.47.1792200597865;
+        Fri, 16 Oct 2026 18:29:57 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e804becsm17019475ad.21.2026.10.16.18.29.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 18:29:35 -0700 (PDT)
+        Fri, 16 Oct 2026 18:29:57 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next 22/38] bpf: Count sleepable callbacks as sleepable map users
-Date: Sat, 17 Oct 2026 01:24:35 +0000
-Message-ID: <20261017012451.364800-14-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 23/38] bpf: Check the maps that sleepable callbacks use
+Date: Sat, 17 Oct 2026 01:24:36 +0000
+Message-ID: <20261017012451.364800-15-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
 References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
@@ -84,99 +84,155 @@ Content-Transfer-Encoding: 8bit
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-map->sleepable_refcnt tells bpf_map_fd_put_ptr() whether an inner map that
-is taken out of its outer map has to wait for an RCU Tasks Trace grace
-period as well.  It counts the sleepable programs that use the outer map.
-The bpf_wq or bpf_task_work callback of a program that is not sleepable
-runs under rcu_read_lock_trace() only, and is not counted.
+Sleepable programs can only use the kinds of map that do without an RCU
+read side critical section.  check_map_prog_compatibility() sees to that
+when a map is bound to the program, and asks whether the program is
+sleepable.  That misses the bpf_wq or bpf_task_work callback of a program
+that is not, which runs sleepable all the same, and it misses an inner
+map, which is not bound.
 
-Such a callback can look an inner map up and keep it while user space
-deletes it from the outer map.  The inner map is freed behind a plain RCU
-grace period, under the callback:
+The bpf_wq callback of a tc program that looks a key up in a sockhash
+gets as far as
 
-  BUG: KASAN: slab-use-after-free in array_map_update_elem+0x6bc/0x7d0
+  WARNING: net/core/sock_map.c:903 at __sock_hash_lookup_elem+0x18f/0x1e0
 
-Count a program with such a callback.  The maps are bound before the
-verifier meets the callback, so raise the count of those that are bound
-when it does.
+Ask the same question for the map that is handed to a helper in sleepable
+context, unless the RCU read lock is held: by bpf_rcu_read_lock(), or by
+the helper that runs the callback, as bpf_for_each_map_elem() does for a
+hash map.  Programs that take the lock go on working.  Disabled preemption
+or interrupts are not enough, since the maps ask for rcu_read_lock_held().
+The other parts of the program may use such a map as before.
 
+What is refused from now on runs into the warning above, or uses what the
+map frees behind a plain RCU grace period: an entry of a devmap, of a perf
+event array or of a cgroup array.
+
+A bloom filter does without RCU.  Add it to the list, so that callbacks
+which use one go on loading.  As a side effect sleepable programs can use
+bloom filters as well.
+
+A pointer to the value of a devmap which a program keeps beyond
+bpf_rcu_read_unlock() is not dealt with here.
+
+Fixes: 638e4b825d52 ("bpf: Allows per-cpu maps and map-in-map in sleepable programs")
 Fixes: 8e83da9732d9 ("bpf: add bpf_wq_start")
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/core.c     |  2 +-
- kernel/bpf/syscall.c  |  2 +-
- kernel/bpf/verifier.c | 17 +++++++++++++++--
- 3 files changed, 17 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 80 +++++++++++++++++++++++++++----------------
+ 1 file changed, 51 insertions(+), 29 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 2154c18a5a4d..e98c79e8009c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3044,7 +3044,7 @@ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
- 	bool sleepable;
- 	u32 i;
- 
--	sleepable = aux->prog->sleepable;
-+	sleepable = bpf_prog_runs_sleepable(aux->prog);
- 	for (i = 0; i < len; i++) {
- 		map = used_maps[i];
- 		if (map->ops->map_poke_untrack)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 755529888a72..3f215f2509b2 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -6253,7 +6253,7 @@ static int bpf_prog_bind_map(union bpf_attr *attr)
- 	/* The bpf program will not access the bpf map, but for the sake of
- 	 * simplicity, increase sleepable_refcnt for sleepable program as well.
- 	 */
--	if (prog->sleepable)
-+	if (bpf_prog_runs_sleepable(prog))
- 		atomic64_inc(&map->sleepable_refcnt);
- 	memcpy(used_maps_new, used_maps_old,
- 	       sizeof(used_maps_old[0]) * prog->aux->used_map_cnt);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6b15862a15e8..1f2a846ae415 100644
+index 1f2a846ae415..09173d1d66d3 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -593,6 +593,19 @@ static bool is_async_cb_sleepable(struct bpf_verifier_env *env, struct bpf_insn
- 	return false;
+@@ -219,6 +219,7 @@ static int ref_set_non_owning(struct bpf_verifier_env *env,
+ 			      struct bpf_reg_state *reg);
+ static bool is_trusted_reg(struct bpf_verifier_env *env, const struct bpf_reg_state *reg);
+ static inline bool in_sleepable_context(struct bpf_verifier_env *env);
++static bool in_rcu_callback(struct bpf_verifier_env *env);
+ static const char *non_sleepable_context_description(struct bpf_verifier_env *env);
+ static void scalar32_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
+ static void scalar_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
+@@ -10379,12 +10380,57 @@ bool bpf_allow_tail_call_in_subprogs(struct bpf_verifier_env *env)
+ 	       bpf_jit_supports_subprog_tailcalls();
  }
  
-+/* From here on the maps of the program count it as a sleepable user. */
-+static void mark_sleepable_async_cb(struct bpf_verifier_env *env)
++/* May the map be used outside of an RCU read side critical section? */
++static bool map_needs_no_rcu(const struct bpf_map *map)
 +{
-+	int i;
-+
-+	if (bpf_prog_runs_sleepable(env->prog))
-+		return;
-+
-+	env->prog->aux->sleepable_async_cb = true;
-+	for (i = 0; i < env->used_map_cnt; i++)
-+		atomic64_inc(&env->used_maps[i]->sleepable_refcnt);
++	switch (map->map_type) {
++	case BPF_MAP_TYPE_HASH:
++	case BPF_MAP_TYPE_RHASH:
++	case BPF_MAP_TYPE_LRU_HASH:
++	case BPF_MAP_TYPE_ARRAY:
++	case BPF_MAP_TYPE_PERCPU_HASH:
++	case BPF_MAP_TYPE_PERCPU_ARRAY:
++	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
++	case BPF_MAP_TYPE_LPM_TRIE:
++	case BPF_MAP_TYPE_ARRAY_OF_MAPS:
++	case BPF_MAP_TYPE_HASH_OF_MAPS:
++	case BPF_MAP_TYPE_RINGBUF:
++	case BPF_MAP_TYPE_USER_RINGBUF:
++	case BPF_MAP_TYPE_INODE_STORAGE:
++	case BPF_MAP_TYPE_SK_STORAGE:
++	case BPF_MAP_TYPE_TASK_STORAGE:
++	case BPF_MAP_TYPE_CGRP_STORAGE:
++	case BPF_MAP_TYPE_QUEUE:
++	case BPF_MAP_TYPE_STACK:
++	case BPF_MAP_TYPE_ARENA:
++	case BPF_MAP_TYPE_INSN_ARRAY:
++	case BPF_MAP_TYPE_PROG_ARRAY:
++	case BPF_MAP_TYPE_BLOOM_FILTER:
++		return true;
++	default:
++		return false;
++	}
 +}
 +
- bool bpf_is_may_goto_insn(struct bpf_insn *insn)
+ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+ 					struct bpf_map *map, int func_id)
  {
- 	return insn->code == (BPF_JMP | BPF_JCOND) && insn->src_reg == BPF_MAY_GOTO;
-@@ -11212,7 +11225,7 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 		if (IS_ERR(async_cb))
- 			return PTR_ERR(async_cb);
- 		if (is_async_cb_sleepable(env, insn))
--			env->prog->aux->sleepable_async_cb = true;
-+			mark_sleepable_async_cb(env);
- 		callee = async_cb->frame[0];
- 		callee->async_entry_cnt = state->frame[0]->async_entry_cnt + 1;
+ 	if (!map)
+ 		return 0;
  
-@@ -20776,7 +20789,7 @@ static int __add_used_map(struct bpf_verifier_env *env, struct bpf_map *map)
- 	if (err)
- 		return err;
++	/*
++	 * check_map_prog_compatibility() asks the program.  That misses the
++	 * sleepable callback of another program, and an inner map.  They may
++	 * use any map under the RCU read lock.  Disabled preemption or
++	 * interrupts will not do: the maps ask for rcu_read_lock_held().
++	 */
++	if (in_sleepable(env) && !env->cur_state->active_rcu_locks &&
++	    !in_rcu_callback(env) && !map_needs_no_rcu(map)) {
++		verbose(env, "map '%s' needs bpf_rcu_read_lock() in sleepable context\n",
++			map->name);
++		return -EINVAL;
++	}
++
+ 	/* We need a two way check, first is from map perspective ... */
+ 	switch (map->map_type) {
+ 	case BPF_MAP_TYPE_PROG_ARRAY:
+@@ -20676,35 +20722,11 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+ 		return -EINVAL;
+ 	}
  
--	if (env->prog->sleepable)
-+	if (bpf_prog_runs_sleepable(env->prog))
- 		atomic64_inc(&map->sleepable_refcnt);
+-	if (prog->sleepable)
+-		switch (map->map_type) {
+-		case BPF_MAP_TYPE_HASH:
+-		case BPF_MAP_TYPE_RHASH:
+-		case BPF_MAP_TYPE_LRU_HASH:
+-		case BPF_MAP_TYPE_ARRAY:
+-		case BPF_MAP_TYPE_PERCPU_HASH:
+-		case BPF_MAP_TYPE_PERCPU_ARRAY:
+-		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
+-		case BPF_MAP_TYPE_LPM_TRIE:
+-		case BPF_MAP_TYPE_ARRAY_OF_MAPS:
+-		case BPF_MAP_TYPE_HASH_OF_MAPS:
+-		case BPF_MAP_TYPE_RINGBUF:
+-		case BPF_MAP_TYPE_USER_RINGBUF:
+-		case BPF_MAP_TYPE_INODE_STORAGE:
+-		case BPF_MAP_TYPE_SK_STORAGE:
+-		case BPF_MAP_TYPE_TASK_STORAGE:
+-		case BPF_MAP_TYPE_CGRP_STORAGE:
+-		case BPF_MAP_TYPE_QUEUE:
+-		case BPF_MAP_TYPE_STACK:
+-		case BPF_MAP_TYPE_ARENA:
+-		case BPF_MAP_TYPE_INSN_ARRAY:
+-		case BPF_MAP_TYPE_PROG_ARRAY:
+-			break;
+-		default:
+-			verbose(env,
+-				"Sleepable programs can only use array, hash, ringbuf and local storage maps\n");
+-			return -EINVAL;
+-		}
++	if (prog->sleepable && !map_needs_no_rcu(map)) {
++		verbose(env,
++			"Sleepable programs can only use array, hash, ringbuf and local storage maps\n");
++		return -EINVAL;
++	}
  
- 	/* hold the map. If the program is rejected by verifier,
+ 	if (bpf_map_is_cgroup_storage(map) &&
+ 	    bpf_cgroup_storage_assign(env->prog->aux, map)) {
 -- 
 2.55.0
 
