@@ -1,193 +1,166 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA5535AC0C;
-	Sat, 17 Oct 2026 02:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E615239E6C
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 02:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792202569; cv=none; b=nHEtkw0CGQPGJ99Rgxs+iDyMMqwJTU6Zx/wL6LO1cgg7tMrlp2b8Dbj4a1sHCnGB668XvySua2qf4fvd8hd0PHW7SQsyaZR66nbWnk9/vJGqkpAZcHxARYYuH+BvqTPa/kz6PiVbZEOemvU51+vdHps9wtK+Ln879iozc7V93BE=
+	t=1792202739; cv=none; b=s+3TcCB//mfjXGkI1JByJNw/5ROBm45z10lkJB0p2AU2u1uQxSU5zrPpco37yssCi4I/SvxFE0UHhedCJzmKaWawy4NhbQZHwqz/Y06z6gH4Oom+wcS/oh+nZlEvPv8vjma9PwpXZ/AiawqK6otmhg5uwlJXcxDg8KcZjbHOwEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792202569; c=relaxed/simple;
-	bh=sybnFe4dTdlTV3ojHQOJbxV3NWBCoOzfeAqN5qwqrFI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HwGCDInmq6D2ghOG6CQHqZb8Ld9UQW22I+VwFeU+e3wNo9o9hMAr2UeT3aYbm5EgcZnV/lsU5hMIZIl3yjjt7BAByV06fPMAu9DCtOqvHO0ziNVlUTbTacVVootPZupqp5yBEtRgF2PxiI17Kp5yRR4LIrDeFwQnFdy69wb/1is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZ1N9EFg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792202739; c=relaxed/simple;
+	bh=zt58rHOmJFV1gcAqwHHvv3hqqVu+mXB/xLM5Gh93Lj4=;
+	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
+	 Date; b=CtmcPVXiCwIK4GQddhGCAwM388esVyJek4d+7orT0+359cdA45j8Zc0M2EoJAEjmobPNkEBK57CHfG3Gt+b9eQsYiVl7FLzBfE/LjtX6j4vzheQgSQStLvb2kPUd4Ndsx7zYfTkNgjjUjjrUHwlNw0WO7xh90kKOotAMY0Yke6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQu58jxk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZ1N9EFg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523721F000C4;
-	Sat, 17 Oct 2026 02:02:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQu58jxk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FEF1F000C8;
+	Sat, 17 Oct 2026 02:05:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792202567;
-	bh=22vIGT1gsGhrl96tCEJy/Hhx44CrK2sdH3n02xQ64YM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SZ1N9EFgZY3F0CoLKYzR5A6mTYK2YsinllX+oY5gFQil0qoyhXw4I/pWCPLzaYOaZ
-	 D40I3lnyBqCb4BPvhAAiYHnU65+fL7pd89Ph6HtMbyaf/lOEyYn1Kmw2zIqXzXEdOl
-	 TaBQpzuJ+VylkoS60XeJXzENxj0M7fC609HzYJ1hsaezs0bawobF/u+MZ9cTflP/Bz
-	 JSvr8qLEWIYj8hKUQ2k/AFHqBfdu7hty8pK2le58pSJydW7sQ1yvKJOZkchN5OUbLH
-	 pgwTkfLltNnFfXfAaN95U54on04HhnjUtkMyh8lY82VNJij5MX73FVUNlKVQooOIeQ
-	 E2AUqT8WIUa4A==
-Content-Type: multipart/mixed; boundary="===============6554122423929033199=="
+	s=k20260515; t=1792202737;
+	bh=/c+kWbWJpSo4s2AWkJKhgYsjXJTCe8paa/lG1TGS6dI=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=YQu58jxkYOgkKWABeM+PyJyiyqhGotT1//rrxF3+O5BOks/kQ6SGCdAKZ7f2qiZB6
+	 y/BKz0fuSw4m22kFrWIwWa01YPjW9w0AGcu9cWZ7liW5nr1wuYFn7AfZvgmdDP+uLd
+	 z2q0nqywO9sfMtUysc1l0uo7Ki2mnJu6aL29ol+80+9QwovnBzKfG35I9XC/J4OQpM
+	 7PyCoAEPufJaI6lRrjf+8WMWU/b8sst2q7S03aZtCUepysln757hDVV/s7Zz4oEbEK
+	 tizzx7E57QtHzsKQlYDtZPOuKnsiJz/zGO0XaPRCBKpqUW67reDeoHPzTwVIA23EBv
+	 XPYx2kCboMeeQ==
+Message-ID: <sashiko-outbox-175184@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 36/38] bpf: Follow the head if an skb is
+ written from a slice
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261017012451.364800-28-alexei.starovoitov@gmail.com>
+References: <20261017012058.355787-1-alexei.starovoitov@gmail.com>
+ <20261017012451.364800-28-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 17 Oct 2026 02:05:37 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <d48ced398b4fe0e5a849fccbc303c03f3508ef50c75bf7fbebc2326b2b51bc42@mail.kernel.org>
-In-Reply-To: <20261017012451.364800-8-alexei.starovoitov@gmail.com>
-References: <20261017012451.364800-8-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 16/38] bpf: Hold the socket in the sk_storage map iterator
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,netdev@vger.kernel.org,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 02:02:46 +0000 (UTC)
 
---===============6554122423929033199==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: duplicate bpf_try_make_writable() call in __bpf_skb_store_b=
+ytes()
+--
 
-> bpf: Hold the socket in the sk_storage map iterator
+commit cd64e2e5d6a96038e5e37496663c8035d9bcd26c
+Author: Josef Bacik <josef@toxicpanda.com>
 
-TL;DR: The sk_storage iterator's new owner check may not hold for a storage
-that lost the publish race in bpf_local_storage_alloc(), so it could take a
-reference on a freed socket (use-after-free). The window is narrow.
+bpf: Follow the head if an skb is written from a slice
 
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
+This commit introduces bpf_try_make_writable_from() and updates
+__bpf_skb_store_bytes() and __bpf_skb_meta_store_bytes() to adjust the sour=
+ce
+pointer when making an skb writable reallocates its head.
 
-[ ... ]
-
-> @@ -796,12 +826,44 @@ DEFINE_BPF_ITER_FUNC(bpf_sk_storage_map, struct bpf_iter_meta *meta,
->  		     struct bpf_map *map, struct sock *sk,
->  		     void *value)
->
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index bf01152d0cf9a..54e9084b9263a 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -1752,9 +1752,32 @@ static const struct bpf_func_proto bpf_skb_store_b=
+ytes_proto =3D {
+>  	.arg5_type	=3D ARG_ANYTHING,
+>  };
+> =20
 > +/*
-> + * Take a reference on the socket which owns @selem. RCU keeps the element, not
-> + * its owner. As long as the element is linked under the lock of the storage,
-> + * the owner has not got past bpf_sk_storage_free(), unless that has given up
-> + * on the lock. Then it still waits for owner_refcnt.
+> + * The source of a write through a dynptr may be a slice of the same skb.
+> + * Making the skb writable can move its head: follow the move.
 > + */
-> +static struct sock *
-> +bpf_sk_storage_selem_get_sk(struct bpf_local_storage_elem *selem)
+> +static int bpf_try_make_writable_from(struct sk_buff *skb, u32 write_len,
+> +				      const void **from)
 > +{
-> +	struct bpf_local_storage *sk_storage;
-> +	struct sock *sk = NULL;
-> +	unsigned long flags;
+> +	const void *head =3D skb->head;
+> +	bool in_head =3D *from >=3D head &&
+> +		       *from < (const void *)skb_end_pointer(skb);
+> +	int err;
 > +
-> +	sk_storage = rcu_dereference(selem->local_storage);
-> +	/* reset since ->next() looked: the socket goes away */
-> +	if (!sk_storage)
-> +		return NULL;
-> +
-> +	if (raw_res_spin_lock_irqsave(&sk_storage->lock, flags))
-> +		return NULL;
-> +
-> +	if (!hlist_unhashed(&selem->snode) &&
-> +	    refcount_inc_not_zero(&sk_storage->owner_refcnt)) {
-> +		sk = sk_storage->owner;
-                  ^^^^
-
-Does the invariant in the comment above hold for every storage that can be
-reached from a bucket list?
-
-"As long as the element is linked under the lock of the storage, the owner
-has not got past bpf_sk_storage_free()" is true for the storage published
-in sk->sk_bpf_storage, since that is the only storage
-bpf_local_storage_destroy() runs on and waits for.
-
-It does not seem to hold for a storage that lost the publish race in
-bpf_local_storage_alloc():
-
-kernel/bpf/bpf_local_storage.c:bpf_local_storage_alloc() {
-    ...
-	prev_storage = cmpxchg(owner_storage_ptr, NULL, storage);
-	if (unlikely(prev_storage)) {
-		bpf_selem_unlink_map_nolock(first_selem);
-		raw_res_spin_unlock_irqrestore(&b->lock, flags);
-		err = -EAGAIN;
-		goto uncharge;
-	}
-    ...
-}
-
-bpf_selem_link_map_nolock() has already put first_selem at the head of the
-bucket list, so an RCU reader can see it.  On failure the element is
-unlinked from the map only.  It stays on storage->list, so snode is still
-hashed, first_selem->local_storage still points at the storage,
-storage->owner is the socket, and owner_refcnt stays at 1.  Both are then
-freed through kfree_rcu().
-
-Consider this sequence.
-
-CPU0 and CPU1 each create the first storage of the same socket at the same
-time (bpf_sk_storage_get() with BPF_SK_STORAGE_GET_F_CREATE, or a map
-update, for the same map or for two different maps).  CPU0 loses the
-cmpxchg.
-
-CPU2 is reading the iterator.  Under rcu_read_lock(),
-bpf_sk_storage_map_seq_find_next() reads b->list while CPU0's element E is
-linked there, sees E->local_storage != NULL and returns E.  CPU2 is then
-delayed before ->show(), for example by preemption under
-CONFIG_PREEMPT_RCU.
-
-The socket is closed:
-
-sock_put()
-  sk_free()
-    __sk_destruct()
-      bpf_sk_storage_free()
-        /* destroys only the winning storage, never waits on the losing
-           storage's owner_refcnt */
-    sk_prot_free()
-      /* for AF_UNIX or AF_PACKET this is an immediate kmem_cache_free(),
-         and the open RCU read section does not delay it */
-
-CPU2 then runs bpf_sk_storage_selem_get_sk(E):
-
-    if (!hlist_unhashed(&selem->snode) &&
-        refcount_inc_not_zero(&sk_storage->owner_refcnt)) {
-        sk = sk_storage->owner;
-        if (!refcount_inc_not_zero(&sk->sk_refcnt))
-
-The losing storage is still RCU-valid, so the lock is taken.
-hlist_unhashed(&E->snode) is false, and refcount_inc_not_zero() on
-owner_refcnt goes from 1 to 2.  sk is the freed socket, and
-refcount_inc_not_zero(&sk->sk_refcnt) operates on freed memory.
-
-If it succeeds, the program runs on the freed socket, and
-bpf_sk_storage_map_seq_put_sk() later calls refcount_dec_and_test() on it
-and may queue it for sk_free().  For TCP (SLAB_TYPESAFE_BY_RCU), the
-iterator can instead take a reference on an unrelated socket that has
-reused the object.
-
-This window was already there before the patch, since the old code passed
-storage->owner to the program without any check.  It is also narrow, since
-E is in the bucket only for a few instructions under b->lock.  But the new
-check is meant to make ctx->sk safe, and the iterator now also writes to
-the stale owner itself.
-
-Does bpf_local_storage_alloc() need to make the losing storage look dead
-before it is freed, for example by dropping its owner_refcnt (or unlinking
-first_selem->snode) under storage->lock in the cmpxchg failure path, so that
-the iterator's check holds for every storage?
-
-> +		if (!refcount_inc_not_zero(&sk->sk_refcnt))
-> +			sk = NULL;
-> +		bpf_local_storage_unpin_owner(sk_storage);
-> +	}
-> +	raw_res_spin_unlock_irqrestore(&sk_storage->lock, flags);
-> +
-> +	return sk;
+> +	err =3D bpf_try_make_writable(skb, write_len);
+> +	if (!err && in_head)
+> +		*from =3D skb->head + (*from - head);
+> +	return err;
 > +}
+> +
+>  int __bpf_skb_store_bytes(struct sk_buff *skb, u32 offset, const void *f=
+rom,
+>  			  u32 len, u64 flags)
+>  {
+> +	if (unlikely(offset > INT_MAX))
+> +		return -EFAULT;
+> +	if (unlikely(bpf_try_make_writable_from(skb, offset + len, &from)))
+> +		return -EFAULT;
+> +
+>  	return ____bpf_skb_store_bytes(skb, offset, from, len, flags);
+>  }
+
+[Severity: Medium]
+Does calling ____bpf_skb_store_bytes() after bpf_try_make_writable_from() e=
+nd
+up calling bpf_try_make_writable() a second time without updating from?
+
+Looking at ____bpf_skb_store_bytes() in net/core/filter.c:
+
+    BPF_CALL_5(bpf_skb_store_bytes, struct sk_buff *, skb, u32, offset,
+               const void *, from, u32, len, u64, flags)
+    {
+        void *ptr;
+
+        if (unlikely(flags & ~(BPF_F_RECOMPUTE_CSUM | BPF_F_INVALIDATE_HASH=
+)))
+            return -EINVAL;
+        if (unlikely(offset > INT_MAX))
+            return -EFAULT;
+        if (unlikely(bpf_try_make_writable(skb, offset + len)))
+            return -EFAULT;
+
+        ptr =3D skb->data + offset;
+        if (flags & BPF_F_RECOMPUTE_CSUM)
+            __skb_postpull_rcsum(skb, ptr, len, offset);
+
+        memcpy(ptr, from, len);
+
+When a BPF program calls bpf_dynptr_write() or bpf_dynptr_copy() on a
+BPF_DYNPTR_TYPE_SKB dynptr using a slice of the same skb as the source,
+__bpf_skb_store_bytes() calls bpf_try_make_writable_from() and then calls
+____bpf_skb_store_bytes().
+
+Inside ____bpf_skb_store_bytes(), the second bpf_try_make_writable() call
+follows the chain:
+
+    bpf_try_make_writable()
+      __bpf_try_make_writable()
+        skb_ensure_writable()
+          pskb_may_pull()
+            pskb_may_pull_reason()
+              skb_might_realloc()
+                pskb_expand_head()
+
+When CONFIG_FAIL_SKB_REALLOC triggers, skb_might_realloc() reallocates and
+frees skb->head during that second call without updating from, leaving from
+pointing to the freed head before copying into ptr.
+
+Also, because __bpf_skb_store_bytes() calls bpf_try_make_writable_from()
+before ____bpf_skb_store_bytes() checks flags, invalid flags will only be
+rejected after the skb has already been uncloned or pulled (and will return
+-EFAULT instead of -EINVAL if skb_ensure_writable() fails, unlike
+__bpf_skb_meta_store_bytes() which checks flags first).
+
+Note that passing packet slices directly to the bpf_skb_store_bytes() or
+bpf_lwt_seg6_store_bytes() helpers is prevented later in the series by comm=
+it
+"bpf: Refuse packet slices for packet-changing helpers", so could
+bpf_try_make_writable_from() be used directly inside ____bpf_skb_store_byte=
+s()
+instead of duplicating the checks in __bpf_skb_store_bytes()?
 
 [ ... ]
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/38991548713
---===============6554122423929033199==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261017012058.3557=
+87-1-alexei.starovoitov@gmail.com?part=3D36
