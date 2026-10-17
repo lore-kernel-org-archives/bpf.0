@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-20.mta0.migadu.com [91.218.175.20])
+Received: from mta0.migadu.com (out-33.mta0.migadu.com [91.218.175.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AC42D73A6
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 14:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67833914E1
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 14:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792247286; cv=none; b=bpGUCdb7FUKtCK625PGjbHI7lRXT8HfpKW7Y2LKd6QpT+m1+2+LLUoBkVO3cGuhqzqVSoVay1JvA3uOa4+H9Ojjx9um3jThRQYg38WBA29Gc17oPf+qlVG6jivvgJzmoryTIdCBnmo/rXDcUyHq6QdTrR0d5dO1qjb7vB8pDQXk=
+	t=1792247296; cv=none; b=ah/hqPn+5n/6HOxlb1czwaqwv/rAxpWFdD8o2MdlHncc45i31eApHw0MUtxyzhqEr46c2tpU3eJQZK+LGi+8jz+gNaOmOgrHkXSRBTlInibhi8ERdsiPTTHOgVvW8uCWIUYoPOFqo2V2qTTH1oZbw2mv9UzQrkQuxaaLnz/+tOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792247286; c=relaxed/simple;
-	bh=zlRml5dbBrFYpndsKRAi6GKAzb3il6oIIuaUt6OBrmo=;
+	s=arc-20240116; t=1792247296; c=relaxed/simple;
+	bh=B4+DK3TAUkpyUy4A8hasWuoVXKoQJkWC5KL9mi6LfCw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CVqFIUK/hzcYBjbZapxUgfpqU/6nnkPWZepmdNljjLDJ+LSRyy7zc4yICW9wkhf2Xg4Y5rGjqNKtlblG2z5vWp5hI0ApeD1jmMudQ+uYAYV1BT0i0hFIaTyErSq6plq6yzCV+90otRvMV4vxvur0l8WbaLTJgdrdXh/M+sxZiks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EwaUkp4y; arc=none smtp.client-ip=91.218.175.20
+	 MIME-Version; b=ozV5ILaVRCu+W/7QRw8XhX4f+Y3PmAvplxHWhFlyjXOqOW29jd3ynRh786TYKIGqh16tD03RHIebkv29Lc6gNJOAj4Zj4Epx3ZKdmF3ToeyhWEjASdvBVYpZWVJPJH3Gm2/ah1VkejAIbfBq+DePQWrxhtMaaJiFZqrQ1kHDUmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ilsob+uT; arc=none smtp.client-ip=91.218.175.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EwaUkp4y"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ilsob+uT"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zlRml5dbBrFYpndsKRAi6GKAzb3il6oIIuaUt6OBrmo=;
+DKIM-Signature: a=rsa-sha256; bh=B4+DK3TAUkpyUy4A8hasWuoVXKoQJkWC5KL9mi6LfCw=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792247282; v=1; x=1792852082;
- b=EwaUkp4yIDxtqqYQMSyq8+JMv6sGQTT0tZpAme7O5tEdYH8KeA/RwCTmUkWfL2UQvNz6jv4W
- luqsIIOOy2sURv2ngcz6RtX/3SnTKaVWc8ZveI3uEu52FnfQGXo3SxYYW2f27kOeWOVpZ7yK3wZ
- UGL7qRkWTA5qHvFtic6bA1DA=
+ t=1792247292; v=1; x=1792852092;
+ b=Ilsob+uTF7HZ5GGHzzhUeQT9bS4OmBru1Kw5bBP83G0P4uy2StsqnfJCMc+JYXD/D/0dfbKo
+ Sr01KtSRTF/1j7918lh+UzqL+VqpWqTzjnLbYEK+49jY8ygyRjMQV+DCz13tlSXtG7Th9pFfSMU
+ 1Iz8if9g71Uj3IcfRbKxPyGc=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5e1f2d513015c2b1;
-	Sat, 17 Oct 2026 14:28:02 +0000
-X-Mizu-Trace-ID: 5e1f2d513015c2b1
+Received: by smtp.migadu.com with ESMTPS id 3c10375e1e1aac6d;
+	Sat, 17 Oct 2026 14:28:12 +0000
+X-Mizu-Trace-ID: 3c10375e1e1aac6d
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -64,9 +64,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next 5/6] libbpf: Add bpf_link_create_log API
-Date: Sat, 17 Oct 2026 22:26:48 +0800
-Message-ID: <20261017142649.51047-6-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 6/6] selftests/bpf: Add tests to verify link_create logs
+Date: Sat, 17 Oct 2026 22:26:49 +0800
+Message-ID: <20261017142649.51047-7-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017142649.51047-1-leon.hwang@linux.dev>
 References: <20261017142649.51047-1-leon.hwang@linux.dev>
@@ -78,98 +78,154 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new API to accept the log opts, instead of extending the existing
-struct bpf_link_create_opts.
-
-In the struct bpf_link_create_opts, it seems not proper to append a
-tailing common log field prior to those variant length fields.
-
-Add a new API to avoid breaking the struct bpf_link_create_opts.
+Add tests to verify the new logs in link_create and xdp link_create,
+including a log reported via extack when fail to create an xdp link.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/bpf.c      | 24 ++++++++++++++++++++----
- tools/lib/bpf/bpf.h      |  5 +++++
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 26 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_link.c       | 132 ++++++++++++++++++
+ 1 file changed, 132 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 17e73e443bc7..eb127d71f3c8 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -788,9 +788,10 @@ int bpf_prog_detach2(int prog_fd, int target_fd, enum bpf_attach_type type)
- 	return bpf_prog_detach_opts(prog_fd, target_fd, type, NULL);
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+index e7e9f3c22edf..e2b2ec3cc4e3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+@@ -150,3 +150,135 @@ void serial_test_xdp_link(void)
+ 	test_xdp_link__destroy(skel1);
+ 	test_xdp_link__destroy(skel2);
  }
- 
--int bpf_link_create(int prog_fd, int target_fd,
--		    enum bpf_attach_type attach_type,
--		    const struct bpf_link_create_opts *opts)
-+static int __bpf_link_create(int prog_fd, int target_fd,
-+			     enum bpf_attach_type attach_type,
-+			     const struct bpf_link_create_opts *opts,
-+			     struct bpf_log_opts *log_opts)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, link_create);
- 	__u32 target_btf_id, iter_info_len, relative_id;
-@@ -965,7 +966,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		break;
- 	}
- proceed:
--	fd = sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz);
-+	fd = __sys_bpf_fd(&attr, attr_sz, BPF_LINK_CREATE, log_opts);
- 	if (fd >= 0)
- 		return fd;
- 	/* we'll get EINVAL if LINK_CREATE doesn't support attaching fentry
-@@ -999,6 +1000,21 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	}
- }
- 
-+int bpf_link_create(int prog_fd, int target_fd,
-+		    enum bpf_attach_type attach_type,
-+		    const struct bpf_link_create_opts *opts)
++
++static void test_link_create_invalid_prog_fd(void)
 +{
-+	return __bpf_link_create(prog_fd, target_fd, attach_type, opts, NULL);
++	const char *msg = "Invalid prog_fd.\n";
++	char log_buf[128] = {};
++	int fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++
++	fd = bpf_link_create_log(-1, IFINDEX_LO, BPF_XDP, NULL, &log_opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
++		close(fd);
++		return;
++	}
++
++	ASSERT_EQ(fd, -EBADF, "fd");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
 +}
 +
-+int bpf_link_create_log(int prog_fd, int target_fd,
-+			enum bpf_attach_type attach_type,
-+			const struct bpf_link_create_opts *opts,
-+			struct bpf_log_opts *log_opts)
++static void test_link_create_invalid_attach_type(void)
 +{
-+	return __bpf_link_create(prog_fd, target_fd, attach_type, opts, log_opts);
++	const char *msg = "Invalid attach_type.\n";
++	struct test_xdp_link *skel;
++	char log_buf[128] = {};
++	int fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++
++	skel = test_xdp_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
++		return;
++
++	log_opts.true_size = 0;
++	fd = bpf_link_create_log(bpf_program__fd(skel->progs.xdp_handler), IFINDEX_LO,
++				 BPF_CGROUP_INET_INGRESS, NULL, &log_opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
++		close(fd);
++		goto cleanup;
++	}
++
++	ASSERT_EQ(fd, -EINVAL, "fd");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
++
++cleanup:
++	test_xdp_link__destroy(skel);
 +}
 +
- int bpf_link_detach(int link_fd)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, link_detach);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 826d9cc9ab65..dedaf8086902 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -484,6 +484,11 @@ LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
- 			       const struct bpf_link_create_opts *opts);
- 
-+LIBBPF_API int bpf_link_create_log(int prog_fd, int target_fd,
-+				   enum bpf_attach_type attach_type,
-+				   const struct bpf_link_create_opts *opts,
-+				   struct bpf_log_opts *log_opts);
++static void test_link_create_xdp_invalid_target_ifindex(void)
++{
++	const char *msg = "Invalid target_ifindex.\n";
++	struct test_xdp_link *skel;
++	char log_buf[128] = {};
++	int fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
 +
- LIBBPF_API int bpf_link_detach(int link_fd);
- 
- struct bpf_link_update_opts {
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index eeba4072a5da..990e2f926ecc 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -458,6 +458,7 @@ LIBBPF_1.7.0 {
- 
- LIBBPF_1.8.0 {
- 	global:
-+		bpf_link_create_log;
- 		bpf_map__attach_cgroup_opts;
- 		bpf_prog_stream_open;
- 		bpf_program__add_flags;
++	skel = test_xdp_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
++		return;
++
++	/* Interface indices are positive; zero cannot identify a device. */
++	fd = bpf_link_create_log(bpf_program__fd(skel->progs.xdp_handler), 0,
++				 BPF_XDP, NULL, &log_opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
++		close(fd);
++		goto cleanup;
++	}
++
++	ASSERT_EQ(fd, -EINVAL, "fd");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
++
++cleanup:
++	test_xdp_link__destroy(skel);
++}
++
++static void test_link_create_xdp_extack(void)
++{
++	const char *msg = "Invalid XDP flags for BPF link attachment";
++	struct test_xdp_link *skel;
++	char log_buf[128] = {};
++	int fd;
++	LIBBPF_OPTS(bpf_link_create_opts, opts,
++		    .flags = XDP_FLAGS_REPLACE,
++	);
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++
++	skel = test_xdp_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
++		return;
++
++	fd = bpf_link_create_log(bpf_program__fd(skel->progs.xdp_handler), IFINDEX_LO,
++				 BPF_XDP, &opts, &log_opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
++		close(fd);
++		goto cleanup;
++	}
++
++	ASSERT_EQ(fd, -EINVAL, "fd");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
++
++cleanup:
++	test_xdp_link__destroy(skel);
++}
++
++void test_link_create_log(void)
++{
++	if (test__start_subtest("invalid_prog_fd"))
++		test_link_create_invalid_prog_fd();
++	if (test__start_subtest("invalid_attach_type"))
++		test_link_create_invalid_attach_type();
++	if (test__start_subtest("xdp/invalid_target_ifindex"))
++		test_link_create_xdp_invalid_target_ifindex();
++	if (test__start_subtest("xdp/extack"))
++		test_link_create_xdp_extack();
++}
 -- 
 2.55.0
 
