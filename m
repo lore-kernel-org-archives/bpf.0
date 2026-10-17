@@ -1,64 +1,64 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4ED63AAF73
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B774438DC44
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792255233; cv=none; b=tfkLUxSNOLazKD+Eb+sGquF3tz3bG9cz9GCLsE383SMaY129ihuXou1LXjggWmfrW0qtJiobAAhb+zAJf6eis0ryTkUeMjS20lvmvAGg0VT4VQx7ghT0W91AOsm8xsNp/tcB1MuD1V4HuykIvWZprv5LKRdQW1t8O+zNYV4K22Y=
+	t=1792255239; cv=none; b=CJXJIUpTmYwWp6Du0mPzobXvNEaRApT2A44FvI9ASjpH/Xh/AQnxMWf9QuqaAwNjAhE+mVDZ0vKZ3dLVXb2c2w6/qUnljHPweu+ecHu67KTtOQ1esIUTECTdECFOPx3K+hrEs+TPrTtrOHU1qy4PTmRDaIYhFpFYZkxOz/rO0Go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792255233; c=relaxed/simple;
-	bh=4CNEN7wC8Pe/7XrtPhrG7zkTQrJox5iMYzUoLmJvEaE=;
+	s=arc-20240116; t=1792255239; c=relaxed/simple;
+	bh=LInPVHvbYU0TGNIozpTFRcFgntOfFRp+YJGP5QIZIwE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tqqbph7uRQ8VoNI2yLRJsBvKABUNKrcq3K3ucqgZOn1+7lPdNR00/Q+gwkmMvRnJb7UuTqm8IuF9KD6pw9pABdtweuj4N/0y2mCpWQD3VmvfwsIimhDr2yMu9+3nbZ5MQGy/iH7AJEQL1u647nzS2MsXsvXUWQhH46dYW2B2Yug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NEueKNrS; arc=none smtp.client-ip=209.85.216.54
+	 MIME-Version; b=KqwtAYClocwHNKsfG71fTBA6utLIzxPy8TsSFiiZsJk+yC3IKJsKcp5A2TkWBNFlxYW8TjAEs98WsksMAFV+lYXPgyvW9vhCBxPiyKaEJHbHHMU10OlvMXze6I0Tgyc9RHQwgX51kKWcaqWc0a4hSaWsJzi2u8EH8s7YY9TKuds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QQSgQkPH; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NEueKNrS"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3acb512a7a0so461055a91.1
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:40:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QQSgQkPH"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e987a2ba0cso6135325ad.3
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:40:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792255232; x=1792860032; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792255238; x=1792860038; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GNgrelxi6eEq7P7hlNUFtYxqdxmASU5JrfOLjioF/SE=;
-        b=NEueKNrSy2vxjgPni7UZL4P2D4ZRa9Xpp/ieOeIKFsprEoCuMdXvERAKswT0vigjqH
-         2U0Mgpbk2saaOJU8hRiOrJr9ao3ZAf3VkrVxsuZhmpo8Miy9ce0MjgGCIYBJxMqY4g9W
-         /GJV6U0Jl7noJQEiek64X80J2j4xDPqK+E8Ignxa0R2rFnjj6f7oWyIM6P9ZZIvgNfZw
-         AziffqLCZjcueIgc7lvfUPoRbf6N5OTIgaMZzhjsjUXXIaEGnU1xN7nsDNJiENa7O6r6
-         zfLq3EfBJw3r1L5Gx4/in3QbzT4bSovSPlpHNUQ3qctZ1GzK7/kNBFd6S0cT3zjaw4LZ
-         fD8A==
+        bh=ycFcAXAF2bqJk9ipDiEaIXiHZnKOU+kSnggBV2CR5LE=;
+        b=QQSgQkPHy0cm9fqE3+bJrU2wI53iQWZdFkzgGvF9cvblk9A1NV6OK+aJYrJitioyrW
+         NqwKGFY5OOgQjpcrZQwICp6M94CXa8IHzZzw4YbKVbCh5FGYpR8a5Qh+a23IlMCAZHWI
+         7Bl0EGOSxG617kmtV/vxxp2+N3lgVk1ZGp8HXe5Ypeqtt563b4YArSzXkEkFpRMYcu5y
+         mdUy4Ch7Cx0tkdCmbRHnmSPZweYQ4X8DJ177bd9wUpQMB5zRzxyh5Bx+98JQfZwGrWU5
+         9/dzkMsP0tji+QW8+9tGqB2HrKzDBD8RBFz9mJbk43hU6ti30tdA4E1uoblKHjANM9el
+         DRsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792255232; x=1792860032;
+        d=1e100.net; s=20260707; t=1792255238; x=1792860038;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GNgrelxi6eEq7P7hlNUFtYxqdxmASU5JrfOLjioF/SE=;
-        b=MSZpk50qbdI/K3WCNJBHv065UXFi5czuTVO1CM/dKXwTbJmPWAX0GCz2GFqm+3jl+e
-         PIyxTtMAd6Y+M3r9ppfaYYIAaFd+UtiOQ4ucjYUkhqZ7JqSzmX6SiudooCr/BQ8ur6zz
-         Upnq+l11G0FIhH72POwa9+7RQB74NxcZT9uDZ3XobkwtpyMFykMpIvEBq5GQDhC6eInr
-         Rh2dpqVtgKu5KBq1Daz+wkwt9Qcz89gmDiujqDhOrc6sbm4yo9RDx9yd56NPu1gmmLKp
-         6947UHQ+AhzmuBSqnwLjagvrPmkB/GSxMB3ucleC14U1F3Pe2rajQH69ZVL1er4l3+id
-         gyzA==
-X-Gm-Message-State: AFq9FYJOCp7C9d788ELOVhi9X06vLMmZOWL/xJfcvunohb7khcI7P7Cz
-	Bs5Ba5xiBFH4JMIZBJetVB3Rx8zVJUVUPjr9djIb0OLiyBo7HysF65fTyb/+aw==
-X-Gm-Gg: AYBFou2aDs/qlsZrGlybkC30QHhoiDlzFNEhuUfr5ID7DZsAmaveJgt/F9N0gK2IrTZ
-	vC6Azk7MDF3MF5aCJXFol6H25CkFbXmAQoZcRNXI5g5iZrzWjN7hVxruyrhMe2tqpr9JkxNDBOR
-	YvtLP/Y/vWfnMf/xYSIbjAir5geCGbO5mQGeipZNm98DQKXRyxqFs3n3QZ6q1vJPajkd2brmJ4h
-	ZQ0Tx1QeWWsZPYE8+ihuxw0Q0czFYsWnrcjQMuMedltpLxxHF8ZoNx2n7XfpjhA6rH9d9qU6tlM
-	CRLrWMkecAxxw/7f8hAomtfQV2pJcRzm3ISXa54JXcoEQeDF67qTXSusCRtbfegtEy+RWYvHvxj
-	0pvh4m3p7V6ESNtsZ7RYQFxpY2frKwP87yPyjNVnPynDaifEs7ekNeTAmf6LMUxGHnDnhNxMEHZ
-	grw6M1AhI/3dC+vLatzkFvSTH6JVWcjPTO3fdpQo8tEkie7EdUBx9ZHRM3e/HZi5M02XhIuED13
-	J+7qaRm74AiYIYlHdoIFpC/kFT9TuJLmQ3WLx4fCabHQ6mLiadf/FtFM0Lsp3UliJMquJ0bQoMM
-	RwZi53jriLoE/OK/fa3TuL/bFulVnKGqkXEVgBsjFzmp
-X-Received: by 2002:a17:90b:2247:b0:3ac:17c:6e74 with SMTP id 98e67ed59e1d1-3acef518d7fmr2516583a91.53.1792255231912;
-        Sat, 17 Oct 2026 09:40:31 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd0aa3c24sm4682821a91.4.2026.10.17.09.40.31
+        bh=ycFcAXAF2bqJk9ipDiEaIXiHZnKOU+kSnggBV2CR5LE=;
+        b=Moj1ACCE7/Vq0yBJ1L/4POuanjjznLAw1jwKbkcoezYwGyq8Th6DNzRcyJn+FIa4Kk
+         2tqziuzrN1ERAPumreQ7OM5EZj2u97MfnuXUPtdHNkldGTRVO9Tes7r/3h8VQnLgNOrQ
+         XEpX40UoHC7C6OzWkdJB4tF2PUPSgo71yjiHd/lB2E88Z3cWWHytNnmzVfRq5LU6vMgU
+         Iv5PSLKzTN968VqEW4vdKA3I9NwkKZVB1vQOQJ9/4K7IDvCXQOdF9PkOsRim24gV/fNS
+         YGzBoapwtnSNpDf1AJEAHQKvWYWCjwB/SnMYDmE/issgyMrhND2lEFbUaJPC7Wx09UH8
+         ubyQ==
+X-Gm-Message-State: AFq9FYKT2hSiyxx2yYKd+ec9N+vv+CwRa+FdJL5N67TviVY2/HgbydcN
+	/yeA1Z7X8/2qXXGNt275/vdWOI50ZHIDvv+J+Lv0xs6zjTrga6dfupGApUQAIw==
+X-Gm-Gg: AYBFou3T/gaNmRYE51totoAMw0wtIVLJSmwZqFTty1cf8C2a31lUsHSafCJbaGEZmUC
+	9hRxi/Rlbv2kSMCZk7XWckCQyFwW4kzpb4lVQ0pf8mzjCDw601hHxusTOl059k4R6qSJBwVEDyF
+	zh/J1J3YLcTGuILhbMGKk/PM5YlVqDRb1seD/gPaki242ZwC8THeZCSF4cH29fVeajnw52F6Odh
+	ibK5HwvGPlkxJfi8uN0f6gLBzMQnwGw86ys4/+Q4UENNydC6WZu6nipO2oh8TSaLZK6Zcae4Xcy
+	th1NjwTuJpnZGWReUgVUz8b6SrKycNKYS4udPzmnS2TFKZRauSADd3iiQAkoDLpmEdAw4qtjcqD
+	nT6pDd+O+2p0zicOKr1b/7mN5UGgwG+nQbwxPQHWqMNwMceXwGtyO0l44JjgQPUWgDDtU8PWYuj
+	AZ7vl754XaCp/L3f5IT4NT9StByySf7Lbqy8QW6akwanlI/i4J4saehVTEEvVRexbOWCvPDDjjy
+	d+tFD+4E+0l8Yil8+SP4e1CqHsry34orUx9biufXgn0b8bnNIFWG+C6cac2bD8Qzi8u88g+HUWG
+	ybadwftnJ0PVM+uV36gh3bDXOh26P1KYQ7SMWF++qXY=
+X-Received: by 2002:a17:903:19ef:b0:2e2:bfe8:aa7e with SMTP id d9443c01a7336-2e9a68347e4mr29692205ad.7.1792255237949;
+        Sat, 17 Oct 2026 09:40:37 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e804becsm22336215ad.21.2026.10.17.09.40.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 09:40:31 -0700 (PDT)
+        Sat, 17 Oct 2026 09:40:37 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v2 27/43] bpf: Assume no bounds for a writable tp with tail calls
-Date: Sat, 17 Oct 2026 16:37:29 +0000
-Message-ID: <20261017163745.3341787-28-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 28/43] bpf: Don't take an extension for a writable raw tracepoint program
+Date: Sat, 17 Oct 2026 16:37:30 +0000
+Message-ID: <20261017163745.3341787-29-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
 References: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
@@ -82,40 +82,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-A writable raw tracepoint hands a buffer to the program.  The verifier
-notes how far the program reaches into it, and bpf_probe_register() refuses
-a program that reaches further than the tracepoint allows.  A program that
-does not touch the buffer passes, and can tail-call one of its type that
-reads and writes behind it.
+bpf_probe_register() compares max_tp_access of the program that is
+attached with the size of the buffer that the tracepoint lets programs
+write to.  An extension of that program, or of one of its global
+functions, gets the same context and the same pointer to the buffer.  What
+it accesses is noted in its own max_tp_access, which nobody looks at.  So
+it reads and writes behind the buffer, of a tracepoint that may have none:
 
-Take a BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE program with a tail call to
-reach as far as can be, as for the stack, the packet and the buffers of
-iterators.  It cannot be attached any more.  Plain raw tracepoint programs,
-for which the limit is zero, cannot get at the buffer, and a tail call
-stays within one type: they are left alone.
+  BUG: KASAN: stack-out-of-bounds in bpf_prog_5843f2b820eb4929_tr26_ext_far+0xf4/0x10c
+  Write of size 4 at addr ffffc90000d8f894 by task wext/103
 
-Fixes: 9df1c28bb752 ("bpf: add writable context for raw tracepoints")
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Refuse such extensions.
+
+Fixes: be8704ff07d2 ("bpf: Introduce dynamic program extensions")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/fixups.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/bpf/verifier.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 002c3935a8eb..fe59e3114d82 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -2153,6 +2153,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			prog->aux->max_pkt_offset = MAX_PACKET_OFF;
- 			prog->aux->max_rdonly_access = U32_MAX;
- 			prog->aux->max_rdwr_access = U32_MAX;
-+			if (prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE)
-+				prog->aux->max_tp_access = U32_MAX;
- 
- 			/* mark bpf_tail_call as different opcode to avoid
- 			 * conditional branch in the interpreter for every normal
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 81660ffce99a..0d1b729989d6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -22232,6 +22232,15 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 					"Extension programs should be JITed\n");
+ 				return -EINVAL;
+ 			}
++			/*
++			 * How much of the buffer of the tracepoint is used
++			 * is checked for the program that is attached to it.
++			 */
++			if (tgt_prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE) {
++				bpf_log(log,
++					"Cannot extend a writable raw tracepoint program\n");
++				return -EINVAL;
++			}
+ 			tgt_changes_pkt_data = aux->func
+ 					       ? aux->func[subprog]->aux->changes_pkt_data
+ 					       : aux->changes_pkt_data;
 -- 
 2.55.0
 
