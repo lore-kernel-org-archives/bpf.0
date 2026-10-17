@@ -1,661 +1,594 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF683A0B38
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 18:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792261611; cv=none; b=VYO9a1NEMb/QPFtiuJNQNHeVYdhxWh1KnMnnuBBBnKe6BsWmXl8P7FZOGIqtgiEwhoR63tyHvFnNvilsfNG3s80scAgtDWhTjgtlnCiBu+aVf8FxmFXxTCNBZUOIzLhdhF7VzjBCQj9Z6QYlpKQ1E6ACYBxAOsu2gYVEEwhqe2c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792261611; c=relaxed/simple;
-	bh=ia/0x2l8n3vOFJ15lEzRcTMyBk7pq3CSpIfLdIN8vrQ=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=AiNyTv0Mj/THkE60sADagxJP6QAR95HpYyWK2JSfuqi9zx6FIigWtLBuMkCO4C7UNfkDW4C4nabwMvwixIQViiDmA8vW90vwY1UdNS60Es1GoIhy7F/JSYzEIaASABlpG11lSyfaC7ndbsH8d+J3Lb05NrxCKcgE/xjnHYv/s2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pmjO8KLf; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E453D75CD;
+	Sat, 17 Oct 2026 18:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792263059; cv=fail; b=l8Y3S87kB2iyRv4/sT92KIyEAi72TE00rDJZb3hYUTIOFPsGpT2RvHl7NuoSKYAyr35o5zACCHVz/9ycL108SsMxlNBlxhtVB2m8FNIFfzLaD5x/Q8Q6MVHN/n5hbwFyv49V/BSK37b0jlG4HWW3T24Ht1l/Bn38F6NPvilKrH8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792263059; c=relaxed/simple;
+	bh=te3HHkGhzf6RWFVvaTLaenv9MU50Z6BXRKZxWvBVPi4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Wj+j9493c9M9Cc1A+odPzr0PfugorFosjam4DZuhVV42U8GOo/R8khOpI75ffj3g3xGXBsgnS+kKdSNSun/ypcvDERunDcJwrcqaU4qlIz5r+rwGIb7C/DOorEzS9q0SnsPVjUmJKpshOjL2s0qAAyqXxMCpG25Z/yPlxFc9Pqw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LcFZ2zVz; arc=fail smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pmjO8KLf"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3ace9e6e1a5so671621a91.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 11:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792261608; x=1792866408; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lSD7O15NUI+Vm5PatNNE1ezCgFEloQv/pJBZPVHY2L4=;
-        b=pmjO8KLfODITTu3enqrjD/suSLOs8EYsMyoU2REWTnw/hVeQEsGL4VMV3Ub2eKTGAp
-         naAL2evMXyB7zsqOR/4hrqdjGIwTQddX2q+VQOjRGuhLQW9JZgx8kfzuHZDQjxgwC7In
-         XYC5UMSsw8pMEgRkft3mfbZE4mKATboGtNJcSsYINHVlFjhLtBFXWl8YFFHqZunMahHz
-         tISo3rn+9K5rf+w+iWewQEux9QWgjAvj1RG+W0AVZmbwi+TnJxtWQu5s74xTzME1yA5t
-         FhqIGitbzf+dz5b8odSYqEGznLbiiiy8Qj5NjmO4so5kK68IXOYfj7VQSWOZJukLqNZy
-         +BCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792261608; x=1792866408;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lSD7O15NUI+Vm5PatNNE1ezCgFEloQv/pJBZPVHY2L4=;
-        b=VgBG5lodbAo1C1zhZwnyxxM/OcB9WmOZRAZ+fJ33zxg/DGQp2YWR9GSwjZnlVyNwtL
-         6DJ7l9l2XfohR2PwR4xBNrQKlL8BuXQAKHwW8Hiv3rjgZg637/gSZfw5hzy3+F4fn3/f
-         sTp5hX3LYwbbWVNVr7tqBa48+JW4XxomhjMCikEoP6ievncEzAhHFgGxPfTf7kq0m/Pj
-         dJj3e1Ps0PX47UxLW/6YFsmUC6euLyzqvYoP2HXVCWotLtJVPjyQ8CLGnB/2S4d6ZwhG
-         lmyM6zHIewVs8LH7AvRqhxni7HsDBS6zk5UCbpb/7uJBUY1Vu02OfjWTmfIms/Bh5uZQ
-         DT0Q==
-X-Forwarded-Encrypted: i=1; AKwUvBw3QgWsEz0wfhmJfH65qY8SeaGBhJ2Zv433/eFR/1Erib0uyt0MFAgxmOFA1wAfrP8XO2o=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKbioKLxA2KOr02s8ITV85L8QonwjDQpj/v8FghlFVh828xhmUE
-	VLr/vM1IpH2jm2oF/l9gVsUWn9qCmUzfXY/XNZ+18Lq2tYxRvOoNfXCN
-X-Gm-Gg: AYBFou3MSm5JexWMYoqqQlYGLZcZY1DheD0DC664OVVd6VfpaJX+GydIxulTVNIpef/
-	MvnWd5mrp0+2Ure68XKkVno54s7lXQv6n/ObbnPScjYaXftW4g3UhflvIuubdgHSEIyn/POH97G
-	eEvZapvU3B1IDy44mac2McbQv1QJ9djIvsyN6wFgP5ACugDOk75RaV0a010+ee6jPMT+0RwN47Q
-	g2mdztr5V/RuUxRnM/p/lib41Z04hyop4EDoJlZbLdjoLxqiXCodbzFkX/s07NCSp/FYLabNVq6
-	oTUUSClTWsjeSDp61nsExO7A6qJfgpAmP0a27tkU8QXsKZsr7uoFsSZ4jVqf4mkNHn8trJo5sPq
-	twiLIK0T1holX/eYv4cm2vYkQLiuMcs4yfQz5/3oHjA7IDw41HkiWCuLczkdmngOlbw6wwJC8sx
-	NXSdhQrj40pqN/ywKBtwuj7yLmErtJRIVB0PxkUWedlElQb2fg1F682vR+1tusRYnf3R3h8XeFa
-	eMFJGkXRTsNmeHTqyqUoaD2GX1sFQUtx8xhWtdmivTIhz4vQzsWbfzoOxaktNx1CllH1FlikMr5
-	l67d7FNX19LOeQ==
-X-Received: by 2002:a17:90b:5146:b0:3a4:b509:88bd with SMTP id 98e67ed59e1d1-3acee275a9fmr1977681a91.2.1792261608238;
-        Sat, 17 Oct 2026 11:26:48 -0700 (PDT)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc4991b8asm8964714a91.16.2026.10.17.11.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Oct 2026 11:26:47 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 17 Oct 2026 18:26:46 +0000
-Message-Id: <DM7BPRPOCAFO.ECFSC142CD8Y@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
- <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v12 00/25] bpf: Run exception cleanup landing
- pads when bpf_unwind() unwinds
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <DM7A976G9OGW.ZR7PNBUP083C@gmail.com>
-References: <20261017025129.1914859-1-yonghong.song@linux.dev> <DM7A976G9OGW.ZR7PNBUP083C@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LcFZ2zVz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792263057; x=1823799057;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=te3HHkGhzf6RWFVvaTLaenv9MU50Z6BXRKZxWvBVPi4=;
+  b=LcFZ2zVzmvtA8QCwdF4oN4ax7MPgFxJFFhdb4Ot1AWuRNpKZSKtIbYeB
+   VmyXi9jisp7S8y7pPkKa0qySZob7iZs2ptqCGYCWNtt8ajFRLdnxfGYzm
+   U9PDxam/WGZWHIZDMM7JuNSbNnVEKJhkTrXGM6XIGktF+W68/99sQti4r
+   /leKmpUKoxkUX4i0yQaFzLDWcipMgh2e0w0iNhjNJNgQywTp3SkZznaWO
+   yKkQ1ailFPwainV9FeCerVZWfyuQnXqFEX0oQW4Rr1wv35EtjZRjjgKCw
+   //xrQH7rPomsVV6VXGS/+C7tlKg3CpKHan8fnYA04HKwWRR3vCF/vFMG8
+   A==;
+X-CSE-ConnectionGUID: PULJ+96hSEepGvO4EE3FtA==
+X-CSE-MsgGUID: QK0zHKDuT+eJWwH8/fTE8A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11938"; a="1115068"
+X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
+   d="scan'208";a="1115068"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 11:50:56 -0700
+X-CSE-ConnectionGUID: nOyL6n1yT5q62LPfyhmtRQ==
+X-CSE-MsgGUID: ZQyNQ0BySGGhRPjoNKsflQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
+   d="scan'208";a="2252358"
+Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 11:50:56 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Sat, 17 Oct 2026 11:50:55 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49 via Frontend Transport; Sat, 17 Oct 2026 11:50:55 -0700
+Received: from BL2PR02CU003.outbound.protection.outlook.com (52.101.52.64) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Sat, 17 Oct 2026 11:50:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=V5GB5G3MP6h4JbPIB9i9cXnn8759U8KttgMo9L4p6KVll/fron70GkYKXmzWdLF5dIres6sprScW4GygZfH54B8zrP+l+sFBHvrs8U7z0mzhUwnzE2KwKotd9xj3tAn2/wlt03u8m3iyPW0wKcw0TOTXcJ5VhnjfuyR7RZZBTU5HGLZX8RRDblNtVhZ8ge3X5iwUkYm2+4nEnZiwgTgkD8gqbAbis25Lka0rf1TAABJI5jAUgpVwpb3nsLraEk8v4I0W51adGY9G8L+bH4LeHjJ4c2yNZgVQLgZj9QBmWx3b0U5u24QJ+iboTl16nDw6ZkO5ApImnU4KccowHW5aFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1/tTLv4bHSxzzaZeouGXh9n4yE/MisKTWD1yT9owMdg=;
+ b=i7PNfYe3h9GkwovXrEi3yCylhQK4F1eK5Kqs5tdhn7X/8AcwK/0q2GMpHdv2bSo9m2kjnX8WtWSxveFVsHmna7YfxMIM6KeJQY+6dnxpekG7ZNn8xqxYDnVhHaXvmEaf+PtMM5JQsyhovImYB13XG5hHLqBag/wwbctkOsvBAReF8++Ad4ElitJrXclZfOCFnhOlcfr/Zn+ZyZ/TMszDGKk3ZHPiVpa6fjMHHAIUzREd4qFJ+4pCaFyD1PuFdd4+eWhvkqdRFuTInCJDIsXt3NVVopCC5Kj1nnbrlGzxIAYSCK5PyRRaQzgebnPSWu+bbpgFzXFlzL+/odgMFLFsrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ DM3PPFD7E67F036.namprd11.prod.outlook.com (2603:10b6:f:fc00::f54) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.17; Sat, 17 Oct
+ 2026 18:50:52 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0522.012; Sat, 17 Oct 2026
+ 18:50:52 +0000
+Date: Sat, 17 Oct 2026 20:50:39 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <tushar.vyavahare@intel.com>,
+	<kerneljasonxing@gmail.com>, <bjorn@kernel.org>
+Subject: Re: [PATCH v3 net-next 14/15] selftests: drv-net: test AF_XDP
+ zero-copy with an SKB peer
+Message-ID: <atPDf2DpOfWLt9cT@boxer>
+References: <20261014184539.774708-15-maciej.fijalkowski@intel.com>
+ <179220637173.434549.12610717858136223745@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <179220637173.434549.12610717858136223745@kernel.org>
+X-ClientProxiedBy: VIUP296CA0160.AUTP296.PROD.OUTLOOK.COM
+ (2603:10a6:800:35d::17) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DM3PPFD7E67F036:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fbd5fea-02c7-475d-aa4f-08df2c7f91a0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|23010399003|261009223027099003|56012099006|4143699003|11063799006|5023799004|10067099003|18002099003|22082099003|6133799003|3023799007;
+X-Microsoft-Antispam-Message-Info: NRUM02Ssk5Xxiu4EY8zxCGDoO2d04ozfC6AFwWbvZ9rl+OhXbhiomUkMdqDwVm3N/wod/pSZwJ+HH88RztOB2BBnEIHkV+HncOqfhnJAwcd5R/V/fPyTcUe2SyA6aLB+UMABONhz6Jt43RKDnTF1cEWayx19nZjgYIHRngCTscBK5xi5nrI76QOgrgFcyfZpz5sEzMsJgrTCZ5cHqWYTpQGZKtW19i21Neb1Alwomd1b4hWby7kOZxs943SPtgHI5vzAQ25TKC6lPHuzOc5gNbvtSlDfXTuQfEQdi05FStccZCQl4C/v85qoK5y0aqRZz8WHS1DMQKQ8ac7Z/6Dw23fioyaVQ/XAsull6X23rS4HhwpgePM4IkkdsjDY83GJu9z7qny2QUCCpRFS/GnA9EF0FKDgJy4azma/KgvytiM5hgr1GKKLfqkH6WhVU4Ki+c67i2GsyuW9rAJhd04Kcs4QQAnqojEQUEJha6fVCIh/bI0LYir7oo3Kn2oxmpsqOAQmOt6DIDXN8Oz1C6ohUCUOyp8s/yK0puXYKQWjyJU2I+9h7oPZ7bEBU2fCbI6QUCdsB+AOcg5T+P3jDntco3ylJ6yTtwDqQxG3PyVZUbF9IN3vNiB3FMBnmldnkyCf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(23010399003)(261009223027099003)(56012099006)(4143699003)(11063799006)(5023799004)(10067099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c1N2SmNtenR6VmtXeVBpVmdRUlFuTkt3ZGlMVVpxVTJBdzJ0U2Q1NXFJZGda?=
+ =?utf-8?B?VW1JakQ1RWJacFRqRDhCbjVZNllsSFoyT3hMUmNrTHJXUXF0VTlhZW12VnNP?=
+ =?utf-8?B?WExuMTJQWlo5N3A2V3NwVTEzakZOMlZmaGNmUEFsK3M1Z3JPZ1FzUzBpZ2p2?=
+ =?utf-8?B?dUpNNWZvdUtIMGVWSmhscFpYT2I1eWhtbmNnRDk0cHpHREZVWXpSUzdmUHI1?=
+ =?utf-8?B?alNZQVpYMlA4Z1E1d1VIbVJtaVh4TE8rSVBYRmNwcG9QRHNlcG1JUEhlUE4x?=
+ =?utf-8?B?VzdOUVEwSm1vR0c3SG9PdDROUWlIT2V5QUVoc09oazA1WFAyRmxuWkU4eG5T?=
+ =?utf-8?B?bGUrcmNPUjR2b0tmMWdET2tMQzIxU3dyN1ZqTUg1aEo1R0k5UWg2cXNzYTBL?=
+ =?utf-8?B?TjRIMis4U1pLUmdtd1UxVFBuVWttVFlxMitEZE1wdDJMWW9yVE1JZWhwU2gr?=
+ =?utf-8?B?eXlDdkxoY1dETGdGNWVkT3ZXdUE0cUZSWVpDVUdsays4bVdrcFFRNDhNTWR0?=
+ =?utf-8?B?MStpM29hVUZ4VkxyL1hnM3BxQlhCcElVNDdHanBZMFlMQlZYZk9sd2VnM2du?=
+ =?utf-8?B?WURqQUZUVnZpUXZrUWJDN05ocmQrWVNNOUhyb3JBL2p4MjJwQXE1d05NbkRo?=
+ =?utf-8?B?NWZsTThNUjdSTWdxN1BKS0pER3oyNlJpQllYRkl3enFOK2JDcTdMcVBpUXlt?=
+ =?utf-8?B?YVZIUUc5ZFRLKzk3ZVZ3MmtZM1pRbFVySkdJWFF3dDhSWklZcWthSjBiU0FX?=
+ =?utf-8?B?ZktNZURMTVViaEtmVTBJcVBnVEg3MG1MRE1zRTY2TjhwSVRlQ1doT29JdUxr?=
+ =?utf-8?B?elVVUkZ1ak91ajFpTTJOOEt0TTBveUtycnNHLzJaQ2xWbUI4WnBraW8wMjhL?=
+ =?utf-8?B?U3VDSHRoWEZTQnhSa2tVUWs1Vzk2NE5rNTkvaTlJcFBzVldmVkNGOUEwUFF2?=
+ =?utf-8?B?WFBSOGpPR3ZVb1M2MllSWlRlSDdLOVkrTVVMTmVPbElLbE1CcllDRXkxTVhN?=
+ =?utf-8?B?THBaQ1pQYzVYZjYzTjZkci9yS0EwMDlUR293RkhmSGpoWUlyUS9TcEVzUllQ?=
+ =?utf-8?B?MitlUTEwNVVrVi9uT2JBdDdRSDN2dnNjb3E2VkpnY3VtWGl5dXhUWjVCZGZS?=
+ =?utf-8?B?ZmN2dy9tbnJlR1NVcXRjeTNncXdOaDFaSDlQK2d4aytBdGY4MHJETGtZWjR4?=
+ =?utf-8?B?OWRQczVySjl1dHpNSFMxalV2dnQzQUtZMUdFOEdMWWhTVEJHRHJ6STdVbERE?=
+ =?utf-8?B?alRwWHQ3VnlNSWg0Y1hrODBWZXBZOXliVWFlN3I1SUJzSnoyYXFNUkk1TmpB?=
+ =?utf-8?B?R01ta09BWHM0WjRHWFBDZVF1ZStsamNabU4yRi9TTG5GSk9IcFhRWDkzSC8v?=
+ =?utf-8?B?U3psazZLMGVDYzVWcGgwZWo4NXRzVU5FdzJtcGtMVUg5cFpVK0J1MWVOekhF?=
+ =?utf-8?B?dzgyNWJaQnZhNVFkbmpQczJzcnVpbS9PK0JUNHIrTWVkU1htQTYzcHAxWmZx?=
+ =?utf-8?B?UHZHK2FYR2xmb3orYTVSK3o4d0hQWjRRMmtpcGRUVHBvWWxiZVNkOVJIeVRB?=
+ =?utf-8?B?NGV1QUo0bUg4THNsVVhjL1hyK3BwYWFVdnNEZStGWjF0UTAxZitaRmhuLzZt?=
+ =?utf-8?B?VEozYmlhdzBrQ0p2dG91YTlsM0w0SkF1OEVwbzN2czAvWVl6VmJYc2dyTytU?=
+ =?utf-8?B?YnJjbGYrVll2ZG1pWFNjeG0veDBSRTN2SU40ay9mNnd0YldTMUU2eDl3bTVu?=
+ =?utf-8?B?b2drcjcrUmViME1SWENweGozWHdRMEg2dStGV0s2WHdIdG4ySFR5bnY4eGpq?=
+ =?utf-8?B?RUx6WTdkOERHcXlURmw0RVpLOEZPYUFFTTRoWFlUY0hudUpPcTRNdFNXYW9r?=
+ =?utf-8?B?N0NmdzRjYVpTVWlhYU9lMHNHTmVhUzlpOTB0c3BQWjQ0VjQrc3B6Wm5kNzZv?=
+ =?utf-8?B?cllVZDhvS1EvSUZTaU1OYmVQU1RUNktNU2R6bnFQOENYRGUxZGxYdjdSK015?=
+ =?utf-8?B?U3J0cFhoYmYzbFlFTEc3Tmpnc3BiT2J3WUo4ODIvTWo4L1BRU3F4bDQ2em5Z?=
+ =?utf-8?B?aG14UnRPSUd6elhLRnlxN2swRnUzelR3eG11Nlp1U0dLdGJkSGt3eldKWmtQ?=
+ =?utf-8?B?TDFKN0tHa1pZSlZWNk1LVExPSHR6RnM5NEJCVGwxZHV2VzhySFBFY0VzZkZQ?=
+ =?utf-8?B?S1ZVb1dPTm1GTDZqa1VrS1V4TEJmbGdnb2V0blNBUlE1REFkVXA0SkFYOEc4?=
+ =?utf-8?B?QjYvTUkvaDBwaUxLNlhaaUViYkMwNGlmZFpVWkRmNExEWjlSYURLbmZrNGdP?=
+ =?utf-8?B?QisyTHZRd24zNEUrQWlwOG9xRkMrbVhsNUhiT0Y3bnd6REQ4dDhGSzR5UkJq?=
+ =?utf-8?Q?HAVCIz/uCtFrYFms=3D?=
+X-Exchange-RoutingPolicyChecked: P+qEZhVHazjBRQobsp8oyo+uZQM1Ryo/GRiIv7N7uumQYskngh/PuU5rtAJ+idRfsD96Bt4ySobQFcWrmXQXvgdR1GkjQ6fFXOaBveE4jnDQ+zxEgtlj+iBumnNe+KmYLVpUy1Y3mX1hv3fvmfbcOcjfFipKZvGUVmSzVmrzw4ch1+qiLsV7WuOnIUAIFg0WXOmsNLYplPFYMmjK8RjcZmIaNN0Qm+i8uS8uGGGiUC5jQrnPO7XpDUB6DaL11OlDtj38IgZdtHHNpzY4zHPhScTtcBeESghAPpnctmmVkAciw1+JBj0EHt+iBsHwLAxnX3ON8aaaMxEGIVssyi06zQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fbd5fea-02c7-475d-aa4f-08df2c7f91a0
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2026 18:50:52.6984
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NVr+pLv0wnZlsiw1efcBNbBsoaPjOfuvzAKSRCLJRp2ZxyyYHwEKXa4RCa8hb4KWxmjvqBgbe7e971I27CeGONiJgGyqHbJwkTz0c64S5GY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPFD7E67F036
+X-OriginatorOrg: intel.com
 
-On Sat, Oct 17, 2026 at 05:18 PM Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> uapi in patch 1, kfuncs in patch 2 and libbpf patches 17-21 stay as-is.
+On Sat, Oct 17, 2026 at 03:06:11AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 8 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 6 · Low: 2
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] In tools/testing/selftests/drivers/net/hw/xsk.py, main()
+>   changes state on both hosts and has no try/finally to undo it.
+> - [Medium] In xsk.py, _run() starts the DUT zero-copy endpoint with
+>   `local = cmd(local_args, background=True, fail=False)` at line 142 and…
+> - [Medium] main() in xsk.py calls `xsk_reserve_hugepages(saved_hugepages,
+>   cfg.remote)` (line 227), and xsk_reserve_hugepages()…
+> - [Medium] If an endpoint is killed, the NIC's TX/RX descriptor ring
+>   sizes are never restored.
+> - [Medium] Taking the zero-copy queue out of RSS (_reserve_queue(),
+>   xsk.py line 74) is the only thing keeping non-test traffic off it.
+> - [Medium] _reserve_queue() in xsk.py assumes every reported channel can
+>   be addressed by RSS.
+> - [Low] The commit message says 'A host without ntuple support skips' and
+>   'A DUT with fewer than two such queues skips'.
+> - [Low] In xsk.py, _steer_udp() runs `ethtool -K <if> ntuple-filters on`
+>   (line 86) when the feature is inactive and not fixed.
+> 
 
-On a 2nd thought...
-The table exists to keep the normal path free of unwind code.
-Once we pay for the branch the kernel only uses the table to generate
-insns that llvm could have generated.
-BPFAsmPrinter emits one record per invoke: arg setup plus one call.
-So the table doesn't say more than 'this call -> that pad'.
+I believe here I am done with responding to comments from our beloved
+bot. There is one issue that indeed needs a fix before getting this in
+(see below at ATR comment). Let me know if any fixups are possible...
 
-If llvm emits:
-  invoke foo              call foo; if r3 != 0 goto pad
-  ret                     r3 = 0; exit
-  call _Unwind_Resume     r0 = 0; r3 = 1; exit
-  invoke bpf_unwind       r0 = 0; goto pad
-then .bpf_cleanup, uapi, both kfuncs, libbpf, light skeleton,
-static linker changes go away. Other loaders have nothing to do either.
-No patching before the main pass, so insn numbers in the log don't shift.
-Functions end with exit, so no need for patch 12.
-_Unwind_Resume and bpf_unwind don't reach the object file,
-so no rename in libbpf and no BTF anchor for them in rust.
-llvm knows what is nounwind, so no conservative closure for callx.
-That's close to what Eduard was proposing in v4, but without new insn.
+> --
+> 
+> selftests: drv-net: test AF_XDP zero-copy with an SKB peer
+> 
+> This adds drivers/net/hw/xsk.py. It runs the xskxceiver cases as pairs of
+> processes: a zero-copy endpoint on the DUT and an SKB-mode endpoint on the
+> remote. main() sets up the shared state once (an RSS-excluded queue, ntuple
+> rules on both hosts, huge pages) and undoes it after ksft_run().
+> 
+> > diff --git a/tools/testing/selftests/drivers/net/hw/xsk.py b/tools/testing/selftests/drivers/net/hw/xsk.py
+> > new file mode 100755
+> > index 000000000000..fd708bb3420d
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/drivers/net/hw/xsk.py
+> > @@ -0,0 +1,263 @@
+> 
+> [ ... ]
+> 
+> > +def _reserve_queue(cfg):
+> > +    """Take the last queue with both an RX and a TX ring out of RSS. A TX
+> > +    endpoint fills no RX buffers, so in zero-copy mode its queue drops what
+> > +    it receives, the control connection included."""
+> > +    ch = cfg.ethnl.channels_get({"header": {"dev-index": cfg.ifindex}})
+> > +    count = ch.get("combined-count", 0) + min(ch.get("rx-count", 0),
+> > +                                              ch.get("tx-count", 0))
+> 
+> [Severity: Medium]
+> Does this assume that the RSS indirection table can address every reported
+> channel?
+> 
+> On pre-X550 ixgbe (82599/X540) with ATR enabled, which is the default,
+> ixgbe_get_channels() reports the Flow Director queue count:
+> 
+> drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c:ixgbe_get_channels() {
+>     ...
+> 	/* report flow director queues as maximum channels */
+> 	ch->combined_count = adapter->ring_feature[RING_F_FDIR].indices;
+>     ...
+> }
+> 
+> That count can be as high as 64. The RSS table on those parts can only
+> address 16 queues:
+> 
+> ixgbe_rss_indir_tbl_max() {
+> 	if (adapter->hw.mac.type < ixgbe_mac_X550)
+> 		return 16;
+>     ...
+> }
+> 
+> ixgbe_set_rxfh() rejects entries beyond that limit:
+> 
+> 	for (i = 0; i < reta_entries; i++)
+> 		if (rxfh->indir[i] >= max_queues)
+> 			return -EINVAL;
+> 
+> On a host with more than 17 CPUs, would "ethtool -X <netif> equal 63" fail
+> and raise CmdExitFailure during setup? That would abort the suite on a NIC
+> that advertises AF_XDP zero-copy. In this configuration the chosen queue is
+> already outside RSS, so the table doesn't need to change.
+> 
+> > +    if count < 2:
+> > +        return None
+> > +    queue = count - 1
+> > +    ethtool(f"-X {cfg.ifname} equal {queue}")
 
-The kernel needs to know which subprogs say something in r3.
-In the sketch llvm adds BTF decl_tag "unwind" to such FUNCs.
-The insns come from user space now, so the verifier checks that r3
-is a scalar and that a callback exits with r3 == 0.
-r3 becomes an ABI between llvm and the kernel.
+in v4 rejected ethtool -X skips the run instead of raising exitfailure and
+any previous setup is undone.
 
-The kernel part, on top of bpf-next instead of the whole series:
+Current get_channels() output interpretation is targeted towards modern
+NICs, but later on if there is really such need we could check if chosen
+queue is already out of RSS...?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 54144372281c..f55a14e6c388 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1882,6 +1882,7 @@ struct bpf_prog_aux {
- 	bool priv_stack_requested;
- 	bool changes_pkt_data;
- 	bool might_sleep;
-+	bool ret_unwind;
- 	bool kprobe_write_ctx;
- 	struct {
- 		s32 keyring_serial;
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 11cd90d85bad..6501c873f365 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -944,6 +944,7 @@ struct bpf_subprog_info {
- 	s16 fastcall_stack_off;
- 	bool has_tail_call: 1;
- 	bool might_throw: 1;
-+	bool ret_unwind: 1; /* says in r3 whether it returns or unwinds */
- 	bool tail_call_reachable: 1;
- 	bool has_ld_abs: 1;
- 	bool is_cb: 1;
-@@ -1214,6 +1215,8 @@ static inline struct bpf_subprog_info *subprog_info(struct bpf_verifier_env *env
- 	return &env->subprog_info[subprog];
- }
- 
-+#define BPF_REG_UNWIND BPF_REG_3
-+
- static inline bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int subprog)
- {
- 	return subprog_info(env, subprog)->ret_reg_pair;
-diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-index 43d5740034c0..0f8dbacdf9ca 100644
---- a/kernel/bpf/backtrack.c
-+++ b/kernel/bpf/backtrack.c
-@@ -448,6 +448,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 				bt_clear_reg(bt, BPF_REG_0);
- 				/* and if it does not set R2, main pass would catch it */
- 				bt_clear_reg(bt, BPF_REG_2);
-+				bt_clear_reg(bt, BPF_REG_UNWIND);
- 				/* r1-r5 are invalidated after subprog call,
- 				 * so for global func call it shouldn't be set
- 				 * anymore
-@@ -548,7 +549,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 					return -EFAULT;
- 			}
- 		} else if (opcode == BPF_EXIT) {
--			bool from_subprog_call, r0_precise, r2_precise;
-+			bool from_subprog_call, r0_precise, r2_precise, r3_precise;
- 
- 			/* BPF_EXIT in subprog or callback always returns
- 			 * right after the call instruction, so by checking
-@@ -565,6 +566,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 
- 			r0_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
- 			r2_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_2);
-+			r3_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_UNWIND);
- 
- 			/* Backtracking to a nested function call, 'idx' is a part of
- 			 * the inner frame 'subseq_idx' is a part of the outer frame.
-@@ -578,8 +580,10 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 			 * might be a precise helper argument as well, so leave it set.
- 			 */
- 			bt_clear_reg(bt, BPF_REG_0);
--			if (from_subprog_call)
-+			if (from_subprog_call) {
- 				bt_clear_reg(bt, BPF_REG_2);
-+				bt_clear_reg(bt, BPF_REG_UNWIND);
-+			}
- 			if (from_subprog_call && (bt_reg_mask(bt) & BPF_REGMASK_ARGS)) {
- 				verifier_bug(env, "backtracking exit unexpected regs %x",
- 					     bt_reg_mask(bt));
-@@ -593,6 +597,8 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 				bt_set_reg(bt, BPF_REG_0);
- 			if (r2_precise)
- 				bt_set_reg(bt, BPF_REG_2);
-+			if (r3_precise)
-+				bt_set_reg(bt, BPF_REG_UNWIND);
- 			/* r6-r9 and stack slots will stay set in caller frame
- 			 * bitmasks until we return back from callee(s)
- 			 */
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 608621d7f225..8580fa2b634f 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1383,6 +1383,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->exception_cb = env->subprog_info[i].is_exception_cb;
- 		func[i]->aux->changes_pkt_data = env->subprog_info[i].changes_pkt_data;
- 		func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
-+		func[i]->aux->ret_unwind = env->subprog_info[i].ret_unwind;
- 		func[i]->aux->token = prog->aux->token;
- 		if (!i)
- 			func[i]->aux->exception_boundary = env->seen_exception;
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index e657e6d95408..51ccb8b080a9 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -2482,7 +2482,7 @@ static int callee_subprog(struct bpf_verifier_env *env, const struct bpf_insn *i
- static void compute_insn_live_regs(struct bpf_verifier_env *env,
- 				   struct bpf_insn *insn,
- 				   struct insn_live_regs *info,
--				   bool ret_reg_pair)
-+				   bool ret_reg_pair, bool ret_unwind)
- {
- 	struct bpf_call_summary cs;
- 	const u8 class = BPF_CLASS(insn->code);
-@@ -2616,6 +2616,8 @@ static void compute_insn_live_regs(struct bpf_verifier_env *env,
- 		case BPF_EXIT:
- 			def = 0;
- 			use = ret_reg_pair ? (r0 | r2) : r0;
-+			if (ret_unwind)
-+				use |= reg64_mask(BPF_REG_UNWIND);
- 			break;
- 		case BPF_CALL:
- 			def = ALL_CALLER_SAVED_REGS;
-@@ -2698,7 +2700,8 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
- 		ret_reg_pair = bpf_ret_reg_pair(env, subprog);
- 
- 		for (i = start; i < end; ++i)
--			compute_insn_live_regs(env, &insns[i], &state[i], ret_reg_pair);
-+			compute_insn_live_regs(env, &insns[i], &state[i], ret_reg_pair,
-+					       subprog && env->subprog_info[subprog].ret_unwind);
- 	}
- 
- 	/* Forward pass: resolve stack access through FP-derived pointers */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1facec5485b3..888dabd81d15 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -440,7 +440,7 @@ static const int ret_regs[] = { BPF_REG_0, BPF_REG_2 };
- static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
- {
- 	const struct btf *btf = env->prog->aux->btf;
--	const struct btf_type *type;
-+	const struct btf_type *type, *func;
- 	int subprog;
- 	u32 size;
- 
-@@ -454,8 +454,22 @@ static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
- 	 * refuses to replace a function returning more than 8 bytes.
- 	 */
- 	for (subprog = 1; subprog < env->subprog_cnt; subprog++) {
-+		struct bpf_subprog_info *sub = subprog_info(env, subprog);
-+
- 		type = subprog_ret_type(env, subprog);
--		if (!type || btf_type_is_void(type))
-+		if (!type)
-+			continue;
-+		func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
-+		if (btf_find_next_decl_tag(btf, func, -1, "unwind", 0) > 0) {
-+			/* They return to the caller with whatever is in r3. */
-+			if (sub->has_tail_call || sub->has_ld_abs) {
-+				verbose(env, "tail call or ld_abs in a subprog that can unwind\n");
-+				return -EINVAL;
-+			}
-+			sub->ret_unwind = true;
-+			env->prog->jit_required = 1;
-+		}
-+		if (btf_type_is_void(type))
- 			continue;
- 		if (verifier_bug_if(IS_ERR(btf_resolve_size(btf, type, &size)), env,
- 				    "cannot size return type of subprog %d", subprog))
-@@ -11386,6 +11400,9 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			}
- 		}
- 
-+		if (env->subprog_info[subprog].ret_unwind)
-+			mark_reg_unknown(env, caller->regs, BPF_REG_UNWIND);
-+
- 		if (env->subprog_info[subprog].might_throw) {
- 			struct bpf_verifier_state *branch;
- 
-@@ -11823,13 +11840,14 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 	struct bpf_verifier_state *state = env->cur_state, *prev_st;
- 	struct bpf_func_state *caller, *callee;
- 	struct bpf_reg_state *r0;
--	bool in_callback_fn;
-+	bool in_callback_fn, ret_unwind;
- 	u32 i, nregs;
- 	int err;
- 
- 	callee = state->frame[state->curframe];
- 	r0 = &callee->regs[BPF_REG_0];
- 	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
-+	ret_unwind = subprog_info(env, callee->subprogno)->ret_unwind;
- 	for (i = 0; i < nregs; i++) {
- 		if (callee->regs[ret_regs[i]].type != PTR_TO_STACK)
- 			continue;
-@@ -11861,6 +11879,16 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 					       "At callback return", "R0");
- 			return -EINVAL;
- 		}
-+		/* the helper that called it does not look at r3 */
-+		if (ret_unwind) {
-+			err = mark_chain_precision(env, BPF_REG_UNWIND);
-+			if (err)
-+				return err;
-+			if (!bpf_register_is_null(&callee->regs[BPF_REG_UNWIND])) {
-+				verbose(env, "callback cannot unwind\n");
-+				return -EINVAL;
-+			}
-+		}
- 		if (!bpf_calls_callback(env, callee->callsite)) {
- 			verifier_bug(env, "in callback at %d, callsite %d !calls_callback",
- 				     *insn_idx, callee->callsite);
-@@ -11879,6 +11907,8 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 			caller->regs[regno] = callee->regs[regno];
- 			bpf_diag_mod_end(env);
- 		}
-+		if (ret_unwind && callee->regs[BPF_REG_UNWIND].type == SCALAR_VALUE)
-+			caller->regs[BPF_REG_UNWIND] = callee->regs[BPF_REG_UNWIND];
- 	}
- 
- 	/* Invalidate callee-local dynptrs and their slices before the frame goes away. */
-@@ -19222,6 +19252,12 @@ static int check_global_subprog_return_code(struct bpf_verifier_env *env)
- 	u32 i, nregs;
- 	int err;
- 
-+	if (subprog_info(env, subprog)->ret_unwind) {
-+		err = check_global_ret_scalar_reg(env, BPF_REG_UNWIND);
-+		if (err)
-+			return err;
-+	}
-+
- 	if (subprog_returns_void(env, subprog))
- 		return 0;
- 
-@@ -22135,6 +22171,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 				prog_extension ? "Extension" : "Tracing");
- 			return -EINVAL;
- 		}
-+		/* Neither a trampoline that calls the subprog nor an extension keeps r3. */
-+		if (aux->func && subprog && aux->func[subprog]->aux->ret_unwind &&
-+		    prog->expected_attach_type != BPF_TRACE_FENTRY) {
-+			bpf_log(log, "Only fentry can attach to %s, which can unwind\n", tname);
-+			return -EINVAL;
-+		}
- 		conservative = aux->func_info_aux[subprog].unreliable;
- 		if (prog_extension) {
- 			if (conservative) {
+> 
+> [Severity: Medium]
+> On NICs that steer flows based on TX, is taking the queue out of RSS
+> enough to keep the TCP control connection off it?
+> 
+> Flow Director ATR is on by default on i40e. i40e_atr() samples TCP TX
+> packets, including the SYN. It then programs an FD filter that steers the
+> flow's RX to the queue of the TX ring:
+> 
+> drivers/net/ethernet/intel/i40e/i40e_txrx.c:i40e_atr() {
+>     ...
+> 	flex_ptype = FIELD_PREP(I40E_TXD_FLTR_QW0_QINDEX_MASK,
+> 				tx_ring->queue_index);
+>     ...
+> }
 
-The llvm part:
+SO CLOSE! This one has to be addressed as atr is turned on by default and
+this could cause i40e runs being stochastic. I must admit I did not have
+i40e setup on my side, but it has full AF_XDP feature support (including
+mbuf zc) so its coverage matters.
 
-diff -ruN a/llvm/lib/Target/BPF/BPF.h b/llvm/lib/Target/BPF/BPF.h
---- a/llvm/lib/Target/BPF/BPF.h	2026-09-16 22:24:30.000000000 +0000
-+++ b/llvm/lib/Target/BPF/BPF.h	2026-10-17 18:08:10.169807195 +0000
-@@ -35,6 +35,8 @@
- };
- 
- ModulePass *createBPFCheckAndAdjustIRLegacyPass();
-+ModulePass *createBPFUnwindPreparePass();
-+FunctionPass *createBPFUnwindLowerPass();
- 
- class BPFISelDAGToDAGPass : public SelectionDAGISelPass {
- public:
-diff -ruN a/llvm/lib/Target/BPF/BPFISelLowering.cpp b/llvm/lib/Target/BPF/BPFISelLowering.cpp
---- a/llvm/lib/Target/BPF/BPFISelLowering.cpp	2026-09-16 22:24:30.000000000 +0000
-+++ b/llvm/lib/Target/BPF/BPFISelLowering.cpp	2026-10-17 18:08:10.169807195 +0000
-@@ -696,6 +696,14 @@
-     RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
-   }
- 
-+  // A function that can unwind says in r3 that it did not.
-+  if (!MF.getFunction().doesNotThrow()) {
-+    Chain = DAG.getCopyToReg(Chain, DL, BPF::R3,
-+                             DAG.getConstant(0, DL, MVT::i64), Glue);
-+    Glue = Chain.getValue(1);
-+    RetOps.push_back(DAG.getRegister(BPF::R3, MVT::i64));
-+  }
-+
-   RetOps[0] = Chain; // Update chain.
- 
-   // Add the glue if we have it.
-diff -ruN a/llvm/lib/Target/BPF/BPFTargetMachine.cpp b/llvm/lib/Target/BPF/BPFTargetMachine.cpp
---- a/llvm/lib/Target/BPF/BPFTargetMachine.cpp	2026-09-16 22:24:30.000000000 +0000
-+++ b/llvm/lib/Target/BPF/BPFTargetMachine.cpp	2026-10-17 18:08:10.169807195 +0000
-@@ -117,6 +117,7 @@
-   addPass(createBPFCheckAndAdjustIRLegacyPass());
- 
-   TargetPassConfig::addIRPasses();
-+  addPass(createBPFUnwindPreparePass());
- }
- 
- TargetTransformInfo
-@@ -147,6 +148,7 @@
- }
- 
- void BPFPassConfig::addPreEmitPass() {
-+  addPass(createBPFUnwindLowerPass());
-   addPass(createBPFMIPreEmitCheckingLegacyPass());
-   if (!DisableMIPeephole) {
-     addPass(createBPFMIExpandStackArgPseudosLegacyPass());
-diff -ruN a/llvm/lib/Target/BPF/BPFUnwind.cpp b/llvm/lib/Target/BPF/BPFUnwind.cpp
---- a/llvm/lib/Target/BPF/BPFUnwind.cpp	1970-01-01 00:00:00.000000000 +0000
-+++ b/llvm/lib/Target/BPF/BPFUnwind.cpp	2026-10-17 18:08:49.629960874 +0000
-@@ -0,0 +1,206 @@
-+//===-- BPFUnwind.cpp - Lower unwinding to a flag in r3 and a branch ------===//
-+//
-+// A function that can unwind says in r3 how it returns:
-+//   ret                     r3 = 0; exit            (BPFTargetLowering::LowerReturn)
-+//   resume                  r0 = 0; r3 = 1; exit
-+//   invoke f() unwind pad   call f; if r3 != 0 goto pad
-+//   invoke bpf_unwind()     r0 = 0; goto pad
-+// There are no tables and nothing for a loader or the kernel to dispatch.
-+//
-+//===----------------------------------------------------------------------===//
-+
-+#include "BPF.h"
-+#include "BPFInstrInfo.h"
-+#include "BPFSubtarget.h"
-+#include "llvm/CodeGen/MachineFunctionPass.h"
-+#include "llvm/CodeGen/MachineInstrBuilder.h"
-+#include "llvm/IR/IRBuilder.h"
-+#include "llvm/IR/InstIterator.h"
-+#include "llvm/IR/IntrinsicInst.h"
-+#include "llvm/IR/Module.h"
-+#include "llvm/Transforms/Utils/Local.h"
-+
-+using namespace llvm;
-+
-+namespace {
-+
-+/// Make every call that may unwind an invoke: it ends its block and has a pad.
-+struct BPFUnwindPrepare : public ModulePass {
-+  static char ID;
-+  BPFUnwindPrepare() : ModulePass(ID) {}
-+  StringRef getPassName() const override { return "BPF Unwind Prepare"; }
-+
-+  static bool mayUnwind(const Instruction &I) {
-+    const auto *CB = dyn_cast<CallBase>(&I);
-+    return CB && !CB->doesNotThrow() && !CB->isInlineAsm() &&
-+           !isa<IntrinsicInst>(CB);
-+  }
-+
-+  bool runOnModule(Module &M) override {
-+    bool Changed = false, IndirectUnwind = false;
-+
-+    for (Function &F : M)
-+      for (Instruction &I : instructions(F))
-+        IndirectUnwind |= mayUnwind(I) && cast<CallBase>(I).isIndirectCall();
-+
-+    for (Function &F : M) {
-+      if (F.isDeclaration())
-+        continue;
-+      // The caller of a function pointer looks at r3 whatever the callee is.
-+      if (IndirectUnwind && F.doesNotThrow() && F.hasAddressTaken()) {
-+        F.removeFnAttr(Attribute::NoUnwind);
-+        Changed = true;
-+      }
-+      if (F.doesNotThrow())
-+        continue;
-+
-+      SmallVector<CallInst *, 8> Calls;
-+      for (Instruction &I : instructions(F))
-+        if (isa<CallInst>(I) && mayUnwind(I))
-+          Calls.push_back(cast<CallInst>(&I));
-+      if (Calls.empty())
-+        continue;
-+
-+      LLVMContext &C = M.getContext();
-+      if (!F.hasPersonalityFn())
-+        F.setPersonalityFn(cast<Constant>(
-+            M.getOrInsertFunction("__gcc_personality_v0",
-+                                  FunctionType::get(Type::getInt32Ty(C), true))
-+                .getCallee()));
-+      BasicBlock *Pad = BasicBlock::Create(C, "unwind.resume", &F);
-+      IRBuilder<> B(Pad);
-+      LandingPadInst *LP = B.CreateLandingPad(
-+          StructType::get(PointerType::getUnqual(C), Type::getInt32Ty(C)), 0);
-+      LP->setCleanup(true);
-+      B.CreateResume(LP);
-+      for (CallInst *CI : Calls)
-+        changeToInvokeAndSplitBasicBlock(CI, Pad);
-+      Changed = true;
-+    }
-+    return Changed;
-+  }
-+};
-+
-+/// After register allocation, which took call -> pad for an EH edge and so
-+/// keeps only r6-r9 and the stack alive over it, turn the edge into a branch.
-+struct BPFUnwindLower : public MachineFunctionPass {
-+  static char ID;
-+  BPFUnwindLower() : MachineFunctionPass(ID) {}
-+  StringRef getPassName() const override { return "BPF Unwind Lower"; }
-+
-+  static bool callsTo(const MachineInstr &MI, StringRef Name) {
-+    const MachineOperand &MO = MI.getOperand(0);
-+    return (MO.isGlobal() && MO.getGlobal()->getName() == Name) ||
-+           (MO.isSymbol() && Name == MO.getSymbolName());
-+  }
-+
-+  /// Nothing after \p MI in its block runs: \p Succ, if any, is what follows.
-+  static void endBlockAfter(MachineInstr &MI, MachineBasicBlock *Succ) {
-+    MachineBasicBlock &MBB = *MI.getParent();
-+    MBB.erase(std::next(MI.getIterator()), MBB.end());
-+    while (!MBB.succ_empty())
-+      MBB.removeSuccessor(MBB.succ_begin());
-+    if (Succ)
-+      MBB.addSuccessor(Succ);
-+  }
-+
-+  bool runOnMachineFunction(MachineFunction &MF) override {
-+    const TargetInstrInfo &TII = *MF.getSubtarget().getInstrInfo();
-+    DenseMap<MCSymbol *, MachineBasicBlock *> Begin;
-+    SmallVector<std::pair<MachineInstr *, MachineBasicBlock *>, 8> Sites;
-+    SmallVector<MachineInstr *, 8> Labels, Resumes;
-+
-+    for (const LandingPadInfo &LP : MF.getLandingPads())
-+      for (MCSymbol *Sym : LP.BeginLabels)
-+        Begin[Sym] = LP.LandingPadBlock;
-+
-+    for (MachineBasicBlock &MBB : MF) {
-+      MachineBasicBlock *Pad = nullptr;
-+      for (MachineInstr &MI : MBB) {
-+        if (MI.isEHLabel()) {
-+          Pad = Begin.lookup(MI.getOperand(0).getMCSymbol());
-+          Labels.push_back(&MI);
-+        } else if (MI.isCall() && callsTo(MI, "_Unwind_Resume")) {
-+          Resumes.push_back(&MI);
-+        } else if (MI.isCall() && Pad) {
-+          Sites.push_back({&MI, Pad});
-+        }
-+      }
-+    }
-+    if (Labels.empty() && Resumes.empty())
-+      return false;
-+    for (MachineInstr *MI : Labels)
-+      MI->eraseFromParent();
-+
-+    for (auto [Call, Pad] : Sites) {
-+      MachineBasicBlock *MBB = Call->getParent();
-+      const DebugLoc &DL = Call->getDebugLoc();
-+      const auto *II =
-+          dyn_cast_or_null<InvokeInst>(MBB->getBasicBlock()->getTerminator());
-+
-+      // The pad reads r0, which the callee zeroes when it unwinds.
-+      Call->addRegisterDefined(BPF::R0);
-+      Call->clearRegisterDeads(BPF::R0);
-+
-+      if (callsTo(*Call, "bpf_unwind") || (II && II->doesNotReturn())) {
-+        if (callsTo(*Call, "bpf_unwind"))
-+          Call = BuildMI(*MBB, Call, DL, TII.get(BPF::MOV_ri), BPF::R0).addImm(0);
-+        endBlockAfter(*Call, Pad);
-+        if (!MBB->isLayoutSuccessor(Pad))
-+          BuildMI(MBB, DL, TII.get(BPF::JMP)).addMBB(Pad);
-+      } else {
-+        MachineBasicBlock *Rest = MBB->splitAt(*Call);
-+        if (Rest != MBB) {
-+          Rest->removeSuccessor(Pad);
-+          MBB->addSuccessor(Pad);
-+        }
-+        Call->addRegisterDefined(BPF::R3);
-+        Call->clearRegisterDeads(BPF::R3);
-+        BuildMI(MBB, DL, TII.get(BPF::JNE_ri))
-+            .addReg(BPF::R3)
-+            .addImm(0)
-+            .addMBB(Pad);
-+      }
-+    }
-+
-+    for (MachineInstr *Call : Resumes) {
-+      MachineBasicBlock *MBB = Call->getParent();
-+      const DebugLoc &DL = Call->getDebugLoc();
-+
-+      BuildMI(*MBB, Call, DL, TII.get(BPF::MOV_ri), BPF::R0).addImm(0);
-+      BuildMI(*MBB, Call, DL, TII.get(BPF::MOV_ri), BPF::R3).addImm(1);
-+      MachineInstr *Ret = BuildMI(*MBB, Call, DL, TII.get(BPF::RET))
-+                              .addReg(BPF::R0, RegState::Implicit)
-+                              .addReg(BPF::R3, RegState::Implicit);
-+      endBlockAfter(*Ret, nullptr);
-+    }
-+
-+    // The pads are plain blocks now and there is no table to emit.
-+    for (MachineBasicBlock &MBB : MF)
-+      MBB.setIsEHPad(false);
-+    // FIXME: prototype. MachineFunction has no way to drop them.
-+    const_cast<std::vector<LandingPadInfo> &>(MF.getLandingPads()).clear();
-+
-+    // What was behind a call that does not return.
-+    for (bool Again = true; Again;) {
-+      Again = false;
-+      for (MachineBasicBlock &MBB : make_early_inc_range(MF)) {
-+        if (&MBB == &MF.front() || !MBB.pred_empty() || MBB.hasAddressTaken())
-+          continue;
-+        while (!MBB.succ_empty())
-+          MBB.removeSuccessor(MBB.succ_begin());
-+        MBB.eraseFromParent();
-+        Again = true;
-+      }
-+    }
-+    return true;
-+  }
-+};
-+
-+} // namespace
-+
-+char BPFUnwindPrepare::ID = 0;
-+char BPFUnwindLower::ID = 0;
-+
-+ModulePass *llvm::createBPFUnwindPreparePass() { return new BPFUnwindPrepare(); }
-+FunctionPass *llvm::createBPFUnwindLowerPass() { return new BPFUnwindLower(); }
-diff -ruN a/llvm/lib/Target/BPF/BTFDebug.cpp b/llvm/lib/Target/BPF/BTFDebug.cpp
---- a/llvm/lib/Target/BPF/BTFDebug.cpp	2026-09-16 22:24:30.000000000 +0000
-+++ b/llvm/lib/Target/BPF/BTFDebug.cpp	2026-10-17 18:08:10.169807195 +0000
-@@ -1645,6 +1645,10 @@
-     FuncTypeId = processDISubprogram(SP, ProtoTypeId, Scope);
-   }
- 
-+  // Tell the kernel which functions say in r3 how they return.
-+  if (!MF->getFunction().doesNotThrow())
-+    addType(std::make_unique<BTFTypeDeclTag>(FuncTypeId, -1, "unwind"));
-+
-   for (const auto &TypeEntry : TypeEntries)
-     TypeEntry->completeType(*this);
- 
-diff -ruN a/llvm/lib/Target/BPF/CMakeLists.txt b/llvm/lib/Target/BPF/CMakeLists.txt
---- a/llvm/lib/Target/BPF/CMakeLists.txt	2026-09-16 22:24:30.000000000 +0000
-+++ b/llvm/lib/Target/BPF/CMakeLists.txt	2026-10-17 18:08:10.169807195 +0000
-@@ -41,6 +41,7 @@
-   BPFSubtarget.cpp
-   BPFTargetLoweringObjectFile.cpp
-   BPFTargetMachine.cpp
-+  BPFUnwind.cpp
-   BPFMIPeephole.cpp
-   BPFMIChecking.cpp
-   BPFMISimplifyPatchable.cpp
+Fix would be:
 
-Tested on x86 only, in qemu, with unmodified libbpf.
-C with __attribute__((cleanup)) and C++ with try/catch built with -fexceptions:
-guards in three frames, global subprog, callx via a table in rodata,
-16 byte return, catch, bpf_loop() callback load and run.
-A lock without a guard and a callback that unwinds are rejected.
-rustc output with panic=unwind (drop, move, a[i], dyn Trait) compiles
-to the expected asm.
-test_progs and llvm tests were not run.
+diff --git a/tools/testing/selftests/drivers/net/hw/xsk.py b/tools/testing/selftests/drivers/net/hw/xsk.py
+--- a/tools/testing/selftests/drivers/net/hw/xsk.py
++++ b/tools/testing/selftests/drivers/net/hw/xsk.py
+@@ -115,6 +115,16 @@ def _reserve_queue(cfg, undo):
+     return queue
+ 
+ 
++def _disable_atr(cfg, undo):
++    """i40e ATR steers what a TCP connection receives to the queue that it
++    sends from, which can be the zero-copy one, so turn it off until undo."""
++    flags = cmd(f"ethtool --show-priv-flags {cfg.ifname}", fail=False).stdout
++    if re.search(r"^flow-director-atr\s*: on$", flags, re.MULTILINE):
++        priv = f"--set-priv-flags {cfg.ifname} flow-director-atr"
++        ethtool(f"{priv} off")
++        undo.callback(ethtool, f"{priv} on")
++
++
+ def _steer_udp(cfg, undo, ifname, queue, host=None):
+     """Steer the test flow to queue until undo, return False if ifname
+     cannot."""
+@@ -313,6 +323,7 @@ def main():
+         cfg.queue = _reserve_queue(cfg, undo)
+         if cfg.queue is None:
+             sys.exit(SKIP_CODE)
++        _disable_atr(cfg, undo)
+ 
+         cfg.udp_port = rand_port()
+         steered = (_steer_udp(cfg, undo, cfg.ifname, cfg.queue) and
 
-I'm not sure that decl_tag is the best way to tell the kernel.
+> 
+> FD filters take priority over RSS. Suppose XPS picks the last TX queue for
+> the CPU that the DUT xskxceiver runs on. The remote's replies on the
+> control connection would then land on the zero-copy queue.
+> 
+> In TX cases that queue has no fill buffers. Wouldn't the control
+> connection stall, so the case fails or times out depending on CPU
+> placement?
+> 
+> Only a udp4 ntuple rule is installed. Unlike a TCP4 sideband rule, it
+> doesn't disable ATR automatically, and the flow-director-atr private flag
+> is not cleared.
+> 
+> Some drivers gate aRFS on NETIF_F_NTUPLE, which _steer_udp() may turn on.
+> When RFS is configured, aRFS could steer flows the same way.
+> 
+> > +    return queue
+> > +
+> > +
+> > +def _steer_udp(cfg, ifname, port, queue, host=None):
+> > +    """Steer the test flow to queue, return False if ifname cannot."""
+> > +    ntuple = ethtool(f"-k {ifname}", json=True, host=host)[0]["ntuple-filters"]
+> > +    if not ntuple["active"]:
+> > +        if ntuple["fixed"]:
+> > +            print(f"1..0 # SKIP {ifname} does not support ntuple-filters")
+> > +            return False
+> > +
+> > +        ethtool(f"-K {ifname} ntuple-filters on", host=host)
+> > +
+> > +    out = ethtool(f"-N {ifname} flow-type udp4 dst-port {port} action {queue}",
+> > +                  host=host).stdout
+> > +    rule = re.search(r"ID (\d+)", out).group(1)
+> 
+> [Severity: Low]
+> The commit message says:
+> 
+>     A host without ntuple support skips.
+> 
+> and:
+> 
+>     A DUT with fewer than two such queues skips
+> 
+> Here a skip happens only when ntuple-filters is fixed off. There are two
+> other failure cases:
+> 
+> - The feature can be toggled but the NIC rejects the udp4 dst-port rule.
+>   ethtool -N then raises CmdExitFailure.
+> - The output has no "ID N". The re.search(...).group(1) then raises
+>   AttributeError.
+> 
+> Would either of these bypass the skip branch in main()? The run would then
+> error out instead of skipping, and the _unsteer_udp() and "ethtool -X
+> default" calls in that branch would never run. If only the remote rule
+> fails, the DUT rule that was already added would also be left behind.
+> 
+> Similarly, _reserve_queue() runs "ethtool -X equal" with fail=True. A DUT
+> that rejects the RSS table update, such as the pre-X550 ixgbe case above,
+> would crash during setup instead of skipping.
+> 
+> > +    cfg.rules.append((host, ifname, rule, ntuple["active"]))
+> 
+> [Severity: Low]
+> When ntuple-filters was inactive, "ethtool -K ... ntuple-filters on" turns
+> it on before the rule is added. The toggle is recorded only here, after
+> both ethtool -N and the ID parse succeed.
+> 
+> If either of those raises, the toggle is never recorded. _unsteer_udp()
+> turns the feature off only for entries in cfg.rules.
+> 
+> Could ntuple-filters be left enabled on that host after a failed run?
+> Recording the undo right after the toggle would avoid that.
+> 
+> > +    return True
+> 
+> [ ... ]
+> 
+> > +def _setup(cfg, busy_poll):
+> 
+> [ ... ]
+> 
+> > +    fallbacks = [
+> > +        defer(ip, f"link set dev {cfg.ifname} mtu {cfg.dev['mtu']}"),
+> > +        defer(ip, f"link set dev {cfg.remote_ifname} "
+> > +                  f"mtu {cfg.remote_dev['mtu']}", host=cfg.remote),
+> > +        defer(ip, f"link set dev {cfg.ifname} xdpdrv off"),
+> > +        defer(ip, f"link set dev {cfg.remote_ifname} xdpgeneric off",
+> > +              host=cfg.remote),
+> > +    ]
+> 
+> [Severity: Medium]
+> What restores the NIC ring sizes when an endpoint is killed?
+> 
+> xskxceiver changes ring sizes with set_hw_ring_size(). The only restore
+> happens in cleanup_iface(), on normal exit:
 
-Thoughts?
+Addressed in v4 by moving ring changes into  xsk.py . The runner saves the
+sizes and registers their restoration before starting the endpoints, so
+restoration does not depend on endpoint cleanup running.
 
-Eduard,
-pls chime in as well.
+> 
+> tools/testing/selftests/net/lib/xsk/xskxceiver.c:cleanup_iface() {
+>     ...
+> 	if (ifobj_has_cap(ifobj, XSK_CAP_HW_RING))
+> 		hw_ring_size_reset(ifobj);
+>     ...
+> }
+> 
+> xskxceiver has no signal handling, so this restore is skipped in two
+> cases:
+> 
+> - xsk_wait_endpoint_exit() sends SIGKILL to the DUT endpoint after
+>   CASE_TIMEOUT.
+> - timeout(1) sends SIGTERM to the remote endpoint.
+> 
+> These fallbacks cover only the MTU and the XDP detach.
+> 
+> The next endpoint's capability probe in test_xsk.c then adopts the
+> leftover size as its default:
+> 
+> 	if (!get_hw_ring_size(ifobj->ifname, &ifobj->ring)) {
+> 		ifobj_set_cap(ifobj, XSK_CAP_HW_RING);
+> 		...
+> 		ifobj->set_ring.default_tx = ifobj->ring.tx_pending;
+> 		ifobj->set_ring.default_rx = ifobj->ring.rx_pending;
+> 
+> Would a hung ring size case then leave the NIC with a min or max
+> descriptor ring size for the rest of the run, and after it?
+> 
+> > +    return fallbacks
+> 
+> [ ... ]
+> 
+> > +def _run(cfg, local_args, remote_args, ctrl_port):
+> 
+> [ ... ]
+> 
+> > +    try:
+> > +        head, listening = xsk_wait_listen(remote, ctrl_port, LISTEN_TIMEOUT)
+> > +        if listening:
+> > +            local = cmd(local_args, background=True, fail=False)
+> > +            dut_ret = xsk_wait_endpoint_exit(local, "dut", CASE_TIMEOUT)
+> > +    finally:
+> > +        # Even if the DUT endpoint did not run, so that the remote one is
+> > +        # gone before the next case starts.
+> > +        remote_ret = xsk_wait_endpoint_exit(remote, "remote", REMOTE_TIMEOUT,
+> > +                                            head)
+> 
+> [Severity: Medium]
+> Can the DUT endpoint be orphaned here? The finally reaps only the remote
+> endpoint, and xsk_wait_endpoint_exit() kills the process only on a
+> timeout:
+> 
+> tools/testing/selftests/net/lib/py/xsk.py:xsk_wait_endpoint_exit() {
+>     try:
+>         endpoint.process(terminate=False, fail=False, timeout=timeout)
+>     except subprocess.TimeoutExpired:
+>         endpoint.proc.kill()
+>     ...
+> }
+
+Addressed in v4 in the shared helper: interruption kills and reaps the
+endpoint before propagating the exception.
+
+> 
+> When the kselftest runner times out, it sends SIGTERM to the Python
+> process only. _ksft_intr then raises KsftTerminate inside the wait on
+> local, and the exception propagates while local.proc is still running.
+> 
+> ksft_run() catches the exception and runs ksft_flush_defer(). That
+> detaches the XDP program and restores the MTU while the AF_XDP socket is
+> still bound. main() then deletes the ntuple rules and resets RSS.
+> 
+> xskxceiver would keep running after Python exits. It would later run its
+> own cleanup_iface() against state that the runner has already changed.
+> 
+> Should local also be killed in the finally?
+> 
+> > +    return dut_ret, remote_ret
+> 
+> [ ... ]
+> 
+> > +def main():
+> > +    # ksft_run() exits on -l and -h before main() can undo the setup.
+> > +    if "-l" in sys.argv or "-h" in sys.argv:
+> > +        sys.exit(f"{sys.argv[0]}: -l and -h are not supported")
+> 
+> [ ... ]
+> 
+> > +        saved_hugepages = []
+> > +        cfg.hugepages = (xsk_reserve_hugepages(saved_hugepages) and
+> > +                         xsk_reserve_hugepages(saved_hugepages, cfg.remote))
+> 
+> [Severity: Medium]
+> What happens when the remote kernel is built without CONFIG_HUGETLBFS?
+> xsk_reserve_hugepages() starts with:
+
+addressed in v4 and described on veth runner comments
+
+> 
+>     have = int(cmd("sysctl -n vm.nr_hugepages", host=host).stdout)
+> 
+> vm.nr_hugepages exists only with CONFIG_HUGETLBFS (mm/hugetlb_sysctl.c).
+> Without it the sysctl fails, and cmd() raises CmdExitFailure instead of
+> the helper returning False.
+> 
+> The commit message says the UNALIGNED cases are "left out without them".
+> Wouldn't the whole suite abort before ksft_run() instead, leaving the RSS
+> change and ntuple rules in place?
+> 
+> The drivers/net/hw config covers the DUT, but nothing constrains the
+> remote kernel.
+> 
+> > +
+> > +        cases = _get_cases(cfg)
+> 
+> [ ... ]
+> 
+> > +        ksft_run([ksft_variants(cases)(test_xsk),
+> > +                  ksft_variants(cases)(test_xsk_busy_poll)], args=(cfg,))
+> > +
+> > +        xsk_release_hugepages(saved_hugepages)
+> > +        _unsteer_udp(cfg)
+> > +        ethtool(f"-X {cfg.ifname} default")
+> 
+> [Severity: Medium]
+> If main() leaves early, does anything undo the RSS change, the ntuple
+> rules and the huge page reservation? These three calls run only when
+> ksft_run() returns normally, and the setup has no try/finally around it.
+> NetDrvEpEnv.__exit__ doesn't know about cfg.rules or saved_hugepages, and
+> defer() only works inside a case.
+> 
+> Any exception after _reserve_queue() skips all three calls. Some examples:
+
+addressed in v4 via ExitStack introduction, suggested by Bjorn
+
+> 
+> - a CmdExitFailure from ethtool -N on either host
+> - the AttributeError from the rule ID parse
+> - a failing remote sysctl
+> - a failing "xskxceiver -L" in _get_cases()
+> 
+> The "-l"/"-h" guard at the top of main() matches only those exact tokens.
+> ksft_run() parses arguments with:
+> 
+>     opts, _ = getopt.getopt(sys.argv[1:], 'hlt:T:')
+> 
+> This accepts clustered options like "-lt NAME" or "-hl". It also calls
+> sys.exit(1) on a GetoptError, such as an unknown option, --help, or -t
+> with no value. All of these exit from inside ksft_run(), after the setup
+> has already run.
+> 
+> The commit message gives the reason for the guard as:
+> 
+>     so xsk.py rejects -l and -h, on which ksft_run() exits without
+>     returning
+> 
+> sys.exit() raises SystemExit. Would a try/finally around the setup and
+> ksft_run() cover these paths and the -l/-h case as well?
+> 
+> There are two smaller points about the teardown itself:
+> 
+> - "ethtool -X default" installs the driver's default indirection table,
+>   not the one that was in place before the run. A custom table set by
+>   the admin is lost.
+> - If xsk_release_hugepages() fails, for example over ssh, the rule
+>   deletes and the RSS reset after it are skipped.
+> 
+> > +    ksft_exit()
+> 
+> -- 
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014184539.774708-1-maciej.fijalkowski%40intel.com
