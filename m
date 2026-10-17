@@ -1,64 +1,64 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8843BE621
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:41:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E473C3425
+	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 16:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792255314; cv=none; b=Tl22vAjM6INJxkr0oVl3SS5xchgN14ZrMPy7+2zsLPNK/o0iUd6TriAwFB3oJreXtdnndHHNf0oKmFau6pbuoNbCOe1BMjN5yL6ORx7qWGH5hQcPJ+aBF5Nkr9eB6b0UaCW3tyax2uOUHIIcAHquspdn1rROdpnhdHkod2TnYK0=
+	t=1792255321; cv=none; b=ae/pR+RAvg2Km8S1DLoOrCeT75Ka2ZKWuPbDjwSTnir+dfObFgRIBD2KQyhSSJ5IEP9xw4SuOP4Mbn1ayO0ArgfV+IxbP+E3l/leUmDwOVhxM5mlKXeFXcNoo2H/epMhEODvMRDS9EEXv5N/YQWbU9nIKV7F5JWbgUdVvveu1Eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792255314; c=relaxed/simple;
-	bh=R+DPCBEkdgYI6avsD7xgcl46Y6TXpa2aAM83O0WBiXY=;
+	s=arc-20240116; t=1792255321; c=relaxed/simple;
+	bh=Ipp2H/k4dhC+OvxL4abQ0ddlv/D8LJd/EQwSg4r9yo8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hHw+zdhTPUC+IAAVFPcK+k33SWOvgRbCjnU+xGZneLyBiZh3YXHK3P5nsd+i5zDP5QADZ4uLgvEvf09U8QaJTaMk55os2sKBpV7QayKMuF8FVEEzeOyjQmCSesW9zA3jvOcGyw7B3c8wnCOpXKlJNOhff7pIN8m4RzE6i+jreC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ldXI+/CT; arc=none smtp.client-ip=209.85.215.178
+	 MIME-Version; b=BFgsQ9kGIMD5NIIiJsLu5CJl2DnEY0O9SFWnKP/9KdAoY7eGsnZLmURT65EyQeZ32cJLfkW6dfHKbNUMmz7+Mj3uoHE7n1EMEUHXec3vR9Uay9VvlgQ/X8SP+3NvLClE/RoNj/eOEwctYKfKrbrn/69mOTcZLO1GJRBREaMsrvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rdBgT9ns; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ldXI+/CT"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc147d86bebso592485a12.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:41:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rdBgT9ns"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3a706146559so708401a91.2
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 09:41:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792255313; x=1792860113; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792255319; x=1792860119; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WGbfhlZclnf0Sz0zZg2NrkKRp/tNpyz/wz+xRYKuPic=;
-        b=ldXI+/CTCUGRY8L0DoIDVPS8rnOCrQYiT8EKYnGYEQhAJ4FIdxN5VirF2+0z5RmMTa
-         EWbrWk7GwSgFjTrhuGUHxN07nGTkvh6v8EkaEluqdZqfiE7knKLLmJMhZXCbVlxQ2TbG
-         n7woJaROkHSXReglBF6lrUdl9g4oIE4dhYSnEIgpyhzCqQbyp8c+RsyRUtzuqN/syUuM
-         7Q9Atrm3BMtrkvogs6IQWG5NNWEol9OtnUoGS0TwdM4k0B8INWvz7pP/v8aRnQR4QOJX
-         lbF28mxXbJvqOmLHpB3V/t5dM3BZREZ1Fr3q4g6rYmQcPH5m5Rf9GRuqsoUo716FvhU/
-         cD+g==
+        bh=/MIJ1TgjBck3sgThtiZzIAtvcivxjRxzFH1zAg43Pv8=;
+        b=rdBgT9nsm4a46Syd5U8WpPJrfemhqba43yuCcxtD6PTErAcWg8p9hyTjAkZy8yq+YX
+         FRNdjPM52OOmjpi/SeXQQRlE1Y9vkQR0HFlJZItQrwVECpuCQm7pRcSSsgtSHPChM5xs
+         0KxhPpZQipuBot1rglW9potiqcdxCFlGTUka2AE7kgYjYD9Y7XSk4SVa6sILtRZoWhuu
+         HN23giNwu9hAKDu+fkgdLFbWONmzRPqqbPg+KsY7FYFUz4IySN1LCw3C0Ysrg0IOcNj8
+         SMU77FXrG+6vteZQgZ2mTDs/KjC4MgdMBUmHeRZ7QDiaA0qHxCeKal942AyLKbEuAOKP
+         nHCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792255313; x=1792860113;
+        d=1e100.net; s=20260707; t=1792255319; x=1792860119;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WGbfhlZclnf0Sz0zZg2NrkKRp/tNpyz/wz+xRYKuPic=;
-        b=SF3ewx+upu7arxrI/+ub8qHPkB30nWVkWjBSgq1gCTL77JKpmhEStBJHlCDRTR0n4j
-         5wMJClAj9o6mPwq8Y68oL8pJr03YFCflWnLeWmu+y0p2LIEdPqvZ7aPZAkyH99CQfwvx
-         uCX1s4jsma9/a1TzlONDtxpXF67MK2Y8K8Ms9YpBXKaLPst90K2b8Q+8mPM80i2LIS8Y
-         V/ixGOwS9nyNim+yffMrNQALgJlbfPKHb9v5Kdr5RNZ7/sEu8MSJBTGTfLh7yPzGK6dO
-         gMTswlf8q2c57SQHQlrNVDT+CRKkYlXQO+ePGr1vn2TI4yKJtAaRtk8Cy+bY0PzlzE7C
-         m0BA==
-X-Gm-Message-State: AFq9FYLqd5DCDKsfK7kpR9lrzu9kmuLwXkafRJBNgBgq/hS9ttM6D1ly
-	GyWzXg9OhEUja1ZIZh4MTAdnA+qOvWWXVNBWk2+fiqKQnvHVsUSItPOy3dEHgQ==
-X-Gm-Gg: AYBFou2sbjZ3YqY+rmQp6osbX5Y5BBl9rtDdIBrhV2l4qIyiZDS9N1InTX46LLsdaPX
-	58Y3r7BHN8dnxr5Xh9wPOoONIaFJ43SSbUwFuXITPhPbRscHbcYPOvL0ELiKNXyTb94heXEJ3Yf
-	dgeO6YIbqIVfDwjf5qMMe3ekxI6xgzq2qytpwe7jKtqQHn3kOfICxoEG0YFLcbCW40rK42HDZgw
-	zB6rYoJ3XEPFo6bQdFMsSP1H668qdpeOPeKPfLqaxe9S6HwhmxhkS5u0g8lgOtf77m2voWF9N4/
-	G5I1I7Iaxmt8+W0iDnBAvIrRYkxQztMBTaf8+14HZop4i4I42g0dH5Im+gHsYNoOUdNbfrkC1SK
-	IKnnjfZEf4u9+jB02pw1FDNBzIx/dlYbNqoTFvK+Mrk8Lp45B42RbJapVC5WlMOQLm5ftpxe9Qt
-	3VdEnXhsWIAUxp9DSWtvUXW5YqPtl9eI6ifqE9d2tbXkEc7Zul7KvDWy8U1zGIlTcvUH2b7jUJR
-	y5t2Jr8xQG5nEaiOhdMZTchOj+Okk2u2dvLznhZjHNl84i0ft7cfnUM5PBn0unhVmHVFQxsCVl1
-	YfDjDZa2yDuFKZqSjGNs7rktI5KYpxhg8vyo7x59jfHx5rLoPdDHlpg=
-X-Received: by 2002:a05:6a21:7e82:b0:3e2:2b6c:2e7 with SMTP id adf61e73a8af0-3e22b6c0795mr1299944637.28.1792255312990;
-        Sat, 17 Oct 2026 09:41:52 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd6549ee946sm2277863a12.20.2026.10.17.09.41.52
+        bh=/MIJ1TgjBck3sgThtiZzIAtvcivxjRxzFH1zAg43Pv8=;
+        b=QLLTgsFaD6SqCu49ZlC42651kiTZCC0OHMR/t0zktkO0ekXdOw99odRuEvSIcQYWUg
+         wMIuiKgMrbMwj/fLud9OdEEbL7HrcQVPt9nrVpEuQNmExXzusSoCHkKMWogCk5yWR8JU
+         d1m2sgKHBuQw0NTnIHAuJag7uYTKt2SiE5T+QXo37Go2g2i4FhTNKOp/yg/Kpuo1ZYnJ
+         PX3HGvCw3zrgoxOyX/TL+RN/HOYYlyhLkXnRmCyA448wTXwy7jZ5HpJFTMxwouALDdtY
+         FEqZmwb79moo0rH9SPL/tVdUem4A17pQK3qMRlAHHCz0c/291DiaTgErIIhYLZ5JWWim
+         YE7w==
+X-Gm-Message-State: AFq9FYLZoGnHtXR6Zy79df4MFfpmEpFNihsDcG6VUuM0gp7hgNhqzRpe
+	i1zLl8/9LYUOBMiR5//AbnFburuW+V7qX6+LITxe44GJhZipk+tUtDQDtZFj7w==
+X-Gm-Gg: AYBFou0ATzN/X+0t2tgwg89QMwBImXrera92AOACkuZRMzqpsjRyhF3TKZwdAGSAkMI
+	fVHwuOd8/gvvmkMU7r0+yJ55AjU6ZCXdfzOvAbXHAqzKDnF1Hs/RaqZeJbrrM/W5p23zYAFRS5x
+	bCKgU6LMLmib0VUnDfw5nRX1CsiPlq+0WmyxfXAoOJ97QinjGuuh4pVHFT6KuNM6lic3iH7H0lz
+	SUm59Eu5PV25cMJqqNqTmo0qSQjJe3zCm2mAJ0hi8TC4lIsP0hYdhmpi0f/YKcqDw7EcBtb1uTU
+	iphrKfiCEdpKUQRfJNnYyrK4wfKlK19mek6WIDLXJi+qWAoo+jiWkYTmt1fjI8iqQo2BoEbu3Ov
+	iN+Folr2cBal/Hs/4Vmh7nVl7ROWoFyWaclfaBAcKizRhQSIG+8MQ8xF5Qz5BS4pqP49lPQ6vNx
+	d9P4go+UtVmOE6jVpJXBA0kz8SNvSn8JFy0ksZu6TDhvnbVGIX8uoBtBVQ7k27IuATbckQT2iDg
+	Dgf0BwxQaIUzMk9b5iNWsKeS+E0w2ZNlBPxvZOFVxD+dkkJwS5td0l80TnjBl4aP2m9XC83Q32i
+	fXgFcEfKYg5zlxt3ihdgpJnelzxmndGVrHwKs11ejWc=
+X-Received: by 2002:a17:90b:1d0a:b0:3a7:8c68:6446 with SMTP id 98e67ed59e1d1-3acef651a94mr2954994a91.63.1792255318889;
+        Sat, 17 Oct 2026 09:41:58 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac947dfa00sm13718983a91.17.2026.10.17.09.41.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 09:41:52 -0700 (PDT)
+        Sat, 17 Oct 2026 09:41:58 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	netdev@vger.kernel.org,
 	josef@toxicpanda.com,
 	mason@kernel.org
-Subject: [PATCH bpf-next v2 40/43] bpf: Unclone the skb for kfuncs that write through a dynptr
-Date: Sat, 17 Oct 2026 16:37:42 +0000
-Message-ID: <20261017163745.3341787-41-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 41/43] bpf: Follow the head if an skb is written from a slice
+Date: Sat, 17 Oct 2026 16:37:43 +0000
+Message-ID: <20261017163745.3341787-42-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
 References: <20261017163745.3341787-1-alexei.starovoitov@gmail.com>
@@ -82,49 +82,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Josef Bacik <josef@toxicpanda.com>
 
-bpf_dynptr_copy(), bpf_dynptr_memset() and the kfuncs that read user or
-kernel memory into a dynptr ask bpf_dynptr_slice_rdwr() for a slice and
-write to it.  For the linear part of an skb that is a pointer into its
-head.  bpf_dynptr_slice_rdwr() counts on the verifier to have uncloned the
-skb, see bpf_unclone_prologue().
+The source of bpf_dynptr_write() may be a slice of the skb which is
+written to, that is a pointer into its head. bpf_dynptr_copy() does it by
+itself for a copy inside of one skb, if the source is linear and the
+destination is not.
 
-The verifier does so if the program itself calls bpf_dynptr_slice_rdwr()
-or writes to the packet.  A program that only uses these kfuncs gets no
-prologue, and changes the data of all the clones of the skb.  A packet
-socket, whose clone is taken before tc ingress runs, sees what
-bpf_dynptr_memset() has written there.
+__bpf_skb_store_bytes() and __bpf_skb_meta_store_bytes() make the skb
+writable first. If that reallocates the head, the source points to the old
+one, and freed memory is copied into the packet.
 
-Treat a call that may write to an skb like a direct write.
+The offsets in the head do not change when it is reallocated here. Move
+the source along with the head.
 
-Fixes: daec295a7094 ("bpf/helpers: Introduce bpf_dynptr_copy kfunc")
-Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
-Fixes: 5fc5d8fded57 ("bpf: Add bpf_dynptr_memset() kfunc")
+Fixes: 2012c867c800 ("bpf: verifier: Accept dynptr mem as mem in helpers")
+Fixes: f38499ff45f5 ("bpf: Unclone skb head on bpf_dynptr_write to skb metadata")
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ net/core/filter.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d384b9ec3d93..47e2969928a4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15689,6 +15689,14 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	    bpf_is_kfunc_pkt_changing(&meta))
- 		clear_all_pkt_pointers(env);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 15354134091a..12a5e530a81b 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1715,6 +1715,24 @@ static inline void bpf_pull_mac_rcsum(struct sk_buff *skb)
+ 		skb_postpull_rcsum(skb, skb_mac_header(skb), skb->mac_len);
+ }
  
-+	/*
-+	 * These kfuncs write to the head of the skb in place if what they write
-+	 * to is linear. Like a direct write that takes bpf_unclone_prologue().
-+	 */
-+	if (is_kfunc_dynptr_write(&meta) &&
-+	    dynptr_write_changes_pkt_data(meta.dynptr_write_type))
-+		may_access_direct_pkt_data(env, NULL, BPF_WRITE);
++/*
++ * The source of a write through a dynptr may be a slice of the same skb.
++ * Making the skb writable can move its head: follow the move.
++ */
++static int bpf_try_make_writable_from(struct sk_buff *skb, u32 write_len,
++				      const void **from)
++{
++	const void *head = skb->head;
++	bool in_head = *from >= head &&
++		       *from < (const void *)skb_end_pointer(skb);
++	int err;
 +
- 	proto_slots = kfunc_abi_slots(&desc->func_model);
- 	if (proto_slots > MAX_BPF_FUNC_REG_ARGS) {
- 		struct bpf_func_state *caller = cur_func(env);
++	err = bpf_try_make_writable(skb, write_len);
++	if (!err && in_head)
++		*from = skb->head + (*from - head);
++	return err;
++}
++
+ BPF_CALL_5(bpf_skb_store_bytes, struct sk_buff *, skb, u32, offset,
+ 	   const void *, from, u32, len, u64, flags)
+ {
+@@ -1724,7 +1742,7 @@ BPF_CALL_5(bpf_skb_store_bytes, struct sk_buff *, skb, u32, offset,
+ 		return -EINVAL;
+ 	if (unlikely(offset > INT_MAX))
+ 		return -EFAULT;
+-	if (unlikely(bpf_try_make_writable(skb, offset + len)))
++	if (unlikely(bpf_try_make_writable_from(skb, offset + len, &from)))
+ 		return -EFAULT;
+ 
+ 	ptr = skb->data + offset;
+@@ -12427,7 +12445,7 @@ int __bpf_skb_meta_store_bytes(struct sk_buff *skb, u32 offset,
+ {
+ 	if (unlikely(flags))
+ 		return -EINVAL;
+-	if (unlikely(bpf_try_make_writable(skb, 0)))
++	if (unlikely(bpf_try_make_writable_from(skb, 0, &from)))
+ 		return -EFAULT;
+ 
+ 	memmove(bpf_skb_meta_pointer(skb, offset), from, len);
 -- 
 2.55.0
 
