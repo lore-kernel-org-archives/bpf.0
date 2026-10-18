@@ -1,133 +1,196 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E14397B1C;
-	Sun, 18 Oct 2026 16:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C4D36B907;
+	Sun, 18 Oct 2026 16:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792339545; cv=none; b=ExNBFVRZWt3kCu9lvjZ0v7KAQj9DR0cvmaD3VYlG5qbGnHudpr0xYn01uiTCPkgblQDolGHmRmhgbXm3scc24hQ26msVcwKjDtarG0NOo82yQSsJ1tT2viLC6hf4qKC7Jfazu5ZrPBbWQP9NfIWWOvTzPhspruf6+mCZHKXZ7Ss=
+	t=1792340158; cv=none; b=Me8XVTwSMPESA3Lxww19w8UFuK7QnEXVmOU0UOhoJGh4LuKp9euhOi1RefA3gNBWfEGo2mjJ0ayaXkIV+L7p+aAkEIpcz+x7zAURYhM9kVl/YXqei9XWgxCurjhNCOTY8BHASQOUoU8Ku5AB1CGtLHPqsmQFTWGrJLzXeCRl+MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792339545; c=relaxed/simple;
-	bh=I3mFYRlW1cJ+rcMolecnK2+xja8HIP1Uxg7ZuT8jr7s=;
+	s=arc-20240116; t=1792340158; c=relaxed/simple;
+	bh=gO8Jv3kBbkekLp0M0ToCtUaXdXIZSPp3XpJ2V7vrXaY=;
 	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=QoypQ9/qPRxyFyJXSAwqfAYNGiaAPmaLuElQEhRl7aDlU6EJ4FtG+hfcMf5urRDj0v6Uctr2iY8uzx59BigxLe5L9aXlc1FHisxS4ffnlhY17GZxIx9E/xaV94wNIuYACOMnZ0bXj+Ve9dMbHTVW/yNmZ+yfaaMohNUCi2vxq7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALyqpG/U; arc=none smtp.client-ip=100.103.45.18
+	 Date; b=ps6l2Tfr6Iyw0Q9WMuSs4u5UNOCEQ1ZbAsbR/nJE0V99UAOJrPe/yGjXsUny+1zub3L+YD7rdaOoEUrrly5FlQRprJkEtkhaspvBNJ3PwsF912XgoVjTj/lun7+Rya4dGsr6PnwEyUpenRJ2M2CmAtCREyVJFLhjWpTQesNtUtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAqnKEVk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALyqpG/U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B2FD1F000C4;
-	Sun, 18 Oct 2026 16:05:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAqnKEVk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F94A1F000C4;
+	Sun, 18 Oct 2026 16:15:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792339542;
-	bh=Dj1iI/xVu8BjBO3XWtXsWJGOXPBDkz4MynJLZwJ+/n0=;
+	s=k20260515; t=1792340157;
+	bh=RaZ7YViG/iKDytKYEsZTHi1ga7iOXJlQndUMyv3+wMs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ALyqpG/UXqKELLjmI8iR9l2Q8+foCjR2CFD2+ei96Aw4z+Wnc55k5vML0FqHTHkVf
-	 RmKwzaFca8Pw9+u/aVGuyy4+QOOmeHMD94ZKUUd/erRIvVZE2LWJiGxX+RzRvVcRFa
-	 GT9gDGU71xFc482IpVgHD5MVEuxU+e0oCUIZfDCOCPgemwDRhSD7S6hB9LHv+YcbCO
-	 XIRKpvIDxbCR7pTwNZKrlr0BD6JNJ36V/ZvuKwVvMgAcM1gwS7cFFPHHadG1CYjUiP
-	 rICHf2D+r45Bt27Lr7QXujR17XPjMlm1DNx57chBLjcZOVDx56tJKKDlGtK7aYxb+Z
-	 w530UEkqaoPcA==
-Message-ID: <sashiko-outbox-176260@kernel.org>
+	b=iAqnKEVkG2SdAI4pTKrRiACJ9ErDgGzKowde85LNyEFcAYAZ9gRbF1BWzoMkIdU95
+	 ghBT94l7yw0gUPwTnym9XLMv4Q+90TaqIiL6wwWXUo5kp2KeKtaKMnzZ12Zje8wo1N
+	 WxpFSQ5c6k1ZJLqDHG9zuSut3JkxX35pFhON9nGH7ETZMVe9bHbhOFSRgcytV0Xyie
+	 yTE09g8EzKf38wQHwlVX0tDZ2tu0kMUvT+ppg82W4/WTwG1JYiK1VFOflAt1IyxCpk
+	 3XpgNBYgFoyKZ5xZ9H0voAJMRCvHKMTZXFBZtiTcL7vGraKF9fF8IJJXtbVOGcyHQ0
+	 PWG/an5iAzt8w==
+Message-ID: <sashiko-outbox-176273@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 14/15] kallsyms: scripts/kallsyms: Reduce the output
- file size
+Subject: Re: [PATCH v2 next 06/15] kallsyms: Optimise symbol name search
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "David Laight" <david.laight.linux@gmail.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Petr
  Mladek" <pmladek@suse.com>, "Kees Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, "Jim
  Cromie" <jim.cromie@gmail.com>, "Lorenzo Stoakes" <ljs@kernel.org>
 Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, "Steven
  Rostedt" <rostedt@goodmis.org>, nathan@kernel.org, nsc@kernel.org
-In-Reply-To: <20261018155206.132411-15-david.laight.linux@gmail.com>
+In-Reply-To: <20261018155206.132411-7-david.laight.linux@gmail.com>
 References: <20261018155206.132411-1-david.laight.linux@gmail.com>
- <20261018155206.132411-15-david.laight.linux@gmail.com>
+ <20261018155206.132411-7-david.laight.linux@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 18 Oct 2026 16:05:41 +0000
+Date: Sun, 18 Oct 2026 16:15:56 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] kallsyms: NULL dereference and offset mismatch in write_src() on u=
-nused tokens
+- [High] kallsyms: race in set_kallsyms_off_size() causes NULL dereference
+- [High] kallsyms: set_kallsyms_off_size() sleeps in atomic context
 --
 
-commit 20102d6e3b81d88a59f6ac3b9732c8a7b28d3f98
+commit d36232e927821c82911022ce5bae7cb3de465edd
 Author: David Laight <david.laight.linux@gmail.com>
 
-kallsyms: scripts/kallsyms: Reduce the output file size
+kallsyms: Optimise symbol name search
 
-This commit reduces the size of the assembly output generated by
-scripts/kallsyms by formatting byte values in decimal, packing multiple
-values per line for kallsyms_token_index and kallsyms_markers, moving the
-token tables first, and replacing duplicate symbol name comments with
-symbol offsets.
+This commit optimizes symbol name lookups by indexing the compressed
+names table directly instead of the array of symbol values. It supports
+both 24-bit and 32-bit offset tables, selecting between them using a
+static branch initialized on the first symbol lookup.
 
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 189fb50ec8c58..8576fe6ad90b7 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -350,6 +350,30 @@ static void write_src(void)
->  	struct sym_entry *se;
-> =20
->  	printf("\t.section .rodata, \"a\"\n");
-> +	printf("\n");
-> +
-> +	output_label("kallsyms_token_table");
-> +	off =3D 0;
-> +	for (i =3D 0; i < 256; i++) {
-> +		best_idx[i] =3D off;
-> +		off +=3D token_table[i].len + 1;
-> +		printf("\t.asciz\t\"%s\"\t/* %u: %u */\n",
-> +		       token_table[i].str, i, token_table[i].refs);
-> +	}
-
-[Severity: High]
-Can token_table[i].str be NULL here when fewer than 256 tokens are
-populated?
-
-During pass 0 of a CONFIG_KALLSYMS=3Dy build, scripts/link-vmlinux.sh runs
-scripts/kallsyms on an empty symbol file:
-
-scripts/link-vmlinux.sh:kallsyms_step() {
-    ...
-    if is_enabled CONFIG_KALLSYMS; then
-        true > .tmp_vmlinux0.syms
-        kallsyms .tmp_vmlinux0.syms .tmp_vmlinux0.kallsyms
-    fi
-    ...
-}
-
-When symbol_cnt is 0 (or whenever the input symbols do not populate all
-256 entries), insert_real_symbols_in_table() leaves token_table[i].str as
-NULL and token_table[i].len as 0 for unreferenced tokens:
-
-scripts/kallsyms.c:insert_real_symbols_in_table() {
-    ...
-    for (i =3D 0; i <=3D 255; i++) {
-        if (!token_table[i].refs)
-            continue;
-        token_table[i].len =3D 1;
-        token_table[i].str =3D xmalloc(2);
-        token_table[i].str[0] =3D i;
-        token_table[i].str[1] =3D 0;
-    }
-}
-
-In optimize_result(), find_best_token() then returns -1 and breaks out of
-the loop before filling the remaining unused tokens.
-
-When write_src() passes token_table[i].str to printf("%s"), isn't that
-undefined behavior that segfaults on non-glibc hosts (such as musl)? Also,
-on glibc hosts where printf("%s", NULL) outputs "(null)" (7 bytes
-including the NUL terminator in .asciz), off is only incremented by
-token_table[i].len + 1 (1 byte), which mismatches the actual size emitted
-into kallsyms_token_table and corrupts the offsets recorded in best_idx[].
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index d18d78e626db2..31451feac8221 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
 
 [ ... ]
 
+> @@ -185,14 +216,19 @@ unsigned long kallsyms_sym_address(int idx)
+>  	return (unsigned long)offset_to_ptr(kallsyms_offsets + idx);
+>  }
+> =20
+> -static unsigned int get_symbol_seq(int index)
+> -{
+> -	unsigned int i, seq =3D 0;
+> +static DEFINE_STATIC_KEY_TRUE(kallsyms_off_size_24);
+> =20
+> -	for (i =3D 0; i < 3; i++)
+> -		seq =3D (seq << 8) | kallsyms_seqs_of_names[3 * index + i];
+> +static inline unsigned int get_symbol_name_offset(unsigned long index)
+> +{
+> +	if (static_branch_likely(&kallsyms_off_size_24))
+> +		return kallsyms_off24_of_names[index].v;
+> +	return kallsyms_off32_of_names[index];
+> +}
+> =20
+> -	return seq;
+> +static void set_kallsyms_off_size(void)
+> +{
+> +	if (kallsyms_off_size !=3D 24)
+> +		static_branch_disable(&kallsyms_off_size_24);
+>  }
+
+[Severity: High]
+Can calling static_branch_disable() in set_kallsyms_off_size() sleep in
+an atomic or early-boot context when kallsyms_off_size !=3D 24?
+
+static_branch_disable() calls static_key_disable() in
+kernel/jump_label.c, which acquires cpus_read_lock() and
+jump_label_mutex:
+
+kernel/jump_label.c:static_key_disable() {
+	cpus_read_lock();
+	static_key_disable_cpuslocked(key);
+	cpus_read_unlock();
+}
+
+However, kallsyms_lookup_name() -> kallsyms_lookup_names() can be called
+first from contexts where sleeping is not allowed:
+
+- lib/codetag.c:get_symbol() calls kallsyms_lookup_name() under
+  preempt_disable():
+
+	preempt_disable();
+	ret =3D mod ?
+		(void *)find_kallsyms_symbol_value(mod, buf) :
+		(void *)kallsyms_lookup_name(buf);
+	preempt_enable();
+
+- mm/alloc_tag.c:alloc_tag_sec_init() calls kallsyms_lookup_name() during
+  start_kernel() -> mm_core_init() while interrupts are disabled and
+  before poking_init().
+
+- Non-sleepable runtime or debugger callers such as
+  bpf_kallsyms_lookup_name(), kdbgetsymval(), and xmon also invoke
+  kallsyms_lookup_name().
+
+> =20
+>  static int kallsyms_lookup_names(const char *name,
+> @@ -201,15 +237,16 @@ static int kallsyms_lookup_names(const char *name,
+>  {
+>  	int ret;
+>  	int low, mid, high;
+> -	unsigned int seq, off;
+> +	unsigned int off;
+> +
+> +	DO_ONCE_LITE(set_kallsyms_off_size);
+> =20
+>  	low =3D 0;
+>  	high =3D kallsyms_num_syms - 1;
+> =20
+>  	while (low <=3D high) {
+>  		mid =3D low + (high - low) / 2;
+> -		seq =3D get_symbol_seq(mid);
+> -		off =3D get_symbol_offset(seq);
+> +		off =3D get_symbol_name_offset(mid);
+
+[Severity: High]
+Does DO_ONCE_LITE(set_kallsyms_off_size) allow a concurrent caller to
+dereference NULL in get_symbol_name_offset() when kallsyms_off_size =3D=3D =
+32?
+
+In scripts/kallsyms.c:write_src(), only kallsyms_off24_of_names or
+kallsyms_off32_of_names is emitted, and both are declared __weak in
+kernel/kallsyms_internal.h:
+
+extern struct { unsigned int v:24 __packed; } __packed kallsyms_off24_of_na=
+mes[] __weak;
+extern u32 kallsyms_off32_of_names[] __weak;
+
+When kallsyms_off_size =3D=3D 32, kallsyms_off24_of_names resolves to NULL,
+while kallsyms_off_size_24 starts enabled via
+DEFINE_STATIC_KEY_TRUE(kallsyms_off_size_24).
+
+In include/linux/once_lite.h, __ONCE_LITE_IF() sets __already_done =3D true
+before executing set_kallsyms_off_size() and does not wait for it to
+finish:
+
+		if (unlikely(__ret_cond) && unlikely(!__already_done)) {
+			__already_done =3D true;
+			__ret_once =3D true;
+		}
+
+If two CPUs call kallsyms_lookup_names() concurrently for the first time
+while the first CPU is still inside set_kallsyms_off_size() ->
+static_branch_disable(&kallsyms_off_size_24), the second CPU sees
+__already_done =3D=3D true and proceeds directly to
+get_symbol_name_offset(mid). Since kallsyms_off_size_24 has not been
+patched yet, get_symbol_name_offset() evaluates
+kallsyms_off24_of_names[index].v and dereferences NULL.
+
+[ ... ]
+
+>
+>
+>
+>
+>
+
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261018155206.1324=
-11-1-david.laight.linux@gmail.com?part=3D14
+11-1-david.laight.linux@gmail.com?part=3D6
