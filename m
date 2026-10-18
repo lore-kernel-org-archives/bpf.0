@@ -1,56 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444823914E2;
-	Sun, 18 Oct 2026 03:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C05349CFD;
+	Sun, 18 Oct 2026 03:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792294141; cv=none; b=pqoFE2ooxeiwg1DawVM3SIf5QkuXt8dPnBuEI+yNSDUAtaMajJWOQfKynQx3wADmMgTJOw7iFfWJn9ViM0ehv43dWTnLHssyvoLBFevLJtOgg0nyUVw/BR9zbID0fSDjHSSHYGNZsz9eKirdJJa8lU3d5v787STjwConLKS3Phc=
+	t=1792295221; cv=none; b=ayF7K3A/oR/rpmUiZbfvU1RPkdwXDnv9FZRpUB5TzHkfCXCYjDAj4t2LwV6A5uDqt60G/8/og0O5z4R1rT9t6J1zFQYUaHTtjUuRT2j7IhWYgH2pDdil7ehlZG5AIahMZXYaYQGae2LaZ14TzA/WBj7JGeC1e85F0/5c8kTCA1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792294141; c=relaxed/simple;
-	bh=F+Hq0GMwdlaQdyJkkOLy2FYTmXa++UKxr1RzWfqR9Qk=;
+	s=arc-20240116; t=1792295221; c=relaxed/simple;
+	bh=TnlLL+kSdfBTHy2er0Odwu5fnbzTG2kKx5edc0IjVR4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iFMNBCm6wW7TsatzRtBF8X84/fnD8ixhROG9ZF0NiRd0lUHlc+DEIkOTweAHNR8gk8b6Djwu7pdrjgpGFkUbcY6oEPz/Hf8DL8zc0C/K75B4Ev4zbiWI40RY85d/wM/u2uYTxDEp2SkH20ZKwNYCZFJdhu8Rk2DydzRPo+5pNk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GGYJafbg; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZVjFx/IiDjDcMJbwCVJCUW7duIbOzp5c7q89QF23RAR1RNJy24bA4H50QA37jTM85hPNtGbDGzAqQA0dZ/mHrC2cBXfYDj4QE7Ba5asg8durqsjexS8rTdRi9mMi+Y4HfnV7OA2NPmuY7aZeG0ecIT4w1xuvVHU9kS3ei9Oub4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=czC7Xa9Z; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GGYJafbg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="czC7Xa9Z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792294138; x=1823830138;
+  t=1792295219; x=1823831219;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=F+Hq0GMwdlaQdyJkkOLy2FYTmXa++UKxr1RzWfqR9Qk=;
-  b=GGYJafbgbKrmhVqtLIfWe3CF0RhVTtyDkP1yTQAXZuvF95OScm+pdHws
-   mAEHV6Wd4BVpnW7H3YsKJYVGBkYqczonKf//UKouuy4U5zYutN8lGAkzQ
-   Hv6fwQoT21KChfnVE/vFDG/MVyzQ7Gvlsxeni4LrnatHuUZigFr2Frb8r
-   Xw+jRd+Mn57DZBidnUR2kPVPIbz1yJrloWXkN63/7umHURmie6B8k91tK
-   5lsIMAqPPILFig+X3ouQgZWF8FRf84spYcmgpIxhkw0N3T4JYLlstgOwp
-   +LmjJw0k0ePuo0D48d6QJEzSlv7QtxwdMn7QYRpj1B99JSgkCIGPCK98A
-   Q==;
-X-CSE-ConnectionGUID: u2dcIjv7QSW5qhbvfeGsNQ==
-X-CSE-MsgGUID: BRzNgwMSQkOgNQramYCcsw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11938"; a="1033961"
+  bh=TnlLL+kSdfBTHy2er0Odwu5fnbzTG2kKx5edc0IjVR4=;
+  b=czC7Xa9ZidUefzFlLchxLeSfFl6QnuJSsb0gv7LthD6hwnhY75juwP9u
+   L/Fz2kzYmyU4U/8/bXfaGdZiQlDdLUdoLoSFvCSvMCRuFK1ViF1xNDEyN
+   F9075apFBNsqIn5J7oPwSiXSyzCRX51Q3idWnXvLZ6fn6BDaOYZRki67r
+   gdchq9177HZ7ZrGZzl2FtWMIoH0BlUUfOuxpN2a/2y/5FFJIaMEtQUrZE
+   6ZChDrOEx4+Dcy1gqHobe33QoJAhBk5VtdMsyqS8UlSRXTzlfHBnM9330
+   Xon1OK1V6QPJgxgj4mdrvRudKLrRnzHeYL6IqRnyDPUXHbeDfZAUd7NB0
+   w==;
+X-CSE-ConnectionGUID: IGl1/o0ARWqwL2uE06E2tA==
+X-CSE-MsgGUID: 7sr/zAhYQJOOCESgxMTgEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11938"; a="1028947"
 X-IronPort-AV: E=Sophos;i="6.27,165,1787036400"; 
-   d="scan'208";a="1033961"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 20:28:57 -0700
-X-CSE-ConnectionGUID: H2kq8ComQM28lxHqC8d2EA==
-X-CSE-MsgGUID: K2jZON5XSQWVuvrP1P0Z7w==
+   d="scan'208";a="1028947"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 20:46:59 -0700
+X-CSE-ConnectionGUID: Xv/bWGnITGedwc8FCp+V6g==
+X-CSE-MsgGUID: pKi0NCHdTgiiAjuihecQWg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,165,1787036400"; 
-   d="scan'208";a="2246898"
+   d="scan'208";a="4018129"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 17 Oct 2026 20:28:52 -0700
+  by fmviesa013.fm.intel.com with ESMTP; 17 Oct 2026 20:46:53 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xIHZo-00000000K2M-0QN0;
-	Sun, 18 Oct 2026 03:28:48 +0000
-Date: Sun, 18 Oct 2026 11:28:29 +0800
+	id 1xIHrF-00000000K3C-0HEZ;
+	Sun, 18 Oct 2026 03:46:49 +0000
+Date: Sun, 18 Oct 2026 11:46:48 +0800
 From: kernel test robot <lkp@intel.com>
 To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Andrew Lunn <andrew+netdev@lunn.ch>,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -79,7 +80,7 @@ Cc: oe-kbuild-all@lists.linux.dev, Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH bpf-next 2/6] bpf: Add syscall common attrs support for
  xdp link_create
-Message-ID: <202610181150.jL2DnHl7-lkp@intel.com>
+Message-ID: <202610181115.hv8jYAxy-lkp@intel.com>
 References: <20261017142649.51047-3-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -101,20 +102,21 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Add-syscal
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
 patch link:    https://lore.kernel.org/r/20261017142649.51047-3-leon.hwang%40linux.dev
 patch subject: [PATCH bpf-next 2/6] bpf: Add syscall common attrs support for xdp link_create
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20261018/202610181150.jL2DnHl7-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261018/202610181150.jL2DnHl7-lkp@intel.com/reproduce)
+config: um-defconfig (https://download.01.org/0day-ci/archive/20261018/202610181115.hv8jYAxy-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261018/202610181115.hv8jYAxy-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610181150.jL2DnHl7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610181115.hv8jYAxy-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
+   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
    /usr/bin/ld: net/core/dev.o: in function `bpf_xdp_link_attach':
->> net/core/dev.c:10789:(.text+0x96f9): undefined reference to `bpf_log'
-   collect2: error: ld returned 1 exit status
+>> net/core/dev.c:10789:(.ltext+0xcb71): undefined reference to `bpf_log'
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 
 vim +10789 net/core/dev.c
