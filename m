@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2300F248896;
-	Sun, 18 Oct 2026 15:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B34239E9B;
+	Sun, 18 Oct 2026 15:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792337410; cv=none; b=XmpN3xfIVpol3blyoOXU3amiDn9j1TucP3Dmsq4C3OOrxVcjRvdocUXaL45uCHH10jI784QUDfzJjLTH6zo3ikZ9c7TU1NfWPO4bPWgxPyEM85hkUcNMlZmiMQrGhGj0LHd1BQzIPn8H6mcCZci2hQssoi6WmXm2ofTzUNPEfjg=
+	t=1792337413; cv=none; b=GHgXeBoQ+Li2bdMLDob4jxrku+6bb3T6Cg4yB1ZUn1l3VwvsHXbFEPhInRR2ThWtLqFtT1IULbjoH85brGTNdSpapME3j3sW523lh5ROP+6Ub24HQiub4FM20sY2LPWbmsF9vN/bXF41WAkjuL0N0YAXwTeGFWGWQlp792dgxiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792337410; c=relaxed/simple;
-	bh=tEoKc/rPp06pgCmkkNlYeQ9XL85I/oLfL04UNlC4lPc=;
+	s=arc-20240116; t=1792337413; c=relaxed/simple;
+	bh=uVhzQOhsRrNM/U+yQpyrSYEnMZ+vGmBrIZZVcz4jmY8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=h9f8oGtl78s+RF3dB2A4QUgsbNksmi6t4UjtpM4PvJfcx3MHvbiQnFMKNr/cRuKsugs/mCrGLP8J5Rl3pJ/7eOCXm/FEo+0XTUstzIKfxgWUJM/+YpFxn0LuIRspVB4r9dQOYhVScVRPPYSPVi1Fv2j0TmIxNi3T/gTSFF5H7js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YDMCNere; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=BvXadnjSjJAI4ZcA0MZ4oXo+eyqegeJY/i3Frv6Ktp6QT81yWcHDjBhIQld/4bTFm1ChImLyBd7y2uUPnoJVisqiCgbsyspAOfwo/Q3awW+lL7E5FG8pYTIdbtOxREbpALD4Vn060NHr8o+UWZ+sR4XrImHgce4/v19GCGUjCJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vw9nSQSC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YDMCNere"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FE31F000C5;
-	Sun, 18 Oct 2026 15:30:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vw9nSQSC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C087A1F000C4;
+	Sun, 18 Oct 2026 15:30:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792337407;
-	bh=Xw8tjepwG9FbE8Kip96v7ZhTRyp+FxNpGTh3m86oNyU=;
+	s=k20260515; t=1792337408;
+	bh=q/HR72gFHItCPfFgx3/JNMsaaf8Rwbc8aR6XfNrkGN0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=YDMCNerekJVBGfPJvnMKEH2m/CMasLLWT0MAbHhRCNn8JxjyLFkHfwpov47ofzW41
-	 xwx1Kiwaoiuad9NVRQoHGzofYrWPJa6WvonfO1v1QVSkOJuSHmLgSMXRB9XuK07ywH
-	 TLtWB66VtCSwpvK8M3KpvWwVzjDRALq/fFWSL13yA/u/L8T7d/BBZ+RwaZSzBZHkRe
-	 VLOeoH+ipeobjzSXUX1zAl3avYgEisiJFDyAHWs5+j8X1zl26dwDoTZxJAmxPERM3J
-	 DuGgXE1A/tIFLjd8IUOvVJC0gAMdshtk/DJChPC9qTZ5mEdAbDMgl7xkKt+cdT7TWp
-	 74Aq4zsDaEzYg==
+	b=Vw9nSQSC57W4Dp3DEjbpItFVPTV0+spJ/pxmA4kAzpDp/PsG8ziHOZKCtTUAum5Pm
+	 Igy5aqp0DuFifO8L1N6Md+awcVMSH03l83pL1CWACeuB5JySq8nsofu8+wo7oWqZle
+	 Cyut/TCiMDKFg7jSTMaaIrYVzyzoZmIwGCjS5JBnj1dV8eAQ3fxy+w3I4xIJBXBtz7
+	 oT7YjBpzFBO36IBD6hRaMqRdxVCDmqMuVPmGXCF5pOXFtPewUMwUO5pZ36nsVbF6rT
+	 ZkzRNyc8kM5DixMlSYggboucOtTrH7S84ZfbCCRJt0xu0Z8M+nonPdjDZrNSqGpPPy
+	 KKkKgMOZerVsw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A4683811965;
-	Sun, 18 Oct 2026 15:30:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B44413811965;
+	Sun, 18 Oct 2026 15:30:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,41 +37,42 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] bpf: Zero-extend the index in inlined
- bpf_get_func_arg()
+Subject: Re: [PATCH bpf-next] locking/atomic: arc, hexagon,
+ openrisc: Define arch_cmpxchg_local()
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179233740603.1716327.12837007566420254836.git-patchwork-notify@kernel.org>
-Date: Sun, 18 Oct 2026 15:30:06 +0000
-References: <20261018-get-func-arg-v2-0-048848b3eddf@gmail.com>
-In-Reply-To: <20261018-get-func-arg-v2-0-048848b3eddf@gmail.com>
-To: Woojin Ji <random6.xyz@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+ <179233740728.1716327.4924636966415964247.git-patchwork-notify@kernel.org>
+Date: Sun, 18 Oct 2026 15:30:07 +0000
+References: <20261018132907.3823160-1-sashal@kernel.org>
+In-Reply-To: <20261018132907.3823160-1-sashal@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ vgupta@kernel.org, bcain@kernel.org, shorne@gmail.com, josef@toxicpanda.com,
+ eddyz87@gmail.com, memxor@gmail.com, jonas@southpole.se,
+ stefan.kristiansson@saunalahti.fi, peterz@infradead.org, will@kernel.org,
+ boqun@kernel.org, mark.rutland@arm.com, mhiramat@kernel.org,
+ bpf@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-hexagon@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bot@kernelci.org, lkp@intel.com
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Sun, 18 Oct 2026 13:21:40 +0900 you wrote:
-> v2, from the review of v1:
+On Sun, 18 Oct 2026 09:29:07 -0400 you wrote:
+> Commit ccb88db8dac8 ("bpf: Don't hand out a linked element as extra
+> element") made alloc_htab_elem() take the per-cpu spare element with
+> try_cmpxchg_local(), the first caller of cmpxchg_local() outside of
+> architecture code. It doesn't build on arc, hexagon and openrisc:
 > 
->  - Shift the index as a 32-bit value instead of inserting an explicit
->    zero-extension (Alexei). The inlined sequence is one instruction shorter
->    and the bounds check is untouched, so no program is accepted or rejected
->    differently.
+>   include/linux/atomic/atomic-arch-fallback.h:384:27: error: implicit declaration of function 'arch_cmpxchg_local'; did you mean 'raw_cmpxchg_local'? [-Werror=implicit-function-declaration]
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,v2,1/2] bpf: Zero-extend the index in inlined bpf_get_func_arg()
-    https://git.kernel.org/bpf/bpf-next/c/1c1dda9ba9f3
-  - [bpf,v2,2/2] selftests/bpf: Test out-of-range index bits in bpf_get_func_arg()
-    https://git.kernel.org/bpf/bpf-next/c/38dbc3047a2f
+  - [bpf-next] locking/atomic: arc, hexagon, openrisc: Define arch_cmpxchg_local()
+    https://git.kernel.org/bpf/bpf-next/c/8cebaa3be829
 
 You are awesome, thank you!
 -- 
