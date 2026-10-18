@@ -1,101 +1,66 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316D044A414;
-	Sun, 18 Oct 2026 12:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAE33DAAB9;
+	Sun, 18 Oct 2026 12:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792325408; cv=none; b=OU6sBD2BiuNcvdGJeIek8RCnshEDb6wjIbjokV/a9owfBzRT6Ihg6JDH/KYbCRd5vr0UovuxFJZU8YlJ9paSZZfc+ldi77qi6OLKW/tMH6RbnyCz4EI7oSEyM5cDPvm0Wi4cQjrsBoldUteINN4+JDi7g5qElTS0Yff7t/o+Pdk=
+	t=1792326922; cv=none; b=n94WwbhTibFDOr213OL7rF1YTgh3eS0rLcM3CVEKxVng9bF4czbCjGMN50t+FsxhSJjMEgnfT9x11krn+ympEIYQZ6KUbi07VpmS3Bl+21YkMTw3N/hXVZAUT//knXN60XI72r4HUvqaPrZ/VSgSRznCKCYLlih0pH52puC4Sz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792325408; c=relaxed/simple;
-	bh=nrE8K3ZJMYd4/DYevz/Oj1oqhY7ZQHsG0VyN8WPlhcU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ZFd8gyubnUMGBw3BqbbgVzjKD7gC8mgElpxSGI79OcT8CEkmEA1rAyicm1fwuq6PACmzvC6tkccOMZtTyNE4pQx6lbavI+uyFFdSLizlV0QTKGZoKGTzsA57vsi9u9VRBeldKVhb4/F8z0PWkDPWPUic1yywEO/9MJjBEjtqRok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wmDM8heN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GjXs0Haa; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1792326922; c=relaxed/simple;
+	bh=Tk6fSf6VC//cgaYsAOTP5zu4p9jY1xX6q3jPZfcN20g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l3mVOJOw7gGk3g7HLjaIQ68LPONuZeKrBovtUwinjfC0G2/NBggscx9e6d25gfDl7vHuVei8Z/YGRg9IndzNurLNjEdzJWZY2hxzy6RM4rLT29NQa4nb/song1R2scyC/dcu+r4Zgrjv4J2ai2KsJsBFmmkrgVC7LzB0OU6J/cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/TQNYXb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wmDM8heN";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GjXs0Haa"
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1792325404;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nrE8K3ZJMYd4/DYevz/Oj1oqhY7ZQHsG0VyN8WPlhcU=;
-	b=wmDM8heNY3lBLBtcBlMJB/2Dn13GA8eeviIjwqAZQli9LUApXd+mkoGOVgjbdq67+dUPrF
-	kSwhTxqSMHGoKXHncXtI8FMUiNhpMVQ/O0Ff1FD/IeLYmlj5U5pnk8I6QoCXHqqTJjScc7
-	UH2Sr/nU2m9Zpw9pSapWoXlG0jxlcVUGG71KCQh9gvKtk95myHZCOYI/5CF7wheL9n/jxz
-	u2X7OjbkEBckEd36Sxk5j1nBIzkomEAl6nxOsGE9Su4TqJg25PGiHJnPWfxfiLlcukfmgR
-	ZbWRT1a0Je6CMRxKybTZcFDXs/qGslcO0cFhko68PcKiPQD8MBMjNXNLUAR4VA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1792325404;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nrE8K3ZJMYd4/DYevz/Oj1oqhY7ZQHsG0VyN8WPlhcU=;
-	b=GjXs0HaabzRRkMStq73HasvZPstvl17frN1Ek09L/c+KZw3ylbXAsbSEtc4rYxidliI2UD
-	2U3p7e/WoKp9TiAg==
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Gabriele Monaco
- <gmonaco@redhat.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Steven
- Rostedt <rostedt@goodmis.org>
-Cc: Nam Cao <namcao@linutronix.de>, Wen Yang <wen.yang@linux.dev>, Tobias
- Schaffner <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
-In-Reply-To: <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
- <20261001152042.124445-11-gmonaco@redhat.com>
- <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
- <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
- <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
- <878q3xtptq.fsf@jogness.linutronix.de>
- <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
- <87bj8s8ih9.fsf@jogness.linutronix.de>
- <DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
- <87v770uuyr.fsf@jogness.linutronix.de>
- <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
-Date: Sun, 18 Oct 2026 14:16:03 +0206
-Message-ID: <87ik2zryzo.fsf@jogness.linutronix.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/TQNYXb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E50A1F000C5;
+	Sun, 18 Oct 2026 12:35:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792326920;
+	bh=zxY+jnuszN6Gi8YXmVZRdY2Gy8q5uxVokWAXww2xgCk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=h/TQNYXb5k8QgXkB600ume6kDzxLI2G6CCbDG0dOFHcYv877vhsjDdTKxKXwXO889
+	 EmRgYpwlw7NY45XQ1MJMZW4qQI9upZgzyatvk/W30R/hnuUWrrPA48YX1QOT9Wzm9x
+	 FA986qgx1Ua3WBKh20EX6TBC1GtZem9V/AjuTb46llfCKEAycCInZkFexYeImtfZyo
+	 qM4MsPWwij5XlV6VjYHJ2zU6N/i6ydBwNHC5bAGGM5ZGdn4dqpTY5Ae5WEAyfzFJ3F
+	 NXYqiiXbqoOx2/7PPhJ2SQM+YWlFW8UlwbeZa7HpPcBtctZP7N5DxCnI9yby28woAc
+	 cFp9m5MYd1jyA==
+Date: Sun, 18 Oct 2026 15:35:17 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Wei Hu <weh@linux.microsoft.com>
+Cc: longli@kernel.org, kotaranov@microsoft.com, kuba@kernel.org,
+	davem@davemloft.net, pabeni@redhat.com, edumazet@google.com,
+	andrew+netdev@lunn.ch, jgg@ziepe.ca, haiyangz@microsoft.com,
+	wei.liu@kernel.org, decui@microsoft.com,
+	shradhagupta@linux.microsoft.com, horms@kernel.org,
+	ernis@linux.microsoft.com, stephen@networkplumber.org,
+	netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, sdf@fomichev.me, daniel@iogearbox.net,
+	hawk@kernel.org, ast@kernel.org, john.fastabend@gmail.com,
+	weh@microsoft.com, edumazet@kernel.org
+Subject: Re: [PATCH net-next v7 00/13] net: mana: reconfigure by replacing
+ the queue set
+Message-ID: <20261018123517.GD64621@unreal>
+References: <cover.1791710735.git.weh@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1791710735.git.weh@linux.microsoft.com>
 
-On 2026-10-17, "Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
-> On Sat, Oct 17, 2026 at 07:02 PM John Ogness <john.ogness@linutronix.de> wrote:
->> It would be nice if it could be filtered so that only RV violation
->> bpf_printk's would trigger. I do not think it is possible for a filter
->> to do primitive pattern matching on @bpf_string. Or am I wrong?
->
-> not an ftrace expert, but it should be possible. bpf_string is
-> a dynamic string field and filters take globs on those.
+On Fri, Oct 16, 2026 at 03:38:33PM +0000, Wei Hu wrote:
 
-Yes, indeed this works. Thanks for mentioning the globs.
+<...>
 
->> With the "new" ringbuffer and nbcon implementations, it no longer dos-es
->> the kernel, so I have no problem with bpf programs calling
->> printk_deferred(). And besides, userspace can already blast the
->> ringbuffer and consoles via /dev/kmsg.
->
-> well, /dev/kmsg is ratelimited unless printk.devkmsg=on,
-> but the kfunc wouldn't be.
-> I still feel that bpf_stream + user space that writes into
-> /dev/kmsg is a better design.
+>  drivers/infiniband/hw/mana/cq.c               |    3 +-
 
-My issue with the /dev/kmsg design is bogus timestamps. But let's just
-drop my suggestion to allow eBPF programs to call printk(). Since the RV
-move to eBPF will require new user workflows anyway, the users will need
-to learn these new packages, tools, and output sources. The important
-thing (for me) is RV violations can still be used effectively with
-ftrace/perf, which they can (using globs in bpf_trace:bpf_trace_printk
-filters).
+The RDMA changes are negligible.
 
-@gmonaco: There should be clean glob-friendly RV bpf_trace_printk
-strings so that filters can be easily and reliably set up.
-
-John
+Thanks,
+Acked-by: Leon Romanovsky <leon@kernel.org>
