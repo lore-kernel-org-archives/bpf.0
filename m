@@ -1,76 +1,72 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E782F5495
-	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3155145038
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792285400; cv=none; b=sO4seoUCDunbMdLx7GPqv8vdZ/4M6fHGg36mjmJ7kCgxo3uvZspNQIQ5PNH1wEbvvovpVdvBRg+erAc64yZEfuvKjCwKD4D3oN9Spooi+gZQ7EFRNVWj1fPInuQlcaBJXCLq3jz23mRIy69nH/ZGW+o42F+UH3q7v2EozJIWWAw=
+	t=1792286878; cv=none; b=mbsHl1LfeNrIpiX/CVkjm76C3USWQNEDXFlGuMlGYfxp9gfmrPXsjABZOShECR69/CwD1gp6N9Eux+FhtLmVZWQFWezuFdABj/QP3MYXXc+PuvdKd8W57YN3t7N2KoZ1Hiwqwc+4MbmnzG+EZHaFl7tbUR4SOJgT4oQ2sQ0s+Q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792285400; c=relaxed/simple;
-	bh=dNuFCvtL4pyBK4I8tXVFMFSIIXJVP5YdZ6djiH0YFq8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aIajQmrEcXoXGBvK8nE4dp8Mp0SYhrrg6jF+2Nt/Bac4AjMkVfOPa2lCHNGOe5S4jGyhQp54iaioWkdDU5x02dxOSYyrQPoAr4bgJMY+uGh6T1IYuwNmmzWaWrgwesEoNB4ADwF2KEoLrOMvL12/kZ40+hA1eag2nqmAsrGN2Nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pEkVhkdw; arc=none smtp.client-ip=209.85.210.178
+	s=arc-20240116; t=1792286878; c=relaxed/simple;
+	bh=tkiOfmdHr5kOq2uXuo3m+6KWjyP5EOQs/3JbmkdgetI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=srkaIiYMOtBwB4dFQzINmXMJ45BHUJjVD3K8hQXpaC6ALwlxhEtKsgDpaaiDHZQDns+adOzrwW6KxK4r5I72+bDIzYBodZxRz0eVu3gb5NzDHhvIJqTFCEJ18dvzCX/NjrU4hA6KwiI0I6X0RnjZyp4WADrRg2VAmikMZYujJwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FOUWEUai; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pEkVhkdw"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8a05e3f0d23so117636b3a.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 18:03:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FOUWEUai"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3acd21ba21aso884988a91.1
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 18:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792285398; x=1792890198; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=WD3g722/9K6HoLlGq+HAL5yG10ySSL0HZEPgl3K0gr4=;
-        b=pEkVhkdweyRKo1xkeK7eKive8YvtvCFH5RndsPW1uDTbqKhpSv6zMh5jdQDu92GDWD
-         1dVFaEvMw7qq/Hau9jsMYYoTXGvrqYbNOYcMVeP/a+ooWloUITQBiogm++n889JpL/ib
-         riB6VVeEzjCv7CMwDdjBsmKWDNJZR1hB4JAZQLsX1PJ1hn3JfueGvXPwaF4Se122FrQh
-         jy+htJHODMvOrApUpF79CGBu4oNC43wATJ1KzA8tJFEGs6on/XQ1r/9ENiy3e1aVXgDS
-         E3XQokp2+oe1Ov5nqwF0RN5GWaUjoRj2vNjfGvUreUSHMk/TxYOFDDdJqrfanieXIPXv
-         Z5Fw==
+        d=gmail.com; s=20251104; t=1792286876; x=1792891676; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=snwUkhPLrHgz2APuZstMsya2Ffy3a5Mctprzb96QwMc=;
+        b=FOUWEUaidXzHJjZiMzCU15/oVo7YaJHrLYWUw0c0aaZqzxk+6s9qQ2/4vTDlCXHbdJ
+         BOp5Y7/1hB2/dFgzOIDMLFBwgQ1ntJfbd6jLOjnd6gjasGbPBzV7HQWnAoPv5tYMYU9o
+         Q+TD2fscIjvVGMLY0rpI9aPqUIOMn5Nqh+9wOSQBlCX/XHPa/SlWTmfrHja9eeRCTz+X
+         Kn3PUlU05QN9QlmCFXD7WAWdY2uZVGI+NkkyfzjVPf+Hdk3qb5s0cueiJioAZW2v4vjM
+         h/gqPa9RHqGCP+1ywnRuujaFtp4nItSgJzQadT/GVkZKQIThHDQk2yB6sy+KNBDaxvtg
+         rTCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792285398; x=1792890198;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WD3g722/9K6HoLlGq+HAL5yG10ySSL0HZEPgl3K0gr4=;
-        b=vmLdsJ5yTL7VN8Gjj1p8IgtqgaF1Zu9BzIcrtI272puc/gjuk6QX8RsvIyn6IXAq+x
-         H5ttL0kcC+alR1OpbsaCnQ4N/YgSPNAUD5p13koxQSEWuXVBvTWGirISTef70XYNzpTD
-         EO7dsfNlfntzXiDeEXkWh6JXaCLD1TJANQblQnluKitwOBSSvv8RGg/ah7/ehUe05Tr9
-         3y01icDdM+lhELMcRjCd8vvqiG9CUMp5uzyen17utS0p2iQeltru2RX4pWj+ycGAxas4
-         j4egVEDKaeP8rn2EVh2VMaQpxNIGj3ee37m0B/mbAj1rCLleWwI57TWWABJZ5PAkGRy1
-         AYGA==
-X-Gm-Message-State: AFq9FYLT/XDjS7sAO2Gi9EGCS4RFIPu5Vb+HWYDXeDSaHkkPNDmjDTQG
-	PX2Z/jBL6uM5APnxcIxUw5N1gLsDd5STOES7LysI6GfOWq17otkYn9w3NJ5NLw==
-X-Gm-Gg: AYBFou3RFbWoOgdWNel24B/mEm03Ly0PoHq2hx8iOzW7x2u7HxaMsegCsN1z+y3aDCY
-	EBoWU0vlqoBGMjNGNH75Rl99Qk0/rEUyMLcHgMXLivOwTvXJnp4JD0ygh6tt+OgYRUGFNyFXg8O
-	JUsFWHSb/0LaxGly+vq1qxkdZay/WX/DMhmOhAaUQaP3cJpUbQkS3kL6w6lW5UamlZGhGi97OkI
-	eq6KY2JwRuNxdj+tlNvSEz6w7XdhDqljA6zhG2QVpSrWYTiO9ZhGj8MvAp5UsNdMrTPnmBcQa6p
-	CoP/MHxng7gn0/YPlD/Ivr+U5mJVI8genkdMXscwe2yuJj8rnwA1yEmyiNagKdol6BIRgU4gEc6
-	40tsvpTr5dmXKTKMsWqRUJKvuNPC4ippD9rlDTbyjW7jfoTnnFK3aSnG6AlrIEQw6wWUlZ7Z73k
-	evEAw/ywsfuy1rLtz0aAdpnxNtPYPIy6cPSC0hKGz0934fRgCaj9MAr5LHzR/5P6emYOkAl86I/
-	dc49SHqERbd1KIqWz/S2lHJMJwpeBuHgYxE9YQZGBDIbtXQi7fVzz/QxekwHJBAi2Nkmihh3Sax
-	d5aVlVc13H2q9tLV8XsUOFFwui63O9DFdBnMmk1J1Eg=
-X-Received: by 2002:a05:6a00:3e24:b0:893:12e5:c07c with SMTP id d2e1a72fcca58-8a04be4225cmr2890891b3a.27.1792285398243;
-        Sat, 17 Oct 2026 18:03:18 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f579464besm2653047b3a.34.2026.10.17.18.03.17
+        d=1e100.net; s=20260707; t=1792286876; x=1792891676;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=snwUkhPLrHgz2APuZstMsya2Ffy3a5Mctprzb96QwMc=;
+        b=aUgn03j2Ckv5zx4mSlg01TGvenyE7XquxLdbtZPu2QjzFhz3+DAdpnLh9ItRRYSyTW
+         4G7tHTahZRrmPt9z4rxMuxFttDeToZwgpseELCANMVElmyHgDHxJ4pr7cjpFetQn1cIp
+         mfDG6LrzaScAMhRxRFKzJX/SzCAtFY2djf0UYx8IPgKvRCQgiX76su36eNL+5QQ2WKZk
+         TGTHB6r0OkK8HrWaIZHslWuMGawFjtLVSHd187bpxGJTHgp6bzft1jWrJfC0HPQtPfUt
+         kRlTWj/tbkdQzu4rR2T3phYMSjM3UhOUNHWPU25DoZTEKrE4QB3qR5VPXBI07nCNAhJK
+         8a1Q==
+X-Gm-Message-State: AFq9FYImq2fgyGOFXmbwI9xabCYHBP9xJpyQKMpMdnui7Rsax9NIG7KO
+	vEEveL4MH7BnU7/0mUMoJ8/pxpD70tLCxyI7rZwmm/vyXpK4d7XKBzmEMbQFwg==
+X-Gm-Gg: AYBFou0YR1CWS2erQlM5pTIehwitLhvllihig/A1cPvI8lyODwEu0P5IY+pWGU6wOXE
+	rxyq31VYEBZptzBAXxduUlpMXE6yRBEH4ULe29ZhumV+wzvCTbcCfSvCi+bem583NZxVpXeq9op
+	60xP1rY3vGXycVh2hqMhMVZukeY981h4CaKhEnLhHsaIOYoDpXid2d4yRBo8oyqBCKU6LkLT71y
+	bidp/JFdLOY9oh7QUmf3RSD6N1vODJtAFqWCnd4adUepeAYk+r9V0xYUXAJOsn00m0D5KyjbquQ
+	0e63AfnHtM6imkW/PtGNmshzztX4vHXYqMj2kejX6V18EqGBikkbJqJTAs9I1dML2hMs2xn0+qX
+	gFi9pYVSig00JndphYWjM62tDrMwIvs50b6NBzmYFq+GPUuVebefq/NYH4BBhrHTPWDei4myqB3
+	dF2mj+t12M2/qfGsJVKWVYYI6dtZQxOD5I85u24NCxP+c0xrpJsre7NpntynmZB1TCz7zyaCR11
+	zOZ7CqTyl1ygo4oKIeYYkIuw+r4C8bT2Iy7kHjRZT2y8bIr77IX3s5GHbPNIwre1JZLvlbdFpJ0
+	j+OqqvXXOltwngTQyu6AiO/kez6kJcKDW1l39Nje4jw=
+X-Received: by 2002:a17:90b:388c:b0:3ac:a521:959 with SMTP id 98e67ed59e1d1-3acef1881camr3866978a91.29.1792286876230;
+        Sat, 17 Oct 2026 18:27:56 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac945e7311sm15051408a91.4.2026.10.17.18.27.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 18:03:17 -0700 (PDT)
+        Sat, 17 Oct 2026 18:27:55 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Add a C++ prog with exceptions
-Date: Sun, 18 Oct 2026 01:02:45 +0000
-Message-ID: <20261018010246.1643877-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next] bpf: Refuse the prologue for an extension if callers keep packet pointers
+Date: Sun, 18 Oct 2026 01:27:53 +0000
+Message-ID: <20261018012753.1724147-1-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
-References: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,283 +77,182 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-  static __noinline int inner(int len)
-  {
-          rcu_guard guard;
+An extension that writes to the packet of a tc, lwt_xmit or sk_skb program
+starts with bpf_unclone_prologue().  If the skb is cloned, that gives it
+a new head.
 
-          if (len > 100)
-                  throw 1;
-          return len;
-  }
+It does not count as changing packet data.  changes_pkt_data goes by the
+helpers and kfuncs that a program calls, and whether it gets a prologue
+is known only after it has been compared with its target.  So the extension
+can replace a global function that leaves the packet alone, and the callers
+of that function keep their packet pointers across the call.  These point
+into the old head, which is left to the other clone.  Once that is freed,
+by the reader of a packet socket for example:
 
-  static __noinline int middle(int len)
-  {
-          preempt_guard guard;
+  BUG: KASAN: slab-use-after-free in bpf_prog_53bc21b9810cadbc_t_read+0x2e8/0x36e
+  Read of size 1 at addr ffff888107bfe73c by task tt11/102
+  Freed by task 112:
+   kfree+0x161/0x500
+   skb_release_data+0x2dc/0x340
+   consume_skb+0xa6/0x1c0
+   packet_recvmsg+0x4b3/0xa20
 
-          return inner(len) + 1;
-  }
+Nothing is wrong if the target program writes to the packet too: its own
+prologue has uncloned the skb, and that of the extension does nothing.
+Nor if the callers hold no packet pointers, like a dispatcher, or if the
+main function is replaced.
 
-  SEC("tc") int catches(struct __sk_buff *skb)
-  {
-          try {
-                  return middle(skb->len);
-          } catch (...) {
-                  return 42;
-          }
-  }
+Note for every global function that leaves the packet alone if it is
+called while packet pointers, or slices of the dynptr of a packet, are
+held.  What the callers of a global function hold is not known while it
+is verified, so the functions that it calls are taken for such as well.
+Refuse an extension with a prologue for such a function, unless the target
+program has a prologue, both when the extension is loaded and when it
+is attached to another target.
 
-The exception passes through two frames. The destructors call
-bpf_rcu_read_unlock() and bpf_preempt_enable(). The verifier insists on
-both, and the test checks that they ran in that order.
-In the second prog nobody catches. The destructors run and the prog
-returns 0.
-
-All that is left of the C++ runtime is four one line functions.
-__cxa_throw() calls _Unwind_RaiseException(), which llvm lowers.
-
-progs/*.cpp are built like progs/*.rs: by clang only and without skeletons.
-vmlinux.h and bpf_helpers.h are not C++, so the prog declares what it
-needs.
-
-The test is skipped when llvm doesn't lower unwinding [1]. It looks for BTF
-decl_tag "unwind" in the object, since the version of llvm doesn't tell.
-
-[1] https://github.com/llvm/llvm-project/pull/233140
-
+Fixes: 7e40781cc8b7 ("bpf: verifier: Use target program's type for access verifications")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/bpf/sashiko-outbox-175849@kernel.org/
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile.skel     |  11 ++
- .../selftests/bpf/prog_tests/unwind_cxx.c     |  76 ++++++++++++
- .../selftests/bpf/progs/unwind_cxx.cpp        | 117 ++++++++++++++++++
- 3 files changed, 204 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
- create mode 100644 tools/testing/selftests/bpf/progs/unwind_cxx.cpp
+ include/linux/bpf.h          |  2 ++
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/fixups.c          |  6 +++++
+ kernel/bpf/verifier.c        | 48 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
-index 06e297a17156..6570c48f92b0 100644
---- a/tools/testing/selftests/bpf/Makefile.skel
-+++ b/tools/testing/selftests/bpf/Makefile.skel
-@@ -153,4 +153,15 @@ $(RUST_OBJS): $(RDIR)/%.bpf.o: progs/%.rs $(RUST_CORE) | $(RDIR)
- endif
- endif
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index feb7de6483e3..54ae73e211f7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1757,6 +1757,7 @@ struct bpf_func_info_aux {
+ 	bool unreliable;
+ 	bool called[BPF_FUNC_CTX_CNT];
+ 	bool verified[BPF_FUNC_CTX_CNT];
++	bool called_with_pkt_ptrs;
+ };
  
-+# Programs in C++. No skeletons: gcc doesn't build them.
-+ifeq ($(BPF_CC),$(CLANG))
-+CXX_OBJS := $(patsubst progs/%.cpp,$(RDIR)/%.bpf.o,$(wildcard progs/*.cpp))
-+BPF_OBJS += $(CXX_OBJS)
-+
-+$(CXX_OBJS): $(RDIR)/%.bpf.o: progs/%.cpp | $(RDIR)
-+	$(call msg,$(BPF_CC_MSG),$(BINARY),$@)
-+	$(Q)$(BPF_CC) -x c++ -g -Wall -Werror -fexceptions -funwind-tables -fno-rtti	\
-+		$(BPF_CC_FLAGS) -c $< -o $@ $(call skip_on_fail,BPF)
-+endif
-+
- endif # BPF_CC
-diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c b/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
-new file mode 100644
-index 000000000000..6a189045851f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+
-+/*
-+ * llvm tags the functions that say in r3 whether they return or unwind.
-+ * Without that _Unwind_RaiseException() is an unknown extern and libbpf doesn't
-+ * open the object, so look before that.
-+ */
-+static bool llvm_lowers_unwinding(const char *file)
+ enum bpf_jit_poke_reason {
+@@ -1894,6 +1895,7 @@ struct bpf_prog_aux {
+ 	bool jits_use_priv_stack;
+ 	bool priv_stack_requested;
+ 	bool changes_pkt_data;
++	bool has_prologue;
+ 	bool might_sleep;
+ 	bool kprobe_write_ctx;
+ 	struct {
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 7a72bb06fe56..951a90458d18 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1381,6 +1381,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			    const struct bpf_prog *tgt_prog,
+ 			    u32 btf_id,
+ 			    struct bpf_attach_target_info *tgt_info);
++int bpf_check_ext_prologue(struct bpf_verifier_log *log,
++			   const struct bpf_prog *tgt_prog, u32 btf_id);
+ void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
+ 
+ int mark_chain_precision(struct bpf_verifier_env *env, int regno);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index a8739fbd0349..673751b86aee 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -940,6 +940,12 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
+ 					"Extension writing packet data must take ctx and scalars only\n");
+ 				return -EINVAL;
+ 			}
++			if (env->prog->type == BPF_PROG_TYPE_EXT &&
++			    bpf_check_ext_prologue(&env->log,
++						   env->prog->aux->dst_prog,
++						   env->prog->aux->attach_btf_id))
++				return -EINVAL;
++			env->prog->aux->has_prologue = true;
+ 			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
+ 							 BPF_PATCH_MOVE_TARGET);
+ 			if (!new_prog)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 63fff641d985..c31287d2231c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10867,6 +10867,20 @@ static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
+ 	}));
+ }
+ 
++static bool holds_pkt_pointers(struct bpf_verifier_env *env)
 +{
-+	struct btf *btf = btf__parse(file, NULL);
-+	int i, n = btf ? btf__type_cnt(btf) : 0;
++	struct bpf_func_state *state;
++	struct bpf_reg_state *reg;
 +	bool ret = false;
 +
-+	for (i = 1; i < n && !ret; i++) {
-+		const struct btf_type *t = btf__type_by_id(btf, i);
++	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
++		if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg))
++			ret = true;
++	}));
 +
-+		ret = btf_is_decl_tag(t) &&
-+		      !strcmp(btf__name_by_offset(btf, t->name_off), "unwind");
-+	}
-+	btf__free(btf);
 +	return ret;
 +}
 +
-+static void run(struct bpf_object *obj, const char *name, int len, int retval, int dtors)
-+{
-+	struct bpf_program *prog = bpf_object__find_program_by_name(obj, name);
-+	struct bpf_map *map = bpf_object__find_map_by_name(obj, ".data.dtors");
-+	char data[256] = {};
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		.data_in = data,
-+		.data_size_in = len,
-+		.repeat = 1,
-+	);
-+	int key = 0, val = 0;
-+
-+	if (!ASSERT_OK_PTR(prog, name) || !ASSERT_OK_PTR(map, "dtors"))
-+		return;
-+	ASSERT_OK(bpf_map__update_elem(map, &key, sizeof(key), &val, sizeof(val), 0), "clear");
-+	ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(prog), &opts), "test_run");
-+	ASSERT_EQ(opts.retval, retval, "retval");
-+	ASSERT_OK(bpf_map__lookup_elem(map, &key, sizeof(key), &val, sizeof(val), 0), "lookup");
-+	ASSERT_EQ(val, dtors, "dtors");
-+}
-+
-+void test_unwind_cxx(void)
-+{
-+#if defined(__x86_64__) || defined(__aarch64__)
-+	const char *file = "./unwind_cxx.bpf.o";
-+	struct bpf_object *obj;
-+
-+	/* gcc flavor doesn't build it */
-+	if (access(file, R_OK) || !llvm_lowers_unwinding(file) || !is_jit_enabled()) {
-+		test__skip();
-+		return;
-+	}
-+	obj = bpf_object__open_file(file, NULL);
-+	if (!ASSERT_OK_PTR(obj, "open"))
-+		return;
-+	if (!ASSERT_OK(bpf_object__load(obj), "load"))
-+		goto out;
-+	/* libbpf goes on without BTF when the kernel doesn't take it */
-+	ASSERT_GE(bpf_object__btf_fd(obj), 0, "btf_fd");
-+
-+	/* inner's destructor, then middle's */
-+	run(obj, "catches", 64, 65, 12);
-+	run(obj, "catches", 200, 42, 12);
-+	run(obj, "does_not_catch", 64, 65, 12);
-+	run(obj, "does_not_catch", 200, 0, 12);
-+out:
-+	bpf_object__close(obj);
-+#else
-+	test__skip();
-+#endif
-+}
-diff --git a/tools/testing/selftests/bpf/progs/unwind_cxx.cpp b/tools/testing/selftests/bpf/progs/unwind_cxx.cpp
-new file mode 100644
-index 000000000000..fa9ddd87319d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/unwind_cxx.cpp
-@@ -0,0 +1,117 @@
-+// SPDX-License-Identifier: GPL-2.0
+ enum {
+ 	AT_PKT_END = -1,
+ 	BEYOND_PKT_END = -2,
+@@ -11472,6 +11486,13 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
+ 		clear_caller_saved_regs(env, caller->regs);
+ 		invalidate_outgoing_stack_args(env, cur_func(env));
++		/*
++		 * What the callers of a global function hold is not known
++		 * while it is verified.
++		 */
++		if (!env->subprog_info[subprog].changes_pkt_data &&
++		    (state->frame[0]->subprogno || holds_pkt_pointers(env)))
++			sub_aux->called_with_pkt_ptrs = true;
+ 
+ 		/*
+ 		 * A non-void global function returns a 64-bit SCALAR_VALUE in
+@@ -22209,6 +22230,30 @@ static int check_unreliable_func_args(struct bpf_verifier_log *log, struct btf *
+ 	return -EINVAL;
+ }
+ 
 +/*
-+ * C++ exceptions. llvm lowers unwinding to plain insns:
-+ *   ret                      r3 = 0; exit
-+ *   invoke foo unwind pad    call foo; if r3 != 0 goto pad
-+ *   resume                   r0 = 0; r3 = 1; exit
-+ * so 'throw' is a jump or an exit, 'catch (...)' and the destructors that run on
-+ * the way are ordinary blocks reached by ordinary branches.
-+ *
-+ * vmlinux.h and bpf_helpers.h are not C++.
++ * The prologue of an extension gives a cloned skb a new head, unless the
++ * prologue of the target program has done that. The callers of the function
++ * that it replaces must not hold on to the old head.
 + */
-+#define SEC(name) __attribute__((section(name), used))
-+#define __ksym __attribute__((section(".ksyms")))
-+#define __noinline __attribute__((noinline))
-+#define __always_inline inline __attribute__((always_inline))
-+
-+#if __clang_major__ >= 24
-+
-+struct __sk_buff {
-+	unsigned int len;
-+};
-+
-+extern "C" {
-+void bpf_rcu_read_lock(void) noexcept __ksym;
-+void bpf_rcu_read_unlock(void) noexcept __ksym;
-+void bpf_preempt_disable(void) noexcept __ksym;
-+void bpf_preempt_enable(void) noexcept __ksym;
-+
-+/* Starts an unwind. Not a kfunc: llvm lowers the call and it doesn't come back. */
-+int _Unwind_RaiseException(void *exc);
-+
-+/* All that is left of the C++ runtime. Nobody looks at the exception object. */
-+static char exc_obj[16];
-+
-+__always_inline void *__cxa_allocate_exception(unsigned long size) noexcept
++int bpf_check_ext_prologue(struct bpf_verifier_log *log,
++			   const struct bpf_prog *tgt_prog, u32 btf_id)
 +{
-+	return exc_obj;
++	const struct bpf_prog_aux *aux = tgt_prog->aux;
++	int i;
++
++	if (aux->has_prologue)
++		return 0;
++
++	for (i = 0; i < aux->func_info_cnt; i++)
++		if (aux->func_info[i].type_id == btf_id &&
++		    !aux->func_info_aux[i].called_with_pkt_ptrs)
++			return 0;
++
++	bpf_log(log,
++		"Extension writing packet data cannot replace a function whose callers keep packet pointers\n");
++	return -EINVAL;
 +}
 +
-+__always_inline void __cxa_throw(void *exc, void *tinfo, void (*dtor)(void *))
-+{
-+	_Unwind_RaiseException(exc);
-+	__builtin_trap();
-+}
-+
-+__always_inline void *__cxa_begin_catch(void *exc) noexcept
-+{
-+	return exc;
-+}
-+
-+__always_inline void __cxa_end_catch(void) noexcept
-+{
-+}
-+}
-+
-+/* One decimal digit per destructor, in the order they ran */
-+volatile int dtors SEC(".data.dtors");
-+
-+/* The verifier insists that both are undone on every path out of the prog */
-+struct rcu_guard {
-+	__always_inline rcu_guard()
-+	{
-+		bpf_rcu_read_lock();
-+	}
-+	__always_inline ~rcu_guard()
-+	{
-+		bpf_rcu_read_unlock();
-+		dtors = dtors * 10 + 1;
-+	}
-+};
-+
-+struct preempt_guard {
-+	__always_inline preempt_guard()
-+	{
-+		bpf_preempt_disable();
-+	}
-+	__always_inline ~preempt_guard()
-+	{
-+		bpf_preempt_enable();
-+		dtors = dtors * 10 + 2;
-+	}
-+};
-+
-+static __noinline int inner(int len)
-+{
-+	rcu_guard guard;
-+
-+	if (len > 100)
-+		throw 1;
-+	return len;
-+}
-+
-+static __noinline int middle(int len)
-+{
-+	preempt_guard guard;
-+
-+	return inner(len) + 1;
-+}
-+
-+extern "C" SEC("tc") int catches(struct __sk_buff *skb)
-+{
-+	try {
-+		return middle(skb->len);
-+	} catch (...) {
-+		return 42;
-+	}
-+}
-+
-+/* The exception leaves the prog: it returns 0 */
-+extern "C" SEC("tc") int does_not_catch(struct __sk_buff *skb)
-+{
-+	return middle(skb->len);
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") = "GPL";
+ /*
+  * An extension is verified as a program that runs under the RCU read lock. Does
+  * the function that it is to replace?
+@@ -22333,6 +22378,9 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 					"Extension program changes packet data, while original does not\n");
+ 				return -EINVAL;
+ 			}
++			if (prog->aux->has_prologue &&
++			    bpf_check_ext_prologue(log, tgt_prog, btf_id))
++				return -EINVAL;
+ 
+ 			tgt_might_sleep = aux->func
+ 					  ? aux->func[subprog]->aux->might_sleep
+
+base-commit: a6303535c2ad9d49598d52556183911f02287791
 -- 
 2.55.0
 
