@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D8E4AA1CE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A3D3D6487;
 	Sun, 18 Oct 2026 14:06:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792332375; cv=none; b=t64cZth0eatGDefF6pte6ne19RDUp94xAnKD0CIpFzqL0hZlLCuMDAgVMZtusCmmMpyBGtVh+3zTcwuAiteHG9aBXfZDp7BRxvZ3q+RoU8X3M4QP1o0c2D9fDa7WFmxCp00MyMakZhz4c7KVQoZtvzsaZGRs4t+TWXpnMIIVJiQ=
+	t=1792332374; cv=none; b=lKb6RT3y1/ALDGJX7jaQ9CeGc+WWaORjv9t9VwCg+iXNXCN6dHKIasRmWjK23r9pDEB2TvNlZOaz1ECcUzvfa0J5zEUSc/Xe7Ml6F/5biAZ8lw/VrJLC0h+kryDBxvmFFnAo+KDhh4jK2ij2kWIL/tuuobvaZmKb6kf6x6th9t0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792332375; c=relaxed/simple;
-	bh=/bM8SOCh5YCdx6+EZftfg62XHrOY2Gdodm+8s1mk9as=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aX7cQM/BFBTKdjB4m5AReoF4oRLdbq/tgOOYXyVcNtpe6GwmWWfDYIPFcGNAyGQNNxoc+RgVLC1puqxELhDnSAYhD8C1Wgqko9cjg+o7SyDARthwmxf1XzF+nJiq8OAzY+GwVybpdJR0+8GuCUeTVp98QkHDjilqoZ7Wj3RBdMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hjdqt/MX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1792332374; c=relaxed/simple;
+	bh=6zfVRO0wUkIX0trYTHFUHGIOQjYjRYp9mcAVET69qKc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fxf7mIjgFmJCKHzdDPHCDnPqAVIb1zeXumkkMncjmUzGFO7teWe2+xyKpbtnMugqKVa3Led9gev5QqYqVnwsAOX9H/m1s1GXTJp7leMvuMtBrim1VbNU7UMeZdWCbpr1TDxPvpx2KB69FE62GKcNfC8TQCSiPgeVZM7VP86xiSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=usZl9r2s; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hjdqt/MX"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 92FCCC2BD04;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="usZl9r2s"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 66132C2BCC7;
 	Sun, 18 Oct 2026 14:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1792332374;
-	bh=/bM8SOCh5YCdx6+EZftfg62XHrOY2Gdodm+8s1mk9as=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Hjdqt/MX6Mfh9oQ+WIb/RKPNZPMCNL2jgwOWr+rvIwhVBqAaePH/br5y8A5E8b20r
-	 kXhQWeVrLW1WktP+b7GCf1kHWD0HmHaqTJO/rDV7i74DSeq9jObiJUqRkfOdxy3mam
-	 cv2+QehzZexvkqmh23MN0JWSwRt1MHw8bglP6AZJHRWux40NlBc4TzuecuKXpxNenS
-	 1NZPoIuAo2cMjPS3gO4oKyfKMMibiYKGYoZsZwrr7wfhRZ9NfZuMfdGGLXgp58YSwG
-	 Pk/iIUUemtrYegw4Qehh9ud8s4sRgnih+Buc1k2tADBOzf3h7Z4sUN9g+rpXJNZUv3
-	 lQaGGjsN8Sk/g==
+	bh=6zfVRO0wUkIX0trYTHFUHGIOQjYjRYp9mcAVET69qKc=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=usZl9r2sx7zxafYTaJ+GsiOeWirU+LywZL7cdtE1pCPcHZVe0zha7MqgEkB/SOFWb
+	 oB5udI+H0DMUyslePTtSFHvojjaeY47mLcR1hlPJUIERj7jVawsANnDPDcsnZ3BlCz
+	 hOYVe2q1dY3T+iYkkFCraki4EDbkHJNmQ8Cm3d72Rc1whKplgxxXKWINokoOH2N5av
+	 2o4zSC9O9m3VKft9+ESnPcPwjXBPr7zDKIMGiYSy1riuzWPcSlgrTTDYJpFXwNGZPB
+	 8EflRdiIxMXfxffaXqDao7eWXIy6+5WLbTRFj6KN4gYdxNKvPUsEHwXj8mnmsgHjvF
+	 crFSBHYEX12nA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 738F9CCF2C4;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 414A2CCF2C9;
 	Sun, 18 Oct 2026 14:06:14 +0000 (UTC)
 From: Bochao Cao via B4 Relay <devnull+bochaolucky.gmail.com@kernel.org>
-Date: Sun, 18 Oct 2026 22:05:51 +0800
-Subject: [PATCH net-next v6 2/5] selftests/bpf: Track XDP test processes
- and isolate namespaces
+Subject: [PATCH net-next v6 0/5] selftests: Fix and migrate the XDP feature
+ test
+Date: Sun, 18 Oct 2026 22:05:49 +0800
+Message-Id: <20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,9 +41,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261018-xdp-v5-send-20261008-v6-2-7336e1282ca3@gmail.com>
-References: <20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3@gmail.com>
-In-Reply-To: <20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22OQQ6CMBBFr0JmbU0LUogr72FY0HaEGimkrQRDu
+ LttUVcu//t/XmYFh1ajg3O2gsVZOz2aEPghA9m3pkOiVciQ05wzSmuyqInMJXFoFPnBgjJFkam
+ C8RLC6WTxppekvYJBTwwuHpq9cU9xR+mjNW5F65AI2xrZR/TxJ/r1x1mvnR/tKz06l0m814z+/
+ ykAShTyupKCV/JEL93Q6sdRjgM027a9AaS+voX7AAAA
+X-Change-ID: 20261008-xdp-v5-send-20261008-301d0e1d3165
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -66,11 +68,11 @@ Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
  Petr Machata <petrm@nvidia.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792332371; l=10312;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792332371; l=3816;
  i=bochaolucky@gmail.com; s=default; h=from:subject:message-id;
- bh=Ma+Q5a2YpvxxjtjYn33OkTL0G04LP0BT+h4trKbLTb0=;
- b=0wf1Lzv/Mb/MDuBYoYNN1K0pWa/6n03AdWqwKnXnZw/jFRxt5iB8KB1H1DF4lFmT1b8yesp4/
- 8D64PsSZYS7DF7yhiddAvez3W5imKsE1mZ1zIuyZCyGBuZ7IJB3oBYn
+ bh=6zfVRO0wUkIX0trYTHFUHGIOQjYjRYp9mcAVET69qKc=;
+ b=VEZVqT1rfhQPPNsBAbSVqpiKSeZrkvkyD1+KxVRRNWTFS1XQO0FbQcuRXdSv9d9pCTjp42CIt
+ PI7f8E3W/obD9ZLY5jEh0U5lkf8I0n4JEtsgRglpEvVNSyz1Vu9x2fU
 X-Developer-Key: i=bochaolucky@gmail.com; a=ed25519;
  pk=ZYp7O2eXSIrJ9YmKrl0iHDoulPYSG+1lzICsicAvld0=
 X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/default with
@@ -78,368 +80,79 @@ X-Endpoint-Received: by B4 Relay for bochaolucky@gmail.com/default with
 X-Original-From: Bochao Cao <bochaolucky@gmail.com>
 Reply-To: bochaolucky@gmail.com
 
-From: Bochao Cao <bochaolucky@gmail.com>
+This series fixes the XDP feature test and moves it to drivers/net/hw.
+The tester uses AF_PACKET, so the remote host does not need native XDP.
+Existing remote XDP programs and offload settings are left unchanged.
 
-Track the DUT shell job and give each run separate DUT and tester
-namespaces. Bound the readiness wait and handle signals during setup and
-cleanup.
+Changes since v5:
+- Fix control EOF handling and preserve existing XDP programs on attach
+  failure in the initial cleanup patch.
+- Bound shell readiness, fix signal cleanup and namespace ownership,
+  isolate tracepoint counters, and fail on capability mismatches.
+- Support a separate control network, use an atomic signal flag, return
+  failure on interruption, and query capabilities after attachment.
+- Fix inherited source paths, host-tool selection and installed-header
+  priority in the shared BPF build rules.
+- Use argv lists for local commands and SSH deployment. Remove the old
+  ignore entry and fix the README heading.
+- Run veth XDP_TX when peer GRO is enabled without native XDP. Skip only
+  when the peer has neither. This covers the case addressed by [1].
 
-Filter tracepoint counters by this run's program and CPU map IDs. Return
-failure when detected and advertised features differ.
+Tested on x86_64 Ubuntu with Linux 6.8.0-124-generic:
+- Normal and separate-output builds, relative inherited srctree, host
+  bootstrap with target CC/LD disabled, and conflicting source headers.
+- Earlier baseline across three veth configurations: 17 PASS and
+  1 expected XDP_TX SKIP.
+- All six features with separate IPv4 and IPv6 control networks: 12 PASS.
+- Nine error/cleanup checks, six protocol/isolation checks, and DUT/tester
+  attach-failure preservation checks passed.
+- Patch 2: two concurrent six-case runs and three repeated-TERM runs
+  left no helper processes or namespaces.
+- SSH deployment and execution from a path containing spaces and a quote.
+- GRO-only XDP_TX: isolated veth modules with and without the one-line
+  fix reproduce failure and success for both IPv4 and IPv6. The runner
+  also passes the expected skip/failure/success checks with ethtool 5.16.
+- GCC -fanalyzer reported no diagnostics. Clang diagnostics were checked;
+  the unused assignment was removed and model false positives documented.
 
-Tested with two concurrent six-feature runs and three repeated-TERM
-runs. All passed and left no helper processes or namespaces.
+Tests used veth devices; physical-NIC testing remains unverified.
 
-Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test tool")
+[1] https://lists.openwall.net/netdev/2026/10/16/565
+
+Previous version:
+https://lore.kernel.org/all/20261010-xdp-v5-send-20261008-v5-0-de687cb67c40@gmail.com/
+
 Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
+
 ---
- tools/testing/selftests/bpf/progs/xdp_features.c |  18 +++-
- tools/testing/selftests/bpf/test_xdp_features.sh | 132 ++++++++++++++++++-----
- tools/testing/selftests/bpf/xdp_features.c       |  26 +++++
- 3 files changed, 146 insertions(+), 30 deletions(-)
+Bochao Cao (5):
+      selftests/bpf: Fix XDP feature test setup and teardown
+      selftests/bpf: Track XDP test processes and isolate namespaces
+      selftests/bpf: Send XDP feature probes with AF_PACKET
+      selftests/net: Add a shared BPF skeleton rule
+      selftests/net: Move the XDP feature test to drivers/net/hw
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_features.c b/tools/testing/selftests/bpf/progs/xdp_features.c
-index 67424084a38a1..07d1eaea5fbe5 100644
---- a/tools/testing/selftests/bpf/progs/xdp_features.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_features.c
-@@ -2,10 +2,11 @@
- 
- #include <stdbool.h>
- #include <linux/bpf.h>
- #include <linux/netdev.h>
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
- #include <bpf/bpf_endian.h>
- #include <bpf/bpf_tracing.h>
- #include <linux/if_ether.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
-@@ -20,11 +21,20 @@
- 				 (a).s6_addr32[1] == (b).s6_addr32[1] &&	\
- 				 (a).s6_addr32[2] == (b).s6_addr32[2] &&	\
- 				 (a).s6_addr32[3] == (b).s6_addr32[3])
- 
- struct net_device;
--struct bpf_prog;
-+struct bpf_prog_aux {
-+	__u32 id;
-+} __attribute__((preserve_access_index));
-+
-+struct bpf_prog {
-+	struct bpf_prog_aux *aux;
-+} __attribute__((preserve_access_index));
-+
-+__u32 dut_prog_id;
-+__u32 dut_cpumap_id;
- 
- struct xdp_cpumap_stats {
- 	unsigned int redirect;
- 	unsigned int pass;
- 	unsigned int drop;
-@@ -226,10 +236,13 @@ SEC("tp_btf/xdp_exception")
- int BPF_PROG(xdp_exception, const struct net_device *dev,
- 	     const struct bpf_prog *xdp, __u32 act)
- {
- 	__u32 *val, key = 0;
- 
-+	if (!dut_prog_id || BPF_CORE_READ(xdp, aux, id) != dut_prog_id)
-+		return 0;
-+
- 	val = bpf_map_lookup_elem(&dut_stats, &key);
- 	if (val)
- 		__sync_add_and_fetch(val, 1);
- 
- 	return 0;
-@@ -239,10 +252,13 @@ SEC("tp_btf/xdp_cpumap_kthread")
- int BPF_PROG(tp_xdp_cpumap_kthread, int map_id, unsigned int processed,
- 	     unsigned int drops, int sched, struct xdp_cpumap_stats *xdp_stats)
- {
- 	__u32 *val, key = 0;
- 
-+	if (!dut_cpumap_id || map_id != dut_cpumap_id)
-+		return 0;
-+
- 	val = bpf_map_lookup_elem(&dut_stats, &key);
- 	if (val)
- 		__sync_add_and_fetch(val, 1);
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
-index 0aa71c4455c05..5b68b20d94ac9 100755
---- a/tools/testing/selftests/bpf/test_xdp_features.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_features.sh
-@@ -1,107 +1,181 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
- readonly NS="ns1-$(mktemp -u XXXXXX)"
-+readonly DUT_NS="dut-${NS}"
- readonly V0_IP4=10.10.0.11
- readonly V1_IP4=10.10.0.1
- readonly V0_IP6=2001:db8::11
- readonly V1_IP6=2001:db8::1
- 
- ret=1
-+dut_pid=""
-+peer_created=false
-+dut_created=false
-+setup_in_progress=true
-+pending_signal=0
- 
- setup() {
- 	{
--		ip netns add ${NS}
--
--		ip link add v1 type veth peer name v0 netns ${NS}
--
--		ip link set v1 up
--		ip addr add $V1_IP4/24 dev v1
--		ip addr add $V1_IP6/64 nodad dev v1
-+		[ ! -e "/run/netns/${NS}" ]
-+		peer_created=true
-+		ip netns add "${NS}"
-+		[ ! -e "/run/netns/${DUT_NS}" ]
-+		dut_created=true
-+		ip netns add "${DUT_NS}"
-+
-+		ip -n "$DUT_NS" link add v1 type veth peer name v0 netns ${NS}
-+
-+		ip -n "$DUT_NS" link set v1 up
-+		ip -n "$DUT_NS" addr add $V1_IP4/24 dev v1
-+		ip -n "$DUT_NS" addr add $V1_IP6/64 nodad dev v1
- 		ip -n ${NS} link set dev v0 up
- 		ip -n ${NS} addr add $V0_IP4/24 dev v0
- 		ip -n ${NS} addr add $V0_IP6/64 nodad dev v0
- 
- 		# Enable XDP mode and disable checksum offload
--		ethtool -K v1 gro on
--		ethtool -K v1 tx-checksumming off
-+		ip netns exec "$DUT_NS" ethtool -K v1 gro on
-+		ip netns exec "$DUT_NS" ethtool -K v1 tx-checksumming off
- 		ip netns exec ${NS} ethtool -K v0 gro on
- 		ip netns exec ${NS} ethtool -K v0 tx-checksumming off
- 	} > /dev/null 2>&1
-+	setup_in_progress=false
-+	[ "$pending_signal" -eq 0 ] || exit "$pending_signal"
-+}
-+
-+terminate_dut_server() {
-+	local pid
-+
-+	# Use the shell job instead of dut_pid, which may not have been assigned
-+	# yet if a signal arrived immediately after the server was started.
-+	pid=$(jobs -pr 2> /dev/null) || true
-+	if [ -z "$pid" ]; then
-+		dut_pid=""
-+		return
-+	fi
-+
-+	kill -KILL %% 2> /dev/null || true
-+	wait "$pid" 2> /dev/null || true
-+	dut_pid=""
- }
- 
- cleanup() {
--	ip link del v1 2> /dev/null
--	ip netns del ${NS} 2> /dev/null
--	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
-+	trap '' HUP INT QUIT ABRT TERM
-+	trap - EXIT
-+	terminate_dut_server
-+	if "$dut_created"; then
-+		ip netns del "$DUT_NS" 2> /dev/null || true
-+	fi
-+	if "$peer_created"; then
-+		ip netns del "$NS" 2> /dev/null || true
-+	fi
- }
- 
- wait_for_dut_server() {
--	while sleep 1; do
--		ss -tlp | grep -q xdp_features
--		[ $? -eq 0 ] && break
-+	local attempt
-+
-+	for ((attempt = 0; attempt < 30; attempt++)); do
-+		if [ "$(jobs -pr 2> /dev/null)" != "$dut_pid" ]; then
-+			echo "xdp_features server $dut_pid exited before readiness" >&2
-+			return 1
-+		fi
-+
-+		if ip netns exec "$DUT_NS" ss -tlp 2> /dev/null |
-+		   grep -q "pid=$dut_pid,"; then
-+			return 0
-+		fi
-+
-+		sleep 1
- 	done
-+	echo "xdp_features server $dut_pid did not become ready" >&2
-+	return 1
-+}
-+
-+start_dut_server() {
-+	ip netns exec "$DUT_NS" ./xdp_features "$@" &
-+	dut_pid=$!
-+	wait_for_dut_server
-+}
-+
-+reap_dut_server() {
-+	local status=0
-+
-+	wait "$dut_pid" || status=$?
-+	dut_pid=""
-+	return "$status"
- }
- 
- test_xdp_features() {
- 	setup
- 
- 	## XDP_PASS
--	./xdp_features -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_PASS -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_DROP
--	./xdp_features -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_DROP -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_DROP \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_ABORTED
--	./xdp_features -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_ABORTED -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_ABORTED \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_TX
--	./xdp_features -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_TX -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_TX \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_REDIRECT
--	./xdp_features -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_REDIRECT -D $V1_IP6 -T $V0_IP6 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_REDIRECT \
- 					   -D $V1_IP6 -C $V1_IP6 \
- 					   -T $V0_IP6 v0
- 	[ $? -ne 0 ] && exit
-+	reap_dut_server
- 
- 	## XDP_NDO_XMIT
--	./xdp_features -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
--	wait_for_dut_server
-+	start_dut_server -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
- 	ip netns exec ${NS} ./xdp_features -t -f XDP_NDO_XMIT \
- 					   -D ::ffff:$V1_IP4 \
- 					   -C ::ffff:$V1_IP4 \
- 					   -T ::ffff:$V0_IP4 v0
- 	ret=$?
--	cleanup
-+	reap_dut_server
-+}
-+
-+handle_signal() {
-+	if "$setup_in_progress"; then
-+		pending_signal=$1
-+	else
-+		exit "$1"
-+	fi
- }
- 
- set -e
--trap cleanup 2 3 6 9
-+trap cleanup EXIT
-+trap 'handle_signal 129' HUP
-+trap 'handle_signal 130' INT
-+trap 'handle_signal 131' QUIT
-+trap 'handle_signal 134' ABRT
-+trap 'handle_signal 143' TERM
- 
- test_xdp_features
- 
- exit $ret
-diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
-index 3076fdda61fa4..97c0e871c5b65 100644
---- a/tools/testing/selftests/bpf/xdp_features.c
-+++ b/tools/testing/selftests/bpf/xdp_features.c
-@@ -665,17 +665,39 @@ static int tester_run(struct xdp_features *skel)
- 
- 	fprintf(stdout, "Feature %s: [%s][%s]\n", get_xdp_feature_str(),
- 		detected_cap ? GREEN("DETECTED") : RED("NOT DETECTED"),
- 		env.feature.drv_feature & advertised_feature ? GREEN("ADVERTISED")
- 							     : RED("NOT ADVERTISED"));
-+	if (!err && detected_cap != !!(env.feature.drv_feature & advertised_feature))
-+		err = -EINVAL;
- out:
- 	if (xdp_attached)
- 		bpf_xdp_detach(env.ifindex, flags, NULL);
- 	close(sockfd);
- 	return err < 0 ? err : 0;
- }
- 
-+static int dut_set_trace_ids(struct xdp_features *skel)
-+{
-+	struct bpf_prog_info prog = {};
-+	struct bpf_map_info map = {};
-+	__u32 len = sizeof(prog);
-+	int err;
-+
-+	err = bpf_prog_get_info_by_fd(bpf_program__fd(skel->progs.xdp_do_aborted),
-+				      &prog, &len);
-+	if (err)
-+		return err;
-+	len = sizeof(map);
-+	err = bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.cpu_map), &map, &len);
-+	if (err)
-+		return err;
-+	skel->bss->dut_prog_id = prog.id;
-+	skel->bss->dut_cpumap_id = map.id;
-+	return 0;
-+}
-+
- int main(int argc, char **argv)
- {
- 	struct xdp_features *skel;
- 	int err;
- 
-@@ -714,10 +736,14 @@ int main(int argc, char **argv)
- 	if (err) {
- 		fprintf(stderr, "Failed to load and verify BPF skeleton\n");
- 		goto cleanup;
- 	}
- 
-+	err = dut_set_trace_ids(skel);
-+	if (err)
-+		goto cleanup;
-+
- 	err = xdp_features__attach(skel);
- 	if (err) {
- 		fprintf(stderr, "Failed to attach BPF skeleton\n");
- 		goto cleanup;
- 	}
+ tools/testing/selftests/bpf/.gitignore             |    1 -
+ tools/testing/selftests/bpf/Makefile               |   11 +-
+ tools/testing/selftests/bpf/test_xdp_features.sh   |  107 --
+ tools/testing/selftests/bpf/xdp_features.c         |  719 --------------
+ tools/testing/selftests/drivers/net/README.rst     |   19 +
+ tools/testing/selftests/drivers/net/hw/.gitignore  |    3 +
+ tools/testing/selftests/drivers/net/hw/Makefile    |   15 +-
+ tools/testing/selftests/drivers/net/hw/config      |    3 +
+ .../net/hw/xdp_features.bpf.c}                     |   60 +-
+ .../selftests/drivers/net/hw/xdp_features.c        | 1023 ++++++++++++++++++++
+ .../{bpf => drivers/net/hw}/xdp_features.h         |    1 +
+ .../selftests/drivers/net/hw/xdp_features.py       |  146 +++
+ .../selftests/drivers/net/lib/py/remote_ssh.py     |    2 +-
+ tools/testing/selftests/net/bpf.mk                 |   33 +-
+ 14 files changed, 1266 insertions(+), 877 deletions(-)
+---
+base-commit: 8df0638138d3e0344fd1fb36cf2d1ca1cf5028f0
+change-id: 20261008-xdp-v5-send-20261008-301d0e1d3165
 
--- 
-Git-155)
+Best regards,
+--  
+Bochao Cao <bochaolucky@gmail.com>
 
 
