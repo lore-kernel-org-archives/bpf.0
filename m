@@ -1,106 +1,85 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1983955C4
-	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 15:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1967238DC53;
+	Sun, 18 Oct 2026 15:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792337771; cv=none; b=KEmtiSutPa5BfMqbLY/Sm/WdccljC0OQJPKU4cDk4/0vu/c/iiX+CrgBB+rKOesZg0BiaIT2xdbuVImt/5PqwdDqvXZ8xVIbwU2NtaLhlW8GGKG5sPjaNqE4+4bEoztj6tJmrvWBWfqhlrBlgpCCFvojRRJE/7tstRXlq6jb2IE=
+	t=1792338602; cv=none; b=tItG+CZtlB55/lJHwFwxt5tCPJxCPLciJtqixS6jAEtq1IgbtPq3Drwu+Kol7ucwh0AKoLsIZfu5TlJxrdVJfDpYqQN60LJBWO5eSNOLtFNgl5zfUJ24vbrQlFJvIb/l0aS254H4csctFP8syOXWctPIWeFAVt9A4hFblPstIJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792337771; c=relaxed/simple;
-	bh=waGPtSzpE3lIXbhGjF91+oeOVlgMsJXlHWJmCr+kn20=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=msO7mYVgFeNEbOqU2M3FaqRbWa3RhZOBOsjyf8lfEspA+YDE0Zwt/BKlZe/vQTm7QitjtZ1WGYObPhW/oRXpp5j/xfdiFwTZjK8thqdoJxyzmX/c6YvnMcPGGhfxLKXGCqkFNAfd4Of+gzxdOV0JCZn6otaoZf0Tm5wC6BtEWM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRyTK6Lp; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792338602; c=relaxed/simple;
+	bh=nuWm5cdLlbh+eTVljmY2s0zpnWdBSnZbHIzuUMimW9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cb07jpP9xJ7JhEy7fJOPtkVdmzYBLuQYVPu7KRehgidOM7GOT43WvJ4ZQA6vOFENU922gduFfCqn0DJCF3NvPcCQQ4hlEhBww0NuYXS7TF8ojq/AGXOYoes6T8GhHUAfeYciyzsULthqjw4m9RJUkM1QSjGQZEIPi06oD/t3MgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R5cqjmm0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRyTK6Lp"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc4b1f7e8f4so569338a12.1
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 08:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792337769; x=1792942569; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ikyHv0vTUgy0Xo2LWvfxOo1dUQuPKaqw0/RogLyXK/U=;
-        b=FRyTK6Lp4t+55uA5y7cIlzu3qZQyU4gfkI6NhAWhpXgHbI3Quvys33pnGU439QrYUO
-         nCLub49d5RDGVkPn7+Wl+g7kA2avadD1QfKrW8bB6/9ILSbcpv93oITPovLvhWDhpaWT
-         zdFrRM8cCIVkoLcc0yDnvOSNhR+FO0keW8tcinnWNM/aMaTHetur4siTLO5kvSX17byw
-         cBL7/DBy5KiG7sh5o8XWbuRVWdduFJ2G25wN1vtVQ6bxegBSnTpvuEG94Rf5OEDQK8DE
-         mbpvJg5lfvghsYQdL25I1zi69TS9Qj5soJLrNpeGd9Bc3I1sOdtFjrwGvephnpRdObYl
-         D7gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792337769; x=1792942569;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ikyHv0vTUgy0Xo2LWvfxOo1dUQuPKaqw0/RogLyXK/U=;
-        b=uylNTQMIE21AXbIki9zgrTNHWjwfFn28f2/xnPF+4OsTPhZ0f3P0MgHFTzD0xvUxum
-         yGBnjylR8T55ODPzv2TIQh6Iv2+qfDXBYKWE1WMQ2GrFPFpjqjT+wz00TN4z418mAP55
-         DpoDm4dJa5nrBjTWV1RqBIZVpF9J4juiOTmUuawL3jNGh1WIpVNWpaAZHwGwMYvsQx6t
-         thSLy+JimQN6g1oAvewyGB3TYWpZ0crBdrWe0q2xDra7NJMaFjJzI/iJofAqEtLfYvQt
-         dOnns+APqLnDNnC4tWqSVQwFleCmnGum2LyE0ujKJtpdvR8/7aORQHsppcfHE4RV5CvL
-         Eszw==
-X-Forwarded-Encrypted: i=1; AKwUvBzCnQ+g3OddHRUzG5XER32rCzl4Zvi4ervnDm8UXysCq5anJI4WJ+GmKQ22aw9aMzUKOlA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYImzTNvzClCRnSzKiZYDia3SENOpnHS8MJv0LSvJPphJewwOAqQ
-	RDfQ9lZaI6Qb0H5qqZLXYnYFpa+tGV94cP6HVg2lw+S62fq11oSMvueQ
-X-Gm-Gg: AYBFou0GB+5rLvyTZzGCgRvNnv0Wdm70TAZDnHfx24JXroMlZNyhoNhlo3f2RzAfWvg
-	1Ur7Bp4DPRS/TNP8Ecxh77bdrqZaQP2kMzAD3YWKs7tzqPDloKydBMTkDS6NSqgMrl+fOI0sS1J
-	Vbd0ygGsjpx2JSzNtcUa5rANaKUBZrrbImwsMou6RKa2De+PExmZ3vftNkZp7rFxKsoYRoccM6q
-	SlyRpFkumV41dxd7egligGdN9T6KOMqjj09n3sEAc0veol+Re4EuLwOPkQ2/rT1eNQi5M8NhGWh
-	nJiscYXPouFjY5q+XyCK+cGD7SEMZa8fqJs9POyUl0ibSZMx6n++BhUJHm/ZX7ZmqOA9pGjXmU3
-	hDvshEQdNf2cL1Q/85xT5CKozDkoZdO4mrApILeH3nZVeQF2y22plrlEZqWyco3xOO29Pwv934i
-	YotI9PbUFGYyQoEt6GEVz1gQqJ3O7E4WDYqWus9A+//M3EQ6u9Pesx+Ayjrgp/h1Y2ls/YL5rBi
-	KZeVLWqzCcUcIIBrnA6+Q07UATXwjySEDMS7UokqqQqlCxWgdWDzHD2EWrCavtOUMECCSnGvKdH
-	MDs=
-X-Received: by 2002:a05:6a20:a103:b0:3e1:e481:747b with SMTP id adf61e73a8af0-3e22626fb46mr3823122637.24.1792337769231;
-        Sun, 18 Oct 2026 08:36:09 -0700 (PDT)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89f57e220bbsm3069177b3a.43.2026.10.18.08.36.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Oct 2026 08:36:08 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 18 Oct 2026 15:36:07 +0000
-Message-Id: <DM82PN9SLID5.ZJSU0JDPQAA6@gmail.com>
-To: "Ren Wei" <weir@nebusec.ai>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <john.fastabend@gmail.com>,
- <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
- <sdf@fomichev.me>, <drosen@google.com>, <ameryhung@gmail.com>,
- <xyx2021@mail.ustc.edu.cn>, <chenyy23@mails.tsinghua.edu.cn>,
- <vega@nebusec.ai>, <rakukuip@gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Reject packet dynptr slices in
- mutating helpers and subprograms
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <cover.1792222148.git.rakukuip@gmail.com>
-References: <cover.1792222148.git.rakukuip@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R5cqjmm0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9FE1F000C4;
+	Sun, 18 Oct 2026 15:49:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792338600;
+	bh=6LphvJRgdMJSniREV29w572IWK1vBbe+xqjQ4ijfnWg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=R5cqjmm0/pxO8eWkiE374zCrnaP6BYGUuQpanGQXmgKXv6qo9G0XALv+JAGPsZWBQ
+	 82hnVRlC0cPE7YUB38NmsqyKeqrc16j3oJ19PIB17au1ZkjQyPXUGHHUZzNlARMPsv
+	 0KcvhFPPxRiTgsG0EezciP9cGMpaHNwgsYzqn8lvZXtjxZ+oNUsGS7mqiF1Ov6t243
+	 f4W5VXcv5VBZR8rpCQXrIvRUjVZCHlavSHklpYDj03gHAnBS8LpzOPNh1vgNqa7IIH
+	 0XWlf3iNIi9ydffoEZCHNbPp9FWcUk9Q22rNrJE83iRR059mRwAvbwJW4HK1gc365z
+	 0gP2Scs7OvnNQ==
+Date: Sun, 18 Oct 2026 17:49:50 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alasdair Kergon <agk@redhat.com>, 
+	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, 
+	Benjamin Marzinski <bmarzins@redhat.com>, David Howells <dhowells@redhat.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Andrew Halaney <andrew@amutable.com>, dm-devel@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	bpf@vger.kernel.org, fsverity@lists.linux.dev, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/3] keys: Add well known IDs for
+ fs-verity/dm-verity keys
+Message-ID: <20261018-skrupel-ungefiltert-bauamt-99f4c40aa5f8@brauner>
+References: <20261008-ajhalaney-dmverity-key-identifier-v2-0-008456d189cb@amutable.com>
+ <20261012-broschen-inanspruchnahme-gebilde-d72cf2b99cda@brauner>
+ <DM5UD20248FG.3BXPS76LK06F5@gmail.com>
+ <20261016-ratlos-endkunde-eindimensional-1fe5eef08d13@brauner>
+ <DM6CJUE4J2LX.2NR5QB5X3N0Y6@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DM6CJUE4J2LX.2NR5QB5X3N0Y6@gmail.com>
 
-On Sat, Oct 17, 2026 at 10:44 PM Ren Wei <weir@nebusec.ai> wrote:
-> This series resolves the problem across mutating helpers and subprograms:
+On Fri, Oct 16, 2026 at 02:53:23PM +0000, Alexei Starovoitov wrote:
+> On Fri Oct 16, 2026 at 8:27 AM UTC, Christian Brauner wrote:
+> > On Fri, Oct 16, 2026 at 12:38:11AM +0000, Alexei Starovoitov wrote:
+> >> On Mon, Oct 12, 2026 at 12:38 PM Christian Brauner <brauner@kernel.org> wrote:
+> >> > Applied to the vfs-7.4.keyring branch of the vfs/vfs.git tree.
+> >> > Patches in the vfs-7.4.keyring branch should appear in linux-next soon.
+> >> 
+> >> What is this branch based on ?
+> >> v2 was sent against bpf-next, because
+> >> commit 264d8fd2794f ("bpf, keys: Add a bpf keyring for program signature validation")
+> >> is only there.
+> >> All hunks in keyctl.h, key.h and process_keys.c have its lines as
+> >> context, so the patches don't apply to -rc as-is.
+> >> And patch 3 documents KEY_SPEC_BPF_KEYRING.
+> >
+> > It's based on the portion of bpf-next that has Daniel's keyring patches.
+> > Which means I just wait until bpf-next is merged and then send it as a
+> > follow-up pr.
+> 
+> ohh. that should work. If it's simpler I can take this patch set into bpf-next,
+> so you wouldn't need to monitor merge window that closely.
 
-Not anymore. This doesn't apply to bpf-next, because it was fixed there
-a few hours before you sent v2:
-
-  a6f8a67c13dd ("bpf: Refuse packet slices for packet-changing helpers")
-  19e6ca6b4a22 ("bpf: Drop packet pointers behind kfuncs writing an skb")
-  589998616e0f ("bpf: Let bpf_dynptr_write() mark a global function")
-  b7f97db88948 ("bpf: Don't take a dynptr argument for a local dynptr")
-  1c19f2b3b2f3 ("bpf: Follow the head if an skb is written from a slice")
-
-check_func_arg() rejects the PoC with "function access to the packet is
-not allowed".
-
-pw-bot: cr
+LLMs make that kinda trivial. I need to send late merge window PRs a lot
+when we e.g., do tree-wide changes that would cause a lot of merge
+conflicts if constantly carried in -next.
