@@ -1,72 +1,76 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C22B2DB789
-	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED9328640B
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792285371; cv=none; b=f3u5wI07s7I4Q2DCuG3QJz6dmBVJV41zPub/ySA0XQhuW+pyzCzCdBBVe1V4sRU0YiRsujkiI8AQ8UBdnbxshv9aEaQ0UwNhkoZxbYc4+J83cMu268UGzb2uESf2DUBcZU70SVxY0alBUNdd8jvHIxynvaixRzWOQWly6CLZeQ4=
+	t=1792285376; cv=none; b=R4rqVGkxuNxHfoIutjsPJ3TPc/a6jGN4PQwGuyyRV0SM6BaSV3pmKkExuOzJmInFVaZ2F5+xV4U1KTTj9g7L5AyoB2+40uiS4FqqRbjKgr26RngYBuOQzZBtQ2NGh42Zjuqadn+XiVI0JDlDLk8f/nEDXR1qoCXf+vOmPlsYFLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792285371; c=relaxed/simple;
-	bh=3uEa4ZFLcvbFe181GbJ9aegm/+A3nZlkaC5RGlN9A2I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=t5OCLFDP/vkW88fHN3mrDjOHRwyyvxoY4XoWZePO+seQ6c9eKqGaUTwnwA+ODyTCj3Cm+HlXnO23gs3tC+oUznkKSUpxzAZP+y3Gc/XZYN0cF3utotVRIk2+8YByhQVgnPLExq1jq9MnUVyUshKulsQAwcvgfJ8pMr82PrThJlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sIpEVlg2; arc=none smtp.client-ip=209.85.215.175
+	s=arc-20240116; t=1792285376; c=relaxed/simple;
+	bh=QOv6OI22Gmt8lvo3HJLECdko8G18xh9FYvVV0d3DVuU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MirCXExSPy2XeflzIw2YczQRcEgdUDE8WDy3mWUkl2l5sjRlWTCVFO7bydXQCDGl9QtTSqQoj0SQGIJRcjat+Ydd+EQ9HJnmlhvTIufxaHcn7hBOt4qIcpr/2onZUW6B/2rrfQ9mptFfhYJkigOri/NvJ7nXy8NtkQFU3XKAqHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dL25LHfK; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sIpEVlg2"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cc147d86bebso667204a12.0
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 18:02:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dL25LHfK"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ab4178ee33so812176a91.3
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 18:02:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792285368; x=1792890168; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1Vp05muOT4Nx0fg/ey18lPqt3vV3rvfbsrOvPrZxnEE=;
-        b=sIpEVlg22zyXZbYFknOtv65brqVaW2UgVZKwU6wUifQayJKN9ulhwVs7ExwsIodEjc
-         Tgm6eE88y+t2DXdDNybqzG1q9tGu6rcpvaXbYCwvkP7Cdi/SDSM+RPIu0lliyfJD88Dx
-         YLxBjaQJaZJtQWF07wi63FWyVHg9CF9blTezVJFmK53/mypth6mdPwIcj/mdKWBBaNBz
-         FcQs/6tmyEaUDzjLksnVlx0LnEBpzCcS8u3XeAEingb6ism5B1SKuPWZKnTecD9lkfEq
-         43OrPVAs7XctS44UHXq23kizoZ5blxji0WynaLKX5qoV+JK9gw6s6KLRm8q4m+voWmZk
-         Bi5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792285368; x=1792890168;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792285374; x=1792890174; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1Vp05muOT4Nx0fg/ey18lPqt3vV3rvfbsrOvPrZxnEE=;
-        b=oV4BkupQvnkI5toaSlPWJ4uZq/UgPao3a5p77cWvep11lsQmNg8yzpgc/LRjzVLekQ
-         +4gjalqzZEj4LcU+/KHCW+gt5eYgJ3VaA2aumLlHU5coH85vQ+zzPf+9egzS2faBBe+B
-         bR7GZsnTTpcwvAnj3F2CUgc/aCcFl7nqF/0f9F2qUxIJ03xsKvqPuMuorbbU63qq6UTl
-         NwtgC0/XrrCqwyN38TqXfpKoqItP8q9OgrsYtt9HcvVFbWu0qVrmWfZOM+wFXXfCs061
-         k9FtmT8GyIjNW1Px1YO7NKXOtRvXbLVPtTDA8gbW0BEq8ZiIv7YT2+dJFkMJZxTqKfoR
-         lrtg==
-X-Gm-Message-State: AFq9FYJAqQPr7BiBCSR4iSmRJDtKw2668jF0NJE0gwd409lCaB6r1ZWB
-	b1dHGo/WoyK9oYQgXtu9wdDbsg8bAGYkKsmE4F/8Gyb3bCugGdmQpHkw36SSzA==
-X-Gm-Gg: AYBFou3MXYGfr5l1E6jDhkSG1Yp2BCNKFuEo6ZsHmP+4XaB2l9y9jatbZqi3epAFbsh
-	ohikFgL2BGn6aVZkgiNdBf4xio0RI9unZEkJ0qvvrjE7LPbxPpB+X5lRTiUlJ7sScbYkBAg+65J
-	k1p2Tohx8m6Z7PR3BJ3n2REHrb4/5V8GqZOSIbMWC1CJe10Zwp6Kx1gi1t1nYmC11XYaYSzHy2k
-	peWlPh5jNZQIp+Us1jiekksBY0C8d9ViLe19Lx+pnuY/XQ2kCZhkbSSt7W3RGwSvp52cnhj2vqY
-	Rm+yaWwk4qGvNDg+K5k7mSbI1++4W3poNmJg96JAMcjFBQxf6Phhg9gIVAijFLoPgx3fJYKoa7V
-	6KQFBYaAdRlFIqDefyYb3ma3G3SqvmB8QBvbJJfNNUlNilrWyLBDwoGGL3rktvfVJkQeobizmxD
-	G90gdg+wgG7FVKdfXzNIX/8Qk9Q0jHGZD3nVl56NZvOTLjCohadvLJWs089w6VEVOXqI6/8qFyi
-	f3HH9EeYEfvXPvzToPSuSVWjDdc8cv3N7XXbzeWNojYoy7oi4BACIqLLNjxuo1q+prvHC4JrBgW
-	O57bon066StOI8rBWrn3i6tseJxef+XI1CrbCw1O7x3gKgL9+Ihn+w==
-X-Received: by 2002:a05:6a20:2591:b0:3e2:335b:1a62 with SMTP id adf61e73a8af0-3e2335b24b8mr1311607637.49.1792285368226;
-        Sat, 17 Oct 2026 18:02:48 -0700 (PDT)
+        bh=DuqIy61RYjGSSa/2SzJ+efDB2VrQDO9/PJ3AGJ3QMXQ=;
+        b=dL25LHfKzmQZjrFNKXZCrp8eoma8TosmIlSz57urfmcSGDf2HKjZj3c65gY40qaWm7
+         aAiznY6JKEbf4Sz/oekMlnuOhD7k37HN2/Bm95kf8F3bmD5xliiHUbq8pY+3jtDA4Nve
+         bgHvyo85e3IDGbFYKHxo6ibJUPeuWy/Iz+nMRKwiQGYlrdbQ5E+fDzEgcSFVV4fFn25L
+         H1HuUoSuBdis3Fb/0HsFlYhd9oVu+r1ckFvra9QsOUVBE6rOBDly1IY4ti4BgNSiFVtq
+         b5s/sUvQjJJ5STYNfoQA6V54TM7NOhcatbXGiXToBL/SlQ8uJ6bQGfPUrSolhkB1Hk9H
+         N0OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792285374; x=1792890174;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DuqIy61RYjGSSa/2SzJ+efDB2VrQDO9/PJ3AGJ3QMXQ=;
+        b=KbjRO5FElKw4D/PDEQRa06GD3fZzA/d1ZpaJIbYAwRQMdwL0QseqNtw9Y2qcOmlQlJ
+         KQ1VGgGnwfcvB+dsLoG9JYIXyYrJmOZLukdAtsoDFDODAAF649oH2bMwjAOV/5q7MR85
+         YLvSsT3Rnv/1/yVYWOwJEGCW7nPo9k22Kgnc6dsM5MsrnWVdu69EaMKMRVZa7P1LrfDa
+         3SS+w/xE7++STXmH61IKtC6hboTHD80QebkJB9arBwdWhR4mq16FQLQCvJMRrXPt3WOy
+         rGYtN/gaKzFPWFXx69cxBhXHHGaF60agVN04pV/2IamB62qu0Ei/Lfv1v1Chj86UJbTd
+         Ff6w==
+X-Gm-Message-State: AFq9FYIL7Ds9jgHUoKq8wNJ1TmhtRMeRbKbmRuIu9dZV/9OEWByLogW+
+	9gRXPYkwo+gzGwutfZ10D7TibHhpGijEWQgWurFZ8VHDB+6xFOH5XJPYDcYn3g==
+X-Gm-Gg: AYBFou3aNjv1AccSvILIXXzgTgmcTAFDf+1QA58dAknrRdQ5rwauZ3KcriZTmFKM/3c
+	UAqlwafxySW9hrp3O0aGiyfIU4kxnvm1eL6l7CbrJJ9ZRsVZF+9vjxV5N2wObzErWuxDe/lDPTn
+	am4wYa9YF8nbOzHOicB8+Mb6SdHh4f4YYjL6FtGJr73ASocI1IXF1LHRSCRTLASMKCu4XoZirT2
+	3933Nt1p3hv2jgW4qBQ7qTSL95Q0Lkt/VtEFBMPTC5m1ekJBnnTh7jtxQ0Tb8YWno1M9uUwHIyr
+	eu145dgw/Yb62zN8Wv5nDMs6azsRrQ8s5/90h3foE149b2RA+Nx81Vwy1o/l1zn7q3z7Qqj0eEp
+	jrce+FirJ/hRcr+VFdKhv48xIA/Ra58PN4ntJkdVXglrpPcBsW+bT/bFr/q6Q0FYbRXBhBHkqU1
+	J5CyVr2DWHHP/pO9V1Zo1V5kknJNP2vsJunxT5lysUqinDlPSOAG7eZ3fmSZ9sMnwEU35qhrhh4
+	hjsQGnF2FPxTn++WVT9wB5TXFV+QWcjxPX6PI2t4i97qO8hf+H7sq4ld1qcpd8cgH8kQeYClm/1
+	kPutQZQqHnXhC0SAL32CHNOdlPOkYcydo9d5ooTe5x0=
+X-Received: by 2002:a17:90b:2e85:b0:3ac:aa8d:19eb with SMTP id 98e67ed59e1d1-3acee29585cmr2984680a91.3.1792285374142;
+        Sat, 17 Oct 2026 18:02:54 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd6549fb561sm2645087a12.23.2026.10.17.18.02.47
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac945e72c6sm14717677a91.5.2026.10.17.18.02.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 18:02:47 -0700 (PDT)
+        Sat, 17 Oct 2026 18:02:53 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 0/5] bpf: Unwinding via r3
-Date: Sun, 18 Oct 2026 01:02:40 +0000
-Message-ID: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 1/5] bpf: Support unwinding via r3
+Date: Sun, 18 Oct 2026 01:02:41 +0000
+Message-ID: <20261018010246.1643877-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
+References: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,114 +79,448 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@anthropic.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-This is the r3 alternative from the discussion of v12 of Yonghong's series
-[1] as patches, with x86-64 and arm64 JITs and selftests.
+Rust Drop, C++ destructors and __attribute__((cleanup)) in C have to run
+when a panic or an exception passes through a frame.
 
-1. What is the problem?
-
-A rust panic or a C++ exception has to run Drop impls or destructors of
-every frame it passes through. bpf_throw() discards the frames, so the
-verifier doesn't let a frame that owns a lock or a reference throw. In rust
-every index and every unwrap() can panic.
-
-2. Is it worth solving?
-
-Without it rust-bpf [2] drops all landing pads and a panic is bpf_throw().
-A prog that can panic with a guard held doesn't load.
-
-3. Is there a simpler way?
-
-[1] keeps the normal path free of unwind code. llvm emits a table, libbpf
-passes it to the kernel, bpf_unwind() walks the stack and rewrites return
-addresses, and the verifier models hidden edges from calls to pads. That's
-1400 lines in the kernel, with new uapi and two kfuncs, and 440 lines in
-libbpf.
-
-Here llvm emits plain insns [3]:
+llvm lowers unwinding to plain insns [1]. A function that can unwind says
+in r3 how it returns, and its caller looks at r3 after the call:
 
   ret                            r3 = 0; exit
   invoke foo unwind pad          call foo; if r3 != 0 goto pad
   resume                         r0 = 0; r3 = 1; exit
+  call _Unwind_RaiseException    r0 = 0; r3 = 1; exit
+  invoke _Unwind_RaiseException  r0 = 0; goto pad
 
-Pads are ordinary code, so the verifier part is 96 lines in patch 1.
-The price is a branch after a call that may unwind. Patches 2 and 3 take it
-off the normal path in the JITs without telling the verifier. 360 lines
-with them.
+Landing pads are ordinary blocks reached by ordinary branches, so the
+verifier checks them like any other code. A pad that forgets to drop
+a lock or a reference is a leak on that path. There are no tables, no stack
+walk, no uapi, no kfuncs and nothing to do for libbpf and other loaders.
 
-4. Will the api and the layers last?
+The kernel only has to know which subprogs say something in r3.
+llvm marks them with BTF decl_tag "unwind". For such a subprog:
+- It has to exit with a scalar in r3, which reaches the caller like r0
+  does. After a call to a global subprog it's an unknown scalar.
+- As a callback it has to exit with r3 == 0. The helper that calls it
+  doesn't look at r3.
+- Tail call and ld_abs are rejected. Both return to the caller of the
+  subprog with whatever is in r3.
+- Only fentry can attach to it. A trampoline that calls the subprog and
+  an extension that replaces it don't keep r3.
+- The prog has to be JITed. The interpreter returns r0 only.
+Without the tag r3 is not readable after a call, as before.
 
-No uapi, no kfuncs, no changes in libbpf and other loaders.
-r3 and BTF decl_tag "unwind" become an ABI between llvm and the kernel.
-The source level entry point is _Unwind_RaiseException() of the Itanium
-ABI. It's what the runtimes of rust and C++ call on other architectures.
+r3 steers control flow. A JIT that loses it between 'exit' and the insn
+after the call would skip a pad that the verifier saw running. So JITs opt
+in with bpf_jit_supports_unwind(). x86-64 does: r3 is rdx and the epilogue
+doesn't touch it.
 
-5. Is it good taste?
+Rust
 
-Every frame returns through its own epilogue. The only question is where it
-returns to. That's one bit.
+rust-bpf is switched to it [2]. The programs are built with
+-C panic=unwind. The panic handler prints the message and calls
+_Unwind_RaiseException(). The IR post-processing used to turn invoke into
+call and drop the pads. Now it leaves invoke, landingpad and resume to
+llvm.
+A panic that cannot unwind, e.g. one that reaches an extern "C" function,
+still ends in bpf_throw().
+exc_cleanup.rs panics three frames deep, with preemption disabled in one
+frame and rcu_read_lock held in another. All Drop impls run and the prog
+returns 0.
+scx_simple.rs is 2216 insns. 13 of 37 direct calls of subprogs and all 20
+indirect calls are followed by the branch. In scx_cosmos.rs it's 21 of 61
+and 20 of 20 in 3716 insns.
 
-It's not specific to rust. A C++ prog with throw, catch and destructors
-compiles, loads and runs. It's a selftest in patch 5.
+C++
 
-Since the sketches in [1]:
-- bpf_unwind() is gone. _Unwind_RaiseException() starts an unwind.
-- llvm applies the convention to functions with uwtable only, so C progs
-  are not affected.
-- JITs opt in. A JIT that loses r3 would skip a pad.
-- A subprog with the tag has to exit with a scalar in r3.
-- A callback that doesn't set r3 was hitting verifier_bug().
-- The extable lookup is search_bpf_extables().
-- 'Functions end with exit' was not quite right. A function can still end
-  with a call of a noreturn function that cannot unwind, like bpf_throw().
-  rust-bpf adds 'exit' after it.
+Exceptions work too. This compiles, loads and runs:
 
-Tested in qemu only, x86-64 and arm64 with and without pointer
-authentication: the selftests, C, C++ and rust progs built with [3],
-with and without bpf_jit_harden=2. test_progs was run on x86-64. On arm64
-the same objects were loaded and run by a small loader, and __jited
-patterns were matched against the JIT output by a script.
+  struct rcu_guard {
+          rcu_guard() { bpf_rcu_read_lock(); }
+          ~rcu_guard() { bpf_rcu_read_unlock(); }
+  };
 
-[1] https://lore.kernel.org/bpf/20261017025129.1914859-1-yonghong.song@linux.dev/
-[2] https://github.com/4ast/rust-bpf
-[3] https://github.com/llvm/llvm-project/pull/233140
+  static __noinline int inner(int len)
+  {
+          rcu_guard guard;
 
-Alexei Starovoitov (5):
-  bpf: Support unwinding via r3
-  bpf, x86: Replace 'if r3 != 0 goto pad' after a call with an extable
-    entry
-  bpf, arm64: Support unwinding via r3
-  selftests/bpf: Add tests for unwinding via r3
-  selftests/bpf: Add a C++ prog with exceptions
+          if (len > 100)
+                  throw 1;
+          return len;
+  }
 
- arch/arm64/net/bpf_jit.h                      |   2 +
- arch/arm64/net/bpf_jit_comp.c                 | 110 +++
- arch/x86/net/bpf_jit_comp.c                   | 107 ++-
- include/linux/bpf.h                           |   1 +
- include/linux/bpf_verifier.h                  |   5 +-
- include/linux/filter.h                        |  11 +
- kernel/bpf/backtrack.c                        |  10 +-
- kernel/bpf/core.c                             |  53 ++
- kernel/bpf/fixups.c                           |   1 +
- kernel/bpf/liveness.c                         |   7 +-
- kernel/bpf/verifier.c                         |  66 +-
- tools/testing/selftests/bpf/Makefile.skel     |  11 +
- .../selftests/bpf/prog_tests/unwind_attach.c  |  67 ++
- .../selftests/bpf/prog_tests/unwind_cxx.c     |  76 ++
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/unwind_attach.c       |  32 +
- .../selftests/bpf/progs/unwind_cxx.cpp        | 117 +++
- .../selftests/bpf/progs/verifier_unwind.c     | 759 ++++++++++++++++++
- 18 files changed, 1427 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/unwind_attach.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
- create mode 100644 tools/testing/selftests/bpf/progs/unwind_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/unwind_cxx.cpp
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_unwind.c
+  SEC("tc") int prog(struct __sk_buff *skb)
+  {
+          try {
+                  return inner(skb->len);
+          } catch (...) {
+                  return 42;
+          }
+  }
 
+It returns 64 for a packet of 64 bytes and 42 for a packet of 200 bytes.
+The destructor runs in both cases, otherwise the verifier would reject
+the prog. 'throw' is a jump to the pad with the destructor. 'catch' is
+the branch after the call:
 
-base-commit: c058636f788f8751e419b407206516280226e568
+  inner:
+    w6 = w1
+    call bpf_rcu_read_lock
+    if w6 s< 101 goto ret
+    goto pad
+  ret:
+    call bpf_rcu_read_unlock
+    w0 = w6
+    r3 = 0
+    exit
+  pad:
+    call bpf_rcu_read_unlock
+    r0 = 0
+    r3 = 1
+    exit
+
+  prog:
+    w6 = *(u32 *)(r1 + 0)
+    w1 = w6
+    call inner
+    if r3 != 0 goto catch
+  out:
+    w0 = w6
+    exit
+  catch:
+    w6 = 42
+    goto out
+
+It needs -fexceptions -funwind-tables and four one line __cxa_*()
+functions, where __cxa_throw() calls _Unwind_RaiseException().
+Every pad is entered whatever was thrown, so llvm takes catch (...) only.
+It's a selftest in the last patch.
+
+[1] https://github.com/llvm/llvm-project/pull/233140
+[2] https://github.com/4ast/rust-bpf/commit/b3225d1
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ arch/x86/net/bpf_jit_comp.c  |  5 +++
+ include/linux/bpf.h          |  1 +
+ include/linux/bpf_verifier.h |  3 ++
+ include/linux/filter.h       |  1 +
+ kernel/bpf/backtrack.c       | 10 ++++--
+ kernel/bpf/core.c            |  9 +++++
+ kernel/bpf/fixups.c          |  1 +
+ kernel/bpf/liveness.c        |  7 ++--
+ kernel/bpf/verifier.c        | 66 ++++++++++++++++++++++++++++++++++--
+ 9 files changed, 96 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 11a4e4f87aac..16e847c615bc 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -5025,6 +5025,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_unwind(void)
++{
++	return true;
++}
++
+ const struct bpf_jit_arg_abi *bpf_jit_arg_abi(void)
+ {
+ 	return &x86_arg_abi;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 22947fa192e4..5f824c4242be 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1894,6 +1894,7 @@ struct bpf_prog_aux {
+ 	bool priv_stack_requested;
+ 	bool changes_pkt_data;
+ 	bool might_sleep;
++	bool ret_unwind;
+ 	bool kprobe_write_ctx;
+ 	struct {
+ 		s32 keyring_serial;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index e420d211f423..0f25454094a7 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -949,6 +949,7 @@ struct bpf_subprog_info {
+ 	s16 fastcall_stack_off;
+ 	bool has_tail_call: 1;
+ 	bool might_throw: 1;
++	bool ret_unwind: 1; /* says in r3 whether it returns or unwinds */
+ 	bool tail_call_reachable: 1;
+ 	bool has_ld_abs: 1;
+ 	bool is_cb: 1;
+@@ -1219,6 +1220,8 @@ static inline struct bpf_subprog_info *subprog_info(struct bpf_verifier_env *env
+ 	return &env->subprog_info[subprog];
+ }
+ 
++#define BPF_REG_UNWIND BPF_REG_3
++
+ static inline bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int subprog)
+ {
+ 	return subprog_info(env, subprog)->ret_reg_pair;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 9339c6131f8f..15600d0e1b57 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1244,6 +1244,7 @@ bool bpf_jit_supports_percpu_insn(void);
+ bool bpf_jit_supports_kfunc_call(void);
+ bool bpf_jit_supports_callx(void);
+ bool bpf_jit_supports_kfunc_ret_reg_pair(void);
++bool bpf_jit_supports_unwind(void);
+ bool bpf_jit_supports_stack_args(void);
+ bool bpf_jit_supports_arena_args(void);
+ bool bpf_jit_supports_far_kfunc_call(void);
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index 43d5740034c0..0f8dbacdf9ca 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -448,6 +448,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 				bt_clear_reg(bt, BPF_REG_0);
+ 				/* and if it does not set R2, main pass would catch it */
+ 				bt_clear_reg(bt, BPF_REG_2);
++				bt_clear_reg(bt, BPF_REG_UNWIND);
+ 				/* r1-r5 are invalidated after subprog call,
+ 				 * so for global func call it shouldn't be set
+ 				 * anymore
+@@ -548,7 +549,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 					return -EFAULT;
+ 			}
+ 		} else if (opcode == BPF_EXIT) {
+-			bool from_subprog_call, r0_precise, r2_precise;
++			bool from_subprog_call, r0_precise, r2_precise, r3_precise;
+ 
+ 			/* BPF_EXIT in subprog or callback always returns
+ 			 * right after the call instruction, so by checking
+@@ -565,6 +566,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 
+ 			r0_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
+ 			r2_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_2);
++			r3_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_UNWIND);
+ 
+ 			/* Backtracking to a nested function call, 'idx' is a part of
+ 			 * the inner frame 'subseq_idx' is a part of the outer frame.
+@@ -578,8 +580,10 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 			 * might be a precise helper argument as well, so leave it set.
+ 			 */
+ 			bt_clear_reg(bt, BPF_REG_0);
+-			if (from_subprog_call)
++			if (from_subprog_call) {
+ 				bt_clear_reg(bt, BPF_REG_2);
++				bt_clear_reg(bt, BPF_REG_UNWIND);
++			}
+ 			if (from_subprog_call && (bt_reg_mask(bt) & BPF_REGMASK_ARGS)) {
+ 				verifier_bug(env, "backtracking exit unexpected regs %x",
+ 					     bt_reg_mask(bt));
+@@ -593,6 +597,8 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 				bt_set_reg(bt, BPF_REG_0);
+ 			if (r2_precise)
+ 				bt_set_reg(bt, BPF_REG_2);
++			if (r3_precise)
++				bt_set_reg(bt, BPF_REG_UNWIND);
+ 			/* r6-r9 and stack slots will stay set in caller frame
+ 			 * bitmasks until we return back from callee(s)
+ 			 */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index e1216927373a..b16d74d2681a 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3322,6 +3322,15 @@ bool __weak bpf_jit_supports_kfunc_ret_reg_pair(void)
+ 	return false;
+ }
+ 
++/*
++ * What a subprog leaves in r3 has to reach its caller: nothing from 'exit' to
++ * the insn after the call may clobber it.
++ */
++bool __weak bpf_jit_supports_unwind(void)
++{
++	return false;
++}
++
+ /*
+  * How this arch places a by-value kfunc argument, or NULL for one that has
+  * not opted in and so only takes an argument of a single eightbyte, which
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index fe59e3114d82..5e3e3cd378ee 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1383,6 +1383,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		func[i]->aux->exception_cb = env->subprog_info[i].is_exception_cb;
+ 		func[i]->aux->changes_pkt_data = env->subprog_info[i].changes_pkt_data;
+ 		func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
++		func[i]->aux->ret_unwind = env->subprog_info[i].ret_unwind;
+ 		func[i]->aux->token = prog->aux->token;
+ 		if (!i)
+ 			func[i]->aux->exception_boundary = env->seen_exception;
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index e657e6d95408..51ccb8b080a9 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -2482,7 +2482,7 @@ static int callee_subprog(struct bpf_verifier_env *env, const struct bpf_insn *i
+ static void compute_insn_live_regs(struct bpf_verifier_env *env,
+ 				   struct bpf_insn *insn,
+ 				   struct insn_live_regs *info,
+-				   bool ret_reg_pair)
++				   bool ret_reg_pair, bool ret_unwind)
+ {
+ 	struct bpf_call_summary cs;
+ 	const u8 class = BPF_CLASS(insn->code);
+@@ -2616,6 +2616,8 @@ static void compute_insn_live_regs(struct bpf_verifier_env *env,
+ 		case BPF_EXIT:
+ 			def = 0;
+ 			use = ret_reg_pair ? (r0 | r2) : r0;
++			if (ret_unwind)
++				use |= reg64_mask(BPF_REG_UNWIND);
+ 			break;
+ 		case BPF_CALL:
+ 			def = ALL_CALLER_SAVED_REGS;
+@@ -2698,7 +2700,8 @@ int bpf_compute_live_registers(struct bpf_verifier_env *env)
+ 		ret_reg_pair = bpf_ret_reg_pair(env, subprog);
+ 
+ 		for (i = start; i < end; ++i)
+-			compute_insn_live_regs(env, &insns[i], &state[i], ret_reg_pair);
++			compute_insn_live_regs(env, &insns[i], &state[i], ret_reg_pair,
++					       subprog && env->subprog_info[subprog].ret_unwind);
+ 	}
+ 
+ 	/* Forward pass: resolve stack access through FP-derived pointers */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2c812a5f1da8..7f1aefafa0b9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -440,7 +440,7 @@ static const int ret_regs[] = { BPF_REG_0, BPF_REG_2 };
+ static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
+ {
+ 	const struct btf *btf = env->prog->aux->btf;
+-	const struct btf_type *type;
++	const struct btf_type *type, *func;
+ 	int subprog;
+ 	u32 size;
+ 
+@@ -454,8 +454,26 @@ static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
+ 	 * refuses to replace a function returning more than 8 bytes.
+ 	 */
+ 	for (subprog = 1; subprog < env->subprog_cnt; subprog++) {
++		struct bpf_subprog_info *sub = subprog_info(env, subprog);
++
+ 		type = subprog_ret_type(env, subprog);
+-		if (!type || btf_type_is_void(type))
++		if (!type)
++			continue;
++		func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
++		if (btf_find_next_decl_tag(btf, func, -1, "unwind", 0) > 0) {
++			if (!bpf_jit_supports_unwind()) {
++				verbose(env, "JIT does not support unwinding\n");
++				return -ENOTSUPP;
++			}
++			/* They return to the caller with whatever is in r3. */
++			if (sub->has_tail_call || sub->has_ld_abs) {
++				verbose(env, "tail call or ld_abs in a subprog that can unwind\n");
++				return -EINVAL;
++			}
++			sub->ret_unwind = true;
++			env->prog->jit_required = 1;
++		}
++		if (btf_type_is_void(type))
+ 			continue;
+ 		if (verifier_bug_if(IS_ERR(btf_resolve_size(btf, type, &size)), env,
+ 				    "cannot size return type of subprog %d", subprog))
+@@ -11471,6 +11489,9 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			}
+ 		}
+ 
++		if (env->subprog_info[subprog].ret_unwind)
++			mark_reg_unknown(env, caller->regs, BPF_REG_UNWIND);
++
+ 		if (env->subprog_info[subprog].might_throw) {
+ 			struct bpf_verifier_state *branch;
+ 
+@@ -11923,13 +11944,14 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 	struct bpf_verifier_state *state = env->cur_state, *prev_st;
+ 	struct bpf_func_state *caller, *callee;
+ 	struct bpf_reg_state *r0;
+-	bool in_callback_fn;
++	bool in_callback_fn, ret_unwind;
+ 	u32 i, nregs;
+ 	int err;
+ 
+ 	callee = state->frame[state->curframe];
+ 	r0 = &callee->regs[BPF_REG_0];
+ 	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
++	ret_unwind = subprog_info(env, callee->subprogno)->ret_unwind;
+ 	for (i = 0; i < nregs; i++) {
+ 		if (callee->regs[ret_regs[i]].type != PTR_TO_STACK)
+ 			continue;
+@@ -11961,6 +11983,16 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 					       "At callback return", "R0");
+ 			return -EINVAL;
+ 		}
++		/* the helper that called it does not look at r3 */
++		if (ret_unwind) {
++			if (!bpf_register_is_null(&callee->regs[BPF_REG_UNWIND])) {
++				verbose(env, "callback cannot unwind\n");
++				return -EINVAL;
++			}
++			err = mark_chain_precision(env, BPF_REG_UNWIND);
++			if (err)
++				return err;
++		}
+ 		if (!bpf_calls_callback(env, callee->callsite)) {
+ 			verifier_bug(env, "in callback at %d, callsite %d !calls_callback",
+ 				     *insn_idx, callee->callsite);
+@@ -11979,6 +12011,22 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 			caller->regs[regno] = callee->regs[regno];
+ 			bpf_diag_mod_end(env);
+ 		}
++		if (ret_unwind) {
++			struct bpf_reg_state *r3 = &callee->regs[BPF_REG_UNWIND];
++
++			err = check_reg_arg(env, BPF_REG_UNWIND, SRC_OP);
++			if (err)
++				return err;
++			if (r3->type != SCALAR_VALUE) {
++				verbose(env, "At subprogram exit the register R%d is not a scalar value (%s)\n",
++					BPF_REG_UNWIND, reg_type_str(env, r3->type));
++				return -EINVAL;
++			}
++			bpf_diag_mod_begin(env, &caller->regs[BPF_REG_UNWIND], r3,
++					   BPF_DIAG_MOD_WRITE);
++			caller->regs[BPF_REG_UNWIND] = *r3;
++			bpf_diag_mod_end(env);
++		}
+ 	}
+ 
+ 	/* Invalidate callee-local dynptrs and their slices before the frame goes away. */
+@@ -19335,6 +19383,12 @@ static int check_global_subprog_return_code(struct bpf_verifier_env *env)
+ 	u32 i, nregs;
+ 	int err;
+ 
++	if (subprog_info(env, subprog)->ret_unwind) {
++		err = check_global_ret_scalar_reg(env, BPF_REG_UNWIND);
++		if (err)
++			return err;
++	}
++
+ 	if (subprog_returns_void(env, subprog))
+ 		return 0;
+ 
+@@ -22226,6 +22280,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 				prog_extension ? "Extension" : "Tracing");
+ 			return -EINVAL;
+ 		}
++		/* Neither a trampoline that calls the subprog nor an extension keeps r3. */
++		if (aux->func && subprog && aux->func[subprog]->aux->ret_unwind &&
++		    prog->expected_attach_type != BPF_TRACE_FENTRY) {
++			bpf_log(log, "Only fentry can attach to %s, which can unwind\n", tname);
++			return -EINVAL;
++		}
+ 		conservative = aux->func_info_aux[subprog].unreliable;
+ 		if (prog_extension) {
+ 			if (conservative) {
 -- 
 2.55.0
 
