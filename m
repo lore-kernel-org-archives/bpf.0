@@ -1,73 +1,73 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EFA28640B
-	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B517242D89
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792285388; cv=none; b=qtjAFOHcg8TeBSUyT5HgGQycp9Xk/l+xPkJEz2cUwFgMS1H8YT+rtmYSsBT20ELzkiF2N05JNorJy9IBKd0tlxDINsaKVYjJsHxJEF1YBKmHoY/nbunKiRQICYl1+wd7jF7FVRq7sDU2SFfrto4XXniusTMEPIHiUDHopayxKmw=
+	t=1792285395; cv=none; b=OOSXSJu0l2h+8wKZNbaQxvqqXaxn4v/97MnlLV1Qdl1Df5yC5wujRD3HxFu40XYE2RJju0ZQFAEa77jwSiY2uZUv+c7uZVKHxdx+97XF57Yt0BPA/i06JD1zJI/P8dgRspM2XLG3jGC9C5jedZts9uu5Yb8C5yqL4m5EREYZct4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792285388; c=relaxed/simple;
-	bh=vfVj6xDUSyJVYthPFvPtXRKBIognCI/1uGH7CshVOio=;
+	s=arc-20240116; t=1792285395; c=relaxed/simple;
+	bh=5a8j3amPlqot+b2YunsCBQhIXWvdQCxBBa760u5CvSU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XnB0U1Lrkr76NbqdnTroBChXukUgbS3gNlo4++oMH750X7UwnnvYv5EHdXT90fS1k0xjAtnLX8auaBkeuiRzBSQsSLxqj5Xtr3ZpDvM9X+iIJCG2Yc0YAdx8Pcpf/AItpuQO/8+79BcqkcufYuJzOdvxqLZ2FFV+FQFniFTKLes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TqyOnVm3; arc=none smtp.client-ip=209.85.216.50
+	 MIME-Version; b=lAU0+wCPeaV7cFy2S/tqvKxQYxB7B0udu0SqZx5RtEzdQUt+1HqdRFuYSoimmetJO1aQuXSBuMAwLjVt/edCzN7DIKKXccrthnGCZROUQtaEKPJMTsqsRONwx3ho17jne+lHl/tg1o9i9jOYK+5QDq0yMeEbX9aB/A4+FBd1y5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WzPJmi5C; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TqyOnVm3"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-38759bcd877so623642a91.2
-        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 18:03:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WzPJmi5C"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3a7cfe8f761so1401427a91.1
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 18:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792285386; x=1792890186; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792285392; x=1792890192; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3TrHXAfAbjO/BfS7Lf91lg3nUbKI9hcTBhHPC9nb+JY=;
-        b=TqyOnVm3QGjiaXdgCh3NSDicLjNd/wZs6ytyvGgpoCzx1izSvn9j53lKZ6uElcDkMz
-         89gDWujvYwNv+kOJboKFyv3rSDRHystencEwFvH37+eJKu5O5VKNf4VVkCldud/CFm9R
-         E+4eni1qpb0nf4soZ04A21JWmJ0e4izmq2y5Ct6fO0Si+4ZrA5I0iRYuJ/zqytcHpWHs
-         uqGFUZhCdaY4hk7gdRIfw3s4WhfobPW6G50/sv776ok0I83taAbZaphN2tr84CMyHXnF
-         rXSnplf067csFuuZELfhYscIeEQTHqTj4bNl9jM3+Z/EMApZY3i183SUd59k5GXQ6JUD
-         Mb3g==
+        bh=6dY2dzAOUngbDQqs/BK4gpOOLVBpIUQf//vo/cpD9HI=;
+        b=WzPJmi5CXnKZx0Uwm8lwVXxoJh1JBuN25UX1h2smQzn8cV1bcruFZMjVddRalMWar8
+         FFKippzYr16CL1zf75SWp9llxa6x1QYMXy+wAgZ7KTxQr49DvAKwU94DMPGomXMuyPwb
+         z04gS/5CmkAOKB+cJhyIMZZeuyug1OL1wQUPdGPZQGlwK6JufUimZSSMATDp+dtrF6HX
+         Medobncl2VemYz2B7N4UZ2xmfkfygN5YjE87AapZvUtndgKYR1N45YVleRczABwQfFuV
+         QeAy0lvEe+QHcobU1uSfcduZglbYp3ND+lpLJ6X2j8juWUsG0tZxsbrG4RphdiSebptk
+         PAkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792285386; x=1792890186;
+        d=1e100.net; s=20260707; t=1792285392; x=1792890192;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3TrHXAfAbjO/BfS7Lf91lg3nUbKI9hcTBhHPC9nb+JY=;
-        b=CIAz3Tbl0X0ruLn85lFdwTxpXHRw01Jx4LCUl/aLcSGXxJYtOwMSB7qvhDPy1DxWJK
-         5jkSH6+lun7WHHipEYbOQ3xU0zZLetZfAtDa61VtgIyWQokSeOTLLwFaGpevCu1fXrO5
-         kTa3xg2CLxB7M61dzaJ+XyZfG7XOvxkQFzpS+ImbPdWpa7fmLTI8hHNFSWakyUKlKglr
-         AOovLQItk/8oDWDEjPSeZp/43nDa2od7eEBKUHKpkYw4T9UoSY8RXeO/EOMyQ9n2txcb
-         J4r/9nKFZXc9R7Xt/eBCP5nHr3eX6SRuFVP5FcWTqaRGONcHdGImuqgBPb+toD2OJUNW
-         TAdQ==
-X-Gm-Message-State: AFq9FYKTjyJq9wFY1B8ZG2Xvxyczy8Ljv+izH2MFk1FCNJQjOdBAWVXv
-	DGJezH37zFmjul1KbFt9vzgx29xrugvaR3/sKL0udXRATwVEeRzeVbuRJ/BRDw==
-X-Gm-Gg: AYBFou0EStV+scP4cDyccnMEu4D7cOPm52bOHyelXZVcdiuzaTFoNfU/QQnQdY2yfsD
-	sB7jIluiC8xf2HWpQyKNszuaEdFmUGXntFRmNB2eTwLsvlS3IxuHQhU13POIesEpi0NinmYnxDt
-	TTVuyk9LVQL7emqHEUdVYxlAWKBtgU2Rp7svJXAjLX8MWz3IPzZ/Zpu7ifQ+W9L1iPSd2h9y9qC
-	gEbf6X1BuAM2QwJlTDXcZI2pD6EFlltMzrphcTkPgAFHKR/x0msy6cUVLf+DVP9yNH/RZwuA+8R
-	NWd5HU22NUjC7hM6cuo+Za2wkysEGeDrjYZ909hVkelEuoDFbar0PM29HEzLbS4gx1qcJ5oBccP
-	LepDWXLnahc+ka0Cm1SYZJJNO+BqLp6cRx6pqqWrtLwwr6cA8HD+IiHmPh9uWG70OM2jUXfM7zL
-	lSiaZz2SereKGpz839xxUG0Z0guAlwCUOSPHMQJZ602c8JXxh5dGx+YkhgJzZy74l/BWEqVVLc9
-	3Q1L0DOF/QPVD9Aag0Z7gyE2NSPQ08OIjN5cLlk242np7ELTgnam/SU8QX1JcCR8jF4eRgKwoEL
-	3AJ7kjH/ur4R0infsvvR7oTGm35rYAgQ+LLhlsP9nftGyRMpagkiCA==
-X-Received: by 2002:a17:90b:4c0d:b0:3aa:f4af:1e16 with SMTP id 98e67ed59e1d1-3acee293046mr3650756a91.7.1792285386243;
-        Sat, 17 Oct 2026 18:03:06 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc4972fe6sm10076612a91.15.2026.10.17.18.03.05
+        bh=6dY2dzAOUngbDQqs/BK4gpOOLVBpIUQf//vo/cpD9HI=;
+        b=nXZYx1QcE0IggisQ/S8ev9cIEcHCbc0+bGoB7laOnnTAdlbzi9IMjbGtU+Oev7VN27
+         VdSjdnCaa1sbwm3bnZmA6fD0FmCXvekXXzApQ4p7yoFUyRJUC8Vrjp/VhzOi/rMRRkqW
+         T2kRrQnQol9OAX2B270vhbOyKT6N82tjt7mM6BQDMcPAdgcF74Fja0WZga4FMe6oTKfB
+         pRjlITwZu4PoFJsV4Ed2BqsY+1uL1Ms8uPPaEHS/S5caBGYQFZrGmGFHY9D+oqRLiNQB
+         bmSFeeTFrUeLMXvQGJOPVDFBS0vJ5g3/cyLbLoCJwiLV8iEvk8lUcEs5WVAmU4vZ5EPv
+         BFuw==
+X-Gm-Message-State: AFq9FYKzgBqaNCWZTmVh4rDLArINkLiLLewVwKR+7wDoK7V8onJiCBx9
+	20AaPPJBRLyUqqomygid9CyfK0Pn4HHgcJI6qLSx3dIvHfSJDRUtqYUMi1p7pA==
+X-Gm-Gg: AYBFou3a4h3ToRFRQbfjgdsEQm13GsQQFUrB6wzExkHGxyeNUYlB5IpLhiQ9theD17f
+	c66Z+J58teq1Be974XDIXzCIKYbR/OpKUfKFQWpme8BKp4yRGTRp0nkZHFW10kcx2HhUe4s8Q15
+	f5GWmrQ7hq/MHQzmqp0ZSWmUEneqHdd+O4k6rUU2wvCCrlmTYYz0o/t/tmUzM9zWp9VjH3/V0Y6
+	y1FlfcFSBO6BpvbPojlp4HWtvM1xIAaLiieZMa1f15hhZtRmBFfeLu2HtkhO8bpgmq7V++2b6+g
+	6qBqcsHjZU21GDUqVus01MbVnKE2M3noYxiwzzFgtdlb4z0CEPDQB81gVzbQysqENGwLCGERsY6
+	ISeqICMmFcz0jEg3+pTs2KegM3oYQjvRr64VsBW9FxgxFr7bTdmMe8+PGu9H8guOsrNikOeGaj4
+	e9LB7y3DD7PpVFQfNndXK5oLtzcCLcZT+M/vJ47wsTbBKgvZEGJB0Sajjk7vZgNjG1K3mGBAPQK
+	AvY2jO73vk8/xQP+khSh/qJDd1S/0tGf7Ta3aCxn4aQLpvi4cTWAibfu6wcGodvM1x0bjuFt4Ms
+	4FIiaw8PgxjwpAMhTdRXnTotvAhUSZjtUPzfqQ/kntLLMdJ3x+AG1w==
+X-Received: by 2002:a17:90b:1d43:b0:3a6:d850:bf16 with SMTP id 98e67ed59e1d1-3acef14bee3mr1939701a91.23.1792285392255;
+        Sat, 17 Oct 2026 18:03:12 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac94792925sm14478403a91.13.2026.10.17.18.03.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Oct 2026 18:03:05 -0700 (PDT)
+        Sat, 17 Oct 2026 18:03:11 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 3/5] bpf, arm64: Support unwinding via r3
-Date: Sun, 18 Oct 2026 01:02:43 +0000
-Message-ID: <20261018010246.1643877-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 4/5] selftests/bpf: Add tests for unwinding via r3
+Date: Sun, 18 Oct 2026 01:02:44 +0000
+Message-ID: <20261018010246.1643877-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
 References: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
@@ -81,242 +81,932 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-r3 is x2. The epilogue doesn't touch it, so say so in
-bpf_jit_supports_unwind().
+The tests spell out the insns that llvm emits and put BTF decl_tag "unwind"
+on the subprogs by hand, so they don't depend on llvm version.
 
-Like x86, replace 'if r3 != 0 goto pad' after a call with an extable entry:
+verifier_unwind:
+- r3 of a static and of a global subprog at run time, through one and
+  two frames. The verifier removes 'if r3 != 0' when it knows r3, so the
+  tests derive it from skb->len.
+- A landing pad is checked like any other code: it has to drop
+  rcu_read_lock.
+- r3 is not readable after a call to a subprog without the tag.
+- A subprog with the tag has to exit with a scalar in r3.
+- Precision of r3 is tracked into the callee.
+- A callback has to exit with r3 == 0.
+- Tail call and ld_abs are rejected.
+- x86-64 and arm64 JITs don't emit the branch after the call, unless it's
+  a jump target, and an exit with r3 != 0 fixes its return address.
 
-  bpf                         arm64 before                arm64 after
-  call inner                  bl inner                    bl inner
-  if r3 != 0 goto pad         mov x8, x0                  mov x8, x0
-  w0 = w6                     cmp x2, #0                  mov w8, w19
-                              b.ne pad
-                              mov w8, w19
-
-The callee returns to the pad past 'mov x8, x0'. That's fine: r0 is x8 and
-the epilogue of the callee copies it to x0 and leaves x8 as it is.
-
-An exit with r3 != 0 fixes LR in its frame record. With pointer
-authentication it's signed with SP at the entry of the prog, which is
-FP + 16:
-
-  ldr x17, [x29, #8]
-  add x16, x29, #16
-  autia1716
-  mov x0, x17
-  bl bpf_unwind_target
-  mov x17, x0
-  add x16, x29, #16
-  pacia1716
-  str x17, [x29, #8]
-
-So the lookup gets an authenticated address, and autiasp in the epilogue
-checks the new one. autia1716 and pacia1716 are hints like paciasp and
-autiasp: nops when the cpu doesn't have pointer authentication.
-RET is not subject to BTI.
-
-The private stack pointer is in a callee saved register. Unlike x86 there
-is nothing to undo after the call, so it doesn't get in the way.
-
-Tested in qemu with -cpu max and -cpu cortex-a72, i.e. with and without
-pointer authentication.
+unwind_attach: only fentry can attach to a subprog that can unwind.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/arm64/net/bpf_jit.h      |   2 +
- arch/arm64/net/bpf_jit_comp.c | 110 ++++++++++++++++++++++++++++++++++
- 2 files changed, 112 insertions(+)
+ .../selftests/bpf/prog_tests/unwind_attach.c  |  67 ++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/unwind_attach.c       |  32 +
+ .../selftests/bpf/progs/verifier_unwind.c     | 759 ++++++++++++++++++
+ 4 files changed, 860 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/unwind_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/unwind_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_unwind.c
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index b2fe6e6dcf44..50029dd9baa6 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -316,6 +316,8 @@
- 
- #define A64_PACIASP A64_HINT(AARCH64_INSN_HINT_PACIASP)
- #define A64_AUTIASP A64_HINT(AARCH64_INSN_HINT_AUTIASP)
-+#define A64_PACIA1716 A64_HINT(AARCH64_INSN_HINT_PACIA_1716)
-+#define A64_AUTIA1716 A64_HINT(AARCH64_INSN_HINT_AUTIA_1716)
- 
- /* BTI */
- #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 506c4201fec8..9b702930486a 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -11,6 +11,7 @@
- #include <linux/bitfield.h>
- #include <linux/bpf.h>
- #include <linux/cfi.h>
-+#include <linux/extable.h>
- #include <linux/filter.h>
- #include <linux/memory.h>
- #include <linux/printk.h>
-@@ -1221,6 +1222,86 @@ static int add_exception_handler(const struct bpf_insn *insn,
- 	return 0;
- }
- 
+diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_attach.c b/tools/testing/selftests/bpf/prog_tests/unwind_attach.c
+new file mode 100644
+index 000000000000..6927757a15b6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/unwind_attach.c
+@@ -0,0 +1,67 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "verifier_unwind.skel.h"
++#include "unwind_attach.skel.h"
++
 +/*
-+ * See bpf_jit_unwind_site(). The branch after the call that was just emitted is
-+ * not emitted. Remember where it goes. The pad is an index into ctx->offset.
++ * A trampoline that calls the subprog and an extension that replaces it don't
++ * keep r3, so only fentry can attach to a subprog that can unwind.
 + */
-+static int add_unwind_exentry(struct jit_ctx *ctx, int pad)
++static void attach(int tgt_fd, const char *name, bool ok)
 +{
-+	struct exception_table_entry *ex;
-+	off_t ins_offset;
++	struct unwind_attach *skel;
++	struct bpf_program *prog;
++	int err;
 +
-+	if (!ctx->image)
-+		/* First pass */
-+		return 0;
++	skel = unwind_attach__open();
++	if (!ASSERT_OK_PTR(skel, "unwind_attach__open"))
++		return;
 +
-+	if (!ctx->prog->aux->extable ||
-+	    WARN_ON_ONCE(ctx->exentry_idx >= ctx->prog->aux->num_exentries))
-+		return -EINVAL;
++	prog = bpf_object__find_program_by_name(skel->obj, name);
++	if (!ASSERT_OK_PTR(prog, name))
++		goto out;
++	bpf_program__set_autoload(prog, true);
++	err = bpf_program__set_attach_target(prog, tgt_fd, "global_unwinds");
++	if (!ASSERT_OK(err, "set_attach_target"))
++		goto out;
 +
-+	ex = &ctx->prog->aux->extable[ctx->exentry_idx];
-+	ins_offset = (long)&ctx->ro_image[ctx->idx] - 1 - (long)&ex->insn;
-+	if (WARN_ON_ONCE(ins_offset >= 0 || ins_offset < INT_MIN))
-+		return -ERANGE;
++	err = unwind_attach__load(skel);
++	if (ok)
++		ASSERT_OK(err, name);
++	else
++		ASSERT_ERR(err, name);
++out:
++	unwind_attach__destroy(skel);
++}
 +
-+	/* switch ex to rw buffer for writing */
-+	ex = (void *)ctx->image + ((void *)ex - (void *)ctx->ro_image);
-+	ex->insn = ins_offset;
-+	ex->fixup = (ctx->offset[pad] - ctx->idx) * AARCH64_INSN_SIZE;
-+	ex->type = EX_TYPE_BPF;
++void test_unwind_attach(void)
++{
++#if defined(__x86_64__) || defined(__aarch64__)
++	struct verifier_unwind *tgt;
++	struct bpf_program *prog;
++	int tgt_fd;
 +
-+	ctx->exentry_idx++;
++	if (!is_jit_enabled()) {
++		test__skip();
++		return;
++	}
++
++	tgt = verifier_unwind__open();
++	if (!ASSERT_OK_PTR(tgt, "verifier_unwind__open"))
++		return;
++	bpf_object__for_each_program(prog, tgt->obj)
++		bpf_program__set_autoload(prog, prog == tgt->progs.calls_global_unwinds);
++	if (!ASSERT_OK(verifier_unwind__load(tgt), "verifier_unwind__load"))
++		goto out;
++	tgt_fd = bpf_program__fd(tgt->progs.calls_global_unwinds);
++
++	attach(tgt_fd, "fentry_unwind", true);
++	attach(tgt_fd, "fexit_unwind", false);
++	attach(tgt_fd, "fmod_ret_unwind", false);
++	attach(tgt_fd, "freplace_unwind", false);
++out:
++	verifier_unwind__destroy(tgt);
++#else
++	test__skip();
++#endif
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index c69c0f7e9cc8..2c15d6251b5a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -130,6 +130,7 @@
+ #include "verifier_uninit.skel.h"
+ #include "verifier_unpriv.skel.h"
+ #include "verifier_unpriv_perf.skel.h"
++#include "verifier_unwind.skel.h"
+ #include "verifier_value_adj_spill.skel.h"
+ #include "verifier_value.skel.h"
+ #include "verifier_value_illegal_alu.skel.h"
+@@ -319,6 +320,7 @@ void test_verifier_typedef(void)              { RUN(verifier_typedef); }
+ void test_verifier_uninit(void)               { RUN(verifier_uninit); }
+ void test_verifier_unpriv(void)               { RUN(verifier_unpriv); }
+ void test_verifier_unpriv_perf(void)          { RUN(verifier_unpriv_perf); }
++void test_verifier_unwind(void)               { RUN(verifier_unwind); }
+ void test_verifier_value_adj_spill(void)      { RUN(verifier_value_adj_spill); }
+ void test_verifier_value(void)                { RUN(verifier_value); }
+ void test_verifier_value_illegal_alu(void)    { RUN(verifier_value_illegal_alu); }
+diff --git a/tools/testing/selftests/bpf/progs/unwind_attach.c b/tools/testing/selftests/bpf/progs/unwind_attach.c
+new file mode 100644
+index 000000000000..269d349139fc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/unwind_attach.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++/* The target is global_unwinds() in verifier_unwind.c */
++
++SEC("?fentry/global_unwinds")
++int BPF_PROG(fentry_unwind)
++{
 +	return 0;
 +}
 +
-+static u64 bpf_unwind_target(u64 ret_addr)
++SEC("?fexit/global_unwinds")
++int BPF_PROG(fexit_unwind)
 +{
-+	const struct exception_table_entry *e = search_bpf_extables(ret_addr - 1);
++	return 0;
++}
 +
-+	return e ? ret_addr + e->fixup : ret_addr;
++SEC("?fmod_ret/global_unwinds")
++int BPF_PROG(fmod_ret_unwind)
++{
++	return 0;
++}
++
++SEC("?freplace/global_unwinds")
++unsigned long freplace_unwind(void)
++{
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind.c b/tools/testing/selftests/bpf/progs/verifier_unwind.c
+new file mode 100644
+index 000000000000..18b4774f4292
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_unwind.c
+@@ -0,0 +1,759 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++/*
++ * llvm lowers unwinding to plain insns:
++ *   ret                      r3 = 0; exit
++ *   invoke foo unwind pad    call foo; if r3 != 0 goto pad
++ *   resume                   r0 = 0; r3 = 1; exit
++ * and puts this tag on the functions that say something in r3.
++ * The tests spell the insns out, so they don't depend on llvm version.
++ */
++#define __unwind __attribute__((btf_decl_tag("unwind")))
++
++extern void bpf_rcu_read_lock(void) __ksym;
++extern void bpf_rcu_read_unlock(void) __ksym;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(int));
++	__uint(value_size, sizeof(int));
++} prog_array SEC(".maps");
++
++/*
++ * The verifier removes 'if r3 != 0' when it knows r3. To have it at run time
++ * the tests pass skb->len, which is 64, or skb->len - 64.
++ *
++ * r1 == 0: returns 7, otherwise unwinds
++ */
++__naked __noinline __used __unwind
++static unsigned long may_unwind(void)
++{
++	asm volatile (
++		"if r1 != 0 goto 1f;"
++		"r0 = 7;"
++		"r3 = 0;"
++		"exit;"
++	"1:"
++		"r0 = 0;"
++		"r3 = 1;"
++		"exit;"
++	);
++}
++
++/* owns nothing: its pad only resumes */
++__naked __noinline __used __unwind
++static unsigned long passes_on(void)
++{
++	asm volatile (
++		"call may_unwind;"
++		"if r3 != 0 goto 1f;"
++		"r0 += 1;"
++		"r3 = 0;"
++		"exit;"
++	"1:"
++		"r0 = 0;"
++		"r3 = 1;"
++		"exit;"
++	);
++}
++
++__naked __noinline __used __unwind
++unsigned long global_returns(void)
++{
++	asm volatile (
++		"r0 = 7;"
++		"r3 = 0;"
++		"exit;"
++	);
++}
++
++__naked __noinline __used __unwind
++unsigned long global_unwinds(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"r3 = 1;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: the callee returns")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(7)
++__naked int callee_returns(void)
++{
++	asm volatile (
++		"r1 = *(u32 *)(r1 + %[len]);"
++		"r1 -= 64;"
++		"call may_unwind;"
++		"if r3 != 0 goto 1f;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len))
++		: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: the callee unwinds")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(42)
++__naked int callee_unwinds(void)
++{
++	asm volatile (
++		"r1 = *(u32 *)(r1 + %[len]);"
++		"call may_unwind;"
++		"if r3 != 0 goto 1f;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len))
++		: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: return through two frames")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(8)
++__naked int two_frames_return(void)
++{
++	asm volatile (
++		"r1 = *(u32 *)(r1 + %[len]);"
++		"r1 -= 64;"
++		"call passes_on;"
++		"if r3 != 0 goto 1f;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len))
++		: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: unwind through two frames")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(42)
++__naked int two_frames_unwind(void)
++{
++	asm volatile (
++		"r1 = *(u32 *)(r1 + %[len]);"
++		"call passes_on;"
++		"if r3 != 0 goto 1f;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len))
++		: __clobber_all
++	);
++}
++
++/* 'if r3 != 0' makes r3 precise. The chain goes into the callee through its exit. */
++SEC("tc")
++__description("unwind: precision of r3 is tracked into the callee")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r3 stack= before 12: (95) exit")
++__msg("mark_precise: frame1: regs=r3 stack= before 11: (b7) r3 = 1")
++__naked int r3_precision(void)
++{
++	asm volatile (
++		"r1 = 1;"
++		"call may_unwind;"
++		"if r3 != 0 goto 1f;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: the pad drops what the frame owns")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success
++__naked int pad_unlocks(void)
++{
++	asm volatile (
++		"call %[bpf_rcu_read_lock];"
++		"call %[bpf_get_prandom_u32];"
++		"r1 = r0;"
++		"call may_unwind;"
++		"if r3 != 0 goto 1f;"
++		"call %[bpf_rcu_read_unlock];"
++		"r0 = 0;"
++		"exit;"
++	"1:"
++		"call %[bpf_rcu_read_unlock];"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock),
++		  __imm(bpf_get_prandom_u32)
++		: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: the pad is checked like any other code")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("BPF_EXIT instruction in main prog cannot be used inside bpf_rcu_read_lock-ed region")
++__naked int pad_forgets_to_unlock(void)
++{
++	asm volatile (
++		"call %[bpf_rcu_read_lock];"
++		"call %[bpf_get_prandom_u32];"
++		"r1 = r0;"
++		"call may_unwind;"
++		"if r3 != 0 goto 1f;"
++		"call %[bpf_rcu_read_unlock];"
++	"1:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock),
++		  __imm(bpf_get_prandom_u32)
++		: __clobber_all
++	);
++}
++
++/* The verifier doesn't look into a global subprog at the call: it may unwind. */
++SEC("tc")
++__description("unwind: r3 is unknown after a call to a global subprog")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("BPF_EXIT instruction in main prog cannot be used inside bpf_rcu_read_lock-ed region")
++__naked int global_pad_forgets_to_unlock(void)
++{
++	asm volatile (
++		"call %[bpf_rcu_read_lock];"
++		"call global_returns;"
++		"if r3 != 0 goto 1f;"
++		"call %[bpf_rcu_read_unlock];"
++	"1:"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_rcu_read_lock),
++		  __imm(bpf_rcu_read_unlock)
++		: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: a global subprog returns")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(7)
++__naked int calls_global_returns(void)
++{
++	asm volatile (
++		"call global_returns;"
++		"if r3 != 0 goto 1f;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: a global subprog unwinds")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(42)
++__naked int calls_global_unwinds(void)
++{
++	asm volatile (
++		"call global_unwinds;"
++		"if r3 != 0 goto 1f;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used
++static unsigned long no_tag(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"r3 = 0;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: r3 is not readable after a call to a subprog without the tag")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("R3 !read_ok")
++__naked int callee_has_no_tag(void)
++{
++	asm volatile (
++		"call no_tag;"
++		"if r3 != 0 goto 1f;"
++	"1:"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used __unwind
++static unsigned long r3_not_set(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: static subprog doesn't set r3")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("R3 !read_ok")
++__naked int static_r3_not_set(void)
++{
++	asm volatile (
++		"call r3_not_set;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used __unwind
++static unsigned long r3_is_pointer(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"r3 = r10;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: static subprog leaves a pointer in r3")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("At subprogram exit the register R3 is not a scalar value (fp)")
++__naked int static_r3_is_pointer(void)
++{
++	asm volatile (
++		"call r3_is_pointer;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used __unwind
++unsigned long global_r3_not_set(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: global subprog doesn't set r3")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("R3 !read_ok")
++__naked int calls_global_r3_not_set(void)
++{
++	asm volatile (
++		"call global_r3_not_set;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used __unwind
++unsigned long global_r3_is_pointer(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"r3 = r10;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: global subprog leaves a pointer in r3")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("At subprogram exit the register R3 is not a scalar value (fp)")
++__naked int calls_global_r3_is_pointer(void)
++{
++	asm volatile (
++		"call global_r3_is_pointer;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++/* The helper that calls a callback doesn't look at r3. */
++__naked __noinline __used __unwind
++static unsigned long cb_returns(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"r3 = 0;"
++		"exit;"
++	);
++}
++
++__naked __noinline __used __unwind
++static unsigned long cb_unwinds(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"r3 = 1;"
++		"exit;"
++	);
++}
++
++__naked __noinline __used __unwind
++static unsigned long cb_r3_not_set(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: callback returns")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(3)
++__naked int callback_returns(void)
++{
++	asm volatile (
++		"r1 = 3;"
++		"r2 = %[cb_returns];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		"exit;"
++		:
++		: __imm_ptr(cb_returns),
++		  __imm(bpf_loop)
++		: __clobber_common
++	);
++}
++
++SEC("tc")
++__description("unwind: callback unwinds")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("callback cannot unwind")
++__naked int callback_unwinds(void)
++{
++	asm volatile (
++		"r1 = 3;"
++		"r2 = %[cb_unwinds];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		"exit;"
++		:
++		: __imm_ptr(cb_unwinds),
++		  __imm(bpf_loop)
++		: __clobber_common
++	);
++}
++
++SEC("tc")
++__description("unwind: callback doesn't set r3")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("callback cannot unwind")
++__naked int callback_r3_not_set(void)
++{
++	asm volatile (
++		"r1 = 3;"
++		"r2 = %[cb_r3_not_set];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		"exit;"
++		:
++		: __imm_ptr(cb_r3_not_set),
++		  __imm(bpf_loop)
++		: __clobber_common
++	);
++}
++
++/* Both return to the caller of the subprog with whatever is in r3. */
++__naked __noinline __used __unwind
++static unsigned long does_tail_call(void)
++{
++	asm volatile (
++		"r2 = %[prog_array] ll;"
++		"r3 = 0;"
++		"call %[bpf_tail_call];"
++		"r0 = 0;"
++		"r3 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_tail_call),
++		  __imm_addr(prog_array)
++	);
++}
++
++SEC("tc")
++__description("unwind: tail call in a subprog that can unwind")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("tail call or ld_abs in a subprog that can unwind")
++__naked int tail_call_in_subprog(void)
++{
++	asm volatile (
++		"call does_tail_call;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used __unwind
++static unsigned long does_ld_abs(void)
++{
++	asm volatile (
++		"r6 = r1;"
++		"r0 = *(u8*)skb[0];"
++		"r3 = 0;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("unwind: ld_abs in a subprog that can unwind")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("tail call or ld_abs in a subprog that can unwind")
++__naked int ld_abs_in_subprog(void)
++{
++	asm volatile (
++		"call does_ld_abs;"
++		"exit;"
++		::: __clobber_all
++	);
 +}
 +
 +/*
-+ * Make an exit with r3 != 0 return to the pad.
-+ * LR in the frame record is signed with SP at the entry of the prog, which is
-+ * FP + 16. The x16/x17 forms are hints like PACIASP: nops without pointer auth.
-+ * r0, r2 and r3 are what the caller may look at.
++ * JITs don't emit 'if r3 != 0 goto pad' after a call. It becomes an extable entry.
++ * An exit with r3 != 0 looks its return address up there.
 + */
-+static void emit_unwind_ret_addr(struct jit_ctx *ctx, bool look_at_r3)
++SEC("tc")
++__description("unwind: jit: no branch after the call")
++__success __retval(42)
++__load_if_JITed()
++__arch_x86_64
++__jited("	callq	0x{{.*}}")
++__jited("	movl	$0x7, %eax")
++__jited("...")
++__jited("	movl	$0x1, %edx")
++__jited("	pushq	%rax")
++__jited("	pushq	%rsi")
++__jited("	pushq	%rdx")
++__jited("	movq	0x8(%rbp), %rdi")
++__jited("	callq	0x{{.*}}")
++__jited("	movq	%rax, 0x8(%rbp)")
++__jited("	popq	%rdx")
++__jited("	popq	%rsi")
++__jited("	popq	%rax")
++__arch_arm64
++__jited("	bl	{{.*}}")
++__jited("	mov	x8, x0")
++__jited("	mov	x8, #0x7")
++__jited("...")
++__jited("	mov	x2, #0x1")
++__jited("	stp	x8, x1, [sp, #-0x10]!")
++__jited("	stp	x2, xzr, [sp, #-0x10]!")
++__jited("	ldr	x17, [x29, #0x8]")
++__jited("...")
++__jited("	str	x17, [x29, #0x8]")
++__jited("	ldp	x2, xzr, [sp], #0x10")
++__jited("	ldp	x8, x1, [sp], #0x10")
++__naked int jit_no_branch(void)
 +{
-+	const bool ptr_auth = IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL);
-+	const u8 r0 = bpf2a64[BPF_REG_0];
-+	const u8 r2 = bpf2a64[BPF_REG_2];
-+	const u8 r3 = bpf2a64[BPF_REG_3];
-+	__le32 *branch = ctx->image + ctx->idx;
-+
-+	if (look_at_r3)
-+		emit(A64_NOP, ctx);
-+
-+	emit(A64_PUSH(r0, r2, A64_SP), ctx);
-+	emit(A64_PUSH(r3, A64_ZR, A64_SP), ctx);
-+
-+	emit(A64_LDR64I(A64_R(17), A64_FP, 8), ctx);
-+	if (ptr_auth) {
-+		emit(A64_ADD_I(1, A64_R(16), A64_FP, 16), ctx);
-+		emit(A64_AUTIA1716, ctx);
-+	}
-+	emit(A64_MOV(1, A64_R(0), A64_R(17)), ctx);
-+	emit_call((u64)bpf_unwind_target, ctx);
-+	emit(A64_MOV(1, A64_R(17), A64_R(0)), ctx);
-+	if (ptr_auth) {
-+		emit(A64_ADD_I(1, A64_R(16), A64_FP, 16), ctx);
-+		emit(A64_PACIA1716, ctx);
-+	}
-+	emit(A64_STR64I(A64_R(17), A64_FP, 8), ctx);
-+
-+	emit(A64_POP(r3, A64_ZR, A64_SP), ctx);
-+	emit(A64_POP(r0, r2, A64_SP), ctx);
-+
-+	if (look_at_r3 && ctx->image)
-+		*branch = cpu_to_le32(A64_CBZ(1, r3, &ctx->image[ctx->idx] - branch));
++	asm volatile (
++		"r1 = *(u32 *)(r1 + %[len]);"
++		"call may_unwind;"
++		"if r3 != 0 goto 1f;"
++		"r0 = 7;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len))
++		: __clobber_all
++	);
 +}
 +
- static const struct bpf_jit_arg_abi arm64_arg_abi = {
- 	.nr_arg_regs		= 8,
- 	.even_reg_align		= true,
-@@ -1378,6 +1459,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 	int off_adj;
- 	int ret;
- 	bool sign_extend;
-+	enum bpf_unwind_exit unw;
- 
- 	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
- 		emit_bti(A64_BTI_J, ctx);
-@@ -1781,6 +1863,13 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 			emit_kfunc_arg_moves(ctx, fm);
- 		}
- 		emit_call(func_addr, ctx);
-+		if (bpf_jit_unwind_site(env, ctx->prog, i)) {
-+			ret = add_unwind_exentry(ctx, i + 2 + insn[1].off);
-+			if (ret)
-+				return ret;
-+			emit(A64_MOV(1, r0, A64_R(0)), ctx);
-+			return 1;
-+		}
- 		/*
- 		 * Call to arch_bpf_timed_may_goto() is emitted by the
- 		 * verifier and called with custom calling convention with
-@@ -1799,6 +1888,13 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 		 * counter and the private stack are callee saved.
- 		 */
- 		emit(A64_BLR(dst), ctx);
-+		if (bpf_jit_unwind_site(env, ctx->prog, i)) {
-+			ret = add_unwind_exentry(ctx, i + 2 + insn[1].off);
-+			if (ret)
-+				return ret;
-+			emit(A64_MOV(1, bpf2a64[BPF_REG_0], A64_R(0)), ctx);
-+			return 1;
-+		}
- 		emit(A64_MOV(1, bpf2a64[BPF_REG_0], A64_R(0)), ctx);
- 		break;
- 	/* tail call */
-@@ -1808,6 +1904,9 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 		break;
- 	/* function return */
- 	case BPF_JMP | BPF_EXIT:
-+		unw = bpf_jit_unwind_exit(env, ctx->prog, i);
-+		if (unw != BPF_EXIT_RETURNS)
-+			emit_unwind_ret_addr(ctx, unw == BPF_EXIT_LOOK_AT_R3);
- 		/* Optimization: when last instruction is EXIT,
- 		   simply fallthrough to epilogue. */
- 		if (i == ctx->prog->len - 1)
-@@ -2240,6 +2339,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	int body_idx;
- 	int exentry_idx;
- 	int out_cnt;
-+	int i;
- 
- 	if (!prog->jit_requested)
- 		return prog;
-@@ -2313,6 +2413,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	build_epilogue(&ctx, was_classic);
- 	build_plt(&ctx);
- 
-+	/* The extra pass doesn't get here, so the count is adjusted once. */
-+	for (i = 0; i < prog->len; i++)
-+		if (bpf_jit_unwind_site(env, prog, i))
-+			prog->aux->num_exentries++;
-+
- 	extable_align = __alignof__(struct exception_table_entry);
- 	extable_size = prog->aux->num_exentries *
- 		sizeof(struct exception_table_entry);
-@@ -2464,6 +2569,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
- 	return true;
- }
- 
-+bool bpf_jit_supports_unwind(void)
++/* The exit cannot tell what is in r3 */
++__naked __noinline __used __unwind
++static unsigned long r3_from_r1(void)
 +{
-+	return true;
++	asm volatile (
++		"r0 = 0;"
++		"r3 = r1;"
++		"exit;"
++	);
 +}
 +
- const struct bpf_jit_arg_abi *bpf_jit_arg_abi(void)
- {
- 	return &arm64_arg_abi;
++SEC("tc")
++__description("unwind: jit: exit looks at r3, returns")
++__success __retval(7)
++__load_if_JITed()
++__arch_x86_64
++__jited("	movq	%rdi, %rdx")
++__jited("	testq	%rdx, %rdx")
++__jited("	je	{{.*}}")
++__jited("	pushq	%rax")
++__arch_arm64
++__jited("	mov	x2, x0")
++__jited("	cbz	x2, {{.*}}")
++__jited("	stp	x8, x1, [sp, #-0x10]!")
++__naked int jit_exit_looks_at_r3_returns(void)
++{
++	asm volatile (
++		"r1 = *(u32 *)(r1 + %[len]);"
++		"r1 -= 64;"
++		"call r3_from_r1;"
++		"if r3 != 0 goto 1f;"
++		"r0 = 7;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len))
++		: __clobber_all
++	);
++}
++
++SEC("tc")
++__description("unwind: jit: exit looks at r3, unwinds")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(42)
++__naked int jit_exit_looks_at_r3_unwinds(void)
++{
++	asm volatile (
++		"r1 = *(u32 *)(r1 + %[len]);"
++		"call r3_from_r1;"
++		"if r3 != 0 goto 1f;"
++		"r0 = 7;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len))
++		: __clobber_all
++	);
++}
++
++/* Something else jumps to the branch, so it has to be there */
++SEC("tc")
++__description("unwind: jit: the branch is a jump target")
++__success
++__load_if_JITed()
++__arch_x86_64
++__jited("	movl	$0x1, %edi")
++__jited("	callq	0x{{.*}}")
++__jited("{{.*}}	testq	%rdx, %rdx")
++__jited("	jne	{{.*}}")
++__arch_arm64
++__jited("	mov	x0, #0x1")
++__jited("	bl	{{.*}}")
++__jited("	mov	x8, x0")
++__jited("{{.*}}	cmp	x2, #0x0")
++__jited("	b.ne	{{.*}}")
++__naked int jit_branch_is_jump_target(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"r3 = 0;"
++		"if r0 == 0 goto 2f;"
++		"r1 = 1;"
++		"call may_unwind;"
++	"2:"
++		"if r3 != 0 goto 1f;"
++		"r0 = 7;"
++		"exit;"
++	"1:"
++		"r0 = 42;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all
++	);
++}
++
++/*
++ * BTF FUNC records are not generated for kfuncs referenced
++ * from inline assembly. These records are necessary for
++ * libbpf to link the program. The function below is a hack
++ * to ensure that BTF FUNC records are generated.
++ */
++void __kfunc_btf_root(void)
++{
++	bpf_rcu_read_lock();
++	bpf_rcu_read_unlock();
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
