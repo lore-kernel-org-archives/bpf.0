@@ -1,152 +1,211 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5A523395D
-	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C828C1E1E16
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792288102; cv=none; b=APINk0g8tBUmviCTuM80EHWtuITukbkSFgdVSq+YQqyiYJ7gHHlyaKLjU8dLOGrRA6gsyH/pM0cxbKkNBDL1kZ7Dupz/9MMKwVoc+s6c3FPi6n/rz0g1tsc65RHrTjmGSInM6IHKQyonOXFjn/qHZ+BwQhcMqTB5vwXjQAwly0g=
+	t=1792288112; cv=none; b=Q3EMNslfrQhuKlWSZunWHFC/0NA9Ig/L7q3fhyObZX6Rljvv3LY3E10MBfn9/3Oh/uwMtQHnw9BXKqCJ3Upd+F8MPLaxIgLxumC6y098zUnvhd901NhenVjf4lcZ98aIuUBUOCtTuQiIWs9xjHD2RZfKBOzKEuAKgi+E+SIBqw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792288102; c=relaxed/simple;
-	bh=TZnlImL1jN8rkNbNKThUcLWXxeIy8vofb1LTOd8Jh7A=;
-	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=Pl2tqzXDDPFPdB31JHE1J7ML3St0M/z1070LF27XbD9tzQgsq7Hxf2MA1n9QD2IbMsuKlQ+giZ1cZPCo+rV1Lv2dB7M3iTfJuQz+kSSezII0dV/taj301T5UOXOd1NgVR/DYn5jeExenjQyCGYQyRQ9GBK4HXudtJJD94pkKNUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dahOQWXv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792288112; c=relaxed/simple;
+	bh=UWEap/EhFEdVY3elCjafX+Rcwlk6PrMGP4X7oAZOq9k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=BoL9zKPCit5kkzI2lUhjGSDOPsLhokeZ/E1Nlq2sl0sIa19+ezI5AJjJRgZQ2MHx94m26whU/xyUWntY1lwFQPetqMGLmlDOcE9xiyVAFDIuLmxU+avjglZqGvu/H8YTlfmnSbDC2toViJVKw9Y0BmKoWPytAmSVCzHzQb9ps0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HylDli4T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dahOQWXv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B26AB1F000C4;
-	Sun, 18 Oct 2026 01:48:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HylDli4T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5D41F000C4;
+	Sun, 18 Oct 2026 01:48:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792288100;
-	bh=bLD08TFGMCF3mDjOv4/aI+/2GsoE/EG9uFRpMpODtg8=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=dahOQWXvZNDok2Nr+9/7IRKlPy4LnGmhxgrnKpUWDk9dHA8vI4Mky68Pt8LkuniTT
-	 aZGBWcxqFQHvGvt/YlvD15SBBYzhgBf9xJVS+W4dXmZ9E+dweKSUiwfVtkMmRwdWT8
-	 M2dJox1yO7KIqLr+s9RJjYfHKcrqRYSVA+nTtyLtCtGoW1oLhzWuDROoMRgJnVUyz6
-	 NnJ8wsjCtkJJxrc0TMsCMHIJj8WXsRdzd2ir0MBkAW7b4YpdmZZ04wTBf0//GXX9YE
-	 bD0mZ3UQ9gVj1EQeWX4YYpsaMuLVGDRo+Wo+1P4mc7Wb1gESK0w0DxuxM7QW4iqGIp
-	 IC3eIYakMzorg==
-Message-ID: <sashiko-outbox-175875@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Refuse the prologue for an extension if
- callers keep packet pointers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261018012753.1724147-1-alexei.starovoitov@gmail.com>
-References: <20261018012753.1724147-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 18 Oct 2026 01:48:20 +0000
+	s=k20260515; t=1792288111;
+	bh=zlZdcHdvCWtRIdorhkyLpcOxfauIn09Po3GCzqzVhmc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=HylDli4TgH3z81v9p4bj5VEwkH4/FZZzCJzilUllrRMUgNnGSmMj/JAp3DIavptvF
+	 LHagABfAAEa4RHFLVxgOZTuhsBFRDygjtsFmmmY3+GPYFgrOVRvdz9qHBFDoF29P6I
+	 3bGR13wEH2OxiarU9XcSDux5inR71dzVLxkU46bSlvuy8c84eGENY846gLrITBUQLd
+	 ktFYliEol7cJ58a45vDvoM4HEXw05sZr1xP1Vwnhz/eEOi4vzUvawWi+AXcCtu4YfN
+	 +UJq4K8hYw0gU1yrww3FxuYbkKXfrVZkMsp1FOIvQlPM4/JHrroec+vcAierVMbOZN
+	 0PwTsijURZnyg==
+Content-Type: multipart/mixed; boundary="===============6465459991306325806=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <5f36481f4331174e8ce3a76e97d2865b1002fc90ce642c2b1fe19ca154185496@mail.kernel.org>
+In-Reply-To: <20261018010246.1643877-2-alexei.starovoitov@gmail.com>
+References: <20261018010246.1643877-2-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] bpf: Support unwinding via r3
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 18 Oct 2026 01:48:30 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] bpf: bypass of called_with_pkt_ptrs check in bpf_check_ext_pro=
-logue()
---
+--===============6465459991306325806==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 83bf0cef185c53983f34422c2173a9a0850a623f
-Author: Alexei Starovoitov <ast@kernel.org>
+> bpf: Support unwinding via r3
 
-bpf: Refuse the prologue for an extension if callers keep packet pointers
+TL;DR:
+- Possible wrong r3 after fentry on an unwind subprog (rdx not restored), so
+  the verifier may miss a reachable pad
+- "unwind" decl_tag matched by prefix, may reject unrelated programs
+- Missing diagnostic write record for R3 (nit)
 
-This commit tracks whether global subprograms that do not change packet data
-are called while packet pointers or packet dynptr slices are held. It
-refuses loading or attaching an extension program with a prologue to such a
-function unless the target program already has a prologue of its own.
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 11a4e4f87aac..16e847c615bc 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -5025,6 +5025,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
+>  
+> +bool bpf_jit_supports_unwind(void)
+> +{
+> +	return true;
+> +}
+> +
+>  const struct bpf_jit_arg_abi *bpf_jit_arg_abi(void)
+
+Can the r3 that reaches the caller still be clobbered when fentry is attached
+to a subprog that can unwind on x86-64?
+
+prepare_func_exit() only checks that r3 is readable and a scalar at exit:
+
+	err = check_reg_arg(env, BPF_REG_UNWIND, SRC_OP);
+	...
+	caller->regs[BPF_REG_UNWIND] = *r3;
+
+set_callee_state() copies r1-r5 into the callee no matter how many arguments
+the callee declares.  So a static unwind subprog that never writes r3 passes
+verification whenever its caller set r3 before the call.  The selftest 'static
+subprog doesn't set r3' fails only because its caller leaves r3 uninitialized.
+This means r3 does not behave 'like r0', which is NOT_INIT when the callee
+starts.
+
+An fentry-only trampoline is built with BPF_TRAMP_F_RESTORE_REGS, and it
+restores only the argument slots in the target's func model:
+
+	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+		restore_regs(&prog, pos_of_slot, nr_regs, regs_off);
+
+For a static subprog whose BTF passes btf_check_subprog_call(),
+func_info_aux[].unreliable stays false, so bpf_check_attach_target() sets
+conservative == false and btf_distill_func_proto() uses the real BTF argument
+count instead of 5.  If that count is below 3, rdx is never restored.  By then
+rdx has been overwritten by __bpf_prog_enter*(), by the fentry prog, and by
+__bpf_prog_exit*(), which receives run_ctx in rdx.
+
+For example:
+
+  caller:  r3 = 0; r1 = ...; call S; if r3 != 0 goto pad
+  S (static, BTF 'int S(int)', decl_tag "unwind"):
+       r0 = r1; exit
+
+The verifier knows r3 == 0 after the call, marks it precise, and never
+explores the pad from this path.  If the pad is also reachable from another
+path, bpf_opt_hard_wire_dead_code_branches() does not hard-wire the branch, so
+it stays in the image.  Once fentry is attached to S, S returns whatever rdx
+the trampoline left behind, and the branch can be taken at run time with a
+register state the verifier never checked for the pad.
+
+The later extable conversion in this series (f2c9eb1fde9a "bpf, x86: Replace
+'if r3 != 0 goto pad' after a call with an extable entry") does not change
+this.  An exit not preceded by 'r3 = imm' gets 'test rdx, rdx' plus the
+extable lookup, and returns to the pad.  No later commit in the range fixes
+it.
+
+The same trampoline behaviour already affects a static subprog that reads an
+argument register it did not declare, so this widens an existing gap.  Here,
+though, r3 directly decides which landing pads the verifier treats as
+reachable.
+
+Would it work to mark r3 NOT_INIT on entry to an unwind subprog when r3 is not
+a declared argument (as is done for r0), or to treat unwind subprogs as
+conservative for fentry so that all five argument registers are restored?
+
+[ ... ]
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 63fff641d9858..c31287d2231c0 100644
+> index 63fff641d985..70b2087c7185 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -22209,6 +22230,30 @@ static int check_unreliable_func_args(struct bpf=
-_verifier_log *log, struct btf *
->  	return -EINVAL;
->  }
-> =20
-> +/*
-> + * The prologue of an extension gives a cloned skb a new head, unless the
-> + * prologue of the target program has done that. The callers of the func=
-tion
-> + * that it replaces must not hold on to the old head.
-> + */
-> +int bpf_check_ext_prologue(struct bpf_verifier_log *log,
-> +			   const struct bpf_prog *tgt_prog, u32 btf_id)
-> +{
-> +	const struct bpf_prog_aux *aux =3D tgt_prog->aux;
-> +	int i;
-> +
-> +	if (aux->has_prologue)
-> +		return 0;
-> +
-> +	for (i =3D 0; i < aux->func_info_cnt; i++)
-> +		if (aux->func_info[i].type_id =3D=3D btf_id &&
-> +		    !aux->func_info_aux[i].called_with_pkt_ptrs)
-> +			return 0;
+> @@ -454,8 +454,26 @@ static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
+>  	for (subprog = 1; subprog < env->subprog_cnt; subprog++) {
+> [ ... ]
+>  		type = subprog_ret_type(env, subprog);
+> -		if (!type || btf_type_is_void(type))
+> +		if (!type)
+> +			continue;
+> +		func = btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id);
+> +		if (btf_find_next_decl_tag(btf, func, -1, "unwind", 0) > 0) {
 
-[Severity: Critical]
-Can this loop in bpf_check_ext_prologue() bypass the called_with_pkt_ptrs
-check if two subprograms in aux->func_info[] share the same type_id?
+Does this match only the tag "unwind"?
 
-During program load, prepare_btf_func() and check_btf_func() in
-kernel/bpf/check_btf.c verify that each krecord[i].type_id references a
-BTF_KIND_FUNC, but do not require type_id to be unique across subprograms:
+btf_find_next_decl_tag() does strncmp(__btf_name_by_offset(btf, t->name_off),
+tag_key, strlen(tag_key)), so it matches by prefix.  The other callers rely on
+that because they pass key prefixes that end in a delimiter ("arg:",
+"exception_callback:") and then parse the value.  Here the key is the full tag
+name "unwind" with no delimiter.
 
-kernel/bpf/check_btf.c:prepare_btf_func() {
-	...
-		/* check type_id */
-		type =3D btf_type_by_id(btf, krecord[i].type_id);
-		if (!type || !btf_type_is_func(type)) {
-			verbose(env, "invalid type id %d in func info",
-				krecord[i].type_id);
-			goto err_free;
-		}
-	...
-}
+Any decl_tag on a subprog whose name starts with "unwind" (for example
+"unwind_safe", "unwinding", or a later "unwind:<x>" form) sets
+sub->ret_unwind, even though the commit message says only the tag "unwind"
+means this.  Such a subprog loaded fine before this patch.  Now:
 
-When resolving the attach target in bpf_check_attach_target(), the loop
-stops at the first subprogram matching btf_id and attaches the extension
-trampoline to tgt_prog->aux->func[subprog]->bpf_func:
+  1) on every JIT other than x86-64, bpf_check() fails with -ENOTSUPP
+     ("JIT does not support unwinding")
 
-kernel/bpf/verifier.c:bpf_check_attach_target() {
-	...
-		for (i =3D 0; i < aux->func_info_cnt; i++)
-			if (aux->func_info[i].type_id =3D=3D btf_id) {
-				subprog =3D i;
-				break;
-			}
-	...
-}
+  2) on x86-64, prepare_func_exit() and check_global_subprog_return_code()
+     require an initialized scalar in R3 at every exit, so a subprog that
+     never sets r3 (it is normally scratched by helper calls) is rejected
+     with "R3 !read_ok"
 
-However, in bpf_check_ext_prologue(), if the first subprogram matching
-btf_id has called_with_pkt_ptrs set to true, the loop does not break and
-continues scanning aux->func_info[]. If a subsequent subprogram shares the
-same btf_id and has called_with_pkt_ptrs set to false,
-bpf_check_ext_prologue() returns 0 even though the extension replaces the
-first matching subprogram, allowing bpf_unclone_prologue() to reallocate
-skb->head while callers of that first subprogram still hold packet pointers.
+  3) tail calls and ld_abs in it are rejected
 
-Should bpf_check_ext_prologue() stop at the first entry matching btf_id (or
-take the resolved subprog index directly)?
+  4) fexit and freplace can no longer attach to it
 
-> +
-> +	bpf_log(log,
-> +		"Extension writing packet data cannot replace a function whose callers=
- keep packet pointers\n");
-> +	return -EINVAL;
-> +}
+  5) jit_required is forced
+
+Would checking the name of the found tag with strcmp() against "unwind" limit
+this to the tag llvm emits?
 
 [ ... ]
 
->
+> @@ -11489,6 +11507,9 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> [ ... ]
+>  
+> +		if (env->subprog_info[subprog].ret_unwind)
+> +			mark_reg_unknown(env, caller->regs, BPF_REG_UNWIND);
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261018012753.1724=
-147-1-alexei.starovoitov@gmail.com?part=3D1
+Should this R3 write be wrapped in bpf_diag_mod_begin()/bpf_diag_mod_end()
+with BPF_DIAG_MOD_WRITE?
+
+In the global subprog path, every return register write is wrapped that way:
+R0, and R2 for a register pair.  The new R3 write in prepare_func_exit() in
+this patch is wrapped the same way.
+
+Just before this, clear_caller_saved_regs() -> bpf_diag_record_caller_saved()
+logs a BPF_DIAG_MOD_CALLER_SAVED scrub event for R3, and nothing is logged
+afterwards.  When a later error involves R3 after a call to a global subprog
+that can unwind, the "Causal path" printed by diag_print_mod() ends with:
+
+  R3: call invalidated this caller-saved register; previous value was ...
+
+It never shows that the call wrote an unknown scalar into R3, which can
+mislead the user.  R2 in the pair case gets the scrub event followed by a
+write event, which is the intended pattern.
+
+This only affects diagnostics, not verification results.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39085585797
+--===============6465459991306325806==--
