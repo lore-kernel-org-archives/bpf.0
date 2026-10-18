@@ -1,87 +1,78 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDBCCA6F;
-	Sun, 18 Oct 2026 15:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579D54CEE78
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 15:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792335671; cv=none; b=ET9/HNoouAerenXPMZP8Bz2jiBJg7hWj3hCOHpmZSsjI6S2mC7/LdzfvPly6fo16Y5KqQSAQLN3nFJYwpF064YIKudRluv2vjxBgtB/yvyPrpsay4UGOzE6zJtqWpdipnenntVlpl5k3T/glXhwdiyFx8n3geQYGmStBXCFxQHk=
+	t=1792336208; cv=none; b=mEyQmUyVBQ+3bynOVLAHl2kZ5ZX/Oj5Kv5bir/em+ac33q6L+aHjPkdlQsRHjjVS/Eka/B0eK5ZIfSLRTwrBZ6D+Q7GzL5XuYUUF6421YwX6eNCrPq8C+mlQe/iocuPVOu5ZM6NXXSBZ0pe+lPjPCS2uaRsu4d7qowRpm5cCUmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792335671; c=relaxed/simple;
-	bh=hHucxanoRbVcPV3hrlDuU407nTeTQ20xbLPEhLH8uH8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l6O2YQnmcBK18jfFa4uJna+UM1SBWmvpk+h0EUfIpVVcn47QlxGQtFgELZYwhRFM0prEpN0oVPICFggzvuunkFDiLO3WLIm+R7oXOUz5JkYKeSVLi3LrYxYIIaLVm3LPK00D1yaN+kCBMNgx8YKLf8RfMtPiAVVKxhD9gtLPSAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=UCiDyNys; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1792336208; c=relaxed/simple;
+	bh=mYTTCaWK/9ZqajGBsojFgfS95l5+LKN9YQ6cPzrivYY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=XBICBHOkjXZSUshtkM9llq5S1YK3s7w124gYAt251o2WCzTKOjxY21QIoV2+IsklGdU5WiKOaQtvi6S4mHpNi1+19/3M9zyG2AqFUiht276zGoH+6XKbhF2L8rR0htONdGsNtVdtg1UKq9Fo8Kch7KX5IdY4GDz5jOj3+jXFleQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KaGRc5Sd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="UCiDyNys"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Hu6ewlO5IG9SLBwTyGiV+QusCIa7MkxJyl9d84DVc5w=; b=UCiDyNysttf7+QJf+TJdazXvBF
-	1mFgI21YSgCqVl/GEnsdJKaC4GIpn7KOldpQYQXc0nTASeqrorew3JTx1HYbRY91yPnZ/JhcYom9C
-	DnGUHcbfBLtbeS9gHCL/iBSRVtRkfxDPlWRhTH2xonZtVYcwyLMe040CN8AG4alGdYtf4BalfGLKY
-	N5tP6n3jf/9pHcpACJIq91v5+zx4CNC6uZGJOgHX+9vErHGcFZxNLft6BVpYXrUmvQCh35OexQaqx
-	GhUGxKw2R0mHj+bWd10AHGkgy5pKmWwQpBif0ri7k1iBNYxdDzmIzEeI/F+v8FINfGVq1cciWgzYj
-	FY1zI/DA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.5 #2 (Red Hat Linux))
-	id 1xISNk-0000000BKK0-2W1H;
-	Sun, 18 Oct 2026 15:01:05 +0000
-Date: Sun, 18 Oct 2026 16:01:04 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Chris Mason <mason@kernel.org>, Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-	Amir Goldstein <amir73il@gmail.com>, bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 02/17] namespace: check a submount for references right
- before unmounting it
-Message-ID: <20261018150104.GG3535232@ZenIV>
-References: <20260930-work-mount-fixes-3-v1-0-be34c83956ae@kernel.org>
- <20260930-work-mount-fixes-3-v1-2-be34c83956ae@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KaGRc5Sd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF471F000C4;
+	Sun, 18 Oct 2026 15:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792336205;
+	bh=/K1uDIKhAuo8s4okgbTQPGLSZc1YbXuU3fqgFkYAvyE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=KaGRc5Sd11esIP0gtPRgSE/OGVGlFxZWT3ewC0tQoxy1mxQaGL+rsVfa74fGosU3U
+	 xXIFh0Me2bnpJPnNaJVc+Ob+qDOvkcUmZqwgicADQzxPxufWoeIWk2yuPfDjUdWbX3
+	 Y8VXjzvaIF89ogfr3tyCXeYFoP6WB560+EcDE3NC1kRv/99E/kQUDhnevwUS74KuI/
+	 cptl9jselVvfaaRItCmv2SvXTMUetsxBzrk1u+tCeH4b44DbDeTmtd2nxCYWu0VBzk
+	 GwZXe7ua/o5uoySPWDedZwu0xkxCzWzLIWtHN/bp0OFWV09+zmVlVert/oruQ6kts4
+	 kCx3tR7fEt8SA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B42EF381195F;
+	Sun, 18 Oct 2026 15:10:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260930-work-mount-fixes-3-v1-2-be34c83956ae@kernel.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf,
+ x86: Mask the shift counts of the magic number division
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179233620462.1709764.3268728489775198543.git-patchwork-notify@kernel.org>
+Date: Sun, 18 Oct 2026 15:10:04 +0000
+References: <20261018113352.730799-1-daniel@iogearbox.net>
+In-Reply-To: <20261018113352.730799-1-daniel@iogearbox.net>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, lkp@intel.com
 
-On Wed, Sep 30, 2026 at 03:31:54PM +0200, Christian Brauner wrote:
->  static void shrink_submounts(struct mount *mnt)
->  {
-> -	LIST_HEAD(graveyard);
-> -	struct mount *m;
-> -
-> -	/* extract submounts of 'mountpoint' from the expiration list */
-> -	while (select_submounts(mnt, &graveyard)) {
-> -		while (!list_empty(&graveyard)) {
-> -			m = list_first_entry(&graveyard, struct mount,
-> -						mnt_expire);
-> -			touch_mnt_namespace(m->mnt_ns);
-> -			umount_tree(m, UMOUNT_PROPAGATE|UMOUNT_SYNC);
-> -		}
-> +	for (;;) {
-> +		if (!__shrink_submounts(mnt))
-> +			break;
+Hello:
 
-Everything else aside...  Why would one ever use
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-	for (;;) {
-		if (!test())
-			break;
-	}
+On Sun, 18 Oct 2026 13:33:52 +0200 you wrote:
+> The kernel test robot reports for a clang 22 randconfig with UBSAN
+> and ThinLTO:
+> 
+>   vmlinux.o: error: objtool: do_jit(): unexpected end of section .text.do_jit
+> 
+> Fix by masking the counts to their range like rol64() does, which keeps the
+> shifts defined for the sanitizer and removes the __ubsan_handle_shift_out_of_bounds()
+> checks. The counts are below 32 and 64 anyway, so the emitted code does not
+> change. Reproduced with clang 20 and the robot's config without LTO.
+> 
+> [...]
 
-instead of
+Here is the summary with links:
+  - [bpf-next] bpf, x86: Mask the shift counts of the magic number division
+    https://git.kernel.org/bpf/bpf-next/c/73a5accbfd21
 
-	while (test())
-		;
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-outside of IOCCC?  Sure, compiler will generate the same code, but...
+
