@@ -1,143 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8339E175A95
-	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67762139C9
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792287496; cv=none; b=K5rbk++6oF0yRw29Ty/VzVveO/hyNm7XDVsVCashVi3F5zslzdps9u6U8zjHkfJoV6VG++7J8rQcV897ZnD4+DMo27cfT4nGqfK2NOneiN1/DISslxKducPy6r08so5z/2ANw9xhqGu9OViqbQh/piRxDobvo6eTvWKQymHzdqw=
+	t=1792287499; cv=none; b=LpUZ52siLnbIs7jABcgkol8jP5eJBZge8svXummdu1gVKqniqSOR9KRbauym2sIyJMtVVkN/HXbZJPdPIR+j+sbBMKi5PRqEuNBfhvpzc0fnQSkpMM4nHfeVRGUN8cfSFIVFk2t4e8ktlGaNOLZimiR/CCuV9OzVDWYTgZNcnW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792287496; c=relaxed/simple;
-	bh=MS3W3iQ/d6YPbu5aaGwhaaBO2VIb2J+oXLudON7814w=;
+	s=arc-20240116; t=1792287499; c=relaxed/simple;
+	bh=c8rp9kmmN+Cyv/k//QbCJcn+p1GYGWNjgiKOWWHQNCM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GC5p5VDMBd4D2r/Ksb5btwt0FGX84/Nu/AtUR93UmlYlowuW2cQ1sQRlHJt5NmW1iR1iGiLODnpVPFRYQLrdj8+ZhPRCx3YRA/H3JFS00eqWsTQ3irnNtSs2tL4VK6tsVOd263B3KhjgLtRgAgGRmy25TG4TNbm2X7i8qEQdm/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcjMk7lO; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=lhDbEQ9hO59puOnCv4iQt8q73RrqlIH93oTqNL2xtUoCaDD5E7BMG6MpB3O3qCV3u5Xf7wmx8SL5EHJU8POlrbX6JtRegOtLwh1ptuYfJ+6jfxWhNCxik4zdhDASX2VASlSySY76ha8R/y5aw7qysKCmTEnqedw/MHgjN+fyy3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a6q2MWwa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcjMk7lO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353491F000C4;
-	Sun, 18 Oct 2026 01:38:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a6q2MWwa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 497DD1F000C4;
+	Sun, 18 Oct 2026 01:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792287495;
-	bh=Iis3ysHIDQRRcqyxUEyPNxOLH7DDGkYokFipffZneNM=;
+	s=k20260515; t=1792287498;
+	bh=ocPgm/n1PmCC/DZ9RyVxOVZYExcMpYWZIXn5CVSzLGI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gcjMk7lOdLYgXYktb15Q1ch7d32ZXClav/UdMDbIo7ygyjxv7nvK9rQPkQTSrAD1p
-	 LtGwXX3X6SsTjRuEMI9LMtqe/LZWlE3QlkHD8c7QQkM3F/NJ40S/UubWjgbJ+3yGeU
-	 +K8mmVgnJ2ZcqUXeCWxN8Z1jHY0dwPEojafVCVK/8dDlY/kJfPSLDMokWFmwaXMvFC
-	 1AWOHkbjSXz0hLkWEhqUQK3V7mZ4KBaxgToYqY9gCSV3urz89EtU5Xz37eRMXVS9mc
-	 TklSE21osX9DNlo00SfV4XECqXTY84zuP4JpuSEFaLAX96/wnQ8jLJdbgxmTRreSD9
-	 9hp6iI7GeqV4Q==
-Content-Type: multipart/mixed; boundary="===============3629620460694473961=="
+	b=a6q2MWwa15FEDmb2Hkt3c6Kwhf0NXsTPlGgMSXWyyuwZwL5L2IKDJS0gxU37iIKYd
+	 Nwj9TuMBGQwO6D1tcw5sZW23ubcYqAg7XvYk82Z68HyUpHwoxC+AWU4eHm33bM4cRp
+	 HWax+hSyJ1CtnbOqfGkB9n7dc4nBZjQEHNon69ULR+d4Wl45eW8F8P+z2Y+N4F8+hc
+	 dkV5x5QbwyzsiWKLCYxM8D9njMcEZauNBE+KP0EqSna9g7x88RD48l5pnhed1q8EKA
+	 +X8J0NI0WWD6aiecfPTIJ/rIxwClfqeB976svmw0+WeTGgz7gJ40j/pjF5P3QU2VZa
+	 cO4k4aZReS28Q==
+Content-Type: multipart/mixed; boundary="===============1834638559549938750=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <bf338f91821e91b295fb4489600873abad8d7255658c55383e820aeb86c3e4f5@mail.kernel.org>
-In-Reply-To: <20261018010246.1643877-5-alexei.starovoitov@gmail.com>
-References: <20261018010246.1643877-5-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Add tests for unwinding via r3
+Message-Id: <82a0d7f7c3e52fc72b8b790724b1fc02abcc305e2c7444bac55701a280a098f3@mail.kernel.org>
+In-Reply-To: <20261018010246.1643877-6-alexei.starovoitov@gmail.com>
+References: <20261018010246.1643877-6-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: Add a C++ prog with exceptions
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 18 Oct 2026 01:38:14 +0000 (UTC)
+Date: Sun, 18 Oct 2026 01:38:17 +0000 (UTC)
 
---===============3629620460694473961==
+--===============1834638559549938750==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Add tests for unwinding via r3
+> selftests/bpf: Add a C++ prog with exceptions
 
-TL;DR:
-- unwind_attach.c: unused attach() on non-x86/arm64 may fail the whole
-  selftest build under -Werror
-- fmod_ret negative test passes without the new check; error-only assertions
-  are weak
+TL;DR: Test nit only: test_unwind_cxx() skips silently in three different
+cases (no object, llvm lacks unwinding lowering, JIT disabled); consider
+printing a skip reason, though existing tests do the same.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_attach.c b/tools/testing/selftests/bpf/prog_tests/unwind_attach.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c b/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
 > new file mode 100644
-> index 000000000000..6927757a15b6
+> index 000000000000..6a189045851f
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/unwind_attach.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include "verifier_unwind.skel.h"
-> +#include "unwind_attach.skel.h"
-> +
-> +/*
-> + * A trampoline that calls the subprog and an extension that replaces it don't
-> + * keep r3, so only fentry can attach to a subprog that can unwind.
-> + */
-> +static void attach(int tgt_fd, const char *name, bool ok)
-> +{
-
-Will this build on architectures other than x86_64 and aarch64?
-
-attach() is a non-inline static function, but every caller is inside the
-#if defined(__x86_64__) || defined(__aarch64__) block in
-test_unwind_attach().  On s390x, riscv64, ppc64le, loongarch and the rest,
-the #else branch only calls test__skip(), so attach() is defined but never
-used.
-
-The selftests build prog_tests/*.c with the flags from Makefile.buildvars:
-
-    COMMON_CFLAGS = -g $(OPT_FLAGS) -rdynamic -std=gnu11 \
-              -Wall -Werror -fno-omit-frame-pointer ...
-
--Wall enables -Wunused-function, so compiling unwind_attach.test.o should
-fail there with "'attach' defined but not used
-[-Werror=unused-function]", which breaks the test_progs build for the whole
-suite.  s390x and riscv64 both have DENYLIST files in the selftests tree, so
-they are built.
-
-The skeleton helpers from the two included .skel.h files are static inline
-and don't warn, so only attach() is affected.  No later patch in this series
-touches this file.
-
-Could attach() move inside the arch #if block, or be marked __maybe_unused?
+> +++ b/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
 
 [ ... ]
 
-> +void test_unwind_attach(void)
+> +void test_unwind_cxx(void)
 > +{
 > +#if defined(__x86_64__) || defined(__aarch64__)
+> +	const char *file = "./unwind_cxx.bpf.o";
+> +	struct bpf_object *obj;
+> +
+> +	/* gcc flavor doesn't build it */
+> +	if (access(file, R_OK) || !llvm_lowers_unwinding(file) || !is_jit_enabled()) {
+> +		test__skip();
+> +		return;
+> +	}
 
-[ ... ]
+This isn't a bug, but three different conditions end in the same bare
+test__skip() here, and none of them prints a reason:
 
-> +	attach(tgt_fd, "fentry_unwind", true);
-> +	attach(tgt_fd, "fexit_unwind", false);
-> +	attach(tgt_fd, "fmod_ret_unwind", false);
-> +	attach(tgt_fd, "freplace_unwind", false);
+  access(file, R_OK)           the object was not built (gcc flavor)
+  !llvm_lowers_unwinding(file) llvm has no BTF decl_tag "unwind" lowering
+  !is_jit_enabled()            the JIT is disabled
 
-This isn't a bug, but does the fmod_ret_unwind case test the new restriction?
+Would it be worth printing which check failed before calling test__skip(),
+for example:
 
-Every expected failure in attach() is checked only with ASSERT_ERR(err,
-name), and bpf_check_attach_target() already rejects BPF_MODIFY_RETURN
-against any BPF program target, whether or not the target can unwind:
+  printf("%s:SKIP:llvm does not lower unwinding\n", __func__);
 
-    } else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
-        if (tgt_prog) {
-            module_put(mod);
-            bpf_log(log, "can't modify return codes of BPF programs\n");
-            return -EINVAL;
-        }
+so that a reader of the test_progs output can tell an old toolchain from
+bpf_jit_enable being 0?
 
-So with the new "Only fentry can attach to %s, which can unwind" check the
-load returns -EINVAL, and without it the load still returns -EINVAL from the
-check above.  The fmod_ret case can't catch a regression in the restriction
-described in the commit message.
+The subsystem selftests guidance asks for a reason string with every skip.
+The same pattern is used by test_rust() in prog_tests/data_in_arena.c, so
+this may simply follow existing practice.
 
-The fexit and freplace cases do discriminate, since fexit on a BPF subprog
-is otherwise allowed and freplace_unwind() matches global_unwinds() in
-btf_check_func_type_match().  But they accept any error, so an unrelated
-load failure would make them pass too.
-
-fexit_bpf2bpf.c's test_obj_load_failure_common() captures the verifier log
-and checks it with ASSERT_HAS_SUBSTR(log_buf, exp_msg, ...).  Could the
-negative cases here check for "which can unwind" in the log in the same way,
-so each one exercises the new check?
+> +	obj = bpf_object__open_file(file, NULL);
 
 [ ... ]
 
@@ -147,4 +102,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39085585797
---===============3629620460694473961==--
+--===============1834638559549938750==--
