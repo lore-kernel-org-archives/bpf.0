@@ -1,179 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0B84CF47E
-	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:34:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8339E175A95
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 01:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792287271; cv=none; b=tlJIoblxdGPQXjdw63yg5SybE7eE8DYv7fmxe9yKkAWbjk2cyAP/pHudnoM9Y9hcqgwZqpACU+VtiKv3WXpxJ5uWI2HEQT4fEDX9eNwNgW+JvRCzJV4Qv2M3n7jGjZAgamESGuyCKapwFWxg7B1Fcu5fLNB6NvMLAr/09bcchQo=
+	t=1792287496; cv=none; b=K5rbk++6oF0yRw29Ty/VzVveO/hyNm7XDVsVCashVi3F5zslzdps9u6U8zjHkfJoV6VG++7J8rQcV897ZnD4+DMo27cfT4nGqfK2NOneiN1/DISslxKducPy6r08so5z/2ANw9xhqGu9OViqbQh/piRxDobvo6eTvWKQymHzdqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792287271; c=relaxed/simple;
-	bh=VCoZe2kmRZDnTwf3AnYD63GCS5pSJuOBc6Ysr0mRddU=;
-	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
-	 Date; b=D3ghpOOi7pC8s8R8ZzMcfFJ1UHmf8tRN+xCpwiWS1g3FFeRRYaNGbCdbKDFQ52+QvZX3IU4SzX8E/5dKdEtwkPxVisjygruw/JzvmzJ2qqt8f8dLHQBug0oHjiPQ2Iiw8gf249dC6jYweUYgdsU4Rv2O7GkRIfz3mXiYkoybKVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aOFWQCQv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792287496; c=relaxed/simple;
+	bh=MS3W3iQ/d6YPbu5aaGwhaaBO2VIb2J+oXLudON7814w=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GC5p5VDMBd4D2r/Ksb5btwt0FGX84/Nu/AtUR93UmlYlowuW2cQ1sQRlHJt5NmW1iR1iGiLODnpVPFRYQLrdj8+ZhPRCx3YRA/H3JFS00eqWsTQ3irnNtSs2tL4VK6tsVOd263B3KhjgLtRgAgGRmy25TG4TNbm2X7i8qEQdm/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcjMk7lO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aOFWQCQv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 015681F000C4;
-	Sun, 18 Oct 2026 01:34:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcjMk7lO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353491F000C4;
+	Sun, 18 Oct 2026 01:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792287270;
-	bh=wF5/XRCTsSw78t6XDmdEETt6mUm6jrqUlhVIu7oJ0kQ=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=aOFWQCQv1bNWMoodIM4UQ1qyeA1JtKFORosBy1DYTH2H17ZtF4Yc0toFCOyM6GCRW
-	 3Ver9/KFyW+yy0iKSUl5jnMe/BGPX5NeX4792lNKNvjQoK0DY2t6X3b+oVfrnOSr5M
-	 EfSFuzKGmLQtT2BnW7ursHF9qLUw0yS2N8YP0pWOCWM1urfETro+HREoFT2hlTSANm
-	 TuYwHBzMWRYVeYrhV0qrToRT/SPnoqkYjIlA6NYb4plrVmW5p7RIC44Ipyptr5AsSA
-	 GvAnfsecgnL2dSudw4SO1VGa6jNRkS24B4K87SlJRaeYId648GxmRkOBbJb+KZF8JU
-	 aoVccIttmJgZA==
-Message-ID: <sashiko-outbox-175873@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/5] bpf, arm64: Support unwinding via r3
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261018010246.1643877-4-alexei.starovoitov@gmail.com>
-References: <20261018010246.1643877-1-alexei.starovoitov@gmail.com>
- <20261018010246.1643877-4-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 18 Oct 2026 01:34:29 +0000
+	s=k20260515; t=1792287495;
+	bh=Iis3ysHIDQRRcqyxUEyPNxOLH7DDGkYokFipffZneNM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=gcjMk7lOdLYgXYktb15Q1ch7d32ZXClav/UdMDbIo7ygyjxv7nvK9rQPkQTSrAD1p
+	 LtGwXX3X6SsTjRuEMI9LMtqe/LZWlE3QlkHD8c7QQkM3F/NJ40S/UubWjgbJ+3yGeU
+	 +K8mmVgnJ2ZcqUXeCWxN8Z1jHY0dwPEojafVCVK/8dDlY/kJfPSLDMokWFmwaXMvFC
+	 1AWOHkbjSXz0hLkWEhqUQK3V7mZ4KBaxgToYqY9gCSV3urz89EtU5Xz37eRMXVS9mc
+	 TklSE21osX9DNlo00SfV4XECqXTY84zuP4JpuSEFaLAX96/wnQ8jLJdbgxmTRreSD9
+	 9hp6iI7GeqV4Q==
+Content-Type: multipart/mixed; boundary="===============3629620460694473961=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <bf338f91821e91b295fb4489600873abad8d7255658c55383e820aeb86c3e4f5@mail.kernel.org>
+In-Reply-To: <20261018010246.1643877-5-alexei.starovoitov@gmail.com>
+References: <20261018010246.1643877-5-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Add tests for unwinding via r3
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 18 Oct 2026 01:38:14 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] bpf, arm64: stale jump_target in bpf_jit_unwind_exit() skips l=
-anding pad
---
+--===============3629620460694473961==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit e9dd702da2c478ecd8523b3f071fba585759acfc
-Author: Alexei Starovoitov <ast@kernel.org>
+> selftests/bpf: Add tests for unwinding via r3
 
-bpf, arm64: Support unwinding via r3
+TL;DR:
+- unwind_attach.c: unused attach() on non-x86/arm64 may fail the whole
+  selftest build under -Werror
+- fmod_ret negative test passes without the new check; error-only assertions
+  are weak
 
-This commit adds arm64 JIT support for unwinding via r3 by replacing the
-post-call conditional branch with an exception table entry and rewriting the
-return address in the callee frame record upon unwinding exit.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_attach.c b/tools/testing/selftests/bpf/prog_tests/unwind_attach.c
+> new file mode 100644
+> index 000000000000..6927757a15b6
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/unwind_attach.c
+> @@ -0,0 +1,67 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include "verifier_unwind.skel.h"
+> +#include "unwind_attach.skel.h"
+> +
+> +/*
+> + * A trampoline that calls the subprog and an extension that replaces it don't
+> + * keep r3, so only fentry can attach to a subprog that can unwind.
+> + */
+> +static void attach(int tgt_fd, const char *name, bool ok)
+> +{
 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 506c4201fec85..9b702930486a1 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-[ ... ]
-> @@ -1781,6 +1863,13 @@ static int build_insn(const struct bpf_verifier_en=
-v *env, const struct bpf_insn
->  			emit_kfunc_arg_moves(ctx, fm);
->  		}
->  		emit_call(func_addr, ctx);
-> +		if (bpf_jit_unwind_site(env, ctx->prog, i)) {
-> +			ret =3D add_unwind_exentry(ctx, i + 2 + insn[1].off);
-> +			if (ret)
-> +				return ret;
-> +			emit(A64_MOV(1, r0, A64_R(0)), ctx);
-> +			return 1;
-> +		}
->  		/*
->  		 * Call to arch_bpf_timed_may_goto() is emitted by the
->  		 * verifier and called with custom calling convention with
-> @@ -1799,6 +1888,13 @@ static int build_insn(const struct bpf_verifier_en=
-v *env, const struct bpf_insn
->  		 * counter and the private stack are callee saved.
->  		 */
->  		emit(A64_BLR(dst), ctx);
-> +		if (bpf_jit_unwind_site(env, ctx->prog, i)) {
-> +			ret =3D add_unwind_exentry(ctx, i + 2 + insn[1].off);
-> +			if (ret)
-> +				return ret;
-> +			emit(A64_MOV(1, bpf2a64[BPF_REG_0], A64_R(0)), ctx);
-> +			return 1;
-> +		}
->  		emit(A64_MOV(1, bpf2a64[BPF_REG_0], A64_R(0)), ctx);
->  		break;
->  	/* tail call */
-> @@ -1808,6 +1904,9 @@ static int build_insn(const struct bpf_verifier_env=
- *env, const struct bpf_insn
->  		break;
->  	/* function return */
->  	case BPF_JMP | BPF_EXIT:
-> +		unw =3D bpf_jit_unwind_exit(env, ctx->prog, i);
-> +		if (unw !=3D BPF_EXIT_RETURNS)
-> +			emit_unwind_ret_addr(ctx, unw =3D=3D BPF_EXIT_LOOK_AT_R3);
+Will this build on architectures other than x86_64 and aarch64?
 
-[Severity: Critical]
-Could stale jump_target metadata in env->insn_aux_data cause
-bpf_jit_unwind_exit() or bpf_jit_unwind_site() to skip the landing pad when
-unwinding?
+attach() is a non-inline static function, but every caller is inside the
+#if defined(__x86_64__) || defined(__aarch64__) block in
+test_unwind_attach().  On s390x, riscv64, ppc64le, loongarch and the rest,
+the #else branch only calls test__skip(), so attach() is defined but never
+used.
 
-In build_insn(), bpf_jit_unwind_site() elides the caller's post-call branch
-and relies on the callee rewriting its return address via
-emit_unwind_ret_addr(). Both bpf_jit_unwind_site() and bpf_jit_unwind_exit()
-use bpf_is_jump_target() at JIT time to determine whether an instruction can
-be reached by a jump rather than falling through from the preceding
-instruction:
+The selftests build prog_tests/*.c with the flags from Makefile.buildvars:
 
-kernel/bpf/core.c:bpf_jit_unwind_exit() {
-	...
-	if (!i || bpf_is_jump_target(env, prog->aux->subprog_start + i) ||
-	    insn[-1].code !=3D (BPF_ALU64 | BPF_MOV | BPF_K) ||
-	    insn[-1].dst_reg !=3D BPF_REG_UNWIND)
-		return BPF_EXIT_LOOK_AT_R3;
-	return insn[-1].imm ? BPF_EXIT_UNWINDS : BPF_EXIT_RETURNS;
-}
+    COMMON_CFLAGS = -g $(OPT_FLAGS) -rdynamic -std=gnu11 \
+              -Wall -Werror -fno-omit-frame-pointer ...
 
-However, env->insn_aux_data[].jump_target is populated during bpf_check_cfg=
-()
-(which only marks branch targets, not fallthrough edges) and is not preserv=
-ed
-across post-CFG instruction removal passes in verifier_remove_insns():
+-Wall enables -Wunused-function, so compiling unwind_attach.test.o should
+fail there with "'attach' defined but not used
+[-Werror=unused-function]", which breaks the test_progs build for the whole
+suite.  s390x and riscv64 both have DENYLIST files in the selftests tree, so
+they are built.
 
-kernel/bpf/fixups.c:verifier_remove_insns() {
-	...
-	memmove(aux_data + off,	aux_data + off + cnt,
-		sizeof(*aux_data) * (orig_prog_len - off - cnt));
-	env->insn_aux_data_len -=3D cnt;
-}
+The skeleton helpers from the two included .skel.h files are static inline
+and don't warn, so only attach() is affected.  No later patch in this series
+touches this file.
 
-For example, in a subprogram annotated with btf_decl_tag("unwind"):
+Could attach() move inside the arch #if block, or be marked __maybe_unused?
 
-1. Path A sets r3 =3D 1; goto L, while path B sets r3 =3D 0 and falls throu=
-gh to
-   L, where L is a conditional branch whose target is dead (such as
-   if r6 !=3D 0 goto dead; followed by exit;).
-
-2. bpf_check_cfg() marks L with jump_target =3D true (from goto L), but lea=
-ves
-   the fallthrough exit at L + 1 with jump_target =3D false.
-
-3. bpf_prune_dead_branches() or bpf_opt_hard_wire_dead_code_branches()
-   rewrites L into goto +0 without setting jump_target on L + 1.
-
-4. bpf_opt_remove_nops() -> verifier_remove_insns() removes the NOP at L,
-   shifting exit into slot L (so goto L now targets exit directly with
-   r3 =3D 1) and overwriting aux_data[L].jump_target with
-   aux_data[L + 1].jump_target (false). A similar loss of jump_target can
-   happen when bpf_remove_fastcall_spills_fills() turns a jump-target spill
-   into NOPs that bpf_opt_remove_nops() removes, or when a NOP before the
-   post-call if r3 !=3D 0 goto pad is removed.
-
-When bpf_int_jit_compile() -> build_body() -> build_insn() runs,
-bpf_jit_unwind_exit() sees !bpf_is_jump_target() and insn[-1] as r3 =3D 0,
-returning BPF_EXIT_RETURNS. As a result, build_insn() omits
-emit_unwind_ret_addr() while also eliding the caller's if r3 !=3D 0 goto pad
-branch via bpf_jit_unwind_site().
-
-When path A executes at runtime and exits with r3 =3D 1, won't execution by=
-pass
-the landing pad and fall through into the caller's normal return path where
-the verifier assumed r3 =3D=3D 0?
-
->  		/* Optimization: when last instruction is EXIT,
->  		   simply fallthrough to epilogue. */
->  		if (i =3D=3D ctx->prog->len - 1)
 [ ... ]
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261018010246.1643=
-877-1-alexei.starovoitov@gmail.com?part=3D3
+> +void test_unwind_attach(void)
+> +{
+> +#if defined(__x86_64__) || defined(__aarch64__)
+
+[ ... ]
+
+> +	attach(tgt_fd, "fentry_unwind", true);
+> +	attach(tgt_fd, "fexit_unwind", false);
+> +	attach(tgt_fd, "fmod_ret_unwind", false);
+> +	attach(tgt_fd, "freplace_unwind", false);
+
+This isn't a bug, but does the fmod_ret_unwind case test the new restriction?
+
+Every expected failure in attach() is checked only with ASSERT_ERR(err,
+name), and bpf_check_attach_target() already rejects BPF_MODIFY_RETURN
+against any BPF program target, whether or not the target can unwind:
+
+    } else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
+        if (tgt_prog) {
+            module_put(mod);
+            bpf_log(log, "can't modify return codes of BPF programs\n");
+            return -EINVAL;
+        }
+
+So with the new "Only fentry can attach to %s, which can unwind" check the
+load returns -EINVAL, and without it the load still returns -EINVAL from the
+check above.  The fmod_ret case can't catch a regression in the restriction
+described in the commit message.
+
+The fexit and freplace cases do discriminate, since fexit on a BPF subprog
+is otherwise allowed and freplace_unwind() matches global_unwinds() in
+btf_check_func_type_match().  But they accept any error, so an unrelated
+load failure would make them pass too.
+
+fexit_bpf2bpf.c's test_obj_load_failure_common() captures the verifier log
+and checks it with ASSERT_HAS_SUBSTR(log_buf, exp_msg, ...).  Could the
+negative cases here check for "which can unwind" in the log in the same way,
+so each one exercises the new check?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39085585797
+--===============3629620460694473961==--
