@@ -1,196 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-32.mta1.migadu.com [95.215.58.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C4D36B907;
-	Sun, 18 Oct 2026 16:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A264F3D1ABD
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 16:28:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792340158; cv=none; b=Me8XVTwSMPESA3Lxww19w8UFuK7QnEXVmOU0UOhoJGh4LuKp9euhOi1RefA3gNBWfEGo2mjJ0ayaXkIV+L7p+aAkEIpcz+x7zAURYhM9kVl/YXqei9XWgxCurjhNCOTY8BHASQOUoU8Ku5AB1CGtLHPqsmQFTWGrJLzXeCRl+MM=
+	t=1792340937; cv=none; b=Gg4YAS02UxbmGQwme62lOEZcOF1hTCdkyko0NL/oX6hO5e/Rk4y1ksSXtNA30KqoDJfi//Fyi89AqgEA+r72tyIV7h5/UjHsZ0IhIwIjt3xv58WKGFOH6i2bwOgFrEX8LmBI5POe+3DdM4sdCeuLFvylzHVbEWLIMYS8l6Bce28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792340158; c=relaxed/simple;
-	bh=gO8Jv3kBbkekLp0M0ToCtUaXdXIZSPp3XpJ2V7vrXaY=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=ps6l2Tfr6Iyw0Q9WMuSs4u5UNOCEQ1ZbAsbR/nJE0V99UAOJrPe/yGjXsUny+1zub3L+YD7rdaOoEUrrly5FlQRprJkEtkhaspvBNJ3PwsF912XgoVjTj/lun7+Rya4dGsr6PnwEyUpenRJ2M2CmAtCREyVJFLhjWpTQesNtUtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAqnKEVk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792340937; c=relaxed/simple;
+	bh=L42fux9FkX7PdFA0Fbfsqg8O/3baLdxzaRMtvglaHYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h7s//eN+vfKs5LlNCnLmqOGpTsY7GN6Xn94VKv+kVRGviDMVkx4EnGdi5J4LeAEBE62qTU0wyXxZppP7OjNhngyT3oCRPmoQiN4URQqdCWPG2UZbPVrT+2x0z3Vz3Gh58Xzi5tGiOjXDCKxk++2rsPQRumM/HjA5x+/r2ip44jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sjCLl7hz; arc=none smtp.client-ip=95.215.58.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAqnKEVk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F94A1F000C4;
-	Sun, 18 Oct 2026 16:15:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792340157;
-	bh=RaZ7YViG/iKDytKYEsZTHi1ga7iOXJlQndUMyv3+wMs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iAqnKEVkG2SdAI4pTKrRiACJ9ErDgGzKowde85LNyEFcAYAZ9gRbF1BWzoMkIdU95
-	 ghBT94l7yw0gUPwTnym9XLMv4Q+90TaqIiL6wwWXUo5kp2KeKtaKMnzZ12Zje8wo1N
-	 WxpFSQ5c6k1ZJLqDHG9zuSut3JkxX35pFhON9nGH7ETZMVe9bHbhOFSRgcytV0Xyie
-	 yTE09g8EzKf38wQHwlVX0tDZ2tu0kMUvT+ppg82W4/WTwG1JYiK1VFOflAt1IyxCpk
-	 3XpgNBYgFoyKZ5xZ9H0voAJMRCvHKMTZXFBZtiTcL7vGraKF9fF8IJJXtbVOGcyHQ0
-	 PWG/an5iAzt8w==
-Message-ID: <sashiko-outbox-176273@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 next 06/15] kallsyms: Optimise symbol name search
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "David Laight" <david.laight.linux@gmail.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Petr
- Mladek" <pmladek@suse.com>, "Kees Cook" <kees@kernel.org>, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, "Jim
- Cromie" <jim.cromie@gmail.com>, "Lorenzo Stoakes" <ljs@kernel.org>
-Cc: "Luis Chamberlain" <mcgrof@kernel.org>, "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, "Steven
- Rostedt" <rostedt@goodmis.org>, nathan@kernel.org, nsc@kernel.org
-In-Reply-To: <20261018155206.132411-7-david.laight.linux@gmail.com>
-References: <20261018155206.132411-1-david.laight.linux@gmail.com>
- <20261018155206.132411-7-david.laight.linux@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 18 Oct 2026 16:15:56 +0000
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sjCLl7hz"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=L42fux9FkX7PdFA0Fbfsqg8O/3baLdxzaRMtvglaHYw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792340933; v=1; x=1792945733;
+ b=sjCLl7hzK8/AzsPIANOdRQPqWK1kpU/4pi7aC8CdEmi6UYMc3x3yzhDK4+VyuWAqnSLVb4P/
+ NQxO9EzQCJWJMx/u9+j9OlD3eNydBNjf20/pj3YQZ4tzpE7ySCelYOFN/rC3Sc30lSNJ5grJCfg
+ pjblbGYVYHDSPNRSWk985q4s=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 67c9c5eea7512f8c;
+	Sun, 18 Oct 2026 16:28:53 +0000
+X-Mizu-Trace-ID: 67c9c5eea7512f8c
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <6dc8b3e5-b4fe-45f6-9ed6-137c00e7d7db@linux.dev>
+Date: Mon, 19 Oct 2026 00:28:48 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/6] bpf: Add syscall common attrs support for
+ link_create
+To: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+References: <20261017142649.51047-1-leon.hwang@linux.dev>
+ <20261017142649.51047-2-leon.hwang@linux.dev>
+ <sashiko-outbox-175562@kernel.org>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <sashiko-outbox-175562@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] kallsyms: race in set_kallsyms_off_size() causes NULL dereference
-- [High] kallsyms: set_kallsyms_off_size() sleeps in atomic context
---
+On 2026/10/17 22:39, sashiko-bot@kernel.org wrote:
 
-commit d36232e927821c82911022ce5bae7cb3de465edd
-Author: David Laight <david.laight.linux@gmail.com>
+[...]
 
-kallsyms: Optimise symbol name search
+>>  out:
+>> -	if (ret < 0)
+>> +	/* preserve original error even if log finalization is successful */
+>> +	err = bpf_log_attr_finalize(&attr_log, log);
+>> +	if (err)
+>> +		ret = err;
+>> +
+>> +	kfree(log);
+>> +
+>> +	if (ret < 0 && prog)
+>>  		bpf_prog_put(prog);
+>>  	return ret;
+>>  }
+> 
+> [Severity: Critical]
+> Can this underflow the refcount on prog and leak the newly installed link
+> file descriptor if bpf_log_attr_finalize() fails after link attachment
+> succeeds?
 
-This commit optimizes symbol name lookups by indexing the compressed
-names table directly instead of the array of symbol values. It supports
-both 24-bit and 32-bit offset tables, selecting between them using a
-static branch initialized on the first symbol lookup.
+Correct.
 
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index d18d78e626db2..31451feac8221 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
+To avoid such prog leak, I'd like to report the log_true_size twice.
 
-[ ... ]
+ret = bpf_log_attr_report_size(&attr_log, 0);
+if (ret)
+	goto out;
 
-> @@ -185,14 +216,19 @@ unsigned long kallsyms_sym_address(int idx)
->  	return (unsigned long)offset_to_ptr(kallsyms_offsets + idx);
->  }
-> =20
-> -static unsigned int get_symbol_seq(int index)
-> -{
-> -	unsigned int i, seq =3D 0;
-> +static DEFINE_STATIC_KEY_TRUE(kallsyms_off_size_24);
-> =20
-> -	for (i =3D 0; i < 3; i++)
-> -		seq =3D (seq << 8) | kallsyms_seqs_of_names[3 * index + i];
-> +static inline unsigned int get_symbol_name_offset(unsigned long index)
-> +{
-> +	if (static_branch_likely(&kallsyms_off_size_24))
-> +		return kallsyms_off24_of_names[index].v;
-> +	return kallsyms_off32_of_names[index];
-> +}
-> =20
-> -	return seq;
-> +static void set_kallsyms_off_size(void)
-> +{
-> +	if (kallsyms_off_size !=3D 24)
-> +		static_branch_disable(&kallsyms_off_size_24);
->  }
-
-[Severity: High]
-Can calling static_branch_disable() in set_kallsyms_off_size() sleep in
-an atomic or early-boot context when kallsyms_off_size !=3D 24?
-
-static_branch_disable() calls static_key_disable() in
-kernel/jump_label.c, which acquires cpus_read_lock() and
-jump_label_mutex:
-
-kernel/jump_label.c:static_key_disable() {
-	cpus_read_lock();
-	static_key_disable_cpuslocked(key);
-	cpus_read_unlock();
+switch (prog->type) {
+	/* ... */
 }
 
-However, kallsyms_lookup_name() -> kallsyms_lookup_names() can be called
-first from contexts where sleeping is not allowed:
+out:
+if (ret) {
+	int err =  bpf_log_attr_finalize(&attr_log, log);
 
-- lib/codetag.c:get_symbol() calls kallsyms_lookup_name() under
-  preempt_disable():
+	ret = err ? err : ret;
+}
 
-	preempt_disable();
-	ret =3D mod ?
-		(void *)find_kallsyms_symbol_value(mod, buf) :
-		(void *)kallsyms_lookup_name(buf);
-	preempt_enable();
+if (ret < 0 && prog)
+	bpf_prog_put(prog);
 
-- mm/alloc_tag.c:alloc_tag_sec_init() calls kallsyms_lookup_name() during
-  start_kernel() -> mm_core_init() while interrupts are disabled and
-  before poking_init().
+kfree(log);
+return ret;
 
-- Non-sleepable runtime or debugger callers such as
-  bpf_kallsyms_lookup_name(), kdbgetsymval(), and xmon also invoke
-  kallsyms_lookup_name().
+Thanks,
+Leon
 
-> =20
->  static int kallsyms_lookup_names(const char *name,
-> @@ -201,15 +237,16 @@ static int kallsyms_lookup_names(const char *name,
->  {
->  	int ret;
->  	int low, mid, high;
-> -	unsigned int seq, off;
-> +	unsigned int off;
-> +
-> +	DO_ONCE_LITE(set_kallsyms_off_size);
-> =20
->  	low =3D 0;
->  	high =3D kallsyms_num_syms - 1;
-> =20
->  	while (low <=3D high) {
->  		mid =3D low + (high - low) / 2;
-> -		seq =3D get_symbol_seq(mid);
-> -		off =3D get_symbol_offset(seq);
-> +		off =3D get_symbol_name_offset(mid);
+> [...]
 
-[Severity: High]
-Does DO_ONCE_LITE(set_kallsyms_off_size) allow a concurrent caller to
-dereference NULL in get_symbol_name_offset() when kallsyms_off_size =3D=3D =
-32?
-
-In scripts/kallsyms.c:write_src(), only kallsyms_off24_of_names or
-kallsyms_off32_of_names is emitted, and both are declared __weak in
-kernel/kallsyms_internal.h:
-
-extern struct { unsigned int v:24 __packed; } __packed kallsyms_off24_of_na=
-mes[] __weak;
-extern u32 kallsyms_off32_of_names[] __weak;
-
-When kallsyms_off_size =3D=3D 32, kallsyms_off24_of_names resolves to NULL,
-while kallsyms_off_size_24 starts enabled via
-DEFINE_STATIC_KEY_TRUE(kallsyms_off_size_24).
-
-In include/linux/once_lite.h, __ONCE_LITE_IF() sets __already_done =3D true
-before executing set_kallsyms_off_size() and does not wait for it to
-finish:
-
-		if (unlikely(__ret_cond) && unlikely(!__already_done)) {
-			__already_done =3D true;
-			__ret_once =3D true;
-		}
-
-If two CPUs call kallsyms_lookup_names() concurrently for the first time
-while the first CPU is still inside set_kallsyms_off_size() ->
-static_branch_disable(&kallsyms_off_size_24), the second CPU sees
-__already_done =3D=3D true and proceeds directly to
-get_symbol_name_offset(mid). Since kallsyms_off_size_24 has not been
-patched yet, get_symbol_name_offset() evaluates
-kallsyms_off24_of_names[index].v and dereferences NULL.
-
-[ ... ]
-
->
->
->
->
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261018155206.1324=
-11-1-david.laight.linux@gmail.com?part=3D6
