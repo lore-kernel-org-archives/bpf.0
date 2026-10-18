@@ -1,43 +1,43 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8357B3BFE4C;
-	Sun, 18 Oct 2026 15:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CA73B530F
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 15:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792338790; cv=none; b=oQVThZFd7oa845f4HdqryCKou3kQ/04hmWGsxKmOypxkVmV0oq0iFBJJxJg5sAtbjJorD6wF5O7/tTJfMq6W6POAGLwgdXWMfYaPwvt0FOkduGixm/YV5W/ejKKFUjGbx26t0W6s00VwRTuNj/YBzU1am740ZQfSrqpPRJWVspA=
+	t=1792338792; cv=none; b=QiAjv7lUaez0/b0tr2EuUve7d6S0ZzR6JuvcOhr6gGYPGythpSdo+SEw/Rp2Q19dfm4lBjhPCQobsJTURaP1+l6lZzE+gxa2+GadR/8ifaFWAt7mokOspoM+5sIV3LaLDaghBS0SpoisOfwmrrCWMKiBAvDCIUY86HmTaDlWna0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792338790; c=relaxed/simple;
-	bh=Rml9MYXsr/6tFjtQ62qZFuqAxvrNRb/EfuakjDjKMTY=;
+	s=arc-20240116; t=1792338792; c=relaxed/simple;
+	bh=bFtfrDFfJiFgzrOGha7X+aYjJEuOgNNxvP6urm8vnsc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nh2N4qTPVVn57lxXDy8YeCc+cNd3jZB20VJGT6iLstgvzxveO3fquBqdBojhc6F0BPBQevsdImuaW387wnXYch3ljAJOfePfNNHfRyM9Dq5BxncmyvsFgOh4X9uXwRz3/lgmPzbj5/Ou1gLMWm+UlhSdwN+hNg1x7AltG7KTUho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=SGx0k382; arc=none smtp.client-ip=185.226.149.37
+	 MIME-Version; b=omlUbubbrrjFGbxfgZd5OcLzTnOPHNa4vFJEy5qjHjUlN3KnGSamzIUKMgNPzIusLks0HfU/kFfvIOLB7UJ4Li1fbFffxKXy9AMDjOtR6R80VK/vxZ3vzjU3YhrbeUua3gcv+wmsBKwONGae7Ze5ASLyUhHHOdlAsmovRmiZZyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=Xc1S+Jf8; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="SGx0k382"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="Xc1S+Jf8"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xITC2-000Ic0-TE; Sun, 18 Oct 2026 17:53:02 +0200
+	id 1xITC4-000IdH-US; Sun, 18 Oct 2026 17:53:04 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
 	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
 	:Message-Id:Date:Subject:Cc:To:From;
-	bh=B7W50HzfEtTYoFlPorZ56JD0MRdF3AifMRwslpL7QiY=; b=SGx0k382n2f4n0b1r8w0++TS0v
-	Jb/gZnm5YEF/MSMiDG8j83SZtsFceMWy2s6Ze0PEVx1oPELtJ31RP6FNQNVYsNSGRZx1NUMDoIs6U
-	U+hhb/FEeUjpsHuXYLINQLbFtJniN/JtjNSePh9a22jYRqvaKXxyjHNeUjjAxzfRyqDDrG+1hSZg7
-	lAnxvUSUlMIYeIDjKeTFyt331jT2mtF7Kr8gvzjWWU4tYRMU/zm/viJnOHB7tI+jIVCvHWTBDeiw+
-	iBYMvWvmPHGbwCPbJTx4uhvJuiR6+q0aLIMeS5bnuUfO/nmgCse3GcgEvRcdBCbL/bXTCQ/gX/m7P
-	o+A6wyqQ==;
+	bh=yXPKNCrTN84ndLWWFsp5Lhf/pJS8VAJCKJYB6ObXzLQ=; b=Xc1S+Jf8vfCRaiAKGxAg5BZUkr
+	+rmNykpMiVRy4hM7zw2uQGA81tQL4ACEEv0fEWCkHJlq+q9ROwhfVRAw9Y3t3MGvUb+Eii7OUlFbE
+	AhtDrvUI0trMu1AtUlGkO+uefAqWOIPEn3aQ8XtxUDVaAjewFT196lF1+Vc3pXKE/yVgRJPN47OFD
+	XUcvHhmJT0SJUWxQ+oEHPhJaLCIaNQ8jGjp4zEg8JhDMbDdiipqEk8E8ikreOC3QKwke+wKOjy/9E
+	tD1N53lclZJls8GjgpQGEEbQ7+mcU0gJTnrckGP6vedKLgtlBvl9Tm2UJ2lz+QBO/eoN2T4lTBMq2
+	fDcJgGJg==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1xITBx-0001oT-KN; Sun, 18 Oct 2026 17:52:57 +0200
+	id 1xITBz-0000Bb-HJ; Sun, 18 Oct 2026 17:52:59 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.95)
-	id 1xITBf-004q3U-1Z;
-	Sun, 18 Oct 2026 17:52:39 +0200
+	id 1xITBl-004q3U-Fh;
+	Sun, 18 Oct 2026 17:52:45 +0200
 From: David Laight <david.laight.linux@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Petr Mladek <pmladek@suse.com>,
@@ -51,9 +51,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>,
 	Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH v2 next 03/15] kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
-Date: Sun, 18 Oct 2026 16:51:54 +0100
-Message-Id: <20261018155206.132411-4-david.laight.linux@gmail.com>
+Subject: [PATCH 15/15] kallsyms: scripts/kallsyms: Improve compression by about 2%
+Date: Sun, 18 Oct 2026 16:52:06 +0100
+Message-Id: <20261018155206.132411-16-david.laight.linux@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20261018155206.132411-1-david.laight.linux@gmail.com>
 References: <20261018155206.132411-1-david.laight.linux@gmail.com>
@@ -65,298 +65,234 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-- Improve the test stability/reproducability by taking the faster of
-  two calls to kallsyms_lookup_name().
-- Check that kallsyms_lookup_name() returns the expected address
-  unless the symbol is duplicated.
-- Report the names of the min/max symbols.
-- Output an 8 line 64 entry histogram of the times taken.
-- This shows there is a reasonably normal distribution with a small
-  number of much slower outliers that don't really affect the average.
+If the symbols contain a lot of "abc" and "abd" and a few "abe" then
+the compression code first substitutes (say) 'x' for "ab" giving
+"xc", "xd" and "xe".
+It might later substitute 'y' for "xc" and 'z' for "xd" giving
+"y", "z" and "xe".
+The token 'x' is then hardly used, expanding "xe" back to "abe"
+costs one byte every time it is used, but frees up 'x' to be used
+for a much more common symbol pair.
 
-Additionally:
-- Add a very long symbol to check the handling of two byte lengths.
-- Do the test_perf_kallsyms_lookup_name() last because it can take long
-  enough that the CPU frequency changes and the times reported by the
-  other tests can change.
-- Mark the 4 test functions noinline_for_stack since they all have a
-  quite large on-stack structure.
+Add a check at the end of the compression that all the counts still match.
+
+Increases the compression ratio by about 2% on both the 'normal'
+kernel I'm building and on the x86-64 allyesconfig kernel.
+
+For simplicity the code will only expand a token where the two tokens
+that were merged are still in the table.
+It might be possible to find some others, eg ones that are 3 characters.
 
 Signed-off-by: David Laight <david.laight.linux@gmail.com>
 ---
- kernel/kallsyms_selftest.c | 165 ++++++++++++++++++++++++++++---------
- 1 file changed, 125 insertions(+), 40 deletions(-)
+ scripts/kallsyms.c | 137 +++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 127 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
-index 0db79237fe54..9072bd91c318 100644
---- a/kernel/kallsyms_selftest.c
-+++ b/kernel/kallsyms_selftest.c
-@@ -22,6 +22,8 @@
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 8576fe6ad90b..9dbd7c85eec1 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -76,6 +76,7 @@ static int token_profit[0x10000];
+ static struct token_table {
+ 	char           *str;		/* Full expansion, '\0' terminated */
+ 	unsigned short len;		/* Length of str */
++	unsigned short pair;		/* Original token pair for this token */
+ 	unsigned int   refs;		/* Number of time used in a symbol */
+ } token_table[256];
  
- 
- #define MAX_NUM_OF_RECORDS		64
-+#define HISTOGRAM_BUCKETS		64
-+#define HISTOGRAM_RESOLUTION		10
- 
- struct test_stat {
- 	int min;
-@@ -29,35 +31,56 @@ struct test_stat {
- 	int save_cnt;
- 	int real_cnt;
- 	int perf;
--	u64 sum;
- 	char *name;
- 	unsigned long addr;
- 	unsigned long addrs[MAX_NUM_OF_RECORDS];
- };
- 
-+struct lookup_name_info {
-+	unsigned int count;
-+	unsigned int min;
-+	unsigned int max;
-+	u64 sum;
-+	char min_name[64];
-+	char max_name[64];
-+	unsigned int histogram[HISTOGRAM_BUCKETS];
-+	unsigned int scale;
-+};
-+
- struct test_item {
- 	char *name;
- 	unsigned long addr;
- };
- 
--#define ITEM_FUNC(s)				\
--	{					\
--		.name = #s,			\
--		.addr = (unsigned long)s,	\
--	}
--
--#define ITEM_DATA(s)				\
-+#define _TEST_ITEM(s)				\
- 	{					\
- 		.name = #s,			\
- 		.addr = (unsigned long)&s,	\
- 	}
- 
-+#define TEST_ITEM(s) _TEST_ITEM(s)
- 
- static int kallsyms_test_var_bss_static;
- static int kallsyms_test_var_data_static = 1;
- int kallsyms_test_var_bss;
- int kallsyms_test_var_data = 1;
- 
-+/* This is 509 characters, compresses to about 330 */
-+#define kallsyms_very_long_name \
-+The_time_has_come_the_Walrus_said_To_talk_of_many_things\
-+_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings\
-+_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings\
-+\
-+_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run\
-+_Shall_we_be_trotting_home_again_But_answer_came_there_none\
-+_And_this_was_scarcely_odd_because_Theyd_eaten_every_one\
-+\
-+_The_moon_was_shining_sulkily_Because_she_thought_the_sun\
-+_Had_got_no_business_to_be_there_After_the_day_was_done\
-+_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun
-+
-+static int kallsyms_very_long_name = 1;
-+
- static int kallsyms_test_func_static(void)
- {
- 	kallsyms_test_var_bss_static++;
-@@ -79,16 +102,17 @@ __weak int kallsyms_test_func_weak(void)
+@@ -514,6 +515,37 @@ static void build_initial_token_table(void)
+ 		learn_symbol(symbol[i]->sym, symbol[i]->len);
  }
  
- static struct test_item test_items[] = {
--	ITEM_FUNC(kallsyms_test_func_static),
--	ITEM_FUNC(kallsyms_test_func),
--	ITEM_FUNC(kallsyms_test_func_weak),
--	ITEM_FUNC(vmalloc_noprof),
--	ITEM_FUNC(vfree),
-+	TEST_ITEM(kallsyms_test_func_static),
-+	TEST_ITEM(kallsyms_test_func),
-+	TEST_ITEM(kallsyms_test_func_weak),
-+	TEST_ITEM(vmalloc_noprof),
-+	TEST_ITEM(vfree),
- #ifdef CONFIG_KALLSYMS_ALL
--	ITEM_DATA(kallsyms_test_var_bss_static),
--	ITEM_DATA(kallsyms_test_var_data_static),
--	ITEM_DATA(kallsyms_test_var_bss),
--	ITEM_DATA(kallsyms_test_var_data),
-+	TEST_ITEM(kallsyms_test_var_bss_static),
-+	TEST_ITEM(kallsyms_test_var_data_static),
-+	TEST_ITEM(kallsyms_very_long_name),
-+	TEST_ITEM(kallsyms_test_var_bss),
-+	TEST_ITEM(kallsyms_test_var_data),
- #endif
- };
- 
-@@ -101,7 +125,7 @@ static int stat_symbol_len(void *data, const char *name, unsigned long addr)
- 	return 0;
- }
- 
--static void test_kallsyms_compression_ratio(void)
-+static noinline_for_stack void test_kallsyms_compression_ratio(void)
- {
- 	u32 pos, off, len, num;
- 	u32 ratio, total_size, total_len = 0;
-@@ -153,38 +177,99 @@ static void test_kallsyms_compression_ratio(void)
- 	pr_info(" ---------------------------------------------------------\n");
- }
- 
-+static int is_duplicate(void *data, unsigned long addr)
++/* Check that the token_profit[] matches the compressed symbols. */
++static void check_tables(void)
 +{
-+	return (*(int *)data)++;
++	unsigned int save_profit[0x10000];
++	unsigned int tok_refs[256];
++	unsigned int i, j;
++
++	memcpy(save_profit, token_profit, sizeof(save_profit));
++	memset(token_profit, 0, sizeof(token_profit));
++
++	build_initial_token_table();
++
++	for (i = 0; i < 0x10000; i++) {
++		if (token_profit[i] != save_profit[i])
++			errx(1, "profit error for %u,%u (%s/%s) discrepency %u != %u\n",
++			     LEFT(i), RIGHT(i), token_table[LEFT(i)].str,
++			     token_table[RIGHT(i)].str, token_profit[i], save_profit[i]);
++	}
++
++	memset(tok_refs, 0, sizeof(tok_refs));
++	for (i = 0; i < symbol_cnt; i++)
++		for (j = 0; j < symbol[i]->len; j++)
++			tok_refs[symbol[i]->sym[j]]++;
++
++	for (i = 1; i < 256; i++) {
++		if (tok_refs[i] != token_table[i].refs)
++			errx(1, "token reference error for %u (%s) %u != %u\n",
++			     i, token_table[i].str, token_table[i].refs, tok_refs[i]);
++	}
 +}
 +
- static int lookup_name(void *data, const char *name, unsigned long addr)
+ static unsigned char *find_token(unsigned char *str, unsigned char *end,
+ 				 unsigned int want)
  {
--	u64 t0, t1, t;
--	struct test_stat *stat = (struct test_stat *)data;
-+	struct lookup_name_info *info = data;
-+	unsigned int i, t0, t1, t;
-+	unsigned long got_addr;
- 
-+	/* Improve the stability by taking the fastest of two calls. */
- 	t0 = ktime_get_ns();
- 	(void)kallsyms_lookup_name(name);
- 	t1 = ktime_get_ns();
--
- 	t = t1 - t0;
--	if (t < stat->min)
--		stat->min = t;
-+	got_addr = kallsyms_lookup_name(name);
-+	t0 = ktime_get_ns();
-+	if (t0 - t1 < t)
-+		t = t0 - t1;
- 
--	if (t > stat->max)
--		stat->max = t;
-+	if (addr != got_addr) {
-+		int c = 0;
- 
--	stat->real_cnt++;
--	stat->sum += t;
-+		if (!kallsyms_on_each_match_symbol(is_duplicate, name, &c)) {
-+			pr_info("got %ld not %ld for %s\n", got_addr, addr, name);
-+			return 1;
-+		}
-+	}
-+
-+	info->count++;
-+	info->sum += t;
-+
-+	if (t < info->min) {
-+		info->min = t;
-+		strscpy(info->min_name, name);
-+	}
-+
-+	if (t > info->max) {
-+		info->max = t;
-+		strscpy(info->max_name, name);
-+	}
-+
-+	/* Create a histogram of the times */
-+	t = (t / HISTOGRAM_RESOLUTION) >> info->scale;
-+	while (t >= HISTOGRAM_BUCKETS) {
-+		t >>= 1;
-+		info->scale++;
-+		for (i = 0; i < HISTOGRAM_BUCKETS / 2; i++)
-+			info->histogram[i] = info->histogram[2 * i] + info->histogram[2 * i + 1];
-+		for (; i < HISTOGRAM_BUCKETS; i++)
-+			info->histogram[i] = 0;
-+	}
-+	info->histogram[t]++;
- 
- 	return 0;
+@@ -561,6 +593,47 @@ static __attribute__((noinline)) unsigned int compress_symbols(unsigned int toke
+ 	return substitutions;
  }
  
--static void test_perf_kallsyms_lookup_name(void)
-+static noinline_for_stack void test_perf_kallsyms_lookup_name(void)
- {
--	struct test_stat stat;
--
--	memset(&stat, 0, sizeof(stat));
--	stat.min = INT_MAX;
--	kallsyms_on_each_symbol(lookup_name, &stat);
--	pr_info("kallsyms_lookup_name() looked up %d symbols\n", stat.real_cnt);
--	pr_info("The time spent on each symbol is (ns): min=%d, max=%d, avg=%lld\n",
--		stat.min, stat.max, div_u64(stat.sum, stat.real_cnt));
-+	struct lookup_name_info info;
-+	unsigned int idx, scale, row;
-+	char line[HISTOGRAM_BUCKETS];
-+	int len;
++/* Change every occurance of idx back to token_pair.
++ * This extends all the symbol table entries but frees up a token. */
++static __attribute__((noinline)) void uncompress_symbols(unsigned int token_pair, int idx)
++{
++	unsigned int i, len;
++	unsigned char *sym, *p, *end;
++	unsigned int substitutions;
 +
-+	memset(&info, 0, sizeof(info));
-+	info.min = ~0u;
-+	kallsyms_on_each_symbol(lookup_name, &info);
-+	pr_info("kallsyms_lookup_name() looked up %d symbols, average %lld ns\n",
-+		info.count, div_u64(info.sum, info.count));
-+	pr_info("\tfastest %u ns (%s)\n", info.min, info.min_name);
-+	pr_info("\tslowest %u ns (%s)\n", info.max, info.max_name);
++	for (i = 0; i < symbol_cnt; i++) {
++		sym = symbol[i]->sym;
++		len = symbol[i]->len;
++		p = memchr(sym, idx, len);
++		if (!p)
++			continue;
++		end = sym + len;
 +
-+	scale = 0;
-+	for (idx = 0; idx < HISTOGRAM_BUCKETS; idx++) {
-+		if (scale < info.histogram[idx])
-+			scale = info.histogram[idx];
-+	}
-+	row = 8;
-+	scale /= row;
-+	pr_info("\tDistribution, %uns per column, %u counts per *:\n",
-+		HISTOGRAM_RESOLUTION << info.scale, scale);
-+	while (row--) {
-+		memset(line, ' ', sizeof(line));
-+		len = 0;
-+		for (idx = 0; idx < HISTOGRAM_BUCKETS; idx++) {
-+			if (info.histogram[idx] > row * scale) {
-+				len = idx + 1;
-+				line[idx] = '*';
++		do {
++			len = end - p - 1;
++			end++;
++			if (len) {
++				adjust_profit(idx, RIGHT(token_pair), p[1], p[1]);
++				memmove(p + 2, p + 1, len);
 +			}
-+		}
-+		pr_info("\t|%.*s\n", len, line);
++			p[0] = LEFT(token_pair);
++			p[1] = RIGHT(token_pair);
++			if (p != sym)
++				adjust_profit(p[-1], p[-1], idx, LEFT(token_pair));
++			p = memchr(p + 2, idx, len);
++		} while (p);
++		symbol[i]->len = end - sym;
 +	}
- }
- 
- static int find_symbol(void *data, const char *name, unsigned long addr)
-@@ -207,7 +292,7 @@ static int find_symbol(void *data, const char *name, unsigned long addr)
- 	return 0;
- }
- 
--static void test_perf_kallsyms_on_each_symbol(void)
-+static noinline_for_stack void test_perf_kallsyms_on_each_symbol(void)
++
++	substitutions = token_table[idx].refs;
++
++	token_profit[token_pair] += substitutions;
++
++	token_table[idx].refs = 0;
++	token_table[LEFT(token_pair)].refs += substitutions;
++	token_table[RIGHT(token_pair)].refs += substitutions;
++}
++
+ /* search the token with the maximum profit */
+ static int find_best_token(void)
  {
- 	u64 t0, t1;
- 	struct test_stat stat;
-@@ -240,7 +325,7 @@ static int match_symbol(void *data, unsigned long addr)
- 	return 0;
+@@ -578,14 +651,47 @@ static int find_best_token(void)
+ 	return best;
  }
  
--static void test_perf_kallsyms_on_each_match_symbol(void)
-+static noinline_for_stack void test_perf_kallsyms_on_each_match_symbol(void)
++static int split_token(unsigned int profit)
++{
++	struct token_table *tt, *left, *right;
++	unsigned int i;
++	int best = -1;
++
++	for (i = 0; i < 256; i++) {
++		tt = token_table + i;
++
++		if (tt->len == 1 || tt->refs >= profit)
++			continue;
++
++		/* Ignore tokens where the original parts have be reused */
++		left = &token_table[LEFT(tt->pair)];
++		right = &token_table[RIGHT(tt->pair)];
++		if (tt->len != left->len + right->len ||
++		    memcmp(tt->str, left->str, left->len) ||
++		    memcmp(tt->str + left->len, right->str, right->len))
++			continue;
++
++		best = i;
++		if (tt->refs == 2)
++			break;
++		profit = tt->refs;
++	}
++	if (best < 0)
++		return -1;
++
++	uncompress_symbols(token_table[best].pair, best);
++
++	return best;
++}
++
+ /* this is the core of the algorithm: calculate the "best" table */
+ static void optimize_result(void)
  {
- 	u64 t0, t1;
- 	struct test_stat stat;
-@@ -254,7 +339,7 @@ static void test_perf_kallsyms_on_each_match_symbol(void)
- 	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
- }
+-	unsigned int i, idx, len, refs;
+-	struct token_table *left, *right;
++	struct token_table *t, *left, *right;
+ 	unsigned char to_process[256];
++	unsigned int idx, len, refs;
++	int i, best;
+ 	char *str;
+-	int best;
  
--static int test_kallsyms_basic_function(void)
-+static noinline_for_stack int test_kallsyms_basic_function(void)
- {
- 	int i, j, ret;
- 	int next = 0, nr_failed = 0;
-@@ -425,9 +510,9 @@ static int test_entry(void *p)
+ 	/* Generate a list of the unused tokens. */
+ 	for (i = 0, idx = 0; i < 256; i++) {
+@@ -593,20 +699,28 @@ static void optimize_result(void)
+ 			to_process[idx++] = i;
  	}
  
- 	test_kallsyms_compression_ratio();
--	test_perf_kallsyms_lookup_name();
- 	test_perf_kallsyms_on_each_symbol();
- 	test_perf_kallsyms_on_each_match_symbol();
-+	test_perf_kallsyms_lookup_name();
- 	pr_info("finish\n");
+-	do {
++	for (;;) {
+ 		/* find the token pair with the best profit value */
+ 		best = find_best_token();
+ 		if (best < 0)
+ 			break;
+-		i = to_process[--idx];
++		if (idx) {
++			i = to_process[--idx];
++		} else {
++			/* Try to free up a little-used token. */
++			i = split_token(token_profit[best]);
++			if (i < 0)
++				break;
++		}
  
- 	return 0;
+ 		/* replace this token pair in all the valid symbols */
+ 		refs = compress_symbols(best, i);
++		t = &token_table[i];
+ 
+ 		/* Update the number of times each token is used */
+-		token_table[i].refs += refs;
++		t->refs += refs;
++		t->pair = best;
+ 
+-		/* Generate the full name for this symbol */
+ 		left = &token_table[LEFT(best)];
+ 		right = &token_table[RIGHT(best)];
+ 		if (!(left->refs -= refs))
+@@ -621,9 +735,10 @@ static void optimize_result(void)
+ 		str[len] = 0;
+ 		memcpy(str, left->str, left->len);
+ 		memcpy(str + left->len, right->str, right->len);
+-		token_table[i].str = str;
+-		token_table[i].len = len;
+-	} while (idx);
++		free(t->str);
++		t->str = str;
++		t->len = len;
++	}
+ }
+ 
+ /* start by placing the symbols that are actually used on the table */
+@@ -654,6 +769,8 @@ static void optimize_token_table(void)
+ 	insert_real_symbols_in_table();
+ 
+ 	optimize_result();
++
++	check_tables();
+ }
+ 
+ /* guess for "linker script provide" symbol */
 -- 
 2.39.5
 
