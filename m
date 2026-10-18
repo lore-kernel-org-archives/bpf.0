@@ -1,123 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E8F36F41C
-	for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 23:41:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF1445038
+	for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 00:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792280505; cv=none; b=slsmapOXQAN3Cb6k4auSUlFi96SHFkL2mz7uFQtAOKiU5R9eI/sPu8aKfeROGwFTKEi7BsYTSrQKxtVnrEWxPcDpJiTGfm1xF70PLNThJRkYRI6ZxSaDCWSvAfPXhsIiwQ9MNf3QBmpNMS9HE9gHrWh8rQjLHT6l7WJjUptfwYM=
+	t=1792283718; cv=none; b=rYkzBgk/wLDdO497lasMqlqJ5p6KPqKkqJqBgGvTEQs2RicNza4BO3jPTgJ9Bgkyp+WK8f2i4KXfUM5Epr6r11K3pDpkxkuqpXKE0Ud0Z/O2aU9qa2AsIZB3keJCK+WH3WxdPzdSlqWnSeJmEv4CAY1rVqz16xief7lpedhLbfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792280505; c=relaxed/simple;
-	bh=OHbFX0mZvPkqfgZ/eJKMdzt88GSSSm12y27p9mWhGcc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GExkAyh0qpcOJ9C4t+45yCLiKZ37p7f9utTf0SgIo1sISPbLwjvFPiTBGxvMksXTzHtQyYfyOlwagZglK42oj2qnC5+GLub3UuA85A2CBq+QW4kFJWcsxnkpDAN6kApqq+eA0anNvfpuA9TNg+laCuLbCpSdFx98EBsDXymJAzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RAznOx19; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792283718; c=relaxed/simple;
+	bh=hfjTc2+7mRLA4lbE+4kOi9bthGB0Crc//S5N1v+8APY=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=QbN7AflEqbfE1sBSskapwjSCWwIUHpueXjbZCDcGCu7MHkkEbuLu5houSLd6lh1BI1S8AIT27+3jrk3OALeYQQiax2Qg5NGEy/j6+2fap6jIS4EdRFKUAl7R33f8ru9kpTDiefxIVWppb2Vm89RGoJ23PdRGh0DN+C05qPNCjz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QzE9NVYS; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RAznOx19"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B59A41F000C4;
-	Sat, 17 Oct 2026 23:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792280504;
-	bh=tQAAuYjO3b/nr6hz41zDC7EDYKMnx9YZKnBEJqQTp/0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RAznOx19lDUaMFrJMhKDgIs3QqnnAgU4caKHH2t7C5Fscmwb9XoNCkyKqzQC4jyNx
-	 q6b01HyJ4Il5HgEgXgrOUk3KbKrHG63I8pCA9+6NWIXA1wHhT2+3rkOQINkT4bsthw
-	 rgbsvWuTE1ifFiIBS2ciepZN2v6BYLUDupddk9s2bDuWU+6OSHCACbwonf6fWLtwlK
-	 NVkn2xVsJegY4UNv7yYQ/ubqmQWSzBZ2ZkvJF9IfkRyzgLkjSZcUlmM7JsHBvZctyY
-	 GwBf1Pl1vQY0HGnirv8KOR0czcevFEWS9Q6VTIr8oH83moFhuFnUsofTz3HnN9NThr
-	 DWfxUglLB+zBw==
-Content-Type: multipart/mixed; boundary="===============8570596444813883407=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QzE9NVYS"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2e812e2b31bso5008975ad.3
+        for <bpf@vger.kernel.org>; Sat, 17 Oct 2026 17:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792283717; x=1792888517; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EH0gDvSzc6w/u1uhbFkTvLvSWpp8Ypw96bljv6WuNF0=;
+        b=QzE9NVYSUvm/wvJSGbAu7CZWKF2axYikrTyhj8rjKO2kMyTZVKj67V95F/drpYdZBR
+         aLmyYOHH//eT8GDqYwczvezQ1Hdp7Kx/wINArXHW1uaRRIt04UoN9uu3Z40gBcoRN/M1
+         a/5OvBOcHu08FlTIZVWaba/Q7majAiE9PCq93ApnkcAUD7Hlp2Te04cCgMVQtzeJcbwa
+         1k1RWbflBAh/teQFn5pQfxJMRcVm1dt5CZ/71MAONoKKg8CRtzsGnOZdkjXDvG6VlhdG
+         IqsL+KnXN0YR5kXT9U1tR4y77nmcvwBH1cousdCdU0n9/mdTGhF297+nKStl24edXW8h
+         qOQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792283717; x=1792888517;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EH0gDvSzc6w/u1uhbFkTvLvSWpp8Ypw96bljv6WuNF0=;
+        b=gXw9cP67BgPRbBgcmAfW8rEk2GungqZGF525ZlsbfACviAi1PEVanogNdPQfhRc0sD
+         sxnqhout1U7Zy/cS5xIKTtlK/ySgPoGNRzMOMSqkc3WaKrFXawoq2n7uJZ2X0qOferXU
+         /xz8e8Weg4Fnr/tcmBk3pTHKvtlDWxnuDmuP5w/TyRYCcC7Zeho6asuwWPUYNbrXEbXk
+         alITPQkpQZriQ8qYb1oyYH5t7j7XXP42jj11bkUgb1Z9qpNtNwUHawmMkBpr1KsMPAqo
+         mNEkaWK4n/W52tD1ZDz8/WG8KTznZi/JLfyeOvQI3c4iyVAySzjA2siO2uJM9h5HYaEg
+         AJew==
+X-Forwarded-Encrypted: i=1; AKwUvBy/uhpCNfl+YzoKjHwZgLNyHe87opRMlB5YFZBjXQNYUusURhceLETC+2dzEvtIEOPyoxM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI6rl5WOUFQc7TWljAt/jCexJtf0zLSUVUJsss+q8UryzUCykXM
+	A57NUWYx+DUZ487cYKVCjLcM5+CbaqmQXjfmAEIaUKFgbHtPcC+upB8fR9E7/w==
+X-Gm-Gg: AYBFou1A3+t/fRUCns/gyTJS1F/MrftwJh0UTwSmA61773y7q1fI1s4nhyC/mi7YkG8
+	zS7s2xj3uJz9CHU9BDF3KWylDlZfp6mOaQfT3+3DhKclAgKwQqdMO9IPno6NJ7mqIMf5HLpUK+o
+	Vus8qKFmMYliPUhmQywcd9j3Ej910WTItc+0Z8ju9b7FkiCbGeWrQoGRXtHM+mpfduA7wGbyBOu
+	6ZHvTBK6nXvA42bBTZ+vyBWiiGSF4+X/F1CSqXwp9SFO8xRG7VMAuscIew0sMLnF0JK7D53CpR5
+	eMQVGT5RNsjz2f4MWiOi+PNfm/xOQj33cfYj0ejr4HOKtRDn36TJyXwuPyzEYLIDzZq+a5NnO9f
+	ElWGr6rgtGNzRFXbdT5KpWJKTikKP8zjYRfnJ4OGCa3XNiY1oCNkElNQ7ui0KE9ljA0Ih0ug+Lu
+	xU0vCLAy8mG7ulxbfZrPzuJwctnVAQy9kvaMbtOQxL4wjhgQZ4PTsWWcLytfaPyI+Y9Qxbf5ZG5
+	OrHdqQQAJpm6wfV9jznBnUWzXsp0ryW889QPs5nbdW6JxDfxil1Sv66A5+8bZ6Vgd2X/8ev6FwX
+	UO4=
+X-Received: by 2002:a17:902:ce87:b0:2e9:9522:ed3a with SMTP id d9443c01a7336-2e9a69e7439mr35618735ad.22.1792283717022;
+        Sat, 17 Oct 2026 17:35:17 -0700 (PDT)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e97e8aad3dsm24408635ad.64.2026.10.17.17.35.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Oct 2026 17:35:15 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 18 Oct 2026 00:35:15 +0000
+Message-Id: <DM7JJW2KF0F9.20SESIVIYNMYU@gmail.com>
+Subject: Re: [PATCH bpf-next v3 11/16] bpf: Refuse the prologue for an
+ extension that cannot take it
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <sashiko-outbox-175849@kernel.org>
+References: <20261017230950.802052-1-alexei.starovoitov@gmail.com> <20261017230950.802052-12-alexei.starovoitov@gmail.com> <sashiko-outbox-175849@kernel.org>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <07767b15f635ea35ad4ad69114b1bd1de43b40d5c359e54e96799996dfdf6740@mail.kernel.org>
-In-Reply-To: <20261017230950.802052-12-alexei.starovoitov@gmail.com>
-References: <20261017230950.802052-12-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v3 11/16] bpf: Refuse the prologue for an extension that cannot take it
-From: bot+bpf-ci@kernel.org
-To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,josef@toxicpanda.com,mason@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 17 Oct 2026 23:41:42 +0000 (UTC)
 
---===============8570596444813883407==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat, Oct 17, 2026 at 04:29 PM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
+> Could this cause a use-after-free in the caller after the extension returns,
 
-> bpf: Refuse the prologue for an extension that cannot take it
+Yes, for a target that only reads the packet. It's an old bug, not from
+this patch. Reproduced on bpf-next without the series:
 
-TL;DR: Commit message only: the Fixes: tag may point at the wrong commit,
-since extensions could not write packet data (or get the prologue) until
-7e40781cc8b7, though be8704ff07d2 may be defensible.
+  BUG: KASAN: slab-use-after-free in bpf_prog_769e8c14b3a52c7a_t_read+0x386/0x404
+  Read of size 1 at addr ffff888104c61e3c by task tt11/102
+  Freed by task 113:
+   kfree+0x161/0x500
+   skb_release_data+0x2dc/0x340
+   consume_skb+0xa6/0x1c0
+   packet_recvmsg+0x4b3/0xa20
 
-> bpf: Refuse the prologue for an extension that cannot take it
->
-> A tc, lwt_xmit or sk_skb program that writes to packet data starts with
-> bpf_unclone_prologue().  It takes the skb from R1, and if the skb is cloned
-> it calls bpf_skb_pull_data() and restores R1 only.
->
-> That suits the main function of a program.  An extension gets the prologue
-> too, but it starts with the arguments of the function that it replaces.
-> If the first one is not the context, something else is taken for an skb:
->
->   BUG: KASAN: stack-out-of-bounds in skb_ensure_writable+0x84/0x1a0
->   Read of size 8 at addr ffffc90000270ad0 by task uncl/105
->    skb_ensure_writable+0x84/0x1a0
->    bpf_skb_pull_data+0x32/0xf0
->    bpf_prog_853eb1991d35e093_ext_slice+0x4f/0x321
->    bpf_prog_9eb18752b5d0959a_t_glob+0x2ac/0x2de
->   BUG: unable to handle page fault for address: 0000000082298821
->
-> And whatever R2-R5 held is lost, while the verifier goes on trusting
-> pointers in them.
->
-> Refuse an extension that needs a prologue unless it gets the context as
-> its first argument and scalars beside it.  A scalar is still clobbered if
-> the skb is cloned, which the verifier can cope with.  Extensions of XDP,
-> sk_msg and sockopt programs get no prologue and load as before.
->
-> Fixes: be8704ff07d2 ("bpf: Introduce dynamic program extensions")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Two corrections though:
 
-Is the Fixes: tag pointing at the right commit?
+> skb_ensure_writable() -> pskb_expand_head(), which reallocates and frees
+> skb->head while the caller still holds pointers into the old skb->head.
 
-At be8704ff07d2, the prologue could not be reached from an extension.  The
-prologue is only generated when env->seen_direct_write is set, and at that
-commit the flag was only set via may_access_direct_pkt_data(), which
-switched on env->prog->type:
+For a cloned skb it only drops a reference. The old head goes when the
+other clone is freed, so another cpu has to do that while the caller is
+still running. And the caller can only read: a target that writes
+to the packet has its own prologue.
 
-    switch (env->prog->type) {
-    ...
-    default:
-        return false;
-    }
+> If the target tc, lwt_xmit, or sk_skb program only reads packet data (or
+> clones the skb via bpf_clone_redirect() and reloads skb->data) and calls a
 
-BPF_PROG_TYPE_EXT fell into the default case, so an extension could not
-write packet data directly.  bpf_unclone_prologue() returns 0 when
-!direct_write, so no prologue was patched in and R1-R5 of the extension
-were never clobbered.
+bpf_clone_redirect() unclones the skb before it returns.
 
-Direct packet writes from an extension, and therefore the prologue, first
-became possible with 7e40781cc8b7 ("bpf: verifier: Use target program's
-type for access verifications").  That commit introduced
-resolve_prog_type() and made may_access_direct_pkt_data() use the target
-program's type, so an extension replacing a tc, lwt_xmit or sk_skb global
-function could set seen_direct_write.
+> and should an extension receiving a prologue also require the target function
+> to have changes_pkt_data set (and set prog->aux->changes_pkt_data for
+> subsequent BPF_LINK_CREATE attachments)?
 
-That said, the tag may still be defensible, since be8704ff07d2 is what
-copied the target's ops into env->ops, which supplies gen_prologue.
+That alone is too strict. It would refuse
+freplace/test_pkt_write_access_subprog in fexit_bpf2bpf, which is fine:
+the target writes to the packet, so the skb is uncloned at entry and
+the prologue of the extension does nothing.
 
-Should this include:
-
-  Fixes: 7e40781cc8b7 ("bpf: verifier: Use target program's type for access verifications")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39078926044
---===============8570596444813883407==--
+Will send a follow-up: refuse such an extension unless the target function
+changes packet data or the target prog has the prologue, at load
+and at BPF_LINK_CREATE.
