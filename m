@@ -1,279 +1,485 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8189A4F93A3
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792418078; cv=pass; b=nvqC2OEyc2Gg0t4pWc2HuZ0MImWvyNxaBomg5h87MNB09FxnBGwo1Vwizd+lNCesT7qz28HmFgyfAD9Uf/vxR5Krig3FNuztwnnTslVXwkzyx1sWNdiDDsNN4Lb15PT3mAOfbXRwzPV265ZCtTXwZZqPCIS60vx4zlGDTaHMXtk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792418078; c=relaxed/simple;
-	bh=gvwoY48v8HtjEGBanR0EVPc+UxSyK5a07IZl2skoMZ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P8DYjSVSqimnstz5Y63Kt7/bT5QV2sZA3C47jByDP0qJ3PlUs3LoX1prJb6I3emw/nleBFCpmQ0CCPQHaTduFxvwwWZHi2boksg3IaxVOWhQbTrf7BcayZpEZXIAck/CXW8vjz9scgFY7Ysb/znEjOtfacCn+D8C82Wt0zoKp+w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uNpXCGQP; arc=pass smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D6E501F24;
+	Mon, 19 Oct 2026 13:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792418099; cv=none; b=grHRnqRnGp4Cql27YPZ4K3uhqONzQWqIF/lZ2nTxR22pn8aKGHqfNL0/YAu5OBbzNxEyfyoaEbakhvcMTgByEGfvlBLUo8om6rCJQS5RZB1fL+0UKzLSGlojRZiIfrMdQycdrnOvbRxLbpYv+qZYwwLBwNTfD8TYPXk4GJlwr6Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792418099; c=relaxed/simple;
+	bh=NVetNNEzOAHuseoFgEMvq38N3+QCRz8vPEa6tSnFy2Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=seK6N2sPbIHdz9s9ecgRnz/cCU9DAYwLGNOTw34Fbxz2iOF9QRypvhKxopfQCF4G/aVdtKwKucGiiWiRm0kf1QSLWJCEwnSFyfgtLhbNHGurcffB+nZT1BEGDkxfZ7st3viGgB9nnw+qiVEhsm468Ko4V9GVOFdiDttDNYS0DS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9CCz0e9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uNpXCGQP"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-5337fa12431so402761cf.1
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:54:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792418074; cv=none;
-        d=google.com; s=arc-20260327;
-        b=smmXpWt79f51wVENlFOVs/8yEskTn66Xp1XiP6NHxI0g4qFvNBHLfdm+Pa3h4S9cad
-         ZZRoEwTSYMgEEOjOMYkvl6ipGud4YLG5kVkNl3rjfjpJo5uYCOugRIOzb2yorjLEckMP
-         w9wVfMlsCq0i/zfwYzqQxTnW9R44CJhpBuMD8RxNQuQMumJHBGzzCq1Au5Ky/vjmF8+8
-         YqS0Nobh7PwBdkvhZ1EAUBns0BEe6/QcE1bEQW6gY9BUyYYlRw7RpkBlN3eS6FOXQO7q
-         la12a4oXPaseK6nALvGQG0RkqTdAlO7zIyyzbSLE7oXADIWqNMZpm6JxC8C0Wkj+6z4U
-         uyyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0kEytU5LeiM3vhSLHRfNg06oRQOFH8XdzJ+MdOl7cWw=;
-        fh=3twjhOaKkLxwehxQKVtycmRP51AnCm5vIprYS2ToukI=;
-        b=rtGl1ggCADSHOXmnJnN5VvsWaVQ/8iDdlP/opFInmercLzHUeVgXBZXXMAFp99CRro
-         8DoB4X1i1fa0yP2YENrsxx6LILzFrxEdKEqI2kR25OiOoLHlGK0mBvcHY2qHciT0VDUX
-         C413DtED94ZqV0V13fZmdpWFdy0kZokUDu9ITuTy2xlJS/OXTvAVEIYEToKvnz5vP6Th
-         WvaMa/H3QpSuMJ62y0r7kOzqb1fu+yCj6zmZFXPAKcQfPkaWHPCmC4KrkMLp9ClZB3YN
-         dkMUf5qdu1IX1ENEdpnS6MzaDkfGe7u7S+KXgLPB5YiP1joqvonAdVOVbyCS2BXdHZvs
-         eW7g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792418074; x=1793022874; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0kEytU5LeiM3vhSLHRfNg06oRQOFH8XdzJ+MdOl7cWw=;
-        b=uNpXCGQPcR1FBHrB7LaE+WHjBB52uC8BjnVVPYEmtek8ERcmSeijJ9LBLLm3BTxAqr
-         aPAH3DCoH57rKYO2v9WsiafoGqkCwWxfh85xiwk/SzfB5nR7V9ZNVdQRB9d08PwdyJYz
-         YeqQhUu/UVlD/Cbdavi/XdKRN+hGNO91HLRAihExCMqkd9RhcWL29TXISP/KuI83Z7YE
-         k0U66OxR055W3AkvkRdfYmr1meUrsTDI1N1wTb7gd5MfJzteXs6T3i4yaL8DNRyOsMZm
-         SMY5kub6Zj+WrgsJ203Oafz3t4jeM+JWEF5bWZIAFcuOQktMCKCM2eJUR9tBEjSR1Pym
-         /aKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792418074; x=1793022874;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0kEytU5LeiM3vhSLHRfNg06oRQOFH8XdzJ+MdOl7cWw=;
-        b=2evN8B/Zwdf2Z02aXJNqx/SrL6UJj0a86p0fAKSNNfYgqs+Jdzv4GnhMVgcEHkeDvh
-         DX8jwdLrBncRiyYHqSv8datEpOjSFYD66jCXhiyYR4DDuPrc3VzFOGfKTfMON+DrW8Sn
-         i1wg67odtx1BUn3gvZF5/llnwijSSgMDSH0L4uYkHzeDMIbldT8xTE19Yx870eBJ/pia
-         l9mCzRurQ9r0me5fOqCa4Ytt8OPODVG0gTZlQlzYlXrG79BoeY0uWJVUq9tgIsOv6pCC
-         nMrUG+rkXF7xYth6J6EDWGc+xRuqErJIg9k3AjB2+twnI77/+ssxnrBikvjgFMfJyKYy
-         MnHA==
-X-Forwarded-Encrypted: i=1; AKwUvBxVMKw8J6JWHzUHG5veoddvdUS/lLzd5iwkrIvhoFCh0tIfbQln0hFLVDYIrG/m7pKnkzw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKAgq0hDC5Gbb0PYZyCjD8HmC6dA7Q62sZQRTCAGoQLa01cq5Ni
-	Z3mrWe5RboPUrk7i8Tj9qYrxQ2v2///Blfs/3xUFoMdo7vBdROxbGzuyfgwhN6x7NUIwpHRsNiF
-	XXUT6vd0UNxJusjyrG4V1F4dAQnJLuvGz2b8h3YW3
-X-Gm-Gg: AYBFou2CFkRuSIlnvofviXiNXoTFbh7cEE3bjsVf+XyPZLXVHLPiEXACYg3p4OWaKua
-	AGXZ//IHs8QsIa1qyU2halGjC7CZZPMyDNB8famDj5ZYteqYp8BHFl1kpFpd60WXQ3WVupVpPWP
-	8WBXbtxJHa1qwKk7s8ZORpQADbM3cDs1jcXpPW7rWKcQXeF44F5QSUgmmhOludPt/LkvCD8xBfI
-	MjcgeeZUsdyNnS9sFvEJ32r2JYrVpIu61MzC3fcjzNMSzI8iHbKWypUwjFs0ymX/iravyZYc7qD
-	nFnyRzL7sNJte0rnJOUzhvsWEYP8Uy8+acUq3lAeqH3BG3puWweuAt+amj73eRqVU1Dm0O4+Uwp
-	3b304mIoIjU9MdpppqTb9wCtFoa99rqdyZfxtT+UjLY0m03z/huoUwkw=
-X-Received: by 2002:a05:622a:228b:b0:532:eff9:ca08 with SMTP id
- d75a77b69052e-536465dfce9mr41062201cf.12.1792418073474; Mon, 19 Oct 2026
- 06:54:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9CCz0e9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82FBA1F000C5;
+	Mon, 19 Oct 2026 13:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792418095;
+	bh=naQpsq1oOIaJNCMfkoIcYYTRo5AJT7ecBXQg43SNO7M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=e9CCz0e9kh38vtJRn+633Vm7VOYrZDAnWSFw58ZiJDtIJr9RoZEk7TmtpUb1vOtpE
+	 HO2BZr76h86hGvJGIjN1MIPEF631t+zgiAD7es+o5G3a/lyZ3PNmYIR33psYLGlONJ
+	 Cfugvk8tn+Q/vM0GuYRyMZ4J6LEH6Hxwfg6PIQqwkUD/W15jD+xborH8CcdMDzy5/f
+	 8KvDdVytC4oxaJoQcHR6A9TDjSdh7CVb4m9PVHCCvtFEASX/A3GOJ+++TeN2YD7UlG
+	 btis2qwQ/wbLRKO5zHBR0u8BNWJOLUHhyrirjDQ+8YKxZ8RQJ9ezqHqOxQWrw9XkTK
+	 1vPGXZwrbfWZA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Yuan Chen <chenyuan@kylinos.cn>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-6.1] libbpf: Skip bpf_object__probe_loading() when BPF token is in use
+Date: Mon, 19 Oct 2026 09:45:00 -0400
+Message-ID: <20261019135441.1420968-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261019135441.1420968-1-sashal@kernel.org>
+References: <20261019135441.1420968-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261018211514.2817293-1-chia-yu.chang@nokia-bell-labs.com> <20261018211514.2817293-2-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20261018211514.2817293-2-chia-yu.chang@nokia-bell-labs.com>
-From: Neal Cardwell <ncardwell@google.com>
-Date: Mon, 19 Oct 2026 09:54:16 -0400
-X-Gm-Features: AclHuK-yKHKszrAvQ0DWznhcRsJCvVm21RfRVRcavHBDlb8PKd3FVpjc1os6wtY
-Message-ID: <CADVnQy=jqk0vZUsG6JKv44cBbnR5pG5+7Tvacohuz3tzFpF6pQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/3] tcp: accecn: Add ece_delta to rate_sample
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: ihor.solodrai@linux.dev, john.fastabend@gmail.com, jakub@cloudflare.com, 
-	jiayuan.chen@linux.dev, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, linux-kselftest@vger.kernel.org, 
-	shuah@kernel.org, horms@kernel.org, dsahern@kernel.org, pabeni@redhat.com, 
-	jhs@mojatatu.com, stephen@networkplumber.org, davem@davemloft.net, 
-	edumazet@google.com, andrew+netdev@lunn.ch, donald.hunter@gmail.com, 
-	kuniyu@google.com, ij@kernel.org, koen.de_schepper@nokia-bell-labs.com, 
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com, Mike_Rudolph@comcast.com, 
-	Jeff_Howe@comcast.com, srichard@netapp.com, 
-	Olivier Tilmans <olivier.tilmans@nokia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.57
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Oct 18, 2026 at 5:15=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
- wrote:
->
-> From: Ilpo J=C3=A4rvinen <ij@kernel.org>
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-Thanks for the patch. I agree this will be useful for congestion
-control modules using L4S ECN. For example, I see this field is used
-by Prague in https://github.com/L4STeam/linux/blob/testing/net/ipv4/tcp_pra=
-gue.c
-.... is that the current URL for the code?
+[ Upstream commit d262a25d8b58b697b2a1a2fe4b0078446cc00e11 ]
 
-> Include echoed CE count into rate_sample. Replace local ecn_count
-> variable with it.
+bpf_object__probe_loading() tries to load trivial SOCKET_FILTER and
+TRACEPOINT programs to verify the BPF environment works.  When a
+BPF token is in use with restricted program type permissions, these
+probe loads may fail because the token does not allow the specific
+program types, even though BPF loading is perfectly functional.
 
-I'd suggest a clearer commit message, like:
+Fix by skipping the probe when a token FD is present: BPF token
+creation itself proves the kernel has a working BPF subsystem.
+Real BPF issues will be caught during actual program and map loading.
 
-Include in rate_sample a count of the number of segments that were
-newly marked, on this ACK, as having been CE (congestion experienced).
-Replace local ecn_count variable with it. This signal will be useful,
-in upcoming patches, for congestion control modules, like Prague,
-which want to process AccECN-style ECN signals.
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20260610145059.113412-2-chenyuan_fl@163.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
->
-> Co-developed-by: Olivier Tilmans <olivier.tilmans@nokia.com>
-> Signed-off-by: Olivier Tilmans <olivier.tilmans@nokia.com>
-> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> ---
->  include/net/tcp.h    |  1 +
->  net/ipv4/tcp_input.c | 41 +++++++++++++++++++----------------------
->  2 files changed, 20 insertions(+), 22 deletions(-)
->
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 0265c27a5fd7..1838389a9d8a 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -1346,6 +1346,7 @@ struct rate_sample {
->         int  losses;            /* number of packets marked lost upon ACK=
- */
->         u32  acked_sacked;      /* number of packets newly (S)ACKed upon =
-ACK */
->         u32  prior_in_flight;   /* in flight before this ACK */
-> +       u32  ece_delta;         /* is this ACK echoing some received CE? =
-*/
+LLM Generated explanations, may be completely bogus:
 
+This is a real libbpf load-path bug in this 6.18 tree: restricted BPF
+tokens make `bpf_object__probe_loading()` fail even when the actual
+programs would load. The change is small, already present in the
+matching 6.18 code, and is worth backporting.
 
-This comment seems incorrect. It implies the value is a boolean, but
-it's a count.
+## PHASE 1: COMMIT MESSAGE FORENSICS
 
-I'd suggest renaming the field for clarity, to something like
-acked_sacked_ece, since AFAIK it is the subset of the packets in
-acked_sacked that were marked as CE.
+**Step 1.1: PARSE THE SUBJECT LINE**
+- Record: `[libbpf] [Skip] Skip bpf_object__probe_loading() when BPF
+  token is in use`
+- Subsystem: `libbpf` (userspace library in `tools/lib/bpf/`)
+- Verb “Skip” is a workaround/fix for a false-negative probe, not a
+  feature.
 
-So, for clarity/readability, I'd suggest renaming it, and placing the
-field immediately below acked_sacked, and reworking the comment to be
-like:
+**Step 1.2: PARSE ALL COMMIT MESSAGE TAGS**
+- Record:
+  - `Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>` (author)
+  - `Signed-off-by: Andrii Nakryiko <andrii@kernel.org>` (libbpf/BPF
+    maintainer)
+  - `Link: https://lore.kernel.org/bpf/20260610145059.113412-2-
+    chenyuan_fl@163.com`
+  - No `Fixes:`, `Reported-by`, `Tested-by`, `Reviewed-by`, `Acked-by`,
+    or `Cc: stable` in the committed message (absence of Fixes/Cc-stable
+    is expected here)
+  - Mailing-list review did include `Acked-by: Mykyta Yatsenko
+    <yatsenko@meta.com>` (not copied into the final commit text)
 
-        u32  acked_sacked;      /* number of packets newly (S)ACKed upon AC=
-K */
-        u32  acked_sacked_ece;  /* number of packets ECE-marked upon ACK */
+**Step 1.3: ANALYZE THE COMMIT BODY TEXT**
+- Record:
+  - **Bug:** `bpf_object__probe_loading()` loads dummy `SOCKET_FILTER`
+    and `TRACEPOINT` programs. With a BPF token whose allowed program
+    types exclude those, the probe fails even though real loads would
+    work.
+  - **Symptom:** `bpf_object__load()` / `bpf_object__prepare()` returns
+    an error and warns that BPF/RLIMIT_MEMLOCK is broken. In-tree token
+    selftests (`obj_priv_map`, `obj_priv_prog`, freplace, implicit-
+    token, struct_ops BTF cases) hit this.
+  - **Cover letter (v3):** same probe can also drop the token path and
+    then break later loads (struct_ops + global data: `fd X is not
+    pointing to valid bpf_map`).
+  - **Root cause:** probe uses hardcoded program types and passes
+    `obj->token_fd`.
+  - **Fix:** skip the probe when `token_fd` is set; creating the token
+    already proves BPF syscalls work.
+  - **Versions:** no version list in the message. BPF tokens exist since
+    ~6.9; this 6.18 tree has them.
 
->         u32  last_end_seq;      /* end_seq of most recently ACKed packet =
-*/
->         bool is_app_limited;    /* is sample from packet with bubble in p=
-ipe? */
->         bool is_retrans;        /* is sample from retransmission? */
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 02ec0b0116d1..a5a7302050c4 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -588,9 +588,10 @@ static u32 __tcp_accecn_process(struct sock *sk, con=
-st struct sk_buff *skb,
->         return safe_delta;
->  }
->
-> -static u32 tcp_accecn_process(struct sock *sk, const struct sk_buff *skb=
-,
-> -                             u32 delivered_pkts, u32 delivered_bytes,
-> -                             u64 prior_bytes_acked, int *flag)
-> +static void tcp_accecn_process(struct sock *sk, struct rate_sample *rs,
-> +                              const struct sk_buff *skb, u32 delivered_p=
-kts,
-> +                              u32 delivered_bytes, u64 prior_bytes_acked=
-,
-> +                              int *flag)
->  {
->         struct tcp_sock *tp =3D tcp_sk(sk);
->         u32 delta;
-> @@ -600,11 +601,11 @@ static u32 tcp_accecn_process(struct sock *sk, cons=
-t struct sk_buff *skb,
->         if (delta > 0) {
->                 tcp_count_delivered_ce(tp, delta);
->                 *flag |=3D FLAG_ECE;
-> +               rs->ece_delta =3D delta;
->                 /* Recalculate header predictor */
->                 if (tp->pred_flags)
->                         tcp_fast_path_on(tp);
->         }
-> -       return delta;
->  }
+**Step 1.4: DETECT HIDDEN BUG FIXES**
+- Record: Not a disguised cleanup. It is an explicit functional fix for
+  a false probe failure. Skipping the probe is the fix, not a refactor.
 
+## PHASE 2: DIFF ANALYSIS
 
-Does this compile? Did you try to compile this patch? This removes the
-only "return" statement from a function that returns a value. Looks
-like invalid C to me. :-)
+**Step 2.1: INVENTORY THE CHANGES**
+- Record:
+  - File: `tools/lib/bpf/libbpf.c` — 3 insertions, 7 deletions
+  - Function: `bpf_object__probe_loading()`
+  - Scope: single-file surgical change
 
->
->  /* Buffer size and advertised window tuning.
-> @@ -4220,8 +4221,8 @@ static void tcp_xmit_recovery(struct sock *sk, int =
-rexmit)
->  }
->
->  /* Returns the number of packets newly acked or sacked by the current AC=
-K */
-> -static u32 tcp_newly_delivered(struct sock *sk, u32 prior_delivered,
-> -                              u32 ecn_count, int flag)
-> +static u32 tcp_newly_delivered(struct sock *sk, struct rate_sample *rs,
-> +                              u32 prior_delivered, int flag)
->  {
->         const struct net *net =3D sock_net(sk);
->         struct tcp_sock *tp =3D tcp_sk(sk);
-> @@ -4232,8 +4233,8 @@ static u32 tcp_newly_delivered(struct sock *sk, u32=
- prior_delivered,
->
->         if (flag & FLAG_ECE) {
->                 if (tcp_ecn_mode_rfc3168(tp))
+**Step 2.2: UNDERSTAND THE CODE FLOW CHANGE**
+- Record:
+  - **Before:** After `bpf_object_prepare_token()`, probe always runs
+    (except `gen_loader`). It passes `token_fd` / `BPF_F_TOKEN_FD` into
+    dummy `SOCKET_FILTER` then `TRACEPOINT` loads. Either failure aborts
+    object prepare/load.
+  - **After:** If `obj->token_fd` is set, return 0 immediately (same as
+    `gen_loader`). Dummy loads no longer use token opts (`NULL` opts).
+  - **Path:** initialization/prepare of every `bpf_object` load, not a
+    rare error path.
 
+**Step 2.3: IDENTIFY THE BUG MECHANISM**
+- Record:
+  - **Category:** logic/correctness (false failure in a capability
+    probe)
+  - **Mechanism:** probe assumes `SOCKET_FILTER` or `TRACEPOINT` is
+    allowed. Restricted tokens are the whole point of BPF token
+    delegation. Probe failure is treated as “BPF is unavailable,” so
+    legitimate objects never load.
+  - Not UAF/leak/race/overflow.
 
-This (tcp_ecn_mode_rfc3168(tp)) expression seems to suggest that the
-value will not be available for AccECN connections. How will Prague
-use this rs->ece_delta field if it's only available for rfc3168 ECN?
+**Step 2.4: ASSESS THE FIX QUALITY**
+- Record:
+  - Obviously correct: token creation already used `bpf_token_create()`.
+    Real map/prog errors still happen in the real load path.
+  - Minimal: one extra skip condition; dummy loads drop unused token
+    opts.
+  - `bpf_prog_load(..., NULL)` is valid: `OPTS_VALID` treats NULL as OK;
+    `OPTS_GET` falls back to 0. Same as empty opts when `token_fd == 0`.
+  - Regression risk is low. Skipping `bump_rlimit_memlock()` in this
+    function is fine: `bpf_prog_load()` still calls it, and tokens imply
+    6.9+ with memcg BPF accounting.
+  - Residual gap: series patch 2 (feature probes using hardcoded types)
+    is **not** in this tree. This patch still stands alone for the
+    probe_loading hard-fail.
 
-I suggest addressing this so that the rs->ece_delta is updated if
-tcp_ecn_mode_any(), and putting that change in a new commit, placed
-before this commit in this patch series.
+## PHASE 3: GIT HISTORY INVESTIGATION
 
->
-> -                       ecn_count =3D delivered;
-> -               NET_ADD_STATS(net, LINUX_MIB_TCPDELIVEREDCE, ecn_count);
-> +                       rs->ece_delta =3D delivered;
-> +               NET_ADD_STATS(net, LINUX_MIB_TCPDELIVEREDCE, rs->ece_delt=
-a);
->         }
->
->         return delivered;
-> @@ -4288,7 +4289,7 @@ static int tcp_ack(struct sock *sk, const struct sk=
-_buff *skb, int flag)
->         struct inet_connection_sock *icsk =3D inet_csk(sk);
->         struct tcp_sock *tp =3D tcp_sk(sk);
->         struct tcp_sacktag_state sack_state;
-> -       struct rate_sample rs =3D { .prior_delivered =3D 0 };
-> +       struct rate_sample rs =3D { .prior_delivered =3D 0, .ece_delta =
-=3D 0 };
+**Step 3.1: BLAME THE CHANGED LINES**
+- Record:
+  - Probe itself: Stanislav Fomichev, 2018 (`47eff61777c7`).
+  - Token opts in the probe: `6b434b61b4d9e` (“libbpf: Wire up BPF token
+    support at BPF object level”), Andrii Nakryiko, 2024-01-23 (kernel
+    ~6.9).
+  - Buggy pattern has been in this 6.18 line since the branch, not a
+    post-6.18 introduction.
 
-Adding the ece_delta field here in the initializer is redundant.
+**Step 3.2: FOLLOW THE FIXES: TAG**
+- Record: No `Fixes:` tag (Mykyta asked for one; it was never added).
+  The introducing commit is `6b434b61b4d9e`, which **is** in this tree
+  (`git merge-base --is-ancestor` succeeded).
 
-According to the C99 standard (ISO/IEC 9899:1999, Section 6.7.9,
-paragraph 21), if an aggregate or union contains fewer initializers
-than there are members, the remaining fields are implicitly
-initialized the same as objects that have static storage duration.
-When you explicitly initialize even a single scalar field (whether to
-zero or any other value) using a designated initializer, you trigger
-the C language rule for partial initialization. Arithmetic/Scalar
-types (integers, floats) are initialized to 0.
+**Step 3.3: CHECK FILE HISTORY FOR RELATED CHANGES**
+- Record:
+  - `f9bceaa59c5c4` already skips this probe for light skeleton
+    (`gen_loader`); this patch extends that idea to tokens.
+  - `1315c28ed8095` split load into `bpf_object__prepare()` / load;
+    probe now runs from `bpf_object_prepare()`.
+  - Series patch 2 (“fetch probeable prog type from token”) is **not**
+    in this tree.
+  - Standalone: Andrii said this was the only v2 patch that should land
+    on its own.
 
-Thanks again for the patch.
+**Step 3.4: CHECK THE AUTHOR'S OTHER COMMITS**
+- Record: Yuan Chen has another libbpf fix here (`aa485e8789d56`, NULL
+  deref in `btf_dump__free`). Not the libbpf maintainer. Applied by
+  Andrii Nakryiko.
 
-Best,
-neal
+**Step 3.5: CHECK FOR DEPENDENT/PREREQUISITE COMMITS**
+- Record: Needs `obj->token_fd` and `bpf_object__probe_loading()`, both
+  present. No new helpers. Applies standalone. Patch 2 is a related but
+  separate feature-probe issue.
+
+## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
+
+**Step 4.1: FIND THE ORIGINAL PATCH DISCUSSION**
+- Record:
+  - `b4 dig -c d262a25d8b58`:
+    https://patch.msgid.link/20260610145059.113412-2-chenyuan_fl@163.com
+  - Revisions:
+    - v1 (2026-05-29): selftest workaround — add
+      SOCKET_FILTER/TRACEPOINT to token tests
+    - v2 (2026-06-04): 3 patches; this skip plus selftest ARRAY map plus
+      feature-probe skip
+    - `[PATCH bpf]` (2026-06-09): this patch alone after Andrii asked to
+      resend it
+    - v3 (2026-06-10): 2 patches; this skip plus smarter feature probes
+      — **this is what landed**
+  - Review:
+    - Mykyta: skip is correct; making the probe token-aware would be
+      worse. `Acked-by`.
+    - Andrii: this is the only v2 patch that should apply; resend it
+      alone.
+    - Mykyta on the bpf-tree resend: retarget **bpf-next**, add a Fixes
+      tag, include Acks. No NAK.
+  - No reviewer `Cc: stable`. bpf-next targeting is a process note, not
+    a statement that the bug is absent from 6.18.
+
+**Step 4.2: CHECK WHO REVIEWED THE PATCH**
+- Record: Recipients included Andrii Nakryiko, Alexei Starovoitov,
+  Daniel Borkmann, Eduard Zingerman, Mykyta Yatsenko,
+  `bpf@vger.kernel.org`. Right maintainers. Applied by Andrii.
+
+**Step 4.3: SEARCH FOR THE BUG REPORT**
+- Record: No syzbot/bugzilla. Trigger is in-tree
+  `tools/testing/selftests/bpf/prog_tests/token.c`: `obj_priv_map`
+  (QUEUE map only), `obj_priv_prog` (XDP only), freplace, implicit-token
+  struct_ops. Author hit failing tests; v1 tried widening token
+  permissions instead of fixing libbpf.
+
+**Step 4.4: CHECK FOR RELATED PATCHES AND SERIES**
+- Record: v3 2/2 is the feature-probe follow-up (`features.c`). Not
+  required for this skip to be correct. Not in this tree.
+
+**Step 4.5: CHECK STABLE MAILING LIST HISTORY**
+- Record: lore.kernel.org/stable search returned HTTP 403. UNVERIFIED
+  whether stable@ discussed this. No in-tree evidence of a prior
+  rejection.
+
+## PHASE 5: CODE SEMANTIC ANALYSIS
+
+**Step 5.1: IDENTIFY KEY FUNCTIONS**
+- Record: `bpf_object__probe_loading()` only.
+
+**Step 5.2: TRACE CALLERS**
+- Record: Single caller, `bpf_object_prepare()` (`libbpf.c` ~8705),
+  which is called from:
+  - `bpf_object_load()` if state `< OBJ_PREPARED`
+  - public `bpf_object__prepare()`
+- Every normal `bpf_object__load()` / skeleton load goes through this
+  after token setup.
+
+**Step 5.3: TRACE CALLEES**
+- Record: `bump_rlimit_memlock()`, `bpf_prog_load()`, `close()`,
+  `pr_warn()`. After the skip, those are not used when a token is
+  present.
+
+**Step 5.4: FOLLOW THE CALL CHAIN**
+- Record: Userspace, reachable from any app using in-tree
+  libbpf/bpftool/selftests with a BPF token (explicit `bpf_token_path`
+  or implicit `/sys/fs/bpf`). Not a kernel oops path. Unprivileged user-
+  namespace workloads with delegated tokens are the intended users.
+
+**Step 5.5: SEARCH FOR SIMILAR PATTERNS**
+- Record: Same skip already exists for `obj->gen_loader`.
+  `tools/lib/bpf/features.c` still hardcodes probe program types with
+  `token_fd` — that is series patch 2, still open in this tree.
+
+## PHASE 6: CROSS-REFERENCING AGAINST THE LOCAL TREE
+
+**Step 6.1: DOES THE BUGGY CODE EXIST IN THIS TREE?**
+- Record:
+  - Local tree: `v6.18.53` (`Makefile` 6.18.53, `git describe HEAD` =
+    `v6.18.53-5049-g0f0bdc2b0dffb`), branch `autosel`.
+  - `v6.18:tools/lib/bpf/libbpf.c` has the pre-fix probe: token opts +
+    `SOCKET_FILTER`/`TRACEPOINT`.
+  - Pre-fix hunk md5 matches `v6.18` exactly.
+  - Kernel BPF token (`kernel/bpf/token.c`, `35f96de04127d`) is in 6.18.
+  - Bug introduced ~6.9 (`6b434b61b4d9e`), well before 6.18.
+
+**Step 6.2: CHECK FOR BACKPORT COMPLICATIONS**
+- Record: Clean apply. Context around `bpf_object__probe_loading()`
+  matches 6.18. No refactor in the way.
+
+**Step 6.3: CHECK IF RELATED FIXES ARE ALREADY HERE**
+- Record: No other skip of this probe for tokens. No equivalent feature-
+  probe fix. Token selftests still omit SOCKET_FILTER/TRACEPOINT for
+  `obj_priv_*`, so they still depend on this libbpf change.
+
+## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
+
+**Step 7.1: IDENTIFY THE SUBSYSTEM AND ITS CRITICALITY**
+- Record: `tools/lib/bpf` — IMPORTANT, not CORE kernel. Used by bpftool,
+  selftests, and distro in-tree libbpf. BPF tokens are the supported
+  unprivileged/container path.
+
+**Step 7.2: ASSESS SUBSYSTEM ACTIVITY**
+- Record: Active (recent libbpf mmap/percpu/relocation fixes). Token
+  wiring itself has been stable since 6.9; this is a late correctness
+  fix, not churn in brand-new code.
+
+## PHASE 8: IMPACT AND RISK ASSESSMENT
+
+**Step 8.1: DETERMINE WHO IS AFFECTED**
+- Record: Config/driver-specific in the BPF-token sense: users of libbpf
+  object load with a token whose allowed types exclude SOCKET_FILTER
+  **and** TRACEPOINT. That includes the in-tree token selftests and
+  container/user-ns setups that delegate only XDP, struct_ops, maps,
+  etc.
+
+**Step 8.2: DETERMINE THE TRIGGER CONDITIONS**
+- Record: Trigger is common for token users: every
+  `bpf_object__load()`/`prepare()`. Not a race. Unprivileged tasks in a
+  delegated user ns can hit it; that is the token design.
+
+**Step 8.3: DETERMINE THE FAILURE MODE SEVERITY**
+- Record: Object load/prepare fails outright with a misleading “Couldn't
+  load trivial BPF program” warning. Not a kernel oops/corruption.
+  **Severity: MEDIUM-HIGH** for token users (feature completely
+  unusable), **LOW** for everyone else (`token_fd == 0` path is
+  unchanged).
+
+**Step 8.4: CALCULATE RISK-BENEFIT RATIO**
+- Record:
+  - **Benefit:** Restricted-token libbpf loads work; in-tree token tests
+    can pass; matches the token least-privilege model.
+  - **Risk:** Very low (net −4 lines, one extra early return).
+  - **Ratio:** Strongly favorable for 6.18.
+
+## PHASE 9: FINAL SYNTHESIS
+
+**Step 9.1: COMPILE THE EVIDENCE**
+
+FOR:
+- Real, reproducible false failure on every object load with a
+  restricted token
+- In-tree selftests exercise exactly this (XDP-only, map-only,
+  struct_ops-only tokens)
+- Buggy code is in 6.18; tokens are in 6.18
+- 10-line, obviously correct skip; same pattern as `gen_loader`
+- Acked by Mykyta Yatsenko; applied by Andrii Nakryiko
+- Clean apply; no new API
+- Andrii treated this patch as independently landable
+
+AGAINST:
+- Userspace libbpf, not a kernel oops/UAF/deadlock
+- No `Cc: stable`; reviewers asked for bpf-next (process, not “bug
+  absent from 6.18”)
+- Series patch 2 (feature probes) is still missing; some
+  struct_ops+global-data cases may still fail
+- Specialized to BPF token users, not all machines
+
+UNRESOLVED:
+- Stable@ thread search failed (HTTP 403)
+- Cover-letter claim that a failed probe “drops the token reference” in
+  the kernel was not independently verified; the libbpf-level hard-fail
+  is verified from code and tests
+
+**Step 9.2: APPLY THE STABLE RULES CHECKLIST**
+1. Obviously correct and tested? **PASS** — skip is the same idea as
+   `gen_loader`; reviewed/acked; tests exist
+2. Fixes a real bug that affects users? **PASS** — object load fails for
+   valid token configs
+3. Important issue? **PASS** (MEDIUM-HIGH for token users) — complete
+   load failure, not theoretical; fits “oh, that's not good”
+4. Small and contained? **PASS** — 3/7 lines, one function
+5. No new features or APIs? **PASS**
+6. Can apply to the local tree? **PASS** — 6.18 source matches the pre-
+   image
+
+**Step 9.3: CHECK FOR EXCEPTION CATEGORIES**
+- Record: None (not a device ID, quirk, DT, build, or docs fix).
+  Qualifies as a normal small bugfix.
+
+**Step 9.4: DECISION**
+
+6.18 ships BPF tokens and this probe. Without the skip, libbpf treats a
+least-privilege token as “BPF does not work” and aborts prepare/load.
+That is a real, user-visible break for the token feature and for in-tree
+tests, with a tiny, maintainer-reviewed fix and negligible regression
+risk.
+
+### What the commit solves for this tree
+Restricted BPF tokens cannot load objects through libbpf because a dummy
+SOCKET_FILTER/TRACEPOINT probe is not in the token’s allow-list.
+Skipping the probe when a token FD exists restores load/prepare for
+those objects.
+
+### Stable rules / risk
+Meets the written rules: small, obviously correct, real bug, no new API,
+applies cleanly to 6.18. Benefit is restoring a supported 6.18 feature;
+risk is an extra early return on a userspace probe.
+
+### Concerns
+Feature-probe hardcoded types (series patch 2) remain in this tree, so
+some token+global-data cases may still be incomplete. That does not
+remove the standalone value of stopping probe_loading from failing the
+whole load.
+
+Verification:
+- [Phase 1] Parsed tags: author Yuan Chen; SOB Andrii Nakryiko; lore
+  link; no Fixes/Reported-by/Cc-stable in the commit
+- [Phase 2] Diff: `tools/lib/bpf/libbpf.c`,
+  `bpf_object__probe_loading()`, +3/−7; skip on `obj->token_fd`; dummy
+  loads use NULL opts
+- [Phase 2] Confirmed `OPTS_VALID(NULL)` is true in `libbpf_internal.h`
+- [Phase 3] Blame: token opts added in `6b434b61b4d9e` (2024-01-23);
+  ancestor of this tree
+- [Phase 3] No Fixes tag; introducing commit present; patch 2 not in
+  this tree
+- [Phase 4] `b4 dig -c d262a25d8b58`: lore
+  https://patch.msgid.link/20260610145059.113412-2-chenyuan_fl@163.com
+- [Phase 4] `b4 dig -a`: v1 selftest workaround → v2 series → bpf-only
+  resend → v3 1/2 (landed)
+- [Phase 4] `b4 dig -w`: bpf maintainers on Cc
+- [Phase 4] mbox: Mykyta Acked-by; Andrii asked to land this patch
+  alone; later asked bpf-next + Fixes tag
+- [Phase 5] Only caller is `bpf_object_prepare()` ← `bpf_object_load()`
+  and `bpf_object__prepare()`
+- [Phase 6] `git describe HEAD` / `make kernelversion`: 6.18.53; `v6.18`
+  file matches pre-fix hunk md5
+- [Phase 6] Token selftests in this tree still use XDP-only / map-only
+  tokens without SOCKET_FILTER/TRACEPOINT
+- [Phase 8] Failure mode: userspace object load abort, not kernel oops;
+  severity MEDIUM-HIGH for token users
+- UNVERIFIED: stable@ mailing-list discussion (lore 403); kernel “drops
+  token reference” cover-letter claim
+
+**YES**
+
+ tools/lib/bpf/libbpf.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b21d2f842579f..1aaf2bdf26857 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5070,12 +5070,8 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 		BPF_EXIT_INSN(),
+ 	};
+ 	int ret, insn_cnt = ARRAY_SIZE(insns);
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+-		.token_fd = obj->token_fd,
+-		.prog_flags = obj->token_fd ? BPF_F_TOKEN_FD : 0,
+-	);
+ 
+-	if (obj->gen_loader)
++	if (obj->gen_loader || obj->token_fd)
+ 		return 0;
+ 
+ 	ret = bump_rlimit_memlock();
+@@ -5084,9 +5080,9 @@ bpf_object__probe_loading(struct bpf_object *obj)
+ 			errstr(ret));
+ 
+ 	/* make sure basic loading works */
+-	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &opts);
++	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0)
+-		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, &opts);
++		ret = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
+ 	if (ret < 0) {
+ 		ret = errno;
+ 		pr_warn("Error in %s(): %s. Couldn't load trivial BPF program. Make sure your kernel supports BPF (CONFIG_BPF_SYSCALL=y) and/or that RLIMIT_MEMLOCK is set to big enough value.\n",
+-- 
+2.53.0
+
