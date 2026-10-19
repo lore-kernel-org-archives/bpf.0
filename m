@@ -1,170 +1,137 @@
-Received: from mail-oa2-f9.google.com (mail-oa2-f9.google.com [74.125.231.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524B5449B2C
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35D135966
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792380310; cv=none; b=jjY8AcvV3mm+DrblBKLVc3nCzbEHe601NfohL5bx64mNtWfYDzQOPB7Rld99xg3ntxQE/sRtG1uXEj/RVIUy6wpuHfnibCLW0DBUjAA2C5yWBXJcHU2R70mSa4SdmrTzNT6hJ7eNs4XkzDZ/+CK2Z3h3FxpNduUl7E01jg/Gdsw=
+	t=1792380680; cv=none; b=EsCJYReCzcM1owqsYWJaUKSs/TmyTa0ktM1aivyMprmv21kcoVV6dqhOpYHP7xi4fEGRO8MSCMbpLnV1ECJQdRoXuq2d8iR7BiS8X0+2H1usjO6DRemcDMpH3RzF8R/7WIdTO6sStNcZ5FiZJxa0cQHnHvfTwE5KErpIIBHK/TI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792380310; c=relaxed/simple;
-	bh=tzw+aCcv3UQYtzkDQiX9ynkaGvSmqn6LNADjaXtYzwQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aiTfMhevoNyiD+MmUlZKB8b6au/+MMPeEYeFE1n+XCJsbfB4Cksm+5eg2chyREmgV27L2j+y1AT0eFmKc65wt/WXyky2lJDXHXcZoBIXSud5dFN7PQ2hePcarxTQCWEyrZUiRi9pWt/237w6Q1WL5bSldXZfEj6wt4jTVjbJR28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BGXXHvCK; arc=none smtp.client-ip=74.125.231.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792380680; c=relaxed/simple;
+	bh=W7QWTdMt/sq+VR4J+JSEfGBLgp7z0mtPMSjKcV/mfr4=;
+	h=Message-ID:From:Subject:To:In-Reply-To:References:Content-Type:
+	 Date; b=l10gKS7G3kZQl0EjIei6RfIGI8WWd+Pii48LVcUDBY69hijyKbnYljJXiC6ATuZo8yh2+Pwv6ehIYVwgiztH/kqUBw8P9TNbBbSIviB27FecEohRZH1y9+pWkkd10KG3sCyZYDUL8bB5svR0QKsPnon2ywVpHV5AZBgZFM4yD3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kpBKIBVp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BGXXHvCK"
-Received: by mail-oa2-f9.google.com with SMTP id 586e51a60fabf-47bb3ddaaf6so1036986fac.0
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:25:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792380308; x=1792985108; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kh+n6U5ggjpSUBE8mowdMoP3nwWk+nABuZj9uU6qz8c=;
-        b=BGXXHvCKg+haOi0jHenrCvxMLnfgDQCumHKA6InaZSlpUFH7PcfZmdnuR0RRd72zUz
-         IyjpLcoqEPkpshchK9THSVsO2juInwTxrelOxbRy0maYN7NzQNPJkRQrNShao4ST3mmr
-         B54SuJ0YOqM2v+eNAnd9s+NQQ2RTpWrc/83uc9pgKHmrWk2Po7IDXokFPAcUbWxlpxHr
-         yQM5jx/D/FWdi1fMtj89JD7v33mRC8BssLWtwMdfIf+DVcsIlPTOxkXaTy4Z8BmOs/fG
-         C+PX4K1bO9nV+muBx8d7e7Wi0WXivZL66VQx36rVFqlZsFMfIGk/7z5reH4OcYL5d18T
-         olKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792380308; x=1792985108;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kh+n6U5ggjpSUBE8mowdMoP3nwWk+nABuZj9uU6qz8c=;
-        b=UoG8p156dbbSzz1e8B5rSKK8qix1A0E0t5N9x2YAVvLBTapwIhzK5tvD7CtZLeJdQd
-         9gCyBfnWX3bjioorCHXJZNXyn/yAUG4t+wWLVVYgyVSO03dmoRB9K6olUoWnEw+T6mYx
-         Qpv5hFE/d+ZsWM8kEX73s9Fr++KDe440vwrOrcnlSp2CSNc7XCvOTyEuvfIQkdGUcVZ5
-         C6TRN5JUD979uTTXOeYCA4qg0vOfoBuf7Mm7BuNjjr55ckt/vjEvpCjN/AmvgEzZK4b8
-         fyfY+w6k/ckMx+Lj2lBDycAKF1ev61UJWyX4WAz4SH/Kt5a17QuaoIQuoyuFg9g00r5i
-         LBHw==
-X-Gm-Message-State: AFq9FYIBAw8XC5d9zYNsmaMJxzjJOfCkFgTyt0ndpEem7DPBOqjxva5N
-	TjaY07Buba9pKKWlM4abY62q0bQJsLlCe3rbfFbD8xp6dzc5/ngjTVpoOENYTmhBIlg=
-X-Gm-Gg: AYBFou33lissbY7mskMGzRW/cfylGPlKAsJ0lkycbHMQwn0T9A2Uk3F6+3P9OrC+DgD
-	+ANdwGqnoRK3uu0PAsy1gm9Dr4h8SkKpmY9CFWagfqm41GVX/zwqziLkgh0f+9jdabQmUHnLZPu
-	c+hlqLYwUZKdZHnw4v/Z/hGLBrTO8d4zaoiVY+LEonTh2dyHYWUb2cwXVm/KSzHXfUMTXytYOYG
-	VL0l/yYFxkw9H8Uo2jogFkRFACa9/9d4+8iMv93l4j0e+9+oxNNxUrMpiwJxwrnoaMxB2kN8ru5
-	6wPu/jnMcl64VxbdByR4vqo7EdsMT0j4j5I0wa6t8zRiyU9MnhBKilVpYFhu7SEuPsBGqFXvxbS
-	CjlnLCdZ4gcB+qzrwlfKDovTbdB7O4SRtB7hGPkUm1kcSDc39nvNMBPGC5yRVntpJ9lcGJV0CaQ
-	cNeHqYTm4ExNkqiY+q9e54wpPAVfousQtXbLKKU8Svs9gezq/CqaXpZaApt7Qn6zPEhrfYlUNDU
-	N2WO1RaXhvwjr6cXp48waSymjuITKAk46mpePGa4lBROS9U/M4lNwcYQPtawMviKV5+QW4KVLcP
-	3iFkqA==
-X-Received: by 2002:a05:6820:168e:b0:6f4:87df:79b1 with SMTP id 006d021491bc7-7035598d0bbmr4070327eaf.21.1792380307985;
-        Sun, 18 Oct 2026 20:25:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4f::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a73b640adesm7471839fac.10.2026.10.18.20.25.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 20:25:05 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 16/16] selftests/bpf: Test an arena kfunc argument passed from a subprogram
-Date: Mon, 19 Oct 2026 05:23:56 +0200
-Message-ID: <20261019032401.2302823-17-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261019032401.2302823-1-memxor@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kpBKIBVp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E031F000C4;
+	Mon, 19 Oct 2026 03:31:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792380678;
+	bh=JAJ/qzmWMngPY+a7DE1GBIHYpP+bqjPTj2om3pToQdQ=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=kpBKIBVp/AH5KUW9elLFav2V6tS40WafV/si3X/+z03STa0IOYzf3aq1HKxjux8fW
+	 Rq/tJJhB7APphAxQMQ3/41/8Dr2rHlm8muBylLUbC4/SMPXOMtkwdKBFYDQv4GnsED
+	 jQJt9yxGwDhv/vpxiBKejaKyaxa80+MXDw8alTqq9eK2IJm5vTQ83uHjt+OQM4ebo2
+	 65USrsTp6DGMoPD/T7D0maEQfVWj4GSkMIPvFF3FyNb91Pftc6E8BvBrqco5E1o3gx
+	 bkwtqFhnaC7RU8YIE96x6UMDNKuxSMV9IlAOnc7OGehqEXy9pMXP3x4T8fYu4S9Cy8
+	 tlCGD0Hqs6OFg==
+Message-ID: <sashiko-outbox-176573@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 04/16] selftests/bpf: Clone a program that
+ calls a module kfunc
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261019032401.2302823-5-memxor@gmail.com>
 References: <20261019032401.2302823-1-memxor@gmail.com>
+ <20261019032401.2302823-5-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 19 Oct 2026 03:31:18 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2464; h=from:subject; bh=tzw+aCcv3UQYtzkDQiX9ynkaGvSmqn6LNADjaXtYzwQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr57tM8df2VmyFtsXS3Hd9ly4cVrMnrpjjiYPqrisW6Q1 xFQ6SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJG7zxgZTrjIev4ukPlz0qNnw/MPlm 37bM3Uu6rEH0i1hE3ZcNa+lJHhQUmVXGV33yZfg60uaiJf5Xc84dd/sJb3vVjljM27zxnxAAA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
 
-Call a kfunc with an __arena argument from a global subprogram that does
-nothing else with the arena, the address arrives as a number and no cast
-is involved. The subprogram needs the arena base set up by its own
-prologue for the JIT to rebase the argument, which the BPF CI review
-found was not recorded for it.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] selftests/bpf: new standalone file for narrow bpf_program__clone() =
+variant
+--
 
-Pass a NULL constant to a nullable __arena kfunc argument as well, from
-a program that touches the arena nowhere else. The verifier takes its
-early exit for a NULL argument, but the JIT rebases the call like any
-other, behind the NULL test the function model asks for, so the arena
-base has to be set up for that call alone.
+commit 037d01e59174031ad79e435ca7e39a5bb4ce575d
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../testing/selftests/bpf/progs/arena_kfunc.c | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
+selftests/bpf: Clone a program that calls a module kfunc
 
-diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc.c b/tools/testing/selftests/bpf/progs/arena_kfunc.c
-index a049d6371d09..5d1cb1a7e8ee 100644
---- a/tools/testing/selftests/bpf/progs/arena_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/arena_kfunc.c
-@@ -192,6 +192,57 @@ int arena_arg_unpopulated(void *ctx)
- 	return 0;
- }
- 
-+/*
-+ * A subprogram whose only arena use is the argument of a kfunc needs the
-+ * arena base too, the JIT rebases the argument on it. The address arrives
-+ * as a number, so no cast marks the subprogram either.
-+ */
-+__noinline int arena_arg_from_subprog(unsigned long addr)
-+{
-+	return bpf_kfunc_arena_arg_test((u64 *)addr) != 41;
-+}
-+
-+/*
-+ * A NULL constant for the __arena argument takes an early exit in the
-+ * verifier; the call needs the arena base all the same, the JIT rebases
-+ * the argument with a NULL test.
-+ */
-+SEC("syscall")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(0)
-+int arena_arg_null(void *ctx)
-+{
-+	return bpf_kfunc_arena_cap_nullable_test(NULL) != 0;
-+}
-+
-+SEC("syscall")
-+__arch_x86_64
-+__arch_arm64
-+__success __retval(0)
-+int arena_arg_subprog(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	u64 __arena *val;
-+	int ret;
-+
-+	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!val)
-+		return 1;
-+
-+	*val = 41;
-+	if (arena_arg_from_subprog((unsigned long)val))
-+		ret = 2;
-+	else
-+		ret = *val != 42 ? 3 : 0;
-+
-+	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
-+	return ret;
-+#else
-+	return 0;
-+#endif
-+}
-+
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
--- 
-2.53.0-Meta
+This commit adds a selftest that opens kfunc_call_test, prepares the object
+via bpf_object__prepare(), and loads kfunc_call_test1 using
+bpf_program__clone() to verify module BTF fd handling in the object's
+fd_array.
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c =
+b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
+> new file mode 100644
+> index 0000000000000..fa6ccbaa7fd98
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
+> @@ -0,0 +1,30 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <test_progs.h>
+> +#include "kfunc_call_test.skel.h"
+> +
+> +/*
+> + * bpf_program__clone() loads a program from a prepared object with the
+> + * fd_array of the object, where module BTF fds start at slot 1 and slot=
+ 0 is
+> + * empty. It used to pass the fill index of that array as fd_array_cnt, =
+which
+> + * made the kernel resolve slot 0 and fail the load.
+> + */
+> +void test_clone_module_kfunc(void)
+> +{
+> +	struct kfunc_call_test *skel;
+> +	int err, fd;
+> +
+> +	skel =3D kfunc_call_test__open();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		return;
+> +
+> +	err =3D bpf_object__prepare(skel->obj);
+> +	if (!ASSERT_OK(err, "prepare"))
+> +		goto out;
+> +
+> +	fd =3D bpf_program__clone(skel->progs.kfunc_call_test1, NULL);
+> +	if (ASSERT_GE(fd, 0, "clone"))
+> +		close(fd);
+> +out:
+> +	kfunc_call_test__destroy(skel);
+> +}
+
+[Severity: Low]
+This isn't a bug, but test_clone_module_kfunc() in
+tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c adds a new
+standalone test file for a single bpf_object__prepare() and
+bpf_program__clone() check on kfunc_call_test.skel.h.
+
+In the same directory, tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+already includes kfunc_call_test.skel.h, exercises kfunc_call_test1 across
+loader variants, and groups subtests under test_kfunc_call():
+
+tools/testing/selftests/bpf/prog_tests/kfunc_call.c:test_kfunc_call() {
+	test_main();
+
+	if (test__start_subtest("subprog"))
+		test_subprog();
+
+	if (test__start_subtest("subprog_lskel"))
+		test_subprog_lskel();
+
+	if (test__start_subtest("destructive"))
+		test_destructive();
+}
+
+Similarly, tools/testing/selftests/bpf/prog_tests/prepare.c and
+tools/testing/selftests/bpf/prog_tests/clone_attach_btf_id.c already test
+bpf_object__prepare() and bpf_program__clone().
+
+Could this check be added as a subtest or case in an existing test file such
+as kfunc_call.c, prepare.c, or clone_attach_btf_id.c (similar to how the
+preceding patch in the series extended prog_tests/map_excl.c) instead of
+adding a new standalone file?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019032401.2302=
+823-1-memxor@gmail.com?part=3D4
