@@ -1,68 +1,67 @@
-Received: from mail-oi2-f11.google.com (mail-oi2-f11.google.com [74.125.231.203])
+Received: from mail-oa2-f0.google.com (mail-oa2-f0.google.com [74.125.231.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16E4347C6
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.203
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787B63FE35F
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792380253; cv=none; b=Mqbw4v2481882uaxyGLJVfdFu7nm4vQwtsXa4FL+U2U5E0eDAUrSUiMfVMk90W83G/n+mpPKJaT9fRH9Ll/hRgD+ehnhRXp03vU+iPRJSqjTct6WJ6lhhKzSyLJk0wme+2FZHwoH4d8ekHf+zhGC14Q7OF1EniTllWLMDh78bag=
+	t=1792380256; cv=none; b=l5yGHQ+PmvQ99onZfxSB0gV3O5NBv35BB+oWWU8KqBvTJWFPuuwqRPzbLiisrUExAYIL1zw59bMsrmyirwIevl3My7L9V6qbzAgHSCaHRzQPwg/XdniGl9TE7BtUKpBxiGmy1ZvZtVouNHib2ZG5P10GAu5N71LHqiyDpaZgzeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792380253; c=relaxed/simple;
-	bh=mdzm7Zkoi49BnoASY8pI27qt4uEUNHVwF0Sm2VD9FwU=;
+	s=arc-20240116; t=1792380256; c=relaxed/simple;
+	bh=ZShGeNanuUHY02XvT1kzHAY3uvJYW5ICW1RCSkEOQh0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hl+8jqYv2qOrWDsbTz4P/u1Olra0tSxSS/v3hORsJlJcPUV7hmOBCcbg/Ymu/S1Sgerlkb5pxlrLoRg3A8wMUTXtk0Y8/9bPButETRq+IfI09quNaLbTR0rd8zPG8wMvSEtB3Zbuwu0Poxcf/WaoysYut9Xg9AhSE/dOjlu9TFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q8j2oR3T; arc=none smtp.client-ip=74.125.231.203
+	 MIME-Version; b=Xh47yDEbfYV58ivGBuuS5ERd0haAYU1lZ50pWPgUcFCUMlW2GEa5U89FQ5rnOIxb8BH7uj0gM1fiH6lRjK3GIsMl+YcSJ2sLNxM1iKbgJr1B4Ygvco+w+XBL3hX9tpGbsTeVWIqvZjcfSQR4Zsx1/AizlGe9sDXvbKPXiqsSjJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dEj2CWK4; arc=none smtp.client-ip=74.125.231.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q8j2oR3T"
-Received: by mail-oi2-f11.google.com with SMTP id 5614622812f47-4f3f1adebb0so741543b6e.0
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:24:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dEj2CWK4"
+Received: by mail-oa2-f0.google.com with SMTP id 586e51a60fabf-44cdbcd53b8so1074774fac.0
+        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:24:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792380250; x=1792985050; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792380254; x=1792985054; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3yBMLXPGZdZcdw09sBqHdpuwnUdHEe8lob+82mIOoMA=;
-        b=q8j2oR3T9MKGPgLB22yKE4ZlorM7zpTh9rwr8s9ZG8+J1f6iDuIpMXCltAMtR2q32d
-         oaSe6ISzgZ8a4NqR2+1oJ3Lxvac8vXjXmipxsSxo0Par8iX2XyJmF8VxWGsnR8q9roVU
-         F/Biq16VmtOYyBWjSLxupSOoFglTg5bdMfEbsfqRd7qaPPsbQxYKFMLkP8XovWXRiPnO
-         boCO8lA5wFqI0iM+dzDGwTgHIZ+rMcfMID/T5O3CwRUDq2c+ZTyYz8z4RvlxGuC/O/+A
-         GwEkGTIBhJO/4lyy3sfHs2/XpvqAZ5HlazXGhhm5f5uHHczgVKCpNdMfQe18gHomyw2l
-         qmbQ==
+        bh=4/ZBbrRIm9FYkp5XjwkBgtt6mE6SxTN/jj5SC/UXAfk=;
+        b=dEj2CWK42nH8Q2irJSIQYQhmCxiOQJ0kDyxbIqo5l4m5Od2ZU48JQNXlnpWs6bLGBd
+         lqavpxSrC+opEbz+VOz9cFKeacHPkLoJa0VGIg74VMIA6fleSmqqTVKpRKobsm6xuBpT
+         EH0cbNfLBnu86S8rIO4OpF8z0pnD727FCXIOMNx7lz5yPKGwhmATxfcYu023ZPRsVdYb
+         UetSNu6mNH1z+mq5LqSHNl8Vt2ffsmZe2sFUh3VracKyID0ANVt4snr1WPbImp38FDCj
+         0gJsMmpVNY0O32iOZ5O71rQ6NnkSm9fcShnuTtg7FAH4YR6pewJe6zhP1Eh6t76Z1sNe
+         CImg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792380250; x=1792985050;
+        d=1e100.net; s=20260707; t=1792380254; x=1792985054;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3yBMLXPGZdZcdw09sBqHdpuwnUdHEe8lob+82mIOoMA=;
-        b=qwKugnZBCRXG2krkxGKFQBSRpf6LiZ0Ph1oIBi6qPlPx1IUWrq1OjuHBStfuZJ79A8
-         OVNqjJ/N7elWAqmI+v4lMmg/I6iQx0+pIaufpfjRbf1fun8fHelmY8LHlG3ekmDgEV9T
-         G3lSu6qgz6ZkPv7LtpM6N2QcHKeyeVUH6gxyM3w9ZBIsPGbJCRoImKbi73/mKdttqAcM
-         qwxa9L/OUGk0X+f3ghuHVmeUgHuX2wXilMNKLWr/l2FwcqnX519EUQ/+4Ig/lPyH1qjX
-         mda/oi16WjyIdWeqlHGQ0xrctI4XMxlzbadcOrSSRocO7fgXH+Qq8ATqwJvQTeEfukwK
-         eNug==
-X-Gm-Message-State: AFq9FYJ2lDCynYD7CYr85uKqn+OlEbLE+NsRBuHrVDN6r4cPX2goNyYO
-	XRyfVza1sRu0IW0nofSOwfrEPsLZGjKTXcxTscmxLXMEhTPE7LbQoh0+CUeFmmsk3ls=
-X-Gm-Gg: AYBFou3bBOd0XvnPiT74xsOtqM6UcgF2o6pqM90BYVFO2su5QQIGcanJsk1aNbkHuLq
-	ENwBcl9T2UllD+Z7t91EaOuA3lhnv12jSnZwD13YujeF2Mbr4ftxdyqJaGkx0EneQ6xlNSJHEi4
-	a0zB/Og9CBJhljQ/hKZGJ/WnPd2zQ+SW1RXzbq68emBfB7QeWTVPUtJsEM8aOIshC7LeY417whe
-	oJvQ30S+U+FGbRZG91zrFmssUNtv/PiRt0FsGfyld6Mz6BZyxieo4OM2wh1fvBUanNuMXbO6yx1
-	Fz2kJ00ZrHzzTU3IyMvzdJOyou+DCcU27ieFA+d6GD+VnVJXnEcWMy/Xw9bgVzsMRxbNcWBIlFo
-	n8BHkp+cl45+vuVTvmJVCbnuUgaivKvjrRBWyALWjKKreA2fu6C3j6N5HdQF68Q/Hhmb1KStRKB
-	m1vinyEr1n9ahpmQRG0Ov028PMscHDT5eoEg8znPaoAJzlokUEa1JbZ1jCToASgx1r7whfWLbrF
-	c9ScfN6BblwT1SrKrH0TkMtqBv6RdAm+03p4GMNeTj0wT7AinmkUGUYAMdgWzbPMVG2xfT6Xx6H
-	iKWe3Q==
-X-Received: by 2002:a05:6808:e7c3:20b0:53f:3c0e:c74b with SMTP id 5614622812f47-53f3c0ee60fmr2876936b6e.9.1792380250469;
-        Sun, 18 Oct 2026 20:24:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:43::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-54481784097sm1893121b6e.3.2026.10.18.20.24.06
+        bh=4/ZBbrRIm9FYkp5XjwkBgtt6mE6SxTN/jj5SC/UXAfk=;
+        b=BcEfjaELa7hQE4PJT0r5Alqg7E77d1Xkd9EkX9G1l947zsQsC9jQIJr8i/nwi9VhEm
+         m8C62LvPtBRf6CgLAGUeRwX8PO128TSKj3j9FHS5kxqKz10dnYaCGjbNJyNhoKdbm7I1
+         IbdhWa8ESdr1o2SvNryv61OZYijQ4Y3wYDLcSoYML6eB2mZvUxkr97MB9sRfD9gfCy41
+         NLthtdXYjQgDwJsU6STqkUZ0+YAJgRYnauUeaUNczfJBJd/7f//LLU8GhkRmLanSdEm4
+         RrMWm6S70PYXP51tfDPkO8quGtY89TtDhYopv68TQMRfHxjPLkkuBjIemuBsJBu0sEyR
+         3JtA==
+X-Gm-Message-State: AFq9FYLBWUQ7FMnnkZ5seSWcitIqmZZjoxeXFJlgl01qX5sHlpSHi5O9
+	F5RG3IakPTlbO3Tyy98gn7dhV4yDbg2W2ETS2yYrlplfDVN6Xpu98yd0Xhq/0J0jFnk=
+X-Gm-Gg: AYBFou0aTyQCW8RaRzcOKvSKV/3wPd0WzNSl5XEpTdj8+jIuS3zD0zqA+lSkptMkkp8
+	OKVyQ5mikTANW6gznU2qzQW2padHFudh5r2ufPZdHk81rotlyoIGhfqPdhQAcA60/AIWm7xz0Yf
+	iht8BfHP/j3YCtaM3//lGGwGuLAJgP8dBXFIuXcwRDv3f4rPBHOjAz3/3GjQsp00AwfBikoTOQ6
+	+d72tqww2/2KkGTIQAQg3KtwtXQlpA3qw9l0LSHV9M9JsndaVvPLS/otR0FQiwfimUzfvoQfvi0
+	eEhbX7lunT/q66uqkvItxMnzTM+bGwAXRr86U3y0hMInh5gOhX8s0yTGYMYV13vhPJI3k0x7SNq
+	Ulw54obhSPFnuBxft4x4nReWVw4tEEz+fRXkyZsqkCubrkm0dwJQ0dhABUSYXPMYpzrwpSCstI5
+	C6uRh2G5SbO2v4GSKFOzySv+l/9t67rhlsQMttH/HTpIH1br99Vnb+U68S/3T+bnkT/a8LeP211
+	Nq29w5JHvn9/89Wr9ZxgvUtp/K9RjYiwrh5BlaXWhNk18Yc+e5REvuw0yUFWSjCn0GTtOwqumHD
+	W3JmB/k=
+X-Received: by 2002:a05:6808:1392:b0:4d6:92b3:5c84 with SMTP id 5614622812f47-53cd3ecf953mr4640078b6e.65.1792380254150;
+        Sun, 18 Oct 2026 20:24:14 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-5388288ad5bsm6672664b6e.2.2026.10.18.20.24.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 20:24:09 -0700 (PDT)
+        Sun, 18 Oct 2026 20:24:12 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: KP Singh <kpsingh@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -71,9 +70,9 @@ Cc: KP Singh <kpsingh@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 01/16] bpf: Check exclusive maps once the program digest is final
-Date: Mon, 19 Oct 2026 05:23:41 +0200
-Message-ID: <20261019032401.2302823-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 02/16] selftests/bpf: Bind an exclusive map through a continuous fd_array
+Date: Mon, 19 Oct 2026 05:23:42 +0200
+Message-ID: <20261019032401.2302823-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019032401.2302823-1-memxor@gmail.com>
 References: <20261019032401.2302823-1-memxor@gmail.com>
@@ -83,114 +82,90 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4373; h=from:subject; bh=mdzm7Zkoi49BnoASY8pI27qt4uEUNHVwF0Sm2VD9FwU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr84HrcyH8neO8h/Y2dR6jT1sQe65T0nqlzt2/pcV8vid xL+9o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABOZaMTIMNucIexyv9XvyKApizIL7w screuS05Ir/X7cddfBU7HyCgz/TLJ1nMRPbP33qP/sxiaVQ28FhN0Zuf5cKqnv+tCrfGY2MwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3326; h=from:subject; bh=ZShGeNanuUHY02XvT1kzHAY3uvJYW5ICW1RCSkEOQh0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr+5n3VNrVx7Y+NK59rvj5auTFAQXfdu8c2p/nhKrQl2j cfSVjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEwkdCPDP90kgxi1SDP7f4/m3DOXsD raset+v5mzfLd8c9hlYRfHl4wMTU3PzF9n6Wmuynrcuu//0T3lFmxhedWiFVFzf9pNTL/NCAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-An exclusive map is bound to the digest of its program, which the
-verifier compared against prog->digest in check_map_prog_compatibility()
-as the map was added to the program. For a map an insn refers to that
-happens in check_and_resolve_insns(), after the digest is computed at
-the top of that function. For a map bound through a continuous fd_array
-it happens in process_fd_array(), which runs earlier, so for an unsigned
-program the comparison saw a zeroed digest and the load failed with
--EACCES, "program's hash doesn't match map's excl_prog_hash", for the
-very program the map is exclusive to.
+Load the exclusive program of map_excl with the map in a continuous
+fd_array rather than through its insns alone, which has to work, and
+the other program the same way, which has to be refused. The two
+programs used to be identical and so shared a digest; give the second
+one a value of its own so that the kernel can tell them apart.
 
-Computing the digest earlier would not do: it has to cover the insns as
-the kernel verifies and runs them, after the CO-RE relocations it
-applies, or a loader could submit the insns of the exclusive program
-together with relocations that change them and pass the check with a
-different program. Leave the digest where it is and move the comparison
-instead: check every used map against the digest at the end of
-check_and_resolve_insns(), whether an insn referred to it or the array
-bound it.
-
-The early digest of a signed program goes with the early comparison.
-Commit b707068e0ed9 ("bpf: Verify signed loader metadata at load time")
-computed it only so that the maps of a signed loader passed the check in
-process_fd_array(); the signature itself is verified over the submitted
-insns and the frozen maps by bpf_prog_verify_signature(), which does not
-read the digest. The maps of a signed program are now checked against
-the digest of the final insns like everyone else's, which covers the
-relocations the kernel applies and the signature does not; a loader
-program carries none.
-
-Fixes: baefdbdf6812 ("bpf: Implement exclusive map creation")
-Cc: KP Singh <kpsingh@kernel.org>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 36 ++++++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 12 deletions(-)
+ .../selftests/bpf/prog_tests/map_excl.c       | 37 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/map_excl.c  |  3 +-
+ 2 files changed, 39 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5958425e9a2a..14dacc5d202f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20775,12 +20775,6 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- {
- 	enum bpf_prog_type prog_type = resolve_prog_type(prog);
- 
--	if (map->excl_prog_sha &&
--	    memcmp(map->excl_prog_sha, prog->digest, SHA256_DIGEST_SIZE)) {
--		verbose(env, "program's hash doesn't match map's excl_prog_hash\n");
--		return -EACCES;
--	}
--
- 	if (btf_record_has_field(map->record, BPF_LIST_HEAD) ||
- 	    btf_record_has_field(map->record, BPF_RB_ROOT)) {
- 		if (is_tracing_prog_type(prog_type)) {
-@@ -20878,6 +20872,29 @@ static int bpf_map_claim(struct bpf_verifier_env *env, struct bpf_map *map)
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_excl.c b/tools/testing/selftests/bpf/prog_tests/map_excl.c
+index 3f4422b9ffa6..9ff4cd3de2ec 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_excl.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_excl.c
+@@ -161,12 +161,49 @@ static void test_map_excl_create_validation(void)
+ 	ASSERT_EQ(fd, -EINVAL, "reject size with NULL hash pointer");
  }
  
 +/*
-+ * An exclusive map is bound to the digest of its program. The digest covers
-+ * the insns as they are verified, after the CO-RE relocations the kernel
-+ * applies, so it exists only once check_and_resolve_insns() has computed it,
-+ * and the maps are checked against it there, whether an insn referred to
-+ * them or a continuous fd_array bound them before.
++ * The exclusive map bound through a continuous fd_array rather than by an
++ * insn. The kernel resolves the array before it verifies the program, so it
++ * has to have the digest of the program at hand by then.
 + */
-+static int check_excl_maps(struct bpf_verifier_env *env)
++static void test_map_excl_fd_array(void)
 +{
-+	int i;
++	struct map_excl *skel = map_excl__open();
++	LIBBPF_OPTS(bpf_prog_load_opts, opts);
++	int err, fd, map_fd;
 +
-+	for (i = 0; i < env->used_map_cnt; i++) {
-+		struct bpf_map *map = env->used_maps[i];
++	if (!ASSERT_OK_PTR(skel, "map_excl__open"))
++		return;
++	err = bpf_map__set_exclusive_program(skel->maps.excl_map, skel->progs.should_have_access);
++	if (!ASSERT_OK(err, "bpf_map__set_exclusive_program"))
++		goto out;
 +
-+		if (map->excl_prog_sha &&
-+		    memcmp(map->excl_prog_sha, env->prog->digest, SHA256_DIGEST_SIZE)) {
-+			verbose(env, "program's hash doesn't match map's excl_prog_hash\n");
-+			return -EACCES;
-+		}
-+	}
-+	return 0;
++	bpf_program__set_autoload(skel->progs.should_have_access, true);
++	bpf_program__set_autoload(skel->progs.should_not_have_access, true);
++	err = bpf_object__prepare(skel->obj);
++	if (!ASSERT_OK(err, "map_excl prepare"))
++		goto out;
++
++	map_fd = bpf_map__fd(skel->maps.excl_map);
++	opts.fd_array = &map_fd;
++	opts.fd_array_cnt = 1;
++	fd = bpf_program__clone(skel->progs.should_have_access, &opts);
++	if (ASSERT_GE(fd, 0, "exclusive program with the map in fd_array"))
++		close(fd);
++	fd = bpf_program__clone(skel->progs.should_not_have_access, &opts);
++	ASSERT_EQ(fd, -EACCES, "other program with the map in fd_array");
++out:
++	map_excl__destroy(skel);
 +}
 +
- static int __add_used_map(struct bpf_verifier_env *env, struct bpf_map *map)
+ void test_map_excl(void)
  {
- 	int i, err;
-@@ -21332,7 +21349,7 @@ static int check_and_resolve_insns(struct bpf_verifier_env *env)
- 	 * 'struct bpf_map *' into a register instead of user map_fd.
- 	 * These pointers will be used later by verifier to validate map access.
- 	 */
--	return 0;
-+	return check_excl_maps(env);
- }
+ 	if (test__start_subtest("map_excl_allowed"))
+ 		test_map_excl_allowed();
+ 	if (test__start_subtest("map_excl_denied"))
+ 		test_map_excl_denied();
++	if (test__start_subtest("map_excl_fd_array"))
++		test_map_excl_fd_array();
+ 	if (test__start_subtest("map_excl_no_map_in_map"))
+ 		test_map_excl_no_map_in_map();
+ 	if (test__start_subtest("map_excl_no_map_iter"))
+diff --git a/tools/testing/selftests/bpf/progs/map_excl.c b/tools/testing/selftests/bpf/progs/map_excl.c
+index d461684728e4..90f127073dff 100644
+--- a/tools/testing/selftests/bpf/progs/map_excl.c
++++ b/tools/testing/selftests/bpf/progs/map_excl.c
+@@ -27,7 +27,8 @@ int should_have_access(void *ctx)
+ SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+ int should_not_have_access(void *ctx)
+ {
+-	int key = 0, value = 0xdeadbeef;
++	/* a different value, so that the two programs do not share a digest */
++	int key = 0, value = 0xbaadf00d;
  
- /* that many pointers to functions are recognized in the maps of a program at most */
-@@ -23564,11 +23581,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 		ret = -EINVAL;
- 		goto err_prep;
- 	}
--	if (env->signature) {
--		ret = bpf_prog_calc_tag(env->prog);
--		if (ret < 0)
--			goto err_prep;
--	}
- 
- 	ret = process_fd_array(env, attr, uattr);
- 	if (ret)
+ 	bpf_map_update_elem(&excl_map, &key, &value, 0);
+ 	return 0;
 -- 
 2.53.0-Meta
 
