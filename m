@@ -1,181 +1,119 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FD6277026;
-	Mon, 19 Oct 2026 09:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A3D4AA028
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 09:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792401367; cv=none; b=d7DD6tCK0UCwXgHMQ0/dyJ0XsgzVWNHLqNzNKIlsJH0zN/B/OLGnfdWkoM/AbaK16ATuC3f0FH16sgwfMMkrllxiO9i1jDsIq7EysYg3Ijsoj70822Q5L2vhct4/rrhNjyqHh7mDXgfxk4RD72LZ83FQG06IA6QXswS2R/j2hwg=
+	t=1792401629; cv=none; b=CJ0GSEdJSORgW1yrRIsTkYi+s7EI3ky/qtZqL/SD0assibKxvrQqILwM0yGUprJC0DcybR20xLfAX5VU0TLVIwzwXVwDhSXrCZ7XBbPClxy6nmEj3APS182vlnq31C4+t4duueXTPf0/dAc+ouQsK3HvGBUJgVy9+G3kL8hGIUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792401367; c=relaxed/simple;
-	bh=88L7hie2tDkWe7PZYJG3j2OUPcoz6V6ev/d6mTgZGwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PU6d/1Ik4vofrXalVL1SAZkOb5rh/D8JONcEjgEUMY8j7Qbs2u2hwndoNH1kaZoLgBIAG7KqYy5GNzzd8maKDsIUanCaTqEk4htfImRSqwbYQnIHCpJ/ck4Od6MrkZvpUo1bUEKfeVdPzVRTHanaYDoRC0ZjET/APPXGvw82pBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ghGHOwZ6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=NiyW3Nok; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=yC77sQaB; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OXbTTu5b; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1792401629; c=relaxed/simple;
+	bh=23uLVGVu4LenPJTiUbtiHkyS7W5/ZO7Ic3YJWLzrJ8Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=FtPylIdCekc0M2cXDTS7S7MFxEwrirBTL4JEc6wAwY/jXworKjuzaD67SqdsBST+yHobmdgG+cHXUafgm4VwGSfEsjBPlBn5YvjmAlHMfzRZ1wvW57Wj2CrkZ6vRbunOwEYLFrOxeBiUXa61yuTVNXWuFzJwIGOcMP7nwpeWjXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=N7B4PspO; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ghGHOwZ6";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="NiyW3Nok";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="yC77sQaB";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OXbTTu5b"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 36E7721C13;
-	Mon, 19 Oct 2026 09:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1792401364; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=ghGHOwZ6JxMIYAZ26rWhTpweaoCboTRlTL999bMVvyF0E2aZvlajC6BK/JwQUb+GP8T6vZ
-	QpYJUF6W+y1mzomrimeyLNCvmnyrxjwp7Seri96i1piyel8vRzZVgO5dZWa2mhLkRaC+hO
-	33rSbF30BBO4HAdoMOLbGOQBAaetndA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1792401364;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=NiyW3NokfsPA3E7a9inhFGaT20Sl0YlKV0Mjp7kg8WBDh3ren76IclmzfKPO6t+0UBeewT
-	Aln5ixT4mweAfjAA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=yC77sQaB;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=OXbTTu5b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1792401363; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=yC77sQaBlmmo4b7SixoP8v0ykVb8nEozZqjSpHaFK0Q0fFqDF87llv3DaPBzNzh5CWKXxE
-	8gosP/5itJsjOS62NqMDVHZ6RE8KHwU6Z6TD/DQLBDRiRDdTI6GbVTal3EcB41/okvGfzs
-	XYhpDE6XhOp3uEX3iDXLm00HlOVNL9U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1792401363;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=OXbTTu5bfXVm5PferY6twjbDiPg/4EpFJsGB4+Iw+QGZxYgpoXGqIFOBisjJhNvUhGnAuO
-	Hh+gTeNTZwQ1Z6AQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ECE25134B3;
-	Mon, 19 Oct 2026 09:16:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 1ML/MNLf1WrwFAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 19 Oct 2026 09:16:02 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 772FAA1413; Mon, 19 Oct 2026 11:16:02 +0200 (CEST)
-Date: Mon, 19 Oct 2026 11:16:02 +0200
-From: Jan Kara <jack@suse.cz>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, linuxppc-dev@lists.ozlabs.org, 
-	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-media@vger.kernel.org, wine-devel@list.winehq.org, 
-	linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] file: simplify and harden cleanup handling
-Message-ID: <p4eitjefwpwhfouwhmvxmelxl3yncv3vjdi7wsgu7rna2zorqd@rlvbcpzcpbid>
-References: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="N7B4PspO"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6af8620a7d2so2187316a12.0
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 02:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1792401626; x=1793006426; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=rCnbEw2lvBYbntrA6KDS3EO6vufdqSnBrzMmqli8drs=;
+        b=N7B4PspOq9/uakZFaemK5D2GJIoFlyDJz0JsUXxdX31t+m2Dauj4XpS2EkeuQKOdQK
+         wh7Nw7ttBy4ELbOtSYNv8tnTYh6+p8NQEB5WFUDhN+wgg8VqjjLwl5bqhs3xCbmGIXKx
+         i5QjNH6U6AnZPuLL0e/Y7IC5j52uMt7wcpWCB9Cn5qTDwwoTYn8+DMeTwvi/gKrm1Qby
+         RxDIrBARe3ujeUbAo6+zhot+jzY4erZQvdN7Fq3/DJQB9OVOdot7wM9Wyq2W/n3jETal
+         u60AD7/aJeGZi9MJ6nJC8JFXUDR+X2dZnTavmhaaE3doRuAzwmg0F5ZgFW3A8pUd4/ye
+         r6hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792401626; x=1793006426;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=rCnbEw2lvBYbntrA6KDS3EO6vufdqSnBrzMmqli8drs=;
+        b=CIgyFQYuVb0ZXdy2gmrLPm3DEWtYzP0lzm4FFHIcnwkQ5dlq4RRLSPLxlLxcIDFPkc
+         0D4E9EgfO6x8GVCvOcGhbc8yK2VvyLC/BBTqLTZJsQUhE3HV3m8TDscGcQZ+RvT+BhF9
+         sc33gRyHmyTP/5jUySGwtlJ/KzXQDBAodnRZo1M8RPtQqGEO2DvDaSHC2uJ2FnexiypQ
+         1f3QAv0ziV2zYH9JBYMgj40JcEOkJGTC9ymG7hzMmd+3R/DERhPTy3SfeouhawcIqX4d
+         zQkYDoQGOSv5ihswSO+7VA+tDveL/5/49Bjbifrk+PudQe4I4YuiFCTHgYv4ni9R6rQh
+         aBjQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwF0lr2TZ683JoIZQMXHgPIvRRoxdyFT2iYi8l2keN4Z5s4EL5uwPAQ262myznP0brRz/s=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ/dgzEJu5mGh07NqT9hODq+cglwE8IXz2GxJ7/6WMX1VqHJOWf
+	Ap/80SVqZ0SyKV8/B2fsOGHmphCnikQlxgIY7eoXhEMGqaQUB8oY2fv2iD4Hbx4bmgc=
+X-Gm-Gg: AYBFou0JUaT2JN4r3BTdecUOKQYZxDQqQhe3UbuQv2qFYTRbQpFw3MkRBAygHd6Q0Jb
+	96+ynIh+Rroh5BxXaO4Zxiv6g+EwW+A/sGKfq/SK8KlMVBlw3dMnSYVRY0cQdU/Z5XVTuRL/h4z
+	u9Rmz9nFrkafRPg3vbhJWZEm+OoOtwWeEwA5OrvFRfWABOykZt76fWsTkDvHKS3/xceaTrQujin
+	Sz2VcEleZEi7/Tn819cbp/KAUOZjQXKfhppelkb4NWm/BmhmVXxlQdur+hQ5f6/WJ+axGgmjc1W
+	f5mzlSOZEKyJIpalkmCqROw02OAXkcfjwEhwPsgDb998DIliQB7RN6gw6R8G5a0pH3eEI2ESbBN
+	Sy8U/EtDGOP+p8lGMmXDkslWjp7X9wyBv5Ox7BEunGgzfZuUreXKNvTanDIlaj8IVkgG9AgjrOv
+	2FAHwLldxOqoZGf3k678k6xxdVq34bmMqFEgS882KOOcOiMquPxirNwwqWIyhF
+X-Received: by 2002:a17:906:ba89:b0:c31:c767:ae0b with SMTP id a640c23a62f3a-c4196dac03amr433604866b.0.1792401625664;
+        Mon, 19 Oct 2026 02:20:25 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac6:5067:2dc::49:220])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c40919c0402sm342196266b.61.2026.10.19.02.20.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 02:20:25 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Willem Ferguson <wferguson@cloudflare.com>,  netdev@vger.kernel.org,
+  davem@davemloft.net,  edumazet@kernel.org,  kuba@kernel.org,
+  pabeni@redhat.com,  ncardwell@google.com,  bpf@vger.kernel.org,
+  ast@kernel.org,  daniel@iogearbox.net,  andrii@kernel.org,
+  eddyz87@gmail.com,  memxor@gmail.com,  linux-doc@vger.kernel.org,
+  corbet@lwn.net,  linux-kselftest@vger.kernel.org,  shuah@kernel.org,
+  linux-kernel@vger.kernel.org,  kernel-team@cloudflare.com
+Subject: Re: [RFC PATCH net-next 0/4] tcp: carry a BPF-chosen identifier in
+ TSval low bits
+In-Reply-To: <atFI9vl5hy09Dc0t@devvm7509.cco0.facebook.com> (Stanislav
+	Fomichev's message of "Thu, 15 Oct 2026 14:45:02 -0700")
+References: <20261013103906.2660384-1-wferguson@cloudflare.com>
+	<atFI9vl5hy09Dc0t@devvm7509.cco0.facebook.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Mon, 19 Oct 2026 11:20:24 +0200
+Message-ID: <87a4oaf3mv.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 36E7721C13
-X-Rspamd-Action: no action
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:email,suse.cz:dkim,suse.com:email];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
-X-Spam-Score: -4.01
+Content-Type: text/plain
 
-On Thu 17-09-26 11:09:41, Christian Brauner wrote:
-> The cleanup guards rely on unnecessary infrastructure and make the code
-> more complicated to follow than it needs to be. Clean it up. Also shrink
-> the struct a bit and get rid of the unnecessary error variable. We can
-> just make this more ergonomic by using fdf->fd directly. Also expose the
-> struct itself as const and hide the actual underlying local variable
-> behind a UNIQUE_ID() named variable so we avoid risking shadow variables
-> and polluting callsites. Code generation wise the outcome is exactly the
-> same but simpler.
-> 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+Hey Stan,
 
-I know I'm really late but FWIW this looks really great! I know this is in
-PR to Linus so feel free to ignore:
+On Thu, Oct 15, 2026 at 02:45 PM -07, Stanislav Fomichev wrote:
+> On 10/13, Willem Ferguson wrote:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+[...]
 
-;)
-								Honza
+>> Questions for reviewers:
+>> 
+>>  1. Is encoding an identifier in the low bits of TSval acceptable in
+>>     principle, given the trade-offs above?
+>>  2. If so, what feedback do you have on the implementation?
+>
+> Don't see any feedback yet, so from the top of my head: looks like you
+> control two sides of the communication, so why not a custom (bpf) tcp option?
+> Would you need that on every packet and it makes it expensive?
+>
+> Or any other field you can abuse maybe? IPv6 Flow label?
 
-> ---
-> Christian Brauner (4):
->       file: simplify FD_PREPARE()
->       file: declare the FD_PREPARE() variable with __cleanup() directly
->       cleanup: remove CLASS_INIT()
->       file: make struct fd_prepare const and kill its err field
-> 
->  arch/powerpc/platforms/cell/spufs/inode.c |  12 +--
->  drivers/gpio/gpiolib-cdev.c               |  18 ++---
->  drivers/gpu/drm/msm/msm_perfcntr.c        |   4 +-
->  drivers/media/mc/mc-request.c             |   8 +-
->  drivers/misc/ntsync.c                     |   6 +-
->  fs/eventfd.c                              |   4 +-
->  fs/eventpoll.c                            |   6 +-
->  fs/file.c                                 |   8 +-
->  fs/namespace.c                            |  12 +--
->  fs/nsfs.c                                 |   4 +-
->  fs/xfs/xfs_handle.c                       |   6 +-
->  include/linux/cleanup.h                   |   7 --
->  include/linux/file.h                      | 130 +++++++++++-------------------
->  io_uring/mock_file.c                      |   8 +-
->  kernel/bpf/bpf_iter.c                     |   6 +-
->  kernel/bpf/token.c                        |   6 +-
->  mm/userfaultfd.c                          |   6 +-
->  net/core/scm.c                            |   8 +-
->  net/handshake/netlink.c                   |   8 +-
->  net/kcm/kcmsock.c                         |   6 +-
->  20 files changed, 117 insertions(+), 156 deletions(-)
-> ---
-> base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
-> change-id: 20260917-work-file-fd_prepare-ea5966d68a95
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Nah, we don't control the client unfortunately.
+
+Client here is any device that connects to our edge PoP.
+
+> Implementation-wise, the sock_ops is going away in favor of bpf_tcp_ops,
+> so BPF_SOCK_OPS_TCP_TS_ID_CB_FLAG is a no go.
+
+Yeah, we have just recently realized [1].
+
+Thanks for feedback.
+
+[1] https://lore.kernel.org/all/877bjk893u.fsf@cloudflare.com/
+
+
