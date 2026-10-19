@@ -1,81 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792446849;
-	b=ahfj6HDAwlq/AOkcGwtwezvGt2Yyc5yHCFDm7nhQ+ByX5USjQIkxfgSth8XYNsWwcfi2
-	 p0g1kkQK8Nl57giiIrLT2C58YuOXNK5qKOlAtGKDJx0zw80YdQKV39F9ynbL8fHHe89a7
-	 f7ySIblME2QwmqYFzQyQNmeVsM+0jMMaXRMFC47Lokd61gYl4yFr7N71qpXuKrpe3ZlLe
-	 fWoVFz1h8FjETj5Avjjy2PBKNOUrpiHVO6ozXHsbt8+jYhMcXtMiiGszteAYe8USu9dJv
-	 8me+01yrO5M1NG1Ujn7oU769UuVvpY8XwSQ1YtQvGAHR4Yfosfs5gJLFXks2PbNxw7w==
+	t=1792446859;
+	b=Xp2VQZyvMhXY5QaNLEjeQLcxA+mbTDTgQrnghyoJwLZghjUwrv1FwSNrNo8uxN0qx3uR
+	 4yRHu9yS9bjPIX7hYS8Md8CtdTy7QjPFiTQQRVf+Pa+Y5ZstJSH7jOMC58jUXFuwp1/X3
+	 p11p65OMjWJrzedRs8DvWXsNAbaeD5iJY1wj9w3ZuV5Gc4Qk8VKkcwWS0kcmETwSVieIb
+	 IeQcTi63E4KoCvxBzEOt7QBi5kddn2/Yapgnq6IOLGFWtJASej9s0D0UD/qH8S0Oa5HWS
+	 Gt7KHx2jmiRDaJdiK/Z5kbcuQfS+HLQUD7Zr0tG9+H5q8uQIMxx/Dg5bOJ9p+v7qo2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792446849;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=REW/9j+OlAseSVUPZSaGZcgsaYuUzx8Jih/oiiyk91c=;
-	b=caxF8sy51/nW52CjiXe7kh6PDLORowtwYhi+Rfi1jw+MoBl1wkRBB7emNT1jg71UxocD
-	 E8G4p5p9ZCUgDT4aVeBPVkBxg1cDqmq8S/TVFjFhkXCUSKyT2cDpS/RqxjsBe7CYfFzBi
-	 gdi+C1nMRkgiFQ5BQxj/hNHgpHRahlZMKPoNU1sN984+1QVkekE5TYzZlUVLi2QXPWA5o
-	 KS3eQKu5blRXTCX+gtqrm8Ubm0PFZNDRozt4Zr4zK25GW0sSOu67/XkBK+uNcSF1gcVFa
-	 Ot/ZLh5JI6J0IX9FMFF83V0GU+o7gMzgrAmMUnlHDWs9kUyaU8gMwEK+0+qOvLE+xeA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792446859;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=9VOqMYgyNn/QmRwvpRSK7qR74louWoMyKZEaojotFbw=;
+	b=jL7OuW+tkYopJGzRsTZ8y9B61026eaMpxAq92ZieffChQFHbZTfJ03UnECmRUAj8Ht+Q
+	 mMiUCagLemuneU84RcqpqK4QUJljTpmmLHROy26+WK3lfEhmtz7RCG4zOvY/SpeUp2uxX
+	 ECPmJ6nkuRUcTGzbaKonBG32HQigbwRqmwFdBrc5u8NHVbrkxMPFgzCcLa+B1g+RmT6NR
+	 /brfO89DmA3B8WUmnIQ5vbq8WMXj12Ww4Y5RkSM+xiJ+qJ26Ka8NonUiuC2EXay+ni9aE
+	 lPZqBeYKBCljvOohZaiIz8Ysn8oqTa3nVjcN58iTGW3FCsAV/VmOEfnNXbhsJxJtPsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=H7ONmosJ;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=izJT5KbY;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QK7+r4OA;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB2E1606A319;
-	Mon, 19 Oct 2026 21:54:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DB2E1606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with UTF8SMTPS id B1F5A606A31A;
+	Mon, 19 Oct 2026 21:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=H7ONmosJ;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=izJT5KbY
-Date: Mon, 19 Oct 2026 23:54:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1792446846;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=REW/9j+OlAseSVUPZSaGZcgsaYuUzx8Jih/oiiyk91c=;
-	b=H7ONmosJ6zh6o9SpTnoFSdKuZJWBx2Yxqc+G+jHtUPhx7c7ud9ydR+LVE3+lN0RMh8C4KS
-	8G3nCCbis88zqCsmMSaVdNcHGhP7wLEwCFalK2lFBg1ZBu+HqXebx/QtKf3a3g+YLfc4Lh
-	jV/cE6BoOXG4Zs8W/cV3V90pkjzr0oqjs2acZbgyqKr9Yz069Kg7dPlLvmJSy4csDxNyun
-	uL1+4pZlCS6DGRgIgrEel5QLllBEvfuCQjsxDEcEeoIJ/0A8NKgtNHFW+KBt0Vrpnrkz/B
-	9VY8PfjKWnH4lBmJvus7ioEmA7P2iPj9Nf/IAhhUDL0kxyz2WT29JUYWkryHxw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1792446846;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=REW/9j+OlAseSVUPZSaGZcgsaYuUzx8Jih/oiiyk91c=;
-	b=izJT5KbYwxJdCKsI4l1Onn0ZAkS1NLhodI8dZ38boqdNTaLmtDi5UQr/YUzocMRSNfjxjt
-	UeZZ20yI2vUpysCw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Daniel Zahka <daniel.zahka@gmail.com>
-Cc: Alexander Duyck <alexanderduyck@fb.com>,
-	Jakub Kicinski <kuba@kernel.org>, kernel-team@meta.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Paolo Abeni <pabeni@redhat.com>,
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QK7+r4OA
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id B651D1F000C5;
+	Mon, 19 Oct 2026 21:54:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792446858;
+	bh=9VOqMYgyNn/QmRwvpRSK7qR74louWoMyKZEaojotFbw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=QK7+r4OA84djCe8sbywz/SfHhL34jL0OcRwYgTQ9E6z/LUAWCITJbcpn7I+qYoF93
+	 ehZleY2Lao9msS4gqzDv6GX+OypO2owkTeLCbzTZV6FEk3hKAzpY8wIDCrvyP0ubEO
+	 a41SJvZKoaOA/4ZICR3sHCNqYKZuFj5cNedlzgmQFyqTix+VGObZsUdrpnoPqRBXvv
+	 WTvh8L/NNWUt9SJgfsvaQQO6d/EEhlW/xYNIC/Se7Qj80qg86hPgZ+BBUCsKF7czRJ
+	 yMiqR5LLyNiHlY2Qm+e6eVsqrxrxEO2u9A0Y8GcogfK3wPbygmGukp9U7RxWpqbVLF
+	 /WNWFs+CkTmUA==
+Date: Tue, 20 Oct 2026 00:54:14 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: manuelh@nvidia.com
+Cc: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Halaney <andrew@amutable.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/4] eth: mpnic: count packets, bytes, and
- drops per ring
-Message-ID: <20261019215405.OCzrrKYw@linutronix.de>
-References: <20261012-mpnic-counters3-v2-0-8afba81c2d5a@gmail.com>
- <20261012-mpnic-counters3-v2-1-8afba81c2d5a@gmail.com>
- <20261016220930.i32JEcqe@linutronix.de>
- <DM8U47F4MNK3.2V54CCQ9YTNBY@gmail.com>
+	linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/4] IPE: add a dedicated policy keyring
+Message-ID: <ataRhrucvhM8qZAs@kernel.org>
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,47 +67,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM8U47F4MNK3.2V54CCQ9YTNBY@gmail.com>
+In-Reply-To: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
 
-On 2026-10-19 09:04:38 [-0400], Daniel Zahka wrote:
-> >> An RCU approach is used because ndo_get_stats64 is not called with the
-> >> instance lock.
-> >
-> > Why do you have the two mpnic_base_stats and fold the stats into into
-> > it? My guess would be that on stop the counters are reset and you want
-> > to preserve the stats.
-> >
+On Mon, Oct 19, 2026 at 09:40:24PM +0000, Manuel Huber via B4 Relay wrote:
+> Add a dedicated ".ipe" keyring for IPE policy-signature verification,
+> modeled after the dm-verity keyring, allowing userspace to provision
+> IPE-specific policy-signing certificates. Systems that do not provision
+> the keyring retain their existing behavior.
 > 
-> Not sure I understand. I think you are asking about two things:
+> This RFC is based on commit 48f936e302a9 ("ipe: update the project and
+> test suite links") from ipe/next so review can begin before the
+> prerequisite keyring work reaches that branch. The series will be rebased
+> onto a refreshed ipe/next once that work is available there [1].
 > 
-> 1. Why have two mpnic_base_stats?
+> The keyring readiness check currently follows the dm-verity and BPF
+> implementations. A parallel keys RFC introduces keyring_is_empty() for
+> this purpose [2]. A later revision will use the helper if it is available
+> in the submission base.
 > 
-> To avoid a separate heap allocation that can fail. Handling an
-> allocation failure in the ndo_stop path when doing the aggregation into
-> the base stats is tricky.
-
-Right. But looking at hinic3_get_stats64() for instance (I just grabbed
-a random one) it simply does query the stats for each queue, add up,
-return. It probably does not drop the queues on down, just reallocates
-them while changing the number of queues (and maybe MTU).
-
-> 2. Why split stats into base stats and per queue stats, and why reset
-> the per queue counts when the device transitions down?
+> Testing:
+> - Built an x86_64 kernel with GCC 15.2.0 and Clang/LLD 21.1.8.
+> - Passed all 33 IPE parser KUnit assertions.
+> - Passed all 4 sealed-default keyring selftests under QEMU TCG.
+> - Passed all 16 provisioning-mode keyring selftests under QEMU TCG with
+>   ipe.keyring_unsealed=1.
 > 
-> This is the way the stats in netdev.yaml are exposed depending on the
-> 'scope' request attribute. My reading of the relevant kernel docs is
-> that the per queue counters are counting events for the current live
-> queue, so it makes sense to reset them and fold those counts into the
-> base stats when the interface is transitioned down.
+> [1] https://lore.kernel.org/r/20261008-ajhalaney-dmverity-key-identifier-v2-0-008456d189cb@amutable.com
+> [2] https://lore.kernel.org/r/20261016215326.4110064-5-jarkko@kernel.org
+> 
+> Signed-off-by: Manuel Huber <manuelh@nvidia.com>
+> ---
+> Manuel Huber (4):
+>       ipe: add the .ipe policy keyring
+>       keys: add KEY_SPEC_IPE_KEYRING
+>       Documentation: ipe: document the IPE keyring
+>       selftests/ipe: test the IPE policy keyring
+> 
+>  Documentation/admin-guide/LSM/ipe.rst           |  41 ++-
+>  Documentation/admin-guide/kernel-parameters.txt |   9 +
+>  Documentation/security/ipe.rst                  |  16 +-
+>  Documentation/security/keys/core.rst            |   9 +
+>  MAINTAINERS                                     |   1 +
+>  include/linux/key.h                             |   2 +
+>  include/uapi/linux/keyctl.h                     |   1 +
+>  security/ipe/Makefile                           |   1 +
+>  security/ipe/ipe.c                              |   2 +
+>  security/ipe/keyring.c                          |  80 ++++++
+>  security/ipe/keyring.h                          |  16 ++
+>  security/ipe/policy.c                           |  10 +
+>  security/keys/process_keys.c                    |  23 ++
+>  tools/testing/selftests/Makefile                |   1 +
+>  tools/testing/selftests/ipe/Makefile            |   5 +
+>  tools/testing/selftests/ipe/config              |   7 +
+>  tools/testing/selftests/ipe/test-ipe-keyring.sh | 357 ++++++++++++++++++++++++
+>  17 files changed, 575 insertions(+), 6 deletions(-)
+> ---
+> base-commit: 48f936e302a9c48cfc032eb5944c3a6246bc9043
+> change-id: 20261019-b4-ipe-keyring-rfc-b93b9ae129a2
+> 
+> Best regards,
+> -- 
+> Manuel Huber <manuelh@nvidia.com>
+> 
+> 
 
-Is there any other driver doing this?
-There is ::get_sset_count() and so on for the per-queue stats.
-If the interface goes down and frees all its queues, then the stats are
-gone, true. But preserving them at the price of two (down+up) forced RCU
-grace period, I don't know. It looks like a bit too much.
+We are in the phase of release cycle that it would be hard to find any
+time to review this properly so might take a while, or I'll review a
+follow-up iteration if other feedback arrives.
 
-> >> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
-
-Sebastian
+Br, Jarkko
