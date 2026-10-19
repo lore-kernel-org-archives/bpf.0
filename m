@@ -1,95 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792441983;
-	b=wjkZsFXW5HBkXI+eXHX8otza8l4HVRvvQ08DZKYCv3gZQA7tmuO8dYMbCpz2q6OnVoj5
-	 iLBNryVAH09Hvjp3oXFgzesDvCTikkbr5eaVinG3+CVOoCJMcEKHZMxKPOCWCSY3TdbmM
-	 0hmbbTgmARMWggH3W6m0dzZXao/hi4DyN7dF976yBVQxP4IpeNXrSX2iOgJigQ1ZwGC+Y
-	 OWWD9s2XtdovVgaGM6WTrFeM859HYbST9W2sGzGDI2MzDGNcwDK9MAuwgPU2v3huGnEqz
-	 0x7wThk307l59DIY9t1b+JNkC55FG5+UVJ/zp+fYPO3EJW2R8q3hdBZZPHqbYnwqSIQ==
+	t=1792442342;
+	b=sX6xGtCww+I0qHeAgwQexhIQcWszz5eQM44uZGhovH5YIHRIOFO1cyTJkb2TC+SN7rMu
+	 isnTlC54Ulj9E98sohn+jygRl0jnsasDe90zuNMNoxV+0L/Z6Rx2gqdpK7gNTmcbJwsne
+	 SmZwZcM+y1d9vW0SBaGjHgAaDOrWfqXTKQsEzQHV5XFm/2i4mM932QKJHZPt3EEE8ltrm
+	 AdsNWDgV+lp8gqdEOv/hhn9E4OwldhilsN78sr7blXek9/tnknIcKfv1N7ZtvEQULNGHT
+	 izk/ms16N8Me7oyumH3DNa+bXn3woVLc7KF5nIwVgb2WAom3ljTu6yMeD5oggWPCKkw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792441983;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=qVFJ10bshnMMtbuFEBUfSyCytNNOLb/WpfvFWWyEY1s=;
-	b=hPhQH+Q0kGqVY3+ixgDrWOPTvzK/4IG7xUbQgn2tOpzPnRtWWpaO990jS/7vOF8l305D
-	 riXCFSTNG4z33lfMSaJyqjeHtmXdYGlhMsB7tuzb/2awyp4r5f1JB6XA+ka2pyQESdC9t
-	 4IQtArwz21KFrSJ09rkFRa8F9byrO18CqRQn+16ekAM+2/ERRbTiByfZoYtvBp+j5+5WB
-	 l34zC2TKjUd8DFrmKEPTT7ADyzPfzxHZi0RdNXRoD+oNFW5Bh6rG/siFfof/rfgm0Ty9a
-	 i8ZahSnmSb7qs8N5HKlHkrRe2SEbaRYx+vCFCQPmOPanzT8QlGIZv2GtzhqE/SbU0pQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792442342;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=rQrwLkWPs/sgcjrdJz7n1H9Y2d9Q/zNd6aYBgbEUAcY=;
+	b=ELmTRhcGcw1acAXwTxKGTEalqzSvkhwM2JXK3eC9GiwPwLzTWhoG9hf2T2T0JKn43Hc/
+	 zdF6t2/uBfn1tp2bV8H5PoOGCTRh1iEnWj39OMOdJuDddnuqgtyufIb8ssVWD7zIUl31X
+	 Y9Qan5hjUoO2mgNx3sQRO+w9b+L8S+0CmKzn6uTasdb21IPpA5yvdiqzmdWJUrSDr0Bza
+	 uH3ZIL/kuBgc7gfx415yJbAtHGtdjYFSFC6nLggKbdiinFJYq/p/t7n6nR0cz5JgBebLL
+	 eZ3rVyTxy1Mj+4V+px56kEmn71qgoEbh/U33n4BdEorL4wBwjH9VtyslibpNEyxrTUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=NuDOqCzQ;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QR+ebvgP;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143D2606A320
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 20:33:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 143D2606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FBB606A319
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 20:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=NuDOqCzQ
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e7e742a2c7so464045ad.0
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792441982; x=1793046782; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=qVFJ10bshnMMtbuFEBUfSyCytNNOLb/WpfvFWWyEY1s=;
-        b=NuDOqCzQLRks/4SyqpG8bObFKwc3gh0FXt3z0VdFZFWLb+7p5ZEgR/tA4C5Gp1o/Ey
-         IrtDEhnbheTe2IxTaUZUr9BsD06x6tubiUDJbVl4X9BAyYyiKnklN/Yt3Hbeot56aaQV
-         xhnA92AePKlBCEUAYwOuPqA/F3CYANlarGNCK3dGIL4CeblYKQTfqN+QiYCuI8w2AKkt
-         4havOST9yOFXzV+F7yIQ1meiUlqHk/y8Pyekxnner+X+OEo9WK4Jb21sf243fzMfUnMe
-         8MvZ/sbxswo8qx3hH+VkEX0j5q9QHjf5KvvcByyWpWX6+u2tfx+y0DFOy/YZ7opStKBv
-         rrAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792441982; x=1793046782;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qVFJ10bshnMMtbuFEBUfSyCytNNOLb/WpfvFWWyEY1s=;
-        b=FNy/F3zGKdudGFXE2HukTJqnFZAHRIU+F5v+8TdAfnkAUEVNFpcsxO+N7Vsk+5xypi
-         41hIFCtFgzZCcBwy9i+9PlagAta31ylx3FBZvspj7s6W/yB2cwnpAPPFsbQL/qtKTt9F
-         jjphEPo87W5rGSdtLR8fjO3HHeZWvjiulRbahnB/aNAeNhDzKIIds6AxkNzG/TMdpsLW
-         R/jvCIaGBUzjJ7lHs327dvQNka37DuH/haXzSFiig48cZ9ekk+0GoIDur9/4It2ok3D/
-         0pQlhagF0AwXzQX2cQlEQRsAr4GyMUbQThDdR+U4EKUNHN1Wa3WuPf14s+a/pmJ31iGD
-         UNvA==
-X-Forwarded-Encrypted: i=1; AKwUvBxeKwCq9fBaSSZyBFegQwCw+kdqk0UKs32Yrrd8eq0xmX484JQt4h1rB9Y+zDf81bDr8H8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLYW1EosaX0jausTxKqCVAhb52eVTkWdlUMIvhUZXk6oAMegbsb
-	ovkeITkpj5vECKs1ZuifcGPfJu/WlFhIpIM/i2JdZ65lk/5fMoALewFuaG45sQ==
-X-Gm-Gg: AYBFou0cDfcVuwKvWy+u57hfDDEwsFaI8zclwruTT3p4j0XlfJR1hjin6asUfq8OG7V
-	tSjs1bnXxzbBEe9ezYRQu6d2DvjkmAXhH3kK9Y+KJzofsO1SY93JLDCDzVo14RQsQhgRzCgx6Jo
-	of1NiFZ/RPsbxrZsnZ1PIahxpeH2NyjlByxjYpHpkFREfwxzhMsRKwTx4spqrLN1I6U3iGC8/xd
-	vjXoEc9tHj9oph8BQdSWGPWaNHd+PO2/jHfaAfswuaXhBM2K3WkLBzVfvAi/ExWiz4xLV/75z+l
-	rCSHqglid4hkgJd6rgyx8OVHH0AcvOhATE25s9AqjJpxTjIi2psfcubxp216h5dpPq44wjgLoY8
-	xDf/5Vzm7DSlS66iTxzaprO/J/LeL1UjSAL2Ci6CifbNFryNrrNG2Zw9N+3KASKGGGLDkC06s4S
-	SRxHfxTAaODcgXEZnNo29oqI2BF+5/aFUBzf9dr/ozDBKEvOXfngkhBsJ56MFg3OeVapjbrh4yD
-	BnKYXDlZwNfsusY5TJ1+Sf2ceMLF0BekgJ9Ew==
-X-Received: by 2002:a17:902:ec88:b0:2e8:130d:4f6f with SMTP id d9443c01a7336-2ea1dace426mr1504985ad.19.1792441982140;
-        Mon, 19 Oct 2026 13:33:02 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea1502b4f0sm5179025ad.53.2026.10.19.13.33.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 13:33:01 -0700 (PDT)
-Message-ID: <a54f8bb126343e4606dbc46f0dfc7c48f6a08c0e.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/5] bpf: Unwinding with unwind_goto and
- unwind_exit
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Date: Mon, 19 Oct 2026 13:32:59 -0700
-In-Reply-To: <20261019051846.3012089-1-alexei.starovoitov@gmail.com>
-References: <20261019051846.3012089-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QR+ebvgP
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EE61F000C4;
+	Mon, 19 Oct 2026 20:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792442342;
+	bh=rQrwLkWPs/sgcjrdJz7n1H9Y2d9Q/zNd6aYBgbEUAcY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=QR+ebvgP0H2BTw63eZwx2OfbwN6LcFQ94GnOI7+hARM5zKY0SL5DMU6egEr+r66/o
+	 gb7y8xj79YYBA8AUMEhKLgMPkxDpaTjDX1Py8CA3JUzcafqQwxmADvGcMoIqHQgslQ
+	 7qFpcQes/dxk3/2NsH8K7OMnQwoMDFNf5hiUaJxhOPOz6brl6SW5Rg7DCEWdGFotb4
+	 9vbDGpQS2D1S0hQBzYrzDcpKrYeQgqNvIixzYjfluySyoobVKZbYU5xyHaoUCgEBrB
+	 e8dZeRrn3v4jJq1K1BjKGkmKk9XzQYMaTbPv1/8ayQjAquaabAcxfhUzvLnlcNsf81
+	 xlOkShL5HNkFw==
+Content-Type: multipart/mixed; boundary="===============6021076871367193231=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,78 +49,130 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Message-Id: <c00cb40a9eeb29c7c4863e3e011f094899463d3f6cba9bc4d77192bbc4e195c6@mail.kernel.org>
+In-Reply-To: <20261019201108.4552-2-emil@etsalapatis.com>
+References: <20261019201108.4552-2-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v6 1/3] bpf: Revalidate faulted arena pages before installing user mappings
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,daniel@iogearbox.net,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 19 Oct 2026 20:39:01 +0000 (UTC)
 
-On Mon, 2026-10-19 at 05:18 +0000, Alexei Starovoitov wrote:
+--===============6021076871367193231==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-...
+> bpf: Revalidate faulted arena pages before installing user mappings
 
-> 3. Is there a simpler way?
->=20
-> [3] keeps the normal path free of unwind code. llvm emits a table, libbpf
-> passes it to the kernel, bpf_unwind() walks the stack and rewrites return
-> addresses, and the verifier models hidden edges from calls to pads. That'=
-s
-> 1400 lines in the kernel, with new uapi and two kfuncs, and 440 lines in
-> libbpf.
->=20
-> Here the edge from a call to its pad is an insn, and so is the other way
-> to leave a frame [4]:
->=20
->   ret                            exit
->   invoke foo unwind pad          call foo; unwind_goto pad
->   resume                         r0 =3D 0; unwind_exit
->=20
-> Pads are ordinary code. The verifier learns one bit: how the callee left.
-> The normal path is free of unwind code too: JITs emit nothing for
-> unwind_goto, and exit is what it was.
-> 170 lines in patch 1 and 80 lines in each JIT.
+TL;DR: Possible NULL pointer dereference in arena_vm_fault(): returning
+VM_FAULT_LOCKED for mapping-less arena pages may crash __do_fault() if a
+memory failure poisons a mapped page right after the check.
 
-As far as I understand, the main difference from what was discussed in [1]
-is that for nested calls of functions that can unwind, each function
-in a chain must be called as call/unwind_goto pair, right?
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 0ff707707da0..5e0e0837980b 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
 
-LLVM IR does not have such limitation: `call` and `invoke` calls can
-be mixed in a chain. What the limitation buys is an ability to skip
-the loop like [2] in the verifier.
+[ ... ]
 
-Is it planned to add an LLVM pass that converts all `call`s to
-`invoke`s for unwinding functions?
+> @@ -584,8 +584,22 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+>  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+>  	if (new_page)
+>  		free_pages_nolock(new_page, 0);
+> -	vmf->page = page;
+> -	return 0;
+> +
+> +	/*
+> +	 * A free clears the kernel pte and then takes the page lock before it
+> +	 * zaps user vma-s. Either it waits for this fault and zaps its pte, or
+> +	 * the page is gone from here.
+> +	 */
+> +	lock_page(page);
+> +	if (vmalloc_to_page((void *)kaddr) == page && !PageHWPoison(page)) {
+> +		vmf->page = page;
+> +		return VM_FAULT_LOCKED;
+> +	}
+                ^^^^
 
-[1] https://lore.kernel.org/bpf/a9c4ebe0c1a08d7025179b1ec2297a4d975cd072.ca=
-mel@gmail.com/
-[2] https://github.com/kernel-patches/bpf/blob/fbc89e90cacd207b4271da25ed7a=
-380f6b56125e/kernel/bpf/verifier.c#L18564
+Can this return path lead to a NULL pointer dereference when the page is
+poisoned after this check?
+
+Once arena_vm_fault() returns VM_FAULT_LOCKED, __do_fault() takes the
+locked branch of its hwpoison handling, which assumes a page-cache folio
+with a valid folio->mapping.  Arena pages come from
+alloc_pages_node()/alloc_pages_nolock() and never get a mapping, so
+folio->mapping is NULL.
+
+The !PageHWPoison(page) test keeps already-poisoned pages out of that
+branch, but it is a check-then-act sequence.  memory_failure() runs
+TestSetPageHWPoison(p) before it takes a reference or the folio lock, so
+holding the page lock here does not stop it from setting the flag.
+__do_fault() then reads the flag again:
+
+    ret = vma->vm_ops->fault(vmf);          /* arena: VM_FAULT_LOCKED */
+    ...
+    if (unlikely(PageHWPoison(vmf->page))) {
+            vm_fault_t poisonret = VM_FAULT_HWPOISON;
+            if (ret & VM_FAULT_LOCKED) {
+                    if (folio_mapped(folio))
+                            unmap_mapping_folio(folio);
+
+and unmap_mapping_folio() does:
+
+    struct address_space *mapping = folio->mapping;   /* NULL */
+    ...
+    i_mmap_lock_read(mapping);    /* down_read(&mapping->i_mmap_rwsem) */
+
+A possible sequence:
+
+1. Processes A and B mmap the same arena.  This is allowed, since
+   arena_map_mmap() lets a second process use the same address.  Page P is
+   already mapped by a user PTE in A, so folio_mapped(P) is true via
+   folio_add_file_rmap_ptes() in set_pte_range().
+
+2. B touches the same offset.  arena_vm_fault() locks P, sees
+   vmalloc_to_page(kaddr) == P and !PageHWPoison(P), and returns
+   VM_FAULT_LOCKED.
+
+3. Before B's __do_fault() reads PageHWPoison(vmf->page), memory_failure()
+   runs for pfn(P) on another CPU (MCE/GHES, madvise(MADV_HWPOISON) from A,
+   or hwpoison_inject) and sets PG_hwpoison.
+
+4. B's __do_fault() sees PageHWPoison, VM_FAULT_LOCKED and folio_mapped(),
+   and calls unmap_mapping_folio() with a NULL mapping, which dereferences
+   NULL in i_mmap_lock_read().
+
+Before this patch the handler returned 0, so the poisoned branch in
+__do_fault() only did folio_put() and returned VM_FAULT_HWPOISON without
+touching folio->mapping.  The window is short, but this opens a crash path
+during memory-error recovery.
+
+tcmu_vma_fault() also returns VM_FAULT_LOCKED for mapping-less pages, which
+suggests the mm core gap is latent elsewhere, but that does not make the
+arena case safe.
+
+Would it make sense to give arena pages a mapping the way fb_deferred_io
+does, or to make the mm core skip unmap_mapping_folio() when folio->mapping
+is NULL?
+
+The following commit in the series (e49bf3a39cc3 "bpf: Fix arena race
+between page free and alloc leading to incoherency") does not touch this
+path.
+
+> +	/* The page was freed meanwhile. Let the fault start over. */
+> +	fault_ret = PageHWPoison(page) ? VM_FAULT_HWPOISON : VM_FAULT_NOPAGE;
+> +	unlock_page(page);
+> +	put_page(page);
+> +	return fault_ret;
+>
+>  out_err_locked_memcg:
+>  	bpf_map_memcg_exit(old_memcg, new_memcg);
+
 
 ---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Aside from that, one minor thing caught my attention (hate freplace program=
-s).
-Suppose there is a main program:
-
-    caller:
-        call foo
-        unwind_goto pad
-        ... normal continuation ...
-    pad:
-        ... unwind continuation ...
-
-    foo:                 // global
-        r0 =3D 0
-        unwind_exit
-
-And then there is an freplace program:
-
-    foo-replacement:
-        r0 =3D 0
-        unwind_exit
-
-If I read the series correctly before the replacement runtime control
-flow would follow `unwind_goto pad`, but after the replacement it
-would follow the normal continuation flow.
-Is it intentional? Seem to be a surprising behavior.
-Commit message says:
-
-  > So is freplace: an extension leaves with exit and
-  > the callers are ready for that.
-
-But I'm not sure I understand that.
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39318700728
+--===============6021076871367193231==--
