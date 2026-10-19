@@ -1,77 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792421714;
-	b=QwGDAnqzVS7DDPn9nMZRiy4BkJZZj0cwb/xA5PKsnLBE9/G5vJ/1z0tvLUmchzO6/CqC
-	 YHpAUl9ma54OnAGwucx7xZSFjPQEc4ys0lFvf2Ho5v3RIM6sUDpruIYgXvA/h2z9dQ5v7
-	 8lpK4ILnkeFxb3uIDcv5V/nkT6VAtRgY2xlDMvkrhpyaQn62M1Yau/wBrxle4An0mXUu2
-	 pfxjfJIBP1ePQvoS8Dtd3Zj/WUMQuaf+AoQkfGXodHKbjUybfsI4BgybI1itg7xHztyHk
-	 fbClv+cTOwsTEMrAiThAiyUoT3hRWEvwQmS2nxrm0loaXyt9Q/+GoSI6FgR841d7ZJQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792421714;
-	h=Received:Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=sHbDMT8ENqvz9QG0gvkdlOdXMu+42GPiSj0ilWUBxPM=;
-	b=NpTQrVH2H6Spl/EwVTbS2H642PP4IAq0OWPoYbEnMizE27TWI2Q5ZxKkEDzAY4bMZF7/
-	 pFbFKujeU6PaFRRLFc0F0/e4/QOLLclWHISqb2VVTNDxS8ROHk70MkAFqZ7K5DTt5pI9y
-	 C+P1443gCPkNNK45gdbny/aKCPHOlXW2Ycsl4yKKl8z5IQcIpj0quEjxRYeE06f+6GRV4
-	 ak61279uh94Yl5IzZgBNznB7c9EM9tNAhG3DyrcoxSnWUG6Z3/Kt+SuEvyw/Q/JwrhBQ8
-	 U8pNbGsc9xyu2W5dM2mL3HuHskqSTkhQMzOXhBPf6vbrlugI4VhUXp5q+5Ht1+18qHA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VxWpwoA3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
-Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293F8606EFF3;
-	Mon, 19 Oct 2026 14:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=VxWpwoA3
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792423440;
+	b=SE7OUvSjvjnBCVP+aasXZzA9H7NldTf6mybOpj4L0r0GU1yX5fbK71gLYrKsLy8dWmzC
+	 38Zfvy24k1urgIApDN/l13FVllCx+mGt1zwlxwMhF0q6xWvQMjnK04PUPd8HGgasLqlht
+	 h3T/FLCVzaNCmPpQELWyPfW/ayBhnqJgKLvQ2HMtxW323jQ6sHTQbGWXYr3hr6FAb/zHy
+	 +OmZQrJJDJpEQQ5RZPTKWDD5Rhn1GImXNXz16VQOz0gXpL9Va6p+yEe4enPK5nD0typI0
+	 2bfJJxTxPuzyvXJysYwCIOKzmyYX/NspcBa4tJGnNKlqUrdARLmY7bv+ttEvv0FbypQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792423440;
+	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
+	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=4eLFyGKiPJMtTIXftX4CvV1KoAV13HYov222ZjSdPFg=;
+	b=bR5L8Lv4SkrPZesLsIj2wPwHRtS3VPF/0KGoXN21uru9c1Iqx7+EUez4BiUIHO6/RcA6
+	 f+VpRNzuQlxBOY3GXvZcJvGY4Zzr7PWoH4k/ObVlqsxM/q2+B/xel4YzonDuSt/0cd4go
+	 ZiKk8mN7tQfz258vF8ALluUfpYnmkbPIpEgL78AUSzEtxaxptwq8vCYh0yIuxs1AWfN9y
+	 o73GVbLluqlpaVmg7gv6N+dOWeswMIaDkTr/ziM03kx3J3ypU5zCXe+RHNGmkO4mJ4GBo
+	 OAUmuMp9xvUcGcObd6sHANL3TZ3hErR9BztS3R5qMVHiS6AtzK+o108xwVE2Pw7LQGg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L9ewDfpJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A4E6513F3;
-	Mon, 19 Oct 2026 14:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792421714; cv=none; b=hmttmFiDlnJ+dbtNegyYoTJlWQeX4e8PWfjb3xikXu0s1eT44fK53GPU6ZlP35n9WIVDPqlEfUdsGtp6nnTVZgO2TPfXKyBMBuunuVbn5f4YJWCpAXKtXr347amxjaDxNca5CaEv9vT03tBfSoveGZkRc0UVDGbem6FrN7MjIso=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792421714; c=relaxed/simple;
-	bh=nIlMfvMaBe0ZMQwkcMYX6GTwHnQbjtaTSb4Mg+QQCFM=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Jcikb1Hzx/9f99IX7wRq116S/isIbQfL1qo7iEtF5VgtblxJ48+FHC/BuZCNzeKejqvmW3CanbXcb0ik1P38Y1TKZYIRpqs22KO3DzXQsSdTGPibLe6LbSpCIV3L0ZOyIwqAmJUk0HoY8+sNzZiBDcVzUNzzl4rfnCU1BqJC2XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VxWpwoA3; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2A91F000C6;
-	Mon, 19 Oct 2026 14:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB92B60AE2C7;
+	Mon, 19 Oct 2026 15:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L9ewDfpJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C2961F000C4;
+	Mon, 19 Oct 2026 15:23:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792421712;
-	bh=sHbDMT8ENqvz9QG0gvkdlOdXMu+42GPiSj0ilWUBxPM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=VxWpwoA3SbJ4icQi+dVMsoA6vtJc3SyHGAxdIrWHixM+jK0AqTICTayUAQBiM5YK+
-	 iPW3i93adtXrPlu5BIJ15z3YYcfwE3DXXSSk3tEjNEZ7JMOQHTsBvMO7CKP9/Xcgt/
-	 6py5EGRUjgEt+8BTrMBt3/ppOalh0o86KiPCpbyCZTXB03Pbic5fdMXGVi5b9KN7GS
-	 rygA9v55/F4Kv5G6jj4ZRXqS1OwcMkdGt0Z+xQdrN1eeRlgAQC6KHyv12d1EhIqLb1
-	 XjAg3wkkPFgOjrgSWK2Rz2YwoSMuJi9IOmRIZkZN7ZxSpSuM1mc1U+dEP+96gWAdGv
-	 F290DQui7g2ow==
-Subject:
- Re: [PATCH net-next v6 4/5] selftests/net: Add a shared BPF skeleton rule
-From: netdev-bot+sashiko@kernel.org
-To: bochaolucky@gmail.com
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, davem@davemloft.net,
- kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- andrew+netdev@lunn.ch, edumazet@kernel.org, pabeni@redhat.com,
- horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
- willemdebruijn.kernel@gmail.com, petrm@nvidia.com
-Date: Mon, 19 Oct 2026 14:55:10 +0000
-Message-ID: <179242171055.3135.2655547147698612346@kernel.org>
-In-Reply-To: <20261018-xdp-v5-send-20261008-v6-4-7336e1282ca3@gmail.com>
-References: <20261018-xdp-v5-send-20261008-v6-4-7336e1282ca3@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1792423439;
+	bh=4eLFyGKiPJMtTIXftX4CvV1KoAV13HYov222ZjSdPFg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=L9ewDfpJ/rXX/VusF6ChIIgdlRr4Mu2B6zySEt7rPafwX9G0O1uxQ4Y7TcXRPaTGY
+	 qAtRiYvkDNpm/yMGv6i5xw9izYikkFlhNQU3tGt8I/2wDBhb84fsSwDG3SV8Gbjlcp
+	 M83ca4OfJiG5/3t9bVjwIVtxCet/Yq7UVeU4nqcycgt2lkhFla8FZvmeqbKKnUsJpS
+	 EtJOZzlpu1KLBa67Lc5FnOwWLTj294uTR34Mjzrg9JlIWo9AHGt9Z/vpzIy964euEc
+	 5WmBSvKgAd8sg4N8gXBfWwWEugVP1hChxUFQE+AHA3RLsa6Ek38Y/nDkyvVWWrzdT9
+	 XOe2DsKSyrOqQ==
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 02B55F4006C;
+	Mon, 19 Oct 2026 11:23:58 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Mon, 19 Oct 2026 11:23:58 -0400
+X-ME-Sender: <xms:DTbWartuLlGuZo2dtWjtN0OHMsF-bdCWW_0uZCCOmE9QTUHQcbpTlQ>
+    <xme:DTbWalSXuN05qoS5nOPgUua_UGSpxuW9s6jCRCfnOdKsDgMbrs0YtV0EAOQVAH71y
+    jxKC1mSMzBc3ihS2wUX5iXmKtJ_STKgwPuVYI0BJxKqc4t2JKJoSw>
+X-ME-Received: <xmr:DTbWaluh0poHqK9Mt4s6gO5yxWobYkbm-RLre7kC32cz7Slt8Po_b5YC9usQOM5k9y3bMYH64pZuxBDXd79nwCehhRAEbGh6>
+X-ME-Proxy-Cause: dmFkZTFxUJdm5wwDentUf4q7O59iYNdwqKMnixhSgaLkk1fmocLKobKbM+RyRhTm3kqbdq
+    GZz1WNVgJ4bDjAKGKvmLqSew2Px0JG93axkc4pJiL2hDyhQLeVD0oK976RrFzwNrD8BGUB
+    k9eETPX0MopLAArJxEBE50QEp1+eOrzpGrqCPlJrnOzmFKtzUP5P/pmVNrzV9PFhWnZcjT
+    JRsPBHli9gBJ/NPuYbhLRHsFOoiYmLsy/TZpVX7tp5vj25GVMyy6B9k1tw5KNWEmZRjkiM
+    GAnqDGAkEW/7RQMK7IMUucuyTUFH13h1YK10BRSQQeHASU32MqLno9keSqAb8xdY5ob/k4
+    GKm6jVCUbKizvaFI7aUs9IoKa8fpHdYlKaXmWDV5mSp/cGIpAs3hVBsPeJn+/CBGmgUXqP
+    /54AXE1q8ATTSpcar2rHW43nQG2IFOs7btol4I1wWJCrTvH/YYlfb5jlZ2lzQVQogUQCKB
+    CAHgA4nSiFb6MNJWQUZh+LU0qgoriSl3Gt5YQLIlFxeKzFS4pczKyPN4bSZPAm7kxNY4fr
+    bCHNg70cJtniqHnw+YwZJivITsCpII5auLOaebI3DZRmoPhey1PCIn7EGSQ5gCLcIQOn9W
+    qXEKvMf2zDkkVfX2XiJX9p+tfOalan7a9dTWceqHB+jXf0KMBbTXlgdHLZuw
+X-ME-Proxy: <xmx:DTbWajyr_ZzqWGmZfzfijrnq4uME813kGVFi8SNBW8MS2cdLbt00yA>
+    <xmx:DTbWak3I9_9gBqgsLk-Peu6j2xslkVV-qtNDo__0nYpB9nXUTqNO6w>
+    <xmx:DTbWaoxZ_uQiYZdXGu-aaRx7Mwg2UsmwrFVJPBgm1m4ebsPEnr89ew>
+    <xmx:DTbWasMpMflFqTSh23j0pmDFu4ozJUjwi-LV9Fr_6e7_kIryrfCNKA>
+    <xmx:DTbWal4YOe-vTzbp5n4oqfMxwvBIjsx9tWMyVBFzH8AUUCBKo62CBUO7>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 19 Oct 2026 11:23:57 -0400 (EDT)
+Date: Mon, 19 Oct 2026 08:23:55 -0700
+From: Boqun Feng <boqun@kernel.org>
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
+	Gary Guo <gary@garyguo.net>, Alice Ryhl <aliceryhl@google.com>,
+	Lyude Paul <lyude@redhat.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH v3] selftests/bpf: Use the new NMI_BITS definition
+Message-ID: <atY2C77fARQNgWp3@tardis.local>
+References: <20261002102923.45846-1-boqun@kernel.org>
+ <da2773b2-1ed2-40ef-aefa-0e754cdb2f9d@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -81,142 +106,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da2773b2-1ed2-40ef-aefa-0e754cdb2f9d@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Fri, Oct 02, 2026 at 09:50:02PM +0800, Leon Hwang wrote:
+> On 2026/10/2 18:29, Boqun Feng wrote:
+> > The definition of NMI_BITS was out of sync after the introduction of
+> > HAS_SEPARATE_PREEMPT_RESCHED_BITS, hence adjust it.
+> > 
+> > Reported-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+> > Fixes: 3b0e2a22d408 ("preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS")
+> > Reviewed-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+> > Cc: Leon Hwang <leon.hwang@linux.dev>
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Signed-off-by: Boqun Feng <boqun@kernel.org>
+> 
+> lgtm,
+> 
+> Acked-by: Leon Hwang <leon.hwang@linux.dev>
+> 
+> One nit below.
+> 
+> > ---
+> > v2: https://lore.kernel.org/lkml/20261001082519.16195-4-boqun@kernel.org/
+> > v2 -> v3:
+> > 
+> > * Add Fixes tag.
+> > * Add CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS weak symbol because
+> >   CONFIG_* is not available in bpf programs.
+> > 
+> > 
+> >  tools/testing/selftests/bpf/bpf_experimental.h | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> > index 2893bf06ff25..a09448347966 100644
+> > --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> > +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> > @@ -367,11 +367,16 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
+> >  extern int bpf_sock_read_xattr(struct socket *sock, const char *name__str,
+> >  			       struct bpf_dynptr *value_p) __weak __ksym;
+> >  
+> > +extern bool CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS __kconfig __weak;
+> > +
+> > +/* A trivial macro to make NMI_BITS exactly the same as in <linux/preempt.h> */
+> > +#define IS_ENABLED(cfg)	(cfg)
+> 
+> NIT: change this to ((cfg) ? 1 : 0) to match IS_ENABLED() semantics.
+> 
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 1
+Seems reasonable.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Regards,
+Boqun
 
-- [Medium] Under LLVM=1, the host bpftool bootstrap rule in
-  tools/testing/selftests/net/bpf.mk probes one compiler and builds with…
-- [Low] The patch makes two changes outside its subject.
-
---
-
-selftests/net: Add a shared BPF skeleton rule
-
-This commit adds a shared %.skel.h rule to selftests/net/bpf.mk. When
-BPFTOOL is not supplied, it also builds a host bootstrap bpftool. The
-BPF compiler now takes KHDR_INCLUDES instead of the source-tree
-usr/include, and the libbpf sub-make gets an absolute srctree.
-
-> diff --git a/tools/testing/selftests/net/bpf.mk b/tools/testing/selftests/net/bpf.mk
-> index a4f6755dd8941..016e32960280a 100644
-> --- a/tools/testing/selftests/net/bpf.mk
-> +++ b/tools/testing/selftests/net/bpf.mk
-> @@ -6,8 +6,8 @@ BUILD_DIR := $(SCRATCH_DIR)/build
->  BPFDIR := $(top_srcdir)/tools/lib/bpf
->  APIDIR := $(top_srcdir)/tools/include/uapi
->  
-> +CCINCLUDE += $(KHDR_INCLUDES)
->  CCINCLUDE += -I$(selfdir)/bpf
-> -CCINCLUDE += -I$(top_srcdir)/usr/include/
->  CCINCLUDE += -I$(SCRATCH_DIR)/include
->  
->  BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
-> @@ -46,8 +46,37 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
->  	   $(APIDIR)/linux/bpf.h					       \
->  	   | $(BUILD_DIR)/libbpf
->  	$(call msg,MAKE,,$@)
-> -	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
-> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) srctree=$(abspath $(top_srcdir)) \
-> +		    OUTPUT=$(BUILD_DIR)/libbpf/ \
->  		    EXTRA_CFLAGS='-g -O0'				       \
->  		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
-
-[Severity: Low]
-This isn't a bug, but the patch also changes two existing parts of
-bpf.mk. CCINCLUDE now uses $(KHDR_INCLUDES) in place of
--I$(top_srcdir)/usr/include/, and the libbpf sub-make now gets an
-absolute srctree.
-
-Both changes fix behaviour that dates back to commit 3f584c211d8c
-("selftests: net: extract BPF building logic from the Makefile").
-
-The commit message does describe both changes. Would it be worth moving
-them into their own patch, or adding a Fixes: tag, so they can be picked
-up separately from the new skeleton rule?
-
->  
->  EXTRA_CLEAN += $(SCRATCH_DIR)
-> +
-> +# Build a host bpftool only when a test needs a generated skeleton.
-> +HOSTCC ?= gcc
-> +HOSTLD ?= ld
-> +BPFTOOL_BUILD := $(BUILD_DIR)/bpftool
-
-[ ... ]
-
-> +$(BPFTOOL_BUILD)/bootstrap/bpftool: \
-> +	$(wildcard $(top_srcdir)/tools/bpf/bpftool/*.[ch]) \
-> +	$(top_srcdir)/tools/bpf/bpftool/Makefile \
-> +	$(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)
-> +	$(call msg,MAKE,,$@)
-> +	$(Q)mkdir -p $(BPFTOOL_BUILD)
-> +	$(Q)$(MAKE) $(submake_extras) -C $(top_srcdir)/tools/bpf/bpftool \
-> +		OUTPUT=$(BPFTOOL_BUILD)/ srctree=$(abspath $(top_srcdir)) \
-> +		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" bootstrap
-
-[Severity: Medium]
-Can this bootstrap build fail with LLVM=1?
-
-bpf.mk sets HOSTCC to gcc and HOSTLD to ld whatever LLVM=, LLVM_PREFIX
-and LLVM_SUFFIX are, and it only hands them to the bpftool sub-make as
-CC and LD. HOSTCC itself is never passed or exported, so inside the
-sub-make tools/scripts/Makefile.include sets it from LLVM:
-
-  $(call allow-override,HOSTCC,$(LLVM_PREFIX)clang$(LLVM_SUFFIX))
-  $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
-  $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-
-bpftool then compiles the bootstrap objects and the bootstrap libbpf with
-that HOSTCC, which is clang:
-
-tools/bpf/bpftool/Makefile:
-	$(QUIET_CC)$(HOSTCC) $(HOST_CFLAGS) -c -MMD $< -o $@
-	...
-		ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
-		CFLAGS="$(LIBBPF_BOOTSTRAP_CFLAGS)" EXTRA_CFLAGS= $@ install_headers
-
-The CC_NO_CLANG probe in Makefile.include, however, runs against $(CC).
-That is the gcc forced on the command line, so the probe adds the
-GCC-only warning:
-
-  ifeq ($(CC_NO_CLANG), 1)
-  EXTRA_WARNINGS += -Wstrict-aliasing=3
-
-bpftool copies EXTRA_WARNINGS into CFLAGS, HOST_CFLAGS and
-LIBBPF_BOOTSTRAP_CFLAGS, and tools/lib/bpf/Makefile adds -Werror. Clang
-would then stop with:
-
-  error: unknown warning option '-Wstrict-aliasing=3' [-Werror,-Wunknown-warning-option]
-
-Commit 093b75ef5995 ("tools: Suppress request for warning options not
-existent in clang") added the CC_NO_CLANG guard to avoid exactly this
-error.
-
-On a clang-only host the result is the same, because a missing gcc
-leaves CC_NO_CLANG at 1. The libelf-zstd feature probe would also run
-with gcc, not with the clang that does the linking.
-
-The following command should hit this once "selftests/net: Move the XDP
-feature test to drivers/net/hw" makes xdp_features depend on
-xdp_features.skel.h:
-
-  make LLVM=1 -C tools/testing/selftests TARGETS=drivers/net/hw
-
-selftests/bpf and selftests/hid include tools/scripts/Makefile.include,
-so their HOSTCC follows LLVM=. Could bpf.mk set its HOSTCC/HOSTLD
-defaults the same way, or pass HOSTCC, HOSTLD and HOSTAR to the bpftool
-sub-make as well as CC and LD?
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3%40gmail.com
+> Thanks,
+> Leon
+> 
+> > +
+> >  #define PREEMPT_BITS	8
+> >  #define SOFTIRQ_BITS	8
+> >  #define HARDIRQ_DISABLE_BITS	8
+> >  #define HARDIRQ_BITS	4
+> > -#define NMI_BITS	1
+> > +#define NMI_BITS	(1 + 3*IS_ENABLED(CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS))
+> >  
+> >  #define PREEMPT_SHIFT	0
+> >  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
+> 
