@@ -1,64 +1,64 @@
-Received: from mail-oo2-f2.google.com (mail-oo2-f2.google.com [74.125.231.130])
+Received: from mail-oo1-f66.google.com (mail-oo1-f66.google.com [209.85.161.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD6744838A
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B971448BB6
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792380290; cv=none; b=MD+uFiPZLOKXMg6GqjvwabAjcj/0rziHS+K9eQJcLDtPD1ZE96KlYKVS4CJpOs1o6cHF1VrgZMprexvquy7CWBQm72JVGo5zrcm0rfZKKAXy48O9CB48YoumK5m2yYaWA5dOGvBypyq3XRtY8rhc8ndlojBGwyeG38VR0mMY0EQ=
+	t=1792380294; cv=none; b=YwqI9x7ItIMgCqOyaQJ1DR5Tj3CrHx+8n6Tl8j7pP2m6n5tN1ZYhXWnt5wfUC8KXUX/7V2sgYt32mjn55cvaaI8r0bGRKG+7E+2mFrvIl2fUR8n/BryEg7XqOKn2Meks1UdKaEqwXbtY5So402QbRplNBz8/BmrTnnhI05RsmYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792380290; c=relaxed/simple;
-	bh=b/t8ZuWZDUKOV/2tRDFiPuCX5yZQmsGWn7miL09onxE=;
+	s=arc-20240116; t=1792380294; c=relaxed/simple;
+	bh=xL0P9Fll0akclp3p051aboP8kSgjsC1qcGxiRV2smgc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CU18MeK1KTGTGFlvWojODEy0Ey9/s5soyMn5+mcOubF8x1V7MDfq5lhvhrrm/0C1HZt/MucG6Ldt/S2vRfptraNMRsrvWbrb9pcpKXiMA8Rdq6KuYhtHWsdlXIMHQv1eUjLWVspxGq+wXIs0QTenVvcYW1v9zbxsNPnrUWxBLQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sT743b/W; arc=none smtp.client-ip=74.125.231.130
+	 MIME-Version; b=MLBwl8ezrgX9/Krv3FG8PxxMYfa7TDIxAhNLt0MOfTG5Ikz74hPZgy+DFinJDbD89alh/dlNrPrzXzcWg2N0uHSS2adwRVdePZSRjt5vWxVlus/djnM5aKtId324HEtPNg4QsdN/cNIpOlFd4iB1zMA7m7YCQSm6xticdBXyIjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=md3R6G4D; arc=none smtp.client-ip=209.85.161.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sT743b/W"
-Received: by mail-oo2-f2.google.com with SMTP id 46e09a7af769-824f3901d55so1057236a34.1
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:24:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="md3R6G4D"
+Received: by mail-oo1-f66.google.com with SMTP id 006d021491bc7-70094949641so1893672eaf.0
+        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:24:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792380288; x=1792985088; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792380291; x=1792985091; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NeUTIgQ0KJJA+c9aUBWzGj/SnLdiQlWwxSsFBKrEdws=;
-        b=sT743b/W/PE9yE41tOS+XVrTXyca/V3kfCWIWZlya2x3cpGFZp60Rdj2YHzUmHZiO1
-         CK/YKr4+ATIqws4nVkdvhKeUS9G9FARlsuZExvjftFA0TB/qUAiSMQnEzC+axHIBoR+p
-         sIDpp0MIH1jQNMaplvcueNuJkpblBwx7V7RMak+XuBfdkofA3ZyQyt3RzyBPeA4AmWdu
-         TxGuCAblHgcfsL3JV9UnfXPJ8IjB8Nf5/+Zzyi7eqm7woeceqnUtqbKnLqfvIuMfVpPL
-         QcshULp1Gh1soTm1dMz3u6JvqG+5IBFaRjSEOuqJjmM/XFOkggK0B6TkwZahtN45Cloi
-         Tkpg==
+        bh=HhZRFo/F7FIEM4mtz7LFgdckmmdEP/yEKbkXicbifHs=;
+        b=md3R6G4DfkNr2j122GHdPcbyDke+VvXFaQihK7yPYEQnM8EsPFTi015dZ4IdvWQkoW
+         GaEDtYFTH+thyy+vkQsm7L38GvDzvTeeJICzjNrTANUiRTgw9rWHpmcEfSZ7hJB/sBhq
+         fx1MeZ5oiC3zvk0/w7JDdnqF+YpY1Eh/nDf5eH9J1Hq3jigI+geb1aCK9IdtL2kcEB+k
+         PcpTdS+EO5OGctq3EcxAIHqAdbMb25hEtok53H3p1WzYSmnAmFcwQ6mrvoKhbSu9Hg+J
+         KTNvCD3/vYgvMSHacv5485S6DOaW04TgG4EXKnOViLW+GXOQinqpPq+TirWBFO0fCcFE
+         T0Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792380288; x=1792985088;
+        d=1e100.net; s=20260707; t=1792380291; x=1792985091;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NeUTIgQ0KJJA+c9aUBWzGj/SnLdiQlWwxSsFBKrEdws=;
-        b=PkfjLYm/iglZ97vPfWjx1jAmfQz0GYlvgYFgyos+l+bvjFDuk4vDLCcY6tD3hikTfP
-         hWY4ALXowbOHwLC3PQjtxCJ2ISUEC3Y+hivKyJtGMSIShQKYfLQvAS1YS1hOTCPjBAbi
-         Cqqp88YseiFYEINmTPxQ8X+vhTBut8YnSTkbUkFQv3qbh4MC6M/taATZJMqvCkKRDESy
-         cvCcOTQeZlKxE0RAL6uPlPoMVITLt/EC3r5nzZjK342O4MZGRDDKBI5Pv1dVyuycX67H
-         ZZyhIFSA91yNAFsSHC/MmoNTLj8w9MU4V2FbZ2qq+ekffeP2mifmMbVao4sc1maDSosi
-         j+tw==
-X-Gm-Message-State: AFq9FYID9xcrPUXRBWmkohrcGi8o+42am6kGxFaDY3GFpNXzeJomRxjz
-	cXwWIzPGie045GUL7E+6bfjeCOn1gdGBsf58V38RW2f9Q9jAq0ENTcWAVBSMvJh8T74=
-X-Gm-Gg: AYBFou0uP3M2iSwmZa/Rjene6xxJtNwzc70IQPm0ENifh74uXVMeDAEaD7tq78WxRh2
-	dKAdc6aAvG9IkICAKcmLgXcHpg9l3eyVvtaJkOM475/lY1SXY5Bgv+jB+gBHsWKYk24YmCwHVET
-	8ULdn/Mn0VXc/esdb/4l/OKsm4HlVJi1XcZ7WiYAuDdNKUOaZIERvIXT+YMwHLvzHIFKYDECUtl
-	ptkpThomU2duz8A4Rh55UMbRqkcV94eSX7B5exS+lZsjd0lxdH0f6PrLhEIbh5tAwMByvb9gviX
-	B+AKrP0kf6V6xStNihICOKSYblpr9djVZs41hjKCP5+BOC8jSEzoQwD2RjYjDAggHCz6KtuvjdJ
-	xxSDEb2GIKidsPlZTDw+NGxLUVNxA8krCUx4IoaXNmKfgnjAaE4cXI5j/3uDy8p66Pt4j2b43pf
-	+YzCpALHBP8aIko6VCyOqb55jDkEQUh3OTQ9jxWBuGC1nEevHGRYe74mHs1Ko09rGPKnwod9kxz
-	m4makX7a5GmtqQfMIUNgC6PmjSp851LrhR5egtDXQeWahYtv2A5/i/hHlszZlCINaPws0l5MMdN
-	0vboNg==
-X-Received: by 2002:a05:6830:81d4:b0:846:e5a3:c8bb with SMTP id 46e09a7af769-846e5a3c98fmr4435897a34.15.1792380287623;
-        Sun, 18 Oct 2026 20:24:47 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4a::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-842a0f284d1sm7855881a34.2.2026.10.18.20.24.44
+        bh=HhZRFo/F7FIEM4mtz7LFgdckmmdEP/yEKbkXicbifHs=;
+        b=PvSnZhWc+R4SDmkbC3+UI6iq6J7xM4eepXtlTuel0M5L3Vv2DldpZPgF8tAFeQl4SG
+         9P7SjO/bBF+Pg80wkePBeajBO/V4Fv1btgPBkdVK6rR7aEM6ebTvw8ouKceAsZv38rez
+         RITDlzPrT2M/l1wX1EnqJ6NrYoObcHLA5juk+YvBF9vp0aHGx21fye1ibm+SaxyWc/RE
+         di7T+0CWHzc7MJQ7pGmMcp29ey2a18QgtIziGpw9rBmBT2574DLWxPei+YbEdt2hcAuN
+         QGS5LkzailQMPtz7SxUPF3kHD1oPLF1m1Nc/1Qp+Z5Mpv1Sd5ApXhhoI5XIsnxOvXT8Y
+         vNEw==
+X-Gm-Message-State: AFq9FYI/0meVKl0T+zcTRUFL5ZqFm3+aHCwrdcNwPH2cmjfwei8ZNF6D
+	Xq+cHx3kECDW6vZYRV5iWPMRPCn98vYQvvHrK6UCuq3k70kwDnEXMgunNMCZqlW5ySM=
+X-Gm-Gg: AYBFou3oIPQCKvrfYbQGrOWxEXjXU3aSTuNGgxs72dh2H8yoBYGyHO+EVytIFKei5II
+	NsgUW4o0GfkRARy3d7QbEAXAFS+yp9IwvJMZDg8CL7UHq/M/Y3AkvFhfcxi/wQBtFL+hfWKxIK4
+	G/sAQ3Tl4zOFQmrtzS6bsr9E9XsE5JIjG/6m8IOXM4YpnlJMISz8A5U2vnlDB2h90SA2cFAKIFp
+	4WiEh1AFDHjv+Cy3ZWJbtObhC7KBDJ0v9E0aQ2r8iU0U5JPzFae3BuMBJ9hlv5vkm+Jtt//n3RZ
+	REVECOVdeca3LO1pJq2gUI8AxWpdhzqopU1jwdI+crT+WULAo5z+5U8hPoHREl6I5qVFM8F9FHZ
+	xt/j+49yb7V5ynM3zMpo1jXM80eMi07H/soSUm2knE7SzqvaaXdciBFx8AfEMj6OgFTaK96bZrn
+	ZmoH64wztz4m+SgKsVFP6jPBHCA32MULd8PK1zILHOaP5Uf55pNRndnw0vNiNuCwFpvB0NBVoHw
+	mNf7oQUI/LOqmGxsptqeMoar96oUsiJei8uj6006KKk0RquRvHES8zZGCqck/kwT/X+H/ec2ioc
+	jF/BQDEeQ7SRRmgmMg==
+X-Received: by 2002:a05:6820:1797:b0:6fa:3c7:8798 with SMTP id 006d021491bc7-70116c56343mr6344262eaf.56.1792380291133;
+        Sun, 18 Oct 2026 20:24:51 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:71::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-84a4da2d675sm369455a34.10.2026.10.18.20.24.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 20:24:45 -0700 (PDT)
+        Sun, 18 Oct 2026 20:24:49 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 11/16] libbpf: Bind the arena of an object to every program in it
-Date: Mon, 19 Oct 2026 05:23:51 +0200
-Message-ID: <20261019032401.2302823-12-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 12/16] selftests/bpf: Test arena binding by libbpf
+Date: Mon, 19 Oct 2026 05:23:52 +0200
+Message-ID: <20261019032401.2302823-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019032401.2302823-1-memxor@gmail.com>
 References: <20261019032401.2302823-1-memxor@gmail.com>
@@ -82,276 +82,239 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10987; h=from:subject; bh=b/t8ZuWZDUKOV/2tRDFiPuCX5yZQmsGWn7miL09onxE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr57MzeobUhJ5/G/dmn/Hf3QyfblrnUn7jHtHWzYnXzLm 0L7ZUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIncf87wz/zzkQ2prx4+W/Z3Jd/xsF jFPCujvC+GLrGphSsF+GUy1Bn+yk2T2/rFzVThxYITdxaWzLc8+XxrJr/UnEsyS1dM2BC6jRcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7591; h=from:subject; bh=xL0P9Fll0akclp3p051aboP8kSgjsC1qcGxiRV2smgc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr16KtNbp7qi9y9enl6lq6aYWfnnB+NT/zLMArT25C6+V 7j7aUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIk0pjD8j1p71mf1oRoxVZPQpT/eM9 wVFZiV2eD2ODAge+pyaRsuVYb/ng8qZ6ww2Ry6wF7RtSumWL5ihk8Qo8uOa5mlPzg+at7hBgA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A program has an arena only when one of its insns refers to the arena
-map. The kernel can hand a program arena pointers all the same: as
-__arena struct_ops arguments, through __arena struct members and as
-kfunc return values. The verifier rejects those in a program without an
-arena, since it has nowhere to place them, and so a struct_ops callback
-that touches nothing but its arguments fails to load until it refers to
-the arena artificially, e.g. with asm volatile("" :: "r"(&arena)).
-
-Bind the arena of an object to every program loaded from it. The kernel
-binds the maps of a continuous fd_array (fd_array_cnt) like maps an insn
-refers to, so pass the arena in slot 0, which is free: a kfunc insn with
-offset 0 names vmlinux BTF rather than a slot. The module BTF slots that
-follow stay as they are. A feature probe keeps older kernels, which
-reject a non-zero fd_array_cnt, on the previous behavior.
-
-An object has at most one arena, libbpf refuses a second one, so there
-is no ambiguity about which arena a program gets. Programs that never
-touch the arena see it among their maps, and pay for the arena base
-setup in their JIT prologue until a later patch spares them that; the
-arena now lives as long as any program of the object. With the count,
-the kernel also resolves every module BTF slot of the array for every
-program of the object, so each of them holds the modules the object
-calls into, not only the programs that call them. Where the JIT is
-disabled or the loader lacks CAP_PERFMON, every program of such an
-object now fails to load, since an arena needs both, where before only
-the programs using the arena did. bpf_program__clone() binds the arena
-the same way, so a program loads through veristat as it does through
-bpf_object__load(). An arena exclusive to another program and the
-light skeleton loader are left alone.
-
-An arena exclusive to the program itself is bound only where the kernel
-checks an exclusive map against the digest of the final program. Earlier
-kernels compared a map bound through the fd_array against a digest they
-had not computed yet and refused the load for the very program the map
-is exclusive to, so a second probe loads a program with a map exclusive
-to it through fd_array_cnt; where that fails, the program keeps binding
-its arena through its insns, as before.
+Attach a struct_ops callback with an __arena argument from an object
+whose callback and unrelated program never refer to the arena, drive it
+through the kernel, and check that an unrelated program of the object
+got the arena among its maps as well. Load the same object through
+bpf_object__prepare() and bpf_program__clone() too, the way veristat
+loads programs.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/features.c        | 82 +++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.c          | 66 +++++++++++++++++++++++++-
- tools/lib/bpf/libbpf_internal.h |  4 ++
- 3 files changed, 150 insertions(+), 2 deletions(-)
+ .../bpf/prog_tests/test_struct_ops_arena.c    | 120 ++++++++++++++++++
+ .../bpf/progs/struct_ops_arena_autobind.c     |  64 ++++++++++
+ 2 files changed, 184 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
 
-diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-index 9f589980beef..adb5d2e7fdfa 100644
---- a/tools/lib/bpf/features.c
-+++ b/tools/lib/bpf/features.c
-@@ -77,6 +77,82 @@ static int probe_kern_global_data(int token_fd)
- 	return probe_fd(ret);
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
+index 1c04473fb42d..e7580b9f0fc2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
+@@ -13,6 +13,7 @@
+ #include "struct_ops_arena_member_fail__mismatch_mem.skel.h"
+ #include "struct_ops_arena_member_fail__write.skel.h"
+ #include "struct_ops_arena_member_fail__no_arena.skel.h"
++#include "struct_ops_arena_autobind.skel.h"
+ 
+ #if defined(__x86_64__) || defined(__aarch64__)
+ /*
+@@ -145,6 +146,119 @@ static void arena_member(void)
+ 	struct_ops_arena_member__destroy(skel);
  }
  
-+/*
-+ * A continuous fd_array binds every map in it to the program, whether an
-+ * insn refers to the map or not. Kernels without the attribute reject a
-+ * non-zero fd_array_cnt.
-+ */
-+static int probe_kern_fd_array_cnt(int token_fd)
++/* @prog_fd lists exactly one map, the one with @map_id. */
++static void assert_prog_map(int prog_fd, __u32 map_id, const char *name)
 +{
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
++	__u32 map_ids[2] = {}, len = sizeof(struct bpf_prog_info);
++	struct bpf_prog_info info = {
++		.nr_map_ids = ARRAY_SIZE(map_ids),
++		.map_ids = ptr_to_u64(map_ids),
 +	};
-+	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
-+		.token_fd = token_fd,
-+		.map_flags = token_fd ? BPF_F_TOKEN_FD : 0,
-+	);
-+	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
-+		.token_fd = token_fd,
-+		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
-+		.fd_array_cnt = 1,
-+	);
-+	int ret, map, insn_cnt = ARRAY_SIZE(insns);
-+
-+	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "libbpf_det_bind", sizeof(int), sizeof(int), 1,
-+			     &map_opts);
-+	if (map < 0) {
-+		ret = -errno;
-+		pr_warn("Error in %s(): %s. Couldn't create simple array map.\n",
-+			__func__, errstr(ret));
-+		return ret;
-+	}
-+
-+	prog_opts.fd_array = &map;
-+	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &prog_opts);
-+	close(map);
-+	return probe_fd(ret);
-+}
-+
-+/*
-+ * The kernel checks an exclusive map bound through fd_array_cnt against the
-+ * digest of the final program. Earlier kernels compared it as the map was
-+ * added, against a digest they had not computed yet, and refused the load for
-+ * the very program the map is exclusive to; kernels without exclusive maps
-+ * refuse the map.
-+ */
-+static int probe_kern_excl_map_fd_array_cnt(int token_fd)
-+{
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	__u8 hash[SHA256_DIGEST_LENGTH];
-+	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
-+		.token_fd = token_fd,
-+		.map_flags = token_fd ? BPF_F_TOKEN_FD : 0,
-+		.excl_prog_hash = hash,
-+		.excl_prog_hash_size = sizeof(hash),
-+	);
-+	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
-+		.token_fd = token_fd,
-+		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
-+		.fd_array_cnt = 1,
-+	);
-+	int ret, map, insn_cnt = ARRAY_SIZE(insns);
-+
-+	libbpf_sha256(insns, sizeof(insns), hash);
-+	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "libbpf_det_excl", sizeof(int), sizeof(int), 1,
-+			     &map_opts);
-+	if (map < 0)
-+		return 0;
-+
-+	prog_opts.fd_array = &map;
-+	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &prog_opts);
-+	close(map);
-+	return probe_fd(ret);
-+}
-+
- static int probe_kern_btf(int token_fd)
- {
- 	static const char strs[] = "\0int";
-@@ -742,6 +818,12 @@ static struct kern_feature_desc {
- 	[FEAT_PERCPU_DATA] = {
- 		"kernel supports percpu data", probe_kern_percpu_data,
- 	},
-+	[FEAT_FD_ARRAY_CNT] = {
-+		"continuous fd_array (fd_array_cnt)", probe_kern_fd_array_cnt,
-+	},
-+	[FEAT_EXCL_MAP_FD_ARRAY_CNT] = {
-+		"exclusive map bound through fd_array_cnt", probe_kern_excl_map_fd_array_cnt,
-+	},
- };
- 
- bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fcedb78abe00..8fcb8cf39cc0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -797,7 +797,8 @@ struct bpf_object {
- 	/*
- 	 * Slots handed out so far, slot 0 included. A kfunc insn names a module
- 	 * BTF slot through its offset, slot 0 stands for vmlinux BTF and stays
--	 * empty, so the array goes to the kernel without a count.
-+	 * empty, so the array goes to the kernel without a count, unless
-+	 * bpf_object__bind_arena() puts the arena of the object there.
- 	 */
- 	size_t fd_array_used;
- 
-@@ -8804,6 +8805,56 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
- 
- static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_sz);
- 
-+/*
-+ * Bind the arena of the object to the program about to be loaded. A program
-+ * has an arena only when an insn refers to the map, but the kernel can hand
-+ * it arena pointers all the same, as struct_ops arguments, through tagged
-+ * struct members or as kfunc return values, and the verifier rejects those
-+ * when the program has no arena to place them in. A continuous fd_array
-+ * binds every map in it, the arena takes slot 0, which is free: a kfunc insn
-+ * with offset 0 names vmlinux BTF rather than a slot.
-+ */
-+static int bpf_object__bind_arena(struct bpf_object *obj, struct bpf_program *prog,
-+				  struct bpf_prog_load_opts *load_attr)
-+{
-+	struct bpf_map *map;
 +	int err;
 +
-+	if (obj->gen_loader || obj->arena_map_idx < 0 || !kernel_supports(obj, FEAT_FD_ARRAY_CNT))
-+		return 0;
-+	map = &obj->maps[obj->arena_map_idx];
-+	/*
-+	 * Nothing to bind when the arena is not created, or no longer is after
-+	 * a failed load, when it is exclusive to another program, and nothing
-+	 * for an offloaded program, which the kernel does not let near an
-+	 * arena.
-+	 */
-+	if (!map->autocreate || map->fd < 0 || (map->excl_prog && map->excl_prog != prog) ||
-+	    load_attr->prog_ifindex)
-+		return 0;
-+	/*
-+	 * An arena exclusive to the program itself needs a kernel that checks
-+	 * the map against the digest of the final program. Earlier kernels
-+	 * compared a map bound through the fd_array against a digest they had
-+	 * not computed yet and refused the load; there the program binds its
-+	 * arena through its insns, as before.
-+	 */
-+	if (map->excl_prog && !kernel_supports(obj, FEAT_EXCL_MAP_FD_ARRAY_CNT))
-+		return 0;
++	err = bpf_prog_get_info_by_fd(prog_fd, &info, &len);
++	if (!ASSERT_OK(err, name))
++		return;
++	if (!ASSERT_EQ(info.nr_map_ids, 1, name))
++		return;
++	ASSERT_EQ(map_ids[0], map_id, name);
++}
 +
-+	if (!obj->fd_array_used) {
-+		err = libbpf_ensure_mem((void **)&obj->fd_array, &obj->fd_array_cap, sizeof(int), 1);
-+		if (err)
-+			return err;
-+		obj->fd_array_used = 1;
++/*
++ * libbpf binds the arena of an object to every program in it: a callback
++ * with an __arena argument loads without referring to the arena, and an
++ * unrelated program gets the arena as well.
++ */
++static void arena_autobind(void)
++{
++	struct struct_ops_arena_autobind *skel;
++	struct bpf_map_info info = {};
++	__u32 len = sizeof(info);
++	int err;
++
++	skel = struct_ops_arena_autobind__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "struct_ops_arena_autobind__open_and_load"))
++		return;
++
++	err = bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.arena), &info, &len);
++	if (!ASSERT_OK(err, "arena_info"))
++		goto out;
++	assert_prog_map(bpf_program__fd(skel->progs.test_arena_cb), info.id, "test_arena_cb");
++	assert_prog_map(bpf_program__fd(skel->progs.unrelated), info.id, "unrelated");
++
++	attach_and_trigger(skel->maps.testmod_arena_autobind, skel->progs.trigger);
++out:
++	struct_ops_arena_autobind__destroy(skel);
++}
++
++/*
++ * The same binding through bpf_object__prepare() and bpf_program__clone(), the
++ * way veristat loads a program: the arena takes slot 0 of a continuous
++ * fd_array, next to the module BTF of the kfunc the trigger calls.
++ */
++static void arena_autobind_clone(void)
++{
++	struct struct_ops_arena_autobind *skel;
++	struct bpf_map_info info = {};
++	__u32 len = sizeof(info);
++	struct bpf_program *prog;
++	int err, fd;
++
++	skel = struct_ops_arena_autobind__open();
++	if (!ASSERT_OK_PTR(skel, "struct_ops_arena_autobind__open"))
++		return;
++
++	err = bpf_object__prepare(skel->obj);
++	if (!ASSERT_OK(err, "prepare"))
++		goto out;
++	err = bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.arena), &info, &len);
++	if (!ASSERT_OK(err, "arena_info"))
++		goto out;
++	bpf_object__for_each_program(prog, skel->obj) {
++		fd = bpf_program__clone(prog, NULL);
++		if (!ASSERT_GE(fd, 0, bpf_program__name(prog)))
++			continue;
++		assert_prog_map(fd, info.id, bpf_program__name(prog));
++		close(fd);
 +	}
-+	obj->fd_array[0] = map->fd;
-+	load_attr->fd_array = obj->fd_array;
-+	/* with slot 0 filled every slot handed out is valid, so the array can go with a count */
-+	load_attr->fd_array_cnt = obj->fd_array_used;
++out:
++	struct_ops_arena_autobind__destroy(skel);
++}
++
++/*
++ * An arena exclusive to a program is bound to that program all the same: the
++ * kernel checks an exclusive map against the digest of the final program, so
++ * the binding through the fd_array passes for the program the map is
++ * exclusive to.
++ */
++static void arena_autobind_excl(void)
++{
++	struct struct_ops_arena_autobind *skel;
++	struct bpf_map_info info = {};
++	__u32 len = sizeof(info);
++	int err;
++
++	skel = struct_ops_arena_autobind__open();
++	if (!ASSERT_OK_PTR(skel, "struct_ops_arena_autobind__open"))
++		return;
++	/* the other programs need the arena too, and cannot have it */
++	bpf_map__set_autocreate(skel->maps.testmod_arena_autobind, false);
++	bpf_program__set_autoload(skel->progs.trigger, false);
++	err = bpf_map__set_exclusive_program(skel->maps.arena, skel->progs.unrelated);
++	if (!ASSERT_OK(err, "set_exclusive_program"))
++		goto out;
++
++	err = struct_ops_arena_autobind__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto out;
++	err = bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.arena), &info, &len);
++	if (!ASSERT_OK(err, "arena_info"))
++		goto out;
++	assert_prog_map(bpf_program__fd(skel->progs.unrelated), info.id, "unrelated");
++out:
++	struct_ops_arena_autobind__destroy(skel);
++}
++
+ /* The same through the vmlinux.h rendering of the members, which takes casts. */
+ static void arena_member_render(void)
+ {
+@@ -197,6 +311,12 @@ void serial_test_struct_ops_arena(void)
+ 		/* so that the missing member tests show up as skipped */
+ 		test__skip();
+ 	}
++	if (test__start_subtest("arena_autobind"))
++		arena_autobind();
++	if (test__start_subtest("arena_autobind_clone"))
++		arena_autobind_clone();
++	if (test__start_subtest("arena_autobind_excl"))
++		arena_autobind_excl();
+ #else
+ 	test__skip();
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
+new file mode 100644
+index 000000000000..495faa0f4a8b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
+@@ -0,0 +1,64 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++#include "../test_kmods/bpf_testmod.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1);
++} arena SEC(".maps");
++
++/*
++ * Neither the callback nor the unrelated program refers to the arena. libbpf
++ * binds it to them all the same, so the callback can use the __arena argument
++ * the kernel hands it.
++ */
++SEC("struct_ops/test_arena")
++int test_arena_cb(unsigned long long *ctx)
++{
++	u64 __arena *ptr = (u64 __arena *)ctx[0];
++
++	*ptr += 1;
 +	return 0;
 +}
 +
- static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog,
- 				struct bpf_insn *insns, int insns_cnt,
- 				const char *license, __u32 kern_version, int *prog_fd)
-@@ -8867,6 +8918,9 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
- 	if (obj->data_in_arena)
- 		load_attr.prog_flags |= BPF_F_ARENA_SCALAR;
- 	load_attr.fd_array = obj->fd_array;
-+	err = bpf_object__bind_arena(obj, prog, &load_attr);
-+	if (err)
-+		return err;
- 
- 	load_attr.token_fd = obj->token_fd;
- 	if (obj->token_fd)
-@@ -9966,8 +10020,10 @@ static void bpf_object_cleanup_btf(struct bpf_object *obj)
- 
- static void bpf_object_post_load_cleanup(struct bpf_object *obj)
- {
--	/* clean up fd_array */
-+	/* clean up fd_array, and the slots handed out with it */
- 	zfree(&obj->fd_array);
-+	obj->fd_array_cap = 0;
-+	obj->fd_array_used = 0;
- 
- 	/* clean up BTF */
- 	bpf_object_cleanup_btf(obj);
-@@ -10946,6 +11002,12 @@ int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts
- 	attr.kern_version = OPTS_GET(opts, kern_version, 0) ?: obj->kern_version;
- 	attr.fd_array = OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array;
- 	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
-+	/* the arena of the object goes with the program, as in bpf_object__load() */
-+	if (!OPTS_GET(opts, fd_array, NULL) && !OPTS_GET(opts, fd_array_cnt, 0)) {
-+		err = bpf_object__bind_arena(obj, prog, &attr);
-+		if (err)
-+			return libbpf_err(err);
-+	}
- 	attr.token_fd = OPTS_GET(opts, token_fd, 0) ?: obj->token_fd;
- 	if (attr.token_fd)
- 		attr.prog_flags |= BPF_F_TOKEN_FD;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 4e45dfacb548..e90b5336bac0 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -404,6 +404,10 @@ enum kern_feature_id {
- 	FEAT_BPF_SYSCALL_COMMON_ATTRS,
- 	/* Kernel supports percpu data */
- 	FEAT_PERCPU_DATA,
-+	/* Kernel binds every map in a continuous fd_array (fd_array_cnt) to the program */
-+	FEAT_FD_ARRAY_CNT,
-+	/* Kernel checks an exclusive map bound through fd_array_cnt against the final digest */
-+	FEAT_EXCL_MAP_FD_ARRAY_CNT,
- 	__FEAT_CNT,
- };
- 
++SEC(".struct_ops.link")
++struct bpf_testmod_ops3 testmod_arena_autobind = {
++	.test_arena = (void *)test_arena_cb,
++};
++
++SEC("syscall")
++int unrelated(void *ctx)
++{
++	return 0;
++}
++
++SEC("syscall")
++int trigger(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++	u64 __arena *val;
++
++	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
++	if (!val)
++		return 1;
++
++	*val = 41;
++	if (bpf_testmod_ops3_call_test_arena((u64 *)val))
++		return 2;
++	if (*val != 42)
++		return 3;
++
++	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
++#endif
++	return 0;
++}
 -- 
 2.53.0-Meta
 
