@@ -1,68 +1,34 @@
-Received: from mta1.migadu.com (out-169.mta1.migadu.com [95.215.58.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4763D9DAD
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.169
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E93403955E4;
+	Mon, 19 Oct 2026 04:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792382027; cv=none; b=WK/pSgfpg7u9SZqwx1Sx6U/UsVsddr2c/l6VZjrTBuJEMpInjCqAV40BLd8rRD26Ub4gAWBZU/GUJ+6UeJz64Nv/jP3L3JgPt7zw2XCEni9v5uWyrQZA1TUvyk/wSXLoTbUTyFfo/B2IuGQXJcMQ6tRFHqaEGDaRxhLC+aHf1C8=
+	t=1792382472; cv=none; b=rbpioHazSTAq9lOibg6216ihc0ap7XWXOBxNFwIMmKOjPgJ2X+8isfcyEhveMuaIpCZbh18NtRxebKyqIGlUOC5d7GRVpfab+AQ+6mGsRUIDezME2l4KGlV1mFKVIbjWZgvxqn5hY1rLkw6aKjasmFX55QzRsMvAaQc8fvUi59I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792382027; c=relaxed/simple;
-	bh=Vcxvr/qaW7PDnOXJbF3Nyf0hUX2HYPQGMERHgFWI0EY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=IssBgQFSKUO7qr3s5MDmp3eJxb7qM6LQB5VF2HPzpNllcgpA2UCF0p3/fPsNm1mavzRwRcbZR1Jztev69f0zVCDKa/iq+c+xiXcXr44yvvCBxEQjbelSkpYOjfZKVDnKAy/eK9anWfHFdbSuFQgy+leDihOOoSUUvHUpKiLLKm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DOhYQEVI; arc=none smtp.client-ip=95.215.58.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DOhYQEVI"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Vcxvr/qaW7PDnOXJbF3Nyf0hUX2HYPQGMERHgFWI0EY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792382023; v=1; x=1792986823;
- b=DOhYQEVIK6uoGJJBJkGThlqWnZvqo6wucO1tK6quYc84H21xMGpHknVNq8vL3M5fgCnTxl7q
- HSKPjeXj8LltMg28TVshGv6dxToX7FUcJkJJoNPUC4FUiGabGaIrQ0J483t5WA98cpFWBVrIAsp
- rueAPEor9IDeS0bMVupYmVq0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 577f89e16abcb16c;
-	Mon, 19 Oct 2026 03:53:43 +0000
-X-Mizu-Trace-ID: 577f89e16abcb16c
-X-Migadu-Flow: FLOW_OUT
-From: Ridong Chen <ridong.chen@linux.dev>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Dave Chinner <david@fromorbit.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Qi Zheng <qi.zheng@linux.dev>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Kairui Song <kasong@tencent.com>,
-	Barry Song <baohua@kernel.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>,
-	Wei Xu <weixugc@google.com>,
-	Baoquan He <baoquan.he@linux.dev>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Ridong Chen <ridong.chen@linux.dev>,
-	Ridong Chen <chenridong@xiaomi.com>
-Subject: [PATCH v4 5/9] mm/vmscan: pass scan_control to the LRU isolate/shrink tracepoints
-Date: Mon, 19 Oct 2026 11:52:48 +0800
-Message-Id: <20261019035252.2357900-5-ridong.chen@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261019034426.2354049-1-ridong.chen@linux.dev>
-References: <20261019034426.2354049-1-ridong.chen@linux.dev>
+	s=arc-20240116; t=1792382472; c=relaxed/simple;
+	bh=hML0u60eL3ia2fxzAGEOE6MtfiYK0ZmVCWLTbbvcHG0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aI7eyl9wyLjI9BbKiNmWbqHjvWi6Xs81oZIiIvzu7d0xwBnGbmsukAoBgh6gucEK7Zsn2gmzZsgP5VsulppaV0zWRgt5cn51VWiO9zzAbF+wq1Vhhj8d0xu7OtQ5Y/vQKFMJ2grE3n+BeGgsp6EA/poU90NLIHibIRZ2empectg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxD9MEltVqqCsXAA--.1944S3;
+	Mon, 19 Oct 2026 12:01:08 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCxPs8DltVqbeEtAA--.30517S2;
+	Mon, 19 Oct 2026 12:01:08 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2] selftests/bpf: Use snake_case for subtest descriptions in jit_insns_arena.c
+Date: Mon, 19 Oct 2026 12:01:06 +0800
+Message-ID: <20261019040106.27309-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,161 +36,73 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxPs8DltVqbeEtAA--.30517S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7uFW3ZryUWw4UWFW7WFy5ZFc_yoW8CF4kpa
+	ykWw13trWrAF1a934kZF47W3WruFn3JFnxWr48Xw4fAF15JF1qgrWxKF15t3ZFkrWfZwnY
+	9w4Iyr9rWF4UCrcCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE
+	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnUUUUUUUU=
 
-From: Ridong Chen <chenridong@xiaomi.com>
+Normalize two inline assembly test descriptions in jit_insns_arena.c
+from space-separated strings to snake_case.
 
-mm_vmscan_lru_isolate, mm_vmscan_lru_shrink_inactive and
-mm_vmscan_lru_shrink_active spell out reclaim state (reclaim_idx, order,
-priority) as individual arguments, all of which the caller already holds
-in struct scan_control. Now that the struct is visible from the trace
-header, pass sc directly and pick the fields out in TP_fast_assign.
+It is done for consistency with other neighboring subtests registered
+in test_jit_insns() (such as alu_imm, alu_reg, etc.). This also makes
+it convenient to execute these subtests directly from the command line
+without being forced to use shell quoting.
 
-No functional change. The tracefs event format (TP_STRUCT__entry and
-TP_printk) is unchanged, so tracefs-based consumers are unaffected.
-BPF programs attached via raw_tp/tp_btf see the new TP_PROTO and need
-to be adjusted; tracepoints are not a stable ABI (see
-Documentation/bpf/bpf_design_QA.rst).
+Otherwise, unquoted shell word-splitting causes test_progs to reject
+the extra arguments before the filter code runs:
 
-Assisted-by: LLM
-Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+$ sudo ./test_progs -t jit_insns/arena access with zero offset
+Usage: test_progs [OPTION...]
+Try `test_progs --help' or `test_progs --usage' for more information.
+
+$ sudo ./test_progs -t jit_insns/cast to a user address
+Usage: test_progs [OPTION...]
+Try `test_progs --help' or `test_progs --usage' for more information.
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- mm/trace_vmscan.h | 31 +++++++++++++++----------------
- mm/vmscan.c       | 14 +++++++-------
- 2 files changed, 22 insertions(+), 23 deletions(-)
+v2: update the commit message to make it accurate.
 
-diff --git a/mm/trace_vmscan.h b/mm/trace_vmscan.h
-index db4590356845..b1b329039e14 100644
---- a/mm/trace_vmscan.h
-+++ b/mm/trace_vmscan.h
-@@ -350,15 +350,14 @@ TRACE_EVENT(mm_shrink_slab_end,
- );
+ tools/testing/selftests/bpf/progs/jit_insns_arena.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/jit_insns_arena.c b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
+index b396d5aefb5a..16276ec192ac 100644
+--- a/tools/testing/selftests/bpf/progs/jit_insns_arena.c
++++ b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
+@@ -34,7 +34,7 @@ struct {
  
- TRACE_EVENT(mm_vmscan_lru_isolate,
--	TP_PROTO(int highest_zoneidx,
--		int order,
--		unsigned long nr_requested,
--		unsigned long nr_scanned,
--		unsigned long nr_skipped,
--		unsigned long nr_taken,
--		int lru),
-+	TP_PROTO(struct scan_control *sc,
-+		 unsigned long nr_requested,
-+		 unsigned long nr_scanned,
-+		 unsigned long nr_skipped,
-+		 unsigned long nr_taken,
-+		 int lru),
- 
--	TP_ARGS(highest_zoneidx, order, nr_requested, nr_scanned, nr_skipped, nr_taken, lru),
-+	TP_ARGS(sc, nr_requested, nr_scanned, nr_skipped, nr_taken, lru),
- 
- 	TP_STRUCT__entry(
- 		__field(int, highest_zoneidx)
-@@ -371,8 +370,8 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
- 	),
- 
- 	TP_fast_assign(
--		__entry->highest_zoneidx = highest_zoneidx;
--		__entry->order = order;
-+		__entry->highest_zoneidx = sc->reclaim_idx;
-+		__entry->order = sc->order;
- 		__entry->nr_requested = nr_requested;
- 		__entry->nr_scanned = nr_scanned;
- 		__entry->nr_skipped = nr_skipped;
-@@ -466,9 +465,9 @@ TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
- 
- 	TP_PROTO(int nid,
- 		unsigned long nr_scanned, unsigned long nr_reclaimed,
--		struct reclaim_stat *stat, int priority, int file),
-+		struct reclaim_stat *stat, struct scan_control *sc, int file),
- 
--	TP_ARGS(nid, nr_scanned, nr_reclaimed, stat, priority, file),
-+	TP_ARGS(nid, nr_scanned, nr_reclaimed, stat, sc, file),
- 
- 	TP_STRUCT__entry(
- 		__field(int, nid)
-@@ -498,7 +497,7 @@ TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
- 		__entry->nr_activate1 = stat->nr_activate[1];
- 		__entry->nr_ref_keep = stat->nr_ref_keep;
- 		__entry->nr_unmap_fail = stat->nr_unmap_fail;
--		__entry->priority = priority;
-+		__entry->priority = sc->priority;
- 		__entry->reclaim_flags = trace_reclaim_flags(file);
- 	),
- 
-@@ -517,9 +516,9 @@ TRACE_EVENT(mm_vmscan_lru_shrink_active,
- 
- 	TP_PROTO(int nid, unsigned long nr_taken,
- 		unsigned long nr_active, unsigned long nr_deactivated,
--		unsigned long nr_referenced, int priority, int file),
-+		unsigned long nr_referenced, struct scan_control *sc, int file),
- 
--	TP_ARGS(nid, nr_taken, nr_active, nr_deactivated, nr_referenced, priority, file),
-+	TP_ARGS(nid, nr_taken, nr_active, nr_deactivated, nr_referenced, sc, file),
- 
- 	TP_STRUCT__entry(
- 		__field(int, nid)
-@@ -537,7 +536,7 @@ TRACE_EVENT(mm_vmscan_lru_shrink_active,
- 		__entry->nr_active = nr_active;
- 		__entry->nr_deactivated = nr_deactivated;
- 		__entry->nr_referenced = nr_referenced;
--		__entry->priority = priority;
-+		__entry->priority = sc->priority;
- 		__entry->reclaim_flags = trace_reclaim_flags(file);
- 	),
- 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index e064354ea24f..5d5eee757c61 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1759,7 +1759,7 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
- 		}
- 	}
- 	*nr_scanned = total_scan;
--	trace_mm_vmscan_lru_isolate(sc->reclaim_idx, sc->order, nr_to_scan,
-+	trace_mm_vmscan_lru_isolate(sc, nr_to_scan,
- 				    total_scan, skipped, nr_taken, lru);
- 	update_lru_sizes(lruvec, lru, nr_zone_taken);
- 	return nr_taken;
-@@ -2048,7 +2048,7 @@ static unsigned long shrink_inactive_list(unsigned long nr_to_scan,
- 
- 	handle_reclaim_writeback(nr_taken, pgdat, sc, &stat);
- 	trace_mm_vmscan_lru_shrink_inactive(pgdat->node_id,
--			nr_scanned, nr_reclaimed, &stat, sc->priority, file);
-+			nr_scanned, nr_reclaimed, &stat, sc, file);
- 	return nr_reclaimed;
+ #if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ SEC("syscall")
+-__description("arena access with zero offset")
++__description("arena_access_with_zero_offset")
+ __success __retval(0)
+ int arena_zero_off(void *ctx)
+ {
+@@ -82,7 +82,7 @@ int arena_zero_off(void *ctx)
  }
  
-@@ -2155,7 +2155,7 @@ static void shrink_active_list(unsigned long nr_to_scan,
- 		mod_lruvec_state(lruvec, PGROTATE_ANON + file, nr_rotated);
- 
- 	trace_mm_vmscan_lru_shrink_active(pgdat->node_id, nr_taken, nr_activate,
--			nr_deactivate, nr_rotated, sc->priority, file);
-+			nr_deactivate, nr_rotated, sc, file);
- }
- 
- static unsigned int reclaim_folio_list(struct list_head *folio_list,
-@@ -4844,9 +4844,9 @@ static int scan_folios(unsigned long nr_to_scan, struct lruvec *lruvec,
- 	mod_lruvec_state(lruvec, item, isolated);
- 	mod_lruvec_state(lruvec, PGREFILL, sorted);
- 	mod_lruvec_state(lruvec, PGSCAN_ANON + type, isolated);
--	trace_mm_vmscan_lru_isolate(sc->reclaim_idx, sc->order, nr_to_scan,
--				scanned, skipped, isolated,
--				type ? LRU_INACTIVE_FILE : LRU_INACTIVE_ANON);
-+	trace_mm_vmscan_lru_isolate(sc, nr_to_scan,
-+				    scanned, skipped, isolated,
-+				    type ? LRU_INACTIVE_FILE : LRU_INACTIVE_ANON);
- 
- 	*isolatedp = isolated;
- 	return scanned;
-@@ -4988,7 +4988,7 @@ static int evict_folios(unsigned long nr_to_scan, struct lruvec *lruvec,
- 	if (isolated)
- 		handle_reclaim_writeback(isolated, pgdat, sc, &stat);
- 	trace_mm_vmscan_lru_shrink_inactive(pgdat->node_id,
--			type_scanned, reclaimed, &stat, sc->priority,
-+			type_scanned, reclaimed, &stat, sc,
- 			type ? LRU_INACTIVE_FILE : LRU_INACTIVE_ANON);
- 
- 	list_for_each_entry_safe_reverse(folio, next, &list, lru) {
+ SEC("syscall")
+-__description("cast to a user address")
++__description("cast_to_a_user_address")
+ __success __retval(0)
+ int cast_to_user(void *ctx)
+ {
 -- 
-2.34.1
+2.42.0
 
