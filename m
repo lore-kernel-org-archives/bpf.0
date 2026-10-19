@@ -1,61 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.206
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792424191;
-	b=r8nOy6Af4+iPGS84WzZL8pv7S8X5VtGgb+nj2wQGN4tOLH1kqHzS47LHfR2kOGThqMau
-	 /KlvrCjJw3eB+XaFnCkqTJAmT37/Fc4044shQcBGNoyWx/Xmc3rISwNBZclPyFq11rP+T
-	 sNUQs2Vh+swGMGAH6nK1t80NYfjJTMEHPTcQMvTNWeNyb4v6PM6wqnDUOLFqqw4Korswo
-	 ODMCgx9Xsg4UqcRWZzh03THiIZjgIVzQdCkpeSgtHrToNd2qZ9iEcVDJLWAEmapcI+Y7X
-	 1B8wpFGWV/yHpbqOz/viw5Ts8LAFnopLA8kV0rZV8OBQJBdMUAdNCgVdGcSdksGBoQA==
+	t=1792424206;
+	b=uPx1qi89QiKr4/Bf6nQnyr1ajd3ca2VBKC/GZMkKySpAuNy+9KREdmqTBDiGbdcc7Shq
+	 lUuPvSMi/l+epuDJUVH3b0mBAqRKfQjuOLA4+66yW9eYVE3KOuQnKVWNq43UKjeOLWEOj
+	 wIdzLTdPPkU8r56AZLxjT5N2OevWKFj7RdfZjB/ApT3drduudRAG91ruYYS3yNysm9nqP
+	 k1PBV2ceS9eDkFQQtDg85TqncqSPd8pPdixAc6uFpGiXtqhGwvl3StGbuhjhdfWvt1crt
+	 JhKZO6WJTiuNvzeY4GrF06oUnYe3YfJdZwZVsqE+886nS4xsLDjkV3zAKta/ec8t/DQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792424191;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=musYXh/y9YPvWwh9w5V0GXcRJcdGJuMMuP9cBcENcuc=;
-	b=dR+L2uWauN1/sS/ZdpLLWfZ8YyN2RD16MIABMt4S+eJu/Ak0XaMX2J4avbpY5iSyrUL+
-	 1uHTtIyhZxWyFrP9tts7MmaFaXeDihIRV3LB5vsQKJ24J6zEAuJWXE+xobl+si4GeGohy
-	 ngOWPUJEicV3yF2KewHgWZw37v2V+pAl5AxUcuRQ0N8WsbWenGsvgi6JNpsKk7+SmzwlY
-	 w9/gkYyeFzvpgTtl3ZDUoO4HfKeiaRsvYZZ6DCIAG2doepJwLHqGUtUpotRPTLlJ8JYEU
-	 FQcfBrJO3ysChGOxj4QkCGXrcgYHSUN5Er03OnRFkKE18bZ2Xhitqozsegi6598kjCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792424206;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=UOj9knh0frr379rHSoli0b/qodvVS2OqPC7MrjigU40=;
+	b=M/OqE/XvyvrDxwiX4pxYrE4/aup1FWLcdC9kA26QNfWmGH1EtH356EQo3tN18B8tDD55
+	 e6G/PRhadVCkthprfoafzy4ouBGXR7ciBZ5YwjjYzuTEVHZEhymU9avozZK0LbnuW4oZ+
+	 D4PH9g3ZnO6e0D6jxyY7WG3UqEFdZB5MLHPEHEW8WFsy4n/TTzko2EmW8k2IFCG6U1FTF
+	 GfHW+4iJBoa3Ca3oqyYv6Jz1eQZoQC/Q08ItnemUDKCP319m+GThcM8cKVe+cJQdhBId7
+	 WkILCbdcj4vgYWQQd91iEB1AiEFyJkQQKAS3m0PeSHCCKd1TXcPxXNY1D0ohFnploWA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QAv97V8g;
+	arc=none smtp.remote-ip=91.218.175.206
+Received: from mta0.migadu.com (out-206.mta0.migadu.com [91.218.175.206])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4608D606AAF1
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 15:36:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4608D606AAF1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=musYXh/y9YPvWwh9w5V0GXcRJcdGJuMMuP9cBcENcuc=; b=heKkbQscS++8wJQUUBa6j1kmJQ
-	y9MHGMusE904X5ZOr0UEi+CA28Br59nKIre56I2/4IWvaJ9+wuRBoUPARSleGVRVl+n6AHJ+Bv92s
-	LF0xjCiKYj6B6F1stvot3CGbI5B0JFxml9v4bIQAgA1CwwjbbjFRD5WdANNVhYX6VDIPRcGtKE2bE
-	kqV69BzL8MJwrD0kse1/me6JAKaPSZnj/A/VWEmtQ1PO4ROL3z+ydhr3TAFQWIHjw1uAgf/8Ls9zL
-	GMZyEJghIOmsIZZVmNtW9Er4ulyd62mR2w3sKqXqnhIDCCReW0DQ0qIXuxiUNrwDr9VQBJVG/rn14
-	LzNr6QhQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xIpPI-0003rd-1G;
-	Mon, 19 Oct 2026 17:36:12 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xIpPH-000CTw-2u;
-	Mon, 19 Oct 2026 17:36:11 +0200
-Message-ID: <7f44cb1c-c584-43ae-829c-8baa084b09ce@iogearbox.net>
-Date: Mon, 19 Oct 2026 17:36:10 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CCD606C174
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 15:36:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 29CCD606C174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=QAv97V8g
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=XDVY+hJBQ7Ezg2H1SpsrCrnN81f0MMx4M8tEPctpFHU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792424203; v=1; x=1793029003;
+ b=QAv97V8gISE9gLS9YDSGh9BqdBlGkcqlufsQgDuEVuRZbstseQ0/OtUJNNOtmWLybKDBiRd6
+ LOdRf4XOpPqsIQTa35rB6gAX7vuDSQH7ra4JOV5DwH3Iq4gVfFhPuH0U5XyuG3B2f0AnjiP0i/S
+ cDcX6iDXucQeHhz7dn6nPbLY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 503e4b6d01360189;
+	Mon, 19 Oct 2026 15:36:43 +0000
+X-Mizu-Trace-ID: 503e4b6d01360189
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Masashi Honma <masashi.honma@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 0/6] bpf: Add syscall common attrs support for xdp link_create
+Date: Mon, 19 Oct 2026 23:36:22 +0800
+Message-ID: <20261019153628.15912-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,49 +94,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Refuse CO-RE relocations for a
- signed program
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
-References: <20261019144851.4052056-1-memxor@gmail.com>
- <20261019144851.4052056-2-memxor@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-In-Reply-To: <20261019144851.4052056-2-memxor@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28158/Mon Oct 19 08:26:01 2026)
+Content-Transfer-Encoding: 8bit
 
-On 10/19/26 4:48 PM, Kumar Kartikeya Dwivedi wrote:
-> The signature of a program covers its insns as submitted, along with the
-> frozen metadata maps of a signed loader, and bpf_prog_verify_signature()
-> checks it before the verifier does anything else with the program. CO-RE
-> relocations are the one input besides the insns that changes them: the
-> loader hands them in with the program, and bpf_check_core_relo() applies
-> them after the signature check, rewriting the immediate or the offset of
-> every insn a record names with a value the loader chooses, a field
-> offset, a type size or id or an enum value of the kernel BTF, or a type
-> id of the BTF the loader supplies itself. Whoever holds a signed program
-> can so change its constants once the signature has passed, the offsets a
-> signed loader reads its metadata map with for instance, and run a
-> program the signer never saw. The exclusive metadata map of a signed
-> loader does not make up for it: the hash that binds the map to a program
-> is chosen by whoever creates the map, so it can name the relocated
-> program as well.
-> 
-> Refuse a signed load that carries relocations, before the signature is
-> examined, like the other checks on the shape of a signed load. A signed
-> loader has none to lose: the programs it embeds are relocated by the
-> loader itself through bpf_core_apply(), and nothing relocates the loader.
-> The BTF of the program itself can stay: without relocations it steers
-> only the verification, through func_info, line_info and the annotations
-> of global function arguments, and rewrites nothing.
-> 
-> Fixes: 349271568303 ("bpf: Implement signature verification for BPF programs")
-> Cc: KP Singh <kpsingh@kernel.org>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+I'm planning to add syscall common attrs support for LINK_CREATE cmd.
+
+This is the first series for the plan, that adds syscall common attrs
+support for xdp LINK_CREATE.
+
+Thereafter, retire the tracepoint bpf_xdp_link_attach_failed, because
+the underlying driver's error can be back-propagated to user space via
+the syscall common attrs.
+
+Changes:
+v1 -> v2:
+* Add log for invalid prog type in link_create().
+* Reject log_opts for fallback bpf_raw_tracepoint_open() in libbpf.
+* Report log_true_size as 0 before creating concrete link, and report
+  the actual log_true_size when fail to create the concrete link.
+  (Sashiko)
+* Add stub bpf_log() when CONFIG_BPF_SYSCALL is not set. (bots)
+* Check 'extack._msg' before adding 'extack._msg' to log buffer.
+  (Sashiko, bot+bpf-ci)
+* Change __bpf_sys_fd to __sys_bpf_fd in the subject and body of
+  patch 4. (bot+bpf-ci)
+* Move OPTS_VALID(opts, bpf_link_create_opts) to __sys_bpf_fd(). (Sashiko)
+* Move bpf_link_create_log to the LIBBPF_1.9.0 section. (Sashiko)
+* Update patch msg with a concrete case in patch 5. (bot+bpf-ci)
+* Factor out helpers to simplify the tests code. (bot+bpf-ci)
+* v1: https://lore.kernel.org/bpf/20261017142649.51047-1-leon.hwang@linux.dev/
+
+Leon Hwang (6):
+  bpf: Add syscall common attrs support for link_create
+  bpf: Add syscall common attrs support for xdp link_create
+  bpf: Retire tracepoint bpf_xdp_link_attach_failed
+  libbpf: Factor out __sys_bpf_fd helper
+  libbpf: Add bpf_link_create_log API
+  selftests/bpf: Add tests to verify link_create logs
+
+ include/linux/bpf_verifier.h                  |   6 ++
+ include/linux/netdevice.h                     |   3 +-
+ include/trace/events/xdp.h                    |  17 ---
+ kernel/bpf/log.c                              |  19 ++--
+ kernel/bpf/syscall.c                          |  41 +++++--
+ net/core/dev.c                                |   8 +-
+ tools/lib/bpf/bpf.c                           |  69 ++++++++----
+ tools/lib/bpf/bpf.h                           |   5 +
+ tools/lib/bpf/libbpf.map                      |   2 +
+ .../selftests/bpf/prog_tests/xdp_attach.c     |  65 -----------
+ .../selftests/bpf/prog_tests/xdp_link.c       | 101 ++++++++++++++++++
+ .../bpf/progs/test_xdp_attach_fail.c          |  54 ----------
+ 12 files changed, 217 insertions(+), 173 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/progs/test_xdp_attach_fail.c
+
+-- 
+2.55.0
+
