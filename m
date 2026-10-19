@@ -1,78 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792431502;
-	b=JctsVjrlywqPU+KTEPKXu9hBFl1BZyIo+Y1AiShWn3Dv7NdnnsF9Klg+Kd6fn8glq867
-	 XtGUb6q+IrAY/KOE7BpwjNOE5JRYYvp5Hfg0FickD+Xa1oaq56SJaNB8kBBnjPF3u1MJY
-	 BM628LoO91gTdKmLEjouZ0yUd/PpR0xKLQKprIIo+mKqi72qg/vgXblLxyY80UtoL/SEF
-	 gK/ch6hEEwri9l1Kcch0iToJk9AjdcIj/icqKA77bdv0YUnidJyFrhLOnplwzSokWtgJu
-	 0iv0v0xEZuOwlObZKaVPhLMCDybREbF/LLZDAPhc0Gk+KSl8RCgZwNoTmrtglFbV8Ew==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792431502;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=DnMksxBeVgGBLISVAmVNMYiivsdCkOY1OzObG07U/BQ=;
-	b=Quzto20dh0YsK9FlAw2dZGbwC5BOp5+1Tonq4jCW4R9BPb42q/PcJwtImMj24kTQZs4A
-	 yggRbLnYtf1d7XvlqUzFHvEH46/1R0Ge9lcGIS2w2A1j/Qhg4ckrv/G0Z8d3yHzqjB6vq
-	 qYufcpybUxudkf3qMbeLb1S3TVJNFlXdbEFEtRnLvryqWn+kRiM3jDQZEovvGRoJtl5Bo
-	 1nWapYXI+V06VUpypsy1c3nqtixU9wqW8kHankkEA5bqm9wFpTClHyyLIePY2maOrgNWw
-	 uhYsER1yK6QmTccsZTazLh8ihizqqPNVL3tFYTIxeACGEyGuLFufRdSakniWzPY2I2w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lhe+6Z2q;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792431515;
+	b=MRyQ+oZES4okm1xK7A3wHPf90hvbIJkD2GwVDXrb+SnOU0eJLTL0sXvhXHmLr6rx5pBj
+	 zz/fF4+3dsXnCfufBa6qrZ0atWwUoP5MVKW8W+NMk69mMazDp+me3+Zja/6W5ccQPrScZ
+	 Ex+thrcpD6NCoPV8JTC9vbnV2cpVIqTBke3HbRp9ON77++gMZPdqxzNo1m8xyyL/+RA9y
+	 yEMiBup++d5sGf7oUiobY9WRubA7Rdo9vBbuipMdVKQSTmWrsEB1ysBA+axL/I6SLDqyx
+	 c/qAB9Ng2s80y4zNGvpx6ITK94cR6GzhIAMwjjBhH8x7lMXX0QIQqIzDLDXijhDcNWw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792431515;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=OhYDrX64R6g4NIIcUmBdVZ5TPioNZZovMeTZXST8PaY=;
+	b=RMVXkjdpa+Nveh8CJQwMSA/pHMzBQhpvYTaYwPPR4tGR/3+IVZ6RMIqTuEf2QwXmADPC
+	 U0x7AqePacNIvKiP8j/CxddC4QV9+N1ypqQV/YeatKUhTFoQl9UB6QBFfGIgelAZgk1IZ
+	 JdJajUiDOoL9BsvcvIccsaLUpLP770jy8hirF3REFKviwN247zeefD3rJtaw5/a6fjtxl
+	 vooWE3GXT+p/qxCip3EUTk4qufJySfxTsq52n3S7scL4KFCVzZmcfgRGUvHxq4HjgZIzv
+	 GiGKP6yiKS/7gDWvo4fFonc9c7toph3M117U/lRzgmWdULo/yMbLOSNsSZdLLMUb51g==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KLxwrvaA;
+	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3EE606A31D;
-	Mon, 19 Oct 2026 17:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3A6606A332;
+	Mon, 19 Oct 2026 17:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lhe+6Z2q
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792431501;
-	b=ZkBhE66yOM2NGCjQ0+6OnHSDF3lhRpjaBb4ARxBX30NtbVTdUIbi91qgIwzifvTfHcCj
-	 2pRKUB3crIs/lataXtXihOxlqLquZwUgU3jRJ5JaOUveLAJknVjE9xoO3OOmsGXM6IsDD
-	 MhWCjAm+hxZ+I/LOYLREJaBfzlz/6sXrBHQQlkvYORlVr1vT5XzXXNuLCWT737OB0cK03
-	 LZAn8Ugq9wzWTq5T8B/3MLri2uWQZZJcZGYNNLaC/FJ5iKzT2Q6ZsFAZStT4kthazisGy
-	 pK1P0BIVkZ9iew9uRmpfVH+6ucQSPfAuWO6CuEqekULBmWg20SOnPQEUrDpuRjL978g==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792431501;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=DnMksxBeVgGBLISVAmVNMYiivsdCkOY1OzObG07U/BQ=;
-	b=Df1+vpJh0LPkn/kBPBVIs3o27qkcWbqsPO6920CabUobQ71M3nqIXbprcuYFy71VeYWU
-	 QEyomrqcB/K0RJ7nOi9SFbVRp02iC9JnbSlVJbJ3kXSj4E7EgLNqOP9nrsOQMBIydQmke
-	 ULjpizcUnHzuuxqtat4IQ+gfTaFGMBGjIYgeD7WthfajFkyqPZ7Gs3ZBWWQIszNtzG7j2
-	 5CfK1WLRp2CYNxrz5JVL5am4dMaJNq5IUxbD/9gJkLTwW8PHYV4RK2Gub2YcVjPlY6Qow
-	 sT13AIxu09S4KWMo+6/P0O5Z5E7UtbZY+Wyt0yeteR15V+2wuth3FZwLk2K76UinPaw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id F2B961F000C4;
-	Mon, 19 Oct 2026 17:38:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KLxwrvaA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96FBF1F000C6;
+	Mon, 19 Oct 2026 17:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792431501;
-	bh=DnMksxBeVgGBLISVAmVNMYiivsdCkOY1OzObG07U/BQ=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=lhe+6Z2qBF7EhuvKVl0Pq1oFenam5uSDpbvjbrmUoUSHYvJ6FdeArwSVgCs91cE1h
-	 ZySVNNoD5j67mHskjs2tA4q3kTTZRYanYiQgt68gjpGtShlOKeNx46JD30Jfrb7B79
-	 jExNGI3NKkKWLz1AQF2XKEJHxd6E8YrXST4S/OpeWIJVQ4EfTwTLhqYM2P0BDR/Y/V
-	 1pe21A3c3IQ5VeBWrWVkZy8Ng4XVALZGmc1UDCljkNjVxENbnsGYuy6kaFeMp3CIMa
-	 /g6baFC2Uw3Qwe/XWjlqOkNMtg/xn4KoYyR86JpdBwnR70qEJukf1QEVckw7d+VP1d
-	 VsA7MRxQVIOeg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 53641400AB;
-	Mon, 19 Oct 2026 17:38:20 +0000 (UTC)
-From: Nicholas Velten via B4 Relay <devnull+nicholasfvelten.gmail.com@kernel.org>
-Date: Mon, 19 Oct 2026 14:38:20 -0300
-Subject: [PATCH bpf-next v2] bpf: Annotate data races on bpf_lru_node type
+	s=k20260515; t=1792431514;
+	bh=OhYDrX64R6g4NIIcUmBdVZ5TPioNZZovMeTZXST8PaY=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=KLxwrvaA/6JqtvkzyPD62LRueq9U06zH6SLQPLcJlwxWipwfTi4c21FsVPgskv9Vd
+	 FtKWGNSFJMYlON/T0yUFBCakXmsJVbolPfxGMitXwloWJ+hB5N36QTub7/gmQ+tiVG
+	 gHGW+cimBUZwCVuTR/mEousnLGNpTHA1M1FjiP8O2m8N6dyjilhNGr5PChbb+UAI+Q
+	 e2Sewrcz/mcmXqjDPF4ZcoOUUq1S9i9bPUG03gnce6rmpJTQMjnkCQOWVYc954e4q5
+	 cKTO1c67kKsZtmWt7NJ6aZcZTA+Yfe8Yh30XzglmdhB9DZZSJ37b2J+n3+GMJZes/V
+	 YFsW0xUaSRK6Q==
+Subject: Re: [PATCH net-next v8 1/5] net: stmmac: take ownership of saved RX
+ state at poll entry
+From: netdev-bot+sashiko@kernel.org
+To: lorenzo.bianconi@oss.qualcomm.com
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
+ netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ bpf@vger.kernel.org
+Date: Mon, 19 Oct 2026 17:38:33 +0000
+Message-ID: <179243151310.3135.16032115262445521338@kernel.org>
+In-Reply-To: <20261018-stmmac-rx-mb-v8-1-5f58c0b25849@oss.qualcomm.com>
+References: <20261018-stmmac-rx-mb-v8-1-5f58c0b25849@oss.qualcomm.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -82,155 +67,169 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261019-fix-lru-node-type-kcsan-v2-1-c10a410b3565@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAItV1moC/4WOQQ6DIBREr2L+ur8R1Np01Xs0LgA/SqtgQI3Ge
- PeiPUCXk5k3MxsE8oYCPJINPM0mGGej4JcEVCtsQ2jqqIGn/MZSlqE2C3Z+QutqwnEdCD8qCIs
- 5zwqV3gtZSgGRHjzF6Nn8AjlotLSMUP2cMMk3qfEoPrKtCaPz63liZifxd29myDCVZZ7pQmius
- 2fTC9Ndleuh2vf9C54yZjLaAAAA
-X-Change-ID: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com, 
- Nicholas Velten <nicholasfvelten@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792431499; l=4464;
- i=nicholasfvelten@gmail.com; s=20261014; h=from:subject:message-id;
- bh=vlUE37PtQTyOLq5PXbvONu4Xi4bntjAirjuFev9xeZY=;
- b=JZxRDHgecZKvX7el63L+yAF4pfGpixN4R034psx0LcMfaL23UJrM4JhFNTmIoIeIF5DZ/pcRr
- RfDrhWOWENtDM/LNh0/BhEjQCrZIogg3RW0HBM7bSLKxo4vOgBIIyF1
-X-Developer-Key: i=nicholasfvelten@gmail.com; a=ed25519;
- pk=WVTZgm6yXQ+XrhULAObg4lwcHPhhxAXrAY+YY6svXzg=
-X-Endpoint-Received: by B4 Relay for nicholasfvelten@gmail.com/20261014
- with auth_id=1173
-X-Original-From: Nicholas Velten <nicholasfvelten@gmail.com>
-Reply-To: nicholasfvelten@gmail.com
-Content-Transfer-Encoding: 7bit
 
-From: Nicholas Velten <nicholasfvelten@gmail.com>
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-KCSAN reports a data race on bpf_lru_node::type between the LRU list
-rotation and the free path of the common LRU:
+Low priority / nit picks for your consideration:
 
-  BUG: KCSAN: data-race in __bpf_lru_list_rotate / bpf_lru_push_free
+- [Low] The authorship and Signed-off-by chain disagree.
 
-  write to 0xffff88811b758022 of 1 bytes by task 4756 on cpu 1:
-   __bpf_lru_node_move
-   __bpf_lru_list_rotate_active
-   __bpf_lru_list_rotate
-   bpf_lru_list_pop_free_to_local
-   bpf_common_lru_pop_free
-   bpf_lru_pop_free
-   htab_lru_map_update_elem
+Pre-existing issues:
+- [High] At this commit, stmmac_rx() still uses `skb == NULL` to decide
+  that a descriptor starts a new frame.
+- [High] This problem wasn't introduced by this patch, but the commit
+  message relies on it being absent.
 
-  read to 0xffff88811b758022 of 1 bytes by task 4752 on cpu 0:
-   bpf_lru_list_push_free
-   bpf_common_lru_push_free
-   bpf_lru_push_free
-   htab_lru_push_free
-   htab_lru_map_update_elem
+--
 
-  value changed: 0x00 -> 0x01
+net: stmmac: take ownership of saved RX state at poll entry
 
-bpf_lru_list_push_free() reads node->type for a WARN_ON_ONCE() sanity
-check before taking l->lock. __bpf_lru_node_move(), called right after
-under l->lock, does the same check, so drop the unlocked one.
+This commit makes stmmac_rx() and stmmac_rx_zc() take the saved
+partial-frame state at poll entry. A new in_progress flag tracks whether
+a frame is still incomplete, and the state is saved again only in that
+case. It also frees the saved skb in stmmac_reset_rx_queue() and in
+__free_dma_rx_desc_resources().
 
-bpf_common_lru_push_free() re-checks node->type under loc_l->lock after
-the lockless READ_ONCE() at function entry. By then the node has been
-removed from the htab, so only flush and rotate can change its type,
-through __bpf_lru_node_move_in() and __bpf_lru_node_move() under
-l->lock. Mark that re-check with READ_ONCE() and those two writers with
-WRITE_ONCE(), following commit 6df8fb83301d ("bpf_lru_list: Read
-double-checked variable once without lock"). The remaining writers
-operate on a node with a single owner that nobody else reads and are
-left alone.
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
+> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-Tested on bpf-next with CONFIG_KCSAN=y in a 4-vCPU virtme-ng guest,
-using a reproducer that runs 8 threads issuing BPF_MAP_UPDATE_BATCH
-on a 64-entry BPF_MAP_TYPE_LRU_HASH with overlapping keys.
+[Severity: Low]
+This isn't a bug, but the author field and the Signed-off-by chain don't
+match. The commit author is Lorenzo Bianconi. The first Signed-off-by is
+James Hilliard, and there is no Co-developed-by tag.
 
-Reported-by: syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=1ea4f564bf6f1f3d1dc4
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Nicholas Velten <nicholasfvelten@gmail.com>
----
-The reproducer used for testing is a small userspace program (8 threads
-issuing BPF_MAP_UPDATE_BATCH on a 64-entry BPF_MAP_TYPE_LRU_HASH with
-overlapping keys). I can post it, or turn it into a selftest, if that
-would be useful.
+If James wrote the patch, should it carry a "From: James Hilliard
+<james.hilliard1@gmail.com>" line so git credits him as the author? If
+Lorenzo is the author, does James's sign-off need a matching
+Co-developed-by tag?
 
-Not tested: architectures other than x86_64, sparse, and the full
-test_maps / test_progs suites (only test_lru_map was run).
----
-Changes in v2:
-- Drop the Fixes: tag (Alexei)
-- Remove the unlocked WARN_ON_ONCE() in bpf_lru_list_push_free() instead
-  of annotating it; __bpf_lru_node_move() does the same check under
-  l->lock (Alexei)
-- Keep WRITE_ONCE() only in __bpf_lru_node_move_in() and
-  __bpf_lru_node_move(), the only writers that can race with the
-  re-check in bpf_common_lru_push_free() (Alexei)
-- Link to v1: https://patch.msgid.link/20261013-fix-lru-node-type-kcsan-v1-1-0b743f5af2f3@gmail.com
----
- kernel/bpf/bpf_lru_list.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+The other patches in the series carry only Lorenzo's sign-off. That
+suggests this patch was written by James and picked into the series.
 
-diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
-index 5ed7cb4b9..3858886b0 100644
---- a/kernel/bpf/bpf_lru_list.c
-+++ b/kernel/bpf/bpf_lru_list.c
-@@ -71,7 +71,7 @@ static void __bpf_lru_node_move_in(struct bpf_lru_list *l,
- 		return;
- 
- 	bpf_lru_list_count_inc(l, tgt_type);
--	node->type = tgt_type;
-+	WRITE_ONCE(node->type, tgt_type);
- 	bpf_lru_node_clear_ref(node);
- 	/* Reset pending_free only when moving to the free list */
- 	if (tgt_type == BPF_LRU_LIST_T_FREE)
-@@ -94,7 +94,7 @@ static void __bpf_lru_node_move(struct bpf_lru_list *l,
- 	if (node->type != tgt_type) {
- 		bpf_lru_list_count_dec(l, node->type);
- 		bpf_lru_list_count_inc(l, tgt_type);
--		node->type = tgt_type;
-+		WRITE_ONCE(node->type, tgt_type);
- 	}
- 	bpf_lru_node_clear_ref(node);
- 
-@@ -298,9 +298,6 @@ static void bpf_lru_list_push_free(struct bpf_lru_list *l,
- {
- 	unsigned long flags;
- 
--	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(node->type)))
--		return;
--
- 	if (raw_res_spin_lock_irqsave(&l->lock, flags)) {
- 		WRITE_ONCE(node->pending_free, 1);
- 		return;
-@@ -542,7 +539,7 @@ static void bpf_common_lru_push_free(struct bpf_lru *lru,
- 			return;
- 		}
- 
--		if (unlikely(node->type != BPF_LRU_LOCAL_LIST_T_PENDING)) {
-+		if (unlikely(READ_ONCE(node->type) != BPF_LRU_LOCAL_LIST_T_PENDING)) {
- 			raw_res_spin_unlock_irqrestore(&loc_l->lock,
- 						       flags);
- 			goto check_lru_list;
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 53782ab55e125..8fd2acb25fb60 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
----
-base-commit: 763187dbbf83764a57d5811168ef9de7b9a60e2d
-change-id: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
+[ ... ]
 
-Best regards,
---  
-Nicholas Velten <nicholasfvelten@gmail.com>
+> @@ -5958,9 +5970,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>  						      STMMAC_XDP_REDIRECT)) {
+>  					xdp_status |= xdp_res;
+>  					buf->page = NULL;
+> -					skb = NULL;
+> -					count++;
+> -					continue;
+> +					goto next;
+>  				}
+>  			}
+>  		}
 
+[Severity: High]
+This is a pre-existing issue, and this patch doesn't change how it
+behaves. What happens here when the XDP verdict is taken on a descriptor
+that still has rx_not_ls set?
 
+stmmac_rx() uses skb == NULL to mean a new frame is starting. The goto
+next now also clears in_progress, and error stays 0. The remaining
+descriptors of the same hardware frame would then each be handled as the
+first descriptor of a new frame.
+
+The XDP_CONSUMED branch just above has the same shape:
+
+	skb = NULL;
+
+	if (unlikely((status & rx_not_ls)))
+		goto read_again;
+
+So does the napi_build_skb() failure path:
+
+	if (!skb) {
+		page_pool_recycle_direct(rx_q->page_pool,
+					 buf->page);
+		buf->page = NULL;
+		rx_dropped++;
+		count++;
+		goto drain_data;
+	}
+
+In each of these three cases, could the middle and tail descriptors be
+passed to XDP and built into an skb with a stale or zero len? Could
+buf1_len then underflow and produce an skb length near 4G?
+
+An on-link peer can reach this by sending a frame that spans several
+descriptors while an XDP program returns a non-PASS verdict. A
+napi_build_skb() failure on such a frame reaches it too.
+
+Later patches in this series seem to fix it. "net: stmmac: drop
+multi-buffer frames in XDP mode" sets error on non-last descriptors when
+XDP is attached. "net: stmmac: rework stmmac_rx to support XDP rx
+multi-buff" runs XDP and stmmac_build_skb() only on the last descriptor
+and sends build failures to error_free_frag.
+
+[ ... ]
+
+> @@ -8399,6 +8408,9 @@ static void stmmac_reset_rx_queue(struct stmmac_priv *priv, u32 queue)
+>  {
+>  	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
+>  
+> +	dev_kfree_skb_any(rx_q->state.skb);
+> +	rx_q->state.skb = NULL;
+> +	rx_q->state_saved = false;
+>  	rx_q->cur_rx = 0;
+>  	rx_q->dirty_rx = 0;
+>  }
+
+[Severity: High]
+This isn't a bug introduced by this patch, but the commit message says
+that, without this change, the first poll "resumes that stale skb with
+descriptors from the freshly initialized ring". Is the ring actually
+re-initialized on the stmmac_resume() path?
+
+stmmac_resume() does:
+
+	stmmac_reset_queues_param(priv);
+
+	stmmac_free_tx_skbufs(priv);
+	stmmac_clear_descriptors(priv, &priv->dma_conf);
+
+	ret = stmmac_hw_setup(ndev);
+
+None of these calls refills buf_pool or rewrites the descriptor buffer
+addresses. stmmac_clear_rx_descriptors() calls stmmac_init_rx_desc() on
+every entry. On dwmac4 that only sets the owner bits:
+
+static void dwmac4_rd_init_rx_desc(struct dma_desc *p, int disable_rx_ic,
+				   u8 descriptor_mode, int end, int bfsize)
+{
+	dwmac4_set_rx_owner(p, disable_rx_ic);
+}
+
+Suppose stmmac_rx_refill() hit a page_pool allocation failure before
+suspend:
+
+		if (!buf->page) {
+			buf->page = page_pool_alloc_pages(rx_q->page_pool, gfp);
+			if (!buf->page)
+				break;
+		}
+
+Then the entries between dirty_rx and cur_rx still have buf->page ==
+NULL. On resume, cur_rx and dirty_rx are reset to 0 and every descriptor
+goes back to the DMA. When one of those entries completes, can
+stmmac_rx() call page_address(buf->page) and napi_build_skb() on a NULL
+page?
+
+There is a similar problem on dwmac4/xgmac. Descriptors that the hardware
+writes back between napi_disable() in stmmac_suspend() and
+stmmac_stop_all_dma() have RDES0/RDES1 overwritten with status words.
+If those descriptors are given back to the DMA, would it write to a
+bogus buffer address?
+
+The resume sequence is the same at the end of the series.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-stmmac-rx-mb-v8-0-5f58c0b25849%40oss.qualcomm.com
