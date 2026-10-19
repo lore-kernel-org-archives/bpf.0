@@ -1,273 +1,265 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E14148F03C;
-	Mon, 19 Oct 2026 07:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792395333; cv=none; b=juCw2l5vwv++hTQBNIUpTZK5g9C5oNxUXLiwVIAJ5Lfa6cmnOKMGlv69F0hg7XH7zIhEvpbrXssIXjzniaSwXzrBlc8/+hcBuWMFvw/KPrIWh/YPZivrDKrhU4TqT+nJwQkIzK4wmJErJZN8yJ2FRy4kzva9xfCWXN3b0hiUPCs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792395333; c=relaxed/simple;
-	bh=ZA7pU5ompcYtd3VGd+DLN6a6SyE7SjbqoTdoFw9JR0c=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=FYhXX1H2ms0j/pxIC6oNkzpMgqWpP7WwchTG/XgEUZD6Oqp4/jBj5V+joovlWyLQXJtoyzqg4cWK9VwL1xvjxmWoo5cV57DRhu7/yoz1pmAIC0WE6+GRJSAfdPPB5h4oL1xRM34k0tJTZ75c+Wu6Rju2EJuaU2WfDdmw7HF7chQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EpQO1wOM; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2316234402A
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 07:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792395671; cv=pass; b=GPX58/j4GaU5CTj0BUCBn/mrcfCfmGaMg2XS8nIYlPt2UXEUv0jQ/e8LvLuxQESdbepMNfKsOdkq26ei8CsclzfitMEuFCrPvY0YGmsY5Pxjt4EQOoWATD015OPhlXOwSaXTZGE3oBUwq4CrUGhQ0VvBssaXd0ngqjQh8nf1tls=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792395671; c=relaxed/simple;
+	bh=jPqPx4WIvZCwXAxSt7/GckqZUZbeRwYWXgGLl4PYDUQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YyGs+LZCEoLbhJ6MaZ7x/i73+SPT7JkDgUIsZXPPt+LprgTW9Y2HyIC3u9t0FlOPXnsFFtaBW8LESMyPgng0XGYdRKJh/0n8w9UhhUPkLwd1MkbKYdWDACnkNXtaAy75l862w14m749ybqQTORpKeUxnUj7kaORkoW+X8GIcP9I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=stj+Pqak; arc=pass smtp.client-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EpQO1wOM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F6F1F000C4;
-	Mon, 19 Oct 2026 07:35:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792395331;
-	bh=ub6xNDj0gTx7rvONhT+iRVTk+88VnE0Xs8Cn8IZs+b4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EpQO1wOMFyEDqwrG8NZIVQ1Go+KCnpPfAxyCUAfXXBZ/6PqMWQKRY1okOj3UOG9vs
-	 JXjqkFSF0uYWoWIBVLdtHVyUhmr8dkcmN7R5jeDHkd/jhDSL7teYI22I+Jc4e/l5eI
-	 27nbM4p+KXJ7TjgZhUJr1PuUcCuRw8JHOxnhNCuxwJsqZABoHD/jMCWptO+zqoxKBJ
-	 b5Y4g3AC1y6dVngmFp/3vjNhYbAD4sXByLK3urzYuptDAN7+IGC6B9+VfWAQwTfoiX
-	 nTNglmnO9CKDBZ+/gjFubEnt/j4DmeJBMSrw0GXrz9SJ8XjRWBpsaKiWsqSzMV8xWj
-	 LFW3m9tYPzbpA==
-Message-ID: <sashiko-outbox-176751@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [Patch v3 4/4] perf/x86/intel/lbr: Limit branch snapshots to
- valid entries
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
-Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261019070836.2972403-5-dapeng1.mi@linux.intel.com>
-References: <20261019070836.2972403-1-dapeng1.mi@linux.intel.com>
- <20261019070836.2972403-5-dapeng1.mi@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 07:35:30 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="stj+Pqak"
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6767d92cde6so1791771d50.0
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 00:41:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792395669; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NgmIsTDjjE30KlteA7Hw84WfOGJdMGTgeALnUWm5tBxhidR/ChwXNSMEtHBXI7Oik8
+         bojFSPsbbIv5VgSD7uEiDc8n3jlrQ4jmdxsAVqc7K2d1Q5LD2Vyztfek3qtXkhhM/Fs7
+         Xp9V2T89PMh/T5xYBPhmR3OehI5/jwA9UpbgmAel5kKF02MWFmcQW642v4TRjClHPcvi
+         269nvVH4oucSoKy6F+rthLBbpcpDJ/hVO95U412LW/fpuln8VSt/YNDp49PPv6/zy+ec
+         MELtayPLBp9G3s7IxshQxxn+nkh6YDdYdJdJiyJ0RlYH2cC8L2jcuxhU/9nMpcg02mGq
+         wbEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KpPZjaMDJls8EZkE/6oJfht+hbPc5JiwcvTAxpT7o3k=;
+        fh=68XgUMEiNz1cPFdRyhq8eSNGUkRCrVWVM72BKwfZYWg=;
+        b=An0WIlhXKfVCzE+O1sIPKSD1V0oDZFOgsFwrZ6jF9/kEwSc7N5wYL6o2aOeCHlFnOu
+         Gofsnb6nPGxZHf6QGJumWAxviPTTRVGYpcl6Q0urXNFhUngtTR6Ilo2yuYX9qWzQoXxM
+         LDM2yyQGFi5NtY689db6Ad5+MNEPWopYU7GlwttE1EEP8wXWeAmbFKKuvN0fpPujO/TQ
+         j5lE37y4daDnyGXWycLuytYN/kzB0PncXFSeEgPaNTUKPcQRdcphscIi4+NbMm2zr8Y1
+         Bay8He2YSggYLJ9oeO5LYAk4UPQPg+YJvlhKFjfKxZEqCHvXHM/Kghw/nstwRDGYxNmQ
+         hGjQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792395669; x=1793000469; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KpPZjaMDJls8EZkE/6oJfht+hbPc5JiwcvTAxpT7o3k=;
+        b=stj+PqakSpfB9TgMBuG3ew92Dxs8Jpin0cIq86kR4EmmUUYSeCG5u+C5Fscbml1Fp8
+         d84f0CuerA765uEw+KWLF30h9coIaUF4cRdelXJu/N62PpWKPXRMT9QhUIt2NVHDKn0M
+         cBwQLTtfCnIeHUtsUMK9eJBUqfO1PJYPJq/bPK3SJ57/Vq2NfjE6ZYexHudycwJ0NCju
+         lj+No9ujD4yYFc8Don+rCejq0c5rRI7GqncKINnwdbd6+7yQpOameLmiK11c1PwivLaX
+         FyNLIkQpGECKQ9PlAadZZHl9To2efPvwsSCn/zr/9/St5YOk7+RL0m/xfj2Q+RUrkADh
+         4JXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792395669; x=1793000469;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KpPZjaMDJls8EZkE/6oJfht+hbPc5JiwcvTAxpT7o3k=;
+        b=tZ9R9/SBbkugje+S+bSnEJ8VVDvjjSspigr0eWcrtwjsOPsLT5gtf7XgeSQjpFR03D
+         YfObPtBtLE5bIpi/+IzDCDRP4zD0hhzf2euiQxZlKJjbb7kSbgFakkI+rccTGVBpWinr
+         7zCQ8a0HU7ApCQq9hkLAAoNbS+GnF29D+jUmEESXan7M6O6YksUAXXqSy77aGLpQm3hI
+         r08F/0aZv9+n1s/6qtfRdm9xvh3P2qQnIcX55KLPtrCIcQFDU9SbnjAFU2EGJGqKTqLU
+         dHOF+xv/GSkzI8BzIdjLubPxcaXnMlEr8YPl0pmSMW0S3Hf4mDagD1HtJtT8ORyx60p8
+         X0OA==
+X-Forwarded-Encrypted: i=1; AKwUvBzzHGtYlWi9is7YO0fdwrj923yTkrKpqys1Yf6LfgKTajECokgNHciHQDmISx4LdbXaMOs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJTJTLR2ONyGPmRqI4BfVSEQp04b4m5wxFGCTyngHCd04ToHd4/
+	9gr+XBmd4M/4qHWNPeHRGigSlJLp2rNMH0kR9+JEJNhhBjWKp9E9gLQFb16thRO0ndPfsyxJf+e
+	CVRaxDsMerpyi6LEUa67KtmyV8JWzgow=
+X-Gm-Gg: AYBFou0cdA486fpuciLEXXZCLBv5KA70IUSrjhCHc+6sZ6VMQ5QsN2AlvGZEm3YYpFZ
+	Vnqkc9ydfxaLC/TMRuXUcoACFKhNcbzYmUzN91yeVhNIRWJGErS3HZTakcu9Fuc3ivauUCVO5za
+	cY0MlLEtvc5FB0k9126MsY5VIlOPtyTsxKm0uvQ6zFTwoMIz/Q5P/+0t6rz0j/DYDU/eJPDQX+K
+	ZslypqmrXYOL4y+QUNf6CbU5YAczkeucmzdwukPG8Z6hKag5g9VemrxXYCWrD6BYRnKRmrbgROe
+	Bnsi1ogcDem8Z88WFbfk9wTCr9ge1DwH/I5YXkgAzWz4SgZM8YaI5VfoRk3EtsKdvyZNVIycwMT
+	vJLdMKhrJdg==
+X-Received: by 2002:a05:690e:4181:b0:679:938d:a5e1 with SMTP id
+ 956f58d0204a3-679ca9152camr1672832d50.106.1792395668941; Mon, 19 Oct 2026
+ 00:41:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20261019064157.29885-1-laoar.shao@gmail.com> <20261019064157.29885-5-laoar.shao@gmail.com>
+ <sashiko-outbox-176727@kernel.org>
+In-Reply-To: <sashiko-outbox-176727@kernel.org>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Mon, 19 Oct 2026 15:40:28 +0800
+X-Gm-Features: AclHuK87RnG2er9Q0sMuCWVVDHgxTVssGIXLDngoxhqch9KZMv8DKOFsSe8QrYs
+Message-ID: <CALOAHbA9XCM=5AKz=MMCRcx79_E44rBNUZQi_c68tZQ1iYoxhA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 bpf-next 4/5] sched: add BPF-based per-cgroup NUMA
+ balancing mode selection
+To: sashiko-reviews@lists.linux.dev
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, 
+	david@kernel.org, gourry@gourry.net, tj@kernel.org, hannes@cmpxchg.org, 
+	mkoutny@suse.com, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
+	yu.c.chen@intel.com, zhao1.liu@intel.com, tim.c.chen@linux.intel.com, 
+	lizhe.67@bytedance.com, bpf@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] perf/x86/intel/lbr: stale LBR data or -ENOENT in intel_pmu_lbr_rea=
-d() for PEBS
-- [Medium] perf/x86/intel/lbr: unreset lbr_stack.nr in intel_pmu_arch_lbr_r=
-ead_xsave()
-- [Medium] perf/x86: late lbr_nr clamping in init_hw_perf_events() after ar=
-ch LBR init
---
+On Mon, Oct 19, 2026 at 2:58=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Critical] mm: use-after-free on source folio in migrate_misplaced_foli=
+o()
+> --
+>
+> commit 5de3ed8c82d3030544f5f025b8ae47dd8339bfeb
+> Author: Yafang Shao <laoar.shao@gmail.com>
+>
+> sched: add BPF-based per-cgroup NUMA balancing mode selection
+>
+> This commit introduces per-cgroup NUMA balancing mode selection managed v=
+ia
+> the bpf_numab_set_mode() and bpf_numab_get_mode() kfuncs. Hot paths combi=
+ne
+> requests along the task or folio's memcg cgroup hierarchy behind the
+> numab_cgroup_mode_set static key to override the global sysctl setting.
+>
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index 211c29bd2a283..c0692c7b27467 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+>
+> [ ... ]
+>
+> > @@ -2770,7 +2770,7 @@ int migrate_misplaced_folio(struct folio *folio, =
+int node)
+> >       if (nr_succeeded) {
+> >               count_vm_numa_events(NUMA_PAGE_MIGRATE, nr_succeeded);
+> >               count_memcg_events(memcg, NUMA_PAGE_MIGRATE, nr_succeeded=
+);
+> > -             if ((numab_in_tiering_mode())
+> > +             if (folio_numab_in_tiering_mode(folio)
+> >                   && !node_is_toptier(folio_nid(folio))
+> >                   && node_is_toptier(node))
+> >                       mod_lruvec_state(lruvec, PGPROMOTE_SUCCESS, nr_su=
+cceeded);
+>
+> [Severity: Critical]
+> Has the source folio already been uncharged and freed by the time
+> migrate_misplaced_folio() calls folio_numab_in_tiering_mode(folio) here?
+>
+> Before calling migrate_pages(), migrate_misplaced_folio() snapshots the
+> folio's memcg because migration transfers the charge and releases the
+> isolation reference on the source folio:
+>
+> migrate_misplaced_folio()
+>   memcg =3D get_mem_cgroup_from_folio(folio);
+>   migrate_pages()
+>     migrate_pages_batch()
+>       migrate_folios_move()
+>         migrate_folio_move()
+>           move_to_new_folio()
+>             folio_migrate_flags()
+>               mem_cgroup_migrate()
+>                 old->memcg_data =3D 0;
+>           migrate_folio_done()
+>             folio_put(src);
+>
+> When nr_succeeded is non-zero, calling folio_numab_in_tiering_mode(folio)=
+ ->
+> folio_numab_mode(folio) -> folio_memcg(folio) -> folio_objcg(folio) reads
+> folio->memcg_data on the freed source folio:
+>
+> static inline struct obj_cgroup *folio_objcg(const struct folio *folio)
+> {
+>         unsigned long memcg_data =3D folio->memcg_data;
+>
+>         VM_BUG_ON_FOLIO(folio_test_slab(folio), folio);
+>         VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJEXTS, folio);
+>
+>         return (struct obj_cgroup *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+> }
+>
+> If the freed page has not been reallocated yet, folio->memcg_data is 0, s=
+o
+> folio_memcg(folio) returns NULL and folio_numab_mode(folio) falls back to
+> NUMAB_FOLLOW_SYSTEM rather than using the owner cgroup's tiering mode for
+> PGPROMOTE_SUCCESS accounting.
+>
+> If another CPU reallocates the freed page before this check runs (for exa=
+mple
+> as a slab page setting PG_slab and MEMCG_DATA_OBJEXTS, or as a compound t=
+ail
+> page), can folio_objcg(folio) trigger VM_BUG_ON_FOLIO() or dereference a
+> slabobj_ext pointer as a struct obj_cgroup *?
+>
+> Would it make sense to evaluate folio_numab_in_tiering_mode(folio) before
+> migrate_pages(), or derive the mode from the already-pinned memcg pointer=
+?
 
-commit da27a6ac96e6d944e33e171c276d0b044be96def
-Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
+Nice catch. The check has to run before migrate_pages().
 
-perf/x86/intel/lbr: Limit branch snapshots to valid entries
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 4b87d465c5fd..84f224c42ab2 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -2761,6 +2761,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
+node)
+        LIST_HEAD(migratepages);
+        struct mem_cgroup *memcg =3D get_mem_cgroup_from_folio(folio);
+        struct lruvec *lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
++       bool folio_tiering =3D folio_numab_in_tiering_mode(folio);
 
-This patch limits __intel_pmu_snapshot_branch_stack() to copy up to
-cpuc->lbr_stack.nr entries rather than x86_pmu.lbr_nr, and resets
-cpuc->lbr_stack.nr to 0 in intel_pmu_lbr_read() when there are no active
-LBR users or LBR is excluded on the host.
-
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index 0a34d674df590..5dfb9e9156e88 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -2822,7 +2822,7 @@ __intel_pmu_snapshot_branch_stack(struct perf_branc=
-h_entry *entries,
->  	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
-> =20
->  	intel_pmu_lbr_read();
-> -	cnt =3D min_t(unsigned int, cnt, x86_pmu.lbr_nr);
-> +	cnt =3D min_t(unsigned int, cnt, cpuc->lbr_stack.nr);
-> =20
->  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
-nt);
->  	intel_pmu_enable_all(0);
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index 249db12e927ed..cc0300aba7de0 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -1022,14 +1022,19 @@ void intel_pmu_lbr_read(void)
->  {
->  	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
-> =20
-> +	if (!cpuc->lbr_users || vlbr_exclude_host()) {
-> +		/* Reset lbr_stack.nr to prevent stale data leakage. */
-> +		cpuc->lbr_stack.nr =3D 0;
-> +		return;
-> +	}
-> +
->  	/*
->  	 * Don't read when all LBRs users are using adaptive PEBS.
->  	 *
->  	 * This could be smarter and actually check the event,
->  	 * but this simple approach seems to work for now.
->  	 */
-> -	if (!cpuc->lbr_users || vlbr_exclude_host() ||
-> -	    cpuc->lbr_users =3D=3D cpuc->lbr_pebs_users)
-> +	if (cpuc->lbr_users =3D=3D cpuc->lbr_pebs_users)
->  		return;
-
-[Severity: High]
-Does skipping x86_pmu.lbr_read(cpuc) here when cpuc->lbr_users =3D=3D
-cpuc->lbr_pebs_users cause __intel_pmu_snapshot_branch_stack() to return
-0 entries or copy stale cpuc->lbr_entries[] to BPF programs?
-
-The commit message notes that when all active LBR users are PEBS events,
-the LBR stack is already updated from the PEBS records. However, PEBS LBR
-records are only written into cpuc->lbr_entries[] and cpuc->lbr_stack.nr
-during counter overflow PMI draining:
-
-  handle_pmi_common()
-    -> x86_pmu_drain_pebs()
-      -> setup_pebs_adaptive_sample_data() / setup_arch_pebs_sample_data()
-        -> intel_pmu_store_pebs_lbrs()
-
-In contrast, bpf_get_branch_snapshot() invokes
-intel_pmu_snapshot_branch_stack() or intel_pmu_snapshot_arch_branch_stack()
-synchronously from a software or tracing event outside of any PEBS drain.
-Those functions freeze the hardware LBRs and call
-__intel_pmu_snapshot_branch_stack() -> intel_pmu_lbr_read() to read the
-current hardware LBR registers.
-
-When all active LBR events on the CPU are adaptive PEBS events, returning
-early in intel_pmu_lbr_read() without reading the hardware LBRs or
-updating cpuc->lbr_stack.nr leads to several issues:
-
-1. If no PEBS PMI has occurred since the last intel_pmu_lbr_reset(),
-   cpuc->lbr_stack.nr is still 0, so __intel_pmu_snapshot_branch_stack()
-   copies 0 entries and bpf_get_branch_snapshot() fails with -ENOENT even
-   though the LBR hardware has been actively recording branches.
-
-2. If an earlier PEBS PMI occurred, cpuc->lbr_entries[] and
-   cpuc->lbr_stack.nr hold the historical branch stack from that old PEBS
-   overflow sample rather than the live branches frozen at the snapshot
-   point.
-
-3. Stale or cross-task entries can also remain in cpuc->lbr_entries[] with
-   cpuc->lbr_stack.nr > 0 across transitions that do not call
-   intel_pmu_lbr_reset():
-
-   arch/x86/events/intel/lbr.c:intel_pmu_lbr_add() {
-       if (x86_pmu.intel_cap.pebs_baseline && event->attr.precise_ip > 0)
-           cpuc->lbr_pebs_users++;
-       perf_sched_cb_inc(event->pmu);
-       if (!cpuc->lbr_users++ && !event->total_time_running)
-           intel_pmu_lbr_reset();
-   }
-
-   Scheduling in a previously active PEBS LBR event where
-   event->total_time_running > 0 (or removing a non-PEBS LBR event via
-   intel_pmu_lbr_del() while a PEBS LBR event remains active) does not
-   reset cpuc->lbr_stack.nr. Similarly, on a context switch with
-   PERF_SAMPLE_BRANCH_CALL_STACK:
-
-   arch/x86/events/intel/lbr.c:__intel_pmu_lbr_restore() {
-       ...
-       x86_pmu.lbr_restore(ctx);
-
-       task_context_opt(ctx)->lbr_stack_state =3D LBR_NONE;
-   }
-
-   __intel_pmu_lbr_restore() updates the hardware LBR MSRs for the
-   incoming task without resetting cpuc->lbr_stack.nr, leaving the
-   previous task's cached cpuc->lbr_entries[] to be copied by
-   __intel_pmu_snapshot_branch_stack().
-
-> =20
->  	x86_pmu.lbr_read(cpuc);
-
-[Severity: Medium]
-Can x86_pmu.lbr_read(cpuc) leave a stale non-zero cpuc->lbr_stack.nr when
-intel_pmu_arch_lbr_read_xsave() sees the hardware Arch LBR state in its
-XSAVE INIT configuration?
-
-In the preceding patch ("perf/x86/intel/lbr: Reset the cached LBR stack in
-intel_pmu_lbr_reset()"), intel_pmu_arch_lbr_read_xsave() was updated to:
-
-arch/x86/events/intel/lbr.c:intel_pmu_arch_lbr_read_xsave() {
-	...
-	xsaves(&xsave->xsave, XFEATURE_MASK_LBR);
-
-	if (xsave->header.xfeatures & XFEATURE_MASK_LBR)
-		intel_pmu_store_lbr(cpuc, xsave->lbr.entries);
-}
-
-When 0 branches have been recorded in hardware, the Arch LBR state is in
-its XSAVE INIT configuration, so xsaves() clears XFEATURE_MASK_LBR in
-xsave->header.xfeatures. Unlike the MSR fallback path
-intel_pmu_store_lbr(cpuc, NULL) which reads 0 from MSR_ARCH_LBR_FROM_0 and
-sets cpuc->lbr_stack.nr =3D 0, skipping intel_pmu_store_lbr() here without
-an else branch leaves cpuc->lbr_stack.nr at its previous value.
-
-If cpuc->lbr_stack.nr was non-zero from an earlier read and the hardware
-Arch LBR state subsequently returns to the INIT state without
-intel_pmu_lbr_reset() being called (for example, when
-__intel_pmu_lbr_restore() restores a task's call-stack LBR context via
-intel_pmu_arch_lbr_xrstors() whose saved xfeatures has XFEATURE_MASK_LBR
-clear, when RET instructions pop all prior CALL entries in call-stack
-mode, when a CPU wakes from a deep C-state that resets Arch LBR registers,
-or when an LBR event with event->total_time_running > 0 is scheduled back
-in), __intel_pmu_snapshot_branch_stack() will see the old
-cpuc->lbr_stack.nr and copy stale cpuc->lbr_entries[] into entries.
-
-Should intel_pmu_arch_lbr_read_xsave() set cpuc->lbr_stack.nr =3D 0 when
-!(xsave->header.xfeatures & XFEATURE_MASK_LBR)?
+        list_add(&folio->lru, &migratepages);
+        nr_remaining =3D migrate_pages(&migratepages, alloc_misplaced_dst_f=
+olio,
+@@ -2771,7 +2772,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
+node)
+        if (nr_succeeded) {
+                count_vm_numa_events(NUMA_PAGE_MIGRATE, nr_succeeded);
+                count_memcg_events(memcg, NUMA_PAGE_MIGRATE, nr_succeeded);
+-               if (folio_numab_in_tiering_mode(folio)
++               if (folio_tiering
+                    && !node_is_toptier(folio_nid(folio))
+                    && node_is_toptier(node))
+                        mod_lruvec_state(lruvec, PGPROMOTE_SUCCESS,
+nr_succeeded);
 
 
-[Severity: Medium]
-Also in the earlier patch in this series ("perf/x86: Clamp x86_pmu.lbr_nr
-to MAX_LBR_ENTRIES"), init_hw_perf_events() clamps x86_pmu.lbr_nr after
-vendor PMU initialization has already run:
+BTW, the folio_nid(folio) next to it has the same problem: after a
+successful migration the source folio is uncharged and its isolation
+reference dropped, so it may already be back in the allocator, and
+a reallocated page's flags give a wrong nid. That one predates this
+series (it goes back to e39bb6be9f2b), so I will fix it separately:
 
-arch/x86/events/core.c:init_hw_perf_events() {
-	...
-	err =3D x86_pmu.init();
-	...
-	x86_pmu.lbr_nr =3D min(x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
-}
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 15b45832bcfa..685c06a472ea 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -2760,6 +2760,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
+node)
+        LIST_HEAD(migratepages);
+        struct mem_cgroup *memcg =3D get_mem_cgroup_from_folio(folio);
+        struct lruvec *lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
++       int src_nid =3D folio_nid(folio);
 
-During x86_pmu.init() -> intel_pmu_init() -> intel_pmu_arch_lbr_init(),
-the Arch LBR depth is selected from the highest bit in
-eax.split.lbr_depth_mask (up to 64), tested against MSR_ARCH_LBR_DEPTH,
-and validated against xfeature_size(XFEATURE_LBR):
+        list_add(&folio->lru, &migratepages);
+        nr_remaining =3D migrate_pages(&migratepages, alloc_misplaced_dst_f=
+olio,
+@@ -2771,7 +2772,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
+node)
+                count_vm_numa_events(NUMA_PAGE_MIGRATE, nr_succeeded);
+                count_memcg_events(memcg, NUMA_PAGE_MIGRATE, nr_succeeded);
+                if ((sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIE=
+RING)
+-                   && !node_is_toptier(folio_nid(folio))
++                   && !node_is_toptier(src_node))
+                    && node_is_toptier(node))
+                        mod_lruvec_state(lruvec, PGPROMOTE_SUCCESS,
+nr_succeeded);
+        }
 
-arch/x86/events/intel/lbr.c:intel_pmu_arch_lbr_init() {
-	...
-	lbr_nr =3D fls(eax.split.lbr_depth_mask) * 8;
-	if (!lbr_nr)
-		goto clear_arch_lbr;
-
-	/* Apply the max depth of Arch LBR */
-	if (wrmsrq_safe(MSR_ARCH_LBR_DEPTH, lbr_nr))
-		goto clear_arch_lbr;
-
-	x86_pmu.lbr_nr =3D lbr_nr;
-
-	if (has_arch_lbr_xsave() &&
-	    xfeature_size(XFEATURE_LBR) !=3D get_lbr_state_size()) {
-		WARN_ON(1);
-		goto clear_arch_lbr;
-	}
-}
-
-If hardware enumerates a maximum depth greater than MAX_LBR_ENTRIES (32)
-in eax.split.lbr_depth_mask, clamping x86_pmu.lbr_nr to 32 afterwards in
-init_hw_perf_events() means intel_pmu_arch_lbr_reset() will later execute
-an unchecked wrmsrq(MSR_ARCH_LBR_DEPTH, x86_pmu.lbr_nr) with depth 32:
-
-arch/x86/events/intel/lbr.c:intel_pmu_arch_lbr_reset() {
-	/* Write to ARCH_LBR_DEPTH MSR, all LBR entries are reset to 0 */
-	wrmsrq(MSR_ARCH_LBR_DEPTH, x86_pmu.lbr_nr);
-}
-
-If depth 32 (bit 3 in eax.split.lbr_depth_mask) is not supported by the
-processor or VM, won't that wrmsrq(MSR_ARCH_LBR_DEPTH, 32) trigger an
-unhandled #GP fault during CPU startup or LBR reset, in addition to
-get_lbr_state_size() and the boot logs having used the unclamped
-x86_pmu.lbr_nr?
-
-Should intel_pmu_arch_lbr_init() mask or bound the selected depth to
-MAX_LBR_ENTRIES before validating MSR_ARCH_LBR_DEPTH and
-get_lbr_state_size()?
+Pls correct me if I'm wrong.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019070836.2972=
-403-1-dapeng1.mi@linux.intel.com?part=3D4
+Regards
+Yafang
