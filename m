@@ -1,49 +1,49 @@
 Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740634CF490;
-	Mon, 19 Oct 2026 02:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95F82D3225;
+	Mon, 19 Oct 2026 02:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792375343; cv=none; b=dloPlLuaGi4CyajajO2MXZCW7cqp4i0RGMwcbDjEdBSmQmM7eW7a71wrKM2rfyy2Wv0zYbJuA6M+XjI4TwaksZRbJisYx60wqwpgv5Rw7R9Gvg5zB5BnZUKt2ByWUo1FG7zJ73C3tboYz8hwRPue3B+dhOQLathaW0nC09k8yY8=
+	t=1792375541; cv=none; b=L4CJIRQX41gIqjIELnXzqWE9srr3KjhPyXg6CfpvBXvNM/TrH7688qO6sy65fEYTmycezvVZ2Bv9Nw2Wwe3q4poyNhSYYJuNt510aMOOJAleTVNGG/OQQTO+QN4aFgNMd9battnLm1SdUa+XflaiLsVRHRBGo1dQDczIOLeNEBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792375343; c=relaxed/simple;
-	bh=CrBEXDkDCcDmwYhULFFB5lb91VniCalfTSpXaxGMiic=;
+	s=arc-20240116; t=1792375541; c=relaxed/simple;
+	bh=lwinPgx0CZ5wkbiMfYEdcgDi7tlb+oggJPtWf5y7XTo=;
 	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CYLjFPpBW+XJBiSReFaRMhQYhfwxkvMTW5NyQ88wHJQ4ct26cvxotv3uEXW/YQno2NV3T5fdQ4jAprpabIbc7pk9OcTnTmDchmN0115xZDoYgT/dBxIcthEM0PAD0mUbN37nQi1wOBBofGchf246sZhSDZ8yOVY10gCp3IYN1EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=YRJBelM/; arc=none smtp.client-ip=67.231.148.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=Quh9fKfvVnwrFrnSoKaZKWKENqzPtNbfa87UwtEgUYdWm6ohcB2NXCur8PLTRpGnR9eH99UdnWwBn3jF2ZPPgJAonHuufv2OQll7LiAiQnPiF5otWBXh3LUQ4QPXq0bO/Bik7WPW59ueHvUXhgdWf1QK28zsdRAVfF8crGdUZM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=WIIjeBbT; arc=none smtp.client-ip=67.231.148.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="YRJBelM/"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="WIIjeBbT"
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69J1ISu83916939;
-	Sun, 18 Oct 2026 19:01:44 -0700
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69J1ISuU3916939;
+	Sun, 18 Oct 2026 19:05:11 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=h
-	9WhfbnZcg2XfwJLiKDkusGE7adgYss24aV3D+wlPVs=; b=YRJBelM/QUYLZqrbr
-	GMNScRT+kYizNuvQQpX9fiJd1ErqcsiTQTa4n6aOGR61RS0dAQVz/weoqgjIibeF
-	fn+zbgXWtPFQR7JHtgYlojH/hS88PbA7rEQ+n0i2MXAAoKSdnhk+U7+DrfGXUhLp
-	Nlwjipywy1/bzdxT5zLtpPHtX0Y1Od1vlGXB7FXEVqS2CvvI2NKK22IdxqOwizkL
-	+pCvoU5sQ/+vlLevsHdyrNwmnzEo4TA16m/M3jAylOqGFc9qtb5P8g2BSd/UyhDT
-	3h3IBBWqKdZwQwN875c0ipY1r6XCGDa6c3P+eApm9AN4EZ/7ll1e6nJCBWeV37J1
-	nd/SA==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4hc6cj3suc-1
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=I
+	NOT/SaBinoe041hZslNrW+vQOeY5Fukiv1QSBycCuI=; b=WIIjeBbTH4Qn/w4wj
+	czFbUT/qY4zGv1nv4QT9miR0WPpaepIOoVk819DY4W1kxu3V7na27sP7JKuJFgIv
+	O36SwLXa16b1e//ZAMq7lO+fd5+zyFTZzaOoiTFDcrDSS+4BKGp5UKkE5fmfMb8/
+	7bGDQ1A+pNf02DRrHuz9bfNUDWcjaUaqqp7dSSX6wQn7Ce0zZEvQ/4RWDaS4+htU
+	i0iJtwlznPcB8AjMMVdfzxXRHDvu73O+CsArx30KdupmASC06S/AzgUjkQMUmWie
+	E6XhLbkSVAq9uJ+0KQyXGZeQnzzPKWAPOy3XGjs1JAFteKKNEGSGDJWE8gLpv7vV
+	CAZsA==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4hc6cj3t3r-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 18 Oct 2026 19:01:44 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+	Sun, 18 Oct 2026 19:05:11 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Sun, 18 Oct 2026 19:01:43 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Sun, 18 Oct 2026 19:01:43 -0700
+ 15.2.1544.25; Sun, 18 Oct 2026 19:05:10 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Sun, 18 Oct 2026 19:05:10 -0700
 Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with ESMTP id 30C043F70B8;
-	Sun, 18 Oct 2026 19:01:37 -0700 (PDT)
-Date: Mon, 19 Oct 2026 07:31:37 +0530
+	by maili.marvell.com (Postfix) with ESMTP id 64A7D3F7067;
+	Sun, 18 Oct 2026 19:05:06 -0700 (PDT)
+Date: Mon, 19 Oct 2026 07:35:05 +0530
 From: Ratheesh Kannoth <rkannoth@marvell.com>
 To: <netdev-bot+sashiko@kernel.org>
 CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -52,11 +52,11 @@ CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <hawk@kernel.org>, <john.fastabend@gmail.com>, <kuba@kernel.org>,
         <pabeni@redhat.com>, <sdf@fomichev.me>, <sgoutham@marvell.com>,
         <horms@kernel.org>
-Subject: Re: [PATCH v20 net-next 2/2] octeontx2: add mqprio bandwidth offload
- for NIX TX schedulers
-Message-ID: <atV491xfWzf9YqV_@rkannoth-OptiPlex-7090>
-References: <20261014023431.1775238-3-rkannoth@marvell.com>
- <179229176763.3135.4109423332542874325@kernel.org>
+Subject: Re: [PATCH v20 net-next 1/2] octeontx2: use atomic bitops for PF/VF
+ and rep flags
+Message-ID: <atV60YxlUUmKoOD7@rkannoth-OptiPlex-7090>
+References: <20261014023431.1775238-2-rkannoth@marvell.com>
+ <179229176614.3135.15223480028363952634@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,35 +66,35 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <179229176763.3135.4109423332542874325@kernel.org>
-X-Proofpoint-ORIG-GUID: DiDLC41SboqihpT9M6sc8GEcUlZkR3Gf
-X-Authority-Analysis: v=2.4 cv=L7KI0OT8 c=1 sm=1 tr=0 ts=6ad57a08 cx=c_pps
- a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+In-Reply-To: <179229176614.3135.15223480028363952634@kernel.org>
+X-Proofpoint-ORIG-GUID: yOgbeG6t8Ef6b9oNz5lrWVVinyW8myd-
+X-Authority-Analysis: v=2.4 cv=L7KI0OT8 c=1 sm=1 tr=0 ts=6ad57ad7 cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
  a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
  a=l0iWHRpgs5sLHlkKQ1IR:22 a=EAYMVhzMl8SCOHhVQcBL:22 a=9R54UkLUAAAA:8
- a=M5GUcnROAAAA:8 a=VwQbUJbxAAAA:8 a=c8XjreaX63J_zlD7CjUA:9 a=3ZKOabzyN94A:10
+ a=M5GUcnROAAAA:8 a=VwQbUJbxAAAA:8 a=tH0sOK6vZEEzpobvoDgA:9 a=3ZKOabzyN94A:10
  a=QEXdDO2ut3YA:10 a=YTcpBFlVQWkNscrzJ_Dz:22 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE5MDAwNyBTYWx0ZWRfX1wN4V3DUWSHo
- CIroJ9b1zBcZbMXmN5NDWoHkEqvch0GJrMyyPaHrQAREVSIxgFwJfNny9Cej4G0Hi1ykaBllJ2W
- lfU/DUF3SPe0aeqkfMJP2zvbbkQvE9qamzjliCHmBSuy1yj5uDZp3vDDrLOc+kiehHEDO4oV/HR
- XJ4HHj8rp4cPr9C///xA5Oz0qWKXMtrk9ok49Sz95LPkIGfh67ZwTBKF+EX1uoNQO84HA2h8PqD
- RGHWzycra22Eh1FkC12z2AD7EhYoCC0xTQcCLB8gXzRPq4BtG2rwUPaeZKWEaTV/GV1l+LLniI2
- aa/YvnzcfTf1gUa00pqUUfPUc7h+HoekiQ9O5K+KDddYhcz5IJfvDWvQySckU/mkDsRHQ78cBCn
- X+lih5cDFrA7sn5ttSZ8BLYrtWqu1x6969QQvYTdVzjX+WMcFABbkCX6RU0Y/8hh0avVg2zV10d
- sLqEptKISBOp1TP784g==
-X-Proofpoint-GUID: DiDLC41SboqihpT9M6sc8GEcUlZkR3Gf
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE5MDAwNyBTYWx0ZWRfX6MVA7hZYsOlw
- aRPxdJIuOKyg+CLKSswdEpIOTRtfy1jwBmaLqX+fMllPR3r1Fu8CdLygRX7EwY1Egz6ckKwIvf6
- R5bEa1WeycOLSqD/rWXIcDsaIpSi9NA=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE5MDAwNyBTYWx0ZWRfX26JiLCpNVWJM
+ RxswE7h+kdtK4Ih37m0+Q13Uw44SmqGWfuhtRtJlZ1o5CZQRk1nhYjFKuvWC0FavUyu7mbHI5AM
+ puGUl502OGvRMzNGanA1fSKdzcGb75zpPU0Leg6zvpV8k+lMY43DZVsOyM1aE2RmP93ZhTr1Ls3
+ b7ekCPslhglL3LCQ85R5WFxk4FZNTE1zuaiYaJDs5T6Dk5HdSxrgG0tezrcEpKFAwjrtfHgtHXE
+ xiHcaql6GxvnpPpWH69D/ca9QAIv/iI5d/sNi1/k7XVvDaIouMtkaIXne37BU6xFXQZtxcuMgSM
+ 1Nx2l9jm21QSysOTU1AJ/qis2FhXCNbWiqADVCRxS74/r/mdiBIX1jh+EQmdkMIWZpmj/TohSNa
+ hvhUFHPa6Ehgi3RzjCFDm/zY2HP56//C2OumBQyr406VLmm3LLMS1jfjEo2GpYM9UENk6iCuEkJ
+ rKFmnFojxsHGKN3XUOA==
+X-Proofpoint-GUID: yOgbeG6t8Ef6b9oNz5lrWVVinyW8myd-
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE5MDAwNyBTYWx0ZWRfX3tKH7b3p2Bxb
+ WgzRzh2NmscBLM01kZ9ZBQn52I6hP8NrYyAswa8rBtnAkMnQg804J46C8ImNmHZPQ4QeVJAUUX3
+ lTZfHv4U0PLlv4mei/5eH5SDktCwJPM=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-10-19_01,2026-10-14_01,2025-10-01_01
 
-On 2026-10-18 at 08:19:27, netdev-bot+sashiko@kernel.org (netdev-bot+sashiko@kernel.org) wrote:
-> Thank you for your contribution! Sashiko AI review found 10 potential
+On 2026-10-18 at 08:19:26, netdev-bot+sashiko@kernel.org (netdev-bot+sashiko@kernel.org) wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential
 > issue(s) to consider.
 >
-> Critical: 0 · High: 0 · Medium: 7 (1) · Low: 3
+> Critical: 0 (1) · High: 1 (3) · Medium: 1 (5) · Low: 0
 >
 > If you believe none of the issues are legitimate, please reply to each
 > issue of Medium severity or higher and explain why the AI is wrong.
@@ -102,544 +102,484 @@ On 2026-10-18 at 08:19:27, netdev-bot+sashiko@kernel.org (netdev-bot+sashiko@ker
 > know by including "pw-bot: cr" as a separate line at the end of your reply
 > (one such reply per series is enough).
 >
-> - [Medium] When hw-tc-offload is off, otx2_teardown_tc_mqprio() can
->   commit a replace that the qdisc core rejected.
-This needs the AF mailbox write in otx2_nix_tm_clear_queue_shaper() to fail, so it is very rare.
-The failure is not silent: otx2_mqprio_down() logs a netdev_warn() with the error code, and
-otx2_teardown_tc_mqprio() returns the error with an extack message and a netdev_err().
-Software state is always released, as the core cannot veto qdisc teardown.
-Any stale shaper is dropped when the TX schedulers are reallocated on the next stop/open.
+> - [High] otx2_sync_flags_from_rep() (otx2_common.h:625-634) updates
+>   priv->flags with a non-atomic read-modify-write: `new =…
+This is not a regression from this patch. The race already existed, and the patch narrows it.
 
-> - [Medium] A failed shaper clear during mqprio delete leaves the hardware
->   rate-limiting with no qdisc behind it.
+> - [Medium] The commit message presents this patch as a cleanup that
+>   switches flag updates to atomic bitops.
+the fix to the representor path is a side effect of this patch, not its purpose
 
-This needs hw-tc-offload turned off and an mqprio replace that the qdisc core then rejects
-. That combination is rare, and no valid config is affected. The driver logs
-the failed teardown or rollback with netdev_err()/extack, so the user knows the offload state may
-not match the qdisc. The next qdisc delete or replace re-syncs the hardware state.
-
-> - [Medium] otx2_mqprio_restore_old() returns early on errors, and neither
->   caller repairs or quiesces the device afterwards.
-
-Rollback only reaches these paths if an AF mailbox call or a small kcalloc fails while
-restoring the old config. That is an unlikely double-fault, since the failed replace has
-already been rejected. In both cases otx2_mqprio_restore_old() logs a netdev_err() saying
-the hardware limits may not match the qdisc, so the user is told. The next stop/open
-rebuilds the TX scheduler, so I don't plan extra recovery logic for this rare case.
-
-> - [Medium] If the restart inside a rollback fails, the committed offload
->   state is lost for good.
-
-This needs a failed ndo_open() during rollback of an already failed replace, which is a rare
-double failure (e.g. a mailbox error or an allocation failure). In that case
-otx2_mqprio_restore_old() logs "mqprio: rollback netdev restart failed: %d; qdisc rates may not
-be enforced", and the open failure itself is reported to the user. The interface is left down,
-so no traffic runs unshaped.
-
-> - [Medium] The new err_free_hw unwind in otx2_open() leaks
->   pf->refill_wrk.
-
-This path is only taken on a mailbox failure while restoring mqprio shapers during open, which is
-rare, and the failure is reported with netdev_err(). refill_wrk is allocated with devm_kcalloc(),
-so it is not lost. It stays on devres and is freed on driver unload, and the next successful
-open or config allocates a fresh array. The older error labels behave the same way, so this
-patch adds no new leak class.
-
-> - [Medium] otx2_mqprio_restart_netdev() hand-rolls a close/open:
->   clear_bit(__LINK_STATE_START), then ops->ndo_stop()/ndo_open().
-
-This is pre-existing: otx2_change_mtu(), otx2_set_channels() and otx2_xdp_setup() already use
-the same stop/open pattern without netpoll exclusion. It is also rare, as it needs netconsole
-active and a poll racing with an mqprio bounce. This patch adds no new mechanism, only one more
-caller. Any netpoll fix belongs in a common helper for all of these paths, in a separate patch.
-
-> - [Medium] In mqprio mode, the scheduler topology for the shared TL4 is
->   never programmed.
-
-The TL4 is a shared resource. The HTB teardown path does not clear NIX_AF_TL4X_TOPOLOGY or reset
-it to defaults, so a reused TL4 can already carry stale values today. This is not specific to
-mqprio. With no explicit programming, the TL4 keeps its default topology, and the MDQs under
-TL4[0] share the same PRIO 0 and DWRR arbitration. Hence the netdev_warn_once() in the patch.
-
-> - [Low] After a failed replace, the netdev TC layout is restored only
->   later, from a work item, so there is a window with num_tc == 0.
-> - [Low] The new comment in otx2_config_sched_shaping() (qos.c) says 65536
->   is 'the kernel-side default burst when HTB does not supply an explicit…
-> - [Low] Two offload restrictions are missing from the commit message's
->   list of rejections.
 >
 > Pre-existing issues:
-> - [Medium] This problem wasn't introduced by this patch, but
->   otx2_reset_task() checks netif_running() before rtnl_lock() and then…
+> - [Critical] rvu_rep_get_stats64() calls
+>   schedule_delayed_work(&rep->stats_wrk, 100ms) whenever…
+> - [High] rvu_rep_setup_tc_cb() ignores the return value of
+>   rvu_rep_mcam_flow_init() and then publishes rep->flow_cfg as…
+> - [High] rvu_rep_destroy() reads rep->flow_cfg after freeing the memory
+>   that holds rep.
+> - [High] rvu_rep_mcam_flow_init() builds and sends AF mailbox messages on
+>   priv->mbox (otx2_mbox_alloc_msg_npc_mcam_alloc_entry() /…
+> - [Medium] The new comment on OTX2_REP_SYNC_FLAGS_MASK says only
+>   MCAM_ENTRIES_ALLOC, NTUPLE_SUPPORT, TC_FLOWER_SUPPORT and…
+> - [Medium] In otx2_tc_del_flow(), deleting any marked flower rule clears
+>   OTX2_FLAG_TC_MARK_ENABLED even if other marked rules are still…
+> - [Medium] rvu_rep_mcam_flow_init() zero-allocates rep->flow_cfg with
+>   kzalloc_objs() and never sets mark_flows to 1.
+> - [Medium] In otx2_config_hwtstamp_set() (otx2_pf.c), a direct switch
+>   from HWTSTAMP_TX_ONESTEP_SYNC to HWTSTAMP_TX_ON leaves…
+> - [Medium] The representor flow_cfg lifecycle leaks memory in two ways.
 >
 > --
 >
-> octeontx2: add mqprio bandwidth offload for NIX TX schedulers
+> octeontx2: use atomic bitops for PF/VF and rep flags
 >
-> This adds TC_SETUP_QDISC_MQPRIO offload with the bw_rlimit shaper on
-> octeontx2 PF and VF netdevs. It programs per-queue MDQ CIR/PIR through the
-> AF mailbox and allocates one SMQ per non-QoS queue under TL4[0]. Every
-> mqprio add, replace and delete bounces the netdev through ndo_stop() and
-> ndo_open(). Rates are cached in software and staged in mq_offload_snap
-> snapshots that are committed on TC_ROOT_GRAFT or on teardown of the
-> replaced qdisc.
+> This converts the otx2_nic and rep_dev flags from u64 masks to unsigned
+> long bitmaps updated with set_bit()/clear_bit()/test_bit(). It also adds
+> otx2_sync_flags_from_rep(), which copies a masked set of representor-owned
+> bits onto the shared PF context. The representor VF-initialized flag moves
+> to OTX2_FLAG_REP_VF_INITIALIZED (bit 21).
 >
-> > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> > index 836601fc10d8e..c95177602bf95 100644
-> > --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
->
-> [ ... ]
->
-> > @@ -651,7 +784,11 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lvl, int prio, bool txschq_for
-> >  						(u64)hw->smq_link_type);
-> >  		req->num_regs++;
-> >  		/* MDQ config */
-> > -		parent = schq_list[NIX_TXSCH_LVL_TL4][prio];
-> > +		if (pfvf->mqprio.rate_limit)
-> > +			parent = schq_list[NIX_TXSCH_LVL_TL4][0];
-> > +		else
-> > +			parent = schq_list[NIX_TXSCH_LVL_TL4][prio];
-> > +
-> >  		req->reg[1] = NIX_AF_MDQX_PARENT(schq);
-> >  		req->regval[1] = parent << 16;
-> >  		req->num_regs++;
->
-> [ ... ]
->
-> > @@ -777,6 +914,9 @@ int otx2_txsch_alloc(struct otx2_nic *pfvf)
-> >  		req->schq[NIX_TXSCH_LVL_TL4] = chan_cnt;
-> >  	}
+> > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> > index 3c7275d545bba..0dc4c44e521d9 100644
+> > --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> > @@ -482,6 +482,41 @@ struct pf_irq_data {
+> >  	int mdevs;
+> >  };
 > >
-> > +	if (pfvf->mqprio.rate_limit)
-> > +		req->schq[NIX_TXSCH_LVL_SMQ] = pfvf->hw.non_qos_queues;
+> > +enum otx2_flag_bits {
+> > +	OTX2_FLAG_RX_TSTAMP_ENABLED,
+>
+> [ ... ]
+>
+> > +	OTX2_FLAG_TC_MARK_ENABLED,
+> > +	OTX2_FLAG_REP_MODE_ENABLED,
+> > +	OTX2_FLAG_PORT_UP,
+> > +	OTX2_FLAG_IPSEC_OFFLOAD_ENABLED,
+> > +	OTX2_FLAG_REP_VF_INITIALIZED,
+> > +	OTX2_FLAG_MAX,
+> > +};
 > > +
-> >  	rc = otx2_sync_mbox_msg(&pfvf->mbox);
-> >  	if (rc)
-> >  		return rc;
+> > +/* Representor-owned flags copied onto the PF mailbox context in
+> > + * rvu_rep_setup_tc_cb().  All other bits are owned by the PF/VF netdev.
+> > + */
+> > +#define OTX2_REP_SYNC_FLAGS_MASK				\
+> > +	(BIT(OTX2_FLAG_MCAM_ENTRIES_ALLOC) |			\
+> > +	 BIT(OTX2_FLAG_NTUPLE_SUPPORT) |			\
+> > +	 BIT(OTX2_FLAG_TC_FLOWER_SUPPORT) |			\
+> > +	 BIT(OTX2_FLAG_REP_VF_INITIALIZED))
 >
 > [Severity: Medium]
-> With rate_limit set, this requests non_qos_queues SMQs but still only one
-> TL4. otx2_txschq_config() then points every MDQ's NIX_AF_MDQX_PARENT at
-> schq_list[NIX_TXSCH_LVL_TL4][0]. The only thing it writes to
-> NIX_AF_MDQX_SCHEDULE is the DWRR quantum, so every MDQ gets PRIO 0.
+> This isn't a bug introduced by this patch, but does this comment get the
+> owner of OTX2_FLAG_TC_MARK_ENABLED right?
 >
-> Where is NIX_AF_TL4X_TOPOLOGY (PRIO_ANCHOR / RR_PRIO) programmed for that
-> TL4? The only TOPOLOGY writes I can find are the TL1 defaults in
-> otx2_txschq_config() and the HTB paths in qos.c, for example
-> otx2_qos_txschq_set_parent_topology():
+> On the representor path, rvu_rep_setup_tc_cb() points priv->flow_cfg at
+> rep->flow_cfg. otx2_tc_parse_actions() then does:
 >
-> 	cfg->reg[0] = NIX_AF_TL4X_TOPOLOGY(parent->schq);
-> 	...
-> 	cfg->regval[0] = (u64)parent->prio_anchor << 32;
+>     otx2_set_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
+>     refcount_inc(&nic->flow_cfg->mark_flows);
 >
-> On the AF side, nix_reset_tx_schedule() resets only PARENT and SCHEDULE for
-> TL4, so a reused TL4 could keep a stale RR_PRIO / PRIO_ANCHOR. Would the
-> N PRIO 0 children still be arbitrated as a single DWRR group?
+> So the bit lives on the shared priv, but the counter is per-rep.
+> otx2_tc_del_flow() then clears the shared bit based on one rep's counter.
 >
-> The netdev_warn_once() in otx2_setup_tc_mqprio() says the offload "uses
-> TL4[0] without explicit topology programming", yet the driver still reports
-> TC_MQPRIO_HW_OFFLOAD_TCS. Should the TL4 topology be programmed explicitly
-> before offload is reported as successful?
+> Say rep A and rep B both have skbedit mark rules and the rule on rep B is
+> deleted. Wouldn't otx2_rcv_pkt_handler() then stop setting skb->mark for
+> rep A's traffic?
+>
+>     if (otx2_test_flag(pfvf, OTX2_FLAG_TC_MARK_ENABLED))
+>         skb->mark = parse->match_id;
+>
+> Before this patch, priv->flags = rep->flags wiped the bit on every
+> callback, so representor marking was already broken. This patch changes
+> how it fails, but the new comment now describes TC_MARK_ENABLED as owned
+> by the PF/VF netdev.
 >
 > [ ... ]
+>
+> > @@ -593,6 +607,32 @@ struct otx2_nic {
+> >  	unsigned long		*af_xdp_zc_qidx;
+> >  };
+> >
+>
+> [ ... ]
+>
+> > +static inline void otx2_sync_flags_from_rep(struct otx2_nic *dst,
+> > +					    unsigned long *src_flags)
+> > +{
+> > +	unsigned long src = READ_ONCE(*src_flags);
+> > +	unsigned long new_flags;
+> > +
+> > +	new_flags = (READ_ONCE(dst->flags) & ~OTX2_REP_SYNC_FLAGS_MASK) |
+> > +		    (src & OTX2_REP_SYNC_FLAGS_MASK);
+> > +	WRITE_ONCE(dst->flags, new_flags);
+> > +}
+>
+> [Severity: High]
+> Can this read-modify-write lose a concurrent set_bit() or clear_bit() on
+> priv->flags?
+>
+> Every other writer of this word now uses atomic bitops. Any update that
+> lands between the READ_ONCE() and the WRITE_ONCE() here is overwritten
+> with the stale value.
+>
+> rvu_rep_setup_tc_cb() runs from the flower block callback under rtnl
+> only. rvu_rep_destroy() and rvu_rep_create()->rvu_rep_napi_init() are
+> called from otx2_devlink_eswitch_mode_set() holding only the devlink
+> instance lock. During that time the rep netdevs and their TC blocks are
+> still registered:
+>
+> CPU1 (tc flower on a rep)
+> rvu_rep_setup_tc_cb()
+>   otx2_sync_flags_from_rep()
+>     new_flags = (READ_ONCE(dst->flags) & ~MASK) | ...
+>
+> CPU2 (devlink eswitch mode legacy)
+> rvu_rep_destroy()
+>   otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
+>
+> CPU1
+>     WRITE_ONCE(dst->flags, new_flags);   <- INTF_DOWN lost
+>
+> If INTF_DOWN is lost, otx2_napi_handler() would re-arm the CQ interrupt
+> through NIX_LF_CINTX_ENA_W1S during teardown. rvu_rep_remove() would
+> later see INTF_DOWN clear and call rvu_rep_destroy() a second time on the
+> already freed priv->reps.
+>
+> The opposite direction looks possible too. The clear of INTF_DOWN in
+> rvu_rep_napi_init() could be undone, and the representor datapath would
+> never get its interrupts re-enabled.
+>
+> Would set_mask_bits(&dst->flags, OTX2_REP_SYNC_FLAGS_MASK,
+> src & OTX2_REP_SYNC_FLAGS_MASK), or a try_cmpxchg() loop, match what the
+> commit message says about atomic bitops and "without clearing PF-owned
+> bits"?
 >
 > > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> > index 777e7156badb7..f51161e8b5949 100644
+> > index 7dc0ce669d0b7..777e7156badb7 100644
 > > --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
 > > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> > @@ -2008,6 +2008,15 @@ int otx2_open(struct net_device *netdev)
-> >  	if (err)
-> >  		goto err_free_mem;
-> >
-> > +	/* Fail closed: abort open if cached mqprio shapers cannot be restored. */
-> > +	err = otx2_mqprio_up(pf);
-> > +	if (err) {
-> > +		netdev_err(pf->netdev,
-> > +			   "mqprio: failed to restore shapers during open: %d\n",
-> > +			   err);
-> > +		goto err_free_hw;
-> > +	}
-> > +
-> >  	/* Register NAPI handler */
-> >  	for (qidx = 0; qidx < pf->hw.cint_cnt; qidx++) {
-> >  		cq_poll = &qset->napi[qidx];
 >
 > [ ... ]
 >
-> > @@ -2206,6 +2215,7 @@ int otx2_open(struct net_device *netdev)
-> >  	free_irq(vec, pf);
-> >  err_disable_napi:
-> >  	otx2_disable_napi(pf);
-> > +err_free_hw:
-> >  	otx2_free_hw_resources(pf);
-> >  err_free_mem:
-> >  	otx2_free_queue_mem(qset);
+> > @@ -2538,8 +2538,8 @@ int otx2_config_hwtstamp_set(struct net_device *netdev,
+> >
+> >  	switch (config->tx_type) {
+> >  	case HWTSTAMP_TX_OFF:
+> > -		if (pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC)
+> > -			pfvf->flags &= ~OTX2_FLAG_PTP_ONESTEP_SYNC;
+> > +		if (otx2_test_flag(pfvf, OTX2_FLAG_PTP_ONESTEP_SYNC))
+> > +			otx2_clear_flag(pfvf, OTX2_FLAG_PTP_ONESTEP_SYNC);
+> >
+> >  		cancel_delayed_work(&pfvf->ptp->synctstamp_work);
+> >  		otx2_config_hw_tx_tstamp(pfvf, false);
+> > @@ -2550,7 +2550,7 @@ int otx2_config_hwtstamp_set(struct net_device *netdev,
+> >  					   "One-step time stamping is not supported");
+> >  			return -ERANGE;
+> >  		}
+> > -		pfvf->flags |= OTX2_FLAG_PTP_ONESTEP_SYNC;
+> > +		otx2_set_flag(pfvf, OTX2_FLAG_PTP_ONESTEP_SYNC);
+> >  		schedule_delayed_work(&pfvf->ptp->synctstamp_work,
+> >  				      msecs_to_jiffies(500));
+> >  		fallthrough;
 >
 > [Severity: Medium]
-> Does this new unwind leak pf->refill_wrk? It is allocated on every open via
-> otx2_init_hw_resources()->otx2_config_nix_queues():
+> This is a pre-existing issue, but what clears OTX2_FLAG_PTP_ONESTEP_SYNC
+> when the mode switches straight from HWTSTAMP_TX_ONESTEP_SYNC to
+> HWTSTAMP_TX_ON?
 >
-> 	pfvf->refill_wrk = devm_kcalloc(pfvf->dev, pfvf->qset.cq_cnt,
-> 					sizeof(struct refill_work), GFP_KERNEL);
+> Only the HWTSTAMP_TX_OFF case clears it. The HWTSTAMP_TX_ON case only
+> does:
 >
-> Neither otx2_free_hw_resources() nor otx2_free_queue_mem() frees it. The
-> only devm_kfree(pf->refill_wrk) is in otx2_stop(), and otx2_stop() returns
-> early afterwards because OTX2_FLAG_INTF_DOWN is set. The next open then
-> overwrites the pointer, and each leaked array stays on devres until unbind.
+>     case HWTSTAMP_TX_ON:
+>         otx2_config_hw_tx_tstamp(pfvf, true);
+>         break;
 >
-> The older labels after otx2_init_hw_resources() have the same omission. This
-> new label, though, is reached whenever a shaper mailbox write fails during
-> any open while mqprio offload is active. That includes the mqprio bounces
-> and the MTU, channel and reset reopen paths.
->
-> [ ... ]
+> otx2_set_txtstamp() would keep taking the one-step branch for PTP Sync
+> packets. It rewrites the origin timestamp and never sets
+> SKBTX_IN_PROGRESS, so the requested two-step mode isn't applied until
+> there is an OFF request in between.
 >
 > > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> > index 8877af348a090..b34a86259e786 100644
+> > index dee38d5c7f65b..8877af348a090 100644
 > > --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
 > > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
 >
 > [ ... ]
 >
-> > +static void otx2_mqprio_defer_netdev_tc_restore(struct otx2_nic *pfvf)
-> > +{
-> > +	if (READ_ONCE(pfvf->mqprio.defer_tc_work))
-> > +		return;
-> > +	schedule_work(&pfvf->mqprio.netdev_tc_work);
-> > +}
->
-> [Severity: Low]
-> After a failed replace, both the fail_validate and cleanup paths in
-> otx2_setup_tc_mqprio() call this to re-apply old_mq_snap later. Before the
-> work can take RTNL, mqprio_destroy() runs for the rejected new qdisc (with
-> hw_offload unset) and does:
->
-> 	else
-> 		netdev_set_num_tc(dev, 0);
->
-> The old offloaded mqprio remains root and the MDQ shapers stay programmed.
-> Until the work runs, netdev_pick_tx() / skb_tx_hash() see num_tc == 0. They
-> can then hash traffic onto queues shaped for other TCs.
->
-> Is this window intended? Could the layout be restored without going
-> through a work item?
->
-> > +
-> > +static int otx2_mqprio_restore_old(struct otx2_nic *pfvf)
-> > +{
-> > +	struct mq_offload_snap *snap = pfvf->old_mq_snap;
-> > +	struct net_device *netdev = pfvf->netdev;
-> > +	u16 num_txq = pfvf->hw.non_qos_queues;
-> > +	int tc, txq, err;
-> > +
-> > +	if (!snap)
-> > +		return 0;
-> > +
-> > +	err = otx2_mqprio_alloc_cache(pfvf, false);
-> > +	if (err) {
-> > +		netdev_err(netdev,
-> > +			   "mqprio: rollback failed to allocate rate cache: %d\n",
-> > +			   err);
-> > +		return err;
-> > +	}
->
-> [ ... ]
->
-> > +	otx2_mqprio_apply_snap_netdev(netdev, snap);
-> > +
-> > +	if (otx2_mqprio_mdq_allocated(pfvf)) {
-> > +		err = otx2_nix_tm_clear_queue_shaper(pfvf);
-> > +		if (err) {
-> > +			netdev_err(netdev,
-> > +				   "mqprio: rollback shaper clear failed: %d; hardware limits may not match qdisc\n",
-> > +				   err);
-> > +			return err;
-> > +		}
-> > +	}
+> > @@ -505,7 +505,7 @@ static int otx2_tc_parse_actions(struct otx2_nic *nic,
+> >  			mark = act->mark;
+> >  			req->match_id = mark & OTX2_RX_MATCH_ID_MASK;
+> >  			req->op = NIX_RX_ACTION_DEFAULT;
+> > -			nic->flags |= OTX2_FLAG_TC_MARK_ENABLED;
+> > +			otx2_set_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
+> >  			refcount_inc(&nic->flow_cfg->mark_flows);
+> >  			break;
 >
 > [Severity: Medium]
-> What state is the device left in when either of these early returns is
-> taken?
+> This isn't a bug introduced by this patch, but for representors, is
+> mark_flows ever initialized before this refcount_inc()?
 >
-> If otx2_mqprio_alloc_cache() fails, nothing has been restored yet. The
-> hardware and the caches still hold the rejected replacement, and rate_limit
-> stays true.
+> rvu_rep_mcam_flow_init() allocates rep->flow_cfg with kzalloc_objs() and
+> never sets mark_flows. The only refcount_set(&flow_cfg->mark_flows, 1) is
+> in otx2_mcam_entry_init(), which representors don't use.
 >
-> If otx2_nix_tm_clear_queue_shaper() fails, the cache has already been
-> rebuilt from old_mq_snap, but neither the restart nor otx2_mqprio_up()
-> runs. The MDQs then hold a mix of new and cleared CIR/PIR values.
+> A rule such as "tc filter add dev <rep> ... action skbedit mark N" would
+> then go through:
 >
-> Neither caller repairs this. otx2_teardown_tc_mqprio() only clears the
-> replace flags and returns the error, which mqprio_disable_offload() ignores.
-> The cleanup label in otx2_setup_tc_mqprio() only logs.
+> rvu_rep_setup_tc_cb()->otx2_setup_tc_cls_flower()->otx2_tc_add_flow()
+>   ->otx2_tc_prepare_flow()->otx2_tc_parse_actions()
+>     refcount_inc(&nic->flow_cfg->mark_flows);   /* from 0 */
 >
-> Should a failed rollback force the device back to a known state?
+> That fires the "addition on 0; use-after-free" warning in
+> refcount_warn_saturate() and saturates the counter. After that,
+> refcount_dec_and_test() in otx2_tc_del_flow() always returns false.
 >
-> > +
-> > +	/* Rebuild the TX scheduler via netdev restart when running; otx2_mqprio_up()
-> > +	 * alone is insufficient after a failed replace that already bounced the
-> > +	 * interface. If open failed, TX schedulers were freed; defer shaper restore
-> > +	 * to the next successful ndo_open() via otx2_mqprio_up().
-> > +	 */
-> > +	pfvf->mqprio.rate_limit = true;
-> > +
-> > +	if (netif_running(netdev)) {
-> > +		err = otx2_mqprio_restart_netdev(netdev, true);
-> > +		if (err) {
-> > +			netdev_err(netdev,
-> > +				   "mqprio: rollback netdev restart failed: %d; qdisc rates may not be enforced\n",
-> > +				   err);
-> > +			return err;
-> > +		}
+> otx2_sync_flags_from_rep() now keeps TC_MARK_ENABLED on priv across
+> callbacks, so this broken counter is the only thing that decides when the
+> flag gets cleared.
+>
+> [ ... ]
+>
+> > @@ -1195,12 +1195,12 @@ static int otx2_tc_del_flow(struct otx2_nic *nic,
+> >  	/* Disable TC MARK flag if they are no rules with skbedit mark action */
+> >  	if (flow_node->req.match_id)
+> >  		if (!refcount_dec_and_test(&flow_cfg->mark_flows))
+> > -			nic->flags &= ~OTX2_FLAG_TC_MARK_ENABLED;
+> > +			otx2_clear_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
 >
 > [Severity: Medium]
-> The comment above says shaper restore is deferred to the next successful
-> ndo_open(). Does that still hold if ndo_open() fails inside this restart?
+> This is a pre-existing issue, but is this condition inverted?
 >
-> On that failure, otx2_mqprio_restart_netdev() calls otx2_mqprio_clear_sw()
-> (rate_limit = false, rate caches freed), sets OTX2_FLAG_INTF_DOWN and calls
-> netif_close(). This function then returns without reinstating rate_limit or
-> the cache. The old offloaded mqprio qdisc stays installed.
+> otx2_mcam_entry_init() sets mark_flows to 1, and each FLOW_ACTION_MARK
+> adds one. With two marked rules the count is 3. Deleting one brings it to
+> 2, refcount_dec_and_test() returns false, and the flag is cleared.
 >
-> On the next ip link set up, otx2_txsch_alloc() allocates a single SMQ and
-> otx2_mqprio_up() returns immediately:
->
-> 	if (!pfvf->mqprio.rate_limit)
-> 		return 0;
->
-> Wouldn't the interface then run without any bandwidth limits while the
-> qdisc still reports hardware-offloaded rates?
+> Because of the base reference, deleting mark rules never brings the
+> counter to 0. Wouldn't every delete of a marked rule clear
+> OTX2_FLAG_TC_MARK_ENABLED, so that otx2_rcv_pkt_handler() stops setting
+> skb->mark for the rules still installed?
 >
 > [ ... ]
 >
-> > +static int otx2_mqprio_restart_netdev(struct net_device *netdev, bool rate_limit)
-> > +{
-> > +	struct otx2_nic *pfvf = netdev_priv(netdev);
-> > +	const struct net_device_ops *ops = netdev->netdev_ops;
-> > +	bool running = netif_running(netdev);
-> > +	int err;
->
-> [ ... ]
->
-> > +	if (running) {
-> > +		clear_bit(__LINK_STATE_START, &netdev->state);
-> > +		smp_mb__after_atomic(); /* Commit netif_running(). */
-> > +	}
-> > +
-> > +	err = ops->ndo_stop(netdev);
->
-> [Severity: Medium]
-> This open-codes a close/open but skips the netpoll exclusion that
-> __dev_close_many() takes before ndo_stop():
->
-> 	/* Temporarily disable netpoll until the interface is down */
-> 	netpoll_poll_disable(dev);
->
-> netpoll_poll_dev() checks netif_running() only once, after
-> down_trylock(&ni->dev_lock). A poll that passed that check before the
-> clear_bit() could still be in poll_one_napi()->otx2_napi_handler() while
-> otx2_stop() runs.
->
-> In otx2_stop(), napi_synchronize() waits for NAPI_STATE_SCHED but not for
-> NAPI_STATE_NPSVC. otx2_free_hw_resources() also frees the CQ/SQ resources
-> before otx2_disable_napi() runs. With netconsole active, could this be a
-> use-after-free of the CQ rings?
->
-> otx2_change_mtu(), otx2_set_channels() and otx2_xdp_setup() already have
-> the same gap. This helper adds a new trigger on every mqprio add, replace,
-> delete and rollback. During the bounce, unlocked netif_running() readers
-> also see false while IFF_UP stays set.
->
-> [ ... ]
->
-> > +	err = ops->ndo_open(netdev);
-> > +	if (!err && running) {
-> > +		set_bit(__LINK_STATE_START, &netdev->state);
-> > +	} else if (err) {
->
-> [ ... ]
->
-> > +		otx2_mqprio_clear_sw(pfvf);
-> > +		/* ndo_open() rolls back on failure; mark the interface down so
-> > +		 * otx2_stop() returns early when netif_close() runs.  Caller
-> > +		 * holds RTNL; netif_close() is used since it needs no extra
-> > +		 * locking (dev_close() would also take the netdev ops lock).
-> > +		 */
-> > +		otx2_set_flag(pfvf, OTX2_FLAG_INTF_DOWN);
-> > +		/* visible to otx2_stop() on other cpus */
-> > +		smp_wmb();
-> > +		netif_close(netdev);
-> > +	}
->
-> [Severity: Medium]
-> This is a pre-existing issue and was not introduced by this patch, but
-> otx2_reset_task() checks netif_running() before it takes RTNL:
->
-> 	if (!netif_running(pf->netdev))
-> 		return;
->
-> 	rtnl_lock();
-> 	otx2_stop(pf->netdev);
-> 	pf->reset_count++;
-> 	otx2_open(pf->netdev);
->
-> A reset task that is waiting on RTNL can reopen a device that was closed in
-> the meantime. This netif_close() becomes one more such close. otx2_stop()
-> returns early because of OTX2_FLAG_INTF_DOWN, and otx2_open() allocates
-> hardware, NAPI and IRQs while IFF_UP is clear.
->
-> Would a later ip link set up then open the device a second time? The same
-> race exists with an ordinary dev_close().
->
-> [ ... ]
->
-> > +static bool otx2_tc_can_offload(struct net_device *netdev)
-> > +{
-> > +	return !!(netdev->hw_features & NETIF_F_HW_TC);
-> > +}
->
-> [Severity: Low]
-> On the PF, otx2_probe() adds NETIF_F_HW_TC to hw_features only when
-> OTX2_FLAG_TC_FLOWER_SUPPORT is set, and that flag depends on MCAM entries
-> being allocated:
->
-> 	if (otx2_test_flag(pf, OTX2_FLAG_TC_FLOWER_SUPPORT))
-> 		netdev->hw_features |= NETIF_F_HW_TC;
->
-> So PFs without flower MCAM entries reject mqprio bandwidth offload with
-> -EOPNOTSUPP, even though MDQ shaping has nothing to do with flower. Is that
-> intended?
->
-> Because this tests hw_features rather than features, turning hw-tc-offload
-> off does not disable mqprio offload. That is inconsistent with the
-> tc_can_offload() check in otx2_teardown_tc_mqprio().
->
-> The commit message lists the rejected configurations:
->
->   "Reject offload with PFC, XDP, HTB, SDP representors, per-TC rates on
->   multi-queue classes, and ethtool channel changes while active."
->
-> That list leaves out this restriction. It also leaves out the rejection, in
-> otx2_setup_tc_mqprio(), of replacing a software mqprio root with an
-> offloaded one ("delete existing mqprio before re-enabling hw/sw offload").
-> Could both be documented?
->
-> > +
-> > +static int otx2_teardown_tc_mqprio(struct otx2_nic *pfvf,
-> > +				   struct tc_mqprio_qopt_offload *mqprio)
-> > +{
->
-> [ ... ]
->
-> > +	/* tc qdisc replace runs setup on the new mqprio before destroying the
-> > +	 * old one. replace_setup_done and TC_ROOT_GRAFT distinguish stale
-> > +	 * old-instance teardown from graft failure after setup.
-> > +	 * qdisc_offload_graft_helper() skips TC_ROOT_GRAFT unless hw-tc-offload
-> > +	 * is enabled in netdev->features; commit without graft in that case.
-> > +	 */
-> > +	if (pfvf->mqprio.replace_setup_done && pfvf->cur_mq_snap) {
-> > +		err = 0;
-> > +		if (pfvf->mqprio.replace_graft_done || !tc_can_offload(netdev)) {
-> > +			otx2_mqprio_snap_commit(pfvf);
-> > +		} else {
->
-> [Severity: Medium]
-> Can this commit a replace that the qdisc core rejected?
->
-> In otx2_probe() and otx2vf_probe(), NETIF_F_HW_TC is added to hw_features
-> after netdev->features |= netdev->hw_features. So by default
-> tc_can_offload() is false, while otx2_tc_can_offload() still accepts mqprio
-> offload.
->
-> Take a tc qdisc replace ... mqprio ... hw 1 shaper bw_rlimit ... with an
-> estimator, issued over an active offloaded mqprio. mqprio_init() succeeds,
-> the driver reprograms the hardware, and TCQ_F_MQROOT is set. Then
-> qdisc_create() rejects the qdisc:
->
-> 	if (tca[TCA_RATE]) {
-> 		err = -EOPNOTSUPP;
-> 		if (sch->flags & TCQ_F_MQROOT) {
-> 			...
-> 			goto err_out4;
->
-> err_out4 calls ops->destroy(). mqprio_destroy() has hw_offload set, so it
-> calls back into the driver and we end up here. replace_setup_done and
-> cur_mq_snap are set and !tc_can_offload() is true. The rejected config is
-> committed into old_mq_snap and left in hardware, while the old qdisc is
-> still root.
->
-> In this configuration TC_ROOT_GRAFT is never delivered, because
-> qdisc_offload_graft_helper() returns early:
->
-> 	if (!tc_can_offload(dev) || !dev->netdev_ops->ndo_setup_tc)
-> 		return;
->
-> That means this branch cannot tell a successful graft from a failed
-> create. Later rollbacks would also restore this wrong snapshot.
->
-> [ ... ]
->
-> > +	/* Skip the netdev restart when mqprio offload was not active. */
-> > +	if (!had_mqprio)
-> > +		return 0;
-> > +
-> > +	if (if_up) {
-> > +		err = otx2_mqprio_down(pfvf);
-> > +		if (err) {
-> > +			if (extack)
-> > +				NL_SET_ERR_MSG_FMT_MOD(extack,
-> > +						       "mqprio: teardown incomplete (%d)",
-> > +						       err);
-> > +			netdev_err(netdev,
-> > +				   "mqprio: offload teardown incomplete (%d); driver state may not match removed qdisc\n",
-> > +				   err);
-> > +			return err;
-> > +		}
-> > +
-> > +		err = otx2_mqprio_restart_netdev(netdev, false);
->
-> [Severity: Medium]
-> Doesn't this early return skip the step that otx2_mqprio_down() relies on?
-> If otx2_nix_tm_clear_queue_shaper() fails there, otx2_mqprio_clear_sw() has
-> already released the software state, and the comment in otx2_mqprio_down()
-> says:
->
-> 	/* The core cannot veto qdisc teardown, so always release software
-> 	 * state.  The netdev restart that follows reallocates the TX
-> 	 * scheduler, which drops any shaper left programmed.
-> 	 */
->
-> mqprio_disable_offload() ignores the return value of ndo_setup_tc(), so the
-> qdisc is removed anyway. Until some unrelated stop/open, the MDQs keep their
-> PIR/CIR values and the multi-SMQ topology under TL4[0].
->
-> Should the restart still run when otx2_mqprio_down() fails?
->
-> [ ... ]
->
-> > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/qos.c b/drivers/net/ethernet/marvell/octeontx2/nic/qos.c
-> > index f160b1618efa2..9ef55a6db50b7 100644
-> > --- a/drivers/net/ethernet/marvell/octeontx2/nic/qos.c
-> > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/qos.c
-> > @@ -118,6 +118,9 @@ static void otx2_config_sched_shaping(struct otx2_nic *pfvf,
-> >  	/* configure PIR */
-> >  	maxrate = (node->rate > node->ceil) ? node->rate : node->ceil;
+> > diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> > index 0f5d5642d3f7a..7df82c22cc12b 100644
+> > --- a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> > @@ -93,9 +93,9 @@ static int rvu_rep_mcam_flow_init(struct rep_dev *rep)
+> >  	rep->flow_cfg->max_flows = allocated;
 > >
-> > +	/* 65536 is the kernel-side default burst when HTB does not supply an
-> > +	 * explicit value, not the NIX hardware maximum (CN10K_MAX_BURST_SIZE).
-> > +	 */
-> >  	cfg->regval[*num_regs] =
-> >  		otx2_get_txschq_rate_regval(pfvf, maxrate, 65536);
-> >  	(*num_regs)++;
+> >  	if (allocated) {
+> > -		rep->flags |= OTX2_FLAG_MCAM_ENTRIES_ALLOC;
+> > -		rep->flags |= OTX2_FLAG_NTUPLE_SUPPORT;
+> > -		rep->flags |= OTX2_FLAG_TC_FLOWER_SUPPORT;
+> > +		set_bit(OTX2_FLAG_MCAM_ENTRIES_ALLOC, &rep->flags);
+> > +		set_bit(OTX2_FLAG_NTUPLE_SUPPORT, &rep->flags);
+> > +		set_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags);
+> >  	}
 >
-> [Severity: Low]
-> This isn't a bug, but is this comment accurate? struct tc_htb_qopt_offload
-> has no burst or cburst field, so HTB offload never supplies an explicit
-> burst and the driver always uses this fixed constant.
+> [Severity: High]
+> This isn't a bug introduced by this patch, but does
+> rvu_rep_mcam_flow_init() ever take priv->mbox.lock?
 >
-> The same wording appears in otx2_nix_tm_set_queue_shaper() ("Use the same
-> 65536 byte default as the HTB shaper path").
+> It allocates and sends AF messages without the lock:
+>
+>     while (allocated < count) {
+>         req = otx2_mbox_alloc_msg_npc_mcam_alloc_entry(&priv->mbox);
+>         ...
+>         if (otx2_sync_mbox_msg(&priv->mbox))
+>             goto exit;
+>
+> and then unlocks unconditionally at the exit label:
+>
+> exit:
+>     ...
+>     mutex_unlock(&priv->mbox.lock);
+>
+> Its only caller, rvu_rep_setup_tc_cb(), holds rtnl but not the mbox
+> mutex. rvu_rep_get_stats(), rvu_eswitch_config() and the otx2_tc_*
+> helpers all serialize on priv->mbox.lock.
+>
+> Can these MCAM allocation messages interleave with the stats work's
+> mailbox traffic and corrupt the shared mbox region?
+>
+> And if another task holds mbox.lock at that point, doesn't this
+> mutex_unlock() release that task's critical section?
+>
+> [Severity: Medium]
+> This is also a pre-existing issue, but do rep->flow_cfg and its flow_ent
+> leak here?
+>
+> rvu_rep_mcam_flow_init() allocates a new flow_cfg and flow_ent on every
+> call and never frees the previous ones. It also doesn't free flow_cfg
+> when the flow_ent kcalloc() fails:
+>
+>     rep->flow_cfg = kzalloc_objs(struct otx2_flow_config, 1);
+>     ...
+>     rep->flow_cfg->flow_ent = kcalloc(count, sizeof(u16), GFP_KERNEL);
+>     if (!rep->flow_cfg->flow_ent)
+>         return -ENOMEM;
+>
+> rvu_rep_setup_tc_cb() calls it again on every TC callback while
+> TC_FLOWER_SUPPORT stays clear, including FLOW_CLS_STATS from dumps.
+> TC_FLOWER_SUPPORT stays clear after a flow_ent allocation failure, a
+> mailbox failure, or an MCAM allocation that returns zero entries.
+>
+> Separately, rvu_rep_destroy() only does kfree(rep->flow_cfg).
+> flow_cfg->flow_ent is never freed, and the MCAM entries allocated for the
+> rep's pcifunc are never released to the AF.
+>
+> > @@ -109,14 +109,14 @@ static int rvu_rep_setup_tc_cb(enum tc_setup_type type,
+> >  	struct rep_dev *rep = cb_priv;
+> >  	struct otx2_nic *priv = rep->mdev;
+> >
+> > -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
+> > +	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+> >  		return -EINVAL;
+> >
+> > -	if (!(rep->flags & OTX2_FLAG_TC_FLOWER_SUPPORT))
+> > +	if (!test_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags))
+> >  		rvu_rep_mcam_flow_init(rep);
+>
+> [Severity: High]
+> This isn't a bug introduced by this patch, but what happens when
+> rvu_rep_mcam_flow_init() returns -ENOMEM here?
+>
+> The return value is dropped, and rep->flow_cfg is published below in one
+> of two broken states:
+>
+> - NULL, if kzalloc_objs() failed.
+> - With zeroed list heads, if the flow_ent kcalloc() failed, because that
+>   path skips INIT_LIST_HEAD().
+>
+> FLOW_CLS_REPLACE bails out early because TC_FLOWER_SUPPORT is clear.
+> FLOW_CLS_DESTROY, however, goes straight to:
+>
+> otx2_setup_tc_cls_flower()->otx2_tc_del_flow()
+>   ->otx2_tc_get_entry_by_cookie()
+>       list_for_each_entry(tmp, &flow_cfg->flow_list_tc, list)
+>
+> Wouldn't that dereference a NULL flow_cfg, or follow a NULL ->next from a
+> zeroed list head? tc core issues the destroy when a skip_sw replace fails,
+> and when a non-skip_hw filter is deleted.
+>
+> >
+> >  	priv->netdev = rep->netdev;
+> > -	priv->flags = rep->flags;
+> > +	otx2_sync_flags_from_rep(priv, &rep->flags);
+> >  	priv->pcifunc = rep->pcifunc;
+> >  	priv->flow_cfg = rep->flow_cfg;
+>
+> [Severity: Medium]
+> This change looks like it fixes a real bug, but the commit message only
+> hints at it:
+>
+>   ... giving lockless NAPI readers a consistent word without clearing
+>   PF-owned bits.
+>
+>   Relocate representor VF initialization to OTX2_FLAG_REP_VF_INITIALIZED
+>   (bit 21).
+>
+> Before this patch, priv->flags = rep->flags overwrote every PF-owned bit
+> on the shared rep PF otx2_nic. rvu_rep_probe() sets
+> OTX2_FLAG_REP_MODE_ENABLED on priv, but rep->flags never has it, so any
+> flower callback on a representor cleared it.
+>
+> The old RVU_REP_VF_INITIALIZED was BIT_ULL(0), the same bit as
+> OTX2_FLAG_RX_TSTAMP_ENABLED. The callback only proceeds when that bit is
+> set, so the copy also set RX_TSTAMP_ENABLED on priv.
+>
+> With REP_MODE_ENABLED cleared, otx2_tx_napi_handler() uses pfvf->netdev,
+> which the callback has just set to the last rep's netdev. It also stops
+> forcing qidx to 0:
+>
+>     if (otx2_test_flag(pfvf, OTX2_FLAG_REP_MODE_ENABLED))
+>         qidx = 0;
+>     txq = netdev_get_tx_queue(ndev, qidx);
+>
+> That means netdev_tx_completed_queue() could update a netdev_queue past
+> the single TX queue that alloc_etherdev() allocates for the rep.
+>
+> Should the commit message describe this representor TX/RX breakage and
+> carry a Fixes: tag so it gets picked up for stable? Something like:
+>
+> Fixes: 6c40ca957fe5 ("octeontx2-pf: Adds TC offload support")
+>
+> [ ... ]
+>
+> > @@ -382,7 +382,7 @@ static void rvu_rep_get_stats64(struct net_device *dev,
+> >  {
+> >  	struct rep_dev *rep = netdev_priv(dev);
+> >
+> > -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
+> > +	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+> >  		return;
+> >
+> >  	stats->rx_packets = rep->stats.rx_frames;
+>
+> [Severity: Critical]
+> This is a pre-existing issue, but is stats_wrk ever cancelled before the
+> rep netdev is freed?
+>
+> Further down, rvu_rep_get_stats64() does:
+>
+>     schedule_delayed_work(&rep->stats_wrk, msecs_to_jiffies(100));
+>
+> stats_wrk is embedded in struct rep_dev, which is netdev_priv(rep->netdev).
+> Neither rvu_rep_destroy() nor the rvu_rep_create() error path calls
+> cancel_delayed_work_sync() before free_netdev().
+>
+> unregister_netdev() itself re-arms the work through the RTM_DELLINK
+> message:
+>
+> unregister_netdev()->...->rtnl_fill_ifinfo()->rtnl_fill_stats()
+>   ->dev_get_stats()->rvu_rep_get_stats64()
+>     schedule_delayed_work(&rep->stats_wrk, ...)
+>
+> Any stats read does the same, including unprivileged ones such as
+> /proc/net/dev or ip -s link.
+>
+> About 100ms after free_netdev(), wouldn't the timer fire from freed
+> memory? rvu_rep_get_stats() would then do container_of() on the freed rep,
+> dereference rep->mdev and take priv->mbox.lock.
+>
+> There is also an ordering question in rvu_rep_create().
+> INIT_DELAYED_WORK(&rep->stats_wrk, rvu_rep_get_stats) runs only after
+> register_netdev(). Can the RTM_NEWLINK stats fill schedule the work before
+> it is initialized?
+>
+> [ ... ]
+>
+> > @@ -632,7 +632,7 @@ void rvu_rep_destroy(struct otx2_nic *priv)
+> >  	int rep_id;
+> >
+> >  	rvu_eswitch_config(priv, false);
+> > -	priv->flags |= OTX2_FLAG_INTF_DOWN;
+> > +	otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
+> >  	rvu_rep_free_cq_rsrc(priv);
+> >  	for (rep_id = 0; rep_id < priv->rep_cnt; rep_id++) {
+> >  		rep = priv->reps[rep_id];
+>
+> [Severity: High]
+> This isn't a bug introduced by this patch, but doesn't the rest of this
+> loop read rep after it has been freed?
+>
+>         unregister_netdev(rep->netdev);
+>         rvu_rep_devlink_port_unregister(rep);
+>         free_netdev(rep->netdev);
+>         kfree(rep->flow_cfg);
+>
+> In rvu_rep_create(), rep comes from netdev_priv(ndev), so it lives inside
+> the netdev allocation. Once unregister_netdev() has completed,
+> free_netdev() normally drops the last device reference and frees that
+> memory.
+>
+> kfree(rep->flow_cfg) then loads the pointer from freed memory. With slab
+> poisoning that means kfree() of a poison value. With init_on_free,
+> flow_cfg leaks. KASAN would report the access on every
+> rvu_rep_destroy().
+>
+> [ ... ]
 >
 > --
 > Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261014023431.1775238-1-rkannoth%40marvell.com
