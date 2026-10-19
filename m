@@ -1,109 +1,103 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1320D37CD4E
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 02:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9960278F3A
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 02:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792378501; cv=none; b=KhF2lUmy2OznYREfOrc81GMpddyRTW5VhOuQwhRdnmqeyarLypkHsVP3mM12her05Hs7UYbcP7AyX2OBpxbtvlI2Uu5F5q2BgPtpBMwKzyBoGpNswf9Wq+XTRssIaTSVt12HxVKXaO/mfYDQQxs7q2IxmwE0jC2KLLfN1jO5gw8=
+	t=1792378624; cv=none; b=YVHOwdlZBvLbiAK2tbUJlhPLIWSUdhM2o3u6/kt+H0xot3QHz5goPjbIKFtrkLZywAgMqknRAnoH4Im6g1lTj+k0Km8wYDhlMsrLOuRt5qy+1zZEefHjmiOzVhiafwVTOGwR4zjXiK7R+Uf3OiWTJUYNrLsvHiwCw5fOqz2+JpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792378501; c=relaxed/simple;
-	bh=XGREyND8rEv52sMD8zmNsmIDPDCH9HddupZaIP9wsLA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ljn0d6TycfsHQY38GyLmI9ehqoyboTPXiTjwzCeAP+ub9zEPgKcXfTuSvGXirPsCVw5ZOj8RHkEEPEuncbTaFpooYB3FHO8VyuUYFYCLeOy5Ha/Of3Ll1APs1oz8vdcVF5w1K4nZF0GEDElK1MSMq+LWUg3fINe8WFt17VlpqFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyJ9saRi; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792378624; c=relaxed/simple;
+	bh=3NAqWW71J7SDnu+ttrhfE2lynCgJz547lkEgELB7ig8=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=naJk8zzg8hzGH4DTHGA/7yRdNSB+xRem8WLOhkzzzIxzgr8EEfzGOLTWJZGXtFE0vRv4U9Ho217PV4NzGaLvxIKWPRtBgWzKaAfQD8yH9pcAiBIW8T3k56LcIue6szYLeqeMUTOLQYsFbu4WBmZxfU5WphBhhbRiF8RvpVDKKYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AbcDb+lF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyJ9saRi"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-35cd4e8bdbdso4049547eec.1
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 19:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792378499; x=1792983299; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XGREyND8rEv52sMD8zmNsmIDPDCH9HddupZaIP9wsLA=;
-        b=fyJ9saRizt//RF3/0HkOaCcodnCYYeYYMp5bBj64t1q3VeUAg0Wxkv0f8nLqQmUVcZ
-         PMKSYVD2iI17oCK3tOTtDlZ78rjxzFqKXVEfCZvj5cXenELlpmGB+ir0Oz9r0vSkE5CS
-         Qgl6EDZjRxvD5m9ep/pF01h0NdyLZZG3nC90HFqXdYX9OOevgXGQMBw+iyCzg+/f6x7g
-         iWEANmZZHlqv3Bu3g52ut2pnsX8m5hn/4Gh4mJgb3aMEpCgAhfiZ3j4xeGhEH9Xwkg3w
-         3cJHUvWqoFyYekBo6CJ0/EJqJb3ZBPPscc09Wdc5MlSUOZnKXcTu5OL9hviQq0sZyoQc
-         UELw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792378499; x=1792983299;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XGREyND8rEv52sMD8zmNsmIDPDCH9HddupZaIP9wsLA=;
-        b=HY2JkvJjFesDdjewRSuasWIlWKCwl2BLbIwV2yKoIFSWVfDc3VYBnUfFdLIUuVosJL
-         FqBapyl4c83RYNwD5P3nTCjwHNcINe1yIJqh25UsI8wuS35cne9GKzQGqt7okOXqhp1l
-         tQUNEMpMUX7cNW0plI7NH56qTs6uV8tiWFrF1qge6KiJMQpxn6xu5pQrMGYnY70GRXTk
-         vbwFuRz+Y2YI1YT25k8n0hGMGZEZU8jaO3EfdfuAg8UlF3e9Nc4xSVf2dNDP/xjuoGz2
-         Nq7gXuI2UZP22CYkdxqcPWaM2blCYgcYgTaLJnDUdsFZphUc3FWZgDXWMU65SzbvY7fy
-         mhPA==
-X-Forwarded-Encrypted: i=1; AKwUvBz/ytb+9qKnPWmAqG2eRcfPE0SAeme5XuOHdgVRQoUPyYWFpyaLvkd0wfOKFVITfyP1ibM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLJlGQApea6GbsqP5R31SF+DFoGPZhKSxRtTL3AL9dFi3aaISuT
-	FDAq9xTEYZoQlxkX4zz974BQ6I7J5+KFyO6IdfkZCTkl0iH1baQMOB4T
-X-Gm-Gg: AYBFou1RC5iWiXmswgsTZ8a22OWHtdzsfAzBkOmRmWZHj9ae81/SZdN0UF+8kh5OrK9
-	df6+OQWukvfAGedAwCKvNI5GqtHR41NDkD6hYSLIBbouRR8zEUC04sh0yj7MPaPG5xffoycc2Tm
-	uTWfrzIFyGEhzaSAnEazl6EPhMCfc39HTxeB6S6u2PGNmpwQlLQ0KLrvHmbC/9l3DN1rGG05Ruz
-	vuFtvEcABspQvKLT9ialJgo6X1V10W46IEwvGycdtolIY5xNvaG8Dyi7Fw0JDS2AhP8JEvr/tP7
-	i5t4oGgIEUyLzatxGe4J5zhFmqClYr9RGr8R4v9v9Tyj8bMNyhsM6K/EDLMcbnehCJrlFacrLtt
-	8mRTzOfG4ezOEmVw98IlbHDBjAfkTYzIQwlsWTDiuzcQPuArRa2Ab6l1cL0bs8lo6zno3eU5abe
-	l+bXhnrsIDzZnUwNMf5JiuM3vlBHEvm+yIrEJYcJDICpuzkBgbnbvOIN3e4FjO8F7ZOoWRF+8Yz
-	A==
-X-Received: by 2002:a05:701b:4586:10b0:18a:6c40:1a35 with SMTP id a92af1059eb24-18a6c401a5dmr2085059c88.20.1792378499080;
-        Sun, 18 Oct 2026 19:54:59 -0700 (PDT)
-Received: from ubuntu.. ([23.254.208.9])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1830f213ba7sm28459793c88.0.2026.10.18.19.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 19:54:58 -0700 (PDT)
-From: Qiliang Yuan <odys.yuan@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Run the enable_stats program with BPF_PROG_TEST_RUN
-Date: Mon, 19 Oct 2026 10:54:52 +0800
-Message-ID: <20261019025452.1470555-1-odys.yuan@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <DM6HAA1FCDCO.1V38UFFVZNV16@gmail.com>
-References: <20261009-selftests-bpf-enable-stats-inflight-v2-1-691ee379e511@gmail.com> <DM6HAA1FCDCO.1V38UFFVZNV16@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AbcDb+lF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97241F000C4;
+	Mon, 19 Oct 2026 02:57:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792378623;
+	bh=r0pVKksXHlf38tKA89/DIApguarFGGhcM4vuK/ApZWU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AbcDb+lFO2YMcghfFG7OgjFPUbfJ+iJppz0FHtc4ZWQnek9tgVOLGwZS/3EK9kxnh
+	 ZTYGJQrsCkuv9RkyDVL0KG+9n32AfT41d+QYyLnznXA5l/lrx4x2HAIKdVZEdfbHEX
+	 oRPaXhfftOn+HrTXgsk6EjE4UlcW+4Xv5XFuBsIED7BC0rkKUT9EOMdDlpUffqn4N1
+	 aWOkwHjC9QJrMIFTdz5ZaxJtK7EgwcVTXFPHr55wQqQiVXmFvRNXkyhV15IqAAfWBU
+	 akHcdvmNLl1/OV1TV+NN75hqNPX0yJn1z37wolN1NtkvNSXhTyez41RpVR6IgFk1Ax
+	 GQTvxvL6w1KeA==
+Message-ID: <sashiko-outbox-176554@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: Run the enable_stats program
+ with BPF_PROG_TEST_RUN
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Qiliang Yuan" <odys.yuan@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261019-selftests-bpf-enable-stats-inflight-v3-1-e7728f5b061a@gmail.com>
+References: <20261019-selftests-bpf-enable-stats-inflight-v3-1-e7728f5b061a@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 19 Oct 2026 02:57:02 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 16, 2026 at 6:35 PM UTC, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> Did v1 fail anywhere?
-> It passed BPF CI on x86, arm64 and s390.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] selftests/bpf: deprecated CHECK() macro used in test_enable_stats()
+--
 
-No, I haven't seen v1 fail. v2 only addressed a concern from Sashiko
-about the resolution of the clock.
+commit 149e144806feffc72e780046d3d7759e157ee137
+Author: Qiliang Yuan <odys.yuan@gmail.com>
 
-> Run the prog 1000 times in a for loop and keep get_info as it was in v1.
-> Then no need for the comment, and check_run_cnt_valid compares
-> 1000 with 1000 instead of 1 with 1.
+selftests/bpf: Run the enable_stats program with BPF_PROG_TEST_RUN
 
-Done in v3 [1].
+This commit replaces attaching the enable_stats BPF program to sys_enter
+with running it 1000 times via BPF_PROG_TEST_RUN so that concurrent
+syscalls on other CPUs do not race with reading run_cnt and count.
 
-> Also pls don't respin in 12 hours only because a bot said something. Wait for people to reply.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/enable_stats.c b/tool=
+s/testing/selftests/bpf/prog_tests/enable_stats.c
+> index 75f85d0fe74a4..5b9cc119d072d 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/enable_stats.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/enable_stats.c
+> @@ -5,10 +5,11 @@
+>  void test_enable_stats(void)
+>  {
+>  	struct test_enable_stats *skel;
+> -	int stats_fd, err, prog_fd;
+> +	int stats_fd, err, prog_fd, i;
+>  	struct bpf_prog_info info;
+>  	__u32 info_len =3D sizeof(info);
+>  	int duration =3D 0;
+> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+> =20
+>  	skel =3D test_enable_stats__open_and_load();
+>  	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+> @@ -20,13 +21,15 @@ void test_enable_stats(void)
+>  		return;
+>  	}
+> =20
+> -	err =3D test_enable_stats__attach(skel);
+> -	if (CHECK(err, "attach_raw_tp", "err %d\n", err))
+> +	prog_fd =3D bpf_program__fd(skel->progs.test_enable_stats);
+> +	for (i =3D 0; i < 1000; i++) {
+> +		err =3D bpf_prog_test_run_opts(prog_fd, &topts);
+> +		if (err)
+> +			break;
+> +	}
+> +	if (CHECK(err, "test_run", "err %d\n", err))
+>  		goto cleanup;
 
-Understood, sorry for the noise.
+[Severity: Low]
+Since CHECK() is deprecated in BPF selftests, should this new check in
+test_enable_stats() (and perhaps the surrounding checks in this function)
+use ASSERT_OK(err, "test_run") instead?
 
-[1] https://lore.kernel.org/r/20261019-selftests-bpf-enable-stats-inflight-v3-1-e7728f5b061a@gmail.com
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019-selftests-=
+bpf-enable-stats-inflight-v3-1-e7728f5b061a@gmail.com?part=3D1
