@@ -1,111 +1,109 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1D534F479;
-	Mon, 19 Oct 2026 07:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACAD423E94;
+	Mon, 19 Oct 2026 07:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792394313; cv=none; b=A2Oj/xm6IDJNeKvzawrU7VthELVk6evhaRkjVrQ4k33nl4Q7f2Q6EbqlS5fDQrdhs1Nncd1lWNSqe9QRLSNfFmDDYt3fFTlVislZ8FeGVk84S2ZRfmz4tbCzGe6yHEw1Ddzi/vP+Ghl2uO3KMuGqqjj8PnGa8VSLBPReu8q5Tog=
+	t=1792394666; cv=none; b=OVrpE615LRWqXfV1ybAexcz6jirk4l/9T5rIB3DFy20KHTPlvXnD1vRhFZOE4LmLcHV3Y44fghUe7WtgTjrCpbCs6cSD9MlSZiUkvWhx5o/WcooYPQrxgivdGwkoEJ9vmi5iTLtWLSNWErfTED8NocyjXcQ1goIk8z3n63JeimM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792394313; c=relaxed/simple;
-	bh=9yKawQQoA//h0KHEdlu1uZglSjBRUM72WxHod0luenw=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=RgAS7eOS3L/btHM0wjyHnV0ymsfVYSHsIyg0MaRI6BOSl+8hAclXCnjjx2GuNI4xtgEl47yu4OpJN2+OBVbqp+qosbZ65zfHAaoOtLOQSmLbjn3SrD2DXuIOWRPMagFTwiL7H4uu1+dq5Y5LCbjDZ3RauxW1feUAPvFxI2i4X24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Ax39JFxNVqHzUXAA--.1364S3;
-	Mon, 19 Oct 2026 15:18:29 +0800 (CST)
-Received: from [127.0.0.1] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJCxtMxDxNVqp+wtAA--.4251S2;
-	Mon, 19 Oct 2026 15:18:29 +0800 (CST)
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Use snake_case for subtest
- descriptions in jit_insns_arena.c
-To: Daniel Borkmann <daniel@iogearbox.net>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261019040106.27309-1-yangtiezhu@loongson.cn>
- <d13c66a3-0519-48c1-88fe-55bc755b79a2@iogearbox.net>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <84434f7a-1c38-03ea-3062-8e8cf364fd4e@loongson.cn>
-Date: Mon, 19 Oct 2026 15:18:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1792394666; c=relaxed/simple;
+	bh=PJMNtFZdCxAkfXpCGh9gdP0M/bJtvasByqnTtI9idOs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=gHso7JPoCKRxiEcHQbQNDUH+LrRZ5Uy/91hmylVSiZ6+lI7BQYY9uvdNrHWUTX+hjyTz1I6HdGCXm7uIGrJwCPeDSHN4RtzQ41jSvBZTNbwllZO6hh0C7uWRXurFOwYYKZrJ6BGLqsM8xl3QSv6sSdQgGDs2InVNncCJmKcNHvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggHitl0r; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggHitl0r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8571F000C4;
+	Mon, 19 Oct 2026 07:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792394665;
+	bh=kq41aEXGRIjZiDj+Lf2TBzLa687IIXYS/7guQvFIns4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ggHitl0rXZyzCQCjN2UknQ40BhlbBcTxZG09AcCzpp5wAsA5ho/FiflIfIJ4mEK1y
+	 6VS8S7ervff50xPjQk0fgrN1ptCCJzqUQb4SZ4i1g906kHxhuHIKQ40rN8IeTQzjwf
+	 MVsTmyF8Y2vfLeUwNqOkpOBkRcpRdwDzG2bgEIZLscXgMxX/uh0/ewXONSUWspaa1t
+	 Y259/Soj7mZdinOjIz1my6RleMtKjL0AXnVhlFaUJOBxiJtF8sqhvu+sXCqx2KT7xt
+	 8scp6w5vFlgHfAXGfA+HaNLEHeqMJJhjwO+euGG3MNxBR7C2+seS6e2BmGsvdZMBe/
+	 fLyvPT46WqT0Q==
+Content-Type: multipart/mixed; boundary="===============4963888778798225134=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <d13c66a3-0519-48c1-88fe-55bc755b79a2@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxtMxDxNVqp+wtAA--.4251S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7trW8XFWUGw4DCrWkurWDZFc_yoW8WF4fpa
-	yDWrWaqrZ7A3WS9w4kZw18Ga40kFZ5J3WDKryrXr15Gry5G3WYg34UKrn0kFWvgFWxZryI
-	kw42vF9FgFy7CFcCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
-	AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtw
-	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-	67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr
-	0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8I3
-	8UUUUUU==
+Message-Id: <737a8f07246a2cd31950ffcdb2a98b9ee81824c27a362dd17e0ba94e2281b00e@mail.kernel.org>
+In-Reply-To: <20261019064157.29885-5-laoar.shao@gmail.com>
+References: <20261019064157.29885-5-laoar.shao@gmail.com>
+Subject: Re: [RFC PATCH v3 bpf-next 4/5] sched: add BPF-based per-cgroup NUMA balancing mode selection
+From: bot+bpf-ci@kernel.org
+To: laoar.shao@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mingo@redhat.com,peterz@infradead.org,juri.lelli@redhat.com,vincent.guittot@linaro.org,akpm@linux-foundation.org,david@kernel.org,gourry@gourry.net,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,shakeel.butt@linux.dev,roman.gushchin@linux.dev,yu.c.chen@intel.com,zhao1.liu@intel.com,tim.c.chen@linux.intel.com,lizhe.67@bytedance.com
+Cc: bpf@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,linux-kernel@vger.kernel.org,laoar.shao@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 19 Oct 2026 07:24:24 +0000 (UTC)
 
-On 2026/10/19 下午2:47, Daniel Borkmann wrote:
-> On 10/19/26 6:01 AM, Tiezhu Yang wrote:
->> Normalize two inline assembly test descriptions in jit_insns_arena.c
->> from space-separated strings to snake_case.
->>
->> It is done for consistency with other neighboring subtests registered
->> in test_jit_insns() (such as alu_imm, alu_reg, etc.). This also makes
->> it convenient to execute these subtests directly from the command line
->> without being forced to use shell quoting.
->>
->> Otherwise, unquoted shell word-splitting causes test_progs to reject
->> the extra arguments before the filter code runs:
->>
->> $ sudo ./test_progs -t jit_insns/arena access with zero offset
->> Usage: test_progs [OPTION...]
->> Try `test_progs --help' or `test_progs --usage' for more information.
->>
->> $ sudo ./test_progs -t jit_insns/cast to a user address
->> Usage: test_progs [OPTION...]
->> Try `test_progs --help' or `test_progs --usage' for more information.
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Do these not work already?
-> 
->    ./test_progs -t jit_insns/arena_zero_off
->    ./test_progs -t jit_insns/cast_to_user
+--===============4963888778798225134==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Yes, they work.
+> sched: add BPF-based per-cgroup NUMA balancing mode selection
 
-I misunderstood that the name is "cast to a user address" in the output
-rather than "cast_to_user" before, there is difference between the
-description and the name.
+TL;DR: Comment only: the comment on task_numab_in_tiering_mode() may describe
+the return value backwards, since task_numa_fault() skips non-top-tier
+statistics when it returns true.
 
-Something like this:
+> diff --git a/include/linux/sched/numa_balancing.h b/include/linux/sched/numa_balancing.h
+> index 36de57f7fb06..d63891a8be01 100644
+> --- a/include/linux/sched/numa_balancing.h
+> +++ b/include/linux/sched/numa_balancing.h
 
-$ sudo ./test_progs -t jit_insns/cast_to_user
-#191/2   jit_insns/cast to a user address:OK
-#191     jit_insns:OK
-#192     jit_insns_blinded:OK
-Summary: 2/1 PASSED, 0 SKIPPED, 0/0 FAILED
+[ ... ]
 
-Anyway, if this patch is not necessary, please ignore it.
+> @@ -53,6 +95,68 @@ static inline bool numab_in_normal_mode(void)
+>  {
+>  	return sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL;
+>  }
+> +
+> +/*
+> + * Whether @p runs in tiering mode, i.e. whether faults on non-top-tier
+> + * memory still feed its NUMA statistics. The requests of the task's
+> + * cgroup and of every ancestor are combined; an opt-out wins, otherwise
+> + * the bits are read independently, as the sysctl reads them. Without
+> + * any request, the global sysctl decides.
+> + */
+> +static inline bool task_numab_in_tiering_mode(struct task_struct *p)
+> +{
+> +#ifdef CONFIG_BPF_NUMAB
+> +	if (static_branch_unlikely(&numab_cgroup_mode_set)) {
+> +		int mode = task_numab_mode(p);
+> +
+> +		if (mode != NUMAB_FOLLOW_SYSTEM)
+> +			return mode & NUMA_BALANCING_MEMORY_TIERING;
+> +	}
+> +#endif
+> +	return numab_in_tiering_mode();
+> +}
 
-Thanks,
-Tiezhu
+The comment above task_numab_in_tiering_mode() says it reports "whether
+faults on non-top-tier memory still feed its NUMA statistics".  Is that
+the right way around?
+
+The only caller, task_numa_fault() in kernel/sched/fair.c, uses it like
+this:
+
+	if (!node_is_toptier(mem_node) &&
+	    (task_numab_in_tiering_mode(p) || !cpupid_valid(last_cpupid)))
+		return;
+
+so a true return makes task_numa_fault() bail out before recording any
+statistics for non-top-tier memory.  Should the comment say that faults on
+non-top-tier memory are kept out of the task's NUMA statistics instead?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39213018427
+--===============4963888778798225134==--
