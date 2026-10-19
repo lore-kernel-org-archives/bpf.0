@@ -1,64 +1,64 @@
-Received: from mail-oo2-f11.google.com (mail-oo2-f11.google.com [74.125.231.139])
+Received: from mail-oa2-f11.google.com (mail-oa2-f11.google.com [74.125.231.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131754F55AA
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0D84F6482
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792416160; cv=none; b=N+sq9Uzs+VmeSpMEcS84g37eZZeD9y7W4F3X5x12OE0YnCiaOTrRt+fbwEndiGdM1JVWsknN9TXK2G3BKJMEhXMb2fEYfF+165JrjUPIspTlAY5Fol/09buhTRrMzPTKI33cibbza5EoamXrmkI2LjPvUAoXs8A3MkUE1alCqKM=
+	t=1792416165; cv=none; b=Nu2TnMNt7SjilhEoV57Jei36cyxrQoyXDH3UYMWb5fF+RbiesjWLq55hDuYHk8c63+wt6O0c8Zwfx1oNcWXur3QC46rgA4uI2UYwSknPxWYxgvBxQ4GXwUZOH3gyISWeUpfq50u7PtgwMyduF8f8WCRAmu9IM+UeO2JLhTGzJhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792416160; c=relaxed/simple;
-	bh=qLPMFsyEpkOGw113JHwHEVJiVp2tpGDAnFgjZL+p5hw=;
+	s=arc-20240116; t=1792416165; c=relaxed/simple;
+	bh=b/t8ZuWZDUKOV/2tRDFiPuCX5yZQmsGWn7miL09onxE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aYd+wA9E928acMA/ULz+o9C0q24Zj664bByr9Jml+ynAny2ncpdzKTC5ssiEnjS5vOpyo0kWpp54gpdMLmJR5DiQxPS7Hz4WWjlpiDw2SOO3CUDYwFd8Q0crX/NbM/ANGtCMcRC5brdjISNEGtpcQFZUu6caSt0rV4SyUE3VYkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cfzi9ut7; arc=none smtp.client-ip=74.125.231.139
+	 MIME-Version; b=GgLVo0wvpdCK1ADjX7Gu5ndwTBjDOTD0C9zfgtzWQyvhag3nxRikxxo810Fc6EW/4WnGNGGlqwnV7EIniY15X62ZkxsZ6BxYM7TqEz5pWEKwpRVeywfLjUOudqIoNR2Gy5ywCbS3q+K6o9kkF8Y6ULYtj8ZnLGzC0Po2zo7D8X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcyEfySO; arc=none smtp.client-ip=74.125.231.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cfzi9ut7"
-Received: by mail-oo2-f11.google.com with SMTP id 46e09a7af769-82757b1535eso1063990a34.0
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:22:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcyEfySO"
+Received: by mail-oa2-f11.google.com with SMTP id 586e51a60fabf-4a77fe1bc0bso698506fac.0
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:22:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792416157; x=1793020957; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792416162; x=1793020962; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=l9RE9JM214B+X4FmZ+JGGe9DNbR5ti9z5PwFUQWUEMg=;
-        b=Cfzi9ut7uBx4vpLPuLHp/tV9YarHi9r/M7f2dpaiWlRUbMEL58L2fI7O8wgjomzdDM
-         RYiNHqvuxBv7a7CMfKkNHCXfXpyRslzmFZV00NKmgTHqEyqqynpcFOGrHylj8a8OKD6q
-         VgbMSRHwLjnEb0bnXxC8/ANjjRnK3dr1sLyZq89Ns0rWZ1/t9/Ml7Hv9/IPTOXYI2hYx
-         tbjdFy7jvrg28TmG/Qvtpbq/XQD/cuL/dq9l4yR9/Js2WFKrCiGDuksL9/urF0hisR63
-         io1Z1aCjHagqaf8+YLtcXT9wg4u6MJZi2/6GJB4fcNDVmiN+m2J55n3mQDwRr2FtQ/yA
-         jLNg==
+        bh=NeUTIgQ0KJJA+c9aUBWzGj/SnLdiQlWwxSsFBKrEdws=;
+        b=XcyEfySOu/G65W40C/zwWbvzFSxZXcL2uiBcqwc8qg93retHf1N8eYeEct23cqlHT1
+         DGk9dtMynJdjJFlZo38tXV0mLix7sBy59jMhj+nJSdXA50TIAYIokJiuMINNjPysZ+P0
+         u27+tecc6/ZITqhTVS6WFPi9DboQiI0b4U7S/SLiHuZ5Ngu2Eu1JRH9NSLra48CJPUCe
+         rsGvQMifSVL4G/Vqqgk0bTWyYFsrgRf9Z0UjISUTygsivQ5pyW6Z3eQikIkfJx/P/iR1
+         a9kwxJ/uFYk3/OeFTAx4GUrBGtRY+lmGB0apqsWMnVFjFgbPjlqAFddPDjb+L5u0z6V4
+         /ibw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792416157; x=1793020957;
+        d=1e100.net; s=20260707; t=1792416162; x=1793020962;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=l9RE9JM214B+X4FmZ+JGGe9DNbR5ti9z5PwFUQWUEMg=;
-        b=rs6zFaUhjwJJcjKciAB+hHkfwEtdRACTbYGBYLOv6HCVwk9KxuJm68afK4eZyUu/US
-         gOve+85M+sJ16xKSoEVhGQDImhJuOxPKHmPi4QvNleqJ8o9uQ9hiQ5O68DkExTZku2G1
-         h3ZAtKgcJ0x4LLARUm9fdmdE/8QMPD/XWMF4SmpQctvrxA/gMF9Xaca0x+mVe9BrCJ8c
-         cQ3z/CzAvXORL7oSo2kWy8Lt6nyxxR7/SUKEEVT2XWE0b2a8BFfWGpY0lfxvzwKA5DS4
-         ijsPv2hK801LWBsVdAbWgcuDJfCdPR1urJymMvfUugiX/GFJd46e0ZdBXQk5W0r1OEZ7
-         7cfA==
-X-Gm-Message-State: AFq9FYI7Xa6AjUbUVp+SMrH021Jd0BGUC+f10dbp8ccZRLnzsJPmZjcL
-	lsgNR3RGrsZ1wVHK/75Cljc4kEw5l9rd2XOXRodZext7SmUE9apUPsemBCStfkwHIaw=
-X-Gm-Gg: AYBFou2duVwsug4KAQcGEVYPUpCDHe4y3OwZgchqw5T2WaW8OJciz8biZYiwT9Aog/t
-	AvX9Kfa68azNf6Iqzm5VXC0/EkPLjv09whTZcFiOO6FLhvPWwDskY9TsFptO9qGHe4qtkWHwHYU
-	vPm4v752g5iwFWaHzj3NjnpwkhSnMurXeYuAdN9qRbMgm2VV74hBn4l5ePJNeXc+9UPRTLVFpmu
-	xeELg5J8wsWzH0/8RvhPHx0/ngN4o417ZnSAmrj61q2BncMhkUTvvlT18iRQipeNBSabETvi0g9
-	L2ns6x+2poZz5Vw7Zds7A3iKwgRVzHyWRTv3OtZEmPlR7j70g5RjOVZ0IcYOVSxS355B9uFvNLk
-	eJvDluXifgyWSzZ4UujqAL1H3lxCnGJA9y2xVw1ZRy2A2eeNqdd8nmKgN0g47of/qdUheh0lZV8
-	7qsGcQkUS86MAZUAOOTJkJlqQQivxHZ+ZlFPZUQdRLk8bj1rVxGE+qm+BPbIfIYOOUGkZGxaBb8
-	aMHhR0O67ak1zvBdLXMU9I3uuV6VHwDu/N20v+GbgNkK3lQaerYvugWQN6mHLhVFtfl+QG2odXr
-	SkCJrA==
-X-Received: by 2002:a05:6830:6f8c:b0:803:c56c:2b1a with SMTP id 46e09a7af769-8450392ee62mr7170126a34.26.1792416153343;
-        Mon, 19 Oct 2026 06:22:33 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:17::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-84a4da2d675sm1299013a34.10.2026.10.19.06.22.32
+        bh=NeUTIgQ0KJJA+c9aUBWzGj/SnLdiQlWwxSsFBKrEdws=;
+        b=A7guwpaFk2QjLcCAAuh7mMn2g8YbWYXLx0zf7X+8Nbtn51rkfIqQVVSt+3uGtZTLo1
+         z67z05ECgNxGHVO4vQBsSSURfdyDth+0pbTngoFTIfFimxa2hPFcBWfZw72KPGJ7EmU7
+         xE0Odf5WMy8Ig4DKDVSfcU3F54MDZKMLsltIqueypOEDmWZyWMMu4zAQMW1FNg/oqEqe
+         5RV0sfzav2jMosQJQFfmVk6bChHiZ4bgrldywGqyrXutCxY9etECFTgGyJOVnhYbfizK
+         YThFfd2qgtbGu8KDLUx2JtMvp22pVhqB5suprIIHbIVoJmBvvyqrEaehAhAvNfUqBkdA
+         Isvg==
+X-Gm-Message-State: AFq9FYKuYxNdkvp4Ki//qOSvEz4PF3xMXJ9YcPiMpK4oRt6gRGHf0LmC
+	TQgzYQCvenKwMcQnnOkt5ExyHyRteddkr8gKfvpWnB/3ZO0vjeRIVCzxJbd0Kqot6FY=
+X-Gm-Gg: AYBFou3gefvuiWgmR+wSdo97KYhGbyJ6aGXk1Sy/hQ8SrT3fEl6T3UABn1iO/JUOjHS
+	YcEvVK8Wb8/4+ExLt27+agbSdq7rNJHM0IGghPix2+tS0yE1eKBB6L2BzalP7uXT0mQutqz4Jsf
+	bAMxFIFVybuwLxpGqxSGD4jUusKDoq7rJCF2tIs146t1uQ1Z2vS1+ERCi2hLNoYqh/X2jmD51N0
+	ks/buwDGcRrB9Z9M2MOqSsPpTJuWGDvmb02gecuQR0l3gg/hf/GwtrLExqnasyeMUzwqRH+kzmi
+	MEKrIA4khJr9JN5zXIzk4rCIMuLLxAsA9GFavNtX9VFNWDTTHeENprEGX5DfSZ9jiOMWOHVGH9y
+	pO96bNlMBdq6ZYIXD8iHjAQVXEYiDeTHJJB1MisOxniSMqLe6TDT8BlDx34eDfiHSzq0auE8uTF
+	7g+q5ZPVdrU6CVicryjMBgw1HOigSJHhLb7KajNUMUP1ZCnC/IEv9L/M9vq//U3wgcBxIokB+9R
+	B1rO6CSdPCoQJhiG1d35yJ58L8rt8c10wMw0q12pGSRNWZtWPOSeSNXG1tt41MrA5TnPr2Tr81m
+	z+5Swg==
+X-Received: by 2002:a05:6808:ec3:b0:4d6:90d3:e18e with SMTP id 5614622812f47-53cd1cbb717mr5564226b6e.45.1792416161582;
+        Mon, 19 Oct 2026 06:22:41 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:10::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a73b63cff2sm7949930fac.7.2026.10.19.06.22.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 06:22:32 -0700 (PDT)
+        Mon, 19 Oct 2026 06:22:39 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 09/16] selftests/bpf: Test __arena pointer members
-Date: Mon, 19 Oct 2026 15:21:51 +0200
-Message-ID: <20261019132203.3034698-10-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 11/16] libbpf: Bind the arena of an object to every program in it
+Date: Mon, 19 Oct 2026 15:21:53 +0200
+Message-ID: <20261019132203.3034698-12-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019132203.3034698-1-memxor@gmail.com>
 References: <20261019132203.3034698-1-memxor@gmail.com>
@@ -82,783 +82,276 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=28728; h=from:subject; bh=qLPMFsyEpkOGw113JHwHEVJiVp2tpGDAnFgjZL+p5hw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuaxFGuXH4HF9bdavFHZimJBDjsPlH/0C3p/fIpJ14LLnpU yjq9o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABORzGL4Z5vVZiP0tz+CV+SB5eQtgl +ks0I55OY/nX+rx2It1wTP24wMB/71Ci3QXXX0x0Gu2WE3FRpevP1dv9LFovxamEpgUsQMRgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10987; h=from:subject; bh=b/t8ZuWZDUKOV/2tRDFiPuCX5yZQmsGWn7miL09onxE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuaxFGZm9U3pCTy+N+6Nf+O/+hk+nLXOpP2GfeOtmxOvmTM oX2zo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABORWM3w32uhfX1Y0nvxnh2r7y1UVU o0FIpbKVtxa9X8ixM+P9BYbsLw30Vi74kHDkG75m7zOCSklJ0ecnF//Ze7UVssdzNeW7xgLhsA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add a struct_ops member to bpf_testmod whose argument struct publishes
-arena pointers: a plain one, a __nullable one that is left NULL, one
-behind a nested struct, one inside a union, next to a scalar, together
-with a kfunc that fills the struct with the kernel address of an __arena
-argument and calls the member.
+A program has an arena only when one of its insns refers to the arena
+map. The kernel can hand a program arena pointers all the same: as
+__arena struct_ops arguments, through __arena struct members and as
+kfunc return values. The verifier rejects those in a program without an
+arena, since it has nowhere to place them, and so a struct_ops callback
+that touches nothing but its arguments fails to load until it refers to
+the arena artificially, e.g. with asm volatile("" :: "r"(&arena)).
 
-Two callbacks read the pointers back. One shares the header with the
-module, so the members are arena pointers on the program side as well
-and need no cast; it also records the register a load produces, which
-must be the arena offset with the upper 32 bits clear, reads the member
-with a load-acquire as well, which has to yield the same pointer, and
-hands the pointer to an __arena kfunc. The other mirrors the vmlinux.h
-rendering of the struct, a kernel pointer with the type tag as an
-attribute, and casts the members to the arena address space the way a
-program built against vmlinux.h has to. Both increment the value through
-each pointer and the trigger checks the count. The first callback also
-reads a member through a plain pointer to a bad address, a probed load
-that is skipped or faults, and checks that it reads as NULL rather than
-as an arena pointer.
+Bind the arena of an object to every program loaded from it. The kernel
+binds the maps of a continuous fd_array (fd_array_cnt) like maps an insn
+refers to, so pass the arena in slot 0, which is free: a kfunc insn with
+offset 0 names vmlinux BTF rather than a slot. The module BTF slots that
+follow stay as they are. A feature probe keeps older kernels, which
+reject a non-zero fd_array_cnt, on the previous behavior.
 
-The failure cases cover a store to the member, which a struct_ops
-program cannot do to any argument member, a load from the union, an
-exchange, one insn loading the arena pointer on one path and a scalar or
-a memory pointer on another, and a program without an arena. On a
-kernel whose module BTF carries no type tags the member tests are
-reported as skipped.
+An object has at most one arena, libbpf refuses a second one, so there
+is no ambiguity about which arena a program gets. Programs that never
+touch the arena see it among their maps, and pay for the arena base
+setup in their JIT prologue until a later patch spares them that; the
+arena now lives as long as any program of the object. With the count,
+the kernel also resolves every module BTF slot of the array for every
+program of the object, so each of them holds the modules the object
+calls into, not only the programs that call them. Where the JIT is
+disabled or the loader lacks CAP_PERFMON, every program of such an
+object now fails to load, since an arena needs both, where before only
+the programs using the arena did. bpf_program__clone() binds the arena
+the same way, so a program loads through veristat as it does through
+bpf_object__load(). An arena exclusive to another program and the
+light skeleton loader are left alone.
+
+An arena exclusive to the program itself is bound only where the kernel
+checks an exclusive map against the digest of the final program. Earlier
+kernels compared a map bound through the fd_array against a digest they
+had not computed yet and refused the load for the very program the map
+is exclusive to, so a second probe loads a program with a map exclusive
+to it through fd_array_cnt; where that fails, the program keeps binding
+its arena through its insns, as before.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/prog_tests/test_struct_ops_arena.c    |  75 ++++++++++++
- .../bpf/progs/struct_ops_arena_member.c       | 109 ++++++++++++++++++
- .../struct_ops_arena_member_fail__mismatch.c  |  45 ++++++++
- ...ruct_ops_arena_member_fail__mismatch_mem.c |  54 +++++++++
- .../struct_ops_arena_member_fail__no_arena.c  |  24 ++++
- .../struct_ops_arena_member_fail__union.c     |  34 ++++++
- .../struct_ops_arena_member_fail__write.c     |  36 ++++++
- .../struct_ops_arena_member_fail__xchg.c      |  40 +++++++
- .../progs/struct_ops_arena_member_render.c    |  85 ++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  24 ++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |  44 ++++++-
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   1 +
- 12 files changed, 569 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch_mem.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__no_arena.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__union.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__write.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__xchg.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
+ tools/lib/bpf/features.c        | 82 +++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c          | 66 +++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf_internal.h |  4 ++
+ 3 files changed, 150 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-index 7f9f54ba3fbe..1c04473fb42d 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-@@ -5,6 +5,14 @@
- #include "struct_ops_arena.skel.h"
- #include "struct_ops_arena_attach.skel.h"
- #include "struct_ops_arena_fail.skel.h"
-+#include "struct_ops_arena_member.skel.h"
-+#include "struct_ops_arena_member_render.skel.h"
-+#include "struct_ops_arena_member_fail__union.skel.h"
-+#include "struct_ops_arena_member_fail__xchg.skel.h"
-+#include "struct_ops_arena_member_fail__mismatch.skel.h"
-+#include "struct_ops_arena_member_fail__mismatch_mem.skel.h"
-+#include "struct_ops_arena_member_fail__write.skel.h"
-+#include "struct_ops_arena_member_fail__no_arena.skel.h"
- 
- #if defined(__x86_64__) || defined(__aarch64__)
- /*
-@@ -101,6 +109,54 @@ static void arena_arg_attach(void)
- 
- 	struct_ops_arena__destroy(skel);
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index 9f589980beef..adb5d2e7fdfa 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -77,6 +77,82 @@ static int probe_kern_global_data(int token_fd)
+ 	return probe_fd(ret);
  }
-+
-+/* Attach @st_ops and run @trigger once, it returns 0 when everything checked out. */
-+static void attach_and_trigger(struct bpf_map *st_ops, struct bpf_program *trigger)
+ 
++/*
++ * A continuous fd_array binds every map in it to the program, whether an
++ * insn refers to the map or not. Kernels without the attribute reject a
++ * non-zero fd_array_cnt.
++ */
++static int probe_kern_fd_array_cnt(int token_fd)
 +{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct bpf_link *link;
++	struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
++		.token_fd = token_fd,
++		.map_flags = token_fd ? BPF_F_TOKEN_FD : 0,
++	);
++	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
++		.token_fd = token_fd,
++		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
++		.fd_array_cnt = 1,
++	);
++	int ret, map, insn_cnt = ARRAY_SIZE(insns);
++
++	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "libbpf_det_bind", sizeof(int), sizeof(int), 1,
++			     &map_opts);
++	if (map < 0) {
++		ret = -errno;
++		pr_warn("Error in %s(): %s. Couldn't create simple array map.\n",
++			__func__, errstr(ret));
++		return ret;
++	}
++
++	prog_opts.fd_array = &map;
++	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &prog_opts);
++	close(map);
++	return probe_fd(ret);
++}
++
++/*
++ * The kernel checks an exclusive map bound through fd_array_cnt against the
++ * digest of the final program. Earlier kernels compared it as the map was
++ * added, against a digest they had not computed yet, and refused the load for
++ * the very program the map is exclusive to; kernels without exclusive maps
++ * refuse the map.
++ */
++static int probe_kern_excl_map_fd_array_cnt(int token_fd)
++{
++	struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	__u8 hash[SHA256_DIGEST_LENGTH];
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
++		.token_fd = token_fd,
++		.map_flags = token_fd ? BPF_F_TOKEN_FD : 0,
++		.excl_prog_hash = hash,
++		.excl_prog_hash_size = sizeof(hash),
++	);
++	LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
++		.token_fd = token_fd,
++		.prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
++		.fd_array_cnt = 1,
++	);
++	int ret, map, insn_cnt = ARRAY_SIZE(insns);
++
++	libbpf_sha256(insns, sizeof(insns), hash);
++	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "libbpf_det_excl", sizeof(int), sizeof(int), 1,
++			     &map_opts);
++	if (map < 0)
++		return 0;
++
++	prog_opts.fd_array = &map;
++	ret = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, insn_cnt, &prog_opts);
++	close(map);
++	return probe_fd(ret);
++}
++
+ static int probe_kern_btf(int token_fd)
+ {
+ 	static const char strs[] = "\0int";
+@@ -742,6 +818,12 @@ static struct kern_feature_desc {
+ 	[FEAT_PERCPU_DATA] = {
+ 		"kernel supports percpu data", probe_kern_percpu_data,
+ 	},
++	[FEAT_FD_ARRAY_CNT] = {
++		"continuous fd_array (fd_array_cnt)", probe_kern_fd_array_cnt,
++	},
++	[FEAT_EXCL_MAP_FD_ARRAY_CNT] = {
++		"exclusive map bound through fd_array_cnt", probe_kern_excl_map_fd_array_cnt,
++	},
+ };
+ 
+ bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index fcedb78abe00..8fcb8cf39cc0 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -797,7 +797,8 @@ struct bpf_object {
+ 	/*
+ 	 * Slots handed out so far, slot 0 included. A kfunc insn names a module
+ 	 * BTF slot through its offset, slot 0 stands for vmlinux BTF and stays
+-	 * empty, so the array goes to the kernel without a count.
++	 * empty, so the array goes to the kernel without a count, unless
++	 * bpf_object__bind_arena() puts the arena of the object there.
+ 	 */
+ 	size_t fd_array_used;
+ 
+@@ -8804,6 +8805,56 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
+ 
+ static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_sz);
+ 
++/*
++ * Bind the arena of the object to the program about to be loaded. A program
++ * has an arena only when an insn refers to the map, but the kernel can hand
++ * it arena pointers all the same, as struct_ops arguments, through tagged
++ * struct members or as kfunc return values, and the verifier rejects those
++ * when the program has no arena to place them in. A continuous fd_array
++ * binds every map in it, the arena takes slot 0, which is free: a kfunc insn
++ * with offset 0 names vmlinux BTF rather than a slot.
++ */
++static int bpf_object__bind_arena(struct bpf_object *obj, struct bpf_program *prog,
++				  struct bpf_prog_load_opts *load_attr)
++{
++	struct bpf_map *map;
 +	int err;
 +
-+	link = bpf_map__attach_struct_ops(st_ops);
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		return;
++	if (obj->gen_loader || obj->arena_map_idx < 0 || !kernel_supports(obj, FEAT_FD_ARRAY_CNT))
++		return 0;
++	map = &obj->maps[obj->arena_map_idx];
++	/*
++	 * Nothing to bind when the arena is not created, or no longer is after
++	 * a failed load, when it is exclusive to another program, and nothing
++	 * for an offloaded program, which the kernel does not let near an
++	 * arena.
++	 */
++	if (!map->autocreate || map->fd < 0 || (map->excl_prog && map->excl_prog != prog) ||
++	    load_attr->prog_ifindex)
++		return 0;
++	/*
++	 * An arena exclusive to the program itself needs a kernel that checks
++	 * the map against the digest of the final program. Earlier kernels
++	 * compared a map bound through the fd_array against a digest they had
++	 * not computed yet and refused the load; there the program binds its
++	 * arena through its insns, as before.
++	 */
++	if (map->excl_prog && !kernel_supports(obj, FEAT_EXCL_MAP_FD_ARRAY_CNT))
++		return 0;
 +
-+	err = bpf_prog_test_run_opts(bpf_program__fd(trigger), &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "trigger_retval");
-+
-+	bpf_link__destroy(link);
-+}
-+
-+/*
-+ * Attach a callback that reads arena pointers out of its argument struct.
-+ * The header is shared with the module, so the members are arena pointers
-+ * on the program side as well.
-+ */
-+static void arena_member(void)
-+{
-+	struct struct_ops_arena_member *skel;
-+
-+	skel = struct_ops_arena_member__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_arena_member__open_and_load"))
-+		return;
-+
-+	attach_and_trigger(skel->maps.testmod_arena_member, skel->progs.trigger);
-+	struct_ops_arena_member__destroy(skel);
-+}
-+
-+/* The same through the vmlinux.h rendering of the members, which takes casts. */
-+static void arena_member_render(void)
-+{
-+	struct struct_ops_arena_member_render *skel;
-+
-+	skel = struct_ops_arena_member_render__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_arena_member_render__open_and_load"))
-+		return;
-+
-+	attach_and_trigger(skel->maps.testmod_arena_member_render, skel->progs.trigger);
-+	struct_ops_arena_member_render__destroy(skel);
-+}
- #endif
- 
- /*
-@@ -116,12 +172,31 @@ void serial_test_struct_ops_arena(void)
- 	 * arena arguments", so the programs cannot even load.
- 	 */
- #if defined(__x86_64__) || defined(__aarch64__)
-+	int has_tag;
-+
- 	if (test__start_subtest("arena_arg"))
- 		arena_arg();
- 	if (test__start_subtest("arena_arg_fail"))
- 		arena_arg_fail();
- 	if (test__start_subtest("arena_arg_attach"))
- 		arena_arg_attach();
-+	/* the tags reach the module BTF only from a toolchain with btf_type_tag support */
-+	has_tag = testmod_member_has_type_tag("bpf_testmod_arena_member_args", "ptr", "arena");
-+	if (ASSERT_GE(has_tag, 0, "testmod_btf") && has_tag) {
-+		if (test__start_subtest("arena_member"))
-+			arena_member();
-+		if (test__start_subtest("arena_member_render"))
-+			arena_member_render();
-+		RUN_TESTS(struct_ops_arena_member_fail__union);
-+		RUN_TESTS(struct_ops_arena_member_fail__xchg);
-+		RUN_TESTS(struct_ops_arena_member_fail__mismatch);
-+		RUN_TESTS(struct_ops_arena_member_fail__mismatch_mem);
-+		RUN_TESTS(struct_ops_arena_member_fail__write);
-+		RUN_TESTS(struct_ops_arena_member_fail__no_arena);
-+	} else if (test__start_subtest("arena_member")) {
-+		/* so that the missing member tests show up as skipped */
-+		test__skip();
++	if (!obj->fd_array_used) {
++		err = libbpf_ensure_mem((void **)&obj->fd_array, &obj->fd_array_cap, sizeof(int), 1);
++		if (err)
++			return err;
++		obj->fd_array_used = 1;
 +	}
- #else
- 	test__skip();
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
-new file mode 100644
-index 000000000000..a2218cd81619
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_experimental.h"
-+#include <bpf_arena_common.h>
-+#include "../test_kmods/bpf_testmod.h"
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	/* page 0 hosts the arena globals, page 1 is for allocations */
-+	__uint(max_entries, 2);
-+} arena SEC(".maps");
-+
-+/* also associates the callback with the arena */
-+u64 __arena arena_touch;
-+/* the register value a load of args->ptr produced in the callback */
-+u64 __arena member_ptr_val;
-+
-+/*
-+ * The header is shared with the module, so the members are u64 __arena * on
-+ * this side too and the loads need no cast. The verifier derives the type of
-+ * the loaded value from the module BTF, where the members carry the tag.
-+ */
-+SEC("struct_ops/test_arena_member")
-+int BPF_PROG(test_arena_member_cb, struct bpf_testmod_arena_member_args *args)
-+{
-+	u64 __arena *ptr = args->ptr, *acq;
-+	u64 raw;
-+
-+	arena_touch++;
-+
-+	/* the register right after the load, untouched by the compiler */
-+	asm volatile("%[raw] = *(u64 *)(%[args] + %[off])"
-+		     : [raw]"=r"(raw)
-+		     : [args]"r"(args),
-+		       [off]"i"(offsetof(struct bpf_testmod_arena_member_args, ptr)));
-+	member_ptr_val = raw;
-+
-+	*ptr += 1;
-+	/* an acquire load of the member yields the same arena pointer */
-+	asm volatile("r1 = %[args];\n"
-+		     ".8byte 0x00000100000010db;\n"	/* r0 = load_acquire((u64 *)(r1 + 0)) */
-+		     "%[acq] = r0;"
-+		     : [acq]"=r"(acq)
-+		     : [args]"r"(args)
-+		     : "r0", "r1");
-+	if (acq != ptr)
-+		return 0xbad;
-+	*acq += 1;
-+	if (args->null_ptr)
-+		return 0xbad;
-+	*args->nested.ptr += 1;
-+	if (args->cookie != 0xc00c1e)
-+		return 0xbad;
-+	/*
-+	 * @faulting is a plain kernel pointer, so the member behind it is read
-+	 * with a probed load, which the JIT skips for a user address or which
-+	 * faults, and reads as NULL rather than as an arena pointer.
-+	 */
-+	if (args->faulting->ptr)
-+		return 0xbad;
-+	/* an arena pointer to kfuncs as well, the kfunc adds one */
-+	bpf_kfunc_arena_arg_test((u64 *)args->ptr);
++	obj->fd_array[0] = map->fd;
++	load_attr->fd_array = obj->fd_array;
++	/* with slot 0 filled every slot handed out is valid, so the array can go with a count */
++	load_attr->fd_array_cnt = obj->fd_array_used;
 +	return 0;
 +}
 +
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member = {
-+	.test_arena_member = (void *)test_arena_member_cb,
-+};
-+
-+SEC("syscall")
-+int trigger(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	u64 __arena *val;
-+	int ret;
-+
-+	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!val)
-+		return 1;
-+
-+	*val = 41;
-+	ret = bpf_testmod_ops3_call_test_arena_member((u64 *)val);
-+	if (ret)
-+		return 2;
-+	/* ptr, its acquire load, nested.ptr and the kfunc each added one */
-+	if (*val != 45)
-+		return 3;
-+
-+	/*
-+	 * The callback saw (u32)(kaddr - kern_vm_start), the arena offset of
-+	 * val with the upper 32 bits clear, the same as an __arena argument.
-+	 */
-+	if (member_ptr_val != (u32)(u64)val)
-+		return 4;
-+
-+	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
-+#endif
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch.c
-new file mode 100644
-index 000000000000..0b4147894122
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf_arena_common.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1);
-+} arena SEC(".maps");
-+
-+/*
-+ * The same load reaches args->ptr on one path and args->cookie on the other,
-+ * the branch on the unknown cookie value makes the verifier walk both. The
-+ * rewrite is per insn, so the paths have to agree on what they load.
-+ */
-+SEC("struct_ops/test_arena_member")
-+__failure __msg("loads an arena pointer member on one path and something else on another")
-+__naked int mismatch_member(void)
-+{
-+	asm volatile (
-+	"r6 = *(u64 *)(r1 + 0);"
-+	"r2 = %[arena] ll;"
-+	"r0 = *(u64 *)(r6 + %[cookie_off]);"
-+	"if r0 == 0 goto 1f;"
-+	"r6 += %[cookie_off];"
-+"1:	r0 = *(u64 *)(r6 + 0);"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm_addr(arena),
-+	  __imm_const(cookie_off, offsetof(struct bpf_testmod_arena_member_args, cookie))
-+	: __clobber_all);
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member_fail = {
-+	.test_arena_member = (void *)mismatch_member,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch_mem.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch_mem.c
-new file mode 100644
-index 000000000000..ff6d4db47cfd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch_mem.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf_arena_common.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1);
-+} arena SEC(".maps");
-+
-+/*
-+ * The same load reads args->ptr on one path and the memory argument on the
-+ * other. The verifier lets a load insn serve a kernel struct pointer and a
-+ * memory pointer, see save_aux_ptr_type(), but the rewrite of the arena
-+ * member would corrupt the value the other path loads. A global function
-+ * is the only place a struct_ops program of this type gets a memory pointer.
-+ * The loaded value goes nowhere: an ALU insn on it would be an arena
-+ * pointer on one path and a scalar on the other, which the verifier rejects
-+ * on its own before the fixup pass gets to the load.
-+ */
-+__noinline int load_either(unsigned long long *ctx __arg_ctx, u64 *mem __arg_nonnull)
-+{
-+	struct bpf_testmod_arena_member_args *args = (void *)ctx[0];
-+	void *p = args;
-+
-+	if (args->cookie == 0)
-+		p = mem;
-+	/* one load insn, reached with both pointers */
-+	asm volatile("r0 = *(u64 *)(%[p] + 0)" :: [p]"r"(p) : "r0");
-+	return 0;
-+}
-+
-+SEC("struct_ops/test_arena_member")
-+__failure __msg("loads an arena pointer member on one path and something else on another")
-+int BPF_PROG(mismatch_mem, struct bpf_testmod_arena_member_args *args)
-+{
-+	u64 local = 0;
-+
-+	asm volatile("" :: "r"(&arena));
-+	return load_either(ctx, &local);
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member_fail = {
-+	.test_arena_member = (void *)mismatch_mem,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__no_arena.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__no_arena.c
-new file mode 100644
-index 000000000000..cdd8ea740478
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__no_arena.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* No arena in the object: the member cannot be translated into anything. */
-+SEC("struct_ops/test_arena_member")
-+__failure __msg("arena pointer member ptr of struct bpf_testmod_arena_member_args "
-+		"requires a program with an associated arena")
-+int BPF_PROG(no_arena_member, struct bpf_testmod_arena_member_args *args)
-+{
-+	return args->ptr != NULL;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member_fail = {
-+	.test_arena_member = (void *)no_arena_member,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__union.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__union.c
-new file mode 100644
-index 000000000000..d45666fd482c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__union.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf_arena_common.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1);
-+} arena SEC(".maps");
-+
-+/*
-+ * An offset into a union resolves to its first member, so a program reading
-+ * raw there would get an arena pointer it did not ask for.
-+ */
-+SEC("struct_ops/test_arena_member")
-+__failure __msg("arena pointer member ptr of bpf_testmod_arena_union is inside a union")
-+int BPF_PROG(union_member, struct bpf_testmod_arena_member_args *args)
-+{
-+	asm volatile("" :: "r"(&arena));
-+	return *args->u.ptr != 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member_fail = {
-+	.test_arena_member = (void *)union_member,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__write.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__write.c
-new file mode 100644
-index 000000000000..ff0761980948
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__write.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf_arena_common.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1);
-+} arena SEC(".maps");
-+
-+/*
-+ * The kernel owns the member, a program only reads it. A struct_ops program
-+ * cannot store through its arguments at all, so the store is refused before
-+ * the tag comes into play; the exchange test reaches the arena member check.
-+ */
-+SEC("struct_ops/test_arena_member")
-+__failure __msg("only read is supported")
-+int BPF_PROG(write_member, struct bpf_testmod_arena_member_args *args)
-+{
-+	asm volatile("" :: "r"(&arena));
-+	args->ptr = NULL;
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member_fail = {
-+	.test_arena_member = (void *)write_member,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__xchg.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__xchg.c
-new file mode 100644
-index 000000000000..0d814166cabc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__xchg.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf_arena_common.h>
-+#include "bpf_misc.h"
-+#include "../test_kmods/bpf_testmod.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 1);
-+} arena SEC(".maps");
-+
-+/* An atomic that writes the member is neither a plain nor an acquire load. */
-+SEC("struct_ops/test_arena_member")
-+__failure __msg("arena pointer member ptr of struct "
-+		"bpf_testmod_arena_member_args can only be read with a plain or an acquire load")
-+__naked int xchg_member(void)
-+{
-+	asm volatile (
-+	"r1 = *(u64 *)(r1 + 0);"
-+	"r2 = %[arena] ll;"
-+	"r0 = 0;"
-+	/* r0 = xchg_64((u64 *)(r1 + 0), r0): BPF_STX | BPF_ATOMIC | BPF_DW, imm BPF_XCHG */
-+	".8byte 0x000000e1000001db;"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm_addr(arena)
-+	: __clobber_all);
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member_fail = {
-+	.test_arena_member = (void *)xchg_member,
-+};
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
-new file mode 100644
-index 000000000000..23fc2b927793
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_experimental.h"
-+#include <bpf_arena_common.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/*
-+ * The module types as vmlinux.h renders them: the tag is an attribute on a
-+ * pointer in the kernel address space, so the program has to cast the member
-+ * to the arena address space before using it. That is what a program built
-+ * against vmlinux.h sees for a kernel struct with an __arena member.
-+ */
-+#define __arena_tag	__attribute__((btf_type_tag("arena")))
-+#define __nullable_tag	__attribute__((btf_type_tag("nullable")))
-+
-+struct bpf_testmod_arena_member_args {
-+	__u64 __arena_tag *ptr;
-+	__u64 __arena_tag __nullable_tag *null_ptr;
-+	struct {
-+		__u64 __arena_tag *ptr;
-+	} nested;
-+} __attribute__((preserve_access_index));
-+
-+struct bpf_testmod_ops3 {
-+	int (*test_arena_member)(struct bpf_testmod_arena_member_args *args);
-+};
-+
-+int bpf_testmod_ops3_call_test_arena_member(__u64 *ptr__arena) __ksym;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 2);
-+} arena SEC(".maps");
-+
-+/* also associates the callback with the arena */
-+u64 __arena arena_touch;
-+
-+SEC("struct_ops/test_arena_member")
-+int BPF_PROG(test_arena_member_render_cb, struct bpf_testmod_arena_member_args *args)
-+{
-+	u64 __arena *ptr = (u64 __arena *)args->ptr;
-+
-+	arena_touch++;
-+	*ptr += 1;
-+	if (args->null_ptr)
-+		return 0xbad;
-+	*(u64 __arena *)args->nested.ptr += 1;
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops3 testmod_arena_member_render = {
-+	.test_arena_member = (void *)test_arena_member_render_cb,
-+};
-+
-+SEC("syscall")
-+int trigger(void *ctx)
-+{
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	u64 __arena *val;
-+	int ret;
-+
-+	val = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
-+	if (!val)
-+		return 1;
-+
-+	*val = 41;
-+	ret = bpf_testmod_ops3_call_test_arena_member((u64 *)val);
-+	if (ret)
-+		return 2;
-+	/* ptr and nested.ptr each added one */
-+	if (*val != 43)
-+		return 3;
-+
-+	bpf_arena_free_pages(&arena, (void __arena *)val, 1);
-+#endif
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 37d5824810d1..6380f52f4dd2 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -506,6 +506,11 @@ static int bpf_testmod_ops3__test_arena_multislot(struct bpf_testmod_arena_pair
- 	return 0;
- }
+ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 				struct bpf_insn *insns, int insns_cnt,
+ 				const char *license, __u32 kern_version, int *prog_fd)
+@@ -8867,6 +8918,9 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 	if (obj->data_in_arena)
+ 		load_attr.prog_flags |= BPF_F_ARENA_SCALAR;
+ 	load_attr.fd_array = obj->fd_array;
++	err = bpf_object__bind_arena(obj, prog, &load_attr);
++	if (err)
++		return err;
  
-+static int bpf_testmod_ops3__test_arena_member(struct bpf_testmod_arena_member_args *args)
-+{
-+	return 0;
-+}
-+
- static int bpf_testmod_ops3__test_nullable(struct bpf_testmod_nullable_args *args)
+ 	load_attr.token_fd = obj->token_fd;
+ 	if (obj->token_fd)
+@@ -9966,8 +10020,10 @@ static void bpf_object_cleanup_btf(struct bpf_object *obj)
+ 
+ static void bpf_object_post_load_cleanup(struct bpf_object *obj)
  {
- 	return 0;
-@@ -518,6 +523,7 @@ static struct bpf_testmod_ops3 __bpf_testmod_ops3 = {
- 	.test_arena_nullable = bpf_testmod_ops3__test_arena_nullable,
- 	.test_arena_stack = bpf_testmod_ops3__test_arena_stack,
- 	.test_arena_multislot = bpf_testmod_ops3__test_arena_multislot,
-+	.test_arena_member = bpf_testmod_ops3__test_arena_member,
- 	.test_nullable = bpf_testmod_ops3__test_nullable,
+-	/* clean up fd_array */
++	/* clean up fd_array, and the slots handed out with it */
+ 	zfree(&obj->fd_array);
++	obj->fd_array_cap = 0;
++	obj->fd_array_used = 0;
+ 
+ 	/* clean up BTF */
+ 	bpf_object_cleanup_btf(obj);
+@@ -10946,6 +11002,12 @@ int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts
+ 	attr.kern_version = OPTS_GET(opts, kern_version, 0) ?: obj->kern_version;
+ 	attr.fd_array = OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array;
+ 	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
++	/* the arena of the object goes with the program, as in bpf_object__load() */
++	if (!OPTS_GET(opts, fd_array, NULL) && !OPTS_GET(opts, fd_array_cnt, 0)) {
++		err = bpf_object__bind_arena(obj, prog, &attr);
++		if (err)
++			return libbpf_err(err);
++	}
+ 	attr.token_fd = OPTS_GET(opts, token_fd, 0) ?: obj->token_fd;
+ 	if (attr.token_fd)
+ 		attr.prog_flags |= BPF_F_TOKEN_FD;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 4e45dfacb548..e90b5336bac0 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -404,6 +404,10 @@ enum kern_feature_id {
+ 	FEAT_BPF_SYSCALL_COMMON_ATTRS,
+ 	/* Kernel supports percpu data */
+ 	FEAT_PERCPU_DATA,
++	/* Kernel binds every map in a continuous fd_array (fd_array_cnt) to the program */
++	FEAT_FD_ARRAY_CNT,
++	/* Kernel checks an exclusive map bound through fd_array_cnt against the final digest */
++	FEAT_EXCL_MAP_FD_ARRAY_CNT,
+ 	__FEAT_CNT,
  };
  
-@@ -559,6 +565,23 @@ __bpf_kfunc int bpf_testmod_ops3_call_test_arena_multislot(u64 *ptr__arena)
- 	return st_ops3->test_arena_multislot(p, ptr__arena);
- }
- 
-+/* The callback gets the kernel address of @ptr__arena behind each __arena member. */
-+__bpf_kfunc int bpf_testmod_ops3_call_test_arena_member(u64 *ptr__arena)
-+{
-+	struct bpf_testmod_arena_member_args args = {
-+		.ptr = ptr__arena,
-+		.nested.ptr = ptr__arena,
-+		.u.ptr = ptr__arena,
-+		.cookie = 0xc00c1e,
-+		/* in the first page, which is never mapped */
-+		.faulting = (void *)16,
-+	};
-+
-+	if (!st_ops3 || !st_ops3->test_arena_member)
-+		return -EOPNOTSUPP;
-+	return st_ops3->test_arena_member(&args);
-+}
-+
- /*
-  * The members of struct bpf_testmod_nullable_args are trusted the way the
-  * verifier's BTF_TYPE_SAFE_TRUSTED() lists vmlinux members: through a struct
-@@ -1021,6 +1044,7 @@ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_nullable)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_stack)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_multislot)
-+BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_arena_member)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_nullable)
- BTF_ID_FLAGS(func, bpf_kfunc_get_default_trusted_ptr_test);
- BTF_ID_FLAGS(func, bpf_kfunc_put_default_trusted_ptr_test);
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-index 1a67564a6b8d..4ba9def74404 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-@@ -115,12 +115,25 @@ struct bpf_testmod_arena_pair {
- };
- 
- /*
-- * The qualifiers are BTF type tags for the verifier. The module gets them
-- * from bpf_compiler_types.h, user space and BPF programs need them empty.
-+ * The qualifiers are BTF type tags for the verifier. The module gets __arena
-+ * and __nullable from bpf_compiler_types.h. A BPF program gets __arena from
-+ * bpf_arena_common.h, and the same definition here when it includes this
-+ * header first, and needs __nullable and __percpu empty. User space needs all
-+ * of them empty.
-  */
- #ifdef __KERNEL__
- #include <linux/bpf_compiler_types.h>
- #endif
-+#if defined(__BPF__) && !defined(__arena)
-+#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
-+#define __arena __attribute__((address_space(1))) __attribute__((btf_type_tag("arena")))
-+#else
-+#define __arena __attribute__((btf_type_tag("arena")))
-+#endif
-+#endif
-+#ifndef __arena
-+#define __arena
-+#endif
- #ifndef __nullable
- #define __nullable
- #endif
-@@ -132,6 +145,31 @@ struct bpf_testmod_pcpu {
- 	int val;
- };
- 
-+struct bpf_testmod_arena_nested {
-+	u64 __arena *ptr;
-+};
-+
-+union bpf_testmod_arena_union {
-+	u64 __arena *ptr;
-+	u64 raw;
-+};
-+
-+/* Arguments of test_arena_member(), the pointers hold kernel addresses of arena memory */
-+struct bpf_testmod_arena_member_args {
-+	/* the value the caller passed, never NULL */
-+	u64 __arena *ptr;
-+	/* always NULL */
-+	u64 __arena __nullable *null_ptr;
-+	/* the same value again, behind a nested struct */
-+	struct bpf_testmod_arena_nested nested;
-+	/* the same value again, but a load from a union is rejected */
-+	union bpf_testmod_arena_union u;
-+	/* a scalar, loaded by the same insn as @ptr in a verifier test */
-+	u64 cookie;
-+	/* a bad pointer to a struct like this one, a load through it faults */
-+	struct bpf_testmod_arena_member_args *faulting;
-+};
-+
- /* Arguments of test_nullable(), trusted through the __safe_trusted alias in the module */
- struct bpf_testmod_nullable_args {
- 	/* never NULL */
-@@ -157,6 +195,8 @@ struct bpf_testmod_ops3 {
- 				u64 g, u64 h, u64 *ptr);
- 	/* a multi-slot leading arg, so @ptr is not at the slot its arg index suggests */
- 	int (*test_arena_multislot)(struct bpf_testmod_arena_pair p, u64 *ptr);
-+	/* Used to test __arena pointer members. */
-+	int (*test_arena_member)(struct bpf_testmod_arena_member_args *args);
- 	/* Used to test __nullable pointer members. */
- 	int (*test_nullable)(struct bpf_testmod_nullable_args *args);
- };
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 1e7b1f1e5148..3b810f1e438f 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -224,6 +224,7 @@ int bpf_testmod_ops3_call_test_arena(__u64 *ptr__arena) __ksym;
- int bpf_testmod_ops3_call_test_arena_nullable(__u64 *ptr__arena__nullable) __ksym;
- int bpf_testmod_ops3_call_test_arena_stack(__u64 *ptr__arena) __ksym;
- int bpf_testmod_ops3_call_test_arena_multislot(__u64 *ptr__arena) __ksym;
-+int bpf_testmod_ops3_call_test_arena_member(__u64 *ptr__arena) __ksym;
- int bpf_testmod_ops3_call_test_nullable(void) __ksym;
- 
- __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
 -- 
 2.53.0-Meta
 
