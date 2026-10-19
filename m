@@ -1,84 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792429128;
-	b=VYCEVzjylvjj7PF+XRG1LB4aY3ovOvbH+jN1ASES/MW6GL+YaTpaHxlkKVJGnVkPCSv5
-	 igHDCc3g7kwCxxVE1FCW6DDfFHWX17ucH/q0+O+Z4T4hk58lQzon5UteDkaqreT0kjwXg
-	 L6SWlTi4eLXoh5xG+vtUKSyBsJ0y2VCesnLqwlmmxxlYkfIkZP1/S+ncNqqzcdr/QJ60s
-	 gJpH6NNZk1epBpMuugpqrRFZOAvfQ5alVZ+GjV+eLOYrH0az8WtK7QwvNSzZKBg/Aklpl
-	 xlwcJXZbEMb/hRSKBA1UCFCd5RWpFO1hoTnoJJJsCoR3cw2ahnUT67Pq9aFGfK0SZKw==
+	t=1792429655;
+	b=z5tehCC4P2ePoWlRC/cb2GndZ8xl7gbkZ8DFQFRZjbcykpVJU/05PaIM0hYrLBYjzmgD
+	 s5d8TzQn9FvHOOY411p5OOgMoBDQLFHtljh/u7WFSrNrmGuX+fVENpjljpKIhCw6Yh/gf
+	 3BVBeEpK+BfZqm82kDSd9rYhMwepohkSLhwLcIsvxssX7WpTjU5UwBCAu4O2YQDcnsEmQ
+	 93ZjksoNUiPvvIuZ6p5ke3mzbAhT/vVcZ2GUogN74OHb9mfTshzljWZGY+c1gkVeIMuZy
+	 RFvUHV9v9dvniOwlEnK9dVGluZYZzV7+w+UHtiTg/Rf9eS6Mq7ZGg4wzjE+4xk1aDow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792429128;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
-	bh=KkMdWlrPdSNNduqxUUOw/TuQSGBXGO9cH3ilJ+obI3E=;
-	b=NzbV9B+aNqP0nSJwRtPcTGLxIQH/mH/18Kzl+/Vp9X0Nw0JtfToRLhsYzZPXiYek1nKO
-	 gcHHohtvi3MGzehCDdtuYX+HSQC0KIx6ddNNRqHgPQ7ZvwDB70HbA6/veMj7vso3Hdx3U
-	 DMfiN1qz3rCmcFdZWndEnS7cmwcOP+H5bvU8m9zEZDmOsKs5uODcss8EA5GorJjWbtomb
-	 8TNO+N70/O17cQlZ8k0duU510CQa47kt5Jvj/in1TFdSLuzx6K+oiHqeoofhswscwf2Cp
-	 fOQkRdaSyvelOi/T4TF+rrgla+dTN3r7cNsw5uaHusQCCJU68s2g598OUO7LAK+9xzQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792429655;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=rhMGS4hc4DBrGFPmsWHhHKuoY0IQAFvPYSF5t3kd/sA=;
+	b=NgtdndLSXzExGqDIVQsem1UR/wclL/2eZt1YkAeoVLz/L3ia49t/2nxBycjGXNOWtB0N
+	 eIOZcmMwPlt4bTUBnv0yVM08xrfHODt896FUKn1U4hj+sFXWMMfei0hu3TcBlbO/WQB0C
+	 CgfKi0p07PCTuBDh1hSrqaOvjQCkY5JW6G64C28PNIaXUJOqmAip0hk1dTMMyu2rTIhvO
+	 Oeh3H9ERt9daJFNkPb1gm2CHYmzAlW9THc6nwgXuMyGrFBE81Qd8Z3ousRzp8J7YwuBg3
+	 wcsIVxpRYq1IHIaInuNH7nDGD5LLS0QsLAh0KrFbEHD0alyI6H5nQsdD1sPPT/+mOfQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=g4MaDUX2;
-	arc=none smtp.remote-ip=209.85.214.181
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hj4CbPEC;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C331F606A31B
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 16:58:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C331F606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838C9606A31B
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 17:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=g4MaDUX2
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e8fe8e343fso12014325ad.2
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 09:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792429127; x=1793033927; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KkMdWlrPdSNNduqxUUOw/TuQSGBXGO9cH3ilJ+obI3E=;
-        b=g4MaDUX28LQh6dEGXiyEcLOoXECScCKHQHOS02TSMQ4RJBsO+uWD5pVHNxxFeeKNex
-         HzWdXWT89sanXVLsc0E7jADPCeouWDQfAf/5b0Dsn+UQuUqdp7gZDMSVj+jJdM0C/5Tg
-         xWQpDZdTdX9KwyEVxyVSfMaCpKglGkDw3LM2BiL3/8O7AIXVDl0CxLglNrpMcimbjBTq
-         ItJyoOEFkmPQc5NkjyDXV27xdT87ngyP95XEYmjw7jZiR7yI795FbWx6l+Op6y6iee1H
-         WTWFceyt0Wi8EOqk/mRTc5sTXBSE2PdlPtjJQz4sARhLqvNEduFZO01UJmpgcXcwZnYn
-         XmvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792429127; x=1793033927;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KkMdWlrPdSNNduqxUUOw/TuQSGBXGO9cH3ilJ+obI3E=;
-        b=LleXGxW/5WgAMXcf6hbmPj0Rfk0xmU5ic+9LwWldWcKTXsPh7gm+HuCWuExtJz+23G
-         2UdSkO45D5k64MTic4gZxE1QYiUvCipFF5U0SmQ8c3bEIP/VQHWhJe7NobI6rnDNuB/R
-         Bb0sBRQ1FO4LzvNV3DxJDVP8Vce5Hq5ZVy2oi6LfZEjMyvZ30ZQM//fysKDyqS13sIM4
-         8CAGviWrR6+RFQnxCupt8MiJHSF6skyUZpfHvUe8zidlUokk/mtmB9sK/BLuTa4IIsuq
-         2w/7vzzoUMxY/o1t1HIFbPEGn6j4NhqyX+Rhdl/UbYCUvoxqlb9X/+bF8pmMMzjkzcPB
-         NnjQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwPa3pUpMX22XyH43vxT2rGljvDZ6dYTDLc5dkskiNxc76EO533BWT/IxkAK0LNZIUaGf4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKzFVFaaBeKKZB+ADkyVmMKRjMIMx5XEsk/K5MwqGOcq4CkSeEU
-	/dXXNAlNTJ6WTVWxwafa2a/EigATP7zGv8gl008BaYriIPv0uQ08TMCy
-X-Gm-Gg: AYBFou3eCIIdKBRi4JdTK9Fz+WL1cxKrP8mv39FhzLLojbEFm0yvdRTgZe5InnRIMOn
-	2znOtkRkZl2EV68wzNlSK6QOjISTYGNDZp1DXEZkrjr2wkgQ1T6+GupkUgoL6FIOYJBgUNRjfCF
-	fz8W42sC7wU49J/JsTclusZz4itswyo3zGRCAVZCgGP94y0OF2V/pr5gG1H62K9fjGHXhjc/g/2
-	+BHslGVHI0mLcSjSrqiu3UcXpt7kwzbq+Nfm/w5wA4L+cIQ7xpuxTKT6jS2EwAkbModP0pis8m+
-	RD29BJ2/K65Dtf17PcuaY1fQN652+wQ0tbkOurbcogRqUE8u3RHwTx89Q5Gp2Dubm3RVBKL2z4T
-	hY44hPi3SFj003pcUVjnPwBCLPD4liC3fUsOoMWZnVVBfds1rzo+c8oSCmJPC8YiJ1qd9VMDVdt
-	KdcwmoYeccTQHaUUjXnnMC8/DmELuUyzgBBPhVsqmBZ63R93mQ3ri+BNmI6IeTBD7UK/GKUUMQT
-	SYpgeMACGOUlkOPicsc8WZtYfBXB9qtG8O1qh0+yq3ua/NyX/N4fQLHqezeB+o6Re3cbt69nj8/
-	daTL599+yP4ZkH3TBedNpHvGDN7TAkcn/i0hXVs25eVa5QH6gWqCJPFjTYl+
-X-Received: by 2002:a17:903:3503:b0:2dd:ad73:c989 with SMTP id d9443c01a7336-2e9a69e9d24mr66985745ad.33.1792429127112;
-        Mon, 19 Oct 2026 09:58:47 -0700 (PDT)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea1501f4a7sm3688635ad.43.2026.10.19.09.58.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2026 09:58:46 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hj4CbPEC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE37E1F000C4;
+	Mon, 19 Oct 2026 17:07:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792429655;
+	bh=rhMGS4hc4DBrGFPmsWHhHKuoY0IQAFvPYSF5t3kd/sA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hj4CbPECyGqNIysZOEz4vWwI1zNys8uGbHD04Dvy/olBRxCM4bFF8kopiFWARlim8
+	 h1N/DvZ9N3YrR5sOMo/TZ2W25uDoHRnhURk+N4YapCh/lo8VdcQQUeJMJ7l+OhNblM
+	 tvuWn4kcUWHmOaqJj3hN/Gd7xxUiojcXC+ajEELQw6vuBaMyYiWNZ/dkRPn6cL+mxy
+	 /9WNsMXGhCMVgCvm8NFoVIeNgHiB9H8pRW4zNvG6VnV+12xUbOgiEjeVXqGp1wMB/t
+	 FEMgKHDaK5hx5JJdOqP85pBeWAcMF9TbUkDIwDIhx3gOjlmU03K2D6xlfKvwUrbPo9
+	 ijrZKA1XZx+LQ==
+Message-ID: <sashiko-outbox-177997@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v8 4/5] net: stmmac: fix VLAN tag stripping on
+ non-linear RX frames
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261018-stmmac-rx-mb-v8-4-5f58c0b25849@oss.qualcomm.com>
+References: <20261018-stmmac-rx-mb-v8-0-5f58c0b25849@oss.qualcomm.com>
+ <20261018-stmmac-rx-mb-v8-4-5f58c0b25849@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 19 Oct 2026 17:07:34 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,44 +60,151 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Oct 2026 16:58:45 +0000
-Message-Id: <DM8Z3GGUEUFH.2WBEEIG5RKMRL@gmail.com>
-Subject: Re: [PATCH bpf-next 0/5] bpf: Expose pinned arenas as sized bpffs
- files
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-Cc: "Andrea Righi" <arighi@nvidia.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Josh Don" <joshdon@google.com>, "Vineeth
- Pillai" <vineethrp@google.com>, "Balbir Singh" <balbirs@nvidia.com>,
- "Shameer Kolothum" <skolothumtho@nvidia.com>, "Himadri Chhaya-Shailesh"
- <himadrics@protonmail.com>, "NchangRoy" <royfru44@gmail.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20261010224902.1232178-1-arighi@nvidia.com>
- <DM6HVNSP3USV.AJSWS289Z3I9@gmail.com>
- <CAEf4BzZZRrD86ZswsB2r-swqNi7D1p52Vs=fQ9MXSgGATN31Jg@mail.gmail.com>
- <DM7JXB4PREVH.1BHG31CCNRXF1@gmail.com>
- <CAEf4BzaeXxoPqtcV6E1x8zh-Uv_C1cfNjzUYLKDWwod=k2ttLQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzaeXxoPqtcV6E1x8zh-Uv_C1cfNjzUYLKDWwod=k2ttLQ@mail.gmail.com>
 
-On Mon Oct 19, 2026 at 4:19 PM UTC, Andrii Nakryiko wrote:
->
-> Yeah, there are just so many cases where we have some memory that is
-> special in some way (e.g., huge page-backed memory, or some IOMMU,
-> e.g., that doorbell stuff, which, if I understand correctly, is done
-> though writes to specially set up memory ranges), and we can't shove
-> all this into BPF_MAP_CREATE interface if we want to have BPF program
-> accessing that memory. So having a generic way to just bolt ARRAY on
-> top of already created memory seems like a useful primitive.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] net: stmmac: unconditional VLAN_ETH_HLEN pull in stmmac_rx_vlan()
+--
 
-I see. In such light the use case makes sense to me.
+commit 0a2d776ad3e3751ad20c9dd1144b0c000e67acc1
+Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
+net: stmmac: fix VLAN tag stripping on non-linear RX frames
+
+This commit updates stmmac_rx_vlan() to linearize the VLAN header with
+pskb_may_pull(), preserve XDP metadata when popping the VLAN tag, and drop
+the frame in stmmac_rx() and stmmac_dispatch_skb_zc() if pulling fails.
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index e929cc0f23125..04dc6dcaa435d 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5095,22 +5095,30 @@ static netdev_features_t stmmac_features_check(st=
+ruct sk_buff *skb,
+>  	return vlan_features_check(skb, features);
+>  }
+> =20
+> -static void stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
+> +static int stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
+>  {
+> -	struct vlan_ethhdr *veth =3D skb_vlan_eth_hdr(skb);
+> -	__be16 vlan_proto =3D veth->h_vlan_proto;
+> -	u16 vlanid;
+> +	struct vlan_ethhdr *veth;
+> =20
+> -	if ((vlan_proto =3D=3D htons(ETH_P_8021Q) &&
+> +	if (!pskb_may_pull(skb, VLAN_ETH_HLEN))
+> +		return -EINVAL;
+> +
+> +	veth =3D skb_vlan_eth_hdr(skb);
+> +	if ((veth->h_vlan_proto =3D=3D htons(ETH_P_8021Q) &&
+>  	     dev->features & NETIF_F_HW_VLAN_CTAG_RX) ||
+> -	    (vlan_proto =3D=3D htons(ETH_P_8021AD) &&
+> +	    (veth->h_vlan_proto =3D=3D htons(ETH_P_8021AD) &&
+>  	     dev->features & NETIF_F_HW_VLAN_STAG_RX)) {
+
+[Severity: Medium]
+Can calling pskb_may_pull(skb, VLAN_ETH_HLEN) unconditionally at the start
+of stmmac_rx_vlan() cause valid untagged frames to be dropped, or force
+unnecessary fragment pulls on non-linear untagged packets?
+
+When priv->hw->hw_vlan_en is false, stmmac_rx() and stmmac_dispatch_skb_zc()
+call stmmac_rx_vlan() on every received frame, even when VLAN RX stripping
+offloads are disabled in dev->features or the packet is untagged.
+
+XDP helpers such as bpf_xdp_adjust_head(), bpf_xdp_adjust_tail(), and
+bpf_xdp_frags_shrink_tail() allow shrinking a frame down to ETH_HLEN (14
+bytes):
+
+net/core/filter.c:bpf_xdp_adjust_head() {
+	...
+	if (unlikely(data < data_start ||
+		     data > xdp->data_end - ETH_HLEN))
+		return -EINVAL;
+	...
+}
+
+For an untagged frame of 14 to 17 bytes (where ETH_HLEN <=3D skb->len <
+VLAN_ETH_HLEN), pskb_may_pull(skb, VLAN_ETH_HLEN) fails and returns -EINVAL,
+causing both stmmac_rx() and stmmac_dispatch_skb_zc() to free and drop the
+skb via dev_kfree_skb_any(skb).
+
+Additionally, for non-linear untagged frames with skb->len >=3D VLAN_ETH_HL=
+EN
+whose linear head is ETH_HLEN bytes (for example, after bpf_xdp_adjust_head=
+()
+with BPF_F_XDP_HAS_FRAGS, or with GMAC4 split header mode splitting after t=
+he
+14-byte L2 header), pulling VLAN_ETH_HLEN before checking h_vlan_proto forc=
+es
+__pskb_pull_tail() on every untagged packet.
+
+Since veth->h_vlan_proto sits within the first ETH_HLEN bytes of the header,
+should stmmac_rx_vlan() only pull ETH_HLEN initially (or check dev->features
+first), and defer pskb_may_pull(skb, VLAN_ETH_HLEN) and reloading veth until
+after confirming that veth->h_vlan_proto matches a VLAN ethertype to be
+stripped?
+
+> +		__be16 vlan_proto =3D veth->h_vlan_proto;
+> +		u16 vlanid =3D ntohs(veth->h_vlan_TCI);
+> +		u8 meta_len =3D skb_metadata_len(skb);
+> +
+>  		/* pop the vlan tag */
+> -		vlanid =3D ntohs(veth->h_vlan_TCI);
+> -		memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
+> +		memmove(skb->data - meta_len + VLAN_HLEN,
+> +			skb->data - meta_len, meta_len + ETH_ALEN * 2);
+>  		skb_pull(skb, VLAN_HLEN);
+>  		__vlan_hwaccel_put_tag(skb, vlan_proto, vlanid);
+>  	}
+> +
+> +	return 0;
+>  }
+
+[ ... ]
+
+> @@ -5530,12 +5538,15 @@ static void stmmac_dispatch_skb_zc(struct stmmac_=
+priv *priv, u32 queue,
+>  	}
+> =20
+>  	stmmac_get_rx_hwtstamp(priv, p, np, skb);
+> -	if (priv->hw->hw_vlan_en)
+> +	if (priv->hw->hw_vlan_en) {
+>  		/* MAC level stripping. */
+>  		stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
+> -	else
+> -		/* Driver level stripping. */
+> -		stmmac_rx_vlan(priv->dev, skb);
+> +	} else if (stmmac_rx_vlan(priv->dev, skb)) {
+> +		dev_kfree_skb_any(skb);
+> +		priv->xstats.rx_dropped++;
+> +		return;
+> +	}
+> +
+>  	skb->protocol =3D eth_type_trans(skb, priv->dev);
+> =20
+>  	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb))
+> @@ -6041,12 +6052,14 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
+t limit, u32 queue)
+> =20
+>  		stmmac_get_rx_hwtstamp(priv, p, np, skb);
+> =20
+> -		if (priv->hw->hw_vlan_en)
+> +		if (priv->hw->hw_vlan_en) {
+>  			/* MAC level stripping. */
+>  			stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
+> -		else
+> -			/* Driver level stripping. */
+> -			stmmac_rx_vlan(priv->dev, skb);
+> +		} else if (stmmac_rx_vlan(priv->dev, skb)) {
+> +			dev_kfree_skb_any(skb);
+> +			rx_dropped++;
+> +			goto next;
+> +		}
+> =20
+>  		skb->protocol =3D eth_type_trans(skb, priv->dev);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261018-stmmac-rx-=
+mb-v8-0-5f58c0b25849@oss.qualcomm.com?part=3D4
