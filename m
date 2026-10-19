@@ -1,182 +1,189 @@
-Received: from mta1.migadu.com (out-214.mta1.migadu.com [95.215.58.214])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8770312836
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 02:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.214
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F583515D4
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 02:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792378098; cv=none; b=PeM0q/K08uOPXO1o3aFWoCf/t373CaPHPevRKSZE9ci8X7VLAbAN3D+jeALopOnrJqsfzqfLyX5klAVOAgz4l26d/vBZBIDLjr0N4wTwqIQ8t6ETKM7ALdP0IQWNC8U/jnCn9V3vE4ay7gRFQfa/ejl2B9fm3EQ8V5X8X8AHVu8=
+	t=1792378415; cv=none; b=p+uoOpGUIBfPH5f0E6/I4cY7+/nIt1CxnIIVzyzOYKQUNJ1uh8cZgRqn/ygNJ7+ChP5tkuliBa/99wvvRh37692bn/Q6QXugAVUWtCb6VNfH8fGMJn11rXPIGO7YVtl3bwemrBrKLWqQ+8kay98Wa53VKpMZB0ulQINZB6vQ+MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792378098; c=relaxed/simple;
-	bh=uJd85rqKa3hx2YcUCQnwN6zrGg8MtC8mCup4hf7dmx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pnkhPoYlYbd3Zuvk+uyGw7rS4LVdtQKYk4iT6n5A9/Olt5z4LTtIXj026QAjixP9amCT5lx7jfcq9ZoD5WhMdznxS8KS8BKg/2l2ZVP1Sg6xG3xBOQlgZFoe0bhZAuICYDMQi5KmMcGOjO4t+e/Kmot6zrynfQ97juxbEEL8GoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DpsqdlHq; arc=none smtp.client-ip=95.215.58.214
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792378415; c=relaxed/simple;
+	bh=g88Hr+cEKlwVOqv7qPM1EbXDQsicsjNoVYFMbSNf9zQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XeEIAIBjOF3Mqw2qZ2tXKobfHQ9FMu40eDbt4fKF7/oAsngJcxTnfglzrz4vYTBpwbwRifVIcojJfqgOqLgT01ahIuxuPnvnBho6X64+LNvbVT4POSs6iOVV8sbmFtaR7Ho7N/OrsxQX+lQ8Y+LXmZzddV228CXAEL1d3rU9aNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m83MqevY; arc=none smtp.client-ip=74.125.82.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DpsqdlHq"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uJd85rqKa3hx2YcUCQnwN6zrGg8MtC8mCup4hf7dmx0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792378094; v=1; x=1792982894;
- b=DpsqdlHqh57TOQVudIzSXAdrXDkcT/txgvanrBVID2zfgCU4OWXnyxk1y3aNrelR/Wrvmsrt
- YXipXfJW1yjA6HnuJrTeFY2F7ODIBeX51BsDaXpt3frFu7HM+oF+FZzA6AN6MubNUJSCjtHNVXG
- hSnaGDRs5SLRcBpOu+0R2tH0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b000c8b95270aa37;
-	Mon, 19 Oct 2026 02:48:13 +0000
-X-Mizu-Trace-ID: b000c8b95270aa37
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <ff8c13d1-371d-4da6-95fc-9fd13adddb56@linux.dev>
-Date: Mon, 19 Oct 2026 10:48:05 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m83MqevY"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-15dd124bbe7so3041974c88.1
+        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 19:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792378412; x=1792983212; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=J0S5EuaZLa4NVRw+Z41PzbyY1diIZpVZR+4Fb+cEP44=;
+        b=m83MqevYkRZi1/BTULFjPZmNf611z3au1jwKuJ4GPxbkpkfNb7EdsMbPxhO4zhFnbH
+         28TB65ZWxZQ2Kx8lRGB+KSYQTegH21INQad8fOngCdCdQOZ38YFpIQ0jk/rozZ0r7tkr
+         8okuq49DDjroAjZo+7WsJHVPPvoYAt2JOQzClcVPje6aILhJoV88ZS4+/CIwdnPhQ2jS
+         Gta9QBru8jjeH5BO7cVPlLhErz1tdvYQiznwq9a8DuYJgOXiewxi4+G3NLFxMntWYXGk
+         mL8maGLwSsaGD8yM8Txf2cR/rMKelXVQxvMQS+zFTwjhZugABvTH8OmJThLQcpQUMrkK
+         buPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792378412; x=1792983212;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=J0S5EuaZLa4NVRw+Z41PzbyY1diIZpVZR+4Fb+cEP44=;
+        b=bqpMJXmbLTyG6g8e4opNcX5+GVX+T2fsTBa6+Ci5+4pUFlNE0/Tp902w9ISUKrfl0D
+         KPrq5cgBe4jQxzlpIc0mf5yctBsaF10SOjv5eu7/ducekQ/l1JbTsgQfV8l/V53NknIU
+         +/HQ8738qiiYeA7LkycUDlXEYgASHatShZbkrSa5d6PiJI6kpXwQATFFKTPxEhHSnOTe
+         GfMDaYnsce299t+nALuB2PHYz2bgQ3mTcY0gCQLnCdXyz4cIqXuXi9lz5n+5Fb09Ghin
+         JlVxjQPv/jBaeJCO6FupdIqEaTKVzaGsS2KImPm+dF4QGUOf8kLLhg0b86mURMayHRSe
+         ZHvg==
+X-Gm-Message-State: AFq9FYIXKVeX7JfD/arSzQxLa9DqxZo7t/BEfWFPhEnrm1i/o9pv7KZ2
+	sEZKI6tRvIvMwdtDu5813yTXemFsLc291weui/ZjrTNkUbR+95mjqB06
+X-Gm-Gg: AYBFou0/ll7JdrPL3bsY78zwPZneTHtEenjGdzsp/D/Sx1nnLcSBr3EU9Ylj6YBgv3E
+	j10SvmX33k6GtjqQFP6otZ+ekKqnxt+fPeQwMXecJ0tLH3a4IkabNazr5SKuD9UcnG/6bLImwrq
+	hqUlW7zMXLuiGPIXLtS+q9s8iv0aG9fXxXNZZ6yn9tD8svGxwRPnBYoiO6UrCRBXCoG7T3uKC3Q
+	phXcqAO51OQQgPCecg95Oqfs6l/e89XHgrY7rc3HVvoc1wM3QurC6+FS3gqosf6ILUpLrDm6JfQ
+	F+zirYEdzLfYj3Ld4Ub02hyLyEUx9Q03Ix0xfhK5WY5oOJli3zJBQ+7zzsZmn1jqXbQq96Z4T6g
+	WdAy3/fTLExABz7DaHJ7Xudul2Gl6sSBYIoY0CDI9kqsnfRbmCVVWZ63dPMfpALvQufM6GQ7twE
+	pg7q5ShR0cgxywL+L0CEDCSnF1AEPk+nb63qc6F61u04qcn1BUij7EEaPwUOFvtTdJlA==
+X-Received: by 2002:a05:7023:d0b:b0:186:4a57:94e5 with SMTP id a92af1059eb24-1864a5796e5mr9180051c88.34.1792378412241;
+        Sun, 18 Oct 2026 19:53:32 -0700 (PDT)
+Received: from [127.0.1.1] ([23.254.208.9])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831c5cb39esm26099277c88.22.2026.10.18.19.53.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Oct 2026 19:53:31 -0700 (PDT)
+From: Qiliang Yuan <odys.yuan@gmail.com>
+Date: Mon, 19 Oct 2026 10:53:25 +0800
+Subject: [PATCH bpf-next v3] selftests/bpf: Run the enable_stats program
+ with BPF_PROG_TEST_RUN
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 2/7] mm/vmscan: move vmscan tracepoints to a local
- header
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Dave Chinner
- <david@fromorbit.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Kairui Song <kasong@tencent.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Baoquan He <baoquan.he@linux.dev>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)"
- <cgroups@vger.kernel.org>,
- "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)"
- <linux-mm@kvack.org>,
- "open list:BPF [MISC] :Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>,
- Ridong Chen <chenridong@xiaomi.com>
-References: <20261013131309.2790253-1-ridong.chen@linux.dev>
- <20261013131309.2790253-3-ridong.chen@linux.dev>
- <20261014124914.21c21559@gandalf.local.home>
-From: Ridong Chen <ridong.chen@linux.dev>
-In-Reply-To: <20261014124914.21c21559@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20261019-selftests-bpf-enable-stats-inflight-v3-1-e7728f5b061a@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACWG1WoC/5XNTQ6CMBAF4KuYrh3Tn1jBlfcwLkqZwiSlkLYhG
+ MLdraxY6vLNy3xvZQkjYWL308oizpRoDCWo84nZ3oQOgdqSmeRSC84rSOhdxpQTNJMDDKbxCCm
+ bcqDgPHV9Bmxdo7SRFXeKFWmK6GjZV57s+xZwyexVmp5SHuN7n5/F3v+1NAsQwG1TS0Rpdase3
+ WDIX+w47P4sj2b9mymLqWuBqG41XoU4mtu2fQCghB8xNAEAAA==
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Qiliang Yuan <odys.yuan@gmail.com>
+X-Mailer: b4 0.13.0
 
+enable_stats attaches its program to sys_enter, so every syscall of the
+system runs it. Once the program is detached, the test compares its
+run_cnt to the number of runs the program counted itself.
 
+Detaching doesn't wait for the runs already started on other CPUs, and
+each of them increments count before run_cnt. With other tests making
+syscalls in parallel, the test reads run_cnt one run behind count now
+and then:
 
-On 10/15/2026 12:49 AM, Steven Rostedt wrote:
-> On Tue, 13 Oct 2026 21:13:04 +0800
-> Ridong Chen <ridong.chen@linux.dev> wrote:
-> 
->> From: Ridong Chen <chenridong@xiaomi.com>
->>
->> Move include/trace/events/vmscan.h to mm/trace_vmscan.h so that the
->> tracepoints can be extended to reference vmscan-internal structures such
->> as struct scan_control, which is not visible outside mm/.  This mirrors
->> what several other subsystems already do with their trace headers (e.g.
->> arch/x86/kvm/trace.h, drivers/gpu/drm/drm_trace.h, net/xfrm/trace_iptfs.h).
->> As they do, use a relative TRACE_INCLUDE_PATH so that no Makefile change
->> is needed.
->>
->> No functional change.
->>
->> Assisted-by: LLM
->> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
->> ---
->>   MAINTAINERS                                        | 2 ++
->>   mm/shrinker.c                                      | 2 +-
->>   include/trace/events/vmscan.h => mm/trace_vmscan.h | 4 ++++
->>   mm/vmscan.c                                        | 2 +-
->>   4 files changed, 8 insertions(+), 2 deletions(-)
->>   rename include/trace/events/vmscan.h => mm/trace_vmscan.h (99%)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index c5519d67b6f4..80d2a9dd0525 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -17575,6 +17575,7 @@ F:	Documentation/admin-guide/mm/multigen_lru.rst
->>   F:	Documentation/mm/multigen_lru.rst
->>   F:	include/linux/mm_inline.h
->>   F:	include/linux/mmzone.h
->> +F:	mm/trace_vmscan.h
->>   F:	mm/vmscan.c
->>   F:	mm/workingset.c
->>   
->> @@ -17722,6 +17723,7 @@ R:	Shakeel Butt <shakeel.butt@linux.dev>
->>   R:	Lorenzo Stoakes <ljs@kernel.org>
->>   L:	linux-mm@kvack.org
->>   S:	Maintained
->> +F:	mm/trace_vmscan.h
->>   F:	mm/vmscan.c
->>   F:	mm/workingset.c
->>   
->> diff --git a/mm/shrinker.c b/mm/shrinker.c
->> index 7ec2a9704f6f..3c3e87c4b61c 100644
->> --- a/mm/shrinker.c
->> +++ b/mm/shrinker.c
->> @@ -3,7 +3,7 @@
->>   #include <linux/rwsem.h>
->>   #include <linux/shrinker.h>
->>   #include <linux/rculist.h>
->> -#include <trace/events/vmscan.h>
->> +#include "trace_vmscan.h"
->>   
->>   #include "internal.h"
->>   
->> diff --git a/include/trace/events/vmscan.h b/mm/trace_vmscan.h
->> similarity index 99%
->> rename from include/trace/events/vmscan.h
->> rename to mm/trace_vmscan.h
->> index 8a872990b4be..c5d824fef554 100644
->> --- a/include/trace/events/vmscan.h
->> +++ b/mm/trace_vmscan.h
->> @@ -648,4 +648,8 @@ TRACE_EVENT(mm_vmscan_kswapd_clear_hopeless,
->>   #endif /* _TRACE_VMSCAN_H */
->>   
->>   /* This part must be outside protection */
->> +#undef TRACE_INCLUDE_FILE
->> +#undef TRACE_INCLUDE_PATH
->> +#define TRACE_INCLUDE_PATH ../../mm
-> 
-> The proper way to do this is to have:
-> 
-> #define TRACE_INCLUDE_PATH .
-> 
-> And update the Makefile with:
-> 
-> CFLAGS_vmscan.o := -I$(src)
-> 
-> -- Steve
-> 
+  test_enable_stats:FAIL:check_run_cnt_valid invalid run_cnt stats
 
-Thank you. Will update.
+Run the program 1000 times with BPF_PROG_TEST_RUN instead of attaching
+it, so that nothing else runs it and both counts are final when the test
+reads them.
 
-> 
-> 
->> +#define TRACE_INCLUDE_FILE trace_vmscan
->>   #include <trace/define_trace.h>
->> diff --git a/mm/vmscan.c b/mm/vmscan.c
->> index 29b31446fc11..6207dad9e644 100644
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -71,7 +71,7 @@
->>   #include "swap.h"
->>   
->>   #define CREATE_TRACE_POINTS
->> -#include <trace/events/vmscan.h>
->> +#include "trace_vmscan.h"
->>   
->>   struct scan_control {
->>   	/* How many pages shrink_list() should reclaim */
-> 
+enable_stats run 100 times with 32 processes calling dd with bs=1 in
+the background, on a bpf-next kernel with KASAN enabled, x86_64 VM with
+32 vCPUs, before and after this patch:
 
+            before                                after
+  outcome   3 of 100 failed (check_run_cnt_valid)   0 of 100 failed
+
+Fixes: 31a9f7fe9337 ("bpf: Add selftest for BPF_ENABLE_STATS")
+Signed-off-by: Qiliang Yuan <odys.yuan@gmail.com>
+---
+V2 -> V3:
+- Run the program 1000 times and keep getting the info as in v1, as the
+  loop of v2 never ends if the kernel counts the runs but not their
+  time (Alexei)
+- Add before/after data
+
+V1 -> V2:
+- Run the program until its run time shows, as a single run can be
+  shorter than the resolution of the clock (Sashiko)
+
+v2: https://lore.kernel.org/r/20261009-selftests-bpf-enable-stats-inflight-v2-1-691ee379e511@gmail.com
+v1: https://lore.kernel.org/r/20261008-selftests-bpf-enable-stats-inflight-v1-1-0cb92ee2c6d3@gmail.com
+---
+ tools/testing/selftests/bpf/prog_tests/enable_stats.c | 15 +++++++++------
+ tools/testing/selftests/bpf/progs/test_enable_stats.c |  2 +-
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/enable_stats.c b/tools/testing/selftests/bpf/prog_tests/enable_stats.c
+index 75f85d0fe74a4..5b9cc119d072d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/enable_stats.c
++++ b/tools/testing/selftests/bpf/prog_tests/enable_stats.c
+@@ -5,10 +5,11 @@
+ void test_enable_stats(void)
+ {
+ 	struct test_enable_stats *skel;
+-	int stats_fd, err, prog_fd;
++	int stats_fd, err, prog_fd, i;
+ 	struct bpf_prog_info info;
+ 	__u32 info_len = sizeof(info);
+ 	int duration = 0;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
+ 
+ 	skel = test_enable_stats__open_and_load();
+ 	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
+@@ -20,13 +21,15 @@ void test_enable_stats(void)
+ 		return;
+ 	}
+ 
+-	err = test_enable_stats__attach(skel);
+-	if (CHECK(err, "attach_raw_tp", "err %d\n", err))
++	prog_fd = bpf_program__fd(skel->progs.test_enable_stats);
++	for (i = 0; i < 1000; i++) {
++		err = bpf_prog_test_run_opts(prog_fd, &topts);
++		if (err)
++			break;
++	}
++	if (CHECK(err, "test_run", "err %d\n", err))
+ 		goto cleanup;
+ 
+-	test_enable_stats__detach(skel);
+-
+-	prog_fd = bpf_program__fd(skel->progs.test_enable_stats);
+ 	memset(&info, 0, info_len);
+ 	err = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
+ 	if (CHECK(err, "get_prog_info",
+diff --git a/tools/testing/selftests/bpf/progs/test_enable_stats.c b/tools/testing/selftests/bpf/progs/test_enable_stats.c
+index 1705097d01d7b..e28d674fc77ac 100644
+--- a/tools/testing/selftests/bpf/progs/test_enable_stats.c
++++ b/tools/testing/selftests/bpf/progs/test_enable_stats.c
+@@ -10,7 +10,7 @@ char _license[] SEC("license") = "GPL";
+ 
+ __u64 count = 0;
+ 
+-SEC("raw_tracepoint/sys_enter")
++SEC("raw_tp")
+ int test_enable_stats(void *ctx)
+ {
+ 	__sync_fetch_and_add(&count, 1);
+
+---
+base-commit: e1d84a37cba984388988d2f1ddc84561413f0db2
+change-id: 20261008-selftests-bpf-enable-stats-inflight-edfb36a280f3
+
+Best regards,
 -- 
-Best regards
-Ridong
+Qiliang Yuan <odys.yuan@gmail.com>
 
