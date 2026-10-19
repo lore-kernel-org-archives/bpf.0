@@ -1,106 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBCD489897;
-	Mon, 19 Oct 2026 07:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFC73469FA;
+	Mon, 19 Oct 2026 07:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792394078; cv=none; b=pr3MRgGCAnMIIk3lZbzzb11OtyN67aqbg5vK4L0EB0ev0cXDsO44Uzk+laK5Bk/Gw152+nA+G0HaS/xj31jfPDotG4j2A1ARHNVLtanBE3k3Bt/o8zhTrbtnK1YCTCsFNfgpt4oX1hB68xRZAg0qEzFLqzgOW/WZs5wXAhNlGxc=
+	t=1792394198; cv=none; b=UoUtNgnl/9GionE5Dici+9hcDl1tsql04nNeOciIuhatQzAXnmbia7vWnI9VReaFplC4j1Jf0d5bhThFdAkhauCzhE9uZfG3m/KzeQRg2KsLLYZaHMGNECJIT+kLS5qWxTCI0lYyD290uXbaplj2SVnIKz+wH15P4dxjkydytho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792394078; c=relaxed/simple;
-	bh=7CV3JuowRHiD7me0v0jviQVZs6DcoQzgPKmStIBgNQQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HO5RL2DBqFIdurxfgxYXuRCZhgsm8Dw3Ida935XCsM/0d/gADUQRhbneQXcrbWwPNd6dp6zYm9phf2BqP/hDiac3E654ATfPb+2OwjPTAYhdd/5TJZKyUaX4Voobn3ewi3erAuKrpqekzXLOwLcAJ1hKyUG3KcbKgYkdS6MUEKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TO3/piPO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792394198; c=relaxed/simple;
+	bh=4WgwU9shtUU+fE4j68GsBLuuELuvCZdWuT88IOOcqEo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=p+afxJKo4KlLD8/FupS1hdZ7vdZZh1kPE4OtpftEak0bwGXI1A3ZXopU6RWSbblIClfSrIvCLSIL3eznpuiRQ2MeU1cQP/XhvuHhHdE1s3fyj/lli5bpr4U+WAMjF7Z7a8iTmv3oxLppF9yr0KNTv52MBMomZeDahETkZUizXQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m4Fz8hFi; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TO3/piPO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DFDF1F000C4;
-	Mon, 19 Oct 2026 07:14:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792394076;
-	bh=bjfAc2gny8dQsYPeC3CuZrupUfIwRcHCXU8B21O53cM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TO3/piPOM3x60PNpztvZMRu22lNm4l7few6eRCSKB1FrHx2knOjeG/Oa7F0Fc0C9l
-	 UmVkO/ZWa6oeP5/zf9/BfXFxg6KQZVuewNvTgb5BCC8Hu2DA+Ev+FT2wz0lYRiBgk+
-	 YUWS+niNabITtQe/7d75LLWlDjywICF7JaYnSOfaXlG35XFHF50Ntf2bSz2MA4GbjS
-	 Vv7kT71/ONlhp0fLiEnQngyIR1ijOewuz9jel3TNNWJblNpyaAryXAoorWX1neL5rK
-	 OpFJJQv3VFTlWthXwOa84cWgk77PrwZ9YGGMTuK9Ee6YY6g9j8J+Z1dkU7WBqOe9QC
-	 y6oZG6pgkOJXg==
-Content-Type: multipart/mixed; boundary="===============4079140705519087332=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m4Fz8hFi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792394197; x=1823930197;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4WgwU9shtUU+fE4j68GsBLuuELuvCZdWuT88IOOcqEo=;
+  b=m4Fz8hFiE5PFqimM+104Tp65wnY8WA5qo8dBDPdE6zEmWaiO1vnmaP4L
+   wr0nafpejcV3gWnb8CVpAM2R8hHEMjxdp0/U0Bx0hErtkU8vS5RhcpidY
+   ARwWM9NzH4saewSe87GQYIhJtKt4AxeSrfTMpbao1lBM60X1QX/r0rdO0
+   OhoLD0y4qDNFRGJfJ70sesRz8FhBtr3GU7dBUXHisjwzmRkwW0wkr3lAf
+   9UXrGepDTvE1x2qPK9OddAI1J0pxyMlG9PkuQU5Hk+5xGVC27VP5M1q9J
+   7bmXzUxxCoEB8oyRUkY07IuS31TvLGeiiHWAetf5BcaAXiPOmtZN5u22B
+   Q==;
+X-CSE-ConnectionGUID: PB/Kz5kkTQ22NbJhFQLEPQ==
+X-CSE-MsgGUID: +AJpZQmMQpK0hSRtqTov1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="1085674"
+X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
+   d="scan'208";a="1085674"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 00:16:36 -0700
+X-CSE-ConnectionGUID: RiVP1Ei0SKqmxh7tLgjD2w==
+X-CSE-MsgGUID: f8IRIGV2RIeUkTK2PHv/Vw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
+   d="scan'208";a="2807228"
+Received: from spr.sh.intel.com ([10.112.229.196])
+  by fmviesa007.fm.intel.com with ESMTP; 19 Oct 2026 00:16:31 -0700
+From: Dapeng Mi <dapeng1.mi@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Eranian Stephane <eranian@google.com>,
+	Sandipan Das <sandipan.das@amd.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Ananth Narayan <ananth.narayan@amd.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Dapeng Mi <dapeng1.mi@intel.com>,
+	Zide Chen <zide.chen@intel.com>,
+	Falcon Thomas <thomas.falcon@intel.com>,
+	Xudong Hao <xudong.hao@intel.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: [Patch v3 0/4] perf/x86: Limit branch snapshots to valid entries
+Date: Mon, 19 Oct 2026 15:08:32 +0800
+Message-Id: <20261019070836.2972403-1-dapeng1.mi@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <03f6cc15036fbecfd577d878d80d7b182b1cc6574e8bb7daabf6ad8e44fd59dd@mail.kernel.org>
-In-Reply-To: <20261019064157.29885-4-laoar.shao@gmail.com>
-References: <20261019064157.29885-4-laoar.shao@gmail.com>
-Subject: Re: [RFC PATCH v3 bpf-next 3/5] sched: add helpers for numa balancing
-From: bot+bpf-ci@kernel.org
-To: laoar.shao@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mingo@redhat.com,peterz@infradead.org,juri.lelli@redhat.com,vincent.guittot@linaro.org,akpm@linux-foundation.org,david@kernel.org,gourry@gourry.net,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,shakeel.butt@linux.dev,roman.gushchin@linux.dev,yu.c.chen@intel.com,zhao1.liu@intel.com,tim.c.chen@linux.intel.com,lizhe.67@bytedance.com
-Cc: bpf@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,linux-kernel@vger.kernel.org,laoar.shao@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 19 Oct 2026 07:14:36 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============4079140705519087332==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Sashiko reported that the vendor-specific branch snapshot callbacks
+used by bpf_get_branch_snapshot() copy up to x86_pmu.lbr_nr entries
+from cpuc->lbr_entries[], regardless of how many valid entries the
+last LBR read produced. This makes BPF programs read stale or invalid
+branch records. Patch 1 addresses AMD and patch 2 addresses Intel.
 
-> sched: add helpers for numa balancing
+Changes in v3:
+- Patch 01: A new patch to ensure x86_pmu.lbr_nr not to exclude
+  MAX_LBR_ENTRIES (Internal Sashiko).
+- Patch 03: Clean cached LBR stack when reseting hardware LBR registers,
+  which prevents stale LBR stack leakage.
+- Patch 04: Don't reset cached LBR stack if all LBR events are PEBS
+  events. This ensures PEBS captured LBR stack isn't cleared (Sashiko).
 
-TL;DR: Nits only: redundant parentheses around the new numab_in_tiering_mode()
-helper calls in should_numa_migrate_memory() and migrate_misplaced_folio()
-could be dropped.
+Changes in v2:
+- Include a fix for Intel LBR.
+- Add Tested-by from Dapeng to the Intel fix.
+  https://lore.kernel.org/all/eb6c7bda-0dcf-4fac-ad69-9f5b24abc21b@linux.intel.com/
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 71dc47d6114d..066818498c76 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
+History:
+v2: https://lore.kernel.org/all/cover.1792064123.git.sandipan.das@amd.com/
+v1: https://lore.kernel.org/all/20261007181002.4005262-1-sandipan.das@amd.com/
 
-[ ... ]
+Dapeng Mi (3):
+  perf/x86: Clamp x86_pmu.lbr_nr to MAX_LBR_ENTRIES
+  perf/x86/intel/lbr: Reset the cached LBR stack in
+    intel_pmu_lbr_reset()
+  perf/x86/intel/lbr: Limit branch snapshots to valid entries
 
-> @@ -2963,8 +2965,8 @@ bool should_numa_migrate_memory(struct task_struct *p, struct folio *folio,
->  	this_cpupid = cpu_pid_to_cpupid(dst_cpu, current->pid);
->  	last_cpupid = folio_xchg_last_cpupid(folio, this_cpupid);
->  
-> -	if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING) &&
-> -	    !node_is_toptier(src_nid) && !cpupid_valid(last_cpupid))
-> +	if (!(numab_in_tiering_mode()) && !node_is_toptier(src_nid) &&
-> +	    !cpupid_valid(last_cpupid))
->  		return false;
+Sandipan Das (1):
+  perf/x86/amd/lbr: Limit branch snapshots to valid entries
 
-this isn't a bug, but could the extra parentheses in
-!(numab_in_tiering_mode()) be dropped here?  They were needed around the
-old bitwise test, and the other converted sites such as
-task_numa_fault() call the helper without them.
-
-[ ... ]
-
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 15b45832bcfa..a622df9a9b42 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-
-[ ... ]
-
-> @@ -2770,7 +2771,7 @@ int migrate_misplaced_folio(struct folio *folio, int node)
->  	if (nr_succeeded) {
->  		count_vm_numa_events(NUMA_PAGE_MIGRATE, nr_succeeded);
->  		count_memcg_events(memcg, NUMA_PAGE_MIGRATE, nr_succeeded);
-> -		if ((sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING)
-> +		if ((numab_in_tiering_mode())
->  		    && !node_is_toptier(folio_nid(folio))
->  		    && node_is_toptier(node))
->  			mod_lruvec_state(lruvec, PGPROMOTE_SUCCESS, nr_succeeded);
-
-The same applies to the parentheses in
-if ((numab_in_tiering_mode()) here.
+ arch/x86/events/amd/core.c   |  2 +-
+ arch/x86/events/amd/lbr.c    |  4 +++-
+ arch/x86/events/core.c       |  2 ++
+ arch/x86/events/intel/core.c |  2 +-
+ arch/x86/events/intel/lbr.c  | 14 +++++++++++---
+ 5 files changed, 18 insertions(+), 6 deletions(-)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: f5a78ecccd98a04c47cea1cd63c2a2fdce8a4b48
+-- 
+2.34.1
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39213018427
---===============4079140705519087332==--
