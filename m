@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792431517;
-	b=g0HHlKKxR1JvE3/xA0ol0u4LQvKPeinI481nWhp2Ayu9Do9bXz3efaM/qwDpcFijfTHs
-	 p63AYS7D/NW1rNA534xv+ZT3SVmLS9GW49ko1mJ7QECZ84utVasHIXoKo7KESofjpPLpu
-	 9hUQ4eI2/jfp/GBzGLhqwUU4u0zARNRySjjnrjyoxH5j8ct9szV2TZIQpHlgwqWEd+Fz1
-	 5XY46Jm6MoHJ4/EPzkF+UG8UrJ3fCGXAQ2MD2PbtxhtkbbkJFCNIslQGVNppJr9GECSvH
-	 7HsfH//9eEuxEXc9X0OFaz8xon3hqf8hyQa0aUBOnM8AzhModANEoaY09L17L3raSrg==
+	t=1792431520;
+	b=gHMko4AlWKUm8vYkTs1JRbjW9od7mqV2hwVS15vzkZx/zcIByxnabTn93h2xhLFrWhB8
+	 6IdASPyWfpnlEg+aAOwvZ/wGXeDuilwEw1xk7kVOHu7ai22TIQsQNTJBDEylD0FvEUNXA
+	 rklp6clfnJWcDH5wZAj1PgcTaXGSSDBxExV1oeNVSOcTh9YZdUd8C8CJewIm84iCTKlOI
+	 Jcjm5d8Iuuzd5gcOac/0IHhmmcZhz2gHR5Mnlg8YGa48/zZQO2b14kvmu2VUSpCVEn9ZJ
+	 sIC/s9LjID5rJ8+nqoNltGUvvTJTZ2N8/43oSXzHH/n/8A93aWbr9q/8W50uDzTpPIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792431517;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792431520;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=jxLzr0WgWnW5NX5VbKd/AKKIcWzJwAW/qePwa3/vqSE=;
-	b=hwwNhpxRQeJwNCtLXqPqRIRFr3F73hZ/8IExgTLZVrNmpPgmHq6FDorCjKkSUFdrXPI2
-	 l0J74IrMeiIaJSPUK9ahDOAspVfceBoO8TTusPgFVwin9beW70vNPe+aP4g94yRbWFcHX
-	 +3xTODovJTA6rubRYI2rXtSdr+4WF7Xfgfw3fSfmLDyhQ5ffL/S+ickHyA8Q5JSzK1enu
-	 X9tuh86+WQUduoM/GAAo2RBn0EtcGE/Q8fabIIjwN1PbKx2BNt2VAj2Qku/woIPVdZ65D
-	 Q8sTEIQlYW+K+rk/YYPXReNZIopEjn1uGR96v8khboeK/DvlNd8smLYbxn9OTK5NLXg==
+	bh=d3YgZ6rFjSF640oAE6K1esSmJ69BZZKZXyF8UF8PDV8=;
+	b=uxbbhUhaQ1GOV1fKM9Jddr6jbGIUSCqTIYMx90tqxu+dtCUOpYIdSF/bdpHm0KHkY0Cx
+	 QPXjkHUt2kKQcukmBNMEXguZBH+FRwylUrWFAzKVvKlJI46VwVwwUlx7N58DXm2IcGxeK
+	 VqFlI8AbKjo/pM3hXQ1lhXVCGuseqtbqAJhlV+mPdd2WZyii//+Fpf3P+uzQqN16K457o
+	 3une2i6hky33S9ip/UybvoVl3qZ0Z/l4RoaR15hgCevvUHs+lpuK6l+WLn25LaFBxdsn4
+	 g4keR9+W3fHQQhfWLrc1o8yuRqa1woBw2fYoJy24I/6XAlZnfHpYcS4upgVfwAvPHIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XFVPcxTB;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OGHeF0po;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F4760A2606;
-	Mon, 19 Oct 2026 17:38:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A84F606A329;
+	Mon, 19 Oct 2026 17:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XFVPcxTB
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 560881F000CC;
-	Mon, 19 Oct 2026 17:38:35 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OGHeF0po
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD1581F000CA;
+	Mon, 19 Oct 2026 17:38:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792431516;
-	bh=jxLzr0WgWnW5NX5VbKd/AKKIcWzJwAW/qePwa3/vqSE=;
+	s=k20260515; t=1792431520;
+	bh=d3YgZ6rFjSF640oAE6K1esSmJ69BZZKZXyF8UF8PDV8=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=XFVPcxTBBVAMSXbo6YHTCdp9Ti4e3FTz0KD/Zq9VxbAYfRAvGx0FEHPRxb6Gqqw6e
-	 d6RQHTNs0PKRUCvTXAIKXt8AlEqiAVKlbEDdqmloe6wDKQbX9nvLXSCotd4BIFwkTg
-	 dyOLR1Cyuz68lRa36wAHS8b/cp0V0kfUrhFARqZZSTKI7l6J0uDgVzjnsRH8N8hzva
-	 p9Wcz5vM3tx/ZS+TdHVUsJe2DfQ2NbEqH/WRpqrMR6R8bS+RvwevpDF1cijJheX9uj
-	 KNF7EpOSTwQkOnNmUqRW1kipY57HIYLpXQoSVWjQNePW0ppWYvsBI3B3L9flJ80QzX
-	 xWb77+R15QCCA==
-Subject: Re: [PATCH net-next v8 2/5] net: stmmac: drop split frames on AF_XDP
- zero-copy RX
+	b=OGHeF0pozEU603615+FPvY7N67oa1EM2SWddXg5nBTC1lyYAXI5EuQfwk9LHShwNx
+	 3Qtm8ih59KhxxfknnlFsSSdo46Tl0zEsC5ScyjYBodIBd8eShsSKXXbJgoFmxNetSi
+	 4GHICW02PACle9bt6Lg/VJUsCij5q0g6wES5uj0IcN46b/oBkBtw9ideIQ5Y94IGt2
+	 BRL2TkFSwSluaO63rY5PenSzggMzEh5p5ZHVfpf3sA6lX7sWhCOCqaYjNCxc9e+c4a
+	 L49Dj3opw8IKHYlXejnw0RC0FhSfjL5qU3PMgm80Uh7tq22hjS3zEPqIxwx9zK3e4b
+	 83fPjUJpYVgrA==
+Subject: Re: [PATCH net-next v8 4/5] net: stmmac: fix VLAN tag stripping on
+ non-linear RX frames
 From: netdev-bot+sashiko@kernel.org
 To: lorenzo.bianconi@oss.qualcomm.com
 Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -51,11 +51,11 @@ Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
  netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  bpf@vger.kernel.org
-Date: Mon, 19 Oct 2026 17:38:34 +0000
-Message-ID: <179243151485.3135.12311252292585825@kernel.org>
-In-Reply-To: <20261018-stmmac-rx-mb-v8-2-5f58c0b25849@oss.qualcomm.com>
-References: <20261018-stmmac-rx-mb-v8-2-5f58c0b25849@oss.qualcomm.com>
-X-sashiko-severity: Low
+Date: Mon, 19 Oct 2026 17:38:38 +0000
+Message-ID: <179243151841.3135.10232947668205235199@kernel.org>
+In-Reply-To: <20261018-stmmac-rx-mb-v8-4-5f58c0b25849@oss.qualcomm.com>
+References: <20261018-stmmac-rx-mb-v8-4-5f58c0b25849@oss.qualcomm.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -68,238 +68,219 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 2 (1) · Low: 1
 
-- [Low] The patch changes the discard test from `status == discard_frame`
-  to `status & discard_frame` in both stmmac_rx() and stmmac_rx_zc().
-- [Low] After this patch, stmmac_rx_zc() counts the same event (a frame
-  split across RX descriptors on an AF_XDP zero-copy queue) differently…
-- [Low] In stmmac_rx_zc() on dwmac4/XGMAC, a split frame can now be
-  counted in both rx_dropped and rx_errors.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] The commit message and Fixes: tag describe a crash that cannot
+  happen in any tree this patch would be backported to.
+- [Medium] The commit message says that moving meta_len bytes together
+  with the MAC addresses in stmmac_rx_vlan() keeps data_meta pointing at…
+- [Low] stmmac_rx_vlan() now calls pskb_may_pull(skb, VLAN_ETH_HLEN)
+  before checking h_vlan_proto or dev->features.
 
 Pre-existing issues:
-- [High] At this commit, stmmac_rx() (non-ZC, XDP attached, GMAC4/XGMAC
-  whose non-last descriptors report bare rx_not_ls) still drops a non-…
-- [Medium] stmmac_rx_zc() and stmmac_rx() add their local
-  rx_dropped/rx_errors into the device-wide `priv->xstats.rx_dropped`…
+- [Medium] This problem wasn't introduced by this patch, but
+  priv->xstats.rx_dropped is a plain 'unsigned long' (common.h:241)…
 
 --
 
-net: stmmac: drop split frames on AF_XDP zero-copy RX
+net: stmmac: fix VLAN tag stripping on non-linear RX frames
 
-In stmmac_rx_zc(), when the 1:1 XSK mapping check drops a non-last
-descriptor, this patch now marks the frame as errored. The rest of the
-split frame is then drained, and its tail is no longer handled as a new
-frame. The patch also makes the legacy enhanced and normal descriptor
-callbacks report rx_not_ls together with discard_frame, and changes the
-discard test in stmmac_rx_zc() and stmmac_rx() from == to &.
+This patch makes stmmac_rx_vlan() call pskb_may_pull(skb, VLAN_ETH_HLEN)
+before it reads the VLAN header. When the tag is popped, any XDP metadata
+is now moved along with the MAC addresses. If the pull fails, both RX
+callers drop the frame.
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/enh_desc.c b/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
-> index 0512536012251..297e2428a8f9b 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
-> @@ -184,7 +184,7 @@ static int enh_desc_get_rx_status(struct stmmac_extra_stats *x,
->  
->  	if (unlikely(!(rdes0 & RDES0_LAST_DESCRIPTOR))) {
->  		x->rx_length++;
-> -		return discard_frame;
-> +		return discard_frame | rx_not_ls;
->  	}
-
-[Severity: Low]
-
-With this change and the matching one in ndesc_get_rx_status(), does
-stmmac_rx_zc() now count the same split frame differently depending on
-the descriptor format?
-
-On dwmac4 and xgmac, dwmac4_wrback_get_rx_status() and
-dwxgmac2_get_rx_status() return a bare rx_not_ls for a non-last
-descriptor:
-
-	if (likely(!(rdes3 & RDES3_LAST_DESCRIPTOR)))
-		return rx_not_ls;
-
-So the frame reaches the new 1:1 mapping drop and rx_dropped is
-incremented once.
-
-On dwmac100/dwmac1000, non-last descriptors now carry discard_frame. The
-status & discard_frame block in stmmac_rx_zc() runs first and increments
-rx_errors for each non-last descriptor (when hwts_rx_en is off). The new
-rx_dropped++ in the 1:1 path is never reached on these cores.
-
-An N-descriptor jumbo frame would then show up as 1 rx_dropped on
-GMAC4/XGMAC, but as N-1 rx_errors on dwmac1000. Both counters are
-exported through stmmac_get_stats64(). Is this asymmetry intended?
-
-The legacy cores already counted rx_errors per descriptor before this
-patch; what is new is the different rx_dropped accounting. Later in the
-series, "net: stmmac: rework stmmac_rx to support XDP rx multi-buff"
-changes stmmac_rx() to test !error && (status & discard_frame), so it
-counts once per frame. stmmac_rx_zc() still counts per descriptor at the
-end of the series.
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 8fd2acb25fb60..efa88cd359dac 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-
-[ ... ]
-
-> @@ -5715,8 +5718,9 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
->  		if (likely(status & rx_not_ls)) {
->  			xsk_buff_free(buf->xdp);
->  			buf->xdp = NULL;
-> +			rx_dropped++;
-> +			error = 1;
->  			dirty++;
-> -			count++;
->  			goto read_again;
->  		}
->  
-
-[Severity: Low]
-
-Can one split frame on dwmac4/XGMAC now be counted in both rx_dropped and
-rx_errors?
-
-The first non-last descriptor takes this path, which increments
-rx_dropped and sets error = 1. Suppose the last descriptor of the same
-frame then reports discard_frame (RDES3_ERROR_SUMMARY, for example a CRC
-or giant error on an oversized frame). The earlier block in
-stmmac_rx_zc() still runs:
-
-		if (unlikely(status & discard_frame)) {
-			error = 1;
-			if (!priv->hwts_rx_en)
-				rx_errors++;
-		}
-
-This happens even though error is already set for this frame.
-stmmac_get_stats64() exports both totals as rx_dropped and rx_errors.
-
-Later in the series, "net: stmmac: rework stmmac_rx to support XDP rx
-multi-buff" avoids this in stmmac_rx() by testing !error && (status &
-discard_frame). stmmac_rx_zc() is not changed, so the double count is
-still there at the end of the series.
+> stmmac_rx_vlan() reads the VLAN header straight from skb->data and
+> removes it with skb_pull(), assuming the header is always in the linear
+> part of the skb. That is not true once non-linear skbs can reach it: a
+> program loaded with BPF_F_XDP_HAS_FRAGS can pass up a fragmented frame
+> whose linear head has been shortened to as little as ETH_HLEN by
+> bpf_xdp_adjust_head(), and the unguarded skb_pull() then drives skb->len
+> below skb->data_len, tripping BUG() in __skb_pull().
 
 [Severity: Medium]
+Can this scenario happen in a tree that matches the Fixes: tag?
 
-This is a pre-existing issue and was not introduced by this patch. The
-new rx_dropped++ feeds this accumulation at the end of stmmac_rx_zc():
+On the AF_XDP zero-copy path from bba2556efad6, stmmac_construct_skb_zc()
+always builds a linear skb:
 
-	priv->xstats.rx_dropped += rx_dropped;
-	priv->xstats.rx_errors += rx_errors;
+	skb = napi_alloc_skb(&ch->rxtx_napi,
+			     xdp->data_end - xdp->data_hard_start);
+	...
+	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
 
-These are plain unsigned long fields in struct stmmac_extra_stats,
-shared by the whole device. Each RX channel has its own NAPI instance,
-so stmmac_rx_zc() and stmmac_rx() can run at the same time for different
-queues on different CPUs.
+On the regular stmmac_rx() path with XDP enabled, multi-descriptor frames
+and buf2 frames are both dropped:
 
-Can these non-atomic read-modify-writes lose updates?
-stmmac_get_stats64() also reads the fields without any synchronization.
+		/* We do not support SG in XDP mode */
+		if (unlikely(!error && (status & rx_not_ls) &&
+			     stmmac_xdp_is_enabled(priv))) {
+		...
+		if (unlikely(stmmac_xdp_is_enabled(priv) && buf2_len)) {
+			rx_dropped++;
+			goto next;
+		}
 
-stmmac_rx() does the same accumulation, and it is unchanged at the end
-of the series.
+The XDP_PASS skb there is built with napi_build_skb() plus
+skb_put(buf1_len) and has no frags. XDP_PASS skbs with frags seem to
+appear only with the later "net: stmmac: rework stmmac_rx to support XDP
+rx multi-buff" patch in this series.
 
-> @@ -5883,7 +5887,8 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+Even with a 14 byte linear head, skb_pull(skb, VLAN_HLEN) here would leave
+10 bytes of headlen and would not BUG. Wouldn't the BUG() come from
+eth_type_trans()->eth_skb_pull_mac()->skb_pull_inline(skb, ETH_HLEN)
+instead?
+
+On current trees, the patch fixes a different case. An XDP program can
+use bpf_xdp_adjust_tail() to shrink a linear frame to 14..17 bytes while
+bytes 12-13 still hold a VLAN ethertype. The old code then reads
+h_vlan_TCI past skb->len and pops the tag. That leaves skb->len below
+ETH_HLEN, and eth_type_trans() passes a malformed skb up the stack.
+
+Could the commit message describe that case, and could the Fixes: tag be
+rechecked? As written, stable maintainers may conclude that 5.13+ kernels
+hit a BUG() they do not have.
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index e929cc0f23125..04dc6dcaa435d 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5095,22 +5095,30 @@ static netdev_features_t stmmac_features_check(struct sk_buff *skb,
+>  	return vlan_features_check(skb, features);
+>  }
 >  
->  		if (priv->extend_desc)
->  			stmmac_rx_extended_status(priv, &priv->xstats, rx_q->dma_erx + entry);
-> -		if (unlikely(status == discard_frame)) {
-> +
-> +		if (unlikely(status & discard_frame)) {
+> -static void stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
+> +static int stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
+>  {
+> -	struct vlan_ethhdr *veth = skb_vlan_eth_hdr(skb);
+> -	__be16 vlan_proto = veth->h_vlan_proto;
+> -	u16 vlanid;
+> +	struct vlan_ethhdr *veth;
+>  
+> -	if ((vlan_proto == htons(ETH_P_8021Q) &&
+> +	if (!pskb_may_pull(skb, VLAN_ETH_HLEN))
+> +		return -EINVAL;
 
 [Severity: Low]
+Does this drop every 14..17 byte frame, including untagged ones?
 
-Changing == to & here and in stmmac_rx_zc() also changes the normal RX
-path on dwmac4/GMAC4/GMAC5. Should the commit message mention this?
+The pull happens before h_vlan_proto and dev->features are checked. Any
+skb with skb->len < VLAN_ETH_HLEN now fails here, and both stmmac_rx()
+and stmmac_dispatch_skb_zc() free it and count it in rx_dropped.
 
-dwmac4_wrback_get_rx_status() sets ret = discard_frame when
-RDES3_ERROR_SUMMARY is set. It then ORs in csum_none for IP header or
-payload errors:
+This also covers interfaces set with "ethtool -K rxvlan off". There,
+stmmac_set_features() clears hw_vlan_en, so stmmac_rx_vlan() runs for
+every frame. It also covers non-xmac cores, where hw_vlan_en is never
+set.
 
-	if (rdes1 & RDES1_IP_HDR_ERROR) {
-		x->ip_hdr_err++;
-		ret |= csum_none;
-	}
+Such frames can come from an XDP program that shrinks a frame with
+bpf_xdp_adjust_tail(), which allows lengths down to ETH_HLEN, and then
+returns XDP_PASS. Before this patch they went through eth_type_trans()
+unchanged.
 
-So a frame with both an L2 error and an IP checksum error reports
-discard_frame | csum_none.
+Would it work to check the ethertype and features first? ETH_HLEN is
+enough to read h_vlan_proto, and VLAN_ETH_HLEN would only be needed
+when the tag is about to be popped.
 
-Before this patch, such a frame failed the == test. It was run through
-XDP and passed to napi_gro_receive() with CHECKSUM_NONE. Now it is
-dropped and counted in rx_errors.
+> +
+> +	veth = skb_vlan_eth_hdr(skb);
+> +	if ((veth->h_vlan_proto == htons(ETH_P_8021Q) &&
+>  	     dev->features & NETIF_F_HW_VLAN_CTAG_RX) ||
+> -	    (vlan_proto == htons(ETH_P_8021AD) &&
+> +	    (veth->h_vlan_proto == htons(ETH_P_8021AD) &&
+>  	     dev->features & NETIF_F_HW_VLAN_STAG_RX)) {
+> +		__be16 vlan_proto = veth->h_vlan_proto;
+> +		u16 vlanid = ntohs(veth->h_vlan_TCI);
+> +		u8 meta_len = skb_metadata_len(skb);
+> +
+>  		/* pop the vlan tag */
+> -		vlanid = ntohs(veth->h_vlan_TCI);
+> -		memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
+> +		memmove(skb->data - meta_len + VLAN_HLEN,
+> +			skb->data - meta_len, meta_len + ETH_ALEN * 2);
 
-The new behaviour looks correct. It stops errored frames from reaching
-the stack, which has been possible since commit 644b8437ccef9e ("net:
-stmmac: dwmac4: report Rx checksum errors in status").
+[Severity: Medium]
+On the AF_XDP zero-copy path, do the meta_len bytes before skb->data
+actually hold the XDP metadata?
 
-However, the commit message presents the operator change only as a
-result of the enh_desc/norm_desc normalization, and limits the scope to
-AF_XDP zero-copy. Could it describe this GMAC4 change and reference
-644b8437ccef9e?
+stmmac_construct_skb_zc() records the metadata length but never copies
+the metadata bytes:
 
->  			page_pool_put_page(rx_q->page_pool, buf->page, 0, true);
->  			buf->page = NULL;
->  			error = 1;
+	skb_reserve(skb, xdp->data - xdp->data_hard_start);
+	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
+	if (metasize)
+		skb_metadata_set(skb, metasize);
 
-[Severity: High]
+The skb comes from napi_alloc_skb(), which does not zero the headroom,
+so the bytes in front of skb->data are stale. This memmove() moves those
+stale bytes in front of the relocated MAC header.
 
-This isn't a bug introduced by this patch. The commit message says the
-change lets stmmac_rx() drain split frames, which holds for
-dwmac100/dwmac1000.
+After eth_type_trans(), bpf_compute_data_pointers() sets data_meta to
+skb->data - skb_metadata_len(skb). TC BPF programs would then read
+uninitialized headroom instead of what the XDP program wrote.
 
-GMAC4/XGMAC report non-last descriptors as a bare rx_not_ls. On those
-cores, with an XDP program attached, are there still paths in
-stmmac_rx() that drop a non-last descriptor without setting error?
+On the regular stmmac_rx() path, skb_metadata_set() is never called at
+this commit. meta_len is therefore always 0 there, and this part of the
+change does nothing until the later rework patch adds the call in
+stmmac_build_skb(). stmmac_construct_skb_zc() is still unchanged at the
+end of the series.
 
-When the XDP verdict is STMMAC_XDP_CONSUMED:
+Peer drivers such as igc_construct_skb_zc() copy starting at
+xdp->data_meta and then call __skb_pull(skb, metasize). Should
+stmmac_construct_skb_zc() do the same, or should the metadata claim come
+out of the commit message?
 
-				if (xdp_res & STMMAC_XDP_CONSUMED) {
-					...
-					skb = NULL;
+>  		skb_pull(skb, VLAN_HLEN);
+>  		__vlan_hwaccel_put_tag(skb, vlan_proto, vlanid);
+>  	}
 
-					if (unlikely((status & rx_not_ls)))
-						goto read_again;
+[ ... ]
 
-error is still 0 here, so the next fragment goes through XDP as a new
-frame. With a 1-3 byte tail, wouldn't buf1_len -= ETH_FCS_LEN underflow?
+> @@ -5530,12 +5538,15 @@ static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
+>  	}
+>  
+>  	stmmac_get_rx_hwtstamp(priv, p, np, skb);
+> -	if (priv->hw->hw_vlan_en)
+> +	if (priv->hw->hw_vlan_en) {
+>  		/* MAC level stripping. */
+>  		stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
+> -	else
+> -		/* Driver level stripping. */
+> -		stmmac_rx_vlan(priv->dev, skb);
+> +	} else if (stmmac_rx_vlan(priv->dev, skb)) {
+> +		dev_kfree_skb_any(skb);
+> +		priv->xstats.rx_dropped++;
 
-For XDP_TX/XDP_REDIRECT:
+[Severity: Medium]
+This isn't a bug introduced by this patch, but priv->xstats.rx_dropped is
+a plain unsigned long shared by all RX queues. Per-queue NAPI contexts,
+which can run at the same time on different CPUs, update it with
+unsynchronized read-modify-write:
 
-				} else if (xdp_res & (STMMAC_XDP_TX |
-						      STMMAC_XDP_REDIRECT)) {
-					xdp_status |= xdp_res;
-					buf->page = NULL;
-					goto next;
-				}
+stmmac_dispatch_skb_zc():
+	priv->xstats.rx_dropped++;
 
-goto next clears in_progress even when rx_not_ls is set. The loop head
-then resets error and len, and the tail is reparsed with len == 0.
+stmmac_rx_zc() and stmmac_rx():
+	priv->xstats.rx_dropped += rx_dropped;
 
-When napi_build_skb() fails:
+stmmac_get_stats64() also reads it without READ_ONCE().
 
-				rx_dropped++;
-				count++;
-				goto drain_data;
+Can concurrent updates from two queues lose increments here? The new
+error path adds one more writer that follows the existing pattern.
 
-error is not set here either, so a later descriptor can build an skb from
-only the end of the frame.
+> +		return;
+> +	}
 
-This is the same class of bug the patch fixes in stmmac_rx_zc(). An
-on-link peer can trigger it, since GMAC_CONFIG_JE is always set on
-GMAC4.
-
-It looks like later patches in the same series fix it: "net: stmmac:
-drop multi-buffer frames in XDP mode" and "net: stmmac: rework stmmac_rx
-to support XDP rx multi-buff". After those, XDP and stmmac_build_skb()
-only run on the last descriptor, and failures go to error_free_frag.
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-stmmac-rx-mb-v8-0-5f58c0b25849%40oss.qualcomm.com
