@@ -1,265 +1,111 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2316234402A
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 07:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792395671; cv=pass; b=GPX58/j4GaU5CTj0BUCBn/mrcfCfmGaMg2XS8nIYlPt2UXEUv0jQ/e8LvLuxQESdbepMNfKsOdkq26ei8CsclzfitMEuFCrPvY0YGmsY5Pxjt4EQOoWATD015OPhlXOwSaXTZGE3oBUwq4CrUGhQ0VvBssaXd0ngqjQh8nf1tls=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792395671; c=relaxed/simple;
-	bh=jPqPx4WIvZCwXAxSt7/GckqZUZbeRwYWXgGLl4PYDUQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YyGs+LZCEoLbhJ6MaZ7x/i73+SPT7JkDgUIsZXPPt+LprgTW9Y2HyIC3u9t0FlOPXnsFFtaBW8LESMyPgng0XGYdRKJh/0n8w9UhhUPkLwd1MkbKYdWDACnkNXtaAy75l862w14m749ybqQTORpKeUxnUj7kaORkoW+X8GIcP9I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=stj+Pqak; arc=pass smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF161485955;
+	Mon, 19 Oct 2026 07:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792395842; cv=none; b=kkVyQQK6XAt0OAcM8pAI7AKwtIQrjWx0rfYM1pq9f7wQFXHS3UlxnYjU2bHW0ejeGkY1a1vNCTRMBfInrnydjFG+VuiUbhhe6n6rFARCXtE6oPLMVVRPbPvbcrpIzZf7frfvehXcSBzbWIDd8rCsCuli1hfkHO7h/4FsPL8WZAs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792395842; c=relaxed/simple;
+	bh=Qrl/30TvAG5g/rCWfCPBCBTPrIC/Mw5YnYWOrzImG/I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IZuFrSKOY9koBmhjud9yuBj62k0V8g2SsuR8PveAYB+gWpxT7x97z4E6m/99u3gz+3WRndVaB07k5QkpO81a7nZMtziTcO6cti2UbQ+BnCw6OFcg0HWYcoMOsYRSHMQcyInG+wYDDGxEE/YKrEJ6aCvQwPdmtxyIgiTnBXDIGJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Q6n6aQo4; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="stj+Pqak"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6767d92cde6so1791771d50.0
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 00:41:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792395669; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NgmIsTDjjE30KlteA7Hw84WfOGJdMGTgeALnUWm5tBxhidR/ChwXNSMEtHBXI7Oik8
-         bojFSPsbbIv5VgSD7uEiDc8n3jlrQ4jmdxsAVqc7K2d1Q5LD2Vyztfek3qtXkhhM/Fs7
-         Xp9V2T89PMh/T5xYBPhmR3OehI5/jwA9UpbgmAel5kKF02MWFmcQW642v4TRjClHPcvi
-         269nvVH4oucSoKy6F+rthLBbpcpDJ/hVO95U412LW/fpuln8VSt/YNDp49PPv6/zy+ec
-         MELtayPLBp9G3s7IxshQxxn+nkh6YDdYdJdJiyJ0RlYH2cC8L2jcuxhU/9nMpcg02mGq
-         wbEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KpPZjaMDJls8EZkE/6oJfht+hbPc5JiwcvTAxpT7o3k=;
-        fh=68XgUMEiNz1cPFdRyhq8eSNGUkRCrVWVM72BKwfZYWg=;
-        b=An0WIlhXKfVCzE+O1sIPKSD1V0oDZFOgsFwrZ6jF9/kEwSc7N5wYL6o2aOeCHlFnOu
-         Gofsnb6nPGxZHf6QGJumWAxviPTTRVGYpcl6Q0urXNFhUngtTR6Ilo2yuYX9qWzQoXxM
-         LDM2yyQGFi5NtY689db6Ad5+MNEPWopYU7GlwttE1EEP8wXWeAmbFKKuvN0fpPujO/TQ
-         j5lE37y4daDnyGXWycLuytYN/kzB0PncXFSeEgPaNTUKPcQRdcphscIi4+NbMm2zr8Y1
-         Bay8He2YSggYLJ9oeO5LYAk4UPQPg+YJvlhKFjfKxZEqCHvXHM/Kghw/nstwRDGYxNmQ
-         hGjQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792395669; x=1793000469; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=KpPZjaMDJls8EZkE/6oJfht+hbPc5JiwcvTAxpT7o3k=;
-        b=stj+PqakSpfB9TgMBuG3ew92Dxs8Jpin0cIq86kR4EmmUUYSeCG5u+C5Fscbml1Fp8
-         d84f0CuerA765uEw+KWLF30h9coIaUF4cRdelXJu/N62PpWKPXRMT9QhUIt2NVHDKn0M
-         cBwQLTtfCnIeHUtsUMK9eJBUqfO1PJYPJq/bPK3SJ57/Vq2NfjE6ZYexHudycwJ0NCju
-         lj+No9ujD4yYFc8Don+rCejq0c5rRI7GqncKINnwdbd6+7yQpOameLmiK11c1PwivLaX
-         FyNLIkQpGECKQ9PlAadZZHl9To2efPvwsSCn/zr/9/St5YOk7+RL0m/xfj2Q+RUrkADh
-         4JXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792395669; x=1793000469;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KpPZjaMDJls8EZkE/6oJfht+hbPc5JiwcvTAxpT7o3k=;
-        b=tZ9R9/SBbkugje+S+bSnEJ8VVDvjjSspigr0eWcrtwjsOPsLT5gtf7XgeSQjpFR03D
-         YfObPtBtLE5bIpi/+IzDCDRP4zD0hhzf2euiQxZlKJjbb7kSbgFakkI+rccTGVBpWinr
-         7zCQ8a0HU7ApCQq9hkLAAoNbS+GnF29D+jUmEESXan7M6O6YksUAXXqSy77aGLpQm3hI
-         r08F/0aZv9+n1s/6qtfRdm9xvh3P2qQnIcX55KLPtrCIcQFDU9SbnjAFU2EGJGqKTqLU
-         dHOF+xv/GSkzI8BzIdjLubPxcaXnMlEr8YPl0pmSMW0S3Hf4mDagD1HtJtT8ORyx60p8
-         X0OA==
-X-Forwarded-Encrypted: i=1; AKwUvBzzHGtYlWi9is7YO0fdwrj923yTkrKpqys1Yf6LfgKTajECokgNHciHQDmISx4LdbXaMOs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJTJTLR2ONyGPmRqI4BfVSEQp04b4m5wxFGCTyngHCd04ToHd4/
-	9gr+XBmd4M/4qHWNPeHRGigSlJLp2rNMH0kR9+JEJNhhBjWKp9E9gLQFb16thRO0ndPfsyxJf+e
-	CVRaxDsMerpyi6LEUa67KtmyV8JWzgow=
-X-Gm-Gg: AYBFou0cdA486fpuciLEXXZCLBv5KA70IUSrjhCHc+6sZ6VMQ5QsN2AlvGZEm3YYpFZ
-	Vnqkc9ydfxaLC/TMRuXUcoACFKhNcbzYmUzN91yeVhNIRWJGErS3HZTakcu9Fuc3ivauUCVO5za
-	cY0MlLEtvc5FB0k9126MsY5VIlOPtyTsxKm0uvQ6zFTwoMIz/Q5P/+0t6rz0j/DYDU/eJPDQX+K
-	ZslypqmrXYOL4y+QUNf6CbU5YAczkeucmzdwukPG8Z6hKag5g9VemrxXYCWrD6BYRnKRmrbgROe
-	Bnsi1ogcDem8Z88WFbfk9wTCr9ge1DwH/I5YXkgAzWz4SgZM8YaI5VfoRk3EtsKdvyZNVIycwMT
-	vJLdMKhrJdg==
-X-Received: by 2002:a05:690e:4181:b0:679:938d:a5e1 with SMTP id
- 956f58d0204a3-679ca9152camr1672832d50.106.1792395668941; Mon, 19 Oct 2026
- 00:41:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Q6n6aQo4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=fON541dSDMWUmSBQmdQzELWqCAGta3A/OGm0i3HJqVs=; b=Q6n6aQo4xWhztLxC+djcGN1AjP
+	+W7MyfkMRkd/wC2lrsEmiXxKgsAxAegL87P5oY9/VS7LqdgxwswGyL+tuvlgfMZgvN8KSu4je9G3k
+	UeHsqM9AruD7dVlOQcuXWLvK6wxIUR8eMOtpdAMNIoVUc1gxhLbVVFazHJhM1lY16uNHLjQ5kOd+E
+	8BuTRyIwbgpt+WRFzARjdzzVYxL56K44QnivpW6FGDIob3puuOEZsGSxAn1R1HiNICC6c2ha1S1qv
+	YRaXV/mnKiwhyYr2+AA5CcXMoUR5/9euMbsmB5XjmmDAEjQryy2bor6yZF8nEJMFcQq2fk3HTRruk
+	OOAUEewA==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xIi2G-000N7L-1I;
+	Mon, 19 Oct 2026 09:43:56 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xIi2F-000HtG-28;
+	Mon, 19 Oct 2026 09:43:55 +0200
+Message-ID: <910eee7f-cf91-4d52-b465-ec0b7c63a2db@iogearbox.net>
+Date: Mon, 19 Oct 2026 09:43:55 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261019064157.29885-1-laoar.shao@gmail.com> <20261019064157.29885-5-laoar.shao@gmail.com>
- <sashiko-outbox-176727@kernel.org>
-In-Reply-To: <sashiko-outbox-176727@kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Mon, 19 Oct 2026 15:40:28 +0800
-X-Gm-Features: AclHuK87RnG2er9Q0sMuCWVVDHgxTVssGIXLDngoxhqch9KZMv8DKOFsSe8QrYs
-Message-ID: <CALOAHbA9XCM=5AKz=MMCRcx79_E44rBNUZQi_c68tZQ1iYoxhA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 bpf-next 4/5] sched: add BPF-based per-cgroup NUMA
- balancing mode selection
-To: sashiko-reviews@lists.linux.dev
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, mingo@redhat.com, peterz@infradead.org, 
-	juri.lelli@redhat.com, vincent.guittot@linaro.org, akpm@linux-foundation.org, 
-	david@kernel.org, gourry@gourry.net, tj@kernel.org, hannes@cmpxchg.org, 
-	mkoutny@suse.com, shakeel.butt@linux.dev, roman.gushchin@linux.dev, 
-	yu.c.chen@intel.com, zhao1.liu@intel.com, tim.c.chen@linux.intel.com, 
-	lizhe.67@bytedance.com, bpf@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Use snake_case for subtest
+ descriptions in jit_insns_arena.c
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261019040106.27309-1-yangtiezhu@loongson.cn>
+ <d13c66a3-0519-48c1-88fe-55bc755b79a2@iogearbox.net>
+ <84434f7a-1c38-03ea-3062-8e8cf364fd4e@loongson.cn>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+In-Reply-To: <84434f7a-1c38-03ea-3062-8e8cf364fd4e@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28158/Mon Oct 19 08:26:01 2026)
 
-On Mon, Oct 19, 2026 at 2:58=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Critical] mm: use-after-free on source folio in migrate_misplaced_foli=
-o()
-> --
->
-> commit 5de3ed8c82d3030544f5f025b8ae47dd8339bfeb
-> Author: Yafang Shao <laoar.shao@gmail.com>
->
-> sched: add BPF-based per-cgroup NUMA balancing mode selection
->
-> This commit introduces per-cgroup NUMA balancing mode selection managed v=
-ia
-> the bpf_numab_set_mode() and bpf_numab_get_mode() kfuncs. Hot paths combi=
-ne
-> requests along the task or folio's memcg cgroup hierarchy behind the
-> numab_cgroup_mode_set static key to override the global sysctl setting.
->
-> > diff --git a/mm/migrate.c b/mm/migrate.c
-> > index 211c29bd2a283..c0692c7b27467 100644
-> > --- a/mm/migrate.c
-> > +++ b/mm/migrate.c
->
-> [ ... ]
->
-> > @@ -2770,7 +2770,7 @@ int migrate_misplaced_folio(struct folio *folio, =
-int node)
-> >       if (nr_succeeded) {
-> >               count_vm_numa_events(NUMA_PAGE_MIGRATE, nr_succeeded);
-> >               count_memcg_events(memcg, NUMA_PAGE_MIGRATE, nr_succeeded=
-);
-> > -             if ((numab_in_tiering_mode())
-> > +             if (folio_numab_in_tiering_mode(folio)
-> >                   && !node_is_toptier(folio_nid(folio))
-> >                   && node_is_toptier(node))
-> >                       mod_lruvec_state(lruvec, PGPROMOTE_SUCCESS, nr_su=
-cceeded);
->
-> [Severity: Critical]
-> Has the source folio already been uncharged and freed by the time
-> migrate_misplaced_folio() calls folio_numab_in_tiering_mode(folio) here?
->
-> Before calling migrate_pages(), migrate_misplaced_folio() snapshots the
-> folio's memcg because migration transfers the charge and releases the
-> isolation reference on the source folio:
->
-> migrate_misplaced_folio()
->   memcg =3D get_mem_cgroup_from_folio(folio);
->   migrate_pages()
->     migrate_pages_batch()
->       migrate_folios_move()
->         migrate_folio_move()
->           move_to_new_folio()
->             folio_migrate_flags()
->               mem_cgroup_migrate()
->                 old->memcg_data =3D 0;
->           migrate_folio_done()
->             folio_put(src);
->
-> When nr_succeeded is non-zero, calling folio_numab_in_tiering_mode(folio)=
- ->
-> folio_numab_mode(folio) -> folio_memcg(folio) -> folio_objcg(folio) reads
-> folio->memcg_data on the freed source folio:
->
-> static inline struct obj_cgroup *folio_objcg(const struct folio *folio)
-> {
->         unsigned long memcg_data =3D folio->memcg_data;
->
->         VM_BUG_ON_FOLIO(folio_test_slab(folio), folio);
->         VM_BUG_ON_FOLIO(memcg_data & MEMCG_DATA_OBJEXTS, folio);
->
->         return (struct obj_cgroup *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
-> }
->
-> If the freed page has not been reallocated yet, folio->memcg_data is 0, s=
-o
-> folio_memcg(folio) returns NULL and folio_numab_mode(folio) falls back to
-> NUMAB_FOLLOW_SYSTEM rather than using the owner cgroup's tiering mode for
-> PGPROMOTE_SUCCESS accounting.
->
-> If another CPU reallocates the freed page before this check runs (for exa=
-mple
-> as a slab page setting PG_slab and MEMCG_DATA_OBJEXTS, or as a compound t=
-ail
-> page), can folio_objcg(folio) trigger VM_BUG_ON_FOLIO() or dereference a
-> slabobj_ext pointer as a struct obj_cgroup *?
->
-> Would it make sense to evaluate folio_numab_in_tiering_mode(folio) before
-> migrate_pages(), or derive the mode from the already-pinned memcg pointer=
-?
+On 10/19/26 9:18 AM, Tiezhu Yang wrote:
+> On 2026/10/19 下午2:47, Daniel Borkmann wrote:
+>> On 10/19/26 6:01 AM, Tiezhu Yang wrote:
+>>> Normalize two inline assembly test descriptions in jit_insns_arena.c
+>>> from space-separated strings to snake_case.
+>>>
+>>> It is done for consistency with other neighboring subtests registered
+>>> in test_jit_insns() (such as alu_imm, alu_reg, etc.). This also makes
+>>> it convenient to execute these subtests directly from the command line
+>>> without being forced to use shell quoting.
+>>>
+>>> Otherwise, unquoted shell word-splitting causes test_progs to reject
+>>> the extra arguments before the filter code runs:
+>>>
+>>> $ sudo ./test_progs -t jit_insns/arena access with zero offset
+>>> Usage: test_progs [OPTION...]
+>>> Try `test_progs --help' or `test_progs --usage' for more information.
+>>>
+>>> $ sudo ./test_progs -t jit_insns/cast to a user address
+>>> Usage: test_progs [OPTION...]
+>>> Try `test_progs --help' or `test_progs --usage' for more information.
+>>>
+>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> Do these not work already?
+>>
+>>    ./test_progs -t jit_insns/arena_zero_off
+>>    ./test_progs -t jit_insns/cast_to_user
+> 
+> Yes, they work.
+> 
+> I misunderstood that the name is "cast to a user address" in the output
+> rather than "cast_to_user" before, there is difference between the
+> description and the name.
+> 
+> Something like this:
+> 
+> $ sudo ./test_progs -t jit_insns/cast_to_user
+> #191/2   jit_insns/cast to a user address:OK
+> #191     jit_insns:OK
+> #192     jit_insns_blinded:OK
+> Summary: 2/1 PASSED, 0 SKIPPED, 0/0 FAILED
 
-Nice catch. The check has to run before migrate_pages().
-
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 4b87d465c5fd..84f224c42ab2 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2761,6 +2761,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
-node)
-        LIST_HEAD(migratepages);
-        struct mem_cgroup *memcg =3D get_mem_cgroup_from_folio(folio);
-        struct lruvec *lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
-+       bool folio_tiering =3D folio_numab_in_tiering_mode(folio);
-
-        list_add(&folio->lru, &migratepages);
-        nr_remaining =3D migrate_pages(&migratepages, alloc_misplaced_dst_f=
-olio,
-@@ -2771,7 +2772,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
-node)
-        if (nr_succeeded) {
-                count_vm_numa_events(NUMA_PAGE_MIGRATE, nr_succeeded);
-                count_memcg_events(memcg, NUMA_PAGE_MIGRATE, nr_succeeded);
--               if (folio_numab_in_tiering_mode(folio)
-+               if (folio_tiering
-                    && !node_is_toptier(folio_nid(folio))
-                    && node_is_toptier(node))
-                        mod_lruvec_state(lruvec, PGPROMOTE_SUCCESS,
-nr_succeeded);
-
-
-BTW, the folio_nid(folio) next to it has the same problem: after a
-successful migration the source folio is uncharged and its isolation
-reference dropped, so it may already be back in the allocator, and
-a reallocated page's flags give a wrong nid. That one predates this
-series (it goes back to e39bb6be9f2b), so I will fix it separately:
-
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 15b45832bcfa..685c06a472ea 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2760,6 +2760,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
-node)
-        LIST_HEAD(migratepages);
-        struct mem_cgroup *memcg =3D get_mem_cgroup_from_folio(folio);
-        struct lruvec *lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
-+       int src_nid =3D folio_nid(folio);
-
-        list_add(&folio->lru, &migratepages);
-        nr_remaining =3D migrate_pages(&migratepages, alloc_misplaced_dst_f=
-olio,
-@@ -2771,7 +2772,7 @@ int migrate_misplaced_folio(struct folio *folio, int =
-node)
-                count_vm_numa_events(NUMA_PAGE_MIGRATE, nr_succeeded);
-                count_memcg_events(memcg, NUMA_PAGE_MIGRATE, nr_succeeded);
-                if ((sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIE=
-RING)
--                   && !node_is_toptier(folio_nid(folio))
-+                   && !node_is_toptier(src_node))
-                    && node_is_toptier(node))
-                        mod_lruvec_state(lruvec, PGPROMOTE_SUCCESS,
-nr_succeeded);
-        }
-
-Pls correct me if I'm wrong.
-
---=20
-Regards
-Yafang
+That makes a lot more sense as reasoning. I've applied the patch to bpf-next
+and also adapted the commit message accordingly. Thanks!
