@@ -1,145 +1,138 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC492E92BA
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 01:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01CA20E6E2;
+	Mon, 19 Oct 2026 01:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792373494; cv=none; b=P5lVlNxpDMj5iwCXfSDvzyty4whPbP13zRbkZ/K+clZNntbLjEwgZo0H07cumsHHsHIQh45iPNScyp45wzQlpIBdUqC/wVPSnY/+sa4mQalw7PsfME+eoBrkKeJkW+7ikmw6O8BQsW1D31ggorAb3vQxvl+xeVFnbGTM6iwR4Cc=
+	t=1792373630; cv=none; b=Aznl0+nDMGkCnGrcc3LLlu8537hsZRCGZEVzTJcvFwmGf75nIPAvTc78IOurzvlIYvNpighWctMKqUvb9mC/6cXWxTBmULRqyQfvVxRMgWt6I/EFRsK2a49TVWPqphP25ntBXQPb1v0Y2XL+AiJ3aV8Nbk38FoHi2H+Zc6gyYXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792373494; c=relaxed/simple;
-	bh=TGDF0NfqUind8bd9n5FNh1wHcjuEHBpsxqOITA2l+Xk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=MiIQD6kc4TgwvnqLXOmRvf/zHgoe1mWgfgRw1L/flA68KY2BX0kXK+7DBFOw0G/QUKoYYLQ3XU+ewXjH02Phsr4UWXzn3FqQmiSiWxa1Z/mT0GX/PuuGW1tNV22jY3bvRkxo4XpV4kWYk8d7EpPPonn6h6RYi3L+Qz9I5z2P458=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e5ZunzOQ; arc=none smtp.client-ip=74.125.225.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e5ZunzOQ"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-48db76d98a1so645817f8f.1
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 18:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792373491; x=1792978291; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=WISQLz2AQxQcT0S2L37UPdDuk3j2AQ3msq6Prumccac=;
-        b=e5ZunzOQcCPj3Yoc7V3+SkVc77PpDED3XFmobT27ATTTXP8c21KQZN2uGkmktDpQs0
-         Mzm9Wfy/l2V35qlD9FCNWdi8wvezHdad7qFccXN3dmQP+K0iP6SYqGV9VXkOCGJlld7F
-         +Tje+eInhlk4k6azO9VwT8+owTB1ofkil2gHbvhTfeYJecx3Fl7d108SGTR7DGvZIeeH
-         kF1jf9ggGxaf3KQX42xDYoDbOC8GvLu1HhlSGcyF9cQR1j0pxKBxwt/eLkA/ovKBR8Zt
-         UihbQ+dxm/zz+2qObY5a5smx4RkIHYslSMYwNkUfVDHST677j+sWnj3mAhHHp+rMYyh0
-         13Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792373491; x=1792978291;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WISQLz2AQxQcT0S2L37UPdDuk3j2AQ3msq6Prumccac=;
-        b=NcM3F18hb7JexODNFaItHwMAOXGA4gLzsv2RFB8ykvEw2wArAfAQ6YINSF9qj1OKiO
-         Fzlmjj4StJAarB0YbojCezKU0ogmWkSUoxqZWw6vE49lmQEnfdbFq25u4djMBs9pJlsY
-         hoRKEejYyirlxym14J2rrz2CFct0gNU/Eyz387lwDUZmtPR3A3ExFGrNvjX39bRSP4m4
-         PJxHDlh/PU85isKtAsE4I/Z7fxX8oYmn6AwifT193WLgeY8ko1r8VCV/UbE19x4zS5k+
-         OQmlCa2Fzc56T5Yv083QxmzZJEs9C6vEvlRAcwNwImWS3IcD7juR/rxEvR+/Zq7CQn8X
-         Mc3Q==
-X-Gm-Message-State: AFq9FYL1HXfcC/rE6zOoU8jzjmrhZIQUFLIwiorJSI5J10HaIBuxkW+j
-	2VAq4wEBOgw5ChtUoI0UnvAbhvGE0+a3W8cyifWN+O4Avi9F0a7bSmS4
-X-Gm-Gg: AYBFou2FqtcfvXHL4Cb4HXIxbvwDnEIBFEJNbqBYDS8bt1DxDUHP6yDHVQDOzs0xa6n
-	SjbyxZNKlD8zErtV08Je/qgJSzlEcjE34n+GilwbKXcv6BbcgG4zxXDEm5sCIwmN3dcwRvERsJN
-	+LEsqeCeU7QphszBORRFCNED6s2dyzQEIGn2hPHfstk0dvQ31XczHknnaVUDLGvXs2AmRupYu1C
-	Gm2njoCcTbPPoVh7KYNN4yQKc4XfeKoCZltpGzTz5qfSBqLOu78TIXgwsraWT+L2p5LzwVqTLaN
-	xW7HMWQxsgHFloH81jBXYK5pzoPFKBsGCeyr5kOf2P0my+VGKGb9TJjHBF6c1H0LCFA6dtf/FoB
-	oLasd32U6bxcbvpbPLwVyCgR6m31n0i9JBqdQgpgHWGITaB0sxa/Ht9qQugHwrNXSCPetufjfH6
-	n3Nwcq0uEOX7MZsxfBq2lMjm4qOBoqYhaF21k1oUhpHOvg59Y2qIVRvTuvj5WKTvs+4r2bNmT38
-	OqGROR8hzGllrGVClkA5MS5ZrSfhxKq83nzwel7XPmDhYTqe/fA3lKq1yDr2gUClTCMq31WC05v
-	rNBD/bkcBawulToMD/s5qchq3xDUXnNcpwz3rg==
-X-Received: by 2002:a05:600c:5492:b0:4a1:d992:9476 with SMTP id 5b1f17b1804b1-4a1d992951cmr116649365e9.23.1792373491132;
-        Sun, 18 Oct 2026 18:31:31 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1cf983b88sm232364725e9.7.2026.10.18.18.31.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Oct 2026 18:31:30 -0700 (PDT)
+	s=arc-20240116; t=1792373630; c=relaxed/simple;
+	bh=CLPXxO8YwoqCRp2ZUTaY8ylfbE+V5chVr1TGEeyRt38=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b+88PAPPlH7Mc1R51XWBanNYy2MV5aepvD9ajMcsLbV9fkngWI3sydPiAOoSmKGUntKBNhbGCuoX893P5iG6R6+LLpPPH9uISFfkVXSHhhMIxLIGRxg5W7vL/8kPi8PqMdiF3BGTtvYWo1dzCxUUW5ImxABis44+abbIZvuqD2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Bxn9Fyc9VqDSQXAA--.1256S3;
+	Mon, 19 Oct 2026 09:33:38 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJDxTs9wc9VqFtctAA--.30913S2;
+	Mon, 19 Oct 2026 09:33:36 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] LoongArch: BPF: Fix stack arguments for indirect trampolines
+Date: Mon, 19 Oct 2026 09:33:35 +0800
+Message-ID: <20261019013335.13512-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Oct 2026 03:31:30 +0200
-Message-Id: <DM8FDI32CJ1Y.2JOM7KJERMF7M@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix wq test by changing 50us
- sleep to polling over 1s
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <thamrinjonathan@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20261005-wq-poll-fix-v1-1-99ce4bac59f4@gmail.com>
-In-Reply-To: <20261005-wq-poll-fix-v1-1-99ce4bac59f4@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxTs9wc9VqFtctAA--.30913S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGF4DXF1xGr4rZw1kCr18Xrc_yoW5tFWkpF
+	n8CFsxGF40qr4xt3Z7GayUZrya9Fs3Zw43Wr4DJay0ya15ury8XF1rK3ZI9F98GrnYv340
+	vrs0vwn09FWDA3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
+	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
+	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jUsqXUUUUU=
 
-On Mon Oct 5, 2026 at 11:37 AM CEST, Jonathan Bastari Thamrin via B4 Relay =
-wrote:
-> From: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
->
-> wq test fails with ok_sleepable reading 0 instead of 2 as workqueue
-> callback hasn't executed before check.
->
-> This happens as callback runs later on a kworker and 50us isn't always
-> enough.
->
-> Change from 50us sleep to polling over 1s.
->
-> Before (usleep(50)): 3 fails out of 5000 runs
-> Diagnosing issue (usleep(0)): 23 out of 100 runs
-> After (Polling): 0 out of 5000 runs
-> Tested using vmtest on x86_64, test pinned to one CPU with `yes` load
->
-> Link: https://github.com/kernel-patches/vmtest/issues/455
->
-> Signed-off-by: Jonathan Bastari Thamrin <thamrinjonathan@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/wq.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/=
-selftests/bpf/prog_tests/wq.c
-> index 84831eecc..b55d8547f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/wq.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/wq.c
-> @@ -7,7 +7,7 @@
->  void serial_test_wq(void)
->  {
->  	struct wq *wq_skel =3D NULL;
-> -	int err, prog_fd;
-> +	int err, prog_fd, tries;
->
->  	LIBBPF_OPTS(bpf_test_run_opts, topts);
->
-> @@ -28,7 +28,13 @@ void serial_test_wq(void)
->  	ASSERT_OK(err, "test_run");
->  	ASSERT_EQ(topts.retval, 0, "test_run");
->
-> -	usleep(50); /* 10 usecs should be enough, but give it extra */
-> +	/* loop check over 1 sec to make sure it doesn't fail early when busy *=
-/
-> +	for (tries =3D 1000; tries >=3D 0; tries--) {
-> +		if (wq_skel->bss->ok_sleepable =3D=3D (1 << 1))
-> +			break;
-> +
-> +		usleep(1000);
-> +	}
->
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Please figure out the actual condition this loop is trying to wait for and
-establish it directly, there are several examples in the selftests.
+LoongArch passes arguments beyond a0-a7 at the caller stack pointer. The
+trampoline store_args() helper always reads those arguments at FP + 16,
+which is correct for a regular fentry trampoline: its prologue leaves FP
+16 bytes below the stack pointer at trampoline entry to hold the saved
+RA/FP frame record of the parent function.
 
-pw-bot: cr
+A struct_ops indirect trampoline is entered through a function pointer and
+only saves its own RA and FP before setting FP to the entry stack pointer.
+Its stack arguments therefore start at FP, not FP + 16. As a result, every
+stack-passed struct_ops argument is currently read two slots late.
+
+Select the source offset based on whether the trampoline is indirect. This
+also prepares the stack-passed arena argument path to consume the actual
+pointer slot.
+
+With this patch, the BPF selftest "./test_progs -t struct_ops_multi_args"
+passed on LoongArch.
+
+Fixes: c9ebe2016de9 ("LoongArch: BPF: Support up to 12 function arguments for trampoline")
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+v3:
+  - Reword the log and comment to clarify that the 16-byte frame record
+    is saved for the parent function, not the traced function. (bot+bpf-ci)
+  - Remove a stray blank line after the opening brace of store_args(). (bot+bpf-ci)
+  - Reorder the comment sentences to match the true/false branches of
+    is_struct_ops for better readability.
+
+Here is the original link:
+https://lore.kernel.org/bpf/20260821233516.3426127-8-memxor@gmail.com/
+
+This version is based on the series:
+https://lore.kernel.org/loongarch/20261016081006.26069-1-yangtiezhu@loongson.cn/
+
+ arch/loongarch/net/bpf_jit.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 1a7c8effc37b..c6784602f029 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -1725,17 +1725,22 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
+ 	return ret;
+ }
+ 
+-static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_off)
++static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_off, bool is_struct_ops)
+ {
++	/*
++	 * Indirect struct_ops trampolines place incoming stack arguments directly at FP.
++	 * Regular fentry trampolines need to skip the 16-byte RA/FP frame record saved
++	 * for the parent function.
++	 */
++	int stack_args_off = is_struct_ops ? 0 : 16;
+ 	int i;
+ 
+ 	for (i = 0; i < nr_arg_slots; i++) {
+ 		if (i < LOONGARCH_MAX_REG_ARGS)
+ 			emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
+ 		else {
+-			/* Skip slots for T0 and FP of traced function */
+ 			emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
+-				  16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
++				  stack_args_off + (i - LOONGARCH_MAX_REG_ARGS) * 8);
+ 			emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -args_off);
+ 		}
+ 		args_off -= 8;
+@@ -2068,7 +2073,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+ 	func_meta = nr_arg_slots;
+ 	emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -func_meta_off, func_meta);
+ 
+-	store_args(ctx, nr_arg_slots, args_off);
++	store_args(ctx, nr_arg_slots, args_off, is_struct_ops);
+ 
+ 	if (bpf_fsession_cnt(tnodes)) {
+ 		/* clear all session cookies' value */
+-- 
+2.42.0
+
