@@ -1,158 +1,105 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5D43644BE
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 02:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7561833B97D;
+	Mon, 19 Oct 2026 02:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792375894; cv=none; b=BoKFDCsdPo9ggzgKstWgmahBq0qgWl+Z3HFGNJ90UrA85jU8hH5HShZbfJA/RBTSind+t6Dwc75BU37vDwpoOFunTaWdxnKNt8vepP2O203uYVQgIe825BYQy+VkJvELJO5CvpqTFVIdcXwBEZtH+4pCwozzA6B9YvoG5/9EPK8=
+	t=1792376833; cv=none; b=KGpCmujopvMYBIdKlicFjp5xtIFGm1dhzdxlev3T/WZWv9Kofyovm4TfzJVNgWZ6wIZ909ffQRAZ4aFmNycnEuvsjNkx9FOpvTCR8sp4Wb5+2CeW63jlfGXEdkdAEbHj4qCMZvnnlZbkqFCDuzoTQrUdkdwP96C7zpi1h/YU5Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792375894; c=relaxed/simple;
-	bh=//y/MIu9uR/LXkr1muCyOtxg09cxnF6FAzBp8EMUteQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=WYJaokZa2+F9CxOA1iqaLbcC+LpOF0WT33j/WtQywFw7p7ZeW8STnsH6BWh927dakBBSF0z3UjjPPxICWgSMwwlecka89TTqoLIvCbHSVHAX5EaslPanVrupkcdcpoX1DSGmWYT+GhVl80usnaJjG6syDhyS8m7VuIvtKv5Ee5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cRhRV8UT; arc=none smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cRhRV8UT"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48db8366c3aso781082f8f.0
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 19:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792375890; x=1792980690; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=yq8r18auL3kyxH5XJ1eYj6G//xk8iEfWZvNxcHJYvp8=;
-        b=cRhRV8UTKjp0aYhPh1u41Vx0vtHfj8nnQMOwrr1O98qJVE6BD2eB74ttimU14GGMr8
-         9jEf38B6P9xA1Waf96Xut3ba/WCZfQuG0Tq9wEA9ziVdo2RtCtFbnxCRet4SaHsnE/TD
-         NXQqiR+FFTdGpujKNSXyXFnSwigeXBLn5rgsMxNdTPGVa1i72pkolKhHUzA40PA7YTmZ
-         aK94AgsBw9RA/bFCfFLRSDH4/4t8RdVqQ7+8HLxH+wV9rJMtCgo/5cw+JrbwHqkOykbz
-         ctOoeJUUd7G8cOGMDkG0XKjTJ+rLnTge/0FtQ/fInCyeBUTeNBGy6jqfVWxLUsrPJhEQ
-         Y1Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792375890; x=1792980690;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yq8r18auL3kyxH5XJ1eYj6G//xk8iEfWZvNxcHJYvp8=;
-        b=Ww8XNXNXhJ/SNL2kyxhHuHAVSUwE3kpn8R5AHCANvJ1Fuocj5TH/+ttNJ/a81N3TIo
-         GzyjGKZ0AV1F+OQgsPERiK3PYEje5idMOKhDTiLf3ijIeKSeCRJ0ywVbUKCnhVojAqyG
-         4oWLML0VV8Hs76UIvByTGNS3kvDE0Zh6yGCNae4UDdIEgfNIgYJ6RZVHqSEsEUI4NlHn
-         fGrZy4tt3ENP/MmFz3bvVyuoR+w0kmDoZpxYDDv9ihuI7t13/h6P4PIpQHb9djn5WUbp
-         XTpuHQ3Vy7Ci9fYQ7xdyXWKDOqoFOYFRaXtX2e2ym/vCEpqAfzIWratm8A+Q5+bdvfgw
-         VI5A==
-X-Gm-Message-State: AFq9FYK0Hzgt5dgzJMT4NYcrVjZYr+W7l+3eBGBrN/PwgLrQCFeiIq9p
-	53umy9neJslb/UDqszkbYTIjKvVT0c2g6M86X1O5UjS3XQqsofybT8c+
-X-Gm-Gg: AYBFou1UCTOn49Hnf+QJq/5NmjeqI+qCcYNghZl/23crURklMJlAMdMgBSLQEEXweIx
-	7CLG9j103ovDaP+eaV0q1M1ZlY1e3SAqf/6mB0C4cThgs7gY5D2JVPsW3l6Tj9nG0poUF0L8l4Z
-	1V4XR4LJWg76hXOiwTJtDweukT+Id6m8pdTV7HzZkDY1s8UpX2MecwMcWM6lw5hggsj/vtVkoji
-	SKlPtr0gebNCsv0BZDUrzULlFI4Nw8B0OFwR5HlvHfNXswHYH8G/v9+Btsnp50JtngCttJloMo4
-	Gv04Xgbk3bgi8BCLRvEo6zJHSRFLpWBri/IR6MN1WclCbDgHrtIOwQODRbfRPAlvd0i5q+9Vx/r
-	5DNY3/QN6zIrm5hE6pHrWVF59KZBH3TPhj0INPy78W8scDzYgTcQlxDM6xCezUzKVnloQqzsWTA
-	RWcTruobnZ6Vakuhak1cBAxr8z9mRuqAwlrPobeomRSB+Y2RnJy8AVDLpuUPSSmHuhvLJ96MISP
-	AX4TEsKMOMcriXXIEMXeWquUHWohMFGP1Ig5dUiKLui7qrWiMz36Fyxq7vNo1k4rt3M6HMQ1XMX
-	FXi5yjI2Y455MSLQQITDvm6EZnyTnZ22zier5KFdbJKNiVCG
-X-Received: by 2002:a05:6000:1050:b0:48d:ecba:3cf8 with SMTP id ffacd0b85a97d-48e07fa82f3mr8841415f8f.43.1792375890233;
-        Sun, 18 Oct 2026 19:11:30 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48dfd4f5b2dsm21520294f8f.31.2026.10.18.19.11.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Oct 2026 19:11:29 -0700 (PDT)
+	s=arc-20240116; t=1792376833; c=relaxed/simple;
+	bh=5Vlx++ZrB1lA0LXFqW1xMRq3aBHMSTYKQtgFBrHEenc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SsUabgS6aXJGnB5wPn2g/maQcZ6s1rbV8Fy+Vl8jqorxpwgmUnTk4VFhzqdT2eik0HhGpDWNawVICUq7LxxqcUNn5ZIQlaf11qwL89JvF2SWzG/zCr0CyOG/HRs0ygWlprn6dPp7Oo4+ymRwo3JdL7a/YdaNts4n6/S7zJk3NFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8CxfdL7f9VqXicXAA--.1756S3;
+	Mon, 19 Oct 2026 10:27:08 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJBxJs36f9VqNtstAA--.54458S2;
+	Mon, 19 Oct 2026 10:27:06 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Use snake_case for subtest descriptions in jit_insns_arena.c
+Date: Mon, 19 Oct 2026 10:27:05 +0800
+Message-ID: <20261019022705.30670-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Oct 2026 04:11:29 +0200
-Message-Id: <DM8G84CGPV1M.24HT5CS3KKB9F@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Enforce trusted BTF ID argument
- provenance
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Yiyang Chen"
- <chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: aerc 0.21.0
-References: <20261007-a3-arg-trusted-v4-v4-0-253ef3a1a69a@mails.tsinghua.edu.cn> <20261007-a3-arg-trusted-v4-v4-1-253ef3a1a69a@mails.tsinghua.edu.cn> <sashiko-outbox-163202@kernel.org>
-In-Reply-To: <sashiko-outbox-163202@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxJs36f9VqNtstAA--.54458S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxJry3GF1DGw4ftryrZr4kZrc_yoW8AF13pa
+	y8CwnxtrWfJF13ua4kZrW2g3WruFn3GFy5Kr48Xr4fuF15JFyvgryxK3W5KwnIkrWfZrnY
+	9w42yr9Fvr4UCrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+	AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zyIUUUUUU==
 
-On Wed Oct 7, 2026 at 6:43 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] bpf: check_func_arg() allows PTR_UNTRUSTED | MEM_RCU into KF_RCU=
- kfuncs
-> --
->
-> commit 1e71cf476e59d8805f3765efcab69f9c9d9bba4a
-> Author: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
->
-> bpf: Enforce trusted BTF ID argument provenance
->
-> This commit modifies the verifier to make the provenance check contract-d=
-riven
-> by marking generated BTF ID kfunc argument types with PTR_TRUSTED and exp=
-licitly
-> adding MEM_RCU only for KF_RCU kfuncs. It uses the normalized type for mo=
-difier
-> checks while reference lookup uses the original register.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 353bde9ae2274..a0ab793f041d8 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->> @@ -9605,8 +9614,10 @@ static int check_func_arg(struct bpf_verifier_env=
- *env, u32 arg, u32 slot, u32 p
->>  			}
->>  		}
->>
->> -		if (is_kfunc(meta) && (!is_trusted_reg(env, reg) ||
->> -				       bpf_type_has_unsafe_modifiers(reg->type))) {
->> +		reg_type =3D reg->type & ~(arg_type & PTR_MAYBE_NULL);
->> +		if ((arg_type & PTR_TRUSTED) &&
->> +		    (!is_trusted_reg_type(env, reg, reg_type) ||
->> +		     bpf_type_has_unsafe_modifiers(reg_type))) {
->>  			if (!(arg_type & MEM_RCU)) {
-> [ ... ]
->>  				return -EINVAL;
->>  			}
->>  			if (!is_rcu_reg(reg)) {
-> [ ... ]
->>  				return -EINVAL;
->>  			}
->>  		}
->
-> [Severity: High]
-> Does this allow a register with both MEM_RCU and PTR_UNTRUSTED modifiers =
-to be
-> passed into KF_RCU kfuncs?
->
-> If a BPF program loads a pointer that is marked as PTR_UNTRUSTED | MEM_RC=
-U (for
-> example, when loading an __rcu pointer embedded in a union) inside an RCU
-> critical section, and passes it to a KF_RCU kfunc:
->
-> 1. The arg_type has MEM_RCU, so the first inner check !(arg_type & MEM_RC=
-U) is
->    false.
-> 2. The register has MEM_RCU, so the second inner check !is_rcu_reg(reg) i=
-s
->    false.
-> 3. The validation falls through and succeeds, even though the register ha=
-s the
->    PTR_UNTRUSTED modifier.
->
-> Since check_reg_type() bypasses the strict compatible_reg_types check for=
- kfunc
-> BTF_ID arguments, this appears to leave the verifier without any checks t=
-hat
-> would reject the untrusted modifier here. Can this result in untrusted ga=
-rbage
-> pointers being used as valid RCU pointers?
+Normalize two inline assembly test descriptions in jit_insns_arena.c
+from space-separated strings to snake_case for consistency and to fix
+command-line filter parsing in test_progs. Otherwise:
 
-Yiyang, could you please follow up with a fix for this corner case as well?
-Thanks a lot for the existing fix.
+$ sudo ./test_progs -t jit_insns/arena access with zero offset
+Usage: test_progs [OPTION...]
+Try `test_progs --help' or `test_progs --usage' for more information.
+
+$ sudo ./test_progs -t jit_insns/cast to a user address
+Usage: test_progs [OPTION...]
+Try `test_progs --help' or `test_progs --usage' for more information.
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+Note: This issue was introduced by the recent commit 54e8bde13a3a
+("selftests/bpf: Add JIT instruction tests"). Since it's only in
+bpf-next and hasn't been merged into mainline yet, no need to add
+Fixes tag IMO.
+
+ tools/testing/selftests/bpf/progs/jit_insns_arena.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/jit_insns_arena.c b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
+index b396d5aefb5a..16276ec192ac 100644
+--- a/tools/testing/selftests/bpf/progs/jit_insns_arena.c
++++ b/tools/testing/selftests/bpf/progs/jit_insns_arena.c
+@@ -34,7 +34,7 @@ struct {
+ 
+ #if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ SEC("syscall")
+-__description("arena access with zero offset")
++__description("arena_access_with_zero_offset")
+ __success __retval(0)
+ int arena_zero_off(void *ctx)
+ {
+@@ -82,7 +82,7 @@ int arena_zero_off(void *ctx)
+ }
+ 
+ SEC("syscall")
+-__description("cast to a user address")
++__description("cast_to_a_user_address")
+ __success __retval(0)
+ int cast_to_user(void *ctx)
+ {
+-- 
+2.42.0
+
