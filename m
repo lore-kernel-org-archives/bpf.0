@@ -1,146 +1,107 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 376E639099C;
-	Mon, 19 Oct 2026 11:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BCF30D40E
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 11:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792408239; cv=none; b=MVWlaSYb/Lm6U3hQ18daLKLYDBFftRivlkqeKl4FJsCLxWficoX4+Exnn5Vfd3PO5X1uLc0oqLYHhygLzI7PfSPH9WsI88vr6MlRl/H27abe24JGdBX5dndjVJ5x7dpdNV3iftjKtRazV6VojxXYn3QFJQwslXZVmWRMjro4y7c=
+	t=1792408601; cv=none; b=eza+1KVfNaEy6qxbbYPJROIOHKIefpujTRQ1mCi38y6XsGx8Gax3zA0lvbd2cgcHtzMfNGommPKfUwJN9WBE6ShpXhUkukWQNgRWsQWz+v1L+XEd8tNSRY4TsImHG7rq8kWVYZ837Vu39LN//9Jg4DYJiCsbF5r0p9ryTvo16RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792408239; c=relaxed/simple;
-	bh=HI3jLzIMNHgXngha933TyDy60kZHwaCdeVQpvZO8cTM=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=CZL3to3MpWlEn8tft0Wslaksbse3Evgobg5agHJRztyV9mRFoaOKlyRc/7yogK7kZIqrXgUjAG12i0lXWK0IIdpTgwKyhMDMLYw33ARSmeYCUv2giV3YcVmMnzRv0TwMU9EMdOl+POOGWKAeAiRn+2w6qMyryCNyAn4sFPXMhUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=LvyJ1pby; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1792408601; c=relaxed/simple;
+	bh=EWf5c8ljj/09dklnGXsFMrD980MsIpsyxtjkVc+RqkA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=VoAD3pXdyMZp6Ay1LjmqMlq4RDUYHjEKPxIV9HxGSzaQh31/NdrRIJaM1/BBf9MnyG9cirocFQOM5TdF1XvM6EtYoDg+abXj5gewBcOe97jrprQHAtWY3d24V4ML2OA8Qo3QyUaie/jPwqNaL8R8bXclZaimoJ9w8HADOp1wfJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=XoDmMQKE; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="LvyJ1pby"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D813FA012B;
-	Mon, 19 Oct 2026 13:10:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1792408235; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=t+VSMmyfYD4g+GNYlrSnZIeaS9t9MvdaQFl0FVMqPCo=;
-	b=LvyJ1pbyvgjoMdZoaSeBG62z3wRWXrUIUJ4NeeaxNoW9hd/uSC5BtjwEYI5SaLFQETtPrG
-	rmt7qPKPS4hlD+1bLGpPzdb2Vd1J+arx04AjKXmT8oxYwOvUV0HaiJO6Dw+a9plsKD4Cjw
-	oKtj3PnWArmj87okeVF8jewNL35fr4A6AXUueUXMXjwrkSFTloRthv8C90aopFMHuIcZPO
-	6XPiiIa+zJl5aIDLqU98D7pX80lFV+NJA4QLs+miDmibA5VUt+ZKptYc1QvD/L3q3xpeHa
-	TwZxISdFcYm98rFADZBQ1rSa3miOb2CJdc4/GvnDoOp63Fz82ORStom6q3V5kg==
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="XoDmMQKE"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6afbc363efeso3117374a12.3
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 04:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1792408595; x=1793013395; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=fGQ+9YD2bGTiX9CIhcjMfZ/cpyi6knaOi/h3v5oGsFg=;
+        b=XoDmMQKEOQKqUxk8KfM0lWSk6tqVxd/OrMnljANod2AjeUj+ZKyXMVx4I0bXDBkHD3
+         IwaI2WsPta3UXoWumUv3TC/4dqRwd+ebqIAa10goyWn4YwO+y+hVRL8KqF3t8q8KfXjk
+         CLXs+bFc1Ow1OVeedSxzDlp+/eWkjCDGLy3vF+gMqamGqMOY73czyqvqJyEI6J4UNldg
+         JHRIEJgAEiXQgiHVMt3dWgJEhP4Jv3nFUbLCE1s+giLKgIUMf3YmhRmL9hY9BDZisoET
+         oJXY8DDcy5is+2ytLJVIWp7mxmEGNIOJMR7JjdjEprBOqkAMZCecX844al4AdPy6LG0c
+         F+rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792408595; x=1793013395;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=fGQ+9YD2bGTiX9CIhcjMfZ/cpyi6knaOi/h3v5oGsFg=;
+        b=AoQZsfCYgQV6zpWkT4uv4p5Y7y2Q6rEAH9DhMZcxcbCKqDSVPEvRnny/2tjJ2G7VW/
+         TEf1lCfLsilKIuY7k5+h6KZ0iEbjRO2ALKcy6Gwch72CTZ0YnPZ+h2aor8O+V7zoYpN9
+         QorY64jMEyspknb6cCblCI4ZOpXtH9ffwqzCOXdPXmU0cSs6uLXW5h9t2a3jkScdIFxV
+         BLi3yxj4Ds3u53/ao7C0XmBPEltLmqPhj2y/FYezVW10R3eOhogQfZEjctOGj69tmSq6
+         nXTxbMHvXaitmkgxxrAVhheiRJvNoCpnOsdjN/iNEOZSbmWSJzMaZ482m4DLtzQidAou
+         PEzA==
+X-Forwarded-Encrypted: i=1; AKwUvBxUFBkY2KsKg+mjmxfYSEEvcNBZ/jF8YMJGzKVwVocKqoqsmfgEEq7+K/WN9JT5Bjh4HlM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI5v+ZYXWWYhJe1YHNZzvZuUCjNPTfg8x44dIcTipPCdy+jSV58
+	XOq3Vm43NPK1LZo+ujD2IubY/739nEvMfIK4UD0rKVZSO4pMLSblGW1ai+CoE2CPOxs=
+X-Gm-Gg: AYBFou30AX+VtsYOMmsS+SpQ9sCyIyNoylipPcrAfllMtwt7ANTLBgZ03r5kuRMHBQ6
+	JFmRpJgv7ISHbVCm5BrlF4yvIjiJ1j/HHmK8Eyk5pOykxNzbhfQDEgqmpAjall7lNV6+cwIHnBC
+	j6Pu9PNn85udwfF4lSyNpXax4HK+3Sw5rheBx0US3vTnkQ+fawxpzaCxKJjFp7vZ29drBBNhtSS
+	rXTTThXeL18t6JhlCWxNdsDEfyQe0aBtawSXZiB86vlloil0QjZKYAuOH40Iro4edNwfBGe8D+D
+	qlvx2GA94xX3cVd8C9XPiL3eHf4XiMLoLr6GOoe4hrGytjcu3MU/vIMXiMe0gQQ1BpD7dItNyGS
+	u1kh1dfX3qt5Q4For0koBk8AENRCgCfe4cdbS95d23W2hwGpnH52akABujYOidh9n6eu52t2Isy
+	6mOj98zTsCg5M/WBSju9qxXcPwYAFHMiJN+Bqub/qevT6j/KSobNdoWAwvre7e
+X-Received: by 2002:a05:6402:270d:b0:6b1:c7d9:b631 with SMTP id 4fb4d7f45d1cf-6b3a8191a46mr4712969a12.23.1792408594035;
+        Mon, 19 Oct 2026 04:16:34 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac6:5067:2dc::49:220])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b38a1e9e44sm3663824a12.32.2026.10.19.04.16.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 04:16:33 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
+ Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>,  Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
+ <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  Jiri Olsa
+ <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>,  Ihor
+ Solodrai <ihor.solodrai@linux.dev>,  Shuah Khan <shuah@kernel.org>,  John
+ Fastabend <john.fastabend@gmail.com>,  Lorenz Bauer <lmb@cloudflare.com>,
+  bpf@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH bpf-next 2/3] bpf, sockmap: Restrict iter-context
+ sockmap updates to iter/sockmap
+In-Reply-To: <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co>
+	(Michal Luczaj's message of "Fri, 16 Oct 2026 23:09:14 +0200")
+References: <20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co>
+	<20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Mon, 19 Oct 2026 13:16:31 +0200
+Message-ID: <874ieiey9c.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 19 Oct 2026 13:10:33 +0200
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre
- Torgue <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
- <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
- Fomichev <sdf@fomichev.me>, Jose Abreu <Jose.Abreu@synopsys.com>, Ong Boon
- Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v8 5/5] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
-In-Reply-To: <20261018-stmmac-rx-mb-v8-5-5f58c0b25849@oss.qualcomm.com>
-References: <20261018-stmmac-rx-mb-v8-0-5f58c0b25849@oss.qualcomm.com>
- <20261018-stmmac-rx-mb-v8-5-5f58c0b25849@oss.qualcomm.com>
-Message-ID: <937b7f07872c29b1c486ac836c8f990e@tipi-net.de>
-X-Sender: nb@tipi-net.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain
 
-On 18.10.2026 19:07, Lorenzo Bianconi wrote:
-> The preceding commit dropped frames split across multiple descriptors, 
-> or
-> using a second buffer, while XDP was enabled. This prevented the
-> per-descriptor XDP path from re-parsing frame tails and from applying 
-> FCS
-> handling to truncated buffers.
-> 
-> Rework stmmac_rx() to accumulate all the descriptors that make up a 
-> frame
-> in an xdp_buff, so the XDP program runs on the full (possibly 
-> fragmented)
-> packet instead of just the first buffer. Frames split across 
-> descriptors
-> or buffers are now passed to programs loaded with BPF_F_XDP_HAS_FRAGS;
-> programs without that capability continue to drop fragmented frames. 
-> When
-> the frame is not consumed by the program, assemble the skb from the 
-> head
-> buffer and the collected fragments via napi_build_skb()/
-> xdp_update_skb_frags_info().
-> 
-> Note that XDP still rejects an MTU larger than ETH_DATA_LEN
-> (stmmac_xdp_set_prog(), stmmac_change_mtu()) and disables SPH, so an
-> ordinary frame fits in a single buffer. This path is therefore 
-> exercised
-> by frames that do span several descriptors (for example jumbo frames 
-> the
-> MAC admits through its jumbo-enable bit) and is groundwork for 
-> extending
-> XDP to jumbo/SPH; it does not enable XDP jumbo support by itself.
-> 
-> To do so, store the in-progress xdp_buff in rx_q->state instead of the
-> partially built skb, so the accumulated head and fragments survive a 
-> NAPI
-> poll boundary (mid-frame dma_own or dirty_rx break). The state is saved
-> only while a frame is in progress and cleared once it completes, 
-> leaving
-> it untouched when the poll does not process anything (e.g. netpoll 
-> invoked
-> with a zero budget).
-> 
-> In addition:
-> - advertise NETDEV_XDP_ACT_RX_SG, since the RX path can now deliver
->   non-linear buffers to XDP;
-> - build the skb head with napi_build_skb() passing xdp->frame_sz, so
->   skb_shinfo() lands on the same shared_info the fragments were 
-> accumulated
->   into;
-> - carry the XDP metadata written with bpf_xdp_adjust_meta() into the 
-> skb
->   via skb_metadata_set(), so it is no longer dropped and TC/BPF 
-> programs
->   can read it through data_meta;
-> - attach fragments with xdp_buff_add_frag(), which initializes all the
->   shared_info fields and takes care of the pfmemalloc bit;
-> - charge fragments the whole page_pool page size (xdp->frame_sz) as
->   truesize instead of the old dma_buf_sz; with SPH/buf2 most frames 
-> carry
->   a fragment, so skb->truesize grows by roughly 1.5x on 4K pages and 2x 
-> on
->   64K pages, which reduces the effective socket receive buffer. The new
->   value is more accurate now that a fragment is a full page_pool page, 
-> but
->   it is a behavior change;
-> - release the buffers collected in the xdp_buff when a frame is dropped
->   on RX errors; the previous code relied on dev_kfree_skb() recycling 
-> the
->   skb frags, which no longer applies now that the head and fragments 
-> live
->   in an xdp_buff rather than a partially built skb;
-> - drop the whole frame when it would exceed MAX_SKB_FRAGS, where the
->   previous skb_add_rx_frag() calls were unbounded;
-> - strip the Ethernet FCS from the accumulated xdp_buff with a 
-> driver-local
->   tail shrink (stmmac_xdp_shrink_tail()) for both linear and fragmented
->   frames, instead of trimming the skb or the first descriptor length.
-> 
-> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+On Fri, Oct 16, 2026 at 11:09 PM +02, Michal Luczaj wrote:
+> @@ -10341,7 +10342,12 @@ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
+>  	 */
+>  	switch (type) {
+>  	case BPF_PROG_TYPE_TRACING:
+> -		if (eatype == BPF_TRACE_ITER)
+> +		/* iter/sockmap only; type check rejects a freplace of any
+> +		 * iterator's bpf_iter_sockmap() subprog.
+> +		 */
+> +		if (eatype == BPF_TRACE_ITER &&
+> +		    env->prog->type == BPF_PROG_TYPE_TRACING &&
+> +		    !strcmp(afname + strlen(BPF_ITER_FUNC_PREFIX), "sockmap"))
+>  			return true;
+>  		break;
+>  	case BPF_PROG_TYPE_SOCK_OPS:
 
-> [...]
-
-Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
-
-Thanks,
-Nicolai
+Explicit bailout when prog->type == BPF_PROG_TYPE_EXT might be more
+self-explanatory.
