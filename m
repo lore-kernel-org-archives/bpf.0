@@ -1,69 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792422091;
-	b=nIWU0i3GADZCBqAR3ZgqfLb6Vi3snQCBpyAKXCKRi2psfbnfocZFkCq/2EL7dVKAS6Ne
-	 I8aStf5IgcIbyK4ttBmeyHxTY6BA5/K3eHATYiyaM4tkKrqL+IA6tcgFPqzHjST4ht8jK
-	 yKeauVpvFj58uTmzgjAXkUtdZQDBdmU5Uf44e3M/bsEhhEScBO4YwVMmAqrxVZUlNNyZ8
-	 12rT3cAXtPiH18lDUyhnp1bt6KNfQM9fAZkG2yAjWUn0D8lOKBvwrxybM1kjI6gp4+KsP
-	 CirU7sDQEWuu6X2/rDS96DKXHC48/F6xHblPg/Fw55/+V5ngcjp0UQ2D8Ar2MI/T0iQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792422091;
-	h=Received:Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:
-	 Date;
-	bh=IAOBmo/4ic3jXX9wroTjAB02hzEgaYEfduQTfRYwxNE=;
-	b=FEEkzypfzUOmyqhAfIlnkaQ8bJN47XYEZWeZ2dyRYuqgo2/fqkuMqdq9v9KeYprYpqxs
-	 4KnFn/U8TJ/zTXSpU/mBtwX0LmyCrSB2yrRrldDrIRRzvMmHz2nj0gq9bdUlvo+osI/8P
-	 ijCeOY+VbaORe4gIO/8zRU8w3yhEn40aF4tDQm2hgkcRCaaWaLwTaYXiVFJ4UrQ2ehOhr
-	 JPcotrGUZn+TGEfYXncF+RXIbpIsTpO4rjwxXfv0RHYmkhyIF0CZFJI1m2dqAYHroUgoJ
-	 cjXRBYLRQXktG7NuERwy8HIEEL9+jlEk6N9RLm0DZzBA/Qo+6rOUjnjb5f6m9o+T0oQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GmWXLXnC;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
-Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31411607AF15
-	for <bpf.vger.kernel.org@localhost.mlmmj>; Mon, 19 Oct 2026 15:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GmWXLXnC
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.226.149.37
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792423245;
+	b=TeEWk6bmNvyBOI2KXVLzxNjdMl52JKzuNKcJEzNq3yAj3IfCfqu8UulRvZBNYJDZg9aj
+	 WBa3iEUc64y0wXv9x76Fs0hGeE4mPG7ZnXVdnNVPjZEZktSFK1fe3FYgnaVVVwUsG1Yuy
+	 8iQm3D59fjFXBT87Fc6ohEw8of0DQqa87SKucJJahk5jQKmmGWzR/MFG26hHb/V9v+npb
+	 I9Km9XVPYU5n/HY/0zwPX/mx24j4GUUcnsYljCa1c9q4WRn5ECBqRcAbODPk7C/4wI3ti
+	 qVE1nwV0HarAVePP9wr5D4gu3ZabX/hMnTrBQGFFtPzkig6ffcZ7gAsOCcXff5rM0YQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792423245;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:From:Subject:To:Cc:References:
+	 Content-Language:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=ZtF3pLjwdO/EjU6H/l0B9QYdOBekN6Mz1r0HXeqWce0=;
+	b=iq+wlgNW4zFW3G4DZ2x7FWlC3ACDHRdpUVrbwZqVuIzVdIU+Ux8z6FdEfdISXwHlI2jR
+	 ne3PxSQiwvtbnHNkc9QrDNfpOvgMZA7xqOA445e1zMHTbWADmaTQq09+GsujKhPINb3tK
+	 Wh/9HrFLBjYqAYUg/y+zac5+bkfbHt+JIUEoGyeigLP6gQccwIg18dK6qdM2EyEQdn7g6
+	 cxUF5bxJ8PkXdGU33QpZLOsAvkBQXfnKm2tijB4v2PvHJIypAfAAw5/DfX3RNwrfsjpcQ
+	 yJ0+ukLVwXukC9eosoKbYrKraTLdcNyDtifWAQYx85XJZiGxabzVSbhjnjNsfmHdC1A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=rbox.co;
+	spf=pass smtp.mailfrom=rbox.co;
+	dkim=pass header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=DY6YxkkD;
+	arc=none smtp.remote-ip=185.226.149.37
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1444433B975
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 15:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792422091; cv=none; b=H2Lmh+3acPa2hylBuOzdBCq+X9z0YD1Qu2osKMAnVP6Muj3n73lZaw8NASHAY3cLimrg1oba2SNrgiLWTGiKIVhEtvOFjHe5yCKVEd8+fB6ioXYG03MiK6JexWY5cD/PMihCCkeZPGfMkfhdge1JI7Gn7wZdusGHSUGnM7ftlYE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792422091; c=relaxed/simple;
-	bh=D2Qv0/JSugpBJZzFZB2Hewawe0Ks0xO/9Pp9HNMWtAw=;
-	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
-	 Date; b=TZYDfW8pTdGaxZrSCU6YGY5TRM6w1Xs93NSbyLMiynkBak6QN4U8nlDj8Ci7GT+KzjHLVk8p75QuKCWrKXLnzV46ciTtE+A2T17xd8MMmMZdlRbIJEWEhKHilItz+KfB/xBZT/2DLK3SM7FC7jU22nTM98lyb6QknYIUncGgPVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GmWXLXnC; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30061F000C4;
-	Mon, 19 Oct 2026 15:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792422090;
-	bh=IAOBmo/4ic3jXX9wroTjAB02hzEgaYEfduQTfRYwxNE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GmWXLXnCHUDPa9GReJdY7mS8UKFB1QLewHJP/uXQQrY8YO3alxsuuXYYNixtIERBv
-	 3GT44PxNqJ7Hdw1O55CAXkl25MXhmf9QHrqp5+Eu09FtKvm7Wy6NtBrn6sO3Ly6qqk
-	 BQfOD4SU5bUJKXu1MHSXvB7FGsYvRRpzYCVvMGN7tac2yRHHWIMczB2MyuRUdH3eXb
-	 O3QrUvROmkhsxTg82kTTGD8GVS7N/gCFSV/cZmyxCxYg2gSpekkDHbtzmg+6MmgrET
-	 L8l2+YnL9pcJ7hIPgWp/VO7TlPYN83MoXR2bPDF8Wm+hgpY4dJzOTyOCD6ZOlmnLDZ
-	 exUmgARU2XOfA==
-Message-ID: <sashiko-outbox-177591@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH AUTOSEL 6.18] bpf: Reject callback subprogs invoke
- tailcall
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sasha Levin" <sashal@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261019135441.1420968-237-sashal@kernel.org>
-References: <20261019135441.1420968-1-sashal@kernel.org>
- <20261019135441.1420968-237-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 15:01:29 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB1160A7E4E;
+	Mon, 19 Oct 2026 15:20:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DB1160A7E4E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=rbox.co header.i=@rbox.co header.a=rsa-sha256 header.s=selector1 header.b=DY6YxkkD
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1xIpA5-0033bO-0y; Mon, 19 Oct 2026 17:20:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=ZtF3pLjwdO/EjU6H/l0B9QYdOBekN6Mz1r0HXeqWce0=; b=DY6YxkkDUmTX8UqWgioRvLjJS5
+	DANrdy1OniLaalx1SR0mZq7QLxopCq7qV5bnROKJBfaN32xs8gP0nROCCbutICsSP189kbbd2cVeI
+	pqebf+IM+G+6z+qii/pnOCfqHV2rUTwdIZOA6yKQJvEufAPztRnRExCEK+Py7MN+mgDMC74eJUzo0
+	/qQYskF0+QsDO/n/DsfZts2fVqZAntNQTbnB1T7XndkanQ73SSEhbFOVFR8sfI3fGb1QFa35OxFgD
+	SBTYmu8cxjatHZp2fpuJzELYETqR7xhi2FZR6eDuJKKXd+kNZxT9yIFJfM+Ixiua5CQKF2v0Qb08w
+	yYx0PV5w==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1xIp9y-0008Ot-A1; Mon, 19 Oct 2026 17:20:22 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1xIp9p-006D8P-CR;
+	Mon, 19 Oct 2026 17:20:13 +0200
+Message-ID: <a9ba4549-4bae-4516-85ef-ee38f13551cd@rbox.co>
+Date: Mon, 19 Oct 2026 17:20:12 +0200
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,85 +65,69 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH bpf-next 2/3] bpf, sockmap: Restrict iter-context sockmap
+ updates to iter/sockmap
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Lorenz Bauer <lmb@cloudflare.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Sashiko <sashiko-bot@kernel.org>,
+ Jakub Sitnicki <jakub@cloudflare.com>
+References: <20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co>
+ <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co>
+ <DM6O08VBRY20.1PFUYACCZ38JL@gmail.com>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <DM6O08VBRY20.1PFUYACCZ38JL@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: unreset tail_call_reachable in check_max_stack_depth_subprog()
---
+On 10/17/26 01:52, Alexei Starovoitov wrote:
+> On Fri, Oct 16, 2026 at 11:09 PM Michal Luczaj <mhal@rbox.co> wrote:
+>> [2]: commit 64c2f93fc325 ("bpf, sockmap: Take state lock for af_unix iter")
+> 
+> unix_state_lock() in bpf_iter_unix_seq_show() was added only for
+> unix_stream_bpf_update_proto() called from the iter prog.
+> iter/unix cannot get there anymore.
+> can we drop it ? can be a follow up...
 
-commit c2ffc0a7246f4fd9042fb29769bcdfa70c066eca
-Author: Pu Lehui <pulehui@huawei.com>
+So we don't care about having a stable socket state while iterating? Which
+is the case for iter/sockmap, but is unlike iter/{tcp,udp}.
 
-bpf: Reject callback subprogs invoke tailcall
+>> +		if (eatype == BPF_TRACE_ITER &&
+>> +		    env->prog->type == BPF_PROG_TYPE_TRACING &&
+>> +		    !strcmp(afname + strlen(BPF_ITER_FUNC_PREFIX), "sockmap"))
+>>  			return true;
+> 
+> iter/sockmap prog is not limited to ctx->sk it seems.
+> bpf_skc_to_unix_sock(ctx->sk)->peer is a plain PTR_TO_BTF_ID and
+> the value arg of bpf_map_update_elem() accepts it.
+> The peer doesn't have to be in any map, so it has no psock,
+> and sock_map_seq_show() holds nothing but rcu.
+> sock_map_update_elem() takes bh_lock_sock(), then sock_map_link() does
+> sk_psock_init() and unix_stream_bpf_update_proto() on a socket
+> that unix_release_sock() can be tearing down.
+> That's the same unlocked socket as in iter/task_file.
 
-This commit rejects tailcalls inside synchronous callback subprograms by
-widening the exception callback check in check_max_stack_depth_subprog()
-to cover all callbacks via is_cb.
+I'm not sure I see the (stream sock) issue above. psock->sk_pair holds the
+peer, so peer pointer remains valid during proto update. iter/sockmap is
+safe, because sk is held by RCU. And for iter/unix we currently take
+unix_state_lock().
 
-Link: https://patch.msgid.link/20260716120157.835937-3-pulehui@huaweicloud.=
-com
+But iter/sockmap dgram peer is a problem, right? No sk_pair, no lock, and
+connect(AF_UNSPEC) can get the peer dropped.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b89a5d717e422..5cc3e9a990ef7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> Should we restrict it to ctx->sk somehow?
 
-[ ... ]
-
-> @@ -6852,8 +6848,8 @@ static int check_max_stack_depth_subprog(struct bpf=
-_verifier_env *env, int idx,
->  	 */
->  	if (tail_call_reachable)
->  		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
-> -			if (subprog[tmp].is_exception_cb) {
-> -				verbose(env, "cannot tail call within exception cb\n");
-> +			if (subprog[tmp].is_cb) {
-> +				verbose(env, "cannot tail call within callback\n");
->  				return -EINVAL;
->  			}
->  			subprog[tmp].tail_call_reachable =3D true;
-
-[Severity: High]
-Can this falsely reject valid BPF programs when a program calls a
-tail-calling subprogram and later uses an unrelated synchronous callback
-that does not invoke any tailcalls?
-
-In check_max_stack_depth() -> check_max_stack_depth_subprog(), the local
-variable tail_call_reachable is initialized once at function entry and
-is only ever set to true when descending into a callee:
-
-kernel/bpf/verifier.c:check_max_stack_depth_subprog() {
-	bool tail_call_reachable =3D false;
-	...
-		idx =3D sidx;
-		if (!priv_stack_supported)
-			subprog[idx].priv_stack_mode =3D NO_PRIV_STACK;
-
-		if (subprog[idx].has_tail_call)
-			tail_call_reachable =3D true;
-}
-
-Because tail_call_reachable is never reset to false when entering a
-subsequent callee whose has_tail_call is false (or when popping back to
-a caller), once any normal subprogram with has_tail_call =3D=3D true is
-visited, tail_call_reachable remains true for the rest of the walk.
-
-Synchronous callbacks (such as callbacks passed to bpf_loop or
-bpf_for_each_map_elem) have is_cb =3D=3D true and is_async_cb =3D=3D false,=
- so
-the traversal enters them via bpf_pseudo_func(insn + i). If a synchronous
-callback without tailcalls is visited after an unrelated tail-calling
-subprogram, tail_call_reachable is still true and hits this new
-subprog[tmp].is_cb check, failing BPF_PROG_LOAD with -EINVAL.
-
-Does this backport also need prerequisite upstream commit 3513ea9dab6c1
-("bpf: Sync tail_call_reachable with callee state on entry"), which
-updates the callee entry logic to:
-
-	tail_call_reachable =3D subprog[idx].has_tail_call;
-
-so that tail_call_reachable does not leak across unrelated subprograms?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019135441.1420=
-968-237-sashal@kernel.org?part=3D1
+I recall a discussion about having BPF helpers accept only trusted
+pointers:
+https://lore.kernel.org/bpf/CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com/
+Restricting only iter/unix seems better?
