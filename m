@@ -1,101 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.46
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792429687;
-	b=ltHh3SDd1zyZL2zvmybWt7pasU1bDctRjTPcUR3dAq2u0am9j9audmIS4tWcoQccNRMd
-	 +89Z+vLjIwOKgtfV7fWYXDs+esxwuxrh+WQa+CDfena39J0dgrk3bkgzWDmClLlHLBxKb
-	 AOMxP2/ow0o3ynwEdQYjrHPRzhFE10igjWcEz7GgAgv6KISFkCMAqdQDz8GWXJjN1VTT3
-	 9ni0cnl0/c9qMPKuJtdkDkHuKx6uv1pZvcoYOrhtLQljKY2YGqrPnjrnGvO16TcfJfX/M
-	 Zy+PIIXcNnlGz5hn5kxCnG8ABLItS76uBolSUk1+PWgjDwYevhAK6PefE67JoyXZ5PQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792429687;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=z9Rf2ubDKz7ML74MPtfck2qyU1vrqP5ztLplisyq7v8=;
-	b=gUxiYFZuH8H6DLdlpwrDrKnn2db5+Mj9+C1j/Wz+Ganr0NOJqELlmTz2775Yg4qAE1fX
-	 kMJ0ROmnmKAre1zRW1V8KtqjzugqUCWEf7p7p90Pm1b/KP5eRO5Mhcegwz8WzOOy3dvUH
-	 /Y6IXWzyHNjRDj/abYBdtOSodHVUOA6Zz9pCigm1nocDVZjV5BR9Zaltb6xJZ+r4VGmb1
-	 +Y6otSQAgk4JkWFeC3R9NOdr+NYujno7zFYS5Mu01Sm7iF82ce0+xNHVVKiv1fiy06IyS
-	 02OG1eYOZeDFBTAtjVtcflWYsflphZYmj26E6bdO5i5oxpNbS1Qkwcj8FH3QCp9M4iQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hN5V4SND;
-	arc=none smtp.remote-ip=209.85.221.46
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792431502;
+	b=JctsVjrlywqPU+KTEPKXu9hBFl1BZyIo+Y1AiShWn3Dv7NdnnsF9Klg+Kd6fn8glq867
+	 XtGUb6q+IrAY/KOE7BpwjNOE5JRYYvp5Hfg0FickD+Xa1oaq56SJaNB8kBBnjPF3u1MJY
+	 BM628LoO91gTdKmLEjouZ0yUd/PpR0xKLQKprIIo+mKqi72qg/vgXblLxyY80UtoL/SEF
+	 gK/ch6hEEwri9l1Kcch0iToJk9AjdcIj/icqKA77bdv0YUnidJyFrhLOnplwzSokWtgJu
+	 0iv0v0xEZuOwlObZKaVPhLMCDybREbF/LLZDAPhc0Gk+KSl8RCgZwNoTmrtglFbV8Ew==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792431502;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=DnMksxBeVgGBLISVAmVNMYiivsdCkOY1OzObG07U/BQ=;
+	b=Quzto20dh0YsK9FlAw2dZGbwC5BOp5+1Tonq4jCW4R9BPb42q/PcJwtImMj24kTQZs4A
+	 yggRbLnYtf1d7XvlqUzFHvEH46/1R0Ge9lcGIS2w2A1j/Qhg4ckrv/G0Z8d3yHzqjB6vq
+	 qYufcpybUxudkf3qMbeLb1S3TVJNFlXdbEFEtRnLvryqWn+kRiM3jDQZEovvGRoJtl5Bo
+	 1nWapYXI+V06VUpypsy1c3nqtixU9wqW8kHankkEA5bqm9wFpTClHyyLIePY2maOrgNWw
+	 uhYsER1yK6QmTccsZTazLh8ihizqqPNVL3tFYTIxeACGEyGuLFufRdSakniWzPY2I2w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lhe+6Z2q;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3EE606A31D;
+	Mon, 19 Oct 2026 17:38:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lhe+6Z2q
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1792431501;
+	b=ZkBhE66yOM2NGCjQ0+6OnHSDF3lhRpjaBb4ARxBX30NtbVTdUIbi91qgIwzifvTfHcCj
+	 2pRKUB3crIs/lataXtXihOxlqLquZwUgU3jRJ5JaOUveLAJknVjE9xoO3OOmsGXM6IsDD
+	 MhWCjAm+hxZ+I/LOYLREJaBfzlz/6sXrBHQQlkvYORlVr1vT5XzXXNuLCWT737OB0cK03
+	 LZAn8Ugq9wzWTq5T8B/3MLri2uWQZZJcZGYNNLaC/FJ5iKzT2Q6ZsFAZStT4kthazisGy
+	 pK1P0BIVkZ9iew9uRmpfVH+6ucQSPfAuWO6CuEqekULBmWg20SOnPQEUrDpuRjL978g==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792431501;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=DnMksxBeVgGBLISVAmVNMYiivsdCkOY1OzObG07U/BQ=;
+	b=Df1+vpJh0LPkn/kBPBVIs3o27qkcWbqsPO6920CabUobQ71M3nqIXbprcuYFy71VeYWU
+	 QEyomrqcB/K0RJ7nOi9SFbVRp02iC9JnbSlVJbJ3kXSj4E7EgLNqOP9nrsOQMBIydQmke
+	 ULjpizcUnHzuuxqtat4IQ+gfTaFGMBGjIYgeD7WthfajFkyqPZ7Gs3ZBWWQIszNtzG7j2
+	 5CfK1WLRp2CYNxrz5JVL5am4dMaJNq5IUxbD/9gJkLTwW8PHYV4RK2Gub2YcVjPlY6Qow
+	 sT13AIxu09S4KWMo+6/P0O5Z5E7UtbZY+Wyt0yeteR15V+2wuth3FZwLk2K76UinPaw==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B0C606A31F
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 17:08:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 09B0C606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hN5V4SND
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-48bbb06e746so1167278f8f.3
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 10:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792429685; x=1793034485; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=z9Rf2ubDKz7ML74MPtfck2qyU1vrqP5ztLplisyq7v8=;
-        b=hN5V4SNDE/HFB3N3cv5LHldWsl4SYF+12521DFRCCiZpfDuORmspN/Um2jdLYJZoY3
-         zUWtmNM5qdCPIMuIJ8hlUTR2/APPnKF/kKILGKtIsqLGPiOgOtjzqhJ10OQZIfDprErE
-         ucTxHQ1/E+h2jQW3sMFeGl98+8ktAINYbs5T1tLJZxxaMvX5TMLGK8b7NCMTNx8aFnBb
-         QieABdzmmJZWvEzafqMUHjcuK78YK2rpg6tPRQ9eonHahpzWzC2bdYR/5JeiEBa+Ve0C
-         sRDYhXJnwGYdsuOiOhyDKPNfjUsH2MlB7BqqgnL35qv/WBNZ5d7f5piomeMhpihfnwHo
-         9S2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792429685; x=1793034485;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=z9Rf2ubDKz7ML74MPtfck2qyU1vrqP5ztLplisyq7v8=;
-        b=WChj2GGDKAMcKPNjw2YOgF2/M1mFgQoZrgcC+XSniq+GsVU4je0eUfZN0fNvpLtnSm
-         3NOfsMh7gxuS+qbRLwYlgFrgsC4VXo8PgHCjKFYrAsr/2OsicI7uwgudsdp5k72fmEFU
-         KDdbtdY3Bk2Husng/LUvTLsnAyKR1uB4HDG0cpSZ5jffhTd8JJfkImGvngyc0G1UfGNf
-         z8T1xc/X/jqls9oCT4e80+dsvoWR0A2MPis7VR8zcNAidD18NBrR0WsUhQj5F32wsW2U
-         Jved10NhPQ/6A3lBgft8qHZSUKatHlWqjWJFeJHAoot/movuyIdIR52z0QlWVulRJC38
-         kZBg==
-X-Forwarded-Encrypted: i=1; AKwUvBydpxeZut9hqHg/G+8zhtv1pDK96VhKFOwBI9Of+NbXJzsgkGJWbcoMraFEkoNTL4hmYZU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKe1ZBEwbtlJ3kMUMAEkKG1rPV+9BZ9eJc8iy3D0PoanqD0O6NO
-	v7G3jxNOnGMY/umrtTOjRTOnE4V41lTGmg/+R+tprEa6tQEoe4LhB5Cw
-X-Gm-Gg: AYBFou3F6UMoIuKReVvdaphCCeyCnwh7Grh/V4waJcKo84mCH7TsiY7sJRXtSYqza/r
-	b2gzD7ebnrEYu69nQ9g1F8gSQ9vxVWOjrFHKQG/j3wMWzXcJ10qlyhRY+L0Jl3r10lfQVGkhx4G
-	HfqAO3dpgJasQxmoDGrgArQ4IyN4GBcko5bnL606w4nIuby+Huzqyiwoj+ashHfmr96H385vek5
-	cnrcCSHX4xYWtu7qbD9M1fNOn9wJ1A3NENLTkf2Z327FM3gvAksfHUYJoMt35IohEQtMn1Xb6DX
-	3sWGNHefaBIcJzjZZFoeJjAG91J58eWDjgtXjN/90SP89FDgby+hPLOfP7lUNCBx/2XpXFysgmb
-	HXI2YSHFE8I2QbCvb+3UyuARVVW494xcHs7VqUX3iFzi/mGlEEs1veaI1hnHBoxn1gLqHlKti4a
-	pK0FRtR8O2l0xCkGFyGOpl1PrysYw0dqNh+kv3chg6dPOkva7kikZOxln8HZ31qdvGEYD2sQVel
-	AcqibzEjpjtcG9LKgIRT1hFz9woKsEUP/I=
-X-Received: by 2002:adf:e78f:0:b0:48d:ff81:5201 with SMTP id ffacd0b85a97d-48e07f99fa0mr12300471f8f.41.1792429685165;
-        Mon, 19 Oct 2026 10:08:05 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d818237sm146817f8f.27.2026.10.19.10.08.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 10:08:04 -0700 (PDT)
-Date: Mon, 19 Oct 2026 18:08:03 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek
- <pmladek@suse.com>, Kees Cook <kees@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes
- <ljs@kernel.org>, oe-kbuild-all@lists.linux.dev, Linux Memory Management
- List <linux-mm@kvack.org>, Luis Chamberlain <mcgrof@kernel.org>, Andrey
- Grodzovsky <andrey.grodzovsky@crowdstrike.com>, Steven Rostedt
- <rostedt@goodmis.org>
-Subject: Re: [PATCH v2 next 03/15] kallsyms: Improve selftest
- test_perf_kallsyms_lookup_name() output
-Message-ID: <20261019180803.3ff8c35b@pumpkin>
-In-Reply-To: <202610192356.CItNLOke-lkp@intel.com>
-References: <20261018155206.132411-4-david.laight.linux@gmail.com>
-	<202610192356.CItNLOke-lkp@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	by smtp.kernel.org (Postfix) with ESMTPS id F2B961F000C4;
+	Mon, 19 Oct 2026 17:38:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792431501;
+	bh=DnMksxBeVgGBLISVAmVNMYiivsdCkOY1OzObG07U/BQ=;
+	h=From:Date:Subject:To:Cc:Reply-To;
+	b=lhe+6Z2qBF7EhuvKVl0Pq1oFenam5uSDpbvjbrmUoUSHYvJ6FdeArwSVgCs91cE1h
+	 ZySVNNoD5j67mHskjs2tA4q3kTTZRYanYiQgt68gjpGtShlOKeNx46JD30Jfrb7B79
+	 jExNGI3NKkKWLz1AQF2XKEJHxd6E8YrXST4S/OpeWIJVQ4EfTwTLhqYM2P0BDR/Y/V
+	 1pe21A3c3IQ5VeBWrWVkZy8Ng4XVALZGmc1UDCljkNjVxENbnsGYuy6kaFeMp3CIMa
+	 /g6baFC2Uw3Qwe/XWjlqOkNMtg/xn4KoYyR86JpdBwnR70qEJukf1QEVckw7d+VP1d
+	 VsA7MRxQVIOeg==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 53641400AB;
+	Mon, 19 Oct 2026 17:38:20 +0000 (UTC)
+From: Nicholas Velten via B4 Relay <devnull+nicholasfvelten.gmail.com@kernel.org>
+Date: Mon, 19 Oct 2026 14:38:20 -0300
+Subject: [PATCH bpf-next v2] bpf: Annotate data races on bpf_lru_node type
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,43 +82,155 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261019-fix-lru-node-type-kcsan-v2-1-c10a410b3565@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAItV1moC/4WOQQ6DIBREr2L+ur8R1Np01Xs0LgA/SqtgQI3Ge
+ PeiPUCXk5k3MxsE8oYCPJINPM0mGGej4JcEVCtsQ2jqqIGn/MZSlqE2C3Z+QutqwnEdCD8qCIs
+ 5zwqV3gtZSgGRHjzF6Nn8AjlotLSMUP2cMMk3qfEoPrKtCaPz63liZifxd29myDCVZZ7pQmius
+ 2fTC9Ndleuh2vf9C54yZjLaAAAA
+X-Change-ID: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com, 
+ Nicholas Velten <nicholasfvelten@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792431499; l=4464;
+ i=nicholasfvelten@gmail.com; s=20261014; h=from:subject:message-id;
+ bh=vlUE37PtQTyOLq5PXbvONu4Xi4bntjAirjuFev9xeZY=;
+ b=JZxRDHgecZKvX7el63L+yAF4pfGpixN4R034psx0LcMfaL23UJrM4JhFNTmIoIeIF5DZ/pcRr
+ RfDrhWOWENtDM/LNh0/BhEjQCrZIogg3RW0HBM7bSLKxo4vOgBIIyF1
+X-Developer-Key: i=nicholasfvelten@gmail.com; a=ed25519;
+ pk=WVTZgm6yXQ+XrhULAObg4lwcHPhhxAXrAY+YY6svXzg=
+X-Endpoint-Received: by B4 Relay for nicholasfvelten@gmail.com/20261014
+ with auth_id=1173
+X-Original-From: Nicholas Velten <nicholasfvelten@gmail.com>
+Reply-To: nicholasfvelten@gmail.com
 Content-Transfer-Encoding: 7bit
 
-On Tue, 20 Oct 2026 00:07:48 +0800
-kernel test robot <lkp@intel.com> wrote:
+From: Nicholas Velten <nicholasfvelten@gmail.com>
 
-> Hi David,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on akpm-mm/mm-everything]
-> [also build test WARNING on linus/master v7.3]
-> [cannot apply to next-20261016 next-20261016]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/kallsyms-scripts-kallsyms-c-Avoid-overrunning-on-stack-buffer/20261018-165152
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20261018155206.132411-4-david.laight.linux%40gmail.com
-> patch subject: [PATCH v2 next 03/15] kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
-> config: nios2-randconfig-1000-20261019 (https://download.01.org/0day-ci/archive/20261019/202610192356.CItNLOke-lkp@intel.com/config)
-> compiler: nios2-linux-gcc (GCC) 10.5.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610192356.CItNLOke-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202610192356.CItNLOke-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> kernel/kallsyms_selftest.c:70:1: warning: 'The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run_Shall_we_be_trotting_home_again_But_answer_came_there_none_And_this_was_scarcely_odd_because_Theyd_eaten_every_one_The_moon_was_shining_sulkily_Because_she_thought_the_sun_Had_got_no_business_to_be_there_After_the_day_was_done_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun' defined but not used [-Wunused-variable]  
-...
+KCSAN reports a data race on bpf_lru_node::type between the LRU list
+rotation and the free path of the common LRU:
 
-Already noted, it depends on the build options.
-I'll use the same 'trick' as done for the other static symbols
-(that is reference it from a non-static function).
+  BUG: KCSAN: data-race in __bpf_lru_list_rotate / bpf_lru_push_free
 
-David
+  write to 0xffff88811b758022 of 1 bytes by task 4756 on cpu 1:
+   __bpf_lru_node_move
+   __bpf_lru_list_rotate_active
+   __bpf_lru_list_rotate
+   bpf_lru_list_pop_free_to_local
+   bpf_common_lru_pop_free
+   bpf_lru_pop_free
+   htab_lru_map_update_elem
+
+  read to 0xffff88811b758022 of 1 bytes by task 4752 on cpu 0:
+   bpf_lru_list_push_free
+   bpf_common_lru_push_free
+   bpf_lru_push_free
+   htab_lru_push_free
+   htab_lru_map_update_elem
+
+  value changed: 0x00 -> 0x01
+
+bpf_lru_list_push_free() reads node->type for a WARN_ON_ONCE() sanity
+check before taking l->lock. __bpf_lru_node_move(), called right after
+under l->lock, does the same check, so drop the unlocked one.
+
+bpf_common_lru_push_free() re-checks node->type under loc_l->lock after
+the lockless READ_ONCE() at function entry. By then the node has been
+removed from the htab, so only flush and rotate can change its type,
+through __bpf_lru_node_move_in() and __bpf_lru_node_move() under
+l->lock. Mark that re-check with READ_ONCE() and those two writers with
+WRITE_ONCE(), following commit 6df8fb83301d ("bpf_lru_list: Read
+double-checked variable once without lock"). The remaining writers
+operate on a node with a single owner that nobody else reads and are
+left alone.
+
+Tested on bpf-next with CONFIG_KCSAN=y in a 4-vCPU virtme-ng guest,
+using a reproducer that runs 8 threads issuing BPF_MAP_UPDATE_BATCH
+on a 64-entry BPF_MAP_TYPE_LRU_HASH with overlapping keys.
+
+Reported-by: syzbot+1ea4f564bf6f1f3d1dc4@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=1ea4f564bf6f1f3d1dc4
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Nicholas Velten <nicholasfvelten@gmail.com>
+---
+The reproducer used for testing is a small userspace program (8 threads
+issuing BPF_MAP_UPDATE_BATCH on a 64-entry BPF_MAP_TYPE_LRU_HASH with
+overlapping keys). I can post it, or turn it into a selftest, if that
+would be useful.
+
+Not tested: architectures other than x86_64, sparse, and the full
+test_maps / test_progs suites (only test_lru_map was run).
+---
+Changes in v2:
+- Drop the Fixes: tag (Alexei)
+- Remove the unlocked WARN_ON_ONCE() in bpf_lru_list_push_free() instead
+  of annotating it; __bpf_lru_node_move() does the same check under
+  l->lock (Alexei)
+- Keep WRITE_ONCE() only in __bpf_lru_node_move_in() and
+  __bpf_lru_node_move(), the only writers that can race with the
+  re-check in bpf_common_lru_push_free() (Alexei)
+- Link to v1: https://patch.msgid.link/20261013-fix-lru-node-type-kcsan-v1-1-0b743f5af2f3@gmail.com
+---
+ kernel/bpf/bpf_lru_list.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+index 5ed7cb4b9..3858886b0 100644
+--- a/kernel/bpf/bpf_lru_list.c
++++ b/kernel/bpf/bpf_lru_list.c
+@@ -71,7 +71,7 @@ static void __bpf_lru_node_move_in(struct bpf_lru_list *l,
+ 		return;
+ 
+ 	bpf_lru_list_count_inc(l, tgt_type);
+-	node->type = tgt_type;
++	WRITE_ONCE(node->type, tgt_type);
+ 	bpf_lru_node_clear_ref(node);
+ 	/* Reset pending_free only when moving to the free list */
+ 	if (tgt_type == BPF_LRU_LIST_T_FREE)
+@@ -94,7 +94,7 @@ static void __bpf_lru_node_move(struct bpf_lru_list *l,
+ 	if (node->type != tgt_type) {
+ 		bpf_lru_list_count_dec(l, node->type);
+ 		bpf_lru_list_count_inc(l, tgt_type);
+-		node->type = tgt_type;
++		WRITE_ONCE(node->type, tgt_type);
+ 	}
+ 	bpf_lru_node_clear_ref(node);
+ 
+@@ -298,9 +298,6 @@ static void bpf_lru_list_push_free(struct bpf_lru_list *l,
+ {
+ 	unsigned long flags;
+ 
+-	if (WARN_ON_ONCE(IS_LOCAL_LIST_TYPE(node->type)))
+-		return;
+-
+ 	if (raw_res_spin_lock_irqsave(&l->lock, flags)) {
+ 		WRITE_ONCE(node->pending_free, 1);
+ 		return;
+@@ -542,7 +539,7 @@ static void bpf_common_lru_push_free(struct bpf_lru *lru,
+ 			return;
+ 		}
+ 
+-		if (unlikely(node->type != BPF_LRU_LOCAL_LIST_T_PENDING)) {
++		if (unlikely(READ_ONCE(node->type) != BPF_LRU_LOCAL_LIST_T_PENDING)) {
+ 			raw_res_spin_unlock_irqrestore(&loc_l->lock,
+ 						       flags);
+ 			goto check_lru_list;
+
+---
+base-commit: 763187dbbf83764a57d5811168ef9de7b9a60e2d
+change-id: 20261013-fix-lru-node-type-kcsan-4235c085b7ba
+
+Best regards,
+--  
+Nicholas Velten <nicholasfvelten@gmail.com>
+
+
