@@ -1,138 +1,156 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01CA20E6E2;
-	Mon, 19 Oct 2026 01:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADBB33CEBD;
+	Mon, 19 Oct 2026 01:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792373630; cv=none; b=Aznl0+nDMGkCnGrcc3LLlu8537hsZRCGZEVzTJcvFwmGf75nIPAvTc78IOurzvlIYvNpighWctMKqUvb9mC/6cXWxTBmULRqyQfvVxRMgWt6I/EFRsK2a49TVWPqphP25ntBXQPb1v0Y2XL+AiJ3aV8Nbk38FoHi2H+Zc6gyYXU=
+	t=1792374090; cv=none; b=qMgYvR3DXH6ffGw0UjWzJWGzrva/5iZm7cg6iDZpxkgptQj2ce2B5lJ4Wu79QQxc5ZKUP0ewMSgB4K/Fm1RUrgemruVku6GsNo4WazjxY9opcnfn974APnhkYzX3xo79hPdVafS88IQVAsTMipQoTKvhoHscrjYSOuPV64C866E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792373630; c=relaxed/simple;
-	bh=CLPXxO8YwoqCRp2ZUTaY8ylfbE+V5chVr1TGEeyRt38=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b+88PAPPlH7Mc1R51XWBanNYy2MV5aepvD9ajMcsLbV9fkngWI3sydPiAOoSmKGUntKBNhbGCuoX893P5iG6R6+LLpPPH9uISFfkVXSHhhMIxLIGRxg5W7vL/8kPi8PqMdiF3BGTtvYWo1dzCxUUW5ImxABis44+abbIZvuqD2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Bxn9Fyc9VqDSQXAA--.1256S3;
-	Mon, 19 Oct 2026 09:33:38 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxTs9wc9VqFtctAA--.30913S2;
-	Mon, 19 Oct 2026 09:33:36 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] LoongArch: BPF: Fix stack arguments for indirect trampolines
-Date: Mon, 19 Oct 2026 09:33:35 +0800
-Message-ID: <20261019013335.13512-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+	s=arc-20240116; t=1792374090; c=relaxed/simple;
+	bh=eZUkITTygu9kWmqLJjEQApGjH1GyMZc+ZWj4uOwlHKY=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PXbmP5x+w5MenacPeNv9ghcFFKu1oEGuSp1y5sMiP5fShMtVMt/kADOLlX8E4Gg1prKyygQP9wZM+/CgWAVhNxm9uGXGRDnvMCJArNHJMUAQMc0CbcUYWye1KtLq8MRp7nb9Be9h3Hz19ojbj7XpKXuHK9NNVdnhesKmQGEAeoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=EfBA1wB1; arc=none smtp.client-ip=162.62.57.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="EfBA1wB1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1792374081; bh=Vqm5NiksGY4HrQbWx/n2zQ+tsPVca38MSEIqYskeCW4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EfBA1wB1kcALsHrJtIN6wpbGdUM7bnqMj7VYkgbHd0DomKlFcjJ2JoHciWyoQV8pq
+	 b5kU3cF0qSA7NosrvjLlwaHB22WkJ6tWGPR1sqJqvEVY9EbAA2NrhlAR1Vd+6q8mZP
+	 Ffzw7OzDaaLFPoEQOwmVp72hlvWWS8UHm6CKHnwU=
+Received: from fedora ([2408:8207:c43:1bd0:c595:d7b2:f1d6:8a28])
+	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
+	id A4DBBE69; Mon, 19 Oct 2026 09:41:13 +0800
+X-QQ-mid: xmsmtpt1792374073tqzj49z64
+Message-ID: <tencent_FE9F89DF33773710DF821792DB952E8AE306@qq.com>
+X-QQ-XMAILINFO: NnYhxYSyuBnL/G/d/G+g99ale/grdxAGBmoOJg4kfvQJXfm2lB5iyAcuTWzMmn
+	 2ngtY0wowG2i0OGO5cRzn6C/kwFMZlyRoPSE+1x9MIAZyHIqq30SyR6IdlCLCmhN7e6j97w2XhP8
+	 MaBS60tDddPunpbgiTJojYURVqIKV2LswpYeZDmdiVaN3FjWWAoMPO+LhJOG71NfOqI8gfwM4aQs
+	 1ghNngMpYyk8ohGwdZUNdxcFihClBBuf5UzOXMaD206H9aY0HeutC9tTb3IWToOUf3fBc67fVZke
+	 Q8HUWVMsnN4TRRONRmUNnCAMAFP+UCh5qW1RyULrjYR/huqfsZat+OM7lDA/7hmZhKyzOAQT6Rca
+	 PpBY26sNx4krLkTD9J4YGdU21RlMMeRhLChTWPeW+je/yu6wJr62UBxWzg0/ihj4VOX5rYkhAaWS
+	 XmqsLqoiQeR27CiQ74AxYHRMoDYx9jZiVtLxyFUI927a5gSrBPzE4E7AZvYysxpnWKtBftQ+LI4X
+	 XYsVwBDBVnfs5beDRHy1zt+Ktta/Ya1RMHf5D+tHJ1Bi4Jkp3R3psdPU+EgfkYWcwnoCn64ob1C6
+	 i2rsyCpwzIocLX7o6x+Mv1C9YYYfiVPwTT6TZTjCzuN8HvDPWwaVPg3ATyleR86wGSfJlN1noJ3L
+	 iw7Il9T5fRgWJWjNXEHytOvEWOdtnVNleJgjOn09zAnlgsRZ0kpZSqCJkeuSQmyOtf0p7NLFJmXz
+	 8gz0ymE46cMc7h1+Wen9czFFu+YTnBG4SGETWifvY6YFzLsw9uF7ytnJuD4tDOvAbOGqa6yWBmGh
+	 mf89GtW2xNhQsSEnC/brwiF0q29FiEfBeqXcstZN79AH/HqnMb9iS0DlKlO/eoDClSagBnYNEL3h
+	 1+3hNO5oBB9RrnegLIdKh96621WpIu9vRrMYs4WfS3LgpPclP7/7heGHPJHz7DNOgq2MgyKCFXhH
+	 5fxE2UNLri3yq2A42DNlJ0En6/c7H23OSYDqYnHo/WGO7SNObXnZvObyPvkJ9eWvLoXC/SjGg4bR
+	 5xxs/8xbHP1132K2Tumj3tF8tOOphVeXxuQY/mfw==
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+Date: Sun, 18 Oct 2026 17:38:48 -0700
+From: Pingfan Liu <atlarge80@qq.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, Pingfan Liu <piliu@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jeremy Linton <jeremy.linton@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Simon Horman <horms@kernel.org>,
+	Gerd Hoffmann <kraxel@redhat.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Philipp Rudo <prudo@redhat.com>, Viktor Malik <vmalik@redhat.com>,
+	Jan Hendrik Farr <kernel@jfarr.cc>, Baoquan He <bhe@redhat.com>,
+	Dave Young <dyoung@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	kexec@lists.infradead.org, bpf@vger.kernel.org,
+	systemd-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE
+ format boot image
+X-OQ-MSGID: <atVmmBqDNXz6AjfU@fedora>
+References: <20260322014402.8815-1-piliu@redhat.com>
+ <20261011201325.GA918242@nvidia.com>
+ <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTs9wc9VqFtctAA--.30913S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxGF4DXF1xGr4rZw1kCr18Xrc_yoW5tFWkpF
-	n8CFsxGF40qr4xt3Z7GayUZrya9Fs3Zw43Wr4DJay0ya15ury8XF1rK3ZI9F98GrnYv340
-	vrs0vwn09FWDA3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jUsqXUUUUU=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
 
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+On Tue, Oct 13, 2026 at 09:19:28PM +0200, Ard Biesheuvel wrote:
+> Hi Jason,
+> 
+> Thanks for chiming in.
+> 
+> On Sun, 11 Oct 2026, at 22:13, Jason Gunthorpe wrote:
+> > On Sun, Mar 22, 2026 at 09:43:49AM +0800, Pingfan Liu wrote:
+> >> *** The history ***
+> >> 
+> >> Nowadays, UEFI PE bootable images are becoming increasingly popular
+> >> among distributions. Currently, we have several kinds of image format
+> >> parsers in user space (kexec-tools). However, this approach breaks the
+> >> integrity protection of the images. To address this integrity protection
+> >> concern, several approaches have been proposed to resolve this issue,
+> >> but none of them have been accepted upstream yet.
+> >> 
+> >> The summary of those approaches:
+> >>   -1. UEFI service emulator for UEFI stub
+> >>   -2. PE format parser in kernel
+> >>   -3. Signing the arm64/boot/Image
+> >
+> > I recently had an interesting discussion with Ard around DRTM for
+> > kexec and we sort of independently concluded that #1 would be the best
+> > (only?) option there.
+> >
+> > All the implementations of DRTM today live in the EFI stub and
+> > intercept the boot process as it goes along. After ExitBootServices
+> > the DRTM implementation will launch the kernel in a different way.
+> > Even worse today's x86 version strongly requires EFI boot services to
+> > connect the Linux stub with a trampoline helper provided earlier in
+> > the boot chain.
+> >
+> > A kexec flow that only works on decompressed vmlinux, with no option
+> > to run any EFI code, is going to be difficult to support. There is
+> > enough information and choices involved in DRTM that it is undesirable
+> > for the predecessor kernel to try and DRTM launch it on behalf of the
+> > successor, let alone trying to get the insane x86 trampolines into a
+> > kexec successor kernel.
+> >
+> > Given those constraints entering the successor kernel through the
+> > normal EFI entry point is highly desirable. This would allow x86 to
+> > continue to provide the DRTM trampolines through an EFI mechanism and
+> > means the Linux EFI stub always handles the launch with identical code
+> > in all scenarios.
+> >
+> 
+> With some help from my friend Claude, I've prepared a prototype that
+> reuses my efiloader Rust crate to boot EFI stub images (bare Image,
+> zboot, UKI) in the kernel: the EFI boot phase is invoked at kexec
+> load time, and runs under the preceding kernel up until the point
+> where ExitBootServices() is called. Then, the actual kexec call
+> will return from ExitBootServices() after shutting down the first
+> kernel.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efiloader-kexec
+> 
 
-LoongArch passes arguments beyond a0-a7 at the caller stack pointer. The
-trampoline store_args() helper always reads those arguments at FP + 16,
-which is correct for a regular fentry trampoline: its prologue leaves FP
-16 bytes below the stack pointer at trampoline entry to hold the saved
-RA/FP frame record of the parent function.
+Sorry, I haven't had time to go through it yet. But I'm curious how you
+would address the portability issues, especially those related to the
+console, that you pointed out in my emulator implementation.
 
-A struct_ops indirect trampoline is entered through a function pointer and
-only saves its own RA and FP before setting FP to the entry stack pointer.
-Its stack arguments therefore start at FP, not FP + 16. As a result, every
-stack-passed struct_ops argument is currently read two slots late.
 
-Select the source offset based on whether the trampoline is indirect. This
-also prepares the stack-passed arena argument path to consume the actual
-pointer slot.
+Thanks,
 
-With this patch, the BPF selftest "./test_progs -t struct_ops_multi_args"
-passed on LoongArch.
-
-Fixes: c9ebe2016de9 ("LoongArch: BPF: Support up to 12 function arguments for trampoline")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-v3:
-  - Reword the log and comment to clarify that the 16-byte frame record
-    is saved for the parent function, not the traced function. (bot+bpf-ci)
-  - Remove a stray blank line after the opening brace of store_args(). (bot+bpf-ci)
-  - Reorder the comment sentences to match the true/false branches of
-    is_struct_ops for better readability.
-
-Here is the original link:
-https://lore.kernel.org/bpf/20260821233516.3426127-8-memxor@gmail.com/
-
-This version is based on the series:
-https://lore.kernel.org/loongarch/20261016081006.26069-1-yangtiezhu@loongson.cn/
-
- arch/loongarch/net/bpf_jit.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 1a7c8effc37b..c6784602f029 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1725,17 +1725,22 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
- 	return ret;
- }
- 
--static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_off)
-+static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_off, bool is_struct_ops)
- {
-+	/*
-+	 * Indirect struct_ops trampolines place incoming stack arguments directly at FP.
-+	 * Regular fentry trampolines need to skip the 16-byte RA/FP frame record saved
-+	 * for the parent function.
-+	 */
-+	int stack_args_off = is_struct_ops ? 0 : 16;
- 	int i;
- 
- 	for (i = 0; i < nr_arg_slots; i++) {
- 		if (i < LOONGARCH_MAX_REG_ARGS)
- 			emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
- 		else {
--			/* Skip slots for T0 and FP of traced function */
- 			emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
--				  16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
-+				  stack_args_off + (i - LOONGARCH_MAX_REG_ARGS) * 8);
- 			emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -args_off);
- 		}
- 		args_off -= 8;
-@@ -2068,7 +2073,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	func_meta = nr_arg_slots;
- 	emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -func_meta_off, func_meta);
- 
--	store_args(ctx, nr_arg_slots, args_off);
-+	store_args(ctx, nr_arg_slots, args_off, is_struct_ops);
- 
- 	if (bpf_fsession_cnt(tnodes)) {
- 		/* clear all session cookies' value */
--- 
-2.42.0
+Pingfan
+> There are some limitations (4k pages only, CONTIG_ALLOC support
+> required) but it seems to work as expected.
+> 
+> I haven't looked at measured boot or DRTM specifics.
+> 
+> 
 
