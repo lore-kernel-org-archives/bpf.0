@@ -1,64 +1,64 @@
-Received: from mail-oa2-f10.google.com (mail-oa2-f10.google.com [74.125.231.74])
+Received: from mail-oi2-f7.google.com (mail-oi2-f7.google.com [74.125.231.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D4B4F30FF
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EC54F390B
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792416138; cv=none; b=DmZzaIQP009NgeH62CJQgHhV8ZpCHCmAYBoOeS1zQvLaWfU8VEWaPUyNpjm/lySC9I0XwLla9wVzJI2W0KBlDekb1W4plolVDvtVn7IueMQzvnOZ6JlmKiSvLbjBMVNfNynYDmMiGPW5Xe90OmZ+xihT4esVeEZJfYPH5uYfP+M=
+	t=1792416141; cv=none; b=GCaJ2CcRw2THXIQ0Lzk7H1jLatCyV7OuSt2paq/DasxzZlM/Pko/IbCqMbTmMsvGMejRK+0eqFqvxQZxv0E/UMEyyItKBJDBbiexwwyw61Bl/gQYlYF6Aj7riDE18kxEU4ynzjNH9FcsMU68dV/jOcPcdyQg96lNTnXT9ig/ehg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792416138; c=relaxed/simple;
-	bh=NWSf/BFzbgbgWUKwXp35PZz9dmXpR9qjJiaJQa2uzVU=;
+	s=arc-20240116; t=1792416141; c=relaxed/simple;
+	bh=ut2kzaiRvkH38BjwAeA1ltAiR0RHURyaSXCiA2GMOr8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T/cjuhDdoIJnFsWJFjSaq8tcN78IIy2ycczvcsvWiaTCmF4T/MleTc22q/iLZW2i2gNsRdNPly7ekSEu/SMpYXGdMf5ehgqb8BR/w4ox7y0Y8LchnLwMGxUBU/LEvlmrGsV7NDbhJbJtcKdYjQLhJFvUQwyiFvWC2lFt03fcyXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnxmVj9k; arc=none smtp.client-ip=74.125.231.74
+	 MIME-Version; b=sS3OBRbZfnpv+UL3rW9N50K2uhDdhVsvWRGMeB0fMHYQYKMVXvsbaG9LEMDdDxzFvucxU0zUadZdRG0S2T+tgFEMd2nDLTqU2MU9rGkiRgUeNLdU7G3US37Jn7+TOy1QepWiIwWq9OHwQI4ESTsDdMtwGlNQ8u0dSxNRnM4edSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HudxJgY/; arc=none smtp.client-ip=74.125.231.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnxmVj9k"
-Received: by mail-oa2-f10.google.com with SMTP id 586e51a60fabf-49e545b61f6so787965fac.1
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:22:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HudxJgY/"
+Received: by mail-oi2-f7.google.com with SMTP id 5614622812f47-4b39374fab5so814632b6e.1
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:22:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792416136; x=1793020936; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792416138; x=1793020938; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=L/BxRK4PUDB2ek3xhfb9PwSjtR7+rFj/bTjbadDEoVY=;
-        b=VnxmVj9kFHqiXtCtUP2lkEOWo7U00zVpPh9767ayb+X28rNeEgcScRdJDuIhKgIFS1
-         jMRBXTx0fQ0syw4yLK7Hnt1dV4Sbly0NcPkXCQmGucX0dNchxm+eFFz72ECzuOczP+kz
-         zMcoyxIY4FcBYcm2nWHxZ3HPmKLUS4ixnoymMflDnRnYHzF3RA2foxXqVSlAnUt+4+fg
-         8e6jGFEQjpRBPPdaJbmhJJItCIv+ue4ROVUS1aleg+5RmtwsulMFhji/8biE7jATJSVl
-         YHxmeLEy0CKsX+/0fO6gIe9Iyf9K41sOl/NDjasEKcWZ9JfI+q8Im7MeG3BC3WNx9jTC
-         OBaQ==
+        bh=Le+JqdNhGZ7FITF3Cabx9gvL5qFNvU6cAFx7z8aQg4c=;
+        b=HudxJgY/MziJxU+TUO9NKBleJu3HCg+T8ZbpJgBzlWBEZCQP/0wVVhL2w5xR16w5/D
+         jM3ab8JuoJM6ZmLe31pNUPM3XcP/LwYeLoKNhp7yzNdCqco++m3E0so0qNLMRmXgTMzH
+         qRDhN13+MWAyv5lo5VPe5nP+0txS2bThZVE0YvA6YV3UZA7CCe8WD5Ootf9qaeN0t/JT
+         83Tc3EuUWLp+LagQCaiOEQ19yAjYupnftZUy+v0sq+CcVH6sUCZ4hJddPJRCBsrDwyh0
+         1oE993NuEZI9cWyD6cNMDhdpn/74/0Yp7U9eniHtwmhFmlK1jA+qTrtTuGoPZDb3iD3J
+         0A6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792416136; x=1793020936;
+        d=1e100.net; s=20260707; t=1792416138; x=1793020938;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=L/BxRK4PUDB2ek3xhfb9PwSjtR7+rFj/bTjbadDEoVY=;
-        b=yTIF1ePt5u8aN0leSbggCKojEaeEWl6dw4+Zj3dmBOxpTVLdf7lzj5PTCGxHRpOLF2
-         gYqd6uYyvEX43AipFcayXIN4Jbml0zjUjm7PgKMP9owEvvZ5CrrpmhiycDfcbZNfAc+K
-         ED916n4BEzUjMODCNLCTYornKAOL4Nj+T2TzCulUYRemRCzk45xSEY0uVuIaD1z0bK9u
-         XfAhnZ0oo13dsY47+GOV/udLoetDX0ozlthTceekvzDN5ZEEwyKlb0FjRWUxtGcCbc0t
-         sn4r7vguUUy7Q4EEERHatVnEGqMFPk5t1QG6SPQfF9VHjGV6HaNrQpOnELj29bA2dqig
-         3BQg==
-X-Gm-Message-State: AFq9FYJ6+Nm/31yG6prSZn1pFKliLBBEIavFRYWAuegyqBUuaNKh+ri5
-	HuFSRmG53tnXzPUtNLR11QD+bJY2vEpL+iyOQ0oB/jiFoMH6sA+A1D/2WE5JMnbN4Rg=
-X-Gm-Gg: AYBFou2Xp18Jo3ODLLyE/SAR5ZoJ9zIl7H20Hvh7e7baro02DW4a1DMzMtaBFz40rOl
-	Ohsh6dR66EmuAkY79fD9iqJ1ffr2f2i2GhS8TK7UDyndFAMkd/w+DAUk/hW976tNVaVZqZkraW7
-	yQOA0C1Qz0/LEOZJxzcS+em39ru3rmojXVC6t3mSKomNGx+01rHVgu8Wm0gBdfS+Bo0+ZxUEkcr
-	FA6AdfsbNF2eyYCao9knZEUdd0PIaswFzE2KqXCdIyWx0UCIBp2rOsb+sj/Xfg6vaG1eOUo4G69
-	JSolkTcGpV6rzw401jFWmp8pMGwrEcQxI+HhmXQv1Xh7Kh1NrncqMJcJRo8oFC6EQcKDPRY0JB8
-	Rj/IQg19IoqWaMq6SZgjfCbgSOMZb2wt6seLO3yZvocGphQy/fZ76SiRQ0mUVTBoyIeC6110Ufs
-	Gs6XqKZTOvrCTTEJqzksqNIdI1o+gYHcX+ZxstfGGOtTqjzaC7kVDDLHcXTNpAnYmHIWl/cHjQ/
-	rFGZRhJ2UkhPkZF899eZhgb7qrtT/8QO/3+CDVmXIpuymDOQmeLkmvR+67M4j1znkQtuAPldj63
-	Vuw0YQ==
-X-Received: by 2002:a05:6870:8188:b0:494:b8f4:9a3d with SMTP id 586e51a60fabf-4a757adec3dmr6585407fac.40.1792416135673;
-        Mon, 19 Oct 2026 06:22:15 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:1a::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a73b5b2e59sm8306348fac.3.2026.10.19.06.22.14
+        bh=Le+JqdNhGZ7FITF3Cabx9gvL5qFNvU6cAFx7z8aQg4c=;
+        b=lL9PhG4wk97r3qzU11OoH0nJnPgVOOmdfxBrvU9LvGLyLJpPhkF23hiQgzj7MN8TNy
+         mRXMr0VviTkWJi5oMFtLIo93DBcXbkr3Q+/lcv9H1OPSCcHkkUJg6XQQT5jwwCZR9XCC
+         x9GzihPVvsA9g6CZns8bUGXz9PxYZ/qKSsFY8bi9svkcEIYu7wl5hXfgmHkaFjxqx+tW
+         mkCweOVu7gaONApqWFiBaplUKNwMBdNk2wKmjj/7nMNfCN2wRuMi8soIZt5OW/javMNt
+         Cnqh8Dk0xTwt0R134NwJl3DUsvsPhRy9xQ4YqoxwtQUxv0AbuT43Db+3b3wOhGjrbZKQ
+         clmA==
+X-Gm-Message-State: AFq9FYJGV0ZgrsgU74lDS35W7oN2uN7sGWYERkOZztbhS7FhmAq/oeqb
+	p2nSrg8s81AJ3jkPewUWwXoccY+qBgZ5mVQ3qw/UF3Beqd7nBfBxWaNFp596VtRHD6U=
+X-Gm-Gg: AYBFou36YzerKGbRVY9AnpzLei7S2lETTpyAkHswNxSh1+rpC4JmTn9p7bTmzDsXeyY
+	xv8TGKL/cKQ9fvbeUgrGo2Hr0Nay9erC0JcPcNE2XEVRYQ2KHL66EJIBd0huO2eYYpTJkmZvdtD
+	dtk59Lk1uPLyX88rfEajLMLaswq2ipppnudN6ShDnonlQ2TwLuatuzlglxTs3MjRHpf2rUUDsvS
+	xykrPcVaTZxxkY8Jc8aOoAJO44yLeZeNvQuiBDLl9rcCJ7LmjAWn57p7tU83xTxoH0ct0+fDEx5
+	2LQbpebNRqpvx3Vq6BJUmUkShQ8Bj2373EY/pO6r+FxPeH+bOp2Z7ANm/7ImAC6r7LAs7+OOIWz
+	ybbIE+dlrJKA+T54ZMx75EmWYSNtfiSr44sA9TnNeoE6C6l5JwdEIlo/yoWda8GvNFPKgh5KFZC
+	qbJEzOu9FmCzfuwLiyTk29CiiNEhvVC1OfV0Zt1TwV8c+ul+o1C38gknEfS0DDzb/EE6QY5cjtP
+	N5dm/1bXRihYvQvjxjupvNQqkprU/QEEUv7BhK9iucmlmIhmoaJXBTlhFyuYJ6nWq8NzKzhWVdk
+	EoeE
+X-Received: by 2002:a05:6808:c226:b0:4e7:d180:7719 with SMTP id 5614622812f47-53cd20a427bmr6033718b6e.42.1792416138563;
+        Mon, 19 Oct 2026 06:22:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:a::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-54216a94c00sm3597169b6e.0.2026.10.19.06.22.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 06:22:14 -0700 (PDT)
+        Mon, 19 Oct 2026 06:22:17 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>,
@@ -71,9 +71,9 @@ Cc: Mykyta Yatsenko <yatsenko@meta.com>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 03/16] libbpf: Keep the fd_array fill index out of bpf_program__clone()
-Date: Mon, 19 Oct 2026 15:21:45 +0200
-Message-ID: <20261019132203.3034698-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 04/16] selftests/bpf: Clone a program that calls a module kfunc
+Date: Mon, 19 Oct 2026 15:21:46 +0200
+Message-ID: <20261019132203.3034698-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019132203.3034698-1-memxor@gmail.com>
 References: <20261019132203.3034698-1-memxor@gmail.com>
@@ -83,89 +83,60 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3536; h=from:subject; bh=NWSf/BFzbgbgWUKwXp35PZz9dmXpR9qjJiaJQa2uzVU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuaxBF+K/+qKTv36d1L+pS8zcmq/d3f2SFdK+QfbrjRs+dV 744XHaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZjIo7kM/9NeS30w3fUqvEv7Tutx85 fuJ0TqxQqvXv2ydQNnQYQc63+Gv+Kfrq3KW/es7tAsRo2KJ8KL1maWeb1rCD6+XFdp1/vQiYwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1924; h=from:subject; bh=ut2kzaiRvkH38BjwAeA1ltAiR0RHURyaSXCiA2GMOr8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuaxBHNoweVS/LF1aVPey74de7A5rbeI9ucajcYcbGvnHpk T0tPRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbynIOR4Uf0gTvdbncYJXqLdRUKMp Yb5sQsWbPqwX5/U/nAivshVxn+56271Hf73zy7hwEbbyfvV38yc8b5qQ82x5xkefPIjPlkOR8A
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-bpf_program__clone() hands the kernel the fd_array of the object along
-with obj->fd_array_cnt when the caller supplies neither. That counter is
-not a count the kernel can use: it is the index of the next free slot
-of an array built for the sparse fd_array API, where module BTF fds
-start at slot 1 and slot 0 stays empty, since a kfunc insn with offset
-0 names vmlinux BTF rather than a slot. A non-zero fd_array_cnt turns
-the array into a continuous one, which the kernel resolves slot by
-slot, and slot 0 holds 0. Cloning a program from an object that calls a
-module kfunc thus fails with "fd 0 is not pointing to valid bpf_map or
-btf", for every program of the object, which is what veristat runs into
-on such an object. bpf_object__load() passes the array without a count.
+Prepare an object whose program calls a kfunc of bpf_testmod and load
+the program through bpf_program__clone(), the way veristat loads
+programs. The module BTF fd sits in slot 1 of the fd_array of the
+object and slot 0 is empty; the clone used to pass the fill index of
+that array as fd_array_cnt, which made the kernel resolve slot 0 and
+fail the load with "fd 0 is not pointing to valid bpf_map or btf".
 
-Do the same in bpf_program__clone(), leaving the count to callers who
-pass an array of their own, and rename the counter to fd_array_used so
-that it no longer reads like the uapi field.
-
-Fixes: 970bd2dced35 ("libbpf: Introduce bpf_program__clone()")
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/libbpf.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ .../bpf/prog_tests/clone_module_kfunc.c       | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index cb09ded90773..fcedb78abe00 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -794,7 +794,12 @@ struct bpf_object {
- 
- 	int *fd_array;
- 	size_t fd_array_cap;
--	size_t fd_array_cnt;
-+	/*
-+	 * Slots handed out so far, slot 0 included. A kfunc insn names a module
-+	 * BTF slot through its offset, slot 0 stands for vmlinux BTF and stays
-+	 * empty, so the array goes to the kernel without a count.
-+	 */
-+	size_t fd_array_used;
- 
- 	struct usdt_manager *usdt_man;
- 
-@@ -9716,22 +9721,22 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
- 	/* set index for module BTF fd in fd_array, if unset */
- 	if (mod_btf && !mod_btf->fd_array_idx) {
- 		/* insn->off is s16 */
--		if (obj->fd_array_cnt == INT16_MAX) {
-+		if (obj->fd_array_used == INT16_MAX) {
- 			pr_warn("extern (func ksym) '%s': module BTF fd index %d too big to fit in bpf_insn offset\n",
- 				ext->name, mod_btf->fd_array_idx);
- 			return -E2BIG;
- 		}
- 		/* Cannot use index 0 for module BTF fd */
--		if (!obj->fd_array_cnt)
--			obj->fd_array_cnt = 1;
-+		if (!obj->fd_array_used)
-+			obj->fd_array_used = 1;
- 
- 		ret = libbpf_ensure_mem((void **)&obj->fd_array, &obj->fd_array_cap, sizeof(int),
--					obj->fd_array_cnt + 1);
-+					obj->fd_array_used + 1);
- 		if (ret)
- 			return ret;
--		mod_btf->fd_array_idx = obj->fd_array_cnt;
-+		mod_btf->fd_array_idx = obj->fd_array_used;
- 		/* we assume module BTF FD is always >0 */
--		obj->fd_array[obj->fd_array_cnt++] = mod_btf->fd;
-+		obj->fd_array[obj->fd_array_used++] = mod_btf->fd;
- 	}
- 
- 	ext->is_set = true;
-@@ -10940,7 +10945,7 @@ int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts
- 	attr.prog_ifindex = OPTS_GET(opts, prog_ifindex, 0) ?: prog->prog_ifindex;
- 	attr.kern_version = OPTS_GET(opts, kern_version, 0) ?: obj->kern_version;
- 	attr.fd_array = OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array;
--	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0) ?: obj->fd_array_cnt;
-+	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
- 	attr.token_fd = OPTS_GET(opts, token_fd, 0) ?: obj->token_fd;
- 	if (attr.token_fd)
- 		attr.prog_flags |= BPF_F_TOKEN_FD;
+diff --git a/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
+new file mode 100644
+index 000000000000..fa6ccbaa7fd9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include "kfunc_call_test.skel.h"
++
++/*
++ * bpf_program__clone() loads a program from a prepared object with the
++ * fd_array of the object, where module BTF fds start at slot 1 and slot 0 is
++ * empty. It used to pass the fill index of that array as fd_array_cnt, which
++ * made the kernel resolve slot 0 and fail the load.
++ */
++void test_clone_module_kfunc(void)
++{
++	struct kfunc_call_test *skel;
++	int err, fd;
++
++	skel = kfunc_call_test__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	err = bpf_object__prepare(skel->obj);
++	if (!ASSERT_OK(err, "prepare"))
++		goto out;
++
++	fd = bpf_program__clone(skel->progs.kfunc_call_test1, NULL);
++	if (ASSERT_GE(fd, 0, "clone"))
++		close(fd);
++out:
++	kfunc_call_test__destroy(skel);
++}
 -- 
 2.53.0-Meta
 
