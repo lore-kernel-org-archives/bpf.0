@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.98
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.112
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792424258;
-	b=fGewyKGcw7YmCuhmMWz9cU1/1AYYE+lKvZESDKTaiRUSpST5YwkZZ1DR4Zk8akLC5TFk
-	 HncNzvuyf7FB0wWtSaYZry4hYj/YNwm7K/Pw5yV/JEAkOHwC0eKIteIF0voRRD9mIUVGc
-	 h4FcBgCJFO246Jfz4ffNguJWOgN2iXfXkjNQc56D/VjoZCAahEGa54HU3AJ4yaFWM4XB+
-	 txlJ7pRtPjVRL21OD2LXmzkagaHSm9YGKwGxYBDFGBRLcjSrRotZwtCpiiYIcBr5lSYf9
-	 AIxWDK7SS2BE7EiIapgiVWhIcdBnBFu35qIvmaSDn7zfKDWfzEJJRhbRhGkBl11rcSQ==
+	t=1792424270;
+	b=nYklmz4jw3iTfWscDViFt5yJXJIjwDUUkjRiMIbmqVHbhUCQVuj7zs6Uxz7++QDEFMcF
+	 FWI98wsR7DIsnuYy+rhecwGjLJX6VAxDPCiHG4cGDrl8wTZtMG/WeBqGcPDqupzbhF12Q
+	 bN5ybOpKmN5yMAfUg6Qj5SaPaB2lhu99eS3zUmhK5NqcoGkOZ97tLIjvwnkS7O0b/LBkV
+	 +lrH72y0aOn65eAA/FMAOLwlMWwjDz6bETCbnMC5c+1VTXlgTiUIZEZZPnD5DIh4K1pOa
+	 +0Ar3hG9g7LNIxRQCC0CVmhhUrKio7/7Ik3rHbOUct2XFmJyCa3nQdDHzc9foRootoA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792424258;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792424270;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=dUJTYJsLlzyXXUY346kwM0qbEb7/ZcRCJp3v3CTcxII=;
-	b=azBlXk1DMpVURmzfmpr3CETdkoAQJvf7Pk16ewX259wjSlt6kt5yqGfgEAa/sE5s6hgA
-	 ohbepnu2EvtZQWDuheaqaOFnIAV7tc95bToO+YTXdcxXEMI8oQ32nJIRul2HqnjWifGx5
-	 p1fQzaFxMV55T/3Yt66FAkhH6GqjdsMY92y4rk0mXHF5C4hF/4GHOENU8n9gG85fF/UDt
-	 SduXfk5T0VeTutkIC+TBLMubKK7sos4xT0Lg2FlGPsWATPoiA7qBegnxOz/q4eB3BewiR
-	 +zI9v/cTN16hHIhXMIp5Hb0cldle7fFBTuBTOnZqtiDAIKlpkoGp6L2zvgDyIPOxlJQ==
+	bh=9GDFV35RrSVf5yP47jS+7rs1H7n+XBgiZq3zykV+XtQ=;
+	b=NbquN/occisXuhoMjORYXHXnNVyOctJy8jbe7QI5CBRGkHl6YaEwCZY0ndozFVK7nPLP
+	 1CmVlRaAwnPOzIVGWi7klMNH6mkB+cgs4NCpJNBcWaUDnT8Ua3AFvwUrb1QQZvvaSQbcw
+	 J30AEsCTPAN/r7Mg1AQswRHxK9nOmp7Q8rZhgmj7pHovJA+a2K1gHOJSngxiUzR6PZE5s
+	 E5x/9xRBsX/ovE84/UhOpZTVPbCqVzRYjXjSPiiK0j3TbPgM4qxBqj6g/9wZr1LQPi3cz
+	 o+BTs2yzBP64sK5b9PzSXTijQQ84Y5yxv37EVlPpZybwctBWV3+MEJ0q4hTCLm5W+YA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NB+MtaXv;
-	arc=none smtp.remote-ip=95.215.58.98
-Received: from mta1.migadu.com (out-98.mta1.migadu.com [95.215.58.98])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=abJudIif;
+	arc=none smtp.remote-ip=95.215.58.112
+Received: from mta1.migadu.com (out-112.mta1.migadu.com [95.215.58.112])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F015608340B
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 15:37:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F015608340B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E2A607D370
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 15:37:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73E2A607D370
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NB+MtaXv
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=abJudIif
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=oA/tXzZewa3e1Eee5uSA/aYj+j+eif8gKx6dS9PYgCk=;
+DKIM-Signature: a=rsa-sha256; bh=qDoOdKi6oKQdzWjw9ttiqe9bR4kfbpGeSoHF507AHt0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792424255; v=1; x=1793029055;
- b=NB+MtaXvTaeOYBOzBzOpI+ex4jCH7doRKORA+v/0S5q77izL4FdeG19kF2Nhp5avEyXtGkkR
- jC/2ulPQPdDi7zPYbXzVAhAsMYqVzkCgVdSuEzoklRy2ICLRQ/VvoOBgoYKzl7w+MIJVFDpjNoX
- mlk4XryaMk4QcIvZoxYru6xM=
+ t=1792424267; v=1; x=1793029067;
+ b=abJudIifdqiqorxkeCIJGPWF9qW+47bZo8UjVm19X+kdltm2ERiOdbyqJJkmHL3XGS+UZJ4P
+ Yv9WOL6WBvtu7aHiLM+a1o0sVwMXxNrJS5gruurlyOd4cr3ozjtmkFA88sV7QZWI3irFQvCcJcH
+ 2/cCAj57uOASLTx7sM6w52yM=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1854e421e9778bac;
-	Mon, 19 Oct 2026 15:37:35 +0000
-X-Mizu-Trace-ID: 1854e421e9778bac
+Received: by smtp.migadu.com with ESMTPS id 6d9efb940e6379e3;
+	Mon, 19 Oct 2026 15:37:47 +0000
+X-Mizu-Trace-ID: 6d9efb940e6379e3
 X-Migadu-Flow: FLOW_OUT
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
@@ -82,9 +82,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v2 5/6] libbpf: Add bpf_link_create_log API
-Date: Mon, 19 Oct 2026 23:36:27 +0800
-Message-ID: <20261019153628.15912-6-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Add tests to verify link_create logs
+Date: Mon, 19 Oct 2026 23:36:28 +0800
+Message-ID: <20261019153628.15912-7-leon.hwang@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261019153628.15912-1-leon.hwang@linux.dev>
 References: <20261019153628.15912-1-leon.hwang@linux.dev>
@@ -99,147 +99,123 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new API to accept the log opts, instead of extending the existing
-struct bpf_link_create_opts.
-
-Appending log_opts to struct bpf_link_create_opts would place them after
-attach-type-specific fields of varying sizes, making it difficult to
-extend the struct while preserving forward compatibility.
-
-For example, adding log_opts would prevent extending uprobe_multi
-directly with a new build_id field. Instead, a separate union would
-be needed:
-
-struct bpf_link_create_opts {
-        /* ... */
-        union {
-                /* ... */
-                struct {
-                        /* ... */
-                        __u32 path_fd;
-                } uprobe_multi;
-        };
-        struct bpf_log_opts *log_opts;
-        union {
-                struct {
-                        __u64 build_id;
-                } uprobe_multi_ext;
-        };
-        size_t :0;
-};
-
-Without log_opts, build_id could be added directly to uprobe_multi:
-
-struct bpf_link_create_opts {
-        /* ... */
-        union {
-                /* ... */
-                struct {
-                        /* ... */
-                        __u32 path_fd;
-                        __u64 build_id;
-                } uprobe_multi;
-        };
-        size_t :0;
-};
-
-Introduce bpf_link_create_log() to accept struct bpf_log_opts separately,
-preserving the forward compatibility of struct bpf_link_create_opts.
+Add tests to verify the new logs in link_create and xdp link_create,
+including a log reported via extack when fail to create an xdp link.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/bpf.c      | 28 ++++++++++++++++++++++++----
- tools/lib/bpf/bpf.h      |  5 +++++
- tools/lib/bpf/libbpf.map |  2 ++
- 3 files changed, 31 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_link.c       | 101 ++++++++++++++++++
+ 1 file changed, 101 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 9a2107d4f6d8..263a1d516a02 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -788,9 +788,10 @@ int bpf_prog_detach2(int prog_fd, int target_fd, enum bpf_attach_type type)
- 	return bpf_prog_detach_opts(prog_fd, target_fd, type, NULL);
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+index e7e9f3c22edf..18c1f1039d4e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+@@ -150,3 +150,104 @@ void serial_test_xdp_link(void)
+ 	test_xdp_link__destroy(skel1);
+ 	test_xdp_link__destroy(skel2);
  }
- 
--int bpf_link_create(int prog_fd, int target_fd,
--		    enum bpf_attach_type attach_type,
--		    const struct bpf_link_create_opts *opts)
-+static int __bpf_link_create(int prog_fd, int target_fd,
-+			     enum bpf_attach_type attach_type,
-+			     const struct bpf_link_create_opts *opts,
-+			     struct bpf_log_opts *log_opts)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, link_create);
- 	__u32 target_btf_id, iter_info_len, relative_id;
-@@ -965,7 +966,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		break;
- 	}
- proceed:
--	fd = sys_bpf_fd(BPF_LINK_CREATE, &attr, attr_sz);
-+	fd = __sys_bpf_fd(&attr, attr_sz, BPF_LINK_CREATE, log_opts);
- 	if (fd >= 0)
- 		return fd;
- 	/* we'll get EINVAL if LINK_CREATE doesn't support attaching fentry
-@@ -975,6 +976,10 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	if (err != -EINVAL)
- 		return libbpf_err(err);
- 
-+	/* bpf_raw_tracepoint_open() does not support log_opts */
-+	if (log_opts)
-+		return libbpf_err(err);
 +
- 	/* if user used features not supported by
- 	 * BPF_RAW_TRACEPOINT_OPEN command, then just give up immediately
- 	 */
-@@ -999,6 +1004,21 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	}
- }
- 
-+int bpf_link_create(int prog_fd, int target_fd,
-+		    enum bpf_attach_type attach_type,
-+		    const struct bpf_link_create_opts *opts)
++static void test_link_create(int prog_fd, int ifindex, enum bpf_attach_type attach_type,
++			     struct bpf_link_create_opts *opts, int exp_err, const char *msg)
 +{
-+	return __bpf_link_create(prog_fd, target_fd, attach_type, opts, NULL);
++	char log_buf[128] = {};
++	int fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts,
++		    .buf = log_buf,
++		    .size = sizeof(log_buf),
++		    .level = 1,
++	);
++
++	fd = bpf_link_create_log(prog_fd, ifindex, attach_type, opts, &log_opts);
++	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
++		close(fd);
++		return;
++	}
++
++	ASSERT_EQ(fd, exp_err, "fd");
++	ASSERT_STREQ(log_buf, msg, "log_buf");
++	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
 +}
 +
-+int bpf_link_create_log(int prog_fd, int target_fd,
-+			enum bpf_attach_type attach_type,
-+			const struct bpf_link_create_opts *opts,
-+			struct bpf_log_opts *log_opts)
++static void test_link_create_invalid_prog_fd(void)
 +{
-+	return __bpf_link_create(prog_fd, target_fd, attach_type, opts, log_opts);
++	const char *msg = "Invalid prog_fd.\n";
++
++	test_link_create(-1, IFINDEX_LO, BPF_XDP, NULL, -EBADF, msg);
 +}
 +
- int bpf_link_detach(int link_fd)
- {
- 	const size_t attr_sz = offsetofend(union bpf_attr, link_detach);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 826d9cc9ab65..dedaf8086902 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -484,6 +484,11 @@ LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
- 			       const struct bpf_link_create_opts *opts);
- 
-+LIBBPF_API int bpf_link_create_log(int prog_fd, int target_fd,
-+				   enum bpf_attach_type attach_type,
-+				   const struct bpf_link_create_opts *opts,
-+				   struct bpf_log_opts *log_opts);
++static void test_link_create_invalid_prog_type(void)
++{
++	const struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	const char *msg = "Invalid prog type.\n";
++	int prog_fd;
 +
- LIBBPF_API int bpf_link_detach(int link_fd);
- 
- struct bpf_link_update_opts {
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index eeba4072a5da..f6eb57151f7d 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -475,4 +475,6 @@ LIBBPF_1.8.0 {
- } LIBBPF_1.7.0;
- 
- LIBBPF_1.9.0 {
-+	global:
-+		bpf_link_create_log;
- } LIBBPF_1.8.0;
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_LIRC_MODE2, NULL, "GPL", insns,
++				ARRAY_SIZE(insns), NULL);
++	if (!ASSERT_GE(prog_fd, 0, "bpf_prog_load"))
++		return;
++
++	test_link_create(prog_fd, 0, BPF_LIRC_MODE2, NULL, -EINVAL, msg);
++
++	close(prog_fd);
++}
++
++static void test_link_create_attach(int ifindex, enum bpf_attach_type attach_type,
++				    struct bpf_link_create_opts *opts, const char *msg)
++{
++	struct test_xdp_link *skel;
++
++	skel = test_xdp_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
++		return;
++
++	test_link_create(bpf_program__fd(skel->progs.xdp_handler), ifindex, attach_type, opts,
++			 -EINVAL, msg);
++
++	test_xdp_link__destroy(skel);
++}
++
++static void test_link_create_invalid_attach_type(void)
++{
++	const char *msg = "Invalid attach_type.\n";
++
++	test_link_create_attach(IFINDEX_LO, BPF_CGROUP_INET_INGRESS, NULL, msg);
++}
++
++static void test_link_create_xdp_invalid_target_ifindex(void)
++{
++	const char *msg = "Invalid target_ifindex.\n";
++
++	test_link_create_attach(0, BPF_XDP, NULL, msg);
++}
++
++static void test_link_create_xdp_extack(void)
++{
++	const char *msg = "Invalid XDP flags for BPF link attachment\n";
++	LIBBPF_OPTS(bpf_link_create_opts, opts,
++		    .flags = XDP_FLAGS_REPLACE,
++	);
++
++	test_link_create_attach(IFINDEX_LO, BPF_XDP, &opts, msg);
++}
++
++void test_link_create_log(void)
++{
++	if (test__start_subtest("invalid_prog_fd"))
++		test_link_create_invalid_prog_fd();
++	if (test__start_subtest("invalid_prog_type"))
++		test_link_create_invalid_prog_type();
++	if (test__start_subtest("invalid_attach_type"))
++		test_link_create_invalid_attach_type();
++	if (test__start_subtest("xdp/invalid_target_ifindex"))
++		test_link_create_xdp_invalid_target_ifindex();
++	if (test__start_subtest("xdp/extack"))
++		test_link_create_xdp_extack();
++}
 -- 
 2.55.0
 
