@@ -1,68 +1,72 @@
-Received: from mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8722457E52
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 04:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0567E356748
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 05:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792383866; cv=none; b=OFCHjBsL20RZLa0cv1wp4fo5iDue6iX/34hSIawp2w+RJJIPUEoasEnjDQE2Rh8jqlvEeKzQ4vLPT6zNQiwJedKkTqwfmItIGoV2EI9uEFbmPHmopO4cp7Wbml5S9Bt1AUjGBV+w2SO5tljeuBz+TWAz9z2Wi7sdKBuIxx3WQw8=
+	t=1792387133; cv=none; b=bHM9XMxJCh1Qs1Y8UcuKLYziM0JjUBJ5x03ppQJmjkuVbxoSh2JTqsOd9PjLqTOEj27wLQTpn0FPX0UVD+mTLtEGfjF6NfHagkenbs0Je11VlGXwOJvnkFRsgSWQfXsVtgjyWX73w+y5nduiPjQ1R+sRxvj+L+0FFYbYF66EnD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792383866; c=relaxed/simple;
-	bh=rgCPstrZqNeEdMXP/SoDZYcPpE8lXWIHRU+cnN2B2DQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=D21MiQYRAbEYHALPQkc7oj+DcPHdh6K7YRw65ppw+PY399ECQR81b8RwtgRXSh/0nyHCumS1dllx3/SyF6rnbP4eXtCyLkxPAfXa2dFctke7CJFlgZ84I73xvHWPo5Kq+apqmJPPS/VG7KDxauSsMZZsclwWLI9yXSUuQxZ3loc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UtBOYQeT; arc=none smtp.client-ip=91.218.175.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792387133; c=relaxed/simple;
+	bh=tnsn3aIwkiHHL/XJvjQ3qhRsV8194f7HA/ecnMRGn6Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tkQEPhkW6HEEybYdZqB6IkQSn+44FOwuUnCX3l1XBoXy63RdVjYE5hk37soWdeszU/GLKGNVza+H0QtZL3y5NbrcwNkTHmQhhTSXZfib+cCzLVC1vFYFp66PmKj4MaBgpgtUfE7J5MARuQYpynJkYEefMJxd/ta5lQ151T6AA70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NFnHJ2l2; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UtBOYQeT"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=rgCPstrZqNeEdMXP/SoDZYcPpE8lXWIHRU+cnN2B2DQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792383857; v=1; x=1792988657;
- b=UtBOYQeTvAeOkvPL5rT9MKUJj+4fbyTR8TCfgiIxaugA1ujuINo44eeFE8CPilvw/nTrVV4d
- NqAGKiob+r9yWe5tHwsfsWu9WQpCOQeI+ViliJuNYGUIyIJY37KkYUlpgbIgV6NX9kQVGPpvHx8
- BJFiHTZmfc28ImkgRKVdSKEo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a7533987bd4880b4;
-	Mon, 19 Oct 2026 04:24:17 +0000
-X-Mizu-Trace-ID: a7533987bd4880b4
-X-Migadu-Flow: FLOW_OUT
-From: Ridong Chen <ridong.chen@linux.dev>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Dave Chinner <david@fromorbit.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Qi Zheng <qi.zheng@linux.dev>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Kairui Song <kasong@tencent.com>,
-	Barry Song <baohua@kernel.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>,
-	Wei Xu <weixugc@google.com>,
-	Baoquan He <baoquan.he@linux.dev>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Ridong Chen <ridong.chen@linux.dev>,
-	Ridong Chen <chenridong@xiaomi.com>
-Subject: [PATCH v4 9/9] mm/mglru: add tracepoint for inc_max_seq()
-Date: Mon, 19 Oct 2026 12:23:08 +0800
-Message-Id: <20261019042308.2372396-4-ridong.chen@linux.dev>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261019034426.2354049-1-ridong.chen@linux.dev>
-References: <20261019034426.2354049-1-ridong.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NFnHJ2l2"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc7e79c1eaaso621870a12.2
+        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 22:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792387130; x=1792991930; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ybCsopGMj5e5nRo1pXBaH0VN9+twDO40UVj2z9EZ6NA=;
+        b=NFnHJ2l2t4WGYqFp/zJPHHKeDBxUxypqzxt9pwRmdMa1cpL31EDScDiBByL13bQjuC
+         LQ/6LXrUGaR539Hv0wkoj3cp7Om0KYeRdO9SVfRmC6JlawRe8oXSpuG+k0ZLuWT/v4bq
+         jfKXdbtCwZ5FeyHErkvZGqzGdduKBwMJUIwOIISAbAzGdf8wp3WTOhDFgVwoMQWcQYjS
+         lb0YExMm856Q1nhFvOtGs7UMWUkJH/MHgKfAgJYi/NQTx09vJhnRRqK2DxzQwJSK6PcV
+         WHaNknnw12w7i/HOBgQKrsbx2v2lmVpuJWXZu/KKqp1guPTk4yN+NqAy1fpgsSgXCirU
+         aVgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792387130; x=1792991930;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ybCsopGMj5e5nRo1pXBaH0VN9+twDO40UVj2z9EZ6NA=;
+        b=CE1qavw+RORD78Uf/mPE2TBGsoeOUq++1b1bgOnJfHXbkbwYN9T9tsdd824J94jo1m
+         t6sMz9WzoGDlrv1xFGL8bkKnP45xtHad2njy19TrZQlkAazFg24wIimiWcITcUS6gMOj
+         tQVd5JkiJH6AMySg5vFvUmaTodDB5zFdjoEkm6Zo9eKeHuBrmPiYKAT+uUADjQfh9PQj
+         Q1AQuZjI+K+/Wq9tZaegbB8DJumbDND11hRlYLIqkQFz99A4QeM2dmQuEUXTXtwiMk0j
+         aCGWFcvrAoy/Pl7m8GEQV/xNZV3p/CO9WyIqJeuwtfhqXtgod+0FVbI2KnoAw4Vg5lej
+         BfGQ==
+X-Gm-Message-State: AFq9FYJrwGdycXYuU+rt7AoGDVMuATyDPgvNdASZnQurQ48XCLBEd6MN
+	loRZK7WRxxYS5AOTG6Z567uZFmc5EkLabMZMNrDFUgUpiPp6BQ9725/lnGeRiw==
+X-Gm-Gg: AYBFou0tHQ4O+3ifa/ppEg2+bMVrPh4L8sdH7Im+TzmlpicdtmSisfKmJzoG6hU+eyI
+	YPmusfnx2vDo40SkZs/wPMHFlRFmUPkqcqmQPnGTHbqeXitQVHkTYDInm84UYkkYQRvBhmMerSa
+	oDKdn2DPsfEtNFkmCqkQz7BMVw/v7+cwZlqxOvpNY0roIQdALZju2fgZKNr0cL7k22y5CSxjaXL
+	Lzw5HTU9HUnDbgl1UQyMrOKwoqu8Z18Yxs/hFXjT9oldenq6ElBuw8995uYRn+LhqZpRb2eZiUB
+	qP1bfVC8bbJJ43YbpdaYQe6N0tXW4hmgD6czoFN+Kc2ZTDHRSn9h+cWZdilrDSb5imNR2qX03ym
+	GCOQOTmx9utFBQnfJrEjQbVhVitUjzkrVXFw8cESJ5BnjmGihpfyGxFJjzNmuRn7wUmAkwFX7Gq
+	Cr2dieso2P6Mt1nchrJp2yo6tHo42qmBfntWkj0P0COcdQPGZeH6S4QDBWhg8pmxX+VyP4wefMI
+	mB052zwRyjni/sDcuzxlbPYNfHz1c7r30T3AOpHwQTTVLJc/HlBSHJWVWh0jx+NMgs4KPWAcwS4
+	rafrino50TKzLyfkpGNwnther3orR61aL8hCGfZAv0wp99AD26CkcQ==
+X-Received: by 2002:a17:90b:3889:b0:3ac:17c:6e85 with SMTP id 98e67ed59e1d1-3acef0ffa0fmr5619389a91.47.1792387130088;
+        Sun, 18 Oct 2026 22:18:50 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc9e47588sm8105232a91.1.2026.10.18.22.18.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Oct 2026 22:18:48 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH v2 bpf-next 0/5] bpf: Unwinding with unwind_goto and unwind_exit
+Date: Mon, 19 Oct 2026 05:18:41 +0000
+Message-ID: <20261019051846.3012089-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,105 +75,131 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Ridong Chen <chenridong@xiaomi.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-Aging in MGLRU advances max_seq via inc_max_seq(), creating a new
-youngest generation. There is currently no tracepoint on this path, so
-the moment a new generation is created, and how the min_seq of each type
-trails behind it, cannot be observed as it happens.
+v1 [1] said in r3 how a subprog returns. v2 has two new insns instead,
+as Kumar suggested.
 
-Add mm_mglru_inc_max_seq, emitted right after max_seq is bumped while
-the lruvec lock is still held, with the node id, memcg id, the new
-max_seq, the anon and file min_seq, and the number of pages in each
-generation for both types, summed over zones and clamped to >= 0 the
-same way the debugfs lru_gen file reports them. The nr_anon/nr_file
-arrays are indexed by generation slot, so the emitted max_seq/min_seq
-say which slot holds which seq. They are printed with __print_array(),
-so the output is hex and its length follows MAX_NR_GENS automatically.
+1. What is the problem?
 
-Only the lruvec is passed in; all of the above is collected in
-TP_fast_assign(), so inc_max_seq() does no extra work when the event is
-disabled. Paired with mm_mglru_scan_folios it makes the full
-aging-to-eviction window observable per memcg.
+A rust panic or a C++ exception has to run Drop impls or destructors of
+every frame it passes through. bpf_throw() discards the frames, so the
+verifier doesn't let a frame that owns a lock or a reference throw. In rust
+every index and every unwrap() can panic.
 
-Assisted-by: LLM
-Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
----
- mm/trace_vmscan.h | 47 +++++++++++++++++++++++++++++++++++++++++++++++
- mm/vmscan.c       |  2 ++
- 2 files changed, 49 insertions(+)
+2. Is it worth solving?
 
-diff --git a/mm/trace_vmscan.h b/mm/trace_vmscan.h
-index 8148b8224422..cddf42b5849a 100644
---- a/mm/trace_vmscan.h
-+++ b/mm/trace_vmscan.h
-@@ -456,6 +456,53 @@ TRACE_EVENT(mm_mglru_scan_folios,
- 		__entry->min_seq)
- );
- 
-+TRACE_EVENT(mm_mglru_inc_max_seq,
-+
-+	TP_PROTO(struct lruvec *lruvec),
-+
-+	TP_ARGS(lruvec),
-+
-+	TP_STRUCT__entry(
-+		__field(u64, memcg_id)
-+		__field(unsigned long, max_seq)
-+		__field(unsigned long, anon_min_seq)
-+		__field(unsigned long, file_min_seq)
-+		__array(unsigned long, nr_anon, MAX_NR_GENS)
-+		__array(unsigned long, nr_file, MAX_NR_GENS)
-+		__field(int, nid)
-+	),
-+
-+	TP_fast_assign(
-+		struct lru_gen_folio *lrugen = &lruvec->lrugen;
-+		int gen, zone;
-+
-+		__entry->memcg_id = mem_cgroup_id(lruvec_memcg(lruvec));
-+		__entry->max_seq = lrugen->max_seq;
-+		__entry->anon_min_seq = lrugen->min_seq[LRU_GEN_ANON];
-+		__entry->file_min_seq = lrugen->min_seq[LRU_GEN_FILE];
-+		/* summed over zones and clamped to >= 0, as debugfs lru_gen does */
-+		for (gen = 0; gen < MAX_NR_GENS; gen++) {
-+			__entry->nr_anon[gen] = 0;
-+			__entry->nr_file[gen] = 0;
-+			for (zone = 0; zone < MAX_NR_ZONES; zone++) {
-+				__entry->nr_anon[gen] +=
-+					max(lrugen->nr_pages[gen][LRU_GEN_ANON][zone], 0L);
-+				__entry->nr_file[gen] +=
-+					max(lrugen->nr_pages[gen][LRU_GEN_FILE][zone], 0L);
-+			}
-+		}
-+		__entry->nid = lruvec_pgdat(lruvec)->node_id;
-+	),
-+
-+	TP_printk("nid=%d memcg_id=%llu max_seq=%lu anon_min_seq=%lu file_min_seq=%lu nr_anon=%s nr_file=%s",
-+		__entry->nid,
-+		__entry->memcg_id,
-+		__entry->max_seq,
-+		__entry->anon_min_seq,
-+		__entry->file_min_seq,
-+		__print_array(__entry->nr_anon, MAX_NR_GENS, sizeof(unsigned long)),
-+		__print_array(__entry->nr_file, MAX_NR_GENS, sizeof(unsigned long)))
-+);
- #endif /* CONFIG_LRU_GEN */
- 
- TRACE_EVENT(mm_vmscan_write_folio,
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index d459678c5ee5..7b9b1aca5c88 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4129,6 +4129,8 @@ static bool inc_max_seq(struct lruvec *lruvec, unsigned long seq, int swappiness
- 	WRITE_ONCE(lrugen->timestamps[next], jiffies);
- 	/* make sure preceding modifications appear */
- 	smp_store_release(&lrugen->max_seq, lrugen->max_seq + 1);
-+
-+	trace_mm_mglru_inc_max_seq(lruvec);
- unlock:
- 	lruvec_unlock_irq(lruvec);
- 
+Without it rust-bpf [2] drops all landing pads and a panic is bpf_throw().
+A prog that can panic with a guard held doesn't load.
+
+3. Is there a simpler way?
+
+[3] keeps the normal path free of unwind code. llvm emits a table, libbpf
+passes it to the kernel, bpf_unwind() walks the stack and rewrites return
+addresses, and the verifier models hidden edges from calls to pads. That's
+1400 lines in the kernel, with new uapi and two kfuncs, and 440 lines in
+libbpf.
+
+Here the edge from a call to its pad is an insn, and so is the other way
+to leave a frame [4]:
+
+  ret                            exit
+  invoke foo unwind pad          call foo; unwind_goto pad
+  resume                         r0 = 0; unwind_exit
+
+Pads are ordinary code. The verifier learns one bit: how the callee left.
+The normal path is free of unwind code too: JITs emit nothing for
+unwind_goto, and exit is what it was.
+170 lines in patch 1 and 80 lines in each JIT.
+
+4. Will the api and the layers last?
+
+Two new insns: one more kind of BPF_JCOND and one more kind of BPF_EXIT.
+No kfuncs, no BTF, no changes in libbpf and other loaders.
+The source level entry point is _Unwind_RaiseException() of the Itanium
+ABI. It's what the runtimes of rust and C++ call on other architectures.
+unwind_exit returns r0 like exit does. Today it's 0. That's where an
+exception object would go.
+
+5. Is it good taste?
+
+Every frame returns through its own epilogue. The only question is where it
+returns to. That's one bit, and it's a bit of control flow. v1 kept it in
+a register.
+
+It's not specific to rust. A C++ prog with throw, catch and destructors
+compiles, loads and runs. It's a selftest in patch 5.
+
+v1 -> v2:
+- unwind_goto and unwind_exit instead of 'if r3 != 0 goto pad' and
+  'r3 = 1; exit' (Kumar).
+- JIT support is not an optimization anymore. There are no shape tests, no
+  look at jump_target, which was stale (sashiko), no exit that looks at r3
+  and no fallback to a branch.
+- r3 is an argument again and nothing else. In v1 a subprog that didn't
+  write it passed it through, and fentry didn't restore it (bpf-ci).
+- Async and exception callbacks cannot unwind (sashiko).
+- No BTF decl_tag, which was matched by prefix (bpf-ci). It works without
+  BTF.
+- x86 private stack is supported.
+- Tail call, ld_abs and freplace are allowed.
+- bpf_unwind_target() is in core.c. num_exentries is counted in
+  jit_subprogs().
+- selftests: no #ifdef by arch, which broke the build on the rest of them.
+  The messages are checked. fentry and freplace are attached and the
+  target is run. fmod_ret is gone, it didn't test anything new. Skips say
+  why (bpf-ci).
+- clang defines __BPF_FEATURE_UNWIND.
+
+Tested in qemu only, x86-64 and arm64 with and without pointer
+authentication: the selftests, C, C++ and rust progs built with [4],
+with and without bpf_jit_harden=2. test_progs was run on x86-64. On arm64
+the same objects were loaded and run by a small loader, and __jited
+patterns were matched against the JIT output by a script.
+
+[1] https://lore.kernel.org/bpf/20261018010246.1643877-1-alexei.starovoitov@gmail.com/
+[2] https://github.com/4ast/rust-bpf
+[3] https://lore.kernel.org/bpf/20261017025129.1914859-1-yonghong.song@linux.dev/
+[4] https://github.com/llvm/llvm-project/pull/233140
+
+Alexei Starovoitov (5):
+  bpf: Add unwind_goto and unwind_exit insns
+  bpf, x86: Support unwind_goto and unwind_exit
+  bpf, arm64: Support unwind_goto and unwind_exit
+  selftests/bpf: Add tests for unwind_goto and unwind_exit
+  selftests/bpf: Add a C++ prog with exceptions
+
+ arch/arm64/net/bpf_jit.h                      |    2 +
+ arch/arm64/net/bpf_jit_comp.c                 |   78 ++
+ arch/x86/net/bpf_jit_comp.c                   |   83 +-
+ include/linux/bpf.h                           |    1 +
+ include/linux/bpf_verifier.h                  |    3 +
+ include/linux/filter.h                        |   12 +
+ include/uapi/linux/bpf.h                      |   11 +
+ kernel/bpf/const_fold.c                       |    2 +-
+ kernel/bpf/core.c                             |   24 +
+ kernel/bpf/disasm.c                           |    7 +-
+ kernel/bpf/fixups.c                           |    7 +
+ kernel/bpf/states.c                           |    3 +
+ kernel/bpf/verifier.c                         |   93 +-
+ tools/include/uapi/linux/bpf.h                |   11 +
+ tools/testing/selftests/bpf/Makefile.skel     |   11 +
+ .../selftests/bpf/prog_tests/unwind_attach.c  |  102 ++
+ .../selftests/bpf/prog_tests/unwind_cxx.c     |   76 ++
+ .../selftests/bpf/prog_tests/verifier.c       |    2 +
+ .../selftests/bpf/progs/unwind_attach.c       |   29 +
+ .../selftests/bpf/progs/unwind_cxx.cpp        |  115 ++
+ .../selftests/bpf/progs/verifier_unwind.c     | 1047 +++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |    3 +-
+ 22 files changed, 1716 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/unwind_attach.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
+ create mode 100644 tools/testing/selftests/bpf/progs/unwind_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/unwind_cxx.cpp
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_unwind.c
+
+
+base-commit: 27dc4fc4ae7b01efb68561f98c5f373e55fb71c2
 -- 
-2.34.1
+2.55.0
 
