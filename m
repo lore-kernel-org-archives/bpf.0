@@ -1,57 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792429655;
-	b=z5tehCC4P2ePoWlRC/cb2GndZ8xl7gbkZ8DFQFRZjbcykpVJU/05PaIM0hYrLBYjzmgD
-	 s5d8TzQn9FvHOOY411p5OOgMoBDQLFHtljh/u7WFSrNrmGuX+fVENpjljpKIhCw6Yh/gf
-	 3BVBeEpK+BfZqm82kDSd9rYhMwepohkSLhwLcIsvxssX7WpTjU5UwBCAu4O2YQDcnsEmQ
-	 93ZjksoNUiPvvIuZ6p5ke3mzbAhT/vVcZ2GUogN74OHb9mfTshzljWZGY+c1gkVeIMuZy
-	 RFvUHV9v9dvniOwlEnK9dVGluZYZzV7+w+UHtiTg/Rf9eS6Mq7ZGg4wzjE+4xk1aDow==
+	t=1792429687;
+	b=ltHh3SDd1zyZL2zvmybWt7pasU1bDctRjTPcUR3dAq2u0am9j9audmIS4tWcoQccNRMd
+	 +89Z+vLjIwOKgtfV7fWYXDs+esxwuxrh+WQa+CDfena39J0dgrk3bkgzWDmClLlHLBxKb
+	 AOMxP2/ow0o3ynwEdQYjrHPRzhFE10igjWcEz7GgAgv6KISFkCMAqdQDz8GWXJjN1VTT3
+	 9ni0cnl0/c9qMPKuJtdkDkHuKx6uv1pZvcoYOrhtLQljKY2YGqrPnjrnGvO16TcfJfX/M
+	 Zy+PIIXcNnlGz5hn5kxCnG8ABLItS76uBolSUk1+PWgjDwYevhAK6PefE67JoyXZ5PQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792429655;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=rhMGS4hc4DBrGFPmsWHhHKuoY0IQAFvPYSF5t3kd/sA=;
-	b=NgtdndLSXzExGqDIVQsem1UR/wclL/2eZt1YkAeoVLz/L3ia49t/2nxBycjGXNOWtB0N
-	 eIOZcmMwPlt4bTUBnv0yVM08xrfHODt896FUKn1U4hj+sFXWMMfei0hu3TcBlbO/WQB0C
-	 CgfKi0p07PCTuBDh1hSrqaOvjQCkY5JW6G64C28PNIaXUJOqmAip0hk1dTMMyu2rTIhvO
-	 Oeh3H9ERt9daJFNkPb1gm2CHYmzAlW9THc6nwgXuMyGrFBE81Qd8Z3ousRzp8J7YwuBg3
-	 wcsIVxpRYq1IHIaInuNH7nDGD5LLS0QsLAh0KrFbEHD0alyI6H5nQsdD1sPPT/+mOfQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792429687;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:X-Mailer:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=z9Rf2ubDKz7ML74MPtfck2qyU1vrqP5ztLplisyq7v8=;
+	b=gUxiYFZuH8H6DLdlpwrDrKnn2db5+Mj9+C1j/Wz+Ganr0NOJqELlmTz2775Yg4qAE1fX
+	 kMJ0ROmnmKAre1zRW1V8KtqjzugqUCWEf7p7p90Pm1b/KP5eRO5Mhcegwz8WzOOy3dvUH
+	 /Y6IXWzyHNjRDj/abYBdtOSodHVUOA6Zz9pCigm1nocDVZjV5BR9Zaltb6xJZ+r4VGmb1
+	 +Y6otSQAgk4JkWFeC3R9NOdr+NYujno7zFYS5Mu01Sm7iF82ce0+xNHVVKiv1fiy06IyS
+	 02OG1eYOZeDFBTAtjVtcflWYsflphZYmj26E6bdO5i5oxpNbS1Qkwcj8FH3QCp9M4iQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hj4CbPEC;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hN5V4SND;
+	arc=none smtp.remote-ip=209.85.221.46
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838C9606A31B
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 17:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B0C606A31F
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 17:08:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 09B0C606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hj4CbPEC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE37E1F000C4;
-	Mon, 19 Oct 2026 17:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792429655;
-	bh=rhMGS4hc4DBrGFPmsWHhHKuoY0IQAFvPYSF5t3kd/sA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hj4CbPECyGqNIysZOEz4vWwI1zNys8uGbHD04Dvy/olBRxCM4bFF8kopiFWARlim8
-	 h1N/DvZ9N3YrR5sOMo/TZ2W25uDoHRnhURk+N4YapCh/lo8VdcQQUeJMJ7l+OhNblM
-	 tvuWn4kcUWHmOaqJj3hN/Gd7xxUiojcXC+ajEELQw6vuBaMyYiWNZ/dkRPn6cL+mxy
-	 /9WNsMXGhCMVgCvm8NFoVIeNgHiB9H8pRW4zNvG6VnV+12xUbOgiEjeVXqGp1wMB/t
-	 FEMgKHDaK5hx5JJdOqP85pBeWAcMF9TbUkDIwDIhx3gOjlmU03K2D6xlfKvwUrbPo9
-	 ijrZKA1XZx+LQ==
-Message-ID: <sashiko-outbox-177997@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v8 4/5] net: stmmac: fix VLAN tag stripping on
- non-linear RX frames
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261018-stmmac-rx-mb-v8-4-5f58c0b25849@oss.qualcomm.com>
-References: <20261018-stmmac-rx-mb-v8-0-5f58c0b25849@oss.qualcomm.com>
- <20261018-stmmac-rx-mb-v8-4-5f58c0b25849@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 17:07:34 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hN5V4SND
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-48bbb06e746so1167278f8f.3
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 10:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792429685; x=1793034485; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=z9Rf2ubDKz7ML74MPtfck2qyU1vrqP5ztLplisyq7v8=;
+        b=hN5V4SNDE/HFB3N3cv5LHldWsl4SYF+12521DFRCCiZpfDuORmspN/Um2jdLYJZoY3
+         zUWtmNM5qdCPIMuIJ8hlUTR2/APPnKF/kKILGKtIsqLGPiOgOtjzqhJ10OQZIfDprErE
+         ucTxHQ1/E+h2jQW3sMFeGl98+8ktAINYbs5T1tLJZxxaMvX5TMLGK8b7NCMTNx8aFnBb
+         QieABdzmmJZWvEzafqMUHjcuK78YK2rpg6tPRQ9eonHahpzWzC2bdYR/5JeiEBa+Ve0C
+         sRDYhXJnwGYdsuOiOhyDKPNfjUsH2MlB7BqqgnL35qv/WBNZ5d7f5piomeMhpihfnwHo
+         9S2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792429685; x=1793034485;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=z9Rf2ubDKz7ML74MPtfck2qyU1vrqP5ztLplisyq7v8=;
+        b=WChj2GGDKAMcKPNjw2YOgF2/M1mFgQoZrgcC+XSniq+GsVU4je0eUfZN0fNvpLtnSm
+         3NOfsMh7gxuS+qbRLwYlgFrgsC4VXo8PgHCjKFYrAsr/2OsicI7uwgudsdp5k72fmEFU
+         KDdbtdY3Bk2Husng/LUvTLsnAyKR1uB4HDG0cpSZ5jffhTd8JJfkImGvngyc0G1UfGNf
+         z8T1xc/X/jqls9oCT4e80+dsvoWR0A2MPis7VR8zcNAidD18NBrR0WsUhQj5F32wsW2U
+         Jved10NhPQ/6A3lBgft8qHZSUKatHlWqjWJFeJHAoot/movuyIdIR52z0QlWVulRJC38
+         kZBg==
+X-Forwarded-Encrypted: i=1; AKwUvBydpxeZut9hqHg/G+8zhtv1pDK96VhKFOwBI9Of+NbXJzsgkGJWbcoMraFEkoNTL4hmYZU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKe1ZBEwbtlJ3kMUMAEkKG1rPV+9BZ9eJc8iy3D0PoanqD0O6NO
+	v7G3jxNOnGMY/umrtTOjRTOnE4V41lTGmg/+R+tprEa6tQEoe4LhB5Cw
+X-Gm-Gg: AYBFou3F6UMoIuKReVvdaphCCeyCnwh7Grh/V4waJcKo84mCH7TsiY7sJRXtSYqza/r
+	b2gzD7ebnrEYu69nQ9g1F8gSQ9vxVWOjrFHKQG/j3wMWzXcJ10qlyhRY+L0Jl3r10lfQVGkhx4G
+	HfqAO3dpgJasQxmoDGrgArQ4IyN4GBcko5bnL606w4nIuby+Huzqyiwoj+ashHfmr96H385vek5
+	cnrcCSHX4xYWtu7qbD9M1fNOn9wJ1A3NENLTkf2Z327FM3gvAksfHUYJoMt35IohEQtMn1Xb6DX
+	3sWGNHefaBIcJzjZZFoeJjAG91J58eWDjgtXjN/90SP89FDgby+hPLOfP7lUNCBx/2XpXFysgmb
+	HXI2YSHFE8I2QbCvb+3UyuARVVW494xcHs7VqUX3iFzi/mGlEEs1veaI1hnHBoxn1gLqHlKti4a
+	pK0FRtR8O2l0xCkGFyGOpl1PrysYw0dqNh+kv3chg6dPOkva7kikZOxln8HZ31qdvGEYD2sQVel
+	AcqibzEjpjtcG9LKgIRT1hFz9woKsEUP/I=
+X-Received: by 2002:adf:e78f:0:b0:48d:ff81:5201 with SMTP id ffacd0b85a97d-48e07f99fa0mr12300471f8f.41.1792429685165;
+        Mon, 19 Oct 2026 10:08:05 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d818237sm146817f8f.27.2026.10.19.10.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 10:08:04 -0700 (PDT)
+Date: Mon, 19 Oct 2026 18:08:03 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Petr Mladek
+ <pmladek@suse.com>, Kees Cook <kees@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ bpf@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes
+ <ljs@kernel.org>, oe-kbuild-all@lists.linux.dev, Linux Memory Management
+ List <linux-mm@kvack.org>, Luis Chamberlain <mcgrof@kernel.org>, Andrey
+ Grodzovsky <andrey.grodzovsky@crowdstrike.com>, Steven Rostedt
+ <rostedt@goodmis.org>
+Subject: Re: [PATCH v2 next 03/15] kallsyms: Improve selftest
+ test_perf_kallsyms_lookup_name() output
+Message-ID: <20261019180803.3ff8c35b@pumpkin>
+In-Reply-To: <202610192356.CItNLOke-lkp@intel.com>
+References: <20261018155206.132411-4-david.laight.linux@gmail.com>
+	<202610192356.CItNLOke-lkp@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,151 +104,44 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] net: stmmac: unconditional VLAN_ETH_HLEN pull in stmmac_rx_vlan()
---
+On Tue, 20 Oct 2026 00:07:48 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-commit 0a2d776ad3e3751ad20c9dd1144b0c000e67acc1
-Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+> Hi David,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on akpm-mm/mm-everything]
+> [also build test WARNING on linus/master v7.3]
+> [cannot apply to next-20261016 next-20261016]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/David-Laight/kallsyms-scripts-kallsyms-c-Avoid-overrunning-on-stack-buffer/20261018-165152
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20261018155206.132411-4-david.laight.linux%40gmail.com
+> patch subject: [PATCH v2 next 03/15] kallsyms: Improve selftest test_perf_kallsyms_lookup_name() output
+> config: nios2-randconfig-1000-20261019 (https://download.01.org/0day-ci/archive/20261019/202610192356.CItNLOke-lkp@intel.com/config)
+> compiler: nios2-linux-gcc (GCC) 10.5.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610192356.CItNLOke-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202610192356.CItNLOke-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> kernel/kallsyms_selftest.c:70:1: warning: 'The_time_has_come_the_Walrus_said_To_talk_of_many_things_Of_shoes_and_ships_and_sealing_wax_Of_cabbages_and_kings_And_why_the_sea_is_boiling_hot_And_whether_pigs_have_wings_O_Oysters_said_the_Carpenter_Youve_had_a_pleasant_run_Shall_we_be_trotting_home_again_But_answer_came_there_none_And_this_was_scarcely_odd_because_Theyd_eaten_every_one_The_moon_was_shining_sulkily_Because_she_thought_the_sun_Had_got_no_business_to_be_there_After_the_day_was_done_Its_very_rude_of_him_she_said_To_come_and_spoil_the_fun' defined but not used [-Wunused-variable]  
+...
 
-net: stmmac: fix VLAN tag stripping on non-linear RX frames
+Already noted, it depends on the build options.
+I'll use the same 'trick' as done for the other static symbols
+(that is reference it from a non-static function).
 
-This commit updates stmmac_rx_vlan() to linearize the VLAN header with
-pskb_may_pull(), preserve XDP metadata when popping the VLAN tag, and drop
-the frame in stmmac_rx() and stmmac_dispatch_skb_zc() if pulling fails.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index e929cc0f23125..04dc6dcaa435d 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5095,22 +5095,30 @@ static netdev_features_t stmmac_features_check(st=
-ruct sk_buff *skb,
->  	return vlan_features_check(skb, features);
->  }
-> =20
-> -static void stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
-> +static int stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
->  {
-> -	struct vlan_ethhdr *veth =3D skb_vlan_eth_hdr(skb);
-> -	__be16 vlan_proto =3D veth->h_vlan_proto;
-> -	u16 vlanid;
-> +	struct vlan_ethhdr *veth;
-> =20
-> -	if ((vlan_proto =3D=3D htons(ETH_P_8021Q) &&
-> +	if (!pskb_may_pull(skb, VLAN_ETH_HLEN))
-> +		return -EINVAL;
-> +
-> +	veth =3D skb_vlan_eth_hdr(skb);
-> +	if ((veth->h_vlan_proto =3D=3D htons(ETH_P_8021Q) &&
->  	     dev->features & NETIF_F_HW_VLAN_CTAG_RX) ||
-> -	    (vlan_proto =3D=3D htons(ETH_P_8021AD) &&
-> +	    (veth->h_vlan_proto =3D=3D htons(ETH_P_8021AD) &&
->  	     dev->features & NETIF_F_HW_VLAN_STAG_RX)) {
-
-[Severity: Medium]
-Can calling pskb_may_pull(skb, VLAN_ETH_HLEN) unconditionally at the start
-of stmmac_rx_vlan() cause valid untagged frames to be dropped, or force
-unnecessary fragment pulls on non-linear untagged packets?
-
-When priv->hw->hw_vlan_en is false, stmmac_rx() and stmmac_dispatch_skb_zc()
-call stmmac_rx_vlan() on every received frame, even when VLAN RX stripping
-offloads are disabled in dev->features or the packet is untagged.
-
-XDP helpers such as bpf_xdp_adjust_head(), bpf_xdp_adjust_tail(), and
-bpf_xdp_frags_shrink_tail() allow shrinking a frame down to ETH_HLEN (14
-bytes):
-
-net/core/filter.c:bpf_xdp_adjust_head() {
-	...
-	if (unlikely(data < data_start ||
-		     data > xdp->data_end - ETH_HLEN))
-		return -EINVAL;
-	...
-}
-
-For an untagged frame of 14 to 17 bytes (where ETH_HLEN <=3D skb->len <
-VLAN_ETH_HLEN), pskb_may_pull(skb, VLAN_ETH_HLEN) fails and returns -EINVAL,
-causing both stmmac_rx() and stmmac_dispatch_skb_zc() to free and drop the
-skb via dev_kfree_skb_any(skb).
-
-Additionally, for non-linear untagged frames with skb->len >=3D VLAN_ETH_HL=
-EN
-whose linear head is ETH_HLEN bytes (for example, after bpf_xdp_adjust_head=
-()
-with BPF_F_XDP_HAS_FRAGS, or with GMAC4 split header mode splitting after t=
-he
-14-byte L2 header), pulling VLAN_ETH_HLEN before checking h_vlan_proto forc=
-es
-__pskb_pull_tail() on every untagged packet.
-
-Since veth->h_vlan_proto sits within the first ETH_HLEN bytes of the header,
-should stmmac_rx_vlan() only pull ETH_HLEN initially (or check dev->features
-first), and defer pskb_may_pull(skb, VLAN_ETH_HLEN) and reloading veth until
-after confirming that veth->h_vlan_proto matches a VLAN ethertype to be
-stripped?
-
-> +		__be16 vlan_proto =3D veth->h_vlan_proto;
-> +		u16 vlanid =3D ntohs(veth->h_vlan_TCI);
-> +		u8 meta_len =3D skb_metadata_len(skb);
-> +
->  		/* pop the vlan tag */
-> -		vlanid =3D ntohs(veth->h_vlan_TCI);
-> -		memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
-> +		memmove(skb->data - meta_len + VLAN_HLEN,
-> +			skb->data - meta_len, meta_len + ETH_ALEN * 2);
->  		skb_pull(skb, VLAN_HLEN);
->  		__vlan_hwaccel_put_tag(skb, vlan_proto, vlanid);
->  	}
-> +
-> +	return 0;
->  }
-
-[ ... ]
-
-> @@ -5530,12 +5538,15 @@ static void stmmac_dispatch_skb_zc(struct stmmac_=
-priv *priv, u32 queue,
->  	}
-> =20
->  	stmmac_get_rx_hwtstamp(priv, p, np, skb);
-> -	if (priv->hw->hw_vlan_en)
-> +	if (priv->hw->hw_vlan_en) {
->  		/* MAC level stripping. */
->  		stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
-> -	else
-> -		/* Driver level stripping. */
-> -		stmmac_rx_vlan(priv->dev, skb);
-> +	} else if (stmmac_rx_vlan(priv->dev, skb)) {
-> +		dev_kfree_skb_any(skb);
-> +		priv->xstats.rx_dropped++;
-> +		return;
-> +	}
-> +
->  	skb->protocol =3D eth_type_trans(skb, priv->dev);
-> =20
->  	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb))
-> @@ -6041,12 +6052,14 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
-t limit, u32 queue)
-> =20
->  		stmmac_get_rx_hwtstamp(priv, p, np, skb);
-> =20
-> -		if (priv->hw->hw_vlan_en)
-> +		if (priv->hw->hw_vlan_en) {
->  			/* MAC level stripping. */
->  			stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
-> -		else
-> -			/* Driver level stripping. */
-> -			stmmac_rx_vlan(priv->dev, skb);
-> +		} else if (stmmac_rx_vlan(priv->dev, skb)) {
-> +			dev_kfree_skb_any(skb);
-> +			rx_dropped++;
-> +			goto next;
-> +		}
-> =20
->  		skb->protocol =3D eth_type_trans(skb, priv->dev);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261018-stmmac-rx-=
-mb-v8-0-5f58c0b25849@oss.qualcomm.com?part=3D4
+David
