@@ -1,102 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792423440;
-	b=SE7OUvSjvjnBCVP+aasXZzA9H7NldTf6mybOpj4L0r0GU1yX5fbK71gLYrKsLy8dWmzC
-	 38Zfvy24k1urgIApDN/l13FVllCx+mGt1zwlxwMhF0q6xWvQMjnK04PUPd8HGgasLqlht
-	 h3T/FLCVzaNCmPpQELWyPfW/ayBhnqJgKLvQ2HMtxW323jQ6sHTQbGWXYr3hr6FAb/zHy
-	 +OmZQrJJDJpEQQ5RZPTKWDD5Rhn1GImXNXz16VQOz0gXpL9Va6p+yEe4enPK5nD0typI0
-	 2bfJJxTxPuzyvXJysYwCIOKzmyYX/NspcBa4tJGnNKlqUrdARLmY7bv+ttEvv0FbypQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792423440;
-	h=Received:DKIM-Signature:Received:Received:X-ME-Sender:X-ME-Received:
-	 X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=4eLFyGKiPJMtTIXftX4CvV1KoAV13HYov222ZjSdPFg=;
-	b=bR5L8Lv4SkrPZesLsIj2wPwHRtS3VPF/0KGoXN21uru9c1Iqx7+EUez4BiUIHO6/RcA6
-	 f+VpRNzuQlxBOY3GXvZcJvGY4Zzr7PWoH4k/ObVlqsxM/q2+B/xel4YzonDuSt/0cd4go
-	 ZiKk8mN7tQfz258vF8ALluUfpYnmkbPIpEgL78AUSzEtxaxptwq8vCYh0yIuxs1AWfN9y
-	 o73GVbLluqlpaVmg7gv6N+dOWeswMIaDkTr/ziM03kx3J3ypU5zCXe+RHNGmkO4mJ4GBo
-	 OAUmuMp9xvUcGcObd6sHANL3TZ3hErR9BztS3R5qMVHiS6AtzK+o108xwVE2Pw7LQGg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L9ewDfpJ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB92B60AE2C7;
-	Mon, 19 Oct 2026 15:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792421706;
+	b=ei+L/tE3NSbTTcq1fTGCitQOJVuEHL/6P5sBV7nZdlIUV7HxrSFQqTCvM0Fl1aZbtP61
+	 kNAD8u4HF9xJO+3J3UHhb1/Vnu7E30ZyrWVZW9Gg0P3VA89kwSuDanZMxAIFhoQLIc4rM
+	 9NpV6WmV/6Vz9oAMo7AES3piS4HJR/SRjemckjJhHFO8DJPmeXlbvE7DgNFgY09QE3oau
+	 3OjBGOxqDKQtOxcyWRc1EI6pQr19XFpSXNv6ykygS7dVV1aUurabFZasVNfm2w2wVzVt+
+	 TeoMHDNsYYpo/w0fL8fVuZKz588IOCwhuBuHUyUEEVlHpGvIBJCm8d8HHEQJ45ad2wQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792421706;
+	h=Received:Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=mZLzRwRYboY/RmAU+vEf+KfhFzbpntUfPL9/1QMLPg4=;
+	b=GCgR7D6d9SfRaYV226T9vC8CNfHsflX5NSht0VUFHsOhrhQ+SkEXvDKrqRrgP6gqky2K
+	 xZ5VXgVjp7GljaUJ5lMPtReA6bjTwpCgHc1UOEOaIswy+DaBV+yHAl9MqirNZa26zTs4u
+	 PUV5cOauu4ELT9nT9xpMFdbYQbD86qou91BUoZKVU8uudgQJbx5BMUt062AzwENQhU9Er
+	 SZk12hg4aUKF5DQUwuLW62Dzvo3j7mcjwQscScTRCLh8A/63RaCl1WcBgKD0RK4uNN8qz
+	 2mF9QfBDlQd9HACVpostfQBImSKzBG1yoC9qWls7XYA/L1j40nWbe0dyg+tTPepun2w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHHofU0r;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B007B606EFE6;
+	Mon, 19 Oct 2026 14:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L9ewDfpJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C2961F000C4;
-	Mon, 19 Oct 2026 15:23:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHHofU0r
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABBE234964;
+	Mon, 19 Oct 2026 14:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792421706; cv=none; b=TCnLJuB3FaGM41lcTEq2aWDzCDHTl8TD8XX++TZc52MwHT7PhCag2sSFh7cx5nxv3yDN1QVDBLoX1jCiik56UfdtLt9awUXTXFPF1hkdVLFxV35fLn8kPAwnWLZk4v9/aNJOunDo6D7ilxchKBGqduKvrHdPd8ut3HOUNtnA5RM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792421706; c=relaxed/simple;
+	bh=rzZ8aVYHTbvvvHXdIbMH7BBTWk45dgc5mYEFN5NQOlM=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=m1fZLah0vPULlyLzU9lUVjC99sltZZjXQKpqaUIsfXtjFeC6ku308uJGdFLlGcLRvPmKjeVI0fcNdl0uzS6XYVvAxAMFSozDnQlPmTtfSgU6dD9Jnpethn14G5delDQT1Y45vYkgFtS1I4y5AXEJFsqe8X9wWrEIcL3dS3zGVu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHHofU0r; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 526C01F000C4;
+	Mon, 19 Oct 2026 14:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792423439;
-	bh=4eLFyGKiPJMtTIXftX4CvV1KoAV13HYov222ZjSdPFg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=L9ewDfpJ/rXX/VusF6ChIIgdlRr4Mu2B6zySEt7rPafwX9G0O1uxQ4Y7TcXRPaTGY
-	 qAtRiYvkDNpm/yMGv6i5xw9izYikkFlhNQU3tGt8I/2wDBhb84fsSwDG3SV8Gbjlcp
-	 M83ca4OfJiG5/3t9bVjwIVtxCet/Yq7UVeU4nqcycgt2lkhFla8FZvmeqbKKnUsJpS
-	 EtJOZzlpu1KLBa67Lc5FnOwWLTj294uTR34Mjzrg9JlIWo9AHGt9Z/vpzIy964euEc
-	 5WmBSvKgAd8sg4N8gXBfWwWEugVP1hChxUFQE+AHA3RLsa6Ek38Y/nDkyvVWWrzdT9
-	 XOe2DsKSyrOqQ==
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 02B55F4006C;
-	Mon, 19 Oct 2026 11:23:58 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Mon, 19 Oct 2026 11:23:58 -0400
-X-ME-Sender: <xms:DTbWartuLlGuZo2dtWjtN0OHMsF-bdCWW_0uZCCOmE9QTUHQcbpTlQ>
-    <xme:DTbWalSXuN05qoS5nOPgUua_UGSpxuW9s6jCRCfnOdKsDgMbrs0YtV0EAOQVAH71y
-    jxKC1mSMzBc3ihS2wUX5iXmKtJ_STKgwPuVYI0BJxKqc4t2JKJoSw>
-X-ME-Received: <xmr:DTbWaluh0poHqK9Mt4s6gO5yxWobYkbm-RLre7kC32cz7Slt8Po_b5YC9usQOM5k9y3bMYH64pZuxBDXd79nwCehhRAEbGh6>
-X-ME-Proxy-Cause: dmFkZTFxUJdm5wwDentUf4q7O59iYNdwqKMnixhSgaLkk1fmocLKobKbM+RyRhTm3kqbdq
-    GZz1WNVgJ4bDjAKGKvmLqSew2Px0JG93axkc4pJiL2hDyhQLeVD0oK976RrFzwNrD8BGUB
-    k9eETPX0MopLAArJxEBE50QEp1+eOrzpGrqCPlJrnOzmFKtzUP5P/pmVNrzV9PFhWnZcjT
-    JRsPBHli9gBJ/NPuYbhLRHsFOoiYmLsy/TZpVX7tp5vj25GVMyy6B9k1tw5KNWEmZRjkiM
-    GAnqDGAkEW/7RQMK7IMUucuyTUFH13h1YK10BRSQQeHASU32MqLno9keSqAb8xdY5ob/k4
-    GKm6jVCUbKizvaFI7aUs9IoKa8fpHdYlKaXmWDV5mSp/cGIpAs3hVBsPeJn+/CBGmgUXqP
-    /54AXE1q8ATTSpcar2rHW43nQG2IFOs7btol4I1wWJCrTvH/YYlfb5jlZ2lzQVQogUQCKB
-    CAHgA4nSiFb6MNJWQUZh+LU0qgoriSl3Gt5YQLIlFxeKzFS4pczKyPN4bSZPAm7kxNY4fr
-    bCHNg70cJtniqHnw+YwZJivITsCpII5auLOaebI3DZRmoPhey1PCIn7EGSQ5gCLcIQOn9W
-    qXEKvMf2zDkkVfX2XiJX9p+tfOalan7a9dTWceqHB+jXf0KMBbTXlgdHLZuw
-X-ME-Proxy: <xmx:DTbWajyr_ZzqWGmZfzfijrnq4uME813kGVFi8SNBW8MS2cdLbt00yA>
-    <xmx:DTbWak3I9_9gBqgsLk-Peu6j2xslkVV-qtNDo__0nYpB9nXUTqNO6w>
-    <xmx:DTbWaoxZ_uQiYZdXGu-aaRx7Mwg2UsmwrFVJPBgm1m4ebsPEnr89ew>
-    <xmx:DTbWasMpMflFqTSh23j0pmDFu4ozJUjwi-LV9Fr_6e7_kIryrfCNKA>
-    <xmx:DTbWal4YOe-vTzbp5n4oqfMxwvBIjsx9tWMyVBFzH8AUUCBKo62CBUO7>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Oct 2026 11:23:57 -0400 (EDT)
-Date: Mon, 19 Oct 2026 08:23:55 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
-	Gary Guo <gary@garyguo.net>, Alice Ryhl <aliceryhl@google.com>,
-	Lyude Paul <lyude@redhat.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Shrikanth Hegde <sshegde@linux.ibm.com>,
-	Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH v3] selftests/bpf: Use the new NMI_BITS definition
-Message-ID: <atY2C77fARQNgWp3@tardis.local>
-References: <20261002102923.45846-1-boqun@kernel.org>
- <da2773b2-1ed2-40ef-aefa-0e754cdb2f9d@linux.dev>
+	s=k20260515; t=1792421705;
+	bh=mZLzRwRYboY/RmAU+vEf+KfhFzbpntUfPL9/1QMLPg4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=kHHofU0rYuCnhF24LmEHw4SnsG9PEmLBo2DwGVUs58j86P/0FdZ6XWeHDZVLvTErD
+	 x+nBzd9woAXRC3l15OeMB2SlHqkfUknr7620h8Qw4aOs5iK5MiNwO3y4ZITB91sqbf
+	 KFSL4LR8q+FXg/ttYU8yCEw4UF3zy4j1ho4b//W/OrxVJzexrr/Gl14YZI46TTMFYX
+	 5F/oYIRGQcdconbxeDYTqbmyc9ZBEUKlERt8NvM5jRfpq83cMG1JeKy6YVKoLKVbGm
+	 YD3+tckFU23CE+YxRzCrFnAFxDC8FNpacA+kHqx1WGrt7z22o7RoX6nmDYc1b6v3ip
+	 VFfur1KqMae5w==
+Subject: Re: [PATCH net-next v6 1/5] selftests/bpf: Fix XDP feature test setup
+ and teardown
+From: netdev-bot+sashiko@kernel.org
+To: bochaolucky@gmail.com
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ andrew+netdev@lunn.ch, edumazet@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
+ willemdebruijn.kernel@gmail.com, petrm@nvidia.com
+Date: Mon, 19 Oct 2026 14:55:02 +0000
+Message-ID: <179242170282.3135.3655485232785325877@kernel.org>
+In-Reply-To: <20261018-xdp-v5-send-20261008-v6-1-7336e1282ca3@gmail.com>
+References: <20261018-xdp-v5-send-20261008-v6-1-7336e1282ca3@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,72 +81,201 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da2773b2-1ed2-40ef-aefa-0e754cdb2f9d@linux.dev>
 
-On Fri, Oct 02, 2026 at 09:50:02PM +0800, Leon Hwang wrote:
-> On 2026/10/2 18:29, Boqun Feng wrote:
-> > The definition of NMI_BITS was out of sync after the introduction of
-> > HAS_SEPARATE_PREEMPT_RESCHED_BITS, hence adjust it.
-> > 
-> > Reported-by: Shrikanth Hegde <sshegde@linux.ibm.com>
-> > Fixes: 3b0e2a22d408 ("preempt: Introduce HAS_SEPARATE_PREEMPT_RESCHED_BITS")
-> > Reviewed-by: Shrikanth Hegde <sshegde@linux.ibm.com>
-> > Cc: Leon Hwang <leon.hwang@linux.dev>
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Signed-off-by: Boqun Feng <boqun@kernel.org>
-> 
-> lgtm,
-> 
-> Acked-by: Leon Hwang <leon.hwang@linux.dev>
-> 
-> One nit below.
-> 
-> > ---
-> > v2: https://lore.kernel.org/lkml/20261001082519.16195-4-boqun@kernel.org/
-> > v2 -> v3:
-> > 
-> > * Add Fixes tag.
-> > * Add CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS weak symbol because
-> >   CONFIG_* is not available in bpf programs.
-> > 
-> > 
-> >  tools/testing/selftests/bpf/bpf_experimental.h | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-> > index 2893bf06ff25..a09448347966 100644
-> > --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> > +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> > @@ -367,11 +367,16 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
-> >  extern int bpf_sock_read_xattr(struct socket *sock, const char *name__str,
-> >  			       struct bpf_dynptr *value_p) __weak __ksym;
-> >  
-> > +extern bool CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS __kconfig __weak;
-> > +
-> > +/* A trivial macro to make NMI_BITS exactly the same as in <linux/preempt.h> */
-> > +#define IS_ENABLED(cfg)	(cfg)
-> 
-> NIT: change this to ((cfg) ? 1 : 0) to match IS_ENABLED() semantics.
-> 
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Seems reasonable.
+Low priority / nit picks for your consideration:
 
-Regards,
-Boqun
+- [Low] The `xdp_attached` guard only records that an attach succeeded at
+  some point.
 
-> Thanks,
-> Leon
-> 
-> > +
-> >  #define PREEMPT_BITS	8
-> >  #define SOFTIRQ_BITS	8
-> >  #define HARDIRQ_DISABLE_BITS	8
-> >  #define HARDIRQ_BITS	4
-> > -#define NMI_BITS	1
-> > +#define NMI_BITS	(1 + 3*IS_ENABLED(CONFIG_HAS_SEPARATE_PREEMPT_RESCHED_BITS))
-> >  
-> >  #define PREEMPT_SHIFT	0
-> >  #define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
-> 
+Pre-existing issues:
+- [Medium] test_xdp_features.sh uses only the tester's exit status, and
+  tester_run() returns 0 whether or not the capability is DETECTED or…
+- [Low] In tester_run(), the settimeo() and connect() failure paths
+  return directly without close(sockfd), which leaks the control socket.
+- [Low] recv_msg() accepts payloads shorter than val_size and copies only
+  the bytes it received.
+
+--
+
+selftests/bpf: Fix XDP feature test setup and teardown
+
+This commit fixes several setup and teardown problems in the xdp_features
+selftest tool. It initializes the DUT state and socket address lengths,
+hands the echo socket back to the caller, and stops and joins the echo
+thread only if it was started. It also samples the tester counters before
+teardown, and it detaches XDP programs only after a successful attach.
+
+> diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
+> index a27ed663967c4..3076fdda61fa4 100644
+> --- a/tools/testing/selftests/bpf/xdp_features.c
+> +++ b/tools/testing/selftests/bpf/xdp_features.c
+
+[ ... ]
+
+> @@ -341,10 +343,14 @@ static int recv_msg(int sockfd, void *buf, size_t bufsize, void *val,
+>  		    size_t val_size)
+>  {
+>  	struct tlv_hdr *tlv = (struct tlv_hdr *)buf;
+> -	size_t len;
+> +	ssize_t len;
+>  
+>  	len = recv(sockfd, buf, bufsize, 0);
+> -	if (len != ntohs(tlv->len) || len < sizeof(*tlv))
+> +	if (len < 0)
+> +		return -errno;
+> +	if (!len)
+> +		return -ECONNRESET;
+> +	if (len < sizeof(*tlv) || len != ntohs(tlv->len))
+>  		return -EINVAL;
+>  
+>  	if (val) {
+
+[Severity: Low]
+This isn't a bug introduced by this patch, but recv_msg() only rejects
+payloads that are larger than val_size:
+
+	if (val) {
+		len -= sizeof(*tlv);
+		if (len > val_size)
+			return -ENOMEM;
+
+		memcpy(val, tlv->data, len);
+	}
+
+Can a short payload leave part of the destination unwritten?
+
+In tester_run(), stats and advertised_feature are both declared without
+an initial value. Leftover stack bytes could then affect the feature
+result that gets printed.
+
+A later patch in this series changes the check to:
+
+	if (len != val_size)
+		return -ENOMEM;
+
+That rejects short payloads before the memcpy().
+
+[ ... ]
+
+> @@ -403,9 +412,12 @@ static int dut_run(struct xdp_features *skel)
+>  			if (err)
+>  				goto out;
+>  
+> +			xdp_attached = true;
+> +
+>  			err = dut_run_echo_thread(&dut_thread, &echo_sockfd);
+
+[ ... ]
+
+> @@ -422,6 +434,7 @@ static int dut_run(struct xdp_features *skel)
+>  
+>  			exiting = true;
+>  			bpf_xdp_detach(env.ifindex, flags, NULL);
+> +			xdp_attached = false;
+
+[Severity: Low]
+The xdp_attached flag records that bpf_xdp_attach() succeeded at some
+point. However, bpf_xdp_detach(env.ifindex, flags, NULL) removes
+whatever program is attached to the device at the time it runs.
+
+If another privileged user replaces the program between the attach and
+the detach, would this still remove that other program?
+
+The out: label in tester_run() uses the same pattern:
+
+	if (xdp_attached)
+		bpf_xdp_detach(env.ifindex, flags, NULL);
+
+A later patch in this series appears to fix this. The DUT attaches with
+bpf_link_create() and cleans up with close(link_fd). The tester no
+longer attaches an XDP program at all, because it uses AF_PACKET.
+
+>  
+>  			tlv->type = htons(CMD_ACK);
+>  			tlv->len = htons(sizeof(*tlv));
+
+[ ... ]
+
+> @@ -578,7 +596,7 @@ static int tester_run(struct xdp_features *skel)
+>  	struct bpf_program *prog;
+>  	unsigned int stats;
+>  	int i, err, sockfd;
+> -	bool detected_cap;
+> +	bool detected_cap, xdp_attached = false;
+>  
+>  	sockfd = socket(AF_INET6, SOCK_STREAM, 0);
+>  	if (sockfd < 0) {
+
+[Severity: Low]
+This is a pre-existing issue, but the settimeo() and connect() failure
+paths just below this return without closing sockfd:
+
+	if (settimeo(sockfd, 1000) < 0)
+		return -EINVAL;
+
+	err = connect(sockfd, (struct sockaddr *)&env.dut_ctrl_addr,
+		      sizeof(env.dut_ctrl_addr));
+	if (err) {
+		...
+		return -errno;
+	}
+
+Does this leak the control socket? Now that xdp_attached starts out
+false, could these paths go to the out: label instead?
+
+A later patch in this series changes them to "err = -errno; goto out;".
+
+[ ... ]
+
+> @@ -636,19 +655,21 @@ static int tester_run(struct xdp_features *skel)
+>  	if (err)
+>  		goto out;
+>  
+> +	/* Sample before teardown, which can produce additional echo traffic. */
+> +	detected_cap = tester_collect_detected_cap(skel, ntohl(stats));
+> +
+>  	/* stop the test */
+
+[ ... ]
+
+>  	fprintf(stdout, "Feature %s: [%s][%s]\n", get_xdp_feature_str(),
+>  		detected_cap ? GREEN("DETECTED") : RED("NOT DETECTED"),
+>  		env.feature.drv_feature & advertised_feature ? GREEN("ADVERTISED")
+>  							     : RED("NOT ADVERTISED"));
+>  out:
+> -	bpf_xdp_detach(env.ifindex, flags, NULL);
+> +	if (xdp_attached)
+> +		bpf_xdp_detach(env.ifindex, flags, NULL);
+>  	close(sockfd);
+>  	return err < 0 ? err : 0;
+>  }
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but detected_cap and
+advertised_feature are only printed here. tester_run() returns 0
+whatever their values are.
+
+test_xdp_features.sh checks only the exit status of the tester:
+
+	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
+					   -D $V1_IP6 -C $V1_IP6 \
+					   -T $V0_IP6 v0
+	[ $? -ne 0 ] && exit
+
+Could a broken or unadvertised XDP action still pass the selftest?
+
+A later patch in this series ("selftests/bpf: Track XDP test processes
+and isolate namespaces") adds:
+
+	if (!err && detected_cap != !!(env.feature.drv_feature & advertised_feature))
+		err = -EINVAL;
+
+The same series also replaces the shell script with
+drivers/net/hw/xdp_features.py.
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3%40gmail.com
