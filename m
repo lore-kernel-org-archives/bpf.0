@@ -1,136 +1,165 @@
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C674E77E4
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792415084; cv=none; b=XpMqNPde3OZC1Ul5CRsLVvwAe2NFtsMXjcjYFB0v3jqnxqwB9bsjnZTotb+XXs0xy336OMUiC4w5AxMeUHLG/X2VixDXdi3GvF9ejn4Of2BjCAhOM+I6z85Yxxaywkap7taR05r9dCOyuqG14wqzR4ye4gtlPUhoeVW3o5HfeZM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792415084; c=relaxed/simple;
-	bh=ypi3osWI8gP8xyKWXAity7kWnhHwA/VpXlB9i/wvPi4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=aIJOaKigecOP6LG5RGTS3znp6Ei79sHuKb4f0R8mHL+6Rnso2251g9hNXLW7rc+rCYKyh01HpnHCyOLd61sQcJU9aVOzOHI/jq1H7j9+aljB2We4YDvf9QuQd+F0f9tlf1oxdd1gpcjPSRy13W1nUzuj3ZUG12WTYKPlMRERfHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zw2Ro5NT; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97BA73DCD85
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792415131; cv=pass; b=ROEw8ePDu/vnTqOVuPIOjiTLA6EVbuWHRFIF/7aRVDbJazoAy5dlNGiN3309ZTzGg7qITaClpJuXgXWf+lxvMV/x1g9xaHXxlby3CpBpV6+pmnLWGdJUYDTiwzgm3vlYdmWNH5sZk3ncL50Z+fNyHwdXAW7tJgZ4v+55nqGMFE4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792415131; c=relaxed/simple;
+	bh=PA8IT0mW8qyJLl9udMwhuGJy547uTDcbwByYbnkz5eY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZuJkBlc5P0B3swtMAsxBME71qlxnmTWlGpFSpqRvq+OeSzFDpoVkd5Lz9YXLD/3Dcs9D9qJEQUl3kfzV9Lu3MM0rMgrM9Gw3wYh4thlReKFlllYxQ3i32MZtezurj8UvBqWBuOaIp/SzHTPKyAf91em0WnXVrtf6Nya0uVYaJ6Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JMpfyA8K; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=RQ+I/6uY; arc=pass smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zw2Ro5NT"
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-91b834592afso23418186d6.0
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:04:40 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JMpfyA8K";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="RQ+I/6uY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792415129;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vUPbdohuI5rYwK6fOugHmkfgJHBc1I0kpq40ADeEBNQ=;
+	b=JMpfyA8KhiNKd4ujEIyXJMFkEGla0el34XzCnZuJXI9ZmCrYB0Q8RePm/bJId7Nme8wm2n
+	Kg15iHahIz3zXgAORUy7vMX6hsel3q9PwNTQrQdqb5AlpifjnQAZ4Tx1DEIdepQ+vUxDr7
+	3sfr3jOr4r0LXTnOgsB8F+XeWGuEehI=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-35-PodJUwibNs2KtMnk63sYXg-1; Mon, 19 Oct 2026 13:05:28 +0000
+X-MC-Unique: PodJUwibNs2KtMnk63sYXg-1
+X-Mimecast-MFC-AGG-ID: PodJUwibNs2KtMnk63sYXg_1792415127
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c438ca31778so95495866b.2
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:05:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792415127; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YwFrE2BM5zCCGjB7bmPyriHxf+UaAqAcVBbfo9Yi9/WH7RW+ZZsneD9qSH7hl2ph3y
+         kTeUt7ULo5X063o0VadAvR7iuppCwYgdh/01kLp2u4Kl9XMllPFm5f9PYiI6PLA5d9ul
+         cc6qS2EKNrjPrMUwffY//0sus6T2ucVNFGdIabkTAQXWARbZ5dv3vHKB47SynX/6cHcP
+         MBZQiDvG6cBSvfqTMshmCeQhiy8XT37kZlKiDrfqdTj33Xup1baozRDcXuMcVuwTjITz
+         pQmN8147/MxMYDJ2VAePrUOh879g1ZREkdWuaVrUm0eAXRyiMvl/BUSEYymCnZYPoO6G
+         pSFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vUPbdohuI5rYwK6fOugHmkfgJHBc1I0kpq40ADeEBNQ=;
+        fh=RWbsicjz9jvGasmeJitQc4Ux4Srhp0F6XdWGuqVfXT4=;
+        b=XtGjepTOXJ8Uts2cf+b9V0JvzYH9y6W7LZUCjTdO3819lvaozD6cez3181BbYzZzVb
+         sqKaYPl5KaZ1PVEcZMxoaSxQlY6Iy0hmiMao1GHSTbDQy+lgl4CsmP6jJAcv2JUUv9m4
+         2J0k9KmOgyLdw9t5hPs7IUkChnHYVFEb8bdYD+pYSfw50gmJ4ByelwRM7dgogpR9dWz7
+         yLrGKmBcr1iTMBSQOO1YZ+SWf6vp746g9wDhwkjVi9Tq4LdGXKdmOynvHV3dlPoVsVh/
+         Y/smp60s9hta0gv4bxKe8Wdz074E/7Pt7M0SPTUBiCLKj2kK1TO1X1gTj3TWq2p1PMK6
+         eZEA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792415080; x=1793019880; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ypi3osWI8gP8xyKWXAity7kWnhHwA/VpXlB9i/wvPi4=;
-        b=Zw2Ro5NTFeqeRpPaUDiAoqDBBEVA4vrR/egIYDXbODNDfzxRKXaLD1RJK11z0W2Nfo
-         v4ChuE6+1Sfi4K+VMqUl/ZYJB0btqAXli5pJHKqFcJ5+/uVwztEMPyj+J7yGeSc02FBk
-         C6CLlRLhQJl0jM8HTwn917o5vL1wfF9ZSDi+dhXi+InmnwfjUMcBIiA70sapE8VxKTcE
-         fF9GSx6VUK6IsUY0dHiKY4mYq2w+na9GwH3Hpjy1mWZGcO69wec5JKb27RNOnTs3sqsM
-         01rhQF+lRKg5rrHh7r063fn0ukbU+Iv3/sufzKGp/PEF1gaM6y90GfQ/oOuPO+W+XT/y
-         jCvQ==
+        d=redhat.com; s=google; t=1792415127; x=1793019927; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vUPbdohuI5rYwK6fOugHmkfgJHBc1I0kpq40ADeEBNQ=;
+        b=RQ+I/6uY/DZUnEmt6uREMIh5F12M3GW1INq4ZPX2351JuRIhvobmFPGJEruviL0Ui4
+         FHHGb9HM0WxGh/KZpJWi5PfZz1fizNuV5o+XVvRbyNVex5Wsg3+G4qLWdJQGDdno/X4K
+         BHgXa9JrjdgtrRA/H+66wKwIxSr2hboKTCkligE7w1wynmsB6q8b3ausmk381N7cUJjh
+         NtmdDY06R3VmfZ9cR0y31pFeXc807r9kfX479mcP+JoyLttWjPiWRtFg1Hcoant5Dli5
+         o0j3ZPOlRgc+bghlTcfisIL+gsusXdyHuIoB5MW9DRjk8V/DiixU29UtG/RPqZLknOff
+         Gk0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792415080; x=1793019880;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792415127; x=1793019927;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ypi3osWI8gP8xyKWXAity7kWnhHwA/VpXlB9i/wvPi4=;
-        b=Ucpsa/CyT93SZgHA41i61GAsETjkLjQJaR8aCzbZriP86UuxocCbwBHyHsw8SzbW9r
-         iP1TWh4Txlvb6fMb5LuBPwiGghDY7yOAHBnTDSnbCqeW+O1SoNvC1ogI2PpldNpd24WE
-         uqhoJW6iE2HHqXjQRGhSxqCcogC1FsIRGkVYHWGiICGv6JpP/szr3Qu+oEhZ97axQzz6
-         HidwjHQWjCO7rkZtsdwxPY9vp6DCtAEekJA91K5lhH3hsPMAxaBd9pwHf28yErxgeiO4
-         4N5o+GH8xRoVTmjkQ9H8Y0SGwD+Ec80E3NRbAszc3sCV/s96JSL6LPtHht16kmXc2GI+
-         BO8Q==
-X-Forwarded-Encrypted: i=1; AKwUvBxCSTvR4Em5LRdmrNHV1k3xvC6hPZQGKPcrRPkOQOIpd3wExw/SlphKhIwr7bUQ2NeujA4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKINf0gsplHUrQFkDLz+FJTCoOgbE8bCn50Y1m0dWVUjksgYlNA
-	sITivH/7MFRS5wUdbKpaP5MKConfymxJa0EaCJ8RE7m3cTIw8bO33jlV
-X-Gm-Gg: AYBFou37/gXJE8ZSqZJ+6ub8zn6TQxIVuGlP6gl0CbaXKjEtrMU6gPXRwY+foM9b2Gk
-	PzDxxC/HyAWMYb6B9X+o/U8qVPlpIBS7mLl8IpHJsYZ4lQPE3twtRlnnGlh35BYiU24/5xGtwIc
-	LCvL9SoiTTV6AAVUakXxUCpvTonwH1+pa29s0gIrMdMxwUqQDVqvtweHcq5JoxwQ/fCMuZDO7RB
-	gALLTo5i3d48yyIdS3RTsGAR5+4Ittr3X/wW8ADKR6JmDj5QiOib12axMRAGODxqYCSw48SlQ8f
-	7RvCQ7GubQj0nA9aKjI6zdg/b0ZhOAOFtM3w3U7pILKHeKSA1IsXg8nMuNbMkjgfbswtAkOb7hr
-	zKzvSSJr/RgnZuz3kShF5NwRYUc4AOLy5M4lifjleA6sNvlGETvptdH2pysvGq+TqwUTOlRAs2p
-	zSXUa98BtZVAuRot7ijnXaW1vmaMhrkG56UiggQfIfsf7kKKiPyezoOUXgd+zspJSqn9ItIgw8O
-	co=
-X-Received: by 2002:a05:620a:7119:b0:93e:fc4e:c490 with SMTP id af79cd13be357-93f29cf1c9bmr1378673385a.15.1792415079619;
-        Mon, 19 Oct 2026 06:04:39 -0700 (PDT)
-Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f3cb855a0sm328418385a.4.2026.10.19.06.04.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2026 06:04:39 -0700 (PDT)
+        bh=vUPbdohuI5rYwK6fOugHmkfgJHBc1I0kpq40ADeEBNQ=;
+        b=1ZnztyCrkx+Ssz5mBFgJ/BImLhfE+NIOvXE/KwtP1CsXyZQDVbOfJq09SZGXGj+Zrk
+         9eS2TqZ5WnubNNG0HVy0bYO9KLc2kTKdyqJfjPbVIpeh2GJznIvKCtcT3r2X1twyJvRC
+         QeXQ4+T5e4aNHNlE3k9u7v0vcBr0sJZEnw0SDYDcLGqyUFTgvDLDsnqQ5uqcuaCf+WQp
+         DAFhdKf1lf5RsmYuz9PkauPSr7n6ciz+numasQ4kad9hwLXGKFG6sYWRB41wc76ohsU0
+         d6p6o/tEWKDOwrsg+Zd7i6B5tTznSlxw9gUjH5iaoinTUziZFakedUS/CEEChPj9jEqe
+         0HYA==
+X-Forwarded-Encrypted: i=1; AKwUvBwr0oPrOXG02rZ9h8L3KAOJEWrtOJu7U2F4DbDpydldwvy8Z507e1Ye1Scr7wzr+WrWc2E=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKbAI3qvEmM2P1tLZg/ScVWn0wefdW7BsKgScxCcG2UEs7envUD
+	sIBiA3SelpdqKFrn4dx3imYdz9NHZd7Blr0PGxoHreyxGmpv9KZznqsWap5GcPOLKnezDIFfTt9
+	LhhNHNQv+yOhELKgGqxroufbgYju5KYIwoUM7pcqjojjJXadUfe8ga6vSEHrDA8oDRJB9H1Ic3Q
+	PPRTgcEzkjv6ZIPDEeYEZHxzCE6gSn
+X-Gm-Gg: AYBFou0SYDT7o5F+m0cUQIaWArjZdn/E/xzLVaQPxrNtaIhXtJ7/pbK8pwAN5vd+ub4
+	Fs9uhBJ1DY7HNj9rymXTQLWYlKj6HhcCG6V3EYFX5vMaq7TNgON99kuaPKOn2OefRmcfdlFNzsw
+	+ZjXEBS8q+JL7pntyMtNgYDrZwdQ06Bz/eknLm3Naric37ISj5hJHMMhySowIxmsloH7QVz6ptO
+	wNwE1HbnjGcQXM=
+X-Received: by 2002:a17:907:c008:b0:c40:f89f:d91d with SMTP id a640c23a62f3a-c419fafad52mr566086266b.28.1792415126882;
+        Mon, 19 Oct 2026 06:05:26 -0700 (PDT)
+X-Received: by 2002:a17:907:c008:b0:c40:f89f:d91d with SMTP id
+ a640c23a62f3a-c419fafad52mr566081966b.28.1792415126452; Mon, 19 Oct 2026
+ 06:05:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20261001152042.124445-1-gmonaco@redhat.com> <20261001152042.124445-11-gmonaco@redhat.com>
+ <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com> <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
+ <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com> <878q3xtptq.fsf@jogness.linutronix.de>
+ <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com> <87bj8s8ih9.fsf@jogness.linutronix.de>
+ <DM78SVMBI2XW.2XHVC67VON48A@gmail.com> <87v770uuyr.fsf@jogness.linutronix.de>
+ <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com> <87ik2zryzo.fsf@jogness.linutronix.de>
+ <0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
+ <CAP4=nvR2i092924zszA8Qh0UUYnwXfAsa+7KjPe-NpwC+bbLXw@mail.gmail.com>
+ <8580176d216258e9008c344e0529509117dcc18b.camel@redhat.com>
+ <CAP4=nvTc297yQHz8aumZFAQ3+JK=5Z_=416WdosT0S6nHEeNfQ@mail.gmail.com> <d2622f5c375ab26514d059b5949dee28f3f9998d.camel@redhat.com>
+In-Reply-To: <d2622f5c375ab26514d059b5949dee28f3f9998d.camel@redhat.com>
+From: Tomas Glozar <tglozar@redhat.com>
+Date: Mon, 19 Oct 2026 15:05:10 +0200
+X-Gm-Features: AclHuK-qu9FGzZ1wQlrHPYBUAdZYSh4UcmqBXa3GV9mICyDiafDBWh4-NKWR3no
+Message-ID: <CAP4=nvRhd1d+o8O045LB=dcYa2UudH7ZbG388wcwEX+JNBWY=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
+To: Gabriele Monaco <gmonaco@redhat.com>
+Cc: John Ogness <john.ogness@linutronix.de>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Steven Rostedt <rostedt@goodmis.org>, Nam Cao <namcao@linutronix.de>, 
+	Wen Yang <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>, 
+	Viktor Malik <vmalik@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Oct 2026 09:04:38 -0400
-Message-Id: <DM8U47F4MNK3.2V54CCQ9YTNBY@gmail.com>
-To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>, "Daniel Zahka"
- <daniel.zahka@gmail.com>
-Cc: "Alexander Duyck" <alexanderduyck@fb.com>, "Jakub Kicinski"
- <kuba@kernel.org>, <kernel-team@meta.com>, "Andrew Lunn"
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Paolo
- Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Eric Dumazet" <edumazet@kernel.org>,
- <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 1/4] eth: mpnic: count packets, bytes, and
- drops per ring
-From: "Daniel Zahka" <daniel.zahka@gmail.com>
-X-Mailer: aerc 0.21.0-threadmapfix
-References: <20261012-mpnic-counters3-v2-0-8afba81c2d5a@gmail.com>
- <20261012-mpnic-counters3-v2-1-8afba81c2d5a@gmail.com>
- <20261016220930.i32JEcqe@linutronix.de>
-In-Reply-To: <20261016220930.i32JEcqe@linutronix.de>
 
-On Fri Oct 16, 2026 at 6:09 PM EDT, Sebastian Andrzej Siewior wrote:
-> On 2026-10-12 05:04:34 [-0700], Daniel Zahka wrote:
->> Keep packet, byte and drop counters on each Tx work, Tx completion, and
->> Rx completion queue. Report them to the core via the rtnl_link_stats64
->> interface.
->>=20
->> Rx completion queues also count errors. Frames the device marked with an
->> uncorrectable error are counted as errors, and frames that fail for any
->> other reason are counted as drops.
->>=20
->> All packets cleaned from the TWQ during mpnic_flush() are counted as
->> drops, though completions for some of them may have been DMA'd into
->> the completion ring between the time mpnic_poll() last ran and before
->> mpnic_wait_all_queues_idle() returns. This is done for code simplicity.
->>=20
->> An RCU approach is used because ndo_get_stats64 is not called with the
->> instance lock.
+On Mon, Oct 19, 2026 at 2:48=E2=80=AFPM Gabriele Monaco <gmonaco@redhat.com=
+> wrote:
+> >
+> > Do I understand it correctly that the idea is to modify existing
+> > tracefs instances when enabling an RV monitor to filter our RV-related
+> > bpf_trace_printk events?
 >
-> Why do you have the two mpnic_base_stats and fold the stats into into
-> it? My guess would be that on stop the counters are reset and you want
-> to preserve the stats.
+> Not quite. The initial issue is that the current iteration of RV BPF moni=
+tor
+> don't cooperate well with trace-cmd/perf. Alexei suggested we use bpf_pri=
+ntk and
+> filter out the desired events with plain ftrace glob filters (from trace-
+> cmd/perf).
+>
+> I believe this would be usually equivalent to having a dedicated tracepoi=
+nt for
+> RV BPF monitors.
+>
+> E.g. you'd do (roughly):
+>
+>   trace-cmd -e bpf_prink --filter 'bpf_string ~ "rv: sleep: * violation"
+>
+> instead of (with a new kfunc)
+>
+>   trace-cmd -e rv:error_bpf --filter 'monitor =3D "sleep"'
 >
 
-Not sure I understand. I think you are asking about two things:
+I was talking about preventing other (non-RV) consumers of
+bpf_trace_printk from seeing the RV prints. Eg. if I create a tracefs
+instance and enable bpf_trace_printk, intending to see my own debug
+prints, I will also see debug prints for RV, unless I explicitly
+filter them out. I get that on the RV side, these are mostly
+equivalent.
 
-1. Why have two mpnic_base_stats?
-
-To avoid a separate heap allocation that can fail. Handling an
-allocation failure in the ndo_stop path when doing the aggregation into
-the base stats is tricky.
-
-2. Why split stats into base stats and per queue stats, and why reset
-the per queue counts when the device transitions down?
-
-This is the way the stats in netdev.yaml are exposed depending on the
-'scope' request attribute. My reading of the relevant kernel docs is
-that the per queue counters are counting events for the current live
-queue, so it makes sense to reset them and fold those counts into the
-base stats when the interface is transitioned down.
-
->> Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
->
-> Sebastian
+Tomas
 
