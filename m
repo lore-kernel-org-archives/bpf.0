@@ -1,165 +1,156 @@
-Received: from mail-oo2-f11.google.com (mail-oo2-f11.google.com [74.125.231.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8880E55C9EE
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 14:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.139
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792421341; cv=none; b=ko4Yq+w58NQwI5pbp7bDCpmHaO0dJkp0bx8rF7bKp2CdKy3QPgZtv0l99oLB1slKEhX1OKZwYSJg65ZeMbLx9jnMYrU3IufaROJ/DVJjBZ0sh23i8adW+uVnKBYpjr1ffUwacVp81JKr/eKeqsxZxiZ5mN+WYGAnJqt9+Zo3wNo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792421341; c=relaxed/simple;
-	bh=Z8tlh1BcQ4RQzZxqBONrIPgKcJMRVs5xw/h5Zr7K/sU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dBvHrGTblC5SArc/wegBeCSfEPyrlcT91vBLJ836GKNQbaW63uyPGtZO9KhBi55p4OoLZlLo3cqCimwRtqaUO3YnfYQsTNGhoEO7r5MAyy3B03oXjGvgXIZ/H7IVmUzTaSR9K4q6b10qLICH4PMjcNFF4fXSC6SrOEO/rm4cqlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kFvxD5AI; arc=none smtp.client-ip=74.125.231.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792422091;
+	b=nIWU0i3GADZCBqAR3ZgqfLb6Vi3snQCBpyAKXCKRi2psfbnfocZFkCq/2EL7dVKAS6Ne
+	 I8aStf5IgcIbyK4ttBmeyHxTY6BA5/K3eHATYiyaM4tkKrqL+IA6tcgFPqzHjST4ht8jK
+	 yKeauVpvFj58uTmzgjAXkUtdZQDBdmU5Uf44e3M/bsEhhEScBO4YwVMmAqrxVZUlNNyZ8
+	 12rT3cAXtPiH18lDUyhnp1bt6KNfQM9fAZkG2yAjWUn0D8lOKBvwrxybM1kjI6gp4+KsP
+	 CirU7sDQEWuu6X2/rDS96DKXHC48/F6xHblPg/Fw55/+V5ngcjp0UQ2D8Ar2MI/T0iQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792422091;
+	h=Received:Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:
+	 Date;
+	bh=IAOBmo/4ic3jXX9wroTjAB02hzEgaYEfduQTfRYwxNE=;
+	b=FEEkzypfzUOmyqhAfIlnkaQ8bJN47XYEZWeZ2dyRYuqgo2/fqkuMqdq9v9KeYprYpqxs
+	 4KnFn/U8TJ/zTXSpU/mBtwX0LmyCrSB2yrRrldDrIRRzvMmHz2nj0gq9bdUlvo+osI/8P
+	 ijCeOY+VbaORe4gIO/8zRU8w3yhEn40aF4tDQm2hgkcRCaaWaLwTaYXiVFJ4UrQ2ehOhr
+	 JPcotrGUZn+TGEfYXncF+RXIbpIsTpO4rjwxXfv0RHYmkhyIF0CZFJI1m2dqAYHroUgoJ
+	 cjXRBYLRQXktG7NuERwy8HIEEL9+jlEk6N9RLm0DZzBA/Qo+6rOUjnjb5f6m9o+T0oQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GmWXLXnC;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31411607AF15
+	for <bpf.vger.kernel.org@localhost.mlmmj>; Mon, 19 Oct 2026 15:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kFvxD5AI"
-Received: by mail-oo2-f11.google.com with SMTP id 46e09a7af769-828912d37e6so560685a34.0
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 07:49:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792421339; x=1793026139; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fodFFz3XBaFazuL3SUx4CvMDlfcvqTN0Qfgh4HkR58o=;
-        b=kFvxD5AIU/NDr6bFHcT7WJJwg/cMLMddfcH1VO5Eoc5Cj5Xzw8JaG3qkjjjOYodoal
-         g8xm9BUEq3lq9rLiNVGD/yMyq5lNcfjG3Q1zs7CGgvNKkF84bJdS36fgSprpeFEUHXOB
-         TCqWq+Ti8IB99fOoqJyXBQMBqx21UXF/5tGaeCqw9fpH2xC6gLS6w4Bjxx37fw/qXX2P
-         bPGdUerm6iwI/gk7pNkSwUGPWjV7l8OViyWbhz2cMVd57lNggNOWCAo0pYQd2qJ0QHKj
-         zn1jDXgVTV7WfdmtISnNYUS9O86UU/ksWEVmITrqgwZBaX8I/BbMeaoQ/uOlLF0SanvS
-         o0dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792421339; x=1793026139;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fodFFz3XBaFazuL3SUx4CvMDlfcvqTN0Qfgh4HkR58o=;
-        b=dJ1u+RkzXySAW93udy460lM+/GZw69fo+mLGqbAlceynCIymk3WXyK1mDeOx9WcHDB
-         YHAjVPz9mVUvzjs72kDO9Eq9LkQNG9glETXBgf8PHfWZwf5RecRtfGEhV9raugIavW6K
-         hfGp9BzRFDVkE1xc9YicuJqiAJ4etvEm4kEwbf7fEjAycu5H1a6gnb9u9nlJFaRV34wl
-         wVwzYRzDtn3/x2uVz+/QRRckftX+xOZJuHUJreHEfoyrIk0+615uz+l5Ccji9FguMtmv
-         HXVV3yqaw5yahrykdtS5+YEa2NJYddagjfkM1uM28TlGhxHv3WXS2xJMDObqZgLFE/n4
-         NUcQ==
-X-Gm-Message-State: AFq9FYKY3gvyO3SGMfcMHpPBc1WKMOfW5XBfRcCdguUp32oAAikAHyTl
-	SR1QOcVKJzkJqLccmvrIHWY0DBfwOBwRBqbx7sSApw1eycrYSM+NnoAdY4P3pqq6A80=
-X-Gm-Gg: AYBFou3ByPr1Om+lSDYTfz6QFn0ng8yXfZlcHixWzDK7nfnlyyva3Adijm+nalUswWJ
-	MOfZsZURsmz14doCZ7DQvCRFiLqAGpa3vymeY3FDxMNbgyc/K8sdk8r05Hk4L+UG0+wq32cp56Z
-	m0aG3A/CjmWonwW1ixri9PPcjrSkYS6l3wnwUxqBUp5K1X1EclEK6YPwZv/iWo968rR8X6HNFQ0
-	6qqZFbPtNQpdtKe/KhHq14qD6Cih8ktGBlyMuL1ck7mhcY32h4ZyPzGflB4cKjANdelqDXgWwHx
-	f6BKv9tG61gE1DoG2mCpcxaDlG94ul2iIO3+ZYPSEc+fKYTKtQeSknOB4ney+XLlCsIBkhz/QVT
-	Vwuz7xyGqOWcs8FTPhQg3Y6axBGXso0ZWhATY22JwSvRMrLOjHkB3EyIbkxlFSS0WrVJJUfz3Ap
-	ZN+KO0VOkEm5+wqqdaXqrgJ24Zvqh6eQ1ZoJ0cooX/bVxDiCG6TeMThaUO+obJ38E3hjg2pbhq0
-	KFpAhsmDekdlPrcSNQV2gq6oxQdJKRT0mPIei+UOV+MCjgLKnk6jFATOOBgz3arZrOYe37aYugH
-	kPt/hw==
-X-Received: by 2002:a05:6830:81d8:b0:81c:9abc:974b with SMTP id 46e09a7af769-845021dcfa5mr5244058a34.17.1792421339331;
-        Mon, 19 Oct 2026 07:48:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:42::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-849859184easm2804163a34.23.2026.10.19.07.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 07:48:58 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Test that a signed program with CO-RE relocations is refused
-Date: Mon, 19 Oct 2026 16:48:50 +0200
-Message-ID: <20261019144851.4052056-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261019144851.4052056-1-memxor@gmail.com>
-References: <20261019144851.4052056-1-memxor@gmail.com>
-Precedence: bulk
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GmWXLXnC
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1444433B975
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 15:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792422091; cv=none; b=H2Lmh+3acPa2hylBuOzdBCq+X9z0YD1Qu2osKMAnVP6Muj3n73lZaw8NASHAY3cLimrg1oba2SNrgiLWTGiKIVhEtvOFjHe5yCKVEd8+fB6ioXYG03MiK6JexWY5cD/PMihCCkeZPGfMkfhdge1JI7Gn7wZdusGHSUGnM7ftlYE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792422091; c=relaxed/simple;
+	bh=D2Qv0/JSugpBJZzFZB2Hewawe0Ks0xO/9Pp9HNMWtAw=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=TZYDfW8pTdGaxZrSCU6YGY5TRM6w1Xs93NSbyLMiynkBak6QN4U8nlDj8Ci7GT+KzjHLVk8p75QuKCWrKXLnzV46ciTtE+A2T17xd8MMmMZdlRbIJEWEhKHilItz+KfB/xBZT/2DLK3SM7FC7jU22nTM98lyb6QknYIUncGgPVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GmWXLXnC; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C30061F000C4;
+	Mon, 19 Oct 2026 15:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792422090;
+	bh=IAOBmo/4ic3jXX9wroTjAB02hzEgaYEfduQTfRYwxNE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=GmWXLXnCHUDPa9GReJdY7mS8UKFB1QLewHJP/uXQQrY8YO3alxsuuXYYNixtIERBv
+	 3GT44PxNqJ7Hdw1O55CAXkl25MXhmf9QHrqp5+Eu09FtKvm7Wy6NtBrn6sO3Ly6qqk
+	 BQfOD4SU5bUJKXu1MHSXvB7FGsYvRRpzYCVvMGN7tac2yRHHWIMczB2MyuRUdH3eXb
+	 O3QrUvROmkhsxTg82kTTGD8GVS7N/gCFSV/cZmyxCxYg2gSpekkDHbtzmg+6MmgrET
+	 L8l2+YnL9pcJ7hIPgWp/VO7TlPYN83MoXR2bPDF8Wm+hgpY4dJzOTyOCD6ZOlmnLDZ
+	 exUmgARU2XOfA==
+Message-ID: <sashiko-outbox-177591@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH AUTOSEL 6.18] bpf: Reject callback subprogs invoke
+ tailcall
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sasha Levin" <sashal@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261019135441.1420968-237-sashal@kernel.org>
+References: <20261019135441.1420968-1-sashal@kernel.org>
+ <20261019135441.1420968-237-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 19 Oct 2026 15:01:29 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
+List-Post: <mailto:bpf@vger.kernel.org>
+List-Help: <mailto:bpf+help@vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3151; h=from:subject; bh=Z8tlh1BcQ4RQzZxqBONrIPgKcJMRVs5xw/h5Zr7K/sU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeua7jaz1s9rpV/ccC+xt1aOj1sl1JLwXaSnzaCwIMiDvd9p 15+OUhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATKTlP8P/kBWGAoJT5Dn01KUvbpUPEN 0t+kOsb3pvWHTay2//ipqiGBkWsXwukf9/86nvlNXWl/TiDFok1tSIW5yxvqynb+Rx+QM3AA==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+List-Owner: <mailto:bpf+owner@vger.kernel.org>
+Precedence: list
 
-Load a two insn program with a junk signature and one CO-RE relocation
-record, and check that the kernel refuses it with -EACCES and the message
-naming the relocations, before it examines the signature. Without the
-check the same load gets as far as the signature and fails on it with
--EBADMSG.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: unreset tail_call_reachable in check_max_stack_depth_subprog()
+--
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/prog_tests/signed_loader.c  | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
+commit c2ffc0a7246f4fd9042fb29769bcdfa70c066eca
+Author: Pu Lehui <pulehui@huawei.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-index a0f93756e717..e43dba8fed8e 100644
---- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-+++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-@@ -379,6 +379,51 @@ static void signature_enforced(void)
- 	gen_loader_fixture_fini(&f);
- }
- 
-+/*
-+ * CO-RE relocations would have the kernel rewrite the insns after the
-+ * signature was checked over them, with values the loader picks through the
-+ * BTF it supplies. A signed load that carries any is rejected before the
-+ * signature is examined, so junk serves as one.
-+ */
-+static void signed_core_relo_rejected(void)
-+{
-+	static const __u8 junk[64] = { 0x30, 0x42, 0x13, 0x37, };
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	struct bpf_core_relo relo = {
-+		.insn_off = 0,
-+		.type_id = 1,
-+		.kind = BPF_CORE_TYPE_ID_LOCAL,
-+	};
-+	char log_buf[1024] = {};
-+	union bpf_attr attr;
-+	int fd;
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.prog_type = BPF_PROG_TYPE_SYSCALL;
-+	attr.insns = ptr_to_u64(insns);
-+	attr.insn_cnt = ARRAY_SIZE(insns);
-+	attr.license = ptr_to_u64("Dual BSD/GPL");
-+	attr.prog_flags = BPF_F_SLEEPABLE;
-+	attr.signature = ptr_to_u64(junk);
-+	attr.signature_size = sizeof(junk);
-+	attr.keyring_id = KEY_SPEC_SESSION_KEYRING;
-+	attr.core_relos = ptr_to_u64(&relo);
-+	attr.core_relo_cnt = 1;
-+	attr.core_relo_rec_size = sizeof(relo);
-+	attr.log_level = 1;
-+	attr.log_buf = ptr_to_u64(log_buf);
-+	attr.log_size = sizeof(log_buf);
-+	fd = syscall(__NR_bpf, BPF_PROG_LOAD, &attr, offsetofend(union bpf_attr, keyring_id));
-+	fd = fd < 0 ? -errno : fd;
-+	ASSERT_EQ(fd, -EACCES, "signed load with CO-RE relocations rejected");
-+	ASSERT_HAS_SUBSTR(log_buf, "signed program cannot carry CO-RE relocations", "log");
-+	if (fd >= 0)
-+		close(fd);
-+}
-+
- static void signed_nonexcl_fd_array_rejected(void)
- {
- 	static const __u8 junk[64] = { 0x30, 0x42, 0x13, 0x37, };
-@@ -2187,6 +2232,7 @@ static const struct {
- 	{ "signed_unfrozen_fd_array_rejected", signed_unfrozen_fd_array_rejected, BOOT_SEALED },
- 	{ "signed_nonarray_fd_array_rejected", signed_nonarray_fd_array_rejected, BOOT_SEALED },
- 	{ "signed_btf_fd_array_rejected", signed_btf_fd_array_rejected, BOOT_ANY },
-+	{ "signed_core_relo_rejected", signed_core_relo_rejected, BOOT_ANY },
- 	{ "signed_module_kfunc_rejected", signed_module_kfunc_rejected, BOOT_SEALED },
- 	{ "signature_failure_logs", signature_failure_logs, BOOT_SEALED },
- 	{ "signature_too_large", signature_too_large, BOOT_ANY },
--- 
-2.53.0-Meta
+bpf: Reject callback subprogs invoke tailcall
 
+This commit rejects tailcalls inside synchronous callback subprograms by
+widening the exception callback check in check_max_stack_depth_subprog()
+to cover all callbacks via is_cb.
+
+Link: https://patch.msgid.link/20260716120157.835937-3-pulehui@huaweicloud.=
+com
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b89a5d717e422..5cc3e9a990ef7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -6852,8 +6848,8 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx,
+>  	 */
+>  	if (tail_call_reachable)
+>  		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
+> -			if (subprog[tmp].is_exception_cb) {
+> -				verbose(env, "cannot tail call within exception cb\n");
+> +			if (subprog[tmp].is_cb) {
+> +				verbose(env, "cannot tail call within callback\n");
+>  				return -EINVAL;
+>  			}
+>  			subprog[tmp].tail_call_reachable =3D true;
+
+[Severity: High]
+Can this falsely reject valid BPF programs when a program calls a
+tail-calling subprogram and later uses an unrelated synchronous callback
+that does not invoke any tailcalls?
+
+In check_max_stack_depth() -> check_max_stack_depth_subprog(), the local
+variable tail_call_reachable is initialized once at function entry and
+is only ever set to true when descending into a callee:
+
+kernel/bpf/verifier.c:check_max_stack_depth_subprog() {
+	bool tail_call_reachable =3D false;
+	...
+		idx =3D sidx;
+		if (!priv_stack_supported)
+			subprog[idx].priv_stack_mode =3D NO_PRIV_STACK;
+
+		if (subprog[idx].has_tail_call)
+			tail_call_reachable =3D true;
+}
+
+Because tail_call_reachable is never reset to false when entering a
+subsequent callee whose has_tail_call is false (or when popping back to
+a caller), once any normal subprogram with has_tail_call =3D=3D true is
+visited, tail_call_reachable remains true for the rest of the walk.
+
+Synchronous callbacks (such as callbacks passed to bpf_loop or
+bpf_for_each_map_elem) have is_cb =3D=3D true and is_async_cb =3D=3D false,=
+ so
+the traversal enters them via bpf_pseudo_func(insn + i). If a synchronous
+callback without tailcalls is visited after an unrelated tail-calling
+subprogram, tail_call_reachable is still true and hits this new
+subprog[tmp].is_cb check, failing BPF_PROG_LOAD with -EINVAL.
+
+Does this backport also need prerequisite upstream commit 3513ea9dab6c1
+("bpf: Sync tail_call_reachable with callee state on entry"), which
+updates the callee entry logic to:
+
+	tail_call_reachable =3D subprog[idx].has_tail_call;
+
+so that tail_call_reachable does not leak across unrelated subprograms?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019135441.1420=
+968-237-sashal@kernel.org?part=3D1
