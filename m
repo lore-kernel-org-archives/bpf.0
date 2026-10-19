@@ -1,62 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792431522;
-	b=brB08zahs7r1xsWQxWe3mHrjQlkCn4WjeIPmxS3ABL81rwADr85wMxVuJjnt4flkQ5No
-	 cSZu1+p3Tiowj0JN/KVMYHmkujuoLCO05aZ9ItR6KS4+OgsGeFNHhJyoAz5EnDyWQmTVj
-	 qQZlFzxubp6pr+OKIdDiIBNYu6lZraXy/EOqg8gmUvZdqY8qSt2nM5pwxJdKC2IKy86sE
-	 h4WKlyAxnJDGDy9qvgKqYo+HcZgUxJd9lFMF9rvtQQbMXXDmk2Lp2MPmGhOXmWOr4w+3W
-	 ZjvW2tiaZhFim7s9btetgif5EfxF0ALzz55/0SKGM1o1OuQlvQvt5T2X4vZdYEDQ3mA==
+	t=1792437954;
+	b=iftff58y8uYhfnWZ56/hw1fDVhGMeO52X3/+Bpd1EdHSxB8E2cm7DiEATQFgq6eIjuzk
+	 J+0lSLttEcWkX0nkCXQLxGLCEVjZfAO/YjnmTnBEKAr3odkJO7JfIx5d+lNRwj1Gn91k2
+	 VZHMvx5fpdTr606gLnfcylUqUbG4mNpM5Du9T6Hl/yidupjEXzAeSJ1GK8cbyPhPqkoFT
+	 xKnURvxBfE/EXMTUiL0X/GXYnBidSimkXj1IIrory8JuKRxOtWOIJNZqoXfdGMfob9YhJ
+	 YpSijrptJeK1AdW9/WtqfKDHRfUGhdZam4RLCC/dBVtWGKibAs4q+MLjcD5/CckASFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792431522;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=7ykaxJta1Hj+twICobH251gv/WlRqnsBOHcpwmRY0M0=;
-	b=z39CvW3y17/eFndTA9KstePaLcD3ZpxQlOr2yag1tRSrooiil3+L6QLqRzkDIL88q8iG
-	 +xo9C2fRXb77+Ic9vSOjRa2Bc2mWdGOSTEwtvRtA0Shvq5+pv+09L54b2dP9R3MEoGl/R
-	 jqB/APDcozeSV5Hiv0iqQZb49Up1jOh5Wi30eqZx6tUysvF2MMv8m0hFgMCDdNpRHC0n4
-	 oCQ98qkvCEEFZnzMQnBuls7avQCwgGIvM3qNBmd7ruQa641cdpgAep0cIe7u5sD4Ew+eb
-	 yiTrWt2zutfwHU4EEqnmgtMeQyjgNpxjuZVepb2GR05F6tPJkA5QgtXCXEA0mfUBjHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792437954;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=Gl+QuejblNFV3uEkIxOgOsS4jX0GlJs/ROUNx5zrPn4=;
+	b=Dh8CZFNYlkVbNX7MdfjfR6GpaQrECM20i1ZJt3yIfETDameRU70XW7stCy4NoPjZh6lL
+	 i8djC1VXPSJD6z30ixlCzI7vcMITy7+UW44lPA8i7PaqBBZ70Hpp+rqGIJIX0G6a2lsXV
+	 krN67DVIuotlzDP2cuNQzW83nk6FDPLU6giMiE3IPa9E9LBMEW8R+NU/d/HotIhK+IxLi
+	 S21PnIyZbD//hUma4Oj+l/AlqvrV6IIcIZSwiHWHexgWSJYik9Vc9H5G74JR/F5pAXwfR
+	 8HoLTN9hKKzKq1JFluSoKpaVcjjmvABAlxwA7RbJOFcwwIpEuwqJhTFgPGcMffX9zOw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G0XFbXNn;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gYnQr9al;
+	arc=none smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B888606A32C;
-	Mon, 19 Oct 2026 17:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F7E606A328
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 19:25:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 57F7E606A328
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=G0XFbXNn
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1CC1F000C6;
-	Mon, 19 Oct 2026 17:38:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792431521;
-	bh=7ykaxJta1Hj+twICobH251gv/WlRqnsBOHcpwmRY0M0=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=G0XFbXNn6X4sA6mDTzmJUaHkacexmEeDXQUyLNgEhNyiIvcrOO2BGfswJm5pzhpDJ
-	 Bbspgt55bDVGZUfXb5CtWa8bPcPexpSZdtroj5JH5ZzzykHEC3KbsSnhPt+tguvbh2
-	 7qlFz2nKxcvyOBD8Xz1lT2JI8vYS/QnEy3Pt3P90o/Rdu4J+HAutLlFJZyBRgyWGgB
-	 Toj1pMdpj5HW+SEfph0Hf5VChzH6ad8RCE6yy3yMUesxX431naK/NElYcrH6p8zZQQ
-	 ZbDHcdSN2zfPhoQNag6Gzr0dDEaagtFbLYftFL/rGdQNSlMzA7sOvffixAs0XVYPDW
-	 E+2KBE26briNA==
-Subject: Re: [PATCH net-next v8 5/5] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- bpf@vger.kernel.org
-Date: Mon, 19 Oct 2026 17:38:40 +0000
-Message-ID: <179243152020.3135.588086716583719127@kernel.org>
-In-Reply-To: <20261018-stmmac-rx-mb-v8-5-5f58c0b25849@oss.qualcomm.com>
-References: <20261018-stmmac-rx-mb-v8-5-5f58c0b25849@oss.qualcomm.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gYnQr9al
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ab4178ee33so1893844a91.3
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 12:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792437954; x=1793042754; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Gl+QuejblNFV3uEkIxOgOsS4jX0GlJs/ROUNx5zrPn4=;
+        b=gYnQr9alcw+J9ojP/SdeDo47GsqS10jIYNdvilfzW9uVyvOFI724RKT1A9EsWtQ3bQ
+         OgXWmiBiwDCiu/gWReT46D/Rk9VHkHgUrKHIxf0YStCBAljm0BIHRVvWPUYzKX908eUt
+         iCuSA6FUQ3dcvqmycwRt4gjLfOklT6OAGxuKl5xqbY72BqpfGdxLXGUQIuf+OJ5g7fu5
+         g/W82eNWWUviKy78jCy3BJRjKeND6NWnWoTU9lAqh7g7bOgPK8d9buk+6bjXfb3EBJwv
+         ck0cedd6WPJoOke0xDGXsTBf/906L8PkyCNeMlUttfM6CF3DCo/JPd8cengfq/sPfTmR
+         TcnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792437954; x=1793042754;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Gl+QuejblNFV3uEkIxOgOsS4jX0GlJs/ROUNx5zrPn4=;
+        b=DJklBYFW/ZSNz/6MfLFkP8RSBpEdxXKxmaY2HLzbJs2sq9WfQDX/r9/5PgCU6KbUSS
+         RCPWFtKivtc8pUgeD9KA2OX5vBj2I2kt6MvnkeNJlAdDfSDyJTO8UHx0R5N8TbVNhENS
+         9ndoPp1XE4/PlRWfw3qWBNkEgSmOh9oMc4iO+9d788kP87mzFminXN3FJAE0T1QEdJ/L
+         ifDJY5pdF/6JZPXdQoCjeLOFwkxb6llkjfEkuzlQm4CLqqAZTrW8Li/Y6HhFObHQbds4
+         0bbA0yMjFA/lpnmUej72CwnTMnK9HGZOjKaDvcWkicw9zz/m2ZsCggCvGdh3KUz4bOZy
+         pRJA==
+X-Forwarded-Encrypted: i=1; AKwUvBwTtCnb94+HhVcuLnm4xOa3YhfMz0D0xQNgfnNA1k7yTLT7/u0FgI96PrckOMrmqqHGJkY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKf34FfxfGjB4B8wI6j7sr16rB001FK2j26YYnm5A6QJ6RVFoZC
+	GyJZxroVmVZBoEDU2I/9HXYhZBKaa2UMG/Dzyt73gSYJS27OTDMKSCZy
+X-Gm-Gg: AYBFou2fZAXPsxycPvF/Z9f+8YFU9un+ozUyeeLkbQNqNFv0e3dv3wW43hlRxSfht7c
+	yuo1yIYH3Pf7kJ55n7J+/aY5DQ1WCpfbF0Gt6+C8s7yJTRRTR/jSWiSA8OcPby7cVVX8eOc07kL
+	ZcTS8kAYHLV4LCV424yb98rifI8/axfSWDcZh5692FBG+h13wisIeVb7foWC2cNFfHV35Qu2gRw
+	AD3ToA74fuXA2EThp7PzZ/mF60rqEOS9FhhQoI0As1oUJ5FAkDUGHPi6U188R+cM2xN0HawR8Iu
+	mYCaPkgKW43pkyKYqDlbd4bZDRr96kVLNCzcAufv5nOK8Kk6V2aJx3VdMvk4QlhpbFykHOEUOGQ
+	DKUaS99ag5pxiyvk27Zm6T13tzQWeKYRu5EUr+VdxAqt8LObVCAXZ9ZElHuz6dRhFek8o8Ewgd0
+	1Vpz1hKTJUKPH5Av+jh18ljxnaMH4Y+ZUNbddmtlRcBtQ0xfOhJwEuFKzDScS0GXfa/AnSqZkfy
+	LICtKL3ohjfSMRLajxJa40xVypk8iU8E0dIkSJb0zh8XlQNzvU8p3hBJVO4hlA75o2moTniz0kq
+	K94=
+X-Received: by 2002:a17:90b:280e:b0:3ab:be66:ddbf with SMTP id 98e67ed59e1d1-3acef58d853mr6802869a91.54.1792437953584;
+        Mon, 19 Oct 2026 12:25:53 -0700 (PDT)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acd05c9255sm8977238a91.2.2026.10.19.12.25.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Oct 2026 12:25:52 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 Oct 2026 19:25:50 +0000
+Message-Id: <DM9282PWYQD9.21LDVIJ8824AL@gmail.com>
+Cc: "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S . Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
+ <sdf@fomichev.me>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Kuniyuki Iwashima" <kuniyu@google.com>, "Hangbin Liu"
+ <liuhangbin@gmail.com>, "Martin Karsten" <mkarsten@uwaterloo.ca>, "Masashi
+ Honma" <masashi.honma@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add syscall common attrs support
+ for link_create
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20261019153628.15912-2-leon.hwang@linux.dev>
+References: <20261019153628.15912-1-leon.hwang@linux.dev> <20261019153628.15912-2-leon.hwang@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,270 +119,95 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+On Mon, Oct 19, 2026 at 08:36 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+> +	ret = bpf_log_attr_report_size(&attr_log, 0);
+> +	if (ret)
+> +		goto put_prog;
 
-Critical: 0 · High: 0 (1) · Medium: 2 (1) · Low: 1
+can we drop bpf_log_attr_report_size() ?
+Nothing is logged when the attach succeeds, so there is no size to
+report, and libbpf zeroes attr_common, so log_true_size reads 0 anyway.
+Finalizing only when ret < 0 already keeps -EFAULT away from a live link.
+Then no need for the 2nd write, the log.c refactoring and the put_prog
+label.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+Something like this (compile tested only):
 
-- [Medium] The patch fixes a DMA under-sync on the XDP drop path but does
-  not say so.
-- [Medium] Fragment truesize is undercounted when num_pages is not a
-  power of two.
-- [Low] The patch advertises NETDEV_XDP_ACT_RX_SG (line 8189) and now
-  runs frags-aware programs on multi-buffer xdp_buffs…
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 849bc91..61d100e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5856,8 +5856,11 @@ err_put:
+ }
 
-Pre-existing issues:
-- [High] XDP_TX completions are recycled into the RX page_pool's lockless
-  alloc cache from a different NAPI context.
-- [Medium] The AF_XDP zero-copy XDP_PASS path reports XDP metadata whose
-  bytes it never copies.
+ #define BPF_LINK_CREATE_LAST_FIELD link_create.uprobe_multi.path_fd
+-static int link_create(union bpf_attr *attr, bpfptr_t uattr)
++static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
++		       bpfptr_t uattr_common, u32 size_common)
+ {
++	struct bpf_verifier_log *log;
++	struct bpf_log_attr attr_log;
+ 	struct bpf_prog *prog;
+ 	int ret;
 
---
+@@ -5867,14 +5870,24 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+ 	if (attr->link_create.attach_type == BPF_STRUCT_OPS)
+ 		return bpf_struct_ops_link_create(attr);
 
-net: stmmac: rework stmmac_rx to support XDP rx multi-buff
++	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
++	if (IS_ERR(log))
++		return PTR_ERR(log);
++
+ 	prog = bpf_prog_get(attr->link_create.prog_fd);
+-	if (IS_ERR(prog))
+-		return PTR_ERR(prog);
++	if (IS_ERR(prog)) {
++		bpf_log(log, "Invalid prog_fd.\n");
++		ret = PTR_ERR(prog);
++		prog = NULL;
++		goto out;
++	}
 
-This reworks stmmac_rx() to collect every descriptor of a frame in an
-xdp_buff, so the XDP program runs on the whole frame, including any
-fragments. The skb is then built from the xdp_buff with napi_build_skb()
-and xdp_update_skb_frags_info(). The in-progress xdp_buff is saved in
-rx_q->state across NAPI polls, and NETDEV_XDP_ACT_RX_SG is advertised.
+ 	ret = bpf_prog_attach_check_attach_type(prog,
+ 						attr->link_create.attach_type);
+-	if (ret)
++	if (ret) {
++		bpf_log(log, "Invalid attach_type.\n");
+ 		goto out;
++	}
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 04dc6dcaa435d..e9c61524fc740 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+@@ -5953,12 +5966,19 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+ 			ret = bpf_uprobe_multi_link_attach(attr, prog);
+ 		break;
+ 	default:
++		bpf_log(log, "Invalid prog type.\n");
+ 		ret = -EINVAL;
+ 	}
 
-[ ... ]
+ out:
+-	if (ret < 0)
+-		bpf_prog_put(prog);
++	if (ret < 0) {
++		int err = bpf_log_attr_finalize(&attr_log, log);
++
++		ret = err ? err : ret;
++		if (prog)
++			bpf_prog_put(prog);
++	}
++	kfree(log);
+ 	return ret;
+ }
 
-> @@ -5806,6 +5812,119 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
+@@ -6530,7 +6550,7 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+ 		err = bpf_map_do_batch(&attr, uattr.user, BPF_MAP_DELETE_BATCH);
+ 		break;
+ 	case BPF_LINK_CREATE:
+-		err = link_create(&attr, uattr);
++		err = link_create(&attr, uattr, &attr_common, uattr_common, size_common);
+ 		break;
+ 	case BPF_LINK_UPDATE:
+ 		err = link_update(&attr);
 
-[ ... ]
-
-> +static struct sk_buff *stmmac_build_skb(struct xdp_buff *xdp)
-> +{
-> +	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-> +	u32 metasize = xdp->data - xdp->data_meta;
-
-[ ... ]
-
-> +	skb_mark_for_recycle(skb);
-> +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> +	skb_put(skb, xdp->data_end - xdp->data);
-> +	if (metasize)
-> +		skb_metadata_set(skb, metasize);
-
-[Severity: Medium]
-This isn't a bug introduced by this patch. Now that the page_pool path
-keeps the metadata, though, the AF_XDP zero-copy XDP_PASS path no longer
-matches it. Does stmmac_construct_skb_zc() pass stale headroom bytes to
-TC/BPF as metadata?
-
-stmmac_construct_skb_zc() {
-    ...
-	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
-	if (metasize)
-		skb_metadata_set(skb, metasize);
-    ...
-}
-
-Only [data, data_end) is copied into the new skb, but the metasize bytes
-in front of skb->data are still marked as metadata. A TC/BPF program that
-reads data_meta on frames from stmmac_rx_zc()->stmmac_dispatch_skb_zc()
-would see leftover bytes from the napi_alloc_skb() headroom instead of
-what the XDP program wrote.
-
-Other zero-copy drivers copy metasize + datasize bytes starting at
-xdp->data_meta and then call __skb_pull(skb, metasize). Would the same
-approach work here?
-
-> +
-> +	if (unlikely(xdp_buff_has_frags(xdp)))
-> +		xdp_update_skb_frags_info(skb, num_frags, sinfo->xdp_frags_size,
-> +					  sinfo->xdp_frags_truesize,
-> +					  xdp_buff_get_skb_flags(xdp));
-> +	return skb;
-> +}
-> +
-> +static bool stmmac_build_xdp_frags(struct stmmac_priv *priv,
-> +				   struct stmmac_rx_queue *rx_q,
-> +				   unsigned int len, struct page *page,
-> +				   unsigned int offset,
-> +				   enum dma_data_direction dma_dir,
-> +				   struct xdp_buff *xdp)
-> +{
-> +	dma_addr_t dma_addr = page_pool_get_dma_addr(page) + offset;
-> +
-> +	dma_sync_single_for_cpu(priv->device, dma_addr, len, dma_dir);
-> +	if (!xdp_buff_add_frag(xdp, page_to_netmem(page), offset, len,
-> +			       xdp->frame_sz)) {
-
-[Severity: Medium]
-The commit message says:
-
-  charge fragments the whole page_pool page size (xdp->frame_sz) as
-  truesize instead of the old dma_buf_sz
-
-Is xdp->frame_sz the page_pool page size in every configuration?
-
-frame_sz comes from bufsz = rx_q->napi_skb_frag_size in stmmac_rx(). That
-value is set in __alloc_dma_rx_desc_resources():
-
-	rx_q->napi_skb_frag_size = num_pages * PAGE_SIZE;
-	...
-	pp_params.order = order_base_2(num_pages);
-
-When num_pages is not a power of two, each page_pool buffer is
-PAGE_SIZE << order, which is larger than napi_skb_frag_size. Two examples
-with 4K pages and no XDP:
-
-- dma_buf_sz of 8KiB: num_pages = 3, order 2, so each 16K page is charged
-  as 12K.
-- dma_buf_sz of 16KiB: num_pages = 5, order 3, so each 32K page is charged
-  as 20K.
-
-stmmac_xdp_shrink_tail() subtracts the same xdp->frame_sz. Then
-stmmac_build_skb() adds sinfo->xdp_frags_truesize to skb->truesize
-through xdp_update_skb_frags_info(). As a result, skb->truesize is lower
-than the memory the fragments actually pin.
-
-Could the fragment truesize use PAGE_SIZE << pp_params.order instead? Or
-could num_pages be rounded up to a power of two?
-
-[ ... ]
-
-> @@ -5927,129 +6039,89 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
-
-[ ... ]
-
-> +		pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start;
-> +
-> +		ctx.desc = p;
-> +		ctx.ndesc = np;
-> +
-> +		skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
-> +		/* Due xdp_adjust_tail: DMA sync for_device
-> +		 * cover max len CPU touch
-> +		 */
-> +		sync_len = ctx.xdp.data_end - ctx.xdp.data_hard_start;
-> +		sync_len = max(sync_len, pre_len);
-
-[Severity: Medium]
-The old pre_len and sync_len subtracted buf->page_offset:
-
-	sync_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
-		   buf->page_offset;
-
-The new ones don't. This looks like a separate DMA sync fix, and the
-commit message doesn't mention it.
-
-Commit 88095728511e ("net: stmmac: fix rx Scatter-Gather support") set
-pp_params.offset = 0, and __page_pool_dma_sync_for_device() syncs from
-dma_addr + pool->p.offset. So with the old formula, the XDP_CONSUMED path
-synced [0, L) for an L-byte frame at XDP_PACKET_HEADROOM. The bytes the
-CPU had touched were at [256, 256 + L).
-
-Take a non-coherent platform and an XDP program that writes the packet,
-grows the tail or writes metadata, and then returns XDP_DROP or
-XDP_ABORTED, or fails a redirect. Could that leave dirty cache lines in
-the recycled page? Those lines could later be written back over a frame
-the device has DMA'd into the page.
-
-The new formula looks like the correct one. Stable kernels that picked up
-88095728511e would keep the under-sync. Could this go out as a separate
-net fix with:
-
-Fixes: 88095728511e ("net: stmmac: fix rx Scatter-Gather support")
-
-or at least be described in the commit message?
-
-> +
-> +		/* For Not XDP_PASS verdict */
-> +		if (IS_ERR(skb)) {
-> +			unsigned int xdp_res = -PTR_ERR(skb);
-> +
-> +			if (xdp_res & STMMAC_XDP_CONSUMED) {
-> +				stmmac_xdp_put_buff(rx_q, &ctx.xdp, sync_len,
-> +						    true);
-> +				rx_dropped++;
-> +			} else if (xdp_res & (STMMAC_XDP_TX |
-> +					      STMMAC_XDP_REDIRECT)) {
-> +				xdp_status |= xdp_res;
-> +			}
-
-[Severity: High]
-This is a pre-existing issue, but this patch sends fragment pages down the
-same path. Is it safe for tx_napi to recycle XDP_TX completions directly
-into this RX queue's page_pool?
-
-stmmac_tx_clean() runs from ch->tx_napi and does:
-
-	if (xdpf &&
-	    tx_q->tx_skbuff_dma[entry].buf_type == STMMAC_TXBUF_T_XDP_TX) {
-		xdp_return_frame_rx_napi(xdpf);
-		tx_q->xdpf[entry] = NULL;
-	}
-
-That call ends up here:
-
-xdp_return_frame_rx_napi()
-  __xdp_return(..., napi_direct=true)
-    page_pool_put_full_netmem(pp, netmem, true)
-      page_pool_recycle_in_cache()
-        pool->alloc.cache[pool->alloc.count++] = netmem;
-
-The page_pool belongs to ch->rx_napi, which is a separate napi_struct.
-stmmac_xdp_get_tx_queue() picks the XDP_TX queue by CPU. tx_napi can also
-be scheduled on another CPU by stmmac_tx_timer() or by a per-channel TX
-MSI vector. stmmac does not set pp_params.napi, so page_pool cannot catch
-this.
-
-At the same time, stmmac_rx() on rx_napi uses the same alloc cache. It
-does so through stmmac_rx_refill() and through the new allow_direct=true
-puts in stmmac_xdp_put_buff(), stmmac_build_xdp_frags() and
-stmmac_xdp_shrink_tail().
-
-Can these two contexts race on alloc.count and the cache slots? That
-could lose a page, or cache the same page twice so that it gets handed to
-two RX descriptors.
-
-With multi-buffer frames, xdp_return_frame_rx_napi() now also returns
-every fragment page with napi_direct=true, so more pages go through this
-race.
-
-[ ... ]
-
-> @@ -8106,6 +8186,7 @@ static int __stmmac_dvr_probe(struct device *device,
->  	ndev->hw_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
->  			    NETIF_F_RXCSUM;
->  	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
-> +			     NETDEV_XDP_ACT_RX_SG |
->  			     NETDEV_XDP_ACT_XSK_ZEROCOPY;
-
-[Severity: Low]
-With NETDEV_XDP_ACT_RX_SG advertised, frags-aware programs now see
-multi-buffer frames. However, __alloc_dma_rx_desc_resources() still
-registers the rxq with:
-
-	ret = xdp_rxq_info_reg(&rx_q->xdp_rxq, priv->dev, queue, napi_id);
-
-That leaves frag_size at 0, so bpf_xdp_frags_increase_tail() always
-returns early:
-
-	if (!rxq->frag_size || rxq->frag_size > xdp->frame_sz)
-		return -EOPNOTSUPP;
-
-Is it intended that a positive bpf_xdp_adjust_tail() on a multi-buffer
-stmmac frame always fails, even when the last fragment page has room?
-Other RX_SG drivers such as bnxt behave the same way, so this may just be
-a limitation. Would registering with __xdp_rxq_info_reg() and a real
-frag_size be worth considering?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-stmmac-rx-mb-v8-0-5f58c0b25849%40oss.qualcomm.com
+pw-bot: cr
