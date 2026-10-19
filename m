@@ -1,64 +1,64 @@
-Received: from mail-oa2-f9.google.com (mail-oa2-f9.google.com [74.125.231.73])
+Received: from mail-oo2-f5.google.com (mail-oo2-f5.google.com [74.125.231.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8CE347C6
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:25:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A95449B12
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792380302; cv=none; b=rjnTr7ZmQwUtAjvy9urc46C/Tq0jfjtIyKfKHdWleUgWDPcu7qAxBtKTBPfvZO9m42nvokguI5my8vzF04MqikJybDkPdLYV/+Gkq0MDgPcyHzLof/LOwYNK8y3IXMbf+/yoJKnbSOem5ZRPaU4aZ75lqTypGwXWzhkD+Fh2vOc=
+	t=1792380307; cv=none; b=AsxlrEsPRl0Lf5O1XHziPEFx2c0HphhHnhM5OOazEI5NRA4+se7Io7szWsZ9U9Wu5NVc7urW0N/wcQwo6jBrjgM1Bp3IM3PuFPhgiskAX6geCvgv4Eohr4O9teUF5t3LkxLo7VjG5GZ59cC6TGR4E7IcoTzIwHKNnByRJr2K/E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792380302; c=relaxed/simple;
-	bh=wkNICcps7frzL6g557F0CF4WlqQPE6ujHJptwnsZnhU=;
+	s=arc-20240116; t=1792380307; c=relaxed/simple;
+	bh=MjVlsS67ogCYGtQh0quK89bo1+H9rlJHIjszXdfjJKY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lQ7iAyHq4Y2AtwVv3kjvGevy7h601ae8f+O3g4xCJJ+6McMIi7f/N1NjOQHRuk3FtWoep+1Oqf0XQyKv8zJrwNkDjZBfWkJMtBF4g2j6TlVv5VpGINTbgwrxuNkxTA7TclzuWSgWmRab8X1mJ8G0yTtFaR7xxNYqugV6jLXza0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kJXgiK72; arc=none smtp.client-ip=74.125.231.73
+	 MIME-Version; b=JR6Uo2wDmuDVx7RzB/EjXxyoeVvJL66OC+GZBgy3lBLMVzczT5gY5pJi75YkYNKVn3RbEVg28sCrDLturk69lwn4y0x1Q5kDcAjdkQgzOHdPyDlw27CemRj3viDHzVlTkpiv+5r5lp0W3geosHxjPcT8i1yaEUAktvxvszqwjNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2VLKwJS; arc=none smtp.client-ip=74.125.231.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kJXgiK72"
-Received: by mail-oa2-f9.google.com with SMTP id 586e51a60fabf-4840f0c24bbso984340fac.1
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:25:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2VLKwJS"
+Received: by mail-oo2-f5.google.com with SMTP id 006d021491bc7-703478630a2so1131106eaf.1
+        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792380300; x=1792985100; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792380303; x=1792985103; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LB7CvF1E002yt3vp9WKk4eerqqBc2RjMT2aAVgH3Knk=;
-        b=kJXgiK72ujoeq6un0zojf5HgTtplXMDDrrMi3c8X9Ll74uZ+FRakZwcCtCUD07lVHR
-         7Kcw2s0oiCoqdAEBEbeLiK6g5H6uFZTn2sUWC2gMQZ+Q8Z93ifGF10mUUJz981FpPP/H
-         X96PG8oAFWWrjGA/SAW4pQfEGsFRYhapnnOetnPYQG+3fgJsiklCfudrfojTc4M2t8MB
-         ZNNWGo246Ac5QXTNkOvtGBDD1Ykboq5q1G902RTyJ6ATNoATHnYj7JTpdoL5YeAxTV0/
-         v71CQsufd7yNWLY/Oqdb2Gi93bkwpCIfsubtB0G8DzVZFx257AEm7fmxujs8jXKUTcfe
-         Fgjw==
+        bh=Fa84feS2jAGyKmyjjQIHpyrgjwO+euWJsFjV2K0lZro=;
+        b=O2VLKwJSEwb0C0DGMSsXCd7Yct0MINE19BKGCcjVYxGlmGjBAgPrz0ZLmjYW8Dt+O/
+         RGCSJDzJIcuHJ862tOoa8/T1RgRnPaUcLddfnFSl5RzfS7f7LHGrseRPkcuN0L9XwgsP
+         qvXXTRuL4sf1rQUZaPRToToKRTeFVfLFMX/9Uv7SeAo8uS1Zo6hQeD2J2KJwK22GXDFA
+         kehHyBPjrGdY3EUQveZVCwEHyxtRJURu+0lGEbMfheFpTLZaeEUi5J+ykYiVEVsTzOgM
+         PTN9ZWzcRRzwYDZmBPMajAe4oRNngfYkYn30bSn5SillAuzUdChCeJumIcXVjzrt1XcK
+         AhFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792380300; x=1792985100;
+        d=1e100.net; s=20260707; t=1792380303; x=1792985103;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LB7CvF1E002yt3vp9WKk4eerqqBc2RjMT2aAVgH3Knk=;
-        b=ZNfHYHPPW+yvdNyRQVS9HRHSsb7CTQ8gwv5nGQh4Vqx7gXBZeFaP+GsgNuYGxMKmVg
-         khaUZ+23Hcb6VifMSQDczY1dzDciSksLTlEYFrtZG7oT8xjIVByj8gb0/n7UaAccu9dM
-         Ymmpjw6cseiN+0lsoVGuXI5dAaDHrRibuJnZTelfq5aQbWcSW08XBdETyuO2i2BoxwCi
-         Q3zC/b/+/WilpOkvk4DcLV7GlIlXpqFTwzSqCZtU0dEtHkR0l5opywpvzdLiHUL+EazQ
-         dh0y4oGjQMX9749v/vw2X3B9hDoLnI0J8htv2Y14lc/fuUqOzpoWu/vGriQX6bVIzPZ4
-         LZBA==
-X-Gm-Message-State: AFq9FYKnb9xc4C8ogXsLIhcJK4FlkhVzcKn0DChLGCYyNWiqpqUCv/cU
-	wq4+58Uiueywy3qNlJSMU78ML4Tpi4vs694zD+AFsznPTRX8Lvb/DWvjK54J87d6UWA=
-X-Gm-Gg: AYBFou0qU9yBDZJ65txxh40dZmz1JN2smgdPfnnTUDaMwCrnTMYQIdaeJThrduqzaJ3
-	4o9bbmseg1N232yv5ACyy7nA7HtWE6EWqtMg0jFgDoftiXZeA6C/vPss3ExCAdfjGOPfQV84tKg
-	SsSdt1BtGRvyJzP80fzMkw+AGNOZ6M4naBVrrLGyLH/LhLUUvqvkAfqWev4yMr2513CfkeDYbWw
-	3aQ/FrQ68vDMecbq5myu7Q/DesSBhGU178Bx2Veg38XBH95d+4w7VnQy/CzC+I+acgaMlAOwVOj
-	XsUHAKhNhSSPnACCc6yo7YEbBG3OsrWVPKAiTrL4PvWq659dt1wo4maoH6sqbfwyOOjpktY51sR
-	HIHtHmj40P3GRrzjzLPrZGiIcE7AMmHDMjWRWhh2DxKKI++3nVqIi8pTiz5Kr3q9ltuG2WTt7WY
-	lmMPtjs03P7XUmeLa7+roAPtdxcWBBgccY7zem1tNN/FEgKOv9sFuJj06X6or/upf/B0SmzemL5
-	uCOLXjBhKifTmG0IrJt+e02Zf05ZvVqBu3rq27TtD2mDPJgTCH9E2/ZZutKsdo5JXDphRSPkdBb
-	Cq8XAw==
-X-Received: by 2002:a05:6870:b3e2:b0:49e:45d6:feb0 with SMTP id 586e51a60fabf-4a75789dc38mr5371678fac.20.1792380299715;
-        Sun, 18 Oct 2026 20:24:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:5a::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a73b2dc362sm7904828fac.2.2026.10.18.20.24.56
+        bh=Fa84feS2jAGyKmyjjQIHpyrgjwO+euWJsFjV2K0lZro=;
+        b=RqmGprSoqBDGJLH3dPzcxjEAoBIXye0EZPSIjLHPSkNrnOBLpKuQHw4RmPuoWMef4I
+         G8U6LrnEt0lZWapavLmTtsjiEgMtyaFhSoGCw+m15rb1xLL3ovZQubV4IjEfQyr6SzT5
+         zvob5kdOCJdy8FKi74qWfw4PA1XipGI84t3bXu30nOizbw6/Hj6bsLe8A8p8hqpvCJWA
+         FO6Y2dNbAijc3lu0fiJ6IY37+iEMfuUx8zmzNr3qYq5rIN3GfIdE+xAUjaLBmRMZxHMs
+         gcSCcU5qhllUvQXsot3WQGx5SXLMSV6+z44AIDfyDP5EbTN1nYr76uGrytCxtlcPvtiz
+         g41w==
+X-Gm-Message-State: AFq9FYKmQwS2wupTf0kaZG4u1tkYVkQTYd1A03nMIw7Jf/1LECTjEkEt
+	6uj/gcaKYTd7VZC6iMa/K+ekZxsC3wOZN+I9GHHX1krB4NkTJscPjWViJp8KQmGus74=
+X-Gm-Gg: AYBFou0CPtrAsdPsWdr/a6r45rQvk/1n7x5pAxqNgJeeUGcnuOhaRuNrQeYZcKw3Ok6
+	tSofvoz8ifJeUCWGB919NT5QoLwwYdlL1cypkKSn1A8XUoG9MW5QCQEwZbQHIlVpTtUF0U04KDd
+	Fh9VUC7/sj/jGEIn0GRIUWjGVQIafbzdmV1vO/r9rcrT33TbKKsWWIMHpFAVjZYw5bnvF2t8+6T
+	xiivTUcDBG2Ag9mZaVN7xR+QoF8gtwja+t95CC1p6M+yAJcuB9PuhwSTXW8RFNysHBWXszZH3kQ
+	KqfGdbqqjd6eM5F4jOQXqKYhgt52XMZ9j3+sbx819jaMS9D5lnestQ2WQeRJ/895/0/Z94Gyq8K
+	rdQmGTF/e5mcfQXpGEkwUsDntL+YRKlkqHCLkJLK//QPhaiDYjYFJ8wf5/EA0LGQ26qlCQCS0ms
+	7MP2mZU8lim/jLmG27rL+HWHS9utTR+6iJRggwBGumznO2QEfnZKFpc3lQgB433kXrxPP7K9DTk
+	U3BpqkWoEXQBOLurmNjp8ilTCuCJi7ClnQiywzaIlMIpUjDNZ1dRufpYyauWoIQ7WaCZ6EvKrkp
+	jlf6sg==
+X-Received: by 2002:a05:6820:1ca7:b0:6dd:5306:d1a1 with SMTP id 006d021491bc7-70352297e25mr4862910eaf.3.1792380303557;
+        Sun, 18 Oct 2026 20:25:03 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:40::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8438ce16e37sm8379958a34.13.2026.10.18.20.25.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 20:24:57 -0700 (PDT)
+        Sun, 18 Oct 2026 20:25:01 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -70,9 +70,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 14/16] libbpf: Render the arena type tag with its address space
-Date: Mon, 19 Oct 2026 05:23:54 +0200
-Message-ID: <20261019032401.2302823-15-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 15/16] selftests/bpf: Test the address space rendering of the arena type tag
+Date: Mon, 19 Oct 2026 05:23:55 +0200
+Message-ID: <20261019032401.2302823-16-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261019032401.2302823-1-memxor@gmail.com>
 References: <20261019032401.2302823-1-memxor@gmail.com>
@@ -82,49 +82,84 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1998; h=from:subject; bh=wkNICcps7frzL6g557F0CF4WlqQPE6ujHJptwnsZnhU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr95Pzw9mt9//kahxPy3G71l7NKt9Gv+l841lM8QcjnXZ nFrXUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm4zGb4p9jHUL9ld0lWldHNuYeCDQ rz3neec9cK+v7tWb7p5YjVaxkZ1oaXtFhcr7Gqfh7g2TmtonHlEW3V19/3uanX9nVa8ZnwAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3287; h=from:subject; bh=MjVlsS67ogCYGtQh0quK89bo1+H9rlJHIjszXdfjJKY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr57++pP1HbLSpcduRHELldYmcWTbtP78zlOruODxh/NV a6o7SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMBGx1Qz/a18ue2uy9LXsK03V+dpfXb TUeVP7Mlxrw7ddDCoJXVo1k+Gv0EmRVe+uPJZjL/mk1LPwwc8/3ewFOooZ/LsORPeuebWWCwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A kernel struct member tagged __arena reaches a program built against
-vmlinux.h as a pointer in the kernel address space with the tag as an
-attribute, struct scx_cmask __attribute__((btf_type_tag("arena"))) *cmask,
-so the program casts it to the arena address space before dereferencing
-it, although the verifier already hands it an arena pointer.
-
-The tag denotes a pointer into the BPF arena, address_space(1) to the
-compiler, so render it as such: __attribute__((address_space(1)))
-followed by the tag attribute as before, which keeps the dump faithful
-to the BTF. A program then reads the member as an arena pointer and
-hands it to anything declared with its own __arena without a cast.
-
-Nothing else changes for consumers of the C dump. Skeletons strip the
-modifiers of variable types and never carried the tag. Clang without
-casts between address spaces still accepts the declaration and only a
-program touching such a member would need a cast there, as it did for
-every arena pointer before. GCC has no address spaces for BPF and warns,
-under -Wattributes, that it ignores the attribute, which the selftests
-build already silences.
+Add an arena-tagged pointer member to the type tag dump test and expect
+the address space attribute in front of the tag. The struct_ops test
+that mirrors the previous rendering now describes it as the output of
+an older libbpf.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/btf_dump.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../testing/selftests/bpf/prog_tests/btf_dump.c  | 16 +++++++++++++---
+ .../bpf/progs/struct_ops_arena_member_render.c   |  8 ++++----
+ 2 files changed, 17 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 996e61b5f11f..7dedd3975c39 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1595,6 +1595,9 @@ static void btf_dump_emit_type_chain(struct btf_dump *d,
- 			name = btf_name_of(d, t->name_off);
- 			if (btf_kflag(t))
- 				btf_dump_printf(d, " __attribute__((%s))", name);
-+			else if (strcmp(name, "arena") == 0)
-+				/* the tag denotes a pointer into the BPF arena address space */
-+				btf_dump_printf(d, " __attribute__((address_space(1))) __attribute__((btf_type_tag(\"arena\")))");
- 			else
- 				btf_dump_printf(d, " __attribute__((btf_type_tag(\"%s\")))", name);
- 			break;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index 17fa44cb9c91..35f214e254da 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -604,8 +604,10 @@ static void test_btf_dump_type_tags(void)
+ 	 * struct s {
+ 	 *   void __attribute__((btf_type_tag(\"void_tag\"))) *p1;
+ 	 *   void __attribute__((void_attr)) *p2;
++	 *   void __arena *p3;
+ 	 * };
+ 	 *
++	 * The arena tag is rendered with the address space it denotes.
+ 	 */
+ 
+ 	id = btf__add_type_tag(btf, "void_tag", 0);
+@@ -618,17 +620,25 @@ static void test_btf_dump_type_tags(void)
+ 	id = btf__add_ptr(btf, id);
+ 	ASSERT_EQ(id, 4, "void_ptr_id2");
+ 
+-	id = btf__add_struct(btf, "s", 8);
+-	ASSERT_EQ(id, 5, "struct_id");
++	id = btf__add_type_tag(btf, "arena", 0);
++	ASSERT_EQ(id, 5, "arena_tag_id");
++	id = btf__add_ptr(btf, id);
++	ASSERT_EQ(id, 6, "void_ptr_id3");
++
++	id = btf__add_struct(btf, "s", 24);
++	ASSERT_EQ(id, 7, "struct_id");
+ 	err = btf__add_field(btf, "p1", 2, 0, 0);
+ 	ASSERT_OK(err, "field_ok1");
+-	err = btf__add_field(btf, "p2", 4, 0, 0);
++	err = btf__add_field(btf, "p2", 4, 64, 0);
+ 	ASSERT_OK(err, "field_ok2");
++	err = btf__add_field(btf, "p3", 6, 128, 0);
++	ASSERT_OK(err, "field_ok3");
+ 
+ 	test_ctx__dump_and_compare(&t,
+ "struct s {\n"
+ "	void __attribute__((btf_type_tag(\"void_tag\"))) *p1;\n"
+ "	void __attribute__((void_attr)) *p2;\n"
++"	void __attribute__((address_space(1))) __attribute__((btf_type_tag(\"arena\"))) *p3;\n"
+ "};\n\n", "dump_and_compare");
+ 
+ 	test_ctx__free(&t);
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
+index 23fc2b927793..09b4c740bdca 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
+@@ -11,10 +11,10 @@
+ char _license[] SEC("license") = "GPL";
+ 
+ /*
+- * The module types as vmlinux.h renders them: the tag is an attribute on a
+- * pointer in the kernel address space, so the program has to cast the member
+- * to the arena address space before using it. That is what a program built
+- * against vmlinux.h sees for a kernel struct with an __arena member.
++ * The module types as a vmlinux.h generated by a libbpf that does not render
++ * the arena tag with its address space shows them: an attribute on a pointer
++ * in the kernel address space, so the program has to cast the member to the
++ * arena address space before using it.
+  */
+ #define __arena_tag	__attribute__((btf_type_tag("arena")))
+ #define __nullable_tag	__attribute__((btf_type_tag("nullable")))
 -- 
 2.53.0-Meta
 
