@@ -1,80 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1792440673;
-	b=R1kmW/IsTRGTt2XYziI8X3DIfpO7vNOUDDRi26Th+0N+2NCv8huuIcMriEIFediRlfUR
-	 1q7nvaepht4lIc1DprpAEn3Xk3nKB1UqTmOMJc4FxfrYV+jKtcOOFmlqAW0bGBeJaY5EW
-	 A2ay4zyWl66UJA8BmKioOGyC37/oAUtwp3KAJ6N+krkGGUBm0S7WS5ktqN+a7Ype8CzFh
-	 KxM9wRLuo2q0+oUX41E18bHdKc2iQ0AdSR3M7zOOV57rWUjXZHJZEnPDEfAlmxjEd0M37
-	 5kwYl5SfQ/o00/urdISctvo99qPXBbAeorI40XuUn1N1CVv6kdpDs+H3qUZ0LryrIPA==
+	b=InoADl1y1F/wQy4nBNaO0jm4Z+xoo8KW30dFv/HEq5C3Mc0ZOpc2OZ1L20Wvr9HJAqoT
+	 fRyPq1h1Ioy3uSh3zgMFXjsmBANYvQfIcHFj7+3XkFxQLE+RTFwR/zpv2pYV0hvkQcw1b
+	 t0/kW7onnY3BwZUXKOp5u/FIzhSXv1S/BJdVtsJ2ffe4LfHXBVRVGfMAMg1nPBQKve2iQ
+	 oKnMWewDH2DnNBKbTTvxiIcdk1YbpXb6jxeuQEuQwiWDexTQbreJ8xGRuYwx841Ba9X61
+	 WsmdxC8xgsopHHWN9CkkyTNDertGG4qfQ/rEmaZCcXAjvDyu+UGgrBOwryoa3ZxNgNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792440673;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=zEo7Iqpg+YERrcbhcTHgvOyPbI2nEpYXLlomySpOh9I=;
-	b=LghERpcwEWGaCMwZpaiwgfGBwITJeJP/A6FXIv1Mio1n1FflVRu9PSY5y4qKbP9w0LS6
-	 WtCNGnVVk+9DviPLi73MgwmKi0N3oL+kzZbt48x0OskGV2E8wpkdz3NJSMSexvh05pXAS
-	 NCU90tSiYLw54yCz6T/MtgQveY+kKu97WQqLSbhut1FVV/eQEfepM340az8kNGb/yd3h4
-	 6Wv+DDpCRQ0+iQJw1HwtQ8Pdd+elQP4p07qRhXo7nsd/yCe7FMRs/DHTRULeIsnM1KoiG
-	 P8jdDk9ziY7Bl9nl+sGpr9sGABZTBNIFkywa5cBo39G8+peu0U5R0aQRqD15jwC+sig==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=gOK8sZ0DiOEL3CePk4GSHDXsosMeaQXN6LZjB328OjE=;
+	b=rBwDjZZXhfDCLQIPOfZwGnfLEbHnq7WzZu7cLyyHVa6OtRp6U8e8pD5E8DJzqMVac/BB
+	 xXh1Iwjo5Q+4sseZm9XyjALItibo8vD3rIV0tmS3FMBMK+KdUCKzmWhTxtT/NloMTqM+2
+	 J2Pn74VZ6Jg+f9HnDzHAKfWp5CXL+zh8v2dFOrh7zWUwU4a/eLu29UKGpV3hjufiQrsYw
+	 ErCI80W042z5d0G41ANKbfuEkOs6KWuxcbyla7oW/qm/q7ebwayD9c5UNXvEB933shZ+b
+	 Vj+E4AOiBAg5P+3ENoQJ9xB9gL9IT27wWmtqMPqTB/+78fOyfcAiyPAWDDg/D1/W4kw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=jQvHEqAk;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	dkim=pass header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=SMgiEGak;
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32979606A32C
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 20:11:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 32979606A32C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220B3606A327
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 20:11:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 220B3606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=jQvHEqAk
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e5fb79ce82so13300255ad.0
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:11:11 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=SMgiEGak
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e7e742a2c7so362085ad.0
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792440671; x=1793045471; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zEo7Iqpg+YERrcbhcTHgvOyPbI2nEpYXLlomySpOh9I=;
-        b=jQvHEqAkKtkc6Zop9QT31InpqMiws7c4dXlN6PW65LtE7M+vId3v0VIuiM6J2AWZzk
-         hPrru6ZEQykU7uB71DV7SE3HvR6eWyF0jubYL2eOaXAo1eMb9YTVJZim853H+39YIQRF
-         CaVxiwzr1sWUUKM9H3FFvaWNzh7o5h/UY8fWhcAmDdEYcmjMJ2G7ua08hTq/lh2Cyesb
-         6UaQVLdfvtlrVIEiB6Rpv8pe/d69AekiICBAkS0+jq9mWgL085GgJPQP1v2qQU9m+Brd
-         MbNj6dMUIuQV3etjaIpsrreODEKrdyara8gvpa1KJN/qhce4R9ls6RG4GJN8vNCc3b/0
-         lBzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792440671; x=1793045471;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792440672; x=1793045472; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zEo7Iqpg+YERrcbhcTHgvOyPbI2nEpYXLlomySpOh9I=;
-        b=mh3yseWMgZr+ArGCr0wSWFohRWveSDt920Sin0BScP4jdL8PqWKmX+M3cXTGJ8G24L
-         0QxvjQKxUXvK/bl4Eg3LjbDDiuf+Ktrpbzv/dQ8L9HVV+66FsT70+49nyYr3e8uZbsss
-         bkyhtJUtNP1jVTXrt77NLXMRqg5qfYKrl8DXKeRcOaIZQ/dHJ9CQ9n6pJHls2OVukIvr
-         C13HiPScAFGulaoek7zZYLFNIsCrwTUgzaAnuVxeodpGP16n6/uAUN0HMWhd49F+eAfO
-         KIlcJ2iWHets/RWng8rACPeZq1uXVGrf32uc+smc8EXJui6QVIYk3C3/vaIoULfYnFsd
-         EjuA==
-X-Gm-Message-State: AFq9FYJHaI//kk6j6WSlTM/PPYVLYZBWHGXS+SCyzQwG0YYcWC/6/m4T
-	30FfA3H9dF3M6C+/mapRlqxiUzTbJRqPNwd4vgHYW+RuLtgGqcngZQyXQYqjlSd0vHPCDmjmPNo
-	71PkEnZA=
-X-Gm-Gg: AYBFou1/G+ZSDdVq0Vx8dj458yGFrBtHJXRsKrU0GfVBiVkTMwYdd+s8/1nBpV03xmi
-	RwzU6uWgoAUO23or2abWPFwW95oDAuP5R+SjKWUxHXiKM1ve5z4YEo9DrZNpq1+IiwnEvQEcdaS
-	BzLVIeMc76ksughn/SQpmvaU9UsSAipGPw2DdQ6x5/rz0ARCUFPpfYXt5XhseRssDHU+SInTt0G
-	WHnuA05AeI8SbGRhkGkN8putKaTMyo1pZc/v5S29JbirWs25I8e1A9n62xus3JLaCh+Bn+QOGRC
-	iA9JMHvSVzZ7GskHzHn1D8pzOD6wrLefMfGqKWLVi7Ve981S51zJE5S4HNPDcEmzD8L805szNAp
-	XPiS0PG5ZqLbA+ktkont3AyH735TrA0NXJri5aFxECP4VTaY2PWvU2UVDcHnWbgc7bo+V2LyKvO
-	wnt8ZoDCusfqzEK8PpQ5xcxYb4TV+SWf+osbTEmC44RnJz5gNivxanO88aXkb5Fd3oFCD/J0YPy
-	jo70mbwv0q5BNvgZEd+wFCjnXek41F5+gpM
-X-Received: by 2002:a17:903:41ce:b0:2e9:5829:9b40 with SMTP id d9443c01a7336-2e9a68d969emr74780595ad.9.1792440671136;
-        Mon, 19 Oct 2026 13:11:11 -0700 (PDT)
+        bh=gOK8sZ0DiOEL3CePk4GSHDXsosMeaQXN6LZjB328OjE=;
+        b=SMgiEGakbvkjM6ZZFTbRmVaUvTon7wSCXYtqo8SsMx9ylrmM0EfFYoO6z1y8lHbzNH
+         C6Yj7OHR00GL/oB04M62KHO+sYMZD48cmlp/Jnv+Qb/D9AxpLExaaoRLuL87p0lHpyu0
+         BYIwpVm5xnWb7CikhpMf9NSGkkv8BLJOSKzTIUzKGmiAM1nqrEizaFqtGnXFp529CXBe
+         fNnyApt2Hv2dhtgmMEy7nrDt7v5RVD9irstDxPrXTFYvEEJWifI1GdTcmfj6dKxeqpFs
+         CW5Aw8p8nk9eZTlyBds6oC9P/UosFL+i0zmwgkZh3NMS3Z0U7SNfdDDc4GdKgIrvZXhE
+         elhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792440672; x=1793045472;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gOK8sZ0DiOEL3CePk4GSHDXsosMeaQXN6LZjB328OjE=;
+        b=ixZSn4ipQlagNfxSBpbhezqks/Ix3w+td8rhbTBhKw40LdL2ABptFxsILSI8J/99PL
+         efu5i/P7MdeIAqYpWmAyRERREnLmQVE1n3V6ZxZfnCaRJ3vd6w8x7pQ2jg+bXd0w8u1F
+         60AVSE3PyG1WG5Z7DpeOjKx/Yg4+r45TEvfmkLTnpbcBunuKIxQkkr1X4qghXhWxTMZt
+         V5qshRdimqNsLyVxkVsw701CHBuHRCoqKj5TgT6t2pX5LEXt4Pto044Vve3La4yb9xMo
+         CVPHPucdps6wlbgnM/ERFYW4AknTXbe2U8T753Gi6eNrWDQ0RilV/kXUN2HV15LU2R6/
+         yQ5g==
+X-Gm-Message-State: AFq9FYJPdVzpcbzljNAwbM9cdACSEuUdl42wZJg6CdrWQSwxeKZuZIlK
+	+ulS1+ntX+GvWjLvM/pHuMjDs3fyD3VJF9bEMMoyF8t1qqVxYNv0VI9P2tuEqJm6TR4ggHNZ4tR
+	shhqiQIg=
+X-Gm-Gg: AYBFou2zHxDPHCL6cA1vtJWj5W/jvSQoRztX/Scy+Dq3iSrDVf1uqtcxfS2oHXgC2jn
+	/l+LCBBYQLBEb5A0GmG2LlR1Kgaca6daK1gK/11PoBnqz8ZFhdpBCBajNS5Bj/UIpyCGJ0xDcmF
+	BWElUqnqodjrlC/JEtQzvbrg2yvjoctKziuqh5ZJsYihYgDe6GLpRNXg5bvfjyMz/aQB/Fmo/yQ
+	j0uCOQFLGQfuSUO7H7YeQDMCVHXK8uHL59a6Bjoef3bRQTd0vjPYuz/E4HOWUOKVge08+Oy/3NB
+	Q2Yh+y1vKKzNMMJjLafrHMPj8ZuczhdYtYC0c/1wVj3xc5qBuq912+8jq4hFadVGGwZpnljce/n
+	ZVrMiZTEU0MtIojlEGWGnwX46Ppy3sDo/409rKkJGfnE6usb9tn6IQM+Vd7B3oQWmxMYhaODURS
+	90eAqkuP1IjuXdZzlXFR9NbsOBwDT9G1n3pLU1AfVzbZ8h2hGHtomPi6+RGJW5MQvRRgphx52If
+	7/MUlr48y8iVeJKwqZGAY1Bs02BPkHsG7KYPRnsaDOE4mELw3RR9LnVLilXyb0jKjDTBCJ4wWHt
+	pbQtmZcLc+xDZPnHtQ==
+X-Received: by 2002:a17:902:7b89:b0:2e9:6333:fba8 with SMTP id d9443c01a7336-2ea1d7195e7mr849205ad.16.1792440672357;
+        Mon, 19 Oct 2026 13:11:12 -0700 (PDT)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea151818f0sm5102585ad.65.2026.10.19.13.11.10
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea151818f0sm5102585ad.65.2026.10.19.13.11.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 13:11:10 -0700 (PDT)
+        Mon, 19 Oct 2026 13:11:11 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -82,12 +85,13 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf-next v6 0/3] bpf: Fix arena memory incoherence
-Date: Mon, 19 Oct 2026 20:11:05 +0000
-Message-ID: <20261019201108.4552-1-emil@etsalapatis.com>
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v6 1/3] bpf: Revalidate faulted arena pages before installing user mappings
+Date: Mon, 19 Oct 2026 20:11:06 +0000
+Message-ID: <20261019201108.4552-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20261019201108.4552-1-emil@etsalapatis.com>
+References: <20261019201108.4552-1-emil@etsalapatis.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,131 +103,61 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Arena memory is tracked in two places: the range tree, which records
-which addresses are allocated, and the kernel and user page tables. The
-two are updated under different locks, and that leaves two races:
+A user fault on an arena pins the page that the kernel arena maps,
+drops the arena spinlock and returns the page to the core fault code,
+which then locks the folio and installs the user PTE. A concurrent
+free can clear the kernel mapping in that window. The page reference
+prevents a use-after-free, but the fault can still install a user PTE
+for a page the arena has already released. User space and BPF programs
+then see different memory at the same arena offset.
 
-- Since b8467290edab ("bpf: arena: make arena kfuncs any context safe"),
-  a free releases its range before the kernel TLB flush and the user zap
-  complete. A concurrent allocation can then write through stale
-  translations into pages that are about to be freed.
+Close the window from the fault side. Lock the page, recheck that the
+kernel mapping still points to it, and return it with VM_FAULT_LOCKED so
+that it stays locked until the core fault code has installed the user
+PTE. If a free removed the page, drop it and return VM_FAULT_NOPAGE so
+that the fault starts over. Return VM_FAULT_HWPOISON for a poisoned
+page.
 
-- A user fault takes a reference to the page and installs the user PTE
-  after dropping the arena lock. A free that runs in between leaves user
-  space mapping a page that the arena has already released.
+This change alone does not close the race, because the free path does
+not yet wait for the page lock. The following change makes frees wait
+for in-flight faults before zapping user mappings.
 
-In both cases BPF programs and user space can see different pages at the
-same arena address.
-
-- A free keeps its range allocated until the TLB flush and the user zap
-  are complete, and only then releases it with range_tree_set(). User
-  faults on the range get SIGBUS until then. Frees serialize on
-  zap_mutex.
-
-- A user fault pins the page, locks its folio, and revalidates the
-  kernel mapping before installing the user PTE, the way filemap_fault()
-  synchronizes with truncate. The free waits for the folio lock of every
-  page it removed before it zaps user mappings.
-
-Patches 1 and 2 fix the two races. Patch 3 adds selftests.
-
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>
+---
+ kernel/bpf/arena.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-v5 -> v6 (https://lore.kernel.org/bpf/20261016193703.9203-1-emil@etsalapatis.com/)
-
-- Return the locked page from arena_vm_fault() with VM_FAULT_LOCKED
-  instead of installing the user PTE there with finish_fault(). The
-  fault checks PageHWPoison() before it returns the page. (Alexei)
-- Give faults on a range that is being freed the same SIGBUS as faults
-  on a reserved range. Drop the record of the range being freed and the
-  fault-side wait. (Alexei)
-- Drop the trylock and deferral scheme. Frees serialize on zap_mutex and
-  zap user mappings with zap_pages(), which takes mmap_read_lock() of
-  each mapping process as in mainline. Keep the single-page zap
-  shortcut. Sleepable frees are deferred only when the arena spinlock
-  cannot be taken, and the worker retries such a free in place instead
-  of requeueing itself. (Alexei)
-- Drop v5 patch 1. The worker no longer requeues itself, so the
-  flush_work() in arena_map_free() waits for all of its work. (Alexei)
-- Drop v5 patch 4, which retried faults when the arena lock timed out.
-  (Alexei)
-- Drop the immediate release of ranges without kernel PTEs; they go
-  through the regular free path.
-- Selftests: map the page into user space before the paused free, and
-  let the fault_free_realloc reader skip reads that raise SIGBUS.
-
-v4 -> v5 (https://lore.kernel.org/bpf/20261014233442.8392-1-emil@etsalapatis.com/)
-
-- Drop the third range-tree state and the is_range_tree_set() change
-  (v4 patches 4 and 5). A free keeps its range allocated until the TLB
-  flush and the user zap complete, then releases it with
-  range_tree_set(). range_tree_clear() only allocates when the whole
-  range is free, and then there is nothing to free. (Alexei)
-- Drop the per-arena mapping, page->mapping, the mapping-tree zap and
-  the new bpf_map_ops callback (v4 patches 1 and 2). (Alexei)
-- Replace opref (v4 patch 7) with the folio lock. A fault rechecks the
-  kernel PTE with the folio locked and installs the user PTE itself with
-  finish_fault(), and a free waits for the folio lock of each page it
-  removed before zapping (new patch 2). (Alexei)
-- Give faults on a reserved range the scratch_page error. Faults on the
-  range being freed sleep until the free releases it, instead of
-  spinning on VM_FAULT_RETRY. (Alexei)
-- Trylock arena->lock and the mmap read lock of every process that maps
-  the arena before retiring a range, and defer the free if one is
-  contended. The worker waits for the contended lock instead of
-  requeueing itself. The deferred span, allocated with
-  __GFP_RETRY_MAYFAIL when the caller can sleep, is the only allocation
-  before the ptes are cleared. (Alexei)
-- Release a range without kernel ptes, such as a reserved one, right
-  away without arena->lock or mmap_lock, so freeing and reallocating a
-  reserved range is never deferred in sleepable context.
-- Retry faults when the arena lock times out, keeping SIGBUS for
-  -EDEADLK (new patch 4).
-- Selftests: rename the subtests, and pause frees in zap_vma_range(),
-  which arm64 can trace, instead of flush_tlb_kernel_range().
-
-v3 -> v4 (https://lore.kernel.org/bpf/20260923191125.5311-1-emil@etsalapatis.com/)
-
-- Add per-arena anonymous mappings and associate pages with them
-- Return VM_FAULT_LOCKED and let generic MM install user PTEs; wait
-  for locked fault pages before TLB flushing and zapping (Alexei).
-- Add mutual exclusion between arena free and fault operations to
-  prevent incoherency.
-- Return VM_FAULT_NOPAGE for non-retryable GUP faults when progress is
-  impossible.
-- Stop and drain self-requeueing deferred frees before map teardown.
-- Track ownership of unavailable ranges independently of free progress
-  and retry worker reservations on -ENOMEM without starting teardown.
-- Make arena free span state machine explicit.
-
-v2 -> v3 (https://lore.kernel.org/bpf/20260923061425.7045-1-emil@etsalapatis.com/)
-
-- Rebase on bpf-next and resolve conflicts
-- Fold in the atomic mark_available range tree operation into initial
-  fix patches
-
-v1 -> v2 (https://lore.kernel.org/bpf/20260902070239.16968-1-emil@etsalapatis.com/)
-
-- Use __range_iter_next() in is_range_tree_set() (bot-ci)
-- Move -EAGAIN handling to the patch where the errno is introduced (bot-ci)
-- Add refactoring patch for (Puranjay)
-- Avoid leaking unavailable range tree nodes with atomic mark_available
-  operation()
-- Avoid retries on res spinlock locking for -EDEADLK (Puranjay)
-
-Emil Tsalapatis (3):
-  bpf: Revalidate faulted arena pages before installing user mappings
-  bpf: Fix arena race between page free and alloc leading to incoherency
-  selftests/bpf: Add arena allocation race tests
-
- kernel/bpf/arena.c                            | 177 +++++-----
- .../selftests/bpf/prog_tests/arena_race.c     | 320 ++++++++++++++++++
- .../testing/selftests/bpf/progs/arena_race.c  | 166 +++++++++
- 3 files changed, 575 insertions(+), 88 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_race.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_race.c
-
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 0ff707707da0..5e0e0837980b 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -584,8 +584,22 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+ 	if (new_page)
+ 		free_pages_nolock(new_page, 0);
+-	vmf->page = page;
+-	return 0;
++
++	/*
++	 * A free clears the kernel pte and then takes the page lock before it
++	 * zaps user vma-s. Either it waits for this fault and zaps its pte, or
++	 * the page is gone from here.
++	 */
++	lock_page(page);
++	if (vmalloc_to_page((void *)kaddr) == page && !PageHWPoison(page)) {
++		vmf->page = page;
++		return VM_FAULT_LOCKED;
++	}
++	/* The page was freed meanwhile. Let the fault start over. */
++	fault_ret = PageHWPoison(page) ? VM_FAULT_HWPOISON : VM_FAULT_NOPAGE;
++	unlock_page(page);
++	put_page(page);
++	return fault_ret;
+ 
+ out_err_locked_memcg:
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
 -- 
 2.52.0
 
