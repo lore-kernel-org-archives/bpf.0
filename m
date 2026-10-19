@@ -1,45 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792422954;
-	b=taFf2iG5BG76nxjLhXu3O/TSyKn64sQpEjbIFL7SttYHvE03rfw1SZAUxh41Ss6YrDuP
-	 i3n5zUfOOgHFjMB2abfBuSJ1GVJ0y057HQWOrxwpdUvi4Brk91m1Ywvozo2AF3yBxxGcs
-	 BbHVSF5WVRkWmxBGf07sajMLBaAJPqxBEQkZV2dFefn7ITQZOEcZr67UiDQvqaKMjVxra
-	 DfZInX7RiU5y7jQ+aXaM/hIVqDRlNXTBqK//5zjLZ5oRkkhkNDHbROEAsFFpRhcM4wTSI
-	 iAhcMYuaNVgutnNREscI/3J8JtUfhtaGd3pLmtglu2OuADvZrvTltnsORrO+861Qn2w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792422954;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=4kjU0ZNgKeDuSC3sF79gmSkLBZmEmKeau6g9lhc612o=;
-	b=YGjetZinQx1+g7aNFPIg6voaj4tFQw3hIt8UqmNCnel/jcMlrdY72nXlEk5pAK4avegz
-	 K/m0VgoXLBTUviDNXQp+NPyVH/kiKj8yx5aqRZmerfZQkRtiYh9sZ0KJi82YCntijgsIt
-	 4SmelrLBr9EMte6XYPBYnqsoDM0HgLBVlWENg4vGdrZwzGwQJ2EVnS/z/46vzl8lsMZy5
-	 Khf2fis/CgvnfZry674WzqDnY0kLtEegRD9TSQZOmQqwHGlGWUoKObmdlCRLs+KKT+Ix3
-	 fVkBJxadZi9pzAqiPrisHRJw0XXH5W2fUai+zij/pUzKmA4QpgwKINe87YMZimrpXFg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LoO3f1iJ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A79609DCFF
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 15:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792421716;
+	b=23bMFOgtnP64xFTrYT8fOzfq87Td+tQ2Cq4MZhTDk/n5cy6b5II6e4bmx3E+D1eAs/iJ
+	 h33MExCQ9rKBxLYHBdqcKMBNZLQTNahlQXPD8jLd+428KPBiCeftTA3u+X6pZoKD7thXk
+	 hZaMc6m7r7Wz3Uq8xVr7yE18xUJT6WS8D5TQMdJ8xMJ1wHaBMGXMKE57Ufe99SjXK/1/p
+	 3C7AZii7emSkwPyVkqmus1WNGYLqZi+opCPHZgdVDVVH80rxJTtGgGepjP+PHtHKZEHsy
+	 Ig7gOsQWh2bAuaTBLZeKqGQprcn2O23MPJz2b7WWLvEyy3EDZ9OWkw0L+A+AJH3BhiQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792421716;
+	h=Received:Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=GGQDu3KpUoZE/p1c8fjAoWeH2M3H1CvP9vTMz0v9H0c=;
+	b=cairlKnInfMpwvWqEp0ue+FxJCQOVF/y5AftyvCMXrQPHFAkcdH+2GihOH8KpYDTEgCI
+	 GXVig5TJlusxPNtN1Luc1/Aceea+/ePKJM+8h3a5YRpfT4iXYYD/pYjWI0aFQDMHS8K1l
+	 OUpoZp8Z0GqojnUsfxRBN7Mq8hweJkZwUJq/cZVcuHywaP9pgl+uG/X6ZwD/mMdncdky0
+	 W2pMUTGfymw7UmZpc79KSMKlrnXGa4wUOWnFsdxaII3JviyP9PWOka5W6x6GAFNyNcXq4
+	 0a9OX6HdQwuKh6SoWQ1NDy6i+xf0tZBTklgtxWmiYi00NhT43iWIvsvwX75SIQHcpKw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="J/WZxcGZ";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
+Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28A9D606EFF9;
+	Mon, 19 Oct 2026 14:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LoO3f1iJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA331F000C4;
-	Mon, 19 Oct 2026 15:15:54 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J/WZxcGZ
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01866513FF;
+	Mon, 19 Oct 2026 14:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792421716; cv=none; b=PTmwy4xYTvIrLUb+zxZKAY5M0EDZu7rtd4myqWdCyaEVGS/40CAnhhqs8G+3sjK+KIzekM6ooQ/Z1BlewUcVJwcvRwV+NCd7uMWcFR5FvjoQRmNl+YPuYT7ltcXtZFt3ywlU+WH1ic2BTqq57ayvCIsCPMTqMhptyOfYBRM35yE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792421716; c=relaxed/simple;
+	bh=yeJUiVE364TkyBT9KxNNYFIJYnduRzkfoILBp0l6keM=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MUEzAgiC/7qqJGN9msphzwb4GSSh6Sn5Qmk/4/hZRkGdU5pBfNLtmuTxmS/V+2lpc0QDxLYc0jx/ocQgngmp/vgB2rAK5JLA1YDZkLFumVZNbXJlkiSEKbuQOUGua7T+ePubZM7/+Yu4zcFcrc0Hq0lEwBFLcd40fJmQ3y8kjCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/WZxcGZ; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BE9B1F000C4;
+	Mon, 19 Oct 2026 14:55:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792422954;
-	bh=4kjU0ZNgKeDuSC3sF79gmSkLBZmEmKeau6g9lhc612o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LoO3f1iJxqQv0Cn4CPWroGE6AUuvIXKHnrjjD2MKzk/EhhIxTiG8shnmcRutpd9AY
-	 X52VIRIB7cAPMg8GmxrtlaLF/8AMPEuWBjLCCu2XBKqQIeeTjjkj2wjPSrwFB4s79A
-	 pqNADVdCGb4kZpVdIU2pVwkIuiUnRVqY5A5rEVpN1jqRdwnPxabEXBjhu8RX+OBc1+
-	 PV+muUphjYjSKHiOxy+5oPPByHefje/QxocZB7nNiy3CETTlfsNBwOZwhxtVT1EjCh
-	 UYQMDFezol3TjREGjDeaQpFK0+8C4yxbVA9328sQGYayOx+RceuQIVVm93OFWy2VAF
-	 57BrHKUIkQxHQ==
-Content-Type: multipart/mixed; boundary="===============2455065071638320290=="
+	s=k20260515; t=1792421714;
+	bh=GGQDu3KpUoZE/p1c8fjAoWeH2M3H1CvP9vTMz0v9H0c=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=J/WZxcGZYXXM8Jg9S0jNEMAq/kdsDaU3s4HerB9xq/QAxe9LKLbN8RVpqlzIceM1x
+	 x2pu4hX+wS8EwUUC9/57B7m4jyuM3/4GW5NsqReaV+162rJwDMRLjcZosTdHuZDzu4
+	 psqYno6Rcb6zfHY7yoSfVzEFixfYGLO8/bcrDogPJ6GrCWd5R+VGnyncnWaZ5Qygup
+	 rV2L5WKKgYKo1JDJuStx9JLzDBjWi+xodMTIgXG+x5cE/VU21KCJ2XtrvFvsBd9w7c
+	 M120u8A26Eq/BIVjVjGQ9bCGDogpAdmlZ8TDb1qnMttEn/CirDw3rmyfRR1Zwi7E0Q
+	 s/V3+aBAkHXCA==
+Subject: Re: [PATCH net-next v6 5/5] selftests/net: Move the XDP feature test
+ to drivers/net/hw
+From: netdev-bot+sashiko@kernel.org
+To: bochaolucky@gmail.com
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ andrew+netdev@lunn.ch, edumazet@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
+ willemdebruijn.kernel@gmail.com, petrm@nvidia.com
+Date: Mon, 19 Oct 2026 14:55:12 +0000
+Message-ID: <179242171266.3135.15973309239973345340@kernel.org>
+In-Reply-To: <20261018-xdp-v5-send-20261008-v6-5-7336e1282ca3@gmail.com>
+References: <20261018-xdp-v5-send-20261008-v6-5-7336e1282ca3@gmail.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,122 +81,98 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <fc72351703797f0b378539604785e0c12576199cf2462de31a6ef0b8fb07e042@mail.kernel.org>
-In-Reply-To: <20261019144851.4052056-2-memxor@gmail.com>
-References: <20261019144851.4052056-2-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Refuse CO-RE relocations for a signed program
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: kpsingh@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 19 Oct 2026 15:15:54 +0000 (UTC)
 
---===============2455065071638320290==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-> bpf: Refuse CO-RE relocations for a signed program
+Low priority / nit picks for your consideration:
 
-TL;DR: Commit message may be inaccurate: unsigned program BTF still drives
-post-signature insn patching (bpf_obj_new size, struct_meta, exception
-callback), so signed programs may still change; check itself looks correct.
+- [Low] The patch changes Remote.deploy() in
+  tools/testing/selftests/drivers/net/lib/py/remote_ssh.py from…
+- [Low] In dut_run()
+  (tools/testing/selftests/drivers/net/hw/xdp_features.c line 490), the…
 
->     bpf: Refuse CO-RE relocations for a signed program
->
->     The signature of a program covers its insns as submitted, along with the
->     frozen metadata maps of a signed loader, and bpf_prog_verify_signature()
->     checks it before the verifier does anything else with the program. CO-RE
->     relocations are the one input besides the insns that changes them: the
->     loader hands them in with the program, and bpf_check_core_relo() applies
->     them after the signature check, rewriting the immediate or the offset of
->     every insn a record names with a value the loader chooses, a field
->     offset, a type size or id or an enum value of the kernel BTF, or a type
->     id of the BTF the loader supplies itself. Whoever holds a signed program
->     can so change its constants once the signature has passed, the offsets a
->     signed loader reads its metadata map with for instance, and run a
->     program the signer never saw. The exclusive metadata map of a signed
->     loader does not make up for it: the hash that binds the map to a program
->     is chosen by whoever creates the map, so it can name the relocated
->     program as well.
->
->     Refuse a signed load that carries relocations, before the signature is
->     examined, like the other checks on the shape of a signed load. A signed
->     loader has none to lose: the programs it embeds are relocated by the
->     loader itself through bpf_core_apply(), and nothing relocates the loader.
->     The BTF of the program itself can stay: without relocations it steers
->     only the verification, through func_info, line_info and the annotations
->     of global function arguments, and rewrites nothing.
->
->     Fixes: 349271568303 ("bpf: Implement signature verification for BPF programs")
->     Cc: KP Singh <kpsingh@kernel.org>
->     Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+--
 
-The commit message says CO-RE relocations "are the one input besides the
-insns that changes them", and that the BTF of the program "steers only the
-verification ... and rewrites nothing".
+selftests/net: Move the XDP feature test to drivers/net/hw
 
-Are both statements accurate?
+This commit replaces the veth-based test_xdp_features.sh script in
+selftests/bpf with a NetDrvEpEnv Python test under drivers/net/hw. The
+xdp_features helper is now built there with the shared BPF rules. The
+commit also changes Remote.deploy() to pass scp arguments as a list.
 
-The program BTF (prog_btf_fd, installed into prog->aux->btf by
-bpf_prepare_btf_info()) is not part of the signed payload.
-bpf_prog_verify_signature() hashes only the insns followed by the frozen
-maps, and it runs before the BTF is read.
+> diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/drivers/net/hw/xdp_features.c
+> similarity index 99%
+> rename from tools/testing/selftests/bpf/xdp_features.c
+> rename to tools/testing/selftests/drivers/net/hw/xdp_features.c
+> index be4acb768e0a2..a0ec7000e444b 100644
+> --- a/tools/testing/selftests/bpf/xdp_features.c
+> +++ b/tools/testing/selftests/drivers/net/hw/xdp_features.c
 
-The verifier still patches the insns using values taken from that BTF.  In
-check_special_kfunc(), for bpf_obj_new_impl() and bpf_percpu_obj_new_impl():
+[ ... ]
 
-    ret_btf = env->prog->aux->btf;
-    ...
-    insn_aux->obj_new_size = ret_t->size;
-    insn_aux->kptr_struct_meta = struct_meta;
+> @@ -484,6 +485,7 @@ static int dut_run(struct xdp_features *skel)
+>  			"Failed creating control socket on device %s\n", env.ifname);
+>  		return -errno;
+>  	}
+> +	ksft_ready();
+>  
+>  	/* Allow remote startup and BPF loading on slow test machines. */
 
-and later bpf_fixup_kfunc_call() emits:
+[Severity: Low]
+This isn't a bug, but is this comment above the accept() retry loop in
+dut_run() still accurate?
 
-    insn_buf[0] = BPF_MOV64_IMM(BPF_REG_1, obj_new_size);
+Nothing loads BPF while this loop waits. tester_run() on the remote side
+only uses TCP, UDP and AF_PACKET sockets. On the DUT, main() already runs
+xdp_features__open(), xdp_features__load() and xdp_features__attach()
+before it calls dut_run().
 
-followed by a BPF_LD_IMM64 of the struct_meta pointer into R2.  The same
-BTF-derived struct_meta is patched in for bpf_obj_drop and
-bpf_refcount_acquire, and for the list push and rbtree add kfuncs through
-__fixup_collection_insert_kfunc().
+The README added by this patch also says the remote helper "does not load
+BPF".
 
-These kfuncs are registered for BPF_PROG_TYPE_SYSCALL (the signed loader
-type) as well as TRACING, SCHED_CLS, XDP, STRUCT_OPS and CGROUP_SKB, and
-nothing in the signed load path refuses them.
+The comment came in with the earlier series patch "selftests/bpf: Send XDP
+feature probes with AF_PACKET". That patch took BPF out of the tester, so
+the comment was already stale when it was added, and it stays stale here.
 
-Can a holder of a signed program still have the kernel patch in an
-allocation size and struct_meta pointer derived from a BTF type the signer
-never saw, after the signature check has passed?  That looks like the same
-class of post-signature constant change this patch sets out to close.
+>  	ctrl_sockfd = -1;
 
-Similarly, bpf_find_exception_callback_insn_off() picks the exception
-callback subprog from an "exception_callback:" decl tag in the same
-unsigned BTF, which changes run-time control flow and not only the
-verification.
+[ ... ]
 
-The memory safety impact looks limited, since the verifier checks accesses
-against the same BTF it then patches in.  This is mainly a question of the
-message's accuracy, and of the scope of the hardening it describes.
+> diff --git a/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py b/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
+> index 924addde19a3e..5e2950a7c95fa 100644
+> --- a/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
+> +++ b/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
+> @@ -35,5 +35,5 @@ class Remote:
+>          if not os.path.isabs(what):
+>              what = os.path.abspath(self.dir_path + "/" + what)
+>  
+> -        cmd(f"scp {what} {self.name}:{file_name}")
+> +        cmd(["scp", what, f"{self.name}:{file_name}"])
 
-Separately, the statement that the embedded programs "are relocated by the
-loader itself through bpf_core_apply()" seems imprecise.  The loader
-program only issues a nested BPF_PROG_LOAD carrying core_relo_cnt
-(bpf_gen__prog_load() in tools/lib/bpf/gen_loader.c), and the kernel
-applies the relocations in bpf_check_core_relo() -> bpf_core_apply() on
-that nested, unsigned load.
+[Severity: Low]
+This change looks like a standalone fix for the shared Remote.deploy()
+helper. It isn't really part of moving the XDP feature test.
 
-Could the message be narrowed so it does not claim the program BTF
-"rewrites nothing", or could it acknowledge the bpf_obj_new, list and
-rbtree fixups and the exception_callback decl tag?  Should those paths
-also be refused for a signed program?
+When cmd() gets a string with spaces, it splits it in
+net/lib/py/utils.py:
 
-The check itself looks correct: core_relo_cnt is zero for the signed
-loader (bpf_load_and_run() in skel_internal.h memsets attr), the early
-return leaks nothing, and the err_prep path in bpf_check() cleans up.
+    if shell is None and isinstance(comm, str) and ' ' in comm:
+        comm = comm.split()
 
+So a local path that contains spaces reaches scp as several arguments.
+Existing callers already hit this, for example main() in
+drivers/net/hw/csum.py:
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+    cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39273821952
---===============2455065071638320290==--
+Would it make sense to split this out into its own patch with a Fixes: tag
+for commit 1a20a9a0ddef ("selftests: drv-net: define endpoint structures"),
+where the scp string was introduced? That would make the fix easier to find
+and backport.
+
+>          return file_name
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3%40gmail.com
