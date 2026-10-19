@@ -1,457 +1,271 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A111C56761C;
-	Mon, 19 Oct 2026 13:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792418261; cv=none; b=fH/Tv5oI/7CDtqaw0h0F0e5dXyvJKs2ns8OT4Fj4PfC0c6Ymc+AIhIJkdDzLAN6MQ03mxMw97DotbEvPgrPhq5m4ky3dKTYVLooGv4mogsJXxRP2gOdaqEKikw3MBtu/uO59PA+QFCpucHQv/8ymiRTd7KK/HPv2UPupwv+Sv7g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792418261; c=relaxed/simple;
-	bh=mVu/VZ5070a8W1qqcSIftbIH/POy+fY8wJoWqo21vOk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bTJ+Dd6yg3rbxDVNNO+1NShB5F2jvIS2vOKnQF3NZMXUuT1DAjlIWD6e7NT3djSqGCngRWMgTQUyNgHDTgqat+SBcVQF6HscD1OOvqgebCMmFKTiWynQlbIi2TPPFCR70auxaKnhS8PTDQKWU8iYMOuz+dPV2ia0oTPwjD0hv88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YHl5R+GI; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81BB59E3AC
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792418365; cv=pass; b=IXLJ0JyHehmj7L5ES6WcQT2NPWIoOsR+MTa3gEOO/vZk26m40vDu3WlQJqvDtjb0JITJOprV1rWZwN33G+0KYR28wfULFf6HHgt2W5pXC3UgAzwX3Cd8OdHJ7gBh+eBPhcYKc55FcLxMNjjDN+5alLuPpQVVeIsmD4cKZlvec2g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792418365; c=relaxed/simple;
+	bh=vRKtHhtnSiVocMKcHj2IeE7eoWduJufuBbjw8LUmvyU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hx7zY3sY1LIb+D/0gZwS4wGVpCM8RsW4wZ0j4gWW6vMqpdcmVQ37U21JCdy4+xDquoEmBfAIM0FRVpUP+dmOjExyR29JwqBVceTc6dIWtm6Wo66yNHcdymYNT8wmwzCAk7fuGHTtPfurMwbyNbEax+iL22lr07VQsbWtW6ClRrE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=dozKaF1m; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=WITz630F; arc=pass smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YHl5R+GI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCB7E1F000C9;
-	Mon, 19 Oct 2026 13:57:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792418259;
-	bh=7tglQ4SuEKiErpdWAuNWDMl5ZXFyXLnC3VVhBZBHVVw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YHl5R+GIUox6T9jGfx6o40DLZf8BBP/rkbYxSa6piueEkRm2OY5KQ6LhCKl/Cw9rk
-	 9TGaTB9vKZ6UOnkJz1/a/Sfs62ZuNtj3CZwt36q67ncoNZTUJVbHoXuWzJk8OT05WE
-	 4ssjLY4VcCpYMCEYiZsVr8e08gy36sLLZs4lCEia18glhpav7aacnP4eyuB1mSOUu/
-	 qLpzzGKnUdQYZt54lqC/edKbDkTWXvuP7SIEQ4kUu8tYfnAjw1uxPmQk76dNEWsdOB
-	 Fgf+RtC/MCkXE0xYaNQRg/ZrkeQPG+5XGK4ipuQwO7NhKh6tWX0MuqW3URxH4KRcor
-	 tjlrTddPJMINg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	luke.r.nels@gmail.com,
-	xi.wang@gmail.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-5.10] riscv, bpf: Add support for BPF_SDIV and BPF_SMOD in RV32 JIT
-Date: Mon, 19 Oct 2026 09:46:56 -0400
-Message-ID: <20261019135441.1420968-125-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261019135441.1420968-1-sashal@kernel.org>
-References: <20261019135441.1420968-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="dozKaF1m";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="WITz630F"
+Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69JD9dQQ2561436
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:59:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=W2Q5NbkXZFX2IYeB+rITdmJ46kQ40IR/VqtH2S5mst8=; b=dozK
+	aF1m//QlqQfhqKEeZH7yccyiI3Zvo2avADGqUzkwKY4/b3qe0U2mMUsMnOgx3t9C
+	w8/ahz50BQ20ArJo1kgmpCd4uRJ0qggtT0JMKsGptpIVzqYFp/U+iU5miAvY7zQ9
+	fmbFCpCFANtC52fcr0zygGl1FFerSnMCqCQOQJykN38xQVkzRs+MqaXoA8bw0IR8
+	DEDJGSGM8I95PEBAWrxYOdvt11dbnYpOO1/xl8C3GNyGT53cun7a4GPBeDGVUdH/
+	VJjFFX8RryP4bKDpfZA0WJF4x7V+Ot6NkgIvAKB/8gXSRbPEphCmHFZe6MEH9Y9d
+	RgDRrDGDHdZucZlcSA==
+Received: from mail-yx1-f70.google.com (mail-yx1-f70.google.com [74.125.224.70])
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4hcktwbbsy-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 13:59:16 +0000 (GMT)
+Received: by mail-yx1-f70.google.com with SMTP id 956f58d0204a3-677c4ca2265so2824006d50.2
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 06:59:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792418356; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gIHe5taTztm8N4bJ/XZUnoVg3zPhWMW38KY0HXl1hPajqfMzxR0enDANM63CiM++Pl
+         fEGxR+kMtCpyWYLfiMIyotANKnvKRiZbTZk22ZYDQA7pdbydTPmXXKDx1j0omZQp35PM
+         ziqoK7x005DSJYSX+EGGF3LFf7fECXvnbn2E2DcpRCddXk5ONeB7jLzHCrWWHunz/qik
+         50jIEVr+cTf8QTBS7KrasLGHF4epE/hjSJhbZEOoMoQU+oqxsdVJ9otbOjB+Fbp2EAGX
+         VC1vICDlbs9Ov/GhFoBmcKXBlAVQ4WiH43w5Gt0X5BZGFZk6fvv/f150WgyL6ZNpy1BN
+         C6RQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=W2Q5NbkXZFX2IYeB+rITdmJ46kQ40IR/VqtH2S5mst8=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=YYpJOr5YKslMRlaEBs55mXa5636GzI9t6jIKBft8XG6UKOsR6BjDS6ssOyKkrYOz5u
+         FdekZu/FkOj4C11ft+2LUvr/bl72QOgscRbMjv1NOPtGrelLRhTxiCurMPyXsUs1DyRa
+         eOmY7JOESTD/fGvpcY7jpehuGEXQ5AGqfuffSZFTA1Vf1cHNcTx7Nf1nx/atmlB8NUk6
+         dEut9FAtmVF3tVQyqI33M7qOnXzKrxEIDHi2OhB7Hd9fPy0hqQ6As77SkFA/tUep8T2I
+         jtVhOqDhDoanja6CM8qhNbDBJe/lxsWArMWPv2bnfyQKtHvV4c/6dQqtc1WSE/IIZEo0
+         N3Ew==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1792418356; x=1793023156; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=W2Q5NbkXZFX2IYeB+rITdmJ46kQ40IR/VqtH2S5mst8=;
+        b=WITz630FdWmo3zT1aaXnq/pllyd4MHl8xunzdiGmHjUNYe+asa0Kq06YNvt7QIJjk4
+         RL38ecaL8cuYPqcFecbEFXi/LtkZzmtfC1ZHE6YLHEaXKVtXabA9PFo8XOe1VR5AtoPj
+         8aNB74h81c2AokSK3wj+E3RGl3iQ+dsfVFa//9rFSpD0ymxbs+sDegh8e9v/oL4qPRIz
+         Yv82I8btvKRxWkYTGpPtaDQ3NtKORVkwKgjm9NzWrAOIlHQ99gjZCldGTqP1erGt4y28
+         wfyJ/4PP1KU5Rut2SxnxvkuTGCR0/dCmGMaS8u/9esjPPfC4au6HP/Mcj1366/hN4NmS
+         SsSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792418356; x=1793023156;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=W2Q5NbkXZFX2IYeB+rITdmJ46kQ40IR/VqtH2S5mst8=;
+        b=NnAS8gfzYjLGNvs29fanZjvRY1t9IWxkzf7OWZarOK/8tPtLQRw4tYvregoLW0khKL
+         U0V2K+X1zgET8UW5QuK/x37/VJPui1ecuGT6mFNcEgOH9aJFKqgJpDDjFYiay1Rwsqpx
+         Fzssp9kGCj2Nth6smUUvH47nVi4r3k+BnQLLmUFISiFBTWmPY8K03KVFroaQJimGE3kx
+         J27y2G6Vb8ucPbCPiSgnbdYCRuqaaE3n9aIYyLixT4cBk+6vw8MVD44ZNomwDcTrwwVK
+         34m9cqwZqDmtIrvcLMUjxUIg9abmHuLU3JOvz6b2eQbqbd5b3UCrRLuzw5yz4roBgrDo
+         sRMg==
+X-Gm-Message-State: AFq9FYKeimowbfTKxzq/DgjxBLWoOhI/HRlHny/lJ43mlaDpBycg/xSH
+	e81QEcyZTIw7/EQXddP1VZeWe/cZ1PCApFWpv7tLfBFCYZ4j/jgdWsj2UQNILfrUGkZWL+PdDS5
+	H2iMCDwP1A/fOfBfaKaOC4/8HBrbCH8zo+fSJ7AZMtFO5ytVqmi7Q6ex5IL9kA3g8R9Tzvk5MYc
+	nvOxIDsluvl9vVCWanOecYuQ22N8dydryHoxp7
+X-Gm-Gg: AYBFou3SuDwUNgCgznG0L8sn7z5z56kkNVQUOFifDIQG+tuRxmq0Vwmx+UrSMQcisNu
+	PHK0torh7gxBlc8T0IkEWVADVeEoEmDQJF5zAS9oXyNDgTyIOdZdUz5kGPP0r0JMoiELzdsOZkM
+	HfgEIMRgTWzIdJHPSrMTjrt4cSoK34QSKmodduRGOiS6X9UYdi0Pqo6gyo
+X-Received: by 2002:a05:690e:1512:b0:679:15d0:9492 with SMTP id 956f58d0204a3-679ca8d61famr1806932d50.93.1792418355953;
+        Mon, 19 Oct 2026 06:59:15 -0700 (PDT)
+X-Received: by 2002:a05:690e:1512:b0:679:15d0:9492 with SMTP id
+ 956f58d0204a3-679ca8d61famr1806925d50.93.1792418355387; Mon, 19 Oct 2026
+ 06:59:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18.57
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com>
+ <20261010143156.379864-8-andrey.grodzovsky@crowdstrike.com> <sashiko-outbox-166685@kernel.org>
+In-Reply-To: <sashiko-outbox-166685@kernel.org>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Mon, 19 Oct 2026 09:59:02 -0400
+X-Gm-Features: AclHuK8-chbj1rVBMLedg9wJZt3mjYJm9zJvcXutim4nnDp5VmLVfhBvB6zqLxU
+Message-ID: <CAOu3gNj7fYONFo2-UqcBVv5Uk2=d4Cw=0fvQvLPCwiDA6zc3Wg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 7/7] selftests/bpf: Convert veristat to BPF_PROG_LOAD_STRATEGY_MANUAL
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-ORIG-GUID: Le87kz5a0JVfZmLE-arFTZ4XqgKf13Lo
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE5MDA1NSBTYWx0ZWRfX6AjoQa5iI0Ea
+ lfmYsWSnyoAdw8URUkNHpDYmNKKXYSWQeNK4+86+uFYVr+IC4hBpYeJPwgQIGeStlQfkJ8GCcRq
+ Lm9zFRf5CvDJzi8M2oLjb1eu+Y1ZecC4cmhTBl+ed7LRS6zcpoif+8ssNLs+V8mRkL3QiedQ8tt
+ bWVKch+wl4ddVm8CQzR4Scz8qi4IlYJUVSXamF1E5ld/QwmNOCRt+W9dQpRM68mBcw/vRvNCfTE
+ LE5+cMyLdWzqKBNn1ELhW3+BqRAkDCp9Qki+5hkGkKDNKarvaqj7EqWn5XIVrz0vqsKyUQcR53d
+ kP2LE5Ye/79bVnLLBlJX151l6tL+1WUx3GlWmpCoytp+Y0/P7kteJn/Yfo8dkStCAc/UCshKazm
+ oPoQc4MWl1SFIrWURl4GrEGYQM9UKdHUomLlu5VK4sov85Cs30kDf/dFoICCjXMfHamtbmHllsb
+ HnUQelrP+H1eEPDzuwg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE5MDA1NSBTYWx0ZWRfX+Mmt1fHa2wI4
+ 0TtONcXYNFAHMmLbzqDPXO0X9VZNDNCCZHnQnMY1htmCGsnvGxj/OmZUwl/xfu5hfQnw8Pct6XH
+ JhA1bdlDHPQkF7lejgl1KWg6VHdH4XdW48Td3h4z8o+PHY8YPP+/
+X-Authority-Analysis: v=2.4 cv=ZIVCCn7b c=1 sm=1 tr=0 ts=6ad62234 cx=c_pps
+ a=S/uc88zpIJVNbziUnJ6G4Q==:117 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
+ a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
+ a=R_n4Uisa8axJ7jemP0ek:22 a=c92rfblmAAAA:8 a=pl6vuDidAAAA:8 a=VwQbUJbxAAAA:8
+ a=BiacRjDT1vw9CRUp734A:9 a=QEXdDO2ut3YA:10 a=nd2WpGr1bMy9NW-iytEl:22
+ a=GvGzcOZaWPEFPQC_NcjD:22
+X-Proofpoint-GUID: Le87kz5a0JVfZmLE-arFTZ4XqgKf13Lo
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11940
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 adultscore=0 priorityscore=1501 phishscore=0 spamscore=0
+ suspectscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610190055
 
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
+On Sat, Oct 10, 2026 at 11:08=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+> - [Medium] bpf: veristat uninitialized memory read of log buffer on early=
+ load failure
+> - [Low] bpf: veristat skips cleanup and info retrieval when BPF program f=
+d is 0
+> --
+>
+> commit 9ac34aec88e7eee9b39c53e8055bc5989345ce5b
+> Author: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> Subject: selftests/bpf: Convert veristat to BPF_PROG_LOAD_STRATEGY_MANUAL
+>
+> This commit updates the veristat utility to verify programs using
+> BPF_PROG_LOAD_STRATEGY_MANUAL alongside bpf_program__load() and
+> bpf_program__unload(). It replaces the previous use of bpf_program__clone=
+(),
+> ensuring RODATA maps are properly bound during verification and subsequen=
+tly
+> dropped upon unload.
+>
+> > diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/sel=
+ftests/bpf/veristat.c
+> > index 9cfc9b4b41c12..0cd19b59037f6 100644
+> > --- a/tools/testing/selftests/bpf/veristat.c
+> > +++ b/tools/testing/selftests/bpf/veristat.c
+> [ ... ]
+> > @@ -1726,18 +1725,15 @@ static int process_prog(const char *filename, s=
+truct bpf_object *obj, struct bpf
+> >       if (env.force_reg_invariants)
+> >               bpf_program__add_flags(prog, BPF_F_TEST_REG_INVARIANTS);
+> >
+> > -     opts.log_buf =3D buf;
+> > -     opts.log_size =3D buf_sz;
+> > -     opts.log_level =3D log_level;
+> > +     bpf_program__set_log_buf(prog, buf, buf_sz);
+> > +     bpf_program__set_log_level(prog, log_level);
+> >
+> >       cgroup_err =3D reset_stat_cgroup();
+> >       mem_peak_a =3D cgroup_memory_peak();
+> > -     fd =3D bpf_program__clone(prog, &opts);
+> > -     if (fd < 0) {
+> > -             err =3D fd;
+> > -             if (env.verbose)
+> > -                     fprintf(stderr, "Failed to load program %s %d\n",=
+ prog_name, err);
+> > -     }
+> > +     err =3D bpf_program__load(prog);
+>
+> [Severity: Medium]
+> If bpf_program__load() returns an early error (e.g. from libbpf without
+> calling the kernel), could the dynamically allocated buf remain
+> uninitialized?
+>
+> When env.verbose or env.top_src_lines > 0 is set, buf is allocated
+> via malloc() but the fallback initialization only null-terminates the
+> static array:
+>
+>         if (env.verbose || env.top_src_lines > 0) {
+>                 buf =3D malloc(buf_sz);
+>         ...
+>         verif_log_buf[0] =3D '\0';
+>
+> If bpf_program__load() returns early without modifying the buffer,
+> parse_verif_log(buf, ...) will read this uninitialized memory. Could
+> buf[0] =3D '\0' be set directly on buf before loading?
+>
 
-[ Upstream commit 2e0fa2389c50fd3a69bb738efa74e127b7516938 ]
+While this is a true observation, it seems to me this exact scenario
+would also happen in the `clone` case, so it looks like a pre-existing
+issue.
 
-The current rv32 bpf jit compiler incorrectly treats BPF_SDIV and
-BPF_SMOD as unsigned operations. The BPF instruction set allows
-signed division and modulo by reusing the BPF_DIV and BPF_MOD opcodes
-with the instruction offset set to 1.
+> > +     fd =3D err =3D=3D 0 ? bpf_program__fd(prog) : -1;
+>
+> [Severity: Low]
+> If standard input is closed, can bpf_program__load() assign file descript=
+or
+> 0 to the loaded program?
+>
+> If fd 0 is assigned, later checks will explicitly skip handling it:
+>
+>         if (fd > 0 && bpf_prog_get_info_by_fd(fd, &info, &info_len) =3D=
+=3D 0)
+>
+> This causes the program's JIT statistics to be skipped. Should this check
+> test for fd >=3D 0 instead of fd > 0?
 
-Update the emit_alu_r32() function to accept an 'is_sdiv' variable and
-emit the correct div and rem instructions when the offset is 1.
+Same as above , I thiink the issue was pre-existing.
 
-Before this patch:
-[   44.161771] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
-[   44.167385] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 ret 2147483645 != -3 (0x7ffffffd != 0xfffffffd)FAIL (1 times)
-[   44.171053] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
-[   44.172081] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 ret 1 != -1 (0x1 != 0xffffffff)FAIL (1 times)
+>
+> > +     if (err && env.verbose)
+> > +             fprintf(stderr, "Failed to load program %s %d\n", prog_na=
+me, err);
+> >       mem_peak_b =3D cgroup_memory_peak();
+> >       if (!cgroup_err && mem_peak_a >=3D 0 && mem_peak_b >=3D 0)
+> >               mem_peak =3D mem_peak_b - mem_peak_a;
+> [ ... ]
+> > @@ -1774,7 +1770,7 @@ static int process_prog(const char *filename, str=
+uct bpf_object *obj, struct bpf
+> >       if (verif_log_buf !=3D buf)
+> >               free(buf);
+> >       if (fd > 0)
+> > -             close(fd);
+> > +             bpf_program__unload(prog);
+>
+> [Severity: Low]
+> Similar to the issue above, if fd is 0, will this prevent the program fro=
+m
+> being immediately unloaded and leave it in the kernel until the entire
+> BPF object is closed?
+>
+> Should this check also use if (fd >=3D 0) to ensure cleanup occurs?
+>
+> >       return 0;
+> >  }
 
-After this patch:
-[   16.002192] test_bpf: #165 ALU_SDIV_X: -6 / 2 = -3 jited:1 95 PASS
-[   16.002983] test_bpf: #166 ALU_SDIV_K: -6 / 2 = -3 jited:1 1059 PASS
-[   16.017167] test_bpf: #169 ALU_SMOD_X: -7 % 2 = -1 jited:1 136 PASS
-[   16.023002] test_bpf: #170 ALU_SMOD_K: -7 % 2 = -1 jited:1 109 PASS
+To summarize, I agree all the 3 issues definitely need to be addressed
+and I am happy to fix it. I just don't know if it should be as a part
+of this patch-set or a standalone fix?
 
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
-Link: https://lore.kernel.org/bpf/20260714002451.4091139-2-visitorckw@gmail.com
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
 
-LLM Generated explanations, may be completely bogus:
+Andrey
 
-## Phase 1: Commit message forensics
-
-**Step 1.1 — Subject**
-Record: `[riscv, bpf] [Add support] Treat BPF_SDIV/BPF_SMOD as signed in
-the RV32 JIT, not as unsigned DIV/MOD.`
-
-**Step 1.2 — Tags**
-Record:
-- Reviewed-by: Pu Lehui `<pulehui@huawei.com>` (RISC-V BPF JIT reviewer;
-  author of the RV64 signed-div JIT)
-- Link: `https://lore.kernel.org/bpf/20260714002451.4091139-2-
-  visitorckw@gmail.com`
-- Signed-off-by: Kuan-Wei Chiu (author)
-- Signed-off-by: Kumar Kartikeya Dwivedi (BPF maintainer, applied to
-  bpf-next)
-- No Fixes:, no Cc: stable, no Reported-by, no Tested-by on the commit
-  itself (Tested-by: Pu Lehui is on the series cover)
-- Absence of Fixes/Cc: stable is expected for this review and is not a
-  negative signal
-
-**Step 1.3 — Body**
-Record: The RV32 JIT emits `divu`/`remu` for `BPF_DIV`/`BPF_MOD` even
-when `insn->off == 1` (the BPF encoding for signed div/mod). Symptom is
-silent wrong results with the program still marked JIT’d (`jited:1`):
-`-6 / 2` → `2147483645` instead of `-3`; `-7 % 2` → `1` instead of `-1`.
-Root cause: offset field ignored. After: those `test_bpf` cases PASS.
-
-**Step 1.4 — Hidden bug fix?**
-Record: Yes. Title says “Add support”, but this is a JIT miscompilation
-fix. The JIT already handles DIV/MOD; it just uses the unsigned RISC-V
-ops. Cover-letter v3 dropped a Fixes: tag and retitled the series as
-enablement; that is framing, not a lack of a bug.
-
-## Phase 2: Diff analysis
-
-**Step 2.1 — Inventory**
-Record: One file, `arch/riscv/net/bpf_jit_comp32.c`, +10/−5. Functions:
-`emit_alu_r32()` (signature + DIV/MOD cases), `bpf_jit_emit_insn()` (two
-call sites). Surgical, single-file.
-
-**Step 2.2 — Flow**
-Record:
-- Before: `emit_alu_r32(..., u8 op)` always emits `rv_divu` / `rv_remu`.
-- After: it takes `const struct bpf_insn *insn`, sets `is_signed =
-  insn->off == 1`, and emits `rv_div`/`rv_rem` vs `rv_divu`/`rv_remu`.
-- Callers pass `insn` instead of `BPF_OP(code)`. Both register (`BPF_X`)
-  and immediate (`BPF_K`) 32-bit DIV/MOD already go through this path
-  (no RISC-V I-type div).
-- 64-bit DIV/MOD on RV32 still `goto notsupported` (interpreter
-  fallback). This patch does not touch that path.
-
-**Step 2.3 — Bug mechanism**
-Record: Logic/correctness. Signed vs unsigned opcode selected by
-`insn->off`. Not a leak, race, or UAF.
-
-**Step 2.4 — Fix quality**
-Record: Obviously correct and minimal. Regression risk is low: unsigned
-path is unchanged when `off == 0`; signed ops are the matching RISC-V
-M-extension instructions. No API or data-structure change. Minor nit:
-commit text says an `is_sdiv` argument; the code uses `is_signed` from
-`insn->off`. Harmless.
-
-## Phase 3: Git history
-
-**Step 3.1 — Blame**
-Record: Unsigned `rv_divu`/`rv_remu` in `emit_alu_r32` come from
-`5f316b65e99f` (“riscv, bpf: Add RV32G eBPF JIT”, 2020-03,
-**v5.7-rc1**). At that time BPF had no signed div. The encoding (`off ==
-1`) landed in `ec0e2da95f72d` (“bpf: Support new signed div/mod
-instructions.”, 2023-07, **v6.6-rc1**), which updated the interpreter
-and x86 JIT only. RV64 JIT followed in `3e18ff4bce9b5` (**v6.6-rc1**).
-RV32 stayed on unsigned emit until this commit.
-
-**Step 3.2 — Fixes: tag**
-Record: None on the landed commit. v1/v2 had a Fixes: tag; v3 removed
-it. CI bot later suggested `Fixes: 5f316b65e99f`; Pu Lehui replied that
-a Fixes tag was not needed. That objection is about blaming the 2020 JIT
-(which was correct then), not about whether today’s unsigned emit is
-wrong.
-
-**Step 3.3 — File history / series**
-Record: bpf-next v4 1/3 of “signed operations and 32-bit atomics”:
-1. this SDIV/SMOD patch (`2e0fa2389c50f`)
-2. BPF_MOVSX (`c6a08afdfe3a8`)
-3. 32-bit atomics (`a1b37972efc0b`)
-
-This patch does not depend on 2 or 3. Merge: `426a6befd01f9`.
-
-**Step 3.4 — Author**
-Record: Kuan-Wei Chiu; not the RV32 JIT original author. Nearby work is
-this series only. Reviewer Pu Lehui is the established RISC-V BPF JIT
-contributor.
-
-**Step 3.5 — Prerequisites**
-Record: Needs `rv_div()` / `rv_rem()` in `arch/riscv/net/bpf_jit.h`
-(added by `3e18ff4bce9b5`, present here). Needs `emit_alu_r32` and
-32-bit DIV/MOD cases (present since v5.7). Standalone on this tree.
-
-## Phase 4: Mailing list
-
-**Step 4.1 — Original discussion**
-Record: Lore from `b4 dig`:
-`https://patch.msgid.link/20260714002451.4091139-2-visitorckw@gmail.com`
-Revisions: v3 (2026-07-06) and v4 (2026-07-14). v3 changelog: pass
-`insn` into `emit_alu_r32`; **remove Fixes: tag and update title**.
-Applied version is v4 (latest). No NAK on this patch. No Cc: stable in
-the thread.
-
-**Step 4.2 — Recipients**
-Record: bpf@vger, linux-riscv, ast, daniel, andrii, eddyz87, memxor,
-palmer, aou, pulehui, martin.lau, yonghong.song, alex@ghiti.fr. Right
-lists and maintainers. Reviewed-by Pu Lehui; applied by Kumar Kartikeya
-Dwivedi.
-
-**Step 4.3 — Bug report**
-Record: No syzbot/bugzilla. Evidence is in-tree `test_bpf` (#165, #166,
-#169, #170) plus Pu Lehui Tested-by on the cover. Cover also notes
-`test_bpf.ko` going to 0 failures on the author’s setup.
-
-**Step 4.4 — Series**
-Record: 1/3 is this fix. 2/3 (MOVSX) and 3/3 (atomics) are separate ISA-
-coverage patches. 3/3 is closer to a feature (more JIT’d atomics;
-interpreter already worked). This patch is self-contained.
-
-**Step 4.5 — stable@**
-Record: UNVERIFIED. lore.kernel.org returned 403 to HTTP fetch; the
-saved mboxes have no stable@ nomination.
-
-## Phase 5: Semantic analysis
-
-**Step 5.1 — Functions**
-Record: `emit_alu_r32`, `bpf_jit_emit_insn`.
-
-**Step 5.2 — Callers**
-Record: `emit_alu_r32` is only called from `bpf_jit_emit_insn` (ALU
-32-bit X/K DIV/MOD/MUL/shifts, and NEG). `bpf_jit_emit_insn` is called
-from `arch/riscv/net/bpf_jit_core.c` during JIT of a loaded BPF program.
-
-**Step 5.3 — Callees**
-Record: `bpf_get_reg32` / `bpf_put_reg32`,
-`rv_div`/`rv_divu`/`rv_rem`/`rv_remu`. No new locks or allocations.
-
-**Step 5.4 — Reachability**
-Record: Yes, from BPF program load on RV32 with `CONFIG_BPF_JIT`
-(`HAVE_EBPF_JIT if MMU`). Userspace that can load BPF (privileged; or
-unprivileged if enabled) can hit it. `lib/test_bpf.c` exercises it
-directly. With `BPF_JIT_ALWAYS_ON`, interpreter fallback is gone and a
-wrong JIT is the only path.
-
-**Step 5.5 — Similar patterns**
-Record: RV64 already branched on signed vs unsigned in
-`bpf_jit_comp64.c`. Interpreter in `kernel/bpf/fixups.c` uses `insn->off
-== 1` the same way. ARM32 added 32-bit signed div in `5097faa559a60`
-(v6.7-rc1). RV32 64-bit SDIV is still not JIT’d (`notsupported`) —
-different, safe fallback.
-
-## Phase 6: Local tree (this checkout)
-
-**Step 6.1 — Does the buggy code exist here?**
-Record: Local tree is **7.3.0-rc4** (`v7.3-rc4-27-gf0100363d8c37`). RV32
-JIT, signed-div ISA, and `rv_div`/`rv_rem` are all present. The
-unsigned-only emit existed in this lineage from v6.6 until
-`2e0fa2389c50f` (contained in **v7.3-rc1**). Current `emit_alu_r32`
-already has `is_signed = insn->off == 1`. The bug class is in this
-tree’s history; the file this patch touches is here.
-
-**Step 6.2 — Backport difficulty**
-Record: Clean apply on this code. Pre-image matches the parent of
-`2e0fa2389c50f`. Helpers already exist.
-
-**Step 6.3 — Related fixes already here**
-Record: This commit is already an ancestor of HEAD (landed in 7.3-rc1).
-That is origin-tree presence, not a reason to treat it as “already
-selected for stable.” No alternate RV32 SDIV fix. Later series patches
-(MOVSX, atomics) are independent.
-
-## Phase 7: Subsystem context
-
-**Step 7.1**
-Record: `arch/riscv/net` BPF JIT. Criticality: **PERIPHERAL** for
-hardware (RV32 Linux with MMU), **IMPORTANT** for correctness of JIT’d
-BPF on that platform. Makefile: `bpf_jit_comp32.o` only when not
-`CONFIG_ARCH_RV64I`.
-
-**Step 7.2**
-Record: File is mature (since v5.7) with occasional ISA catch-up. Not a
-staging driver.
-
-## Phase 8: Impact and risk
-
-**Step 8.1 — Who**
-Record: RV32 + BPF JIT users (embedded RISC-V with MMU). Not RV64. Not
-no-MMU (no eBPF JIT).
-
-**Step 8.2 — Trigger**
-Record: Loading/running a BPF program that uses 32-bit signed DIV or MOD
-(`off == 1`). Common in `test_bpf`; less common in production filters,
-but a valid ISA op since v6.6. Typically requires BPF-load privilege.
-
-**Step 8.3 — Failure mode**
-Record: Silent wrong ALU result while still reporting `jited:1`. Not a
-panic. Wrong packet/cgroup/seccomp decisions are possible if a program
-uses signed div. Severity: **HIGH** for correctness, not CRITICAL
-crash/corruption of kernel memory.
-
-**Step 8.4 — Risk/benefit**
-Record: Benefit: correct 32-bit signed div/mod on RV32 JIT; `test_bpf`
-failures gone. Risk: very low (~10 lines, ALU emit only, unsigned path
-unchanged). Ratio: favorable.
-
-## Phase 9: Synthesis
-
-**Evidence FOR**
-- JIT emits unsigned ops for a signed encoding; programs get wrong
-  answers and still count as JIT’d.
-- Reproduced by `test_bpf`; reviewed and tested by Pu Lehui.
-- Small, obviously correct, no new UAPI.
-- Independent of the rest of the series.
-- All helpers and call sites exist in this tree.
-- Same class of ISA handling RV64 and the interpreter already do.
-
-**Evidence AGAINST**
-- Subject/cover are “Add support”; sent to bpf-next, not bpf.
-- Maintainer said a Fixes tag was not needed (“not a bugfix”) — aimed at
-  the 2020 JIT commit, which predates signed div.
-- RV32 is a small user base; 64-bit SDIV still not JIT’d (safe
-  fallback).
-- Not a crash, deadlock, or kernel memory-safety bug.
-
-**Unresolved**
-- UNVERIFIED: whether stable@ ever discussed this (lore HTTP 403).
-- UNVERIFIED: exact v1/v2 subject/Fixes SHA (v3 changelog confirms a
-  Fixes tag was removed).
-
-**Stable rules**
-1. Obviously correct and tested? **PASS** — review + `test_bpf`
-   before/after + Tested-by.
-2. Real bug affecting users? **PASS** — wrong JIT output for a valid
-   insn, not a new opcode.
-3. Important? **PASS** — silent miscompilation of ALU; high correctness
-   impact, not a panic.
-4. Small and contained? **PASS** — one file, ~10 lines.
-5. No new features/APIs? **PASS** — selects existing RISC-V `div`/`rem`
-   when `off==1`; BPF ISA already has this encoding.
-6. Applies to this tree? **PASS** — file, helpers, and DIV/MOD path are
-   here.
-
-**Exception category:** none (not an ID/quirk/DT/build/doc patch).
-
-The “add support” wording is leftover from a feature series. Behavior is
-a JIT bug: the compiler accepts SDIV/SMOD and emits the wrong RISC-V
-instruction. That is appropriate for this tree.
-
-Verification:
-- [Phase 1] Parsed tags: Reviewed-by Pu Lehui; Link to bpf lore; no
-  Fixes/Cc: stable/Reported-by
-- [Phase 1] Body documents `test_bpf` #165/#166/#169/#170 wrong results
-  with `jited:1`
-- [Phase 2] Diff: `emit_alu_r32` takes `insn`; `is_signed = insn->off ==
-  1`; `rv_div`/`rv_rem` vs `divu`/`remu`; two call-site updates
-- [Phase 2] Confirmed 64-bit DIV/MOD still `goto notsupported` (no
-  incomplete 64-bit signed path)
-- [Phase 3] `git blame` on parent: unsigned emit from `5f316b65e99f`
-  (v5.7-rc1)
-- [Phase 3] `ec0e2da95f72d` added signed div ISA in v6.6-rc1; RV64 JIT
-  `3e18ff4bce9b5` same cycle
-- [Phase 3] `git describe --contains 2e0fa2389c50f` → `v7.3-rc1~...`;
-  `git merge-base --is-ancestor` confirms it is in HEAD
-- [Phase 3] Series 2/3 and 3/3 are independent; no prerequisite besides
-  `rv_div`/`rv_rem` (present)
-- [Phase 4] `b4 dig -c 2e0fa2389c50f`: patch-id match; v3 and v4;
-  applied v4 1/3
-- [Phase 4] `b4 dig -w`: bpf + linux-riscv + BPF/RISC-V maintainers
-- [Phase 4] v3 mbox: CI suggested Fixes: 5f316b65e99f; Pu Lehui: “not
-  need to add fixes tag, as this not a bugfix”; Pu Reviewed-by on the
-  code
-- [Phase 4] Cover: “Remove the Fixes: tag and update title”; Tested-by
-  Pu Lehui
-- [Phase 4] WebFetch lore: 403 Forbidden — discussion taken from b4
-  mboxes instead
-- [Phase 5] Callers: only `bpf_jit_emit_insn`; JIT compile path from
-  `bpf_jit_core.c`
-- [Phase 5] `lib/test_bpf.c` has ALU_SDIV_* / ALU_SMOD_* cases matching
-  the commit
-- [Phase 6] `make kernelversion` / `git describe HEAD`: 7.3.0-rc4 /
-  v7.3-rc4-27-gf0100363d8c37
-- [Phase 6] `arch/riscv/net/Makefile`: comp32 used when not RV64I;
-  `HAVE_EBPF_JIT if MMU`
-- [Phase 6] Current file already has the signed emit (commit ancestor of
-  HEAD)
-- [Phase 8] Failure mode: wrong 32-bit signed div/mod in JIT’d BPF;
-  severity HIGH correctness
-- UNVERIFIED: stable@ mailing list history (lore 403)
-
-The patch is a small, tested JIT correctness fix for a real miscompile
-on RV32. It meets stable rules for this tree.
-
-**YES**
-
- arch/riscv/net/bpf_jit_comp32.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
-
-diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-index 592dd86fbf811..89153946a4e46 100644
---- a/arch/riscv/net/bpf_jit_comp32.c
-+++ b/arch/riscv/net/bpf_jit_comp32.c
-@@ -509,12 +509,15 @@ static void emit_alu_r64(const s8 *dst, const s8 *src,
- }
- 
- static void emit_alu_r32(const s8 *dst, const s8 *src,
--			 struct rv_jit_context *ctx, const u8 op)
-+			 struct rv_jit_context *ctx,
-+			 const struct bpf_insn *insn)
- {
- 	const s8 *tmp1 = bpf2rv32[TMP_REG_1];
- 	const s8 *tmp2 = bpf2rv32[TMP_REG_2];
- 	const s8 *rd = bpf_get_reg32(dst, tmp1, ctx);
- 	const s8 *rs = bpf_get_reg32(src, tmp2, ctx);
-+	u8 op = BPF_OP(insn->code);
-+	bool is_signed = insn->off == 1;
- 
- 	switch (op) {
- 	case BPF_MOV:
-@@ -539,10 +542,12 @@ static void emit_alu_r32(const s8 *dst, const s8 *src,
- 		emit(rv_mul(lo(rd), lo(rd), lo(rs)), ctx);
- 		break;
- 	case BPF_DIV:
--		emit(rv_divu(lo(rd), lo(rd), lo(rs)), ctx);
-+		emit(is_signed ? rv_div(lo(rd), lo(rd), lo(rs)) :
-+				 rv_divu(lo(rd), lo(rd), lo(rs)), ctx);
- 		break;
- 	case BPF_MOD:
--		emit(rv_remu(lo(rd), lo(rd), lo(rs)), ctx);
-+		emit(is_signed ? rv_rem(lo(rd), lo(rd), lo(rs)) :
-+				 rv_remu(lo(rd), lo(rd), lo(rs)), ctx);
- 		break;
- 	case BPF_LSH:
- 		emit(rv_sll(lo(rd), lo(rd), lo(rs)), ctx);
-@@ -1041,7 +1046,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_imm32(tmp2, imm, ctx);
- 			src = tmp2;
- 		}
--		emit_alu_r32(dst, src, ctx, BPF_OP(code));
-+		emit_alu_r32(dst, src, ctx, insn);
- 		break;
- 
- 	case BPF_ALU | BPF_MOV | BPF_K:
-@@ -1065,7 +1070,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		 * src is ignored---choose tmp2 as a dummy register since it
- 		 * is not on the stack.
- 		 */
--		emit_alu_r32(dst, tmp2, ctx, BPF_OP(code));
-+		emit_alu_r32(dst, tmp2, ctx, insn);
- 		break;
- 
- 	case BPF_ALU | BPF_END | BPF_FROM_LE:
--- 
-2.53.0
-
+>
+> --
+> Sashiko AI review =C2=B7 https://urldefense.com/v3/__https://sashiko.dev/=
+*/patchset/20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com?part=
+=3D7__;Iw!!BmdzS3_lV9HdKG8!3il3wicS8Eiw2ogONUagDMIrsqcvvmLZ1xXNrquJMEVXEJr8=
+5kqsNp4CNFasNUc417QJ6t73GShkLS7-x-efgKPJp1HzLOdaJg$
