@@ -1,298 +1,235 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666401AC45D
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 01:13:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792372413; cv=none; b=Cn/W5RyoXjD6rLDRQYH0wPJiDYF5CtqABG2DLPBedboBwJEx6wlZLgB364aiiVZAk1KtzUDdjZ+bpiDXXa0pw/RcpLhnFt0nl0LI+40tUniex0HavWkTTBQTTPlomYmWhHwejlnTkKSZAisgTaZ0nZdBVw7TSiEkMmIjtU+SLoU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792372413; c=relaxed/simple;
-	bh=bntzwVkgy1XhsUFl9A5E8NeNdZ0t1iQs6Enbsh3fKeQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iKkWLii1bXu6Sm+VycN4JFeGKq0JlohmizF5YSvotWA0j9trdkQHzyTKI6Ku6+ws8GsLmDwz3grbwAHFXMl9e3V8M3R2zepxHzm+peZwQono90r3yyBJiCZ7LWusi7O5i3z+/8Bvp97sF8mBKVrYUZDMwRJUHb60ThV+IHYkMTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y3+YTjOe; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609C41D9663
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 01:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.138
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792373200; cv=pass; b=u/YWKoho6lcbCospQZPmQeJHxjTGKV4+UNmCaMxBd9xvNbA1i6NAm5HWlDdzauyjqaS6Q6Nq+FaezsMBtKnTfQPY7hR427CikZ3LPZ6sKSifSobTVK2kXhpemWhWobdwPMRnWE7AZLYszZ9bVtST5pqgIcYd6iSesM7K6ZHjoxw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792373200; c=relaxed/simple;
+	bh=AQ03o12O9IdqsK59VhhG+Jt1ViPqQPPhVf0zLMdb05k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cGRuLbMYQT+DC6ZGFKWe41EsGvAfyZqwHAuAQO8oa1EYbVLMaO6zBxMMtAxFMUwdOcUCT7FDZTRHYPZl4UsJMdaSqP4E4QJgaEy3vxYg6nLwAH09jJNu7JKm4nKK3VyoV5chkfiWVocV9vLTZaAZMiivMOYWhq5LlyjllUDasz8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UdbRAhc+; arc=pass smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y3+YTjOe"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-89f639ba307so494820b3a.3
-        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 18:13:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UdbRAhc+"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-4a0f23b853dso8272135e9.1
+        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 18:26:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792373197; cv=none;
+        d=google.com; s=arc-20260327;
+        b=k+gvE8ekuyr1409sNTT1ruptzi1UF7XZNu5PCdK9DtncmFYQQSbhgs4vogViaf/eWw
+         pOL4t1n/MPRr4esKJnQZH83ELEQ/JmPBKRPLTN0XKPqaegsVw4L3R7njB49hCji23I6d
+         0zL9zA0MZHBS+AJIWZFhdJuGTXdO0XBzU/Ci7PQOLbwJJciC15bYRjTJd6m764ZAmaQh
+         4dLwmuKiZNaZ9bdKRUqCrbkOMm7zqKNC0ad3bQPoTZJ3ea9ag/MGdhx0zaSl+2iKhLdM
+         w6EKFp5MiIH1frIrSeak71kuRnmHvDEQFMMOq0lCocht7+5a9Y5iI2rKtEsioSmfGQPA
+         Mq9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=RQd44OdrVueqtH/s6XrJu0u8hZhKNo21NCR4aX2KSgk=;
+        fh=zK0FSgi/QnYaeQP665moKTxPVDsI4YOtphCj83Wo86I=;
+        b=qvO/bDvMzk6NM9EOYhc/sfZURsAA3KlD5LRcY5dqnWN9qK1L4ir/dqxKT92iKnrMGu
+         SfVuvAIFHDSmxQy/0jjIR/PkiLsVc+GmNb6vzh1e+ExUEegBtT6AytmAl2u3wK9v9A1C
+         0vyFJXHTYlygUTzobtpfzygcqXdFZzKrKSXSYPRcEyGsTB6TGquD+gILYou7XomsMut/
+         JJR8qpOiZI4eNssXmual+ICX3vwJ2HkP7Hx7wSVJ3Ng3GqOfPsrQaKHBvrXH1wtnmF86
+         TVjc8wmdaxn8yixCppFKqmVxLZRFgNbzBCkZ2Q63zAYY0BAUB98GiCNgzK+z0n2Yw9j+
+         b1EA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792372412; x=1792977212; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=r0Sxuxs0EeUMgUZwauh7fkGLGVHI/Gd5mDOOEksG0cA=;
-        b=Y3+YTjOe2L9CF8ITBVfOOxppI1iBSbYTB1ZE+ILSHPL1Z3NabtLO8sHS7lgdSmX9K4
-         rBp38UI4GUDwUDg2UF1UPxaW3dcTcivL3Vaxj33fzG3mfYtn9jUNwYHDWoAf9xlX4wgJ
-         rA1SmivA/i0W3V2qjjdrMHlu1NgK9WqJm4kR9/EswzdhjWLUyx5RC11hO/oTwLbGbNn8
-         NwK73Yza/KgjArmIYOur0HDbkXKhUQn1iFQUfhNkh1WdSf3mPgOY5jRSVkrTXlCg7an4
-         yHAZtMIuVltX2slIPJsRUxb40MpkzrVo6xHg1MjtGsQpwQHvxxRL5eYf4Fk/HaDeUlxE
-         zwNw==
+        d=gmail.com; s=20251104; t=1792373197; x=1792977997; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RQd44OdrVueqtH/s6XrJu0u8hZhKNo21NCR4aX2KSgk=;
+        b=UdbRAhc+Vtl+VHo/nxtouJa94Z5SFz+HmRNggITBiyCu9JVJD4hCmiyacUSDfnx7eC
+         d9B9KCKoI4ZW+UOJr2l+AbALNS52GLC7JzDHa0LrgMdGr0Nj6edg73Hq1k+X4ZqybrX7
+         tj7BQHV0GUdK79xCHIvvMUWa/ErvwJwL2MT23YSV/3GSHs+/Idx8Nl3WFlUl8YLm/X8d
+         oug0yEo/L1TG5AlAmupxOZ21UZLTJHEhDhQEbln2zo3Z26MiAw+NazwaVs6RNHJ3QenJ
+         7qqRClz5fftcDGW8iLoCtTUjo2DY/T4o98t7Tz9qsIaAoVmGQH0WTNpoOIGTbU3Cyk3K
+         ZjQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792372412; x=1792977212;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=r0Sxuxs0EeUMgUZwauh7fkGLGVHI/Gd5mDOOEksG0cA=;
-        b=nl1AVMg5mhsSz1nzfM8hYZKIPG02HMIW8MKJArcFq6so8niBqf2I6V+hUFm3Tmd04R
-         uKwDHZ8G59LOe03xWxUqBvFDNm/f+CF2lCwQxwSu9cB0hfWn3AVLyB3Gh13FQVAu09PD
-         R4e2YfTWD9UWSNu8WJxBCzkC7gwZS52cO46GAfFPP0mE5YPdgReg29D1aWOR/GE8Thsk
-         ZBXlDnG9CS74aKkog+D+kqjYxht4hUrfiPFQeo8HuliTP5Db2Eha+NaKcctzFuKM4/S1
-         4EUpc7VFDNO1bCBF8QmCMa0wr5peMQebr70nI1L5AdMu9apJ3U/fnn2UgscuzT/3b2nQ
-         W+HA==
-X-Gm-Message-State: AFq9FYIVF9eFnV33dD72LuNCTsE4j50u9+FLvjxdYmZ/12+UmuIf6t05
-	RwO2jP+e8eYto0h3uyznKjjJVtq5UGxycT+pZGpbgfGDD+38uJ91lksQDZKxKw==
-X-Gm-Gg: AYBFou3K+jws3+pOsmZ9JKw+HwV4ZiQzcFRV+3VQewgvxFmLc1zN7sRUFRWDE7YrzIC
-	QsNv2Jx3I93Z5DOYSVQuOhg2/dWxLIp+i4GccW2jDzHtQZTODep+rTtYxryx6xfqhJYyyx0F5Rj
-	QgaoeCGlqhRrLfXAH5DnDHuaZMCKxKe0lgaticQbIdOKx1PJRWbKUrQ45wBzF2juWHrJhqOnlGr
-	6WheWZXLGauuiZYE4uOMvLWYkpaVB0UmN3u/B+pObED4PVrLJdf48A7sj93kr1ad6Ogq6XEz6L0
-	deQxpt0/i804G9TRYa2qJIYc8OhP/5Az3m0nUL6DWx+3s+Lx5j/cEVDC+oJ4y1wxJy9WSFYuwtm
-	Sy2W8I5TupH6yoYbUv5Vy5rFMfNCe84PNSr2Bx8irxcKT9FvBmbO/uOIwHrOhyOlRqvnW7lL/xK
-	Wj4lY+c5eJWGrWpHI46/bvztk9nqUWIi0U/pyBy4VJ5qYlgqs7vCmTpuAISdvNK+ox79Y1r4rrT
-	PhUqE7QE+n5j6yfD5715NRbch/SM6fQvr6oGd9u5whN2YkcUd9quOBFVxgBya20KiA6bhbWQcHg
-	TcZjg43xwDN4R7M6VSjuawobltqh38TFKw+lsVWwtwY=
-X-Received: by 2002:a05:6a00:17a9:b0:89f:4cd9:241a with SMTP id d2e1a72fcca58-8a04c43806emr4715638b3a.41.1792372411409;
-        Sun, 18 Oct 2026 18:13:31 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-89fd010b47fsm2888435b3a.31.2026.10.18.18.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Oct 2026 18:13:30 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf-next v2] bpf: Refuse the prologue for an extension if callers keep packet pointers
-Date: Mon, 19 Oct 2026 01:13:27 +0000
-Message-ID: <20261019011328.1843764-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20260707; t=1792373197; x=1792977997;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=RQd44OdrVueqtH/s6XrJu0u8hZhKNo21NCR4aX2KSgk=;
+        b=ZRxj4nJAU8Umpfxc5esM215kuEDpidK1h7ynxcmdrULLE57W8i10CPhLrJUEZLLUUG
+         Xs1PajbJ/I1HJj2cJJbFfSlvdUzLNrOdT8ph7WlXo69XBeZIUD7y/HIgA/42DZAjXAT9
+         CThoDl6qhuPWmYktDk6bQTOhK6MS3WYfSvV+WTrcpeW0N3/uOanLMMOC/kuQZ6C1RVfn
+         wuQIKcFIOcFgvVCjp74uDaniCjKQ36jduxtI0s7zhO5hGXaaYml1gAz04JZf/iek8cKa
+         Qw8Q/j/udOI0/QTgKl6ANvdhW1NAkmHSJe+OYkw8+3gS1cmw8YY0eDYBCTaQ5me7LWT5
+         qaWw==
+X-Forwarded-Encrypted: i=1; AKwUvBxdIRzjEKuRH9zKta1nhRHzZ7UTpZVra95AtQ51YDz8Ko2H9LoKiJvQG8d91saqXeaC3rA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKRvIpTcLqbBFYKoANARZEwKx/ibiUQiovnUAWxcYWPEbsCczat
+	VfxOSQf+9VleUZAyQF+lBQPD0c9gJRmd+wwlgtX0dsGEfSZYuIXCzSR26dEwOZzjtVKfi6rrkxK
+	zs+Bj1KRSNIs19arDwzJHUC5AMx5+/gA=
+X-Gm-Gg: AYBFou05/uscTTcy3JC5ob97eZAWcIWP4+iSlnv0hExBuPL07F1IDMiX51XFd7Se9n9
+	wsw78KYKQU1ms/CTCs8XlB91H0E2Y8wGsNrN9VNDIk6KCXEK0oU5jcfr+hwOW1qzGapD3W2QJbU
+	9uT4uQyqLNDjr26HM3bgBtgLnuOd++2zZSpCRm2Kf6GqzjTogMNhXL022UI/RF6lr6JmM3DnXt8
+	xf2h14dW/1k4Zew4o3d2+s83mt55rLPrEDLikXzPDFN7l5/jVME9e0MCGp7MvRpsW7jmhmgn8qY
+	JHxWa5hsXFuJxQaLlXyYQ5pdIG6jdPbLgHvc1TX9ZE0ti3kXMrktR7tN3jMGpaEb5GM7tTJpshn
+	Dm/wX//T4jWI4ZVRcx3BzSbUbmqnNXt13Jd8CMHKoUQQdh6TrKfQC5+cqI15QI+Zk5YMaKPPNHI
+	TVa7UwX0CELO/Tl45dEInikqFcvU056oQ=
+X-Received: by 2002:a05:600c:4e8a:b0:4a1:8961:78dd with SMTP id
+ 5b1f17b1804b1-4a1d7616464mr140734885e9.27.1792373197230; Sun, 18 Oct 2026
+ 18:26:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260723114042.559926-2-max@linux.ibm.com> <DK63HA8KEYWH.1W1W2IJEWEVRD@gmail.com>
+ <ede5833e-59f1-40db-b72d-bef247a16f9e@linux.ibm.com> <0eca445a-d882-4821-b6f3-4ba124607ebc@linux.ibm.com>
+In-Reply-To: <0eca445a-d882-4821-b6f3-4ba124607ebc@linux.ibm.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Mon, 19 Oct 2026 03:25:59 +0200
+X-Gm-Features: AclHuK81nbxNTal5GHxSdakoHv5f4rvSwuNigSTADQ_gbSoSrO5ygZJIc_0EkJc
+Message-ID: <CAP01T743ZYEDDTxQ=_R+3kUJ8xLjQnm8jAeDnkPmLpc4Df+pNg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix flaky refcount asserts in map_kptr_race
+To: Maxim Khmelevskii <max@linux.ibm.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, 
+	Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Thu, 15 Oct 2026 at 14:13, Maxim Khmelevskii <max@linux.ibm.com> wrote:
+>
+> On 13/08/2026 00:51, Maxim Khmelevskii wrote:
+> > On 23/07/2026 18:34, Kumar Kartikeya Dwivedi wrote:
+> >> On Thu Jul 23, 2026 at 1:40 PM CEST, Maxim Khmelevskii wrote:
+> >>> bpf_testmod shares objects across tests; prog_test_struct that holds
+> >>> cnt.refs.counter is one of them. Refcounter release is deferred behind
+> >>> an RCU grace period, so it may still be pending when this test asserts.
+> >>> wait_for_refs prevents flaky failures when other tests have
+> >>> contaminated
+> >>> the refcount.
+> >>>
+> >>> Fixed tests:
+> >>>   - test_htab_leak
+> >>>   - test_percpu_htab_leak
+> >>>   - test_sk_ls_leak
+> >>>
+> >>> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> >>> Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> >>> Signed-off-by: Maxim Khmelevskii <max@linux.ibm.com>
+> >>> ---
+> >> Wouldn't this still be flaky? Could we order these tests and wait for
+> >> a RCU gp
+> >> to pass before finishing each one? We have kern_sync_rcu(). Either
+> >> way, I don't
+> >> think the current approach is the right way forward.
+> >>
+> >> pw-bot: cr
+> >>
+> >>> .../testing/selftests/bpf/prog_tests/map_kptr_race.c | 12 ++++++++++++
+> >>>   1 file changed, 12 insertions(+)
+> >>>
+> >>> diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+> >>> b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+> >>> index 506ed55e8528..5a543b3465a8 100644
+> >>> --- a/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+> >>> +++ b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+> >>> @@ -28,6 +28,15 @@ static int read_refs(struct map_kptr_race *skel)
+> >>>       return skel->bss->num_of_refs;
+> >>>   }
+> >>>
+> >>> +static void wait_for_refs(struct map_kptr_race *skel)
+> >>> +{
+> >>> +    for (int i = 0; i < 500; i++) {
+> >>> +        if (read_refs(skel) == 2)
+> >>> +            return;
+> >>> +        usleep(10 * 1000);
+> >>> +    }
+> >>> +}
+> >>> +
+> >>>   static void test_htab_leak(void)
+> >>>   {
+> >>>       LIBBPF_OPTS(bpf_test_run_opts, opts,
+> >>> @@ -73,6 +82,7 @@ static void test_htab_leak(void)
+> >>>           sched_yield();
+> >>>
+> >>>       ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
+> >>> +    wait_for_refs(watcher);
+> >>>       ASSERT_EQ(read_refs(watcher), 2, "htab refcount");
+> >>>
+> >>>   out_watcher:
+> >>> @@ -134,6 +144,7 @@ static void test_percpu_htab_leak(void)
+> >>>           sched_yield();
+> >>>
+> >>>       ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
+> >>> +    wait_for_refs(watcher);
+> >>>       ASSERT_EQ(read_refs(watcher), 2, "percpu_htab refcount");
+> >>>
+> >>>   out_watcher:
+> >>> @@ -195,6 +206,7 @@ static void test_sk_ls_leak(void)
+> >>>           sched_yield();
+> >>>
+> >>>       ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
+> >>> +    wait_for_refs(watcher);
+> >>>       ASSERT_EQ(read_refs(watcher), 2, "sk_ls refcount");
+> >>>
+> >>>   out_watcher:
+> >
+> > > Wouldn't this still be flaky?
+> >
+> > Yes, but it seems like the best solution to me.
+> >
+> > > Could we order these tests and wait for a RCU gp
+> > to pass before finishing each one?
+> >
+> > I don't think so, because an RCU gp does not guarantee that htab dtor
+> > was called.
+> >
+> >
+> > Let me try to explain these points and please correct me if they are
+> > wrong.
+> >
+> > That is how htab frees memory:
+> >
+> > const struct bpf_map_ops htab_map_ops = {
+> > ...
+> >     .map_free = htab_map_free,
+> > ...
+> >
+> > static void htab_map_free(struct bpf_map *map)
+> > |-> void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
+> >     wait for bpf_mem_refill
+> >
+> > static void bpf_mem_refill(struct irq_work *work)
+> > |-> static void free_bulk(struct bpf_mem_cache *c)
+> >     |-> static void do_call_rcu_ttrace(struct bpf_mem_cache *c)
+> >         |-> static inline void call_rcu_tasks_trace(struct rcu_head
+> > *rhp, rcu_callback_t func)
+> >             register callback __free_rcu
+> >
+> > static void __free_rcu(struct rcu_head *head)
+> > |-> static int free_all(struct bpf_mem_cache *c, struct llist_node
+> > *llnode, bool percpu)
+> >        here the htab destructor is called
+> >
+> > If this is correct, htab free happens after RCU gp and task RCU gp,
+> > which makes the option with waiting for the RCU gp after each test
+> > pointless. What kind of guarantees kern_sync_rcu gives right now?
+> >
+> > Polling on refs seems better because it improves chances for the test
+> > to pass without introducing major changes and it works with any RCU
+> > flavor, also the same hack is used already in bpf_testmod_exit.
+> >
+> > Considering all of this, what do you think is the way forward?
+> >
+> Hi, I know the solution isn't perfect and the issue most likely is low
+> priority, but still would be nice to improve the test. Please hit me up
+> whenever you have any comments regarding it.
+>
 
-An extension that writes to the packet of a tc, lwt_xmit or sk_skb program
-starts with bpf_unclone_prologue().  If the skb is cloned, that gives it
-a new head.
-
-It does not count as changing packet data.  changes_pkt_data goes by the
-helpers and kfuncs that a program calls, and whether it gets a prologue
-is known only after it has been compared with its target.  So the extension
-can replace a global function that leaves the packet alone, and the callers
-of that function keep their packet pointers across the call.  These point
-into the old head, which is left to the other clone.  Once that is freed,
-by the reader of a packet socket for example:
-
-  BUG: KASAN: slab-use-after-free in bpf_prog_53bc21b9810cadbc_t_read+0x2e8/0x36e
-  Read of size 1 at addr ffff888107bfe73c by task tt11/102
-  Freed by task 112:
-   kfree+0x161/0x500
-   skb_release_data+0x2dc/0x340
-   consume_skb+0xa6/0x1c0
-   packet_recvmsg+0x4b3/0xa20
-
-Nothing is wrong if the target program writes to the packet too: its own
-prologue has uncloned the skb, and that of the extension does nothing.
-Nor if the callers hold no packet pointers, like a dispatcher, or if the
-main function is replaced.
-
-Note for every global function that leaves the packet alone if it is
-called while packet pointers, or slices of the dynptr of a packet, are
-held.  What the callers of a global function hold is not known while it
-is verified, so the functions that it calls are taken for such as well.
-Refuse an extension with a prologue for such a function, unless the target
-program has a prologue, both when the extension is loaded and when it
-is attached to another target.
-
-Functions can share a type id in func_info.  The first of them is the one
-that is replaced, so look it up in one place.
-
-Fixes: 7e40781cc8b7 ("bpf: verifier: Use target program's type for access verifications")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
-v1 -> v2:
-- Two functions with one type id got past the check: it took any of them,
-  while the first one is replaced.  Same use-after-free, reproduced.
-  bpf_check_attach_target() and bpf_check_ext_prologue() share the lookup
-  now (sashiko, bpf-ci).
-
-v1: https://lore.kernel.org/bpf/20261018012753.1724147-1-alexei.starovoitov@gmail.com/
-
- include/linux/bpf.h          |  2 ++
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/fixups.c          |  6 ++++
- kernel/bpf/verifier.c        | 67 ++++++++++++++++++++++++++++++++----
- 4 files changed, 71 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index feb7de6483e3..54ae73e211f7 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1757,6 +1757,7 @@ struct bpf_func_info_aux {
- 	bool unreliable;
- 	bool called[BPF_FUNC_CTX_CNT];
- 	bool verified[BPF_FUNC_CTX_CNT];
-+	bool called_with_pkt_ptrs;
- };
- 
- enum bpf_jit_poke_reason {
-@@ -1894,6 +1895,7 @@ struct bpf_prog_aux {
- 	bool jits_use_priv_stack;
- 	bool priv_stack_requested;
- 	bool changes_pkt_data;
-+	bool has_prologue;
- 	bool might_sleep;
- 	bool kprobe_write_ctx;
- 	struct {
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7a72bb06fe56..951a90458d18 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1381,6 +1381,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			    const struct bpf_prog *tgt_prog,
- 			    u32 btf_id,
- 			    struct bpf_attach_target_info *tgt_info);
-+int bpf_check_ext_prologue(struct bpf_verifier_log *log,
-+			   const struct bpf_prog *tgt_prog, u32 btf_id);
- void bpf_free_kfunc_btf_tab(struct bpf_kfunc_btf_tab *tab);
- 
- int mark_chain_precision(struct bpf_verifier_env *env, int regno);
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index a8739fbd0349..673751b86aee 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -940,6 +940,12 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 					"Extension writing packet data must take ctx and scalars only\n");
- 				return -EINVAL;
- 			}
-+			if (env->prog->type == BPF_PROG_TYPE_EXT &&
-+			    bpf_check_ext_prologue(&env->log,
-+						   env->prog->aux->dst_prog,
-+						   env->prog->aux->attach_btf_id))
-+				return -EINVAL;
-+			env->prog->aux->has_prologue = true;
- 			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
- 							 BPF_PATCH_MOVE_TARGET);
- 			if (!new_prog)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 63fff641d985..1444be95f577 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10867,6 +10867,20 @@ static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
- 	}));
- }
- 
-+static bool holds_pkt_pointers(struct bpf_verifier_env *env)
-+{
-+	struct bpf_func_state *state;
-+	struct bpf_reg_state *reg;
-+	bool ret = false;
-+
-+	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
-+		if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg))
-+			ret = true;
-+	}));
-+
-+	return ret;
-+}
-+
- enum {
- 	AT_PKT_END = -1,
- 	BEYOND_PKT_END = -2,
-@@ -11472,6 +11486,13 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 		clear_caller_saved_regs(env, caller->regs);
- 		invalidate_outgoing_stack_args(env, cur_func(env));
-+		/*
-+		 * What the callers of a global function hold is not known
-+		 * while it is verified.
-+		 */
-+		if (!env->subprog_info[subprog].changes_pkt_data &&
-+		    (state->frame[0]->subprogno || holds_pkt_pointers(env)))
-+			sub_aux->called_with_pkt_ptrs = true;
- 
- 		/*
- 		 * A non-void global function returns a 64-bit SCALAR_VALUE in
-@@ -22209,6 +22230,41 @@ static int check_unreliable_func_args(struct bpf_verifier_log *log, struct btf *
- 	return -EINVAL;
- }
- 
-+/* Functions may share a type id. The first of them is attached to. */
-+static int find_tgt_subprog(const struct bpf_prog *tgt_prog, u32 btf_id)
-+{
-+	const struct bpf_prog_aux *aux = tgt_prog->aux;
-+	int i;
-+
-+	for (i = 0; i < aux->func_info_cnt; i++)
-+		if (aux->func_info[i].type_id == btf_id)
-+			return i;
-+
-+	return -1;
-+}
-+
-+/*
-+ * The prologue of an extension gives a cloned skb a new head, unless the
-+ * prologue of the target program has done that. The callers of the function
-+ * that it replaces must not hold on to the old head.
-+ */
-+int bpf_check_ext_prologue(struct bpf_verifier_log *log,
-+			   const struct bpf_prog *tgt_prog, u32 btf_id)
-+{
-+	const struct bpf_prog_aux *aux = tgt_prog->aux;
-+	int subprog = find_tgt_subprog(tgt_prog, btf_id);
-+
-+	if (aux->has_prologue)
-+		return 0;
-+
-+	if (subprog >= 0 && !aux->func_info_aux[subprog].called_with_pkt_ptrs)
-+		return 0;
-+
-+	bpf_log(log,
-+		"Extension writing packet data cannot replace a function whose callers keep packet pointers\n");
-+	return -EINVAL;
-+}
-+
- /*
-  * An extension is verified as a program that runs under the RCU read lock. Does
-  * the function that it is to replace?
-@@ -22235,7 +22291,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 	char trace_symbol[KSYM_SYMBOL_LEN];
- 	const char prefix[] = "btf_trace_";
- 	struct bpf_raw_event_map *btp;
--	int ret = 0, subprog = -1, i;
-+	int ret = 0, subprog = -1;
- 	const struct btf_type *t;
- 	bool conservative = true;
- 	const char *tname, *fname;
-@@ -22274,11 +22330,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			return -EINVAL;
- 		}
- 
--		for (i = 0; i < aux->func_info_cnt; i++)
--			if (aux->func_info[i].type_id == btf_id) {
--				subprog = i;
--				break;
--			}
-+		subprog = find_tgt_subprog(tgt_prog, btf_id);
- 		if (subprog == -1) {
- 			bpf_log(log, "Subprog %s doesn't exist\n", tname);
- 			return -EINVAL;
-@@ -22333,6 +22385,9 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 					"Extension program changes packet data, while original does not\n");
- 				return -EINVAL;
- 			}
-+			if (prog->aux->has_prologue &&
-+			    bpf_check_ext_prologue(log, tgt_prog, btf_id))
-+				return -EINVAL;
- 
- 			tgt_might_sleep = aux->func
- 					  ? aux->func[subprog]->aux->might_sleep
--- 
-2.55.0
-
+I still feel this is not the right solution. If RCU gp isn't enough,
+trace when the dtor is called and set a bit that user space can wait
+upon, and we can spin with yields until that bit is set. If other
+tests modifying the refcount is problematic to wait properly then we
+can mark this one as serial, but I think that can be avoided.
