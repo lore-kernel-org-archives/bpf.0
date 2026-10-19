@@ -1,36 +1,33 @@
-Received: from mta0.migadu.com (out-198.mta0.migadu.com [91.218.175.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C31495539
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 09:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619054AA1CD;
+	Mon, 19 Oct 2026 09:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792403450; cv=none; b=G4ShfLlGqtWsA/HnQerF8N2UnIBBCKEFd0O/Y6PtEZNGoNCPdzlVlCPdETor9FQvixivqGWXL8Qy/anQ5EQy/d8YSzCeT/kqBswcykE2I7qzDlsto57US5rIGp68CfSQN38k/Y7pWwdFwPM2T/qHTiJwwDB55Rmp2O/6H92ORqY=
+	t=1792403903; cv=none; b=tsT+v52/UfBCDLOG7GgrgOyJMh7R7YIg41icmPg7RrisAPLWb/Ow8i7rB/pT/NO6XURA6otcLp6frYhl6Vxw+yDHu8fiuL60sqOWRH1HdhFAMhJy8o8DAf68GcnedH9ee3z3miy/INcs/huhi2R7hS/TvJ1AYnR2zajvIyCaRnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792403450; c=relaxed/simple;
-	bh=5dg8NSvB9hFjoy54PLoUpMKB7gitIbpPU2h83kRMT2s=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nWNTiqUTVV8eqLvwg71UpQRDfSeTgjEQjOgifzzh2DXaay/Si8cqlIfw8n5Zz/Va4umkIGyTZ3eGe6mO+Wc6CvgL8mW/JcKl02DnFvA8v8FIuCelNimYkCTuSJ4yQfEnAnimF0MofK3bcbuCt5aUayNJ7bdX9h9YBNbh3X9Jb7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Sovzfxe0; arc=none smtp.client-ip=91.218.175.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792403903; c=relaxed/simple;
+	bh=7STzAZVE2icKcOUDIcTfyyUyejv1yzD1Rq+SGFadgCQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qIUSZVKR1RLzjgSJp8821MdOWLF41nYXtuzoch8/uiO/mAFiW8EtywyFsztoOCzWlHtlLPF00BJNZv9NvxxrtGWlpFbaq/5wFQsFTFbi6W9/CGVGAd8HfTHVOOSBshmxkTZd9P5VbaiwxhMMUyGYnIZ3dZHND9YE4XA01RVf+V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IsQ8XZY0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Sovzfxe0"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5dg8NSvB9hFjoy54PLoUpMKB7gitIbpPU2h83kRMT2s=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792403446; v=1; x=1793008246;
- b=Sovzfxe0zRfZXnJh2soMp8JNM+dkRvWsul3dh56BXn+bh1RMfHKiV7Lahy/mx9+lLjABlgMF
- drMjuPXJxB1EGsqMN3K+GdWu7k028eZRP46HppLCB/YeVzaFZnOiOlVc6Ajd3yWOuZDHg0uYtMv
- /M28WOWew/a2FNCW2e9z40/s=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 535a794b7b48e7a4;
-	Mon, 19 Oct 2026 09:50:46 +0000
-X-Mizu-Trace-ID: 535a794b7b48e7a4
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2352b824-7e36-453e-b3e9-151761a352c3@linux.dev>
-Date: Mon, 19 Oct 2026 17:50:36 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsQ8XZY0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C34A1F000C4;
+	Mon, 19 Oct 2026 09:58:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792403902;
+	bh=c3RnrIDDX2/I7bSPgPTL7arfKC/4On1YTWVqBC2tUVU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=IsQ8XZY0yUaSWEvovFDg/M5FMNYyJxGIXCCnAbnb3D+poYtT8r9MToxAmx3Zj4aY3
+	 1R629wzDJZqXv2o1IGeku8h0a0O+OvS2d1WpjA89ig3XqrrflqF+CkAitgC7lZYMVI
+	 +LyXeQ/Pwx8c1yYLrhYUvVQbhxohK5sLp8sgrNcBlqwkLGB6DLflxAVEMPdO0x6rLz
+	 UUdCxHc9Qk9/W1VZ8zA3N5iv/1Tsj3S+Jk2QpNBYGr0hjyuX2idiOLLWCg1zg8xkhW
+	 SI1I7unpPdodJNO98KG2fmFLw2k+McAjZmWg1V13OUKiHlTOc+jbm+TROOCXUwza+k
+	 Vthnlfzaj+nUg==
+Message-ID: <746ba331-0a9f-46ed-8faf-d432bec5c8c6@kernel.org>
+Date: Mon, 19 Oct 2026 11:58:16 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,63 +35,70 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
- ameryhung@gmail.com, alexei.starovoitov@gmail.com
-Subject: Re: [RFC PATCH v10 4/4] docs: cgroup-v2: document the iocost BPF cost
- model attachment
-To: Tejun Heo <tj@kernel.org>
-References: <20261003124045.1289305-1-cui.tao@linux.dev>
- <20261003124045.1289305-5-cui.tao@linux.dev>
- <eae39daec12cf6f121cc5010574a6c03@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <eae39daec12cf6f121cc5010574a6c03@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/2] veth: schedule the peer's NAPI after XDP_TX when
+ only GRO is enabled
+To: Lorenzo Bianconi <lorenzo@kernel.org>, Tianyi Gao <tianyi@cloudflare.com>
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, toke@redhat.com,
+ horms@kernel.org, bpf@vger.kernel.org, shuah@kernel.org,
+ kernel-team@cloudflare.com, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, sdf@fomichev.me, linux-kselftest@vger.kernel.org,
+ bochaolucky@gmail.com, toshiaki.makita1@gmail.com
+References: <20261016214217.16942-1-tianyi@cloudflare.com>
+ <20261016214217.16942-2-tianyi@cloudflare.com> <atSMqdB52V494aYn@lore-desk>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <atSMqdB52V494aYn@lore-desk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello Tejun,
 
-在 2026/10/17 01:49, Tejun Heo 写道:
-> Hello, Tao.
-> 
-> On Sat, 03 Oct 2026 20:40:45 +0800, Tao Cui wrote:
->>  	  model		The cost model in use - "linear"
->> +			or "bpf" while the BPF model
->> +			is in use
-> 
-> "linear" or "bpf" is enough here.
-> 
-Shortened to "linear" or "bpf".
 
->> +	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost model
->> +	can be bound to a device by attaching an "iocost_model_ops"
->> +	struct_ops carrying the whole disk's major:minor in its "dev"
->> +	member (a partition's major:minor is rejected).  Attaching
->> +	creates the controller if needed, like an io.cost.model write
->> +	does, and
->> +	switches the device's pricing to the model; enabling and
+On 10/18/26 11:08, Lorenzo Bianconi wrote:
+>> veth_xdp_xmit() queues XDP_TX frames on the peer's ring if the peer has
+>> NAPI. A peer with GRO enabled and no XDP program also has NAPI.
+>>
+>> veth_xdp_flush() then schedules the peer's NAPI, but only if the peer's
+>> xdp_prog is set, so for such a peer the frames are never processed.
+>> Nothing else schedules that NAPI by default.
+>>
+>> Once the ring is full, every XDP_TX frame is dropped, and so are the
+>> skbs that veth_xmit() queues on the same ring.
+>>
+>> Commit 0e672f306a28 ("veth: check for NAPI instead of xdp_prog before
+>> xmit of XDP frame") changed the check in veth_xdp_xmit() but not the one
+>> in veth_xdp_flush(). Make veth_xdp_flush() check the napi pointer
+>> instead of xdp_prog, as veth_xdp_xmit() does.
+>>
+>> Fixes: 0e672f306a28 ("veth: check for NAPI instead of xdp_prog before xmit of XDP frame")
+>> Signed-off-by: Tianyi Gao <tianyi@cloudflare.com>
 > 
-> Attaching now also populates the device's line, so the existing sentence
-> saying the line is populated on the first write to "io.cost.qos" or
-> "io.cost.model" needs updating. The paragraph also runs 21 lines with a
-> leftover break after "does, and". Can it be split into three, attaching,
-> model= selection and detaching, and removal and ctrl?
-> 
-Updated and split. The documentation now says the device's line
-appears on the first io.cost.qos or io.cost.model write, or when a
-model is attached. The same wording change also went into the
-io.cost.qos section.
+> Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
 
-The paragraph is now split into three parts: attaching, model=
-selection, and detaching/removal with ctrl. The stray line break after
-"does, and" is gone too.
 
-Thanks,
-Tao
+LGTM
 
-> Thanks.
-> 
+Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
+
+
+>> ---
+>>   drivers/net/veth.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+>> index 643b97dc5245..9405ffac598a 100644
+>> --- a/drivers/net/veth.c
+>> +++ b/drivers/net/veth.c
+>> @@ -612,7 +612,7 @@ static void veth_xdp_flush(struct veth_rq *rq, struct veth_xdp_tx_bq *bq)
+>>   	rcv_priv = netdev_priv(rcv);
+>>   	rcv_rq = &rcv_priv->rq[veth_select_rxq(rcv)];
+>>   	/* xdp_ring is initialized on receive side? */
+>> -	if (unlikely(!rcu_access_pointer(rcv_rq->xdp_prog)))
+>> +	if (unlikely(!rcu_access_pointer(rcv_rq->napi)))
+>>   		goto out;
+>>   
+>>   	__veth_xdp_flush(rcv_rq);
+>> -- 
+>> 2.55.0
+>>
 
