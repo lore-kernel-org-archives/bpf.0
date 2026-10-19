@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792421706;
-	b=ei+L/tE3NSbTTcq1fTGCitQOJVuEHL/6P5sBV7nZdlIUV7HxrSFQqTCvM0Fl1aZbtP61
-	 kNAD8u4HF9xJO+3J3UHhb1/Vnu7E30ZyrWVZW9Gg0P3VA89kwSuDanZMxAIFhoQLIc4rM
-	 9NpV6WmV/6Vz9oAMo7AES3piS4HJR/SRjemckjJhHFO8DJPmeXlbvE7DgNFgY09QE3oau
-	 3OjBGOxqDKQtOxcyWRc1EI6pQr19XFpSXNv6ykygS7dVV1aUurabFZasVNfm2w2wVzVt+
-	 TeoMHDNsYYpo/w0fL8fVuZKz588IOCwhuBuHUyUEEVlHpGvIBJCm8d8HHEQJ45ad2wQ==
+	t=1792421709;
+	b=b4LkGYVvSsvx+SfANkO0I7+L9oa/sxz5EmKbhQu+Do1wBTDWBxC6XodULFGHrs8KOe04
+	 RlrEOGxp+EJVDb/YRrRC6trcKMVM7i8vhM3zSghRwjoirEGBtE9I98FrqyJoS66ymPf47
+	 BZEDGvuwrYcbvyDpo5EQItAG/XIhx4OuIJ9zASTMCqHVwP0LM9B3P0ouMdKcCVbvtM2vD
+	 WSn6L2F5YvfnlaxssDT/KxS7m9qICUmVz9m5CuxTAaFDvPFctS58cODOdfnRi8iNlOHS/
+	 zhMoMEDYYBsijSBDXiQ+BO4iUncxheazra7wI+qp8hPU+vngaJNOZ0xqthRh68/iScA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792421706;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792421709;
 	h=Received:Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=mZLzRwRYboY/RmAU+vEf+KfhFzbpntUfPL9/1QMLPg4=;
-	b=GCgR7D6d9SfRaYV226T9vC8CNfHsflX5NSht0VUFHsOhrhQ+SkEXvDKrqRrgP6gqky2K
-	 xZ5VXgVjp7GljaUJ5lMPtReA6bjTwpCgHc1UOEOaIswy+DaBV+yHAl9MqirNZa26zTs4u
-	 PUV5cOauu4ELT9nT9xpMFdbYQbD86qou91BUoZKVU8uudgQJbx5BMUt062AzwENQhU9Er
-	 SZk12hg4aUKF5DQUwuLW62Dzvo3j7mcjwQscScTRCLh8A/63RaCl1WcBgKD0RK4uNN8qz
-	 2mF9QfBDlQd9HACVpostfQBImSKzBG1yoC9qWls7XYA/L1j40nWbe0dyg+tTPepun2w==
+	bh=+JUxYD7hsy9+873bVBb64U1eteVVDuAvUhFWgvJelD4=;
+	b=FrAWDstoOvfmlccm1mGNB/6jzN2JKvgtNANldHNtFYsrpMWwZ9SSwo7mujIMtb73vR3d
+	 Cdhy0fs3pGE9K/ucT3lf1W8isKEUeMWjQjRqIzaGa0nhapfnhtbeqI7g3xVc8VGXh/Hop
+	 0sVaaex3RbQgiiw0ns3AFYo4JYXX3e/opm6Jo1OrVyFtuZmcUTWQp7if3zjWsDqo5WbJc
+	 LYHl2zlKtw5WbbBO8Unwl9OlUqcl7NuXGKZ/OkZrNlU+BjdJitzo6RXsZukyBtMhXhmc4
+	 TXoLs564xQc81pfvVwQHst6WoQUpe1WpWUcxLOoK7y3Skrc3rRk78tgn5Z29mDhrPOg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHHofU0r;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TpoWiUhv;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=10.30.226.211
 Received: from aws-us-west-2-korg-listserv-1.web.codeaurora.org (ip-10-30-226-211.us-west-2.compute.internal [10.30.226.211])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B007B606EFE6;
-	Mon, 19 Oct 2026 14:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 177E5606EFE9;
+	Mon, 19 Oct 2026 14:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kHHofU0r
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TpoWiUhv
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABBE234964;
-	Mon, 19 Oct 2026 14:55:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CC36513FF;
+	Mon, 19 Oct 2026 14:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792421706; cv=none; b=TCnLJuB3FaGM41lcTEq2aWDzCDHTl8TD8XX++TZc52MwHT7PhCag2sSFh7cx5nxv3yDN1QVDBLoX1jCiik56UfdtLt9awUXTXFPF1hkdVLFxV35fLn8kPAwnWLZk4v9/aNJOunDo6D7ilxchKBGqduKvrHdPd8ut3HOUNtnA5RM=
+	t=1792421709; cv=none; b=Kx5/sJm6PI9j5E86xXnZIrs+5rYpV6nQbp7hVgKoXvjcn2yieSY6aJx6d82tlKrAfQQmBhe+Jv7MlRpQeIhZiel27RQASaX/2rDovckt5uHP+WQCZyAPZPKHwR+A7an8ZpUyannl5/k0US1/eYymqjRMeGLuBKuc0+T1td1s13M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792421706; c=relaxed/simple;
-	bh=rzZ8aVYHTbvvvHXdIbMH7BBTWk45dgc5mYEFN5NQOlM=;
+	s=arc-20240116; t=1792421709; c=relaxed/simple;
+	bh=rypUYqt1WxoN40+ku5yahBFpXbOcWjQofkx/7yag5k8=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m1fZLah0vPULlyLzU9lUVjC99sltZZjXQKpqaUIsfXtjFeC6ku308uJGdFLlGcLRvPmKjeVI0fcNdl0uzS6XYVvAxAMFSozDnQlPmTtfSgU6dD9Jnpethn14G5delDQT1Y45vYkgFtS1I4y5AXEJFsqe8X9wWrEIcL3dS3zGVu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHHofU0r; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 526C01F000C4;
-	Mon, 19 Oct 2026 14:55:03 +0000 (UTC)
+	 Content-Type:MIME-Version; b=RDhSZ+olmgcyrHGvJ2BbJTtY8eU9BKdNjs+RPfq2ptHG0sDuBY+FVCeuj23dlD4SmGq4fYxNuOhoxgK4nV/xAWDrx39XL/guT3SW4twlmBaFcqSDcv1vA/y0xINjP289ut/KCzhPnzm1bc1feM22uZAqsJpTVYcABKMoAH0GWoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpoWiUhv; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA241F000C5;
+	Mon, 19 Oct 2026 14:55:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792421705;
-	bh=mZLzRwRYboY/RmAU+vEf+KfhFzbpntUfPL9/1QMLPg4=;
+	s=k20260515; t=1792421707;
+	bh=+JUxYD7hsy9+873bVBb64U1eteVVDuAvUhFWgvJelD4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kHHofU0rYuCnhF24LmEHw4SnsG9PEmLBo2DwGVUs58j86P/0FdZ6XWeHDZVLvTErD
-	 x+nBzd9woAXRC3l15OeMB2SlHqkfUknr7620h8Qw4aOs5iK5MiNwO3y4ZITB91sqbf
-	 KFSL4LR8q+FXg/ttYU8yCEw4UF3zy4j1ho4b//W/OrxVJzexrr/Gl14YZI46TTMFYX
-	 5F/oYIRGQcdconbxeDYTqbmyc9ZBEUKlERt8NvM5jRfpq83cMG1JeKy6YVKoLKVbGm
-	 YD3+tckFU23CE+YxRzCrFnAFxDC8FNpacA+kHqx1WGrt7z22o7RoX6nmDYc1b6v3ip
-	 VFfur1KqMae5w==
-Subject: Re: [PATCH net-next v6 1/5] selftests/bpf: Fix XDP feature test setup
- and teardown
+	b=TpoWiUhvlPWuiOAzwQ0+QYp1daD5dXruX/kR2AJHRWNdqmgRTyUwwWwa+sRV+2IrL
+	 qdMOqQJf/VKImZ2CmKFbRDxbSpf1mueNlPbW0S0A4JWDzEuu6gIvPdPBwXxAiMJvcS
+	 kiA6C8l9qYU76zsFXaLHbH28Rj+nDJXA4kqFjor8LjGmFwpPZBE27OTiVgGPbAOI5p
+	 XOmxC3hdmTfeaEkvfoOrttUR+AGgMExhSly0PcfHcVjOQtnPIWNfn9fJzru23dsa9V
+	 yqYN4frfKF+YRddnsrOMbfO9x9lyfBw/xJeRQu/KIbKmkHA+4G6Jdjl82mfELlJCgx
+	 smIVXBHc809cw==
+Subject: Re: [PATCH net-next v6 2/5] selftests/bpf: Track XDP test processes
+ and isolate namespaces
 From: netdev-bot+sashiko@kernel.org
 To: bochaolucky@gmail.com
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
@@ -65,10 +65,10 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
  linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
  alexis.lothore@bootlin.com, lorenzo@kernel.org, tiozhang@didiglobal.com,
  willemdebruijn.kernel@gmail.com, petrm@nvidia.com
-Date: Mon, 19 Oct 2026 14:55:02 +0000
-Message-ID: <179242170282.3135.3655485232785325877@kernel.org>
-In-Reply-To: <20261018-xdp-v5-send-20261008-v6-1-7336e1282ca3@gmail.com>
-References: <20261018-xdp-v5-send-20261008-v6-1-7336e1282ca3@gmail.com>
+Date: Mon, 19 Oct 2026 14:55:05 +0000
+Message-ID: <179242170518.3135.2037803545467217348@kernel.org>
+In-Reply-To: <20261018-xdp-v5-send-20261008-v6-2-7336e1282ca3@gmail.com>
+References: <20261018-xdp-v5-send-20261008-v6-2-7336e1282ca3@gmail.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -88,194 +88,116 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] The `xdp_attached` guard only records that an attach succeeded at
-  some point.
-
-Pre-existing issues:
-- [Medium] test_xdp_features.sh uses only the tester's exit status, and
-  tester_run() returns 0 whether or not the capability is DETECTED or…
-- [Low] In tester_run(), the settimeo() and connect() failure paths
-  return directly without close(sockfd), which leaks the control socket.
-- [Low] recv_msg() accepts payloads shorter than val_size and copies only
-  the bytes it received.
+- [Low] Concern about a signal race in cleanup() and handle_signal() in
+  tools/testing/selftests/bpf/test_xdp_features.sh.
+- [Low] Concern about a check-then-create race (TOCTOU) on namespace
+  ownership in setup() of…
 
 --
 
-selftests/bpf: Fix XDP feature test setup and teardown
+selftests/bpf: Track XDP test processes and isolate namespaces
 
-This commit fixes several setup and teardown problems in the xdp_features
-selftest tool. It initializes the DUT state and socket address lengths,
-hands the echo socket back to the caller, and stops and joins the echo
-thread only if it was started. It also samples the tester counters before
-teardown, and it detaches XDP programs only after a successful attach.
+This commit reworks test_xdp_features.sh so each run gets its own DUT and
+tester namespaces. The DUT server is tracked as a shell job with a bounded
+readiness wait, and signals are handled during setup and cleanup. It also
+filters the tracepoint counters by this run's program and CPU map IDs, and
+makes the tester fail when detected and advertised features differ.
 
-> diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
-> index a27ed663967c4..3076fdda61fa4 100644
-> --- a/tools/testing/selftests/bpf/xdp_features.c
-> +++ b/tools/testing/selftests/bpf/xdp_features.c
+> diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
+> index 0aa71c4455c05..5b68b20d94ac9 100755
+> --- a/tools/testing/selftests/bpf/test_xdp_features.sh
+> +++ b/tools/testing/selftests/bpf/test_xdp_features.sh
+> @@ -2,105 +2,179 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  readonly NS="ns1-$(mktemp -u XXXXXX)"
+> +readonly DUT_NS="dut-${NS}"
 
 [ ... ]
 
-> @@ -341,10 +343,14 @@ static int recv_msg(int sockfd, void *buf, size_t bufsize, void *val,
->  		    size_t val_size)
->  {
->  	struct tlv_hdr *tlv = (struct tlv_hdr *)buf;
-> -	size_t len;
-> +	ssize_t len;
->  
->  	len = recv(sockfd, buf, bufsize, 0);
-> -	if (len != ntohs(tlv->len) || len < sizeof(*tlv))
-> +	if (len < 0)
-> +		return -errno;
-> +	if (!len)
-> +		return -ECONNRESET;
-> +	if (len < sizeof(*tlv) || len != ntohs(tlv->len))
->  		return -EINVAL;
->  
->  	if (val) {
+>  setup() {
+>  	{
+> -		ip netns add ${NS}
+> -
+> -		ip link add v1 type veth peer name v0 netns ${NS}
+> -
+> -		ip link set v1 up
+> -		ip addr add $V1_IP4/24 dev v1
+> -		ip addr add $V1_IP6/64 nodad dev v1
+> +		[ ! -e "/run/netns/${NS}" ]
+> +		peer_created=true
+> +		ip netns add "${NS}"
+> +		[ ! -e "/run/netns/${DUT_NS}" ]
+> +		dut_created=true
+> +		ip netns add "${DUT_NS}"
 
 [Severity: Low]
-This isn't a bug introduced by this patch, but recv_msg() only rejects
-payloads that are larger than val_size:
+Can cleanup() end up deleting a namespace that belongs to a different run?
 
-	if (val) {
-		len -= sizeof(*tlv);
-		if (len > val_size)
-			return -ENOMEM;
+The existence check and the ip netns add are not atomic. The ownership
+flag is also set before the create succeeds.
 
-		memcpy(val, tlv->data, len);
-	}
+Suppose a concurrent run creates the same name after the [ ! -e ... ]
+check but before ip netns add. The add fails and set -e exits. cleanup()
+then sees peer_created=true (or dut_created=true):
 
-Can a short payload leave part of the destination unwritten?
+cleanup() {
+    ...
+	if "$peer_created"; then
+		ip netns del "$NS" 2> /dev/null || true
+	fi
+}
 
-In tester_run(), stats and advertised_feature are both declared without
-an initial value. Leftover stack bytes could then affect the feature
-result that gets printed.
+and deletes the other run's namespace.
 
-A later patch in this series changes the check to:
+This needs two runs to get the same suffix from mktemp -u XXXXXX and then
+hit the window, so it is unlikely. Would setting peer_created and
+dut_created only after each ip netns add succeeds close it?
 
-	if (len != val_size)
-		return -ENOMEM;
-
-That rejects short payloads before the memcpy().
-
-[ ... ]
-
-> @@ -403,9 +412,12 @@ static int dut_run(struct xdp_features *skel)
->  			if (err)
->  				goto out;
->  
-> +			xdp_attached = true;
-> +
->  			err = dut_run_echo_thread(&dut_thread, &echo_sockfd);
+The later patch in this series, "selftests/net: Move the XDP feature test
+to drivers/net/hw", deletes test_xdp_features.sh entirely. So this only
+affects the intermediate state of the series.
 
 [ ... ]
 
-> @@ -422,6 +434,7 @@ static int dut_run(struct xdp_features *skel)
->  
->  			exiting = true;
->  			bpf_xdp_detach(env.ifindex, flags, NULL);
-> +			xdp_attached = false;
-
-[Severity: Low]
-The xdp_attached flag records that bpf_xdp_attach() succeeded at some
-point. However, bpf_xdp_detach(env.ifindex, flags, NULL) removes
-whatever program is attached to the device at the time it runs.
-
-If another privileged user replaces the program between the attach and
-the detach, would this still remove that other program?
-
-The out: label in tester_run() uses the same pattern:
-
-	if (xdp_attached)
-		bpf_xdp_detach(env.ifindex, flags, NULL);
-
-A later patch in this series appears to fix this. The DUT attaches with
-bpf_link_create() and cleans up with close(link_fd). The tester no
-longer attaches an XDP program at all, because it uses AF_PACKET.
-
->  
->  			tlv->type = htons(CMD_ACK);
->  			tlv->len = htons(sizeof(*tlv));
-
-[ ... ]
-
-> @@ -578,7 +596,7 @@ static int tester_run(struct xdp_features *skel)
->  	struct bpf_program *prog;
->  	unsigned int stats;
->  	int i, err, sockfd;
-> -	bool detected_cap;
-> +	bool detected_cap, xdp_attached = false;
->  
->  	sockfd = socket(AF_INET6, SOCK_STREAM, 0);
->  	if (sockfd < 0) {
-
-[Severity: Low]
-This is a pre-existing issue, but the settimeo() and connect() failure
-paths just below this return without closing sockfd:
-
-	if (settimeo(sockfd, 1000) < 0)
-		return -EINVAL;
-
-	err = connect(sockfd, (struct sockaddr *)&env.dut_ctrl_addr,
-		      sizeof(env.dut_ctrl_addr));
-	if (err) {
-		...
-		return -errno;
-	}
-
-Does this leak the control socket? Now that xdp_attached starts out
-false, could these paths go to the out: label instead?
-
-A later patch in this series changes them to "err = -errno; goto out;".
-
-[ ... ]
-
-> @@ -636,19 +655,21 @@ static int tester_run(struct xdp_features *skel)
->  	if (err)
->  		goto out;
->  
-> +	/* Sample before teardown, which can produce additional echo traffic. */
-> +	detected_cap = tester_collect_detected_cap(skel, ntohl(stats));
-> +
->  	/* stop the test */
-
-[ ... ]
-
->  	fprintf(stdout, "Feature %s: [%s][%s]\n", get_xdp_feature_str(),
->  		detected_cap ? GREEN("DETECTED") : RED("NOT DETECTED"),
->  		env.feature.drv_feature & advertised_feature ? GREEN("ADVERTISED")
->  							     : RED("NOT ADVERTISED"));
->  out:
-> -	bpf_xdp_detach(env.ifindex, flags, NULL);
-> +	if (xdp_attached)
-> +		bpf_xdp_detach(env.ifindex, flags, NULL);
->  	close(sockfd);
->  	return err < 0 ? err : 0;
+>  cleanup() {
+> -	ip link del v1 2> /dev/null
+> -	ip netns del ${NS} 2> /dev/null
+> -	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
+> +	trap '' HUP INT QUIT ABRT TERM
+> +	trap - EXIT
+> +	terminate_dut_server
+> +	if "$dut_created"; then
+> +		ip netns del "$DUT_NS" 2> /dev/null || true
+> +	fi
+> +	if "$peer_created"; then
+> +		ip netns del "$NS" 2> /dev/null || true
+> +	fi
 >  }
 
-[Severity: Medium]
-This isn't a bug introduced by this patch, but detected_cap and
-advertised_feature are only printed here. tester_run() returns 0
-whatever their values are.
+[Severity: Low]
+Is there a window where a second signal can cut cleanup() short?
 
-test_xdp_features.sh checks only the exit status of the tester:
+After the first HUP/INT/QUIT/ABRT/TERM, handle_signal() calls exit and
+cleanup() starts as the EXIT trap. If a second signal arrives before the
+trap '' HUP INT QUIT ABRT TERM line takes effect, handle_signal() still
+runs:
 
-	ip netns exec ${NS} ./xdp_features -t -f XDP_PASS \
-					   -D $V1_IP6 -C $V1_IP6 \
-					   -T $V0_IP6 v0
-	[ $? -ne 0 ] && exit
+handle_signal() {
+	if "$setup_in_progress"; then
+		pending_signal=$1
+	else
+		exit "$1"
+	fi
+}
 
-Could a broken or unadvertised XDP action still pass the selftest?
+That exit would then run from inside the EXIT trap. In that case,
+terminate_dut_server() and both ip netns del calls would be skipped,
+leaving the DUT xdp_features process and both namespaces behind.
 
-A later patch in this series ("selftests/bpf: Track XDP test processes
-and isolate namespaces") adds:
-
-	if (!err && detected_cap != !!(env.feature.drv_feature & advertised_feature))
-		err = -EINVAL;
-
-The same series also replaces the shell script with
-drivers/net/hw/xdp_features.py.
+The old script had no TERM or EXIT trap, so this is not worse than
+before. The later patch "selftests/net: Move the XDP feature test to
+drivers/net/hw" also removes this script.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261018-xdp-v5-send-20261008-v6-0-7336e1282ca3%40gmail.com
