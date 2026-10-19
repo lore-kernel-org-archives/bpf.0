@@ -1,86 +1,331 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f4.google.com (mail-oo2-f4.google.com [74.125.231.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B9E447811;
-	Mon, 19 Oct 2026 03:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F245347C6
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 03:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792380009; cv=none; b=cyUHyAj24u0atLJ3MebJYgx5KDDeNz015AVfCd9rg0+htAfUSHa5sZopzKrSbyf2rIx+QJ9PhIjLN627PZtcQC/J2RlzbeKEkUSWzWyaLPUvfozQsj2knWCqRvv9CXwfOyzybOf1IUUEEg7aRa8E0dyoLZewVLpAo6nppJHc67Q=
+	t=1792380248; cv=none; b=jSKVKiX3eWyDGeafXy56ImRSncLkfodzO4XCaxjBXMtdnTOQ13bCARzLLyA+6kuLxJtx70do4rpDwIcC9EFbKqOryBXqniXnQxy//YLAef392a2GEGFzdy5tkWfH6h36l6Ix3O4i/lJrpJ6wnxS8rKD1BVJ5qLHfQ5xxCh4TTWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792380009; c=relaxed/simple;
-	bh=9D/tTq4orHUatReRSC0s/yYSLUXAjs0NGHI8nfR6iU0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hPN4MSXc3vf0BZc9Gg+OiUDBeCBK4p3bYmH/bXAsUEoRYFWgMgLfRt4g7XQ8r92h3NImGDwyetxXBXY/H9fUkj304tJsl/TQ+P3ym16SJsBGpRvn+rZR/2mV9Nh5CYZkKMp4s9bkyYhUwCYoH5Qqtb1Grk324d+/GqFNarz83BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MXsJ9G4R; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792380248; c=relaxed/simple;
+	bh=aZNktlEiJUGtJKRIEEbtNoztYN6ynBl1mA6gzyGqWtA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S7SpcQkO5UEEWlTejuwdODCFhqF0EpA5u03lL8AVvH8CKtsjW35d1ySuN/CDobkyAbyCDY+pjKdLzLUJRGdvUNpdfgXJtd8qLDAcxZG3dr7lWRNIo4Fef1a1/T4TTiEZzcuDIEYq/7DpgWHo6cRo4CIfrm6rnicivnpTMBPR1HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SgULL9a6; arc=none smtp.client-ip=74.125.231.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MXsJ9G4R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073791F000C4;
-	Mon, 19 Oct 2026 03:20:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792380008;
-	bh=CNKDQtmKSS3+n5QZzQjFbPVGBPOyM0GNuPUPPITwubQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=MXsJ9G4R+GN9olJb4nktvleN20dsr+1EWMDqzwK0NfiCiIyFVEEjjYnf2KPb9UIGb
-	 V9r491TixLohKL7eZ5bfw0zYzfY65/rqp4M3X7JcKbPkbw0XnGe6zdLatOGEwZCvuF
-	 yQc8XBJuSIRI8IobnRf2ygljDKMeZxAzWJbJyGWz7G/BJK/IePn+pPDRkJAB0oFr+w
-	 4AOoA9R18qfrSg4wMpmYihylGSn/eAaSjt6W76ELzpmcVpkeZSKpfFj2YTXYq3Kr95
-	 4DRvAr4idxrstYec55LysTNHAZ6B6v+dctC44I/HPkK3L9wUcS9L2sIro8u5KxHGmV
-	 l23cUB0sxBueQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F143938119C5;
-	Mon, 19 Oct 2026 03:20:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SgULL9a6"
+Received: by mail-oo2-f4.google.com with SMTP id 006d021491bc7-702ba2fd61cso382351eaf.1
+        for <bpf@vger.kernel.org>; Sun, 18 Oct 2026 20:24:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792380246; x=1792985046; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GIp75lTAaLXTgObZn7LO0ZzQmjq1ZCzlM6BRqu8qRfA=;
+        b=SgULL9a6JQ2zKen0kwQ9lmQLx8TGx+gE08pCHgCJ6tb9Cmecc09nJZKP9Fb59rw5pq
+         f7IJg/G6Xg9YFu4kp9w2ACTmcGN9n3xZLUbvZ443jecwUTt9gmZF7JO7F9rVo+GI4DSj
+         uxws6DOQ5tr5Cxdb+I4sW9dVEWp/IqBYLbT0xXKnxAiclsRgmAazDiLdos056+i1dEW2
+         paca6ty7d/k6YaKxrC10/OYh8N0CShSV+ZkygnKD79AP3FxKJTPpa5Dqi5y6+EWHNk9/
+         hkLc+mKAncuSFLN64jL0R2fj3u1yMRbHorFWsY5wOgYp547nxMPdt0iFaCqhPAckrAGN
+         lGIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792380246; x=1792985046;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GIp75lTAaLXTgObZn7LO0ZzQmjq1ZCzlM6BRqu8qRfA=;
+        b=iAvjj5uqNbvmGByXGvsCxrFJFugl6HLS7C9ot7yHpzmXbXRYz8GgKmB8oW6u9hRZYM
+         wf1Kto83EsPGCCAa2niwDLD4k80v/xSiuOGTaxib8mJZpjOpJwDC0rpuLq2hmN5Uv9T8
+         WqFE7oYmNTONenpqt4daUdYW9YrQyDSbGzW1QUxJhs24etvXHTMs4dcrGoEbRIukrCJR
+         Z23VvJdiaAQwOhEYIJpePGSFVU+HrkfU5qRVLJkiUmRmhaTsz2mTwzga/tQgjuwPMku7
+         LciMPf041kqAWVtRfCPYsXf6rQBkI56kdzt0b//OTjZITLW0q5oWd0ocCYqLrZ1lezmP
+         OgPg==
+X-Gm-Message-State: AFq9FYKtelkORtFeBBIHd42Lzch7yh2zZ/HJSQ2Mz7u6Zl3TRK4lcABp
+	UK1TwAGXlVdkCH1TP6oZMsIaONL93pQQu8AJLx3KTjlvZyUDH+trYUZsorbwPVaRAsA=
+X-Gm-Gg: AYBFou0v5doLYoUZzAWMP1B18YovXOqDrJ/Cw17dYIh9Bi40gG7Cayan2ThSKZAQjgm
+	IwMqj9M+Xtb1LHjCSfT3hKa70467+hsXGF7IID9j73Hg0KQGQCkEbEsS/u5g4LgScaQnWHVbxB8
+	wWSUGxR5bo4rGaAzIgYL6F8oc1WVn5ih/vcYx76ax4Z6g0/ZYHsG2Os03XQV+bW8VBlfPiQu+4w
+	FCCkEGB8j8LgcD2wVtohfYpHm4tOc8IR8JRuoObvuXgu6ucnS/s2Sir1Fpp/8Mu3aCJ+pTJgHhE
+	pRhKnz3LqlLHYivtF7WlF9O/VpVWHOU8FDX5DGNh/AuY0tbDW50TNFK/aCKpeYd17fFzu1iXmIa
+	BeLslziEe+KliJw0NvYjQ62aNkM9hEPOD/fEroQ0bM33roeztEa7Wqj122M9iwmg1Slb8ed/qCA
+	gsHkyDM9CJQn6RBmwIjBet59AOawcakZxOOxD7tv0tVHhA+hDTZyxpG5QDzBoNsJfurUK7+XRFp
+	k28g+liUsf+IzG/OCDr5MtVQs0cBDEB6FhQ7X4FltTFBqVsBLpNjTubg0y97+cL1uH00EPEBd4o
+	v3icYw==
+X-Received: by 2002:a05:6820:55d5:20b0:6ca:b5f:e6cb with SMTP id 006d021491bc7-70356b9b26amr2989210eaf.42.1792380245534;
+        Sun, 18 Oct 2026 20:24:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4c::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a73b63cff2sm7068615fac.7.2026.10.18.20.24.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Oct 2026 20:24:03 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 00/16] Fix some arena paper cuts
+Date: Mon, 19 Oct 2026 05:23:40 +0200
+Message-ID: <20261019032401.2302823-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14442; h=from:subject; bh=aZNktlEiJUGtJKRIEEbtNoztYN6ynBl1mA6gzyGqWtA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIetqr87zmUlZj5inXgu4sO6+6ewjn/71RrIUS0y7Vy91JjjJ wnBWRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbyPJaRYSHvtksz5wYo+RYIFX0TWF ajsneFuH5ayMSkdTZTSq3qJzD8lSxK5dv24ezpy/N/Nh5c+Nt4Z2tayePAoBO+rxNcWHXc2QE=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Run the cpumask map insert tests
- only for the test task
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179238000660.2381645.14989315546275364536.git-patchwork-notify@kernel.org>
-Date: Mon, 19 Oct 2026 03:20:06 +0000
-References: 
- <20261009-selftests-bpf-cpumask-insert-filter-v1-1-3249218594d7@gmail.com>
-In-Reply-To: 
- <20261009-selftests-bpf-cpumask-insert-filter-v1-1-3249218594d7@gmail.com>
-To: Qiliang Yuan <odys.yuan@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, shuah@kernel.org, void@manifault.com,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
 
-Hello:
+Kernel code that shares arena memory with BPF programs runs into two
+paper cuts, both visible in sched_ext's cid-form schedulers today.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+A kernel struct cannot publish an arena pointer: a pointer member reaches
+the program typed as a kernel pointer, so sched_ext hands out a plain u64
+holding a pre-translated arena address and every program casts it before
+use. __arena and __nullable become BTF type tags, defined in a header of
+their own, bpf_compiler_types.h, that the code tagging a member includes.
+A load through an __arena member of a kernel struct yields PTR_TO_ARENA:
+the member holds the kernel address and the fixup pass appends the
+conversion to the arena pointer form that the struct_ops trampoline
+applies to __arena arguments, with a NULL test for __nullable members.
+A __nullable member on its own yields PTR_MAYBE_NULL where NULL would
+otherwise be assumed away, on trusted, RCU and per-CPU results, and the
+program checks it; through a plain or an untrusted pointer the member is
+probed and tolerates NULL, as the BTF_TYPE_SAFE_*_OR_NULL lists never
+applied there either. libbpf renders the arena tag with its address
+space, so the member arrives in a program built against vmlinux.h ready
+to use, without a cast.
 
-On Fri, 09 Oct 2026 09:49:32 +0800 you wrote:
-> verify_success() attaches each cpumask test program to task_newtask,
-> forks a single child, and expects err to be 0 afterwards. Most programs
-> return right away for other tasks than the test one.
-> 
-> test_insert_leave and test_insert_remove_release don't, and insert a
-> cpumask into the single entry of __cpumask_map for every task created
-> in the system while they are attached. test_insert_leave leaves its
-> cpumask in the map, so a second task created, for instance by a test
-> running in parallel, fails to insert one and sets err to 3. Two tasks
-> created at the same time can do the same to test_insert_remove_release.
-> 
-> [...]
+A program only has an arena when one of its insns refers to the arena
+map, yet the kernel hands programs arena pointers through struct_ops
+arguments, tagged members and kfunc return values, and a struct_ops
+callback that touches nothing but its arguments fails verification until
+it refers to the arena artificially. libbpf binds the arena of an object
+to every program loaded from it, through a continuous fd_array. So that
+programs which never touch the arena pay nothing for it, the final insns
+of a function decide, right before it is JITed, whether it needs the
+arena base, and the JITs set it up only then.
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Run the cpumask map insert tests only for the test task
-    https://git.kernel.org/bpf/bpf-next/c/e2c978ad415c
+Tested with sched_ext for-next as well: a typed cmask member next to the
+existing cmask_arena_addr in struct scx_enable_args passes the
+enable_cmask selftest read straight from the member, without a cast and
+without the asm volatile arena reference.
 
-You are awesome, thank you!
+The series opens with two fixes the reviews led to: the verifier checked
+an exclusive map bound through a continuous fd_array against a program
+digest it had not computed yet, and bpf_program__clone() passed the
+fd_array fill index of the object as fd_array_cnt, which made every
+clone from an object with module kfuncs fail.
+
+See commit logs for details.
+
+Changelog:
+----------
+v3 -> v4
+v3: https://lore.kernel.org/bpf/20261015234125.3152346-1-memxor@gmail.com
+
+ * Drop PTR_MAYBE_NULL on probed results again, plain and untrusted
+   pointers and pointers to scalars, where the tag asks for no check, as
+   BTF_TYPE_SAFE_*_OR_NULL never did either; keep it on per-CPU results,
+   and test both. (Alexei)
+ * Check the skeleton pointer in the exclusive map fd_array test.
+   (Sashiko)
+ * Accept an acquire load of an __arena member, rewritten like a plain
+   load, and test it.
+ * Check the exclusive maps against the digest once it is final, at the
+   end of check_and_resolve_insns(), instead of computing the digest
+   before the fd_array is resolved, which would have let relocations the
+   kernel applies change a program after the check. (BPF CI)
+ * Declare has_tag inside the arch guard of the arena struct_ops test,
+   it was unused on s390x and failed the build there. (BPF CI)
+ * Say in the autobind test log which programs never refer to the arena.
+   (BPF CI)
+ * Move the two no-arena tests to an object without an arena map in a
+   patch of their own, ahead of the libbpf binding, so that they pass at
+   every step of the series. (BPF CI)
+ * Move __arena and __nullable out of compiler_types.h into a new
+   bpf_compiler_types.h that the code tagging a member includes, so the
+   rest of the kernel never sees them. (Alexei)
+ * Decide whether a function needs the arena base on its final insns,
+   right before the JIT, instead of recording uses during verification:
+   a constant NULL passed to a nullable __arena kfunc argument took the
+   verifier's early exit and was never recorded, so the x86 JIT rejected
+   the program; test that case. (Alexei)
+ * Hide the open-coded type tag attributes of the render mirror test
+   behind macros. (Alexei)
+ * Bind an arena exclusive to the program itself only where the kernel
+   checks exclusive maps against the final digest, found by a second
+   probe, so that such a program keeps loading on kernels without the
+   first patch; test the binding.
+ * Correct two libbpf logs: the JIT prologue cost of the binding goes
+   away later in the series, and GCC ignores the address space attribute
+   with a warning.
+ * Report a missing member as an error from the type tag probe of the
+   tests instead of a skip, and check the arena of every clone in the
+   autobind test.
+ * Spell out in the test logs the store case a struct_ops program cannot
+   reach the member check with, the memory pointer mismatch case and
+   the NULL constant passed to a nullable __arena kfunc argument.
+ * Drop the early digest of a signed program along with the early
+   comparison it served; the signature check hashes the insns itself.
+
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20261013082012.1107446-1-memxor@gmail.com
+
+ * Keep NULL on a probed load of an __arena member as well, so that a
+   fault reads as NULL rather than as an arena pointer, and test it.
+   (Sashiko)
+ * Drop the stripping of PTR_MAYBE_NULL: a __nullable member yields it
+   whatever the pointer it is read through, per-CPU, plain and scalar
+   pointees included, and the program checks; test each. (Sashiko)
+ * Report the arena member tests as skipped on a kernel whose module BTF
+   carries no type tags. (BPF CI)
+ * Update the fd_array_used comment for the arena in slot 0. (BPF CI)
+ * Compute the program digest before the fd_array is resolved, as a fix
+   patch with a selftest: an exclusive map bound through a continuous
+   fd_array was checked against a digest the kernel had not computed
+   yet for an unsigned program, which failed the binding of an exclusive
+   arena to its own program.
+ * Skip an arena whose fd is gone after a failed load; keep the count a
+   caller passes to bpf_program__clone().
+ * Load the autobind object through bpf_object__prepare() and
+   bpf_program__clone() in the test as well.
+ * Look for the type tag on the member in the module BTF itself, guard
+   the test kfuncs against a missing ops3 map, and define __arena for a
+   program that includes the module header before bpf_arena_common.h.
+ * Note in the libbpf commit log that the kernel resolves every module
+   BTF slot for every program once the arena is bound.
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20261012133711.4030594-1-memxor@gmail.com
+
+ * Leave the flags of members walked from a map pointer alone: the
+   review found that an __rcu member comes out of that path as MEM_RCU,
+   neither nullable nor probed, which is an older problem of the path
+   and of the bare PTR_TO_BTF_ID results it accepts, left to a separate
+   series after a wider audit. (Sashiko)
+ * Record the non-arena side of a shared load insn for every load, not
+   only for loads through a kernel struct pointer, since a load insn may
+   also serve a memory pointer on another path; test that case. (Sashiko)
+ * Return early in assert_prog_map() when the program lists no map, so a
+   failing check does not read uninitialized memory. (Sashiko)
+ * Mark the __arena argument of a kfunc call where the call is verified,
+   the kfunc pre-pass marked subprogram 0 whatever subprogram held the
+   call, and test a subprogram whose only arena use is such a call.
+   (BPF CI)
+ * Bind the arena only when libbpf creates it, so a program whose arena
+   has autocreate off still loads; leave out an arena exclusive to
+   another program and offloaded programs; reset fd_array_cnt after the
+   load; bind it from bpf_program__clone() as well, so veristat loads
+   what bpf_object__load() loads. (BPF CI)
+ * Stop bpf_program__clone() from passing the fd_array fill index of the
+   object as fd_array_cnt, and rename the index so that it no longer
+   reads like the uapi field, as a fix patch with a selftest: slot 0
+   holds no fd, so every clone from an object with module kfuncs failed.
+ * Skip the __arena and __nullable member tests when the module BTF
+   carries no type tags, as with a GCC build. (BPF CI)
+ * Initialize map_ids in the autobind test for GCC's
+   -Wmaybe-uninitialized. (BPF CI)
+ * Note in the libbpf commit log that every program of an object with an
+   arena now needs the JIT and CAP_PERFMON.
+ * Fix the description of the store failure test. (BPF CI)
+
+Kumar Kartikeya Dwivedi (16):
+  bpf: Check exclusive maps once the program digest is final
+  selftests/bpf: Bind an exclusive map through a continuous fd_array
+  libbpf: Keep the fd_array fill index out of bpf_program__clone()
+  selftests/bpf: Clone a program that calls a module kfunc
+  bpf: Add the __arena and __nullable BTF type tags
+  bpf: Recognize __nullable on pointer members of kernel structs
+  bpf: Turn loads of __arena pointer members into arena pointers
+  selftests/bpf: Test __nullable pointer members
+  selftests/bpf: Test __arena pointer members
+  selftests/bpf: Move the no-arena tests out of objects with an arena
+    map
+  libbpf: Bind the arena of an object to every program in it
+  selftests/bpf: Test arena binding by libbpf
+  bpf: Set up the arena base only in functions that use it
+  libbpf: Render the arena type tag with its address space
+  selftests/bpf: Test the address space rendering of the arena type tag
+  selftests/bpf: Test an arena kfunc argument passed from a subprogram
+
+ arch/arm64/net/bpf_jit_comp.c                 |   6 +-
+ arch/loongarch/net/bpf_jit.c                  |   6 +-
+ arch/powerpc/net/bpf_jit_comp.c               |   6 +-
+ arch/riscv/net/bpf_jit_core.c                 |   6 +-
+ arch/s390/net/bpf_jit_comp.c                  |   7 +-
+ arch/x86/net/bpf_jit_comp.c                   |  14 +-
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_compiler_types.h            |  21 ++
+ include/linux/bpf_verifier.h                  |   8 +
+ include/linux/filter.h                        |  13 ++
+ kernel/bpf/btf.c                              |  48 ++++-
+ kernel/bpf/core.c                             |  57 +++++
+ kernel/bpf/fixups.c                           |  67 +++++-
+ kernel/bpf/verifier.c                         |  99 +++++++--
+ tools/lib/bpf/btf_dump.c                      |   3 +
+ tools/lib/bpf/features.c                      |  82 ++++++++
+ tools/lib/bpf/libbpf.c                        |  85 +++++++-
+ tools/lib/bpf/libbpf_internal.h               |   4 +
+ .../selftests/bpf/prog_tests/btf_dump.c       |  16 +-
+ .../bpf/prog_tests/clone_module_kfunc.c       |  30 +++
+ .../selftests/bpf/prog_tests/map_excl.c       |  37 ++++
+ .../bpf/prog_tests/test_struct_ops_arena.c    | 195 ++++++++++++++++++
+ .../bpf/prog_tests/test_struct_ops_nullable.c |  62 ++++++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../testing/selftests/bpf/progs/arena_kfunc.c |  47 ++++-
+ .../selftests/bpf/progs/arena_noarena.c       |  39 ++++
+ tools/testing/selftests/bpf/progs/map_excl.c  |   3 +-
+ .../bpf/progs/struct_ops_arena_autobind.c     |  64 ++++++
+ .../bpf/progs/struct_ops_arena_member.c       | 109 ++++++++++
+ .../struct_ops_arena_member_fail__mismatch.c  |  45 ++++
+ ...ruct_ops_arena_member_fail__mismatch_mem.c |  54 +++++
+ .../struct_ops_arena_member_fail__no_arena.c  |  24 +++
+ .../struct_ops_arena_member_fail__union.c     |  34 +++
+ .../struct_ops_arena_member_fail__write.c     |  36 ++++
+ .../struct_ops_arena_member_fail__xchg.c      |  40 ++++
+ .../progs/struct_ops_arena_member_render.c    |  85 ++++++++
+ .../selftests/bpf/progs/struct_ops_nullable.c |  82 ++++++++
+ .../bpf/progs/struct_ops_nullable_fail.c      |  28 +++
+ .../progs/struct_ops_nullable_fail__percpu.c  |  28 +++
+ .../progs/struct_ops_nullable_probed__plain.c |  26 +++
+ .../struct_ops_nullable_probed__scalar.c      |  26 +++
+ .../struct_ops_nullable_probed__untrusted.c   |  45 ++++
+ .../bpf/progs/verifier_arena_scalar.c         |  13 --
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  67 ++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.h    |  74 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   2 +
+ tools/testing/selftests/bpf/testing_helpers.c |  45 ++++
+ tools/testing/selftests/bpf/testing_helpers.h |   7 +
+ 48 files changed, 1835 insertions(+), 64 deletions(-)
+ create mode 100644 include/linux/bpf_compiler_types.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/clone_module_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_nullable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_noarena.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_autobind.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__mismatch_mem.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__no_arena.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__union.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__write.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_fail__xchg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_arena_member_render.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_fail__percpu.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_probed__plain.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_probed__scalar.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_nullable_probed__untrusted.c
+
+
+base-commit: 44b6b1dfb259e8baa5226679945fb6c25d11c207
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0-Meta
 
