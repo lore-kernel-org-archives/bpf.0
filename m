@@ -1,79 +1,109 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFDD4F4729;
-	Mon, 19 Oct 2026 13:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C388E4F4043;
+	Mon, 19 Oct 2026 13:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792415782; cv=none; b=f0mJQmaZz0/qmcsUqbyQMTLWqYrhdiiu/WWV0TO5snJzY5joJNFt0NoVaGDhIA1/JBBpCKfye2rBdP9ofDSaxKGkzyahpgO2IKMy/hSIHPTbvrzyHDNzFgg07YImpdSqd4OXp+d3U/ezJeKXV0cSuOQP/4xZoanofR5joA8sfxI=
+	t=1792415807; cv=none; b=p9y034GIKmj4+x2ziW0SHvyiIy6KpV+4gM9hwHkf4SpI1WD5bNfXvlk6wmN02Rykiv/Br/YOrfokJtDWhbEBp2w5wD0E0f5eDZcI/DEJ7vTGT4uuIJEFNn/JnaJavg/lZ5aEaSbn/jbmcPsYyQrdRAZjxIa4CWLcNWCO2ECsWMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792415782; c=relaxed/simple;
-	bh=UYZkjscYlvJrGL4MOMQy1TLF67ANDmMiNKFbA4lDxIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bFWsi8iFGhdaka/Du2JhWXJSWAijgxyMmIRq9dsP3CwL6N6nEawPPBfYz+yM04N+owc5b8Z5iE/h6229k41wWxjnBSakbND73OfJfif15i7b8ul1DSdvqvOTg3arV4f+PI2TizGF1dXsPQOKp1lIjqqe9lDuw8BIzaj1pkx9wVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=2G21fCwk; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	s=arc-20240116; t=1792415807; c=relaxed/simple;
+	bh=KEfUjJ+sWeyEpypWIo35O6elA0OeVZ28l/vNOIqBtYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=mA5/VZwc5jpK8Yvou1ZFTHU80J2mswJ24LI3Boh1XORYUYOGJ7C3SX5xYGegXqi5nVbI2fdtrTIwxSDnvltkUUHaL/joIQZGSrD+FMg0OC0iXHsb3acLJ3cEb/9DU9OTaiHq+y4juD2qWTHboD48rp66iSVaQvrOSQp+um4GJGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=CGjJxHSS; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="2G21fCwk"
-Received: from omf15.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 5AD80A06F2;
-	Mon, 19 Oct 2026 13:16:12 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 28CC318;
-	Mon, 19 Oct 2026 13:16:10 +0000 (UTC)
-Date: Mon, 19 Oct 2026 09:16:08 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: John Ogness <john.ogness@linutronix.de>
-Cc: Gabriele Monaco <gmonaco@redhat.com>, Alexei Starovoitov
- <alexei.starovoitov@gmail.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Nam Cao
- <namcao@linutronix.de>, Wen Yang <wen.yang@linux.dev>, Tobias Schaffner
- <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
-Message-ID: <20261019091608.1990a4e6@gandalf.local.home>
-In-Reply-To: <87y0buox9f.fsf@jogness.linutronix.de>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
-	<20261001152042.124445-11-gmonaco@redhat.com>
-	<DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
-	<b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
-	<DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
-	<878q3xtptq.fsf@jogness.linutronix.de>
-	<8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
-	<87bj8s8ih9.fsf@jogness.linutronix.de>
-	<DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
-	<87v770uuyr.fsf@jogness.linutronix.de>
-	<DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
-	<87ik2zryzo.fsf@jogness.linutronix.de>
-	<0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
-	<87y0buox9f.fsf@jogness.linutronix.de>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="CGjJxHSS"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=KEfUjJ+sWeyEpypWIo35O6elA0OeVZ28l/vNOIqBtYE=;
+	b=CGjJxHSSLnLyFiBJ6fmCvw7MlJSp71N6IQMPcQkTfVBF4w4+qhSNBqybtc2YkWCvE5LwoEOVU
+	nkl6Q6kL3AgrL1evhkMPi2OeyEjemmmAVgbOgxQlks5tBhbrz4Ra7a12Oy27gvkosJfa6xtd7mk
+	IO1wVoLvEGKoMecheF6kbbs=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4j7bfV0G5ZzRhrQ;
+	Mon, 19 Oct 2026 21:16:34 +0800 (CST)
+Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3320840575;
+	Mon, 19 Oct 2026 21:16:37 +0800 (CST)
+Received: from [10.67.110.140] (10.67.110.140) by
+ whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Mon, 19 Oct 2026 21:16:30 +0800
+Message-ID: <5e6e9ac9-172e-4434-a333-8bcad9e026de@huawei.com>
+Date: Mon, 19 Oct 2026 21:16:28 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 -next 09/18] landlock: Add READ_METADATA and
+ WRITE_METADATA access rights
+To: Justin Suess <utilityemal77@gmail.com>
+CC: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
+	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
+	<skhan@linuxfoundation.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+	<martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+	<jolsa@kernel.org>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+	<rdunlap@infradead.org>, <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+	<dakr@kernel.org>, <johan@kernel.org>, <dlemoal@kernel.org>, <hch@lst.de>,
+	<axboe@kernel.dk>, <viro@zeniv.linux.org.uk>, <brauner@kernel.org>,
+	<jack@suse.cz>, <dhowells@redhat.com>, <code@tyhicks.com>,
+	<linkinjeon@kernel.org>, <sj1557.seo@samsung.com>, <yuezhang.mo@sony.com>,
+	<hirofumi@mail.parknet.co.jp>, <cel@kernel.org>, <jlayton@kernel.org>,
+	<neil@brown.name>, <okorniev@redhat.com>, <Dai.Ngo@oracle.com>,
+	<tom@talpey.com>, <hyc.lee@gmail.com>, <miklos@szeredi.hu>,
+	<amir73il@gmail.com>, <senozhatsky@chromium.org>,
+	<chenxiaosong@chenxiaosong.com>, <kpsingh@kernel.org>, <matt@bobrowski.net>,
+	<rostedt@goodmis.org>, <mhiramat@kernel.org>,
+	<mathieu.desnoyers@efficios.com>, <john.johansen@canonical.com>,
+	<georgia.garcia@canonical.com>, <zohar@linux.ibm.com>,
+	<roberto.sassu@huawei.com>, <dmitry.kasatkin@gmail.com>,
+	<eric.snowberg@oracle.com>, <stephen.smalley.work@gmail.com>,
+	<omosnacek@gmail.com>, <casey@schaufler-ca.com>, <takedakn@nttdata.co.jp>,
+	<penguin-kernel@i-love.sakura.ne.jp>, <xiujianfeng@huawei.com>,
+	<nanx95726@gmail.com>, <djwong@kernel.org>, <lujialin4@huawei.com>,
+	<bpf@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<driver-core@lists.linux.dev>, <linux-block@vger.kernel.org>,
+	<linux-fsdevel@vger.kernel.org>, <netfs@lists.linux.dev>,
+	<ecryptfs@vger.kernel.org>, <exfat@lists.linux.dev>,
+	<linux-nfs@vger.kernel.org>, <ntfs@lists.linux.dev>,
+	<linux-unionfs@vger.kernel.org>, <linux-cifs@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <apparmor@lists.ubuntu.com>,
+	<linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20261015125425.3246251-1-caixinchen1@huawei.com>
+ <20261015125425.3246251-10-caixinchen1@huawei.com> <atI20Vs7Du9-g1Hz@zenbox>
+Content-Language: en-US
+From: Cai Xinchen <caixinchen1@huawei.com>
+In-Reply-To: <atI20Vs7Du9-g1Hz@zenbox>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 28CC318
-X-Stat-Signature: yftfmptywaia8souzeyih17qrpida7ya
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+ggX8o75464mCS2UhdC/fNpXOAJBDjlbU=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=UYZkjscYlvJrGL4MOMQy1TLF67ANDmMiNKFbA4lDxIE=; b=2G21fCwky4/3zlULfLr0aYCywU6uIi8qghOo5x8GCvD/BRBRI3JFIwfKH6HL7d7U6+MRM6uiVU+dYrufmYb72/OhiiqQRNAYS9kzasGtECrz8I69igN/oYFS3itXswxN97AJ9Fj4hjsUpy2YGqSQmPMprXwO33CUv5zanZEa9Xo=
-X-HE-Tag: 1792415770-775354
-X-HE-Meta: U2FsdGVkX18YuBIW56dm9fcfes23Ts79xS5MsyNGez3UFo8VOR4SYVkbP07eYHZj2Mcn/sCYO3R69YS/2W2GaTgUIhHUe/jkbxHLri4a/8s16RHKgMnm0o7SXAF/NFv+KMTrj3fubNzGimV9SFsr8/KzX69Mq1RyV14AMHts8k15E1ZkYWtOBtaSMJ3p+ytUkDywjmnqIQPRNBqdc/+veO8ryNRAXmYjNJXqSszzwVRnQYWBUDeRGgGN+kBTfrEVoQkRXMrpEqchFkHzs5b0kwp7nFO/Y0HsurhrDDsBeDQ9A9xi5TJlxvDH2GTuAwdT
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ whupemk100010.china.huawei.com (7.152.184.41)
 
-On Mon, 19 Oct 2026 11:33:56 +0206
-John Ogness <john.ogness@linutronix.de> wrote:
+Hello Justin,
 
-> Are these trace_printk's available without getting the scary kernel
-> warning when kernel code uses trace_printk()? We do want RV support to
-> be enabled in production kernels.
+Thank you for the review, and for thinking the implications through so
+carefully -- the concrete scenarios you describe were very helpful to
+settle the design.
 
-Note that if internal tooling uses their own trace instance, there's a
-trace_array_printk() that takes the instance as a parameter and acts just
-like trace_printk(). The difference is that it cannot be used for the top
-level instance and it doesn't cause any scary kernel messages.
+I agree it should be a conscious
+decision: the next revision will make the *_METADATA checked at open time
 
--- Steve
+and follow the mechanic for the truncate right
+
+On 10/16/2026 10:44 PM, Justin Suess wrote:
+> LANDLOCK_ACCESS_FS_*_METADATA should be checked at open time and follow
+> the mechanic for the truncate right. Otherwise the access for already
+> opened file descriptors would be changed. See hook_file_open in
+> security/landlock/fs.c and this discussion here [1]
+>
+> It should have clear documentation for this as well.
