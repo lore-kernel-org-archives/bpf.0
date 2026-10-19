@@ -1,56 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792447041;
-	b=EgpsQCG3YxFD5eSWCE5JzuuG4PphNr0AOIL/pYGxY/cL88QnBvii0LCmrJqXZuToaAXz
-	 Mh5l5jJSZ1AQewIyq/53XL4SeGG+bAWQa9R4JjHbu41YA1owAuLI2qDd4NC4FO/V+n5Ip
-	 rrPu6jeHZOnOvEbsNt9wiBQzEY3w27XZ13DUccarE5MaCGJs+fgq7SsJ+8YoyaZbPid7l
-	 KpAUQl2m/qdAWhf8f0odZ/85mimkVKaKCyNQ5yrYQJi4U67GuomUTXTCRzfLmwrScfAMy
-	 v83O+d7ziw8SrDKWWLZ3SGvu2/jqQ+sfDkZORy3hLdqv0rG65SVJMNW76AY1eYekRFA==
+	t=1792451759;
+	b=r3XvS67NmwmCthMpViVYj4gVfYfuNNM4z/8UuFPuNLEkHHqIdUuLDRnjHc3/NaDc5UYO
+	 1z0Zsl5ZFuguERnhlkTSharwYsKI6YPll2YIW8+qt/21OVX5FoLkXnc/8oqLmtJEAytRO
+	 54a47+BtxBg9EpGceim3AFTvkTlV4r+NmGlUSTMNryZiEw2lBUvoXICPV/E8370ToEmcz
+	 cTxdaY+MjphkexSZBqMtp+OOnQH51SwmJjEPVyvJXbwEP8aQtNs3vpErS44tcE95OmF3Y
+	 Q9oc/CHwa4StI5GEA8D5nnLajJi4h+sKWNwmhu2pPXq2vQXK3RWElgjIeTSvYmcox3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792447041;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=MKj7glC7ZuV0NZIPGzkF3iyF1E2FueFtrb4gt/AWgv8=;
-	b=KO1KQDW211GrhNWxatYpStnhhJiOJ4fYQQHreIkigWYGBn0bejp8qt2pLl6ikY+T6kz7
-	 HRoetuUjN1VktaXuu+a8qeGJnRqmCuWvKf58YM26auF78d/2Oq6DQiOTEZsg5XG4vY6dQ
-	 xag29qemwh6++y3hy93pjTBf34UfMlqHAjeitE6D4ueZ6I4uutpHAzAditmJhmIdTnP8g
-	 mE1QsgqBEz21JT8iNxoXVvAwjcfiD4sJ407EP4bLzg4FfQuRPHaNJlXZELemV73/m73eh
-	 Xx82I0hPMFpVyJtcO4eHE74GLZ0C+mB8zn4r4m+UIj2NdbOxXyVRURrCaKgo+l6gBIQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792451759;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ZFh4t2a+XC8DHJvTpV0MW4bJipbpqLj03+M6T9LwwnI=;
+	b=MosacQhYQ4TWqBBprm4hgMeV63T/9LKRxZDvRo5rtGXtkCAGZZoDI0sj7+3BN7N6ffWn
+	 yHGz10nwCOqSLnaTzQjz0grbl23yHk5LmFjvI22N6/3xb0xwIJgdkLOTFNSmy9kJXPx/y
+	 NUOFeGkwWZ34A8MiV7S4YdqfSXzHjsvjsR8Gv3xdp3FR1gLb0A1HrEY0z5YDCNx2bt1uj
+	 9x4+Q56FQ1clL9pvKaPs6EnH98qocRr4LWT5+zDxBuG0rHtkxPSH7VyA4GsPO5HTasUiC
+	 yxUGxEa7vJvNNJi415ec+LmQ9m43govz7cBFTNfKaIOwCoQAZ5SbJqijydcXKtz3hGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cZvhIbqq;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bPIOEqzK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A4E606A31A;
-	Mon, 19 Oct 2026 21:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA340606A31A;
+	Mon, 19 Oct 2026 23:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cZvhIbqq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EAB31F000C4;
-	Mon, 19 Oct 2026 21:57:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bPIOEqzK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB371F000C4;
+	Mon, 19 Oct 2026 23:15:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792447040;
-	bh=MKj7glC7ZuV0NZIPGzkF3iyF1E2FueFtrb4gt/AWgv8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cZvhIbqqbzR6PT3G3hJb6gFymOY2MrJrZal2iS3Mebpg8dmETAV7LHrfxrFLM6e7o
-	 36fmI9/X6vqGQ+puKac1ycq/8kUAlrXDLkzCGHqT4PIs5Z6ZBWcRhnb5ATDLidZYHD
-	 AwSNFEoGHTYJav+0yj7i4ltBBRWiz6k3uiS3rEiD8IHeP16zJuWiMReIsOTIDtlTZ2
-	 Hf3JfvmVc6bxtQDbEQaGlHi1D0IAckUiytSEm93JzcMsyXBBioLgmgwfo1Jf7zZDNu
-	 rFCPKEcUyvWpdEdY6rfNKAoIp5Npzoab1LZxRwi3MrO/XeMUlwzmvn3uLtMnCWcPqT
-	 R05zfwYIV/TKg==
-Message-ID: <sashiko-outbox-178282@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 4/4] selftests/ipe: test the IPE policy keyring
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Manuel Huber" <manuelh@nvidia.com>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20261019-b4-ipe-keyring-rfc-v1-4-156f0b93e843@nvidia.com>
-References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
- <20261019-b4-ipe-keyring-rfc-v1-4-156f0b93e843@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 21:57:19 +0000
+	s=k20260515; t=1792451758;
+	bh=ZFh4t2a+XC8DHJvTpV0MW4bJipbpqLj03+M6T9LwwnI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=bPIOEqzKnmKauAtxooCrPQvPo9UW0wwVRVFWyPm/EFIRdYWNuLal3MOkYwCxk+ckc
+	 qsI6gRZEEft2sEl58tKgnJRrJSPMOLCq3dCSFvudrL4YQAKPDo0p4LHZG/Oel0uv9o
+	 mqY5ty8k37BBkJMg+Vk8VmNMLze5a0tT78MMuBqFii2pT0URI+OmkDsbEizwdmxGTK
+	 iZ/CrN8vPzXUyvy4G2ZRm4OXOGzy3Jv7W949rxatRhlMwLlpo9rJFieOjyCEMKZder
+	 vkE3FgPykTxNNkIErS9wR93pSPftiMRneXy1NRffwHxX2OhvvRwABnrlWy3/SyDZG7
+	 HRSJv16QpB3og==
+Message-ID: <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org>
+Date: Mon, 19 Oct 2026 16:15:57 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,140 +50,270 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
+To: manuelh@nvidia.com, David Howells <dhowells@redhat.com>,
+ Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+ Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+ <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
+Content-Language: en-US
+From: Fan Wu <wufan@kernel.org>
+In-Reply-To: <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/ipe: missing CONFIG_CRYPTO_SHA256 in config fragment
-- [Low] selftests/ipe: keyctl id check precedes already-provisioned keyring=
- check
---
 
-commit 0116188a11e090ec7a12ebe17082312fda668a18
-Author: Manuel Huber <manuelh@nvidia.com>
 
-selftests/ipe: test the IPE policy keyring
+On 10/19/2026 2:40 PM, Manuel Huber via B4 Relay wrote:
+> From: Manuel Huber <manuelh@nvidia.com>
+> 
+> Add a dedicated .ipe keyring for IPE policy signature verification,
+> modeled after the .dm-verity and .bpf keyring implementations.
+> 
+> With this, userspace can provision its own keys into the keyring,
+> then restrict it and activate it for IPE policy signature verification.
+> 
+> This enables scenarios in which a trusted userspace component generates
+> an IPE policy, and creates an ephemeral policy-signing key pair,
+> provisions its public certificate, and restricts the IPE keyring during
+> the early lifetime of a system. The trusted component can then sign the
+> IPE policy, destroy the private key, and load and activate the policy.
+> During that phase, the system is considered in a trusted state whereas
+> the system transitions into a possibly untrusted state afterwards,
+> running arbitrary user-provided applications. In such a scenario, the
+> trusted userspace component could reside on a dm-verity protected
+> rootfs disk, and applications would reside on additional dm-verity
+> protected disks. The latter disks would be dynamically attached and
+> their dm-verity root hashes and/or signatures not known a priori to
+> launching the system.
+> 
 
-This commit adds a kselftest script and configuration fragment to validate
-IPE policy keyring operations for both sealed and unsealed boot parameter
-states.
+You might need to explain why the existing keyrings, i.e. builtin/secondary/platform cannot be used in your scenario. Like the firmware is not trusted?
 
-> diff --git a/tools/testing/selftests/ipe/config b/tools/testing/selftests=
-/ipe/config
+> A concrete usage scenario could be Kata Containers, which enables
+> running Kubernetes pods in ephemeral, headless utility VMs, possibly
+> without systemd. The rootfs disk is static and known beforehand, but
+> containerd's image layers might be acquired and transported into the
+> VM using the erofs snapshotter and dynamic block device attachment
+> using dm-verity.
+> 
+> Signed-off-by: Manuel Huber <manuelh@nvidia.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |  9 +++
+>  security/ipe/Makefile                           |  1 +
+>  security/ipe/ipe.c                              |  2 +
+>  security/ipe/keyring.c                          | 79 +++++++++++++++++++++++++
+>  security/ipe/keyring.h                          | 16 +++++
+>  security/ipe/policy.c                           | 10 ++++
+>  6 files changed, 117 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index e75344f4e0cd..fd508dd779ed 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -2733,6 +2733,15 @@ Kernel parameters
+>  			Determine whether IPE starts in permissive (0) or
+>  			enforce (1) mode. The default is enforce.
+>  
+> +	ipe.keyring_unsealed=
+> +			[IPE]
+> +			Format: <bool>
+> +			When set to 1, leave the IPE policy keyring
+> +			unsealed after initialization so userspace can provision
+> +			keys. Once the keyring is nonempty and restricted, it is
+> +			searched during policy-signature verification. The default
+> +			is 0, which creates the keyring restricted and empty.
+> +
+
+I would prefer a Kconfig CONFIG_SECURITY_IPE_KEYRING default to N instead, like the fsverity keyring. In the kconfig you can also describe in which cases should this option be turned on. 
+
+>  	ipe.success_audit=
+>  			[IPE]
+>  			Format: <bool>
+> diff --git a/security/ipe/Makefile b/security/ipe/Makefile
+> index 2ffabfa63fe9..109e736696a5 100644
+> --- a/security/ipe/Makefile
+> +++ b/security/ipe/Makefile
+> @@ -20,6 +20,7 @@ obj-$(CONFIG_SECURITY_IPE) += \
+>  	hooks.o \
+>  	fs.o \
+>  	ipe.o \
+> +	keyring.o \
+
+with Kconfig this can be obj-$(CONFIG_IPE_KEYRING) += keyring.o
+
+>  	policy.o \
+>  	policy_fs.o \
+>  	policy_parser.o \
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index 495bb765de1b..f5232f850dc2 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -7,6 +7,7 @@
+>  #include "ipe.h"
+>  #include "eval.h"
+>  #include "hooks.h"
+> +#include "keyring.h"
+>  
+>  extern const char *const ipe_boot_policy;
+>  bool ipe_enabled;
+> @@ -97,4 +98,5 @@ DEFINE_LSM(ipe) = {
+>  	.init = ipe_init,
+>  	.blobs = &ipe_blobs,
+>  	.initcall_fs = ipe_init_securityfs,
+> +	.initcall_late = ipe_keyring_init,
+>  };
+> diff --git a/security/ipe/keyring.c b/security/ipe/keyring.c
 > new file mode 100644
-> index 0000000000000..498c224d2c182
+> index 000000000000..ea8d164b62a6
 > --- /dev/null
-> +++ b/tools/testing/selftests/ipe/config
-> @@ -0,0 +1,7 @@
-> +CONFIG_AUDIT=3Dy
-> +CONFIG_AUDITSYSCALL=3Dy
-> +CONFIG_KEYS=3Dy
-> +CONFIG_PROC_FS=3Dy
-> +CONFIG_SECURITY=3Dy
-> +CONFIG_SECURITYFS=3Dy
-> +CONFIG_SECURITY_IPE=3Dy
+> +++ b/security/ipe/keyring.c
+> @@ -0,0 +1,79 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+> + */
+> +
+> +#include <linux/cred.h>
+> +#include <linux/err.h>
+> +#include <linux/key.h>
+> +#include <linux/moduleparam.h>
+> +
+> +#include "ipe.h"
+> +#include "keyring.h"
+> +
+> +static struct key *ipe_keyring __ro_after_init;
 
-[Severity: Medium]
-Should this config fragment also include CONFIG_CRYPTO_SHA256=3Dy (along wi=
-th
-CONFIG_NET=3Dy and CONFIG_SYSFS=3Dy, which CONFIG_AUDIT and CONFIG_SECURITY
-depend on)?
+You can remove static here then the other ipe code can directly use the variable instead of a function call. 
 
-In test-ipe-keyring.sh, generate_keypair() and sign_policy() generate
-RSA-2048 X.509 certificates and PKCS#7 signatures using SHA-256. When a
-signed policy is written to /sys/kernel/security/ipe/new_policy,
-new_policy() -> ipe_new_policy() -> verify_pkcs7_signature() ->
-pkcs7_verify() -> pkcs7_digest() allocates the shash algorithm:
+> +
+> +static bool ipe_keyring_unsealed __ro_after_init;
+> +
+> +/* Set the right module name for built-in parameters. */
+> +#ifdef KBUILD_MODNAME
+> +#undef KBUILD_MODNAME
+> +#define KBUILD_MODNAME "ipe"
+> +#endif
+> +
+> +module_param_named(keyring_unsealed, ipe_keyring_unsealed, bool, 0444);
+> +MODULE_PARM_DESC(keyring_unsealed, "Leave the IPE keyring unsealed");
+> +
 
-crypto/asymmetric_keys/pkcs7_verify.c:pkcs7_digest() {
-	...
-	tfm =3D crypto_alloc_shash(sinfo->sig->hash_algo, 0, 0);
-	if (IS_ERR(tfm))
-		return (PTR_ERR(tfm) =3D=3D -ENOENT) ? -ENOPKG : PTR_ERR(tfm);
-	...
-}
+...
 
-Although CONFIG_SECURITY_IPE selects CONFIG_CRYPTO_LIB_SHA256,
-CONFIG_PKCS7_MESSAGE_PARSER, and CONFIG_SYSTEM_DATA_VERIFICATION, none of
-those select CONFIG_CRYPTO_SHA256 to register the "sha256" crypto_shash
-algorithm.
+> +
+> +/**
+> + * ipe_keyring_init() - Allocate and configure the IPE keyring.
+> + *
+> + * Return: Always %0. A failure leaves IPE without its dedicated keyring.
+> + */
+> +int __init ipe_keyring_init(void)
+> +{
+> +	struct key *keyring;
+> +	int rc;
+> +
+> +	keyring = keyring_alloc(".ipe", GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
+> +				current_cred(),
+> +				KEY_POS_SEARCH |
+> +				KEY_USR_VIEW | KEY_USR_READ | KEY_USR_WRITE |
+> +				KEY_USR_SEARCH | KEY_USR_SETATTR,
+> +				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
+> +	if (IS_ERR(keyring)) {
+> +		pr_err("failed to allocate keyring: %ld\n", PTR_ERR(keyring));
+> +		return 0;
 
-Without CONFIG_CRYPTO_SHA256=3Dy, pkcs7_digest() returns -ENOPKG. That caus=
-es
-positive policy loads in test_unsealed_keyring() to fail, and causes the
-negative checks in test_sealed_keyring() and test_unsealed_keyring() to
-falsely pass before ipe_new_policy() ever reaches ipe_keyring_lookup():
+You might need to panic here like the fsverity kerying.
 
-security/ipe/policy.c:ipe_new_policy() {
-	...
-		if (rc =3D=3D -ENOKEY || rc =3D=3D -EKEYREJECTED) {
-			keyring =3D ipe_keyring_lookup();
-			if (keyring)
-				rc =3D verify_pkcs7_signature(NULL, 0, new->pkcs7,
-							    pkcs7len, keyring,
-							    VERIFYING_UNSPECIFIED_SIGNATURE,
-							    set_pkcs7_data, new);
-		}
-	...
-}
+> +	}
+> +
+> +	if (!ipe_keyring_unsealed) {
+> +		rc = keyring_restrict(make_key_ref(keyring, true), NULL, NULL);
+> +		if (rc) {
+> +			pr_err("failed to restrict keyring: %d\n", rc);
+> +			key_revoke(keyring);
+> +			key_put(keyring);
+> +			return 0;
+> +		}
+> +	}
 
-> diff --git a/tools/testing/selftests/ipe/test-ipe-keyring.sh b/tools/test=
-ing/selftests/ipe/test-ipe-keyring.sh
-> new file mode 100755
-> index 0000000000000..557ccc825fe24
+This looks kind of awkward, like if unseal is not set, it can create an empty keyring then immediately seal it. I would switch to the fsverity's approach to let userspace seal it.
+
+> +
+> +	ipe_keyring = keyring;
+> +
+> +	return 0;
+> +}
+> diff --git a/security/ipe/keyring.h b/security/ipe/keyring.h
+> new file mode 100644
+> index 000000000000..3d450a465511
 > --- /dev/null
-> +++ b/tools/testing/selftests/ipe/test-ipe-keyring.sh
-
-[ ... ]
-
-> +	keyctl setperm "$KEY_SPEC_IPE_KEYRING" \
-> +		"$IPE_KEYRING_PERM_LOCKED" >/dev/null 2>&1 ||
-> +		fail "drop mutation permissions from the keyring"
-> +	ktap_test_pass "mutation permissions can be dropped"
+> +++ b/security/ipe/keyring.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+> + */
 > +
-> +	if keyctl id "$KEY_SPEC_IPE_KEYRING" >/dev/null 2>&1; then
-> +		fail "the special key ID granted possession rights"
-> +	fi
-> +	ktap_test_pass "the special key ID grants no possession rights"
-
-[ ... ]
-
-> +keyring_serial=3D$(keyctl id "$KEY_SPEC_IPE_KEYRING" 2>/dev/null) ||
-> +	skip "KEY_SPEC_IPE_KEYRING does not resolve"
-> +keyring_description=3D$(keyctl describe "$keyring_serial" 2>/dev/null) ||
-> +	skip "cannot describe the IPE keyring"
-> +case "$keyring_description" in
-> +	*"keyring: .ipe") ;;
-> +	*) skip "KEY_SPEC_IPE_KEYRING resolved to an unexpected key" ;;
-> +esac
+> +#ifndef _IPE_KEYRING_H
+> +#define _IPE_KEYRING_H
 > +
-> +keyring_unsealed=3D$(cat /sys/module/ipe/parameters/keyring_unsealed)
-> +case "$keyring_unsealed" in
-> +	Y)
-> +		[ "$(keyring_key_count)" =3D 0 ] ||
-> +			skip "the IPE keyring has already been provisioned"
-> +		test_unsealed_keyring
-> +		;;
+> +#include <linux/init.h>
+> +
+> +struct key;
+> +
+> +int __init ipe_keyring_init(void);
+> +struct key *ipe_keyring_lookup(void);
+> +
+> +#endif /* _IPE_KEYRING_H */
+> diff --git a/security/ipe/policy.c b/security/ipe/policy.c
+> index e542329726bc..abc1ff9ac230 100644
+> --- a/security/ipe/policy.c
+> +++ b/security/ipe/policy.c
+> @@ -9,6 +9,7 @@
+>  #include "ipe.h"
+>  #include "eval.h"
+>  #include "fs.h"
+> +#include "keyring.h"
+>  #include "policy.h"
+>  #include "policy_parser.h"
+>  #include "audit.h"
+> @@ -160,6 +161,7 @@ struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+>  				  const char *pkcs7, size_t pkcs7len)
+>  {
+>  	struct ipe_policy *new = NULL;
+> +	struct key *keyring;
+>  	int rc = 0;
+>  
+>  	new = kzalloc_obj(*new);
+> @@ -189,6 +191,14 @@ struct ipe_policy *ipe_new_policy(const char *text, size_t textlen,
+>  						    VERIFYING_UNSPECIFIED_SIGNATURE,
+>  						    set_pkcs7_data, new);
+>  #endif
+> +		if (rc == -ENOKEY || rc == -EKEYREJECTED) {
+> +			keyring = ipe_keyring_lookup();
+> +			if (keyring)
+> +				rc = verify_pkcs7_signature(NULL, 0, new->pkcs7,
+> +							    pkcs7len, keyring,
+> +							    VERIFYING_UNSPECIFIED_SIGNATURE,
+> +							    set_pkcs7_data, new);
+> +		}
 
-[Severity: Low]
-Can the "the IPE keyring has already been provisioned" skip check be
-reached if the keyring was already provisioned and locked?
+With Kconfig this part can be just like the above cases. 
 
-When the keyring is locked with IPE_KEYRING_PERM_LOCKED (0x08030000),
-KEY_USR_SEARCH is dropped. Because lookup_user_key() returns an unpossessed
-key reference for KEY_SPEC_IPE_KEYRING, running keyctl id on
-KEY_SPEC_IPE_KEYRING fails with -EACCES once locked (as verified in
-test_unsealed_keyring() above).
+Fan
 
-When test-ipe-keyring.sh is run a second time or on a system where the
-keyring was already provisioned and locked, the initial keyctl id check at
-the top of the script will fail and skip with "KEY_SPEC_IPE_KEYRING does
-not resolve" before reaching the keyring_key_count() check (which uses
-keyctl list and only needs read/view permissions). Should the
-keyring_key_count() check happen before calling keyctl id when
-keyring_unsealed is Y?
+>  		if (rc)
+>  			goto err;
+>  	} else {
+> 
 
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019-b4-ipe-key=
-ring-rfc-v1-0-156f0b93e843@nvidia.com?part=3D4
