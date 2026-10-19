@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-140.mta1.migadu.com [95.215.58.140])
+Received: from mta1.migadu.com (out-232.mta1.migadu.com [95.215.58.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333E848F826
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 09:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C764A5EB2
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 09:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792402732; cv=none; b=JiY7JIVVg+oCYwkpm2SxrSP/cAqkXv8hXlKgQDEUWpTRnGwonOTeRkUVpRN3g4h2zHPCu4AfpkP7Kw4o6AHduRIrwt9sFPzlpU7fFnMC99zWzNLFH/m96Jo2khNKDvsp3tUlWleeiazgZgXAlKztjFUIrqocQddJYMph3JwyW6I=
+	t=1792403065; cv=none; b=CWI9GDqatBZqHQsbIOpgRfnnMTPpPRMk3mk0ycMdqOfVsfrvob9AyfIyVO3Hxna4wTUkaM9HvJwgR8xvjGmKZsX/2YhLWlCVmCjq2vF0/oas4BKOBRLfdLt1QhDLqLhwTfFaYpAMkTx2RVL33xoD4nV9S1Un52wje8jWCqrEJs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792402732; c=relaxed/simple;
-	bh=pCurOb3VbzjUyrGfUIzqpi6M8nOAvf7wjuF/7ks+AGI=;
+	s=arc-20240116; t=1792403065; c=relaxed/simple;
+	bh=e0QRKXqseSbnwv/jNw0BZs0Ci0ks6UPUvoTzc0mkA6U=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=J9OriCwheHGAOzdzPk++rCUlubU4doB42Dr4Rn03H6pGPjiyvSSmM8bqBQMvUJ5kdYmlpn7Wq+cvVObzkEvSKN+NmZPluZ5Fl8lA4VuH4n26doQO9+MROQid2Fru+IgIRyVTPGqFWa0EFq9Y/iTpBc9+HIm2i/gz9RZAX4aMi7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Lj08vzkB; arc=none smtp.client-ip=95.215.58.140
+	 In-Reply-To:Content-Type; b=ibie43ljOcjPywrbHBrvFI2EmPvPK5eHyx1RDS16627pMLHQS50ToSfFnTTsDTTRzRQiwWlHntn+lOIfiPipy8qzGjCUrDXXzlGXLYcSHrXEtCdRYqhQeGTgXmBZsZXoKWrRWcFwJBQfqxd1YNqh3uJYo3PaM6f/f9nFGVVlAp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BMaBccpM; arc=none smtp.client-ip=95.215.58.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Lj08vzkB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BMaBccpM"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=pCurOb3VbzjUyrGfUIzqpi6M8nOAvf7wjuF/7ks+AGI=;
+DKIM-Signature: a=rsa-sha256; bh=e0QRKXqseSbnwv/jNw0BZs0Ci0ks6UPUvoTzc0mkA6U=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792402728; v=1; x=1793007528;
- b=Lj08vzkBSc0GOoTwKr9QGN/XXr8XRenNQPeEKL4olD6mCq6l28qEsVzLg+EpuCh1w+D1sVmm
- fujO0S/+dpHLO8K9gejk2ntYtkUL5vGveJAzggY2FCJt7IwzerBrnVti7yj3qTJKwNPrVvLB+Ek
- 7bfR6SEZH7j8T9ykgqD5pEqc=
+ t=1792403060; v=1; x=1793007860;
+ b=BMaBccpMv3NMSDT1Bd0lgqkLZ9Hcw/VNr3PvN7xr/D9ixiZf51Ma/Yu9HoJmC/dNLPaqTC0n
+ hQDkxRFL1nMlfQuW0pXCk2oH2Mw7jP5U1GRu1G6aKNVcn9wtPl2clD1vIu6ESSEw8BkSg7ndplj
+ fSgChnF961fWYeln4MxeG+Ec=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 26079291d9b31009;
-	Mon, 19 Oct 2026 09:38:48 +0000
-X-Mizu-Trace-ID: 26079291d9b31009
+Received: by smtp.migadu.com with ESMTPS id 51b1cea30dcf2afa;
+	Mon, 19 Oct 2026 09:44:20 +0000
+X-Mizu-Trace-ID: 51b1cea30dcf2afa
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <e864121c-f5ad-4df3-b956-f412632db3fb@linux.dev>
-Date: Mon, 19 Oct 2026 17:38:42 +0800
+Message-ID: <8f67b745-d63f-4d3f-9672-7bad7ce0e436@linux.dev>
+Date: Mon, 19 Oct 2026 17:44:10 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,13 +44,14 @@ Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
  eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
  linux-kselftest@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
  ameryhung@gmail.com, alexei.starovoitov@gmail.com
-Subject: Re: [RFC PATCH v10 2/4] selftests/bpf: add iocost cost model test
+Subject: Re: [RFC PATCH v10 3/4] blk-iocost: add iocost_ioc_tick tracepoint
+ for per-period device summary
 To: Tejun Heo <tj@kernel.org>
 References: <20261003124045.1289305-1-cui.tao@linux.dev>
- <20261003124045.1289305-3-cui.tao@linux.dev>
- <47611e3e8a2bfbdce1dfd9a1fe2c5019@kernel.org>
+ <20261003124045.1289305-4-cui.tao@linux.dev>
+ <b76b821edba101b68f085f03e8613d7c@kernel.org>
 From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <47611e3e8a2bfbdce1dfd9a1fe2c5019@kernel.org>
+In-Reply-To: <b76b821edba101b68f085f03e8613d7c@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -59,64 +60,27 @@ Hello Tejun,
 在 2026/10/17 01:49, Tejun Heo 写道:
 > Hello, Tao.
 > 
-> On Sat, 03 Oct 2026 20:40:43 +0800, Tao Cui wrote:
->> +	dev = getenv("IOCOST_TEST_DEV");
+> On Sat, 03 Oct 2026 20:40:44 +0800, Tao Cui wrote:
+>> + * Periodic per-device summary, emitted once per period from the tail of
+>> + * ioc_timer_fn().  Unlike the state-change events above, this fires every
 > 
-> Nothing in the tree sets IOCOST_TEST_DEV, so both tests always skip in CI.
-> The null_blk instance the v11 removal test creates could serve these two
-> as well.
+> The event is emitted before the vrate adjustment and the period
+> transition, not from the tail.
 > 
-Right, that was an oversight. All three tests now create their own
-null_blk instance through configfs. The create/remove helpers from the
-removal test are shared, the $IOCOST_TEST_DEV handling is gone, and
-everything now runs in CI.
+Updated both the commit message and the comment to say that the event
+is emitted before the vrate adjustment and the period transition.
 
->> +		if (ASSERT_OK(err, "readback"))
->> +			ASSERT_EQ(strcmp(model, "bpf"), 0, "model_bpf");
+>> +		/* whether the controller still has active iocgs */
+>> +		__field(int, running)
 > 
-> ASSERT_STREQ() prints both strings on failure.
+> nr_active counts every entry on ioc->active_iocgs, and ioc->lock is held
+> from the count to the emit point, so running always equals active != 0.
+> Maybe drop the field?
 > 
-Switched.
-
->> +		bpf_link__destroy(skel->links.iocost_2x);
->> +		/* cleared, or the skeleton destroy below detaches again */
->> +		skel->links.iocost_2x = NULL;
-> 
-> Without clearing, the skeleton destroy would call bpf_link__destroy() on
-> the freed link. It wouldn't detach again.
-> 
-Good catch. The comment now says the link has already been destroyed
-and the field is cleared so iocost_model__destroy() doesn't try to
-destroy it again.
-
->> + * The cursor handling follows the builtin: a zero cursor means "no
->> + * previous IO", and the cursor is advanced for bios the builtin
->> + * prices (READ/WRITE with a non-zero size; the builtin skips the
->> + * whole update when the cost is zero), so flushes and discards
->> + * leave it alone and long merged streams do not drift past the
->> + * 16MB seek threshold.
-> 
-> The model advances the cursor for every merged READ or WRITE bio.
-> ioc_rqos_merge() only moves it on a back merge into the request ending at
-> the cursor, so a front merge leaves the builtin's cursor alone and moves
-> the model's.
-> 
-Fixed; the example model now moves the cursor the way
-ioc_rqos_merge() moves the builtin's, so front merges leave it alone.
-
->> +	} else {
->> +		base = randio;
->> +		for (i = 1; i < NSLOTS; i++) {
->> +			if (s->stamp[i] < s->stamp[victim])
->> +				victim = i;
->> +		}
-> 
-> A merged bio which matches no slot, e.g. a front merge or a merge into
-> another stream's request, takes the LRU slot and can evict a live stream.
-> Maybe skip the slot replacement for IOCOST_COST_F_MERGE?
-> 
-Agreed; a merged bio which matches no slot is now priced without
-touching the table, so a merge can no longer evict a live stream.
+Dropped, along with the printk column and the corresponding commit
+message paragraph. With the lock held across the count and the
+tracepoint emission, it always equals active != 0, so it carries no
+additional information.
 
 Thanks,
 Tao
