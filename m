@@ -1,104 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792438836;
-	b=uQ0LbNtF2OrybETStDPXu+GhN5JCUkjIgsrZyfqgCcemcfjNY55ylAaW6Wljfp9wJc8a
-	 OY/833Z/NY5j09VYXUhHMwIGMMFp/h74w5lH3e8HSrk68UJojdJt91nDZWuhR7zu5vSZf
-	 gOb02glDpBmG8rusG7WE9LoRLFGD9kqD3AzpoGm8lrKBWDObltuWYpaQXiudqFSORtnVh
-	 1UUMEZhlYQddkVEmAIRFdtWpUZV34DjTJHDmm7JXtZh2E4g4iGidOqIOZCr9mdu2gb2Gr
-	 1NSutVY08wCE+2lUFWy1Sz1w0WurjLpINFyrjEA4IxlbzvTzeepEMD8CKHmA6rgCH1g==
+	t=1792439411;
+	b=4aIKAKWVpm2jaf6wCcoaVE5rFcQ8r4p7KlZbPHBDSLwP1uJ4XZnTAp7YZrPM3Ii2N5FO
+	 +NCRLsDxIp7rpHW4KYCtF5wioSPkDgVd3c2lZewDNeHOMwQVTtFeftPftHFW0UybCjEgX
+	 nPtudtGjiC7YZrEniPR1jMo/aTmPKrFAmPI83IYBGaGpN+gDf0tb3E0fd3oqir6MunnWm
+	 Jri2TECQSm0ODaBUM6F7saYhvXNonn4wXrF0aVFLFTg7zZZysbAc37bCsknIh/87LowiJ
+	 I6TNl6KpPDZVwZ+lXsfbe6vjX5tkHtw2+Ue9ypUqhTXwzYG1gOJN1yiYOZ0F28gQ9IQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792438836;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:To:Cc:Subject:From:In-Reply-To:References:X-Mailer:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=jCMFezbT/OjEFJBH7XUEU5R0jVHmGVvv13z7WJO3X3E=;
-	b=mtNCSxmCU7kHtfQE5sZEXqTiqJR951j8GWiGf7XsbTq9W9qgOW0L05f9r2KMB1qTo1KG
-	 SGm4dP4Dtn7lk2lh99Ylopr838bDv8h+wZUDzoRCQT5sguVPAWy4sIPCntWqP62Df/m6i
-	 b8Saj+fXatNLemQCC8/qCjUeTRSgFdU0VghXY3iOPBfuC7lOxrQMUojnYLLGjXci3ObsZ
-	 2wcentbxf9jehsFukIcuUV0NnUGmUOvcgiJCfAA7Is0djZda7Q12k6qt8QReNUDnvYK+j
-	 c5UdtBhnA/ZyGYbaVJ4Ss7MC3xKBs28n+vwG9H5mU/quRjZxPwzpnJhfu0K8RvqfqBA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792439411;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=TW4CS6cv+nvnkOr0R6JwitX4uLQdBnZYq/XUSM6xcHk=;
+	b=dmhtKsEMyN/kxCw6VrX+++XxHcqWxyXDezY2J8SgMXzhj8GYkUl6ILrdQZ1nCy2Xf7e9
+	 wdDa9ELK10ZWdKJ1zOutC/A76C7aCjSrrJ5+gZ8aeWiNSJyWbtKnwNx6IJoiC0rRY97Uz
+	 xhUKJXIdHsY2Xb/6JadYunr12nv2xMNTPXkksV6Mw467KHtSKtJzoQvGXT1qlutKUZWR0
+	 epPuSNNuU5aEKkRxGaJsqFR7FAeYZMUjiOjuv59AksHwtYQ3LxulYhsEzkXqLGTzy0bly
+	 ehBUCi85wbd7PKCmSbi7EihKnqBc9pi4on224JCwVB1d65+8K6QcSZwraaZHGARRjaQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AwKLsCH0;
-	arc=none smtp.remote-ip=209.85.216.46
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f02yvpmB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CCB606A32A
-	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 19:40:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25CCB606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653EA606A31B
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 19:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AwKLsCH0
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3ac91ac8924so1480671a91.1
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 12:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792438835; x=1793043635; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jCMFezbT/OjEFJBH7XUEU5R0jVHmGVvv13z7WJO3X3E=;
-        b=AwKLsCH0eCBDjV+uPmQSwL4hPhllyt3bz/fVOAvm5/kXUvXjTfvH5ZqqwpMjcpWh7X
-         JNTxMbWNTnOOwfXbMPriw8L2OXABTAKygX/SZvHJZ1HUu28hcBLfI3idDkgcBZthXgRY
-         0eR+LXFb7SEPUh1Yf59T1npD6SMgsMin2amGbSD84ao89WhG+Ue/0EqTaQfQaqACnz/+
-         W8o82Ko0xYys8Vw7SK4rYh768XCtXLQJMz6T5e+Ji3fgRQjW6XAAltPMFl7/V0vapMPw
-         M/XEL58w+kM5QEI3wTtJJHMYu1JG/ZgGFaiHo2zb1UPw3+bQKTRzCt16qNpTGAPufCbR
-         OLpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792438835; x=1793043635;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jCMFezbT/OjEFJBH7XUEU5R0jVHmGVvv13z7WJO3X3E=;
-        b=oZystsCMLf3qg7vWRGG0VB42sCkQZyEkfPdsr7wqaDSBdT60SVLk55a4YpkdMgHgxl
-         QLuSUp7/SaCHEvz3BkTsqEsAQ499AwF26kQkiymG3NZAvG9Aad+y3gz/t/BVoA+lhTOE
-         n2yccN/PX2FgNngRmFJh/GjghfpslubxHV5gSMaXF2Ihuy7NNVTFd/kCxEMxqX1PsWid
-         v3WNKMjryZtnXG0jSzqO16gxmcHfwOSfn1yqoaaYy9/rMcMrzxyZq7aLlmS86ZOxXb3c
-         uVLmkxAl6whishlG6vJrABQWQL8GJ7ceOLW49lyJCLW/v17GC+f0h34qNSEpLKrlY0Gy
-         LBpQ==
-X-Gm-Message-State: AFq9FYLWZijmpfZQFjjftCxylTTo3W9VGPzUJ8fTM0k5h4VCzJYhJzNx
-	8nY9JrDBhPVeZb8gk6z+40I/Px+P1SYLZo9tNZoFBlrtgR+0rgJI9e25
-X-Gm-Gg: AYBFou3vq2EYHgWjbOeqJ77pPsUYkSj1iVLNbwzrR//loH/1cc1PWJZUNX45zUVccla
-	CKEpTz6t9ebf6qIyRsx80G3b3bOKOXZwXQCtjT6jyWnSjAmb7FJBjHgfR3ghSqNb9cQbEXv6Gxo
-	MiMgS8ZlDOuxWl1tdi4yK2yOv05tea0ka8CXVnxV2/vNhzPnz91xf6ZCSu1OxsOOh8ZKchXqDg9
-	HsIVCjaeLi417JSAfL4l9SwKRR1DNHDlGqL1dTDPoUs90wXsdVb/wij4X5VbWGAckOX8xFUcXoI
-	QYUPAAxbys6XoYj9KCCzITcYAYpP5odcS3hwa5PRufoe/g54CcifNp9zHmLh9HrPYU3/fo9zylG
-	jmFFyMs2agJz44SUaHIaH/gkfMd/slvUo/w2lvqC3AVN3PTzt/YzRghivaFAbp2oP/Qvx/qn6qJ
-	3FdUevdSgHHHR3B6bRwxa7a96rReiShfeUmK+v1Ud14GXjUiGgBs/kzvYMo66ZjpklXADsXvj0Z
-	AIhS0irafrWlpAF7TN9Y9QzA+Bsw2YOORvu5lBatMVRbUsXhfjzpsGcaBOHkkHRW3KrSq5ArTRs
-	v44frKvoKlHXoQ==
-X-Received: by 2002:a17:90b:4a03:b0:3ac:6e91:3f14 with SMTP id 98e67ed59e1d1-3acef134d44mr8271080a91.22.1792438835344;
-        Mon, 19 Oct 2026 12:40:35 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3acc9942956sm7478188a91.1.2026.10.19.12.40.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2026 12:40:34 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Oct 2026 19:40:33 +0000
-Message-Id: <DM92JCFA4X4U.30MTDH0KCPTJ@gmail.com>
-To: "Michal Luczaj" <mhal@rbox.co>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, "Lorenz Bauer" <lmb@cloudflare.com>
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Sashiko" <sashiko-bot@kernel.org>, "Jakub
- Sitnicki" <jakub@cloudflare.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf, sockmap: Restrict iter-context
- sockmap updates to iter/sockmap
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <a9ba4549-4bae-4516-85ef-ee38f13551cd@rbox.co>
-References: <20261016-sockmap-update-limit-iter-v1-0-23fa946db59e@rbox.co> <20261016-sockmap-update-limit-iter-v1-2-23fa946db59e@rbox.co> <DM6O08VBRY20.1PFUYACCZ38JL@gmail.com> <a9ba4549-4bae-4516-85ef-ee38f13551cd@rbox.co>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f02yvpmB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07BB31F000C4;
+	Mon, 19 Oct 2026 19:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792439411;
+	bh=TW4CS6cv+nvnkOr0R6JwitX4uLQdBnZYq/XUSM6xcHk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=f02yvpmB1z1QrQPVl4IbdEjDVhac/S6GZARTbAw1kzhzLikBsGIzu3xq8iP/J1+Dj
+	 9kgUNFdTAyzLPENViuLONyEt3LcE14fpHabc7eOr2wAlQXOsVCCt2oL+YtPX2U2NZU
+	 3YmZs1Zy5JYijrvzghrLSRIU9199KqZz6IaCXLtItrPZaPHkVwWKm4eR0PGe8J3Db/
+	 p6Fo9AoyVaUx7yBHFN3h+tDtH3PBCJBh0bf7yP1erjjPapkYa1obtCJVflPehiVcPi
+	 e52IZW4lbCAWI4Y/NJdnxyl35Ban6HMJROnhnBLxfHSI/0RJf3kzO13oKSFm0n16GY
+	 s0KntA3n0T6Rw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15483924A53;
+	Mon, 19 Oct 2026 19:50:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,37 +53,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v5 00/16] Fix some arena paper cuts
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179243940978.3292775.11903554212923646408.git-patchwork-notify@kernel.org>
+Date: Mon, 19 Oct 2026 19:50:09 +0000
+References: <20261019132203.3034698-1-memxor@gmail.com>
+In-Reply-To: <20261019132203.3034698-1-memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, tj@kernel.org, kkd@meta.com, kernel-team@meta.com
 
-On Mon, Oct 19, 2026 at 08:20 AM Michal Luczaj <mhal@rbox.co> wrote:
-> On 10/17/26 01:52, Alexei Starovoitov wrote:
->> unix_state_lock() in bpf_iter_unix_seq_show() was added only for
->> unix_stream_bpf_update_proto() called from the iter prog.
->> iter/unix cannot get there anymore.
->> can we drop it ? can be a follow up...
->
-> So we don't care about having a stable socket state while iterating? Which
-> is the case for iter/sockmap, but is unlike iter/{tcp,udp}.
+Hello:
 
-Not sure. Is there a value?
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> I'm not sure I see the (stream sock) issue above. psock->sk_pair holds the
-> peer, so peer pointer remains valid during proto update. iter/sockmap is
-> safe, because sk is held by RCU. And for iter/unix we currently take
-> unix_state_lock().
+On Mon, 19 Oct 2026 15:21:42 +0200 you wrote:
+> Kernel code that shares arena memory with BPF programs runs into two
+> paper cuts, both visible in sched_ext's cid-form schedulers today.
+> 
+> A kernel struct cannot publish an arena pointer: a pointer member reaches
+> the program typed as a kernel pointer, so sched_ext hands out a plain u64
+> holding a pre-translated arena address and every program casts it before
+> use. __arena and __nullable become BTF type tags, defined in a header of
+> their own, bpf_compiler_types.h, that the code tagging a member includes.
+> A load through an __arena member of a kernel struct yields PTR_TO_ARENA:
+> the member holds the kernel address and the fixup pass appends the
+> conversion to the arena pointer form that the struct_ops trampoline
+> applies to __arena arguments, with a NULL test for __nullable members.
+> A __nullable member on its own yields PTR_MAYBE_NULL where NULL would
+> otherwise be assumed away, on trusted, RCU and per-CPU results, and the
+> program checks it; through a plain or an untrusted pointer the member is
+> probed and tolerates NULL, as the BTF_TYPE_SAFE_*_OR_NULL lists never
+> applied there either. libbpf renders the arena tag with its address
+> space, so the member arrives in a program built against vmlinux.h ready
+> to use, without a cast.
+> 
+> [...]
 
-got it. you're right.
+Here is the summary with links:
+  - [bpf-next,v5,01/16] bpf: Check exclusive maps once the program digest is final
+    https://git.kernel.org/bpf/bpf-next/c/55f17779d649
+  - [bpf-next,v5,02/16] selftests/bpf: Bind an exclusive map through a continuous fd_array
+    https://git.kernel.org/bpf/bpf-next/c/c2e56c88f14a
+  - [bpf-next,v5,03/16] libbpf: Keep the fd_array fill index out of bpf_program__clone()
+    https://git.kernel.org/bpf/bpf-next/c/b1eaee8b9a95
+  - [bpf-next,v5,04/16] selftests/bpf: Clone a program that calls a module kfunc
+    https://git.kernel.org/bpf/bpf-next/c/d837f008bfe6
+  - [bpf-next,v5,05/16] bpf: Add the __arena and __nullable BTF type tags
+    https://git.kernel.org/bpf/bpf-next/c/10832993c941
+  - [bpf-next,v5,06/16] bpf: Recognize __nullable on pointer members of kernel structs
+    https://git.kernel.org/bpf/bpf-next/c/bc7c2824682b
+  - [bpf-next,v5,07/16] bpf: Turn loads of __arena pointer members into arena pointers
+    https://git.kernel.org/bpf/bpf-next/c/7efe1d4e1139
+  - [bpf-next,v5,08/16] selftests/bpf: Test __nullable pointer members
+    https://git.kernel.org/bpf/bpf-next/c/9278bedb22de
+  - [bpf-next,v5,09/16] selftests/bpf: Test __arena pointer members
+    https://git.kernel.org/bpf/bpf-next/c/1dad22de9c03
+  - [bpf-next,v5,10/16] selftests/bpf: Move the no-arena tests out of objects with an arena map
+    https://git.kernel.org/bpf/bpf-next/c/bc4a327d5b87
+  - [bpf-next,v5,11/16] libbpf: Bind the arena of an object to every program in it
+    https://git.kernel.org/bpf/bpf-next/c/cd7a395838cb
+  - [bpf-next,v5,12/16] selftests/bpf: Test arena binding by libbpf
+    https://git.kernel.org/bpf/bpf-next/c/8911d7766073
+  - [bpf-next,v5,13/16] bpf: Set up the arena base only in functions that use it
+    https://git.kernel.org/bpf/bpf-next/c/a8471eb0747f
+  - [bpf-next,v5,14/16] libbpf: Render the arena type tag with its address space
+    https://git.kernel.org/bpf/bpf-next/c/7418d9291c57
+  - [bpf-next,v5,15/16] selftests/bpf: Test the address space rendering of the arena type tag
+    https://git.kernel.org/bpf/bpf-next/c/31ef8ab6dfc7
+  - [bpf-next,v5,16/16] selftests/bpf: Test an arena kfunc argument passed from a subprogram
+    https://git.kernel.org/bpf/bpf-next/c/fb854e2e54a7
 
->> Should we restrict it to ctx->sk somehow?
->
-> I recall a discussion about having BPF helpers accept only trusted
-> pointers:
-> https://lore.kernel.org/bpf/CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com/
-> Restricting only iter/unix seems better?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-we just discussed at bpf sync meeting that it's time to
-finally remove plain PTR_TO_BTF_ID.
-Otherwise we keep hitting this bug everywhere.
 
-in the meantime can we do it for this one arg ?
-Mark ctx->sk as PTR_TRUSTED in sock_map_iter_reg
-like iter/tcp and iter/udp do ?
