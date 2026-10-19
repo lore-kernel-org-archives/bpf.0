@@ -1,109 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACAD423E94;
-	Mon, 19 Oct 2026 07:24:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD7448875D;
+	Mon, 19 Oct 2026 07:28:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792394666; cv=none; b=OVrpE615LRWqXfV1ybAexcz6jirk4l/9T5rIB3DFy20KHTPlvXnD1vRhFZOE4LmLcHV3Y44fghUe7WtgTjrCpbCs6cSD9MlSZiUkvWhx5o/WcooYPQrxgivdGwkoEJ9vmi5iTLtWLSNWErfTED8NocyjXcQ1goIk8z3n63JeimM=
+	t=1792394913; cv=none; b=XQbklZVUERvpf7rGDoeXbUlfOhupzZyJbo3Dvy9h9RufDgut0Pj7YyD0yGtoGZgfgi1kWXnBATJhAIOI63DDyUjbK1meYirTMxCwji8SGRulmMonNtyLc4VC7D8CGhEr4DokADpHeLrYlksg0VhJQ9/Br6LGQ+mBarEFReltqzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792394666; c=relaxed/simple;
-	bh=PJMNtFZdCxAkfXpCGh9gdP0M/bJtvasByqnTtI9idOs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gHso7JPoCKRxiEcHQbQNDUH+LrRZ5Uy/91hmylVSiZ6+lI7BQYY9uvdNrHWUTX+hjyTz1I6HdGCXm7uIGrJwCPeDSHN4RtzQ41jSvBZTNbwllZO6hh0C7uWRXurFOwYYKZrJ6BGLqsM8xl3QSv6sSdQgGDs2InVNncCJmKcNHvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggHitl0r; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792394913; c=relaxed/simple;
+	bh=wzSPSQP14nOUWnUkCLcnw6P8OJhJPhsNsdJfZpDwOQw=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=pI0X6dkHStbV+3VZOnw3zod0xrFt9e5Kj/pXmC8XsGixAQGNXDv+wOkvv2/Z4ME99V8/GMM7wmfDsCH7JDY204g4O25ZzIONFJt9J4rLzCb0wq/Os/jzlPD7U7UmzMEnnuCv78+HyTxKdR1SyxWdD/6yBZ6S5mkKAwa2rUXyf+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BHqgcASq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggHitl0r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8571F000C4;
-	Mon, 19 Oct 2026 07:24:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BHqgcASq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83FAF1F000C4;
+	Mon, 19 Oct 2026 07:28:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792394665;
-	bh=kq41aEXGRIjZiDj+Lf2TBzLa687IIXYS/7guQvFIns4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ggHitl0rXZyzCQCjN2UknQ40BhlbBcTxZG09AcCzpp5wAsA5ho/FiflIfIJ4mEK1y
-	 6VS8S7ervff50xPjQk0fgrN1ptCCJzqUQb4SZ4i1g906kHxhuHIKQ40rN8IeTQzjwf
-	 MVsTmyF8Y2vfLeUwNqOkpOBkRcpRdwDzG2bgEIZLscXgMxX/uh0/ewXONSUWspaa1t
-	 Y259/Soj7mZdinOjIz1my6RleMtKjL0AXnVhlFaUJOBxiJtF8sqhvu+sXCqx2KT7xt
-	 8scp6w5vFlgHfAXGfA+HaNLEHeqMJJhjwO+euGG3MNxBR7C2+seS6e2BmGsvdZMBe/
-	 fLyvPT46WqT0Q==
-Content-Type: multipart/mixed; boundary="===============4963888778798225134=="
+	s=k20260515; t=1792394910;
+	bh=KubjCLATY2mohcWYNWDi8lK41JHzEvaGAtUBAOuiA2w=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=BHqgcASq72+5P9T0H2vFTAI+WGh6U0q/aJbm7BVC7Dja1FhcQMc0Tnw63oXT3c0CA
+	 +RXnK9EGpo9NfTyCoYEfdwVLxpVlY7uFQcnv6NncllgqGDzL/jksnTDWzTaVtNizs9
+	 MC+yapaRpJn9kSb0YgBSsfP/3NPnBlZcCKAEnMPn8zpi6XdT89vSw8I9dTjf6N9H2B
+	 ooiBdR90r1erTlKC4E8LSG/qeioV+LdRAKoX9yBJE9IQaUddP6ZWOoKJeqlGFqDiFT
+	 CPGV5Fsh2Os34neb5mxYgBSG40O/gwRKixT0MfAXjWJjwbMywJFRCbPHMazp9VWUjc
+	 2TQJzIOeicRSg==
+Message-ID: <sashiko-outbox-176745@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [Patch v3 1/4] perf/x86: Clamp x86_pmu.lbr_nr to
+ MAX_LBR_ENTRIES
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261019070836.2972403-2-dapeng1.mi@linux.intel.com>
+References: <20261019070836.2972403-1-dapeng1.mi@linux.intel.com>
+ <20261019070836.2972403-2-dapeng1.mi@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 19 Oct 2026 07:28:30 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <737a8f07246a2cd31950ffcdb2a98b9ee81824c27a362dd17e0ba94e2281b00e@mail.kernel.org>
-In-Reply-To: <20261019064157.29885-5-laoar.shao@gmail.com>
-References: <20261019064157.29885-5-laoar.shao@gmail.com>
-Subject: Re: [RFC PATCH v3 bpf-next 4/5] sched: add BPF-based per-cgroup NUMA balancing mode selection
-From: bot+bpf-ci@kernel.org
-To: laoar.shao@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mingo@redhat.com,peterz@infradead.org,juri.lelli@redhat.com,vincent.guittot@linaro.org,akpm@linux-foundation.org,david@kernel.org,gourry@gourry.net,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,shakeel.butt@linux.dev,roman.gushchin@linux.dev,yu.c.chen@intel.com,zhao1.liu@intel.com,tim.c.chen@linux.intel.com,lizhe.67@bytedance.com
-Cc: bpf@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,linux-kernel@vger.kernel.org,laoar.shao@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 19 Oct 2026 07:24:24 +0000 (UTC)
 
---===============4963888778798225134==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] perf/x86: late x86_pmu.lbr_nr clamp in init_hw_perf_events() risks=
+ #GP
+--
 
-> sched: add BPF-based per-cgroup NUMA balancing mode selection
+commit 7f534b76717bd0a7a33fa3404815780334bcf485
+Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
 
-TL;DR: Comment only: the comment on task_numab_in_tiering_mode() may describe
-the return value backwards, since task_numa_fault() skips non-top-tier
-statistics when it returns true.
+perf/x86: Clamp x86_pmu.lbr_nr to MAX_LBR_ENTRIES
 
-> diff --git a/include/linux/sched/numa_balancing.h b/include/linux/sched/numa_balancing.h
-> index 36de57f7fb06..d63891a8be01 100644
-> --- a/include/linux/sched/numa_balancing.h
-> +++ b/include/linux/sched/numa_balancing.h
+This commit clamps x86_pmu.lbr_nr to MAX_LBR_ENTRIES in
+init_hw_perf_events() to prevent out-of-bounds accesses to the cached
+LBR stack.
 
-[ ... ]
-
-> @@ -53,6 +95,68 @@ static inline bool numab_in_normal_mode(void)
->  {
->  	return sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL;
->  }
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index 4df792b139e05..82f6b66db7e2f 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -2645,6 +2645,8 @@ static int __init init_hw_perf_events(void)
+>  	if (!x86_pmu.config_mask)
+>  		x86_pmu.config_mask =3D X86_RAW_EVENT_MASK;
+> =20
+> +	x86_pmu.lbr_nr =3D min(x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
 > +
-> +/*
-> + * Whether @p runs in tiering mode, i.e. whether faults on non-top-tier
-> + * memory still feed its NUMA statistics. The requests of the task's
-> + * cgroup and of every ancestor are combined; an opt-out wins, otherwise
-> + * the bits are read independently, as the sysctl reads them. Without
-> + * any request, the global sysctl decides.
-> + */
-> +static inline bool task_numab_in_tiering_mode(struct task_struct *p)
-> +{
-> +#ifdef CONFIG_BPF_NUMAB
-> +	if (static_branch_unlikely(&numab_cgroup_mode_set)) {
-> +		int mode = task_numab_mode(p);
-> +
-> +		if (mode != NUMAB_FOLLOW_SYSTEM)
-> +			return mode & NUMA_BALANCING_MEMORY_TIERING;
-> +	}
-> +#endif
-> +	return numab_in_tiering_mode();
-> +}
+>  	perf_events_lapic_init();
+>  	register_nmi_handler(NMI_LOCAL, perf_event_nmi_handler, 0, "PMI");
 
-The comment above task_numab_in_tiering_mode() says it reports "whether
-faults on non-top-tier memory still feed its NUMA statistics".  Is that
-the right way around?
+[Severity: High]
+Does clamping x86_pmu.lbr_nr after intel_pmu_init() and amd_pmu_init()
+return risk an unhandled #GP in intel_pmu_arch_lbr_reset() and leave
+the vendor PMU initialization inconsistent with the clamped depth?
 
-The only caller, task_numa_fault() in kernel/sched/fair.c, uses it like
-this:
+For Intel Architectural LBR, supported depths are enumerated as a bitmask
+in eax.split.lbr_depth_mask (where each bit indicates support for a
+multiple of 8 up to 64). During init_hw_perf_events() -> intel_pmu_init()
+-> intel_pmu_arch_lbr_init(), the code selects the highest supported bit
+and validates that unclamped depth against MSR_ARCH_LBR_DEPTH:
 
-	if (!node_is_toptier(mem_node) &&
-	    (task_numab_in_tiering_mode(p) || !cpupid_valid(last_cpupid)))
-		return;
+arch/x86/events/intel/lbr.c:intel_pmu_arch_lbr_init() {
+	...
+	lbr_nr =3D fls(eax.split.lbr_depth_mask) * 8;
+	if (!lbr_nr)
+		goto clear_arch_lbr;
 
-so a true return makes task_numa_fault() bail out before recording any
-statistics for non-top-tier memory.  Should the comment say that faults on
-non-top-tier memory are kept out of the task's NUMA statistics instead?
+	/* Apply the max depth of Arch LBR */
+	if (wrmsrq_safe(MSR_ARCH_LBR_DEPTH, lbr_nr))
+		goto clear_arch_lbr;
+	...
+}
 
+If a CPU or hypervisor advertises a depth greater than 32 in
+lbr_depth_mask without also setting the bit for depth 32, clamping
+x86_pmu.lbr_nr to MAX_LBR_ENTRIES (32) here leaves x86_pmu.lbr_nr set to
+an unsupported depth that was never tested with wrmsrq_safe(). When
+cpuhp_setup_state() subsequently runs x86_pmu_starting_cpu() ->
+intel_pmu_cpu_starting() -> intel_pmu_lbr_reset() ->
+intel_pmu_arch_lbr_reset():
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+arch/x86/events/intel/lbr.c:intel_pmu_arch_lbr_reset() {
+	/* Write to ARCH_LBR_DEPTH MSR, all LBR entries are reset to 0 */
+	wrmsrq(MSR_ARCH_LBR_DEPTH, x86_pmu.lbr_nr);
+}
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39213018427
---===============4963888778798225134==--
+won't this unchecked wrmsrq() of 32 to MSR_ARCH_LBR_DEPTH raise a fatal
+#GP at boot?
+
+Additionally, because this clamp runs after vendor initialization has
+completed:
+
+1. intel_pmu_arch_lbr_init() has already validated the XSAVE size via
+   is_arch_lbr_xsave_available() and allocated pmu->task_ctx_cache using
+   the unclamped lbr_nr.
+
+2. intel_pmu_init() has already probed MSRs up to the unclamped
+   x86_pmu.lbr_nr and logged the unclamped depth:
+
+arch/x86/events/intel/core.c:intel_pmu_init() {
+	...
+	for (i =3D 0; i < x86_pmu.lbr_nr; i++) {
+		if (!(check_msr(x86_pmu.lbr_from + i, 0xffffUL) &&
+		      check_msr(x86_pmu.lbr_to + i, 0xffffUL)))
+			x86_pmu.lbr_nr =3D 0;
+	}
+
+	if (x86_pmu.lbr_nr) {
+		intel_pmu_lbr_init();
+
+		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+	...
+}
+
+3. amd_pmu_lbr_init() has likewise already logged the unclamped depth:
+
+arch/x86/events/amd/lbr.c:amd_pmu_lbr_init() {
+	...
+	x86_pmu.lbr_nr =3D ebx.split.lbr_v2_stack_sz;
+
+	pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+	...
+}
+
+Should the MAX_LBR_ENTRIES limit be enforced at the point where
+x86_pmu.lbr_nr (and lbr_depth_mask in intel_pmu_arch_lbr_init()) is
+determined inside the vendor initialization paths instead?
+
+> =20
+ =EC=99=84=EB=B2=BD
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019070836.2972=
+403-1-dapeng1.mi@linux.intel.com?part=3D1
