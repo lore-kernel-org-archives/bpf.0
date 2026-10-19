@@ -1,57 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1792426778;
-	b=oOymaauqmz17vwF9pFph0nHNHBfFdjBl98LW2sZMc/eVifO6iZAG0E/vme2NSSN/APhz
-	 iydaTjQsyb7EuKW4FrIyyzdqeaYsWMpMR/yKoaYLb3PT/1hjkh2pz2dZLSPiw8FDLelVU
-	 xYKXEeK/8VDIoKm/Vyg2KN+C5KJ0jYxa/t76HHjooStlu7drIy7cfFwK+At09TfFZYRLQ
-	 8URbfR/H+C0TDCq5pwz78uVeuP9VZGkvgR958vTzkVMZg1EinGPk8D4l25XUmWEVsHSTb
-	 XSCHZ2FTco7wD78BJottkxqGz2VfxgExQj8iNQpdE/5Fq6GFilBsZ8o1C2SJ4nyuUEw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	b=vzIvDXQatLwhPdz0aPsR1KjB/1M6cS4uV5Ght5iJFA9HWx+otpx5Ne9Y2OlIFoXkWhas
+	 IkXouz98Nax7uBbZbVyIXybgBEdS3ttJFcpoXCpRLDVKhPQFiVqgkXl7h01JUUta2b0+f
+	 cZ8FIoGzRpans3UCP2ERgfdiQ/r9iaUZkorGo1knKoip34yzBvWcwcJ1J++KmfvlB7zXc
+	 5fngQluItbB6zhJ9CiaSZ+NRvOts1AFfeafDnr5oiNcqON5/viJq+l2YF6ZOUDmYt6GW2
+	 ieHvYvkXg1pwbLubQZpJVgo21rRyKY15AzzgnOkhJtXEjRI/F4eWiBfAxt6kc6oUOHg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792426778;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=dIIEkm7Ckxb3xIa7RHXibja+O1JV/PV2z0/w1UNObv8=;
-	b=GwUt+k/sP9fV9uNVV6nspc3iTc/z/zwxawcokI9aWf24HznxcSIGqfqj3Ti65XpXDayM
-	 jFruE/JyjCQdgkfyZAe+F/XOhLDVATgpUUZi+TN5X9b2hCOrUBh2l+NDF4Xb82lpUV+G9
-	 bT4FpxF+JECz4DOYnd4D37SwmzZl3BKeU2ugg6Y3oxQKf6WNeKec91i5ZoedglpefcXao
-	 VZgYoiossdgRSn782c6aN7lhutqy4XygEDaqD8A4Wdr5fOxmrALZGSP3vuaECQQthlef2
-	 VNV/F7V7e52wgHnoBdR/ZEgD94FsRQrMYaAFImGaGMf5EJc5bWe1YZrRsM2hO94TrQw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h1A5I1bT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=PJJTCalwhybaV0YnpikxX4f4T6RunQfv+DiHrJ4+ZBU=;
+	b=YHMd3d6SXjKPwTaMA75g78eQ/pim+cck3eZaYPOjLQWtMRqgtM3iCS6fULT6W68s+P3t
+	 ZtGl4uCfcpgxLonQ3mtEV7ASzk6UlZXmEUowtqqp08XfSoXxWsJR1cZx3OoxHOJiuM7iJ
+	 jON0GYm4xOAxIHoQUn22k4KC0/foMfb/9EeEOoZe/7c3qT45a+XYp/VmIb6I4OFuM24SC
+	 6RrrWKcJEH4NmCy5bqwXMfENgipail9cR2fmeudTMcyjAeHkwGSyvEhCG8Nk+D02vxHns
+	 kuNX0Q1qbvuE19hxpZHf5/6ZFRNB8PakfEAlYuih5+eYpFTC3b83IN7jPAgBPkz1jBg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=YgwJuMuA;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9FB606A319;
-	Mon, 19 Oct 2026 16:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7106606A31D
+	for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 16:19:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7106606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h1A5I1bT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 605041F000C4;
-	Mon, 19 Oct 2026 16:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792426777;
-	bh=dIIEkm7Ckxb3xIa7RHXibja+O1JV/PV2z0/w1UNObv8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=h1A5I1bTmS4HeAiAJlEGEpGqpqOqoz0anQOmjFTE0CyWREWBA6lYQtRta1coDXUab
-	 rMZoB3nwKZtv14LEsR9mFzXdREOoiy9DnXYoHP9pqMKjjkISebm5VEYlngrKX0Fm2L
-	 turvDIgbv0VSOtBqSBXnob8K2ZceKvhaitPUjIbyY0KxQZ1fJq5745OrazFGwYli4f
-	 QpSoPy0TvEw4/fukZ6hzdBPjtwAse6NBKok/HYTnagkk+byv37gcYJ+vSbYzTyUYvF
-	 Jg8ZSwar+daa6+AFHs9Rsjh7FaDbTeUInAnUH6CZLk0QdJz8yRAR/cdqGB/3cOgpsT
-	 3CD2vQzwUm9ng==
-Message-ID: <sashiko-outbox-177863@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add syscall common attrs support
- for link_create
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20261019153628.15912-2-leon.hwang@linux.dev>
-References: <20261019153628.15912-1-leon.hwang@linux.dev>
- <20261019153628.15912-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 19 Oct 2026 16:19:36 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=YgwJuMuA
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ab3260b2cdso1140387a91.1
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 09:19:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792426777; cv=none;
+        d=google.com; s=arc-20260327;
+        b=LwqQvUiuNlrNGpEZWIaV5B6rGI19hUnAuvbWGV1bM8E4dOPE4onQj89kM2mYh84AQt
+         +VXjOXl0/8ITuOPJgD5uKD02wrxsxVMtp7WLEH0O3VHRSoO0rQxzg1ZSSh8JyBiOlijD
+         TcINAeOvNIujW5hoEb1ucUN1AOA766230BWM88zNFVKzNvtFFAIo1+vYFgb3e/frQcwR
+         CdRcGr8L24L52H37NUvODBBtTUOIAmkg0iHSL/BSN8mfG27jERpN+81UzJ73TmEGyYv6
+         jREHTQd2DlQtG5YAPmCBuwo9aVPyWusDKft9TlmSpk8eZj55gVxkyg5cSsZNderAMbUR
+         +FEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=PJJTCalwhybaV0YnpikxX4f4T6RunQfv+DiHrJ4+ZBU=;
+        fh=CgC6jO2zuFLoRipwHalfPlQ1qSxkRzgrq275PtFEEbw=;
+        b=qQxQms2D6pUrBcEl4745KKdFfpZtArAIt5oxhSZvirNh03JuZraHVk/fpf4yItzQ6I
+         ewX7dINSl/UdGMaDj6TtGwY282JZEFt6sy2r1wcVvyBbhhQSFJm0Z8Ed4fqwBTmUo114
+         9Ph3X0COXCuss+ms/qKAUm/vf9h7y+vIpb5l7MXVOvOjhko2y95NPns497oOO6esLW0b
+         OFU2T7w8SI4Olc0VP/4eWlV0AZQ39zsL+JkLfKhRAwZdwUPBufwh/VTajpj+R3UuAqCc
+         j0milM0AuTQiAYChOLoazOcoIZbyTOZm5fqpySvt8tHH9cJ1DpdtiEyAxRcldoWzgOkG
+         IwCA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792426777; x=1793031577; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=PJJTCalwhybaV0YnpikxX4f4T6RunQfv+DiHrJ4+ZBU=;
+        b=YgwJuMuAifhbXhFvTbAh+dNiezCsh9FgcumUZrh352cjGXc8dhxc22/r+1vsKEOuiQ
+         HI+tgssG66wVWXA7yKPHd3X5X6Q5QZ5mZwhGEYYbQXYg6Kq+0nvp041dArpWfh/mx8ua
+         TyO9l499UZOY5/RAJWULy4fgrZsKNt7jsbpNZ/BNReGeZuqFlzfNEYsd+DMPtfJqExz9
+         Vik7WLiQIqegUicm2kQGtEq00UvxPYgsHeTv0jZhLAGzEcmcWV7VtTrLue18I6Doo6sO
+         jZCTYgSwxAePX8YXHxdyU79eSW4V6uMV5ZCh4bym9h9rB+EgP5w9/RKcc06llIDuDCAN
+         dfNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792426777; x=1793031577;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PJJTCalwhybaV0YnpikxX4f4T6RunQfv+DiHrJ4+ZBU=;
+        b=ZUJcHDu9pFAIsbMi9536A4lhTvXVLir5bWNhvzLnS44G6PAtAxXxT71f0e/bXObk6/
+         83Vjrq37d8YC0mysvslmgwY/tkimnUMdQiyiE0MmMFMcfIfLL+j7/AVj+rU2aQekDMWG
+         NImapo2g1BLGul61TEsUjvGRvl7XJAvtIbLtcWhnknyxufndEzuEjjNm2GReoUYxCsOx
+         02Kw+cPLUJUkolUeHM1HDUqVbdIX3xP+vQ9usj5CMxsRmfB7C7CKcxrZtkss4YCG0f3q
+         lGa9G3FhMcDq2zy/yXKd7w6p9Wmnh4gG11pkmn2XPEGdzvb1yHUd0bl8jqUj/ImXh9cR
+         I8OQ==
+X-Forwarded-Encrypted: i=1; AKwUvByjuAdhqU32NCjiPxPquYN2U27iKfYwCAx/H466sAest6XAWk0tHOqwZ7IAne+SX3ECZGc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJbgBZUPpUpQ+teDbbEtzVkn85tk9IKWi+xr+ouvINgc3/Oe3lB
+	lix6eBDP36lAEvZfJPHI4exmr5dp8WCKxsrJrD5gS5dBQTUQxlrFM07Ey2wBrZGo0ut8TNIqrdC
+	2ZAcGjUDHWgEJaNOKPTXpcyx1IdBGIg8=
+X-Gm-Gg: AYBFou3vy4JLD4Gcv92I6c1PBuh0davADEh+WP2gn3qD7H5E09iuv6yx7I5LHbPAc8J
+	n2bGYebDEPCiNyvwDOM9lp095O0CbrxPGoAE8vd5GCu8olkE7YKNsXvB2Xd147fTejlIBN8D43e
+	+LHXLN03sl1A4MJ1mo2w1Vtxlji5FFc18n7br+2PvGEuX2ZddvWhowD9zOquTFRepbBZbpxfqhM
+	vW64wY5kvAMcOh5d7ijrI12uLk+sALbZhtcrec413lSS/zer4MNXzkF6Jo/7WaF6wCfJ/ymfunJ
+	jI6vvhUcMVvAjGpns9AudblkErR6Xel/+3bm/teEn9SpG4aPjnU5gFo9Xf1/xeiWBjGtD52fhbG
+	zNXAmDcjrqotkvi8IILxPayn26TzraimdViCD949WJ3Rrcb3eWTpF0Hkcf9So4JI=
+X-Received: by 2002:a17:90b:3889:b0:3ac:17c:6e85 with SMTP id
+ 98e67ed59e1d1-3acef0ffa0fmr6944547a91.47.1792426777044; Mon, 19 Oct 2026
+ 09:19:37 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,168 +103,79 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261010224902.1232178-1-arighi@nvidia.com> <DM6HVNSP3USV.AJSWS289Z3I9@gmail.com>
+ <CAEf4BzZZRrD86ZswsB2r-swqNi7D1p52Vs=fQ9MXSgGATN31Jg@mail.gmail.com> <DM7JXB4PREVH.1BHG31CCNRXF1@gmail.com>
+In-Reply-To: <DM7JXB4PREVH.1BHG31CCNRXF1@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 19 Oct 2026 09:19:24 -0700
+X-Gm-Features: AclHuK-HFgyrtXdEf6EddMbv0AqemeagPcniTwi6V4E_qoHT91-FJu0HS9ZwBfw
+Message-ID: <CAEf4BzaeXxoPqtcV6E1x8zh-Uv_C1cfNjzUYLKDWwod=k2ttLQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/5] bpf: Expose pinned arenas as sized bpffs files
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrea Righi <arighi@nvidia.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Josh Don <joshdon@google.com>, 
+	Vineeth Pillai <vineethrp@google.com>, Balbir Singh <balbirs@nvidia.com>, 
+	Shameer Kolothum <skolothumtho@nvidia.com>, 
+	Himadri Chhaya-Shailesh <himadrics@protonmail.com>, NchangRoy <royfru44@gmail.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: incorrect attach_type and prog_type error logging in link_c=
-reate()
---
+On Sat, Oct 17, 2026 at 5:52=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Oct 16, 2026 at 12:52 PM Andrii Nakryiko <andrii.nakryiko@gmail.c=
+om> wrote:
+> > kernel to do that. But once we have the ability to create ARRAY from a
+> > bunch of pre-existing memory (e.g., from memfd), this can be used both
+> > in a guest and in the host, and both models, guest allocates or host
+> > allocates, could be supported with the same model.
+>
+> I don't think it will work for their use case.
+> With array of maps scx needs two lookups and two NULL checks
+> on every access, and the result cannot be kept in the task ctx
+> which is in arena today, since ptr_to_map_value becomes scalar.
 
-commit 6e1b9a1ad09acdb6c859fd328c7f20b775a8136a
-Author: Leon Hwang <leon.hwang@linux.dev>
+fair enough
 
-bpf: Add syscall common attrs support for link_create
+> unless everything is converted to magically bounded array, but...
+>
+> > annoying, but what if we teach verifier to just automatically add
+> > bounds limiting sequence (e.g., masking if value size is power of two,
+> > slightly slower sequence for non-power-of-two, of course)
+>
+> while working on arena ~year back I tried to add runtime masking to
+> ptr_to_map_value and couldn't figure it out.
+> then in ~april I tried again with llm-s and failed again.
+> the main issue is that ptr_to_map_value is a pointer,
+> and progs keep adding random stuff to it.
+> There is no way to split it into 'base + offset'
+> and apply mask on 'offset'.
 
-This commit adds syscall common attributes support to BPF_LINK_CREATE,
-creating and finalizing a verifier log instance to report error messages
-for invalid prog_fd, attach_type, and prog_type.
+yeah, good point, some food for thought, I haven't thought much about
+this, will keep it on backburner for now
 
-Links:
-[1] https://lore.kernel.org/bpf/20260514004634.3DA09C19425@smtp.kernel.org/
+> I tried alignment tricks, like align each ptr_to_map_value's base
+> to 64k or such, but still failed. Something needs to remember
+> upper bits to see when math overflows.
+> That's why Barret was using explicit mask in C on every array access
+> (when he implemented all kinds of complex data structs on top of arrays).
+> Every access in C was base + mask(offset).
+>
+> Array from memfd is a separate topic. So far I'm failing to see
+> a use case, but if it's not a lot of code, then why not.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 849bc9136299d..201658b75ab77 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -5856,8 +5856,11 @@ static int bpf_map_do_batch(const union bpf_attr *=
-attr,
->  }
-> =20
->  #define BPF_LINK_CREATE_LAST_FIELD link_create.uprobe_multi.path_fd
-> -static int link_create(union bpf_attr *attr, bpfptr_t uattr)
-> +static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_=
-common_attr *attr_common,
-> +		       bpfptr_t uattr_common, u32 size_common)
->  {
-> +	struct bpf_verifier_log *log;
-> +	struct bpf_log_attr attr_log;
->  	struct bpf_prog *prog;
->  	int ret;
-> =20
-> @@ -5867,14 +5870,28 @@ static int link_create(union bpf_attr *attr, bpfp=
-tr_t uattr)
->  	if (attr->link_create.attach_type =3D=3D BPF_STRUCT_OPS)
->  		return bpf_struct_ops_link_create(attr);
-> =20
-> +	log =3D bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, =
-size_common);
-> +	if (IS_ERR(log))
-> +		return PTR_ERR(log);
-> +
->  	prog =3D bpf_prog_get(attr->link_create.prog_fd);
-> -	if (IS_ERR(prog))
-> -		return PTR_ERR(prog);
-> +	if (IS_ERR(prog)) {
-> +		bpf_log(log, "Invalid prog_fd.\n");
-> +		ret =3D PTR_ERR(prog);
-> +		prog =3D NULL;
-> +		goto out;
-> +	}
-> =20
->  	ret =3D bpf_prog_attach_check_attach_type(prog,
->  						attr->link_create.attach_type);
-> -	if (ret)
-> +	if (ret) {
-> +		bpf_log(log, "Invalid attach_type.\n");
->  		goto out;
-> +	}
-> +
-> +	ret =3D bpf_log_attr_report_size(&attr_log, 0);
-> +	if (ret)
-> +		goto put_prog;
-> =20
->  	switch (prog->type) {
->  	case BPF_PROG_TYPE_CGROUP_SKB:
-> @@ -5953,12 +5970,22 @@ static int link_create(union bpf_attr *attr, bpfp=
-tr_t uattr)
->  			ret =3D bpf_uprobe_multi_link_attach(attr, prog);
->  		break;
->  	default:
-> +		bpf_log(log, "Invalid prog type.\n");
->  		ret =3D -EINVAL;
->  	}
+Yeah, there are just so many cases where we have some memory that is
+special in some way (e.g., huge page-backed memory, or some IOMMU,
+e.g., that doorbell stuff, which, if I understand correctly, is done
+though writes to specially set up memory ranges), and we can't shove
+all this into BPF_MAP_CREATE interface if we want to have BPF program
+accessing that memory. So having a generic way to just bolt ARRAY on
+top of already created memory seems like a useful primitive.
 
-[Severity: Medium]
-Can calling bpf_prog_attach_check_attach_type() before checking
-prog->type cause inaccurate or missing log messages in link_create()?
-
-First, in kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type():
-
-	default:
-		ptype =3D attach_type_to_prog_type(attach_type);
-		if (ptype =3D=3D BPF_PROG_TYPE_UNSPEC || ptype !=3D prog->type)
-			return -EINVAL;
-		return 0;
-
-Because attach_type_to_prog_type() only maps attach types to a subset of
-program types, most program types not supported by link_create() (such
-as BPF_PROG_TYPE_SOCKET_FILTER, BPF_PROG_TYPE_SCHED_ACT,
-BPF_PROG_TYPE_RAW_TRACEPOINT, or BPF_PROG_TYPE_SYSCALL) fail in
-bpf_prog_attach_check_attach_type() with -EINVAL and log
-"Invalid attach_type.\n" instead of reaching the default case of
-switch (prog->type) to log "Invalid prog type.\n".
-
-Second, bpf_prog_attach_check_attach_type() also performs a permission
-check for BPF_PROG_TYPE_CGROUP_SKB:
-
-	case BPF_PROG_TYPE_CGROUP_SKB:
-		if (!bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
-			/* cg-skb progs can be loaded by unpriv user.
-			 * check permissions at attach time.
-			 */
-			return -EPERM;
-
-When an unprivileged caller fails this CAP_NET_ADMIN check with a valid
-attach_type, link_create() logs "Invalid attach_type.\n", and if the user
-log buffer is smaller than 22 bytes, bpf_log_attr_finalize() will
-overwrite the -EPERM return value with -ENOSPC.
-
-Third, for BPF_PROG_TYPE_TRACING and BPF_PROG_TYPE_LSM,
-bpf_prog_attach_check_attach_type() only verifies that
-attach_type_to_prog_type(attach_type) =3D=3D prog->type, while the check ag=
-ainst
-prog->expected_attach_type happens later inside switch (prog->type) in
-link_create():
-
-	case BPF_PROG_TYPE_LSM:
-	case BPF_PROG_TYPE_TRACING:
-		if (attr->link_create.attach_type !=3D prog->expected_attach_type) {
-			ret =3D -EINVAL;
-			goto out;
-		}
-
-If a tracing or LSM program is passed a mismatched tracing or LSM
-attach_type (for example, BPF_TRACE_FEXIT for a BPF_TRACE_FENTRY
-program), bpf_prog_attach_check_attach_type() returns 0,
-bpf_log_attr_report_size(&attr_log, 0) runs, and the check in
-switch (prog->type) jumps to out without logging "Invalid attach_type.\n".
-
-> =20
->  out:
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		int err =3D bpf_log_attr_finalize(&attr_log, log);
-> +
-> +		ret =3D err ? err : ret;
-> +	}
-> +
-> +put_prog:
-> +	if (ret < 0 && prog)
->  		bpf_prog_put(prog);
-> +
-> +	kfree(log);
->  	return ret;
->  }
-
-[ ... ]
-
-=E5=AE=8C=E7=BE=8E =E2=80=94 wait no, I shouldn't write anything else! Let =
-me make sure I didn't write anything extra at the end.
-Wait: I just wrote "=E5=AE=8C=E7=BE=8E =E2=80=94 wait no..." in the respons=
-e stream?!
-Oh! No, I am in the response stream! Let me check if I can avoid that. Too =
-late, it's already in the output stream!}] Let me stop immediately.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261019153628.1591=
-2-1-leon.hwang@linux.dev?part=3D1
+So we'll give it a try and see how it looks.
