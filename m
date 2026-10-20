@@ -1,156 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.129
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792504384;
-	b=t52n24ZdtuPnYhvFkiSEuESkTKJuRVGpwcyddh5Y5FLsjGZkFr7a4tAMntUt/eHR8pOR
-	 jYWRCDNRdcln3K7WV0LT6+BdjMkDZylIb6w9FcviUw25WKusUpX8B1yx2BRypbCH6i67i
-	 gPZzy80Z1jrmODZo5lFFQhNRk2kbOuEK+F8DYQe28dv7bElCgKUb8Oft02Xfndz9Jpqq4
-	 ECpUkXOl2VzP+ASHwsrbpo5/nhNIcMy2aLKMZm65un+5k9/Tvk/nKKZ3WfYF6ibFbTjvo
-	 LfXpWhdiYzzGagpZlYrdON4oeBqipdhpoaTwY2H4MHPT+SbMnuHa0EqGMO5SbTEDVzg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504384;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 msip_labels:x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=Sp9BZDCJSPYKYKwWttAGfBpvJHVea57EX6Bnuoov61o=;
-	b=S6bDKQ95sS0GnyWzjH4fjzM1CWwtvaeixPoWdL9zhvB3z6ZX7znVgsyeRyBXAWCqMg2+
-	 yCGa3WfVxilfkCRjvYLf63INKu8judVGqkam3IjYsa+CepbZaYHU/wYobf7QkqjGIyro/
-	 HZqIlWNYWfb0sTttirdPARKshK1Cydd2uKSpUPi0EWL3KehcTf3FQoL+KnZzNUqexXjfu
-	 giYPNUtDZ2JEyJoQb/M3xulHmyFSEcLDUvV1BlBFqzyitcUt5EYDAeygA2iDI+1ipKna3
-	 rnO4U8CrdxqnDi4jzmhZa9cAKO84QxXmKrvUHmzApLefG8FgZY/UMF88KfTu/w6Ghag==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=vecima.com;
-	spf=pass smtp.mailfrom=vecima.com;
-	dkim=pass header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b=iTmMWBSE;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.93.194.129
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11021129.outbound.protection.outlook.com [40.93.194.129])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792504400;
+	b=3iqjhVShsK/49+tKIW+vIrGndrEuIPCp/UqdbWB8sat0jxTf4Uz1+LBU+O9cGZIaonmK
+	 EAaLVEJWwNecTeRG6iQrsl6Px6Xflxe7JbYTitZca2SjPPe2OZ1UDacct6Ry5ARBpaOsa
+	 0HzYv1a1NhZi951Edztty4nxvhuDKG5TlIO8f29h7d5Y9KTJDNaSz6IPTX+euEq/7zEbp
+	 WzTuZdU/2AtPcH8lZQdVrcus0pTcKb+y5+tlfZv/KW1a5ygL2ocusmQkoDrqvvZL5cxpQ
+	 F8Hf4YbLhjrqfQjNV8gUFC797+VfWgFYif5rEC6S8NQOKpVVpd5HkdvBTnkLvN/ITPw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504400;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=ni1kpsCUmSMmOSQ2x9W2DKoNyy5/Ld98Sj47TVlfU0o=;
+	b=hSZXoki/1itEqtNpsCx8ufk5YQAjFN+fJWC9zkAAxwnMyK0ygoilN79rz40FGvYesPNP
+	 mMYgUFuHs7Hdlx7C1JR6BUZygQxkJv/yOJ4ouWBBgh1J4RnuInR8nLmXDeK7LYPNyvVN0
+	 RihQ7NIs32KJEV58qRtf402O70UvwIDD4ZM618O3bGiCAapFyOE1TX43r9QDovyCDL6Ji
+	 AqZyJB45u9CA/7FlKke/f1No/j5xvnWZkC3jtpGC3ujYKhBw9azu7j5sYuFrloXHgPiWJ
+	 wz89t2A7uxYR6G4AtYPSL59v6IEWdagUvKDCBO1jZ87TUP5lnE+nSdCDRT2C5sauXRA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ljsDYJfw;
+	arc=none smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F75D606A31C;
-	Tue, 20 Oct 2026 13:53:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4F75D606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vecima.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vecima.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E41606A333
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:53:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76E41606A333
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b=iTmMWBSE
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PyyNpZb9CvO/bwFPCj5Gncom2OB7Bq3IsmE1HH8Q//+hwGCnlFQsWSSPh+lOX2HDPhLLzfpLVrVIgwM7ZCCKTWM7SXKVdOqbsHw3gjc9VoHVsJg3afMVrjoUlLkwpQS9F9AFe13ACCToP9C6nJPvtWhsvZhmsyknWao0TzBIHUoarLA0YbMSwNOgIEgl48QmExzwWVLrbsVIqG7uACzQMctO+mfgffr/lx14Gh0dx+5X1eCEgzQvYhEKGSAjKM08+jMujqJYZUsHlRNBhyOp8yVhuJUrxSIPhzN9mMqHsAP3UXc5mwyE3JEqGzwYAiRqlEHG9cztDwwWtbxL1W2dHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sp9BZDCJSPYKYKwWttAGfBpvJHVea57EX6Bnuoov61o=;
- b=ak5fLcbn+ZnYooPk2NDaLMJ3VM5KrA6D3k3AhUOku4ZOQHqbpUMWzrRulKsFSnY0uIiU7xUsV8YEgvMiU/hKZtX03rnK/ZuOqoJekICMckEf6cGfssCNqHXYp4L+I0nZ2z2DleRUT2qSp1Ax8p/WtzUp+3SHEq/OAADJgtBg6UVMt4vLvlDPDb/LhqaS16gQVnoLvHBVQKCCrVpvLJML9FOEfZvnEOZsdOKvgDI+G8TV6pmnuestM8iT3uQQuvBsf0VCHK7oi9dHTkiOPDT7B2us+kslib7om0DFG80Q4w6ZRs9aSqp9X8gwam1CLQM4ReP1HIhrFKTz2dbOxIA9xQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vecima.com; dmarc=pass action=none header.from=vecima.com;
- dkim=pass header.d=vecima.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vecima.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Sp9BZDCJSPYKYKwWttAGfBpvJHVea57EX6Bnuoov61o=;
- b=iTmMWBSEU5SNywhHJGm99sPUYgQPyXqxxNMx6WOc929f29jDhjCUBaawdabKdnCeOeS2uKpOJopLsxyQZFNv1lmCIS3EFORwoqth63yhZ9tSgdwzcGATb5QHmMSoRB/3bC4cKd+U5LXeNdE7IO1NtYpukdKswWthG2Rzp9IS9Vy6FBsKEJ1gQBou0Wog/G1bS6vuzLlNFbWRrWMPTPKs2x4HETf9EsGYYbTaLh2RXAoi1xHexPBxm4Y33oZK+Zy/eb48gqGYai6ZC/nz++aWR+1qONdOL7ToSxHr9IbiikBb86xSeZlMjzWyZwTT/36WPcHhPS12Tu/wz3hbDXEH4Q==
-Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
- (2603:10b6:f:fc00::ad2) by CH9PR18MB074315.namprd18.prod.outlook.com
- (2603:10b6:610:351::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.14; Tue, 20 Oct
- 2026 13:52:54 +0000
-Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
- ([fe80::6a72:cf5b:2c44:9ac0]) by DS4PPFFD8A841C2.namprd18.prod.outlook.com
- ([fe80::6a72:cf5b:2c44:9ac0%4]) with mapi id 15.21.0546.012; Tue, 20 Oct 2026
- 13:52:54 +0000
-From: Marcin Knap <Marcin.Knap@vecima.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-CC: Magnus Karlsson <magnus.karlsson@gmail.com>, Tony Nguyen
-	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Magnus Karlsson <magnus.karlsson@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	"jtollet@cisco.com" <jtollet@cisco.com>, "intel-wired-lan@lists.osuosl.org"
-	<intel-wired-lan@lists.osuosl.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
-Thread-Topic: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
-Thread-Index: AQHdX6MW14dMxGSC9k6V0uDc5Tc4vLcFXSSAgACWooCAAA4QkIAAWoaAgAAN7TM=
-Date: Tue, 20 Oct 2026 13:52:54 +0000
-Message-ID:
- <DS4PPFFD8A841C22E2663DBBA3A1B4F581E80672@DS4PPFFD8A841C2.namprd18.prod.outlook.com>
-References: <20261019-xsk-zc-rx-double-free-v1-1-2aa19f6628fb@vecima.com>
- <ataHK9s/MpNgXWhT@boxer>
- <CAJ8uoz38cE-1diOnih=HYW+ACqq9YQhaM7tz8KCHjTxgZVc+rQ@mail.gmail.com>
- <DS4PPFFD8A841C2AC917618A9B1B19453C480672@DS4PPFFD8A841C2.namprd18.prod.outlook.com>
- <atddQ8qN/R1tU1fk@boxer>
-In-Reply-To: <atddQ8qN/R1tU1fk@boxer>
-Accept-Language: en-150, pl-PL, en-US
-Content-Language: aa
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Enabled=True;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SiteId=9d639caa-2d40-486d-ac82-e59b0005382f;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SetDate=2026-10-20T13:52:54.153Z;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Name=General;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_ContentBits=1;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Method=Standard;
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vecima.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS4PPFFD8A841C2:EE_|CH9PR18MB074315:EE_
-x-ms-office365-filtering-correlation-id: b6cd637d-625d-4ec3-6e8b-08df2eb170e4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|23010399003|1800799024|7416014|366016|376014|6133799003|10067099003|22082099003|18002099003|11063799006|4143699003|38070700021|56012099006;
-x-microsoft-antispam-message-info:
- R/mH1Fvunx+g1aBqDz3oBWgFO2z35h2ARcaRv9wxEgCHizQnkVurZdg89gSSwg8Aw4hGq6xCwvVuIIO3CQj+ugeuutLJr4WadlMm57di7Y9mk09eiRnAhvGMYyBzn5Aq4byOrO+43WFhSiJR1eQtisM/AJAYFGBgDybYVLSwJTa5h3Obw04+E46M1idL93gcfBLz51R+7tyMhXpd95VHumkVsD0zHQtZ1ej5ApFN88x2h5YYVpQJuovxgfnBDupAv8Gg4N4xO3LkObCP4CBZnlcfRRCq0rgIEQEFXcKosF8CyXpwrBmD5XYTWWtmW5IaKTSmUsxjc44LrZsre2LbjuqRPVZT+vpWP+w2wH85nLBrgRNpYA5Fez9Tw1RFEQ0GPGGCynEvhhR1/kcwDP3TrcfGH0TUWA+mNoHl7V3oS+YFLF0RtLlQ/oa1xfnPxLqSQtA6NT5HTqV2RepFSTyfZFOH9cgf8tE0FiZ7pcTy3nKY5AXqGBMsAdUoQE503UxqvKb7GskE5an/WWsTYMyF5xsXd3JDZkXFaLHRkmy2bdiNo7pdGqQD3LKim588sZ//Vulvzcxt99s0QKFu+o9kretzVfiMir/UWaCcRbU7CtJHCPJ/pg2QnZiAyky+QyepArZbeVe86Rr68+ThLiyPoyejJwqPqc7ebXcTwma+RBLvr+umDjbFTN7TuAJCGYsre6+vCsQX0wmPRpNgwyFc+5aeAeT2kcIOkiPB+w10bds=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFFD8A841C2.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(7416014)(366016)(376014)(6133799003)(10067099003)(22082099003)(18002099003)(11063799006)(4143699003)(38070700021)(56012099006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?pp2IvRtMth5VFOsJKXUQ67AJdB2AQQ61oLKKeJ0PhiXB0HXFkjeL544lOhDE?=
- =?us-ascii?Q?ab8xEAVuQ3tYLo3cnEfkgrBUHMwKycAKV9CxdrzqPRH6z3SxJjsdxbJfC/6D?=
- =?us-ascii?Q?h5c+t3uEBH5eWGSWzyR9AupRmNnqF959LCzK5Pzmy5/uelwLmEGli+GKM4sa?=
- =?us-ascii?Q?4Uueab9erd0FhRF5p5MwNsox3tmiqsHLVsXuMoC8ISHmdbW4wAY7zk5OrQBG?=
- =?us-ascii?Q?tVlkzq4dtvbPZx+GsIK9FUkAqzknAa7ZkLDzr4K4tRO7BeNcB+7pLg3T5Chr?=
- =?us-ascii?Q?g/3rkldrwPzp77o0B9IXIgnpE5yr/XBRlQ85EvoqhY/st/Wf3ag+D1LKn8nT?=
- =?us-ascii?Q?Yg2uzpdWkgYXUBOh/4yPehdoK6n4izMZB2Iz1VelEfIMOO8isp5FSfN9t/tn?=
- =?us-ascii?Q?Sue6PS3YLbJqOcZdu8Zyq8N3LyjX1/YNzjnlHU0+FAbjG7qe9NTG8pjcqWp4?=
- =?us-ascii?Q?a9cESzq26dHLk1siOH9PnYyRzF2e1O9yWapwwJfQqj+xudHj6mPHAt2pLiK8?=
- =?us-ascii?Q?yfrjxVfSPqwQYFOYVRNYyur8up/ZYftZUBkbOfO2/J6fnYg0FJz0Elf4NAHo?=
- =?us-ascii?Q?ZeEq1SDl9IbQlPZ4+gX80fEg4U6aTeoqyWp3xB0NUABqfVi6evtCML+aAQDf?=
- =?us-ascii?Q?XrG+wk3+fFk1YfZSHjlYqQyDrZq6jsL5/XSYs6JC2WwPTwK4/gsvxcjmzJEA?=
- =?us-ascii?Q?UFxZ0fB3EN6YmarN7qbxxfDZmR0Y6Cv31RatfetlnGZ63d3dmek0+Jb8BaXq?=
- =?us-ascii?Q?PLdPQ7sANwUIcgATWwq/ajSgPVUa8MPKeAKgrS3Ql6zc4aNUV5LgQCfRk4Jj?=
- =?us-ascii?Q?xkuQovBJA+LaBp6mLBfQ0uoCwc2VGdpWHq5X79UFE0Xy2kIPyaEQHFsPjjRz?=
- =?us-ascii?Q?ono1soG/orJKCM6G8y+44mWS4aUPgAK41lV7VHBULKtTWR+UU7uAvBOwZVhk?=
- =?us-ascii?Q?TFErVSK6cbxxJflVgdHVePj925iSk+lEC1V7E0ojQ+P/0FgPTrxuEwQ21Dye?=
- =?us-ascii?Q?U7pbaRokR84da9Uz1yzwvCYe/rhBsB1BI580wDkgryDW61kCES/QsSmnDeeI?=
- =?us-ascii?Q?RrcNOzlspQGWlKiQf+TTpb2FQLEZWjRvEuwDyhw2/pOfYEJVvAzqK9ShgjXI?=
- =?us-ascii?Q?RO+JvnLdDGGZZhePsI2CmUDlEP+1m2azLKQSDGmXJ486BTu1ZZfAN/aJfT3R?=
- =?us-ascii?Q?/LTUTHR8R1RPiP3K79JQfSkefbf2ap0jrbICJWFS23qMvwNKw5MYr6xQ/BH3?=
- =?us-ascii?Q?jUwoPLOUmjW+F+4jNdvLx8EwiOqjNLMjMMEDgCG55GQxyX1de/X4CmLnfq64?=
- =?us-ascii?Q?UrprJcbuWkDjnn/r8EK7Xw7O0cDAKgVLDRXwc1yubt8bjOWu+J2GUd6xngKT?=
- =?us-ascii?Q?ICK49bBrkMN6Sx2WicAnNjQOapvQxCIr/yeZWMtmOWkrus+wILf/vnOMQQA9?=
- =?us-ascii?Q?d/OngPbYTnKftyEvJdA/TKdlN8Rw46Ge3A6LozMzKV4FntCKifTYRuwBgJ+m?=
- =?us-ascii?Q?w3Rx9J3lI1ZA8FqwkcDqDSq3k6uV5JizMiYlmBCGFa0zrHQqjnSicoiTaKXo?=
- =?us-ascii?Q?h5+8MJs6+/UsyiP8AUkn+lqxiyaKncoCIFg/jH82z3uqA0yXwuDwSrhYfRwC?=
- =?us-ascii?Q?KqL1VrLNaJFe6WMB2k1HItz5GG8tNWZTSY03sbPaBuitkIUgSoyjUmiwHPs9?=
- =?us-ascii?Q?qXYJemmPdqrlg5ayaPbqhOzFFnchiZs83HUNB35ZjFXuQAcs?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ljsDYJfw
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48dfc0421d9so2344224f8f.1
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 06:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792504399; x=1793109199; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ni1kpsCUmSMmOSQ2x9W2DKoNyy5/Ld98Sj47TVlfU0o=;
+        b=ljsDYJfwu3AtAc1Dcz+igJrM9WNFOYQpGUbqbkSQuEupQYCZ0faqyzR+qErYRSPaKH
+         /+m//F1bNEEU6yF7zF7qVCK3036lYOFgLfpU6mXTtaR964AZOkFQ69LXhUimRKxcUM/a
+         qsfL9Fh/qQQC9l9sgI/LF1Zu7S5rpeLmDI9AjMpX+e/F68JO0/hZyOPHulWMPYMNhDaH
+         5pSDmJIY1TnOYiC1NkUEQWROOo8Vb7nUzukOml6qpADg+d1t4kQuxVTrXeL1WL1juOh7
+         OgFksx/IOyYj23a5NOVOKDbslBrF3AQHq8vZezTijClS1AjgnbkS3de4zQEVHVq8BaJp
+         rcXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792504399; x=1793109199;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ni1kpsCUmSMmOSQ2x9W2DKoNyy5/Ld98Sj47TVlfU0o=;
+        b=TD+UMegD2fsDDiVOVN4HAGtsB9oktd7+TatP0NgOj6o45wbu5Tx4geENHZ0bokXVSE
+         TxmAg++HuwQufxhRRZF33k6hLNoHf3XAgkoko+/y9pP7OplGLzNt+mdZd1PcVjA+rZ8X
+         3xKVMK6axh6wWX8/SPn42E9QhPnBhHebaQDLBlNC4d0abP3Upf2MSisX4YyyfvtV9zWc
+         QFdp3N8k28wnud8gNFnOgjugBbgsLtEDBcrE2vZOZvr3QsJAZv9PpzHTaK3vQXiS2yjj
+         3BIvQUuyiir+ESQMkAXQaVSiXjkqjY1LiwsaEiNzrd4YGp6Qva3V8k0rF7V6ulWMS1w3
+         9Luw==
+X-Forwarded-Encrypted: i=1; AKwUvBwo4nDEbWAKCiud7NXjRAx4wNhZNS97tO7FVPUEL6HP3EI6wdWuXXrlQoo7eVjrcEa5dIc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJCeyNKf+YFFjnkjtlJd9JG5N6TLdYyOXaA7E2GbDEHmky2zPuq
+	n8vInGfPJ00CYRVaxb37WKBQGtsssCVrI0w8rXp1eP/sW6REYzmZutcY
+X-Gm-Gg: AYBFou1H+wxxtZAJjVhh04q0SKz9WWhvGWbWK4qdRf570Ko5YpsHujXmqiFTcCzlbcM
+	D7vlv5igBVBTT+eSKoTwpN3978vMBRgWPb4mdH8g9YkdzgxlzUwfkLDhC9QHrEt5ua/aT93Z91w
+	RkNLRUPUMkWN63TJqbC21f0M7LkiNwMcLHm9S+FGIze/O6MM2RlCm+mbAv/SNcBsNjys6rXaET4
+	W9en7fw4N5hFUlFR//Zpmq8UddNJ9CfNH1thHqcQwvYk6czUmt6bDU3ls969btlQHw0pR3Mtsmk
+	vaTOI5kySo7i+qnX1ufUGv6gYgCaG+YeCt+FG5ABEapvKwShAK2on0s1KAazhoRWcsfM8H4B6nD
+	hSPupZ+O6mw/1XTY9ZiNeoggVrCD69n2dfW1y9mcNiE4NQVwzHxI77P9JTIlcrFoRuJltUPhiQl
+	xLp4hkTQQlI7Cwe8I3Vz+pZJwZ03oztTT212oqe94Jjz0sIbtCdUBRtXhocoelc9mNkD/0uUXF0
+	nn6mTAXWLlCni6olZj4usH9xiEiwPEBia1lNWdTSUPGXIa9kVs4LibClLc2vEnZTarO
+X-Received: by 2002:a05:600c:3e05:b0:4a1:71ab:63ba with SMTP id 5b1f17b1804b1-4a1d763625emr226211395e9.29.1792504398481;
+        Tue, 20 Oct 2026 06:53:18 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:37c9:85ba:855b:cf83? ([2a02:8109:a307:d900:37c9:85ba:855b:cf83])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d8178dbsm6643439f8f.21.2026.10.20.06.53.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 06:53:17 -0700 (PDT)
+Message-ID: <912a0f0d-3d95-4303-a7d4-6c6650d16752@gmail.com>
+Date: Tue, 20 Oct 2026 14:53:14 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -160,64 +91,128 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: vecima.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS4PPFFD8A841C2.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6cd637d-625d-4ec3-6e8b-08df2eb170e4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2026 13:52:54.7406
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9d639caa-2d40-486d-ac82-e59b0005382f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: djdKji4WsOIg8z4skYSW7/2mSdcDevjKT+AgAmoJy5JW79m9YoSRD1K/bJVFT52Y6/D1xxck4k+iS0eQjasf+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH9PR18MB074315
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpf: Don't use percpu_counter for the htab
+ element count in NMI
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
+References: <20261020131524.207415-1-puranjay@kernel.org>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20261020131524.207415-1-puranjay@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 20, 2026 at 07:00:47AM +0000, Maciej Fijalkowski wrote:=0A=
-=0A=
-> Please don't top-post on MLs and configure your mail client to wrap your=
-=0A=
-> lines. Kernel people get triggered by this :P=0A=
-=0A=
-Sorry for that, I was trying but not good enough... =0A=
-cannot setup this on web outlook and I have blocked every other client.=0A=
-=0A=
-> ZC drivers are supposed to break processing and yield cpu to=0A=
-> application when xsk rxq gets full. We didn't want to expose=0A=
-> particular packet multiple times to XDP progs as that might confuse=0A=
-> internal logic of progs. Therefore we drop the packet in the core and=0A=
-> let driver side know about this via ENOBUFS return value.=0A=
-=0A=
-Thanks, that explains it and it makes sense to me. =0A=
-I will drop the core change and fix the=0A=
-drivers that free the buffer again after -ENOBUFS instead.=0A=
-=0A=
-> Marcin, could you re-iterate why Jerome's fixes were not enough for=0A=
-> you?=0A=
-=0A=
-This is how I understand this but I don't know this code well and I can be=
-=0A=
-wrong.=0A=
-Jerome's patches stop mlx5e from releasing the same WQE buffer twice=0A=
-when a refill is retried. They don't cover the case where the core=0A=
-has already freed the buffer on -ENOBUFS. mlx5e_xdp_handle() treats=0A=
-the failed redirect as XDP_DROP, skip-release isn't set, and the=0A=
-buffer is released again when its slot is refilled.=0A=
-=0A=
-xp_free() only catches this if the buffer is still on the free list.=0A=
-The free list is LIFO and refill allocates replacement buffers in=0A=
-bulk, so the buffer freed by the core is usually handed to another=0A=
-WQE before its old slot is refilled. The second free then puts a=0A=
-buffer that is still in use back on the free list, and the same UMEM=0A=
-frame is later published twice.=0A=
-=0A=
-> Would also be nice to align mlx-5 to -ENOBUFS case.=0A=
-=0A=
-Will do, I have potential mlx5 fix (this was my workaround).=0A=
-=0A=
-I did quick analysis with AI tool and it sounds like all drivers have =0A=
-similar problem and they don't handle -ENOBUFS correctly except =0A=
-Intel drivers needs_wakup path. Given that, would you prefer the driver =0A=
-fixes, or do you have any other ideas?=0A=
-=0A=
-Thanks,=0A=
-Marcin=
+
+
+On 10/20/26 2:15 PM, Puranjay Mohan wrote:
+> BPF programs attached to perf events run in NMI and can update a
+> non-preallocated hash map. For large maps the element count is a
+> percpu_counter, whose slow path takes fbc->lock with
+> raw_spin_lock_irqsave(). That does not exclude NMIs, so an NMI that
+> interrupts a holder of the lock and then updates the same map spins on it
+> forever:
+> 
+>   WARNING: inconsistent lock state
+>   inconsistent {INITIAL USE} -> {IN-NMI} usage.
+>   kstress/261 [HC2[2]:SC0[0]:HE0:SE1] takes:
+>   (key#5){....}-{2:2}, at: _raw_spin_lock_irqsave+0x18/0x30
+>   {INITIAL USE} state was registered at:
+>     percpu_counter_add_batch+0xd8/0x160
+>     alloc_htab_elem+0x408/0x480
+>     htab_map_update_elem+0x1e8/0x6a0
+> 
+> is_map_full() is affected too, as __percpu_counter_compare() falls back
+> to percpu_counter_sum(), which takes the same lock.
+> 
+> Count the elements added or removed in NMI in htab->count, which is
+> otherwise unused for such maps, and add it to the percpu_counter where
+> that is read. In NMI is_map_full() only reads the percpu_counter, so the
+> limit is approximate by up to PERCPU_COUNTER_BATCH * num_online_cpus()
+> there.
+> 
+> Fixes: 86fe28f7692d ("bpf: Optimize element count in non-preallocated hash map.")
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>  kernel/bpf/hashtab.c | 26 ++++++++++++++++++++------
+>  1 file changed, 20 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index bf78e09f4d518..7a27479c46dc5 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -95,7 +95,8 @@ struct bpf_htab {
+>  	};
+>  	struct htab_elem *__percpu *extra_elems;
+>  	/* number of elements in non-preallocated hashtable are kept
+> -	 * in either pcount or count
+> +	 * in either pcount or count; with pcount, those added or removed
+> +	 * in NMI are in count, see is_map_full()
+>  	 */
+>  	struct percpu_counter pcount;
+>  	atomic_t count;
+> @@ -1160,11 +1161,23 @@ static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)
+>  	}
+>  }
+>  
+> +/*
+> + * With use_percpu_counter the elements added or removed in NMI are counted in
+> + * @count, as percpu_counter takes a spinlock that the NMI could have
+> + * interrupted the holder of.
+> + */
+>  static bool is_map_full(struct bpf_htab *htab)
+>  {
+> -	if (htab->use_percpu_counter)
+> -		return __percpu_counter_compare(&htab->pcount, htab->map.max_entries,
+
+To protect bucket locks in rhashtable from re-entrance from NMI we use 
+bpf_disable_instrumentation()/bpf_enable_instrumentation(), will it work here?
+It looks like a more common solution for hashtab.
+> +	if (htab->use_percpu_counter) {
+> +		/* percpu_counter_sum() takes that lock, so only read it in NMI */
+> +		if (in_nmi())
+> +			return percpu_counter_read(&htab->pcount) +
+> +			       atomic_read(&htab->count) >= htab->map.max_entries;
+> +		return __percpu_counter_compare(&htab->pcount,
+> +						(s64)htab->map.max_entries -
+> +						atomic_read(&htab->count),
+>  						PERCPU_COUNTER_BATCH) >= 0;
+> +	}
+>  	return atomic_read(&htab->count) >= htab->map.max_entries;
+>  }
+>  
+> @@ -1172,7 +1185,7 @@ static void inc_elem_count(struct bpf_htab *htab)
+>  {
+>  	bpf_map_inc_elem_count(&htab->map);
+>  
+> -	if (htab->use_percpu_counter)
+> +	if (htab->use_percpu_counter && !in_nmi())
+>  		percpu_counter_add_batch(&htab->pcount, 1, PERCPU_COUNTER_BATCH);
+>  	else
+>  		atomic_inc(&htab->count);
+> @@ -1182,7 +1195,7 @@ static void dec_elem_count(struct bpf_htab *htab)
+>  {
+>  	bpf_map_dec_elem_count(&htab->map);
+>  
+> -	if (htab->use_percpu_counter)
+> +	if (htab->use_percpu_counter && !in_nmi())
+>  		percpu_counter_add_batch(&htab->pcount, -1, PERCPU_COUNTER_BATCH);
+>  	else
+>  		atomic_dec(&htab->count);
+> @@ -2578,7 +2591,8 @@ static u64 htab_map_mem_usage(const struct bpf_map *map)
+>  #define LLIST_NODE_SZ sizeof(struct llist_node)
+>  
+>  		num_entries = htab->use_percpu_counter ?
+> -					  percpu_counter_sum(&htab->pcount) :
+> +					  percpu_counter_sum(&htab->pcount) +
+> +					  atomic_read(&htab->count) :
+>  					  atomic_read(&htab->count);
+>  		usage += (htab->elem_size + LLIST_NODE_SZ) * num_entries;
+>  		if (percpu) {
+> 
+> base-commit: b71326388a8a24674846c1d8d3b6dd831d9843a9
+
