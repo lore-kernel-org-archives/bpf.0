@@ -1,45 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792521185;
-	b=x+qnoiDfl7n/gKNGJlD/bmHPkYaSM1iWB2RlNnA/IgOUUoJP8jDRBM8KsA6iDh22EGbj
-	 Gxe2wOELouRn3UeGwI/94ZmWIC/VciH09qyDgSpEmV86c/JzI8HE5cegczNvYU7kdq953
-	 KygWZ+rCFmo8t69Qlpzg5ZxA44H3K8ebnH33uloG2Iw0MWodhqrUK24RVekymGkzctdem
-	 W3FVjpUp1Olbb3V80ufkUE7H+WzeJSRcpyLeUvpC/2rM1kupLbPFtcMRORsWBb+KZmU3t
-	 RXFoSESf9lgjR7Mi8bu9VGEzRz02iFkgYTiauU/Iv2836KBpMzJ+IfzRL0q8+cqK8qw==
+	t=1792521335;
+	b=N8dWfAEjK6RWB8SjSIegNEqeEHzH8KXzgni+fMTRqzpGq8gCNKMiMSGQKI2yo9BC/ibj
+	 2MwuILXosw7s+KRNqvhvMchrvrsZPpaQJcYfrWWtwYmHlVCFBk+9EnJ62mW0n01xEVqRl
+	 93AovHTwri/cxwhV0DAbRTUxe1ynKsXaZo5x2GGMW4Mab7leTB/xFZf405XcLvsNzWM6P
+	 ZJYevQNqY7S76NMVcckLaAB8yBVcKTpXJAPjwgp81ww4F+14hZAE2Xl+SZYiIL4ww1icf
+	 iieEXeTjgf+AF8IV/kn4vpShNaWNWX2/v1C/Hh4yCB/2wS4HAG8XPsZDfHt2oQLMiwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792521185;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=tcOgHR83oJ/E387XM9X7XUHtvcTJO511qwW+hFx3nDg=;
-	b=1x58Zi/6CcBMYIFfUh+eWglrB93s8q5ZN9Q/iQflTFlFGp+MPWR/xbISBEtA0NlLXRg5
-	 x+uyXPjmYCz/3XO9eMTUr0dybt/HttSe7JZ76uuwHONc2ZFMLN/ErDTPhBTTQDNauiUbb
-	 1a03JZOTRlHRve97t3BdMLD5MC6vEysUzRgFbo5nKC1S8KQVYzcR+OZbX8u7AVvQGJ2wx
-	 T9O2VyLKFbgheLu6wJNmKgsQhQKu9MWn7/bSy+uJ2wwB1wQn9SwhrOtuuxHAET9t9csM9
-	 xtwfpjJNMdLWeAxBrBJRlaMP1KfNsbQlLpZCSiEpmW9Eq1L/bgWeDy0Nj4fxvM2oYIg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792521335;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=YGPp6zSq8MECdgo+ymz9N6VomSbT1RJdER3RaOhHS6Q=;
+	b=cFzBjOibHp/Vt39c2rvMNLILulr55cTmPzvSbKZIYq+DKDZ/UfO+hZTuHAin9NbtPi+b
+	 J3PYFiSRGM0urQ9DvIYn/s3KGt63RV4QmynQ9qLwJDmj6+0CYH5LRxMN8zfC/erE937vn
+	 jwZN+YU2mRlF9WiF/lpmQtCo7loc2Xu3eJJ5qpVj6qQrtoLrAXb4s2YDUOc/jbgvPEySg
+	 riVRIQjQ+oeA7pumGpAWYDi3JBO+tshaoul7Txl5ZtCEzdRPMoRs2Pt4eYP3UvHMHHtlQ
+	 YTkFfLdQINaNmWzrFr3AElgTFnpNuFpuF8nC15A73yl5MNGGKiEMTdOMje/35rC094w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EiYlKpxT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B625Jpps;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F49606A31C
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8019C606A319
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EiYlKpxT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E8C21F000C9;
-	Tue, 20 Oct 2026 18:33:04 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=B625Jpps
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9BC91F000C9;
+	Tue, 20 Oct 2026 18:35:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792521184;
-	bh=tcOgHR83oJ/E387XM9X7XUHtvcTJO511qwW+hFx3nDg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EiYlKpxTms7fqr4qk7hrx1I3zIxXVjtufaczMj9LPAqR/eA4x7kaGVMQpIWz6YIyQ
-	 21YOKv8//LccxsvdTC5Ip3yUzlyL8vz80IWjFl/9PRXA768DT9qNU5ZEsmgEWGzmd+
-	 fOe1X4vA6LQmNFB51OKu6o/LSx8vXgsxslC+QQAa0+lYDLNgLI1g4D+YG5hO1ZRaC2
-	 x/2iOag7MjDFfzO+vYkNmnvsLcrUgMOMUWIMo7gz1Aq1LaO+xQy46o9flAcZ1hw7nH
-	 UyFvDDgsWdXDD7g4je+j/iV1zNpiJU4m0ITUmLkJuNZSr37IXHhY6+iVzKNBYBhMz1
-	 r/rBUf0N4HTcQ==
-Content-Type: multipart/mixed; boundary="===============0240370079051438660=="
+	s=k20260515; t=1792521335;
+	bh=YGPp6zSq8MECdgo+ymz9N6VomSbT1RJdER3RaOhHS6Q=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=B625JppsAHACxS34xusrNQX0glS4gGoQo0Ab7k5d7jVrEdfFjE8SVFxFevpJaV0Qt
+	 UyTw0gJsesRkWv56cjMekf+sOSYU1oPocq3XZukioiDNS6ru4OE52/0G3GjoJOjiQ6
+	 MQer+6VXEtjNh8K4sVMNtnIiWAtlL6wNLS9HRtNwaTPJ9HGHNsMoQBbplRTTvaDK7u
+	 0FZdhIQ2k0PXgFTk3F3nUL46MUsNtnbtbk8BJUoXM5tX6l1soNVJ1+SIqeU6uw4xCu
+	 fvU1Qkm6MFyyAga4jy7OkDlM9CvCiAsvo/X3yqvJR/KIXI0T3yvWADhffuUQvVUfc+
+	 Zp1xqe2y5S8YQ==
+Message-ID: <sashiko-outbox-179485@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 4/7] selftests/bpf: libarena: Handle NMI
+ reentrancy
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
+In-Reply-To: <20261020181900.6755-5-emil@etsalapatis.com>
+References: <20261020181900.6755-1-emil@etsalapatis.com>
+ <20261020181900.6755-5-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Oct 2026 18:35:34 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,75 +59,81 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <a9d7c1aded97ee3ced24068eeaa79c447ccc242ba7f33c5ff85aa4bbc55650be@mail.kernel.org>
-In-Reply-To: <20261020180147.1769873-6-memxor@gmail.com>
-References: <20261020180147.1769873-6-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 5/6] bpf, arm64: Add a native bpf_throw() entry that captures R6 to R9
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 18:33:04 +0000 (UTC)
 
---===============0240370079051438660==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: buddy_free() overwrites error with deferred free =
+status
+--
 
-> bpf, arm64: Add a native bpf_throw() entry that captures R6 to R9
+commit 6b8ade1832d5b23360c4e6c8d75625a18af4fe8e
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-TL;DR: Nit only: the open-coded "brk #0x1" after bl bpf_throw_unwind() in the
-arm64 bpf_throw_entry could be ASM_BUG(), which would give a clearer report if
-the call ever returned. Not a bug.
+selftests/bpf: libarena: Handle NMI reentrancy
 
-> diff --git a/arch/arm64/net/bpf_throw.S b/arch/arm64/net/bpf_throw.S
-> new file mode 100644
-> index 000000000000..aac1c5e967e1
-> --- /dev/null
-> +++ b/arch/arm64/net/bpf_throw.S
+This commit adds per-CPU reentrancy protection to the libarena buddy cache
+and defers frees issued from NMI context onto an intrusive list when the
+local cache cannot be used.
+
+> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools=
+/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> index ce05e3e58ebae..85d670b8762bb 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
 
 [ ... ]
 
-> +SYM_FUNC_START(bpf_throw_entry)
-> +	stp	x29, x30, [sp, #-(16 + BPF_THROW_REGS_SIZE)]!
+> @@ -1100,12 +1244,25 @@ __weak int buddy_free(struct buddy __arena *buddy=
+, void __arena *addr)
+>  	if (!ret)
+>  		return 0;
+> =20
+> +	if (bpf_in_nmi()) {
+> +		buddy_deferred_free_start(buddy, addr);
+> +		return 0;
+> +	}
+> +
+>  	ret =3D buddy_lock(buddy, flags);
+>  	if (ret)
+>  		return ret;
+> =20
+>  	ret =3D buddy_free_unlocked(buddy, (u64)addr);
+> =20
+> +	/* Drain any frees stranded during an NMI. */
+> +	if (unlikely(buddy_deferred_free_pending(buddy))) {
+> +		ret =3D buddy_deferred_free_complete(buddy);
+> +		if (ret)
+> +			goto out_unlock;
+> +	}
+> +
+> +out_unlock:
+>  	buddy_unlock(buddy, flags);
+> =20
+>  	return ret;
+
+[Severity: Medium]
+In buddy_free() in tools/testing/selftests/bpf/libarena/src/buddy.bpf.c, if
+buddy_free_unlocked(buddy, (u64)addr) fails (for example, returning -EINVAL
+on an unaligned or invalid address) while buddy_deferred_free_pending(buddy)
+is true, calling buddy_deferred_free_complete(buddy) unconditionally
+overwrites ret. If draining the deferred list succeeds, ret is set to 0 and
+the error from buddy_free_unlocked() is lost.
+
+Also, the goto out_unlock statement jumps directly to the immediately
+adjacent out_unlock label.
+
+Should buddy_free() preserve any error from buddy_free_unlocked() in the
+same way buddy_free_bulk() does:
+
+	if (unlikely(buddy_deferred_free_pending(buddy))) {
+		err =3D buddy_deferred_free_complete(buddy);
+		ret =3D ret ?: err;
+	}
+
+and drop the redundant out_unlock label?
 
 [ ... ]
 
-> +	/* bpf_throw_unwind(regs, cookie); the cookie is R1 of the caller. */
-> +	mov	x1, x0
-> +	add	x0, sp, #16
-> +	bl	bpf_throw_unwind
-> +	brk	#0x1
-> +SYM_FUNC_END(bpf_throw_entry)
-
-This isn't a bug, but would ASM_BUG() fit better here than the open-coded
-brk #0x1 after the call to bpf_throw_unwind()?
-
-Immediate 0x1 is not one of the BRK immediates listed in
-arch/arm64/include/asm/brk-imm.h, so if bpf_throw_unwind() ever did return,
-the result would be an anonymous "Oops - BRK" from do_el1_brk64().
-
-Other arm64 assembly with the same "bl <noreturn>; trap" pattern uses
-ASM_BUG() from <asm/asm-bug.h>:
-
-arch/arm64/kernel/entry.S:
-	bl	handle_bad_stack
-	ASM_BUG()
-
-arch/arm64/kernel/head.S:
-	bl	start_kernel
-	ASM_BUG()
-
-ASM_BUG() emits brk BUG_BRK_IMM plus a __bug_table entry, so the report
-would name bpf_throw.S and the line.
-
-The follow-up commit 9a710c167b82 ("bpf: Restore callee-saved registers from
-the frames being unwound") keeps the brk #0x1 as well.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39472833568
---===============0240370079051438660==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020181900.6755=
+-1-emil@etsalapatis.com?part=3D4
