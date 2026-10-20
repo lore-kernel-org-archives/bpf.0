@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792524630;
-	b=myUjWJ5rhQ6zxJq0zcRc5wvdVRmskZtbTs3EGlCAYSwBTiAEfJrFDlNAssP3FM4ibY+T
-	 IS6bTW+4p10EEdRQVQ9BBOoSxtfyJjzYC1r3JqrhgAiP2zEMMtGPVTj4eEbkx/fua7UdU
-	 TSSk6G3G0qHBIVuA4YjHrBU/O+agxdV0JytzqVpCWkxHtErIVpl6A1urV/MwH571UC/sR
-	 reIr5ksyZDncyD9CVhUqevP6mlXTmOk9z8/oOgxB2OY9z3Nyu5AEHNS+Nz1ovgPHQge1N
-	 tjR6O10/qVM8Kq1MyX9lSW/C5WB3ZD8T/OrHqaN68IZSujDN/tmp6TXb3ncoOLyjBQg==
+	t=1792524632;
+	b=c2R7VAw37ceo218K0OEuUaHOqnV0jpbG/81C+x3rFVmp3YeS6DIeActpUmQnMIPqJLzj
+	 FwDL15bMPIc0FMEYrlLMR+11aScmqqyTZ/4oarusQFlEuMCvCG9FS1a1PZrrrdEwPovri
+	 pI0vlWUtvYf8SqO3soc5Mv8GuNdDY9/UO8tMyh62JZaoyjVsFkQmploB5oAxEwgUPLnCJ
+	 Jmz9xFODsl8n97fGOROLbx/h1GiDWV2lT1K5rZYpQnKICND4ZeUgL4tW2bu8Z2kjYdu4T
+	 xX2X/GpdAhpcWkaSuWO5iTEM2TylmQUvx/Ggv60FVXDr0LIDAEzX49w5wSmXuJViLxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792524630;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792524632;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=3/6lfOiLcuVyA3cX0EYsczIjRwzeAaCSLhLn+i8CtDI=;
-	b=2ipiKY3YaPHCMYe59wNNytIiRDOCw0oYHXocKYWOgrrv2w3LipyCH1JmXPWKO1XZ8oJc
-	 /HoEr8ecSt0kqoUz+aL9Jsv68R47btHuSIjgdztsV+iXDlsDPpMWpDw97cOmbrVBP8Hh4
-	 sYl8ztpXjEUaFSxucjbXQFMzg2ZytqSHk3rsygu3HoSSnm4krUU8NcRaS4dVR3OtIe2WX
-	 EepIXu7ZRJr8GLTQmBHFhboWkSAgTebI4wY3HnWpB0PRRYdRKk00ag5KsrFCI+Aeuc3gZ
-	 PuoADchUtDa+jxVW1VzdFbW7CvrRBSdX1236v3GFypJXasmSicGFsbaUEyqvKVqxlYg==
+	bh=R0B/vC+8Yth+jfM3hC2VKAKXYKuQRAvN04jQowf6g94=;
+	b=TVxPF6YafBv5eGw9eJjJw4DBJ2s+17Rzn2Xrcg5VXmQUqyE+RgqGZqAifcoIvvs35Sbk
+	 rRf7azSo8+4CtjjXS+w8Y013MUMcL4Ir9uHUAubZDWLwBob1iZ0XUNHb4t6NjpDY6Ox3p
+	 ddmfd1KVF7xYJ+jFRLtNpcXIuaZJxz27Fyat2/A+kwy3JPEDA74co+18x6pgCHDTQpmhm
+	 p7cxrR7fHArYV3LamaXtPbz00kbaQp2NC9culq383zc3//EJzumaNex8NVkxaJCfGNZPK
+	 K5avzVcVWZuUxllKLc+stvJ4fdNJeSj7zf57xZTCNGGHGW+EDimDUFM+S+jn1XWyoPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdfHw1Lk;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ba1F0jWe;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674CC606A32D;
-	Tue, 20 Oct 2026 19:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947AD606A33A;
+	Tue, 20 Oct 2026 19:30:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdfHw1Lk
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7961F000D1;
-	Tue, 20 Oct 2026 19:30:29 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ba1F0jWe
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78D61F000CA;
+	Tue, 20 Oct 2026 19:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792524630;
-	bh=3/6lfOiLcuVyA3cX0EYsczIjRwzeAaCSLhLn+i8CtDI=;
+	s=k20260515; t=1792524632;
+	bh=R0B/vC+8Yth+jfM3hC2VKAKXYKuQRAvN04jQowf6g94=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=QdfHw1LkD5+b+rGvqANXS2NVfo2wC9RlgwMb803Le9givN6mxXU/EUuJKXwiTYTn1
-	 9UMg5yBtcTHf8bFr8Y0CA4bFOGvTizUIRC310n0OlibZlFvrKJ0cDOLM3a5wYTaHfw
-	 Yku2I+RWIkp3ceBRLNOwWZu3cy3FjIFpS64I2b9OZy8Z1XEvkgBpTe4Hh0tYVWQfS4
-	 B9sdv7b3FgRv9eZj1/poIng9lZEUvyHb3/G2zejVkdbiQ41oIME/aoRoM/SDq0Wjr4
-	 0WFkqIRZVJ1Q5eqMsH982nI/R0N/zErNdDHwTtk9pj7fJ7AQDgiyT9lUfryiGGe2Kn
-	 I+HDUHdytOLcQ==
-Subject: Re: [PATCH v4 net-next 12/15] selftests: xsk: prepare xskxceiver for
- endpoints on two hosts
+	b=Ba1F0jWe5k81Q1arFmnz6hYEIpAvaF0KxGTJEKuAB3dqz4art6nt54HYWAlFUMHpw
+	 C87dmkxSPNrCYDOERxA2COua1UU1Cly/jC8p19hCUg47FriPStvP80XgGa600KOoMt
+	 yVU3GbLqInKTvuCd4CQ0ms0CqfZ9J22m8rVf4oFul1kN0YuMB5+q0b4xFkP1Cjtfcg
+	 sWTFtjmstAS7ykVcaAjMCZLZBUGNFORTcuShotsTSLypuhdHJsYDswFyE/MIYvL5+d
+	 +fmza5GLbSOuX4AOZ18TWCp5hcIDUlh7HUd+wBgLMJJE318xIJTBuyGz+l6S7f9Gqx
+	 i2vdLPT2KkD0Q==
+Subject: Re: [PATCH v4 net-next 14/15] selftests: drv-net: test AF_XDP
+ zero-copy with an SKB peer
 From: netdev-bot+sashiko@kernel.org
 To: maciej.fijalkowski@intel.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
  stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
  tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Tue, 20 Oct 2026 19:30:29 +0000
-Message-ID: <179252462905.3135.16990828336786085778@kernel.org>
-In-Reply-To: <20261016174338.787135-13-maciej.fijalkowski@intel.com>
-References: <20261016174338.787135-13-maciej.fijalkowski@intel.com>
-X-sashiko-severity: Low
+Date: Tue, 20 Oct 2026 19:30:31 +0000
+Message-ID: <179252463139.3135.17340338517897417556@kernel.org>
+In-Reply-To: <20261016174338.787135-15-maciej.fijalkowski@intel.com>
+References: <20261016174338.787135-15-maciej.fijalkowski@intel.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -64,123 +64,183 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider.
 
-Low priority / nit picks for your consideration:
+Critical: 0 · High: 0 · Medium: 1 · Low: 2
 
-- [Low] parse_command_line() does not fully validate the new numeric
-  options.
-- [Low] In the adjust-tail cases, RX can decide to skip only after the
-  traffic has run: testapp_validate_rx_endpoint() clears…
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
+
+- [Medium] On ixgbe, the queue that main() takes out of RSS goes back
+  into RSS before or during every case.
+- [Low] Two ring-size cases check the wrong host's capabilities.
+- [Low] The runner drops its XDP-detach fallback on the strength of an
+  exit code that does not cover detach failures.
 
 --
 
-selftests: xsk: prepare xskxceiver for endpoints on two hosts
+selftests: drv-net: test AF_XDP zero-copy with an SKB peer
 
-This prepares xskxceiver to run a case with its two endpoints on two
-hosts. It adds --queue, --max-frags and --timeout options, a SKIP message
-on the control channel, and a wait for the link to come up once the
-endpoints are in sync. It also changes the default case MTU to
-ETH_DATA_LEN and restores the original MTU in cleanup_iface().
+This adds drivers/net/hw/xsk.py. It runs the xskxceiver cases as pairs of
+endpoints: zero-copy on the DUT and SKB mode on the remote host. Once per
+run, main() takes the last DUT queue out of RSS, adds ntuple rules on both
+hosts and reserves huge pages. Each case sizes the rings for the HW_SW ring
+size cases and registers XDP and MTU fallbacks, which are cancelled when
+both endpoints pass or skip.
 
-> diff --git a/tools/testing/selftests/net/lib/xsk/xsk_peer.c b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
-> index e3e353d6abd95..256e63196f923 100644
-> --- a/tools/testing/selftests/net/lib/xsk/xsk_peer.c
-> +++ b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
+> diff --git a/tools/testing/selftests/drivers/net/hw/xsk.py b/tools/testing/selftests/drivers/net/hw/xsk.py
+> new file mode 100755
+> index 0000000000000..dbcd687fea3d8
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/xsk.py
+> @@ -0,0 +1,368 @@
 
 [ ... ]
 
-> @@ -162,6 +179,30 @@ void xsk_peer_abort(struct xsk_peer *peer)
->  		peer_send(peer, XSK_PEER_ABORT, 0);
->  }
->  
-> +/*
-> + * Tell the peer that this endpoint skips the case, so that it skips too.
-> + * Closing with unread data, or getting data once closed, resets the
-> + * connection and drops the SKIP if the peer has yet to acknowledge it, as
-> + * when a NIC reset holds the link down. So read until the peer closes.
-> + */
-> +void xsk_peer_skip(struct xsk_peer *peer, int timeout_ms)
+> +# The TX ring of the sender and the RX ring of the receiver that a case
+> +# needs at a given size, 64 being the default batch size of xskxceiver.
+> +RING_SIZES = {
+> +    "HW_SW_MIN_RING_SIZE": {"tx": 64},
+> +    "HW_SW_MAX_RING_SIZE": {"tx": "max", "rx": "max"},
+> +}
 
 [Severity: Low]
-Is "so that it skips too" accurate for the adjust-tail cases?
+Do these ring requirements match what the C side checks? In test_xsk.c,
+testapp_hw_sw_min_ring_size() and testapp_hw_sw_max_ring_size() both skip
+unless the tx ifobj has XSK_CAP_HW_RING:
 
-In those cases the RX endpoint decides to skip only after the traffic has
-run. testapp_validate_rx_endpoint() clears the support flag:
+tools/testing/selftests/net/lib/xsk/test_xsk.c:testapp_hw_sw_min_ring_size() {
+    ...
+	if (!ifobj_has_cap(test->ifobj_tx, XSK_CAP_HW_RING)) {
+		ksft_print_msg("HW ring sizes not supported.\n");
+    ...
+}
 
-    if (!is_adjust_tail_supported(ifobject->xdp_progs)) {
-        test->adjust_tail_support = false;
-        return TEST_PASS;
-    }
+On the receiving endpoint, ifobj_tx is the peer shadow. setup_peer() in
+xskxceiver.c fills it with the local caps:
 
-and then testapp_adjust_tail() returns TEST_SKIP:
+	shadow->caps = local->caps;
 
-    if (!test->adjust_tail_support) {
-        ...
-        return TEST_SKIP;
-    }
+So the receiver ends up checking whether its own NIC can report ring
+sizes.
 
-By that point the TX endpoint has usually finished with TEST_PASS. It
-never sees the SKIP, so it does not skip.
+In tx_HW_SW_MIN_RING_SIZE the remote is the SKB-mode receiver. If the
+remote NIC has no get_ringparam, the remote endpoint skips and tells the
+DUT to skip too. The case is then reported as skipped, even though xsk.py
+never needs the remote ring and has already resized the DUT TX ring.
 
-The final verdict still comes out right, because xsk.py later in the
-series reports a pass plus a skip as a skipped case. Could the comment
-say that the peer either skips or passes?
+testapp_hw_sw_max_ring_size() has a similar issue:
+
+	batch_size = min(xsk_get_cap(test, tx_max_pending), max_descs) - 8;
+
+xsk_get_cap() reads test->ifobj_tx->caps, so each host takes
+tx_max_pending from its own NIC. If the two NICs have different TX
+maximums, can the two endpoints end up using different batch sizes?
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-> index 9704702f60fc9..56ea5ac6a3c63 100644
-> --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-> +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+> +def _reserve_queue(cfg, undo):
+> +    """Take the last queue with both an RX and a TX ring out of RSS until
+> +    undo, return None if the DUT cannot. A TX endpoint fills no RX buffers,
+> +    so in zero-copy mode its queue drops what it receives, the control
+> +    connection included."""
 
 [ ... ]
 
-> @@ -328,6 +302,18 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
->  		case OPT_UDP_PORT:
->  			opt_udp_port = strtoul(optarg, NULL, 10);
->  			break;
-> +		case OPT_QUEUE:
-> +			opt_queue = strtoul(optarg, NULL, 10);
-> +			break;
-> +		case OPT_MAX_FRAGS:
-> +			/* It sizes the packet array of TOO_MANY_FRAGS. */
-> +			opt_max_frags = strtoul(optarg, NULL, 10);
-> +			if (opt_max_frags > 0xffff)
-> +				print_usage(argv);
-> +			break;
-> +		case OPT_TIMEOUT:
-> +			opt_timeout = strtoul(optarg, NULL, 10);
-> +			break;
+> +    queue = count - 1
+> +    if cmd(f"ethtool -X {cfg.ifname} equal {queue}", fail=False).ret:
+> +        print(f"1..0 # SKIP {cfg.ifname} cannot take queue {queue} out of RSS")
+> +        return None
+> +    undo.callback(_restore_rss, cfg, rss.get("indir"))
+> +    return queue
+
+[Severity: Medium]
+Does the indirection table set here stay in place for the rest of the run
+on every zero-copy driver? ixgbe advertises xsk-zerocopy, but
+ixgbe_setup_reta() rebuilds the table on every configure. It never checks
+netif_is_rxfh_configured():
+
+drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:ixgbe_setup_reta() {
+    ...
+	/* Fill out redirection table */
+	memset(adapter->rss_indir_tbl, 0, sizeof(adapter->rss_indir_tbl));
+    ...
+}
+
+The first rebuild happens right after _reserve_queue(), when _steer_udp()
+turns ntuple-filters on:
+
+_steer_udp() "ethtool -K <if> ntuple-filters on"
+  ixgbe_set_features()     (need_reset)
+    ixgbe_do_reset()
+      ixgbe_up()
+        ixgbe_configure()
+          ixgbe_configure_rx()
+            ixgbe_setup_mrqc()
+              ixgbe_setup_reta()
+
+It also happens inside every case. xskxceiver's driver-mode XDP attach and
+detach go through ixgbe_xdp_setup(), which closes and reopens the device:
+
+	err = ixgbe_setup_tc(dev, adapter->hw_tcs);
+
+MTU and ring changes reinit the device as well.
+
+ixgbe_fdir_filter_restore() puts the ntuple rule back, but it does not
+restore the RETA, so the reserved queue gets RSS traffic again. In TX
+cases the zero-copy socket on that queue fills no RX buffers. Anything
+hashed to that queue is dropped, including the TCP control connection on
+the random ctrl_port.
+
+Would this show up as intermittent timeouts on ixgbe DUTs rather than as
+a skip? The runner never reads the table back with rss_get to detect it.
+
+[ ... ]
+
+> +def _test(cfg, direction, test_id, name, busy_poll):
+
+[ ... ]
+
+> +    dut_ret, remote_ret = _run(cfg, local, remote, ctrl_port)
+> +    if dut_ret is None:
+> +        raise KsftFailEx(f"remote endpoint did not listen on port {ctrl_port}")
+> +    rets = {dut_ret, remote_ret}
+> +    if rets <= {0, SKIP_CODE}:
+> +        # Both endpoints detached their XDP programs and restored the MTU.
+> +        for fallback in fallbacks:
+> +            fallback.cancel()
 
 [Severity: Low]
-Should --timeout and --max-frags get a full range check here?
+Does a 0 or skip exit code actually show that the XDP programs were
+detached? cleanup_iface() in xskxceiver.c does not check the result of
+the detach:
 
-strtoul() returns an unsigned long, and the result is truncated to u32
-before the > 0xffff check. A --max-frags value of 2^32 or more can
-therefore pass the check.
+	if (ifobj->xdp_prog)
+		xsk_detach_xdp_program(ifobj->ifindex,
+				       mode_to_xdp_flags(ifobj->mode));
 
---timeout accepts any u32, including 0. Later the value is multiplied by
-1000 in u32 and passed on as an int:
+xsk_detach_xdp_program() in xsk.c also throws away the return value of
+bpf_xdp_detach():
 
-    wait_link_up()
-        err = xsk_wait_link_up(ifobj->ifname, thread_tmout * 1000);
+void xsk_detach_xdp_program(int ifindex, u32 xdp_flags)
+{
+	bpf_xdp_detach(ifindex, xdp_flags, NULL);
+}
 
-    main()
-        xsk_peer_skip(peer, opt_timeout * 1000);
+Only an MTU restore error changes the endpoint's exit code.
 
-A timeout of 2147484 seconds or more, or a negative string (which
-strtoul() wraps), gives a negative timeout_ms. With a negative
-timeout_ms, the poll() in xsk_peer_skip() blocks with no limit.
+Suppose bpf_xdp_detach() fails, for example because the driver's ndo_bpf
+rejects the reconfiguration. The endpoint still exits 0, and this loop
+also cancels the "xdpdrv off" and "xdpgeneric off" fallbacks. After the
+last case, the program and its XSKMAP would stay attached to the
+interface.
 
-In this series, xsk.py checks --max-frags and --timeout against 1-0xffff
-before passing them on. So this only happens when xskxceiver is run by
-hand.
-
-Could xskxceiver reject these out-of-range values itself, as it already
-does for the --max-frags upper bound?
+Running "xdpdrv off" when no program is attached does nothing. Could the
+XDP fallbacks be kept, and only the MTU fallbacks be cancelled?
 
 [ ... ]
 
