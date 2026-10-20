@@ -1,99 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792530422;
-	b=bWOYAyS08iWj+GiOUPV8OvgqBDtpEyB0tpSUBZQ/NAjN+44P6ok2j8cZd7S6/flu5rzd
-	 jUAoLln59DpSWPmhrEuIXdWLo6BN+f8MDvl3fv3MqE0AZuv7q45pHH0kOpbJIAx5dmDgg
-	 S/RqFnLY5BDY0cL0taLpT0QJx28675JVUvoiJum93KYd/srpJiY6ZspC3gVcbYiLATKOZ
-	 IhR6Q9/uGvK5t2bQZXehmb83J5iVanH+larilpxSM6j2r1MnjHZBfzwJmxWH7kCw0LMfx
-	 MtUcFZtQJ5QUVrLFdFkJoKaXJbbnhqUcqxsrvb9IlhudGl78WrR9fPKbcoMPANf+nig==
+	t=1792530531;
+	b=PKuvUbQQt/Uw8CLEJqZRmsWADtAlv2kW9O5vsizOt9UoDrya4hjc2wc8aKOA6/MUNYFn
+	 cC4XnwrBh6TVLL0iOpG9d2O7XxWa1RpnFE4mrl+EVv/GhP2Le7J32smjVPSxDEyyGVL71
+	 nBRFLQ6o2E7ewazVixM106S2zSLlFQKH4l+AVwL3Yz/ZRmbrjJel0jCV9Ad/nBdhBu8eK
+	 DZXsY2QVba6T82ihhv42Au0apLUamp8gKBJqomUTHQx6945MP67oPiWJmuikaes2J6GYt
+	 t853TA0Yi/B+9RDmHfdZRv6YYRZhhxUYNdll8RIAXiKU9feiyIM6FfIDrUxp5CnWI5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792530422;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=YLJAEyWgWD+owz8+apEIXzolE9JgI3rEa6MIslADBzg=;
-	b=IUPtM95UmuZshqxfOT031ydXZ9SF5fEqSp7U1CjPviCjHA5k/28NnypDZzP7obH9hn2K
-	 vkAzsZR6+ExgpBfuy3Ot7gwVlEB40rBCth/KsgpFUsHDejwuixd2+X0E2CMQYcMQK9Hhu
-	 kodTmqnrImpSGk919lQ/aXQDd0XKJ7URSJNVtTvyFo3c10bNJJp9jv0FOcD+djsrMZ87h
-	 actUZa3fucbSeRrPVgO1S5SpQfDvIMjedLGYXUtWEIiSfbZw+THGTuTF0jDtYkuaXJhmW
-	 lKjIbOQP7jLtfClLOzg2CGC9GOBFRdf5D/RpF3Ly7TfFVMJTvlPsrL8PfFdov8MK+Ig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792530531;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=LHNZsy1AhmzsrhwZyxEBJo+bnbpDcTwMAklGp3PSgbg=;
+	b=jqZRAZSB5Ze6MIgRRcpP9L0FtznhBZk0Q9mrhcBIGz6G6TY6TejBUISItByeCYBbhTjP
+	 D2b15mtGn98POO1+aPtlpeWsvnz+IA8QRFldgYHqXbLnjLwiQ57k8FalfH6srH/cQmOYp
+	 AB7U5Ro5up7JhLFsRfLFseph1qlro7k1SCTvVne7bcdk+D3yjnoNtas9wGYLT5A/3KWa6
+	 U+SsafW6KpN+03u/fY6ALv7tTpmkqyxMeF7hjGw2TGONao8Ocsvgf2Yup4GUZVLDvhlr5
+	 PdaRvM1kzazYil42t6ZUZOu6YBwgb8838CpIFSFf04ARr55iVYiVKcs6TFPLph7yHjQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Xo9u1Q86;
-	arc=none smtp.remote-ip=74.125.82.171
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MjHSLj6i;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C77606A31D
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 21:07:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16C77606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A82606A322;
+	Tue, 20 Oct 2026 21:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Xo9u1Q86
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-3535bf8b3e0so9120eec.0
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:07:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792530421; x=1793135221; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=YLJAEyWgWD+owz8+apEIXzolE9JgI3rEa6MIslADBzg=;
-        b=Xo9u1Q86eghEmTqL8We7UIsBOyMUz3YRXxCGgw9PT6lz96S72SZsImsa9DvLMPheyS
-         JEO+FfTnrrERLJbvkio3/qwoVkQu+fKAoWkNBceM2YVYmAzyWm2btFEQb/WnrFe/BuzC
-         TjIFiUvXIN5SpRgq3NHs5ZcBbGyWT4ZDT+KNS+JBDqupaRQnbrolhiMhh2JoVfnv59ub
-         gMvd5H705otAvD81ApzR9N7cRInmlL9E5+Y48v6GUGFZq3a5+gjFrQDXSbI0Iq+5OUG6
-         IinUvJnN3oOwFnD6R+1lLjE0+MpiBJZRDwoYrwaYaPqXXgS3LLSqMGgmd7IhJTpbc3ew
-         Y/qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792530421; x=1793135221;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YLJAEyWgWD+owz8+apEIXzolE9JgI3rEa6MIslADBzg=;
-        b=PFCBGbA/Vr0/ctw0pTeAmUfGTtAQRL8D81gicIj/T1Pk84wfpddmDk2FK2X4fmI2aZ
-         FGVvM8WFWutxIK09YUji2EGBMJz7mbGAANWS0zHwYCW66l3BiKjzrvLDa7/fvdn5IY3i
-         kOUtYOJwKX0UkIX1P6CufqwsGKoDtPoQ8LBeDIevg/PSHZa/+C7aYl8PuE8aeEii94va
-         jpuMe/Xbdn0Qa3fVki5F2BYjUrkdaz6MXwfvMpKPC3MJr/puuRldgpdYVa6ODD+lq2sr
-         isM2IzHEjTNsEeB8SUiFhm3xbwrDlSUW4/1IktFqsDluY9qwowfWwOTHySOj/p2/fwvc
-         I6UQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxpP3XkVn/5qwd9aizsOXFOL9agpIMuDL/n3Xro7Rw3q/Y3ZhJLZU0D0pCJ3aQIHvZFGIU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJO1PhJAI3P4VNxyfvgnxgI3X/ABwyDXaTM1Y03lsTNxjcMy9pp
-	VsA9aauWHwMHcl0hyqlmhdX7RTS9tA0XTrenc/CUUzyaywX4FwnRjXpX
-X-Gm-Gg: AYBFou03KqDF3516BRx1y9MywtVTewWnfFYkmkrMl7hpF6/88fQ4bh8eeduzCzFnjXZ
-	rTcK2/wokAtlxXa9SWBtCCYTvVSHmeE/6ZcqrdtZ9o3pzMhXpbdKEKMy1yJriYH8YvJ5ep5vG4D
-	jsd7becfIvDBuf4HFbvuSZmGK2H9+YVUxAO28rUrrAWCnk6flf5FeleMyN0KhW2ARxt1rwFn08B
-	RcpefRXLvy/+dxyoUIQx6TU6pyftK+N0AzGtSeSLwkcoee7JM1T/B14tx7USZ5YnbpB+rz4xTFR
-	fwcj7A3yE/qhxpuKXyd6dShpAqqXzVkrcraDJimHOXW6BF5FV6gHZg7dcLGLSmPtKXnQvYhzXfF
-	Rp4lVXxGNvPTTaBp1xu7A+mtuLdqGX55/ehAe9S8y10KRHecXBbeKuly43xM4t6R/A43X3qYyBW
-	/UKfXe5EDd7sAR6rCZzH1N6OBnDqy4y+eLCc5uyQFiMVdTO65q5Ibh8pht4Fdh1ch9/EFo8hEP0
-	TbBC43x62QZoQ+xZx0lAMiJUdV+dPev2bM4tv9EYT18VZvm2op3MfXPlX+dTAf84r8=
-X-Received: by 2002:a05:7301:618e:20b0:35e:2c6:d46c with SMTP id 5a478bee46e88-3674c63d579mr616592eec.10.1792530421071;
-        Tue, 20 Oct 2026 14:07:01 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:2946:827a:f5c3:d83c? ([2620:10d:c090:500::7:5753])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367416a1fb9sm963662eec.20.2026.10.20.14.06.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 14:07:00 -0700 (PDT)
-Message-ID: <94c04d9a833d73c368ea9d6bdfcbded27556233d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: support 32-bit linear scalar evolution
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- bot+bpf-ci@kernel.org, 	bpf@vger.kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com, 
-	yonghong.song@linux.dev, martin.lau@kernel.org, mason@kernel.org, 
-	ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 14:06:58 -0700
-In-Reply-To: <DM9YUX1TXEEC.1FCUJ0M8D7HGU@gmail.com>
-References: <20261020-scev-32bit-v1-1-838f34f9f0cd@gmail.com>
-	 <77720df26bea4edfd16a92d307115ad152f9ab558df8848fd8e0d7cb31e9f5eb@mail.kernel.org>
-	 <DM9YUX1TXEEC.1FCUJ0M8D7HGU@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MjHSLj6i
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B90921F000CE;
+	Tue, 20 Oct 2026 21:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792530530;
+	bh=LHNZsy1AhmzsrhwZyxEBJo+bnbpDcTwMAklGp3PSgbg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=MjHSLj6imdArMWL3vvkO7ju8c//mQbQeY5QXTMPxyT+Z6ghZHyG0SXQr41amV76SZ
+	 aGCChnRkuifPNl87J4jDXC+XEhfpf4EXdAdS1LuAVo3yIkPjMwPZdz8UmUX8cAsXXH
+	 XCtNspvjoUlRVJ0EaZpzvYr8sZuIoUpH1oLOiwtnRjusbuCb6vIzdtBEmpnAvsuZDk
+	 rZ8koiGsJSFWBS5XxRVd9BmDlst3URLlogwzPx0q1besV0QenMGaGRyc3L16dc4Etc
+	 hFJOIu3FVDB7xc58fmDLRr1AD9+TgQUzZuYalQ9ozgNlMW0av4O5qpmTbI3DPg58S2
+	 hx0G+jRLJ5JAA==
+Date: Tue, 20 Oct 2026 14:08:49 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Kurt Kanzenbach <kurt@linutronix.de>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Paolo
+ Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>, Maxime
+ Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Song Yoong Siang <yoong.siang.song@intel.com>, Mohd
+ Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>, Ong Boon Leong
+ <boon.leong.ong@intel.com>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Nicolai Buchwitz <nb@tipi-net.de>, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net v3 0/2] net: stmmac: Fix XSK crashes on stm32mp2
+Message-ID: <20261020140849.12fc79ef@kernel.org>
+In-Reply-To: <20261013-stmmac_xsk_crashes-v3-0-50fca7790af2@linutronix.de>
+References: <20261013-stmmac_xsk_crashes-v3-0-50fca7790af2@linutronix.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,40 +70,15 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 2026-10-20 at 21:00 +0000, Alexei Starovoitov wrote:
-> On Tue, Oct 20, 2026 at 04:35 AM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel=
-.org> wrote:
-> > > +	if (!scev_value_compatible(env, st, &initial_val, &bound_val))
-> > > +		return false;
-> >=20
-> > For a pointer-vs-pointer JMP32 latch (allowed for privileged programs, =
-since
-> > check_cond_jmp_op() only rejects pointer comparisons when !allow_ptr_le=
-aks),
-> > can the computed max_header_count end up smaller than the real number o=
-f
-> > iterations?  bpf_widen_scev_regs() and bpf_clamp_scev_regs() then bound=
- the
-> > induction pointer's range with that count, and the memory access checks
-> > inside the loop depend on it being a true upper bound.
-> >=20
-> > Would it make sense to return false here when latch->jmp32 is set and e=
-ither
-> > initial_val.ptr_reg or bound_val.ptr_reg is >=3D 0?  zext32 latches can=
-not
-> > involve pointers, because ALU32 on pointers is rejected.
->=20
-> Yes. Seems like a real bug.
->=20
->   r1 =3D map_value + 0, r2 =3D map_value + 56
->   l: r1 +=3D 8; if w1 <=3D w2 goto l
->=20
-> max_header_count is 8 and r1 is clamped to 0..56. If the low 32 bits
-> of r2 are 0xfffffff8 then w1 wraps to 0 and the latch stays true,
-> so r1 walks past the map value.
->=20
-> pls fix in a followup.
+On Tue, 13 Oct 2026 10:57:20 +0200 Kurt Kanzenbach wrote:
+> while looking at the TBS thingy [1], I've noticed kernel crashes. That
+> happens when opening or closing an AF_XDP/ZC socket while parallel Tx
+> traffic is going on.
 
-Yes, and another complain about clamping and possibly dead states.
-I'll send follow up for pointers today. For clamping need to think a bit.
+Let's respin this against net-next. The merge window has started,
+applying this to net would give us an immediate conflict and pain.
+-- 
+pw-bot: cr
