@@ -1,87 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792504400;
-	b=3iqjhVShsK/49+tKIW+vIrGndrEuIPCp/UqdbWB8sat0jxTf4Uz1+LBU+O9cGZIaonmK
-	 EAaLVEJWwNecTeRG6iQrsl6Px6Xflxe7JbYTitZca2SjPPe2OZ1UDacct6Ry5ARBpaOsa
-	 0HzYv1a1NhZi951Edztty4nxvhuDKG5TlIO8f29h7d5Y9KTJDNaSz6IPTX+euEq/7zEbp
-	 WzTuZdU/2AtPcH8lZQdVrcus0pTcKb+y5+tlfZv/KW1a5ygL2ocusmQkoDrqvvZL5cxpQ
-	 F8Hf4YbLhjrqfQjNV8gUFC797+VfWgFYif5rEC6S8NQOKpVVpd5HkdvBTnkLvN/ITPw==
+	t=1792504647;
+	b=PjCi7AFFWeyVgsbYrEfTJ2QsQWZrLvGKLM2TTHcUVcJ3ZhbLFEbRr/3HvgnwvkDixQpl
+	 pYFqpv2GoBiGJrCKR5OLlBUHOc/4FoOW3wju7Am8TABOQXqV3f5LUB3WzOyUxvJ7ujHLa
+	 T+lTZlELA55xAZtKUfbuECI8GTKUlMdWrFH0cS4CYxRNrn1rxF6DYpGqCNgxiYLRlc2HS
+	 amfojGymsI6lAIZmaVorO7yXqxZRLDPFKJlJzmQp3wNBl40AkQ6CGjpECuPkgAhu5Byfk
+	 n3+dAOyaKHRwQuwxineBRQu+AAr7/eIvr06HXmo8d1rYxC8b/ZGpWm0kXKmvmXRREAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504400;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=ni1kpsCUmSMmOSQ2x9W2DKoNyy5/Ld98Sj47TVlfU0o=;
-	b=hSZXoki/1itEqtNpsCx8ufk5YQAjFN+fJWC9zkAAxwnMyK0ygoilN79rz40FGvYesPNP
-	 mMYgUFuHs7Hdlx7C1JR6BUZygQxkJv/yOJ4ouWBBgh1J4RnuInR8nLmXDeK7LYPNyvVN0
-	 RihQ7NIs32KJEV58qRtf402O70UvwIDD4ZM618O3bGiCAapFyOE1TX43r9QDovyCDL6Ji
-	 AqZyJB45u9CA/7FlKke/f1No/j5xvnWZkC3jtpGC3ujYKhBw9azu7j5sYuFrloXHgPiWJ
-	 wz89t2A7uxYR6G4AtYPSL59v6IEWdagUvKDCBO1jZ87TUP5lnE+nSdCDRT2C5sauXRA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504647;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=a/Me5Y6HF/VtoKt97MMtAjJt+DhVNNIv+fWtI37yBSU=;
+	b=5n+tC7xze1Mkcz898JS1l93lSHskEymHvza4TfieKCnoBCe0yNIz6fuCfBTE3VJA6trF
+	 2/GvzroqeH8ssRj8zdRQpS4djtT19WCwnO9BYyR7sT3shHBFchrshL8lr89E9g4rZIkpY
+	 2M1bP1DDn9EW4F5LHCYL56evAwCHkNdlxcMYh6+xzmfqushBGfQ+jr77D2ENmKTEj7g4e
+	 uplYe+hP4m2FWHX4ElUDp/LFXHtP7GmNI9+glhmCkyhEk3J1x5hWw7JY808L8oBEdgkpa
+	 7zwyxSv8aq2r981KNpDU4GqTBp4ZihhRGz9oblxEiXNxmNLm23QHEGPUf5kean5TWXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ljsDYJfw;
-	arc=none smtp.remote-ip=209.85.221.44
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=okYMfWml;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E41606A333
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:53:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76E41606A333
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A55D606A319
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ljsDYJfw
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48dfc0421d9so2344224f8f.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 06:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792504399; x=1793109199; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ni1kpsCUmSMmOSQ2x9W2DKoNyy5/Ld98Sj47TVlfU0o=;
-        b=ljsDYJfwu3AtAc1Dcz+igJrM9WNFOYQpGUbqbkSQuEupQYCZ0faqyzR+qErYRSPaKH
-         /+m//F1bNEEU6yF7zF7qVCK3036lYOFgLfpU6mXTtaR964AZOkFQ69LXhUimRKxcUM/a
-         qsfL9Fh/qQQC9l9sgI/LF1Zu7S5rpeLmDI9AjMpX+e/F68JO0/hZyOPHulWMPYMNhDaH
-         5pSDmJIY1TnOYiC1NkUEQWROOo8Vb7nUzukOml6qpADg+d1t4kQuxVTrXeL1WL1juOh7
-         OgFksx/IOyYj23a5NOVOKDbslBrF3AQHq8vZezTijClS1AjgnbkS3de4zQEVHVq8BaJp
-         rcXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792504399; x=1793109199;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ni1kpsCUmSMmOSQ2x9W2DKoNyy5/Ld98Sj47TVlfU0o=;
-        b=TD+UMegD2fsDDiVOVN4HAGtsB9oktd7+TatP0NgOj6o45wbu5Tx4geENHZ0bokXVSE
-         TxmAg++HuwQufxhRRZF33k6hLNoHf3XAgkoko+/y9pP7OplGLzNt+mdZd1PcVjA+rZ8X
-         3xKVMK6axh6wWX8/SPn42E9QhPnBhHebaQDLBlNC4d0abP3Upf2MSisX4YyyfvtV9zWc
-         QFdp3N8k28wnud8gNFnOgjugBbgsLtEDBcrE2vZOZvr3QsJAZv9PpzHTaK3vQXiS2yjj
-         3BIvQUuyiir+ESQMkAXQaVSiXjkqjY1LiwsaEiNzrd4YGp6Qva3V8k0rF7V6ulWMS1w3
-         9Luw==
-X-Forwarded-Encrypted: i=1; AKwUvBwo4nDEbWAKCiud7NXjRAx4wNhZNS97tO7FVPUEL6HP3EI6wdWuXXrlQoo7eVjrcEa5dIc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJCeyNKf+YFFjnkjtlJd9JG5N6TLdYyOXaA7E2GbDEHmky2zPuq
-	n8vInGfPJ00CYRVaxb37WKBQGtsssCVrI0w8rXp1eP/sW6REYzmZutcY
-X-Gm-Gg: AYBFou1H+wxxtZAJjVhh04q0SKz9WWhvGWbWK4qdRf570Ko5YpsHujXmqiFTcCzlbcM
-	D7vlv5igBVBTT+eSKoTwpN3978vMBRgWPb4mdH8g9YkdzgxlzUwfkLDhC9QHrEt5ua/aT93Z91w
-	RkNLRUPUMkWN63TJqbC21f0M7LkiNwMcLHm9S+FGIze/O6MM2RlCm+mbAv/SNcBsNjys6rXaET4
-	W9en7fw4N5hFUlFR//Zpmq8UddNJ9CfNH1thHqcQwvYk6czUmt6bDU3ls969btlQHw0pR3Mtsmk
-	vaTOI5kySo7i+qnX1ufUGv6gYgCaG+YeCt+FG5ABEapvKwShAK2on0s1KAazhoRWcsfM8H4B6nD
-	hSPupZ+O6mw/1XTY9ZiNeoggVrCD69n2dfW1y9mcNiE4NQVwzHxI77P9JTIlcrFoRuJltUPhiQl
-	xLp4hkTQQlI7Cwe8I3Vz+pZJwZ03oztTT212oqe94Jjz0sIbtCdUBRtXhocoelc9mNkD/0uUXF0
-	nn6mTAXWLlCni6olZj4usH9xiEiwPEBia1lNWdTSUPGXIa9kVs4LibClLc2vEnZTarO
-X-Received: by 2002:a05:600c:3e05:b0:4a1:71ab:63ba with SMTP id 5b1f17b1804b1-4a1d763625emr226211395e9.29.1792504398481;
-        Tue, 20 Oct 2026 06:53:18 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:37c9:85ba:855b:cf83? ([2a02:8109:a307:d900:37c9:85ba:855b:cf83])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d8178dbsm6643439f8f.21.2026.10.20.06.53.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2026 06:53:17 -0700 (PDT)
-Message-ID: <912a0f0d-3d95-4303-a7d4-6c6650d16752@gmail.com>
-Date: Tue, 20 Oct 2026 14:53:14 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=okYMfWml
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2C41F000C4;
+	Tue, 20 Oct 2026 13:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792504646;
+	bh=a/Me5Y6HF/VtoKt97MMtAjJt+DhVNNIv+fWtI37yBSU=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=okYMfWml2vHYVCL0z1ks6GbSm/wSmhtDidTgX9ij3sTVVYaV63EOqEfFY7cBm+HgC
+	 cwF4bNsCs9M6oSj64wuYTv1InCaBokXn7iupmYttCk6EhAhG41XJhD97QNDw1u7PO9
+	 IZHIGPfcBoEfZqwC2NCHoz1FvEolHPo7z6uItsIiC4W4jQhYp7wLnsGh7lp5wRlacQ
+	 3JzeUCHWrgCItnH/JMv5q3bQFSYFItZvUIPXuHsMdnjIQ5fWjEu4CzdyYIlTEz7TEx
+	 iXY2m5FTyjlXTbCGvzN4b4yeEFaA/SZnMUZuFGEGiwvc9KUWWYaZRvbV3rjIi+kErJ
+	 E8m1KbvmTslkw==
+Message-ID: <sashiko-outbox-179062@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 15/16] selftests/bpf: Add test for mixed arena
+ percpu object
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
+In-Reply-To: <a36e6a008493b367af5d9c338cf707fadfc8a632.1792503001.git.xukuohai@huawei.com>
+References: <cover.1792503001.git.xukuohai@huawei.com>
+ <a36e6a008493b367af5d9c338cf707fadfc8a632.1792503001.git.xukuohai@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Oct 2026 13:57:26 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -90,129 +59,93 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf: Don't use percpu_counter for the htab
- element count in NMI
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
-References: <20261020131524.207415-1-puranjay@kernel.org>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20261020131524.207415-1-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: unreachable err > 0 branch and silent test bypass=
+ in test_arena_percpu_mixed()
+--
 
+commit df1443ad7be8c02167841960847603cc924444f9
+Author: Xu Kuohai <xukuohai@huawei.com>
 
-On 10/20/26 2:15 PM, Puranjay Mohan wrote:
-> BPF programs attached to perf events run in NMI and can update a
-> non-preallocated hash map. For large maps the element count is a
-> percpu_counter, whose slow path takes fbc->lock with
-> raw_spin_lock_irqsave(). That does not exclude NMIs, so an NMI that
-> interrupts a holder of the lock and then updates the same map spins on it
-> forever:
-> 
->   WARNING: inconsistent lock state
->   inconsistent {INITIAL USE} -> {IN-NMI} usage.
->   kstress/261 [HC2[2]:SC0[0]:HE0:SE1] takes:
->   (key#5){....}-{2:2}, at: _raw_spin_lock_irqsave+0x18/0x30
->   {INITIAL USE} state was registered at:
->     percpu_counter_add_batch+0xd8/0x160
->     alloc_htab_elem+0x408/0x480
->     htab_map_update_elem+0x1e8/0x6a0
-> 
-> is_map_full() is affected too, as __percpu_counter_compare() falls back
-> to percpu_counter_sum(), which takes the same lock.
-> 
-> Count the elements added or removed in NMI in htab->count, which is
-> otherwise unused for such maps, and add it to the percpu_counter where
-> that is read. In NMI is_map_full() only reads the percpu_counter, so the
-> limit is approximate by up to PERCPU_COUNTER_BATCH * num_online_cpus()
-> there.
-> 
-> Fixes: 86fe28f7692d ("bpf: Optimize element count in non-preallocated hash map.")
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->  kernel/bpf/hashtab.c | 26 ++++++++++++++++++++------
->  1 file changed, 20 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index bf78e09f4d518..7a27479c46dc5 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -95,7 +95,8 @@ struct bpf_htab {
->  	};
->  	struct htab_elem *__percpu *extra_elems;
->  	/* number of elements in non-preallocated hashtable are kept
-> -	 * in either pcount or count
-> +	 * in either pcount or count; with pcount, those added or removed
-> +	 * in NMI are in count, see is_map_full()
->  	 */
->  	struct percpu_counter pcount;
->  	atomic_t count;
-> @@ -1160,11 +1161,23 @@ static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)
->  	}
+selftests/bpf: Add test for mixed arena percpu object
+
+This commit adds a selftest subtest and BPF program to exercise mixing
+per-CPU arena variables and a regular global arena variable within the
+same BPF arena map.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_percpu.c b/tool=
+s/testing/selftests/bpf/prog_tests/arena_percpu.c
+> index 27d4721c7ae9a..b450be5f2b36c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
+
+[ ... ]
+
+> @@ -137,6 +138,99 @@ static void test_arena_percpu_only(void)
+>  	restore_affinity();
 >  }
->  
-> +/*
-> + * With use_percpu_counter the elements added or removed in NMI are counted in
-> + * @count, as percpu_counter takes a spinlock that the NMI could have
-> + * interrupted the holder of.
-> + */
->  static bool is_map_full(struct bpf_htab *htab)
->  {
-> -	if (htab->use_percpu_counter)
-> -		return __percpu_counter_compare(&htab->pcount, htab->map.max_entries,
+> =20
+> +static void test_arena_percpu_mixed(void)
+> +{
+> +	struct arena_percpu_mixed *skel;
+> +	struct bpf_map *arena, *bss_map;
+> +	bool *possible =3D NULL, *online =3D NULL, *written =3D NULL;
+> +	int possible_cpus, online_cpus, nr_written =3D 0, cpu, err;
 
-To protect bucket locks in rhashtable from re-entrance from NMI we use 
-bpf_disable_instrumentation()/bpf_enable_instrumentation(), will it work here?
-It looks like a more common solution for hashtab.
-> +	if (htab->use_percpu_counter) {
-> +		/* percpu_counter_sum() takes that lock, so only read it in NMI */
-> +		if (in_nmi())
-> +			return percpu_counter_read(&htab->pcount) +
-> +			       atomic_read(&htab->count) >= htab->map.max_entries;
-> +		return __percpu_counter_compare(&htab->pcount,
-> +						(s64)htab->map.max_entries -
-> +						atomic_read(&htab->count),
->  						PERCPU_COUNTER_BATCH) >= 0;
+[ ... ]
+
+> +	for (cpu =3D 0; cpu < online_cpus; cpu++) {
+> +		if (!online[cpu] || cpu >=3D CPU_SETSIZE || !CPU_ISSET(cpu, &affinity_=
+save))
+> +			continue;
+> +
+> +		err =3D run_on_cpu(cpu, skel->progs.arena_percpu_mixed_write, "write");
+> +		if (err < 0)
+> +			goto out;
+> +		if (err > 0)
+> +			continue;
+> +		written[cpu] =3D true;
+> +		nr_written++;
 > +	}
->  	return atomic_read(&htab->count) >= htab->map.max_entries;
->  }
->  
-> @@ -1172,7 +1185,7 @@ static void inc_elem_count(struct bpf_htab *htab)
->  {
->  	bpf_map_inc_elem_count(&htab->map);
->  
-> -	if (htab->use_percpu_counter)
-> +	if (htab->use_percpu_counter && !in_nmi())
->  		percpu_counter_add_batch(&htab->pcount, 1, PERCPU_COUNTER_BATCH);
->  	else
->  		atomic_inc(&htab->count);
-> @@ -1182,7 +1195,7 @@ static void dec_elem_count(struct bpf_htab *htab)
->  {
->  	bpf_map_dec_elem_count(&htab->map);
->  
-> -	if (htab->use_percpu_counter)
-> +	if (htab->use_percpu_counter && !in_nmi())
->  		percpu_counter_add_batch(&htab->pcount, -1, PERCPU_COUNTER_BATCH);
->  	else
->  		atomic_dec(&htab->count);
-> @@ -2578,7 +2591,8 @@ static u64 htab_map_mem_usage(const struct bpf_map *map)
->  #define LLIST_NODE_SZ sizeof(struct llist_node)
->  
->  		num_entries = htab->use_percpu_counter ?
-> -					  percpu_counter_sum(&htab->pcount) :
-> +					  percpu_counter_sum(&htab->pcount) +
-> +					  atomic_read(&htab->count) :
->  					  atomic_read(&htab->count);
->  		usage += (htab->elem_size + LLIST_NODE_SZ) * num_entries;
->  		if (percpu) {
-> 
-> base-commit: b71326388a8a24674846c1d8d3b6dd831d9843a9
+> +	if (!ASSERT_GE(nr_written, 1, "cpus_exercised"))
+> +		goto out;
 
+[Severity: Medium]
+Can the err > 0 branch ever be reached here? Looking at run_on_cpu() in
+tools/testing/selftests/bpf/prog_tests/arena_percpu.c:
+
+static int run_on_cpu(int cpu, struct bpf_program *prog, const char *name)
+{
+	LIBBPF_OPTS(bpf_test_run_opts, opts);
+	int err;
+
+	if (pin_to(cpu))
+		return -1;
+
+	err =3D bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
+
+	if (!ASSERT_OK(err, name))
+		return -1;
+	if (!ASSERT_OK(opts.retval, name))
+		return -1;
+	return 0;
+}
+
+run_on_cpu() only returns -1 or 0, so the err > 0 check is dead code.
+
+Furthermore, if pin_to(cpu) fails (for example, if a CPU cannot be pinned or
+goes offline), run_on_cpu() returns -1 without recording an assertion
+failure. In test_arena_percpu_mixed(), that triggers goto out, bypassing
+ASSERT_GE(nr_written, 1, "cpus_exercised") and all subsequent arena checks
+while allowing the subtest to pass silently.
+
+Was run_on_cpu() intended to return a positive value when pin_to(cpu) fails
+so the loop can skip that CPU and still enforce nr_written >=3D 1?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
+t.xukuohai@huawei.com?part=3D15
