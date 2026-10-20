@@ -1,45 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792486734;
-	b=VBmKK3LlAhSBpqtq8RbpjCijsUAhhnnhS8Nm3TCiit2PCitiB6dAWxBIafevSqUgA9MJ
-	 Lac9tQyTdLDHS/JYBrKadUkZ5brXdT5gc+dURjLnMLhNGcNRrUdBbMtB+Jv6PC5EQeC7K
-	 zkYBg5nX+W2R3hq12uLC8u3SWRmNvb6ExvgHtI4IMopoW/ZnGY8d//GdupuMjTbc1tqq7
-	 AlL6tLuXcQEIO3wD7xeeoQDoGAkqDoYjJQgUVrPaJNY/FJBWUavs7UIkmizcQ7L1a/81g
-	 yJ4bBVe0cFx04zVn30Jea7Ndt0Z8++F1rd9eQ+50JKhEqSHRicO+LwzJNIAny14eSZg==
+	t=1792487411;
+	b=O2wFj6KU9gAJ4U9AnfO8N/ug8p8qrj48zzCg9XGNcAb3pqNP56hyIptJ4h6uHhAunLKS
+	 QtBSHvgEZW1db8QFj8X4ilIJiNZsCeQXohmJXyM2voxHdsAZP72niwJvb/zrqTs9SNISU
+	 fIqmx+6/rnztoDkQCtR6gcNxYQ4B4hPIHNlrw6W3Sg7kFHVoUkXEI5cNiOBikf9GnLyO1
+	 8RRpXURbdFs360BY0S3t0ZQHSBJBdfbub3q06GTVIn0f89LJd1p/UM3OTPzlIGOBlSwTq
+	 WrohQMh8yhkuzgY27x6Nbjay6C1PUanBhxks0xIjUpzron7bRN9eGnnCJWhYuseLMyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792486734;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=HlLZ9zGeNEup/rHEpny5JmMLv3fK5Tlr0wrd1y6qyXY=;
-	b=IyehdeazHh7byR9b+KkNcUk1oI0F9BQd4+6EE4e0bC68+aQClf3AB21Vv+KHZmHrlzKV
-	 uzGg5Lky3C6qKoDkU1anjwTPM3L97ARLHaBvAsTLg9n4/oAfno0gEu2EFr1gspVZsWLKb
-	 UY1S0Y9Eu5OF1dIKIf1ep/uJdktsCtP7shtA8THnZ6kvtFk4AvHLeMyIgogZI/bTIUzev
-	 9eT69ICOP02J8d/cXDoidcFznhZqxLcjQc6vpAeu1il1n9JE0Sy0gf0NITNlnwYIn3vX4
-	 S+P4pLPN+uLdY0rn6L4VQXEadRHwB3DBzMneJThZTGetMBUgOl17YknbE7jk6F5aoqw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792487411;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=XAtDlmIS6gGYPAr5WtgcIqKrQ7x0x9dsNKC7eWyXpnE=;
+	b=nFceq1CW1k0K+mbQTMobrO7KTnBzRFB1xuTYep1Lfp/EYtCy0yDopo+hhQTbwy4FhVNu
+	 vuRzZci0AW+IWiTyEB5MgXN1sfdwjZmJZG1hqYLXbdY2UE/FQrEMeG3P0nEhBSjnWAqHs
+	 qNnXAjV+DwQiEABfgrTe7KSjsIb6ciS4DdX+EBo5o1TqgrPKWK9o1RIUEN+YoWWVvIoMh
+	 NC8Lwj21l/RsRjfotBDgUUSYF+UdNueIRPCe7Edt0Mur0o6j6Yy86OIFJsWUSH8KbEmx9
+	 ICHLYlH7iiHJvQGY09NvZb9JlJAEb+JartzZxHh5R6jl+vAYVBdbmi3nf7ttECqDCEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EwlNOE9A;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gxVSY+dv;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABC9606A31A;
-	Tue, 20 Oct 2026 08:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD961606A330;
+	Tue, 20 Oct 2026 09:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EwlNOE9A
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C421F000C4;
-	Tue, 20 Oct 2026 08:58:53 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gxVSY+dv
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F97D1F000CC;
+	Tue, 20 Oct 2026 09:10:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792486734;
-	bh=HlLZ9zGeNEup/rHEpny5JmMLv3fK5Tlr0wrd1y6qyXY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EwlNOE9A6HClJkvde0kvUnzaqmRf601biMcVfJWjPPZAPytYo3tQ2sQspN5IdLrr8
-	 j1LKmnLBwQ4VpNLE939lziDV64lDN1ppA9OjHtxyFTQorxqVCeeqqvOCfFJG7p8Egx
-	 tn7AU4U63x6jl0VWqgQjuQbUS9YZsLXNhaLarB2KdlyJTu4oVzLwf45aPqOM5euA2P
-	 9jQrzNi9IlM4mQS7knsGSVoJN6EHvMXzKQSveHO0qJdIlLJfLo4pPB7MU15S2LWNtj
-	 3qnN98lfGiaC2xxxviQYyqR0znEe7mJN2E/F3jaWyI1VXLxrGWxhz1C6ns+teAQ8l3
-	 MT8nrF3+l/xEg==
-Content-Type: multipart/mixed; boundary="===============0961616978328380911=="
+	s=k20260515; t=1792487410;
+	bh=XAtDlmIS6gGYPAr5WtgcIqKrQ7x0x9dsNKC7eWyXpnE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=gxVSY+dvbsGFa42pCg/MMnt+cH7yS7EP7z/NdlaND5lL9LNZBJTObos1PWXweHTRB
+	 xDi9chg0/nzfB0DbFYxkTN97mUOsZ/1FFn0TzphZ6ZRTx6xuDWoAaZIRWGqXB7uQpX
+	 3kctvonUX0gyD3xLJY3jtVMUyYbjNZIXyK3EJ0Tm7UZ/BB7IWSMG0Yx64WgYWEPNLY
+	 q63FvnVcDhEuOnJtUTxM4acq+uSvH0lFZVFws/jJ2cpn5rBOgnaOZEc+lk/KBQzJnb
+	 oA3KPXRNQGLKFaDlSzSSdL/QSOpAvk/kugEUuXfBxEV9w0eDZrS9MtUdiKT7WHPRhy
+	 eBT5scmr8grww==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 774723808209;
+	Tue, 20 Oct 2026 09:10:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,66 +53,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <a02301c0ff8593349602f81cdf0c21f1b38db0b60118f8eed3199a6a38330234@mail.kernel.org>
-In-Reply-To: <20261020083713.905006-1-yanxia@cmss.chinamobile.com>
-References: <20261020083713.905006-1-yanxia@cmss.chinamobile.com>
-Subject: Re: [PATCH bpf-next v2] tools/bpf: Remove legacy BPF tools
-From: bot+bpf-ci@kernel.org
-To: yanxia@cmss.chinamobile.com,daniel@iogearbox.net,bpf@vger.kernel.org
-Cc: yana06070@163.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,richardcochran@gmail.com,netdev@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 08:58:53 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/4] mptcp: misc improvements for v7.4
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179248740902.3599760.12752617471968534331.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Oct 2026 09:10:09 +0000
+References: 
+ <20261013-net-next-mptcp-misc-feat-7-4-part2-v1-0-1181e5d2fda4@kernel.org>
+In-Reply-To: 
+ <20261013-net-next-mptcp-misc-feat-7-4-part2-v1-0-1181e5d2fda4@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ cpaasch@openai.com, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kernel@vger.kernel.org, liuhangbin@kylinos.cn, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
 
---===============0961616978328380911==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> tools/bpf: Remove legacy BPF tools
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-TL;DR: Nit only: the reworded filter.rst sentence says the instruction table
-lists opcodes, but it only has mnemonics and descriptions, so the new wording
-may mislead readers.
+On Tue, 13 Oct 2026 19:56:37 +0200 you wrote:
+> Here are some unrelated improvements for MPTCP and its selftests:
+> 
+> - Patches 1-2: avoid printing (pr_debug) uninitialised data. These are
+>   non-urgent fixes that can be backported to silence errors or if it
+>   helps with other backports.
+> 
+> - Patches 3-4: convert IPTables to NFTables in MPTCP selftests.
+> 
+> [...]
 
-> diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
-> index e0b9dc14a9bf..ee35cea6face 100644
-> --- a/Documentation/networking/filter.rst
-> +++ b/Documentation/networking/filter.rst
+Here is the summary with links:
+  - [net-next,1/4] mptcp: options: mpc: avoid printing uninit data
+    https://git.kernel.org/netdev/net-next/c/a234ee8eb9a2
+  - [net-next,2/4] mptcp: options: dss: avoid printing uninit csum
+    https://git.kernel.org/netdev/net-next/c/00e2690c9dad
+  - [net-next,3/4] selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+    https://git.kernel.org/netdev/net-next/c/d7add5f410ba
+  - [net-next,4/4] selftests: mptcp: convert iptables to nftables for mptcp_join.sh
+    https://git.kernel.org/netdev/net-next/c/be3b69f3cedf
 
-[ ... ]
-
-> @@ -213,9 +210,8 @@ contains a miscellaneous argument that can be interpreted in different
->  ways depending on the given instruction in op.
->
->  The instruction set consists of load, store, branch, alu, miscellaneous
-> -and return instructions that are also represented in bpf_asm syntax. This
-> -table lists all bpf_asm instructions available resp. what their underlying
-> -opcodes as defined in linux/filter.h stand for:
-> +and return instructions. This table lists the assembly notation and
-> +the corresponding opcodes defined in linux/filter.h:
->
->    ===========      ===================  =====================
->    Instruction      Addressing mode      Description
-
-Does the table that follows actually list opcodes?
-
-It only has three columns: Instruction (mnemonics such as ld, ldh, jeq, ret),
-Addressing mode, and Description (prose such as "Load word into A").  There
-are no opcode values like 0x28 and no BPF_* opcode macros from
-linux/filter.h or linux/bpf_common.h in it.
-
-The old text said the table showed what the underlying opcodes defined in
-linux/filter.h "stand for", which matched the Description column.  The new
-wording reads as if the opcodes themselves are listed, so a reader looking
-for the encoding of an instruction will not find it there.
-
-Would something like "This table lists the assembly notation and what the
-corresponding opcodes defined in linux/filter.h do:" keep the original
-meaning?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39395316270
---===============0961616978328380911==--
