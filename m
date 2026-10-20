@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792524628;
-	b=Gm8av0JUHRBNUicu52fP80I8riKZU8ujzjgMGe/XOv24L5b76S58ag54QLfsLedeKF9I
-	 W8H41QtbFzjR4bwTavyWm+/gkEUC9Whd35pSRdwzwiLnvEp2XMJMuu8vZYd0niERyIJF8
-	 iSwN816ugm2gkuRoODoGjpX+PZkZXGDvK8FEFWoWYY+UlQGuk4XDxVJhczc2YJLRd8KXl
-	 SOIECmxDTMaN07Xqeqld9duCxxjCOJYpRWjv+gbg7kXe+RteX+1aSRJk/UAWEB9V6KF59
-	 kVPmZET8jhfS+RhPpdZV1PcVFuXTnhSQTt+2nUmm4V8VlcNuC+7idIHwq+/3H05lnnQ==
+	t=1792524630;
+	b=myUjWJ5rhQ6zxJq0zcRc5wvdVRmskZtbTs3EGlCAYSwBTiAEfJrFDlNAssP3FM4ibY+T
+	 IS6bTW+4p10EEdRQVQ9BBOoSxtfyJjzYC1r3JqrhgAiP2zEMMtGPVTj4eEbkx/fua7UdU
+	 TSSk6G3G0qHBIVuA4YjHrBU/O+agxdV0JytzqVpCWkxHtErIVpl6A1urV/MwH571UC/sR
+	 reIr5ksyZDncyD9CVhUqevP6mlXTmOk9z8/oOgxB2OY9z3Nyu5AEHNS+Nz1ovgPHQge1N
+	 tjR6O10/qVM8Kq1MyX9lSW/C5WB3ZD8T/OrHqaN68IZSujDN/tmp6TXb3ncoOLyjBQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792524628;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792524630;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=nr7n0KV3XaoCzzLIl04hIKAJBlF9TKM+nh434rYZHAo=;
-	b=MvBsSMzQBr35lU6BCi1gHxob/euW9VGRAv45vc5StmtKeUW6IXKAwTwjt3dVsYOHBcze
-	 WaSnar0Dl5QcMQVF/ymDHc6w3WZj57cp4JzPCsc7OF/Sfj/xlznG9/cfjPsCB8EWAHIph
-	 QXRLSBjQrHQSFRRjaEEdgHbYQJfAxXNonGxbQW2WjRF74Qw8ukmmpN8h9hKxfIL4p2FAP
-	 QSRNwTAJv7iFGsiFMljxvqwj7VLcKu3D255p8p15E4vjGQ8TBagLLyZV0tdhJiQpM8/Pc
-	 O7fRiEv/cAKvC0OWcy2K+ZX2ssqDFWpaWG3VMN4NGRefNG5Bu4w/vsupMBWig80DwOQ==
+	bh=3/6lfOiLcuVyA3cX0EYsczIjRwzeAaCSLhLn+i8CtDI=;
+	b=2ipiKY3YaPHCMYe59wNNytIiRDOCw0oYHXocKYWOgrrv2w3LipyCH1JmXPWKO1XZ8oJc
+	 /HoEr8ecSt0kqoUz+aL9Jsv68R47btHuSIjgdztsV+iXDlsDPpMWpDw97cOmbrVBP8Hh4
+	 sYl8ztpXjEUaFSxucjbXQFMzg2ZytqSHk3rsygu3HoSSnm4krUU8NcRaS4dVR3OtIe2WX
+	 EepIXu7ZRJr8GLTQmBHFhboWkSAgTebI4wY3HnWpB0PRRYdRKk00ag5KsrFCI+Aeuc3gZ
+	 PuoADchUtDa+jxVW1VzdFbW7CvrRBSdX1236v3GFypJXasmSicGFsbaUEyqvKVqxlYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fCllyH4O;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdfHw1Lk;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5FC606A326;
-	Tue, 20 Oct 2026 19:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674CC606A32D;
+	Tue, 20 Oct 2026 19:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fCllyH4O
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7D31F000C9;
-	Tue, 20 Oct 2026 19:30:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QdfHw1Lk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7961F000D1;
+	Tue, 20 Oct 2026 19:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792524627;
-	bh=nr7n0KV3XaoCzzLIl04hIKAJBlF9TKM+nh434rYZHAo=;
+	s=k20260515; t=1792524630;
+	bh=3/6lfOiLcuVyA3cX0EYsczIjRwzeAaCSLhLn+i8CtDI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=fCllyH4OxyRGMO35nMP9/7CBKsN07PETmPprLNK5JlL4jTAjP2FywmEWFGbG6rZpI
-	 II2V+G7TdkdzoE8QsTaaY8rkXuW9mazrpqj3siLKohQ4S3ufyFdFDDaHS35aw43JJ6
-	 VvXpoSbLjU0OapWF+OLlfOxy6ZK58vye9u8N8lHCwxZaqwtGjD2ZNikOeoTTG6ZFfv
-	 WgDrrzkxGYDy45fi3ozXRop7sZAZqbXvKfAvlWEuOE3lELnFQ3N8F7mHMmjH7qZxTq
-	 UayUr/2TE/cSrBLY/R2y2T7BcBrH0sbk0HhzBt9p1EfYSPHQeFY6lWhgxFhDv+iyOK
-	 H9KSZVKJOSi5A==
-Subject: Re: [PATCH v4 net-next 10/15] selftests: xsk: run the RX and TX
- endpoints in separate processes
+	b=QdfHw1LkD5+b+rGvqANXS2NVfo2wC9RlgwMb803Le9givN6mxXU/EUuJKXwiTYTn1
+	 9UMg5yBtcTHf8bFr8Y0CA4bFOGvTizUIRC310n0OlibZlFvrKJ0cDOLM3a5wYTaHfw
+	 Yku2I+RWIkp3ceBRLNOwWZu3cy3FjIFpS64I2b9OZy8Z1XEvkgBpTe4Hh0tYVWQfS4
+	 B9sdv7b3FgRv9eZj1/poIng9lZEUvyHb3/G2zejVkdbiQ41oIME/aoRoM/SDq0Wjr4
+	 0WFkqIRZVJ1Q5eqMsH982nI/R0N/zErNdDHwTtk9pj7fJ7AQDgiyT9lUfryiGGe2Kn
+	 I+HDUHdytOLcQ==
+Subject: Re: [PATCH v4 net-next 12/15] selftests: xsk: prepare xskxceiver for
+ endpoints on two hosts
 From: netdev-bot+sashiko@kernel.org
 To: maciej.fijalkowski@intel.com
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
  stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
  tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Tue, 20 Oct 2026 19:30:26 +0000
-Message-ID: <179252462658.3135.12143911663224541762@kernel.org>
-In-Reply-To: <20261016174338.787135-11-maciej.fijalkowski@intel.com>
-References: <20261016174338.787135-11-maciej.fijalkowski@intel.com>
+Date: Tue, 20 Oct 2026 19:30:29 +0000
+Message-ID: <179252462905.3135.16990828336786085778@kernel.org>
+In-Reply-To: <20261016174338.787135-13-maciej.fijalkowski@intel.com>
+References: <20261016174338.787135-13-maciej.fijalkowski@intel.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -70,76 +70,119 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] Skip handling in the launcher and the endpoints don't match.
+- [Low] parse_command_line() does not fully validate the new numeric
+  options.
+- [Low] In the adjust-tail cases, RX can decide to skip only after the
+  traffic has run: testapp_validate_rx_endpoint() clears…
 
 --
 
-selftests: xsk: run the RX and TX endpoints in separate processes
+selftests: xsk: prepare xskxceiver for endpoints on two hosts
 
-This commit splits xskxceiver into separate RX and TX processes. The two
-processes stay in step over a TCP control channel that carries READY,
-PROGRESS and ABORT messages. test_xsk.py starts TX as the listener on
-127.0.0.1, starts RX once TX listens, and builds the verdict from both
-exit codes.
+This prepares xskxceiver to run a case with its two endpoints on two
+hosts. It adds --queue, --max-frags and --timeout options, a SKIP message
+on the control channel, and a wait for the link to come up once the
+endpoints are in sync. It also changes the default case MTU to
+ETH_DATA_LEN and restores the original MTU in cleanup_iface().
+
+> diff --git a/tools/testing/selftests/net/lib/xsk/xsk_peer.c b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
+> index e3e353d6abd95..256e63196f923 100644
+> --- a/tools/testing/selftests/net/lib/xsk/xsk_peer.c
+> +++ b/tools/testing/selftests/net/lib/xsk/xsk_peer.c
+
+[ ... ]
+
+> @@ -162,6 +179,30 @@ void xsk_peer_abort(struct xsk_peer *peer)
+>  		peer_send(peer, XSK_PEER_ABORT, 0);
+>  }
+>  
+> +/*
+> + * Tell the peer that this endpoint skips the case, so that it skips too.
+> + * Closing with unread data, or getting data once closed, resets the
+> + * connection and drops the SKIP if the peer has yet to acknowledge it, as
+> + * when a NIC reset holds the link down. So read until the peer closes.
+> + */
+> +void xsk_peer_skip(struct xsk_peer *peer, int timeout_ms)
+
+[Severity: Low]
+Is "so that it skips too" accurate for the adjust-tail cases?
+
+In those cases the RX endpoint decides to skip only after the traffic has
+run. testapp_validate_rx_endpoint() clears the support flag:
+
+    if (!is_adjust_tail_supported(ifobject->xdp_progs)) {
+        test->adjust_tail_support = false;
+        return TEST_PASS;
+    }
+
+and then testapp_adjust_tail() returns TEST_SKIP:
+
+    if (!test->adjust_tail_support) {
+        ...
+        return TEST_SKIP;
+    }
+
+By that point the TX endpoint has usually finished with TEST_PASS. It
+never sees the SKIP, so it does not skip.
+
+The final verdict still comes out right, because xsk.py later in the
+series reports a pass plus a skip as a skipped case. Could the comment
+say that the peer either skips or passes?
+
+[ ... ]
 
 > diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
-> index b4f9cd3715037..fbfff586e0e5e 100644
+> index 9704702f60fc9..56ea5ac6a3c63 100644
 > --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
 > +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
 
 [ ... ]
 
-> @@ -409,12 +474,26 @@ int main(int argc, char **argv)
-
-[ ... ]
-
->  	test.tx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
->  	test.rx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
->  	if (!test.tx_pkt_stream_default || !test.rx_pkt_stream_default)
->  		goto out;
->  
-> -	caps = detect_mode_caps(ifobj_tx);
-> +	if (setup_peer(local_ifobj, shadow_ifobj, &peer))
-> +		goto out;
->  
->  	if (!mode_supported(opt_mode, caps)) {
->  		if (opt_mode == TEST_MODE_DRV)
+> @@ -328,6 +302,18 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+>  		case OPT_UDP_PORT:
+>  			opt_udp_port = strtoul(optarg, NULL, 10);
+>  			break;
+> +		case OPT_QUEUE:
+> +			opt_queue = strtoul(optarg, NULL, 10);
+> +			break;
+> +		case OPT_MAX_FRAGS:
+> +			/* It sizes the packet array of TOO_MANY_FRAGS. */
+> +			opt_max_frags = strtoul(optarg, NULL, 10);
+> +			if (opt_max_frags > 0xffff)
+> +				print_usage(argv);
+> +			break;
+> +		case OPT_TIMEOUT:
+> +			opt_timeout = strtoul(optarg, NULL, 10);
+> +			break;
 
 [Severity: Low]
+Should --timeout and --max-frags get a full range check here?
 
-Suppose this endpoint skips here because of its local caps. It then goes
-to out: and closes the control socket without telling the peer. The
-control protocol in xsk_peer.c has only these message types:
+strtoul() returns an unsigned long, and the result is truncated to u32
+before the > 0xffff check. A --max-frags value of 2^32 or more can
+therefore pass the check.
 
-enum xsk_peer_msg_type {
-	XSK_PEER_READY = 1,
-	XSK_PEER_PROGRESS,
-	XSK_PEER_ABORT,
-};
+--timeout accepts any u32, including 0. Later the value is multiplied by
+1000 in u32 and passed on as an int:
 
-Would a peer that is still waiting in xsk_peer_ready() get -EPIPE and
-fail in sync_endpoints(), instead of skipping?
+    wait_link_up()
+        err = xsk_wait_link_up(ifobj->ifname, thread_tmout * 1000);
 
-In test_xsk.py, _test() reports a skip only when neither endpoint fails:
+    main()
+        xsk_peer_skip(peer, opt_timeout * 1000);
 
-    if SKIP_CODE in rets and rets <= {0, SKIP_CODE}:
+A timeout of 2147484 seconds or more, or a negative string (which
+strtoul() wraps), gives a negative timeout_ms. With a negative
+timeout_ms, the poll() in xsk_peer_skip() blocks with no limit.
 
-That means the exit codes would be {4, 1}, and the case would be reported
-as a failure. Other local skips work the same way, for example the
-multi-buffer check in __testapp_validate_traffic() and the unaligned
-check in testapp_validate_traffic().
+In this series, xsk.py checks --max-frags and --timeout against 1-0xffff
+before passing them on. So this only happens when xskxceiver is run by
+hand.
 
-This doesn't look reachable in this commit. With the veth runner both ends
-have the same caps, so these early skips happen on both sides and give
-{4, 4}. The problem would only show up with endpoints on two hosts.
+Could xskxceiver reject these out-of-range values itself, as it already
+does for the --max-frags upper bound?
 
-The later commit "selftests: xsk: prepare xskxceiver for endpoints on two
-hosts" seems to close this gap. It adds XSK_PEER_SKIP, xsk_peer_skip()
-(called from main() when ret == TEST_SKIP) and xsk_peer_skipped() checks
-in sync_endpoints() and __send_pkts().
-
-Could the skip message move into this patch? Or could the commit message
-say that, until then, skips are expected to happen on both endpoints?
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261016174338.787135-1-maciej.fijalkowski%40intel.com
