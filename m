@@ -1,45 +1,112 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792491766;
-	b=ELeSfoD8uISwvCUMnqdT0Ds1CFdCjk68EVJvY6UOp77sySTXu2tVxZ5N5WVXXHYOtvdu
-	 eNDjfSbCCbqudbF9Zo7eIPK/mRiQsVfwfWVhK0lrxjyNP66h4oyVmJ+HAujK8Ux3sc50k
-	 UlNFO4yWfOdXH1hkdrbzs7JhUeQh5WXrOM44ddRJgw3FcPY/mQp/r8mdMhUGnZINr9/81
-	 2jy2leCcuQnKsxqENzDbkIInjpzgDMVW2YexWJUfbx9kaNZsSnC7MdRjwZIopu3ZIhweD
-	 xiecP+orCYrzmv2Gy0QBNiJLRYYNHiHOa+QogmyDi2voF3IqXHc8ThXlpsMVNx76ebw==
+	t=1792491924;
+	b=rmzGsucSr9vCHaukS3PT3W4Yt1qqom/2NqbPXhU2uVYkkrrMVgGyBv8g2FKiJAgdjC3/
+	 hGqbJrOPRiPukm6bKqGZPJPsvPC6e9vygrShsYhZK+jCAxrbv7+cm30DoQWaYDXHPLozE
+	 eofSlIDyMs6KiFWGtMQTZRGWxn26ntasSuINiFtkEre7MlMsHghlZ6AgqB9kXgm7e0yvH
+	 kkoLIXKYwni214eibH5LU/7vw0GKnCaE+CYkvzgf1Jn5H0P2lPlwtYOCX9zFQnT9mSx9R
+	 RgQVhi06DwFuOLW7yP3ZflAUZTTqCZdVMafvnNWMt1+EEGnDzi1fHD3o5C2awKwt8vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792491766;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Wanx/Y3C+0SlSQC9sDYqWym0szuF/WkjMrFohRrApNo=;
-	b=0Juw1wv2reys8Z6go/cjSkMdjouGbHGoEp4om6bLfwQaiVQ9Dtb2CntLsDTEUd7pIwJv
-	 Cr5xp+1Of/aWiFU0YFXCVAa9Zb41voEYNnnZ4b91lqjJhvZ8IAeks64ixgNd41BjMyycG
-	 tCzm90rCh+5ZpmYx5mr+jF+1alFaN/j0pBHSgl7rDNsK1V+uvlIRmNuHTeWiG9s/NYyOF
-	 ywCUthudSe6djzgfMOrwbZRANwZVN2ejajfwjreJmxPFak50HkEJX74osmBN4apElVVUV
-	 hvvOTuChb43hyeoLdIPLwwurF+EPAELnIAXu3LO8/5m78onrhsmBpNvXQ5GunpezPjA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792491924;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=TM2nirS6qLCdfkEXwJGzTZRWTT5VvtzmWaq8aIlT8Es=;
+	b=5R3bcRB8sxQbSKmPaREiEDKAT+rRhvwbp6SSP/ZEu6CGgyLW/pzoIt67Tmb3yeU1rfSX
+	 EgSYlIvySUKRI/UYHzxvhwzWrg9u+swNkzzoNJOjKuBRAZKGKmVmNd0AczQjjt1NgFSyS
+	 06o32cbFCvoWSqHA1QJvQKMK4X1NQfKdsl6ZtW9GQ9qVmFn9NXj67p3VLdBzwC/KJ0AM6
+	 2EVS3dcMEC1B26zSPo2ISdtt1Jh6tpCTkPPg/mhe9+YdPCPrmM27D0avoqhC7nZMjOsNU
+	 FmfwB2+0xdl2WAW/j8oQbXGBm5u61tOadl48ldv+UG6j6lXhjSyXcER4Kd0cxNMzC9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T5Oa7TM3;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rN+ZIgn5;
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8613B606A319;
-	Tue, 20 Oct 2026 10:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C83D606A32F
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:25:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C83D606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T5Oa7TM3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A896F1F000C4;
-	Tue, 20 Oct 2026 10:22:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792491766;
-	bh=Wanx/Y3C+0SlSQC9sDYqWym0szuF/WkjMrFohRrApNo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=T5Oa7TM3nby70HzARWjHBQQEUhvyDMnYSKnWODFB/qM7TAf4HWluzvCMoZuIgfgIy
-	 w2nKBO4fzEoENZA4IWc+qN+yQAjr5zvfQ7dniIZd5i9fHU6VSXezpYkh4VxtJAfdAd
-	 R/jPBncUlO/gYqZhBR9EoNd5L/i6DYwumiLVnFxU9f1zYERkCIjC4+I7irWQs1XCyE
-	 AkzJ0zp7mWH1cJu4KqrxzXJ+EuPQ0CjP3QJ+0bf/j7bCL4iOzlNm3URN/4BF/fYMlr
-	 KwILvV+MnSELolXwD0MjL6cIUlXuwVAvGaVQJEuYCGS7QfLxotp409zmw49clS+fpN
-	 5R83GhZiZRMJA==
-Content-Type: multipart/mixed; boundary="===============8069249734330607249=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rN+ZIgn5
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a1df146015so18015035e9.0
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 03:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792491923; x=1793096723; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TM2nirS6qLCdfkEXwJGzTZRWTT5VvtzmWaq8aIlT8Es=;
+        b=rN+ZIgn5UDsDN7iYJJOAzOWGo+ZnZO6ByKmA+QRfdhWJfLlAoTB1Pi3HTkXvmNziCv
+         Y9CRa7/HjbBvVGW3eMSQZHfdejFDKvLBH+xRMeHqu9e0KNgblNBfkrEPfpUeIUPmL6nO
+         4naGbzrVV/c5hvWSBpiawmbKBBYYbRUdldYkPEqxcg+VgcopB4dx1x8kCTvLcIScPMjW
+         Wpx3uY5XsAR0oXYO0UGidtjSIjQ0NKLUGmoyVpqBHPP27xJUATGs6yfGMd2kLApfHdw+
+         OYIQ2JdoWP00tPo0w8DNTWHP2+xMQAvrMrK99/w+39XcRuOYJMxou1TZFfV4gVILlkJR
+         CMsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792491923; x=1793096723;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TM2nirS6qLCdfkEXwJGzTZRWTT5VvtzmWaq8aIlT8Es=;
+        b=R8icUqLUHf8r/KEIMfvrjrmjc7eooQ/uw2mTysl5OM/Egi/7sNcFp7UL3ExMVUZptp
+         Pdb/SlauCluEcSsK7FHIhDWARHCSzjNW8FFUgciZbM9BE1hyVshq+WXWuUsi+DyDrdl4
+         fcP8CPd2kBAeld31VO894DbfgkI9GShMNx9v3R33XCoKKSCumO7aBv4beQAm6+RtjqLT
+         q1vI5Pgft2sL0GlZnJwt146NballjyY4UEUYLatNbPRHtQeaTFqvFS5Y+3sAcLV1Uftj
+         QpAB4N3zIJIv4B1oJ+VhDLetKiw8f3oG7n/TRKm3cGgkFwvh43b22nYpc9iM56zbXFXA
+         1tCw==
+X-Gm-Message-State: AFq9FYKD3ZgVISDCfW18KwXSLL9S/Xi5rsE6Brh4KxlM3Zrj2BwRq1Cq
+	LZSVDngTV2tV+iQug0xRrVefjQNzOtPzIlrhFkESo1t7A0A6347grpbOzgE1eZkNyZw=
+X-Gm-Gg: AYBFou2RqKEodi4yqvawYwslgSZ9ViRlP9mXfCFr5+sJrTKxODY8wOzpZoBZsY2h8BY
+	ZAqfoBcbyLoGvYshszY6LSIcwj/9N3gTxoRR54gy0lcMZMf5kOyfVepPdu5lIfRUci/WEiHGPOr
+	OSjSGDOLnn9qfT/Z1V1P+MDpjaT+rcblob4WU/t1tVNJ+F9KGFgnd6qnbJCGWDJszTSnqxOm9Ke
+	9d05REF2qNltAcKkinvahSyYgnPPevOcijIM3BO7N3uXO1FtYeEubUEvBd2td3BbG4Hv8K7XtFq
+	fEEpR4kxRI+n7Kpq6uaZEIX7N/OcPZfBq0G80OtN3r1QFlg9XY/tVKKrV5d3CHnAIs+HoVeXsVz
+	rWgfuLkUFBdoCPcX+A4/FW3JQvGBI30dy5R97fb3svRJHNftBQLoEpqqZSo/7AONku4Gdkd/q1K
+	vfe1ipOeJ4o8zDCAn5O3QTUFw+RNidW8MmwyaYjYQWgbv0pY1Fms1IS4y9cDaligaKylFaqIurL
+	lIAuzd697KWV/B7yw1/D1oR7Fh3vKarbbN3qbLjNmx99A==
+X-Received: by 2002:a05:600c:a10c:b0:4a0:1a7f:2abb with SMTP id 5b1f17b1804b1-4a1d75fe221mr175698025e9.11.1792491922422;
+        Tue, 20 Oct 2026 03:25:22 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4a1f69d9b1esm37544825e9.7.2026.10.20.03.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2026 03:25:21 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	willemb@google.com,
+	eddyz87@gmail.com,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	liamwisehart@meta.com,
+	martin.lau@linux.dev,
+	pabeni@redhat.com,
+	song@kernel.org,
+	netdev@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	kuniyu@google.com,
+	memxor@gmail.com,
+	emil@etsalapatis.com,
+	almagui@kernel.org,
+	Mahe Tardy <mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next 1/8] bpf: improve ksock_kfunc_set LSM recursion filter
+Date: Tue, 20 Oct 2026 10:25:05 +0000
+Message-ID: <20261020102512.518479-2-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261020102512.518479-1-mahe.tardy@gmail.com>
+References: <20261020102512.518479-1-mahe.tardy@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,59 +116,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <42d40286dc3a75179629023befe798cbabc88e8c5d890f2dac1211477cc6ef7e@mail.kernel.org>
-In-Reply-To: <20261020095124.928021-1-yanxia@cmss.chinamobile.com>
-References: <20261020095124.928021-1-yanxia@cmss.chinamobile.com>
-Subject: Re: [PATCH bpf-next v3] tools/bpf: Remove legacy BPF tools
-From: bot+bpf-ci@kernel.org
-To: yanxia@cmss.chinamobile.com,daniel@iogearbox.net,bpf@vger.kernel.org
-Cc: yana06070@163.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,richardcochran@gmail.com,netdev@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 10:22:45 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============8069249734330607249==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Improves '7ae4eb14c5f9 ("bpf: Add ksock kfuncs")' verifier filter to
+avoid recursion from calling bpf_ksock_send() from the
+security_socket_sendmsg() LSM hooks. The filter was unnecessarily
+restrictive, this makes sure only bpf_ksock_send() is forbidden and not
+the bpf_ksock_acquire() and bpf_ksock_release() kfuncs that are part of
+the same set but are safe to be called in that context.
 
-> tools/bpf: Remove legacy BPF tools
-
-TL;DR: Commit message only: the changelog doesn't say why bpf_asm, bpf_dbg and
-bpf_jit_disasm are removed or what replaces them. Not a bug.
-
->     tools/bpf: Remove legacy BPF tools
->
->     Remove bpf_asm, bpf_dbg and bpf_jit_disasm, along with the assembler's
->     lexer and parser, as suggested by Daniel.
->
->     Drop their build and install rules, feature checks and ignore entries.
->     Remove the tool-specific documentation and update the PTP classifier and
->     packet socket test comments. Keep the classic BPF instruction descriptions
->     and assembly examples.
->
->     Keep the bpftool and resolve_btfids build and clean targets, and the
->     bpftool install target.
->
->     Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
->     Link: https://lore.kernel.org/bpf/61f7315e-c835-425e-a99b-d2470ba9a875@iogearbox.net/
->     Signed-off-by: Xia Yan <yanxia@cmss.chinamobile.com>
-
-This isn't a bug, but could the changelog say briefly why these tools are
-being removed and what users should use instead?
-
-The body lists what is removed (build and install rules, feature checks,
-ignore entries, documentation, comments), but the only stated reason is "as
-suggested by Daniel" plus the Link: tag.
-
-The documentation hunks also drop the in-tree explanation of how to produce
-xt_bpf/cls_bpf bytecode and how to disassemble a JIT image dump from the
-kernel log.  A short pointer to the replacements, for example tcpdump -ddd
-for the bytecode or bpftool for JIT dumps, would let the commit stand on its
-own without relying on the Link:.
-
-
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ net/core/bpf_ksock.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39405560147
---===============8069249734330607249==--
+diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+index 48a2e2327ace..6c508c7a0adc 100644
+--- a/net/core/bpf_ksock.c
++++ b/net/core/bpf_ksock.c
+@@ -264,6 +264,7 @@ BTF_ID(func, bpf_lsm_socket_sendmsg)
+ #else
+ BTF_ID_UNUSED
+ #endif
++BTF_ID_LIST_SINGLE(bpf_ksock_send_id, func, bpf_ksock_send)
+ #endif
+
+ static int bpf_ksock_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
+@@ -275,9 +276,13 @@ static int bpf_ksock_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
+ 		return 0;
+
+ #ifdef CONFIG_BPF_LSM
+-	if (prog->type == BPF_PROG_TYPE_LSM &&
+-	    prog->aux->attach_btf_id != bpf_lsm_socket_sendmsg_id[0])
++	if (prog->type == BPF_PROG_TYPE_LSM) {
++		if (prog->aux->attach_btf_id == bpf_lsm_socket_sendmsg_id[0] &&
++		    kfunc_id == bpf_ksock_send_id[0])
++			return -EACCES;
++
+ 		return 0;
++	}
+ #endif
+
+ 	return -EACCES;
+--
+2.43.0
+
