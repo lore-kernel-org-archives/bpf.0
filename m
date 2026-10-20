@@ -1,56 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=84.16.66.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792521412;
-	b=pbjYepPzEgxMpCq5qsxBTkZI6t8KfSIpYyFtx4/clbZkonXY6eKZ9I+5bA0H1o94qTj9
-	 qhKnGmuIwfRGP2/inGMiH5R/WLPt4sIfwd05rPxpKn6VhQLvAyWOUPipYWLSPM7BvdL3d
-	 Mw69t0o8bkTAwI03PP69dtO7hl6+NW8CFghNm3MHPUnfkRhwL/056mX1/kFThh1ERWOjw
-	 yercuzVK9rT2dWpNEbpLmNXTVw4fBiwpFBWO3xkTJ/IS3nSdT7IAEBDq6DAecNr9y6ZLO
-	 F8bO5pid6htLBkHROgjp1wePFVsw1zC0vup6I0S4dhjyT2obH4Kwv+qkcdB40HyQtNQ==
+	t=1792521489;
+	b=3QtnKjQWVS0KCvBzfghwO3DTkoTJBLcZ5gt3yWPBWGNmkjehVOcVl06MW0VQnD5PTjhe
+	 +6rFqc3VGA1Px2BeN/Sm53H473eI6fYTyU7EhMV3pDqRgAS/FCo82gpZ9uW7q2mErWoqc
+	 Mtn0yfO8ITqaQiHsUPK1+BmFNpqr0xSGF2KDkE/0vOYTqcQQ6QHIA951olxbDVnMRnLRn
+	 HiHmotww1dr9y3REEGYTAKM+5vjUKntDdCjAlVjF9WfEfxyBIempspZ9TNvahIoo/ylNm
+	 a4+WHEPCQOsXM3SXVSkW1dXiPQBCXaes95YngWFvVdVhH4LCHUc7ZjoIx+8Q49qZ4tg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792521412;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=6XFglQIwIcQq47ucEF+Jep4VYqyQbu2yIdNWVzBU9wU=;
-	b=oBJTo6IRXXYNGqVZfK+hWGGBMZGXol+4gouXAAzbd41f4IJz/mypRhmt3KD1QVhac1fY
-	 cgAkZWQvsm2fyVGUsmsZ3UMi6FQ3zYFHlhe4Gxis0/uTBmP7cXLDArkHAAqgNaoFH0gLE
-	 bni0AeOmaXjmmD1549hDdbszV4J8YbRuDmAR+2dDRDaW3FSq3UOTfzQRY2gKsbc4cOLQF
-	 S0hcG2sa8wkYrCii4JZp1EPQh0366bhZSoyaRwbY3zxSvcsRe2k/nNYr6KIj3ZUqWp3hT
-	 1S9kBFsF4jiILiZeKlgY+WuiHt9knbQ6cevP1c4uhRRylX1qug368MupJTm7gCfsLVg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792521489;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
+	 X-Infomaniak-Routing;
+	bh=Pr5tsmnntCf16xoQZruQvjUzk9vMB//UroElAOAsHX4=;
+	b=5oPXrvBxn8R/Hc0I+XJdRlWLW+mcWm7zZqyBURZHgcEWy6XAo4uqdkoIErtdpxwhco6t
+	 i6BrUIz8NgIPSQv4TspI1JtrfJUkATgsHrcvbZv57z37zVs7jM2i3s3S72COsgQPzguzU
+	 YSMtyxaTQ4GpKRqwfFdAbRfJUFhRfoGF/Sw0ku1kyPMRF+QZ7fQ0KolMwlpK2UFp86FIC
+	 fIsOIR7G4UBsytqnt9oU0ZyGrN5J9bOYMdnN6Tf6Gm8cez6l78vvK75kMa2dYzHxwfHRa
+	 UzAUXG3LFzDBCE/iFdcR3Mg8aUw5HXiIiFM+8YeHV2WDdXTTbQkep65260Yf6YFoBfA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dpSknhjr;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=none header.from=digikod.net;
+	spf=pass smtp.mailfrom=digikod.net;
+	dkim=pass header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=yMdKCsMo;
+	arc=none smtp.remote-ip=84.16.66.171
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9465C606A31C
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C91606A335
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:38:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85C91606A335
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dpSknhjr
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169641F000C9;
-	Tue, 20 Oct 2026 18:36:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792521412;
-	bh=6XFglQIwIcQq47ucEF+Jep4VYqyQbu2yIdNWVzBU9wU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=dpSknhjr6YcL4SW4DkhiUNyvjDsqykRpK/xKU53aa09CuJ+QM7uYlQGzdhtDwIFR+
-	 jjmGG6qq71Kayvx89tZYIuSYRhxI6bYj3mJkmctjQojqIreRYZ2bh6E+Gt4DyyQa3P
-	 96J6901bVyxUxoG7pmi4TDKATdIUCIdKieJyWe3/p8FUmZ+81a2cZhAfuqXaCzsr/T
-	 p4xbb1ht2bRX4w/NrGAf/jAWNSkMIoHCLk+povnJ5yXlLgeZK4fsyQROd2Ah3xa8jR
-	 qs9RObTWKv/bTm5ldMr9KyWqP6MXSQ93Qs2QZv+m9deqx/PgtZ7JxmbPxvYAzPZkdP
-	 PfOhT3M2A7cWw==
-Message-ID: <sashiko-outbox-179489@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 3/7] selftests/bpf: libarena: Add buddy
- per-CPU caches
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
-In-Reply-To: <20261020181900.6755-4-emil@etsalapatis.com>
-References: <20261020181900.6755-1-emil@etsalapatis.com>
- <20261020181900.6755-4-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 18:36:51 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=digikod.net header.i=@digikod.net header.a=rsa-sha256 header.s=20191114 header.b=yMdKCsMo
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4j8Lkw5qmyzQnb;
+	Tue, 20 Oct 2026 20:38:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1792521480;
+	bh=Pr5tsmnntCf16xoQZruQvjUzk9vMB//UroElAOAsHX4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yMdKCsMolUavEVmgMhSTA49ormN3OEV/fDdxYmqsA7HkJHcEwxL/HPA/yAlAw+0iF
+	 dmtOdiH0jvq4OUTMreoubhxD7uszI5MrBlsbriJHkXED08zJUO8HpGLFBjDQkh5KSX
+	 INXyii7ZadMPi2U+U2FE2AjiSBHRz0+UMrO9R1HA=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4j8Lkt4K95zMPV;
+	Tue, 20 Oct 2026 20:37:58 +0200 (CEST)
+Date: Tue, 20 Oct 2026 20:37:57 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, NeilBrown <neil@brown.name>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+	Amir Goldstein <amir73il@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Tingmao Wang <m@maowtm.org>
+Subject: Re: [PATCH bpf-next v1 00/11] fs: unified VFS ancestor walk for
+ Landlock and BPF
+Message-ID: <20261020.eiP2Kohshahj@digikod.net>
+References: <20261013164800.2906577-1-utilityemal77@gmail.com>
+ <DM6PICFFAU5Z.14KOZT5YJO7MA@gmail.com>
+ <atdw4wVVarvwgRH0@zenbox>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,265 +76,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <atdw4wVVarvwgRH0@zenbox>
+X-Infomaniak-Routing: alpha
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: missing cache validity and NULL checks in buddy.b=
-pf.c
-- [Medium] selftests/bpf: missing pointer validation in buddy_cache_free()
-- [Medium] selftests/bpf: out-of-bounds write in buddy_cache_state_destroy()
---
+On Tue, Oct 20, 2026 at 10:05:54AM -0400, Justin Suess wrote:
+> On Sat, Oct 17, 2026 at 01:02:40AM +0000, Alexei Starovoitov wrote:
+> > On Tue, Oct 13, 2026 at 12:47 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > > The structure is unchanged from the RFC [2]: a stepwise engine private
+> > > to namei.c, a callback front-end for in-kernel callers (Landlock
+> > > is converted, fixing the follow_up() race Al reported, hence the
+> > > Fixes: tag on patch 3), and open-coded BPF iterators over the engine in
+> > > referenced and rcu flavors, with bpf_path_ancestors_legitimize()
+> > > escalating from the latter to the former mid-walk.  Patch 1 is carried
+> > > from Song's series.  See the RFC cover for the full background and API
+> > > listing.
+> > 
+> > Song's series stopped at
+> > "It is a conceptual dead-end to expose these two modes via separate APIs
+> > and leak this implementation detail into non-core code. It will not
+> > happen as far as I'm concerned."
+> > VFS_WALK_RCU, -ECHILD to the caller, two bpf iterators and the
+> > legitimize kfunc are that leak.
+> Following up on this, plan is I'll submit v2 of the verifier fixes
+> series and get that finished first.
+> 
+> Then after that I'll do a redesign around a single iterator
+> implementation that decides the walk type and abstracts away the details.
+> It will be KF_RCU_PROTECTED and callers will need to break out of the
+> loop to do sleepable work. They'll be able to acquire the path
+> references with a kfunc to take them out of the loop.
+> 
+> That drops the __uninit iterator changes and the legitimize kfunc as
+> well.
+> 
+> > Landlock still passes flags == 0, so nothing in the kernel walks in
+> > rcu mode.
+> Mickaël would you be interested in the hybrid walk conversion as part
+> of this series? Or prefer sleepable walk be retained for now and
+> converted later?
 
-commit 8dee6e0e331ae6f1872b723dff5e251350292c90
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+I would prefer a standalone series for VFS and Landlock that also
+include (with dedicated patches) the RCU optimization proposed by
+Tingmao.  That would prove that it works end-to-end with the RCU
+optimization, and that would be easier to review and merge.  Then a
+series dedicated to BPF could leverage this work.
 
-selftests/bpf: libarena: Add buddy per-CPU caches
-
-This commit introduces per-CPU LIFO array caches in struct buddy for the
-eight smallest allocation orders so small allocations and frees can bypass
-the central buddy allocator lock on the fast path.
-
-> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools=
-/testing/selftests/bpf/libarena/src/buddy.bpf.c
-> index 72b9ea3ac7d53..ce05e3e58ebae 100644
-> --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-
-[ ... ]
-
-> @@ -38,18 +42,116 @@
->   * and their allocation state. It also includes the freelist
->   * heads for the allocation itself.
->   */
-
-[ ... ]
-
-> +static __always_inline void __arena *
-> +buddy_cache_pop(struct buddy_cache __arena *cache, int order)
-> +{
-> +	struct buddy_cache_order __arena *slots;
-> +	void __arena *addr;
-> +	u32 elems;
-> +
-> +	slots =3D &cache->orders[order];
-> +	elems =3D READ_ONCE(slots->elems);
-> +	if (!elems)
-> +		return NULL;
-> +
-> +	addr =3D READ_ONCE(slots->objects[elems - 1]);
-> +	WRITE_ONCE(slots->elems, elems - 1);
-> +
-> +	return addr;
-> +}
-> +
-> +static __always_inline int buddy_cache_push(struct buddy_cache __arena *=
-cache,
-> +					    int order, void __arena *obj)
-> +{
-> +	struct buddy_cache_order __arena *slots;
-> +	u32 elems;
-> +
-> +	slots =3D &cache->orders[order];
-> +	elems =3D READ_ONCE(slots->elems);
-> +	if (elems >=3D BUDDY_CACHE_CAPACITY)
-> +		return -ENOMEM;
-> +
-> +	WRITE_ONCE(slots->objects[elems], obj);
-> +	WRITE_ONCE(slots->elems, elems + 1);
-> +
-> +	return 0;
-> +}
-> +
-> +void __arena *buddy_cache_alloc(struct buddy __arena *buddy, size_t orde=
-r)
-> +{
-> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
-> +	struct buddy_cache __arena *cache;
-> +	unsigned int cpu;
-> +
-> +	DISABLE_CACHE_IF_ASAN(NULL);
-> +
-> +	if (order >=3D BUDDY_CACHE_NUM_ORDERS)
-> +		return NULL;
-> +
-> +	cpu =3D bpf_get_smp_processor_id();
-> +	cache =3D state->percpu[cpu];
-> +
-> +	return buddy_cache_pop(cache, order);
-> +}
-
-[Severity: Medium]
-Should buddy_cache_alloc() and buddy_cache_free() check that buddy is
-non-NULL, that READ_ONCE(state->valid) is true, and that cache is non-NULL
-before calling buddy_cache_pop() or buddy_cache_push()?
-
-In buddy_alloc(), buddy_cache_alloc(buddy, order) is now called before
-buddy_alloc_memory() checks if (!buddy):
-
-buddy_alloc()
-    order =3D size_to_order(size);
-    address =3D buddy_cache_alloc(buddy, order);
-    if (address)
-        return address;
-    return buddy_alloc_memory(buddy, size, order, 0);
-
-Calling buddy_alloc(NULL, size) for a cached order (order <
-BUDDY_CACHE_NUM_ORDERS) will therefore dereference &buddy->cache_state in
-buddy_cache_alloc().
-
-In addition, buddy_cache_state_init() and buddy_cache_state_destroy()
-maintain state->valid with WRITE_ONCE(), but neither this commit nor the
-follow-up commits in the series check state->valid or cache !=3D NULL in
-buddy.bpf.c. If buddy_alloc() or buddy_free() is called while cache_state is
-uninitialized or destroyed (where state->valid is false and
-state->percpu[cpu] is NULL), buddy_cache_pop() and buddy_cache_push() will
-dereference NULL at arena address 0. Because BPF exception handling on
-reserved page 0 zeroes loads and ignores stores, buddy_cache_push() will
-read elems as 0, ignore the stores, and return 0, causing buddy_free() to
-silently drop the freed block instead of returning it to the central buddy
-allocator.
-
-> +
-> +/* Retrieve the order of an allocation from the address. */
-> +static int buddy_cache_get_order(void __arena *addr)
-> +{
-> +	struct buddy_chunk __arena *chunk;
-> +	u64 idx;
-> +
-> +	chunk =3D (void __arena *)((u64)addr & ~BUDDY_CHUNK_OFFSET_MASK);
-> +	idx =3D ((u64)addr & BUDDY_CHUNK_OFFSET_MASK) / BUDDY_MIN_ALLOC_BYTES;
-> +
-> +	return idx_get_order(chunk, idx);
-> +}
-> +
-> +int buddy_cache_free(struct buddy __arena *buddy, void __arena *addr)
-> +{
-> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
-> +	struct buddy_cache __arena *cache;
-> +	unsigned int cpu;
-> +	int order;
-> +
-> +	DISABLE_CACHE_IF_ASAN(-EINVAL);
-> +
-> +	order =3D buddy_cache_get_order(addr);
-> +	if (order >=3D BUDDY_CACHE_NUM_ORDERS)
-> +		return -EINVAL;
-> +
-> +	cpu =3D bpf_get_smp_processor_id();
-> +	cache =3D state->percpu[cpu];
-> =20
-> +	return buddy_cache_push(cache, order, addr);
-> +}
-
-[Severity: Medium]
-What prevents buddy_cache_free() from accepting unaligned, interior, or
-unallocated pointers before buddy_free_unlocked() can validate them?
-
-In buddy_free(), buddy_cache_free() is invoked prior to
-buddy_free_unlocked():
-
-buddy_free()
-    ret =3D buddy_cache_free(buddy, addr);
-    if (!ret)
-        return 0;
-    ...
-    ret =3D buddy_free_unlocked(buddy, (u64)addr);
-
-While buddy_free_unlocked() checks that addr is aligned to
-BUDDY_MIN_ALLOC_BYTES and verifies that idx is marked allocated via
-idx_set_allocated(chunk, idx, false), buddy_cache_get_order() divides by
-BUDDY_MIN_ALLOC_BYTES and reads idx_get_order(chunk, idx) without checking
-either alignment or chunk->allocated.
-
-When a chunk is initialized in buddy_chunk_get(), chunk->orders is
-zero-initialized, and buddy_chunk_alloc() only sets the order and allocated
-bit at the head index idx of each allocated block (advancing by idx +=3D 1U=
- <<
-order_req), leaving interior sub-block indices with allocated =3D=3D 0 and
-order =3D=3D 0.
-
-If a caller passes an interior pointer such as
-(u8 __arena *)alloc_path_test.bulk[i] + BUDDY_MIN_ALLOC_BYTES (as tested by
-test_buddy_cache_paths() in the follow-up commit "selftests/bpf: libarena:
-Cover buddy cache fast paths"), buddy_cache_get_order() reads order 0 at
-idx + 1, and buddy_cache_free() pushes the interior pointer into the order-0
-per-CPU cache and returns 0 instead of failing with -EINVAL. Likewise, an
-unaligned pointer inside an allocated cached-order block has its low bits
-truncated by the division in buddy_cache_get_order() and is pushed unaligned
-into the per-CPU cache, corrupting subsequent buddy_alloc() returns.
-
-[ ... ]
-
-> @@ -557,6 +659,46 @@ static struct buddy_chunk __arena *buddy_chunk_get(s=
-truct buddy __arena *buddy)
->  	return chunk;
->  }
-> =20
-> +static int buddy_cache_state_init(struct buddy __arena *buddy)
-> +{
-> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
-> +	struct buddy_cache __arena *cache;
-> +	unsigned int cpu, order;
-> +	int ret;
-> +
-> +	DISABLE_CACHE_IF_ASAN(0);
-> +
-> +	if (CONFIG_NR_CPUS > BUDDY_CACHE_MAX_CPUS)
-> +		return -E2BIG;
-> +
-> +	WRITE_ONCE(state->valid, false);
-> +
-> +	for (cpu =3D zero; cpu < CONFIG_NR_CPUS && can_loop; cpu++) {
-> +		ret =3D buddy_alloc_bulk(buddy, sizeof(*cache), 0,
-> +				       (void __arena * __arena *)&state->percpu[cpu]);
-> +		if (ret)
-> +			return ret;
-> +
-> +		cache =3D state->percpu[cpu];
-> +		for (order =3D zero; order < BUDDY_CACHE_NUM_ORDERS && can_loop; order=
-++)
-> +			WRITE_ONCE(cache->orders[order].elems, 0);
-> +	}
-> +
-> +	WRITE_ONCE(state->valid, true);
-> +
-> +	return 0;
-> +}
-> +
-> +static void buddy_cache_state_destroy(struct buddy __arena *buddy)
-> +{
-> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
-> +	unsigned int cpu;
-> +
-> +	WRITE_ONCE(state->valid, false);
-> +	for (cpu =3D zero; cpu < CONFIG_NR_CPUS && can_loop; cpu++)
-> +		WRITE_ONCE(state->percpu[cpu], NULL);
-> +}
-
-[Severity: Medium]
-Can buddy_cache_state_destroy() overflow state->percpu[] when CONFIG_NR_CPUS
-is greater than BUDDY_CACHE_MAX_CPUS (1024)?
-
-While buddy_cache_state_init() checks if (CONFIG_NR_CPUS >
-BUDDY_CACHE_MAX_CPUS) and returns -E2BIG, buddy_init() handles that failure
-by calling buddy_destroy() -> buddy_cache_state_destroy():
-
-buddy_init()
-    ret =3D buddy_cache_state_init(buddy);
-    if (ret) {
-        buddy_destroy(buddy);
-        return ret;
-    }
-
-In addition, arena_buddy_destroy() and arena_buddy_reset() in common.bpf.c
-call buddy_destroy() directly before buddy_init(). Since
-buddy_cache_state_destroy() loops up to CONFIG_NR_CPUS without bounding
-against BUDDY_CACHE_MAX_CPUS, won't it write past the end of
-state->percpu[BUDDY_CACHE_MAX_CPUS] and clobber adjacent arena memory on
-kernels built with CONFIG_NR_CPUS > 1024?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020181900.6755=
--1-emil@etsalapatis.com?part=3D3
+> 
+> Justin
+> > Patches 1-3 fix a real race and don't need bpf.
+> > Send them to Christian, Al and Mickael on their own.
+> > 
+> > > Verifier fixes propagating the RCU-ness to trusted fields can be done,
+> > > but it's best as a separate series where the idea can be examined more
+> > > closely.  Then marking the dentry as trusted will allow you to use the
+> > > dentry xattr kfuncs.  Nothing in this series strictly depends on having
+> > > a trusted dentry, nor will marking it trusted require changes in this
+> > > API.  See my follow up [4].
+> > 
+> > Then what can a prog do with a position?
+> > pos->dentry is untrusted now.
+> > Marking it trusted will require changes.
+> > d = pos->dentry is not linked to pos. It will stay trusted after
+> > bpf_path_put(pos).
+> > pos of the rcu iterator points into bpf stack.
+> > MEM_RCU propagation fixes neither.
+> > What next() should return depends on how the verifier tracks it.
+> > Let's do the verifier part first.
+> > 
+> > pw-bot: cr
+> 
