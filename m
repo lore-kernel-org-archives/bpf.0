@@ -1,58 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792524624;
-	b=biuiF1V/LJ4y0S/Tlz7PKIK+2YCylHjFvcxmgPWqVeSJ3ngh7dvZZP3O9gk1A5piciQK
-	 C68xwNii6PFiWNdEBWKURgEZuiwo7il1QsMbUtvebHgIawkK8reapsVQ8xO7J4uF/W+U6
-	 6yEG8kM7DLXa+dp42ztIo/7BztuZevXEO/cWZpE8uiDwEd3S8eGUJRhzaB/+y+llqjKxe
-	 SqLHPggy9llCv6DmJu7eS51XICbT5m9ITxAIgCnyoHtu44wpOhKWaaXjci/xjCfswOp54
-	 BBacdXixbMIvVApslrs6g/M739xjNqBMGiVA6MVYgxzFjLqOFK2PoygzJVg8zBwqIMA==
+	t=1792526676;
+	b=slsVxffO03dbjDChMsGKC223n2CGnrigIgK4u2Pnur3vfoBERz04zbebMRBOpP4ec/14
+	 R381sTyr2CAZydXR2H+ZothVjDhHQuFbpbdSWKb6gxv/Y12QlJkyOolexYvluoURRONSG
+	 T/9LJxKzHNlsXGXgdVjuzpb5KXVj87kSNqsvDGLHF2PNMMj/n1GArUpffPtfvy7+NcBwq
+	 VdfAhC63GIsb38BTqTkhnQRHcc4EBIuGNhREAHN42R4yPdO+Zr0PdacojZ+Yn7IadJuaE
+	 7m87sFDGsMfOChDPluSMxsLOXEJRYhDlte2a6+zgSUX5iOhTIe71lmM2YP/XyZok1mw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792524624;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=2LYIs8aFRzc8aCCkLtrsuAXgCJ+0neQAn2pAIkJK0dU=;
-	b=hZczzsAYVJn9jiPOOu1VrtnnEd4Shyu5QYbsfuZ7niw0lFJCcUwwqEJso3dbiMdlVoQ9
-	 lbIWpW4Ehwtvf0f8MwYUp+0yQOOOpRnlLBINHe2jynTb94IRUWGaEzKRsLDHyFFYge8nD
-	 TR1PS15Da2f98jqLua0dfAZy9xtRYofaLy1SPywIOyEXdlg54D7wLlN5TQO4zlRykQzyU
-	 SenE+bzOgYwOcQf2FyOWX1dVKIXUrl/0PDH5atvhfVv/ysvCgWn/NvE6wSHF3+ifUGgHk
-	 GR9doQopHcMtoACjSv3PVMtjYzA5VtK7oqYx3fThIVeiAH41qoRVjzzJMLYniX63AQg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792526676;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Subject:From:To:In-Reply-To:References:
+	 X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=m18DMiyB+7VTcut54fI0anXX4tAmR8j+EXZ+9qn1WDU=;
+	b=ZmyLfxvMjvCxOTpf+PQEhP/KN5C/tXFr6T/ej2lKf7dBOuUHAXDYXjiibK9Y9hto/ghv
+	 0Da5hbGmOMxB0PQ23+wYjncSkjQ9tTBJm/P0yeaGvtnjBXR0ssFYwdtuXmz+VndMZLhGJ
+	 +1ENcRt17hmAQ0bkWuKGutSVg7bvCWYmpfIHgGv15htKkhG8/8I0N1q+DlOtuvdlxq+ga
+	 M52QHK/l8FOxCbDS8B4eSGJY0oemC3SOTtoGVOI3/j1n45N1mylAOn7DJLkYZc0uh0cWv
+	 gX4/RtiNXAu8K9U4IBxJQzVHRV4vYl/SiPgLns2F961RyGPYQRsS/qmoQ03BUwJjZAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NNeIl6Lq;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pRZtBkwX;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D40F606A31F;
-	Tue, 20 Oct 2026 19:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73493606A31A
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 20:04:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 73493606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NNeIl6Lq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 615B21F000CD;
-	Tue, 20 Oct 2026 19:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792524624;
-	bh=2LYIs8aFRzc8aCCkLtrsuAXgCJ+0neQAn2pAIkJK0dU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=NNeIl6LqqtnHLej8cyJoytG/dYprnqoVr1tlqK1G2aNgHV2Kou2ZR6NSGgHCAXW4S
-	 1tApnrKp1BWpky612yIDouXWES8eflVF761LpVRB++MxwLDjK1sk4nmWDy+dh4KlPl
-	 aKADT/lmCPMiQUjPDq6P18/x7WMc54cMeLNEnl9RRSi1EV1asyzn97tPGvCqiJYkxa
-	 tjg+woGAy2FeXRtbP/pcy1l+/5h6VkWk1Zg2OUFZ+mJnd2lGRynX6G5IB39SvHaRBR
-	 AbFMn8+Ydk+VRDGACAAAn5dABpQLkPrw67AsMo/uVOpCT/dPwuFfm3ZS/dWHNC+HsM
-	 ToHhpNrKh10Wg==
-Subject: Re: [PATCH v4 net-next 06/15] selftests: xsk: move the AF_XDP test
- suite to selftests/net
-From: netdev-bot+sashiko@kernel.org
-To: maciej.fijalkowski@intel.com
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
- stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
- tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
-Date: Tue, 20 Oct 2026 19:30:22 +0000
-Message-ID: <179252462291.3135.9171929520806354921@kernel.org>
-In-Reply-To: <20261016174338.787135-7-maciej.fijalkowski@intel.com>
-References: <20261016174338.787135-7-maciej.fijalkowski@intel.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pRZtBkwX
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e946155442so29134155ad.3
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:04:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792526676; x=1793131476; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=m18DMiyB+7VTcut54fI0anXX4tAmR8j+EXZ+9qn1WDU=;
+        b=pRZtBkwX/GLj69biQFthVUDcY0Bh9+Or+AyyzplcVjUoudL32uRxJ46ytob/wWKQFO
+         l/PBO29IoB2s3yZbdCFDyYZoG7NFrdHOBgZq9e7JgvBlkqixV+pRAwaU/ZVP8BYvt3Xi
+         X/RBn0fmseD5EuTx818RkmMK5OzIKQYGB4eIyDi9Tioie+NLYm5PCo2Ma6tLSOIO1J1u
+         O6q3i/oPuGApiAbP06RQ3AGgyJ8ZRyaI4JmlUPxjtUtWs49+42h2uqC5Sa4K+Zx+ktk0
+         UQsF/19coCewWbAlDUZ0p3wdBU9l7peSEBo4fsvNVNuq/FXo9XPzBPTrulRIZu8Dtbi3
+         vHJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792526676; x=1793131476;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=m18DMiyB+7VTcut54fI0anXX4tAmR8j+EXZ+9qn1WDU=;
+        b=ifliGssUTE9pEchsGpc4lNSVUF6cz0+3rItQCHglZ0saHrC58SbUMxy9UFZOIO1cxq
+         NDmNEj7LiFcCE83totjCAG11bWsrHSOkesNp987diYvJClRkiKDGdOsbxEEdTvuFcwhu
+         CUpTWGGyJ+OMnnYzHV06ngMiXer1Q5WWozLn0zujQoLsv6kArJAnPV9wo6eJisPumqlS
+         Gkg8WmVPJB+uMdbULlIQdc7JQVy3NGSPRHwZ1Ziw5ypmr2eEE6IMvwMD+eZbGFEQb1Y8
+         0G+6j+KfdUTlbmzh6juUBw34x1jMzim62/NSheLKf/+v0hwLgMIQBdwmXmS0FeIO/WB8
+         HBQg==
+X-Forwarded-Encrypted: i=1; AKwUvByczqIm17CrPXfFlLpIdyzJwXlUh39ctWtI5TR9M5zJwQxaf0+v6IlPXlj1oxW8iA7Bdh0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKsLe3O17Rr0YynfzUuoNoCvzf9wRc2xwOd6rWj3JLztsx++TJx
+	fjNYcUqGL9Go3fnfhdyCY+UHgFa+9r1sH6Ik3F5P0OTXSP0Uj+dqlyixzi3irA==
+X-Gm-Gg: AYBFou2wV2wtEq7o5xFBBqYuPbrYYFWqz4hL47rA4rPjgvP+FgrNwLEG+C0jEjLeElD
+	qNhpEhgUflhPzk92Vfq76n77gMffiLHQx87u/3W1dFHM+pCqRihJ8a3S5vCU4HdGbowex9szYdO
+	AKrasBCknrC9b49/0lGI4RGTgd91JWcA31ZUXiw34YHpxx6X5VoG5yu9PgLd4nTOFte5RFYSFNP
+	WLCP1jyKPR4r/g/wNGEjuIC3jRCWHTmYIlE7Eycp2DorgKuYx2V86zu/ayowRdWbfd7PMPc3bq1
+	tP2lmrZtDoDdf4P2tvPrU+m1SSE4QcnN5YiwYWs0WlUcLMjSHipmyrpy8XfNUumBqGWqwnxdT/S
+	s3lWGWx5ub5yDTA6MtHBhyD1DSD9gQbiIEbpJKvrhKDejNxfA5UyiKeG7mQD7cdKMceB5sg8G7I
+	fXbeTq1rGhUhn3tneqlKOBxrLyUr3Oqs77IywCQSy84c7hQz7YKjnN668/KQAuJrOAcMUJ+KHbO
+	kVJLbBol6QkrpJ/mx1JSjzMUDmxxDmQj5gnvA3gFf/it+RL69O24uWsLiYKV93YI/we7bwEutbN
+	zJ3zNlxUHkvxe3QjeTCAJMvBPb/6K8b9wXaLIuGH9kcBeUeqqygChLbl1vXunICcPbjtZocqWi+
+	cI8NEtg==
+X-Received: by 2002:a17:90b:574d:b0:3ab:884b:65a8 with SMTP id 98e67ed59e1d1-3ad86f05a40mr1417a91.26.1792526675585;
+        Tue, 20 Oct 2026 13:04:35 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad813de463sm808246a91.13.2026.10.20.13.04.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 13:04:33 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 20 Oct 2026 20:04:32 +0000
+Message-Id: <DM9XO98ZA7UV.2V9PDC4868WI9@gmail.com>
+Subject: Re: [PATCH v4 bpf-next 1/6] bpf: Add unwind_goto and unwind_exit
+ insns
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <sashiko-outbox-179499@kernel.org>
+References: <20261020181320.1284798-1-alexei.starovoitov@gmail.com> <20261020181320.1284798-2-alexei.starovoitov@gmail.com> <sashiko-outbox-179499@kernel.org>
+X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,182 +101,55 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Tue, Oct 20, 2026 at 11:57 AM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
+>> +			if (!aux_data[i + 1].seen) {
+>> +				memcpy(insn + 1, &trap, sizeof(trap));
+>> +				aux_data[i + 1].seen = env->pass_cnt;
+>> +			}
+>
+> [Severity: High]
+> When bpf_opt_hard_wire_dead_code_branches() overwrites insn + 1 with trap and
+> marks aux_data[i + 1].seen = env->pass_cnt, could stale flags in
+> aux_data[i + 1] corrupt the trap instruction or trigger a verifier bug?
 
-Critical: 0 · High: 0 · Medium: 2 · Low: 0 (1)
+No. That verifier_bug_if() needs bpf_jit_needs_zext(), and it's false
+on x86-64 and arm64, the only JITs with bpf_jit_supports_unwind().
+needs_zext and arena_scalar need an arena, and arena needs CAP_PERFMON.
+Then bypass_spec_v1 is true, there is no speculative walk of i + 1,
+and they cannot be set on an insn that wasn't seen.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+> Also, what happens if the call and unwind_goto at insn i are themselves in
+> dead code (!aux_data[i].seen), but jump to a shared landing pad that was
+> reached from another call (aux_data[i + 1 + insn->off].seen)? Because
+> aux_data[i].seen is not checked here, insn + 1 is overwritten with trap and
+> marked seen, so bpf_opt_remove_dead_code() removes the dead call and
+> unwind_goto while leaving an orphaned goto pc-1 in the program (and any
+> later live conditional jump with untaken target i + 1 can no longer see
+> !aux_data[i + 1].seen).
+>
+> Should this check aux_data[i].seen before handling unwind_goto, and clear
+> zext_dst, needs_zext, and arena_scalar on aux_data[i + 1] when writing trap?
 
-- [Medium] This patch moves get_hw_ring_size() out of
-  tools/testing/selftests/bpf/network_helpers.c and appends it to…
-- [Medium] The new $(XSK_BPF_OBJ) rule in
-  tools/testing/selftests/net/lib/Makefile compiles xsk_xdp_progs.bpf.c…
+Not a bug. It's one extra 'goto pc-1' that nothing can reach. A live
+cond jump to it is never taken, otherwise i + 1 would have been seen.
 
-Pre-existing issues:
-- [Low] At this commit, test_exit() in
-  tools/testing/selftests/net/xsk_prereqs.sh ends with an unconditional…
+>> +	if (!bpf_jit_supports_unwind()) {
+>> +		verbose(env, "JIT does not support unwinding\n");
+>> +		return -ENOTSUPP;
+>> +	}
+>
+> [Severity: Medium]
+> Should check_unwind_insns() also reject programs when
+> !env->prog->jit_requested or bpf_prog_is_offloaded(env->prog->aux)?
 
---
+yeah. Only netdevsim gets there, nfp rejects the opcode in
+nfp_verify_insn(), and nothing runs such a prog, so it's just a wrong
+xlated dump. Will reject offloaded progs in check_unwind_insns() in v5.
 
-selftests: xsk: move the AF_XDP test suite to selftests/net
+> Similarly, when CONFIG_BPF_JIT_ALWAYS_ON is disabled and bpf_jit_enable is 0,
+> checking !env->prog->jit_requested in check_unwind_insns() (like
+> require_callx_jit() does) would reject unwinding before passes such as
+> bpf_compute_subprog_ret_regs() that gate on env->prog->jit_requested.
 
-This commit moves xskxceiver, the AF_XDP library, the test definitions
-and the XDP program from selftests/bpf to selftests/net/lib/xsk. It also
-moves test_xsk.sh and xsk_prereqs.sh to selftests/net, and net/lib now
-builds xskxceiver and its skeleton when a working bpftool is available.
-The ethtool ring helper get_hw_ring_size() moves from network_helpers.c
-into xsk.c.
-
-> diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
-> index ff83603397d06..c26088da04892 100644
-> --- a/tools/testing/selftests/net/lib/Makefile
-> +++ b/tools/testing/selftests/net/lib/Makefile
-
-[ ... ]
-
-> @@ -23,3 +33,28 @@ TEST_INCLUDES := $(wildcard py/*.py sh/*.sh)
->  include ../../lib.mk
->  
->  include ../bpf.mk
-> +
-> +# AF_XDP test engine used by net/test_xsk.sh.
-> +XSK_DIR := xsk
-> +XSK_BPF_OBJ := $(OUTPUT)/xsk_xdp_progs.bpf.o
-> +XSK_SKEL := $(OUTPUT)/xsk_xdp_progs.skel.h
-
-[ ... ]
-
-> +$(XSK_BPF_OBJ): $(XSK_DIR)/xsk_xdp_progs.bpf.c $(XSK_DIR)/xsk_xdp_common.h $(BPFOBJ)
-> +	$(call msg,BPF_PROG,,$@)
-> +	$(Q)$(CLANG) -O2 -g --target=bpf $(CCINCLUDE) $(CLANG_SYS_INCLUDES) \
-> +		-Wno-compare-distinct-pointer-types -c $< -o $@
-
-[Severity: Medium]
-Could this produce a BPF object with the wrong byte order when
-cross-compiling for a big-endian target?
-
-Plain --target=bpf uses the build host's byte order. xskxceiver itself
-is built with $(CC), and lib.mk sets that to $(CROSS_COMPILE)gcc. So a
-build for s390x on an x86_64 host would put a little-endian object into
-the skeleton of a big-endian xskxceiver.
-
-On the target, xsk_xdp_progs__open_and_load() would then fail in
-bpf_object_load():
-
-tools/lib/bpf/libbpf.c:bpf_object_load() {
-    ...
-	} else if (!is_native_endianness(obj)) {
-		pr_warn("object '%s': loading non-native endianness is unsupported\n", obj->name);
-		return libbpf_err(-LIBBPF_ERRNO__ENDIAN);
-	}
-    ...
-}
-
-The bpf selftests Makefile, which built this program before the move,
-picks the target based on $(CC):
-
-BPF_TARGET_ENDIAN:=$(if $(IS_LITTLE_ENDIAN),--target=bpfel,--target=bpfeb)
-
-The existing rule in net/bpf.mk also uses plain --target=bpf. Should
-the new rule pick bpfel or bpfeb the same way the bpf selftests do?
-
-> +
-> +$(OUTPUT)/xskxceiver: $(XSK_SOURCES) $(XSK_HEADERS) $(XSK_SKEL) $(BPFOBJ)
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/net/lib/xsk/xsk.c
-> similarity index 97%
-> rename from tools/testing/selftests/bpf/xsk.c
-> rename to tools/testing/selftests/net/lib/xsk/xsk.c
-> index 25d568abf0f20..660540efc46e0 100644
-> --- a/tools/testing/selftests/bpf/xsk.c
-> +++ b/tools/testing/selftests/net/lib/xsk/xsk.c
-
-[ ... ]
-
-> @@ -779,3 +778,27 @@ void xsk_socket__delete(struct xsk_socket *xsk)
->  		close(xsk->fd);
->  	free(xsk);
->  }
-> +
-> +int get_hw_ring_size(char *ifname, struct ethtool_ringparam *ring_param)
-
-[Severity: Medium]
-Can this function move into xsk.c without its license being addressed?
-
-get_hw_ring_size() comes from tools/testing/selftests/bpf/network_helpers.c,
-which carries:
-
-// SPDX-License-Identifier: GPL-2.0-only
-
-xsk.c carries:
-
-// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-
-The function was contributed as GPL-2.0-only in commit 90a695c3d31e1c
-(Tushar Vyavahare). After this move, the xsk.c file tag offers it under
-LGPL-2.1 or BSD-2-Clause. Neither the SPDX header nor the function gets
-a license note.
-
-The commit message only says:
-
-  "Move the ethtool ring helper from network_helpers into xsk.c"
-
-It does not mention a relicense or carry an ack from the original
-author. Could the relicense be acked explicitly, or could the helper
-live in a GPL-2.0 file such as test_xsk.c instead?
-
-> +{
-> +	struct ifreq ifr = {0};
-> +	int sockfd, err;
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/net/test_xsk.sh
-> similarity index 98%
-> rename from tools/testing/selftests/bpf/test_xsk.sh
-> rename to tools/testing/selftests/net/test_xsk.sh
-> index 69fac65f073c5..fbf4551d596a4 100755
-> --- a/tools/testing/selftests/bpf/test_xsk.sh
-> +++ b/tools/testing/selftests/net/test_xsk.sh
-> @@ -97,6 +97,11 @@ do
->  	esac
->  done
->  
-> +if [ ! -x "./${XSKOBJ}" ]; then
-> +	echo "xskxceiver was not built; skipping"
-> +	exit $ksft_skip
-> +fi
-> +
-
-[Severity: Low]
-This isn't a bug introduced by this patch, but the new check exits with
-$ksft_skip, while the other skip paths go through test_exit() in
-xsk_prereqs.sh, and that always exits 1:
-
-tools/testing/selftests/net/xsk_prereqs.sh:test_exit() {
-	if [ $1 -ne 0 ]; then
-		test_status $1 $(basename $0)
-	fi
-	exit 1
-}
-
-validate_veth_support() and validate_ip_utility() both call
-"test_exit $ksft_skip". So when veth support or the ip utility is
-missing, the result is a failure rather than a skip.
-
-Later in the series, "selftests: xsk: run one test case per xskxceiver
-invocation" replaces test_xsk.sh and xsk_prereqs.sh with test_xsk.py,
-which skips with exit code 4. By the end of the series this is gone.
-
-Should test_exit() pass its argument to exit for the commits in
-between?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261016174338.787135-1-maciej.fijalkowski%40intel.com
+Not a bug. jit_required is set, so bpf_fixup_call_args() rejects the
+prog at the end of verification. It's only a matter of when.
