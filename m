@@ -1,112 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792491928;
-	b=IOQlpPiMHgju6EvCNmt3jlks2FF37KJBZcP6c+6Prqu4kpofZN8+Czl8xgMCNIbyL45x
-	 TA/ZVDr8XSaVM4oZwZr94UAG1ZG6CR7Se9PSM+dAsTn/y6gB3eaUI4EpZT0/hW03Ul2X1
-	 Nz5BRD+Rx+EmM5uB7B6p9Fh0b7a5Y7CMQ8LeqZ2jpJyesOBdwc3sBFqP8Y2EGKScVsIvQ
-	 pi0Hi9HZ6d7Qd5ugJA2ORaz1qnMhBL9xZ4yT5+1Mh1UhMghcA1ElXRcxoXqKn2FNwNX/k
-	 qLOtA1pRgYWESEx34Ug4luXRPUuAVKCs9WGUdUzuwm/EMXO7/fgMoas9BNfWIXJPjXw==
+	t=1792493295;
+	b=peGCnkU7nBraS6TrQQgP4UZzYE3sYLvzRvkhwbZf8VXSWjLiimMlBSLHwDLNWloXqZz5
+	 6+eY1y3aaOPpPPQt8XzTS/IcSPoRlT1waaZAIfxKABCdoaIXolvJ2PK+ntQe06UKSZySl
+	 d2ivHC0LHKQps0z7VPE3ug0qtcRC6wiFkCT8ni3ymNfHoNLjBq8vYU45lTpeCC/CQQ063
+	 bRKjWXo3UYBFQo6VYS1/8+Gsjl6zUFb2BMR8K4Tb170kLpHaGche2Q+0xKlcyTZDKmFih
+	 /btTFlk1OMEDuqsjgDDmU3KKbDxCfVbaDhNTwA5l61LYg/T/OlEC6VXbgk6AYhClUTA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792491928;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=hGAvaD5FraNbfMMFntkD8CACjxCj7f+xaJYrjp5/P9U=;
-	b=M5hull1EQMptFDbrqbti1RL9LAb1aaEhx2KnO1JanLxrkR8NBFU6BHPlYOz9x5LblWi7
-	 e/CFilOIEeO/ZS7QtAh8K/MZtJ9YxTmZOyZql21jWX7ar2eIwpMqwEFSDUmoCb6HNErcn
-	 2GsqsddekbozEoOplFai0m8FaRTb3yVrqdoLlWHP+vaPqDR2mdwO5ZKTqol01+iRiFDLS
-	 O6sac6vMq0SZJBFoY8jgaDHX6sDpAaCw4Bc8IqrCdAt4/ghmhd8Q9b+0oOa8UjlpkM9Vk
-	 jIo/Gyv4fjuqVz2QEE13uFZLX6aisJtJT88IU6JVdKKFb0nj0GjxVlUuyO3P58YX7fQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792493295;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=9Zw24p/saADZ7syx7j8QqBGFYl8Xd5k3nVSaKsS8org=;
+	b=MfaI7WLKAT7TswjENQvT2EOP3CNJryPVN8LxwZOC7OoM0kL9dudPKeNWpBZiWWRZopE3
+	 8ec1Rnn2Hzr/Yr2DN2/4vEb6qaNMeKMwalE+W+ujNOMophb/hrKkvXafFEVvdjkiYTdJJ
+	 UOd6RLGIa4Cb718TaJCCM6oY6OYy+oX42y+BH+BKKjT8/+/6X2U6YKcmMH1dMqPYhUpYD
+	 x5x/OXK0j5biyRoVn5diaUck3U1qqCX3nShSlppwixIXt9Ng8tteji0A04juNYSYrOSAh
+	 gQU3byDYLJhR+dTOj6SWgiZK0utSQm0JiuhAMC8qV+dKSbDZYtRwkfb8zj4KddhaJWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cYHKsHnA;
-	arc=none smtp.remote-ip=209.85.128.54
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dqJFDAox;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE4C60A262C
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:25:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EE4C60A262C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1A5606A31E
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cYHKsHnA
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a1635f7c89so29139395e9.2
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 03:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792491926; x=1793096726; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=hGAvaD5FraNbfMMFntkD8CACjxCj7f+xaJYrjp5/P9U=;
-        b=cYHKsHnAwCNUzF4Lfw4RofTAiQ+DdY0ztZV8T1RjQu6KF8hb2gr4LuHuNnhBjyMbNu
-         FlMTwDZ66Y5cPras0ruUIcVvwUxBm279gTQwRwKGwPe4/pNceVXOHx+QHYD4KmdDtt1N
-         Ln/8cUNlu1qh8sXuRMFWp+0+Rwo0cTrDMpM2xjvY3h1r5Ta81sPnN81vkxmlrFocaKur
-         7oSwbKvg2EAwtzfBaoyLwZfm9nm9Vb7EZRxlTw3OnAA5dnbeX71IuS/G+lzi0mxvrMnJ
-         P/6C2ll222vXTU+OPfoY7gug7hZGtsaW4KRQyujs+ji+z6NP3nZMhOG0CXTYMcLVStgK
-         SC0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792491926; x=1793096726;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hGAvaD5FraNbfMMFntkD8CACjxCj7f+xaJYrjp5/P9U=;
-        b=lqMJE6yZfSEcOxTB+MisnrosAccZNe7ALXhHzD26ECkCdC5uCJWiwpx1MuEUVdxe/A
-         dXgqBsGItBuVrkjoskx47uVJos97eDkHSON41sdGVPEFSXFRKHvzwHoH1a/biObQ6RzG
-         I8TkrAJzMBMt8ENXAPGzhEYLKA4g+BwtLGL0XPSr5BbUa8K+SQnLzW02vmBwmOK77O/f
-         2T77llyOBudVCqAkcQf0sEJigzGcHIh0D0fpBWItpBSuG+iTcgIKOrEdbQ0KhhKiKZap
-         V0fQ2ccjLq0gvQ42ah47+qXjcYbZraP0nFfOSxQT6v1OsfplNUsDVZP0u+069niZR2mt
-         fKHw==
-X-Gm-Message-State: AFq9FYLo5PU8r6ewKyjULzCyp00UbBls/Tsh2DwHKkgxHNL+zl2dVzOj
-	SMpeMPXQU2dhNOzH6Akyt12A12khbWB/ri7LbW6cg+DWm+E8SZRcQF+pfFyDf08B0e5zMg==
-X-Gm-Gg: AYBFou0TT9zDFvUMopLoUe+GOaT9SYQUBCmt/ylOAmkd+07xuimLtZWZ2bS/8gg7nFW
-	HbI+SwVF579JyeK+S9TadF02KroqiE/nsV9L52h1Wgb2fxsr1bVnToCM2qsAY69crSRtnJYAOv1
-	l9wWnfv6+VgZ5Oc4WfwdL6Iz6QOPF6YwS1/6UQE0vAp3Ez/nmYMAIs5vQ517ZbOUGR4o/QhzF2Z
-	vXlwp2ODdtauzwrIdlHV8VLdgRsolHl7k9AyemOP/MS0kvdr8NipcICxvXpjvkzMMlqlc1+P7aC
-	qf9Yg1fe2w0KtjjrgmPlNXlRnmzmgl/bhiL1UlS0OVIKGWE8aIYCFE4mAVLUw9TsNOj7xzDDdNJ
-	sVhjea/LF1Chbmj7tXjhh9vVSefl+Zs2QyuoKY+W28vtHVOBPNykuZXpO1QKWBiDbsLIx4m3pL/
-	VbaTeAmB8JxsQ6g4O12KmzKQq3hwMuXyQDoxerwCcaBA+pqbtej48s/MqkxX9H3tMAqrXjd/edU
-	pMTVcHbKlAHoQx+dO85ACO5bmwqnO4DLe6oCJlOVw3JHQ==
-X-Received: by 2002:a05:600c:63cb:b0:49f:ce72:e931 with SMTP id 5b1f17b1804b1-4a1d76356c9mr155492965e9.35.1792491926406;
-        Tue, 20 Oct 2026 03:25:26 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4a1f69d9b1esm37544825e9.7.2026.10.20.03.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 03:25:26 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	willemb@google.com,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	horms@kernel.org,
-	liamwisehart@meta.com,
-	martin.lau@linux.dev,
-	pabeni@redhat.com,
-	song@kernel.org,
-	netdev@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kuniyu@google.com,
-	memxor@gmail.com,
-	emil@etsalapatis.com,
-	almagui@kernel.org,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next 6/8] bpf: add bpf_ksock_sendto() kfunc
-Date: Tue, 20 Oct 2026 10:25:10 +0000
-Message-ID: <20261020102512.518479-7-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261020102512.518479-1-mahe.tardy@gmail.com>
-References: <20261020102512.518479-1-mahe.tardy@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dqJFDAox
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA2B1F00ADF
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792493294;
+	bh=9Zw24p/saADZ7syx7j8QqBGFYl8Xd5k3nVSaKsS8org=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=dqJFDAoxRt1W8nDk4gwL8Z07sDdJKsQJt/PY8NoYEOY72CHEACr9xaijQNMaLPoYO
+	 zLVAYvMU0u6r6M1V+bo2MC/IHypyOYCuExl/Di12ZywZqyyKbVeLI706FG6l7D3iJ4
+	 PJgPO4Rjllw1WgsYRVkNleIFPzOzJDwRZg88KzT4GXQP+SLZFdXi/gPbwIcEsuZ/bi
+	 pTc9VLLfbBN/bcdZFcwM0cMvvfNdu8rQ8wY0E7piXilmSy+8MGtlPEXhYHW1lBeYkI
+	 9UuJ5nTtsvDNGkyBQgmQpOJe/kNJpsbg2SKNhb+aGz/z8/Tja0/+jBuCCuD6ynI6QE
+	 zjG88N+4HH/6w==
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6b1dae0febeso3834323a12.2
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 03:48:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBz5JvPTlgYhCsopkp0ErSMiBoCgNQgah29h+x3zvhRXUHcoydUPhntZFssrX/VE2tGhiRc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIZsFcCZ5BZoD2w/oSeKLB5mHW0QRx+bTcpcTxbdYHyqWqFu4iV
+	FL7GrO4UiYPZn4AEhu4mCmJVE+kujvSY6bOe5L3SZsH/QeFHwd3pS2DR7Ysp35dFEzNB+4iDwHV
+	0GEvRXQF96X9E4WCOdAfuq2VQH0ofYxs=
+X-Received: by 2002:a05:6402:518c:b0:6b3:c088:3646 with SMTP id
+ 4fb4d7f45d1cf-6b3c0883973mr5683359a12.19.1792493293238; Tue, 20 Oct 2026
+ 03:48:13 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -116,164 +59,131 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261016081006.26069-1-yangtiezhu@loongson.cn> <20261016081006.26069-2-yangtiezhu@loongson.cn>
+In-Reply-To: <20261016081006.26069-2-yangtiezhu@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 20 Oct 2026 18:48:02 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H63qesMYvT-KyJFDJckZxdvKRr=++D=dMxtuvOZuO7TQw@mail.gmail.com>
+X-Gm-Features: AclHuK8hXtMJqt-eUZHz9NQiocHWzQn_jEAdqjkfZ7FHF9J_UYI2Ikx9rQXlYgE
+Message-ID: <CAAhV-H63qesMYvT-KyJFDJckZxdvKRr=++D=dMxtuvOZuO7TQw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] LoongArch: Add CPUCFG2 DIV32 feature detection
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The motivation is to plumb more of the socket API into ksock, thus
-supporting sendto() in addition to send() which makes a lot of sense in
-the context of UDP sockets which are the only type currently supported.
-This is useful when ksock is used to reply to specific addresses or send
-to multiple addresses.
+This one is applied, thanks.
 
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- net/core/bpf_ksock.c | 98 ++++++++++++++++++++++++++++++++------------
- 1 file changed, 71 insertions(+), 27 deletions(-)
+Huacai
 
-diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-index 87329c4a2f8e..dda5aefb101e 100644
---- a/net/core/bpf_ksock.c
-+++ b/net/core/bpf_ksock.c
-@@ -37,6 +37,49 @@ static void ksock_release_work_fn(struct work_struct *work)
- 	kfree(ks);
- }
-
-+static int bpf_ksock_addr_to_sockaddr(const union bpf_ksock_addr *addr,
-+				      u32 addr_sz, struct sockaddr_storage *sa)
-+{
-+	if (!addr || addr_sz != sizeof(*addr))
-+		return -EINVAL;
-+
-+	/* Kfunc memory arguments may be unaligned. */
-+	memcpy(sa, addr, sizeof(*addr));
-+
-+	switch (sa->ss_family) {
-+	case AF_INET:
-+		return sizeof(struct sockaddr_in);
-+	case AF_INET6:
-+		return sizeof(struct sockaddr_in6);
-+	default:
-+		return -EAFNOSUPPORT;
-+	}
-+}
-+
-+static int ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data_sz,
-+			const union bpf_ksock_addr *addr, u32 addr_sz)
-+{
-+	struct sockaddr_storage sa;
-+	struct msghdr msg = {
-+		.msg_flags = MSG_DONTWAIT,
-+	};
-+	struct kvec iov = {
-+		.iov_base = (void *)data,
-+		.iov_len = data_sz,
-+	};
-+	int addrlen;
-+
-+	if (addr) {
-+		addrlen = bpf_ksock_addr_to_sockaddr(addr, addr_sz, &sa);
-+		if (addrlen < 0)
-+			return addrlen;
-+		msg.msg_name = &sa;
-+		msg.msg_namelen = addrlen;
-+	}
-+
-+	return kernel_sendmsg(ks->sock, &msg, &iov, 1, data_sz);
-+}
-+
- __bpf_kfunc_start_defs();
-
- /**
-@@ -155,22 +198,9 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
- 	struct sockaddr_storage sa;
- 	int addrlen;
-
--	if (!addr || addr__sz != sizeof(*addr))
--		return -EINVAL;
--
--	/* Kfunc memory arguments may be unaligned. */
--	memcpy(&sa, addr, sizeof(*addr));
--
--	switch (sa.ss_family) {
--	case AF_INET:
--		addrlen = sizeof(struct sockaddr_in);
--		break;
--	case AF_INET6:
--		addrlen = sizeof(struct sockaddr_in6);
--		break;
--	default:
--		return -EAFNOSUPPORT;
--	}
-+	addrlen = bpf_ksock_addr_to_sockaddr(addr, addr__sz, &sa);
-+	if (addrlen < 0)
-+		return addrlen;
-
- 	return connect_socket(ks->sock, &sa, addrlen, 0);
- }
-@@ -225,18 +255,29 @@ CFI_NOSEAL(bpf_ksock_release_dtor);
- __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
- 			       u32 data__sz)
- {
--	struct msghdr msg = {
--		.msg_flags = MSG_DONTWAIT,
--	};
--	struct kvec iov = {
--		.iov_base = (void *)data,
--		.iov_len = data__sz,
--	};
--	int ret;
--
--	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
-+	return ksock_sendto(ks, data, data__sz, NULL, 0);
-+}
-
--	return ret;
-+/**
-+ * bpf_ksock_sendto() - Send data through a BPF kernel socket to a remote address.
-+ * @ks:		The BPF kernel socket context. Must be an acquired reference.
-+ * @data:	Pointer to the data to send.
-+ * @data__sz:	Size of the data to send.
-+ * @addr__nullable: Pointer to an IPv4 or IPv6 socket address, or NULL to use
-+ *		   the connected destination.
-+ * @addr__sz:	Size of the address union, ignored when the address is NULL.
-+ *
-+ * Sends data to the specified address, or to the connected destination when
-+ * the address is NULL, best-effort and nonblocking. This may sleep
-+ * (kernel_sendmsg), so it can only be called from sleepable BPF programs.
-+ *
-+ * Return: Number of bytes sent on success, negative errno on error.
-+ */
-+__bpf_kfunc int bpf_ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data__sz,
-+				 const union bpf_ksock_addr *addr__nullable,
-+				 u32 addr__sz)
-+{
-+	return ksock_sendto(ks, data, data__sz, addr__nullable, addr__sz);
- }
-
- __bpf_kfunc_end_defs();
-@@ -255,6 +296,7 @@ BTF_ID_FLAGS(func, bpf_ksock_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_ksock_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_ksock_connect, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_ksock_send, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_ksock_sendto, KF_SLEEPABLE)
- BTF_KFUNCS_END(ksock_kfunc_btf_ids)
-
- #ifdef CONFIG_BPF_LSM
-@@ -265,6 +307,7 @@ BTF_ID(func, bpf_lsm_socket_sendmsg)
- BTF_ID_UNUSED
- #endif
- BTF_ID_LIST_SINGLE(bpf_ksock_send_id, func, bpf_ksock_send)
-+BTF_ID_LIST_SINGLE(bpf_ksock_sendto_id, func, bpf_ksock_sendto)
-
- BTF_ID_LIST(bpf_lsm_socket_connect_id)
- #ifdef CONFIG_SECURITY_NETWORK
-@@ -287,6 +330,7 @@ static int bpf_ksock_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
- 	if (prog->type == BPF_PROG_TYPE_LSM) {
- 		if (prog->aux->attach_btf_id == bpf_lsm_socket_sendmsg_id[0] &&
- 		    (kfunc_id == bpf_ksock_send_id[0] ||
-+		     kfunc_id == bpf_ksock_sendto_id[0] ||
- 		    /*
- 		     * Break the socket_sendmsg -> bpf_ksock_connect() ->
- 		     * socket_connect -> bpf_ksock_send() -> socket_sendmsg'
---
-2.43.0
-
+On Fri, Oct 16, 2026 at 4:10=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> The LoongArch Architecture Manual defines a hardware capability bit
+> CPUCFG2_DIV32 (bit 26 of CPUCFG 0x2). When this bit is set to 1, it
+> indicates that on 64-bit machines, the division and mod instructions
+> (DIV.W[U] and MOD.W[U]) will ignore the upper 32 bits of the input
+> registers and only compute based on the lower 32 bits.
+>
+> On certain CPU cores without this feature, these 32-bit instructions
+> require both input operands to be properly sign-extended. Otherwise,
+> the hardware execution results can be randomly meaningless values.
+>
+> Add CPU_FEATURE_DIV32 to detect and export this hardware capability
+> via elf_hwcap and cpu_has_div32. This provides the infrastructure
+> for subsystems like BPF JIT to safely choose either native 32-bit
+> instructions or fallback instruction sequences based on the actual
+> CPU hardware capabilities.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/cpu-features.h | 1 +
+>  arch/loongarch/include/asm/cpu.h          | 2 ++
+>  arch/loongarch/include/uapi/asm/hwcap.h   | 1 +
+>  arch/loongarch/kernel/cpu-probe.c         | 4 ++++
+>  arch/loongarch/kernel/proc.c              | 2 ++
+>  5 files changed, 10 insertions(+)
+>
+> diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/i=
+nclude/asm/cpu-features.h
+> index 62059c5551b9..3e7cf1987171 100644
+> --- a/arch/loongarch/include/asm/cpu-features.h
+> +++ b/arch/loongarch/include/asm/cpu-features.h
+> @@ -69,5 +69,6 @@
+>  #define cpu_has_msgint         cpu_opt(LOONGARCH_CPU_MSGINT)
+>  #define cpu_has_avecint                cpu_opt(LOONGARCH_CPU_AVECINT)
+>  #define cpu_has_redirectint    cpu_opt(LOONGARCH_CPU_REDIRECTINT)
+> +#define cpu_has_div32          cpu_opt(LOONGARCH_CPU_DIV32)
+>
+>  #endif /* __ASM_CPU_FEATURES_H */
+> diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/as=
+m/cpu.h
+> index 91b96938861e..d1cf5dd5eceb 100644
+> --- a/arch/loongarch/include/asm/cpu.h
+> +++ b/arch/loongarch/include/asm/cpu.h
+> @@ -127,6 +127,7 @@ static inline char *id_to_core_name(unsigned int id)
+>  #define CPU_FEATURE_MSGINT             31      /* CPU has MSG interrupt =
+*/
+>  #define CPU_FEATURE_AVECINT            32      /* CPU has AVEC interrupt=
+ */
+>  #define CPU_FEATURE_REDIRECTINT                33      /* CPU has interr=
+upt remapping */
+> +#define CPU_FEATURE_DIV32              34      /* CPU has DIV32 feature =
+*/
+>
+>  #define LOONGARCH_CPU_CPUCFG           BIT_ULL(CPU_FEATURE_CPUCFG)
+>  #define LOONGARCH_CPU_LAM              BIT_ULL(CPU_FEATURE_LAM)
+> @@ -162,5 +163,6 @@ static inline char *id_to_core_name(unsigned int id)
+>  #define LOONGARCH_CPU_MSGINT           BIT_ULL(CPU_FEATURE_MSGINT)
+>  #define LOONGARCH_CPU_AVECINT          BIT_ULL(CPU_FEATURE_AVECINT)
+>  #define LOONGARCH_CPU_REDIRECTINT      BIT_ULL(CPU_FEATURE_REDIRECTINT)
+> +#define LOONGARCH_CPU_DIV32            BIT_ULL(CPU_FEATURE_DIV32)
+>
+>  #endif /* _ASM_CPU_H */
+> diff --git a/arch/loongarch/include/uapi/asm/hwcap.h b/arch/loongarch/inc=
+lude/uapi/asm/hwcap.h
+> index 90e96113ba51..00bf93683c74 100644
+> --- a/arch/loongarch/include/uapi/asm/hwcap.h
+> +++ b/arch/loongarch/include/uapi/asm/hwcap.h
+> @@ -20,5 +20,6 @@
+>  #define HWCAP_LOONGARCH_LSPW           (1 << 14)
+>  #define HWCAP_LOONGARCH_SCQ            (1 << 15)
+>  #define HWCAP_LOONGARCH_LAM_BH         (1 << 16)
+> +#define HWCAP_LOONGARCH_DIV32          (1 << 17)
+>
+>  #endif /* _UAPI_ASM_HWCAP_H */
+> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cp=
+u-probe.c
+> index 74d31f260dfd..c50fcba805f7 100644
+> --- a/arch/loongarch/kernel/cpu-probe.c
+> +++ b/arch/loongarch/kernel/cpu-probe.c
+> @@ -236,6 +236,10 @@ static void cpu_probe_common(struct cpuinfo_loongarc=
+h *c)
+>                 elf_hwcap |=3D HWCAP_LOONGARCH_LBT_MIPS;
+>         }
+>  #endif
+> +       if (config & CPUCFG2_DIV32) {
+> +               c->options |=3D LOONGARCH_CPU_DIV32;
+> +               elf_hwcap |=3D HWCAP_LOONGARCH_DIV32;
+> +       }
+>
+>         config =3D read_cpucfg(LOONGARCH_CPUCFG6);
+>         if (config & CPUCFG6_PMP)
+> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
+> index d4ce5b585453..c8d6f397de55 100644
+> --- a/arch/loongarch/kernel/proc.c
+> +++ b/arch/loongarch/kernel/proc.c
+> @@ -94,6 +94,8 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>                 seq_puts(m, " lbt_arm");
+>         if (cpu_has_lbt_mips)
+>                 seq_puts(m, " lbt_mips");
+> +       if (cpu_has_div32)
+> +               seq_puts(m, " div32");
+>         seq_puts(m, "\n");
+>
+>         seq_printf(m, "Hardware Watchpoint\t: %s", str_yes_no(cpu_has_wat=
+ch));
+> --
+> 2.42.0
+>
