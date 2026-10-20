@@ -1,55 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792493295;
-	b=peGCnkU7nBraS6TrQQgP4UZzYE3sYLvzRvkhwbZf8VXSWjLiimMlBSLHwDLNWloXqZz5
-	 6+eY1y3aaOPpPPQt8XzTS/IcSPoRlT1waaZAIfxKABCdoaIXolvJ2PK+ntQe06UKSZySl
-	 d2ivHC0LHKQps0z7VPE3ug0qtcRC6wiFkCT8ni3ymNfHoNLjBq8vYU45lTpeCC/CQQ063
-	 bRKjWXo3UYBFQo6VYS1/8+Gsjl6zUFb2BMR8K4Tb170kLpHaGche2Q+0xKlcyTZDKmFih
-	 /btTFlk1OMEDuqsjgDDmU3KKbDxCfVbaDhNTwA5l61LYg/T/OlEC6VXbgk6AYhClUTA==
+	t=1792493426;
+	b=dwfa7NqjvMKkRppn75WSnXw7a44jIBhzalOEwPaYDWViEfIHU2FnkV5a8Hp7q8x+bTXW
+	 Zd6DVpcNk1qxM8n4++GCsIabiJPlgJQ8V4+FCbKOHNnaA1SIgfMcSkQDTtaVmpR+Ry82k
+	 AUIJ8+uazIL+qBM1CmGO54OLLnDZnrnBp1YRynb1jkSaThXI9dyp38fmmlU4Kt/QgcNl7
+	 /8t7/qIqG0YEturwE6QPsFvNpwoPTMBIyaOHe6BLop4aF+9IGjC6eBT0mRpEvPu6sCpIV
+	 HIoyeTs3zWeUuHTiF7ncJ9x8Z8HEkwbrqdJ62zBvnFIqhJ9g/e2ee/Zr8JhgFHsq0cg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792493295;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=9Zw24p/saADZ7syx7j8QqBGFYl8Xd5k3nVSaKsS8org=;
-	b=MfaI7WLKAT7TswjENQvT2EOP3CNJryPVN8LxwZOC7OoM0kL9dudPKeNWpBZiWWRZopE3
-	 8ec1Rnn2Hzr/Yr2DN2/4vEb6qaNMeKMwalE+W+ujNOMophb/hrKkvXafFEVvdjkiYTdJJ
-	 UOd6RLGIa4Cb718TaJCCM6oY6OYy+oX42y+BH+BKKjT8/+/6X2U6YKcmMH1dMqPYhUpYD
-	 x5x/OXK0j5biyRoVn5diaUck3U1qqCX3nShSlppwixIXt9Ng8tteji0A04juNYSYrOSAh
-	 gQU3byDYLJhR+dTOj6SWgiZK0utSQm0JiuhAMC8qV+dKSbDZYtRwkfb8zj4KddhaJWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792493426;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=9Kv/ULeJ6pUo5Q5w5vFxVRD84tjRkymD9RFQwaVpcn4=;
+	b=IjAQZFIhnXpiObO7iczY/LfcSaxbDOAFLi/6DTyvYsxNM8zrx1NQvxka0FDk3rTkmM3T
+	 PR+U4QpWRVoI9bOY/7JLY3kNm6YPSwcSI2UwH1vjuYWpu6NI4t5Z2ncYMeLoCJSYodRyI
+	 MJ9QK5VmOcjoXGNldmoGhDwe6IsKUK8IhocfatQvRCpm3wavOw0Jg7hXQeZ528YiBDk8t
+	 lufl+ApzWfhl1kU3endDZOWrBF0RAeks+mMjqUCd8sdNotU65rTXTWE7AQZMyrQ+0bUKi
+	 itU8tJ/r7ItmIX5cJct/8YuJBo8LTGjrfR9/FQA2eHbXLn01I2DzpLDO75z1S+Egv4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dqJFDAox;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=bobrowski.net;
+	spf=pass smtp.mailfrom=bobrowski.net;
+	dkim=pass header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=WghxI3Up;
+	arc=none smtp.remote-ip=209.85.216.48
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1A5606A31E
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8054060A2600
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:50:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8054060A2600
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bobrowski.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dqJFDAox
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA2B1F00ADF
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:48:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792493294;
-	bh=9Zw24p/saADZ7syx7j8QqBGFYl8Xd5k3nVSaKsS8org=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=dqJFDAoxRt1W8nDk4gwL8Z07sDdJKsQJt/PY8NoYEOY72CHEACr9xaijQNMaLPoYO
-	 zLVAYvMU0u6r6M1V+bo2MC/IHypyOYCuExl/Di12ZywZqyyKbVeLI706FG6l7D3iJ4
-	 PJgPO4Rjllw1WgsYRVkNleIFPzOzJDwRZg88KzT4GXQP+SLZFdXi/gPbwIcEsuZ/bi
-	 pTc9VLLfbBN/bcdZFcwM0cMvvfNdu8rQ8wY0E7piXilmSy+8MGtlPEXhYHW1lBeYkI
-	 9UuJ5nTtsvDNGkyBQgmQpOJe/kNJpsbg2SKNhb+aGz/z8/Tja0/+jBuCCuD6ynI6QE
-	 zjG88N+4HH/6w==
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6b1dae0febeso3834323a12.2
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 03:48:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz5JvPTlgYhCsopkp0ErSMiBoCgNQgah29h+x3zvhRXUHcoydUPhntZFssrX/VE2tGhiRc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIZsFcCZ5BZoD2w/oSeKLB5mHW0QRx+bTcpcTxbdYHyqWqFu4iV
-	FL7GrO4UiYPZn4AEhu4mCmJVE+kujvSY6bOe5L3SZsH/QeFHwd3pS2DR7Ysp35dFEzNB+4iDwHV
-	0GEvRXQF96X9E4WCOdAfuq2VQH0ofYxs=
-X-Received: by 2002:a05:6402:518c:b0:6b3:c088:3646 with SMTP id
- 4fb4d7f45d1cf-6b3c0883973mr5683359a12.19.1792493293238; Tue, 20 Oct 2026
- 03:48:13 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=WghxI3Up
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3ab98332238so2416537a91.3
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 03:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bobrowski.net; s=google; t=1792493425; x=1793098225; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9Kv/ULeJ6pUo5Q5w5vFxVRD84tjRkymD9RFQwaVpcn4=;
+        b=WghxI3Up3cKf6RyLG617g6gp1fbtM68Tu0QayXyEvueWNs2uwXsB4pl+epAB0GzAHN
+         lmgnE7YrMpwTUjbnDobBNSl6KXoekV1BoqFvYEesxFbS242lLJXNceTMlY8qARByCF/r
+         b/+GtY+R7jR6F6lGmWoDWR1GR51bFvn7agdI/lDTvzCCvTs8QSVbkT0lJJLRFbeYxd1K
+         0Byhx/WEUFCgoUA2/ybpWhk3c+BOiloYorMYFm+ZW7dFKwsxkgeC/tEDNocIbF4kC1Fz
+         GG8BdTPf8Bggy3gvBxenoMElQ/OKp9g++QhNpGJud7t+aPKpkwvMW6YfiPeZzzqpJD3D
+         Ip7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792493425; x=1793098225;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9Kv/ULeJ6pUo5Q5w5vFxVRD84tjRkymD9RFQwaVpcn4=;
+        b=NNDNI6RdJ0HSOKfsJm1B6pM4BAlugYw58HByQ7y3csQex07WGbVG3C5fl4tbXpIHo4
+         gFMN2HsgG9vqpba7Rk/sRuG1PyaPLBggq+tB39ovx8zI5lXEXJ3UgrzSxQWHm/u6lUme
+         0NuF4tpip0Eh5Hs1QMBySxzWrTxDlXFxJDjwu73RSUmJheOpUJVx6grQq7bSI3iblcsh
+         C2t3XDw1osqlEvEjJ7ejFVd47E2RO+PSjLxX79nYTm+wjnGmD57pSPKLMNDZ64gCz5Gx
+         3kurDhmreZWY/o+JEd5dGHPG4ndVFHB4JbBCKZ+GbHL57L7FfCHywBoN6tAI6WW7bQLm
+         9ZAA==
+X-Gm-Message-State: AFq9FYJzCPpisrRAXNBAlMyn9NiYz9OtQ5dZQfPx5aEYdMzMLBWmXD0Z
+	k91Or3wizSbxKTuReXbMoFIu3LQU/JrXQLjI2bB2XCFXh1sFnXsJfbbZRdLitbFAVq+UhDcWMnR
+	ZjxRzexQB
+X-Gm-Gg: AYBFou3+jffz5tXRG0oLF1xDRahaT35zPG3OOUfhlNkGFz8WbWpNGIuRoP6/MbFfq4Y
+	tQj6wvT1Z8pX/U8+C48S5ClS9ACBEuR9ZxxlW0afrERMsWT96jLRIaOvGUfYWA7oI9yL+FMaiBr
+	t16yXeKYffr3XnskIQlOnJcNRyGRyQrEL14KJPnEoVMVBuy9PoL8r1uTw1/vK0TQtp9qjNi1eyg
+	MyPQx/V3/+bQCpPjlZ7TTSwuLaYKhwb6NTi8+WQxyopC/MeHZUbYDFimNwJ9KJSzgxivymzNR49
+	lytBSBrGEawmXne47fonOToHLYf2ptrPdzuy4Lg3NKNWG4SKMWTvP0HulOksjmDLFbl/hW0ndH3
+	WQ21GqBKmhEXjwJFYPPhV6LvQNAyfzU+s6D/OJDx5kQ5CylpKbyfARl08f3GQ24ziGVjpKCJat3
+	vM3lsdouRRpHKJB1CzgJa277XDxCMJY06nMm0GLAHRe2tAV1sOk/kPu4LIr+X1xXPEXJKziewjM
+	46z1g0Vo8Uv3fMUEQ7mNHD7VpRj1rhyQudomIdySj/LeYIqSirtWt+Ct3AoqTu1tW/tx3+j5tPc
+	fa67COSm0hyeT4xO4IbyX3S0oLY=
+X-Received: by 2002:a17:90b:2cce:b0:3ac:b3c7:de14 with SMTP id 98e67ed59e1d1-3acef5c8cb3mr8447674a91.61.1792493424631;
+        Tue, 20 Oct 2026 03:50:24 -0700 (PDT)
+Received: from workstation.. (163-53-146-70.ip4.superloop.au. [163.53.146.70])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad60f36a5asm3487902a91.9.2026.10.20.03.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2026 03:50:24 -0700 (PDT)
+From: Matt Bobrowski <matt@bobrowski.net>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	linux-fsdevel@vger.kernel.org,
+	Matt Bobrowski <matt@bobrowski.net>
+Subject: [PATCH bpf-next 0/2] bpf: fix crash in bpf_path_d_path() for exiting tasks
+Date: Tue, 20 Oct 2026 21:50:12 +1100
+Message-ID: <20261020105014.97985-1-matt@bobrowski.net>
+X-Mailer: git-send-email 2.47.3
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,131 +107,28 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261016081006.26069-1-yangtiezhu@loongson.cn> <20261016081006.26069-2-yangtiezhu@loongson.cn>
-In-Reply-To: <20261016081006.26069-2-yangtiezhu@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 20 Oct 2026 18:48:02 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H63qesMYvT-KyJFDJckZxdvKRr=++D=dMxtuvOZuO7TQw@mail.gmail.com>
-X-Gm-Features: AclHuK8hXtMJqt-eUZHz9NQiocHWzQn_jEAdqjkfZ7FHF9J_UYI2Ikx9rQXlYgE
-Message-ID: <CAAhV-H63qesMYvT-KyJFDJckZxdvKRr=++D=dMxtuvOZuO7TQw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] LoongArch: Add CPUCFG2 DIV32 feature detection
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-This one is applied, thanks.
+bpf_path_d_path() can run on a file released from exit_task_work(),
+after exit_fs() has cleared the task's fs, as a BPF LSM program attached
+to file_release does whenever a task exits holding the last reference to
+an open file. d_path() then dereferences the NULL fs.
 
-Huacai
+Patch 1 returns -EINVAL from bpf_path_d_path() when current->fs is NULL.
+Patch 2 adds a selftest that crashes the kernel without it.
 
-On Fri, Oct 16, 2026 at 4:10=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> The LoongArch Architecture Manual defines a hardware capability bit
-> CPUCFG2_DIV32 (bit 26 of CPUCFG 0x2). When this bit is set to 1, it
-> indicates that on 64-bit machines, the division and mod instructions
-> (DIV.W[U] and MOD.W[U]) will ignore the upper 32 bits of the input
-> registers and only compute based on the lower 32 bits.
->
-> On certain CPU cores without this feature, these 32-bit instructions
-> require both input operands to be properly sign-extended. Otherwise,
-> the hardware execution results can be randomly meaningless values.
->
-> Add CPU_FEATURE_DIV32 to detect and export this hardware capability
-> via elf_hwcap and cpu_has_div32. This provides the infrastructure
-> for subsystems like BPF JIT to safely choose either native 32-bit
-> instructions or fallback instruction sequences based on the actual
-> CPU hardware capabilities.
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/loongarch/include/asm/cpu-features.h | 1 +
->  arch/loongarch/include/asm/cpu.h          | 2 ++
->  arch/loongarch/include/uapi/asm/hwcap.h   | 1 +
->  arch/loongarch/kernel/cpu-probe.c         | 4 ++++
->  arch/loongarch/kernel/proc.c              | 2 ++
->  5 files changed, 10 insertions(+)
->
-> diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/i=
-nclude/asm/cpu-features.h
-> index 62059c5551b9..3e7cf1987171 100644
-> --- a/arch/loongarch/include/asm/cpu-features.h
-> +++ b/arch/loongarch/include/asm/cpu-features.h
-> @@ -69,5 +69,6 @@
->  #define cpu_has_msgint         cpu_opt(LOONGARCH_CPU_MSGINT)
->  #define cpu_has_avecint                cpu_opt(LOONGARCH_CPU_AVECINT)
->  #define cpu_has_redirectint    cpu_opt(LOONGARCH_CPU_REDIRECTINT)
-> +#define cpu_has_div32          cpu_opt(LOONGARCH_CPU_DIV32)
->
->  #endif /* __ASM_CPU_FEATURES_H */
-> diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/as=
-m/cpu.h
-> index 91b96938861e..d1cf5dd5eceb 100644
-> --- a/arch/loongarch/include/asm/cpu.h
-> +++ b/arch/loongarch/include/asm/cpu.h
-> @@ -127,6 +127,7 @@ static inline char *id_to_core_name(unsigned int id)
->  #define CPU_FEATURE_MSGINT             31      /* CPU has MSG interrupt =
-*/
->  #define CPU_FEATURE_AVECINT            32      /* CPU has AVEC interrupt=
- */
->  #define CPU_FEATURE_REDIRECTINT                33      /* CPU has interr=
-upt remapping */
-> +#define CPU_FEATURE_DIV32              34      /* CPU has DIV32 feature =
-*/
->
->  #define LOONGARCH_CPU_CPUCFG           BIT_ULL(CPU_FEATURE_CPUCFG)
->  #define LOONGARCH_CPU_LAM              BIT_ULL(CPU_FEATURE_LAM)
-> @@ -162,5 +163,6 @@ static inline char *id_to_core_name(unsigned int id)
->  #define LOONGARCH_CPU_MSGINT           BIT_ULL(CPU_FEATURE_MSGINT)
->  #define LOONGARCH_CPU_AVECINT          BIT_ULL(CPU_FEATURE_AVECINT)
->  #define LOONGARCH_CPU_REDIRECTINT      BIT_ULL(CPU_FEATURE_REDIRECTINT)
-> +#define LOONGARCH_CPU_DIV32            BIT_ULL(CPU_FEATURE_DIV32)
->
->  #endif /* _ASM_CPU_H */
-> diff --git a/arch/loongarch/include/uapi/asm/hwcap.h b/arch/loongarch/inc=
-lude/uapi/asm/hwcap.h
-> index 90e96113ba51..00bf93683c74 100644
-> --- a/arch/loongarch/include/uapi/asm/hwcap.h
-> +++ b/arch/loongarch/include/uapi/asm/hwcap.h
-> @@ -20,5 +20,6 @@
->  #define HWCAP_LOONGARCH_LSPW           (1 << 14)
->  #define HWCAP_LOONGARCH_SCQ            (1 << 15)
->  #define HWCAP_LOONGARCH_LAM_BH         (1 << 16)
-> +#define HWCAP_LOONGARCH_DIV32          (1 << 17)
->
->  #endif /* _UAPI_ASM_HWCAP_H */
-> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cp=
-u-probe.c
-> index 74d31f260dfd..c50fcba805f7 100644
-> --- a/arch/loongarch/kernel/cpu-probe.c
-> +++ b/arch/loongarch/kernel/cpu-probe.c
-> @@ -236,6 +236,10 @@ static void cpu_probe_common(struct cpuinfo_loongarc=
-h *c)
->                 elf_hwcap |=3D HWCAP_LOONGARCH_LBT_MIPS;
->         }
->  #endif
-> +       if (config & CPUCFG2_DIV32) {
-> +               c->options |=3D LOONGARCH_CPU_DIV32;
-> +               elf_hwcap |=3D HWCAP_LOONGARCH_DIV32;
-> +       }
->
->         config =3D read_cpucfg(LOONGARCH_CPUCFG6);
->         if (config & CPUCFG6_PMP)
-> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-> index d4ce5b585453..c8d6f397de55 100644
-> --- a/arch/loongarch/kernel/proc.c
-> +++ b/arch/loongarch/kernel/proc.c
-> @@ -94,6 +94,8 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->                 seq_puts(m, " lbt_arm");
->         if (cpu_has_lbt_mips)
->                 seq_puts(m, " lbt_mips");
-> +       if (cpu_has_div32)
-> +               seq_puts(m, " div32");
->         seq_puts(m, "\n");
->
->         seq_printf(m, "Hardware Watchpoint\t: %s", str_yes_no(cpu_has_wat=
-ch));
-> --
-> 2.42.0
->
+Matt Bobrowski (2):
+  bpf: fix crash in bpf_path_d_path() for exiting tasks
+  selftests/bpf: test bpf_path_d_path() on a file released at task exit
+
+ fs/bpf_fs_kfuncs.c                            |  8 +++
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      | 51 +++++++++++++++++++
+ .../selftests/bpf/progs/test_path_d_path.c    | 35 +++++++++++++
+ 3 files changed, 94 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_path_d_path.c
+
+
+base-commit: 0007654a7bf13ef2a19afd398bbc6507087f19fd
+-- 
+2.47.3
+
