@@ -1,49 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792530046;
-	b=4NnwORzSQd92kqLsAvP5HaCf6JXT0bFsR1nhP75AE9h8GZnX1OU/8tNAUJcTYtYGdbJC
-	 g7ZGanWeQGCjRBdhWBe1CcLYAauztt6Rbh/jgeRZHFvgUCZ6V2qJWN3dV2kphu8kNmmTa
-	 JuGYmVbnqGY2J9tTij4PY8SpUdG3/diZEfo9w8A7ulma7IlHjsjutqHXAZrZzBOkM71VM
-	 9/kcUEdpXmkIB/GoNSIjVKo3P/a5RwerEw3hsU7O3X1+wS2z3vy5cE00uXt0DqCtwfzIW
-	 IQkJUgBgN7GOI57p7VaprsoKMkQ3mKnXMyy1q2WBd3liofch84e59LdxBruiBHuDXFw==
+	t=1792530422;
+	b=bWOYAyS08iWj+GiOUPV8OvgqBDtpEyB0tpSUBZQ/NAjN+44P6ok2j8cZd7S6/flu5rzd
+	 jUAoLln59DpSWPmhrEuIXdWLo6BN+f8MDvl3fv3MqE0AZuv7q45pHH0kOpbJIAx5dmDgg
+	 S/RqFnLY5BDY0cL0taLpT0QJx28675JVUvoiJum93KYd/srpJiY6ZspC3gVcbYiLATKOZ
+	 IhR6Q9/uGvK5t2bQZXehmb83J5iVanH+larilpxSM6j2r1MnjHZBfzwJmxWH7kCw0LMfx
+	 MtUcFZtQJ5QUVrLFdFkJoKaXJbbnhqUcqxsrvb9IlhudGl78WrR9fPKbcoMPANf+nig==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792530046;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=s7LHFRSXHic5XGEInYp0jAmgGHudXLNGKJjFiKqPrq4=;
-	b=x+8OXnHWdA2SCN9KDQAKJt0MMJL10iH/H1v1ek83/wgaBfgexB7ZRr9AOzjh5Loz3lma
-	 ULtYYSYsuO5pwFoPjEZ3xQ8EDPUN8Y+O7Kb2I2HTfiQZIK6DhBfUAgZw+hdxfCbsmkm4N
-	 3UwdiBe+CwTnoOYORS7eNDJIVaCoiefCTRfs/APEjb+YmVoz35G37gxKXJx8rkBa0plEi
-	 /AhxxFzyL8eY9KxU8Yzsab9VaFfVqhwFL7lqs24MRcgeP/k0ij9kml6SI3fku3+tfKlNp
-	 vCAYjcmTEHHUTGm00CUkkTHPy5KZlqrNV/QSCwQKunK6FJpjwevclBW+JBLy/4XowIA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792530422;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=YLJAEyWgWD+owz8+apEIXzolE9JgI3rEa6MIslADBzg=;
+	b=IUPtM95UmuZshqxfOT031ydXZ9SF5fEqSp7U1CjPviCjHA5k/28NnypDZzP7obH9hn2K
+	 vkAzsZR6+ExgpBfuy3Ot7gwVlEB40rBCth/KsgpFUsHDejwuixd2+X0E2CMQYcMQK9Hhu
+	 kodTmqnrImpSGk919lQ/aXQDd0XKJ7URSJNVtTvyFo3c10bNJJp9jv0FOcD+djsrMZ87h
+	 actUZa3fucbSeRrPVgO1S5SpQfDvIMjedLGYXUtWEIiSfbZw+THGTuTF0jDtYkuaXJhmW
+	 lKjIbOQP7jLtfClLOzg2CGC9GOBFRdf5D/RpF3Ly7TfFVMJTvlPsrL8PfFdov8MK+Ig==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KQci7tJF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Xo9u1Q86;
+	arc=none smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2E7606A326;
-	Tue, 20 Oct 2026 21:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C77606A31D
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 21:07:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16C77606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KQci7tJF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BAF1F000CA;
-	Tue, 20 Oct 2026 21:00:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792530046;
-	bh=s7LHFRSXHic5XGEInYp0jAmgGHudXLNGKJjFiKqPrq4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=KQci7tJF+IYLQv12efD+MqxN8J1OOwJGnXlOocHPZKc29bqs7Rn4uxmeGPDrGl9/K
-	 DlZh+oY49USpQZHxL+KjFEv0OW74s+5g6WrN4Umesz8ZSy4kJ9elFqSZiEMHh9kWav
-	 cW5alHMgELP+qd4Mj0p1uOEq+HRuwVz7Fu6mmpjK8oo/udT3qTqa3lWAJSP6l6NSuA
-	 cqQOtolImM7THpRhx7QSnEtpo7lCBakPYqUOtiVqaERF/8ITWp+Sdb+HOO0PPGlWHO
-	 weVCueq+jZPslSqNq3gslFD+60qceaw0ggnoYot0rsoW8NUlJNaaAUwhpHsjhyVO50
-	 Zc2yMZPTVRHfQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A3B93809A09;
-	Tue, 20 Oct 2026 21:00:46 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Xo9u1Q86
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-3535bf8b3e0so9120eec.0
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792530421; x=1793135221; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=YLJAEyWgWD+owz8+apEIXzolE9JgI3rEa6MIslADBzg=;
+        b=Xo9u1Q86eghEmTqL8We7UIsBOyMUz3YRXxCGgw9PT6lz96S72SZsImsa9DvLMPheyS
+         JEO+FfTnrrERLJbvkio3/qwoVkQu+fKAoWkNBceM2YVYmAzyWm2btFEQb/WnrFe/BuzC
+         TjIFiUvXIN5SpRgq3NHs5ZcBbGyWT4ZDT+KNS+JBDqupaRQnbrolhiMhh2JoVfnv59ub
+         gMvd5H705otAvD81ApzR9N7cRInmlL9E5+Y48v6GUGFZq3a5+gjFrQDXSbI0Iq+5OUG6
+         IinUvJnN3oOwFnD6R+1lLjE0+MpiBJZRDwoYrwaYaPqXXgS3LLSqMGgmd7IhJTpbc3ew
+         Y/qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792530421; x=1793135221;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YLJAEyWgWD+owz8+apEIXzolE9JgI3rEa6MIslADBzg=;
+        b=PFCBGbA/Vr0/ctw0pTeAmUfGTtAQRL8D81gicIj/T1Pk84wfpddmDk2FK2X4fmI2aZ
+         FGVvM8WFWutxIK09YUji2EGBMJz7mbGAANWS0zHwYCW66l3BiKjzrvLDa7/fvdn5IY3i
+         kOUtYOJwKX0UkIX1P6CufqwsGKoDtPoQ8LBeDIevg/PSHZa/+C7aYl8PuE8aeEii94va
+         jpuMe/Xbdn0Qa3fVki5F2BYjUrkdaz6MXwfvMpKPC3MJr/puuRldgpdYVa6ODD+lq2sr
+         isM2IzHEjTNsEeB8SUiFhm3xbwrDlSUW4/1IktFqsDluY9qwowfWwOTHySOj/p2/fwvc
+         I6UQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxpP3XkVn/5qwd9aizsOXFOL9agpIMuDL/n3Xro7Rw3q/Y3ZhJLZU0D0pCJ3aQIHvZFGIU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJO1PhJAI3P4VNxyfvgnxgI3X/ABwyDXaTM1Y03lsTNxjcMy9pp
+	VsA9aauWHwMHcl0hyqlmhdX7RTS9tA0XTrenc/CUUzyaywX4FwnRjXpX
+X-Gm-Gg: AYBFou03KqDF3516BRx1y9MywtVTewWnfFYkmkrMl7hpF6/88fQ4bh8eeduzCzFnjXZ
+	rTcK2/wokAtlxXa9SWBtCCYTvVSHmeE/6ZcqrdtZ9o3pzMhXpbdKEKMy1yJriYH8YvJ5ep5vG4D
+	jsd7becfIvDBuf4HFbvuSZmGK2H9+YVUxAO28rUrrAWCnk6flf5FeleMyN0KhW2ARxt1rwFn08B
+	RcpefRXLvy/+dxyoUIQx6TU6pyftK+N0AzGtSeSLwkcoee7JM1T/B14tx7USZ5YnbpB+rz4xTFR
+	fwcj7A3yE/qhxpuKXyd6dShpAqqXzVkrcraDJimHOXW6BF5FV6gHZg7dcLGLSmPtKXnQvYhzXfF
+	Rp4lVXxGNvPTTaBp1xu7A+mtuLdqGX55/ehAe9S8y10KRHecXBbeKuly43xM4t6R/A43X3qYyBW
+	/UKfXe5EDd7sAR6rCZzH1N6OBnDqy4y+eLCc5uyQFiMVdTO65q5Ibh8pht4Fdh1ch9/EFo8hEP0
+	TbBC43x62QZoQ+xZx0lAMiJUdV+dPev2bM4tv9EYT18VZvm2op3MfXPlX+dTAf84r8=
+X-Received: by 2002:a05:7301:618e:20b0:35e:2c6:d46c with SMTP id 5a478bee46e88-3674c63d579mr616592eec.10.1792530421071;
+        Tue, 20 Oct 2026 14:07:01 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:2946:827a:f5c3:d83c? ([2620:10d:c090:500::7:5753])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367416a1fb9sm963662eec.20.2026.10.20.14.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2026 14:07:00 -0700 (PDT)
+Message-ID: <94c04d9a833d73c368ea9d6bdfcbded27556233d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: support 32-bit linear scalar evolution
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ bot+bpf-ci@kernel.org, 	bpf@vger.kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com, 
+	yonghong.song@linux.dev, martin.lau@kernel.org, mason@kernel.org, 
+	ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 14:06:58 -0700
+In-Reply-To: <DM9YUX1TXEEC.1FCUJ0M8D7HGU@gmail.com>
+References: <20261020-scev-32bit-v1-1-838f34f9f0cd@gmail.com>
+	 <77720df26bea4edfd16a92d307115ad152f9ab558df8848fd8e0d7cb31e9f5eb@mail.kernel.org>
+	 <DM9YUX1TXEEC.1FCUJ0M8D7HGU@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,54 +103,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3] net: mana: add BQL support
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179253004477.208021.12583295837722282628.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Oct 2026 21:00:44 +0000
-References: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
-In-Reply-To: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
-To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-Cc: netdev@vger.kernel.org, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- kotaranov@microsoft.com, horms@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, bpf@vger.kernel.org
 
-Hello:
+On Tue, 2026-10-20 at 21:00 +0000, Alexei Starovoitov wrote:
+> On Tue, Oct 20, 2026 at 04:35 AM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel=
+.org> wrote:
+> > > +	if (!scev_value_compatible(env, st, &initial_val, &bound_val))
+> > > +		return false;
+> >=20
+> > For a pointer-vs-pointer JMP32 latch (allowed for privileged programs, =
+since
+> > check_cond_jmp_op() only rejects pointer comparisons when !allow_ptr_le=
+aks),
+> > can the computed max_header_count end up smaller than the real number o=
+f
+> > iterations?  bpf_widen_scev_regs() and bpf_clamp_scev_regs() then bound=
+ the
+> > induction pointer's range with that count, and the memory access checks
+> > inside the loop depend on it being a true upper bound.
+> >=20
+> > Would it make sense to return false here when latch->jmp32 is set and e=
+ither
+> > initial_val.ptr_reg or bound_val.ptr_reg is >=3D 0?  zext32 latches can=
+not
+> > involve pointers, because ALU32 on pointers is rejected.
+>=20
+> Yes. Seems like a real bug.
+>=20
+>   r1 =3D map_value + 0, r2 =3D map_value + 56
+>   l: r1 +=3D 8; if w1 <=3D w2 goto l
+>=20
+> max_header_count is 8 and r1 is clamped to 0..56. If the low 32 bits
+> of r2 are 0xfffffff8 then w1 wraps to 0 and the latch stays true,
+> so r1 walks past the map value.
+>=20
+> pls fix in a followup.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 13 Oct 2026 17:49:37 -0400 you wrote:
-> MANA doesn't support byte queue limits, so each TX queue can hold 256
-> WQEs by default, and up to 16384, of up to 64 KB TSO packets, before the
-> qdisc layer sees any backpressure. This adds latency to all the flows
-> sharing a queue, and defeats AQM qdiscs such as fq_codel, which rely on
-> BQL to keep the driver queues short.
-> 
-> Report the bytes queued and completed to BQL, except for the XDP_TX and
-> XDP_REDIRECT frames. These share the SQs, but bypass the qdisc and are
-> sent even when the queue is stopped, so BQL can't hold them back.
-> Counting them would let sustained XDP traffic keep the queue stopped,
-> starving the stack, and the TX watchdog would then either fire while the
-> completions still arrive, or, if the XDP sends refreshed trans_start,
-> not fire when the completions stop. The XDP SKBs are marked in their
-> skb->cb, next to the WQE size, so that their completions are skipped as
-> well.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v3] net: mana: add BQL support
-    https://git.kernel.org/netdev/net-next/c/799cdeaa5c39
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Yes, and another complain about clamping and possibly dead states.
+I'll send follow up for pointers today. For clamping need to think a bit.
