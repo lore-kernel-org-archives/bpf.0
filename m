@@ -1,45 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792506560;
-	b=OlnEbBTq/GWnAJIqBgkvoekzXGjLz7ClsexfoG8a6Yoc8sEywqafff7NbylC+Pa7hbZe
-	 jksZSyzaQiDJjlz0lgKk4mYqCu62wgiVK51gLViwWIg98nQ77/seiq64KULTw5QaHe+HR
-	 qWvzfOqV8svs5DGla2oq1HVaKWj9dCz0ziztA5hclzbAhgOQkLo5IFpzdnv8cJHddb255
-	 ymu4NlOT7nIoVeO18kcWJGktxurZLPC9c8DfJHEA0N+pbO71bMiefq674u2mLxjsxl0sV
-	 WrOX1dQ9cFZOlQWCIsGcDP5h5KqHO091h9BSlkpdI3Qy6+27IUS58qPzt41Yn7+Hxjg==
+	t=1792506695;
+	b=F4QQA0w2B7+HWDsxBbYBeN+MA+Jbc0M09Meiq1aY4wGZSV9/B+VIIquMq+ipUjh7ChXF
+	 hwfion/FaiJsgpAKEY64qWQooYRKijGDSCLf2Xo/vtSP0o3Gnx9GmVbl+7VgE4UKAX4lq
+	 bJDlBv213BgMreqU8KDYgm5Vdov0VxE6L9tWUYtVFQpN4jrNna75cAiYDJ8VXNSge4na2
+	 Pxa/sIyBzXjHRXNBSqlMLFYDj86zhY0xerfCpK0JdmOGUjSJnJMEf9ZKS5n498Z4Oe/nj
+	 BtBl97mDNaum1tL/mPPkWAVUSIfYrqPinUb/o87pYQQh4fzOerxVTMMG7OI224LmVDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792506560;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=tnzmruvpw+zMT3qGYg1V/ubAlXjcG/6w9CFj+4EFdPg=;
-	b=Zx4LgHdBLekRzhfYdp1ENbTwk+GPQCbyP0LaDtA+NY8qsHgQjZOc5QdSlSMMBod4jSG8
-	 RMz/fz0nXkGPL0WVAH43tmzxCd7u4ni2vGaa5lSsyAKo2XlCNR0am2XC5e8zr1D5ieBmj
-	 RH37sorAJmm4OYY9KxrFXxFnmI8OLmycLQEpNNodRmy0Vm/9q20KJ2COWRODzh/oUVOHY
-	 okn4uKMZ0pUQ+ooVsvQRZAH+O8raHdMQVLmeSwoFfPLfi6vDDuHtCmlO+pdAhsBQImdSp
-	 BiIMjG93P+3sScPO4oOYZoU5CxSUiv2mGrwBhAve+FeDOAD6RTPJroB0dkE8p5xC9CA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792506695;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=6lYKorWj87iYcvhys8M/egze+aiLqjvheFL9Lt/9ki4=;
+	b=DMkkC7v7d7b0mhSsFfl+U1WLypNEanDMXN/eu8u48P7TiTFGrj1C6SaqjB3cKQXL630R
+	 iuFS1tv8wyDDHzbuwrZXOnOKO7yX75iOMGUh6ePN6mrt9lAul0ySS6jayXQ09zLNOazKD
+	 KW+NDoisVXMj9P80ms4ZRywHKe5ey6bU/jO0RTftZZnRivagtC7ivdfvFyjyrLGpO7K53
+	 /a7lCfl1efUeDHYaA5CFweuRgAeWZa1NCqIqUqsAeWLuBtZkmo+BJG5t2tU18vtOSmPAO
+	 0fZVcqmbKlmAa5xOdGiI9pjeWarH8e03eaqHQy+fP0UNX1nZ7mkmlEvAchp0S3w/5Ow==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iZGqSLOg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EcGTrHKm;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E52C606A32D;
-	Tue, 20 Oct 2026 14:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3C8606A31E
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iZGqSLOg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5CB51F000C5;
-	Tue, 20 Oct 2026 14:29:19 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EcGTrHKm
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D191F000C4;
+	Tue, 20 Oct 2026 14:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792506560;
-	bh=tnzmruvpw+zMT3qGYg1V/ubAlXjcG/6w9CFj+4EFdPg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iZGqSLOg7noAIeXh7qtTPCqn01JuhtGOa5VKCj/K1v9j1AzKxJh0P2qMSB8suaUxh
-	 nEQaJ9gHY0w47W0YkeuuMId5cozVIBt2ViZRWwChpGD/1fWZIWc2Hb5HvZTi++G2gU
-	 SCjExwsNzDsvMpnaC1UrNQKnIgli1Ah7Rq6Z9ivLXMnCzV9rec+KYsyFKdYX1PMdOg
-	 YXZRKlvXranwG6urf3adyTzdI12spqJbfSDt6g9lxL8J8BMX9PdYIhBeseKq6oj38P
-	 sZ6XslEOarwcO0kDQd/ke5KnTUsLBOuKA+MKSWTnW3DzpP3h2i8cbVFATzue/rw5zm
-	 i7F556ICs8Euw==
-Content-Type: multipart/mixed; boundary="===============8681009879540805806=="
+	s=k20260515; t=1792506694;
+	bh=6lYKorWj87iYcvhys8M/egze+aiLqjvheFL9Lt/9ki4=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=EcGTrHKmUoliUhTD6KxW2H6HiSAoWwrStf/z2ClFHVJY/rfSjkM121sUR5SeB4QJl
+	 ckKP6Nl/fGA3L/GC2NJ+QrN1xFW91bNthb1Pos5Yhj/PpWkexKaGHz8PO9z044JUHK
+	 sxTttDklQy0pfSRjv9Tz37nn0mGnO/uxpYsO4kNf8zSYohm/QHFtDXZfudtBSWS1AK
+	 22wHE5MStPsCvHL9KKvpGSqIydLazoqJddmSlqIZwtPu6IwKApZkrS/9DU4B4oSxys
+	 /3PKevjRtV/Kz7EN04h5sXggR993udu9hThk4WDYH0wmIZStJqvjkIOlJ5a9t0feFe
+	 ZvKyHJJhtZOSA==
+Message-ID: <sashiko-outbox-179141@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 11/16] bpf, arm64: Add support for arena percpu
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
+In-Reply-To: <1ada7d01118df6deb0707b1a17ff11e041d6ca80.1792503001.git.xukuohai@huawei.com>
+References: <cover.1792503001.git.xukuohai@huawei.com>
+ <1ada7d01118df6deb0707b1a17ff11e041d6ca80.1792503001.git.xukuohai@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Oct 2026 14:31:33 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,234 +58,144 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <ee5357d7518fed983436590b5132f93cea1427b57944419eb67e3b25c87ed5db@mail.kernel.org>
-In-Reply-To: <38a798d59fc40d94c555c785a900e57c22cec2bc.1792503001.git.xukuohai@huawei.com>
-References: <38a798d59fc40d94c555c785a900e57c22cec2bc.1792503001.git.xukuohai@huawei.com>
-Subject: Re: [PATCH bpf-next 09/16] bpf: Teach verifier about arena percpu instructions
-From: bot+bpf-ci@kernel.org
-To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,emil@etsalapatis.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 14:29:19 +0000 (UTC)
 
---===============8681009879540805806==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] bpf, arm64: upper 32 bits not cleared for arena percpu in buil=
+d_insn()
+- [Low] bpf, arm64: link failure in build_insn() when CONFIG_BPF_SYSCALL=3Dn
+--
 
-> bpf: Teach verifier about arena percpu instructions
+commit 06cd99f2557b7d24037d63a9c40cf67ca1795637
+Author: Xu Kuohai <xukuohai@huawei.com>
 
-TL;DR:
-- Verifier state pruning may skip arena percpu bounds checks, so out-of-range
-  accesses could load
-- Possible vmlinux link failure on 32-bit/!MMU: no stubs for new arena helpers
-- JIT constant blinding skipped for loader-controlled immediates
+bpf, arm64: Add support for arena percpu
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 7750df973494..5ffefcd5f15e 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -674,6 +674,9 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
->  u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena);
->  u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena);
->  u64 bpf_arena_map_kern_vm_start(struct bpf_map *map);
-> +u32 bpf_arena_percpu_chunk_off(const struct bpf_map *map);
-> +u32 bpf_arena_percpu_chunk_sz(const struct bpf_map *map);
-> +bool bpf_arena_percpu_off_in_range(const struct bpf_map *map, u32 off);
->  struct bpf_map *bpf_prog_arena(struct bpf_prog *prog);
->  int bpf_obj_name_cpy(char *dst, const char *src, unsigned int size);
->  
+This commit adds arm64 JIT support for the BPF_PSEUDO_ARENA_PERCPU pseudo
+instruction by computing smp_processor_id() * chunk_sz and adding it to CPU
+0's arena address.
 
-Is this declaration reachable from a build that doesn't compile arena.c?
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 1d5f4cf88d331..998806cc700eb 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
 
-kernel/bpf/Makefile only builds arena.c when both options are set:
+[ ... ]
 
+> @@ -1829,6 +1835,26 @@ static int build_insn(const struct bpf_verifier_en=
+v *env, const struct bpf_insn
+>  		else
+>  			emit_a64_mov_i64(dst, imm64, ctx);
+> =20
+> +#ifdef CONFIG_SMP
+> +		if (insn->src_reg =3D=3D BPF_PSEUDO_ARENA_PERCPU) {
+> +			u32 chunk_sz =3D bpf_arena_percpu_chunk_sz(bpf_prog_arena(ctx->prog));
+
+[Severity: Low]
+Will linking vmlinux fail with undefined references to bpf_prog_arena() and
+bpf_arena_percpu_chunk_sz() when building with CONFIG_BPF_JIT=3Dy,
+CONFIG_SMP=3Dy, and CONFIG_BPF_SYSCALL=3Dn?
+
+arch/arm64/net/Makefile compiles bpf_jit_comp.o whenever CONFIG_BPF_JIT=3Dy,
+whereas kernel/bpf/Makefile only builds arena.o when CONFIG_BPF_SYSCALL=3Dy:
+
+kernel/bpf/Makefile:
     ifeq ($(CONFIG_MMU)$(CONFIG_64BIT),yy)
-    obj-$(CONFIG_BPF_SYSCALL) += arena.o range_tree.o
+    obj-$(CONFIG_BPF_SYSCALL) +=3D arena.o range_tree.o
     endif
 
-verifier.o is built for every CONFIG_BPF_SYSCALL config, and this patch
-calls the new helpers from it behind runtime map_type checks only, which the
-compiler cannot remove:
+Other arena helpers used by the JIT, such as bpf_arena_get_user_vm_start() =
+and
+bpf_arena_get_kern_vm_start(), have __weak fallbacks in kernel/bpf/core.c or
+inline stubs in include/linux/bpf.h, but bpf_prog_arena() and
+bpf_arena_percpu_chunk_sz() are only defined in kernel/bpf/arena.c.
 
-    check_ld_imm():
-        u64 pos = aux->map_off - bpf_arena_percpu_chunk_off(map);
-        dst_reg->mem_size = bpf_arena_percpu_chunk_sz(map);
-
-    check_and_resolve_insns():
-        if (!bpf_arena_percpu_chunk_sz(map)) {
-        if (!bpf_arena_percpu_off_in_range(map, off)) {
-
-Can this fail to link vmlinux with undefined references to
-bpf_arena_percpu_chunk_off, bpf_arena_percpu_chunk_sz and
-bpf_arena_percpu_off_in_range on 32-bit or !MMU kernels with
-CONFIG_BPF_SYSCALL=y?  In-tree examples are
-arch/arm/configs/imx_v6_v7_defconfig, aspeed_g5_defconfig and
-imxrt_defconfig (!MMU).
-
-The other arena.c symbols used by always-built code all have a fallback.
-kernel/bpf/core.c has __weak bpf_arena_get_user_vm_start() and
-bpf_arena_get_kern_vm_start() stubs "for configs without MMU or 32-bit", and
-include/linux/bpf.h wraps the arena kfuncs in
-"#if defined(CONFIG_MMU) && defined(CONFIG_64BIT)" with static inline stubs.
-
-Nothing later in the series adds stubs for these three helpers.  The JIT
-callers added later are 64-bit only, so stubs (or a CONFIG_MMU &&
-CONFIG_64BIT guard) would be needed only for the verifier call sites.
-
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index fc22d66d194a..29291101416a 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-
-[ ... ]
-
-> @@ -1600,6 +1601,20 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bp
->  			continue;
->  		}
->  
-> +		if (insn->code == (BPF_LD | BPF_IMM | BPF_DW) &&
-> +		    insn->src_reg == BPF_PSEUDO_ARENA_PERCPU) {
+> +
+> +			/* tmp =3D smp_processor_id() */
+> +			emit_current_cpu_id(tmp, ctx);
 > +			/*
-> +			 * The imm of an arena percpu pseudo insn is the
-> +			 * loader resolved address of the value in cpu 0's
-> +			 * chunk, and the JIT translates the pseudo insn to
-> +			 * step it into the running cpu's chunk. No need to
-> +			 * blind it.
+> +			 * tmp *=3D chunk_sz
+> +			 * arena_map_alloc() guarantees
+> +			 * chunk_sz * nr_cpu_ids <=3D vm_range <=3D 4 GiB and
+> +			 * cpu_number < nr_cpu_ids, so a 32-bit mul
+> +			 * cannot overflow here.
 > +			 */
-> +			insn++;
-> +			i++;
-> +			continue;
+> +			emit_a64_mov_i(0, tmp2, chunk_sz, ctx);
+> +			emit(A64_MUL(0, tmp, tmp, tmp2), ctx);
+> +			/* dst +=3D tmp */
+> +			emit(A64_ADD(1, dst, dst, tmp), ctx);
 > +		}
+> +#endif
 > +
->  		/* We temporarily need to hold the original ld64 insn
->  		 * so that we can still access the first part in the
->  		 * second blinding run.
+>  		return 1;
+>  	}
 
-Is it safe to skip constant blinding for this instruction?
+[Severity: Critical]
+Can this leave non-zero upper 32 bits in dst when arena->user_vm_start is at
+or above 4 GiB, causing subsequent arena memory operations on dst to access
+out-of-bounds kernel virtual memory?
 
-The new comment describes the imm as the "loader resolved address".
-check_and_resolve_insns() builds it from loader chosen values:
+In kernel/bpf/verifier.c:check_and_resolve_insns(), BPF_PSEUDO_ARENA_PERCPU
+is resolved via arena_map_direct_value_addr() to the full 64-bit
+arena->user_vm_start + off:
 
-    arena_map_direct_value_addr() + off
-      == arena->user_vm_start + insn[1].imm
+    err =3D map->ops->map_direct_value_addr(map, &addr, off);
+    ...
+    aux->map_off =3D off;
+    addr +=3D off;
+    ...
+    insn[0].imm =3D (u32)addr;
+    insn[1].imm =3D addr >> 32;
 
-user_vm_start comes from attr->map_extra (any page aligned value that does
-not cross a 32-bit boundary), and off can be any value inside the chunk.  So
-the loader controls essentially all 64 bits that the JIT emits as an
-immediate (movabs on x86, a mov sequence on arm64).
+Unlike BPF_PSEUDO_MAP_VALUE (which marks the register as SCALAR_VALUE so th=
+at
+dereferencing it requires an addr_space_cast or scalar access fixup that
+truncates the value to 32 bits), check_ld_imm() marks the destination regis=
+ter
+of BPF_PSEUDO_ARENA_PERCPU directly as PTR_TO_ARENA:
 
-The bpf_pseudo_func() skip just above is justified because that address "is
-not a user controlled constant".  This one is.  By comparison, a regular
-arena global (BPF_PSEUDO_MAP_VALUE) has its src_reg cleared by
-convert_pseudo_ld_imm64() and is blinded.
+    if (insn->src_reg =3D=3D BPF_PSEUDO_ARENA_PERCPU) {
+        u64 pos =3D aux->map_off - bpf_arena_percpu_chunk_off(map);
+        ...
+        __mark_reg_known(dst_reg, pos);
+        dst_reg->type =3D PTR_TO_ARENA;
+        dst_reg->mem_size =3D bpf_arena_percpu_chunk_sz(map);
+    }
 
-With net.core.bpf_jit_harden=2, can a CAP_BPF + CAP_PERFMON loader now place
-chosen 8-byte immediates in the JIT image through this instruction?
+Because dst_reg is already PTR_TO_ARENA, it can be dereferenced directly by
+BPF_LDX, BPF_STX, BPF_ST, or BPF_ATOMIC instructions without an intervening
+addr_space_cast. In arch/arm64/net/bpf_jit_comp.c:build_insn(), the
+BPF_PROBE_MEM32, BPF_PROBE_MEM32SX, and BPF_PROBE_ATOMIC handlers assume the
+upper 32 bits of a PTR_TO_ARENA register are already cleared and perform an
+unmasked 64-bit addition with arena_vm_base (kern_vm_start):
 
-The comment's reason ("the JIT translates the pseudo insn") explains why the
-generic rewrite cannot be applied, since that would drop the src_reg marker.
-It doesn't show that blinding is unnecessary, and the commit message does
-not mention the exemption.
+    if (BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM32 ||
+        BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM32SX) {
+        emit(A64_ADD(1, tmp2, src, arena_vm_base), ctx);
+        src =3D tmp2;
+    }
 
-Would blinding the value while keeping the per-cpu step work, for example by
-emitting the per-cpu add as a separate step after a blinded load?
+However, for BPF_PSEUDO_ARENA_PERCPU, build_insn() loads the full 64-bit im=
+m64
+via emit_a64_mov_i64(dst, imm64, ctx) and then either adds tmp with a 64-bit
+A64_ADD(1, dst, dst, tmp) on CONFIG_SMP or leaves dst untouched on
+!CONFIG_SMP. In both cases, bits [63:32] of dst retain user_vm_start >> 32,=
+ so
+dereferencing dst accesses kern_vm_start + user_vm_start + off + cpu_off
+instead of kern_vm_start + (u32)(user_vm_start + off + cpu_off).
+
+Should BPF_PSEUDO_ARENA_PERCPU zero-extend the 32-bit address on both
+CONFIG_SMP and !CONFIG_SMP (for example, loading only the 32-bit imm and us=
+ing
+a 32-bit A64_ADD(0, dst, dst, tmp))?
 
 [ ... ]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 01434e1d23b5..0c0d3662ec76 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+>
+>--=20
+>2.39.5
+>
 
-[ ... ]
-
-> @@ -19080,10 +19100,27 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
->  	map = env->used_maps[aux->map_index];
->  
->  	if (insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
-> -	    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE) {
-> +	    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE ||
-> +	    insn->src_reg == BPF_PSEUDO_ARENA_PERCPU) {
->  		if (map->map_type == BPF_MAP_TYPE_ARENA) {
-> -			__mark_reg_unknown(env, dst_reg);
-> -			dst_reg->map_ptr = map;
-> +			if (insn->src_reg == BPF_PSEUDO_ARENA_PERCPU) {
-> +				u64 pos = aux->map_off - bpf_arena_percpu_chunk_off(map);
-> +
-> +				/*
-> +				 * The register value tracks the position of
-> +				 * the reference inside cpu 0's chunk and
-> +				 * mem_size bounds accesses to the chunk.
-> +				 * map_ptr and mem_size share a union and
-> +				 * map_ptr is never read for PTR_TO_ARENA,
-> +				 * so only mem_size is set.
-> +				 */
-> +				__mark_reg_known(dst_reg, pos);
-> +				dst_reg->type = PTR_TO_ARENA;
-> +				dst_reg->mem_size = bpf_arena_percpu_chunk_sz(map);
-> +			} else {
-> +				__mark_reg_unknown(env, dst_reg);
-> +				dst_reg->map_ptr = map;
-> +			}
->  			bpf_diag_mod_end(env);
->  			return 0;
->  		}
-
-Does state pruning still distinguish these registers?
-
-This patch gives PTR_TO_ARENA registers safety state.  var_off holds the
-position inside cpu 0's chunk and mem_size holds the bound that
-check_mem_access() enforces.  regsafe() in kernel/bpf/states.c was not
-updated, and it still treats any two PTR_TO_ARENA registers as equivalent:
-
-    case PTR_TO_ARENA:
-        return true;
-
-A path whose per-cpu reference is out of range can then be pruned against an
-explored path whose reference is in range (or is a plain unbounded arena
-pointer), and the bound check never runs for it.  For example:
-
-    r0 = bpf_get_prandom_u32()
-    r1 = ld_imm64 ARENA_PERCPU(off = chunk_off + chunk_sz - 4)
-                                       ; pos = chunk_sz - 4
-    if r0 == 0 goto L
-    r1 = ld_imm64 ARENA_PERCPU(off = chunk_off)
-                                       ; pos = 0
-  L:
-    r2 = *(u64 *)(r1 + 0)
-    r0 = 0
-    exit
-
-The fall-through path (pos 0) is explored first, passes the 8 byte load at
-L, and leaves a checkpoint there.  That needs enough preceding insns/jumps,
-or BPF_F_TEST_STATE_FREQ.
-
-When the pushed branch (pos chunk_sz - 4) reaches L, states_equal() ->
-regsafe() returns true for r1.  r0 is not precise, so it matches too.  The
-path is pruned and the program loads, even though that load reads 4 bytes
-past cpu 0's chunk.
-
-A plain arena pointer (e.g. after addr_space_cast) on the first path hides
-an out-of-range per-cpu reference on the second path in the same way, so
-whether the program is accepted depends on exploration order.
-
-That contradicts the commit message ("If the offset or the access size goes
-past cpu 0's chunk, the prog is rejected") and what the percpu_bounds
-selftest added in 08224ba2de19 expects.  At runtime the access lands in the
-next CPU's chunk, or past the last chunk.  Arena accesses are PROBE_MEM32,
-so kernel memory is not exposed, but per-cpu data is silently shared across
-CPUs.
-
-Should regsafe() compare mem_size, and check range_within()/tnum_in() on
-the position, for PTR_TO_ARENA registers with mem_size != 0?
-
-This is not fixed later in the series.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39434884362
---===============8681009879540805806==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
+t.xukuohai@huawei.com?part=3D11
