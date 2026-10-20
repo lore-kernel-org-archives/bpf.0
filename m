@@ -1,44 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792515472;
-	b=akfYQOm3bpxCGI4H8dvYgEXdRaJIqeRfNTgaaAIGSA08EhzG9bEz2tAxqaaX+OV2lGIh
-	 ciwsdX6heRD6jFEI1fDjtqku9rJyHv+u4at15mkGW/EC1W1z+IL5rIMAdBI07QQDcZPZ+
-	 B94IVHBpJS79AJpooH9yY6HGLQE2qnvyYq8Vzw05mmrrmQ3kFBeZ4LtJ8eufWCU0ZI6Np
-	 rcGefmjCZPOoZlQFAjlvfZ/lf8Rwoq4mrLC3pzHVLPfl55BtFtiI20RgP8XYOmUSbTRn5
-	 +87ZKkjvgYeqXJXxd9onXtShGG2REyQMcOJgxoGvXkd3PCx6tJ8eo7dySOpXSsX/eTg==
+	t=1792516126;
+	b=O1uFM39f0vX7gTI1u2mcyxngGaneAQiaghswEyCHArUhoRmTRFd0Zul69tEHmaNP9B0f
+	 71tsSTxQCQlSOHuBERS30ZiSD0VKbEJ6eCaGPXNSbepgEIEtG2dBa/vnKlL8E35pFwiy7
+	 KtYd0h7635g/2nSdtWdmfSPmmqVmL9AMWUcM44S4QNvCBRfS8v3B/LT3CnlprywRx8Gvv
+	 XzB8TNtIfrGHRDrzsPfUufJls3OLwkci68t8ySZUCqSSNrstPDf8kbe9tZV02ZbvlyrH/
+	 ZWRmr4Dg3jVrZSibujyQ4xWRSVuNcg0RoNnpJdmn3ge8aDN+vmcMDvY+i1xljcYcxUw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792515472;
-	h=Received:Message-ID:From:Subject:Reply-To:To:Cc:In-Reply-To:
-	 References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=0mP4kUJV9Dub/xcube8/VUquTAKht52U1uQexTyPAHU=;
-	b=bCHaG0Jel1hDgBHViyfeSnhFawKmJq4BiLgu1pTqlmnFDWo0i1Lz4nmH3Vw9B5rYT+Ct
-	 grmQLkYwTcbzr+e/a0+hjnws7SNeHQ6q6LgMx0ovKKKioNFa11aVYCHv1s4V3NQCnE0ED
-	 ll78tWfG8YR5ze4PCRtS2trICGzbfQR/Ug2k792MNj7tGAiHBy2Y7zL5UgnbnsbvdRZlJ
-	 Sk5d8rH4uI0NXF3zh9Vf3yUvYSrUsw6qm5m5bBbhHg5UYa+bfrqmJZ0bfwLDd+r4d3EMf
-	 f8wjmS5fgrMh0ZaoJZu77/w/CeRrexK/8a7Fq/Wa89qRx8uNtdZK81m6FpIEueB22WQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792516126;
+	h=Received:Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date;
+	bh=WmttQryXnibWlRJiZPUojQhvGDcV+ijgulX9csVBoUI=;
+	b=PlKXfsQ8wzTB3riK9oIlZ8EcS7V89K/tQE8Eup8/NkPg26zRHvRyLzXKKEY+kZ+7rZkc
+	 XEIr8M7YSBX/8u6rcAwqRMQ2i6ITjyZyd4A+EsvVa2KtKS1axtyydwvIc+pwpVJb97+e/
+	 4tRpCJCQXknnydeuKOr4QNO/8Peow9SjoDQ1i3m/XFwmsWrRiDKyH9/4fkeA1ols4BdYN
+	 phZMJkLBcFw0DgJr/w+nGHjgqQKqTH6iV86EVnOlXWA1eJjEdRuCgWDdKf6Qlfbw16E1/
+	 CZOUpINss/GeASlUnBkfqss8DjVjPs46FD/3jK/uYAM+PJBxkLJasnfdJls1ci1PXQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B22606A31A
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:57:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307EF1F000C9;
-	Tue, 20 Oct 2026 16:57:52 +0000 (UTC)
-Message-ID: <sashiko-outbox-179390@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 06/12] bpf: Track low-32 scalar equality
- across sign-extending movs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vineet Gupta" <vineet.gupta@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261020161907.2115379-7-vineet.gupta@linux.dev>
-References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
- <20261020161907.2115379-7-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 16:57:21 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE45606A31B;
+	Tue, 20 Oct 2026 17:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06841F000C9;
+	Tue, 20 Oct 2026 17:08:45 +0000 (UTC)
+Content-Type: multipart/mixed; boundary="===============2184321447331015808=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -47,160 +35,108 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <443e1351eed4f46cf6c202e5f1130b189e9c5eb09cfcffd24d752c6ec73d450c@mail.kernel.org>
+In-Reply-To: <20261020161907.2115379-4-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-4-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v3 03/12] bpf: Prepare linked scalars for relations narrower than 64 bits
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 17:08:45 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: empty range after reg_bounds_sync() in sync_linked_regs()
---
+--===============2184321447331015808==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit ad01f18c15eb8cfa9a97b984758db9dd254aace2
-Author: Vineet Gupta <vineet.gupta@linux.dev>
+> bpf: Prepare linked scalars for relations narrower than 64 bits
 
-bpf: Track low-32 scalar equality across sign-extending movs
+TL;DR: Commit message only: regs_exact() now also rejects states whose linked
+scalars share a base id in old but not in cur, a stricter infinite-loop check
+the changelog doesn't mention.
 
-This commit adds BPF_REG_LINK_SEXT to track low-32 scalar equality across
-32-bit sign-extending moves, using sext_32_to_64() and tnum_sext() to
-propagate bounds in sync_linked_regs().
+> bpf: Prepare linked scalars for relations narrower than 64 bits
+>
+> Two scalars sharing an ->id are always related by full 64-bit equality
+> today: reg == base + delta over all 64 bits (this is true for
+> BPF_ADD_CONST32 as well, which implies upper bits to be all zero).
+> Sign-extension needs a genuinely low32 equal only relationship kind
+> with bit 31 supplying upper 32-bits.
+>
+> Today the following 2 relationships exist
+>
+>   #define BPF_ADD_CONST64 (1U << 31)
+>   #define BPF_ADD_CONST32 (1U << 30)
+>
+> Model them differently as
+>
+>   enum bpf_reg_link_kind { BPF_REG_LINK_NONE, BPF_REG_LINK_FULL,
+>                            BPF_REG_LINK_ZEXT, BPF_REG_LINK_SEXT };
+>
+> So BPF_ADD_CONST64 becomes BPF_REG_LINK_FULL and BPF_ADD_CONST32 becomes
+> BPF_REG_LINK_ZEXT with the exact same semantics as today. But this paves
+> the way for a future BPF_REG_LINK_SEXT in the same framework.
+>
+> The implementation needs to change as well. Today the above 2 bits are
+> shoe-horned into ->id, needing masking and OR'ing to get ->id and kind
+> bits: with more types and bits needed, move them out into an enum
+> bitfield of its own. To avoid growing the storage (and stay within the
+> 1K allocator bucket), borrow 2 bits out of ->map_uid, 31 -> 29, which is
+> still far more ids than a program can generate.
+>
+> ->id becomes a plain identifier, so check_scalar_ids() loses its "compare
+> the compound id, then the base id" dance in favour of one check_ids().
+>
+> With the kind out of ->id it also leaves the idmap key, so regs_exact()
+> and regsafe()'s explore_alu_limits arm have to compare it explicitly.
+>
+> One case changes behaviour -- old {r2.id=A+delta32} against
+> cur {r2.id=B+delta64} was accepted and is now rejected, correctly, since
+> alu32 and alu64 deltas diverge in sync_linked_regs().
+>
+> Clearing a link is no longer just ->id = 0: any stale ->link_kind needs
+> to be cleared out as well. And given this needs to be done in the newly
+> added kernel/bpf/scev.c, it is moved into bpf_verifier.h as
+> bpf_clear_scalar_id().
+>
+> The helper also zeroes ->delta, which the open-coded clear left behind.
+> Unlike ->id that field is inside the memcmp() prefix state comparison
+> uses, so a leftover value could keep two otherwise-identical states
+> apart; clearing it can only help pruning.
+>
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6afd718ede647..4621b476b206e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -6090,6 +6090,25 @@ static void zext_32_to_64(struct bpf_reg_state *re=
-g)
->  	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
->  }
-> =20
-> +/*
-> + * The sign-extending counterpart. Signed bounds carry over directly bec=
-ause
-> + * sign extension is monotonic over the signed 32-bit range.
-> + */
-> +static void sext_32_to_64(struct bpf_reg_state *reg)
-> +{
-> +	/*
-> +	 * See comment at reg_step_check_unsigned(). Sign extension subtracts
-> +	 * 2^32 from every value with bit 31 set, which preserves a residue
-> +	 * mod step only when step divides 2^32, so the line cannot be kept.
-> +	 * The zero-extending twin calls reg_step_check_unsigned(reg, 32) for
-> +	 * the same reason; the unsigned form does not apply here because the
-> +	 * result is not the low 32 bits but the low 32 bits moved.
-> +	 */
-> +	reg_step_reset(reg);
-> +	reg->var_off =3D tnum_sext(reg->var_off, 4);
-> +	reg_set_srange64(reg, reg_s32_min(reg), reg_s32_max(reg));
-> +}
-[ ... ]
-> @@ -18795,9 +18843,26 @@ static void sync_linked_regs(struct bpf_verifier=
-_env *env, struct bpf_verifier_s
->  			scalar32_min_max_add(reg, &fake_reg);
->  			scalar_min_max_add(reg, &fake_reg);
->  			reg->var_off =3D tnum_add(reg->var_off, fake_reg.var_off);
-> -			if (reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
-> -			    known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT)
-> +			if (reg->link_kind =3D=3D BPF_REG_LINK_SEXT) {
-> +				sext_32_to_64(reg);
-> +			} else if (reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
-> +				   known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
-> +				   known_reg->link_kind =3D=3D BPF_REG_LINK_SEXT) {
-> +				/*
-> +				 * Either @reg is itself the zero extension, or
-> +				 * @reg has no 32-bit kind and @known_reg does
-> +				 * -- the reverse direction, where the guard
-> +				 * above has already proved @reg fits 32 bits.
-> +				 * Then @reg is @known_reg's low half with
-> +				 * nothing above it, whichever way @known_reg
-> +				 * filled its own high half, so the zero
-> +				 * extension is the reconstruction for both
-> +				 * kinds. BPF_REG_LINK_FULL is not here on
-> +				 * purpose: it relates all 64 bits and must not
-> +				 * be truncated.
-> +				 */
->  				zext_32_to_64(reg);
-> +			}
->  			/*
->  			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
->  			 * link over a wide base does not propagate back, so the
+The changelog lists only the delta32/delta64 mismatch as a case that changes
+behaviour.  Is that the only one?
 
-[Severity: Medium]
-Can sync_linked_regs() leave reg with CNUM64_EMPTY and CNUM32_EMPTY after
-reg_bounds_sync(), triggering a register invariants violation on the next
-instruction that inspects the register?
+regs_exact() also changes.  It used to run check_ids() on the compound id,
+so old {r2.id=A, r3.id=A|BPF_ADD_CONST64} against cur {r2.id=B,
+r3.id=C|BPF_ADD_CONST64} built two independent idmap entries (A->B and
+A|flag->C|flag) and was accepted as exact.
 
-At the end of the differencing block in sync_linked_regs():
+With the kind moved out of ->id, the same pair now maps A->B and then A->C,
+and check_ids() rejects it:
 
-	cnum64_intersect_with(&reg->r64, prev.r64);
-	cnum32_intersect_with(&reg->r32, prev.r32);
-	reg->var_off =3D tnum_intersect(reg->var_off, prev.var_off);
-	if (range_bounds_violation(reg))
-		*reg =3D prev;
-	reg_bounds_sync(reg);
+    return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+           rold->link_kind == rcur->link_kind &&
+           check_ids(rold->id, rcur->id, idmap) && ...
 
-range_bounds_violation(reg) is only checked before reg_bounds_sync(reg),
-and tnum_intersect() is called without checking tnum_overlap(). When a
-contradiction occurs across domains (between r64, r32, and var_off) rather
-than within r64 or r32 individually, the pre-sync range_bounds_violation()
-check passes, and reg_bounds_sync(reg) then turns the cross-domain
-disjointness into CNUM64_EMPTY / CNUM32_EMPTY without restoring prev.
+regs_exact() is reached through regsafe(..., EXACT) from the infinite loop
+check in bpf_is_state_visited():
 
-This can be triggered in two ways with BPF_REG_LINK_SEXT:
+    states_equal(env, &sl->state, cur, EXACT)
 
-1. Cross-domain contradiction between r64 and r32 via sext_32_to_64():
+so this is a stricter comparison than before.
 
-   Suppose r6 is a 64-bit unknown scalar and r7 =3D (s32)r6 links r7 to r6
-   with BPF_REG_LINK_SEXT.
+Could the changelog also say that regs_exact() now enforces base-id
+consistency for linked scalars, which the old compound-id idmap key did not?
 
-   - Narrow r7 with signed 64-bit jumps to [-0x7ffffff0, 0x7ffffff0], so
-     r7.r64 is [-0x7ffffff0, 0x7ffffff0] and r7.r32 is the arc
-     [0x80000010, 0x7ffffff0].
-   - Execute if w6 < 0x7ffffff0 goto out. Because [0x7ffffff0, 0xffffffff]
-     and [0x80000010, 0x7ffffff0] overlap in two disjoint arcs,
-     cnum32_intersect() over-approximates by keeping the smaller arc
-     [0x7ffffff0, 0xffffffff] for r6.r32 and r7.r32, while r7.r64 remains
-     [-0x7ffffff0, 0x7ffffff0].
-   - Execute if w6 !=3D w8 goto out where w8 has r32 =3D [0x7ffffff8, 0x800=
-00007].
-   - In sync_linked_regs() for r7, reg->r32 is [0x7ffffff8, 0x80000007],
-     which straddles S32_MAX / S32_MIN. sext_32_to_64(reg) sets reg->r64 to
-     [S32_MIN, S32_MAX].
-   - Intersecting reg->r64 with prev.r64 gives [-0x7ffffff0, 0x7ffffff0]
-     (non-empty) and intersecting reg->r32 with prev.r32 gives
-     [0x7ffffff8, 0x80000007] (non-empty).
-   - range_bounds_violation(reg) is false, so *reg =3D prev is skipped.
-   - reg_bounds_sync(reg) calls deduce_bounds_32_from_64(reg), which
-     intersects [0x7ffffff8, 0x80000007] with [0x80000010, 0x7ffffff0] and
-     leaves reg->r32 =3D CNUM32_EMPTY and reg->r64 =3D CNUM64_EMPTY.
 
-2. Contradiction between var_off and r64/r32 via tnum_intersect():
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-   Suppose r6 is a 64-bit unknown scalar, r7 =3D (s32)r6, and r7 is narrowed
-   to [-4, 3].
-
-   - Execute if w6 & 8 goto out. On the fallthrough branch,
-     regs_refine_cond_op() calls __mark_reg_unbounded(&r6) and clears bit 3
-     in var_off; sync_linked_regs() narrows r7 to [0, 3] with
-     var_off =3D TNUM(0, 3).
-   - Execute if w6 & 4 goto target. On the taken branch, r6 gets low-32
-     var_off =3D TNUM(4, 0xfffffff3) and r32 =3D [-0x7ffffffc, 0x7ffffff7].
-   - In sync_linked_regs() on r7, cnum64_intersect_with() and
-     cnum32_intersect_with() both produce [0, 3] (non-empty), while
-     tnum_intersect() without a tnum_overlap() check combines
-     TNUM(4, 0xfffffffffffffff3) and TNUM(0, 3) into TNUM(4, 3) ([4, 7]).
-   - range_bounds_violation(reg) is false before reg_bounds_sync(reg), and
-     __update_reg_bounds() inside reg_bounds_sync(reg) then intersects
-     [0, 3] with [4, 7], leaving r7 with CNUM32_EMPTY and CNUM64_EMPTY.
-
-Should sync_linked_regs() check !tnum_overlap(reg->var_off, prev.var_off)
-and also check range_bounds_violation(reg) after reg_bounds_sync(reg) before
-committing the updated state?
-
->  			/*
->  			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
->  			 * link over a wide base does not propagate back, so the
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020161907.2115=
-379-1-vineet.gupta@linux.dev?part=3D6
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
+--===============2184321447331015808==--
