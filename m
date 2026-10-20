@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792504903;
-	b=NtxU1vTDbLP9A9NB6djjcGbbFfv4prfzxvudJ7QiKkAnyk8eRG3oKdjINsvvD+veIcDV
-	 b2mfXJWkxgKOGy/bBV1kGo64swCEgiqID1a70INgrSU6H6cOOAzryFv8RT5LOXayvZgYB
-	 tcb7Pw4NcVvqn6lUVKX2xuJ9SPMNqM0qo14A9JnHB9mLSu8ofcq3x8CT3Ewi6507GZE/a
-	 lnBjZ2HvYrmrwD3qcCbXYOPcOtxJR4mwXZe0hS0hhRSFiiaIu2ie5G7O7YNKFSdPANAGF
-	 z7mcMWX3tiukXVoH6drVgfbDWkrojrgCCKyM748zguB4OMTqM2kdWbhJRP/RmqHYwfw==
+	t=1792505065;
+	b=bhWl27jHBctJ0Vv/gN/+WZY96+VZ874QloU5oHDSImWUIGIc7D4ljIMQy+52AOwVUGhO
+	 GJSHfCU6EzqpZ4jB7bLKI8LxY1q+PyQUWUpYjVXqXTJmHiDecKkrzDbgFGgVAKyN1CZn5
+	 LPN3lMd8zAjQ1oZfJhBSXvQNOpWzMQlZX1e4kRdvUNiG9Vt25m8Dl6fkgXXAJ8nZDntvW
+	 EfTZZwo+PwVIl8id7rjk4otMJK9NMgu7ayuwb6L0sv/PJ06ZFAu7Ac91iMyxeZn5eUqaE
+	 Mf/HsvZrAtbCxYC3K71iuu76HQNkXRsPFMIUhuHHgR6AfpuA5BKkX+dSY1pRKnrNfEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504903;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505065;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=/PzkJJnr1xi8qEIuYiOzuHmilmQw1z23oWnEO1Wl9hk=;
-	b=OKZj1FmfKMazQ3SNhgFRWIYY6DE9ljx579JNuiYMMKu/2dkWXepW1xbZ2F3EHoIwYbiI
-	 nXxasJsOr/3mCQhuxnddffuIUJWq3hVK9pyaY7DiO61QWijvtx6ODkwqHrehx7mqrKxdt
-	 O/OUnZvAAQYZlpmBTr2t8LNY4vZIQj884nG+tlUKi3tDM1jd92ccU6QlB13LZjxH1XAWQ
-	 QYODt6AteoaNC2r8m0j1bCXkdgaJn61w4bkhF0EnqgQGCtI9PYNQsBKt0dchHlHVbAMNN
-	 zm/50HrCqSUyLEkUnyArzYyAu+fxwKa3UHrpRUOb/5aLrULkCNC/oOZce+yeaOjCHGw==
+	bh=7r2+jmI9yLt+HU7/91BGv76dGLIgtVNmcuy+6F4aKzs=;
+	b=4tPX8WbbL05RQnb/1NGrVkUwh0SzZfg0E5M3TQ8EI3hC4sKAbhp40pMLsxBGFe+Vknr3
+	 /dR4fB5Wc7KIYhOMUBQYpNWdm0UKt3PbdVtc4Wve2z0k0IUloEv0wb13oMrihX4qZGrRY
+	 PMrxolTYVhsybTnVUQDcL3x5yVp9vggok+rhsAr2eMqmcqVyaGy3E1JJxemFDYLO5uUyi
+	 EGZwj0mkKYyazpfJ2qnFtXiN/yHVzP++dDQFoabb1Uzv1HY5t+eAEy0HSvWDqxhUQmrg8
+	 oROEfSfI6piedMtGSikMaccKV/Z59U79NZcJckMp3dC2CW9ccvOG9qL77UJceTQmfYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMiLS4nC;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d3ehGHNV;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B464A606A31C
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4D3606A319
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMiLS4nC
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E0EB1F000CF;
-	Tue, 20 Oct 2026 14:01:42 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d3ehGHNV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22EC11F000C4;
+	Tue, 20 Oct 2026 14:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792504902;
-	bh=/PzkJJnr1xi8qEIuYiOzuHmilmQw1z23oWnEO1Wl9hk=;
+	s=k20260515; t=1792505064;
+	bh=7r2+jmI9yLt+HU7/91BGv76dGLIgtVNmcuy+6F4aKzs=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=YMiLS4nCvbPhU9CXjO2kBrvmGnlVFvxMaqMlEUAnJjM8Hz3gnAjswc7C4gdqDrIjE
-	 QfUNYvLrdVhBG0met02jHDJCEMRAPRf8xCzLFo6koWIIpfdoElXiZZA/gp6SxPrxq6
-	 i2VuTlDYyr3bLbWVQ1Zg6/+MV0vyTgMH4tybL2IT3DrI4SEHdxR46ELEBgV9HpWeL0
-	 9aXdJkY86Xr61wWvxuq1Xml3m0+0ceccTeXGDYy58BR7oJorHdgdDijTJ0t3ARZvvu
-	 oczkRc+d+jMQtKKH4iQqR19gtlV9rVRziqwPyB+UkGdInOKR5l2mBJnsKx1Ntn15Im
-	 s6p6JJKMZ1WpA==
-Message-ID: <sashiko-outbox-179076@kernel.org>
+	b=d3ehGHNVV3ov7v5VqIZwAKN/3bHF8eDiWt5SkrI1vgWN8r6i9nR5r4u/V+POYk0pk
+	 iz78b5RdDYo6U9nxaV4cDv2Oms9gwrmVjGbZF6n3UQKpFMXa8a7f2ls+Mr2OU+tf54
+	 pzy2lBQ2RaT/Nsa4IyIjGCf8GizNmBCe3rqfvC6JvDTMr3nBLbhJroIkIsW8p4oY97
+	 MdCwpM5cpgfCixQmFy1fWmtbhEijAoh+licR1EBxTvyhhT3Uc/i99NGBKL+iHfMiaZ
+	 Ttr8QfO5GnG4JEiDCOcjat109SxlsIevSuTemvceY4hBN3FjfWJn6Oc3AMaXdrgymQ
+	 +jX6Lrj7vjScg==
+Message-ID: <sashiko-outbox-179079@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 13/16] bpftool: Emit the arena percpu datasec
- into skeleton
+Subject: Re: [PATCH bpf-next 05/16] libbpf: Add the arena percpu chunk
+ attribute to map creation options
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
-In-Reply-To: <a579251a284c3dd4954c305a04346acef4ec4113.1792503001.git.xukuohai@huawei.com>
+In-Reply-To: <e596c9878df94ac93c172d93106c8ebd2dac4bb7.1792503001.git.xukuohai@huawei.com>
 References: <cover.1792503001.git.xukuohai@huawei.com>
- <a579251a284c3dd4954c305a04346acef4ec4113.1792503001.git.xukuohai@huawei.com>
+ <e596c9878df94ac93c172d93106c8ebd2dac4bb7.1792503001.git.xukuohai@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 14:01:41 +0000
+Date: Tue, 20 Oct 2026 14:04:23 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,125 +60,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpftool: NULL pointer dereference in do_skeleton() when BTF is a=
-bsent
-- [Low] bpftool: missing pointer cast in do_skeleton() breaks C++ skeleton =
-build
+- [High] libbpf: ABI break in struct bpf_map_create_opts from field inserti=
+on
 --
 
-commit 104a6169dc8cb31cbaeca548b8c48657b09d1a96
+commit c57f05a60ad40accdc31f88eec3828c5149f9136
 Author: Xu Kuohai <xukuohai@huawei.com>
 
-bpftool: Emit the arena percpu datasec into skeleton
+libbpf: Add the arena percpu chunk attribute to map creation options
 
-This commit updates bpftool skeleton generation to emit a separate
-arena_percpu data section struct when .arena.percpu variables are present
-and initializes obj->arena_percpu to cpu 0's per-cpu arena base in the
-generated load function.
+This commit adds arena_percpu_chunk_off and arena_percpu_chunk_sz to
+union bpf_attr and struct bpf_map_create_opts, and populates them when
+creating an arena map.
 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index ee680f7c21160..8a321ec1155a1 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index 826d9cc9ab65d..15a544488eb59 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -70,6 +70,10 @@ struct bpf_map_create_opts {
+>  	const void *excl_prog_hash;
+>  	__u32 excl_prog_hash_size;
+> =20
+> +	/* offset and size of an arena percpu chunk */
+> +	__u32 arena_percpu_chunk_off;
+> +	__u32 arena_percpu_chunk_sz;
+> +
+>  	struct bpf_log_opts *log_opts;
+> =20
+>  	size_t :0;
+
+[Severity: High]
+Does inserting arena_percpu_chunk_off and arena_percpu_chunk_sz before
+log_opts break binary compatibility for struct bpf_map_create_opts?
+
+struct bpf_map_create_opts is a size-versioned LIBBPF_OPTS structure
+validated and accessed through OPTS_VALID() and OPTS_GET() in
+bpf_map_create():
+
+tools/lib/bpf/bpf.c:bpf_map_create() {
+	...
+	if (!OPTS_VALID(opts, bpf_map_create_opts))
+		return libbpf_err(-EINVAL);
+	...
+	attr.arena_percpu_chunk_off =3D OPTS_GET(opts, arena_percpu_chunk_off, 0);
+	attr.arena_percpu_chunk_sz =3D OPTS_GET(opts, arena_percpu_chunk_sz, 0);
+
+	log_opts =3D OPTS_GET(opts, log_opts, NULL);
+	if (!OPTS_VALID(log_opts, bpf_log_opts))
+		return libbpf_err(-EINVAL);
+}
+
+Prior to this change, log_opts was the last field in struct
+bpf_map_create_opts (at byte offset 72 on 64-bit platforms, with
+sizeof(struct bpf_map_create_opts) =3D=3D 80) and
+bpf_map_create_opts__last_field was defined as log_opts:
+
+tools/lib/bpf/bpf.h:
+	struct bpf_log_opts *log_opts;
+
+	size_t :0;
+};
+#define bpf_map_create_opts__last_field log_opts
+
+Placing arena_percpu_chunk_off (offset 68) and arena_percpu_chunk_sz
+(offset 72) ahead of log_opts shifts log_opts to offset 80 (with
+sizeof(struct bpf_map_create_opts) =3D=3D 88).
+
+If an existing binary compiled against the previous struct
+bpf_map_create_opts layout (opts->sz =3D=3D 80, log_opts at offset 72) calls
+the updated bpf_map_create(), OPTS_GET(opts, arena_percpu_chunk_sz, 0)
+will read the lower 32 bits of the caller's log_opts pointer into
+attr.arena_percpu_chunk_sz, while OPTS_GET(opts, log_opts, NULL) will see
+opts->sz < offsetofend(struct bpf_map_create_opts, log_opts) and silently
+drop log_opts.
+
+Conversely, if a binary compiled against the new header sets
+arena_percpu_chunk_sz and runs against an older libbpf.so, the older
+bpf_map_create() will read the 32-bit arena_percpu_chunk_sz value at
+offset 72 as a non-NULL struct bpf_log_opts *log_opts pointer and
+dereference it in OPTS_VALID(log_opts, bpf_log_opts).
+
+Should arena_percpu_chunk_off and arena_percpu_chunk_sz be appended after
+log_opts, with bpf_map_create_opts__last_field updated to
+arena_percpu_chunk_sz?
 
 [ ... ]
-
-> @@ -1511,11 +1523,58 @@ static int do_skeleton(int argc, char **argv)
->  			return %1$s__open_opts(NULL);			    \n\
->  		}							    \n\
->  									    \n\
-> -		static inline int					    \n\
-> -		%1$s__load(struct %1$s *obj)				    \n\
-> -		{							    \n\
-> -			return bpf_object__load_skeleton(obj->skeleton);    \n\
-> -		}							    \n\
-> +		",
-> +		obj_name
-> +	);
-> +
-> +	/* The per-cpu arena data has no mmaped slot in the map skeleton.
-> +	 * Point obj->arena_percpu at cpu 0's chunk once the object is
-> +	 * loaded.
-> +	 */
-> +	{
-> +		char arena_map_ident[256] =3D "";
-> +		bool have_percpu_arena =3D false;
-> +
-> +		bpf_object__for_each_map(map, obj) {
-> +			if (bpf_map__type(map) !=3D BPF_MAP_TYPE_ARENA)
-> +				continue;
-> +			if (find_type_for_map(bpf_object__btf(obj), "arena_percpu") &&
-> +			    get_map_ident(map, arena_map_ident, sizeof(arena_map_ident))) {
-
-[Severity: Medium]
-Can this dereference a NULL btf pointer when generating a skeleton for an
-object with an arena map but no BTF information?
-
-Earlier in do_skeleton(), codegen_datasecs() is guarded by checking if btf
-is non-NULL:
-
-    if (btf) {
-        err =3D codegen_datasecs(obj, obj_name);
-        if (err)
-            goto out;
-    }
-
-Here, bpf_object__btf(obj) is passed directly to find_type_for_map()
-without checking if btf is NULL:
-
-    do_skeleton()
-      find_type_for_map(bpf_object__btf(obj), "arena_percpu")
-        btf__type_cnt(btf)
-          return btf->start_id + btf->nr_types;
-
-Should this check that btf is non-NULL before calling find_type_for_map()?
-
-> +				have_percpu_arena =3D true;
-> +				break;
-> +			}
-> +		}
-> +
-> +		if (have_percpu_arena) {
-> +			codegen("\
-> +				\n\
-> +				static inline int \n\
-> +				%1$s__load(struct %1$s *obj) \n\
-> +				{ \n\
-> +					int err; \n\
-> +					 \n\
-> +					err =3D bpf_object__load_skeleton(obj->skeleton); \n\
-> +					if (err) \n\
-> +						return err; \n\
-> +					obj->arena_percpu =3D \n\
-> +						bpf_map__arena_percpu_base(obj->maps.%2$s); \n\
-
-[Severity: Low]
-Will this assignment fail to compile when the generated skeleton header is
-included in C++ code?
-
-bpf_map__arena_percpu_base() returns void *, while obj->arena_percpu is a
-typed struct pointer (struct <obj_name>__arena_percpu *). In C++, implicit
-conversion from void * to a typed pointer is not permitted.
-
-Elsewhere in tools/bpf/bpftool/gen.c, such as in gen_st_ops_shadow_init(),
-void * returns are cast using __typeof__:
-
-    obj->struct_ops.%1$s =3D (__typeof__(obj->struct_ops.%1$s))
-        bpf_map__initial_value(obj->maps.%1$s, NULL);
-
-Should obj->arena_percpu also use a (__typeof__(obj->arena_percpu)) cast
-here?
-
-> +					return 0; \n\
-> +				} \n\
-> +				", obj_name, arena_map_ident);
-
-[ ... ]
-
->
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
-t.xukuohai@huawei.com?part=3D13
+t.xukuohai@huawei.com?part=3D5
