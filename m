@@ -1,55 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505572;
-	b=sYeOVy9nQjqp7JTKA1NY+QuCccd1kmXZpOnF6XH3rhJDd8DDeP438xn8yNZi0ZdFq6Q9
-	 tsEkq8jfHi24nlIFm7uPJacWn1Jn5CqpoyIEzr2AZw7noBdET2wCoQfYlIB3YqCeGgNOr
-	 S0s5uRqLzcWC+nQSscrYgizgQqkdu08TCI5TLn0D0Xt8la5Sl3dse7AsWvxVx8a//gxKs
-	 FtG46f2k/L/npRgeWlcYFFYEwOO6ebUsRLql44ihFwJAwOmEdMJFHELrCH1OJdeor7kav
-	 PatNnkS76WpUmUFTuONA1iVjOtp1QmGKao50/PTmE/q9lqY3K//uHOvcKZgAAA2w7Uw==
+	t=1792505574;
+	b=PIOWZRgDXndtXx+tyxKilHI6AzMP/H6U8w952wpiZmf2oUHjQmO6xuhKIhm9x+sdBJZo
+	 GNGX99F8ROJz8VhULYcLySBm4aHZXE+EYYxMQnSZ1KZyHRq6c4ZufvEw1zsnD1elvtoAR
+	 /qStkv+b4ZWufWyMhnKV+orNbaOJHW4Klz9D/E0ROv92GyXwRyy4gsF8vh5aBBaLsT4QC
+	 oaINbMRlVFicjhCOhj8+9xEv1uW65wgacvtJ+q6Hm4C4eUblnMol9NttCqs8JT2UpSEmu
+	 9wTeryEyJgOdkMG0H7j5a/mBBA1BKCfs1pdQIyeispeOqyo5sTJ73IysuD2lRQOR6IA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505572;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505574;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=GD5llvseKZs+O5b0Tu0mTD1CIuSikTJlCdK4rXSWDW0=;
-	b=jpa0jJ3xG3OXIKBquqM0XBAppeB6kZxE1M5s1wNhHscaiRx6Fy7PeJ72Ge+QypGs5Uzp
-	 8Mqk8RVdoZq5pk0VQRF3fStqZbaNVe9M8hkFvK4QgbcNTl8aJbwtwLepvbxO+uFQVMX/0
-	 8TVUbHjF6O/BhFZGN1cTpGSUfZy0jf3Opbk6PL0BBriV8TZSKWGvQwnR2xdHr7A5ujhZc
-	 VxCFhbK3pQUiVQIVMTJIsJ9/EZKdUUHTxKhzmjBSvG1L+MqZkKh/llcWjeJQGGfiJj46U
-	 LxOZ9YqgGxFAyEa5i4cBrKWXNMN7fGENOhGyNdJL1OlXbzmjpzsXAKwHdy8gZmxo0Ug==
+	bh=MwOeW89lQ65+WUWrkke0YgzcewxmuJACDAnj3RCGBTw=;
+	b=JFydu1UXDvX7BqPCydPKT/DTjGolYNLuiHCnLH/BLHkMAuGjtvBo/DNFAJYjinG0d1s4
+	 9/oZaDhsC6nqrjwa7GTlzLHi42HVeUjf5kw/avyp4WOxeJG0IF/HMLfKJjsyzjITr7vPy
+	 CDi7rX1nw1e5P0aJqs0PMBzKnLWNgFGS9dLY0CxIbalw4R6rE9q8CL58IhSdrzHlgif41
+	 OxOXSc0D8CECTDk03UgP4MEkc6m4QyppA9fvr2Cm1qpdp/lsikHURXISCGvRjyl/5zr9N
+	 ilIZWZIb7t9GXYvT74Y2hDkiwfD47cJj4KRoT5QwCTbt79Gm9LL3JMfUg5D681ZC0Bw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="HJlGw38/";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lim5kEyf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CF260A2604
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89570606A31E
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HJlGw38/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF75E1F000C4;
-	Tue, 20 Oct 2026 14:12:51 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lim5kEyf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D231F000C4;
+	Tue, 20 Oct 2026 14:12:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792505572;
-	bh=GD5llvseKZs+O5b0Tu0mTD1CIuSikTJlCdK4rXSWDW0=;
+	s=k20260515; t=1792505574;
+	bh=MwOeW89lQ65+WUWrkke0YgzcewxmuJACDAnj3RCGBTw=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=HJlGw38/k+DX5iAAnfiVBHGxituzp0ZER86E6T52rjl7YpdTan+HtIYTBLmKPoba/
-	 GjxePVkq8Y344gtyIV2YrStN3t0siC0Btc+anlRH0s3ArSxVkejuMAicEUvik9HjCC
-	 j0IBhXXWNbv5Af9uSa9mCoouLMywkNOqdVes34L7zVYj+7tTESVPhT5PbTUeu1Nt4A
-	 8gGrReQXA0suGmX8/WXYNiFciLfPdquE9dy4IePiDI25bog6BQ3gYdmzlahDmtoiQR
-	 6waitZ4Epu2uk0xiKgehr1R+gFiuBzAnLlhGyA8F/jyDswSN79urMY4c/HqUeV74k6
-	 AX4AEdX9NXnkg==
-Message-ID: <sashiko-outbox-179094@kernel.org>
+	b=lim5kEyfXVEJj4734txsPvjnHAcrQcRbkp6NdE4hxv8N5PKZSRwGtDEWOqekL6RUD
+	 4Poe4t2z0z3IORINzV0Rrzth/1gDo86ToFmhnynSnecFAD/Htoknpta0F2Fs95EVNs
+	 oAJ1Y3wQBWF6YtC8i4b7+UF5GYUtlI3qz8Mjm6lPtkOmmMZeKX0M1gjal51VRTs+PZ
+	 vPyeJsef5jwbkpk+Napf/H9LuVlV/da7zRTK6nKvPYYOJCSoNNQrs/qVnGH1JQeyoT
+	 agqHZSt3YCzy6jKw+rIcvg2PHC9x/RjPCPf+4I7606XsdDD1apvfn4Uhzc6UTeVm3X
+	 fo6z0aN2iYNBg==
+Message-ID: <sashiko-outbox-179095@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 10/16] bpf, x86: Add support for arena percpu
+Subject: Re: [PATCH bpf-next 14/16] selftests/bpf: Add test for arena
+ percpu-only object
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
-In-Reply-To: <f7b5dd9137eb77203be0c03841da50f9b020417f.1792503001.git.xukuohai@huawei.com>
+In-Reply-To: <f7f725d0057be520ec5fb417f3f7d3a1e2c765fe.1792503001.git.xukuohai@huawei.com>
 References: <cover.1792503001.git.xukuohai@huawei.com>
- <f7b5dd9137eb77203be0c03841da50f9b020417f.1792503001.git.xukuohai@huawei.com>
+ <f7f725d0057be520ec5fb417f3f7d3a1e2c765fe.1792503001.git.xukuohai@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 14:12:50 +0000
+Date: Tue, 20 Oct 2026 14:12:52 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,127 +62,138 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] bpf, x86: non-zero upper 32 bits in do_jit() for BPF_PSEUDO_AR=
-ENA_PERCPU
+- [High] selftests/bpf: mismatch between __arena_percpu addr_space_cast and=
+ verifier
 --
 
-commit 34dfe71210a640d381ba611ce04d0354e5fd7cd0
+commit 978ace4d7c1590716d35b8badc4a0e110474bd79
 Author: Xu Kuohai <xukuohai@huawei.com>
 
-bpf, x86: Add support for arena percpu
+selftests/bpf: Add test for arena percpu-only object
 
-This commit adds x86 JIT support for the BPF_PSEUDO_ARENA_PERCPU pseudo
-instruction, translating the per-CPU arena address by adding
-smp_processor_id() * chunk_sz to CPU 0's address.
+This commit adds the __arena_percpu macro to bpf_arena_common.h along with a
+selftest for an object containing only an arena per-cpu variable.
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 72a2a0a89e033..7c09a4d90cd17 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -2772,6 +2772,34 @@ static int do_jit(struct bpf_verifier_env *env, st=
-ruct bpf_prog *bpf_prog, int *
-> =20
->  		case BPF_LD | BPF_IMM | BPF_DW:
->  			emit_mov_imm64(&prog, dst_reg, insn[1].imm, insn[0].imm);
-> +
-> +#ifdef CONFIG_SMP
-> +			if (insn->src_reg =3D=3D BPF_PSEUDO_ARENA_PERCPU) {
-> +				u32 chunk_sz =3D bpf_arena_percpu_chunk_sz(bpf_prog_arena(bpf_prog));
-> +
-> +				/* aux =3D smp_processor_id(); mov aux, gs:[cpu_number] */
-> +				EMIT2(0x65, add_2mod(0x40, 0, AUX_REG));
-> +				EMIT3(0x8B, add_2reg(0x04, 0, AUX_REG), 0x25);
-> +				EMIT((u32)(unsigned long)&cpu_number, 4);
-> +
-> +				/*
-> +				 * aux *=3D chunk_sz
-> +				 * arena_map_alloc() guarantees
-> +				 * chunk_sz * nr_cpu_ids <=3D vm_range <=3D 4 GiB and
-> +				 * cpu_number < nr_cpu_ids, so a 32-bit imul
-> +				 * cannot overflow here.
-> +				 */
-> +				maybe_emit_mod(&prog, AUX_REG, AUX_REG, false);
-> +				/* imul aux, aux, imm32 */
-> +				EMIT2_off32(0x69, add_2reg(0xC0, AUX_REG, AUX_REG),
-> +					    chunk_sz);
-> +
-> +				/* dst +=3D aux */
-> +				maybe_emit_mod(&prog, dst_reg, AUX_REG, true);
-> +				EMIT2(0x01, add_2reg(0xC0, dst_reg, AUX_REG));
-> +			}
-> +#endif
-
-[Severity: Critical]
-Does this leave non-zero upper 32 bits in dst_reg for BPF_PSEUDO_ARENA_PERC=
-PU
-instructions?
-
-In check_and_resolve_insns(), BPF_PSEUDO_ARENA_PERCPU resolves the base
-address via arena_map_direct_value_addr(), which sets
-addr =3D arena->user_vm_start + off and populates insn[1].imm with the uppe=
-r 32
-bits:
-
-kernel/bpf/verifier.c:check_and_resolve_insns() {
-	...
-	err =3D map->ops->map_direct_value_addr(map, &addr, off);
-	...
-	aux->map_off =3D off;
-	addr +=3D off;
-	...
-	insn[0].imm =3D (u32)addr;
-	insn[1].imm =3D addr >> 32;
-}
-
-In check_ld_imm(), BPF_PSEUDO_ARENA_PERCPU marks dst_reg directly as
-PTR_TO_ARENA, so the verifier allows direct BPF_LDX, BPF_STX, BPF_ST, and
-BPF_ATOMIC accesses through dst_reg without an intervening addr_space_cast =
-or
-32-bit truncation:
-
-kernel/bpf/verifier.c:check_ld_imm() {
-	...
-	if (insn->src_reg =3D=3D BPF_PSEUDO_ARENA_PERCPU) {
-		u64 pos =3D aux->map_off - bpf_arena_percpu_chunk_off(map);
-
-		__mark_reg_known(dst_reg, pos);
-		dst_reg->type =3D PTR_TO_ARENA;
-		dst_reg->mem_size =3D bpf_arena_percpu_chunk_sz(map);
-	}
-}
-
-In do_jit(), arena loads, stores, and atomics emit 64-bit indexed addressing
-with r12 (kern_vm_start) via emit_ldx_r12(), emit_ldsx_r12(), emit_stx_r12(=
-),
-emit_st_r12(), and emit_atomic_rmw_index(), and ex_handler_bpf() passes the
-faulting register value to bpf_prog_report_arena_violation(), which all rely
-on the upper 32 bits of a PTR_TO_ARENA register being zero.
-
-However, emit_mov_imm64() loads the full 64-bit user_vm_start + off into
-dst_reg (including non-zero insn[1].imm when user_vm_start >=3D 4 GiB), and=
- the
-64-bit addition on CONFIG_SMP (or no-op on !CONFIG_SMP) preserves those upp=
-er
-32 bits. When dst_reg is dereferenced, the memory access computes
-kern_vm_start + user_vm_start + off + cpu * chunk_sz instead of
-kern_vm_start + (u32)(user_vm_start + off + cpu * chunk_sz), accessing out =
-of
-bounds of the arena vmalloc region (or arbitrary 64-bit kernel virtual
-addresses via user-controlled attr->map_extra).
-
-Should BPF_PSEUDO_ARENA_PERCPU zero-extend the 32-bit address on both
-CONFIG_SMP and !CONFIG_SMP (for example by loading only the lower 32 bits
-insn[0].imm and using a 32-bit add)?
-
-> +
->  			insn++;
->  			i++;
->  			break;
+> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_commo=
+n.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> index 82aafe879fae2..7cdee141764e7 100644
+> --- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> @@ -35,11 +35,13 @@
+>  #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_A=
+SM)
+>  #define __arena __attribute__((address_space(1))) __attribute__((btf_typ=
+e_tag("arena")))
+>  #define __arena_global __attribute__((address_space(1)))
+> +#define __arena_percpu __attribute__((address_space(1))) __attribute__((=
+section(".arena.percpu")))
+>  #define cast_kern(ptr) /* nop for bpf prog. emitted by LLVM */
+>  #define cast_user(ptr) /* nop for bpf prog. emitted by LLVM */
+>  #else
+>  #define __arena __attribute__((btf_type_tag("arena")))
+>  #define __arena_global SEC(".addr_space.1")
+> +#define __arena_percpu SEC(".arena.percpu")
+>  #define cast_kern(ptr) bpf_addr_space_cast(ptr, 0, 1)
+>  #define cast_user(ptr) bpf_addr_space_cast(ptr, 1, 0)
+>  #endif
 
 [ ... ]
 
-=E5=AE=8C=E7=BE=8E=EF=BC=81=E8=BE=93=E5=87=BA=E7=BB=93=E6=9D=9F=E3=80=82
+> diff --git a/tools/testing/selftests/bpf/progs/arena_percpu_only.c b/tool=
+s/testing/selftests/bpf/progs/arena_percpu_only.c
+> new file mode 100644
+> index 0000000000000..35e4ff983e65d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/arena_percpu_only.c
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Huawei Technologies Inc. */
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_arena_common.h"
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARENA);
+> +	__uint(map_flags, BPF_F_MMAPABLE);
+> +} arena SEC(".maps");
+> +
+> +__u64 __arena_percpu counter =3D 0x123456;
+> +
+> +SEC("syscall")
+> +int arena_percpu_only_write(void *ctx)
+> +{
+> +	counter =3D bpf_get_smp_processor_id();
+> +	return 0;
+> +}
+
+[Severity: High]
+How does __arena_percpu interact with the verifier and JITs across the two
+branches in tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h?
+
+First, when compiled without __BPF_FEATURE_ADDR_SPACE_CAST (such as under
+test_progs-bpf_gcc or when BPF_ARENA_FORCE_ASM is defined), __arena_percpu =
+is
+defined without address_space(1), and arena_percpu_only_write() assigns to
+counter unconditionally without #ifdef __BPF_FEATURE_ADDR_SPACE_CAST or
+cast_kern().
+
+In that configuration, the compiler emits a BPF_LD | BPF_IMM | BPF_DW
+instruction (relocated by libbpf to BPF_PSEUDO_ARENA_PERCPU) followed direc=
+tly
+by BPF_STX | BPF_MEM | BPF_DW without an rX =3D addr_space_cast(rX, 0, 1)
+instruction. Unlike BPF_PSEUDO_MAP_VALUE on an arena map (which check_ld_im=
+m()
+marks as SCALAR_VALUE so the verifier rejects uncast dereferences),
+check_ld_imm() in kernel/bpf/verifier.c marks BPF_PSEUDO_ARENA_PERCPU direc=
+tly
+as PTR_TO_ARENA, and bpf_convert_ctx_accesses() rewrites the store to
+BPF_STX | BPF_PROBE_MEM32 | BPF_DW.
+
+However, check_and_resolve_insns() resolves the 64-bit immediate of
+BPF_PSEUDO_ARENA_PERCPU to the full 64-bit arena->user_vm_start + off (with
+insn[1].imm =3D addr >> 32), and the x86 and arm64 JITs load this full 64-b=
+it
+immediate and add smp_processor_id() * chunk_sz using 64-bit addition witho=
+ut
+clearing the upper 32 bits. Without addr_space_cast(rX, 0, 1) (which
+bpf_do_misc_fixups() rewrites to a 32-bit wX =3D wY move to zero the upper =
+32
+bits), the upper 32 bits of the PTR_TO_ARENA register remain
+user_vm_start >> 32. When test_arena_percpu_only() in
+tools/testing/selftests/bpf/prog_tests/arena_percpu.c runs
+arena_percpu_only_write(), BPF_PROBE_MEM32 adds the 64-bit kern_vm_start to
+this 64-bit register, targeting kern_vm_start + user_vm_start + off +
+cpu * chunk_sz outside the arena's 4 GiB kernel vmalloc area.
+
+Second, when __BPF_FEATURE_ADDR_SPACE_CAST is defined, __arena_percpu has
+__attribute__((address_space(1))), which causes Clang to emit
+rX =3D addr_space_cast(rX, 0, 1) immediately after BPF_PSEUDO_ARENA_PERCPU.=
+ In
+check_alu_op() in kernel/bpf/verifier.c, addr_space_cast calls
+mark_reg_unknown() on dst_reg, which zeroes dst_reg->mem_size and resets the
+chunk offset pos set by check_ld_imm():
+
+kernel/bpf/verifier.c:check_alu_op() {
+    ...
+	if (bpf_insn_is_addr_space_cast(insn)) {
+		...
+		/* convert from ptr_to_arena to scalar or vice versa */
+		mark_reg_unknown(env, regs, insn->dst_reg);
+    ...
+}
+
+Doesn't this wipe out dst_reg->mem_size and bypass the per-cpu chunk bounds
+check in check_mem_access()?
+
+> +
+> +char LICENSE[] SEC("license") =3D "GPL";
+
+[ ... ]
+
+>
+>
+>
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
-t.xukuohai@huawei.com?part=3D10
+t.xukuohai@huawei.com?part=3D14
