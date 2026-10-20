@@ -1,56 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792504647;
-	b=PjCi7AFFWeyVgsbYrEfTJ2QsQWZrLvGKLM2TTHcUVcJ3ZhbLFEbRr/3HvgnwvkDixQpl
-	 pYFqpv2GoBiGJrCKR5OLlBUHOc/4FoOW3wju7Am8TABOQXqV3f5LUB3WzOyUxvJ7ujHLa
-	 T+lTZlELA55xAZtKUfbuECI8GTKUlMdWrFH0cS4CYxRNrn1rxF6DYpGqCNgxiYLRlc2HS
-	 amfojGymsI6lAIZmaVorO7yXqxZRLDPFKJlJzmQp3wNBl40AkQ6CGjpECuPkgAhu5Byfk
-	 n3+dAOyaKHRwQuwxineBRQu+AAr7/eIvr06HXmo8d1rYxC8b/ZGpWm0kXKmvmXRREAg==
+	t=1792504808;
+	b=uXLafLzxxTgWlx1cQhDh4DSkrNCtv9FFL3EgUPujINBI1y6Nj6KpxxKx6OHLIqkIKW/6
+	 Jql8fkbX1AgTeuwO/QUSIo5BQLnD66clQQPO3aorf5uebFZzyPZd2SNjV9wP6Rdha/Lb7
+	 LXDcl+REdzd/0FMQiV5nEu9YzCNkSKmluLSfr2ThNxu7srWMs40YGbvYz3orgaMjzmIhg
+	 0IHqnD5tSdubkdBwgdnu4ZUz+Rud0DGhHuh3Rh+YVPq1C+2ZTpyA4pxcreymuGXsrnYaG
+	 Rf8s2ii8Az9V+s8eKLtxvbhe5Sj8KApkjCblFtks40SUxtYfR61R2mCxggk9lgSb/BA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504647;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=a/Me5Y6HF/VtoKt97MMtAjJt+DhVNNIv+fWtI37yBSU=;
-	b=5n+tC7xze1Mkcz898JS1l93lSHskEymHvza4TfieKCnoBCe0yNIz6fuCfBTE3VJA6trF
-	 2/GvzroqeH8ssRj8zdRQpS4djtT19WCwnO9BYyR7sT3shHBFchrshL8lr89E9g4rZIkpY
-	 2M1bP1DDn9EW4F5LHCYL56evAwCHkNdlxcMYh6+xzmfqushBGfQ+jr77D2ENmKTEj7g4e
-	 uplYe+hP4m2FWHX4ElUDp/LFXHtP7GmNI9+glhmCkyhEk3J1x5hWw7JY808L8oBEdgkpa
-	 7zwyxSv8aq2r981KNpDU4GqTBp4ZihhRGz9oblxEiXNxmNLm23QHEGPUf5kean5TWXw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504808;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+	b=rC3IAXIo+vkfT0pJXTdpRX3kewUnN9o9Zd+i3/KaBVekit3amxD9BbQHgyTJg+I3uKMx
+	 IhacgLiu62ozfL/7LY6H6pBA/OpMy+RRSfuZe6Jd1FeomCSnwiJT6lCv5+JCxZbODgTJ9
+	 jrHGpf+z/FP0GGyK6RZR4wXoZbb2zZurUsQN/4FKR/65frgq/2KIIttg3amTRuj3udY8l
+	 M9Ay1QmvS1wQzndaMF/hJbTLtE4TyBCUIY1mxP+ahyZMAxk/jNrFgxEUpunSy4zyFh/dv
+	 grASNiUQestXjfNEQ2ioW0Xl2W6lkwkFnW47W09sz0r0CIb+QJrMVmN+HHpPvgv2nhQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=okYMfWml;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=L0bl1cST;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=mR8JAM6D;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A55D606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:57:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E07606A325
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:00:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D2E07606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=okYMfWml
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2C41F000C4;
-	Tue, 20 Oct 2026 13:57:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792504646;
-	bh=a/Me5Y6HF/VtoKt97MMtAjJt+DhVNNIv+fWtI37yBSU=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=okYMfWml2vHYVCL0z1ks6GbSm/wSmhtDidTgX9ij3sTVVYaV63EOqEfFY7cBm+HgC
-	 cwF4bNsCs9M6oSj64wuYTv1InCaBokXn7iupmYttCk6EhAhG41XJhD97QNDw1u7PO9
-	 IZHIGPfcBoEfZqwC2NCHoz1FvEolHPo7z6uItsIiC4W4jQhYp7wLnsGh7lp5wRlacQ
-	 3JzeUCHWrgCItnH/JMv5q3bQFSYFItZvUIPXuHsMdnjIQ5fWjEu4CzdyYIlTEz7TEx
-	 iXY2m5FTyjlXTbCGvzN4b4yeEFaA/SZnMUZuFGEGiwvc9KUWWYaZRvbV3rjIi+kErJ
-	 E8m1KbvmTslkw==
-Message-ID: <sashiko-outbox-179062@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 15/16] selftests/bpf: Add test for mixed arena
- percpu object
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
-In-Reply-To: <a36e6a008493b367af5d9c338cf707fadfc8a632.1792503001.git.xukuohai@huawei.com>
-References: <cover.1792503001.git.xukuohai@huawei.com>
- <a36e6a008493b367af5d9c338cf707fadfc8a632.1792503001.git.xukuohai@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 13:57:26 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=L0bl1cST;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=mR8JAM6D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792504806;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+	b=L0bl1cSTJ496pTbXuacsGMd8nvS9KpGFgxVVSCODXi00cApC58o1imFGv25uStSK0AnLcr
+	necMXKGRWatmGQkngi51Pj2n7nPSM+63zhRbfxK3CptkE+v+lAWZH11gVH5HCANgF6CX/L
+	BupaNpIWDJPsEyFLGeWAUrKkmiZVUCI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-353-cGs3hiIZOoaCsM9QmpJTlA-1; Tue, 20 Oct 2026 13:59:59 +0000
+X-MC-Unique: cGs3hiIZOoaCsM9QmpJTlA-1
+X-Mimecast-MFC-AGG-ID: cGs3hiIZOoaCsM9QmpJTlA_1792504798
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a1d1f26a63so23997245e9.1
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 06:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1792504798; x=1793109598; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+        b=mR8JAM6Dx+SPWbfkeZnOuGFetgjlmDjbH+LFq7jAyJiAKciZVgzTSeI6Ngc+/YyH0P
+         mCirkApaIVqwGqDQdP2i06rvMK5Lzpo/0kN8K5u1fw/RGJHTSQa9GjEofK8nUNDMiR+8
+         R2Gb3eriJjl0yEV0gN6e3mnMU+2KU+03pZhqTDSW0iKY45Tof4QGCbXBCBmRfrOJGxN3
+         SDa1e9D2dcwGvBSzSTbmKB6Y7A/s8AxccXVSNLU6bh6lQ/ZgeRH3t3pU4xR5+F4KqSna
+         74f949/TZbz4xCOso7OpWx31lR91CKkQO8Scbt1MpT8t8+oiHGy/upa3vJ7adtQbFopZ
+         7D9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792504798; x=1793109598;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+        b=0jIKKdhGc1PJMSKhTEflcONUcv9RxckSCcFib408XoRhayaRU+F78YRULeqIbgJB4n
+         8SL9aSaJtIfAfR8PEpGTR4GE2AgmKVAQ9g/+/pI6b3mQJBL/7n8mEhlo4gFMQkOFy+oI
+         XsO/UWFFvdwucv47mGSHfnk9yg6HO/6S19uk5NpRQ4o6oU42BvzuSwvq1kVHrv8yQA91
+         Rlg4KcDnC7G3b85luDL5KeNjWeFJqLmPhhBxflifFaIw/x0CDj7b9wMSyeZhG6v/Ue4C
+         EPki7qftFkv0DXLUGGn8i6KtpJI/Lq/8DXY4bgl7C0IAQ8MpioGQEFzshOcrNgeI79sk
+         +hHg==
+X-Forwarded-Encrypted: i=1; AKwUvBwowRKENCsnAG30V/EHB/UHQz+WQ4y7wyyRYx2RGWLzD8/m9wczUxaKwWds0FBZD2ao2VY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJNJJKxhCiDcgZJCRJZJITyj7iuXZvzbIMmS1ZiZ+q5Sh5fHKVC
+	EdyBGcNCcPRNKhJ5umjTUCCbnW6RK3M+2wpt/+GbeuMnry2Ryr8WouUlgcbj30Un3UyKT+n6PG3
+	7b0S23BOM3J4uRe+ua9H8gvzCOUMP0/RG28KeIsHCe2yHktav9cPm7JojWH6LZQ==
+X-Gm-Gg: AYBFou0mlOvaF5aa/+NNaI9b0mwN+o1KhOIGuuW4fn8XSWdrpcVZIZlGqx6+D4bMB92
+	o9kNEAw6SKIREWt9Lsye6EgNt/0lAxpUzpJWjEA4J4YbdQ9q85GfLFw1RXATxLZlU4Puwx8Ku36
+	xmrljBYHy3Q8bNu/RC2DnserhVWCx5M4s/qyIvaPw4S9mb+35F/68s3pbV+7lgjk2aVfhYE9Ph1
+	nQvBBPG7Yx1PRncIVqFh66zIxwW4qiO+ngriMSrMjFnpfUemESi9M48wRHUYHwiPE21Sad+cTaT
+	S1YHCs7O7/SF7tKWDgrcdC+Dcuq3QHQq9mL0fIeKQiIOLVhaKrWbAsOz5rOHmGUP3tsopeXYewx
+	6Ubi5ucc3iWNJABgy9VQ5GVVQQ0qAKzfeb/CnpGPbJ5INuS8p1iQTT3MFfFSL2FGRbJYmoLevzA
+	==
+X-Received: by 2002:a05:600c:4e14:b0:4a1:d307:b526 with SMTP id 5b1f17b1804b1-4a1d7464034mr234316655e9.0.1792504798211;
+        Tue, 20 Oct 2026 06:59:58 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e14:b0:4a1:d307:b526 with SMTP id 5b1f17b1804b1-4a1d7464034mr234316075e9.0.1792504797756;
+        Tue, 20 Oct 2026 06:59:57 -0700 (PDT)
+Received: from [192.168.188.234] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2d85a9bsm82778815e9.15.2026.10.20.06.59.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 06:59:57 -0700 (PDT)
+Message-ID: <106b3ab1-77e2-4656-a124-7f78ad890ee7@redhat.com>
+Date: Tue, 20 Oct 2026 15:59:55 +0200
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,93 +111,51 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 0/7] ipv4,ipv6: convert the getsockopt
+ switches to sockopt_t
+To: Ido Schimmel <idosch@nvidia.com>, Breno Leitao <leitao@debian.org>
+Cc: David Ahern <dsahern@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, david.laight.linux@gmail.com,
+ kernel-team@meta.com
+References: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
+ <20261019081907.GA2725184@shredder>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20261019081907.GA2725184@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests/bpf: unreachable err > 0 branch and silent test bypass=
- in test_arena_percpu_mixed()
---
+On 10/19/26 10:19, Ido Schimmel wrote:
+> On Thu, Oct 15, 2026 at 03:05:29AM -0700, Breno Leitao wrote:
+>> This series continues the migration to sockopt_t, as described in [1].
+>> do_ip_getsockopt() and do_ipv6_getsockopt() still take a sockptr_t pair,
+>> and everything they forward to now takes a sockopt_t, so convert them
+>> both.
+> 
+> Acked-by: Ido Schimmel <idosch@nvidia.com>
+> 
+> Given the user visible changes, the fact that the merge window is now
+> open and that this isn't the last part of the conversion, my preference
+> would be for this to be re-posted after the merge window.
 
-commit df1443ad7be8c02167841960847603cc924444f9
-Author: Xu Kuohai <xukuohai@huawei.com>
+I agree on the above, also clashiko noted that patch 7 lacks an additional
 
-selftests/bpf: Add test for mixed arena percpu object
+CONFIG_IP_MULTICAST=y
 
-This commit adds a selftest subtest and BPF program to exercise mixing
-per-CPU arena variables and a regular global arena variable within the
-same BPF arena map.
+/P
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_percpu.c b/tool=
-s/testing/selftests/bpf/prog_tests/arena_percpu.c
-> index 27d4721c7ae9a..b450be5f2b36c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
-
-[ ... ]
-
-> @@ -137,6 +138,99 @@ static void test_arena_percpu_only(void)
->  	restore_affinity();
->  }
-> =20
-> +static void test_arena_percpu_mixed(void)
-> +{
-> +	struct arena_percpu_mixed *skel;
-> +	struct bpf_map *arena, *bss_map;
-> +	bool *possible =3D NULL, *online =3D NULL, *written =3D NULL;
-> +	int possible_cpus, online_cpus, nr_written =3D 0, cpu, err;
-
-[ ... ]
-
-> +	for (cpu =3D 0; cpu < online_cpus; cpu++) {
-> +		if (!online[cpu] || cpu >=3D CPU_SETSIZE || !CPU_ISSET(cpu, &affinity_=
-save))
-> +			continue;
-> +
-> +		err =3D run_on_cpu(cpu, skel->progs.arena_percpu_mixed_write, "write");
-> +		if (err < 0)
-> +			goto out;
-> +		if (err > 0)
-> +			continue;
-> +		written[cpu] =3D true;
-> +		nr_written++;
-> +	}
-> +	if (!ASSERT_GE(nr_written, 1, "cpus_exercised"))
-> +		goto out;
-
-[Severity: Medium]
-Can the err > 0 branch ever be reached here? Looking at run_on_cpu() in
-tools/testing/selftests/bpf/prog_tests/arena_percpu.c:
-
-static int run_on_cpu(int cpu, struct bpf_program *prog, const char *name)
-{
-	LIBBPF_OPTS(bpf_test_run_opts, opts);
-	int err;
-
-	if (pin_to(cpu))
-		return -1;
-
-	err =3D bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-
-	if (!ASSERT_OK(err, name))
-		return -1;
-	if (!ASSERT_OK(opts.retval, name))
-		return -1;
-	return 0;
-}
-
-run_on_cpu() only returns -1 or 0, so the err > 0 check is dead code.
-
-Furthermore, if pin_to(cpu) fails (for example, if a CPU cannot be pinned or
-goes offline), run_on_cpu() returns -1 without recording an assertion
-failure. In test_arena_percpu_mixed(), that triggers goto out, bypassing
-ASSERT_GE(nr_written, 1, "cpus_exercised") and all subsequent arena checks
-while allowing the subtest to pass silently.
-
-Was run_on_cpu() intended to return a positive value when pin_to(cpu) fails
-so the loop can skip that CPU and still enforce nr_written >=3D 1?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
-t.xukuohai@huawei.com?part=3D15
