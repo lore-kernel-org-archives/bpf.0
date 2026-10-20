@@ -1,68 +1,62 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=13.77.154.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792466940;
-	b=tLJvMnLE7Cx3f60B+UlsNMW4W/M2pKks+rvgLLAR08n6QboI6GzuiEsFBOzo1esmqs6l
-	 duN+wukaITME7dQ4VXzInX8v+o8QRunAxkc8urOvcSTR3xWHB/1AHtQ1YsuUHNCOQ33eK
-	 LwyFlEUnbWMKvI5FpNHcmf+5ldU9LI+t8TVEwN2g2n2rJqppT/1VsPNMWMpK91AHR0POI
-	 3aG6/IuNA73gbRvzjhixpDZRoBOd17TuftUXUiYud8MeET6EpOC7ih/NFJSlGeIMZUBfU
-	 esGNNwiweubJHOahUZSYC46i0EK6ibry4Ze4EMZcEpTTWTET9DRTlKwFl9uO0RV9GJg==
+	t=1792470649;
+	b=FYtbxGdRGc1VrBj9lDcou459fV0Q20ZFaQzcqr+1ldN1lw7TrvqbndLBNQxA8SZRIbCl
+	 qxtUWkvwnmA2Sg5dxgCimGNXROdB1wSJCywmABFrz0eBZO1P/K9zGhxTI5KXnDo4DclO5
+	 udt0S8Y2Cnqzgeqv4l+rMbi0USCNu2vFEbFgMzaROWJusDR3GdCvmJqjpXxvg8Ghu1CXl
+	 xbVsrKPDx4KY+yTN+85ZYeGbb05gdRWCOfiGSIE+OMO0mrTL4MzLDMj8xQxS23V08G4lg
+	 t8R6X2W4Itc+k8aY0/GDZODojc10pbfmQnRDJeF/cMq0+bRYpyo78034WtYhs6rvQqw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792466940;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=eYhpFhCV1vkP+5Z5Z8wHRbiIDOGVJbobZIYMKB9tLZY=;
-	b=jwx59sWzWugIA+tmIj1lQLiPQkISYOPS9HARt4ZKr8d8eIrOkIKfIhvNPVDER1nXkL8I
-	 9KBFMlxUNY+bdE3p0IZh2t9bydsIRPxiph9fylc5FpeKLQHBKvkwIar8TEDsInt7gD3pz
-	 zKJazLc0O3AOkOv8Yh4SqPMhBr8vdU+dxnZ9+j+ga3OABdq8ugGb2rXzLW57ye2Jska6A
-	 3VKKL4SObOC0kYCojR74qNrXpmSSQrovOfJAblMmTFUUDM2Dp5UfN8T/SzHHebHosPVo5
-	 LOcIUjNnh579u/vGdGdDEm6i+dfO2sLbb8MxF6t0dxzz0ThEd9k0PwupoHkfcDEu0iA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792470649;
+	h=DMARC-Filter:Received:DKIM-Filter:DKIM-Signature:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:Content-Type:
+	 MIME-Version:Content-Transfer-Encoding:X-Spam-Status:
+	 X-Spam-Checker-Version;
+	bh=6DcGGOOFdce5ERyHzgW3XUEmRU7KpMeHrpytV7uK3CA=;
+	b=WetTRKpso9GQ8MEIHY8TSdYQeOpd5NK5EYAwbDQD0gYEsACXilZS+CEI7Sq7cEauzwXT
+	 38k424Eybo29z5gOPrmtzJOON2o09NatO9bZS0uZCN8MCeZ2uR9+d8RX7SkOVy06wTQ/L
+	 xH3yaXsI0zxdrbMWhZLGXNyyYqhOBZAWSOS/cbWwaVS49+6gsgPegflWAbd4gicCJE2Qp
+	 +64n7fHH5S7NHVr3iGCgFbICyny59isMpn/fCrx8nYImUxXQth/2+HB4uhcwsZocESg1V
+	 UOif0Lfsx8cCbgPvayYqothEjLsKGxQTXBtIJ61iCb87nrkLzURTTL5T1ydnIhxJbgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XSKQrgUG;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4770606A319;
-	Tue, 20 Oct 2026 03:28:59 +0000 (UTC)
+	dmarc=pass header.from=linux.microsoft.com;
+	spf=pass smtp.mailfrom=linux.microsoft.com;
+	dkim=pass header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=CS0kzJ6V;
+	arc=none smtp.remote-ip=13.77.154.182
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1C33606A31A;
+	Tue, 20 Oct 2026 04:30:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1C33606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XSKQrgUG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 877581F000C5;
-	Tue, 20 Oct 2026 03:28:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792466939;
-	bh=eYhpFhCV1vkP+5Z5Z8wHRbiIDOGVJbobZIYMKB9tLZY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XSKQrgUGH/vud0NN4jnQ5CZIK6KTjKqy0BRlpbRhVKNnj4v0bVWBb+Avzcb2qEBUW
-	 m45bzOoiGv+wH2OjTiwNBlCPLIjGVEMJNSpEXeF5RKgG6cOC3PXF3S3d3LdlXlhjXJ
-	 Wlnro1p4sJH927Cl1e3sLhEJLgj4cnxBui5nQlVE9LCrUX3Ikc1fmPYcY/gHtDCP4x
-	 X9Tu5NDX+qQmkegmfLtEwJmUY/iOlhQXa7aXruy0J/Fn1VNKdREfGXCLELl+dr4uoC
-	 xmwItsj5+5HNstG6De1zlVCD26TutAkE5EW/8+xqPkS8s9HqXJamhjmxL5HpyQxKT0
-	 IVb8uS6oufAxg==
-Date: Tue, 20 Oct 2026 11:08:54 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] net: stmmac: disable TX checksum offload
- for jumbo frames on bugged cores
-Message-ID: <atbbRqSJIJ_glwuf@xhacker>
-References: <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
- <20261012-stmmac-xdp-tx-pre-fixes-v1-2-05fd0c90f7e1@oss.qualcomm.com>
- <6d1d99b5-1c3c-4e59-a0b2-e4d671e594ce@bootlin.com>
- <ata8k2EVDCDTmeE6@xhacker>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.a=rsa-sha256 header.s=default header.b=CS0kzJ6V
+Received: from weh-cvm-dev-vm.y50bckvjo0hefgfnzfztsfttff.phxx.internal.cloudapp.net (unknown [20.169.55.37])
+	by linux.microsoft.com (Postfix) with ESMTPSA id E211520B7168;
+	Mon, 19 Oct 2026 21:30:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E211520B7168
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1792470641;
+	bh=6DcGGOOFdce5ERyHzgW3XUEmRU7KpMeHrpytV7uK3CA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CS0kzJ6V5exZC/Oxw4HGYd9bVsqvkL/H90ftXt8pcPBtqIQ/M8Qx/lifmZM9Qdi/q
+	 xxwLBbuH0aNiFGPq/S6kd98PZOel5zGnpeo6z/GqHRhatqm9oOKRMqBRZRpB7uWQIY
+	 TKAgolw/uS086DhAngF5p05mv7pACCn6hSsEgEyU=
+From: Wei Hu <weh@linux.microsoft.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-rdma@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	weh@microsoft.com,
+	kuba@kernel.org
+Subject: Re: [PATCH net-next v7 02/13] net: mana: share the EQ pool across a queue-set swap
+Date: Tue, 20 Oct 2026 04:30:38 +0000
+Message-ID: <qset-v7-sashiko-02-v8-plan.20261018.weh@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <sashiko-outbox-175602@kernel.org>
+References: <cover.1791710735.git.weh@linux.microsoft.com> <9b7e62cc70138f8940a32869da44c1260748be14.1791710735.git.weh@linux.microsoft.com> <sashiko-outbox-175602@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,95 +66,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ata8k2EVDCDTmeE6@xhacker>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 20, 2026 at 08:57:55AM +0800, Jisheng Zhang wrote:
-> On Fri, Oct 16, 2026 at 04:18:06PM +0200, Maxime Chevallier wrote:
-> > Hi Lorenzo,
-> > 
-> > On 10/12/26 17:24, Lorenzo Bianconi wrote:
-> > > stmmac_xdp_xmit_xdpf() decides TX checksum insertion from the queue COE
-> > > capability only:
-> > > 
-> > > 	csum = !priv->plat->tx_queues_cfg[queue].coe_unsupported;
-> > > 
-> > > and lets the enhanced descriptor set TX_CIC_FULL accordingly. On the
-> > > bugged_jumbo cores (snps,dwmac-3.40a, snps,dwmac-3.610 and
-> > > snps,dwmac-3.710) hardware checksum insertion is broken for jumbo
-> > > frames; the skb path works around it by clearing NETIF_F_CSUM_MASK in
-> > > stmmac_fix_features() when the MTU exceeds ETH_DATA_LEN, so skbs are
-> > > never marked CHECKSUM_PARTIAL and no checksum is inserted. The XDP TX
-> > > path bypasses that workaround, so once XDP is allowed at MTU >
-> > > ETH_DATA_LEN, jumbo frames sent via XDP_TX or redirected into the
-> > > device would leave the interface with a full checksum insertion enabled
-> > > on those cores - exactly what the workaround is meant to avoid.
-> > > 
-> > > Disable checksum insertion for oversized frames on bugged_jumbo cores in
-> > > the XDP TX path too.
-> 
-> Here I want to query a generic rule from netdev maintainers:
-> can XDP frame enable HW checksum on dwmac IP? Per my understanding, the
-> dwmac can only do HW checksum for normal particular packets layouts, such as
-> TCP, UDP. What about if XDP transmits a non-IP frame?
+Hi,
 
-or a generic XDP guide from netdev maintainers:
-Since XDP can tranmist arbitrary Eth frames, so how does the eth driver cope
-with HW checksum if the HW checksum is intended for supported IP packet
-layouts rather than arbitrary layer2 frames?
+> Should mana_ib_remove_cq_cb() use cmpxchg() and synchronize_rcu() for
+> teardown, similar to what was added for Ethernet CQs in
+> mana_gd_destroy_cq()?
 
-choices:
-c1. Simply disabled HW checksum by default. Then XDP prog must provide
-checksums themselves, lost the HW offload cap for IP packets.
+I will leave the RDMA teardown path unchanged in v8. The callback-wrapper
+lifetime issue is real, but mana_ib_remove_cq_cb() and mana_ib_destroy_cq()
+already have this ordering in both unmodified upstream bases used for v6
+and v7. The acquire/release publication change does not introduce that
+reader/free race or resolve it. An independent RDMA lifetime fix should
+cover the hardware CQ and pending events as well as the software readers;
+I am not including that separate change in this queue-set revision.
 
-c2. detect the frame in eth driver's xdp code path, then enable/disable
-HW checksum accordingly. Then how? Any example in exisiting eth drivers
-is appreciated.
+> Can gc->cq_table be NULL when this acquire load executes?
 
-Thanks in advance
+I will also leave this initialization path unchanged in v8. There is a
+window after max_num_cqs is populated and before cq_table is allocated.
+A spurious or premature completion in that window could hit the missing
+table-root check. That window and the unguarded lookup already exist in
+both upstream bases, before this series.
 
-> 
-> Correct me if I misunderstood something.
-> 
-> Thanks
-> > > 
-> > > Fixes: be8b38a722e6 ("net: stmmac: Add support for XDP_TX action")
-> > > Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-> > 
-> > Looks cleaner to me than the alternative patch from Jisheng :
-> > 
-> > https://lore.kernel.org/netdev/20260929121025.20821-1-jszhang@kernel.org/
-> > 
-> > It sure seems there're a lot of people interested in getting XDP/XSK
-> > working properly on stmmac :)
-> > 
-> > Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> > 
-> > Maxime
-> > 
-> > > ---
-> > >  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > index ca61ab449e32..0e29c5d04714 100644
-> > > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > @@ -5276,6 +5276,14 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
-> > >  		return STMMAC_XDP_CONSUMED;
-> > >  	}
-> > >  
-> > > +	/* Disable TX checksum offload for jumbo frames on cores where
-> > > +	 * checksum insertion is broken for oversized frames, matching the
-> > > +	 * stmmac_fix_features() workaround used by the skb path.
-> > > +	 */
-> > > +	if (priv->plat->bugged_jumbo &&
-> > > +	    xdp_get_frame_len(xdpf) > ETH_FRAME_LEN)
-> > > +		csum = false;
-> > > +
-> > >  	while (true) {
-> > >  		skb_frag_t *frag = i ? &sinfo->frags[i - 1] : NULL;
-> > >  		int len = frag ? skb_frag_size(frag) : xdpf->len;
-> > > 
-> > 
+For normal HWC startup, WQEs are posted only after channel establishment
+returns and the CQ table is installed. I have not identified a normal
+completion producer in the window described here. This is a conditional
+hardware-protocol hardening issue, not a demonstrated new startup failure
+caused by the publication change.
+
+> Could this sequential mana_gd_test_eq() call lead to an unbounded RTNL
+> stall if an EQ stops delivering interrupts?
+
+I will address the additional per-CQ timeout amplification in v8. These
+extra waits are introduced by the queue-set series and are already in v6.
+
+The correction will stop the retiring WQs, keep their CQ callbacks alive,
+and issue all required parent-EQ markers before waiting. Per-EQ
+completions will allow one shared 30-second completion budget per RX or TX
+cleanup batch. CQ withdrawal and the existing RCU reader wait remain
+after the batch, including the partial-allocation cleanup paths.
+
+One detail of the reported bound needs qualification: each TX/RX pair has
+its own parent EQ. One stalled parent normally adds two CQ waits, about
+60 seconds. The 128 * 30-second case requires all 64 parents to stall
+while the hardware channel remains responsive. The cumulative delay is
+finite, but it is still a real problem introduced by these extra waits.
+
+The correction bounds the added CQ-marker completion waits, not all RTNL
+hold time. Existing per-EQ destruction waits and hardware-channel request
+time remain separate. It also preserves the existing best-effort cleanup
+policy after a failed marker, rather than claiming new hardware recovery
+guarantees.
+
+Thanks,
+Wei
