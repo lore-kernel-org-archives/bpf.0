@@ -1,59 +1,70 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.135
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792502144;
-	b=wOvSQFLNUfDsU82aP80O64bCUTF2HyvK8MlVRXZz0hEc1wybkT9EZjHMLPx/ZFrR3SUA
-	 q7Tfry7EwASE87Gu9hNjq4+okphWtttvw4LWTUZdL/HCBD/Zq1HWhO2fEIoihZ1s2lE14
-	 kYeSikAQLw1C8+VPvQywgitTTDOVhmKz2RH73rKpKo9qf0vY7Pvk2jpuULHDvbt6kHj9J
-	 ylheuMu2tatiz4xrHQEaDw6ozC7oVVxlzihbpQFIct6D9YIhmcETy2BNQm5hq6n4Mav/t
-	 yUKYDyuAaa1OMF2uewu67oZhWENpqijAYoMbXE7wcjU+RVhPK6cUEghLzbuKBON2WWw==
+	t=1792502147;
+	b=UjkDLbWxg6lu31puFL/W+qRVcIEVipguulTVMcwZgCD0sVa102KmcCdJ6e/GP0HMapuh
+	 0KnLC0FiZUO3A4tZDNeRitoOx1MHCSdXXRHlWJXY+KZ9yi4hDVoQBNZbQSqxTCmC94rW2
+	 yFCXeidjYMjvRx/3xJmnSdEdpY4UXV3xLyOik9kj75eGBa3YHNFrm1lUxPCauWBuNoDwY
+	 Lw7LApO+EXltX5MjRRei5/OHsgZT+xeIJ8spqPsL5vV3KX4+zLl/ECL/mWj3IW6lSnKH4
+	 oIHYIo5SG8RzASAL3olj+YbJGtEdqW8LLdVyWyOqDOiuti6koDiYVkQ19CVufw/g6eg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792502144;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=iD1o1sc5rhM8eL2oWcB3VcoUQguaYFm2HuUIhLXHPVo=;
-	b=PTanBbxC3436iPdGN1r3ipj6YJKEuLWdLn2hf1y36JwplCcYEwOD2LdMBtTJ2O+ZEtt4
-	 OPBvGQe2g9+gsGMAJJXXu5neEGD7dZy77MCukyTLdholrDRHi5dvh09RlTZZXTT+znpHM
-	 nsaQnBmthQK6Gc6lLhfJOFxWv/nmlHKj386Uayyyo3oILRusB7DtLNdDVHM7USytQbaVT
-	 XNKpl/h4C9xPKHcfT1WEG1cxzrkJdq+2PEC/n5w44aj95D65JP/UoZ1ARnsfmNPmAqhlB
-	 6OLZNJgANuY44WgZE7yTqEyueCafrHuPR7oAqjGUWTU+G04BIJ75MJyamnSHtgrJI4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792502147;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=21Ns/YBEwZQWni2k9iPZ+g2qxVfaJKV+vF/odCNBOZs=;
+	b=3Ijlo0qK9SLIVyQm1QjcaaFHmkBpevyVG8HYNiCmg8/Bd2Ypsw7F8/O2qa/nmgJeFEzK
+	 DkL3msMpGr9Yhj/yybt3mkZzkUrhLliDtAhoDLcRrFj83/pmjww5XzV0K4Y+KPkUYBabN
+	 LiNnsKo9mnJkK8Bu0lsTNOOdafznBEaf0BwWYmHG4e1Cq0Z7bCYq0lFSrN1jzD2zZU4mw
+	 QZqVRqXiGxkVxqEvf6yHgnqLASsLwpiZqEvOUnVaVC73R/9Vnz/+RYj4GJSF7BznOQRfx
+	 Tbz5c7DrKNRLFx41pHeAnHH8Oak6B8JfBh6vQZWjto7tebp9SjbNE/26rfBgs6TlsBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WW64Us1D;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA96560A2605
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WW64Us1D
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6612B1F000C4;
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=zwKD9imj;
+	arc=none smtp.remote-ip=111.22.67.135
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96516606A326;
 	Tue, 20 Oct 2026 13:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792502143;
-	bh=iD1o1sc5rhM8eL2oWcB3VcoUQguaYFm2HuUIhLXHPVo=;
-	h=From:To:Cc:Subject:Date;
-	b=WW64Us1DzNBqIX2opFxZ3hEnWCJFsvj+J6uz6LQYAveILnVCkey3a6XsRm7YgNnDg
-	 XHgQnfxCx308W/VdcicBEdNc3zOnvSkzeyHwWzG/g9Rl/ZSpC+sdwr91BGiWL7Asyv
-	 OTP7XLNtQjxFQx1DGfNI0Aaz69T8Hsz+Lwos0lx58Bg2gu6/aKz22QL+Vn+BolWnzl
-	 OK4jCcOJ/Lu9F6ptL4Ov0Wzypr5HVVJsyyrbFp+W0lAoVHbMO8gp28LLP5jPkGs4GG
-	 kkcEzWOCznxPiTDZliabfkUK2pYYkr1fIDlwMZiDf/QDe3/Azujmpc3EFE+ZT7OfKX
-	 dHb6YLhEz7T7Q==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next] bpf: Don't use percpu_counter for the htab element count in NMI
-Date: Tue, 20 Oct 2026 06:15:22 -0700
-Message-ID: <20261020131524.207415-1-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96516606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=zwKD9imj
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=zwKD9imjUpgk87K2Pmmrn76ziPO3W9/ohs7U/Vke+3xh7ADf3EIZy4bgAdv1e01jOT+ApRz2MnQ5r
+	 VTTYztKGZ7uMVOeq3QOz6Ib9o17OxvK6k/vZUkocxHrtZuG21+TaXRsI7LHPtRIi0XdnmTQD2rFmPZ
+	 od8LY9X5ULurqWuI=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee76ad7697de4b-1e809;
+	Tue, 20 Oct 2026 21:15:41 +0800 (CST)
+X-RM-TRANSID:2ee76ad7697de4b-1e809
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from [192.168.229.154] (unknown[112.23.104.16])
+	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee16ad7697809e-cf017;
+	Tue, 20 Oct 2026 21:15:41 +0800 (CST)
+X-RM-TRANSID:2ee16ad7697809e-cf017
+From: Xia Yan <yanxia@cmss.chinamobile.com>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
+ kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, lorenzo@kernel.org,
+ stable@vger.kernel.org, toke@redhat.com, yana06070@163.com
+Subject:
+ Re: [PATCH net] veth: fix stale peer max_mtu on XDP program replacement
+Date: Tue, 20 Oct 2026 21:14:02 +0800
+Message-ID: <20261020131402.5fad43b1f27b.xdp-mtu-cc-toke@cmss.chinamobile.com>
+In-Reply-To: <20261020020147.790274-1-yanxia@cmss.chinamobile.com>
+References: <20261020020147.790274-1-yanxia@cmss.chinamobile.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,109 +74,17 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-BPF programs attached to perf events run in NMI and can update a
-non-preallocated hash map. For large maps the element count is a
-percpu_counter, whose slow path takes fbc->lock with
-raw_spin_lock_irqsave(). That does not exclude NMIs, so an NMI that
-interrupts a holder of the lock and then updates the same map spins on it
-forever:
+Hi Toke,
 
-  WARNING: inconsistent lock state
-  inconsistent {INITIAL USE} -> {IN-NMI} usage.
-  kstress/261 [HC2[2]:SC0[0]:HE0:SE1] takes:
-  (key#5){....}-{2:2}, at: _raw_spin_lock_irqsave+0x18/0x30
-  {INITIAL USE} state was registered at:
-    percpu_counter_add_batch+0xd8/0x160
-    alloc_htab_elem+0x408/0x480
-    htab_map_update_elem+0x1e8/0x6a0
+Adding you to Cc; I missed you on the original submission.
 
-is_map_full() is affected too, as __percpu_counter_compare() falls back
-to percpu_counter_sum(), which takes the same lock.
+The patch refreshes peer max_mtu when replacing an XDP program with
+one that has different fragment support:
 
-Count the elements added or removed in NMI in htab->count, which is
-otherwise unused for such maps, and add it to the percpu_counter where
-that is read. In NMI is_map_full() only reads the percpu_counter, so the
-limit is approximate by up to PERCPU_COUNTER_BATCH * num_online_cpus()
-there.
+https://lore.kernel.org/netdev/20261020020147.790274-1-yanxia@cmss.chinamobile.com/
 
-Fixes: 86fe28f7692d ("bpf: Optimize element count in non-preallocated hash map.")
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- kernel/bpf/hashtab.c | 26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+Best regards,
+Xia Yan
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index bf78e09f4d518..7a27479c46dc5 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -95,7 +95,8 @@ struct bpf_htab {
- 	};
- 	struct htab_elem *__percpu *extra_elems;
- 	/* number of elements in non-preallocated hashtable are kept
--	 * in either pcount or count
-+	 * in either pcount or count; with pcount, those added or removed
-+	 * in NMI are in count, see is_map_full()
- 	 */
- 	struct percpu_counter pcount;
- 	atomic_t count;
-@@ -1160,11 +1161,23 @@ static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)
- 	}
- }
- 
-+/*
-+ * With use_percpu_counter the elements added or removed in NMI are counted in
-+ * @count, as percpu_counter takes a spinlock that the NMI could have
-+ * interrupted the holder of.
-+ */
- static bool is_map_full(struct bpf_htab *htab)
- {
--	if (htab->use_percpu_counter)
--		return __percpu_counter_compare(&htab->pcount, htab->map.max_entries,
-+	if (htab->use_percpu_counter) {
-+		/* percpu_counter_sum() takes that lock, so only read it in NMI */
-+		if (in_nmi())
-+			return percpu_counter_read(&htab->pcount) +
-+			       atomic_read(&htab->count) >= htab->map.max_entries;
-+		return __percpu_counter_compare(&htab->pcount,
-+						(s64)htab->map.max_entries -
-+						atomic_read(&htab->count),
- 						PERCPU_COUNTER_BATCH) >= 0;
-+	}
- 	return atomic_read(&htab->count) >= htab->map.max_entries;
- }
- 
-@@ -1172,7 +1185,7 @@ static void inc_elem_count(struct bpf_htab *htab)
- {
- 	bpf_map_inc_elem_count(&htab->map);
- 
--	if (htab->use_percpu_counter)
-+	if (htab->use_percpu_counter && !in_nmi())
- 		percpu_counter_add_batch(&htab->pcount, 1, PERCPU_COUNTER_BATCH);
- 	else
- 		atomic_inc(&htab->count);
-@@ -1182,7 +1195,7 @@ static void dec_elem_count(struct bpf_htab *htab)
- {
- 	bpf_map_dec_elem_count(&htab->map);
- 
--	if (htab->use_percpu_counter)
-+	if (htab->use_percpu_counter && !in_nmi())
- 		percpu_counter_add_batch(&htab->pcount, -1, PERCPU_COUNTER_BATCH);
- 	else
- 		atomic_dec(&htab->count);
-@@ -2578,7 +2591,8 @@ static u64 htab_map_mem_usage(const struct bpf_map *map)
- #define LLIST_NODE_SZ sizeof(struct llist_node)
- 
- 		num_entries = htab->use_percpu_counter ?
--					  percpu_counter_sum(&htab->pcount) :
-+					  percpu_counter_sum(&htab->pcount) +
-+					  atomic_read(&htab->count) :
- 					  atomic_read(&htab->count);
- 		usage += (htab->elem_size + LLIST_NODE_SZ) * num_entries;
- 		if (percpu) {
-
-base-commit: b71326388a8a24674846c1d8d3b6dd831d9843a9
--- 
-2.53.0-Meta
 
