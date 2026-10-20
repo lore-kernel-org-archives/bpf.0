@@ -1,81 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792508212;
-	b=YrqRNyLUOdCZJ8W+HZ7FcTpTsjehf8MmNIn6FPmovf12u825f8rzMbcN2nImB08lq1mr
-	 a6Ga2IjPUOEDvZt2AJhefsLCTwPsBXRCQubaiM5moIGOIwdbNewdJmw/0yWMDgNK9Jr5P
-	 Vyl8eLNnHAZNaqh+4bjOZckHh8x2VhktmvrBgZ9egUHOoAf1QWhyrjDmZ9PkHQI+2ldfm
-	 aNgVX5Cttj4m43HV05/O80hvSD6B+wGmGJQdlgJ8ufV5In2bPK5eLfcBctmtCXAm/Tlhd
-	 gcOaoTmdQpXkN4dvzMjdnjZDXyrt12Oi/cmiyVo1O0WK4ASpRtueezOIQLcgNBcxleQ==
+	t=1792508213;
+	b=K9py0iCl3btHoDVWB4B8xAf6nERYdtz6pAaTmuXe6oXS/Ely2SqyTVhGhyjR9gbb5d+D
+	 ClUPXjj7j8FHr6da22SYHVXyPIkf69IHMH7/9aYjPestXjzI515ogNmCicRVty51yHR/1
+	 Jf8hXjsCCuFWUrBK32P1IrnJcE8zomqlRXjkWUDaUlDnNnXIwY0QIF+NQ75+/0dVj/HLD
+	 9iljkBL3HLL7uij/aGiPu2fDfu+84em0UNQV37mu8ITFl4fKQpEmsIArGAixnmycUtzst
+	 Mx0yXhUuPU/B8iKTqr0fkYzcJ0CUdjt0+dK7Qc4J3G8WFVOqJ6ELi/6S4kQgBYnjzEQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792508212;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792508213;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=sEH+gk6m5/qnpp5QLh7H9z4ZLDT2OcNjYujc4qYm+Dk=;
-	b=KlodpTaZfl19KeeW0GDc/e6+mFF6+lezto7iE5vKm/iIOdQlnvSpHjpCDajiSr4UbTBB
-	 BOI4Z2wdKbe3nEH18E53t1PS55upkUOSn/RphoNiFFWEb2qlX0ugMXTI8eAa5l7u14f3i
-	 RyfH3uePYySPlNhxx4Yyh1otUwdYg7MAOOGVVKqwzWxNqy+PtGVSWRVU3ZA+bDFkiFqUe
-	 RONdxykGlA+U6OqiAz1tGfGCyuNCKcDb+a59WpJ2iGWWI3hCOuyXg6C4gufv7zF+m3DpC
-	 uhwlSt+JcTnvRcDt2DZ1hato/YZQmbtXQZ2z7Z44lO6NRP4TibVML48N3uZnwPOu60w==
+	bh=i3Jfkp9hIEUQZRTYVT2QSxlb33aqrHI5yayyK0Kb5fg=;
+	b=fGSA6P9pBKlaVK6nMam1FXxhtO1muHK+sGZpJFEnIZL5uwslYHv6dGYYhRK6YASiIgaH
+	 bqOVMlUufLBCaA5qrytGkNtPCcdHCo3pyxF5wfAlKnRv4EzrzglMFT0TOpoLuXHpXS7kK
+	 I0EQXgkSayU9qYayQiNdEZV956LdmYlj3+M+Cl9A79PxBPLvlQAwfKbR1FQR7TCsksHOU
+	 GGP19BAG6EcxSgwQ/m9pd1sPY94H9dV059dXHE28HsK364eqlX8lghaFL7xWHLEWe5uuO
+	 KfDn6zypiU0QItBlXmZoUyKpzUCHdWn+cicQ5NhDT1Gf8atmvsyPMvbuf06QgYLqiTA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Zrcu6evo;
-	arc=none smtp.remote-ip=74.125.224.49
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C5RyRCzS;
+	arc=none smtp.remote-ip=74.125.224.48
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53C6606A322
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:56:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A53C6606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793EB606A323
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:56:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 793EB606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Zrcu6evo
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-679a2b5fe87so3096671d50.3
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:56:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C5RyRCzS
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-676804a3a22so3267547d50.1
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792508210; x=1793113010; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792508212; x=1793113012; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sEH+gk6m5/qnpp5QLh7H9z4ZLDT2OcNjYujc4qYm+Dk=;
-        b=Zrcu6evof4TmTlL8EJ+vNp/AeZmAZM4UEJQuTO2FWlDRtEUBlcsAwqWBEkBqrxqy88
-         lFcR5J6zuQFTB1wdnpvwB1eTdao4YRs3/EymhL5rcjlB6fo0X19isGR5i+aNtHWtBnYJ
-         /FpX1zV1jOK6apWLvv00EO4J/haV3Z1I+yJBFvAZFasa9WM8Qz7Rn593imidrqyW2sD4
-         xAZWbA/OGlD6YD7tlna0paFcDg4TybGYOitSFpUjJgsPUOcPpAFVX2ivniGvIz9eG5OG
-         oV73HkZaHqzH1DSVhf9gab/O9emUrxXnc43UibE8+yswRfwRIzDHZvEP9pVB5cfefETr
-         btHA==
+        bh=i3Jfkp9hIEUQZRTYVT2QSxlb33aqrHI5yayyK0Kb5fg=;
+        b=C5RyRCzSZF4Gb2mJPzCbEpOu2xb1aiZ9KV9CwBASE8GtyYiFKrQ1jI9yUjIE2fnV5a
+         hmsk38XztCPRRvBzKxriuXDopM6lGpX3ucE0MRXUrI5fAr4u2nmuMpCOEETTFrOG0AEH
+         tBQUKxjy28hvUm/LUj1eR7oBSePkcqYAzjk5grxJiLLW8lvFaEbGRYb/FfH11ThxoZ4C
+         6uqOcwjtkRitkDHnr7VRAmlI1g64NIAeQC+iNnzI13TVZf16Q+TteUzVOEgq5J60mXvI
+         qkFPOYMBmAD3mEgJhUvrPo8MP/6cXgQu4t+XsZa/Tr5/vNgXyuZhw8+wLx3pkQSaanhZ
+         c25Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792508210; x=1793113010;
+        d=1e100.net; s=20260707; t=1792508212; x=1793113012;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sEH+gk6m5/qnpp5QLh7H9z4ZLDT2OcNjYujc4qYm+Dk=;
-        b=LVPsXFRAmYtkibCSejcLs2/sK5nQwPb9CG1htrtwRVWSlvr7/7zpVE9NIAONtAprcn
-         dbUlPicsLGAJt381r0iQmFTLYcS2kFI9b1zzbcwemGyPuGyfSv8dGUQMiqKemd1hIkx0
-         vYq0V+1JcL8Tgv/xcNH4Ol+53GAZhEpxwPDjPxzI2alE9UNdVGqccp1zdow+1dao3XBr
-         LXJ8IaYKVgUNj399xic6jfaN3/wSiZBxsGLBLvspnrxbIytKumJfj+yWB0gCxKMnks9V
-         MrsCB61Az9pMAdviXsM6jzGLcJeEiEhtiPY4BjQWyZrQziaYyEXsjFMARBzjHzXwLgRK
-         dtOg==
-X-Forwarded-Encrypted: i=1; AKwUvBydyitnuF9oMy7nHsDB+cgtU1ykUTTX6i4Aaq58dYa/iFfe0dSyBsdQiODUHN164W0WapE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLrMayvCao4yC9QWH2+een/QR0pVi2ebRvR90UQ2c5XkcMOuTRL
-	ayE3Xi1X+8f2nZGiAfO6J3gXNohJ4MN4XwsPMYlfNi1xFlPdaYr4EYnC
-X-Gm-Gg: AYBFou0nYyYz+HXuvbPnXKJ8OMfWZT0jGpahVjUaq3J/2lzWkQ9hZYpnQA1gke+HTOt
-	pHbuFvpPXPy2Yc01xm3/hfy8gi2FWY8VsmLD/4MsHL8+pAZfOkxbeIaKmsRJCpj4qowV2zLLFwa
-	4f6tquu9nJpAHS1xd0l+m7e43dI1HgCwZNx6stw+BEH6nf61x+KS0yiBoWQVOfUxgcAmqXf0kKq
-	juhjmDoc5rLfoyP27GNJT8G+TTBr1HE0ULcnhczgOVQhfmIZI5FQvu6Jbv7zNkCj09z64CT9WSH
-	V7ZjvfUmxh6ONotbXhfL52Aag4OUj7/MnpYbHAi4rOWcWs4rvmtuCdrrKuBzBJDnSCyYwbqJfty
-	WyL4cDz+XKs9mE5N+aiY3Wt52F1uQFnUoq0zhVs5OByMnvyzciDSdU3k07aZ8SI5dwgcj0hYWvi
-	5/iR07FWmplcRDBZMLloc/VN9mIXMmLwcnbJEA7s43GqkNU83d3f9wdktFfEW6gDlO1ClZLKG+
-X-Received: by 2002:a05:690e:1448:b0:679:992e:3ad8 with SMTP id 956f58d0204a3-679ca92c9ccmr3733258d50.132.1792508210509;
-        Tue, 20 Oct 2026 07:56:50 -0700 (PDT)
+        bh=i3Jfkp9hIEUQZRTYVT2QSxlb33aqrHI5yayyK0Kb5fg=;
+        b=IRhWbBtF2SW9RosGLlUyCNyi3WfUoD1s/xsriOpEtsmUIZrxaMaiJtMs/WauBHv1XU
+         aBH5UumMgKav7VhalXIr0x8u7twUBHWjW1BGaPBYRzE+LxKoSYa/wDsL0bwzHP5Pnevr
+         eahjmeAi7SCqQeYkecRN6aLY6RBhNu/Ur+8vR0MJwgx3gaVQX74M634FLudUOtXm14Z/
+         L7lLcQEdI33h0Ux1Zt1Uqr/WLCvegUDdMHrcIBy3o/qWxxcP+92vfWY8kATrZ1Pugat5
+         alBFuRGSPO3Dneo8cr77YMNfb8m+JzP8IKisDULGVegcrS3n4vcz1/xtgC5Wg0jJCgkA
+         L1Zw==
+X-Forwarded-Encrypted: i=1; AKwUvBwYjWVnHAbuu4FEKx3fImP7OhA5af09cjvAGAnYDkHb7FZo4xMgf4rCTh+G8tuDFDRXdCc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIOdY0OdVrb099XgQijFbPjl4n/WY0dFT3tEkgZzDj5O2kj+e6G
+	CzgksMmc5Glr2bihnfvEX0b8NJii68eP8LUmbP4lTvExfZKIrQB4JM6DQKA7qQ==
+X-Gm-Gg: AYBFou3dWAUCqnorbogfps+KkjcU0yRiIQV+gGs+ZzWTfGGk7gJfmqSSAH0e18WbyCT
+	bzEQTAkSlVl9XxKlmcHAT6OHDjJro3b80RGIrUrI3H1YIuajjinyxhQAMNtHlE5lTUz+7tNltQs
+	ZrkIzmFSUk+OzsEOt/tkI2+EHuJm96ETjxKbl/4FmPVtqVJ/aaCDNUSwNE4KcZwAOe4HE9YTLel
+	9LKFcccSRJWljWLer3Tjw0pbh4ha0L+dym0AETt72JuFYkxsOKnHG9Uusuc2nIovMiy7a5yiCY0
+	1pz9AIMhgtk9Ys2UNAoFhhVcREXeLJ24tPJitiCn2M33o5LHHDTQyz/kepegFDQyk/gqXMidwPH
+	H9XVPVAArPgNuNNjIpfaUg4mhE58jK4F5hmybmVnzFOyH/rUMquZWtBexsKTvDEzvj/FoHqx5g1
+	3EkYkemQolLpYdbF80gKgW2ho8zOxAZWiDntVSkxHXUqxQ8Vd9AQZeyloVKgjDoIEDDmwBsoY=
+X-Received: by 2002:a05:690e:1304:b0:679:b9ad:d64d with SMTP id 956f58d0204a3-679ca72d570mr3389454d50.27.1792508212489;
+        Tue, 20 Oct 2026 07:56:52 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:8701:205:573e:17eb])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679b1c98a1esm5239944d50.1.2026.10.20.07.56.49
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679b1c98a1esm5239944d50.1.2026.10.20.07.56.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 07:56:50 -0700 (PDT)
+        Tue, 20 Oct 2026 07:56:51 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -85,11 +85,10 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: Song Liu <song@kernel.org>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	bpf@vger.kernel.org,
-	Justin Suess <utilityemal77@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/6] bpf: Bind trusted fields to their parent's reference
-Date: Tue, 20 Oct 2026 10:50:56 -0400
-Message-ID: <20261020145059.2146170-4-utilityemal77@gmail.com>
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [PATCH bpf-next v2 4/6] selftests/bpf: Test trusted-field invalidation on parent release
+Date: Tue, 20 Oct 2026 10:50:57 -0400
+Message-ID: <20261020145059.2146170-5-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261020145059.2146170-1-utilityemal77@gmail.com>
 References: <20261020145059.2146170-1-utilityemal77@gmail.com>
@@ -104,63 +103,71 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A field in the __safe_trusted or __safe_trusted_or_null set walked out
-of a referenced parent yields PTR_TRUSTED with nothing tying it to the
-reference that keeps it alive. Releasing the parent invalidates the
-parent's own register but not the walked field, which stays fully
-trusted after the object may already be freed:
+Walking file->f_inode out of an acquired file must not outlive
+bpf_put_file(). Add a reject test where the inode is used as a trusted
+argument after the file's reference is released and an accept test
+where it is read before.
 
-	file = bpf_get_task_exe_file(task);	/* acquired */
-	inode = file->f_inode;			/* __safe_trusted */
-	bpf_put_file(file);			/* inode stays trusted */
-
-Set the walked field's parent_id to the parent's reference id, or to
-the parent's own parent_id so a chain of derived fields stays bound to
-the original reference. release_reference() already invalidates every
-register whose parent_id matches, recursively, and regsafe() already
-maps parent_id through check_ids(), so no other verifier changes are
-needed. An RCU-protected parent keeps bounding its fields to the RCU
-critical section through MEM_RCU instead.
-
-Fixes: 6fcd486b3a0a ("bpf: Refactor RCU enforcement in the verifier.")
-Cc: stable@vger.kernel.org
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- kernel/bpf/verifier.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../selftests/bpf/progs/verifier_vfs_accept.c | 17 +++++++++++++++++
+ .../selftests/bpf/progs/verifier_vfs_reject.c | 19 +++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 534200c0d27d..c85c83a6ee63 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6562,6 +6562,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	const char *tname = btf_name_by_offset(reg->btf, t->name_off);
- 	const char *field_name = NULL;
- 	enum bpf_type_flag flag = 0;
-+	u32 parent_id = 0;
- 	u32 btf_id = 0;
- 	s64 min_off;
- 	int ret;
-@@ -6716,6 +6717,11 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 			 */
- 			flag = PTR_UNTRUSTED;
- 		}
-+
-+		/* A trusted field is pinned by whatever pins its parent. */
-+		if (flag & PTR_TRUSTED)
-+			parent_id = reg_is_referenced(env, reg) ? reg->id :
-+								  reg->parent_id;
- 	} else {
- 		/* Old compat. Deprecated */
- 		clear_trusted_flags(&flag);
-@@ -6725,6 +6731,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 		ret = mark_btf_ld_reg(env, regs, value_regno, ret, reg->btf, btf_id, flag);
- 		if (ret < 0)
- 			return ret;
-+		regs[value_regno].parent_id = parent_id;
- 	}
- 
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+index 34919abcff04..53441391bcae 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+@@ -124,4 +124,21 @@ int BPF_PROG(trusted_field_used_in_rcu_cs, struct linux_binprm *bprm)
  	return 0;
+ }
+ 
++SEC("lsm.s/file_open")
++__success
++int BPF_PROG(trusted_field_used_before_put)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct file *file = bpf_get_task_exe_file(task);
++	ino_t ino;
++
++	if (!file)
++		return 0;
++
++	ino = file->f_inode->i_ino;
++	bpf_put_file(file);
++	__sink(ino);
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+index 7ca0d8c3edf1..c2be63ad8055 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+@@ -224,4 +224,23 @@ int BPF_PROG(trusted_field_escapes_rcu_cs, struct linux_binprm *bprm)
+ 	subprog_trusted_inode(inode);
+ 	return 0;
+ }
++
++SEC("lsm.s/file_open")
++__failure __msg("R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_")
++int BPF_PROG(trusted_field_outlives_parent_reference)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct file *file = bpf_get_task_exe_file(task);
++	struct inode *inode;
++
++	if (!file)
++		return 0;
++
++	inode = file->f_inode;
++	bpf_put_file(file);
++
++	/* inode was pinned by file's reference and died with it. */
++	subprog_trusted_inode(inode);
++	return 0;
++}
+ char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
