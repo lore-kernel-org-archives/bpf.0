@@ -1,107 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792502986;
-	b=DnPhlAGsohWaQyDCo5CKftJeQOAHE5v1EIZukB54/S8nCyZTpm5wv9bm654jFj57jDvI
-	 I9MB02m4hNAKgGvBKx/VmsDzCMp/Wap27rUEsacJb6eNSbRVerRnXjCD9GDegC19W7/Dy
-	 aDCE/nz1q1o8eLsXXihj5fBzkEHfk7vWFpejxK2t3xztiQukh9iC/TiTzfj9/8uR2K4Dr
-	 lpH4020PfC4PYWOHDw8gBDnELlXbbd5IW/ftU5PYsr+c7Xdl0iE1SKlbKG1HOtfCNZLt8
-	 t6j5cX/r+rNP5uUwY77e23XflMLusGI0eh5b+4WM7sLS49HboU8VKdKRfWMv/wnCWDg==
+	t=1792503159;
+	b=SAZnjaZO2qvK3B4ja2CsgmFqXpuVvMBR3RSAjXgZ6SvDB0swhJvuQRpog842iNWbaKlo
+	 9hMgSUn4vR6fAjqZA5t3+57xkMRAFc9RcwTHAMDRGXrTY1cp9ifmx70GZPY85KGY65DY1
+	 LyZjmVwMJl3WolscDhfsvZtExjQsaVqFCrnEeJmzgbrynS8CkpRF97qo8mJeC3RourR2k
+	 ALR1GwmAKT104VDByRQo+y4eVue6t5pRCqw05gs3DHTgooMPDhozoveDtVw55k/SdvBb3
+	 zOrQe9I9lGQ/aCHYY12n6IRMsYpZgFG8QWq/NvreCy3KZJn4ToI955nny5VLPWKS8ew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792502986;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792503159;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Date:From:
 	 To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Proofpoint-GUID:
-	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
+	 Content-Disposition:In-Reply-To:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
 	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=9oBwEXRRzD4Ff3hTa/71jc1yF6BC+HAxpTNSMjbQEtk=;
-	b=vEdRbRa8IvRoL5EavYy7I/L7lJSGTsUBrnM9soQKPI/HLg52cPCD6Fn0iYKs8W+3RBWD
-	 +E9s83iBs3D5GOpoPeEZ8Yn6p1C2ea9uEv7KrPZj8r8ADOjtIWJG3XHaqcNiIx30/vt08
-	 7No/SIJ2H6WWbS9QBfZzwAI3+e2k1tGuKUy+AWKsBb2fYLiVDcGmcTE68+kRXn1TLIdK1
-	 IO9bql2mMAaEfLadGSpHdnZweG/H+il5VSDs9Af/B8abjlMsqmP/UT9ssA6iQIkb2ADL+
-	 PQ7JNsyYqj3GE35uGBlmHRwfcxVNs2p0HtvzX2xx1VNwB6LByHcutLNNBO+GlfdMzGA==
+	bh=9rYgdYA07tDFKT0QV8zsUnpaX9mBg/UUlKx4RXntknU=;
+	b=q08QW6XIuR3jKdQ+S6qjU3j+Rfy2cLPVWBUddevElxTonuhUQWr/SC6w4TIIdGr1+216
+	 1+epKrVmxu39xebIVNtEFuOgNUSwV4qOHYicbrTm9KtiCkzgNPxIiaQtHTuv+WFeKYbOe
+	 3j8xxvxTAV1aMbr6tQXX7ie3FFAD2Knf0qiCxDfOkwEcuEqmz2AKh5wqe0UMNBEa2B9ft
+	 Do/eXKlXWo65SKZpoyZlXrQgvZMGtyODJE2JDC5xFpBzIFWbSmKOR0YP98Jao9yV411+5
+	 fWCWSJbJsVTsLupCxE68RjJT5iCFWC+nKvNKQCc17Fh1ux4MfTEtQb8RuacRLd76E7A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=d2IPC+K+;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=cUGOdKVK;
-	arc=none smtp.remote-ip=205.220.168.131
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b="epr/s/Cd";
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=j12WkUqC;
+	arc=none smtp.remote-ip=205.220.180.131
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A417D606A327
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:29:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A417D606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3F5606A31D
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:32:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2C3F5606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=d2IPC+K+;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=cUGOdKVK
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69KDA1a61209331
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:29:44 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=epr/s/Cd;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=j12WkUqC
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69KDAKh62214654
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:32:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=9oBwEXRRzD4Ff3hTa/71jc1y
-	F6BC+HAxpTNSMjbQEtk=; b=d2IPC+K+sazAukoGXPBqWD+uW/TP9wWPpUZsmlZA
-	ieTU/Y5V6eigtfsHEUZvZIPRcQcgN6VTs+d9DebC/bx2XQ5r3SNOkOlP6+8VNAn3
-	SzMwAfdWqqImZ/8ikEB6BxzpOu5JUpg6t6Fmja4TeRAXzU+IXrB3l9C9NXriBXwm
-	ezRRGXOyKrD4s0rGoyHi7R0qkSzGAivd79GPZSo+mmul42rjwpMdxnuYeZ4qpy1T
-	sXvrWKoJuYSjwIsk5c6/ckYv2ye4Is6TsZ8yUFIlV1u7B678JcrpiMw7JQ8nNvyD
-	6qRt0wmHLXYbSo3wRmmHg8mK+g6aq6mMDZIZm7OXb7HKJw==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hdw5panxg-1
+	:references:subject:to; s=qcppdkim1; bh=9rYgdYA07tDFKT0QV8zsUnpa
+	X9mBg/UUlKx4RXntknU=; b=epr/s/Cds/ILc886vHtBe9bGm2yyAq3CisHeyjlZ
+	4/7HMFkuDOzCYcNT4+Vdww5koRjHpJT/s+JVT0SVVt5vCEbAqn7+/OHucr/hCCol
+	DgXv5te+YS94PBEOC/w4ggu+zubdYXw0VwJNj46uZkpDs7RLqsQAKcg6JctOBviC
+	zrBER8zadEEV8oR71XHTdF33g0UM7Q2ZfFjO+kn5NN3AKE7GA/gpDY84/+h0fswZ
+	jZgbFmJOuqmK4yIOX5WZE/wN+xhxYHaNl5UrJXeshZUN2JT94cWmc68GmWz56ErB
+	f8Vt0BgjPm9E+3abBPkuNwzi6KTD+9BQluvYdyIcCEQLEw==
+Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hdw5ntkg2-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:29:43 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93f2373e9b4so350179085a.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 06:29:43 -0700 (PDT)
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 13:32:37 +0000 (GMT)
+Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-9806e283b0eso2565109241.3
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 06:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1792502983; x=1793107783; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1792503157; x=1793107957; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=9oBwEXRRzD4Ff3hTa/71jc1yF6BC+HAxpTNSMjbQEtk=;
-        b=cUGOdKVKnK/nG9yNjxXJzDxLJsYWr0E2Ub/4gQO2ZGxARRW/Tc7oPAM2Vtj1nFdkGC
-         W0eeSOTG8HbLFp3piC3jO86mvUyPqX3ZN75uUWR3SSgxeJSlK45UWnTE/42f6xeR1OFX
-         H6LAPBGRUr37bfCHs/ufWw2EpFRcJp0V1O0x3074Fy8GHHQWgbfW1nqnfj40Qbh7pQYR
-         VURc5QMRUSGO2UOBBKyU2z+7FsNFx4rMZm+7EG5L/fbkUWUPlLjB2waANkL9GHcVBMpD
-         9wvwiyCjcF+VKlWUFx6gC99VMDgyTup36s9+gAKUGzlxEyNq9eFwsigii7/Cp2d5eSmF
-         RqPw==
+        bh=9rYgdYA07tDFKT0QV8zsUnpaX9mBg/UUlKx4RXntknU=;
+        b=j12WkUqCLzzcvX0XXA8n9cXrzAwhP/H8ISzjN9YjIqzBLyCNURBNc6zMqLH7OKdHKQ
+         zAKNkn9Av0q5MfHX2VX1S9PvrrBqliWKe1j/32sd4H3kCGqwkvfPOqFCvL6FwN6mPJsS
+         62fRcDYvbmM8aenzn3WuVv2Ow/AC+9nH8hvePMWxoSHWvb3O5+MDbLw5Xl/W7REr8ARl
+         cg7uGT46XrKl9+uEpPCap+54zugUV0CtCAcgfl186EhEYr6YWwJnijfy8a3fBYihvLZV
+         3hElqLE78oJcPGJJqj+N2mWSTGkPwDz0/Vn/cvd914dphwKOkkaviVrZf/S7oWF2ppy+
+         8ZnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792502983; x=1793107783;
+        d=1e100.net; s=20260707; t=1792503157; x=1793107957;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9oBwEXRRzD4Ff3hTa/71jc1yF6BC+HAxpTNSMjbQEtk=;
-        b=VzUdGGoF7cLRxxZA4PHuC6f/QDo/c18cLtGFgYq1qxRoluLwyw3fKhyQNLE/PsoSZw
-         LSU8ILENuv08Ovh48I8xzkfH+gr2dVZI9T7yYvEaPPEgTmP4WpfeHwqraJ1K36LYjsnL
-         f2uuibiI0YIphvWu7FMQ+oEJE+y+4N7NHnyyBds9biHore3dxKET92m2dimyQJ5jDSVN
-         2Kag/0bef5SFL4E1a6ZGUdLpCekSI5mKqf+EUdBMGvyssUc5cCbqCgD0ii5+3F39QsMV
-         Q2BL7burpqsr1Qwrs8gzEcI9OWHXbMxmgqOcHpsBu/A7J9TQr7+2LuvpNV3pMMR33LwP
-         XqRw==
-X-Forwarded-Encrypted: i=1; AKwUvBy4BqZkqDC+5GeCK9sqGqu4N5KIaxFhhTvpCxveJJjU9fHVXzOR4fvzLAgyZ7CHmChU8fo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIvjh1+k4LRMk6T+sYvq18+VWAJgWXFqleJffDgW/2BYGpCvEkp
-	EvGoGVTrdOsi5z9Y7V8Aoycjc7745TxSrJPMQn/3kxiInIxPEYbUFcTny7OewvueemOFTRs7UBK
-	QOE8rL+WY6FzrF1hNYPDZzNl15GreHykNKMV/6O8fEtxXbVDRBI557nc=
-X-Gm-Gg: AYBFou3zykYRu0qqbr5lmfZTJc//KT8Oh579AOI5rLIpghmgHG9A8s8VM/eqpZpKO6e
-	/eXPLIgMJh8xwcQ8I5dOBA0wO03iLPG09BLdVj7dqWSOAk/eksZCumEw5HL7nOUBT48gS3J1OsT
-	sOgex7SEuyCkkeiYhddTCA5veKLBp+scBMzQ7negbrulGF7lcm+xmVvIUrsTUMNMui8iCYsHSN6
-	xjQBM/7lshtheGMJfRS5quCLX7zmc50KyC3JUsPzcpIkvIPoHYtlb7lE+qpHynT/gBfF1za0R95
-	A5jZL7sWXRB7OYEpcyUC+0HW97SmWJz9+MVF3Ce6GsQJa8zPmmwTUTp0A5OCQ8VT3kpfPIq76zi
-	NhNq7DOJEpoeGrg==
-X-Received: by 2002:a05:620a:1a20:b0:93e:a71a:5de0 with SMTP id af79cd13be357-93f29cc7983mr1918670285a.26.1792502982547;
-        Tue, 20 Oct 2026 06:29:42 -0700 (PDT)
-X-Received: by 2002:a05:620a:1a20:b0:93e:a71a:5de0 with SMTP id af79cd13be357-93f29cc7983mr1918663585a.26.1792502981752;
-        Tue, 20 Oct 2026 06:29:41 -0700 (PDT)
+        bh=9rYgdYA07tDFKT0QV8zsUnpaX9mBg/UUlKx4RXntknU=;
+        b=omUVNFMA/sZzxKzu5anxw2Ac/i1GQJuEogedSUToZKeThCpYsR0y8d0QvL0vJj0oq0
+         i+oEEXKyLooOWpDHd7bA7H10edf+8r1wYJqb8X3NWiQTYSB94sLqgvFjWeBBUFprAwOW
+         pI6BdlxN1ATp5cXfTUidG7Lz8YvAHxzGWxM0ZmuaEZJWvz1pZuUSdN56X4phVTwfSoGQ
+         t3yB24UoDUnOty4ic4R+T01cXYqfsuJf9pjk/uRtp7IVuUsryUGTuWyXyjO1PjXrRWBB
+         OphbEO+XSBf8ychUsP2IMQ+G2HEmYueYH8XYc0JwO5Id8Y7zwOxlLX0F7y3hem+LOOrx
+         Dh9A==
+X-Forwarded-Encrypted: i=1; AKwUvBzzdHXdIzh8oCbbuvxGqMeueuSswPIyG1Nxd0PcUgg6tWA1iqbAN+coDeVAJStxesl6MXM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLhu7Pxh3/rzjLOmedULotLInzRjo4uPYxTAVJJXLMHZZ3V8Fcw
+	xItUG+YWSPsPIHiZLTkBMCGnA2+FOqoeVRjAayWLQIOBBEHY2Sz7zF7pqVrMy/icggEqJL63ZqN
+	TWmeWgo4J8lMGXu8JM4619TcFSBVGzlt/bzymO4fIbJ9er8REmuYflSAoNRHKJvo=
+X-Gm-Gg: AYBFou2TehHmIaKD8SCHvAiTfmXGlGkenFgLxXw19k3qSknPXCIRlL4yFu6yjDMzTCx
+	ty/eUHxcJhOMipJWR+R3VSNaFpWAIaN1lVPIh8KoA+uhmgFec8Z4B5Fb+TqxO4nxeVXqf5LmW3S
+	RZr28Uf+CWBVFh2NuIcp/oVt0AeIWuC76cjHut1XZ61jWQT9fCyWS99pwVkY+DJVeis+nlMP1YU
+	zKvXRWU+UXP/A2HyEjwj6/wwGEKvWzT7JVXuVYW/9VXAlmnl2TZjfS25nd6db5Myt2opTmL/mcT
+	/43q9Xy1V4d7tAKUEMUAtrS7loMUZliJ07WdDYV5N0AQZ/f/EfCD3/8bKDS2taknf1qr3LbKYL9
+	eKvXYS4RnuywYbQ==
+X-Received: by 2002:a05:6102:509f:b0:7c0:cdd9:31c1 with SMTP id ada2fe7eead31-7cc3691e07emr3385071137.12.1792503156834;
+        Tue, 20 Oct 2026 06:32:36 -0700 (PDT)
+X-Received: by 2002:a05:6102:509f:b0:7c0:cdd9:31c1 with SMTP id ada2fe7eead31-7cc3691e07emr3385044137.12.1792503155962;
+        Tue, 20 Oct 2026 06:32:35 -0700 (PDT)
 Received: from localhost ([188.216.77.92])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e1d818d61sm6024062f8f.31.2026.10.20.06.29.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2ca3666sm75084605e9.1.2026.10.20.06.32.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 06:29:40 -0700 (PDT)
-Date: Tue, 20 Oct 2026 15:29:40 +0200
+        Tue, 20 Oct 2026 06:32:33 -0700 (PDT)
+Date: Tue, 20 Oct 2026 15:32:33 +0200
 From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 To: netdev-bot+sashiko@kernel.org
 Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -111,11 +111,11 @@ Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
         john.fastabend@gmail.com, sdf@fomichev.me, Jose.Abreu@synopsys.com,
         boon.leong.ong@intel.com, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v8 4/5] net: stmmac: fix VLAN tag stripping on
- non-linear RX frames
-Message-ID: <atdsxFPHU00Oc0Zk@lore-desk>
-References: <20261018-stmmac-rx-mb-v8-4-5f58c0b25849@oss.qualcomm.com>
- <179243151841.3135.10232947668205235199@kernel.org>
+Subject: Re: [PATCH net-next v8 5/5] net: stmmac: rework stmmac_rx to support
+ XDP rx multi-buff
+Message-ID: <atdtcD1o6N--LRpl@lore-desk>
+References: <20261018-stmmac-rx-mb-v8-5-5f58c0b25849@oss.qualcomm.com>
+ <179243152020.3135.588086716583719127@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -126,38 +126,38 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="INi3XEPXl+Bdj046"
+	protocol="application/pgp-signature"; boundary="lJZGZmpUiB07xMUc"
 Content-Disposition: inline
-In-Reply-To: <179243151841.3135.10232947668205235199@kernel.org>
-X-Proofpoint-GUID: 6EC6yjeB5m3_LUYux96CXBTv8rnpLxCe
-X-Authority-Analysis: v=2.4 cv=fb84WEQF c=1 sm=1 tr=0 ts=6ad76cc7 cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
+In-Reply-To: <179243152020.3135.588086716583719127@kernel.org>
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIwMDA1MyBTYWx0ZWRfX1W9AaylGeYJE
+ TxoCXNulpFjL+RuXKYDTue9oMoQkX2NrAobB+Hx5JjjEyE9PbMoFBK+5X4lMVHbB4B4nP7bC6Qn
+ 3JcPx/SN/EV2Artwoo7ZdJA/RsUIKHg=
+X-Proofpoint-GUID: NvdYlSHn2FbmlSwIY1YaVHLOog-TuROZ
+X-Proofpoint-ORIG-GUID: NvdYlSHn2FbmlSwIY1YaVHLOog-TuROZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIwMDA1MyBTYWx0ZWRfX1ePh4r4rtaYK
+ SRNpLAvVXS4GsXTa+hDTMCeSRv0lGhKNcPeE0cIc+0UEvqGfLDNPUd7JsSGyX+W8rGI2S1qLr2i
+ EyqJgUxrS7a7eVoo4+5bZ2HX1bcMC2pf0Aj2bIgKuK3pTsB3dCvurRM6ZtpTRZkf8zAEYYejXUy
+ ENSKhmns7FphSZSBh28quO3nAGRZhWVGAAep+a4pEnxAdrzp9WnyS251QNuqnsMvIEVkK4XLl+G
+ mOCb2eB0T3+rX4UGw2AdMuydX/FtTxEGc5sDM5QgnUWsszuhhQZW9irIpmwI17OqRR3tf1epzm2
+ ukkwE1uYhkPSfgueThi/v8DYv2LMFZRV8XZIMfMaoNrx144e5ztQDQdjCDzY9jsVYZSsnoLTzHc
+ ItMGZxHMxBXIQwPqr0vNU/jIfr8RpZeaETTrG6xvjF/FeA1Xa+WzMngL+qsSMquQ+kGSLv5V5Fy
+ +f3GA+DAg9Mj4bT779w==
+X-Authority-Analysis: v=2.4 cv=TcsDJhQh c=1 sm=1 tr=0 ts=6ad76d76 cx=c_pps
+ a=UbhLPJ621ZpgOD2l3yZY1w==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
  a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=_K5XuSEh1TEqbUxoQ0s3:22 a=9R54UkLUAAAA:8
- a=EUspDBNiAAAA:8 a=a3DH8UJokq-MAUnuC1gA:9 a=QEXdDO2ut3YA:10
- a=tRD2RFjWxTLXFJH57dcA:9 a=PEH46H7Ffwr30OY-TuGO:22 a=YTcpBFlVQWkNscrzJ_Dz:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIwMDA1MyBTYWx0ZWRfXxjunAvzZVy8X
- ctx6zRm6X5C+CvtEBD+hMajzSo13HzsFVL2+9g7zVH22RTufk9M+urysX51pDruTiEWkQwpl/D1
- EnqZ1ppJp3L2+JOny8y0innx5X8CtZ+OJddryCJzL/KQoWFhUJzLU/4H8WeCUQvmVuBcmLrF1ve
- s/SEGSlg7oe5t4N/Ind5L2nndvmEEgzUqJBFt7weL8jqXERAycHIYAulTpp21iHIwHH4mbaYLi/
- DLamoI112lj7aCCzNXOok4kQgh9Y9o5l+FHpz9lSiBiSn4OwO3/Meunoc6wfuXzE66E26DvhAzb
- 5dqbQtcTUzWvTQQuYMe1C9i5oc/XUS2vGMxbqD2ir0hjci5mEZfOA6Pm6Xf3N5JH2J2G0wYLPdh
- DhoBSC6udF7Cr0gnDTsntKjYeqlUt4qwGLqjIqPqm40zUGMfWv9618D+1nAcKnzEFHri+MqPlCM
- l1OCwNnr32tHZc7v2ig==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIwMDA1MyBTYWx0ZWRfXxGZZj0IVh0Ds
- 1ImEahOpgnHvPdr9J9ByEjjM2GAp41Iiepu9TWQ+34b3a4ATVWDajDOGhWkYCTjLpVpsd/qbD7E
- SvuQiYtbTumyUHxl8eZi9ie5woVvAPQ=
-X-Proofpoint-ORIG-GUID: 6EC6yjeB5m3_LUYux96CXBTv8rnpLxCe
+ a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22 a=9R54UkLUAAAA:8
+ a=EUspDBNiAAAA:8 a=AAtxJrX6kwZzT1o8YZAA:9 a=QEXdDO2ut3YA:10
+ a=gBTJZmOXgchuYORFWpUA:9 a=TOPH6uDL9cOC6tEoww4z:22 a=YTcpBFlVQWkNscrzJ_Dz:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-10-20_02,2026-10-19_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
- phishscore=0 clxscore=1015 bulkscore=0 spamscore=0 priorityscore=1501
+ malwarescore=0 adultscore=0 impostorscore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610200053
 
---INi3XEPXl+Bdj046
+--lJZGZmpUiB07xMUc
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -165,7 +165,7 @@ Content-Transfer-Encoding: quoted-printable
 > Thank you for your contribution! Sashiko AI review found 3 potential
 > issue(s) to consider.
 >=20
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 2 (1) =C2=B7 Low: 1
+> Critical: 0 =C2=B7 High: 0 (1) =C2=B7 Medium: 2 (1) =C2=B7 Low: 1
 >=20
 > If you believe none of the issues are legitimate, please reply to each
 > issue of Medium severity or higher and explain why the AI is wrong.
@@ -173,244 +173,301 @@ Content-Transfer-Encoding: quoted-printable
 > know by including "pw-bot: cr" as a separate line at the end of your reply
 > (one such reply per series is enough).
 >=20
-> - [Medium] The commit message and Fixes: tag describe a crash that cannot
->   happen in any tree this patch would be backported to.
-> - [Medium] The commit message says that moving meta_len bytes together
->   with the MAC addresses in stmmac_rx_vlan() keeps data_meta pointing at=
-=E2=80=A6
-> - [Low] stmmac_rx_vlan() now calls pskb_may_pull(skb, VLAN_ETH_HLEN)
->   before checking h_vlan_proto or dev->features.
+> - [Medium] The patch fixes a DMA under-sync on the XDP drop path but does
+>   not say so.
+> - [Medium] Fragment truesize is undercounted when num_pages is not a
+>   power of two.
+> - [Low] The patch advertises NETDEV_XDP_ACT_RX_SG (line 8189) and now
+>   runs frags-aware programs on multi-buffer xdp_buffs=E2=80=A6
 >=20
 > Pre-existing issues:
-> - [Medium] This problem wasn't introduced by this patch, but
->   priv->xstats.rx_dropped is a plain 'unsigned long' (common.h:241)=E2=80=
-=A6
+> - [High] XDP_TX completions are recycled into the RX page_pool's lockless
+>   alloc cache from a different NAPI context.
+> - [Medium] The AF_XDP zero-copy XDP_PASS path reports XDP metadata whose
+>   bytes it never copies.
 >=20
 > --
 >=20
-> net: stmmac: fix VLAN tag stripping on non-linear RX frames
+> net: stmmac: rework stmmac_rx to support XDP rx multi-buff
 >=20
-> This patch makes stmmac_rx_vlan() call pskb_may_pull(skb, VLAN_ETH_HLEN)
-> before it reads the VLAN header. When the tag is popped, any XDP metadata
-> is now moved along with the MAC addresses. If the pull fails, both RX
-> callers drop the frame.
->=20
-> > stmmac_rx_vlan() reads the VLAN header straight from skb->data and
-> > removes it with skb_pull(), assuming the header is always in the linear
-> > part of the skb. That is not true once non-linear skbs can reach it: a
-> > program loaded with BPF_F_XDP_HAS_FRAGS can pass up a fragmented frame
-> > whose linear head has been shortened to as little as ETH_HLEN by
-> > bpf_xdp_adjust_head(), and the unguarded skb_pull() then drives skb->len
-> > below skb->data_len, tripping BUG() in __skb_pull().
->=20
-> [Severity: Medium]
-> Can this scenario happen in a tree that matches the Fixes: tag?
->=20
-> On the AF_XDP zero-copy path from bba2556efad6, stmmac_construct_skb_zc()
-> always builds a linear skb:
->=20
-> 	skb =3D napi_alloc_skb(&ch->rxtx_napi,
-> 			     xdp->data_end - xdp->data_hard_start);
-> 	...
-> 	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
->=20
-> On the regular stmmac_rx() path with XDP enabled, multi-descriptor frames
-> and buf2 frames are both dropped:
->=20
-> 		/* We do not support SG in XDP mode */
-> 		if (unlikely(!error && (status & rx_not_ls) &&
-> 			     stmmac_xdp_is_enabled(priv))) {
-> 		...
-> 		if (unlikely(stmmac_xdp_is_enabled(priv) && buf2_len)) {
-> 			rx_dropped++;
-> 			goto next;
-> 		}
->=20
-> The XDP_PASS skb there is built with napi_build_skb() plus
-> skb_put(buf1_len) and has no frags. XDP_PASS skbs with frags seem to
-> appear only with the later "net: stmmac: rework stmmac_rx to support XDP
-> rx multi-buff" patch in this series.
->=20
-> Even with a 14 byte linear head, skb_pull(skb, VLAN_HLEN) here would leave
-> 10 bytes of headlen and would not BUG. Wouldn't the BUG() come from
-> eth_type_trans()->eth_skb_pull_mac()->skb_pull_inline(skb, ETH_HLEN)
-> instead?
->=20
-> On current trees, the patch fixes a different case. An XDP program can
-> use bpf_xdp_adjust_tail() to shrink a linear frame to 14..17 bytes while
-> bytes 12-13 still hold a VLAN ethertype. The old code then reads
-> h_vlan_TCI past skb->len and pops the tag. That leaves skb->len below
-> ETH_HLEN, and eth_type_trans() passes a malformed skb up the stack.
->=20
-> Could the commit message describe that case, and could the Fixes: tag be
-> rechecked? As written, stable maintainers may conclude that 5.13+ kernels
-> hit a BUG() they do not have.
-
-I will fix it in the next iteration.
-
+> This reworks stmmac_rx() to collect every descriptor of a frame in an
+> xdp_buff, so the XDP program runs on the whole frame, including any
+> fragments. The skb is then built from the xdp_buff with napi_build_skb()
+> and xdp_update_skb_frags_info(). The in-progress xdp_buff is saved in
+> rx_q->state across NAPI polls, and NETDEV_XDP_ACT_RX_SG is advertised.
 >=20
 > > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/driver=
 s/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index e929cc0f23125..04dc6dcaa435d 100644
+> > index 04dc6dcaa435d..e9c61524fc740 100644
 > > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 > > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > @@ -5095,22 +5095,30 @@ static netdev_features_t stmmac_features_check(=
-struct sk_buff *skb,
-> >  	return vlan_features_check(skb, features);
-> >  }
-> > =20
-> > -static void stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
-> > +static int stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
-> >  {
-> > -	struct vlan_ethhdr *veth =3D skb_vlan_eth_hdr(skb);
-> > -	__be16 vlan_proto =3D veth->h_vlan_proto;
-> > -	u16 vlanid;
-> > +	struct vlan_ethhdr *veth;
-> > =20
-> > -	if ((vlan_proto =3D=3D htons(ETH_P_8021Q) &&
-> > +	if (!pskb_may_pull(skb, VLAN_ETH_HLEN))
-> > +		return -EINVAL;
 >=20
-> [Severity: Low]
-> Does this drop every 14..17 byte frame, including untagged ones?
-
-I will fix it in the next iteration.
-
+> [ ... ]
 >=20
-> The pull happens before h_vlan_proto and dev->features are checked. Any
-> skb with skb->len < VLAN_ETH_HLEN now fails here, and both stmmac_rx()
-> and stmmac_dispatch_skb_zc() free it and count it in rx_dropped.
+> > @@ -5806,6 +5812,119 @@ static int stmmac_rx_zc(struct stmmac_priv *pri=
+v, int limit, u32 queue)
 >=20
-> This also covers interfaces set with "ethtool -K rxvlan off". There,
-> stmmac_set_features() clears hw_vlan_en, so stmmac_rx_vlan() runs for
-> every frame. It also covers non-xmac cores, where hw_vlan_en is never
-> set.
+> [ ... ]
 >=20
-> Such frames can come from an XDP program that shrinks a frame with
-> bpf_xdp_adjust_tail(), which allows lengths down to ETH_HLEN, and then
-> returns XDP_PASS. Before this patch they went through eth_type_trans()
-> unchanged.
+> > +static struct sk_buff *stmmac_build_skb(struct xdp_buff *xdp)
+> > +{
+> > +	struct skb_shared_info *sinfo =3D xdp_get_shared_info_from_buff(xdp);
+> > +	u32 metasize =3D xdp->data - xdp->data_meta;
 >=20
-> Would it work to check the ethertype and features first? ETH_HLEN is
-> enough to read h_vlan_proto, and VLAN_ETH_HLEN would only be needed
-> when the tag is about to be popped.
+> [ ... ]
 >=20
-> > +
-> > +	veth =3D skb_vlan_eth_hdr(skb);
-> > +	if ((veth->h_vlan_proto =3D=3D htons(ETH_P_8021Q) &&
-> >  	     dev->features & NETIF_F_HW_VLAN_CTAG_RX) ||
-> > -	    (vlan_proto =3D=3D htons(ETH_P_8021AD) &&
-> > +	    (veth->h_vlan_proto =3D=3D htons(ETH_P_8021AD) &&
-> >  	     dev->features & NETIF_F_HW_VLAN_STAG_RX)) {
-> > +		__be16 vlan_proto =3D veth->h_vlan_proto;
-> > +		u16 vlanid =3D ntohs(veth->h_vlan_TCI);
-> > +		u8 meta_len =3D skb_metadata_len(skb);
-> > +
-> >  		/* pop the vlan tag */
-> > -		vlanid =3D ntohs(veth->h_vlan_TCI);
-> > -		memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
-> > +		memmove(skb->data - meta_len + VLAN_HLEN,
-> > +			skb->data - meta_len, meta_len + ETH_ALEN * 2);
+> > +	skb_mark_for_recycle(skb);
+> > +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
+> > +	skb_put(skb, xdp->data_end - xdp->data);
+> > +	if (metasize)
+> > +		skb_metadata_set(skb, metasize);
 >=20
 > [Severity: Medium]
-> On the AF_XDP zero-copy path, do the meta_len bytes before skb->data
-> actually hold the XDP metadata?
+> This isn't a bug introduced by this patch. Now that the page_pool path
+> keeps the metadata, though, the AF_XDP zero-copy XDP_PASS path no longer
+> matches it. Does stmmac_construct_skb_zc() pass stale headroom bytes to
+> TC/BPF as metadata?
 
-I guess this issue is not introduced by this series. I will fix it with a
-dedicated patch.
-
+Since this issue has not been introduced by this patch I guess we can fix it
+with a dedicated patch.
 >=20
-> stmmac_construct_skb_zc() records the metadata length but never copies
-> the metadata bytes:
->=20
+> stmmac_construct_skb_zc() {
+>     ...
 > 	skb_reserve(skb, xdp->data - xdp->data_hard_start);
 > 	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
 > 	if (metasize)
 > 		skb_metadata_set(skb, metasize);
+>     ...
+> }
 >=20
-> The skb comes from napi_alloc_skb(), which does not zero the headroom,
-> so the bytes in front of skb->data are stale. This memmove() moves those
-> stale bytes in front of the relocated MAC header.
+> Only [data, data_end) is copied into the new skb, but the metasize bytes
+> in front of skb->data are still marked as metadata. A TC/BPF program that
+> reads data_meta on frames from stmmac_rx_zc()->stmmac_dispatch_skb_zc()
+> would see leftover bytes from the napi_alloc_skb() headroom instead of
+> what the XDP program wrote.
 >=20
-> After eth_type_trans(), bpf_compute_data_pointers() sets data_meta to
-> skb->data - skb_metadata_len(skb). TC BPF programs would then read
-> uninitialized headroom instead of what the XDP program wrote.
+> Other zero-copy drivers copy metasize + datasize bytes starting at
+> xdp->data_meta and then call __skb_pull(skb, metasize). Would the same
+> approach work here?
 >=20
-> On the regular stmmac_rx() path, skb_metadata_set() is never called at
-> this commit. meta_len is therefore always 0 there, and this part of the
-> change does nothing until the later rework patch adds the call in
-> stmmac_build_skb(). stmmac_construct_skb_zc() is still unchanged at the
-> end of the series.
+> > +
+> > +	if (unlikely(xdp_buff_has_frags(xdp)))
+> > +		xdp_update_skb_frags_info(skb, num_frags, sinfo->xdp_frags_size,
+> > +					  sinfo->xdp_frags_truesize,
+> > +					  xdp_buff_get_skb_flags(xdp));
+> > +	return skb;
+> > +}
+> > +
+> > +static bool stmmac_build_xdp_frags(struct stmmac_priv *priv,
+> > +				   struct stmmac_rx_queue *rx_q,
+> > +				   unsigned int len, struct page *page,
+> > +				   unsigned int offset,
+> > +				   enum dma_data_direction dma_dir,
+> > +				   struct xdp_buff *xdp)
+> > +{
+> > +	dma_addr_t dma_addr =3D page_pool_get_dma_addr(page) + offset;
+> > +
+> > +	dma_sync_single_for_cpu(priv->device, dma_addr, len, dma_dir);
+> > +	if (!xdp_buff_add_frag(xdp, page_to_netmem(page), offset, len,
+> > +			       xdp->frame_sz)) {
 >=20
-> Peer drivers such as igc_construct_skb_zc() copy starting at
-> xdp->data_meta and then call __skb_pull(skb, metasize). Should
-> stmmac_construct_skb_zc() do the same, or should the metadata claim come
-> out of the commit message?
+> [Severity: Medium]
+> The commit message says:
 >=20
-> >  		skb_pull(skb, VLAN_HLEN);
-> >  		__vlan_hwaccel_put_tag(skb, vlan_proto, vlanid);
-> >  	}
+>   charge fragments the whole page_pool page size (xdp->frame_sz) as
+>   truesize instead of the old dma_buf_sz
+>=20
+> Is xdp->frame_sz the page_pool page size in every configuration?
+>=20
+> frame_sz comes from bufsz =3D rx_q->napi_skb_frag_size in stmmac_rx(). Th=
+at
+> value is set in __alloc_dma_rx_desc_resources():
+>=20
+> 	rx_q->napi_skb_frag_size =3D num_pages * PAGE_SIZE;
+> 	...
+> 	pp_params.order =3D order_base_2(num_pages);
+>=20
+> When num_pages is not a power of two, each page_pool buffer is
+> PAGE_SIZE << order, which is larger than napi_skb_frag_size. Two examples
+> with 4K pages and no XDP:
+>=20
+> - dma_buf_sz of 8KiB: num_pages =3D 3, order 2, so each 16K page is charg=
+ed
+>   as 12K.
+> - dma_buf_sz of 16KiB: num_pages =3D 5, order 3, so each 32K page is char=
+ged
+>   as 20K.
+>=20
+> stmmac_xdp_shrink_tail() subtracts the same xdp->frame_sz. Then
+> stmmac_build_skb() adds sinfo->xdp_frags_truesize to skb->truesize
+> through xdp_update_skb_frags_info(). As a result, skb->truesize is lower
+> than the memory the fragments actually pin.
+>=20
+> Could the fragment truesize use PAGE_SIZE << pp_params.order instead? Or
+> could num_pages be rounded up to a power of two?
+
+I will fix it in the next iteration.
+
 >=20
 > [ ... ]
 >=20
-> > @@ -5530,12 +5538,15 @@ static void stmmac_dispatch_skb_zc(struct stmma=
-c_priv *priv, u32 queue,
-> >  	}
-> > =20
-> >  	stmmac_get_rx_hwtstamp(priv, p, np, skb);
-> > -	if (priv->hw->hw_vlan_en)
-> > +	if (priv->hw->hw_vlan_en) {
-> >  		/* MAC level stripping. */
-> >  		stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
-> > -	else
-> > -		/* Driver level stripping. */
-> > -		stmmac_rx_vlan(priv->dev, skb);
-> > +	} else if (stmmac_rx_vlan(priv->dev, skb)) {
-> > +		dev_kfree_skb_any(skb);
-> > +		priv->xstats.rx_dropped++;
+> > @@ -5927,129 +6039,89 @@ static int stmmac_rx(struct stmmac_priv *priv,=
+ int limit, u32 queue)
+>=20
+> [ ... ]
+>=20
+> > +		pre_len =3D ctx.xdp.data_end - ctx.xdp.data_hard_start;
+> > +
+> > +		ctx.desc =3D p;
+> > +		ctx.ndesc =3D np;
+> > +
+> > +		skb =3D stmmac_xdp_run_prog(priv, &ctx.xdp);
+> > +		/* Due xdp_adjust_tail: DMA sync for_device
+> > +		 * cover max len CPU touch
+> > +		 */
+> > +		sync_len =3D ctx.xdp.data_end - ctx.xdp.data_hard_start;
+> > +		sync_len =3D max(sync_len, pre_len);
 >=20
 > [Severity: Medium]
-> This isn't a bug introduced by this patch, but priv->xstats.rx_dropped is
-> a plain unsigned long shared by all RX queues. Per-queue NAPI contexts,
-> which can run at the same time on different CPUs, update it with
-> unsynchronized read-modify-write:
+> The old pre_len and sync_len subtracted buf->page_offset:
+>=20
+> 	sync_len =3D ctx.xdp.data_end - ctx.xdp.data_hard_start -
+> 		   buf->page_offset;
+>=20
+> The new ones don't. This looks like a separate DMA sync fix, and the
+> commit message doesn't mention it.
+>=20
+> Commit 88095728511e ("net: stmmac: fix rx Scatter-Gather support") set
+> pp_params.offset =3D 0, and __page_pool_dma_sync_for_device() syncs from
+> dma_addr + pool->p.offset. So with the old formula, the XDP_CONSUMED path
+> synced [0, L) for an L-byte frame at XDP_PACKET_HEADROOM. The bytes the
+> CPU had touched were at [256, 256 + L).
+>=20
+> Take a non-coherent platform and an XDP program that writes the packet,
+> grows the tail or writes metadata, and then returns XDP_DROP or
+> XDP_ABORTED, or fails a redirect. Could that leave dirty cache lines in
+> the recycled page? Those lines could later be written back over a frame
+> the device has DMA'd into the page.
+>=20
+> The new formula looks like the correct one. Stable kernels that picked up
+> 88095728511e would keep the under-sync. Could this go out as a separate
+> net fix with:
+>=20
+> Fixes: 88095728511e ("net: stmmac: fix rx Scatter-Gather support")
+>=20
+> or at least be described in the commit message?
+
+I will post a dedicated patch to fix it.
+
+>=20
+> > +
+> > +		/* For Not XDP_PASS verdict */
+> > +		if (IS_ERR(skb)) {
+> > +			unsigned int xdp_res =3D -PTR_ERR(skb);
+> > +
+> > +			if (xdp_res & STMMAC_XDP_CONSUMED) {
+> > +				stmmac_xdp_put_buff(rx_q, &ctx.xdp, sync_len,
+> > +						    true);
+> > +				rx_dropped++;
+> > +			} else if (xdp_res & (STMMAC_XDP_TX |
+> > +					      STMMAC_XDP_REDIRECT)) {
+> > +				xdp_status |=3D xdp_res;
+> > +			}
+>=20
+> [Severity: High]
+> This is a pre-existing issue, but this patch sends fragment pages down the
+> same path. Is it safe for tx_napi to recycle XDP_TX completions directly
+> into this RX queue's page_pool?
 
 Since this issue has not been introduced by this patch I guess we can fix it
 with a dedicated patch.
+
+>=20
+> stmmac_tx_clean() runs from ch->tx_napi and does:
+>=20
+> 	if (xdpf &&
+> 	    tx_q->tx_skbuff_dma[entry].buf_type =3D=3D STMMAC_TXBUF_T_XDP_TX) {
+> 		xdp_return_frame_rx_napi(xdpf);
+> 		tx_q->xdpf[entry] =3D NULL;
+> 	}
+>=20
+> That call ends up here:
+>=20
+> xdp_return_frame_rx_napi()
+>   __xdp_return(..., napi_direct=3Dtrue)
+>     page_pool_put_full_netmem(pp, netmem, true)
+>       page_pool_recycle_in_cache()
+>         pool->alloc.cache[pool->alloc.count++] =3D netmem;
+>=20
+> The page_pool belongs to ch->rx_napi, which is a separate napi_struct.
+> stmmac_xdp_get_tx_queue() picks the XDP_TX queue by CPU. tx_napi can also
+> be scheduled on another CPU by stmmac_tx_timer() or by a per-channel TX
+> MSI vector. stmmac does not set pp_params.napi, so page_pool cannot catch
+> this.
+>=20
+> At the same time, stmmac_rx() on rx_napi uses the same alloc cache. It
+> does so through stmmac_rx_refill() and through the new allow_direct=3Dtrue
+> puts in stmmac_xdp_put_buff(), stmmac_build_xdp_frags() and
+> stmmac_xdp_shrink_tail().
+>=20
+> Can these two contexts race on alloc.count and the cache slots? That
+> could lose a page, or cache the same page twice so that it gets handed to
+> two RX descriptors.
+>=20
+> With multi-buffer frames, xdp_return_frame_rx_napi() now also returns
+> every fragment page with napi_direct=3Dtrue, so more pages go through this
+> race.
+>=20
+> [ ... ]
+>=20
+> > @@ -8106,6 +8186,7 @@ static int __stmmac_dvr_probe(struct device *devi=
+ce,
+> >  	ndev->hw_features =3D NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSU=
+M |
+> >  			    NETIF_F_RXCSUM;
+> >  	ndev->xdp_features =3D NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT=
+ |
+> > +			     NETDEV_XDP_ACT_RX_SG |
+> >  			     NETDEV_XDP_ACT_XSK_ZEROCOPY;
+>=20
+> [Severity: Low]
+> With NETDEV_XDP_ACT_RX_SG advertised, frags-aware programs now see
+> multi-buffer frames. However, __alloc_dma_rx_desc_resources() still
+> registers the rxq with:
+>=20
+> 	ret =3D xdp_rxq_info_reg(&rx_q->xdp_rxq, priv->dev, queue, napi_id);
+>=20
+> That leaves frag_size at 0, so bpf_xdp_frags_increase_tail() always
+> returns early:
+>=20
+> 	if (!rxq->frag_size || rxq->frag_size > xdp->frame_sz)
+> 		return -EOPNOTSUPP;
+>=20
+> Is it intended that a positive bpf_xdp_adjust_tail() on a multi-buffer
+> stmmac frame always fails, even when the last fragment page has room?
+> Other RX_SG drivers such as bnxt behave the same way, so this may just be
+> a limitation. Would registering with __xdp_rxq_info_reg() and a real
+> frag_size be worth considering?
+
+I will fix it in the next revision.
 
 Regards,
 Lorenzo
 
 >=20
-> stmmac_dispatch_skb_zc():
-> 	priv->xstats.rx_dropped++;
->=20
-> stmmac_rx_zc() and stmmac_rx():
-> 	priv->xstats.rx_dropped +=3D rx_dropped;
->=20
-> stmmac_get_stats64() also reads it without READ_ONCE().
->=20
-> Can concurrent updates from two queues lose increments here? The new
-> error path adds one more writer that follows the existing pattern.
->=20
-> > +		return;
-> > +	}
->=20
-> [ ... ]
->=20
 > --=20
 > Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
 set/20261018-stmmac-rx-mb-v8-0-5f58c0b25849%40oss.qualcomm.com
 
---INi3XEPXl+Bdj046
+--lJZGZmpUiB07xMUc
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCatdsxAAKCRA6cBh0uS2t
-rKQoAP4/pJPKdXpLyqrHEoZ9hjCpzl7Ao3ihZm/BO2XQn+kadQEAiiu1toFS/K4W
-U6LBTRJeuv31t0+QLs3auhpkTAQ+/AQ=
-=b1Cd
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCatdtcAAKCRA6cBh0uS2t
+rATLAQCSvZ33CM/2uk7SiugoyWVQyTLcX4+EuDn+8YQzsGZdZwEA5TNtIM50LdiW
+eMNXxEqYgA/WRnQ0sRpIoSDa8/M01QQ=
+=LdD9
 -----END PGP SIGNATURE-----
 
---INi3XEPXl+Bdj046--
+--lJZGZmpUiB07xMUc--
