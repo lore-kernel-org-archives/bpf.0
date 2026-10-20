@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.212
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.223
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792513232;
-	b=ABxbHX79meOxJUneK6sFck+iwH/yddce3wESZV+zBxV6qmC4Mst/5VhF1Gpd8mocs57A
-	 g7RWdQiuDYRcE0aLyD6LlMpSh0e+1Lng+2/TAV9qzQAapEjMKLYqLbbCVTMCUgmdJYkMc
-	 cMRVXBMuEjsU6LAmFkPW5xVAkaqhNhl3IIzGRmKeD6alPWdWw2bEVaVj8nujmMCllWNC4
-	 oJS1OTm7jA4I/SVeSWR73lZmc31CNuy66tyTAzVc6WlaMw1zb3MKxilkGPM7UACrghwVB
-	 JlxSh4sI08qUc50afeMajQY4x78UIg61M2OONEZU+QfjYN2/BeXKDtahOr2VQ/NLj7A==
+	t=1792513241;
+	b=V7BPhddKpoxTB2NZheoqbd9X8/ecD915acv2Y2wE9ekaOOSf7ST0XiPcXboGKjmSHDAf
+	 ERst12Cu7kbkzixKtDtv1agmA6qed91V7s+VdoNxpHDhpkaTBYXBpDByv8KMswpGZbQ8N
+	 Xl/R+TMAOQzvnYz7RkkTnSN+Gd8+7X1Ij9XwqMRMJqMVGo2oPZz8N3Dux2/4/U1NJo7DO
+	 9xGf/tGI9MY3UppqCarduk5VJnKPuF19qICkLk60M8As9cnN6WEjOVcY4QU/hH4BGe6iU
+	 yIlp7R3wyoDGuswmpLJg9PEimCptuY8NeCuhEfOrKQ14n6n78BdCPpuBAfQL5ugzA0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792513232;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792513241;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Sw0Rt7vqhhhHXuR/kqMIOEmCx8YstN+oG6LNxRkcBg0=;
-	b=wuNdRu0RaQwPkyex1yhJhU4rLGp/Nx7ArALNm7zYOxH61rPPD8JJALNhl0tCjoDF20SI
-	 +OXY3DUhdAKMVCRKMMpKPV828ohQZYKb0t29Ty6rOUafSLoY+6TjuGCg+vomJiyql3teQ
-	 aAlxvS7G1Ewj3XjnV3qL3LrV5Qi0TqZcM8kznFHi6ajAgdiQj7lFVwYOe/QZWysl9EfgT
-	 h7j1O5/qkn9aznyF2jw6vx5FiTGeiDX2yHnsoMo6GVjrImr+YVFx0AOKzHx0uun13EW1G
-	 5s5JXOHlqxZ8N15BCKLDIov+fJsukhbbFREJKCSD6zQyqDP4NHzY7wh5Ej+kMZ752VA==
+	bh=KeJcHprlgsSy37jz/sG9vjDpxR12mebXUF6cGvE57FI=;
+	b=Doi7iN8aHDccDaHFc4ak9iavT0Dn+ueaXutESgcJZM88lVcN8t01punG6RnjhBwktPQX
+	 VVam8jzuU7X+Q6c0l8kCyvfcVaufCvSHLsG4wRU6tOYkn1oQ4vahPi9NOYIC5bEKmm2t8
+	 s6gkKAiljKdF76fOBIS4ZB5usnY+gn1mx4m9uhdYGPz3rcs7kD3dImx0S+ruxXO5Mqoh6
+	 O1Ra+zCis7gCmrBAbVaCuCaOAfEhAY4xFsdgWFsdSymd+P1NIOzF16SgII3+ioNXOpciG
+	 iV9w2VKdYYEc2/c5rKd6VnPMJ2kesLE43AgEqhofDJElgFKZF+nJa6YODpWzgxzkG1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AfqkDZQ3;
-	arc=none smtp.remote-ip=91.218.175.212
-Received: from mta0.migadu.com (out-212.mta0.migadu.com [91.218.175.212])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=joGV6+Gr;
+	arc=none smtp.remote-ip=95.215.58.223
+Received: from mta1.migadu.com (out-223.mta1.migadu.com [95.215.58.223])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF4F606A31B
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:20:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADF4F606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DE6606A336
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:20:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0DE6606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AfqkDZQ3
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=joGV6+Gr
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=6Q302pfkEjtg0bjYhHItjsXd7uy9gzx2wXtjDeZSnxc=;
+DKIM-Signature: a=rsa-sha256; bh=fWbqd58nG00sKbjBsRKDAHkAG8PIKnJXAquf0f3KMa4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792513229; v=1; x=1793118029;
- b=AfqkDZQ3LyEkanWjjWfHagaOi0tBTOSS6mVGf8HgrSFFb4+4DY5sNDJ2A5ifLrjxPCZMsMf4
- YfOIR5OrjehUuaHxzX63Zc2yR2oOO4cMw9KbtzdczKcoIs6cs8ROmy+SvFX32qNemAJCxa5TruR
- 63LmrIGQxhAaHr7C8UR6OpMo=
+ t=1792513239; v=1; x=1793118039;
+ b=joGV6+Grdbg07HqEzIJexPKlE63j33/c69tfNiJxVFvlOU9RtuWVQ1GzbvBCjK7hHa7cxjpJ
+ EO1RDIIEklAoNh383BiHg5F4mOQgkNLMpzWfSoZa2oq8TDePdkVQbeJCVid4vXtbuswuEr5Nl55
+ IIkSsS9gZP/29HV0h2DlaIi0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 09312a5580f3931b;
-	Tue, 20 Oct 2026 16:20:23 +0000
-X-Mizu-Trace-ID: 09312a5580f3931b
+Received: by smtp.migadu.com with ESMTPS id fbbc5854844eea49;
+	Tue, 20 Oct 2026 16:20:38 +0000
+X-Mizu-Trace-ID: fbbc5854844eea49
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -65,9 +65,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v3 09/12] bpf: Track low-32 scalar equality across narrowing stack fills
-Date: Tue, 20 Oct 2026 09:19:04 -0700
-Message-ID: <20261020161907.2115379-10-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v3 10/12] selftests/bpf: Cover the low-32 link for narrowing stack fills
+Date: Tue, 20 Oct 2026 09:19:05 -0700
+Message-ID: <20261020161907.2115379-11-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261020161907.2115379-1-vineet.gupta@linux.dev>
 References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
@@ -82,185 +82,426 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A 32-bit fill from a wider spilled scalar has the same shape as a 32-bit
-mov from a wider source, and the relation was dropped rather than
-recorded:
+Eight programs, following the mov set:
 
-  r6 = ...                  /* full 64-bit unknown */
-  *(u64 *)(r10 - 8) = r6;   /* slot linked to r6 */
-  r2 = *(u32 *)(r10 - 8);   /* narrowing fill */
-  if w6 != 0 goto ...       /* not taken: r6's low 32 bits are 0 */
-  if r2 == 0 goto ...       /* not deduced today */
+ - zext_fill_narrow_from_wide_spill: narrowing the spilled value reaches
+   the filled register
+ - sext_fill_narrow_from_wide_spill: the same for a sign-extending fill
+ - sext_delta_survives_narrowing_fill: a slot carrying a delta hands it
+   to the fill, so r2 is (u32)(r6 + 5) and not (u32)r6
+ - zext_fill_full_width_keeps_full_link: a full-width fill stays a plain
+   64-bit equality
+ - zext_fill_byte_forms_no_link: a sub-word fill is below the model
+ - fill_kinds_reach_different_values: the same, for the two kinds off one
+   slot
+ - sext_fill_does_not_inherit_zext_link: a sign-extending fill must not
+   come away with the slot's zero-extending link
+ - sext_byte_fill_drops_sext_link: nor may an 8-bit ldsx keep a
+   sign-extending one
 
-Record a low-32 link as the mov arm does. Stack slots are already
-first-class members of an ->id set, so sync_linked_regs() and the
-reconstruction helpers apply unchanged. A fill narrower than 32 bits has
-no expressible relation and still drops it.
+The first three pin the link itself: disabling link formation in the fill
+arm makes all three fail. The last two pin the link-kind checks in
+check_mem_access() and assert on the register dump rather than a guarded
+branch, so they fail on the rule rather than a downstream effect.
 
-Which extension rebuilds the high half depends on the load, so
-check_stack_read() takes is_ldsx and sets BPF_REG_LINK_SEXT where that
-is known. check_mem_access() then keeps a sign-extending link across a
-4-byte sign-extending load only: BPF_REG_LINK_SEXT means (s32)(base +
-delta) specifically, so an 8- or 16-bit ldsx is a relation the kind
-cannot express, the same way the ALU arm's subreg_link is gated on
-(insn->off >> 3) == 4.
-
-Costs. A bisect lands one clang regression here -- big_alloc2 2956 -> 3095
-insns, 157 -> 165 states -- but it is not this patch alone: it takes both
-this and the preceding reverse-direction patch, and neither moves
-big_alloc2 by itself. The external corpus does move for this patch alone,
-no verdict changes, six programs verifying in more instructions:
-
-  +1812    2470 ->  4282  test_file_open    bpfjailer-lib-tests open
-  +1765   59556 -> 61321  twfw_connect4     tupperware-agent twfw_sock
-  +1765   59556 -> 61321  twfw_sendmsg4     same object
-   +752    5874 ->  6626  layered_enqueue   scx_layered 1.0.11.1
-   +252    2512 ->  2764  bpfj_exec_execve  exec_enforce
-   +252    2512 ->  2764  bpfj_exec_execveat  same object
-
-+6598 over 25.2M, or +0.026%, and +218 states. The shape is the familiar
-one: a more precise recorded state has a smaller equivalence class and
-prunes against fewer predecessors.
+The sign-extending fills are ldsx, so they sit under a new CAN_USE_LDSX
+gate; verifier_ldsx.c open-coded the same condition and uses the macro
+now. sext_byte_fill_drops_sext_link needs both gates, since the
+BPF_REG_LINK_SEXT it tests is built with a movsx and only the fill is an
+ldsx.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v3: was v2 9/13.
- - renamed to the new encoding, and the fill inherits the slot's delta
-   rather than resetting it, matching patch 6
- - a sign-extending load keeps a link only if it is a 4-byte
-   BPF_REG_LINK_SEXT. BPF_REG_LINK_ZEXT says the opposite of what the
-   load just did, and an 8- or 16-bit ldsx is a relation the kind cannot
-   express.
- - measured cost, which v2 did not report: six external programs verify
-   in more instructions, +6598 aggregate (+0.026%), worst +1812 on
-   test_file_open. No verdict changes. Attributed to this patch by
-   building the patch-7 and patch-8 kernels separately.
+v3: was v2 10/13.
+ - new: sext_delta_survives_narrowing_fill, for the inherited delta
+ - new: sext_fill_does_not_inherit_zext_link and
+   sext_byte_fill_drops_sext_link, for the two kinds a sign-extending
+   load must not come away with. Both assert on the register dump
+   rather than a guarded branch.
+ - the sign-extending fills are ldsx, so they sit under a new
+   CAN_USE_LDSX gate; verifier_ldsx.c open-coded the same condition and
+   uses the macro now.
 
- kernel/bpf/verifier.c | 60 +++++++++++++++++++++++++++++++++++--------
- 1 file changed, 49 insertions(+), 11 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   8 +
+ .../selftests/bpf/progs/verifier_ldsx.c       |   8 +-
+ .../bpf/progs/verifier_linked_scalars.c       | 306 ++++++++++++++++++
+ 3 files changed, 316 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6b26487d4549..feefa5733fd7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4223,7 +4223,8 @@ static void bpf_diag_stack_read_invalid(struct bpf_verifier_env *env, int off, i
- static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 				      /* func where src register points to */
- 				      struct bpf_func_state *reg_state,
--				      int off, int size, int dst_regno)
-+				      int off, int size, int dst_regno,
-+				      bool is_ldsx)
- {
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
-@@ -4258,22 +4259,52 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index c5ffb36dfd74..ef0250a10cc7 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -293,6 +293,14 @@
+ #define CAN_USE_MOVSX
+ #endif
  
- 			if (size <= spill_size &&
- 			    bpf_stack_narrow_access_ok(off, size, spill_size)) {
-+				bool narrowing = get_reg_width(reg) > size * BITS_PER_BYTE;
-+				/*
-+				 * A narrowing fill keeps only the slot's low 32 bits,
-+				 * so record a low-32 link rather than dropping the
-+				 * relation, as a 32-bit mov from a wide source does.
-+				 * Which link kind depends on how the load fills the high
-+				 * half, hence is_ldsx.
-+				 */
-+				bool subreg_link = narrowing && size == 4;
++#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
++     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) ||		\
++     defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) ||	\
++     defined(__TARGET_ARCH_loongarch)) &&				\
++	(__clang_major__ >= 18 || defined(__BPF_FEATURE_LDSX))
++#define CAN_USE_LDSX
++#endif
 +
- 				if (dst_regno < 0)
- 					return 0;
+ #if __clang_major__ >= 18 && defined(ENABLE_ATOMICS_TESTS) &&		\
+ 	(defined(__TARGET_ARCH_arm64) ||				\
+ 	 defined(__TARGET_ARCH_x86) ||					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+index 49e8cd4bb4f9..6c1553059101 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+@@ -5,11 +5,7 @@
+ #include "bpf_misc.h"
+ #include <bpf_arena_common.h>
  
--				if (env->bpf_capable && size == 4 && spill_size == 4 &&
--				    get_reg_width(reg) <= 32)
-+				if (env->bpf_capable && size == 4 &&
-+				    (subreg_link || (spill_size == 4 && !narrowing)))
- 					/* Ensure stack slot has an ID to build a relation
- 					 * with the destination register on fill.
- 					 */
- 					assign_scalar_id_before_mov(env, reg);
- 				state->regs[dst_regno] = *reg;
+-#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
+-	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
+-	defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) || \
+-	defined(__TARGET_ARCH_loongarch)) && \
+-	(__clang_major__ >= 18 || defined(__BPF_FEATURE_LDSX))
++#ifdef CAN_USE_LDSX
  
--				/* Break the relation on a narrowing fill.
--				 * coerce_reg_to_size will adjust the boundaries.
-+				/*
-+				 * A fill that is not narrowing copies the slot's link
-+				 * kind verbatim, which a sign-extending load can
-+				 * contradict. check_mem_access() runs after this and
-+				 * drops any kind but BPF_REG_LINK_SEXT once it knows
-+				 * the extension was not a no-op.
- 				 */
--				if (get_reg_width(reg) > size * BITS_PER_BYTE)
-+				if (subreg_link && reg->id) {
-+					/*
-+					 * Keep the slot's delta: both
-+					 * (u32)(base + d) and (s32)(base + d)
-+					 * have low half base + d, so the fill
-+					 * inherits it rather than resetting it.
-+					 */
-+					state->regs[dst_regno].link_kind =
-+						is_ldsx ? BPF_REG_LINK_SEXT : BPF_REG_LINK_ZEXT;
-+				} else if (narrowing) {
-+					/*
-+					 * Nothing to relate: either the slot has
-+					 * no id to share, or the fill is narrower
-+					 * than the 32 bits a link can describe.
-+					 * coerce_reg_to_size adjusts the bounds.
-+					 */
- 					bpf_clear_scalar_id(&state->regs[dst_regno]);
-+				}
- 			} else {
- 				int spill_cnt = 0, zero_cnt = 0;
+ SEC("socket")
+ __description("LDSX, S8")
+@@ -464,6 +460,6 @@ int dummy_test(void)
+ 	return 0;
+ }
  
-@@ -4439,7 +4470,7 @@ static int check_stack_read_var_off(struct bpf_verifier_env *env, struct bpf_reg
-  */
- static int check_stack_read(struct bpf_verifier_env *env,
- 			    struct bpf_reg_state *reg, argno_t ptr_argno, int off, int size,
--			    int dst_regno)
-+			    int dst_regno, bool is_ldsx)
- {
- 	struct bpf_func_state *state = bpf_func(env, reg);
- 	int err;
-@@ -4478,7 +4509,7 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	if (!var_off) {
- 		off += reg->var_off.value;
- 		err = check_stack_read_fixed_off(env, state, off, size,
--						 dst_regno);
-+						 dst_regno, is_ldsx);
- 	} else {
- 		/* Variable offset stack reads need more conservative handling
- 		 * than fixed offset ones. Note that dst_regno >= 0 on this
-@@ -7295,7 +7326,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+-#endif
++#endif /* CAN_USE_LDSX */
  
- 		if (t == BPF_READ)
- 			err = check_stack_read(env, reg, argno, off, size,
--					       value_regno);
-+					       value_regno, is_ldsx);
- 		else
- 			err = check_stack_write(env, reg, off, size,
- 						value_regno, insn_idx);
-@@ -7392,13 +7423,20 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
- 			 * Sign-extension can change the register value relative
- 			 * to a scalar it is linked with by id (e.g. a zero-
- 			 * extending fill of the same spilled stack slot), thus
--			 * drop the shared id in that case.
-+			 * drop the shared id in that case. Only a 4-byte
-+			 * BPF_REG_LINK_SEXT link survives: it says the high
-+			 * half is this very sign-extension. BPF_REG_LINK_ZEXT
-+			 * says the opposite and would be a lie about the value
-+			 * just produced, and an 8- or 16-bit sign extension is
-+			 * a relation BPF_REG_LINK_SEXT cannot express at all --
-+			 * it means (s32)(base + delta) specifically.
- 			 */
- 			bool no_sext = reg_umax(&regs[value_regno]) <
- 					(1ULL << (size * BITS_PER_BYTE - 1));
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+index 69efe1381eca..ab78285153fb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
++++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+@@ -245,6 +245,7 @@ l0_%=:								\
+ 	: __imm(bpf_get_prandom_u32)
+ 	: __clobber_all);
+ }
++
+ #endif /* CAN_USE_MOVSX */
  
- 			coerce_reg_to_size_sx(&regs[value_regno], size);
--			if (!no_sext)
-+			if (!no_sext &&
-+			    !(size == 4 && regs[value_regno].link_kind == BPF_REG_LINK_SEXT))
- 				bpf_clear_scalar_id(&regs[value_regno]);
- 		}
- 	}
+ SEC("socket")
+@@ -1120,6 +1121,102 @@ __naked void zext_mov_breaks_linked_src(void)
+ 	: __clobber_all);
+ }
+ 
++/*
++ * A narrowing fill keeps only the slot's low 32 bits, so a later narrowing of
++ * the spilled value must still reach the filled register. Same relation as a
++ * 32-bit mov from a wide source, with the stack slot as the base.
++ */
++SEC("socket")
++__success
++__naked void zext_fill_narrow_from_wide_spill(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(u32 *)(r10 - 8);	/* narrowing fill, forms the link */ \
++"
++#else
++"	r2 = *(u32 *)(r10 - 4);				\
++"
++#endif
++"	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
++	if r2 == 0 goto 1f;					\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A full-width fill of a wide slot is a plain 64-bit equality, not a low-32
++ * link, so it must keep propagating exactly as before.
++ */
++SEC("socket")
++__success
++__naked void zext_fill_full_width_keeps_full_link(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;						\
++	*(u64 *)(r10 - 8) = r6;					\
++	r2 = *(u64 *)(r10 - 8);	/* no narrowing */		\
++	if r6 != 0 goto 1f;					\
++	if r2 == 0 goto 1f;					\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A sub-word fill is below the low-32 model, so no link is formed and the
++ * relation is dropped as before.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__naked void zext_fill_byte_forms_no_link(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;						\
++	*(u64 *)(r10 - 8) = r6;					\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(u8 *)(r10 - 8);	/* 1-byte fill: no link */	\
++"
++#else
++"	r2 = *(u8 *)(r10 - 1);					\
++"
++#endif
++"	if w6 != 0 goto 1f;					\
++	if r2 == 0 goto 1f;	/* not deduced */		\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ #ifdef CAN_USE_MOVSX
+ 
+ /*
+@@ -1494,6 +1591,215 @@ __naked void sext_drops_stale_step(void)
+ 	: __clobber_all);
+ }
+ 
++/*
++ * Same for a narrowing fill: the slot is (s32)(r6 + 5), so the filled register
++ * is (u32)(r6 + 5). Forcing the delta to 0 made the verifier believe r2 == r6.
++ */
++SEC("socket")
++__success
++__naked void sext_delta_survives_narrowing_fill(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	r6 <<= 32;						\
++	call %[bpf_get_prandom_u32];				\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	w7 = w6;		/* BPF_REG_LINK_ZEXT, delta 0 */	\
++	w7 += 5;		/* BPF_REG_LINK_ZEXT, delta 5 */	\
++	r8 = (s32)r7;		/* BPF_REG_LINK_SEXT, delta 5 */	\
++	*(u64 *)(r10 - 8) = r8;	/* full spill keeps the link */	\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(u32 *)(r10 - 8);	/* narrowing fill inherits delta */ \
++"
++#else
++"	r2 = *(u32 *)(r10 - 4);					\
++"
++#endif
++"	if r6 != 0 goto 1f;	/* r6 == 0, so r2 == 5 */	\
++	if r2 == 5 goto 1f;	/* always taken: r2 is 5 */	\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ #endif /* CAN_USE_MOVSX */
+ 
++#ifdef CAN_USE_LDSX
++
++/*
++ * The sign-extending counterpart: the filled register is the sign extension of
++ * the slot's low 32 bits, so a narrowing of those bits arrives sign-extended.
++ */
++SEC("socket")
++__success
++__naked void sext_fill_narrow_from_wide_spill(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(s32 *)(r10 - 8);	/* narrowing sx fill */		\
++"
++#else
++"	r2 = *(s32 *)(r10 - 4);				\
++"
++#endif
++"	if w6 != -1 goto 1f;	/* narrows r6, propagates to r2 */ \
++	if r2 == -1 goto 1f;	/* sign-extended, not 0xffffffff */ \
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * The same, for the two link kinds off one slot.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void fill_kinds_reach_different_values(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	r6 &= 1;						\
++	call %[bpf_get_prandom_u32];				\
++	r8 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r8 |= r0;						\
++	*(u64 *)(r10 - 8) = r8;					\
++	if r6 >= 1 goto 2f;					\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(s32 *)(r10 - 8);	/* sign-extending fill */	\
++"
++#else
++"	r2 = *(s32 *)(r10 - 4);				\
++"
++#endif
++"	goto 1f;						\
++2:								\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(u32 *)(r10 - 8);	/* zero-extending fill */	\
++"
++#else
++"	r2 = *(u32 *)(r10 - 4);				\
++"
++#endif
++"1:								\
++	if w8 != -1 goto 3f;					\
++	if r2 == -1 goto 3f;	/* only the sign-extending path */ \
++	r0 /= 0;						\
++3:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A sign-extending fill must not come away with a zero-extending link. The
++ * slot below already fits 32 bits, so the fill is not narrowing and assigns
++ * no link kind of its own, and "state->regs[dst] = *reg" copies the slot's
++ * verbatim; check_mem_access() is what has to drop it, since it would leave
++ * r2 recording a zero-extension of a value it has just sign-extended.
++ * Asserted on the register dump rather than on a guarded branch, so it pins
++ * the rule itself and not a downstream effect.
++ */
++SEC("socket")
++__success __log_level(2)
++/* a copied link would print as R2=scalar(id=N+0,smin=... */
++__msg("(81) r2 = *(s32 *)(r10 {{.*}} R2=scalar(smin=")
++__naked void sext_fill_does_not_inherit_zext_link(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	w7 = w6;		/* r7 = zext32(r6), fits 32 bits */ \
++	*(u64 *)(r10 - 8) = r7;					\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(s32 *)(r10 - 8);	/* sign-extending, not narrowing */ \
++"
++#else
++"	r2 = *(s32 *)(r10 - 4);					\
++"
++#endif
++"	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * BPF_REG_LINK_SEXT says the register is (s32)(base + delta) -- a 32-bit sign
++ * extension specifically. An 8- or 16-bit ldsx is a different relation, so
++ * the exemption that keeps a sign-extending link across a sign-extending
++ * load has to be gated on the load width. Ungated, r2 below claims to be
++ * (s32)r6 when it is really (s8)((s32)r6).
++ */
++SEC("socket")
++__success __log_level(2)
++#ifdef CAN_USE_MOVSX
++/*
++ * Needs MOVSX as well as LDSX: the BPF_REG_LINK_SEXT under test is built with
++ * r7 = (s32)r6, and only the byte fill below is an ldsx.
++ */
++/* a surviving link would print as R2=scalar(id=N+0.sx,smin=... */
++__msg("(91) r2 = *(s8 *)(r10 {{.*}} R2=scalar(smin=")
++__naked void sext_byte_fill_drops_sext_link(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	r7 = (s32)r6;		/* r7 = BPF_REG_LINK_SEXT, delta 0 */	\
++	if r7 > 255 goto 1f;	/* r7 fits a byte */		\
++	*(u64 *)(r10 - 8) = r7;	/* full spill keeps the link */	\
++"
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++"	r2 = *(s8 *)(r10 - 8);	/* 8-bit ldsx: no link survives */ \
++"
++#else
++"	r2 = *(s8 *)(r10 - 1);					\
++"
++#endif
++"	r0 = r2;		/* keep r2 live so the fill prints it */ \
++	r0 &= 1;						\
++	exit;							\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++#endif /* CAN_USE_MOVSX */
++
++#endif /* CAN_USE_LDSX */
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0-Meta
 
