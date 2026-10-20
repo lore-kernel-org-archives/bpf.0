@@ -1,99 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792535284;
-	b=3ysCsQO5KWc4tfHqz6/EcPXHgygBRmebxzDNERAo0mVdDJPIinVhigks7CJEQoHVuYVG
-	 5EMfhAi0UphETNIOVjJs4G3SZusPCJMB1DCyZcVrsBctkRhIh5a2Lk/JrUFL478+hVJeB
-	 9Ug12WHxNlPwaO1ynEkAqN+U+IJRWojIOQ+GHUsXGag7vYOewICDhDdqBMuRHj5Q2nALz
-	 VSkIRCf06Lo+N0VrJFx3jdN0EsQZBA9CbehALhC/wtl5opYHxbJdZrmX30PbQOFclEbwR
-	 JrIu4+rxN5gIqmH3ieb8u516XpPD6pSQ05dTbukZvfnjI93TfPsZL1ak/3cf2IU8tAg==
+	t=1792536486;
+	b=splDGyIkIfk1Iiss7ERQzh3ig57fucQ/+CdFV5KqD6QyRJUTtmsS/r0qzkS65+8ZhW7i
+	 U676a48WT9hsfQ0jW6N0lxLQFAqpJQOoekMe4Cf/IEKBGanhAB89Ymmf1KwaEN9WXFlFg
+	 7ckJOFRim8NRZ3IgG4ygv67jfx8gltfV3/IenTpPnG2Gy71u/yoDstobJmOKtR/v7YVOi
+	 2ucv2BjvbjKCUSsqN7vH4di9gwxRYSdy+FNdqTLlsmZq5kMushXKwAQ2NvXeyiiOZfIwx
+	 o0pQeTd8/Ir/dzRo/EqRmax071aWSbVIJ1SVPqDnjwinW9fUMINawloLJKe+Jm3YlTQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792535284;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792536486;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=G4ZO9/xaGwtst57VlOOA8l2P8QCQh7t0mTcJLRZEW7s=;
-	b=hlHqSEDMlc0ifkys5IeLXZMvFO2mvlftey8ibxBH8+Yg/sOciV1Ka/4W+entiOUixEUL
-	 5ElXTiY0dDBtIaDavKtTPd9t8ir6mK1TSRZvzlG9yKqfngOq0v592zhHj88uNlx5oI8E+
-	 1oP/BlSo68KCjLakbG7Y3CBPLc4yYAbeLJXkX8Lpnm3Z1tuH0y6dODkRyreG538i3zTOZ
-	 RdA1gQVAQHhq36lNB+foyqVnehUq0mYlB9tCR7M9/0Ux70wNyzinUcgePT2kzhFEpywjQ
-	 tMiIXVcsPc1+mdAReerf2Z/FfLUjwGLSCRIET930H2UcXvuaN/Zigb0YmKc74l6uD0A==
+	bh=6yXfb9mjujsVRy/vJZuGdz5kAO1npB7zLQ/d5HyY2C4=;
+	b=K50QTKPWv6LPfBswocfn/3kqunJwB2X7TafZtJGkqWS2d414eFyJa4U+PA8/hj+fe7Jg
+	 dbQbWq0uDAzmcOGnfhdv+t6lBUCJ9t8dbtYbdGQpOaMt80GUOuJRMMuLRRYWHmHpgmgIU
+	 Rqd+rPi52PQrIl6NxtlyJ888N6DZ6C6ZxPGp7RiRb34P+kVJQwf/2lSVHJMxdp4gzKDNH
+	 1EPZXRE1Zhcv+cnTc8Lon/m5o8st8xMtpCPzpcLfUrP1kkeu+uenp5rEJs8hE7aPwuFb6
+	 6evpvxB25Gadn0EXCTQO+P6A2nwTUscKRJtvGzbkiH36FBMD5XYYp9A0Zi95DNbtTqQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=rmfEpk+f;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.51
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=wStoV3WS;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.41
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EFD606A31C
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 22:28:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 71EFD606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B02606A31B
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 22:48:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3B02606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=rmfEpk+f
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6ae14cdc63aso2246a12.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:28:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792535283; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=wStoV3WS
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6b1aa377c61so61009a12.3
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:48:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792536484; cv=none;
         d=google.com; s=arc-20260327;
-        b=H3XWq5SrAhcsZXPY4bdaUUe7ObQAbzbeUZMhkf50QjPQ43tMY/ObGj9l29oHKW8ZAU
-         8ABRTt5m2vG2gYhsj1iJt1mc2QV15hSGXBBj3djvlS3OlF1/k4cQkjAOBPufOtnvznkh
-         FavYMvc+PZiU5j5ix5RkiItfhuFQ0Cgk6uv7h6TXklBW43eIVmSPP/14sa4bPGJ9AVuh
-         kJVkVObLODuK9lpn8zACrzNm14bkXeVVDOlrLV9eUFfd98kEhpogRH14BUaAa1L7R8pU
-         v9/mOFTwbbJ6K9jAZss4xyRXB6b2s3bc8YtGIQNx+BiIhSgn5xpMqVpF4Om+kIerMXXk
-         k0Rg==
+        b=VP6puwDvpSMClS/xugdTex4n5CEcpVcNGgrmpzDUHp1Ev34BdzUmZm3srym1ZEWUna
+         FXbpRaaYmZvXcdnPCifBq6EgzL6DBHUy+htR00ReCQnSflG9ln2K451jkMqLiq2Gy5YX
+         HkPaHUjHfghNDmag4zSigA95bZ0TL7jvoi+PKUzE9DsE5JinOgEWgfHr8dq5fdhwLlEC
+         qrw9nRa0DMFdICubK9VI8Gm6TjHYJDG74hKrh6nGZ+nxM+tZh8Fqn+aFy1IgZE2H5L8S
+         p9n2g3GOv15eAwWDmX90238Mz+ZJqJCv2wj4F96ZJnLZRca2r6jKeG+8aHlG3eRAOseN
+         52dA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=G4ZO9/xaGwtst57VlOOA8l2P8QCQh7t0mTcJLRZEW7s=;
-        fh=ccxZaQ6cRojj4+MDgtAGAZmQrgngac+OXG17w6p4APc=;
-        b=aVi5jliGSH1k2xzKtEHnLzS0yI+x47YWuXvra6J0dFbb/rqg0B71eJdv6kN9m+iGmE
-         92pnEicp52JLIhBRA3X+s2KRZu2j7uR6R+fyHXVxiEDWFUWRCT+CxFW+Uk09KONI16Ly
-         RDvGeYSCEp9LvCXbT22BCpj7ndWwyBkdlKSBIj41Kz4I9tYLOdSK7xk/JPWU7WnAnjWO
-         gIWYH4rQduuPW3jMcbB/O3ZuS/r67K1QS23d3TG5npY7DVLai0i3jkfvWb0LygfXyHUl
-         XNsdc7IcbWPp9xlyPgBMtYYMzV3zylyVrGZPMlJHYTfPJjZxfwrm2TVq6pPx5kHQAdal
-         a3KA==;
+        bh=6yXfb9mjujsVRy/vJZuGdz5kAO1npB7zLQ/d5HyY2C4=;
+        fh=PEkDiLhMSCMQdtGR1aj4mlnQrHipeoiz8fWgDNOaeDg=;
+        b=IkOUB3rpRrj+bMEDa2ytMmCvWgSVMzYBQ2Q2iPWN+h0QM1yTNsLlcl6p5c9eEDUct6
+         oD++Wyv2eR6VTb8COabxyjeNv2dLYfYlaoqh5J9T3zeKa7XarJaGK2AlSBSSxs1u90md
+         U1GFh+PZu5zXnzVWYcjBkRMNBUsghe2IW/+2C/sKhGEJTnipVEO+e05iP/UsiGpLuzCr
+         zjmR6glTO6zzgHcGOe04z9IQ6OvgxkqOecUljGG+46uy+9wBMRUr9Od+JqMJJ6S3Lsor
+         nfNT8nWmeKRSCaQMxLG6NtetIgYpUopdsEQrwU0t0NXDG9Mu46nXrHqDTfZsQAJifnMx
+         PquA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792535283; x=1793140083; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1792536484; x=1793141284; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=G4ZO9/xaGwtst57VlOOA8l2P8QCQh7t0mTcJLRZEW7s=;
-        b=rmfEpk+fCkZv/kL89pFPui7fFmGk1n8reU/QsXYE74PD0EFucUW0hMf+IS4aStL0Q8
-         nG8UsAS92tQv9D9ZQHsaoESspRJ/Zb/tLj8EXkHtFpS/b+Yv1XiiogGOoQF3SNlGVDbi
-         VjAnWBFpIEg3G+6ql6HnSMNEeatAVsqUGblKkp4VLsG3Vl5mPo6Qjfzp7VqRcZCtcixG
-         ZID0xGN14VQRGASeikykGdy6GBWJ9A0V6AFkxpNoT6/e09Wv+fXGPPohwmNppGmv7pGS
-         v5JICbY+ElGsHORRCVuJuVcDfeCBoIeo53TU2c1aTQ4ePKBBopr0CzBIg003ZmACaLP1
-         mCqA==
+        bh=6yXfb9mjujsVRy/vJZuGdz5kAO1npB7zLQ/d5HyY2C4=;
+        b=wStoV3WSPV5rzWT+qtfZtfLiDH5gius5WaC3SxZ7NeM+zdQLgPLL3wMUzjI50SzmQd
+         FB0fU8GG8gvfXu9UN8/KoYOUwvE3JMcyOmdjUrfPSVH6WkqvEicaiwtPOWnDSCdJz0EN
+         6OTSkL18qrmvvamhqniKnBw0EG+uj8M/W9c7CyNwadvw0PeF/w1Q5GKk77PSL7SU5ExO
+         AtA87XCFxLSFfXcwKgTisWsUj1uDJmWD7CCPfLL9ILVWYolY+u5EVLTYKThiFtlXrdch
+         VYHFd/WOE/pzteZvgEJEn210ohtLf0Eoe9+aN8M8OWwPbV1zb3JNdFzm+2z91Z9Byaz3
+         OyHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792535283; x=1793140083;
+        d=1e100.net; s=20260707; t=1792536484; x=1793141284;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=G4ZO9/xaGwtst57VlOOA8l2P8QCQh7t0mTcJLRZEW7s=;
-        b=Lb42bhtCrsjZQ0Cet6KHwsa1BrNTtx3jOp4DNkjbkeqOnSlU0Us0kUzoVA3Z/px9Fv
-         RYllfFl9kb3mu34PEy0BDVPFJC+2PXR4lrpH6WVTCDani+a1WnRvtg05u1TfsIx1aKBI
-         RMXzwjcZaTnka9uxcZqWyibL3xMoTVpYytI1OdHqNIB7kCnOeOmYKTSCImqru4tBHL0t
-         8lU/FRPCagSZbBGKKdM+3aB1K6c7g+wX2qTeb+PoWLZrkWk+kiEmPwc3zYN0YxSmFqFu
-         qAMfwDyNWDqgQA7J4R6eH/A7Z3SQSBpzTj6RJYBpMioeIBxx+UAG10RUDk3WGSEX0Ke8
-         q1Mw==
-X-Forwarded-Encrypted: i=1; AKwUvBy5Iyk1pxlG7IIVSuayYHNWjYrYLa4z1wuriz2prCtW6+aZbFhb2EISZoOxOnSXx0TuLa4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI+/2R4KkZWusAuoD2jPsUQWGJPL1aHqshBKDC1j+qLPVmyQ+yi
-	IMfTtCSYgkMreq+tmDeMKpPZuVsywSArjNIlfQ9YzhvnmzeZdbufUHiwj2hSZd0arxJFeXzVDUj
-	+rMNF/F1Jrdp7oChdr3Tl3El2VBwR3gggmA3zxmrm
-X-Gm-Gg: AYBFou1NNnd2CFjTxMfbQ3zMs96XEUSlGBZPvvSbzXHcrpzLYeQzk1vBV/ju3uKOgpk
-	p2g2XeIpnKtLGfiAA9VKP5/O0f2iU7feiPpTwxynMQgzLv1p/Agh0AiR4bGdH16DPhfT6Ot7JJQ
-	83YwPh1B6orQYSkcNt/E9sqbBndEVfo0DKAa2mPFMhgV/WTm+cX7dRJ5P6uQIEKmHyRB1lbtR6G
-	ONGQWfx83zpGKf05l+4Xrcerjp8xjJmSp2Lw3GQYYtHdMm97vFO+j+udXHxpoHQpgJddgq1PoSh
-	9PonhnlJ61iFZ7OAoJLXrAc0rj8IpMbSH3wjCLy2ATtAClQsIpeKF4vnM64Is8o=
-X-Received: by 2002:a05:6402:a593:10b0:6aa:babf:adeb with SMTP id
- 4fb4d7f45d1cf-6b3e59e5999mr93600a12.4.1792535282334; Tue, 20 Oct 2026
- 15:28:02 -0700 (PDT)
+        bh=6yXfb9mjujsVRy/vJZuGdz5kAO1npB7zLQ/d5HyY2C4=;
+        b=lpDryW4sTH7XoxGze+Tw9++4yDkuHjupuyu0OAixmc6GWLusmq4CCa1NxevYCT/8mP
+         vvpqG5I+B+f/WR0qEpFBSRfurwOowz3Xc0tBg7cp57M3A4SxJ1vdLw+1fXkJ7jUgkngU
+         mNly3zSjQl/U3MuatAoa2X9Bs6WmI1VOMGsZNTxcwIelRGolNWt4ARzKTawTvQ41cGSD
+         WSLlu3sLaemIS8EFMwv1BmoL2rGDFGNgtoXUb00ow4SO/kjayuAPDjPM1GuL2Sk9zLuF
+         QdkYJbApRulnPwiPeLbVn2wXnRLDyeGu6VdJlwcZfTzw4R56ljVYoTgF6BGqR1wB+29y
+         6Y8Q==
+X-Forwarded-Encrypted: i=1; AKwUvBy3ScxMYQg6zrsGyRKdy2bA+WvSZD9P7wQ3qnI6N7IIAWNWpPkLhsSzlO6w3HooCYiUCc0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKFyEB8F9eoV614FGiaRfB27F/lQ94G/qNf4n0aO4nPfYRZvJYs
+	YXC2Y2gQWMX81OPid10G9puuM9floJ9OoRSHRTVdUU53DJ8MflcjesvVltKKn0NMNmhtwW8m3L5
+	3sm/7/HHHW/LbchkwQMn0/eW2/k1LZNjtY8c6yZeq
+X-Gm-Gg: AYBFou2/p8CtSUcfgFip+254lFs8PdC4mHzbd68YhVMK9P1TVH1QZvQubFkBqJehWAH
+	GzXefKu5o7ZltlVYBdGMYKHBrbi+dw5gqtNmRu3m+pmpD4SrVAPjwZLaXYcnKSXxsphBeOUaqbQ
+	sv7wALB2zurj5shhcT1qCUSAnWcsZ0zSQ1iMeixhcD7hy+l2OXeq+4haoNaPxjEWQDre3UHcgyJ
+	dS5hXv3z5txjW9D1t08TjY1eiLSiXluuA+DAnPDaceA23XlvoBL7VE49I9CsySjCNQWgAS0hrkb
+	wdRlEDUW+WNviBww8gZC0jAdRSjIlcLQrMB+ROiRONm0Tfjg+UY/kTCVnA8pJw44Gcm4tNGPqJ7
+	LBndQDR/cig==
+X-Received: by 2002:a17:907:8693:b0:c29:4fcb:2886 with SMTP id
+ a640c23a62f3a-c46797b975emr38531066b.39.1792536483525; Tue, 20 Oct 2026
+ 15:48:03 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,63 +104,218 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261014173945.373295-1-almasrymina@google.com>
- <179249101026.3632927.6502845375265155678.git-patchwork-notify@kernel.org>
- <CAHS8izMRSU3AyVf+sP5uXShiSKuLumZwT=fsgW+bhJz47UoPRQ@mail.gmail.com>
- <20261020150307.258b00e9@kernel.org> <CAHS8izPZ18v_1CnRkaAAA=d94wutJhoOZdOFO_1CEXSexd_=EQ@mail.gmail.com>
- <20261020151352.794bf03b@kernel.org>
-In-Reply-To: <20261020151352.794bf03b@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 20 Oct 2026 15:27:50 -0700
-X-Gm-Features: AclHuK9dUEuy9FSTZ5UcXIu_nwM1X5COPAnL8H94zeKVggsnQ3YuXniy9SKSJgk
-Message-ID: <CAHS8izPOqgG-LffZtN8rmuEt0dS1YZOmWALM9Le8F+rLbVA-sA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 0/6] net: unify symmetric netmem and page_pool refcounting
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: patchwork-bot+netdevbpf@kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
-	ayush.sawal@chelsio.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
-	edumazet@kernel.org, pabeni@redhat.com, tariqt@nvidia.com, horms@kernel.org, 
-	steffen.klassert@secunet.com, herbert@gondor.apana.org.au, 
-	ncardwell@google.com, kuniyu@google.com, john.fastabend@gmail.com, 
-	sd@queasysnail.net, ebiggers@kernel.org, kees@kernel.org, 
-	aleksandr.loktionov@intel.com, petrm@nvidia.com, u.kleine-koenig@baylibre.com, 
-	j.raczynski@samsung.com, wang.zhan@smartx.com, willemb@google.com
+References: <20261009130708.1370675-1-wusamuel@google.com> <c090cb17-9bed-4742-a1c1-92cae6ee239e@oracle.com>
+ <CAG2KctozPSev+EXSpHitM3JWfjufQaEjsPJHS_1HJ1wSm7sJ1w@mail.gmail.com> <CAEf4BzZQ6uyOOj5gCZyVnqdswtn23wAVWWWsNEH3Ay4drv051Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzZQ6uyOOj5gCZyVnqdswtn23wAVWWWsNEH3Ay4drv051Q@mail.gmail.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Tue, 20 Oct 2026 15:47:51 -0700
+X-Gm-Features: AclHuK8bStO7TUz4ooohvy3JJshS0mULX3Tv_T9H4IarvNkAHVHjZ9o7-HaqZX8
+Message-ID: <CAG2KctpzyshDMQcztJPUmjUYKKurH5c8+2a0oep0wsG8tR65Cg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Resolve typeless ksyms in the kernel
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alan Maguire <alan.maguire@oracle.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel-team@android.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 20, 2026 at 3:13=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+On Fri, Oct 16, 2026 at 11:55=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> On Tue, 20 Oct 2026 15:10:03 -0700 Mina Almasry wrote:
-> > > You should have followed more modern naming patterns tho
-> > > get_netmem() is pretty bad IMO. PP naming is object_action()
-> > > so netmem_ref() or netmem_inc_ref() would be better, no?
+> On Sun, Oct 11, 2026 at 8:56=E2=80=AFAM Samuel Wu <wusamuel@google.com> w=
+rote:
 > >
-> > Ah, I didn't know about the modern naming. I made get_netmem mirror
-> > get_page. I now notice it's folio_get not get_folio. I can follow up
-> > with a cleanup when net-next reopens. I assume that will not be a lot
-> > of code churn. I was also going to try to look into deleting and
-> > consolidating some of the now-redundant ref-ing functions anyway.
+> > On Sat, Oct 10, 2026 at 12:09=E2=80=AFPM Alan Maguire <alan.maguire@ora=
+cle.com> wrote:
+> > >
+> > > On 09/10/2026 14:07, Samuel Wu wrote:
+> > > > libbpf resolves typeless symbols by parsing /proc/kallsyms, which
+> > > > dominates load time for BPF programs with typeless symbols. This mo=
+stly
+> > > > comes from needing to do thousands of syscalls and a linear scan of
+> > > > kallsyms.
+> > > >
+> > > > Call bpf_kallsyms_lookup_name() from BPF_PROG_TYPE_SYSCALL, such th=
+at
+> > > > the resolution can be done with a couple of syscalls and a binary
+> > > > search. This is a similar approach to what the light skeleton does.=
+ The
+> > > > fast path passes the name and result through ctx, which requires co=
+mmit
+> > > > ae5ef001aa98 ("bpf: Support variable offsets for syscall PTR_TO_CTX=
+").
+> > > >
+> > > > Any fast path error (e.g. kernels without ae5ef001aa98) falls back =
+to
+> > > > the legacy /proc/kallsyms scan, including strong misses, since the
+> > > > kernel doesn't match LTO "<name>.llvm.<hash>" symbols. Weak misses
+> > > > default to zero.
+> > > >
+> > > > Depending on the device, I see ~9-11x loading speedup when resolvin=
+g a
+> > > > BPF program with 11 typeless lock externs.
+> > > >   - x86_64 VM, 6.18 + ae5ef001aa98: 147ms -> 17ms
+> > > >   - ARM64 phone, 7.1: 626ms -> 55ms
+> > > >
+> > > > Signed-off-by: Samuel Wu <wusamuel@google.com>
+> > > > ---
+> > > >  tools/lib/bpf/libbpf.c | 59 ++++++++++++++++++++++++++++++++++++++=
++++-
+> > > >  1 file changed, 58 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > > index cb09ded90773..7564ec6bde64 100644
+> > > > --- a/tools/lib/bpf/libbpf.c
+> > > > +++ b/tools/lib/bpf/libbpf.c
+> > > > @@ -9590,6 +9590,58 @@ static int bpf_object__read_kallsyms_file(st=
+ruct bpf_object *obj)
+> > > >       return libbpf_kallsyms_parse(kallsyms_cb, obj);
+> > > >  }
+> > > >
+> > > > +static int bpf_object__resolve_ksyms_in_kernel(struct bpf_object *=
+obj)
+> > > > +{
+> > > > +     struct extern_desc *ext;
+> > > > +     int i, prog_fd, err =3D 0;
+> > > > +     struct {
+> > > > +             __u64 addr;
+> > > > +             char name[512];
+> > > > +     } ctx =3D {};
+> > > > +     LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags =3D BPF_F_S=
+LEEPABLE);
+> > > > +     LIBBPF_OPTS(bpf_test_run_opts, topts, .ctx_in =3D &ctx, .ctx_=
+size_in =3D sizeof(ctx));
+> > > > +     /* bpf_kallsyms_lookup_name(ctx.name, sizeof(ctx.name), 0, &c=
+tx.addr) */
+> > > > +     static const struct bpf_insn insns[] =3D {
+> > > > +             BPF_MOV64_REG(BPF_REG_4, BPF_REG_1),
+> > > > +             BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
+> > > > +             BPF_MOV64_IMM(BPF_REG_2, sizeof(ctx.name)),
+> > > > +             BPF_MOV64_IMM(BPF_REG_3, 0),
+> > > > +             BPF_EMIT_CALL(BPF_FUNC_kallsyms_lookup_name),
+> > > > +             BPF_EXIT_INSN(),
+> > > > +     };
+> > > > +
+> > > > +     if (obj->gen_loader || obj->token_fd)
+> > > > +             return -EOPNOTSUPP;
+> > > > +
+> > > > +     prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL",
+> > > > +                             insns, ARRAY_SIZE(insns), &opts);
+> > > > +     if (prog_fd < 0)
+> > > > +             return prog_fd;
+> > > > +
+> > > > +     for (i =3D 0; i < obj->nr_extern; i++) {
+> > > > +             ext =3D &obj->externs[i];
+> > > > +             if (ext->type !=3D EXT_KSYM || ext->ksym.type_id)
+> > > > +                     continue;
+> > > > +             if (snprintf(ctx.name, sizeof(ctx.name), "%s", ext->n=
+ame) >=3D sizeof(ctx.name)) {
+> > > > +                     err =3D -ENAMETOOLONG;
+> > > > +                     break;
+> > > > +             }
+> > > > +             err =3D bpf_prog_test_run_opts(prog_fd, &topts) ?: (i=
+nt)topts.retval;
+> > > > +             if (err =3D=3D -ENOENT && ext->is_weak) {
+> > > > +                     err =3D 0;
+> > > > +                     continue;
+> > > > +             }
+> > > > +             if (err)
+> > > > +                     break;
+> > > > +             ext->is_set =3D true;
+> > > > +             ext->ksym.addr =3D ctx.addr;
+> > > > +             pr_debug("extern (ksym) '%s': resolved in kernel to 0=
+x%llx\n",
+> > > > +                      ext->name, ext->ksym.addr);
+> > > > +     }
+> > >
+> > > Great to see the win in terms of resolution time, but I wonder if we =
+could
+> > > speed things up further by resolving multiple symbols at once, since =
+we have
+> > > all the externs available (either by dynamically creating your progra=
+m that
+> > > does symbol resolution as a side-effect, or adding a more direct reso=
+lution method)?
+> > >
+> > > A single syscall could provide an even faster speedup, so might be wo=
+rth a look.
+> >
+> > I tried resolving multiple symbols in one pass, but unfortunately the
+> > impact was negligible and made the code much more complex. I profiled
+> > a few numbers, and turns out it's because resolving typeless symbols
+> > is down to ~1% of total load time (from ~90%), with the remaining time
+> > mostly spent on BTF loading, CORE relocation, and BPF verification.
+> >
+> > > Another concern would be a lot of production kernels won't have BPF t=
+est run
+> > > support baked in, so relying on that without fallback would be a prob=
+lem.
+> >
+> > Are you referring to BPF_PROG_TEST_RUN when mentioning "BPF test run
+> > support", or something else? And totally agreed in that we need a
+> > fallback, of which it currently falls back to reading /proc/kallsyms
+> > on any error during the new fast path.
+> >
 >
-> If you do it soon I think we can try to squeeze it into this merge
-> window to avoid unnecessary burden for backports.
+> Have you considered adding a faster interface to /proc/kallsyms
+> instead? That would benefit not just this particular use case, but
+> generally lots of other user space applications that have to deal with
+> kallsyms (all kinds of symbolizers, tracers, etc).
 >
-
-Let me try to get it on net-next in the next hour or 2.
-
-> > I can also make it one of the design pricnciple in the page_pool docs
-> > so that the LLMs pick up good naming practices moving forward.
+> A while ago I added PROCMAP_QUERY ioctl()-based interface to
+> /proc/PID/maps to query process VMAs and I think it turned out quite
+> nicely and is super useful in practice. Back then I was hoping we'll
+> eventually also add similar (in principle) extensible ioctl()-based
+> interface to /proc/kallsyms as well, so that at least fast
+> address-to-symbol and symbol name-to-symbol point query could be done
+> quickly. And it actually would finally provide a way to provide more
+> information per kernel symbol, if necessary (/proc/kallsyms is
+> basically set in stone, besides it being text based and thus slow and
+> inconvenient for programmatic access).
 >
-> I don't think it's needed. I mean, if at all we should perhaps
-> think about naming guidelines for all of netdev, but no time for that
-> right now..
+> Can you please look into that, I think it would be a much more generic
+> and desirable outcome instead of this somewhat hacky solution of
+> calling BPF program to resolve a symbol.
+>
+> WDYT?
 
-Yep, honestly, maybe even just general guidelines in an even more
-global place like linux/agents. One thing that has been working well
-for me is coding rules or designs in Markdown; agents inevitably pick
-them up and try to code in accordance with these rules. Just spit
-balling ideas, nothing concrete right now.
+Thanks for the feedback Andrii. An ioctl for kallsyms makes sense. I
+agree it would be useful for userspace outside of libbpf, and it would
+probably provide a significant speedup vs today's text based parsing.
 
---
-Thanks,
-Mina
+I'll send a patchset out when I get something working!
+
+> pw-bot: cr
+>
+>
+> > > > +     close(prog_fd);
+> > > > +     return err;
+> > > > +}
+> > > > +
+> > > >  static int find_ksym_btf_id(struct bpf_object *obj, const char *ks=
+ym_name,
+> > > >                           __u16 kind, struct btf **res_btf,
+> > > >                           struct module_btf **res_mod_btf)
+> > > > @@ -9863,7 +9915,12 @@ static int bpf_object__resolve_externs(struc=
+t bpf_object *obj,
+> > > >                       return -EINVAL;
+> > > >       }
+> > > >       if (need_kallsyms) {
+> > > > -             err =3D bpf_object__read_kallsyms_file(obj);
+> > > > +             err =3D bpf_object__resolve_ksyms_in_kernel(obj);
+> > > > +             if (err) {
+> > > > +                     pr_debug("failed to resolve ksyms in kernel: =
+%s, falling back to /proc/kallsyms\n",
+> > > > +                              errstr(err));
+> > > > +                     err =3D bpf_object__read_kallsyms_file(obj);
+> > > > +             }
+> > > >               if (err)
+> > > >                       return -EINVAL;
+> > > >       }
+> > >
