@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505829;
-	b=N33y2PvUVvcmg8JFJ34/aYEd5PBnKI5fJp8pXm5+E2TPBIO5A7ekYrPGcObs1ytRFYZ8
-	 bbAjoEmieHqPc88mZu5ALGO69XDzhjD4YgRRJsJMIJ5wN72Ul7onzJcoECbi2l4w7sukh
-	 oNWThLCvjX+to4UDc9ttDWSrxIqtQn6hxs6mg4TK2bqark4C/X63ffFEnLsnZSImDtaVc
-	 S96UT23CAp06P/8tLfcR3QGxjLz2DZD6EFTT5XqmWHF/o5v9GmFB1xsHAt/TB3Dv/I//G
-	 /yrujP+ifAEVxTrl/VUjlrQEj+m9KoYAoYCEF4X8fF5hKwvIVaZ1LWzArGd3SMl1/kQ==
+	t=1792505831;
+	b=033dTEfuw4E4MFW00WfZblF3x5mohLd3/9YBTvhleLK2k/FT6SZdjNU2RAq6V8yHhe7y
+	 5ZX1iIAU5/TAjlBdYAz3qaYzLy+qid05scvpMcH9qX6NLuRulWFApfZaUDqddh6AxF+cp
+	 bf+Uieqb0PMk+ZYTCO3Tf8HZj8Wxz2/mkB6DW99U8UcpbUVyWjOkSDYOE4owirViEvKLu
+	 XdAs08yoPL3atWTJqGCqxuGy3L+94e36jvhtAFh2McefiOPTR/w8+FYUOTYJE8TMXl/hr
+	 7097eE9kf09P7nFAYYc4YkyZj+SDc8q1XBaCnDSEGYrIIAQHDW9Xn5GmXfO11zVLMlg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505829;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505831;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=/bwahVLN0DEkxTRBZ/QYg4lSD68f7g2itJ3lu6Z/yU8=;
-	b=Uieuo8QxNUNLlOjcM5J4t+rrjq6jRtXBEiPHYt91xBLZfMd2lVKZA5RtDz3I9ZEJebXF
-	 hOayta9O/u5McGJwiSNni2FKv1tiNfgu14Mj2OSCu+KZ5m4MUe76rWDaeBYe6qi/6oiOp
-	 88IFfoxKMyza6yYNv1aQ4OEAQlpJzPxzhHJ8HcVZr2srpzONfUh6qc6mBlowfnlqEmamR
-	 i68sh2mdACku22KqrHQJQkR5UwTPvwy3MhkelM5v/5uKs5SKHK3W86/Fyd68LEQaC+AlI
-	 JPOpXNDnXwfvnhwN9qXJKVRcYICIOqsvQTYp111YA9t3qbjD5eLvmQfvYezV6/Jn3WQ==
+	bh=EvEWwZXJOQ9AXxY31LoCfiy60IlEMawdYT0DrZFa57A=;
+	b=zY1YTVb3Ob9TbE+h/WiICB2Nn4jO8Unjcbj6GdAtrWZJ2ZU2T3XaHsrR1NoP5D9c4ro6
+	 H6ZWoqFFAC66nrC/d4GSuY21WDTPTgDAkf//0vYPokALRVxPNj/u7Y6hos6RpxnzKKc1+
+	 ENAGDm3evjWYIi70gIW1zmtCrGjtm/M5kr1r+6txu4ruVB9iD3VF99UzraPAUMrWXQDf/
+	 JudIfOIaEp9Yh4LYaeGfAWpyraLAaIM7CrGm3ttgpuKzVzBQbiZQFEtLZ/rFgs4txfpdv
+	 +7LaTFYAbDmf2YrJTdkdD8ZvnlhgKG0tv7LHr8A7rXQUvZU7aXLoJEHPs9qF23eIF7Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwqYtWbc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JOWzZbVM;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B48D606AA2C;
-	Tue, 20 Oct 2026 14:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8B5606C212;
+	Tue, 20 Oct 2026 14:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XwqYtWbc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7AF1F000C4;
-	Tue, 20 Oct 2026 14:17:08 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JOWzZbVM
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA191F000C4;
+	Tue, 20 Oct 2026 14:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792505829;
-	bh=/bwahVLN0DEkxTRBZ/QYg4lSD68f7g2itJ3lu6Z/yU8=;
+	s=k20260515; t=1792505831;
+	bh=EvEWwZXJOQ9AXxY31LoCfiy60IlEMawdYT0DrZFa57A=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=XwqYtWbc09MHfYsfV1HGcppcIfI4RZtsJqSYpLJuvClv7mEF1wEe0CcrtCOrZUB5j
-	 zL+np52ZBqJAnOgGEx0+vI3RE6qm0/6DRiKcaYCEkcE64mYksv1rkWt8CI6j9sDA4l
-	 eUZdPUlBCC7Iwuz6UJm5tCUj338HeHAmfI2uz5A6FtqEOr+XBhP0SFOvJDWkaWgHJr
-	 XMECc2rlIXNtO6SFrGnipFNO47rDXbTZ2tSAcT3fAqxPeK7R7+qz8BED2jlGjf1TbG
-	 X7aBupPdaLyyrsFDG/YiGs56vdwr4XSo5mhi8nxX4yp9gZzT2zvYGjAW9PqgRs5jcT
-	 ggVPYzxoF0lUg==
-Content-Type: multipart/mixed; boundary="===============5182827459711567144=="
+	b=JOWzZbVMzJHD9YT2GIP5+X0V8Cj/V90twOPhqK1f1iYY1U8oE9X3seQShMF3ZbP8q
+	 /oNigFu9nmnyE4Pa7BiXSlVi5/SyKrpchzJ2CfovIOtg4Rk+TKKQMNjb7u6NEPD4Bd
+	 uHP3L8oc9Jyryj63n2V76+7/DynpH48uWp4tChhd0zDdW+hk8/of9XTXvt6L4/MXNB
+	 YXiYDgyetzF5L7gCIEkAsT7Q6OgFTyn67zxC2/4kQ7kGxoL1RXL6lrY2FxA9CEjXzF
+	 9C2LLsWNkO1OU1QUYKwnANoYyxdc0DQMqIk496eIZ8Jv23KiX2UMKouPJG180SyHti
+	 2c2ZPzvuXWVAg==
+Content-Type: multipart/mixed; boundary="===============5171442887851383942=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,115 +49,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <45632128dde3ab61514bf0db311766b2113e01b63bdbd37c04f4a8b2de6c985c@mail.kernel.org>
-In-Reply-To: <ad35a4e7b9ff044a63d7903ae6509c68ea05d6d5.1792503001.git.xukuohai@huawei.com>
-References: <ad35a4e7b9ff044a63d7903ae6509c68ea05d6d5.1792503001.git.xukuohai@huawei.com>
-Subject: Re: [PATCH bpf-next 16/16] selftests/bpf: Add test for arena percpu bounds
+Message-Id: <723450d805c81106880f33239053949f2da673394089f83cecea50b067c58ff8@mail.kernel.org>
+In-Reply-To: <d56952f063f90acb07c0a37c96a83851bea227d8.1792503001.git.xukuohai@huawei.com>
+References: <d56952f063f90acb07c0a37c96a83851bea227d8.1792503001.git.xukuohai@huawei.com>
+Subject: Re: [PATCH bpf-next 12/16] libbpf: Introduce arena percpu helpers for user space
 From: bot+bpf-ci@kernel.org
 To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,emil@etsalapatis.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 14:17:08 +0000 (UTC)
+Date: Tue, 20 Oct 2026 14:17:10 +0000 (UTC)
 
---===============5182827459711567144==
+--===============5171442887851383942==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Add test for arena percpu bounds
+> libbpf: Introduce arena percpu helpers for user space
 
-TL;DR: Nits only in the arena percpu bounds selftest: a redundant insns[2].off
-= 0 assignment, and the repeated bpf_prog_load and log-check code could share
-a helper.
+TL;DR: The new libbpf arena percpu symbols are exported under the
+already-released LIBBPF_1.8.0 node instead of LIBBPF_1.9.0, which changes that
+version's ABI and can cause undefined symbol errors at runtime.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_percpu.c b/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
-> --- a/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index eeba4072a5da..eda89ab60543 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -458,6 +458,8 @@ LIBBPF_1.7.0 {
+>
+>  LIBBPF_1.8.0 {
+>  	global:
+> +		bpf_map__arena_percpu_base;
+> +		bpf_map__arena_percpu_ptr;
+>  		bpf_map__attach_cgroup_opts;
+>  		bpf_prog_stream_open;
+>  		bpf_program__add_flags;
 
-[ ... ]
+Should these two symbols be added to the LIBBPF_1.9.0 node instead of
+LIBBPF_1.8.0?
 
-> +/* check out of range pseudo instructions and accesses */
-> +static void test_arena_percpu_percpu_bounds(void)
-> +{
+Commit 3ead4ead078f ("libbpf: Start v1.9 development cycle") states that
+libbpf 1.8.0 has been released, bumped LIBBPF_MINOR_VERSION to 9, and added
+an empty node at the end of libbpf.map:
 
-[ ... ]
+    LIBBPF_1.9.0 {
+    } LIBBPF_1.8.0;
 
-> +	/* a reference at the start of the chunk loads */
-> +	insns[1].imm = page_sz;
-> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
-> +				"arena_percpu_ref", "GPL", insns,
-> +				ARRAY_SIZE(insns), &prog_opts);
-> +	if (!ASSERT_GE(prog_fd, 0, "in_range_load"))
-> +		goto out;
-> +	close(prog_fd);
-> +
-> +	/* the first u64 below the chunk and one past its end are rejected */
-> +	bad_offs[0] = page_sz - 8;
-> +	bad_offs[1] = page_sz + page_sz;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(bad_offs); i++) {
-> +		insns[1].imm = bad_offs[i];
-> +		prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
-> +					"arena_percpu_ref", "GPL", insns,
-> +					ARRAY_SIZE(insns), &prog_opts);
-> +		if (!ASSERT_LT(prog_fd, 0, "out_of_range_load"))
-> +			close(prog_fd);
-> +		snprintf(expected, sizeof(expected),
-> +			 "per-cpu arena reference at offset %u "
-> +			 "outside cpu 0's chunk", bad_offs[i]);
-> +		ASSERT_HAS_SUBSTR(log_buf, expected, "out_of_range_log");
-> +	}
-> +
-> +	/* the last u64 of the chunk is in range and loads */
-> +	insns[1].imm = page_sz + page_sz - 8;
-> +	insns[2].off = 0;
+That node is still empty here, so exporting the new functions under
+LIBBPF_1.8.0 changes the ABI of an already released version.
 
-This isn't a bug, but is this insns[2].off = 0 assignment needed?  The field
-is still 0 from the initializer at this point.
+Binaries that use these symbols will record them as @LIBBPF_1.8.0, so
+symbol-version based dependency generators (for example rpm's
+libbpf.so.1(LIBBPF_1.8.0)) would accept the real libbpf 1.8.0 release, which
+does not have bpf_map__arena_percpu_base or bpf_map__arena_percpu_ptr.  At
+runtime the dynamic linker then fails with an undefined symbol error instead
+of a clear "version LIBBPF_1.9.0 not found" message.
 
-> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
-> +				"arena_percpu_ref", "GPL", insns,
-> +				ARRAY_SIZE(insns), &prog_opts);
-> +	if (!ASSERT_GE(prog_fd, 0, "last_u64_load"))
-> +		goto out;
-> +	close(prog_fd);
-> +
-> +	/* one u64 past the chunk end is rejected */
-> +	insns[2].off = 8;
-> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
-> +				"arena_percpu_ref", "GPL", insns,
-> +				ARRAY_SIZE(insns), &prog_opts);
-> +	if (!ASSERT_LT(prog_fd, 0, "out_of_range_access"))
-> +		close(prog_fd);
-> +	snprintf(expected, sizeof(expected),
-> +		 "per-cpu arena access at offset %d size 8 "
-> +		 "outside cpu 0's chunk", (int)page_sz);
-> +	ASSERT_HAS_SUBSTR(log_buf, expected, "out_of_range_access_log");
-> +
-> +	/* an access below the chunk start is rejected */
-> +	insns[1].imm = page_sz;
-> +	insns[2].off = -8;
-> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT,
-> +				"arena_percpu_ref", "GPL", insns,
-> +				ARRAY_SIZE(insns), &prog_opts);
-> +	if (!ASSERT_LT(prog_fd, 0, "below_chunk_access"))
-> +		close(prog_fd);
-> +	snprintf(expected, sizeof(expected),
-> +		 "per-cpu arena access at offset -8 size 8 "
-> +		 "outside cpu 0's chunk");
-> +	ASSERT_HAS_SUBSTR(log_buf, expected, "below_chunk_access_log");
-
-This isn't a bug, but could the five identical bpf_prog_load() calls and the
-repeated reject/log checks share a small helper?
-
-Only insns[1].imm and insns[2].off differ between the cases, and the
-ASSERT_LT + close, snprintf into expected, ASSERT_HAS_SUBSTR sequence is
-repeated three times.
-
-A helper taking the reference offset and the access offset, and returning
-the prog fd or checking the expected log, would make each case a single
-line, like run_on_cpu() and check_percpu_value() do elsewhere in this file.
-
-[ ... ]
+No later commit in this series changes libbpf.map.
 
 
 ---
@@ -165,4 +111,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39434884362
---===============5182827459711567144==--
+--===============5171442887851383942==--
