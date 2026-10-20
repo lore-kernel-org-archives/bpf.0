@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792538393;
-	b=kNOLwIlKwxZ4dTh0Y+kPL0t9M3aLuJnYUAZahLtwPnE7KGmucH4jCRxUiCXOM0g0k3JQ
-	 QAwUBxP2oQYMC5AKN9F6FHRXvexjFNb/LWmDozQTBX+9ysmrm7sC3tBcmZ1ENsAO/K8zz
-	 kYnx84NJNzYobPlFlJ/rMIKNaH1OM7jBI+dxLJALVkX4V/og1iSRBHZenrNxw71zZBqHx
-	 +sWXnV+hIZl0tkUdSy3zoJrZfxtqTc5cOmpinpWCqHFt71c+VVQVocvRy5ZcyqqHGTd21
-	 lNw/hqQXDbb5e3OS6CGyBdIT9XA6SaUyiFaJYd54CzGu+T7AO2HseHUL0+puizdCf0Q==
+	t=1792538399;
+	b=nErQmSt21wIGpIynlwYxp+vGQ+6Xmh5kpSuK8gDGUzuE7fgvOB87fv8FnE64ojkImfau
+	 upyON2rTMKn4K8p9VCiUiwfpVO7DKGjrsq3z47wQmWMA0bfQZuM34sJpFQILyEoX4ua3/
+	 4RCQtk8pW4RBZYUFX5/V0BQRspYswa/4l1KlH/ZrEXwXTpQzaUwy+lQbYh3UAUPXq1PHM
+	 qbpVLdUlKzVB2basLp7lTvY/iQWejnCQI5esbThNeqZkhYGxcmzwwQeUejDHU8cWQicOB
+	 YiCy1s+DZ0PTQViMlz6NIff53C9SpV7DnKyIoqFjv574yQGjNfSe7JHe/PHWfFcbjuw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792538393;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792538399;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=SG5BacMW/8GY1BLub3UBBtaXQ74qa466hh0xtJGHpt4=;
-	b=1A+zEB8bRu3dMNJqI8r8K7Asi9b8wyYnHlp1stF5hbQXkLsX1RgIQyC7ogPth5+EnhUt
-	 MDDVhxuGnjwgkgQl7L98TKXVvIPM2EkEFV+im5oty6lsZOOsizwgF75zWTHFQ/ILrnOFi
-	 zhlT/X+rSJO1/UvU4gjnimdC7jJvA7c7b5y2ZTATTTaBGWghD31JLaXS0hWtRbzEcaClD
-	 M9tuW9+Lgzi/s3/w18PHh/hejpOFpGpcpODv6Ag97X6G4g4+eIkzZRPZhDrrut+QBm8M/
-	 fvaSnqPsqRKZi8iwDWw7FXFyJDiT4v8mMmiqgMY5D3irKJIHmnm5A3JtmNYY76Eqtjw==
+	bh=Hc4TEVuvWzyg0HQCXzcfeCpFf+Rspk/JVSrCCcdyBaE=;
+	b=2U/dbYgDLGGYUHk1XKTK3Xn/KR1V7FW2pgcr2ORwqZAwu32JsJOi5I/NxITIs+GE0EBu
+	 iCI76aDE8KLby2IGYuDrZj6nuWZ8cQckeZJv19JIDfsUcbRX6PtD9M2WWayuanR49EaRf
+	 4QkchqNsvpuPMmHigh+zcBjjWGEr8aKZm93LpNRYvijryqrq86W2bIRbOq84V331VTqEI
+	 u82Gx6MsAgMaeXuK7YxGwUtMQiOXFewg64uMsfKRs3MK1e/z45TE/sCKUf5D70pz+3VWK
+	 /LNeGRsrz7NBr1H1Jbqdqh1YihTqXGcW6FwB3r4lu91FVsh4zlwC+Nd4fmKgMpyl/1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CmWqHsaG;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=i7HXsKhJ;
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1526606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 23:19:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1526606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887D8606A31A
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 23:19:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 887D8606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CmWqHsaG
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ab41538192so130929a91.0
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:19:52 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=i7HXsKhJ
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc1bc88a20eso39378a12.3
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792538392; x=1793143192; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792538399; x=1793143199; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SG5BacMW/8GY1BLub3UBBtaXQ74qa466hh0xtJGHpt4=;
-        b=CmWqHsaGQzerc1iWckOZ3pHA6bpw7wjdEgmPolHa/uZwB3uoQ0RA+yCDY1Ma1ZHFDR
-         RrIekQoA7JOO1P90M0ziJl0a4qjZdsGfeqxJlCIWqA8gdKq2opSJEPVZL5zUl3OOqCOw
-         KIjnwLhh5vczeCE4o2jlITGeoqVPNMCzFVSHokfVPaLbwQbXgr8mN2m6nCc9C9Yd2Gzc
-         XPEHlXL0w2UrIDq/RGIn5kh4qTkNUOYvkjlhKEFOOiH62f+4IwxRPvPEiv3Mrula52HE
-         NlfkEJmWgDFodp+3M8fVYvGzZD5T+Nse/W5iow6UBbLsGrYTfwINm492sMapn2szeCRh
-         R9SA==
+        bh=Hc4TEVuvWzyg0HQCXzcfeCpFf+Rspk/JVSrCCcdyBaE=;
+        b=i7HXsKhJMvjECuYcqIGMj/Gofujdds1m1zbdT9vBBZ8tg07kGX5VQhCHUUjMPziWey
+         XJsxrvtRGBDfNQL2VzN3ahzUezhpXQ98EP+hMIqzSXBIUfVd7ROm3uxVEI3bjpAXdkVr
+         3vQriA9td6sez2Cl5Zj3W5+km7NQIrNdpR9hoPH1BHjC/jOwdWpumvyZsXBTOsJYslHW
+         RQ9G7y84kPSy9cNxRgEOwsK8r1T1MVKLrCJfWmADOlKmBy8ArhB/9B6eSXB3sYA/bymo
+         JhrdWrITn5PEuwBhYe7WWq4mKv2DSdR9X8wBNlvvxkhv2S+VDZH61qiti028z6zj2i6A
+         l0Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792538392; x=1793143192;
+        d=1e100.net; s=20260707; t=1792538399; x=1793143199;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SG5BacMW/8GY1BLub3UBBtaXQ74qa466hh0xtJGHpt4=;
-        b=lISnRXbVDkSQt4xarMz/QodVKqZ8DFsnBtuybOSkSu4tk6MBPlvssVEpTdEXBUmjLb
-         WL//d1mxNUScYZTKdgrOYllhFqdNQuOGy3QHa3RBFYCZaJEB/xkIy0sYwQ9qzzivvg2A
-         6iPrMy95v4o1b/Em5FLWdXUSlPS+OJqQZNaAU9h0eKJbT92uEfV1S3y2Z0x6yG01kKOm
-         5vIGHQu9o+4/9W0gDSYA2wkj8HPSCcsRczuMcCcsWm1E/YY4yQ+lbez+Wtt8ArE/Vl3Y
-         bUcd0hPrI2KtelGr1644Z9wmvS0VBDRWicUW65i1W5ON8NKm7gqKsDAbJQSsdmoAUWhe
-         /cHA==
-X-Gm-Message-State: AFq9FYJKDGNhVb/bNT3ih6W8ziuQJHGdwp/SCy2sDW3SWbMk4bYr6MFx
-	RN9UIjjLns+21J/HeEFdfcCWFPRemTPa0ivdEuEmtURa5FLs7cnhDqAp09EteQ==
-X-Gm-Gg: AYBFou1K1MZ17JLZpqQRRBnNzWYv/mxHL0Owy15mnCQxtoUTr+jEWBTlhTHp3pC/ul+
-	5uKRwwL1ENZrSAFVxwBi/W9Sqj/ctIZMY+ltYvwJP+Ut1KOxFltO89P/gXSAmhVuwrOrnHZzy7i
-	iDanWsXmvqoaNIz49IJSacurjxaMXKKojCpyCF2JhPq8sKNfm5SHd7ipRouY4VlRnWcsMIKX9Lg
-	M5qTgMLUlEMhPx59ZR51hPbk8/KkN/1hXOfoE8W6+6xOH3xbJ/zxfWqSHouVkpouEQa91SMi8c5
-	2KwtuP2ZSAcXCfhW6udxwA58EFWzpcp1LooQoYoDri7hOR/Gvdev75NAVqdHU5Up1x8c/CBoHqV
-	uxinhsFzZgNOaWCRjYOkqSH5UbkMVNpMzvRW/TIscseNYtQxdVvXveygQ0Guo3TfnAyk31+RIzH
-	wfmBW3hGADfqa6KbZ4zeembNckH6dPiKuv1ntPv3jaS+qgRMPS25ilNo80fE+xsMJxuyju6Og3r
-	AYu8SyqpZm752FOdb3JgZFaX6JVYTClKQYiTva0Rz/hKPPeuhcHl8MbUe1aRUdSCXSH/DXYxZqW
-	QF4E6jdsyX6XyodkX27eQk7ZEpoHuwqL954UuBsBaMYF4qT/QO45rQ==
-X-Received: by 2002:a17:90b:3908:b0:3a7:3474:b1ee with SMTP id 98e67ed59e1d1-3ad8708ad2amr305946a91.60.1792538392074;
-        Tue, 20 Oct 2026 16:19:52 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad813de463sm1295714a91.13.2026.10.20.16.19.51
+        bh=Hc4TEVuvWzyg0HQCXzcfeCpFf+Rspk/JVSrCCcdyBaE=;
+        b=uJg13kRMSmqiT9TzwaP3m3c7Ky/qylz3zET3GohK5ckgBe8PBAkxtGPpJm30W1SG6j
+         kXCdPZz2CmrLb+4QzIU2ZPoVQr+9O19SJ55AZ3bUcpGXRlTYA+itUusnr5y9pKOtfQBX
+         +rYflAh/0+g8NwBakcSKhUUmFZbLM7/3ABvgdD1R1pXj7BSUR9DMaPUiv39OgWlKZfxx
+         MriveBV/1mq2EuUt/o0w98/1tr9+iLoRrF1+zgcFgIUsqBxRtNVNTvF+XXxrSQWcewCV
+         lDIuBXwOsxPWA6DS5obntnQd0UC34QFnEhL6Jukf/OGxBOQwduGvD5zNuLKCOduELxhs
+         e9sA==
+X-Gm-Message-State: AFq9FYKZPymaPA23YeXFxlViGSTzmlZtA3psJ/s7GrFN1F3E+jiKSYQ6
+	paRN8CFgmgXpZEic6HMbOf3P/Xd8pyb7bbRdlyBoSxDYXDXx4HOCmu7YvPRvZg==
+X-Gm-Gg: AYBFou2qv+lF/9V3Z0OhfHrgrfETd8NBZtyZfrgULrz+BZnJMIfDkbm6D0ZK+D1Ytve
+	DmTMCGkLl9hUbBltZpK7vq9kuwTP6mVhYUPl3LyWe0PEAqfbwsIvdZeuoXa6qoRwLPtjoV7wwi2
+	Z8/gI9h3MeT+JHgUA84mSdOKzDTzuV2AqRfkrhkaiQA2FoIksa9HSy+kmh9QVGHPmPvuPvjatbn
+	4zyxh6HDMLeh13HvebZgbmXB9EBDozHPzfrqSgxWd4ea/QWPsP0mWMG7wWAhESPGxvO9b8A8eZJ
+	G5+O5f5yFopluJI3PyixqLTsAmm1KTcL2+ge3/bq6vNfESDIu2TUquYNZjbVF7jjkKAbS+GkmDG
+	yJ2man3sydl/LHtLKOC2RhjziUNZRXUz4UXa4Xe7zI2ASUqwf22NDklaw61wSQGW4juytL8Ir6e
+	DpZ8D8LMC+XhRHD0JcXlXdEZc9YA49ubSWI9hcZV5FELWB1fpHbAi8/TuhQWQPxPxqG7LZSGpCu
+	+huzQbSKPfRsSxqj9vexIJT1LYT9QS6bRL+UC8wLNh6xbvoTT0qPmUdwczWBRMfSXkzHAFDdZpm
+	u28yU/KPtoPXdmxXzVnSF4M6m5LLva1AyEYw+Xev23hneQFQBvgoPzLkuLQhoACaVeBmN9oR2ts
+	k6nrlIFLxkJX2ruqkJdwlNmp3
+X-Received: by 2002:a17:90b:5390:b0:3ac:a204:aa27 with SMTP id 98e67ed59e1d1-3ad870b7858mr280035a91.66.1792538398762;
+        Tue, 20 Oct 2026 16:19:58 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad803035a1sm1410099a91.13.2026.10.20.16.19.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 16:19:51 -0700 (PDT)
+        Tue, 20 Oct 2026 16:19:57 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -84,9 +85,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	yonghong.song@linux.dev
-Subject: [PATCH bpf-next 1/3] bpf: Make unwind_exit of an exception callback exit in JITs
-Date: Tue, 20 Oct 2026 23:19:39 +0000
-Message-ID: <20261020231942.2568163-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/3] bpf: Reject unwind_goto and unwind_exit in offloaded progs
+Date: Tue, 20 Oct 2026 23:19:40 +0000
+Message-ID: <20261020231942.2568163-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261020231942.2568163-1-alexei.starovoitov@gmail.com>
 References: <20261020231942.2568163-1-alexei.starovoitov@gmail.com>
@@ -103,93 +104,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-For the verifier unwind_exit of an exception callback is exit. For JITs
-the callback is a subprog, so they emit the lookup of the return address.
-The idea was that the kernel calls the callback and the lookup finds
-nothing.
+A prog with unwind_goto or unwind_exit has to be JITed by a JIT that
+supports them. The driver JITs an offloaded prog, and nobody looks at
+jit_required there.
 
-But an exception callback has no frame of its own. It returns from
-the frame of the main prog that threw, and the kernel isn't always
-the caller of that one:
-- An extension returns to the caller of the subprog that it replaced.
-- After a tail call in a subprog the main prog returns to the caller of
-  that subprog.
-
-When unwind_goto follows that call, the callback goes to the pad, and
-the pad wasn't verified with it:
-
-  r6 = 1
-  call a             // can unwind
-  unwind_goto pad
-  r6 = 2
-  call b             // cannot unwind
-  unwind_goto pad    // stays, since the pad is not dead code
-  exit
-pad:
-  r0 = r6            // r6 is 1 for the verifier
-
-An extension without unwind_exit can replace b(). When it throws and its
-exception callback ends with unwind_exit, the pad runs with r6 = 2.
-
-Both JITs ask bpf_prog_can_unwind(). Let it say no for an exception
-callback.
-
-An async callback has a frame of its own and the kernel is the caller.
+nfp rejects unwind_goto in nfp_verify_insn(). netdevsim takes everything.
+Nothing runs such a prog, but it's not jited for bpf_insn_prepare_dump(),
+which takes unwind_goto for BPF_CALL_ARGS and shows it as a call.
 
 Fixes: a2d274771321 ("bpf: Add unwind_goto and unwind_exit insns")
-Closes: https://lore.kernel.org/bpf/sashiko-outbox-179498@kernel.org/
-Link: https://lore.kernel.org/bpf/5f24cbed1ec4a6a0ecd0b834d738c48dc9eb64362be4fa50dfb0eaddfad928b3@mail.kernel.org/
+Closes: https://lore.kernel.org/bpf/sashiko-outbox-179499@kernel.org/
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/arm64/net/bpf_jit_comp.c | 2 +-
- arch/x86/net/bpf_jit_comp.c   | 2 +-
- include/linux/filter.h        | 4 ++++
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index b3efe0668e86..326e9e1dea0a 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1273,7 +1273,7 @@ static long bpf_unwind_fixup(u64 lr)
- 	e = search_bpf_extables(ptrauth_strip_kernel_insn_pac(lr) - 1);
- 	/*
- 	 * The verifier made sure that unwind_goto follows a call in a prog. When
--	 * the kernel called an async or an exception callback, it's exit.
-+	 * the kernel called an async callback, it's exit.
- 	 */
- 	return e ? e->fixup : 0;
- }
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index d3ab36281144..6a2fe3d0039d 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2552,7 +2552,7 @@ static u64 bpf_unwind_target(u64 ret_addr)
- 
- 	/*
- 	 * The verifier made sure that unwind_goto follows a call in a prog. When
--	 * the kernel called an async or an exception callback, it's exit.
-+	 * the kernel called an async callback, it's exit.
- 	 */
- 	return e ? ret_addr + e->fixup : ret_addr;
- }
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index fccd8db33647..e0218e677a1d 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -267,9 +267,13 @@ static inline bool bpf_is_unwind_exit(const struct bpf_insn *insn)
- /*
-  * The caller of the main prog doesn't tell unwind_exit from exit. An extension
-  * is different: its caller is the caller of the subprog that it replaced.
-+ * An exception callback returns from the frame of the main prog. After freplace
-+ * or a tail call it returns to a prog that wasn't verified with the callback.
-  */
- static inline bool bpf_prog_can_unwind(const struct bpf_prog *prog)
- {
-+	if (prog->aux->exception_cb)
-+		return false;
- 	return bpf_is_subprog(prog) || prog->type == BPF_PROG_TYPE_EXT;
- }
- 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7d7193b087f6..5601d2056218 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3462,7 +3462,7 @@ static int check_unwind_insns(struct bpf_verifier_env *env)
+ 	}
+ 	if (!seen)
+ 		return 0;
+-	if (!bpf_jit_supports_unwind()) {
++	if (!bpf_jit_supports_unwind() || bpf_prog_is_offloaded(env->prog->aux)) {
+ 		verbose(env, "JIT does not support unwinding\n");
+ 		return -ENOTSUPP;
+ 	}
 -- 
 2.55.0
 
