@@ -1,91 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792491166;
-	b=hizaIyctX+yNO+j1PicAvjgmql2m57fPO3r3ZQx9LEz+HTMDKfLo1/f9R3qSiVQ8/Aw1
-	 wV+olHL2T/zk+rR6ZQfPZIHKhdaz9QpZyMLtmZIQblVFhjQia1kDfddu5kD6tACXegZNg
-	 kD9OAjnZyrSlx/3l9drXil5Ox5xnq2+W5Raurwgt6XToCzb+c3ozRygccLvesLgnZg7o8
-	 UbshTwugA+fyUFh8a8YN3+/mOUluwyDbAxoEbervDDSNkDMDTMhWFg/+YjO7WfWHBmPqY
-	 Lds145OatoTi6KFZywyo702OwGEl3H89V0woa843XjkOLmRDw02N9lCdOghcNHR6Hug==
+	t=1792491766;
+	b=ELeSfoD8uISwvCUMnqdT0Ds1CFdCjk68EVJvY6UOp77sySTXu2tVxZ5N5WVXXHYOtvdu
+	 eNDjfSbCCbqudbF9Zo7eIPK/mRiQsVfwfWVhK0lrxjyNP66h4oyVmJ+HAujK8Ux3sc50k
+	 UlNFO4yWfOdXH1hkdrbzs7JhUeQh5WXrOM44ddRJgw3FcPY/mQp/r8mdMhUGnZINr9/81
+	 2jy2leCcuQnKsxqENzDbkIInjpzgDMVW2YexWJUfbx9kaNZsSnC7MdRjwZIopu3ZIhweD
+	 xiecP+orCYrzmv2Gy0QBNiJLRYYNHiHOa+QogmyDi2voF3IqXHc8ThXlpsMVNx76ebw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792491166;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=hyIt8UuqcY0wLMo+M/DJiAp4mcXijBe1VnJG7zgOR5g=;
-	b=ibuw1gGWbRCQ8T3x03TBjfQsrdBQ3c6t/xetOxuKa0M9LJ6p9y0eLlKgHmzGAivECmJ8
-	 P/jKqedOeFwbLaE84weKiuscQLfJCvr49js7cy+g7ilJPHG8Q1tMfwW8rYIf43SpjzMpx
-	 4v5I6y6pK2ijMlusAutgeAk4g4rvyBGV2o5UsgoABuHMHgqyNRw2IeewlQO6PkfWGz0+O
-	 0SH7J3vNUomxxxFhBA7Nia4XSVHoidhLn+GcuzvutxUHYuRQnL0mMi5HF0YOPWZpfJ7s8
-	 lFEcLVmDiCNP2DfEffpU326bOVH3COgLGIoGle2XV2wqJbjmPZlIvkvGNyAdFEghkYw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792491766;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=Wanx/Y3C+0SlSQC9sDYqWym0szuF/WkjMrFohRrApNo=;
+	b=0Juw1wv2reys8Z6go/cjSkMdjouGbHGoEp4om6bLfwQaiVQ9Dtb2CntLsDTEUd7pIwJv
+	 Cr5xp+1Of/aWiFU0YFXCVAa9Zb41voEYNnnZ4b91lqjJhvZ8IAeks64ixgNd41BjMyycG
+	 tCzm90rCh+5ZpmYx5mr+jF+1alFaN/j0pBHSgl7rDNsK1V+uvlIRmNuHTeWiG9s/NYyOF
+	 ywCUthudSe6djzgfMOrwbZRANwZVN2ejajfwjreJmxPFak50HkEJX74osmBN4apElVVUV
+	 hvvOTuChb43hyeoLdIPLwwurF+EPAELnIAXu3LO8/5m78onrhsmBpNvXQ5GunpezPjA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Jj9wGdz2;
-	arc=none smtp.remote-ip=209.85.167.51
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T5Oa7TM3;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8B5606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:12:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9F8B5606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8613B606A319;
+	Tue, 20 Oct 2026 10:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Jj9wGdz2
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5bcb6faf862so2785213e87.2
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 03:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792491164; x=1793095964; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hyIt8UuqcY0wLMo+M/DJiAp4mcXijBe1VnJG7zgOR5g=;
-        b=Jj9wGdz23EbV6ZqyCW2W0QgkzaZJQ+3DAqkCpZQaz4JIC9kPLT1PBBQNllkhkFxXXU
-         d4dbQkyNnwaOxyJnBqVtkWkRYsbDrb7ZDxAq6KxmrBpHBSDOlP06CJBn64PtnJv1nGhF
-         kWgJwKgKltl/xcIgkozffn0hqWPOpV+pGL1JpwQBT1lEqmG/waUaUHyFJ7JmHYQB1iTH
-         hzANXjbxp3i57EBvlnVekpIy45L3U0jLVowcbrR4WcEdLKzGaDcxRm9mBlZ9xfjfUILP
-         H6urXD75MlKhqDP0s+i3/X4t19ii8Xq/9aongrOMLVuzd1Y7V2XZo+//+yEjyhw/M0tn
-         D5DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792491164; x=1793095964;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=hyIt8UuqcY0wLMo+M/DJiAp4mcXijBe1VnJG7zgOR5g=;
-        b=jUNCRPbJHsILsaC+yOaISni0Av237hTKqb2gFsZLMFZV0RhIjhRLp1n2//v7WFg0Vo
-         xMNXzZ0wNwm987N5daw39QFwbuhMbzsswrCiIhtaaBw1+RVdJPtCia5WwWxtin+ridNe
-         kYPjAk3pk3InomUoYZWm82dXBBmVnMuOIvGyQmYrn4w/xzLDvm4bCyVfEugWsMpVrFmz
-         CZ6RfYWKVREv3B3IzqoQcdNBVfc++/zbuQt1mrouBrmLKJ6hrl2JxFt/WRtOu7xWoo2/
-         6UIAJ13WLS5DyfMRQslZ8/xZNmSfpLmk4XA5mohXqJb0zJlZytn57+o04yuGGdVGPMsO
-         i4QA==
-X-Gm-Message-State: AFq9FYJg4XHlsF++NNhWtYCGkWVxZCrXHsXrZf4d8rN+hwXh/7BBZEgL
-	oRVlk077ID0LPrHIDA4wY8m2fYPW0rSMCEtZd+qcEvZoSdbV5E08AhoDuAHd5aYcq58=
-X-Gm-Gg: AYBFou0GlStjag8uFhlyqtMZcyQ3BLk+CJZySr0B/kFDYM4VNsQNBOfXU2Okytshv2W
-	tpUbJky94qyQ2k/iSYKmqvGTQhcibUYDsXXdjSNC/VTC8b480lhX+mu0GIOOK+XOHUdUJd31P9f
-	intYjjN+dhvPkwGXmiVTn3QSxRbzxo2pcXZ7rEn/h/+3abHkoVg2BC32xSQhLKTsvzKm8bexlQG
-	SdqH6q4ADO8c6BFWOakwr9wk+vxCiZU0puOk42VpXJK93rse5IyZWrmK4CBMpjgSgTnKPPF9E80
-	87SQRoNshcjHgpRyB5s208qv7nL0DtUJ+7+O1GLOD6xhfYPzClwQR6xr3wP9DAQNphAnl+YXaah
-	/VhrOLwRQEVIrRM2004ScLud95Yubd2SfoL864rX3y/FZPZAg60Lkp/PKoYTHr53qAZnfdRVChd
-	6tUD39YRoRPhq3frMqB7Iaax/qhhWNLW8R2cIGvHKotm4KgB20vDS0eRrDVVYfR+LyI/o5MA9Oi
-	S6vtGCO+ASKDfjMToYDqDokY6dKioGg5HLdMywcywngMO/QTcI=
-X-Received: by 2002:a05:6512:158f:b0:5ba:356b:5a85 with SMTP id 2adb3069b0e04-5be50a74de4mr3285157e87.43.1792491163375;
-        Tue, 20 Oct 2026 03:12:43 -0700 (PDT)
-Received: from localhost.localdomain (95-24-167-79.broadband.corbina.ru. [95.24.167.79])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5be4a64433csm2509649e87.82.2026.10.20.03.12.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 03:12:43 -0700 (PDT)
-From: Maxim Skokov <skokovmaksimevg@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	yonghong.song@linux.dev,
-	Maxim Skokov <skokovmaksimevg@gmail.com>
-Subject: [PATCH bpf-next] bpf: Cast helper IDs to the helper type in bpf_helper_defs.h
-Date: Tue, 20 Oct 2026 13:12:15 +0300
-Message-ID: <20261020101229.111074-1-skokovmaksimevg@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T5Oa7TM3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A896F1F000C4;
+	Tue, 20 Oct 2026 10:22:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792491766;
+	bh=Wanx/Y3C+0SlSQC9sDYqWym0szuF/WkjMrFohRrApNo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=T5Oa7TM3nby70HzARWjHBQQEUhvyDMnYSKnWODFB/qM7TAf4HWluzvCMoZuIgfgIy
+	 w2nKBO4fzEoENZA4IWc+qN+yQAjr5zvfQ7dniIZd5i9fHU6VSXezpYkh4VxtJAfdAd
+	 R/jPBncUlO/gYqZhBR9EoNd5L/i6DYwumiLVnFxU9f1zYERkCIjC4+I7irWQs1XCyE
+	 AkzJ0zp7mWH1cJu4KqrxzXJ+EuPQ0CjP3QJ+0bf/j7bCL4iOzlNm3URN/4BF/fYMlr
+	 KwILvV+MnSELolXwD0MjL6cIUlXuwVAvGaVQJEuYCGS7QfLxotp409zmw49clS+fpN
+	 5R83GhZiZRMJA==
+Content-Type: multipart/mixed; boundary="===============8069249734330607249=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -95,50 +49,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <42d40286dc3a75179629023befe798cbabc88e8c5d890f2dac1211477cc6ef7e@mail.kernel.org>
+In-Reply-To: <20261020095124.928021-1-yanxia@cmss.chinamobile.com>
+References: <20261020095124.928021-1-yanxia@cmss.chinamobile.com>
+Subject: Re: [PATCH bpf-next v3] tools/bpf: Remove legacy BPF tools
+From: bot+bpf-ci@kernel.org
+To: yanxia@cmss.chinamobile.com,daniel@iogearbox.net,bpf@vger.kernel.org
+Cc: yana06070@163.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,richardcochran@gmail.com,netdev@vger.kernel.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 10:22:45 +0000 (UTC)
 
-bpf_helper_defs.h defines each helper as a function pointer initialized
-with a void pointer:
+--===============8069249734330607249==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-  static long (* const bpf_map_update_elem)(...) = (void *) 2;
+> tools/bpf: Remove legacy BPF tools
 
-Converting void * to a function pointer is a GNU extension in C (gcc
--pedantic: "ISO C forbids initialization between function pointer and
-'void *'") and an error in C++, so BPF programs written in C++ can't
-include bpf_helpers.h.
+TL;DR: Commit message only: the changelog doesn't say why bpf_asm, bpf_dbg and
+bpf_jit_disasm are removed or what replaces them. Not a bug.
 
-Cast to the type of the pointer being defined instead. The name is in
-scope in its own initializer, so this works in C and C++:
+>     tools/bpf: Remove legacy BPF tools
+>
+>     Remove bpf_asm, bpf_dbg and bpf_jit_disasm, along with the assembler's
+>     lexer and parser, as suggested by Daniel.
+>
+>     Drop their build and install rules, feature checks and ignore entries.
+>     Remove the tool-specific documentation and update the PTP classifier and
+>     packet socket test comments. Keep the classic BPF instruction descriptions
+>     and assembly examples.
+>
+>     Keep the bpftool and resolve_btfids build and clean targets, and the
+>     bpftool install target.
+>
+>     Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+>     Link: https://lore.kernel.org/bpf/61f7315e-c835-425e-a99b-d2470ba9a875@iogearbox.net/
+>     Signed-off-by: Xia Yan <yanxia@cmss.chinamobile.com>
 
-  static long (* const bpf_map_update_elem)(...) =
-	(__typeof__(bpf_map_update_elem)) 2;
+This isn't a bug, but could the changelog say briefly why these tools are
+being removed and what users should use instead?
 
-The generated code doesn't change.
+The body lists what is removed (build and install rules, feature checks,
+ignore entries, documentation, comments), but the only stated reason is "as
+suggested by Daniel" plus the Link: tag.
 
-Assisted-by: LLM
-Signed-off-by: Maxim Skokov <skokovmaksimevg@gmail.com>
+The documentation hunks also drop the in-tree explanation of how to produce
+xt_bpf/cls_bpf bytecode and how to disassemble a JIT image dump from the
+kernel log.  A short pointer to the replacements, for example tcpdump -ddd
+for the bytecode or bpftool for JIT dumps, would let the commit stand on its
+own without relying on the Link:.
+
+
 ---
-Tested: the generated header compiles with clang for the bpf target as
-C, gnu++20 and c++17, and with gcc as C; with gcc -pedantic the 211
-function pointer warnings are gone. All 1082 selftests BPF programs
-build to byte-identical objects with the old and the new header.
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
- scripts/bpf_doc.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index 15d113a1bc1d1..6c18aa09389d8 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -908,7 +908,7 @@ class PrinterHelpersHeader(Printer):
-             comma = ', '
-             print(one_arg, end='')
- 
--        print(') = (void *) %d;' % helper.enum_val)
-+        print(') = (__typeof__(%s)) %d;' % (proto['name'], helper.enum_val))
-         print('')
- 
- 
--- 
-2.47.3
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39405560147
+--===============8069249734330607249==--
