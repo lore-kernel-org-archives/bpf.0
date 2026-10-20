@@ -1,81 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792508213;
-	b=K9py0iCl3btHoDVWB4B8xAf6nERYdtz6pAaTmuXe6oXS/Ely2SqyTVhGhyjR9gbb5d+D
-	 ClUPXjj7j8FHr6da22SYHVXyPIkf69IHMH7/9aYjPestXjzI515ogNmCicRVty51yHR/1
-	 Jf8hXjsCCuFWUrBK32P1IrnJcE8zomqlRXjkWUDaUlDnNnXIwY0QIF+NQ75+/0dVj/HLD
-	 9iljkBL3HLL7uij/aGiPu2fDfu+84em0UNQV37mu8ITFl4fKQpEmsIArGAixnmycUtzst
-	 Mx0yXhUuPU/B8iKTqr0fkYzcJ0CUdjt0+dK7Qc4J3G8WFVOqJ6ELi/6S4kQgBYnjzEQ==
+	t=1792508218;
+	b=XVbzhPlXRNCKz07flgu1JUlLJBus/W/fp11lxIPiTw3pGex6DyrOZ9+UqQFd7pN5DiBz
+	 uqYmLglOlAlS0+T/dgKpkhvHrBzp/NmiyU6YR8Q3F/gLXo7hLgVOF394LUNeQcD4ZJt5l
+	 TH5k34LcnvveHocsg2iik2L6IaPJzPg3gu/Vcpi1W8t4j2De56+9fk2GTO4OA6Yiaw1R9
+	 6Ftr1ZV6dcjgnk5OuV7M1aynBznyNAckAVRNZ2rX/TTe17dt4GOHTsEtVJU+NVRU39K0u
+	 e/bVF7nCJGBJqHze5EG6skV5/DuoFqliy+ENAMB5WiLG+KUAlo1wqfuQckoWOyEUZNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792508213;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792508218;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=i3Jfkp9hIEUQZRTYVT2QSxlb33aqrHI5yayyK0Kb5fg=;
-	b=fGSA6P9pBKlaVK6nMam1FXxhtO1muHK+sGZpJFEnIZL5uwslYHv6dGYYhRK6YASiIgaH
-	 bqOVMlUufLBCaA5qrytGkNtPCcdHCo3pyxF5wfAlKnRv4EzrzglMFT0TOpoLuXHpXS7kK
-	 I0EQXgkSayU9qYayQiNdEZV956LdmYlj3+M+Cl9A79PxBPLvlQAwfKbR1FQR7TCsksHOU
-	 GGP19BAG6EcxSgwQ/m9pd1sPY94H9dV059dXHE28HsK364eqlX8lghaFL7xWHLEWe5uuO
-	 KfDn6zypiU0QItBlXmZoUyKpzUCHdWn+cicQ5NhDT1Gf8atmvsyPMvbuf06QgYLqiTA==
+	bh=laKttaaJBwo/m3r8kgxAVHc0DX2pc7Yi6eXEgKH97Ic=;
+	b=w/O93bwFYQa/8WSY+nCdQoTSbbYJo4vrLbknyPj+q/da81uM6dj5UdjwiBujk1Y15kxh
+	 NtxWTDkqNZfJ4uwDDP0hTTgnHVHkXejeEawSHMBUX6WYYLCq0UiUmGH1D4RaNdfkoOeH3
+	 +8Mp8vF+OJD/ioiDpzZPMBhG7mcRF+MXIGWeOhhZxMd+/BRS0sbcPxox+isYryA86dy07
+	 kMYVw92eAqe42snWC2O+7gGCL+u24isJHRj57myOq//OpecCX/Etr701DGOxUvc5me5mZ
+	 4q4xuiwV0R5OjsGdNJtPLGumk+v5ZZPHu7ZQI+pJLRiyhIDBveee9TMp+mhXYrzhTuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C5RyRCzS;
-	arc=none smtp.remote-ip=74.125.224.48
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ii0ttB8c;
+	arc=none smtp.remote-ip=74.125.224.52
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793EB606A323
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:56:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 793EB606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E759860A2616
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:56:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E759860A2616
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C5RyRCzS
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-676804a3a22so3267547d50.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:56:53 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ii0ttB8c
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-67583c777abso913588d50.1
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:56:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792508212; x=1793113012; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792508217; x=1793113017; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=i3Jfkp9hIEUQZRTYVT2QSxlb33aqrHI5yayyK0Kb5fg=;
-        b=C5RyRCzSZF4Gb2mJPzCbEpOu2xb1aiZ9KV9CwBASE8GtyYiFKrQ1jI9yUjIE2fnV5a
-         hmsk38XztCPRRvBzKxriuXDopM6lGpX3ucE0MRXUrI5fAr4u2nmuMpCOEETTFrOG0AEH
-         tBQUKxjy28hvUm/LUj1eR7oBSePkcqYAzjk5grxJiLLW8lvFaEbGRYb/FfH11ThxoZ4C
-         6uqOcwjtkRitkDHnr7VRAmlI1g64NIAeQC+iNnzI13TVZf16Q+TteUzVOEgq5J60mXvI
-         qkFPOYMBmAD3mEgJhUvrPo8MP/6cXgQu4t+XsZa/Tr5/vNgXyuZhw8+wLx3pkQSaanhZ
-         c25Q==
+        bh=laKttaaJBwo/m3r8kgxAVHc0DX2pc7Yi6eXEgKH97Ic=;
+        b=ii0ttB8cIcGzP9zV3ZREwiZ5ofLUSuRspo8x7HONnAj3oWU0jYjhkOa/v7vOCjs+Sr
+         EnyqsV9KbaqLvrJRC4HwEgG/iOiSqyjJkxxeTzW57KuL4MoOm4QEbMTqRfMGZ/SftxQf
+         d9kAZjd2Phz/oKZfH8XpVSQ6Gg8jeAJRiwp9dFyrimBqXAhLSWlPTWHr9lF4cDVjBAxv
+         u9nIdUOXVNziD9y6GC4aJ3pqfja0SDZMDMaB6EJsRHhRE6KEa9w8MEishbqsEZCMXYWT
+         xCdwGDPn5JumBc6ikxG0eQ/GYWUeyj5sKkF72ZxmJEnxWSS3GPbmcl+ceeJXnB/WL3Nl
+         7Bpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792508212; x=1793113012;
+        d=1e100.net; s=20260707; t=1792508217; x=1793113017;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=i3Jfkp9hIEUQZRTYVT2QSxlb33aqrHI5yayyK0Kb5fg=;
-        b=IRhWbBtF2SW9RosGLlUyCNyi3WfUoD1s/xsriOpEtsmUIZrxaMaiJtMs/WauBHv1XU
-         aBH5UumMgKav7VhalXIr0x8u7twUBHWjW1BGaPBYRzE+LxKoSYa/wDsL0bwzHP5Pnevr
-         eahjmeAi7SCqQeYkecRN6aLY6RBhNu/Ur+8vR0MJwgx3gaVQX74M634FLudUOtXm14Z/
-         L7lLcQEdI33h0Ux1Zt1Uqr/WLCvegUDdMHrcIBy3o/qWxxcP+92vfWY8kATrZ1Pugat5
-         alBFuRGSPO3Dneo8cr77YMNfb8m+JzP8IKisDULGVegcrS3n4vcz1/xtgC5Wg0jJCgkA
-         L1Zw==
-X-Forwarded-Encrypted: i=1; AKwUvBwYjWVnHAbuu4FEKx3fImP7OhA5af09cjvAGAnYDkHb7FZo4xMgf4rCTh+G8tuDFDRXdCc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIOdY0OdVrb099XgQijFbPjl4n/WY0dFT3tEkgZzDj5O2kj+e6G
-	CzgksMmc5Glr2bihnfvEX0b8NJii68eP8LUmbP4lTvExfZKIrQB4JM6DQKA7qQ==
-X-Gm-Gg: AYBFou3dWAUCqnorbogfps+KkjcU0yRiIQV+gGs+ZzWTfGGk7gJfmqSSAH0e18WbyCT
-	bzEQTAkSlVl9XxKlmcHAT6OHDjJro3b80RGIrUrI3H1YIuajjinyxhQAMNtHlE5lTUz+7tNltQs
-	ZrkIzmFSUk+OzsEOt/tkI2+EHuJm96ETjxKbl/4FmPVtqVJ/aaCDNUSwNE4KcZwAOe4HE9YTLel
-	9LKFcccSRJWljWLer3Tjw0pbh4ha0L+dym0AETt72JuFYkxsOKnHG9Uusuc2nIovMiy7a5yiCY0
-	1pz9AIMhgtk9Ys2UNAoFhhVcREXeLJ24tPJitiCn2M33o5LHHDTQyz/kepegFDQyk/gqXMidwPH
-	H9XVPVAArPgNuNNjIpfaUg4mhE58jK4F5hmybmVnzFOyH/rUMquZWtBexsKTvDEzvj/FoHqx5g1
-	3EkYkemQolLpYdbF80gKgW2ho8zOxAZWiDntVSkxHXUqxQ8Vd9AQZeyloVKgjDoIEDDmwBsoY=
-X-Received: by 2002:a05:690e:1304:b0:679:b9ad:d64d with SMTP id 956f58d0204a3-679ca72d570mr3389454d50.27.1792508212489;
-        Tue, 20 Oct 2026 07:56:52 -0700 (PDT)
+        bh=laKttaaJBwo/m3r8kgxAVHc0DX2pc7Yi6eXEgKH97Ic=;
+        b=wAged5JMbBU+xmhMT9abgcP5GUcviUZT57YwrGTC1AAgVAmeWxzdFl1zry6HQ4IY53
+         a4Zn3GbUzW/p/HmG6VieXXLZbYbwolggT+ncPfMozHQDJ1zUnpoByjBDQDp2bMSGubSo
+         A/raGWIHJrssOPtBYHz/nVM0kgc5zgvLsR4n0lL1aaW/gRBaktm3CmeKW5RIHMdIfp0X
+         SenR0bxXhPojWh3mS1PRuzxYPH8NNrdhsOnroPZPDaXkLv5U636wcVZ3C/asCk8G23n+
+         innZnx3ta17ZbSWV6BxssAv6tmbftX+rsQeBLfCvyQmhG57iVkK7hDR7uxFE4i80McZt
+         WcNA==
+X-Forwarded-Encrypted: i=1; AKwUvBwEH+u35PG3voSkQGJfClGjiUeQOh0WeGxpd+ALxih2PUcr+EJ//UYGvCwBE+eLNE4+QEU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI+7gYw1UeNK8Sgzy9cgDbJKGbobh2zGuaepNu4kJS04HvliJ5v
+	bRLg2239a2ue0dVEonr5TpPnqcTznE859nlbg7r7DZu1vDZKBqw4OcDy
+X-Gm-Gg: AYBFou0jlvw7iNMgYvQ7FPDtGVstsgC2I4yT1S5FXm3qzrR+c34JEDXkz5Gn/ulJuEn
+	OYryE+1hFaLoC919HUHearccnFtTzbBZHspU7SVKMz1WnjRCS9+NRgd0yRl1yYjcwN4OuF889+t
+	Yse+xgm1dpNYw62b1GbBaosgBwo2sTsN9vRhzV1/3ePZ2OsShFbt/7oEN7wAz1wVis5/KRSqi6N
+	WwUYATEJrM+DPKLibpTYpYsnYCrWcBWADgpERGIUsbVuT1TSWAKTslfylvC7+1yhAMmSeV+goC1
+	6UeI8RROIcDZByeoSoEfaz2sW0Fjo/MMzIzkZ19p18MDPUL19gIJuCcinKDu06GEjFV8hL3kQwr
+	TRr3CdZxu5J+MoVCsplRFc8jBc99Gt3y1iheJ5C/zavORqDk9RHXY0dU34mwOe1gLBo9NKt9o9N
+	wimwM/6hOiSqhZK27s5CHKKJTA0O4WXmiNqPXyX+Opfq8GLYHzD0CrP5tkuAGQfZ+FOB8NyOZtO
+	LqNCx364Q==
+X-Received: by 2002:a05:690e:1918:b0:679:9b73:bfab with SMTP id 956f58d0204a3-679fc08c394mr899178d50.43.1792508217007;
+        Tue, 20 Oct 2026 07:56:57 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:8701:205:573e:17eb])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679b1c98a1esm5239944d50.1.2026.10.20.07.56.51
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679b1c98a1esm5239944d50.1.2026.10.20.07.56.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 07:56:51 -0700 (PDT)
+        Tue, 20 Oct 2026 07:56:56 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -86,9 +87,9 @@ Cc: Song Liu <song@kernel.org>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	bpf@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next v2 4/6] selftests/bpf: Test trusted-field invalidation on parent release
-Date: Tue, 20 Oct 2026 10:50:57 -0400
-Message-ID: <20261020145059.2146170-5-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Test iterator element invalidation on destroy
+Date: Tue, 20 Oct 2026 10:50:59 -0400
+Message-ID: <20261020145059.2146170-7-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261020145059.2146170-1-utilityemal77@gmail.com>
 References: <20261020145059.2146170-1-utilityemal77@gmail.com>
@@ -103,71 +104,94 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Walking file->f_inode out of an acquired file must not outlive
-bpf_put_file(). Add a reject test where the inode is used as a trusted
-argument after the file's reference is released and an accept test
-where it is read before.
+Save a task_vma element and a trusted field walked out of it across
+bpf_iter_task_vma_destroy() and check that both uses are rejected, and
+that the existing operations already allowed before destroy are accepted.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_vfs_accept.c | 17 +++++++++++++++++
- .../selftests/bpf/progs/verifier_vfs_reject.c | 19 +++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ .../selftests/bpf/progs/iters_task_failure.c  | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
-index 34919abcff04..53441391bcae 100644
---- a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
-@@ -124,4 +124,21 @@ int BPF_PROG(trusted_field_used_in_rcu_cs, struct linux_binprm *bprm)
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/progs/iters_task_failure.c b/tools/testing/selftests/bpf/progs/iters_task_failure.c
+index 566a1d3dffea..f9c149b4a2d5 100644
+--- a/tools/testing/selftests/bpf/progs/iters_task_failure.c
++++ b/tools/testing/selftests/bpf/progs/iters_task_failure.c
+@@ -14,6 +14,74 @@ void bpf_cgroup_release(struct cgroup *p) __ksym;
+ void bpf_rcu_read_lock(void) __ksym;
+ void bpf_rcu_read_unlock(void) __ksym;
  
-+SEC("lsm.s/file_open")
-+__success
-+int BPF_PROG(trusted_field_used_before_put)
++__weak int subprog_trusted_file(struct file *file __arg_trusted)
 +{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+	struct file *file = bpf_get_task_exe_file(task);
-+	ino_t ino;
-+
-+	if (!file)
-+		return 0;
-+
-+	ino = file->f_inode->i_ino;
-+	bpf_put_file(file);
-+	__sink(ino);
-+	return 0;
++	return file->f_inode->i_ino;
 +}
 +
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
-index 7ca0d8c3edf1..c2be63ad8055 100644
---- a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
-@@ -224,4 +224,23 @@ int BPF_PROG(trusted_field_escapes_rcu_cs, struct linux_binprm *bprm)
- 	subprog_trusted_inode(inode);
- 	return 0;
- }
++SEC("?raw_tp")
++__failure __msg("invalid mem access 'scalar'")
++int iter_task_vma_use_after_destroy(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma it;
++	struct vm_area_struct *vma;
++	unsigned long start;
 +
-+SEC("lsm.s/file_open")
++	bpf_iter_task_vma_new(&it, task, 0);
++	vma = bpf_iter_task_vma_next(&it);
++	if (!vma) {
++		bpf_iter_task_vma_destroy(&it);
++		return 0;
++	}
++	bpf_iter_task_vma_destroy(&it);
++
++	/* The vma snapshot lives in the iterator and died with it. */
++	start = vma->vm_start;
++	return start;
++}
++
++SEC("?raw_tp")
 +__failure __msg("R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_")
-+int BPF_PROG(trusted_field_outlives_parent_reference)
++int iter_task_vma_file_after_destroy(const void *ctx)
 +{
 +	struct task_struct *task = bpf_get_current_task_btf();
-+	struct file *file = bpf_get_task_exe_file(task);
-+	struct inode *inode;
++	struct bpf_iter_task_vma it;
++	struct vm_area_struct *vma;
++	struct file *file;
 +
-+	if (!file)
++	bpf_iter_task_vma_new(&it, task, 0);
++	vma = bpf_iter_task_vma_next(&it);
++	file = vma ? vma->vm_file : NULL;
++	if (!file) {
++		bpf_iter_task_vma_destroy(&it);
 +		return 0;
++	}
++	bpf_iter_task_vma_destroy(&it);
 +
-+	inode = file->f_inode;
-+	bpf_put_file(file);
-+
-+	/* inode was pinned by file's reference and died with it. */
-+	subprog_trusted_inode(inode);
-+	return 0;
++	/* vm_file was pinned through the vma by the iterator. */
++	return subprog_trusted_file(file);
 +}
- char _license[] SEC("license") = "GPL";
++
++SEC("?raw_tp")
++__success
++int iter_task_vma_file_before_destroy(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma it;
++	struct vm_area_struct *vma;
++	struct file *file;
++	int ret = 0;
++
++	bpf_iter_task_vma_new(&it, task, 0);
++	vma = bpf_iter_task_vma_next(&it);
++	file = vma ? vma->vm_file : NULL;
++	if (file)
++		ret = subprog_trusted_file(file);
++	bpf_iter_task_vma_destroy(&it);
++	return ret;
++}
++
+ SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+ __failure __msg("kernel func bpf_iter_task_new requires RCU critical section protection")
+ int BPF_PROG(iter_tasks_without_lock)
 -- 
 2.55.0
 
