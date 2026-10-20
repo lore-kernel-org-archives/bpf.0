@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792530021;
-	b=dNjiy1stwckrovkr4bcHZQ6CMMZCrw7k3ZGCUPrSXXs5ndzgIuKI579enT3SBa5pmVii
-	 OiTdH8zEfeCrJyuBsoFCm+2fLh2H89vkFKammGb82SZ2soUIaDKgY1oOL/PE2PIna3Lmg
-	 3MrhYiEx3sKUB+LEI/vQyEOioo3sGPXYqLfBTSzc/ruwUuf0okhc+udZdfyaZ9F0Fhsvp
-	 x4VzH6CpX8vmDowr3z3xEvrPuizOBSQG7J+n7Yb7E3syCJ/2059sqTmvKUsdEicLzXD+C
-	 FA72fcKTavhr1mj6Gs83nNCxNRIo71iMJqHwoX1AliJxY8R+kkMhpN4eZdINGws4xdg==
+	t=1792530018;
+	b=tkFMFmrJ0XTAxWZK3czJfiZj6u8kfymWjZwk+mMx3ZXb7EdvO0PRRJ4igNG9+YdiFgFF
+	 zxj8MrUnVVLVp13MfkXZdO+zeZFGp851NUQny50iz/tpapgv7RGdMz32w7cIzgwei4/FS
+	 V99VwZHrwE6P32os73/qzx28nHf93pHmHsmfmD7v65cqW269Lw3VlautzWQmAzp/3E7sx
+	 l1aTAD0mLasQE/ykvTxwYGhSBfzPH/hFLZoSygsGs+oM0/csisCYSXkje4z25gLJ4CIEm
+	 /UO7yItLC5UaSSuT71Jol9FpjTjk6wW8+U4txkG4tWZik2Lb6dJcAAQpszyAaYx4cgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792530021;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792530018;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=rXhJ4L/NzZHRNleuPwZVcwoS29a45TpivMkwEHBOWew=;
-	b=Pr16G6nUUtsaU2aphu+Iam/nTkAt2f9Bzi9OWmrEZ6Gl40DX+4q9x43cgLmR2f/7ATmw
-	 h7ggd5kyHEMm0jdnMgAF51yoFzOPb7ndpTgYb/zsk8VODb2BE1RbsRvnujG5u0qGZFlUD
-	 T0g4zXykBfPhj4xVQ4zrRn3snZQJyBmS6mTtnHP3TMsLcyTKfVlvGpd5qcGMf7ILgRAYq
-	 hEMq6JpElkRuRA4RuCTM94QG4Q5pb/LcJO4+9wpsRS3MZWYxrGLIkSVb1TVNXQRxg/49T
-	 rHeuMTXNgTjuweRYvXYFjyqy/T+KK+Hx1PCzZzMAiYkMzOMMPfwbwkocjIV7ikLFCPA==
+	bh=BZZiE/z5rF980Eqj/J1JcYevvChj0IOpKnbHsSSVniM=;
+	b=ypFM9C3zn7g9TjUJ6fIJwXkwC4/NFsR8wtOY8Y2OIumyfH0E+AEnfDT3IIs7u4IUBD0w
+	 ycP/nGbcqVCQX0WtVW1mwuqo89UL1EMLJWyNRfO+FNaENek51LavuEI3mjduagkCEDtZm
+	 7J63wJJ5abKIChOapnbV9JWaOLyFkwLgAIUMxWmArS9JFt/2j/zoMXX0TmnUtXEpxIKCO
+	 tvog2NYnnKXK2bEgCgsqcBNa/6dbUon3213eiNh6Ck3qSkU6ysJN82n4P8igjXn6zCz72
+	 0FAwjLYyVAqwq+zKBAPsDMIlEve2NwnBrdVwpcrLhPKKzb9z70JFgGwDtUuC4qlj/RQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MTmDRsy3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IeJjFuJT;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B79606A326;
-	Tue, 20 Oct 2026 21:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD47C606A323;
+	Tue, 20 Oct 2026 21:00:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MTmDRsy3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C791F000C9;
-	Tue, 20 Oct 2026 21:00:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IeJjFuJT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4793D1F000C9;
+	Tue, 20 Oct 2026 21:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792530020;
-	bh=rXhJ4L/NzZHRNleuPwZVcwoS29a45TpivMkwEHBOWew=;
+	s=k20260515; t=1792530017;
+	bh=BZZiE/z5rF980Eqj/J1JcYevvChj0IOpKnbHsSSVniM=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=MTmDRsy3nLBQ0PhKm6Gb0dU33W8UFBz7XMBQN21MCWcbcn62H6RMM4ALcD7PujBR2
-	 2hZODVAK2ICJeo8rw54l1P80smzfFiYoy0JAkwuyvKBsrRE6ZPPz/Je5ct62o1fw2x
-	 sGkpw9CUbCSqQJ51JxYRMywQv2e13LQ6dNAIWGq0OYdnR+jvx3mB8p4IjWu7lcycif
-	 2SmlkwP4RMnQ73tzKepKaAPBmRZSDuu0Hb2JGAPXVUcy9crBnwzZPaRsEvK+buBcDd
-	 nf5RgO2xJhpd1VhgLGjzkV+pKWT1i+pu60aAEs4vcgiMNpG9K0a0CAZLy7UqRvN/+R
-	 FoRNQQ7Oal5zg==
+	b=IeJjFuJTBZ8Q+/YnFuqhKvBtYb6tY3GAHR7MJaAL1Amv2QdPTWFbCNJaq625kkEXB
+	 GgEqRvKupjra3zymov9ysXZ4P5bCPVuKc3Yt1NB0VA5y8j7h46y+NAfDHEKOXlfVQF
+	 oUYtYWBwoGCX3aExmqbVEnjy3ryFjb+Kf0fj8SPuTIKkdakii4093KXZlUIITsp+eZ
+	 r5hGOBc0N4p8rjeH7FaTEVj+Ix/gVDQnk4/j8RoGwO0P6qU8261zzEj7kuD0HyuFGz
+	 gKEOugMV+QTik/h2rMwtHJvpuZGas6hDmRpakbsa64t0yNXKXzZ8w932h6TKzx4h25
+	 fNz+rwQeLh4sw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A44E3809A09;
-	Tue, 20 Oct 2026 21:00:20 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A3E53809A09;
+	Tue, 20 Oct 2026 21:00:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,58 +54,46 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/6] bpf: Add syscall common attrs support for
- xdp
- link_create
+Subject: Re: [PATCH bpf-next v2 0/3] bpf: Add bpf_ksock_sendto() kfunc
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179253001886.208021.6536312952037292688.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Oct 2026 21:00:18 +0000
-References: <20261020152804.39863-1-leon.hwang@linux.dev>
-In-Reply-To: <20261020152804.39863-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, shuah@kernel.org, kuniyu@google.com,
- liuhangbin@gmail.com, mkarsten@uwaterloo.ca, masashi.honma@gmail.com,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+ <179253001577.208021.3409263261084470234.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Oct 2026 21:00:15 +0000
+References: <20261020155848.75711-1-mahe.tardy@gmail.com>
+In-Reply-To: <20261020155848.75711-1-mahe.tardy@gmail.com>
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, willemb@google.com,
+ eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
+ kuba@kernel.org, horms@kernel.org, liamwisehart@meta.com,
+ martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org,
+ netdev@vger.kernel.org, sdf.kernel@gmail.com, yonghong.song@linux.dev,
+ jolsa@kernel.org, kuniyu@google.com, memxor@gmail.com, emil@etsalapatis.com,
+ almagui@kernel.org
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 20 Oct 2026 23:27:58 +0800 you wrote:
-> I'm planning to add syscall common attrs support for LINK_CREATE cmd.
+On Tue, 20 Oct 2026 15:58:45 +0000 you wrote:
+> This patch series improves the bpf_ksock infrastructure in line with the
+> work proposed during Prague Plumbers 2026 presentation[^1] by adding
+> the bpf_ksock_sendto() kfunc to complement the bpf_ksock_send().
 > 
-> This is the first series for the plan, that adds syscall common attrs
-> support for xdp LINK_CREATE.
-> 
-> Thereafter, retire the tracepoint bpf_xdp_link_attach_failed, because
-> the underlying driver's error can be back-propagated to user space via
-> the syscall common attrs.
+> This is useful when using ksock to reply to differents peers while
+> reusing the same UDP socket and generally works toward the goal of ksock
+> to support the basic socket operations.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3,1/6] bpf: Add syscall common attrs support for link_create
-    https://git.kernel.org/bpf/bpf-next/c/c8e3a753a9ee
-  - [bpf-next,v3,2/6] bpf: Add syscall common attrs support for xdp link_create
-    https://git.kernel.org/bpf/bpf-next/c/d80d00835520
-  - [bpf-next,v3,3/6] bpf: Retire tracepoint bpf_xdp_link_attach_failed
-    https://git.kernel.org/bpf/bpf-next/c/278568acb588
-  - [bpf-next,v3,4/6] libbpf: Factor out __sys_bpf_fd helper
-    https://git.kernel.org/bpf/bpf-next/c/deb9732f53da
-  - [bpf-next,v3,5/6] libbpf: Add bpf_link_create_log API
-    https://git.kernel.org/bpf/bpf-next/c/1480f290d1f7
-  - [bpf-next,v3,6/6] selftests/bpf: Add tests to verify link_create logs
-    https://git.kernel.org/bpf/bpf-next/c/f23fa8f01ce3
+  - [bpf-next,v2,1/3] bpf: add bpf_ksock_sendto() kfunc
+    https://git.kernel.org/bpf/bpf-next/c/74be619845bd
+  - [bpf-next,v2,2/3] selftests/bpf: Test ksock sendto()
+    https://git.kernel.org/bpf/bpf-next/c/7d563ae3ed74
+  - [bpf-next,v2,3/3] selftests/bpf: Test forbidden bpf_ksock_sendto() LSM attach
+    https://git.kernel.org/bpf/bpf-next/c/d90912846f26
 
 You are awesome, thank you!
 -- 
