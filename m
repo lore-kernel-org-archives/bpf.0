@@ -1,156 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.97
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792479654;
-	b=5QGU/AqthLk9iQuSf823ss0PzfL777ndsLCwHDMwsWy5Qm0uvUQpXytD1Sx0aQFCjRbE
-	 cu1PYrNAuCgk/NGFWTEf6h/UiBeJRUIb3axoFns4RYXQnvb7iovNycsAKyvSQYEH7SIJH
-	 mRTR9cH/iZ3A0DmC7p3DFBoWYYiNro8I/TIlPI8G1f5niYyVA9iBB0oKgZ83Nsaia8ncT
-	 RDwKMxJvR/8oMjV7s4WVNIVULN+up/ZUVlfIt0WydVlCPO2nvog7ChjOO4xfIYnBmrL2u
-	 oNWstLRaBR/r2/LyzDAFyeky8jOJagqSKjmK5k6HZuongbI254QnkCnmYbgWVZkz0HA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792479654;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 msip_labels:x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=/VVvS3p9MVQVPizg+CrUu7Aw+xxCEEdKPpTfT/NgpSA=;
-	b=n9jt0JZkIDrUYwO5hXdQokhsEOhOuYVpPXRlgmuXAQjoFPJ5Tt4CEe6g2vG7FDYDJUNF
-	 +1mlgp4ghuXWDAjQpJrU1o/TVBC+2K3NQf+fznKkALAuYjNR9lXSFFhYqablEmQxaQovF
-	 2APXE6tuSe6zSni3Zcb9o+JgOwtSaozHSBVHHE3vK4QZ/Eg2PpeOM0Zu1p681saS55hPq
-	 G8YYsH5Hw3xatfK3PzzXPLZD3C71Eomitg48aEpnDD8/rT+aZJCRWQ0MQXScTKgfezzCG
-	 YmScqQlA3C7nZc80is6CX81/mET6aX2CkzrQniJnlACqHA+ZXom9Nq4/ayade7OgQHA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=vecima.com;
-	spf=pass smtp.mailfrom=vecima.com;
-	dkim=pass header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b=iR9Uco8Q;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.97
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11020097.outbound.protection.outlook.com [52.101.193.97])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792480395;
+	b=lIfbxHUc24EeF/gEmFMWwncvGv9igMX44ok8cxTfsTbi4DeyjfKxOyubZYzTMVoUssVV
+	 mqQ+/fTZKavvunEcgjsMlEcfZbTgFn61GpP0N8qpdLM7mk4jcwT4ZAKPpM5oQpeVSCr5A
+	 cWpaQbeWjW0/gnl1fo5ByjlnMOXCE2aQhb8XsVwTFcJpfXcER3DJMo3vcaIpqIHhUfVbU
+	 ZyjvHLOv2+w4T1ybxcfbEcKdb3NuRwNwOLeW45qk1Li1KlXqAIhdp/iMgMK9YE+rm/hS7
+	 LoRBvyMepW8y6h7yPykJHJ1yQUmci7+I6bYTaS+FPcFGkaUFq/LiWy08ExfNxolxFRg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792480395;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=wd6KFeSMn8LrlLVLM0frHHtnQQM2/rOQcFaVZTGLUB0=;
+	b=y573lmAa+3su55CDIKwhIvsiSCJcixyqiEkYzEQuznaLMtQ9Q9eIsk4Vr1dSsbnER0CF
+	 fiDPFDzNNiNd1rSDdXmaP/a/PIWnZ3tNWJrH85Hp8+IUZh5QHAJZsrw3n6RqoRc2EVCKw
+	 wj6F4ITB6tlxm7Rql/HwVMHhkxC9UCM9RcfKxv9oeie5rCEZ4Q7tohzUwMLSyjh1y1ZS7
+	 aq1uC0pPtRcqXoZfvtMy9kD6d1uQ2TDc0paDsumSsj2cOAdxU3wdlwXEJCuX9ZtQGiqtv
+	 za68w8PsubW/3gIRFJrRpIuxvDvFkQkfKP05YYGlch94ft6+d5Zh4+l52kjkx5nRMUw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlXWjNmN;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E4E606A320;
-	Tue, 20 Oct 2026 07:00:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45E4E606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vecima.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vecima.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8A8606A31B;
+	Tue, 20 Oct 2026 07:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b=iR9Uco8Q
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fJdyy1QwNSl9C4h5AACrFB6Jh+cOQ8CjlcaeHPezJx5r6aLsyjN/lgSqU0sLwWEH6hioC08HvGVnSeSrN7tkXyqNbffLh1urhuN1Od4MyPDbaBmuvv4UAQFAQUS0509SsCQ3TRH4m94D6PZ6MdM7IUwASeUzu8FvKSw8qStCpjmcumOY9Oy1Sxflaq35tRYnUhoHYKg67JLGidcdmCyC/KXL/oHMMUzFD8NeI5NVmRk6IxZ3atWU6bwJNjME+iM+OTzfai6VFVH3YNPcUsRtQVRc26I6Npn5xwkHpjOEsBkQtbVJswOfru+BeTz7/F+/WVD4LF6hzrwar4jvXwDjFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/VVvS3p9MVQVPizg+CrUu7Aw+xxCEEdKPpTfT/NgpSA=;
- b=ky2M+eWrzM8ADMteRcVDLA40Xikkvx9gDLhEGUBDbhWN4uBjv3921vWscC7yfi14YJ3nRvmXc+Kjd7PjTQiHdN7HBMSyOes4+PWoIML9AkSq6sFx/17PuKD/UgxenNbyi22+vVCfSBl8NcXQOguo4nLSqH0v5j5g+15nTzyssyGUSivu+GvpjaEdmyRo36Mc6pfEeRV+WPUoEugUNYSJ3T1hqVVQqVjLD/B9DfZi2rXi1nTi54Sab774zajDP626MQfp2uYIt2Ue0vRdFqUUphFTBjdAOtNnGeljNZM98W2QNlt+CFw6ayeb3iu3W6+m80wb/rwsuJJvqH7oxBMQ3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vecima.com; dmarc=pass action=none header.from=vecima.com;
- dkim=pass header.d=vecima.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vecima.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/VVvS3p9MVQVPizg+CrUu7Aw+xxCEEdKPpTfT/NgpSA=;
- b=iR9Uco8Q0I2QY7BpR5hURKBbPzltCrTmfDfRuGOxEHGR7YaKYsoR8lpNlMpestQAIKivAsA4ftdocE1gIZmez9zigy48ymxWoDy0xIyRAYmKjCtFcbobtNQJ42L5mZDa2tpkLu3dGTEPOJCmwvaeqfr1OkKig01fanU5or932+ZwGsthV7bjAlgyFTDoj5nqKU02X3OYVyMrbUwiG8R4rGj6HQbMklS0aJ7LPifbh/Fqh7KnOgsP7nfY8KxgMv1WHIcgZDnc9Dlh0pSU48zeh+Xqz0r8+hDmBZfs+VryRDfpVn5Z3mL/ejgJU77P/idMa0iS7fhvyn46Nj0VTurolQ==
-Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
- (2603:10b6:f:fc00::ad2) by LY0PR18MB626747.namprd18.prod.outlook.com
- (2603:10b6:404:234::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Tue, 20 Oct
- 2026 07:00:48 +0000
-Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
- ([fe80::6a72:cf5b:2c44:9ac0]) by DS4PPFFD8A841C2.namprd18.prod.outlook.com
- ([fe80::6a72:cf5b:2c44:9ac0%4]) with mapi id 15.21.0546.012; Tue, 20 Oct 2026
- 07:00:47 +0000
-From: Marcin Knap <Marcin.Knap@vecima.com>
-To: Magnus Karlsson <magnus.karlsson@gmail.com>, Maciej Fijalkowski
-	<maciej.fijalkowski@intel.com>
-CC: Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
-	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, Simon
- Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, "jtollet@cisco.com"
-	<jtollet@cisco.com>, "intel-wired-lan@lists.osuosl.org"
-	<intel-wired-lan@lists.osuosl.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
-Thread-Topic: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
- full
-Thread-Index: AQHdX6MW14dMxGSC9k6V0uDc5Tc4vLcFXSSAgACWooCAAA4QkA==
-Date: Tue, 20 Oct 2026 07:00:47 +0000
-Message-ID:
- <DS4PPFFD8A841C2AC917618A9B1B19453C480672@DS4PPFFD8A841C2.namprd18.prod.outlook.com>
-References: <20261019-xsk-zc-rx-double-free-v1-1-2aa19f6628fb@vecima.com>
- <ataHK9s/MpNgXWhT@boxer>
- <CAJ8uoz38cE-1diOnih=HYW+ACqq9YQhaM7tz8KCHjTxgZVc+rQ@mail.gmail.com>
-In-Reply-To:
- <CAJ8uoz38cE-1diOnih=HYW+ACqq9YQhaM7tz8KCHjTxgZVc+rQ@mail.gmail.com>
-Accept-Language: en-150, pl-PL, en-US
-Content-Language: aa
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Enabled=True;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SiteId=9d639caa-2d40-486d-ac82-e59b0005382f;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SetDate=2026-10-20T07:00:47.416Z;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Name=General;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_ContentBits=1;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Method=Standard;
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vecima.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS4PPFFD8A841C2:EE_|LY0PR18MB626747:EE_
-x-ms-office365-filtering-correlation-id: 24995434-ce05-4d4a-5910-08df2e77de7a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|23010399003|1800799024|366016|6133799003|18002099003|10067099003|22082099003|11063799006|38070700021|260925021311599003|260925021911599003|4143699003|260925022911599003|261009223027099003|56012099006;
-x-microsoft-antispam-message-info:
- mPEFDCcK7de6uyjLOum6MnFaXGZ/X5uqyo0KrZZSGkUxR+YdVxPWobihk/tGxUEne94ho621scqYove568dL8I74ZZRLTujsm+DtsiRZ2jOhCC7ah02j5s0m/bX8GU5QtLYyCbykEW5k/XG+NOMOH8u1Xh3/2d55PVeF30mBu+PBptu2At9TgB+TqUCqhbcRwHNiSNgLi8ymqSexonukgAsQbj5qiJQSjkqUKsKRrP39xMfsD+SJpeHcOnpBHJT8c5KpS+v995QuytJzPjCw0rN/AAYBrXA1rkoSZpUfwjRzPOFs/AxCz1Fskn3PN+SDCWw/ZgsdHnw+IzGrNVKkJKF5TnCunaYvGorJBPB02uNEpgzc1ifwpo1ZCHC8eF80as9Nu99ovnW7rqKqVad9nS3p1BE2IhRUu3tLtCPR/ZGNtvC4qBIr2IU62rUSlIYMbILDjWITX4yKcXt5OXnhoA+8eRF7WFFBuKUUbPp/gEjU99N30UGeElunc8ikCHd9+9RcYeNorL8P23WYQe4iTNDmRFHDtv/eHmnQNk1IgsY5n4qjFXQTzcfW1yBjc3YmWOQMkLFLXlJzpfZVBCknYXzIXwibAUZ0qqu1LuE2HkOM1aSej3a4KZItnknkAbNdUSlSCeOzHKLJAGw6bONm7jGRKExu5TfJu7y00ntLcro=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFFD8A841C2.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(1800799024)(366016)(6133799003)(18002099003)(10067099003)(22082099003)(11063799006)(38070700021)(260925021311599003)(260925021911599003)(4143699003)(260925022911599003)(261009223027099003)(56012099006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?JSn2t7MJzVvFIJ9FHzsY8xo/OPyHt/AHpuIg3+BTAkqGy5fdbPF1vb+LFMKA?=
- =?us-ascii?Q?7QJm+4oFnFZMSVh1D+hHQamGTrxpCFRFgYzlzgiZEQWMaUtbeihDHj7fBjOs?=
- =?us-ascii?Q?V9Y467ixgNBUOWmW6kOP+SsqPAoGPSRif01X3ii5oqPHlG3BUatEVyBPf8ul?=
- =?us-ascii?Q?c8+QB4CwC/nrkQ3wdPbBeO0QakB07Bnow5ZJGtLYsa56oPkMVbIpHSaWXFPo?=
- =?us-ascii?Q?52csKqKn2QV/pj/U9uRe6PRUc/zQPefAyKLmNcl3s7fHcqgTQYq5HDtvt+aL?=
- =?us-ascii?Q?evUPi78LHj9P72cMR4wXxYKlTV5BR4NaFOPkOCbv4uvJqu5d+yOBeAae14FY?=
- =?us-ascii?Q?7HNeKHiPYPF5VhwUSIeMY7NocyC2G/bNBJJxja2dA/3LR3lRFWhWuLnPU6Je?=
- =?us-ascii?Q?PevzNqqeoSvDl6PYU0/s761ZRvZgTZuEoh90mAMHLeIRKZ2lBwH42JXoTpPg?=
- =?us-ascii?Q?cxtnA80ssYPZZ2SChT92KjL3b++Vo7yzPAYjptSRFHnfr1ClvavI2fQDcXbt?=
- =?us-ascii?Q?WyTkslGqAJbk9d8+Ox5XGBGd+7c5bmxAG8l6lGE8BwJR9RX5TTB/MKzTPfGl?=
- =?us-ascii?Q?wuWlqZE5vpnmpBe2E6/r9rh/eLVhYirxkf5Io4JdxhSPkxfDQKOJMWlhYILC?=
- =?us-ascii?Q?TcXTUYYefcFoQM9HveMTrBpPMhGHChUk4udwgMAPZXkstBJbbaYAooz0JVZh?=
- =?us-ascii?Q?huIHQPRk8dLDCqDZk5QOV+0mZUIMW+dWh061hYBxoNLLVcvimwX8EXb3EQNO?=
- =?us-ascii?Q?6dCN8Bzv65vMRHBw2S4DfQWnTksxPiAmeySmIkI5qNQYn2RJO7UQze/6cnls?=
- =?us-ascii?Q?6+ydjaf5r7bvuvCqtX2zIb34Jv9tWdxdFru0kWFvj1B4rnEVX78+q20+8kdF?=
- =?us-ascii?Q?7VlNgsuAskWIcLpFIzP2rN09GU+mxLsYArkw5+z+huijnwsFTkJw9so4qExu?=
- =?us-ascii?Q?ltgY7TMCzyri14DVKHu/2EqqTPiBd5d8IVBbDnORXgpG2t4SUyAl093702k6?=
- =?us-ascii?Q?1TvT5njiik54pM5YCItVSJHSZwmbk2MIta18LY61t/Mal6Duwo+olsCNqT8V?=
- =?us-ascii?Q?BryIxkE5R+hGmT8QYaDx0kRiDwVbK0R1S5FMBoa2huhrYN4S6MTqWAvBEM1g?=
- =?us-ascii?Q?PyzN66okrFlbmn64Z5tK6EJ+YsXExVhIOjcMaf9Qk0NxQneq6SOwlEqpYwf8?=
- =?us-ascii?Q?jxyirqUxTTf8qkVXdqERgDW505NSLt2fVYfCq90nB4orsNxnT5wKCQ3Gf8Eh?=
- =?us-ascii?Q?2dhOi/ovvy4F0JAmmTvsE0qCaeCF5MqVXFxeo4arbdi01kXf2uttHIIdMO+c?=
- =?us-ascii?Q?H1041NNftf6mRExNSFGxHmSgfsZuMzMJnj1yIRDDNf/Fjr38czzAjJooJcmM?=
- =?us-ascii?Q?Nxt/nlsCeUFIhRgvsQUOLmTUX0OHDlKKW7nd2YnOaL424Yq+zBf6gbF76+eU?=
- =?us-ascii?Q?2syxHohgNYy8CX0btppRTeUTnLhbw7A62TdnrPXH1dyhdF/2YzD/aJ3X+QY2?=
- =?us-ascii?Q?sYMBxAmoUdL2CYoFwtxs73/9FfAQwvrhIM8/3HVsyDnGn3J8x3azM/uVqgVk?=
- =?us-ascii?Q?Cu3FDumRFLLONgml0x+lpFgruhUqnXrlXHSMiW0Bp+3PwLy3b7OtV1F7cuI5?=
- =?us-ascii?Q?6aw5pIq/M8vpIwUgYBHE5tw/6cmQSpkpnDfJwHflqbcVcLORKLBioOD9hFle?=
- =?us-ascii?Q?gGZc4SErx9yZUzfi2T0JHjHDnMwLeekmcuT601RfzKmdjNJl?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlXWjNmN
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B0B1F000C4;
+	Tue, 20 Oct 2026 07:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792480394;
+	bh=wd6KFeSMn8LrlLVLM0frHHtnQQM2/rOQcFaVZTGLUB0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=LlXWjNmNppfE6C+Lc8V9evRgShMxAi3FLMPztGxZeOvweJWk/cYQrUOybgaL/zXwp
+	 bW195FzrjcPdxZhut65E1UbmOv2Z396gKGdm+pPo0gq7gZoEipTz9a5EX7cZaHBCMi
+	 MH2E6g1k4nx1XAsVH+4nMVNMfBZDNro4ydxCdeDL8QDLYS9X2MU9PucLvO5JtHrAjs
+	 xGyciLIvLrx8oQnhLb+nDCx0zZx51FtCfb9KAXfbJOhWpEjb/Heyto5ZhyV+pEfRhm
+	 PDd6SSmoqbappo9h0lJhQ2U+l7fET1FeUsb8ZCHBiD3fTjcCX2uUDFTbDbpF32S8GK
+	 jaRqgCaMW7NEg==
+Content-Type: multipart/mixed; boundary="===============7625777895205599761=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -160,235 +49,244 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: vecima.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS4PPFFD8A841C2.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24995434-ce05-4d4a-5910-08df2e77de7a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2026 07:00:47.8062
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9d639caa-2d40-486d-ac82-e59b0005382f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l7QHfLmM8c0VTV6llPecxmh4VUsMY4CPsqhYki0Z4Qa1J0kX1lTkafM7u2Q5ktXxtfi2Ouvur/zHcNb56/p30w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LY0PR18MB626747
+Message-Id: <f07f9053cf89280975ba16d372db721dbd51d2b7d6462b2f4161f79aebd21b0a@mail.kernel.org>
+In-Reply-To: <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
+References: <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
+Subject: Re: [PATCH bpf v2 1/1] bpf: reject raw iteration over managed map fields
+From: bot+bpf-ci@kernel.org
+To: zhilinz@nebusec.ai,ameryhung@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,llvm@lists.linux.dev
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,davem@davemloft.net,edumazet@kernel.org,pabeni@redhat.com,horms@kernel.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,zhilinz@nebusec.ai,menglong8.dong@gmail.com,bestswngs@gmail.com,mattbobrowski@google.com,vega@nebusec.ai,sashiko-bot@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 07:13:14 +0000 (UTC)
 
-> Sashiko report shows that drivers are rather inconsistent here=0A=
-Yes I missed it, I am working on fixes.=0A=
-=0A=
-> On mlx5 with striding RQ this also ended in a NULL pointer=0A=
-> dereference in mlx5e_post_rx_wqes(). =0A=
-=0A=
-So in my case I received kernel panic when I turned of striding rq off and =
-the rx ring was full, but the panic itself was mitigated by the fixes from =
-@Jerome Tollet in the mlx driver. I described the problem with linked fixes=
- here:=0A=
-https://forums.developer.nvidia.com/t/ofed-backport-of-mainline-mlx5e-xsk-s=
-tale-buffer-release-fix-kernel-panic-in-mlx5e-post-rx-wqes/384752/5 =0A=
-But the real root cause is the problem I'm trying to fix.=0A=
-=0A=
-> Did you verify this or is this rather a speculation? xp_free() protects=
-=0A=
-> against double-free cases.=0A=
-=0A=
-I verified this, the origin bug on our own was that we received the same UM=
-EM frame several twice even we haven't push it to the ring, that was causin=
-g serious damages in our system, we need to add special detection duplicate=
-d frames after receiving frames on rx ring, when I removed this additional =
-xdp free, the problem was gone.=0A=
-=0A=
-=0A=
-> Have you thought about massaging mlx driver instead of intel + core?=0A=
-> Even when that would be correct approach ixgbe would miss being addressed=
-.=0A=
-=0A=
-I was considering and I did as workaround, but IMO the final fix should be =
-placed in the AF XDP, because there is inconsistency between different kind=
- of errors, look at xsk_rcv_check() there isn't any freeing buffer, so why =
-only ENOBUFS causes that? Maybe there is some reason that I don't know. Mor=
-eover, if I fix it only in mlx, the problem in the other driver at certain =
-path will persist including Intel, only ZC with needs_wakup flag path is pr=
-operly handled there. Yes ixgbe is my gap, I missed it and I can apply the =
-patch there as well.  But eventually this is your call where to fix it, of =
-course. =0A=
-=0A=
-> A note to ourselves, we should write a section in the documentation=0A=
-> for AF_XDP that defines the expected driver behavior. There are very=0A=
-> likely more inconsistencies out there since this was never explicitly=0A=
-> specified anywhere=0A=
-=0A=
-This is good point, some documented unification of behavor across happy pat=
-h and different kind of errors would be nice.=0A=
-=0A=
-=0A=
-________________________________________=0A=
-From: Magnus Karlsson <magnus.karlsson@gmail.com>=0A=
-Sent: Tuesday, 20 October 2026 08:09=0A=
-To: Maciej Fijalkowski=0A=
-Cc: Marcin Knap; Tony Nguyen; Przemek Kitszel; Andrew Lunn; David S. Miller=
-; Eric Dumazet; Jakub Kicinski; Paolo Abeni; Magnus Karlsson; Stanislav Fom=
-ichev; Simon Horman; Alexei Starovoitov; Daniel Borkmann; Jesper Dangaard B=
-rouer; John Fastabend; jtollet@cisco.com; intel-wired-lan@lists.osuosl.org;=
- netdev@vger.kernel.org; linux-kernel@vger.kernel.org; bpf@vger.kernel.org=
-=0A=
-Subject: Re: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is =
-full=0A=
-=0A=
-CAUTION: This email originated from outside of the organization. Do not cli=
-ck links or open attachments unless you recognize the sender and know the c=
-ontent is safe.=0A=
-=0A=
-=0A=
-[You don't often get email from magnus.karlsson@gmail.com. Learn why this i=
-s important at https://aka.ms/LearnAboutSenderIdentification ]=0A=
-=0A=
-On Tue, 20 Oct 2026 at 00:14, Maciej Fijalkowski=0A=
-<maciej.fijalkowski@intel.com> wrote:=0A=
->=0A=
-> On Mon, Oct 19, 2026 at 10:22:02AM +0200, Marcin Knap via B4 Relay wrote:=
-=0A=
-> > From: Marcin Knap <marcin.knap@vecima.com>=0A=
-> >=0A=
-> > When an XDP program redirects a zero-copy buffer to an XSK and the=0A=
-> > socket's Rx ring is full, xsk_rcv_zc() frees the buffer and returns=0A=
-> > -ENOBUFS to xdp_do_redirect().=0A=
-> >=0A=
-> > A failed xdp_do_redirect() leaves the buffer owned by the caller, and=
-=0A=
-> > drivers rely on that: mlx5e treats the failure as XDP_DROP and releases=
-=0A=
->=0A=
-> Sashiko report shows that drivers are rather inconsistent here=0A=
-=0A=
-A note to ourselves, we should write a section in the documentation=0A=
-for AF_XDP that defines the expected driver behavior. There are very=0A=
-likely more inconsistencies out there since this was never explicitly=0A=
-specified anywhere.=0A=
-=0A=
-> > the buffer when the Rx WQE is refilled, and i40e and ice free it on=0A=
-> > XDP_CONSUMED. The buffer is therefore freed twice. It gets reused for=
-=0A=
-> > another Rx descriptor, the second free puts an in-use buffer back on=0A=
-> > the pool free list, and the same UMEM frame is later handed to user=0A=
-> > space twice.=0A=
->=0A=
-> Did you verify this or is this rather a speculation? xp_free() protects=
-=0A=
-> against double-free cases.=0A=
->=0A=
-> > On mlx5 with striding RQ this also ended in a NULL pointer=0A=
-> > dereference in mlx5e_post_rx_wqes().=0A=
->=0A=
-> Please more info on this then.=0A=
->=0A=
-> >=0A=
-> > Leave the buffer with the caller on both the single-buffer and the=0A=
-> > multi-buffer -ENOBUFS paths, as xsk_rcv() and xsk_rcv_check() already=
-=0A=
-> > do. i40e and ice relied on the core freeing the buffer on their=0A=
-> > need_wakeup -ENOBUFS (XDP_EXIT) path, so make them free it there.=0A=
-> >=0A=
-> > Seen on Mellanox ConnectX-6 DX MT2892 (FW 22.47.1026) with AF_XDP=0A=
-> > zero-copy on 7.3.0-rc6 when the user-space consumer could not keep up=
-=0A=
-> > with the Rx ring. With this change no duplicate frames were seen with=
-=0A=
-> > striding RQ on or off.=0A=
->=0A=
-> Have you thought about massaging mlx driver instead of intel + core?=0A=
-> Even when that would be correct approach ixgbe would miss being addressed=
-.=0A=
->=0A=
-> >=0A=
-> > Fixes: 269009893146 ("xsk: recycle buffer in case Rx queue was full")=
-=0A=
-> > Signed-off-by: Marcin Knap <marcin.knap@vecima.com>=0A=
-> > ---=0A=
-> > Tested on mlx5 (ConnectX-6 DX) in zero-copy single-buffer mode.=0A=
-> > The i40e and ice changes and the multi-buffer path are build-tested=0A=
-> > only, as I don't have that hardware available.=0A=
-> > ---=0A=
-> >  drivers/net/ethernet/intel/i40e/i40e_xsk.c |  1 +=0A=
-> >  drivers/net/ethernet/intel/ice/ice_xsk.c   |  1 +=0A=
-> >  net/xdp/xsk.c                              | 15 +++------------=0A=
-> >  3 files changed, 5 insertions(+), 12 deletions(-)=0A=
-> >=0A=
-> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/e=
-thernet/intel/i40e/i40e_xsk.c=0A=
-> > index 9f47388eaba5..d32c7255f0b3 100644=0A=
-> > --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c=0A=
-> > +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c=0A=
-> > @@ -358,6 +358,7 @@ static void i40e_handle_xdp_result_zc(struct i40e_r=
-ing *rx_ring,=0A=
-> >               return;=0A=
-> >=0A=
-> >       if (xdp_res =3D=3D I40E_XDP_EXIT) {=0A=
-> > +             xsk_buff_free(xdp_buff);=0A=
-> >               *failure =3D true;=0A=
-> >               return;=0A=
-> >       }=0A=
-> > diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/eth=
-ernet/intel/ice/ice_xsk.c=0A=
-> > index 0643017541c3..7c1dd4c87a71 100644=0A=
-> > --- a/drivers/net/ethernet/intel/ice/ice_xsk.c=0A=
-> > +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c=0A=
-> > @@ -636,6 +636,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring=
-,=0A=
-> >               if (likely(xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR))) {=0A=
-> >                       xdp_xmit |=3D xdp_res;=0A=
-> >               } else if (xdp_res =3D=3D ICE_XDP_EXIT) {=0A=
-> > +                     xsk_buff_free(first);=0A=
-> >                       failure =3D true;=0A=
-> >                       first =3D NULL;=0A=
-> >                       break;=0A=
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c=0A=
-> > index 33475b180ea6..0edc160c660f 100644=0A=
-> > --- a/net/xdp/xsk.c=0A=
-> > +++ b/net/xdp/xsk.c=0A=
-> > @@ -224,21 +224,15 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct=
- xdp_buff *xdp, u32 len)=0A=
-> >       struct list_head *xskb_list;=0A=
-> >       u32 contd =3D 0;=0A=
-> >       u32 num_desc;=0A=
-> > -     int err;=0A=
-> >=0A=
-> > -     if (likely(!frags)) {=0A=
-> > -             err =3D __xsk_rcv_zc(xs, xskb, len, contd);=0A=
-> > -             if (err)=0A=
-> > -                     goto err;=0A=
-> > -             return 0;=0A=
-> > -     }=0A=
-> > +     if (likely(!frags))=0A=
-> > +             return __xsk_rcv_zc(xs, xskb, len, contd);=0A=
-> >=0A=
-> >       contd =3D XDP_PKT_CONTD;=0A=
-> >       num_desc =3D xdp_get_shared_info_from_buff(xdp)->nr_frags + 1;=0A=
-> >       if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {=0A=
-> >               xs->rx_queue_full++;=0A=
-> > -             err =3D -ENOBUFS;=0A=
-> > -             goto err;=0A=
-> > +             return -ENOBUFS;=0A=
-> >       }=0A=
-> >=0A=
-> >       __xsk_rcv_zc_safe(xs, xskb, len, contd);=0A=
-> > @@ -252,9 +246,6 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct x=
-dp_buff *xdp, u32 len)=0A=
-> >       }=0A=
-> >=0A=
-> >       return 0;=0A=
-> > -err:=0A=
-> > -     xsk_buff_free(xdp);=0A=
-> > -     return err;=0A=
-> >  }=0A=
-> >=0A=
-> >  static void *xsk_copy_xdp_start(struct xdp_buff *from)=0A=
-> >=0A=
-> > ---=0A=
-> > base-commit: ff47652a4b66c067c765a7ad464d930b5a9367cc=0A=
-> > change-id: 20261019-xsk-zc-rx-double-free-1a3b059cd41f=0A=
-> >=0A=
-> > Best regards,=0A=
-> > --=0A=
-> > Marcin Knap <marcin.knap@vecima.com>=0A=
-> >=0A=
-> >=0A=
->=0A=
+--===============7625777895205599761==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> bpf: reject raw iteration over managed map fields
+
+TL;DR:
+- Possible kernel fault: map->record may be an ERR_PTR, dereferenced when
+  attaching map iterators
+- Per-CPU map iterators may be wrongly rejected
+- Fixes: tag may be incomplete
+
+>     bpf: reject raw iteration over managed map fields
+>     
+>     BPF map iterators expose values as writable PTR_TO_BUF memory. Attach-time
+>     validation bounds maximum access by value_size, but does not account for
+>     BTF-managed fields in map values. Direct buffer accesses can therefore read
+>     or overwrite fields such as __kptr without the verifier's ownership checks.
+>     
+>     For bpf_map_elem and bpf_sk_storage_map iterators, limit value access to
+>     the prefix before the first managed field. Since max_rdwr_access is an
+>     exclusive end offset and record fields are sorted, accesses ending at the
+>     first managed field remain available while accesses reaching it are denied.
+>     
+>     Revalidate the replacement program against the map associated with an
+>     iterator link before bpf_link_update() swaps programs. Add selftests for
+>     allowed prefix access, rejected managed-field reads and writes, and link
+>     updates that introduce managed-field access.
+>     
+>     Fixes: 9db44fdd8105 ("bpf: Support kptrs in local storage maps")
+>     Cc: stable@vger.kernel.org
+>     Reported-by: Vega <vega@nebusec.ai>
+>     Link: https://lore.kernel.org/all/1fa798d444efac579e91ee0716e228902a8f9afe.1791980149.git.zhilinz@nebusec.ai/
+
+[ ... ]
+
+>     Suggested-by: Amery Hung <ameryhung@gmail.com>
+>     Assisted-by: LLM
+>     Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+
+The only Fixes: tag points at 9db44fdd8105 ("bpf: Support kptrs in local
+storage maps"), which only enabled kptrs in sk/inode/task/cgrp storage maps.
+That tag covers the bpf_sk_storage_map iterator, but this patch also changes
+the bpf_map_elem iterator in kernel/bpf/map_iter.c for hash, LRU hash and
+array maps.
+
+Is that tag complete?  The bpf_map_elem iterators (a5cbe05a6673 ("bpf:
+Implement bpf iterator for map elements")) have handed out the raw hash/array
+value as a writable PTR_TO_BUF, bounded only by value_size, ever since special
+fields appeared in those maps.  That includes bpf_timer (b00628b1c7d5 ("bpf:
+Introduce bpf timers.")) and kptrs (61df10c7799e ("bpf: Allow storing
+unreferenced kptr in map"), v5.19).
+
+At 61df10c7799e, bpf_iter_attach_map() only bounded max_rdwr_access by
+value_size, and the bpf_map_elem iterator value was a writable PTR_TO_BUF, so
+a program could read or overwrite a __kptr slot with raw accesses.  Percpu
+hash and percpu array exposure came later (65334e64a493, 6df4ea1ff0ff), so
+61df10c7799e looks like the oldest introducing commit.
+
+With only 9db44fdd8105 listed, stable trees that have 61df10c7799e (or
+timers) but not 9db44fdd8105, for example 6.1, would not be picked for the
+map_iter.c part of the fix.
+
+Should this carry an additional tag:
+
+  Fixes: 61df10c7799e ("bpf: Allow storing unreferenced kptr in map")
+
+and optionally keep the 9db44fdd8105 tag as a second Fixes: line for the
+sk_storage iterator?
+
+> diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
+> index c19b360bad9e..04cf255587aa 100644
+> --- a/kernel/bpf/map_iter.c
+> +++ b/kernel/bpf/map_iter.c
+> @@ -97,25 +97,15 @@ static struct bpf_iter_reg bpf_map_reg_info = {
+> +static int bpf_iter_map_elem_check_prog(struct bpf_prog *prog,
+> +					struct bpf_map *map)
+
+[ ... ]
+
+> @@ -135,10 +125,39 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
+>  	else
+>  		value_size = round_up(map->value_size, 8) * num_possible_cpus();
+>  
+> -	if (key_acc_size > key_size || value_acc_size > value_size) {
+> -		err = -EACCES;
+> +	if (key_acc_size > key_size || value_acc_size > value_size)
+> +		return -EACCES;
+> +
+> +	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
+> +	if (map->record && value_acc_size > map->record->fields[0].offset)
+> +		return -EACCES;
+
+Can map->record be an ERR_PTR here, so that the map->record test passes and
+map->record->fields[0].offset is then loaded through an invalid pointer?
+
+In map_check_btf() (kernel/bpf/syscall.c), the result of btf_parse_fields()
+is stored without being cleared on error:
+
+    map->record = btf_parse_fields(btf, value_type, ...);
+    if (!IS_ERR_OR_NULL(map->record)) {
+        ...
+    }
+    ret = btf_check_and_fixup_fields(btf, map->record);
+
+btf_check_and_fixup_fields() returns 0 when IS_ERR_OR_NULL(rec), and
+htab_map_check_btf(), array_map_check_btf() and
+bpf_local_storage_map_check_btf() never look at the record.  The ERR_PTR
+stays in map->record and map creation succeeds.
+
+This does not look like a corner case.  btf_find_field() returns -EINVAL for
+any value type that is not a struct, union or datasec:
+
+    if (__btf_type_is_struct(t))
+        return btf_find_struct_field(...);
+    else if (btf_type_is_datasec(t))
+        return btf_find_datasec_var(...);
+    return -EINVAL;
+
+That means every libbpf map declared with __type(value, __u64),
+__type(value, int), an array value and so on has map->record ==
+ERR_PTR(-EINVAL).  Allocation failures and the -E2BIG/-EEXIST parse errors
+also leave an ERR_PTR behind.  Every other reader guards with
+IS_ERR_OR_NULL(map->record): check_map_access(), bpf_obj_memcpy(),
+btf_record_has_field(), bpf_map_mmap(), map_freeze(), array_map_free() and
+bpf_ma_set_dtor().
+
+With this patch, BPF_LINK_CREATE for a bpf_map_elem iterator on such a map
+goes:
+
+    link_create()
+      bpf_iter_link_attach()
+        bpf_iter_attach_map()
+          bpf_iter_map_elem_check_prog()
+
+Once the key and value size checks pass, it evaluates
+map->record->fields[0].offset, which is a load from (void *)-22 +
+offsetof(struct btf_record, fields), i.e. address 0xa.  BPF_LINK_UPDATE
+reaches the same code through bpf_iter_link_replace() ->
+bpf_iter_map_elem_validate_prog().
+
+The existing selftests appear to hit this.  test_bpf_hash_map attaches
+dump_bpf_hash_map and sleepable_dummy_dump to hashmap1 (__type(value, __u64)),
+and test_bpf_array_map and test_bpf_percpu_* attach to maps with __u64/__u32
+values.  Before this patch these iterators worked because map->record was
+never dereferenced.
+
+Should this be !IS_ERR_OR_NULL(map->record), matching the other map->record
+readers?
+
+Separately, does this check also apply to per-CPU maps where map->record is
+valid, even though the iterator never exposes map memory directly there?
+
+map_check_btf() allows BPF_KPTR_* fields in PERCPU_HASH, LRU_PERCPU_HASH and
+PERCPU_ARRAY.  For those map types __bpf_hash_map_seq_show() and
+__bpf_array_map_seq_show() fill a temporary percpu_value_buf instead:
+
+    copy_map_value_long(map, info->percpu_value_buf + off, per_cpu_ptr(pptr, cpu));
+    check_and_init_map_value(map, info->percpu_value_buf + off);
+
+The copy skips special fields and then zeroes them, and writes never reach
+the map, so reading or overwriting a __kptr through this buffer does not seem
+possible.
+
+The new bound is fields[0].offset, an offset within a single CPU's value, but
+value_acc_size is compared here against a buffer of
+round_up(map->value_size, 8) * num_possible_cpus() bytes.  Any access to the
+slot of CPU 1 or higher, or to CPU 0 data after the first kptr, now fails with
+-EACCES.
+
+For example, take a PERCPU_HASH value of the form:
+
+    struct { u64 cnt; struct foo __kptr *p; }
+
+An iterator that sums cnt across CPUs attached fine before this change, and it
+is now rejected.  There is no way to adjust the program to work around it.
+
+Since this is tagged for stable, should per-CPU maps skip the managed-field
+check, given their iterator buffer is already sanitized?
+
+[ ... ]
+
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> index 1d295a8769fa..ffbcfab9a71c 100644
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
+> @@ -846,12 +846,35 @@ static void bpf_iter_fini_sk_storage_map(void *priv_data)
+> +static int bpf_iter_sk_storage_map_check_prog(struct bpf_prog *prog,
+> +					      struct bpf_map *map)
+> +{
+> +	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
+> +		return -EINVAL;
+> +
+> +	if (prog->aux->max_rdwr_access > map->value_size)
+> +		return -EACCES;
+> +
+> +	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
+> +	if (map->record &&
+> +	    prog->aux->max_rdwr_access > map->record->fields[0].offset)
+> +		return -EACCES;
+
+This looks like the same ERR_PTR dereference as in
+bpf_iter_map_elem_check_prog(), and it is reached even more easily.
+bpf_local_storage_map_alloc_check() requires BTF for every SK_STORAGE map:
+
+    /* Enforce BTF for userspace sk dumping */
+    !attr->btf_key_type_id || !attr->btf_value_type_id)
+        return -EINVAL;
+
+So every sk_storage map whose value type is a scalar goes through
+map_check_btf() -> btf_parse_fields() -> btf_find_field() == -EINVAL and keeps
+map->record == ERR_PTR(-EINVAL).  That includes sk_stg_map in
+progs/bpf_iter_bpf_sk_storage_map.c and bpf_iter_bpf_sk_storage_helpers.c,
+both declared with __type(value, int).
+
+The map->record test passes for the ERR_PTR, and map->record->fields[0].offset
+then faults at a near-NULL address.  This happens during BPF_LINK_CREATE
+(bpf_iter_attach_map()) and BPF_LINK_UPDATE
+(bpf_iter_sk_storage_map_validate_prog()) for any bpf_sk_storage_map iterator
+whose max_rdwr_access fits value_size.  Before this patch that was a working
+configuration.
+
+Could this use IS_ERR_OR_NULL(map->record) as well?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39382306212
+--===============7625777895205599761==--
