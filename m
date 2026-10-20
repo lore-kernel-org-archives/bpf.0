@@ -1,100 +1,44 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.215.169
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1792514337;
-	b=0VggeMd5uBlc8b2tkAT1V7qY3fiaLpf7qH/CoAgftCPoA62ALOybQCQm7HSrlHtrbe3F
-	 PWs/2kLiXeYt8nbPazxpZgumtQ4VY9gZuzCXBk9zkuXDNH/P/RsqO4PESjbqRhSgUN9u0
-	 Vdrf8npE0dY9WO/nBgPtf/zug9Ak+9R3GMFE51vNEpgZ0UkBe26DRw9eio72dODqwKyZK
-	 /FsszbVL4ePqxH7kxrOK2RziC0BLfyjG2SAFiE/IdPluywKirlsOum2ngU/CXskUJ65dG
-	 hkLXrsmnG0gRv2SiCQNlqYDj47nyIj6qKz4bdSBEE7m8pPksxb2NwAfDeUx0zYGjCvg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792514337;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-	b=BAJ704LRvQsT+VQyMFX2i1JVwREVI4SUOJptI3vznOT1APRqAVpdGiL9lO4i3STWYttr
-	 9lhCq3TBpfEy5rrIVu2HHAf7pvLZwg4F4GNKA69sGXOJudFOaKrQB+LPOm5sDVwQjgcBU
-	 xeOf3k3CB+N99tT5H0x3ZbzX23c2rf3WIA6SbOaZR4bLE7dgOfmpVBhm1f0l6z20aOFfG
-	 KNq11KTt8ZyevW1K+sUkpmjXcznMJO9MWe9YssiV8s8Igv4WXLHRj2FGyr1IqY159vCWd
-	 2quxV1510BAVVzLjIX03/vYvjrPKlBVOIfxCb6UH5bb86ikdQpSarhauqU5aSjpNG+w==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=GwYGVURA;
-	arc=fail smtp.remote-ip=209.85.215.169
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792514429;
+	b=vFN3DT9h5u21ePeYtuJk4AcgdKnW96sqH2RIi0hprfEYyEmCiGH1xMrFGFuLPmKjB5hi
+	 03c/XZlUuOzuOtSuK30d9eU5hUZKSOXjcEJuGn8GOh/Y+PELk8Hgwss86oFKNmNR0BeKe
+	 Qe7Q3fSNMRUntSj+qWhB3zW2L4rVKmBYQqP1SmRFJVDLYLtKBoiKGlAKH1LTxhl4iVPiN
+	 mObr1UJsrGX5tpUTxlDTRN70BTkZCy2hcG8IPJrWxM5hGfWAMSNwDDh6hlbOi3387LVGA
+	 XPgub0hcqKg7xS0ZnE/TsKA2cMS4z0qr0c4ZSoWmIdKNF02N4awJ68QzcY9lVM4Alsw==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792514429;
+	h=Received:Message-ID:From:Subject:Reply-To:To:Cc:In-Reply-To:
+	 References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=WV5u3i930IYdub8VqB7hzebv3VGUvXoUzVDIBMdZvJI=;
+	b=U8NzXPEiQ6hjYZgqOlmOjzRkMjrAPf9jcyrEOIsDUWhCIWptwZZOvDADYhY1ZkZvqiiR
+	 4yaSuUIdoiYQUqOK5JDAVB+xIBId6xAYeo4E6vvYdTVlpmEGzQWvpC0qxY06KFfCRKt49
+	 b5nhdCBQTpPSRjlcfVFRBn3S+aDhEQeSBPe1GqxeXckS9a8qeHkmxJwHtJ0QptqX9KBov
+	 slZYh0GCXpTTZ7hfyRbqW943rdqndKciT3dUgH7GAN6YE3kuU+xctrKcFrOPzODRiP0kR
+	 5Qcmr8Cwn0ZskwjXUl9kbsd9sIj2rr8MHNr37Pp1OwCgQUz2jOOsEZD7wqIhOGh2EpQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F274B60A2604
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:38:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F274B60A2604
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=GwYGVURA
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cd5c9e52398so1265261a12.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 09:38:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792514336; cv=none;
-        d=google.com; s=arc-20260327;
-        b=CxWVwISevFLhQYOXb9pkE2Y+GmA4XtaZvACWqPHvAHjgWBTFPxJOvHPpuIuPiErNU8
-         iQo4wbnNWJ1A77BkCd/gJgACT83ozft0coyzMUXKAlhmGhGpRYxEvaOfE69//lZ2Kl7Q
-         8VEgzxK56GV0A9Fg9eyEhN5UcrV8rpKKOUBVHFjBrp4wWq8wOsa4O2U8KBj5+jcfPVFe
-         cn8Ud7sDU5EI68njf138jDiTx5weUXzxRyVgvoul5d+1kd6ebe/KAwee7Y4PQGt5XaQe
-         ykM53EOEN66w9WsE46it52+dt7ng4gfyDKEHB+C6rkWziFnGuwDaObp/NI95WoypPAQB
-         oLHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-        fh=KBen45nMuZTPRsibGJjAGJcdglxPjrIOrLKDCJUaEzk=;
-        b=R/XjBxyWyX7JF50yNu9R0YyGMSvbUSazTB9ZJwEMJr7AZ+hFVadiOZ3ejD2vbgH7M2
-         UwvIT7PR8a2jghDRcf707WdXqNg7Y2M40CMV4Odzd1XjPCWAHSQVLvVTWn6gXm4qkz0z
-         JL/X/WjsKyZm3u7AlzuktNVtChuCw/wbGX4bBqX5LK6Vdc314XRVUoXE3+l0SZ4lYWZ5
-         i0mhT5Zt4/9OF/m2BKZgVfmPxBO/lxHBzNl7ADH5D4N1fEjPsWi3UHLflGuxtzW0i/FO
-         TGroM/RHUBJmYRDYKVKh1mT0NKWD6mjCJKCRQx5jNrjTRxJ6Nd0mzvsonm9OP/WUAeqa
-         Gj9w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1792514336; x=1793119136; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-        b=GwYGVURAL7E3Gqp1mE6IbppA5fK/M6QVj3T4+Mu1VqNJAQWSHTCgIBs7lXAHx7VP4b
-         X7Ol6JtjEVwHUVW/UUWijctAKk0S3FIF6sAkL2D0z4+yun1CiPIG05jQakKiuYArY+di
-         qKUZ2JssWHS9PY4Rrbam2j+K8HSVipMYAjJhVwlz0qlw5vC30c9m2oPlM5nOac4bwKsb
-         0iIOeo41vgbotndmbkqO3IW2nEL8EcaGXBwYuALkuaiWKHExqpmpd78k/kVF659++rVb
-         16kcHMvBo17gh+L06xflahlYQXJ+NMSTGDwKIeHcy9Z1IKqewLhKEpxT50Ywi1EBHbtT
-         Ya6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792514336; x=1793119136;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5h6v8PMV52XAIibb0bLKm7PVGjK4muo/m4wCC4Oc5nw=;
-        b=eQeF9MqqodYTerXpB3HS7CFVv/0ezfLxxTzQ94zTE4VVIqHKplngvT4viJA+m3YBAS
-         fX+IwrbeUhF3c+oaqlc5NAqS29KbV3DXknxsIibmDb8nu8DVh4LaX9/Poj52cKfBeLGl
-         pCM+vyrQj+exH2cQewN/IkAl7R+zELDHUN7k5q1H/psYesD+mI2vLW9Wqe+uwAwKF3tG
-         xPY7bL6JnI6FOw+7eQBW9pSReOBzCcsd7r2NWJ8uouXziJenGaIs5dvsTyCMSIk3LZVp
-         hs+taPmahdHiqQEZE/SXA8PAfrlDdBKUk7VufRYquPZBT/1ijjkCc/40t24NNyUjyShp
-         O+LQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzoV3RWCl81aBJbiNk/ENKq1g2hMApIlGV7ppQbuL0bTITGG44GZv8TUgyRim1FeNKvvmQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKiysHQ1Vg3ue+020IVFaKAXLHg7htZGMIxtgfzvjDz1m5nuB2C
-	nwU0RUqkH47HCiZcLL15ArlbhNst32hTiMEFVooBz2CYBOJM6ePeM+BJ5D43K8+RLfvGaiYmazr
-	1dz12OfyKbwoRZvGLhiPSomrZ2zxSJ8oBl0peufpk
-X-Gm-Gg: AYBFou2KhtkGcYQqAy9Y71v+GwkdqIqaCPXS0Ez+L8LeggMo5YJ5TQPm8CEGdTcYFaj
-	sD4jHVWTtECLhZhowcecuE8wDlZ2eXYoY54/HjYFLwg1iawxRqLzLjV+oYyW1p6nRqFCA9JNUlC
-	kcbmearxEiVoQqV2pVX2QiAq+3WMVhEDu9za7oDU9m+usa7WnaXB/yLSa9gq58PQJFMa4rfCx2j
-	j0u8i7U4eXjNWlO4IqnpUrYZ6UvrLP+ImeGjyfeqGp+FChELURA29tNSIQkHAgJ41+dxRWg8AD4
-	B5ECFeDXV05OkpYXQs3vwYiV/20tO1fGUOIKoakqyrFN1xC8I5/x6zGry9QVkvHmF8DIifIQNri
-	quZpXEjWTy78=
-X-Received: by 2002:a17:903:1111:b0:2e6:dcce:8227 with SMTP id
- d9443c01a7336-2e9a6c1a30dmr99034965ad.37.1792514336247; Tue, 20 Oct 2026
- 09:38:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18BF606A31B
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:40:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4606D1F00ADB;
+	Tue, 20 Oct 2026 16:40:28 +0000 (UTC)
+Message-ID: <sashiko-outbox-179367@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 04/12] bpf: Track low-32 scalar equality
+ across zero-extending movs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vineet Gupta" <vineet.gupta@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261020161907.2115379-5-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+ <20261020161907.2115379-5-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Oct 2026 16:39:57 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,60 +47,153 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <cover.1790088067.git.rrobaina@redhat.com> <CAHC9VhQ=FFYVNmQdiMsqg+5KDDrSC3SZS+H2=r_GkhfwQox8tg@mail.gmail.com>
- <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com>
-In-Reply-To: <CAABTaaBL=TScs8Qqu3b8F6KZPGMyvwy6cBC3teDaBL6MGMucNg@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 20 Oct 2026 12:38:41 -0400
-X-Gm-Features: AclHuK9ZakV6IFm9eD67kaqUic0iU1MgVPLS7VN6RgjPgTRZmZP6_X_XOYOX9ZU
-Message-ID: <CAHC9VhROsmzbm+AP63Sm7mqCokgEy6Zu0AVMY0gxp8qY75Pqiw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/14] audit: log all six syscall arguments in the
- SYSCALL record
-To: Ricardo Robaina <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, eparis@redhat.com, 
-	sgrubb@redhat.com, oleg@redhat.com, richard.henderson@linaro.org, 
-	mattst88@gmail.com, linmag7@gmail.com, linux@armlinux.org.uk, 
-	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
-	tsbogend@alpha.franken.de, jonas@southpole.se, 
-	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
-	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
-	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
-	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
-	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 13, 2026 at 8:36=E2=80=AFAM Ricardo Robaina <rrobaina@redhat.co=
-m> wrote:
-> On Thu, Oct 1, 2026 at 6:06=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
-rote:
-> > On Tue, Sep 22, 2026 at 3:21=E2=80=AFPM Ricardo Robaina <rrobaina@redha=
-t.com> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: empty or corrupted range after intersection in sync_linked_=
+regs()
+--
 
-...
+commit 05d23d7192de1c6009703f8fbe1537ad78dda89e
+Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-> > * As pointed out by Sashiko, when you were converting all of the
-> > arches, it looks like you missed alpha.  I took a quick look and it
-> > appears that it should be a pretty straightforward conversion like
-> > most of the others.
->
-> I've actually dropped the alpha patch as per Magnus's request [1].
->
-> [1] https://lore.kernel.org/audit/CA+=3DFv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4=
-BLWOvDTt92t5Eg@mail.gmail.com/
+bpf: Track low-32 scalar equality across zero-extending movs
 
-The problem is that as things stand, this patchset breaks the build on
-Alpha.  Perhaps this gets resolved during the current merge window,
-but as you know we can't break the kernel build ...
+This commit extends linked-scalar tracking across zero-extending 32-bit mov=
+es
+from wide 64-bit source registers using BPF_REG_LINK_ZEXT. Because a wide b=
+ase
+cannot be inverted across all 64 bits, sync_linked_regs() propagates bounds
+forward only and intersects the derived bounds with the destination registe=
+r's
+existing state.
 
-https://lore.kernel.org/oe-kbuild-all/202610041836.6TatRQSm-lkp@intel.com
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b9c20a5cc6d6f..6afd718ede647 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -18749,6 +18798,27 @@ static void sync_linked_regs(struct bpf_verifier=
+_env *env, struct bpf_verifier_s
+>  			if (reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
+>  			    known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT)
+>  				zext_32_to_64(reg);
+> +			/*
+> +			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
+> +			 * link over a wide base does not propagate back, so the
+> +			 * base can be wider than what @reg has already proved
+> +			 * about itself; replacing it would lose that.
+> +			 */
+> +			cnum64_intersect_with(&reg->r64, prev.r64);
+> +			cnum32_intersect_with(&reg->r32, prev.r32);
+> +			reg->var_off =3D tnum_intersect(reg->var_off, prev.var_off);
+> +			/*
+> +			 * An empty intersection means the two sides contradict,
+> +			 * so this path is unreachable. Say nothing rather than
+> +			 * say it with an empty range: reg_bounds_sync() below
+> +			 * refuses to touch one, and the first later
+> +			 * reg_bounds_sanity_check() would report it as a
+> +			 * verifier bug, which it is not. Keeping the wider
+> +			 * pre-intersect state only costs precision on a path
+> +			 * that cannot be taken.
+> +			 */
+> +			if (range_bounds_violation(reg))
+> +				*reg =3D prev;
+>  			reg_bounds_sync(reg);
+>  		}
+>  		if (e->is_reg)
+
+[Severity: Medium]
+Can a contradiction in var_off or linear step still leave an empty range on
+reg, or corrupt reg into a bogus constant, after sync_linked_regs() finishe=
+s?
+
+First, tnum_intersect() in kernel/bpf/tnum.c assumes its arguments overlap:
+
+/* Note that if a and b disagree - i.e. one has a 'known 1' where the other=
+ has
+ * a 'known 0' - this will return a 'known 1' for that bit.
+ */
+struct tnum tnum_intersect(struct tnum a, struct tnum b)
+{
+	u64 v, mu;
+
+	v =3D a.value | b.value;
+	mu =3D a.mask & b.mask;
+	return TNUM(v & ~mu, mu);
+}
+
+When reg->var_off and prev.var_off disagree on a known bit without
+tnum_overlap(reg->var_off, prev.var_off) being checked first, tnum_intersec=
+t()
+turns the conflicting bit into a known 1.
+
+Second, range_bounds_violation(reg) only checks cnum32_is_empty(reg->r32) ||
+cnum64_is_empty(reg->r64), and is only called before reg_bounds_sync(reg). =
+Any
+contradiction between the intersected r64/r32 ranges and var_off (via
+__update_reg_bounds()) or base/step (via __update_bounds_from_step()) happe=
+ns
+inside reg_bounds_sync(reg), after the range_bounds_violation(reg) check has
+already passed.
+
+For example, in a socket filter:
+
+  w7 =3D w6;                /* r6 is unknown 64-bit; r7 gets BPF_REG_LINK_Z=
+EXT */
+  if w7 < 4 goto out;
+  if w7 > 5 goto out;
+  if w7 & 2 goto out;     /* r7: r64=3D[4, 5], var_off=3D(0x4; 0x1) */
+  if r6 & 2 goto l1;
+
+At l1, r6 has var_off=3D(0x2; ~2ULL), so after zext_32_to_64(reg), reg has
+r64=3D[2, U32_MAX] and var_off=3D(0x2; 0xfffffffd). Intersecting r64 and r3=
+2 with
+prev produces [4, 5], which is non-empty, so range_bounds_violation(reg) is
+false. However, tnum_intersect() produces (0x6; 0x1) ([6, 7]), and
+reg_bounds_sync(reg) then intersects [4, 5] with [6, 7], leaving reg->r64 a=
+nd
+reg->r32 empty and triggering a verifier warning on a subsequent r7 %=3D r9=
+ (with
+r9 =3D 0).
+
+Worse, if w7 was narrowed to a single constant 4 (r64=3D[4, 4],
+var_off=3D(0x4; 0x0)) before "if r6 & 2 goto l1", tnum_intersect() fabricat=
+es
+the constant var_off=3D(0x6; 0x0). Inside
+reg_bounds_sync()->__update_reg_bounds()->__update_reg64_bounds():
+
+	cnum64_intersect_with(&reg->r64, cnum64_from_tnum(reg->var_off));
+
+	/* Check if u64 and tnum overlap in a single value */
+	tnum_next =3D tnum_step(reg->var_off, reg_umin(reg));
+	umin_in_tnum =3D (reg_umin(reg) & ~reg->var_off.mask) =3D=3D reg->var_off.=
+value;
+	tmax =3D reg->var_off.value | reg->var_off.mask;
+	if (umin_in_tnum && tnum_next > reg_umax(reg)) {
+		___mark_reg_known(reg, reg_umin(reg));
+	} else if (!umin_in_tnum && tnum_next =3D=3D tmax) {
+		___mark_reg_known(reg, tmax);
+	}
+
+cnum64_intersect_with() sets reg->r64 to CNUM64_EMPTY, where reg_umin(reg)
+returns 0 and reg_umax(reg) returns U64_MAX. That satisfies !umin_in_tnum &&
+tnum_next =3D=3D tmax (6 =3D=3D 6) and calls ___mark_reg_known(reg, 6), ove=
+rwriting
+r7 =3D=3D 4 with the contradicted constant r7 =3D=3D 6.
+
+Even when tnum_overlap(reg->var_off, prev.var_off) holds, reg_bounds_sync(r=
+eg)
+can still empty r64/r32 if the intersected cnum range and intersected tnum =
+(or
+base/step in __update_bounds_from_step()) have no common points.
+
+Should sync_linked_regs() verify tnum_overlap(reg->var_off, prev.var_off)
+before calling tnum_intersect(), and also check range_bounds_violation(reg)
+after reg_bounds_sync(reg) to restore *reg =3D prev?
 
 --=20
-paul-moore.com
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020161907.2115=
+379-1-vineet.gupta@linux.dev?part=3D4
