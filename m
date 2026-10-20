@@ -1,32 +1,32 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792516126;
-	b=O1uFM39f0vX7gTI1u2mcyxngGaneAQiaghswEyCHArUhoRmTRFd0Zul69tEHmaNP9B0f
-	 71tsSTxQCQlSOHuBERS30ZiSD0VKbEJ6eCaGPXNSbepgEIEtG2dBa/vnKlL8E35pFwiy7
-	 KtYd0h7635g/2nSdtWdmfSPmmqVmL9AMWUcM44S4QNvCBRfS8v3B/LT3CnlprywRx8Gvv
-	 XzB8TNtIfrGHRDrzsPfUufJls3OLwkci68t8ySZUCqSSNrstPDf8kbe9tZV02ZbvlyrH/
-	 ZWRmr4Dg3jVrZSibujyQ4xWRSVuNcg0RoNnpJdmn3ge8aDN+vmcMDvY+i1xljcYcxUw==
+	t=1792516148;
+	b=X8023UZ4QOc+s/EJlvoroj6UUn/Om7OMA5ZAUt8QivX6+NLLBBTAMiOXjftN0av4F1g9
+	 ZaLCUBkdJG/DsbhUIcUmS1Rv0o71CVS37KuZvtJmBvBi+iAH58EJY+4QNRCvgNcYxuL3u
+	 iOu5rLI8gbqenxJDqH8xOwnMt0ooqnPl8s23vPkYrfAZKc4GIDjDCixePaLch0jehjD3H
+	 l/KghuBO19YEZZmO81gW7URbumx31nJs9J/71jCad22SIyY5Dz96hGhdfvdOTiYl3k/NB
+	 ScQCFcXCszX2LwtIIlAwZdOwHcBTfk9FwptaWTU2gg5jzRyHFrOnjCTOXMgNL0pEIzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792516126;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792516148;
 	h=Received:Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
 	 Subject:From:To:Cc:Date;
-	bh=WmttQryXnibWlRJiZPUojQhvGDcV+ijgulX9csVBoUI=;
-	b=PlKXfsQ8wzTB3riK9oIlZ8EcS7V89K/tQE8Eup8/NkPg26zRHvRyLzXKKEY+kZ+7rZkc
-	 XEIr8M7YSBX/8u6rcAwqRMQ2i6ITjyZyd4A+EsvVa2KtKS1axtyydwvIc+pwpVJb97+e/
-	 4tRpCJCQXknnydeuKOr4QNO/8Peow9SjoDQ1i3m/XFwmsWrRiDKyH9/4fkeA1ols4BdYN
-	 phZMJkLBcFw0DgJr/w+nGHjgqQKqTH6iV86EVnOlXWA1eJjEdRuCgWDdKf6Qlfbw16E1/
-	 CZOUpINss/GeASlUnBkfqss8DjVjPs46FD/3jK/uYAM+PJBxkLJasnfdJls1ci1PXQA==
+	bh=gvYVT/Wi1TZ9dnq+0QbzJ7fSdeN4ALRA7DrD+z7c92U=;
+	b=xf2/ZF/7Q4dJOEIgEC4HQ2LlFuZdMT6tYiWOe9OkmzHNe0MNaIUQRqbFyI5QC/B1TXb0
+	 GLM7Q6/Yluvpytkoxsja+cNeApkdoJQ4x23fuAgDCc0l4N6ljFK66cgJkoirY4jG1qwcE
+	 9gfXWX97VXad5FTsjheK9znVE5A+RosBNCrrRwHxrMjXIydL+FtHhy5b/jEnSYaClCj32
+	 vhgo5CQYJowpm7Xi2F+0tzxLTiZ5xD3C265ncqUaweyEvsT6L+dYptSK5EVWxJbbIPnCH
+	 b9s0FUF267MTH1pIbnZNYcoPH90bL7PYCuFs9GDBpYDmfAB6AXwoUNDawslh7Lhe9yQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE45606A31B;
-	Tue, 20 Oct 2026 17:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B06841F000C9;
-	Tue, 20 Oct 2026 17:08:45 +0000 (UTC)
-Content-Type: multipart/mixed; boundary="===============2184321447331015808=="
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADC3606A320;
+	Tue, 20 Oct 2026 17:09:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B26ED1F000CB;
+	Tue, 20 Oct 2026 17:09:06 +0000 (UTC)
+Content-Type: multipart/mixed; boundary="===============5893420697026274867=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -36,102 +36,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <443e1351eed4f46cf6c202e5f1130b189e9c5eb09cfcffd24d752c6ec73d450c@mail.kernel.org>
-In-Reply-To: <20261020161907.2115379-4-vineet.gupta@linux.dev>
-References: <20261020161907.2115379-4-vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next v3 03/12] bpf: Prepare linked scalars for relations narrower than 64 bits
+Message-Id: <d6b900be6e27a2ab0ff198e30d28c0d35410daa23bf03ead13a359569f9bfdd9@mail.kernel.org>
+In-Reply-To: <20261020161907.2115379-5-vineet.gupta@linux.dev>
+References: <20261020161907.2115379-5-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v3 04/12] bpf: Track low-32 scalar equality across zero-extending movs
 From: bot+bpf-ci@kernel.org
 To: vineet.gupta@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
 Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 17:08:45 +0000 (UTC)
+Date: Tue, 20 Oct 2026 17:09:06 +0000 (UTC)
 
---===============2184321447331015808==
+--===============5893420697026274867==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Prepare linked scalars for relations narrower than 64 bits
+> bpf: Track low-32 scalar equality across zero-extending movs
 
-TL;DR: Commit message only: regs_exact() now also rejects states whose linked
-scalars share a base id in old but not in cur, a stricter infinite-loop check
-the changelog doesn't mention.
+TL;DR: The comment and changelog claim a zero delta from an add is refused
+composition, but a 32-bit add of known zero records the same link as the mov
+and composes. Behaviour is sound; the explanation looks inaccurate.
 
-> bpf: Prepare linked scalars for relations narrower than 64 bits
->
-> Two scalars sharing an ->id are always related by full 64-bit equality
-> today: reg == base + delta over all 64 bits (this is true for
-> BPF_ADD_CONST32 as well, which implies upper bits to be all zero).
-> Sign-extension needs a genuinely low32 equal only relationship kind
-> with bit 31 supplying upper 32-bits.
->
-> Today the following 2 relationships exist
->
->   #define BPF_ADD_CONST64 (1U << 31)
->   #define BPF_ADD_CONST32 (1U << 30)
->
-> Model them differently as
->
->   enum bpf_reg_link_kind { BPF_REG_LINK_NONE, BPF_REG_LINK_FULL,
->                            BPF_REG_LINK_ZEXT, BPF_REG_LINK_SEXT };
->
-> So BPF_ADD_CONST64 becomes BPF_REG_LINK_FULL and BPF_ADD_CONST32 becomes
-> BPF_REG_LINK_ZEXT with the exact same semantics as today. But this paves
-> the way for a future BPF_REG_LINK_SEXT in the same framework.
->
-> The implementation needs to change as well. Today the above 2 bits are
-> shoe-horned into ->id, needing masking and OR'ing to get ->id and kind
-> bits: with more types and bits needed, move them out into an enum
-> bitfield of its own. To avoid growing the storage (and stay within the
-> 1K allocator bucket), borrow 2 bits out of ->map_uid, 31 -> 29, which is
-> still far more ids than a program can generate.
->
-> ->id becomes a plain identifier, so check_scalar_ids() loses its "compare
-> the compound id, then the base id" dance in favour of one check_ids().
->
-> With the kind out of ->id it also leaves the idmap key, so regs_exact()
-> and regsafe()'s explore_alu_limits arm have to compare it explicitly.
->
-> One case changes behaviour -- old {r2.id=A+delta32} against
-> cur {r2.id=B+delta64} was accepted and is now rejected, correctly, since
-> alu32 and alu64 deltas diverge in sync_linked_regs().
->
-> Clearing a link is no longer just ->id = 0: any stale ->link_kind needs
-> to be cleared out as well. And given this needs to be done in the newly
-> added kernel/bpf/scev.c, it is moved into bpf_verifier.h as
-> bpf_clear_scalar_id().
->
-> The helper also zeroes ->delta, which the open-coded clear left behind.
-> Unlike ->id that field is inside the memcmp() prefix state comparison
-> uses, so a leftover value could keep two otherwise-identical states
-> apart; clearing it can only help pruning.
->
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-The changelog lists only the delta32/delta64 mismatch as a case that changes
-behaviour.  Is that the only one?
+[ ... ]
 
-regs_exact() also changes.  It used to run check_ids() on the compound id,
-so old {r2.id=A, r3.id=A|BPF_ADD_CONST64} against cur {r2.id=B,
-r3.id=C|BPF_ADD_CONST64} built two independent idmap entries (A->B and
-A|flag->C|flag) and was accepted as exact.
+> @@ -17594,11 +17584,28 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+>
+>  		if (dst_reg->link_kind) {
+>  			/*
+> -			 * If the register already went through rX += val
+> -			 * we cannot accumulate another val into rx->off.
+> +			 * Only the zero-extending link the mov above records,
+> +			 * BPF_REG_LINK_ZEXT with delta 0, can take a delta:
+> +			 * (u32)((u32)(base + 0) + off) is (u32)(base + off).
+> +			 * The add has to be 32-bit as well, since a 64-bit one
+> +			 * parts company with the link once the low half wraps.
+> +			 *
+> +			 * Everything else still drops the link. A zero delta
+> +			 * reached by an add rather than by the mov, say "r1 +=
+> +			 * r3" with r3 known to be 0, has already spent its
+> +			 * delta; composing onto it keeps a link alive across a
+> +			 * loop's increments, and since the delta is compared
+> +			 * for equality, every value the loop reaches becomes a
+> +			 * state of its own and stops pruning.
+>  			 */
+> +			if (dst_reg->link_kind != BPF_REG_LINK_ZEXT || !alu32 ||
+> +			    dst_reg->delta) {
+> +				/* also the target of the two gotos above */
+>  clear_id:
+> -			bpf_clear_scalar_id(dst_reg);
+> +				bpf_clear_scalar_id(dst_reg);
+> +			} else {
+> +				dst_reg->delta = off;
+> +			}
+>  		} else {
+>  			if (alu32)
+>  				dst_reg->link_kind = BPF_REG_LINK_ZEXT;
 
-With the kind moved out of ->id, the same pair now maps A->B and then A->C,
-and check_ids() rejects it:
+The comment says a zero delta "reached by an add rather than by the mov"
+has already spent its delta, and the commit message says allowing
+composition onto "a zero delta that an add produced rather than the mov
+still costs 1176 -> 1196".  Can this test actually tell the two apart?
 
-    return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
-           rold->link_kind == rcur->link_kind &&
-           check_ids(rold->id, rcur->id, idmap) && ...
+A 32-bit add or sub of a known zero ("w1 += 0", "w1 -= 0", or "w1 += w3"
+with w3 known to be 0) on a register that has an id but no link_kind goes
+through the else arm quoted above and records:
 
-regs_exact() is reached through regsafe(..., EXACT) from the infinite loop
-check in bpf_is_state_visited():
+    dst_reg->link_kind = BPF_REG_LINK_ZEXT;
+    dst_reg->delta = off;    /* off == 0 */
 
-    states_equal(env, &sl->state, cur, EXACT)
+That is the same state the mov records, so a following "w1 += 1" passes the
+"dst_reg->link_kind != BPF_REG_LINK_ZEXT || !alu32 || dst_reg->delta" test
+and composes.
 
-so this is a stricter comparison than before.
+Only the 64-bit example from the comment ("r1 += r3", which records
+BPF_REG_LINK_FULL) is actually refused.
 
-Could the changelog also say that regs_exact() now enforces base-id
-consistency for linked scalars, which the old compound-id idmap key did not?
+The result is still sound, since (u32)((u32)(base + 0) + off) is
+(u32)(base + off).  Should the comment and the changelog limit the claim to
+64-bit adds, or does the mov-produced link need to be made distinguishable
+from the add-produced one?
 
 
 ---
@@ -139,4 +125,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
---===============2184321447331015808==--
+--===============5893420697026274867==--
