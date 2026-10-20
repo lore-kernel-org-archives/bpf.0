@@ -1,101 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792508856;
-	b=ZoHAEu0MWdSZDHyVPFH5Xa/LEclYC0a2aBSEkr87qFoay+TwTrEK9u+tkh83p09C9tZb
-	 rdV7UTeh5Jlt2lVOzisSI2DjZemNALcOU6JAzU2ndZYFhdj73cSR2d7u95ChhQDc5OmiC
-	 VMUEHJKNLCi+QxncYy76eHKTcSoV8Op/0MazhIoDNtpbA3nE3x0VG+lV4TruVBdPkiiiu
-	 NohrpiqKqJd3lgKb+wxhuR1U5eRVPBkP8T+B9sfdAY/Z/tYNrHuQwJ9EwtOm6N0WbvLbo
-	 UumBRZdk8Vds284xFfOOhwng+GQr2YTR4AecB4zMt1bKKq7JxmXKLJA/wBtieKvj2Vg==
+	t=1792509950;
+	b=ZQ/CAcy3lB/PHV23y61g7gTW2YkA34BWH/OS3D+/E+TqY3tICK/kulICF9DyZDFPimiL
+	 q+Qv92ZtvJihOqdu+MM+AZwu9FEA3sRlC/a6XW1dowHyl/U6TNM+XNUO6fAcIqfbk+5B/
+	 dPNqIsExAKndTzEZhOcJ6nVK3Nt7spFuUOsB0ZfGveHH3ntklwBC2rRwUGgWSeau8SAee
+	 jo3BTvizSnVGFmCOaQUCtpGCtXnbLyOA4CXpBVaGTkUVWFwTutLFeSM89C471GgTmrnBu
+	 fSMZ530rlHFzMOKwTVucSckN2JKQuInfMpvln6qFlY0A4ZjEbcSw2xCVFzqVvXVIJOQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792508856;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=/KS4MM+90L5b3yl4IF+KZ1cxg7psw7VcH7wSJwMesDk=;
-	b=qF5Ugx7cy8jVllY31CQMjGjxdQUm3ZoKw6VmZS01HqfxsAKCakCIg9MhMyfH1Wt82r/P
-	 l1NSKk/mIOg5aRxBXUttc89ZEHN4DjleeoK2PSA33pSWIyVHpBW5nIFotcsKrf6R/shvy
-	 K9EUnkpWkPIjjn2isOdhQJrpTpZ8M/5rGMVFcrem14BFkJh/2EGDT4gLlsVJDTAqcBgyV
-	 MjboBSc1dsO1mjiKwUHcn/tSOYu3dSQ9DLNwb5o1DLfH5WhZzIzbYY9lGsq0HkaqD2uZR
-	 SjPXvz+y3uhW02fkkXfmk0qpoypf9n1vfOMMZ4JfCiEWaa73x4tTszMR0+/nzwA/qww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792509950;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=qnnKDDvmabqOsa4xKgNN1r+wBeLKSYF6UBFIXxksVrk=;
+	b=Nd/zLW0PcyCmX95YsXV/bcXpN3Kd5CN0aUx4JgESS0MNTqrhIYH9RmvxQPtcCb0bTrD9
+	 KBW9dzaRg+qvhSkL1OJM5EFRO8A8jAtDhp1pmJzACE0M8PR+sDjFi4E2Edb29q5Qbw+/q
+	 PopAM2ZLEFGRpCAUf88LYWcVdmKNEgLkGxEQ4JY6mVWUXhFUgk/JWPdhvkyetifwz1CnP
+	 mvx1b/Yu0UCaRTIB7hsXn9JwZ+oXJzGzCrp/BFWU0+ssnfvWqk+FBTFW9SeqKg2SlGgqW
+	 tigpuftVM2hipKf4RxuwK55Z6MH8PfhAuynfDIWQzsGR6kSMuomNsFln1IVKavr6tZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XAYwuqzw;
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="N/Ryh22H";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A434606A328
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:07:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A434606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF76B606A31A;
+	Tue, 20 Oct 2026 15:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XAYwuqzw
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e8b20a899fso16662725ad.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 08:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792508856; x=1793113656; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=/KS4MM+90L5b3yl4IF+KZ1cxg7psw7VcH7wSJwMesDk=;
-        b=XAYwuqzwhJRHpb2wnmdJp/kFWyjyM2aoEz/hOGR7L3NfVt16xhjPpYJEnLFu6o/qXp
-         /HR/kZvZrsSyqK9A1aL1myqjLZke7z8qdD0zD7HKDG5bUACqMt4aZ0amTHQyCkudsFJg
-         +8uUbiJ6eqsbcAnUnui1GemFN+ePuwd/W6jC/Kqis6JSpLzBJ8J38up3A+ahvIRsyJXp
-         ANXBlAFWhBMEkW3+ptu9TiGfHzzo102/rb4tu2XxZrpacpMI8ne+ur7pz6y80Y7Oa3nY
-         NSCzghm/U+Njwx8RTqV5yGBuGT0SfSxcls8JGl+C3WtSufm0KUwa8IdhFDiq8RntfBki
-         FF3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792508856; x=1793113656;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/KS4MM+90L5b3yl4IF+KZ1cxg7psw7VcH7wSJwMesDk=;
-        b=kaA6+8GzCuMFdOv6gLVkaYQDWFp4sXUjEHhpZ4jazSGvNbsRS6tegqLfWuVKpCcEsi
-         V6l6PTZRYOi3f4IS9WEIOj5+aEnzdF64bCCwQDMvhqLVNqdV1o7pu/mBydeMBkJFZdWB
-         uXuuT5MnPkWDkza6rXJE+5FXX6nTYV1VPMJTv9K+SW8DFBnDNm/R2DjaXHJqiUbtijek
-         kswBa9zQ2OK0SlEyRKdXTMzccMxM1WwDF/fD1aJ4R/xm+5hB7cDjQttu/UTBsQBtQrYr
-         C1rsDVPRisX27aVvwHnnTy5H3fe/Qv7T/xliXuxWJqoIUnpIo13FCfYVv3mBvGqkeLj4
-         rsJQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzvdSiEjpJDOGsgA4cYjaK7QU9pntZdocufKnz6b7bI1g+x6SSSE15oDjZ+e6hVuUKComc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKSanpXNcgeFwqqSFC+Z/bv/OD05hpO0qbruZkOME7y6QR7Z1Ay
-	XcWoj8mnZfta18UAYEL9duykStbAMprhuI3yqV41JwXJlT1F8ILGfnt3
-X-Gm-Gg: AYBFou3MZOdkAMnUNI8oh85GCfTcI1blKBBulSdaUppNCwHpWSMeBpgyHAPVdLOiUWv
-	q6Rcsw2oaA4g7LC1TqEijAxxhjFASTscGX7A9Z8zV961aH+TSfp1Z7JdtZgW5Yb8kiKA5ZdGqnA
-	4ndDg04j4gUChojGbeId/UsysIOCJcf6pf3ZuP+SuMlM/dVvwY8BPDMCk7k60Hn+h7O6uZJp9nw
-	RzyHUVTKVrp1zwLnZf5Phu1beUR10eCk1evUWF9oaJbIUJdPYFvZspNlA0c8P+XYpZG674ZFYN4
-	K/3Gd0OeB9cGRpq8DNVcpJIlsfjWRtE0IxomOcekCY/7DYT9YNtSFnYNXnx3yoo6v+jafTtTqz0
-	CY7gemgsr7PU7zOU+WtqV2nhDwiS2tcaTThnIQvxD2qnX99HHS6v5m/QXnFxdyWuUnjol6uCl1T
-	XPP34LMcU9+6o6dVDfSLnmoB7vHZs60RdrqPGcuVOnzHoEP/NfNSkQvsxCqPWZrb4IhRtQigKWm
-	f391XHuJdVA5dJFMvg4ZCmf5UxwAKilfPKaAuWCyB0zsib17YdWEU0ii/e3gKtepC7WXeqK4l39
-	alQ=
-X-Received: by 2002:a17:903:2c47:b0:2e9:9c65:1af9 with SMTP id d9443c01a7336-2e9a6d41d0dmr98863285ad.53.1792508855484;
-        Tue, 20 Oct 2026 08:07:35 -0700 (PDT)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b4ae277sm277345ad.76.2026.10.20.08.07.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2026 08:07:32 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 20 Oct 2026 15:07:31 +0000
-Message-Id: <DM9RCU3BDWEG.1C32ZIVU95S76@gmail.com>
-Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <davem@davemloft.net>,
- <willemb@google.com>, <eddyz87@gmail.com>, <edumazet@google.com>,
- <john.fastabend@gmail.com>, <kuba@kernel.org>, <horms@kernel.org>,
- <liamwisehart@meta.com>, <martin.lau@linux.dev>, <pabeni@redhat.com>,
- <song@kernel.org>, <netdev@vger.kernel.org>, <sdf.kernel@gmail.com>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <kuniyu@google.com>,
- <memxor@gmail.com>, <emil@etsalapatis.com>, <almagui@kernel.org>
-Subject: Re: [PATCH bpf-next 0/8] bpf: Expand ksock send-path support
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20261020102512.518479-1-mahe.tardy@gmail.com>
-References: <20261020102512.518479-1-mahe.tardy@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=N/Ryh22H
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 395A81F000C4;
+	Tue, 20 Oct 2026 15:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792509949;
+	bh=qnnKDDvmabqOsa4xKgNN1r+wBeLKSYF6UBFIXxksVrk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=N/Ryh22H3bh2OekkLERS5+/ZNyR79Ait3mk83MBE58z5nY43sBxn8Q9mb70aqTRLT
+	 kdRkja4iI4E8nIbnMI6tw5NgjDFfu5AnqxuLQiDzEU7pet6JhegJxpupKTcC5FkjuY
+	 OTnTETl4hTWohoiYS2FZ87uIookOWSNwoPhWDP0n5NsraDyNgAbD+ru21uhbIfzPwI
+	 tl49VaWf4TvIpf347OiU6Ulfc/C4ylIsSLfjRvr9UT6MKCqLL8cd+VDS5z9kux/xGC
+	 Fg4i1KgYvbSS52K5qSC184y7iRf+pTkBa0CEiGQbDUk6pKRn3s2elqhj5rbtGUDScg
+	 69FDpahn/H8qw==
+Content-Type: multipart/mixed; boundary="===============4093518717466758589=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,165 +49,179 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Message-Id: <a9ee5ed21d9e00e36d2bc48f64d47422ccfa7f8d12575e63456ffb0f9decd400@mail.kernel.org>
+In-Reply-To: <20261020145059.2146170-6-utilityemal77@gmail.com>
+References: <20261020145059.2146170-6-utilityemal77@gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/6] bpf: Bind iterator elements to their iterator
+From: bot+bpf-ci@kernel.org
+To: utilityemal77@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: song@kernel.org,puranjay@kernel.org,bpf@vger.kernel.org,utilityemal77@gmail.com,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 15:25:49 +0000 (UTC)
 
-On Tue, Oct 20, 2026 at 03:25 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
-> * allow bpf_ksock_connect() to be called in the send path
-> * add bpf_ksock_sendto() kfunc to complement to bpf_ksock_send()
+--===============4093518717466758589==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> bpf: Bind iterator elements to their iterator
+
+TL;DR:
+- Iterator elements may stay trusted after the next next() call drops them, so
+  the verifier may still accept use-after-free programs
+- Fixes: tag likely should be 4cc8c50c9abc
+
+>     bpf: Bind iterator elements to their iterator
 >
-> This is useful when using ksock to reply to differents peers while
-> reusing the same UDP socket and generally works toward the goal of ksock
-> to support the basic socket operations.
+>     An element returned by an iterator's next() kfunc is kept alive by the
+>     iterator alone. bpf_iter_task_vma_next() returns a snapshot that lives
+>     in the iterator's own allocation and holds the vma's vm_file reference
+>     only until the next step or destroy; bpf_iter_kmem_cache_next() and
+>     bpf_iter_dmabuf_next() hand out objects whose reference the iterator
+>     drops the same way. The verifier marks every such element PTR_TRUSTED
+>     with nothing tying it to the iterator, so a pointer saved across
+>     bpf_iter_<type>_destroy() stays fully trusted after the memory or the
+>     reference behind it is gone:
+>
+>     	bpf_iter_task_vma_new(&it, task, 0);
+>     	vma = bpf_iter_task_vma_next(&it);
+>     	file = vma->vm_file;			/* __safe_trusted_or_null */
+>     	bpf_iter_task_vma_destroy(&it);		/* frees snapshot, fput() */
+>     	start = vma->vm_start;			/* vma, file still trusted */
+>
+>     Set the element's parent_id to the iterator's reference id, as is
+>     already done for the PTR_TO_MEM elements of bpf_iter_num_next(), so
+>     that destroying the iterator invalidates the element together with
+>     every trusted field acquired from it. Elements of an RCU-protected
+>     iterator keep MEM_RCU and stay bounded by the critical section instead:
+>     they point at RCU-managed objects rather than iterator state.
+>
+>     Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfuncs")
+>     Cc: stable@vger.kernel.org
+>     Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 
-can we drop connect from LSM progs and patches 1-5 altogether ?
-bpf_ksock_sendto() alone replies to different peers on one socket.
+The Fixes: tag points at 4ac454682158 ("bpf: Introduce task_vma open-coded
+iterator kfuncs").  Did the problem described here exist at that commit?
 
-connect + send from LSM progs can't do that reliably. The socket is
-shared through the kptr and sleepable progs run concurrently. Between
-bpf_ksock_connect(A) and bpf_ksock_send() on one CPU, another CPU does
-bpf_ksock_connect(B) and the datagram for A goes to B.
+At 4ac454682158, check_kfunc_call() gave every kfunc-returned struct pointer,
+including the result of bpf_iter_task_vma_next(), a plain PTR_TO_BTF_ID
+without PTR_TRUSTED, so there was no trusted pointer to outlive the iterator.
 
-Without connect there, acquire/release in socket_sendmsg has no user:
-nothing can be done with that reference. bpf_ksock_sendto() is in
-ksock_kfunc_btf_ids, so the current filter rejects it in socket_sendmsg
-already. Then no need for bpf_ksock_send_id, bpf_ksock_sendto_id,
-bpf_ksock_connect_id, bpf_lsm_socket_connect_id and the cycle comment.
+The PTR_TRUSTED marking of iter next() results (or MEM_RCU for
+KF_RCU_PROTECTED iterators) came with 4cc8c50c9abc ("bpf: Make the pointer
+returned by iter next method valid"), and that change affects all three
+iterators named in the commit message.  The kmem_cache (2e9a548009c2) and
+dmabuf (6eab7ac7c5ee) iterators were added after it, and task_vma only became
+affected through it.
 
-Selftests are left out below. Patch 8 stays as is, patch 7 stays
-without the socket_connect hunk.
+The task_vma snapshot and vm_file reference described in the commit message
+came later with 4cbee026db54 ("bpf: return VMA snapshot from task_vma
+iterator"), which itself carries a Fixes: tag pointing at 4ac454682158.
 
-Something like this (compile tested only):
+Should this be:
 
-diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-index 48a2e23..48757dc 100644
---- a/net/core/bpf_ksock.c
-+++ b/net/core/bpf_ksock.c
-@@ -37,6 +37,25 @@ static void ksock_release_work_fn(struct work_struct *work)
- 	kfree(ks);
- }
+  Fixes: 4cc8c50c9abc ("bpf: Make the pointer returned by iter next method valid")
 
-+static int bpf_ksock_addr_to_sockaddr(const union bpf_ksock_addr *addr,
-+				      u32 addr_sz, struct sockaddr_storage *sa)
-+{
-+	if (!addr || addr_sz != sizeof(*addr))
-+		return -EINVAL;
-+
-+	/* Kfunc memory arguments may be unaligned. */
-+	memcpy(sa, addr, sizeof(*addr));
-+
-+	switch (sa->ss_family) {
-+	case AF_INET:
-+		return sizeof(struct sockaddr_in);
-+	case AF_INET6:
-+		return sizeof(struct sockaddr_in6);
-+	default:
-+		return -EAFNOSUPPORT;
-+	}
-+}
-+
- __bpf_kfunc_start_defs();
+> diff --git a/Documentation/bpf/bpf_iterators.rst b/Documentation/bpf/bpf_iterators.rst
+> index 189e3ec1c6c8..08c9c15b59ac 100644
+> --- a/Documentation/bpf/bpf_iterators.rst
+> +++ b/Documentation/bpf/bpf_iterators.rst
+> @@ -79,7 +79,11 @@ Constructor/next/destructor implementation contract is as follows:
 
- /**
-@@ -155,22 +174,9 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
- 	struct sockaddr_storage sa;
- 	int addrlen;
+[ ... ]
 
--	if (!addr || addr__sz != sizeof(*addr))
--		return -EINVAL;
--
--	/* Kfunc memory arguments may be unaligned. */
--	memcpy(&sa, addr, sizeof(*addr));
--
--	switch (sa.ss_family) {
--	case AF_INET:
--		addrlen = sizeof(struct sockaddr_in);
--		break;
--	case AF_INET6:
--		addrlen = sizeof(struct sockaddr_in6);
--		break;
--	default:
--		return -EAFNOSUPPORT;
--	}
-+	addrlen = bpf_ksock_addr_to_sockaddr(addr, addr__sz, &sa);
-+	if (addrlen < 0)
-+		return addrlen;
+> -    NULL-returning kfunc, of course).
+> +    NULL-returning kfunc, of course). An element is only guaranteed to be
+> +    valid until the iterator is destroyed, so the verifier invalidates it,
+> +    and every trusted pointer derived from it, at `bpf_iter_<type>_destroy()`.
+> +    Elements of an RCU-protected iterator (see KF_RCU_PROTECTED) are instead
+> +    valid until the end of the RCU critical section.
 
- 	return connect_socket(ks->sock, &sa, addrlen, 0);
- }
-@@ -212,19 +218,25 @@ __bpf_kfunc void bpf_ksock_release_dtor(void *ks)
- CFI_NOSEAL(bpf_ksock_release_dtor);
+[ ... ]
 
- /**
-- * bpf_ksock_send() - Send data through a BPF kernel socket.
-+ * bpf_ksock_sendto() - Send data through a BPF kernel socket to a remote address.
-  * @ks:		The BPF kernel socket context. Must be an acquired reference.
-  * @data:	Pointer to the data to send.
-  * @data__sz:	Size of the data to send.
-+ * @addr__nullable: Pointer to an IPv4 or IPv6 socket address, or NULL to use
-+ *		   the connected destination.
-+ * @addr__sz:	Size of the address union, ignored when the address is NULL.
-  *
-- * Sends data on a connected socket, best-effort and nonblocking. This may sleep
-+ * Sends data to the specified address, or to the connected destination when
-+ * the address is NULL, best-effort and nonblocking. This may sleep
-  * (kernel_sendmsg), so it can only be called from sleepable BPF programs.
-  *
-  * Return: Number of bytes sent on success, negative errno on error.
-  */
--__bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
--			       u32 data__sz)
-+__bpf_kfunc int bpf_ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data__sz,
-+				 const union bpf_ksock_addr *addr__nullable,
-+				 u32 addr__sz)
- {
-+	struct sockaddr_storage sa;
- 	struct msghdr msg = {
- 		.msg_flags = MSG_DONTWAIT,
- 	};
-@@ -232,11 +244,34 @@ __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
- 		.iov_base = (void *)data,
- 		.iov_len = data__sz,
- 	};
--	int ret;
-+	int addrlen;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5d3deea1cdc7..869e8d4083c6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -15762,6 +15762,19 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  			regs[BPF_REG_0].btf = desc_btf;
+>  			regs[BPF_REG_0].type = type;
+>  			regs[BPF_REG_0].btf_id = ptr_type_id;
+> +
+> +			/*
+> +			 * A trusted element is pinned by the iterator that
+> +			 * produced it and dies with it, like the memory
+> +			 * returned by bpf_iter_num_next() above. An RCU
+> +			 * element is bounded by the critical section instead.
+> +			 */
+> +			if (bpf_is_iter_next_kfunc(&meta) && (type & PTR_TRUSTED)) {
+> +				err = validate_ref_obj(env, &meta.ref_obj);
+> +				if (err)
+> +					return err;
+> +				regs[BPF_REG_0].parent_id = meta.ref_obj.id;
+> +			}
+>  		}
 
--	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
-+	if (addr__nullable) {
-+		addrlen = bpf_ksock_addr_to_sockaddr(addr__nullable, addr__sz, &sa);
-+		if (addrlen < 0)
-+			return addrlen;
-+		msg.msg_name = &sa;
-+		msg.msg_namelen = addrlen;
-+	}
+Is this fix complete for the lifetime of the element?  The documentation
+hunk above and the new comment say the element is valid until
+bpf_iter_<type>_destroy(), but several next() kfuncs drop the previous
+element inside the following call to next(), not only at destroy.
 
--	return ret;
-+	return kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
-+}
-+
-+/**
-+ * bpf_ksock_send() - Send data through a BPF kernel socket.
-+ * @ks:		The BPF kernel socket context. Must be an acquired reference.
-+ * @data:	Pointer to the data to send.
-+ * @data__sz:	Size of the data to send.
-+ *
-+ * Sends data on a connected socket, best-effort and nonblocking. This may sleep
-+ * (kernel_sendmsg), so it can only be called from sleepable BPF programs.
-+ *
-+ * Return: Number of bytes sent on success, negative errno on error.
-+ */
-+__bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
-+			       u32 data__sz)
-+{
-+	return bpf_ksock_sendto(ks, data, data__sz, NULL, 0);
- }
+The commit message says as much for task_vma: "holds the vma's vm_file
+reference only until the next step or destroy".
 
- __bpf_kfunc_end_defs();
-@@ -255,6 +290,7 @@ BTF_KFUNCS_START(ksock_kfunc_btf_ids)
- BTF_ID_FLAGS(func, bpf_ksock_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_ksock_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_ksock_send, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_ksock_sendto, KF_SLEEPABLE)
- BTF_KFUNCS_END(ksock_kfunc_btf_ids)
+What the next() kfuncs do to the previous element:
 
- #ifdef CONFIG_BPF_LSM
+  bpf_iter_task_vma_next():
+      bpf_iter_task_vma_snapshot_reset() does fput(snap->vm_file) and then
+      overwrites the snapshot.  This runs before
+      bpf_iter_task_vma_find_next(), so it also runs on the call that
+      returns NULL.
 
-pw-bot: cr
+  bpf_iter_dmabuf_next() -> dma_buf_iter_next():
+      dma_buf_put() on the previous buffer.
+
+  bpf_iter_kmem_cache_next():
+      prev->refcount--, or kmem_cache_destroy(prev) if the refcount was 1.
+
+  bpf_iter_css_task_next() -> css_task_iter_next():
+      put_task_struct(it->cur_task).
+
+With this patch the element, and the trusted fields walked from it, keep
+parent_id equal to the iterator id and stay PTR_TRUSTED until destroy.  Would
+a program like this still verify?
+
+    bpf_iter_task_vma_new(&it, task, 0);
+    while ((vma = bpf_iter_task_vma_next(&it)))
+            if (vma->vm_file)
+                    file = vma->vm_file;   /* trusted, parent_id = iter */
+    /* the last next() returned NULL after fput(file) */
+    if (file)
+            ret = subprog_trusted_file(file);  /* still trusted */
+    bpf_iter_task_vma_destroy(&it);
+
+Once bpf_iter_task_vma_next() has called vma_end_read(), nothing stops the
+VMA from being unmapped concurrently.  Can the file then lose its last
+reference while the program still passes it to a trusted-argument kfunc?
+
+The kmem_cache and dmabuf cases look similar: an element saved from
+iteration N stays trusted in iteration N+1 after the iterator has put it.
+
+A later patch in the series, a51a1f92e627 ("selftests/bpf: Test iterator
+element invalidation on destroy"), covers only the destroy case, and nothing
+in the series invalidates the descendants of the iterator id at next().
+
+Should the verifier invalidate the registers whose parent_id is the iterator
+id at each next() call for PTR_TRUSTED elements?  If not, should the
+documentation, the comment and the commit message say that elements stop
+being valid at the next step rather than at destroy?
+
+This looks like a remaining gap in the fix rather than something this patch
+introduces.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39445554665
+--===============4093518717466758589==--
