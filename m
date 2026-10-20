@@ -1,82 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792508218;
-	b=XVbzhPlXRNCKz07flgu1JUlLJBus/W/fp11lxIPiTw3pGex6DyrOZ9+UqQFd7pN5DiBz
-	 uqYmLglOlAlS0+T/dgKpkhvHrBzp/NmiyU6YR8Q3F/gLXo7hLgVOF394LUNeQcD4ZJt5l
-	 TH5k34LcnvveHocsg2iik2L6IaPJzPg3gu/Vcpi1W8t4j2De56+9fk2GTO4OA6Yiaw1R9
-	 6Ftr1ZV6dcjgnk5OuV7M1aynBznyNAckAVRNZ2rX/TTe17dt4GOHTsEtVJU+NVRU39K0u
-	 e/bVF7nCJGBJqHze5EG6skV5/DuoFqliy+ENAMB5WiLG+KUAlo1wqfuQckoWOyEUZNw==
+	t=1792508210;
+	b=YWyGK0Q8i7KNqWPzSF1fPsKuSavDQLheXpWq521vHufXI4Wz/3OSfPFT/SvJNt1FreTu
+	 RLDs6dnYRAjmfT51LUGB+bHS/46Vz+vt5jJWLJYak31ebUTF4WxKL4H13fs9mrrOK+/f3
+	 VNTpKBO05ZbJnKEcvSWYowMdBmqQ6qbur4fCmGVcjc38Xzy9t3/OSTNXZcyZTchUUyazz
+	 mcGPYL2jmHLNJIJckkxVRliFKD7VV4T66G0E2vzwDefZavxzvEpVNzDp//WnVRLcUtXyn
+	 IjCiy0b/WuW9eUO0gPbzpokm3ld5UN1ObFlK1v26H49106nwa3k4LvD02DF9QITtUeg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792508218;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792508210;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=laKttaaJBwo/m3r8kgxAVHc0DX2pc7Yi6eXEgKH97Ic=;
-	b=w/O93bwFYQa/8WSY+nCdQoTSbbYJo4vrLbknyPj+q/da81uM6dj5UdjwiBujk1Y15kxh
-	 NtxWTDkqNZfJ4uwDDP0hTTgnHVHkXejeEawSHMBUX6WYYLCq0UiUmGH1D4RaNdfkoOeH3
-	 +8Mp8vF+OJD/ioiDpzZPMBhG7mcRF+MXIGWeOhhZxMd+/BRS0sbcPxox+isYryA86dy07
-	 kMYVw92eAqe42snWC2O+7gGCL+u24isJHRj57myOq//OpecCX/Etr701DGOxUvc5me5mZ
-	 4q4xuiwV0R5OjsGdNJtPLGumk+v5ZZPHu7ZQI+pJLRiyhIDBveee9TMp+mhXYrzhTuw==
+	bh=uiiIL8NFGD5DETU2s3g3/cnc9XKzRM8iH1yFYNpgoQc=;
+	b=go+0Zx4ySDHpa72wpaFVBqHkjF5xxfu94G+2F5y9oy98cRRFXRTiZilrzXRPzfwyPpfl
+	 3k5xfUvw0EuWBq9hVQyI5BcE8zeOdtSM7H1n36zrPZUMx0gYg81hYyUIlFitjJxU4e+AQ
+	 FBNlygcjwyjaRsXiNrPI0uPH5wOKQni/NJ+Avmwa0OWhNCMl+3mlmryi4AeH/OoCIMtx2
+	 0OeP1v9fMd5uLINAtk632sYIubQCZ5gz4LOnwGQk+TBkkOEftOzNPY1dCFJVvSnKm2ZNB
+	 1hkiAsWnKkhWQORkVxLt+COqH2lXQoKoSCEoyvgUgMRz2ry4nLq1DWT3v3+OupwOhOg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ii0ttB8c;
-	arc=none smtp.remote-ip=74.125.224.52
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="dys6/S4d";
+	arc=none smtp.remote-ip=209.85.128.171
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E759860A2616
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:56:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E759860A2616
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AA6606A31F
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:56:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5AA6606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ii0ttB8c
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-67583c777abso913588d50.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:56:57 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=dys6/S4d
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8ab432273c5so26273917b3.3
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:56:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792508217; x=1793113017; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792508208; x=1793113008; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=laKttaaJBwo/m3r8kgxAVHc0DX2pc7Yi6eXEgKH97Ic=;
-        b=ii0ttB8cIcGzP9zV3ZREwiZ5ofLUSuRspo8x7HONnAj3oWU0jYjhkOa/v7vOCjs+Sr
-         EnyqsV9KbaqLvrJRC4HwEgG/iOiSqyjJkxxeTzW57KuL4MoOm4QEbMTqRfMGZ/SftxQf
-         d9kAZjd2Phz/oKZfH8XpVSQ6Gg8jeAJRiwp9dFyrimBqXAhLSWlPTWHr9lF4cDVjBAxv
-         u9nIdUOXVNziD9y6GC4aJ3pqfja0SDZMDMaB6EJsRHhRE6KEa9w8MEishbqsEZCMXYWT
-         xCdwGDPn5JumBc6ikxG0eQ/GYWUeyj5sKkF72ZxmJEnxWSS3GPbmcl+ceeJXnB/WL3Nl
-         7Bpw==
+        bh=uiiIL8NFGD5DETU2s3g3/cnc9XKzRM8iH1yFYNpgoQc=;
+        b=dys6/S4dmC8/FQAgnJSVVfAmUAVkH3lDMexZZlMx4d2L/zHVtug/uiXotBrpfclY/S
+         pBTdGqOZJ39oMHL8AQQxDJ+V5Lo0dsEd6S0yuhlA1JFJ2ax3xjSuDS2NNj1Qo8M4PYq3
+         OTC0uho4DQ94H83ZgAJAE6qileaBK+hZRT5fzlv1i/wsJXP3/0Y/QjWtuaec/JloBZvp
+         xdhfQ+mxfbk7Mu7oH1E/jg/IdeXHcbnJEGFJtgzHO1xos97VEnGqaYdX9LkOwoMgTiN3
+         r8zLfBKQWi74qvyijH7XLkxxLzlmFLH21PQKwGIct/4V8QlQIi2hK7bxtEn2iidWr4X5
+         yYag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792508217; x=1793113017;
+        d=1e100.net; s=20260707; t=1792508209; x=1793113009;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=laKttaaJBwo/m3r8kgxAVHc0DX2pc7Yi6eXEgKH97Ic=;
-        b=wAged5JMbBU+xmhMT9abgcP5GUcviUZT57YwrGTC1AAgVAmeWxzdFl1zry6HQ4IY53
-         a4Zn3GbUzW/p/HmG6VieXXLZbYbwolggT+ncPfMozHQDJ1zUnpoByjBDQDp2bMSGubSo
-         A/raGWIHJrssOPtBYHz/nVM0kgc5zgvLsR4n0lL1aaW/gRBaktm3CmeKW5RIHMdIfp0X
-         SenR0bxXhPojWh3mS1PRuzxYPH8NNrdhsOnroPZPDaXkLv5U636wcVZ3C/asCk8G23n+
-         innZnx3ta17ZbSWV6BxssAv6tmbftX+rsQeBLfCvyQmhG57iVkK7hDR7uxFE4i80McZt
-         WcNA==
-X-Forwarded-Encrypted: i=1; AKwUvBwEH+u35PG3voSkQGJfClGjiUeQOh0WeGxpd+ALxih2PUcr+EJ//UYGvCwBE+eLNE4+QEU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI+7gYw1UeNK8Sgzy9cgDbJKGbobh2zGuaepNu4kJS04HvliJ5v
-	bRLg2239a2ue0dVEonr5TpPnqcTznE859nlbg7r7DZu1vDZKBqw4OcDy
-X-Gm-Gg: AYBFou0jlvw7iNMgYvQ7FPDtGVstsgC2I4yT1S5FXm3qzrR+c34JEDXkz5Gn/ulJuEn
-	OYryE+1hFaLoC919HUHearccnFtTzbBZHspU7SVKMz1WnjRCS9+NRgd0yRl1yYjcwN4OuF889+t
-	Yse+xgm1dpNYw62b1GbBaosgBwo2sTsN9vRhzV1/3ePZ2OsShFbt/7oEN7wAz1wVis5/KRSqi6N
-	WwUYATEJrM+DPKLibpTYpYsnYCrWcBWADgpERGIUsbVuT1TSWAKTslfylvC7+1yhAMmSeV+goC1
-	6UeI8RROIcDZByeoSoEfaz2sW0Fjo/MMzIzkZ19p18MDPUL19gIJuCcinKDu06GEjFV8hL3kQwr
-	TRr3CdZxu5J+MoVCsplRFc8jBc99Gt3y1iheJ5C/zavORqDk9RHXY0dU34mwOe1gLBo9NKt9o9N
-	wimwM/6hOiSqhZK27s5CHKKJTA0O4WXmiNqPXyX+Opfq8GLYHzD0CrP5tkuAGQfZ+FOB8NyOZtO
-	LqNCx364Q==
-X-Received: by 2002:a05:690e:1918:b0:679:9b73:bfab with SMTP id 956f58d0204a3-679fc08c394mr899178d50.43.1792508217007;
-        Tue, 20 Oct 2026 07:56:57 -0700 (PDT)
+        bh=uiiIL8NFGD5DETU2s3g3/cnc9XKzRM8iH1yFYNpgoQc=;
+        b=v/ptZWLmlCUvV9m8PVmZiNSCQkXmjYqCIGkPEjeKIcxTCGeItWj3a+X4ki9II9Auey
+         vFROD+qkSieWlY+udfuFbrJNv1clC5qdhy7FM+uq4T3oiyzK1Z1Mys4ulV//IR+xMF+s
+         H1hlaJS5fwANDZh5PBqL4sIH9+lEGXOR6NFYtv4luh6i8LEtBAb3WPN5qH4Fp0jxsYo/
+         fXM3VAhZJ/Yw8UbDgVWVnM0wT/xgMDnmblNY3Cbtm92vYE1oAtm+au9YX7rN5FKKqt1Q
+         A0AtVHhoRqVMcIi1NwQXdX4ULw0oq9LKr1BaV2Zu8oNRp3zdcsGXXXCBfX0wgtyw2JZa
+         f0lw==
+X-Forwarded-Encrypted: i=1; AKwUvBy3gQIX7Xwtr51S0tIj45kamKUCnBuCrrMmTs4XYbGSx6B9s6z9GgX7++Ot62+QRXM3/3E=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJZ3ULyuPRZeji3RcMH4v/wYNmItfx4iWf6EDEVlHKlLYhsA9LG
+	gWJtQ8q9rDv64X/FL8wsWzf90jAehr95LAOepSNkANfLuP2BpLbQcZu5
+X-Gm-Gg: AYBFou1YQrn8yagdrvKmUgSR1dYYei6ZvMaQ0nk+ZK4PmrozCR5FN7yXs+pNMkL5Wzw
+	woEUJynvv9TmS18CkCvEGn9EuEv8ASTHFwsq7xvD/AadgIUWXkizXogbI/n2stUX6P2ru7lQCmJ
+	XJynqmXqZ22cEP5CnsDTUHs9G+UZMGR7Ae+4p1slL+lgXcNH/pd41+pfLtrZpqrwdk2MZFpcIDG
+	fScakvJMYGFg4ZctHJWNVwfzoyi8Jcx3Rw79Zl9EdNEv9Vk84/vL9B79oCbPN9H7m76nXZHKT57
+	fAZgTfSY+LbPm/P6Zu2Z0jl5UAIW5aaWa0Kza1GwOhdGkYU5+Q9E/t9Ydivy/X6ReJgovqaJ4V8
+	4Hjj9KsXHK3d0nuSAD9M9O3LHomazdfLY6cv1P1p9CzZAlI/182xVffcuEUTy6Fbs4ZJ89DhGgE
+	k+vltq5XYX/PuLT1hSRYKXo0oFrPDwqQ39Po3uiuD+Y1V3n+vcYePx4qJbQL3Ap1hLQ7/Ppy0=
+X-Received: by 2002:a05:690e:2606:b0:677:bb39:4c1b with SMTP id 956f58d0204a3-679ca913128mr2850089d50.105.1792508208677;
+        Tue, 20 Oct 2026 07:56:48 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:8701:205:573e:17eb])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679b1c98a1esm5239944d50.1.2026.10.20.07.56.56
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-679b1c98a1esm5239944d50.1.2026.10.20.07.56.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 07:56:56 -0700 (PDT)
+        Tue, 20 Oct 2026 07:56:48 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,9 +86,9 @@ Cc: Song Liu <song@kernel.org>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	bpf@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Test iterator element invalidation on destroy
-Date: Tue, 20 Oct 2026 10:50:59 -0400
-Message-ID: <20261020145059.2146170-7-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next v2 2/6] selftests/bpf: Test MEM_RCU carry-over for trusted fields
+Date: Tue, 20 Oct 2026 10:50:55 -0400
+Message-ID: <20261020145059.2146170-3-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261020145059.2146170-1-utilityemal77@gmail.com>
 References: <20261020145059.2146170-1-utilityemal77@gmail.com>
@@ -104,94 +103,112 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Save a task_vma element and a trusted field walked out of it across
-bpf_iter_task_vma_destroy() and check that both uses are rejected, and
-that the existing operations already allowed before destroy are accepted.
+Walking file->f_inode out of an RCU-protected mm->exe_file must yield
+an RCU pointer that may be NULL rather than a trusted one. Add reject
+tests where the inode is dereferenced without a NULL check and where it
+is used as a trusted argument after bpf_rcu_read_unlock(), and an
+accept test where it is checked and dereferenced inside the RCU
+critical section.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- .../selftests/bpf/progs/iters_task_failure.c  | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ .../selftests/bpf/progs/verifier_vfs_accept.c | 24 +++++++++
+ .../selftests/bpf/progs/verifier_vfs_reject.c | 51 +++++++++++++++++++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/iters_task_failure.c b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-index 566a1d3dffea..f9c149b4a2d5 100644
---- a/tools/testing/selftests/bpf/progs/iters_task_failure.c
-+++ b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-@@ -14,6 +14,74 @@ void bpf_cgroup_release(struct cgroup *p) __ksym;
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+index 55398c04290a..34919abcff04 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+@@ -100,4 +100,28 @@ int BPF_PROG(inode_rename, struct inode *old_dir, struct dentry *old_dentry,
+ 	return 0;
+ }
  
-+__weak int subprog_trusted_file(struct file *file __arg_trusted)
-+{
-+	return file->f_inode->i_ino;
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("invalid mem access 'scalar'")
-+int iter_task_vma_use_after_destroy(const void *ctx)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+	struct bpf_iter_task_vma it;
-+	struct vm_area_struct *vma;
-+	unsigned long start;
-+
-+	bpf_iter_task_vma_new(&it, task, 0);
-+	vma = bpf_iter_task_vma_next(&it);
-+	if (!vma) {
-+		bpf_iter_task_vma_destroy(&it);
-+		return 0;
-+	}
-+	bpf_iter_task_vma_destroy(&it);
-+
-+	/* The vma snapshot lives in the iterator and died with it. */
-+	start = vma->vm_start;
-+	return start;
-+}
-+
-+SEC("?raw_tp")
-+__failure __msg("R1 type=scalar expected=ptr_, trusted_ptr_, rcu_ptr_")
-+int iter_task_vma_file_after_destroy(const void *ctx)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+	struct bpf_iter_task_vma it;
-+	struct vm_area_struct *vma;
-+	struct file *file;
-+
-+	bpf_iter_task_vma_new(&it, task, 0);
-+	vma = bpf_iter_task_vma_next(&it);
-+	file = vma ? vma->vm_file : NULL;
-+	if (!file) {
-+		bpf_iter_task_vma_destroy(&it);
-+		return 0;
-+	}
-+	bpf_iter_task_vma_destroy(&it);
-+
-+	/* vm_file was pinned through the vma by the iterator. */
-+	return subprog_trusted_file(file);
-+}
-+
-+SEC("?raw_tp")
++SEC("lsm.s/bprm_committed_creds")
 +__success
-+int iter_task_vma_file_before_destroy(const void *ctx)
++int BPF_PROG(trusted_field_used_in_rcu_cs, struct linux_binprm *bprm)
 +{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+	struct bpf_iter_task_vma it;
-+	struct vm_area_struct *vma;
++	struct mm_struct *mm = bprm->mm;
++	struct inode *inode;
 +	struct file *file;
-+	int ret = 0;
++	ino_t ino = 0;
 +
-+	bpf_iter_task_vma_new(&it, task, 0);
-+	vma = bpf_iter_task_vma_next(&it);
-+	file = vma ? vma->vm_file : NULL;
-+	if (file)
-+		ret = subprog_trusted_file(file);
-+	bpf_iter_task_vma_destroy(&it);
-+	return ret;
++	if (!mm)
++		return 0;
++
++	bpf_rcu_read_lock();
++	file = mm->exe_file;
++	if (file) {
++		inode = file->f_inode;
++		if (inode)
++			ino = inode->i_ino;
++	}
++	bpf_rcu_read_unlock();
++	__sink(ino);
++	return 0;
 +}
 +
- SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
- __failure __msg("kernel func bpf_iter_task_new requires RCU critical section protection")
- int BPF_PROG(iter_tasks_without_lock)
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+index b5f456d57669..7ca0d8c3edf1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+@@ -173,4 +173,55 @@ int BPF_PROG(inode_rename, struct inode *old_dir, struct dentry *old_dentry,
+ 		return -EACCES;
+ 	return 0;
+ }
++
++__weak int subprog_trusted_inode(struct inode *inode __arg_trusted)
++{
++	return inode->i_ino;
++}
++
++SEC("lsm.s/bprm_committed_creds")
++__failure __msg("invalid mem access 'rcu_ptr_or_null_'")
++int BPF_PROG(trusted_field_of_rcu_parent_unchecked, struct linux_binprm *bprm)
++{
++	struct mm_struct *mm = bprm->mm;
++	struct file *file;
++	ino_t ino = 0;
++
++	if (!mm)
++		return 0;
++
++	bpf_rcu_read_lock();
++	file = mm->exe_file;
++	/* The file may have been recycled under RCU: f_inode can be NULL. */
++	if (file)
++		ino = file->f_inode->i_ino;
++	bpf_rcu_read_unlock();
++	__sink(ino);
++	return 0;
++}
++
++SEC("lsm.s/bprm_committed_creds")
++__failure __msg("R1 type=untrusted_ptr_ expected=ptr_, trusted_ptr_, rcu_ptr_")
++int BPF_PROG(trusted_field_escapes_rcu_cs, struct linux_binprm *bprm)
++{
++	struct mm_struct *mm = bprm->mm;
++	struct inode *inode;
++	struct file *file;
++
++	if (!mm)
++		return 0;
++
++	bpf_rcu_read_lock();
++	file = mm->exe_file;
++	if (!file) {
++		bpf_rcu_read_unlock();
++		return 0;
++	}
++	inode = file->f_inode;
++	bpf_rcu_read_unlock();
++
++	/* inode inherited MEM_RCU from file and is untrusted after unlock. */
++	subprog_trusted_inode(inode);
++	return 0;
++}
+ char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
