@@ -1,76 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.241
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792513256;
-	b=QC3/IV9gKWwRrNXVOKU1tv7UiIBf7F+aZmBYZPt6OXeaCDUQbBGT+xBUCimsCvQYmQNS
-	 9/D48LCBN8zF96osTRBjsv3t96BV3reMLEGtIYFZlUe14x5GFjkIXSvWDKABgJq76PkRQ
-	 DioPeLbJumyGG5OzHNNOf0oj0vB4kneEgLLuyc+2LiHcxT7XMJwhlwySMF8ITFhtLiDj+
-	 GSNY0KDF1Nnyxpm6INtokMO8/u3gfNQCiJkpX1X2L5gXzVChMGqP+xDEvLL1Sv7C+jswn
-	 hbr8Gm8Wzk23FCpO9mmdWB8NGojnmLxhOlCkGV24pFaqt6pED3TorCUKZ8PJCWR9gWw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792513256;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=hrU0r9uDIs9Pd22NaQQcI8Yi0Ld/nqW4OLqdhS8pNrI=;
-	b=l4u636ZW/H4FKpMEToRa3RszyMUHNsTsy50gVv4F2tD2z34bZA7BzQgJD9Dc0kSV76ds
-	 Z3XzwOS5xx0Bm0FGGiFCCet3Sv1p2ZC+Qwo97iq4e666qoL7CmmRwTrj7aWZ0dC6hxIO/
-	 pOyziEp9fYDMsDWu3D5zEtUtDJqgCwYK1myEReHETrJC5kXGilkZgSyPNFC76J3Zqe1oE
-	 gVCOOLHD2v6h5Tx8lO3xsYD+N6Or33Dtld0ou4TcQfcrTgRWljnF9KNkahtK1zxDDZI3u
-	 czacz4LclOrlAbV53Qj8hMAs1ebmOJQdZF3erZA8qIJLz/yZzQfZSc1p0L1MQqTRsyg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DdSjhmh4;
-	arc=none smtp.remote-ip=95.215.58.241
-Received: from mta1.migadu.com (out-241.mta1.migadu.com [95.215.58.241])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792513398;
+	b=pFlHpFzUcaTiE3jLW0FjBuTio2o71COa9PGgIOQymAmuNJ4bzVrYBz5Hr2xWsAZqyrjN
+	 HMhBGwcNzjoeZOr9KKSM0vuV3jz3+o0e0V3+dOgSfiIBVrJhauqn3FWkODOYgKfS4EpR8
+	 m/LoWqlqsKjvqfvrdqgdxWyxJRzZif8zMmY01UILV/CLX23ATw7W5/P4gYLSDZCcS/llc
+	 qQHVxr0iXDE1uF1t4Qsp63URFkAKU1hdGT+HNnMlO4cixTbqCduWQJ3OWZ7ZwWZ653TtM
+	 BfcOtjjSm+5+Ko/xBwvtq58sLBmPB4zL3dsZuiJvHQ92HirtzFL0/9fdILLDyQ0BmOA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792513398;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=0jCj2axNyxSFURiXpH7V4N8DE8GNJe9dPnJmhT9P0cA=;
+	b=eeKsK/aT3H1I4Cnum7jAifZKIWgHZ7vbE/WtfzDHmRZnHtdg9W0dD2pLifPTjTQXL9Os
+	 2p0NsMT1BWB8cxw7gRGK3C1WVT4QHAnyfPkeFEEh15b07TG7COJRf67nTbAEDLLR1jf2R
+	 w9pqQY4Ib88s2ze77tnDWy1htJWYMJg3QyZPiJfvi10xE5Qn5BMHeQ1j9G/ex4jYrF/d9
+	 pc6c4WT6SKwP4+pmL10ubZbY041iSY7BvZLicRprijBzM9NMnV0DkbmJEC8BrIOszkikP
+	 Q1Y4+3UoKYJUuciWKIl/dFAl7t5yQ7gQj/n+TIxC6gOOb/RBrPfWraMlH1NG3iY1ulw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Xua+F94x;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.208.49
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4618260A2604
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:20:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4618260A2604
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09B9606A31F
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:23:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F09B9606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DdSjhmh4
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NbWUSQWwUXooZIyxNLSex7QYUtdoTqWvzVJqXTgn82c=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792513254; v=1; x=1793118054;
- b=DdSjhmh4MWu3D3DfmX7AKIi9g6mERQmU6G+jeRd4kFbYCSrHHm8E3orwkqcUcCfCY3YJ2WPI
- i+aMwtCvz57MkjjEZoVMXrYD7HIfnGysxxClgTP8QWYASdDvlLH7JYj1GW6qHLrctehdPg84Fr3
- 15RqnSM3D9gIERG+L76VZoPk=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a1348edbf7a2f3df;
-	Tue, 20 Oct 2026 16:20:54 +0000
-X-Mizu-Trace-ID: a1348edbf7a2f3df
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v3 12/12] [do not merge] selftests/bpf: Cover the low-32 link for narrowing stack spills
-Date: Tue, 20 Oct 2026 09:19:07 -0700
-Message-ID: <20261020161907.2115379-13-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261020161907.2115379-1-vineet.gupta@linux.dev>
-References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Xua+F94x
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6b1b12de661so14913a12.0
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 09:23:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792513396; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mCIm1YwaZzn9/da5qTpl8MOqlWNqCMM3np7uRSJW/5yOLvFiHo5UcdGuLpcHDNTRHB
+         rY+8bj7SorF2ef8JocHthMSi5xkJ6PdQxZaltB67TfGSkEzF/Khl6JzfOfsIvcCkALy4
+         Ne8VCkF61SOCMXJofk6Psgi7YMSFMcRvA3KUCPpLKZoKuxZ7CNkkWxD2xzdKfA3TXmyP
+         8xJZkZQuTNRUVGIn3LXkL1Gwtb8ndk+KKJccEdJKbyH0fu9LpS23pOgq+Indbut8J7Z6
+         7rJVCPttKA71evaY0keC+fd2XXqFezA4km1MurhOmMc75sFi0ckOqLiYGIJyIv/AMGXK
+         kcLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0jCj2axNyxSFURiXpH7V4N8DE8GNJe9dPnJmhT9P0cA=;
+        fh=cru/MXUf20sIey4R+kXM23/7Zs0L7yrnXaTSf6eKEyM=;
+        b=fK1Y3y+YtQtDREhUHSUKeBVN++WwNdCISaWIDNzjheGYQ7sPqOK6OavEzj331b6LqO
+         dLO/CBjj0zc+yXi1qL9sWLDHzY+nZfZx51GWvDOG7GVG3j/0FvKeA/S3L9K8tNlHTvoy
+         CHHLVSkyOvAhPWc5z5dnzzzyYcJBeYms6B2WjZBaGJnhugJEwFAr0YRYmNznQZ6QjzUK
+         L4XBCZY51A2qrlesWGs5MslbstfhS5EGLqKhDOQGMq6m04kGNOzqY4PxoOx7gH6qTGNl
+         ilVZ9VTLSLicGAByaiYpkcMFuJU3yPNQtlcPsrd/3YI+q4QREM7qWpIxmicy2XKPP9bw
+         Gt3w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792513396; x=1793118196; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0jCj2axNyxSFURiXpH7V4N8DE8GNJe9dPnJmhT9P0cA=;
+        b=Xua+F94xPs4SLRFvPHZvf8ENdD6xQkEFYVjamT9EZRzYSfJtvS7XDtwmZyz1gTEJ0Z
+         /WkxlqQ5rxEvkZKLXwDC4ALxhuuf3lvKENwOAe2FrlDflythScAJ0Tn5Atp7/sUdwsFJ
+         E5biZmC8UmGgW0KNyTHjULGeLnoa0QbAm6UUD7R5xj70LVhv4dsixEwE51Pjds0Owm/s
+         yh4EPRS7zc5XwowJlsvmHsNHogBe1Cs3eCTy7l+wjYHJVHHx8KQKzvWnrNZKclhTNIQm
+         ckqTqXGWGJiMJjLhtJ75lQ1ZbkeOSru9OrP82Q8PUanZ2j0r8yLVhiS2BLjqoKfeus8q
+         kXmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792513396; x=1793118196;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0jCj2axNyxSFURiXpH7V4N8DE8GNJe9dPnJmhT9P0cA=;
+        b=R1QnFxLwFQNdG8ydbKQ3Ae4WhKfivoPFe09kvxOCeRnnb14agXlysj4u0dPjuABNcw
+         2qNmTPyoutvETUfqkitXThDfwXlKScDbjHg5SL0wOD4KtG2f2Z/Uua7ErFPwqoEnqGcH
+         j+MeQ0hxmsURo+Jg5hkntYs9Sf88CCpltouBjpkOHgAFkAzR3RECIsjW6Cj+Jm91RGws
+         osxq5yYXUDD2REMmFAXbF4HM2PTY8Vc5XhzrdBiJZlTGAg/HuFopMj7rZs+iskbz3zzO
+         VcyaesyfESY2W7q69T9UxPo1cVmB3v9JL3u2h2Cq8y1+MWzlBL6VOfnTEmpKAwYsZS8O
+         ctUw==
+X-Forwarded-Encrypted: i=1; AKwUvByXKGK7jifYs76SXLIBsJ9m0sbWP28kr7cg6KbC5q4pS/G2KflafDCjM1Pqr37DpDT5DFo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ0C+tJzz3SgutqHywwmZ8imypGEAW7W8FwHrvz77e3WjY0o5r3
+	xTWNrh+9uJpsU8xoL/xMHMbT/FZMIQd8LzpsM2EFXinOHspVSAsOKVMMr2HElk7xsKbkge5s+Z8
+	1Ecy0b5i0qRXga1rgJ5sCgVn88vIAoB3PQbKCg1Pa
+X-Gm-Gg: AYBFou3+NA/YC6YykJ86KbAsVEUZb9cEADXJr01BaFCVCaoCK02X75/jtWPEi/vvF4h
+	TUAVLvwbmL2I6Ax8hovhCtvcG5iD7Fyefphf9oVScaoNugWCRcxS52wxXNW579ORNRFk5uHdFdC
+	qxAN4Q5CnW133VSnW1L9AF2EyLYlKXyBly4Bdr09X5a0yCDota743+8Nbom7GgtGyY1itfPUuPk
+	hvdc5PiXitQhOR54HpRcFpluLhuVm36t9SVCchTl69QXdb4QAvS39lJThKyZ8PKZN5LMFDg2adu
+	6LNauvN0qq9rrBX0r5DCLpYKZMf3Dl4QJMyhLydv2LdMQ5aT4Vog
+X-Received: by 2002:a05:6402:a593:10b0:6aa:babf:adeb with SMTP id
+ 4fb4d7f45d1cf-6b3e59e5999mr68410a12.4.1792513395686; Tue, 20 Oct 2026
+ 09:23:15 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -80,249 +103,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261014173945.373295-1-almasrymina@google.com> <179249101026.3632927.6502845375265155678.git-patchwork-notify@kernel.org>
+In-Reply-To: <179249101026.3632927.6502845375265155678.git-patchwork-notify@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 20 Oct 2026 09:23:03 -0700
+X-Gm-Features: AclHuK98NB_XkoOPCMHRm8iUlfrFJ_YYRk69JLvIRXvJ8G4hhuCyWlkE4iWtFOw
+Message-ID: <CAHS8izMRSU3AyVf+sP5uXShiSKuLumZwT=fsgW+bhJz47UoPRQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 0/6] net: unify symmetric netmem and page_pool refcounting
+To: patchwork-bot+netdevbpf@kernel.org
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, ayush.sawal@chelsio.com, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, 
+	kuba@kernel.org, pabeni@redhat.com, tariqt@nvidia.com, horms@kernel.org, 
+	steffen.klassert@secunet.com, herbert@gondor.apana.org.au, 
+	ncardwell@google.com, kuniyu@google.com, john.fastabend@gmail.com, 
+	sd@queasysnail.net, ebiggers@kernel.org, kees@kernel.org, 
+	aleksandr.loktionov@intel.com, petrm@nvidia.com, u.kleine-koenig@baylibre.com, 
+	j.raczynski@samsung.com, wang.zhan@smartx.com, willemb@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Six programs:
+On Tue, Oct 20, 2026 at 3:10=E2=80=AFAM <patchwork-bot+netdevbpf@kernel.org=
+> wrote:
+>
+> Hello:
+>
+> This series was applied to netdev/net-next.git (main)
+> by Paolo Abeni <pabeni@redhat.com>:
+>
+> On Wed, 14 Oct 2026 17:37:14 +0000 you wrote:
+> > netmems (pages and net_iovs) have two independent refcounts: a non-pp
+> > refcount (page._refcount or binding->ref) governing backing memory
+> > lifetime, and pp_ref_count governing recycling within a page_pool while
+> > page_pool holds a single backing non-pp reference. SKBs with
+> > pp_recycle=3D1 own pp_ref_count references on page_pool fragments; SKBs
+> > with pp_recycle=3D0 own non-pp references.
+> >
+> > [...]
+>
+> Here is the summary with links:
+>   - [net-next,v3,1/6] netmem: rename __get/__put_netmem() to get/put_net_=
+iov()
+>     https://git.kernel.org/netdev/net-next/c/a868720467d9
+>   - [net-next,v3,2/6] net: skbuff: add napi_pp_get_page() and use it in t=
+cp_recvmsg_dmabuf()
+>     https://git.kernel.org/netdev/net-next/c/729a47b803b5
+>   - [net-next,v3,3/6] net: skbuff: replace skb_page_unref() and __skb_fra=
+g_unref() with skb_netmem_unref()
+>     https://git.kernel.org/netdev/net-next/c/4d688084070e
+>   - [net-next,v3,4/6] net: skbuff: replace __skb_frag_ref() with symmetri=
+c skb_netmem_ref()
+>     https://git.kernel.org/netdev/net-next/c/1f6f88105e1d
+>   - [net-next,v3,5/6] net: skbuff: use skb_frag_ref() in skb_try_coalesce=
+()
+>     https://git.kernel.org/netdev/net-next/c/447f58db3505
+>   - [net-next,v3,6/6] net: kunit: test netmem, page_pool, and skb frag re=
+fcounting
+>     https://git.kernel.org/netdev/net-next/c/2285346afc99
+>
+> You are awesome, thank you!
+> --
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html
+>
 
- - zext_narrowing_spill_reaches_fill: narrowing while the value is still
-   on the stack narrows the slot, and the fill copies an already narrowed
-   value. This is the order the link is for
- - zext_narrowing_spill_drops_link: the other order does not pay, since
-   the fill is a mov and a mov drops a zero-extending link
- - zext_narrowing_spill_truncates_slot: the slot must be truncated before
-   the kind goes on it, or the first sync empties it. Asserted on the
-   dump, since nothing downstream rejects an empty slot --
-   BPF_F_TEST_REG_INVARIANTS does not walk them
- - zext_narrowing_spill_byte_no_link: a sub-word spill is below the model
- - sext_delta_survives_narrowing_spill: a source carrying a delta hands
-   it to the slot
- - sext_fill_of_narrowing_spill_drops_zext: a sign-extending fill of such
-   a slot must not come away with its zero-extending link
+This is awesome. For years the skb refcounting annoyed the hell out of
+me. I couldn't fix it on my own; there were too many edge cases I
+didn't thoroughly understand and could break. LLMs made this possible.
+Thanks!
 
-Posted with the patch above, which is not proposed for merge; these go or
-stay with it.
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
-v3: was v2 13/13, now tagged [do not merge] with the patch above.
- - zext_narrowing_spill_keeps_link becomes
-   zext_narrowing_spill_drops_link: a fill is a mov, and a mov drops
-   the link (patch 4)
- - new: zext_narrowing_spill_reaches_fill, the first positive test for
-   the spill link, narrowing before the fill
- - new: zext_narrowing_spill_truncates_slot,
-   sext_delta_survives_narrowing_spill and
-   sext_fill_of_narrowing_spill_drops_zext
-
- .../bpf/progs/verifier_linked_scalars.c       | 181 ++++++++++++++++++
- 1 file changed, 181 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-index ab78285153fb..8ade4836e1b2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-@@ -1217,6 +1217,128 @@ __naked void zext_fill_byte_forms_no_link(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * The link does reach a fill, provided the narrowing happens while the value
-+ * is still on the stack: sync_linked_regs() walks spilled slots, so narrowing
-+ * r6 narrows the slot and the fill copies an already narrowed value. This is
-+ * the order the narrowing-spill link is for; the other order is below.
-+ */
-+SEC("socket")
-+__success
-+__naked void zext_narrowing_spill_reaches_fill(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;		/* r6 = full 64-bit unknown */	\
-+	*(u32 *)(r10 - 8) = r6;	/* narrowing spill, forms the link */ \
-+	if w6 != 0 goto 1f;	/* narrow r6 while it is on the stack */ \
-+	r2 = *(u32 *)(r10 - 8);	/* fill gets the narrowed value */ \
-+	if r2 == 0 goto 1f;					\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * A narrowing spill stores only the source's low 32 bits, so the slot is their
-+ * zero-extension. Filling it back is a mov, though, and that drops the link
-+ * for the same reason zext_chain_drops_link does, so a later narrowing of the
-+ * source does not reach the filled register.
-+ */
-+SEC("socket")
-+__failure
-+__msg("div by zero")
-+__naked void zext_narrowing_spill_drops_link(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;		/* r6 = full 64-bit unknown */	\
-+	*(u32 *)(r10 - 8) = r6;	/* narrowing spill, forms the link */ \
-+	r2 = *(u32 *)(r10 - 8);	/* fill it back */		\
-+	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
-+	if r2 == 0 goto 1f;					\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * save_register_state() copies the source register whole, so the slot of a
-+ * narrowing spill arrives holding bounds for bits the store never wrote.
-+ * Recording BPF_REG_LINK_ZEXT on top of those is a contradiction, and the first
-+ * sync_linked_regs() runs straight into it: it rebuilds the slot's low half
-+ * correctly and then intersects it against the stale wide bounds, which are
-+ * disjoint from it, leaving the slot with an empty range. Nothing downstream
-+ * notices -- not even BPF_F_TEST_REG_INVARIANTS, which does not walk stack
-+ * slots -- so assert on the dump.
-+ */
-+SEC("socket")
-+__success __log_level(2)
-+/* untruncated, the slot kept r6's umin=0x100000000 and went empty on sync */
-+__msg("*(u32 *)(r10 -8) = r6 {{.*}} fp-8={{.*}}smin=0,smax=umax=0xffffffff")
-+__naked void zext_narrowing_spill_truncates_slot(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	r7 = 1;							\
-+	r7 <<= 32;						\
-+	r6 |= r7;		/* r6 >= 2^32, so the spill narrows */ \
-+	*(u32 *)(r10 - 8) = r6;	/* slot is (u32)r6 */		\
-+	r8 = 1;							\
-+	r8 <<= 32;						\
-+	r8 += 5;						\
-+	if r6 > r8 goto 1f;	/* narrows r6, syncs the slot */ \
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * A sub-word spill is below the low-32 model, so no link is formed there.
-+ * The fill is a byte load too, so this pins the spill-side and fill-side
-+ * size gates together rather than either on its own.
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void zext_narrowing_spill_byte_no_link(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;						\
-+	*(u8 *)(r10 - 8) = r6;	/* 1-byte spill: no link */	\
-+	r2 = *(u8 *)(r10 - 8);					\
-+	if w6 != 0 goto 1f;					\
-+	if r2 == 0 goto 1f;	/* not deduced */		\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- #ifdef CAN_USE_MOVSX
- 
- /*
-@@ -1628,6 +1750,36 @@ __naked void sext_delta_survives_narrowing_fill(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * And for a narrowing spill: the slot holds (u32)(r6 + 5). Recording delta 0
-+ * there put the slot, and anything filled from it, 5 away from the truth.
-+ */
-+SEC("socket")
-+__success
-+__naked void sext_delta_survives_narrowing_spill(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	r6 <<= 32;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 |= r0;		/* r6 = full 64-bit unknown */	\
-+	w7 = w6;		/* BPF_REG_LINK_ZEXT, delta 0 */	\
-+	w7 += 5;		/* BPF_REG_LINK_ZEXT, delta 5 */	\
-+	r8 = (s32)r7;		/* BPF_REG_LINK_SEXT, delta 5 */	\
-+	*(u32 *)(r10 - 8) = r8;	/* narrowing spill keeps delta */ \
-+	if r6 != 0 goto 1f;	/* narrow before the fill */	\
-+	r2 = *(u32 *)(r10 - 8);	/* r2 == 5, not 0 */		\
-+	if r2 == 5 goto 1f;	/* always taken: r2 is 5 */					\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- #endif /* CAN_USE_MOVSX */
- 
- #ifdef CAN_USE_LDSX
-@@ -1800,6 +1952,35 @@ __naked void sext_byte_fill_drops_sext_link(void)
- }
- #endif /* CAN_USE_MOVSX */
- 
-+/*
-+ * The same, with the zero-extending link coming from a narrowing spill rather
-+ * than a mov. The spill truncated the slot to 32 bits, so the fill is not
-+ * narrowing and assigns no link kind of its own; the slot's zero-extending
-+ * one must not survive the sign-extending load.
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void sext_fill_of_narrowing_spill_drops_zext(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;		/* r6 = full 64-bit unknown */	\
-+	*(u32 *)(r10 - 8) = r6;	/* narrowing spill: slot is ZEXT */ \
-+	r2 = *(s32 *)(r10 - 8);	/* sign-extending, not narrowing */ \
-+	if w6 != -1 goto 1f;	/* slot low 32 bits are all ones */ \
-+	if r2 s>= 0 goto 1f;	/* taken only if r2 was rebuilt zext */ \
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- #endif /* CAN_USE_LDSX */
- 
- char _license[] SEC("license") = "GPL";
--- 
-2.53.0-Meta
-
+--
+Thanks,
+Mina
