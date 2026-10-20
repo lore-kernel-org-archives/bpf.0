@@ -1,103 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792508320;
-	b=Xutl5GCI8jvkwZTBs+ZAufTbpOVnb8YGAd7JYoNv8XOM5HHpCRCohtsx7k+cr7C6ddxl
-	 6TQ0g3243dXkGRaoVPhOUr93xyRTjmjy5FaX6he/4Bco5eVyLaeomTfhXvpSzjnkVM3U6
-	 TcTEPMAUtt31u4TfL9HxjrO5UzceZsCRDxc5CU++lC82lGXcLFGGGQ+L9xJN181PhsCR7
-	 QYj2NPHOt+EpjFBB/2HR/YH9UGZUMxBvuByJkOAA6aJ2miEHiSGxCRFLIgIwzCoo2n4DM
-	 yNpngzlaiugTXrCvavofeCJESSa+9hCs81E53Yum1syaNt09i5gn5AAoVjkbingIYtQ==
+	t=1792508856;
+	b=ZoHAEu0MWdSZDHyVPFH5Xa/LEclYC0a2aBSEkr87qFoay+TwTrEK9u+tkh83p09C9tZb
+	 rdV7UTeh5Jlt2lVOzisSI2DjZemNALcOU6JAzU2ndZYFhdj73cSR2d7u95ChhQDc5OmiC
+	 VMUEHJKNLCi+QxncYy76eHKTcSoV8Op/0MazhIoDNtpbA3nE3x0VG+lV4TruVBdPkiiiu
+	 NohrpiqKqJd3lgKb+wxhuR1U5eRVPBkP8T+B9sfdAY/Z/tYNrHuQwJ9EwtOm6N0WbvLbo
+	 UumBRZdk8Vds284xFfOOhwng+GQr2YTR4AecB4zMt1bKKq7JxmXKLJA/wBtieKvj2Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792508320;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792508856;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
 	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=gocN0lUv+ePHb7pN6LNyapCRmaF7S37bTOPeiY6oAS0=;
-	b=zv+Lp0vJADECSyd5Euoim1EezHPkSq9Q5p4UGoHi+ubQKt/WxznJcT2RTUhqh2qcsYzX
-	 P0porMeIBVGL138OyUNooF74g+C/qU4OekFSaohe1BWUcQkQ/hTzFLg8xP1uyBZWZTltx
-	 84G1uPGGwlMD7ivef0dpzQu9dVUt8F63PR/lKmXcBQcrAiiGKOfFdLUA3+SHLjpdMMJDs
-	 hQ91NCfNvXsRMT6BC4OsbdVbfU5NBpVuOqnSkbySkJvGkwxAOuBBKW/OL9msMLsidK0k9
-	 A/PUuF16A5IsvDssK4rolf2TCB7PNbiIPgJn89RmA4BEQ3CzGZy2o0T/Y/yZ2Hlc/jg==
+	bh=/KS4MM+90L5b3yl4IF+KZ1cxg7psw7VcH7wSJwMesDk=;
+	b=qF5Ugx7cy8jVllY31CQMjGjxdQUm3ZoKw6VmZS01HqfxsAKCakCIg9MhMyfH1Wt82r/P
+	 l1NSKk/mIOg5aRxBXUttc89ZEHN4DjleeoK2PSA33pSWIyVHpBW5nIFotcsKrf6R/shvy
+	 K9EUnkpWkPIjjn2isOdhQJrpTpZ8M/5rGMVFcrem14BFkJh/2EGDT4gLlsVJDTAqcBgyV
+	 MjboBSc1dsO1mjiKwUHcn/tSOYu3dSQ9DLNwb5o1DLfH5WhZzIzbYY9lGsq0HkaqD2uZR
+	 SjPXvz+y3uhW02fkkXfmk0qpoypf9n1vfOMMZ4JfCiEWaa73x4tTszMR0+/nzwA/qww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MS6xHdyw;
-	arc=none smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XAYwuqzw;
+	arc=none smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740D260A3824
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:58:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 740D260A3824
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A434606A328
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:07:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6A434606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MS6xHdyw
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e95bd1c14cso26895465ad.2
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:58:39 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XAYwuqzw
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e8b20a899fso16662725ad.1
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 08:07:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792508319; x=1793113119; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792508856; x=1793113656; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=gocN0lUv+ePHb7pN6LNyapCRmaF7S37bTOPeiY6oAS0=;
-        b=MS6xHdywJb5spuXqgqSCAqSB0RNnXW7AqREUxfx+vVdDK08lo0LGe0vVHr+Gqy5m5D
-         raMBdA6EY8StfTs50bjxWXCkkr4v3FTJf142yBdfbIZ2s+ng8EQnRba5DMhWV5/akqb8
-         EOtlvDJFG51mMjOzH6YjdOZP+qnyBmHgCW97qa0pQDKsUYZ17lv6XulT9vUr79BgsCZJ
-         ylSKHzYrgGZ92eear0ftWY7AmQp0tMgOk0PYhsy+fkMkxR+X7SyniqvBbZ4K+28V17wW
-         17crHjJRHt1ZJkdOEtZ1uZdf0kX3f0pEALSD7Gs0zhf0FjmvvBEHa61CPArJFbMJHGFb
-         IOEw==
+        bh=/KS4MM+90L5b3yl4IF+KZ1cxg7psw7VcH7wSJwMesDk=;
+        b=XAYwuqzwhJRHpb2wnmdJp/kFWyjyM2aoEz/hOGR7L3NfVt16xhjPpYJEnLFu6o/qXp
+         /HR/kZvZrsSyqK9A1aL1myqjLZke7z8qdD0zD7HKDG5bUACqMt4aZ0amTHQyCkudsFJg
+         +8uUbiJ6eqsbcAnUnui1GemFN+ePuwd/W6jC/Kqis6JSpLzBJ8J38up3A+ahvIRsyJXp
+         ANXBlAFWhBMEkW3+ptu9TiGfHzzo102/rb4tu2XxZrpacpMI8ne+ur7pz6y80Y7Oa3nY
+         NSCzghm/U+Njwx8RTqV5yGBuGT0SfSxcls8JGl+C3WtSufm0KUwa8IdhFDiq8RntfBki
+         FF3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792508319; x=1793113119;
+        d=1e100.net; s=20260707; t=1792508856; x=1793113656;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gocN0lUv+ePHb7pN6LNyapCRmaF7S37bTOPeiY6oAS0=;
-        b=biutSsV2Pw22GnCfd7AOcIlPewXQ8zTBhwUJFulV5LjZA92oyu6/7eVzkWJtw3C/9h
-         qHPq172cCXws50se5sxucEA+UbTI00LMjq0LdmqijCiJIOO6AXSaovtR6s0STzaunzqi
-         F3YmREFgGUokQkZeR+HjtE7VD1G9nFnGS9hx+jJ6vlmRdzHQm1lFaaP7jffi7fSmTfEl
-         VNLgTMQ3TDO3XyFVSFsAX3I6rKjTgX7BKg/fvwt8Q0TGZQo6CkqxbzjarecU3+6ggXP3
-         xvdT7BJT3ols85jgAo7PuT8aars3fBZxfQjZCONJCWlHwHVorkLR47Z9XOnOXb6Ru2fV
-         Vqcg==
-X-Forwarded-Encrypted: i=1; AKwUvBxdJTt+hsIxuYsgIDpixKA0GNW4Aj2GTHW3melvNy1cCBT5BqQ1dbrJdP0KGJnqvcn3ksU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLsLnUpqjeVUmb7XQzD7t1VP8UU7hXprIwuTukxZUAyASKwjGA8
-	K2N0t0aYL2FltxDO6+/mS4YE7A63X7yVYKB34KRWSFwj5LwIyuiCXFZB
-X-Gm-Gg: AYBFou20lonnB0d9TrAXO66MpsvhhvB1DKgdU5nkCWQ3pWxqeHWaLNTlB/mVKB8iX9A
-	RnL95YrsrfmkekaoYY6bCz6V0ZrqZWMdq0mkHzSkDuUxPaTBqVWYhWSmh+L7olQDvw4JHQcZSHn
-	+nic+bYFLD2gfPMqeAdgjDsqbXxPU+DYv700+1W0QVI1PTzyHrqfqfFhoAIEKntEzhj61YbfxTT
-	GloXoMOIVhz//VMm3U5MYOQR2Gk65HRZ7NSofA5qeyXYA3TH9r8NN19JGbXN+o5X1AXIdygf0XX
-	TyUz3C6stu+ry7aNU7P94K25P3xb3MLx635Fm4/pK5Z9OnzHncG5pEzTuR6GqHXFT+LSAOYQlRR
-	8D92mLasTZDNvdO7x6kqfVVtimp7LR7bdhuIw0TCACRBJ1rI4hDDUBvGwuHTpFsjnnba20ao15G
-	mDzH1HVNDl9tbbsbrzXAXgiXrLlIjLO2johyPYj5ZBld3EK0WLdYsTlcP8REuXVMmXQv/KLSdWn
-	PKVhQ0mpMLa3sTue50EAP9242cZx6CzddwX1/CUUrjh5lrepsLmolK55TYw8NzeVzDi2UbXGS/4
-	Lz4nQd6xdpATMA==
-X-Received: by 2002:a17:903:2351:b0:2e9:9f14:c40 with SMTP id d9443c01a7336-2e9a684330amr96805845ad.6.1792508318588;
-        Tue, 20 Oct 2026 07:58:38 -0700 (PDT)
-Received: from localhost ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b40fe7fsm280255ad.13.2026.10.20.07.58.37
+        bh=/KS4MM+90L5b3yl4IF+KZ1cxg7psw7VcH7wSJwMesDk=;
+        b=kaA6+8GzCuMFdOv6gLVkaYQDWFp4sXUjEHhpZ4jazSGvNbsRS6tegqLfWuVKpCcEsi
+         V6l6PTZRYOi3f4IS9WEIOj5+aEnzdF64bCCwQDMvhqLVNqdV1o7pu/mBydeMBkJFZdWB
+         uXuuT5MnPkWDkza6rXJE+5FXX6nTYV1VPMJTv9K+SW8DFBnDNm/R2DjaXHJqiUbtijek
+         kswBa9zQ2OK0SlEyRKdXTMzccMxM1WwDF/fD1aJ4R/xm+5hB7cDjQttu/UTBsQBtQrYr
+         C1rsDVPRisX27aVvwHnnTy5H3fe/Qv7T/xliXuxWJqoIUnpIo13FCfYVv3mBvGqkeLj4
+         rsJQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzvdSiEjpJDOGsgA4cYjaK7QU9pntZdocufKnz6b7bI1g+x6SSSE15oDjZ+e6hVuUKComc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKSanpXNcgeFwqqSFC+Z/bv/OD05hpO0qbruZkOME7y6QR7Z1Ay
+	XcWoj8mnZfta18UAYEL9duykStbAMprhuI3yqV41JwXJlT1F8ILGfnt3
+X-Gm-Gg: AYBFou3MZOdkAMnUNI8oh85GCfTcI1blKBBulSdaUppNCwHpWSMeBpgyHAPVdLOiUWv
+	q6Rcsw2oaA4g7LC1TqEijAxxhjFASTscGX7A9Z8zV961aH+TSfp1Z7JdtZgW5Yb8kiKA5ZdGqnA
+	4ndDg04j4gUChojGbeId/UsysIOCJcf6pf3ZuP+SuMlM/dVvwY8BPDMCk7k60Hn+h7O6uZJp9nw
+	RzyHUVTKVrp1zwLnZf5Phu1beUR10eCk1evUWF9oaJbIUJdPYFvZspNlA0c8P+XYpZG674ZFYN4
+	K/3Gd0OeB9cGRpq8DNVcpJIlsfjWRtE0IxomOcekCY/7DYT9YNtSFnYNXnx3yoo6v+jafTtTqz0
+	CY7gemgsr7PU7zOU+WtqV2nhDwiS2tcaTThnIQvxD2qnX99HHS6v5m/QXnFxdyWuUnjol6uCl1T
+	XPP34LMcU9+6o6dVDfSLnmoB7vHZs60RdrqPGcuVOnzHoEP/NfNSkQvsxCqPWZrb4IhRtQigKWm
+	f391XHuJdVA5dJFMvg4ZCmf5UxwAKilfPKaAuWCyB0zsib17YdWEU0ii/e3gKtepC7WXeqK4l39
+	alQ=
+X-Received: by 2002:a17:903:2c47:b0:2e9:9c65:1af9 with SMTP id d9443c01a7336-2e9a6d41d0dmr98863285ad.53.1792508855484;
+        Tue, 20 Oct 2026 08:07:35 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b4ae277sm277345ad.76.2026.10.20.08.07.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2026 07:58:37 -0700 (PDT)
+        Tue, 20 Oct 2026 08:07:32 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 20 Oct 2026 14:58:36 +0000
-Message-Id: <DM9R60QEU8RP.2MWT9CY6J4ZVF@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <john.fastabend@gmail.com>,
- <davem@davemloft.net>, <edumazet@kernel.org>, <pabeni@redhat.com>,
- <horms@kernel.org>, <nathan@kernel.org>, <ndesaulniers@google.com>,
- <morbo@google.com>, <justinstitt@google.com>, <menglong8.dong@gmail.com>,
- <bestswngs@gmail.com>, <mattbobrowski@google.com>, <vega@nebusec.ai>,
- <sashiko-bot@kernel.org>
-Subject: Re: [PATCH bpf v2 1/1] bpf: reject raw iteration over managed map
- fields
+Date: Tue, 20 Oct 2026 15:07:31 +0000
+Message-Id: <DM9RCU3BDWEG.1C32ZIVU95S76@gmail.com>
+Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <davem@davemloft.net>,
+ <willemb@google.com>, <eddyz87@gmail.com>, <edumazet@google.com>,
+ <john.fastabend@gmail.com>, <kuba@kernel.org>, <horms@kernel.org>,
+ <liamwisehart@meta.com>, <martin.lau@linux.dev>, <pabeni@redhat.com>,
+ <song@kernel.org>, <netdev@vger.kernel.org>, <sdf.kernel@gmail.com>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <kuniyu@google.com>,
+ <memxor@gmail.com>, <emil@etsalapatis.com>, <almagui@kernel.org>
+Subject: Re: [PATCH bpf-next 0/8] bpf: Expand ksock send-path support
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Zhiling Zou" <zhilinz@nebusec.ai>, <ameryhung@gmail.com>,
- <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <llvm@lists.linux.dev>
-In-Reply-To: <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
-References: <cover.1792217106.git.zhilinz@nebusec.ai> <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
+To: "Mahe Tardy" <mahe.tardy@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20261020102512.518479-1-mahe.tardy@gmail.com>
+References: <20261020102512.518479-1-mahe.tardy@gmail.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -110,201 +106,164 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Mon, Oct 19, 2026 at 11:35 PM Zhiling Zou <zhilinz@nebusec.ai> wrote:
-> Revalidate the replacement program against the map associated with an
-> iterator link before bpf_link_update() swaps programs. Add selftests for
-> allowed prefix access, rejected managed-field reads and writes, and link
-> updates that introduce managed-field access.
+On Tue, Oct 20, 2026 at 03:25 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
+> * allow bpf_ksock_connect() to be called in the send path
+> * add bpf_ksock_sendto() kfunc to complement to bpf_ksock_send()
+>
+> This is useful when using ksock to reply to differents peers while
+> reusing the same UDP socket and generally works toward the goal of ksock
+> to support the basic socket operations.
 
-The sockmap iterator has the same hole.
-sock_map_iter_attach_target() checks max_rdonly_access against key_size
-at attach time only, so bpf_link_update() can still swap in a prog that
-reads past the key.
+can we drop connect from LSM progs and patches 1-5 altogether ?
+bpf_ksock_sendto() alone replies to different peers on one socket.
 
-No need for a new callback that each target has to remember to set.
-attach_target can record the limits in bpf_iter_aux_info and bpf_iter
-core can check them on attach and on replace. That covers all three
-targets. validate_prog, its typedef and the split of both attach
-functions go away. Selftests are left out below.
+connect + send from LSM progs can't do that reliably. The socket is
+shared through the kptr and sleepable progs run concurrently. Between
+bpf_ksock_connect(A) and bpf_ksock_send() on one CPU, another CPU does
+bpf_ksock_connect(B) and the datagram for A goes to B.
+
+Without connect there, acquire/release in socket_sendmsg has no user:
+nothing can be done with that reference. bpf_ksock_sendto() is in
+ksock_kfunc_btf_ids, so the current filter rejects it in socket_sendmsg
+already. Then no need for bpf_ksock_send_id, bpf_ksock_sendto_id,
+bpf_ksock_connect_id, bpf_lsm_socket_connect_id and the cycle comment.
+
+Selftests are left out below. Patch 8 stays as is, patch 7 stays
+without the socket_connect hunk.
 
 Something like this (compile tested only):
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0ecb941..ffb6fee 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -544,6 +544,14 @@ static inline void check_and_init_map_value(struct bpf_map *map, void *dst)
- 	bpf_obj_init(map->record, dst);
+diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+index 48a2e23..48757dc 100644
+--- a/net/core/bpf_ksock.c
++++ b/net/core/bpf_ksock.c
+@@ -37,6 +37,25 @@ static void ksock_release_work_fn(struct work_struct *work)
+ 	kfree(ks);
  }
 
-+/* Part of map value before the first special field. Fields are sorted by offset. */
-+static inline u32 bpf_map_raw_value_size(const struct bpf_map *map)
++static int bpf_ksock_addr_to_sockaddr(const union bpf_ksock_addr *addr,
++				      u32 addr_sz, struct sockaddr_storage *sa)
 +{
-+	if (IS_ERR_OR_NULL(map->record))
-+		return map->value_size;
-+	return map->record->fields[0].offset;
-+}
++	if (!addr || addr_sz != sizeof(*addr))
++		return -EINVAL;
 +
- /* memcpy that is used with 8-byte aligned pointers, power-of-8 size and
-  * forced to use 'long' read/writes to try to atomically copy long counters.
-  * Best-effort only.  No barriers here, since it _will_ race with concurrent
-@@ -2992,6 +3000,9 @@ enum bpf_iter_task_type {
- struct bpf_iter_aux_info {
- 	/* for map_elem iter */
- 	struct bpf_map *map;
-+	/* how far a prog may access key and value of the map */
-+	u32 max_rdonly_access;
-+	u32 max_rdwr_access;
-
- 	/* for cgroup iter */
- 	struct {
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index b40eb40..6f3ae92 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -405,10 +405,21 @@ static void bpf_iter_link_dealloc(struct bpf_link *link)
- 	kfree(iter_link);
- }
-
-+static int bpf_iter_check_access(const struct bpf_prog *prog,
-+				 const struct bpf_iter_aux_info *aux)
-+{
-+	if (prog->aux->max_rdonly_access > aux->max_rdonly_access ||
-+	    prog->aux->max_rdwr_access > aux->max_rdwr_access)
-+		return -EACCES;
-+	return 0;
-+}
++	/* Kfunc memory arguments may be unaligned. */
++	memcpy(sa, addr, sizeof(*addr));
 +
- static int bpf_iter_link_replace(struct bpf_link *link,
- 				 struct bpf_prog *new_prog,
- 				 struct bpf_prog *old_prog)
- {
-+	struct bpf_iter_link *iter_link =
-+		container_of(link, struct bpf_iter_link, link);
- 	int ret = 0;
-
- 	mutex_lock(&link_mutex);
-@@ -424,6 +435,10 @@ static int bpf_iter_link_replace(struct bpf_link *link,
- 		goto out_unlock;
- 	}
-
-+	ret = bpf_iter_check_access(new_prog, &iter_link->aux);
-+	if (ret)
-+		goto out_unlock;
-+
- 	old_prog = xchg(&link->prog, new_prog);
- 	bpf_prog_put(old_prog);
-
-@@ -570,6 +585,14 @@ int bpf_iter_link_attach(const union bpf_attr *attr, bpfptr_t uattr,
- 		}
- 	}
-
-+	err = bpf_iter_check_access(prog, &link->aux);
-+	if (err) {
-+		if (tinfo->reg_info->detach_target)
-+			tinfo->reg_info->detach_target(&link->aux);
-+		bpf_link_cleanup(&link_primer);
-+		return err;
++	switch (sa->ss_family) {
++	case AF_INET:
++		return sizeof(struct sockaddr_in);
++	case AF_INET6:
++		return sizeof(struct sockaddr_in6);
++	default:
++		return -EAFNOSUPPORT;
 +	}
++}
 +
- 	return bpf_link_settle(&link_primer);
+ __bpf_kfunc_start_defs();
+
+ /**
+@@ -155,22 +174,9 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
+ 	struct sockaddr_storage sa;
+ 	int addrlen;
+
+-	if (!addr || addr__sz != sizeof(*addr))
+-		return -EINVAL;
+-
+-	/* Kfunc memory arguments may be unaligned. */
+-	memcpy(&sa, addr, sizeof(*addr));
+-
+-	switch (sa.ss_family) {
+-	case AF_INET:
+-		addrlen = sizeof(struct sockaddr_in);
+-		break;
+-	case AF_INET6:
+-		addrlen = sizeof(struct sockaddr_in6);
+-		break;
+-	default:
+-		return -EAFNOSUPPORT;
+-	}
++	addrlen = bpf_ksock_addr_to_sockaddr(addr, addr__sz, &sa);
++	if (addrlen < 0)
++		return addrlen;
+
+ 	return connect_socket(ks->sock, &sa, addrlen, 0);
+ }
+@@ -212,19 +218,25 @@ __bpf_kfunc void bpf_ksock_release_dtor(void *ks)
+ CFI_NOSEAL(bpf_ksock_release_dtor);
+
+ /**
+- * bpf_ksock_send() - Send data through a BPF kernel socket.
++ * bpf_ksock_sendto() - Send data through a BPF kernel socket to a remote address.
+  * @ks:		The BPF kernel socket context. Must be an acquired reference.
+  * @data:	Pointer to the data to send.
+  * @data__sz:	Size of the data to send.
++ * @addr__nullable: Pointer to an IPv4 or IPv6 socket address, or NULL to use
++ *		   the connected destination.
++ * @addr__sz:	Size of the address union, ignored when the address is NULL.
+  *
+- * Sends data on a connected socket, best-effort and nonblocking. This may sleep
++ * Sends data to the specified address, or to the connected destination when
++ * the address is NULL, best-effort and nonblocking. This may sleep
+  * (kernel_sendmsg), so it can only be called from sleepable BPF programs.
+  *
+  * Return: Number of bytes sent on success, negative errno on error.
+  */
+-__bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
+-			       u32 data__sz)
++__bpf_kfunc int bpf_ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data__sz,
++				 const union bpf_ksock_addr *addr__nullable,
++				 u32 addr__sz)
+ {
++	struct sockaddr_storage sa;
+ 	struct msghdr msg = {
+ 		.msg_flags = MSG_DONTWAIT,
+ 	};
+@@ -232,11 +244,34 @@ __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
+ 		.iov_base = (void *)data,
+ 		.iov_len = data__sz,
+ 	};
+-	int ret;
++	int addrlen;
+
+-	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
++	if (addr__nullable) {
++		addrlen = bpf_ksock_addr_to_sockaddr(addr__nullable, addr__sz, &sa);
++		if (addrlen < 0)
++			return addrlen;
++		msg.msg_name = &sa;
++		msg.msg_namelen = addrlen;
++	}
+
+-	return ret;
++	return kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
++}
++
++/**
++ * bpf_ksock_send() - Send data through a BPF kernel socket.
++ * @ks:		The BPF kernel socket context. Must be an acquired reference.
++ * @data:	Pointer to the data to send.
++ * @data__sz:	Size of the data to send.
++ *
++ * Sends data on a connected socket, best-effort and nonblocking. This may sleep
++ * (kernel_sendmsg), so it can only be called from sleepable BPF programs.
++ *
++ * Return: Number of bytes sent on success, negative errno on error.
++ */
++__bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
++			       u32 data__sz)
++{
++	return bpf_ksock_sendto(ks, data, data__sz, NULL, 0);
  }
 
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index c19b360..9fd5920 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -101,7 +101,6 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 			       union bpf_iter_link_info *linfo,
- 			       struct bpf_iter_aux_info *aux)
- {
--	u32 key_acc_size, value_acc_size, key_size, value_size;
- 	struct bpf_map *map;
- 	bool is_percpu = false;
- 	int err = -EINVAL;
-@@ -127,18 +126,12 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 		 map->map_type != BPF_MAP_TYPE_RHASH)
- 		goto put_map;
+ __bpf_kfunc_end_defs();
+@@ -255,6 +290,7 @@ BTF_KFUNCS_START(ksock_kfunc_btf_ids)
+ BTF_ID_FLAGS(func, bpf_ksock_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_ksock_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_ksock_send, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_ksock_sendto, KF_SLEEPABLE)
+ BTF_KFUNCS_END(ksock_kfunc_btf_ids)
 
--	key_acc_size = prog->aux->max_rdonly_access;
--	value_acc_size = prog->aux->max_rdwr_access;
--	key_size = map->key_size;
-+	aux->max_rdonly_access = map->key_size;
-+	/* percpu values are copied with special fields zeroed */
- 	if (!is_percpu)
--		value_size = map->value_size;
-+		aux->max_rdwr_access = bpf_map_raw_value_size(map);
- 	else
--		value_size = round_up(map->value_size, 8) * num_possible_cpus();
--
--	if (key_acc_size > key_size || value_acc_size > value_size) {
--		err = -EACCES;
--		goto put_map;
--	}
-+		aux->max_rdwr_access = round_up(map->value_size, 8) * num_possible_cpus();
-
- 	aux->map = map;
- 	return 0;
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index 1d295a8..44b7e61 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -863,11 +863,7 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
- 		goto put_map;
-
--	if (prog->aux->max_rdwr_access > map->value_size) {
--		err = -EACCES;
--		goto put_map;
--	}
--
-+	aux->max_rdwr_access = bpf_map_raw_value_size(map);
- 	aux->map = map;
- 	return 0;
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 38df842..37144bf 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1951,11 +1951,7 @@ static int sock_map_iter_attach_target(struct bpf_prog *prog,
- 	    map->map_type != BPF_MAP_TYPE_SOCKHASH)
- 		goto put_map;
-
--	if (prog->aux->max_rdonly_access > map->key_size) {
--		err = -EACCES;
--		goto put_map;
--	}
--
-+	aux->max_rdonly_access = map->key_size;
- 	aux->map = map;
- 	return 0;
-
-
-> Fixes: 9db44fdd8105 ("bpf: Support kptrs in local storage maps")
-
-Wrong tag. Iterators could write special fields from the start:
-commit d6c4503cc296 ("bpf: Implement bpf iterator for hash maps") and
-commit 5ce6e77c7edf ("bpf: Implement bpf iterator for sock local storage map").
-
-[...]
-
-> +	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
-> +	if (map->record && value_acc_size > map->record->fields[0].offset)
-
-This will crash. map->record is an ERR_PTR when btf_parse_fields()
-failed, and map_check_btf() still creates the map. A value with two
-struct bpf_timer gets -E2BIG, for example. That's why other users check
-IS_ERR_OR_NULL(). Attaching any iterator to such a map now faults on
-fields[0], whether the prog touches the value or not. Same in
-bpf_iter_sk_storage_map_check_prog().
-
-Percpu maps don't have this bug. Their iterator runs on
-percpu_value_buf: copy_map_value_long() skips special fields and
-check_and_init_map_value() zeroes them, so the prog sees zeros and
-writes to a temporary copy. This check rejects a prog that sums a
-counter over all cpus in a percpu hash that has a kptr, for no reason.
-
-It's an old bug, it needs root and the fix rejects progs that load
-today. Pls target bpf-next.
+ #ifdef CONFIG_BPF_LSM
 
 pw-bot: cr
