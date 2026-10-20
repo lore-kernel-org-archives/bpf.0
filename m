@@ -1,57 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.241
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792516839;
-	b=SJZgWlWQ/BK4DZFc3f5AXIGbd7Y9MmoIyehh7PJuhcIpHCrnSMvn/Q7rPB8MF3bETVWi
-	 DSHwcEQ8GRIfarh9G3N4t3t3r3FmBEDgV6oHYWAiuBRDJv2NUCencPcJAgxkHfl/lr1AK
-	 ihFpbbwr0Kuv0is07zaFrt84OKqy8RDJZng69+hEJCl7lYU7CoLP29NFHjQBa/RzwpE/w
-	 hmgx0fx0yJbfqBuQd8GByV2t3a5Cz0uRpCdRV0Xwk9XqGVJXpR21PgG0BEjVcpFvYnApj
-	 Kyo4TI0YVfXhHQzHA6oZSWKwNpx9B/gRh1oa8CwC4Xjm9cxLMOeJtLqPRqkERRXttcw==
+	t=1792517717;
+	b=qhTb08TyznfqKzVPGgZpfmtf+JsAnC3HP3s8Q233fj93yrwCm3rbq6yrMYujgkibeDSU
+	 nlkAbcUQYyP3PJSsHSnOjYEBeWDBPqF22GUNt+yFTzz81L4pwOTMbWd9Twxrrbm/z67VD
+	 EcxmcGlHx+Qa7VBaFFvjKUgmUwPa6s3okvy1mZlO/Mx2d6mwNQFP+8R4sEwvYk1IxrJdk
+	 gsfeK82oKuJ80CJWzEv+HNM50DKGum2n7zh1pjvIRr9a1+sqQaQpHfY7SeyPduki41ukr
+	 UQWhQhJeiehp1zxWVXCAAUaBWFEIqV2HW+R5NoOHiHqI18ClInCV7TRhWvzmzfXOY5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792516839;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=rW+dNTDwU9IAPS+U46iKSDXcgWC2yUlq58WkqgQKgBc=;
-	b=zSuRq9LPA7NoqI37OSLOrJZW5x/8UwmGQJfh5NzOSlWtvSjrVEFmdev6hEp+aRwxzuZK
-	 9LweUN2NFC72fQS2LrltU0HuF+ldK9Vohp2vOZ+2fX3c9zCeR2O47hrztCQ2SZL7gv4M4
-	 KPXWBMoG2qX1FEKh+iUFwY6dzoa/ja8tGl2FX9dNmlLG9C/27G2/b7IwgVCE3rIrDCqSQ
-	 TG7Uy2mwMXkmMxc3g6LQl9AIM0dhTrgAFeculTa9pAT/shW1BBEAdP2M3Vto5ITUbjAA2
-	 JqXh+3R7DE7iuUqKJpMRhMtbpLRnSLXu7/60ysNykslFdpVPeif+25ML3/1+FiEtgOQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792517717;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=NnTaOa3hkoHPkJ8XKbl1J5CFxSilwdeYRAmrFeskxiU=;
+	b=pDB/eZXYs3W2GY7nz7CwQut+bYh+bT28rr0gCH28R3vGcyFnYwHXLeKPN7+LvL3Ny7Th
+	 uLZfm+FIX34Dr1hYsQirXiTNIt3ykfcBjPVgaUETUBgInGDEa9QOCT4YgaAIONA+I1BgM
+	 rKDf0sxvl6SumYSHSt4mbM4Eo6/IYcxRioKmwwgHuN8B+2WJmvsRvf8rpt47hENvbbByZ
+	 +Hlq4uf4n6909XWaSw6AL4BNq9X7LcdruETPSLy16+hApiqqtHx4jsx9aowDc5X0fCapl
+	 lXhJ0lIeeN3v7tn269XsJY8mz1QsFN1qnSv0c9Ko1VPuyLQRhHmEFW61oUNJxvFt0rQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FR05pxn2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RBlXxVZo;
+	arc=none smtp.remote-ip=95.215.58.241
+Received: from mta1.migadu.com (out-241.mta1.migadu.com [95.215.58.241])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F5C606A330
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6732A606A319
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:35:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6732A606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FR05pxn2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D92F1F000C9;
-	Tue, 20 Oct 2026 17:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792516838;
-	bh=rW+dNTDwU9IAPS+U46iKSDXcgWC2yUlq58WkqgQKgBc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FR05pxn2BhItvOV1SIcm1kcJinwrGq1yPwZHpTBetmLYfkpZk9l2YRvS6HTDqCxua
-	 g+vnZ/5XVqb5k0S3rAC94yOSpYDdeZMBF1ynUVGosY7avN9EuiruKULqYNwOc+QJR6
-	 bFXSGK9y2P/LCSoN7O9QCRkxR7FFG83T1DshcbHpvqn67hmkp8K7LvWEDrHEhtwyTl
-	 JNkc9V1fBbiBSTZ/7c96nv/QHAtCh1JANUVPSbAv8M+rmrXgScYJRq2feAFIMrtdFw
-	 8MiBU+wapH7FNbRCD8hP/WOSoT7IGJWgPjnCf/xYKHFVoYSBOGRP2LkKnte4xQLD1H
-	 KUrk2s8mnomFQ==
-Message-ID: <sashiko-outbox-179412@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 08/12] bpf: Recover the low 32 bits on the
- reverse link direction
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vineet Gupta" <vineet.gupta@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261020161907.2115379-9-vineet.gupta@linux.dev>
-References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
- <20261020161907.2115379-9-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 17:20:28 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RBlXxVZo
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=X+yygbxUoN1ZfucgOCaad1pSIRXDRAW6Rdpby5YRIMg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792517713; v=1; x=1793122513;
+ b=RBlXxVZo2FqT7u7s3q3yWdJQIdIswf7Z9BD8qd5ZscpPFu2NXGhM+W1sGhaQLgnt8k1FKNZp
+ o5D2nxWDWTC9q8I3reZ5np31BzPB8sK4QzD7Bw9tc+iPLn/VQfwb8hc4mrFehD9IBtenOuszknB
+ Ljl1iM2c9h9vGlfFpikgaAfo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d23907ce8bec091b;
+	Tue, 20 Oct 2026 17:35:12 +0000
+X-Mizu-Trace-ID: d23907ce8bec091b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <20ac0187-cae1-4c8c-9949-8e8501aff2fc@linux.dev>
+Date: Tue, 20 Oct 2026 10:35:06 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,155 +57,117 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] libbpf: Prefer mounted tracefs over debugfs
+To: Eduard Zateev <hackerowskiy@gmail.com>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, linux-kernel@vger.kernel.org
+References: <20261018092629.585046-1-hackerowskiy@gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20261018092629.585046-1-hackerowskiy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: missing contradiction check in sync_linked_regs() reverse-d=
-irection arm
---
+On 10/18/26 2:26 AM, Eduard Zateev wrote:
+> The tracefs path helpers look up /sys/kernel/debug/tracing first, even
+> when tracefs is already mounted at /sys/kernel/tracing. This can trigger
+> an unnecessary legacy tracefs mount and selects a path beneath debugfs,
+> which is commonly restricted.
 
-commit 651910c4895680e635057947cc88b56f4edbf401
-Author: Vineet Gupta <vineet.gupta@linux.dev>
+This doesn't describe the actual problem. If debugfs is restricted or
+not mounted, the existing faccessat() check already fails and libbpf
+falls back to tracefs.
 
-bpf: Recover the low 32 bits on the reverse link direction
+It looks like the actual trivial improvement is in avoiding the
+debugfs/tracing automount causing:
 
-This commit updates sync_linked_regs() in the BPF verifier to recover the l=
-ow
-32-bit bounds and subreg tnum when propagating from a narrow linked register
-(BPF_REG_LINK_ZEXT or BPF_REG_LINK_SEXT) back to a linked register wider th=
-an
-32 bits.
+  NOTICE: Automounting of tracing to debugfs is deprecated and will be removed in 2030
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 4621b476b206e..ac50252cec1f7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -18785,29 +18785,54 @@ static void sync_linked_regs(struct bpf_verifie=
-r_env *env, struct bpf_verifier_s
->  		if (reg->id !=3D known_reg->id)
->  			continue;
->  		/*
-> -		 * The reverse direction does not work for a narrow known_reg:
-> -		 * it knows only its low 32 bits, which say nothing about a
-> -		 * wider reg's high half. Neither (u32)(base + delta) nor
-> -		 * (s32)(base + delta) inverts once the base is wider than 32
-> -		 * bits.
-> +		 * The reverse direction, from a narrow known_reg to a wider
-> +		 * reg, does not invert: neither (u32)(base + delta) nor
-> +		 * (s32)(base + delta) says anything about the base's high
-> +		 * half. It does still pin the low half, though -- both sides
-> +		 * are (base + delta) mod 2^32, differing only by their deltas
-> +		 * -- so recover that much and leave the high half alone.
->  		 */
->  		if ((known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
->  		     known_reg->link_kind =3D=3D BPF_REG_LINK_SEXT) &&
->  		    reg->link_kind !=3D BPF_REG_LINK_ZEXT &&
->  		    reg->link_kind !=3D BPF_REG_LINK_SEXT &&
-> -		    get_reg_width(reg) > 32)
-> -			continue;
-> +		    get_reg_width(reg) > 32) {
-> +			/*
-> +			 * Only @low's 32-bit half is meaningful: its var_off
-> +			 * is advanced over all 64 bits while r64 and the
-> +			 * base/step line are not, and nothing below reads
-> +			 * either. It is a scratch value, not a register state.
-> +			 */
-> +			struct bpf_reg_state low =3D *known_reg;
-> +			struct tnum low32;
+in the kernel logs whenever debugfs/tracing gets automounted.
+libbpf triggers that on legacy kprobe/uprobe/tracepoint attach when
+debugfs is mounted.
+
+See commit 9ba817fb7c6a ("tracing: Deprecate auto-mounting tracefs in
+debugfs") and CONFIG_TRACEFS_AUTOMOUNT_DEPRECATED.
+
+> 
+> Prefer the direct tracefs mount when statfs() reports TRACEFS_MAGIC.
+> Checking the filesystem type avoids selecting an existing but unmounted
+> sysfs mountpoint. Preserve the existing debugfs fallback and the default
+> tracefs path when neither location is available.
+> 
+> Fixes: a1ac9fd6c650 ("libbpf: fallback to tracefs mount point if debugfs is not mounted")
+> Closes: https://github.com/libbpf/libbpf/issues/966
+> Assisted-by: LLM
+> Signed-off-by: Eduard Zateev <hackerowskiy@gmail.com>
+
+Please update the commit message to show the actual consequence of the
+change. And drop both fixes and assisted-by tags. This is not a bug,
+and assited-by has been recently deprecated.
+
+The diff looks ok to me, but tbh I don't see much value in it.
+Any particular reason you decided to fix this?
+
+pw-bot: cr
+
+
+> ---
+> 
+> Validation on Fedora 44 (aarch64):
+> - Built static and shared libbpf with the default warning settings.
+> - Exercised all five path helpers using wrapped syscalls for both mounts,
+>   tracefs only, debugfs only, an unmounted tracefs directory, and neither
+>   path available. The original code fails the both-mounts scenario.
+> - Confirmed the direct tracefs paths on the host's mounted tracefs.
+> Privileged BPF attach/mount tests were not run.
+> 
+>  tools/lib/bpf/libbpf.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index cb09ded90..9db0a8bde 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -59,6 +59,10 @@
+>  #define BPF_FS_MAGIC		0xcafe4a11
+>  #endif
+>  
+> +#ifndef TRACEFS_MAGIC
+> +#define TRACEFS_MAGIC		0x74726163
+> +#endif
 > +
-> +			fake_reg.type =3D SCALAR_VALUE;
-> +			__mark_reg_known(&fake_reg,
-> +					 (s64)reg->delta - (s64)known_reg->delta);
-> +			scalar32_min_max_add(&low, &fake_reg);
-> +			low.var_off =3D tnum_add(low.var_off, fake_reg.var_off);
-> +
-> +			cnum32_intersect_with(&reg->r32, low.r32);
-> +			low32 =3D tnum_intersect(tnum_subreg(reg->var_off),
-> +					       tnum_subreg(low.var_off));
-> +			reg->var_off =3D tnum_with_subreg(reg->var_off, low32);
-> +			reg_bounds_sync(reg);
-> +			goto scratched;
-> +		}
+>  #define MAX_EVENT_NAME_LEN	64
+>  
+>  #define BPF_FS_DEFAULT_PATH "/sys/fs/bpf"
+> @@ -12713,12 +12717,17 @@ static int append_to_file(const char *file, const char *fmt, ...)
+>  
+>  static bool use_debugfs(void)
+>  {
+> -	static int has_debugfs = -1;
+> +	static int needs_debugfs = -1;
+> +	struct statfs st_fs;
+>  
+> -	if (has_debugfs < 0)
+> -		has_debugfs = faccessat(AT_FDCWD, DEBUGFS, F_OK, AT_EACCESS) == 0;
+> +	if (needs_debugfs < 0) {
+> +		if (statfs(TRACEFS, &st_fs) == 0 && st_fs.f_type == TRACEFS_MAGIC)
+> +			needs_debugfs = 0;
+> +		else
+> +			needs_debugfs = faccessat(AT_FDCWD, DEBUGFS, F_OK, AT_EACCESS) == 0;
+> +	}
+>  
+> -	return has_debugfs == 1;
+> +	return needs_debugfs == 1;
+>  }
+>  
+>  static const char *tracefs_path(void)
+> 
+> base-commit: a6303535c2ad9d49598d52556183911f02287791
 
-[Severity: Medium]
-Can this reverse-direction arm leave reg with an empty range (CNUM32_EMPTY =
-or
-CNUM64_EMPTY) or conflicting constant subreg bits when the low-32 bounds,
-var_off, or step progression of reg and known_reg contradict on an
-unreachable path?
-
-In the sibling differencing arm further down in sync_linked_regs(), the code
-saves prev =3D *reg before intersecting and restores *reg =3D prev if
-range_bounds_violation(reg) holds:
-
-kernel/bpf/verifier.c:sync_linked_regs() {
-	...
-	cnum64_intersect_with(&reg->r64, prev.r64);
-	cnum32_intersect_with(&reg->r32, prev.r32);
-	reg->var_off =3D tnum_intersect(reg->var_off, prev.var_off);
-	if (range_bounds_violation(reg))
-		*reg =3D prev;
-	reg_bounds_sync(reg);
-}
-
-In the new arm above, cnum32_intersect_with(&reg->r32, low.r32) and
-tnum_intersect() are applied directly without saving prev or checking for
-contradictions. If reg->r32 becomes CNUM32_EMPTY, reg_bounds_sync() exits
-early on range_bounds_violation(reg), and even when cnum32_intersect_with()
-is non-empty, reg_bounds_sync() can still empty reg->r32 or reg->r64 via
-__update_reg_bounds(), __reg_deduce_bounds(), or __update_bounds_from_step()
-when the narrowed low 32 bits contradict reg's 64-bit bounds, subreg tnum, =
-or
-base/step progression. Similarly, if tnum_subreg(reg->var_off) and
-tnum_subreg(low.var_off) do not overlap (!tnum_overlap()), tnum_intersect()
-ORs conflicting constant bits together.
-
-Contradictions can reach this arm in several ways during check_cond_jmp_op()
--> sync_linked_regs():
-
-1. Mixed link kinds: if r6 is a wide unknown scalar (BPF_REG_LINK_NONE),
-   w7 =3D w6 (BPF_REG_LINK_ZEXT), and r8 =3D r6; r8 +=3D 2 (BPF_REG_LINK_FU=
-LL),
-   narrowing r8 with if w8 !=3D 7 goto out syncs r6->r32 to [5, 5] while
-   skipping r7 because r7->link_kind !=3D r8->link_kind. A subsequent
-   if w7 !=3D 9 goto out then enters the new arm for r6 and r8, intersecting
-   [5, 5] with [9, 9] and [7, 7] with [11, 11] to leave r6->r32 and r8->r32
-   as CNUM32_EMPTY.
-
-2. Sign-extending mov (BPF_REG_LINK_SEXT): if a wide r6 has its low 32 bits
-   pinned by if w6 !=3D 5 goto out (so r6->r32 is [5, 5]), r7 =3D (s32)r6 l=
-inks
-   r7 with BPF_REG_LINK_SEXT while coerce_reg_to_size_sx() resets r7->r32 to
-   [S32_MIN, S32_MAX]. A following if w7 !=3D 8 goto out enters the new arm
-   and intersects r6->r32 ([5, 5]) with [8, 8].
-
-3. BPF_JSET fallthrough: in regs_refine_cond_op(), the BPF_JSET | BPF_X
-   fallthrough path calls __mark_reg_unbounded() before masking var_off.
-   After w7 =3D w6; if w6 =3D=3D 0 goto out; (where r6->r32 is [1, U32_MAX]=
-),
-   if w7 & -1 goto out refines r7 to 0 on fallthrough and syncs back to r6,
-   intersecting [1, U32_MAX] with [0, 0].
-
-4. Step or tnum conflict inside reg_bounds_sync(): if a wide r6 has step > 1
-   (for example step =3D=3D 3) and w7 =3D w6 resets r7->step to 1 via
-   zext_32_to_64(), narrowing w7 to a value in r6->r32 that is not a
-   multiple of 3 passes cnum32_intersect_with() and then becomes empty in
-   __update_bounds_from_step(r6) at the end of reg_bounds_sync().
-
-When reg is left in this state, any subsequent instruction that checks it v=
-ia
-reg_bounds_sanity_check() triggers verifier_bug() ("range bounds violation"=
-),
-emitting a BPF_WARN_ONCE() and returning -EFAULT when
-BPF_F_TEST_REG_INVARIANTS is enabled.
-
-Should this arm save struct bpf_reg_state prev =3D *reg and restore *reg =
-=3D prev
-if !tnum_overlap(tnum_subreg(reg->var_off), tnum_subreg(low.var_off)) or if
-range_bounds_violation(reg) is true after reg_bounds_sync(reg)?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020161907.2115=
-379-1-vineet.gupta@linux.dev?part=3D8
