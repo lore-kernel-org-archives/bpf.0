@@ -1,23 +1,23 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=45.249.212.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792504168;
-	b=JSKOJrYawtf57Qu55nKgsLDhJP+vy7PwHx5nDn8x40lycrQ4J0sxNIAi10boGC3XvUb9
-	 hySZv5htLqYN5H8k7SL4DgOzTf1bo83bCUNIqufZ4hFWb3MYMOLpJy+54S3fo4KbGIPQ7
-	 d7lE5SC2ofe7M6MLvEB1tBUVmcz7mT3c7MDIZGFaeUuCJgj0MtZ4Pgc2HmERrg+IKKrqR
-	 Q45Yq/BLnC829T0wgXD/LZ4qa1zsZg4b41NllVv2PtDvBj/yF/apFOB7RBlLNGrJW0b+f
-	 OdsrQK0fCeEbJNTk/+Gz9NG04mVqm1tnbrTYCoRS9NIUGHjY+Ame1zINVWI3m/BDXNQ==
+	t=1792504163;
+	b=g1kGfxOBxeLsLbyT9KlRXnFiscpQoR4X5KF9h2hs0ZWI9AXr2XfYZIj/M5kjjthN/nWP
+	 3NkrD3lDoDWAzLvvPWP1xbIVOnZq0EZXI38x809PyVN+KhhOy9JvNaHpcyg0OZpKtOIj4
+	 GAAw6WSs4Kmx5HIV8swM2f5NdhskmPxO4Fxo1NPeSPyCIasWDslRUY7SDvHSmV2wDCyZi
+	 cbGH0Eg6A+htMUQQaMzN35RYHrEmecsKyoOUtRJE65+s0uhP5DrRUAneI7SdUnbLu2ywp
+	 9xoR68f+R3TVcSc7l/xBxamuw7YUPlouKM6IBqbv7Nlaqpnv1VDCBTt9PWmHC9dnrfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504168;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504163;
 	h=DMARC-Filter:Received:Received:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
 	 X-CM-SenderInfo;
-	bh=Hvi3uCpaINsi13oQBA18SCLqYurMB7l3si8TGKYhMB4=;
-	b=Mx68aDFqMmQ0ZGXr3Sq8TmGi7xaAceHSN9/jkYYBUDOGU51/r2IHWcZAv/8RaO72Fubh
-	 WJeZbrWFvk5FaW+EnQGI2n60E5ebiESbQ+b4IQtTnw4sfdlFMFcwxUH+7Yu509Ubh7Kmp
-	 pncaNjbwoCoaX+ERyjtnN25adbX2nB1lVKmNJDrqt072BkjRwcsIHBAXtaUkpsFuhBeAU
-	 ovmNVtWIWQfc1poX0x7lrZpiN9oIlJUtTQKV0eizGuyX6VcbB3o4jxfJGCCB+IFj3cL3S
-	 +anloY0Eu+QJEAN3GXaxzj/k2BjBehe1ZoZHHDI4Ub7A7Y+ZD2wrPRov61mwxp48QxA==
+	bh=BmlOqCCLjgLQNdIbenYay5d5iN3U5aSR2PVFkG5h4Z4=;
+	b=5hJtVNBBUZh1iPkUJsTDkAmFdjLl25pEEmm/gYo3/0WpDprVaQILaYnV6I9ei460ymEf
+	 1MS4++TKhuuYZHu27RcSMXnsqttJitGIIQ7uyONFgcCeUgMaLx8uCdqv1kr2yBCm2lljr
+	 yi+D4vEasgHj+qHW0tXBxDjLPqRWnGF7m6VzW24Iwj6AJxMM7y0eVIWI3N2wH3Rs3AjGn
+	 41p+WdtmCD4b4Adx3bb5bAfa66TuShbXBrev3h83A4lcyPIa7zw71RvodVzb4MSwx3mUn
+	 ApIsgHX9DLmlYhxSLq2cCqF8DfJVVRKy56kkbet9KdFzQLPusf4gXrSlirIWwsVvk8w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=huaweicloud.com;
 	spf=pass smtp.mailfrom=huaweicloud.com;
@@ -26,20 +26,20 @@ Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684F760A2600;
-	Tue, 20 Oct 2026 13:49:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 684F760A2600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBD3606AB1F;
+	Tue, 20 Oct 2026 13:49:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FBD3606AB1F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j8DKn4XYNzYQtwQ;
-	Tue, 20 Oct 2026 21:49:17 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j8DKm6ylSzYQtsK;
+	Tue, 20 Oct 2026 21:49:16 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 9DC3D40561;
-	Tue, 20 Oct 2026 21:49:19 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 00A97408E5;
+	Tue, 20 Oct 2026 21:49:18 +0800 (CST)
 Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgB3d_pdcddq79ScBA--.16873S15;
-	Tue, 20 Oct 2026 21:49:19 +0800 (CST)
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgB3d_pdcddq79ScBA--.16873S3;
+	Tue, 20 Oct 2026 21:49:18 +0800 (CST)
 From: Xu Kuohai <xukuohai@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -50,9 +50,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next 13/16] bpftool: Emit the arena percpu datasec into skeleton
-Date: Tue, 20 Oct 2026 13:22:58 +0000
-Message-ID: <a579251a284c3dd4954c305a04346acef4ec4113.1792503001.git.xukuohai@huawei.com>
+Subject: [PATCH bpf-next 01/16] libbpf: Collect arena percpu data section
+Date: Tue, 20 Oct 2026 13:22:46 +0000
+Message-ID: <7b248b2be4834322ddaad8ee08d22d083877a932.1792503001.git.xukuohai@huawei.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1792503001.git.xukuohai@huawei.com>
 References: <cover.1792503001.git.xukuohai@huawei.com>
@@ -66,174 +66,122 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgB3d_pdcddq79ScBA--.16873S15
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF4kZFWUKryUCFy3ZryUGFg_yoW5uFyxp3
-	WxGFWYkrWUXFy3Cw4fWw4UCryY9r4rX34rAa4ak34rAr4fXr4DJFWIk3WYvF15Kr1SqF4Y
-	ga4Svr42kry7JF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFc
-	xC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_
-	Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r
-	43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
-	Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
-	0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
-	Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJw
-	CI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1KFAJUU
-	UUU==
+X-CM-TRANSID:_Ch0CgB3d_pdcddq79ScBA--.16873S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFW3ZF4ftrWfWF4fZF4xJFb_yoW5uw4fp3
+	y3CFy0gw4rXr4I9w1rZayagryY9r4Fvr109a4Yqw18AryrWw1rXa48tFsYvF1agr1fZr15
+	X3y09rWxXrWDAFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2
+	IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8Zw
+	CF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j
+	6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64
+	vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0x
+	vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j1hFxUUUUU=
 X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
 From: Xu Kuohai <xukuohai@huawei.com>
 
-Emit the arena percpu data into skeleton.
+Introduce a new section ".arena.percpu" for the bpf arena. A variable
+in this section lives in the bpf arena and has a separate value for
+each possible CPU. The initial value is replicated for each CPU at
+load time.
 
-For an object with
-
-__u64 arena_global __arena;
-__u64 __arena_percpu data1;
-__u64 __arena_percpu data2;
-
-the skeleton gets two data sections for the arena map
-
-struct obj__arena {
-	__u64 arena_global;
-} *arena;
-
-struct obj__arena_percpu {
-	__u64 data1;
-	__u64 data2;
-} *arena_percpu;
-
-and the load function points arena_percpu at cpu 0's chunk
-
-static inline int
-obj__load(struct obj *obj)
-{
-	int err;
-
-	err = bpf_object__load_skeleton(obj->skeleton);
-	if (err)
-		return err;
-
-	obj->arena_percpu = bpf_map__arena_percpu_base(obj->maps.arena);
-
-	return 0;
-}
-
-Other cpus can be accessed through bpf_map__arena_percpu_ptr().
-
-For an object with only
-
-__u64 __arena_percpu counter;
-
-the skeleton carries a single arena_percpu section
-
-struct obj__arena_percpu {
-	__u64 counter;
-} *arena_percpu;
+Collect the section's data and index so the later steps can size,
+place and relocate it.
 
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- tools/bpf/bpftool/gen.c | 69 ++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 64 insertions(+), 5 deletions(-)
+ tools/lib/bpf/libbpf.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index ee680f7c2116..8a321ec1155a 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -132,6 +132,10 @@ static bool get_datasec_ident(const char *sec_name, char *buf, size_t buf_sz)
- 		snprintf(buf, buf_sz, "arena");
- 		return true;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8fcb8cf39cc0..d79fc382319e 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -573,6 +573,13 @@ struct bpf_struct_ops {
+  */
+ #define ARENA_DATA_SEC ".arena.data"
+ 
++/*
++ * A variable in this section is arena percpu data. It lives in the bpf
++ * arena and has a separate value for each possible CPU. The initial value
++ * is replicated for each CPU at load time.
++ */
++#define ARENA_PERCPU_SEC ".arena.percpu"
++
+ enum libbpf_map_type {
+ 	LIBBPF_MAP_UNSPEC,
+ 	LIBBPF_MAP_DATA,
+@@ -718,6 +725,7 @@ struct elf_state {
+ 	Elf64_Ehdr *ehdr;
+ 	Elf_Data *symbols;
+ 	Elf_Data *arena_data;
++	Elf_Data *arena_percpu_data;
+ 	size_t shstrndx; /* section index for section name strings */
+ 	size_t strtabidx;
+ 	struct elf_sec_desc *secs;
+@@ -728,6 +736,7 @@ struct elf_state {
+ 	int symbols_shndx;
+ 	bool has_st_ops;
+ 	int arena_data_shndx;
++	int arena_percpu_shndx;
+ 	int jumptables_data_shndx;
+ };
+ 
+@@ -1645,6 +1654,7 @@ static struct bpf_object *bpf_object__new(const char *path,
+ 	obj->efile.obj_buf_sz = obj_buf_sz;
+ 	obj->efile.btf_maps_shndx = -1;
+ 	obj->efile.arena_data_shndx = -1;
++	obj->efile.arena_percpu_shndx = -1;
+ 	obj->kconfig_map_idx = -1;
+ 	obj->arena_map_idx = -1;
+ 
+@@ -1664,6 +1674,7 @@ static void bpf_object__elf_finish(struct bpf_object *obj)
+ 	obj->efile.ehdr = NULL;
+ 	obj->efile.symbols = NULL;
+ 	obj->efile.arena_data = NULL;
++	obj->efile.arena_percpu_data = NULL;
+ 
+ 	zfree(&obj->efile.secs);
+ 	obj->efile.sec_cnt = 0;
+@@ -3201,7 +3212,7 @@ static int bpf_object__init_arena_data(struct bpf_object *obj)
+ 
+ 	if (obj->arena_map_idx < 0) {
+ 		/* bpf_object__init_user_btf_maps() didn't look: there is no .maps section */
+-		if (obj->efile.arena_data) {
++		if (obj->efile.arena_data || obj->efile.arena_percpu_data) {
+ 			pr_warn("elf: sec '%s': to use global __arena variables the ARENA map should be explicitly declared in SEC(\".maps\")\n",
+ 				ARENA_SEC);
+ 			return -ENOENT;
+@@ -3331,6 +3342,12 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
+ 		return -ENOENT;
  	}
-+	if (strcmp(sec_name, ".arena.percpu") == 0) {
-+		snprintf(buf, buf_sz, "arena_percpu");
-+		return true;
-+	}
- 	for  (i = 0, n = ARRAY_SIZE(pfxs); i < n; i++) {
- 		const char *pfx = pfxs[i];
  
-@@ -326,6 +330,14 @@ static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
- 		}
- 	}
- 
-+	/* expose arena percpu  as a separate data section */
-+	sec = find_type_for_map(btf, "arena_percpu");
-+	if (sec) {
-+		err = codegen_datasec_def(obj, btf, d, sec, obj_name);
-+		if (err)
-+			goto out;
++	if (obj->efile.arena_percpu_data && obj->arena_map_idx < 0) {
++		pr_warn("elf: sec '%s': to use arena percpu variables the ARENA map should be explicitly declared in SEC(\".maps\")\n",
++			ARENA_PERCPU_SEC);
++		return -ENOENT;
 +	}
 +
+ 	return 0;
+ }
  
- out:
- 	btf_dump__free(d);
-@@ -1511,11 +1523,58 @@ static int do_skeleton(int argc, char **argv)
- 			return %1$s__open_opts(NULL);			    \n\
- 		}							    \n\
- 									    \n\
--		static inline int					    \n\
--		%1$s__load(struct %1$s *obj)				    \n\
--		{							    \n\
--			return bpf_object__load_skeleton(obj->skeleton);    \n\
--		}							    \n\
-+		",
-+		obj_name
-+	);
-+
-+	/* The per-cpu arena data has no mmaped slot in the map skeleton.
-+	 * Point obj->arena_percpu at cpu 0's chunk once the object is
-+	 * loaded.
-+	 */
-+	{
-+		char arena_map_ident[256] = "";
-+		bool have_percpu_arena = false;
-+
-+		bpf_object__for_each_map(map, obj) {
-+			if (bpf_map__type(map) != BPF_MAP_TYPE_ARENA)
-+				continue;
-+			if (find_type_for_map(bpf_object__btf(obj), "arena_percpu") &&
-+			    get_map_ident(map, arena_map_ident, sizeof(arena_map_ident))) {
-+				have_percpu_arena = true;
-+				break;
-+			}
-+		}
-+
-+		if (have_percpu_arena) {
-+			codegen("\
-+				\n\
-+				static inline int \n\
-+				%1$s__load(struct %1$s *obj) \n\
-+				{ \n\
-+					int err; \n\
-+					 \n\
-+					err = bpf_object__load_skeleton(obj->skeleton); \n\
-+					if (err) \n\
-+						return err; \n\
-+					obj->arena_percpu = \n\
-+						bpf_map__arena_percpu_base(obj->maps.%2$s); \n\
-+					return 0; \n\
-+				} \n\
-+				", obj_name, arena_map_ident);
-+		} else {
-+			codegen("\
-+				\n\
-+				static inline int \n\
-+				%1$s__load(struct %1$s *obj) \n\
-+				{ \n\
-+					return bpf_object__load_skeleton(obj->skeleton); \n\
-+				} \n\
-+				", obj_name);
-+		}
-+	}
-+
-+	codegen("\
-+		\n\
- 									    \n\
- 		static inline struct %1$s *				    \n\
- 		%1$s__open_and_load(void)				    \n\
+@@ -4286,6 +4303,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 				obj->efile.arena_data_shndx = idx;
+ 			} else if (strcmp(name, ARENA_DATA_SEC) == 0) {
+ 				/* the marker, see the first pass */
++			} else if (strcmp(name, ARENA_PERCPU_SEC) == 0) {
++				obj->efile.arena_percpu_data = data;
++				obj->efile.arena_percpu_shndx = idx;
+ 			} else if (strcmp(name, JUMPTABLES_SEC) == 0) {
+ 				obj->jumptables_data = malloc(data->d_size);
+ 				if (!obj->jumptables_data)
 -- 
 2.47.3
 
