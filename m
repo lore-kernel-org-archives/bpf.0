@@ -1,93 +1,44 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.165
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792510169;
-	b=ZwG0Iojlk6RtpkLcJaQKEcRn1xSuFGBaOiDbH+Wi88EZTUcq5N8XhgZ/wD5pfNKzJyC0
-	 4SKr8V63ZVPati6pT3LLlinB5oUDsni6pZUvK0GZhaxSaGJe9QCdiYkUUw/rpzuFaBuBy
-	 QAqm8j7JCcB8a1xKftMuUNIg7WSEsyKdjcAd4qNoNYrLxor/0W4HcmqCPj1kRCqat/gjo
-	 s9/ySrunTfA0VuQcUyJ12d4t883ejxryayJKAxy87gyOiMSOG5skMlCmT7z19GgnOlp+t
-	 YEAVb047Ly5GK9w871/t6i/slyIxASLT9yGVvLdyzaqnpcKyD+xIlE432Oc98pgkQpQ==
+	t=1792510211;
+	b=jsej10c3MCEhkqGzo7frCl/6v8Qt6EhbD7GDzuZKquea7eZmvflFtmL71YmOqxo4dqsa
+	 e22nTMVYYzxQT/B/9GIIXV+B8bmRDRiixaJRbsSiVWHUObjyErBlCtziJhw4Ibjg3A9Lw
+	 QDCjag/1mUf0abm4NADX+I9KK4sRtL5t3MjyRHdyADIKJXOaJK7PyYyyw6x8c0Umw9OUp
+	 UDUguQOV06JynlJd1cLFk9nM0g6k7/KKXBAMVxOEBvZpvt2+jXASPgFmOnva8AuWYcCDV
+	 6o/+Qv6GOtUZYQRKNi6tJjDqDYogB81xembSKLEHkkZsmi9dc2MpDOQ2RbInyQ46H5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792510169;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=9GDFV35RrSVf5yP47jS+7rs1H7n+XBgiZq3zykV+XtQ=;
-	b=fElMfecwp0gSLDPs9bKEaHfXN9vRg0IVr0ylKSx4j0VmYj/gw97fMgQbjaWnwpVZafd/
-	 o+p53Sk6Rk322gYB/FY99QDQvPfKZrITE4XnpRdbSrLTtAsYDCQ27fTpHl6zRP1bDeXwm
-	 QEbkvAucJv4aFH0qJ6YrNakW4xj247+6KF1GgtZ+n9jpnDXYjcFuvmckWsGTucM68Tl3I
-	 vctayytgAdZUEpMzEbW5EU3wRtK+hZerNaoZwEks3m59AfIv2LN/VmCZYj7z9kRbENKMp
-	 Ib7WRhpLOiVoEH2VWBOt+3S8CvEsq8nxefW9SU4R7WIHwk0tVK0CQMLNJUA7sm71FmQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792510211;
+	h=Received:Message-ID:From:Subject:Reply-To:To:Cc:In-Reply-To:
+	 References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=oiW1SyicLwAWmVV/Xn0Hpj+kC04S86sNJ9kaMOA17is=;
+	b=zM4LmaH4uMyNVgob4yM/329nLVQfK4pefOUDFtkABqZHlZ+a4ESGjLLjULkOTOdJS+eg
+	 vuP0Zl/otRIb0Fn2lgCejysquls2FToKCVb8zStIh/4EaRP9v9R193eBqejcEPJodVZVS
+	 6LSCORPx9QI/GQxaX+6NzGfJD/V3JCIsODZT/swhloy6pvzhM7s/+r4im+hmkym8s1lKG
+	 1GDqVI604ojetCPvSyf0M20xRoSsfEQaHEa0Qp8w44a20/K8HY0dkRS7ThXR+dP8n2T6b
+	 N7y/8TDn3FyYvExSBOUARy9WMYwBehyK+AZNbKmcZXmFoWGbSw0yRhkgGKTI71Rf8ZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=p92AzfhW;
-	arc=none smtp.remote-ip=95.215.58.165
-Received: from mta1.migadu.com (out-165.mta1.migadu.com [95.215.58.165])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4873606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:29:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4873606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=p92AzfhW
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qDoOdKi6oKQdzWjw9ttiqe9bR4kfbpGeSoHF507AHt0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792510166; v=1; x=1793114966;
- b=p92AzfhWed4SyYzF49MR++ac8jKwi80XZSID3tvwg8/O0Mplg2Ajaj9K66S/IOXdNs4eyymr
- QgJbWWwiOa1QWBxdQFbUJZxFw5iymDOps+oJsRwKMqbJmHtfL4dlWgY0m58xM7/2NSsnLvAXg+g
- te54vjopRcRCbsDE0xj/pC6c=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4a298b9aecc1ef70;
-	Tue, 20 Oct 2026 15:29:26 +0000
-X-Mizu-Trace-ID: 4a298b9aecc1ef70
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Masashi Honma <masashi.honma@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v3 6/6] selftests/bpf: Add tests to verify link_create logs
-Date: Tue, 20 Oct 2026 23:28:04 +0800
-Message-ID: <20261020152804.39863-7-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261020152804.39863-1-leon.hwang@linux.dev>
-References: <20261020152804.39863-1-leon.hwang@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EEF60A2618
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54A31F000C4;
+	Tue, 20 Oct 2026 15:30:10 +0000 (UTC)
+Message-ID: <sashiko-outbox-179248@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 5/6] bpf: Bind iterator elements to their
+ iterator
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Justin Suess" <utilityemal77@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261020145059.2146170-6-utilityemal77@gmail.com>
+References: <20261020145059.2146170-1-utilityemal77@gmail.com>
+ <20261020145059.2146170-6-utilityemal77@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Oct 2026 15:29:35 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,126 +47,166 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add tests to verify the new logs in link_create and xdp link_create,
-including a log reported via extack when fail to create an xdp link.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] bpf: iterator elements stay PTR_TRUSTED across next() in check=
+_kfunc_call()
+- [High] bpf: missing parent_id reference propagation in check_func_arg() a=
+nd check_kfunc_call()
+--
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/xdp_link.c       | 101 ++++++++++++++++++
- 1 file changed, 101 insertions(+)
+commit 5ca4ad8c9e1677551effb1ab248bfb034b276685
+Author: Justin Suess <utilityemal77@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-index e7e9f3c22edf..18c1f1039d4e 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@ -150,3 +150,104 @@ void serial_test_xdp_link(void)
- 	test_xdp_link__destroy(skel1);
- 	test_xdp_link__destroy(skel2);
- }
-+
-+static void test_link_create(int prog_fd, int ifindex, enum bpf_attach_type attach_type,
-+			     struct bpf_link_create_opts *opts, int exp_err, const char *msg)
-+{
-+	char log_buf[128] = {};
-+	int fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts,
-+		    .buf = log_buf,
-+		    .size = sizeof(log_buf),
-+		    .level = 1,
-+	);
-+
-+	fd = bpf_link_create_log(prog_fd, ifindex, attach_type, opts, &log_opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_link_create_log")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_EQ(fd, exp_err, "fd");
-+	ASSERT_STREQ(log_buf, msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
-+}
-+
-+static void test_link_create_invalid_prog_fd(void)
-+{
-+	const char *msg = "Invalid prog_fd.\n";
-+
-+	test_link_create(-1, IFINDEX_LO, BPF_XDP, NULL, -EBADF, msg);
-+}
-+
-+static void test_link_create_invalid_prog_type(void)
-+{
-+	const struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	const char *msg = "Invalid prog type.\n";
-+	int prog_fd;
-+
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_LIRC_MODE2, NULL, "GPL", insns,
-+				ARRAY_SIZE(insns), NULL);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf_prog_load"))
-+		return;
-+
-+	test_link_create(prog_fd, 0, BPF_LIRC_MODE2, NULL, -EINVAL, msg);
-+
-+	close(prog_fd);
-+}
-+
-+static void test_link_create_attach(int ifindex, enum bpf_attach_type attach_type,
-+				    struct bpf_link_create_opts *opts, const char *msg)
-+{
-+	struct test_xdp_link *skel;
-+
-+	skel = test_xdp_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
-+		return;
-+
-+	test_link_create(bpf_program__fd(skel->progs.xdp_handler), ifindex, attach_type, opts,
-+			 -EINVAL, msg);
-+
-+	test_xdp_link__destroy(skel);
-+}
-+
-+static void test_link_create_invalid_attach_type(void)
-+{
-+	const char *msg = "Invalid attach_type.\n";
-+
-+	test_link_create_attach(IFINDEX_LO, BPF_CGROUP_INET_INGRESS, NULL, msg);
-+}
-+
-+static void test_link_create_xdp_invalid_target_ifindex(void)
-+{
-+	const char *msg = "Invalid target_ifindex.\n";
-+
-+	test_link_create_attach(0, BPF_XDP, NULL, msg);
-+}
-+
-+static void test_link_create_xdp_extack(void)
-+{
-+	const char *msg = "Invalid XDP flags for BPF link attachment\n";
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = XDP_FLAGS_REPLACE,
-+	);
-+
-+	test_link_create_attach(IFINDEX_LO, BPF_XDP, &opts, msg);
-+}
-+
-+void test_link_create_log(void)
-+{
-+	if (test__start_subtest("invalid_prog_fd"))
-+		test_link_create_invalid_prog_fd();
-+	if (test__start_subtest("invalid_prog_type"))
-+		test_link_create_invalid_prog_type();
-+	if (test__start_subtest("invalid_attach_type"))
-+		test_link_create_invalid_attach_type();
-+	if (test__start_subtest("xdp/invalid_target_ifindex"))
-+		test_link_create_xdp_invalid_target_ifindex();
-+	if (test__start_subtest("xdp/extack"))
-+		test_link_create_xdp_extack();
-+}
--- 
-2.55.0
+bpf: Bind iterator elements to their iterator
 
+This commit sets parent_id on PTR_TRUSTED elements returned by open-coded
+iterator next() kfuncs to the iterator's reference id so that destroying the
+iterator invalidates the returned element and any trusted fields derived fr=
+om
+it.
+
+> diff --git a/Documentation/bpf/bpf_iterators.rst b/Documentation/bpf/bpf_=
+iterators.rst
+> index 189e3ec1c6c8e..08c9c15b59acd 100644
+> --- a/Documentation/bpf/bpf_iterators.rst
+> +++ b/Documentation/bpf/bpf_iterators.rst
+> @@ -79,7 +79,11 @@ Constructor/next/destructor implementation contract is=
+ as follows:
+>      will eventually return NULL when elements are exhausted. Once NULL is
+>      returned, subsequent next calls *should keep returning NULL*. Next m=
+ethod
+>      is marked with KF_ITER_NEXT (and should also have KF_RET_NULL as
+> -    NULL-returning kfunc, of course).
+> +    NULL-returning kfunc, of course). An element is only guaranteed to be
+> +    valid until the iterator is destroyed, so the verifier invalidates i=
+t,
+> +    and every trusted pointer derived from it, at `bpf_iter_<type>_destr=
+oy()`.
+> +    Elements of an RCU-protected iterator (see KF_RCU_PROTECTED) are ins=
+tead
+> +    valid until the end of the RCU critical section.
+> =20
+>    - destructor, `bpf_iter_<type>_destroy()`, is always called once. Even=
+ if
+>      constructor failed or next returned nothing.  Destructor frees up any
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c85c83a6ee63a..9ce5517dc1a02 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -15504,6 +15504,19 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+>  			regs[BPF_REG_0].btf =3D desc_btf;
+>  			regs[BPF_REG_0].type =3D type;
+>  			regs[BPF_REG_0].btf_id =3D ptr_type_id;
+> +
+> +			/*
+> +			 * A trusted element is pinned by the iterator that
+> +			 * produced it and dies with it, like the memory
+> +			 * returned by bpf_iter_num_next() above. An RCU
+> +			 * element is bounded by the critical section instead.
+> +			 */
+> +			if (bpf_is_iter_next_kfunc(&meta) && (type & PTR_TRUSTED)) {
+> +				err =3D validate_ref_obj(env, &meta.ref_obj);
+> +				if (err)
+> +					return err;
+> +				regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
+> +			}
+
+[Severity: Critical]
+Does binding parent_id to the iterator's reference id still leave elements
+and derived pointers valid across subsequent bpf_iter_<type>_next() calls?
+
+In process_iter_arg(), unmark_stack_slots_iter() (which calls
+release_reference(env, st->id)) is only invoked when is_iter_destroy_kfunc()
+is true:
+
+kernel/bpf/verifier.c:process_iter_arg() {
+	...
+	meta->iter.spi =3D spi;
+	meta->iter.frameno =3D reg->frameno;
+	update_ref_obj(&meta->ref_obj, &bpf_stack_slot(state, spi)->spilled_ptr);
+
+	if (is_iter_destroy_kfunc(meta)) {
+		err =3D unmark_stack_slots_iter(env, reg, nr_slots);
+		if (err)
+			return err;
+	}
+	...
+}
+
+However, non-RCU open-coded iterator next() implementations drop the
+previous element's reference during the next bpf_iter_<type>_next() call
+(including the final call that returns NULL), before destroy is called:
+
+- bpf_iter_task_vma_next() calls bpf_iter_task_vma_snapshot_reset(snap),
+  which calls fput(snap->vm_file) and overwrites the snapshot.
+- bpf_iter_kmem_cache_next() decrements prev->refcount and calls
+  kmem_cache_destroy(prev) when prev->refcount =3D=3D 1.
+- bpf_iter_dmabuf_next() calls dma_buf_iter_next(kit->dmabuf), which calls
+  dma_buf_put() on the previous dma_buf.
+- bpf_iter_css_task_next() calls css_task_iter_next(kit->css_it), which
+  calls put_task_struct(it->cur_task) on the previous task.
+
+If a BPF program saves an element pointer or a trusted field walked from it
+(such as file =3D vma->vm_file) in a callee-saved register or stack spill,
+calls bpf_iter_<type>_next() again, and then accesses the saved pointer
+before calling bpf_iter_<type>_destroy(), won't the pointer remain
+PTR_TRUSTED after the underlying reference has been dropped?
+
+Also, should Documentation/bpf/bpf_iterators.rst state that an element is
+only valid until the next bpf_iter_<type>_next() call or
+bpf_iter_<type>_destroy()?
+
+[Severity: High]
+What happens when a pointer pinned via parent_id (such as vma->vm_file) is
+passed to bpf_dynptr_from_file() or a kfunc returning a borrowed
+PTR_TO_BTF_ID such as bpf_real_data_inode()?
+
+In check_func_arg(), meta->ref_obj is only updated when reg_is_referenced()
+is true, which checks cur_state->refs for reg->id and ignores reg->parent_i=
+d:
+
+kernel/bpf/verifier.c:check_func_arg() {
+	...
+	if (reg_is_referenced(env, reg))
+		update_ref_obj(&meta->ref_obj, reg);
+	...
+}
+
+When file =3D vma->vm_file (which has reg->parent_id set to the iterator's =
+id
+and reg_is_referenced() =3D=3D false) is passed to bpf_dynptr_from_file(),
+mark_stack_slots_dynptr() sees ref_obj->id =3D=3D 0 and calls
+acquire_reference(env, insn_idx, 0). Doesn't this create the file dynptr
+with parent_id =3D 0, allowing the dynptr and its slices to outlive
+bpf_iter_task_vma_destroy() after fput(snap->vm_file) has run?
+
+Note also that if a child reference is bound to the iterator's reference id
+and left unreleased at destroy time, unmark_stack_slots_iter() ignores the
+-EINVAL return from release_reference():
+
+kernel/bpf/verifier.c:unmark_stack_slots_iter() {
+	...
+	if (i =3D=3D 0)
+		WARN_ON_ONCE(release_reference(env, st->id));
+	...
+}
+
+Similarly, in check_kfunc_call() above, setting regs[BPF_REG_0].parent_id is
+gated on bpf_is_iter_next_kfunc(&meta) (unlike the PTR_TO_MEM branch above
+it). If a BPF program calls bpf_real_data_inode(file) on either an acquired
+file or vma->vm_file, won't the returned trusted struct inode * have
+parent_id =3D=3D 0 and remain valid after bpf_put_file() or
+bpf_iter_task_vma_destroy()?
+
+>  		}
+> =20
+>  		if (is_kfunc_ret_null(&meta)) {
+
+([Morph](https://morph.so))
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020145059.2146=
+170-1-utilityemal77@gmail.com?part=3D5
