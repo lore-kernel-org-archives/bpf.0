@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792514429;
-	b=vFN3DT9h5u21ePeYtuJk4AcgdKnW96sqH2RIi0hprfEYyEmCiGH1xMrFGFuLPmKjB5hi
-	 03c/XZlUuOzuOtSuK30d9eU5hUZKSOXjcEJuGn8GOh/Y+PELk8Hgwss86oFKNmNR0BeKe
-	 Qe7Q3fSNMRUntSj+qWhB3zW2L4rVKmBYQqP1SmRFJVDLYLtKBoiKGlAKH1LTxhl4iVPiN
-	 mObr1UJsrGX5tpUTxlDTRN70BTkZCy2hcG8IPJrWxM5hGfWAMSNwDDh6hlbOi3387LVGA
-	 XPgub0hcqKg7xS0ZnE/TsKA2cMS4z0qr0c4ZSoWmIdKNF02N4awJ68QzcY9lVM4Alsw==
+	t=1792514585;
+	b=x2pB6rEbezYBSibIz894wH/HSpHu/rTOf6Q8gty3Ab9KSYaDz5jbDcQux3K9s8JBBSzO
+	 4kaH6TbwNP8GnoD5mDoIu7NkIaW+2ks9IsD+10ktJIv2Jbiz/2rTfDJ0Io0bf/DMu90uM
+	 rM6xKPny2iztLE5z+dmUL4RTU0IV588pO+Hn7OVWwPKhDZfkROcpj5TxgTc08g133j41E
+	 CSInIl/5+cZN1nXMWaenJa6yMqufzf/PaIbvI2CFBG04aGKmCy1BjlRl2YemDr6pIAPwU
+	 Nwfbi2wldP0MG7wnkBrWxVtJDUdvIrJ3vAoImqy6y1hG2u+fUhG8SaxMCzRtZ5KRs3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792514429;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792514585;
 	h=Received:Message-ID:From:Subject:Reply-To:To:Cc:In-Reply-To:
 	 References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=WV5u3i930IYdub8VqB7hzebv3VGUvXoUzVDIBMdZvJI=;
-	b=U8NzXPEiQ6hjYZgqOlmOjzRkMjrAPf9jcyrEOIsDUWhCIWptwZZOvDADYhY1ZkZvqiiR
-	 4yaSuUIdoiYQUqOK5JDAVB+xIBId6xAYeo4E6vvYdTVlpmEGzQWvpC0qxY06KFfCRKt49
-	 b5nhdCBQTpPSRjlcfVFRBn3S+aDhEQeSBPe1GqxeXckS9a8qeHkmxJwHtJ0QptqX9KBov
-	 slZYh0GCXpTTZ7hfyRbqW943rdqndKciT3dUgH7GAN6YE3kuU+xctrKcFrOPzODRiP0kR
-	 5Qcmr8Cwn0ZskwjXUl9kbsd9sIj2rr8MHNr37Pp1OwCgQUz2jOOsEZD7wqIhOGh2EpQ==
+	bh=/owV5taIEGMcTkaOevOiapZDdTSVeRPFnQQ681SbOVs=;
+	b=sQybChFIsfv+MVJu/EbyZQTDzSq3FPvP9QZWhIgSQ+mSMGwJFeC66Gwup4zhyG0saisi
+	 vO0Pz72yce0t3J5CeY/qmgz0bKCmoAusDHazAXqR+jVULZQNoxq+r7YBOqPUi2ztVQ83f
+	 H8jpzBq0viiGCeOuLg/W79EX4J2YJWqN6Gg2yczctSfV4vfFwF0W0s+/npcAAK4CHMCdE
+	 IwhB+Ny1LXxujcnMSdlhY+NMfGQqR1SoVCnjOlqKCXAs5vOUOwRdCwtJJFMERgm3jYPcw
+	 ui2UpZGN03gC4n9SvYy60sDasRAiC8ANTv7TyTVO96L62fHvBoE83sHilD5peuX6F2g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18BF606A31B
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4606D1F00ADB;
-	Tue, 20 Oct 2026 16:40:28 +0000 (UTC)
-Message-ID: <sashiko-outbox-179367@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38021606A335
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:43:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFFA41F000CA;
+	Tue, 20 Oct 2026 16:43:04 +0000 (UTC)
+Message-ID: <sashiko-outbox-179371@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 04/12] bpf: Track low-32 scalar equality
- across zero-extending movs
+Subject: Re: [PATCH bpf-next v3 11/12] [do not merge] bpf: Track low-32
+ scalar equality across narrowing stack spills
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Vineet Gupta" <vineet.gupta@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261020161907.2115379-5-vineet.gupta@linux.dev>
+In-Reply-To: <20261020161907.2115379-12-vineet.gupta@linux.dev>
 References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
- <20261020161907.2115379-5-vineet.gupta@linux.dev>
+ <20261020161907.2115379-12-vineet.gupta@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 16:39:57 +0000
+Date: Tue, 20 Oct 2026 16:42:34 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -50,150 +50,120 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: empty or corrupted range after intersection in sync_linked_=
-regs()
+- [Medium] bpf: zext_32_to_64() on 4-byte spill loses signed bounds on ldsx=
+ fill
 --
 
-commit 05d23d7192de1c6009703f8fbe1537ad78dda89e
+commit b63f0039bbb8ede3ae56c9d69df1283e246bde61
 Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-bpf: Track low-32 scalar equality across zero-extending movs
+bpf: Track low-32 scalar equality across narrowing stack spills
 
-This commit extends linked-scalar tracking across zero-extending 32-bit mov=
-es
-from wide 64-bit source registers using BPF_REG_LINK_ZEXT. Because a wide b=
-ase
-cannot be inverted across all 64 bits, sync_linked_regs() propagates bounds
-forward only and intersects the derived bounds with the destination registe=
-r's
-existing state.
+This patch tracks low-32 scalar equality across 4-byte narrowing stack
+spills by assigning a scalar ID, truncating the spilled slot with
+zext_32_to_64(), and setting link_kind to BPF_REG_LINK_ZEXT.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b9c20a5cc6d6f..6afd718ede647 100644
+> index 083b5bd70d3fa..de2a5c048a29a 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-
 [ ... ]
-
-> @@ -18749,6 +18798,27 @@ static void sync_linked_regs(struct bpf_verifier=
-_env *env, struct bpf_verifier_s
->  			if (reg->link_kind =3D=3D BPF_REG_LINK_ZEXT ||
->  			    known_reg->link_kind =3D=3D BPF_REG_LINK_ZEXT)
->  				zext_32_to_64(reg);
-> +			/*
-> +			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
-> +			 * link over a wide base does not propagate back, so the
-> +			 * base can be wider than what @reg has already proved
-> +			 * about itself; replacing it would lose that.
-> +			 */
-> +			cnum64_intersect_with(&reg->r64, prev.r64);
-> +			cnum32_intersect_with(&reg->r32, prev.r32);
-> +			reg->var_off =3D tnum_intersect(reg->var_off, prev.var_off);
-> +			/*
-> +			 * An empty intersection means the two sides contradict,
-> +			 * so this path is unreachable. Say nothing rather than
-> +			 * say it with an empty range: reg_bounds_sync() below
-> +			 * refuses to touch one, and the first later
-> +			 * reg_bounds_sanity_check() would report it as a
-> +			 * verifier bug, which it is not. Keeping the wider
-> +			 * pre-intersect state only costs precision on a path
-> +			 * that cannot be taken.
-> +			 */
-> +			if (range_bounds_violation(reg))
-> +				*reg =3D prev;
->  			reg_bounds_sync(reg);
->  		}
->  		if (e->is_reg)
+> @@ -3927,15 +3928,46 @@ static int check_stack_write_fixed_off(struct bpf=
+_verifier_env *env,
+>  	mark_stack_slot_scratched(env, spi);
+>  	if (reg && !(off % BPF_REG_SIZE) && reg->type =3D=3D SCALAR_VALUE && en=
+v->bpf_capable) {
+>  		bool reg_value_fits;
+> +		bool subreg_link;
+> =20
+>  		reg_value_fits =3D get_reg_width(reg) <=3D BITS_PER_BYTE * size;
+> +		/*
+> +		 * A narrowing spill stores the low 32 bits of the source, so
+> +		 * the slot is their zero-extension: record a low-32 link
+> +		 * rather than dropping the relation, as a 32-bit mov does.
+> +		 * A store never sign-extends, so there is only one link kind here.
+> +		 */
+> +		subreg_link =3D !reg_value_fits && size =3D=3D 4;
+> +
+>  		/* Make sure that reg had an ID to build a relation on spill. */
+> -		if (reg_value_fits)
+> +		if (reg_value_fits || subreg_link)
+>  			assign_scalar_id_before_mov(env, reg);
+>  		save_register_state(env, state, spi, reg, size);
+> -		/* Break the relation on a narrowing spill. */
+> -		if (!reg_value_fits)
+> -			bpf_clear_scalar_id(&ss->spilled_ptr);
+> +		if (!reg_value_fits) {
+> +			if (subreg_link && reg->id) {
+> +				/*
+> +				 * save_register_state() copies the source
+> +				 * whole, but the store only wrote its low 32
+> +				 * bits, so truncate to those before recording
+> +				 * the kind: a slot asserting BPF_REG_LINK_ZEXT
+> +				 * over the source's wider bounds is a register
+> +				 * state that contradicts itself.
+> +				 *
+> +				 * Keep the source's delta, though: the slot
+> +				 * holds (u32)(base + delta), so resetting it to
+> +				 * 0 would record a relation off by that delta.
+> +				 */
+> +				zext_32_to_64(&ss->spilled_ptr);
+> +				ss->spilled_ptr.link_kind =3D BPF_REG_LINK_ZEXT;
 
 [Severity: Medium]
-Can a contradiction in var_off or linear step still leave an empty range on
-reg, or corrupt reg into a bogus constant, after sync_linked_regs() finishe=
-s?
+Does calling zext_32_to_64() on ss->spilled_ptr cause a precision
+regression when the 4-byte slot is subsequently filled by a sign-extending
+load (ldsx)?
 
-First, tnum_intersect() in kernel/bpf/tnum.c assumes its arguments overlap:
+When spilling a scalar register whose signed range straddles zero (for
+example [-10, 10], where reg_umax(reg) is U64_MAX and get_reg_width(reg)
+is 64) with a 4-byte store (*(u32 *)(r10 - 8) =3D rX), subreg_link is true
+and zext_32_to_64(&ss->spilled_ptr) is called:
 
-/* Note that if a and b disagree - i.e. one has a 'known 1' where the other=
- has
- * a 'known 0' - this will return a 'known 1' for that bit.
- */
-struct tnum tnum_intersect(struct tnum a, struct tnum b)
+static void zext_32_to_64(struct bpf_reg_state *reg)
 {
-	u64 v, mu;
-
-	v =3D a.value | b.value;
-	mu =3D a.mask & b.mask;
-	return TNUM(v & ~mu, mu);
+	reg_step_check_unsigned(reg, 32);
+	reg->var_off =3D tnum_subreg(reg->var_off);
+	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
 }
 
-When reg->var_off and prev.var_off disagree on a known bit without
-tnum_overlap(reg->var_off, prev.var_off) being checked first, tnum_intersec=
-t()
-turns the conflicting bit into a known 1.
+Because r32 =3D [-10, 10] straddles zero in unsigned 32-bit arithmetic
+(u32_min =3D 0, u32_max =3D 0xffffffff), zext_32_to_64() overwrites
+ss->spilled_ptr.r64 with [0, 0xffffffff] while leaving [-10, 10] only in
+r32.
 
-Second, range_bounds_violation(reg) only checks cnum32_is_empty(reg->r32) ||
-cnum64_is_empty(reg->r64), and is only called before reg_bounds_sync(reg). =
-Any
-contradiction between the intersected r64/r32 ranges and var_off (via
-__update_reg_bounds()) or base/step (via __update_bounds_from_step()) happe=
-ns
-inside reg_bounds_sync(reg), after the range_bounds_violation(reg) check has
-already passed.
+If the slot is then reloaded with a sign-extending load (*(s32 *)(r10 - 8),
+*(s16 *)(r10 - 8), or *(s8 *)(r10 - 8)), check_stack_read_fixed_off()
+copies ss->spilled_ptr to the destination register and check_mem_access()
+calls coerce_reg_to_size_sx():
 
-For example, in a socket filter:
+static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
+{
+	...
+	/* If every value fits the signed N-bit range sign extension is a noop. */
+	if (reg_smin(reg) >=3D -limit && reg_smax(reg) < limit)
+		return;
 
-  w7 =3D w6;                /* r6 is unknown 64-bit; r7 gets BPF_REG_LINK_Z=
-EXT */
-  if w7 < 4 goto out;
-  if w7 > 5 goto out;
-  if w7 & 2 goto out;     /* r7: r64=3D[4, 5], var_off=3D(0x4; 0x1) */
-  if r6 & 2 goto l1;
+Because coerce_reg_to_size_sx() inspects reg_smin(reg) and reg_smax(reg)
+from r64 rather than r32, smax is 0xffffffff (>=3D limit), so the early
+return no longer triggers and coerce_reg_to_size_sx() falls through to
+set_sext64_default_val(), resetting both r64 and r32 to [S32_MIN, S32_MAX]
+(or the full S16/S8 range).
 
-At l1, r6 has var_off=3D(0x2; ~2ULL), so after zext_32_to_64(reg), reg has
-r64=3D[2, U32_MAX] and var_off=3D(0x2; 0xfffffffd). Intersecting r64 and r3=
-2 with
-prev produces [4, 5], which is non-empty, so range_bounds_violation(reg) is
-false. However, tnum_intersect() produces (0x6; 0x1) ([6, 7]), and
-reg_bounds_sync(reg) then intersects [4, 5] with [6, 7], leaving reg->r64 a=
-nd
-reg->r32 empty and triggering a verifier warning on a subsequent r7 %=3D r9=
- (with
-r9 =3D 0).
-
-Worse, if w7 was narrowed to a single constant 4 (r64=3D[4, 4],
-var_off=3D(0x4; 0x0)) before "if r6 & 2 goto l1", tnum_intersect() fabricat=
-es
-the constant var_off=3D(0x6; 0x0). Inside
-reg_bounds_sync()->__update_reg_bounds()->__update_reg64_bounds():
-
-	cnum64_intersect_with(&reg->r64, cnum64_from_tnum(reg->var_off));
-
-	/* Check if u64 and tnum overlap in a single value */
-	tnum_next =3D tnum_step(reg->var_off, reg_umin(reg));
-	umin_in_tnum =3D (reg_umin(reg) & ~reg->var_off.mask) =3D=3D reg->var_off.=
-value;
-	tmax =3D reg->var_off.value | reg->var_off.mask;
-	if (umin_in_tnum && tnum_next > reg_umax(reg)) {
-		___mark_reg_known(reg, reg_umin(reg));
-	} else if (!umin_in_tnum && tnum_next =3D=3D tmax) {
-		___mark_reg_known(reg, tmax);
-	}
-
-cnum64_intersect_with() sets reg->r64 to CNUM64_EMPTY, where reg_umin(reg)
-returns 0 and reg_umax(reg) returns U64_MAX. That satisfies !umin_in_tnum &&
-tnum_next =3D=3D tmax (6 =3D=3D 6) and calls ___mark_reg_known(reg, 6), ove=
-rwriting
-r7 =3D=3D 4 with the contradicted constant r7 =3D=3D 6.
-
-Even when tnum_overlap(reg->var_off, prev.var_off) holds, reg_bounds_sync(r=
-eg)
-can still empty r64/r32 if the intersected cnum range and intersected tnum =
-(or
-base/step in __update_bounds_from_step()) have no common points.
-
-Should sync_linked_regs() verify tnum_overlap(reg->var_off, prev.var_off)
-before calling tnum_intersect(), and also check range_bounds_violation(reg)
-after reg_bounds_sync(reg) to restore *reg =3D prev?
+> +			} else {
+> +				/*
+> +				 * Nothing to relate: either the source has no
+> +				 * id to share, or the store is narrower than
+> +				 * the 32 bits a link can describe.
+> +				 */
+> +				bpf_clear_scalar_id(&ss->spilled_ptr);
+> +			}
+> +		}
+>  	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
+>  		   env->bpf_capable) {
+>  		struct bpf_reg_state *tmp_reg =3D &env->fake_reg[0];
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020161907.2115=
-379-1-vineet.gupta@linux.dev?part=3D4
+379-1-vineet.gupta@linux.dev?part=3D11
