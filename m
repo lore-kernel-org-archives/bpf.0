@@ -1,56 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505065;
-	b=bhWl27jHBctJ0Vv/gN/+WZY96+VZ874QloU5oHDSImWUIGIc7D4ljIMQy+52AOwVUGhO
-	 GJSHfCU6EzqpZ4jB7bLKI8LxY1q+PyQUWUpYjVXqXTJmHiDecKkrzDbgFGgVAKyN1CZn5
-	 LPN3lMd8zAjQ1oZfJhBSXvQNOpWzMQlZX1e4kRdvUNiG9Vt25m8Dl6fkgXXAJ8nZDntvW
-	 EfTZZwo+PwVIl8id7rjk4otMJK9NMgu7ayuwb6L0sv/PJ06ZFAu7Ac91iMyxeZn5eUqaE
-	 Mf/HsvZrAtbCxYC3K71iuu76HQNkXRsPFMIUhuHHgR6AfpuA5BKkX+dSY1pRKnrNfEA==
+	t=1792505148;
+	b=T+CsUHEHs0+fb5d2iH5RuhCDfbd5w+P+kbda7l943wCLOqTPIT4kVljIFTV3tgLKsmhu
+	 1t7dDN58vXVpqfDPD7IaxPZ7skD3xRrJMS4psOGjbnA1WicR292bQFnWCqcbokKpPFcWl
+	 3khpWvx4iFTYL/5uRo79ORqnTNYXBWVoE2DpYEvmg3Ef+JLRfnejuD6qzV5ageqIe3M8j
+	 mQEUqG/gubQwODQR0uYbW6hOXTKbYXz5enlhT3eLUsSMW6Zc/bn+BBMm4mBLpYLYJFSaX
+	 Ct7j2WqiRZCDkr0EAzg2SFqT2e4H6PtGKUqcJ2jTgrCPuXVaSxVKsJ9vNzhuGZB8sEA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505065;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=7r2+jmI9yLt+HU7/91BGv76dGLIgtVNmcuy+6F4aKzs=;
-	b=4tPX8WbbL05RQnb/1NGrVkUwh0SzZfg0E5M3TQ8EI3hC4sKAbhp40pMLsxBGFe+Vknr3
-	 /dR4fB5Wc7KIYhOMUBQYpNWdm0UKt3PbdVtc4Wve2z0k0IUloEv0wb13oMrihX4qZGrRY
-	 PMrxolTYVhsybTnVUQDcL3x5yVp9vggok+rhsAr2eMqmcqVyaGy3E1JJxemFDYLO5uUyi
-	 EGZwj0mkKYyazpfJ2qnFtXiN/yHVzP++dDQFoabb1Uzv1HY5t+eAEy0HSvWDqxhUQmrg8
-	 oROEfSfI6piedMtGSikMaccKV/Z59U79NZcJckMp3dC2CW9ccvOG9qL77UJceTQmfYw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505148;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+	b=Gw1eu7ZQYf3YTAXfhUBNyrUwasTXd3dP7pGjMPGrUxSxl5ctHondA4oU+SgSOLH+1XJV
+	 9JztlffKG0rXU/cVHBI5DZrdFn12ft4TJV0FgZH3prB1DDcUb5xvRH85VDwNndKdZbtdS
+	 Nt/jEyaTjUrGIAeexmSXW1cpf7gRZ6/8Rx2xhFg1SYtZsAc2SnmX0wFcgHLv3cO0cWbN8
+	 agp2RJGZ4+ip1f3RIgh0+AGAg7bZQHEWqLCIaw2jhUYkIsGPbDxvsrM7H3VRhILrWiGHJ
+	 uWgx55xneLrkvNEleAyYrmR2tTs1iHNlViXWMEN2csqeBd5Gb3DSVqtyd2lpTTCQxbg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d3ehGHNV;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Nt3i5266;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=BVuZOrII;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4D3606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D48606A31B
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:05:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77D48606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d3ehGHNV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22EC11F000C4;
-	Tue, 20 Oct 2026 14:04:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792505064;
-	bh=7r2+jmI9yLt+HU7/91BGv76dGLIgtVNmcuy+6F4aKzs=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=d3ehGHNVV3ov7v5VqIZwAKN/3bHF8eDiWt5SkrI1vgWN8r6i9nR5r4u/V+POYk0pk
-	 iz78b5RdDYo6U9nxaV4cDv2Oms9gwrmVjGbZF6n3UQKpFMXa8a7f2ls+Mr2OU+tf54
-	 pzy2lBQ2RaT/Nsa4IyIjGCf8GizNmBCe3rqfvC6JvDTMr3nBLbhJroIkIsW8p4oY97
-	 MdCwpM5cpgfCixQmFy1fWmtbhEijAoh+licR1EBxTvyhhT3Uc/i99NGBKL+iHfMiaZ
-	 Ttr8QfO5GnG4JEiDCOcjat109SxlsIevSuTemvceY4hBN3FjfWJn6Oc3AMaXdrgymQ
-	 +jX6Lrj7vjScg==
-Message-ID: <sashiko-outbox-179079@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 05/16] libbpf: Add the arena percpu chunk
- attribute to map creation options
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
-In-Reply-To: <e596c9878df94ac93c172d93106c8ebd2dac4bb7.1792503001.git.xukuohai@huawei.com>
-References: <cover.1792503001.git.xukuohai@huawei.com>
- <e596c9878df94ac93c172d93106c8ebd2dac4bb7.1792503001.git.xukuohai@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 14:04:23 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Nt3i5266;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=BVuZOrII
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792505146;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+	b=Nt3i5266bYeuVgqKkSRC0hAc8PiaObZbifV92h75U+uebHzPRgBkHDjvvGnPVdGZUGTbkC
+	B2pRS/AbJgBjxsDfbZjzIZYLs1SpcDXwHUDGd8i/XbddCTuM7PmcsL5/wnvo4pbThi3x2y
+	W8Px53qxTnh6NsQZCIAboO7jqhx+1NU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-260-2I4SIGUXNCu5r8AF_NdGCg-1; Tue, 20 Oct 2026 14:05:44 +0000
+X-MC-Unique: 2I4SIGUXNCu5r8AF_NdGCg-1
+X-Mimecast-MFC-AGG-ID: 2I4SIGUXNCu5r8AF_NdGCg_1792505143
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a1f03f2e8aso12584565e9.1
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 07:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1792505143; x=1793109943; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+        b=BVuZOrIIRZeNQ7/dQ54GjubARN7Ii/zM6ccftk6Numa1K1g6WTAo2y6KApvG1+TA+b
+         VhM6V+oduSJOVU3pQR5H11182ZJL2rPOGYmVpySDisop50RXbEJsCHiNPpmQ1SroM5Y/
+         mpCwq+y8luRBaJ5FSwRoHQp8jqg9BUEgWiFAl8l0WRKdpzKALRRP3CMHsWatOHJU2aXm
+         inV6qDJwsbNK0pFpnFblyXeiBvUpIknGMLOp9DpWZq7qsG165txoBQnfx4pNgFygcrr4
+         Hh+8sedn03eXfvIc56XssmAttSBjVd7lz7fddPOyn2223/Ep8xbANcj5l7vdLbKquic7
+         FqXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792505143; x=1793109943;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9ykT13PSVdEhkpSDogty+KQ6PO4mrXSOM4DldWxwlI4=;
+        b=idhsc/X871kgEufavs1A2eA9yW/Otj564L5k3uulQzLeluygCby0gVBeMaWQ4WYyt4
+         9iFVhr3fUsA+NIpKsvCDuYOj36G9ZtPnTyoUtdgwHEKAj9hhlWcjArI/i/qmDrIPvikY
+         kxem3WurO5OmjzekEtCwgmYfbIOfV2+9PwhDrHgTMFlMctzEI+E2y8r8XrHeU1Y62w/v
+         53EEOsAz/mvlJQT9oMM0TxDxKd9D8cA0rxaT5NDWfcPNHcCZX1ox9pixblNuHjRhFev/
+         UTVvj+zDxFNQNi/qlFUqDRyZVpt53LT8YYTRUl/JBwU2wm+T2aDc5sp+22KG5pcGE9OQ
+         25jg==
+X-Forwarded-Encrypted: i=1; AKwUvBy5ul6MxR/1I11aBXMU2C4C3cK6/7MsDIeCd4988OyZfU9G3a3CiydaR5RzJHBlMrbSCq0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLef1jfXnbiv1Ea1o7jeUowSFY0TLC6eMu7kRTdrO1KublTUKjv
+	y6a+riu1gAP8WupYK/Q/I1DRc5oBusFUOtY5not1UA0UCRndHs86aeELNemaV5pcP51Q4w2J51E
+	I4THnHInyw3N6VfZv/XYdpemFlpWGRi3gJfuHpuX0wkNY90WG66G84g==
+X-Gm-Gg: AYBFou0hVoRMOGQb7poTTWK1bITLd2XcBCmqSBoOzHjU0tWjl3sFZT0/julPaE0Kary
+	WDFck/NA5TsA+NRy7dcc2GO9+KVs79139LEMT+Js4oJZWEqcxfpX3A2Kc89+OA+xQZhrqjE1cPL
+	GOE/bDUUJChTMzZNMUT42XedG0h2cSV3QkwlrEVtXJzw1+8xtNowhA4FCIrlban8/mJyj4WPeAO
+	tpDtXUsBCGxNJjb91QaR0nwFAn1WYnfh/ln6h37cghWUCbdezv+Psr6X9FO0HsuMXEIvMW65/F2
+	Qr5CwroUIpZmaYGxe7f2TdetMtV3US2EYn74XKiWmgGytOZ0G8DhCL+JifU0iGubB9II5n9PSKs
+	M+HVFRLlAJzMECCBkGnATwQuwriYrGt/0Y83WZEwKKv3CG8H81W5YriEr1rhF3FrqR0RioET33w
+	==
+X-Received: by 2002:a05:600c:3f0e:b0:4a1:fa33:441a with SMTP id 5b1f17b1804b1-4a1fa33452cmr18514575e9.2.1792505142705;
+        Tue, 20 Oct 2026 07:05:42 -0700 (PDT)
+X-Received: by 2002:a05:600c:3f0e:b0:4a1:fa33:441a with SMTP id 5b1f17b1804b1-4a1fa33452cmr18513575e9.2.1792505142147;
+        Tue, 20 Oct 2026 07:05:42 -0700 (PDT)
+Received: from [192.168.188.234] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f2d43242sm69875765e9.9.2026.10.20.07.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 07:05:41 -0700 (PDT)
+Message-ID: <7ceef2dc-717c-44f5-9974-1ed8f0440fa3@redhat.com>
+Date: Tue, 20 Oct 2026 16:05:39 +0200
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,95 +111,51 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 0/7] ipv4,ipv6: convert the getsockopt
+ switches to sockopt_t
+To: Ido Schimmel <idosch@nvidia.com>, Breno Leitao <leitao@debian.org>
+Cc: David Ahern <dsahern@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+ Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, david.laight.linux@gmail.com,
+ kernel-team@meta.com
+References: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
+ <20261019081907.GA2725184@shredder>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20261019081907.GA2725184@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] libbpf: ABI break in struct bpf_map_create_opts from field inserti=
-on
---
+On 10/19/26 10:19, Ido Schimmel wrote:
+> On Thu, Oct 15, 2026 at 03:05:29AM -0700, Breno Leitao wrote:
+>> This series continues the migration to sockopt_t, as described in [1].
+>> do_ip_getsockopt() and do_ipv6_getsockopt() still take a sockptr_t pair,
+>> and everything they forward to now takes a sockopt_t, so convert them
+>> both.
+> 
+> Acked-by: Ido Schimmel <idosch@nvidia.com>
+> 
+> Given the user visible changes, the fact that the merge window is now
+> open and that this isn't the last part of the conversion, my preference
+> would be for this to be re-posted after the merge window.
 
-commit c57f05a60ad40accdc31f88eec3828c5149f9136
-Author: Xu Kuohai <xukuohai@huawei.com>
+I agree on the above, also clashiko noted that patch 7 lacks an additional
 
-libbpf: Add the arena percpu chunk attribute to map creation options
+CONFIG_IP_MULTICAST=y
 
-This commit adds arena_percpu_chunk_off and arena_percpu_chunk_sz to
-union bpf_attr and struct bpf_map_create_opts, and populates them when
-creating an arena map.
+/P
 
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 826d9cc9ab65d..15a544488eb59 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -70,6 +70,10 @@ struct bpf_map_create_opts {
->  	const void *excl_prog_hash;
->  	__u32 excl_prog_hash_size;
-> =20
-> +	/* offset and size of an arena percpu chunk */
-> +	__u32 arena_percpu_chunk_off;
-> +	__u32 arena_percpu_chunk_sz;
-> +
->  	struct bpf_log_opts *log_opts;
-> =20
->  	size_t :0;
-
-[Severity: High]
-Does inserting arena_percpu_chunk_off and arena_percpu_chunk_sz before
-log_opts break binary compatibility for struct bpf_map_create_opts?
-
-struct bpf_map_create_opts is a size-versioned LIBBPF_OPTS structure
-validated and accessed through OPTS_VALID() and OPTS_GET() in
-bpf_map_create():
-
-tools/lib/bpf/bpf.c:bpf_map_create() {
-	...
-	if (!OPTS_VALID(opts, bpf_map_create_opts))
-		return libbpf_err(-EINVAL);
-	...
-	attr.arena_percpu_chunk_off =3D OPTS_GET(opts, arena_percpu_chunk_off, 0);
-	attr.arena_percpu_chunk_sz =3D OPTS_GET(opts, arena_percpu_chunk_sz, 0);
-
-	log_opts =3D OPTS_GET(opts, log_opts, NULL);
-	if (!OPTS_VALID(log_opts, bpf_log_opts))
-		return libbpf_err(-EINVAL);
-}
-
-Prior to this change, log_opts was the last field in struct
-bpf_map_create_opts (at byte offset 72 on 64-bit platforms, with
-sizeof(struct bpf_map_create_opts) =3D=3D 80) and
-bpf_map_create_opts__last_field was defined as log_opts:
-
-tools/lib/bpf/bpf.h:
-	struct bpf_log_opts *log_opts;
-
-	size_t :0;
-};
-#define bpf_map_create_opts__last_field log_opts
-
-Placing arena_percpu_chunk_off (offset 68) and arena_percpu_chunk_sz
-(offset 72) ahead of log_opts shifts log_opts to offset 80 (with
-sizeof(struct bpf_map_create_opts) =3D=3D 88).
-
-If an existing binary compiled against the previous struct
-bpf_map_create_opts layout (opts->sz =3D=3D 80, log_opts at offset 72) calls
-the updated bpf_map_create(), OPTS_GET(opts, arena_percpu_chunk_sz, 0)
-will read the lower 32 bits of the caller's log_opts pointer into
-attr.arena_percpu_chunk_sz, while OPTS_GET(opts, log_opts, NULL) will see
-opts->sz < offsetofend(struct bpf_map_create_opts, log_opts) and silently
-drop log_opts.
-
-Conversely, if a binary compiled against the new header sets
-arena_percpu_chunk_sz and runs against an older libbpf.so, the older
-bpf_map_create() will read the 32-bit arena_percpu_chunk_sz value at
-offset 72 as a non-NULL struct bpf_log_opts *log_opts pointer and
-dereference it in OPTS_VALID(log_opts, bpf_log_opts).
-
-Should arena_percpu_chunk_off and arena_percpu_chunk_sz be appended after
-log_opts, with bpf_map_create_opts__last_field updated to
-arena_percpu_chunk_sz?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
-t.xukuohai@huawei.com?part=3D5
