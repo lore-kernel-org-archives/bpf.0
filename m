@@ -1,54 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.218
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792521176;
-	b=A3Uo/DaHBeN0P0gEcrC664+moixJ+KS3Te3+BeQb6FCClWHtryH0BXKPJ4pKl0pTm0x6
-	 FzfxoVI8qa7lVc+aE+xU+i5/0IGFflEGwldoq94sqJhT8ZQkCOaq/+X+Qa8g9B5hzZl2j
-	 ignLNWvziJMPvrBpcV2BdfJG8w59iNVfdaPOOLDTGiAsIB5FPAQBbGJtT5oEzhBDspPzV
-	 fcCIlaALYy7zwjDMxXdS1CPM1sc3IJrxuI5y0bdFp7bTebIFpP7obo+vN4uM0wC47+DtI
-	 qZTetD8F90vQq6O45/IGthVfT/70D5Dz8uxJn1wZJwqraKZKis06R9wSlzp/n17ndMw==
+	t=1792521185;
+	b=x+qnoiDfl7n/gKNGJlD/bmHPkYaSM1iWB2RlNnA/IgOUUoJP8jDRBM8KsA6iDh22EGbj
+	 Gxe2wOELouRn3UeGwI/94ZmWIC/VciH09qyDgSpEmV86c/JzI8HE5cegczNvYU7kdq953
+	 KygWZ+rCFmo8t69Qlpzg5ZxA44H3K8ebnH33uloG2Iw0MWodhqrUK24RVekymGkzctdem
+	 W3FVjpUp1Olbb3V80ufkUE7H+WzeJSRcpyLeUvpC/2rM1kupLbPFtcMRORsWBb+KZmU3t
+	 RXFoSESf9lgjR7Mi8bu9VGEzRz02iFkgYTiauU/Iv2836KBpMzJ+IfzRL0q8+cqK8qw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792521176;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=VVpuWYwkWD/9/HNw8SQdi33UO4JldlQknYGbD5fRVbE=;
-	b=DOzxY+qBVPs/+h5tb0gQwXmzuMCe1VSlVWWiX4i4kwIzgY+Z6EqHit+GHpzGUxni775H
-	 Q/8mZ4LUMCGDYLAwN0knqVpuDlM+eoqnKPQDYLhbkpO6v8tqxr1uDxFnPlTed4oKIHYbb
-	 eGcR+DFQFah6J+d25pzKnJYxZRjCXB9WfR6UOjxBqqrcUEi0RnAe62pu02D6qkO5XvPGp
-	 q0RizJXx2X3ENmO0VI8MqU3pegJFRfm5vgOO/Xjea9JKCOD4Gkknu+25KA6tU9tVzVmf3
-	 QDr9DjOFETyEXC0mABHQYnY7Q6JiNom19VsPk4JQFDKkFgmIyfQijfF+65eFwDSeA6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792521185;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=tcOgHR83oJ/E387XM9X7XUHtvcTJO511qwW+hFx3nDg=;
+	b=1x58Zi/6CcBMYIFfUh+eWglrB93s8q5ZN9Q/iQflTFlFGp+MPWR/xbISBEtA0NlLXRg5
+	 x+uyXPjmYCz/3XO9eMTUr0dybt/HttSe7JZ76uuwHONc2ZFMLN/ErDTPhBTTQDNauiUbb
+	 1a03JZOTRlHRve97t3BdMLD5MC6vEysUzRgFbo5nKC1S8KQVYzcR+OZbX8u7AVvQGJ2wx
+	 T9O2VyLKFbgheLu6wJNmKgsQhQKu9MWn7/bSy+uJ2wwB1wQn9SwhrOtuuxHAET9t9csM9
+	 xtwfpjJNMdLWeAxBrBJRlaMP1KfNsbQlLpZCSiEpmW9Eq1L/bgWeDy0Nj4fxvM2oYIg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eiFDJWYL;
-	arc=none smtp.remote-ip=95.215.58.218
-Received: from mta1.migadu.com (out-218.mta1.migadu.com [95.215.58.218])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EiYlKpxT;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0620A606A31C
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:32:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0620A606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F49606A31C
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:33:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eiFDJWYL
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZaL8y2eN1FweU55DX6zD7cbfGbNsVefal33JOq2RRQY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792521173; v=1; x=1793125973;
- b=eiFDJWYLuxc1mV1IP/6Y8R94SNfhTmenqK8tTKp0K2hezy4gu/ZrXgBdJAADVVtEFhB75pvP
- zN6s7N5vafqm5BmR9EdKwQu+tB/WK88I+7VsREfiEkOMTrB9BFv9jjg2JsNnvATwOHqNPSldGji
- jOJUmvJ2cG3PBQTmcftZ9xdU=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2e1178afebfa25aa;
-	Tue, 20 Oct 2026 18:32:53 +0000
-X-Mizu-Trace-ID: 2e1178afebfa25aa
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d2369629-846e-4fd8-b567-a0fd8863256c@linux.dev>
-Date: Tue, 20 Oct 2026 11:32:48 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EiYlKpxT
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E8C21F000C9;
+	Tue, 20 Oct 2026 18:33:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792521184;
+	bh=tcOgHR83oJ/E387XM9X7XUHtvcTJO511qwW+hFx3nDg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=EiYlKpxTms7fqr4qk7hrx1I3zIxXVjtufaczMj9LPAqR/eA4x7kaGVMQpIWz6YIyQ
+	 21YOKv8//LccxsvdTC5Ip3yUzlyL8vz80IWjFl/9PRXA768DT9qNU5ZEsmgEWGzmd+
+	 fOe1X4vA6LQmNFB51OKu6o/LSx8vXgsxslC+QQAa0+lYDLNgLI1g4D+YG5hO1ZRaC2
+	 x/2iOag7MjDFfzO+vYkNmnvsLcrUgMOMUWIMo7gz1Aq1LaO+xQy46o9flAcZ1hw7nH
+	 UyFvDDgsWdXDD7g4je+j/iV1zNpiJU4m0ITUmLkJuNZSr37IXHhY6+iVzKNBYBhMz1
+	 r/rBUf0N4HTcQ==
+Content-Type: multipart/mixed; boundary="===============0240370079051438660=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,76 +49,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 00/11] bpf: Scope callback arguments to their
- frame
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Amery Hung <ameryhung@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
- Nicholas Carlini <npc@anthropic.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20261009202759.50520-1-ihor.solodrai@linux.dev>
- <DM6EVHTVM3IR.3RCFLKV9WC80J@gmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DM6EVHTVM3IR.3RCFLKV9WC80J@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <a9d7c1aded97ee3ced24068eeaa79c447ccc242ba7f33c5ff85aa4bbc55650be@mail.kernel.org>
+In-Reply-To: <20261020180147.1769873-6-memxor@gmail.com>
+References: <20261020180147.1769873-6-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 5/6] bpf, arm64: Add a native bpf_throw() entry that captures R6 to R9
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 18:33:04 +0000 (UTC)
+
+--===============0240370079051438660==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 10/16/26 9:42 AM, Alexei Starovoitov wrote:
-> On Fri, Oct 09, 2026 at 01:27 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->> Introduce REF_TYPE_FRAME for this use case: a reference owned by a
->> callee frame, dropped when the frame is popped. Tie each argument to
->> this reference so callback return invalidates it and its descendants.
-> 
-> Another idea...
-> The id is owned by the frame. Can we keep it in bpf_func_state
-> like diag_frame_id ?
-> release_reference() already takes ids that are not in refs[].
-> See unmark_stack_slots_dynptr().
-> Clones copy parent_id and slices hang off dynptr's id, so both are
-> reached.
+> bpf, arm64: Add a native bpf_throw() entry that captures R6 to R9
 
-Slices are not reached. A slice's parent_id is the dynptr id, and the
-walk from frame_id finds that id only while the dynptr is still in a
-register or a stack slot. R1 is caller-saved, so the bpf_dynptr_data()
-call that creates the slice usually clobbers it.
+TL;DR: Nit only: the open-coded "brk #0x1" after bl bpf_throw_unwind() in the
+arm64 bpf_throw_entry could be ASM_BUG(), which would give a clearer report if
+the call ever returned. Not a bug.
 
-This can be fixed in your diff with:
+> diff --git a/arch/arm64/net/bpf_throw.S b/arch/arm64/net/bpf_throw.S
+> new file mode 100644
+> index 000000000000..aac1c5e967e1
+> --- /dev/null
+> +++ b/arch/arm64/net/bpf_throw.S
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bc12df55d2e2..57859c3baeeb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11470,6 +11470,7 @@ void mark_frame_scoped_arg(struct bpf_verifier_env *env, struct bpf_func_state *
- {
- 	if (!callee->frame_id)
- 		callee->frame_id = ++env->id_gen;
-+	callee->regs[regno].id = callee->frame_id;
- 	callee->regs[regno].parent_id = callee->frame_id;
- }
- 
-i.e. the reg is its own parent again.
+[ ... ]
+
+> +SYM_FUNC_START(bpf_throw_entry)
+> +	stp	x29, x30, [sp, #-(16 + BPF_THROW_REGS_SIZE)]!
+
+[ ... ]
+
+> +	/* bpf_throw_unwind(regs, cookie); the cookie is R1 of the caller. */
+> +	mov	x1, x0
+> +	add	x0, sp, #16
+> +	bl	bpf_throw_unwind
+> +	brk	#0x1
+> +SYM_FUNC_END(bpf_throw_entry)
+
+This isn't a bug, but would ASM_BUG() fit better here than the open-coded
+brk #0x1 after the call to bpf_throw_unwind()?
+
+Immediate 0x1 is not one of the BRK immediates listed in
+arch/arm64/include/asm/brk-imm.h, so if bpf_throw_unwind() ever did return,
+the result would be an anonymous "Oops - BRK" from do_el1_brk64().
+
+Other arm64 assembly with the same "bl <noreturn>; trap" pattern uses
+ASM_BUG() from <asm/asm-bug.h>:
+
+arch/arm64/kernel/entry.S:
+	bl	handle_bad_stack
+	ASM_BUG()
+
+arch/arm64/kernel/head.S:
+	bl	start_kernel
+	ASM_BUG()
+
+ASM_BUG() emits brk BUG_BRK_IMM plus a __bug_table entry, so the report
+would name bpf_throw.S and the line.
+
+The follow-up commit 9a710c167b82 ("bpf: Restore callee-saved registers from
+the frames being unwound") keeps the brk #0x1 as well.
 
 
-> All setters have callee already, so no need for patches 1-3,
-> REF_TYPE_FRAME, frameno in refs[], the reg that is its own parent, etc.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-I don't quite understand the concern with the series as is.
-I'm guessing a new weird REF_TYPE in refs[] which is not an actual
-acquirable object gives an ick. Or is it the plumbing?
-I take it you agree that we need some kind of frame-tied lifetime
-tracking, right?
-
-I added some refactoring patches in attempt to avoid growing
-bpf_func_state vs v1 (Eduard mentioned we create a lot of these
-objects), and that is what you've just suggested.
-
-frame_id approach is fine with me, just want to understand the choices
-we are making.
-
-Thanks!
-
-> [...]
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39472833568
+--===============0240370079051438660==--
