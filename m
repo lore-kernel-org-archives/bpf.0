@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792520012;
-	b=xdMSIuay/lymUn6McDtwYx+kKByMsBjfSfREC4AsQ4K4CdF6T3LKcUQ363tUk68otsJx
-	 f3k6a/u2nk1c3FycaOyWp5/9koLJ44jMFf5bOfF50Pph0oRodp76yymAP6rwhlfxnI797
-	 Zk4IPdRi08RIIgfpUQjwkwkA3h5OQWBFTNHCeV6auidaLUU2eIHFfzybsjPum+YOy4uYB
-	 1bebQP5es9EYOg1eeZSXvJPnKJOFcQOv1BvhTerJG3MjG1ZWKRl2XrbDHjh07fp73h5DF
-	 //9ZUdAd9kHbrgWBQ8PpxSpDnIXGWVC3H2kpaLjBMPPdrdGTrCLXfk76gz7JBiTJ1+w==
+	t=1792520019;
+	b=mT9ugjzTT3MSNFR2RYvLbvNOKPPd+rvolZHgB9KVUpJ0GSrpoVMm4AC2ziE6AGG60HKd
+	 OB1XHmiqz9tOJ3DeoCbrWoHVg6/5fPPOIzPy9rEQbnp/MvmFWcQIwX/htyERAoa6May6Z
+	 rq8WljLHxXngnh9cifDZMCupZIHcTvPUoDb5Cf4D7NYi+hk0mijKwJ4oVKdUcBidc0Vo2
+	 6O8ypZu2Tq30+MtstKitUE1WzQHTcS9VFuRvzCrBhb/dO0o6x6mFijIxKigVmYZ9Hsh1r
+	 CT18laTjY306PYBwcnDT2yQoyECr3BIue1l2glPlXiJJcjW41VHoooQU4V+Ixk4M21A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792520012;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792520019;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=HSeISpGqMTYb1fl68xScBqHaWPqJr1yZzVI1CGkLHKk=;
-	b=msTxeLmZKZ9k29yP9NlMLwZ8ZCy3oz9GseSZBvjDpeiYsPAd0H/IYTFvQp18a5hHqyzL
-	 eZqBFO/VdKRWNZJOvhtR/vMCcs4rodNBnjfoBzIwsu80BOniDhxeDe5jsLEORPcbxQ+9I
-	 fXaFNFKYe4zKEQEA0j+91AzxPh/anFTQyTmPaJg9iWFFGinEJNH0utiucTtyVEFFDubXR
-	 TGmjeteq7v8VGFC1YRgzhw4OrpExHYtUaYiDWzan2qv5Ldrw8ornwL0Qkkb7Ko+/L8N07
-	 PQLKFINiLaEb/sn2yrlwcB+4u+Zy1cv9XOlWDIdpple4v3/lLwxAyO/kFVzPO82TJbA==
+	bh=Db74klC66CBksTvcfwg3EV4RLSh9va8TK1+QVPxZijY=;
+	b=JnXWU30/TDOIYsgytT5S9v7GUC+/9ltCc8As4v5a5SPAOGCG8uwM7LL+MIiiJYMQ7X5Y
+	 k0VeNlvsPMT1TG8rGpw1t/7zAKzm4NTvYy9NZZyAYy3TcnGkHl/YAnrSNhbY7xJn7GXI1
+	 kDUTgCyBsW4srfr9bU9o//HKcNLlfCckOPprJgAIWLU7LgFPm859zBbCovvbJvRKl5Hyp
+	 55nNdKqKy88kJo5AK6pWixDX4mR8loc8MaS5sFMFhxRRUXJHhD4CpwzmusbtD6rJPG4aA
+	 HyGz4Wr28BLMEEdxCrEdHGI9JZzAN35mSMeneEj37Z8gxR3wMQXrpmGrYej6Im4MBIg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QJ3RAaqz;
-	arc=none smtp.remote-ip=209.85.216.50
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=LpFwGvht;
+	arc=none smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF59606A31B
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:13:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CF59606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26BA606A31C
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:13:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A26BA606A31C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QJ3RAaqz
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3ad2b3b1c02so1510546a91.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 11:13:31 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=LpFwGvht
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8a070b3f44aso800382b3a.2
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 11:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792520011; x=1793124811; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792520018; x=1793124818; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HSeISpGqMTYb1fl68xScBqHaWPqJr1yZzVI1CGkLHKk=;
-        b=QJ3RAaqzy5A60tGtfBqDD3rqDzsTRBHSQ1jAzzgvNCsh5cvw35bfew39PgAjzT7hkP
-         ZexA/1Yo7LkkFDO+9O3zk7uOwdP2rEd1ezPxkzblbZGnPQnz21xu45izEeJiZT8c1QRM
-         7iyRCbJL6GmoDCKrFtLgHaU152y02g6F5u38LS4X5mAZD2Cf5541jNqYNHAYEnC/J73r
-         AYDH9TDUkHmMItdzr9J33yFTb7YUvfRGfvL9xdSALgKI8l4EMmBdxdPfWE+/o1AgZbrg
-         A56YM4GpQpL+d1XonItgQLKm3sMf0OI0zpaw9wOygJ35VbP0dBN+6TSGH5JlI9EnpRRF
-         44IQ==
+        bh=Db74klC66CBksTvcfwg3EV4RLSh9va8TK1+QVPxZijY=;
+        b=LpFwGvhtq0JG1OYJpcjp5BlA2NWhf5GI266CnN+h/avN+6wBXjev441HJkQpCLZ3/z
+         406K9DpQTtlTg/jIMSMnMf8kuwABWN1ykYOl2Gfoi0YEtj6nTHUG9LdKa7/TRZ31Twxv
+         74Ci1As6sW16cspZ7mMdIzqHVjEgKv/UeGKdWQDp4IX8rWY5kNiiOKagt2Z2oMEz/pWC
+         slLMqifqdn/wxNi6lx3Z1aVAbeOZ8tT7ZgyoarNLPRarEZHx1QuOrT7iXeELU4CHORrB
+         57vadSP052/Rdng10yoCojUYdwXeEr8KbeD48kTufzMld+XqnVAY3UBdR/R4gDy+4T3T
+         b3SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792520011; x=1793124811;
+        d=1e100.net; s=20260707; t=1792520018; x=1793124818;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HSeISpGqMTYb1fl68xScBqHaWPqJr1yZzVI1CGkLHKk=;
-        b=K/NQ+JCEY6JVZGaYeimO6LL8/YoXRq06XVzFqvWdRhz1sR/Oc0nLkTwbDnwqVAJ+Yn
-         RSOKOKHiiSjDIyWADrzSdFixM3dgmAAU3GH3bDEs92ZaOg8Aup26hsleGoICEL7hjuPz
-         WzGuUBHCqXbbun6A1AZXP6Jol3OE1lIrJ4oIwX1UojYyui9GHNvpAIvKhBghwsp7C7hb
-         gw7HUg9aRP1aiGV8onQkjE30TTe/0RGQSksPLPCVSA7FRn9GiGmuawz4krSxaEL5C/WR
-         k+tz7JLRRj4tShWHMSkTyb4bCetNw+3L297kKO5PI0lLqjcOfVsETuOxiPnBJXVA4J4R
-         D0IQ==
-X-Gm-Message-State: AFq9FYK14on70lDsIwCA5SUjrsr4AuH9skbxelZpXHwTGuMQyAdltxG5
-	fMtaCxx1t6McZcYahsCS2HTD+lAc0KGjdAvNpeMztw5uTyFaXdjexAtF2Zrdaw==
-X-Gm-Gg: AYBFou0lDGV92VfzetjXHyfAExZzp90Y+buauEJDNglJOlCLrJ2zBdLQ7+zfU9zCsjA
-	6LkHuHLua8kD2tfvlhp6KOg8hxurU68Ziy8PX1WDuKiKxLLKFT2NDvT5LAFPlMeLC+plBsztA9I
-	5JJpvwZ6+Tv2BYcsTKG0M1cReGI61gRqapq6IitUYnerjdQaihKbmTsn0lnMq9pbgbqemWwdtVC
-	nBYBPygY48pVJBPbg0SxRoI5LGR0GDZ8HnSYdHakEnKgbLEWlNREVUdU+fV/6FK81g4gcqix0ms
-	aRXnL0k+eE1jj0KZHfOz/3J5+RUdc82gixiijtFOETQ+DhYrDdnQz4l9P77pSneoV2yuvHzJWYT
-	kLrF2CVz3WNMhmyaCeHHI9f+llKKHWkFK7lhArhxzQXkQE6W1ZJoEyeedW6rS1JAa8po+clLFsF
-	MdFIRKdhSDM+NPay7WMsmcTo5vWb/SoBuSAr6+UBGYcTTgQ+B0qsEiXkNueG2TtNVWKq0OOcitt
-	U/uZqEjDMMikTXIw2ArCUHMDV2c10il9/SeYir3OB+Iy/8cGb1dHnDWVDnXRqrj/7DN7WyZNWvE
-	UgUJ8jFLlOHL/YrL3EPsEMGUPLqi2T66bg2xhdIePto=
-X-Received: by 2002:a17:90b:35cb:b0:3aa:fc22:8aac with SMTP id 98e67ed59e1d1-3acef56f93cmr10441621a91.51.1792520011038;
-        Tue, 20 Oct 2026 11:13:31 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad8021d29bsm619558a91.4.2026.10.20.11.13.30
+        bh=Db74klC66CBksTvcfwg3EV4RLSh9va8TK1+QVPxZijY=;
+        b=kxzlSgW4zylH7qgMESHun8ycmuPqfDtaL9MtHNNp7y+C9Iq1bDymHn4ySC2hA2abYc
+         T6WoQT2RUqX+1SCPQ1I9NQMqE9/vH6cLHtrfXFfkPbn2a3IA0CvxdFm2bUB/gQYaVkqE
+         sLdXG0Wt0O6qQw27pDInyB19syeATRs54Md2fkv4W+eYVvQrrsd2p4MFTVP49YXOVJfB
+         Bg1011VyXCBTwkI0Kt53SPR9YE4Nvq6C3FyAHwXi/M5dYQ1JnTybfLWA/RhYkpo5cZUc
+         yI17pRC3JVO4jTx/cXrPZjrerRzTMt2Ko9mJVRkKWh+jOhKHrsU/VwROdVI+boGgCqJz
+         a69w==
+X-Gm-Message-State: AFq9FYLP/1ITmbXJ+f/EF/jZFn3EMG/BxBPDd1KEHzQHX5XskEYodDpU
+	JPFuEtXAVXZOlqO8bXRc7NMxMPTZswuuR68uPnTrnKo380MwybJvdF8XsSvWFQ==
+X-Gm-Gg: AYBFou3YLn36LktE4ZQ5RE1Lu2qLFxuVCkt9FvLMiWkrnhCcAn7vVaY+bNBkJsdBrc5
+	OQk1j67T3GZt0EkeQhDGptowct39xhrgXttIVmV7XTvvANbWYRHxPt0fsYT/8vWyVJhJQozUWIz
+	4jh8XdI++IsPrnNzgof6mu1OyQ41Tu9CElIaIAgdsuPu/OaZSCSzJB2AywKOLX3iusoj5lG5NoK
+	q8he+w2SxWF7ZfOVPUoaNW4kepkIqX8f/fivytuON8CSyK9hFXMNqLpoe48EViU423NPOICKjsJ
+	QF3t5ta8ibcvbv9ujAeUn/kf94gqRT6orArhbE0+nab+o1TePLygRJmI5K25xFI6DP7obHEe66q
+	2BP/vtMPwKdYY90Taq8P7pJwf3VbIXpnC7CJOVYBNoz+1BIjXRbhM3mUEMB+MnwVggETYb8f0Oo
+	jCV4J3mOZDteAsGfMEXiKEaxfCCGDE/AhxzC8nisPxvzPYK1IFqw6IoRx/jju1UJfvHoDS/lMpu
+	o+DZzUcSUgi8P9HWBPTthNpcLufkl9fYg1iNFU3kIxLGhJaq+gaDM8pY2yNEJh3pVEO7qpdBiBC
+	jsz3nxE00TiQ7iHpkljqEiPyQWO84FlIg/+jWpUvdzonGWNmhaPQXA==
+X-Received: by 2002:a05:6a21:482:b0:3e1:bce3:c3cb with SMTP id adf61e73a8af0-3e225fd83dcmr10049752637.44.1792520017747;
+        Tue, 20 Oct 2026 11:13:37 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd6a8711d27sm47250a12.22.2026.10.20.11.13.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 11:13:30 -0700 (PDT)
+        Tue, 20 Oct 2026 11:13:37 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -84,9 +84,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	yonghong.song@linux.dev
-Subject: [PATCH v4 bpf-next 1/6] bpf: Add unwind_goto and unwind_exit insns
-Date: Tue, 20 Oct 2026 18:13:15 +0000
-Message-ID: <20261020181320.1284798-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH v4 bpf-next 2/6] bpf, x86: Support unwind_goto and unwind_exit
+Date: Tue, 20 Oct 2026 18:13:16 +0000
+Message-ID: <20261020181320.1284798-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261020181320.1284798-1-alexei.starovoitov@gmail.com>
 References: <20261020181320.1284798-1-alexei.starovoitov@gmail.com>
@@ -103,632 +103,195 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Rust Drop, C++ destructors and __attribute__((cleanup)) in C have to run
-when a panic or an exception passes through a frame.
+  bpf                         x86
+  call inner                  call inner
+  unwind_goto pad
+  w0 = w6                     mov eax, ebx
 
-v1 [1] did it with a flag in r3 and 'if r3 != 0 goto pad' after the call.
-Three bugs that the bots found there had the same cause: r3 is an ordinary
-register, and JITs guessed the meaning from the shape of the code.
-Kumar suggested new insns instead [2]:
+  r0 = 0                      xor eax, eax
+  unwind_exit                 push rax
+                              push rsi
+                              mov rdi, [rbp + 8]
+                              call bpf_unwind_target
+                              mov [rbp + 8], rax
+                              pop rsi
+                              pop rax
+                              leave
+                              ret
 
-  unwind_goto pad    BPF_JMP | BPF_JCOND, src_reg = BPF_UNWIND_GOTO
-  unwind_exit        BPF_JMP | BPF_EXIT,  src_reg = BPF_UNWIND_EXIT
+unwind_goto is an extable entry and no code. unwind_exit looks its return
+address up there and returns to the pad. r0 and r2 are what a subprog
+returns, so rax and rsi are saved around the lookup.
 
-'call foo; unwind_goto pad' goes to the pad when foo left with unwind_exit
-and falls through when it left with exit. No register says which one it
-was. In everything else unwind_exit is exit.
+When there is no entry, the kernel called the subprog as an async or an
+exception callback, and unwind_exit is exit.
 
-llvm lowers unwinding to them [3]:
+The caller of the main prog doesn't tell exit from unwind_exit, so there
+it's exit. An extension is different. freplace is a jump, so its return
+address is the one of the subprog that it replaced.
 
-  ret                            exit
-  invoke foo unwind pad          call foo; unwind_goto pad
-  resume                         r0 = 0; unwind_exit
-  call _Unwind_RaiseException    r0 = 0; unwind_exit
-  invoke _Unwind_RaiseException  goto pad
+With private stack r9 is saved around a call, and 'pop r9' has to be done
+on the way to the pad too. In such progs unwind_goto is:
 
-In a function that returns 16 bytes it's 'r0 = 0; r2 = 0; unwind_exit'.
+  push r9
+  call foo
+  pop r9       <- exit returns here
+  jmp 1f
+  pop r9       <- unwind_exit returns here
+  jmp pad
+1:
 
-Landing pads are ordinary blocks, so the verifier checks them like any
-other code. A pad that forgets to drop a lock or a reference is a leak on
-that path. There are no tables, no stack walk, no kfuncs, no BTF and
-nothing to do for libbpf and other loaders.
-
-In the verifier:
-- unwind_goto has to follow a call or callx of a subprog and cannot be
-  a jump target. For cfg, liveness and the rest it's one more conditional
-  jump, like may_goto.
-- How the callee left is one bit of the verifier state. It lives from
-  the exit of the callee to the next insn. states_equal() looks at it,
-  since the registers can be the same either way.
-- unwind_exit is rejected when unwind_goto doesn't follow the call.
-- A global subprog that has unwind_exit can leave either way. Both are
-  explored after the call, like it's done for might_throw.
-- A sync callback cannot unwind. The helper that calls it doesn't expect
-  that: bpf_loop() would go on.
-- unwind_exit of the main prog is exit, unless it's an extension. So it is
-  in async and exception callbacks. The kernel calls them, and there is no
-  frame to unwind to.
-- An extension leaves either way, like the subprog that it replaced.
-  freplace is a jump, so the extension returns to the caller of
-  the subprog. An extension that has unwind_exit can replace only a subprog
-  that has it too. Otherwise there is no unwind_goto after the calls.
-- Of tracing progs only fentry can attach to a subprog or an extension
-  that has unwind_exit. It would return to the trampoline that called it.
-- unwind_exit changes its return address, so the cpu mispredicts
-  the return and runs what follows unwind_goto speculatively. Without
-  CAP_PERFMON the verifier looks at that path too.
-- unwind_goto goes away together with a pad that turned out to be dead
-  code. It stays when what follows it is dead code. The cpu predicts that
-  the callee returns there, so 'goto pc-1' takes the place of the dead
-  code. Otherwise its removal would move other code there.
-
-JITs don't emit a branch:
-
-  unwind_goto:
-	extable[n++] = { ret_addr - 1 -> pad }
-  unwind_exit:
-	my_ret_addr = bpf_unwind_target(my_ret_addr)
-	epilogue
-
-So exit and the normal path after the call cost nothing. Every frame fixes
-only its own return address. There is no stack walk. The lookup is what
-the page fault handler does for bpf progs.
-The interpreter cannot do that, so the prog has to be JITed, and JITs opt
-in with bpf_jit_supports_unwind(). x86-64 and arm64 are in the next
-patches.
-
-BPF_JCOND is the same opcode as BPF_CALL_ARGS of the interpreter, and
-BPF_UNWIND_GOTO is the same number as BPF_PSEUDO_CALL. may_goto is gone by
-the time a prog is dumped, unwind_goto is not. bpf_insn_prepare_dump()
-tells them apart: a prog with unwind_goto is always JITed.
-
-Compared to v1 there is no BTF decl_tag and no 'r3 = 0' before every exit.
-Tail call and ld_abs are fine in a subprog that can unwind, since they
-leave it like exit does.
-
-unwind_exit doesn't set r0. An implicit definition of r0 would need
-special cases in backtracking, in liveness and in the check of the return
-value of the main prog. A plain 'r0 = 0' in front of it needs none.
-
-Rust
-
-rust-bpf [4] builds with that llvm as it is. The programs are built with
--C panic=unwind. The panic handler prints the message and calls
-_Unwind_RaiseException().
-exc_cleanup.rs panics three frames deep, with preemption disabled in one
-frame and rcu_read_lock held in another. All Drop impls run and the prog
-returns 0.
-scx_simple.rs is 2195 insns with 48 unwind_goto, 20 of them after callx,
-and 16 unwind_exit. With r3 it was 2216 insns. scx_cosmos.rs is 3694 insns
-with 68 and 18. It was 3716.
-
-C++
-
-Exceptions work too. This compiles, loads and runs:
-
-  struct rcu_guard {
-          rcu_guard() { bpf_rcu_read_lock(); }
-          ~rcu_guard() { bpf_rcu_read_unlock(); }
-  };
-
-  static __noinline int inner(int len)
-  {
-          rcu_guard guard;
-
-          if (len > 100)
-                  throw 1;
-          return len;
-  }
-
-  SEC("tc") int prog(struct __sk_buff *skb)
-  {
-          try {
-                  return inner(skb->len);
-          } catch (...) {
-                  return 42;
-          }
-  }
-
-It returns 64 for a packet of 64 bytes and 42 for a packet of 200 bytes.
-The destructor runs in both cases, otherwise the verifier would reject
-the prog. 'throw' is a jump to the pad with the destructor. 'catch' is
-unwind_goto:
-
-  inner:
-    w6 = w1
-    call bpf_rcu_read_lock
-    if w6 s< 101 goto ret
-    r1 = exc_obj ll
-    *(u32 *)(r1 + 0) = 1
-    goto pad
-  ret:
-    call bpf_rcu_read_unlock
-    w0 = w6
-    exit
-  pad:
-    call bpf_rcu_read_unlock
-    r0 = 0
-    unwind_exit
-
-  prog:
-    w6 = *(u32 *)(r1 + 0)
-    w1 = w6
-    call inner
-    unwind_goto catch
-  out:
-    w0 = w6
-    exit
-  catch:
-    w6 = 42
-    goto out
-
-It needs -fexceptions -funwind-tables and four one line __cxa_*()
-functions, where __cxa_throw() calls _Unwind_RaiseException().
-Every pad is entered whatever was thrown, so llvm takes catch (...) only.
-It's a selftest in patch 5.
-
-[1] https://lore.kernel.org/bpf/20261018010246.1643877-1-alexei.starovoitov@gmail.com/
-[2] https://lore.kernel.org/bpf/DM7KR7J8VY2T.1CZIRUF6QRCWG@gmail.com/
-[3] https://github.com/llvm/llvm-project/pull/233649
-[4] https://github.com/4ast/rust-bpf
-
-Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h            |   1 +
- include/linux/bpf_verifier.h   |   3 +
- include/linux/filter.h         |  20 ++++++
- include/uapi/linux/bpf.h       |  13 ++++
- kernel/bpf/const_fold.c        |   2 +-
- kernel/bpf/core.c              |   6 ++
- kernel/bpf/disasm.c            |   7 ++-
- kernel/bpf/fixups.c            |  18 ++++++
- kernel/bpf/states.c            |   3 +
- kernel/bpf/syscall.c           |   6 ++
- kernel/bpf/verifier.c          | 109 ++++++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h |  13 ++++
- 12 files changed, 197 insertions(+), 4 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 101 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 100 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7750df973494..580f89c450b5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1897,6 +1897,7 @@ struct bpf_prog_aux {
- 	bool changes_pkt_data;
- 	bool has_prologue;
- 	bool might_sleep;
-+	bool can_unwind;
- 	bool kprobe_write_ctx;
- 	/* has insns that work with the arena base, see bpf_prog_has_arena_insns() */
- 	bool uses_arena_insns;
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 54481da4ed2d..6606b341351e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -532,6 +532,8 @@ struct bpf_verifier_state {
- 
- 	bool speculative;
- 	bool in_sleepable;
-+	/* The callee left with unwind_exit. Next insn is unwind_goto. */
-+	bool unwound;
- 
- 	/*
- 	 * First and last insn idx of this verifier state.
-@@ -957,6 +959,7 @@ struct bpf_subprog_info {
- 	s16 fastcall_stack_off;
- 	bool has_tail_call: 1;
- 	bool might_throw: 1;
-+	bool can_unwind: 1; /* has unwind_exit */
- 	bool tail_call_reachable: 1;
- 	bool has_ld_abs: 1;
- 	bool is_cb: 1;
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 6f4c9bd024a0..fccd8db33647 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -254,6 +254,25 @@ static inline bool insn_is_mov_percpu_addr(const struct bpf_insn *insn)
- 		.off   = 0,					\
- 		.imm   = 1 })
- 
-+static inline bool bpf_is_unwind_goto(const struct bpf_insn *insn)
-+{
-+	return insn->code == (BPF_JMP | BPF_JCOND) && insn->src_reg == BPF_UNWIND_GOTO;
-+}
-+
-+static inline bool bpf_is_unwind_exit(const struct bpf_insn *insn)
-+{
-+	return insn->code == (BPF_JMP | BPF_EXIT) && insn->src_reg == BPF_UNWIND_EXIT;
-+}
-+
-+/*
-+ * The caller of the main prog doesn't tell unwind_exit from exit. An extension
-+ * is different: its caller is the caller of the subprog that it replaced.
-+ */
-+static inline bool bpf_prog_can_unwind(const struct bpf_prog *prog)
-+{
-+	return bpf_is_subprog(prog) || prog->type == BPF_PROG_TYPE_EXT;
-+}
-+
- static inline bool insn_is_zext(const struct bpf_insn *insn)
- {
- 	return insn->code == (BPF_ALU | BPF_MOV | BPF_X) && insn->imm == 1;
-@@ -1257,6 +1276,7 @@ bool bpf_jit_supports_percpu_insn(void);
- bool bpf_jit_supports_kfunc_call(void);
- bool bpf_jit_supports_callx(void);
- bool bpf_jit_supports_kfunc_ret_reg_pair(void);
-+bool bpf_jit_supports_unwind(void);
- bool bpf_jit_supports_stack_args(void);
- bool bpf_jit_supports_arena_args(void);
- bool bpf_jit_supports_far_kfunc_call(void);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 6f70db7515dd..f29b0aad440c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -56,6 +56,19 @@
- 
- enum bpf_cond_pseudo_jmp {
- 	BPF_MAY_GOTO = 0,
-+	/*
-+	 * Follows a call of a bpf subprog. Taken when the subprog left with
-+	 * BPF_EXIT that has src_reg == BPF_UNWIND_EXIT.
-+	 */
-+	BPF_UNWIND_GOTO = 1,
-+};
-+
-+enum bpf_pseudo_exit {
-+	/*
-+	 * When bpf_exit->src_reg == BPF_UNWIND_EXIT, it's the same as bpf_exit,
-+	 * except that BPF_UNWIND_GOTO after the call is taken.
-+	 */
-+	BPF_UNWIND_EXIT = 1,
- };
- 
- /* Register numbers */
-diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-index 8dd8c5958eb8..f9edfde965dc 100644
---- a/kernel/bpf/const_fold.c
-+++ b/kernel/bpf/const_fold.c
-@@ -357,7 +357,7 @@ int bpf_prune_dead_branches(struct bpf_verifier_env *env)
- 
- 		if (!bpf_insn_is_cond_jump(insn->code))
- 			continue;
--		if (bpf_is_may_goto_insn(insn))
-+		if (BPF_OP(insn->code) == BPF_JCOND)
- 			continue;
- 
- 		if (!(aux->const_reg_mask & BIT(insn->dst_reg)))
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index fc22d66d194a..3030beb531d9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3399,6 +3399,12 @@ bool __weak bpf_jit_supports_kfunc_ret_reg_pair(void)
- 	return false;
- }
- 
-+/* unwind_goto and unwind_exit */
-+bool __weak bpf_jit_supports_unwind(void)
-+{
-+	return false;
-+}
-+
- /*
-  * How this arch places a by-value kfunc argument, or NULL for one that has
-  * not opted in and so only takes an argument of a single eightbyte, which
-diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
-index 36d3228d7745..889fc074496f 100644
---- a/kernel/bpf/disasm.c
-+++ b/kernel/bpf/disasm.c
-@@ -375,11 +375,16 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
- 			   insn->src_reg == BPF_MAY_GOTO) {
- 			verbose(cbs->private_data, "(%02x) may_goto pc%+d",
- 				insn->code, insn->off);
-+		} else if (insn->code == (BPF_JMP | BPF_JCOND) &&
-+			   insn->src_reg == BPF_UNWIND_GOTO) {
-+			verbose(cbs->private_data, "(%02x) unwind_goto pc%+d",
-+				insn->code, insn->off);
- 		} else if (insn->code == (BPF_JMP32 | BPF_JA)) {
- 			verbose(cbs->private_data, "(%02x) gotol pc%+d",
- 				insn->code, insn->imm);
- 		} else if (insn->code == (BPF_JMP | BPF_EXIT)) {
--			verbose(cbs->private_data, "(%02x) exit", insn->code);
-+			verbose(cbs->private_data, "(%02x) %s", insn->code,
-+				insn->src_reg == BPF_UNWIND_EXIT ? "unwind_exit" : "exit");
- 		} else if (BPF_SRC(insn->code) == BPF_X) {
- 			verbose(cbs->private_data,
- 				"(%02x) if %c%d %s %c%d goto pc%+d",
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 409b9104c723..f062ef7dd943 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -658,6 +658,7 @@ void bpf_opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env)
- {
- 	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
- 	struct bpf_insn ja = BPF_JMP_IMM(BPF_JA, 0, 0, 0);
-+	struct bpf_insn trap = BPF_JMP_IMM(BPF_JA, 0, 0, -1);
- 	struct bpf_insn *insn = env->prog->insnsi;
- 	const int insn_cnt = env->prog->len;
- 	int i;
-@@ -666,6 +667,20 @@ void bpf_opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env)
- 		if (!bpf_insn_is_cond_jump(insn->code))
- 			continue;
- 
-+		if (bpf_is_unwind_goto(insn) && aux_data[i + 1 + insn->off].seen) {
-+			/*
-+			 * The callee never exits. Its unwind_exit needs
-+			 * unwind_goto all the same, and the cpu predicts that it
-+			 * returns to what follows. Don't let the removal of dead
-+			 * code put something else there.
-+			 */
-+			if (!aux_data[i + 1].seen) {
-+				memcpy(insn + 1, &trap, sizeof(trap));
-+				aux_data[i + 1].seen = env->pass_cnt;
-+			}
-+			continue;
-+		}
-+
- 		if (!aux_data[i + 1].seen)
- 			ja.off = insn->off;
- 		else if (!aux_data[i + 1 + insn->off].seen)
-@@ -1467,12 +1482,15 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 			if (BPF_CLASS(insn->code) == BPF_STX &&
- 			     BPF_MODE(insn->code) == BPF_PROBE_ATOMIC)
- 				num_exentries++;
-+			if (bpf_is_unwind_goto(insn))
-+				num_exentries++;
- 		}
- 		func[i]->aux->num_exentries = num_exentries;
- 		func[i]->aux->tail_call_reachable = env->subprog_info[i].tail_call_reachable;
- 		func[i]->aux->exception_cb = env->subprog_info[i].is_exception_cb;
- 		func[i]->aux->changes_pkt_data = env->subprog_info[i].changes_pkt_data;
- 		func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
-+		func[i]->aux->can_unwind = env->subprog_info[i].can_unwind;
- 		func[i]->aux->token = prog->aux->token;
- 		if (!i)
- 			func[i]->aux->exception_boundary = env->seen_exception;
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index b3d250caaaa6..d7df6632a5c4 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -1046,6 +1046,9 @@ static bool states_equal(struct bpf_verifier_env *env,
- 	if (old->in_sleepable != cur->in_sleepable)
- 		return false;
- 
-+	if (old->unwound != cur->unwound)
-+		return false;
-+
- 	if (!refsafe(old, cur, &env->idmap_scratch))
- 		return false;
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 849bc9136299..90bc7230afa8 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5087,6 +5087,12 @@ static struct bpf_insn *bpf_insn_prepare_dump(const struct bpf_prog *prog,
- 			insns[i].imm = BPF_FUNC_tail_call;
- 			/* fall-through */
- 		}
-+		/*
-+		 * BPF_JCOND is the same opcode as BPF_CALL_ARGS. The latter is for
-+		 * the interpreter, and a prog with unwind_goto is always JITed.
-+		 */
-+		if (prog->jited && bpf_is_unwind_goto(&insns[i]))
-+			continue;
- 		if (code == (BPF_JMP | BPF_CALL) ||
- 		    code == (BPF_JMP | BPF_CALL_ARGS)) {
- 			/* Restore the legacy xlated dump layout. */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 01434e1d23b5..e387320e196f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1769,6 +1769,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
- 		return err;
- 	dst_state->speculative = src->speculative;
- 	dst_state->in_sleepable = src->in_sleepable;
-+	dst_state->unwound = src->unwound;
- 	dst_state->curframe = src->curframe;
- 	dst_state->branches = src->branches;
- 	dst_state->parent = src->parent;
-@@ -3430,6 +3431,46 @@ static int next_callx_callee(struct bpf_verifier_env *env, int caller, int from)
- 	return bit < end ? bit - caller * cnt : -1;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 72a2a0a89e03..d3ab36281144 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -15,6 +15,7 @@
+ #include <linux/memory.h>
+ #include <linux/sort.h>
+ #include <linux/execmem.h>
++#include <linux/extable.h>
+ #include <asm/extable.h>
+ #include <asm/ftrace.h>
+ #include <asm/set_memory.h>
+@@ -2511,6 +2512,68 @@ static void adjust_cmp_imm(u32 *op, s32 *imm)
+ 	}
  }
  
 +/*
-+ * 'call foo; unwind_goto pad' goes to the pad when foo left with unwind_exit.
-+ * JITs don't emit a branch for it. unwind_exit finds the pad by its return
-+ * address. So unwind_goto has to follow the call and nothing may jump to it.
++ * There is no branch for unwind_goto, only an extable entry
++ *   { .insn = ret_addr - 1, .fixup = target - ret_addr }
++ * where ret_addr is the return address of the call in front of it. unwind_exit
++ * replaces the return address of its frame with bpf_unwind_target() of it.
++ * ret_addr - 1, because what follows the call can have an entry of its own.
++ * No insn starts there, so a fault cannot hit the entry.
 + */
-+static int check_unwind_insns(struct bpf_verifier_env *env)
++static int add_unwind_exentry(struct bpf_prog *prog, u8 *image, u8 *rw_image, int *excnt,
++			      int ret_addr, int target)
 +{
-+	struct bpf_insn *insn = env->prog->insnsi;
-+	bool seen = false;
-+	int i;
++	struct exception_table_entry *ex;
++	s64 delta;
 +
-+	for (i = 0; i < env->prog->len; i++, insn++) {
-+		if (bpf_is_unwind_exit(insn)) {
-+			bpf_find_containing_subprog(env, i)->can_unwind = true;
-+			seen = true;
-+		}
-+		if (!bpf_is_unwind_goto(insn))
-+			continue;
-+		seen = true;
-+		if (!i || !(bpf_pseudo_call(insn - 1) || bpf_is_callx(insn - 1))) {
-+			verbose(env, "unwind_goto at insn %d doesn't follow a call of a subprog\n",
-+				i);
-+			return -EINVAL;
-+		}
-+		if (bpf_is_jump_target(env, i)) {
-+			verbose(env, "jump to unwind_goto at insn %d\n", i);
-+			return -EINVAL;
-+		}
-+	}
-+	if (!seen)
++	if (!prog->aux->extable)
 +		return 0;
-+	if (!bpf_jit_supports_unwind()) {
-+		verbose(env, "JIT does not support unwinding\n");
-+		return -ENOTSUPP;
++	if (*excnt >= prog->aux->num_exentries) {
++		pr_err("unwind extable bug\n");
++		return -EFAULT;
 +	}
-+	env->prog->jit_required = 1;
-+	env->prog->aux->can_unwind = env->subprog_info[0].can_unwind;
++	ex = &prog->aux->extable[(*excnt)++];
++	delta = image + ret_addr - 1 - (u8 *)&ex->insn;
++	if (!is_simm32(delta)) {
++		pr_err("extable->insn doesn't fit into 32-bit\n");
++		return -EFAULT;
++	}
++	/* switch ex to rw buffer for writes */
++	ex = (void *)rw_image + ((void *)ex - (void *)image);
++	ex->insn = delta;
++	ex->fixup = target - ret_addr;
++	ex->data = EX_TYPE_BPF;
 +	return 0;
 +}
 +
- /*
-  * Sort subprogs in topological order so that leaf subprogs come first and
-  * their callers come later. This is a DFS post-order traversal of the call
-@@ -11584,6 +11625,19 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			}
- 		}
- 
-+		if (env->subprog_info[subprog].can_unwind) {
-+			struct bpf_verifier_state *branch;
++static u64 bpf_unwind_target(u64 ret_addr)
++{
++	const struct exception_table_entry *e = search_bpf_extables(ret_addr - 1);
 +
-+			if (!bpf_is_unwind_goto(insn + 1)) {
-+				verbose(env, "no unwind_goto after the call of %s()\n", sub_name);
-+				return -EINVAL;
++	/*
++	 * The verifier made sure that unwind_goto follows a call in a prog. When
++	 * the kernel called an async or an exception callback, it's exit.
++	 */
++	return e ? ret_addr + e->fixup : ret_addr;
++}
++
++/* unwind_exit: fix the return address of this frame. r0 and r2 are returned. */
++static int emit_unwind_ret_addr(u8 **pprog, u8 *ip)
++{
++	u8 *prog = *pprog, *start = prog;
++
++	EMIT2(0x50, 0x56);			/* push rax; push rsi */
++	EMIT4(0x48, 0x8B, 0x7D, 0x08);		/* mov rdi, [rbp + 8] */
++	ip += prog - start;
++	ip += x86_call_depth_emit_accounting(&prog, bpf_unwind_target, ip);
++	if (emit_call(&prog, bpf_unwind_target, ip))
++		return -EINVAL;
++	EMIT4(0x48, 0x89, 0x45, 0x08);		/* mov [rbp + 8], rax */
++	EMIT2(0x5E, 0x58);			/* pop rsi; pop rax */
++	*pprog = prog;
++	return 0;
++}
++
+ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		  u8 *rw_image, int oldproglen, struct jit_context *ctx, bool jmp_padding)
+ {
+@@ -3493,6 +3556,34 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+ 				pop_r9(&prog);
+ 			break;
+ 
++			/* unwind_goto. The verifier expanded may_goto. */
++		case BPF_JMP | BPF_JCOND:
++			if (!priv_frame_ptr) {
++				err = add_unwind_exentry(bpf_prog, image, rw_image, &excnt,
++							 addrs[i - 1], addrs[i + insn->off]);
++				if (err)
++					return err;
++				break;
 +			}
-+			branch = push_stack(env, *insn_idx + 1, *insn_idx, false);
-+			if (IS_ERR(branch))
-+				return PTR_ERR(branch);
-+			branch->unwound = true;
-+		}
-+
- 		if (env->subprog_info[subprog].might_throw) {
- 			struct bpf_verifier_state *branch;
- 
-@@ -12057,6 +12111,19 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 	}
- 
- 	caller = state->frame[state->curframe - 1];
-+	if (bpf_is_unwind_exit(&env->prog->insnsi[*insn_idx])) {
-+		/* the helper or the kfunc that called it doesn't expect that */
-+		if (callee->in_callback_fn) {
-+			verbose(env, "callback cannot unwind\n");
-+			return -EINVAL;
-+		}
-+		if (!bpf_is_unwind_goto(&env->prog->insnsi[callee->callsite + 1])) {
-+			verbose(env, "unwind_exit, but no unwind_goto after the call at insn %d\n",
-+				callee->callsite);
-+			return -EINVAL;
-+		}
-+		state->unwound = true;
-+	}
- 	if (callee->in_callback_fn) {
- 		if (r0->type != SCALAR_VALUE) {
- 			verbose(env, "R0 not a scalar value\n");
-@@ -18759,6 +18826,23 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		return -EINVAL;
- 	}
- 
-+	if (bpf_is_unwind_goto(insn)) {
-+		if (!env->cur_state->unwound)
-+			return 0;
-+		env->cur_state->unwound = false;
-+		/*
-+		 * unwind_exit changed its return address, so the return is
-+		 * mispredicted and what follows unwind_goto runs speculatively.
-+		 */
-+		if (!env->bypass_spec_v1) {
-+			err = sanitize_speculative_path(env, NULL, *insn_idx + 1, *insn_idx);
++			/*
++			 * 'pop r9' after the call has to be done on the way to
++			 * the pad too:
++			 *   call foo
++			 *   pop r9      <- exit returns here
++			 *   jmp 1f
++			 *   pop r9      <- unwind_exit returns here
++			 *   jmp pad
++			 * 1:
++			 */
++			err = add_unwind_exentry(bpf_prog, image, rw_image, &excnt,
++						 addrs[i - 1] - 2, addrs[i - 1] + 2);
 +			if (err)
 +				return err;
-+		}
-+		*insn_idx += insn->off;
-+		return 0;
-+	}
++			EMIT2(0xEB, 7);
++			pop_r9(&prog);
++			EMIT1_off32(0xE9, addrs[i + insn->off] - (addrs[i - 1] + 9));
++			break;
 +
- 	if (opcode == BPF_JCOND) {
- 		struct bpf_verifier_state *cur_st = env->cur_state, *queued_st, *prev_st;
- 		int idx = *insn_idx;
-@@ -21223,14 +21307,14 @@ static int check_jmp_fields(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		return 0;
- 	case BPF_EXIT:
- 		if (BPF_SRC(insn->code) != BPF_K || insn->imm != 0 ||
--		    insn->src_reg != BPF_REG_0 || insn->dst_reg != BPF_REG_0 ||
-+		    insn->src_reg > BPF_UNWIND_EXIT || insn->dst_reg != BPF_REG_0 ||
- 		    class == BPF_JMP32) {
- 			verbose(env, "BPF_EXIT uses reserved fields\n");
- 			return -EINVAL;
- 		}
- 		return 0;
- 	case BPF_JCOND:
--		if (insn->code != (BPF_JMP | BPF_JCOND) || insn->src_reg != BPF_MAY_GOTO ||
-+		if (insn->code != (BPF_JMP | BPF_JCOND) || insn->src_reg > BPF_UNWIND_GOTO ||
- 		    insn->dst_reg || insn->imm) {
- 			verbose(env, "invalid may_goto imm %d\n", insn->imm);
- 			return -EINVAL;
-@@ -22436,6 +22520,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		struct bpf_prog_aux *aux = tgt_prog->aux;
- 		bool tgt_changes_pkt_data;
- 		bool tgt_might_sleep;
-+		bool tgt_can_unwind;
+ 		case BPF_JMP | BPF_TAIL_CALL:
+ 			if (imm32)
+ 				emit_bpf_tail_call_direct(bpf_prog,
+@@ -3774,13 +3865,16 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+ 			break;
  
- 		if (bpf_prog_is_dev_bound(prog->aux) &&
- 		    !bpf_prog_dev_bound_match(prog, tgt_prog)) {
-@@ -22464,6 +22549,16 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 				prog_extension ? "Extension" : "Tracing");
- 			return -EINVAL;
- 		}
-+		/* unwind_exit of the main prog is exit, unless it's an extension */
-+		tgt_can_unwind = (subprog || tgt_prog->type == BPF_PROG_TYPE_EXT) &&
-+				 (aux->func ? aux->func[subprog]->aux->can_unwind
-+					    : aux->can_unwind);
-+		/* unwind_exit would return to the trampoline that called the target */
-+		if (tgt_can_unwind && !prog_extension &&
-+		    prog->expected_attach_type != BPF_TRACE_FENTRY) {
-+			bpf_log(log, "Only fentry can attach to %s, which can unwind\n", tname);
-+			return -EINVAL;
-+		}
- 		conservative = aux->func_info_aux[subprog].unreliable;
- 		if (prog_extension) {
- 			if (aux->func_info_aux[subprog].linkage != BTF_FUNC_GLOBAL ||
-@@ -22511,6 +22606,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 					"Extension program may sleep, while original does not\n");
- 				return -EINVAL;
- 			}
-+			/* There is no unwind_goto after the calls of the original */
-+			if (prog->aux->can_unwind && !tgt_can_unwind) {
-+				bpf_log(log,
-+					"Extension program can unwind, while original does not\n");
+ 		case BPF_JMP | BPF_EXIT:
++			if (src_reg == BPF_UNWIND_EXIT && bpf_prog_can_unwind(bpf_prog) &&
++			    emit_unwind_ret_addr(&prog, ip))
 +				return -EINVAL;
-+			}
- 		}
- 		if (!tgt_prog->jited) {
- 			bpf_log(log, "Can attach to only JITed progs\n");
-@@ -23845,6 +23946,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
+ 			if (seen_exit) {
+ 				jmp_offset = ctx->cleanup_addr - addrs[i];
+ 				goto emit_jmp;
+ 			}
+ 			seen_exit = true;
+ 			/* Update cleanup_addr */
+-			ctx->cleanup_addr = proglen;
++			ctx->cleanup_addr = proglen + (prog - temp);
+ 			if (bpf_prog_was_classic(bpf_prog) &&
+ 			    !ns_capable_noaudit(&init_user_ns, CAP_SYS_ADMIN)) {
+ 				if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
+@@ -5027,6 +5121,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
+ 	return true;
+ }
  
-+	ret = check_unwind_insns(env);
-+	if (ret < 0)
-+		goto skip_full_check;
++bool bpf_jit_supports_unwind(void)
++{
++	return true;
++}
 +
- 	ret = bpf_compute_postorder(env);
- 	if (ret < 0)
- 		goto skip_full_check;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 6f70db7515dd..f29b0aad440c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -56,6 +56,19 @@
- 
- enum bpf_cond_pseudo_jmp {
- 	BPF_MAY_GOTO = 0,
-+	/*
-+	 * Follows a call of a bpf subprog. Taken when the subprog left with
-+	 * BPF_EXIT that has src_reg == BPF_UNWIND_EXIT.
-+	 */
-+	BPF_UNWIND_GOTO = 1,
-+};
-+
-+enum bpf_pseudo_exit {
-+	/*
-+	 * When bpf_exit->src_reg == BPF_UNWIND_EXIT, it's the same as bpf_exit,
-+	 * except that BPF_UNWIND_GOTO after the call is taken.
-+	 */
-+	BPF_UNWIND_EXIT = 1,
- };
- 
- /* Register numbers */
+ const struct bpf_jit_arg_abi *bpf_jit_arg_abi(void)
+ {
+ 	return &x86_arg_abi;
 -- 
 2.55.0
 
