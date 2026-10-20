@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792530018;
-	b=tkFMFmrJ0XTAxWZK3czJfiZj6u8kfymWjZwk+mMx3ZXb7EdvO0PRRJ4igNG9+YdiFgFF
-	 zxj8MrUnVVLVp13MfkXZdO+zeZFGp851NUQny50iz/tpapgv7RGdMz32w7cIzgwei4/FS
-	 V99VwZHrwE6P32os73/qzx28nHf93pHmHsmfmD7v65cqW269Lw3VlautzWQmAzp/3E7sx
-	 l1aTAD0mLasQE/ykvTxwYGhSBfzPH/hFLZoSygsGs+oM0/csisCYSXkje4z25gLJ4CIEm
-	 /UO7yItLC5UaSSuT71Jol9FpjTjk6wW8+U4txkG4tWZik2Lb6dJcAAQpszyAaYx4cgA==
+	t=1792530046;
+	b=4NnwORzSQd92kqLsAvP5HaCf6JXT0bFsR1nhP75AE9h8GZnX1OU/8tNAUJcTYtYGdbJC
+	 g7ZGanWeQGCjRBdhWBe1CcLYAauztt6Rbh/jgeRZHFvgUCZ6V2qJWN3dV2kphu8kNmmTa
+	 JuGYmVbnqGY2J9tTij4PY8SpUdG3/diZEfo9w8A7ulma7IlHjsjutqHXAZrZzBOkM71VM
+	 9/kcUEdpXmkIB/GoNSIjVKo3P/a5RwerEw3hsU7O3X1+wS2z3vy5cE00uXt0DqCtwfzIW
+	 IQkJUgBgN7GOI57p7VaprsoKMkQ3mKnXMyy1q2WBd3liofch84e59LdxBruiBHuDXFw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792530018;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792530046;
 	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
 	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
 	 In-Reply-To:To:Cc;
-	bh=BZZiE/z5rF980Eqj/J1JcYevvChj0IOpKnbHsSSVniM=;
-	b=ypFM9C3zn7g9TjUJ6fIJwXkwC4/NFsR8wtOY8Y2OIumyfH0E+AEnfDT3IIs7u4IUBD0w
-	 ycP/nGbcqVCQX0WtVW1mwuqo89UL1EMLJWyNRfO+FNaENek51LavuEI3mjduagkCEDtZm
-	 7J63wJJ5abKIChOapnbV9JWaOLyFkwLgAIUMxWmArS9JFt/2j/zoMXX0TmnUtXEpxIKCO
-	 tvog2NYnnKXK2bEgCgsqcBNa/6dbUon3213eiNh6Ck3qSkU6ysJN82n4P8igjXn6zCz72
-	 0FAwjLYyVAqwq+zKBAPsDMIlEve2NwnBrdVwpcrLhPKKzb9z70JFgGwDtUuC4qlj/RQ==
+	bh=s7LHFRSXHic5XGEInYp0jAmgGHudXLNGKJjFiKqPrq4=;
+	b=x+8OXnHWdA2SCN9KDQAKJt0MMJL10iH/H1v1ek83/wgaBfgexB7ZRr9AOzjh5Loz3lma
+	 ULtYYSYsuO5pwFoPjEZ3xQ8EDPUN8Y+O7Kb2I2HTfiQZIK6DhBfUAgZw+hdxfCbsmkm4N
+	 3UwdiBe+CwTnoOYORS7eNDJIVaCoiefCTRfs/APEjb+YmVoz35G37gxKXJx8rkBa0plEi
+	 /AhxxFzyL8eY9KxU8Yzsab9VaFfVqhwFL7lqs24MRcgeP/k0ij9kml6SI3fku3+tfKlNp
+	 vCAYjcmTEHHUTGm00CUkkTHPy5KZlqrNV/QSCwQKunK6FJpjwevclBW+JBLy/4XowIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IeJjFuJT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KQci7tJF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD47C606A323;
-	Tue, 20 Oct 2026 21:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2E7606A326;
+	Tue, 20 Oct 2026 21:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IeJjFuJT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4793D1F000C9;
-	Tue, 20 Oct 2026 21:00:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KQci7tJF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BAF1F000CA;
+	Tue, 20 Oct 2026 21:00:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792530017;
-	bh=BZZiE/z5rF980Eqj/J1JcYevvChj0IOpKnbHsSSVniM=;
+	s=k20260515; t=1792530046;
+	bh=s7LHFRSXHic5XGEInYp0jAmgGHudXLNGKJjFiKqPrq4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=IeJjFuJTBZ8Q+/YnFuqhKvBtYb6tY3GAHR7MJaAL1Amv2QdPTWFbCNJaq625kkEXB
-	 GgEqRvKupjra3zymov9ysXZ4P5bCPVuKc3Yt1NB0VA5y8j7h46y+NAfDHEKOXlfVQF
-	 oUYtYWBwoGCX3aExmqbVEnjy3ryFjb+Kf0fj8SPuTIKkdakii4093KXZlUIITsp+eZ
-	 r5hGOBc0N4p8rjeH7FaTEVj+Ix/gVDQnk4/j8RoGwO0P6qU8261zzEj7kuD0HyuFGz
-	 gKEOugMV+QTik/h2rMwtHJvpuZGas6hDmRpakbsa64t0yNXKXzZ8w932h6TKzx4h25
-	 fNz+rwQeLh4sw==
+	b=KQci7tJF+IYLQv12efD+MqxN8J1OOwJGnXlOocHPZKc29bqs7Rn4uxmeGPDrGl9/K
+	 DlZh+oY49USpQZHxL+KjFEv0OW74s+5g6WrN4Umesz8ZSy4kJ9elFqSZiEMHh9kWav
+	 cW5alHMgELP+qd4Mj0p1uOEq+HRuwVz7Fu6mmpjK8oo/udT3qTqa3lWAJSP6l6NSuA
+	 cqQOtolImM7THpRhx7QSnEtpo7lCBakPYqUOtiVqaERF/8ITWp+Sdb+HOO0PPGlWHO
+	 weVCueq+jZPslSqNq3gslFD+60qceaw0ggnoYot0rsoW8NUlJNaaAUwhpHsjhyVO50
+	 Zc2yMZPTVRHfQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A3E53809A09;
-	Tue, 20 Oct 2026 21:00:17 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3A3B93809A09;
+	Tue, 20 Oct 2026 21:00:46 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,46 +54,49 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/3] bpf: Add bpf_ksock_sendto() kfunc
+Subject: Re: [PATCH net-next v3] net: mana: add BQL support
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179253001577.208021.3409263261084470234.git-patchwork-notify@kernel.org>
-Date: Tue, 20 Oct 2026 21:00:15 +0000
-References: <20261020155848.75711-1-mahe.tardy@gmail.com>
-In-Reply-To: <20261020155848.75711-1-mahe.tardy@gmail.com>
-To: Mahe Tardy <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, davem@davemloft.net, willemb@google.com,
- eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
- kuba@kernel.org, horms@kernel.org, liamwisehart@meta.com,
- martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org,
- netdev@vger.kernel.org, sdf.kernel@gmail.com, yonghong.song@linux.dev,
- jolsa@kernel.org, kuniyu@google.com, memxor@gmail.com, emil@etsalapatis.com,
- almagui@kernel.org
+ <179253004477.208021.12583295837722282628.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Oct 2026 21:00:44 +0000
+References: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
+In-Reply-To: <20261013214937.145312-1-hamzamahfooz@linux.microsoft.com>
+To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+Cc: netdev@vger.kernel.org, haiyangz@microsoft.com, wei.liu@kernel.org,
+ decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+ kotaranov@microsoft.com, horms@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 20 Oct 2026 15:58:45 +0000 you wrote:
-> This patch series improves the bpf_ksock infrastructure in line with the
-> work proposed during Prague Plumbers 2026 presentation[^1] by adding
-> the bpf_ksock_sendto() kfunc to complement the bpf_ksock_send().
+On Tue, 13 Oct 2026 17:49:37 -0400 you wrote:
+> MANA doesn't support byte queue limits, so each TX queue can hold 256
+> WQEs by default, and up to 16384, of up to 64 KB TSO packets, before the
+> qdisc layer sees any backpressure. This adds latency to all the flows
+> sharing a queue, and defeats AQM qdiscs such as fq_codel, which rely on
+> BQL to keep the driver queues short.
 > 
-> This is useful when using ksock to reply to differents peers while
-> reusing the same UDP socket and generally works toward the goal of ksock
-> to support the basic socket operations.
+> Report the bytes queued and completed to BQL, except for the XDP_TX and
+> XDP_REDIRECT frames. These share the SQs, but bypass the qdisc and are
+> sent even when the queue is stopped, so BQL can't hold them back.
+> Counting them would let sustained XDP traffic keep the queue stopped,
+> starving the stack, and the TX watchdog would then either fire while the
+> completions still arrive, or, if the XDP sends refreshed trans_start,
+> not fire when the completions stop. The XDP SKBs are marked in their
+> skb->cb, next to the WQE size, so that their completions are skipped as
+> well.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2,1/3] bpf: add bpf_ksock_sendto() kfunc
-    https://git.kernel.org/bpf/bpf-next/c/74be619845bd
-  - [bpf-next,v2,2/3] selftests/bpf: Test ksock sendto()
-    https://git.kernel.org/bpf/bpf-next/c/7d563ae3ed74
-  - [bpf-next,v2,3/3] selftests/bpf: Test forbidden bpf_ksock_sendto() LSM attach
-    https://git.kernel.org/bpf/bpf-next/c/d90912846f26
+  - [net-next,v3] net: mana: add BQL support
+    https://git.kernel.org/netdev/net-next/c/799cdeaa5c39
 
 You are awesome, thank you!
 -- 
