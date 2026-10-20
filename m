@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505840;
-	b=ilYTxzNZGpmZ689IZtljzfzdluY0Xq2tgpG7qy8b9XqLT00la3QgC4TGdPaFBK/OWDky
-	 8HLezXEzsb2z03aiO/84Bd6WReJgc6oGv42yHCltAFAvZuv0830GqlqQhAh5Kb6ud6ey8
-	 G8pD9IKjdH6xfhkSY/BzPQT1T4fghtMKMK76+5tj9TpQq1+SZM8M6dk5N6OD2WxUC9kd/
-	 x4tt/4x2uSSXE1bgjHXHkd64hKFcijng4xBPOFxQNRuYrfTUbcSj+3EYTfoq6DwhM7lUy
-	 6LqvdtMB1hGVyVGwPgQ78zbUTJr62hi0WY/kGBdl/8A58HxlnnmwR/h/T4CQ7ClWlAQ==
+	t=1792505850;
+	b=D2V3LGlhpj1xU+dEb0PwNAVCl+62N6hLjDPP2nyePLHxaF2E2RNfrzRzQZkegDEAKZKF
+	 BNgu6IQShRO6ct6wJdGZEZToqoyIUeP3vZp8g8xCSKtzPOJPv8/3XfoOPuD0BjaonxT3Z
+	 +y+lmBaaLasYBpHuwDYPdnTKsFADF3Lh/oejwlt03r8wgsOQuMqa0c3MnAYxmVAH6kWdP
+	 7rpB5eTK0aVpzIRGgjCyCfy/ARyIgApO9TEybgcTVtIuF3lxKVeb/lfB4IbfLdlBi51z8
+	 jKe3oixBMAEc4/EBaIaeqYF10VLTqbI4pe1b3UjMb07TxAkfOy8CB6K77sC1/N2KmHg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505840;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505850;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=h9yFrw4govaK3v2B/JZCV+F4mrTwJZiAYy2bn7NeXj4=;
-	b=oSDYkF2sUtzAIR+YzzIGL/+9mbKpiBOVDNSeVsvQxSroB2fSawDNdjoCeeoPLLes2c6E
-	 DJNnaFBHCYSVNy4EZ5fEdahDanq+tLXqBPW4qfYpPE8VGzz1s4nC5LUaCvd3UU98mFOpH
-	 21yNZJUVFivyZuPXzUnJ8Xqgk9+9x4fMZLBFKBpIcl8gby+EsG9HaGw9ZjIkXgomFzCBc
-	 fSNn0wKFyylFq7gX3Hj9Chp4N3n9SLU1+hg2qG4A2xLikEuvKz0pdGZzGVz2vRY1bDSS3
-	 l8C4Oj/rbOCrf6hMIQx2RqcZH5RA7HoCrYJdAE+2XrL0LWkAW9c2PIi7oDmID0xPuyQ==
+	bh=FIuwE2PGaY92yYLJg1ozwjEZ5BPB6OWvqekeMNIQNfI=;
+	b=4Ybui8Qtb29ovfAsyiSryVMHVMVnaRT9A5eisAEKe2ZHcKBntk40b9342yLv8AmIKkZk
+	 rTp82uwpD0OCTgdKMUGWep24f0HZQAfmyBpbhyAwhRURsgqWJ8g9uTcyiy14xpyR6AoxH
+	 vB3tUJfNs8V3zBjvsVFylEHfXsbaNwgZhPU+BaNgZoFup+alO4JOSREim4nYQAup+b7fu
+	 P1dpBRwcc2FO4HLW0w+4Nt20Wed5SGPMBg1/COotiq5ELEhvoJ79bw5vMYKw33D8r8onk
+	 VpCjPg1Hi3+tQbRjPUZbek+Zw+sFKrXujrhqIS1BNo8FFSSGmPhKMbFaCt8E6L2Ybww==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fhZ1P3H1;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iJ7w9Mqr;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5941606A33F;
-	Tue, 20 Oct 2026 14:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69640606C210;
+	Tue, 20 Oct 2026 14:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fhZ1P3H1
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE261F000C6;
-	Tue, 20 Oct 2026 14:17:19 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iJ7w9Mqr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3E31F000C4;
+	Tue, 20 Oct 2026 14:17:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792505839;
-	bh=h9yFrw4govaK3v2B/JZCV+F4mrTwJZiAYy2bn7NeXj4=;
+	s=k20260515; t=1792505845;
+	bh=FIuwE2PGaY92yYLJg1ozwjEZ5BPB6OWvqekeMNIQNfI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fhZ1P3H1tBUmwM9HzEn3AeGsUuz44m2Brj5kxPXNjGJBd6SB94xB0JX0iHKhQOstF
-	 YzjznTKYD0uXT+2iY8NkL3omUuMutB7kRnb01psYk1hA+S1JUPeN5Asg9BlbiAufvW
-	 JrdfGVWaF3N+Biu2WIEE3awVIDF6W5CUyeHLSaaGV12tur53P4d1FUzgPyqOmEW3KP
-	 XIRUws95xq15LbW89ONdx8ifiuWnpiKSr1+OWLR1qb7d8ShctxneKcrfTgfpUlJ3ea
-	 +/VM3vTYq+nswD22/CjT/5B4VTK8w8vRbd/lLAuxw8Q2x53OrNFmLRGggGQNQG7mzd
-	 33eYnrF6OnlKA==
-Content-Type: multipart/mixed; boundary="===============1170969253696388872=="
+	b=iJ7w9MqrjN4iDtwKyL25IdnCbxJKvf/vyntFItkmZiejHO/sP9RNQpuZixRA/QSog
+	 NRohsavOcXGItTBv5W/Qkyn9pECDGfC8XEwmEP6b8yV7HlD/TbKYRMbsFZfnIleSOx
+	 g2dhr61kliGvJXYMEQmUf2Z8Vvea3KIKJHfr0Q+CqY7Cvy1qNIKlBH8jiLvBa1usS6
+	 LHl7C8d1p1kKz7ykACsdI3eVxKjeQ+8N1ysu6heJW8rwd0fnQ2t/zOgF6sgjrD1Gyv
+	 CC52sF/pssoA85IqWI2jUrhYI8GdJjBQkoaasM5PtgrMmXr5yYO5geUSakFRCum/kZ
+	 NymKoYtGsRFpQ==
+Content-Type: multipart/mixed; boundary="===============2483452175354941989=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,134 +49,133 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <8279ae353583c0148d24530d4aebb476539793bbedbf7883110a7f39c7249278@mail.kernel.org>
-In-Reply-To: <114861b89f9ea8789e8572c53b1c88774c311460.1792503001.git.xukuohai@huawei.com>
-References: <114861b89f9ea8789e8572c53b1c88774c311460.1792503001.git.xukuohai@huawei.com>
-Subject: Re: [PATCH bpf-next 04/16] libbpf: Copy the percpu chunks into the bpf arena
+Message-Id: <b3d8bb8499c3546d31a08e162fcca31042c7eac583c454d49db1d38fa42bc3fd@mail.kernel.org>
+In-Reply-To: <f7f725d0057be520ec5fb417f3f7d3a1e2c765fe.1792503001.git.xukuohai@huawei.com>
+References: <f7f725d0057be520ec5fb417f3f7d3a1e2c765fe.1792503001.git.xukuohai@huawei.com>
+Subject: Re: [PATCH bpf-next 14/16] selftests/bpf: Add test for arena percpu-only object
 From: bot+bpf-ci@kernel.org
 To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,emil@etsalapatis.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 14:17:19 +0000 (UTC)
+Date: Tue, 20 Oct 2026 14:17:25 +0000 (UTC)
 
---===============1170969253696388872==
+--===============2483452175354941989==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> libbpf: Copy the percpu chunks into the bpf arena
+> selftests/bpf: Add test for arena percpu-only object
 
 TL;DR:
-- arena_percpu_populate() may pin the loader thread to cpus the app excluded
-  (isolcpus)
-- the final affinity restore may permanently shrink the thread's cpu mask, and
-  its failure is unchecked
+- arena_percpu_only.c lacks an addr_space_cast gate, so in the fallback config
+  the store may hit a user address and oops the kernel
+- test skips silently without a reason (minor)
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> index 82aafe879fae..7cdee141764e 100644
+> --- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
+> @@ -35,11 +35,13 @@
+>  #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
 
 [ ... ]
 
-> @@ -5649,6 +5650,49 @@ static struct bpf_map *bpf_object__sec_map(struct bpf_object *obj, int sec_idx)
-> +/*
-> + * Copy the percpu chunks into the mmapped bpf arena, one chunk at a
-> + * time. Before copying each chunk, pin the thread to the chunk's cpu,
-> + * so the copy faults the chunk's pages in from that cpu's NUMA node.
-> + * If pinning fails, fall back to copying on the current cpu.
-> + */
-> +static void arena_percpu_populate(struct bpf_object *obj, void *arena_mmaped)
+>  #else
+>  #define __arena __attribute__((btf_type_tag("arena")))
+>  #define __arena_global SEC(".addr_space.1")
+> +#define __arena_percpu SEC(".arena.percpu")
+>  #define cast_kern(ptr) bpf_addr_space_cast(ptr, 0, 1)
+>  #define cast_user(ptr) bpf_addr_space_cast(ptr, 1, 0)
+>  #endif
+
+In this fallback branch (clang without __BPF_FEATURE_ADDR_SPACE_CAST, or
+with BPF_ARENA_FORCE_ASM), __arena_percpu only selects the section, so no
+addr_space_cast is emitted for accesses to the variable.  Can the access in
+arena_percpu_only.c work in this configuration?
+
+    __u64 __arena_percpu counter = 0x123456;
+    ...
+    counter = bpf_get_smp_processor_id();
+
+This compiles to roughly:
+
+    r1 = counter ll
+    *(u64 *)(r1 + 0) = r0
+
+with no cast_kern() between the two instructions.  libbpf turns the ld_imm64
+into BPF_PSEUDO_ARENA_PERCPU, and resolve_pseudo_ldimm64() fills in the full
+64-bit value from arena_map_direct_value_addr(), i.e. user_vm_start + off.
+check_ld_imm() still types the register as PTR_TO_ARENA:
+
+    __mark_reg_known(dst_reg, pos);
+    dst_reg->type = PTR_TO_ARENA;
+    dst_reg->mem_size = bpf_arena_percpu_chunk_sz(map);
+
+so the verifier accepts the store, and the fixups turn it into
+BPF_PROBE_MEM32.  The x86 jit emits PROBE_MEM32 as [reg + r12 + off] using
+the whole 64-bit register, while the arena layout in kernel/bpf/arena.c
+assumes that register holds only the lower 32 bits of the user pointer.
+
+Using the example values from the comment in arena.c, user_vm_start
+0x7f7d26200000 and kern_vm_start 0xffffc90001e69000, the store targets
+0x0000487d28069000.  That is a user-space address and not in the arena.
+
+On x86 with supervisor-mode access prevention enabled, a supervisor access
+to a user address goes through do_user_addr_fault() -> page_fault_oops()
+without consulting the bpf extable, so running this test would oops the
+kernel.  Without it, the store lands on whatever the current process has
+mapped at that address, and other user_vm_start values can make the sum land
+in kernel space.
+
+Every other arena selftest that touches arena globals directly
+(arena_atomics.c, linked_arena1.c, data_in_arena_decl.c, arena_htab.c, ...)
+gates that code on __BPF_FEATURE_ADDR_SPACE_CAST and skips otherwise.  In
+the same fallback branch, __arena_global variables need an explicit
+cast_kern().  arena_percpu_only.c has no such gate.  Should it have one?
+
+The underlying problem appears to be on the kernel side of this series.
+Commit 2e94f202e80e ("bpf: Teach verifier about arena percpu instructions")
+types an uncast 64-bit user address as PTR_TO_ARENA, and the jit commits
+a27c971d206b ("bpf, x86: Add support for arena percpu") and 0c3a9efd447d
+("bpf, arm64: Add support for arena percpu") do not truncate it.
+
+Commit 08224ba2de19 ("selftests/bpf: Add test for arena percpu bounds")
+loads exactly this uncast ld_imm64 + ldx pattern but never runs it.  No fix
+for this was found later in the series (searched e06485c3c3fb..08224ba2de19).
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_percpu.c b/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
+> new file mode 100644
+> index 000000000000..27d4721c7ae9
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_percpu.c
+> @@ -0,0 +1,148 @@
+
+[ ... ]
+
+> +void test_arena_percpu(void)
 > +{
-> +	size_t chunk_sz = obj->arena_percpu.chunk_sz;
-> +	cpu_set_t *saved_set = NULL, *one = NULL;
-> +	size_t set_sz;
-> +	void *base;
-> +	int cpu;
-> +
-> +	base = arena_mmaped + obj->arena_percpu.offset;
-> +
-> +	set_sz = CPU_ALLOC_SIZE(obj->arena_percpu.nr_chunks);
-> +	saved_set = CPU_ALLOC(obj->arena_percpu.nr_chunks);
-> +	one = CPU_ALLOC(obj->arena_percpu.nr_chunks);
-> +	if (!saved_set || !one || sched_getaffinity(0, set_sz, saved_set) != 0) {
-> +		/* no affinity info, fall back to copying on the current cpu */
-> +		for (cpu = 0; cpu < obj->arena_percpu.nr_chunks; cpu++)
-> +			memcpy(base + cpu * chunk_sz, obj->arena_percpu.chunk, chunk_sz);
-> +		goto out;
+> +	if (!feat_supported(NULL, FEAT_ARENA_PERCPU_DATA)) {
+> +		test__skip();
+> +		return;
 > +	}
-> +
-> +	for (cpu = 0; cpu < obj->arena_percpu.nr_chunks; cpu++) {
-> +		CPU_ZERO_S(set_sz, one);
-> +		CPU_SET_S(cpu, set_sz, one);
-> +		sched_setaffinity(0, set_sz, one);
-
-Can this loop move the calling thread onto cpus the application deliberately
-excluded?  saved_set is fetched but never consulted, so the loop pins to
-every cpu in [0, nr_chunks) regardless of the caller's mask.
-
-The kernel's __sched_setaffinity() only intersects the new mask with
-cpuset_cpus_allowed(), not with the thread's earlier mask.  An application
-that limited its threads with taskset or sched_setaffinity() (for example to
-housekeeping cpus 0-3 on a box booted with isolcpus= or nohz_full=4-63) would
-have libbpf run on every isolated cpu during bpf_object__load().  Each pin
-also forces a migration through stop_one_cpu() that preempts whatever is
-running on that cpu.
-
-Would it work to pin only to cpus that are set in saved_set, and copy the
-remaining chunks without pinning?
-
-> +
-> +		/* faults the chunk pages in from the target cpu's NUMA node */
-> +		memcpy(base + cpu * chunk_sz, obj->arena_percpu.chunk, chunk_sz);
-> +	}
-> +
-> +	sched_setaffinity(0, set_sz, saved_set);
-
-Does this final sched_setaffinity() actually give back the original state?
-The kernel's sched_getaffinity() returns:
-
-    cpumask_and(mask, &p->cpus_mask, cpu_active_mask);
-
-so saved_set holds only the cpus that are active at the time of the call, not
-the thread's full cpus_mask.  A thread with default affinity has a cpus_mask
-covering all possible cpus, so after this call its cpus_mask shrinks to the
-cpus that were online when the object was loaded.
-
-Because the syscall sets SCA_USER, that snapshot is also stored as
-p->user_cpus_ptr, and __set_cpus_allowed_ptr() clamps later cpuset updates
-to it:
-
-    if (p->user_cpus_ptr && !(ctx->flags & (SCA_USER | ...)) &&
-        cpumask_and(rq->scratch_mask, ctx->new_mask, p->user_cpus_ptr))
-            ctx->new_mask = rq->scratch_mask;
-
-For example, take a vm with possible=0-63 and online=0-15, loading an object
-that has .arena.percpu variables.  From then on the loader thread, and every
-thread or process it creates afterwards (cpus_mask and user_cpus_ptr are
-inherited), could never run on cpus 16-63, even after they are hot-added or
-the cpuset is widened.  Before this patch, bpf_object__load() never touched
-scheduling state.
-
-The return value of this sched_setaffinity() is also ignored.  If it fails
-(-ENOMEM from alloc_user_cpus_ptr(), or -EINVAL when a concurrent cpuset or
-hotplug change leaves saved_set with no allowed or active cpus), the thread
-stays pinned to the last cpu it was moved to, and nothing reports it.
-
-The commit message and the function comment only cover the case where pinning
-fails.  They do not mention changing or restoring the caller's affinity, and
-no later patch in this series changes arena_percpu_populate().
-
-Would doing the per-cpu copies in a short-lived helper thread avoid touching
-the caller's thread altogether?  Otherwise, could the return value of the
-restore at least be checked and reported with pr_warn()?
-
-> +
-> +out:
-> +	CPU_FREE(saved_set);
-> +	CPU_FREE(one);
-> +	zfree(&obj->arena_percpu.chunk);
+> +	if (test__start_subtest("percpu_only"))
+> +		test_arena_percpu_only();
 > +}
 
-[ ... ]
+A subsystem pattern flags this as potentially concerning: a test that skips
+silently, with no message.  When the kernel lacks arena percpu support,
+test__skip() is called without printing a reason, and feat_supported() is
+also silent when the probe returns 0.  The output only shows the test as
+skipped and never says that FEAT_ARENA_PERCPU_DATA (kernel, jit, or arena
+percpu chunk support) was missing.
+
+test__skip() does mark the test as skipped in the test_progs output, and
+many bpf selftests call it without a message, so this may be acceptable as
+is.  The skip condition itself looks correct, since the probe loads a
+BPF_PSEUDO_ARENA_PERCPU program and therefore also covers jits without
+bpf_jit_supports_arena_percpu_insn().
+
+Would it be worth printing a short reason before test__skip(), for example
+that arena percpu data is not supported?
 
 
 ---
@@ -184,4 +183,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39434884362
---===============1170969253696388872==--
+--===============2483452175354941989==--
