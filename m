@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792504845;
-	b=uctNfaIHjEVTeiab6o5hwH1VlkH3CpKvntRcdMouMM7iehKopbnSir9s6h6j8kxM/REB
-	 UPZvDJXpnhDcHsiI8ZjIF8fLOVT4vgHNkB3iklXQ7mMVEnDoYFG9oIHOKXebDHlJxgTFJ
-	 iSLMHFLhDB4qg1hCrWcvr8lfcinhzui68uCCWtGAI3LIaOmF7CZwNKGzxN6OO22q9pZe2
-	 T50r9LEtLZe80Df1BPY80D9TF81LkTqVcg5o7M50oZBze12fCtk5wXk3AWAKNrXYo7p2H
-	 ly/l0JO8p4/3VLJXpDYQOQJD1aa/qGiyMoYYQOWcquZY+sHOi1u14H2KhxJUxJCzIvw==
+	t=1792504903;
+	b=NtxU1vTDbLP9A9NB6djjcGbbFfv4prfzxvudJ7QiKkAnyk8eRG3oKdjINsvvD+veIcDV
+	 b2mfXJWkxgKOGy/bBV1kGo64swCEgiqID1a70INgrSU6H6cOOAzryFv8RT5LOXayvZgYB
+	 tcb7Pw4NcVvqn6lUVKX2xuJ9SPMNqM0qo14A9JnHB9mLSu8ofcq3x8CT3Ewi6507GZE/a
+	 lnBjZ2HvYrmrwD3qcCbXYOPcOtxJR4mwXZe0hS0hhRSFiiaIu2ie5G7O7YNKFSdPANAGF
+	 z7mcMWX3tiukXVoH6drVgfbDWkrojrgCCKyM748zguB4OMTqM2kdWbhJRP/RmqHYwfw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792504845;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792504903;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=hqdIqNFuRseo5/W0ymTuUioOKujljNuJAkUi803qNZs=;
-	b=SM42oip+9SOYe3/0jNzkEhcz2cbD84liP0oFcC3vOnHj2GAdLpHYvJjdc8oKKsI7H6HA
-	 WMHuYWlQZtMOE9C/Gl0I08qhZhbZPBXik3qAjWT8tjQpdC7b5ghKEWNlXRBSXugPSIyEg
-	 vVszF8gyiGxNsSegI30lYhJNCd3SQ1BBZ6I8Cz5GLIG5Nmz3XaA+1c4dTl7Z16JO6j84I
-	 Bp+/woM7t3tdcgdnA/O0QWF4wp34r8tDdxCrxbzfCq/kRdpgeKs2wyPuzT1HYsUyCkvaH
-	 wL6WoOxL2VXvz/vnownlFRRM8qk7r8IselZqfDiDtyNwmhGQDPl8EmIA3TgaOV+MSeQ==
+	bh=/PzkJJnr1xi8qEIuYiOzuHmilmQw1z23oWnEO1Wl9hk=;
+	b=OKZj1FmfKMazQ3SNhgFRWIYY6DE9ljx579JNuiYMMKu/2dkWXepW1xbZ2F3EHoIwYbiI
+	 nXxasJsOr/3mCQhuxnddffuIUJWq3hVK9pyaY7DiO61QWijvtx6ODkwqHrehx7mqrKxdt
+	 O/OUnZvAAQYZlpmBTr2t8LNY4vZIQj884nG+tlUKi3tDM1jd92ccU6QlB13LZjxH1XAWQ
+	 QYODt6AteoaNC2r8m0j1bCXkdgaJn61w4bkhF0EnqgQGCtI9PYNQsBKt0dchHlHVbAMNN
+	 zm/50HrCqSUyLEkUnyArzYyAu+fxwKa3UHrpRUOb/5aLrULkCNC/oOZce+yeaOjCHGw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z3bmvTtz;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMiLS4nC;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A6E60A261F
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B464A606A31C
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:01:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z3bmvTtz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6EFB1F000C7;
-	Tue, 20 Oct 2026 14:00:44 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YMiLS4nC
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E0EB1F000CF;
+	Tue, 20 Oct 2026 14:01:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792504845;
-	bh=hqdIqNFuRseo5/W0ymTuUioOKujljNuJAkUi803qNZs=;
+	s=k20260515; t=1792504902;
+	bh=/PzkJJnr1xi8qEIuYiOzuHmilmQw1z23oWnEO1Wl9hk=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=Z3bmvTtzH81bgc5DfcS8VXI9J/e7sDPoqYCwTd/2BwK4z58S63v7lqo7RjCMVZf5E
-	 ShSG/rUOxqcwfjB3seFls5hYMBZ2bJ6gkHBImB/Gb9g29BAa82jAY54hgis4mI4UVD
-	 FD4TXwjDBbBZh+4+cGfrwJKvis4kQZcUp6RSEcNv3HC5Txq+tlXD/Chf55LkAyYYg7
-	 UsSzDu5h0PM4fLiwGoh+nu497AHlNanmJ0TElLB1vTIyTpzQezxZHrVYV4elFi1L3N
-	 Osx5+Qs7gJ2/40hhwLpMVU6kWiGda/VyafRJN8Bq31J2HY/vnD+aYnh0xOODU1SuyY
-	 efppIZXEvzWUw==
-Message-ID: <sashiko-outbox-179074@kernel.org>
+	b=YMiLS4nCvbPhU9CXjO2kBrvmGnlVFvxMaqMlEUAnJjM8Hz3gnAjswc7C4gdqDrIjE
+	 QfUNYvLrdVhBG0met02jHDJCEMRAPRf8xCzLFo6koWIIpfdoElXiZZA/gp6SxPrxq6
+	 i2VuTlDYyr3bLbWVQ1Zg6/+MV0vyTgMH4tybL2IT3DrI4SEHdxR46ELEBgV9HpWeL0
+	 9aXdJkY86Xr61wWvxuq1Xml3m0+0ceccTeXGDYy58BR7oJorHdgdDijTJ0t3ARZvvu
+	 oczkRc+d+jMQtKKH4iQqR19gtlV9rVRziqwPyB+UkGdInOKR5l2mBJnsKx1Ntn15Im
+	 s6p6JJKMZ1WpA==
+Message-ID: <sashiko-outbox-179076@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 12/16] libbpf: Introduce arena percpu helpers
- for user space
+Subject: Re: [PATCH bpf-next 13/16] bpftool: Emit the arena percpu datasec
+ into skeleton
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
-In-Reply-To: <d56952f063f90acb07c0a37c96a83851bea227d8.1792503001.git.xukuohai@huawei.com>
+In-Reply-To: <a579251a284c3dd4954c305a04346acef4ec4113.1792503001.git.xukuohai@huawei.com>
 References: <cover.1792503001.git.xukuohai@huawei.com>
- <d56952f063f90acb07c0a37c96a83851bea227d8.1792503001.git.xukuohai@huawei.com>
+ <a579251a284c3dd4954c305a04346acef4ec4113.1792503001.git.xukuohai@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 14:00:44 +0000
+Date: Tue, 20 Oct 2026 14:01:41 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,151 +60,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] libbpf: missing errno on error paths in bpf_map__arena_percpu_ba=
-se()
-- [Low] libbpf: 32-bit pointer cast warnings in bpf_map__arena_percpu_ptr()
-- [Low] libbpf: inaccurate @return doc comment for bpf_map__arena_percpu_pt=
-r()
+- [Medium] bpftool: NULL pointer dereference in do_skeleton() when BTF is a=
+bsent
+- [Low] bpftool: missing pointer cast in do_skeleton() breaks C++ skeleton =
+build
 --
 
-commit e49cfa2af43e08885b5b19954e2551d5cbd7f6e2
+commit 104a6169dc8cb31cbaeca548b8c48657b09d1a96
 Author: Xu Kuohai <xukuohai@huawei.com>
 
-libbpf: Introduce arena percpu helpers for user space
+bpftool: Emit the arena percpu datasec into skeleton
 
-This commit adds bpf_map__arena_percpu_base() and bpf_map__arena_percpu_ptr=
-()
-to libbpf so user space and generated skeletons can access arena per-cpu
-areas.
+This commit updates bpftool skeleton generation to emit a separate
+arena_percpu data section struct when .arena.percpu variables are present
+and initializes obj->arena_percpu to cpu 0's per-cpu arena base in the
+generated load function.
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index be2ddaf966318..0edce476451c3 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -12287,6 +12287,55 @@ void *bpf_map__initial_value(const struct bpf_ma=
-p *map, size_t *psize)
->  	return map->mmaped;
->  }
-> =20
-> +void *bpf_map__arena_percpu_ptr(const struct bpf_map *map, void *ptr, un=
-signed int cpu)
-> +{
-> +	struct bpf_object *obj;
-> +	uint64_t base;
-> +
-> +	if (!map || !ptr)
-> +		return libbpf_err_ptr(-EINVAL);
-> +
-> +	obj =3D map->obj;
-> +	if (map->def.type !=3D BPF_MAP_TYPE_ARENA || !obj->arena_percpu.present)
-> +		return libbpf_err_ptr(-EINVAL);
-> +
-> +	if (cpu >=3D obj->arena_percpu.nr_chunks)
-> +		return libbpf_err_ptr(-ERANGE);
-> +
-> +	/*
-> +	 * obj->arena_percpu.chunk is freed by arena_percpu_populate(), and only
-> +	 * then the map is mmaped
-> +	 */
-> +	if (obj->arena_percpu.chunk)
-> +		return libbpf_err_ptr(-EINVAL);
-> +
-> +	base =3D (uint64_t)map->mmaped + obj->arena_percpu.offset;
-> +	if ((uint64_t)ptr < base || (uint64_t)ptr >=3D base + obj->arena_percpu=
-.chunk_sz)
-> +		return libbpf_err_ptr(-EINVAL);
-> +
-> +	return (void *)((uint64_t)ptr + (uint64_t)cpu * obj->arena_percpu.chunk=
-_sz);
-> +}
-
-[Severity: Low]
-Will casting map->mmaped and ptr directly to uint64_t and back to void * in
-bpf_map__arena_percpu_ptr() fail the build on 32-bit architectures?
-
-Since tools/lib/bpf/Makefile sets -Wall -Werror, casting between a 32-bit
-pointer and a 64-bit integer triggers -Wpointer-to-int-cast and
--Wint-to-pointer-cast warnings. Would using uintptr_t or void * pointer
-arithmetic with size_t avoid this?
-
-> +
-> +void *bpf_map__arena_percpu_base(const struct bpf_map *map)
-> +{
-> +	struct bpf_object *obj;
-> +
-> +	if (!map)
-> +		return NULL;
-> +
-> +	obj =3D map->obj;
-> +	/*
-> +	 * The per-cpu chunks exist once the map is created and populated;
-> +	 * obj->arena_percpu.chunk is freed by arena_percpu_populate(), and
-> +	 * only then the map is mmaped
-> +	 */
-> +	if (map->def.type !=3D BPF_MAP_TYPE_ARENA || !obj->arena_percpu.present=
- ||
-> +	    obj->arena_percpu.chunk)
-> +		return NULL;
-
-[Severity: Medium]
-Should the error paths in bpf_map__arena_percpu_base() return
-libbpf_err_ptr(-EINVAL) instead of a bare NULL?
-
-Because bpf_map__arena_percpu_base() is exported as a public LIBBPF_API
-function in tools/lib/bpf/libbpf.h and tools/lib/bpf/libbpf.map, returning
-NULL without setting errno when map is NULL, when map->def.type is not
-BPF_MAP_TYPE_ARENA, when !obj->arena_percpu.present, or when
-obj->arena_percpu.chunk is still set prevents callers from inspecting errno
-or using libbpf_get_error().
-
-> +
-> +	return map->mmaped + obj->arena_percpu.offset;
-> +}
-> +
->  bool bpf_map__is_internal(const struct bpf_map *map)
->  {
->  	return map->libbpf_type !=3D LIBBPF_MAP_UNSPEC;
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index 3e0b7bc91bef9..31d3982226cc7 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -1230,6 +1230,32 @@ LIBBPF_API int bpf_map__set_initial_value(struct b=
-pf_map *map,
->   */
->  LIBBPF_API void *bpf_map__initial_value(const struct bpf_map *map, size_=
-t *psize);
-> =20
-> +/**
-> + * @brief **bpf_map__arena_percpu_ptr()** translates an address within
-> + * cpu 0's chunk of the arena's per-cpu area (e.g. the address of an
-> + * `__arena_percpu` variable as seen in the skeleton's arena_percpu
-> + * section) to the per-cpu chunk of the requested @cpu.
-> + * @param map the ARENA map
-> + * @param ptr address of an `__arena_percpu` variable (cpu 0's chunk)
-> + * @param cpu cpu id to obtain the chunk for
-> + * @return pointer to the variable in the chunk of @cpu; error pointer, =
-if the
-> + * map is not a loaded ARENA map with a per-cpu area, @cpu is out of ran=
-ge,
-> + * or @ptr is not within cpu 0's chunk
-> + */
-> +LIBBPF_API void *bpf_map__arena_percpu_ptr(const struct bpf_map *map, vo=
-id *ptr,
-> +					   unsigned int cpu);
-
-[Severity: Low]
-In the @return comment for bpf_map__arena_percpu_ptr() in
-tools/lib/bpf/libbpf.h, it states that the function returns an "error
-pointer" on failure.
-
-In tools/lib/bpf/libbpf.c, bpf_map__arena_percpu_ptr() returns via
-libbpf_err_ptr(), which sets errno and returns NULL rather than an ERR_PTR.
-Should the comment state that it returns NULL with errno set instead?
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index ee680f7c21160..8a321ec1155a1 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
 
 [ ... ]
 
+> @@ -1511,11 +1523,58 @@ static int do_skeleton(int argc, char **argv)
+>  			return %1$s__open_opts(NULL);			    \n\
+>  		}							    \n\
+>  									    \n\
+> -		static inline int					    \n\
+> -		%1$s__load(struct %1$s *obj)				    \n\
+> -		{							    \n\
+> -			return bpf_object__load_skeleton(obj->skeleton);    \n\
+> -		}							    \n\
+> +		",
+> +		obj_name
+> +	);
+> +
+> +	/* The per-cpu arena data has no mmaped slot in the map skeleton.
+> +	 * Point obj->arena_percpu at cpu 0's chunk once the object is
+> +	 * loaded.
+> +	 */
+> +	{
+> +		char arena_map_ident[256] =3D "";
+> +		bool have_percpu_arena =3D false;
+> +
+> +		bpf_object__for_each_map(map, obj) {
+> +			if (bpf_map__type(map) !=3D BPF_MAP_TYPE_ARENA)
+> +				continue;
+> +			if (find_type_for_map(bpf_object__btf(obj), "arena_percpu") &&
+> +			    get_map_ident(map, arena_map_ident, sizeof(arena_map_ident))) {
+
+[Severity: Medium]
+Can this dereference a NULL btf pointer when generating a skeleton for an
+object with an arena map but no BTF information?
+
+Earlier in do_skeleton(), codegen_datasecs() is guarded by checking if btf
+is non-NULL:
+
+    if (btf) {
+        err =3D codegen_datasecs(obj, obj_name);
+        if (err)
+            goto out;
+    }
+
+Here, bpf_object__btf(obj) is passed directly to find_type_for_map()
+without checking if btf is NULL:
+
+    do_skeleton()
+      find_type_for_map(bpf_object__btf(obj), "arena_percpu")
+        btf__type_cnt(btf)
+          return btf->start_id + btf->nr_types;
+
+Should this check that btf is non-NULL before calling find_type_for_map()?
+
+> +				have_percpu_arena =3D true;
+> +				break;
+> +			}
+> +		}
+> +
+> +		if (have_percpu_arena) {
+> +			codegen("\
+> +				\n\
+> +				static inline int \n\
+> +				%1$s__load(struct %1$s *obj) \n\
+> +				{ \n\
+> +					int err; \n\
+> +					 \n\
+> +					err =3D bpf_object__load_skeleton(obj->skeleton); \n\
+> +					if (err) \n\
+> +						return err; \n\
+> +					obj->arena_percpu =3D \n\
+> +						bpf_map__arena_percpu_base(obj->maps.%2$s); \n\
+
+[Severity: Low]
+Will this assignment fail to compile when the generated skeleton header is
+included in C++ code?
+
+bpf_map__arena_percpu_base() returns void *, while obj->arena_percpu is a
+typed struct pointer (struct <obj_name>__arena_percpu *). In C++, implicit
+conversion from void * to a typed pointer is not permitted.
+
+Elsewhere in tools/bpf/bpftool/gen.c, such as in gen_st_ops_shadow_init(),
+void * returns are cast using __typeof__:
+
+    obj->struct_ops.%1$s =3D (__typeof__(obj->struct_ops.%1$s))
+        bpf_map__initial_value(obj->maps.%1$s, NULL);
+
+Should obj->arena_percpu also use a (__typeof__(obj->arena_percpu)) cast
+here?
+
+> +					return 0; \n\
+> +				} \n\
+> +				", obj_name, arena_map_ident);
+
+[ ... ]
+
+>
+
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
-t.xukuohai@huawei.com?part=3D12
+t.xukuohai@huawei.com?part=3D13
