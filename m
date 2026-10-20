@@ -1,91 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.136
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792518465;
-	b=NqxHCszSmEYiW+AMSIL6sGGL+7ogHYnxtNo2sGWp7iLhVgYcYAPd5JTAk81+rXz/+kdB
-	 2ZE/CsUxBJ36OmVg2zJGfig+dwBvOkpYHFkHre+ufSWGAp9FyRQDV64lHlXBKrmsSjpqN
-	 U0WOmhK0pyrUnYw6laFmsICxSK1m7TWv6gQSP+4m6u6rrKdUlsoka1DXT8E1yp21468hX
-	 brshs2mZyfl2B6gj2O+VMciPp5R6oO3q2IZ2ksmV9wj7ewllXXxYfvR7niRHOC4c5fLCw
-	 rx+onuNACmsF13xzAlft+kFtYMH+2nOYVDyE/zem/30X0wzGR9zPEEMIMY7wdUvytsA==
+	t=1792519102;
+	b=4IIDn2OyHUvwyJ5cPsNVck6nx8THHr8h0HWZv0dHPFb0w0Ik1t+m+IwIAKdb4Jl6ln1R
+	 0qBdVdMJZ5rFU68pOI66m40skn3HJt2Gy1ivLqCbqBCWKm5Rz3WeUL4k78fen6WhT4Ray
+	 29luMXOcdXOQ0WGZEYDE86Z3WpC1LpACcdjYVRKWu2IQQCgTGCJQxNRlha2f3PfUZlyzw
+	 JmCivExghZqD4Pkj+j7eXBxkMPmG3212HYdrrBvonDdTR3z1X3JFjQc6FFAOhffDHr2Fj
+	 WUH420LuzaIjEOZJL+wNB6MPMrR9Mzh2pna0QauF1jeGRnM6snsL9JCy5kh8AeNNLhw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792518465;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:In-Reply-To:References:Organization:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-Scanned-By;
-	bh=WgFMIOh93QhT86nsv4SkYxtkJuNYyAnLVgqCXTRDBJQ=;
-	b=keSMwHkcUWLA4GEI++mYS62L+ujzxjoklox6bwbF0KspUAVaxV1Cxg7Vr4jyOkCdVWvz
-	 ase3ffdxQkuNmiWH1BonhL8/UY37cTeVj4ozbIEerZgwYNvevEEdZiyz8oYlFJaX2Fm+6
-	 T4wuWNOmcjLiFmyOLtAsjC9t3rOj8OZL2ASSriu5Ue38NfH/cDExNcScB9fvelg1yqyJk
-	 nJtpdUg6RQ7Afyxh5o/I5GzZ5lH1xGCCu/0r6w3MZkgQIyW04JLgjvvyH+rqvG3VfFFvK
-	 JQlQUlcCkhZMnqXr6xVGc57j+fraL8fUlnnk+RRXFE5KEbMWNs/g90hz8VQ/WnBi55g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792519102;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=lfvzxumMX8GZYmj1PJHBaPnkGMwtjZCWGV30UbLz0Q0=;
+	b=aPT7dM/VT/CYw+7SXac2CDca3WjOwOCrfN5asTN8nlE+Xtvy+J5FIpYB5NJuht6xBqTg
+	 tAo/NIGUU3Fo78tJur/UkYW4a8ofBiro9GctEGwknm2mlMHljZAsJWUA7QzCHPCeiBSij
+	 o32Eyu1r1UaAq2TiLktDbLzq0l4UsP4ma8XPStiQJZ/a1wSePmY5t35UcSyzEkF7FV10E
+	 OTlQXr4XeKIMoTcfDnRyKbPDu/5gNCjc7STkkrdOtyoWpUwWz5/iyfk/QorUmyfT9hSv/
+	 jYfR6q9ESLRYgr/PVuChEeHvvTklatZrub2lNpoczeY72U7dDDjAi1ak/nwRRGZxWCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Dq9Yd4X8;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="hk7DKm8/";
+	arc=none smtp.remote-ip=74.125.227.136
+Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F0C606A334
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:47:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46F0C606A334
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C2B606A320
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:58:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80C2B606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=Dq9Yd4X8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792518463;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WgFMIOh93QhT86nsv4SkYxtkJuNYyAnLVgqCXTRDBJQ=;
-	b=Dq9Yd4X8PESnjHbots3HCp5ZiyfNXnyO9BjlheTFyZHByNGRXtvmCljSJi3THZxsHjjih4
-	Fg8s+gKfl4D7ZHpdiydjQCo0JqHhVviNVFaXWgFBF/MfWdzRndiHlWl68YAbD9BP/XBUev
-	/AoZYooZx/VpVBPa6+PSW5CMBbvhXtU=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-522-ottbI5POOUSdDjVlOIXqxw-1; Tue,
- 20 Oct 2026 17:47:36 +0000
-X-MC-Unique: ottbI5POOUSdDjVlOIXqxw-1
-X-Mimecast-MFC-AGG-ID: ottbI5POOUSdDjVlOIXqxw_1792518453
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 89C1F18005B3;
-	Tue, 20 Oct 2026 17:47:31 +0000 (UTC)
-Received: from rotkaeppchen (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1F5FF30001A2;
-	Tue, 20 Oct 2026 17:47:22 +0000 (UTC)
-Date: Tue, 20 Oct 2026 19:47:19 +0200
-From: Philipp Rudo <prudo@redhat.com>
-To: "Ard Biesheuvel" <ardb@kernel.org>
-Cc: "Jason Gunthorpe" <jgg@nvidia.com>, Pingfan Liu <atlarge80@qq.com>,
- "Mark Rutland" <mark.rutland@arm.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
- Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jeremy Linton" <jeremy.linton@arm.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon"
- <will@kernel.org>, "Simon Horman" <horms@kernel.org>, "Gerd Hoffmann"
- <kraxel@redhat.com>, "Vitaly Kuznetsov" <vkuznets@redhat.com>, "Viktor
- Malik" <vmalik@redhat.com>, "Jan Hendrik Farr" <kernel@jfarr.cc>, Baoquan
- He <baoquan.he@linux.dev>, "Andrew Morton" <akpm@linux-foundation.org>,
- kexec@lists.infradead.org, bpf@vger.kernel.org,
- systemd-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, Dave
- Young <ruirui.yang@linux.dev>
-Subject: Re: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE
- format boot image
-Message-ID: <20261020194719.4fbd4e4a@rotkaeppchen>
-In-Reply-To: <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
-References: <20260322014402.8815-1-piliu@redhat.com>
- <20261011201325.GA918242@nvidia.com>
- <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
-Organization: Red Hat inc.
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hk7DKm8/
+Received: by mail-pj2-f8.google.com with SMTP id 98e67ed59e1d1-3ac749e0719so976523a91.0
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 10:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792519102; x=1793123902; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lfvzxumMX8GZYmj1PJHBaPnkGMwtjZCWGV30UbLz0Q0=;
+        b=hk7DKm8/HVQtDM7SfuNCgwbY6d9oYkVDTzKvh3xFFVJcjWgeTit4nQ3APKC6JcXMvs
+         5b1sQ076nR/cD60jiZzZnASVUl2A1IZZGCAtZTv89HFO9xMKTFkmD6zhLqjP8L3wg7YT
+         EZ+XvNHUBXYD7s1wo8gn6iYgnI1fN0liSodgV4PIsesSa9bemHyZzT4hLir3wzeKGmpn
+         2cfYdmBPyJQrErJTZ2N9KyeYzowC/aQbw4VYo0vWXFp7rwMFbz2ltIGvlLTQQcEQD2Dv
+         OdgjfMkoZTll+JU+ZxsujBTKAj8fDZLFfw03WYAg+wLvoNDOd2pzWmEdC15h4Plr2owA
+         0SZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792519102; x=1793123902;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lfvzxumMX8GZYmj1PJHBaPnkGMwtjZCWGV30UbLz0Q0=;
+        b=AOj5xOtENotQUUSWbEM10OGxVdWRfVQ0MSnLp17flNrPh68VmDz30jgJZgvmxj5bqI
+         qUeS4D/fe3oO+C/WIIkVposh7Ynp/gCyfjnNVpkYpRAZGIhGHm1hve9vOydUDNxxR3GQ
+         vkdlKjkVnA3kVVLeZS8ppykUM5yd4Yq1lmUfhJiJfRmy6BYl4kEUBq8mWeW+5PQi1QhB
+         3PT+Zv0YlNHT6DoB80awEFp29qEBw75HhdBJ24Vy96jme7fEONPM9pNwYXWMtoOB6D5v
+         Wpkrc32DKVo1uJMyvzsm/DRicpQ+Ih53MHegeyb75ByMEytf2T3YqYoLqMD+0FRd0vlu
+         uf4g==
+X-Forwarded-Encrypted: i=1; AKwUvBxzCH/ggZIi4+iO4JGxiY9xvGDiAeDXcHPUyoEhEhrpsnkHxuXsdbOz5aSveOYAIuuem+w=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKBBT/0E6HRcvBuMMhJt70YHUU3Twnb3zGyWfqIRICbUp1Yc3ko
+	ClB4+ekaal1OiGiv7/wgQu5s+rsGcSiDf1+WTOIu2FvaAnU1Xoi8uUKE
+X-Gm-Gg: AYBFou2WkEMnuBIVzXS3k4Irec1iAlLGpbrnO1M31w9AmOj5ADPaFz0WkYx4r0SNpHH
+	8UX0rALcVIqTevn4FnCmbbD87tpFi1bi34KqIUZX5BTorvFlRB+cXzE7zafxpkjXGuL4toMyu7U
+	vaE4CDrPK68PAmL2aNBOBZuI5XVDgg/7gav/2ZGEjTTXIRzOxpHtqYf3rayJi+bXRHkQTakrk1p
+	dX0x2mr3h5hNpYiYbtaYzdzfhKr63tLtDx6Z2VxydFdRDny61aHDJ/frAY7tOlbJ4KAnIVQ764T
+	EwD5UWbjhtOfQk/HAzprGTNCpIptmdqK4yTn3t9gbwEC6q3tkr8N1ZWmdIyPWSUxHTYSp/LJ2Ci
+	Rf24jc4so5UBDS5KHUaRzlMO1L6/rytnwssIzewMcDnJP1aaMRkPW04MTHaqZg/6pQ4C7jlloID
+	t+l474lgKDQVDDDfnirKvDGBYSEEQL2Em7Z1RYARULpOeQ2aRQjXeFqmwt1yif2hLQoBwdPdrsw
+	RGfKhL761EAEY2fG/IPxPVMe9eNb1yYssq4bUrzpT5w7cPU
+X-Received: by 2002:a17:90b:4b09:b0:3ab:188b:c5bc with SMTP id 98e67ed59e1d1-3aceebb4bb9mr10542274a91.14.1792519101713;
+        Tue, 20 Oct 2026 10:58:21 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:6::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad82f0c0b1sm133581a91.0.2026.10.20.10.58.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Oct 2026 10:58:21 -0700 (PDT)
+Date: Tue, 20 Oct 2026 10:58:13 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Willem Ferguson <wferguson@cloudflare.com>, netdev@vger.kernel.org, 
+	davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
+	ncardwell@google.com, bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, linux-doc@vger.kernel.org, 
+	corbet@lwn.net, linux-kselftest@vger.kernel.org, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@cloudflare.com
+Subject: Re: [RFC PATCH net-next 0/4] tcp: carry a BPF-chosen identifier in
+ TSval low bits
+Message-ID: <atekzexnMd27Kctl@devvm7509.cco0.facebook.com>
+References: <20261013103906.2660384-1-wferguson@cloudflare.com>
+ <atFI9vl5hy09Dc0t@devvm7509.cco0.facebook.com>
+ <87a4oaf3mv.fsf@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -95,120 +102,34 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87a4oaf3mv.fsf@cloudflare.com>
 
-Hi Jason,
-Hi Ard,
-
-let me add my 2 ct as well.
-
-On Tue, 13 Oct 2026 21:19:28 +0200
-"Ard Biesheuvel" <ardb@kernel.org> wrote:
-
-> Hi Jason,
+On 10/19, Jakub Sitnicki wrote:
+> Hey Stan,
 > 
-> Thanks for chiming in.
+> On Thu, Oct 15, 2026 at 02:45 PM -07, Stanislav Fomichev wrote:
+> > On 10/13, Willem Ferguson wrote:
 > 
-> On Sun, 11 Oct 2026, at 22:13, Jason Gunthorpe wrote:
-> > On Sun, Mar 22, 2026 at 09:43:49AM +0800, Pingfan Liu wrote:  
-> >> *** The history ***
+> [...]
+> 
+> >> Questions for reviewers:
 > >> 
-> >> Nowadays, UEFI PE bootable images are becoming increasingly popular
-> >> among distributions. Currently, we have several kinds of image format
-> >> parsers in user space (kexec-tools). However, this approach breaks the
-> >> integrity protection of the images. To address this integrity protection
-> >> concern, several approaches have been proposed to resolve this issue,
-> >> but none of them have been accepted upstream yet.
-> >> 
-> >> The summary of those approaches:
-> >>   -1. UEFI service emulator for UEFI stub
-> >>   -2. PE format parser in kernel
-> >>   -3. Signing the arm64/boot/Image  
+> >>  1. Is encoding an identifier in the low bits of TSval acceptable in
+> >>     principle, given the trade-offs above?
+> >>  2. If so, what feedback do you have on the implementation?
 > >
-> > I recently had an interesting discussion with Ard around DRTM for
-> > kexec and we sort of independently concluded that #1 would be the best
-> > (only?) option there.
+> > Don't see any feedback yet, so from the top of my head: looks like you
+> > control two sides of the communication, so why not a custom (bpf) tcp option?
+> > Would you need that on every packet and it makes it expensive?
 > >
-> > All the implementations of DRTM today live in the EFI stub and
-> > intercept the boot process as it goes along. After ExitBootServices
-> > the DRTM implementation will launch the kernel in a different way.
-> > Even worse today's x86 version strongly requires EFI boot services to
-> > connect the Linux stub with a trampoline helper provided earlier in
-> > the boot chain.
-> >
-> > A kexec flow that only works on decompressed vmlinux, with no option
-> > to run any EFI code, is going to be difficult to support. There is
-> > enough information and choices involved in DRTM that it is undesirable
-> > for the predecessor kernel to try and DRTM launch it on behalf of the
-> > successor, let alone trying to get the insane x86 trampolines into a
-> > kexec successor kernel.
-> >
-> > Given those constraints entering the successor kernel through the
-> > normal EFI entry point is highly desirable. This would allow x86 to
-> > continue to provide the DRTM trampolines through an EFI mechanism and
-> > means the Linux EFI stub always handles the launch with identical code
-> > in all scenarios.
-> >  
+> > Or any other field you can abuse maybe? IPv6 Flow label?
 > 
-> With some help from my friend Claude, I've prepared a prototype that
-> reuses my efiloader Rust crate to boot EFI stub images (bare Image,
-> zboot, UKI) in the kernel: the EFI boot phase is invoked at kexec
-> load time, and runs under the preceding kernel up until the point
-> where ExitBootServices() is called. Then, the actual kexec call
-> will return from ExitBootServices() after shutting down the first
-> kernel.
+> Nah, we don't control the client unfortunately.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efiloader-kexec
+> Client here is any device that connects to our edge PoP.
 
-I only took a brief look and cannot claim to fully understand your
-solution, yet. Nevertheless I'm pretty impressed. I also agree that
-this approach is by far the best, if we can get it to work.
-
-The reason why I and Pingfan abandoned this approach and went for eBPF
-instead was due to security concerns. Our premise is/was that the EFI
-stub must not be able to harm the running kernel. Be it intentional or
-not. That's a guarantee eBPF with its verifier can give but a simple
-file signature can't.
-
-I believe the way Ard ties execution of the EFI stub to module
-signature verification solves the "intentionally malicious" case. In
-the end it doesn't make sense to try to prevent a malicious EFI stub to
-be executed when an attacker could also load a malicious kernel module.
-
-But that still leaves the "unintentional malicious" case. Meaning,
-that someone tries to be "smart" and does weird stuff in the EFI stub
-he knows it won't do any harm during cold boot, but that will cause
-problems to the kernel running the efiloader. IIUC Ard's implementation
-cannot catch such problems. But I expect it will be a total pain to
-debug them. Especially when it is caused by some out-of-tree stub.
-
-To be honest, I'm not sure how this could be solved. I'm not even sure
-if it's worth trying. Nevertheless I believe it's worth having some sort
-of tainted flag. At least that would give developers a hint that some
-untrusted code was run without them spending ours of debugging.
-
-Two more comments with my distro head on.
-
-First, kdump is extremely important to us. So the final solution needs
-to be able to load a crash kernel as well.
-
-Second, implementing the efiloader in Rust is not ideal. This prevents
-us to support the feature in older streams that don't support
-Rust4Linux.
-
-Anyway, thanks for bringing up the topic again. I'm looking forward to
-see the next version.
-
-Thanks
-Philipp
-
-> 
-> There are some limitations (4k pages only, CONTIG_ALLOC support
-> required) but it seems to work as expected.
-> 
-> I haven't looked at measured boot or DRTM specifics.
-> 
-> 
-
+I see, so you rely on the fact that it gets mirrored back.. Btw, looks like
+there is already some similar tsoffset/ts_off infra? Have you considered
+plugging into that?
