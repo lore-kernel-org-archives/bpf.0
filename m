@@ -1,45 +1,49 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792493538;
-	b=dOIQvSHUDgItjESnaJcaSN9Uuvd50E9ACbPMG26/EqoeYok6zufLTHbH7TQu/xgfBulk
-	 GH5qIG2DpCZwtn1sPEUlqXMWjn8s/yC3zESxjX9Fy129Zs86PLuvOrAuJt6qOXQHJeWZ5
-	 RHa1AE2MkT72ASY9GugFncR/VZCbtj49ml5oWF5Gjozfo1HoqcfPFtVrzdUMUrX2Y1nBo
-	 9VTDHp++mGs5Hx6BB8uGTKSKwVlpjRd6lQeaJ8Vxk5MJHx/5xPWgHxLOcQZ/ammqLqc46
-	 pRlVXzOpCRRQw/ccLNFo+pHrJ91vOQbWffNv0GZmWicabNa2NIRbfK9n0dBTEmkxsgA==
+	t=1792494007;
+	b=UhTFgq7Cqm9N65m1GbamvBPDl4xexSe4B/HGWyh3kV2QbIYvF+f7VbYbQWnIzN/3SZ8o
+	 52sU5omxiAqlYMuINvh7jGKIE3C9J7Tc5n2gUBERPivEWQGLZTicJyj2bW8Nl0liyqEvs
+	 K9x+/xVQ1Z2S8ExpAfNY0iBDBUae/JZySz05zLxynQjxHywxsue1um/M+nOJVxC7Rbvz+
+	 PgJlxYfZmMWH3+cAwbwApvPr4xPKCfPzQzQ8AzmxdBGy+tA4fsMUXdU5IbP1T58T/TG3j
+	 ApIHgiX8nMip24BJJw/myWNwQntzCieiJT5OO4Xr9T9kZhlXNLoS//Oz/DtKuZL6hXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792493538;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=KeMzwCuL1HDw5ZoSQ8kH1JqNJ7FZsCuEkwC13MbO6B4=;
-	b=5jKtyOLS8++WJss4EUi+wqCajK+JOjRDJ+36bBP+2Bh9CaPP4h997i287Smkop9sawQ2
-	 B12bWhtB3zH1De8dsAr2Xbv4APwSeel4+Ei4gSmdY/wYfAINR21I3CeGlkuGv+I7P9tVX
-	 1vebGXeJFicFZl0zUwr9aWd0KAba9P5uZnVnoJz8e6RZmm4adnf9IakmKJPKNU5wQmhIP
-	 ijkvvdC7yiZKWHI08Xsun635qhDVZfb1zLD3wmrJLqqQpoMBk2JybfGvcHPwh79PLiLL3
-	 C7Kr+Ut86heYHWpdZY5X6RoQM0ru4pq5Hu6M+gg0GxEddi5qAk8GSmEjy7vSprJMkqQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792494007;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=WiR8iAXAhvMxD9bk2dRxOA7ofdhVuuIXZY/5WPc5+Io=;
+	b=TYrfssFUuP1S5HOEGJgei7FSpWXE+q9BRxDfRbzZVjIanCt7skvyn/HaXtqESPcZ+0g+
+	 igblgtheiGaF/yoG3/cZt+/eRgVCGhPPhvGOVp7HlVaJ7G60Cj0voLTo+/a5LLxU6N8u2
+	 NFvY5G9wccySerFh7HGHe2ldons4N0KanO/ys+hJKut4hia21y7mSsi/NVkdyDSp2z5Nx
+	 +94UQl34+zEMKDRJCiotM8LRWh98+YgyJ4izLdIzxLhqVR1FUzftEA9W15wvhgZJATNeY
+	 Y0Q/G5YdW59ihYwqyn2Y4Y+mOZ20PZuMun2wV/S36PUiNwvbDT4rawA1EzGvfTD7GGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="oLjiM/83";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J2hsQ4I3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5291606A334;
-	Tue, 20 Oct 2026 10:52:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A30606A31E;
+	Tue, 20 Oct 2026 11:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oLjiM/83
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C551F000C4;
-	Tue, 20 Oct 2026 10:52:16 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=J2hsQ4I3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0021F000C4;
+	Tue, 20 Oct 2026 11:00:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792493537;
-	bh=KeMzwCuL1HDw5ZoSQ8kH1JqNJ7FZsCuEkwC13MbO6B4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=oLjiM/8378oQWHbeHHTvZqBrVku6NYdSv6ACiM0nkE95m9N7pdRzorVAF1nvrwpY/
-	 cuzZvFVfJcWgFQEQi4ssFTeAGCNhkmBAUP28kaRV0MWrWzM/CyKbu+dVqqqSQe85QD
-	 uWfOT0/Qm85g1vDwvsULBoy8uu2TUZx4AOboJ+QEJ1APMFNoPAbMEzRV1OGMiHTNjU
-	 Ya0Z1OZv32beiesjuBXdZNXe3GNe2PUPoAAu5dLqylH4awPxJC7htt/e5m7mviex7h
-	 Ov9YytY+CdrZ0mDC2c5J1U1QSYqxX7zyI7Wy5ebV0qQSOtoct6foZI1TkOCQ58WNcV
-	 65FU7ZcLKo4Tg==
-Content-Type: multipart/mixed; boundary="===============8834276171442868486=="
+	s=k20260515; t=1792494007;
+	bh=WiR8iAXAhvMxD9bk2dRxOA7ofdhVuuIXZY/5WPc5+Io=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=J2hsQ4I3EKFxk5XZkEpJYTRkmC3UMQ1MOzl2RU9D9wJOXp4SGcdY1jcK834b+dJhY
+	 y2L1C4kzEHE58ed9JjwqiqOu6MlDGRJeYRg0PhjyJlUKaCul4uXjzzkMbv+GeQUrgk
+	 iF1nk5vpefK82APXTBnBQi5dzDQpVCUPJVE9YjxG0BGEQQ0hZ6vmuxj8A+2hmRccGA
+	 x7S6LDrITP//OZHdXAla9DQe4PakWY4vliJI0419JXRsyK6N+Wbo44JCOtCgmDf1Ax
+	 y1n4Hkua5gVTySBe6sADi3etZ7xx8E0QulsjtSByYUfsf/wWUXsCuj3KiElHGDngaa
+	 5khjIe7CiSQaQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F16503808209;
+	Tue, 20 Oct 2026 11:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,112 +53,51 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <0f730af064fbd00f1b18405237995d4e78b3672fb4ee14eeaa26784aad4b9228@mail.kernel.org>
-In-Reply-To: <20261020102512.518479-8-mahe.tardy@gmail.com>
-References: <20261020102512.518479-8-mahe.tardy@gmail.com>
-Subject: Re: [PATCH bpf-next 7/8] selftests/bpf: Test forbidden bpf_ksock_sendto() LSM attach
-From: bot+bpf-ci@kernel.org
-To: mahe.tardy@gmail.com,bpf@vger.kernel.org
-Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,willemb@google.com,eddyz87@gmail.com,edumazet@google.com,john.fastabend@gmail.com,kuba@kernel.org,horms@kernel.org,liamwisehart@meta.com,martin.lau@linux.dev,pabeni@redhat.com,song@kernel.org,netdev@vger.kernel.org,sdf.kernel@gmail.com,yonghong.song@linux.dev,jolsa@kernel.org,kuniyu@google.com,memxor@gmail.com,emil@etsalapatis.com,almagui@kernel.org,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 10:52:16 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v4] xsk: freeze deferred pool teardown without
+ blocking
+ unregister
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179249400554.3664159.797074660449120287.git-patchwork-notify@kernel.org>
+Date: Tue, 20 Oct 2026 11:00:05 +0000
+References: <20261014-xsk-suspend-teardown-v4-1-27795582e4a3@gmail.com>
+In-Reply-To: <20261014-xsk-suspend-teardown-v4-1-27795582e4a3@gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: netdev@vger.kernel.org, pabeni@redhat.com, kuba@kernel.org,
+ magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me,
+ horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, andrew+netdev@lunn.ch, bpf@vger.kernel.org,
+ edumazet@kernel.org, davem@davemloft.net, bjorn@kernel.org,
+ linux-kernel@vger.kernel.org, kerneljasonxing@gmail.com
 
---===============8834276171442868486==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> selftests/bpf: Test forbidden bpf_ksock_sendto() LSM attach
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-TL;DR:
-- Selftest calls bpf_ksock_sendto() without a prototype until a later patch,
-  so the test may not build or run here (bisectability)
-- Double blank line nit
+On Wed, 14 Oct 2026 12:33:48 -0600 you wrote:
+> Deferred pool destruction calls ndo_bpf() under RTNL. system_wq is
+> not frozen during system sleep, so that callback can run after a
+> device has suspended and gated its clocks. Use system_freezable_wq
+> so running destruction finishes before device suspend and new work
+> waits until process thaw.
+> 
+> Keep assigned pools visible to NETDEV_UNREGISTER independently of
+> the socket list. A released socket has already left that list, but
+> its final pool put can queue destruction after workqueues freeze.
+> A resume-time unregister would then wait for a device reference
+> whose release cannot run until the resume completes.
+> 
+> [...]
 
-> diff --git a/tools/testing/selftests/bpf/progs/ksock_lsm_verifier.c b/tools/testing/selftests/bpf/progs/ksock_lsm_verifier.c
-> --- a/tools/testing/selftests/bpf/progs/ksock_lsm_verifier.c
-> +++ b/tools/testing/selftests/bpf/progs/ksock_lsm_verifier.c
-> @@ -33,7 +33,26 @@ int BPF_PROG(socket_sendmsg_ksock_send, struct socket *sock, struct msghdr *msg,
->  }
->
->  SEC("lsm.s/socket_sendmsg")
-> -__description("bpf_ksock operations other than send are allowed from socket_sendmsg LSM hook")
-> +__description("bpf_ksock_sendto is rejected from socket_sendmsg LSM hook")
-> +__failure __msg("calling kernel function bpf_ksock_sendto is not allowed")
-> +int BPF_PROG(socket_sendmsg_ksock_sendto, struct socket *sock,
-> +	     struct msghdr *msg, int size, int ret)
-> +{
-> +	struct bpf_ksock *ks;
-> +
-> +	ks = ksock_ctx_get();
-> +	if (!ks)
-> +		return ret;
-> +
-> +	bpf_ksock_sendto(ks, send_data, sizeof(send_data), NULL, 0);
+Here is the summary with links:
+  - [net,v4] xsk: freeze deferred pool teardown without blocking unregister
+    https://git.kernel.org/netdev/net/c/fece8420e76f
 
-Is there a BPF-side prototype for bpf_ksock_sendto() at this point in the
-series?
-
-ksock_common.h declares bpf_ksock_create(), bpf_ksock_connect(),
-bpf_ksock_acquire(), bpf_ksock_release() and bpf_ksock_send() with __ksym,
-and this patch only touches progs/ksock_lsm_verifier.c, so nothing declares
-bpf_ksock_sendto().  vmlinux.h carries types only, not function prototypes.
-
-With a recent clang this should be a call to an undeclared function, which
-is an error.  With an older clang the call would be emitted as an undefined
-external symbol without __ksym/BTF information, and libbpf would fail to
-open or load the object.
-
-Either way ksock_lsm_verifier.bpf.o, and therefore RUN_TESTS(ksock_lsm_verifier)
-in prog_tests/ksock.c, would not build or run at this commit, which breaks
-bisectability.
-
-The declaration is only added by the later patch "selftests/bpf: Test ksock
-sendto()" (65327a57ba55), which adds this to ksock_common.h:
-
-  int bpf_ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data__sz,
-                       const union bpf_ksock_addr *addr__nullable,
-                       u32 addr__sz) __ksym;
-
-Could that declaration move into this patch, or this patch be reordered after
-that one?
-
-> +	bpf_ksock_release(ks);
-> +
-> +	return ret;
-> +}
-> +
-> +
-
-This isn't a bug, but there are two consecutive blank lines here after
-socket_sendmsg_ksock_sendto(), while the other programs in this file are
-separated by a single blank line (checkpatch --strict reports "Please don't
-use multiple blank lines").  Could one of them be dropped?
-
-> +SEC("lsm.s/socket_sendmsg")
-> +__description("bpf_ksock acquire and release are allowed from socket_sendmsg LSM hook")
->  __success
->  int BPF_PROG(socket_sendmsg_ksock_allowed, struct socket *sock,
->  	     struct msghdr *msg, int size, int ret)
-
-[ ... ]
-
-> @@ -103,6 +122,7 @@ int BPF_PROG(socket_connect_ksock_allowed, struct socket *sock,
->  		return ret;
->
->  	bpf_ksock_send(ks, send_data, sizeof(send_data));
-> +	bpf_ksock_sendto(ks, send_data, sizeof(send_data), NULL, 0);
-
-This call to bpf_ksock_sendto() has the same missing-prototype problem
-described above.
-
->  	bpf_ksock_release(ks);
->
->  	return ret;
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39408886865
---===============8834276171442868486==--
