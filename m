@@ -1,54 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792472107;
-	b=JefjtLoiAwjQd03P5KTkOSdwXV3UJTIll5DGraGSl7aSd9MF+RGyYF27kU+LU3nKaGFM
-	 tZeDMhxJW6cOyb3yG14GtUXuM0zANt+1mvvp/8GQDvMkw4vzOygD854Pud7PyWZoTZzHA
-	 enXdCqKtuqaWr+DoaGogqi48bnTjeyR3LDCHi+wcMO1DHbIxtddEyMqIogGD9bITLVpVq
-	 bXDzchgcUniDez7CLRUXjHfPo+4pOxs5VTqg2A8/ghfqXO/eUmNewvrNxJb5fhb0lIY0p
-	 LZrfatGLhgodsj1pinMiYSfy1VBV4A94pXtjPM9F+mHm+YgK1vf3wTztagZG2YOfeaw==
+	t=1792473013;
+	b=0MvgKRxPq57Hh63Yrrtk5VZPHx5hhynZXzffeg8C2IgEk8aI27/w87A2h0kYRKTuhak1
+	 3d9K4/umhivPtL/YKeawp3nIhVpaC/Mynon1prSC2QaiFxp7Wl+7U8ZIfLqEKc1bvA8uu
+	 /z4o1W1BQb9pkjL7QA+dvKSIbHIJRzIssFt6BLJWp/Kmxkp9/+jOAWJr76JrVA/ASY2XV
+	 PShSds0lr5mGjj7JYNvMMf9LIFeTjlXaHrqVzjuZlUrpj5BSLELa88coQBX+UGC82NeYa
+	 OsNK2eVKrX0oWuQwyGtkbLZb0ruWgDDgKZPlKuYazpIeg6GeEKBAEhhxrQRaUqu1PKg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792472107;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=JWmybeGplPkSTpFTj85ztkArMWjjQyueHRK8ugu3OPQ=;
-	b=4nFafgxEi32EpcDh82VyowPWoLliYm7C9NYaRLGpCIApgzAD/gatmHXF76g4jiCWJn9L
-	 A8xe0xlp9H6WMeUZQAVT031LYfl7jz+7qLVAs+qrNaCjN83+iA1Ji4kPb6+m7tELWWnnT
-	 6Ar3Sv2BB/EgUz95tzNQe7YFZzcdfmb8zU8QHljKApfxhm1Wnuyfl01RO00tXL1qU6mgx
-	 Z4gOUUAOzZ4cqAemCE1UFehHk3ZFSoKugdZniKp/7zEJl5yVGGtoz/lxtPwBwV62/Yn+k
-	 1QcgUxapxFEraGPrxELPC66268ZxBG62hEkAPgxYwDD/fhDAEaCeBT9fQyqRqflH47w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792473013;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=cIi8ZEtaczM0JFNSbjeBuBEwW/vrTvEsiSS87yPe30s=;
+	b=hhLSwfkHIG/8e7AjIZQHTm/DSJHB7H3xasp6iSQSXea2tMZZWfT2l56OS+FlYD0EOUeb
+	 8H1ZoBtR/9hfk2340rdUMtg6vVyoCZMyttbG+o8xLe1pMYG8uM0r86yiOHTiypC0Jbher
+	 udDX4LtwoBLBk5wnv1GpmXiXuyUioiHrCsPsdaxcwh5TnsBGsoA6Y2Q5OjNmuCU0AQzNV
+	 nWNsDMzAodWQ8/+The3LGhRy+Ru32xof2G1Nuf6/kE3RQQqP/xbmvGepqC4FCT+Eipmcy
+	 QrQ9L3OA7fkGUwUdpUc/jJXQM6h9fRmpKeL3vB6ougNbODmexa+RzgqH5fxwWLDldJg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NS+VcWSA;
-	arc=none smtp.remote-ip=91.218.175.56
-Received: from mta0.migadu.com (out-56.mta0.migadu.com [91.218.175.56])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=canD16H5;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05850606A31A
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 04:55:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05850606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C25606A319
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 05:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NS+VcWSA
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=LFjs2kFiCzLrj4HtSUdWz5JO/YUmh3RAwrRfcIouXUQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792472104; v=1; x=1793076904;
- b=NS+VcWSA3V3I1MI0QLmUDUTvLoqzNWeJYCkXGZl1cmqJ7klxu7xfhZ3Cx0BA9o90zyJ4OQL0
- I//68kmY0pq3tlueygR1KwpmwDE+Efj7ZglrybIn3vjDxcgiFY80+I2IVdIDm8gPsukYBKiuR//
- L1ACgZQ8JCKUk27Ybug0PC84=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id da4906023b4f5813;
-	Tue, 20 Oct 2026 04:55:04 +0000
-X-Mizu-Trace-ID: da4906023b4f5813
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2d307dae-41b7-45cb-a35d-6cbfb09cde04@linux.dev>
-Date: Tue, 20 Oct 2026 12:54:56 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=canD16H5
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91451F000C4;
+	Tue, 20 Oct 2026 05:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792473013;
+	bh=cIi8ZEtaczM0JFNSbjeBuBEwW/vrTvEsiSS87yPe30s=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=canD16H5yFrL8O8S/aIVRisZtpnWUUwV7nGqU0XE+48QhOxod7d43Kl8+TumV7A7a
+	 j/8QxyvwjVUa3OR/MvZeIMu5pP9SQiumQrsLU6fczbmdI9e2ws+zG3hfQr7Bkpyn3B
+	 /FWSAY/Id5lcOwMPsuCrq7dHCx7+XxKaOwhJ14qoPR3+kaTKfgW+JgLyH3oBPL3j3v
+	 MRd4mZNP8vw/GF3Mpsrv7dmnqFoXJ4DWB1hHZXlsfzqT6/MYOb4NL9CfDGJ9ZyVtal
+	 0jkUThdi2rWUP7HG/PbI9i4KGRw9zDD6EEAzlxUScshdw50VU/mfBsa/hh4za8Cg7f
+	 8v43au9m+DNKA==
+Content-Type: multipart/mixed; boundary="===============2401158712173401905=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,65 +49,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Add syscall common attrs support for
- link_create
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Hangbin Liu <liuhangbin@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
- Masashi Honma <masashi.honma@gmail.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261019153628.15912-1-leon.hwang@linux.dev>
- <20261019153628.15912-2-leon.hwang@linux.dev>
- <DM9282PWYQD9.21LDVIJ8824AL@gmail.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <DM9282PWYQD9.21LDVIJ8824AL@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <f272e441c3d8f8bd54b7fc9fac70ee4911ef1ef6008fb581bc8d8f82daf993a4@mail.kernel.org>
+In-Reply-To: <20261020043319.3031996-6-alexei.starovoitov@gmail.com>
+References: <20261020043319.3031996-6-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH v3 bpf-next 5/6] selftests/bpf: Add a C++ prog with exceptions
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 05:10:12 +0000 (UTC)
+
+--===============2401158712173401905==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 20/10/26 03:25, Alexei Starovoitov wrote:
-> On Mon, Oct 19, 2026 at 08:36 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->> +	ret = bpf_log_attr_report_size(&attr_log, 0);
->> +	if (ret)
->> +		goto put_prog;
-> 
-> can we drop bpf_log_attr_report_size() ?
-> Nothing is logged when the attach succeeds, so there is no size to
-> report, and libbpf zeroes attr_common, so log_true_size reads 0 anyway.
-> Finalizing only when ret < 0 already keeps -EFAULT away from a live link.
-> Then no need for the 2nd write, the log.c refactoring and the put_prog
-> label.
+> selftests/bpf: Add a C++ prog with exceptions
 
-Sounds reasonable to me.
+TL;DR: Nit only, in the selftests: the local ENOTSUPP define in unwind_cxx.c
+(and unwind_attach.c) is redundant because test_progs.h already provides it,
+so it can be dropped.
 
-Besides libbpf, other BPF loaders, e.g. cilium/ebpf, also need to zero
-attr_common before calling the BPF syscall.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c b/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
+> new file mode 100644
+> index 000000000000..36e52766022c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/unwind_cxx.c
+> @@ -0,0 +1,76 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <bpf/btf.h>
+> +
+> +#ifndef ENOTSUPP
+> +#define ENOTSUPP 524
+> +#endif
+> +
 
-> 
-> Something like this (compile tested only):
+this isn't a bug, but test_progs.h already pulls in the same
+"#ifndef ENOTSUPP / #define ENOTSUPP 524" block through bpf_util.h, so
+this local copy can never take effect.
 
-Will change like this.
+Could it be dropped here, and likewise in prog_tests/unwind_attach.c from
+earlier in this series?
 
-Thanks,
-Leon
+[ ... ]
 
-> [...]
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39371273420
+--===============2401158712173401905==--
