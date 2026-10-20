@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505574;
-	b=PIOWZRgDXndtXx+tyxKilHI6AzMP/H6U8w952wpiZmf2oUHjQmO6xuhKIhm9x+sdBJZo
-	 GNGX99F8ROJz8VhULYcLySBm4aHZXE+EYYxMQnSZ1KZyHRq6c4ZufvEw1zsnD1elvtoAR
-	 /qStkv+b4ZWufWyMhnKV+orNbaOJHW4Klz9D/E0ROv92GyXwRyy4gsF8vh5aBBaLsT4QC
-	 oaINbMRlVFicjhCOhj8+9xEv1uW65wgacvtJ+q6Hm4C4eUblnMol9NttCqs8JT2UpSEmu
-	 9wTeryEyJgOdkMG0H7j5a/mBBA1BKCfs1pdQIyeispeOqyo5sTJ73IysuD2lRQOR6IA==
+	t=1792505780;
+	b=f4VG35Sv3sFJtGIMOrnL91CFwzJWLUIz1n38TBqzbQDwFEQ2A9yNgYy3j5HqDdoHH94m
+	 X2xZ4Wjupv4eSWleWy9BON109SppaHcWOmOkNh9tSuYW0LhnWb22Sg8WpYRGbGyhvSSu+
+	 QUo4j1PZaxftaVmCvhiMsYPfZzl7IAga5WghcHZm18N1xa+FvfAx7vP8csa75JsFdRtKe
+	 IjTteTg+mrZvQvdXtFxIh0IUuk0PXH6tQBRs7dhqmaeqd5Ss/cLKE3/iF5/I6NKX615jz
+	 X7VjgBJsm449BhDXTGoGZWNRXH3z6zkATcN2itj4+eRzM3lmKickdwODneEJvGJB2Kw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505574;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505780;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=MwOeW89lQ65+WUWrkke0YgzcewxmuJACDAnj3RCGBTw=;
-	b=JFydu1UXDvX7BqPCydPKT/DTjGolYNLuiHCnLH/BLHkMAuGjtvBo/DNFAJYjinG0d1s4
-	 9/oZaDhsC6nqrjwa7GTlzLHi42HVeUjf5kw/avyp4WOxeJG0IF/HMLfKJjsyzjITr7vPy
-	 CDi7rX1nw1e5P0aJqs0PMBzKnLWNgFGS9dLY0CxIbalw4R6rE9q8CL58IhSdrzHlgif41
-	 OxOXSc0D8CECTDk03UgP4MEkc6m4QyppA9fvr2Cm1qpdp/lsikHURXISCGvRjyl/5zr9N
-	 ilIZWZIb7t9GXYvT74Y2hDkiwfD47cJj4KRoT5QwCTbt79Gm9LL3JMfUg5D681ZC0Bw==
+	bh=4x8uH/DGv/CD/1Mxw5Aj75i5s9Y5FtjMjuc3jjdt2uc=;
+	b=eKMIeK1gJHU3Jp+j9/QqScXNEikdAjXGl/q4/vv9EnNcsK8CefQ20WJVTgHZHvpWy0Xg
+	 eaoJjLlD6CoW2V1kvtOUa6IvRV+7nDF9oCLBQ61GlUKXW99jPR9vJhD8y3QiSILt+8XjF
+	 EZMguHWW46N0GVJSzsMYfbEDn+68Y9fRtmW5ZAal83pIb/b50WQpmLSEPpo+dJxUDI/n1
+	 4DuljCmi3Y2YS62Enmz/4CJS0np+qbKHa7grUQIurtxSZYB9bAJfhCICmG4Z6y8mdeBKc
+	 rVQdFzV+jUXS16h79QBcBjJIYWAEV6ABk3uMYDx+QVfaq1FirkqowqX6XacTRnm7Y9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lim5kEyf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O4lR0tUo;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89570606A31E
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:12:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D06D606AA0F
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 14:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lim5kEyf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D231F000C4;
-	Tue, 20 Oct 2026 14:12:53 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O4lR0tUo
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB641F000CA;
+	Tue, 20 Oct 2026 14:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792505574;
-	bh=MwOeW89lQ65+WUWrkke0YgzcewxmuJACDAnj3RCGBTw=;
+	s=k20260515; t=1792505780;
+	bh=4x8uH/DGv/CD/1Mxw5Aj75i5s9Y5FtjMjuc3jjdt2uc=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=lim5kEyfXVEJj4734txsPvjnHAcrQcRbkp6NdE4hxv8N5PKZSRwGtDEWOqekL6RUD
-	 4Poe4t2z0z3IORINzV0Rrzth/1gDo86ToFmhnynSnecFAD/Htoknpta0F2Fs95EVNs
-	 oAJ1Y3wQBWF6YtC8i4b7+UF5GYUtlI3qz8Mjm6lPtkOmmMZeKX0M1gjal51VRTs+PZ
-	 vPyeJsef5jwbkpk+Napf/H9LuVlV/da7zRTK6nKvPYYOJCSoNNQrs/qVnGH1JQeyoT
-	 agqHZSt3YCzy6jKw+rIcvg2PHC9x/RjPCPf+4I7606XsdDD1apvfn4Uhzc6UTeVm3X
-	 fo6z0aN2iYNBg==
-Message-ID: <sashiko-outbox-179095@kernel.org>
+	b=O4lR0tUoiO0EAgylzjFoCVMGivumEv66NkjTXXpCCfD1oOQAkj0xf/xKLzkPr9QiA
+	 A01g+rwC9Q+V1eZTh0V9LjRIJcS5LlJrba5NkdG9gkyecKFk22Iafalq6Srz0ctoZE
+	 8x+DCMCC1UxseIGO2LmJ70s4grs+5QLrA0Hk/1qxGksa/nWg4A5GDQ83RsO3nnqZCk
+	 bTrYnH0Nm/sr/+ANw/8WNaabkzwJtENswz0FCmiz8SJsakphJJxQqvDkuuvuOQDxs0
+	 BPCLk7quzTIDDt3U21Oa5pE7nGW4XBgJBWXwNJ6S3G17FKTvMwdBSdSOloQ70QwyRm
+	 8ENUR6QvHKIwA==
+Message-ID: <sashiko-outbox-179106@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 14/16] selftests/bpf: Add test for arena
- percpu-only object
+Subject: Re: [PATCH bpf-next 09/16] bpf: Teach verifier about arena percpu
+ instructions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Xu Kuohai" <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
-In-Reply-To: <f7f725d0057be520ec5fb417f3f7d3a1e2c765fe.1792503001.git.xukuohai@huawei.com>
+In-Reply-To: <38a798d59fc40d94c555c785a900e57c22cec2bc.1792503001.git.xukuohai@huawei.com>
 References: <cover.1792503001.git.xukuohai@huawei.com>
- <f7f725d0057be520ec5fb417f3f7d3a1e2c765fe.1792503001.git.xukuohai@huawei.com>
+ <38a798d59fc40d94c555c785a900e57c22cec2bc.1792503001.git.xukuohai@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 14:12:52 +0000
+Date: Tue, 20 Oct 2026 14:16:19 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,140 +60,172 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] selftests/bpf: mismatch between __arena_percpu addr_space_cast and=
- verifier
+- [High] bpf: regsafe() ignores per-cpu chunk bounds for PTR_TO_ARENA
+- [Low] bpf: missing weak stubs for arena percpu helpers on 32-bit or !CONF=
+IG_MMU
 --
 
-commit 978ace4d7c1590716d35b8badc4a0e110474bd79
+commit 5dc561c4f5d4d59e121d23f2ab5a7ee680b5b149
 Author: Xu Kuohai <xukuohai@huawei.com>
 
-selftests/bpf: Add test for arena percpu-only object
+bpf: Teach verifier about arena percpu instructions
 
-This commit adds the __arena_percpu macro to bpf_arena_common.h along with a
-selftest for an object containing only an arena per-cpu variable.
+This commit teaches the BPF verifier to validate arena per-cpu pseudo
+instructions by checking that the target offset and memory access bounds
+stay within CPU 0's per-cpu chunk.
 
-> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_commo=
-n.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
-> index 82aafe879fae2..7cdee141764e7 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h
-> @@ -35,11 +35,13 @@
->  #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_A=
-SM)
->  #define __arena __attribute__((address_space(1))) __attribute__((btf_typ=
-e_tag("arena")))
->  #define __arena_global __attribute__((address_space(1)))
-> +#define __arena_percpu __attribute__((address_space(1))) __attribute__((=
-section(".arena.percpu")))
->  #define cast_kern(ptr) /* nop for bpf prog. emitted by LLVM */
->  #define cast_user(ptr) /* nop for bpf prog. emitted by LLVM */
->  #else
->  #define __arena __attribute__((btf_type_tag("arena")))
->  #define __arena_global SEC(".addr_space.1")
-> +#define __arena_percpu SEC(".arena.percpu")
->  #define cast_kern(ptr) bpf_addr_space_cast(ptr, 0, 1)
->  #define cast_user(ptr) bpf_addr_space_cast(ptr, 1, 0)
->  #endif
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/arena_percpu_only.c b/tool=
-s/testing/selftests/bpf/progs/arena_percpu_only.c
-> new file mode 100644
-> index 0000000000000..35e4ff983e65d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_percpu_only.c
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Huawei Technologies Inc. */
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_arena_common.h"
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARENA);
-> +	__uint(map_flags, BPF_F_MMAPABLE);
-> +} arena SEC(".maps");
-> +
-> +__u64 __arena_percpu counter =3D 0x123456;
-> +
-> +SEC("syscall")
-> +int arena_percpu_only_write(void *ctx)
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 05cd6397adae0..310573a2661bb 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -102,6 +102,29 @@ u64 bpf_arena_map_kern_vm_start(struct bpf_map *map)
+>  	return bpf_arena_get_kern_vm_start(container_of(map, struct bpf_arena, =
+map));
+>  }
+> =20
+> +u32 bpf_arena_percpu_chunk_off(const struct bpf_map *map)
 > +{
-> +	counter =3D bpf_get_smp_processor_id();
-> +	return 0;
+> +	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
+> +
+> +	return arena->percpu_chunk_off;
+> +}
+> +
+> +u32 bpf_arena_percpu_chunk_sz(const struct bpf_map *map)
+> +{
+> +	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
+> +
+> +	return arena->percpu_chunk_sz;
+> +}
+> +
+> +bool bpf_arena_percpu_off_in_range(const struct bpf_map *map, u32 off)
+> +{
+> +	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
+> +	u32 chunk_off =3D arena->percpu_chunk_off;
+> +	u32 chunk_sz =3D arena->percpu_chunk_sz;
+> +
+> +	return off >=3D chunk_off && off - chunk_off < chunk_sz;
 > +}
 
-[Severity: High]
-How does __arena_percpu interact with the verifier and JITs across the two
-branches in tools/testing/selftests/bpf/libarena/include/bpf_arena_common.h?
+[Severity: Low]
+Will this cause link failures on 32-bit or !CONFIG_MMU builds when
+CONFIG_BPF_SYSCALL is enabled?
 
-First, when compiled without __BPF_FEATURE_ADDR_SPACE_CAST (such as under
-test_progs-bpf_gcc or when BPF_ARENA_FORCE_ASM is defined), __arena_percpu =
-is
-defined without address_space(1), and arena_percpu_only_write() assigns to
-counter unconditionally without #ifdef __BPF_FEATURE_ADDR_SPACE_CAST or
-cast_kern().
+In kernel/bpf/Makefile, verifier.o is built whenever CONFIG_BPF_SYSCALL=3Dy,
+whereas arena.o is only built when both CONFIG_MMU=3Dy and CONFIG_64BIT=3Dy:
 
-In that configuration, the compiler emits a BPF_LD | BPF_IMM | BPF_DW
-instruction (relocated by libbpf to BPF_PSEUDO_ARENA_PERCPU) followed direc=
-tly
-by BPF_STX | BPF_MEM | BPF_DW without an rX =3D addr_space_cast(rX, 0, 1)
-instruction. Unlike BPF_PSEUDO_MAP_VALUE on an arena map (which check_ld_im=
-m()
-marks as SCALAR_VALUE so the verifier rejects uncast dereferences),
-check_ld_imm() in kernel/bpf/verifier.c marks BPF_PSEUDO_ARENA_PERCPU direc=
-tly
-as PTR_TO_ARENA, and bpf_convert_ctx_accesses() rewrites the store to
-BPF_STX | BPF_PROBE_MEM32 | BPF_DW.
+    ifeq ($(CONFIG_MMU)$(CONFIG_64BIT),yy)
+    obj-$(CONFIG_BPF_SYSCALL) +=3D arena.o range_tree.o
+    endif
 
-However, check_and_resolve_insns() resolves the 64-bit immediate of
-BPF_PSEUDO_ARENA_PERCPU to the full 64-bit arena->user_vm_start + off (with
-insn[1].imm =3D addr >> 32), and the x86 and arm64 JITs load this full 64-b=
-it
-immediate and add smp_processor_id() * chunk_sz using 64-bit addition witho=
-ut
-clearing the upper 32 bits. Without addr_space_cast(rX, 0, 1) (which
-bpf_do_misc_fixups() rewrites to a 32-bit wX =3D wY move to zero the upper =
-32
-bits), the upper 32 bits of the PTR_TO_ARENA register remain
-user_vm_start >> 32. When test_arena_percpu_only() in
-tools/testing/selftests/bpf/prog_tests/arena_percpu.c runs
-arena_percpu_only_write(), BPF_PROBE_MEM32 adds the 64-bit kern_vm_start to
-this 64-bit register, targeting kern_vm_start + user_vm_start + off +
-cpu * chunk_sz outside the arena's 4 GiB kernel vmalloc area.
+For configs without MMU or on 32-bit, kernel/bpf/core.c provides __weak
+stubs for other arena functions referenced outside arena.c:
 
-Second, when __BPF_FEATURE_ADDR_SPACE_CAST is defined, __arena_percpu has
-__attribute__((address_space(1))), which causes Clang to emit
-rX =3D addr_space_cast(rX, 0, 1) immediately after BPF_PSEUDO_ARENA_PERCPU.=
- In
-check_alu_op() in kernel/bpf/verifier.c, addr_space_cast calls
-mark_reg_unknown() on dst_reg, which zeroes dst_reg->mem_size and resets the
-chunk offset pos set by check_ld_imm():
+    /* for configs without MMU or 32-bit */
+    __weak const struct bpf_map_ops arena_map_ops;
+    __weak u64 bpf_arena_get_user_vm_start(struct bpf_arena *arena)
+    {
+    	return 0;
+    }
+    __weak u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena)
+    {
+    	return 0;
+    }
 
-kernel/bpf/verifier.c:check_alu_op() {
-    ...
-	if (bpf_insn_is_addr_space_cast(insn)) {
-		...
-		/* convert from ptr_to_arena to scalar or vice versa */
-		mark_reg_unknown(env, regs, insn->dst_reg);
-    ...
-}
+Since check_ld_imm() and check_and_resolve_insns() in kernel/bpf/verifier.c
+call bpf_arena_percpu_chunk_off(), bpf_arena_percpu_chunk_sz(), and
+bpf_arena_percpu_off_in_range() unconditionally, should __weak fallbacks in
+kernel/bpf/core.c (or inline stubs in include/linux/bpf.h) be added for
+these three helpers as well?
 
-Doesn't this wipe out dst_reg->mem_size and bypass the per-cpu chunk bounds
-check in check_mem_access()?
-
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 01434e1d23b59..0c0d3662ec765 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -7415,6 +7419,17 @@ static int check_mem_access(struct bpf_verifier_en=
+v *env, int insn_idx, struct b
+>  		if (!err && value_regno >=3D 0 && (rdonly_mem || t =3D=3D BPF_READ))
+>  			mark_reg_unknown(env, regs, value_regno);
+>  	} else if (reg->type =3D=3D PTR_TO_ARENA) {
+> +		/*
+> +		 * A per-cpu reference is bounded to cpu 0's chunk through
+> +		 * mem_size. A plain arena pointer has no bound and only
+> +		 * faults at runtime.
+> +		 */
+> +		if (reg->mem_size) {
+> +			err =3D check_mem_region_access(env, reg, argno, off, size,
+> +						      reg->mem_size, false);
+> +			if (err)
+> +				return err;
+> +		}
+>  		if (t =3D=3D BPF_READ && value_regno >=3D 0)
+>  			mark_reg_unknown(env, regs, value_regno);
+>  	} else {
+[ ... ]
+> @@ -19080,10 +19100,27 @@ static int check_ld_imm(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn)
+>  	map =3D env->used_maps[aux->map_index];
+> =20
+>  	if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE ||
+> -	    insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE) {
+> +	    insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE ||
+> +	    insn->src_reg =3D=3D BPF_PSEUDO_ARENA_PERCPU) {
+>  		if (map->map_type =3D=3D BPF_MAP_TYPE_ARENA) {
+> -			__mark_reg_unknown(env, dst_reg);
+> -			dst_reg->map_ptr =3D map;
+> +			if (insn->src_reg =3D=3D BPF_PSEUDO_ARENA_PERCPU) {
+> +				u64 pos =3D aux->map_off - bpf_arena_percpu_chunk_off(map);
 > +
-> +char LICENSE[] SEC("license") =3D "GPL";
+> +				/*
+> +				 * The register value tracks the position of
+> +				 * the reference inside cpu 0's chunk and
+> +				 * mem_size bounds accesses to the chunk.
+> +				 * map_ptr and mem_size share a union and
+> +				 * map_ptr is never read for PTR_TO_ARENA,
+> +				 * so only mem_size is set.
+> +				 */
+> +				__mark_reg_known(dst_reg, pos);
+> +				dst_reg->type =3D PTR_TO_ARENA;
+> +				dst_reg->mem_size =3D bpf_arena_percpu_chunk_sz(map);
+> +			} else {
+> +				__mark_reg_unknown(env, dst_reg);
+> +				dst_reg->map_ptr =3D map;
+> +			}
+>  			bpf_diag_mod_end(env);
+>  			return 0;
+>  		}
+
+[Severity: High]
+Can verifier state pruning bypass the per-cpu chunk bounds check in
+check_mem_access() because regsafe() ignores mem_size and offset ranges for
+PTR_TO_ARENA?
+
+In check_ld_imm(), loading a BPF_PSEUDO_ARENA_PERCPU instruction sets
+dst_reg->type =3D PTR_TO_ARENA, records the offset within CPU 0's chunk via
+__mark_reg_known(dst_reg, pos), and sets dst_reg->mem_size to the chunk
+size. Then check_mem_access() relies on reg->mem_size and the tracked
+register bounds in check_mem_region_access() to reject accesses outside CPU
+0's chunk.
+
+However, in kernel/bpf/states.c, regsafe() still handles PTR_TO_ARENA as:
+
+    case PTR_TO_ARENA:
+    	return true;
+
+If an earlier verified path reaches a prune point with an unbounded
+PTR_TO_ARENA (rold->mem_size =3D=3D 0, such as from an addr_space_cast or a=
+fter
+pointer arithmetic clears mem_size) or a per-cpu PTR_TO_ARENA at a small
+offset like pos =3D 0 where a subsequent memory access is valid, won't a
+second path reaching the same prune point with a per-cpu PTR_TO_ARENA near
+the end of the chunk (e.g. pos =3D chunk_sz - 4) be considered equivalent by
+regsafe() and pruned before check_mem_access() can reject the out-of-bounds
+per-cpu access?
 
 [ ... ]
-
->
->
->
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792503001.gi=
-t.xukuohai@huawei.com?part=3D14
+t.xukuohai@huawei.com?part=3D9
