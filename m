@@ -1,75 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792461731;
-	b=tpnuKAHJAkX6AKqHdFwYH8Apkollmk0YoqtA5cvBscsluhOQHYEylNygTnx6lc87/+VM
-	 Sm/FHEGlpfaqGqOyhpCUjcpcnh4ZZqy6z5ZyBbq5tng3rY/6PNHeq574VXvcXEvoEmBb1
-	 91aCce9lufsr2C1VwHyvRkpN5AvYN9RCWoDjxF3nKsIiZZ2LJIJNsSt8uSQutI2UXvcE7
-	 pn+Eq7i4Yh3k0+9bcp97L/u80rhUnZftFL2n+Nz4dSLeqjzNiaapiimCE3b3fFJG9Db8p
-	 0iAWYHZEV3FJbk2CwHPxMQnJ0zn8KKVWAj0S+DvTfU6Tw2qfBSAZhUbYfj87EkSrJDw==
+	t=1792461945;
+	b=btM39cTX2gVDgfSN6kPNC6+RXFR1CmXQ1v61iTw0tW7eGkkpaoutglA+GYWw1vbWr6eh
+	 V8RmD9B5QG0VLT+c7seXnjGMdjodXAY20s/TLuITnkYYxLqV4Nwx3DE/2qCI8G32TEMse
+	 UwjCVqR0aWp7zp+DokVsfcS1ZJ6QrElHdNKcArbodMvpcDeIGMgTf2YZ56PG1/L/YgsOc
+	 X/vXPa/PmNc/mCNOwz1om2aGwZDJ5hXjUGbC8YjTx+rCGVEj1wti6msLxp6XpC7tv0XSK
+	 B7uEqldiNFPN6Ty+e9Zh5T4ayTmM66I8ZoLWJ+S1uNSZC08UbZJawRPxQmJndajMlmQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792461731;
-	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
-	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
-	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1792461945;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=0E0Q82Is6zdEjs6jL2vNo7lRDKdCGLWZjluyuxDIQjY=;
-	b=XcF7+JbAZy2OM9LmT2AMGaFUB1vv3r6zv7kxyLNleJ5GJVIGcAEvTpZGF8ai8KknmCRB
-	 KecrQfYxTu+7XXlQgSPZNYdB//QT4GhB3tboJoYhuk4S9lUA7NAFmj/BAcg6DU6gud4p1
-	 z2urf2lVA9F+Mm8fOrxYjYfCwr3zrxRlqEU65thOmd6qm6vMPnhe6pDoJQYxLea75a0VR
-	 U3jj+6JyhAxlIgW3PnO0s/GTCMzpyD1HVVDsZ5snIW1/NP5DzCfMmYmaTVZLlusrpv4U2
-	 1OoxaQwrpnglGVsuqANZrm63TrSLR54xJNu9fweBOqBm90CwBmZUWP+DEVHyR/5KMSA==
+	bh=jBHDSbYOOr/pJH/I3PqMtcm89cA/njOWz0J8cUaUEs0=;
+	b=g0V61S+fYvQbJiEpMBoRYEWymRP6M/CjDVs4uNsF+Lpwsg2Jr74hMZbR1UoC06qyln6V
+	 OmDmXx1NaY8LWdw8SJJyjV2FrJP0zRviU3q1YMPaOAUYqkwyoop2y3djExWldfpRuwajv
+	 nbAt/MeDfa/Xs4pRKEX7s46tIYiL9z8ugQ4L3Hjh5Gvb2r7efJqvr3SldyTLaM57FhS0R
+	 I03QKtlP4XMjWyTE+g1j28d6r+wYFLqMoJl1uDQAv3HZKaQGCDFvZZN7z6wco2IoWiqqE
+	 JbRapvsgGOfq8HgpbUosOgiPjigGPszYFnm2z5fjL45z6HNSmfHvA0frGOfGGgEUZmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cmss.chinamobile.com;
-	spf=pass smtp.mailfrom=cmss.chinamobile.com;
-	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b="IcD/Wkuw";
-	arc=none smtp.remote-ip=111.22.67.139
-Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBE0606A319;
-	Tue, 20 Oct 2026 02:02:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EDBE0606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="g2wvuYL/";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02960606A31A;
+	Tue, 20 Oct 2026 02:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=IcD/Wkuw
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=IcD/Wkuwea181oj1+ZhQlsefMEZjCRnWU3t7K0zHabYpAXROemLoRAujzGGyCSu7baYhTD1K7oQTr
-	 u2LSDwtzzS2NKpBKpXmSeB0eoNPRnDj/LJH2ng3gNdImqWKKYCgLISYRou24eG2GGw6FnXFrf1AtbL
-	 pJfuCil0d6+pUJTE=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56ad6cb9609e-14724;
-	Tue, 20 Oct 2026 10:01:58 +0800 (CST)
-X-RM-TRANSID:2ee56ad6cb9609e-14724
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.99])
-	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee66ad6cb95dba-ba9c2;
-	Tue, 20 Oct 2026 10:01:58 +0800 (CST)
-X-RM-TRANSID:2ee66ad6cb95dba-ba9c2
-From: yanxia <yanxia@cmss.chinamobile.com>
-To: netdev@vger.kernel.org
-Cc: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	lorenzo@kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net] veth: fix stale peer max_mtu on XDP program replacement
-Date: Tue, 20 Oct 2026 10:01:47 +0800
-Message-ID: <20261020020147.790274-1-yanxia@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=g2wvuYL/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B901F000CB;
+	Tue, 20 Oct 2026 02:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792461944;
+	bh=jBHDSbYOOr/pJH/I3PqMtcm89cA/njOWz0J8cUaUEs0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=g2wvuYL/xgH/RkAw0lMi5R+WvVYsCYInK6TCW7IuYIwxx2k9LB4wZJhjgYns3wWyh
+	 MjrVLgiuq1HFuDpUk3pGtPCDm4iWt+s8LkvMckvenssQERLHc2ti6TchP0isHCrUeN
+	 Yg8ZehenCJjO/7GJhfMWX/5SbNOkF7bN4jeMoXtCK77sme/P4E1GWN5YPRkHKbbmqw
+	 S49+GmStdLpn3qe7kPvrchh5lWQ92c//trLRwINWJXG8MypCelEFIX4Cf8LZQ1Lg/r
+	 tHZyFK5PpAJ00vivIRTg1XizX9eV/FzJh8L5wsqI/MxWKJdokPYfVk1osnWD49DFuS
+	 zacu3fZLeXfyA==
+Date: Mon, 19 Oct 2026 19:05:43 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Daniel Zahka <daniel.zahka@gmail.com>, Alexander Duyck
+ <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Paolo
+ Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Eric Dumazet <edumazet@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/4] eth: mpnic: count packets, bytes, and
+ drops per ring
+Message-ID: <20261019190543.419e70bc@kernel.org>
+In-Reply-To: <20261019215405.OCzrrKYw@linutronix.de>
+References: <20261012-mpnic-counters3-v2-0-8afba81c2d5a@gmail.com>
+	<20261012-mpnic-counters3-v2-1-8afba81c2d5a@gmail.com>
+	<20261016220930.i32JEcqe@linutronix.de>
+	<DM8U47F4MNK3.2V54CCQ9YTNBY@gmail.com>
+	<20261019215405.OCzrrKYw@linutronix.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,61 +69,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-veth_xdp_set() calculates the peer MTU limit from the incoming program's
-XDP fragment capability, but only stores it when no program was attached.
-Replacing a program with one having a different fragment capability
-therefore leaves the peer's max_mtu stale.
+On Mon, 19 Oct 2026 23:54:05 +0200 Sebastian Andrzej Siewior wrote:
+> On 2026-10-19 09:04:38 [-0400], Daniel Zahka wrote:
+> > > Why do you have the two mpnic_base_stats and fold the stats into into
+> > > it? My guess would be that on stop the counters are reset and you want
+> > > to preserve the stats.
+> > >  
+> > 
+> > Not sure I understand. I think you are asking about two things:
+> > 
+> > 1. Why have two mpnic_base_stats?
+> > 
+> > To avoid a separate heap allocation that can fail. Handling an
+> > allocation failure in the ndo_stop path when doing the aggregation into
+> > the base stats is tricky.  
+> 
+> Right. But looking at hinic3_get_stats64() for instance (I just grabbed
+> a random one) it simply does query the stats for each queue, add up,
+> return. It probably does not drop the queues on down, just reallocates
+> them while changing the number of queues (and maybe MTU).
 
-Replacing a regular program with an xdp.frags program keeps rejecting
-otherwise valid jumbo MTUs. The opposite replacement leaves a larger
-limit in place and permits MTUs which a fresh attachment of the regular
-program would reject.
+I don't think pre-allocating stats for chips which supports thousands
+of queues is reasonable.
 
-Update peer->max_mtu after every successful attachment or replacement.
-Keep the GSO feature update conditional on the first attachment.
+> > 2. Why split stats into base stats and per queue stats, and why reset
+> > the per queue counts when the device transitions down?
+> > 
+> > This is the way the stats in netdev.yaml are exposed depending on the
+> > 'scope' request attribute. My reading of the relevant kernel docs is
+> > that the per queue counters are counting events for the current live
+> > queue, so it makes sense to reset them and fold those counts into the
+> > base stats when the interface is transitioned down.  
+> 
+> Is there any other driver doing this?
+> There is ::get_sset_count() and so on for the per-queue stats.
 
-Found during review of the XDP replacement path and confirmed with
-native XDP on an isolated veth pair. Before the fix, direct replacement
-rejects MTU 9000 after switching to xdp.frags, and accepts it after
-switching back to a regular program. Detaching and attaching instead
-produces the expected results in both directions.
+You may be mixing up queue stats (netlink) with the old ethtool -S
+kitchen sink / garbage dump.
 
-UML tests on net reproduce the problem before this change and match the
-detach/attach controls afterwards, with both devices up or down and
-with either endpoint receiving XDP. Failed replacements preserve the
-previous state; same-type replacements and detach also behave as
-expected. Small-frame traffic passes in the devices-up cases.
+> If the interface goes down and frees all its queues, then the stats are
+> gone, true. But preserving them at the price of two (down+up) forced RCU
+> grace period, I don't know. It looks like a bit too much.
 
-Fixes: 7cda76d858a4 ("veth: Allow jumbo frames in xdp mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: yanxia <yanxia@cmss.chinamobile.com>
----
- drivers/net/veth.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+This is a modern driver, the down / up path is not taken when interface
+is reconfigured. It's only taken when the interface is actually taken
+down or bought up. Which virtually never happens for a datacenter NIC.
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 643b97dc..7db389ae 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1622,10 +1622,9 @@ static int veth_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 			}
- 		}
- 
--		if (!old_prog) {
-+		if (!old_prog)
- 			peer->hw_features &= ~NETIF_F_GSO_SOFTWARE;
--			peer->max_mtu = max_mtu;
--		}
-+		peer->max_mtu = max_mtu;
- 
- 		xdp_features_set_redirect_target(peer, true);
- 	}
+I don't mean to dismiss your concerns, we agonized over this off-list
+for a week, and don't love the resulting flow, either. But I strongly
+prefer the RCU grace period that never really runs, but is easy to
+reason about, to more advanced fixes which use memory barriers etc.
 
-base-commit: 78731b46967e3e7102b5cd5062bef185f3404b5c
--- 
-2.43.0
+Anyway, I'll punt to Paolo for the final call but I think this is fine.
 
-
-
+Acked-by: Jakub Kicinski <kuba@kernel.org>
