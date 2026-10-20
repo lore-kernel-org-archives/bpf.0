@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792505842;
-	b=Hi/vdejFGQ7T3anifk7vocUeVraD/GCVGvL8BAqkaB+Eu0XJMoFLQJotVuP4xIdOQMXy
-	 mgIS0qBzhdrTCgNYR5IEA6ppqaq0bMd+KbXh1kCt/I0z+xmN10R0aXbqK8FRECMetx9hP
-	 OigSDLJSg1j42Pt9332/zvcVdq9QoM15i+ozUWSOhsjzFkK8fVrsGU72UYYcUHrMeD/y8
-	 h5UdMHMXeQwKlR3o3OeW+IsKh2p2GCKMcpea3C7ymbbSBE2r98ublt1RYB2egaPrrtvIJ
-	 WMmquHJuIO1XmFmWAF8g1r4yZwt2FltkTmDBTegNNmnkM+81NWwpc2vqGw/LR7QdNew==
+	t=1792505838;
+	b=i4zDihDVFTlCfTjeHhN+8qldhYCyllWvNwbgrL0fXJHNrP2hDuMnmU6yjehtIgzL3/TR
+	 5fx2s8HdCZB2MZJiy1TlKnMwZwNXg2QqCgLXQJ7UR4Q/mi47bJt8KFuymlL/5Kk2BHxRF
+	 CUh4h64phfqkub3SYGia/RT106hELAem2SAbU+kJa1H8jhogFdiNzWBy0ckhU79uqGgct
+	 zE6lYoFWCzB6NjtCDp0cqHkikD1G2JoBlalRdos7iN1fEgK7UKOmYNUzs0C5fNvgSByFc
+	 BR5HCH9YAVMU+gytt39RR9Q2+8dIQiJKT/Ggv0Lr5Oi/4F8lZba9EENLVzT0jE/h2Jg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792505842;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792505838;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=eyzv8VAqNq1bMqb4fOvcEwCqivNKTmGpUN7t4CEDvZk=;
-	b=pZiDxKHdcKSkdIFA55WswZ2CZCTpZF/7qWEic1CwTsDh5zJrttJcKRmqminN9IJOy34+
-	 P8zjoB/g0fnWl9eDf/c7cKtK8H+05HMMvdk+qI8YHV7UiZcGs8FdDjdT2PoHLsa0xZVpU
-	 MqhE8F69eMy6bhSNNbToJFF0BoY672wHU9b/bH+F62aO2C0PT4UfUHCiPAnBtjBdhRUvh
-	 0o7rUHN4X4PXa7GaQ2LUJtg4ByeftQqEea5FKsm2+YkXMAPuQ9gvJ0SoZgIob087mibUq
-	 m2Rk6VjJIyIaQETfTFR34+KrNzqLTXCflw28wIOzsBRt31kl4/RtMd4zw6tn1keDIng==
+	bh=0boloPQ39hIjmi7oYpL3vbRuNspjkXMV1QcRUTOY9KY=;
+	b=FKdJp0gr3lBL0KophQki6Oni2tv/y8y/yhBYh8jzZ015neooHtzyl2cEFkWTvD9ztq+T
+	 p52PkjTTzZShbk3E/vkyvNqL3FBrOjHqHgUwoYev7j0Y6aktKo77NCwx0xpdOq2NjhUDy
+	 YmwUaP3hCRyixj88kdnTX0kmLu7fG4/960VuPsy47cZ5fBpivMZX4wgN2MAI85CDz7wKc
+	 6fjt4gY5DLaMX2DEbvdU1rVPzf1XidBiZfGg5f4l7U0PrA3uGqtS76WRl0vtzoUYS+Mzh
+	 HrYwpmIIScojpJ8X3PGJQ4oY8TTWCtvubOL/BR9VNqkzseMf6cEqadCD4Sn799ox76g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F3Sjarel;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oFmHTbdV;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62D260A262D;
-	Tue, 20 Oct 2026 14:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AF0606C235;
+	Tue, 20 Oct 2026 14:17:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=F3Sjarel
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E47E1F000C4;
-	Tue, 20 Oct 2026 14:17:21 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=oFmHTbdV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E191F000C4;
+	Tue, 20 Oct 2026 14:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792505841;
-	bh=eyzv8VAqNq1bMqb4fOvcEwCqivNKTmGpUN7t4CEDvZk=;
+	s=k20260515; t=1792505837;
+	bh=0boloPQ39hIjmi7oYpL3vbRuNspjkXMV1QcRUTOY9KY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=F3Sjarel3UirHSqDWgbAcigJAb2VgLKzWpkD9POqx2/dhwFqxZxW690eGRvqR2WqX
-	 NoaRFxxAOwFVunX77I3u+aXHxRSqL5a7hTaKsRNNZnPhtBOimBG6EFPNmbYafSFlLM
-	 BuWK/lLVwsYGOcLOWSPxTMPQ7h53hW3SgG1IP8DKL6lPcSNu/9TLcIHY9ntu7WCEEW
-	 J9KOLHoRQSMol7QO/ooKfsdSOgB5dWIoKHytAb9OCuBBHbsE8Xw1sERnDZ5cO/BNPq
-	 I04ZQmMB/Zvvx5hlSjX1xHk/TEs5ghna01Gm5UCFRLJ6SFz5zpERndztmTJOIplgMP
-	 DVPxpZiLC2s3Q==
-Content-Type: multipart/mixed; boundary="===============4125915590678054643=="
+	b=oFmHTbdVaIZyDMV2+MXK93b0xcpiCMIArymKGSs5HODPzEjkCmK1QTVs1FBDygftt
+	 rCwLauNqlCg0qH1xatW6cJBAfHIKe9N4dzHZLyki5HbIlX4kfQVNpEFYVkq512igXh
+	 YvtB+7G9JD2pWDCoYDvO22KHzv10jBaJs5KExTn65Jxdp+RIrRC9iTZG4FN7ux1zUn
+	 /KfihV7VLxNQCQXE+PtG+SC5faNWi6ZmccD1g6bFr9co2S3oxYoQot5AZKhx0bnFNv
+	 yZP7cbDUobRqBjEkT6O4Lk9W3hplK/MG+/c0k0vMIMyBAvoDOWRmSWO+gcN2tvUanK
+	 7QLzYCAwhDNCA==
+Content-Type: multipart/mixed; boundary="===============8750485772685352005=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,109 +49,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <0f8e9bbc8c00828efc651f83163cd7bec80c11298e94880c0319981ded391ef3@mail.kernel.org>
-In-Reply-To: <10e58b0ec9fab53a862d5efe45c8de932e0f5a6b.1792503001.git.xukuohai@huawei.com>
-References: <10e58b0ec9fab53a862d5efe45c8de932e0f5a6b.1792503001.git.xukuohai@huawei.com>
-Subject: Re: [PATCH bpf-next 07/16] libbpf: Add arena percpu feature probe
+Message-Id: <382819e642302a560c3a9caa157a604c0711828de9ecde51ef490d7cf2f34a3d@mail.kernel.org>
+In-Reply-To: <09a19ff6dfc65af56dca0ec5cee051766470f36a.1792503001.git.xukuohai@huawei.com>
+References: <09a19ff6dfc65af56dca0ec5cee051766470f36a.1792503001.git.xukuohai@huawei.com>
+Subject: Re: [PATCH bpf-next 02/16] libbpf: Create arena percpu chunk from the arena percpu ELF section
 From: bot+bpf-ci@kernel.org
 To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,emil@etsalapatis.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 14:17:21 +0000 (UTC)
+Date: Tue, 20 Oct 2026 14:17:17 +0000 (UTC)
 
---===============4125915590678054643==
+--===============8750485772685352005==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> libbpf: Add arena percpu feature probe
+> libbpf: Create arena percpu chunk from the arena percpu ELF section
 
-TL;DR: The new arena percpu probe check in bpf_object__relocate() lacks an
-arena_map->autocreate condition, so on kernels without the feature, objects
-with .arena.percpu data may fail to load with -EOPNOTSUPP even when the arena
-is disabled.
+TL;DR: Reading the possible-CPUs sysfs file at open time may make
+bpf_object_open() fail, breaking 'bpftool gen skeleton' in sandboxes without
+/sys; suggests computing nr_chunks lazily in relocate.
 
 > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 8634778e8ba5..be2ddaf96631 100644
 > --- a/tools/lib/bpf/libbpf.c
 > +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> @@ -8288,6 +8288,12 @@ static int bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_pat
->  			return -EOPNOTSUPP;
->  		}
+> @@ -3267,6 +3274,41 @@ static int bpf_object__init_arena_data(struct bpf_object *obj)
+>  	return 0;
+>  }
 >
-> +		if (obj->arena_percpu.present && !kernel_supports(obj, FEAT_ARENA_PERCPU_DATA)) {
-> +			pr_warn("map '%s': kernel doesn't support %s variables\n",
-> +				arena_map->name, ARENA_PERCPU_SEC);
+> +static int init_arena_percpu_data(struct bpf_object *obj, void *percpu_data, size_t percpu_sz)
+> +{
+> +	static const char *fcpu = "/sys/devices/system/cpu/possible";
+> +	bool *mask = NULL;
+> +	int possible_cpus;
+> +	int err;
+> +
+> +	if (percpu_sz == 0) {
+> +		pr_warn("arena percpu: empty %s section\n", ARENA_PERCPU_SEC);
+> +		return -EINVAL;
+> +	}
+> +
+> +	err = parse_cpu_mask_file(fcpu, &mask, &possible_cpus);
+> +	if (err) {
+> +		pr_warn("arena percpu: failed to get possible cpus: %s\n",
+> +			errstr(err));
+> +		return err;
+> +	}
+
+Can this make bpf_object_open() fail on hosts where
+/sys/devices/system/cpu/possible cannot be read?
+
+init_arena_percpu_data() is reached from bpf_object__init_user_btf_maps()
+during bpf_object_open(), so opening any object with a .arena.percpu section
+now reads this sysfs file.  Until now libbpf only needed the possible CPU
+count at load or runtime, through map_set_def_max_entries(), the per-cpu
+value size checks and perf_buffer setup.
+
+The value computed here, obj->arena_percpu.nr_chunks, is first used in
+bpf_object__relocate(), which runs from bpf_object_prepare():
+
+> +		size_t percpu_sz = obj->arena_percpu.nr_chunks * obj->arena_percpu.chunk_sz;
+
+Open-only consumers such as 'bpftool gen skeleton' and 'bpftool gen
+subskeleton' call bpf_object__open_mem() and never load, so they now depend
+on the build host's sysfs.  In a build chroot or sandbox without /sys, open
+fails with "arena percpu: failed to get possible cpus" and skeleton
+generation breaks, even though the CPU count is never used there.
+
+With 'gen skeleton -L', open fails with this error before the intended
+-EOPNOTSUPP check in bpf_object__relocate() is reached:
+
+> +		if (obj->gen_loader && obj->arena_percpu.present) {
+> +			pr_warn("map '%s': light skeletons don't support arena percpu variables\n",
+> +				arena_map->name);
 > +			return -EOPNOTSUPP;
 > +		}
+
+Would it work to allocate and copy the chunk at open time, and compute
+nr_chunks lazily in bpf_object__relocate(), where it is first needed?  No
+later commit in the series changes this.
+
 > +
+> +	obj->arena_percpu.chunk_sz = roundup(percpu_sz, sysconf(_SC_PAGE_SIZE));
+> +	obj->arena_percpu.chunk = calloc(1, obj->arena_percpu.chunk_sz); /* zero padding */
+> +	if (!obj->arena_percpu.chunk) {
+> +		free(mask);
+> +		return -ENOMEM;
+> +	}
 
-Should this check also require arena_map->autocreate?
-
-As written, any object with a .arena.percpu section fails to load on a
-kernel without this feature, even when the arena map is not going to be
-created.
-
-The rest of the series supports an arena map with autocreate == false:
-
-  bpf_object__relocate_data(), RELO_ARENA_PERCPU:
-      if (map->autocreate) {
-          insn[0].src_reg = BPF_PSEUDO_ARENA_PERCPU; ...
-      } else {
-          poison_map_ldimm64(...);
-      }
-
-  bpf_object__relocate_data_ptrs():
-      if (!arena->autocreate)
-          return 0;
-
-  bpf_object__bind_arena():
-      if (!map->autocreate || map->fd < 0 || ...)
-          return 0;
-
-The later commit 6714f66de847 ("libbpf: Introduce arena percpu helpers for
-user space") also documents bpf_map__arena_percpu_base() as returning NULL
-for a map with autocreate == false.
-
-The related FEAT_PERCPU_DATA and FEAT_GLOBAL_DATA handling in
-bpf_object__create_maps() skips creating the map and only fails the
-programs that are loaded and reference it:
-
-  If those global variable-using programs are not loaded at runtime due to
-  bpf_program__set_autoload(prog, false), bpf_object loading will succeed
-  just fine even on old kernels. Same skipping applies to percpu data.
-
-Consider a kernel that supports arenas but not arena percpu, or an arch
-whose JIT lacks bpf_jit_supports_arena_percpu_insn().  The application
-calls bpf_map__set_autocreate(arena, false) and
-bpf_program__set_autoload(prog_using_percpu, false), then
-bpf_object__load():
-
-bpf_object__load()
-  bpf_object_load()
-    bpf_object_prepare()
-      bpf_object__relocate()
-        return -EOPNOTSUPP;
-
-At the parent commit 422f64147751 this same object loaded: the arena was
-skipped in bpf_object__create_maps(), percpu ldimm64 instructions in
-programs that are not autoloaded were never relocated, and poisoned ones
-are only rejected if the program is loaded.
-
-libbpf has no public probe for this feature, and retrying with the arena
-disabled hits the same check.  Is there any configuration on such kernels
-that can load an object carrying arena percpu data, including its programs
-that do not use the arena?
-
-Adding arena_map->autocreate && to the condition would keep the early, clear
-error for the normal case while keeping the autocreate == false path
-working.
-
-The commit message says "fail objects carrying arena percpu data with
--EOPNOTSUPP when it is missing", but it does not say why this should apply
-when the arena map is not going to be created.
+[ ... ]
 
 
 ---
@@ -159,4 +147,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39434884362
---===============4125915590678054643==--
+--===============8750485772685352005==--
