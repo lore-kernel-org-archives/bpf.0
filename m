@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.228
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.241
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792513249;
-	b=rB3AGT+GIWRkHsy7cLRepLjjvKvLpgWj+ezlQQ4G8jDzkmL+hRrXg+c1CAplIMehke59
-	 D2Kei1XuCQhqHa2LkerOR87q2hR2zM4BKmqxKqKn4DykCAt5fSqHT8dbITJBzXbcbgmse
-	 lPs6ahxYVcqiGxTdP6KJ7y70bSYLabs+TyQiikBQn5jGzRC8YlK3iET98HnLhySMWgxHX
-	 29oQN2bwMMAeZJwzXFAgLZyKOOWlgbYnaO5ixBvJGHoQZ315RXTMfcaJLXicBjuUPEm7F
-	 pFAXP249QSBGe7BmuCfSPl8IS1lWVfYlbiuFPJVkTQDkQMfw9Zc7lqdYw/PEBtfsE2g==
+	t=1792513256;
+	b=QC3/IV9gKWwRrNXVOKU1tv7UiIBf7F+aZmBYZPt6OXeaCDUQbBGT+xBUCimsCvQYmQNS
+	 9/D48LCBN8zF96osTRBjsv3t96BV3reMLEGtIYFZlUe14x5GFjkIXSvWDKABgJq76PkRQ
+	 DioPeLbJumyGG5OzHNNOf0oj0vB4kneEgLLuyc+2LiHcxT7XMJwhlwySMF8ITFhtLiDj+
+	 GSNY0KDF1Nnyxpm6INtokMO8/u3gfNQCiJkpX1X2L5gXzVChMGqP+xDEvLL1Sv7C+jswn
+	 hbr8Gm8Wzk23FCpO9mmdWB8NGojnmLxhOlCkGV24pFaqt6pED3TorCUKZ8PJCWR9gWw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792513249;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792513256;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=OC8vve1fiqKE1c9n/UcGr0mLlnRlWEjB+BSGAgi53F8=;
-	b=n/omiwKBk3FWdq+cEPQDghdUO9L7s/3JQ4sgdM1GOdJCzfJXBcOYXCsBPw6eo5Zt53Ir
-	 zslzcGWQGTPK29iB47K2ppEuh+ev1iR9fUaeihYdkXKpDp/NSY+4j06hdcuX3TK8AXKTx
-	 c0V+TOSgavedUSuUmXaVqbjBrrCclHowJALnAAFhCt7RRHHQX9WofmnitIfWZBBxXsghz
-	 hY9WbJ0BCX4o6gorQfEUThYzPdM3TtqUJ+MRK+kx2Kq8lP2FWfI/8K6X/uDMtipZ7RyZs
-	 7kx/5JuCdlDD6j8eN468ntej4L2/0i6LjrD/tCV9a2ZcyhvEJNsMw9iyfuahJ3d4zzA==
+	bh=hrU0r9uDIs9Pd22NaQQcI8Yi0Ld/nqW4OLqdhS8pNrI=;
+	b=l4u636ZW/H4FKpMEToRa3RszyMUHNsTsy50gVv4F2tD2z34bZA7BzQgJD9Dc0kSV76ds
+	 Z3XzwOS5xx0Bm0FGGiFCCet3Sv1p2ZC+Qwo97iq4e666qoL7CmmRwTrj7aWZ0dC6hxIO/
+	 pOyziEp9fYDMsDWu3D5zEtUtDJqgCwYK1myEReHETrJC5kXGilkZgSyPNFC76J3Zqe1oE
+	 gVCOOLHD2v6h5Tx8lO3xsYD+N6Or33Dtld0ou4TcQfcrTgRWljnF9KNkahtK1zxDDZI3u
+	 czacz4LclOrlAbV53Qj8hMAs1ebmOJQdZF3erZA8qIJLz/yZzQfZSc1p0L1MQqTRsyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mkRkUypN;
-	arc=none smtp.remote-ip=95.215.58.228
-Received: from mta1.migadu.com (out-228.mta1.migadu.com [95.215.58.228])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DdSjhmh4;
+	arc=none smtp.remote-ip=95.215.58.241
+Received: from mta1.migadu.com (out-241.mta1.migadu.com [95.215.58.241])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86920606A31D
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:20:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86920606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4618260A2604
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:20:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4618260A2604
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mkRkUypN
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DdSjhmh4
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZMLOfQ7Ig4uyCPp/b+t9vYpCNzduUcOXbnHFJaKcnwI=;
+DKIM-Signature: a=rsa-sha256; bh=NbWUSQWwUXooZIyxNLSex7QYUtdoTqWvzVJqXTgn82c=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792513246; v=1; x=1793118046;
- b=mkRkUypNqHMho+uBzef/fYTac3De3nlI11/1DCYwvnNQ7sgegQDsRKs7c+OaTsu8G5ooczkQ
- /eA6o7dfHF4bP/uWc53G7iY1C9PDZCI97jC1e2SF7unPaZ7ZQZ0yHZB1TNbT08WG7u9RFKh9478
- bzXVAMfaIJiDK+bk5Y3OoleE=
+ t=1792513254; v=1; x=1793118054;
+ b=DdSjhmh4MWu3D3DfmX7AKIi9g6mERQmU6G+jeRd4kFbYCSrHHm8E3orwkqcUcCfCY3YJ2WPI
+ i+aMwtCvz57MkjjEZoVMXrYD7HIfnGysxxClgTP8QWYASdDvlLH7JYj1GW6qHLrctehdPg84Fr3
+ 15RqnSM3D9gIERG+L76VZoPk=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2e1b8357c1f15603;
-	Tue, 20 Oct 2026 16:20:46 +0000
-X-Mizu-Trace-ID: 2e1b8357c1f15603
+Received: by smtp.migadu.com with ESMTPS id a1348edbf7a2f3df;
+	Tue, 20 Oct 2026 16:20:54 +0000
+X-Mizu-Trace-ID: a1348edbf7a2f3df
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -65,9 +65,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v3 11/12] [do not merge] bpf: Track low-32 scalar equality across narrowing stack spills
-Date: Tue, 20 Oct 2026 09:19:06 -0700
-Message-ID: <20261020161907.2115379-12-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v3 12/12] [do not merge] selftests/bpf: Cover the low-32 link for narrowing stack spills
+Date: Tue, 20 Oct 2026 09:19:07 -0700
+Message-ID: <20261020161907.2115379-13-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261020161907.2115379-1-vineet.gupta@linux.dev>
 References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
@@ -82,176 +82,247 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A spill narrower than its source stores the source's low 32 bits, so the
-slot is their zero-extension -- the mov relation, in the store direction:
+Six programs:
 
-  r6 = ...                  /* full 64-bit unknown */
-  *(u32 *)(r10 - 8) = r6;   /* slot holds r6's low 32 bits */
-  if w6 != 0 goto ...       /* not taken: r6's low 32 bits are 0 */
-  r2 = *(u32 *)(r10 - 8);
-  if r2 == 0 goto ...       /* not deduced today */
+ - zext_narrowing_spill_reaches_fill: narrowing while the value is still
+   on the stack narrows the slot, and the fill copies an already narrowed
+   value. This is the order the link is for
+ - zext_narrowing_spill_drops_link: the other order does not pay, since
+   the fill is a mov and a mov drops a zero-extending link
+ - zext_narrowing_spill_truncates_slot: the slot must be truncated before
+   the kind goes on it, or the first sync empties it. Asserted on the
+   dump, since nothing downstream rejects an empty slot --
+   BPF_F_TEST_REG_INVARIANTS does not walk them
+ - zext_narrowing_spill_byte_no_link: a sub-word spill is below the model
+ - sext_delta_survives_narrowing_spill: a source carrying a delta hands
+   it to the slot
+ - sext_fill_of_narrowing_spill_drops_zext: a sign-extending fill of such
+   a slot must not come away with its zero-extending link
 
-A store never sign-extends, so BPF_REG_LINK_ZEXT is the only kind that
-arises. save_register_state() copies the source whole, including bounds
-for bits the store did not write, so the slot must be truncated before
-the kind goes on it -- otherwise the first sync_linked_regs() intersects
-the correctly rebuilt low half against those stale bounds and empties
-the slot.
-
-Only one order pays. sync_linked_regs() walks spilled slots, so narrowing
-while the value is still on the stack narrows the slot and the fill copies
-an already narrowed value. Filling first does not benefit: the fill is a
-mov, and a mov drops a zero-extending link.
-
-Posted, not proposed. This is the direction asked for, implemented and
-measured, and the measurement says do not take it. Against the ten patches
-before it, on 441 cilium/katran/fb/sched_ext objects, 1467 programs:
-
-  verdicts      no change at all
-  total_insns   102 changed, 63 worse, +84,450 (+0.34%)
-                  +59,616 (+57.2%)  104,160 -> 163,776  test_file_open
-                  +19,784 (+89.7%)   22,053 ->  41,837  rusty_enqueue
-                   +2,688 (+40.6%)    6,626 ->   9,314  layered_enqueue
-  total_states   64 changed, 63 worse
-
-Nothing is gained for it, and both selftest corpora hide it completely --
-bpf-gcc shows no changed program at all. Nothing in
-tools/testing/selftests/bpf is shaped like a sched_ext scheduler.
-
-The mechanism, from rusty_enqueue's verifier log at the patch before this
-one and at this one. The walks are identical for 17,043 steps, then:
-
-  before   1969: (c7) r6 s>>= 32
-           1970: safe                     <- pruned here
-
-  after    1969: (c7) r6 s>>= 32
-           frame 0: propagating fp-24     <- not pruned
-
-One slot accounts for all of it. fp-24 is written by a narrowing spill 354
-times in the walk, and "propagating fp-24" goes 0 -> 1034 while the other
-slots are unchanged. The slot itself goes from
-
-  fp-24=ppppscalar()
-
-to
-
-  fp-24=ppppscalar(id=11+0,smin=0,smax=umax=0xffffffff,...)
-
-An opaque scalar() matches every candidate state; one carrying an id, a
-kind and a range that sync_linked_regs() narrows further on each compare
-matches far fewer. Three things tighten at once: check_scalar_ids()
-returns true unconditionally for old_id == 0 and the slot now has an id;
-regsafe() gains two rejects that need a kind to be reachable; and
-bpf_bt_sync_linked_regs() makes precision all-or-nothing across a set, so
-marking any member precise now reaches the slot. rusty_enqueue uses the
-value as an array index, which forces mark_chain_precision constantly.
-
-That is the relation working as designed. Recording true information about
-a slot necessarily narrows its equivalence class, and a narrower class
-prunes against fewer predecessors. The narrowing-fill patch earlier in the
-series is the half that pays: the fill is where the value is wanted, and
-it is free on every corpus.
+Posted with the patch above, which is not proposed for merge; these go or
+stay with it.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v3: was v2 12/13, now tagged [do not merge].
- - v2's 11/13, "bpf: record what a narrowing spill actually stores", is
-   dropped: it cost big_alloc2 2956 -> 3095 insns for no verdict.
- - v2's worked example had the fill before the narrowing, which is the
-   one order this link cannot serve. Replaced with the order that works.
- - the slot is truncated to the bits the store actually wrote before
-   the kind goes on it, and inherits the source's delta.
- - NOT PROPOSED FOR MERGE. Against the ten patches before it, on 441
-   cilium/katran/fb/sched_ext objects: 102 programs changed, 63 worse,
-   test_file_open +57% and rusty_enqueue +90%, for no verdict change
-   anywhere. Both selftest corpora hide this completely -- bpf-gcc
-   shows no changed program at all. The message carries the mechanism
-   from the verifier log.
+v3: was v2 13/13, now tagged [do not merge] with the patch above.
+ - zext_narrowing_spill_keeps_link becomes
+   zext_narrowing_spill_drops_link: a fill is a mov, and a mov drops
+   the link (patch 4)
+ - new: zext_narrowing_spill_reaches_fill, the first positive test for
+   the spill link, narrowing before the fill
+ - new: zext_narrowing_spill_truncates_slot,
+   sext_delta_survives_narrowing_spill and
+   sext_fill_of_narrowing_spill_drops_zext
 
- kernel/bpf/verifier.c                         | 40 +++++++++++++++++--
- .../selftests/bpf/progs/verifier_spill_fill.c |  6 ++-
- 2 files changed, 41 insertions(+), 5 deletions(-)
+ .../bpf/progs/verifier_linked_scalars.c       | 181 ++++++++++++++++++
+ 1 file changed, 181 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index feefa5733fd7..3607c032df5f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -222,6 +222,7 @@ static inline bool in_sleepable_context(struct bpf_verifier_env *env);
- static const char *non_sleepable_context_description(struct bpf_verifier_env *env);
- static void scalar32_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
- static void scalar_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
-+static void zext_32_to_64(struct bpf_reg_state *reg);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+index ab78285153fb..8ade4836e1b2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
++++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+@@ -1217,6 +1217,128 @@ __naked void zext_fill_byte_forms_no_link(void)
+ 	: __clobber_all);
+ }
  
- static void bpf_map_ptr_store(struct bpf_insn_aux_data *aux,
- 			      struct bpf_map *map,
-@@ -3908,15 +3909,46 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 	mark_stack_slot_scratched(env, spi);
- 	if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE && env->bpf_capable) {
- 		bool reg_value_fits;
-+		bool subreg_link;
- 
- 		reg_value_fits = get_reg_width(reg) <= BITS_PER_BYTE * size;
-+		/*
-+		 * A narrowing spill stores the low 32 bits of the source, so
-+		 * the slot is their zero-extension: record a low-32 link
-+		 * rather than dropping the relation, as a 32-bit mov does.
-+		 * A store never sign-extends, so there is only one link kind here.
-+		 */
-+		subreg_link = !reg_value_fits && size == 4;
-+
- 		/* Make sure that reg had an ID to build a relation on spill. */
--		if (reg_value_fits)
-+		if (reg_value_fits || subreg_link)
- 			assign_scalar_id_before_mov(env, reg);
- 		save_register_state(env, state, spi, reg, size);
--		/* Break the relation on a narrowing spill. */
--		if (!reg_value_fits)
--			bpf_clear_scalar_id(&ss->spilled_ptr);
-+		if (!reg_value_fits) {
-+			if (subreg_link && reg->id) {
-+				/*
-+				 * save_register_state() copies the source
-+				 * whole, but the store only wrote its low 32
-+				 * bits, so truncate to those before recording
-+				 * the kind: a slot asserting BPF_REG_LINK_ZEXT
-+				 * over the source's wider bounds is a register
-+				 * state that contradicts itself.
-+				 *
-+				 * Keep the source's delta, though: the slot
-+				 * holds (u32)(base + delta), so resetting it to
-+				 * 0 would record a relation off by that delta.
-+				 */
-+				zext_32_to_64(&ss->spilled_ptr);
-+				ss->spilled_ptr.link_kind = BPF_REG_LINK_ZEXT;
-+			} else {
-+				/*
-+				 * Nothing to relate: either the source has no
-+				 * id to share, or the store is narrower than
-+				 * the 32 bits a link can describe.
-+				 */
-+				bpf_clear_scalar_id(&ss->spilled_ptr);
-+			}
-+		}
- 	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
- 		   env->bpf_capable) {
- 		struct bpf_reg_state *tmp_reg = &env->fake_reg[0];
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 4d1374885f6d..081b0fe0d70a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -464,7 +464,11 @@ l0_%=:	r1 >>= 16;					\
- SEC("raw_tp")
- __log_level(2)
- __success
--__msg("fp-8=0m??scalar()")
 +/*
-+ * The 4-byte spill carries the low-32 link, and the slot is truncated to
-+ * the bits the store wrote; the narrower spills do neither.
++ * The link does reach a fill, provided the narrowing happens while the value
++ * is still on the stack: sync_linked_regs() walks spilled slots, so narrowing
++ * r6 narrows the slot and the fill copies an already narrowed value. This is
++ * the order the narrowing-spill link is for; the other order is below.
 + */
-+__msg("fp-8=0m??scalar(id={{[0-9]+}}+0,smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
- __msg("fp-16=00mm??scalar()")
- __msg("fp-24=00mm???scalar()")
- __naked void spill_subregs_preserve_stack_zero(void)
++SEC("socket")
++__success
++__naked void zext_narrowing_spill_reaches_fill(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	*(u32 *)(r10 - 8) = r6;	/* narrowing spill, forms the link */ \
++	if w6 != 0 goto 1f;	/* narrow r6 while it is on the stack */ \
++	r2 = *(u32 *)(r10 - 8);	/* fill gets the narrowed value */ \
++	if r2 == 0 goto 1f;					\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A narrowing spill stores only the source's low 32 bits, so the slot is their
++ * zero-extension. Filling it back is a mov, though, and that drops the link
++ * for the same reason zext_chain_drops_link does, so a later narrowing of the
++ * source does not reach the filled register.
++ */
++SEC("socket")
++__failure
++__msg("div by zero")
++__naked void zext_narrowing_spill_drops_link(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	*(u32 *)(r10 - 8) = r6;	/* narrowing spill, forms the link */ \
++	r2 = *(u32 *)(r10 - 8);	/* fill it back */		\
++	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
++	if r2 == 0 goto 1f;					\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * save_register_state() copies the source register whole, so the slot of a
++ * narrowing spill arrives holding bounds for bits the store never wrote.
++ * Recording BPF_REG_LINK_ZEXT on top of those is a contradiction, and the first
++ * sync_linked_regs() runs straight into it: it rebuilds the slot's low half
++ * correctly and then intersects it against the stale wide bounds, which are
++ * disjoint from it, leaving the slot with an empty range. Nothing downstream
++ * notices -- not even BPF_F_TEST_REG_INVARIANTS, which does not walk stack
++ * slots -- so assert on the dump.
++ */
++SEC("socket")
++__success __log_level(2)
++/* untruncated, the slot kept r6's umin=0x100000000 and went empty on sync */
++__msg("*(u32 *)(r10 -8) = r6 {{.*}} fp-8={{.*}}smin=0,smax=umax=0xffffffff")
++__naked void zext_narrowing_spill_truncates_slot(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	r7 = 1;							\
++	r7 <<= 32;						\
++	r6 |= r7;		/* r6 >= 2^32, so the spill narrows */ \
++	*(u32 *)(r10 - 8) = r6;	/* slot is (u32)r6 */		\
++	r8 = 1;							\
++	r8 <<= 32;						\
++	r8 += 5;						\
++	if r6 > r8 goto 1f;	/* narrows r6, syncs the slot */ \
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A sub-word spill is below the low-32 model, so no link is formed there.
++ * The fill is a byte load too, so this pins the spill-side and fill-side
++ * size gates together rather than either on its own.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__naked void zext_narrowing_spill_byte_no_link(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;						\
++	*(u8 *)(r10 - 8) = r6;	/* 1-byte spill: no link */	\
++	r2 = *(u8 *)(r10 - 8);					\
++	if w6 != 0 goto 1f;					\
++	if r2 == 0 goto 1f;	/* not deduced */		\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ #ifdef CAN_USE_MOVSX
+ 
+ /*
+@@ -1628,6 +1750,36 @@ __naked void sext_delta_survives_narrowing_fill(void)
+ 	: __clobber_all);
+ }
+ 
++/*
++ * And for a narrowing spill: the slot holds (u32)(r6 + 5). Recording delta 0
++ * there put the slot, and anything filled from it, 5 away from the truth.
++ */
++SEC("socket")
++__success
++__naked void sext_delta_survives_narrowing_spill(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	r6 <<= 32;						\
++	call %[bpf_get_prandom_u32];				\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	w7 = w6;		/* BPF_REG_LINK_ZEXT, delta 0 */	\
++	w7 += 5;		/* BPF_REG_LINK_ZEXT, delta 5 */	\
++	r8 = (s32)r7;		/* BPF_REG_LINK_SEXT, delta 5 */	\
++	*(u32 *)(r10 - 8) = r8;	/* narrowing spill keeps delta */ \
++	if r6 != 0 goto 1f;	/* narrow before the fill */	\
++	r2 = *(u32 *)(r10 - 8);	/* r2 == 5, not 0 */		\
++	if r2 == 5 goto 1f;	/* always taken: r2 is 5 */					\
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ #endif /* CAN_USE_MOVSX */
+ 
+ #ifdef CAN_USE_LDSX
+@@ -1800,6 +1952,35 @@ __naked void sext_byte_fill_drops_sext_link(void)
+ }
+ #endif /* CAN_USE_MOVSX */
+ 
++/*
++ * The same, with the zero-extending link coming from a narrowing spill rather
++ * than a mov. The spill truncated the slot to 32 bits, so the fill is not
++ * narrowing and assigns no link kind of its own; the slot's zero-extending
++ * one must not survive the sign-extending load.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__naked void sext_fill_of_narrowing_spill_drops_zext(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;						\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown */	\
++	*(u32 *)(r10 - 8) = r6;	/* narrowing spill: slot is ZEXT */ \
++	r2 = *(s32 *)(r10 - 8);	/* sign-extending, not narrowing */ \
++	if w6 != -1 goto 1f;	/* slot low 32 bits are all ones */ \
++	if r2 s>= 0 goto 1f;	/* taken only if r2 was rebuilt zext */ \
++	r0 /= 0;						\
++1:								\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ #endif /* CAN_USE_LDSX */
+ 
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0-Meta
 
