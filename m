@@ -1,81 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792511941;
-	b=m2YB0NO9qKBml/L8lpNT/NSiaUjYYVu3oEa/rbQzxMUJb5QK8usKgtRJ39A6T8+/aJID
-	 otOfqRNy9zx2NRSBm0DhdnmAkS5uK47U4rg/GxdVgd7T04JeqffCb/Y/yJ2s6da7MFe9i
-	 sL8IK45eg8boVbKiqIWScJhitRpbjjNa3Bbzs1J6FDci5T7eCd8YZDTzd182UBOGVEJMW
-	 3p3WH4deFs6EWVWmXKe3zQInGKKdssRblRAtdBde6g/OKSG+k7m2uZcRkwatTrw1uziSK
-	 qSZgLCNl8FWuDp8VaxJLF5IFKAB95nnTkjpHvm4z1klrZE+OViU2H1oxu9sICBTjqMA==
+	t=1792511942;
+	b=Y/rm+4S41qMFKGgE8FKGeKbhPVOUR7KW6ItiPogFveqT4onuKDA5bGgaEb4CcTYVlkoL
+	 WMOemgxEHrqJUA0zQ82k/85nxC/RI9tpycgjk5i0fqZjI9sD6FxSm4ds/ciOU3W0Kr3Hq
+	 qC2R8y9Zf9iSnS5FD9sQQdR3dTof3XVLELqDs61kdT/rDbJGzlUrJ78FYeuld7KhJQDuD
+	 VsLr1SlaX0jCpTV1QdMobC1yEPEZwcRAGPwU3x7/R70rN6oaBekRkhOjaCSdWwODWhA5R
+	 2MlKH0maPLLYys6YsEzImRDLBe4yG+b4Pvo8fgEZTS1Q/VvZ50GFV6YNQYTqVQVy+Zw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792511941;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792511942;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=7OId8RJ5d9QD0eD16AKrMXmzoMAteLxYLWOYcbZVb2A=;
-	b=Cv3DYKcfmDajjZE1S3/k6EUYCWHkvCfT51FTNcVZc3cdO8/kRqQeRgANktpZDsEW1cOo
-	 MhCJUKt8qXRIjVaiFl8D1DhG+Rb9eOoburpb7oVYMPgPYmw2g/LS9hoo8mEdH6yPNkPcQ
-	 bYVZERMlDhp3xOWUgK8PAfRWjstZ+PcSNZBUiG0ZS6v9DTtwYVYcPeYbCaLsLjSzx6SnW
-	 62fWCbnJeOcq4fvTmJ+l6Llb9v1GlsAHUDAaxP/PMfzwepQJikaM2fGEk7o3j5g1M0WDR
-	 LPN3HW1L6sqfxXbR1aJCs3TULlKWYl2BLfcH9CnWgnndhxczLWnxQgnuAS5JOoDq/zg==
+	bh=56XU7hrsbm+r4VV0OyPWn2c5IYfi16ADafQPzRlPoU4=;
+	b=18vIeQ12zoHX9paQuiQRNqD7Dvqw3lUWBJlDWdRX+R/bI3jyqCINQAdjtkibwxDngZ9a
+	 LE8d+ZnJ0WEl9RabmzCx1UwZyADH0sJzKTWRXhEPw/ma3iwPy30QJnuDT5sMdGvTh9bwj
+	 ctIow19qz7Tv8zTwGe00Gxn7L6u/v32Q0MJW3lERoOCBJORhpuZbvo/9TqM+8h3+ESdoB
+	 wBaD3Zl44Zs48nwwcH2+o0iBpxMdNV7rKY5Ihp1dsWkUnel+DuR/RatdJzHyPWzNXk9Ch
+	 KZuUJ81sVLGHGt6KYpY3DuUxKvBjrr9dXf3OCnXI/RBXxgLadf10kC/HNiPNSD9TztQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=itgc0umX;
-	arc=none smtp.remote-ip=209.85.128.44
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fLwoc4Y8;
+	arc=none smtp.remote-ip=209.85.128.46
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC84606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:59:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BDC84606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE4F606A329
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 15:59:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DE4F606A329
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=itgc0umX
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a1dede3c2cso40385565e9.2
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 08:59:00 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fLwoc4Y8
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a1dfd49525so22116785e9.0
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 08:59:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792511939; x=1793116739; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792511940; x=1793116740; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7OId8RJ5d9QD0eD16AKrMXmzoMAteLxYLWOYcbZVb2A=;
-        b=itgc0umXTf7OyExxknwmQf9gwtXN/BXakhLmirFMBrYCVUlXX7PhhibEFGhQlcw4TL
-         dGacBS8pO2xsvXAG/qXr9hxZP74fQRLX/yuBDffoWoX4090NeXSiuYRuZMI8Z/I0ZW2t
-         J2xS/41pLbpWZuDB9S2FRZwLVDqDqdKcRFyusw20nWH3MLD2QB/m70cNr75sMRF9bpfd
-         ZUyjhL3o6rm4pxJxS+XJhkXsYwepgJ0MMK7wBEC5jFVMwXvgkfVwvre9Oezc7kzS90mL
-         o83Absvy1iRVfGx4l/NnqKh3VnIvlVhqZnts8hfWx9Ga6INJUI7XoLSKndG7qgymwIyi
-         8nZg==
+        bh=56XU7hrsbm+r4VV0OyPWn2c5IYfi16ADafQPzRlPoU4=;
+        b=fLwoc4Y8xO13kEj2s50PdbL6WWwF9RZdkdYggPwmaKF6b+00LNbGTPUHm+oIucn41T
+         Yt3AAVs9y80pdR6m/TqDEM08g/m4wuOWQ/Z/kTKRp+tX7mhcF9eTY3YUhV0YZ56VrOom
+         f+0Ase99Xtj3EJQAmLuFpVT7DZD2nGUVfs2e0+9q2EyTN5g6/LVNT+GAZhHd8z0Cq2I2
+         Hw/1s5/Z5cm69lyulBNy8MFBmxXGGOTkhjOVwcMgMxbKoucAPoqBh7yMSbIV9RCMlDpX
+         l1nZsU46OWMpHiluD+In+KQyOzP7uRQfLOXljytU2rdPcnaOCL0JmufgNTQbTQ91l7R9
+         +NZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792511939; x=1793116739;
+        d=1e100.net; s=20260707; t=1792511940; x=1793116740;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7OId8RJ5d9QD0eD16AKrMXmzoMAteLxYLWOYcbZVb2A=;
-        b=bSWeXgQ/VMSgzAWntHh2qopG17XUO8Lyc/oY3gPmMP+kEpUo+wagYjnYUK9CE6Ua6L
-         TcFxGlq2izPEL6yMyPkBJRH7YiOcDqrDlMm5twtIHxt6JSZU+7A6Z4vbF6YzZf5XdXLS
-         yE8H1M+61xHSvEXAcPWZ0nbp3sY+zOJqeX9gl7+e9WXTxf/vMokTG3Bk0Hc5DqV2sZOo
-         7upNBfJiJrcLfQ3Q+fd16q3wSrptBi5QOBVIC41nnkkU+1Y1gl63aN1kIUdZMj/nn3e/
-         JCh3D0mTf34INwC0OMsLCNdbKQ8S02edB/oKjVQZPrKTfMsaOjAqqLhX1ID3fqkesYdy
-         NHWQ==
-X-Gm-Message-State: AFq9FYJQQ2fRuUtOLGtg9p/Alva6JZYK7WjyVQn4lKWi9WmzWQS9RdqV
-	EPHS/VFoSYcGSec/CSae2DGlwTxMXpFXUqQyyWI68Vzzcv2TsMLdO0HBHm3j1U9cFjxnfg==
-X-Gm-Gg: AYBFou1fCSf60UbV4+ExiB84ToGi8dJnEPbOV/6xIjHQxCKSKRNKMn1ovPX7hdKYthS
-	YXhu2PK43nmLrH/nM39Gm6D7IAiT6xkhUuph6wf8tDjsjEXQTRviEGtVqlKb2Oljr79bv7n5BgG
-	rn233bQjmoLxRlcf6sYo/U5Y6EJ1TPVVxdxJVQq6mES5J1lFzcXCVFx0vbzEm9YTOjACc2mRdwj
-	LL0JACi7jm/hU+sTV0wTG30RSJCKOpaq5VMW0dQofiUwwKkNwHjTAlrTVYVWGbc2apEzZ8ofbWC
-	2iOT+1hsF7wt9vZ9GDiHL1Zz39RDcYVKeCZxE6RW19QDhOK8P7i3Oo3uh/62r3lXU4rWplmzfyC
-	OIZjdH+AWmxq2A85d6p3hIMEWuPbway+M2Ylj2q46Fy1cRqAL7WkA2YS39QtqOHG25alExj2MEX
-	xc0pzLTqeU/3N2mBy2GN3bRz0FKsSWrfWlS5/72suUTuPtb9X7Ohb/A1c7MuVmuJfIse2P3kSIt
-	ATtiEk1gmfA3vrjZBCqsXtZfbtGTacK6MF8az57KBgfzSbf2wNz9PuQ
-X-Received: by 2002:a05:600c:81c8:b0:4a1:9661:14b5 with SMTP id 5b1f17b1804b1-4a1d7616576mr221716865e9.29.1792511939046;
+        bh=56XU7hrsbm+r4VV0OyPWn2c5IYfi16ADafQPzRlPoU4=;
+        b=h9bZ5Ypxfxi2dlKoYdwrvu4z6QnvXDEQdpEeLrHvf2/l54mJXAkkIinS9ZmCI4B/M3
+         HemzdecEeCwjcI994qg9QHW/LJXjRzY5c8QyuC0WEq/jzE6nEsQH4JTbhr9FCfJFQnVK
+         5AIisZQo69wgLHxlaS8FyeDCKt4ZDOJtdPFLJ2ENx/NnkHvwnQXJYgK/dpZw/uRr1B1r
+         a5/DI5UxHRoa1q1cXU38oUraqptVsj/rrHdty0iJMlcgO2qHhaVPgTja3rRscr2zxXlL
+         it9z+04vGWyo/EMMmmiSV51vqlJigbDcZWQes5McIZUkEpHw32KEY7y8GCovj0zeGZ/V
+         p1hQ==
+X-Gm-Message-State: AFq9FYI8gkt+GFq6SWJqug3D8eXpAuUFji9EgrqkBtmfDt+NzoyfFWzB
+	34jBvp9pHnKdwBZsiKQRJP5o38HmdDW4jnpLQN9A9sOEqJTatp7chYq0pdI1YXV1/GAA2w==
+X-Gm-Gg: AYBFou1stNPdn09+7XmkuBK0FGTdFFeZbAfgT1o2skaXUcrgPmm2askntj/1n3v6GH7
+	JzTQuh5RrbOGyzHQJw3ojBRlteYL+6m1Uojy1+xPnuurR2EixnHg013R9RLSjtLXpK30jM7Kr/I
+	dZtsIg6kcpk2z8AvGKYgai4xgX6keGJLEQgYGFzG1HGDyOTUhkVtf464Sb+vMAybjjOLX/+nohH
+	at/RwHKC4eV/9V+WGIs4oBcQ9NhJlJ1+bjQj8mWCvNlpKlc8lMOdTbYHiXuEV+DkTVUiW3r9O7H
+	fiP2Whrl1gxVdfgU2Nco75MzdtxO1c2Y7/tuKN9kxPCCVqOp4mkzJaetw0U2b4isbROqsmP+Kr4
+	LsK/zMrYM8d0SR4DCM5luVCCLLc5PqzY7GdvPpUQ5n/JBZkuRKD9+TZ75yAZlH6wNxQDLK7de7t
+	wDpTLskS0nupfD68n5siBXa8ctgY0EUGXw5fTG0rU6uC+QNMWpmxcdifOAt21on2/2lFDhB8uwG
+	spCOAirdHPJ9qX1wUIKTwWP+ZSeqegjzkeGhTvNKrPKVg==
+X-Received: by 2002:a05:600c:c16a:b0:4a1:acab:234c with SMTP id 5b1f17b1804b1-4a1d75f23a1mr237105725e9.10.1792511939648;
         Tue, 20 Oct 2026 08:58:59 -0700 (PDT)
 Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4a1fb83ff02sm5627335e9.6.2026.10.20.08.58.58
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4a1fb83ff02sm5627335e9.6.2026.10.20.08.58.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 08:58:58 -0700 (PDT)
+        Tue, 20 Oct 2026 08:58:59 -0700 (PDT)
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -101,9 +101,9 @@ Cc: andrii@kernel.org,
 	emil@etsalapatis.com,
 	almagui@kernel.org,
 	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v2 1/3] bpf: add bpf_ksock_sendto() kfunc
-Date: Tue, 20 Oct 2026 15:58:46 +0000
-Message-ID: <20261020155848.75711-2-mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v2 2/3] selftests/bpf: Test ksock sendto()
+Date: Tue, 20 Oct 2026 15:58:47 +0000
+Message-ID: <20261020155848.75711-3-mahe.tardy@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261020155848.75711-1-mahe.tardy@gmail.com>
 References: <20261020155848.75711-1-mahe.tardy@gmail.com>
@@ -118,146 +118,216 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The motivation is to plumb more of the socket API into ksock, thus
-supporting sendto() in addition to send() which makes a lot of sense in
-the context of UDP sockets which are the only type currently supported.
-This is useful when ksock is used to reply to specific addresses or send
-to multiple addresses.
+These tests are covering that:
+1. sendto() on a unconnected UDP socket works (and that the socket stays
+   unconnected, i.e. send() on it fails with -EDESTADDRREQ).
+2. sendto() on a connected UDP socket with a NULL address is equivalent
+   to send().
+3. sendto() on a connected socket with an explicit address doesn't
+   change the peer of the socket (send() after sendto() still sends to
+   the original connected address).
 
 Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- net/core/bpf_ksock.c | 96 +++++++++++++++++++++++++++++++-------------
- 1 file changed, 69 insertions(+), 27 deletions(-)
+ .../selftests/bpf/prog_tests/ksock_sendto.c   | 108 ++++++++++++++++++
+ .../selftests/bpf/progs/ksock_common.h        |   2 +
+ .../selftests/bpf/progs/ksock_sendto.c        |  59 ++++++++++
+ 3 files changed, 169 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ksock_sendto.c
+ create mode 100644 tools/testing/selftests/bpf/progs/ksock_sendto.c
 
-diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-index 48a2e2327ace..37168f43c16c 100644
---- a/net/core/bpf_ksock.c
-+++ b/net/core/bpf_ksock.c
-@@ -37,6 +37,49 @@ static void ksock_release_work_fn(struct work_struct *work)
- 	kfree(ks);
- }
-
-+static int bpf_ksock_addr_to_sockaddr(const union bpf_ksock_addr *addr,
-+				      u32 addr_sz, struct sockaddr_storage *sa)
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksock_sendto.c b/tools/testing/selftests/bpf/prog_tests/ksock_sendto.c
+new file mode 100644
+index 000000000000..498f0e1be6ee
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/ksock_sendto.c
+@@ -0,0 +1,108 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Isovalent */
++
++#include "test_progs.h"
++#include "network_helpers.h"
++#include "ksock_sendto.skel.h"
++
++struct sendto_test_case {
++	const char *name;
++	bool connected;
++	bool use_sendto_addr;
++};
++
++static bool recv_payload(int fd, const void *expected, size_t len)
 +{
-+	if (!addr || addr_sz != sizeof(*addr))
-+		return -EINVAL;
++	char buf[64];
++	ssize_t n;
 +
-+	/* Kfunc memory arguments may be unaligned. */
-+	memcpy(sa, addr, sizeof(*addr));
++	n = recv(fd, buf, sizeof(buf), MSG_TRUNC);
++	if (!ASSERT_EQ(n, len, "recv length"))
++		return false;
++	return ASSERT_MEMEQ(buf, expected, len, "recv payload");
++}
 +
-+	switch (sa->ss_family) {
-+	case AF_INET:
-+		return sizeof(struct sockaddr_in);
-+	case AF_INET6:
-+		return sizeof(struct sockaddr_in6);
-+	default:
-+		return -EAFNOSUPPORT;
++static void test_sendto_case(const struct sendto_test_case *test)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct ksock_sendto *skel;
++	int receivers[2] = { -1, -1 };
++	int err, i, port, sendto_fd;
++	char buf[64];
++	ssize_t n;
++
++	skel = ksock_sendto__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "ksock_sendto open and load"))
++		return;
++
++	/* Use separate receivers for the default peer and explicit destination. */
++	for (i = 0; i < ARRAY_SIZE(receivers); i++) {
++		receivers[i] = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 1000);
++		if (!ASSERT_OK_FD(receivers[i], "receiver socket"))
++			goto out;
++	}
++
++	port = get_socket_local_port(receivers[0]);
++	if (!ASSERT_GE(port, 0, "connected port"))
++		goto out;
++	skel->bss->connected_port = port;
++	port = get_socket_local_port(receivers[1]);
++	if (!ASSERT_GE(port, 0, "sendto port"))
++		goto out;
++	skel->bss->sendto_port = port;
++	skel->bss->connected = test->connected;
++	skel->bss->use_sendto_addr = test->use_sendto_addr;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_sendto), &opts);
++	if (!ASSERT_OK(err, "run test_sendto") || !ASSERT_OK(opts.retval, "test_sendto retval"))
++		goto out;
++
++	/* Check sendto() outcome */
++	if (!ASSERT_EQ(skel->data->sendto_ret, sizeof(skel->data->sendto_data), "sendto bytes"))
++		goto out;
++	sendto_fd = receivers[test->use_sendto_addr ? 1 : 0];
++	if (!recv_payload(sendto_fd, skel->data->sendto_data, sizeof(skel->data->sendto_data)))
++		goto out;
++
++	/* Check send() outcome */
++	if (test->connected) {
++		if (!ASSERT_EQ(skel->data->send_ret, sizeof(skel->data->send_data), "send bytes"))
++			goto out;
++		if (!recv_payload(receivers[0], skel->data->send_data,
++				  sizeof(skel->data->send_data)))
++			goto out;
++	} else if (!ASSERT_EQ(skel->data->send_ret, -EDESTADDRREQ,
++			      "send after sendto remains unconnected")) {
++		goto out;
++	}
++
++	/* Catch unexpected deliveries to either destination. */
++	for (i = 0; i < ARRAY_SIZE(receivers); i++) {
++		n = recv(receivers[i], buf, sizeof(buf), MSG_DONTWAIT);
++		if (!ASSERT_EQ(n, -1, "no extra datagram") ||
++		    !ASSERT_EQ(errno, EAGAIN, "recv errno"))
++			goto out;
++	}
++
++out:
++	for (i = 0; i < ARRAY_SIZE(receivers); i++) {
++		if (receivers[i] >= 0)
++			close(receivers[i]);
++	}
++	ksock_sendto__destroy(skel);
++}
++
++void test_ksock_sendto(void)
++{
++	static const struct sendto_test_case tests[] = {
++		{ .name = "unconnected", .use_sendto_addr = true },
++		{ .name = "connected_null_addr", .connected = true },
++		{ .name = "connected_explicit_addr", .connected = true, .use_sendto_addr = true },
++	};
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (test__start_subtest(tests[i].name))
++			test_sendto_case(&tests[i]);
 +	}
 +}
+diff --git a/tools/testing/selftests/bpf/progs/ksock_common.h b/tools/testing/selftests/bpf/progs/ksock_common.h
+index 01edaeb9fdd4..2a32cff2fbe9 100644
+--- a/tools/testing/selftests/bpf/progs/ksock_common.h
++++ b/tools/testing/selftests/bpf/progs/ksock_common.h
+@@ -16,6 +16,8 @@ int bpf_ksock_connect(struct bpf_ksock *ks, const union bpf_ksock_addr *addr,
+ struct bpf_ksock *bpf_ksock_acquire(struct bpf_ksock *ks) __ksym;
+ void bpf_ksock_release(struct bpf_ksock *ks) __ksym;
+ int bpf_ksock_send(struct bpf_ksock *ks, const void *data, u32 data__sz) __ksym;
++int bpf_ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data__sz,
++		     const union bpf_ksock_addr *addr__nullable, u32 addr__sz) __ksym;
+ void bpf_rcu_read_lock(void) __ksym;
+ void bpf_rcu_read_unlock(void) __ksym;
+
+diff --git a/tools/testing/selftests/bpf/progs/ksock_sendto.c b/tools/testing/selftests/bpf/progs/ksock_sendto.c
+new file mode 100644
+index 000000000000..b6eacf277fcb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/ksock_sendto.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Isovalent */
 +
-+static int ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data_sz,
-+			const union bpf_ksock_addr *addr, u32 addr_sz)
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++#include "bpf_tracing_net.h"
++#include "ksock_common.h"
++
++char sendto_data[] = "hello from bpf sendto";
++char send_data[] = "hello from bpf send";
++
++__be16 connected_port;
++__be16 sendto_port;
++bool connected;
++bool use_sendto_addr;
++int sendto_ret = -1;
++int send_ret = -1;
++
++SEC("syscall")
++int test_sendto(void *ctx)
 +{
-+	struct sockaddr_storage sa;
-+	struct msghdr msg = {
-+		.msg_flags = MSG_DONTWAIT,
++	struct bpf_ksock_create_opts opts = {
++		.family = AF_INET,
++		.type = SOCK_DGRAM,
++		.protocol = IPPROTO_UDP,
 +	};
-+	struct kvec iov = {
-+		.iov_base = (void *)data,
-+		.iov_len = data_sz,
-+	};
-+	int addrlen;
++	union bpf_ksock_addr addr = {};
++	struct bpf_ksock *ks;
++	int err = 0;
 +
-+	if (addr) {
-+		addrlen = bpf_ksock_addr_to_sockaddr(addr, addr_sz, &sa);
-+		if (addrlen < 0)
-+			return addrlen;
-+		msg.msg_name = &sa;
-+		msg.msg_namelen = addrlen;
++	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
++	if (!ks)
++		return err;
++
++	addr.sin.sin_family = AF_INET;
++	addr.sin.sin_addr.s_addr = bpf_htonl(0x7f000001);
++	if (connected) {
++		addr.sin.sin_port = connected_port;
++		err = bpf_ksock_connect(ks, &addr, sizeof(addr));
++		if (err)
++			goto out;
 +	}
 +
-+	return kernel_sendmsg(ks->sock, &msg, &iov, 1, data_sz);
++	addr.sin.sin_port = sendto_port;
++	if (use_sendto_addr)
++		sendto_ret = bpf_ksock_sendto(ks, sendto_data, sizeof(sendto_data),
++					      &addr, sizeof(addr));
++	else
++		sendto_ret = bpf_ksock_sendto(ks, sendto_data, sizeof(sendto_data), NULL, 0);
++
++	/* sendto() must neither connect the socket nor change its default peer. */
++	send_ret = bpf_ksock_send(ks, send_data, sizeof(send_data));
++out:
++	bpf_ksock_release(ks);
++	return err;
 +}
 +
- __bpf_kfunc_start_defs();
-
- /**
-@@ -155,22 +198,9 @@ __bpf_kfunc int bpf_ksock_connect(struct bpf_ksock *ks,
- 	struct sockaddr_storage sa;
- 	int addrlen;
-
--	if (!addr || addr__sz != sizeof(*addr))
--		return -EINVAL;
--
--	/* Kfunc memory arguments may be unaligned. */
--	memcpy(&sa, addr, sizeof(*addr));
--
--	switch (sa.ss_family) {
--	case AF_INET:
--		addrlen = sizeof(struct sockaddr_in);
--		break;
--	case AF_INET6:
--		addrlen = sizeof(struct sockaddr_in6);
--		break;
--	default:
--		return -EAFNOSUPPORT;
--	}
-+	addrlen = bpf_ksock_addr_to_sockaddr(addr, addr__sz, &sa);
-+	if (addrlen < 0)
-+		return addrlen;
-
- 	return connect_socket(ks->sock, &sa, addrlen, 0);
- }
-@@ -225,18 +255,29 @@ CFI_NOSEAL(bpf_ksock_release_dtor);
- __bpf_kfunc int bpf_ksock_send(struct bpf_ksock *ks, const void *data,
- 			       u32 data__sz)
- {
--	struct msghdr msg = {
--		.msg_flags = MSG_DONTWAIT,
--	};
--	struct kvec iov = {
--		.iov_base = (void *)data,
--		.iov_len = data__sz,
--	};
--	int ret;
--
--	ret = kernel_sendmsg(ks->sock, &msg, &iov, 1, data__sz);
-+	return ksock_sendto(ks, data, data__sz, NULL, 0);
-+}
-
--	return ret;
-+/**
-+ * bpf_ksock_sendto() - Send data through a BPF kernel socket to a remote address.
-+ * @ks:		The BPF kernel socket context. Must be an acquired reference.
-+ * @data:	Pointer to the data to send.
-+ * @data__sz:	Size of the data to send.
-+ * @addr__nullable: Pointer to an IPv4 or IPv6 socket address, or NULL to use
-+ *		   the connected destination.
-+ * @addr__sz:	Size of the address union, ignored when the address is NULL.
-+ *
-+ * Sends data to the specified address, or to the connected destination when
-+ * the address is NULL, best-effort and nonblocking. This may sleep
-+ * (kernel_sendmsg), so it can only be called from sleepable BPF programs.
-+ *
-+ * Return: Number of bytes sent on success, negative errno on error.
-+ */
-+__bpf_kfunc int bpf_ksock_sendto(struct bpf_ksock *ks, const void *data, u32 data__sz,
-+				 const union bpf_ksock_addr *addr__nullable,
-+				 u32 addr__sz)
-+{
-+	return ksock_sendto(ks, data, data__sz, addr__nullable, addr__sz);
- }
-
- __bpf_kfunc_end_defs();
-@@ -255,6 +296,7 @@ BTF_KFUNCS_START(ksock_kfunc_btf_ids)
- BTF_ID_FLAGS(func, bpf_ksock_release, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_ksock_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_ksock_send, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_ksock_sendto, KF_SLEEPABLE)
- BTF_KFUNCS_END(ksock_kfunc_btf_ids)
-
- #ifdef CONFIG_BPF_LSM
++char __license[] SEC("license") = "GPL";
 --
 2.43.0
 
