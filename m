@@ -1,95 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792523005;
-	b=mnTiYH32Mh7tsIGwPIYJiYqS0H78PYvwCSqePgCfT8C0z2Rp4UQTcPnwkZIekmnSLrxz
-	 wjn32v/ZmaorgMKIdVdQ9FTiernK2kwg2yPOuqVlkhNNLjaT5hDU8u707C0Pu4+PgO0p0
-	 rM2EBELchQW7IkG8seLiRNwfITx51eioiPQLOtatHIY7F5ylXRdVX+A9fDOoQ1svT8kvo
-	 gkKjNkVifLrLYwX+CUvToqqmejRnBsmf0hT9mjhHxyDhTfDur/i4TFC9usjg2XU+5OScl
-	 NRNGBhWoVMfZkJyqweotLVv/5hOhe7Qz6GI9T/9gKROMnrIidZsud29MI7h0IHHCTKQ==
+	t=1792524625;
+	b=jWLz+CQcZ/5Ew/kTWFXsoVAgj6xVEVSZ75EIGKhMnFqYpRp3KVSkhUsvlvOCocAt/5yc
+	 QUqGa1mu00KJ5KLf/ZSuoXfA9Di60MtyZ3TGjCiQgZ/UgBU0C0yqVYnFWPOJ4QGkiO3xc
+	 XADQpdWsD/ParHz4zOZ1Qh5v60TPe1STmCq3Eu0RFBmoiNpd39DADvgkN0i5Z1aWqSx76
+	 XVt4orMB/do5ks086g7oNMhjcaQ+OMBcloIB4xZ2eQeg2VsQ2sq7V32atqcU3tMzeXP3R
+	 uI17gfikRO/c/fwddNp3hf/Zg1MTLoZa7XxU2CstsyuV7xCn1Og1aDsVHhHcsxh02HQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792523005;
-	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=XW2XawDSDFkTSk897IfBcZxxEG8qyMFEO8Acjxpagfo=;
-	b=v7PITfHPjBlhyXy5rvIqTOzsxJcHk2kpPhUv1dEQUO9RMiH7MHZhbaesEwVuWUNOh7/I
-	 HvbGQhTq0ZEhHNBya4vLUJX79eNHnogdsvqkcRi586C+iz+SPl4lpqmIYh58G+C88lr6/
-	 T6DFME34RyKlBZCO+Kgz0Z/AxIdh1xOczzT6+GCNYMF5YkWxCi+kvMtz1NZu6ENtuQqM+
-	 QSNrBd0Mg0BQmJMBsJfdUqVQ0GFbxSMdq+2ZT9HTphlVZXok4Gev8s9/AmTWcj+m/xr6Y
-	 jbjXS0FD1mSwmBQyufyCLREIHXSNQRl+yoTtpGsVv+cuA7x+N17bMVSCId49AHgzJBw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792524625;
+	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
+	 In-Reply-To:References:X-sashiko-severity:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=fA8NmMcCUM69tmGM3phS918ewacyRr6rhiWhDJJ8Fzk=;
+	b=nvynbQ5r4AyqOjTAGmXg0hkjTEiRgS+MUtnxrz+psGj96lXW0SCjU16fPHYlsvWB3yG4
+	 f0hkUkdAac5uJb1Pvoh3wXZBPXqZiOOVsAajfJmxBTw4PTWIxw7qGbscdLuC/LYIizsRC
+	 WR0RABtskZzDno0LXhCw0+Elx/riyCXQFMSEaiHNeHQxtyhjzAcM8WIYamkL/9hQXYXeV
+	 WygnwsFmcCr+UbtiAd7fTVeQe9e5gIhQ1y/PhhUmiVObS3dJoacQjNZifQAy7YFmz2+PW
+	 Dec7I2FDwMuKbSc7XDIn1UZQSINUawHv9/OCYvqOzzONqO5nnniPVmhDEQuuQ9+OeqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=grische.xyz;
-	spf=pass smtp.mailfrom=grische.xyz;
-	arc=none smtp.remote-ip=209.85.221.43
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dR85apWi;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2468606A328
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 19:03:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B2468606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grische.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=grische.xyz
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-48df54150dfso2729278f8f.0
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 12:03:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792523003; x=1793127803;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XW2XawDSDFkTSk897IfBcZxxEG8qyMFEO8Acjxpagfo=;
-        b=LoVmw8KwPbZ8XXqeMq37x5x0pf4PGRWE7/gR3D2G9F3eriz2XjLytL6KMI7xJijaA3
-         ZZhB2OqgM3zc1WEkA/IJd+SghR2Ad1P2OSpjJH0gtGU2sUNVy2p1FnYrEo/aLxFG5X0g
-         8058rNxhdq/pmwpE7165bJ51tc0roywofGhWAKYf7gH/oCZGdcpbvF1f+9m3fvTPDHL5
-         cXhwS5UtHhVvOhc38BMl/MWXoarCGrnJbJCQn7un7qhYODct1F4JNX2b6pcbwLWSmmnk
-         Wv1fLZ3iBvkxGZfvkU/gUOhcwNVrUEcSPCqjWyNUIHOdrdLzFofYc1E5a0CvEM0WdOT6
-         hTfw==
-X-Forwarded-Encrypted: i=1; AKwUvBxYAjWStmoBRdt+TZhcFHmr0vrFrCgPfh6713ZTofrMMpTWAKqj+J/6g2hBuJf9eCx0P9Q=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ+dyX/42f5Z4xb/pC++ilAlwGdrFnyc2ZMl5Ab/9bV+VpeVleI
-	0Kp8ShNbtw2eU0ExKO40qiTvfl8nt5OW3qXyvNuyduOvU+DgwUrCuUTOFzh4MLQ4sLA=
-X-Gm-Gg: AYBFou05gwPErelr/VZVL0xpE+VlLIbaLMYk9Sw9nK2n9ZLFJfbE3V0JWHgwzkMs1Ux
-	62ypYSt4j13tkjZ8i7Xz7puGq/5bymRXWupYPBDXzkMOcDQU8tOWA6fPrerDQOxHiCJR5o6FClc
-	h3tY7b2I8hGIZSETe1XUOLxq8tQN0iNfLZZb4aAXGbBLvx7c3r9R6Ma4GoqrzNuRDT3hTi1RChZ
-	AudK92LwzhQ8U/CTm6ovrCyNcxbMvYxzdtqX6olwgyBcwqheJqNnWoz8PiUmOMq1vUDIfI/EBCK
-	BZLvrSEBO2FGdE94y6Qrmq+YPyRSL2fFXKhOxR5FhYDYsEWUHVmqo/jRDTOD37W5U+tgtCV1XFj
-	dx+GmppJUNoR+pnwIeYK5ov/RSImjyL5RAoQd8PGv906FcCUSUk7ivFniDLy+2y3Nwt98eUWCFv
-	b3ULmmGsYZ6i+pYYgLSijTEqmKE4FZCWxXDQDvKNsh/WaP1xIYJRpItCTv7LfLp2IpMVkc
-X-Received: by 2002:a05:6000:1ac9:b0:488:8bc1:a2eb with SMTP id ffacd0b85a97d-48e07f99197mr25786391f8f.39.1792523003036;
-        Tue, 20 Oct 2026 12:03:23 -0700 (PDT)
-Received: from lake ([2a02:810d:d09:1b65:a3ee:29e0:454d:c31e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e25828cbfsm279157f8f.23.2026.10.20.12.03.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 12:03:22 -0700 (PDT)
-From: Grische <opensource@grische.xyz>
-To: netdev@vger.kernel.org
-Cc: maxime.chevallier@bootlin.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	Oleksij Rempel <o.rempel@pengutronix.de>,
-	Grische <opensource@grische.xyz>,
-	stable@vger.kernel.org,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Ong Boon Leong <boon.leong.ong@intel.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net 1/3] net: stmmac: honour Rx checksum errors in the AF_XDP zero-copy path
-Date: Tue, 20 Oct 2026 21:03:16 +0200
-Message-ID: <20261020190319.884375-2-opensource@grische.xyz>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261020190319.884375-1-opensource@grische.xyz>
-References: <20261020190319.884375-1-opensource@grische.xyz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DEC60A2617;
+	Tue, 20 Oct 2026 19:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dR85apWi
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E7C1F000CC;
+	Tue, 20 Oct 2026 19:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792524625;
+	bh=fA8NmMcCUM69tmGM3phS918ewacyRr6rhiWhDJJ8Fzk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=dR85apWi/gh/GTS8LvuRBJzIGbPY9JsgAZa3H5lzy4QEmS2qo+ckN69t3DBiDbRT1
+	 cPgqRATnn227MZNaJQ4r4I6KwbH1pCybD1gMgsTULzW7b5ulSvvVjY/aKFjdoR21j2
+	 0Haemu8/RZGC8J6HAEzuV4P9AipdJgfS22DKZs/xVenB4apKUmhqd20iQgztV+23Yl
+	 oyhIhkVyvqv6WMsISHPi4c68DJ/bdwssPpF3zdWycXYdD2qaAzV9BrFNBcj4miv7IX
+	 ZddjroPZ6Drje0e6YrqMY0AZoey+0O8aGa7LOQcvr6xZJFTmeUWoPKh15uZpZnxWqf
+	 rEu/7F98+6d+Q==
+Subject: Re: [PATCH v4 net-next 08/15] selftests: xsk: split xskxceiver main()
+ into setup, run and cleanup
+From: netdev-bot+sashiko@kernel.org
+To: maciej.fijalkowski@intel.com
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+ stfomichev@gmail.com, kuba@kernel.org, pabeni@redhat.com,
+ tushar.vyavahare@intel.com, kerneljasonxing@gmail.com, bjorn@kernel.org
+Date: Tue, 20 Oct 2026 19:30:24 +0000
+Message-ID: <179252462414.3135.14132946402715622104@kernel.org>
+In-Reply-To: <20261016174338.787135-9-maciej.fijalkowski@intel.com>
+References: <20261016174338.787135-9-maciej.fijalkowski@intel.com>
+X-sashiko-severity: Low
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,61 +63,160 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Commit ee0aace5f844 ("net: stmmac: Correctly handle Rx checksum offload
-errors") taught stmmac_rx() to honour the csum_none status, but
-stmmac_dispatch_skb_zc() still ignores it and sets CHECKSUM_UNNECESSARY
-for every IP frame whenever the checksum offload engine (CoE) is
-enabled.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Since commit fe4042797651 ("net: stmmac: dwmac4: stop hardware from
-dropping checksum-error packets") dwmac4 delivers such frames instead of
-dropping them, so this path receives them.
+Low priority / nit picks for your consideration:
 
-Mark the skb CHECKSUM_NONE when csum_none is set, as stmmac_rx() does.
+- [Low] In tools/testing/selftests/net/lib/xsk/test_xsk.c,
+  xsk_reattach_xdp() attaches the new program with…
+- [Low] Baseline decision: not a valid finding at the end of the series.
 
-Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
-Cc: <stable@vger.kernel.org>
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Grische <opensource@grische.xyz>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+--
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 9741f97fa37a..32810f949245 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5463,7 +5463,7 @@ static struct sk_buff *stmmac_construct_skb_zc(struct stmmac_channel *ch,
- 
- static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
- 				   struct dma_desc *p, struct dma_desc *np,
--				   struct xdp_buff *xdp)
-+				   struct xdp_buff *xdp, int status)
- {
- 	struct stmmac_rxq_stats *rxq_stats = &priv->xstats.rxq_stats[queue];
- 	struct stmmac_channel *ch = &priv->channel[queue];
-@@ -5488,7 +5488,8 @@ static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
- 		stmmac_rx_vlan(priv->dev, skb);
- 	skb->protocol = eth_type_trans(skb, priv->dev);
- 
--	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb))
-+	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb) ||
-+	    (status & csum_none))
- 		skb_checksum_none_assert(skb);
- 	else
- 		skb->ip_summed = CHECKSUM_UNNECESSARY;
-@@ -5698,7 +5699,8 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 		switch (res) {
- 		case STMMAC_XDP_PASS:
--			stmmac_dispatch_skb_zc(priv, queue, p, np, buf->xdp);
-+			stmmac_dispatch_skb_zc(priv, queue, p, np, buf->xdp,
-+					       status);
- 			xsk_buff_free(buf->xdp);
- 			break;
- 		case STMMAC_XDP_CONSUMED:
+selftests: xsk: split xskxceiver main() into setup, run and cleanup
+
+This splits xskxceiver main() into the bind_iface(), detect_mode_caps(),
+mode_supported() and cleanup_iface() helpers, to prepare for running a
+single endpoint per process. run_pkt_test() now returns its result, and
+main() gets a common out label for teardown. ksft_print_header() is called
+right after parsing, so stdout is line buffered.
+
+> diff --git a/tools/testing/selftests/net/lib/xsk/xskxceiver.c b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+> index d82224a4fa4b0..97eece4c57f89 100644
+> --- a/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+> +++ b/tools/testing/selftests/net/lib/xsk/xskxceiver.c
+
+[ ... ]
+
+> @@ -317,26 +332,43 @@ static bool is_xdp_supported(int ifindex)
+
+[ ... ]
+
+> +static void cleanup_iface(struct ifobject *ifobj)
+> +{
+> +	if (ifobj->xdp_prog)
+> +		xsk_detach_xdp_program(ifobj->ifindex,
+> +				       mode_to_xdp_flags(ifobj->mode));
+> +	xsk_unload_xdp_programs(ifobj);
+> +}
+
+[Severity: Low]
+Can a native XDP program stay attached to the interface after xskxceiver
+exits?
+
+cleanup_iface() uses ifobj->xdp_prog and ifobj->mode to decide whether to
+detach, and which flags to pass. Both fields are set only at the end of
+xsk_reattach_xdp() in test_xsk.c, after the DRV mode check:
+
+test_xsk.c:xsk_reattach_xdp() {
+    ...
+	err = xsk_attach_xdp_program(xdp_prog, ifobj->ifindex, mode_to_xdp_flags(mode));
+	if (err) {
+		...
+	}
+
+	if (ifobj->mode != mode && (mode == TEST_MODE_DRV || mode == TEST_MODE_ZC))
+		if (!xsk_is_in_mode(ifobj->ifindex, XDP_FLAGS_DRV_MODE)) {
+			ksft_print_msg("ERROR: XDP prog not in DRV mode\n");
+			return -EINVAL;
+		}
+
+	ifobj->xdp_prog = xdp_prog;
+	ifobj->xskmap = xskmap;
+	ifobj->mode = mode;
+    ...
+}
+
+xsk_is_in_mode() returns false if bpf_xdp_query() fails, for example on a
+netlink socket or recv error. That can happen even though the attach with
+XDP_FLAGS_DRV_MODE succeeded. The error path then returns without
+detaching the new program and without recording it.
+
+If this is the first DRV/ZC attach, ifobj->xdp_prog is still NULL from
+ifobject_create(), so cleanup_iface() skips the detach. If an earlier SKB
+attach succeeded, cleanup_iface() detaches with XDP_FLAGS_SKB_MODE, and
+that doesn't remove the native program.
+
+In this patch, this only matters when the failing attach is the last one
+for that ifobj. A later successful reattach in the same mode fixes the
+bookkeeping. Later in the series, xskxceiver runs one test per invocation
+with a fixed mode. Every DRV/ZC run then hits this check on its first
+attach, and xsk_reattach_xdp() and cleanup_iface() are still unchanged.
+
+The old main() never detached XDP programs at all. So this is a gap in the
+new teardown, which the commit message describes as using flags "so that
+they match the attach".
+
+Would it make sense to record xdp_prog and mode right after the attach
+succeeds, before the mode check? Detaching on that error path would also
+work.
+
+> @@ -371,90 +407,62 @@ int main(int argc, char **argv)
+
+[ ... ]
+
+>  	if (opt_run_test != RUN_ALL_TESTS && opt_run_test >= total_tests) {
+>  		ksft_print_msg("Error: test %u does not exist.\n", opt_run_test);
+>  		ksft_exit_xfail();
+>  	}
+>  
+
+[ ... ]
+
+> +	test.tx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
+> +	test.rx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
+> +	if (!test.tx_pkt_stream_default || !test.rx_pkt_stream_default)
+> +		goto out;
+>  
+
+[ ... ]
+
+> +	caps = detect_mode_caps(ifobj_tx);
+>  
+
+[ ... ]
+
+> +	if (opt_mode != TEST_MODE_ALL && !mode_supported(opt_mode, caps)) {
+> +		if (opt_mode == TEST_MODE_DRV)
+> +			ksft_print_msg("Error: XDP_DRV mode not supported.\n");
+> +		else
+> +			ksft_print_msg("Error: zero-copy mode not supported.\n");
+>  		ksft_exit_xfail();
+>  	}
+
+[Severity: Low]
+The commit message says:
+
+  cleanup_iface() detaches and unloads one interface and copes with
+  partially initialized objects, as does pkt_stream_delete(NULL), so
+  main() has a single exit path
+
+Is that accurate for this patch? main() still calls ksft_exit_xfail()
+after setup in two places, and both skip the out label:
+
+  - when the requested test index does not exist. This check now runs
+    after both interfaces are bound.
+  - here, when the requested mode is unsupported. This runs after the
+    packet streams are allocated.
+
+bind_iface() can also call ksft_exit_fail() from parse_command_line() for
+the rx interface. By that point the tx interface's skeleton is already
+loaded.
+
+None of these exits leaves an XDP program attached. is_xdp_supported()
+detaches its probe program, ifobj_zc_avail() deletes its socket, and
+process exit frees the skeletons and heap memory.
+
+This is resolved later in the series. There, find_test() and
+xsk_set_flow() run before any interface is bound, and only the local
+interface is bound. The unsupported-mode case also becomes ret = TEST_SKIP
+followed by goto out.
+
+Could the commit message for this patch be reworded? Another option is to
+convert these exits to goto out in this patch.
+
 -- 
-2.54.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261016174338.787135-1-maciej.fijalkowski%40intel.com
