@@ -1,60 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=111.22.67.139
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792461637;
-	b=fDLddZD2oAIRPVfl//Wc8NOskz3+E+/BWZQUbqse51bVEjYxv73ww3060N/oo3ITHDrq
-	 3jC0onYIWrinUWhbl++GHASAaOapd5T0qRcS3wvoS1zFgSFAil9dwrj4soNPFAqA2WgUX
-	 SjQBwXsH9M2Li6ilUfBDK+hDe9/YmKEtY42bOwCISARKRuSkPuSQjrfHNEZnvr9ul7QmL
-	 e2v8eREGXbZLYCiQqCeuI7A49bCFMkfYpEuuRiPaxhssF5otSHkutYqGQGxK8TP4Gvycs
-	 iRmERCAtgvLkjcovFAeGK4ElGzDxCHGZ4d/iwlLnEJMw31hC4NwgP9FxJ0sjIe8aaHQ==
+	t=1792461731;
+	b=tpnuKAHJAkX6AKqHdFwYH8Apkollmk0YoqtA5cvBscsluhOQHYEylNygTnx6lc87/+VM
+	 Sm/FHEGlpfaqGqOyhpCUjcpcnh4ZZqy6z5ZyBbq5tng3rY/6PNHeq574VXvcXEvoEmBb1
+	 91aCce9lufsr2C1VwHyvRkpN5AvYN9RCWoDjxF3nKsIiZZ2LJIJNsSt8uSQutI2UXvcE7
+	 pn+Eq7i4Yh3k0+9bcp97L/u80rhUnZftFL2n+Nz4dSLeqjzNiaapiimCE3b3fFJG9Db8p
+	 0iAWYHZEV3FJbk2CwHPxMQnJ0zn8KKVWAj0S+DvTfU6Tw2qfBSAZhUbYfj87EkSrJDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792461637;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1792461731;
+	h=DMARC-Filter:DKIM-Signature:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:
+	 X-RM-TRANSID:X-RM-TagInfo:X-RM-SPAM-FLAG:Received:X-RM-TRANSID:From:
+	 To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=JlodduQldZdsStWJrjgdzJgqzFFrar5i3dmdR0/tpuk=;
-	b=vuVSDJGXtkMPlfd6SfxMMZnlAksZkYheTQ4fhzt//N8UG2OSP35Pbp1/+iN56BBHFkmL
-	 2i1X7AJFM//fEFXiZ5mBIqpATpKPOELOyy+iTX3avsjFLaQceSQvycvokKlV6qyOf5oG/
-	 JpcdSY8/3ImUYPDHWzbCHgNoew32RQMamAhbxBAr5uXCMPnR6ZBJre9UjbLHIXps5ILuZ
-	 2/WDKzi8O+rE6IM2HbuNzlOITIAtnx1iieKaSoS2igUsAA9hLiRr9cREVObfgiXDWNo0e
-	 APP4DTwax7pfEmAb4Tx9n04eopol5u/leX2dOc8ETex4ZsQ/4hauzaYB4MEzjQRfEBQ==
+	bh=0E0Q82Is6zdEjs6jL2vNo7lRDKdCGLWZjluyuxDIQjY=;
+	b=XcF7+JbAZy2OM9LmT2AMGaFUB1vv3r6zv7kxyLNleJ5GJVIGcAEvTpZGF8ai8KknmCRB
+	 KecrQfYxTu+7XXlQgSPZNYdB//QT4GhB3tboJoYhuk4S9lUA7NAFmj/BAcg6DU6gud4p1
+	 z2urf2lVA9F+Mm8fOrxYjYfCwr3zrxRlqEU65thOmd6qm6vMPnhe6pDoJQYxLea75a0VR
+	 U3jj+6JyhAxlIgW3PnO0s/GTCMzpyD1HVVDsZ5snIW1/NP5DzCfMmYmaTVZLlusrpv4U2
+	 1OoxaQwrpnglGVsuqANZrm63TrSLR54xJNu9fweBOqBm90CwBmZUWP+DEVHyR/5KMSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fX22Ah8a;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE345606A319;
-	Tue, 20 Oct 2026 02:00:36 +0000 (UTC)
+	dmarc=pass header.from=cmss.chinamobile.com;
+	spf=pass smtp.mailfrom=cmss.chinamobile.com;
+	dkim=pass header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b="IcD/Wkuw";
+	arc=none smtp.remote-ip=111.22.67.139
+Received: from cmccmta6.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBE0606A319;
+	Tue, 20 Oct 2026 02:02:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EDBE0606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fX22Ah8a
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3571F000C4;
-	Tue, 20 Oct 2026 02:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792461636;
-	bh=JlodduQldZdsStWJrjgdzJgqzFFrar5i3dmdR0/tpuk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=fX22Ah8aZrRJqDcfW+nPRCo2sGrBATBa6L38IXJVuy3esscBe+LDQwt9um8KJVp4v
-	 YQh6HqKf3aEuRWKkURcTmYh3n/6eiBAC8eF/FwfMGtXQR9k35kIxn0V4ctVOq4B9AN
-	 BnP4v4FXaTPFd0jQGkQqr/l2kQkUEvIxF7YmhP9rVgUvFBlSAyfk6UjMVbRr5dTqR6
-	 czsHrahS+ooGy+qDR3u+vK5usX8ZvoHaxAaq8jDbgMAbSuN3d0X28NwR0a3+u6f7WS
-	 w6Z5CcYccQAEEKleHBEZ+n6/nnC4XetXnvNDMzo81KGGr2+qL+yF/XjC64QQmpjiib
-	 Vhqx5p7Zzwbpw==
-Date: Mon, 19 Oct 2026 19:00:35 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Daniel Zahka" <daniel.zahka@gmail.com>
-Cc: <netdev-bot+sashiko@kernel.org>, <alexanderduyck@fb.com>,
- <kernel-team@meta.com>, <andrew+netdev@lunn.ch>, <davem@davemloft.net>,
- <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
- <edumazet@kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 2/4] eth: mpnic: report per-queue stats
-Message-ID: <20261019190035.4c3ebf4d@kernel.org>
-In-Reply-To: <DM3QWDZ4B408.2O12B5PXKY8AR@gmail.com>
-References: <20261012-mpnic-counters3-v2-2-8afba81c2d5a@gmail.com>
-	<179189313526.434549.10762925482009523771@kernel.org>
-	<DM3QWDZ4B408.2O12B5PXKY8AR@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.a=rsa-sha256 header.s=default header.b=IcD/Wkuw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=cmss.chinamobile.com; s=default; l=0;
+	h=from:subject:message-id:to:cc:mime-version;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	b=IcD/Wkuwea181oj1+ZhQlsefMEZjCRnWU3t7K0zHabYpAXROemLoRAujzGGyCSu7baYhTD1K7oQTr
+	 u2LSDwtzzS2NKpBKpXmSeB0eoNPRnDj/LJH2ng3gNdImqWKKYCgLISYRou24eG2GGw6FnXFrf1AtbL
+	 pJfuCil0d6+pUJTE=
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee56ad6cb9609e-14724;
+	Tue, 20 Oct 2026 10:01:58 +0800 (CST)
+X-RM-TRANSID:2ee56ad6cb9609e-14724
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.99])
+	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee66ad6cb95dba-ba9c2;
+	Tue, 20 Oct 2026 10:01:58 +0800 (CST)
+X-RM-TRANSID:2ee66ad6cb95dba-ba9c2
+From: yanxia <yanxia@cmss.chinamobile.com>
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	lorenzo@kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH net] veth: fix stale peer max_mtu on XDP program replacement
+Date: Tue, 20 Oct 2026 10:01:47 +0800
+Message-ID: <20261020020147.790274-1-yanxia@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,45 +79,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 13 Oct 2026 09:30:02 -0400 Daniel Zahka wrote:
-> > The counter semantics come from "eth: mpnic: count packets, bytes, and
-> > drops per ring" earlier in this series. This patch is the one that
-> > exposes them as qstats rx-packets and rx-bytes.
-> >
-> > The later patch "eth: mpnic: count Rx allocation failures" also counts
-> > skb build failures in alloc_failed. Those packets still stay in packets
-> > and bytes.
-> 
-> So, the question is whether or not rx-packets, reported both to rtnl
-> stats and qstats, should count drops in the driver. Here, drops are
-> either running out of shinfo frags, but really just skb allocation
-> failure. 
-> 
-> The docs for rtnl stats strongly suggest an skb allocation failure
-> should still be counted for rx-packets.
-> 
-> The docs for qstats imply the opposite. Especially when xdp is not
-> present, which is the case as of this point. Once xdp is introduced,
-> though, counting an skb allocation failure in rx-packets becomes
-> reasonable by the qstats docs, because xdp runs before the point of skb
-> allocation.
-> 
-> Another option would be reporting rx-packets differently for the two
-> APIs. I think this is not desirable, and seems to violate what is in
-> the stats.py selftest.
-> 
-> So, I could either submit a v3, which would just be reverting to v1, or
-> take the approach here as is.
+veth_xdp_set() calculates the peer MTU limit from the incoming program's
+XDP fragment capability, but only stores it when no program was attached.
+Replacing a program with one having a different fragment capability
+therefore leaves the peer's max_mtu stale.
 
-The rtnl stats and qstats are supposed to behave the same if maintained
-by SW. I should have been clearer in the doc but "XDP is considered the
-first layer" was supposed to mean - if you reach the point in the driver
-where you'd call an XDP prog - its a successful Rx, whether the XDP prog
-is actually attached & called, or is NULL & skipped.
+Replacing a regular program with an xdp.frags program keeps rejecting
+otherwise valid jumbo MTUs. The opposite replacement leaves a larger
+limit in place and permits MTUs which a fresh attachment of the regular
+program would reject.
 
-I believe the series is good as is.
+Update peer->max_mtu after every successful attachment or replacement.
+Keep the GSO feature update conditional on the first attachment.
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Found during review of the XDP replacement path and confirmed with
+native XDP on an isolated veth pair. Before the fix, direct replacement
+rejects MTU 9000 after switching to xdp.frags, and accepts it after
+switching back to a regular program. Detaching and attaching instead
+produces the expected results in both directions.
+
+UML tests on net reproduce the problem before this change and match the
+detach/attach controls afterwards, with both devices up or down and
+with either endpoint receiving XDP. Failed replacements preserve the
+previous state; same-type replacements and detach also behave as
+expected. Small-frame traffic passes in the devices-up cases.
+
+Fixes: 7cda76d858a4 ("veth: Allow jumbo frames in xdp mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: yanxia <yanxia@cmss.chinamobile.com>
+---
+ drivers/net/veth.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 643b97dc..7db389ae 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1622,10 +1622,9 @@ static int veth_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+ 			}
+ 		}
+ 
+-		if (!old_prog) {
++		if (!old_prog)
+ 			peer->hw_features &= ~NETIF_F_GSO_SOFTWARE;
+-			peer->max_mtu = max_mtu;
+-		}
++		peer->max_mtu = max_mtu;
+ 
+ 		xdp_features_set_redirect_target(peer, true);
+ 	}
+
+base-commit: 78731b46967e3e7102b5cd5062bef185f3404b5c
+-- 
+2.43.0
+
+
+
