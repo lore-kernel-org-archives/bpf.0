@@ -1,118 +1,156 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792478149;
-	b=iI/TW8rket1XLm52KD8DpW6LfWzd7fy9GsM2bLoWEeW5fOInT7OG+PRigaQnxJ6eFoPd
-	 xD00Z5HLLsMAiHNZ0sFfxJFwhlf89lRO/61DLk5+IaO0dcM4aV+Gx68javpLr40i1Woss
-	 jYhIAR8Kot1Tklwwj3u6CFt5R1IZZJ9RQdMkaEidBPQ5MQ/leXokV5pprZg5DISGFrDfv
-	 ZeMjn4U4dTDomp8mq5PdODKulu7Rz7YAa0JNUqF47RRaRypYt6crmg4OT6owQM9O+WG7u
-	 s2oxSJ13/FXk0J3koz/Qqvvm5NjxgS82MX2oxwuttPZHzbE5kqyM6z37nIfYhiGgaPg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792478149;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=6V94UZGcvxRhySlpmKr6KDy7Ay7ek5MflZMdTT+83LI=;
-	b=4qKE2Nr+q+JLZKGs7cVJ636Pi0hMbNxaKEuuIHzQCuS8gplW28jFwkrnYckIPIInQY1g
-	 W2Ool/kkUGDvezf6m+eD2UOqMgXFz4NC+nXbDVP+Oc016Y3qkqCa7yizLdQa5ctQxqDiJ
-	 r1tUfocKPeGPcNS0tnJF4np8zFJUZp4Y4SnwrXdrRH9MzEKLgVqnU2zllhf4Iu+wbuBcy
-	 GUsovzyBqXwgyxQ03udxSE82uoAn3XqSEf1+DD0CzdOD52d4Soj9s1k/gf+pjf7HnMq87
-	 7CZ2sf0q48uDcOkk2S6adop1/GLmdvVnGslD87SzVMgGxpdkqUCO0Z7vSa86V9Ztzyw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nebusec.ai;
-	spf=pass smtp.mailfrom=nebusec.ai;
-	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=M8ZfGt7X;
-	arc=none smtp.remote-ip=74.125.82.173
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.97
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792479654;
+	b=5QGU/AqthLk9iQuSf823ss0PzfL777ndsLCwHDMwsWy5Qm0uvUQpXytD1Sx0aQFCjRbE
+	 cu1PYrNAuCgk/NGFWTEf6h/UiBeJRUIb3axoFns4RYXQnvb7iovNycsAKyvSQYEH7SIJH
+	 mRTR9cH/iZ3A0DmC7p3DFBoWYYiNro8I/TIlPI8G1f5niYyVA9iBB0oKgZ83Nsaia8ncT
+	 RDwKMxJvR/8oMjV7s4WVNIVULN+up/ZUVlfIt0WydVlCPO2nvog7ChjOO4xfIYnBmrL2u
+	 oNWstLRaBR/r2/LyzDAFyeky8jOJagqSKjmK5k6HZuongbI254QnkCnmYbgWVZkz0HA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792479654;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
+	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
+	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
+	 msip_labels:x-ms-publictraffictype:x-ms-traffictypediagnostic:
+	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
+	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
+	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
+	 x-ms-exchange-antispam-messagedata-chunkcount:
+	 x-ms-exchange-antispam-messagedata-0:Content-Type:
+	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-originalarrivaltime:
+	 X-MS-Exchange-CrossTenant-fromentityheader:
+	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+	 X-MS-Exchange-CrossTenant-userprincipalname:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=/VVvS3p9MVQVPizg+CrUu7Aw+xxCEEdKPpTfT/NgpSA=;
+	b=n9jt0JZkIDrUYwO5hXdQokhsEOhOuYVpPXRlgmuXAQjoFPJ5Tt4CEe6g2vG7FDYDJUNF
+	 +1mlgp4ghuXWDAjQpJrU1o/TVBC+2K3NQf+fznKkALAuYjNR9lXSFFhYqablEmQxaQovF
+	 2APXE6tuSe6zSni3Zcb9o+JgOwtSaozHSBVHHE3vK4QZ/Eg2PpeOM0Zu1p681saS55hPq
+	 G8YYsH5Hw3xatfK3PzzXPLZD3C71Eomitg48aEpnDD8/rT+aZJCRWQ0MQXScTKgfezzCG
+	 YmScqQlA3C7nZc80is6CX81/mET6aX2CkzrQniJnlACqHA+ZXom9Nq4/ayade7OgQHA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=vecima.com;
+	spf=pass smtp.mailfrom=vecima.com;
+	dkim=pass header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b=iR9Uco8Q;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.193.97
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11020097.outbound.protection.outlook.com [52.101.193.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B185606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 06:35:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2B185606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E4E606A320;
+	Tue, 20 Oct 2026 07:00:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45E4E606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vecima.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vecima.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=M8ZfGt7X
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-35cd4e8bdbdso6994000eec.1
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2026 23:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1792478148; x=1793082948; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6V94UZGcvxRhySlpmKr6KDy7Ay7ek5MflZMdTT+83LI=;
-        b=M8ZfGt7XzBgHjfaJjwg7A7651d8XtZPHnbuPrdDQ6Vpc5oBpPkXXp23KwHIgNS7RtU
-         I2l9pBYtEZuVii0szh0QhGBiNZmuKS43BFUbbbqZmU2DRZ6e5ZKqXYa4Goomn0FB8OBm
-         4otDrAqAG2L3Hoz+heERyfgwI87tPJUox9ov1MzUeSLrtizkr8G0Qx/YEuA3hj9OR7tl
-         +gqbDy+2clEWkRC/n+0PhqLqabsBv6rf07W7dx4/WOEXIpJJ/F6+60+iKV/nYQ6jjh8e
-         wjJITOAN2ENDXLeH1nTin9dr5z7T3L4Msla802QCOPayXaxjlsSF1+Vo/V+MLaYCMjcN
-         oUEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792478148; x=1793082948;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6V94UZGcvxRhySlpmKr6KDy7Ay7ek5MflZMdTT+83LI=;
-        b=Onp2tC131bRUYx5Zlw9/2uxSCOARc49kzv4GiXGahrariHY2fXSxJ8XnO6zMRVbj4v
-         Dn/5MUsVt83v5rkWD0uYQd0icKdURlL6j7o61I75e922Cvk4Q6RNgAvJLJ4hl2gnHRbh
-         lOaspUaQrka/zb8q5PgV2kqTORTwgTx1J58Gupw03mUWI+7CWVyc+SEVHc2Ag8hr17/R
-         KAgS/4hNp4SQTsAO6zTPAHeSCUBmTY/i17b3fgBDoQrkBBUsO7tni0TsP64zu/tax6HC
-         wakE7yca4pA8s9/ABeDaPywpkYnXootevkZzLIMwBowbbbilp3q94/Zthb+oxoUpOMq3
-         7htw==
-X-Forwarded-Encrypted: i=1; AKwUvBw1m51aOFk/uHqn10OEoscAAke003duin7dLd8feCl7ovYm7X3Os4fREDtIZZAS+bdFP9E=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIW4MhwgskZ3wbGl/XoyOknM7gXWmYUW5rRSJkseR3ozqnjSjUi
-	AO6nyqOgmSUjqsuTaXk1FczIB5Iipi+0LLqGHXHKyaf8MA/QAObnDKtJpF21uh17+FlB
-X-Gm-Gg: AYBFou1BDh2ouCR/dzeCI1UsFyWa0SABPiLUH3gOLPQhj9TA87BfNPhREbaS+cW3uGq
-	0EN/6MuCWJ27rFQfhQYHKCxOmb0/3OQcerlO7juk44aYpepj9+rzJZ0+It8qAHnx/P4fhB17kgZ
-	dHU4feXQVDtH5c3XKg1Vzill2BkzZh3BxD/qHtDD7el9xiqwlP+xVsAXJTeTEdA8ytglF1hZXPO
-	DDCCw9mwdQGHGV23a4+Q3x40zuHSd8Ll6gvTEciGmq56sUycoYkE+Mk8PgKBkFZaBpNefAmDe8n
-	i7MrFmrgIuVG8QL5a9Itje30n+rpWcaOvvY/ABz0LWERkACyffdgNDmIP4RSLsgIVls7PPX6Y8g
-	iEiKoNIyxb8bGBvcceOzku2+HnSNglJ4esCkcgjr1FmI8Fzgjiin3lEXAmkHEb81V03Sh2Y98hH
-	6jibO32PsPD2c5K1CSm7DD6Exdp7E5Tw0YLkZxLAO63jOPztagDSYGM7I1AksXplsfD+gYWZkg
-X-Received: by 2002:a05:7301:2f2e:b0:35b:b3fa:40f7 with SMTP id 5a478bee46e88-361a33234d1mr13222406eec.38.1792478148023;
-        Mon, 19 Oct 2026 23:35:48 -0700 (PDT)
-Received: from Roxy.sysu.edu.cn ([203.175.14.54])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36632d8b273sm2618192eec.15.2026.10.19.23.35.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 23:35:47 -0700 (PDT)
-From: Zhiling Zou <zhilinz@nebusec.ai>
-To: ameryhung@gmail.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	davem@davemloft.net,
-	edumazet@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	zhilinz@nebusec.ai,
-	menglong8.dong@gmail.com,
-	bestswngs@gmail.com,
-	mattbobrowski@google.com,
-	vega@nebusec.ai,
-	sashiko-bot@kernel.org
-Subject: [PATCH bpf v2 1/1] bpf: reject raw iteration over managed map fields
-Date: Tue, 20 Oct 2026 14:35:24 +0800
-Message-ID: <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1792217106.git.zhilinz@nebusec.ai>
-References: <cover.1792217106.git.zhilinz@nebusec.ai>
+	dkim=pass (2048-bit key, unprotected) header.d=vecima.com header.i=@vecima.com header.a=rsa-sha256 header.s=selector1 header.b=iR9Uco8Q
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fJdyy1QwNSl9C4h5AACrFB6Jh+cOQ8CjlcaeHPezJx5r6aLsyjN/lgSqU0sLwWEH6hioC08HvGVnSeSrN7tkXyqNbffLh1urhuN1Od4MyPDbaBmuvv4UAQFAQUS0509SsCQ3TRH4m94D6PZ6MdM7IUwASeUzu8FvKSw8qStCpjmcumOY9Oy1Sxflaq35tRYnUhoHYKg67JLGidcdmCyC/KXL/oHMMUzFD8NeI5NVmRk6IxZ3atWU6bwJNjME+iM+OTzfai6VFVH3YNPcUsRtQVRc26I6Npn5xwkHpjOEsBkQtbVJswOfru+BeTz7/F+/WVD4LF6hzrwar4jvXwDjFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/VVvS3p9MVQVPizg+CrUu7Aw+xxCEEdKPpTfT/NgpSA=;
+ b=ky2M+eWrzM8ADMteRcVDLA40Xikkvx9gDLhEGUBDbhWN4uBjv3921vWscC7yfi14YJ3nRvmXc+Kjd7PjTQiHdN7HBMSyOes4+PWoIML9AkSq6sFx/17PuKD/UgxenNbyi22+vVCfSBl8NcXQOguo4nLSqH0v5j5g+15nTzyssyGUSivu+GvpjaEdmyRo36Mc6pfEeRV+WPUoEugUNYSJ3T1hqVVQqVjLD/B9DfZi2rXi1nTi54Sab774zajDP626MQfp2uYIt2Ue0vRdFqUUphFTBjdAOtNnGeljNZM98W2QNlt+CFw6ayeb3iu3W6+m80wb/rwsuJJvqH7oxBMQ3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vecima.com; dmarc=pass action=none header.from=vecima.com;
+ dkim=pass header.d=vecima.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vecima.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/VVvS3p9MVQVPizg+CrUu7Aw+xxCEEdKPpTfT/NgpSA=;
+ b=iR9Uco8Q0I2QY7BpR5hURKBbPzltCrTmfDfRuGOxEHGR7YaKYsoR8lpNlMpestQAIKivAsA4ftdocE1gIZmez9zigy48ymxWoDy0xIyRAYmKjCtFcbobtNQJ42L5mZDa2tpkLu3dGTEPOJCmwvaeqfr1OkKig01fanU5or932+ZwGsthV7bjAlgyFTDoj5nqKU02X3OYVyMrbUwiG8R4rGj6HQbMklS0aJ7LPifbh/Fqh7KnOgsP7nfY8KxgMv1WHIcgZDnc9Dlh0pSU48zeh+Xqz0r8+hDmBZfs+VryRDfpVn5Z3mL/ejgJU77P/idMa0iS7fhvyn46Nj0VTurolQ==
+Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
+ (2603:10b6:f:fc00::ad2) by LY0PR18MB626747.namprd18.prod.outlook.com
+ (2603:10b6:404:234::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Tue, 20 Oct
+ 2026 07:00:48 +0000
+Received: from DS4PPFFD8A841C2.namprd18.prod.outlook.com
+ ([fe80::6a72:cf5b:2c44:9ac0]) by DS4PPFFD8A841C2.namprd18.prod.outlook.com
+ ([fe80::6a72:cf5b:2c44:9ac0%4]) with mapi id 15.21.0546.012; Tue, 20 Oct 2026
+ 07:00:47 +0000
+From: Marcin Knap <Marcin.Knap@vecima.com>
+To: Magnus Karlsson <magnus.karlsson@gmail.com>, Maciej Fijalkowski
+	<maciej.fijalkowski@intel.com>
+CC: Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Magnus Karlsson
+	<magnus.karlsson@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, Simon
+ Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>, "jtollet@cisco.com"
+	<jtollet@cisco.com>, "intel-wired-lan@lists.osuosl.org"
+	<intel-wired-lan@lists.osuosl.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
+ full
+Thread-Topic: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is
+ full
+Thread-Index: AQHdX6MW14dMxGSC9k6V0uDc5Tc4vLcFXSSAgACWooCAAA4QkA==
+Date: Tue, 20 Oct 2026 07:00:47 +0000
+Message-ID:
+ <DS4PPFFD8A841C2AC917618A9B1B19453C480672@DS4PPFFD8A841C2.namprd18.prod.outlook.com>
+References: <20261019-xsk-zc-rx-double-free-v1-1-2aa19f6628fb@vecima.com>
+ <ataHK9s/MpNgXWhT@boxer>
+ <CAJ8uoz38cE-1diOnih=HYW+ACqq9YQhaM7tz8KCHjTxgZVc+rQ@mail.gmail.com>
+In-Reply-To:
+ <CAJ8uoz38cE-1diOnih=HYW+ACqq9YQhaM7tz8KCHjTxgZVc+rQ@mail.gmail.com>
+Accept-Language: en-150, pl-PL, en-US
+Content-Language: aa
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Enabled=True;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SiteId=9d639caa-2d40-486d-ac82-e59b0005382f;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_SetDate=2026-10-20T07:00:47.416Z;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Name=General;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_ContentBits=1;MSIP_Label_93f18445-29d5-46c2-bca3-016d3ef06464_Method=Standard;
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vecima.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS4PPFFD8A841C2:EE_|LY0PR18MB626747:EE_
+x-ms-office365-filtering-correlation-id: 24995434-ce05-4d4a-5910-08df2e77de7a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|23010399003|1800799024|366016|6133799003|18002099003|10067099003|22082099003|11063799006|38070700021|260925021311599003|260925021911599003|4143699003|260925022911599003|261009223027099003|56012099006;
+x-microsoft-antispam-message-info:
+ mPEFDCcK7de6uyjLOum6MnFaXGZ/X5uqyo0KrZZSGkUxR+YdVxPWobihk/tGxUEne94ho621scqYove568dL8I74ZZRLTujsm+DtsiRZ2jOhCC7ah02j5s0m/bX8GU5QtLYyCbykEW5k/XG+NOMOH8u1Xh3/2d55PVeF30mBu+PBptu2At9TgB+TqUCqhbcRwHNiSNgLi8ymqSexonukgAsQbj5qiJQSjkqUKsKRrP39xMfsD+SJpeHcOnpBHJT8c5KpS+v995QuytJzPjCw0rN/AAYBrXA1rkoSZpUfwjRzPOFs/AxCz1Fskn3PN+SDCWw/ZgsdHnw+IzGrNVKkJKF5TnCunaYvGorJBPB02uNEpgzc1ifwpo1ZCHC8eF80as9Nu99ovnW7rqKqVad9nS3p1BE2IhRUu3tLtCPR/ZGNtvC4qBIr2IU62rUSlIYMbILDjWITX4yKcXt5OXnhoA+8eRF7WFFBuKUUbPp/gEjU99N30UGeElunc8ikCHd9+9RcYeNorL8P23WYQe4iTNDmRFHDtv/eHmnQNk1IgsY5n4qjFXQTzcfW1yBjc3YmWOQMkLFLXlJzpfZVBCknYXzIXwibAUZ0qqu1LuE2HkOM1aSej3a4KZItnknkAbNdUSlSCeOzHKLJAGw6bONm7jGRKExu5TfJu7y00ntLcro=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFFD8A841C2.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(1800799024)(366016)(6133799003)(18002099003)(10067099003)(22082099003)(11063799006)(38070700021)(260925021311599003)(260925021911599003)(4143699003)(260925022911599003)(261009223027099003)(56012099006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?JSn2t7MJzVvFIJ9FHzsY8xo/OPyHt/AHpuIg3+BTAkqGy5fdbPF1vb+LFMKA?=
+ =?us-ascii?Q?7QJm+4oFnFZMSVh1D+hHQamGTrxpCFRFgYzlzgiZEQWMaUtbeihDHj7fBjOs?=
+ =?us-ascii?Q?V9Y467ixgNBUOWmW6kOP+SsqPAoGPSRif01X3ii5oqPHlG3BUatEVyBPf8ul?=
+ =?us-ascii?Q?c8+QB4CwC/nrkQ3wdPbBeO0QakB07Bnow5ZJGtLYsa56oPkMVbIpHSaWXFPo?=
+ =?us-ascii?Q?52csKqKn2QV/pj/U9uRe6PRUc/zQPefAyKLmNcl3s7fHcqgTQYq5HDtvt+aL?=
+ =?us-ascii?Q?evUPi78LHj9P72cMR4wXxYKlTV5BR4NaFOPkOCbv4uvJqu5d+yOBeAae14FY?=
+ =?us-ascii?Q?7HNeKHiPYPF5VhwUSIeMY7NocyC2G/bNBJJxja2dA/3LR3lRFWhWuLnPU6Je?=
+ =?us-ascii?Q?PevzNqqeoSvDl6PYU0/s761ZRvZgTZuEoh90mAMHLeIRKZ2lBwH42JXoTpPg?=
+ =?us-ascii?Q?cxtnA80ssYPZZ2SChT92KjL3b++Vo7yzPAYjptSRFHnfr1ClvavI2fQDcXbt?=
+ =?us-ascii?Q?WyTkslGqAJbk9d8+Ox5XGBGd+7c5bmxAG8l6lGE8BwJR9RX5TTB/MKzTPfGl?=
+ =?us-ascii?Q?wuWlqZE5vpnmpBe2E6/r9rh/eLVhYirxkf5Io4JdxhSPkxfDQKOJMWlhYILC?=
+ =?us-ascii?Q?TcXTUYYefcFoQM9HveMTrBpPMhGHChUk4udwgMAPZXkstBJbbaYAooz0JVZh?=
+ =?us-ascii?Q?huIHQPRk8dLDCqDZk5QOV+0mZUIMW+dWh061hYBxoNLLVcvimwX8EXb3EQNO?=
+ =?us-ascii?Q?6dCN8Bzv65vMRHBw2S4DfQWnTksxPiAmeySmIkI5qNQYn2RJO7UQze/6cnls?=
+ =?us-ascii?Q?6+ydjaf5r7bvuvCqtX2zIb34Jv9tWdxdFru0kWFvj1B4rnEVX78+q20+8kdF?=
+ =?us-ascii?Q?7VlNgsuAskWIcLpFIzP2rN09GU+mxLsYArkw5+z+huijnwsFTkJw9so4qExu?=
+ =?us-ascii?Q?ltgY7TMCzyri14DVKHu/2EqqTPiBd5d8IVBbDnORXgpG2t4SUyAl093702k6?=
+ =?us-ascii?Q?1TvT5njiik54pM5YCItVSJHSZwmbk2MIta18LY61t/Mal6Duwo+olsCNqT8V?=
+ =?us-ascii?Q?BryIxkE5R+hGmT8QYaDx0kRiDwVbK0R1S5FMBoa2huhrYN4S6MTqWAvBEM1g?=
+ =?us-ascii?Q?PyzN66okrFlbmn64Z5tK6EJ+YsXExVhIOjcMaf9Qk0NxQneq6SOwlEqpYwf8?=
+ =?us-ascii?Q?jxyirqUxTTf8qkVXdqERgDW505NSLt2fVYfCq90nB4orsNxnT5wKCQ3Gf8Eh?=
+ =?us-ascii?Q?2dhOi/ovvy4F0JAmmTvsE0qCaeCF5MqVXFxeo4arbdi01kXf2uttHIIdMO+c?=
+ =?us-ascii?Q?H1041NNftf6mRExNSFGxHmSgfsZuMzMJnj1yIRDDNf/Fjr38czzAjJooJcmM?=
+ =?us-ascii?Q?Nxt/nlsCeUFIhRgvsQUOLmTUX0OHDlKKW7nd2YnOaL424Yq+zBf6gbF76+eU?=
+ =?us-ascii?Q?2syxHohgNYy8CX0btppRTeUTnLhbw7A62TdnrPXH1dyhdF/2YzD/aJ3X+QY2?=
+ =?us-ascii?Q?sYMBxAmoUdL2CYoFwtxs73/9FfAQwvrhIM8/3HVsyDnGn3J8x3azM/uVqgVk?=
+ =?us-ascii?Q?Cu3FDumRFLLONgml0x+lpFgruhUqnXrlXHSMiW0Bp+3PwLy3b7OtV1F7cuI5?=
+ =?us-ascii?Q?6aw5pIq/M8vpIwUgYBHE5tw/6cmQSpkpnDfJwHflqbcVcLORKLBioOD9hFle?=
+ =?us-ascii?Q?gGZc4SErx9yZUzfi2T0JHjHDnMwLeekmcuT601RfzKmdjNJl?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -122,591 +160,235 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: vecima.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS4PPFFD8A841C2.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24995434-ce05-4d4a-5910-08df2e77de7a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2026 07:00:47.8062
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9d639caa-2d40-486d-ac82-e59b0005382f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l7QHfLmM8c0VTV6llPecxmh4VUsMY4CPsqhYki0Z4Qa1J0kX1lTkafM7u2Q5ktXxtfi2Ouvur/zHcNb56/p30w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LY0PR18MB626747
 
-BPF map iterators expose values as writable PTR_TO_BUF memory. Attach-time
-validation bounds maximum access by value_size, but does not account for
-BTF-managed fields in map values. Direct buffer accesses can therefore read
-or overwrite fields such as __kptr without the verifier's ownership checks.
-
-For bpf_map_elem and bpf_sk_storage_map iterators, limit value access to
-the prefix before the first managed field. Since max_rdwr_access is an
-exclusive end offset and record fields are sorted, accesses ending at the
-first managed field remain available while accesses reaching it are denied.
-
-Revalidate the replacement program against the map associated with an
-iterator link before bpf_link_update() swaps programs. Add selftests for
-allowed prefix access, rejected managed-field reads and writes, and link
-updates that introduce managed-field access.
-
-Fixes: 9db44fdd8105 ("bpf: Support kptrs in local storage maps")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Link: https://lore.kernel.org/all/1fa798d444efac579e91ee0716e228902a8f9afe.1791980149.git.zhilinz@nebusec.ai/
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Closes: https://sashiko.dev/#/patchset/cover.1791980149.git.zhilinz@nebusec.ai?part=1
-Suggested-by: Amery Hung <ameryhung@gmail.com>
-Assisted-by: LLM
-Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
----
-changes in v2:
-- Cover bpf_map_elem in addition to bpf_sk_storage_map iterators.
-- Allow access to ordinary value fields before the first managed field.
-- Revalidate replacement programs against the attached map on
-  bpf_link_update().
-- Add selftests for allowed prefix access, rejected kptr reads/writes, and
-  replacement-program validation for both iterator targets.
-- Address the Sashiko link-update finding and Amery Hung's review comments.
-- v1 Link: https://lore.kernel.org/all/1fa798d444efac579e91ee0716e228902a8f9afe.1791980149.git.zhilinz@nebusec.ai/
-
- include/linux/bpf.h                           |   3 +
- kernel/bpf/bpf_iter.c                         |   9 +
- kernel/bpf/map_iter.c                         |  56 ++++--
- net/core/bpf_sk_storage.c                     |  34 +++-
- .../selftests/bpf/prog_tests/bpf_iter.c       | 187 ++++++++++++++++++
- .../bpf/progs/bpf_iter_bpf_sk_storage_map.c   | 113 +++++++++++
- 6 files changed, 377 insertions(+), 25 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0ecb9418dfbd6..b6864779096df 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3007,6 +3007,8 @@ struct bpf_iter_aux_info {
- typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
- 					union bpf_iter_link_info *linfo,
- 					struct bpf_iter_aux_info *aux);
-+typedef int (*bpf_iter_validate_prog_t)(struct bpf_prog *prog,
-+					const struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_detach_target_t)(struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_show_fdinfo_t) (const struct bpf_iter_aux_info *aux,
- 					struct seq_file *seq);
-@@ -3024,6 +3026,7 @@ enum bpf_iter_feature {
- struct bpf_iter_reg {
- 	const char *target;
- 	bpf_iter_attach_target_t attach_target;
-+	bpf_iter_validate_prog_t validate_prog;
- 	bpf_iter_detach_target_t detach_target;
- 	bpf_iter_show_fdinfo_t show_fdinfo;
- 	bpf_iter_fill_link_info_t fill_link_info;
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index b40eb404adab9..765148de64d65 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -409,6 +409,8 @@ static int bpf_iter_link_replace(struct bpf_link *link,
- 				 struct bpf_prog *new_prog,
- 				 struct bpf_prog *old_prog)
- {
-+	struct bpf_iter_link *iter_link =
-+		container_of(link, struct bpf_iter_link, link);
- 	int ret = 0;
- 
- 	mutex_lock(&link_mutex);
-@@ -424,6 +426,13 @@ static int bpf_iter_link_replace(struct bpf_link *link,
- 		goto out_unlock;
- 	}
- 
-+	if (iter_link->tinfo->reg_info->validate_prog) {
-+		ret = iter_link->tinfo->reg_info->validate_prog(new_prog,
-+								 &iter_link->aux);
-+		if (ret)
-+			goto out_unlock;
-+	}
-+
- 	old_prog = xchg(&link->prog, new_prog);
- 	bpf_prog_put(old_prog);
- 
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index c19b360bad9ea..04cf255587aa8 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -97,25 +97,15 @@ static struct bpf_iter_reg bpf_map_reg_info = {
- 	.seq_info		= &bpf_map_seq_info,
- };
- 
--static int bpf_iter_attach_map(struct bpf_prog *prog,
--			       union bpf_iter_link_info *linfo,
--			       struct bpf_iter_aux_info *aux)
-+static int bpf_iter_map_elem_check_prog(struct bpf_prog *prog,
-+					struct bpf_map *map)
- {
- 	u32 key_acc_size, value_acc_size, key_size, value_size;
--	struct bpf_map *map;
- 	bool is_percpu = false;
- 	int err = -EINVAL;
- 
--	if (!linfo->map.map_fd)
--		return -EBADF;
--
--	map = bpf_map_get_with_uref(linfo->map.map_fd);
--	if (IS_ERR(map))
--		return PTR_ERR(map);
--	if (map->excl_prog_sha) {
--		err = -EPERM;
--		goto put_map;
--	}
-+	if (map->excl_prog_sha)
-+		return -EPERM;
- 
- 	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
- 	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
-@@ -125,7 +115,7 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 		 map->map_type != BPF_MAP_TYPE_LRU_HASH &&
- 		 map->map_type != BPF_MAP_TYPE_ARRAY &&
- 		 map->map_type != BPF_MAP_TYPE_RHASH)
--		goto put_map;
-+		return err;
- 
- 	key_acc_size = prog->aux->max_rdonly_access;
- 	value_acc_size = prog->aux->max_rdwr_access;
-@@ -135,10 +125,39 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 	else
- 		value_size = round_up(map->value_size, 8) * num_possible_cpus();
- 
--	if (key_acc_size > key_size || value_acc_size > value_size) {
--		err = -EACCES;
-+	if (key_acc_size > key_size || value_acc_size > value_size)
-+		return -EACCES;
-+
-+	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
-+	if (map->record && value_acc_size > map->record->fields[0].offset)
-+		return -EACCES;
-+
-+	return 0;
-+}
-+
-+static int bpf_iter_map_elem_validate_prog(struct bpf_prog *prog,
-+					   const struct bpf_iter_aux_info *aux)
-+{
-+	return bpf_iter_map_elem_check_prog(prog, aux->map);
-+}
-+
-+static int bpf_iter_attach_map(struct bpf_prog *prog,
-+			       union bpf_iter_link_info *linfo,
-+			       struct bpf_iter_aux_info *aux)
-+{
-+	struct bpf_map *map;
-+	int err;
-+
-+	if (!linfo->map.map_fd)
-+		return -EBADF;
-+
-+	map = bpf_map_get_with_uref(linfo->map.map_fd);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+
-+	err = bpf_iter_map_elem_check_prog(prog, map);
-+	if (err)
- 		goto put_map;
--	}
- 
- 	aux->map = map;
- 	return 0;
-@@ -172,6 +191,7 @@ DEFINE_BPF_ITER_FUNC(bpf_map_elem, struct bpf_iter_meta *meta,
- static const struct bpf_iter_reg bpf_map_elem_reg_info = {
- 	.target			= "bpf_map_elem",
- 	.attach_target		= bpf_iter_attach_map,
-+	.validate_prog		= bpf_iter_map_elem_validate_prog,
- 	.detach_target		= bpf_iter_detach_map,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index 1d295a8769fad..ffbcfab9a71c3 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -846,12 +846,35 @@ static void bpf_iter_fini_sk_storage_map(void *priv_data)
- 	bpf_map_put_with_uref(seq_info->map);
- }
- 
-+static int bpf_iter_sk_storage_map_check_prog(struct bpf_prog *prog,
-+					      struct bpf_map *map)
-+{
-+	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
-+		return -EINVAL;
-+
-+	if (prog->aux->max_rdwr_access > map->value_size)
-+		return -EACCES;
-+
-+	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
-+	if (map->record &&
-+	    prog->aux->max_rdwr_access > map->record->fields[0].offset)
-+		return -EACCES;
-+
-+	return 0;
-+}
-+
-+static int bpf_iter_sk_storage_map_validate_prog(struct bpf_prog *prog,
-+						 const struct bpf_iter_aux_info *aux)
-+{
-+	return bpf_iter_sk_storage_map_check_prog(prog, aux->map);
-+}
-+
- static int bpf_iter_attach_map(struct bpf_prog *prog,
- 			       union bpf_iter_link_info *linfo,
- 			       struct bpf_iter_aux_info *aux)
- {
- 	struct bpf_map *map;
--	int err = -EINVAL;
-+	int err;
- 
- 	if (!linfo->map.map_fd)
- 		return -EBADF;
-@@ -860,13 +883,9 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
- 
--	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
--		goto put_map;
--
--	if (prog->aux->max_rdwr_access > map->value_size) {
--		err = -EACCES;
-+	err = bpf_iter_sk_storage_map_check_prog(prog, map);
-+	if (err)
- 		goto put_map;
--	}
- 
- 	aux->map = map;
- 	return 0;
-@@ -898,6 +917,7 @@ static const struct bpf_iter_seq_info iter_seq_info = {
- static struct bpf_iter_reg bpf_sk_storage_map_reg_info = {
- 	.target			= "bpf_sk_storage_map",
- 	.attach_target		= bpf_iter_attach_map,
-+	.validate_prog		= bpf_iter_sk_storage_map_validate_prog,
- 	.detach_target		= bpf_iter_detach_map,
- 	.show_fdinfo		= bpf_iter_map_show_fdinfo,
- 	.fill_link_info		= bpf_iter_map_fill_link_info,
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index c69080ca14f5a..ef12fd0a2ac1c 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -1400,6 +1400,191 @@ static void test_bpf_sk_storage_map(void)
- 	bpf_iter_bpf_sk_storage_map__destroy(skel);
- }
- 
-+struct managed_value {
-+	__u64 prefix;
-+	__u64 ptr;
-+};
-+
-+static struct bpf_link *attach_managed_map_iter(struct bpf_program *prog,
-+						int map_fd)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo = {};
-+
-+	linfo.map.map_fd = map_fd;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	return bpf_program__attach_iter(prog, &opts);
-+}
-+
-+static int read_managed_map_iter(struct bpf_link *link)
-+{
-+	char buf[64];
-+	int iter_fd, len, err = 0;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (iter_fd < 0)
-+		return -errno;
-+
-+	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
-+		;
-+	if (len < 0)
-+		err = -errno;
-+	close(iter_fd);
-+	return err;
-+}
-+
-+static void test_managed_map_elem_iter(struct bpf_iter_bpf_sk_storage_map *skel)
-+{
-+	struct managed_value value = { .prefix = 10 };
-+	__u32 key = 1;
-+	int map_fd, err;
-+	struct bpf_link *link;
-+
-+	map_fd = bpf_map__fd(skel->maps.managed_hash_map);
-+	err = bpf_map_update_elem(map_fd, &key, &value, BPF_ANY);
-+	if (!ASSERT_OK(err, "hash_map_update"))
-+		return;
-+
-+	link = attach_managed_map_iter(skel->progs.map_iter_prefix, map_fd);
-+	if (!ASSERT_OK_PTR(link, "hash_prefix_attach"))
-+		return;
-+	err = read_managed_map_iter(link);
-+	bpf_link__destroy(link);
-+	if (!ASSERT_OK(err, "hash_prefix_iter"))
-+		return;
-+
-+	err = bpf_map_lookup_elem(map_fd, &key, &value);
-+	if (!ASSERT_OK(err, "hash_prefix_lookup") ||
-+	    !ASSERT_EQ(value.prefix, 11, "hash_prefix_value"))
-+		return;
-+
-+	link = attach_managed_map_iter(skel->progs.map_iter_no_access, map_fd);
-+	if (!ASSERT_OK_PTR(link, "hash_no_access_attach"))
-+		return;
-+	err = bpf_link__update_program(link, skel->progs.map_iter_write_kptr);
-+	if (!ASSERT_EQ(err, -EACCES, "hash_link_update_kptr"))
-+		goto out;
-+	err = bpf_link__update_program(link, skel->progs.map_iter_prefix);
-+	if (!ASSERT_OK(err, "hash_link_update_prefix"))
-+		goto out;
-+	err = read_managed_map_iter(link);
-+	if (!ASSERT_OK(err, "hash_updated_iter"))
-+		goto out;
-+	err = bpf_map_lookup_elem(map_fd, &key, &value);
-+	if (!ASSERT_OK(err, "hash_updated_lookup") ||
-+	    !ASSERT_EQ(value.prefix, 12, "hash_updated_value"))
-+		goto out;
-+
-+	bpf_link__destroy(link);
-+	link = attach_managed_map_iter(skel->progs.map_iter_read_kptr, map_fd);
-+	err = libbpf_get_error(link);
-+	if (!ASSERT_EQ(err, -EACCES, "hash_read_kptr_attach")) {
-+		if (!err)
-+			bpf_link__destroy(link);
-+		return;
-+	}
-+
-+	link = attach_managed_map_iter(skel->progs.map_iter_write_kptr, map_fd);
-+	err = libbpf_get_error(link);
-+	if (!ASSERT_EQ(err, -EACCES, "hash_write_kptr_attach")) {
-+		if (!err)
-+			bpf_link__destroy(link);
-+	}
-+	return;
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_managed_sk_storage_iter(struct bpf_iter_bpf_sk_storage_map *skel)
-+{
-+	struct managed_value value = { .prefix = 20 };
-+	int sock_fd, map_fd, err;
-+	struct bpf_link *link;
-+
-+	sock_fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (!ASSERT_GE(sock_fd, 0, "managed_storage_socket"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.managed_sk_storage_map);
-+	err = bpf_map_update_elem(map_fd, &sock_fd, &value, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "storage_map_update"))
-+		goto out_socket;
-+
-+	link = attach_managed_map_iter(skel->progs.sk_storage_iter_prefix, map_fd);
-+	if (!ASSERT_OK_PTR(link, "storage_prefix_attach"))
-+		goto out_socket;
-+	err = read_managed_map_iter(link);
-+	bpf_link__destroy(link);
-+	if (!ASSERT_OK(err, "storage_prefix_iter"))
-+		goto out_socket;
-+
-+	err = bpf_map_lookup_elem(map_fd, &sock_fd, &value);
-+	if (!ASSERT_OK(err, "storage_prefix_lookup") ||
-+	    !ASSERT_EQ(value.prefix, 21, "storage_prefix_value"))
-+		goto out_socket;
-+
-+	link = attach_managed_map_iter(skel->progs.sk_storage_iter_no_access,
-+				       map_fd);
-+	if (!ASSERT_OK_PTR(link, "storage_no_access_attach"))
-+		goto out_socket;
-+	err = bpf_link__update_program(link,
-+				       skel->progs.sk_storage_iter_write_kptr);
-+	if (!ASSERT_EQ(err, -EACCES, "storage_link_update_kptr"))
-+		goto out_link;
-+	err = bpf_link__update_program(link,
-+				       skel->progs.sk_storage_iter_prefix);
-+	if (!ASSERT_OK(err, "storage_link_update_prefix"))
-+		goto out_link;
-+	err = read_managed_map_iter(link);
-+	if (!ASSERT_OK(err, "storage_updated_iter"))
-+		goto out_link;
-+	err = bpf_map_lookup_elem(map_fd, &sock_fd, &value);
-+	if (!ASSERT_OK(err, "storage_updated_lookup") ||
-+	    !ASSERT_EQ(value.prefix, 22, "storage_updated_value"))
-+		goto out_link;
-+
-+	bpf_link__destroy(link);
-+	link = NULL;
-+	link = attach_managed_map_iter(skel->progs.sk_storage_iter_read_kptr,
-+				       map_fd);
-+	err = libbpf_get_error(link);
-+	if (!ASSERT_EQ(err, -EACCES, "storage_read_kptr_attach")) {
-+		if (!err)
-+			bpf_link__destroy(link);
-+		goto out_socket;
-+	}
-+
-+	link = attach_managed_map_iter(skel->progs.sk_storage_iter_write_kptr,
-+				       map_fd);
-+	err = libbpf_get_error(link);
-+	if (!ASSERT_EQ(err, -EACCES, "storage_write_kptr_attach")) {
-+		if (!err)
-+			bpf_link__destroy(link);
-+	}
-+	goto out_socket;
-+
-+out_link:
-+	if (link)
-+		bpf_link__destroy(link);
-+out_socket:
-+	close(sock_fd);
-+}
-+
-+static void test_bpf_iter_managed_map_fields(void)
-+{
-+	struct bpf_iter_bpf_sk_storage_map *skel;
-+
-+	skel = bpf_iter_bpf_sk_storage_map__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "managed_map_fields_open_and_load"))
-+		return;
-+
-+	test_managed_map_elem_iter(skel);
-+	test_managed_sk_storage_iter(skel);
-+	bpf_iter_bpf_sk_storage_map__destroy(skel);
-+}
-+
- static void test_rdonly_buf_out_of_bound(void)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-@@ -1776,6 +1961,8 @@ void test_bpf_iter(void)
- 		test_bpf_percpu_array_map();
- 	if (test__start_subtest("bpf_sk_storage_map"))
- 		test_bpf_sk_storage_map();
-+	if (test__start_subtest("managed_map_fields"))
-+		test_bpf_iter_managed_map_fields();
- 	if (test__start_subtest("bpf_sk_storage_map_iter_fd"))
- 		test_bpf_sk_storage_map_iter_fd();
- 	if (test__start_subtest("bpf_sk_storage_delete"))
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c
-index eb9642923e1ca..75207dd2c7603 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_map.c
-@@ -18,6 +18,35 @@ __u32 val_sum = 0;
- __u32 ipv6_sk_count = 0;
- __u32 to_add_val = 0;
- 
-+struct local_obj {
-+	__u64 value;
-+};
-+
-+/* Force LLVM to emit complete BTF for local_obj. */
-+struct local_obj *btf_anchor;
-+
-+struct managed_value {
-+	__u64 prefix;
-+	struct local_obj __kptr * ptr;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, __u32);
-+	__type(value, struct managed_value);
-+} managed_hash_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct managed_value);
-+} managed_sk_storage_map SEC(".maps");
-+
-+__u64 observed_kptr;
-+
- SEC("iter/bpf_sk_storage_map")
- int rw_bpf_sk_storage_map(struct bpf_iter__bpf_sk_storage_map *ctx)
- {
-@@ -50,3 +79,87 @@ int oob_write_bpf_sk_storage_map(struct bpf_iter__bpf_sk_storage_map *ctx)
- 
- 	return 0;
- }
-+
-+SEC("iter/bpf_map_elem")
-+int map_iter_no_access(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("iter/bpf_map_elem")
-+int map_iter_prefix(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	struct managed_value *value = ctx->value;
-+
-+	if (value)
-+		value->prefix++;
-+	return 0;
-+}
-+
-+SEC("iter/bpf_map_elem")
-+int map_iter_read_kptr(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	struct managed_value *value = ctx->value;
-+	__u64 *ptr;
-+
-+	if (!value)
-+		return 0;
-+	ptr = (__u64 *)&value->ptr;
-+	observed_kptr = *ptr;
-+	return 0;
-+}
-+
-+SEC("iter/bpf_map_elem")
-+int map_iter_write_kptr(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	struct managed_value *value = ctx->value;
-+	__u64 *ptr;
-+
-+	if (!value)
-+		return 0;
-+	ptr = (__u64 *)&value->ptr;
-+	*ptr = 0x1000;
-+	return 0;
-+}
-+
-+SEC("iter/bpf_sk_storage_map")
-+int sk_storage_iter_no_access(struct bpf_iter__bpf_sk_storage_map *ctx)
-+{
-+	return 0;
-+}
-+
-+SEC("iter/bpf_sk_storage_map")
-+int sk_storage_iter_prefix(struct bpf_iter__bpf_sk_storage_map *ctx)
-+{
-+	struct managed_value *value = ctx->value;
-+
-+	if (ctx->sk && value)
-+		value->prefix++;
-+	return 0;
-+}
-+
-+SEC("iter/bpf_sk_storage_map")
-+int sk_storage_iter_read_kptr(struct bpf_iter__bpf_sk_storage_map *ctx)
-+{
-+	struct managed_value *value = ctx->value;
-+	__u64 *ptr;
-+
-+	if (!ctx->sk || !value)
-+		return 0;
-+	ptr = (__u64 *)&value->ptr;
-+	observed_kptr = *ptr;
-+	return 0;
-+}
-+
-+SEC("iter/bpf_sk_storage_map")
-+int sk_storage_iter_write_kptr(struct bpf_iter__bpf_sk_storage_map *ctx)
-+{
-+	struct managed_value *value = ctx->value;
-+	__u64 *ptr;
-+
-+	if (!ctx->sk || !value)
-+		return 0;
-+	ptr = (__u64 *)&value->ptr;
-+	*ptr = 0x1000;
-+	return 0;
-+}
--- 
-2.55.0
-
+> Sashiko report shows that drivers are rather inconsistent here=0A=
+Yes I missed it, I am working on fixes.=0A=
+=0A=
+> On mlx5 with striding RQ this also ended in a NULL pointer=0A=
+> dereference in mlx5e_post_rx_wqes(). =0A=
+=0A=
+So in my case I received kernel panic when I turned of striding rq off and =
+the rx ring was full, but the panic itself was mitigated by the fixes from =
+@Jerome Tollet in the mlx driver. I described the problem with linked fixes=
+ here:=0A=
+https://forums.developer.nvidia.com/t/ofed-backport-of-mainline-mlx5e-xsk-s=
+tale-buffer-release-fix-kernel-panic-in-mlx5e-post-rx-wqes/384752/5 =0A=
+But the real root cause is the problem I'm trying to fix.=0A=
+=0A=
+> Did you verify this or is this rather a speculation? xp_free() protects=
+=0A=
+> against double-free cases.=0A=
+=0A=
+I verified this, the origin bug on our own was that we received the same UM=
+EM frame several twice even we haven't push it to the ring, that was causin=
+g serious damages in our system, we need to add special detection duplicate=
+d frames after receiving frames on rx ring, when I removed this additional =
+xdp free, the problem was gone.=0A=
+=0A=
+=0A=
+> Have you thought about massaging mlx driver instead of intel + core?=0A=
+> Even when that would be correct approach ixgbe would miss being addressed=
+.=0A=
+=0A=
+I was considering and I did as workaround, but IMO the final fix should be =
+placed in the AF XDP, because there is inconsistency between different kind=
+ of errors, look at xsk_rcv_check() there isn't any freeing buffer, so why =
+only ENOBUFS causes that? Maybe there is some reason that I don't know. Mor=
+eover, if I fix it only in mlx, the problem in the other driver at certain =
+path will persist including Intel, only ZC with needs_wakup flag path is pr=
+operly handled there. Yes ixgbe is my gap, I missed it and I can apply the =
+patch there as well.  But eventually this is your call where to fix it, of =
+course. =0A=
+=0A=
+> A note to ourselves, we should write a section in the documentation=0A=
+> for AF_XDP that defines the expected driver behavior. There are very=0A=
+> likely more inconsistencies out there since this was never explicitly=0A=
+> specified anywhere=0A=
+=0A=
+This is good point, some documented unification of behavor across happy pat=
+h and different kind of errors would be nice.=0A=
+=0A=
+=0A=
+________________________________________=0A=
+From: Magnus Karlsson <magnus.karlsson@gmail.com>=0A=
+Sent: Tuesday, 20 October 2026 08:09=0A=
+To: Maciej Fijalkowski=0A=
+Cc: Marcin Knap; Tony Nguyen; Przemek Kitszel; Andrew Lunn; David S. Miller=
+; Eric Dumazet; Jakub Kicinski; Paolo Abeni; Magnus Karlsson; Stanislav Fom=
+ichev; Simon Horman; Alexei Starovoitov; Daniel Borkmann; Jesper Dangaard B=
+rouer; John Fastabend; jtollet@cisco.com; intel-wired-lan@lists.osuosl.org;=
+ netdev@vger.kernel.org; linux-kernel@vger.kernel.org; bpf@vger.kernel.org=
+=0A=
+Subject: Re: [PATCH bpf] xsk: Do not free ZC Rx buffer when the Rx ring is =
+full=0A=
+=0A=
+CAUTION: This email originated from outside of the organization. Do not cli=
+ck links or open attachments unless you recognize the sender and know the c=
+ontent is safe.=0A=
+=0A=
+=0A=
+[You don't often get email from magnus.karlsson@gmail.com. Learn why this i=
+s important at https://aka.ms/LearnAboutSenderIdentification ]=0A=
+=0A=
+On Tue, 20 Oct 2026 at 00:14, Maciej Fijalkowski=0A=
+<maciej.fijalkowski@intel.com> wrote:=0A=
+>=0A=
+> On Mon, Oct 19, 2026 at 10:22:02AM +0200, Marcin Knap via B4 Relay wrote:=
+=0A=
+> > From: Marcin Knap <marcin.knap@vecima.com>=0A=
+> >=0A=
+> > When an XDP program redirects a zero-copy buffer to an XSK and the=0A=
+> > socket's Rx ring is full, xsk_rcv_zc() frees the buffer and returns=0A=
+> > -ENOBUFS to xdp_do_redirect().=0A=
+> >=0A=
+> > A failed xdp_do_redirect() leaves the buffer owned by the caller, and=
+=0A=
+> > drivers rely on that: mlx5e treats the failure as XDP_DROP and releases=
+=0A=
+>=0A=
+> Sashiko report shows that drivers are rather inconsistent here=0A=
+=0A=
+A note to ourselves, we should write a section in the documentation=0A=
+for AF_XDP that defines the expected driver behavior. There are very=0A=
+likely more inconsistencies out there since this was never explicitly=0A=
+specified anywhere.=0A=
+=0A=
+> > the buffer when the Rx WQE is refilled, and i40e and ice free it on=0A=
+> > XDP_CONSUMED. The buffer is therefore freed twice. It gets reused for=
+=0A=
+> > another Rx descriptor, the second free puts an in-use buffer back on=0A=
+> > the pool free list, and the same UMEM frame is later handed to user=0A=
+> > space twice.=0A=
+>=0A=
+> Did you verify this or is this rather a speculation? xp_free() protects=
+=0A=
+> against double-free cases.=0A=
+>=0A=
+> > On mlx5 with striding RQ this also ended in a NULL pointer=0A=
+> > dereference in mlx5e_post_rx_wqes().=0A=
+>=0A=
+> Please more info on this then.=0A=
+>=0A=
+> >=0A=
+> > Leave the buffer with the caller on both the single-buffer and the=0A=
+> > multi-buffer -ENOBUFS paths, as xsk_rcv() and xsk_rcv_check() already=
+=0A=
+> > do. i40e and ice relied on the core freeing the buffer on their=0A=
+> > need_wakeup -ENOBUFS (XDP_EXIT) path, so make them free it there.=0A=
+> >=0A=
+> > Seen on Mellanox ConnectX-6 DX MT2892 (FW 22.47.1026) with AF_XDP=0A=
+> > zero-copy on 7.3.0-rc6 when the user-space consumer could not keep up=
+=0A=
+> > with the Rx ring. With this change no duplicate frames were seen with=
+=0A=
+> > striding RQ on or off.=0A=
+>=0A=
+> Have you thought about massaging mlx driver instead of intel + core?=0A=
+> Even when that would be correct approach ixgbe would miss being addressed=
+.=0A=
+>=0A=
+> >=0A=
+> > Fixes: 269009893146 ("xsk: recycle buffer in case Rx queue was full")=
+=0A=
+> > Signed-off-by: Marcin Knap <marcin.knap@vecima.com>=0A=
+> > ---=0A=
+> > Tested on mlx5 (ConnectX-6 DX) in zero-copy single-buffer mode.=0A=
+> > The i40e and ice changes and the multi-buffer path are build-tested=0A=
+> > only, as I don't have that hardware available.=0A=
+> > ---=0A=
+> >  drivers/net/ethernet/intel/i40e/i40e_xsk.c |  1 +=0A=
+> >  drivers/net/ethernet/intel/ice/ice_xsk.c   |  1 +=0A=
+> >  net/xdp/xsk.c                              | 15 +++------------=0A=
+> >  3 files changed, 5 insertions(+), 12 deletions(-)=0A=
+> >=0A=
+> > diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/e=
+thernet/intel/i40e/i40e_xsk.c=0A=
+> > index 9f47388eaba5..d32c7255f0b3 100644=0A=
+> > --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c=0A=
+> > +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c=0A=
+> > @@ -358,6 +358,7 @@ static void i40e_handle_xdp_result_zc(struct i40e_r=
+ing *rx_ring,=0A=
+> >               return;=0A=
+> >=0A=
+> >       if (xdp_res =3D=3D I40E_XDP_EXIT) {=0A=
+> > +             xsk_buff_free(xdp_buff);=0A=
+> >               *failure =3D true;=0A=
+> >               return;=0A=
+> >       }=0A=
+> > diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/eth=
+ernet/intel/ice/ice_xsk.c=0A=
+> > index 0643017541c3..7c1dd4c87a71 100644=0A=
+> > --- a/drivers/net/ethernet/intel/ice/ice_xsk.c=0A=
+> > +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c=0A=
+> > @@ -636,6 +636,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring=
+,=0A=
+> >               if (likely(xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR))) {=0A=
+> >                       xdp_xmit |=3D xdp_res;=0A=
+> >               } else if (xdp_res =3D=3D ICE_XDP_EXIT) {=0A=
+> > +                     xsk_buff_free(first);=0A=
+> >                       failure =3D true;=0A=
+> >                       first =3D NULL;=0A=
+> >                       break;=0A=
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c=0A=
+> > index 33475b180ea6..0edc160c660f 100644=0A=
+> > --- a/net/xdp/xsk.c=0A=
+> > +++ b/net/xdp/xsk.c=0A=
+> > @@ -224,21 +224,15 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct=
+ xdp_buff *xdp, u32 len)=0A=
+> >       struct list_head *xskb_list;=0A=
+> >       u32 contd =3D 0;=0A=
+> >       u32 num_desc;=0A=
+> > -     int err;=0A=
+> >=0A=
+> > -     if (likely(!frags)) {=0A=
+> > -             err =3D __xsk_rcv_zc(xs, xskb, len, contd);=0A=
+> > -             if (err)=0A=
+> > -                     goto err;=0A=
+> > -             return 0;=0A=
+> > -     }=0A=
+> > +     if (likely(!frags))=0A=
+> > +             return __xsk_rcv_zc(xs, xskb, len, contd);=0A=
+> >=0A=
+> >       contd =3D XDP_PKT_CONTD;=0A=
+> >       num_desc =3D xdp_get_shared_info_from_buff(xdp)->nr_frags + 1;=0A=
+> >       if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {=0A=
+> >               xs->rx_queue_full++;=0A=
+> > -             err =3D -ENOBUFS;=0A=
+> > -             goto err;=0A=
+> > +             return -ENOBUFS;=0A=
+> >       }=0A=
+> >=0A=
+> >       __xsk_rcv_zc_safe(xs, xskb, len, contd);=0A=
+> > @@ -252,9 +246,6 @@ static int xsk_rcv_zc(struct xdp_sock *xs, struct x=
+dp_buff *xdp, u32 len)=0A=
+> >       }=0A=
+> >=0A=
+> >       return 0;=0A=
+> > -err:=0A=
+> > -     xsk_buff_free(xdp);=0A=
+> > -     return err;=0A=
+> >  }=0A=
+> >=0A=
+> >  static void *xsk_copy_xdp_start(struct xdp_buff *from)=0A=
+> >=0A=
+> > ---=0A=
+> > base-commit: ff47652a4b66c067c765a7ad464d930b5a9367cc=0A=
+> > change-id: 20261019-xsk-zc-rx-double-free-1a3b059cd41f=0A=
+> >=0A=
+> > Best regards,=0A=
+> > --=0A=
+> > Marcin Knap <marcin.knap@vecima.com>=0A=
+> >=0A=
+> >=0A=
+>=0A=
