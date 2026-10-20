@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792521802;
-	b=k9ne+pWK7JXVFJEPGnvsPDVs778/1wJ7nUa0Gh+KmDFMDqCoIGKa3K/spcEsq/05CfVy
-	 o9zPnIyrzehVZyKwqfNec++2KgxfBeXzJGcildxZyRofcUo6Wn/Z2X+LGqhRlS4I8HS34
-	 RKA9b5UADGTxtDWUnJzUjn+qX7vF9ChXR5rW+8GxYrus3j3Iex//Mnie3bOrKt+q2CVH4
-	 qxd+DbOANMf7OPg933NMpfiL+LEtYJ4ytVOTLB2OOOCP/v9uCTmcDbQaZKbyd6jX8HyYr
-	 puBF2twdJNRM7xdj3LQVqmEXUelOiOr6bGCf8HLOi0oPjn1xKD4rQkyMW4prfCWbUVQ==
+	t=1792522533;
+	b=1d50EDZemUheyK5VFLp7VEDf7sEEGxmHj+lNr8wWChGS1cFKlfX0Hrj31TqUDgNMr37g
+	 qICQub/Wg3gAd46zT8Vn/hLC17R/ct7Pxv0tus4IfEGoXOHrdfA+hDF6K9VMHSZYvkyVb
+	 hR/WAITIJd6QgM3SoTYWhYS6Xa4PA5ogMV61GDKGnSKZApmnPzhgKfsPqcqydJdPcoQPQ
+	 WiqNWS6a8GPBnEfqqLl89fe8IzcjrDY1M7jfO4h4m+esTmnzuHcX4Ab8eNtGLfmn4xwoJ
+	 fhCD44FcoLKP0brtZhtsMYc5l/repL3Re4f/YszqJesWsaQlhD6cpbEG+fosgx6f7wQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792521802;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792522533;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Cg5i28eI8ZmgAEQYGaNmNXxb4FmSuruGqb2BKhaEY1g=;
-	b=RnmHOFTzvl6gxUwnSGW4MFjybnagwIShA0VbDe/eG+3fuoHsC/24Jk0laXn5rhpkX24o
-	 idx9lCxiIqBKmyxHcqf4N15ElEdQVmNXVeQq0Q+F/z0sGQSYKouWsCfSjHP9MumkB72SF
-	 cWESAm2s9iwvw/LYRYtDyCFa7Elj1lDwVUzJmNwxSLg1IZoMjiTqLue7bib1pJ/OCK0jw
-	 5jjaNTdXmDTQvmdqxIuffr94CS1ULcEzOTuFpz4A/hEqNI786y7U7OKS+MNk9nuf2r8N5
-	 /O9nIhFHDgTmvMM2bGhBzulJwH4T4wVrAPvFH7R4TDl1Jjr6K7ULbJUrLUDBnpGE9ag==
+	bh=0Hw/79qPEYaev+f6sHyspRcMvZ/yCBD7eK46ft+KnMM=;
+	b=JEQJgQBCDClQ2yTncVeet+NfFEins3onR1qNDO7nJxeFgVpKVgYfQOqzmwCO1QQtx905
+	 y0jr5T3ym8m/z7aVQk1hmgvybNdom7hep4P7VCTorlSHGL2qSeDdYJy4PxQm1B4aNn3QA
+	 2reL9e3J7Xaqyfu1nsLaX3ZSL48t8x0N7h2my+NNzMHJGzjvI2jPu2QCciUOIUs4IqjuF
+	 uILoq/LFV+Fzr8w1cD9Ief0M5x8QECdEU/oC3mcuUOiiGRiqu9UX1UcZDiza/HZsnpasA
+	 Q2ETECnnxIHf+WOsJviuBNrUyMzmUVu1VGzlYj43FjG9Y3X3sP6AT2p38su0GB0vg5Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H+jRGeKM;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A4R7HYrO;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95162606A31D;
-	Tue, 20 Oct 2026 18:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06001606A319
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=H+jRGeKM
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6551F000C9;
-	Tue, 20 Oct 2026 18:43:21 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A4R7HYrO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B821F000C9;
+	Tue, 20 Oct 2026 18:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792521802;
-	bh=Cg5i28eI8ZmgAEQYGaNmNXxb4FmSuruGqb2BKhaEY1g=;
+	s=k20260515; t=1792522532;
+	bh=0Hw/79qPEYaev+f6sHyspRcMvZ/yCBD7eK46ft+KnMM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=H+jRGeKMfGRWKUtlHBGIdLEHaq5YucF5IvOpzpz2lyiHEKg4uplaXyzx+1Y/HCef9
-	 U0OobKH0D8VOS3fa92ErsElC0y0s/S6zb3wZ9LotduqSn1qYqbqLVuhzQIKKDESb+H
-	 5SP/e/f6Qe/K8igdgz3OeQkdUG9JnOm9TFh7isYa6l5pf/jY0HMTsbsvMmJlggSmTH
-	 9X7gMKoXEp6IWvni/b/p5XkznwfsU1imXCv2JY2NkSR7hQ9NgZ2XO2StClqNqgZH53
-	 pF+mKgUbV58WK6kofBTrouuXZXuy2uJ6U9eSTfLUVb1HKvLMXf37SucGH6AbxfM5G/
-	 kvGG7haFlF3dA==
-Content-Type: multipart/mixed; boundary="===============8583768830564627741=="
+	b=A4R7HYrOsBhXJwtIbp3frf7ytWn5CeRJ12GSWgYOIHdfSpJI1ZxG/4ucoKJfzdAF7
+	 /EmizjMIwUT+r2lmhSp3ykOd+rr4fLbeUVP2WTTdbodos5qx4gj9vjeULC9zKpMyG/
+	 YDFDD+UUMLjVajinIwfUPIsk3AT0GstnCin7DV6aONV5oJuBeKAattDXHDAk7dqGr6
+	 vhnZZ4shVLn32FQP7wB2WIyhrG5YPy3YyKntlhGSbUwFJJRAA4wGjZCwRMvVHxH0iW
+	 OfJCuhZA01FDbE4lZvOnOqxd3+FS28MCPmgju9/Soerl0fZLsKgLNiaql/ZDvNWnda
+	 oQOO/VMLDS4LA==
+Content-Type: multipart/mixed; boundary="===============5108569627596291362=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,73 +49,140 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <8e8c6aaacd577f4daa13c8e97702e38c9982a98684f964fc564880bfcd624413@mail.kernel.org>
-In-Reply-To: <1fa798d444efac579e91ee0716e228902a8f9afe.1791980149.git.zhilinz@nebusec.ai>
-References: <1fa798d444efac579e91ee0716e228902a8f9afe.1791980149.git.zhilinz@nebusec.ai>
-Subject: Re: [PATCH net 1/1] bpf: reject raw iteration over managed sk_storage values
+Message-Id: <d77e239b1d4ce28269711313492d11ff18851fbe0459472cdfb1050efd6e744e@mail.kernel.org>
+In-Reply-To: <20261020181320.1284798-4-alexei.starovoitov@gmail.com>
+References: <20261020181320.1284798-4-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH v4 bpf-next 3/6] bpf, arm64: Support unwind_goto and unwind_exit
 From: bot+bpf-ci@kernel.org
-To: zhilinz@nebusec.ai,netdev@vger.kernel.org,bpf@vger.kernel.org
-Cc: davem@davemloft.net,edumazet@kernel.org,pabeni@redhat.com,horms@kernel.org,ameryhung@gmail.com,ast@kernel.org,martin.lau@kernel.org,daniel@iogearbox.net,leon.hwang@linux.dev,mattbobrowski@google.com,zhilinz@nebusec.ai,menglong8.dong@gmail.com,kees@kernel.org,bestswngs@gmail.com,memxor@gmail.com,vega@nebusec.ai,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 20 Oct 2026 18:43:21 +0000 (UTC)
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 20 Oct 2026 18:55:32 +0000 (UTC)
 
---===============8583768830564627741==
+--===============5108569627596291362==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: reject raw iteration over managed sk_storage values
+> bpf, arm64: Support unwind_goto and unwind_exit
 
-TL;DR: Fix only covers sk_storage iterators; the bpf_map_elem iterator in
-map_iter.c may still let programs read or overwrite __kptr fields via raw
-value buffers, as agreed in the v1 review.
+TL;DR: In arm64 JIT, unwind_exit in an exception callback may return into an
+unverified unwind_goto pad (via extension or tail call), possibly allowing
+type confusion and out-of-bounds kernel memory access.
 
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index ecd659f79fd4..b4936f2e5918 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -865,6 +865,12 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
->  	if (map->map_type != BPF_MAP_TYPE_SK_STORAGE)
->  		goto put_map;
->  
-> +	/* The iterator exposes values as raw buffers, bypassing field checks. */
-> +	if (map->record && prog->aux->max_rdwr_access) {
-> +		err = -EACCES;
-> +		goto put_map;
-> +	}
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 1d5f4cf88d33..b3efe0668e86 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+
+[ ... ]
+
+> @@ -1221,6 +1227,76 @@ static int add_exception_handler(const struct bpf_insn *insn,
+[ ... ]
+> +static long bpf_unwind_fixup(u64 lr)
+> +{
+> +	const struct exception_table_entry *e;
 > +
->  	if (prog->aux->max_rdwr_access > map->value_size) {
->  		err = -EACCES;
->  		goto put_map;
+> +	e = search_bpf_extables(ptrauth_strip_kernel_insn_pac(lr) - 1);
+> +	/*
+> +	 * The verifier made sure that unwind_goto follows a call in a prog. When
+> +	 * the kernel called an async or an exception callback, it's exit.
+> +	 */
+> +	return e ? e->fixup : 0;
+> +}
 
-Does the iter/bpf_map_elem path need the same check?
+[ ... ]
 
-The sibling attach callback in kernel/bpf/map_iter.c validates only the
-access sizes against the key and value sizes:
+> @@ -1806,8 +1882,18 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
+>  	/* function return */
+>  	case BPF_JMP | BPF_EXIT:
+> +		if (bpf_is_unwind_exit(insn) && bpf_prog_can_unwind(ctx->prog)) {
+> +			emit_unwind_exit(ctx);
+> +			break;
+> +		}
+>  		/* Optimization: when last instruction is EXIT,
+>  		   simply fallthrough to epilogue. */
+>  		if (i == ctx->prog->len - 1)
 
-kernel/bpf/map_iter.c:bpf_iter_attach_map() {
-    ...
-	if (key_acc_size > key_size || value_acc_size > value_size) {
-		err = -EACCES;
-		goto put_map;
-	}
-    ...
-}
+Can this unwind_exit land in a pad that the verifier never checked, when it
+is emitted for an exception callback?
 
-Its value argument is also registered as a writable PTR_TO_BUF (HASH,
-LRU_HASH, ARRAY and the per-cpu variants), so a program attached there can
-still read or overwrite special fields such as __kptr in the same way the
-commit message describes for sk_storage.
+The verifier treats unwind_exit in an exception callback as a plain exit
+(process_bpf_exit_full() -> check_return_code()), so prepare_func_exit()
+never checks for an unwind_goto at that call site.  The JIT doesn't follow
+that rule.  An exception callback is func[i] with func_idx != 0, so
+bpf_prog_can_unwind() returns true and emit_unwind_exit() is emitted.  The
+comment in bpf_unwind_fixup() ("When the kernel called an async or an
+exception callback, it's exit") then relies on search_bpf_extables()
+failing.
 
-This was raised in the v1 review, with a request to cover that path as well.
-It was agreed to extend the fix in a respin, but this commit only touches
-net/core/bpf_sk_storage.c and no later version has been posted.
+An exception callback has no frame record of its own.  build_prologue()
+does "mov x29, x2", and x2 is ctx.bp from bpf_stack_walker(), which is the
+FP of the first func_idx == 0 frame.  So the "ldr x0, [x29, #8]" in
+emit_unwind_exit() reads the return address of the main prog that threw,
+not an address in bpf_throw().  That address is in BPF code in at least two
+supported setups:
 
-Should the bpf_map_elem iterator be handled as part of this fix?
+1. Extension.  Prog P calls global foo() as "call foo; unwind_goto pad".
+   Extension E replaces foo().  freplace is a B from foo's patch site
+   (bpf_arch_text_poke(), BPF_MOD_JUMP), so E's frame record LR is the
+   return address in P after "bl foo".  E calls bpf_throw() and has
+   __exception_cb(cb), and cb ends with "r0 = 0; unwind_exit".  Extensions
+   with exception callbacks are used in progs/exceptions_ext.c.
+
+2. Tail call.  P's subprog s tail-calls Q.  On arm64 Q runs on s's frame
+   record (emit_bpf_tail_call() branches past the FP/LR push), so Q's
+   exception callback reads the return address in P after "bl s".
+
+In both cases search_bpf_extables() finds the entry that
+add_unwind_exentry() created for P's unwind_goto, and the callback's
+epilogue adds .fixup to LR and returns into P's pad.
+
+Is that path checked anywhere?  In case 1, check_unwind_insns() sets
+prog->aux->can_unwind from subprog_info[0] only, so an unwind_exit in E's
+exception callback doesn't count.  The bpf_check_attach_target() check
+"Extension program can unwind, while original does not" then lets E replace
+a foo() that cannot unwind, and check_func_call() never pushes the unwound
+branch for that call.  In case 2, check_helper_call() models a taken tail
+call as a normal return only.
+
+The unwind_goto and its extable entry survive whenever the pad is reached
+from another path, for example another jump or another call whose callee
+does unwind, because bpf_opt_hard_wire_dead_code_branches() keeps it:
+
+    if (bpf_is_unwind_goto(insn) && aux_data[i + 1 + insn->off].seen)
+            continue;
+
+At runtime the pad then runs with r6-r9 and the stack as they were at the
+"call foo" or "call s" site, plus r0 from the callback, while the verifier
+only checked the pad with the states from its other predecessors.  Could
+that mismatch allow type confusion, for example a register that is a scalar
+at the call site but a map value pointer on the verified path into the pad,
+and from there an out-of-bounds kernel memory access?
+
+The commit message statement "the offset is 0 when the kernel called the
+subprog as a callback" and the comment in bpf_unwind_fixup() don't appear to
+hold for exception callbacks.
+
+Would it work to treat unwind_exit as exit when
+ctx->prog->aux->exception_cb is set, for example:
+
+    if (bpf_is_unwind_exit(insn) && bpf_prog_can_unwind(ctx->prog) &&
+        !ctx->prog->aux->exception_cb)
+
+or else to make the verifier and the attach check account for unwind_exit
+in exception callbacks?
+
+The x86 JIT in 9fa54d36ee99 ("bpf, x86: Support unwind_goto and
+unwind_exit") uses the same condition,
+"src_reg == BPF_UNWIND_EXIT && bpf_prog_can_unwind(bpf_prog)".  No fix for
+this was found in the rest of the series (c1df16f0ed1d..72e419bb0b07), which
+only adds selftests, and those cover the exception callback case only for a
+non-extension main prog.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39475541232
---===============8583768830564627741==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39474515830
+--===============5108569627596291362==--
