@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.165
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792513172;
-	b=pCcG39JXfDHsmQLwSy8WbiBxOMFVOrJ+rIvOrhrfaUzPhq9N+cU5o4Q+wyphyIT0JMtJ
-	 PHqX3y3a8UMqu+/t7mpPzzG/RUx0VQgp+YOA3eg0eV4SoPQSTX+dja+/HJGSj+e378hWu
-	 hwHpUuwmLUP7rhR50qfv+PxWcJPE2yt89h5dHePZKciQ7nzqdgh8kyG01QBGNkXC7YZwn
-	 XWBjy1pt9JuP/e2/em0ePb50LNOKzJaWzCCVDh7AQT85YcZta/5hDs+50J4LjfZTJP9XA
-	 e2kWpNN1FlcOb9cjKagrS49FCFGOa8UNIvqO4/40Ee2u0QIO91rgfZdZt1BPeokHrGQ==
+	t=1792513176;
+	b=3shob/Vb4JydAGuP7uAL6A0I7WNcHyAWuFB+pkCnxMRbrozvdAvU6ar+WqEsh0AXUPro
+	 4ujpoF31/T93rdWNiBxg8Fc2oZNH1pSmm/WDLh4FtNP1HbbHuzR085Qmx9Wadj0SKURpY
+	 iTivY7/PlD6OfD5/7Thc675qda/siKjEToq9s0N2f0eTgx3fP7DanIOjTC7yrj6PQ5lZa
+	 7DvQHhm7MCTTiQwW7NupwqbKYcyCS0mWzvAGY3TjIDXTqnEFB5XUbM7qscdtQyLx2+YB6
+	 30ivy+L2tiWXYWVXpJQemBYaZ0LxnnSTAYk8oKiMqwBWV1xEo2Mct5VZqGsfWgn+ALw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792513172;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792513176;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=7g1O3+AMUjdU652869MtAy7jdfqLJuiqcLsd94SKaL8=;
-	b=D+ml+oVXHzUw6azjpoDD+AdxCGfVmeAuhSSI6IjsiZDBT+JOGnsGEVQ60mQix+hBBlwS
-	 aMBA8/qTc8FF6GvegoR5SpnCF5qDwZcshyeBlfTYyLvoZx/mQtx+/J8ZbNuZxhJ7k85++
-	 HW11MIeGZDQFd3sgYlxwMU60puUy7bNiuT3pjujTZdth+LTn5J0LiMaLjRxzcu9A64xR5
-	 vHv/BUSf2F5GVyGjjgw2QfBKGe4jtqLWSid19oGY60Nfc6VWOk2vxVHZIlXWRLL1bTbr0
-	 0QYrwWZkbFbLNP3P2da+2Im97BAyC04/sPFEx+XLFHHK1iudBaTZG04moYNhxt1Q5AQ==
+	bh=bKUxGHRyo3+/Dr/aOP5Vkotdy4oFjZquORMcELQq3oE=;
+	b=BguKlviG4YXHVRK3E9Fom3SpJUGNmm1Kns14kZTEUP9/F0ONcSXjd164tz2W/fNi8ybv
+	 lLuoPCPn+AANdZXSncuOkMqFL7NXKGOiLPX36Pky4WbgzBA8T9m7SLB0O2oVh3h32N1r+
+	 KgpIUnQi0mzbb9ngb7yJ7qFEJsw9esJ5kFRU2uNRoptuUwCECCVSfGeplqrNrLuAgZJXX
+	 fH4jEBuKPe1V+6jT/j74wKl7MEZ3pr3VSPMpgoQgz09dPPOllX4LSxpwJGOhRJ+unuhSH
+	 EfKMjAh491khUhK1brKdW00puUGAPniakP56o/lyGbvXvudQPpGRYk4sbTgHKczC9OA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lJnrJ9q3;
-	arc=none smtp.remote-ip=95.215.58.172
-Received: from mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dh1cZjHC;
+	arc=none smtp.remote-ip=91.218.175.165
+Received: from mta0.migadu.com (out-165.mta0.migadu.com [91.218.175.165])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71AA606A319
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:19:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C71AA606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF23D60A2607
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:19:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF23D60A2607
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lJnrJ9q3
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=dh1cZjHC
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=2t8VDdkxfN76z4f12I0ygVrVvOVbPTFc5XhNjpzAk+Q=;
+DKIM-Signature: a=rsa-sha256; bh=gE8TgRXK0GcKV0yfwGMME3U10Ye+CXjYA911KUj/qPQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792513169; v=1; x=1793117969;
- b=lJnrJ9q3HlCySm3fXdnACCgL6iXlSggZG56NZdVVRo7ED1ZoWbR59Id+W/Mh1+RYdmRtAEXu
- mV92PMBHR06S750jB1VAJJ4EQL1KW6KSQVfy8ejpOvpxIo3oHEjB7F17czfq/1G9j6GzgK+sUsf
- mRPta96f24vs1+4pyp2pPuN8=
+ t=1792513173; v=1; x=1793117973;
+ b=dh1cZjHCEEe34GQWUX2jBy9/v4hOEK47NdKfX7JVjGe6toZoPPUyUhhV6fKrC91Om1zsigC4
+ dTuG0kl3MxeYLIGjGFc++iGqBIqF44Mk7YFK+/sEHUuFACnf0ydRaiitupbSRqRX2vf9PlTnWex
+ 9VqMb2UA73K5BQF100b+E7Mo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 79913abc3e04dd01;
-	Tue, 20 Oct 2026 16:19:29 +0000
-X-Mizu-Trace-ID: 79913abc3e04dd01
+Received: by smtp.migadu.com with ESMTPS id 567127ed3dc100ce;
+	Tue, 20 Oct 2026 16:19:33 +0000
+X-Mizu-Trace-ID: 567127ed3dc100ce
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -65,9 +65,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v3 01/12] bpf: Keep the 32-bit range across a sign extension that cannot change it
-Date: Tue, 20 Oct 2026 09:18:56 -0700
-Message-ID: <20261020161907.2115379-2-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v3 02/12] selftests/bpf: Cover sign extensions that cannot change the range
+Date: Tue, 20 Oct 2026 09:18:57 -0700
+Message-ID: <20261020161907.2115379-3-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261020161907.2115379-1-vineet.gupta@linux.dev>
 References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
@@ -82,101 +82,88 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch addresses the verifier deficiency where it would throw away
-a good range whenever that range crossed zero.
+Two programs, one per field width that coerce_subreg_to_size_sx() handles.
+Each builds a 32-bit range that straddles zero but still fits the target
+field, so the sign extension is a no-op: [-63, 0] for (s8) and [-4095, 0]
+for (s16). The guard that follows can only be resolved statically if the
+range survives, and it protects a div by zero, so a widened range is a
+verification failure rather than a silently weaker test.
 
-| 1: (54) w0 &= 63      ; R0=scalar(smin32=0,smax32=63,...)
-| 2: (14) w0 -= 63      ; R0=scalar(smin32=-63,smax32=0,...)
-| 3: (bc) w0 = (s8)w0   ; R0=scalar(smin32=-128,smax32=127,...)
-| 4: (c6) if w0 s< 0xffffffc1 goto pc+2
-| ...
-| 7: (34) w0 /= 0
-| div by zero
-
-[-63, 0] already fits an s8, so insn 3 cannot change any value in it, yet
-the range comes out widened to [-128, 127]. The guard at insn 4 then
-cannot be resolved and the div becomes reachable.
-
-The issue is the following check in coerce_subreg_to_size_sx()
-
-	top_smax_value = ((u32)reg_s32_max(reg) >> num_bits) << num_bits;
-	top_smin_value = ((u32)reg_s32_min(reg) >> num_bits) << num_bits;
-
-	if (top_smax_value != top_smin_value)
-		goto out;
-
-which doesn't fire when the range includes zero, since the top bits
-differ. e.g. for [-63, 0]:
-
-    smin32 = -63: high bits all ones
-    smax32 =   0: high bits all zero
-
-The cheap noop test above it does not catch this either -- it only looks
-at reg_umax(), which a negative smin makes huge.
-
-The 64-bit twin, coerce_reg_to_size_sx(), had the same gap and was given
-an equivalent early return by commit 0892ef2a7ef3 ("bpf: Representation
-for intervals with steps"). This patch does the same for the 32-bit path,
-for the s8 and s16 widths it handles. It doesn't improve anything in
-selftests or corpora of external objects -- the shape above only shows up
-in the test the next patch adds -- but seems like the right thing to do
-anyways.
-
-Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
-v3: was v2 5/13.
- - moved to the front: it is unrelated to the low-32 tracking (Alexei)
- - narrowed to the 32-bit path. Commit 0892ef2a7ef3 ("bpf:
-   Representation for intervals with steps") has since given
-   coerce_reg_to_size_sx() an equivalent early return, so Fixes:
-   1f9a1ea821ff goes with that half.
- - measured inert: 0 instruction and 0 state changes on both selftest
-   corpora and on 441 external objects.
+v3: was v2 6/13.
+ - moved with patch 1, and narrowed to the 32-bit mov to match it. The
+   ALU64 forms v2 tested now pass with or without the patch.
 
- kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ .../selftests/bpf/progs/verifier_movsx.c      | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 62f8951126ba..e1b41975a442 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6182,6 +6182,7 @@ static void set_sext32_default_val(struct bpf_reg_state *reg, int size)
- static void coerce_subreg_to_size_sx(struct bpf_reg_state *reg, int size)
- {
- 	s32 init_s32_max, init_s32_min, s32_max, s32_min, u32_val;
-+	s32 field_smin, field_smax;
- 	u32 top_smax_value, top_smin_value;
- 	u32 num_bits = size * 8;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+index 195b27a51224..3fcd03b7a547 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+@@ -202,6 +202,61 @@ l0_%=:							\
+ 	: __clobber_all);
+ }
  
-@@ -6192,6 +6193,27 @@ static void coerce_subreg_to_size_sx(struct bpf_reg_state *reg, int size)
- 	if (reg_umax(reg) < (1ULL << (num_bits - 1)))
- 		return;
- 
-+	if (size == 1) {
-+		field_smin = S8_MIN;
-+		field_smax = S8_MAX;
-+	} else {
-+		/* size == 2 */
-+		field_smin = S16_MIN;
-+		field_smax = S16_MAX;
-+	}
++/*
++ * A 32-bit range that already fits the field is unchanged by the sign
++ * extension. Both of these straddle zero, so reg_umax() is huge and the high
++ * bits of s32_min and s32_max differ: neither of the gates that predate
++ * testing the range against the field can keep it. The guard that follows can
++ * only be resolved statically if the range survives, and it protects a div by
++ * zero, so a widened range is a verification failure rather than a silently
++ * weaker test.
++ */
++SEC("socket")
++__description("MOV32SX, S8, negative range is preserved")
++__success __success_unpriv __retval(0)
++__naked void mov32sx_s8_negative_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0x3f;					\
++	w0 -= 0x3f;					\
++	/* w0 is [-63, 0], already a valid s8 */	\
++	w0 = (s8)w0;					\
++	if w0 s< -0x3f goto l0_%=;			\
++	w0 = 0;						\
++	exit;						\
++l0_%=:							\
++	/* unreachable unless the range was widened */	\
++	w0 /= 0;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
-+	/*
-+	 * The range already fits the field, so (sN)v == v for every value the
-+	 * register can hold and the sign extension changes nothing. The test
-+	 * above misses this once the range straddles zero: it only looks at
-+	 * reg_umax(), which a negative smin makes huge.
-+	 *
-+	 * This has to precede reg_step_reset() below: the extension is a noop,
-+	 * so the base/step line still holds and there is nothing to discard.
-+	 */
-+	if (reg_s32_min(reg) >= field_smin && reg_s32_max(reg) <= field_smax)
-+		return;
++SEC("socket")
++__description("MOV32SX, S16, negative range is preserved")
++__success __success_unpriv __retval(0)
++__naked void mov32sx_s16_negative_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0xfff;					\
++	w0 -= 0xfff;					\
++	/* w0 is [-4095, 0], already a valid s16 */	\
++	w0 = (s16)w0;					\
++	if w0 s< -0xfff goto l0_%=;			\
++	w0 = 0;						\
++	exit;						\
++l0_%=:							\
++	/* unreachable unless the range was widened */	\
++	w0 /= 0;					\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
- 	/* See comment at reg_step_check_unsigned(). */
- 	reg_step_reset(reg);
- 
+ SEC("socket")
+ __description("MOV64SX, S16, R10 Sign Extension")
+ __failure __msg("R1 type=scalar expected=fp, pkt, pkt_meta, map_key, map_value, mem, ringbuf_mem, buf, trusted_ptr_")
 -- 
 2.53.0-Meta
 
