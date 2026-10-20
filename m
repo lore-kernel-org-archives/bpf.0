@@ -1,114 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792521378;
-	b=YO/weO8IY069NyhhpGfYcPq3DLmndp2IhhhO/i26v586iD0NDVzodOtnC8sEjH/hOfMB
-	 uGdNd+SA9l642vntDRCeRqIh/9aXfjeeaJZj4iFlCpDWOQWiIfnUfvw9loHGRtm9hBnUi
-	 puSIKMvtIRFSuNLZFoQw0iOhQuPjMxvIII3OXuOtRbVAxURgGKdK1SucMD1lpjj/w0AJu
-	 7uHlBeuPRC2QMHj3NRfe2M83SSgyv3GZcmit7FPxzPDdPevmJ33m+M0PsbmKhjr6O0BYj
-	 +lqrXirqrLw76+0ZVa3RogecFwzjyQE4NSROVt8Qk03tvka1dAnqn+83w8tK91V5q/Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792521378;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:Content-Type:Content-Disposition:
-	 In-Reply-To:X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
-	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
-	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
-	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
-	 X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=bk7jnHkCaTC6apRDhn9sV5M02QmCrnv+VHnvjh6o6qg=;
-	b=BXnxNVMksNUL+ght1+CqFEfoqgNonMVtqjXbSCGs6QURtfVfDnt4zRK5SpD/5i67Ne10
-	 yJ/WWB2IMtVCgFAzP8+zqMeP02YvgL3DLx0VGy79UaY0VvG4ueJ67n7OqtXwRh+ZMC52l
-	 Uu+ByuYQTN8IIGgalmjyR7LXlSrRv+UIr6+KDR+DY69A5HHZzekYjZNd2AjQ1xNUuH+WJ
-	 XJJlVdJpkt+hXxhByQcMTZMPqSyb9+uCl7rBHWgLtvanii0ZR8Nrw5eqTcsXW+75YyoL8
-	 rIdDjm0Ukr1zoxhiSYPwBeknHWHSf3PAkYkTBxr5S3vRqS0W4OfPgNF5UjrWTXGj9FQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nvidia.com;
-	spf=fail smtp.mailfrom=nvidia.com;
-	dkim=pass header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=MqIbdFJz;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.85.47
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010047.outbound.protection.outlook.com [52.101.85.47])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792521412;
+	b=pbjYepPzEgxMpCq5qsxBTkZI6t8KfSIpYyFtx4/clbZkonXY6eKZ9I+5bA0H1o94qTj9
+	 qhKnGmuIwfRGP2/inGMiH5R/WLPt4sIfwd05rPxpKn6VhQLvAyWOUPipYWLSPM7BvdL3d
+	 Mw69t0o8bkTAwI03PP69dtO7hl6+NW8CFghNm3MHPUnfkRhwL/056mX1/kFThh1ERWOjw
+	 yercuzVK9rT2dWpNEbpLmNXTVw4fBiwpFBWO3xkTJ/IS3nSdT7IAEBDq6DAecNr9y6ZLO
+	 F8bO5pid6htLBkHROgjp1wePFVsw1zC0vup6I0S4dhjyT2obH4Kwv+qkcdB40HyQtNQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792521412;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=6XFglQIwIcQq47ucEF+Jep4VYqyQbu2yIdNWVzBU9wU=;
+	b=oBJTo6IRXXYNGqVZfK+hWGGBMZGXol+4gouXAAzbd41f4IJz/mypRhmt3KD1QVhac1fY
+	 cgAkZWQvsm2fyVGUsmsZ3UMi6FQ3zYFHlhe4Gxis0/uTBmP7cXLDArkHAAqgNaoFH0gLE
+	 bni0AeOmaXjmmD1549hDdbszV4J8YbRuDmAR+2dDRDaW3FSq3UOTfzQRY2gKsbc4cOLQF
+	 S0hcG2sa8wkYrCii4JZp1EPQh0366bhZSoyaRwbY3zxSvcsRe2k/nNYr6KIj3ZUqWp3hT
+	 1S9kBFsF4jiILiZeKlgY+WuiHt9knbQ6cevP1c4uhRRylX1qug368MupJTm7gCfsLVg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dpSknhjr;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B571606A319;
-	Tue, 20 Oct 2026 18:36:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B571606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9465C606A31C
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 18:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=Nvidia.com header.i=@Nvidia.com header.a=rsa-sha256 header.s=selector2 header.b=MqIbdFJz
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Fes33Vb5bVLa8XJddrFIjcBBTUwtajjaRvlffgDQ75lPnC+08QizS12KEMt7QTT9h+gjrTK2KRPoAala+Wa0z+u09gtsWHF+vbn+hspSukZMBePtE4O6/n/nf47fJMsMR5Nfz5fTXPROtF+zTHIboGDrEazSRajYnYxcWPg9Q7gAGp9AkVqgvPsfFYo3begpjbq65KOrBA0DhgDGqywatG9221nriSxITXYS2f+82uVDVFqQ/ttrIAfLsIUGLmYhVptZu8DuQzRDhrjLfDcI/0wA7+ir/sSUGhEHPXqJgki6KnQTNkHlmke5akVfC+2wIxMAmvBUs0MsPm4bz8s3og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bk7jnHkCaTC6apRDhn9sV5M02QmCrnv+VHnvjh6o6qg=;
- b=ewj+LSIvP/qUYmSWWn0k/4mS/JTyplm8pJkKZ3txZ07vNJYFFBZ78Fqi8th+PTljU4QIW9hLK+kAhhZyF+OR+EjpAkFBwDMT8PQvEEFMxi4nESTRwr2lhd0Xht5Avg+FIKh7fLpKLLVKk1JyoDsev7x5tQDJVf4sjnLKZON//bTH9vQV4vbOaetHgo55PPtMK3oTWCanBUDMvqsqTOlZ0w7tsr/4Je/48bS/UF5mOl3B3pEW+fEV4lQugbazPexdbg5D5YT5FOzCxUfFai3M67UfflcCilB64n4FjYPcs7NapEX9geHTdKQtqAk4brCnWDDKrrg4B5i7F13rU12cEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bk7jnHkCaTC6apRDhn9sV5M02QmCrnv+VHnvjh6o6qg=;
- b=MqIbdFJz2O+uKA1RQvKlyZ1nz2oX1//etAzoTK6UAwBfVXC6rS1nHh6gTXJrrImlHrrtCUuXV17hcUFDMyU52NbfEU5unNnKoqYOoIHqiNaY8TmzkKT6mzY6H1YVfIM3rV7LaFoEW7UXdLxvUH3g98PMniEwONaQuPrVfuzNbF++xZ3wxtTUvjH2gwjJzOI1Ac0VMSUgSDbzG1i4qLCoajvnwJuC6ilM9LB544tUN2cEmRoKvT/8wJWdGem8nrgZ1+zw3x60byBYm7+jlWJILI+zsDAEvp8U79doVmwLe08rEUkF/kFr8RENLlMtE6YMRAN3CG3as7f1YLlGqVOn1Q==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12) by CHBPR12MB443627.namprd12.prod.outlook.com
- (2603:10b6:610:36c::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.14; Tue, 20 Oct
- 2026 18:36:10 +0000
-Received: from CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d]) by CHBPR12MB731189.namprd12.prod.outlook.com
- ([fe80::b0e5:123d:fe06:e10d%6]) with mapi id 15.21.0546.012; Tue, 20 Oct 2026
- 18:36:10 +0000
-Date: Tue, 20 Oct 2026 15:36:09 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Philipp Rudo <prudo@redhat.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Pingfan Liu <atlarge80@qq.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jeremy Linton <jeremy.linton@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Simon Horman <horms@kernel.org>,
-	Gerd Hoffmann <kraxel@redhat.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Viktor Malik <vmalik@redhat.com>,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Baoquan He <baoquan.he@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	kexec@lists.infradead.org, bpf@vger.kernel.org,
-	systemd-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Dave Young <ruirui.yang@linux.dev>
-Subject: Re: [PATCHv7 00/13] kexec: Use BPF lskel to enable kexec to load PE
- format boot image
-Message-ID: <20261020183609.GI3008132@nvidia.com>
-References: <20260322014402.8815-1-piliu@redhat.com>
- <20261011201325.GA918242@nvidia.com>
- <722bd9d8-5620-498a-a6c2-d9a1f498e0b7@app.fastmail.com>
- <20261020194719.4fbd4e4a@rotkaeppchen>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261020194719.4fbd4e4a@rotkaeppchen>
-X-ClientProxiedBy: BL1PR13CA0302.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::7) To CHBPR12MB731189.namprd12.prod.outlook.com
- (2603:10b6:610:33d::12)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dpSknhjr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169641F000C9;
+	Tue, 20 Oct 2026 18:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792521412;
+	bh=6XFglQIwIcQq47ucEF+Jep4VYqyQbu2yIdNWVzBU9wU=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=dpSknhjr6YcL4SW4DkhiUNyvjDsqykRpK/xKU53aa09CuJ+QM7uYlQGzdhtDwIFR+
+	 jjmGG6qq71Kayvx89tZYIuSYRhxI6bYj3mJkmctjQojqIreRYZ2bh6E+Gt4DyyQa3P
+	 96J6901bVyxUxoG7pmi4TDKATdIUCIdKieJyWe3/p8FUmZ+81a2cZhAfuqXaCzsr/T
+	 p4xbb1ht2bRX4w/NrGAf/jAWNSkMIoHCLk+povnJ5yXlLgeZK4fsyQROd2Ah3xa8jR
+	 qs9RObTWKv/bTm5ldMr9KyWqP6MXSQ93Qs2QZv+m9deqx/PgtZ7JxmbPxvYAzPZkdP
+	 PfOhT3M2A7cWw==
+Message-ID: <sashiko-outbox-179489@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 3/7] selftests/bpf: libarena: Add buddy
+ per-CPU caches
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
+In-Reply-To: <20261020181900.6755-4-emil@etsalapatis.com>
+References: <20261020181900.6755-1-emil@etsalapatis.com>
+ <20261020181900.6755-4-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Oct 2026 18:36:51 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,102 +59,265 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CHBPR12MB731189:EE_|CHBPR12MB443627:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d3a841d-6153-4fbc-cf58-08df2ed90324
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|23010399003|1800799024|6133799003|22082099003|18002099003|10067099003|4143699003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	JeAXw9a+mn8LyJe/njYKMpNN/PPk2t/IyBWkbWzOKF2ISpR40ZME0J7zZQdiwaGeDIfhXJtA1Mwv9rvurV8psjYx0vK6o1xeKXj3WAxx7ql1eA3YdF8E4zmRJVmP0W98JV6boE22bl5HCP84bywGo0aAvmhybU1noczIkR+ydwZahIh6AA6zLRGo84kjAaybP24fPNDDdHaAvxF0WY4j0VtKXyOKKRAtdOM/8f/qU4gAHX/FKg93b40ILLbUJS1t/hIvnclu3TOu0xIwx0BnepRwHPh/LjVblRa5Vh1PPH0h7jeYbgLv6hl+c1gy03YDvxRWaAYk4sexoQj/Be7iDKh5elkQ6m14TELX1N9wM4ILe2v/9CTBByRKgEZgD9xIcfPl/g4NG6W9eiG4JKPi82xxBlw1PiC3iIewE5vNQU6o8sa3cEwssl/n9CLRg6iWmrto0S5ez0NYKMdEAysIOZlIVVgy170ziHuWAhJZ4129UZ9RbcP7vvEeq63Z4PS1vOrKi0cOff3rtUByIXhMJhA2d4OuGBtXv35RHmopRLcF0MQ3L/bUonGXYOVi4RxgaLFM8wy7OQhmzedgWyUMdClFqpz07np4SRdfvbPuQ22/sqNNDCudfFlHh6/jZrjYbvmbC+FCxkf8dVL0VHgOpOsyx+1Nz6x5hJW3qZdRcGg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHBPR12MB731189.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(23010399003)(1800799024)(6133799003)(22082099003)(18002099003)(10067099003)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?v3+H6yWAyfD5DNL5jPyCA2q3JE99nw6kysQGYRtbH+5DKzy875lLrkIEJ793?=
- =?us-ascii?Q?2NuWok1ZKkyLnEe1Yn8opIaUcGQovf2z5tavvwSlWVGK/96ZHwguHGj0hOSi?=
- =?us-ascii?Q?5REkdJdUw8hhioBF5MyUaj1DmkMOUlWMFud/BE/uHN8xoZP3c872ST3MUe5v?=
- =?us-ascii?Q?trKb5lo0TETfrV6i7ngVnh7EpkpKE3XDwoxi5IGoh1REMxq3SUe16d1omRXr?=
- =?us-ascii?Q?5C85D8KcbgK7Il5PDxVWB/EfklxIY2tS27gjH+pO4CkEanP53wBK/rXJ6RPV?=
- =?us-ascii?Q?v0oI5A1BjHBD5g6fd14nMclLd22vuAlj62kluwH05rIqk31Mya2NtPnSVrHm?=
- =?us-ascii?Q?qeXu/750Tl/I/9nZTJFhGeWaWUF1it8biMXRVsZ3RdLqZwRAlfIC7uhTN2lH?=
- =?us-ascii?Q?dH9CGktIYnn0FaHn6gD3ZOAuxnOiSjxs8sF8Km1+ELt2c2QRuMm1adfqPDPC?=
- =?us-ascii?Q?G7k7GWGlxgYfnFoK6VEcoaxh7rc/GjTKoY8M1lek7Lt16R1iVGRZgm6WXcmN?=
- =?us-ascii?Q?16vOhVWHAcqegFpGAuuhrrsX5j5xDAxIHr2Hc7ZiwCAJrI8i1E1jtx/Q7mek?=
- =?us-ascii?Q?IgZM5AQdUi15Vh/QdOIXJziorSL0AfpyiEDFsiNx3dLE1HzEDkS5WOsd+Vjm?=
- =?us-ascii?Q?3LuHFrDunQ53rnDAciEvpJPRogbED85qQuobyZzJHA2SBadlZQeWabDZi2KP?=
- =?us-ascii?Q?YTEJ7o/Emv/ficNkWz47vAdyGOMNzdefiqI67DQIvcMLl0svzLFEetRtGK3A?=
- =?us-ascii?Q?VT/oku9uQoUscaQbJU25qVqEQSK4sJZS5q7WfhXFwcoxXAeAJk5WwtaXI0S3?=
- =?us-ascii?Q?qiQ5+4CCCPnaU1EDshSEt8uYW1L+5iv+x/7CB1p8UQg76Mmy/0wSd35EfTxM?=
- =?us-ascii?Q?ZuDXEEjoQIdq4QNPpmHWDxdkAIxZaxbdiKF+FbzB73hqASIdANGwVmCthUHi?=
- =?us-ascii?Q?h7XX2Sd0v8EcrdcwDGRshEZprZauVP4NsPwTzUHrokSPE11oo9TvgN6ZmNGm?=
- =?us-ascii?Q?+4JQEzsFyIKaR9xOfxF//4RyQmMtrcE8R8PBqTZIQiz1HfCH+bjWNRa5k89X?=
- =?us-ascii?Q?qDKcWqEzG/bvyvpf4AMKmVqh9krqR2mBovqupukEK91ZX7UHlN+iie5fTATi?=
- =?us-ascii?Q?rLxVsgSlulbzO2LLWC0T0k5Miiwka70pwkbU6X0jPJ3vmChJb5ZKPA0x9l5k?=
- =?us-ascii?Q?FifOiYdx/l79mwfHCMaTZcHxzgBkoRI4SKmEwIJ4nS/pLKnfsZdQM36UNsoH?=
- =?us-ascii?Q?+VtqEaT8k6SPUVQXKzXY/7EK9URChamxdpvh75mwvOyuPxtoHmqiVN8tmhL3?=
- =?us-ascii?Q?aNhQPxHtLdLh2aQMkYNtjBdHIfYr9UMB4WrYyFiau8s4b5/kIvszpCGAlhFo?=
- =?us-ascii?Q?OzQPDi2Mk6yFOtmoxcc2FFTfFf2U7F183JndFWiP+gip1bPJmHryZl3zv5Du?=
- =?us-ascii?Q?lBxd9gy74pUMz//BrpAdTRsW/JVnq28vDIDbbU6xsGorJJHfOQei/ZgEcSQP?=
- =?us-ascii?Q?r6543fyAkOZmQsIvnmNLZJTN0l6TJDTo73Pxj7tTCHuys7ubmAHA6ES0OwqR?=
- =?us-ascii?Q?Bfx1mhtEPnfeoZgpXN8ONWxlvziR4g8ZrPkuwBzLxIt0sFnH8usBEINiLNZQ?=
- =?us-ascii?Q?FUahMTPdC0IIQJdrK+OOu5hYhpyOkgNCm1YnvPVWNGXQNV0kAbRPr8aSYSu0?=
- =?us-ascii?Q?eTO2UUme/lzrtvKpr1GCBYqK4nZCvuLsYhzdqbHwrr4Qnymb?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d3a841d-6153-4fbc-cf58-08df2ed90324
-X-MS-Exchange-CrossTenant-AuthSource: CHBPR12MB731189.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2026 18:36:10.6932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uOQ6QQFnT+g7MMZRiFdXnM9tOCTXM63RzmSbna/Al1OKLUYK7hM2ANG8db84OWbR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CHBPR12MB443627
 
-On Tue, Oct 20, 2026 at 07:47:19PM +0200, Philipp Rudo wrote:
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: missing cache validity and NULL checks in buddy.b=
+pf.c
+- [Medium] selftests/bpf: missing pointer validation in buddy_cache_free()
+- [Medium] selftests/bpf: out-of-bounds write in buddy_cache_state_destroy()
+--
 
-> The reason why I and Pingfan abandoned this approach and went for eBPF
-> instead was due to security concerns. Our premise is/was that the EFI
-> stub must not be able to harm the running kernel. Be it intentional or
-> not. That's a guarantee eBPF with its verifier can give but a simple
-> file signature can't.
+commit 8dee6e0e331ae6f1872b723dff5e251350292c90
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-This seems too much to me, I think the approach of signature
-verification is sufficient. If you can load a module then you don't
-need to fiddle with some covoluted EFI attack. Distros should include
-their EFI signing key in the kernel keyring so a standard UKI passes
-the test.
+selftests/bpf: libarena: Add buddy per-CPU caches
 
-The eBPF approach fails from my perspective because it never actually
-runs the stub code or using the EFI entry point. My interest is to
-actually use the EFI entry point, not just treat it as some convoluted
-zip file.
+This commit introduces per-CPU LIFO array caches in struct buddy for the
+eight smallest allocation orders so small allocations and frees can bypass
+the central buddy allocator lock on the fast path.
 
-> But that still leaves the "unintentional malicious" case. Meaning,
-> that someone tries to be "smart" and does weird stuff in the EFI stub
+> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools=
+/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> index 72b9ea3ac7d53..ce05e3e58ebae 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
 
-Buggy modules exist too, it is up the signer to take a position on
-that, IMHO. How can you have an "out of tree stub" if the only things
-loaded are signed by the kernel builder?
+[ ... ]
 
-Regardles, Ard's suggestion to move the execution from a kthread to a
-user thread could provide enough isolation to mititgate even this..
+> @@ -38,18 +42,116 @@
+>   * and their allocation state. It also includes the freelist
+>   * heads for the allocation itself.
+>   */
 
-> Two more comments with my distro head on.
-> 
-> First, kdump is extremely important to us. So the final solution needs
-> to be able to load a crash kernel as well.
+[ ... ]
 
-And you want this to be a UKI too?
+> +static __always_inline void __arena *
+> +buddy_cache_pop(struct buddy_cache __arena *cache, int order)
+> +{
+> +	struct buddy_cache_order __arena *slots;
+> +	void __arena *addr;
+> +	u32 elems;
+> +
+> +	slots =3D &cache->orders[order];
+> +	elems =3D READ_ONCE(slots->elems);
+> +	if (!elems)
+> +		return NULL;
+> +
+> +	addr =3D READ_ONCE(slots->objects[elems - 1]);
+> +	WRITE_ONCE(slots->elems, elems - 1);
+> +
+> +	return addr;
+> +}
+> +
+> +static __always_inline int buddy_cache_push(struct buddy_cache __arena *=
+cache,
+> +					    int order, void __arena *obj)
+> +{
+> +	struct buddy_cache_order __arena *slots;
+> +	u32 elems;
+> +
+> +	slots =3D &cache->orders[order];
+> +	elems =3D READ_ONCE(slots->elems);
+> +	if (elems >=3D BUDDY_CACHE_CAPACITY)
+> +		return -ENOMEM;
+> +
+> +	WRITE_ONCE(slots->objects[elems], obj);
+> +	WRITE_ONCE(slots->elems, elems + 1);
+> +
+> +	return 0;
+> +}
+> +
+> +void __arena *buddy_cache_alloc(struct buddy __arena *buddy, size_t orde=
+r)
+> +{
+> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
+> +	struct buddy_cache __arena *cache;
+> +	unsigned int cpu;
+> +
+> +	DISABLE_CACHE_IF_ASAN(NULL);
+> +
+> +	if (order >=3D BUDDY_CACHE_NUM_ORDERS)
+> +		return NULL;
+> +
+> +	cpu =3D bpf_get_smp_processor_id();
+> +	cache =3D state->percpu[cpu];
+> +
+> +	return buddy_cache_pop(cache, order);
+> +}
 
-I'm not sure it is so good for crash robustness to have so much more
-complexity in the boot path..
+[Severity: Medium]
+Should buddy_cache_alloc() and buddy_cache_free() check that buddy is
+non-NULL, that READ_ONCE(state->valid) is true, and that cache is non-NULL
+before calling buddy_cache_pop() or buddy_cache_push()?
 
-Though I wonder if you can run the EFI flow when initially loading and
-staging the crash kernel? Then stop at the exit boot services and wait
-for a crash before jumping back into the flow.
+In buddy_alloc(), buddy_cache_alloc(buddy, order) is now called before
+buddy_alloc_memory() checks if (!buddy):
 
-Jason
+buddy_alloc()
+    order =3D size_to_order(size);
+    address =3D buddy_cache_alloc(buddy, order);
+    if (address)
+        return address;
+    return buddy_alloc_memory(buddy, size, order, 0);
+
+Calling buddy_alloc(NULL, size) for a cached order (order <
+BUDDY_CACHE_NUM_ORDERS) will therefore dereference &buddy->cache_state in
+buddy_cache_alloc().
+
+In addition, buddy_cache_state_init() and buddy_cache_state_destroy()
+maintain state->valid with WRITE_ONCE(), but neither this commit nor the
+follow-up commits in the series check state->valid or cache !=3D NULL in
+buddy.bpf.c. If buddy_alloc() or buddy_free() is called while cache_state is
+uninitialized or destroyed (where state->valid is false and
+state->percpu[cpu] is NULL), buddy_cache_pop() and buddy_cache_push() will
+dereference NULL at arena address 0. Because BPF exception handling on
+reserved page 0 zeroes loads and ignores stores, buddy_cache_push() will
+read elems as 0, ignore the stores, and return 0, causing buddy_free() to
+silently drop the freed block instead of returning it to the central buddy
+allocator.
+
+> +
+> +/* Retrieve the order of an allocation from the address. */
+> +static int buddy_cache_get_order(void __arena *addr)
+> +{
+> +	struct buddy_chunk __arena *chunk;
+> +	u64 idx;
+> +
+> +	chunk =3D (void __arena *)((u64)addr & ~BUDDY_CHUNK_OFFSET_MASK);
+> +	idx =3D ((u64)addr & BUDDY_CHUNK_OFFSET_MASK) / BUDDY_MIN_ALLOC_BYTES;
+> +
+> +	return idx_get_order(chunk, idx);
+> +}
+> +
+> +int buddy_cache_free(struct buddy __arena *buddy, void __arena *addr)
+> +{
+> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
+> +	struct buddy_cache __arena *cache;
+> +	unsigned int cpu;
+> +	int order;
+> +
+> +	DISABLE_CACHE_IF_ASAN(-EINVAL);
+> +
+> +	order =3D buddy_cache_get_order(addr);
+> +	if (order >=3D BUDDY_CACHE_NUM_ORDERS)
+> +		return -EINVAL;
+> +
+> +	cpu =3D bpf_get_smp_processor_id();
+> +	cache =3D state->percpu[cpu];
+> =20
+> +	return buddy_cache_push(cache, order, addr);
+> +}
+
+[Severity: Medium]
+What prevents buddy_cache_free() from accepting unaligned, interior, or
+unallocated pointers before buddy_free_unlocked() can validate them?
+
+In buddy_free(), buddy_cache_free() is invoked prior to
+buddy_free_unlocked():
+
+buddy_free()
+    ret =3D buddy_cache_free(buddy, addr);
+    if (!ret)
+        return 0;
+    ...
+    ret =3D buddy_free_unlocked(buddy, (u64)addr);
+
+While buddy_free_unlocked() checks that addr is aligned to
+BUDDY_MIN_ALLOC_BYTES and verifies that idx is marked allocated via
+idx_set_allocated(chunk, idx, false), buddy_cache_get_order() divides by
+BUDDY_MIN_ALLOC_BYTES and reads idx_get_order(chunk, idx) without checking
+either alignment or chunk->allocated.
+
+When a chunk is initialized in buddy_chunk_get(), chunk->orders is
+zero-initialized, and buddy_chunk_alloc() only sets the order and allocated
+bit at the head index idx of each allocated block (advancing by idx +=3D 1U=
+ <<
+order_req), leaving interior sub-block indices with allocated =3D=3D 0 and
+order =3D=3D 0.
+
+If a caller passes an interior pointer such as
+(u8 __arena *)alloc_path_test.bulk[i] + BUDDY_MIN_ALLOC_BYTES (as tested by
+test_buddy_cache_paths() in the follow-up commit "selftests/bpf: libarena:
+Cover buddy cache fast paths"), buddy_cache_get_order() reads order 0 at
+idx + 1, and buddy_cache_free() pushes the interior pointer into the order-0
+per-CPU cache and returns 0 instead of failing with -EINVAL. Likewise, an
+unaligned pointer inside an allocated cached-order block has its low bits
+truncated by the division in buddy_cache_get_order() and is pushed unaligned
+into the per-CPU cache, corrupting subsequent buddy_alloc() returns.
+
+[ ... ]
+
+> @@ -557,6 +659,46 @@ static struct buddy_chunk __arena *buddy_chunk_get(s=
+truct buddy __arena *buddy)
+>  	return chunk;
+>  }
+> =20
+> +static int buddy_cache_state_init(struct buddy __arena *buddy)
+> +{
+> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
+> +	struct buddy_cache __arena *cache;
+> +	unsigned int cpu, order;
+> +	int ret;
+> +
+> +	DISABLE_CACHE_IF_ASAN(0);
+> +
+> +	if (CONFIG_NR_CPUS > BUDDY_CACHE_MAX_CPUS)
+> +		return -E2BIG;
+> +
+> +	WRITE_ONCE(state->valid, false);
+> +
+> +	for (cpu =3D zero; cpu < CONFIG_NR_CPUS && can_loop; cpu++) {
+> +		ret =3D buddy_alloc_bulk(buddy, sizeof(*cache), 0,
+> +				       (void __arena * __arena *)&state->percpu[cpu]);
+> +		if (ret)
+> +			return ret;
+> +
+> +		cache =3D state->percpu[cpu];
+> +		for (order =3D zero; order < BUDDY_CACHE_NUM_ORDERS && can_loop; order=
+++)
+> +			WRITE_ONCE(cache->orders[order].elems, 0);
+> +	}
+> +
+> +	WRITE_ONCE(state->valid, true);
+> +
+> +	return 0;
+> +}
+> +
+> +static void buddy_cache_state_destroy(struct buddy __arena *buddy)
+> +{
+> +	struct buddy_cache_state __arena *state =3D &buddy->cache_state;
+> +	unsigned int cpu;
+> +
+> +	WRITE_ONCE(state->valid, false);
+> +	for (cpu =3D zero; cpu < CONFIG_NR_CPUS && can_loop; cpu++)
+> +		WRITE_ONCE(state->percpu[cpu], NULL);
+> +}
+
+[Severity: Medium]
+Can buddy_cache_state_destroy() overflow state->percpu[] when CONFIG_NR_CPUS
+is greater than BUDDY_CACHE_MAX_CPUS (1024)?
+
+While buddy_cache_state_init() checks if (CONFIG_NR_CPUS >
+BUDDY_CACHE_MAX_CPUS) and returns -E2BIG, buddy_init() handles that failure
+by calling buddy_destroy() -> buddy_cache_state_destroy():
+
+buddy_init()
+    ret =3D buddy_cache_state_init(buddy);
+    if (ret) {
+        buddy_destroy(buddy);
+        return ret;
+    }
+
+In addition, arena_buddy_destroy() and arena_buddy_reset() in common.bpf.c
+call buddy_destroy() directly before buddy_init(). Since
+buddy_cache_state_destroy() loops up to CONFIG_NR_CPUS without bounding
+against BUDDY_CACHE_MAX_CPUS, won't it write past the end of
+state->percpu[BUDDY_CACHE_MAX_CPUS] and clobber adjacent arena memory on
+kernels built with CONFIG_NR_CPUS > 1024?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020181900.6755=
+-1-emil@etsalapatis.com?part=3D3
