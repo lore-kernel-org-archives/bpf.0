@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792483480;
-	b=1wwARwrcGYoczkDBTSaaQl94PQ/7q4Rn4Kp/92WtNMgKJSNZCnS3vVd4orG8YUr9C5nb
-	 4fV8crkYPbY/LfSn5YU1RkDqwajymEbJN0+j7DI2vbAGSW+waRcoKP+pnm3vfzCOXm3Vj
-	 1GHu7wOauCxGb3yDgBCObEDsrwy2wQ+C+d0iboprem37N7XxzBiQ9Zd2gLLxCvnn1dnrV
-	 B4J3/b/ss6VNnCrpFO8ABSYZlFd66pJ8XerrJwV3N23sslTU/2nGopL7xcNkc935Zuq3G
-	 Z112gtS3V6oqIR3GMWFZZrGTa/W12LHRcCL/Y4DGMYGE8sgqgbMHviwcv8jWvyXKcaA==
+	t=1792484149;
+	b=Qir8kHBqOCx6TRh1tsGwWxiLnrriAJ5HiyRf7Kmp9AhTj/EyH6qfWSJ8aIXk3UQ2w5Tk
+	 cbPDKZRO9gkgZoUmQZzKN9eD9Bk59amGtMVS0hhRn13uzQ1aZerbhN7Aujzzd8Lu3ug3W
+	 v7gGwoLuSfA+QIVtW4YPuohIdlal36OURrGRVCkPlPHs4DIztx9rBhBm8xXrCOB10hukq
+	 cqWgJkq/EPJUgQCNedAfh+DKmRB8ZF5bIigg2RqNuvTOwE2BG1J9naPfIo6rsSJq2c3tb
+	 a30u/pAWRttHEAnAwxz2mBVTlV5hVhsnry2rFyjPn0TZG0SiOwpqZBpwqSmJmbu09Vw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792483480;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792484149;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=hu6Ap42/vpdKsczGhkoXGQbS71YsejWqmO6Og5y2a1I=;
-	b=XbXbOxJAy4Ctnnb+t3QqmBFZU49FptSkkoJ46/pxYlDLiyI37+5j1Cvbo3uOMbqs59Hx
-	 BVY88LvPdxHAvYG6GUUauAXylyVxAr96g4sKKacOIYGOMb3eC9vRNBVtw/hHbKKLbycca
-	 mSuGEz4/WsDTW7hpO+eysYKB615NDM951Tpz6FEPrau9u7n7Zv4HIW8oaz2pZ8rUXb6jm
-	 zA29cCtNRArWRn9L2hketxdbu2wwA7PB0WWHJWWhtsmoEiHI+I3FWBvDkw9KAWL4IGHFj
-	 7mx8IDof5RMJy/Ya2nulcdHtgj7sOFg15+fAwW708beG7df4I1WP1FRSUA2Z1hmC2FQ==
+	bh=Ek/HjiU0NQUr+1/BhsqYnXkGvaZ/0t+xYjq4gigGDTE=;
+	b=P47hXKFgDXkrz/oSwpmC+qfcwlsUsS9H3i4RWDlPSjsRPlxkKlGOaWNH5MFV7VXGnw1Z
+	 TQQ4HPVsTsczBB2QpBhUqKroZZB3/vQ60PuKrDwEFZXsZA8UAqKmdzf3EjsG0sJSqh7F4
+	 mj2uDiDMVnqD4YJMDh+bhwBUhd3Rh8DwjS4WXtvANxkezBZoiftGJhLYT2qB77ZgEKp7W
+	 Z4DGiccl4qnpQdwg6Wx4VLImSxOieIUUIaS5nCECqak+Lxi6RJqLNKsQAqY1Z/RmFUXM2
+	 L/zO3s7Fw86NVK7+SzQhYn5IJP7XjrxZpvqUZf9n/RIjfWdWzqXcAhTXu3F/dOO/bag==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S6rV8Z8I;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IqZC1suE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1B8606A31D
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 08:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84FE606A319
+	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 08:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S6rV8Z8I
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E62E21F000C4;
-	Tue, 20 Oct 2026 08:04:39 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IqZC1suE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479971F000C4;
+	Tue, 20 Oct 2026 08:15:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792483480;
-	bh=hu6Ap42/vpdKsczGhkoXGQbS71YsejWqmO6Og5y2a1I=;
+	s=k20260515; t=1792484148;
+	bh=Ek/HjiU0NQUr+1/BhsqYnXkGvaZ/0t+xYjq4gigGDTE=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=S6rV8Z8IJ+HrVgB0kgUX4BM36Nqm6K2cwZZZgQro3pDazcYTp9eiecn6A/2tB/7ad
-	 1hojvWGTiWZQuM5co5LnQMp9mTuwWMH3bA7/p0q5RfJv6C19dhg5BrgZChd5eRlwgI
-	 0tnJX1whrNOKDr1MZBZVkKO227NqHlzMIi2Mi0nqaUxUqEvJ7uI5wWp4suC8Dj0Fem
-	 jhyf6+H25UH1WIrIqtTO32lNkG31V7Rg/aNTpipzilb4WUW0D5aEiUh6Ovrd7y5+As
-	 P4XgF7Olj4mx76GCKix1qkvKzdl06p3AOzbyi+k8CDOAqF72hNybTreglyEQZ2sgbk
-	 y47Ugkz0mBCfQ==
-Message-ID: <sashiko-outbox-178475@kernel.org>
+	b=IqZC1suEQaL/Mc74+r0PLFB5we63cDyTX9VdoiUjXnkKdVJI8MiUJs+EZzXibRHdw
+	 PmcAZqbOO3PVGz2HDj+DKyGm+1QppFZeZ+fq/lx582qdSFNNYbVlRJW9hsAhQRdP9U
+	 Dlh7W9rPdC5Q2N85AV5GqQROdSg6qmbKuczZJ020Rtq7TlIgucJDrK0KFv2fjtMjD5
+	 4EPTUI5+9oQ4yRTAldOtneXKjAn+ccZbGqYBPWmU5ot/3e+oP9ZmqNvwBcTJfqlyl4
+	 3sWX+qESvwyTok00pytdfJHy4spVsDWUE7UOEL7UxuOoSSyehtHBhFtnxWnr8aM7As
+	 qJKr1nxBYvygA==
+Message-ID: <sashiko-outbox-178505@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 1/1] bpf: reject raw iteration over managed map
- fields
+Subject: Re: [PATCH v3 bpf-next 1/6] bpf: Add unwind_goto and unwind_exit
+ insns
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhiling Zou" <zhilinz@nebusec.ai>, bpf@vger.kernel.org
-In-Reply-To: <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
-References: <cover.1792217106.git.zhilinz@nebusec.ai>
- <96a6b5dcf721e49c049662cc269d8ac8c389b6af.1792217106.git.zhilinz@nebusec.ai>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261020043319.3031996-2-alexei.starovoitov@gmail.com>
+References: <20261020043319.3031996-1-alexei.starovoitov@gmail.com>
+ <20261020043319.3031996-2-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 20 Oct 2026 08:04:39 +0000
+Date: Tue, 20 Oct 2026 08:15:47 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,107 +62,132 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] bpf: ERR_PTR dereference on map->record in map iterator prog c=
-hecks
+- [High] bpf: dead code removal after unwind_goto drops speculative verific=
+ation
 --
 
-commit 5c7120e7a68cabfb0dcb935074cfe787d4f05fb6
-Author: Zhiling Zou <zhilinz@nebusec.ai>
+commit c4406736d7c4ae90a726bff79265bfa8a261c473
+Author: Alexei Starovoitov <ast@kernel.org>
 
-bpf: reject raw iteration over managed map fields
+bpf: Add unwind_goto and unwind_exit insns
 
-This commit restricts BPF map iterators (bpf_map_elem and bpf_sk_storage_ma=
-p)
-to accessing only the prefix before the first BTF-managed field in a map
-value, and revalidates replacement programs during bpf_link_update().
+This patch introduces unwind_goto and unwind_exit BPF instructions to
+support zero-cost stack unwinding for Rust Drop, C++ destructors, and C
+cleanup attributes. It updates the BPF verifier to track unwinding state,
+validate landing pads, and explore speculative execution paths following
+unwind_goto.
 
-Link: https://lore.kernel.org/all/1fa798d444efac579e91ee0716e228902a8f9afe.=
-1791980149.git.zhilinz@nebusec.ai/
-
-> diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-> index c19b360bad9ea..04cf255587aa8 100644
-> --- a/kernel/bpf/map_iter.c
-> +++ b/kernel/bpf/map_iter.c
-> @@ -135,10 +125,39 @@ static int bpf_iter_attach_map(struct bpf_prog *pro=
-g,
->  	else
->  		value_size =3D round_up(map->value_size, 8) * num_possible_cpus();
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 409b9104c723e..9ae3a81604483 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -666,6 +666,10 @@ void bpf_opt_hard_wire_dead_code_branches(struct bpf=
+_verifier_env *env)
+>  		if (!bpf_insn_is_cond_jump(insn->code))
+>  			continue;
 > =20
-> -	if (key_acc_size > key_size || value_acc_size > value_size) {
-> -		err =3D -EACCES;
-> +	if (key_acc_size > key_size || value_acc_size > value_size)
-> +		return -EACCES;
+> +		/* unwind_exit of a callee that never exits needs it too */
+> +		if (bpf_is_unwind_goto(insn) && aux_data[i + 1 + insn->off].seen)
+> +			continue;
 > +
-> +	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
-> +	if (map->record && value_acc_size > map->record->fields[0].offset)
-> +		return -EACCES;
-
-[Severity: Critical]
-Can this dereference an ERR_PTR in bpf_iter_map_elem_check_prog() when
-attaching or updating a map iterator on a BTF-enabled map whose value type
-is not a struct or datasec (for example, an int or __u32)?
-
-During BPF_MAP_CREATE, map_check_btf() in kernel/bpf/syscall.c sets
-map->record =3D btf_parse_fields(...):
-
-	map->record =3D btf_parse_fields(btf, value_type,
-				       BPF_SPIN_LOCK | BPF_RES_SPIN_LOCK | BPF_TIMER | BPF_KPTR | BPF_L=
-IST_HEAD |
-				       BPF_RB_ROOT | BPF_REFCOUNT | BPF_WORKQUEUE | BPF_UPTR |
-				       BPF_TASK_WORK,
-				       map->value_size);
-	if (!IS_ERR_OR_NULL(map->record)) {
-
-When value_type is a scalar (or any non-struct/non-datasec type),
-btf_parse_fields() -> btf_find_field() returns ERR_PTR(-EINVAL) (and can
-also return ERR_PTR(-E2BIG) when a struct exceeds BTF_FIELDS_MAX). Because
-map_check_btf() and the per-map-type check callbacks guard special-field
-handling with !IS_ERR_OR_NULL(map->record), map creation succeeds while
-map->record holds a non-NULL error pointer.
-
-When BPF_LINK_CREATE or BPF_LINK_UPDATE later calls
-bpf_iter_map_elem_check_prog(), checking only if (map->record) evaluates to
-true and dereferences map->record->fields[0].offset.
-
-Should this check !IS_ERR_OR_NULL(map->record) instead, matching
-check_map_access() and other map->record users?
+>  		if (!aux_data[i + 1].seen)
+>  			ja.off =3D insn->off;
+>  		else if (!aux_data[i + 1 + insn->off].seen)
 
 [ ... ]
 
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index 1d295a8769fad..ffbcfab9a71c3 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -846,12 +846,35 @@ static void bpf_iter_fini_sk_storage_map(void *priv=
-_data)
->  	bpf_map_put_with_uref(seq_info->map);
->  }
-> =20
-> +static int bpf_iter_sk_storage_map_check_prog(struct bpf_prog *prog,
-> +					      struct bpf_map *map)
-> +{
-> +	if (map->map_type !=3D BPF_MAP_TYPE_SK_STORAGE)
-> +		return -EINVAL;
-> +
-> +	if (prog->aux->max_rdwr_access > map->value_size)
-> +		return -EACCES;
-> +
-> +	/* Fields are sorted by offset; max_rdwr_access is an exclusive end. */
-> +	if (map->record &&
-> +	    prog->aux->max_rdwr_access > map->record->fields[0].offset)
-> +		return -EACCES;
-
-[Severity: Critical]
-Similarly, in bpf_iter_sk_storage_map_check_prog(), won't this crash when
-map->record is an ERR_PTR (such as on sk_stg_map in the existing
-test_bpf_sk_storage_map selftest, which uses __type(value, int))? Should
-this also use !IS_ERR_OR_NULL(map->record)?
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 01434e1d23b59..6c56675c3298d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-=E5=AE=8C=E7=BE=8E=E7=BB=93=E6=9D=9F=E3=80=82 (Wait - no extra text! Let me=
- make sure there is no extra text at the end).
+> @@ -18759,6 +18826,23 @@ static int check_cond_jmp_op(struct bpf_verifier=
+_env *env,
+>  		return -EINVAL;
+>  	}
+> =20
+> +	if (bpf_is_unwind_goto(insn)) {
+> +		if (!env->cur_state->unwound)
+> +			return 0;
+> +		env->cur_state->unwound =3D false;
+> +		/*
+> +		 * unwind_exit changed its return address, so the return is
+> +		 * mispredicted and what follows unwind_goto runs speculatively.
+> +		 */
+> +		if (!env->bypass_spec_v1) {
+> +			err =3D sanitize_speculative_path(env, NULL, *insn_idx + 1, *insn_idx=
+);
+> +			if (err)
+> +				return err;
+> +		}
+> +		*insn_idx +=3D insn->off;
+> +		return 0;
+> +	}
+
+[Severity: High]
+When a static callee never exits normally and only leaves via unwind_exit,
+can bpf_opt_remove_dead_code() delete the speculatively verified
+fallthrough instructions after unwind_goto and shift unverified live code
+into the return misprediction path?
+
+For a loader with CAP_BPF (so is_priv is true) and without CAP_PERFMON (so
+env->bypass_spec_v1 is false), check_cond_jmp_op() pushes the fallthrough
+at *insn_idx + 1 via sanitize_speculative_path() with vstate->speculative
+set to true.
+
+Because the callee never returns normally, those fallthrough instructions
+are only ever visited speculatively. In sanitize_mark_insn_seen(), seen is
+only updated for non-speculative states:
+
+kernel/bpf/verifier.c:sanitize_mark_insn_seen() {
+	if (!vstate->speculative)
+		env->insn_aux_data[env->insn_idx].seen =3D env->pass_cnt;
+}
+
+This leaves aux_data[i + 1].seen as 0.
+
+Unlike ordinary conditional jumps where
+bpf_opt_hard_wire_dead_code_branches() rewrites the jump into an
+unconditional BPF_JA when !aux_data[i + 1].seen (which eliminates branch
+misprediction into i + 1), bpf_opt_hard_wire_dead_code_branches() preserves
+unwind_goto when aux_data[i + 1 + insn->off].seen is set.
+
+Immediately afterward, bpf_opt_remove_dead_code() removes all instructions
+with !aux_data[idx].seen:
+
+kernel/bpf/fixups.c:bpf_opt_remove_dead_code() {
+	for (i =3D 0; i < insn_cnt; i++) {
+		int j;
+
+		j =3D 0;
+		while (i + j < insn_cnt && !aux_data[i + j].seen)
+			j++;
+		if (!j)
+			continue;
+
+		err =3D verifier_remove_insns(env, i, j);
+}
+
+Doesn't this cause two problems when the CPU mispredicts the return to the
+instruction immediately following unwind_goto?
+
+1. If speculative verification hit an unsafe instruction in the fallthrough
+block and do_check() set insn_aux->nospec =3D true, verifier_remove_insns()
+deletes that instruction and its aux_data before bpf_convert_ctx_accesses()
+can emit BPF_ST_NOSPEC().
+
+2. If the fallthrough block was a benign dead block (such as r0 =3D 0; exit)
+followed by an unrelated live basic block while the landing pad is
+elsewhere, deleting the dead block shifts that unrelated live block directly
+into i + 1 (or leaves unwind_goto at the end of the subprogram if the
+landing pad is at a negative offset), where the live block will execute
+speculatively on return misprediction under the post-call register state
+without having been verified for that state.
+
+[ ... ]
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1792217106.gi=
-t.zhilinz@nebusec.ai?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020043319.3031=
+996-1-alexei.starovoitov@gmail.com?part=3D1
