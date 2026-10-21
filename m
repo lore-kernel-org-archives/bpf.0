@@ -1,100 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792620073;
-	b=BrqPbC9WWCT43MnRt+tXNPqwPwwPSZO97cLR4YpzcU5bCn8LeW3AKaVL6mKBWuzuxm7q
-	 rlnJIN0jF+Rbd+S++W0LCwNvjp8/ASS0IP9vVHQaUZomfSt4/yQ5fCxwejdTGjpJfM9wE
-	 t/h75oF/4YeAle1QlgYYe2Nk8RFuLzbjEfLlW2WPm23vLYlR57WUSYj9VM1EfzLNloV2e
-	 YNwDRxQhHe1N/z4xncZoT6ekvXHPqfxSKwphUsvZEFQs2pA3H9VTcdgM5DX7jV8+IzNpI
-	 6+5+OSuYzVKa/Tiua1WA/aQwRUTeEJPsZqldmGarsdnoGjQRPwjoKy6yIPwfGf34/dg==
+	t=1792620107;
+	b=h0grXauRcYprKZ4SZC3vDyubcgYWxWZeuQwA+tiUQBYXfl7dq0wdlsG1Y8PbLwYcuKet
+	 TxkAmdQzs0gNhEyAGAnGwKYAA7bYXSXBB83mQi/Ym1rrqg8Moh2hlvNX2TnDz5C38kLq7
+	 0gtjF/KdzxWJgPaqbn2TQWuW21eOtGN0n0kMW+EXqiGBIDI4CukCIslgQbhpF8+NK2uqH
+	 ee0dKXeLLE+flhR+NnGlJ2ORVYefl7Bgwmit+ilstPkxgy7mD7BnuuzgALFUpY8qsjDnK
+	 +ThqCF/hO+Tg/KazOws+mtb7T4yGfLoSMJXkgbRafKAmw59FE/0NxisbelR+j9VlyUg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792620073;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=ekANNG852YX/Rv0SYRliAvOikAthVPOfNHHk1KWJgg4=;
-	b=2XYnngNr/KBJwN7FoMmtSVsH3Jv9YluQRefV2ao9fbquOrD/kwVuW8ic8zdGi+hK7z7F
-	 pDU+VTZ3fjfUDwjv24YXkRqQwFO9GyC5leW5EqVAPNlK1UvyiniAPduEQLjmCpG9eyIsB
-	 Lvwg4ZGX/VKP0aYPxAK/lyMhS5kbyKLx84CTS8J1ClgVN1lbZIfl6EIwLu/KEOmyg9I4v
-	 VEDy8WoC/DpNlhyo054D4GEVo2ssqeF8XGQ+bzPdVRX8IzengmAoPfDsIrwwRRDo9Do3f
-	 zF3o1oCgLn1ydEGRCU1KLNBqJ4F0wZhg7fxcggZ6DPoTtf2lPqIwIXQ9BouErhuNnzw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792620107;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=JyaVYtrytA0eaLcHL4hmliuZFXquyT9c4Y2ZvnCIqBc=;
+	b=CxIH0MZ/SVO+kbdtwS7FysIWrHAyGImJ5O09Wr/Ewfa/HiKzKZUeDNinHrfGunNGyme3
+	 n9lohM866rPiXaRre1HYRBiitJ/1q1u02IY1gdRtymubSmGP/WyrXfww+fAm8piomnfPq
+	 qY5W+5Zo77GyFmkRSyUJxg3TZ+CepTuVZc5wlx7vmw6EC9RqYcefnQGOT8/vKnIMUmWC7
+	 78JXGrTEpamAc5RB7WgmsmMHPni5hRqkGLoeF8VmqipbtPH3hQu8NYEPHKOLa10vl3EI1
+	 THCet9l2fETjDkSSHuTZnjMPATX+XwV0M8Z777EcvclA8cCZ4PvOqRyGkn1fuuk/mwQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ezRxCH+X;
-	arc=none smtp.remote-ip=209.85.210.172
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="l+/ePMc2";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04E7606A31D
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 22:01:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C04E7606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0170E606A319;
+	Wed, 21 Oct 2026 22:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ezRxCH+X
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8a05b210703so529664b3a.0
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 15:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792620072; x=1793224872; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ekANNG852YX/Rv0SYRliAvOikAthVPOfNHHk1KWJgg4=;
-        b=ezRxCH+XFN6kqXAzUkHG2tuyt8LY9Se12NNEu6NCx7Zv8JzLColYWlPyghLRXld6hm
-         xZDWfFEMmj6UzTmaikg6Y8318LeQ5mTF0RtV9FAJAfzSh5gQS/qFqIyjFEUI5x3l9lNr
-         R/yIsuaAtmNPhm/1e6maqY5TwrtWTXBVM9Gn8GuxITZD0CQ3PsV7i6dVAcCSByahXTGR
-         5fvL3Kj4C8GY9JjpuLmhrLTQKJ0PcLhfeSPhwwIB0tnkzDXjQKPFH+gAQwG7KxXESkdu
-         musrbh9L5xzU8OLHo+AoJ0AWoSAI5mdC8PO1sWksCBobfztW6ACBhalN0Z6F0mCiXkdd
-         wpGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792620072; x=1793224872;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ekANNG852YX/Rv0SYRliAvOikAthVPOfNHHk1KWJgg4=;
-        b=f4WlTgTjo78hlyfGJHAU5TCXDwynXba5VhvG6OXnJzP1OQsvsPOoTFdYc9q74fSiEw
-         mwc88Ly7uI/Oi98CLSWu5OU9PU1JaXzgNqnrc3+cI+NIdugxRZnvBLKgrY02GAcpQdZT
-         1FLxaDWQFr3nDMcPuKna3xfubyfVaGkBLRU2UXGyxGZKSxG3BPSsvjyBnghXrkHTmK3j
-         DZASOYC09ZuRxs/xp2/9yFIfykyfV5VztF9Yb7akNkY0Pu1KWWt2zNBJ4wHS41KRn2f4
-         k9IhOLOwsgEklnq44o4hrEr4ZUcTvKGnmIaIGn1Qj8OYYvbntbvnAsBArCIdfKzF9OSW
-         bYVQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwrHNirfeyAgkLD9Va/b+3VaIqM+b+0ugiqruybYJOEVydJ+iLXlOsoiCee2C9RX6HkrRU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLK0dJjQ3aBkjgxQDbH3Oj9tIp/c+H/qvWK23+dCOwGCU/Q53g+
-	SaMl95x/IAybzpjN8LPYvAlH2DlwcLyBCv3bpPe84JALsCqSSR1FhBp9
-X-Gm-Gg: AYBFou2iSfGH/szqUP9hqWj8HqyLEkfWCi1JQEPOdw8JrftyPX0rmL/2l8tCnCcuI5F
-	zo+ZAjg5TaB3NnaSbSeZVx3UaYVnmUW3FgjU9y5KG7XcrJt+bRGbABYVPDWl9uE0wAl9qoNhzLI
-	e5o4kQKWBilXkJ3MOv4QDu9ZNM0Rn/Kcfbs9AkeaXUrqSWmVDFNVkS2/RCiBOz3UFeD8invwrQn
-	4JIp/6iRkxPioC+OhoC0/zxRlOlNcIQMv23XXYKCgULk+XEyDeSwR6EWnrvySjBGtTldvsnqF2E
-	yNxej/b19hy/y5+WSWDgkjtbwJMPqmxt8RfQNZPk7kCekHzwcfvw4ON06am3WetlIuYmA8p8vSk
-	eqsfJwC9ZYPft8ggHTl9vDp+wmddH0ldEwRrpfdZQAx6IQuTyBqBrZ/dDoEmIPQqoexdPEgA7mV
-	pDUlrZ9fZr5xPLC+T0Udm3ZcaCuxSpHzS4/AqTnzZTVE0UI7D9rRe8urFxXSsyOsMHAv1YkcR5J
-	cH9bTtvzThUZX8FoW4rmNjm1LguXWwny95cARwIuAyIyERsW1VI2Ny/bAc6QfdYcAKk8PgOV1NO
-	X/PpNH67zyMLdw+H3FBNALdt4FYogby5s6vM9j8YwQORp8euCtw7Pclki49S
-X-Received: by 2002:a05:6a00:e86:b0:87c:e6aa:30e4 with SMTP id d2e1a72fcca58-8a089d79060mr2663523b3a.48.1792620071973;
-        Wed, 21 Oct 2026 15:01:11 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a0895c05f4sm1334306b3a.28.2026.10.21.15.01.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 15:01:11 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Oct 2026 22:01:10 +0000
-Message-Id: <DMAUS3F32198.M27YWDF2F3UV@gmail.com>
-Subject: Re: [PATCH v4 0/2] tracing: fgraph: fix the quadratic shadow stack
- walk
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Vineet Gupta" <vineet.gupta@linux.dev>, <rostedt@goodmis.org>,
- <mhiramat@kernel.org>
-Cc: <mark.rutland@arm.com>, <mathieu.desnoyers@efficios.com>,
- <andrii@kernel.org>, <peterz@infradead.org>,
- <linux-trace-kernel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <kernel-team@meta.com>
-In-Reply-To: <20261021174406.2891598-1-vineet.gupta@linux.dev>
-References: <20261021174406.2891598-1-vineet.gupta@linux.dev>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=l+/ePMc2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355FA1F000C3;
+	Wed, 21 Oct 2026 22:01:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792620106;
+	bh=JyaVYtrytA0eaLcHL4hmliuZFXquyT9c4Y2ZvnCIqBc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=l+/ePMc2pas9bGoAqSfUokAb0f8FZAZLx+G9xwNpw17vswhhu/6hMgjaoPnouoY5v
+	 txabJjv2mQLzq68Om6aOOv2LC6O4Bx+YpDR1sehiw8hoW+Pl8VtGI1/6Hq4+gb+qIA
+	 fGYc6Nc0g4uDUcZ/81qTvk/Lz9msbDQpYsU33yqXkilKal41n+/HV1PmC+W+ezj3Be
+	 BGrhEtUpvx9h8l9W+gFSo/I6UMqW4mMqnP5qzSahPnMd+eFhhuwzsgEDPWhA3lzeeL
+	 HLvqTi3p6k+NV+iJAhIfNgj3MhbNnY0tWCOLqA4Wld5284k8JWiBQEcUy/lTR3dE8K
+	 +YKJ3rscod4Wg==
+Date: Wed, 21 Oct 2026 15:01:45 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
+ stfomichev@gmail.com, pabeni@redhat.com, tushar.vyavahare@intel.com,
+ kerneljasonxing@gmail.com, bjorn@kernel.org
+Subject: Re: [PATCH v4 net-next 09/15] selftests: xsk: run one test case per
+ xskxceiver invocation
+Message-ID: <20261021150145.65a22a61@kernel.org>
+In-Reply-To: <20261016174338.787135-10-maciej.fijalkowski@intel.com>
+References: <20261016174338.787135-1-maciej.fijalkowski@intel.com>
+	<20261016174338.787135-10-maciej.fijalkowski@intel.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,9 +61,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 21, 2026 at 10:44 AM Vineet Gupta <vineet.gupta@linux.dev> wrote:
-> On a 60-core Sapphire Rapids machine with 400000 idle threads it took
-> 227 s, inside a single bpf() syscall for the kprobe_multi case.
+On Fri, 16 Oct 2026 19:43:32 +0200 Maciej Fijalkowski wrote:
+> Replace test_xsk.sh and xsk_prereqs.sh with test_xsk.py, which runs
+> xskxceiver once per mode and case, so that every case starts from a
+> fresh process and a crash fails only its own case. A single case is
+> also the unit that the next patch splits into RX and TX processes.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1fc9eaedd744..6985a42bc09c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -29784,6 +29784,7 @@ F:	include/uapi/linux/if_xdp.h
+>  F:	include/uapi/linux/xdp_diag.h
+>  F:	net/xdp/
+>  F:	tools/testing/selftests/net/*xsk*
+> +F:	tools/testing/selftests/net/lib/py/xsk.py
+>  F:	tools/testing/selftests/net/lib/xsk/
 
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+pylint has some complaints, about main(), I think?
+Could you make it clean?
+
+> +++ b/tools/testing/selftests/net/lib/py/xsk.py
+
+Really not loving the amount of "library" code added here.
+Do you need this just to run it over veth in net/ and over
+real HW in drivers/net/ ? Are the test cases very different?
+
+I wonder if we could solve this by parameterizing the env
+class to use veth instead of netdevsim and then have unified tests?
+
+
+> +def xsk_wait_endpoint_exit(endpoint, label, timeout):
+
+odd, the existing cmd() / bkg() stuff doesn't work for you?
+It works for many other tests...
+-- 
+pw-bot: cr
