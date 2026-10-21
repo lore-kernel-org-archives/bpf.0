@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792612702;
-	b=Lg2jTywMP1vm+M+EaDL4f7B5pOnNKtL7cHPDLAhj47ysNyTsY1DbRoQTSKPaBC+m2xKC
-	 Bt6hsrO/WxAIaP+pRyT28S2zOZ1Rp5wLe5PROkgz8yPIvVnZGgqXHIbW6wXc9TwZXVI0K
-	 YRY59L+l6u1S9HjBljoGysrjj+EgwJ20By/smJf0UmUO5K5mzzpplyORe52atZUfqHSTW
-	 pwCxYAgf9dB/xPIpA7iiuLyaQobHJI4tmptH5DIi17QBoXksaozOLpqJKkU4kUDX9EE5Y
-	 IwR74Ne8KQQVg18EjzcI7QQ8TJjYYCjh8dAMXLPNx5IrIplRINUDoINpdqmY5i4AXIw==
+	t=1792612712;
+	b=BBx6DeHGN8lU+swyfKe6WbL0ufusfGqQZX2ssTTxmBB6krXIZ1Tq5IuFDhHeSdBTziOy
+	 R3gzWZyyyZdVjXKSUWw0Wy31MU2zMF7XTPFVUpdtvV8NbKaF+Gi7lM4sn+JegKBqmq2DD
+	 ePg8EuN8FMJLXLxKAdnloVnwpX2cOdcx6L/d3EQ7ykPAeq1haJO4zAMdHUd4dZu9kvhsN
+	 qyveOV0ugzBeq37BNhurfeIk0MQ+i/slsGpQ+7s6RCwiQooKy5Z6DeliBs3tNDJPXQbWp
+	 hfVJ2/2x4Db/+h6ISnEP2uqvw8lfE7MFtwacPL8vTKi7oWiA7KmaU77Vnt2MInwN5pA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792612702;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792612712;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=pF5l050qT/qvl0GvCxGIiAGvWNtowoG+RzEclp/R9Dk=;
-	b=he/Kv0MAcnUAIjKywNbR2cftZW56D0Ifa+pjPYsWnlbRWeUVWjR7bGtLeffMMh44/ze5
-	 aveqTPxbzVcuNNF1s8KCgX2x9PYHgoeZ5zsfesKXc1yVSBhFG06pFii7TGr96Fb1onboo
-	 HYeZ9qvfolfu+c/ZTTyvBnzTUIOkcoSRO1ZdnqOx+QyJtuXk3wVdnojIYFxHlZvImXtoD
-	 39sQhoAJpRNq8GL/e0GFUJkA3UaG/Bz8RXxpIqO50b30R9O2Oe2DiNPgmix5//J2h8P9f
-	 6SZxYhQkhsVnJm8Ovx8vW9A1WH3ssSU3iLPoAjubE+PZ66jVQOxEw4MCKwFAuMKI7Iw==
+	bh=u+4xmbdLU1mrrwnt1X/d3bWQL9p1KJ5CSL5nr0RSS6A=;
+	b=tO9SXQHVvW6yYEK0+dNDZ9839SNvhK7W5JCzwfOgkzln+EE/gKP/FqcpwE71h/O6jg+U
+	 zz+x4aVCFwoJgSEwyn3GtHXrR9OeQF8D7S9uJtfYHs1VIAoCivHzII3qDwXTkDn2+HToM
+	 raXnGcS8d4Mvam6K/TKgvyKT0AtIr9ZJ/NbAfFHEB6bdGhMuiM9bdRRm181CV8qHsSmj1
+	 /BD6eczQiwk+QaFuOlvefP4og6EjEjnbXu3jS011tLzysPDVQihY3bYVUBYnUtdJPCknt
+	 TvDysMUJ1YnJQIhMsJnbfmOhDFyz2iB1mTl8xxSALXolMrlkPOLNC/lu0fDvKodYU5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XdQLUuTe;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dzxUeoNA;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53AF606A319;
-	Wed, 21 Oct 2026 19:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 666A3606A319;
+	Wed, 21 Oct 2026 19:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XdQLUuTe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3BB1F000C1;
-	Wed, 21 Oct 2026 19:58:18 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dzxUeoNA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59201F000C1;
+	Wed, 21 Oct 2026 19:58:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792612701;
-	bh=pF5l050qT/qvl0GvCxGIiAGvWNtowoG+RzEclp/R9Dk=;
+	s=k20260515; t=1792612711;
+	bh=u+4xmbdLU1mrrwnt1X/d3bWQL9p1KJ5CSL5nr0RSS6A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XdQLUuTewF4k8NfDtfZnVjrCcWWNNTSRvZUzNe9JJUpWZusfLOgbRtGQdp8bCFhZB
-	 lFy9m/6IvJJUZjVXFmtiB2GddcVcUsEpWBrJzFXuTZ3QfcJ2dueLFN+VMt4Mnf4R8d
-	 DhTph084b8r5OZeiBC3plGVw0mjlZ1RJP2Nir/r/8pHt0geTDNdox+Cj/+qveEkp+R
-	 WIU1iCR+BeRi71dMRNPZtRkMKOjUQf8OijbtavQj/wm7jaP2iZgFo0Z+OoW2T7gJuC
-	 5AGbG/3rV0eao5zeSHtKjjGI3WfTB6IgVoKjhZr84eQecxXajsoyVk8/+oHLSOXCiV
-	 rHTqSnN3R+o0g==
+	b=dzxUeoNAVzeREkTXx4wpn4Qz9g7BTqmPmF8DOIwyFvv1g+LB0blfX5Y57KNABZV3A
+	 g/2/BZq5FB2fi4SqTH8eeQH3T1SB7A0SrDT7nGObuHcG62icIencAySky6nGXKpq/2
+	 R+9IzIjT8qrlXaXGzWWeehkxVZQZon14itVD+u1iAvpxC7Z+BTCz81RFliiVDfL3DB
+	 YX9QlkVG+ZNID3JwLLjIAmAQ3YKlf+dptoW308wFGqrtufjlooN5qUCIOv0wYOIXas
+	 0wJPDbnWuSP0Sjzf1rici8Dpu956XQPnaMdKE8UIKBEDwtyNWDATkLxKhjR8rmygEf
+	 a/U1O3MJ9GYMA==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>
@@ -53,9 +53,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>
-Subject: [RFC bpf-next 1/9] bpf: Add __srcptr kfunc argument suffix
-Date: Wed, 21 Oct 2026 21:57:50 +0200
-Message-ID: <20261021195759.119421-2-jolsa@kernel.org>
+Subject: [RFC bpf-next 2/9] bpf: Add uprobe faultable user copy kfunc
+Date: Wed, 21 Oct 2026 21:57:51 +0200
+Message-ID: <20261021195759.119421-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261021195759.119421-1-jolsa@kernel.org>
 References: <20261021195759.119421-1-jolsa@kernel.org>
@@ -70,103 +70,106 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Generic sized pointer arguments are treated as writable memory. This
-prevents kfuncs that only read from a source buffer from accepting
-read-only BPF memory, such as const data.
+The bpf_probe_write_user() helper uses a no-fault copy. Adding kfunc
+that can fault in the destination pages while copying to user memory.
 
-Adding __srcptr to mark pointers the kfunc only reads.
+Restricting it to sleepable uprobes and to LOCKDOWN_BPF_WRITE_USER.
 
-Assisted-by: Codex:GPT-5
+Assisted-by: Codex:GPT-6
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- Documentation/bpf/kfuncs.rst | 23 +++++++++++++++++++++++
- kernel/bpf/verifier.c        | 18 ++++++++++++++++--
- 2 files changed, 39 insertions(+), 2 deletions(-)
+ kernel/bpf/helpers.c | 57 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 73578a4c3b1f..6466b76fd721 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -351,6 +351,29 @@ In this case, a program attached to the ``inode_init_security`` LSM hook
- can pass the hook's own ``xattr_count`` argument through to the kfunc,
- which claims xattr slots by writing through it.
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 648abe1ba63a..4d9e9423826a 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -29,6 +29,7 @@
+ #include <linux/task_work.h>
+ #include <linux/irq_work.h>
+ #include <linux/buildid.h>
++#include <asm/tlb.h>
  
-+2.3.10 __srcptr Annotation
-+-------------------------
-+
-+This annotation marks a pointer argument as a source buffer that the kfunc
-+reads without writing. The verifier requires read access, so the source may
-+point to read-only or read/write memory. Pair variable-size buffers with a
-+following ``__sz`` or ``__szk`` argument. For a scalar pointer, the verifier
-+uses the pointee's BTF size; a ``void *`` requires an explicit size.
-+
-+For example, the first kfunc takes a variable-size buffer, while the second
-+takes a scalar source::
-+
-+        __bpf_kfunc void bpf_consume_data(const void *src__srcptr,
-+                                          u32 src__sz)
-+        {
-+        ...
-+        }
-+
-+        __bpf_kfunc void bpf_consume_scalar(const u32 *src__srcptr)
-+        {
-+        ...
-+        }
-+
- .. _BPF_kfunc_nodef:
+ #include "../../lib/kstrtox.h"
  
- 2.4 Using an existing kernel function
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5601d2056218..7dd7b172a297 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13205,6 +13205,12 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
- 	return btf_param_match_suffix(btf, arg, "__sz");
+@@ -3738,6 +3739,36 @@ __bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
+ 	return ret;
  }
  
-+static bool is_kfunc_arg_srcptr(const struct btf *btf,
-+				const struct btf_param *arg)
++/**
++ * bpf_probe_write_user_faultable() - Copy data to userspace with page faults
++ * enabled
++ * @unsafe_dst__ign: Destination address in the current task's address space.
++ * @src__srcptr:     Source buffer in BPF-accessible memory.
++ * @src__sz:         Number of bytes to copy.
++ *
++ * Copies data to userspace, allowing page faults to resolve the destination
++ * mapping. A failed copy may have written a prefix of the source buffer.
++ *
++ * Return: 0 on success, -EFAULT if the copy is incomplete, or -EPERM if the
++ * current task cannot safely access userspace.
++ */
++__bpf_kfunc int bpf_probe_write_user_faultable(void __user *unsafe_dst__ign,
++					      const void *src__srcptr,
++					      u32 src__sz)
 +{
-+	return btf_param_match_suffix(btf, arg, "__srcptr");
++	if (unlikely(in_interrupt() ||
++		     current->flags & (PF_KTHREAD | PF_EXITING)))
++		return -EPERM;
++	if (unlikely(!nmi_uaccess_okay()))
++		return -EPERM;
++	if (unlikely(!current->mm))
++		return -EFAULT;
++	if (copy_to_user(unsafe_dst__ign, src__srcptr, src__sz))
++		return -EFAULT;
++
++	return 0;
 +}
 +
- static bool is_kfunc_arg_const_mem_size(const struct btf *btf,
- 					const struct btf_param *arg)
- {
-@@ -13966,6 +13972,14 @@ u32 btf_func_arg_align(const struct btf *btf, const struct btf_type *t)
- 	return __btf_func_arg_align(btf, t, 0);
- }
+ /**
+  * bpf_copy_from_user_mm_str() - Copy a string from an address space
+  * @dst:             Destination address, in kernel space. This buffer must be
+@@ -5139,6 +5170,31 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
+ 	.set   = &generic_btf_ids,
+ };
  
-+static int mem_prot(const struct btf *btf, const struct btf_param *arg)
++BTF_KFUNCS_START(user_mem_btf_ids)
++BTF_ID_FLAGS(func, bpf_probe_write_user_faultable, KF_SLEEPABLE | KF_PERFMON)
++BTF_KFUNCS_END(user_mem_btf_ids)
++
++enum user_mem_kfunc_id {
++	KF_bpf_probe_write_user_faultable,
++};
++
++BTF_ID_LIST_SINGLE(bpf_probe_write_user_faultable_btf_id, func,
++		   bpf_probe_write_user_faultable)
++
++static int user_mem_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
 +{
-+	if (is_kfunc_arg_srcptr(btf, arg))
-+		return MEM_RDONLY;
-+	else
-+		return MEM_WRITE;
++	if (kfunc_id == bpf_probe_write_user_faultable_btf_id[0])
++		return security_locked_down(LOCKDOWN_BPF_WRITE_USER);
++
++	return 0;
 +}
 +
- static int
- get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 		   const struct btf_param *args, int arg, int nargs, u32 slot,
-@@ -14137,7 +14151,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
- 		}
--		arg_type = ARG_PTR_TO_MEM | MEM_WRITE;
-+		arg_type = ARG_PTR_TO_MEM | mem_prot(meta->btf, &args[arg]);
- 	} else if (btf_type_is_struct(ref_t))
- 		/* A pointer to a struct without a size argument is classified as ARG_PTR_TO_BTF_ID */
- 		arg_type = ARG_PTR_TO_BTF_ID;
-@@ -14162,7 +14176,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 			return -EINVAL;
- 		}
- 		proto->arg_size[arg] = type_size;
--		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
-+		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | mem_prot(meta->btf, &args[arg]);
- 	}
++static const struct btf_kfunc_id_set user_mem_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set = &user_mem_btf_ids,
++	.filter = user_mem_kfunc_filter,
++};
++
+ BTF_ID_LIST(generic_dtor_ids)
+ BTF_ID(struct, task_struct)
+ BTF_ID(func, bpf_task_release_dtor)
+@@ -5266,6 +5322,7 @@ static int __init kfunc_init(void)
+ 	};
  
- 	if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &user_mem_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
 -- 
 2.54.0
 
