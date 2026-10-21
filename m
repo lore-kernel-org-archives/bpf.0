@@ -1,101 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.74
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792562724;
-	b=LkT4nwrfJNCv4AlhNXhftPN4a/DOifLniZLi5zgXlsbKTBa5CX9+YGmgOiVL28CgyvrA
-	 z+d7blnB+L6sVI1BZ/O+XUu6PUv2Xm8dYheDt+VWcsvEM1uAxpBlmg7C6ZygmOw7RhY5e
-	 3j82OkYsOn/1gofk2By+zC5YzdWcfYUTKbDCrcgst9eJkmnBkCv9HotRBGNdhB6NSflyU
-	 9rKpoUw39O3OQF+MeNlbK6UiDGESDR6U/tPXLFhSQeiS4Nx7sKrZQnGSwC9lKQYBCDZtK
-	 kvSlh8YDSZ+x36fach4CaHOEWY+5QeDInF17AdAAec59HzDFCu09UWgHIJO15yeoCOA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792562724;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=pBw4LUv5P6dBy/YmrFxEgRkn5dzedDU5Ft5Mq0UqENs=;
-	b=J7miahpW7PMM0dOmMHpPCvi2Ui0HpKgJE81vRo7963GdrbnTXes5Wr/e95jtJclMwdfd
-	 Cribr0rpTEjn8mEk3Wv24k2E8+nhwTO/2WJdzvLnv7VGvrRcUiNAIvpfGFxu/Lj9e6ozM
-	 mFr4ojlSj6nymA5evvZoOc/I0k2BhEHzeL2Wj8LdhNV8jBD+YFqla45/DgyRKaTyPZr64
-	 0vR1Sioi5KNsoyiD+/ZuptqBSeQhMxqlMpTYBs8snLutoYDIOOYCvUZh7rFcPhASNBlRe
-	 tmO8frC9sBmywldQ6W7aFFHpYQHFkVXNPsMEe5ew1O37UeeQ7k6VtpGWJneApV0Bw6g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WfR3XGo3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.74
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792563348;
+	b=tMI1jDcteLC9FmppqIkVLqR7BArXngxJ16noBzqVP7dfHZ1eod8/vSWBEDrQt8yac9e1
+	 epLNaN7Iv7xvMq8wNC5i+6eKhIg33Mx0iHPHrw8dvo1t83RB6SZ+S5f+4AclJVrhYihkZ
+	 EazI5iOBenXtfjpUExba4MJWecoQNw58uIEUC8YRuRvtkeNZvUNU3dIiB2J3A4AXYCe21
+	 DsLWDt/uHS5GErjA0LnpJgugaxSrnSu+NKtlcgulJ7SrHJU0DxyWEA400n/5L+DsaOeIH
+	 OUKupBu0xR3qd8Wn1n1WRPe1dNkoQHrFjxmy4y8LKDHkIkyItYv+DW+1jMGH1oQ73Pg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792563348;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=NE6FODam8Y7torIkBq54ShtdSgWpLFBkxmVPgOM97Y0=;
+	b=waYM5vI/3ok4c+VG3RN/T8nvReWN0kuOBctm6AFbXF93x1d/NcxT2MlWGOz/g2nl77uH
+	 pMwlDYW9B5vVsfJnXvfnBpXruAtkwL0uQUYjiYGW6ZLBG6ta9pRZu9YeWxqbDk1OuWD8l
+	 1zehCyXMcDHti+a1WkuY9HqFpOO8nkwoIiUIyGo+MhXoQs0FyYETA/+xF1zE3pWxvXVx3
+	 uMg9LQ3QPtFOy5lw8azSYT7Lct3xFEcDmu5N6jAJpYY23lflZICLrna1SXvJ+0UBYG03u
+	 ZHT0Hml5ZrXD2HWr4r3i39lQj1kfs+cwqT7H1MOBLcKbicwJmPwc6uaRum+HPU8ZADg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZlpfCuDz;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948DA60A260E
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 06:05:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 948DA60A260E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0365D606A31D;
+	Wed, 21 Oct 2026 06:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WfR3XGo3
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48afdb491b1so97742f8f.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 23:05:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792562722; cv=none;
-        d=google.com; s=arc-20260327;
-        b=H5fRhHEE9XpNKvz8Nrnsnep2kNwMrp/tGLVGECpjwkyxg89QmBXYct6jFlw1E3rdzz
-         VmxgG/mdvN5Sm2v3nvDkKAP23xvwf5ZkM90HVlVpyRkOFdiP5bk4YUosF72hupXk1VGi
-         qM2ACQ8MlLUGrn/BgwUj5rLF9nrJKul2FJRZqhVHhVikpph8thbYVVrcLDEZGB2Tfwrs
-         V4w/VsFfuave6zvbV34kpL2LXkE90o2oCjZjfw6uNtm9XzHVE4bUhjhWV6MAgTffdlrz
-         oZjDmv6c0xPvE5kJ2ajBDM/Vm6ZYSoiDDoyD0KcdnSf0XeoXJanttPs9ZXDLvJIC4+mb
-         /ZDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=pBw4LUv5P6dBy/YmrFxEgRkn5dzedDU5Ft5Mq0UqENs=;
-        fh=X0Q42DI+2Ce2l/3alhHh70tj+zoKPp6axtZp9qr8hiA=;
-        b=fj773qS3sJUyuFi6xJvT7xciDZ60EafPB0uXj+jHbRSmVVXXP/3e8F2YM1XBGhJ6Ps
-         eqz03b2VEojNT1PBVf3Z0FvCOXHemea65NWQhYQ911nx2A+t84DJAIyeVsIFKeXeLAzf
-         ikQhWVldvJj0gWTrM1sWt4RtRwtlO26Jvedl5g8y/GhGwfkj4x6lPBj5pKN+AVfh1emu
-         rDxHGR27Eul5xcU5Zbr+Kydm2ieVuexTxIBcw5i8elhIsd9hzBQXemRDaQcLpFxgsiSi
-         pRJ9QMcNi05gvlxYAGEEvJKRV1ef6tEQd8/iyBpQciImZCj6CEA3wfOdmMFy/EcgkB5E
-         9c7w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792562722; x=1793167522; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pBw4LUv5P6dBy/YmrFxEgRkn5dzedDU5Ft5Mq0UqENs=;
-        b=WfR3XGo3u0VUtB4FbiSFYnY2XHDpwY5Z/k+5Ybv3EVPpRdSiBzmS1BECsAUVsAaADn
-         awhQzFuVJH+3VUdRO/h7l7VBOCRaTNyo8QP6AWpQoi+c6y5uZmBy4dHDRMF0oB9Ay/RD
-         C4k/Q52c+wbeC12vu6+So4QDpmwN20u1IGWi9cdTm2oeWpYkj7Nfh4Bb1hZabqEvUaCJ
-         mLesV/IRkLMVhgwnkEoBF+3SlMURhOIKok00pewk5a7ehdbF/oG+BHEFhC4GoY4WefuR
-         tAdKfvD5Gpn0fChq1HuMNyIQ7PsZ6cGmKFFv3vVxfggSX8JbHtYYQ2ijwpllLcAzR0sG
-         genQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792562722; x=1793167522;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=pBw4LUv5P6dBy/YmrFxEgRkn5dzedDU5Ft5Mq0UqENs=;
-        b=riT4AUUOaapu0uUdJ3XD41fdiFwTq58wxHpHHIsYKAxqvV8CqninCurZ0uxp3cTNMP
-         J9jVZLdTKArvU9VXx+lQFo/3xsTVnc243fu+N0auF1E92BdVJpgiv8n7mVZZkY6kcYFi
-         4dk0Esbb6P6amqtFQMjwbcUbFuOvNNnMwYtdzPFz2Zo4k1bWM6mdO+tQ3ufPO2g5Gh8j
-         6KOcLQmDzKosEflph/IT87xeu7WZimDQY6//alNhorVbcjd81jctUhet2vUAjA+dIi85
-         R0FBkMqpEGqRSN0EfsshQrP8fVj95LQmjRl/D+V7k+xi1gUXkcAgXuXFJ6FNGf7kpMBU
-         Zngg==
-X-Forwarded-Encrypted: i=1; AKwUvBxpjYmnOvO41OpCIZcpR8B2d3RaZtv6T2+lMzECIw4FysxiHHcqsybpWnlGVDKYpAg1+ak=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKNQNFe/yvoqcfAmOXyfN1l6vOy+RCQ32+1jU9kohecZ5JI4+H4
-	c3FbXLAE66oVKHgWgDD5P4mHfuyX5ZVBcsM62+3jVVRZj2GS4jnzYP8FXvbos1Q8ENsnqPvte7H
-	/Xm6K/9pVATtP1GRF0a4LnLStc8dIBFk=
-X-Gm-Gg: AYBFou1zqGINh0wW0yPqvO0bSCNHFqnO9htftG+GXX8pZQWW98DqJvhnAEecJa4Q6Pj
-	efWT31NalUhZHfgv8CrvSuns7W0X+f9YRqSyQsHrd27HtIyinclNM3KFyV9+DG/p7d86ePMoJMR
-	lsiUUHVmJh+qF/Tj1a0Rrbp5ZSMN+lP1biXnc5pOpQl9w1fyh3NXs/AX+uE8PdJPMZ/n0hkpHQu
-	MTzWRXyAjerRl0oj6uvw9Lh1O6YDtyD/DfsZm2Y/KX5DpQMTdncNgXUAzpBZRWD5+vNdshIMqZO
-	9Gxfj+cejA3vIjx4t4O5a8Jj1c0iyNfrrPZL7TBy3xLaJutXaT1VlztJAJaipSGZFXAodNwc3NR
-	PqDK3tpbCPKUig+VUA8/bv2SWY/RKMRvXkfs+K2/Wf52ei8e5cmnuSVw6zzGIJTWLnFkHePrNiT
-	8/mjrATHvJrT8XiAtAJPYOfeQj5Kj9J5hYCMMwX0WPUPlS+lDIK8V+HAtrmVfR7Z4bDl1fVtcHY
-	e3KSFkSZ4boiLM=
-X-Received: by 2002:a05:6000:4549:b0:487:21be:dcc6 with SMTP id
- ffacd0b85a97d-48e264b2a0amr971173f8f.21.1792562721630; Tue, 20 Oct 2026
- 23:05:21 -0700 (PDT)
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZlpfCuDz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36271F000C9;
+	Wed, 21 Oct 2026 06:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792563347;
+	bh=NE6FODam8Y7torIkBq54ShtdSgWpLFBkxmVPgOM97Y0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZlpfCuDz9DktGxquPoD47fDuegagqTC+8TMUopcdjmjJoKn/9B9qXwlflzzjqXoui
+	 TX+FEMbLmX7o1R4ezKKM8Eqj1Kq61xBv14gu3mA4o2KRLsYRQtgNvgh5QOkMq38dXp
+	 9crrqBTNujdEaOj3GR+yYJdV6jMHqEvngqY0Dtk6dcclBTM6FpkHqOuw5j48GNTsxq
+	 Roq4V5fFgCtxlBMqjogysyrThlB/dvisoCi6GDuGvH8S5mkGpjhXEekE5ICe6hpUBG
+	 KfnKFZ+GmCyRwhW+QcdzPKr4tsZIbLNunaSkQV88kvTAgSc9XkhnXudfodi5mQCc0H
+	 vphogldSkhgOQ==
+Content-Type: multipart/mixed; boundary="===============8716026043077091956=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,176 +49,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20260723114042.559926-2-max@linux.ibm.com> <DK63HA8KEYWH.1W1W2IJEWEVRD@gmail.com>
- <ede5833e-59f1-40db-b72d-bef247a16f9e@linux.ibm.com> <0eca445a-d882-4821-b6f3-4ba124607ebc@linux.ibm.com>
- <CAP01T743ZYEDDTxQ=_R+3kUJ8xLjQnm8jAeDnkPmLpc4Df+pNg@mail.gmail.com> <0ce208ae-b229-4f94-94ae-74edf96f371c@linux.ibm.com>
-In-Reply-To: <0ce208ae-b229-4f94-94ae-74edf96f371c@linux.ibm.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 21 Oct 2026 08:04:43 +0200
-X-Gm-Features: AclHuK9jg52pa5SV3qEWCCAEYYTDjmAxDgqebIo0aj6r6UdDX9mQAcEEyr1MSto
-Message-ID: <CAP01T76Ag2w9kVbLRn7qqKnDPivG31kTMiXbW=+CWaF78Ysn_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix flaky refcount asserts in map_kptr_race
-To: Maxim Khmelevskii <max@linux.ibm.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <ade7e1bd9d4c7a3975fed8e1bea08fd66cf1b03c9c7df26f4f9fe07d36187dfa@mail.kernel.org>
+In-Reply-To: <20261021-bpf-hmul-v2-1-88e260099f7d@outlook.com>
+References: <20261021-bpf-hmul-v2-1-88e260099f7d@outlook.com>
+Subject: Re: [PATCH bpf-next v2 1/8] bpf: Add UHMUL and SHMUL instructions
+From: bot+bpf-ci@kernel.org
+To: tangyazhou@zju.edu.cn,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,void@manifault.com,bpf@ietf.org
+Cc: john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,qmo@kernel.org,puranjay@kernel.org,xukuohai@huaweicloud.com,bjorn@kernel.org,pulehui@huawei.com,catalin.marinas@arm.com,will@kernel.org,mark.rutland@arm.com,linux-arm-kernel@lists.infradead.org,linux-riscv@lists.infradead.org,list+bpf@vahedi.org,linux@armlinux.org.uk,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,johan.almbladh@anyfinetworks.com,paulburton@kernel.org,James.Bottomley@HansenPartnership.com,deller@gmx.de,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,luke.r.nels@gmail.com,xi.wang@gmail.com,iii@linux.ibm.com,hca@linux.ibm.com,gor@linux.ibm.com,davem@davemloft.net,udknight@gmail.com,kuba@kernel.org,corbet@lwn.net,linux-doc@vger.kernel.org,ziye@zju.edu.cn,tangyazhou518@outlook.com,shenghaoyuan0928@163.com,ast@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,
+ yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 21 Oct 2026 06:15:46 +0000 (UTC)
 
-On Mon, 19 Oct 2026 at 17:05, Maxim Khmelevskii <max@linux.ibm.com> wrote:
->
-> On 19/10/2026 03:25, Kumar Kartikeya Dwivedi wrote:
-> > On Thu, 15 Oct 2026 at 14:13, Maxim Khmelevskii <max@linux.ibm.com> wrote:
-> >> On 13/08/2026 00:51, Maxim Khmelevskii wrote:
-> >>> On 23/07/2026 18:34, Kumar Kartikeya Dwivedi wrote:
-> >>>> On Thu Jul 23, 2026 at 1:40 PM CEST, Maxim Khmelevskii wrote:
-> >>>>> bpf_testmod shares objects across tests; prog_test_struct that holds
-> >>>>> cnt.refs.counter is one of them. Refcounter release is deferred behind
-> >>>>> an RCU grace period, so it may still be pending when this test asserts.
-> >>>>> wait_for_refs prevents flaky failures when other tests have
-> >>>>> contaminated
-> >>>>> the refcount.
-> >>>>>
-> >>>>> Fixed tests:
-> >>>>>    - test_htab_leak
-> >>>>>    - test_percpu_htab_leak
-> >>>>>    - test_sk_ls_leak
-> >>>>>
-> >>>>> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> >>>>> Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> >>>>> Signed-off-by: Maxim Khmelevskii <max@linux.ibm.com>
-> >>>>> ---
-> >>>> Wouldn't this still be flaky? Could we order these tests and wait for
-> >>>> a RCU gp
-> >>>> to pass before finishing each one? We have kern_sync_rcu(). Either
-> >>>> way, I don't
-> >>>> think the current approach is the right way forward.
-> >>>>
-> >>>> pw-bot: cr
-> >>>>
-> >>>>> .../testing/selftests/bpf/prog_tests/map_kptr_race.c | 12 ++++++++++++
-> >>>>>    1 file changed, 12 insertions(+)
-> >>>>>
-> >>>>> diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
-> >>>>> b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
-> >>>>> index 506ed55e8528..5a543b3465a8 100644
-> >>>>> --- a/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
-> >>>>> +++ b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
-> >>>>> @@ -28,6 +28,15 @@ static int read_refs(struct map_kptr_race *skel)
-> >>>>>        return skel->bss->num_of_refs;
-> >>>>>    }
-> >>>>>
-> >>>>> +static void wait_for_refs(struct map_kptr_race *skel)
-> >>>>> +{
-> >>>>> +    for (int i = 0; i < 500; i++) {
-> >>>>> +        if (read_refs(skel) == 2)
-> >>>>> +            return;
-> >>>>> +        usleep(10 * 1000);
-> >>>>> +    }
-> >>>>> +}
-> >>>>> +
-> >>>>>    static void test_htab_leak(void)
-> >>>>>    {
-> >>>>>        LIBBPF_OPTS(bpf_test_run_opts, opts,
-> >>>>> @@ -73,6 +82,7 @@ static void test_htab_leak(void)
-> >>>>>            sched_yield();
-> >>>>>
-> >>>>>        ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
-> >>>>> +    wait_for_refs(watcher);
-> >>>>>        ASSERT_EQ(read_refs(watcher), 2, "htab refcount");
-> >>>>>
-> >>>>>    out_watcher:
-> >>>>> @@ -134,6 +144,7 @@ static void test_percpu_htab_leak(void)
-> >>>>>            sched_yield();
-> >>>>>
-> >>>>>        ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
-> >>>>> +    wait_for_refs(watcher);
-> >>>>>        ASSERT_EQ(read_refs(watcher), 2, "percpu_htab refcount");
-> >>>>>
-> >>>>>    out_watcher:
-> >>>>> @@ -195,6 +206,7 @@ static void test_sk_ls_leak(void)
-> >>>>>            sched_yield();
-> >>>>>
-> >>>>>        ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
-> >>>>> +    wait_for_refs(watcher);
-> >>>>>        ASSERT_EQ(read_refs(watcher), 2, "sk_ls refcount");
-> >>>>>
-> >>>>>    out_watcher:
-> >>>> Wouldn't this still be flaky?
-> >>> Yes, but it seems like the best solution to me.
-> >>>
-> >>>> Could we order these tests and wait for a RCU gp
-> >>> to pass before finishing each one?
-> >>>
-> >>> I don't think so, because an RCU gp does not guarantee that htab dtor
-> >>> was called.
-> >>>
-> >>>
-> >>> Let me try to explain these points and please correct me if they are
-> >>> wrong.
-> >>>
-> >>> That is how htab frees memory:
-> >>>
-> >>> const struct bpf_map_ops htab_map_ops = {
-> >>> ...
-> >>>      .map_free = htab_map_free,
-> >>> ...
-> >>>
-> >>> static void htab_map_free(struct bpf_map *map)
-> >>> |-> void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma)
-> >>>      wait for bpf_mem_refill
-> >>>
-> >>> static void bpf_mem_refill(struct irq_work *work)
-> >>> |-> static void free_bulk(struct bpf_mem_cache *c)
-> >>>      |-> static void do_call_rcu_ttrace(struct bpf_mem_cache *c)
-> >>>          |-> static inline void call_rcu_tasks_trace(struct rcu_head
-> >>> *rhp, rcu_callback_t func)
-> >>>              register callback __free_rcu
-> >>>
-> >>> static void __free_rcu(struct rcu_head *head)
-> >>> |-> static int free_all(struct bpf_mem_cache *c, struct llist_node
-> >>> *llnode, bool percpu)
-> >>>         here the htab destructor is called
-> >>>
-> >>> If this is correct, htab free happens after RCU gp and task RCU gp,
-> >>> which makes the option with waiting for the RCU gp after each test
-> >>> pointless. What kind of guarantees kern_sync_rcu gives right now?
-> >>>
-> >>> Polling on refs seems better because it improves chances for the test
-> >>> to pass without introducing major changes and it works with any RCU
-> >>> flavor, also the same hack is used already in bpf_testmod_exit.
-> >>>
-> >>> Considering all of this, what do you think is the way forward?
-> >>>
-> >> Hi, I know the solution isn't perfect and the issue most likely is low
-> >> priority, but still would be nice to improve the test. Please hit me up
-> >> whenever you have any comments regarding it.
-> >>
-> > I still feel this is not the right solution. If RCU gp isn't enough,
-> > trace when the dtor is called and set a bit that user space can wait
-> > upon, and we can spin with yields until that bit is set. If other
-> > tests modifying the refcount is problematic to wait properly then we
-> > can mark this one as serial, but I think that can be avoided.
->
-> What would you say on making a new prog to track
-> bpf_kfunc_call_test_release ?
->
-> SEC("fexit/bpf_kfunc_call_test_release")
-> int BPF_PROG(test_release, struct prog_test_ref_kfunc *p)
-> {
->      /* refs_settled is a global var */
->      if (p->cnt.refs.counter == 1)
->          refs_settled = 1;
->      return 0;
-> }
->
-> Then it's possible to poll on refs_settled in wait_for_refs, like this:
->
->      while (!READ_ONCE(skel->bss->refs_settled))
->          sched_yield();
->
-> Would that be a better solution? If you want, I could send the v2, so
-> you have all the details.
->
+--===============8716026043077091956==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Yes, makes much more sense. Please share a v2 and I'll take a closer look.
+> bpf: Add UHMUL and SHMUL instructions
+
+TL;DR: Verifier still rejects UHMUL/SHMUL (off 1/2), so the new interpreter
+code is unreachable; once enabled, JITs and range tracking would silently use
+low-half multiply. Should the UAPI wait for the full series?
+
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index f29b0aad440c..90c30e5d790b 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -34,6 +34,12 @@
+>  #define BPF_FROM_LE	BPF_TO_LE
+>  #define BPF_FROM_BE	BPF_TO_BE
+>
+> +/* BPF_MUL off values for high-half multiplication; BPF_ALU64 only. */
+> +enum bpf_mul_variant {
+> +	BPF_UHMUL = 1,
+> +	BPF_SHMUL = 2,
+> +};
+> +
+>  /* jmp encodings */
+
+Can a program that uses these new encodings be loaded at all with only this
+patch applied?
+
+check_alu_fields() in kernel/bpf/verifier.c is not touched, and it still
+rejects any BPF_MUL with a non-zero off:
+
+    case BPF_MUL:
+    case BPF_DIV:
+    case BPF_MOD:
+        if (BPF_SRC(insn->code) == BPF_X) {
+            if (insn->imm != 0 || (insn->off != 0 && insn->off != 1) ||
+                (insn->off == 1 && opcode != BPF_MOD && opcode != BPF_DIV)) {
+                verbose(env, "BPF_ALU uses reserved fields\n");
+                return -EINVAL;
+            }
+        } else if (insn->src_reg != BPF_REG_0 ||
+               (insn->off != 0 && insn->off != 1) ||
+               (insn->off == 1 && opcode != BPF_MOD && opcode != BPF_DIV)) {
+
+Both off == 1 (UHMUL) and off == 2 (SHMUL) fail with "BPF_ALU uses reserved
+fields".
+
+That means the UHMUL/SHMUL arms of ALU64_MUL_X and ALU64_MUL_K in
+___bpf_prog_run() cannot run, and BPF_UHMUL/BPF_SHMUL describe encodings the
+kernel refuses.  bpf_insn_is_hmul() in include/linux/filter.h has no callers
+anywhere in the tree, and bpf_is_hmul_variant() is only called by it, so both
+are currently dead code.
+
+The commit message mentions interpreter support, but does not say that the
+verifier change is left for later.
+
+When the verifier is relaxed, the JITs and the range tracking will also need
+attention.  The JITs ignore insn->off for BPF_MUL today; for example
+arch/x86/net/bpf_jit_comp.c emits a plain imul for
+"case BPF_ALU64 | BPF_MUL | BPF_K/X".  adjust_scalar_min_max_vals() models
+BPF_MUL as a low-half multiply.  Without changes there, JITed programs would
+silently compute the low half and the verifier's bounds would not match the
+real result.
+
+Should the UAPI constants and the divmul64v2 group wait until verifier, JIT
+and selftest support land in the same series, or should the unused
+bpf_insn_is_hmul() be dropped from this patch?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39552088777
+--===============8716026043077091956==--
