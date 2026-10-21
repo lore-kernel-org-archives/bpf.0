@@ -1,99 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.169
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792541784;
-	b=DlEdUKLxPRa1RD8DTAG+UnbrOvfR42B7HtQ+YejhXy+z9pRWCW9H0rkRDbUe20wPlloC
-	 hh25tdmk7ORp/O1oIf/PR0pHQQxNrK185PNmPjKZ/KJvN+tuNrjQQ0AXsR5nZwfiOZABS
-	 EIgVqT/R0DBXIhFS8YmRvlzPNIZ41JhlhvkUz99ZBzTem/v7ot2Ehk4TIBNUNsVkkMORJ
-	 k2rgJdY+f6joH4ISYN0Y6VCAY0Sj7gdPMXQUb4/2NL6qLRHiSxHStLTqfcJkDOuXK/xqq
-	 Owdfzo9gBnGBJWUTUW/jWxI9b1XGOsCKdMmulMbM3thar3OFAwj/BrGORUCHpqLkGkQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792541784;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=JUSir2q5BLuFZXQHqg/6Fwc618wXrCwtXkLVpmVntcg=;
-	b=zVBgpT+WwnuapD4IvC2wWhCEj6NKvGRmbDHcFHBYHW71jzXn8tfXLnOtJ7KV7XKUEzie
-	 n4SfPoNtvaA+A10aK4QZoDfSdlHrjMI0szxl27TCuEAD/oS2paEOLgzr9OUIRc4yKh7Bw
-	 AdrytUMl3AXgwE0eEBkciSayPEG4XrIXGe967lz9XTlwP56l4+fhL0NY+n6QsEPH0++DX
-	 tKTwG+EeixJXe0nn6UUi4iswLNlaPzyHzZQcqkuD6MmytIuLm32AjnKK5ZNoHDVnkAPnb
-	 nAPxSBjfvjrixvo2VbgecZMFFQWwisHVgmZ3c6ffNJRszwGp1HmriOD4F1rM7Lc7SHw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=j1laCVTL;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.128.169
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792542100;
+	b=lLZAVkbgJQE9rIYjFg2RTumYCJmQ57yzxRJCab3hlfiJKWqNHOvyAcIhEqaFk0K1vOW9
+	 kMyNzEsMgiuvXwB/5mxAXBH6N4aNDc+426YbE7bQbUlGAru/Q8xJ4AbHkNuXu30dR43Mz
+	 eLMg+uXnjTlP38FVU6AEfow/uBj/vpNtetS8YYk2E4jKxhxUaAijbZWzRnfZSpAXjdC8j
+	 4rrJBkPP0VZ17cIaTD6N2Y0OAcGZwrLrNe1acus47Z8dBA9/Ls3+0Q1Tw+oD2sOX8IqIe
+	 ytYcQ0HFub9BEyEqE/Ky1sfDg1inWVu2M1z6auRXGqYxOdHNTUGvLgIRTcdr2Ea20jg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792542100;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=CzZC5H+2BDeR4IeEvyojZq8pYockzsCAOlLkkLS40RE=;
+	b=m7EmLfNPCq3Q02gUkVel98pcqc1ucEdgMjyv+EQ4QVgDpz/lUuJtUsrxmo0itR/BmdNh
+	 g5jNH2F1HI7Zi+xmnJEtCEx+BnLeZErNkecBac7r2qgvJWP+DI3Y4GAs+li0GNagbPqUF
+	 njjLystnwm+zVbjUIyM3LiDccD6Bll18/DylitahrVxP7jl0lvM1scq/hWBJEQ5jZm6Fj
+	 sZ98c4SzCQkYx6R5NQ4rOXKm5fATaNnIe9QdEBi9uITLp7OXTVwA9wdOptxLpDVy/AP4n
+	 iQN3y3l5+CC9Fn6lLCY6dPhHhN7dPNsZEBxSwCFh/qk3rJQ3Hx48rIPMVzAqA+bww9w==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EoQ3dTU7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E37606A31A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 00:16:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 65E37606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B82606A31A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 00:21:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=j1laCVTL
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-8acda240937so1582507b3.3
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:16:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792541783; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GC4MFvmwGiXiDAxuLnxgM5mRIHc0MP26ZhgzIKM7QVGoLn2sblW6Ibi/GTNG/Hh0ho
-         IPN+UYpJOngtcCgNDvRhzwwKH64aO6Sckb1cmHrAH0oScMUJ8HzXkFzAwa7UqyZinTp1
-         mwiv73b66Clwo1Ge33zndwb9gG0gRii5HYSpIZqfGNcZlVyKQ+xZxy+k/1on7KcY9ES4
-         KT7uTDGtG2cCAypnsIiEYA5vLDBQvPXd6sp89tHAiVtzDcq0RH4AnHqXucDSOS3E2lCS
-         kPopyax+8TfMN4nHUelrTVyFP+V5rShIeUSg07p/HDBZunrw5L26V3CBj6hsyGdclwsw
-         RCIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JUSir2q5BLuFZXQHqg/6Fwc618wXrCwtXkLVpmVntcg=;
-        fh=1vZmhPHifY405qJGURT1JAyByuefzUhkyXCUjZseaGY=;
-        b=d+74ZSKFpnOiqWzrMz7uVg1o1s6eicd8pthGuE2fcF7c7g9JpaS4OP7vVFU6/EbXdd
-         8v7Xq9NyhK2How3nasutwwsIuYAffhsg7F2u64ZB9wmP5Gj02Qh/i9gpYGdzzhweMdtB
-         u1p0EzYKmsxFvOdBm6BvVx2xzwIc4WVMCEo4ZDVfKL611jc/P3Da1GOqbstxeR9VVcid
-         jRRw7Qerq2osquXbXpKxQCsU6HKhlW4+8b/E9vVakaZeLITN7SjGDQXtvE//96T7Tljj
-         Igwvy8RSWl/l7IQV4ZvaTbd267SjfyKQUbYDJEqxJMCe9A/PC/ATJ02h7X+L42vkRNmp
-         wyiw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792541783; x=1793146583; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JUSir2q5BLuFZXQHqg/6Fwc618wXrCwtXkLVpmVntcg=;
-        b=j1laCVTL3txBPYjWWVpjMIQ2W6tC6XgY1+TRm+wL33VlkQbBtqK8U7eyHWJBWr0ZTC
-         PkqKCrkqaA/NjCIYOCiDEoru2HXRs6UQv6hZ/RazF3rEYzZuTyOpoHT1dyeizutAMBNf
-         t/J4PRb+Tb03cJsc/ZIn2j7ZcYVn+g0v0QErf9Cb0V1ioCd54BwWkxiKI5cSu+fY56tp
-         ZXtD8eqwlrmtIigiiFGvEwHk2mAp3USp44VwQisPJ/AGz4np8T1iyCUuuVmyvdvUmBog
-         fS9JwiS7jsfQGtpenWyZOyzzGB7g2PnyQoi1qj1lrC2WRatcz2F3vbgY4iVvMMWPEpsE
-         2/Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792541783; x=1793146583;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JUSir2q5BLuFZXQHqg/6Fwc618wXrCwtXkLVpmVntcg=;
-        b=aviYFrna0p888QZxk1D65TvDgn/lEmAzPgqZnslQQ6YmByZPWAjz63lgTHzotjYTj2
-         tKrCVroG3b4rToWEQ4IH5n9t7dzUMkJEh0yVETsdDZCo79mbRM3y7IhHd+o25r9q0JCq
-         rXSw01+/xc4O6lqpJwsTdsWdQQqWKY6OO4pG0dgStGNvNiTsE6GC455YMHWlenKcrrTm
-         8TYkI7AgaN0+b+NVKReIWKVxeXdO9WvKmaQ6y08E4qKr1GxIoPYQo5GJi+GACgaCo4yw
-         ZFJhQzmYUcEotE/MGSQSD667w7CKB3szHp7AvbodwdQZr23GDBAlb+vPh00Zy7FjQX3o
-         eL/Q==
-X-Gm-Message-State: AFq9FYJZ0VP38Fj1aQAkD3DCzrARQOdcnPEPYbYCx+u9li6T8d6vYKto
-	e8U1G2qBlAC/tWe/GgHFg2e1mzP/5I4jwYmXywsexyOencTNT11Te/7V7n4dsBskWxzS8cav6a9
-	NtkUrDPFRv1b2kqYeqvCDWiRfgDLg5i4=
-X-Gm-Gg: AYBFou1n668XvDjUqBLI+4QEaaON+BvLr5cu5mLKAMGETyxJr9WPtSgx/u4toelB0eD
-	cjVXPdUp7IPrDkyeFBJQouXrk9yE2t39FD6+ZtFkJy7he1kUf97tXdgwpOcaOkkbwge1kk2ziVy
-	4q9B61ET0+TFASEgHLnTClYikOJIt0BiDMiy3CQ5sMOZuqrgXVg9lYYKb2LepwwxAnVUXH4WPyP
-	274jnbbTxxWSX0nZAb310nwhtX17ex5UZWirBiI8QGfnYk5qX83A1pF/JwksMh/cB7XNgQfwSw7
-	h5mcXtVOj0oqlbkSKnpM3jSxNFc08T/8hZE83oPkpnbdqhxtuBjVsrv6Vqb4CPCCy4/cLATODzr
-	/2oE6fercFaiK3SbCl/jq1YZ6DmFzX6c2XErULdZKGPnnjFs8mQ4okuyj5uCLa5GydUU5AA==
-X-Received: by 2002:a05:690c:660c:b0:8b1:ce5:be42 with SMTP id
- 00721157ae682-8b133fe3435mr2771807b3.28.1792541783308; Tue, 20 Oct 2026
- 17:16:23 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=EoQ3dTU7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7F281F000C9;
+	Wed, 21 Oct 2026 00:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792542100;
+	bh=CzZC5H+2BDeR4IeEvyojZq8pYockzsCAOlLkkLS40RE=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=EoQ3dTU7gtWJEvmQ7jPj7LsXZxoGgHBP8BdPS//rPGCE820CAnv9JPmBrljvrLm6b
+	 CZN5Z72dyC4Psf/KID/jxS27wdvdhWoiOfXKkKlsk1UC4YVoJrZ1A9hcVn7MCNh4Ji
+	 fjxZs/wEIkPujnAV3dAKQhABvboRLGip8jSscUs29+f4s2fOhnP0zbkOGlmsJmb/mg
+	 +tbV3XV37As5nMYr8jx1AvSCfW1vWhS+wy0hCX2e8zXxwMxcGf6Fvzen4ftdIjw4Z7
+	 uFU/YzooqXpcGjarMf25pUhn1FXpVSP6PV8Y79MM2xxaesSdKzXB442NgAt2mbEZJ9
+	 FjhYHbu9dV/gw==
+Message-ID: <sashiko-outbox-179630@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: pointer operands for 32-bit
+ recurrences/latches
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261020234705.375067-2-eddyz87@gmail.com>
+References: <20261020234705.375067-1-eddyz87@gmail.com>
+ <20261020234705.375067-2-eddyz87@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 21 Oct 2026 00:21:39 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,36 +59,137 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261013181932.1739238-1-listout@listout.xyz>
-In-Reply-To: <20261013181932.1739238-1-listout@listout.xyz>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 20 Oct 2026 17:16:10 -0700
-X-Gm-Features: AclHuK_gZWAJUCU0Ubmw8jXYAFhpzdlBus0Vb1Ad3mAeDSuigAmuyURzHqelNUE
-Message-ID: <CAADnVQJ5s1MaFhFQ7Djz0a_ABumiEs9NKCCmGAbkeE8TfuZNZA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 0/2] selftests/bpf: Add tests for memcg kfuncs
-To: Brahmajit Das <listout@listout.xyz>
-Cc: bpf <bpf@vger.kernel.org>, bdas@suse.de, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	JP Kobryn <jp.kobryn@linux.dev>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 13, 2026 at 11:19=E2=80=AFAM <listout@listout.xyz> wrote:
->
-> From: Brahmajit Das <bdas@suse.de>
->
-> bpf_get_root_mem_cgroup(), bpf_mem_cgroup_usage(),
-> bpf_mem_cgroup_memory_events() and bpf_proactive_reclaim() have no
-> selftest coverage. Patch 2 adds a memcg_kfuncs test for them, plus
-> verifier tests for their acquire/release, NULL and program type rules.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] bpf: 32-bit linear SCEVs on pointers not rejected outside latch ch=
+eck
+--
 
-I don't think we need to test them.
+commit 674e2a043732fe1343763547170250d3fb165111
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-pw-bot: cr
+selftests/bpf: pointer operands for 32-bit recurrences/latches
+
+This commit adds two selftests checking that loop bounds are not inferred w=
+hen
+latch operands are pointers involved in a 32-bit comparison or a 32-bit
+recurrence.
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/te=
+sting/selftests/bpf/progs/verifier_scev.c
+> index 661ce9ca8f938..6f8c3980299c4 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_scev.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+> @@ -2971,6 +2971,62 @@ __naked void ptr_stack_other_frame(void)
+>  "	::: __clobber_all);
+>  }
+> =20
+
+[ ... ]
+
+> +SEC("xdp")
+> +__failure
+> +__log_level(2)
+> +__msg("scev: incompatible latch operands r6 (map_value), r7 (map_value)")
+> +__msg("loop header at 11, can't compute iterations count at 14")
+> +__naked void ptr_map_value_alu32(void)
+> +{
+> +	asm volatile ("					\
+> +	*(u64 *)(r10 - 8) =3D 0;				\
+> +	r2 =3D r10;					\
+> +	r2 +=3D -8;					\
+> +	r1 =3D %[map] ll;					\
+> +	call %[bpf_map_lookup_elem];			\
+> +	if r0 =3D=3D 0 goto 2f;				\
+> +	r6 =3D r0;					\
+> +	r7 =3D r6;					\
+> +	r7 +=3D 4;					\
+> +	r9 =3D 0;						\
+> +1:"	LIMIT_ITERATIONS				\
+> +"	w6 +=3D 1;					\
+> +	if r6 < r7 goto 1b;				\
+> +2:	r0 =3D 0;						\
+> +	exit;						\
+> +"	:
+> +	: __imm(bpf_map_lookup_elem), __imm_addr(map)
+> +	: __clobber_all);
+> +}
+
+[Severity: High]
+In ptr_map_value_alu32(), w6 +=3D 1 is applied directly to a pointer regist=
+er
+while r6 is also the latch operand. The companion commit ("bpf: reject poin=
+ter
+operands for 32-bit recurrences/latches") rejects this via !latch->zext32 in
+scev_value_compatible():
+
+kernel/bpf/scev.c:scev_value_compatible() {
+	...
+	ra =3D scev_reg_for_read(env, st, a->ptr_reg);
+	rb =3D scev_reg_for_read(env, st, b->ptr_reg);
+	if (ra && rb && bpf_same_memory_origin(ra, rb) && !latch->zext32 && !latch=
+->jmp32)
+		return true;
+}
+
+However, what happens when a pointer register has a 32-bit linear recurrence
+(such as r6 +=3D 1; w6 =3D w6; or w6 =3D w6; w6 +=3D 1;, which simplify() f=
+olds into
+(zext32 (linear r6 1))) while a separate scalar register controls the loop
+latch?
+
+When allow_ptr_leaks is enabled (as in SEC("xdp") with CAP_BPF), check_alu_=
+op()
+permits 32-bit BPF_MOV on a pointer without calling adjust_ptr_min_max_vals=
+(),
+converting r6 into a SCALAR_VALUE holding the low 32 bits of the runtime
+pointer address.
+
+Because scev_value_compatible() only checks the latch operands,
+bpf_compute_loop_iters() accepts r6 as widenable even when coefs.zext32 is
+true:
+
+kernel/bpf/scev.c:bpf_compute_loop_iters() {
+		...
+		r_scev =3D header_env->reg2scev[r];
+		reg =3D scev_reg_for_linear(cur_func, r);
+		/* If SCEV for r is (linear <reg> <slope>) */
+		if (reg && is_simple_linear(scev, r_scev, &coefs) && is_widenable_reg_typ=
+e(reg)) {
+		...
+}
+
+Subsequently, bpf_widen_scev_regs() widens the pointer offset using 32-bit
+linear_bounds(), and on the backedge bpf_clamp_scev_regs() computes 32-bit
+linear_bounds() from entry_reg (the loop-entry PTR_TO_MAP_VALUE with offset=
+ 0)
+and intersects that small offset range with the backedge register reg (now a
+SCALAR_VALUE holding the truncated 32-bit runtime kernel address):
+
+kernel/bpf/scev.c:bpf_clamp_scev_regs() {
+		...
+		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
+		bounds.r64 =3D cnum64_intersect(reg->r64, bounds.r64);
+		bounds.r32 =3D cnum32_intersect(reg->r32, bounds.r32);
+		...
+}
+
+Can this corrupt the verifier's scalar bounds for r6 by clamping a runtime
+32-bit kernel address to a small offset range like [0, 1], and should
+coefs.zext32 on pointer registers also be rejected in bpf_compute_loop_iter=
+s(),
+bpf_widen_scev_regs(), and bpf_clamp_scev_regs() (with corresponding selfte=
+sts
+covering w6 =3D w6 and non-latch pointer recurrences)?
+
+> =20
+>  /* Metadata and packet data have different origins. */
+>  SEC("xdp")
+>  __success
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261020234705.3750=
+67-1-eddyz87@gmail.com?part=3D2
