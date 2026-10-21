@@ -1,104 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792580318;
-	b=TjDcG7Qkpw7J+w8erNawVzU71/uoQATqq9eAvqJ5KM4yxcBKtasOGlLGywUuvY16fKVD
-	 xE3lRzrQubZifnLNLC+YHRx5F5WncNyQqTTxgde3jjzZu9GdpTQGuEKppxhMsKBmVeM73
-	 HO6TL/efHEbt36wg6Y2eP0FytsdSwngJhToacc6cbXnDhdZWXCB5V/fHOsEhZXtLotvm2
-	 6gr6XlDNAn1fnXQ2uxH1E9vfz8gZPbPJsh+215scrsRbp6QG42WByApcraNM8n7KRZDyY
-	 GVkDoAp92Tir7MjpRkIbOVeP6r9HojGU8PEpxKk8wx4RRiMDwErCrtuU9uamA14FA3A==
+	t=1792580667;
+	b=Q+X2NJ/CeojwrNbyRdfqGVnD58Wvx9NeRR+xKZUA//MX5D/wuBPwjsMMVw8iadFXkxTT
+	 C6RgMjzZygu9D0orVZZ+zg8Isx5TnXcX5Hi/l8ZdXVQ4nZhrDu6xwxj3uvFYyR8ekP/RN
+	 xT1eynzJB37ElmY4Ww8rXFSdWsOirXeJm9Vpzuj7pDycuwbvXar48lnOcxnR47X2gWNMH
+	 w2C2gRPz4NvzK07Q6FJz8eYT+/0heiu7GgmDmdV5b6pH1d7vNP2S5N/pX200tBfwXdp6g
+	 wiA0rtQTpvoGLeclvW+Zz+uo6Qbg73knJh7y+O5uQuZ5iembaVYApmdkxXRUQFH9KwQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792580318;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=t/rAtuw8L0JVO1MzbBUMP/K+LGokTIDtHsowAZbEJHg=;
-	b=vr7dbUEgm3iS7QhsaL2LyYv+xj/GnaJkPg5Vo2A1I8aZ2AFq5mtdIPY4OlK9M9uMfHvJ
-	 ybT7tTGU+75yIA0v/7TVRgM5TN3q0mQOxt8IRSSdD/9cn9y6ZjFdVPsOqEBRqLus0NxIU
-	 E5Zat3Xn1xVUlHqDR/5Lg3pV4/SbEQvWAlEh3riANrv6dA52xxGJH1ECeJwqOI8GeWyd4
-	 KAsjo41ARwzalzU/EIfo0pOqojatd6wglQUvqVy3+UzYPSqL+YNcjuWLxdMgneRFnBRCf
-	 ZSi23yc/kRVacoYynvLQYLuVjGies+aLmGY8hCfIkAFaAvf5vvLOAQVOnA99iJqXX5g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792580667;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=757j6HC9/ZJcr0KvzkZU6AFyWK11pyb92mCjzCpfo6Y=;
+	b=YPFOaMhXEv0gnh1cEJhx3/eo+AZLKA5sBlSqYg/h0yEWPlWZG2vYhnbiClx1xjE5XwhE
+	 qany3tTrNueskjUsdQfasKwCcNO5qCImLXxxadqSNOWicObytzZGhmuC93Kpx6GTzJrNy
+	 xTYzgA7pidSAVKl84O02ZMTKAwzO0QKZBOzlPwynjXKhSCpUWJLdY/9C04MbKe9Spo1cd
+	 9HbzlKuloISTumm4cBX5V/iFvsV+HEjKgIeKcm7/qbMpdwwaAJ978uEyVx11Gy3IxauP/
+	 yslGIeDgN+Cm05BRDfldCcLb3TmAn9tlLw38dAI2UPTf7NV2ZgH0kA2S+nfR1S3nkLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bobrowski.net;
-	spf=pass smtp.mailfrom=bobrowski.net;
-	dkim=pass header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=HHNDkB5Z;
-	arc=none smtp.remote-ip=209.85.210.173
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZqeHBMbu;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B055E606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:58:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B055E606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bobrowski.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198A6606A319;
+	Wed, 21 Oct 2026 11:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=HHNDkB5Z
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8a070781f63so246492b3a.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 03:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bobrowski.net; s=google; t=1792580317; x=1793185117; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=t/rAtuw8L0JVO1MzbBUMP/K+LGokTIDtHsowAZbEJHg=;
-        b=HHNDkB5ZzLBhcoftqluBfZzfk4FH8wqvFihietVucu3AcUZ2N8eU/TTlxfrIw6DLfj
-         1a8W/7mx/j8/kp4xIxcA21hhjb0fB9pr5EZZX7iBMO/KKIP/GGfzgLjAt2gZalRQcKM7
-         AnH11A5NWmfD7vXByk1SGh2GmRnXVcG5XI9Rza+srIZzailb/5tz+lK6qrKO+NUYDLT4
-         JHFj3HB9npVsefJH3zwmWSvy+HReCVoSn7l9cR04PABVYFzHOxZy5OpxGRdN37QaJ8oD
-         N84LLbssL3LEgR7A0kyTlogxWFxWLY4kLkv9wkhzmI1PFjr84+c2+MTuIPc+Rjz9oO/v
-         Jc7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792580317; x=1793185117;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=t/rAtuw8L0JVO1MzbBUMP/K+LGokTIDtHsowAZbEJHg=;
-        b=h8RohxHkdKK5gH/UH10wuO/PHBtNk1ObFHvuXiPu2nmMuzhhxqTM4yZ5N32SUDLgOA
-         LcfipdLzXOQ7D9YC3nszgg8ZjsobQ0ZTpfHAckIvgKOJIFLcCdATiyYAv1lZtyfwx3gp
-         MkjeOncdLmiywcgRlDDBsWsRotegih9+EZ/CvDwNMsoeAS5jayyxDf5yDAm/E8eloFbL
-         RfrsFV41uNgmdsbIMT9ILZKj5RGhLSiHZgAVd7naHcgqWKxoFROs2CL5+oE8TstYVkJH
-         7pdNWt6NlcB9+UF0Lek/vnRdgndY2qcuC7obpK7JzvUgvQNxWX6gsQbl1reZiD+lNs/U
-         a7mQ==
-X-Gm-Message-State: AFq9FYL67piRK9rvGGh8sYSPnTuErYBwjGHT46XTyndjWH7RVCqcOcXK
-	mrC8cCGtWs5lvup+ShjtIMMhOBnsvzNfnRdl78EBxYtsS9OlWoDsOWAacxmUZh0R1Uff
-X-Gm-Gg: AYBFou05icSqQv2tLNQmGLaqC8S6Ws+0Iepq9qn+VhNV/0/XU3wcS7QdpLhwA3Kmx+B
-	ADERyRpe3SOtLzoCo/qf08M1FLH1uO21tpIMHT2C9LTpet5TT5bWTsiTKwwLb/GUdfvVIVpkfDE
-	NPpzWjrnCowriSSKC0tWsLVNgARJ+JJuf2rh0dSSdfO71CJ4TFgxbrCBUUC4GICOIIG+W9Ws1OM
-	ib/7TXZrJks+i0gZIAdQUmGMlsDzwjmL2jptWP+UH/mfWKpZ9HTUfsRbaq4LAMIY9f3LkPghe7s
-	nUDSEyBu5TEybLir9znbbP7nolD6Lxi8tVg127bdVbL3+/008nB9xvF2LunrnKHTJwdEEYU7S74
-	rtaPvTXeWe+Y9k/VFjBemRxc75kApYgabVNHsxvw+UL/4Afg39V2iRqoWEJbFGPRuvsD+BbEnwp
-	1Oq+7kG2+y/wKsTAYRKlpcmQiWt2pWvGhk1494B194A2tQdw2uk3ckKIn8JImu5dqeKPYUOf2yQ
-	T81YGfYmlKvzmLOXkf7sfF88dQe1AFmqnXvgOjD2U81s4Y3aSc7+lDgcn03iW3z93/q1VrIFe2e
-	vkOZN3uF3dUZeg2xSycQoT1/fusX5Z4=
-X-Received: by 2002:a05:6a00:3d11:b0:89e:9c7e:fd51 with SMTP id d2e1a72fcca58-8a089d0783dmr1174185b3a.10.1792580315723;
-        Wed, 21 Oct 2026 03:58:35 -0700 (PDT)
-Received: from lima-development (163-53-146-70.ip4.superloop.au. [163.53.146.70])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a0894b49dcsm730783b3a.16.2026.10.21.03.58.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 03:58:35 -0700 (PDT)
-Date: Wed, 21 Oct 2026 21:58:09 +1100
-From: Matt Bobrowski <matt@bobrowski.net>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf: fix crash in bpf_path_d_path() for
- exiting tasks
-Message-ID: <atiawbBo6WRPA6QA@lima-development>
-References: <20261020105014.97985-1-matt@bobrowski.net>
- <20261020105014.97985-2-matt@bobrowski.net>
- <DM9VJTFJGVXB.3GH9LO3NGV5PO@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZqeHBMbu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6070F1F000C9;
+	Wed, 21 Oct 2026 11:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792580666;
+	bh=757j6HC9/ZJcr0KvzkZU6AFyWK11pyb92mCjzCpfo6Y=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZqeHBMbuj5HPn0jHjN8UcyVsdpArJ9Ux1/1JVpKTayRxx1TuNkn7xXuC7OaE4YB6p
+	 et3ByO0EdjxPImpbDNTZISmmL6OvcuyHKQtF85Nod65YO5RF0B1gtwaeq7+Emiw2Kr
+	 5pq5UKziYxfe97yzXpZk18t/1MRc4uyhHh+DLzsWfaNeSR7WcY6WgQaoHqour6gW+z
+	 CYE4UZQK1TLrr/6ES0mfUExvDBIACPJLwyXWqQCBYGAywkzYfS5ip8Uq1kV3Jyh1EB
+	 L+mzOynzyLspsQiG+MIt/fweOzxsh6TisBWlbRX/xDt5Y6HkO4UjA7wYjWR0/HqMEs
+	 HvJEnXWKBJMAw==
+Content-Type: multipart/mixed; boundary="===============1776289824786463327=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,96 +49,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM9VJTFJGVXB.3GH9LO3NGV5PO@gmail.com>
+Message-Id: <5a586e05ad8d24d79759c1d99d6d58eb661dc6f4a4c8d258e05a4962cfe7e59e@mail.kernel.org>
+In-Reply-To: <20261021103957.17532-1-ayushmanrout27@gmail.com>
+References: <20261021103957.17532-1-ayushmanrout27@gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Use memmove() to load bytes from an skb and an xdp_buff
+From: bot+bpf-ci@kernel.org
+To: ayushmanrout27@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,memxor@gmail.com,hawk@kernel.org,drosen@google.com,netdev@vger.kernel.org,ayushmanrout27@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 21 Oct 2026 11:04:26 +0000 (UTC)
 
-On Tue, Oct 20, 2026 at 06:24:42PM +0000, Alexei Starovoitov wrote:
-> On Tue, Oct 20, 2026 at 03:50 AM Matt Bobrowski <matt@bobrowski.net> wrote:
-> > Fix this by returning -EINVAL from bpf_path_d_path() when current->fs
-> > is NULL. Only the task itself clears its fs, in exit_fs(), so the check
-> > cannot race with that.
-> 
-> The crash is gone, but so is the path. file_release progs will get
-> -EINVAL for every file that a task still has open when it exits.
-> 
-> It also breaks what works today. The d_dname branch in d_path() returns
-> before it looks at current->fs, so at task exit a pipe or a socket
-> resolves to "pipe:[123]" now and to -EINVAL with this patch.
-> 
-> And it's not specific to bpf. The comment in fs/cachefiles/namei.c says
-> that current->fs == NULL in do_exit() breaks d_path() called from ext4
-> open.
-> 
-> can we fix it in d_path() instead ?
-> With an empty root prepend_path() goes up to the global root, the same
-> way d_absolute_path() does. Then the check in bpf_path_d_path() is not
-> needed and the selftest can expect the path. A chrooted task gets the
-> path from the global root, but it doesn't have a root anymore.
-> 
-> Something like this (compile tested only):
+--===============1776289824786463327==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Prior to sending out the fix, I also considered addressing this directly
-within d_path(), much like you've proposed here, but decided against
-it. d_path()'s contract is to build a pathname relative to the current
-root. It does fall back to a root-independent name when the path isn't
-reachable from that root, but that fallback still presupposes the caller
-has a root to measure against. An exiting task past exit_fs() has no
-root, so d_path() has no correct answer to give in that state, and I'm
-not convinced we should invent one for it.  That's what
-d_absolute_path() is for.
+> bpf: Use memmove() to load bytes from an skb and an xdp_buff
 
-You're right that my patch regresses the d_dname case though, since
-pipes and sockets resolve today without ever looking at current->fs.
-Rather than replicating the d_dname check in bpf_path_d_path(), which
-would mean duplicating VFS logic such as the mounted pseudo-inode
-special case, I think the cleaner fix is to move the "no root, no
-answer" check into d_path() itself, after the d_dname branch:
+TL;DR: bpf_skb_load_bytes_relative() still uses memcpy() and may corrupt data
+when its destination is an overlapping dynptr slice; should it get the same
+memmove() change, or should the commit message explain why not?
 
-	if (unlikely(!current->fs))
-		return ERR_PTR(-ENOENT);
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -1789,7 +1789,7 @@ BPF_CALL_4(bpf_skb_load_bytes, const struct sk_buff *, skb, u32, offset,
+>  	if (unlikely(!ptr))
+>  		goto err_clear;
+>  	if (ptr != to)
+> -		memcpy(to, ptr, len);
+> +		memmove(to, ptr, len);
+>
+>  	return 0;
+>  err_clear:
 
-That keeps d_path()'s semantics intact, keeps pipe:[N] and socket:[N]
-working at exit, and turns the oops into an error for every caller,
-including the ext4 open path you mentioned. Nothing that works today
-changes behaviour; only calls that currently oops are affected.  Callers
-that want a name in that state then have to choose one explicitly, which
-I take to be Al's point.
+Should bpf_skb_load_bytes_relative() get the same change?
 
-For BPF, that choice could be a new BPF kfunc wrapping
-d_absolute_path(), so programs can pick whichever semantics they actually
-want, and file_release programs that need a name at exit get one whose
-format doesn't depend on how far the task got through do_exit(). I'd
-prefer that over silently falling back to d_absolute_path() inside
-bpf_path_d_path(), which would return chroot-relative names before
-exit_fs() and absolute ones after, and still wouldn't help pipes and
-sockets since d_absolute_path() rejects internal mounts.
+It has the same pattern and still uses memcpy():
 
-Al, would a check like the above in d_path() be acceptable to you?
+net/core/filter.c:bpf_skb_load_bytes_relative() {
+    ...
+	ptr = start + offset;
 
-> diff --git a/fs/d_path.c b/fs/d_path.c
-> index c253090..ea49d33 100644
-> --- a/fs/d_path.c
-> +++ b/fs/d_path.c
-> @@ -265,7 +265,7 @@ static void get_fs_root_rcu(struct fs_struct *fs, struct path *root)
->  char *d_path(const struct path *path, char *buf, int buflen)
->  {
->  	DECLARE_BUFFER(b, buf, buflen);
-> -	struct path root;
-> +	struct path root = {};
-> 
->  	/*
->  	 * We have various synthetic filesystems that never get mounted.  On
-> @@ -284,7 +284,9 @@ char *d_path(const struct path *path, char *buf, int buflen)
->  		return path->dentry->d_op->d_dname(path->dentry, buf, buflen);
-> 
->  	rcu_read_lock();
-> -	get_fs_root_rcu(current->fs, &root);
-> +	/* Past exit_fs() there is no root to stop at, go up to the global one. */
-> +	if (current->fs)
-> +		get_fs_root_rcu(current->fs, &root);
->  	if (unlikely(d_unlinked(path->dentry)))
->  		prepend(&b, " (deleted)", 11);
->  	else
-> 
-> pw-bot: cr
+	if (likely(ptr + len <= end)) {
+		memcpy(to, ptr, len);
+		return 0;
+	}
+    ...
+}
+
+Its proto declares .arg3_type = ARG_PTR_TO_UNINIT_MEM, the same arg type as
+bpf_skb_load_bytes() uses for 'to', so the verifier should also accept a
+slice returned by bpf_dynptr_slice_rdwr() as the destination there.  The
+helper is available to tc programs through tc_cls_act_func_proto() and to
+sk_filter programs.
+
+Since ptr is only checked against skb_tail_pointer(), the source can overlap
+a rdwr slice taken from the linear area.  For example, in a tc program:
+
+  p = bpf_dynptr_slice_rdwr(&ptr, 8, NULL, 64);
+  bpf_skb_load_bytes_relative(skb, 0, p, 64, BPF_HDR_START_NET);
+
+This takes the memcpy() path with dst = src + 8, which on x86 with FSRM
+would repeat the first 8 bytes, the same corruption the commit message
+describes for bpf_dynptr_read().
+
+The Fixes: tag and the subject ("load bytes from an skb") would seem to
+cover this helper as well.  If it is left out on purpose, could the commit
+message say so?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39587398602
+--===============1776289824786463327==--
