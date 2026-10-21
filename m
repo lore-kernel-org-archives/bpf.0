@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792612733;
-	b=cszs3Jwm0tYSMhly9F0vWopE9qlwTgI5Zd+FKYs6xvJ2BSWb37dGzl0IdLNZ2bQH3t+q
-	 fzQS+gK0/BnXcvToTP68gE7pfsPlWPBjJD4W8xiwPmp+NocfAXT2u0JSTyC247EbTAEHz
-	 eaenXTS9J119c6cW6FXzPQpSG0e4fOBjcMoEB8t091X5VxXu5rmKjgusJfUrvd8ZHArsh
-	 LdyiPYEHhDdRW3EXyd0sXGs81ktOvs43L/IE2lzH+lnbWqXcx4OLHA061q1oyRXV/zshk
-	 a5ilbsoSRvk1VXOuI0hup4f0/DFaHu9h3iVNHGren0/9a/ngKE6xKGZ4qW+H13vMHPw==
+	t=1792612743;
+	b=LDIeWD9Ssg4GHV0B3l409gPnFFn6tl8XJZwxu3r8v3QwfR3h2wThTY3G6ujZesGqX1ea
+	 FB2H4Y3rlSyYELhbLlJLrZBHjjGdovsEFEWdf9Bg4HWtLL8/5R3sGo6gX6cLPIJV9K4kH
+	 qvD+ndM3XneBue//smFNHS9hImkb8GSOvqaDUyZJrflZgyCsJZ4biTiIUILCw4ORg6OgO
+	 F9tWnyENsjCXhK8ip5TsFjF8754rlxteWPLBuft/vMIYD6sUKZtrFhtLepxPc9+ZDwFBW
+	 5T0WpDddj2zQh4Yn0ZZRx/rmfwElw8bR9IivyjpLkhUXVYHC76ctFOCOvxhwim/AXnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792612733;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792612743;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=Jn7cYNwO2EebwQTtuyF9ZBF5UX2UIlTQdb3hKPwxsNE=;
-	b=nk9Fg92EPb8dkxflWriCZrE2yjMaq+fLH5Qe7BTzNfF5pyytcQOIQxcP6NS1sFxfYjqQ
-	 W23Fp80oCI0VUq2GqtBJ8CxvE6A/FMLaHfbyhKLj+wqEIDzsOJYCQ5IiM7+WjyG4iJ2S5
-	 YXm6mdkCM8Or1ommV/8aOQCjC1Al8Q+8kEY1egGV7YAIevwCy5ueAiM1IH5sCpOF+Kt7U
-	 erB4qEg/cuRlvEp5Oqjzn7lghg0B0zR2InXZMHnluWiNruWlYeSdDj38Mmx88eX6ikQHH
-	 JWkfEQvq4T2WZdhDfy5zNkb3jzj4EEmtt7DNlaTbeG2oMMMPrdxavVll+sZ3gV6lgqg==
+	bh=2xbtEJ7CZhaLOgThbWGPoTOo9rCIMzg+aSiILL7GT3I=;
+	b=MvonBmqjqvgiqK99bWVZL1ar+sv1S6vU0m3+mB8rfJeQwU15GtaO5Eg9oCWXNG9ayBBQ
+	 LEcQZBW9wQ+mlnm1fRUT1Xa83yw1nCpv8oNK7l+21UdhlToxvLpczCvOfpUe4G71NrWcZ
+	 mfO8bkf7bFSeen1skvJBuWasM+y25Cv5BG2COUMr40ztV/XK2P4V5IFweLaoSL5pxeJM9
+	 difyhRWqfv8sK82oXJSnWzJDeCHQzfi3GukCIuN1xyJD+Tf7WTP027hFvOtj4zhNdY6WT
+	 xwq+KjcR1M96FJCtnsPOEfOh84mZ4rXmLqUzEISfMQFyqTKAHDYwwiHHYWwc3LrClRw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aaHL1atm;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=byOdch+K;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF99606A31A;
-	Wed, 21 Oct 2026 19:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A346E606A31B;
+	Wed, 21 Oct 2026 19:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=aaHL1atm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F92E1F000C1;
-	Wed, 21 Oct 2026 19:58:49 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=byOdch+K
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4918E1F000C1;
+	Wed, 21 Oct 2026 19:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792612732;
-	bh=Jn7cYNwO2EebwQTtuyF9ZBF5UX2UIlTQdb3hKPwxsNE=;
+	s=k20260515; t=1792612742;
+	bh=2xbtEJ7CZhaLOgThbWGPoTOo9rCIMzg+aSiILL7GT3I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=aaHL1atmE35nyOxsUVNKx824WP2YE1bRZTN24CLskPsbTsMWv0Rz9Py4LeD8cjWqo
-	 66nb6382hQ/iBEApI8d2qsL8uF29CgIVtpX0xaOtMR7TXdGzKLpPMJ+jX87imjE19m
-	 J/Z+W87/yHp3kROLG6lX2G/JwT0CD7qukSJX0OVlcdVYGnnVIn+2+20drOKW1AsT9W
-	 Q3x8NdIOw3DULa1TNc2wXHxMlFMDtA/xjO3vXoEZxRzr0rDf6aIL8Mc6DX6RMuCEUX
-	 v/tqtQJNknxoXBjfuENl5NL7QiuXMUcgXGQQsZYQjXIPNnTtVoA8EzTIpR1AtSDLN5
-	 D27bG18iA+sIA==
+	b=byOdch+K6VCuXwjsPgOyFHhwtPhNGXX7T1/mAeqD8RDsWfsK/TLqignAdIMLi1Dwb
+	 1J7a81cWkky9XfR+hKPSssRBJJ9bJceSRkqppuKusPW7tXNcGTxebIrWFfQErCXaCz
+	 jNTXbxAksL1yFzpkEkn9zKTma+9SBkKeNaEzuVRNeFS/rpMytgAl1X/ujAqIpUMXfk
+	 iLv+RUZU9KszPlcdNK5b4BIS/9wsALQYfMwxwtmBqt3wOwdcVqD3S02jm8dELnKfXm
+	 pKifqrN9xELz/D0FjfOo8Jfh6qFRsPZw9FSDyd8aftazxzxeQhwVcrFg9YKG8FN66G
+	 mn+adC+hNTRNA==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>
@@ -53,9 +53,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>
-Subject: [RFC bpf-next 4/9] bpf: Add kfuncs to allocate and seal user pages
-Date: Wed, 21 Oct 2026 21:57:53 +0200
-Message-ID: <20261021195759.119421-5-jolsa@kernel.org>
+Subject: [RFC bpf-next 5/9] selftests/bpf: Add __srcptr kfunc arguments test
+Date: Wed, 21 Oct 2026 21:57:54 +0200
+Message-ID: <20261021195759.119421-6-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261021195759.119421-1-jolsa@kernel.org>
 References: <20261021195759.119421-1-jolsa@kernel.org>
@@ -70,172 +70,133 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding sleepable BPF kfuncs for allocating anonymous pages
-in the current process and changing an allocated page to
-read/execute permissions. The mapping remains in userspace
-until it is unmapped or the process exits.
-
-It's allowed only for sleepable kprobe type, which technicaly
-means only sleepable uprobe.
+Add positive kfunc tests for read-only global and writable stack sources
+annotated with __srcptr. Also verify that a read-only source is rejected
+when passed to a writable mem_len argument.
 
 Assisted-by: Codex:GPT-6
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/helpers.c | 127 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/kfunc_call.c  |  2 ++
+ tools/testing/selftests/bpf/progs/kfunc_call_fail.c  | 10 ++++++++++
+ tools/testing/selftests/bpf/progs/kfunc_call_test.c  | 12 ++++++++++++
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod.c |  5 +++++
+ .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h     |  1 +
+ 5 files changed, 30 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 4d9e9423826a..246f4969a144 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -29,6 +29,10 @@
- #include <linux/task_work.h>
- #include <linux/irq_work.h>
- #include <linux/buildid.h>
-+#include <linux/mm.h>
-+#include <linux/mman.h>
-+#include <linux/personality.h>
-+#include <asm/cacheflush.h>
- #include <asm/tlb.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index 0063e60d6f2f..9b832c5961f5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -63,6 +63,7 @@ static struct kfunc_test_params kfunc_tests[] = {
+ 	 */
+ 	SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_fail, -EINVAL, "processed 4 insns"),
+ 	SYSCALL_NULL_CTX_FAIL(kfunc_syscall_test_null_fail, -EINVAL, "processed 4 insns"),
++	TC_FAIL(kfunc_call_test_mem_len_fail_readonly, 0, "write into map forbidden"),
+ 	TC_FAIL(kfunc_call_test_get_mem_fail_rdonly, 0, "R0 cannot write into rdonly_mem"),
+ 	TC_FAIL(kfunc_call_test_get_mem_fail_use_after_free, 0, "invalid mem access 'scalar'"),
+ 	TC_FAIL(kfunc_call_test_get_mem_fail_oob, 0, "min value is outside of the allowed memory range"),
+@@ -82,6 +83,7 @@ static struct kfunc_test_params kfunc_tests[] = {
+ 	TC_TEST(kfunc_call_test5_asm, 0),
+ 	TC_TEST(kfunc_call_test_ref_btf_id, 0),
+ 	TC_TEST(kfunc_call_test_get_mem, 42),
++	TC_TEST(kfunc_call_test_srcptr, 0),
+ 	SYSCALL_TEST(kfunc_syscall_test, 0),
+ 	SYSCALL_NULL_CTX_TEST(kfunc_syscall_test_null, 0),
+ 	TC_TEST(kfunc_call_test_static_unused_arg, 0),
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+index 7e93f7fb1329..1ab85faaf8db 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_fail.c
+@@ -4,6 +4,8 @@
+ #include <bpf/bpf_helpers.h>
+ #include "../test_kmods/bpf_testmod_kfunc.h"
  
- #include "../../lib/kstrtox.h"
-@@ -3739,6 +3743,127 @@ __bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
- 	return ret;
++static const char mem_len_rodata[] = "read-only data";
++
+ static struct bpf_spin_lock kfunc_call_lock SEC(".data.A");
+ 
+ SEC("?tc")
+@@ -47,6 +49,14 @@ int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
+ 	return 0;
  }
  
-+/* vm_private_data token for the unmergeable anonymous mapping below. */
-+static char bpf_user_page_marker;
-+
-+/**
-+ * bpf_user_page_alloc() - Allocate lazy anonymous pages in the current mm
-+ * @nr_pages: Number of pages to allocate
-+ *
-+ * Creates a read/write anonymous mapping in the current task's address space.
-+ * The mapping is kept non-executable even for tasks with READ_IMPLIES_EXEC,
-+ * to avoid creating a writable executable mapping. The physical page is
-+ * allocated on its first access. The mapping remains until userspace unmaps
-+ * it or the process exits.
-+ *
-+ * Return: The userspace address on success, or a negative error code.
-+ */
-+__bpf_kfunc long bpf_user_page_alloc(unsigned long nr_pages)
++SEC("?tc")
++int kfunc_call_test_mem_len_fail_readonly(struct __sk_buff *skb)
 +{
-+	const unsigned long prot = PROT_READ | PROT_WRITE;
-+	const unsigned long flags = MAP_PRIVATE | MAP_ANONYMOUS;
-+	struct mm_struct *mm = current->mm;
-+	unsigned long addr, populate, len;
-+	struct vm_area_struct *vma;
-+	int err;
-+
-+	if (unlikely(in_interrupt() || current->flags & (PF_KTHREAD | PF_EXITING)))
-+		return -EPERM;
-+	if (unlikely(!nmi_uaccess_okay()))
-+		return -EPERM;
-+	if (unlikely(!mm))
-+		return -EFAULT;
-+	if (unlikely(!nr_pages || nr_pages > (ULONG_MAX >> PAGE_SHIFT)))
-+		return -EINVAL;
-+
-+	len = nr_pages << PAGE_SHIFT;
-+	err = security_mmap_file(NULL, prot, flags);
-+	if (err)
-+		return err;
-+
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
-+
-+	addr = do_mmap(NULL, 0, len, prot, flags,
-+		       mk_vma_flags(VMA_DONTEXPAND_BIT, VMA_DONTCOPY_BIT, VMA_DONTDUMP_BIT),
-+		       0, &populate, NULL);
-+	if (!IS_ERR_VALUE(addr)) {
-+		/* VM_DONTEXPAND prevents merging this mapping into another VMA. */
-+		vma = find_vma(mm, addr);
-+		vma_start_write(vma);
-+		if (current->personality & READ_IMPLIES_EXEC) {
-+			vm_flags_clear(vma, VM_EXEC);
-+			vma_set_page_prot(vma);
-+		}
-+		vma->vm_private_data = &bpf_user_page_marker;
-+	}
-+
-+	mmap_write_unlock(mm);
-+
-+	if (!IS_ERR_VALUE(addr) && populate)
-+		mm_populate(addr, populate);
-+	return addr;
++	bpf_kfunc_call_test_mem_len_pass1((void *)mem_len_rodata,
++					  sizeof(mem_len_rodata));
++	return 0;
 +}
 +
-+/**
-+ * bpf_user_page_exec() - Make a BPF-allocated user page read/execute
-+ * @addr: Address of the page to change
-+ *
-+ * Changes a writable page created by bpf_user_page_alloc() to read/execute.
-+ * The page cannot be made writable again after this call.
-+ *
-+ * Return: 0 on success, or a negative error code.
-+ */
-+__bpf_kfunc int bpf_user_page_exec(unsigned long addr)
+ SEC("?tc")
+ int kfunc_call_test_get_mem_fail_rdonly(struct __sk_buff *skb)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+index 8e6560c31e78..b944e2e186b6 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+@@ -5,6 +5,8 @@
+ #include "bpf_misc.h"
+ #include "../test_kmods/bpf_testmod_kfunc.h"
+ 
++static const char srcptr_rodata[] = "read-only source";
++
+ static struct bpf_spin_lock kfunc_call_lock SEC(".data.A");
+ 
+ SEC("tc")
+@@ -208,6 +210,16 @@ int kfunc_call_test_pass(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
++SEC("tc")
++int kfunc_call_test_srcptr(struct __sk_buff *skb)
 +{
-+	struct mm_struct *mm = current->mm;
-+	struct vm_area_struct *vma;
-+	struct page *page;
-+	int err = -EINVAL;
++	char stack_data[] = "read-write source";
 +
-+	if (unlikely(in_interrupt() ||
-+		     current->flags & (PF_KTHREAD | PF_EXITING)))
-+		return -EPERM;
-+	if (unlikely(!nmi_uaccess_okay()))
-+		return -EPERM;
-+	if (unlikely(!mm))
-+		return -EFAULT;
-+	if ((addr & ~PAGE_MASK) || addr > ULONG_MAX - PAGE_SIZE)
-+		return -EINVAL;
-+
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
-+
-+	vma = find_vma(mm, addr);
-+	if (!vma || vma->vm_start > addr)
-+		goto out;
-+	/* Allow to change only vma allocated by bpf_user_page_alloc. */
-+	if (vma->vm_private_data != &bpf_user_page_marker)
-+		goto out;
-+	if (!(vma->vm_flags & VM_WRITE) || !(vma->vm_flags & VM_MAYEXEC))
-+		goto out;
-+
-+	vma_start_write(vma);
-+
-+	err = get_user_pages(addr, 1, FOLL_WRITE, &page);
-+	if (err != 1) {
-+		if (!err)
-+			err = -EFAULT;
-+		goto out;
-+	}
-+
-+	flush_icache_user_page(vma, page, addr, PAGE_SIZE);
-+	err = do_mprotect_pkey_locked(addr, PAGE_SIZE, PROT_READ | PROT_EXEC, -1);
-+	if (!err) {
-+		vma = find_vma(mm, addr);
-+		vm_flags_clear(vma, VM_MAYWRITE);
-+	}
-+	put_page(page);
-+out:
-+	mmap_write_unlock(mm);
-+	return err;
++	bpf_kfunc_call_test_srcptr(srcptr_rodata, sizeof(srcptr_rodata));
++	bpf_kfunc_call_test_srcptr(stack_data, sizeof(stack_data));
++	return 0;
 +}
 +
- /**
-  * bpf_probe_write_user_faultable() - Copy data to userspace with page faults
-  * enabled
-@@ -5171,6 +5296,8 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
- };
+ struct syscall_test_args {
+ 	__u8 data[16];
+ 	size_t size;
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 6380f52f4dd2..5d72f94a8912 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1024,6 +1024,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_arena_args5_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_arena_stack_arg_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_arena_mixed_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_srcptr)
+ BTF_ID_FLAGS(func, bpf_kfunc_dynptr_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_nonzero_offset_test, KF_ACQUIRE)
+ BTF_ID_FLAGS(func, bpf_kfunc_nested_acquire_zero_offset_test, KF_ACQUIRE)
+@@ -1527,6 +1528,10 @@ __bpf_kfunc void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
+ {
+ }
  
- BTF_KFUNCS_START(user_mem_btf_ids)
-+BTF_ID_FLAGS(func, bpf_user_page_alloc, KF_SLEEPABLE | KF_PERFMON)
-+BTF_ID_FLAGS(func, bpf_user_page_exec, KF_SLEEPABLE | KF_PERFMON)
- BTF_ID_FLAGS(func, bpf_probe_write_user_faultable, KF_SLEEPABLE | KF_PERFMON)
- BTF_KFUNCS_END(user_mem_btf_ids)
++__bpf_kfunc void bpf_kfunc_call_test_srcptr(const void *src__srcptr, int src__sz)
++{
++}
++
+ __bpf_kfunc void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
+ {
+ }
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 3b810f1e438f..919c4c450ef1 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -198,6 +198,7 @@ void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
+ void bpf_kfunc_call_test_ref(struct prog_test_ref_kfunc *p) __ksym;
  
+ void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
++void bpf_kfunc_call_test_srcptr(const void *src__srcptr, int src__sz) __ksym;
+ __u64 bpf_kfunc_arena_arg_test(__u64 *val__arena) __ksym;
+ __u64 bpf_kfunc_arena_cap_test(__u64 *val__arena) __ksym;
+ __u64 bpf_kfunc_arena_cap_nullable_test(__u64 *val__arena__nullable) __ksym;
 -- 
 2.54.0
 
