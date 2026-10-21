@@ -1,97 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792541320;
-	b=ZQAKL/oWeTQRYdag3VphEx0HZdw8zVZE+45HNZxe11bHxJniUeF4nmgnLonPlwx+IIcm
-	 F5V2en+3XbN6Yr+oa2+ZfeMcrpMEEO4pBC+2fQjjBcumLaFsIj8IXn3TlEmgQ0F2uuUTs
-	 gugA8y2Zl5Eh+QXAWXIP5cxX1LQV85YpR6iWqxiCcUsBk5GEhNyfQq42LZlGG/rv+oxGQ
-	 VXaIJbcAlXClULd69iK1XhJu6XzyRPz9D+Z7Awop+zOIPgkE91kP4us6H1hA1IIIV8ltm
-	 bcjOlWuS8s8BRwd0SsQMKHDf5EyUDRCOwf+0E3SmbKztFSYv3RYPCrogthTrKtmHFDQ==
+	t=1792541336;
+	b=hbFHp5VyRcBRub+Bdeaop2OGVtHQtc/Y4SvuU1V/i9wS3pWt4tsFP8e7duyvaatXrnQL
+	 2bTq5gc8tCJKIWj7pMn4R/+4Of7tNIrc7u2RdwixsYKss6OQB2HRRu7kj3dcDg9GiGM8e
+	 Rffm6SituELNVENg6YFe+9fvB5JqX18GImTsmo6E600YeM9tsBwmRsjVX7P1CqLZCT7Tn
+	 fnaXYka9GDG0pa32aZF1B0Ty5VJJcjU7u/gb3QCGUf6aCakGRnBdKNti3Vp8LNafV3LoP
+	 Mx+z4GfBHuYUYMtfrl08LUBydKdco04L2a7h3i78OmT+i9nzpGCh34uqlSQa6zwPuuw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792541320;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792541336;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
 	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=ne1zWRudvzywUfkMAO9aChns/vCIzOVe3eUHfFa4uY4=;
-	b=h6FRKamvvAUQBb+EFs5roheKgMGMdIglx32o5MWUZ7aLHWhfrqvZoDgSHGgLKuWd4FFV
-	 GWBOuIOMAjsbu3fIpGz41QkOVBLjAKlRVuFrHJmLMIYA4cpgUQyNAlKYiWBV2C6Wr40K7
-	 C3hpRs5OgvwSlO/igmqpgmNkh/Ai8qPovdGsjMB0ZR4jsQ48epl6ePzXtGKk8op+37b35
-	 XIT8L2ODWme1RLbBW0NujnpQ+8KLbezEzwicm+sO2EXB0POxJGZJjqPgRqch9L7+dNRbG
-	 gCIyjUZEeolt3bki7VS5/GVUQkZaHQAiqjorAa6erfbS53vZgYq3uj6lSw+KNTJul9Q==
+	bh=WlcWiZFsIF0dEuDGLSJlLXhccf1fNyo1Yhd/8482eB0=;
+	b=zMAvR0xhDmiUi5I4fub4/vOWW/iPQu2CpbVLH0p8g7hqwy/Ni2FK06EV2cvZFGIh7qlu
+	 IMluBF3/IduHyffW/cMqFGzLHsOLYALerCTNQnvzBuFGLz6aGxPlYGjTt41z2uwxUvkzk
+	 u4ZgGBYXdUrYoRhnpqnaiyUuYrR7jSJgBS1fAlY38D8RjK6fa+VPftSBqT1z42xRVZg9s
+	 q4q0X8S8ROcYB7XVPnIlVl497BwYHAuNLdJV6j5zmN6gtc7aKTDRvFSC5fLDBjHNBIAwA
+	 bA8ERfmK3tDCR/zA6PIy3ltEq6FIk6KHFOJpclTrMyLyqRDdbcASy81D+RTTQ2uQ6Vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=d67UiA+y;
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=kE1mXW+R;
+	arc=none smtp.remote-ip=209.85.214.176
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7511A606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 00:08:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7511A606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0280A606A31A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 00:08:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0280A606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=d67UiA+y
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e60f9af6e6so1138185ad.3
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:08:40 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=kE1mXW+R
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2e8246b13cbso998355ad.2
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:08:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792541320; x=1793146120; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ne1zWRudvzywUfkMAO9aChns/vCIzOVe3eUHfFa4uY4=;
-        b=d67UiA+yPSVHKI9B5B0LpvwkGp82bm90nwhkeb0RDm/oiqUocbedLOFC2zyFYA6d+5
-         8N7uin9hVfwXMACUlnmR2jiXbWrW7Q3k3f1JT05oJ6otNGQ7L5YqCDJCvOjJcq6zJ9tj
-         RigZZcGUJBqZ61Ii+mPTCf5yEMBUR26sVZe9rvvmr9YURB+WYgHrH8udZlMmMf7LDDKl
-         72Df7c5hQeLql8ci8FzAUuRv9WJOCmeiC1MhTzDxrzf4uzoW8PjavBfkWhUnrIvzFcDD
-         9zoN87xArljuxZ68eq5xqWKIWuh+LbZH5OJyVBCz3KhbA/g4PysJbHyOBwBXfM4uhnVa
-         spJg==
+        d=gmail.com; s=20251104; t=1792541335; x=1793146135; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WlcWiZFsIF0dEuDGLSJlLXhccf1fNyo1Yhd/8482eB0=;
+        b=kE1mXW+R0uc0RnzhxajsZVWU0NhpBfWoKjK3jty5B4cabEiFHnnZ/XNzcOjkKDdwDO
+         1OIwxbRFVD8iyGuOsBIrDRs2jP5psmdKfjx1oe5iflL0oaqJqcVdfPeWgEg4KVwPfBdI
+         NwSrdF3cZEIxIxfZdHTrMe/akrd2T92k098ALJG/aq7kKThuEzJRsQDRHFs2e/B7JSQO
+         tnAfhmBTa8ufVBfk6sf+kWpyDp3vSAjUdEMEPBE/lbYQSUmUfvadYDNTzt1YCitkU6ia
+         1nwv/Cj18HpIuVc2s5uYaEYGHtp6KsLvZU1bgpZR8iFOZpKTRnXVGI/HYlRAWaz4fJdj
+         O41A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792541320; x=1793146120;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1792541335; x=1793146135;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ne1zWRudvzywUfkMAO9aChns/vCIzOVe3eUHfFa4uY4=;
-        b=FVmEYuA1cA+J75J8+7WdU3ef0V4I26CIXRGIsfW+gp/JI7ShXlbgcULSB8OI/C4aFp
-         kp3orPwbdHfqThQz7ffc+0uA3Tkx1xCUDTgwR6bTZK9luGnWeP8AptV0LoQOskZfTwMc
-         7I4pP31fQ37IQlOjFdcvLy7EAYjS1exxeuH2vuhD2LVbCEU8klTDdXIthwPi4scQRwdO
-         Aw9eXzU73ff0D0lmVL+QmDhIa3g3MxXaX4eqWSJan4utNIe74q+XZj1+OxYxFO6ADLfs
-         z5CNOTCihWn5sFM81/9OU01OlK+7tFSLNZHREkugGZghLtEsDWyIGsK8wHihA05Xl3tm
-         uNTA==
-X-Forwarded-Encrypted: i=1; AKwUvBx9UZgrJ5EeGC8uZL73q0o3yR44IiRvXUq2c0NkCTQSnqSXgb99hgPgnDuQvceW3lkiHrE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIw0VktUDfALwNNNIfA81VMyuL9SCF3hN+OUUjALhiXkONGYk3V
-	BTy3Ojp2auSt6KGqH3nLNFf8CAYRLLFQ9y9slja0inSWY4Q8jpc8pmPj
-X-Gm-Gg: AYBFou3gjtX635uSVBIE8Ndgh2y0bVtx/0Cbsgd27jGpt54tnrgLuMDBTfoLkzwMg/f
-	DDM0BFbFol/PfF5GARwicHJkuV6vanadDxBI8O/X4N6mZUd/9lJCuM2SsUJWCxw29SOjvskExDo
-	nXPAPwBcwuCEa4IWLyhjdNhwDsytuKLLSS57afk3Qnjhgtoz/d/zURBexkCS4dx8WSqb7+U8j+H
-	Bbghbl8QbLL4GYwtzhfkgtgNhge20GUx6LokOXORi/HSRGwO44h0rivaH3rPxWNG6PSp88RnWbf
-	bg5oKEmYPIJiTTlLxmSX8ZmVdUQpqj48hgdonURzAvwIfNCbTRlOZdi5w7abNTvjpM8abaChjgq
-	sm+Tw4otFoFWcObxSOcKVb+C32b6Ic7NJjVOxfnCv3EctAvJC8s8P/BjfHlEt7J9ytGRoVxn6v6
-	IAAreXvESWGFZ80+8SJ6/tSfpMCrf4A4N0kjK2x820iIFv+Q7et2LiksyzpMjZW+sG/SSnZwyZk
-	ZcagLDA9jc3gTgbik3RFYtyMuXef526MjqQpsudGeVJahw0pflryDp9V4UA/z7RSqm/2lNeJIlc
-	TKOe6LptncLylhXul4W63nLfczdVt0Iaqy1eWKQtlLNfuhgNQ8mtzCmF3U7CixXxV1xMX8XTebc
-	xivK1tw==
-X-Received: by 2002:a17:902:e844:b0:2e9:7dda:bfd7 with SMTP id d9443c01a7336-2ea43cf0998mr3685795ad.56.1792541319642;
-        Tue, 20 Oct 2026 17:08:39 -0700 (PDT)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b4ada65sm3810805ad.73.2026.10.20.17.08.37
+        bh=WlcWiZFsIF0dEuDGLSJlLXhccf1fNyo1Yhd/8482eB0=;
+        b=h5psLxH76Y0Yu2/x76UnEBlhpazLBqXIQUl/3EEaT7bv5jHzB1GQFjgFT1plUtjGd2
+         Z0HqxSHTyy0JPy+mA1sqFKz/EixIodBeTfX0qICLupGtc9yk3BlfutXuxrgOOKRHU/+C
+         NfwGPzWJwkFYXC7mKO6Ufs9p/28qs8Ch3yk+tbG35kS4gotx1fp5suzXt7PTUTF5CliH
+         EOvK6dL4ND1l/aZe/4i7HNtIXjvd6niabDyb1FSMhxF+gYviiml210uraSy/CDU2Lblj
+         pBUzYwec/E09v8rfL4h8dYIjWozQHPPu2iQweFZzZXswex3hrbLQD/sNS7xH/eWJ3+2s
+         wdSQ==
+X-Forwarded-Encrypted: i=1; AKwUvByv4ZaNNcFLIls0hPJhqAnESz59A5mlvhqQNuG0/wbbQMytV6dSsm/lbbIGxehbraV7L2Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLzaU0g2OMrDWiPwULRdJH09gbuZspsNfFMLXcL/JhSwzsUdUhm
+	0zWNe6+d4DuCGGvDorgpUXgaKVZWJZ2qZriHpPBzdHr7C2aRyo/QqBrL
+X-Gm-Gg: AYBFou1VfiwCL5oqweEmpiCqomRuzRYJVix2Ou9TI+uEZRB3sp9FYy00hTQXRur2HSC
+	CJ/9gzp3odkPQxhHbHhrI8JxIeQJS1Zsh2GZJTHH8XnzKjTXoTQlMcMYztyLJFXX+5z1QYtEikS
+	47YZyPR7igFfzuZ6DlDOHMPri7hDzDaG8Ghcwukk9BvWiXx3R/tV/MtSfkdr3t0DqpkYiYA3WGc
+	ZHyOta3wCzev4UfG5FiW+Vj6ylRrNMhJj/YkgwT9MyYCCNFHb+onlGv4MmK1LlnXd/5NZcLZWNg
+	H5+IGTg6xZycOL2+ljvFZpAInK2bxxfJuoClo6YLPAbdQ6whUgqRSvPcUOu6X5tBBJ97RizuuT+
+	MfuUBZWtvqp/KNs6h7z149DNmrGUYsEZ6kA5Uc+mmJMivjbbk6cpl7QsUFbnpqlGOxoNtRvy1pz
+	QB9xghLOU46tuRlUyKGctbA0BRsOivmF0lkTo0XoKLGzb2N8XPcHpmrMJtOpgW8RhmkAQua//mm
+	H/6cCVpGQ/aV6oVeltvEqXnsKCXhCTDWV6370SmrKg3slKUjg54A7Q3whSeQgImUZUPie0Z0t2d
+	vrK+LbN4S8TLzwdQevOGtV4bMLfte56jjtDy8IaSMPFiHtdKyLvJhdALjGGx
+X-Received: by 2002:a17:903:17cd:b0:2df:991b:4368 with SMTP id d9443c01a7336-2ea43febd22mr2776525ad.53.1792541335216;
+        Tue, 20 Oct 2026 17:08:55 -0700 (PDT)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b40fe7fsm3940245ad.13.2026.10.20.17.08.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Oct 2026 17:08:38 -0700 (PDT)
+        Tue, 20 Oct 2026 17:08:54 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Oct 2026 00:08:37 +0000
-Message-Id: <DMA2V519LNME.1WWMR93G4S295@gmail.com>
-Cc: <daniel@iogearbox.net>, <martin.lau@linux.dev>, <kernel-team@fb.com>,
- <yonghong.song@linux.dev>, <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: reject pointer operands for 32-bit
- recurrences/latches
+Date: Wed, 21 Oct 2026 00:08:53 +0000
+Message-Id: <DMA2VC8SJY0S.8O3PIVXWV2J4@gmail.com>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <yonghong.song@linux.dev>, <martin.lau@kernel.org>,
+ <mason@kernel.org>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Reject unwind_goto and unwind_exit in
+ offloaded progs
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
- <andrii@kernel.org>
-In-Reply-To: <20261020234705.375067-1-eddyz87@gmail.com>
-References: <20261020234705.375067-1-eddyz87@gmail.com>
+In-Reply-To: <1cc7789274018beba70932ec8806130f1ff07eed56b62e0afbed41385630e4b7@mail.kernel.org>
+References: <20261020231942.2568163-3-alexei.starovoitov@gmail.com> <1cc7789274018beba70932ec8806130f1ff07eed56b62e0afbed41385630e4b7@mail.kernel.org>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -104,33 +103,11 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Tue, Oct 20, 2026 at 04:47 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
-> -	if (ra && rb && bpf_same_memory_origin(ra, rb))
-> +	if (ra && rb && bpf_same_memory_origin(ra, rb) && !latch->zext32 && !latch->jmp32)
->  		return true;
+On Tue, Oct 20, 2026 at 04:43 PM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
+> TL;DR: Code looks correct; only the commit message is questioned: "nobody
+> looks at jit_required" holds just with CONFIG_BPF_JIT_ALWAYS_ON=y, otherwise
+> offloaded progs were already rejected, so the changelog should name the
+> configuration.
 
-This covers the latch only. A 32-bit recurrence on a pointer that
-is not part of the latch is still widened and clamped, it seems:
-
-     r7 = map_value, r1 = 0
-  l: if r7 > 24 goto a
-     goto n
-  a: r0 = *(u8 *)(r7 + 0)
-  n: w7 = w7
-     w7 += 8
-     r1 += 1
-     if r1 != 4 goto l
-
-r7 at the header is (zext32 (linear r7 8)) and is_widenable_reg_type()
-is fine with map_value. 'w7 = w7' makes it a scalar. At the backedge
-bpf_clamp_scev_regs() takes linear_bounds() of the entry reg, which is
-the offset of map_value, and clamps that scalar to 0..24.
-Then 'if r7 > 24' is never taken, so 'a:' is verified with
-r7 == map_value only. At run time in the 2nd iteration r7 is the low
-32 bits of the address + 8 and the prog reads from there.
-
-Should bpf_compute_loop_iters() also have
-	(!coefs.zext32 || reg->type == SCALAR_VALUE)
-next to is_widenable_reg_type() ?
-
-pls follow up.
+It's a nit in the commit log. Not worth a respin.
+humans and bots MUST not report nits.
