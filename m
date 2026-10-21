@@ -1,108 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792603067;
-	b=qrM292cJpUOaNp6w3X+D7KItt/pp1pqE8+6sH0JsHv9SRI1Umfd1VW5c3x91skM+hNsK
-	 ys0MfLkR0fuM6hcICYn24bY0yjLLx7R9axOJ9kf4sMwg+YkBNRr0Vyxtl9mFjeQXamFUD
-	 e97vP2KwzjbMZLaM9erTrTsi56UnnfR3KlquXhPNloPywAoXyxn1cKa6T9LTQ6yXywcQv
-	 VgwF7mJr9iP9+adDiZjZ6p54RnskAN21OvcP9gO5j7FSIpH4eclSd3nEnAk1KnAydikjE
-	 0Z93N8sx4CPOIoMoRrfDf1vC2N4u5efgQzkoJ/sr/m/0r97veK0fY0SSU6MKlyfujpg==
+	t=1792603113;
+	b=Mpqn2MjCcwtpl0jaFhY1ECkbLnULfhjkH0Vgu6x/+hwdna+2aqfRzl85bRxyYwidGZYV
+	 ukXQPsWAe2tPLE2iDltoNa5WDRdVAkJdnQ+M7PxkrWkEwGcRU0ibp+VjdPjYEA9NMhOsa
+	 dLixJQ9Qvz2BgYVAozSCP4LNayAPYzGUYvEG4pMbqbpOZ40v5gKWv0sJuqjSkIAxNB8kR
+	 +bgUfDrJQLB2sH6/pKG/TZ/Dntl49cPF7EeuNQhwHi0rh7Z9LMgoGFjgf/0f9eZe7tarL
+	 75Gkeu569pSZyMXiPlKxARTpWcv078BBIHJa1JT/J5wQLw66Ce5dna6VFKpFaU8AqgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792603067;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792603113;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=s18p6ABSRGJ/UxVSqWCBTz6bx2WQqcF10z8V9BS39Q8=;
-	b=M4YwKB0yGC2Jj6PuytRoyyo6vbHsW7+VKvO/H3ZSb6C+/GL4zpuYgGZ6LbIToluG7m+X
-	 Z6NvJV5XabsloC7SKglPuCGRjP6FIxifpaWYB1RpxXWiyXk39iva4Xahvd24Bcz/PFhO9
-	 vfrYrqPcC1E/v1R6s8pB7hq6pOMlgY/YR/r94YJ+ZpDWar5TMrwDxynvc6AzmYRZZF9Ly
-	 lZmXdOWUbXmxEz62zAPg1Vfc38wMy4cHHB2mzr18EXu3rpnj4DyaTtF6R/NSJI3GWGFBz
-	 w38+L4H7wGm7MHIkKVg1SXF3LtSWgNMpGybZDyX9Dwj9IxAHMymxu7BMo3269V8GRLA==
+	bh=QxzgRFCSRCWipNXz6HQpmDljDRMnyFeDckVppufFRK0=;
+	b=ne5CgvaxTdClvRwFJF3dbm3BzmILI4R9quCQFJBh0Q9aVqpiEX4CMVI8pM03BGyE1hdY
+	 kTXF53mQS8P1/mkMXKoZjaU0OfikZxrosImwaaN66msF/XEvwFzACbaA8IMjrM9AdeQXP
+	 Tplzs3XC6Klo6xDn+hKynUn7KPKI/GT6SowejmtanCl347WhX7+ZcK5PON5wx7IBGLS3g
+	 T0OHKFdnawCTL8NsDnBUvIJGVIJCYK5m1E26xLViSY1DHaEOeE78c8uydR2dHGJDl8pV3
+	 w/k9vsS1jm0tHl83He9WgAYCXU6Au0BN7VnfabdNBuBbrR7g/VTV/fgFrZedNFrOQhw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=trailofbits.com;
 	spf=pass smtp.mailfrom=trailofbits.com;
-	dkim=pass header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=Jz5VKkJ5;
-	arc=none smtp.remote-ip=74.125.82.180
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	dkim=pass header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=dk4x0M0n;
+	arc=none smtp.remote-ip=74.125.82.41
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20465606A331
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:17:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20465606A331
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C064606A321
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:18:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C064606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=Jz5VKkJ5
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-35cd4e8bdbdso1847362eec.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:17:46 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=dk4x0M0n
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-18cdcfc05ffso1011596c88.1
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:18:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1792603066; x=1793207866; darn=vger.kernel.org;
+        d=trailofbits.com; s=google; t=1792603111; x=1793207911; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=s18p6ABSRGJ/UxVSqWCBTz6bx2WQqcF10z8V9BS39Q8=;
-        b=Jz5VKkJ5ki1POVc0ACWEJ+WCtbCo14qie6gLDrZc2KlkQLBROIfXQ8NuX66MUvAIlI
-         hq6wIPUQcbcO6fJy3Ob0V0Pa9PpzPmSkBKu1kP1y5NvredHIYviXEQqulk3f9TVbyBEC
-         m2W01IFBGi18VKS1/c0by3+YIjfTag07ELRegp9PeqQoQv/W1F9pHZ/BWn6FjTwWCrX+
-         6HFgJeL+6xhkHNYqhn3EGL7eMm0TSLBR4OPVFm73RQifYPTpdzhJp+0LyUJYxh+J+Rif
-         epCI1INPp9a3i+fgbkYpZYB0M64+dmY7wu411aRwVReuxRAEJ6WJCLDpAba3V3kot9EL
-         wxxA==
+        bh=QxzgRFCSRCWipNXz6HQpmDljDRMnyFeDckVppufFRK0=;
+        b=dk4x0M0n6a1gnLUPee3r+NjT8j1Nkq7UEYWVEznEutAfLIFhh8tCVa4wAUzBKXD+Br
+         421GLuQ2OflI6KKItnsqDrvVxYgLi7mCr1KPzkw3vDJ1yG3tFQEF7xhxViNPGPrUX2yJ
+         4T/5VbaSAG/80T/ka8ti3/Z+CvkQKkNJ9a2IcVKZrVxJ3Dms6SN8JarqiKhFulLBCVe0
+         hMdaqSgQ4nNLDJ9NyuQuw+5kngTGseQC3bptIfru7+XkFQFzkwA2DbBi+ryWP5uLbBWs
+         sGCIj4QzJn9NrWr/jlyaf9D08/hZPd4aydNfmsYzXJ5Y4C+Rcq7F7sDr0WtFlqzb4Dc9
+         LgxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792603066; x=1793207866;
+        d=1e100.net; s=20260707; t=1792603111; x=1793207911;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=s18p6ABSRGJ/UxVSqWCBTz6bx2WQqcF10z8V9BS39Q8=;
-        b=Aja3llkrW5nn6u7liwTxR6gpFLEpbBTXqxZJWWgwdjmtAbWIrHcKF0RpEFaj8Fymv/
-         nGavfqfnpeLLQcT6MGm95cCLfzo1rLfNiWYTi6scgxcpB+6kj0B4ryMJT/O0jA+FACDq
-         DBHJA02d9T6JTStwQlK0/3M07VHNUDsHXkO5XA45AUK7hR6azDjAxo8O3Pm0mzeEcHA9
-         wn+JTpobM31o7OhSlD884xMzguYdETxwrSnvftMa6jTx3U8fDXK/xYSmcB/E3K6wUKRU
-         P0IKVJr820u+9HljIw7aI4ArsVHjp1Q5097EwJsoKM4svd0ScbkeV1e0hA8WsV2P3xm7
-         TqBg==
-X-Forwarded-Encrypted: i=1; AKwUvBxTm3beCchFPtVGFw5udyVzgN0tuUwRK8daVG8WFfnoLZXErjRTwYOf77NM7x7raHMGCXQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIXxpSQ3JXfL4UTLo2Drmr7Fk2AjPKZKTdQLZFzTYRBDgu3A//O
-	Otyw8pxzjFpeMFI1S6FA4porcWNFTLY31BTIVRJs+nsBlTTVFessWJ4Os2x4GRAFMZw=
-X-Gm-Gg: AYBFou2j1uQiKxn9v9voQlE9vJ/wWATvAr/ChwlJb7s4NkZZRLgaKNapQfsiIRvMSEX
-	ku++LUFlVDY1NUbpLDtVnT0ImWBFKSIYF2CBNk5UskR5rJJXOnTp05iY5IPZOvYOKqBHovSPhyD
-	SF6tf43H6BGIBk6arGOHZlTD/2INz+7g6lnZdQd+LkPBySyz3Wc+MznLOX4TI0sJtHAzXgAD3+U
-	roaxPh1qwZWIsFN8M6fBd/uJYiWrryogRqEhaj6BKlpMtXZAfjqe/w/tUUcXpoUcT5LSyV/P0/p
-	l5uHMLJF2YSpwnZsHkXjGRRQjcfMTwn7s9t54LD7PqdmYnMqUThb+rbxpsYVgsLBYu+BlVvDZ38
-	neM/nalhvGhwm03V4/2vD8AqQZlkXeRWA6p9sr7Il7HHk/zf+kO6FFwbvXCA0AubhEGRkUib3+x
-	Ip16kfBkOSEioNKntv1qbcJH+aq8N7q7OT+VXDwXPxEg29hwuAr2r6WYz3ooB/uk3EX/VsI6xHM
-	egrtJkSspwWbgNq5wtn90TXkpJNC39g0gFIpC4i/2fa6Iexi3asNjcLe0JjkiU2SlDjJUitHSa1
-	lOD7jkolr/BxQTjtBcKV2ghjKxBRZWXnKqj8CToQSTOK7wnn/NRYLpmCgjdPGrWGcprKk0W9Lw=
-	=
-X-Received: by 2002:a05:7300:a206:b0:35d:8c39:b314 with SMTP id 5a478bee46e88-3674f22497bmr3602008eec.37.1792603066175;
-        Wed, 21 Oct 2026 10:17:46 -0700 (PDT)
+        bh=QxzgRFCSRCWipNXz6HQpmDljDRMnyFeDckVppufFRK0=;
+        b=jed4NWoL0WzGNFBjsVI+K7YiV5mw2pfisOgFNCTEvdGlcVrKeBHZLmzD7A3Cpcnoc/
+         Qc+uQHHSOofnaofviipsOWLsBzgNtPLZ1hxEji4CbDRuIV8ikjUPaISLSFmyRrWiPUYm
+         yh+uzqauaqP5NUWViO5ztFDBy0tjWTWUL7I/AayVjfblJFDg+RFSnay0TD/jVfaCtngG
+         nytwuyxeEjP6h6JvOapjJRB20fjhGdW5BPyIXS3nEcJIwKzx5fgPbVK430uzPASAzdyc
+         UJPqEqVjpeq4T786OKHlU317J3GvL5s+BiwLSk1ASSuX6Jt0Jgbcz8Akhyf2oIeCnCNO
+         di8w==
+X-Forwarded-Encrypted: i=1; AKwUvBzs6MKbdgkLQfkAn0/zvC0ccnazI8sqgb8Vh5JlNt+nN9teBqw2yvkeVHblIhc6FDljS0Y=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLaQQomaASKxtA3u5NmOTxPm4Zo1pG9TTj2FrkE3dxmINFwepGw
+	Gc6KXdXjNXYxIaljJ3qvFhuQs7C2EW5AKWPKTzw8QfXQDJEMtrGTSBnVdJxKxQeGmSE=
+X-Gm-Gg: AYBFou38sO14lhQo288vPsVuLlscE+Xc6GxirI1A7ZY6mCPNphLJeHrl/0yQwZlFcEU
+	fpY8vVNr22k81DcR0uM7QYrFjXhpwGhPZeOhD3AI1Vj1puZsQ4F+Hjtg3ZU3BYmTO0L6HRzTa/p
+	sgyui9m9YNxnsocaWRDwFPVVvi959/H4JX2Ai653gSUR8W/l3m/5kxh/ew1WOCc/9py91gSUPfk
+	2TbsJnStR6mkwhXaxooAMK9qcitmEyXFh3tv9l8eIWZDfASZ49Ywz4DtAKyG6hRcevaj0HdHkpk
+	keeZ2cRYr4BgT2jPpxfmQtabVRe/JPKIHCFiqgDC6PdmLDe+7HUnFMClpo7ewqeRu/CllcSKX2C
+	13O6v7zIfCiuMKa4r4dNuf83hd46AAYMAIQO2wuQ33J6ano4UIdd9kC2OZ2igMuepLbBDhDRgFT
+	hD/QL74rF7m3T9ZBvsu1WPwANiSpQBdlt2UFGJWbZD7REiBKjmvw1aCGLsmBBK2LUcvEB5L5EM2
+	BgtySviB3HvnqhnmKaK2CHcyhCJuErlcwaWoSb75u8plRwHZ9dniPM1ONTyR3TEjtexGHZByzlZ
+	UmRY0HeiXOWByOjoYbelVbQosx8KrVm6m4ePcAlk439jF04AEI4O
+X-Received: by 2002:a05:701b:2051:20b0:18a:d0b5:fa42 with SMTP id a92af1059eb24-190a604f7f6mr3396857c88.19.1792603111196;
+        Wed, 21 Oct 2026 10:18:31 -0700 (PDT)
 Received: from localhost.localdomain ([2603:8001:5f01:8bab:d059:e601:becb:a5ad])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367412b24e3sm7811387eec.19.2026.10.21.10.17.44
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903bf5d0a1sm7529738c88.14.2026.10.21.10.18.29
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 21 Oct 2026 10:17:45 -0700 (PDT)
+        Wed, 21 Oct 2026 10:18:30 -0700 (PDT)
 From: Artem Dinaburg <artem@trailofbits.com>
 To: stable@vger.kernel.org
-Cc: andrii@kernel.org,
+Cc: ameryhung@gmail.com,
+	andrii@kernel.org,
 	ast@kernel.org,
 	bpf@vger.kernel.org,
-	catalin.marinas@arm.com,
 	daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	emil@etsalapatis.com,
-	fuad.tabba@linux.dev,
 	ihor.solodrai@linux.dev,
 	jolsa@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	leon.hwang@linux.dev,
 	linux-kernel@vger.kernel.org,
-	mark.rutland@arm.com,
 	martin.lau@linux.dev,
 	memxor@gmail.com,
-	puranjay@kernel.org,
+	pulehui@huawei.com,
 	song@kernel.org,
-	will@kernel.org,
-	xukuohai@huaweicloud.com,
 	yonghong.song@linux.dev
-Subject: [PATCH 6.6.y] bpf, arm64: Force 8-byte alignment for JIT buffer to prevent atomic tearing
-Date: Wed, 21 Oct 2026 13:17:42 -0400
-Message-ID: <20261021171742.310-1-artem@trailofbits.com>
+Subject: [PATCH 6.6.y] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
+Date: Wed, 21 Oct 2026 13:18:27 -0400
+Message-ID: <20261021171827.380-1-artem@trailofbits.com>
 X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -115,71 +110,85 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Fuad Tabba <tabba@google.com>
+From: Pu Lehui <pulehui@huawei.com>
 
-[ Upstream commit ef06fd16d48704eac868441d98d4ef083d8f3d07 ]
+[ Upstream commit 3f562c537e9ecf4bc5e206cfffc2cc047f1b7e94 ]
 
-struct bpf_plt contains a u64 target field. Currently, the BPF JIT
-allocator requests an alignment of 4 bytes (sizeof(u32)) for the JIT
-buffer.
+Syzkaller reported a storage null-ptr-deref issue after replacing prog.
+This occurs in the following scenario:
+1. prog A, an empty prog, is attached to a cgrp.
+2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
+   bpf_get_local_storage helper.
+3. link_update is called to replace prog A with prog B.
 
-Because the base address of the JIT buffer can be 4-byte aligned (e.g.,
-ending in 0x4 or 0xc), the relative padding logic in build_plt() fails
-to ensure that target lands on an 8-byte boundary.
+The reason is that __cgroup_bpf_replace fails to alloc and assign the
+required cgrp storage for the incoming replacement prog. Consequently,
+the new prog inherits an uninit storage, leading to null-ptr-deref panic
+when kick the new prog.
 
-This leads to two issues:
-1. UBSAN reports misaligned-access warnings when dereferencing the
-   structure.
-2. More critically, target is updated concurrently via WRITE_ONCE() in
-   bpf_arch_text_poke() while the JIT'd code executes ldr. On arm64,
-   64-bit loads/stores are only guaranteed to be single-copy atomic if
-   they are 64-bit aligned. A misaligned target risks a torn read,
-   causing the JIT to jump to a corrupted address.
+Fix this by rejecting a link update if new_prog's cgroup storage is
+incompatible with link->prog.
 
-Fix this by increasing the allocation alignment requirement to 8 bytes
-(sizeof(u64)) in bpf_jit_binary_pack_alloc(). This anchors the base of
-the JIT buffer to an 8-byte boundary, allowing the relative padding math
-in build_plt() to correctly align the target field.
-
-Fixes: b2ad54e1533e ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
-Signed-off-by: Fuad Tabba <tabba@google.com>
-Acked-by: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20260226075525.233321-1-tabba@google.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Link: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicloud.com [0]
+Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [1]
+Link: https://lore.kernel.org/bpf/20260807104403.1013064-1-pulehui@huaweicloud.com
 Assisted-by: LLM
-[ Backport to 6.6.y: Request eight-byte image alignment from
-  bpf_jit_binary_alloc(); this target does not use the upstream pack
-  allocator. ]
 Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
 ---
 Hi,
 
-Please consider this backport of the fix for CVE-2026-23383 to 6.6.y.
+Please consider this backport of the fix for CVE-2026-90250 to 6.6.y.
 
-The backport requests the same eight-byte JIT image alignment from the
-older allocator. See the bracketed backport note above.
+The code changes are identical to upstream.
 
 The complete fix is already present in 6.12.y, 6.18.y and 7.2.y.
 
-Build-tested only as part of a cumulative 6.6.y series: the ARM64 JIT
-object with BPF_SYSCALL=y, BPF_JIT=y and WERROR=y; no runtime testing.
+Build-tested only as part of a cumulative 6.6.y series on x86_64
+(allmodconfig, CONFIG_WERROR=y); no runtime testing.
 
 Thanks,
 Artem Dinaburg
 
- arch/arm64/net/bpf_jit_comp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/cgroup.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 9fd0b658e4602bec2be466665d880a355e5bac1a..c5f7276ad1af7e32b69eb9bb5c0f14c3feaa74e8 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1648,7 +1648,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	extable_offset = round_up(prog_size + PLT_TARGET_SIZE, extable_align);
- 	image_size = extable_offset + extable_size;
- 	header = bpf_jit_binary_alloc(image_size, &image_ptr,
--				      sizeof(u32), jit_fill_hole);
-+				      sizeof(u64), jit_fill_hole);
- 	if (header == NULL) {
- 		prog = orig_prog;
- 		goto out_off;
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index fa6f818c8eabb7e3db0de27cc6d58821e91189ae..a810bc0192de8e74aedfb2351f54c118eb8be584 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -856,6 +856,20 @@ static void replace_effective_prog(struct cgroup *cgrp,
+ 	}
+ }
+ 
++static bool cgroup_bpf_storages_compatible(struct bpf_prog *old_prog,
++					   struct bpf_prog *new_prog)
++{
++	enum bpf_cgroup_storage_type stype;
++
++	for_each_cgroup_storage_type(stype) {
++		if (old_prog->aux->cgroup_storage[stype] !=
++		    new_prog->aux->cgroup_storage[stype])
++			return false;
++	}
++
++	return true;
++}
++
+ /**
+  * __cgroup_bpf_replace() - Replace link's program and propagate the change
+  *                          to descendants
+@@ -894,6 +908,9 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
+ 	if (!found)
+ 		return -ENOENT;
+ 
++	if (!cgroup_bpf_storages_compatible(link->link.prog, new_prog))
++		return -EINVAL;
++
+ 	old_prog = xchg(&link->link.prog, new_prog);
+ 	replace_effective_prog(cgrp, atype, pl);
+ 	bpf_prog_put(old_prog);
