@@ -1,71 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.115
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792613664;
-	b=Ovjso/W0snVR+tBwrumyc3K3Yt/uz4me7s7Y50EFrYJQSodQF29J/QXRcypWnVyzpYvx
-	 ytlft1pmzKmNc1FxdHEmRCBl1CyGr865Bfc/woKRZNX21LuyhxVQAG0v2TlDmOmqLbjJn
-	 getHp5M8kiYoiKjQD0L70HCzExFuhHsN+s5kP5C2//HXRi1ZNSK8C3gzehLQb8tNLeD+c
-	 RDLTiR5bI31TOWbESncMCMR5Y4wPW2K0B8KxEKpZk2VWNTT8WPPW0iVi7TdiakiavDYfR
-	 yXncPGiszP+JKm0GDnggkhm7svLPtORantrfyR9gi/zO9qmdANwGuZWnSemp29Uw9IQ==
+	t=1792613700;
+	b=s5tUwL5FxBpfxkQaUXJUy+E0G+njNDw7KJhZGFZD/AMb+kmEfVpykJfsyFF4qcIWTTyY
+	 C6Ei4YWfoga6FxLL1RhT8tzsIjlv7XttQ982MpGXQbF0Wufnjyl+hePfFSPUFZw0kV/8w
+	 uxcOUPTtjzOO3RceDShTlVeh/fdFj2l6UIBU1SkM2XOJs+12ga9mOgL57jzffGUcTa48f
+	 pEWNYa5+feuw999n1qRHNvpciuN63HzPxCTljCWz1QpTiz8HJ7JEXripcaNoVbz/jjiK4
+	 7JSCpCwzaykdR0bH7yGgoypu6SXMGiZtAIUY6ZjUyJi7IY4gmAQHYT6yyhn5/Bawj/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792613664;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=MK/sCNnQliqsRAgVoxF+hCWSDeszRLqOViWrqNvyhPc=;
-	b=K1f9DC2RiFIE65LaMWN/SgfiYHnF0EefyGoNPhyrwEEmVBmcGFIdKtWLacKxGnMuaKoB
-	 qbG6+2Uto+q5jG1RJU3N4L7/zN/1tfPRbzwsjSEVOi3lCyJwiyk5cOiqe5F3kC94lxej5
-	 4TX8CDHUQALxnSYjGLY2NG/+vHGb4z7LZaZpKrIBUuJ+VHxzVkzLI1vs+h/InpCjJRm5m
-	 Mgt9/z0bicrQLXu7tK0jeTIZDElw8CTeLA8qUzBYy6s7KBo05QgV2I6gyXZuOZinDwSRH
-	 Z09AVTzKdxelkNWbTTxF1CrKpoTGk83tymV6Z/ImN9G+KuqofhntYhK3I2N+ZheTVqQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792613700;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=4G+I7djq1OU0EgGUZU0V9GlFagjXrwntNK7yPtcpldk=;
+	b=Jyj3C/dXr53b7QgzjIMQstVs+2CnOe9421zsWGUfYlm2nSQeOngZwpOY+T/HpVN3JYx/
+	 img5rn1IGWVxe0R423VPyOWaok6NbneaVA9Qul2s3X/5FKELL+VP4YE+W2fDjIcaLQerp
+	 WxyT518H6IhEKKUB3jM7jE3CjirX/5Zn1thYyptAfWP9AWRk/UgBwlRW0YqKnIuM8fuKJ
+	 tK5ARkyfuyXwqgTbdSvc8KR05I6Lv86KHnikA7BBR+ywB2hX/rtu832le85gc1VszBKDC
+	 bmgaRMHl+6a5Wl13/7fH+Z5q8S/31jnE2By7BpavLHz6V3sVSyW6LTlZS4GCALK8fKA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ox2VFkCo;
-	arc=none smtp.remote-ip=95.215.58.115
-Received: from mta1.migadu.com (out-115.mta1.migadu.com [95.215.58.115])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f13EnAHY;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67816606A31A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:14:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67816606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A374D606A322
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:15:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ox2VFkCo
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=w2yIvfdgGfmlQVpeDUGVxacsdJvhxz5P+RtAjBdIp+U=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792613658; v=1; x=1793218458;
- b=ox2VFkColxaQvhbRPAOwLuz+qjvZGykGQTMQ7lMfTeQyOsOtVRJkJMu7p9uCJ5Z2qdkKLftq
- GU7CY6UM+UuLov8zO7bMaBIrCLkO2D846eb5SZ+KV15g3NAtPdkArYViUJOZ6UPH59mcy4vJ1E+
- qNKh8sdfB1ahgePZnVF3feYc=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 19901bfe483d708d;
-	Wed, 21 Oct 2026 20:14:18 +0000
-X-Mizu-Trace-ID: 19901bfe483d708d
-X-Migadu-Flow: FLOW_OUT
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Christian Brauner <brauner@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	NeilBrown <neil@brown.name>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH vfs v3] bpf: Allow bpf_d_path() from filp_close_sync()
-Date: Wed, 21 Oct 2026 13:13:59 -0700
-Message-ID: <20261021201400.5409-1-ihor.solodrai@linux.dev>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f13EnAHY
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6EBB1F000C1;
+	Wed, 21 Oct 2026 20:14:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792613700;
+	bh=4G+I7djq1OU0EgGUZU0V9GlFagjXrwntNK7yPtcpldk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=f13EnAHYUIQyw4PttRcvpiWPd4e7Lck9xSEyOAw0QFzzGZh2ZJ9/jvoSCZ1jO1eq2
+	 HnsMW1VRmuXIBHnVy7VKWWPUU85Ft+5ZmoiQRK2SLygiVeR96NP3U+vBmIYa/Ax0iM
+	 GRKvsuZ6jIwdcsr8nYlQtqUWwkCY5BpZ9JB5PmIFRR1RPPC+xAYbaINepGc32Bb+UA
+	 F8FSdj476CvniCuru+dGicGIt9lchQPNXHaGusFaaTLME2UgTbJ6/XBEsiUUsnwPKR
+	 nX32FJwuQ+4tulqVOF+8XOlM9h5JtH0kkfC1lL+1d5dpfEc2rxhWsAeewp3r4zl4rY
+	 7m01tiMKDfoNg==
+Date: Wed, 21 Oct 2026 13:14:56 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev
+Subject: Re: [PATCH v4 bpf-next 2/6] bpf, x86: Support unwind_goto and
+ unwind_exit
+Message-ID: <20261021201456.GA3197963@ax162>
+References: <20261020181320.1284798-1-alexei.starovoitov@gmail.com>
+ <20261020181320.1284798-3-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -75,160 +58,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261020181320.1284798-3-alexei.starovoitov@gmail.com>
 
-The d_path selftest closes its descriptors with close_range() so that
-its fentry program on filp_close() runs.
+Hi Alexei,
 
-Commit 056069eb2b66 ("fs: make close_range() synchronous") switched
-close_range() to filp_close_sync(), so the program still attaches but
-is never called:
+On Tue, Oct 20, 2026 at 06:13:16PM +0000, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+>   bpf                         x86
+>   call inner                  call inner
+>   unwind_goto pad
+>   w0 = w6                     mov eax, ebx
+> 
+>   r0 = 0                      xor eax, eax
+>   unwind_exit                 push rax
+>                               push rsi
+>                               mov rdi, [rbp + 8]
+>                               call bpf_unwind_target
+>                               mov [rbp + 8], rax
+>                               pop rsi
+>                               pop rax
+>                               leave
+>                               ret
+> 
+> unwind_goto is an extable entry and no code. unwind_exit looks its return
+> address up there and returns to the pad. r0 and r2 are what a subprog
+> returns, so rax and rsi are saved around the lookup.
+> 
+> When there is no entry, the kernel called the subprog as an async or an
+> exception callback, and unwind_exit is exit.
+> 
+> The caller of the main prog doesn't tell exit from unwind_exit, so there
+> it's exit. An extension is different. freplace is a jump, so its return
+> address is the one of the subprog that it replaced.
+> 
+> With private stack r9 is saved around a call, and 'pop r9' has to be done
+> on the way to the pad too. In such progs unwind_goto is:
+> 
+>   push r9
+>   call foo
+>   pop r9       <- exit returns here
+>   jmp 1f
+>   pop r9       <- unwind_exit returns here
+>   jmp pad
+> 1:
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-  test_d_path_basic:FAIL:close trampoline for filp_close was not called
+After this change landed in -next as commit cff94a3d78d8 ("bpf, x86:
+Support unwind_goto and unwind_exit"), I am seeing the following objtool
+warning when building with LLVM 23.1.4 and a recent tip of tree version
+of LLVM 24 with the attached configuration (which can become an error
+with CONFIG_OBJTOOL_WERROR):
 
-With that series, close(), close_range() and the closes on exec and
-exit all go through filp_close_sync(). Few paths still reach
-filp_close(), dup2() being one of them, so a program on filp_close()
-no longer sees most file closes.
+  vmlinux.o: warning: objtool: do_jit+0x1330: relocation to !ENDBR: .text+0xc7fab
 
-Allow bpf_d_path() from filp_close_sync(), but only from fentry.
-filp_close_sync() drops the last file reference inline, so by the time
-an fexit program runs, file->f_path may already be freed, with no RCU
-delay for NORCU dentries such as pipes and sockets.
+Something like the below diff appears to inhibit this but I am not sure
+if it is too big of a hammer or if there is a better solution, hence
+just the report and deferring to you, but maybe it is a good starting
+point.
 
-Attach the selftest program to filp_close_sync() and keep triggering
-it with close_range().
-
-Add a test rejecting bpf_d_path() from fexit/filp_close_sync.
-
-Assisted-by: LLM
-Fixes: 056069eb2b66 ("fs: make close_range() synchronous")
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
----
-
-v2->v3:
-  * Drop the unreachable BPF_TRACE_FENTRY_MULTI check (Sashiko)
-  * Add a Fixes: tag
-v2: https://lore.kernel.org/bpf/20260925210347.1364191-1-ihor.solodrai@linux.dev/
-
-v1->v2:
-  * Allow bpf_d_path() from filp_close_sync() only for fentry (bpf-ci-bot)
-  * Add a verifier test rejecting bpf_d_path() from fexit/filp_close_sync
-v1: https://lore.kernel.org/bpf/20260924204226.190315-1-ihor.solodrai@linux.dev/
-
-The issue was found by BPF CI when running on linux-next:
-https://github.com/kernel-patches/bpf/actions/runs/35923662147/job/107398237366
----
- kernel/trace/bpf_trace.c                      | 15 +++++++++++--
- .../testing/selftests/bpf/prog_tests/d_path.c |  7 ++++---
- .../testing/selftests/bpf/progs/test_d_path.c |  2 +-
- .../selftests/bpf/progs/verifier_d_path.c     | 21 +++++++++++++++++++
- 4 files changed, 39 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 29260951aa87..4b2f944bf67f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -974,6 +974,10 @@ BTF_ID(func, vfs_getattr)
- BTF_ID(func, filp_close)
- BTF_SET_END(btf_allowlist_d_path)
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index d3ab36281144..b80f05f377c2 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -641,6 +641,7 @@ static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
  
-+BTF_SET_START(btf_allowlist_d_path_fentry)
-+BTF_ID(func, filp_close_sync)
-+BTF_SET_END(btf_allowlist_d_path_fentry)
-+
- static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ static int emit_call(u8 **pprog, void *func, void *ip)
  {
- 	if (prog->type == BPF_PROG_TYPE_TRACING &&
-@@ -983,8 +987,15 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
- 	if (prog->type == BPF_PROG_TYPE_LSM)
- 		return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
- 
--	return btf_id_set_contains(&btf_allowlist_d_path,
--				   prog->aux->attach_btf_id);
-+	if (btf_id_set_contains(&btf_allowlist_d_path,
-+				prog->aux->attach_btf_id))
-+		return true;
-+
-+	if (btf_id_set_contains(&btf_allowlist_d_path_fentry,
-+				prog->aux->attach_btf_id))
-+		return prog->expected_attach_type == BPF_TRACE_FENTRY;
-+
-+	return false;
++	OPTIMIZER_HIDE_VAR(func);
+ 	return emit_patch(pprog, func, ip, 0xE8);
  }
  
- BTF_ID_LIST_SINGLE(bpf_d_path_btf_ids, struct, path)
-diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-index 1a2a2f1abf03..7665e1d28a64 100644
---- a/tools/testing/selftests/bpf/prog_tests/d_path.c
-+++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -109,8 +109,9 @@ static int trigger_fstat_events(pid_t pid)
- 	fstat(indicatorfd, &fileStat);
- 
- out_close:
--	/* sys_close no longer triggers filp_close, but we can
--	 * call sys_close_range instead which still does
-+	/*
-+	 * filp_close_sync() may be inlined into close(2), so use
-+	 * close_range(2), which calls it directly.
- 	 */
- 	syscall_close(pipefd[0]);
- 	syscall_close(pipefd[1]);
-@@ -165,7 +166,7 @@ static void test_d_path_basic(void)
- 
- 	if (CHECK(!bss->called_close,
- 		  "close",
--		  "trampoline for filp_close was not called\n"))
-+		  "trampoline for filp_close_sync was not called\n"))
- 		goto cleanup;
- 
- 	for (int i = 0; i < MAX_FILES; i++) {
-diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
-index 561b2f861808..edb5494a47f7 100644
---- a/tools/testing/selftests/bpf/progs/test_d_path.c
-+++ b/tools/testing/selftests/bpf/progs/test_d_path.c
-@@ -41,7 +41,7 @@ int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
- 	return 0;
- }
- 
--SEC("fentry/filp_close")
-+SEC("fentry/filp_close_sync")
- int BPF_PROG(prog_close, struct file *file, void *id)
- {
- 	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_d_path.c b/tools/testing/selftests/bpf/progs/verifier_d_path.c
-index 87e51a215558..7ab9b6b1d589 100644
---- a/tools/testing/selftests/bpf/progs/verifier_d_path.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_d_path.c
-@@ -45,4 +45,25 @@ __naked void d_path_reject(void)
- 	: __clobber_all);
- }
- 
-+SEC("fexit/filp_close_sync")
-+__description("d_path fexit reject")
-+__failure __msg("helper call is not allowed in probe")
-+__naked void d_path_fexit_reject(void)
-+{
-+	asm volatile ("					\
-+	r1 = *(u64 *)(r1 + 0);				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r6 = 0;						\
-+	*(u64*)(r2 + 0) = r6;				\
-+	r3 = 8 ll;					\
-+	call %[bpf_d_path];				\
-+	r0 = 0;						\
-+	exit;						\
-+	"
-+	:
-+	: __imm(bpf_d_path)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
-
-base-commit: a804c5742bff224d4cb4d25dd383554d598be32b
 -- 
-2.56.0
-
+Cheers,
+Nathan
