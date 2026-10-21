@@ -1,96 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.32.2.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792562004;
-	b=ejagirIAttkhBm5bxral4djILZFXlGEPUdlBqXfRvkbP12i0jhln4ED0zs6GjjnFPuNE
-	 RFElEMce3WLok4vTenIdc34IMhq28QroHuN6Xe5lpj8clGXAVaJ5paoeSqjfKf4fQ+B81
-	 JuSng1Hq21WQmUxa2WANgBnZH0FzO2OTH67yYq/jzLJ7qYlTwbeRqNm6z7Oj8ud9gJdQd
-	 5UQtrqs7OfGJzYAucqaCo5NZrWdMLTuL2K9gjdcMBwtoKKmYbRAJE/VxonjUMX/4dVfz0
-	 LhowxHIz4hPRV5OmaXS8Q0UnKzD4D9Gq6ic886d5LioAcXNTnMfuTSfwS3U0HeBzkWw==
+	t=1792562718;
+	b=ZTnmcwmi6F8kT4l3n0zzxJI8XUDHszG3L8RSwn+ieyFNbxNbfGtZP+g8yvG5MnyuFPOo
+	 vPSg6v65VDDTwjxXRJUB2nAKFjS1itXlzjSvvy8MlMKyRM6f/XNZTfaFlX0ckvK7OKwni
+	 PMmaPcnNSZCPkswzOrxkO5pTQVV8mNtgFt4rGXSYnOVUcLLECWtdhJOT0rUNYglcyXdaX
+	 HT0hiH+JAJmF/fAGoE8k1ETJeTq4hmRZrha2/5tcLqmhOF8jayMIol/UCFAszSWt4Eg6F
+	 4g3h+1xkDLMOAhUvcoFpzR1xd2o678yuQUu5z5MUbYcZpemOoZmv5G7BGDafmzjlADQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792562004;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-CM-DELIVERINFO:X-Coremail-Antispam;
-	bh=WOtP9JEDTT0H3+K6HcpOlF9ysuDc4jnNrQET8IlEwHs=;
-	b=qjAE6R42q/UJFlX/Ya7wNVyQriNXTzRY3pi+amUsVOmfbYWur++cr/qdMj9eRe1RebpH
-	 sksMCsll3viPV7C0Rgtq7KZhOldi2E2+30RorHjZjOJWvLJAumpa62dq6jDeGLR8vRT2b
-	 OpZLJJcW91XYUQ3gbh7/Y8B/LCeQeR4FeI8UQnhlLE/sQCfZxHk9tx+E7DKBulg4ccGJb
-	 piXEaVivi9w9WDVAlxu2TDcQ0tUj1vY7KC/WLDj9xMKg2m/PC5glEco5mjiZuImvexxKY
-	 80rc2FdyhJF1r6HdKIaxOLcE6hQK6CbrraD/7K1i4oM10X7yU0OkmtLNYmObf8upv6A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792562718;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=8sRNmxmhmHvu5Vv7B62dYVqh3Oec8c+eb18XRGKxW8o=;
+	b=Kq3t5SWBAMrtLA6pz4YThJgl/g86EIKsjGyciZu6RTzzsEo/F//yRLH0fTHNpVBLg12p
+	 tNBMU+1ED0gRNjj/Ika85qokAANqo3ySIEWhYS/eQ3E7hFtH5L60Ie8PGTRaNua5B6uzY
+	 EiWz0jijKpN778fW/zUmCzRzBJawb7WEk3C5oAGlt62qOIUQ3+HlZCtiD4pEArrGTTx5K
+	 MOoEGPZXmPPIlwf3H7TXeOQUr7/9U3Q9V4n/y7dmXvy2LluW85NUojTWr50tOhvjF0ust
+	 EJgy8TTlAOkaz40KckrorXThbQ+dMhHU07uRTQ2BhMbti/lpU1xpOzMO1I0TB5zG0iw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=zju.edu.cn;
-	spf=pass smtp.mailfrom=zju.edu.cn;
-	arc=none smtp.remote-ip=210.32.2.4
-Received: from zju.edu.cn (gw.zju.edu.cn [210.32.2.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D3FC606A319;
-	Wed, 21 Oct 2026 05:53:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D3FC606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wCnU30vU9hqxYmsAQ--.12518S3;
-	Wed, 21 Oct 2026 13:52:48 +0800 (CST)
-Received: from lutetium.tail477849.ts.net (unknown [10.162.163.215])
-	by mail-app2 (Coremail) with UTF8SMTPA id zC_KCgDHHXwuU9hqfMt1AA--.30733S2;
-	Wed, 21 Oct 2026 13:52:47 +0800 (CST)
-From: tangyazhou@zju.edu.cn
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	David Vernet <void@manifault.com>,
-	bpf@ietf.org
-Cc: tangyazhou@zju.edu.cn,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	=?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	Shahab Vahedi <list+bpf@vahedi.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-	Paul Burton <paulburton@kernel.org>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>,
-	Xi Wang <xi.wang@gmail.com>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Wang YanQing <udknight@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-doc@vger.kernel.org,
-	Tianci Cao <ziye@zju.edu.cn>,
-	Yazhou Tang <tangyazhou518@outlook.com>,
-	Shenghao Yuan <shenghaoyuan0928@163.com>
-Subject: [PATCH bpf-next v2 2/8] bpf, x86: JIT UHMUL and SHMUL on x86-64
-Date: Wed, 21 Oct 2026 13:52:30 +0800
-Message-ID: <20261021-bpf-hmul-v2-2-88e260099f7d@outlook.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com>
-References: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com>
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MfrObbjr;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33481606A321;
+	Wed, 21 Oct 2026 06:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MfrObbjr
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6001F000C9;
+	Wed, 21 Oct 2026 06:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792562717;
+	bh=8sRNmxmhmHvu5Vv7B62dYVqh3Oec8c+eb18XRGKxW8o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=MfrObbjrNX+vI43ogQO3fDeqChlkBhOT7XUB5s2u3qv6JK2UIUfr10l9hHextg2EN
+	 RSfO/1d24ImhjNvAAOcF6xt9N5xto+A3hIxYzagFbKsOCs6x1MZBZ1sbnOc3jrxgVK
+	 p9W4NNIFPCpp5C9Pjz/b/pakTLPvvrDxBX8U1IalMZGccjPprxyZLVf1FGomlfFlxf
+	 ARMqOI2EAArUC0Cx61o7eaGJ66U+YsRrKnHOlQimpSz/8+o/s4+G2lg7IoXT9n5f9+
+	 Jbda9KxRS+Il6o7z6FRlcqjW7QdM306uGq39fPRNkSLrvJxtOOL6tLKI/+1+IP/u7P
+	 dwzmOq/BKvBIw==
+Message-ID: <sashiko-outbox-179823@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [Patch v4 5/5] pef/x86/intel: Always snapshot live hardware LBR
+ state for BPF path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261021050711.4043703-6-dapeng1.mi@linux.intel.com>
+References: <20261021050711.4043703-1-dapeng1.mi@linux.intel.com>
+ <20261021050711.4043703-6-dapeng1.mi@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 21 Oct 2026 06:05:17 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,133 +60,309 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.15.2
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zC_KCgDHHXwuU9hqfMt1AA--.30733S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgoLCmrXxB0cWQAAso
-X-CM-DELIVERINFO: =?B?pob2uAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9ICaYHawYgZNs3JF60Ts6PPq05Od3lAt5X1rALYnAzqSMXT3rVO5QlEWQO+/hzO9bz2y
-	+UYAa8tO1tZGO/9TSUb1UDnldeqlI+4cSLgvSlYqmKLRPt2g5/6ISv8F1S15fA==
-X-Coremail-Antispam: 1Uk129KBj93XoWxGFW3AFykAFWxKw1kZr45CFX_yoW5tw48pF
-	s7Grn3CrWDZwsrJrZrXFWxZrnxWF4xWr1xAa42y3y7X3ZxXr18uF4xKa47t3s5CryFvw1S
-	qr1jk3srC3WkWFbCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAF
-	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCF04k2
-	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48J
-	MIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr
-	1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-	x4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUcs2-UUUUU
 
-From: Tianci Cao <ziye@zju.edu.cn>
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [Critical] perf/x86/intel: LBR state corruption in __intel_pmu_snapshot_b=
+ranch_stack()
+- [High] perf/x86/intel: __intel_pmu_snapshot_branch_stack() enables PMU in=
+ PMI
+- [Medium] perf/x86/intel: unfrozen LBRs and PMU re-enable in PMI branch sn=
+apshot
+- [Medium] perf/x86: NMI race on lbr_snapshot in __intel_pmu_snapshot_branc=
+h_stack()
+- [Medium] perf/x86/intel: unfiltered LBR branch counter bits in perf_branc=
+h_entry.reserved
+--
 
-JIT the UHMUL and SHMUL instructions with the one-operand x86-64 mul and
-imul instructions. These instructions multiply RAX by an explicit
-source and return the full product in RDX:RAX, so the desired high half
-is available in RDX.
+commit 4d2b360d61a8a8f6825b3cd919182ee99dbe2d76
+Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
 
-Copy register or immediate sources into AUX_REG, load the destination
-into RAX, and move RDX back to the BPF destination after multiplication.
-Preserve RAX and RDX when they hold other live BPF registers, while
-handling BPF_REG_0 and BPF_REG_3 destinations without restoring over the
-result.
+pef/x86/intel: Always snapshot live hardware LBR state for BPF path
 
-Leave the existing JIT handling of ordinary BPF_MUL unchanged.
+This commit updates __intel_pmu_snapshot_branch_stack() to always read live
+hardware LBR registers for the BPF snapshot path even when PEBS LBR users
+are active. To avoid clobbering cached PEBS LBR data during a PMI, it saves
+and restores cpuc->lbr_stack, cpuc->lbr_entries, and cpuc->lbr_counters
+around intel_pmu_lbr_read() using a per-CPU buffer, and moves the
+cpuc->lbr_users =3D=3D cpuc->lbr_pebs_users check into intel_pmu_handle_irq=
+().
 
-Link: https://lore.kernel.org/bpf/CAADnVQ+2O2zgdy11+vxE6dOp+3Br4zZBysHF-Hne7cP+eeucnQ@mail.gmail.com/
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
----
- arch/x86/net/bpf_jit_comp.c | 48 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> index 5dfb9e9156e88..07d1a8a7845b2 100644
+> --- a/arch/x86/events/intel/core.c
+> +++ b/arch/x86/events/intel/core.c
+> @@ -2815,16 +2815,50 @@ static void intel_pmu_enable_all(int added)
+>  	__intel_pmu_enable_all(added, false);
+>  }
+> =20
+> +struct lbr_snapshot {
+> +	struct perf_branch_stack stack;
+> +	struct perf_branch_entry entries[MAX_LBR_ENTRIES];
+> +	u64 counters[MAX_LBR_ENTRIES];
+> +};
+> +static DEFINE_PER_CPU(struct lbr_snapshot, lbr_snapshot);
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 6a2fe3d0039d..53f38e21f7f3 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1378,6 +1378,38 @@ static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
- 	return 0;
- }
- 
-+/*
-+ * The one-operand x86 mul/imul forms use RAX as the implicit first
-+ * operand and store the 128-bit product in RDX:RAX.
-+ * The JIT uses AUX_REG as the explicit second operand.
-+ */
-+static void emit_hmul_aux(u8 **pprog, u32 dst_reg, bool is_signed)
-+{
-+	u8 *prog = *pprog;
-+	bool save_rax = dst_reg != BPF_REG_0;
-+	bool save_rdx = dst_reg != BPF_REG_3;
-+	u8 mul_modrm_base = is_signed ? 0xE8 : 0xE0; /* imul /5 or mul /4 */
-+
-+	if (save_rax)
-+		EMIT1(0x50); /* push rax */
-+	if (save_rdx)
-+		EMIT1(0x52); /* push rdx */
-+
-+	if (save_rax)
-+		emit_mov_reg(&prog, true, BPF_REG_0, dst_reg);
-+	maybe_emit_1mod(&prog, AUX_REG, true);
-+	EMIT2(0xF7, add_1reg(mul_modrm_base, AUX_REG));
-+	if (save_rdx)
-+		emit_mov_reg(&prog, true, dst_reg, BPF_REG_3);
-+
-+	if (save_rdx)
-+		EMIT1(0x5A); /* pop rdx */
-+	if (save_rax)
-+		EMIT1(0x58); /* pop rax */
-+
-+	*pprog = prog;
-+}
-+
- /* LDX: dst_reg = *(u8*)(src_reg + off) */
- static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
- {
-@@ -2916,6 +2948,14 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 
- 		case BPF_ALU | BPF_MUL | BPF_K:
- 		case BPF_ALU64 | BPF_MUL | BPF_K:
-+			if (bpf_insn_is_hmul(insn)) {
-+				/* imul/mul use AUX_REG as src. */
-+				emit_mov_imm32(&prog, true, AUX_REG, imm32);
-+				emit_hmul_aux(&prog, dst_reg,
-+					      insn->off == BPF_SHMUL);
-+				break;
-+			}
-+
- 			/*
- 			 * lea for 3, 5 and 9, which LLVM leaves as a
- 			 * multiplication, but not for r13, which needs a
-@@ -2951,6 +2991,14 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 
- 		case BPF_ALU | BPF_MUL | BPF_X:
- 		case BPF_ALU64 | BPF_MUL | BPF_X:
-+			if (bpf_insn_is_hmul(insn)) {
-+				/* imul/mul use AUX_REG as src. */
-+				emit_mov_reg(&prog, true, AUX_REG, src_reg);
-+				emit_hmul_aux(&prog, dst_reg,
-+					      insn->off == BPF_SHMUL);
-+				break;
-+			}
-+
- 			maybe_emit_mod(&prog, src_reg, dst_reg,
- 				       BPF_CLASS(insn->code) == BPF_ALU64);
- 
+[Severity: Medium]
+Can an NMI race on the per-CPU lbr_snapshot buffer when
+__intel_pmu_snapshot_branch_stack() is called in non-NMI context?
 
--- 
-2.56.0
+In arch/x86/events/intel/core.c, intel_pmu_snapshot_branch_stack() and
+intel_pmu_snapshot_arch_branch_stack() call local_irq_save(flags) and
+__intel_pmu_disable_all(false) before invoking
+__intel_pmu_snapshot_branch_stack(). However, local_irq_save() only masks
+normal interrupts, and an in-flight PMI or another NMI can still arrive
+after __intel_pmu_disable_all() due to NMI delivery latency.
 
+When cpuc->lbr_pebs_users > 0 and a non-NMI BPF program (such as an
+fentry/fexit trampoline via __bpf_prog_enter_recur() or a raw_tracepoint,
+where bpf_prog_active is not incremented) calls:
+
+  bpf_get_branch_snapshot()
+    -> intel_pmu_snapshot_branch_stack()
+      -> __intel_pmu_snapshot_branch_stack()
+
+an arriving PMI can still invoke bpf_overflow_handler() ->
+bpf_get_branch_snapshot() -> __intel_pmu_snapshot_branch_stack() on the
+same CPU, overwriting this_cpu_ptr(&lbr_snapshot) while the outer call is
+between its save and restore steps. Even if the PMI does not call
+bpf_get_branch_snapshot(), intel_pmu_handle_irq() updates cpuc->lbr_stack
+and cpuc->lbr_entries while the interrupted snapshot is saving or
+restoring them.
+
+Since cpuc->lbr_stack only holds live sample data awaiting output during a
+PMI, should the save and restore of cpuc->lbr_stack be restricted to NMI
+context or otherwise protected against NMI reentrancy?
+
+> +
+>  static noinline int
+>  __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
+>  				  unsigned int cnt, unsigned long flags)
+>  {
+>  	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
+> +	struct lbr_snapshot *snapshot =3D this_cpu_ptr(&lbr_snapshot);
+> +
+> +	/*
+> +	 * This may be called from bpf_event_handler() in a PMI context. If
+> +	 * a PEBS LBR user is active, the PEBS sample record has already updated
+> +	 * cpuc->lbr_stack. Reading the LBR registers here would overwrite that
+> +	 * cached PEBS LBR stack, so save it first and restore it afterward. Th=
+is
+> +	 * keeps the cached LBR data available for later output to userspace in
+> +	 * the normal PEBS record path.
+> +	 */
+> +	if (cpuc->lbr_pebs_users) {
+> +		memcpy(&snapshot->stack, &cpuc->lbr_stack,
+> +		       sizeof(struct perf_branch_stack));
+> +		memcpy(snapshot->entries, cpuc->lbr_entries,
+> +		       sizeof(struct perf_branch_entry) * cpuc->lbr_stack.nr);
+> +		memcpy(snapshot->counters, cpuc->lbr_counters,
+> +		       sizeof(u64) * cpuc->lbr_stack.nr);
+> +	}
+
+[Severity: Critical]
+What happens in __intel_pmu_snapshot_branch_stack() when cpuc->lbr_users
+is non-zero, but cpuc->lbr_pebs_users is 0?
+
+In arch/x86/events/intel/lbr.c:intel_pmu_lbr_add(), cpuc->lbr_pebs_users
+is only incremented when x86_pmu.intel_cap.pebs_baseline is set and
+event->attr.precise_ip > 0:
+
+	if (x86_pmu.intel_cap.pebs_baseline && event->attr.precise_ip > 0)
+		cpuc->lbr_pebs_users++;
+
+When non-PEBS hardware LBR events (precise_ip =3D=3D 0), legacy PEBS LBR
+events (pre-Ice Lake where pebs_baseline =3D=3D 0), or Architectural PEBS L=
+BR
+events (arch/x86/events/intel/ds.c:setup_arch_pebs_sample_data(), where
+pebs_baseline =3D=3D 0) are active, cpuc->lbr_users > 0 while
+cpuc->lbr_pebs_users =3D=3D 0.
+
+In those paths, handle_pmi_common(), setup_pebs_fixed_sample_data(), and
+setup_arch_pebs_sample_data() call intel_pmu_lbr_save_brstack() before
+perf_event_overflow() -> __perf_event_overflow() ->
+bpf_overflow_handler():
+
+	if (has_branch_stack(event))
+		intel_pmu_lbr_save_brstack(&data, cpuc, event);
+	...
+	perf_event_overflow(event, &data, regs);
+
+Inside include/linux/perf_event.h:perf_sample_save_brstack(), brs
+(&cpuc->lbr_stack) is clamped in place and used to precompute
+data->dyn_size:
+
+	brs->nr =3D min_t(u16, event->attr.sample_max_stack, brs->nr);
+	size +=3D brs->nr * sizeof(struct perf_branch_entry);
+	if (brs_cntr)
+		size +=3D brs->nr * sizeof(u64);
+	data->br_stack =3D brs;
+	data->br_stack_cntr =3D brs_cntr;
+	data->dyn_size +=3D size;
+	data->sample_flags |=3D PERF_SAMPLE_BRANCH_STACK;
+
+If bpf_overflow_handler() then calls bpf_get_branch_snapshot() ->
+__intel_pmu_snapshot_branch_stack() with cpuc->lbr_pebs_users =3D=3D 0, the
+save and restore of cpuc->lbr_stack, cpuc->lbr_entries, and
+cpuc->lbr_counters are skipped, and intel_pmu_lbr_read() overwrites them
+in place:
+
+1. In kernel/events/core.c:perf_output_sample(), data->br_stack still
+   points to &cpuc->lbr_stack. Because intel_pmu_lbr_read() resets
+   cpuc->lbr_stack.nr up to x86_pmu.lbr_nr, undoing the sample_max_stack
+   clamp after data->dyn_size was already computed, perf_output_sample()
+   can copy more perf_branch_entry (and counter) elements than
+   perf_output_begin() reserved in the ring buffer.
+
+2. The frozen LBR entries captured at PMI entry (or from the Arch PEBS
+   record) in cpuc->lbr_entries are overwritten by unfrozen post-ack LBR
+   registers containing PMI handler branches.
+
+3. For branch counter groups, intel_pmu_lbr_counters_reorder() has already
+   extracted counter bits from cpuc->lbr_entries[i].reserved into
+   cpuc->lbr_counters[i] and cleared .reserved; calling
+   intel_pmu_lbr_read() -> intel_pmu_store_lbr() writes raw counter bits
+   back into cpuc->lbr_entries[i].reserved and desynchronizes
+   cpuc->lbr_counters[].
+
+Should the save and restore in __intel_pmu_snapshot_branch_stack() be
+gated on cpuc->lbr_users instead of cpuc->lbr_pebs_users (and save/restore
+based on the pre-clamp entry count or full array when needed)?
+
+> =20
+>  	intel_pmu_lbr_read();
+>  	cnt =3D min_t(unsigned int, cnt, cpuc->lbr_stack.nr);
+> -
+>  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
+nt);
+
+[Severity: Medium]
+On platforms with Architectural LBR and branch counter logging, does
+copying cpuc->lbr_entries directly after intel_pmu_lbr_read() leak raw
+branch counter bits in entries[i].reserved to BPF programs?
+
+When intel_pmu_snapshot_arch_branch_stack() calls
+__intel_pmu_snapshot_branch_stack(), intel_pmu_lbr_read() invokes
+intel_pmu_arch_lbr_read() or intel_pmu_arch_lbr_read_xsave(), which calls
+arch/x86/events/intel/lbr.c:intel_pmu_store_lbr():
+
+	/*
+	 * Leverage the reserved field of
+	 * cpuc->lbr_entries[i] to temporarily store the
+	 * branch counters information. The later code will
+	 * decide what content can be disclosed to the perf
+	 * tool. Pleae see intel_pmu_lbr_counters_reorder().
+	 */
+	.reserved =3D (info >> LBR_INFO_BR_CNTR_OFFSET) &
+		    LBR_INFO_BR_CNTR_FULL_MASK,
+
+Normally intel_pmu_lbr_counters_reorder() filters those bits and clears
+cpuc->lbr_entries[i].reserved to 0 before the entries are exposed. Since
+__intel_pmu_snapshot_branch_stack() copies cpuc->lbr_entries directly into
+entries without calling intel_pmu_lbr_counters_reorder(), won't the raw
+hardware counter bits remain in the UAPI perf_branch_entry.reserved field
+returned by bpf_get_branch_snapshot()?
+
+> +
+> +	if (cpuc->lbr_pebs_users) {
+> +		memcpy(&cpuc->lbr_stack, &snapshot->stack,
+> +		       sizeof(struct perf_branch_stack));
+> +		memcpy(cpuc->lbr_entries, snapshot->entries,
+> +		       sizeof(struct perf_branch_entry) * cpuc->lbr_stack.nr);
+> +		memcpy(cpuc->lbr_counters, snapshot->counters,
+> +		       sizeof(u64) * cpuc->lbr_stack.nr);
+> +	}
+> +
+>  	intel_pmu_enable_all(0);
+
+[Severity: High]
+Is it safe for __intel_pmu_snapshot_branch_stack() to unconditionally call
+intel_pmu_enable_all(0) when invoked from bpf_overflow_handler() in a PMI?
+
+In arch/x86/events/intel/core.c:intel_pmu_handle_irq(), the PMI handler
+saves cpuc->enabled, sets cpuc->enabled =3D 0, and disables the PMU in
+hardware:
+
+	pmu_enabled =3D cpuc->enabled;
+	...
+	cpuc->enabled =3D 0;
+	__intel_pmu_disable_all(true);
+
+The PMI handler expects the PMU, PEBS, BTS, and LBRs to remain disabled in
+hardware while handle_pmi_common() and __intel_pmu_pebs_last_event() drain
+PEBS records and reprogram counter periods, only restoring the hardware
+state at the done label if pmu_enabled was set:
+
+	/* Only restore PMU state when it's active. See x86_pmu_disable(). */
+	cpuc->enabled =3D pmu_enabled;
+	if (pmu_enabled)
+		__intel_pmu_enable_all(0, true);
+
+When a BPF program runs via perf_event_overflow() ->
+bpf_overflow_handler() during a PMI and calls bpf_get_branch_snapshot() ->
+__intel_pmu_snapshot_branch_stack(), calling intel_pmu_enable_all(0)
+invokes x86_pmu_pebs_enable_all() and __intel_pmu_enable_all(0, false)
+while cpuc->enabled is 0. This re-enables MSR_IA32_PEBS_ENABLE, LBRs, BTS,
+and MSR_CORE_PERF_GLOBAL_CTRL before __intel_pmu_pebs_last_event() and
+handle_pmi_common() finish reprogramming counter periods, and leaves the
+hardware PMU enabled after the PMI exits if the PMI interrupted an
+x86_pmu_disable() section where pmu_enabled was 0.
+
+Should __intel_pmu_snapshot_branch_stack() avoid calling
+intel_pmu_enable_all(0) when cpuc->enabled is 0?
+
+>  	local_irq_restore(flags);
+>  	return cnt;
+> @@ -4022,7 +4056,12 @@ static int intel_pmu_handle_irq(struct pt_regs *re=
+gs)
+> =20
+>  	loops =3D 0;
+>  again:
+> -	intel_pmu_lbr_read();
+> +	/*
+> +	 * No need to read the LBR stack when all LBR users are PEBS events,
+> +	 * since the PEBS handler updates it.
+> +	 */
+> +	if (cpuc->lbr_users !=3D cpuc->lbr_pebs_users)
+> +		intel_pmu_lbr_read();
+>  	intel_pmu_ack_status(status);
+
+[Severity: Medium]
+When cpuc->lbr_users =3D=3D cpuc->lbr_pebs_users and a BPF program calls
+bpf_get_branch_snapshot() from bpf_overflow_handler() during a PMI, haven't
+the hardware LBR registers already been unfrozen by
+intel_pmu_ack_status(status)?
+
+In arch/x86/events/intel/core.c:intel_pmu_handle_irq(),
+__intel_pmu_disable_all(true) clears MSR_CORE_PERF_GLOBAL_CTRL but does
+not clear LBR enable bits in MSR_IA32_DEBUGCTLMSR or MSR_ARCH_LBR_CTL,
+relying on GLOBAL_STATUS_LBRS_FROZEN to keep the LBR stack frozen.
+
+As noted in arch/x86/events/intel/lbr.c:__intel_pmu_lbr_enable():
+
+	/*
+	 * No need to unfreeze manually, as v4 can do that as part
+	 * of the GLOBAL_STATUS ack.
+	 */
+	if (pmi && x86_pmu.version >=3D 4)
+		return;
+
+On PMU v4+ platforms (which include all pebs_baseline platforms), calling
+intel_pmu_ack_status(status) clears GLOBAL_STATUS_LBRS_FROZEN and
+immediately unfreezes the hardware LBRs. By the time handle_pmi_common() ->
+x86_pmu_drain_pebs() -> __intel_pmu_pebs_last_event() sets up the PEBS
+sample and invokes bpf_overflow_handler() ->
+__intel_pmu_snapshot_branch_stack(), the unfrozen hardware LBR MSRs have
+been recording branches inside the PMI handler itself (and
+__intel_pmu_snapshot_branch_stack() then also calls intel_pmu_enable_all(0)
+before the PMI finishes).
+
+Can __intel_pmu_snapshot_branch_stack() still obtain an unpolluted hardware
+LBR snapshot in this PMI path after intel_pmu_ack_status(status) has
+unfrozen the LBRs?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021050711.4043=
+703-1-dapeng1.mi@linux.intel.com?part=3D5
