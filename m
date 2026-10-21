@@ -1,57 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.96
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792622862;
-	b=ImjgtHS1uGzXrVYEJzf4Sq9bEOmpBXiNdXvyB9S32X87Xc2TrLAoXQslrY97vC0p3jYd
-	 Yz/VdZ8MB0BxiPaLzQqy00wx6/6SQhqCghbyZcX1qTOUBSpHjkYNMzC447bvBOt5fAOr9
-	 Dzc7PAUy0SCzzPqerHyG/TdmBHVASSp5M1kee0my6ReQ9FC4yLnz04VXfU2wU1bUy9wqE
-	 Ems//Ty+3uJbS147Rcglz6n06J5ZSuUwo55nVKYurKwbOIRMslH1Dc9OmYhUQaVMqVlhK
-	 ASy7xOZbfzku7qTMdcD4SUyk8SpuK12EajkrH0Y8Sb1/cyM0IHi40it9EMFueBhQU8A==
+	t=1792623031;
+	b=RBSIJfWNevyKR6etcBgpAmHQJpGPCp9hbyjl+JEwH8GH0LcoQFWYN8Ln0+0H9H6moETJ
+	 6cGn6RUKQuKP/PpE3hId0v2e+Q+paKKmvPdVTbLErrj50YxsuIeaZZeUNBs9xowgLFHwU
+	 yqerqBumqgHHhJHtnwHIOGYCmtGCeNhhZ+Q/WpdA+7LEs5GYTNpdNr51qXn+pfhjdWrky
+	 xPF9Hyi7OypzqUPzByyJOFrRFZhQNg0gBEPi1sSo6T0Bd6fKjtEskQV47e0GUpfsI+CH3
+	 Ksjy7nPU7/jFPVvV9NhBZrbsVrGklZtn8ejkuvd5rADv+WayhI4H6fPEmH/35hEEDjA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792622862;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=Z17GSdCX2AVlDCVfP3oFeK5ugdwfseV89dBX+YdznSQ=;
-	b=ZW+sttATSiRgdZT2Kdz2+SD3GnyoNjL8FRrlAgqMfadVZb9zxoIThhzFUrRA/klpScdy
-	 h/nRFiwnjm0I4C3NJ9gIEP1VnngJcHYewpdZq3kArCF3EMlJWoChyxP6/ieXlfjJ16oRI
-	 MmIr8bA4P628UrEx22V63enMAnfeVGUEkuOBcP2UvjU4NAv/goJtgqof0yaBn/S64/5sQ
-	 WvI9dH4OWRLtV3lmwUksWby/wDKYtBeLDMnrWrqvFRtftMrhigdo4G/rt9V2OhCZkMf3K
-	 NvgK+GfAvRwDoZFx5uedRtybdkZlTFALiG/YLbfKRVSannNSNUkxxguVKF5FPoTozBQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792623031;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=yXmnWq/gCLjc3mMk4LjW2YKmKS1CMT7ul7aIdEl3gPs=;
+	b=FFIloVNLtg/FMu+2S93LsQWEbRi2x4HhlQXlJGE1KF+XPrEhRycPHNANFIilWIzbh1In
+	 MbnQ1HQbUkyjH7r+fssLo+1vjAucp7kSdhsO+EuGiCOJfKPuF0gVDL8+OvbvCAZTwpjqY
+	 wMygANyUwbZZqH2TQFrzu2Jk/icke8AIAKuYDxfmLKYydtpPKsGo3hRb2AvsYWlSY/m15
+	 vwC5eHIrOl4adtxSe3nktd724bQsIV0NXIaa0lpee/z7BLo68G+i/KNhkt2gEJ9I8NcBh
+	 FMseavP0cmt705BhJE714OKpIoRm2VKvLzOBlqS7W7gUa98PB5arafk4g5QI+yvIvlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=1g4.org;
-	spf=pass smtp.mailfrom=1g4.org;
-	dkim=pass header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=DI3LSXNu;
-	arc=none smtp.remote-ip=185.70.43.96
-Received: from mail-4396.protonmail.ch (mail-4396.protonmail.ch [185.70.43.96])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=RyY9+TMp;
+	arc=none smtp.remote-ip=74.125.82.171
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227EE606A31F
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 22:47:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 227EE606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B461E606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 22:50:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B461E606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=DI3LSXNu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
-	s=protonmail; t=1792622858; x=1792882058;
-	bh=Z17GSdCX2AVlDCVfP3oFeK5ugdwfseV89dBX+YdznSQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=DI3LSXNuFBeE+EcHbvnsjHBo8gZt6ugvDQytWrBZVkbgOGdRxORikB3zRDw+oNftr
-	 u0D3oWNP7Gk2ry71jQKu64RfMCwvslOO6Yc9zegYEjuamADjECcfcDZWDdBAc2Kcmx
-	 Kshv8zl30rLHUabLo8GtqRt5X5BYdLDnEcLGG13A95hqqwTwiC38PYfC+VvZQYaMVt
-	 zSQTyt11yESyt0lr2Bj8IlvfEe/JNt2Bm1ZrkQzkb2sQgddGf+Nw9H9hzlRkdCjIQb
-	 G7xF1stddMB/CeewcQBQ5hUgWfVnMCcRg8q8QAFLUoyUvpnVVFE/F7OBggeUu+jn9Q
-	 /T75YrFJ7lN4g==
-Date: Wed, 21 Oct 2026 22:47:33 +0000
-To: netdev@vger.kernel.org, magnus.karlsson@intel.com, maciej.fijalkowski@intel.com
-From: Paul Moses <p@1g4.org>
-Cc: sdf@fomichev.me, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, Paul Moses <p@1g4.org>
-Subject: [PATCH net] xsk: restore UMEM flags after failed pool assignment
-Message-ID: <20261021224705.2078753-1-p@1g4.org>
-Feedback-ID: 8253658:user:proton
-X-Pm-Message-ID: ecd6710c2687fda68e398888edecd953935d89d0
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=RyY9+TMp
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-3282db206d3so2900533eec.0
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 15:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792623030; x=1793227830; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=yXmnWq/gCLjc3mMk4LjW2YKmKS1CMT7ul7aIdEl3gPs=;
+        b=RyY9+TMpDKnJ3t+u3ck+1VHaqQAkPe7TBmRYKdwmxCY0HDaqmbR5n2sNVlzOfMYPAj
+         5j7LkHCVeh3zmpZizQgOU2SVmc4aX37eParM5F48pWGYcSJWizcXckIHKHI85dIsJsG+
+         YlZY75nRohECN5KAusrqBlw2Hnq0AI3+eAgi6XacNjDpAHapMjk6NeWuDxWbihE1TiGX
+         f1VVHK7pWqnkbv7gTKE7Ee3nH4Q8MCHEVNL0UhlNOZ+XEznnYtmpJ+TsQPd4cZd/xnrj
+         319KWjpdst0WQUn/PmSDKOGam6HA3Z0krsu63set/ppRRu1VAMkLV0vQjzAYEoY2PUxz
+         31DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792623030; x=1793227830;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yXmnWq/gCLjc3mMk4LjW2YKmKS1CMT7ul7aIdEl3gPs=;
+        b=FjTp1UscoNRRcr6CTri5at0HCnLxS+MJoO8xBZfywRrO+ocbQlxNlqUAtQKTiDcKGS
+         K5HGHYfhj8OxIa9oFCO3KRYnvK1T42W6++AEP7UqC2PesV6zzZNy1OUNpuDsS4Q63esO
+         1gh/lkBbEu2vod12ajknJ1zRMP683sJGqgXTShzvynRT9wZLF+ebcyiA/fKFkLFfnHdU
+         mqhb5eMDxvCKQWvszPW/FHMR7Szg5p5nnXXn5DfoJKHzFwtWBawV9zC81Pdy/eTzCLcY
+         mSQ/U7pQ5VjlVZjHA6v31vO1mECTOb7aesvX2T2oJXmTvtyMw4mSHvBtxFzys5tOzM5s
+         XBIQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw07VHDmsPnzHMva94jBfBPuEyZJd7A8mdXkpaFB1qdq9yqcrqrgtCt8C3Dc0BieTnaSso=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJpGB32b6GnHckgu7IhEluHLT2g60Ht7nZ9VWwmHZCasoevqxVK
+	NqrrT91xTRbL/rSXXfBvY6gxI1xgUZ0bTCdKVSU4b/5tuy76Daw+6tBp
+X-Gm-Gg: AYBFou0is/inufyXgLqunxC5ORPuVPZ0ka+zGGrF4HVZF3BX5S4Ex9WWmk/Cqb50doG
+	cvK8TLk6zsYmcd4z3LRIqaxXVGQUGj2FEjQ1bb2pcCge1jkPJHDNTQ8xoGWaIrZXSH1mTMMJt/g
+	O4zfLlRarcRT5dxY5gwh1qOE25eGPyk3EM44UhkgQQfjadB4WwGfEiYsSsVK2xY15kvhsj/PufR
+	VhPN+SDylb5/OXN8CPzNbyOl503v0CXEg1anZcwH/dN0meFmZU17XnSzkN7RqUfaNLpWOvYynIC
+	Pl8bSvc6Oru2C+KFFGjmcTW1bA8V6b3Pi+0ZjhskMtMyWju12fv8svF5OTVhgdi17w7XV0I+XSZ
+	1yYnpAheLgeRd37TlxfFxsr6FtuayeicDIgEeY15YOz+aoyc4HDm67plsv81ptyhpZZSikiW/ib
+	I1PU9QV5f8g8jbwY8zc1Ej5BFdMEBOlgDqgzoQhg6/7RqQX2Ez14cSwLZ4LvsIRkHYBjErVePYh
+	TIICGYyNdhJwOOzB+anhtrBFPfEBxCnFOW/TSJHoRJuX4ryWm35rE2HD8lK3EEYdPu7C1umOuun
+	rk/vzuXPAvORADkVvx9Fn5t64kf/+s3y2s662Q==
+X-Received: by 2002:a05:7301:18a1:b0:359:9302:a526 with SMTP id 5a478bee46e88-3674c93ba42mr4415524eec.7.1792623029766;
+        Wed, 21 Oct 2026 15:50:29 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:1e74:b094:f745:1e3d? ([2620:10d:c090:500::4:90ff])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367405edd7bsm10580415eec.6.2026.10.21.15.50.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 15:50:29 -0700 (PDT)
+Message-ID: <fefe4448c7a9f9938c78f1597dd20fa96f180002.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject pointer operands for 32-bit
+ recurrences/latches
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
+	andrii@kernel.org
+Cc: daniel@iogearbox.net, kernel-team@fb.com, yonghong.song@linux.dev, 
+	memxor@gmail.com
+Date: Wed, 21 Oct 2026 15:50:27 -0700
+In-Reply-To: <DMAV87WUFF7M.1PU3M3CCZJDQJ@gmail.com>
+References: <20261021185609.607075-1-eddyz87@gmail.com>
+	 <DMAV87WUFF7M.1PU3M3CCZJDQJ@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,53 +103,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-xp_assign_dev() sets XDP_UMEM_SG_FLAG before checking whether the
-device supports multibuffer zero-copy. If assignment fails, xsk_bind()
-destroys the pool but retains the registered UMEM. A subsequent bind
-without XDP_USE_SG inherits the stale flag.
+On Wed, 2026-10-21 at 22:22 +0000, Alexei Starovoitov wrote:
+> On Wed, Oct 21, 2026 at 11:56 AM Eduard Zingerman <eddyz87@gmail.com> wro=
+te:
+> > Fixes: df4761bd441c ("bpf: Support 32-bit linear scalar evolution")
+>=20
+> sorry, few commits were dropped from bpf-next.
+> It's 32e962577d2d now.
 
-The flag also changes RX buffer sizing after DMA mapping. On igc, a
-failed SG bind followed by a non-SG retry with 4096-byte chunks and
-1792 bytes of headroom passes admission with 2048 bytes, but programs
-a 1024-byte RX buffer. On I225-V hardware, an ordinary 1514-byte frame
-is truncated to 1024 bytes or 1008 with RX timestamps enabled.
-Restoring the original flags eliminates the truncation in both cases.
+Uh-oh.
 
-Save the UMEM flags before assignment and restore them on failure.
+> > +			/* 32-bit ALU operations on pointers convert them to scalars */
+> > +			if (coefs.zext32 && reg->type !=3D SCALAR_VALUE)
+> > +				goto cant_widen;
+>=20
+> le64 does the same without zext32.
+>=20
+>      r7 =3D map_value, r1 =3D 0
+>   l: r7 =3D le64 r7
+>      if r7 < 100 goto out
+>      if r7 > 1000 goto out
+>      r7 +=3D 8
+>      r1 +=3D 1
+>      if r1 !=3D 4 goto l
+>=20
+> On little endian transfer() treats le64 as a nop, so r7 at the header
+> is (linear r7 8), while check_alu_op() makes it an unknown scalar.
+> At the backedge r7 is a scalar 108..1008 and bpf_clamp_scev_regs()
+> intersects it with 0..24, the offsets of map_value at the loop entry:
+>   verifier bug: scev clamp produced empty range for r7
 
-Fixes: d609f3d228a8 ("xsk: add multi-buffer support for sockets sharing ume=
-m")
-Cc: stable@vger.kernel.org
-Signed-off-by: Paul Moses <p@1g4.org>
----
- net/xdp/xsk_buff_pool.c | 2 ++
- 1 file changed, 2 insertions(+)
+I'm going to drop intersection from clamping, testing it now.
 
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 0ebd4d46f7ab..7750d2ec4ee2 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -166,6 +166,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- {
- =09u32 needed =3D netdev->mtu + ETH_PAD_LEN;
- =09u32 segs =3D netdev->xdp_zc_max_segs;
-+=09u8 umem_flags =3D pool->umem->flags;
- =09bool mbuf =3D flags & XDP_USE_SG;
- =09bool force_zc, force_copy;
- =09struct netdev_bpf bpf;
-@@ -268,6 +269,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
- =09if (!force_zc)
- =09=09err =3D 0; /* fallback to copy mode */
- =09if (err) {
-+=09=09pool->umem->flags =3D umem_flags;
- =09=09xsk_clear_pool_at_qid(netdev, queue_id);
- =09=09hlist_del(&pool->dev_node);
- =09=09pool->netdev =3D NULL;
+> Should bpf_clamp_scev_regs() skip the reg when
+> 	entry_reg->type !=3D reg->type
+> ?
 
---=20
-2.56.GIT
+Not clamping would be bad, as the induction variable would get a range
+outside of it's possible in-loop range on a backedge.
+For this particular case, I think le64 should just stay a separate
+expression, not a noop. E.g. during transfer() "r7 =3D (le64 r7)",
+hence no SCEV would be computed for it.
+I'll check if there are other operations that have similar effect.
 
-
+My take is that this is a separate issue.
+I can pack the fix with this patch as a patch-set, if you'd like that.
