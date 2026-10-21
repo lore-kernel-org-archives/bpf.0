@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792612753;
-	b=5QDMeBrcL152U95g4jvTRgzlwVbqQ4uB1rhCJdFJYTwMiaVUzWdkfVGHeeZKhHQeZWFa
-	 qq1uQH1gmGEpq45ozJwwi7i8GnzEDJ0agfyxKydw6xg7A5mX2mKqacA4wd1TXS1lQhkFo
-	 rXbMLb8E2VJYPReCGoBgGGBuz4qmALZHSg41+z7ADv4Mbm0+bxVLLjEnrZxmruORjM/Zv
-	 9ii6cNMv2ucR3QXka28208Wt+upVsPSIUuD8UbYzf/iLqsdQIWe77jYYpXpaxEzf5pBfo
-	 u35g/Jh9PLd+/ld5r+J+RapufG9EvEStV1ScvYW2luiP9H1TPtVwpFw7BjuXNvD7prw==
+	t=1792612763;
+	b=ByuU4n/09TT8sgKuA2uqr84/kdG6EJlQhd7Oh51zkK8dKNXCm0Uo0hZD26nxtX8UrtbF
+	 hyisdCvyEPPANgZjJooKwK/03TYplA7yQ4cOiRrQleYeHiNPT7qd7CCmi8QeM6j61FGcz
+	 82qe9HUllVIDC3//PVqmC1aiozIZVAEbAdzRE0qJ3udAeIDvq+nZFUEnvQpp2bRARaIbf
+	 TPBOPIijISkDtAlI8Dkxih8EvjSgyLhoQ68w+FJFKIwyTriXrWJhwis0S8yEwOWkgH+hQ
+	 CgLuquet7qxoOgzIi4M6UiHJBE21OLM6gHvWu/sFwlLH1oKiyeDhaNNEDUickqtnSKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792612753;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792612763;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=KsD1+5qDV4QT7mV8iObkp0UpjNunR2mAhMdpCp7lNXs=;
-	b=tjyetRARjEd8HdA+nfAf2ZAJpY+oCFH8XEa7q5xtAzOuPDVto1mmALXAnq3t7XpTqgZk
-	 08cAJIAHzjOhH9ENNsuqQR5L/9BhOB5NpfmIEP4AxnJYJUuKH6z1TMojOjGgzu5n92wRG
-	 SScObxVAmYAJOT6uxiTtmGrE2O4sNqUrcoHVtXCqKDnaKEMOgW+qTcMmNKqTUEqLXAHtW
-	 7Tdu85MxelHaHofK2pEaQX/ggsjE7It+L6fBqDCKrJq+LtdQ/ObHy4lkzTXvIsCK8nVV4
-	 7wLRPqAtESZcUORRCKsD8Nw071MuHTpqTwdt9FWfgNd4hcU7Dij/htvI1W9QeCxHmsA==
+	bh=cSq82ODWtlPwv9NWbfrCiBYmC+9lp/ZNZSCghuo9jNY=;
+	b=PNTLLOMGegEcHIXrluZTIx8WRwdta6bC16/XMw5DFEEj0VzcL6jk5RTG5bJJZbLiufEW
+	 Nme+Yu/mNc0VTCL6zax+i4i7Wy3OsXE/YIhG5TGcHrgJfk7K4/s0jUOaq230EAdKAVDAK
+	 YyHVElOjZlQAYG2htfwUAqJNS8wswmm2CQzUT7BogLbml5sx6AIh5+WEQZ7CYKzRbeRqT
+	 Z2c16q8RWmpO5i2NO82KVvcdipKdFYsR0i+HVzV1soT/cfvzc/o4oG5h3/Gv+MEBF32Ne
+	 XlSxPakWjOWdsrzbS6vKKKTpQET4lGu9k7qEvsZdnQC0He+5K4FiCkYtbNIgU2kbYVw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqmoVkDO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RtpnDB24;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04762606A31A;
-	Wed, 21 Oct 2026 19:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D48D606A319;
+	Wed, 21 Oct 2026 19:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nqmoVkDO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97D5F1F000C1;
-	Wed, 21 Oct 2026 19:59:09 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RtpnDB24
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A251F000C4;
+	Wed, 21 Oct 2026 19:59:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792612752;
-	bh=KsD1+5qDV4QT7mV8iObkp0UpjNunR2mAhMdpCp7lNXs=;
+	s=k20260515; t=1792612763;
+	bh=cSq82ODWtlPwv9NWbfrCiBYmC+9lp/ZNZSCghuo9jNY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nqmoVkDOOnG02x+NPAWgyBnquKdWN0g6r3nu8oQY0BFBy4nzd7ZlUldFbwc4Liztn
-	 nl+OW9EsEmG/m96pR+Vp++uoolszVmRz6ZW+YgsY+AAvV8Iurw9HMiRDQMttOVSgsO
-	 88gFxLl7hScsLTF/nPToKVrVbDCZO0cgE+qNx3OO/MNX3pskiRRLmPEdVsjyYJk41I
-	 zC+rIGQ53WZDEb+fO/qRUNWuG87PY1UhuiWZAQsq8DYP6mTYcC8fGRAOQDVbHzYRqZ
-	 1K0Q0vSxtu89bJLxNi/Cy352Y4Apkrc9xNYmFRIZWS4YUtwjYzF7WuGl/Sj4yvqLej
-	 HGHzOqMpFF5ew==
+	b=RtpnDB24temjgYrxtXmGajbdikbJba8pa5HNRYEKjRtbDe5lpXlmEhjDT/sS3jk0c
+	 N17fbdBEJm7xxqIX1BJ6QjaCK/nVjh7+zJFpBqv1UAh+PnccxAJD7GxP19BlJUQi7T
+	 iw0ooAN/3UZZjFG0/62O06pQtO7pe321v+x1Ul9CyG0+pMvlETHdhK4bpSEpXxf4+a
+	 Z7UC8aK/dJ/N8Ixct4rSj0YDBGrDiI0PGZKYmDUd2njpWBiGh5lcTNPt+hplEsDwMw
+	 b91NILcHytqOJ2Zc9lAWTRc7l0ekywd/kI8KRKR8QOJRnft4lBDZxZDERNMAuiinkM
+	 9mQq6kFMK8cVg==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>
@@ -53,9 +53,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>
-Subject: [RFC bpf-next 6/9] selftests/bpf: Add user page allocation test
-Date: Wed, 21 Oct 2026 21:57:55 +0200
-Message-ID: <20261021195759.119421-7-jolsa@kernel.org>
+Subject: [RFC bpf-next 7/9] selftests/bpf: Add uprobe user page exec test
+Date: Wed, 21 Oct 2026 21:57:56 +0200
+Message-ID: <20261021195759.119421-8-jolsa@kernel.org>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261021195759.119421-1-jolsa@kernel.org>
 References: <20261021195759.119421-1-jolsa@kernel.org>
@@ -70,213 +70,144 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that consecutive allocations remain separate VMAs and
-that user page can be allocated again after unmapping.
+Test executable permissions for whole and partial user-page
+allocations and execution of code written into a user page.
 
 Assisted-by: Codex:GPT-6
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../selftests/bpf/prog_tests/user_page.c      | 152 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/user_page.c |  31 ++++
- 2 files changed, 183 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/user_page.c
- create mode 100644 tools/testing/selftests/bpf/progs/user_page.c
+ .../selftests/bpf/prog_tests/user_page.c      | 62 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/user_page.c | 18 ++++++
+ 2 files changed, 80 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/user_page.c b/tools/testing/selftests/bpf/prog_tests/user_page.c
-new file mode 100644
-index 000000000000..ff51e7c598a9
---- /dev/null
+index ff51e7c598a9..1b5dff2c8ff6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/user_page.c
 +++ b/tools/testing/selftests/bpf/prog_tests/user_page.c
-@@ -0,0 +1,152 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <sys/personality.h>
-+#include <unistd.h>
-+
-+#include "user_page.skel.h"
-+
-+enum {
-+	USER_PAGE_ALLOC = 1,
-+};
-+
-+static noinline void user_page_trigger(void)
-+{
-+	asm volatile ("");
-+}
-+
-+static bool check_user_page_vma(void *addr, long size, const char *perms)
-+{
-+	unsigned long start, end;
-+	bool found = false;
-+	char vma_perms[5];
-+	char line[512];
-+	FILE *maps;
-+
-+	maps = fopen("/proc/self/maps", "r");
-+	if (!ASSERT_OK_PTR(maps, "open_maps"))
-+		return false;
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		if (sscanf(line, "%lx-%lx %4s", &start, &end, vma_perms) != 3 ||
-+		    (unsigned long)addr < start || (unsigned long)addr >= end)
-+			continue;
-+		found = ASSERT_EQ(start, (unsigned long)addr, "vma_start") &&
-+			ASSERT_EQ(end - start, size, "vma_size") &&
-+			(!perms || ASSERT_STREQ(vma_perms, perms, "vma_perms"));
-+		break;
-+	}
-+	fclose(maps);
-+	return ASSERT_TRUE(found, "user_page_vma");
-+}
-+
-+static bool alloc_user_pages(struct user_page *skel, unsigned long nr_pages,
-+			     long *addr)
-+{
-+	skel->bss->nr_pages = nr_pages;
-+	skel->bss->action = USER_PAGE_ALLOC;
-+	user_page_trigger();
-+	if (!ASSERT_GE(skel->bss->user_addr, 0, "user_addr"))
-+		return false;
-+
-+	*addr = skel->bss->user_addr;
-+	return true;
-+}
-+
-+static void test_allocations(struct user_page *skel)
-+{
-+	void *pages[2] = { MAP_FAILED, MAP_FAILED };
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	const unsigned long nr_pages = 3;
-+	long addr;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(pages); i++) {
-+		if (!alloc_user_pages(skel, nr_pages, &addr))
-+			goto out;
-+		pages[i] = (void *)addr;
-+	}
-+
-+	/* Back-to-back allocations must remain individual VMAs. */
-+	for (i = 0; i < ARRAY_SIZE(pages); i++) {
-+		if (!check_user_page_vma(pages[i], page_size * nr_pages, NULL))
-+			break;
-+	}
-+
-+out:
-+	for (i = 0; i < ARRAY_SIZE(pages); i++)
-+		if (pages[i] != MAP_FAILED)
-+			munmap(pages[i], page_size * nr_pages);
-+}
-+
-+static void test_reallocate_after_unmap(struct user_page *skel)
+@@ -9,6 +9,8 @@
+ 
+ enum {
+ 	USER_PAGE_ALLOC = 1,
++	USER_PAGE_EXEC = 2,
++	USER_PAGE_EXEC_ONLY = 3,
+ };
+ 
+ static noinline void user_page_trigger(void)
+@@ -128,6 +130,62 @@ static void test_read_implies_exec(struct user_page *skel)
+ 		  "restore_personality");
+ }
+ 
++static void test_execute_user_page(struct user_page *skel)
 +{
 +	long page_size = sysconf(_SC_PAGESIZE);
 +	long addr = -1;
++
++#ifndef __x86_64__
++	test__skip();
++	return;
++#endif
 +
 +	if (!alloc_user_pages(skel, 1, &addr))
++		return;
++
++	skel->bss->exec_addr = addr;
++	skel->bss->action = USER_PAGE_EXEC;
++	user_page_trigger();
++	if (!ASSERT_EQ(skel->bss->write_ret, 0, "exec_write_ret") ||
++	    !ASSERT_EQ(skel->bss->exec_ret, 0, "exec_ret"))
 +		goto out;
 +
-+	if (!ASSERT_OK(munmap((void *)addr, page_size), "munmap"))
-+		goto out;
-+
-+	addr = -1;
-+	alloc_user_pages(skel, 1, &addr);
++	ASSERT_EQ(((int (*)(void))addr)(), 42, "execute_user_page");
 +
 +out:
 +	if (addr >= 0)
 +		munmap((void *)addr, page_size);
 +}
 +
-+static void test_read_implies_exec(struct user_page *skel)
++static void test_partial_exec(struct user_page *skel)
 +{
 +	long page_size = sysconf(_SC_PAGESIZE);
 +	long addr = -1;
-+	int old_personality, set_personality;
 +
-+	old_personality = personality(0xffffffffUL);
-+	if (!ASSERT_NEQ(old_personality, -1, "get_personality"))
++	if (!alloc_user_pages(skel, 3, &addr))
 +		return;
 +
-+	set_personality = old_personality | READ_IMPLIES_EXEC;
-+	if (!ASSERT_NEQ(personality(set_personality), -1, "set_personality"))
-+		return;
-+
-+	skel->bss->action = USER_PAGE_ALLOC;
-+	skel->bss->nr_pages = 1;
++	skel->bss->exec_addr = addr + page_size;
++	skel->bss->action = USER_PAGE_EXEC_ONLY;
 +	user_page_trigger();
-+	if (!ASSERT_GE(skel->bss->user_addr, 0, "read_implies_exec_alloc_ret"))
++	if (!ASSERT_OK(skel->bss->exec_ret, "middle_page_exec_ret") ||
++	    !check_user_page_vma((void *)(addr + 0 * page_size), page_size, "rw-p") ||
++	    !check_user_page_vma((void *)(addr + 1 * page_size), page_size, "r-xp") ||
++	    !check_user_page_vma((void *)(addr + 2 * page_size), page_size, "rw-p"))
 +		goto out;
-+	addr = skel->bss->user_addr;
-+	check_user_page_vma((void *)addr, page_size, "rw-p");
++
++	skel->bss->exec_addr = addr + 2 * page_size;
++	user_page_trigger();
++	if (!ASSERT_OK(skel->bss->exec_ret, "last_page_exec_ret"))
++		goto out;
++
++	check_user_page_vma((void *)(addr + 2 * page_size), page_size, "r-xp");
 +
 +out:
 +	if (addr >= 0)
-+		munmap((void *)addr, page_size);
-+	ASSERT_EQ(personality(old_personality), set_personality,
-+		  "restore_personality");
++		munmap((void *)addr, page_size * 3);
 +}
 +
-+void test_user_page(void)
-+{
-+	struct user_page *skel;
-+
-+	skel = user_page__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	skel->bss->monitored_pid = getpid();
-+	if (!ASSERT_OK(user_page__attach(skel), "attach"))
-+		goto out;
-+
-+	if (test__start_subtest("allocations"))
-+		test_allocations(skel);
-+	if (test__start_subtest("reallocate_after_unmap"))
-+		test_reallocate_after_unmap(skel);
-+	if (test__start_subtest("read_implies_exec"))
-+		test_read_implies_exec(skel);
-+
-+out:
-+	user_page__destroy(skel);
-+}
+ void test_user_page(void)
+ {
+ 	struct user_page *skel;
+@@ -146,6 +204,10 @@ void test_user_page(void)
+ 		test_reallocate_after_unmap(skel);
+ 	if (test__start_subtest("read_implies_exec"))
+ 		test_read_implies_exec(skel);
++	if (test__start_subtest("execute_user_page"))
++		test_execute_user_page(skel);
++	if (test__start_subtest("partial_exec"))
++		test_partial_exec(skel);
+ 
+ out:
+ 	user_page__destroy(skel);
 diff --git a/tools/testing/selftests/bpf/progs/user_page.c b/tools/testing/selftests/bpf/progs/user_page.c
-new file mode 100644
-index 000000000000..6dd9417463df
---- /dev/null
+index 6dd9417463df..38f6fcb89bc6 100644
+--- a/tools/testing/selftests/bpf/progs/user_page.c
 +++ b/tools/testing/selftests/bpf/progs/user_page.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define USER_PAGE_ALLOC 1
-+
-+int monitored_pid;
-+int action;
-+long user_addr;
-+unsigned long nr_pages;
-+
-+SEC("uprobe.s//proc/self/exe:user_page_trigger")
-+int user_page_test(struct pt_regs *ctx)
-+{
-+	if ((bpf_get_current_pid_tgid() >> 32) != monitored_pid)
-+		return 0;
-+
-+	switch (action) {
-+	case USER_PAGE_ALLOC:
-+		user_addr = bpf_user_page_alloc(nr_pages);
+@@ -9,11 +9,20 @@
+ char _license[] SEC("license") = "GPL";
+ 
+ #define USER_PAGE_ALLOC 1
++#define USER_PAGE_EXEC 2
++#define USER_PAGE_EXEC_ONLY 3
+ 
+ int monitored_pid;
+ int action;
+ long user_addr;
++long exec_addr;
+ unsigned long nr_pages;
++int write_ret;
++int exec_ret;
++static const unsigned char insns[] = {
++	0xf3, 0x0f, 0x1e, 0xfa, /* endbr64 */
++	0xb8, 42, 0, 0, 0, 0xc3, /* mov $42, %eax; ret */
++};
+ 
+ SEC("uprobe.s//proc/self/exe:user_page_trigger")
+ int user_page_test(struct pt_regs *ctx)
+@@ -25,6 +34,15 @@ int user_page_test(struct pt_regs *ctx)
+ 	case USER_PAGE_ALLOC:
+ 		user_addr = bpf_user_page_alloc(nr_pages);
+ 		break;
++	case USER_PAGE_EXEC:
++		write_ret = bpf_probe_write_user_faultable((void *)exec_addr,
++							   insns, sizeof(insns));
++		exec_ret = write_ret ? write_ret :
++			bpf_user_page_exec(exec_addr);
 +		break;
-+	}
-+
-+	return 0;
-+}
++	case USER_PAGE_EXEC_ONLY:
++		exec_ret = bpf_user_page_exec(exec_addr);
++		break;
+ 	}
+ 
+ 	return 0;
 -- 
 2.54.0
 
