@@ -1,68 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792565962;
-	b=VDfw5PwbUeIMEqJQr/3PwjH76rB4zoFJ6SKB4z9CLm7c3nSWvHKF5BCs/DRPj59DCAtu
-	 8URGayizbosQ6KWIN52UVQoF+iS3NC+06xI6dPqjwvXMNRzhZ3/I0+ZmsM5W3HuvRvAC3
-	 gbcRX0+F4LN8SsyzjGdkyv7yvoDejg/7T3Sd81LSUReN8KM3l3HV/Tf/Cg4Qolg8iTpDn
-	 2+OGIrDejmr0ooXcMqsFLZHwBvIbi2SR2+DVVUf6sNDi0ctY4ENrFfjaXIotwlNh6LcJ5
-	 2vQM7d4M/cwWIcns9pPOEHuThZ9xG/DJVYQi7IpPJRCH2RQDE5P2329MzYblcbbELgA==
+	t=1792567611;
+	b=rsZICBBp6Qv6YBsd/SH9tq822NyOOwsS7o1j2uXDkdgzYH3x7bMqKAd444GZmuZyUyqN
+	 V1kZKnzz04kCrC6baNvr569buybClQMyJrkW1aEXFYGwuzXJVt8Phxf+v3/mguE39kboQ
+	 Xofd5d/r2wY9Uiu9pRK3HKqnTid6vY0ltRmvzY/I5Et9+xKbwXz84GRlIaYoxedZH6zxe
+	 DaduHbtEUyM9/9jVsjFiI9sew/8N8xAbrDtxdP/tFOcwemqLa1Tn0Z48eiPIB/jLqkzC6
+	 ICIMLM/NI2XFSFTyz2fHyRyWPzyvUmgebQqyUNnLZFtX/ltCiKzpYa82blmKMJpIzgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792565962;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=Lq4BkkFI9gjoEGXPVNlMaanSlhd6OXQdZ6pgRoMGZQg=;
-	b=ypSDRSHgrC6ccchFBxyCc7q2TBBeclXnWtsAa2kD1DeZbHuSyis62FZa8KNryNhjJEps
-	 YmV9Y+jaE7u+VDjGj7bFYqIMbOqy2GCJ0JGns3YskAtSlZJsNZDkBnjAXpxpkmSrj1NQR
-	 QVPZqN1X5qjA3cEbQ8ormEqDPmsfq7sQfzjXqtTwYDRRxegoOwwrE5NWlUS1cvOdCWZ2E
-	 fFwCo+Rp6xpiCHb/LF47i71++f9d59PglEVhL9ww1ynEkMxZvXVJvgTMG5IRlQk3sSf+N
-	 P4cAkmr5voQo1exQyjluwF95UgIjj2fEDZSxzSGP9aNehIXXYFObgYSxHAurQ3AoLOA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792567611;
+	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:To:Cc:Subject:
+	 In-Reply-To:References:Date:Message-ID:MIME-Version:Content-Type;
+	bh=MmY/Cqb/51x27vhDGhhClvRe7mwYyr7WYVbHZ3b+GBs=;
+	b=eOOThRAQn3us0gFB/5LW6lVOw3JBe6alA2RvLZValYzRQa3JU2SSL5Dr9ibAMHi0lC9d
+	 LoJ5w/09SZJ+1A70T+PeGAv5wPG6fXWr1ZtL65KlxznjJ/nlm2o4KmBYI/PFDE6u/kYfL
+	 8XtvwTkKNWe1+AthjCVOoPYcVBODsjt2P6fXuNk/LzF78Zg0wWKOa6FqcgjR/ylkpuzXy
+	 JYbaBIGd0YdtuH/Wa+Jzwvd8I9xbLgmKqHu6AYPDSZDZ67Xp1orvR+8MoBIAuxyPp+ARL
+	 312z86JRvjIRRTRnIDbyAU4yKjZeGNe9iQzqs+xWZTl0tSUmyD35cIskc68DzkBqMzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.intel.com;
-	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="FZb/wjp/";
-	arc=none smtp.remote-ip=192.198.163.9
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pVeemAe0;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b="hHJqxrN/";
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D76606A31A;
-	Wed, 21 Oct 2026 06:59:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24D76606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D774606A31B;
+	Wed, 21 Oct 2026 07:26:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D774606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=FZb/wjp/
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792565963; x=1824101963;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lFLwbry7H3titTEgipKlI5PazJVchb8dodkdEPspUO0=;
-  b=FZb/wjp/8geC96eM3GdYEe9iO9fcuCwGlr7sB/Zsy4GV65OMJrm65eUh
-   R5HxQv2Q5/KLoAz8nozV5QFCgyL93//lJbcX4vLYE/PxlFs4X7s7BpkiH
-   44WbUSq5lJTaQykY/6ZoKkW7ZNepqhSQqIoTrxem8rvxZOlZql7XnbQcE
-   X+q4cO2zkhZRh8W3MhNThIm6KWuAPn/X3dusWyZWNf1l8KDv5aQp6DkxW
-   YSXlg+EQYl6Vkb/X04AH7ofskfeXu47cb+s7oGUdkigmCVEYn9TnAfMc2
-   VSJc4AONphBIcq3dZSnjreN7zBYymKqOTqNHI+UngWpBZNT8IilGPZxNb
-   A==;
-X-CSE-ConnectionGUID: 0FYWC1lBSZ23ikK6dR8JDQ==
-X-CSE-MsgGUID: a9rPMfG9Rfu1VycpHgIVlg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11941"; a="1175511"
-X-IronPort-AV: E=Sophos;i="6.27,169,1787036400"; 
-   d="scan'208";a="1175511"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2026 23:59:22 -0700
-X-CSE-ConnectionGUID: UdE7TSTtSMuE6QXo0JssDw==
-X-CSE-MsgGUID: IrI3onQEQSmu1DR/ginlHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,169,1787036400"; 
-   d="scan'208";a="3014450"
-Received: from unknown (HELO [10.238.3.193]) ([10.238.3.193])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2026 23:59:18 -0700
-Message-ID: <b8fbf942-22e5-4b4d-865b-3b024b4e50c7@linux.intel.com>
-Date: Wed, 21 Oct 2026 14:59:15 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pVeemAe0;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=hHJqxrN/
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1792567607;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MmY/Cqb/51x27vhDGhhClvRe7mwYyr7WYVbHZ3b+GBs=;
+	b=pVeemAe0oC7+BXr2Nm5S22/CDr1Fs8NBhSgl4XA8ij0Z21b54dIk//ioyijJPBNvm5gT4D
+	/6vTxMT+dsxaB6br0Dh63C4vkY5QFwm3lTBGnxY6TS1A9c4AI2tMnvxQiQnG4YactPoaXJ
+	5DOfSCvGnhemTzZc2EDs9/9Rc5BWOTtTgaHNP8AlMtrKLnOD2Eb5BZJ2f1dHPByhLtaOi7
+	/BqEKdAA6anfukRbswNsV+hGU74DONvETLyzCKQrgz7ncu6kJ3M1vRi8rbzpCe4JT6fZ+F
+	Mj0xCn2S4VBVySzK6ogYPgWb9tsvnNXcDeAAUjcAs30V2xy+NzpTgUgtZbKaxw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1792567607;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MmY/Cqb/51x27vhDGhhClvRe7mwYyr7WYVbHZ3b+GBs=;
+	b=hHJqxrN/mmcQYiY62HFm6wBzMv2y5I6wLjiF79tC7PsdDuenyjthDa5EioiP6OFshnScTD
+	AhGTvvyxpNgL0/DQ==
+To: Tomas Glozar <tglozar@redhat.com>, Gabriele Monaco <gmonaco@redhat.com>
+Cc: John Ogness <john.ogness@linutronix.de>, Alexei Starovoitov
+ <alexei.starovoitov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Steven Rostedt
+ <rostedt@goodmis.org>, Wen Yang <wen.yang@linux.dev>, Tobias Schaffner
+ <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
+In-Reply-To: <CAP4=nvRhd1d+o8O045LB=dcYa2UudH7ZbG388wcwEX+JNBWY=Q@mail.gmail.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+ <20261001152042.124445-11-gmonaco@redhat.com>
+ <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
+ <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
+ <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
+ <878q3xtptq.fsf@jogness.linutronix.de>
+ <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
+ <87bj8s8ih9.fsf@jogness.linutronix.de>
+ <DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
+ <87v770uuyr.fsf@jogness.linutronix.de>
+ <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
+ <87ik2zryzo.fsf@jogness.linutronix.de>
+ <0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
+ <CAP4=nvR2i092924zszA8Qh0UUYnwXfAsa+7KjPe-NpwC+bbLXw@mail.gmail.com>
+ <8580176d216258e9008c344e0529509117dcc18b.camel@redhat.com>
+ <CAP4=nvTc297yQHz8aumZFAQ3+JK=5Z_=416WdosT0S6nHEeNfQ@mail.gmail.com>
+ <d2622f5c375ab26514d059b5949dee28f3f9998d.camel@redhat.com>
+ <CAP4=nvRhd1d+o8O045LB=dcYa2UudH7ZbG388wcwEX+JNBWY=Q@mail.gmail.com>
+Date: Wed, 21 Oct 2026 09:26:46 +0200
+Message-ID: <87ld7rqzt5.fsf@yellow.woof>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,140 +91,22 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch v4 5/5] pef/x86/intel: Always snapshot live hardware LBR
- state for BPF path
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Andi Kleen <ak@linux.intel.com>, Eranian Stephane <eranian@google.com>,
- Sandipan Das <sandipan.das@amd.com>, Andrii Nakryiko <andrii@kernel.org>,
- Song Liu <song@kernel.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
- Ananth Narayan <ananth.narayan@amd.com>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- bpf@vger.kernel.org, Dapeng Mi <dapeng1.mi@intel.com>,
- Zide Chen <zide.chen@intel.com>, Falcon Thomas <thomas.falcon@intel.com>,
- Xudong Hao <xudong.hao@intel.com>
-References: <20261021050711.4043703-1-dapeng1.mi@linux.intel.com>
- <20261021050711.4043703-6-dapeng1.mi@linux.intel.com>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20261021050711.4043703-6-dapeng1.mi@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-Sashiko found several new long-standing LBR issues (not caused by the patch
-series), https://lore.kernel.org/all/sashiko-outbox-179823@kernel.org/
+Tomas Glozar <tglozar@redhat.com> writes:
+> I was talking about preventing other (non-RV) consumers of
+> bpf_trace_printk from seeing the RV prints. Eg. if I create a tracefs
+> instance and enable bpf_trace_printk, intending to see my own debug
+> prints, I will also see debug prints for RV, unless I explicitly
+> filter them out. I get that on the RV side, these are mostly
+> equivalent.
 
-Would post new patch series to fix the newly found issues. Thanks.
+I haven't used BPF before, but is that not an RV-specific problem? If
+user has two BPF programs running that both do bpf_trace_printk,
+obviously they get mixed prints. They can either filter out other
+prints, or stop running the other one.
 
-On 10/21/2026 1:07 PM, Dapeng Mi wrote:
-> __intel_pmu_snapshot_branch_stack() is meant to snapshot the current
-> runtime LBR state from hardware for the BPF path. However, stale cached
-> PEBS LBR data can be snapshotted instead when a PEBS LBR user is active.
->
-> Fix this by always snapshotting the live hardware LBR state, regardless
-> of whether a PEBS LBR user is active. Reading the runtime LBR registers
-> can overwrite the cached PEBS LBR stack, so save and restore the cached
-> PEBS LBR state around the snapshot. This preserves the PEBS LBR data for
-> later output to userspace in the normal PEBS record path.
->
-> Fixes: c22ac2a3d4bd ("perf: Enable branch record for software events")
-> Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
-> ---
->  arch/x86/events/intel/core.c | 43 ++++++++++++++++++++++++++++++++++--
->  arch/x86/events/intel/lbr.c  |  9 --------
->  2 files changed, 41 insertions(+), 11 deletions(-)
->
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index 5dfb9e9156e8..07d1a8a7845b 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -2815,16 +2815,50 @@ static void intel_pmu_enable_all(int added)
->  	__intel_pmu_enable_all(added, false);
->  }
->  
-> +struct lbr_snapshot {
-> +	struct perf_branch_stack stack;
-> +	struct perf_branch_entry entries[MAX_LBR_ENTRIES];
-> +	u64 counters[MAX_LBR_ENTRIES];
-> +};
-> +static DEFINE_PER_CPU(struct lbr_snapshot, lbr_snapshot);
-> +
->  static noinline int
->  __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
->  				  unsigned int cnt, unsigned long flags)
->  {
->  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-> +	struct lbr_snapshot *snapshot = this_cpu_ptr(&lbr_snapshot);
-> +
-> +	/*
-> +	 * This may be called from bpf_event_handler() in a PMI context. If
-> +	 * a PEBS LBR user is active, the PEBS sample record has already updated
-> +	 * cpuc->lbr_stack. Reading the LBR registers here would overwrite that
-> +	 * cached PEBS LBR stack, so save it first and restore it afterward. This
-> +	 * keeps the cached LBR data available for later output to userspace in
-> +	 * the normal PEBS record path.
-> +	 */
-> +	if (cpuc->lbr_pebs_users) {
-> +		memcpy(&snapshot->stack, &cpuc->lbr_stack,
-> +		       sizeof(struct perf_branch_stack));
-> +		memcpy(snapshot->entries, cpuc->lbr_entries,
-> +		       sizeof(struct perf_branch_entry) * cpuc->lbr_stack.nr);
-> +		memcpy(snapshot->counters, cpuc->lbr_counters,
-> +		       sizeof(u64) * cpuc->lbr_stack.nr);
-> +	}
->  
->  	intel_pmu_lbr_read();
->  	cnt = min_t(unsigned int, cnt, cpuc->lbr_stack.nr);
-> -
->  	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
-> +
-> +	if (cpuc->lbr_pebs_users) {
-> +		memcpy(&cpuc->lbr_stack, &snapshot->stack,
-> +		       sizeof(struct perf_branch_stack));
-> +		memcpy(cpuc->lbr_entries, snapshot->entries,
-> +		       sizeof(struct perf_branch_entry) * cpuc->lbr_stack.nr);
-> +		memcpy(cpuc->lbr_counters, snapshot->counters,
-> +		       sizeof(u64) * cpuc->lbr_stack.nr);
-> +	}
-> +
->  	intel_pmu_enable_all(0);
->  	local_irq_restore(flags);
->  	return cnt;
-> @@ -4022,7 +4056,12 @@ static int intel_pmu_handle_irq(struct pt_regs *regs)
->  
->  	loops = 0;
->  again:
-> -	intel_pmu_lbr_read();
-> +	/*
-> +	 * No need to read the LBR stack when all LBR users are PEBS events,
-> +	 * since the PEBS handler updates it.
-> +	 */
-> +	if (cpuc->lbr_users != cpuc->lbr_pebs_users)
-> +		intel_pmu_lbr_read();
->  	intel_pmu_ack_status(status);
->  	if (++loops > 100) {
->  		static bool warned;
-> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> index ac1759a71288..07b32255e48d 100644
-> --- a/arch/x86/events/intel/lbr.c
-> +++ b/arch/x86/events/intel/lbr.c
-> @@ -1030,15 +1030,6 @@ void intel_pmu_lbr_read(void)
->  		return;
->  	}
->  
-> -	/*
-> -	 * Don't read when all LBRs users are using adaptive PEBS.
-> -	 *
-> -	 * This could be smarter and actually check the event,
-> -	 * but this simple approach seems to work for now.
-> -	 */
-> -	if (cpuc->lbr_users == cpuc->lbr_pebs_users)
-> -		return;
-> -
->  	x86_pmu.lbr_read(cpuc);
->  
->  	intel_pmu_lbr_filter(cpuc);
+Additionally an RV message only appears when something is wrong. So when
+there is an RV print, there is a bigger problem to worry about.
+
+Nam
