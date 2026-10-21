@@ -1,108 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792605011;
-	b=A5DUO1CytgZIlmPs5tcK/SAG5CUa8C/rMMTEMxfjcCN5K+JBD9dnlNfWrWFZ9ebVQPY8
-	 0QBcKTiUScqagI1JYaSrlQIYYt3gIvEyc6hQ4jlyPfot6PpwW0kh8rQ6Vm/UQogWPE7xx
-	 z8tEBmDri8wG/fhRnRr/kMtDdu4y2l5RnyzUgENPXLl9td23Yw1znpzLDRSYJlyDLBdRR
-	 xLbdNG5rw5PA/pbnoL9pSOF0qfA/VZMthIcY8jjyXrJ8oFfN5oK15HET9fq0WmPoNfAou
-	 3GfD0rpXPaNAeSFLhQYz0YwPROJ9uZYtZKBtsrxMP5Lf5jZkYRpcumh6rV+eiEhapgA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792605011;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.180
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792605217;
+	b=ydzK0TJvEICQzNL3SunGFyUrraQfGcHbNtGOHpew4TmwxmzK3JkvgyBmtxVY9WutG1JL
+	 iXpKhjE8kCWBMBYHKoDEyNYI0wHLxSfxCVme45tj2upUm0EXO7Dh5Tf3Dlz4PtHVRhzZy
+	 ZrWnJKBmMzajsuBRkQntuufRzseP8AE89BhUBnnmFxPjnhHWCmEHHF1J7QBA2QkDctMur
+	 QlkeA2xkyxQXkiuQbxjndPwySJOh5wj5I/hmcPGXGhBrE1y+w3e9B3VQHdHJL1jIclkMF
+	 mwLjEt5HUyEN1CLKVWDzw7B/nWnfVo/EEvs5V60IdU+238WhPi0IDr1KSgcXfG8KOJw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792605217;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=NCiFUlem6qW8F+mY1MeWMFDksPatkBHvYOmj1bKILX0=;
-	b=dKKCmMlGGyp7WNeQPpcKSm1Yo7ouGt2N/J1MqJ/kvJF/0BBVaUBWdNpG8exBdIx1zRbO
-	 kh2eo1DWi62UiROvyt6eyGHz/VnGyWtPfW7GgHuIr1hRr2tBphSYlcMs9CAOlYXA+QmxE
-	 BRD2ny+U9MFrVrUxTE8h5pwFh+XenlBrCuHl5utKUuk8LFeQrdrIZvZudzgsFLBakv3en
-	 1acrxfybNPYmhtKl6qPx0YMDcU2jEMP6ZoOFVnxg9oGBpfFUGR0k/SEPE3UUAeJrogZJk
-	 KJr91H3v2l5eSwEAzW04iTa+gPBS4Kk/ronk9DnychOUHH/VACoV1ltSmY8l2QCxWDw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=trailofbits.com;
-	spf=pass smtp.mailfrom=trailofbits.com;
-	dkim=pass header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=JknpP7YJ;
-	arc=none smtp.remote-ip=74.125.82.47
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=HRzIKbKLO9ua2/xR6UHeXwPGuH+fej2x2QAgvQV43mY=;
+	b=f417raFJzELVh3PMuHldRY9e3G2X3euQMxET8BddJ7ZPPG7pGJfpww2VBOAOIxcGxhVZ
+	 KXSoCFdfUbtoQHE77z+zo+y89fG49gdeRkZLeDIRPPjLahaLu2F5b54XDGDZlB3FAEihb
+	 x3/hfKnf80c/Kt6xjad0/0u6tmUvexkpqm6xTR8vB5st5XpF1GuikN6b/fTKHXu28aW6A
+	 r/3EDKo3/qzxpgFyVEnAC1GSjfGBLlmerTjos1hMM0lLFqEkRBpWURJ464Z1HIcFjZ5+y
+	 07Vd6Ol1gb17Y0cXC9q9SYfLGl1jTfUPhOf19Ds5pIeMi0VU5MbPKSTul93cEbSA66w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bbx+Yu4t;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.180
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77CC606A31A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:50:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D77CC606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A25606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:53:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20A25606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=JknpP7YJ
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-16079d54c17so1860766c88.0
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:50:10 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bbx+Yu4t
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc4aa18f9afso464937a12.3
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:53:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792605216; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Oy2DA5SGuvLoSecbQUvdFft2OGwRLv8S1YaUTEkrXhzIBiP9Elt35iLTXq2RBhcwhL
+         MDEgKbPhJZUzrb/NHvVOZjnbTlIKrnp+bKA8N8idq0L2OaHTgcGDTBg5Ap4G9NQ8BHWx
+         Y0kx1xz53NuCQmyfcX7CcM7jhqxV+sAsEKf+t00yZ8Ck15R3vAgGq9hzK6aAUuLyfSo9
+         m4DGT2q/6tFf/VPrQJLm8SPNHW++Y9TAovK0pi040NzS+ZWJUSk25bo/xDdc7hWv0xzT
+         73N7i0orGCsPLnud+sfE1HWeqcQUQdSiBr7jOv0h9tRGCH7LO7o3xE+CyE+ZzMMGFAXs
+         D+8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HRzIKbKLO9ua2/xR6UHeXwPGuH+fej2x2QAgvQV43mY=;
+        fh=BY3IHw4vY7eTSZb6EdDQAMFyMCfTA1plVlz3DoMiYCk=;
+        b=eRwnmwU9hXmpDZcHIfihzj4JXl8F/BuC/WdbPMRgZLUtInsTBr9KLxGPzFXoFyr0N7
+         MfJaUPyxvo4Ob3rsKoERjRDMK5bYGMBObB0zuZ/c6tRnlV2Z3RwiLezAYbp+b55GXCuQ
+         EFm5GjasPzuSN+3Ya/MxaCNfyRNWXI1V2vxG+u8F5JoJsgAynaSdUjHi+jbHrmgJjrSi
+         VYOAWYI+PWty8afZW0yG8oex6qvKRaYq+0TgtRgoeUzXa1UPUkVB22iW+3/A0e9zFltI
+         d+JyYlli7zcVL1jbHQDY7gOiH08EJbtANO1ITM4gFYokUSm0uZpDnGZzQuXz7pTEWjVX
+         IX9Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1792605010; x=1793209810; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NCiFUlem6qW8F+mY1MeWMFDksPatkBHvYOmj1bKILX0=;
-        b=JknpP7YJuHqK4K8JU+lEEevXFO0Z8hDPpOJEfVQ2tG7d2WjPMCUFv5PHYoIQSxw8WE
-         nG8/1T3sApIfPTKf6r5g1HqBks6vEK2p6thndOk0qY7sL1QECx3lhjqY3NwIQPs/+q2Z
-         rpwkpQFg6hXD/4u8LXJMUtXipenNIKBFmas3T1ToHPQ/HmS6XrqA0Jh4nmTX81FOR4gx
-         s4Syr3pjelkDiFT4JaghhJ2UJEBDGM3y3l9EvUQWmDF64TZB8aa0jarD9CqxI/lFeHVa
-         qoIE8Y2wsFXK4qdq8EloCuDg9Y6dSfKSWhpNK0q3l0zvjcGKOKJSitUaoyuPO3G2IlUj
-         GQog==
+        d=gmail.com; s=20251104; t=1792605216; x=1793210016; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HRzIKbKLO9ua2/xR6UHeXwPGuH+fej2x2QAgvQV43mY=;
+        b=bbx+Yu4tyXLlbw4MnlGLTvddW1yf7vyK8FTcqgruyy9PZUNHGwqV6UtNX8F5po3in9
+         wLR6thuruF+xn5xbrbi4KJtXndc46ra1yeI2RRCvABOrzb1qbuj0V2eyRLPapvaEg9HW
+         8/4Pw3rVD/HRGHLXrjgBoc6MXDKiqBzBCeDchiNen2q5Z2aGwfzoPtdYW9fAoa3RuMq9
+         AVm3AA8ZB80Jixd7Yxbzl6uqA9QARcfd64L/0KppQEZMbjIV1LTBqwoTo79Q8o2wgurA
+         HDJTKkOcWyCXcB+0jd3gnzpn/iu5m4sX+gw+rLwcnUFYB+yyh+O7uZ3wfplsV9eKat6+
+         ceaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792605010; x=1793209810;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NCiFUlem6qW8F+mY1MeWMFDksPatkBHvYOmj1bKILX0=;
-        b=spgR1GvhnDQGDGG38NC+NmGpo70MnHJN0njCfb9CKlH2MrrRykHcwIpfxQK3CvkLn7
-         qaK3k4bdd+dLL65P2yiVlbM95FV9+raOc1R1aVCMF81lFxqlCxkfU3r/rxBaviMgWEtN
-         8IMeX5O2fcrU3IsVcuT7jkmFb4UvFlBrpkTnlExz8uhKzhYs8M+m6eXImgUuBwOQXpoS
-         0Ds8V5CW56+8tE2Jln1OQIcaXADzd4hOZINygHCnJvUWJufLlRYnd821VbSkKFYegM+d
-         c4NMhATLEHFHbT+Dto9VP2+3Y4pmSWUIRSHzgnWdhNEKWmom0MTxHjnQVf3WLEIOThu8
-         oFTw==
-X-Forwarded-Encrypted: i=1; AKwUvBzXMrmbfedstvKHSArU17YhtiYPFHMc5J265Q8518BD/p0SqITFuJQ6T0eVPF1eJkpKwaQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIv3SMXoPwc/7MhL7JYkm47DGNUyj1HhYK13mecyLCNpATprt9n
-	M33ZmDcs0EyLr209kT3WXh6svGGFN9g2SwIs706A/6PIG2roTF18q/FCmZa5yZ/vxao=
-X-Gm-Gg: AYBFou34wLhE/OBMKz8g4O9uHzqkvjioo9niznSp3znJbZa74NFe4E/L2lmu+e5TN5k
-	+hidzL7DiS5zKVhOvfxA5Z2siir0npuxQF/5ozuTtiG6dYllYuVOfhCU5LmGp1yriIF2rCxYvul
-	WrUQfHgB7HpVdtRjoyEtYAJEllLwFtjo/sI7UzL5Z8ZakP++reSBv9GMhFNFDvY9qGy4kDZKr7Q
-	jvJj9W87/y2hjZ68xzbzS3Zyp6n/jpp3LVNVBHBHNJLFVC01BVNVUVYs5rMskA2htzOodB+pYR5
-	cHTJZyBAALZMS81SEp8MO/exsQO5TWTtb7+/btwNGblBoB2EQC67c/e1UrvOsKH/qM+c9b9ynGl
-	09/WE/hwMpajofc5PE/9CdTXA5oGeTseP9KfFvIlUCzPmZgh2p9HSdGs4D0B2ktvd12RFsRRA+l
-	S4OngDEevywiREu8hMCAb6Dq8xwcHZrQquekTZSCaVIQqm1zOeVeHQ1xunr6RWbrgWpdXD2oalM
-	twP9T1Dxf6yqrOEQLWG0xSAU90miMR1ijOBA/YHjaUleyr2NiJQDPcwBNe2OVrYe5ZSgx4W/PuI
-	RYeiPllEcAXFAijHcRcRATgalAoM9k5zp9T9vZDMVHifyRJC5pUi
-X-Received: by 2002:a05:701b:204a:20b0:164:8e14:4939 with SMTP id a92af1059eb24-190a4f0471fmr3741902c88.10.1792605009716;
-        Wed, 21 Oct 2026 10:50:09 -0700 (PDT)
-Received: from localhost.localdomain ([2603:8001:5f01:8bab:d059:e601:becb:a5ad])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903ca044d4sm8226137c88.17.2026.10.21.10.50.07
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 21 Oct 2026 10:50:09 -0700 (PDT)
-From: Artem Dinaburg <artem@trailofbits.com>
-To: stable@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bp@alien8.de,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	dave.hansen@linux.intel.com,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	hpa@zytor.com,
-	ihor.solodrai@linux.dev,
-	jolsa@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	mingo@redhat.com,
-	song@kernel.org,
-	tglx@kernel.org,
-	x86@kernel.org,
-	yonghong.song@linux.dev
-Subject: [PATCH 6.6.y] bpf, x86: Fix trampoline stack size for 128-bit arguments
-Date: Wed, 21 Oct 2026 13:50:04 -0400
-Message-ID: <20261021175004.1276-1-artem@trailofbits.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20260707; t=1792605216; x=1793210016;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HRzIKbKLO9ua2/xR6UHeXwPGuH+fej2x2QAgvQV43mY=;
+        b=pzdRQPPpN6W5FOeYQGRFmOOv+disceeZSq7MGQ8b6zWHQ4RKZLmbiL7tD3K43VrUa2
+         u+GRz1V3aMPmwJecImfPS17Y9zzF3fqw+1RMVbvHSJesNjqkgiUSLWlwo0szslKGNsyn
+         TFwcXr8z8kWdyG7AoCFopG8cIUTDyMgRIeDfsvxMZcurd+QuVVFAhjw6HjqoCQGBK1vC
+         XvozROV5ZCvF0BPrkawhMPcRGW/H1edXdyzZwntNeRWqLIShhfspGiKT/SInFeZgZB3p
+         MyhRyOSB+MfvR8hyU69f5M7s3HvKTJjyQg7N+6Tja4hNHvicHF7MdQtj0KkgeUZ0usdQ
+         HTfQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxrCY8/jT+sCRlss8uu5mp+Lj56SrrQVqMmE/iGQ1NBR8/x5E0o6LDUI+UBGwNqmYMxSe4=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK1s1OJFhiiCQE70SfzfTcPjugPqJW1+l5VSpL90LmlAgo2BLh4
+	ddWEQAX8FvHEPPYo4oO+zRZns92l5CPDBDQK9WJSh1aTPc/I6GZpZLoJQljkeTu8GzKNEI14cM3
+	uv7xkFKIgQrq55JXDWPxTuMTsFyP4ZHQ1vQ==
+X-Gm-Gg: AYBFou1gsf/XMtpu5+Bb+vGzCdT7yY7y4F6cHpcSvSlTKNZ9mhyIXyHKnyTjDwJDrKp
+	IobjafpaHwgP+pGuQIhhaP+xS8rNF5cLUTXMc7nkE+Sh57PsYwfrrT2E903XUK0IX6a0FsXt5tl
+	0b4D1pQK+O9wezp8lyf8JQUDQ2NlZj1JTVilkz0FGQhr+z+PpmcRA2xY9ySYNgWf3geNXTDRxxA
+	5H4fe0vr67Wm+suXG20gPst6UJX/LXTlzovcZIIYMFB44kpfMFP5i2rbR5wqJPnjFdw41pkFTn3
+	SXn37HGCdB5BPKuWr78Yq0yudpff0d1NhRzYe4v8vij0ACPYinnG72FrYx/iAmpa38XfXPpftuS
+	1LXWkeipZIQuDVgu9L/egzBGEepSidwGx7pjEYCaSNDbyM11JLHRQ5houshA6brMaPfUeLqnRuH
+	7X5joHh/u0NIXVN5vQovVXO/8LNhyQpKofk60TO3xgMZwzaSGb3JA=
+X-Received: by 2002:a05:6a20:7486:b0:3dd:85aa:4524 with SMTP id
+ adf61e73a8af0-3e287dc99abmr2330743637.31.1792605216458; Wed, 21 Oct 2026
+ 10:53:36 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -112,61 +105,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261021152455.71524-1-leon.hwang@linux.dev> <DMAO0T9BL4YQ.2B3YU3ON26N6L@gmail.com>
+In-Reply-To: <DMAO0T9BL4YQ.2B3YU3ON26N6L@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 21 Oct 2026 10:53:24 -0700
+X-Gm-Features: AclHuK8_cFMGa7PixGohqfLm4WTItvsVIneWtEgSW9zyjr0DgVTz99PynKBUK2Y
+Message-ID: <CAADnVQJLcDW5HyZO0GEYY0yWtERkULZxYEQs8hEzG19_WogGvw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Pass extack to bpf_xdp_link_attach
+To: Leon Hwang <leon.hwang@linux.dev>, bpf <bpf@vger.kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>, 
+	Martin Karsten <mkarsten@uwaterloo.ca>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Yonghong Song <yonghong.song@linux.dev>
+On Wed, Oct 21, 2026 at 9:43=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+>
+> CI is right. This looks odd,
+> but instead of CI's suggestion:
+>         case BPF_PROG_TYPE_XDP: {
+>                 struct netlink_ext_ack extack =3D {};
+>
+> do something like below:
+>
+> sock_map, netkit and nf links will probably need the same when you
+> get to them. They can take &extack too.
 
-[ Upstream commit 814cba835ef648e0c5eb79505c96c0493b29eea6 ]
-
-btf_distill_func_proto() accepts a function argument up to 16 bytes, so a
-128-bit scalar such as __int128 reaches the x86 trampoline with
-arg_size == 16. But the current implementation assumes an __int128
-argument only needs one register, so the register save area is
-under-allocated and save_args() overwrites adjacent stack slots.
-
-Compute the register count from arg_size for all arguments to fix it.
-
-Fixes: a9c5ad31fbdc ("bpf: x86: Support in-register struct arguments in trampoline programs")
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-Link: https://lore.kernel.org/bpf/20260729050204.2586457-1-yonghong.song@linux.dev
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Assisted-by: LLM
-[ Backport to 6.6.y: Remove the struct-only guard from the existing
-  unbraced argument loop; count eight-byte slots for every argument. ]
-Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
----
-Hi,
-
-Please consider this backport of the fix for CVE-2026-90358 to 6.6.y.
-
-The backport removes the struct-only guard from the existing unbraced
-argument loop. See the bracketed backport note above.
-
-The complete fix is already present in 6.12.y, 6.18.y and 7.2.y.
-
-Build-tested only as part of a cumulative 6.6.y series on x86_64
-(allmodconfig, CONFIG_WERROR=y); no runtime testing.
-
-Thanks,
-Artem Dinaburg
-
- arch/x86/net/bpf_jit_comp.c |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 8028a5a4ab64570022c15bfdf220c4033ad0d4ab..3d33aafa2cc26541e64b37960ce20a06ce5fd2d8 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2467,10 +2467,8 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	u8 *prog;
- 	bool save_ret;
- 
--	/* extra registers for struct arguments */
- 	for (i = 0; i < m->nr_args; i++)
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			nr_regs += (m->arg_size[i] + 7) / 8 - 1;
-+		nr_regs += (m->arg_size[i] + 7) / 8 - 1;
- 
- 	/* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
- 	 * are passed through regs, the remains are through stack.
+We don't have time to do this back and forth.
+So I dropped the series from bpf-next.
+Pls repost the whole set.
