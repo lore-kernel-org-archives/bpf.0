@@ -1,85 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792620247;
-	b=METeyvttjlMOE27x3+ObeLSWOCtdahs4lN3Jf8hmSL+lKjTrjuohOJn/VEToGooHen1W
-	 UhVwBFc9omCQSsFxb79plFqgrIiRFs2BkfcxMu6SQ24MPgnopmO1ajDgDNZs0vld0k1Sr
-	 oY5fc9LxOfdfXQLeMvAGl+hCQW9pj41QET1ORR508xlglAT4fL5Aq4R1X5rqTNfElmAQg
-	 A61scSmju2ZAa7oe/31Nipba0uFYIKInD7l0EMarEeFYR6oDWPdZwiPMHPdDaaZqIOHky
-	 OF/RRypxlIxjnbWQkVNaVPqI5gvxV4ve3cYcEAjz18Ht1xmQaPWzn8C61cafU4Kbjcg==
+	t=1792620528;
+	b=PuFB4gtkXDPkDDGWL+iFBatVkf/Jbrf5GZSS9nUJfGoHOr6DRuRXqm95egbpvNZAHR6+
+	 NxpxfuCXUO9eGzC+QMq4iXqHjYA7JcF7bbFjtD5jSe1fHWDe9zg3hdWsxG2bWpYO2ZvOJ
+	 k5au5pe1Dv8PfDX19NbKR8zgD90UxSNZ/IDExYWFMbuiUZTqbZF5UvCEtd4gWvaxsLncA
+	 hCaMIPvAj2gCrr0Ccp+NJtSMCcd9O3A+UJx+DM3aJqxIzX2loYPOW/SbMUn8JWeSK1Fwi
+	 kjIl7QX+xtrb2S3BHo/PC0IdXk4T7KExGZhRdjem02XkK0l1vPmibE92zaqPHH4qucw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792620247;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792620528;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Subject:From:To:Cc:X-Mailer:References:In-Reply-To;
-	bh=lG5s4Mw3QlF02WaVqxKlut5zcHWhED5dwlHSwNS05WM=;
-	b=fz1kyYOAb/xFx+R/lyeJMCd+jisjwHmKiTcqBD0fV9907i8B96hcOKDApbI2Qk2nTpxF
-	 U/8kP4XT/tA+nJQ8rYOPfzA6V7+Ksjbr9MR1B2hixrt42mPgoQQBqhMoHmxqMJHm/u+mD
-	 /MmZ4EpZA/oQpCvwE1OS1Zgx55A4oFgl7SaAkidwy2RHDT1bcb4GeW51x28Dziyx67FML
-	 Bgja4mKHz0LvFgVrsotsNSa2xMAB0VhVpeNpOmVI7D9Tduw9QSBEjTMOn7nvEuw2P9Bmb
-	 F7OE4dSWw2yrI4WBceyoPNGGuKmuUDAzcs5hQ/b2Sl1INdfS4C+aPgooORR6jh1bAaQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=pz4tEpSynEYvkFogLqp4Cw8HLtwWsTiM4dIDzA9K+QU=;
+	b=TfywwMN1QZbmPORjuRulOuBzRy6LprxeoU4bkCIV7JEgUN2i8kecjRu6+U1Rwj+rQi12
+	 8j+yc8MkNH/jJS2Qtn15UxRiw5VYBGV+Yba3yAftlsdYJT/qeh7WtKv2igiZtVVLncNaQ
+	 85gKUmkIqEcwCns4NZw9WYsOYfdbnI+ETDXY5YUQXui8DlPakh89odwG2XApIhWWI8nOT
+	 6I8eWqvBlgExynhLWxoUyPc/UBHlzMnwYnNlrwAAOpRIgvqhodUKdb9o6EQcr26vlkghu
+	 BrEiIaF/Mfrzxh6i8GVinfFhX+uJCEM4WiIdN5hPRtYdafibol1091A7CLs1zGGjtpQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="U/VM8qeJ";
-	arc=none smtp.remote-ip=209.85.214.176
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fH+Z1N7P;
+	arc=none smtp.remote-ip=209.85.214.179
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3AB3606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 22:04:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3AB3606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D2C606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 22:08:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 04D2C606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=U/VM8qeJ
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2dd76b1361dso8410535ad.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 15:04:06 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fH+Z1N7P
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e96502e447so9149365ad.1
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 15:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792620246; x=1793225046; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=lG5s4Mw3QlF02WaVqxKlut5zcHWhED5dwlHSwNS05WM=;
-        b=U/VM8qeJFsFQB/Tf2sRDCj2FteWlYuHoaLGK8sGh6CW6BWzt3KQ/AaBqLnq45XOEMx
-         CmSWWqriULFtitXY+tKjJ+9sv7eEQweX7ii5zW330nAQ5LdZNCVqg9U/rPus85ctameS
-         1b9mBBsE+JzixQ0F49aC2uBAljszdmIKmZQrDTjsNReyBleoEOzHLk2ucmn6c27uZYCz
-         6ZMgDkE+pFH+dckVBVV6uXHPVaRFWVvT2wKHOWOILH8Fu9GvLa+4s+uulbqy5mIeAC7E
-         OnndhkOfw0IXUmxnQr2ZZIpe1TrblQMMd2+QLsVa2sA1Z1D0Xs4oscpv6Psf7IUBGJHY
-         9iJA==
+        d=gmail.com; s=20251104; t=1792620527; x=1793225327; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pz4tEpSynEYvkFogLqp4Cw8HLtwWsTiM4dIDzA9K+QU=;
+        b=fH+Z1N7P2Tgupp1W801NO1dPhcYVH7BamqOzAtUSFPWa/HXms9IOE8PB3qIpLkGF2p
+         M6W9UNIGqgPAvzS9lwzuQSJgeehzTrkvBi7M5tpLFaG39QjY1tPMVA455CJSip9zAPh6
+         Xto4MKyHaAhU2abCXkvRAkJ3fLhyq9Jd/uGFhGegmUOxDVKMPzz/L1KisFCexrJ46wc3
+         lcGdsWAmZOebA9yMjuFjhzsGRah6wukkq4e2BKe4WMcl8NGNigZSsTqTAd3zKb9Nd9Pr
+         fK4cznOcowRJhBnPSc+V9DHwRNyNr0iGR6C9+GXR89hxEhMRMmx/x2Y1SQu7yVEHulqc
+         Ktfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792620246; x=1793225046;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lG5s4Mw3QlF02WaVqxKlut5zcHWhED5dwlHSwNS05WM=;
-        b=mDaAekTD7XTICnqldheojrai+h1MzQ42TQR9w6mtGkY14/jNXX4LmXTL+LdOAOadun
-         pY9D7rfndEgJvaSYcBb1cEpeHewN4GyNBID0mLHsQOdix0oBULcXUvd9btSmMoEAo5UM
-         2rlxuH+LlU4t04DRcimUFE9GLB4gbPKKnMqOItxyNCP+uIH/hMbMehXMyivnpGQoTEse
-         S1bouUUlOSnUHgWO+/56fKvCMeS/MAirzNbQLLIvin7kDpW0AVF7qwQaTi9m8Z01bipn
-         8427AR/n7mJcBbWYQbjnGFLwZepFa+AICw3D1TTO3YdjkdSLjfQ0Hdgogj0sayULAsv2
-         aqwA==
-X-Forwarded-Encrypted: i=1; AKwUvBy17BLV6BDUJUBAD4BWPDHa0qZ2fS7Kyw5lBB18nB49BjfW61Exs753v6lfzsZp9lfbbBI=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLAo3MS7ZprGtULN8soV/seiiXSPn3qk8rf2oQgkNNTHUu8VQZS
-	/k3DSlpk/c6DURLWoaXMxdeuOpF0qPmY+Fl6EdL4urrV9bpfKQzP8okO
-X-Gm-Gg: AYBFou1v760k3VwEiiXJ2aPufv2Zaew7GDwAI3MA0tXxSz1GHnxuZ7QVzAF8pqCLvdv
-	qKWiFX9JL2ECW0MDZgxudB8vH33PDB4HVhv/YqE3HTRDhUV4QDu87xcsqw3mm9AFlQ82rzmHT6b
-	N/9BqYun/5LaKTitSl75jpUS2sMt7sN3yvZGYz5sicyW0DeNOccFTZV/WyZfhLHXLpbjifRhOft
-	FbXg41n+966Ddzc4yAG3e3wtnNUQshn+e+/h96Ur/W913EtphQXFd0wQfN41ZLWEhv9UGb/H13w
-	fpHmXRnHR1U4JnJXRFB94Z2+gQVD9bBVmjeY4rUBnNtBQxUDPx7fyH+FXvcmWsRP/2PIoIPjeo5
-	FOO+DFW8tN8JzGsH/uuaBrv6+H0YHyLJTcRBR4qO4dj61PkwskJWUJbbt7XhbzvkkrjmRqg+l3A
-	BwAjl4QgV9e8GkjzYiVrG8IDG9szzl47BjzEGDsobw1Nq6qEQY6bvRvOt4MtamZBxBf6XLiYQPl
-	w6x0FcRr/K58KFZbxVPxgU0wTeOIcxesJ8Unsq4kjPYiOGfUn1mG+b529BZgj/6IoyiESIkd+hC
-	Us7T/fLjwi0jVNEWZ37J+BlFOLJdHdbgIz1tx8TJs+gT+wnWUdhoWfDZ3uCoAu7qfRX437Um83b
-	jR0KjfQ==
-X-Received: by 2002:a17:903:37ce:b0:2ea:19bc:2fd3 with SMTP id d9443c01a7336-2ea43e24abemr27977835ad.24.1792620245977;
-        Wed, 21 Oct 2026 15:04:05 -0700 (PDT)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b4557c8sm15852745ad.46.2026.10.21.15.04.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 15:04:05 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1792620527; x=1793225327;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pz4tEpSynEYvkFogLqp4Cw8HLtwWsTiM4dIDzA9K+QU=;
+        b=D8BAayAS37v45Um+I3Y3BVbCwGhVn4JFpb5Ml6xuOl4rk/RH0W3UqHAfnJoPHY1YJO
+         E9jl//RvoCkTs8Ay39wV/bqHDkl7V6Nbdzzx02vJX9XaA7Wed8dazGnuT3G4r+WuP81w
+         GbzXzxqBIcvpqEupAKDJWpp7hlkGRf+whhPeXd/90fFejQsoEU2lb/c+xp6YoQvXQSOq
+         o6UYCdOy/fVeRWa4yOZQpvvdlLuxne8HZClYCQkJZ3yPnX5H2TAYSZ2E0TYxlx6bbtbp
+         2rGzhMv0wOH2QYVVSkXX/05rlZVnsj9nbWMaVPFFshuzTWDSZvoDZd8VJpbupuUnR+eS
+         Bh5g==
+X-Gm-Message-State: AFq9FYIP17xv4ODLV8WGVm/MRVUOndpftmAAdbBlsNgf0KRpiHZv7/J5
+	s9DuAyTBaj77G+eRE/0oW1joduBoiXy9KMtvwrxCLFgNYbb/NUnyh6lU2GEIcg==
+X-Gm-Gg: AYBFou3Oz5pcabDYfrEQvnDhbvi7gpu0WYHLWBQSImKuwur8fJmRvrzvr5wcVqAkJX1
+	dKsNOILW4HJ7CIg7QUWJJ24T+6o1aH97bn7HbjEIid/kqdtlkr6yDwwAcaNNRnN4SEXQ2zPZ2c1
+	u8CCtCoXCyxxRVzuIOC/BJhjQzOJOkoyj2cM7kTvi5MjXSTDGv/7DioXgKSfyvp4HYwsHCRMbbC
+	/YJasgtep1ev7Ce/AOKincTxaSz4laMkNU8Im/iBvAJ8kiTZNxVkg6HoNyB2yGY0yABqMW4Ui0u
+	WBPckLmXCmEqIVpy1O4ibuY6h+PJgb+eDiQfrM+3LZ4SpmlDzsNthLGOABIKPSgdjoyEg6TpAsz
+	SuBI5xLfxH0M9/BnJemU/SpKDl3JQys+hvYSxvm0NE3ROWtAaynNu7CbaqGsrWcKObtEYD1/xUQ
+	I4nluBBd19Vh3aiw+jg1AhFSd1UMVYLdoFK1ULbN+r6ZtKgNQXADf21uBQqHNXAzGpnM9dHMxAA
+	67Wk5Ax9SeE8b9EJ9JYCiVGYbk/USZKaf+65hXe8jDVU5oP5mxW++XhDkld58/DcahKPOyhbQyt
+	b/2NKY9x/L+b/TjwGCa7rqVo78wlDzcbjHsDjDmwgPv0l4y/Croir5pXEs3edJxnoSRafStcJyg
+	BM50IsKUG2WD3zREZjD8MD7Zn
+X-Received: by 2002:a17:903:2a88:b0:2e2:cc25:b232 with SMTP id d9443c01a7336-2ea43cf0a2amr35063215ad.42.1792620527242;
+        Wed, 21 Oct 2026 15:08:47 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b48edc9sm15707205ad.67.2026.10.21.15.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 15:08:46 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH bpf-next] bpf, x86: Use emit_rsb_call() to call bpf_unwind_target()
+Date: Wed, 21 Oct 2026 22:08:44 +0000
+Message-ID: <20261021220844.239400-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -88,50 +96,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Oct 2026 22:04:04 +0000
-Message-Id: <DMAUUBNDJCOQ.12UWI6DR7LNYU@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Use memmove() to load bytes from an skb
- and an xdp_buff
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <ayushmanrout27@gmail.com>,
- <bpf@vger.kernel.org>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <memxor@gmail.com>, <hawk@kernel.org>, <drosen@google.com>,
- <netdev@vger.kernel.org>, <martin.lau@kernel.org>, <eddyz87@gmail.com>,
- <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20261021103957.17532-1-ayushmanrout27@gmail.com>
- <5a586e05ad8d24d79759c1d99d6d58eb661dc6f4a4c8d258e05a4962cfe7e59e@mail.kernel.org>
-In-Reply-To: <5a586e05ad8d24d79759c1d99d6d58eb661dc6f4a4c8d258e05a4962cfe7e59e@mail.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed Oct 21, 2026 at 11:04 AM UTC, bot+bpf-ci wrote:
->> bpf: Use memmove() to load bytes from an skb and an xdp_buff
->
-> TL;DR: bpf_skb_load_bytes_relative() still uses memcpy() and may corrupt =
-data
-> when its destination is an overlapping dynptr slice; should it get the sa=
-me
-> memmove() change, or should the commit message explain why not?
->
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -1789,7 +1789,7 @@ BPF_CALL_4(bpf_skb_load_bytes, const struct sk_buf=
-f *, skb, u32, offset,
->>  	if (unlikely(!ptr))
->>  		goto err_clear;
->>  	if (ptr !=3D to)
->> -		memcpy(to, ptr, len);
->> +		memmove(to, ptr, len);
->>
->>  	return 0;
->>  err_clear:
->
-> Should bpf_skb_load_bytes_relative() get the same change?
+From: Alexei Starovoitov <ast@kernel.org>
 
-+1
+clang inlines emit_unwind_ret_addr() and emit_patch() into do_jit() and
+folds 'bpf_unwind_target - X86_PATCH_SIZE' into one relocation. It points
+to a nop in the padding in front of the function, and objtool complains:
 
-pw-bot: cr
+  vmlinux.o: warning: objtool: do_jit+0x1330: relocation to !ENDBR: .text+0xc7fab
+
+It's only used to compute rel32 of a direct call, so nothing is wrong at
+run time.
+
+emit_rsb_call() does call depth accounting too and hides func from
+the optimizer. Use it instead of open coding.
+
+Fixes: cff94a3d78d8 ("bpf, x86: Support unwind_goto and unwind_exit")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://lore.kernel.org/bpf/20261021201456.GA3197963@ax162/
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ arch/x86/net/bpf_jit_comp.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 6a2fe3d0039d..71f7200dba00 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2564,9 +2564,7 @@ static int emit_unwind_ret_addr(u8 **pprog, u8 *ip)
+ 
+ 	EMIT2(0x50, 0x56);			/* push rax; push rsi */
+ 	EMIT4(0x48, 0x8B, 0x7D, 0x08);		/* mov rdi, [rbp + 8] */
+-	ip += prog - start;
+-	ip += x86_call_depth_emit_accounting(&prog, bpf_unwind_target, ip);
+-	if (emit_call(&prog, bpf_unwind_target, ip))
++	if (emit_rsb_call(&prog, bpf_unwind_target, ip + (prog - start)))
+ 		return -EINVAL;
+ 	EMIT4(0x48, 0x89, 0x45, 0x08);		/* mov [rbp + 8], rax */
+ 	EMIT2(0x5E, 0x58);			/* pop rsi; pop rax */
+
+base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
+-- 
+2.55.0
+
