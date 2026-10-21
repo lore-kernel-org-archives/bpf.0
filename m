@@ -1,42 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.189.79.184
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792561306;
-	b=XBWfmqsPyTgQKOOS6fflCi4Ro/sf6G3ymu1lVlzkeP/2Vea2voBh7Jv74GUO+VM/tH1m
-	 BPPHz4+8RUQp9XD0NYekO+wEQc3GriBHPzWlLQOx+OJFooYuX/u+LbEw7NrOvTQ5P3qiE
-	 XBBsqez+dqxJa66T+EehQjO1iMFxJkB/sUNm3nwc8GB5WTfqHcV/rvzsmYpZ83rOpC2j3
-	 9kjboYiWhkdXWAqij+UuFAD6IowrwbNbUbD2XiCw5wRYJb3hEnSxaKuTSP8yjvcZj052g
-	 wl7Tbr+tbmdRlenHrErMiFFkGzebfVS9MSIC1BQs7+MucF7T00W3n9ZzrqLpNyKfZBw==
+	t=1792561367;
+	b=T8aE3c9t+szfkYVyKdGyoLteYapXHy2T6lxLwpohQRYlFi8TLhgopu4jNZV21/NkXI8V
+	 fH4Ud1n2ymz/qp/ZDVRFv6OvOTvIafCC+gvDKY4qClGyIrh/kGGuMpFlFSlaG2Kd71cdd
+	 nrQKvP1JNZQsG9ybB3QhmSBMeAP9q7GL/FwPu+/C0z1Rq37PiOf+kOy5uZDnZ9jCsSRo5
+	 vnds3gAlexAigPcc55O4UDXr4edvBfEJmaL/tXkEdC0gNXIztJkc03FOistpqdc6UVsAn
+	 /JHolyEgun1Sj2kUbMhITr8iOLTUb7EXN4uzt2+oLkkQszc7WLFeuqoKktHCHdxSwvA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792561306;
-	h=DMARC-Filter:Received:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
-	 In-Reply-To:To:Cc:X-Mailer:X-CM-TRANSID:X-CM-SenderInfo:
-	 X-CM-DELIVERINFO:X-Coremail-Antispam;
-	bh=sdVlJMsF65Nr3fdm/Caz1kaSyWTTPe/nREKl/GePA3k=;
-	b=bVWAiRFKJIZMbGVePflymBMcXocDqeJftWx2VKHWyOmcYZtQDRvAvd9ImaVB6R4IjSp2
-	 5cdAO7yPN7m7yTpN5TmiDLewko9ukB8uniKKuiQn+ykT0ku8u8FVuQnKRB5s95MAuIEim
-	 a8Z7pENq4UGmDrgTIndUw0zVYjL7U5hwek9pevKht9Iin7ixDsnQo+1+FVmDVTjkfeJZr
-	 sgKIKfNRD3D9xc8n1wRad6egzQDGluarWXn93mpdKo4xQH8fH0RGhaIw0Mg+6+MPQh8yF
-	 mPqcWb4NJQ6ehwgPiI0iSkajostMZ6w6Er288KQ+Elj53qtTNbLIKVgxUSiRKwrpH7A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792561367;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=ZHxZCtkGBIHHZ3WxoYYt7JtY8VjyuJK1miMgGbSw6mQ=;
+	b=LxJkU3/JiXzySpODhu2+chcq/RbuwsF2COAfNN7/V+P13fYb/bjPquObash/j42EQLNq
+	 WrDSUcDaEgXAuzxcXYyA1OXIz5bDQrRhJoFudLDWCjEkBPjhBqTz5qgAVYQJvnAJGVTgM
+	 WrfZSY6Naf5eeDtp35qIl3G2uJwU0g9o9wv+TREbQ0pGlMC/61b/m6d4AC0DyqxM9y///
+	 YwNi4WPahmuC5idV04QkQVJgdLz6IrFIHB3DLP+sy3PsdyRXhIOSxJwjgOY2OovO1W+tf
+	 KyOtn2MzrfS4b5quQgz86+JDN3QUmW7n0AvVOIPc5TeuKhJEjftmyW3IbJlJvI7bBUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=zju.edu.cn;
-	spf=pass smtp.mailfrom=zju.edu.cn;
-	arc=none smtp.remote-ip=206.189.79.184
-Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56229606A319;
-	Wed, 21 Oct 2026 05:41:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56229606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wCncwhfUNhqA3msAQ--.12017S3;
-	Wed, 21 Oct 2026 13:40:47 +0800 (CST)
-Received: from lutetium.localdomain (unknown [10.162.163.215])
-	by mail-app4 (Coremail) with UTF8SMTPA id zi_KCgBXJ5xeUNhqcCJmAA--.33421S3;
-	Wed, 21 Oct 2026 13:40:46 +0800 (CST)
-From: tangyazhou@zju.edu.cn
-Date: Wed, 21 Oct 2026 13:40:35 +0800
-Subject: [PATCH bpf-next v2 1/8] bpf: Add UHMUL and SHMUL instructions
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kViUn5FW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0AD606A319;
+	Wed, 21 Oct 2026 05:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kViUn5FW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BA51F000C9;
+	Wed, 21 Oct 2026 05:42:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792561366;
+	bh=ZHxZCtkGBIHHZ3WxoYYt7JtY8VjyuJK1miMgGbSw6mQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kViUn5FWPfLv8eVi1je6k+h0kmNq1ISUyD3sVwX6t2tuM20CL32sGuWAFif+nR5Hw
+	 ck7nNoyRiJJM5Q86jP++o25xUzI8L7gIfLoZkCWIpIWMiopysOu9dQyHmqcq0+WE0n
+	 h3Yr3Ao4l61GqpUDBXDFcQRx1yXYPSNDPDAEJ5Q3bvxdupqxs33PbO8ktDG7L+oMM+
+	 KgKukxg3BLqvrmYW04Hd+t7lBR+X9NmcDGGnjLsbFZ1T6q4Rh6zQrdhtMrN1Wg+Hqi
+	 BkIzndZqLQgMS2o8h8Hx81Hq7DxM+dZkqDBEaLshl9bl9ZDgug4trdrFbcoZPjCXEB
+	 lud7Z/3GfbG6w==
+Message-ID: <sashiko-outbox-179814@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [Patch v4 1/5] perf/x86: Disable LBR if x86_pmu.lbr_nr exceeds
+ MAX_LBR_ENTRIES
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Dapeng Mi" <dapeng1.mi@linux.intel.com>
+Cc: linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20261021050711.4043703-2-dapeng1.mi@linux.intel.com>
+References: <20261021050711.4043703-1-dapeng1.mi@linux.intel.com>
+ <20261021050711.4043703-2-dapeng1.mi@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 21 Oct 2026 05:42:45 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -45,374 +60,146 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20261021-bpf-hmul-v2-1-88e260099f7d@outlook.com>
-References: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com>
-In-Reply-To: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com>
-To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- David Vernet <void@manifault.com>, bpf@ietf.org
-Cc: John Fastabend <john.fastabend@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>, 
- Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
- Shahab Vahedi <list+bpf@vahedi.org>, Russell King <linux@armlinux.org.uk>, 
- Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>, 
- Johan Almbladh <johan.almbladh@anyfinetworks.com>, 
- Paul Burton <paulburton@kernel.org>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Hari Bathini <hbathini@linux.ibm.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- Naveen N Rao <naveen@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, 
- Xi Wang <xi.wang@gmail.com>, Ilya Leoshkevich <iii@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- "David S. Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- linux-doc@vger.kernel.org, Tianci Cao <ziye@zju.edu.cn>, 
- Yazhou Tang <tangyazhou518@outlook.com>, 
- Shenghao Yuan <shenghaoyuan0928@163.com>, 
- Alexei Starovoitov <ast@kernel.org>
-X-Mailer: b4 0.15.2
-X-CM-TRANSID:zi_KCgBXJ5xeUNhqcCJmAA--.33421S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgALCmrXxB0b0QABso
-X-CM-DELIVERINFO: =?B?DvblwAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9Nte+2zWzrdkvaZkVwVQI+FIRDKY/0eZO65g+lHlVXAEMxseE/p1uqb2G0oDaGRkKRvj
-	en1rIj0bnrIH+DqfznhIXCWny1l/Jp05GaoLbDgTgOIH0duDS2HkSSDi5B6Ubw==
-X-Coremail-Antispam: 1Uk129KBj93XoW3ZrWUZw43Zr48uF4UtFWfXrc_yoWkGw43pF
-	4vy34rtFZ2qrW5u3s7J39FkF1rCa1rWr4UGry7W348AF9rtas5tF4vqr4YqF9xJrWkWayY
-	qr9I9ryUu3yUZ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAF
-	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCF04k2
-	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48J
-	MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJw
-	CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-	z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_R67UUUUU==
 
-From: Tianci Cao <ziye@zju.edu.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] perf/x86: init_hw_perf_events() disables LBR too late after vend=
+or PMU init
+--
 
-Define UHMUL and SHMUL as BPF_ALU64 BPF_MUL variants selected by insn->off.
-UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product, while
-SHMUL returns the high 64 bits of a signed product. Keep off == 0 as the
-existing low-half multiplication, and assign off == 1 and off == 2 to
-UHMUL and SHMUL, respectively.
+commit c6c1bbb1f4feb929dd247ddd507177ce58d871e1
+Author: Dapeng Mi <dapeng1.mi@linux.intel.com>
 
-These operations are inspired by the UHMUL and SHMUL instructions introduced
-as part of the PQR instruction class in sBPF (Solana's BPF variant)[1].
+perf/x86: Disable LBR if x86_pmu.lbr_nr exceeds MAX_LBR_ENTRIES
 
-The encoding and immediate semantics differ from current sBPF.
+This commit disables last branch record support in init_hw_perf_events()
+if x86_pmu.lbr_nr exceeds MAX_LBR_ENTRIES to prevent out-of-bounds
+accesses in the cached branch stack handling path.
 
-1. sBPF assigns these operations dedicated opcodes in the BPF_PQR class,
-   whereas this implementation selects them through the offset field of BPF_MUL.
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index 4df792b139e05..002a04c149c29 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -2645,6 +2645,12 @@ static int __init init_hw_perf_events(void)
+>  	if (!x86_pmu.config_mask)
+>  		x86_pmu.config_mask =3D X86_RAW_EVENT_MASK;
+> =20
+> +	if (x86_pmu.lbr_nr > MAX_LBR_ENTRIES) {
+> +		pr_warn("LBR entries %d exceeds max %d, disable LBR.\n",
+> +			x86_pmu.lbr_nr, MAX_LBR_ENTRIES);
+> +		x86_pmu.lbr_nr =3D 0;
+> +	}
+> +
+>  	perf_events_lapic_init();
+>  	register_nmi_handler(NMI_LOCAL, perf_event_nmi_handler, 0, "PMI");
 
-2. sBPF initially sign-extended the immediate operand of UHMUL, but later
-   changed unsigned PQR immediates, including UHMUL, to be zero-extended[2].
-   This was an ISA design choice to treat immediates of explicitly unsigned
-   operations as unsigned 32-bit values[3].
+[Severity: Medium]
+Does zeroing x86_pmu.lbr_nr here in init_hw_perf_events() happen too late,
+after intel_pmu_init() and amd_pmu_init() have already configured hardware
+and driver state using the unvalidated x86_pmu.lbr_nr value?
 
-   Linux instead follows the existing BPF_ALU64 immediate convention.
-   Both immediate forms first sign-extend the 32-bit immediate to 64 bits.
-   UHMUL then interprets the resulting bit pattern as unsigned, while
-   SHMUL interprets it as signed.
+In arch/x86/events/intel/lbr.c:intel_pmu_arch_lbr_init(), if lbr_nr exceeds
+MAX_LBR_ENTRIES, initialization proceeds instead of taking the clear_arch_l=
+br
+path:
 
-Add portable helpers for both operations, using mul_u64_u64_shr() and a
-signed correction instead of relying on a compiler-provided 128-bit
-integer type. Add interpreter support and disassemble UHMUL and SHMUL
-as uh*= and sh*=, respectively. Keep BPF_ALU multiplication restricted
-to the existing low-half variant.
+	lbr_nr =3D fls(eax.split.lbr_depth_mask) * 8;
+	if (!lbr_nr)
+		goto clear_arch_lbr;
 
-Document the encoding and semantics in the BPF instruction set.
-Introduce a new divmul64v2 conformance group that includes divmul64 plus
-UHMUL and SHMUL. Keep divmul64 unchanged so existing implementations
-remain conformant without supporting the new instructions.
+	/* Apply the max depth of Arch LBR */
+	if (wrmsrq_safe(MSR_ARCH_LBR_DEPTH, lbr_nr))
+		goto clear_arch_lbr;
+	...
+	x86_pmu.lbr_counters =3D ecx.split.lbr_counters;
+	x86_pmu.lbr_nr =3D lbr_nr;
 
-[1] https://github.com/solana-labs/rbpf/pull/498
-[2] https://github.com/solana-labs/rbpf/pull/642
-[3] https://lore.kernel.org/bpf/59e754a2-6158-485c-93b9-6f60d9f57528@zju.edu.cn/
+	if (!!x86_pmu.lbr_counters)
+		x86_pmu.flags |=3D PMU_FL_BR_CNTR | PMU_FL_DYN_CONSTRAINT;
 
-Link: https://lore.kernel.org/bpf/CAADnVQ+2O2zgdy11+vxE6dOp+3Br4zZBysHF-Hne7cP+eeucnQ@mail.gmail.com/
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
----
- .../bpf/standardization/instruction-set.rst        | 37 +++++++++++++++----
- include/linux/filter.h                             | 38 ++++++++++++++++++++
- include/uapi/linux/bpf.h                           |  6 ++++
- kernel/bpf/core.c                                  | 41 +++++++++++++++++++++-
- kernel/bpf/disasm.c                                | 18 ++++++++++
- tools/include/uapi/linux/bpf.h                     |  6 ++++
- 6 files changed, 138 insertions(+), 8 deletions(-)
+Because clear_arch_lbr is skipped, X86_FEATURE_ARCH_LBR remains enabled,
+MSR_ARCH_LBR_DEPTH is written, pmu->task_ctx_cache is allocated via
+create_lbr_kmem_cache(), and x86_pmu.lbr_ctl_map and static branches are
+configured.
 
-diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-index 39c74611752b..6f3cb6bcaa1a 100644
---- a/Documentation/bpf/standardization/instruction-set.rst
-+++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -142,8 +142,9 @@ This document defines the following conformance groups:
- * atomic32: includes 32-bit atomic operation instructions (see `Atomic operations`_).
- * atomic64: includes atomic32, plus 64-bit atomic operation instructions.
- * divmul32: includes 32-bit division, multiplication, and modulo instructions.
--* divmul64: includes divmul32, plus 64-bit division, multiplication,
-+* divmul64: includes divmul32, plus 64-bit division, low-half multiplication,
-   and modulo instructions.
-+* divmul64v2: includes divmul64, plus high-half multiplication instructions.
- * packet: deprecated packet access instructions.
- 
- Instruction encoding
-@@ -330,6 +331,8 @@ register.
-   ADD    0x0    0        dst += src
-   SUB    0x1    0        dst -= src
-   MUL    0x2    0        dst \*= src
-+  UHMUL  0x2    1        ``dst uh*= src`` (unsigned high half, ``ALU64`` only)
-+  SHMUL  0x2    2        ``dst sh*= src`` (signed high half, ``ALU64`` only)
-   DIV    0x3    0        dst = (src != 0) ? (dst / src) : 0
-   SDIV   0x3    1        dst = (src == 0) ? 0 : ((src == -1 && dst == LLONG_MIN) ? LLONG_MIN : (dst s/ src))
-   OR     0x4    0        dst \|= src
-@@ -379,13 +382,33 @@ where '(u32)' indicates that the upper 32 bits are zeroed.
- 
-   dst = dst ^ imm
- 
--Note that most arithmetic instructions have 'offset' set to 0. Only three instructions
--(``SDIV``, ``SMOD``, ``MOVSX``) have a non-zero 'offset'.
-+Note that most arithmetic instructions have 'offset' set to 0. The following
-+instructions may have a non-zero 'offset':
-+
-+* ``SDIV`` and ``SMOD``: ``offset == 1`` selects the signed variant.
-+* ``MOVSX``: ``offset`` selects the source operand width.
-+* ``MUL``: ``offset`` selects the multiplication variant (see below).
-+
-+Division, low-half multiplication (``MUL`` with ``offset == 0``), and
-+modulo operations for ``ALU`` are part of the "divmul32" conformance
-+group, and their ``ALU64`` variants are part of the "divmul64"
-+conformance group.
-+
-+For ``ALU64`` multiplication, ``offset == 1`` selects unsigned
-+high-half multiplication (``UHMUL``), and ``offset == 2`` selects
-+signed high-half multiplication (``SHMUL``). Both instructions belong
-+to the "divmul64v2" conformance group.
-+
-+For ``X`` mode, ``src64`` is the 64-bit value in ``src_reg``. For
-+``K`` mode, ``src64`` is ``imm`` sign-extended from 32 to 64 bits.
-+The operations are::
-+
-+  UHMUL: dst = (u64)(((u128)dst * (u128)(u64)src64) >> 64)
-+  SHMUL: dst = (u64)(((s128)(s64)dst * (s128)(s64)src64) >> 64)
-+
-+For ``ALU`` multiplication, only ``offset == 0`` is valid. For ``ALU64``
-+multiplication, offset values other than 0, 1, and 2 are reserved.
- 
--Division, multiplication, and modulo operations for ``ALU`` are part
--of the "divmul32" conformance group, and division, multiplication, and
--modulo operations for ``ALU64`` are part of the "divmul64" conformance
--group.
- The division and modulo operations support both unsigned and signed flavors.
- 
- For unsigned operations (``DIV`` and ``MOD``), for ``ALU``,
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index e0218e677a1d..fa8a1d18691d 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -23,6 +23,7 @@
- #include <linux/sockptr.h>
- #include <linux/static_call.h>
- #include <linux/u64_stats_sync.h>
-+#include <linux/math64.h>
- 
- #include <net/sch_generic.h>
- 
-@@ -152,6 +153,43 @@ struct ctl_table_header;
- #define BPF_ALU32_IMM(OP, DST, IMM)				\
- 	BPF_ALU32_IMM_OFF(OP, DST, IMM, 0)
- 
-+static inline u64 bpf_uhmul64(u64 a, u64 b)
-+{
-+	return mul_u64_u64_shr(a, b, 64);
-+}
-+
-+static inline u64 bpf_shmul64(s64 a, s64 b)
-+{
-+	u64 ua = a, ub = b;
-+	u64 hi = bpf_uhmul64(ua, ub);
-+
-+	/*
-+	 * Let M = 2^64, sa = (a < 0), and sb = (b < 0). Then:
-+	 *
-+	 * a * b = (ua - sa * M) * (ub - sb * M)
-+	 *       = ua * ub - sa * M * ub - sb * M * ua + sa * sb * M^2
-+	 *
-+	 * Therefore, signed_hi = unsigned_hi - sa * ub - sb * ua (mod M).
-+	 */
-+	if (a < 0)
-+		hi -= ub;
-+	if (b < 0)
-+		hi -= ua;
-+	return hi;
-+}
-+
-+static inline bool bpf_is_hmul_variant(s16 off)
-+{
-+	return off == BPF_UHMUL || off == BPF_SHMUL;
-+}
-+
-+static inline bool bpf_insn_is_hmul(const struct bpf_insn *insn)
-+{
-+	return BPF_CLASS(insn->code) == BPF_ALU64 &&
-+	       BPF_OP(insn->code) == BPF_MUL &&
-+	       bpf_is_hmul_variant(insn->off);
-+}
-+
- /* Endianess conversion, cpu_to_{l,b}e(), {l,b}e_to_cpu() */
- 
- #define BPF_ENDIAN(TYPE, DST, LEN)				\
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f29b0aad440c..90c30e5d790b 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -34,6 +34,12 @@
- #define BPF_FROM_LE	BPF_TO_LE
- #define BPF_FROM_BE	BPF_TO_BE
- 
-+/* BPF_MUL off values for high-half multiplication; BPF_ALU64 only. */
-+enum bpf_mul_variant {
-+	BPF_UHMUL = 1,
-+	BPF_SHMUL = 2,
-+};
-+
- /* jmp encodings */
- #define BPF_JNE		0x50	/* jump != */
- #define BPF_JLT		0xa0	/* LT is unsigned, '<' */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3030beb531d9..f4f8cfa80033 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1943,7 +1943,46 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 	ALU(AND,  &)
- 	ALU(OR,   |)
- 	ALU(XOR,  ^)
--	ALU(MUL,  *)
-+	/*
-+	 * MUL needs explicit handlers because ALU64 insn->off selects
-+	 * low-half, unsigned high-half, or signed high-half multiplication.
-+	 */
-+	ALU64_MUL_X:
-+		switch (OFF) {
-+		case 0:
-+			DST = DST * SRC;
-+			break;
-+		case BPF_UHMUL:
-+			DST = bpf_uhmul64(DST, SRC);
-+			break;
-+		case BPF_SHMUL:
-+			DST = bpf_shmul64((s64)DST, (s64)SRC);
-+			break;
-+		default:
-+			goto default_label;
-+		}
-+		CONT;
-+	ALU_MUL_X:
-+		DST = (u32) DST * (u32) SRC;
-+		CONT;
-+	ALU64_MUL_K:
-+		switch (OFF) {
-+		case 0:
-+			DST = DST * IMM;
-+			break;
-+		case BPF_UHMUL:
-+			DST = bpf_uhmul64(DST, (u64)IMM);
-+			break;
-+		case BPF_SHMUL:
-+			DST = bpf_shmul64((s64)DST, (s32)IMM);
-+			break;
-+		default:
-+			goto default_label;
-+		}
-+		CONT;
-+	ALU_MUL_K:
-+		DST = (u32) DST * (u32) IMM;
-+		CONT;
- 	SHT(LSH, <<)
- 	SHT(RSH, >>)
- #undef SHT
-diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
-index 889fc074496f..0b1bbb27e9e4 100644
---- a/kernel/bpf/disasm.c
-+++ b/kernel/bpf/disasm.c
-@@ -163,6 +163,22 @@ static bool is_sdiv_smod(const struct bpf_insn *insn)
- 	       insn->off == 1;
- }
- 
-+/* Return the UHMUL or SHMUL operator string, or NULL for all other encodings. */
-+static const char *hmul_op_string(const struct bpf_insn *insn)
-+{
-+	if (BPF_CLASS(insn->code) != BPF_ALU64 ||
-+	    BPF_OP(insn->code) != BPF_MUL)
-+		return NULL;
-+	switch (insn->off) {
-+	case BPF_UHMUL:
-+		return "uh*=";
-+	case BPF_SHMUL:
-+		return "sh*=";
-+	default:
-+		return NULL;
-+	}
-+}
-+
- static bool is_movsx(const struct bpf_insn *insn)
- {
- 	return BPF_OP(insn->code) == BPF_MOV &&
-@@ -215,6 +231,7 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
- 			verbose(cbs->private_data, "(%02x) %c%d %s %s%c%d",
- 				insn->code, class == BPF_ALU ? 'w' : 'r',
- 				insn->dst_reg,
-+				hmul_op_string(insn) ?:
- 				is_sdiv_smod(insn) ? bpf_alu_sign_string[BPF_OP(insn->code) >> 4]
- 						   : bpf_alu_string[BPF_OP(insn->code) >> 4],
- 				is_movsx(insn) ? bpf_movsx_string[(insn->off >> 3) - 1] : "",
-@@ -224,6 +241,7 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
- 			verbose(cbs->private_data, "(%02x) %c%d %s %d",
- 				insn->code, class == BPF_ALU ? 'w' : 'r',
- 				insn->dst_reg,
-+				hmul_op_string(insn) ?:
- 				is_sdiv_smod(insn) ? bpf_alu_sign_string[BPF_OP(insn->code) >> 4]
- 						   : bpf_alu_string[BPF_OP(insn->code) >> 4],
- 				insn->imm);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f29b0aad440c..90c30e5d790b 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -34,6 +34,12 @@
- #define BPF_FROM_LE	BPF_TO_LE
- #define BPF_FROM_BE	BPF_TO_BE
- 
-+/* BPF_MUL off values for high-half multiplication; BPF_ALU64 only. */
-+enum bpf_mul_variant {
-+	BPF_UHMUL = 1,
-+	BPF_SHMUL = 2,
-+};
-+
- /* jmp encodings */
- #define BPF_JNE		0x50	/* jump != */
- #define BPF_JLT		0xa0	/* LT is unsigned, '<' */
+Subsequently, arch/x86/events/intel/lbr.c:reserve_lbr_buffers() checks the
+feature bit and task_ctx_cache rather than x86_pmu.lbr_nr:
 
--- 
-2.56.0
+	if (!cpu_feature_enabled(X86_FEATURE_ARCH_LBR))
+		return;
 
+	for_each_possible_cpu(cpu) {
+		cpuc =3D per_cpu_ptr(&cpu_hw_events, cpu);
+		kmem_cache =3D x86_get_pmu(cpu)->task_ctx_cache;
+		if (!kmem_cache || cpuc->lbr_xsave)
+			continue;
+
+		cpuc->lbr_xsave =3D kmem_cache_alloc_node(kmem_cache,
+							GFP_KERNEL | __GFP_ZERO,
+							cpu_to_node(cpu));
+	}
+
+Wouldn't this still allocate per-cpu cpuc->lbr_xsave buffers on hardware
+reservation even after x86_pmu.lbr_nr is set to 0?
+
+Similarly, in arch/x86/events/intel/core.c:lbr_is_visible(), leaving
+PMU_FL_BR_CNTR set in x86_pmu.flags keeps branch_counter_nr and
+branch_counter_width visible in sysfs when x86_pmu.lbr_nr is 0:
+
+	/* branches */
+	if (i =3D=3D 0)
+		return x86_pmu.lbr_nr ? attr->mode : 0;
+
+	return (x86_pmu.flags & PMU_FL_BR_CNTR) ? attr->mode : 0;
+
+In addition, both arch/x86/events/intel/core.c:intel_pmu_init() and
+arch/x86/events/amd/core.c:amd_core_pmu_init() check x86_pmu.lbr_nr before
+init_hw_perf_events() clears it:
+
+	if (x86_pmu.lbr_nr) {
+		intel_pmu_lbr_init();
+
+		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+
+		/* only support branch_stack snapshot for perfmon >=3D v2 */
+		if (x86_pmu.disable_all =3D=3D intel_pmu_disable_all) {
+			if (boot_cpu_has(X86_FEATURE_ARCH_LBR)) {
+				static_call_update(perf_snapshot_branch_stack,
+						   intel_pmu_snapshot_arch_branch_stack);
+			} else {
+				static_call_update(perf_snapshot_branch_stack,
+						   intel_pmu_snapshot_branch_stack);
+			}
+		}
+	}
+
+And in amd_core_pmu_init():
+
+	if (!amd_pmu_lbr_init()) {
+		/* LBR requires flushing on context switch */
+		x86_pmu.sched_task =3D amd_pmu_lbr_sched_task;
+		static_call_update(amd_pmu_branch_hw_config, amd_pmu_lbr_hw_config);
+		static_call_update(amd_pmu_branch_reset, amd_pmu_lbr_reset);
+		static_call_update(amd_pmu_branch_add, amd_pmu_lbr_add);
+		static_call_update(amd_pmu_branch_del, amd_pmu_lbr_del);
+
+		/* Only support branch_stack snapshot on perfmon v2 */
+		if (x86_pmu.handle_irq =3D=3D amd_pmu_v2_handle_irq)
+			static_call_update(perf_snapshot_branch_stack, amd_pmu_v2_snapshot_branc=
+h_stack);
+	} else if (!amd_brs_init()) {
+
+If bpf_get_branch_snapshot() is later called when x86_pmu.lbr_nr is 0, won't
+the registered perf_snapshot_branch_stack callback still run, manipulate
+branch and global control registers, and unconditionally call
+intel_pmu_enable_all(0) or amd_pmu_v2_enable_all(0)?
+
+Should the MAX_LBR_ENTRIES check be performed before or during the
+vendor-specific initialization routines (such as intel_pmu_lbr_init(),
+intel_pmu_arch_lbr_init(), and amd_pmu_lbr_init()) so that None of the
+hardware state, slab caches, flags, or static calls are enabled when
+lbr_nr is out of range?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021050711.4043=
+703-1-dapeng1.mi@linux.intel.com?part=3D1
