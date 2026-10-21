@@ -1,70 +1,108 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792604674;
-	b=CcYmgTVFQsJdFX+rvYxW3IdCOVf2tUDSXL5oU1R6LPh63mzlrDhEC9X/2P6IynDbyWk7
-	 5sMXDuTRDuTipA9l4nhEVSDTMnv/FNu6NJjq4Dc1R8Vusj6cPExT0SUngO041awm5dAHu
-	 +EoFE61fxT08rCx01kvdRtyYDCN76O90OSDW7zCPQ9ALdK4rHKJl8zoq6gASr0xSWSGiv
-	 y02sRKgHy1rfIJyyBD4KyBx8OXYOFLYtRciEiBacd55Ydx2aJzDoy1FKhgQLhtCAfsxEv
-	 tOh49Tep+MB4J6RPskjbVnhzFK2ojXp2Sbn8grsD1hz4/k0TzTZ0G6n91haY6BANgRA==
+	t=1792605011;
+	b=A5DUO1CytgZIlmPs5tcK/SAG5CUa8C/rMMTEMxfjcCN5K+JBD9dnlNfWrWFZ9ebVQPY8
+	 0QBcKTiUScqagI1JYaSrlQIYYt3gIvEyc6hQ4jlyPfot6PpwW0kh8rQ6Vm/UQogWPE7xx
+	 z8tEBmDri8wG/fhRnRr/kMtDdu4y2l5RnyzUgENPXLl9td23Yw1znpzLDRSYJlyDLBdRR
+	 xLbdNG5rw5PA/pbnoL9pSOF0qfA/VZMthIcY8jjyXrJ8oFfN5oK15HET9fq0WmPoNfAou
+	 3GfD0rpXPaNAeSFLhQYz0YwPROJ9uZYtZKBtsrxMP5Lf5jZkYRpcumh6rV+eiEhapgA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792604674;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
+	a=rsa-sha256; c=relaxed/relaxed; t=1792605011;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=CrbQvaheVnGVHulUMcA8yjaKoTe8xjFM+3iVN2PxY5Q=;
-	b=mauTsFuLI9qXRxUeZoV/GwzT+ONeXFqDwSF775XsbIMqwFyq6feiZ4RJakgyjDWP2GcS
-	 W/QzAKcw70P1IUfD4U+UCzXIabWzmw+V+pjkv2Tj5/IZY/jD3NrUMsSdNVKBI21Hopjt9
-	 HiRZf1gsCy4IkIHSfiyaZDuOXnCMNFcoBE/cU6zafo414+4TUI61Ud/ESwNxjLEE9ep9z
-	 VqlQoiaHPzXgUQiyMuYlfSUKOpIxTeFY4qbAK03x7Sv/Zb9ZvRGf7U9wzJkLeNEPAIgtb
-	 X6R7vnjlgQX2vaXbuCMpSqP0lVjD2YIGQIwXcSfCDe8zPy/RlIZnDWY/Mjm8ypJXNrA==
+	bh=NCiFUlem6qW8F+mY1MeWMFDksPatkBHvYOmj1bKILX0=;
+	b=dKKCmMlGGyp7WNeQPpcKSm1Yo7ouGt2N/J1MqJ/kvJF/0BBVaUBWdNpG8exBdIx1zRbO
+	 kh2eo1DWi62UiROvyt6eyGHz/VnGyWtPfW7GgHuIr1hRr2tBphSYlcMs9CAOlYXA+QmxE
+	 BRD2ny+U9MFrVrUxTE8h5pwFh+XenlBrCuHl5utKUuk8LFeQrdrIZvZudzgsFLBakv3en
+	 1acrxfybNPYmhtKl6qPx0YMDcU2jEMP6ZoOFVnxg9oGBpfFUGR0k/SEPE3UUAeJrogZJk
+	 KJr91H3v2l5eSwEAzW04iTa+gPBS4Kk/ronk9DnychOUHH/VACoV1ltSmY8l2QCxWDw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=j9OO8fsD;
-	arc=none smtp.remote-ip=91.218.175.7
-Received: from mta0.migadu.com (out-7.mta0.migadu.com [91.218.175.7])
+	dmarc=pass header.from=trailofbits.com;
+	spf=pass smtp.mailfrom=trailofbits.com;
+	dkim=pass header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=JknpP7YJ;
+	arc=none smtp.remote-ip=74.125.82.47
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25772606A31D
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:44:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 25772606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77CC606A31A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:50:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D77CC606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=j9OO8fsD
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gzQQsJPuIUKqQmkp2GndF+kkdcenF51ADI84PnJQfJs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792604672; v=1; x=1793209472;
- b=j9OO8fsD3QvShz8b87kWWn3+D2jiLTV+y79AcTqWLj2XBuwCqd1esy9yr/XXaN9nL5PXddgv
- 5uYBfFiWMG8WSqIzVmx1auiyiqWMvZQTnA2qQc42vOuROw9c6I2kS1Z+gW3V55ErLkAHjmPtyiz
- t1XNwTFgnWj1je1HdmJkVq5c=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c25dbf7ea97f94ab;
-	Wed, 21 Oct 2026 17:44:32 +0000
-X-Mizu-Trace-ID: c25dbf7ea97f94ab
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org
-Cc: mark.rutland@arm.com,
-	mathieu.desnoyers@efficios.com,
-	andrii@kernel.org,
-	peterz@infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=JknpP7YJ
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-16079d54c17so1860766c88.0
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=trailofbits.com; s=google; t=1792605010; x=1793209810; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NCiFUlem6qW8F+mY1MeWMFDksPatkBHvYOmj1bKILX0=;
+        b=JknpP7YJuHqK4K8JU+lEEevXFO0Z8hDPpOJEfVQ2tG7d2WjPMCUFv5PHYoIQSxw8WE
+         nG8/1T3sApIfPTKf6r5g1HqBks6vEK2p6thndOk0qY7sL1QECx3lhjqY3NwIQPs/+q2Z
+         rpwkpQFg6hXD/4u8LXJMUtXipenNIKBFmas3T1ToHPQ/HmS6XrqA0Jh4nmTX81FOR4gx
+         s4Syr3pjelkDiFT4JaghhJ2UJEBDGM3y3l9EvUQWmDF64TZB8aa0jarD9CqxI/lFeHVa
+         qoIE8Y2wsFXK4qdq8EloCuDg9Y6dSfKSWhpNK0q3l0zvjcGKOKJSitUaoyuPO3G2IlUj
+         GQog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792605010; x=1793209810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NCiFUlem6qW8F+mY1MeWMFDksPatkBHvYOmj1bKILX0=;
+        b=spgR1GvhnDQGDGG38NC+NmGpo70MnHJN0njCfb9CKlH2MrrRykHcwIpfxQK3CvkLn7
+         qaK3k4bdd+dLL65P2yiVlbM95FV9+raOc1R1aVCMF81lFxqlCxkfU3r/rxBaviMgWEtN
+         8IMeX5O2fcrU3IsVcuT7jkmFb4UvFlBrpkTnlExz8uhKzhYs8M+m6eXImgUuBwOQXpoS
+         0Ds8V5CW56+8tE2Jln1OQIcaXADzd4hOZINygHCnJvUWJufLlRYnd821VbSkKFYegM+d
+         c4NMhATLEHFHbT+Dto9VP2+3Y4pmSWUIRSHzgnWdhNEKWmom0MTxHjnQVf3WLEIOThu8
+         oFTw==
+X-Forwarded-Encrypted: i=1; AKwUvBzXMrmbfedstvKHSArU17YhtiYPFHMc5J265Q8518BD/p0SqITFuJQ6T0eVPF1eJkpKwaQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIv3SMXoPwc/7MhL7JYkm47DGNUyj1HhYK13mecyLCNpATprt9n
+	M33ZmDcs0EyLr209kT3WXh6svGGFN9g2SwIs706A/6PIG2roTF18q/FCmZa5yZ/vxao=
+X-Gm-Gg: AYBFou34wLhE/OBMKz8g4O9uHzqkvjioo9niznSp3znJbZa74NFe4E/L2lmu+e5TN5k
+	+hidzL7DiS5zKVhOvfxA5Z2siir0npuxQF/5ozuTtiG6dYllYuVOfhCU5LmGp1yriIF2rCxYvul
+	WrUQfHgB7HpVdtRjoyEtYAJEllLwFtjo/sI7UzL5Z8ZakP++reSBv9GMhFNFDvY9qGy4kDZKr7Q
+	jvJj9W87/y2hjZ68xzbzS3Zyp6n/jpp3LVNVBHBHNJLFVC01BVNVUVYs5rMskA2htzOodB+pYR5
+	cHTJZyBAALZMS81SEp8MO/exsQO5TWTtb7+/btwNGblBoB2EQC67c/e1UrvOsKH/qM+c9b9ynGl
+	09/WE/hwMpajofc5PE/9CdTXA5oGeTseP9KfFvIlUCzPmZgh2p9HSdGs4D0B2ktvd12RFsRRA+l
+	S4OngDEevywiREu8hMCAb6Dq8xwcHZrQquekTZSCaVIQqm1zOeVeHQ1xunr6RWbrgWpdXD2oalM
+	twP9T1Dxf6yqrOEQLWG0xSAU90miMR1ijOBA/YHjaUleyr2NiJQDPcwBNe2OVrYe5ZSgx4W/PuI
+	RYeiPllEcAXFAijHcRcRATgalAoM9k5zp9T9vZDMVHifyRJC5pUi
+X-Received: by 2002:a05:701b:204a:20b0:164:8e14:4939 with SMTP id a92af1059eb24-190a4f0471fmr3741902c88.10.1792605009716;
+        Wed, 21 Oct 2026 10:50:09 -0700 (PDT)
+Received: from localhost.localdomain ([2603:8001:5f01:8bab:d059:e601:becb:a5ad])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903ca044d4sm8226137c88.17.2026.10.21.10.50.07
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 21 Oct 2026 10:50:09 -0700 (PDT)
+From: Artem Dinaburg <artem@trailofbits.com>
+To: stable@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bp@alien8.de,
 	bpf@vger.kernel.org,
-	kernel-team@meta.com,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH v4 2/2] tracing: fgraph: use scoped_guard() for the task list walk
-Date: Wed, 21 Oct 2026 10:44:06 -0700
-Message-ID: <20261021174406.2891598-3-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261021174406.2891598-1-vineet.gupta@linux.dev>
-References: <20261021174406.2891598-1-vineet.gupta@linux.dev>
+	daniel@iogearbox.net,
+	dave.hansen@linux.intel.com,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	hpa@zytor.com,
+	ihor.solodrai@linux.dev,
+	jolsa@kernel.org,
+	leon.hwang@linux.dev,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	mingo@redhat.com,
+	song@kernel.org,
+	tglx@kernel.org,
+	x86@kernel.org,
+	yonghong.song@linux.dev
+Subject: [PATCH 6.6.y] bpf, x86: Fix trampoline stack size for 128-bit arguments
+Date: Wed, 21 Oct 2026 13:50:04 -0400
+Message-ID: <20261021175004.1276-1-artem@trailofbits.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,86 +114,59 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-alloc_retstack_tasklist() open-codes rcu_read_lock() and unwinds it
-through an unlock label. Use scoped_guard(rcu) instead and let the
-compiler emit the unlock on every exit path.
+From: Yonghong Song <yonghong.song@linux.dev>
 
-The -EAGAIN case now jumps straight to the free label rather than to
-unlock; leaving the guard's scope releases the RCU read lock on the
-way, so the unlock label has no remaining users and is removed.
+[ Upstream commit 814cba835ef648e0c5eb79505c96c0493b29eea6 ]
 
-No functional change: objdump of fgraph.o shows identical call targets
-and counts, including the three __rcu_read_unlock() sites the compiler
-emits for the exits from the read-side section. A PROVE_RCU +
-DEBUG_ATOMIC_SLEEP build with the -EAGAIN path forced several thousand
-times is clean.
+btf_distill_func_proto() accepts a function argument up to 16 bytes, so a
+128-bit scalar such as __int128 reaches the x86 trampoline with
+arg_size == 16. But the current implementation assumes an __int128
+argument only needs one register, so the register save area is
+under-allocated and save_args() overwrites adjacent stack slots.
 
-The preceding patch deliberately left this alone so that it stays
-straightforward to backport. This is the follow-up.
+Compute the register count from arg_size for all arguments to fix it.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-Tested-by: Vineet Gupta <vineet.gupta@linux.dev>
+Fixes: a9c5ad31fbdc ("bpf: x86: Support in-register struct arguments in trampoline programs")
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Link: https://lore.kernel.org/bpf/20260729050204.2586457-1-yonghong.song@linux.dev
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Assisted-by: LLM
+[ Backport to 6.6.y: Remove the struct-only guard from the existing
+  unbraced argument loop; count eight-byte slots for every argument. ]
+Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
 ---
- kernel/trace/fgraph.c | 39 +++++++++++++++++++--------------------
- 1 file changed, 19 insertions(+), 20 deletions(-)
+Hi,
 
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index 4c74f1a15ad4..bbf6e4e2da2d 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -1057,32 +1057,31 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
- 		}
- 	}
- 
--	rcu_read_lock();
--	for_each_process_thread(g, t) {
--		unsigned long *rs;
-+	scoped_guard (rcu) {
-+		for_each_process_thread(g, t) {
-+			unsigned long *rs;
- 
--		if (t->ret_stack)
--			continue;
-+			if (t->ret_stack)
-+				continue;
- 
--		rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
--		if (!rs) {
--			if (start == end) {
--				ret = -EAGAIN;
--				goto unlock;
-+			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
-+			if (!rs) {
-+				if (start == end) {
-+					ret = -EAGAIN;
-+					goto free;
-+				}
-+				rs = ret_stack_list[start++];
- 			}
--			rs = ret_stack_list[start++];
--		}
- 
--		atomic_set(&t->trace_overrun, 0);
--		ret_stack_init_task_vars(rs);
--		t->curr_ret_stack = 0;
--		t->curr_ret_depth = -1;
--		/* Make sure the tasks see the 0 first: */
--		smp_store_release(&t->ret_stack, rs);
-+			atomic_set(&t->trace_overrun, 0);
-+			ret_stack_init_task_vars(rs);
-+			t->curr_ret_stack = 0;
-+			t->curr_ret_depth = -1;
-+			/* Make sure the tasks see the 0 first: */
-+			smp_store_release(&t->ret_stack, rs);
-+		}
- 	}
- 
--unlock:
--	rcu_read_unlock();
- free:
- 	for (i = start; i < end; i++)
- 		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
--- 
-2.53.0-Meta
+Please consider this backport of the fix for CVE-2026-90358 to 6.6.y.
 
+The backport removes the struct-only guard from the existing unbraced
+argument loop. See the bracketed backport note above.
+
+The complete fix is already present in 6.12.y, 6.18.y and 7.2.y.
+
+Build-tested only as part of a cumulative 6.6.y series on x86_64
+(allmodconfig, CONFIG_WERROR=y); no runtime testing.
+
+Thanks,
+Artem Dinaburg
+
+ arch/x86/net/bpf_jit_comp.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 8028a5a4ab64570022c15bfdf220c4033ad0d4ab..3d33aafa2cc26541e64b37960ce20a06ce5fd2d8 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2467,10 +2467,8 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+ 	u8 *prog;
+ 	bool save_ret;
+ 
+-	/* extra registers for struct arguments */
+ 	for (i = 0; i < m->nr_args; i++)
+-		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+-			nr_regs += (m->arg_size[i] + 7) / 8 - 1;
++		nr_regs += (m->arg_size[i] + 7) / 8 - 1;
+ 
+ 	/* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
+ 	 * are passed through regs, the remains are through stack.
