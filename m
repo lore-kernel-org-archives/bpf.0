@@ -1,45 +1,46 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.38.64.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792616891;
-	b=qjhCTwUDs9wba7ukLeyd4njQEJP90Pc0ojAVJeubhg7yNc3AFWfxywwJN2JxL1QwFhZD
-	 QWQOfQXCH/UmiWNyEsdV+6v1RdHmmwMdFvpMTogzOR717Vkf2v0katvRu4p1LT/2Esb43
-	 015k8c3KawJcsGXLao5hofrVmCcOA5gKumymELtMp8DIowTJAJjyCeg3hbYphUGxhxfdo
-	 zANLA5N5uDCFpddjLmxdt7KXnzEePMYFSG0JnzpE8nHA4heqiwGvXY/nkUc3XZfwi6pSe
-	 99Da6UdB8D+53leSmJrcg317eI4HsurL455LY04O5HiSQlA8t6FfoOtUnPOfD5nbcQg==
+	t=1792616887;
+	b=LcCTFSRuneL+3xeS8sY99C07nWaLR6lyYARlvpkkgZYAq1IKURduaSrO8J1MFG+zRO5a
+	 fJPYJyfW+T3nrf0lFB14M/aYQ3YrfEzHnzek7dwUv0xuWrwL0gUsumU+8eGJmMxIPuei1
+	 WJJIn8K2YGWamIc83mN8exQUwweijTx5/1keS1tL+esfgVOjpIVOe/xQasFwi0jL/sUWi
+	 dRlBABgTgZKPqtjoFRi54uTL9jUjlbvSdVjoc5aUVV/t1HISWANih52rrVaWc9pRdY04P
+	 jJRqBAenHMkC39i1w8YLiejqgNuIR1Z9GYh7R6idaPCeiPkcVqnSNQ86f0vkCiTT+Kg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792616891;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792616887;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=4ey4eJFG3vmM+qX3jhoO2JWgHe6JmYNzqea0vvc8ZdM=;
-	b=JRdwIHLCMFTv4+2//FsCflgSWS3Ven/MbGPvXmw6RFEmqrRyziPLM8m8wGC69BxyMvC1
-	 uZEwVkw5YL7eInR4PGm4YHWYjwPPi0omZNiDQDZ4TE9CRSzP4UgSXXov8FZnsVEDnHLy/
-	 zAyQz8o2cWL4AArPyVMifq2Yj4xG1iYojqtMp9onRxu2/2oZ/4/4HCs+ZNsPbxbNZ/KXp
-	 8JC76R+c/1LYxVZytk/CJWhs4zqIh2uW5sU8EtLK3gbg5NHxf1nYs+mxK7bpk3PGVL9Lw
-	 LG/AwYYJgxpdo3i46p8bgMe+sqPLzjghdr7ZQFGwVvM7gesyUBpUpZzyKd+pYeM7z9g==
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=Uh8B5GR2ITpvAGi6xk07UwmW2QIPmrEdfpY6zzOYLvE=;
+	b=GwixOvwvIKBfWTpgel+TLDemekSuD4f3Xs9xHc2MYhIbUYzZmvOEIaAc3T2avAQ8hEmo
+	 eSY4hn3MwUxKdypx6gdV7gC9NkDRKShbtJiygE+0PEqopESzw10/rRkowv6WMomEFum49
+	 UJwRTLnuHzj9iWMhp+SrVZ+A9Y1YBGOtM3Qi6QcjTtMy/yFVqzPOAOUYqZuQ/ePfAJ16D
+	 Yx3/EiHh+qK6SFOUOrUML1hdmdQuCw0ii4zW5A7we9Wzl3tQLgoo7YwHn5hzhZ2ZpGxSq
+	 +8g/ii67Q+SE2gKNFMK7S9gTn9iInL6nAoDN/CzBddYu17Wm6wBgKPu80ta2gxXDKdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=mail.ustc.edu.cn;
 	spf=pass smtp.mailfrom=mail.ustc.edu.cn;
-	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=WtbmUDIO;
+	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=pSRCm4Rh;
 	arc=none smtp.remote-ip=202.38.64.46
 Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CDC606A322
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 21:08:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 64CDC606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1490606A31B
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 21:08:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D1490606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=WtbmUDIO
+	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=pSRCm4Rh
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=4ey4eJFG3v
-	mM+qX3jhoO2JWgHe6JmYNzqea0vvc8ZdM=; b=WtbmUDIOlJ9Bx+wOywo05aKTE3
-	Y4EantDeY/3o0ApmJl9jXfNAJu/u7C9Rwaqud+ymXxAYENWgUjzzCRe/K1lFU3yq
-	OS9cEej5dg87VCU3NidPX3OKWFnFtpUOetGm53TUAbV/nqj5ZN4e8nvEjHB9nZq8
-	WLei1kfPUxkrZEGSg=
+	Message-ID:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=Uh8B5GR2ITpvAGi6xk07UwmW2QIPmrEdfp
+	Y6zzOYLvE=; b=pSRCm4Rh/EUzLMRCI28MQnOgj7hFrYa00xDcyEMxSSb7s4wFs5
+	KNuiprc0uMrpAYsLDRv4WISELHxj9aRZomJBXSACjH9wi5Amym6NGWgD5aRqv/7s
+	pJOn5yZJ1mk+0Bh6sihN94/Jd2dQpaI9p6JDRw8AkAMuvROfsKJLtIng8=
 Received: from localhost (unknown [222.195.81.103])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgBHxTmsKdlqwjsnAA--.7175S2;
-	Thu, 22 Oct 2026 05:07:56 +0800 (CST)
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgA3xEivKdlq0TsnAA--.2509S2;
+	Thu, 22 Oct 2026 05:07:59 +0800 (CST)
 From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -50,10 +51,12 @@ Cc: ast@kernel.org,
 	ameryhung@gmail.com,
 	yonghong.song@linux.dev,
 	puranjay@kernel.org
-Subject: [PATCH bpf-next v7 0/2] bpf: Track borrowed iterator result lifetimes
-Date: Thu, 22 Oct 2026 05:07:52 +0800
-Message-ID: <20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn>
+Subject: [PATCH bpf-next v7 2/2] selftests/bpf: Test borrowed iterator result lifetimes
+Date: Thu, 22 Oct 2026 05:07:54 +0800
+Message-ID: <20261021210754.3270023-3-xyx2021@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn>
+References: <20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,106 +67,577 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgBHxTmsKdlqwjsnAA--.7175S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF13Gw1xZF1kGw17Kr18Grg_yoWrGFyrpa
-	ykC3yYkF4kJ3W7Kr4xAa17uFyru3Z5JFW5JF1rt34vvan8JF18JFWxKr15ZF9xAF1FkFyf
-	Zr1agas3Ga48Z3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-	C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq
-	07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r
-	18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vI
-	r41lc7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6F4l42xK82IYc2Ij64vIr41l4I8I3I
-	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-	GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-	0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
-	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
-	4UYxBIdaVFxhVjvjDU0xZFpf9x07bzCzNUUUUU=
+X-CM-TRANSID:3pYKCgA3xEivKdlq0TsnAA--.2509S2
+X-Coremail-Antispam: 1UD129KBjvAXoW3Kr18Ar4fXFWUGFyDAFyUtrb_yoW8WF15Jo
+	Z7CFn0ya1UurykAw47Kr4xKrW7ZanY9F9xJrW5G39aga18Gwn5KrW7Ww4UX3WjgF15Kry7
+	ua4rGanavr4kGr1fn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYP7k0a2IF6w4xM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
+	x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
+	1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0
+	I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+	vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE
+	52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXV
+	WUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAK
+	I48JMxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwVWxMxAIw28IcxkI7VAKI48JMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0zHq5UUUUU==
 X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Make non-RCU, non-acquired struct iterator results borrow the current
-element lifetime by default. KF_ITER_RET_INDEPENDENT marks the explicit
-exception for results whose lifetime is independent of the iterator.
+Exercise borrowed VMA results before and after iterator advancement
+and destruction, including NULL next, trusted fields, and a FILE
+dynptr that must be discarded before advancing. Keep positive controls
+for using the current element and discarding the dynptr first.
 
-Trusted field loads and dynptr constructors propagate the source lifetime
-so derived pointers stay in the invalidation graph. Next preserves the
-iterator itself and invalidates old dependents before both return
-outcomes; destroy propagates outstanding-child errors.
+Use a test-module iterator returning current to verify the explicit
+independent-lifetime exception. Retain controls for RCU-protected
+results. Also check the generic trusted-field rule outside iterators:
+reading file->f_inode while holding an acquired file reference succeeds,
+but using the saved inode pointer after bpf_put_file() is rejected.
 
-As Alexei pointed out, the trusted-field rule is generic. Patch 1 now
-explains why an inode pointer loaded from an acquired file becomes
-invalid when that file reference is released, and how the same rule
-applies to fields derived from an iterator result. Patch 2 adds VFS
-tests for the valid before-release access and the rejected after-release
-access alongside the existing iterator lifetime tests.
+The annotated programs check verifier loading and diagnostics; they do
+not request runtime execution of the added programs.
 
-The field-propagation overlap with Kumar's related work remains. This
-series introduces no general kfunc borrowed-return annotation; the
-separate bpf_real_data_inode() return-lifetime gap remains outside its
-scope. The iterator policy has no dependency on that annotation.
-
-Changes in v7:
-  - Explain the generic trusted-field lifetime rule and the file/inode
-    example in patch 1's commit log, as requested by Alexei.
-  - Add a positive and negative VFS test for that example in patch 2.
-  - Rebase onto bpf-next b116ac6087541. The implementation's added and
-    removed lines are unchanged from posted v6; the field-load hunk's
-    context now includes the upstream __nullable handling.
-
-v6:
-https://lore.kernel.org/r/20260927120406.1041915-1-xyx2021@mail.ustc.edu.cn
-Alexei's v6 review:
-https://lore.kernel.org/r/DMA2SZ5PRG4N.3I51MHSTWUUTS@gmail.com
-Kumar's related work:
-https://lore.kernel.org/r/DLGYPZAL708V.3GFLANAPH2L8O@gmail.com
-
-Validation on this candidate with a matching bpf_testmod:
-  - W=1 verifier, full kernel and modules builds passed.
-  - Changed BPF objects and required fixture compiled strictly.
-  - iters: 1/122 passed; 0 skipped.
-  - dynptr: 2/137 passed; 0 skipped.
-  - file_reader: 1/10 passed; 0 skipped.
-  - verifier_vfs_accept: 1/7 passed; 0 skipped.
-  - verifier_vfs_reject: 1/13 passed; 0 skipped.
-  - kmem_cache_iter: 1/3 passed; 0 skipped.
-  - dmabuf_iter: 1/4 passed; 0 skipped.
-
-The new before-release VFS program loaded on both the unmodified
-baseline and this candidate. The after-release program loaded on the
-baseline and was rejected by this candidate with the expected scalar
-access diagnostic. These annotated programs are load-only.
-
-The VMs used panic_on_warn and panic_on_oops. No WARN_ON report,
-Oops or panic was found. Unprivileged BPF was enabled only in the
-isolated guests.
-
-The broad test_progs build used BPF_STRICT_BUILD=0; no compile skips
-were reported. The unfiltered full
-suite, sanitizer and architecture matrices were not run. The fresh
-baseline comparison covers the new VFS example.
-
-Please queue the verifier fix for stable after it reaches the BPF tree.
-
-Xu Yunxiang (2):
-  bpf: Track borrowed iterator results by default
-  selftests/bpf: Test borrowed iterator result lifetimes
-
- Documentation/bpf/bpf_iterators.rst           |  10 +
- include/linux/btf.h                           |   1 +
- kernel/bpf/btf.c                              |  13 +-
- kernel/bpf/verifier.c                         | 103 ++++-
+Assisted-by: LLM
+Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+---
  .../selftests/bpf/progs/iters_testmod.c       | 370 ++++++++++++++++++
  .../selftests/bpf/progs/verifier_vfs_accept.c |  17 +
  .../selftests/bpf/progs/verifier_vfs_reject.c |  19 +
  .../selftests/bpf/test_kmods/bpf_testmod.c    |  25 ++
  .../selftests/bpf/test_kmods/bpf_testmod.h    |   4 +
  .../bpf/test_kmods/bpf_testmod_kfunc.h        |   5 +
- 10 files changed, 548 insertions(+), 19 deletions(-)
+ 6 files changed, 440 insertions(+)
 
-
-base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
+diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/testing/selftests/bpf/progs/iters_testmod.c
+index 145750bb64ef8..8896335668b47 100644
+--- a/tools/testing/selftests/bpf/progs/iters_testmod.c
++++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
+@@ -8,6 +8,44 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++struct bpf_iter_testmod_current {
++	u64 __opaque;
++};
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_independent_lifetime_after_next(const void *ctx)
++{
++	struct bpf_iter_testmod_current it;
++	struct task_struct *task;
++
++	bpf_iter_testmod_current_new(&it);
++	task = bpf_iter_testmod_current_next(&it);
++	if (!task)
++		goto out;
++
++	bpf_iter_testmod_current_next(&it);
++	bpf_kfunc_trusted_task_test(task);
++out:
++	bpf_iter_testmod_current_destroy(&it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_independent_lifetime_after_destroy(const void *ctx)
++{
++	struct bpf_iter_testmod_current it;
++	struct task_struct *task;
++
++	bpf_iter_testmod_current_new(&it);
++	task = bpf_iter_testmod_current_next(&it);
++	bpf_iter_testmod_current_destroy(&it);
++	if (task)
++		bpf_kfunc_trusted_task_test(task);
++	return 0;
++}
++
+ SEC("raw_tp/sys_enter")
+ __success
+ int iter_next_trusted(const void *ctx)
+@@ -28,6 +66,298 @@ int iter_next_trusted(const void *ctx)
+ 	return 0;
+ }
+ 
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	bpf_iter_task_vma_destroy(&vma_it);
++	return vma_ptr->vm_start;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr, *next_vma_ptr;
++	u64 vm_start;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	next_vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!next_vma_ptr)
++		goto out;
++
++	vm_start = vma_ptr->vm_start;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return vm_start;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_after_next_null(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr, *next_vma_ptr;
++	u64 vm_start;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	next_vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (next_vma_ptr)
++		goto out;
++
++	vm_start = vma_ptr->vm_start;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return vm_start;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_field_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	bpf_iter_task_vma_destroy(&vma_it);
++	if (file_ptr)
++		return file_ptr->f_mode;
++	return 0;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_field_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr, *next_vma_ptr;
++	struct file *file_ptr;
++	u32 mode;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	next_vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!next_vma_ptr)
++		goto out;
++
++	mode = file_ptr->f_mode;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return mode;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("Leaking reference id=")
++int iter_next_file_dynptr_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct bpf_dynptr dynptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	bpf_dynptr_from_file(file_ptr, 0, &dynptr);
++	bpf_iter_task_vma_next(&vma_it);
++	bpf_dynptr_file_discard(&dynptr);
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("Leaking reference id=")
++int iter_next_file_dynptr_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct bpf_dynptr dynptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	bpf_dynptr_from_file(file_ptr, 0, &dynptr);
++	bpf_iter_task_vma_destroy(&vma_it);
++	bpf_dynptr_file_discard(&dynptr);
++	return 0;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_file_dynptr_discard_before_advance(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct bpf_dynptr dynptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	bpf_dynptr_from_file(file_ptr, 0, &dynptr);
++	bpf_dynptr_file_discard(&dynptr);
++	bpf_iter_task_vma_next(&vma_it);
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_trusted_current_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (vma_ptr)
++		bpf_kfunc_trusted_vma_test(vma_ptr);
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_trusted_rcu_field_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct mm_struct *mm_ptr;
++	struct file *file_ptr = NULL;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (vma_ptr) {
++		mm_ptr = vma_ptr->vm_mm;
++		/* exe_file has RCU protection independent of the iterator. */
++		if (mm_ptr)
++			file_ptr = mm_ptr->exe_file;
++	}
++
++	bpf_iter_task_vma_destroy(&vma_it);
++	if (file_ptr)
++		return file_ptr->f_mode;
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_trusted_rcu_field_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct mm_struct *mm_ptr;
++	struct file *file_ptr = NULL;
++	u32 mode = 0;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (vma_ptr) {
++		mm_ptr = vma_ptr->vm_mm;
++		if (mm_ptr)
++			file_ptr = mm_ptr->exe_file;
++	}
++
++	bpf_iter_task_vma_next(&vma_it);
++	if (file_ptr)
++		mode = file_ptr->f_mode;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return mode;
++}
++
+ SEC("raw_tp/sys_enter")
+ __failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_next_trusted_or_null(const void *ctx)
+@@ -77,6 +407,46 @@ int iter_next_rcu(const void *ctx)
+ 	return 0;
+ }
+ 
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_rcu_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task task_it;
++	struct task_struct *task_ptr;
++
++	bpf_iter_task_new(&task_it, cur_task, 0);
++
++	task_ptr = bpf_iter_task_next(&task_it);
++	bpf_iter_task_destroy(&task_it);
++	if (!task_ptr)
++		return 0;
++
++	bpf_kfunc_rcu_task_test(task_ptr);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_rcu_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task task_it;
++	struct task_struct *task_ptr;
++
++	bpf_iter_task_new(&task_it, cur_task, 0);
++
++	task_ptr = bpf_iter_task_next(&task_it);
++	if (!task_ptr)
++		goto out;
++
++	bpf_iter_task_next(&task_it);
++	bpf_kfunc_rcu_task_test(task_ptr);
++out:
++	bpf_iter_task_destroy(&task_it);
++	return 0;
++}
++
+ SEC("raw_tp/sys_enter")
+ __failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_next_rcu_or_null(const void *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+index 55398c04290a8..25f37a3dd7cfb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+@@ -11,6 +11,23 @@
+ 
+ static char buf[64];
+ 
++SEC("lsm.s/file_open")
++__success
++int BPF_PROG(inode_field_before_file_put)
++{
++	struct file *file;
++	ino_t ino;
++
++	file = bpf_get_task_exe_file(bpf_get_current_task_btf());
++	if (!file)
++		return 0;
++
++	ino = file->f_inode->i_ino;
++	bpf_put_file(file);
++	__sink(ino);
++	return 0;
++}
++
+ SEC("lsm.s/file_open")
+ __success
+ int BPF_PROG(get_task_exe_file_and_put_kfunc_from_current_sleepable)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+index b5f456d57669e..ed2bd2faebf36 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+@@ -12,6 +12,25 @@
+ 
+ static char buf[PATH_MAX];
+ 
++SEC("lsm.s/file_open")
++__failure __msg("invalid mem access 'scalar'")
++int BPF_PROG(inode_field_after_file_put)
++{
++	struct inode *inode;
++	struct file *file;
++	ino_t ino;
++
++	file = bpf_get_task_exe_file(bpf_get_current_task_btf());
++	if (!file)
++		return 0;
++
++	inode = file->f_inode;
++	bpf_put_file(file);
++	ino = inode->i_ino;
++	__sink(ino);
++	return 0;
++}
++
+ SEC("lsm.s/file_open")
+ __failure __msg("Possibly NULL pointer passed to trusted R1")
+ int BPF_PROG(get_task_exe_file_kfunc_null)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 6380f52f4dd2c..76fbe64755ef9 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -281,6 +281,27 @@ __bpf_kfunc void bpf_iter_testmod_seq_destroy(struct bpf_iter_testmod_seq *it)
+ 	it->cnt = 0;
+ }
+ 
++__bpf_kfunc int bpf_iter_testmod_current_new(struct bpf_iter_testmod_current *it)
++{
++	it->remaining = 2;
++	return 0;
++}
++
++__bpf_kfunc struct task_struct *
++bpf_iter_testmod_current_next(struct bpf_iter_testmod_current *it)
++{
++	if (!it->remaining)
++		return NULL;
++	it->remaining--;
++	/* current remains alive independently of the iterator. */
++	return current;
++}
++
++__bpf_kfunc void bpf_iter_testmod_current_destroy(struct bpf_iter_testmod_current *it)
++{
++	it->remaining = 0;
++}
++
+ __bpf_kfunc void bpf_kfunc_common_test(void)
+ {
+ }
+@@ -1016,6 +1037,10 @@ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_new, KF_ITER_NEW)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_destroy, KF_ITER_DESTROY)
+ BTF_ID_FLAGS(func, bpf_iter_testmod_seq_value)
++BTF_ID_FLAGS(func, bpf_iter_testmod_current_new, KF_ITER_NEW)
++BTF_ID_FLAGS(func, bpf_iter_testmod_current_next,
++	     KF_ITER_NEXT | KF_RET_NULL | KF_ITER_RET_INDEPENDENT)
++BTF_ID_FLAGS(func, bpf_iter_testmod_current_destroy, KF_ITER_DESTROY)
+ BTF_ID_FLAGS(func, bpf_kfunc_common_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_arena_arg_test)
+ BTF_ID_FLAGS(func, bpf_kfunc_arena_cap_test)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
+index 4ba9def74404b..aef780261ef4f 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
+@@ -31,6 +31,10 @@ struct bpf_iter_testmod_seq {
+ 	int cnt;
+ };
+ 
++struct bpf_iter_testmod_current {
++	u64 remaining;
++};
++
+ struct bpf_testmod_ops {
+ 	int (*test_1)(void);
+ 	void (*test_2)(int a, int b);
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 3b810f1e438f7..e9902e651d72b 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -33,6 +33,11 @@ struct prog_test_ref_kfunc {
+ #endif
+ 
+ struct bpf_iter_testmod_seq;
++struct bpf_iter_testmod_current;
++
++int bpf_iter_testmod_current_new(struct bpf_iter_testmod_current *it) __ksym;
++struct task_struct *bpf_iter_testmod_current_next(struct bpf_iter_testmod_current *it) __ksym;
++void bpf_iter_testmod_current_destroy(struct bpf_iter_testmod_current *it) __ksym;
+ 
+ struct prog_test_pass1 {
+ 	int x0;
 -- 
 2.43.0
 
