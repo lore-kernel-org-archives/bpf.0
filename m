@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792599034;
-	b=SplxEWKcvM0AD1MRfjNuVvbzQdILK241seLmEDhfTJ91GYHzfDYn5FSorieidPS08yp8
-	 0UskPHwUCD5t9qxWWa+vgPQMP4/ezm7lEE4MVVRFTUN1WZAeZfOzlScvRQUOkH8CcVf+6
-	 kg6FjVXaTq7Bqp83VRQxeat2IR3SkSPJUCrWSdQMbgD+BoiIlS4MwYCzSCOvvInij/BS5
-	 oxzB4JyNF6VxdijNapH6TF4sA2SpzOGSZ4AGEn3BRxEOhMzPxmy/S8yov2xoFaMep1mWM
-	 nZjYSz22NRORvVRObfCh3iL4iPXLiU88MUJs/LfSll2c6U19t8QXMtP2H0TYH97DmtA==
+	t=1792600331;
+	b=Nm0gfsU9QUohH7c+Mj/3serr7sAFlkmSBe4/fsbX4q1rKl1wvycInjWxAP8t/BI58Ya/
+	 ghzvnNwM00RSqMUob71FAUS1v9xk8paSke61Xyja9BLe62MKrslPNhP83n1S6Y3TStwwl
+	 RZBmxGkQbDLsYFqfrestQebAXeezeIcBB1mqFiy8eTC3vclbZ+x95tqOz03T6h8Z9vPRb
+	 TV1TF4TjyZh0CAv+jYgQw9kUDlHC+Sdast51i/R/yFyCO4uNAZei03jZP2fLnEwZEqn3w
+	 60C/T5CkaxvrvoFYnXwq9ghkQn5ehMNTUIW6cwRo4VULd1JZhuYjsJHQj8lgLHTRRxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792599034;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792600331;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=+7Ujto4tjtuV9lFfiMh55O02RRTxCUDxJr9QcS5uaRc=;
-	b=iasMJ9nT5jMGuhHCmOt2SCYxr3rhhlDNDWkG70eTJbah1eNZ4UgQuuFx9LgxQTZ1cfOY
-	 mUCe36JTole2ByPOJMOQtSrqczCg7CUmoGH1CdwdGuXl80MpSeUeKz+Sebgd/uK/dpdgN
-	 6xc9aM12xf8x3JclNaPunIsEAkGfhVzlGhichSS6LTCwvyt4O0qvoF+QHc2PmhssChRoe
-	 HSBPq0yh/43/iDFCgLC7xCGL2rJv6hSTZM8eE5vvJkkaJ41sRylVNig4RDPtAyOHDT+ZD
-	 5FAQXNzs5sVhMrv23sjBvqb5J3xMPA7ItToI0X9id4TOIe91kdekXh+2GS2xcURSa8A==
+	bh=hWPhn/sEKxSR6yISxRC42gyehfNe6MmeCModEqQ++2s=;
+	b=nTfGZ/d0Qd1FocsU0wtxCUvEiexUJ5srQBITyQs5xgTnu5JRKBFWFsz9wYMJIDnU637L
+	 DIT3FxiKY+wCgSMnN5YEMBFvFS3myv6rs+Ra3QcY0AaVHfTVdANlbSSmYFAX+IuwvESNv
+	 6K1H9z1xBX1Ppu7dNQt6NT8L1Bsu8imdzSxnVKrubuvOQBPmdUlLlK/Sw2UjZLhJawoIX
+	 NluK2m/20NNiG0UZDANXV3Wba7rih+qRDvGTOS7rmE9sK40c/JMOgeCcAus2+M5f6j33Q
+	 jH4GTcHAzr8MqOmtJb+D+FiKfXS+pVCroY2pNoFECqdkkY3gpwSsGOTqXn9XPjKcJyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ayZGeZ2y;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jg2CsMWJ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC22D606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 16:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544DF606A31A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 16:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ayZGeZ2y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070CB1F000C1;
-	Wed, 21 Oct 2026 16:10:32 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Jg2CsMWJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D217C1F000C1;
+	Wed, 21 Oct 2026 16:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792599033;
-	bh=+7Ujto4tjtuV9lFfiMh55O02RRTxCUDxJr9QcS5uaRc=;
+	s=k20260515; t=1792600330;
+	bh=hWPhn/sEKxSR6yISxRC42gyehfNe6MmeCModEqQ++2s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ayZGeZ2yRdKMbjQdkgFx+6kbHruwxIFAgimpOtMezkw81uDDaOS4bdpP04eqbCxao
-	 g/Y0rZeLcMEj9eWzFrxwKvnchZf2aAk8FFb6B2B06peRal6vy0NG2h0a5DUlPB6Z2v
-	 QKtkBDEuVnQm0VmLt79xV7jxDyanl9rRi6z/n//nMApk8eEc30Ql7iTY/HcbUuQ6on
-	 LQpON8+G48YOmThIGnoeMlE/p3gORqwGesDmw3DR4gTHS+QazXIJfKayE30IMmqrEL
-	 gJQn4XZJyO/hvJvVJyv2xx71x2snd5Eh2FvJlLYMlJMlud0sleskcHRmPP+oHJ3YiF
-	 RvJjwbMyDeWHA==
-Message-ID: <sashiko-outbox-180459@kernel.org>
+	b=Jg2CsMWJbDsao1gTDOMaIgwdTes72NJtELslb5haF1OoCgac2MfLmQl8mbqy6w/2L
+	 zFh3BBBaIOMQecdt5wdxTDZgFa+ZTvpVhSETsrTQg3Mr7Jcf1Kioj3luLPzyv8Voeh
+	 19jc1tOk66Oxw6AvlBvAlg98pA1DsssRgEajR/VxrbPcCcoigRgLTTwP84p6l0HRn2
+	 RBShWueVfQIXkQVF+q0b4BZpwhcppvW2nrLbrRdSsWW6cqfG4JGf8Cbzhl3pp2ta1+
+	 dOeOZZIzVvJjkJcT97sXwpgioy9uEQidnXgQVnWMUI0izZpYHBj17H9YiePl3HAmEw
+	 74acH6f5a3tnw==
+Message-ID: <sashiko-outbox-180468@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf, sockmap: use READ_ONCE/WRITE_ONCE for
- saved_data_ready in the verdict path
+Subject: Re: [PATCH bpf] net: return page_pool frags to the pool in
+ bpf_xdp_shrink_data()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Dudu Lu" <phx0fer@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261021155629.68813-1-phx0fer@gmail.com>
-References: <20261021155629.68813-1-phx0fer@gmail.com>
+In-Reply-To: <20261021155645.69120-1-phx0fer@gmail.com>
+References: <20261021155645.69120-1-phx0fer@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 21 Oct 2026 16:10:32 +0000
+Date: Wed, 21 Oct 2026 16:32:10 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,149 +60,117 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] bpf, sockmap: incomplete data-race fix in sk_psock_start_verdict=
-() and sock_map_unref()
+- [High] net: bpf_xdp_shrink_data() unrefs page_pool on non-recycled shared=
+ frags
+- [Low] bpf: multi-line comment style violation in bpf_xdp_shrink_data()
 --
 
-commit 3aa9e245b4ee20f4b50e92e1de66b46757cb8a03
+commit a0cb1ce1fd03b9aff34c23b2b43d38801d791b8d
 Author: Dudu Lu <phx0fer@gmail.com>
 
-bpf, sockmap: use READ_ONCE/WRITE_ONCE for saved_data_ready in the verdict =
-path
+net: return page_pool frags to the pool in bpf_xdp_shrink_data()
 
-This commit annotates accesses to psock->saved_data_ready in
-sk_psock_start_verdict() and sk_psock_stop_verdict() to address data races
-with sock_map_link() and sock_map_unref().
+This commit updates bpf_xdp_shrink_data() in net/core/filter.c to check
+whether a released fragment with MEM_TYPE_PAGE_SHARED is backed by a
+page_pool and recycle it via napi_pp_put_page() before falling back to
+__xdp_return(). This avoids freeing page_pool-backed fragments allocated
+by skb_pp_cow_data() through page_frag_free() under generic xdp when the
+rxq has no registered memory model.
 
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index df385a5a961e8..0bfb8c4e7f36d 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -1260,10 +1260,10 @@ static void sk_psock_verdict_data_ready(struct so=
-ck *sk)
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index b7ac145b68b1f..f17113ff29874 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+
+[ ... ]
+
+> @@ -4408,6 +4409,18 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *x=
+dp, skb_frag_t *frag,
+>  	}
 > =20
->  void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
->  {
-> -	if (READ_ONCE(psock->saved_data_ready))
-> +	if (READ_ONCE(psock->saved_data_ready))
->  		return;
-> =20
-> -	psock->saved_data_ready =3D sk->sk_data_ready;
-> +	WRITE_ONCE(psock->saved_data_ready, sk->sk_data_ready);
->  	WRITE_ONCE(sk->sk_data_ready, sk_psock_verdict_data_ready);
->  	WRITE_ONCE(sk->sk_write_space, sk_psock_write_space);
->  }
-> @@ -1273,9 +1273,9 @@ void sk_psock_stop_verdict(struct sock *sk, struct =
-sk_psock *psock)
->  	psock_set_prog(&psock->progs.stream_verdict, NULL);
->  	psock_set_prog(&psock->progs.skb_verdict, NULL);
-> =20
-> -	if (!psock->saved_data_ready)
-> +	if (!READ_ONCE(psock->saved_data_ready))
->  		return;
-> =20
->  	WRITE_ONCE(sk->sk_data_ready, psock->saved_data_ready);
-> -	psock->saved_data_ready =3D NULL;
-> +	WRITE_ONCE(psock->saved_data_ready, NULL);
->  }
+>  	if (release) {
+> +		/* The frag may be page_pool-backed even when the rxq's
+> +		 * xdp_rxq_info carries no mem model (generic XDP on a
+> +		 * driver that never registers one, e.g. loopback).  In that
+> +		 * case mem_type is MEM_TYPE_PAGE_SHARED and __xdp_return()
+> +		 * would free the page through page_frag_free(), leaving the
+> +		 * page_pool's accounting dangling -- "page_pool leak".  Route
+> +		 * page_pool pages back through the pool instead.
+> +		 */
 
-[Severity: Medium]
-When a socket is concurrently added to and removed from sockmaps via
-sock_map_update_elem() -> sock_map_link() and sock_map_delete_elem() ->
-sock_map_unref() -> sock_map_del_link(), does this change actually resolve
-the reported data races?
+[Severity: Low]
+This isn't a bug, but in bpf subsystem files such as net/core/filter.c,
+should multi-line comments in bpf_xdp_shrink_data() have the opening /* on
+its own line with the comment text starting on the following line?
 
-Every caller of sk_psock_start_verdict(), sk_psock_stop_verdict(),
-sk_psock_start_strp(), and sk_psock_stop_strp() (namely sock_map_link() and
-sock_map_del_link() in net/core/sock_map.c, and sk_psock_drop() in
-net/core/skmsg.c) already holds write_lock_bh(&sk->sk_callback_lock).
-Because all writes to psock->saved_data_ready are serialized by
-sk->sk_callback_lock, the reads in sk_psock_start_verdict() and
-sk_psock_stop_verdict() cannot race with a concurrent writer.
+> +		if (IS_ENABLED(CONFIG_PAGE_POOL) &&
+> +		    mem_type =3D=3D MEM_TYPE_PAGE_SHARED && napi_pp_put_page(netmem))
+> +			return release;
+> +
+>  		__xdp_return(netmem, mem_type, false, zc_frag);
 
-Meanwhile, sk_psock_stop_verdict() in net/core/skmsg.c still reads
-psock->saved_data_ready with an unannotated plain load when restoring
-sk->sk_data_ready:
+[Severity: High]
+Can calling napi_pp_put_page(netmem) in bpf_xdp_shrink_data() when
+mem_type =3D=3D MEM_TYPE_PAGE_SHARED corrupt reference counts if the xdp_bu=
+ff
+owns a page->_refcount reference rather than a pp_ref_count reference?
 
-	if (!READ_ONCE(psock->saved_data_ready))
-		return;
+On a veth interface with native xdp enabled, veth_xdp_rcv_skb() calls
+veth_convert_skb_to_xdp_buff() -> skb_pp_cow_data(). For any trailing
+fragment with size <=3D PAGE_SIZE / 2 (such as a 4000-byte packet),
+page_pool_dev_alloc() -> page_pool_alloc_netmem() calls
+page_pool_alloc_frag_netmem(), which fragments the page with BIAS_MAX:
 
-	WRITE_ONCE(sk->sk_data_ready, psock->saved_data_ready);
+net/core/page_pool.c:page_pool_alloc_frag_netmem() {
+    ...
+		pool->frag_page =3D netmem;
 
-And the sibling functions sk_psock_start_strp() and sk_psock_stop_strp() in
-net/core/skmsg.c, as well as sock_map_link() in net/core/sock_map.c, also
-use plain loads and stores for psock->saved_data_ready:
-
-net/core/skmsg.c:sk_psock_start_strp() {
-	if (psock->saved_data_ready)
-		return;
-
-	psock->saved_data_ready =3D sk->sk_data_ready;
-	...
+frag_reset:
+		pool->frag_users =3D 1;
+		*offset =3D 0;
+		pool->frag_offset =3D size;
+		page_pool_fragment_netmem(netmem, BIAS_MAX);
+		return netmem;
 }
 
-More importantly, the unlocked reads of psock->saved_data_ready that race
-with sk_psock_start_verdict() happen in sock_map_unref() ->
-sock_map_del_link() in net/core/sock_map.c under
-spin_lock_bh(&psock->link_lock), before write_lock_bh(&sk->sk_callback_lock)
-is acquired:
+When bpf_prog_run_xdp() returns XDP_TX or XDP_REDIRECT, veth_xdp_rcv_skb()
+transfers ownership from the skb to the xdp_buff and switches the memory
+model to rq->xdp_mem (which has type MEM_TYPE_PAGE_SHARED):
 
-net/core/sock_map.c:sock_map_del_link() {
-	...
-	spin_lock_bh(&psock->link_lock);
-	list_for_each_entry_safe(link, tmp, &psock->link, list) {
-		if (link->link_raw =3D=3D link_raw) {
-			struct bpf_map *map =3D link->map;
-			struct sk_psock_progs *progs =3D sock_map_progs(map);
-
-			if (psock->saved_data_ready && progs->stream_parser)
-				strp_stop =3D true;
-			if (psock->saved_data_ready && progs->stream_verdict)
-				verdict_stop =3D true;
-			if (psock->saved_data_ready && progs->skb_verdict)
-				verdict_stop =3D true;
-			...
-		}
-	}
-	spin_unlock_bh(&psock->link_lock);
-	if (strp_stop || verdict_stop) {
-		write_lock_bh(&sk->sk_callback_lock);
-		if (strp_stop)
-			sk_psock_stop_strp(sk, psock);
-		if (verdict_stop)
-			sk_psock_stop_verdict(sk, psock);
-		...
-		write_unlock_bh(&sk->sk_callback_lock);
-	}
+drivers/net/veth.c:veth_xdp_rcv_skb() {
+    ...
+	case XDP_TX:
+		veth_xdp_get(xdp);
+		consume_skb(skb);
+		xdp->rxq->mem =3D rq->xdp_mem;
+		if (unlikely(veth_xdp_tx(rq, xdp, bq) < 0)) {
+    ...
 }
 
-Because those reads in sock_map_del_link() remain unannotated plain loads
-outside sk->sk_callback_lock, won't the data race between
-sk_psock_start_verdict() and sock_map_unref() still trigger? In addition,
-if sock_map_del_link() checks psock->saved_data_ready before taking
-write_lock_bh(&sk->sk_callback_lock), can it observe psock->saved_data_ready
-newly set by a concurrent sock_map_link() and then call
-sk_psock_stop_verdict(), clearing psock->progs.stream_verdict and
-psock->progs.skb_verdict and restoring sk->sk_data_ready for the newly
-added link?
+Here, veth_xdp_get(xdp) increments page->_refcount via __skb_frag_ref(),
+and consume_skb(skb) releases the skb's pp_ref_count reference via
+napi_pp_put_page() (decrementing pp_ref_count from BIAS_MAX to
+BIAS_MAX - 1). Because rq->page_pool->frag_page (or another skb sharing
+the fragmented page) still holds the remaining pp_ref_count references,
+pp_ref_count does not reach 0 and netmem_is_pp(netmem) remains true.
 
-Finally, regarding the race between sock_map_link() and sock_map_unref()
-mentioned in the commit description, doesn't that race occur in
-net/core/sock_map.c where sock_map_link() -> sock_map_init_proto() writes
-psock->psock_update_sk_prot without sk->sk_callback_lock while
-sock_map_unref() -> sock_map_del_link() reads it under sk->sk_callback_lock:
+When a downstream program in veth_xdp_rcv_one(), dev_map_bpf_prog_run(),
+or cpu_map_bpf_prog_run_xdp() shrinks and releases that fragment via
+bpf_xdp_adjust_tail() or bpf_xdp_pull_data(), bpf_xdp_shrink_data() sees
+mem_type =3D=3D MEM_TYPE_PAGE_SHARED and netmem_is_pp(netmem) =3D=3D true. =
+Calling
+napi_pp_put_page(netmem) decrements pp_ref_count a second time instead of
+calling __xdp_return() -> page_frag_free() to drop the page->_refcount
+reference.
 
-net/core/sock_map.c:sock_map_init_proto() {
-	if (!sk->sk_prot->psock_update_sk_prot)
-		return -EINVAL;
-	psock->psock_update_sk_prot =3D sk->sk_prot->psock_update_sk_prot;
-	return sk->sk_prot->psock_update_sk_prot(sk, psock, false);
-}
+Wouldn't this leak page->_refcount and cause page_pool_unref_netmem() to
+underflow pp_ref_count (or prematurely recycle the page while other skbs
+still hold fragments of it) when rq->page_pool drains frag_page?
 
-which is not touched by this patch?
+[ ... ]
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021155629.6881=
-3-1-phx0fer@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021155645.6912=
+0-1-phx0fer@gmail.com?part=3D1
