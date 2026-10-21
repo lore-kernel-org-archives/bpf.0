@@ -1,92 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.6
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792540274;
-	b=5WGllmVkX8buIT8xfGJPSewPB5g8pJBTlJ0Cgx8KHi99J4/K84R9o8Kqa3f7Q8tuy61o
-	 TMucudy0lhp+KN+MdCAxvy36i8CxMX9RU0ibS0dGtKobSRnsT+z5Qi3+qubSNlrI6Zzav
-	 qVUnNYtecfr1FeLMhQPtM2LsonTRz8fP4gSvibNsPI1BXV0KwOSzXsW4fydnKajId1AD3
-	 dClbk6VuxUBr/3AdyB+FhzFMR5qs3T8O7twW3g3TnkvVGlt6abZ0P5C+/ZOuCzryBicxI
-	 i4mGPDzMoi1gJvQRAX7rxcepdJkZ/K3c74KlScouF8sFWpfJz/C44ow4M6QMDrPEwNA==
+	t=1792540878;
+	b=lcYlSNX5JMR7TMI5PwyQVU11KQpuFhFYRFxxpwZIVQT0R0/bYAjwtchxjQoY6EJl50hV
+	 mwS+qcMWf734bpbtnVP3oPqJobDd8LbC/T6+zGz2MAzIiZ6oMZZYfMbDWSiKC6cOL0PYB
+	 qxTVfY2MBkBPJF159uGbvNesTjwluLWD6DnoH428O1rYDCW6pNxs5ScZfhNBAJPaI3pHn
+	 +HjCvWanrnwAEv1Py9wR6e6XLj+jv5jDC+2r6sc97UzMYLcrOZrMbrF3yWNraZE2/CAcN
+	 hwBYjku7OMCaQZhW3ARFziwwZ1yR+DmJGeT2jIj2ejDHez2e9wmJ2r35Csev4pNxCww==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792540274;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792540878;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=PehXZcrvadP5J4z5HJ+PHlJPo930ZmM8+dDrOQ32K8w=;
-	b=h6NlzLOna3FeF4m4ZhfOG4b4MWZ/EnjbBnNBRVBYLTqEv/C4QckXZTBljcdmG8X0C3md
-	 83+aNbLc5hOoYAOVnclBcO8Ii9xJ3XWDkR3cm5cn6qZsyBpZRreNQU+X2JvVW2A1w5Wsj
-	 8Usm2vE4JkbeeKk/rQ8fr4RvvuXteZ5xdi4rEzDvoaoHn7+v98bxoVr05UgqVDwcg0gpx
-	 /jB/6GVwIuelpu44Vn6SMEcdJmXcN5ffFkJiAD+kiYVSoQ4WEYWFQm+1+uVcVM3D3pClu
-	 MjfmzA5FVD8xHYRUruvCuB0H17U5mnuiBj2sYAfXG9Rqo3dWfC7nz9WGU1Kn+vySuyg==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:X-Mailer:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=AEeiPsA/EawKKYb8+qMzkwfuJK4nmSs/11TC2lwYs/8=;
+	b=SaitLo3gnx1nop5uIDBdbs0Fz6/71YaE2P+5YvztCilfuEEQ0wvJ21/LBgw1DowqNP0E
+	 37pOqf4ChJbbMf0b6j+L0I5QUnkTsQMeXFxyPyRlCM5l++ZgTKRB2aSwAJ4q73nEyVaxL
+	 ZGTNqxSa2FweL6zXSz9yUpQxtp74/XTEvOcHOW2DvXcjR5xtIfSZ4/WwgmfEuYOT6vN3Q
+	 dQxMDLaZmNGbSAzzBvJIKVrE9nhlOEZQBXHCYQbA8o6HhRnq8/n0zkQ6VgoF4E0KVAuc9
+	 yZC9vPjxw5ejOxY9VqV9opqX6Za3jPmgMtxHA8KD/G3+M9VS4Bf3DsYwa7RrYAsQGAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ebytfI+T;
-	arc=none smtp.remote-ip=74.125.229.6
-Received: from mail-dy2-f6.google.com (mail-dy2-f6.google.com [74.125.229.6])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=X4qmef56;
+	arc=none smtp.remote-ip=209.85.214.172
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3BA606A31A
-	for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 23:51:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF3BA606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F73D606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 00:01:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8F73D606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ebytfI+T
-Received: by mail-dy2-f6.google.com with SMTP id 5a478bee46e88-35adc681e1aso185372eec.0
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 16:51:13 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=X4qmef56
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e901e114fdso698085ad.2
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:01:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792540273; x=1793145073; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792540873; x=1793145673; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=PehXZcrvadP5J4z5HJ+PHlJPo930ZmM8+dDrOQ32K8w=;
-        b=ebytfI+TX7POzxtndJOrL89prTf0QmGSvG89QrvM90w7uvH7cJObqLg3xhAQHEN8Lb
-         dva+vyjKAvXs3R6fxm1mvadLqfL0vyzyBB6XNrjz4Xu9j5ElInUEdm1BcruiZB1vnFp0
-         /4T7iPe0+jVamDOJayyRucpmYfSMuPNCl5PFNrYXrxmJn/MDqfNUHJoFssAppOzMlEBH
-         PC2CoSizMExbZdTDQwEY6CQTgAaossujMaEAg5iBs6e0QKNvanjeaKHEuZGKQTS75Z7i
-         p6hHDu8rfdHXCsnmiCO648sE60I8T4WboBlbU7eOzAfbHuqKcWNES6gldQWMGW8sqmuZ
-         8dhw==
+        bh=AEeiPsA/EawKKYb8+qMzkwfuJK4nmSs/11TC2lwYs/8=;
+        b=X4qmef56mV1cGDB+s8rxjvMjWgK79wD0teCYvWaCvGWcBsW9tn7OKw/eFYtriNtvdR
+         HKc0+D0iRvbEum79CeELLv2i66rh4M1mHINIpveCbd4D6xZVVoeMFr+EI3CqjQi20KYe
+         +Vwll+GwtZL5zEuusqxNLqLR5a8ZbFreBlwDmo25kL8DotyYDjR0nye+wTHO9oyR96lR
+         +SLVbCk8XUPB4wTaWgjsVBkhk1kBtyQzhwBCJWi2oB6XDlYJGOHH3S3PtgdcWYgcWq2k
+         v3NOx76kt1gqlC6ElSLHjsAn2tK5fx72EjQ1DMUtwCDbHZ5t3Qzjvnn2UQ1MtT6NOj53
+         LdAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792540273; x=1793145073;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20260707; t=1792540873; x=1793145673;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PehXZcrvadP5J4z5HJ+PHlJPo930ZmM8+dDrOQ32K8w=;
-        b=bodVIQjbh/J7H6bTHEB/7JeieteLN2gSp3/HbDxOUyrm93d1nzvrjCiXS5n6d1i2AJ
-         jKDd5ZVmLhmd6F6KJyQfIhTd0CcDmA+gjRp6gusqCO3GVLuCbtO9ZlB0epEsOcUMULjz
-         zNTExqxgT3s4CfdTwi226V6dWXclb/qehM0A2a2MU3biSU/+8wMmuDAcdEM0XCqok8uq
-         dytug34FA2ZH3HlRs0R2JWfAVXkR8h4uU0nkpqwKVg9zeKLkwCxxNnVUCkiN7A0bwiCA
-         9EdfU0Yo8GqQycnbuCqjce+rlcu4Wal9p68uU2IydpHUEGYHJJaCKcCWMkGdIxMBWQlT
-         v6OA==
-X-Forwarded-Encrypted: i=1; AKwUvBxWUAl/Qqwa89aAsR6ot+TN6bL/fmJ69Qt6DwqOg82NK2PJ89vSN/ggqciQNP6VUKR8RRA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLmzv1nX4ylio1qyODTORo0WfE8qDLz76F/BGnpgeoYU84g1I0g
-	V1yNKAdJZYiFFXOfO/ffVy4LYZGnbLI7eT4KM0tJsfJiWbfPjp2uwkYO
-X-Gm-Gg: AYBFou0KddErs7h/EORQzZm+OPWm7HrDaQocvqT3dbRa0HK064y513PQiWH8Qt/McmS
-	vshi3mZFksiF/h68nBPPNZH5IUolUHis3/PXt/WZPpi/EHa3ZoGBqzQ4OwXlOWspTjHeKb7139d
-	b/F9mvkzKwKfcDOszn/XAQDmHK+r+YiOuYOpZENPmx8iPSarwqaMMXGXfVq+g7THRI1EMR12y3X
-	gQUrSGWteTVEySViqnHn6vJQ0NPh1GRL52t7SG5pQmjxU6HqlTedmIVeOVQ4lMmFVcbMsdf+aWv
-	n8sruDTU/Jen5CBe9Sk2wk2RNrO78CFP6Qqo3q1zV6FtKNDOBmIvmewjTRZJPUSNyB9Mfo0etc6
-	Cu033kVXF15p8gccXFA3IRhXXn2k+VN7LqemPfSAYUeu1VsZm8/1zhcL0szFE1uqDQ6h2IcpRhR
-	aSI05Ju5MI6qysdqNLnclHo/AVhyQpQHg3CcVd6EyU9a306a3GAcal2HbyIyoEbsRwwbvwK8XZU
-	5McNnk1msfxp/VZNWU0zZ4IiwD9BJ+TCfJ/GTtNRGkESWqmeA==
-X-Received: by 2002:a05:7022:b90c:b0:14d:baf5:c40f with SMTP id a92af1059eb24-190a465c250mr427669c88.14.1792540272758;
-        Tue, 20 Oct 2026 16:51:12 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:6a::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-190e29381d9sm149758c88.18.2026.10.20.16.51.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 16:51:12 -0700 (PDT)
-Date: Tue, 20 Oct 2026 16:51:00 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Vijay Nag <nagvijay@microsoft.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, willemb@google.com, tariqt@nvidia.com
-Subject: Re: mlx5: stale skb encapsulation metadata after native XDP
- decapsulation
-Message-ID: <atf9BogSMMrUenOQ@devvm16445.scu0.facebook.com>
-References: <SETP153MB2368281B3138379C3F88AF71C4672@SETP153MB2368.APCP153.PROD.OUTLOOK.COM>
+        bh=AEeiPsA/EawKKYb8+qMzkwfuJK4nmSs/11TC2lwYs/8=;
+        b=2nO9O81iQv7OO/eQGcIJsuOcg9HA8WRyJwupD8i5E6aI/ubewuf1K87cEsO2tgVjLF
+         9nTwxIRm4uicnMOryH1am4tJ167iGL8cuLteBBmCUouFBOn8QDlSMNzpBy05UkO05TXV
+         0yAJFWXMle4nqzX+eb7MBAeYhVyBoTT+fmONXlQjV2T3m25gJJH1ITg7x5HOlSmip+ee
+         kN2LZoV6VDNsu4klJ19Reb33EUyCu9lV3PetD8Vo7qJHRi+CCcSSlnT+BTA6tg9UQuOo
+         bgtGPNId4Zbxw6+Or/ZTuSJBUGxRAiu68a4NDuf/+k+vZz0+YeGnNGSyRn1ojvimiNUx
+         Y/cA==
+X-Gm-Message-State: AFq9FYLqUMc71PRHzi5Vsqo1vKsbGRAOjlBAgzWJlHZ6q7fJyBBe8/Iq
+	I3BdB8XDivQ/c/R48pB610yW82rMWLTSPArhocUPAis1hYY/WcJYMzjA
+X-Gm-Gg: AYBFou2FOuHovW6wDWU2b2sOH4w/FGmo/pwVxJ3BnS4tRJ2K3mCpELdz/LKu8lGv7wD
+	42Gk7uoqxCJdUXjjHKQZFnNiHUc1lSISPYxZC2FiaZGQZDX3/OgJ5FriRkU4mBiYm2Z/sNBFY38
+	6le8W2ZnkCWiQSmpkHqdxYUnLWJltZ65CaCzqr+kgiULDXNutkxXIjE+VDM7HSwyOKNDVuMttOZ
+	ASDOMP6ApHP3Uo3FTQVKAVYaoaeABKyjjw5x5dIPtPCzZ9Zm3Wbfz9j6GhHA/BdVWN/ZYmuns7W
+	oksdjKfYy8nLeTZFZKjRx3YSPaFxwwj9topB/o3ISaj9/RPQClQQfO0/7ayxR2qzQuRQL+6LUqw
+	r5xyTLjm6xYNlrbUCeiWuEDNj/FFkAXcaaZTiEa2ZREYUZ/X2oCghdkWT76l5lFoJqHCnSrK353
+	pOjwUbplNJBw/9ggSuGLlwWDozkcvlyY8BJyvcgwsAelPoWO/QuHjFIYhzCBVYVYz+CmJRWqxIy
+	QNFEO2tL25Axf8gf/Mz18KBpUx+2/f4g7IUbb0WnSEWr3x5Z70b8IgCefuQoAbvzSaEzHnDAvQb
+	3TInjMFNbw7psA==
+X-Received: by 2002:a17:90b:5310:b0:3a0:c3d4:f3b2 with SMTP id 98e67ed59e1d1-3ad86cc126cmr434607a91.56.1792540872776;
+        Tue, 20 Oct 2026 17:01:12 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad802957d3sm1536060a91.8.2026.10.20.17.01.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 17:01:08 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 21 Oct 2026 00:01:07 +0000
+Message-Id: <DMA2PE5NZ5HP.3DYHQ3DIKG0OG@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v5 0/4] bpf: Fix a struct_ops use-after-free
+ behind a flaky assoc_in_timer test
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Qiliang Yuan" <odys.yuan@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Amery Hung" <ameryhung@gmail.com>
+In-Reply-To: <20261019-selftests-bpf-struct-ops-assoc-timer-v5-0-77b2e181e5cc@gmail.com>
+References: <20261019-selftests-bpf-struct-ops-assoc-timer-v5-0-77b2e181e5cc@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,61 +107,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SETP153MB2368281B3138379C3F88AF71C4672@SETP153MB2368.APCP153.PROD.OUTLOOK.COM>
 
-On 10/20, Vijay Nag wrote:
-> Hi all, 
-> 
-> In a setup where native XDP performs tunnel decapsulation before TC ingress, I'm seeing an unexpected interaction with RX checksum offload.
-> 
-> XDP removes an outer IPv6 header using bpf_xdp_adjust_head() and returns XDP_PASS. TC ingress subsequently calls bpf_skb_change_tail() on the decapsulated packet.
-> 
-> On mlx5 with RX checksum offload enabled, bpf_skb_change_tail() returns -524 (-ENOTSUPP). Tracing shows skb->encapsulation == 1 at TC ingress, even though the outer header has already been removed. Disabling RX checksum offload makes the same processing path succeed.
-> 
-> The following Linux v6.6 code paths appear relevant.
-> 
-> In net/core/filter.c, __bpf_skb_change_tail():
-> 
-> if (skb->encapsulation)
->     return -ENOTSUPP;
-> 
-> In drivers/net/ethernet/mellanox/mlx5/core/en_rx.c, mlx5e_handle_csum():
-> 
-> if (likely((cqe->hds_ip_ext & CQE_L3_OK) && (cqe->hds_ip_ext & CQE_L4_OK))) {
->     skb->ip_summed = CHECKSUM_UNNECESSARY;
->     if (cqe_is_tunneled(cqe)) {
->         skb->csum_level = 1;
->         skb->encapsulation = 1;
->         stats->csum_unnecessary_inner++;
->         return;
->     }
-> }
-> 
-> My current understanding is that the CQE tunnel classification causes the subsequently constructed skb to retain encapsulation metadata corresponding to the original packet, even though XDP has already removed the outer header.
-> 
-> Is this expected behavior when native XDP decapsulates a packet before skb construction?
-> 
-> More generally, what is the intended handling of checksum/encapsulation metadata in this case? Is there an existing fix or recommended way to handle this interaction?
-> 
-> This was observed on a v6.6-based kernel with an mlx5 VF.
-> 
-> Source references:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/filter.c?h=v6.6
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c?h=v6.6
+On Sun, Oct 18, 2026 at 07:27 PM Qiliang Yuan <odys.yuan@gmail.com> wrote:
 
-I don't think we have a good answer for this, there has been some recent
-discussion here: https://lore.kernel.org/netdev/amEojEGsIGkUjIWn@devvm7509.cco0.facebook.com/
-
-In general, from my POW, we should not carry most of the rx metadata into
-an skb when there is an xdp program (until we expose some helpers to the
-xdp to change it). For mlx, we might want to skip that cqe_is_tunneled
-branch in case of xdp, you can try to send a patch and see what happens :-)
-
-For more recent kernels, and for tc, there is bpf_skb_adjust_room helper
-with gives you more control over these fields (in case you can move your
-decap fully to tc).
-
-CC'd Willem who might know more about csum+encap specifics and Tariq for
-mlx5.
+doesn't apply anymore
