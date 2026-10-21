@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792583346;
-	b=UZWdQcvRgt2pcrE0Nrzg7UcyaPaZp3erSiUaN0k4W7d+sz/ps/5B1k/39OkDOk4hpyE5
-	 qCG5QYZP+RO+uMaczn53cEW8V9O6axtR6vzesnZNTHePH4JwJcagiHW3NWiLLuthZ6b7b
-	 zEj6t/8cOyXsTjow8lbl4Ej4uHFl7VuwFw0TfVzP/7pM3iIIbFwGwj4kCZn+Q0B0RqyPu
-	 3Gc0ab5Ir+r9UgF71+AWZhv4HSVKTgMJFXVO+3mVnMPtxLSnTnwc6jjYmpzKQAwy1hLxc
-	 eFEQ99exhsVg8m5pEJlKJEC6EC+o2XameMkQc9WfrFGmAPqzgvtQQ6vUoLromJVf7Wg==
+	t=1792583353;
+	b=aDbpjTrnqeVhXhkrYKcvQwS8PySU9eNrPoH5Kss3ZJuKr09QjvyySTrwx7jGbGTjxi2Q
+	 TtndZMMgnbNO3gp8rEQcWBQ55N5awt6sSFNR+vat51/S4urXqLKldt7djoH1ScnA5h/Ja
+	 y1cyG1AdeX38360K5GnkzV/E5ChHIUsgtfh10dMt/0JlDToTqvRMxure8n2IGTsSjE1/2
+	 LCDLYJO3glyve/pNlJ8knitwSlKslf5fSDVpynsIsA6jL1DpUEQT7rTPWxvbta2rmdQ4O
+	 wRLXzz+MxHbVMToijxQnyFqwDGatMPTePSQol3zBcjy89fM8/3FbERLMbu8M0NxXGMA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792583346;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792583353;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=FervRqDx8i9jzj8UVggEaA9nHNLpP+QF2H9C8Xb5FdU=;
-	b=5q4yRs50mI41C/5YdZNZJAtp/wOffaLiI4O5skY8lyzHAOA3G+QdmW8OrstMR4hGoYAE
-	 7GG/fKC1S/+yBkpbW/Ee6wYfCFnE4aCThTsQVVDmYFWTb0fjatvrfgpXg7+zHCgyqufuA
-	 381YGyEiDbbgxGxN67dzVy1dz+40oc+vWCkBA6LwjFn35LIlUU1YtUeDqZ92j+Xf4lrXZ
-	 bcaWK8iXIaewsFH70TggjmxsKDZlzLaKqvpe11Kbj3ReoKOTLAJ3NWbypZozXYzd8D0g4
-	 QwwGs4bhO+edg6rX1mImkqL/e60U2JnmHzLdVD1HjrQ75XQmDOgd9RVbvsviTFUQO2g==
+	bh=FjU3V+rd8zjjpGJql233pQuD6ax8MAtzDfiydIJHxGw=;
+	b=o2fXDpGQ4+jY3821zu4wMogfG07cSUPeEPmuJ90fbisOHfsUwUKCwTAy6JGmOxn3fqGW
+	 O+Qu0ZMxjlTGa73X1HYIXUW3O1TP7K/62ZrlZunXc396lWpkddBn/bDJi8fjWfpmhTxYb
+	 QXWB38ijM/Hb0Vo9YBCNEAb6YxVzTBwW0R7/SQCXWK36udcENyU+WzBixyhWyCMiKLME1
+	 nf4t11ZD7vwTvVZ3BNSCwcggpUauYBx0J4ByZ0IDzotYG9E2uOyUQ6gjbAyYWscOX5Dz0
+	 UPDPwCz++zVbiMjZ5408c/U+fc7nnJ1ohG8K8fX4k1aLGn1cfFDzGZQkLrXSsSOGlYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dmZOMLDU;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zj/Rld9E";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F389C606A331
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 11:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E63606A32A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 11:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dmZOMLDU
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C721F000C5;
-	Wed, 21 Oct 2026 11:49:04 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zj/Rld9E
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658EA1F000C7;
+	Wed, 21 Oct 2026 11:49:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792583345;
-	bh=FervRqDx8i9jzj8UVggEaA9nHNLpP+QF2H9C8Xb5FdU=;
+	s=k20260515; t=1792583352;
+	bh=FjU3V+rd8zjjpGJql233pQuD6ax8MAtzDfiydIJHxGw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dmZOMLDUUQi0UwuwJGYhc9GR1OTOG2SutD/x/jgPrcaIL46oWA5tCp2xIyhyNlwva
-	 +Rsq+OgnE7TjUoFVs4kYE+5B3ThhbO0lUX5GC4T2ZL3DoA105twL/Y4IWqAMG1Z6f2
-	 LESWTrO/APG+sllWvl8QqlqKLe9sASl5Fmi8yFjWPReZC0T1z2T5+iHLsxD8I48j1D
-	 Gycm1PPJxlRckBfdAcl5z/ehkoo51hHBfQThehypbdBv6pRe/N80Mr0WHPqq499orI
-	 7v59VjjYx8SfwqS+bkT8Ug/7e8+mFvUHZJhq+n5H2H/Wci0HaieYHkwQLx3meB7fNA
-	 BkRIe/7NPcSiA==
-Message-ID: <sashiko-outbox-180181@kernel.org>
+	b=Zj/Rld9EDCqOTfy6Op98uGK996/oHg6AFPiUzQHvATS2lJJxkpBk0JAzqY8edadT6
+	 Sck6dbYuRaJ6se2+9dfM/UEuk22X1W/oCRcT0BUJVOujn2oWDJ9ENER/1eJgCM3aPF
+	 YxOSkF4Otq9wd6oXioXyJcPdgESuHiyLQy47dU/oxYHZ1J1EdjHj7/nc2r7yDwUR4G
+	 LKqI/+jGgoM9tfVLEHFHxEcKkKogF+K/F8yaVntTaSTzsLTwuuJwesqSA+/ey2R/bT
+	 xFzqvFIyigsd611/OjtZCpduUe1GFASmJGTmvBcqzAdpLnuUkDI40upmy0ppGV9M/p
+	 W4Elgji0ic5jA==
+Message-ID: <sashiko-outbox-180182@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 4/7] mm/page_owner: add open-coded page_owner
- iterator
+Subject: Re: [PATCH v3 6/7] mm/page_owner: add
+ bpf_page_owner_get_memcg_info() kfunc
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhen Ni" <zhen.ni@easystack.cn>, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, akpm@linux-foundation.org, vbabka@kernel.org, surenb@google.com, mhocko@suse.com, brendan.jackman@linux.dev, hannes@cmpxchg.org, ziy@nvidia.com, shuah@kernel.org
 Cc: bpf@vger.kernel.org, linux-mm@kvack.org
-In-Reply-To: <20261021112437.1799213-5-zhen.ni@easystack.cn>
+In-Reply-To: <20261021112437.1799213-7-zhen.ni@easystack.cn>
 References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
- <20261021112437.1799213-5-zhen.ni@easystack.cn>
+ <20261021112437.1799213-7-zhen.ni@easystack.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 21 Oct 2026 11:49:04 +0000
+Date: Wed, 21 Oct 2026 11:49:10 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,209 +63,271 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] mm/page_owner: forged handle and stack UAF in bpf_page_owner_s=
-tack_snprint()
-- [High] mm/page_owner: bpf_iter_page_owner_next() violates sticky-NULL con=
-tract
-- [High] mm/page_owner: buf__uninit in bpf_page_owner_stack_snprint() poiso=
+- [High] mm/page_owner: tail page _nr_pages dereferenced as objcg in get_pa=
+ge_memcg_info()
+- [Medium] mm/page_owner: __uninit in bpf_page_owner_get_memcg_info() poiso=
 ns stack
+- [Medium] mm/page_owner: missing __nullable on buf in bpf_page_owner_get_m=
+emcg_info()
 --
 
-commit c92f39f3d2ecdefdc5191d503168d482f4fadf55
+commit 6c73498afe7c643ebd28b236a8d852daad168a14
 Author: Zhen Ni <zhen.ni@easystack.cn>
 
-mm/page_owner: add open-coded page_owner iterator
+mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
 
-This commit introduces an open-coded BPF iterator for page_owner using
-bpf_iter_page_owner_new(), bpf_iter_page_owner_next(), and
-bpf_iter_page_owner_destroy(), along with the bpf_page_owner_stack_snprint()
-kfunc to format the current page's allocation stack trace into a buffer.
+This commit factors per-page memcg lookup out of print_page_owner_memcg()
+into get_page_memcg_info() and adds the bpf_page_owner_get_memcg_info()
+kfunc so BPF page_owner iterators can retrieve memcg metadata and the full
+cgroup path.
+
+[ ... ]
+
+> diff --git a/mm/page_owner.c b/mm/page_owner.c
+> index 8bc15bcdc24e9..7470b5d002be4 100644
+> --- a/mm/page_owner.c
+> +++ b/mm/page_owner.c
+> @@ -538,16 +538,22 @@ void pagetypeinfo_showmixedcount_print(struct seq_f=
+ile *m,
+> =20
+>  #ifdef CONFIG_MEMCG
+>  /*
+> - * Looking for memcg information and print it out
+> + * Collect memcg information of @page into @info; when @buf and a
+> + * nonzero @size are given, also copy the full cgroup path of the
+> + * charged memcg into @buf.
+> + *
+> + * Return: 0 if @page is charged to an attributable memcg; -ENODATA
+> + * otherwise.
+>   */
+> -static inline int print_page_owner_memcg(char *kbuf, size_t count, int r=
+et,
+> -					 struct page *page)
+> +int get_page_memcg_info(struct page *page, struct memcg_info *info,
+> +			char *buf, int size)
+>  {
+>  	unsigned long memcg_data;
+>  	struct obj_cgroup *objcg;
+>  	struct mem_cgroup *memcg;
+> -	bool online;
+> -	char name[80];
+> +	int ret =3D -ENODATA;
+> +
+> +	*info =3D (struct memcg_info){};
+> =20
+>  	rcu_read_lock();
+>  	memcg_data =3D READ_ONCE(page->memcg_data);
+> @@ -555,31 +561,68 @@ static inline int print_page_owner_memcg(char *kbuf=
+, size_t count, int ret,
+>  		goto out_unlock;
+> =20
+>  	if (memcg_data & MEMCG_DATA_OBJEXTS) {
+> -		ret +=3D scnprintf(kbuf + ret, count - ret,
+> -				"Slab cache page\n");
+> +		info->is_slab =3D true;
+>  		goto out_unlock;
+>  	}
+> =20
+>  	objcg =3D (void *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
+> -	memcg =3D objcg ? obj_cgroup_memcg(objcg) : NULL;
+> +	if (!objcg)
+> +		goto out_unlock;
+> +
+> +	memcg =3D obj_cgroup_memcg(objcg);
+
+[Severity: High]
+Can get_page_memcg_info() in mm/page_owner.c dereference folio->_nr_pages as
+a struct obj_cgroup pointer when inspecting tail page 1 of a compound folio?
+
+In struct folio (include/linux/mm_types.h), the first tail page (__page_1)
+places _nr_pages at the same offset as struct page::memcg_data:
+
+include/linux/mm_types.h:struct folio {
+    ...
+			atomic_t _mapcount_1;
+			atomic_t _refcount_1;
+#ifdef NR_PAGES_IN_LARGE_FOLIO
+			unsigned int _nr_pages;
+#endif
+		};
+		struct page __page_1;
+    ...
+}
+
+For a compound folio with order >=3D 3, _nr_pages is 1U << order (for examp=
+le,
+0x8 or 0x200), so its low bits matching OBJEXTS_FLAGS_MASK are zero.
+
+Because bpf_page_owner_get_memcg_info() in mm/page_owner_iter.c calls
+get_page_memcg_info() on scan->pfn without stabilizing the page reference or
+folio state (and struct page_owner_scan is a scalar-only struct that a BPF
+program can also populate on the stack or in a map), page can refer to tail
+page 1 of a compound folio.
+
+In get_page_memcg_info(), page->memcg_data is read before checking
+PageTail(page):
+
+	memcg_data =3D READ_ONCE(page->memcg_data);
+	if (!memcg_data || PageTail(page))
+		goto out_unlock;
+
+If tail page 1 is concurrently freed via __free_pages_prepare() ->
+free_tail_page_prepare() -> clear_compound_head() after READ_ONCE() reads
+_nr_pages into memcg_data, or if the folio is concurrently split to order 0
+in mm/huge_memory.c:__split_folio_to_order() where clear_compound_head()
+clears PageTail(new_head) before new_folio->memcg_data overwrites _nr_pages:
+
+mm/huge_memory.c:__split_folio_to_order() {
+    ...
+		clear_compound_head(new_head);
+		if (new_order) {
+			prep_compound_page(new_head, new_order);
+			folio_set_large_rmappable(new_folio);
+		}
+    ...
+#ifdef CONFIG_MEMCG
+		new_folio->memcg_data =3D folio->memcg_data;
+#endif
+}
+
+wouldn't PageTail(page) evaluate to false while memcg_data holds 1UL << ord=
+er,
+causing obj_cgroup_memcg(objcg) to dereference that page count as a pointer?
+
+[ ... ]
 
 > diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
-> index 529b2c4a589a9..4b9741a2de53c 100644
+> index b7e0ce1dfa80a..a649e1207e246 100644
 > --- a/mm/page_owner_iter.c
 > +++ b/mm/page_owner_iter.c
-[ ... ]
-> @@ -116,3 +117,66 @@ int page_owner_iter_register(void)
-[ ... ]
-> +__bpf_kfunc struct page_owner_scan *
-> +bpf_iter_page_owner_next(struct bpf_iter_page_owner *it)
-> +{
-> +	struct bpf_iter_page_owner_kern *kit =3D (void *)it;
-> +
-> +	if (!static_branch_unlikely(&page_owner_inited))
-> +		return NULL;
-> +
-> +	cond_resched();
-> +
-> +	kit->scan.pfn++;
-> +	if (!page_owner_next_eligible(&kit->scan))
-> +		return NULL;
+> @@ -181,4 +181,52 @@ __bpf_kfunc int bpf_page_owner_stack_snprint(struct =
+page_owner_scan *scan,
+>  	return len;
+>  }
+> =20
+> +/**
+> + * bpf_page_owner_get_memcg_info - Report the memcg charged for the curr=
+ent page
+> + * @scan: page_owner scan handle.
+> + * @info__uninit: output buffer for the memcg_info.
+> + * @buf__uninit: optional output buffer for the full cgroup path.
+> + * @buf__sz: size of @buf__uninit.
+> + *
+> + * Fills @info__uninit with the memcg charged for the page backing
+> + * @scan->pfn.  If @buf__uninit and @buf__sz are provided, the full
+> + * cgroup path is also copied out, so a BPF program can attribute a
+> + * page_owner allocation to a specific cgroup.
+> + *
+> + * @scan->pfn is resolved to a struct page under get_online_mems(),
+> + * so the page cannot be accessed after its memory section is offlined
+> + * or removed.
+> + *
+> + * Returns:
+> + * * 0 on success
+> + * * -ENODATA if the page is not online or not charged to a memcg
+> + * * -EOPNOTSUPP if built without CONFIG_MEMCG
+> + */
+> +__bpf_kfunc int bpf_page_owner_get_memcg_info(struct page_owner_scan *sc=
+an,
+> +					      struct memcg_info *info__uninit,
+> +					      char *buf__uninit, u32 buf__sz)
 
-[Severity: High]
-In kernel/bpf/verifier.c:process_iter_next_call(), once a KF_ITER_NEXT kfunc
-returns NULL and transitions the iterator to BPF_ITER_STATE_DRAINED, the
-verifier assumes any subsequent call on the same iterator also returns NULL
-and marks BPF_REG_0 as constant scalar 0:
+[Severity: Medium]
+Will the __uninit suffix on info__uninit and buf__uninit in
+bpf_page_owner_get_memcg_info() (mm/page_owner_iter.c) cause the BPF verifi=
+er
+to reject valid programs that pass stack buffers across a pruning checkpoin=
+t?
 
-	cur_iter->iter.state =3D BPF_ITER_STATE_DRAINED;
-	__mark_reg_const_zero(env, &cur_fr->regs[BPF_REG_0]);
-
-However, mm/page_owner.c:page_owner_next_eligible() iterates using a local
-pfn variable and only updates scan->pfn when an allocated page is reached:
-
-	unsigned long pfn =3D scan->pfn;
-	...
-	for (; pfn < max_pfn; pfn++) {
-		...
-		scan->pfn =3D pfn;
-		scan->po_snap =3D *page_owner;
-
-When the loop reaches max_pfn without finding an eligible page, it returns
-false while leaving kit->scan.pfn at the previously matched PFN plus one (or
-min_low_pfn if no page matched).
-
-If a BPF program calls bpf_iter_page_owner_next() again after it has return=
-ed
-NULL, kit->scan.pfn++ advances from that earlier PFN and rescans up to
-max_pfn. Because the scan is lockless and calls cond_resched(), a concurrent
-allocation in that tail PFN range (or max_pfn increasing via memory hotplug)
-can cause bpf_iter_page_owner_next() to return a non-NULL &kit->scan pointer
-at runtime when the verifier tracks R0 as scalar 0.
-
-Should bpf_iter_page_owner_next() latch the drained state (or set
-kit->scan.pfn to max_pfn on exhaustion and check it before incrementing) so
-that subsequent calls cannot rescan or return non-NULL?
-
-> +
-> +	return &kit->scan;
-> +}
-> +
-> +__bpf_kfunc void bpf_iter_page_owner_destroy(struct bpf_iter_page_owner =
-*it)
-> +{
-> +}
-> +
-> +__bpf_kfunc int bpf_page_owner_stack_snprint(struct page_owner_scan *sca=
-n,
-> +					     char *buf__uninit, u32 buf__sz)
-
-[Severity: High]
-In mm/page_owner_iter.c:bpf_page_owner_stack_snprint(), the buffer argument
-is annotated as buf__uninit paired with buf__sz.
-
-In kernel/bpf/verifier.c:check_kfunc_args(), the __uninit suffix is only
-handled for KF_ARG_PTR_TO_DYNPTR, whereas a KF_ARG_PTR_TO_MEM and
-KF_ARG_MEM_SIZE pair is validated with BPF_READ | BPF_WRITE and raw_mode set
-to false:
-
-	ret =3D check_mem_size_reg(env, buff_reg, size_reg, buff_argno, argno,
-				 BPF_READ | BPF_WRITE, true, meta, &failure);
-
-At the same time, the static stack liveness pass in
-record_arg_access() -> bpf_kfunc_stack_access_bytes() checks
-is_kfunc_arg_uninit() and returns -size for buf__uninit:
+In kernel/bpf/verifier.c:bpf_kfunc_stack_access_bytes(), any kfunc argument
+matching is_kfunc_arg_uninit() returns a negative size:
 
 	if (is_kfunc_arg_uninit(btf, &args[arg]))
 		return -size;
+	return size;
 
-In kernel/bpf/liveness.c:record_stack_access_off(), a negative access_bytes
-marks all covered stack slots as must_write (dead prior to the call), even
-though bpf_page_owner_stack_snprint() only writes up to len + 1 bytes. At a=
-ny
-state-pruning checkpoint before the call (such as inside a
-bpf_iter_page_owner_next() loop), __clean_func_state() marks those dead sta=
-ck
-slots with STACK_POISON, causing check_mem_size_reg() ->
-check_stack_range_initialized() to reject the BPF program with -EACCES.
+That negative size tells record_stack_access_off() in kernel/bpf/liveness.c
+that the kfunc call overwrites the stack slots without reading them, so sta=
+tic
+stack liveness analysis marks those slots dead prior to the call. When
+clean_verifier_state() -> __clean_func_state() in kernel/bpf/states.c runs =
+at
+an earlier pruning checkpoint (such as the second iteration of
+bpf_iter_page_owner_next(), or a branch/call after stack allocation), it
+poisons those dead stack slots with STACK_POISON:
 
-Could buf__uninit be renamed to buf (or changed to an interface where the
-verifier and stack liveness pass agree on initialization semantics) so that
-passing a stack buffer in an iterator loop is not rejected?
+	for (j =3D start; j < end; j++)
+		st->stack[i].slot_type[j] =3D STACK_POISON;
+
+However, check_kfunc_args() in kernel/bpf/verifier.c only honors
+is_kfunc_arg_uninit() for KF_ARG_PTR_TO_DYNPTR. For KF_ARG_PTR_TO_MEM
+(info__uninit) and KF_ARG_MEM_SIZE (buf__uninit), check_kfunc_args() valida=
+tes
+the buffers with BPF_READ | BPF_WRITE:
+
+	ret =3D check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRITE,
+			    meta, &known_memory);
+    ...
+	ret =3D check_mem_size_reg(env, buff_reg, size_reg, buff_argno, argno,
+				 BPF_READ | BPF_WRITE, true, meta, &failure);
+
+When check_stack_range_initialized() in kernel/bpf/verifier.c performs the
+BPF_READ check with allow_poison =3D=3D false, it hits *stype =3D=3D STACK_=
+POISON and
+fails verification with -EACCES ("slot poisoned by dead code elimination").
 
 > +{
-> +	int len =3D 0;
+> +	struct page *page;
+> +	int ret =3D -ENODATA;
 > +
-> +	if (!buf__uninit || !buf__sz)
-> +		return 0;
+> +	if (!static_branch_unlikely(&page_owner_inited))
+> +		goto nodata;
 > +
-> +	if (static_branch_unlikely(&page_owner_inited))
-> +		len =3D stack_depot_snprint(scan->po_snap.handle, buf__uninit,
-> +					  buf__sz, 0);
+> +	get_online_mems();
+> +	page =3D pfn_to_online_page(scan->pfn);
+> +	if (!page) {
+> +		put_online_mems();
+> +		goto nodata;
+> +	}
+> +	ret =3D get_page_memcg_info(page, info__uninit, buf__uninit, buf__sz);
+> +	put_online_mems();
+> +	return ret;
+> +
+> +nodata:
+> +	*info__uninit =3D (struct memcg_info){};
+> +	if (buf__uninit && buf__sz)
+> +		buf__uninit[0] =3D '\0';
 
-[Severity: Critical]
-In mm/page_owner_iter.c:bpf_page_owner_stack_snprint(), scan->po_snap.handle
-is passed directly to stack_depot_snprint() -> stack_depot_fetch() ->
-depot_fetch_stack(). In lib/stackdepot.c:depot_fetch_stack(), the handle is
-assumed to be a valid stackdepot handle:
+[Severity: Medium]
+Should the optional cgroup path buffer parameter in
+bpf_page_owner_get_memcg_info() (mm/page_owner_iter.c) use a __nullable
+suffix so BPF programs can pass NULL when they only need struct memcg_info?
 
-	if (pool_index >=3D pools_num_cached) {
-		WARN(1, "pool index %d out of bounds (%d) for stack id %08x\n",
-		     pool_index, pools_num_cached, handle);
-		return NULL;
-	}
-	...
-	stack =3D pool + offset;
-	if (WARN_ON(!refcount_read(&stack->count)))
-		return NULL;
+Both bpf_page_owner_get_memcg_info() and get_page_memcg_info() check whether
+buf is NULL, and the kernel-doc describes buf__uninit as an optional output
+buffer. However, in kernel/bpf/verifier.c:get_kfunc_arg_type(), PTR_MAYBE_N=
+ULL
+is only added when is_kfunc_arg_nullable() matches the "__nullable" (or
+"__arena") suffix:
 
-An arbitrary handle value can trigger WARN() on an out-of-range pool_index =
-or
-zero refcount, or point stack at an arbitrary offset inside
-stack_pools[pool_index] where a forged stack->size causes
-stack_trace_snprint() to read out of bounds past the end of the pool.
+static bool is_kfunc_arg_nullable(const struct btf *btf, const struct btf_p=
+aram *arg)
+{
+	return btf_param_match_suffix(btf, arg, "__nullable") ||
+	       btf_param_match_suffix(btf, arg, "__arena");
+}
 
-There are two ways a BPF program can supply an arbitrary scan->po_snap.hand=
-le
-and corrupt or retain stack memory:
+Without a __nullable suffix on the buffer argument, check_kfunc_args() in
+kernel/bpf/verifier.c rejects a BPF program that passes NULL (or a
+PTR_MAYBE_NULL register) for arg#3 with -EACCES ("Possibly NULL pointer pas=
+sed
+to trusted arg#3").
 
-1. Because struct page_owner_scan and struct page_owner in mm/page_owner.h
-contain only scalar fields and char comm[TASK_COMM_LEN],
-__btf_type_is_scalar_struct() returns true. In
-kernel/bpf/verifier.c:check_kfunc_args(), when a non-BTF pointer such as
-PTR_TO_STACK or PTR_TO_MAP_VALUE is passed as struct page_owner_scan *scan,
-the verifier falls back to fixed-size memory and accepts arbitrary
-BPF-controlled bytes:
-
-	if (!__btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
-		...
-		return -EINVAL;
-	}
-	kf_arg_type =3D KF_ARG_PTR_TO_MEM | MEM_FIXED_SIZE;
-	fallthrough;
-
-2. In mm/page_owner_iter.c:bpf_iter_page_owner_next(), the returned
-&kit->scan pointer aliases the on-stack struct bpf_iter_page_owner slots as
-PTR_TO_BTF_ID | PTR_TRUSTED. In kernel/bpf/verifier.c:check_kfunc_call(),
-regs[BPF_REG_0].parent_id =3D meta.ref_obj.id is only set in the
-!__btf_type_is_struct(ptr_type) branch, not in the PTR_TO_BTF_ID branch:
-
-		if (meta.ref_obj.id) {
-			err =3D validate_ref_obj(env, &meta.ref_obj);
-			if (err)
-				return err;
-			regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
-		}
-
-		if (is_kfunc_rcu_protected(&meta))
-			regs[BPF_REG_0].type |=3D MEM_RCU;
-	} else {
-		enum bpf_reg_type type =3D PTR_TO_BTF_ID;
-
-Because parent_id remains 0 on the returned scan pointer, calling
-bpf_iter_page_owner_destroy() marks the iterator stack slots STACK_INVALID
-without invalidating registers holding scan. A BPF program can then reuse
-those stack slots (spilling pointers or writing arbitrary scalars) and read
-them back through scan or pass the overwritten scan->po_snap.handle to
-bpf_page_owner_stack_snprint().
-
-Can this be avoided by keeping the stackdepot handle internal to the opaque
-struct bpf_iter_page_owner state (having bpf_page_owner_stack_snprint() take
-struct bpf_iter_page_owner *it) and tying the lifetime of the pointer
-returned by bpf_iter_page_owner_next() to the iterator's ref_obj_id?
-
-[ ... ]
+> +	return ret;
+> +}
+> +
+>  __bpf_kfunc_end_defs();
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021112437.1799=
-213-1-zhen.ni@easystack.cn?part=3D4
+213-1-zhen.ni@easystack.cn?part=3D6
