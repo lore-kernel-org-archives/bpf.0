@@ -1,104 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.66
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792602892;
-	b=f87wO1wdHBeTOPRIz/jH3c8ApvUB2fx9/JHv6bCzp3hodgNX+N70ynLeTaROXQk4By3B
-	 rIytbML/rqGrAw5bvhEeCfzQ/12Gq2AwY/NpxOKr6NYfuZIHUlRDBlsS9P8nsYIU7s7fG
-	 hSath+oJLV5gGOzoN9f76VOVPaK1rLoNtT52EfbcJSoV9l49Mu5zJMbqJPChkG4GtpDRq
-	 FXavTWwNp3Or926Xoay+yUEM5+LGg7evHusVdHZFAFzWkGMzfTXdTQ3Udc0Fg/q9mY/ej
-	 Pf1ND4pWcgAvl9wxcLkFt8vonDZNfwy4+WrPpYwXPalXSGKMCiPOE7SKkDhFLKwaxKQ==
+	t=1792602912;
+	b=OVXOKaPYJh8sklcMjz4fLYv+vVtITNILGAuHt7GLnsBDe+J+q9cgvKW/CzKUZdlvUzMx
+	 w8FNXW3JoGaxZzmH1fvtBesMNp+Ls1s45D9WrLcXgLlsMQ3Xlm98XXXX3arsG6da4dkLd
+	 XpeNkStKDkrd3NYBLlGC8EELqYY5GirPC9vrAo+e+2zyo6alF6EiqVdpl5SCcvVoEunBX
+	 7sBA1pkwfYDOPXV75IQnNOlwU4rDhfuveG5Yp6uoZqmVdCxSfWESRNK+BHEtwSLiltT13
+	 B14mXFPSFFMwNOJc3d2roCAMnQXzwf/ypGRalSVw2wmMMbgbHsNHK0KiqyDePNP5lCA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792602892;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=1LfQgKp0ztlf0EQ9y2RTrGf8UOpxokWsfVnFXAkS3BA=;
-	b=L0OxGTyx0JTXu9icDJsbirsQFtpFRUeNul69dnKYa7U0yAytmiDTPKF5oznR/YfEPmgj
-	 fiurXd/Afbf4bKuWWcoU4o9otNdJSgBYaJAxlerhOdsO4gSJ1lEXDH4NonmVA7C1KPRYU
-	 wH6/R5tkeaNc5NihQweDfBflgzPQ1SGdYq7DzLAn/7RIFMKi3UwywraB2v8DqJ2Lo1tI/
-	 zEuiJmPsSU4K0eQb3NPu0vRuJhTCFEqUYKN5FJ96rl1awmtV3OUD9gEI5uSVS7DiX9+B+
-	 Y3PKtWJuuIMeeblapiCWtNTNzBk8iJbeQJKajGWQuAWQwxuttn3137CyfkVS6M+AW1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792602912;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=sqCbFUq57Nyuhu/s5jZ25/qkUoiEw9rvaZCGhH+XBfk=;
+	b=QsDRegExTrOo0Z7JYGyYe7SGV/b7vSTPg3lko8xcg7nvnatxX+6qrHBx/M3yVRgzvB32
+	 b0qe1b9dn7Tz9SjrVGrwFLDFLrmEWpV1UKQ2o49ze8GD7MeKvNEL1Dn+5Cd/ntjfU5GWu
+	 s08k47gk9es70moP4DvW5FzNeyrvJrwUbeHX4u1p7FybiF4uow2x/JNurQpi2pMZuAyE8
+	 dB+jILrSqZVwCJLLkU1WGV9LcKOZ3Fa4dLSNTpv1VxpV3EWFGy+ngZvkzvTV7G1s4qviS
+	 Sb9xLfYQAZpXd5wukRJpB10leJSJ1r7m5mRHDfDT1DKEcxP4KAL05pFgDr8ydQrKbPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=trailofbits.com;
-	spf=pass smtp.mailfrom=trailofbits.com;
-	dkim=pass header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=gyrnnNCA;
-	arc=none smtp.remote-ip=74.125.82.175
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qrwyXJRZ;
+	arc=none smtp.remote-ip=95.215.58.66
+Received: from mta1.migadu.com (out-66.mta1.migadu.com [95.215.58.66])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51503606A31D
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:14:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51503606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC62160A261F
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:15:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BC62160A261F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=gyrnnNCA
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-35943f55c06so99493eec.0
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1792602889; x=1793207689; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1LfQgKp0ztlf0EQ9y2RTrGf8UOpxokWsfVnFXAkS3BA=;
-        b=gyrnnNCAok29B5+xIlr8Sc9LwxGU7weiLCTmja+5PDQ51jyX3L5E5jTHOBbHvb0EOc
-         aJmUsu4f4VKzJPm5US+CpAyN5P2V5jP+qTW5fj4+oDwJMLPLuSc6vEZGUmrLnaR9Amq/
-         CU2qjlqUvJHRLfize0/hrjt5c5q7ZzD6uNNSl4FxxDj8VuM+CXyUSxaIi0ffJdgPj5Vt
-         VpV3uo1gpyhDLsla4BpwksK6CL+A/wY69psQHhtgUX0ZyQnzOCOWYXjdql7KS4m9elLR
-         9fpDiFDNS9Qq44+MEgYuJVMmWY6DhP+MeHFXY5UOE6v1hlte2/M0dLUmowo/QwA+6BnO
-         pQDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792602889; x=1793207689;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1LfQgKp0ztlf0EQ9y2RTrGf8UOpxokWsfVnFXAkS3BA=;
-        b=fnhKtBlls4KzSIwaT5B7V1KLJjHw5FA+rtAsizRA3DiSzY5FvWJKuZZbmOlD93Did1
-         rD7ARM40IEYp1JWxD+sFImctuP3+Blhgr6+1pZrL5A68M2cyz8hJGIiIrr9Rg5xekycz
-         3I7lPKwamhnUQYc+Qq5IMevdJBINLgWyXo37u0GDKozHvE1dcaeIQGApuWpmQ5QQfct+
-         BN+MPu1Wsg0xOb2IKOV6Xrjfwta6yU9xW4E2hXYmUpQmv0RZaEaDAmlGdZA70svKR+BJ
-         LiAqKTrdyxXEp9+ACTn0yOh54W/cGgXrUgsTOdcHVmaMxD1Sw4MscJAQt6rJiZ0zMw1T
-         OFxA==
-X-Forwarded-Encrypted: i=1; AKwUvBzMek/iuxPis587LcscayqEcb8g43CcFhdBkIk9y0Y0nnFXerJYVwXD9cG6Mey1YJS17mA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI5wKVUXdAYz0WA9CtO4lb1DyqoW9OzpMV8rlCcu2CsdaG/5Zx5
-	jBZrT0kb1fun73fpkXxGdAYZO8vQUHDG/YGo/b4/rqI5X8RWuughm1UzC8ZpRSjLV3o=
-X-Gm-Gg: AYBFou0GMpS95uo0eyYKnFttrXTjWwlX6AF0Y1Keskh+P1BDXBs/OawdVAiHc2UpBNZ
-	8a2BGpb/n5KrsyRRZOJ38szRyA6xVSMzEtY14VyooBFsXKhEKl+oanQDZJ22ltfRc5pVDDPn+ba
-	i+sQ3QwN8IjTWYby9zsmE7sr9SOrN5WSqDeJ3eCj9n8bY/h/PyXoMAMwDcff6fEfXrPt1v5i8IC
-	cUGIzL+tNDrUvyp+Z7eSQ8Bb9EqvefCnqTe8KiXxZ4hxOVVvjcrfzrlafd/UfVSq3DuRY2UyZLJ
-	PBF6M8a0CnIP8eIUCIxezVSCqA39LsIGM7U1q5F6JKSG8fUsCzzKPvu0pQBo/MlKEUzLWhsnqHz
-	WfwRoDnPKuh4kp3YURReHFd4hQ61KlB/xZkSUJ7fxaggOwM+4HhL+tXQ7ej48PALJzcqozsK227
-	rM3vwuBzPTLwD4mUDrIOfTf/gmB9YY33XASaHPgOWiW73VOgGxlAFV0irJYCqGbzMj4XivUYeQ+
-	3lUtJVk6R0t9z6drr357P+B6oopBb68bFmhbRUGDExDBmPyS23dAzzmDasyE3Y9ZzJtffQJLJ36
-	wS6ojY4mo93zmB6qmyHac4ZHpCTOwReQM2184s69QCvvbETzgaVM
-X-Received: by 2002:a05:7301:d804:b0:351:7848:85ca with SMTP id 5a478bee46e88-36888be04femr354554eec.7.1792602889175;
-        Wed, 21 Oct 2026 10:14:49 -0700 (PDT)
-Received: from localhost.localdomain ([2603:8001:5f01:8bab:d059:e601:becb:a5ad])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36740cc8439sm9458105eec.11.2026.10.21.10.14.47
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 21 Oct 2026 10:14:48 -0700 (PDT)
-From: Artem Dinaburg <artem@trailofbits.com>
-To: stable@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	olsajiri@gmail.com,
-	paul.chaignon@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: [PATCH 6.6.y] bpf: Check the helper function is valid in get_helper_proto
-Date: Wed, 21 Oct 2026 13:14:44 -0400
-Message-ID: <20261021171444.99931-1-artem@trailofbits.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=qrwyXJRZ
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=R3rO7GMpAxVm6n8cNV2L8vfbkvcKtRqwWc2DdbOuAQk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792602908; v=1; x=1793207708;
+ b=qrwyXJRZ3lpugnMoJ4mbaM3vfmAUAnlNLD14G7yZraBru/h/gfcEr5+2CsyTG4NWESKHbspz
+ zWqJkTz0XE6Lb+iCNCanD+rLkHz/z6Gw7pEERkOi2ATP32zJpI0aIzGYGXgord4ShhyiPWuyR6q
+ bqjNXnfzv58jiBjROv4tvaCE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2c2eaff682f769ba;
+	Wed, 21 Oct 2026 17:15:06 +0000
+X-Mizu-Trace-ID: 2c2eaff682f769ba
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <9bb73098-57c1-4754-9ecb-66cbb1e205ee@linux.dev>
+Date: Wed, 21 Oct 2026 10:15:01 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -108,83 +58,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH vfs v2] bpf: Allow bpf_d_path() from filp_close_sync()
+To: Christian Brauner <brauner@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+ NeilBrown <neil@brown.name>, Jiri Olsa <jolsa@kernel.org>,
+ Mark Brown <broonie@kernel.org>, linux-fsdevel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260925210347.1364191-1-ihor.solodrai@linux.dev>
+ <20261021-ananas-siegen-kurstadt-24cc3e5c1ce6@brauner>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20261021-ananas-siegen-kurstadt-24cc3e5c1ce6@brauner>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Jiri Olsa <olsajiri@gmail.com>
+On 2026-10-21 1:54 a.m., Christian Brauner wrote:
+> On Fri, Sep 25, 2026 at 02:03:47PM -0700, Ihor Solodrai wrote:
+>> The d_path selftest closes its descriptors with close_range() so that
+>> its fentry program on filp_close() runs. The vfs commit
+>> c1ed65ea167b ("fs: make close_range() synchronous") switched
+>> close_range() to filp_close_sync(), so the program still attaches but
+>> is never called:
+>>
+>>    test_d_path_basic:FAIL:close trampoline for filp_close was not called
+>>
+>> With that series, close(), close_range() and the closes on exec and
+>> exit all go through filp_close_sync(). Few paths still reach
+>> filp_close(), dup2() being one of them, so a program on filp_close()
+>> no longer sees most file closes.
+>>
+>> Allow bpf_d_path() from filp_close_sync(), but only from fentry.
+>> filp_close_sync() drops the last file reference inline, so by the time
+>> an fexit program runs, file->f_path may already be freed, with no RCU
+>> delay for NORCU dentries such as pipes and sockets.
+>>
+>> Attach the selftest program to filp_close_sync() and keep triggering
+>> it with close_range().
+>>
+>> Add a test rejecting bpf_d_path() from fexit/filp_close_sync.
+>>
+>> Assisted-by: LLM
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>>
+>> ---
+> 
+> This seems fine to me. Sashiko has some comments though.
+> Maybe go through them and resend as necessary.
 
-[ Upstream commit e4414b01c1cd9887bbde92f946c1ba94e40d6d64 ]
+I looked at them when sashiko replied and dismissed.
+Should've commented.
 
-kernel test robot reported verifier bug [1] where the helper func
-pointer could be NULL due to disabled config option.
+I'll respin anyways to rebase, it's been a month.
 
-As Alexei suggested we could check on that in get_helper_proto
-directly. Marking tail_call helper func with BPF_PTR_POISON,
-because it is unused by design.
+Thanks for taking a look.
 
-  [1] https://lore.kernel.org/oe-lkp/202507160818.68358831-lkp@intel.com
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Reported-by: syzbot+a9ed3d9132939852d0df@syzkaller.appspotmail.com
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20250814200655.945632-1-jolsa@kernel.org
-Closes: https://lore.kernel.org/oe-lkp/202507160818.68358831-lkp@intel.com
-Assisted-by: LLM
-[ Backport to 6.6.y: Apply the function-pointer validity check in
-  check_helper_call(), because this target has no get_helper_proto().
-  Refer to the target get_func_proto() callback in the tail-call comment.
-  ]
-Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
----
-Hi,
-
-Please consider this backport of the fix for CVE-2025-39990 to 6.6.y.
-
-The helper-validity check is applied in check_helper_call() and its
-comment names the target get_func_proto() callback. See the bracketed
-backport note above.
-
-The complete fix is already present in 6.12.y, 6.18.y and 7.2.y.
-
-Build-tested only as part of a cumulative 6.6.y series on x86_64
-(allmodconfig, CONFIG_WERROR=y); no runtime testing.
-
-Thanks,
-Artem Dinaburg
-
- kernel/bpf/core.c     |    5 ++++-
- kernel/bpf/verifier.c |    2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 9fa984ee076bccbf5e90eb6a194cec68f2351200..bec8876f12375bbbe00d8cbe5ee7d410e48ecd88 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2959,7 +2959,10 @@ EXPORT_SYMBOL_GPL(bpf_event_output);
- 
- /* Always built-in helper functions. */
- const struct bpf_func_proto bpf_tail_call_proto = {
--	.func		= NULL,
-+	/* func is unused for tail_call, we set it to pass the
-+	 * get_func_proto check
-+	 */
-+	.func		= BPF_PTR_POISON,
- 	.gpl_only	= false,
- 	.ret_type	= RET_VOID,
- 	.arg1_type	= ARG_PTR_TO_CTX,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 778a68bfb91dd4e765252cfb1bacb4b658d1381b..a72e1561464cb94942afa723e57c76f032d30dc0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10091,7 +10091,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 
- 	if (env->ops->get_func_proto)
- 		fn = env->ops->get_func_proto(func_id, env->prog);
--	if (!fn) {
-+	if (!fn || !fn->func) {
- 		verbose(env, "unknown func %s#%d\n", func_id_name(func_id),
- 			func_id);
- 		return -EINVAL;
