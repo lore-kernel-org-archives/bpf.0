@@ -1,104 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792603113;
-	b=Mpqn2MjCcwtpl0jaFhY1ECkbLnULfhjkH0Vgu6x/+hwdna+2aqfRzl85bRxyYwidGZYV
-	 ukXQPsWAe2tPLE2iDltoNa5WDRdVAkJdnQ+M7PxkrWkEwGcRU0ibp+VjdPjYEA9NMhOsa
-	 dLixJQ9Qvz2BgYVAozSCP4LNayAPYzGUYvEG4pMbqbpOZ40v5gKWv0sJuqjSkIAxNB8kR
-	 +bgUfDrJQLB2sH6/pKG/TZ/Dntl49cPF7EeuNQhwHi0rh7Z9LMgoGFjgf/0f9eZe7tarL
-	 75Gkeu569pSZyMXiPlKxARTpWcv078BBIHJa1JT/J5wQLw66Ce5dna6VFKpFaU8AqgA==
+	t=1792603720;
+	b=cjHmn1p87+nM8EzxZE3tPQMJDxyeZVd7q9UN2E2IidyZY1DvcIbPjSL42aZeHl1ZvsgO
+	 5J+El3XRjAoym2Js67Bge52HaZwKBBZgXv9t7nMth63N0AkUfkdk+Mwlk2lgEnlVziHa9
+	 N4XPd7iCG+MdwXX2ixloQrtkCzaILslxX4C3mx8uCC1V8m0T73w2eT3MFT1FjVTN4T4s8
+	 qrZ43UJPyrNW/sGuqc9W4MpBRWC92H8TTYANuKFaEf6ZzUxGygIE8/4Ks4tppK4b9GHDf
+	 EX2QYTDkdixraK9SgFrYM5edujwB2EW3FcxPyvERcZsgzypn9oTTGUrjRYm8DEVOlUA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792603113;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=QxzgRFCSRCWipNXz6HQpmDljDRMnyFeDckVppufFRK0=;
-	b=ne5CgvaxTdClvRwFJF3dbm3BzmILI4R9quCQFJBh0Q9aVqpiEX4CMVI8pM03BGyE1hdY
-	 kTXF53mQS8P1/mkMXKoZjaU0OfikZxrosImwaaN66msF/XEvwFzACbaA8IMjrM9AdeQXP
-	 Tplzs3XC6Klo6xDn+hKynUn7KPKI/GT6SowejmtanCl347WhX7+ZcK5PON5wx7IBGLS3g
-	 T0OHKFdnawCTL8NsDnBUvIJGVIJCYK5m1E26xLViSY1DHaEOeE78c8uydR2dHGJDl8pV3
-	 w/k9vsS1jm0tHl83He9WgAYCXU6Au0BN7VnfabdNBuBbrR7g/VTV/fgFrZedNFrOQhw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792603720;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=0dEY7QwFo7y7A1OmKTX/624e5nWdVoCuPz4X8W4hjew=;
+	b=s2Vjj7GBwap3HOdMT5jDU4t8geG/BcepgLzogyJnG1CfO2XKljZ1RkfYcSfZ0H3pOQ/k
+	 7gQKO+uHHmS2tAZ6s9puGNZJdM6kO5KFOLflU8WvfRoHRV7rg9lnpNkDX+Dq5vZbnp9nt
+	 mAj5m15UuubgffCEXj4+8wvJmpcZ9Hx86QBfSK+0aZeDi/HBuE8146iTk8KJGsaOkeuyj
+	 E075UFR4LnWN46cKfJYOUO4FlJjngv/1b+IyjrhSV/4iS16zlnluFF92fCMDQnN2xH2sZ
+	 b56KJUvTUelZ2hltn5ZfxLdfhz663HPz7qbEKNWflTCTOxbduJeO5Tao7a6lK/lTLlw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=trailofbits.com;
-	spf=pass smtp.mailfrom=trailofbits.com;
-	dkim=pass header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=dk4x0M0n;
-	arc=none smtp.remote-ip=74.125.82.41
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mf+Evl6R;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C064606A321
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:18:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C064606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBDA60A260A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:28:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=dk4x0M0n
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-18cdcfc05ffso1011596c88.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:18:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1792603111; x=1793207911; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QxzgRFCSRCWipNXz6HQpmDljDRMnyFeDckVppufFRK0=;
-        b=dk4x0M0n6a1gnLUPee3r+NjT8j1Nkq7UEYWVEznEutAfLIFhh8tCVa4wAUzBKXD+Br
-         421GLuQ2OflI6KKItnsqDrvVxYgLi7mCr1KPzkw3vDJ1yG3tFQEF7xhxViNPGPrUX2yJ
-         4T/5VbaSAG/80T/ka8ti3/Z+CvkQKkNJ9a2IcVKZrVxJ3Dms6SN8JarqiKhFulLBCVe0
-         hMdaqSgQ4nNLDJ9NyuQuw+5kngTGseQC3bptIfru7+XkFQFzkwA2DbBi+ryWP5uLbBWs
-         sGCIj4QzJn9NrWr/jlyaf9D08/hZPd4aydNfmsYzXJ5Y4C+Rcq7F7sDr0WtFlqzb4Dc9
-         LgxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792603111; x=1793207911;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QxzgRFCSRCWipNXz6HQpmDljDRMnyFeDckVppufFRK0=;
-        b=jed4NWoL0WzGNFBjsVI+K7YiV5mw2pfisOgFNCTEvdGlcVrKeBHZLmzD7A3Cpcnoc/
-         Qc+uQHHSOofnaofviipsOWLsBzgNtPLZ1hxEji4CbDRuIV8ikjUPaISLSFmyRrWiPUYm
-         yh+uzqauaqP5NUWViO5ztFDBy0tjWTWUL7I/AayVjfblJFDg+RFSnay0TD/jVfaCtngG
-         nytwuyxeEjP6h6JvOapjJRB20fjhGdW5BPyIXS3nEcJIwKzx5fgPbVK430uzPASAzdyc
-         UJPqEqVjpeq4T786OKHlU317J3GvL5s+BiwLSk1ASSuX6Jt0Jgbcz8Akhyf2oIeCnCNO
-         di8w==
-X-Forwarded-Encrypted: i=1; AKwUvBzs6MKbdgkLQfkAn0/zvC0ccnazI8sqgb8Vh5JlNt+nN9teBqw2yvkeVHblIhc6FDljS0Y=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLaQQomaASKxtA3u5NmOTxPm4Zo1pG9TTj2FrkE3dxmINFwepGw
-	Gc6KXdXjNXYxIaljJ3qvFhuQs7C2EW5AKWPKTzw8QfXQDJEMtrGTSBnVdJxKxQeGmSE=
-X-Gm-Gg: AYBFou38sO14lhQo288vPsVuLlscE+Xc6GxirI1A7ZY6mCPNphLJeHrl/0yQwZlFcEU
-	fpY8vVNr22k81DcR0uM7QYrFjXhpwGhPZeOhD3AI1Vj1puZsQ4F+Hjtg3ZU3BYmTO0L6HRzTa/p
-	sgyui9m9YNxnsocaWRDwFPVVvi959/H4JX2Ai653gSUR8W/l3m/5kxh/ew1WOCc/9py91gSUPfk
-	2TbsJnStR6mkwhXaxooAMK9qcitmEyXFh3tv9l8eIWZDfASZ49Ywz4DtAKyG6hRcevaj0HdHkpk
-	keeZ2cRYr4BgT2jPpxfmQtabVRe/JPKIHCFiqgDC6PdmLDe+7HUnFMClpo7ewqeRu/CllcSKX2C
-	13O6v7zIfCiuMKa4r4dNuf83hd46AAYMAIQO2wuQ33J6ano4UIdd9kC2OZ2igMuepLbBDhDRgFT
-	hD/QL74rF7m3T9ZBvsu1WPwANiSpQBdlt2UFGJWbZD7REiBKjmvw1aCGLsmBBK2LUcvEB5L5EM2
-	BgtySviB3HvnqhnmKaK2CHcyhCJuErlcwaWoSb75u8plRwHZ9dniPM1ONTyR3TEjtexGHZByzlZ
-	UmRY0HeiXOWByOjoYbelVbQosx8KrVm6m4ePcAlk439jF04AEI4O
-X-Received: by 2002:a05:701b:2051:20b0:18a:d0b5:fa42 with SMTP id a92af1059eb24-190a604f7f6mr3396857c88.19.1792603111196;
-        Wed, 21 Oct 2026 10:18:31 -0700 (PDT)
-Received: from localhost.localdomain ([2603:8001:5f01:8bab:d059:e601:becb:a5ad])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903bf5d0a1sm7529738c88.14.2026.10.21.10.18.29
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 21 Oct 2026 10:18:30 -0700 (PDT)
-From: Artem Dinaburg <artem@trailofbits.com>
-To: stable@vger.kernel.org
-Cc: ameryhung@gmail.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	jolsa@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	pulehui@huawei.com,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: [PATCH 6.6.y] bpf, cgroup: Fix storage null-ptr-deref after replacing prog
-Date: Wed, 21 Oct 2026 13:18:27 -0400
-Message-ID: <20261021171827.380-1-artem@trailofbits.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Mf+Evl6R
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B3861F000C4;
+	Wed, 21 Oct 2026 17:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792603719;
+	bh=0dEY7QwFo7y7A1OmKTX/624e5nWdVoCuPz4X8W4hjew=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Mf+Evl6RuWX+evHUPgBTuaqe3wll4mr3BF17xU5mQz9CK4LeEqIkyRoLmbqXmEyn9
+	 vNEi/1/4Aao+1K7nGVHGKdYKj6N3G5dtwGaDr+8Tm9FLFwP78fhIgRjRZcxFUN70IC
+	 GQvWdY13p4f8wHZGD9U7r+8ekv0jaZkQmHJep6ZOJjc8VlQ0WFHomHhMWsybtaZpWM
+	 D5Ykpx5IAChCFyfPjDSKaL5+8nW/lODVxedHlbgFvL/J1jZXo4L2InllDccfqIKFOI
+	 IDsJz3jDjS0sw6/kHnGHymgOTl/wVIwcM0N2AolW2Wy6sCGXLQy06HoZnoMT9fg7bq
+	 VjxgR7EGP0yAg==
+Message-ID: <sashiko-outbox-180524@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 6.6.y] bpf: Fix stackmap overflow check in
+ __bpf_get_stackid()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Artem Dinaburg" <artem@trailofbits.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261021171625.206-1-artem@trailofbits.com>
+References: <20261021171625.206-1-artem@trailofbits.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 21 Oct 2026 17:28:38 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -107,88 +59,160 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Pu Lehui <pulehui@huawei.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] bpf: integer underflow and OOB write in __bpf_get_stackid()
+--
 
-[ Upstream commit 3f562c537e9ecf4bc5e206cfffc2cc047f1b7e94 ]
+commit 8a7616c005136eb52127894543c589eeca649242
+Author: Arnaud Lecomte <contact@arnaud-lcm.com>
 
-Syzkaller reported a storage null-ptr-deref issue after replacing prog.
-This occurs in the following scenario:
-1. prog A, an empty prog, is attached to a cgrp.
-2. prog B uses BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE and calls the
-   bpf_get_local_storage helper.
-3. link_update is called to replace prog A with prog B.
+bpf: Fix stackmap overflow check in __bpf_get_stackid()
 
-The reason is that __cgroup_bpf_replace fails to alloc and assign the
-required cgrp storage for the incoming replacement prog. Consequently,
-the new prog inherits an uninit storage, leading to null-ptr-deref panic
-when kick the new prog.
+This commit bounds trace_nr in __bpf_get_stackid() to prevent a slab
+out-of-bounds write into a stack map bucket when a perf callchain contains
+more entries than the bucket can hold. It also restores trace->nr after
+both branches of bpf_get_stackid_pe().
 
-Fix this by rejecting a link update if new_prog's cgroup storage is
-incompatible with link->prog.
+Link: https://lore.kernel.org/bpf/20251025192941.1500-1-contact@arnaud-lcm.=
+com
 
-Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-Link: https://lore.kernel.org/bpf/20260728132336.2857800-1-pulehui@huaweicloud.com [0]
-Link: https://lore.kernel.org/bpf/f87b53c0-8f00-45a6-82db-8242fa9b143f@huaweicloud.com [1]
-Link: https://lore.kernel.org/bpf/20260807104403.1013064-1-pulehui@huaweicloud.com
-Assisted-by: LLM
-Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
----
-Hi,
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 458bb80b14d57..60ecf3e82d97b 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -213,7 +213,8 @@ static long __bpf_get_stackid(struct bpf_map *map,
+>  	struct bpf_stack_map *smap =3D container_of(map, struct bpf_stack_map, =
+map);
+>  	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
+>  	u32 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
+> -	u32 hash, id, trace_nr, trace_len;
+> +	u32 hash, id, trace_nr, trace_len, max_depth;
+> +	u32 curr_sysctl_max_stack;
+>  	bool user =3D flags & BPF_F_USER_STACK;
+>  	u64 *ips;
+>  	bool hash_matches;
+> @@ -222,7 +223,12 @@ static long __bpf_get_stackid(struct bpf_map *map,
+>  		/* skipping more than usable stack trace */
+>  		return -EFAULT;
+> =20
+> -	trace_nr =3D trace->nr - skip;
+> +	curr_sysctl_max_stack =3D READ_ONCE(sysctl_perf_event_max_stack);
+> +	max_depth =3D map->value_size / stack_map_data_size(map);
+> +	max_depth +=3D skip;
+> +	if (max_depth > curr_sysctl_max_stack)
+> +		max_depth =3D curr_sysctl_max_stack;
+> +	trace_nr =3D min_t(u32, trace->nr - skip, max_depth - skip);
 
-Please consider this backport of the fix for CVE-2026-90250 to 6.6.y.
+[Severity: Critical]
+Can max_depth - skip underflow here and bypass the bucket size check when
+__bpf_get_stackid() is called from bpf_get_stackid_pe()?
 
-The code changes are identical to upstream.
+When a perf event has PERF_SAMPLE_CALLCHAIN enabled, ctx->data->callchain is
+populated by perf_callchain() -> get_perf_callchain() with add_mark =3D tru=
+e.
+In include/linux/perf_event.h:perf_callchain_store_context(), context marke=
+rs
+such as PERF_CONTEXT_KERNEL and PERF_CONTEXT_USER are appended to entry->ip
+without incrementing ctx->nr:
 
-The complete fix is already present in 6.12.y, 6.18.y and 7.2.y.
+include/linux/perf_event.h:perf_callchain_store_context() {
+	if (ctx->contexts < sysctl_perf_event_max_contexts_per_stack) {
+		struct perf_callchain_entry *entry =3D ctx->entry;
+		entry->ip[entry->nr++] =3D ip;
+		++ctx->contexts;
+		return 0;
+	} else {
+		return -1;
+	}
+}
 
-Build-tested only as part of a cumulative 6.6.y series on x86_64
-(allmodconfig, CONFIG_WERROR=y); no runtime testing.
+Because ctx->nr is bounded by sysctl_perf_event_max_stack while context
+markers are counted separately up to sysctl_perf_event_max_contexts_per_sta=
+ck,
+trace->nr can legitimately exceed curr_sysctl_max_stack (for example, up to
+curr_sysctl_max_stack + 2 on x86_64 or curr_sysctl_max_stack + 8 on powerpc
+when interrupt or signal frame markers are present).
 
-Thanks,
-Artem Dinaburg
+In kernel/bpf/stackmap.c:bpf_get_stackid_pe(), skip comes from
+flags & BPF_F_SKIP_FIELD_MASK (up to 255), and for BPF_F_USER_STACK it also
+adds nr_kernel:
 
- kernel/bpf/cgroup.c |   17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+kernel/bpf/stackmap.c:bpf_get_stackid_pe() {
+...
+	} else { /* user */
+		u64 skip =3D flags & BPF_F_SKIP_FIELD_MASK;
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index fa6f818c8eabb7e3db0de27cc6d58821e91189ae..a810bc0192de8e74aedfb2351f54c118eb8be584 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -856,6 +856,20 @@ static void replace_effective_prog(struct cgroup *cgrp,
- 	}
- }
- 
-+static bool cgroup_bpf_storages_compatible(struct bpf_prog *old_prog,
-+					   struct bpf_prog *new_prog)
-+{
-+	enum bpf_cgroup_storage_type stype;
-+
-+	for_each_cgroup_storage_type(stype) {
-+		if (old_prog->aux->cgroup_storage[stype] !=
-+		    new_prog->aux->cgroup_storage[stype])
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- /**
-  * __cgroup_bpf_replace() - Replace link's program and propagate the change
-  *                          to descendants
-@@ -894,6 +908,9 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
- 	if (!found)
- 		return -ENOENT;
- 
-+	if (!cgroup_bpf_storages_compatible(link->link.prog, new_prog))
-+		return -EINVAL;
-+
- 	old_prog = xchg(&link->link.prog, new_prog);
- 	replace_effective_prog(cgrp, atype, pl);
- 	bpf_prog_put(old_prog);
+		skip +=3D nr_kernel;
+		if (skip > BPF_F_SKIP_FIELD_MASK)
+			return -EFAULT;
+
+		flags =3D (flags & ~BPF_F_SKIP_FIELD_MASK) | skip;
+		ret =3D __bpf_get_stackid(map, trace, flags);
+	}
+...
+}
+
+If curr_sysctl_max_stack < skip < trace->nr, the trace->nr <=3D skip check =
+in
+__bpf_get_stackid() passes, and clamping max_depth to curr_sysctl_max_stack
+makes max_depth smaller than skip. The u32 expression max_depth - skip then
+wraps around to a large unsigned value, so min_t() selects trace->nr - skip
+without clamping it to map->value_size / stack_map_data_size(map).
+
+When trace->nr - skip is larger than the number of elements that fit in
+new_bucket->data (for example, on a small stack map with a 1-entry bucket),
+wouldn't stack_map_get_build_id_offset() or memcpy(new_bucket->data, ips,
+trace_len) in __bpf_get_stackid() still write past the end of
+new_bucket->data, and subsequently cause bpf_stackmap_copy() to overflow
+value in memcpy() and underflow map->value_size - trace_len in memset()?
+
+kernel/bpf/stackmap.c:__bpf_get_stackid() {
+...
+		new_bucket =3D (struct stack_map_bucket *)
+			pcpu_freelist_pop(&smap->freelist);
+		if (unlikely(!new_bucket))
+			return -ENOMEM;
+		memcpy(new_bucket->data, ips, trace_len);
+	}
+...
+}
+
+kernel/bpf/stackmap.c:bpf_stackmap_copy() {
+...
+	trace_len =3D bucket->nr * stack_map_data_size(map);
+	memcpy(value, bucket->data, trace_len);
+	memset(value + trace_len, 0, map->value_size - trace_len);
+...
+}
+
+Also, when skip =3D=3D curr_sysctl_max_stack and trace->nr > skip, max_dept=
+h -
+skip evaluates to 0, which records an empty bucket with new_bucket->nr =3D =
+0;
+and when skip < curr_sysctl_max_stack < max_depth, clamping max_depth to
+curr_sysctl_max_stack before subtracting skip truncates frames that would
+otherwise fit in the bucket.
+
+Since trace is already unwound before __bpf_get_stackid() is called, should
+__bpf_get_stackid() clamp trace->nr - skip directly against the bucket
+capacity map->value_size / stack_map_data_size(map), matching how
+__bpf_get_stack() clamps trace_nr against num_elem?
+
+kernel/bpf/stackmap.c:__bpf_get_stack() {
+...
+	trace_nr =3D trace->nr - skip;
+	trace_nr =3D (trace_nr <=3D num_elem) ? trace_nr : num_elem;
+...
+}
+
+>  	trace_len =3D trace_nr * sizeof(u64);
+>  	ips =3D trace->ip + skip;
+>  	hash =3D jhash2((u32 *)ips, trace_len / sizeof(u32), 0);
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021171625.206-=
+1-artem@trailofbits.com?part=3D1
