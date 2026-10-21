@@ -1,57 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792549246;
-	b=AkTK5QB4ySfTvd96T0MR16K/pugMRiDK+uQr2iOOSLIyEuJ6GnKQSiY/QqVln7GASlvn
-	 5WvlcArMUTx6OX7kH3CB2vbM0sSQNM7hSiMSfoiTQpxrjjH/b2kjZMis0ozkRudMiPhZz
-	 qh7RiuWPAgtWLpxLLUQc5vATJAPrX6l7hQw9dOCwO4yVTnINoY9CgeyPwmEVxDVpf8Hxm
-	 jQ7IO4UOnx3GRtmqLnu8EkQj4T+f6pNoZhaUp6DrmO8ZUWd+1R+cL2ypuyf+kAOSGyQ17
-	 9VZtcuYiduc0xrnRyAcf1+jqcepk6YWAtAg3hNEN3tHmmPz86anQ632pMgJomSso4MQ==
+	t=1792549413;
+	b=I/7WMTdUkqfvLQRkVBy7xBSbQp+FfN+GVDdRjyT1r3EbFWTNZ6VJsEFF+pJ74jHq1+4Q
+	 UPeRtEo308VixusYNGuFON8dLHvGBVmcBqSFOt5aaramWvmqxh4uNven2RwMOwsWfOZcl
+	 7Bi3Vb+WSllwCM2PtMflO6wQe02iHK+mU7mvohRNy8z2RRsbO2TaByYbjlbyo2E1x4onc
+	 pYvz20dkRX0ZH0YjtYkrTed7wsh6SAkQJmoy6m/IKe3Aora3am3amDTj1JSvuiXcbRU98
+	 75Wfa1UjaOvR9m4f7tsaatNmAwgkmKJn/NWhRib2qLfK1Q+1cjRQ5feJQPx9k2FUtyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792549246;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=NocAOHMH6ZadGhcdFlGDkQVTqkooGtFHz+dU9O9aSI0=;
-	b=3TE88ZRc8j/xHo8D5sRxrQspRuSZrmE+frERbh94hG462EO47+3INYHROeAjqSWXzfsW
-	 RAMhr6B7OcOirxw8VHhSeBvTdr2M18sPOTH3iGfDo541Eg4l3fLAA26Dg1XBzlPgE8dYf
-	 pn8xSUAAisgwkFYNB/zo0aEkUQ9ejOmJVtAO5vZQLcnht5Dyw27F/M1/jL2qBZU+nDn9m
-	 Dt3OsCkOIIcN1nBeGqLQ1qYqBJDljke7C+enZAeynIzWcaq2BRKjssgkKLXycj8aYddfO
-	 5PT/Kc9U2RhoU6zvzOok+IFdzRiOBz+rKkxHpau96UhO89LbHaoLG+B7d/X5Spm8WAg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792549413;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=B8lphOSifg5PX8nlYSTrapvqoMYvG2iX6H0eCr1oYfs=;
+	b=NrdgJWkAKMID/HAAQYsHTFnzhHF3yEJO5KoQSR+3F4oRhL+tFfUu4zqkZySVnV8J73s+
+	 XzkMj/ZoqTtJ3OEcqTJjYNCIAZXO1S1uLtiX3yflULEL74Kn/FUaYADlBCm/mvQD9Kbze
+	 7PJrpBRgNQwYKKYZXGs2KKz8NFVVNzVbue0kYjJ3fGRWQKc6CtCQLAvmDgm/eQjnhEuRF
+	 kQ0EsbiddS3SnPmMPVQPdGGNY+79m6W8ndXRPvuWQRICkA/5ad2VBONphd/QmhdhyB3PW
+	 8Lk9u9WkTaEcY3pbnGXWqBqIRdc20rTInr9a+DkDHX0pNRoGlY28bXtfNG2BLzROULQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eDqRpOQ2;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mJR0dfsK;
+	arc=none smtp.remote-ip=91.218.175.5
+Received: from mta0.migadu.com (out-5.mta0.migadu.com [91.218.175.5])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558CA606A31A;
-	Wed, 21 Oct 2026 02:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA047606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 02:23:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA047606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eDqRpOQ2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C951F000C9;
-	Wed, 21 Oct 2026 02:20:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792549246;
-	bh=NocAOHMH6ZadGhcdFlGDkQVTqkooGtFHz+dU9O9aSI0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=eDqRpOQ2bE+iyzSRe3m73wPzbWFaXM6EuccCMNjaoDPcspO9z0Ei6l07Ep1hpJous
-	 t8xHRPhC8l56vmKc8PnTPi0K63njCACZ+4pI1uYrv4DNBLLyti42MMf0I/klNITLxZ
-	 43W1EixzDYWLtsYdCWk6YE5hQeoyIqOFNtowZh6QdEq4NGHVXn2hohd6FL0UbGqFFU
-	 u4mgG+UhEhCwVLPqxPzDP956VnJuUluQ281rBLd+uEeQUERJXHxnXZTSnVeUm4SSob
-	 c1TrOoBLo6mSpcCKdHIBIpau2cYdh2AtwhPFlTZ34SQWstWA0RJZAUl4dVB/r1rcIs
-	 KVMP33K/7yUEQ==
-Date: Tue, 20 Oct 2026 19:20:44 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- josef@toxicpanda.com, mason@kernel.org, steffen.klassert@secunet.com,
- herbert@gondor.apana.org.au
-Subject: Re: [PATCH net] net: free the policies if a socket's clone fails
- late
-Message-ID: <20261020192044.7c3a58a1@kernel.org>
-In-Reply-To: <20261017013912.396296-1-alexei.starovoitov@gmail.com>
-References: <20261017013912.396296-1-alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=mJR0dfsK
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=qh78UdNs3hhRSxjo+cpVhmeG8GQtin9AMjRRaqMlQa0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792549410; v=1; x=1793154210;
+ b=mJR0dfsKj0S1/HTRIZ5D6IdeYHBK6zNYZ1mQd0bnslRSXXM6Nrs/LE4tYGAKuc6RSyZu6xfQ
+ FaS1EA4tsfwfjvFkcTKXUhqKcKN4LaWvcnzNsd3A9vROzdnpJPAYsA5cY0qjTO7iqSwu0sAnDYr
+ 5W4lY6JpLBLyiPaVHVmjfcPE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cc6c77ef38f8cd01;
+	Wed, 21 Oct 2026 02:23:30 +0000
+X-Mizu-Trace-ID: cc6c77ef38f8cd01
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <1ffe4765-ce81-4ff6-a483-e978dce5b234@linux.dev>
+Date: Tue, 20 Oct 2026 19:23:25 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,17 +58,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/3] bpf: Reject unwind_goto and unwind_exit in
+ offloaded progs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org,
+ bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, yonghong.song@linux.dev, martin.lau@kernel.org,
+ mason@kernel.org
+References: <20261020231942.2568163-3-alexei.starovoitov@gmail.com>
+ <1cc7789274018beba70932ec8806130f1ff07eed56b62e0afbed41385630e4b7@mail.kernel.org>
+ <DMA2VC8SJY0S.8O3PIVXWV2J4@gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DMA2VC8SJY0S.8O3PIVXWV2J4@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Sat, 17 Oct 2026 01:39:12 +0000 Alexei Starovoitov wrote:
-> -	if (bpf_sk_storage_clone(sk, newsk))
-> +	if (bpf_sk_storage_clone(sk, newsk)) {
-> +		xfrm_sk_free_policy(newsk);
->  		goto free;
-> +	}
 
-why not add a new jump target and add the unwind at the end 
-of the function?
--- 
-pw-bot: cr
+
+On 10/20/26 5:08 PM, Alexei Starovoitov wrote:
+> On Tue, Oct 20, 2026 at 04:43 PM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
+>> TL;DR: Code looks correct; only the commit message is questioned: "nobody
+>> looks at jit_required" holds just with CONFIG_BPF_JIT_ALWAYS_ON=y, otherwise
+>> offloaded progs were already rejected, so the changelog should name the
+>> configuration.
+> 
+> It's a nit in the commit log. Not worth a respin.
+
+It is a nit, and this particular one might be fine to ignore.
+
+> humans and bots MUST not report nits.
+
+But I don't think we should remove "nit" passes from the review bots.
+
+If people don't read commit messages carefully, and review bots don't
+either, then we are increasing the amount of sloppy or outright
+incorrect claims in the git history.  Even if only bots read the git
+history, this is not good. Over time it will increase confusion and
+ultimately burn human hours and tokens unnecessarily.
+
+And also what's the cost of a respin with a bot fixing a bot-detected
+nit?  2 minutes? 5?
+
+I get the move fast attitude, but we could at least let the bots do
+their jobs assuming we trust them (which we de facto do).
