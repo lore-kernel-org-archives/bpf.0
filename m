@@ -1,100 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792609039;
-	b=F1kA8hQSKIRr2gjXU16Kx4b3xdREZmROf0M/R1jR7A94h0mEBQFxTs5EwoMdDv65hNz3
-	 azNTXFLgMeHoshBaXtVebl42KTwQ/Xq+lQvZ85ajRcXTpHoDaS6ut/gOB03bn2UolXuyP
-	 j/1nletDAHWjcNLTZUyzRxN1CaqUfLyA+PsgMbfE6JQvVhXKHaXqJUGnN6MGKFCGl0FwA
-	 wp5xFhJhtJrel96gCrTT37Len3raQG9hXXAS8eSnLa//E4KHT3NFcllSGz9axVGUKwQC/
-	 /gNAmEbPYX4M+wBXgULW9/iqU6EWGvD7fRh52/pS0M8iNw3nRvthUignhRXSYxhEfDw==
+	t=1792609055;
+	b=V7mFX6liB1MKxw5Sy1lSGUyFWdobL7EgAZ+1MXhDdd5CbpEXbiBqPd72od3wG5GPf99/
+	 NhaNxc+u5ZZ5dq1GE3A6jSWsjGv2G9jRb8dMnUXb3+LID9/PDYTl3BO3T4Bcf/nD82kNn
+	 fDaOG0BolcvA3gFzWbZS1RqJUr3/sUIk8R0iqVUySOxJ1oBunETsxuWg253qqQwQs4OhK
+	 16+PL9GKaPDIBsIyLCdrqFwOkxG8Vkpf2NLT6e+8L/31Qcr/63CFipjmOlbsSs8BSjkyB
+	 HPYE3gIep8WGyKcSbQYRve232HwWyrmziCXvU/lZ464b1Q8RXK8yHJveoffMxiIZF3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792609039;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792609055;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=tI/n7i8YUulS5nmMk231Om3hhflnA13FHGA5mnNrpuY=;
-	b=hq+vF87mcwZfACP+9IIh++JMlvJRkJEK78cZC3a0sG6/cdk1nWuEfqJRC/sx+QzwH3Jc
-	 5zXCFlTNRpwI/x0mSyDFMOT6m890NRkUWN7hggvHyaL62NSwS7SIthxBBTKUWB8JkccQQ
-	 yCkie2gw8aZ6KiTQE5E+2Fex1DU99Pp3/90Qo14aBh42cRiABAvqL/tA3PdMu/63N/65p
-	 WTXLrsgWP9r4QaPiW6b0CXWn0aIoqG4j9GZRL5uPWGjrPMuYAkE73ksUbiNunzgKBMU92
-	 DG6SKIWQr8L285h39iuJwS9JAPoIxMRMcZfcsQd023qph8w/hJM7zRNTxZrvGZ6/LJw==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Subject:
+	 From:To:Cc:Date:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:User-Agent:MIME-Version;
+	bh=BSxcanS/47zEsQsgnmEoyPzbIaTmGno0kzGDYzGw5hI=;
+	b=efC6VYxSOIZ5LMUNYpB/0zj/ano2qcJbQc9Iq6DidmQumcRcf4SZDBLQOCnFGexeaUxY
+	 AP0N4TnuPn5KKvnPmztrn0mo45gSbtNFDVf+ZwD3GS6DW5Vn2fNHPZs0GpeflUIpy7SnE
+	 gu/FlFWOOUGh/AcxwpjawuQspEWUGktdaoqFynGsLEDJeRARp1xufE9TM5rpF7d1xZ5Cv
+	 IIkkKgwqhNdPjkoIZPqSfSG7p/GdqxJb02hagkmyn1aKWVyoy+JAOttAoBy9duRpLnife
+	 5Wh9WimxLSkmR9GScRwHl70lJOfZB4GlnfuGN4GdGjNBwkzclLHKZ+RKPYxR92hV9Rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nebusec.ai;
-	spf=pass smtp.mailfrom=nebusec.ai;
-	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=sMdTfLuT;
-	arc=none smtp.remote-ip=74.125.82.45
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=q3ME6fG5;
+	arc=none smtp.remote-ip=74.125.82.49
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92820606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 18:57:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 92820606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFED606A322
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 18:57:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0AFED606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=sMdTfLuT
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-188406bb948so605364c88.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 11:57:18 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=q3ME6fG5
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-156cbe59622so785739c88.0
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 11:57:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1792609038; x=1793213838; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=tI/n7i8YUulS5nmMk231Om3hhflnA13FHGA5mnNrpuY=;
-        b=sMdTfLuTKJULS0Py84zcJG7gxVbaoZFLk0uy6tq+akLRbz8GTm24Ytky15ywyNE14U
-         WIJshEp4jqB/NVXmTMwR10O5nwI9GMJZCcvHjT189KTkAYM5rdXSzQzxBwLc6XIY+iRX
-         Dpw14ZhPgTGQt/zlwEmzAEANGQyzCbdGl7/NdDTeUvYgRjR5jX3YPZddOAFUaQvsbSFV
-         ej37O/De8wCgGfMMpA3/TX+ztzYN/K/tjBUgc0WpSeA+YfKdKJ8vPylM6MSDxakMzykJ
-         DAZkcGIMkx3YYJPm4plCpixnJA4FSv6HNxW0DUnfe1n+wWb0xeZoiasOMHMQRsUAwz1J
-         GIfg==
+        d=gmail.com; s=20251104; t=1792609054; x=1793213854; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=BSxcanS/47zEsQsgnmEoyPzbIaTmGno0kzGDYzGw5hI=;
+        b=q3ME6fG5kkdKozji1OSVG5OjVgmM5AvX15wr1r+TfRJSJVl+J0bT6OhQggJWtOs35I
+         dNj5sJvH06VGaHlLZa9BllLXi8+gR6hRXoQjYdKBRDRHdbJsi2i34Zl5RLHx45TNVE/A
+         QfXTAfq/6HJeM8eQJ8sMm4EjYiSecoqPkfY5egKOzbCL8/hgq6nSnq67Pr7MgIr69NoG
+         UXh6y5O9TafUQWT7dDX5p0ue2hQEOBojnEScwWoXe+V8KymhWZ6PVqD0H7+pLiud5Cai
+         5Gi6OG6MSq5SQo1PI/0F7WMW4JSueGW8ewm0uxzM+4uSuOx111v8rvFhS3VnqE/DXqPg
+         FfFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792609038; x=1793213838;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tI/n7i8YUulS5nmMk231Om3hhflnA13FHGA5mnNrpuY=;
-        b=lkoKlzTxAVSrrXP+kMhWK8GmcFI/O5rNpwP657ViWFa65MjD0SS+jZ3plNgnMaZU0s
-         8Qv0AhTqJhiI0wqcWJgQGK62KsfkaBjhybdlYE5pH72D2kkxSaxn7NKXOUKWA1gXgEo3
-         iqyvV2HbQqzfoRWh5n7Ne2KHTNVQRJA9Sa+cU5nFNfljKjqjAFALVMg6lDCzo0Ah+Vlv
-         cTtVQZK/7LiBgsT4XUpFLPLm3R/oOelbJr1tZ0iH6DMh6oaffGXsBoYh9aCqrDFoNQZq
-         fU/ms/tbLOd/ZOJZXWNh5IYfwU9iDPTZIn3OeIpTNP/YIDVYz75Q54y4yTh7cjTr2qpj
-         bI1w==
-X-Forwarded-Encrypted: i=1; AKwUvBxlg+0Tzp301bNxgRinn+UX17ETZa0pzTaMlv37/rLhCc8cB2DLTXY1FbC+531v4/3zExo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIoajYBm/sP/hJpr0OJ1m2kSlnjlkxhzzmx+1hhs0yWv2B9BHLB
-	SgwXtAUx1ia893Ou1dni89cXriEhpUQWeuQw2plwan/qvszcv+tEgd2IAmOrtVgtsfbn
-X-Gm-Gg: AYBFou3LX/wwR5rwxvk6CThvIojGxsLvXyLz/eyCexE8gH/24BMKZTa5B3/n+DeY3z9
-	CmXNtDoACT/3+4LKki/GQLj3E40raNYc10gLU+wUf3OJzUndIWR2ExnLqMQA/qrQTopAS67VOoS
-	P2jsheYL092f915WeJai1src+FmSaGpeV1IJnM+mwSxDU634cuVi2Gzi2YtTQNENMZMuMqaQbHF
-	M4x8oWrZk0me0uiNewwKY9+Wc8v+hKRzhOm1kWrB727PdeCPJngBdMx0e1jGNY60hnElHSgUXS+
-	17ZIUCuBfqX0ygaeoF7Pikjt+j1o924gy+6rIlJpl8oN/qs7hfJ6qMU4t1FVJAIgS9ASJ3z45tl
-	ZibThP2TfIPL1X9AxtZsIJipfRjJIoVQ+JYLQwQrnXyN09rOtZ/Y3x4wHHFTlWmiM/q38Qenc8c
-	gmskq5KcN/aLykiLTecFNxIVydUuijPj2Eu/l2K36s7im8siQFwtsX2IQFWmD/RFJMXE3W6sbLC
-	owGNvcnUu4r55U3mFd3GyKmBOlEQy3cRGWIkBu0jAeqJcCy7sEwRBQnPJ+1W26QDyhMGJE=
-X-Received: by 2002:a05:7022:387:b0:154:fa0b:6df1 with SMTP id a92af1059eb24-190a6fa9d37mr4175396c88.37.1792609037603;
-        Wed, 21 Oct 2026 11:57:17 -0700 (PDT)
-Received: from Roxy.sysu.edu.cn ([203.175.14.58])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903a180b9esm12553346c88.4.2026.10.21.11.57.14
+        d=1e100.net; s=20260707; t=1792609054; x=1793213854;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BSxcanS/47zEsQsgnmEoyPzbIaTmGno0kzGDYzGw5hI=;
+        b=ajAwO2K85aYNYzC4UxMBu7AVvC8Lxtb2tFhWzdhcXLljDzBHDXdMTC8nafl7hrR/ls
+         KdAGqyoAHfeV89E7euNJ59RyNB6P8s1kehndk8k9uaJ9lThk7FMpDYfWz/oNaxqqXZva
+         /sETuyCM9qL9/sG6inG7Fec9DlKqTyde2+InLzdX3i2kjpXjFtZEDVo/8+4efnfT0NPN
+         uD0MxnszxlKyp3dxnET2cJanFgp2azHw81kzf59ukww7d9dHUIRLyPq916Y1x+YON67Q
+         NLLX4urhUos47iupGBOCKz7mO4cxpWDh/7zPanSqC/TsQRBaER1gTNjtvxl2NDTgiAWM
+         Cjfg==
+X-Gm-Message-State: AFq9FYL+n0Ee5TtzAGGd25dDnQjUvZ11Z7suhwTgq3Jq0EmkvRwdGtUi
+	jK4/dDObOi/Bvnp0TsOaIZtXhLOBEOaMbR+s4Z8fhMZXqtUjaBQNAmWu1ar0YHUO
+X-Gm-Gg: AYBFou0I7AhIS51OaYfBXsIY76chzJXjstb4xdtFSncOU+GtbQ0zdFvF2LwKY46AlOt
+	4jBMdmYRkbcjZGddw/wv9r6lBsjuwLT5V8XRTQiXcl0Ht1+Bph7XIWZdcUlVC5Y9XdwMhYSGyRM
+	w5qxPhlIqlQWEpYtr5wwTrxPaUNAxFCdt4jDXTZny8HtWlg4039Sh0Y1Hn2GX2KhwuNbQ6coZ4z
+	wVViN4C9PaIVJRQAm/y/radZuLiImlCd+hq+XtdJOBPgreguLCVXPR2W8wSODGUZFXLB/ezuG1x
+	LjvwgE2EUqOvcUnHk8wNuKkpKIJ7wuo2htUCUVVQPV2/+tdH9Y2ovcFvd2ldW4jEpNj3TsUrFFf
+	sJEbzRvW+Ag7vv30sXyuv49V8mlwv8pnRsOQAHtLWHB/Qou+m251EclnlSD5bldEtblTFZx2Co6
+	jMg3qDKTqLAYdabvBXw2ZMWbmYriEhf39lJpt8H07JnvTjVL6s+ZJHCa6PfogNatqyqOIPgu5nx
+	+r7/QWSc8tX9vTJOdIMqFkWx4cVTsRiekzuiHyjdfOEL1Bpcys/b+a1ufMOz4p94sZQfRBWM4YP
+	1sep015SwjN9oABhy8Rp8DiKW11XsrnYgaEqdg==
+X-Received: by 2002:a05:7022:6ba6:b0:16a:1fa:58cb with SMTP id a92af1059eb24-190a051e33emr4444375c88.1.1792609054032;
+        Wed, 21 Oct 2026 11:57:34 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:1e74:b094:f745:1e3d? ([2620:10d:c090:500::4:90ff])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36741e71eaesm19856438eec.26.2026.10.21.11.57.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 11:57:17 -0700 (PDT)
-From: Zhiling Zou <zhilinz@nebusec.ai>
-To: netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: edumazet@kernel.org,
-	ncardwell@google.com,
-	kuniyu@google.com,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jonathon.reinhart@gmail.com,
-	vega@nebusec.ai,
-	zhilinz@nebusec.ai
-Subject: [PATCH net 1/1] tcp: release congestion control reference on rejection
-Date: Thu, 22 Oct 2026 02:57:01 +0800
-Message-ID: <2773af2572ff59055933e407a135b39bca537381.1792607608.git.zhilinz@nebusec.ai>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1792607608.git.zhilinz@nebusec.ai>
-References: <cover.1792607608.git.zhilinz@nebusec.ai>
+        Wed, 21 Oct 2026 11:57:33 -0700 (PDT)
+Message-ID: <1f2b435506da3c11cd69e2ce98073ac3aaa013a1.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject pointer operands for 32-bit
+ recurrences/latches
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
+Cc: daniel@iogearbox.net, kernel-team@fb.com, yonghong.song@linux.dev, 
+	memxor@gmail.com
+Date: Wed, 21 Oct 2026 11:57:32 -0700
+In-Reply-To: <20261021185609.607075-1-eddyz87@gmail.com>
+References: <20261021185609.607075-1-eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,38 +100,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-tcp_set_default_congestion_control() takes a reference to the selected
-algorithm before checking whether a non-init netns may select a
-restricted algorithm. When the check fails, the function returns -EPERM
-without dropping the reference.
+On Wed, 2026-10-21 at 11:56 -0700, Eduard Zingerman wrote:
 
-For BPF struct_ops algorithms this keeps the struct_ops map and its
-programs alive. For module-backed algorithms it leaks the module
-reference as well. A network namespace administrator can repeatedly
-trigger the rejected request after the algorithm has been loaded.
-
-Drop the reference on the rejection path.
-
-Fixes: 8d432592f30f ("net: Only allow init netns to set default tcp cong to a restricted algo")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Assisted-by: LLM
-Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
----
- net/ipv4/tcp_cong.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
-index 8e83ef81fc187..907c63af14785 100644
---- a/net/ipv4/tcp_cong.c
-+++ b/net/ipv4/tcp_cong.c
-@@ -293,6 +293,7 @@ int tcp_set_default_congestion_control(struct net *net, const char *name)
- 	} else if (!net_eq(net, &init_net) &&
- 			!(ca->flags & TCP_CONG_NON_RESTRICTED)) {
- 		/* Only init netns can set default to a restricted algorithm */
-+		bpf_module_put(ca, ca->owner);
- 		ret = -EPERM;
- 	} else {
- 		prev = xchg(&net->ipv4.tcp_congestion_control, ca);
+Please let me know if this should target 'bpf' instead of 'bpf-next'
+since 7.4 request was sent.
