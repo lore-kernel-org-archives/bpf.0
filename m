@@ -1,54 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792613700;
-	b=s5tUwL5FxBpfxkQaUXJUy+E0G+njNDw7KJhZGFZD/AMb+kmEfVpykJfsyFF4qcIWTTyY
-	 C6Ei4YWfoga6FxLL1RhT8tzsIjlv7XttQ982MpGXQbF0Wufnjyl+hePfFSPUFZw0kV/8w
-	 uxcOUPTtjzOO3RceDShTlVeh/fdFj2l6UIBU1SkM2XOJs+12ga9mOgL57jzffGUcTa48f
-	 pEWNYa5+feuw999n1qRHNvpciuN63HzPxCTljCWz1QpTiz8HJ7JEXripcaNoVbz/jjiK4
-	 7JSCpCwzaykdR0bH7yGgoypu6SXMGiZtAIUY6ZjUyJi7IY4gmAQHYT6yyhn5/Bawj/Q==
+	t=1792613773;
+	b=LVC97Hsgc1YRdwWPWISuQM0HYULzkeIOHzmiRbEOhUjwkUZdU8de2Fv9heu7Iep9BBw9
+	 bfStPMW8Q1nh4MAaHkHj5FlmYLmaCFomC2584VRv8uAiOIrxyo41QW8exKn2Yb/kbRMU5
+	 caqOiQf8RIUiNOtwvtcb6lYRaHe9mzwP5VrCYbOZIffKZTdRynJ7Vd2ahXhVxWUs7q9GP
+	 VYuxEQxWJH2cctcX1qF43dBxpywgFtvmGlkyIrxdlhnlXUpc8351t2V+/klgHrQ87e2YF
+	 yrK4xl3LjcoCKZNt2ml2nN9qAtzUCd8JN5CGn/JJVZnq/1YOAJF11/VHEfpT95rR0ug==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792613700;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=4G+I7djq1OU0EgGUZU0V9GlFagjXrwntNK7yPtcpldk=;
-	b=Jyj3C/dXr53b7QgzjIMQstVs+2CnOe9421zsWGUfYlm2nSQeOngZwpOY+T/HpVN3JYx/
-	 img5rn1IGWVxe0R423VPyOWaok6NbneaVA9Qul2s3X/5FKELL+VP4YE+W2fDjIcaLQerp
-	 WxyT518H6IhEKKUB3jM7jE3CjirX/5Zn1thYyptAfWP9AWRk/UgBwlRW0YqKnIuM8fuKJ
-	 tK5ARkyfuyXwqgTbdSvc8KR05I6Lv86KHnikA7BBR+ywB2hX/rtu832le85gc1VszBKDC
-	 bmgaRMHl+6a5Wl13/7fH+Z5q8S/31jnE2By7BpavLHz6V3sVSyW6LTlZS4GCALK8fKA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792613773;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=avp9cqTtWpYaZT22vY285NGVGfC3NkBdRxMRGQ2R0g8=;
+	b=tuMXjt9IgoaPTbKHUiWZeuOgtKh+wO2dXToZ1KJUBVNMyc9r7fPiNDpCQ+8RcDTi4WWn
+	 jHnD1KDRf+9JuKPLf7eJ5M8+QNQX5S5SSjHGAPFZBU4iEG5zNvg4oFo1YA0kG4CconUwf
+	 iWugGJGd7nmR6k/7MNaK1rXTaTGEZRaqcDbvxSPuf3VVS0GgdlALGyqfaMSERepYWEJar
+	 PASgoi3P785YsWzYs6be1jomIPh3d+y3i9YCy6xP1i+oV1/6U4vBFQOkHBDmw2I8GabrF
+	 Z5UWgF6/461n2L0WLFPQot0xgOk+bms4tYz2O+H7hwyejrk23NaHVrCXxk9kL3FKXWg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f13EnAHY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PcBdPivZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A374D606A322
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:15:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08300606A31A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=f13EnAHY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6EBB1F000C1;
-	Wed, 21 Oct 2026 20:14:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PcBdPivZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5D81F000C1;
+	Wed, 21 Oct 2026 20:16:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792613700;
-	bh=4G+I7djq1OU0EgGUZU0V9GlFagjXrwntNK7yPtcpldk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=f13EnAHYUIQyw4PttRcvpiWPd4e7Lck9xSEyOAw0QFzzGZh2ZJ9/jvoSCZ1jO1eq2
-	 HnsMW1VRmuXIBHnVy7VKWWPUU85Ft+5ZmoiQRK2SLygiVeR96NP3U+vBmIYa/Ax0iM
-	 GRKvsuZ6jIwdcsr8nYlQtqUWwkCY5BpZ9JB5PmIFRR1RPPC+xAYbaINepGc32Bb+UA
-	 F8FSdj476CvniCuru+dGicGIt9lchQPNXHaGusFaaTLME2UgTbJ6/XBEsiUUsnwPKR
-	 nX32FJwuQ+4tulqVOF+8XOlM9h5JtH0kkfC1lL+1d5dpfEc2rxhWsAeewp3r4zl4rY
-	 7m01tiMKDfoNg==
-Date: Wed, 21 Oct 2026 13:14:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev
-Subject: Re: [PATCH v4 bpf-next 2/6] bpf, x86: Support unwind_goto and
- unwind_exit
-Message-ID: <20261021201456.GA3197963@ax162>
-References: <20261020181320.1284798-1-alexei.starovoitov@gmail.com>
- <20261020181320.1284798-3-alexei.starovoitov@gmail.com>
+	s=k20260515; t=1792613772;
+	bh=avp9cqTtWpYaZT22vY285NGVGfC3NkBdRxMRGQ2R0g8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PcBdPivZTEymGLZSB54jbgg0KCMSP61BdKHXwK9IcsCh/9lGFIl2KnSGFE7LWSl3z
+	 NqVzQC1779XJWXUwtXgU/SVX2wzxc/qZ5RJSpks5Wo2yrzsg54CIJm2r5GiNpSp/z5
+	 GL845GygvpQu+Xfadh1ovEgaY/+WNThmmApbfobHVff2MskTuiOQufDM4+gqZ/eyNM
+	 fip9xSL+lh6nwvRq1DBpBp7gyBe+gSim9yyEyh4iriHp7Xh6mhPRsPbAYGKUn8NWeA
+	 ilpSZC2pSYIIe+gedZrr7f+/CYZ6dhaZznYuYQp3WjCNof8SkcYP7beyCTtvi543iD
+	 ojzdoYpr+3wpQ==
+Message-ID: <sashiko-outbox-180635@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC bpf-next 1/9] bpf: Add __srcptr kfunc argument suffix
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, linux-mm@kvack.org, "Andrew
+ Morton" <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, "Lorenzo
+ Stoakes" <ljs@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>
+In-Reply-To: <20261021195759.119421-2-jolsa@kernel.org>
+References: <20261021195759.119421-1-jolsa@kernel.org>
+ <20261021195759.119421-2-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 21 Oct 2026 20:16:11 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,81 +63,112 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261020181320.1284798-3-alexei.starovoitov@gmail.com>
 
-Hi Alexei,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] bpf: __srcptr ignored for scalar-struct pointers in resolve_func=
+_arg_type()
+- [Low] bpf: docs: short section underline for __srcptr in kfuncs.rst
+--
 
-On Tue, Oct 20, 2026 at 06:13:16PM +0000, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
->   bpf                         x86
->   call inner                  call inner
->   unwind_goto pad
->   w0 = w6                     mov eax, ebx
-> 
->   r0 = 0                      xor eax, eax
->   unwind_exit                 push rax
->                               push rsi
->                               mov rdi, [rbp + 8]
->                               call bpf_unwind_target
->                               mov [rbp + 8], rax
->                               pop rsi
->                               pop rax
->                               leave
->                               ret
-> 
-> unwind_goto is an extable entry and no code. unwind_exit looks its return
-> address up there and returns to the pad. r0 and r2 are what a subprog
-> returns, so rax and rsi are saved around the lookup.
-> 
-> When there is no entry, the kernel called the subprog as an async or an
-> exception callback, and unwind_exit is exit.
-> 
-> The caller of the main prog doesn't tell exit from unwind_exit, so there
-> it's exit. An extension is different. freplace is a jump, so its return
-> address is the one of the subprog that it replaced.
-> 
-> With private stack r9 is saved around a call, and 'pop r9' has to be done
-> on the way to the pad too. In such progs unwind_goto is:
-> 
->   push r9
->   call foo
->   pop r9       <- exit returns here
->   jmp 1f
->   pop r9       <- unwind_exit returns here
->   jmp pad
-> 1:
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+commit 5dcfefa11540873e12bd9cbd04017e587c3a3f23
+Author: Jiri Olsa <jolsa@kernel.org>
 
-After this change landed in -next as commit cff94a3d78d8 ("bpf, x86:
-Support unwind_goto and unwind_exit"), I am seeing the following objtool
-warning when building with LLVM 23.1.4 and a recent tip of tree version
-of LLVM 24 with the attached configuration (which can become an error
-with CONFIG_OBJTOOL_WERROR):
+bpf: Add __srcptr kfunc argument suffix
 
-  vmlinux.o: warning: objtool: do_jit+0x1330: relocation to !ENDBR: .text+0xc7fab
+This patch adds the __srcptr suffix annotation for BPF kfunc pointer
+arguments so that the verifier checks them with MEM_RDONLY instead of
+MEM_WRITE. It also documents the new annotation in
+Documentation/bpf/kfuncs.rst.
 
-Something like the below diff appears to inhibit this but I am not sure
-if it is too big of a hammer or if there is a better solution, hence
-just the report and deferring to you, but maybe it is a good starting
-point.
+> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> index 73578a4c3b1fb..6466b76fd721e 100644
+> --- a/Documentation/bpf/kfuncs.rst
+> +++ b/Documentation/bpf/kfuncs.rst
+> @@ -351,6 +351,29 @@ In this case, a program attached to the ``inode_init=
+_security`` LSM hook
+>  can pass the hook's own ``xattr_count`` argument through to the kfunc,
+>  which claims xattr slots by writing through it.
+> =20
+> +2.3.10 __srcptr Annotation
+> +-------------------------
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index d3ab36281144..b80f05f377c2 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -641,6 +641,7 @@ static int emit_patch(u8 **pprog, void *func, void *ip, u8 opcode)
- 
- static int emit_call(u8 **pprog, void *func, void *ip)
- {
-+	OPTIMIZER_HIDE_VAR(func);
- 	return emit_patch(pprog, func, ip, 0xE8);
- }
- 
--- 
-Cheers,
-Nathan
+[Severity: Low]
+The section underline in Documentation/bpf/kfuncs.rst is 25 dashes while the
+heading is 26 characters long, which causes Sphinx to emit a "Title underli=
+ne
+too short" warning when building the documentation. Should one more dash be
+added here?
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5601d20562186..7dd7b172a2971 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -14137,7 +14151,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
+struct bpf_call_arg_meta *meta,
+>  				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
+>  			return -EINVAL;
+>  		}
+> -		arg_type =3D ARG_PTR_TO_MEM | MEM_WRITE;
+> +		arg_type =3D ARG_PTR_TO_MEM | mem_prot(meta->btf, &args[arg]);
+>  	} else if (btf_type_is_struct(ref_t))
+>  		/* A pointer to a struct without a size argument is classified as ARG_=
+PTR_TO_BTF_ID */
+>  		arg_type =3D ARG_PTR_TO_BTF_ID;
+> @@ -14162,7 +14176,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
+struct bpf_call_arg_meta *meta,
+>  			return -EINVAL;
+>  		}
+>  		proto->arg_size[arg] =3D type_size;
+> -		arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
+> +		arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | mem_prot(meta->btf, &ar=
+gs[arg]);
+>  	}
+
+[Severity: Medium]
+Should resolve_func_arg_type() in kernel/bpf/verifier.c also use
+mem_prot(meta->btf, &args[arg]) instead of hardcoding MEM_WRITE?
+
+In get_kfunc_arg_type(), a pointer to a struct or union without a following
+__sz or __szk argument matches btf_type_is_struct(ref_t) and is classified =
+as
+ARG_PTR_TO_BTF_ID, bypassing the final else branch above.
+
+Later, when a BPF program passes a non-BTF-ID memory pointer (such as
+read-only map values from .rodata, PTR_TO_MEM | MEM_RDONLY, map keys, or
+stack memory) to a kfunc parameter pointing to a fixed-size struct or union
+composed of scalars, check_func_arg() -> resolve_func_arg_type() converts t=
+he
+argument type to fixed-size memory, but still unconditionally sets MEM_WRIT=
+E:
+
+kernel/bpf/verifier.c:resolve_func_arg_type() {
+	...
+	if (!btf_type_is_scalar_struct(env, btf, ref_t))
+		return 0;
+
+	resolve_ret =3D btf_resolve_size(btf, ref_t, arg_size);
+	if (IS_ERR(resolve_ret)) {
+		...
+	}
+	*arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
+		    (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
+
+	return 0;
+}
+
+Because MEM_WRITE remains set for scalar-struct pointers annotated with
+__srcptr, won't the verifier still reject read-only memory arguments and
+clobber spilled stack slots?
+
+> =20
+>  	if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021195759.1194=
+21-1-jolsa@kernel.org?part=3D1
