@@ -1,38 +1,38 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=156.224.81.87
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.129.254.92
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792581901;
-	b=lb+HwqQaqw99KfqP//TMqgon24ACegcj6/1O9AAkef8T3aV8GSsBilK/RkCwJ65DGygr
-	 jLBrQDnAAp5RydCOfq0r8HPNPhkxhXJGdkB8Nknxm4Wf5GA1/WYyvvjVyoRHZR2VqD/uF
-	 /D0j88p8hdRoCRRo3ULBX1TAHVEf8corDMwrtDBpZe8MCLfUMccjmAGWTnNp622JqBsNN
-	 +hjfrzRZ4hCEaE9w79/noGxCDV5uBnnF6M5VruHXDQpFCgey0S4tNe9PZHCxXDPLYZVGn
-	 7d4IkYwPc23tKcRbvgCJZN4HpTThvZtOUwU509ItUdqFAsJT5WVinmjIO5A/isycISQ==
+	t=1792581904;
+	b=V7eoQiWGz2pZpzmg/ZjLrWXtmNMlhUlThb6hzbtYgzEypp1N660A3HEZJ7yhlNJCSY5r
+	 pphiZzIPq9ybDDiqUggP4J9vRiHxUsFvNUESo2OczXOeNTRwcyKwHXcOmzylat32ORCPi
+	 izA3z0M5c2yFdAITyAXuQR0fJuA+4vaeWffu+cT4phuvKy0K+AgbPIUoVK0lcqz+OfExk
+	 QomhjRSijuOFlhrs7FvpIT+Nbk7mBg7JGiSFB/4BSX8QhvhmBNRi33l/Tjjo2TLeEo9kZ
+	 93T8EwD79AX7065IG5g010zqP5q5lii4y39wwjhdniQN5DdwDHO1L9jLnO5jPXcga7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792581901;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792581904;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
 	 X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
-	bh=a6dY8R/bQis1rIq1yZh1AAI0QczoTtw4exwtDutCO9s=;
-	b=C8vBfUDFQ1MmnHloXjihbWp96Qu3FVMxW9hC4PEBYKgOs9VrO70oxtZy/LmldLZaaKgt
-	 iH8WGfatLEgpdFAgQra9llCbas+z0VC6TpmwIAWR4SVC4eGGW2W/Tonz1DOR/gKxy4sSH
-	 iIp4QjpGovh78MijzKEaD8PWfdW/iXZP7aSiXHSiK4P/3UR7FEXZscRDoRfCtvUtIgCLz
-	 aPAdPvs4CcyDKn83qj5RGWwN8RVcagCbVod63LbaYoIe+jqSYUDkTvJSd7os+Cp/9CttZ
-	 9YRtjvBk/IHVsYFNxTBMobMltbmu9xD47DAH3bPJTlZ6Uwh5oK4Sb8zm5ddCqkgPQtQ==
+	bh=EPDlZMTSTVQ5eCE68sbvYSTGTpxshvufAloZkiCKtC0=;
+	b=3ZNJTS7U++rMcG4aiS918xAqt3GUsuPGfaZVX7QVx2JwvFJc8I67ng9hkcX5cQPJvbpq
+	 wdZ435yj2d+Dy2NZYk/V7ZaLZjAcyTlA0IosE0k2mQ9L9euohp8S7cSXbVBmIZTtd+HHA
+	 0PtgWUsjqxpMMQUMXvoZI+mgfQOol25KnJXgWmLJ+R7AgLwuqZsH8DKICqA9R6S/qg+gj
+	 /psa2+s1xVqPwMAXsrMpHag8j98fWuKDmfmDxVLstNFCMAGZeVqhpzF1bUyfx3kUkQvYy
+	 PRqQUpQydgiTDqqRPYUUv4b8k14S4ZI1/Op+Hv9bOEhv+hkc0TDRU12A+h20ZswpNmA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=easystack.cn;
 	spf=pass smtp.mailfrom=easystack.cn;
-	arc=none smtp.remote-ip=156.224.81.87
-Received: from mail-m8187.xmail.ntesmail.com (mail-m8187.xmail.ntesmail.com [156.224.81.87])
+	arc=none smtp.remote-ip=103.129.254.92
+Received: from mail-m25492.xmail.ntesmail.com (mail-m25492.xmail.ntesmail.com [103.129.254.92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA4F606A31D;
-	Wed, 21 Oct 2026 11:24:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AFA4F606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5F8606A330;
+	Wed, 21 Oct 2026 11:25:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C5F8606A330
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
 Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 204f151a5;
-	Wed, 21 Oct 2026 19:24:49 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 204f151ab;
+	Wed, 21 Oct 2026 19:24:53 +0800 (GMT+08:00)
 From: Zhen Ni <zhen.ni@easystack.cn>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -58,9 +58,9 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH v3 1/7] mm/page_owner: extract page_owner_next_eligible() from read loop
-Date: Wed, 21 Oct 2026 19:24:31 +0800
-Message-Id: <20261021112437.1799213-2-zhen.ni@easystack.cn>
+Subject: [PATCH v3 4/7] mm/page_owner: add open-coded page_owner iterator
+Date: Wed, 21 Oct 2026 19:24:34 +0800
+Message-Id: <20261021112437.1799213-5-zhen.ni@easystack.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20261021112437.1799213-1-zhen.ni@easystack.cn>
 References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
@@ -74,188 +74,164 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa15e34eca80229kunme08c1fd526acd0
+X-HM-Tid: 0aa15e34fe6f0229kunme08c1fd526ace2
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDHU9CVkMdQk9CH09KTkJOGFYVFA
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlCSkNMVk9KT0JPSk5NGB5CT1YVFA
 	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
 	lPT09IVUpLS1VKQktLWQY+
 
-Move the page scanning logic out of read_page_owner() into a dedicated
-helper, in preparation for using it in the page_owner bpf_iter target.
+Add an open-coded bpf_iter over the pages eligible for page_owner
+output, reusing page_owner_next_eligible().
 
-The helper advances a struct page_owner_scan cursor to the next page
-eligible for page_owner output and returns true on a hit. On a hit it
-takes a snapshot of the page_owner record inside the page_ext RCU
-window.
+A sleepable BPF program drives it with
+bpf_iter_page_owner_new()/next()/destroy(); each next() returns the
+page_owner_scan. po_snap is copied inside the page_ext RCU window, so
+the program needs no RCU section when it reads it.
 
-No change to the output is intended. handle is read from the snapshot,
-taken before the non-zero check, so the validated and reported handle
-are the same value.
+Also add bpf_page_owner_stack_snprint(), which renders the stack trace
+of the current page into a caller-provided buffer.
 
 Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
 ---
 Changes in v3:
-- Drop the page field in struct page_owner_scan.
+- Gate the kfuncs with KF_PERFMON.
+- Check the page_owner_inited static key in the iterator.
+- Without scan->page, start at min_low_pfn - 1 and let next() pre-increment.
+- bpf_page_owner_stack_snprint() rejects a NULL or zero-size buffer.
 
 Changes in v2:
-- Route the zero-handle case through ext_put_continue.
+- bpf_page_owner_stack_snprint() now takes the scan cursor.
+- Buffer args renamed to buf__uninit/buf__sz.
 
-v1: https://lore.kernel.org/linux-mm/20261009112308.240769-2-zhen.ni@easystack.cn/
-v2: https://lore.kernel.org/linux-mm/20261013122125.843451-2-zhen.ni@easystack.cn/
+v2: https://lore.kernel.org/linux-mm/20261013122125.843451-4-zhen.ni@easystack.cn/
+v1: https://lore.kernel.org/linux-mm/20261009112308.240769-4-zhen.ni@easystack.cn/
 ---
- mm/page_owner.c | 101 ++++++++++++++++++++++++++++++------------------
- 1 file changed, 64 insertions(+), 37 deletions(-)
+ kernel/bpf/helpers.c |  9 +++++++
+ mm/page_owner.h      |  3 +++
+ mm/page_owner_iter.c | 64 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 76 insertions(+)
 
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index fbbda7ba914b..92a92cdf74ec 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -36,6 +36,15 @@ struct page_owner {
- 	pid_t free_tgid;
- };
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 712dca5a2c5b..0ba836f77957 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4946,6 +4946,15 @@ BTF_ID_FLAGS(func, bpf_iter_dmabuf_new, KF_ITER_NEW | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_iter_dmabuf_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_iter_dmabuf_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
+ #endif
++#ifdef CONFIG_PAGE_OWNER
++BTF_ID_FLAGS(func, bpf_iter_page_owner_new,
++	     KF_ITER_NEW | KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_iter_page_owner_next,
++	     KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_iter_page_owner_destroy,
++	     KF_ITER_DESTROY | KF_SLEEPABLE | KF_PERFMON)
++BTF_ID_FLAGS(func, bpf_page_owner_stack_snprint, KF_SLEEPABLE | KF_PERFMON)
++#endif
+ BTF_ID_FLAGS(func, __bpf_trap)
+ BTF_ID_FLAGS(func, bpf_strcmp, KF_PERFMON);
+ BTF_ID_FLAGS(func, bpf_strcasecmp, KF_PERFMON);
+diff --git a/mm/page_owner.h b/mm/page_owner.h
+index 0aa7695bec82..4ab513f17fc9 100644
+--- a/mm/page_owner.h
++++ b/mm/page_owner.h
+@@ -6,6 +6,7 @@
+ #ifndef __MM_PAGE_OWNER_H
+ #define __MM_PAGE_OWNER_H
  
-+/*
-+ * Cursor and per-page result of page_owner_next_eligible().
-+ */
-+struct page_owner_scan {
-+	/* resume point */
-+	unsigned long pfn;
-+	struct page_owner po_snap;
-+};
++#include <linux/jump_label.h>
+ #include <linux/page_ext.h>
+ #include <linux/sched.h>
+ #include <linux/stackdepot.h>
+@@ -13,6 +14,8 @@
+ /*
+  * mm/page_owner.c
+  */
++DECLARE_STATIC_KEY_FALSE(page_owner_inited);
 +
- struct stack {
- 	struct stack_record *stack_record;
- 	struct stack *next;
-@@ -725,37 +734,24 @@ void __dump_page_owner(const struct page *page)
- 	page_ext_put(page_ext);
+ struct page_owner {
+ 	unsigned short order;
+ 	short last_migrate_reason;
+diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
+index 529b2c4a589a..4b9741a2de53 100644
+--- a/mm/page_owner_iter.c
++++ b/mm/page_owner_iter.c
+@@ -4,6 +4,7 @@
+ #include <linux/memblock.h>
+ #include <linux/mm.h>
+ #include <linux/seq_file.h>
++#include <linux/stackdepot.h>
+ 
+ #include "page_owner.h"
+ 
+@@ -116,3 +117,66 @@ int page_owner_iter_register(void)
+ 
+ 	return bpf_iter_reg_target(&page_owner_iter_reg_info);
  }
- 
--static ssize_t
--read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
-+/*
-+ * Advance @scan to the next page eligible for page_owner output.
-+ * On a hit, fill scan->pfn/po_snap and return true; the caller
-+ * must advance scan->pfn past the hit before calling again to resume
-+ * the scan.
-+ */
-+static bool page_owner_next_eligible(struct page_owner_scan *scan)
- {
--	unsigned long pfn;
--	struct page *page;
--	struct page_ext *page_ext;
--	struct page_owner *page_owner;
--	depot_stack_handle_t handle;
--	struct page_owner_filter_state *state = file->private_data;
-+	unsigned long pfn = scan->pfn;
- 
--	if (!static_branch_unlikely(&page_owner_inited))
--		return -EINVAL;
--
--	page = NULL;
--	if (*ppos == 0)
--		pfn = min_low_pfn;
--	else
--		pfn = *ppos;
- 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
- 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
- 		pfn++;
- 
--	/* Find an allocated page */
- 	for (; pfn < max_pfn; pfn++) {
--		/*
--		 * This temporary page_owner is required so
--		 * that we can avoid the context switches while holding
--		 * the rcu lock and copying the page owner information to
--		 * user through copy_to_user() or GFP_KERNEL allocations.
--		 */
--		struct page_owner page_owner_tmp;
-+		struct page_owner *page_owner;
-+		struct page_ext *page_ext;
-+		struct page *page;
- 
- 		/*
- 		 * If the new page is in a new MAX_ORDER_NR_PAGES area,
-@@ -798,13 +794,45 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 			goto ext_put_continue;
- 
- 		/*
--		 * Access to page_ext->handle isn't synchronous so we should
--		 * be careful to access it.
-+		 * Take a snapshot of the page_owner record inside the RCU
-+		 * window, then validate it, so that print_page_owner()
-+		 * reads the checked handle from the same snapshot.
- 		 */
--		handle = READ_ONCE(page_owner->handle);
--		if (!handle)
-+		scan->pfn = pfn;
-+		scan->po_snap = *page_owner;
 +
-+		if (!scan->po_snap.handle)
- 			goto ext_put_continue;
- 
-+		page_ext_put(page_ext);
-+		return true;
++/* opaque to BPF programs */
++struct bpf_iter_page_owner {
++	__u64 __opaque[16];
++} __attribute__((aligned(8)));
 +
-+ext_put_continue:
-+		page_ext_put(page_ext);
-+		cond_resched();
-+	}
++struct bpf_iter_page_owner_kern {
++	struct page_owner_scan scan;
++} __attribute__((aligned(8)));
 +
-+	return false;
++__bpf_kfunc_start_defs();
++
++__bpf_kfunc int bpf_iter_page_owner_new(struct bpf_iter_page_owner *it)
++{
++	struct bpf_iter_page_owner_kern *kit = (void *)it;
++
++	BUILD_BUG_ON(sizeof(*kit) > sizeof(*it));
++	BUILD_BUG_ON(__alignof__(*kit) != __alignof__(*it));
++
++	kit->scan.pfn = min_low_pfn - 1;
++	return 0;
 +}
 +
-+static ssize_t
-+read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
++__bpf_kfunc struct page_owner_scan *
++bpf_iter_page_owner_next(struct bpf_iter_page_owner *it)
 +{
-+	struct page_owner_scan scan;
-+	struct page_owner_filter_state *state = file->private_data;
++	struct bpf_iter_page_owner_kern *kit = (void *)it;
 +
 +	if (!static_branch_unlikely(&page_owner_inited))
-+		return -EINVAL;
++		return NULL;
 +
-+	if (*ppos == 0)
-+		scan.pfn = min_low_pfn;
-+	else
-+		scan.pfn = *ppos;
++	cond_resched();
 +
-+	/* Find an allocated page */
-+	while (page_owner_next_eligible(&scan)) {
-+		struct page *page = pfn_to_page(scan.pfn);
++	kit->scan.pfn++;
++	if (!page_owner_next_eligible(&kit->scan))
++		return NULL;
 +
- 		if (state->nid_filter_enabled) {
- 			int nid;
- 			memdesc_flags_t page_flags = READ_ONCE(page->flags);
-@@ -814,21 +842,20 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 			 * VM_BUG_ON when accessing poisoned pages.
- 			 */
- 			if (page_flags.f == PAGE_POISON_PATTERN)
--				goto ext_put_continue;
-+				goto skip_continue;
- 			nid = memdesc_nid(&page_flags);
- 			if (!node_isset(nid, state->nid_filter))
--				goto ext_put_continue;
-+				goto skip_continue;
- 		}
- 
- 		/* Record the next PFN to read in the file offset */
--		*ppos = pfn + 1;
-+		*ppos = scan.pfn + 1;
- 
--		page_owner_tmp = *page_owner;
--		page_ext_put(page_ext);
--		return print_page_owner(buf, count, pfn, page,
--				&page_owner_tmp, handle, state);
--ext_put_continue:
--		page_ext_put(page_ext);
-+		return print_page_owner(buf, count, scan.pfn, page,
-+				&scan.po_snap, scan.po_snap.handle, state);
++	return &kit->scan;
++}
 +
-+skip_continue:
-+		scan.pfn++;
- 		cond_resched();
- 	}
- 
++__bpf_kfunc void bpf_iter_page_owner_destroy(struct bpf_iter_page_owner *it)
++{
++}
++
++__bpf_kfunc int bpf_page_owner_stack_snprint(struct page_owner_scan *scan,
++					     char *buf__uninit, u32 buf__sz)
++{
++	int len = 0;
++
++	if (!buf__uninit || !buf__sz)
++		return 0;
++
++	if (static_branch_unlikely(&page_owner_inited))
++		len = stack_depot_snprint(scan->po_snap.handle, buf__uninit,
++					  buf__sz, 0);
++
++	if (!len)
++		buf__uninit[0] = '\0';
++
++	return len;
++}
++
++__bpf_kfunc_end_defs();
 -- 
 2.20.1
 
