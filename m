@@ -1,138 +1,41 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=13.76.78.106
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792572378;
-	b=dQHaKrsKtxebTa2T4YRsI+zmAkRVQdrsobWNHNLpe811cvRdtgHY1E7f1g392GhNQBX9
-	 V0pPAQUxwCt+4L8uQK25Dqm3Ga5GfNPabp88XaEgcRByn0Z1Z/AEYXWVhP4BPcV6BmON5
-	 I7fxM4SzuuSmWaVNOXgT9s4gUk1H4bhknrvUwNed1yaUG/jtsC0qnF34DDCuAapNdWbfn
-	 ptLOvevBD2A1iDvHHMMX73kseIFKvjplnZLn2yK6XItFfh2SpB4XrTsLOBh1eIpI79KUD
-	 6V3vV9x31ab0LyaE64sfTOwlUMzhQv/p3/0FM6dYs/qLjyKHT4YVLDBXGULVLYdtsow==
+	t=1792572619;
+	b=3zD2GDiKU1Zcl4dC7m5BrxMP8WG4+ZIk18aIp056KBFOo6hTaSVVGXjSOW/OtCvwFE7v
+	 BrGNoU8/EvIJ7VAOWx+Boi48WNhhKvWTmsQ/2tw+i6agOrEqaI1Y1f4oOiGyFIiVEiImY
+	 d+9zjg5KREGsnpkFcemzHPGxjaW3rkDoDB/3k19rwz/uAH8oyPlC+S3VCvNagsS6jPX4n
+	 hEjjVHB0Nke1RudZoj6uNry2EMt+m+iwpaBhLM4shuXS+a6k2TV736s+3cTFxv8Y9nHQt
+	 uE+4aTNfN1lur/2XA/xQdYeslJc5bdacjNSu8+UViSWDWSzs26VKPdE6otq0oMlvoGw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792572378;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Autocrypt:Content-Type:Content-Transfer-Encoding:
-	 User-Agent:MIME-Version;
-	bh=/yF0JL6Rd6tCEdOsvrC8K9rzM4lbnQgAsaM0D1hAFzE=;
-	b=jyQ7W9VaP+XXFQdmGf9n3VGhLp5igsZkeQWEp2iooC2b312bfxwJJtuqxol+4A8lcWXa
-	 SPdAyytqEZb2p1d8izvVBlLJZ1raopOoEfmt++AJONHivWkq2i8yMrlntfEWNrGTwU5ss
-	 cRzf4MXT/yDBpZ8351C2cl1a3ykC5146yuKs5uRQQei1Q+kkG5D9fgJKvifk9e5w85Up7
-	 bGMSu33vFoU0hvx1K9ZZrR4pn5XBE7DEOpGlYUfzp9IgnvCyv9SxClf/cKydhbp/Aq9wX
-	 Bn/XUdb9YTVXPGnGgxdJBW/zy1hVjJOP6qaMJU1617TuHmX/M/jGiD5HXW3B2ZtGGoQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792572619;
+	h=DMARC-Filter:Received:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
+	 X-CM-DELIVERINFO:X-Coremail-Antispam;
+	bh=Bvbns/c9k2Ysb0qfksh+EEDxxSvu9RKvSHSavAnICg4=;
+	b=WY/IjbVnNLiO2s/kqZLyyJ0KNO6dNGYzSmQ34ObgYapqmbJnkuzMJHa7Pjh3pI4z7v/A
+	 D/GKKbc089XGzd+dGw1tGmmr1xRwKE7uvZjYywoNgCisa4+xH7fz9FIcxjrJk7stjIqJR
+	 Olu8d784RYOTe9UKbTvXSJrUUo1/B+3TKB7nxM2c9eN5Tx3VkBUvp2FNEGdMTj1tZMikF
+	 OU6PJYf1D+Tovev1UvHq1fClve6bkN59tlfjGuUj3v5vs9B0xcXf+OF/yqDqFUluOcjZH
+	 reJ9tZvMdF66g89t1mwdJpBA5vl2Ld39k8ApLnjhZLC86SjqlKByDoa2jLGbmHMftlQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=WYuxZlXv;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qvvuyH4D;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6D8606A322
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 08:46:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1C6D8606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=WYuxZlXv;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=qvvuyH4D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792572377;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=/yF0JL6Rd6tCEdOsvrC8K9rzM4lbnQgAsaM0D1hAFzE=;
-	b=WYuxZlXvJ+rKt1yZ1R5jH89Cs6WSpZooooJKR3KMuju3Wvzr7DL6xYUcAXUSdVMLbhkavB
-	CXXRYLIOj/K2PkAIfWHMtFzgN3F+q0p/VVEEMNz4VAcpYOSh/SsL93QplinPhW7DNokPjL
-	kt+CsiaHPkdE3m0z4c2gGWk4bpm7eGA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-664-ZmBrU9SbMHC_USA0txzi4A-1; Wed, 21 Oct 2026 08:46:15 +0000
-X-MC-Unique: ZmBrU9SbMHC_USA0txzi4A-1
-X-Mimecast-MFC-AGG-ID: ZmBrU9SbMHC_USA0txzi4A_1792572374
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-48e0ef019a4so397048f8f.3
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 01:46:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1792572374; x=1793177174; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/yF0JL6Rd6tCEdOsvrC8K9rzM4lbnQgAsaM0D1hAFzE=;
-        b=qvvuyH4DPZ7mbqZw0+o84tLAY4eSfF2Pr/CMSCe+wX3HfFTPkjAfEsoikWc1gy3Qho
-         nf+VEkwdNyZ+cO5kCiYgov7ERaZpwgjLxTKN7qHvwpIPFwYiLjdum/eeOxdnhOCfee/k
-         bPXJlJHBLzGBzo0KGhxxmVB8XShaKfaJepnitPhm+0kKP53STmWFbIcEeDMpkth6SULS
-         wehdWoCi/dGDR5450s764PZxBiGIQtkVulytIWsz/6kwmJ6VUkt94bRJi5/KexrgyhXN
-         KtAKzoykAlxkOsNoqjgVXHYmjuu4zVERuqNpRxeROMBqZ9oxug5GxzBgtDI4sj+Q+gyU
-         avsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792572374; x=1793177174;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=/yF0JL6Rd6tCEdOsvrC8K9rzM4lbnQgAsaM0D1hAFzE=;
-        b=r5xn9vNgyic6T6oyIZ6Y3o1Agfq0K5gpaiv0gn3yTjUOSuvnNsvNu1ASQeReNnmv6Q
-         z9APFguORCaQG61pb6wT3RjwgveO/RZd1NOcRcuqYcWD+6pIaSTTcPEky4W6qg505i9o
-         yt0dTcstYT1wEgotGzZ8VJUNu9BREdK8vbN/1wERFdtMiIgbhQRDNY3j4MAWrYrSxDaI
-         xbmUSHV/vbTyCvPDdTx7UTiRMIAHuwzHNWmBLaT8RAri6913nUy+8XDe5MgM9dmL2uUN
-         Jiqje7DrQ9qy/VFn1P2mI1zC/IBvIoWHUTqb31teRWXajIIhrb2XDeTmCuAm7VSVAn/J
-         vKrg==
-X-Forwarded-Encrypted: i=1; AKwUvBxvAttyzOtjZ/rlx1saPReGOzULCSTiJpvz85sVNXKwdbnK5289I5jvFJZ9erm+TOaZUZ4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIO7JB9gA7xA0monQCIAjxPA3BKI59lrJufXEiKdkkysIgqA71x
-	cQH+Hz5VuEilrcPVbOp+OfjoByFaOWJIHqYOBQhqUHu7VG5hGxYmNGgRxs1WTNPwkiMv8vCh77i
-	Xbgp0rT8bIsVIVxUTrDXY0LIyp5aoFfUo9rtFcfl/AoEMTKeHAnZRap70XSbAJg==
-X-Gm-Gg: AYBFou0rYyMp1yPXfDouVGW9FY/5jC8ULt+fnKkigi9uzZENjlzXbRACuIwehBO5A2i
-	GmvogmF7FSrQvNI6kbIGHyPc046TUJ81wDQ/5K0sB9QmqbjkNYKYXdh907VCRcAhUKjt/PiPZOO
-	Q2NhYkP6ry0yT+UbCafubh87FzK55md4e1sYqGGhTO4mT3lQGPaQhU9t8mqSwriPhVDRaTU4RtH
-	zEHHWeVdXvT7y7obKdXRhSyBRQGDGIYDe28zNit+wqMxJ6MRl2jbjj3UJ4UQ3CBo1rKDDd7+LPg
-	Oz2tDg3CvhEr+0jPvvX1+Dozp9VLgbnELQmugaLrhxF8kqzqEg8AfrqjaMOiXGbkNAIAk5jdaie
-	sCgxE8OYRScEq6m71bGv8UBHjLJk=
-X-Received: by 2002:a05:6000:2001:b0:48b:1c:d6e1 with SMTP id ffacd0b85a97d-48e264dd0e4mr2661910f8f.43.1792572374330;
-        Wed, 21 Oct 2026 01:46:14 -0700 (PDT)
-X-Received: by 2002:a05:6000:2001:b0:48b:1c:d6e1 with SMTP id ffacd0b85a97d-48e264dd0e4mr2661878f8f.43.1792572374010;
-        Wed, 21 Oct 2026 01:46:14 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([195.174.34.203])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e2583ffa8sm4205103f8f.51.2026.10.21.01.46.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 01:46:13 -0700 (PDT)
-Message-ID: <631896ae8e44ed6356c3b79598a2facee8af9770.camel@redhat.com>
-Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Nam Cao <namcao@linutronix.de>, John Ogness <john.ogness@linutronix.de>,
-  Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
-Cc: Wen Yang <wen.yang@linux.dev>, Tobias Schaffner
-	 <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
-Date: Wed, 21 Oct 2026 10:46:11 +0200
-In-Reply-To: <87ecdjqxnr.fsf@yellow.woof>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
-	 <20261001152042.124445-11-gmonaco@redhat.com>
-	 <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
-	 <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
-	 <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
-	 <878q3xtptq.fsf@jogness.linutronix.de>
-	 <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
-	 <87bj8s8ih9.fsf@jogness.linutronix.de>
-	 <b76dfd3e5a118e30ab25910f243db1cbcedc1c00.camel@redhat.com>
-	 <871p9mqcn2.fsf@jogness.linutronix.de> <87ld7trgzg.fsf@yellow.woof>
-	 <87mrs9q1d3.fsf@jogness.linutronix.de> <87ecdjqxnr.fsf@yellow.woof>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
- cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
- T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
- eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
- 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+	dmarc=none header.from=zju.edu.cn;
+	spf=pass smtp.mailfrom=zju.edu.cn;
+	arc=none smtp.remote-ip=13.76.78.106
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496BD606A321
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 08:50:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 496BD606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.163.215])
+	by mtasvr (Coremail) with SMTP id _____wD3sj26fNhqUWqtAQ--.294S3;
+	Wed, 21 Oct 2026 16:50:03 +0800 (CST)
+Received: from [10.162.163.215] (unknown [10.162.163.215])
+	by mail-app1 (Coremail) with UTF8SMTPSA id yy_KCgAHFYK5fNhqm8aBAA--.75S3;
+	Wed, 21 Oct 2026 16:50:01 +0800 (CST)
+Message-ID: <0c1e5725-475f-4c40-9f1c-3f4496e765e1@zju.edu.cn>
+Date: Wed, 21 Oct 2026 16:50:01 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -142,40 +45,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/8] bpf: Add UHMUL and SHMUL instructions
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+References: <20261021-bpf-hmul-v2-1-88e260099f7d@outlook.com>
+ <ade7e1bd9d4c7a3975fed8e1bea08fd66cf1b03c9c7df26f4f9fe07d36187dfa@mail.kernel.org>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <ade7e1bd9d4c7a3975fed8e1bea08fd66cf1b03c9c7df26f4f9fe07d36187dfa@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:yy_KCgAHFYK5fNhqm8aBAA--.75S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAg8LCmrXxB0t6AAAst
+X-CM-DELIVERINFO: =?B?D/Xq8gXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9KmYK0NRSKgOZzh3f8tQmcYWTeZJMivZ+GmmWIBIiropCbArUwDKhFFAgA48/vsCNPU2
+	cTM/esb6ffkwVvLJ4LWN3k+NdtyNkM35N3A7iSEk8jLWEuvXCRi6ujgKFvapwA==
+X-Coremail-Antispam: 1Uk129KBj93XoWxGF1fWr1DtrWDWw1UAF15ZFc_yoW5tF1kpF
+	saqF1kGr4kWFZ8Zwn7u342g3WY9a1F9a1UWFyDGrWDZanxG3s5Kr4IgF1avFyUGr4vg3WU
+	tFZ09w1kCrWrZrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI4
+	8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
+	wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjx
+	v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20E
+	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267
+	AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UR7KsUUUUU=
 
-On Wed, 2026-10-21 at 10:13 +0200, Nam Cao wrote:
-> John Ogness <john.ogness@linutronix.de> writes:
-> > On 2026-10-19, Nam Cao <namcao@linutronix.de> wrote:
-> > > John Ogness <john.ogness@linutronix.de> writes:
-> > > > @namcao: Maybe you could chime in if you want the transitions as ev=
-ents.
-> > >=20
-> > > No. Those are only useful for debugging RV itself and do not need to =
-be
-> > > upstream.
-> >=20
-> > Sure, but debugging RV itself _is_ a use case. Especially when RV moves
-> > to eBPF and lots of people will start writing their own RV monitors.
->=20
-> Right.
->=20
-> I wouldn't enable those by default though, it's way too much noises. As
-> it's for debugging the model, we can have some sort of compile-time
-> switch to turn it on.
 
-That's almost what's happening already, in-kernel use tracepoints, gated by
-static branches. Those are the closest thing you can get to a dynamic compi=
-le-
-time switch (assuming such a thing can exist), it's patching the code.
 
-BPF gets even closer to the concept, we use a volatile const flag, which is
-constant for the JIT runtime but volatile for the compiler (not compiled ou=
-t
-when generating byte code). Before loading we set the value we want in the
-object and the JIT compiler wipes away the unused branches.
+On 10/21/26 2:15 PM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Add UHMUL and SHMUL instructions
+> 
+> TL;DR: Verifier still rejects UHMUL/SHMUL (off 1/2), so the new interpreter
+> code is unreachable; once enabled, JITs and range tracking would silently use
+> low-half multiply. Should the UAPI wait for the full series?
+> 
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index f29b0aad440c..90c30e5d790b 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -34,6 +34,12 @@
+>>   #define BPF_FROM_LE	BPF_TO_LE
+>>   #define BPF_FROM_BE	BPF_TO_BE
+>>
+>> +/* BPF_MUL off values for high-half multiplication; BPF_ALU64 only. */
+>> +enum bpf_mul_variant {
+>> +	BPF_UHMUL = 1,
+>> +	BPF_SHMUL = 2,
+>> +};
+>> +
+>>   /* jmp encodings */
+> 
+> Can a program that uses these new encodings be loaded at all with only this
+> patch applied?
+> 
+> check_alu_fields() in kernel/bpf/verifier.c is not touched, and it still
+> rejects any BPF_MUL with a non-zero off:
+> 
+>      case BPF_MUL:
+>      case BPF_DIV:
+>      case BPF_MOD:
+>          if (BPF_SRC(insn->code) == BPF_X) {
+>              if (insn->imm != 0 || (insn->off != 0 && insn->off != 1) ||
+>                  (insn->off == 1 && opcode != BPF_MOD && opcode != BPF_DIV)) {
+>                  verbose(env, "BPF_ALU uses reserved fields\n");
+>                  return -EINVAL;
+>              }
+>          } else if (insn->src_reg != BPF_REG_0 ||
+>                 (insn->off != 0 && insn->off != 1) ||
+>                 (insn->off == 1 && opcode != BPF_MOD && opcode != BPF_DIV)) {
+> 
+> Both off == 1 (UHMUL) and off == 2 (SHMUL) fail with "BPF_ALU uses reserved
+> fields".
+> 
+> That means the UHMUL/SHMUL arms of ALU64_MUL_X and ALU64_MUL_K in
+> ___bpf_prog_run() cannot run, and BPF_UHMUL/BPF_SHMUL describe encodings the
+> kernel refuses.  bpf_insn_is_hmul() in include/linux/filter.h has no callers
+> anywhere in the tree, and bpf_is_hmul_variant() is only called by it, so both
+> are currently dead code.
+> 
+> The commit message mentions interpreter support, but does not say that the
+> verifier change is left for later.
+> 
+> When the verifier is relaxed, the JITs and the range tracking will also need
+> attention.  The JITs ignore insn->off for BPF_MUL today; for example
+> arch/x86/net/bpf_jit_comp.c emits a plain imul for
+> "case BPF_ALU64 | BPF_MUL | BPF_K/X".  adjust_scalar_min_max_vals() models
+> BPF_MUL as a low-half multiply.  Without changes there, JITed programs would
+> silently compute the low half and the verifier's bounds would not match the
+> real result.
+> 
+> Should the UAPI constants and the divmul64v2 group wait until verifier, JIT
+> and selftest support land in the same series, or should the unused
+> bpf_insn_is_hmul() be dropped from this patch?
 
-But technicalities aside, we probably want tracepoints for events too, so
-bpf_printk or whatever else.
 
-Gabriele
+Thanks for the review. This review appears to have been triggered while
+the v2 series was only partially available on the mailing list due to
+SMTP delivery issues. I have now manually sent the remaining patches,
+which should address these concerns.
+
+However, I agree that it would be better to move the definition of
+bpf_insn_is_hmul() from patch 1/8 to patch 2/8 where it is first used.
+I'll make this change in the next revision.
+
+(I've removed most recipients from this reply to avoid running into
+the same SMTP delivery issues again.)
+
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39552088777
 
