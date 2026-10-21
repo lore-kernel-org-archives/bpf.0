@@ -1,97 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792601113;
-	b=BjQ5p4rhVB3aXemAFJ/WpaMCV89GwheB9cnrqYEgySnuL8b/ASPZG2z+QY4hdZ4QDfYv
-	 yYb7f4Zm67TZIQKynCetPSl/tNgPi8ZQR8fOgyRej7Oalh28APZ/Zh+h6sTvriTMaFETm
-	 U04ohFJtQmGhaTwaY8IO9JjOBZ0I4UQ9KEmIe2ux0zx2GxAH2MEc4cJfRQZvYS/FmFQfE
-	 lOj7594HAcN/7FBfPcZT7A4feJCAY38Vr4xKzhQSr0ISzgzN7L/VTwpMBakmvefjQU9SW
-	 Kg7363E2gVy2BlioE8q+sRwy3r3Zmpl1vko6H2r2U0sMXoQuMr2G0kmTAA8WahA6hLQ==
+	t=1792601277;
+	b=l4fjWh27xtZx68kg4TygVAi6nJc9TJ5/vdBS2wAlt+eOT0QVW8l5JqeP1endY9iDY7rw
+	 H5wW5CcqUVoKzMVI/maErteYeQcB2Wz2xtMmHdqq0Q22JCuJRrQU4+vaTkk6n3lpd7so4
+	 GIvB4qEnWMnsPpUZyIgORjzqrjyMnR80Md25+At3CChsmvhZ6hj3vHUxi/d8fdNu1mwP2
+	 xxE3enXPGdJPFSCXyhgJqyJeJgZEQeeSsVO+BPf8TmgkwJbKsCuM/oLczWwXHEEaDTY9z
+	 FSmWjfyFl5UvMv+MyT8Q5uxHaFaKuyiQ5Z3HImrU6de+8VC3zuqi3fzSszlUlrxg2nQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792601113;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=Y299WPPaxWRE9ha0hJbAEz/L7is2XLFDnYowFbrmq1A=;
-	b=evssgtFkKxfnYJs8fckrqcwpPi/P/W3jXM50pilDn2FjzZrupD9kG/sw3C4X7nX/qJxZ
-	 lMJZmKMrmWQXyXzwqm0Vc/e0BLddbtIqj9sX/YeTSixZl91ffFzsEyuX31t1plvowX4v3
-	 Av7EI+0fQZ0HVjrKEeartA1meHQlrikwzqdpr6g4+ZZVUc4aO4tLEC/ts2M3Eve3AZ4MK
-	 /9UEHl2uNY2kQLMShdHWCTFfFWt5VJ7ZOS5ZpGEyjvFu5Vm8bf5V/U6b7zXcNUhmy+wh5
-	 BeF3Yyjcr/KB2d+EzC7Y9f0CrRD3HJbUVn531sEEdbwGL7ys52GD0+O9HWt8kLnvxUQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792601277;
+	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:To:Cc:Subject:
+	 In-Reply-To:References:Date:Message-ID:MIME-Version:Content-Type;
+	bh=31usUnW4ODC36qUh8fuNmRwGkC1IR0lXVsQJbpp8rl4=;
+	b=FrgdZLGNYh0QcznIG95OzGQ1S6W2QnT/LnZtMB8ZrQYz9BwEyzdpzbsb7poIZNDK0QkQ
+	 9VXBV6+ZH6Mva/5ySHtc6NMQYZjUOaJ1AI7KSJBLKZT1nGHkGV8iAxeZHhVRunYArOTvF
+	 M0/Aii/LPgirsSAdTY10b62y4rW1wyR9SkTerIfBIkb4Iy1pUBAZZDJG6g4TBcUDOxXEZ
+	 NbN24xk6PpmmmX88+buMMR863DM0Sr66B+aAW2hHcfxxlknjFLeFx61NQMI9dNbJs7F8p
+	 NHC3RguuKw/YLhB+2iLTNEY1k4fOaIMtkZZKjaO2Jo0anRvZcQ3S8M2+JTD3DR9UwYw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=nMsOImcV;
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=SPcmhiTO;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=VWvD3Eo4;
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0890E606A31A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 16:45:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0890E606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05456606A319;
+	Wed, 21 Oct 2026 16:47:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05456606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=nMsOImcV
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cd5e2d696e0so521118a12.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 09:45:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792601112; x=1793205912; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Y299WPPaxWRE9ha0hJbAEz/L7is2XLFDnYowFbrmq1A=;
-        b=nMsOImcVkm/FZH/V0VjYQmpbt2YaIMt0P0dxfSN1jZ6h6rCtW5BuNgoERp+DqxUTeK
-         W+y1TT8vcfcIem851lDwk5ixlioQhKsY4qlqP9HRAG/eaigUSRGZZRM0jjLYKlbu6mC7
-         M843aU6fyX0neTfZUimBqUV1d7r+HTOx8ZnvbXphOsMblz0e+5aLp+7tf7hvs5VrjFRq
-         4LA50+/PSvpFa4rN+8mADRHkfFuL9UMG0XRjJUpkxCz9JGYLd23ruh9jBpegPycYFugE
-         XeqEvtNBYYb7ZnjoezBOTEQJOHKvnasTinHSYHr3GrApogq8luAek1jMLoGP4VLGQldm
-         NW7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792601112; x=1793205912;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Y299WPPaxWRE9ha0hJbAEz/L7is2XLFDnYowFbrmq1A=;
-        b=IFJ/WCNrabZpVFz4wuMLBrKFZgQXt4kg1W4Ia9lWHs0Xwf0HIRoKohrN7P9YihNZJp
-         71cCMaPWBxbVzKJCQu/m2lmnniUm49uYRYnFDVKg6xH+sPkU/8NIQnrw1imZ9FLQGsyY
-         RPZuap8VVQpk/K+MnA4fC+tfskcACAoAxzOPq3pigR90857PK1cKe8O546Py777fG8v8
-         /F5zPgkyUb1yl8RmuxY6xgQq1gSS7VQ0SlPe57QEUesryftIgsOMEYjI/9PhXwb0jxyk
-         oevAHGgBMi4cD+09sQDqDbN2BUjtyLL+A+c2BLs3oS630pPjbPFDtvnC9LD38rd143HC
-         ZvAw==
-X-Forwarded-Encrypted: i=1; AKwUvBwqy+zu8furAJGdTkO2X5gz+zpFEAunBRrWQn0N1VZUgR2C8EuS36rrZ0EobESMYf5ozFA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLTZXVauVQ71BVeNPRf64P01Yc0quHU18epHvFXKIJaccs1kJFp
-	Vhm6Zky4p7s8SAXCVV8gSE5rF//adjXQu+GXaGO9WLeMTqsULiDEzuiR
-X-Gm-Gg: AYBFou3jcrCBQONbh2mPrxZK7Tj0c1w9WBaZ5wXHOd1vx+bR6MnuJ55/3rLiGPONhQd
-	g2tmSae6/uTry6M2PbSzya5h8NLeP9IYOHnRIYkVZtsA/0uj7uHLvgO6kp7rVcEbXQT/oJAfHXt
-	vTvb9F2bsIbqfYw21bTd6Cf/PKmrN33Ybps9IJ3J7bec0Ru11FL0yIT7FBp2+/v7y3P79iM8kwq
-	x39pPlxC9KH+UZIIZrdUAOLZvsCG6bcKYS0cjIBNnl2VwErwyPsYDhNqI/39MmywOtbjcr6eZXT
-	XNylrEzP4sfgavYdnaPIVjTtpL9Lo4MUpAkFdLA/LFuMPLdeOY6Iw1Wke1pjB/rs3jAtRCwe36B
-	jIiBi+SjeJi4UZNltP2mIPjTUq6PNhhWtEqjBOf/8YSGkhL9Z4eDNNu8+SvpZavZUH2ypdBNiIA
-	grxQ4E/1pDNdy/YvrcbpY+jkZ2NSQ8t1Wit4wmkeIXhlEl8YTw0bcryddlcMPJATdw7NMyzEFqt
-	F9wtSx1wcjMaFt+Bwy6DLGqSX5nYvAqB6uKgDMzaq5L8/7sih38RqtZ+02CNu6ZET6q8WzJKew4
-	VoZ28d2QUvL0+7fe2iVwxzzjVJQYefEDO5Djy2jIsRJpqnZCiMIxQovfYVE7
-X-Received: by 2002:a17:90b:17c5:b0:3ac:adce:60be with SMTP id 98e67ed59e1d1-3ad86f44ed6mr2508283a91.21.1792601112182;
-        Wed, 21 Oct 2026 09:45:12 -0700 (PDT)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd6b8645bf7sm265815a12.28.2026.10.21.09.45.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 09:45:11 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Oct 2026 16:45:10 +0000
-Message-Id: <DMAO25C5MTPO.1PS8C0R1D0KP2@gmail.com>
-Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf, sockmap: use READ_ONCE/WRITE_ONCE for
- saved_data_ready in the verdict path
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Dudu Lu" <phx0fer@gmail.com>, <john.fastabend@gmail.com>,
- <jakub@cloudflare.com>, <jiayuan.chen@linux.dev>
-In-Reply-To: <20261021155629.68813-1-phx0fer@gmail.com>
-References: <20261021155629.68813-1-phx0fer@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=SPcmhiTO;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=VWvD3Eo4
+From: John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1792601274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=31usUnW4ODC36qUh8fuNmRwGkC1IR0lXVsQJbpp8rl4=;
+	b=SPcmhiTONIz2mFY6TbdupPeG3Znj5JmktovOePmdvsNlJFU9zt7XhNS+ndTo/ZEm8+TdHQ
+	3eG9+O97LWRnu2VizuL1dcyoFv5rj7o0qYhUOF5hbcYcqtmcu6cyPjfYW7SNDZ4QS+knaF
+	U2wJ6I6sKg48KpItSonCpcuz0BS4Zw6XYAfb+lQQmiXUfnv3VEqCJ5f1ZTdvh4l0Cx6EGK
+	8ocJrjGApS3pnT0z1PUvSRP72ZJzjeYzqROavzEnsN2AK+tPVOUXJTupNSXY5Pix/TF9N1
+	W/715TqPFXhzrMoHSFHxYB9Qmgex6v0YNeeLcXzQ/jmGPWD0TsnePjN8YfN4ug==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1792601274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=31usUnW4ODC36qUh8fuNmRwGkC1IR0lXVsQJbpp8rl4=;
+	b=VWvD3Eo4Z+PAbHYAkP+MgCt1Jxwhy7DalH1DVBHBkZN1WPcPm2fKIsDLYI3/fxpdmzD/ms
+	Sm+VxCq69zW5ffBg==
+To: Gabriele Monaco <gmonaco@redhat.com>, Steven Rostedt <rostedt@goodmis.org>
+Cc: Nam Cao <namcao@linutronix.de>, Tomas Glozar <tglozar@redhat.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Wen Yang <wen.yang@linux.dev>, Tobias Schaffner
+ <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
+In-Reply-To: <fb5c20f226f723cbb4df5092462dfcf5f2686367.camel@redhat.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+ <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
+ <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
+ <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
+ <878q3xtptq.fsf@jogness.linutronix.de>
+ <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
+ <87bj8s8ih9.fsf@jogness.linutronix.de>
+ <DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
+ <87v770uuyr.fsf@jogness.linutronix.de>
+ <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
+ <87ik2zryzo.fsf@jogness.linutronix.de>
+ <0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
+ <CAP4=nvR2i092924zszA8Qh0UUYnwXfAsa+7KjPe-NpwC+bbLXw@mail.gmail.com>
+ <8580176d216258e9008c344e0529509117dcc18b.camel@redhat.com>
+ <CAP4=nvTc297yQHz8aumZFAQ3+JK=5Z_=416WdosT0S6nHEeNfQ@mail.gmail.com>
+ <87pkx5q1w4.fsf@jogness.linutronix.de>
+ <0d4f11b1999588ddba9d855db43fc492eda32de1.camel@redhat.com>
+ <87h5ifqy6w.fsf@yellow.woof>
+ <a8d8b080f403eed617242a3276717706b4081ed1.camel@redhat.com>
+ <20261021094853.29b9f7be@gandalf.local.home>
+ <fb5c20f226f723cbb4df5092462dfcf5f2686367.camel@redhat.com>
+Date: Wed, 21 Oct 2026 18:53:54 +0206
+Message-ID: <87h5ifvw3p.fsf@jogness.linutronix.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,15 +94,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain
 
-On Wed, Oct 21, 2026 at 08:56 AM Dudu Lu <phx0fer@gmail.com> wrote:
-> sk_psock_stop_strp() uses WRITE_ONCE for the same field.  sock_map_link()
-> / sock_map_unref() touch the same psock from another CPU without the
-> lock, so KCSAN reports the race:
+On 2026-10-21, Gabriele Monaco <gmonaco@redhat.com> wrote:
+>> BTW, I'm curious if it isn't possible to keep both in-kernel and BPF
+>> monitors? That is, for those cases that do not change often and has a
+>> well known model, to simply keep those as modules and hard coded.
 >
->   BUG: KCSAN: data-race in sock_map_link / sock_map_unref
->   BUG: KCSAN: data-race in sk_psock_start_verdict / sock_map_unref
+> In my opinion it is possible and I'm designing every change with that
+> coexistence in mind.
+>
+> I would say we could only drop in-kernel if BPF does such a great job
+> to cover every single technical and non-technical requirement or
+> use-case, AND if it makes maintaining the whole thing easier.
 
-sashiko is right. KCSAN will print both with this patch applied.
+I am wondering if coexistence should be the goal. For example, the
+monitor classes (DA, LTL, HTA) are only implemented in the kernel and
+provide kfuncs for the state transition functions to be available to BPF
+monitors. I would expect that this would allow BPF monitors to have the
+full functionality as in-kernel monitors, since the events, errors, and
+reactors would all trigger from the monitor class code.
 
-pw-bot: cr
+John
