@@ -1,97 +1,43 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=206.189.79.184
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792559885;
-	b=MYqgnfGM8r6xDpmLGx34xcuJxS48S4ivQzAJM8P55JZcBcwthlM53Fr7wCt4Amd2MYQG
-	 ELEn1h2wvlKfo+ESQdwUw/zojJlS1PmVGgC4DLAvk9l2f8mrfnvDx7ONlRkzCT0W9Rnx9
-	 nz/3UcDnDJu77MmZynHxIj/6Lh7QzNiU8Mih/g7kAuNABmJpdm/68thiPrIg0efUI74SY
-	 IlIGQ9DjdbWRH7XjxkQAdFa351+NxoPpTjrU3OO/vqPBE0Y3+neF+4GrAEbsLGAFmvfR7
-	 /xX+OQnIzl/ADZAeCNIAW5apvdtOwyEiCAzG/feYCQ1SImH49/2NV6MR9agB+EG+Oig==
+	t=1792561288;
+	b=OSx9FKbTdRBSxpwurCXW4+JjYrJtNnL+PCHJOwUew6P566Om3kB3WwnsYAtGo5AS4bDv
+	 NXo8xhtGI+GrnH6V/xPeBmKROhsyfcpkVuFlqy+DUujBERDZTeQF1n6sqo8N+qnqUCGLw
+	 E7d4+Bo9zldHX3ZmaisUSJzQvYPLUHPi0/DIIaAXlpoCynWG5mwnId5e2KMa2D/14ySdd
+	 PSQyH1VsnxZHpFNJa77of8fXeL1mZ/QF9t154rJOQ9dSyFiRForLVmTMJoTtbWn7M9GoY
+	 +JydeaupeR5aTR+smCDX92KQ3j0glD1+1vra6WcK+5LTa5cABC0GLc4YzS3fqd68ZRw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792559885;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=RFCVJpypNSaOPfJtLe4XfbwdbHr2FRgzaO6clY/xeFk=;
-	b=ATPkOFly2xjByNnWgdCyq8VZUYRhJR1+CpORMD8sKstTIDg2IlZ2Cg2z5mAfQcMwiBHJ
-	 oGHmtAtaLhgMcVcWuJ/RX77nqqIQ7D1yFrBJ941wMHTEUNuTF3vjcdpdt0Y34r04+GF5e
-	 vfaPIxpg9lpaDzyfXk73K1/WDmlJjUplN1deSY8WA1jZAsibNrlH4yfVElXDpFcr5l8QZ
-	 zkwasyQfMfpcC6akLCThcm/9wDtxUJMRsAYeahWGtADqG3P45UqTu2HMVqDp8SPYR5xhw
-	 zkDIIXzAtDmwdjN6JdPZz0EJnqcVFXywD7nHse3G2JnZb+1d2gklF25ytFEX1KcDULQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792561288;
+	h=DMARC-Filter:Received:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-CM-TRANSID:X-CM-SenderInfo:
+	 X-CM-DELIVERINFO:X-Coremail-Antispam;
+	bh=7tGr2G9dPpN3/hJ8Ir8T7P1L4B1B/fvMVriZ1W2nXF8=;
+	b=liinfdh8oX7AvQdchuskq/VeQ+c8IzIJQSHP+o5a9Q+uvb5V8i6JBd+TqPGTy+nIkAPS
+	 3f0tWkZCKNjLIsBEGnBZv2X4SB0EH+5yXMYKBbRcuk/TFhsVAIZ+Y/h7FinG+4Xq9SVQk
+	 Vzpn+RMIWidHfv5ZKYxfqK3YSJB8TmDqdSgPvf8jncf1+hgz/giFZVyphl98WEKofFTeO
+	 WOwXyeSFLLnR3RW2+CQWWc8yKKbdpiT5GDbVTK5eajTZtHepyKX9PRlUXZmmkI4quj4u7
+	 9HuKbirvjV0VQlS3ZuCY8I83mDi4i3iLWyEH/U5/ghS06BhVrxjkjypvq6V+UY/54rA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KjjK+owp;
-	arc=none smtp.remote-ip=209.85.167.45
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3138A606A31A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 05:18:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3138A606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=KjjK+owp
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5ba328513b9so272780e87.1
-        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 22:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792559883; x=1793164683; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RFCVJpypNSaOPfJtLe4XfbwdbHr2FRgzaO6clY/xeFk=;
-        b=KjjK+owp9xtb+2UXsPt0zOCfaE6qLx8l1W2y6dX2MEe1HQ3t2k9liW1Y76/+eSj1sg
-         F956mgna2Jwk69Wa13yllo4AurgFYNR+30t4ysTBA83wC0zZANvAnD6X0BcWMBuRaoF2
-         aPtAqZSG6Ep1LGuI+OYkN6vXs8oiYkF5WjZt8JnT4KK2+aw8z4Z+f03DViV+ypKQTRPc
-         J1dJed/9BVrniCOL4SpP0Ax3grhhvP1hBDaPY9hWtB0ocQ4zClqpEFpINipwZ3WoaZPR
-         pnnyDuYrsT/fFBSp3rWTXN7x34AtsXLY/YeIwEGG1Sl2m7lOS6RRxrTanFTixYgik5JO
-         uASQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792559883; x=1793164683;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RFCVJpypNSaOPfJtLe4XfbwdbHr2FRgzaO6clY/xeFk=;
-        b=1v9mUn06CnnFiiRG2aSqlRz8GYfDeXq8ClFupFk8HbX5BnxaSpkZbP9SfBBgwajCei
-         aF5ehNfWBOjrAH8MVLnTW64V3oZVqW6MeZZC1Nt1dQclzMSll30L6Uwa9HRXRYE8F+6Q
-         8GxNTJEISdO4/iQ7hZcCnykwb4jjfkr/epFki8Gd6TS2ZL3/CZ17WYwouVqeXtpZX5jd
-         Rg4C7SF8fH6cyQ7xhd9HcgEkGPer1HHrhTh0uGnFE2X266Cdfaz88/cnG9ZBmGs6IPWX
-         c0zl1hWRULD98fTlza8AAhBAc8cR2JkTRmQluWzEJ1muyW4e1YAjAq9xSSfAeI8e77eC
-         YImQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwUwoYNliiPR9UYMXfvSLWVgR1N77tfYR58oJdi6idJnD9bmKExFkusu8Lptflx2/BFyqg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYITZe5nEQ4pnLDcuksosT9vDmiewUmEJI6zwdKM1elv9FhfmEfc
-	gmrA1QC+FrOHM8OmtgBn0v4Jz90/5GtgqAIrAXncSHjluZrPtuR3QxAG
-X-Gm-Gg: AYBFou2MPxwnCYWOf2pbQ06XpYJt8nA52bQONGt0QeKun5nt9hyJtm9myNrzrpDemG8
-	tAgBoSFCPIRa8HsNKBDQHs40cp+CeOrpNWjX771Vu2phd/ADozgWTZBKLa1ljn0rU9GQAtj/tXG
-	FaHhw9JeUojlHXnCsOjesgS/p2P54qwm3BUVhDHQwPDrHC/VxA2JtWlgagvSlx64h62U6ztBbHd
-	6hGEmwWNL8gAytN2mPEcDaR+pRl4CY3rPWupL05EtysE9NAtuBaFaVSLGsnDRKjnpud1lcQrB+F
-	wLMHxDkLbzv7meMqynkpqV1cd3+dG8z9gt+HQR6tSa0A4kCSdy+I8sqU8n9CXnNL6hEDB7iVa3m
-	raHmWvfG7ROOB+1iMRfxbclX4C/UCCF0YrEa8bgK6hYrU+MjkHtzq2Xz8p/2CVde0DJeHsGQYpv
-	4Vv0nmoPeZzUtmVoZX+hQLkDlqd45fyi7XB9kgmGHNv/4Nin7yHr//8v6BsSbmDgoOSUlvTRlFh
-	kct84Kiqfoj5CmqieAyXcSLsiSqkmX3kQeULKBNeQB9GFoOAsHy0LXMhGRwZokqliIj+BahnDYD
-	SW86cDOKbPweZkkK5xgXb82AhU+UuQ5p
-X-Received: by 2002:a05:6512:3a8e:b0:5be:64bc:f7c0 with SMTP id 2adb3069b0e04-5bfa1c22119mr283430e87.18.1792559883013;
-        Tue, 20 Oct 2026 22:18:03 -0700 (PDT)
-Received: from localhost.localdomain (95-24-167-79.broadband.corbina.ru. [95.24.167.79])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bfa11f60e4sm298289e87.25.2026.10.20.22.18.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 22:18:02 -0700 (PDT)
-From: Maxim Skokov <skokovmaksimevg@gmail.com>
-To: alexei.starovoitov@gmail.com
-Cc: memxor@gmail.com,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next] bpf: Cast helper IDs to the helper type in bpf_helper_defs.h
-Date: Wed, 21 Oct 2026 08:17:48 +0300
-Message-ID: <20261021051748.12278-1-skokovmaksimevg@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <DMA3L9A79PD7.DRTZ2IXQUVA7@gmail.com>
-References: <20261020101229.111074-1-skokovmaksimevg@gmail.com> <DMA3L9A79PD7.DRTZ2IXQUVA7@gmail.com>
+	dmarc=none header.from=zju.edu.cn;
+	spf=pass smtp.mailfrom=zju.edu.cn;
+	arc=none smtp.remote-ip=206.189.79.184
+Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C827D606A319;
+	Wed, 21 Oct 2026 05:41:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C827D606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.163.215])
+	by mtasvr (Coremail) with SMTP id _____wC3UOReUNhqAXmsAQ--.16635S3;
+	Wed, 21 Oct 2026 13:40:46 +0800 (CST)
+Received: from lutetium.localdomain (unknown [10.162.163.215])
+	by mail-app4 (Coremail) with UTF8SMTPA id zi_KCgBXJ5xeUNhqcCJmAA--.33421S2;
+	Wed, 21 Oct 2026 13:40:46 +0800 (CST)
+From: tangyazhou@zju.edu.cn
+Subject: [PATCH bpf-next v2 0/8] bpf: Add UHMUL and SHMUL instructions
+Date: Wed, 21 Oct 2026 13:40:34 +0800
+Message-Id: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,41 +47,210 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWOyQ6CMBRFf4W8tSV9FQFd+R+GBcPDlmghHQhD+
+ HdbXN7cc4cdLBlFFh7JDoZmZdWogxCXBFpZ6zcx1QUNgoscuUDWTD2TX/9hGe+oyQW/3rISAj4
+ Z6tVyVr0gUpoWB9Xfsb4ZqHWxKbJSWTea9Vyd8UzEAX7HgmdYoEixzHkhBEPmwou13uTon9vgU
+ +p82mqojuP4AetZVp29AAAA
+X-Change-ID: 20261021-bpf-hmul-40deb6203548
+To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ David Vernet <void@manifault.com>, bpf@ietf.org
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>, 
+ Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+ Shahab Vahedi <list+bpf@vahedi.org>, Russell King <linux@armlinux.org.uk>, 
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Hengqi Chen <hengqi.chen@gmail.com>, 
+ Johan Almbladh <johan.almbladh@anyfinetworks.com>, 
+ Paul Burton <paulburton@kernel.org>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Helge Deller <deller@gmx.de>, Hari Bathini <hbathini@linux.ibm.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ Naveen N Rao <naveen@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, 
+ Xi Wang <xi.wang@gmail.com>, Ilya Leoshkevich <iii@linux.ibm.com>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ "David S. Miller" <davem@davemloft.net>, Wang YanQing <udknight@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ linux-doc@vger.kernel.org, Tianci Cao <ziye@zju.edu.cn>, 
+ Yazhou Tang <tangyazhou518@outlook.com>, 
+ Shenghao Yuan <shenghaoyuan0928@163.com>, 
+ Alexei Starovoitov <ast@kernel.org>
+X-Mailer: b4 0.15.2
+X-CM-TRANSID:zi_KCgBXJ5xeUNhqcCJmAA--.33421S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgALCmrXxB0b0QAAsp
+X-CM-DELIVERINFO: =?B?PkyhEgXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9Nte+2zWzrdkvaZkVwVQI+GRiybpQic3i2BEeUHGie+C93CiqEVoxiU6Y2X07Xr/HRvj
+	en1rIj0bnrIH+DqfznhIXCWny1l/Jp05GaoLbDgTu32AZZBC8J+1WBlzaiJF2g==
+X-Coremail-Antispam: 1Uk129KBj93XoW3AF1ktFyrJFykCFy5AFW3CFX_yoWxJrWDpF
+	4DGr9xGFZ2gFy0vws7Za9ruFy5Xa1rCr43GrykJ3yUJas0qrykXr4Sgw15Z3s8tF1jg3WF
+	vryj9rnY934kZagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAF
+	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
+	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCF04k2
+	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48J
+	MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJw
+	CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+	z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8vksDUUUUU==
 
-On Wed, Oct 21, 2026 at 12:42 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> What C++ programs you have in mind?
+This patchset adds unsigned and signed high-half multiplication to the BPF
+ISA. UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product,
+while SHMUL does the same for a signed product.
 
-Programs from projects whose userspace is already C++ and that want to
-share types with the BPF side, plus typed maps and RAII for locks,
-kptrs and ring buffer reservations. Not full C++: no exceptions, RTTI
-or virtual calls. I'm building that as a small header-only library on
-top of libbpf: https://github.com/cpp-bpf/cpp-bpf
+Both operations are BPF_ALU64 BPF_MUL variants selected by insn->off.
+off == 0 remains the existing low-half multiplication, while off == 1
+and off == 2 select UHMUL and SHMUL, respectively. The immediate forms
+use the usual sign-extended 32-bit BPF immediate.
 
-> We have to see full roadmap to decide whether we should even bother
-> making these steps.
+The patchset adds interpreter, disassembler, verifier, and documentation
+support, along with JIT support for x86-64, arm64 and riscv64. Unsupported
+JIT and hardware offload backends reject the variants to avoid compiling
+them as ordinary multiplication. For now, the verifier computes exact
+results for constant operands and otherwise conservatively marks the
+destination unknown.
 
-Fair. The compiler has to come first, and I've started there:
+Patch 8/8 uses raw bytecode for UHMUL and SHMUL because LLVM support has
+not been merged yet. Once it is available, the raw encodings can be
+replaced with the uh*= and sh*= mnemonics. The corresponding LLVM patch
+is available for review at:
 
-- BTF and CO-RE for C++ records, which crash clang since LLVM 22.1 for
-  any record with methods or bases, and references as pointers in BTF
-  are in review: llvm/llvm-project#233715. Reviews welcome.
-- Next: preserve_access_index, btf_decl_tag, btf_type_tag and
-  bpf_fastcall, which are C-only in clang today.
+  https://github.com/llvm/llvm-project/pull/234076
 
-On the kernel side:
+The instruction design is inspired by the UHMUL and SHMUL operations in
+sBPF (Solana's BPF variant). Patch 1/8 describes the encoding and
+immediate-semantics differences.
 
-- BPF-side headers: Kumar's cpp-bpf-mini series.
-- vmlinux.h: a C++ mode in btf_dump. Generating one for 6.12 and
-  bpf-next, keyword suffixes weren't enough: tags clashing with
-  typedefs, anonymous members of a named struct type (-fms-extensions),
-  members hiding a typedef of the same name, enum forward declarations,
-  and empty structs, which have size 1 in C++ and silently shift the
-  members after them (e.g. lock_class_key without lockdep).
-- Tests: C++ selftests, and a check that C and C++ see the same layout
-  for every type in vmlinux.h.
+Apologies for the delay in sending v2. I was tied up with other commitments
+over the past month.
 
-Kumar, I can send the vmlinux.h cases above as patches on top of your
-btf_dump change, and I'd be glad to split the compiler items too if
-you want to take some of them. How do you plan to order this?
+---
+Changes in v2:
+- Introduce a new conformance group "divmul64v2" for UHMUL/SHMUL. (bot+bpf-ci)
+- Shorten the name of bpf_mul_variant. (Alexei)
+- Remove redundant validation for off field in interpreter. (Alexei)
+- Split arena test to two separate files.
+- Link to v1: https://patch.msgid.link/20260917041712.1860722-1-tangyazhou@zju.edu.cn
+
+Changes in v1:
+- Add JIT support on arm64 and riscv64. (Alexei)
+- Fix the HMUL check on PowerPC JIT backend. (Sashiko AI reviewer)
+- Link to RFC: https://lore.kernel.org/bpf/20260902070534.2141812-1-tangyazhou@zju.edu.cn/
+
+To: bpf@vger.kernel.org
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: David Vernet <void@manifault.com>
+To: bpf@ietf.org
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Quentin Monnet <qmo@kernel.org>
+Cc: Puranjay Mohan <puranjay@kernel.org>
+Cc: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: Björn Töpel <bjorn@kernel.org>
+Cc: Pu Lehui <pulehui@huawei.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-riscv@lists.infradead.org
+Cc: Shahab Vahedi <list+bpf@vahedi.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>
+Cc: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Hari Bathini <hbathini@linux.ibm.com>
+Cc: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+Cc: Naveen N Rao <naveen@kernel.org>
+Cc: Luke Nelson <luke.r.nels@gmail.com>
+Cc: Xi Wang <xi.wang@gmail.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Wang YanQing <udknight@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+
+---
+Tianci Cao (3):
+      bpf: Add UHMUL and SHMUL instructions
+      bpf, x86: JIT UHMUL and SHMUL on x86-64
+      bpf: Add verifier support for UHMUL and SHMUL
+
+Yazhou Tang (5):
+      bpf, arm64: JIT UHMUL and SHMUL
+      bpf, riscv: JIT UHMUL and SHMUL on RV64
+      bpf: Reject UHMUL/SHMUL in unsupported backends
+      bpf: Refactor ALU instruction variant validation
+      selftests/bpf: Add bytecode tests for UHMUL and SHMUL
+
+ .../bpf/standardization/instruction-set.rst        |  37 +++-
+ arch/arc/net/bpf_jit_core.c                        |   3 +
+ arch/arm/net/bpf_jit_32.c                          |   3 +
+ arch/arm64/include/asm/insn.h                      |   4 +
+ arch/arm64/lib/insn.c                              |   6 +
+ arch/arm64/net/bpf_jit.h                           |   6 +
+ arch/arm64/net/bpf_jit_comp.c                      |  15 +-
+ arch/loongarch/net/bpf_jit.c                       |   3 +
+ arch/mips/net/bpf_jit_comp32.c                     |   3 +
+ arch/mips/net/bpf_jit_comp64.c                     |   3 +
+ arch/parisc/net/bpf_jit_comp32.c                   |   3 +
+ arch/parisc/net/bpf_jit_comp64.c                   |   3 +
+ arch/powerpc/net/bpf_jit_comp32.c                  |   3 +
+ arch/powerpc/net/bpf_jit_comp64.c                  |   3 +
+ arch/riscv/net/bpf_jit.h                           |   5 +
+ arch/riscv/net/bpf_jit_comp32.c                    |   3 +
+ arch/riscv/net/bpf_jit_comp64.c                    |  18 +-
+ arch/s390/net/bpf_jit_comp.c                       |   3 +
+ arch/sparc/net/bpf_jit_comp_64.c                   |   3 +
+ arch/x86/net/bpf_jit_comp.c                        |  48 +++++
+ arch/x86/net/bpf_jit_comp32.c                      |   3 +
+ drivers/net/ethernet/netronome/nfp/bpf/verifier.c  |   6 +
+ include/linux/filter.h                             |  38 ++++
+ include/uapi/linux/bpf.h                           |   6 +
+ kernel/bpf/core.c                                  |  41 +++-
+ kernel/bpf/disasm.c                                |  18 ++
+ kernel/bpf/verifier.c                              |  68 +++++-
+ tools/include/uapi/linux/bpf.h                     |   6 +
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
+ .../selftests/bpf/prog_tests/verifier_hmul_arena.c |  19 ++
+ tools/testing/selftests/bpf/progs/verifier_hmul.c  | 235 +++++++++++++++++++++
+ .../selftests/bpf/progs/verifier_hmul_arena.c      |  70 ++++++
+ .../bpf/progs/verifier_value_illegal_alu.c         |   7 +-
+ 33 files changed, 671 insertions(+), 23 deletions(-)
+---
+base-commit: 3a65f38d928a2699ebcec72a2d60bdb8fcde8284
+change-id: 20261021-bpf-hmul-40deb6203548
+
+Best regards,
+--  
+Yazhou Tang <tangyazhou518@outlook.com>
+
