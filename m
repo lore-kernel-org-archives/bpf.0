@@ -1,39 +1,39 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.243.164.118
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792571053;
-	b=WQ7k9IN3qQpigC3za8C/3veecy75XDnX4sbk0sV2pX9MusU2pCaA1pprGMllN/1w9d5R
-	 6Yh+o9FQBNKOjfZyboZCyGOfz8gC0iiYWOSeGwpJ5ZPubLcBMLuC0sI7uQlnhNbYdIYhP
-	 ravS9a/c3gVrfOYdr0PfCaM82FAa6HUuA7Ze8GO9U1PHTdBMpDXly+Knv6IpZlNc/71F/
-	 bblhOP/ajAHIs+WwF0T1vV9BE/HwFIBFdxuKTB572mH+2DvI5XKZQcaX9WZKGARZgxbeV
-	 Sm2DOQiDz36+Qi0//h0pmL/28e+k442/BXDKgsjcPECDUu33RpauNEh20xANbQCgTUA==
+	t=1792571049;
+	b=lYNPGd6YtNJD0fEU6+mj1ib8fTjUMT9WxVoM6BQQxUVHETxseSVcyjw6f9SH3jyrI7h6
+	 35VLR01zcnlJ/cLt/Ws4wSBv+2/qQs4gwKGf2L/Flls2dZNK7+0QTk0XFZlZGEiAn9TX7
+	 ZVQclQ4f+DMH9Xx+ZTG5XZuRgtTmYs+j5tp1T1VzFyPRUwJeFlVCP2o3fRUqb9LOwbPqw
+	 rNbjHA5zTdLt/oakIG9smpHO+gXEEF4TIfZgTPW6BKN/V0fJh/HxgoK4UcsM0X15yBt1Y
+	 oTmMqhqZtrGX+XutA9x1HkUh2KFCMzWM4HTPY9Eeb55PXARQlPkkmt5B6/QatEPN18Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792571053;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792571049;
 	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:X-Mailer:
 	 Content-Transfer-Encoding:X-CM-TRANSID:X-CM-SenderInfo:
 	 X-CM-DELIVERINFO:X-Coremail-Antispam;
-	bh=CbD0gxR0Wk8lCNNFQRlUKh0FxoEg/NBxggjXK7WDk24=;
-	b=i1Je/Cc0GbCpITYsq6hzw9mllSIxBRzPerUbL97mLmWLsT50dahe4TD/Tb/F9fUwGF2D
-	 41vIUyOG5FgC2+wLlUBDnBKu1+5vv2ychIpBi0fOdaRdVLS1ModZ2Khy0VxadC2W6iwtw
-	 UrvIm93Q+8s3fBfBTfZp9Ioogi/509u6FUfilbQe8E3kpmBcBwqKnHdYfiAa/f8UF20hI
-	 c5zz/Y6aBrCc7m8+bkmd/Eb9Qqh+IEgfTV4bTJwZkqdBpB2cS39wcsb+mPZfPRewH8DRc
-	 bXzwDPcRKKhbBXqSGA0jU6v9fy5+vLg5sPpPDDrwkfjOGVMcfBFRCYTeIqc8jLjb+RA==
+	bh=ZJZsGt1RoLGv6bmAnd/MQ4/K8kUfoZK+ne5ibrmUcEs=;
+	b=Gkz2w1spzCmN5MgN4Caq5bgoUTLL33MS9gEBTokM1Q+i2z2zWdGz7DRmw0i9qAAS4pKP
+	 Hr1A6EWKNdbmiWHTeHK6A3FGAMm9I9ajAOrg1wLWEBFfPJu8gnUpNzTlz4hKlO4ohTqaa
+	 EIBBnwADEQHVHXUKR1k60/v0nkKALmK2qwKApSdAblZWWisIyreAXgJ9FISoOojp+/52g
+	 KqDb8O4vuwkLU98ddqlQoktTIMy3cTGyUaBSvaFUqAYEneUIIcO1oisP6vPFFdwOXzgVG
+	 bsn/ZXUD4QG1nFVc72A5jsEWe3CH8TlrS9YQ7j3x5l1v4zoi0uUaBG3xqGMCcr764FQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=zju.edu.cn;
 	spf=pass smtp.mailfrom=zju.edu.cn;
-	arc=none smtp.remote-ip=162.243.161.220
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77ADE606A324;
-	Wed, 21 Oct 2026 08:24:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77ADE606A324
+	arc=none smtp.remote-ip=162.243.164.118
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21AA606A319;
+	Wed, 21 Oct 2026 08:24:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F21AA606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
 Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wDnoj2Ldthqx0+tAQ--.291S3;
-	Wed, 21 Oct 2026 16:23:39 +0800 (CST)
+	by mtasvr (Coremail) with SMTP id _____wDHIT2CdthqlU+tAQ--.827S3;
+	Wed, 21 Oct 2026 16:23:31 +0800 (CST)
 Received: from lutetium.tail477849.ts.net (unknown [10.162.163.215])
-	by mail-app3 (Coremail) with UTF8SMTPA id zS_KCgDHZ6KJdthqoVy1AA--.41174S2;
-	Wed, 21 Oct 2026 16:23:38 +0800 (CST)
+	by mail-app3 (Coremail) with UTF8SMTPA id zS_KCgCnR6KAdthqbly1AA--.47192S2;
+	Wed, 21 Oct 2026 16:23:29 +0800 (CST)
 From: tangyazhou@zju.edu.cn
 To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -84,9 +84,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	Yazhou Tang <tangyazhou518@outlook.com>,
 	Tianci Cao <ziye@zju.edu.cn>,
 	Shenghao Yuan <shenghaoyuan0928@163.com>
-Subject: [PATCH bpf-next v2 4/8] bpf, riscv: JIT UHMUL and SHMUL on RV64
-Date: Wed, 21 Oct 2026 16:23:34 +0800
-Message-ID: <20261021-bpf-hmul-v2-4-88e260099f7d@outlook.com>
+Subject: [PATCH bpf-next v2 3/8] bpf, arm64: JIT UHMUL and SHMUL
+Date: Wed, 21 Oct 2026 16:23:23 +0800
+Message-ID: <20261021-bpf-hmul-v2-3-88e260099f7d@outlook.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com>
 References: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com>
@@ -102,36 +102,35 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.15.2
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zS_KCgDHZ6KJdthqoVy1AA--.41174S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhMLCmrXxB0gcQACsj
-X-CM-DELIVERINFO: =?B?6hsdgwXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9C3p0bkPmn0Y7fsOHCqvQSlsVEzD+W3MyGWincVVrVSTU+ArkQH/OK/F0lezexfgEdHO
-	SMezzgM0yONphbwL0sjex5asr3klFH/wch+QcGGSGhWFXUjsiodnGlnB8JMk6w==
-X-Coremail-Antispam: 1Uk129KBj93XoWxXw1rCw1UCF1DCw1rJF48Xwc_yoW5Cr15pr
-	Z0krna9rWvqF4fJFyDJF47Zw15JFn2gry7KF15Kay5GFsFqFZ7Ga1fKw17Ar98XFyrXa48
-	JFWY9FnxCayvyrbCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+X-CM-TRANSID:zS_KCgCnR6KAdthqbly1AA--.47192S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhMLCmrXxB0gcQABsg
+X-CM-DELIVERINFO: =?B?Xo5KYQXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9C3p0bkPmn0Y7fsOHCqvQSnLiEKTnblmL+U+pBVp0RIpwbVyc97K1UufZTOlSmiCpW3i
+	5mtPgHnUlpBEYv6mWIEaZaBLTnfE6zncm1Lm6vdzJ4dz/iU4djPgnHvF/UDoow==
+X-Coremail-Antispam: 1Uk129KBj93XoWxXr1fCFWxKr1xCr15tF48Zrc_yoW7JF4Dpw
+	n5urWSkrWkWF13GF97tFnrZw4Yka1Fgw4DK345u3yrKrs8Xa4UGFWSg3y2yFs8Gryjga9Y
+	qFyj9r1F9aykXwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBEb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2
+	0xBIdaVrnRJUUUBKb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
 	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
 	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
 	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
 	wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
 	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCF04k2
 	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
 	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48J
-	MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJw
-	CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2
-	z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8189UUUUU=
+	MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
+	IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
+	87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8ymh7UUUUU==
 
 From: Yazhou Tang <tangyazhou518@outlook.com>
 
-On RV64, the RISC-V M extension provides MULHU and MULH instructions that
-return the high 64 bits of an unsigned or signed 64-bit multiplication,
-respectively.
+arm64 provides UMULH and SMULH instructions that return the high 64 bits
+of an unsigned or signed 64-bit multiplication, respectively.
 
-Add the missing MULH encoder and use MULHU and MULH to lower the UHMUL and
+Add encodings for these instructions and use them to lower the UHMUL and
 SHMUL BPF_MUL variants for both register and immediate sources. Keep the
 existing low-half and ALU32 multiplication lowering unchanged.
 
@@ -142,69 +141,108 @@ Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
 Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 ---
- arch/riscv/net/bpf_jit.h        |  5 +++++
- arch/riscv/net/bpf_jit_comp64.c | 18 +++++++++++++++---
- 2 files changed, 20 insertions(+), 3 deletions(-)
+ arch/arm64/include/asm/insn.h |  4 ++++
+ arch/arm64/lib/insn.c         |  6 ++++++
+ arch/arm64/net/bpf_jit.h      |  6 ++++++
+ arch/arm64/net/bpf_jit_comp.c | 15 +++++++++++++--
+ 4 files changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 5c4f53060c91..21a190a6a6d9 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -436,6 +436,11 @@ static inline u32 rv_mul(u8 rd, u8 rs1, u8 rs2)
- 	return rv_r_insn(1, rs2, rs1, 0, rd, 0x33);
+diff --git a/arch/arm64/include/asm/insn.h b/arch/arm64/include/asm/insn.h
+index 1ce75a442638..f38738fa54a2 100644
+--- a/arch/arm64/include/asm/insn.h
++++ b/arch/arm64/include/asm/insn.h
+@@ -247,6 +247,8 @@ enum aarch64_insn_data2_type {
+ enum aarch64_insn_data3_type {
+ 	AARCH64_INSN_DATA3_MADD,
+ 	AARCH64_INSN_DATA3_MSUB,
++	AARCH64_INSN_DATA3_SMULH,
++	AARCH64_INSN_DATA3_UMULH,
+ };
+ 
+ enum aarch64_insn_logic_type {
+@@ -396,6 +398,8 @@ __AARCH64_INSN_FUNCS(sub_ext,	0x7FE00000, 0x4B200000)
+ __AARCH64_INSN_FUNCS(subs_ext,	0x7FE00000, 0x6B200000)
+ __AARCH64_INSN_FUNCS(madd,	0x7FE08000, 0x1B000000)
+ __AARCH64_INSN_FUNCS(msub,	0x7FE08000, 0x1B008000)
++__AARCH64_INSN_FUNCS(smulh,	0x7FE0FC00, 0x1B407C00)
++__AARCH64_INSN_FUNCS(umulh,	0x7FE0FC00, 0x1BC07C00)
+ __AARCH64_INSN_FUNCS(udiv,	0x7FE0FC00, 0x1AC00800)
+ __AARCH64_INSN_FUNCS(sdiv,	0x7FE0FC00, 0x1AC00C00)
+ __AARCH64_INSN_FUNCS(lslv,	0x7FE0FC00, 0x1AC02000)
+diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
+index e70ac0238515..dc483d1b8bd5 100644
+--- a/arch/arm64/lib/insn.c
++++ b/arch/arm64/lib/insn.c
+@@ -1155,6 +1155,12 @@ u32 aarch64_insn_gen_data3(enum aarch64_insn_register dst,
+ 	case AARCH64_INSN_DATA3_MSUB:
+ 		insn = aarch64_insn_get_msub_value();
+ 		break;
++	case AARCH64_INSN_DATA3_SMULH:
++		insn = aarch64_insn_get_smulh_value();
++		break;
++	case AARCH64_INSN_DATA3_UMULH:
++		insn = aarch64_insn_get_umulh_value();
++		break;
+ 	default:
+ 		pr_err("%s: unknown data3 encoding %d\n", __func__, type);
+ 		return AARCH64_BREAK_FAULT;
+diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+index b2fe6e6dcf44..70fc329c661d 100644
+--- a/arch/arm64/net/bpf_jit.h
++++ b/arch/arm64/net/bpf_jit.h
+@@ -281,6 +281,12 @@
+ 	A64_VARIANT(sf), AARCH64_INSN_DATA3_MSUB)
+ /* Rd = Rn * Rm */
+ #define A64_MUL(sf, Rd, Rn, Rm) A64_MADD(sf, Rd, A64_ZR, Rn, Rm)
++/* Rd = high 64 bits of signed Rn * Rm */
++#define A64_SMULH(Rd, Rn, Rm) aarch64_insn_gen_data3(Rd, A64_ZR, Rn, Rm, \
++	AARCH64_INSN_VARIANT_64BIT, AARCH64_INSN_DATA3_SMULH)
++/* Rd = high 64 bits of unsigned Rn * Rm */
++#define A64_UMULH(Rd, Rn, Rm) aarch64_insn_gen_data3(Rd, A64_ZR, Rn, Rm, \
++	AARCH64_INSN_VARIANT_64BIT, AARCH64_INSN_DATA3_UMULH)
+ 
+ /* Logical (shifted register) */
+ #define A64_LOGIC_SREG(sf, Rd, Rn, Rm, type) \
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 326e9e1dea0a..a9989cd5098c 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -144,6 +144,17 @@ static inline void emit_a64_mov_i(const int is64, const int reg,
+ 	}
  }
  
-+static inline u32 rv_mulh(u8 rd, u8 rs1, u8 rs2)
++static inline void emit_a64_mul(const bool is64, const u8 dst, const u8 src,
++				const s16 off, struct jit_ctx *ctx)
 +{
-+	return rv_r_insn(1, rs2, rs1, 1, rd, 0x33);
-+}
-+
- static inline u32 rv_mulhu(u8 rd, u8 rs1, u8 rs2)
- {
- 	return rv_r_insn(1, rs2, rs1, 3, rd, 0x33);
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 788fcc21fd5b..dfaf85926f20 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -197,6 +197,19 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
- 		emit_addi(rd, rd, lower, ctx);
- }
- 
-+static void emit_mul(u8 rd, u8 rs, bool is64, s16 off,
-+		     struct rv_jit_context *ctx)
-+{
-+	if (!is64)
-+		emit(rv_mulw(rd, rd, rs), ctx);
-+	else if (off == BPF_UHMUL)
-+		emit(rv_mulhu(rd, rd, rs), ctx);
-+	else if (off == BPF_SHMUL)
-+		emit(rv_mulh(rd, rd, rs), ctx);
++	if (is64 && off == BPF_UHMUL)
++		emit(A64_UMULH(dst, dst, src), ctx);
++	else if (is64 && off == BPF_SHMUL)
++		emit(A64_SMULH(dst, dst, src), ctx);
 +	else
-+		emit(rv_mul(rd, rd, rs), ctx);
++		emit(A64_MUL(is64, dst, dst, src), ctx);
 +}
 +
- static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+ static int i64_i16_blocks(const u64 val, bool inverse)
  {
- 	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
-@@ -1526,7 +1539,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	return (((val >>  0) & 0xffff) != (inverse ? 0xffff : 0x0000)) +
+@@ -1531,7 +1542,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
  		break;
  	case BPF_ALU | BPF_MUL | BPF_X:
  	case BPF_ALU64 | BPF_MUL | BPF_X:
--		emit(is64 ? rv_mul(rd, rd, rs) : rv_mulw(rd, rd, rs), ctx);
-+		emit_mul(rd, rs, is64, off, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zextw(rd, rd, ctx);
+-		emit(A64_MUL(is64, dst, dst, src), ctx);
++		emit_a64_mul(is64, dst, src, off, ctx);
  		break;
-@@ -1662,8 +1675,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 	case BPF_ALU | BPF_DIV | BPF_X:
+ 	case BPF_ALU64 | BPF_DIV | BPF_X:
+@@ -1660,7 +1671,7 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
  	case BPF_ALU | BPF_MUL | BPF_K:
  	case BPF_ALU64 | BPF_MUL | BPF_K:
- 		emit_imm(RV_REG_T1, imm, ctx);
--		emit(is64 ? rv_mul(rd, rd, RV_REG_T1) :
--		     rv_mulw(rd, rd, RV_REG_T1), ctx);
-+		emit_mul(rd, RV_REG_T1, is64, off, ctx);
- 		if (!is64 && !aux->verifier_zext)
- 			emit_zextw(rd, rd, ctx);
+ 		emit_a64_mov_i(is64, tmp, imm, ctx);
+-		emit(A64_MUL(is64, dst, dst, tmp), ctx);
++		emit_a64_mul(is64, dst, tmp, off, ctx);
  		break;
+ 	case BPF_ALU | BPF_DIV | BPF_K:
+ 	case BPF_ALU64 | BPF_DIV | BPF_K:
 
 -- 
 2.56.0
