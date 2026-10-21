@@ -1,99 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792623031;
-	b=RBSIJfWNevyKR6etcBgpAmHQJpGPCp9hbyjl+JEwH8GH0LcoQFWYN8Ln0+0H9H6moETJ
-	 6cGn6RUKQuKP/PpE3hId0v2e+Q+paKKmvPdVTbLErrj50YxsuIeaZZeUNBs9xowgLFHwU
-	 yqerqBumqgHHhJHtnwHIOGYCmtGCeNhhZ+Q/WpdA+7LEs5GYTNpdNr51qXn+pfhjdWrky
-	 xPF9Hyi7OypzqUPzByyJOFrRFZhQNg0gBEPi1sSo6T0Bd6fKjtEskQV47e0GUpfsI+CH3
-	 Ksjy7nPU7/jFPVvV9NhBZrbsVrGklZtn8ejkuvd5rADv+WayhI4H6fPEmH/35hEEDjA==
+	t=1792623159;
+	b=O6Snpui/na1rmfE8pJV/fiIS5l6/FcKhvmTzEPsYLoe/vfp5Qd7IEnyVWdckq4iIglRf
+	 oGCGGbL8ODl9Rkko3oehm7omRO8iLypLiGX2orduk8mmV9X4X3YUPa3RSiCcqqVF/YU3H
+	 XucbxO2L5JgkOGWt385x6VatdPOsn2k8Y6DHaW+ABtmOLB7OzGuvLeKPQCzsJ8+A5FvOP
+	 xY+0TkBXCiRd1Cuuxh5JCq1IfWsPZvO/NklLb0yT9fQGbFwxI/zFI5w6XZxOSS4wPv1QU
+	 Y40mUH9HfxH4WF75pzkCL9OlqoyDLE+tKQIVYmpJIHjtG1KO90hX3KxKaE3hp5V1dYA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792623031;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792623159;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=yXmnWq/gCLjc3mMk4LjW2YKmKS1CMT7ul7aIdEl3gPs=;
-	b=FFIloVNLtg/FMu+2S93LsQWEbRi2x4HhlQXlJGE1KF+XPrEhRycPHNANFIilWIzbh1In
-	 MbnQ1HQbUkyjH7r+fssLo+1vjAucp7kSdhsO+EuGiCOJfKPuF0gVDL8+OvbvCAZTwpjqY
-	 wMygANyUwbZZqH2TQFrzu2Jk/icke8AIAKuYDxfmLKYydtpPKsGo3hRb2AvsYWlSY/m15
-	 vwC5eHIrOl4adtxSe3nktd724bQsIV0NXIaa0lpee/z7BLo68G+i/KNhkt2gEJ9I8NcBh
-	 FMseavP0cmt705BhJE714OKpIoRm2VKvLzOBlqS7W7gUa98PB5arafk4g5QI+yvIvlQ==
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=v9u/hy9t9m4fz0Ev+ivo47E4Eby44Bm0g2fkBYPU7nE=;
+	b=tGQMNACzF4fSY76B6JsyPx+ACTtEgEYtMP8JlkV014tcmAa1nk+uDrXfWvJLPZTyM1Cs
+	 0FP0vpKNLqYCmxrAQ+cYOCPsKDqMtdY7/PUHYr5DFyfwMTyQCK4O5FDofZ5Zn16nGq7R+
+	 0v3vLx40mTgxUvEoLCpRsLYWLTeahUdNXvB856EJF6GDhtBLRUPMPbriH5Q6vThg1S8V4
+	 WmDE88AdUy3NcG02yt8YykNLQ4EMejOnYFJD73iyZKlS/fkawodBAGHZ0GZnqWNaRSU7r
+	 VAH+i5lQs4MSyb5rNTamHFSBZpbfhpFqTxYh8y7FKivYcuZeLoO7M/mtHTIU9Zs7RcQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=RyY9+TMp;
-	arc=none smtp.remote-ip=74.125.82.171
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=J6krMgcs;
+	arc=none smtp.remote-ip=209.85.208.48
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B461E606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 22:50:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B461E606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD81F606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 22:52:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AD81F606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=RyY9+TMp
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-3282db206d3so2900533eec.0
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 15:50:30 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=J6krMgcs
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6b2232d8ef5so1916704a12.3
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 15:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792623030; x=1793227830; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=yXmnWq/gCLjc3mMk4LjW2YKmKS1CMT7ul7aIdEl3gPs=;
-        b=RyY9+TMpDKnJ3t+u3ck+1VHaqQAkPe7TBmRYKdwmxCY0HDaqmbR5n2sNVlzOfMYPAj
-         5j7LkHCVeh3zmpZizQgOU2SVmc4aX37eParM5F48pWGYcSJWizcXckIHKHI85dIsJsG+
-         YlZY75nRohECN5KAusrqBlw2Hnq0AI3+eAgi6XacNjDpAHapMjk6NeWuDxWbihE1TiGX
-         f1VVHK7pWqnkbv7gTKE7Ee3nH4Q8MCHEVNL0UhlNOZ+XEznnYtmpJ+TsQPd4cZd/xnrj
-         319KWjpdst0WQUn/PmSDKOGam6HA3Z0krsu63set/ppRRu1VAMkLV0vQjzAYEoY2PUxz
-         31DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792623030; x=1793227830;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1792623157; x=1793227957; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yXmnWq/gCLjc3mMk4LjW2YKmKS1CMT7ul7aIdEl3gPs=;
-        b=FjTp1UscoNRRcr6CTri5at0HCnLxS+MJoO8xBZfywRrO+ocbQlxNlqUAtQKTiDcKGS
-         K5HGHYfhj8OxIa9oFCO3KRYnvK1T42W6++AEP7UqC2PesV6zzZNy1OUNpuDsS4Q63esO
-         1gh/lkBbEu2vod12ajknJ1zRMP683sJGqgXTShzvynRT9wZLF+ebcyiA/fKFkLFfnHdU
-         mqhb5eMDxvCKQWvszPW/FHMR7Szg5p5nnXXn5DfoJKHzFwtWBawV9zC81Pdy/eTzCLcY
-         mSQ/U7pQ5VjlVZjHA6v31vO1mECTOb7aesvX2T2oJXmTvtyMw4mSHvBtxFzys5tOzM5s
-         XBIQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw07VHDmsPnzHMva94jBfBPuEyZJd7A8mdXkpaFB1qdq9yqcrqrgtCt8C3Dc0BieTnaSso=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJpGB32b6GnHckgu7IhEluHLT2g60Ht7nZ9VWwmHZCasoevqxVK
-	NqrrT91xTRbL/rSXXfBvY6gxI1xgUZ0bTCdKVSU4b/5tuy76Daw+6tBp
-X-Gm-Gg: AYBFou0is/inufyXgLqunxC5ORPuVPZ0ka+zGGrF4HVZF3BX5S4Ex9WWmk/Cqb50doG
-	cvK8TLk6zsYmcd4z3LRIqaxXVGQUGj2FEjQ1bb2pcCge1jkPJHDNTQ8xoGWaIrZXSH1mTMMJt/g
-	O4zfLlRarcRT5dxY5gwh1qOE25eGPyk3EM44UhkgQQfjadB4WwGfEiYsSsVK2xY15kvhsj/PufR
-	VhPN+SDylb5/OXN8CPzNbyOl503v0CXEg1anZcwH/dN0meFmZU17XnSzkN7RqUfaNLpWOvYynIC
-	Pl8bSvc6Oru2C+KFFGjmcTW1bA8V6b3Pi+0ZjhskMtMyWju12fv8svF5OTVhgdi17w7XV0I+XSZ
-	1yYnpAheLgeRd37TlxfFxsr6FtuayeicDIgEeY15YOz+aoyc4HDm67plsv81ptyhpZZSikiW/ib
-	I1PU9QV5f8g8jbwY8zc1Ej5BFdMEBOlgDqgzoQhg6/7RqQX2Ez14cSwLZ4LvsIRkHYBjErVePYh
-	TIICGYyNdhJwOOzB+anhtrBFPfEBxCnFOW/TSJHoRJuX4ryWm35rE2HD8lK3EEYdPu7C1umOuun
-	rk/vzuXPAvORADkVvx9Fn5t64kf/+s3y2s662Q==
-X-Received: by 2002:a05:7301:18a1:b0:359:9302:a526 with SMTP id 5a478bee46e88-3674c93ba42mr4415524eec.7.1792623029766;
-        Wed, 21 Oct 2026 15:50:29 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:1e74:b094:f745:1e3d? ([2620:10d:c090:500::4:90ff])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367405edd7bsm10580415eec.6.2026.10.21.15.50.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 15:50:29 -0700 (PDT)
-Message-ID: <fefe4448c7a9f9938c78f1597dd20fa96f180002.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject pointer operands for 32-bit
- recurrences/latches
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
-	andrii@kernel.org
-Cc: daniel@iogearbox.net, kernel-team@fb.com, yonghong.song@linux.dev, 
-	memxor@gmail.com
-Date: Wed, 21 Oct 2026 15:50:27 -0700
-In-Reply-To: <DMAV87WUFF7M.1PU3M3CCZJDQJ@gmail.com>
-References: <20261021185609.607075-1-eddyz87@gmail.com>
-	 <DMAV87WUFF7M.1PU3M3CCZJDQJ@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        bh=v9u/hy9t9m4fz0Ev+ivo47E4Eby44Bm0g2fkBYPU7nE=;
+        b=J6krMgcsgyv9rcwwSw27yuUJwMV904kUEkVqycLdIhUurIL/nnK70j/PCaQOUMgRsG
+         fjwQmw5/URZyc5sMmPlwaM+qk7iZ21HDyd1ObY9u/dLwdssn1ZjzzeDBj57g0DnSEpwL
+         iUqaK0YHQacd0BHk2rubmekAzW1fVvMh/ExzMccDOWe+pn1QbVWL0xAlw8u86Suwzo1L
+         /WgNfq/5dji2uXTqn8oNoEUvFfSmz6lbNQKBcSg5SCks+0wLKQfBMBq2GjsLfsTNuzRe
+         3WDVLjmxjMZCrcDk2EPPDpkphmx/ql2OecS6P9Nr6ulKg2kpHhGbhfVWLmU/pn/mc6Ui
+         yLJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792623157; x=1793227957;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=v9u/hy9t9m4fz0Ev+ivo47E4Eby44Bm0g2fkBYPU7nE=;
+        b=A+Pn5M3qAITO5sHaRGEjTtMmj739AVbWKppMdBJSOTLfKXnW7CMnZmo2vvtjLbUEhR
+         B/59fsKZMsTUTOcgD0PsW9trG1/JPYa2YzdS25esnn76jpREVWBFtjDq4t8NkO+cIdun
+         7elWbECJezULC5cpVO21MtHTaPXp7yRiEbHblBdjr4RPlA/L84hepyNcOM6fouOCe+E3
+         wDOg56LyfleWxqlo3qY3kugzjP/3GX0Gt4h+v+qOIJkbEv06AjbTGfiis2wUQKlnxRhP
+         QamOjD/+b2dYPzEw/s98vdwBsOD0xPh2IfebMOPgG7GwE+0bVx+pKj27oaUcxMn0aHtw
+         8LeA==
+X-Forwarded-Encrypted: i=1; AKwUvBxXoubNCWAFVkOT14oJN3Bn9IGYvQqb00eMwtBKQ7Y5Y0oONEXcrhIc1OfGHtO62TLYCrA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJosXPyrh0Yr+VwDye5emy8PhqwwbTDuQ7uw9DTA++9tsu7avII
+	9/CRFG/gn2ntaihe+O3ehF7mb0JPzZ2MpEDijFv+Ga+4i97k0ATaZPL7
+X-Gm-Gg: AYBFou06BhGXRiSxPZ3qvAp0JTnqpyi8Vd3IdGrwPkM0t4ZTs9JnOUDaIaQwBNhKl3D
+	3YFN4IngBfQxgeAvx3oTqt9byZ1Pptf+DPnL0Rk+Sqd7UEhGLgzf+aS3nRd08nkWr3U2nk7QMGW
+	RPJesS7+fWt2BuOg89Qkq3X1WwIZKdAXDTebg4glegveEf+QeSPnVsmL2tX+RKTTyt20uKPmlQ+
+	wFIRK6DnpfMEllaeyPHLwGfK5hC63VwdFf2ZGcOHbhiiRtKyb/3TSuz+s3vx+jf7qPFCJ7o6PUr
+	4mUYF19guoK7D4U9/QLq/a9wd051HVRkyaT8RaB0WKj8cwOoxtAgZKzZjt6YGqBVdCHxXPQG9hS
+	e+6q2j8XBr5MP9kN1mBkM/oA4CgGMupicHj3OD+whWSlLpbRGGQysG2R5FKwpWUzKiARhdhvt1f
+	2NLPbSonnHYJxSE8PcAq7KNdmAoXcVQ/HVGz5/MNUjYno81empga0zCWLsltH97QR5l1prHdqaJ
+	Gz3oVcLx6tcKi80I/V8fzBN27WesU4KBiT/48l1muWwSExrsGkVd+iKZO3+xub1EPgsx+6V3rCG
+	N1rNOHGRXHR33MzWcxLyoaGuJb0CP+D5d9023Lc=
+X-Received: by 2002:a05:6402:2111:b0:6b4:20bc:fa3 with SMTP id 4fb4d7f45d1cf-6b420bc18c0mr141102a12.22.1792623156776;
+        Wed, 21 Oct 2026 15:52:36 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:f859:cfa5:144c:f54a? ([2a02:8109:a307:d900:f859:cfa5:144c:f54a])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b403110fd7sm1248786a12.20.2026.10.21.15.52.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2026 15:52:35 -0700 (PDT)
+Message-ID: <6ecce342-a2a6-407b-95a4-472df021f5af@gmail.com>
+Date: Wed, 21 Oct 2026 23:52:33 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,49 +92,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf: Stop JIT passes only when no insn moves
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
+ andrii@kernel.org, daniel@iogearbox.net, kernel-team@meta.com,
+ eddyz87@gmail.com, memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20261021-jit_size_fix-v1-0-b89fd32cafd6@meta.com>
+ <20261021-jit_size_fix-v1-1-b89fd32cafd6@meta.com>
+ <DMAV2RFTNVWP.26B5N5NZ3TCEL@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <DMAV2RFTNVWP.26B5N5NZ3TCEL@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 2026-10-21 at 22:22 +0000, Alexei Starovoitov wrote:
-> On Wed, Oct 21, 2026 at 11:56 AM Eduard Zingerman <eddyz87@gmail.com> wro=
-te:
-> > Fixes: df4761bd441c ("bpf: Support 32-bit linear scalar evolution")
->=20
-> sorry, few commits were dropped from bpf-next.
-> It's 32e962577d2d now.
 
-Uh-oh.
 
-> > +			/* 32-bit ALU operations on pointers convert them to scalars */
-> > +			if (coefs.zext32 && reg->type !=3D SCALAR_VALUE)
-> > +				goto cant_widen;
->=20
-> le64 does the same without zext32.
->=20
->      r7 =3D map_value, r1 =3D 0
->   l: r7 =3D le64 r7
->      if r7 < 100 goto out
->      if r7 > 1000 goto out
->      r7 +=3D 8
->      r1 +=3D 1
->      if r1 !=3D 4 goto l
->=20
-> On little endian transfer() treats le64 as a nop, so r7 at the header
-> is (linear r7 8), while check_alu_op() makes it an unknown scalar.
-> At the backedge r7 is a scalar 108..1008 and bpf_clamp_scev_regs()
-> intersects it with 0..24, the offsets of map_value at the loop entry:
->   verifier bug: scev clamp produced empty range for r7
+On 10/21/26 11:15 PM, Alexei Starovoitov wrote:
+> On Wed, Oct 21, 2026 at 07:21 AM Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
+>> A backward jump is sized from its target's current-pass address and its
+>> own previous-pass address, so it can grow while other jumps shrink. Two
+>> passes may then give the same image length with jumps still changing,
+>> and the image pass fails with "bpf_jit: fatal error".
+> 
+> can we fix the sizing of the backward jump instead ?
+> 
+> It's the third time it bites us.
+> commit 1612a981b766 ("bpf, x64: fix JIT emission for dead code")
+> special cased ja -1 and
+> commit c8831bdbfbab ("bpf, x64: Fix a jit convergence issue")
+> limited imm8 to 123 because of it.
+> With this patch jumps still grow, and the one that grows in a padding
+> pass still ends in "unexpected jmp_cond padding: -4 bytes".
+> 
+> do_jit() knows how far the current pass moved insn i. With that taken
+> into account a backward jump is sized by the insns it jumps over, the
+> same way as a forward one. Insn sizes start at 64 and only go down, so
+> the image shrinks with every pass like the comment in
+> bpf_int_jit_compile() says, and proglen == oldproglen means that
+> nothing moved.
+> Then no need for addrs_changed, for the ja -1 special case and
+> for is_imm8_jmp_offset().
+> 
+> Something like this (compile tested only):
 
-I'm going to drop intersection from clamping, testing it now.
+I'll send v2. Thanks for the suggestion.
 
-> Should bpf_clamp_scev_regs() skip the reg when
-> 	entry_reg->type !=3D reg->type
-> ?
+> pw-bot: cr
 
-Not clamping would be bad, as the induction variable would get a range
-outside of it's possible in-loop range on a backedge.
-For this particular case, I think le64 should just stay a separate
-expression, not a noop. E.g. during transfer() "r7 =3D (le64 r7)",
-hence no SCEV would be computed for it.
-I'll check if there are other operations that have similar effect.
-
-My take is that this is a separate issue.
-I can pack the fix with this patch as a patch-set, if you'd like that.
