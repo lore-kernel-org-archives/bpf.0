@@ -1,121 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792602705;
-	b=XAaEVocHR0fPkujvDsjsJbjHPghpTX74Hv8WOKxdJ0S9GYVIxGLQLhKZymqCbB/yS2nW
-	 mC+Y3HJxD85+Zayk/c/ldgm/tgzRlrJPRNFRAcj0TZtAbuuGHM1AyZvCkjUlh4WHDegJV
-	 JlLUrldzDMcWncVpC2fjxwwtYeNqMGNRybj5210RzLazuwza5NQLME6cbk3hmjLikk60h
-	 FMmdCrjVHbd83OiWV6b9Kx7RU1vLdKDM4SHc/s1Xmnysdf4GnFlhMtPpYBBQqv6/KKeSx
-	 KTHG0q1WR9sVdmtXYxWH99EHMmbYtNQN74M9VH5dtK9iOL5ovueMuPe2QKdgUSLp+VA==
+	t=1792602892;
+	b=f87wO1wdHBeTOPRIz/jH3c8ApvUB2fx9/JHv6bCzp3hodgNX+N70ynLeTaROXQk4By3B
+	 rIytbML/rqGrAw5bvhEeCfzQ/12Gq2AwY/NpxOKr6NYfuZIHUlRDBlsS9P8nsYIU7s7fG
+	 hSath+oJLV5gGOzoN9f76VOVPaK1rLoNtT52EfbcJSoV9l49Mu5zJMbqJPChkG4GtpDRq
+	 FXavTWwNp3Or926Xoay+yUEM5+LGg7evHusVdHZFAFzWkGMzfTXdTQ3Udc0Fg/q9mY/ej
+	 Pf1ND4pWcgAvl9wxcLkFt8vonDZNfwy4+WrPpYwXPalXSGKMCiPOE7SKkDhFLKwaxKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792602705;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792602892;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=kWSErL8M0Zrcc9bNez1sKQXL8Q35fI7UYN2RBWREyKs=;
-	b=4CiT/Cqgapw1WqTH4usaCzHbh4/Khrx0qVBog9Hqqvll3y1hcwHM8uUWdN6z2FH38Z6V
-	 YqHwRkQldVhfrFzGPnoFkV5RYxndhw6y6lfZ/FzIvIvt/0akzTR8K8bUY4x8ggiivselT
-	 qnxkzoC/+R2M+jqds5wlRbUYX4Cp+1H5zMGyopgZf52pHBFuvFu20DFjWdF5gEvIB15hL
-	 bzFFJNkNi4p1hco9QXWfXIqiEPE1jDk+mBKRl60KKu91kK6WuINRNVFRfCJSGCZCJk9y9
-	 OgNic/WrCM3ByIZJmJXPmpcEEexOCu0nSN+R0S07AXkDX55eyA56G05APXljQtWwhhg==
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=1LfQgKp0ztlf0EQ9y2RTrGf8UOpxokWsfVnFXAkS3BA=;
+	b=L0OxGTyx0JTXu9icDJsbirsQFtpFRUeNul69dnKYa7U0yAytmiDTPKF5oznR/YfEPmgj
+	 fiurXd/Afbf4bKuWWcoU4o9otNdJSgBYaJAxlerhOdsO4gSJ1lEXDH4NonmVA7C1KPRYU
+	 wH6/R5tkeaNc5NihQweDfBflgzPQ1SGdYq7DzLAn/7RIFMKi3UwywraB2v8DqJ2Lo1tI/
+	 zEuiJmPsSU4K0eQb3NPu0vRuJhTCFEqUYKN5FJ96rl1awmtV3OUD9gEI5uSVS7DiX9+B+
+	 Y3PKtWJuuIMeeblapiCWtNTNzBk8iJbeQJKajGWQuAWQwxuttn3137CyfkVS6M+AW1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AaMus1hV;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	dmarc=pass header.from=trailofbits.com;
+	spf=pass smtp.mailfrom=trailofbits.com;
+	dkim=pass header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=gyrnnNCA;
+	arc=none smtp.remote-ip=74.125.82.175
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BDC606A31E
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:11:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34BDC606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51503606A31D
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:14:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51503606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AaMus1hV
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e8b20a899fso5634335ad.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:11:45 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=trailofbits.com header.i=@trailofbits.com header.a=rsa-sha256 header.s=google header.b=gyrnnNCA
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-35943f55c06so99493eec.0
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 10:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792602704; x=1793207504; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=kWSErL8M0Zrcc9bNez1sKQXL8Q35fI7UYN2RBWREyKs=;
-        b=AaMus1hVio6zg/9LoarIIBEkDnFMQdnQoGlqR0h/7EEarLlw794dPT5byofFFeCznU
-         aFOeoFbIBXEWYPlqa9PKU/ss5RIKGIpjKiVwkALyTQmh6g+ehnGjcVskUgvi20N9nxjA
-         ie5bN5DsO3RjDzjjW4WSDezD+249TU3rMb7+Pg3GXUO/NmXiJiBCiUZIKVFf5cn2Dp3N
-         ySBH0E2hckaGBBaHCKAw7hMOBSSQhIvSMWJQQ68CNoHpnVB8I1MwlvIKRM2swZxQf4hL
-         4RX+rTXJImXC5AwGt/asVYdYqu9mn1+kEXAmr8ruJU7WNU55+SgesHMMv9RUEqpG33zd
-         4PNQ==
+        d=trailofbits.com; s=google; t=1792602889; x=1793207689; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1LfQgKp0ztlf0EQ9y2RTrGf8UOpxokWsfVnFXAkS3BA=;
+        b=gyrnnNCAok29B5+xIlr8Sc9LwxGU7weiLCTmja+5PDQ51jyX3L5E5jTHOBbHvb0EOc
+         aJmUsu4f4VKzJPm5US+CpAyN5P2V5jP+qTW5fj4+oDwJMLPLuSc6vEZGUmrLnaR9Amq/
+         CU2qjlqUvJHRLfize0/hrjt5c5q7ZzD6uNNSl4FxxDj8VuM+CXyUSxaIi0ffJdgPj5Vt
+         VpV3uo1gpyhDLsla4BpwksK6CL+A/wY69psQHhtgUX0ZyQnzOCOWYXjdql7KS4m9elLR
+         9fpDiFDNS9Qq44+MEgYuJVMmWY6DhP+MeHFXY5UOE6v1hlte2/M0dLUmowo/QwA+6BnO
+         pQDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792602704; x=1793207504;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kWSErL8M0Zrcc9bNez1sKQXL8Q35fI7UYN2RBWREyKs=;
-        b=O0u3lwwWAEDRhTCgoQgnZPx2FPkffDNaiDFmVhrA5yKh12wUo+0hCV0QWDKQ8NJV7z
-         /zsZl4HunGnHLglVGFwHBM8VXHcSUXA4K9x1yn98b/mekGxCVDrY406RwMWf81ppg8hj
-         L0S5ghVtyDCC4DCFTSwCsgAms1UbWmUAaqqbmewdulDN2e1JU8IE4Pn2J+JT6Unnu5ZH
-         JWE4+7uHmRr4C6cq/uLVCgzsyb51QEcqyuTBIEYg8Ho1QNOnmMH4wYSrMkErLrZoka7k
-         CzHkKuTxCMZ1ysD5AQAU93MUkUygKUHD1hWimmJxCl5/UpoVdaApjVTZTot2XkpRtwtS
-         FdnA==
-X-Forwarded-Encrypted: i=1; AKwUvBxWSwylvsMH/764b9xUlYT2aovSHTbufo9NWJkWk+BtbfAowl/YhD5v1rLu/XdYQk7dG+8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLZTLbBRi86Qj6JaRxZKf7EUYMlS+3ayLDs5fFA6acL1tejym5t
-	HTu6p/yUguIiSyXZ3DIzx77GOmceSDnC/uEVooVX/vNIQds4VDRgnFMM
-X-Gm-Gg: AYBFou1CSEmOXrqvOg9rQ75ZMLXIVGi/iErCc24GFE6sQwWT9rgnnvX9wMiLlt13qGM
-	GDRfqK9oJeJd8b04PVXeEJhElG7TDXarYsHorP95foCB5myzJ+fA465gaze701Ago5VFDHOtNAT
-	RMiKGJRDH2jWSoLyvRyuQdUpdtw/r0hQVRjudCxmHQorE6C/UweqnkWci7TcA7wmLlBVRaNgDZ2
-	ifWF35EetkWTW1NrLGHomJJJDcUQo31nFC44zAJrZOpgJWQmIe6XHY8DTGCL2M5WfGS3HZk14+Q
-	ho/+D3Yitj/RKc3bUwXmu5WZWPvGkOzEohtsitzO4g2N0+CFQryicO5xpYVrT82peLiX8gASZu5
-	Kw+R+ox0RfhY2x1jzcP7Xq+0MGCzb5Mjq1x5XdlnYs4Ml8kjWuxY1UnxzWlzY4PApTk5gnjMv9R
-	leOS/2fHXRVurdNYDCFZtLhY7oYVniiDSlXpHLCIAVR1vSwHS0valgVQAVxjoPqcD0AhQQONPrH
-	H7g+ywlgTYKtnQanSQPK6tzxLYq4onx3iGlNc3YPPhCB1JT0zI8nVj3TuwBkWvh074azONDcAaL
-	vZagszZbc9k4AfJiCzaAqi6lWIJf9G98RRLlyAvZ/oGkuRRlWBm2ejM+7HgPLA==
-X-Received: by 2002:a17:902:fd8f:b0:2e3:1776:278f with SMTP id d9443c01a7336-2ea43f52371mr22587935ad.42.1792602704368;
-        Wed, 21 Oct 2026 10:11:44 -0700 (PDT)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b43478csm14601635ad.28.2026.10.21.10.11.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 10:11:43 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 21 Oct 2026 17:11:42 +0000
-Message-Id: <DMAOMH0CLDLX.127F7BRYUOQEG@gmail.com>
-Cc: "John Fastabend" <john.fastabend@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Quentin Monnet" <qmo@kernel.org>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>,
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, "Pu Lehui"
- <pulehui@huawei.com>, "Catalin Marinas" <catalin.marinas@arm.com>, "Will
- Deacon" <will@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
- <linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
- "Shahab Vahedi" <list+bpf@vahedi.org>, "Russell King"
- <linux@armlinux.org.uk>, "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Hengqi
- Chen" <hengqi.chen@gmail.com>, "Johan Almbladh"
- <johan.almbladh@anyfinetworks.com>, "Paul Burton" <paulburton@kernel.org>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, "Helge
- Deller" <deller@gmx.de>, "Hari Bathini" <hbathini@linux.ibm.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Naveen N Rao"
- <naveen@kernel.org>, "Luke Nelson" <luke.r.nels@gmail.com>, "Xi Wang"
- <xi.wang@gmail.com>, "Ilya Leoshkevich" <iii@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "David
- S. Miller" <davem@davemloft.net>, "Wang YanQing" <udknight@gmail.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
- <linux-doc@vger.kernel.org>, "Tianci Cao" <ziye@zju.edu.cn>, "Yazhou Tang"
- <tangyazhou518@outlook.com>, "Shenghao Yuan" <shenghaoyuan0928@163.com>
-Subject: Re: [PATCH bpf-next v2 1/8] bpf: Add UHMUL and SHMUL instructions
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "David Vernet" <void@manifault.com>, <bpf@ietf.org>
-In-Reply-To: <20261021-bpf-hmul-v2-1-88e260099f7d@outlook.com>
-References: <20261021-bpf-hmul-v2-0-88e260099f7d@outlook.com> <20261021-bpf-hmul-v2-1-88e260099f7d@outlook.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1792602889; x=1793207689;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1LfQgKp0ztlf0EQ9y2RTrGf8UOpxokWsfVnFXAkS3BA=;
+        b=fnhKtBlls4KzSIwaT5B7V1KLJjHw5FA+rtAsizRA3DiSzY5FvWJKuZZbmOlD93Did1
+         rD7ARM40IEYp1JWxD+sFImctuP3+Blhgr6+1pZrL5A68M2cyz8hJGIiIrr9Rg5xekycz
+         3I7lPKwamhnUQYc+Qq5IMevdJBINLgWyXo37u0GDKozHvE1dcaeIQGApuWpmQ5QQfct+
+         BN+MPu1Wsg0xOb2IKOV6Xrjfwta6yU9xW4E2hXYmUpQmv0RZaEaDAmlGdZA70svKR+BJ
+         LiAqKTrdyxXEp9+ACTn0yOh54W/cGgXrUgsTOdcHVmaMxD1Sw4MscJAQt6rJiZ0zMw1T
+         OFxA==
+X-Forwarded-Encrypted: i=1; AKwUvBzMek/iuxPis587LcscayqEcb8g43CcFhdBkIk9y0Y0nnFXerJYVwXD9cG6Mey1YJS17mA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI5wKVUXdAYz0WA9CtO4lb1DyqoW9OzpMV8rlCcu2CsdaG/5Zx5
+	jBZrT0kb1fun73fpkXxGdAYZO8vQUHDG/YGo/b4/rqI5X8RWuughm1UzC8ZpRSjLV3o=
+X-Gm-Gg: AYBFou0GMpS95uo0eyYKnFttrXTjWwlX6AF0Y1Keskh+P1BDXBs/OawdVAiHc2UpBNZ
+	8a2BGpb/n5KrsyRRZOJ38szRyA6xVSMzEtY14VyooBFsXKhEKl+oanQDZJ22ltfRc5pVDDPn+ba
+	i+sQ3QwN8IjTWYby9zsmE7sr9SOrN5WSqDeJ3eCj9n8bY/h/PyXoMAMwDcff6fEfXrPt1v5i8IC
+	cUGIzL+tNDrUvyp+Z7eSQ8Bb9EqvefCnqTe8KiXxZ4hxOVVvjcrfzrlafd/UfVSq3DuRY2UyZLJ
+	PBF6M8a0CnIP8eIUCIxezVSCqA39LsIGM7U1q5F6JKSG8fUsCzzKPvu0pQBo/MlKEUzLWhsnqHz
+	WfwRoDnPKuh4kp3YURReHFd4hQ61KlB/xZkSUJ7fxaggOwM+4HhL+tXQ7ej48PALJzcqozsK227
+	rM3vwuBzPTLwD4mUDrIOfTf/gmB9YY33XASaHPgOWiW73VOgGxlAFV0irJYCqGbzMj4XivUYeQ+
+	3lUtJVk6R0t9z6drr357P+B6oopBb68bFmhbRUGDExDBmPyS23dAzzmDasyE3Y9ZzJtffQJLJ36
+	wS6ojY4mo93zmB6qmyHac4ZHpCTOwReQM2184s69QCvvbETzgaVM
+X-Received: by 2002:a05:7301:d804:b0:351:7848:85ca with SMTP id 5a478bee46e88-36888be04femr354554eec.7.1792602889175;
+        Wed, 21 Oct 2026 10:14:49 -0700 (PDT)
+Received: from localhost.localdomain ([2603:8001:5f01:8bab:d059:e601:becb:a5ad])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36740cc8439sm9458105eec.11.2026.10.21.10.14.47
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 21 Oct 2026 10:14:48 -0700 (PDT)
+From: Artem Dinaburg <artem@trailofbits.com>
+To: stable@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	olsajiri@gmail.com,
+	paul.chaignon@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev
+Subject: [PATCH 6.6.y] bpf: Check the helper function is valid in get_helper_proto
+Date: Wed, 21 Oct 2026 13:14:44 -0400
+Message-ID: <20261021171444.99931-1-artem@trailofbits.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -125,122 +108,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 20, 2026 at 10:40 PM tangyazhou@zju.edu.cn <tangyazhou@zju.edu.cn> wrote:
+From: Jiri Olsa <olsajiri@gmail.com>
 
-> +static inline bool bpf_insn_is_hmul(const struct bpf_insn *insn)
-> +{
-> +	return BPF_CLASS(insn->code) == BPF_ALU64 &&
-> +	       BPF_OP(insn->code) == BPF_MUL &&
-> +	       bpf_is_hmul_variant(insn->off);
-> +}
+[ Upstream commit e4414b01c1cd9887bbde92f946c1ba94e40d6d64 ]
 
-Patch 5 adds this check to 13 JITs and nfp to opt them out.
-Lets make JITs opt in instead, like bpf_jit_supports_callx().
-The verifier checks it once. x86, arm64 and riscv patches add
-bpf_jit_supports_hmul() that returns true. bpf_prog_is_offloaded()
-covers nfp.
-When JIT is on and it doesn't support them the prog is rejected with
-a message in the log instead of silent fallback to the interpreter.
-Then patch 5 goes away and only arm64 and riscv acks are needed.
+kernel test robot reported verifier bug [1] where the helper func
+pointer could be NULL due to disabled config option.
 
-Like:
+As Alexei suggested we could check on that in get_helper_proto
+directly. Marking tail_call helper func with BPF_PTR_POISON,
+because it is unused by design.
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index e0218e6..6ee8d1a 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -152,6 +152,13 @@ struct ctl_table_header;
- #define BPF_ALU32_IMM(OP, DST, IMM)				\
- 	BPF_ALU32_IMM_OFF(OP, DST, IMM, 0)
+  [1] https://lore.kernel.org/oe-lkp/202507160818.68358831-lkp@intel.com
 
-+static inline bool bpf_insn_is_hmul(const struct bpf_insn *insn)
-+{
-+	return BPF_CLASS(insn->code) == BPF_ALU64 &&
-+	       BPF_OP(insn->code) == BPF_MUL &&
-+	       (insn->off == BPF_UHMUL || insn->off == BPF_SHMUL);
-+}
-+
- /* Endianess conversion, cpu_to_{l,b}e(), {l,b}e_to_cpu() */
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Reported-by: syzbot+a9ed3d9132939852d0df@syzkaller.appspotmail.com
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20250814200655.945632-1-jolsa@kernel.org
+Closes: https://lore.kernel.org/oe-lkp/202507160818.68358831-lkp@intel.com
+Assisted-by: LLM
+[ Backport to 6.6.y: Apply the function-pointer validity check in
+  check_helper_call(), because this target has no get_helper_proto().
+  Refer to the target get_func_proto() callback in the tail-call comment.
+  ]
+Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
+---
+Hi,
 
- #define BPF_ENDIAN(TYPE, DST, LEN)				\
-@@ -1281,6 +1288,7 @@ bool bpf_jit_supports_kfunc_call(void);
- bool bpf_jit_supports_callx(void);
- bool bpf_jit_supports_kfunc_ret_reg_pair(void);
- bool bpf_jit_supports_unwind(void);
-+bool bpf_jit_supports_hmul(void);
- bool bpf_jit_supports_stack_args(void);
- bool bpf_jit_supports_arena_args(void);
- bool bpf_jit_supports_far_kfunc_call(void);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f29b0aa..90c30e5 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -34,6 +34,12 @@
- #define BPF_FROM_LE	BPF_TO_LE
- #define BPF_FROM_BE	BPF_TO_BE
+Please consider this backport of the fix for CVE-2025-39990 to 6.6.y.
 
-+/* BPF_MUL off values for high-half multiplication; BPF_ALU64 only. */
-+enum bpf_mul_variant {
-+	BPF_UHMUL = 1,
-+	BPF_SHMUL = 2,
-+};
-+
- /* jmp encodings */
- #define BPF_JNE		0x50	/* jump != */
- #define BPF_JLT		0xa0	/* LT is unsigned, '<' */
+The helper-validity check is applied in check_helper_call() and its
+comment names the target get_func_proto() callback. See the bracketed
+backport note above.
+
+The complete fix is already present in 6.12.y, 6.18.y and 7.2.y.
+
+Build-tested only as part of a cumulative 6.6.y series on x86_64
+(allmodconfig, CONFIG_WERROR=y); no runtime testing.
+
+Thanks,
+Artem Dinaburg
+
+ kernel/bpf/core.c     |    5 ++++-
+ kernel/bpf/verifier.c |    2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3030beb..e17704a 100644
+index 9fa984ee076bccbf5e90eb6a194cec68f2351200..bec8876f12375bbbe00d8cbe5ee7d410e48ecd88 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -3405,6 +3405,12 @@ bool __weak bpf_jit_supports_unwind(void)
- 	return false;
- }
-
-+/* uhmul and shmul */
-+bool __weak bpf_jit_supports_hmul(void)
-+{
-+	return false;
-+}
-+
- /*
-  * How this arch places a by-value kfunc argument, or NULL for one that has
-  * not opted in and so only takes an argument of a single eightbyte, which
+@@ -2959,7 +2959,10 @@ EXPORT_SYMBOL_GPL(bpf_event_output);
+ 
+ /* Always built-in helper functions. */
+ const struct bpf_func_proto bpf_tail_call_proto = {
+-	.func		= NULL,
++	/* func is unused for tail_call, we set it to pass the
++	 * get_func_proto check
++	 */
++	.func		= BPF_PTR_POISON,
+ 	.gpl_only	= false,
+ 	.ret_type	= RET_VOID,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5601d20..9a3c97d 100644
+index 778a68bfb91dd4e765252cfb1bacb4b658d1381b..a72e1561464cb94942afa723e57c76f032d30dc0 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -21194,6 +21194,17 @@ static int fd_array_get_map_idx(struct bpf_verifier_env *env, u32 idx)
- 	return -EPROTO;
- }
-
-+/* The interpreter supports uhmul and shmul. JITs opt in. */
-+static int check_hmul_jit(struct bpf_verifier_env *env)
-+{
-+	if (bpf_prog_is_offloaded(env->prog->aux) ||
-+	    (env->prog->jit_requested && !bpf_jit_supports_hmul())) {
-+		verbose(env, "JIT doesn't support uhmul and shmul\n");
-+		return -EOPNOTSUPP;
-+	}
-+	return 0;
-+}
-+
- static int check_alu_fields(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
- 	u8 class = BPF_CLASS(insn->code);
-@@ -21249,6 +21260,13 @@ static int check_alu_fields(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	case BPF_MUL:
- 	case BPF_DIV:
- 	case BPF_MOD:
-+		if (bpf_insn_is_hmul(insn)) {
-+			if (BPF_SRC(insn->code) == BPF_X ? insn->imm : insn->src_reg) {
-+				verbose(env, "BPF_ALU uses reserved fields\n");
-+				return -EINVAL;
-+			}
-+			return check_hmul_jit(env);
-+		}
- 		if (BPF_SRC(insn->code) == BPF_X) {
- 			if (insn->imm != 0 || (insn->off != 0 && insn->off != 1) ||
- 			    (insn->off == 1 && opcode != BPF_MOD && opcode != BPF_DIV)) {
-
-pw-bot: cr
+@@ -10091,7 +10091,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 
+ 	if (env->ops->get_func_proto)
+ 		fn = env->ops->get_func_proto(func_id, env->prog);
+-	if (!fn) {
++	if (!fn || !fn->func) {
+ 		verbose(env, "unknown func %s#%d\n", func_id_name(func_id),
+ 			func_id);
+ 		return -EINVAL;
