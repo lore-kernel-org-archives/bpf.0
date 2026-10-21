@@ -1,45 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.136
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792610600;
-	b=lUUnNS8a6yws3fR76zQU2cqz+Xluj7cjJMrCEOpUKUa6E+FLz/sAtWEE2W9vI1uBcL0A
-	 65lRfQ3EmK9wKZMVX035GYOqyVdO4BAXvvTcG7S+TtlsNvEZLg4OHyj/y0tBxa0vdOtMi
-	 vZ5Or+k0BjNFIWeOJdrmRFo+f5KgtihibH5Bmu3sAfDeAamJVNsWXti2IQmYa2ipJtnAz
-	 KmnfSV9ffdoilAWL+79HvGx5bcnnoszss6OrytSjwtG1xhg6YPDU4vcpizP6fowa65bdX
-	 ujb/QnxvCL36ajObYJAzP6koh6A5AEQWd9aNSIMLoY78L0YicyAR03sX3dBfuhKG9og==
+	t=1792612219;
+	b=OMFmteCtRyE/mhHN/VS6lOYj8y2opLau6uXh0d+qraAfV0KcUR9d/bueke94uWzHH0Bl
+	 3m6Vb68SVhx4wOfYdFt6apc47a4R1qaT0OvcGxDQKFCFgrmlKDjAtkELj3UKwUxzhXXfJ
+	 HpOExkcvg/M5aKhQtUW5AQDteEkGXtJVEcKlm5scXY62M8rRpTOUcCqqWMOOFoPU+gZ75
+	 6ZpI0pcdAX/wkHY7tYa7ayP9CQfOr5BzdSEsFp/CWlUm03YKa4+tJx0WkZcvN+ifYUYIx
+	 4JYStGH7B5eFZEAlVyUHE87yrZWaVZhIuCd2RJ/Rid+pa/Nl3EauImZsmOQZRdrUeXg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792610600;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=DGlnuOHumE+T11zyYg+nmOnjux9Y7t4aQF8bT4NlU0A=;
-	b=INUGUh5hdjZMgc21ndSA+ZBEElsFTsa2KN+B0BnAkGn0h4fHRZS32EAwyiRa386CqZeY
-	 Y+64Ltb2v6UPHueocLhvG1vE5McbaoslhoBUSyDOxvZGdpJAhmjMTA7GHDPmtkBKtb30E
-	 yHkmNN1VmlRXs2k8FKCsSBxnQ5uvSOAL3OqPhZW1YcL0SJqBMgBQrl26pLfFivPwKmyF8
-	 W+VUaPYTM28KDk8758IflhkJU8HQZo9DxyGelVD+dg8W+YwpZY1VTCeg3KsWzdT/8mny/
-	 WG6qos5CTXDa6WDbFjjgLtyFMOgor8MGcKeNE1ch45DmO289znUS7ww2CeaMhxzfqSA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792612219;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
+	 From:To:X-Mailer:References:In-Reply-To;
+	bh=rfoJ05UONkmwL2VwlQYGmz6+VLrAyTICL7RfJCuaVwE=;
+	b=j97ZbucQpBwmL0VoTKB+T7/JEUDqgoWwwKhFwgzFb+yEfPrBO6durEkAyOhRoiUC3yIj
+	 +cyvGwQJGJk2fjvl4uf6/BQRsLunkjCTPTp4xZ2uKMYOSwBuzihWhVqocj6E1sxqB8byh
+	 WK/Dq2th/oKaPlmqCBelghwHI8FoQxwrRJFVO4EqAp1t3JQia5aIg+1Sg6oBE2ABXtxwX
+	 aPcNCz28Hj0oZFIFsOfpGhrUvXyDmPl0O8+1WXApB1hgdR3njiFfExBmQH6w6agaktZVR
+	 LZL4//2EytcjudqvJtz+3uca9JnxNyvHouuMMlP+/+u1e9koL28I2+BGLyIHgttr7hQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iT8ghLvN;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=goQQtm4q;
+	arc=none smtp.remote-ip=74.125.224.136
+Received: from mail-yx2-f8.google.com (mail-yx2-f8.google.com [74.125.224.136])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8538D606A31A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 19:23:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE23606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 19:50:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7BE23606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iT8ghLvN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A091F000C1;
-	Wed, 21 Oct 2026 19:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792610600;
-	bh=DGlnuOHumE+T11zyYg+nmOnjux9Y7t4aQF8bT4NlU0A=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iT8ghLvNEL61Ky5TPtxLSVQWmQbFYd6q33zD7njG0kDJTpd+NAd5v5HN/g6yqqAJL
-	 T0fYpm8ErNRSQ3mxCq8+TD3MQNgqz+7udZYhQwB8tWiW+vMJ/MbDVfEWsWfsLNN+4Q
-	 78Li13IYF4ccnZpl7/kPYiAOBLIY5y6ST8VKHuWkta++2IklD7YeM5wX6CFUhWWBs+
-	 vUigQJGwzc08oGAALPnqwAhycVmZhz+3pnHhDDDFd4E2JndFibjT3yHpVsi1Tn7v/h
-	 Ij3sJAyDSHzSwNgbmwMmz/44zuUBlkEYd+IZn09eeSuNdHIuCVgR7Hvu1dZNY6dcda
-	 OMp+QVCZTnJkA==
-Content-Type: multipart/mixed; boundary="===============8324463472386661966=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=goQQtm4q
+Received: by mail-yx2-f8.google.com with SMTP id 00721157ae682-8b0c81dcf98so3464297b3.1
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 12:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792612217; x=1793217017; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=rfoJ05UONkmwL2VwlQYGmz6+VLrAyTICL7RfJCuaVwE=;
+        b=goQQtm4qVsIdcw0groGw6hqMcB3SQa/Z4bQ20PwJKf8Rv6WFQJgPFRiA1hteBDZCeS
+         gsWC5P20bRBiDI/gBfL6YqjJ+W8ofEetzDpyLAp/8t7wBZVwciOw9iCtdxjzD23LcWXp
+         VvL1kZqz9a6DKpffHdurAZtrtCSuKKTOtZurqYALIR/kRh53Vdu8lntJsJHylM8X5eFW
+         eqYjppKuKAREzt/DyG8uBijR2qYrTQ5UoJuETr6C/2HEiTgy5jPsylbYHftKp/i+T+7q
+         s/JCJ0it/OyzfY3dD+cJbXriL69Tkeu9rjVzMiWXfwQp4kraYGIvaXL/fCVtTC+xyxQf
+         gDfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792612217; x=1793217017;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rfoJ05UONkmwL2VwlQYGmz6+VLrAyTICL7RfJCuaVwE=;
+        b=Jff/b4Ff2r/M6HMpsLL5SYSnXRVIfJmgbk+FIRi6uvJDv+K+d+inTpcAZWHmISa3zI
+         YxeoCNw2+JdJE8R+Y31fIqbHhUPf3yyImvB6J963fPCPHPWe2ImKJk6jX+6U1VLI3b7P
+         lp13+fGJAve4z0Xgh72Z5dKOrCFgSVOB9XUNmRDn/qVbOngIi6pEwBC9tttwxo8QQ60J
+         bDoh+dewrn2wnrpqDboJ/5fDnHALpBtASVbNnm85gyCWV9L5k1xpdRTpoF4V1KbWozWz
+         phKrYgZBRK1wOSmoeNksUCl3d/TWElmtdTtEYIGh23mgs22N8hSD3lxTF2Fdrd7wP580
+         0qXQ==
+X-Gm-Message-State: AFq9FYK88T7hekH550QwVo0u8fRtCfvPrNO/QgoqEI21J2oNM3jW0/li
+	pDkozjp9C64Is9pA6550Fy+OCjEfwR3TUFLotBaBxnwz5EX3D42Hb2pY
+X-Gm-Gg: AYBFou1RZ1juT3asqb/x5QvwuAtai77eCK2qFttg/F3nohN7JNkseETPZLebE57GICX
+	xUfJg/xQEFO0xU5kEwuycHR/5wJE2Q25QuKhVWICQCUtsJIWbKJ/GlIPm3DxClEAM9lYzLMjEyx
+	U+Yh4XoXjUBw0vA7sjm0O9pi77ajK/gxqoi/04/+fCp5MzIB+fMokBtOE5O+uSgBuAFu9MoYcBN
+	XHQ3ziMaPIItU+cSDlNKripmVjHmQxiDTYneoOI9rrpQ5XMcIKNQayv27Cs3iqMNKVOmjWUdsRs
+	kj5Ng7DdSRz0ZqykyUfH/cFwbNFlO4fnHf78Bt0+ymr6roouR7nH6/f0ThZ/A+sxxwTr8/gaPhl
+	nxelJYe8om9J5mbkdfxSXzEOL1qQ8Hn89suRSkwReAn+KbXM3grbHtbF6v6xWOruvWyt5GtHzF5
+	+5PIs2OXD49rMlxSzPpyum2Xoti6M89chfxltcZ0lf+VT3rtwAddhzoWL8n55GceSOYacMZblQI
+	oRA51RVKpKGS69YHfzg7wTsmTTAJvs7s8jNp7cN5QNoADThgOfQ/+lvyLnU8FKTgFb0Du/lKW33
+	0NpXy+HmE0CvxqTcOogGP/u6ZBaRugOSXm74iJqxxTvTtyGHdgEoM3eaKi9e5tQ=
+X-Received: by 2002:a05:690c:6d83:b0:8ac:6e11:3dee with SMTP id 00721157ae682-8b133c990ffmr18942997b3.10.1792612217411;
+        Wed, 21 Oct 2026 12:50:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5a::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b130074aa6sm16117427b3.10.2026.10.21.12.50.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2026 12:50:16 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -48,184 +86,141 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Message-Id: <ac40b5a677a32b6a04824bf86b78bbb432813792d8b6ecf721c7a6a41ce9db5b@mail.kernel.org>
-In-Reply-To: <20261021185117.650403-1-puranjay@kernel.org>
-References: <20261021185117.650403-1-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v2] bpf: Drop percpu_counter from the htab element count
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,mykyta.yatsenko5@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 21 Oct 2026 19:23:19 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 21 Oct 2026 21:50:15 +0200
+Message-Id: <DMARZV0CMCU6.B7GRUVI8S0WT@gmail.com>
+Cc: <bpf@vger.kernel.org>, <andrii@kernel.org>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <davem@davemloft.net>, <willemb@google.com>,
+ <eddyz87@gmail.com>, <edumazet@google.com>, <john.fastabend@gmail.com>,
+ <kuba@kernel.org>, <horms@kernel.org>, <liamwisehart@meta.com>,
+ <martin.lau@linux.dev>, <pabeni@redhat.com>, <song@kernel.org>,
+ <netdev@vger.kernel.org>, <sdf.kernel@gmail.com>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <kuniyu@google.com>,
+ <emil@etsalapatis.com>, <almagui@kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: add bpf_ksock_sendto() kfunc
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>, "Mahe Tardy"
+ <mahe.tardy@gmail.com>
+X-Mailer: aerc 0.22.0
+References: <20261020155848.75711-1-mahe.tardy@gmail.com>
+ <20261020155848.75711-2-mahe.tardy@gmail.com>
+ <CAEf4BzapP4Hng7bO8crK4SLg_PMH33oKo8esFo1ur5-QewNfig@mail.gmail.com>
+ <atkG-5eqB8LfVxSa@gmail.com>
+ <CAEf4BzYA79tg5C+uzo3S5=MRgM_O7VMYtOwW59QMieJoFNOpVg@mail.gmail.com>
+In-Reply-To: <CAEf4BzYA79tg5C+uzo3S5=MRgM_O7VMYtOwW59QMieJoFNOpVg@mail.gmail.com>
 
---===============8324463472386661966==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> bpf: Drop percpu_counter from the htab element count
-
-TL;DR:
-- On 32-bit kernels, torn s64 elem_count reads or NMI races may make
-  is_map_full() wrong: spurious -E2BIG, or inserts past max_entries
-- Two comment-style nits
-
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index bf78e09f4d51..6e2115477cb9 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-
-[ ... ]
-
-> @@ -94,10 +94,10 @@ struct bpf_htab {
->  		struct bpf_lru lru;
->  	};
->  	struct htab_elem *__percpu *extra_elems;
-> -	/* number of elements in non-preallocated hashtable are kept
-> -	 * in either pcount or count
-> +	/* number of elements in non-preallocated hashtable. With
-> +	 * use_percpu_counter it only follows map.elem_count in steps of
-> +	 * PERCPU_COUNTER_BATCH, see is_map_full()
->  	 */
-> -	struct percpu_counter pcount;
->  	atomic_t count;
->  	bool use_percpu_counter;
->  	bool has_hash;
-
-this isn't a bug, but this multi-line comment still has text on the opening
-/* line.  Since the comment is being rewritten anyway, could the /* go on its
-own line, as is preferred under kernel/bpf/?
-
-[ ... ]
-
-> @@ -739,29 +739,20 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
-
-[ ... ]
-
-> +/* is_map_full() needs htab->max_entries - cur_number_of_elems to be more than
-> + * batch * nr_cpu_ids for the percpu counter to be faster than atomic_t. In
-> + * practice the average bpf hash map size is 10k. With batch count of 32 a 10k
-> + * hash map on a system with 64 cpus can be filled up to 80%:
->   * 10k - 8k > 32 _batch_ * 64 _cpus_
-> - * and __percpu_counter_compare() will still be fast. At that point hash map
-> + * and is_map_full() will still be fast. At that point hash map
->   * collisions will dominate its performance anyway. Assume that hash map filled
->   * to 50+% isn't going to be O(1) and use the following formula to choose
-> - * between percpu_counter and atomic_t.
-> + * between the percpu counter and atomic_t. The batch has to be a power of 2.
->   */
->  #define PERCPU_COUNTER_BATCH 32
-
-this isn't a bug, but the same applies to the rewritten comment above
-PERCPU_COUNTER_BATCH, which also starts its text on the opening /* line.
-Could it use the /* on its own line style as well?
-
-[ ... ]
-
-> @@ -1162,30 +1151,33 @@ static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)
->  
->  static bool is_map_full(struct bpf_htab *htab)
->  {
-> -	if (htab->use_percpu_counter)
-> -		return __percpu_counter_compare(&htab->pcount, htab->map.max_entries,
-> -						PERCPU_COUNTER_BATCH) >= 0;
-> -	return atomic_read(&htab->count) >= htab->map.max_entries;
-> +	s64 count = atomic_read(&htab->count);
-> +
-> +	/* each cpu's elem_count is ahead of count by less than the batch */
-> +	if (htab->use_percpu_counter &&
-> +	    count + nr_cpu_ids * PERCPU_COUNTER_BATCH >= htab->map.max_entries)
-> +		count = bpf_map_sum_elem_count(&htab->map);
-> +	return count >= htab->map.max_entries;
->  }
-
-Can a torn read of the per-cpu s64 elem_count on 32-bit kernels make
-is_map_full() return the wrong answer here?
-
-bpf_map_sum_elem_count() does READ_ONCE(*pcount) on each s64, which on 32-bit
-is split into two 32-bit loads (see include/asm-generic/rwonce.h).  A per-cpu
-elem_count crosses zero regularly, since an element is often freed on a
-different CPU from the one that allocated it.
-
-A 0 -> -1 update rewrites both halves:
-
-    0x00000000_00000000 -> 0xffffffff_ffffffff
-
-If another CPU in htab_map_update_elem() -> alloc_htab_elem() ->
-is_map_full() reads the counter in the middle of that update, it can see
-0x00000000_ffffffff (+4294967295).  Then "count >= htab->map.max_entries" is
-true and alloc_htab_elem() returns -E2BIG for a map that is not full.
-
-A -1 -> 0 update can read as -4294967296, which lets an insert go past
-max_entries.
-
-The old slow path was percpu_counter_sum(), which reads s32 per-cpu counters
-and fbc->count under fbc->lock.  Near max_entries fbc->count is a large
-positive value, so a torn read could not affect that decision.  Before this
-patch, torn elem_count reads only affected the iterator statistics.
-
->  
->  static void inc_elem_count(struct bpf_htab *htab)
->  {
-> -	bpf_map_inc_elem_count(&htab->map);
-> +	s64 cnt = this_cpu_inc_return(*htab->map.elem_count);
->  
-> -	if (htab->use_percpu_counter)
-> -		percpu_counter_add_batch(&htab->pcount, 1, PERCPU_COUNTER_BATCH);
-> -	else
-> +	if (!htab->use_percpu_counter)
->  		atomic_inc(&htab->count);
-> +	else if (!(cnt & (PERCPU_COUNTER_BATCH - 1)))
-> +		atomic_add(PERCPU_COUNTER_BATCH, &htab->count);
->  }
->  
->  static void dec_elem_count(struct bpf_htab *htab)
->  {
-> -	bpf_map_dec_elem_count(&htab->map);
-> +	s64 cnt = this_cpu_dec_return(*htab->map.elem_count);
->  
-> -	if (htab->use_percpu_counter)
-> -		percpu_counter_add_batch(&htab->pcount, -1, PERCPU_COUNTER_BATCH);
-> -	else
-> +	if (!htab->use_percpu_counter)
->  		atomic_dec(&htab->count);
-> +	else if (!((cnt + 1) & (PERCPU_COUNTER_BATCH - 1)))
-> +		atomic_sub(PERCPU_COUNTER_BATCH, &htab->count);
->  }
-
-The same concern applies to inc_elem_count() and dec_elem_count().
-this_cpu_inc_return() on the s64 per-cpu elem_count uses
-this_cpu_add_return_8, which x86 only defines under CONFIG_X86_64.
-Elsewhere it falls back to this_cpu_generic_add_return(), a
-raw_local_irq_save() read-modify-write that an NMI can interrupt.
-
-On x86-32, if an NMI perf_event program updates another bucket of the same
-map in that window, it can see the same return value as the interrupted
-context.  If that value is a multiple of PERCPU_COUNTER_BATCH, both contexts
-run:
-
-    atomic_add(PERCPU_COUNTER_BATCH, &htab->count);
-
-(or both run atomic_sub() on the dec side).  htab->count then stays 32 off
-from the sum of 32 * floor(elem_count / 32) permanently, and the error grows
-over time.
-
-That breaks the "each cpu's elem_count is ahead of count by less than the
-batch" invariant that the fast path in is_map_full() relies on.  A downward
-drift lets the fast path return false while the map is already full.
-
-The old x86-32 fast path used this_cpu_try_cmpxchg() on s32 counters
-(HAVE_CMPXCHG_LOCAL), which an NMI cannot split.
-
-This seems to contradict the commit message statement "so that is exact, in
-NMI as well" for 32-bit kernels.  Should the batched elem_count scheme be
-limited to configurations with native 64-bit per-cpu ops, or should the
-summing side handle torn values?
-
-
+On Wed Oct 21, 2026 at 8:57 PM CEST, Andrii Nakryiko wrote:
+> On Wed, Oct 21, 2026 at 11:39=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.com=
+> wrote:
+>>
+>> On Wed, Oct 21, 2026 at 10:56:23AM -0700, Andrii Nakryiko wrote:
+>> > On Tue, Oct 20, 2026 at 8:59=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.c=
+om> wrote:
+>> > >
+>> > > The motivation is to plumb more of the socket API into ksock, thus
+>> > > supporting sendto() in addition to send() which makes a lot of sense=
+ in
+>> > > the context of UDP sockets which are the only type currently support=
+ed.
+>> > > This is useful when ksock is used to reply to specific addresses or =
+send
+>> > > to multiple addresses.
+>> > >
+>> > > Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+>> > > ---
+>> > >  net/core/bpf_ksock.c | 96 +++++++++++++++++++++++++++++++----------=
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>> > >  1 file changed, 69 insertions(+), 27 deletions(-)
+>> > >
+>>
+>> [...]
+>>
+>> > >
+>> > > -       return ret;
+>> > > +/**
+>> > > + * bpf_ksock_sendto() - Send data through a BPF kernel socket to a =
+remote address.
+>> > > + * @ks:                The BPF kernel socket context. Must be an ac=
+quired reference.
+>> > > + * @data:      Pointer to the data to send.
+>> > > + * @data__sz:  Size of the data to send.
+>> > > + * @addr__nullable: Pointer to an IPv4 or IPv6 socket address, or N=
+ULL to use
+>> > > + *                the connected destination.
+>> > > + * @addr__sz:  Size of the address union, ignored when the address =
+is NULL.
+>> > > + *
+>> > > + * Sends data to the specified address, or to the connected destina=
+tion when
+>> > > + * the address is NULL, best-effort and nonblocking. This may sleep
+>> > > + * (kernel_sendmsg), so it can only be called from sleepable BPF pr=
+ograms.
+>> > > + *
+>> > > + * Return: Number of bytes sent on success, negative errno on error=
+.
+>> > > + */
+>> > > +__bpf_kfunc int bpf_ksock_sendto(struct bpf_ksock *ks, const void *=
+data, u32 data__sz,
+>> >
+>> > This would limit API to fixed-sized data only. Have you considered
+>> > passing dynptr as a source of data, so you can send a wider variety of
+>> > data? I don't have a strong opinion whether we should add a separate
+>> > API or convert this one into dynptr, but I do think that having
+>> > ability to work with variable-sized data is super useful and should be
+>> > added early on.
+>>
+>> Oh wow this is really cool that you send this now. I was working this
+>> afternoon on trying to see if a ksock sendmsg() would make sense, but
+>> with these static buffer limitations as arguments, it actually didn't.
+>> I'm not familiar with dynptr so I didn't think about it, but after a
+>> quick check it looks like it would be a good match with the ksock API!
+>>
+>> As I understand, since bpf_ksock_send() is already part of 7.3, it's
+>> best to not touch it, and having a simple send() available with a
+>> fixed-size data might make sense.
+>
+> agreed
+>
+>>
+>> But since bpf_ksock_sendto() was just merged, we could make it evolve to
+>> use dynptr perhaps? How much time do we have for something which was
+>> merged yesterday to be part of a release? Is it going to be send with
+>> the 7.4 pull soon?
+>>
+>
+> I'd send a follow up in the next few days, it can go in as a fix for
+> kfunc in rc1 or something, unless others have differing opinions on
+> this
+>
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39658415298
---===============8324463472386661966==--
+Another option is to add dynptr variants of both, a pattern we have in othe=
+r
+APIs as well, so there would be no rush. We just have two more kfuncs:
+bpf_ksock_send_dynptr() and bpf_ksock_sendto_dynptr().
+
+>> >
+>> > > +                                const union bpf_ksock_addr *addr__n=
+ullable,
+>> > > +                                u32 addr__sz)
+>> > > +{
+>> > > +       return ksock_sendto(ks, data, data__sz, addr__nullable, addr=
+__sz);
+>> > >  }
+>> > >
+>> > >  __bpf_kfunc_end_defs();
+>> > > @@ -255,6 +296,7 @@ BTF_KFUNCS_START(ksock_kfunc_btf_ids)
+>> > >  BTF_ID_FLAGS(func, bpf_ksock_release, KF_RELEASE)
+>> > >  BTF_ID_FLAGS(func, bpf_ksock_acquire, KF_ACQUIRE | KF_RCU | KF_RET_=
+NULL)
+>> > >  BTF_ID_FLAGS(func, bpf_ksock_send, KF_SLEEPABLE)
+>> > > +BTF_ID_FLAGS(func, bpf_ksock_sendto, KF_SLEEPABLE)
+>> > >  BTF_KFUNCS_END(ksock_kfunc_btf_ids)
+>> > >
+>> > >  #ifdef CONFIG_BPF_LSM
+>> > > --
+>> > > 2.43.0
+>> > >
+
+
