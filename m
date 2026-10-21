@@ -1,81 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.15
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792587927;
-	b=jGyPmhSp2d+zfSU/w6yfrG0PLD6KZCkqkUwMVZ64BQ5+eQnwUUQyOelrclwDDobvgQDM
-	 z8/pHHnikNYvUxMEPuqBExcr2dJyKPJQg0J8qQpICoNOdcNTPBuUZpORm0APBfGjtPFiw
-	 tdJyl3Gceq3OfqawDBQczDEidL7tBToVdimSWxSQ3UaGuXm9QgRkBywL0poP9q1nGJ6Gn
-	 xS1AFbTN89UNRR++802g3NR71ynmYR/5rKzu/4vF+ENweHSpsjc6Tw10NST0GyylB0+An
-	 t24xnVyTWeH9s2XA7AXbksyUKqduVciqTldNJGR2DiD7XGC/vzTTUpkmD1fjGgdzxZw==
+	t=1792590540;
+	b=SGjKEBSJbDKgjT3ZLDX4wpUb5+ABt0TYeS2tAJI4gvynOr/VfgmRE01DFpvSyY9SXoJ/
+	 RE8a7bVmZ8m+PEbTAWfSzXnoEgzZWdGwB5wssRRjkcFJ2UE++Q/GPzVUiINGu0oH+MZfK
+	 HtI4LWOwvj8dMaKdULhb0u1xtVdsWxiXTA8gywfxlulD+/SGJW5ocwfCwzzBzlIfmDQJv
+	 m/OGZizOzUZOKf5MuQbGPAwAftFxVMsA5OQkA4npzCpoSqdRpHgrTvIbwRyARMThPPm02
+	 tVjThNzSHY12RtsOqAX4EK9mTTYrd/y8+jc67qD57Ty5PVSXGHanNlt+gS+AzkXKUmA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792587927;
-	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:To:Cc:Subject:
-	 In-Reply-To:References:Date:Message-ID:MIME-Version:Content-Type;
-	bh=eL9jUC8Gq8PGksHH1scl+B7zay5oD19D22S1KebKPk0=;
-	b=Se36D16QJGFwe2cEfmE/315UXAxO1Cz+09PgkHI09cyo2C/69g1LIjpNi9ETHFrSYblo
-	 6xbTT7cauGp5iPqpVzXv98fjyGZqNd3bUvLo09k3kyMHYIdLq3uk5Ipv/7kd7tq+TJyO5
-	 m6+Xt/shNMZo3BqmpijiDrILxt3Q8iUS9/ZrYxsz0scsERB74i/bYxZP7JWsmDtPXlllx
-	 ScDdMRuWtcxCqFMkKlAAnTzTs74kGkga0i5NL/0AK2kpHSAkIzJqSeLfkG0zcItHP0Pz2
-	 OVyXzxHM/LspvBp27M6/K9H3f7im09g+5B7yQN/wR6au9xF8sDEI8At9TBhvLxozIFQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792590540;
+	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Rspamd-Server:X-Rspamd-Queue-Id:
+	 X-Stat-Signature:X-Spam-Status:X-Session-Marker:X-Session-ID:
+	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
+	bh=m6ie5JCyR2XxFwtvMIqypZ8n7/2BglhxkFeUrEWwt6s=;
+	b=A/t5mN5qdstTHim5yXKUxg7KpJXhBbFwcsc6mP0j8JpnfGJk9IrsHU1PsReEWefl5KkQ
+	 7MWf/6RIhzg3+MG29wFdUlyDtoNH5ZS6NH8pPQwuLJMpL//cnKv5qbwYpblwsqlw6tuOZ
+	 6Lytig65Tlgk1V85wgLHbQI6ZEGdzfHZRnTWNkCQlmuGqVqR3iDw7h1eLrsQwZxzMPFY8
+	 mK64AOHJkab/nvYynFc056gFHsY3jXNhlgfo8vZfhVIVVXUQE1hwgqW65LNdjlbp8hdF0
+	 R1SnT6DFQpABBWduvRDHvelj58mSprhIieh718jBrLupTIsmoCvUqXQhsn7xQ4dLKXg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=TSu2ENMF;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=WjLpN6tb;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	dmarc=pass header.from=goodmis.org;
+	spf=pass smtp.mailfrom=goodmis.org;
+	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=7YHU08uj;
+	arc=none smtp.remote-ip=216.40.44.15
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80963606A31B;
-	Wed, 21 Oct 2026 13:05:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 80963606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D498D606A320;
+	Wed, 21 Oct 2026 13:48:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D498D606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=TSu2ENMF;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=WjLpN6tb
-From: Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1792587922;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eL9jUC8Gq8PGksHH1scl+B7zay5oD19D22S1KebKPk0=;
-	b=TSu2ENMFGbS5RaQ11d/BnnpxrVNm3N2X8UiWOovvI5xwEFtaFO1NJulQ3JcIhN9mITQEKX
-	pLSWJsl4zhf8P/wYD+UDbn66e9o1NCf/AfUbFIKt1FS4L/HcKYnLiLmLWRhf5aJaPineNt
-	FZQmpf2J4BTAlFN+9qC12bs4wbdX3hkiHs5SgBGdjosRo10LY0CNnJ/B2TdLMzN0xyen0u
-	FkDkZ+RZuDc/UujlUKEhI5DJ4efU0OQLHbb5LSpmqW0iHrgTtVDFARXOwG5+9UZudNV150
-	F4fJA90KT0X5yq2ouapvkoi7vOSkgE+g3G2fKk3xLx4sZXcdOF7v7NfxdWDqHQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1792587922;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eL9jUC8Gq8PGksHH1scl+B7zay5oD19D22S1KebKPk0=;
-	b=WjLpN6tbt+hrVfLVYI4HvJVtbKNKfyDhc3KgpFNd8bDoZSjTm985oQNPcbuPmpfC2IAdft
-	QtPzddvlwNI4DRBg==
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Paolo
- Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>, Maxime
- Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
- <alexandre.torgue@foss.st.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel
- Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Song Yoong Siang <yoong.siang.song@intel.com>, Mohd
- Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>, Ong Boon Leong
- <boon.leong.ong@intel.com>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Nicolai Buchwitz <nb@tipi-net.de>,
- netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net v3 0/2] net: stmmac: Fix XSK crashes on stm32mp2
-In-Reply-To: <20261020140849.12fc79ef@kernel.org>
-References: <20261013-stmmac_xsk_crashes-v3-0-50fca7790af2@linutronix.de>
- <20261020140849.12fc79ef@kernel.org>
-Date: Wed, 21 Oct 2026 15:05:20 +0200
-Message-ID: <874iefjjan.fsf@jax.kurt.home>
+	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=7YHU08uj
+Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 969F08048E;
+	Wed, 21 Oct 2026 13:48:57 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id 24FD32001E;
+	Wed, 21 Oct 2026 13:48:55 +0000 (UTC)
+Date: Wed, 21 Oct 2026 09:48:53 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Gabriele Monaco <gmonaco@redhat.com>
+Cc: Nam Cao <namcao@linutronix.de>, John Ogness <john.ogness@linutronix.de>,
+ Tomas Glozar <tglozar@redhat.com>, Alexei Starovoitov
+ <alexei.starovoitov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Wen Yang 
+ <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>,
+ Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
+Message-ID: <20261021094853.29b9f7be@gandalf.local.home>
+In-Reply-To: <a8d8b080f403eed617242a3276717706b4081ed1.camel@redhat.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+	<20261001152042.124445-11-gmonaco@redhat.com>
+	<DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
+	<b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
+	<DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
+	<878q3xtptq.fsf@jogness.linutronix.de>
+	<8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
+	<87bj8s8ih9.fsf@jogness.linutronix.de>
+	<DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
+	<87v770uuyr.fsf@jogness.linutronix.de>
+	<DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
+	<87ik2zryzo.fsf@jogness.linutronix.de>
+	<0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
+	<CAP4=nvR2i092924zszA8Qh0UUYnwXfAsa+7KjPe-NpwC+bbLXw@mail.gmail.com>
+	<8580176d216258e9008c344e0529509117dcc18b.camel@redhat.com>
+	<CAP4=nvTc297yQHz8aumZFAQ3+JK=5Z_=416WdosT0S6nHEeNfQ@mail.gmail.com>
+	<87pkx5q1w4.fsf@jogness.linutronix.de>
+	<0d4f11b1999588ddba9d855db43fc492eda32de1.camel@redhat.com>
+	<87h5ifqy6w.fsf@yellow.woof>
+	<a8d8b080f403eed617242a3276717706b4081ed1.camel@redhat.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,44 +82,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-	micalg=pgp-sha512; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 24FD32001E
+X-Stat-Signature: 3e8xkmsffyoz5tqfcbp5gzchn195ciz6
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/won3QmWO3Ea00n6TVtg5JObWY0ME+wXM=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=m6ie5JCyR2XxFwtvMIqypZ8n7/2BglhxkFeUrEWwt6s=; b=7YHU08ujBNK3Sf9GcF9v9OOvNmoZOVKjeSWm26SiC+x4cOWhpKWxS1a/9z1wHgOFyKxv1kdprbIb47P01mLy5cPvZsfG+ZqEfdD12c0XrjkPry4Q5JKlxhi/kU0z9G2Wl7twvLDE/Qv3yxZuHhqBSdwAPdxkT/UgQnd8EVsi7WE=
+X-HE-Tag: 1792590535-35345
+X-HE-Meta: U2FsdGVkX19cWOGdLkWjMcDfb0lJuNUgOuDab930f5+fzedrDD+DDMLGOlqXXYTRezyRJSDSRbcp/sPe9rzQP2ZlFJouu9+AdFlD0BmJjPrI5dsfs05cDLCVt9LssZnEo3Elup4EVF002qnfwodRVkTdckUSITs1iu2IxBTxNAHDQ4QsWd6Eb0BuGVd3EVV0/vwPoHRirouMyDlnWXHe+XaxiAYtRM/vmpjd9pp6Crmvu7pEFJ3pvba/uutatAPOPGqTZZSUpPiuECwe/TkdqZ3ZVRs1e+N87Z+lkJq7sWkv15HyQDFdvOwBsSacKRQvzpwM24NidLL3NJszxlRmzBd3J7w/KeXZ
 
---=-=-=
-Content-Type: text/plain
+On Wed, 21 Oct 2026 13:54:04 +0200
+Gabriele Monaco <gmonaco@redhat.com> wrote:
 
-On Tue Oct 20 2026, Jakub Kicinski wrote:
-> On Tue, 13 Oct 2026 10:57:20 +0200 Kurt Kanzenbach wrote:
->> while looking at the TBS thingy [1], I've noticed kernel crashes. That
->> happens when opening or closing an AF_XDP/ZC socket while parallel Tx
->> traffic is going on.
->
-> Let's respin this against net-next. The merge window has started,
-> applying this to net would give us an immediate conflict and pain.
+> > I vote 1, much simpler (but maybe I just haven't quite got the issue). I
+> > feel a bit ensure about adding RV kfuncs and would only go that route if
+> > there is no other way.  
+> 
+> We can go down that route and see how it behaves.
 
-I'll send this against net-next when it opens again. Thank you.
+BTW, I'm curious if it isn't possible to keep both in-kernel and BPF
+monitors? That is, for those cases that do not change often and has a well
+known model, to simply keep those as modules and hard coded.
 
-Thanks,
-Kurt
+But this entire thread started with people that wanted BPF type of
+monitors for more flexibility. I would argue that is an entirely separate
+use case. For them, it should be a fully BPF solution, with a few hooks
+into the RV infrastructure.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+It currently is a big unknown if the BPF solution can handle all the use
+cases of the current module method. My suggestion is to not try to do so.
+Keep the module method for the more static use cases that do not need
+dynamic changes. And create a purely BPF method for those that need BPF.
 
------BEGIN PGP SIGNATURE-----
+This thread is sounding like there's different requirements between the BPF
+and module methods. If that's the case, let's keep them separate.
 
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmrYuJATHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgr0qD/9CVSJZZLdINIWpU9XMk/x+nYy9jkIG
-e/b4eMmky2Qaigs+Acxvk85WEa/cbWu3GqARO1PCHTogSyoiAMDv8exsgPG9odmF
-/vQFfQTSQEnsnIArC1aJfxyifMZacKd4fioQkfXFPiWV+ISTF/RxsxAO+FGaG16V
-dYNbWkpfFHg1yWJsXz20mzuQOAQr5/bL5CNDpkgpYH9EHAiDYgRadGTNpVEbQ0Fb
-2FBgzNjb1y6cqzqPrlqp36g7Y5ceFE8iGUfCl50aCerXTN4C8X3s2dJHyZte0FyL
-PJJcNez98JednomiGBlqlRcK3xV3+mm/O/FGYuV5InI5XrvqPMilUOLjmjHrucAV
-6puGa0wtaviD1WjI8puiej6vgavJrZd+AQcKRKyVkvWZNGNhu0oFvon9R/JbTVpL
-DmG8GDNCYzP3LdTb5xJCn2b3zq+dvKhqbd9LGRDzWGuHJNGslqFHThoBmewY/e8V
-5wY20sP3vx1LQEbjJnqP6ADiX6IJpDNPG+7Xsq8JNSVYUxba5Ryoe4mTR2c9/C4+
-tvKWykA0iDmVYSS72swVrEg0NptyMZ1aOx93PpRRoR3G5Ut8GM+3Dtudv5zztR8H
-QwRt+6DNPq4x5ce4tqPddOYhL+WTFvevPtArfpO1l5j6BzLyuPGC2Ku98IDuv4Z5
-Pnn40jVF8OF2Cw==
-=t0X4
------END PGP SIGNATURE-----
---=-=-=--
+I agree with Alexei's first comment about not adding BPF to the module
+method. But that doesn't mean we need to eliminate the module method
+completely in order to use BPF. Instead, just create a new BPF pure method.
+
+Perhaps in the future the BPF method may make the module method obsolete,
+but I don't want users of the module method having to do all these
+workarounds just to satisfy the BPF method while it is in development.
+
+-- Steve
