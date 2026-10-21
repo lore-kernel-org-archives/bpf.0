@@ -1,45 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792542180;
-	b=0yb/4UQuLXC25cchm+qVaPtmwalbK5ksxarutglYFc3oBfTY6zuAfe8Y0BAGNX9ZNSLG
-	 2799dxkCHhrVbY24LzSr/9YhbsPCJfuTXetWPiH8lRexXFE7q4s38SwbFH2skmpdiyN2h
-	 vqaQLh+PEdYFjznO+NHwYc01+v/Tg68LDljA5LV3xd//zpHoLifpvNQGTEO/hzQ6CT2ja
-	 OGtcElshq4ug+oS2LG9BemdJeLZaRJcxQrGHqyWzAb8vxftSvgY1vK1rxlDSxIjomwu42
-	 GXU1/rmRb3k7q7omdtmLqmIDdIC7iZgndzq1J4JKKea2TpdDwJFuw1iqUFp/bFWma6g==
+	t=1792543080;
+	b=U3KrRAJszGLzGV0H/Apb/gxrJAGrZaqq86kHAbRqKLK6lnHKvejoLPMBLDKFXhyG1feM
+	 h/SzZnqugdwF+gOMxO3ORJJjafvqNziCQ/HCdpoGxqTVfGWQHuthICRPbVdvEscU2LyKS
+	 7LbzPZKr4ALQtBQqHrj6H2qOC0xZAhuY3B1tEeqxYgJI730zs6AfI/OtQijkol8CoQ3Hk
+	 iIsitfmfr1vDwqO7nJMfhbI+UP9hWxa0gV37xV4KVl3j2aYVJLTQh56I07G82FgIlXC/9
+	 7l9B4rwaMJ7FwXJkRCnWBAjB+ggXIIzfSW0/7ejnkQluvyQSfkGJnHhlXih0NZR5Dng==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792542180;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=WrrxxKnfQUuHQqe82tN/03zvH7dU5UtA51dgC4/xS0I=;
-	b=lWzuaAtesgAmCX8j6o3enxN++Ilt85lBnunYM89ioN1abyI2izRzFriCgUoKiD2ftcdg
-	 KqORWol49G5hnQYzWNf9mCsAyGdRrMFQ4rXHSMY3yzpI2RUgtogBIaWgPxLiUhhr/WqT7
-	 BUffeHNkcJfvXK0Qtamvn3s7/3iU4AarWPraHW3u5df33bmLjpynzCWYkq279KVeONsld
-	 Qot8kiEOPiQ2FwfjYsh/EV+eyVH0aFotLMAkgrEF5zVNbV5xXwtEmsj3tps5zE05ZnQZB
-	 0UdYPQcw9yGEEVDw0qPIExoyuzzPbB2bv5usZ1ElqmFIK7645jEXXtkhcLwv4JsSmiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792543080;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=9bIq9aII7kLqjsNDBEaSAqEh5ibZTVSbY4P+ooHbewY=;
+	b=kHF0ebhEe3/ZsKCP9z69Y7BhoAGiOmDbjstX2odR+VsYasf2qLOoOrti+CCgwhI0b29M
+	 p44Eoo6orqL7gNDWhBJNVRP+aYMFpAXkm8ZWcE+VIPtLEv/BmGQ41xjuAq3ynjbeGkvBY
+	 aOMKCmmPFs+KQboXPnGc3ph8W1WedP5r73kUn4/MluKJ8VMzCGUEYZTt44k1+y/sKIR74
+	 gXro9TMCB2OPr2pAdmKPTcdzQcz9SW0tRM3QKkuyQGjfnTnt5NCHrLXQEUvP464IjleCn
+	 lffAVwv42CLj//RsW7UrEkXB+taAX9MzPZaClUuPJHLav9sOT1dYf6vfvc+xvfbggzA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWA+PNNT;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="eKFoo/LH";
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7DA606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 00:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7259B606A31A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 00:38:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7259B606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DWA+PNNT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19461F000C9;
-	Wed, 21 Oct 2026 00:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792542179;
-	bh=WrrxxKnfQUuHQqe82tN/03zvH7dU5UtA51dgC4/xS0I=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DWA+PNNTSK7QG6RJUMxYfk4dt+FONjuJp66qtfiRdAS0CQNhY9D6qk6qqkefW6fVS
-	 fF4Y++1dKRBDOTB4XEr2eaPMIo03Md2hZ+9y2EEx0AfsmpwuifYvPvSOVGqw5arPLY
-	 U7IZiXbhutmoqVMEg2X95Dxz1Te0BCOXFqLshVdTJEYsfsm99JTisEBdM84hIjUEiK
-	 zJ23lQF0I/UIu+I4ZsFUCvNYl09yzr6sXe9vUYy4vEJ6NH42x/tiUajF8oZqk8vf1H
-	 FRHR9PnNy90ZYZBcEFIlK0HFZee4ENgXuRi2MbSdX60UdkPIHbny7TcxQj/YKJpDtZ
-	 n3B8FW7o9p4wQ==
-Content-Type: multipart/mixed; boundary="===============0239104791452413268=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=eKFoo/LH
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc52c1b8286so81215a12.1
+        for <bpf@vger.kernel.org>; Tue, 20 Oct 2026 17:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792543080; x=1793147880; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9bIq9aII7kLqjsNDBEaSAqEh5ibZTVSbY4P+ooHbewY=;
+        b=eKFoo/LHGp7jtYrmLpVcXqMKP30nxaprx+ioCYxVhmS1BFT8B462AsmbkkASn0Y6Rk
+         OSw6u9fIMf5DQ8L7TKRj6G4HuhTXuQkH8pRGalecuP5SnzszDOC9a7i/S7qEfvRWWxPw
+         LtYxJLf5XceHQhO5HkfzQPbIDB5TM/zJtpJYqzul7MexF9oNehPOLaBu/SdJb0XpaGwa
+         nRgKUb7rTwvcZesDSUKTpulwZj66VQslWm8ZjX3+GAbOajyEf9EdAHYtoGESaocrn3fQ
+         D+xKIN5c6kydEivM/ibYLj5OZbPIQuX3lFTZ/FftlJf+GqDQfG3waDH6CRktFJb//hrQ
+         v8Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792543080; x=1793147880;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9bIq9aII7kLqjsNDBEaSAqEh5ibZTVSbY4P+ooHbewY=;
+        b=aGvGzZG62uFyaTfRsdwICftvcLdM4Zb4frwzl4PrRqCSu8B4iTZFFIGFAkFXoaF13e
+         LKSBBFNGQm2wvAo/VryX7XTmRqJRZIqd28Tj3JpBgi7qA0sAnsCMfrEToglDvwzWCAdH
+         AfPNNd51kzaDeowjF36A3L9mUDHUtdDp9g8gQqKBYirN3teuvAF3KOP6xir8cDENgnMd
+         NQ9k6WPS77ye2A4AEuzWQfIE5cNbFoWsyU8EbyfsnItn99/GW+7Y/dCR1btJ0SXRg1AU
+         l7HS0t78Ty8QAYq04ksOV9VOGcaJGjE2B0pTU3rJwn9VR/bkHXnDtcP6rGTrV1FjSvzi
+         d86Q==
+X-Forwarded-Encrypted: i=1; AKwUvBy3zgd1SY6i2AehK/oLUAWtMbZ3urdWM1a8dra7y/NOIpxX1Q1w6cSmryCLwrf5fSQnAyw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIxZt4ZIz8cEkqUAOHSkJYJSfE1usLMOztheexPCjepGPTzXgYP
+	7AowKMrG7+8uyIw/snq/EA/MUqKHeqo0N0VsFok6oYNe+dSxjkP/cdnz
+X-Gm-Gg: AYBFou0t+d3HPDYbrcT8D/3uW+m2Ee8GPNyejrZLMF36BKe+LWHXvQLvUDXJaHBaoaB
+	kz+g3QxnfxS2LBgeSloDqEkX2AztFLXjmsOtUzcG+L0wJXz6NhsR+vw9gmFn3nqJFYON7lUaWrA
+	MxXi5NAT4pAKibKz9Fx+SvkUkw715cSXrpJyaLbYSSbVtB4bGu++A2VtFhuJzcCuEnTVAG94RiJ
+	EZQJpTyRbNNrlkXj7BseZ10fzROmk3nX56x4uHbaIOr/1ZD9GjSJvwi6ZRgmbj0tk1hPTNz/OxQ
+	J5JlUg3iSkEKMMywCRgoHd1CUvZdZfKexeKHc+71VTvyHgljENScaw3CZhqw7AySuLE+csPJKWc
+	GjsXyV1IQ14U4CGRtm4ysN+0BV0T2uDc1BAddKszk+suuOh4aHipzYY1ZGTvUUiKrugaufLVCDG
+	lCbbRtNlGkukEqp4sT/5FtGup0d+GM6LHRx1UqXQr7GFemH2jspa3rrt/ql5DgmM3S4osoFvREY
+	AfshZ1jTfpYL7nHvVZXmK/QBqK/DJOxPxmgVmrj6Iy7orSAqEmxFRMvb9ZcZ2z8KvsItXG7RrMy
+	1SLJQ+kxWRY8VAfd7+qVpo/pt0HivUrrSST8IDoAg6j6viHDnYvBr13ChwWhcQ==
+X-Received: by 2002:a17:90b:1b04:b0:3ac:9ed8:f30e with SMTP id 98e67ed59e1d1-3ad86f4e243mr274578a91.35.1792543079615;
+        Tue, 20 Oct 2026 17:37:59 -0700 (PDT)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ad813de463sm1499556a91.13.2026.10.20.17.37.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Oct 2026 17:37:58 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 21 Oct 2026 00:37:58 +0000
+Message-Id: <DMA3HLS1N8FF.9YVQJB6RM2A0@gmail.com>
+To: "Justin Suess" <utilityemal77@gmail.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>
+Cc: "Song Liu" <song@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>,
+ <bpf@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Carry MEM_RCU for trusted fields
+ with MEM_RCU parents
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20261020145059.2146170-2-utilityemal77@gmail.com>
+References: <20261020145059.2146170-1-utilityemal77@gmail.com> <20261020145059.2146170-2-utilityemal77@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,127 +104,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <7c6dc88385abb15de1e5ef89f34a38ad16691f3d580999dd72d896716355e7d2@mail.kernel.org>
-In-Reply-To: <20261020234705.375067-1-eddyz87@gmail.com>
-References: <20261020234705.375067-1-eddyz87@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: reject pointer operands for 32-bit recurrences/latches
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 21 Oct 2026 00:22:58 +0000 (UTC)
 
---===============0239104791452413268==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Oct 20, 2026 at 07:50 AM Justin Suess <utilityemal77@gmail.com> wrote:
+> An RCU-protected parent also guarantees less about the field's value
+> than a trusted one. __safe_trusted promises a non-NULL field for as
+> long as the parent object is valid, but RCU only keeps the parent's
+> memory valid: struct file is allocated SLAB_TYPESAFE_BY_RCU, so a file
+> read under RCU can be freed and reused within the same CS.
 
-> bpf: reject pointer operands for 32-bit recurrences/latches
+It guarantees less about the field's lifetime too. A MEM_RCU parent
+only means that its memory is not freed yet, so the field is safe
+only if the object it points to is RCU freed itself.
+inode is. mm_struct is not, __mmdrop() does kmem_cache_free() without
+a grace period. With this patch the first MEM_RCU vma hands out
+vma->vm_mm as rcu_ptr_mm_struct.
 
-TL;DR:
-- Pointer with 32-bit recurrence still gets widened/clamped, so the verifier
-  may accept an unsafe scalar-address load
-- Commit message example "w1 += 8" on a pointer can't pass verification
+That's what the __safe_rcu_or_null list is for. Let's put f_inode
+there and not apply the trusted lists to a parent that is not trusted.
+exe_file->f_inode is the same rcu_ptr_or_null_inode, so the tests in
+patch 2 don't change, and the ternaries go away.
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> index fea77772ca96..44916071c16b 100644
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
+Something like this (compile tested only):
 
-[ ... ]
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 01434e1..219d027 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6476,6 +6476,11 @@ BTF_TYPE_SAFE_RCU_OR_NULL(struct request_sock) {
+ 	struct sock *sk;
+ };
 
-> @@ -2035,7 +2036,7 @@ static bool scev_value_compatible(struct bpf_verifier_env *env, struct bpf_func_
->  	}
->  	ra = scev_reg_for_read(env, st, a->ptr_reg);
->  	rb = scev_reg_for_read(env, st, b->ptr_reg);
-> -	if (ra && rb && bpf_same_memory_origin(ra, rb))
-> +	if (ra && rb && bpf_same_memory_origin(ra, rb) && !latch->zext32 && !latch->jmp32)
->  		return true;
->  
->  incompatible:
++/* struct file is SLAB_TYPESAFE_BY_RCU. A reused file has f_inode == NULL. */
++BTF_TYPE_SAFE_RCU_OR_NULL(struct file) {
++	struct inode *f_inode;
++};
++
+ /* full trusted: these fields are trusted even outside of RCU CS and never NULL */
+ BTF_TYPE_SAFE_TRUSTED(struct bpf_iter_meta) {
+ 	struct seq_file *seq;
+@@ -6552,6 +6557,7 @@ static bool type_is_rcu_or_null(struct bpf_verifier_env *env,
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct mm_struct));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct sk_buff));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct request_sock));
++	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct file));
 
-[ ... ]
+ 	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id, "__safe_rcu_or_null");
+ }
+@@ -6757,10 +6763,14 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		 *
+ 		 * A regular RCU-protected pointer with __rcu tag can also be deemed
+ 		 * trusted if we are in an RCU CS. Such pointer can be NULL.
++		 *
++		 * If the parent is not trusted, the field can't regain trusted status.
+ 		 */
+-		if (type_is_trusted(env, reg, field_name, btf_id)) {
++		bool trusted = is_trusted_reg(env, reg);
++
++		if (trusted && type_is_trusted(env, reg, field_name, btf_id)) {
+ 			flag |= PTR_TRUSTED;
+-		} else if (type_is_trusted_or_null(env, reg, field_name, btf_id)) {
++		} else if (trusted && type_is_trusted_or_null(env, reg, field_name, btf_id)) {
+ 			flag |= PTR_TRUSTED | PTR_MAYBE_NULL;
+ 		} else if (in_rcu_cs(env) && !type_may_be_null(reg->type)) {
+ 			if (type_is_rcu(env, reg, field_name, btf_id)) {
 
-Does this leave the 32-bit recurrence case open for a pointer register that
-is not one of the latch operands?
+[...]
 
-bpf_compute_loop_iters() accepts a register whose SCEV is a simple linear
-form as long as is_widenable_reg_type() allows its type:
+> Cc: stable@vger.kernel.org
 
-    reg = scev_reg_for_linear(cur_func, r);
-    /* If SCEV for r is (linear <reg> <slope>) */
-    if (reg && is_simple_linear(scev, r_scev, &coefs) && is_widenable_reg_type(reg)) {
+That shouldn't go to stable.
 
-is_simple_linear() accepts (zext32 (linear rX imm)), and
-is_widenable_reg_type() accepts PTR_TO_MAP_VALUE and similar types.  So a
-pointer with a 32-bit recurrence is still reported as bounded by
-bpf_compute_loop_iters(), and bpf_widen_scev_regs() and
-bpf_clamp_scev_regs() then apply linear_bounds() to it.  The new check only
-looks at the latch operands (initial/bound), not at the recurrence register.
-
-Here is an example (needs CAP_BPF and CAP_PERFMON, i.e. allow_ptr_leaks and
-allow_uninit_stack).  r1 is a map value pointer at offset 0 and value_size
-is at least 73:
-
-    r0 = 0
-  l: if r1 s> 72 goto C   // exit; latch fails: ptr vs scalar
-     w1 = w1              // verifier: ptr -> unknown scalar
-     w1 += 8              // SCEV: r1 = (zext32 (linear r1 8))
-     r0 += 1
-     if r0 < 10 goto l    // scalar latch, 10 header executions
-     exit
-  C: r3 = *(u8 *)(r1 + 0)
-     exit
-
-On the first pass, after bpf_widen_scev_regs(), r1 is a PTR_TO_MAP_VALUE
-with offsets [0,72].  is_branch_taken() returns -1 for pointer vs 72, so C
-is checked with r1 as a pointer, which is valid.
-
-On the backedge, handle_loop_entry_exit() calls maybe_clamp_scev_regs() and
-bpf_clamp_scev_regs().  The latter only checks for NOT_INIT, not that the
-register types match.  It computes linear_bounds(entry_reg, ...) from the
-entry pointer's offsets and intersects the result with the now-scalar r1,
-so r1 becomes a scalar in [0,72] with step 8.
-
-On the second pass, 'if r1 s> 72' is never taken, so C is never checked
-with r1 as a scalar.  The next backedge prunes.
-
-At runtime, r1 on the second iteration is zext32(lo32(map_addr) + 8).  That
-value is almost always s> 72, so execution jumps to C and loads from a
-scalar address.  The clamp is unsound here because the register's value
-depends on the runtime base address and not only on the tracked offset,
-which is the same reasoning the commit message gives for the latch
-operands.
-
-Should the widenability check in bpf_compute_loop_iters() also refuse
-zext32 coefficients for non-SCALAR_VALUE registers, or should widening and
-clamping be refused when the entry and current register types differ?
-
-Is this case meant to be covered by this patch?  None of the later commits
-in this series appear to address it.
-
-Also, quoting the commit message:
-
->     Avoid inferring loop bounds for the following program shapes:
->          32-bit latch          |    32-bit recurrence
->       -------------------------+--------------------------
->          r1 = ... pointer ...  |    r1 = ... pointer ...
->          r2 = ... pointer ...  |    r2 = ... pointer ...
->       l: r1 += 8               | l: w1 += 8
->          ...                   |    ...
->          if w1 < w2 goto l     |    if r1 < r2 goto l
-
-This isn't a bug, but the 32-bit recurrence example ("w1 += 8" on the
-pointer r1) cannot pass verification as written, because
-adjust_ptr_min_max_vals() rejects it with "32-bit pointer arithmetic
-prohibited".
-
-The reachable form uses 'w1 = w1' (allowed under allow_ptr_leaks) followed
-by a scalar 'w1 += 8'.  Could the example be changed to show that form?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39518152729
---===============0239104791452413268==--
+pw-bot: cr
