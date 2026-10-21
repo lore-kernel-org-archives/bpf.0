@@ -1,38 +1,38 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.209.128.247
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=210.79.60.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792581901;
-	b=01ucR5LIJT/MxwSCIm08DmwtjdhPncmgeWpTjjwlY11/Viok+x4go39n05EFtnMq0Ott
-	 MiDc5g3wM197B00Yr6Ph66mNEwiMTyU4X3CmeuRmF4+IfoMkaN/g8h8/ax5WwZ2xw7uTm
-	 dwImgRRgyZ94fSuTH5zKZXFckxEwqKH9t3/lm8EiKAPsG6IJbKP2rzgMa/rc9rRHaxxO4
-	 3BNF9duT49oyUqFDtewesVCmPsMLV7Y4Vt19iovJ5STjCm61/g75/BgleXhbi1fZO6eUb
-	 SWb6kvzRXZN49jpTmI8jm7MWqNvMM7k30KZB5UgoyB3f16x14Y+J9Mh7kcfg5AkW2VQ==
+	t=1792581902;
+	b=wvvWAj649LEIokNazyn3xNz6W2orI21HKn5COvHlIdeinbQ473Sc0aT8qs3fyTv1BX5j
+	 DDkyKhTxvMFqRH2QsmORaoLKWbUew2YSFBJip8YzIElufY+4UK1/47G8PT26MpxA8Mrmt
+	 61QzhhLujaCoj7QzYVBmZVD43EXf//yUTT6YhR3SOrDTraoQyg+V6ul43D9wHxZ22E2Tk
+	 TVo4wjhNVpWg9IKTvxt8nec7z5OqODf2puWOXY6u+KVchx4cYA0hvcQbXgAQJmh9Pi5N8
+	 QIl/p7uIuAUVMb+vKf7vugAOs3298UPT18bO1v1D0MjufZ4I99cbTdPIHL+sVnglnAA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792581901;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792581902;
 	h=DMARC-Filter:Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding:X-HM-Tid:X-HM-MType:
-	 X-HM-Spam-Status;
-	bh=fYQedfSsWo5LMmpMHGI7ycvMtfsOZlKk03CQjYqp/4g=;
-	b=aBnKawD6lCSrP/YA+vFS2arO1NgDqXxJdm8DEidBZywNuKLfCuxIQycs85ZJlEzCiryB
-	 UlxyZFfy2lG0MktFhCnYuvbeSq3XbQ2hNNOZoC7Uti/WAXv0l4dB/hbcvtkMgo39TpmDz
-	 dgU7/qRqFaotgmQLZWmA0ORiSlnKa0iR8nkXM/y1i/AV3i+m1Uj7ePVJxCyPv0qA9HVT8
-	 eWz0HZNaGp7hycOsXbolw6NoUidmVeBkrQ3GZGCezsf+muboNNdoup/WTjVSipLksjJlm
-	 vW3juAh/tlJmbte5cVR8PvQv4Q6FJLaEZI92/PWaLGTbGtPp2PC1OwwrrW21FsdwHYQ==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
+	 X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
+	bh=XNod+BDD/BkSwCVYSyt2PbUacsNtMgi+MLEdpjX47ak=;
+	b=pUK/FV5fszLimbBWg1Q36lcxXAPrpVlBd6D4bEdTYz8lcZfG8Yw2XX+Pj03iw8EZ7Yqh
+	 nXlBJpTtXC51jN441CVhP33TQ/HC3Eu31PZ3Hgvqg/tq3/0zJbBxtmdlo6s8OQNP3t3/H
+	 kMzlOQKt/9YIV4+AiJo6a60O+fHpgBKN+1mbphyBP/U+7GbCf+cgXLMQ48FCkgPA+TnDW
+	 pZhRYgJP6/Oin4fKSkIBfLUxwZFlNQo/50gfblvZlpw6UImOIyEKJoDT50iKMHGjLZ/7j
+	 LjdBqgqZkifSz/hKAen/87q2lgSbjKhhJESVCvPH+d11kC1nDmMlIQ84EW4BXl4LLNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=easystack.cn;
 	spf=pass smtp.mailfrom=easystack.cn;
-	arc=none smtp.remote-ip=103.209.128.247
-Received: from mail-m128247.netease.com (mail-m128247.netease.com [103.209.128.247])
+	arc=none smtp.remote-ip=210.79.60.16
+Received: from mail-m6016.netease.com (mail-m6016.netease.com [210.79.60.16])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC3A606A31A;
-	Wed, 21 Oct 2026 11:24:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6CC3A606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E920606A31B;
+	Wed, 21 Oct 2026 11:25:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E920606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
 Received: from localhost.localdomain (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 204f151a4;
-	Wed, 21 Oct 2026 19:24:47 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 204f151a7;
+	Wed, 21 Oct 2026 19:24:50 +0800 (GMT+08:00)
 From: Zhen Ni <zhen.ni@easystack.cn>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -58,10 +58,12 @@ Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Zhen Ni <zhen.ni@easystack.cn>
-Subject: [PATCH v3 0/7] mm/page_owner: add bpf_iter and kfuncs
-Date: Wed, 21 Oct 2026 19:24:30 +0800
-Message-Id: <20261021112437.1799213-1-zhen.ni@easystack.cn>
+Subject: [PATCH v3 2/7] mm/page_owner: protect page access with mem-hotplug read lock
+Date: Wed, 21 Oct 2026 19:24:32 +0800
+Message-Id: <20261021112437.1799213-3-zhen.ni@easystack.cn>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20261021112437.1799213-1-zhen.ni@easystack.cn>
+References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,98 +74,121 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa15e34e6900229kunme08c1fd526accc
+X-HM-Tid: 0aa15e34f2a30229kunme08c1fd526acd7
 X-HM-MType: 1
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDGEofVhkfQxgaGExOSklPSFYVFA
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVlDSx5PVhoeSE1LGB5LTEpMH1YVFA
 	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
 	lPT09IVUpLS1VKQktLWQY+
 
-Hi all,
+The page_owner scan walks PFNs locklessly and dereferences the resolved
+struct page in the scan itself and in print_page_owner(). With
+CONFIG_MEMORY_HOTREMOVE, a concurrent remove_memory() can tear down the
+section's vmemmap, so a dereference after a stale validity check may
+fault.
 
-Introduction
-============
+Take a mem-hotplug read lock across each page's check-then-deref. In the
+scan, gate every PFN with pfn_to_online_page() under the reader and drop
+it before cond_resched(), so hotplug can still interleave between pages;
+in print_page_owner(), re-resolve the page under a reader covering just
+the print of one record.
 
-page_owner records who allocated every page and is a core memory-debug
-facility, but it currently reaches userspace as the debugfs flat dump:
-slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
-means streaming and parsing the entire file in userspace, which is
-expensive on large hosts and hard to query live.
+The reader is cheap: get_online_mems()/put_online_mems() are just
+per-CPU counter increments/decrements when no hotplug is active, so
+they contend only with an actual add/remove. Taking the lock per-page
+bounds the writer's wait to a single page's check-and-deref, keeping
+hot-remove stalls brief while all accesses stay protected.
 
-Exposing the same walk to eBPF lets a program filter and aggregate in
-the kernel and surface only the records it cares about. This series
-adds that access as a seq_file bpf_iter target and an open-coded
-iterator.
+This makes the traversal crash-free. A recycled-but-present page can
+still yield stale data -- the lockless scan is best-effort and
+unchanged by this patch.
 
-Implementation
-==============
+Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
+---
+Changes in v3:
+- New patch. Add the mem-hotplug protect.
+---
+ mm/page_owner.c | 35 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 5 deletions(-)
 
-The page walk is factored into page_owner_next_eligible(), shared by
-the read path and the iterators so eligibility stays identical. Two
-kfuncs expose information that a BPF program cannot decode from the
-snapshot alone: per-page memcg info including the full cgroup path,
-and the stack trace behind a stack_depot handle. Each record is
-snapshotted under the page_ext RCU lock, so consumers read a
-consistent copy.
-
-Testing
-=======
-
-The selftest exercises the seq_file and open-coded iterators, and
-validates the stack_snprint and get_memcg_info kfuncs.
-
-Changes in v3
-=============
-- Add a mem-hotplug read lock across the page scan.
-- Drop the live struct page from the scan cursor and the bpf_iter context.
-- Check the page_owner_inited static key in the iterator.
-- Without scan->page, start at min_low_pfn - 1 and let next() pre-increment.
-- Gate the kfuncs with KF_PERFMON.
-- Enable BPF_ITER_RESCHED for the bpf_iter target.
-- Check ENODATA/EOPNOTSUPP from <errno.h>.
-
-Changes in v2
-=============
-- Route the zero-handle case through ext_put_continue.
-- Drop the scan->pfn++.
-- Fill page/po/pfn only when v is non-NULL.
-- Implement page_owner_seq_stop().
-- bpf_page_owner_stack_snprint() now takes the scan cursor.
-- Buffer args renamed to buf__uninit/buf__sz.
-- Removes the v1 get_nid() kfunc. The node is now stored in scan->nid.
-- bpf_page_owner_get_memcg_info() now resolves the page with
-  pfn_to_online_page() for an offline or removed pfn.
-- Buffer/info args renamed to info__uninit/buf__uninit/buf__sz.
-- Drop the get_nid kfunc coverage.
-- Enable CONFIG_PAGE_OWNER in the bpf selftests config.
-
-v2: https://lore.kernel.org/linux-mm/20261013122125.843451-1-zhen.ni@easystack.cn/
-v1: https://lore.kernel.org/linux-mm/20261009112308.240769-1-zhen.ni@easystack.cn/
-
-
-Zhen Ni (7):
-  mm/page_owner: extract page_owner_next_eligible() from read loop
-  mm/page_owner: protect page access with mem-hotplug read lock
-  mm/page_owner: add bpf_iter target "page_owner"
-  mm/page_owner: add open-coded page_owner iterator
-  mm/page_owner: record the NUMA node in the scan cursor
-  mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
-  selftests/bpf: add tests for the page_owner bpf_iter target
-
- kernel/bpf/helpers.c                          |  10 +
- mm/Makefile                                   |   3 +
- mm/page_owner.c                               | 252 ++++++++++++------
- mm/page_owner.h                               |  60 +++++
- mm/page_owner_iter.c                          | 232 ++++++++++++++++
- tools/testing/selftests/bpf/config            |   2 +
- .../bpf/prog_tests/page_owner_iter.c          | 193 ++++++++++++++
- .../selftests/bpf/progs/bpf_iter_page_owner.c | 157 +++++++++++
- 8 files changed, 826 insertions(+), 83 deletions(-)
- create mode 100644 mm/page_owner.h
- create mode 100644 mm/page_owner_iter.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_page_owner.c
-
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 92a92cdf74ec..8e72a85c663c 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -762,13 +762,22 @@ static bool page_owner_next_eligible(struct page_owner_scan *scan)
+ 			continue;
+ 		}
+ 
+-		page = pfn_to_page(pfn);
++		/*
++		 * Hold a mem-hotplug reader across the page derefs so the
++		 * vmemmap isn't torn down mid-scan; released before
++		 * cond_resched().
++		 */
++		get_online_mems();
++		page = pfn_to_online_page(pfn);
++		if (!page)
++			goto put_online_continue;
++
+ 		if (skip_buddy_pages(&pfn, page))
+-			continue;
++			goto put_online_continue;
+ 
+ 		page_ext = page_ext_get(page);
+ 		if (unlikely(!page_ext))
+-			continue;
++			goto put_online_continue;
+ 
+ 		/*
+ 		 * Some pages could be missed by concurrent allocation or free,
+@@ -805,10 +814,13 @@ static bool page_owner_next_eligible(struct page_owner_scan *scan)
+ 			goto ext_put_continue;
+ 
+ 		page_ext_put(page_ext);
++		put_online_mems();
+ 		return true;
+ 
+ ext_put_continue:
+ 		page_ext_put(page_ext);
++put_online_continue:
++		put_online_mems();
+ 		cond_resched();
+ 	}
+ 
+@@ -831,7 +843,17 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 
+ 	/* Find an allocated page */
+ 	while (page_owner_next_eligible(&scan)) {
+-		struct page *page = pfn_to_page(scan.pfn);
++		struct page *page;
++		ssize_t ret;
++
++		/*
++		 * The scan is lockless. Re-resolve the page under a mem-hotplug
++		 * read-side lock so that we never access a hot-removed section.
++		 */
++		get_online_mems();
++		page = pfn_to_online_page(scan.pfn);
++		if (!page)
++			goto skip_continue;
+ 
+ 		if (state->nid_filter_enabled) {
+ 			int nid;
+@@ -851,10 +873,13 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 		/* Record the next PFN to read in the file offset */
+ 		*ppos = scan.pfn + 1;
+ 
+-		return print_page_owner(buf, count, scan.pfn, page,
++		ret = print_page_owner(buf, count, scan.pfn, page,
+ 				&scan.po_snap, scan.po_snap.handle, state);
++		put_online_mems();
++		return ret;
+ 
+ skip_continue:
++		put_online_mems();
+ 		scan.pfn++;
+ 		cond_resched();
+ 	}
 -- 
 2.20.1
 
