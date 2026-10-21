@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792613773;
-	b=LVC97Hsgc1YRdwWPWISuQM0HYULzkeIOHzmiRbEOhUjwkUZdU8de2Fv9heu7Iep9BBw9
-	 bfStPMW8Q1nh4MAaHkHj5FlmYLmaCFomC2584VRv8uAiOIrxyo41QW8exKn2Yb/kbRMU5
-	 caqOiQf8RIUiNOtwvtcb6lYRaHe9mzwP5VrCYbOZIffKZTdRynJ7Vd2ahXhVxWUs7q9GP
-	 VYuxEQxWJH2cctcX1qF43dBxpywgFtvmGlkyIrxdlhnlXUpc8351t2V+/klgHrQ87e2YF
-	 yrK4xl3LjcoCKZNt2ml2nN9qAtzUCd8JN5CGn/JJVZnq/1YOAJF11/VHEfpT95rR0ug==
+	t=1792614146;
+	b=Gger0bjnUwz1x/tpBwZOm5l8qx+QRWXq522sffWWwgmAYU40kglJkCPBfT2LdX/AcLpG
+	 Zxw2ano1hvBFHN0wBgHB7UK3aFZPsfUnTDLM6VxrIJuzyf6ayD7NOxJQE4ObtBtZVzJHK
+	 ejKOKYDrOjeDv1zYJoxJBBwkG1ywme4rOX5j5wMBDnuCG5T5fjK8J4y5kXtPhf9e/IK88
+	 anvunTc45kJYYWf2WTfo3pDhS9naurYrTI/VTfAqrCArAC6NEYNnc8cbVkydKFqcn4Svk
+	 AxPItPrZAg0b8g9WHtnBpVgvrwRW/h8dJ0ZTpkPCIrk7t+YUG9f8enM1qolwGPGyWMA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792613773;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792614146;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=avp9cqTtWpYaZT22vY285NGVGfC3NkBdRxMRGQ2R0g8=;
-	b=tuMXjt9IgoaPTbKHUiWZeuOgtKh+wO2dXToZ1KJUBVNMyc9r7fPiNDpCQ+8RcDTi4WWn
-	 jHnD1KDRf+9JuKPLf7eJ5M8+QNQX5S5SSjHGAPFZBU4iEG5zNvg4oFo1YA0kG4CconUwf
-	 iWugGJGd7nmR6k/7MNaK1rXTaTGEZRaqcDbvxSPuf3VVS0GgdlALGyqfaMSERepYWEJar
-	 PASgoi3P785YsWzYs6be1jomIPh3d+y3i9YCy6xP1i+oV1/6U4vBFQOkHBDmw2I8GabrF
-	 Z5UWgF6/461n2L0WLFPQot0xgOk+bms4tYz2O+H7hwyejrk23NaHVrCXxk9kL3FKXWg==
+	bh=mGOMnIYwvm/EEEaQ76rK00Aw0STqIep+qzYSTJj84jk=;
+	b=vqM81u217LUha1Rzka5TeDt3uA7+U5sHRpXPVCFIYSlnywnWrgHp357ouylErim/FurP
+	 Btnk3c+OT35U6G2AdktB+C1+GnUzmmLSb9lW0LWfC+qDxsJnYoXlq+ZbRzaPUdiwfwBSz
+	 RsUnQxarTmEoW9nklnUrdfA3724KSQIb1RU80eVjbC992cOq+4mx0rEI9AwiYVxYXoYgA
+	 87+n6GFHBPOE3+ly9ArxJ4SKHmAsNyG6dDZJWleBW/fHWsMuNGjp0WxwRrnwBLiOVJ6nv
+	 k/YivfBApSSVJoXLZggoMIpGwEwOVWWA+ZaEtKdSXWbJ6CZ7rkDEAjUrxCugbhj/pSA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PcBdPivZ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h7KsVwYu;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08300606A31A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4989E606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PcBdPivZ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5D81F000C1;
-	Wed, 21 Oct 2026 20:16:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h7KsVwYu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E1E1F000C1;
+	Wed, 21 Oct 2026 20:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792613772;
-	bh=avp9cqTtWpYaZT22vY285NGVGfC3NkBdRxMRGQ2R0g8=;
+	s=k20260515; t=1792614145;
+	bh=mGOMnIYwvm/EEEaQ76rK00Aw0STqIep+qzYSTJj84jk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PcBdPivZTEymGLZSB54jbgg0KCMSP61BdKHXwK9IcsCh/9lGFIl2KnSGFE7LWSl3z
-	 NqVzQC1779XJWXUwtXgU/SVX2wzxc/qZ5RJSpks5Wo2yrzsg54CIJm2r5GiNpSp/z5
-	 GL845GygvpQu+Xfadh1ovEgaY/+WNThmmApbfobHVff2MskTuiOQufDM4+gqZ/eyNM
-	 fip9xSL+lh6nwvRq1DBpBp7gyBe+gSim9yyEyh4iriHp7Xh6mhPRsPbAYGKUn8NWeA
-	 ilpSZC2pSYIIe+gedZrr7f+/CYZ6dhaZznYuYQp3WjCNof8SkcYP7beyCTtvi543iD
-	 ojzdoYpr+3wpQ==
-Message-ID: <sashiko-outbox-180635@kernel.org>
+	b=h7KsVwYuPW7Uw0bpS7QaDrhuM3jaYLvY7hI7HF6H9IwHLU0gYo7xW8JE7k60JPFW9
+	 K/Uq17uxGUW1I7E1ME0DbwYHGfkM52Eaxc1QX2cJCrdggVPywIKm/bfBLbetC9KfF1
+	 CDajCUDXAdfCv4RJnv0zuJ+GO5bo3QR5h0ce/h+XskK1GE8pIYaoDMO56vN9XaMsR5
+	 ai7bjX+sk25ALCb2tykQ2LTgwkMy3vuQvtbgw4fc7sCODXLVKMFnvUMmBN4Uc0GkBM
+	 3Tiz0Zd54cn26zFhc51ZBIQsy7WSH/p8uR/W+Wkt9+XBgOytQItWUJtkWSsuw9vP3s
+	 8YJ1hxI3JjjtQ==
+Message-ID: <sashiko-outbox-180638@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC bpf-next 1/9] bpf: Add __srcptr kfunc argument suffix
+Subject: Re: [RFC bpf-next 2/9] bpf: Add uprobe faultable user copy kfunc
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
  Borkmann" <daniel@iogearbox.net>
@@ -49,12 +49,12 @@ Cc: bpf@vger.kernel.org, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
  Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, linux-mm@kvack.org, "Andrew
  Morton" <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, "Lorenzo
  Stoakes" <ljs@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>
-In-Reply-To: <20261021195759.119421-2-jolsa@kernel.org>
+In-Reply-To: <20261021195759.119421-3-jolsa@kernel.org>
 References: <20261021195759.119421-1-jolsa@kernel.org>
- <20261021195759.119421-2-jolsa@kernel.org>
+ <20261021195759.119421-3-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 21 Oct 2026 20:16:11 +0000
+Date: Wed, 21 Oct 2026 20:22:24 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,111 +64,220 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [Medium] bpf: __srcptr ignored for scalar-struct pointers in resolve_func=
-_arg_type()
-- [Low] bpf: docs: short section underline for __srcptr in kfuncs.rst
+- [Critical] bpf: missing CAP_SYS_ADMIN check in user_mem_kfunc_filter()
+- [High] bpf: hardened usercopy BUG() in bpf_probe_write_user_faultable()
+- [Medium] bpf: missing prog->sleepable check in user_mem_kfunc_filter()
+- [Low] bpf: unused enum user_mem_kfunc_id in kernel/bpf/helpers.c
 --
 
-commit 5dcfefa11540873e12bd9cbd04017e587c3a3f23
+commit bbd6dece6abea0ce7dfa98ce448c7aae57de64d1
 Author: Jiri Olsa <jolsa@kernel.org>
 
-bpf: Add __srcptr kfunc argument suffix
+bpf: Add uprobe faultable user copy kfunc
 
-This patch adds the __srcptr suffix annotation for BPF kfunc pointer
-arguments so that the verifier checks them with MEM_RDONLY instead of
-MEM_WRITE. It also documents the new annotation in
-Documentation/bpf/kfuncs.rst.
+This patch adds the bpf_probe_write_user_faultable() sleepable kfunc to copy
+data to user memory with page faults enabled. It registers the kfunc for
+BPF_PROG_TYPE_KPROBE programs and filters access with
+LOCKDOWN_BPF_WRITE_USER.
 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 73578a4c3b1fb..6466b76fd721e 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -351,6 +351,29 @@ In this case, a program attached to the ``inode_init=
-_security`` LSM hook
->  can pass the hook's own ``xattr_count`` argument through to the kfunc,
->  which claims xattr slots by writing through it.
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 648abe1ba63ae..4d9e9423826a9 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+
+[ ... ]
+
+> @@ -3738,6 +3739,36 @@ __bpf_kfunc int bpf_copy_from_user_mm(void *dst, u=
+32 dst__sz,
+>  	return ret;
+>  }
 > =20
-> +2.3.10 __srcptr Annotation
-> +-------------------------
+> +/**
+> + * bpf_probe_write_user_faultable() - Copy data to userspace with page f=
+aults
+> + * enabled
+> + * @unsafe_dst__ign: Destination address in the current task's address s=
+pace.
+> + * @src__srcptr:     Source buffer in BPF-accessible memory.
+> + * @src__sz:         Number of bytes to copy.
+> + *
+> + * Copies data to userspace, allowing page faults to resolve the destina=
+tion
+> + * mapping. A failed copy may have written a prefix of the source buffer.
+> + *
+> + * Return: 0 on success, -EFAULT if the copy is incomplete, or -EPERM if=
+ the
+> + * current task cannot safely access userspace.
+> + */
+> +__bpf_kfunc int bpf_probe_write_user_faultable(void __user *unsafe_dst__=
+ign,
+> +					      const void *src__srcptr,
+> +					      u32 src__sz)
+> +{
+> +	if (unlikely(in_interrupt() ||
+> +		     current->flags & (PF_KTHREAD | PF_EXITING)))
+> +		return -EPERM;
+> +	if (unlikely(!nmi_uaccess_okay()))
+> +		return -EPERM;
+> +	if (unlikely(!current->mm))
+> +		return -EFAULT;
+> +	if (copy_to_user(unsafe_dst__ign, src__srcptr, src__sz))
+> +		return -EFAULT;
 
-[Severity: Low]
-The section underline in Documentation/bpf/kfuncs.rst is 25 dashes while the
-heading is 26 characters long, which causes Sphinx to emit a "Title underli=
-ne
-too short" warning when building the documentation. Should one more dash be
-added here?
+[Severity: High]
+Can calling copy_to_user() directly on src__srcptr trigger a hardened
+usercopy bug when a BPF program passes a trusted BTF object pointer?
 
-[ ... ]
+In kernel/bpf/verifier.c, get_kfunc_arg_type() classifies src__srcptr paired
+with src__sz as ARG_PTR_TO_MEM | MEM_RDONLY. During verification,
+check_reg_type() permits mem_types, which includes:
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5601d20562186..7dd7b172a2971 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+kernel/bpf/verifier.c:
+	PTR_TO_BTF_ID | PTR_TRUSTED,
 
-[ ... ]
+and check_helper_mem_access() allows BPF_READ access on scalar fields of
+trusted BTF objects (such as &task->pid or task->comm from
+bpf_get_current_task_btf()).
 
-> @@ -14137,7 +14151,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
->  				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
->  			return -EINVAL;
->  		}
-> -		arg_type =3D ARG_PTR_TO_MEM | MEM_WRITE;
-> +		arg_type =3D ARG_PTR_TO_MEM | mem_prot(meta->btf, &args[arg]);
->  	} else if (btf_type_is_struct(ref_t))
->  		/* A pointer to a struct without a size argument is classified as ARG_=
-PTR_TO_BTF_ID */
->  		arg_type =3D ARG_PTR_TO_BTF_ID;
-> @@ -14162,7 +14176,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
->  			return -EINVAL;
->  		}
->  		proto->arg_size[arg] =3D type_size;
-> -		arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
-> +		arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | mem_prot(meta->btf, &ar=
-gs[arg]);
->  	}
+At runtime, copy_to_user() calls check_copy_size(src__srcptr, src__sz, true)
+-> __check_object_size() -> __check_heap_object() in mm/slub.c:
 
-[Severity: Medium]
-Should resolve_func_arg_type() in kernel/bpf/verifier.c also use
-mem_prot(meta->btf, &args[arg]) instead of hardcoding MEM_WRITE?
-
-In get_kfunc_arg_type(), a pointer to a struct or union without a following
-__sz or __szk argument matches btf_type_is_struct(ref_t) and is classified =
-as
-ARG_PTR_TO_BTF_ID, bypassing the final else branch above.
-
-Later, when a BPF program passes a non-BTF-ID memory pointer (such as
-read-only map values from .rodata, PTR_TO_MEM | MEM_RDONLY, map keys, or
-stack memory) to a kfunc parameter pointing to a fixed-size struct or union
-composed of scalars, check_func_arg() -> resolve_func_arg_type() converts t=
-he
-argument type to fixed-size memory, but still unconditionally sets MEM_WRIT=
-E:
-
-kernel/bpf/verifier.c:resolve_func_arg_type() {
+mm/slub.c:__check_heap_object() {
 	...
-	if (!btf_type_is_scalar_struct(env, btf, ref_t))
-		return 0;
-
-	resolve_ret =3D btf_resolve_size(btf, ref_t, arg_size);
-	if (IS_ERR(resolve_ret)) {
-		...
-	}
-	*arg_type =3D ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
-		    (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
-
-	return 0;
+	usercopy_abort("SLUB object", s->name, to_user, offset, n);
 }
 
-Because MEM_WRITE remains set for scalar-struct pointers annotated with
-__srcptr, won't the verifier still reject read-only memory arguments and
-clobber spilled stack slots?
+When src__srcptr points to a field in a dedicated slab cache outside its
+whitelisted usercopy region (for example task_struct_cachep, mm_cachep,
+files_cachep, or fs_cachep), wouldn't __check_heap_object() call
+usercopy_abort() and panic the kernel when CONFIG_HARDENED_USERCOPY is
+enabled?
 
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * bpf_copy_from_user_mm_str() - Copy a string from an address space
+>   * @dst:             Destination address, in kernel space. This buffer m=
+ust be
+> @@ -5139,6 +5170,31 @@ static const struct btf_kfunc_id_set generic_kfunc=
+_set =3D {
+>  	.set   =3D &generic_btf_ids,
+>  };
 > =20
->  	if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
+> +BTF_KFUNCS_START(user_mem_btf_ids)
+> +BTF_ID_FLAGS(func, bpf_probe_write_user_faultable, KF_SLEEPABLE | KF_PER=
+FMON)
+> +BTF_KFUNCS_END(user_mem_btf_ids)
+> +
+> +enum user_mem_kfunc_id {
+> +	KF_bpf_probe_write_user_faultable,
+> +};
+
+[Severity: Low]
+Is enum user_mem_kfunc_id left over from an earlier version of the patch?
+Since user_mem_kfunc_filter() compares kfunc_id against
+bpf_probe_write_user_faultable_btf_id[0], neither enum user_mem_kfunc_id nor
+KF_bpf_probe_write_user_faultable is used anywhere in kernel/bpf/helpers.c.
+
+> +
+> +BTF_ID_LIST_SINGLE(bpf_probe_write_user_faultable_btf_id, func,
+> +		   bpf_probe_write_user_faultable)
+> +
+> +static int user_mem_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_=
+id)
+> +{
+> +	if (kfunc_id =3D=3D bpf_probe_write_user_faultable_btf_id[0])
+> +		return security_locked_down(LOCKDOWN_BPF_WRITE_USER);
+
+[Severity: Critical]
+Should user_mem_kfunc_filter() also verify that the program has
+CAP_SYS_ADMIN via bpf_token_capable(prog->aux->token, CAP_SYS_ADMIN)?
+
+In user_mem_btf_ids, bpf_probe_write_user_faultable is marked with
+KF_PERFMON, which in check_kfunc_call() in kernel/bpf/verifier.c only checks
+env->allow_ptr_leaks (satisfied by CAP_PERFMON). Meanwhile, for the existing
+bpf_probe_write_user() helper, bpf_tracing_func_proto() in
+kernel/trace/bpf_trace.c enforces CAP_SYS_ADMIN in addition to lockdown:
+
+kernel/trace/bpf_trace.c:bpf_tracing_func_proto() {
+	...
+	if (!bpf_token_capable(prog->aux->token, CAP_SYS_ADMIN))
+		return NULL;
+
+	switch (func_id) {
+	case BPF_FUNC_probe_write_user:
+		return security_locked_down(LOCKDOWN_BPF_WRITE_USER) < 0 ?
+		       NULL : &bpf_probe_write_user_proto;
+	...
+}
+
+And include/uapi/linux/capability.h documents this boundary under CAP_BPF:
+
+	* CAP_SYS_ADMIN is required to use bpf_probe_write_user.
+
+Without a bpf_token_capable(prog->aux->token, CAP_SYS_ADMIN) check in
+user_mem_kfunc_filter(), couldn't a process or container granted only
+CAP_BPF and CAP_PERFMON attach a sleepable uprobe or uprobe_multi program to
+a shared library and overwrite memory in privileged processes?
+
+> +
+> +	return 0;
+> +}
+
+[Severity: Medium]
+Does user_mem_kfunc_filter() also need to check prog->sleepable to restrict
+bpf_probe_write_user_faultable() to sleepable uprobes as described in the
+commit message?
+
+Because BPF_PROG_TYPE_KPROBE is shared by kernel kprobes and uprobes, the
+uprobe-only restriction for sleepable programs is enforced at attach time by
+checking prog->sleepable in __perf_event_set_bpf_prog() and
+bpf_kprobe_multi_link_attach().
+
+In check_kfunc_call() in kernel/bpf/verifier.c, KF_SLEEPABLE checks
+in_sleepable_context(env) rather than prog->sleepable. When a non-sleepable
+BPF_PROG_TYPE_KPROBE program (prog->sleepable =3D=3D false) registers a cal=
+lback
+via bpf_task_work_schedule_signal(), bpf_task_work_schedule_resume(), or
+bpf_wq_set_callback(), push_callback_call() marks the callback state as
+sleepable via is_async_cb_sleepable():
+
+kernel/bpf/verifier.c:is_async_cb_sleepable() {
+	/* bpf_wq and bpf_task_work callbacks are always sleepable. */
+	if (bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
+	    (is_bpf_wq_set_callback_kfunc(insn->imm) || is_task_work_add_kfunc(ins=
+n->imm)))
+		return true;
+	return false;
+}
+
+Without checking !prog->sleepable in user_mem_kfunc_filter(), wouldn't a
+non-sleepable kernel kprobe, kretprobe, or kprobe_multi program be able to
+call bpf_probe_write_user_faultable() from a bpf_task_work callback?
+
+> +
+> +static const struct btf_kfunc_id_set user_mem_kfunc_set =3D {
+> +	.owner =3D THIS_MODULE,
+> +	.set =3D &user_mem_btf_ids,
+> +	.filter =3D user_mem_kfunc_filter,
+> +};
+
+[ ... ]
+
+> @@ -5266,6 +5322,7 @@ static int __init kfunc_init(void)
+>  	};
+> =20
+>  	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc=
+_set);
+> +	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &user_me=
+m_kfunc_set);
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021195759.1194=
-21-1-jolsa@kernel.org?part=3D1
+21-1-jolsa@kernel.org?part=3D2
