@@ -1,57 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792583353;
-	b=aDbpjTrnqeVhXhkrYKcvQwS8PySU9eNrPoH5Kss3ZJuKr09QjvyySTrwx7jGbGTjxi2Q
-	 TtndZMMgnbNO3gp8rEQcWBQ55N5awt6sSFNR+vat51/S4urXqLKldt7djoH1ScnA5h/Ja
-	 y1cyG1AdeX38360K5GnkzV/E5ChHIUsgtfh10dMt/0JlDToTqvRMxure8n2IGTsSjE1/2
-	 LCDLYJO3glyve/pNlJ8knitwSlKslf5fSDVpynsIsA6jL1DpUEQT7rTPWxvbta2rmdQ4O
-	 wRLXzz+MxHbVMToijxQnyFqwDGatMPTePSQol3zBcjy89fM8/3FbERLMbu8M0NxXGMA==
+	t=1792583504;
+	b=lyqI/OTObbRBIDPjdV7xOhSLrITmpsosLjjinJM6YnNLEPLtTIbErljnmeb5zuBJN/DU
+	 ymwOPUQ77zEx6Sue1jImnJ6zohW1qoxA6WyICrwYsyLPVG2RDPAflZFOFOtsvm0f0i7kF
+	 wHK/++Q7uDGy2FnlfzlTDuDyhapR3karUrjGJdw3EoCXcIHMb28O5tC5uPGjjfXu8BLCM
+	 HCxEzNkvxm5Kru5R/NLmV2vBldjux/jDsB2Dph86Ec/jWwdE3pzdj+1Nd4lP0hvwoXmhF
+	 gPiaXP74c2DQQg5BnsAZnORB9Qjmix/++iOSHguo5iAmYwRORVvVOandsBuFUmxbEKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792583353;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=FjU3V+rd8zjjpGJql233pQuD6ax8MAtzDfiydIJHxGw=;
-	b=o2fXDpGQ4+jY3821zu4wMogfG07cSUPeEPmuJ90fbisOHfsUwUKCwTAy6JGmOxn3fqGW
-	 O+Qu0ZMxjlTGa73X1HYIXUW3O1TP7K/62ZrlZunXc396lWpkddBn/bDJi8fjWfpmhTxYb
-	 QXWB38ijM/Hb0Vo9YBCNEAb6YxVzTBwW0R7/SQCXWK36udcENyU+WzBixyhWyCMiKLME1
-	 nf4t11ZD7vwTvVZ3BNSCwcggpUauYBx0J4ByZ0IDzotYG9E2uOyUQ6gjbAyYWscOX5Dz0
-	 UPDPwCz++zVbiMjZ5408c/U+fc7nnJ1ohG8K8fX4k1aLGn1cfFDzGZQkLrXSsSOGlYg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792583504;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=NNGxMQXJMdTjnSOv10aQKb/ppFNgCMDdDlSf+doGbnI=;
+	b=15AynNAzlpSVaUTQp/KUInGfrfZWylyQlsZqVKwSlFhQPRBGWO6QvH0YY2uOwj/vEH8v
+	 1oPRTDHiZvM3OQ/TKkKqU7UE3sSvsDr+kKwsQKxTA660+zcvLT3EOoq0GUMTdQGPDAFQY
+	 gasFPUwamr+WEhX0DqG7eAWw5ghd9WwU4xlJllfHpkwLp9xIj0w6KzW+kFV73uGdFX8Tj
+	 SEmUGCeE1Og38w1QqgJK/Brkx087ScrZRfJZ5jrKkG57ExAH1jMwHx0fg/XDfqTXnATgw
+	 MUsdZ0OgtSSYZccAIYuxzM5YNvnWLE3U/Hy9AT6+zASaFrXXNnncEOPHJEcws7vGOfg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zj/Rld9E";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BtG9PuG7;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E63606A32A
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 11:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85868606A319;
+	Wed, 21 Oct 2026 11:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zj/Rld9E
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 658EA1F000C7;
-	Wed, 21 Oct 2026 11:49:11 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BtG9PuG7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4751F000C4;
+	Wed, 21 Oct 2026 11:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792583352;
-	bh=FjU3V+rd8zjjpGJql233pQuD6ax8MAtzDfiydIJHxGw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Zj/Rld9EDCqOTfy6Op98uGK996/oHg6AFPiUzQHvATS2lJJxkpBk0JAzqY8edadT6
-	 Sck6dbYuRaJ6se2+9dfM/UEuk22X1W/oCRcT0BUJVOujn2oWDJ9ENER/1eJgCM3aPF
-	 YxOSkF4Otq9wd6oXioXyJcPdgESuHiyLQy47dU/oxYHZ1J1EdjHj7/nc2r7yDwUR4G
-	 LKqI/+jGgoM9tfVLEHFHxEcKkKogF+K/F8yaVntTaSTzsLTwuuJwesqSA+/ey2R/bT
-	 xFzqvFIyigsd611/OjtZCpduUe1GFASmJGTmvBcqzAdpLnuUkDI40upmy0ppGV9M/p
-	 W4Elgji0ic5jA==
-Message-ID: <sashiko-outbox-180182@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 6/7] mm/page_owner: add
- bpf_page_owner_get_memcg_info() kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Zhen Ni" <zhen.ni@easystack.cn>, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, akpm@linux-foundation.org, vbabka@kernel.org, surenb@google.com, mhocko@suse.com, brendan.jackman@linux.dev, hannes@cmpxchg.org, ziy@nvidia.com, shuah@kernel.org
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org
-In-Reply-To: <20261021112437.1799213-7-zhen.ni@easystack.cn>
-References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
- <20261021112437.1799213-7-zhen.ni@easystack.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 21 Oct 2026 11:49:10 +0000
+	s=k20260515; t=1792583504;
+	bh=NNGxMQXJMdTjnSOv10aQKb/ppFNgCMDdDlSf+doGbnI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BtG9PuG7VaGKIXkWXibhz2PCSsATBTBkEm2LrSY2Y343uHvevVYcopKMX5TehF69x
+	 x1xCzOfknTAYZAaYrATXygE/jy9CLTHP2IU1xfb9pkcnd7ZXLCRQahK5ET4qBm684J
+	 WNCbZVP4Ty/LLwMRjTebM0RlduZLs9vqiLLZ7NNFL0DELf1YWuzS28cx2e4lU2AVkY
+	 WDRfwlh19vCdfj4IRHdbOKIgl+wEwVs5RnA6uuZWx6z1Wfhs0DoAmOPStXvqLwmECW
+	 /WVwqgT+LciSEOJ941TtrzHyGviNvJ/fyPoyvFc9aTJeWGk2pr1VqLsNx7t125xZF7
+	 uLBx1KbTSJYOQ==
+Content-Type: multipart/mixed; boundary="===============7595896769208109114=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,274 +48,144 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <13ad2d54c140d070976519eba79bb098d6c2d95b64bd8c51640b45c9972baea2@mail.kernel.org>
+In-Reply-To: <20261021112437.1799213-2-zhen.ni@easystack.cn>
+References: <20261021112437.1799213-2-zhen.ni@easystack.cn>
+Subject: Re: [PATCH v3 1/7] mm/page_owner: extract page_owner_next_eligible() from read loop
+From: bot+bpf-ci@kernel.org
+To: zhen.ni@easystack.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,akpm@linux-foundation.org,vbabka@kernel.org,surenb@google.com,mhocko@suse.com,brendan.jackman@linux.dev,hannes@cmpxchg.org,ziy@nvidia.com,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,zhen.ni@easystack.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 21 Oct 2026 11:51:43 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] mm/page_owner: tail page _nr_pages dereferenced as objcg in get_pa=
-ge_memcg_info()
-- [Medium] mm/page_owner: __uninit in bpf_page_owner_get_memcg_info() poiso=
-ns stack
-- [Medium] mm/page_owner: missing __nullable on buf in bpf_page_owner_get_m=
-emcg_info()
---
+--===============7595896769208109114==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 6c73498afe7c643ebd28b236a8d852daad168a14
-Author: Zhen Ni <zhen.ni@easystack.cn>
+> mm/page_owner: extract page_owner_next_eligible() from read loop
 
-mm/page_owner: add bpf_page_owner_get_memcg_info() kfunc
-
-This commit factors per-page memcg lookup out of print_page_owner_memcg()
-into get_page_memcg_info() and adds the bpf_page_owner_get_memcg_info()
-kfunc so BPF page_owner iterators can retrieve memcg metadata and the full
-cgroup path.
-
-[ ... ]
+TL;DR: The nid filter's page->flags read now happens outside the page_ext RCU
+window, so it may fault on an unmapped vmemmap during memory hot-remove; later
+patches fix it, so it is only a bisect window.
 
 > diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 8bc15bcdc24e9..7470b5d002be4 100644
+> index fbbda7ba914b..92a92cdf74ec 100644
 > --- a/mm/page_owner.c
 > +++ b/mm/page_owner.c
-> @@ -538,16 +538,22 @@ void pagetypeinfo_showmixedcount_print(struct seq_f=
-ile *m,
-> =20
->  #ifdef CONFIG_MEMCG
->  /*
-> - * Looking for memcg information and print it out
-> + * Collect memcg information of @page into @info; when @buf and a
-> + * nonzero @size are given, also copy the full cgroup path of the
-> + * charged memcg into @buf.
-> + *
-> + * Return: 0 if @page is charged to an attributable memcg; -ENODATA
-> + * otherwise.
->   */
-> -static inline int print_page_owner_memcg(char *kbuf, size_t count, int r=
-et,
-> -					 struct page *page)
-> +int get_page_memcg_info(struct page *page, struct memcg_info *info,
-> +			char *buf, int size)
->  {
->  	unsigned long memcg_data;
->  	struct obj_cgroup *objcg;
->  	struct mem_cgroup *memcg;
-> -	bool online;
-> -	char name[80];
-> +	int ret =3D -ENODATA;
-> +
-> +	*info =3D (struct memcg_info){};
-> =20
->  	rcu_read_lock();
->  	memcg_data =3D READ_ONCE(page->memcg_data);
-> @@ -555,31 +561,68 @@ static inline int print_page_owner_memcg(char *kbuf=
-, size_t count, int ret,
->  		goto out_unlock;
-> =20
->  	if (memcg_data & MEMCG_DATA_OBJEXTS) {
-> -		ret +=3D scnprintf(kbuf + ret, count - ret,
-> -				"Slab cache page\n");
-> +		info->is_slab =3D true;
->  		goto out_unlock;
->  	}
-> =20
->  	objcg =3D (void *)(memcg_data & ~OBJEXTS_FLAGS_MASK);
-> -	memcg =3D objcg ? obj_cgroup_memcg(objcg) : NULL;
-> +	if (!objcg)
-> +		goto out_unlock;
-> +
-> +	memcg =3D obj_cgroup_memcg(objcg);
-
-[Severity: High]
-Can get_page_memcg_info() in mm/page_owner.c dereference folio->_nr_pages as
-a struct obj_cgroup pointer when inspecting tail page 1 of a compound folio?
-
-In struct folio (include/linux/mm_types.h), the first tail page (__page_1)
-places _nr_pages at the same offset as struct page::memcg_data:
-
-include/linux/mm_types.h:struct folio {
-    ...
-			atomic_t _mapcount_1;
-			atomic_t _refcount_1;
-#ifdef NR_PAGES_IN_LARGE_FOLIO
-			unsigned int _nr_pages;
-#endif
-		};
-		struct page __page_1;
-    ...
-}
-
-For a compound folio with order >=3D 3, _nr_pages is 1U << order (for examp=
-le,
-0x8 or 0x200), so its low bits matching OBJEXTS_FLAGS_MASK are zero.
-
-Because bpf_page_owner_get_memcg_info() in mm/page_owner_iter.c calls
-get_page_memcg_info() on scan->pfn without stabilizing the page reference or
-folio state (and struct page_owner_scan is a scalar-only struct that a BPF
-program can also populate on the stack or in a map), page can refer to tail
-page 1 of a compound folio.
-
-In get_page_memcg_info(), page->memcg_data is read before checking
-PageTail(page):
-
-	memcg_data =3D READ_ONCE(page->memcg_data);
-	if (!memcg_data || PageTail(page))
-		goto out_unlock;
-
-If tail page 1 is concurrently freed via __free_pages_prepare() ->
-free_tail_page_prepare() -> clear_compound_head() after READ_ONCE() reads
-_nr_pages into memcg_data, or if the folio is concurrently split to order 0
-in mm/huge_memory.c:__split_folio_to_order() where clear_compound_head()
-clears PageTail(new_head) before new_folio->memcg_data overwrites _nr_pages:
-
-mm/huge_memory.c:__split_folio_to_order() {
-    ...
-		clear_compound_head(new_head);
-		if (new_order) {
-			prep_compound_page(new_head, new_order);
-			folio_set_large_rmappable(new_folio);
-		}
-    ...
-#ifdef CONFIG_MEMCG
-		new_folio->memcg_data =3D folio->memcg_data;
-#endif
-}
-
-wouldn't PageTail(page) evaluate to false while memcg_data holds 1UL << ord=
-er,
-causing obj_cgroup_memcg(objcg) to dereference that page count as a pointer?
 
 [ ... ]
 
-> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
-> index b7e0ce1dfa80a..a649e1207e246 100644
-> --- a/mm/page_owner_iter.c
-> +++ b/mm/page_owner_iter.c
-> @@ -181,4 +181,52 @@ __bpf_kfunc int bpf_page_owner_stack_snprint(struct =
-page_owner_scan *scan,
->  	return len;
->  }
-> =20
-> +/**
-> + * bpf_page_owner_get_memcg_info - Report the memcg charged for the curr=
-ent page
-> + * @scan: page_owner scan handle.
-> + * @info__uninit: output buffer for the memcg_info.
-> + * @buf__uninit: optional output buffer for the full cgroup path.
-> + * @buf__sz: size of @buf__uninit.
-> + *
-> + * Fills @info__uninit with the memcg charged for the page backing
-> + * @scan->pfn.  If @buf__uninit and @buf__sz are provided, the full
-> + * cgroup path is also copied out, so a BPF program can attribute a
-> + * page_owner allocation to a specific cgroup.
-> + *
-> + * @scan->pfn is resolved to a struct page under get_online_mems(),
-> + * so the page cannot be accessed after its memory section is offlined
-> + * or removed.
-> + *
-> + * Returns:
-> + * * 0 on success
-> + * * -ENODATA if the page is not online or not charged to a memcg
-> + * * -EOPNOTSUPP if built without CONFIG_MEMCG
-> + */
-> +__bpf_kfunc int bpf_page_owner_get_memcg_info(struct page_owner_scan *sc=
-an,
-> +					      struct memcg_info *info__uninit,
-> +					      char *buf__uninit, u32 buf__sz)
-
-[Severity: Medium]
-Will the __uninit suffix on info__uninit and buf__uninit in
-bpf_page_owner_get_memcg_info() (mm/page_owner_iter.c) cause the BPF verifi=
-er
-to reject valid programs that pass stack buffers across a pruning checkpoin=
-t?
-
-In kernel/bpf/verifier.c:bpf_kfunc_stack_access_bytes(), any kfunc argument
-matching is_kfunc_arg_uninit() returns a negative size:
-
-	if (is_kfunc_arg_uninit(btf, &args[arg]))
-		return -size;
-	return size;
-
-That negative size tells record_stack_access_off() in kernel/bpf/liveness.c
-that the kfunc call overwrites the stack slots without reading them, so sta=
-tic
-stack liveness analysis marks those slots dead prior to the call. When
-clean_verifier_state() -> __clean_func_state() in kernel/bpf/states.c runs =
-at
-an earlier pruning checkpoint (such as the second iteration of
-bpf_iter_page_owner_next(), or a branch/call after stack allocation), it
-poisons those dead stack slots with STACK_POISON:
-
-	for (j =3D start; j < end; j++)
-		st->stack[i].slot_type[j] =3D STACK_POISON;
-
-However, check_kfunc_args() in kernel/bpf/verifier.c only honors
-is_kfunc_arg_uninit() for KF_ARG_PTR_TO_DYNPTR. For KF_ARG_PTR_TO_MEM
-(info__uninit) and KF_ARG_MEM_SIZE (buf__uninit), check_kfunc_args() valida=
-tes
-the buffers with BPF_READ | BPF_WRITE:
-
-	ret =3D check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRITE,
-			    meta, &known_memory);
-    ...
-	ret =3D check_mem_size_reg(env, buff_reg, size_reg, buff_argno, argno,
-				 BPF_READ | BPF_WRITE, true, meta, &failure);
-
-When check_stack_range_initialized() in kernel/bpf/verifier.c performs the
-BPF_READ check with allow_poison =3D=3D false, it hits *stype =3D=3D STACK_=
-POISON and
-fails verification with -EACCES ("slot poisoned by dead code elimination").
-
-> +{
-> +	struct page *page;
-> +	int ret =3D -ENODATA;
+> @@ -798,13 +794,45 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+>  			goto ext_put_continue;
+>
+> -		/*
+> -		 * Access to page_ext->handle isn't synchronous so we should
+> -		 * be careful to access it.
+> +		/*
+> +		 * Take a snapshot of the page_owner record inside the RCU
+> +		 * window, then validate it, so that print_page_owner()
+> +		 * reads the checked handle from the same snapshot.
+>  		 */
+> -		handle = READ_ONCE(page_owner->handle);
+> -		if (!handle)
+> +		scan->pfn = pfn;
+> +		scan->po_snap = *page_owner;
 > +
-> +	if (!static_branch_unlikely(&page_owner_inited))
-> +		goto nodata;
+> +		if (!scan->po_snap.handle)
+>  			goto ext_put_continue;
+>
+> +		page_ext_put(page_ext);
+> +		return true;
 > +
-> +	get_online_mems();
-> +	page =3D pfn_to_online_page(scan->pfn);
-> +	if (!page) {
-> +		put_online_mems();
-> +		goto nodata;
+> +ext_put_continue:
+> +		page_ext_put(page_ext);
+> +		cond_resched();
 > +	}
-> +	ret =3D get_page_memcg_info(page, info__uninit, buf__uninit, buf__sz);
-> +	put_online_mems();
-> +	return ret;
 > +
-> +nodata:
-> +	*info__uninit =3D (struct memcg_info){};
-> +	if (buf__uninit && buf__sz)
-> +		buf__uninit[0] =3D '\0';
-
-[Severity: Medium]
-Should the optional cgroup path buffer parameter in
-bpf_page_owner_get_memcg_info() (mm/page_owner_iter.c) use a __nullable
-suffix so BPF programs can pass NULL when they only need struct memcg_info?
-
-Both bpf_page_owner_get_memcg_info() and get_page_memcg_info() check whether
-buf is NULL, and the kernel-doc describes buf__uninit as an optional output
-buffer. However, in kernel/bpf/verifier.c:get_kfunc_arg_type(), PTR_MAYBE_N=
-ULL
-is only added when is_kfunc_arg_nullable() matches the "__nullable" (or
-"__arena") suffix:
-
-static bool is_kfunc_arg_nullable(const struct btf *btf, const struct btf_p=
-aram *arg)
-{
-	return btf_param_match_suffix(btf, arg, "__nullable") ||
-	       btf_param_match_suffix(btf, arg, "__arena");
-}
-
-Without a __nullable suffix on the buffer argument, check_kfunc_args() in
-kernel/bpf/verifier.c rejects a BPF program that passes NULL (or a
-PTR_MAYBE_NULL register) for arg#3 with -EACCES ("Possibly NULL pointer pas=
-sed
-to trusted arg#3").
-
-> +	return ret;
+> +	return false;
 > +}
-> +
->  __bpf_kfunc_end_defs();
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021112437.1799=
-213-1-zhen.ni@easystack.cn?part=3D6
+[ ... ]
+
+> +	/* Find an allocated page */
+> +	while (page_owner_next_eligible(&scan)) {
+> +		struct page *page = pfn_to_page(scan.pfn);
+> +
+>  		if (state->nid_filter_enabled) {
+>  			int nid;
+>  			memdesc_flags_t page_flags = READ_ONCE(page->flags);
+
+Can this READ_ONCE(page->flags) fault on an unmapped vmemmap?
+
+In the parent commit the nid check ran between page_ext_get() and
+page_ext_put(), so it was inside rcu_read_lock():
+
+    page_ext = page_ext_get(page);   /* rcu_read_lock() */
+    ...
+    if (state->nid_filter_enabled) {
+        memdesc_flags_t page_flags = READ_ONCE(page->flags);
+        ...
+            goto ext_put_continue;
+    }
+    ...
+    ext_put_continue:
+        page_ext_put(page_ext);      /* rcu_read_unlock() */
+
+Now page_owner_next_eligible() calls page_ext_put() before it returns true,
+and read_page_owner() reads page->flags with no RCU section, no
+get_online_mems(), and no page reference held.
+
+The RCU section mattered for memory hot-remove:
+
+    offline_pages()
+      memory_notify(MEM_OFFLINE)
+        page_ext_callback()
+          offline_page_ext()
+            synchronize_rcu()
+
+try_remove_memory() requires the blocks to be offline before
+arch_remove_memory() -> ... -> section_deactivate() ->
+depopulate_section_memmap() unmaps the vmemmap.  While a page_ext_get()
+reader was active, that section's memmap could not be torn down.
+
+After this patch, an offline plus remove can complete between page_ext_put()
+and the READ_ONCE(page->flags), because synchronize_rcu() no longer waits
+for this reader.  This needs CONFIG_PAGE_OWNER with page_owner=on,
+CONFIG_MEMORY_HOTREMOVE, a nid filter set through page_owner_write(), and a
+concurrent hot-remove of movable memory.
+
+The commit message says "No change to the output is intended", but it does
+not mention that the nid filter's struct page access moves out of the page_ext
+RCU window.
+
+For context, the parent already read struct page without a pin in
+skip_buddy_pages() (PageBuddy() before page_ext_get()) and in
+print_page_owner() (page->flags, pageblock flags and page->memcg_data after
+page_ext_put()), so this widens an existing race rather than adding a new
+class of problem.  It does turn one protected access into an unprotected
+one, though.
+
+This is fixed later in the series, so it is only a bisect window issue:
+
+- 915f86c7862f ("mm/page_owner: protect page access with mem-hotplug read
+  lock") re-resolves the page in read_page_owner() with pfn_to_online_page()
+  under get_online_mems() before the nid check.
+
+- 2cf991a93cbd ("mm/page_owner: record the NUMA node in the scan cursor")
+  moves the nid computation back into page_owner_next_eligible(), "to avoid
+  dereferencing a possibly-unmapped page".
+
+Could the nid be read in page_owner_next_eligible() before page_ext_put(),
+for example by storing it in the cursor?  Alternatively, could the
+mem-hotplug protection patch be reordered ahead of this one?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39593164040
+--===============7595896769208109114==--
