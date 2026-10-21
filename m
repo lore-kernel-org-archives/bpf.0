@@ -1,99 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.178
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792618163;
-	b=CgQ2fTupQja8J7iaIZR3z05SMeV4JnA1xEUrCQ+Mjyzu384Yb19qtGTBQfm/r6b8eHCi
-	 6sIJ9FOFrql0q+zDoW5UtwmBYBlAsShIWG/ndGeEMlvDMyEGm3A3aRMEUg3HP6N+HG1pc
-	 Q2W9nO5PwTDwl9paGIEnQas49NjO4Gw8Nh1pKGqIdkFifauAtGVAoiJLnLPguj+m07Ab4
-	 pDaMbbN5d9oeABBAN0ePeJ3IGxr//7VEjuZMgtLWovlnGh1sVbqs5djT7gW4Bnco1ll1z
-	 FhhnOnmv13t+sjFYJRibD8YnfVQM7qb7+0lWkPr3RS6a4mc44gs2zl2aa6rXg6wlEqQ==
+	t=1792618309;
+	b=zusf9zsiRgMdQ8OsRroXaq5faJQXMIXzwjGLE1XG8Z+w8wvN+yoOVCjZM7JM0tYfQn/w
+	 KZ7PwD/zHKD1nTaq/7YPqxT0yev/1ye5afd1HF2L3lCUwqpJgXIL/LiFJeR/++Y4yqCrG
+	 5mdfgh8i2qZp8VlG+KMOWeXvfmdkIsLLb0N/rvZjANmK9JjSr4hrswy3wD8F/1IVbUKNK
+	 FBZwUEIyKHnYH7Y6W9O87dgJmCDlvSo7SvIShc6Pq8842qKXNJ7VY7QX+JDdsBjZG5Z+y
+	 BzfihdbTHZ85lHJatDyFK+o6dFTWq9T0FNjlvLxmf3vRbHITH/stb2EZhjHcK8Fd0rw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792618163;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792618309;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
 	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=gpL66/D2iZNZJmKtmfPRZTI2dqc5FxpU7hvuG7+bRBg=;
-	b=DPrvQ+lvB+VGr9w13BpWpYH2Up2wDvZBmgGAv5V1RCBk33LDWuXKiKg3D05Roptc5VgY
-	 iw224u8TKDboW1z9b1eowK7iH/eKh24XCYu+EJ3iGmAtT2n/Cv8Beu5Yx9qaxui/I6EXG
-	 G06WqNt/3Ge49+wiOdtuzqkPVA2hqgKSbJy7uBnEe1Dwe8eVnDm+U2YA239ZpE00qxE14
-	 vARZ36OM4b025SLqNn4Z5l5ZpqyIKjUltiOT2xPizxDOFLE6kL37w2/Ad7GATCpQQk3Lr
-	 ASjErGE1wy3VpD2+jYil7aaSIdeSwvf88sziqFYH3iYIA511HMaru/WVKIRx2tiZs8A==
+	bh=pC8tiM/M9A6S1P2Cu9B78hzKZDqyUaaLB0lWSLli4Bg=;
+	b=GZ24RO05KUDmML/dFfgEtBmiVKqzByjOVIluKztM2WqCXjEmLrpGGpKYJBOV4aCbOZPz
+	 VBHBWLmv/IZ/0rFz7o32dlQVOO2rE3u7/bChYUD938u0/cefWDJAcmpc1Ev8QyMRAsHzc
+	 gJ82KgB4Ff8aW6zjbmD8thxL9ygfOND1OaC5gYXVp/WhutSbgimno5MxmqQDHe4q5pBrE
+	 kICv+yWqEE3Df1xjebO9FyVj5oJNeArQttRKMox0RnwjhZPsgzPrk1tOUtvDfw39dtulA
+	 XgTpvPkZ8Sn6liVPU0sOgviaFRdjitrgdNxHShNRqcZycIkBCqKqQm+RT5JOHxWPNXg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ddppVnau;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.50
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ZrdiL0xO;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.167.178
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16CA606A319
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 21:29:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E16CA606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C99F606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 21:31:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C99F606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ddppVnau
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-81ba09a5d23so1131282a34.3
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 14:29:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792618162; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ZrdiL0xO
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-4c5d8c7f326so483059b6e.1
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 14:31:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792618308; cv=none;
         d=google.com; s=arc-20260327;
-        b=IrHanjA15FBjpvjJIV3E1UbOmz7KFplajSvCld5L8vCOJl271E+/DpGD+yq84ZG1h4
-         B8IZGwv0UfIFWVc4BBQr6OFNq2eYpOHMKVIF17vJTBcEnh1LMpr26JWIqeqfz1gLHY5x
-         T9t10/9eNjtA4RPHPiiHA5xOgJELg1vu9g3EssQZpIbu8xll3x/jJvYiNhVm4tB5c4cY
-         TlAAb6w9W09N8YgaZzT4phIvpi7lZ0py5wKFqnkL0atgktUPOf8u9w7GXpYCo4c5woP7
-         YgsETrTKcgZkrO2w45bFZbaFXoC8vwFXwLGSPVeX9oZkhKBWSFvw0If/V04LtHvU3V1K
-         wtSg==
+        b=bnf01+DiqJmPkVoeUQb8CGBp18QAtqRQyf8cb4vRDoKxA4Jr8huggc4VTUksoEWadJ
+         vDdtSGVClImU4gm27VhZPTg2zq2/5urEbw6dxRJcBAPy0U3BBB7WYpsx/mnpsGytttxQ
+         URg3ytihCGA0e1xaq3D252HVnmGmmMhb3SUQkkcKdxTGskFIXSXFIh0zH924V2BWWWW4
+         GmqMq7AOLMB+toP2Pvc7S0ajmVKQ4lyo/jG9DXlRD6UMUzI7OtfuP3I0Zkkklf8fDwEb
+         WTjZgeVJG0xH8METysWsoxUiBEdVqyd/S77iwdoHebYXKGhxSBSSYofFFtjzTGGCbDRG
+         vPJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=gpL66/D2iZNZJmKtmfPRZTI2dqc5FxpU7hvuG7+bRBg=;
+        bh=pC8tiM/M9A6S1P2Cu9B78hzKZDqyUaaLB0lWSLli4Bg=;
         fh=7ZoPpuPsL0UGaj1+jjLGtmGqShAZjvFUDHyP0EBItSw=;
-        b=Svuj09KfDXuyC/4doJ7ed77EnykeGkhh09rfn9rPP+GTjlNWd+dzuGNbIIeSmmYqmC
-         +fCC/IR2lIkyM2+FnNZqHeBVQ3248iGqY9+iTI+I4mrh6+ghm6c7FWlqgC89kPlsuIJB
-         NZrI8xO5/Lwv8LuuOg0o5KY7Cxy/hY6heyvzX/TNW+J0hSq6hn/iA/qzJCmVJAJGRQEw
-         3zN7AIV9ke05pXmN7A3bwUkLOyMFjLmk7UmnSeUoFTrbjE5rLwu+SMPzbBQ1NnokfewR
-         kYP+ugFT5Vh01xgqLQTlyCdU5ZEJxwnTgfdQUqJKozWlN79GgLIMOKDPEo+jhEKuskuv
-         pGVg==;
+        b=oCNXHye6taL12t7OhuqPiO+pfjPvJAgG1yU4Hd1pfcAUusymNw8TTu7H0BvxvQmqqB
+         RV4hDnmvgzO9Mo+FYhiKr6ba8tXfJx+ojfhj8+ilPMP5vMx6zm+Pl4OIQkludA6PVEbP
+         oZpKDu+/rrneXNyJo6wAYfPHzczqImsP8t6Rjkxop40N4hR5B90y8zlO9OnKkuA7bg/g
+         WWtU5cYGn9h7cDJ/a0CC3cltLLRNNoGw09yRiNZab6rmm74EM0aXjHzluYoR8NF5UIga
+         cyu1OGrWritk+Pe81MnwCxUPFlxgHqUl43n1Z/wnDvmF7FiTuGzJOXxC+AOL9J0by3UD
+         s04Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792618162; x=1793222962; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792618308; x=1793223108; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=gpL66/D2iZNZJmKtmfPRZTI2dqc5FxpU7hvuG7+bRBg=;
-        b=ddppVnau0+i/FiKIfgHvrZQRXAmxdfxx8PlxpkElrZdLoxzaS1gSeCK+8z03SOX3hq
-         9sHnRD87WNABg13m82RBK1ZB80FT7HMWo4bSRgOAXH4FSme21PoCBllqT/lqOP2BLYeB
-         gbybtK71K6fFXzTYLkYtyxr4/WXt/8YRk/nxD1OBcFA56d4EwUBsBABubL6cj+7rC3pd
-         QqRroE8VxkaaOc0i+6MFlUrUww99Oilqznya+mLiUZxfWmw6WazTCV0bYFvIC/XtZLyn
-         AjmTxQDrtJ9MjxIdtx7tOWJ9Z56fKB0oAi140vpQp/sIMKupIQmB66felg+DResRkJcp
-         SJEg==
+        bh=pC8tiM/M9A6S1P2Cu9B78hzKZDqyUaaLB0lWSLli4Bg=;
+        b=ZrdiL0xOnMIVLI34bUuSiLMnJVj01ji4TxNPJFoTM/aHvJXdMs+EmUtUaTjpok4INn
+         t950vBzFoRwgt7BesLNP+ytYotOiGurJ29lBAOP+KkPtNmZbAIOFJaYXGVCqBrDID4Ke
+         J+KED5xh9gJHRMSLh+8wq65CFjD+uUaC4Yi8CrKL28gG2CRv7g7b5kW0Qr8rIHzYAI3j
+         VXgwr4zjjSr4CQmg5gqVVrgHFpVzsX1C0LQf7BQ4zNYI979oX6g32m35NTdZTwuvWCGd
+         vk6XALWZ26dHZWqRhJ1XE1j6KgdJLAjPy1lvBHvTooU9wa1q4TuW4VPJOrkyQQb3UhhY
+         nsHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792618162; x=1793222962;
+        d=1e100.net; s=20260707; t=1792618308; x=1793223108;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gpL66/D2iZNZJmKtmfPRZTI2dqc5FxpU7hvuG7+bRBg=;
-        b=TWOtncVE0Gx9PJ9WT7JV20RZDvhlA7zOTBxP5Ym4ZZwXBejXQukrRFgf/DC9q5cJdd
-         z0D4vUQHTPG4xtxYCStW5rJU09kdufhCDQyU+yUhJkTe+sKCan/mgqwfmJ4LPzLy6pck
-         gjfbMBhvLUKiIswhb2gY3lW1mNJtKNxAmGxuN9zCZFaX2sG9dmTO3oVsZCF4isEY9xLV
-         45i5JMwU440BHBILivPVv25aVjYEFgWN8ohMjJlLtrLHKvXP9KvaAMqom643oPv7sFIc
-         UmJOusEikU4wBWAM3kPhYkRahnFTr7TXb3u1dXhbBXSeN3/vAVrgSEHFmWB5aihfvZMK
-         IVtA==
-X-Gm-Message-State: AFq9FYJPPvyH5UZERh7mmUyKi7+aVYtlXiM9wgqN9XkLy9ix6O5YVxHf
-	NxE2yWiQEuT5NGyeRuBxVxeC105rfAhHDa6DwK0kpGa2AxhuyfJZlplzVnr3SmN9oWCAVuZSaEk
-	q0/KW2WahXaUfxqV1gkgCqJ01mj5VhMo=
-X-Gm-Gg: AYBFou2VzzfPqUxVyNIQOgQjS8dmvyOLsvYzrmrWMKP3UVUvw8pZ/5m9/mT/cYHcUCg
-	wJmhw1pRXAzIwZJfDcS6jgHXC6QSsF6aazBQ0bsyAzI3Q/YIPdt/o7U0wVYUzVI/deS2ujdenDY
-	uj5Nf4uj/l86K10VHu2ru/oRibKCpC9nNk3L6/AvWMUKkCaec5pk6MKoRRXTK2eXSXml9jfn0W7
-	QqZqz7JBlAJfarrTvX93eZmemQMk+uF83sWZY8Dn0aRpQbJSewRrBNhSjKyAiQxKz0ZhuECEPB2
-	ESfUpn4Ao6c90YMeEFh2ybw7Bnvvy6pwMt3pADCqtEKFA+7fjR6YcJvi6+aL+zwkyLF5cVctC2v
-	2/mfKciEfSB5bB+a2ZBcM9PogRcIKi0s+T551
-X-Received: by 2002:a05:6808:23c6:b0:4e5:79ec:5bf8 with SMTP id
- 5614622812f47-55365bbcf59mr2745881b6e.67.1792618161769; Wed, 21 Oct 2026
- 14:29:21 -0700 (PDT)
+        bh=pC8tiM/M9A6S1P2Cu9B78hzKZDqyUaaLB0lWSLli4Bg=;
+        b=HGxkA3iAUzP34txngHtUMnQ2V6iaEU41Ut4OOlSN4UCr39sFJl71Dqa9YQtBrL8uZw
+         UUWz20XLd4/XL0yK4JHznP2o658rLpe9jA9hVkPB0H8CeMKGOpARy/mG/ybNa0BZxsqs
+         E9GvZvy+sKScEQ7vzPGdfPz0NpF2YVJG4H2uE4PDeMVrHRwsYOgtTWVLcl0iTm7T8QRr
+         XQ6wgVAzt7+8om4MWvXtM1fiG6XK+zFQj29fX3wqEvFfXTOtlfO31CqrG5E3hK6cYp+p
+         8wDa3q7MayaBoyNyf/XE3tQbWLEXMeVeN5T/02NhhzI7hZ2+M343ejA2PV1wyGRcYJLu
+         /cQQ==
+X-Gm-Message-State: AFq9FYLqJvJcERy3p3YOWpd52/nbdioeX6dDfqQ5SSEx72qOOcY+3Mn3
+	UC7RTu9O6k8I+owvdulZhz+u/l6dNKJruwjHSd8J97k2aPe3UUQLIb2mBhAhOijUzgUd3qMiCM+
+	v+WmV2iL95p9Qisg12PW92xoQxndz3gcwCcjB
+X-Gm-Gg: AYBFou2ZVAbaznCAjbsm8I6ByYH4/8RhtwO2iKYdSf3krOWZp0sTHlRtZJFypkfndi6
+	75WiqsbpRqk1UaZwF+2EC47yaodNkVU5knOTxScETJhsn1vDBgRyNxBBHiXpk0vXVetwN949Y+0
+	gH/5Fj/sg8ULSjjPWy10qfp0KZHT4mMaGOuPX7ir1MRxxn8VAOUk56IOiznqDN1k8WHYnqhrMVE
+	DMi4rgXo2gvgiDO6mXAgi9RYSL17XJ5GZGwOCT4HXZPabeiL/SzeCpoSVBnE+VOICSyH79C5Xnv
+	4yNlvKmT0L53En9zTFiX3iwbuGOJsDJ4291m2qbickPRvs3nUf9Cyg6vN9YyKO36f0CjGND2Gky
+	Fa8PwriXO64hXxTN/P/m7XXOiUTC6ygiFTrPP
+X-Received: by 2002:a05:6808:d48:b0:4b2:8e1c:5920 with SMTP id
+ 5614622812f47-5534e1c59famr2327157b6e.9.1792618308322; Wed, 21 Oct 2026
+ 14:31:48 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,13 +103,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn> <20261021210754.3270023-2-xyx2021@mail.ustc.edu.cn>
-In-Reply-To: <20261021210754.3270023-2-xyx2021@mail.ustc.edu.cn>
+References: <20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn> <20261021210754.3270023-3-xyx2021@mail.ustc.edu.cn>
+In-Reply-To: <20261021210754.3270023-3-xyx2021@mail.ustc.edu.cn>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 21 Oct 2026 14:29:09 -0700
-X-Gm-Features: AclHuK_TvRfFZ1LeeqVBqWmlEWUzjkCKd6_pPyknEI1L5nyqBM9kSLh65UBc3CY
-Message-ID: <CAMB2axPFKQPGEOmSXK=0mKO=HBijS1JFV01r3M18ifqFBreFvQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 1/2] bpf: Track borrowed iterator results by default
+Date: Wed, 21 Oct 2026 14:31:36 -0700
+X-Gm-Features: AclHuK-JRzTqCJlrsvptFnnm8dHHzVF5EXNFyNsvV7dtV90jxoppmAa-1IIypUA
+Message-ID: <CAMB2axO6pdGYGAwUtXM_Wpp-TEU84oOsQ_N+qud1J2q1dUKu_w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 2/2] selftests/bpf: Test borrowed iterator
+ result lifetimes
 To: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
 	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
@@ -120,54 +121,21 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Oct 21, 2026 at 2:08=E2=80=AFPM Xu Yunxiang <xyx2021@mail.ustc.edu.=
 cn> wrote:
 >
-> An open-coded iterator can return a struct pointer borrowed from its
-> current element. The verifier has not tied such results to iterator
-> state since the task_vma iterator was introduced, so a saved result
-> can still be used after destroy. Commit bee9ef4a40a27 ("bpf: switch
-> task_vma iterator from mmap_lock to per-VMA locks") also made next
-> release the protection of the prior element. A later snapshot
-> conversion made vm_file explicitly borrowed from that element.
+> Exercise borrowed VMA results before and after iterator advancement
+> and destruction, including NULL next, trusted fields, and a FILE
+> dynptr that must be discarded before advancing. Keep positive controls
+> for using the current element and discarding the dynptr first.
 >
-> Associate non-RCU, non-acquired struct results with the iterator
-> reference by default. Invalidate dependents before next forks its
-> NULL and non-NULL paths, while retaining the iterator itself. Let
-> destroy propagate child-reference errors. Add KF_ITER_RET_INDEPENDENT
-> for results that outlive the current element, preserving existing
-> RCU and acquired-reference rules.
+> Use a test-module iterator returning current to verify the explicit
+> independent-lifetime exception. Retain controls for RCU-protected
+> results. Also check the generic trusted-field rule outside iterators:
+> reading file->f_inode while holding an acquired file reference succeeds,
+> but using the saved inode pointer after bpf_put_file() is rejected.
 >
-> Trusted pointer field loads also need to preserve the source lifetime.
-> Loading a trusted field does not acquire a reference to the pointed-to
-> object. Set the field pointer's parent_id to the source's reference ID
-> if the source is referenced, or inherit its parent_id if it is borrowed.
-> This is a generic rule, including accesses unrelated to iterators. For
-> example, the following access is now rejected:
+> The annotated programs check verifier loading and diagnostics; they do
+> not request runtime execution of the added programs.
 >
->   file =3D bpf_get_task_exe_file(task);
->   if (!file)
->           return 0;
->   inode =3D file->f_inode;
->   bpf_put_file(file);
->   ino =3D inode->i_ino;
->
-> The inode pointer borrows the file's lifetime. Releasing the acquired
-> file reference removes that lifetime guarantee, so the verifier must
-> invalidate the derived inode pointer as well. This does not imply that
-> bpf_put_file() immediately frees the file or inode. Reading the inode
-> while the file reference is held remains valid. Fields with independent
-> RCU protection retain their existing lifetime rules.
->
-> For an iterator result, the same propagation keeps trusted fields such
-> as vm_file and f_inode tied to the current element. Propagate the backing
-> object's lifetime through dynptr construction too, so its descendants
-> remain in the invalidation graph. Reuse the reference-release traversal
-> for next without releasing the iterator's own reference.
->
-> Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfuncs"=
-)
-> Suggested-by: Amery Hung <ameryhung@gmail.com>
 > Assisted-by: LLM
 > Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-
-Thanks for working on it.
 
 Reviewed-by: Amery Hung <ameryhung@gmail.com>
