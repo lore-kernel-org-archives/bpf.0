@@ -1,57 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792582739;
-	b=ZjFwoFWkzxrp9FIfPlTVJ/rEWwOUPlXEdxSAbV3ff4dSt9ofn9ZLzGxXK9xrqjOO5yFh
-	 LoDdJn5xeDkGhnLsXhmLOLupswihV2kpcVjQb9SGfnvT50gvr82xOQRgKYDoonYjNSOSQ
-	 gPcr3GS2KajxUL726GzTAl7f0RYsu3CHe5+uzQzKpHDw9jErdilFZhoBEPkG/J/Q/VK7d
-	 iLC60q0dPUVd5JA2b2vjevPMy3uG/Bns9bP6D5G5whtMHOwr+U3L9m5HHu0Fk/LlTZ0JF
-	 wjTgwtlMESQbX21uouorFzfbIrajVBG2/h/I6gPYwkvsAw1ju++i8RN8Y427E7nuu8Q==
+	t=1792582831;
+	b=yfodS5nbuE1Xu2GY2R8tDaP5xwVKeHIg/jC8faROCKUohK1yDVxoSfmPaFPNOVvY6c9s
+	 3yzDHBa0RFoRrAdXh6l1LBfOhX+fS69e/lqgQU6FksAhk9MWY2Li+jDO6LWpyE7D+EA0N
+	 CB6bGECuNXeq9c3eR2r+c75PbOJkYcQeg7hmv0IpRXHCD4QQphT8JdNHx/SBz3gCFmptn
+	 Kc4mepYwMkmzDfAWixPkEGzhCKFHSmk2gMCOlx1Lz4P4zATacn1aN1ABpM4VECtT0S3ei
+	 C/ZwPkeA2KIaPMGwBWH7DCAFUr7wcVS1WyDZv8LhRjNuqUHY4bbhYZpcVow3QfOIz/w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792582739;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792582831;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=GtuTGfWk3H7E1gbYASmMIdUVMADE1R3RABXKZ9cs/xk=;
-	b=TDCviE8Dmk66ZNJBYEodHd9fL3cTwK2EtTle3gHtk/XYJqpT10EI1xtQI4VIlLDDyJdO
-	 ocVSeIFuDCCbmK10An6x3kzbQIQtUIGJyc0c3dLFs1/qEOJle3nH+5KtUEjJ2v+FwbYKD
-	 5rKzldNuBHuRnM16k/E87zV8/XL1X1ikc94yeZZOs3WjHaqb4IVtRkLEVgk+7katAsxOG
-	 uPdWEqlHHb3syu4NNUBfkUelSwgxgRC3187YozwRtf3IJHZ7AZNcbYfdSw6uhY/6kTpUZ
-	 KbBeNI0+eBT4khSUKZN4cwPNAhviPCpS7t6fw6sEyr3XHVF9tscfhSpbVDea3DSNcwQ==
+	bh=hRvoRPccK0ObKuMf62aLb3R3R+A968xeDh5CRkvKhSM=;
+	b=CF+XmGIi6gAtB7Vs6PKDS7GeNLg2Ibbhne3ZweJmH/EJKZYnnBIj8VJYYjUMKzBOwIxs
+	 XIsU5EhqJG1QV4QfESNMDFH/Qo7ZGJYLQaUBAW11RWY+/a7cqX/Pi7eA5usoAB8I6+BwX
+	 VTLY1UgZNp1grXMvSv++n7gu9y/ofr3JvJ57y7VJPtn/jFqhRrdKbgoEd4F+rFUCGt0OZ
+	 IPbnFvOyjVQRU5P/ZqB0iVla6MKGF+qXGz+YB/CnMwqxe6IOuvXfUa4ujcEwIEtZbCVXZ
+	 idpD76K6EmuxfM7kdxJDvSY+uiV4oKXjSYD8aanpL+qZRKzZZBpWpUqu9zUFFRmkjmQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="kz5/tDiu";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h33VLacb;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84F4606A331
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 11:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE01606A319
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 11:40:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kz5/tDiu
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C3D61F01579;
-	Wed, 21 Oct 2026 11:38:57 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h33VLacb
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18D781F000C4;
+	Wed, 21 Oct 2026 11:40:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792582738;
-	bh=GtuTGfWk3H7E1gbYASmMIdUVMADE1R3RABXKZ9cs/xk=;
+	s=k20260515; t=1792582830;
+	bh=hRvoRPccK0ObKuMf62aLb3R3R+A968xeDh5CRkvKhSM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kz5/tDiuq8Zp96IVC2XIiPJGHoX+4gpgay7d0oEStfPLTU2WdUQTRgl1/EF1yoL0O
-	 BU7irob0rKb3sMVDKzMRpIZs7GvhX3Ayu3OQf8z24V8lqQlnUkb6vSsV6V1iO1PTal
-	 2WIyuUHLRX3g8T3i7fIc/icxzDroFXTTZxX6bGgQhbAJW7vma2lGUqci7DlhPF9Eh1
-	 VhktQ7JzWWWXBUBH3XxR7xxFb+Cw9hj6bqf1xYb50wxzrMAsSK9/pZ5BPX3DjHaAck
-	 Se2gn6259qUjypwwgez01jWaRFWrtB7zGEfTWYzVlsKdxq2/r0iUiW9A9w/I+Nd8Rf
-	 Tu90+yQSyJ59A==
-Message-ID: <sashiko-outbox-180173@kernel.org>
+	b=h33VLacb4OUhHA+wtY+sI5cKdIF2czPPGRkYnihor+xX2FmPSsm/mqo/QiZqMFjow
+	 AWYjJG36aosVWVeXvHZChQ5jWXg+Q+oR2yr5m/DQhWJEZIiWeIdlNTiAofFOB5pyNg
+	 4W3Wdi2W3qApZEwrYm7vcqQ4veFz9Xnou+P1J97+XeyCUi2dle9mB+e4iR983+W2Yc
+	 9FbNOcVqAvzhSOstPejbBtPTzeuxZvk5ysHsMmFyxOGwgx3f0frTjmVSMMS0M4XvN/
+	 VsBg7vOfqimxPriV6iNz/idPoeoE5TeH0UpoQ7OqFzLNAV5J07eXOSiZYho022gVY8
+	 dqGkF2mK39x3A==
+Message-ID: <sashiko-outbox-180175@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 7/7] selftests/bpf: add tests for the page_owner
- bpf_iter target
+Subject: Re: [PATCH v3 3/7] mm/page_owner: add bpf_iter target "page_owner"
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Zhen Ni" <zhen.ni@easystack.cn>, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, akpm@linux-foundation.org, vbabka@kernel.org, surenb@google.com, mhocko@suse.com, brendan.jackman@linux.dev, hannes@cmpxchg.org, ziy@nvidia.com, shuah@kernel.org
 Cc: bpf@vger.kernel.org, linux-mm@kvack.org
-In-Reply-To: <20261021112437.1799213-8-zhen.ni@easystack.cn>
+In-Reply-To: <20261021112437.1799213-4-zhen.ni@easystack.cn>
 References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
- <20261021112437.1799213-8-zhen.ni@easystack.cn>
+ <20261021112437.1799213-4-zhen.ni@easystack.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 21 Oct 2026 11:38:56 +0000
+Date: Wed, 21 Oct 2026 11:40:28 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,92 +62,115 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests/bpf: ASSERT_OK_PTR() on strstr() and strchr() passes o=
-n NULL
+- [Medium] mm/page_owner: rescan and post-stop show() in page_owner_seq_sta=
+rt() at EOF
 --
 
-commit c911a68fd56ba0ae206e2cf17e238a8881f03bd2
+commit a6ba125169596a18417440d179f83a946227810e
 Author: Zhen Ni <zhen.ni@easystack.cn>
 
-selftests/bpf: add tests for the page_owner bpf_iter target
+mm/page_owner: add bpf_iter target "page_owner"
 
-This commit adds a sleepable BPF program and a userspace test runner to
-exercise the seq_file and open-coded page_owner BPF iterators and their
-associated kfuncs. It also enables CONFIG_PAGE_OWNER in the BPF selftests
-configuration.
+This commit adds a "page_owner" bpf_iter target that iterates over pages
+eligible for page_owner output using page_owner_next_eligible() and passes
+the PFN and a snapshot of struct page_owner to the attached BPF program.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c b/t=
-ools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+> diff --git a/mm/page_owner_iter.c b/mm/page_owner_iter.c
 > new file mode 100644
-> index 0000000000000..3684ca3089355
+> index 0000000000000..529b2c4a589a9
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/page_owner_iter.c
+> +++ b/mm/page_owner_iter.c
+> @@ -0,0 +1,118 @@
+
 [ ... ]
-> +/* Validate bpf_page_owner_get_memcg_info() results from the open-coded =
-run. */
-> +static void check_memcg_skel(struct bpf_iter_page_owner *skel)
+
+> +static void *page_owner_seq_start(struct seq_file *seq, loff_t *posp)
 > +{
-[ ... ]
-> +	if (skel->bss->memcg_first_name[0])
-> +		ASSERT_OK_PTR(strstr(skel->bss->memcg_first_path,
-> +				    skel->bss->memcg_first_name),
-> +			      "memcg_name_in_path");
+> +	struct page_owner_scan *scan =3D seq->private;
+> +
+> +	if (*posp =3D=3D 0)
+> +		scan->pfn =3D min_low_pfn;
+> +
+> +	if (!page_owner_next_eligible(scan))
+> +		return NULL;
+> +	return &scan->po_snap;
 > +}
 > +
-> +void serial_test_page_owner_iter(void)
+> +static void *page_owner_seq_next(struct seq_file *seq, void *v, loff_t *=
+posp)
 > +{
-[ ... ]
-> +	ASSERT_GT(skel->bss->stack_bytes, 0, "stack_snprint_ok");
-> +	ASSERT_OK_PTR(strstr(skel->bss->stack_text, "+0x"), "stack_frames");
-> +	ASSERT_OK_PTR(strchr(skel->bss->stack_text, '\n'), "stack_lines");
+> +	struct page_owner_scan *scan =3D seq->private;
+> +
+> +	++*posp;
+> +	scan->pfn++;
+> +	if (!page_owner_next_eligible(scan))
+> +		return NULL;
+> +
+> +	return &scan->po_snap;
+> +}
 
 [Severity: Medium]
-Will these ASSERT_OK_PTR() checks in serial_test_page_owner_iter() and
-check_memcg_skel() in tools/testing/selftests/bpf/prog_tests/page_owner_ite=
-r.c
-actually catch a NULL return from strstr() or strchr()?
+Can this rescan PFNs and invoke page_owner_seq_show() again after the final
+page_owner_seq_stop() callback has already run?
 
-In tools/testing/selftests/bpf/test_progs.h, ASSERT_OK_PTR() checks the
-pointer via libbpf_get_error():
+In mm/page_owner.c:page_owner_next_eligible(), scan->pfn is copied into a
+local variable and only written back inside the loop before checking
+scan->po_snap.handle:
 
-    #define ASSERT_OK_PTR(ptr, name) ({                                 \
-            static int duration =3D 0;                                    \
-            const void *___res =3D (ptr);                                 \
-            int ___err =3D libbpf_get_error(___res);                      \
-            bool ___ok =3D ___err =3D=3D 0;                                =
-   \
-            CHECK(!___ok, (name), "unexpected error: %d\n", ___err);    \
-            ___ok;                                                      \
-    })
+mm/page_owner.c:page_owner_next_eligible() {
+	unsigned long pfn =3D scan->pfn;
+	...
+	for (; pfn < max_pfn; pfn++) {
+		...
+		scan->pfn =3D pfn;
+		scan->po_snap =3D *page_owner;
 
-And in tools/lib/bpf/libbpf.c, libbpf_get_error() returns -errno when
-given NULL:
+		if (!scan->po_snap.handle)
+			goto ext_put_continue;
+		...
+		return true;
+		...
+	}
 
-    long libbpf_get_error(const void *ptr)
-    {
-            if (!IS_ERR_OR_NULL(ptr))
-                    return 0;
+	return false;
+}
 
-            if (IS_ERR(ptr))
-                    errno =3D -PTR_ERR(ptr);
+When page_owner_seq_next() advances scan->pfn past the last eligible page
+and calls page_owner_next_eligible(scan), the loop reaches max_pfn and
+returns false without updating scan->pfn to max_pfn. As a result, scan->pfn
+is left at the PFN right after the last hit (or at an intermediate PFN where
+po_snap.handle was zero).
 
-            return -errno;
-    }
+In kernel/bpf/bpf_iter.c:bpf_seq_read(), when page_owner_seq_next() returns
+NULL, bpf_seq_read() calls page_owner_seq_stop(seq, NULL) (running the BPF
+program with ctx.po =3D=3D NULL), marks iter_priv->done_stop =3D true, and =
+flushes
+any buffered output in seq->buf to userspace with a positive return value.
 
-Because strstr() and strchr() do not set errno when returning NULL on a
-non-match, if errno is 0 after bpf_prog_test_run_opts() succeeds,
-libbpf_get_error(NULL) returns 0 and ASSERT_OK_PTR() silently passes even
-when "+0x", '\n', or memcg_first_name is missing.
+When userspace issues the next read() call to observe EOF, bpf_seq_read()
+calls page_owner_seq_start(), which calls page_owner_next_eligible(scan) and
+rescans from the stale scan->pfn up to max_pfn. If any page in that range
+was allocated between the two read() calls, page_owner_next_eligible(scan)
+returns true and page_owner_seq_show() invokes the BPF program again with
+ctx.po !=3D NULL after the terminal ctx.po =3D=3D NULL stop callback has al=
+ready
+run.
 
-Should these checks use ASSERT_NEQ(..., NULL, ...) instead?
+Similarly, if the initial scan finds no eligible pages (*posp remains 0) and
+the BPF program writes output during page_owner_seq_stop(seq, NULL), the
+follow-up read() enters page_owner_seq_start() with *posp =3D=3D 0, resets
+scan->pfn =3D min_low_pfn, and rescans the entire PFN range.
 
-> +
-> +	check_memcg_skel(skel);
-> +
-> +destroy:
-> +	bpf_iter_page_owner__destroy(skel);
-> +}
+Should page_owner_next_eligible() update scan->pfn =3D pfn when the loop
+terminates at max_pfn (and only store scan->pfn =3D pfn on a hit after chec=
+king
+scan->po_snap.handle), and should page_owner_seq_start() also ensure *posp =
+is
+advanced so a follow-up read() after an empty scan does not reset scan->pfn
+to min_low_pfn?
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261021112437.1799=
-213-1-zhen.ni@easystack.cn?part=3D7
+213-1-zhen.ni@easystack.cn?part=3D3
