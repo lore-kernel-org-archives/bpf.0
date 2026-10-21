@@ -1,65 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792559668;
-	b=KR6VBFukv5bz3tI35PYPNeHUuzEz+VuQpG6pTmWP36cu1LKYY+bsTmMZfW+45LJOzzOf
-	 b9kK86qgqFiDUvLuqZfAKU1oAeur/gA6mDEABf88rpNfzns0c4qOlwYB9oBaAsZnBUUdn
-	 dTk1NoQi5ZpEO7hSVfrLI6VIJQnWR+vGyFkJMYwiCySowhMIofj2qwUdD2dYAUvescg0a
-	 OX1CUSCr6jBdsN9MJYVlbhn7rDDx0nAhvgj2sNKAJd2zzVjGxBu6WEy8Ct+ZANzJglBZs
-	 ZnW/Bet+xYOqBdt+mN9LGxWnB36EB7nTgr9M96zS6HaNs5VdctmB/wL1FNUGijtoi0Q==
+	t=1792559690;
+	b=LvzpnPKcT94ZneRZF9bJ3UY0OmFw/sE0JecWZTbMN61E6PHFXFHjN7Xu9GZLArt1tiEw
+	 QVKIe4TxDiBwUSoWeg8nf8nmeCH/V6nifFdq6qJ1KbpoPJGAkO8IRk2sRsmSgf8oBxrRT
+	 SqOt9mkVlVbJt82p9O1OTFsl5ZPBX+pBz67Zj2LmhKP971mrblOglMsaZbplm04B8Jh63
+	 gnd3KSm6JAalqJ4oluiHRzB0Y7K4fO0FKJXTAW/GXIuuWgB6S0shesPB3XwqfXkXxEKtQ
+	 QwORhMil38zfwaeZUrFpj75mdBrYgmROYU/5lxUwrqhrFRmdGcgN4afe74lwT+320Mg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792559668;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792559690;
 	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
 	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
 	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=HGhqz+6jGv9mts8LxCfHA4tZcirjemCco6HqrDaX3HY=;
-	b=ovhmi9slI8CBbEOptjw/u9HzXTTAjDUeGVq4p6Wxih2paPcKzNgBtPDbwhO4mSx7Rr+n
-	 qkTURL2xiXs0Hj83c77GnY7BdY0IdEAJrcBHoW+4J9dq9b+GdVaILl3p75gEQzO1oVVa+
-	 bDdBqNLiqeF/jW56a5Sw/bsDTCh55H3+3b8o3tIGMG4FGTRPHjaduZ5TAPAvFP/w5TBmp
-	 0ruWJfkv4QgAdIRTMtTpdhFBTl6xDCVix2BYO0bApzhzaeBVpaV8kKtpOHUcSEzbzojAS
-	 JWbmVDPSBBLXyY5mTGOYsnBBKfciyIVOjotxLBdxkstOU6wf6NkKRjZEc9e7KjPMG7g==
+	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=l+UzvfTKE+xvxb9jyN0s6EqMSSmyuRP0/v64tcRdlSM=;
+	b=Nal3BxMwKH4yLAaPK7zilvniyn0Ud/sMu+aCgW1molMmVXSjdqhRFRvtIaRGZRazw1yq
+	 wRwA4YoaAOLOLKHAHWwELEwxjD/zIFCdbgB6PgMbxx7iCe40NuNq2MdOo7F7DPZ3HxY/j
+	 8hfqqQ5tQitqOT3WkrQhIHf77VrjMtqoC1p0BhtPgW1Sj5lygbKmdY1MORTIe4Z84QLmA
+	 9jA9MaHyyodYIWybbrTJ9OX4/mBiMn4F7chvq6hwJ8qzpfcThQjJw3JqtVLg3816Js726
+	 6wu25FBHxUkCCdFpFeGLD7DJg6nRf3iBVLbG3w2uHWt2+f4tKsUD0sY2W7MtMsejqpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.intel.com;
 	spf=pass smtp.mailfrom=linux.intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=KDdv5Mzg;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=jTboD54w;
 	arc=none smtp.remote-ip=198.175.65.14
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F0AF606A319;
-	Wed, 21 Oct 2026 05:14:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F0AF606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0186606A31A;
+	Wed, 21 Oct 2026 05:14:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B0186606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=KDdv5Mzg
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=jTboD54w
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792559668; x=1824095668;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=teMU07WGBpqrvDeDqgeYEvqhHGQgB+waO627OeWqOSc=;
-  b=KDdv5Mzgqmg6412/uI6oH0uk8aOtMD9CcgfvRRIf2PrMDi1gRVVXofx+
-   xmuQX0Socy7taNGjvLU628jZK8xfFK46PpTCQO/Jnie2PhcGKb0pwcq1d
-   djwd1DjFkBL7v70KEFTupuh5exqfWk1mQmAYtmgRxjuB+l+S/7B9+/8If
-   P5xmFZ2JcWYRCCvx/aiegxeD21SzEpdNhBnyMmDUfhIFGegWgsngi+ENa
-   vIi4QsHkFJJ594pn8c089hIx9hp9SFcA2IGGPzH79xS0N3ftwidO2erKT
-   XCiDv6CMmAEtYHGe64EW68y84tN3rDQ80VDvFNtTfvVIj7Fc99I+XexVF
-   Q==;
-X-CSE-ConnectionGUID: KLIYupM2SR+CDOskzzwx4g==
-X-CSE-MsgGUID: Euwf5dXJSqKqb7nFqTSVyg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11941"; a="1149143"
+  t=1792559690; x=1824095690;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MEVuvr9POgXP/LhOjLb0m5Uinep80kmDGLAtDAn6zR4=;
+  b=jTboD54wWv7FIkFxA6eXJggyCHIpwEXtkv4AAIFKSq2xOGwMR9br0JsH
+   E8iPP5du23br3kyPerm8rEv7mmV4puwv1yjBZnbWOZltHaZAq/WVyuWAu
+   XLP/LpJpNB0BfWSPv4VeAAfidRdr7UqJiXPldsvuj2n374C4WvWUvMkIa
+   kxjKJQop+nGOsFvK5gJF4+tO439QMl5VfyirNdZ6LoYmL7eWC7+NxdmTF
+   JRp1lLujeu83FXBGvxxnnWl48K055/qavfTU9yUyxb9bmB+1LoP9keZ2M
+   nf0+xf8EioH++zE+mxTfTuh+0JsU4uIPkzh2hW0yhHd740ACk6GvO/nMC
+   g==;
+X-CSE-ConnectionGUID: GnkPzAb6SCWRYRe8+OOctA==
+X-CSE-MsgGUID: Gea76bcnRcmCcbz4W7UmzA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11941"; a="1149201"
 X-IronPort-AV: E=Sophos;i="6.27,169,1787036400"; 
-   d="scan'208";a="1149143"
+   d="scan'208";a="1149201"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2026 22:14:27 -0700
-X-CSE-ConnectionGUID: MQvJP9+JRKyGBhvk2juoLQ==
-X-CSE-MsgGUID: 31Wi+4JHR0aqWU7kFyHSiA==
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2026 22:14:50 -0700
+X-CSE-ConnectionGUID: ri3PIFiQRlCYCWQ/O50tOg==
+X-CSE-MsgGUID: 5p8q/uD1RwqOZ9+NVbZTmw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,169,1787036400"; 
-   d="scan'208";a="2947631"
+   d="scan'208";a="2947677"
 Received: from spr.sh.intel.com ([10.112.229.196])
-  by orviesa005.jf.intel.com with ESMTP; 20 Oct 2026 22:14:23 -0700
+  by orviesa005.jf.intel.com with ESMTP; 20 Oct 2026 22:14:46 -0700
 From: Dapeng Mi <dapeng1.mi@linux.intel.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -83,10 +84,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Falcon Thomas <thomas.falcon@intel.com>,
 	Xudong Hao <xudong.hao@intel.com>,
 	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [Patch v4 0/5] perf/x86: Limit branch snapshots to valid entries 
-Date: Wed, 21 Oct 2026 13:07:06 +0800
-Message-Id: <20261021050711.4043703-1-dapeng1.mi@linux.intel.com>
+Subject: [Patch v4 5/5] pef/x86/intel: Always snapshot live hardware LBR state for BPF path
+Date: Wed, 21 Oct 2026 13:07:11 +0800
+Message-Id: <20261021050711.4043703-6-dapeng1.mi@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261021050711.4043703-1-dapeng1.mi@linux.intel.com>
+References: <20261021050711.4043703-1-dapeng1.mi@linux.intel.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -98,55 +101,113 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sashiko reported that the vendor-specific branch snapshot callbacks
-used by bpf_get_branch_snapshot() copy up to x86_pmu.lbr_nr entries
-from cpuc->lbr_entries[], regardless of how many valid entries the
-last LBR read produced. This makes BPF programs read stale or invalid
-branch records. Patch 1 addresses AMD and patch 2 addresses Intel.
+__intel_pmu_snapshot_branch_stack() is meant to snapshot the current
+runtime LBR state from hardware for the BPF path. However, stale cached
+PEBS LBR data can be snapshotted instead when a PEBS LBR user is active.
 
-Changes in v4:
-- Patch 01: Disable LBR if parsed x86_pmu.lbr_nr exceeds
-  MAX_LBR_ENTRIES (Sashiko).
-- Patch 05: New patch, which always snapshots live hardware LBR stack
-  for BPF path (Sashiko).
+Fix this by always snapshotting the live hardware LBR state, regardless
+of whether a PEBS LBR user is active. Reading the runtime LBR registers
+can overwrite the cached PEBS LBR stack, so save and restore the cached
+PEBS LBR state around the snapshot. This preserves the PEBS LBR data for
+later output to userspace in the normal PEBS record path.
 
-Changes in v3:
-- Patch 01: A new patch to ensure x86_pmu.lbr_nr not to exclude
-  MAX_LBR_ENTRIES (Internal Sashiko).
-- Patch 03: Clean cached LBR stack when reseting hardware LBR registers,
-  which prevents stale LBR stack leakage.
-- Patch 04: Don't reset cached LBR stack if all LBR events are PEBS
-  events. This ensures PEBS captured LBR stack isn't cleared (Sashiko).
+Fixes: c22ac2a3d4bd ("perf: Enable branch record for software events")
+Signed-off-by: Dapeng Mi <dapeng1.mi@linux.intel.com>
+---
+ arch/x86/events/intel/core.c | 43 ++++++++++++++++++++++++++++++++++--
+ arch/x86/events/intel/lbr.c  |  9 --------
+ 2 files changed, 41 insertions(+), 11 deletions(-)
 
-Changes in v2:
-- Include a fix for Intel LBR.
-- Add Tested-by from Dapeng to the Intel fix.
-  https://lore.kernel.org/all/eb6c7bda-0dcf-4fac-ad69-9f5b24abc21b@linux.intel.com/
-
-History:
-v3: https://lore.kernel.org/all/20261019070836.2972403-1-dapeng1.mi@linux.intel.com/
-v2: https://lore.kernel.org/all/cover.1792064123.git.sandipan.das@amd.com/
-v1: https://lore.kernel.org/all/20261007181002.4005262-1-sandipan.das@amd.com/
-
-Dapeng Mi (4):
-  perf/x86: Disable LBR if x86_pmu.lbr_nr exceeds MAX_LBR_ENTRIES
-  perf/x86/intel/lbr: Reset the cached LBR stack in
-    intel_pmu_lbr_reset()
-  perf/x86/intel/lbr: Limit branch snapshots to valid entries
-  pef/x86/intel: Always snapshot live hardware LBR state for BPF path
-
-Sandipan Das (1):
-  perf/x86/amd/lbr: Limit branch snapshots to valid entries
-
- arch/x86/events/amd/core.c   |  2 +-
- arch/x86/events/amd/lbr.c    |  4 +++-
- arch/x86/events/core.c       |  6 +++++
- arch/x86/events/intel/core.c | 45 +++++++++++++++++++++++++++++++++---
- arch/x86/events/intel/lbr.c  | 19 +++++++--------
- 5 files changed, 62 insertions(+), 14 deletions(-)
-
-
-base-commit: f5a78ecccd98a04c47cea1cd63c2a2fdce8a4b48
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 5dfb9e9156e8..07d1a8a7845b 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -2815,16 +2815,50 @@ static void intel_pmu_enable_all(int added)
+ 	__intel_pmu_enable_all(added, false);
+ }
+ 
++struct lbr_snapshot {
++	struct perf_branch_stack stack;
++	struct perf_branch_entry entries[MAX_LBR_ENTRIES];
++	u64 counters[MAX_LBR_ENTRIES];
++};
++static DEFINE_PER_CPU(struct lbr_snapshot, lbr_snapshot);
++
+ static noinline int
+ __intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
+ 				  unsigned int cnt, unsigned long flags)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
++	struct lbr_snapshot *snapshot = this_cpu_ptr(&lbr_snapshot);
++
++	/*
++	 * This may be called from bpf_event_handler() in a PMI context. If
++	 * a PEBS LBR user is active, the PEBS sample record has already updated
++	 * cpuc->lbr_stack. Reading the LBR registers here would overwrite that
++	 * cached PEBS LBR stack, so save it first and restore it afterward. This
++	 * keeps the cached LBR data available for later output to userspace in
++	 * the normal PEBS record path.
++	 */
++	if (cpuc->lbr_pebs_users) {
++		memcpy(&snapshot->stack, &cpuc->lbr_stack,
++		       sizeof(struct perf_branch_stack));
++		memcpy(snapshot->entries, cpuc->lbr_entries,
++		       sizeof(struct perf_branch_entry) * cpuc->lbr_stack.nr);
++		memcpy(snapshot->counters, cpuc->lbr_counters,
++		       sizeof(u64) * cpuc->lbr_stack.nr);
++	}
+ 
+ 	intel_pmu_lbr_read();
+ 	cnt = min_t(unsigned int, cnt, cpuc->lbr_stack.nr);
+-
+ 	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
++
++	if (cpuc->lbr_pebs_users) {
++		memcpy(&cpuc->lbr_stack, &snapshot->stack,
++		       sizeof(struct perf_branch_stack));
++		memcpy(cpuc->lbr_entries, snapshot->entries,
++		       sizeof(struct perf_branch_entry) * cpuc->lbr_stack.nr);
++		memcpy(cpuc->lbr_counters, snapshot->counters,
++		       sizeof(u64) * cpuc->lbr_stack.nr);
++	}
++
+ 	intel_pmu_enable_all(0);
+ 	local_irq_restore(flags);
+ 	return cnt;
+@@ -4022,7 +4056,12 @@ static int intel_pmu_handle_irq(struct pt_regs *regs)
+ 
+ 	loops = 0;
+ again:
+-	intel_pmu_lbr_read();
++	/*
++	 * No need to read the LBR stack when all LBR users are PEBS events,
++	 * since the PEBS handler updates it.
++	 */
++	if (cpuc->lbr_users != cpuc->lbr_pebs_users)
++		intel_pmu_lbr_read();
+ 	intel_pmu_ack_status(status);
+ 	if (++loops > 100) {
+ 		static bool warned;
+diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+index ac1759a71288..07b32255e48d 100644
+--- a/arch/x86/events/intel/lbr.c
++++ b/arch/x86/events/intel/lbr.c
+@@ -1030,15 +1030,6 @@ void intel_pmu_lbr_read(void)
+ 		return;
+ 	}
+ 
+-	/*
+-	 * Don't read when all LBRs users are using adaptive PEBS.
+-	 *
+-	 * This could be smarter and actually check the event,
+-	 * but this simple approach seems to work for now.
+-	 */
+-	if (cpuc->lbr_users == cpuc->lbr_pebs_users)
+-		return;
+-
+ 	x86_pmu.lbr_read(cpuc);
+ 
+ 	intel_pmu_lbr_filter(cpuc);
 -- 
 2.34.1
 
