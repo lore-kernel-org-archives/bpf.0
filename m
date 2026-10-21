@@ -1,138 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.115
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792612951;
-	b=p8wYfWUWytHDmdrwLNnmUMugGmJRfBe3QxmdfgJeG7vACNTFCj5I1S7er+UyVOaMHhd6
-	 rJ40RtYpM4B8kKytcVJhqZlgDUUcuIhXsYsTcryV9wVbZU5s5NeDCtvMWmN4C+WkArvtG
-	 1B9nPWiX8uim9en0jwcVilRzG2M2elq2LulQlTGaTJzvoEcKaXVD+VO4Ly9k3ey1cF1Nr
-	 5vXmdLGglZdGCwg8QACDmzuAo3bws7i830sporq4Ke1LOHycFunIy5Jix0P58EY2IXGzU
-	 Gjz5EJvLOkwoLJBMxTuyS4U/KZ4v8Djy1LPq4MvWsFhtSkykPVpHFR5Ls5czuHJq03Q==
+	t=1792613664;
+	b=Ovjso/W0snVR+tBwrumyc3K3Yt/uz4me7s7Y50EFrYJQSodQF29J/QXRcypWnVyzpYvx
+	 ytlft1pmzKmNc1FxdHEmRCBl1CyGr865Bfc/woKRZNX21LuyhxVQAG0v2TlDmOmqLbjJn
+	 getHp5M8kiYoiKjQD0L70HCzExFuhHsN+s5kP5C2//HXRi1ZNSK8C3gzehLQb8tNLeD+c
+	 RDLTiR5bI31TOWbESncMCMR5Y4wPW2K0B8KxEKpZk2VWNTT8WPPW0iVi7TdiakiavDYfR
+	 yXncPGiszP+JKm0GDnggkhm7svLPtORantrfyR9gi/zO9qmdANwGuZWnSemp29Uw9IQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792612951;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=ZPDN9BexYqJgQl45SdfU9meWuyazsqHXMxCiEWebsmU=;
-	b=zFkGlNrIbdph4hLWLaf+o2Y0XHuaBAs8RzdZPna4mTFHYkApXXBMq9OB10IytDHzO0iO
-	 M8eyel0Co+kKjx4n1jhRW+Q1tPVt1A5e2zawR0AVOpAPGy95JZbJBm8JCSI/UwZ0YquZt
-	 bwZPpGoUi4FgtzZukQbnN+dcgtUndAdovPoQULq4RMyYoG3ulAyP+mUJPxQEILK8c1u2G
-	 1JjnO+uLHzAFm9wCk9x5Hd0OinYAmyShWuiRWFab4a+FUClXPefgJ1iDXB5F8MguQ7XEa
-	 JT68swXznPqc/+/8IQXxqGtKa2CT2iPkT0vVNR3toKpSWEP3DaQXnbXL8mpKUqKJ8gg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792613664;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=MK/sCNnQliqsRAgVoxF+hCWSDeszRLqOViWrqNvyhPc=;
+	b=K1f9DC2RiFIE65LaMWN/SgfiYHnF0EefyGoNPhyrwEEmVBmcGFIdKtWLacKxGnMuaKoB
+	 qbG6+2Uto+q5jG1RJU3N4L7/zN/1tfPRbzwsjSEVOi3lCyJwiyk5cOiqe5F3kC94lxej5
+	 4TX8CDHUQALxnSYjGLY2NG/+vHGb4z7LZaZpKrIBUuJ+VHxzVkzLI1vs+h/InpCjJRm5m
+	 Mgt9/z0bicrQLXu7tK0jeTIZDElw8CTeLA8qUzBYy6s7KBo05QgV2I6gyXZuOZinDwSRH
+	 Z09AVTzKdxelkNWbTTxF1CrKpoTGk83tymV6Z/ImN9G+KuqofhntYhK3I2N+ZheTVqQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=e29+mULU;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=UjJox1PV;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ox2VFkCo;
+	arc=none smtp.remote-ip=95.215.58.115
+Received: from mta1.migadu.com (out-115.mta1.migadu.com [95.215.58.115])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69A0606A31D
-	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:02:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A69A0606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67816606A31A
+	for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:14:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67816606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=e29+mULU;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=UjJox1PV
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792612949;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZPDN9BexYqJgQl45SdfU9meWuyazsqHXMxCiEWebsmU=;
-	b=e29+mULUFeLobQo+uKn8gQNftlS5OaKjvXTj0kV0Os9YPMNIAvf5zxN9RtW08fP1Qwrkhi
-	OJDtJ6pchd9LhnG9+2lhAETKM2TmygTBq5lb8sxIophiuSehSUv7u509D6wuo6hwlwcmWu
-	TI95R9sD9s6LQMYB3gnH/TRUdMXWk64=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-260-BYK0AEEBM-SRCHhN9YMIww-1; Wed, 21 Oct 2026 16:02:28 -0400
-X-MC-Unique: BYK0AEEBM-SRCHhN9YMIww-1
-X-Mimecast-MFC-AGG-ID: BYK0AEEBM-SRCHhN9YMIww_1792612947
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-48e1291432aso802339f8f.2
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 13:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1792612947; x=1793217747; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZPDN9BexYqJgQl45SdfU9meWuyazsqHXMxCiEWebsmU=;
-        b=UjJox1PV3vRCck/ghKbgtwmVLGA1Q+GcnLL03CwW+0LDXjxRO490mF887lIG0gI3hh
-         xPOCF4ugAtCv2VAmJDVTfUx5JY6IB7n51WUhStnzTyFlYj8f8nCZxSUz0/dj+/+j+9Bi
-         D6U1P54Fi/25f/ECZBtRgIlPB8YcB5eMTlhL3SSzr04BhDovwZrwiqhTkzJTEWZljp3F
-         fOU3AJq/xDwjth2LRZ/AlkGZDv93gEIYBYXvJRVrrnS5bLnm3ApPeytsCB8I1O1dqwua
-         L77s99sCt+kGHExOg7QXPgm2I35s0uVwDp1mC1nSqNhsHqdHgrw3kbJlfThtWuK1F5DE
-         ZjEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792612947; x=1793217747;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=ZPDN9BexYqJgQl45SdfU9meWuyazsqHXMxCiEWebsmU=;
-        b=kg/JalYTJRgxXKnG2IkxPeJBUUFGihkS4F/Cz3XP6n3WbDJpprawTKAktRDFIXoTe7
-         iO3rBUNqC9nA2fQ7B8xKsCjlO55HeS8i+vUQ7cjr1ELq5KHzyTTHl9VkLJufMKRWLjIN
-         tweEv8Rv7UDPtHt+TCGSYXwQ6GmbMld4+6g9esAH3gPF72Dpuw2d+lzH7Uhsc6zz3Aim
-         dU/odvaGE74EDPerV5K3B24BYjFcR+mKOpNnFdjXpBrkYM46esDd/ykd6NlNsUmExxGu
-         ywVjnd2rKmh8i1MP3ue17TWvY31WxfKeD4HkgqtJ3fBQYxOE72Ciq7PYrofE1xRO/4bM
-         BZYA==
-X-Forwarded-Encrypted: i=1; AKwUvBzh0p6zhs2YUpA+79xRx7i3+YfAAxbQZ97E8rGyWBu0mAhGeLxTURpxT7efmWa+PmlhpYw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJEOULcLWdfEKPM7ohoJ42Yo2htdKdczC6QErVHaARs0VW6s6o4
-	fAK76XRippOVfaG07Z58PCRZIA5e4zgR2jMQCQip6E0D/EmXn9ZuU+rGcfkp5TxUHH9rDLBFvJb
-	jy2D8aOzpAR9V5nn2HPhD1a7rC9pb3Ol0LpdBIJI1qCPJMB0Xyix5yg==
-X-Gm-Gg: AYBFou2d+zWszzZH8F7Q4n5p/nnc+GhyX79nzyzuo1HzsqFeLGmIvoH4WMl61qcAcyO
-	uMDLsHnXs70LeR6Qw3BJMT1HLD0h6/YljzQHmPTFMdxzFUop7HJ6eBTN+5JmUbAhFChJ7mTOiRT
-	dS93N06ED2D7fS9cTOypCA6lCeWQ7ZhX2Jyqrh3L04Albr5t65xrXNJX6+qZe3lCbI6vmgHJinb
-	Wr1qIkqdHjx+KaidvD6/bWV8skdj5wwnHXTpJp/7V5aBPTMnhWOFeUhFEZiDTepsbZevRVbY7vk
-	LU3QKgI4g4c3AynfRqjbi9SLLEzUH9ShK0Sum9gftJRUzE9Ma82+gJCFMJWHOsgQX9c=
-X-Received: by 2002:a05:6000:2901:b0:48e:25e1:5eb8 with SMTP id ffacd0b85a97d-48e2642e9aemr6954076f8f.3.1792612946303;
-        Wed, 21 Oct 2026 13:02:26 -0700 (PDT)
-X-Received: by 2002:a05:6000:2901:b0:48e:25e1:5eb8 with SMTP id ffacd0b85a97d-48e2642e9aemr6953990f8f.3.1792612945553;
-        Wed, 21 Oct 2026 13:02:25 -0700 (PDT)
-Received: from redhat.com ([2a0d:6fc0:1536:fc00:b838:383:1c7:6e81])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e2581f15esm8122007f8f.20.2026.10.21.13.02.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 13:02:24 -0700 (PDT)
-Date: Wed, 21 Oct 2026 16:02:20 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Eric Dumazet <edumazet@kernel.org>
-Cc: Nick Simpson <nick.simo@gmail.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ox2VFkCo
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=w2yIvfdgGfmlQVpeDUGVxacsdJvhxz5P+RtAjBdIp+U=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792613658; v=1; x=1793218458;
+ b=ox2VFkColxaQvhbRPAOwLuz+qjvZGykGQTMQ7lMfTeQyOsOtVRJkJMu7p9uCJ5Z2qdkKLftq
+ GU7CY6UM+UuLov8zO7bMaBIrCLkO2D846eb5SZ+KV15g3NAtPdkArYViUJOZ6UPH59mcy4vJ1E+
+ qNKh8sdfB1ahgePZnVF3feYc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 19901bfe483d708d;
+	Wed, 21 Oct 2026 20:14:18 +0000
+X-Mizu-Trace-ID: 19901bfe483d708d
+X-Migadu-Flow: FLOW_OUT
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Christian Brauner <brauner@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Song Yoong Siang <yoong.siang.song@intel.com>,
-	Rusty Russell <rusty@rustcorp.com.au>,
-	Max Krasnyansky <maxk@qualcomm.com>,
-	Sridhar Samudrala <sri@us.ibm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 3/3] ipv6: validate checksum_start before fragmenting
-Message-ID: <20261021155431-mutt-send-email-mst@kernel.org>
-References: <20261021180329.26358-1-nick.simo@gmail.com>
- <20261021180329.26358-4-nick.simo@gmail.com>
- <CAL4Wiiq6Jy1XPtkrA-Ge2N+voJrE86DWPJp_jXwHJG3ZgMvPaQ@mail.gmail.com>
- <CAL4WiirCmk_rZBhaXmmgHSHiUjeBSt5hPoRn6Q+AXUGYVNXRaA@mail.gmail.com>
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	NeilBrown <neil@brown.name>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH vfs v3] bpf: Allow bpf_d_path() from filp_close_sync()
+Date: Wed, 21 Oct 2026 13:13:59 -0700
+Message-ID: <20261021201400.5409-1-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -142,100 +75,160 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL4WiirCmk_rZBhaXmmgHSHiUjeBSt5hPoRn6Q+AXUGYVNXRaA@mail.gmail.com>
 
-On Wed, Oct 21, 2026 at 08:47:40PM +0200, Eric Dumazet wrote:
-> Le mer. 21 oct. 2026 à 20:20, Eric Dumazet <edumazet@kernel.org> a écrit :
-> >
-> > Le mer. 21 oct. 2026 à 20:05, Nick Simpson <nick.simo@gmail.com> a écrit :
-> > >
-> > > ip6_fragment() and br_ip6_fragment() complete CHECKSUM_PARTIAL skbs with
-> > > skb_checksum_help() without checking where csum_start points. After
-> > > reassembly by nf_defrag_ipv6, the IPv6 header has moved forward by the
-> > > 8 bytes of the fragment header while csum_start has not, so a
-> > > CHECKSUM_PARTIAL skb from an untrusted source (tun/tap or packet sockets
-> > > with a virtio_net_hdr, or AF_XDP TX metadata) can have csum_start inside
-> > > the IPv6 header, and the checksum is then written into a header that the
-> > > forward hook has already accepted. When csum_start lies before the
-> > > network header, skb_checksum_help() warns.
-> > >
-> > > Add the IPv6 counterpart of ip_check_csum_start() from
-> > > commit 6785011f8b16 ("ipv4: validate checksum_start before completing
-> > > checksum") to the two IPv6 fragmentation paths: refuse to complete a
-> > > checksum that starts inside the unfragmentable part of the packet (the
-> > > IPv6 header and the extension headers before the fragment header) and
-> > > drop the packet instead.
-> > >
-> > > For IPv4, ip_check_csum_start() is also called from nfnetlink_queue,
-> > > xt_CHECKSUM and xfrm_output; their IPv6 counterparts are not changed
-> > > here. A reassembled packet that is not fragmented again, such as an
-> > > atomic fragment, and an unfragmented packet whose checksum is completed
-> > > at egress are not covered either; those have to be handled where the
-> > > CHECKSUM_PARTIAL skb is created, or by a check at reassembly time.
-> >
-> > Then let's do that, instead of adding checks to every consumer.
-> >
-> > A CHECKSUM_PARTIAL fragment is meaningless: the L4 checksum covers the
-> > whole datagram, and our own stack completes it before fragmenting
-> > (ip_do_fragment(), ip6_fragment()). Only untrusted injectors produce
-> > them. Yet inet_frag_reasm_finish() keeps the reassembled skb
-> > CHECKSUM_PARTIAL when all fragments are.
-> >
-> > Downgrading CHECKSUM_PARTIAL to CHECKSUM_NONE in inet_frag_reasm_finish()
-> > covers IPv4, IPv6, nf_defrag_ipv6 (and the bridge path) in one place;
-> > the bogus L4 checksum is then verified and the packet dropped.
-> >
-> >
-> 
-> Scratch that suggestion, it would be one more consumer-side check.
-> 
-> The fix belongs where CHECKSUM_PARTIAL skbs are created, and Michael
-> is already doing this for virtio_net_hdr sources (tun, tap, packet
-> sockets, virtio_net):
-> 
-> https://lore.kernel.org/netdev/cover.1792411304.git.mst@redhat.com/
-> 
-> In particular "net: resolve uncommon partial checksums at ingress":
-> https://lore.kernel.org/netdev/9c08d12b3a7819ae03ded6a154e4f908276e93d4.1792411304.git.mst@redhat.com/
-> CHECKSUM_PARTIAL is only kept when csum_start/csum_offset match a
-> parsed TCP or UDP header, and fragments are explicitly refused
-> (ip_is_fragment(), IP6_FH_F_FRAG): their checksum is completed at
-> ingress, before any protocol processing.
-> 
-> Your patch 1/3 applies the same rule to AF_XDP copy mode, and already
-> links to Michael's patch.
+The d_path selftest closes its descriptors with close_range() so that
+its fentry program on filp_close() runs.
 
-Oh great, AF_XDP. Another one no one noticed.
+Commit 056069eb2b66 ("fs: make close_range() synchronous") switched
+close_range() to filp_close_sync(), so the program still attaches but
+is never called:
 
-> With both, no untrusted source can feed a CHECKSUM_PARTIAL fragment
-> to reassembly, nor an unfragmented packet with a bogus csum_start, so
-> neither this patch nor a reassembly change is needed.
-> 
-> Once the ingress validation is merged, the ip_check_csum_start() calls
-> added by commit 6785011f8b16 can be removed as well.
+  test_d_path_basic:FAIL:close trampoline for filp_close was not called
 
-I think this would be a mistake. While plugging all places where some
-packet change can confuse the stack is hard, making at least sure
-there's no slab oob if we missed one is a no brainer imho: this is the
-extent of the overhead:
+With that series, close(), close_range() and the closes on exec and
+exit all go through filp_close_sync(). Few paths still reach
+filp_close(), dup2() being one of them, so a program on filp_close()
+no longer sees most file closes.
 
+Allow bpf_d_path() from filp_close_sync(), but only from fentry.
+filp_close_sync() drops the last file reference inline, so by the time
+an fexit program runs, file->f_path may already be freed, with no RCU
+delay for NORCU dentries such as pipes and sockets.
 
-        if (unlikely(skb->csum_start < skb->network_header + ip_hdrlen(skb)))
-                return -EINVAL;
-        return 0;
+Attach the selftest program to filp_close_sync() and keep triggering
+it with close_range().
 
-I will be frank, messing up one of the subtle checks we are adding in
-virtio_net_hdr_from_skb is *trivially easy*. It is getting them right
-that is hard. Can we pretty please get help in not turning every such
-mistake into a publicity stunt with most major cloud vendors affected by
-guest driven host code execution?
+Add a test rejecting bpf_d_path() from fexit/filp_close_sync.
 
-I know, we should write less bugs (
-Still, you guys are the net maintainers.
+Assisted-by: LLM
+Fixes: 056069eb2b66 ("fs: make close_range() synchronous")
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
+---
+
+v2->v3:
+  * Drop the unreachable BPF_TRACE_FENTRY_MULTI check (Sashiko)
+  * Add a Fixes: tag
+v2: https://lore.kernel.org/bpf/20260925210347.1364191-1-ihor.solodrai@linux.dev/
+
+v1->v2:
+  * Allow bpf_d_path() from filp_close_sync() only for fentry (bpf-ci-bot)
+  * Add a verifier test rejecting bpf_d_path() from fexit/filp_close_sync
+v1: https://lore.kernel.org/bpf/20260924204226.190315-1-ihor.solodrai@linux.dev/
+
+The issue was found by BPF CI when running on linux-next:
+https://github.com/kernel-patches/bpf/actions/runs/35923662147/job/107398237366
+---
+ kernel/trace/bpf_trace.c                      | 15 +++++++++++--
+ .../testing/selftests/bpf/prog_tests/d_path.c |  7 ++++---
+ .../testing/selftests/bpf/progs/test_d_path.c |  2 +-
+ .../selftests/bpf/progs/verifier_d_path.c     | 21 +++++++++++++++++++
+ 4 files changed, 39 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 29260951aa87..4b2f944bf67f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -974,6 +974,10 @@ BTF_ID(func, vfs_getattr)
+ BTF_ID(func, filp_close)
+ BTF_SET_END(btf_allowlist_d_path)
+ 
++BTF_SET_START(btf_allowlist_d_path_fentry)
++BTF_ID(func, filp_close_sync)
++BTF_SET_END(btf_allowlist_d_path_fentry)
++
+ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ {
+ 	if (prog->type == BPF_PROG_TYPE_TRACING &&
+@@ -983,8 +987,15 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ 	if (prog->type == BPF_PROG_TYPE_LSM)
+ 		return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
+ 
+-	return btf_id_set_contains(&btf_allowlist_d_path,
+-				   prog->aux->attach_btf_id);
++	if (btf_id_set_contains(&btf_allowlist_d_path,
++				prog->aux->attach_btf_id))
++		return true;
++
++	if (btf_id_set_contains(&btf_allowlist_d_path_fentry,
++				prog->aux->attach_btf_id))
++		return prog->expected_attach_type == BPF_TRACE_FENTRY;
++
++	return false;
+ }
+ 
+ BTF_ID_LIST_SINGLE(bpf_d_path_btf_ids, struct, path)
+diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
+index 1a2a2f1abf03..7665e1d28a64 100644
+--- a/tools/testing/selftests/bpf/prog_tests/d_path.c
++++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
+@@ -109,8 +109,9 @@ static int trigger_fstat_events(pid_t pid)
+ 	fstat(indicatorfd, &fileStat);
+ 
+ out_close:
+-	/* sys_close no longer triggers filp_close, but we can
+-	 * call sys_close_range instead which still does
++	/*
++	 * filp_close_sync() may be inlined into close(2), so use
++	 * close_range(2), which calls it directly.
+ 	 */
+ 	syscall_close(pipefd[0]);
+ 	syscall_close(pipefd[1]);
+@@ -165,7 +166,7 @@ static void test_d_path_basic(void)
+ 
+ 	if (CHECK(!bss->called_close,
+ 		  "close",
+-		  "trampoline for filp_close was not called\n"))
++		  "trampoline for filp_close_sync was not called\n"))
+ 		goto cleanup;
+ 
+ 	for (int i = 0; i < MAX_FILES; i++) {
+diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
+index 561b2f861808..edb5494a47f7 100644
+--- a/tools/testing/selftests/bpf/progs/test_d_path.c
++++ b/tools/testing/selftests/bpf/progs/test_d_path.c
+@@ -41,7 +41,7 @@ int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
+ 	return 0;
+ }
+ 
+-SEC("fentry/filp_close")
++SEC("fentry/filp_close_sync")
+ int BPF_PROG(prog_close, struct file *file, void *id)
+ {
+ 	pid_t pid = bpf_get_current_pid_tgid() >> 32;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_d_path.c b/tools/testing/selftests/bpf/progs/verifier_d_path.c
+index 87e51a215558..7ab9b6b1d589 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_d_path.c
++++ b/tools/testing/selftests/bpf/progs/verifier_d_path.c
+@@ -45,4 +45,25 @@ __naked void d_path_reject(void)
+ 	: __clobber_all);
+ }
+ 
++SEC("fexit/filp_close_sync")
++__description("d_path fexit reject")
++__failure __msg("helper call is not allowed in probe")
++__naked void d_path_fexit_reject(void)
++{
++	asm volatile ("					\
++	r1 = *(u64 *)(r1 + 0);				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r6 = 0;						\
++	*(u64*)(r2 + 0) = r6;				\
++	r3 = 8 ll;					\
++	call %[bpf_d_path];				\
++	r0 = 0;						\
++	exit;						\
++	"
++	:
++	: __imm(bpf_d_path)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+
+base-commit: a804c5742bff224d4cb4d25dd383554d598be32b
 -- 
-MST
+2.56.0
 
