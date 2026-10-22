@@ -1,45 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.137.202.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792694736;
-	b=KgkXJof7mm90Km3dkWFMueoyXS69uVOZqA/BvBivgrva8BjxUWVTKkGe2QKU9oM1B7Pj
-	 lAjpcgvrVJzNSvkM8bDCWX9PyXt0WDitV7tWzB0eyfZ4XKiF6kgEyhj5zGH29mpDg4p/b
-	 SVohUomZv131C9amOuvb9MeYgW1bJ492Elg8ghcUQLcPNHwV2LxOJJGO+JMGuwOntwlIp
-	 CCtbLG7RzfsceUEJ1NmcpzRxB4iPRMnCotIe5GoM1TCEunDU2tFu40pclvOeXbJtjzt37
-	 3+adywQMuI0FtvgGiXZML8L/CjVRMJpzPcyUJ5C25Owsfjbq95GXtv9KSumK6R+UV1A==
+	t=1792697608;
+	b=qlaItCOViJMaDc8xXfspqJ79UUVFoQsNqaRL/+DRF9hWfnxrcTKKY0hor0LR4Rjus1Bi
+	 QC2zoqgWIP0WMazO0su8YoMwBE9XkMqqNGm/sdZdHSSWyes1LOeabBfBZfmyRjixLgFOY
+	 lBuiRIKrwLRTAABwGTjYZu60UHOO1YBSE8r2/K3itgplY4OCnrAHSPO5TsoKf9LY1GnmN
+	 vEMplgpy0u/vcS0GyqlcXs75Iwr7UjKJxUVPooUDHsfXcZUzpqON0/7fiwxyt2qJttWce
+	 l1vyNddfU8t1aR8BbImT5QttVLRRaS11oSV389MZGgDYaBzRdeg6b+xO7HrlZAtOaRA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792694736;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=G28HEn/VXJld9jkYtD/8yZsBEWZtFggug0SssZsruNY=;
-	b=SkJ7jvtaAc21WN8/3HMuTi2IS8qvPShY29amGl3DkOHMqxSBhbzoDOmAkOtbPTas+tIN
-	 Tl8+rBVKmnt5o7Me1QwJmr8aRUFVKLN5cjjcLzEOhJDjoObRFM9Q63fJPOY9tO2OUVOAJ
-	 lwdKk3wu16F6XO9lHQeERm7Akk5AvywnthURq3re0mVANKLrT8SlHDJ1Fpke291d7CX51
-	 hisj0e8tkjS4JZe6zwBouj83Ul7qpAGBPIMyBEMtJ6kUO5W3w+4QYkNpidfeWAjc3Cu9m
-	 TdlpXAFsez7OU6x1/X4+IS9/vOcdXYofDBhOIaMMCQGH9DpEXNzE8ylB4JJbfPi8nmA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792697608;
+	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=mCLgkUSjfiPQ2Z/7aDng4XXocalO4USE3TUieu+yZLc=;
+	b=d46PZZPakSl+YosG0tvoHSnEoUxLE5dEqJ3LkGXx2G5fDg3k9tkoWgLrjksk89F0WwQN
+	 0a4t+nz8HmrgSzdohDrQAz16sE2O4G7crTz458KErjDybOkxxov63Ir3Tz72IDv/HkxqS
+	 gaY0sCxHHjEoyKazc5RxYjyUFTaW0wX1fdgxGPub14gVcjn0nj/N+kPIEJgvcbq8Un5Ay
+	 ExxEXmqq1xpmz8gMloOoIEJeABsfHukU6p6A4i9XFM4XzHtUCz0hL/jZePjeULaik3+oS
+	 rPDDTFSNRDYF43R5HymBXiZg9JKIU8CF1VpCqUyrkAa4W7Qdj78jbrCtIAIygbZJW1Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h9U6yV6z;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=ZqPT3x0k;
+	arc=none smtp.remote-ip=198.137.202.133
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1F6606A31B;
-	Thu, 22 Oct 2026 18:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7907C606A319;
+	Thu, 22 Oct 2026 19:33:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7907C606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=h9U6yV6z
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76AE81F01825;
-	Thu, 22 Oct 2026 18:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792694735;
-	bh=G28HEn/VXJld9jkYtD/8yZsBEWZtFggug0SssZsruNY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=h9U6yV6zctGDT2s7FTFQvlXT/pcrtKGrr/d4BaOX6gvREBJ3jce3VwauedN+iElUr
-	 tyEFBos984982QJRYf+xj2sjb6P8y6x+9gaF+wu5KkN4cxDjtuMAdn4PaMYOfyX1/h
-	 ZVZ23TPw4t7+QHQkEtu1NUYWFjqJ+zqRP+E04PeX5idWkGqsWLaa6ybUAQt4IWAmOv
-	 12qZhnJomhUI8ZwysUlQBoTvipZUaP84fHOD/aYkVPiaFh7neTBZBdVqf7aDgHrllV
-	 r1iDHHQ4+RFuNSs0muMfpGboKIaSQvnsAdJrVLljYVkHGIEJtBCgDasmd0rZa26LLe
-	 Lz5caL7PrK9Kw==
-Content-Type: multipart/mixed; boundary="===============8279392703451209759=="
+	dkim=pass (2048-bit key, unprotected) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=bombadil.20210309 header.b=ZqPT3x0k
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=mCLgkUSjfiPQ2Z/7aDng4XXocalO4USE3TUieu+yZLc=; b=ZqPT3x0k+CkPYo13D5zgsJ31Zh
+	JSJ2yQy9T2F9ZvFcBhY+Z/TsYvx16xi5yE85WvpB2WwilwZxtPJ172IuYZAlhKM9hBKf8xUo001L1
+	KcTkOIdULCe5RBTRqtRCfz9nTJTrvqdnAA0jvDHlsZdkWIbYSA8CBt3y3Jlck+YFtCCpf8Kj7c0hb
+	Rp1BprJM9xy8SSEPfotOjGut3et+hWHK00vTkqsylvvHEIpK9lniM1vm0xEQAAbmKmzsr4CmZZq5H
+	qio3WsXzmjQC7G571OtOw+iVIhxTRPBYODRQA5oyszhf8Yi4Xf3IFUljEFquZQ2s/kCNk0eiKG7TO
+	G75+oKiw==;
+Received: from [38.23.173.23] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xJyXT-0000000EpQv-49dK;
+	Thu, 22 Oct 2026 19:33:24 +0000
+Date: Thu, 22 Oct 2026 15:33:16 -0400
+From: "Liam R. Howlett" <liam@infradead.org>
+To: Jann Horn <jannh@google.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	oleg@redhat.com, peterz@infradead.org, mhiramat@kernel.org, jolsa@kernel.org, 
+	akpm@linux-foundation.org, ljs@kernel.org, surenb@google.com, david@kernel.org, 
+	vbabka@kernel.org, hughd@google.com, kees@kernel.org, mingo@redhat.com, 
+	tglx@kernel.org, x86@kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 4/9] uprobes/x86: Don't WARN if an optimized
+ probe can't be written
+Message-ID: <dabdsge2cphfoulqobeswzj7xxkvlq2qyyi3iauqgmftfj6vg6@hbmosdt6t4bd>
+References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
+ <20261022015712.1297331-5-alexei.starovoitov@gmail.com>
+ <CAG48ez0cG532aaXZF_asCDk+fsnQmE9L5PA9T+JN6OGdx6yjGQ@mail.gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,115 +72,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <e31194dd72efd3c182707e870b7e7a6d67b78be23cea06aded0275678373c64c@mail.kernel.org>
-In-Reply-To: <20261022181620.247201-1-mahe.tardy@gmail.com>
-References: <20261022181620.247201-1-mahe.tardy@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add bpf_ksock_bind() kfunc
-From: bot+bpf-ci@kernel.org
-To: mahe.tardy@gmail.com,bpf@vger.kernel.org
-Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,willemb@google.com,eddyz87@gmail.com,edumazet@google.com,john.fastabend@gmail.com,kuba@kernel.org,horms@kernel.org,liamwisehart@meta.com,martin.lau@linux.dev,pabeni@redhat.com,song@kernel.org,netdev@vger.kernel.org,sdf.kernel@gmail.com,yonghong.song@linux.dev,jolsa@kernel.org,kuniyu@google.com,memxor@gmail.com,emil@etsalapatis.com,almagui@kernel.org,mahe.tardy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 22 Oct 2026 18:45:34 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez0cG532aaXZF_asCDk+fsnQmE9L5PA9T+JN6OGdx6yjGQ@mail.gmail.com>
 
---===============8279392703451209759==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 26/10/22 07:56PM, Jann Horn wrote:
+> On Thu, Oct 22, 2026 at 3:57 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > @@ -1197,7 +1194,7 @@ static int __arch_uprobe_optimize(struct arch_uprobe *auprobe, struct mm_struct
+> >         if (IS_ERR(tramp))
+> >                 return PTR_ERR(tramp);
+> >         ret = swbp_optimize(auprobe, vma, vaddr, tramp->vm_start);
+> > -       if (WARN_ON_ONCE(ret) && new_mapping)
+> > +       if (ret && new_mapping)
+> >                 WARN_ON_ONCE(do_munmap(mm, tramp->vm_start, PAGE_SIZE, NULL));
+> 
+> Not an issue with your patch, just FYI regarding this preexisting
+> WARN_ON_ONCE():
+> A failing small GFP_KERNEL allocation could theoretically cause
+> do_munmap() to fail; the VMA tree has the ugly quirk that you can't
+> reliably _remove_ elements without memory allocation.
 
-> bpf: Add bpf_ksock_bind() kfunc
+During munmap() we may need an allocation of one or two vma(s)
+(splitting a vma or punching a hole) - and those may have anon vma
+chains that need to be allocated, we may need to allocate for uffd
+reasons, and we may need to allocate for the maple tree.
 
-TL;DR: bpf_ksock_bind() called from a bpf_wq callback runs with kworker's full
-capabilities, so a CAP_BPF-only SYSCALL program may bypass the privileged-port
-(CAP_NET_BIND_SERVICE) check; the review asks whether to block it.
+That said, this path exclusively uses GFP_KERNEL which means we will
+invoke the shrinker.  If the shrinker comes back unsuccessful, we will
+invoke OOM.  This either succeed or it does not matter (we'll kill this
+task).
 
-> diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
-> index 37168f43c16c..c7b487d90cd0 100644
-> --- a/net/core/bpf_ksock.c
-> +++ b/net/core/bpf_ksock.c
+The other two possibilities is that the OOM is disabled during
+hibernate/suspend calls, or error injection caused the failure.
 
-[ ... ]
+Thanks,
+Liam
 
-> @@ -178,6 +178,33 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
->  	return NULL;
->  }
->
-> +/**
-> + * bpf_ksock_bind() - Bind a BPF kernel socket to a local address.
-
-[ ... ]
-
-> +__bpf_kfunc int bpf_ksock_bind(struct bpf_ksock *ks,
-> +			       const union bpf_ksock_addr *addr, u32 addr__sz)
-> +{
-> +	struct sockaddr_storage sa;
-> +	int addrlen;
-> +
-> +	addrlen = bpf_ksock_addr_to_sockaddr(addr, addr__sz, &sa);
-> +	if (addrlen < 0)
-> +		return addrlen;
-> +
-> +	return __sys_bind_socket(ks->sock, &sa, addrlen);
-> +}
-> +
-
-Can the CAP_NET_BIND_SERVICE check for privileged ports be bypassed when
-this runs from a bpf_wq callback?
-
-bpf_ksock_bind() is added to ksock_init_kfunc_btf_ids, the same set as
-bpf_ksock_connect().  Commit 60bbe76a3f9e ("bpf: Allow ksock connect/send
-calls from wq") made the kfuncs in this set callable from bpf_wq callbacks
-of SYSCALL programs, and tools/testing/selftests/bpf/progs/ksock_wq.c
-already calls bpf_ksock_connect() from such a callback.
-
-bpf_wq_work() runs that callback in a kworker, where current->cred is
-init_cred with cap_effective set to CAP_FULL_SET (see init/init_task.c).
-
-The bind path is:
-
-  bpf_ksock_bind()
-    __sys_bind_socket()
-      security_socket_bind()
-      inet_bind() -> inet_bind_sk() -> __inet_bind()
-
-and __inet_bind() then does:
-
-    snum = ntohs(addr->sin_port);
-    err = -EACCES;
-    if (!(flags & BIND_NO_CAP_NET_BIND_SERVICE) &&
-        snum && inet_port_requires_bind_service(net, snum) &&
-        !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
-            goto out;
-
-__inet6_bind() has the same check.  With init_cred, cap_capable_helper()
-walks up to init_user_ns and finds the capability raised, so the check
-passes for any netns.
-
-For example, a task holding only CAP_BPF can load a SYSCALL program, since
-is_net_admin_prog_type() does not ask for CAP_NET_ADMIN for that type.
-Such a program could bind its ksock to UDP port 53, 123 or 514 from a wq
-callback, while the same call made synchronously from the SYSCALL program
-returns -EACCES.  A bpf_task_work callback looks like it has the same
-problem in a different form, since the check would be evaluated against
-whichever task the work was scheduled on.
-
-Commit 60bbe76a3f9e only argued about LSM checks ("bypassing LSM checks for
-BPF-created sockets could be acceptable"), and connect and send on a UDP
-ksock have no capability gate.  bind appears to be the first ksock
-operation that does, and the commit message does not address the wq
-context.
-
-Should bpf_ksock_bind() refuse to run from kthread context, the way
-bpf_ksock_create() does with its PF_KTHREAD check?  Alternatively, should
-it be kept out of the set that is reachable from wq callbacks, or should
-the commit message state that bypassing the privileged-port check is
-intended?
-
-No fix for this was found in the provided range; 76406b1f799f
-("selftests/bpf: Test bpf_ksock_bind() kfunc") only adds tests.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39831790314
---===============8279392703451209759==--
