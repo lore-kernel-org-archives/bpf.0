@@ -1,87 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792627620;
-	b=TuVLsQXkBU+ngohlMuTOT4uWK9bIIYghAstQYHB6NPsp5F00vc0z9/5DrXpuwahrpQJW
-	 M42ssMPRWGzseaPgDOt+jO5L2ICmBjvgEOyX1+0Gshn8b9LxBU/4TFcfvgP5FX3MBIJNk
-	 OzXzvcOIM056KJNj72turMzwZlcPnE57Mud0cvH5qoWjj4RdnLzC1NPzIfk6bbv2FZtRn
-	 Q2NrjN7oPvt58auwefckxRCh5q+uAkxMiE5PVtPEs2wxh7MvaPfyXtqZShEMAytLY0AA2
-	 x37p7BU/fwL/bN6g9CSF9CGcfb4FgXFZjHwnF4lzCmnRu44bLsS/zN35CrgCLsWb4eQ==
+	t=1792627625;
+	b=Ng28LaC7PRetVTzlXSh6lTYkQzdkXv0zAq21kiv4WW8k/wQzXElHLHQ7J4PRjLoNOGdM
+	 QcCndpYwtf0i8vPX5n+qL2hPsPRLicpfBPmxaTusYvzxT8McgIaYexDg9FYLbnhnQLhmS
+	 v4/HDKwSmWf1BVgXe2ASFX6Wx4u2AQdasXh//VaNrRCi8DtZ0oWAfedeFipbD1+/zW8EN
+	 uK1JjEEumXgd57nw/jvZELFtXGhgZbURxHWypRbjRKdqthrv5OCOzOPVCfgNqywl6LlEf
+	 KJpjTCb2UA9cssV4RBn5LEUmDtodumwCCI0IF20HQVFWHgdSzJK5QEjk9UHzGR14NYw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792627620;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792627625;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=ddWScz4ZqblPj8xCGa3Ayzvz6G64FyAJrNu9xBqBzy8=;
-	b=RlBx7QOW1xSa9FCTWzCGYh++MGG/fdj93fDCP4Ef18SARqxgW94lGrJT7gZyoGrk9pL3
-	 uDxWFrgUGbC0qxXwSpw/lpzF9BDkBEBSpIKhjohcRHRhbVplPQiZyCyg1MN/af5mAT+nr
-	 yj1VVX9sqdNLfDpHTHlCQxMjFGVHSyqmO9ZQBzw4GlLWroZfTOQdxD2YVAkviryggx3v6
-	 /D7FobVF2ImmioLC+pdTce4IDxlLHqzmMy2vLzo7h62IEiJYmXyTnxIG1RwSnM5m5/dSR
-	 xHYlj97nK6n++rOxDpOA7GVTwFJDcQCZIg5n2mz3zn0Ctc/rXkJOfGmkDfbF8yJWzCQ==
+	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=vhJPPbPPep/NKmBM2GPQOvhuWsdva5kFxdCaYldPz6E=;
+	b=xWeJKub2zlqxubhjtRq7m75pYLD4fyGmwP2Nv3zQ+jSkqZE/eK3540C+AHo5KNLRENpZ
+	 lxwjfvpyMkfFC0o5ZNdMOMeHSymRDZ3lXU8TvsguxWP7n+0IhXQ9Yd9IV9h7J/dZiQN+C
+	 +49vQkvCyDc6S0kSYowbZAcsbUHAqk/rNiluiUUUiEcoSVl5H1G3LjXSEIcEFOdpcgTV3
+	 ZUwjBgcmbu/3F8gxTTvT6435gSbbmRVPY6ql9FZDjVhgj7mPHHCQm4n721aQl38bwY6Lr
+	 w2c+GqMiOs30o0XlXNAGHvWbSAnEb8aoXRI2VxHo7ttKmYc4AKCnGfOehlUP3s7rJqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AuJhnq1M;
-	arc=none smtp.remote-ip=74.125.82.182
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=E9lD7E8Y;
+	arc=none smtp.remote-ip=74.125.82.46
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E928606A31B
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 00:06:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E928606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8A5606A319
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 00:07:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C8A5606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AuJhnq1M
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-353804b591eso2394301eec.0
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:06:59 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=E9lD7E8Y
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-181516de561so123223c88.1
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:07:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792627619; x=1793232419; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ddWScz4ZqblPj8xCGa3Ayzvz6G64FyAJrNu9xBqBzy8=;
-        b=AuJhnq1Mz+sOEJDxz7ML/2YHntV7XLZYyFDbi/AfSmcixrhgSxHW1ypangA8ZyWLof
-         6pBC1yb5fsBBkH0+5k1uq30QycVpYzFy3sisLYmkyByLhGbv+vIZOsXmku7SFzpNlbDG
-         hVlb4R6f7sUsD2xvSjA6RFKL9djmd8yZRebAXS025tQZxwhr6/DjblzHAGphHBZLstv4
-         goTyaizqyg1lrWLTcHRrWO7GVpy0MdHz8TqfGpqgrzDWjDKM+uoejgxguzvx/6/uLJUt
-         OBGziiHDnbzcBBboDHJEnHxU23Qp9Q1ydNST23Y8GxZ308jpPabUmsFXCDxbCV7K1Fi1
-         7X0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792627619; x=1793232419;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1792627624; x=1793232424; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ddWScz4ZqblPj8xCGa3Ayzvz6G64FyAJrNu9xBqBzy8=;
-        b=UklQ07znqYFaSm6UrjHqYj9RPZXa0Ew3Wn4SIR8PfVfsAtCL8wf7A7yZP0K4Wj4mkI
-         yT6V2rUNZkeiBD6T64/T4mXiFlzRA6bXeuzvAmWIFKmmukuIizyo8ZhJCFFPNXCNbthM
-         EcfM3tC92ZRrC6+xBULOPRY75gi+4AIqmB9N4+lDL0Gx0xiBMHWsahuRqK8l1k4e2nWW
-         KSP7U4WsAq/F4Kj992ds0FjF6Kn1atXjFa5/YD1WwKnF1FZPXlsCPOXOglvLZrNYojdZ
-         rjuxp/jMun+GTaWBmV0sgJ9dTyPqwp12yVcZKGJWGEHwwo6nzyZBVNkjZ6U9W3m73Gjw
-         uyxg==
-X-Gm-Message-State: AFq9FYJsGwxFcDF7v8jIwUWG+yWS8qrYk8uyfen+Qf9mRdbsWrBw5xsP
-	dp1AD4QHgLFM+bzl2vJD7i1VNeLonlPvnz0zmAlJHAbbiqSa+K9Rojaw0FEnl8SeLw==
-X-Gm-Gg: AYBFou0zdpP07i/ODeNmBH71BGc8xVz7wA0j6zm+SR+7NgzX+9ZF4296lN2/QZxeWD2
-	4dR7Bq1C4Y30a1KNbq6CtyY1xK8DH6/sHnIf3j3OgqUyljJDNuxPguaPGukDrPd1lf5lq1uJ8eg
-	OVOOTm6yg3fYYc86zDhN4OxoM5iU6Vy6Ecr4S4rIVTnDaFR6d/MJoqm7tSZ7D/P8eRc+R2jXHf1
-	rDCtoZGPvqMrure7sylgoVC7cT35Hpysj7rmJJJcBvw+soGmBZhFlRz8BAoNJ/w33CtUP78rXGZ
-	cx8yTp2Q+unJTBa3b62gi7MjXOMslwFvQN1sqDSPvP0cQ+dUYzzcsawyvof2WVm1x4nKSmx7OBu
-	lbxXVqfzsICDH47Kq1HL0rs/CP3rddmT9XFB1zSediSfiC2fOngL65twSRE0TRl4WUa3FZlu87o
-	KZVH+0QUFiXkE1/vjpBMnvnJ4vcAa011rIJnmvqBmPgXysLA3QzPYfzOS8XuMXzCtZcPT8fy0m4
-	QRU3vnqNF8RvxclPKoGbXb/aIhppG1LbBBu/TJPT1nkLVVvl9vMCG8f2XV6zdqh8Q==
-X-Received: by 2002:a05:7300:fd0d:b0:351:2a18:c172 with SMTP id 5a478bee46e88-3674cf383c1mr6648521eec.15.1792627618726;
-        Wed, 21 Oct 2026 17:06:58 -0700 (PDT)
+        bh=vhJPPbPPep/NKmBM2GPQOvhuWsdva5kFxdCaYldPz6E=;
+        b=E9lD7E8YjxMrfVvlvWjYpq3oi0EZtltjY8BnOgR7wkv4lXoK1Ejrqp2YiigLPwLhl5
+         ldfSn6zAUVyKraxNNN2aiEou+n8KTcfW6Tk1YwPGfzddO3FnOMuhc2l9UQPq1W0T52OC
+         n4GVZAjZbi5JDoVGP2Zsq36/0VuEaDH49u3iEmZRqbm2SS+FaOaOuCrRgvWmCzc2A5VO
+         zK01huMZDuBcUn9vlT3yQTf2NRUlzzmon0+OxOxisA3pUNMQM/p2X25nOIatKsTeHG9t
+         8sQ1M/px4bVh0y+mefbdBMuFLj6/gEDejzawa2vw0MGj4V7m467P4c03npQUPx/4uUdN
+         Jy3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792627624; x=1793232424;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vhJPPbPPep/NKmBM2GPQOvhuWsdva5kFxdCaYldPz6E=;
+        b=amlWAzeboZUoqJIpp+bOHTMRRjHf88KgDUPQh/nLmaSonNMyzDC33U4Jn/kMjj3xfS
+         DZffJg5vJhj5LJqF3tuGSE7/CKChl0U22j5YNAgZi0HvehxynGh+SJaAm3K514F/lZcL
+         l3hMNxkcyUpQJxun5NnUaGQ1N0ML/Uacea8KtarF92Ov6jwFPDLoh7h1oBPf/275gt+5
+         ZsHQV14DrRIZYNUFwjPMYV3+xasdOjkaYSZRRldFwFx95dkNFXUupajxkFBzY5EO0TGc
+         02Za+ZuijwSRPzCKAqMbPlmAOGBC1gAafwu1NoCvEEKsRJnlbkH0iddXsbXpwXn8N7dm
+         6oUQ==
+X-Gm-Message-State: AFq9FYJfTvLFmD0ZC4XA9A7Ewilomb8Us6NI63dOYbkStcR/+8/1AK+V
+	EC76TVufe1BKAeJvvqDdDlXlKOcJ8C6GrtKswjAU3icVFGq1Fik3CQFkJ3gmohkpqw==
+X-Gm-Gg: AYBFou1uy2THh3ipKnn5VOy+ADzcm3KFul2G9bY/UMKnCNIIGK53vQVVS2R5yUMnreV
+	AdtKyT6VgK/3JE5IHk47u9wQFqGVLgFKsVmR3uWqvrxty8ZhGzjUFOPWtiTiopTacymDage0iV/
+	8scAseDj7fQqY2+/IHCOknQR4dFfRZrNTVCQbsVzpGISJPgK2l1pxANbs4/XirVlL2fyMeIUmVh
+	gfJGBpimKHvpIiCoqVGkWy/AgeMrmAH+VMeCsRB+QrZ5a1LO24J51UBw5Yidhceie0uH1MfDvud
+	MgWJLUgaBf02Ck4Sw3Q9da7KCxHeKazDZRXULFRdc55yaeP4aHfpsJydBkCIHL4d4Zfpf5pnlIA
+	qiMVhwUcoX9zwPL7x0iGKbkWIPZ4aqn20vDoZxe9M59ByHBapZtn4qPKHsWYpOLZkxz9j9ZgTms
+	osGDDJfV+TFSDoHYKxh0F06+KVNA4W678h8VPlE8Iz9r261Hu5my4lMbkyu0Ap1LZWRUk9dCc0V
+	3FYPGpYCbLzZ/e8LPxEyEF/UzRgBIIFoYUIoHVJ6+80Tb/fYmjnE4pXMtJ83GLnqw==
+X-Received: by 2002:a05:7023:905:b0:184:60dc:c381 with SMTP id a92af1059eb24-192f113b4c6mr1168163c88.23.1792627623993;
+        Wed, 21 Oct 2026 17:07:03 -0700 (PDT)
 Received: from localhost.localdomain ([185.220.238.36])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3673e153519sm11227537eec.3.2026.10.21.17.06.56
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1902f96dc4bsm10682022c88.0.2026.10.21.17.07.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 17:06:58 -0700 (PDT)
+        Wed, 21 Oct 2026 17:07:03 -0700 (PDT)
 From: Wang Yibo <szwyb123@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH bpf-next 0/3] Add diagnostics for kfunc registration failures and jit subtest skips
-Date: Thu, 22 Oct 2026 08:06:54 +0800
-Message-Id: <20261022080500.100-1-szwyb123@gmail.com>
+Subject: [PATCH bpf-next 1/3] bpf: report kfunc sets that fail BTF sanity check
+Date: Thu, 22 Oct 2026 08:07:00 +0800
+Message-Id: <20261022080500.100-2-szwyb123@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20261022080500.100-1-szwyb123@gmail.com>
+References: <20261022080500.100-1-szwyb123@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -93,53 +97,43 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-While testing the unwind_goto series on arm64 I ran into two places
-where a failure is reported without any information about what went
-wrong, and each took a while to track down. These three patches add
-the diagnostics that would have saved that time.
+register_btf_kfunc_id_set() returns -EINVAL when a kfunc in the set has
+no valid FUNC/FUNC_PROTO pair in the BTF of the registering object, but
+nothing is logged: the caller (typically a module init function)
+propagates the error, insmod fails with -EINVAL and dmesg stays silent.
+The only hint is a warning from resolve_btfids at build time, which is
+easy to miss.
 
-Patch 1: when a kfunc in a registered set has no proper FUNC entry in
-the BTF of the registering object, register_btf_kfunc_id_set()
-returns -EINVAL and nothing is printed. With bpf_testmod built by
-pahole 1.30 the module fails to load with -22 and dmesg stays empty;
-the only hint is a resolve_btfids warning buried in the build log.
-Log the offending id, the owner of the BTF and the error code.
+This happened with bpf_testmod built by pahole 1.30: that version does
+not encode __int128, so the three i128 test kfuncs had no BTF func
+entries, their ids in the set stayed 0 and loading the module failed
+with -22, with nothing printed to dmesg.
 
-Patch 2: bpf_testmod_init() chains twelve registrations with
-"ret = ret ?:", so when one of them fails there is no way to tell
-which call it was without instrumenting the module. Print the
-failing expression.
+Log the offending kfunc id, the object that owns the BTF and the error
+code when the sanity check fails.
 
-Patch 3: when test_progs is built without LLVM development libraries,
-every subtest that checks jited output skips with a message that is
-only visible under -v and does not say what to do about it. Point at
-the fix, and add a missing newline in the verbose-only fallback
-message.
+Signed-off-by: Wang Yibo <szwyb123@gmail.com>
+---
+ kernel/bpf/btf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-One observation from building both architectures: with
-CONFIG_WERROR=y (the x86_64 defconfig default) resolve_btfids runs
-with --fatal_warnings, so the stale-pahole case fails the module
-build outright instead of producing a module that fails at load
-time. Patches 1 and 2 only help the WERROR=n path, which is what we
-run in our arm64 CI.
-
-Verified on arm64 (KVM guest) and x86_64 (TCG guest) against
-bpf-next master b71326388a: with the patched kernel a
-pahole-1.30-built bpf_testmod still fails to load, but dmesg now
-says which kfunc and which registration failed; with pahole 1.32 it
-loads cleanly, and the unwind selftests still pass 42/42.
-
-
-Wang Yibo (3):
-  bpf: report kfunc sets that fail BTF sanity check
-  selftests/bpf: name the failing registration in bpf_testmod_init
-  selftests/bpf: say how to fix the missing LLVM skip for jited checks
-
- kernel/bpf/btf.c                              |  6 ++-
- .../selftests/bpf/jit_disasm_helpers.c        |  2 +-
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 41 +++++++++++--------
- tools/testing/selftests/bpf/test_loader.c     |  2 +-
- 4 files changed, 32 insertions(+), 19 deletions(-)
-
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 538129ed2..af07206f9 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -10128,8 +10128,12 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+ 	for (i = 0; i < kset->set->cnt; i++) {
+ 		ret = btf_check_kfunc_protos(btf, btf_relocate_id(btf, kset->set->pairs[i].id),
+ 					     kset->set->pairs[i].flags);
+-		if (ret)
++		if (ret) {
++			pr_err("register_btf_kfunc_id_set: kfunc id %u in BTF of %s failed sanity check, ret %d\n",
++			       kset->set->pairs[i].id,
++			       kset->owner ? kset->owner->name : "vmlinux", ret);
+ 			goto err_out;
++		}
+ 	}
+ 
+ 	ret = btf_populate_kfunc_set(btf, hook, kset);
 -- 
 2.51.0
