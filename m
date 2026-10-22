@@ -1,99 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.235
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792639115;
-	b=1pz9+kDFrFqKTT61Ax/1T9r/NHvwwN+8ruHP+4AQXQNuX/BPujMfQDzVxTMdS/AZ/KHZ
-	 xlCdnIE+EdQ1IMlJWhek6xDVMBEltztxV5+1ngkZmlsNAIw3++G3IqI7T8Ukz8mD0BF5q
-	 aIBss72p2GYhZPG9VMxRvcafBcj2WNPKCHHLBv6U14MtqxaIOOtq+rrKZyh6+ENJDkelW
-	 BSpK07KwTcosLpr9U5QF9ENhqUzwsMEJFurIt/1962QkGpMW3o1SaGYlI6ct6f68ji77U
-	 jVugl+FoC34bQ+Fvob0nPbxeu8qP/V1C8+RkatnJTd6Hm8Hbb/FaZ2YqemvKO7l8otA==
+	t=1792640025;
+	b=w4xxtP/bAMqCaiZdtPjNzDoFnB5UPuARLesyphRY0F9b5hR844l0BD5xhYvFe3NaN6yj
+	 LheA0ZnBJJE0sbK4Ni2PeyR87UEcDHb8aiZH16BEsVJyTJgkktMoWNcW0PL/yKMVnvUrU
+	 JZzwAsGMGda8Hs0d/NC/BWpmq6AgaJiUOqb916hqNL3v6dzhU64MqvvRg97pOGiag3+Ft
+	 jPVuLFqBZEu15ZS4tXpX8Dro875txNiSeK5V+OjoTqvj3xwokOZfQcN026Sz8yi18Sjin
+	 t3N9vq1YtEE4H9fdvdiQdspIHypmtosSbUO8JuKezHZXMR4UhBiFxsgNCQkHD7l872g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792639115;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=a6D5xQQ5xgzdVz3zr/f0pP7qJp5HwDVkL3hDOzlNwK4=;
-	b=Z3gOfl9/VxMH+kBLOrB8h/BsV37Dje4jWRrNGN3VR2+4jzuw2rQmwzbjmci5pCRZqO+5
-	 JwwHPaVUYTCh+WVoqavte537FeRIyTxgnSzlGwDls7v9neHnZ3buKUTcOHjwg83HzKIYE
-	 /4u7wbdV+2QJeBixqm/489RuXlKhxtJz1rfAPCXg+xufHLr7Rsg0sCPrmztR/zZZ5VZ3y
-	 /soDKMIcvmrc7JBijRuNh/y/ORPRm8T+8RP8I91yx99DWT9O9DTSmUuO97uTiQMxlD47E
-	 oDeyM5MJaoJNnW0qkgyXTUZbwo6xOJhOc3pPouD+/Bw7ghYLEPoM32qpIohakwwJzUg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792640025;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=g6pc1fQDzYo8LIZ3Sj7DNdz27l4PFMKRWuYTt7q4Z0w=;
+	b=u2fpnhy5glcjr7jd/f0TCvd9hNiRRtMyRGGI2wlIi+IApGsPo/DXNmbxQYOo6Ur2ds1f
+	 ur5z7GS48L8rZtWSS3Q/1i4yQIJmNIgQ8QQRquao3CfwloPLbjH7p01OuQidZdYATOzdc
+	 VN0FyPUJ3HD3YS0Vr8Uk0uaDE16xTlpE4MKKTpZvO6QOqHwD6sv+oYCsIjD8Nl3dF1Lce
+	 XeXgiMimsawlv+POU6PPfdDRqGIrMheQEIZXoFI/oeKOuWXQ8M3CsoYlqd6K6CXpuQZex
+	 WQ0Fm9uRUJ1Yn6usyl0462dc9fzZLVYZjVC7HV/Lku1h/R23Ttn6B1O7PlfrmlNibZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AsJwjAOO;
-	arc=none smtp.remote-ip=209.85.214.181
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=szsLEv9T;
+	arc=none smtp.remote-ip=91.218.175.235
+Received: from mta0.migadu.com (out-235.mta0.migadu.com [91.218.175.235])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C266606A31D
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 03:18:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C266606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1DF606A319
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 03:33:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D1DF606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AsJwjAOO
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e608cd460eso8565715ad.3
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792639114; x=1793243914; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=a6D5xQQ5xgzdVz3zr/f0pP7qJp5HwDVkL3hDOzlNwK4=;
-        b=AsJwjAOOHRgzlL1D2RSH3Gg4TIDJIApo88aNnw+ops/C71R7BWDARUKAAErQIsJdyn
-         k+/xy9sEgzldd+BeQlGIUtcpjnaKsqKGNuWuLkXhTKNqC+ritg6DtviQYPFNjOUTYmP5
-         f1EhjoWNljG6wWcG+8uMPOhl8by4rBhGMcpGPz7I6UfFNuT5k6tu3caNqVQmVT77LB8H
-         +lqM7KXt9N4uo96kCiuhvTjolkiKbKTrZk59HMnBwKefH8AXZaPlOw21mFnNBXfLaqsB
-         kOdSIcTqtslinU7xn62DtiOKUFFaO5Tl1jV3xqgBH5RfOCz3UxPobDvw90E7AAfMp6hD
-         mnww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792639114; x=1793243914;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=a6D5xQQ5xgzdVz3zr/f0pP7qJp5HwDVkL3hDOzlNwK4=;
-        b=EyIC96ZNTl33nXW9iiz0EuizVteAaQiO96nkKQ4ZgoHHx4ECrosfB8Ms0YLjm+zDfy
-         ziPgQkZmxdfzaekWAOw9ga7Su4GswDJrXKKoglKaT6Xd/rA1A2PUsL5wEhLi3eEE/wV/
-         +fS3sCuSnQrp4zZQyH56Tnk/4i/+FaTuDSe2vk0+ttZR7dFjLn7VZHWhsfkgmVELIhO1
-         bDM+m/iAhBkJCgdwGZm1nxhBsWSETmIn6hQbYWmVAw9FM5e9R60QrqxiueFvS7AkcI5k
-         GbquAAux2CEdRvna8odKzCOAWIgguHUW7LVmkRndBBWY89GaEl4h3Kb64sYOv0v3Yi1H
-         6YNg==
-X-Forwarded-Encrypted: i=1; AKwUvBx8MhZCDHvBe1IpKfhPUboXZsKUc1hDOcWQ3mc5wG2HXXw1IIdt/YTshzACKqa3wZd7IKc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLvfEsfD0igeS7eSuv9uMdHapzzBVhuSpeUz01t4j07I9oaj0L6
-	r0UUqbRkv3ERwFJHEHVBBFiWgyoyD/Ky6noIPHdl/krORPXOws0Ayoru
-X-Gm-Gg: AYBFou1FMYWZ6I2oP0jHQFF+e2NOhisHkd8Dn78mRk/0mTnzGg2o0Zfh9aWRvrd/mtj
-	oW8w4u2ISlKDR0vTr32A15QZjkYPti94vJ6t9u2V/tJvwOerNudHwpizXP4adoCRdEguVy7mtA3
-	3SOh06hF3yaJMKKDZre1AEhRfUCVH+aqiYA3S0XeBZAqDCCJGL2nj8Hp8ba5TcMHrs+0LV/O6k/
-	DJ9lCFrraHx+mYTBk2QSuoEGMKf/EO8Pe2hw3JobNCWpE4VMX7HDet4TVHY6LxAI6sLv8eD+aSD
-	CbaBSRgayaWprtAqoQp/uIyYLgBxocvh1UeaQD2FZm84dcUlNJXHBeJUJiHDSaMjS02Wx5hMqd5
-	lmHsY4SrpY5tRLvciund/u2FeIh/fZAzz4Oh5kSLqAgukYVVtvSr4IXyVZxXLWd/dDraWpXgFjd
-	3tO4/eG7wdlrMsFvjLsqCG+dysAwgf/KxSSpxy8S3xZj8bPMV3UL+IgehpOORe+XoJrp9sUsIZC
-	DAkpH/lDJywruFXtAswKPiHiwsdl1ayHU/JcQIZ4xkfohCQsSZzQoIeos4lgUNAQdCcClzCwrd6
-	g+NcIPH0Suvyi9NuVyC2Q7x0h9Zo2XEXOaG30HdcbpGdOnjqSTS6rvmqVzb8
-X-Received: by 2002:a17:902:ecc9:b0:2e9:7719:40fe with SMTP id d9443c01a7336-2ea437b0c71mr32086145ad.2.1792639114110;
-        Wed, 21 Oct 2026 20:18:34 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b4addfbsm17136755ad.74.2026.10.21.20.18.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 20:18:33 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Oct 2026 03:18:32 +0000
-Message-Id: <DMB1J3GT728H.2KEOF9XKYSGEO@gmail.com>
-Cc: <torvalds@linux-foundation.org>, <bpf@vger.kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <linux-security-module@vger.kernel.org>,
- <brauner@kernel.org>, <dwindsor@gmail.com>, <kpsingh@kernel.org>,
- <matt@bobrowski.net>
-Subject: Re: [GIT PULL] BPF changes for 7.4
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Paul Moore" <paul@paul-moore.com>
-In-Reply-To: <CAHC9VhQz1aam-P+xh8CT=3V9fNtdrcFSZ6VEOWUGx1cKWV+WYQ@mail.gmail.com>
-References: <20261021210147.3450677-1-alexei.starovoitov@gmail.com> <CAHC9VhQGeZtDLKZ7iLYx-d1ua_CojCN03uSG25oVDqOm9GKFag@mail.gmail.com> <DMAVQ90EWW3Q.44GJKDHWOSFC@gmail.com> <CAHC9VhQz1aam-P+xh8CT=3V9fNtdrcFSZ6VEOWUGx1cKWV+WYQ@mail.gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=szsLEv9T
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=9FwKodjy2WUetZrat7gSS2lB32jHVe2L5jLOFxiXhxM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792640021; v=1; x=1793244821;
+ b=szsLEv9TpkLZM9yh8PvrqQjqMimh67Y/GxZZQlYDRlTZs6S15SDHLjVNITUrhujzAyD4Utjg
+ P3QKhvMhfovuCGodMnBxRH5nmuQWkcy6sIbLPj4KBtz/c4TD4l3oyq5cKzOiRyAaUVOwvmYySby
+ b8eXP/ycY8wJR2j2Ql2moOcw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 303f6392ea5a033f;
+	Thu, 22 Oct 2026 03:33:41 +0000
+X-Mizu-Trace-ID: 303f6392ea5a033f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2254edd4-3b97-46d5-9cca-3490f2ea155b@linux.dev>
+Date: Thu, 22 Oct 2026 11:33:34 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,69 +58,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 1/1] tcp: release congestion control reference on
+ rejection
+To: bpf@vger.kernel.org
+References: <cover.1792607608.git.zhilinz@nebusec.ai>
+ <2773af2572ff59055933e407a135b39bca537381.1792607608.git.zhilinz@nebusec.ai>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <2773af2572ff59055933e407a135b39bca537381.1792607608.git.zhilinz@nebusec.ai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 21, 2026 at 06:26 PM Paul Moore <paul@paul-moore.com> wrote:
+
+On 10/22/26 2:57 AM, Zhiling Zou wrote:
+> tcp_set_default_congestion_control() takes a reference to the selected
+> algorithm before checking whether a non-init netns may select a
+> restricted algorithm. When the check fails, the function returns -EPERM
+> without dropping the reference.
 >
-> "... just as the maintenence of bpf_fs_funcs.c falls to the VFS." is
-> the rest of that sentence.  We're not asking for a type of
-> cross-subsystem relationship without precedent.
+> For BPF struct_ops algorithms this keeps the struct_ops map and its
+> programs alive. For module-backed algorithms it leaks the module
+> reference as well. A network namespace administrator can repeatedly
+> trigger the rejected request after the algorithm has been loaded.
+>
+> Drop the reference on the rejection path.
+>
+> Fixes: 8d432592f30f ("net: Only allow init netns to set default tcp cong to a restricted algo")
+> Cc: stable@vger.kernel.org
+> Reported-by: Vega <vega@nebusec.ai>
+> Assisted-by: LLM
+> Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+> ---
+>   net/ipv4/tcp_cong.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+> index 8e83ef81fc187..907c63af14785 100644
+> --- a/net/ipv4/tcp_cong.c
+> +++ b/net/ipv4/tcp_cong.c
+> @@ -293,6 +293,7 @@ int tcp_set_default_congestion_control(struct net *net, const char *name)
+>   	} else if (!net_eq(net, &init_net) &&
+>   			!(ca->flags & TCP_CONG_NON_RESTRICTED)) {
+>   		/* Only init netns can set default to a restricted algorithm */
+> +		bpf_module_put(ca, ca->owner);
+>   		ret = -EPERM;
+>   	} else {
+>   		prev = xchg(&net->ipv4.tcp_congestion_control, ca);
 
-That file has a history.
 
-Nov 2023. Song added bpf_get_file_xattr() for BPF LSM progs to
-kernel/trace/bpf_trace.c:
-commit ac9c05e0e453 ("bpf: Add kfunc bpf_get_file_xattr")
+Can we just move net_eq before bpf_try_module_get ?
 
-Mar 2024. Matt's v2 was adding more kfuncs for BPF LSM progs next to it.
-Christian replied:
-"Conditio sine qua non is that all such kfunc definitions must live in
-the respective file in fs/. They won't be hidden somewhere in
-kernel/bpf/."
-https://lore.kernel.org/bpf/20240306-zeitumstellung-darben-7857ca9817c0@brauner/
+Since we are not allowed to load it, I think we should aslo not touch it ?
 
-Jul 2024. After discussions with Christian at LSFMMBPF Matt created
-fs/bpf_fs_kfuncs.c in v3:
-commit d08e2045ebf0 ("bpf: introduce new VFS based BPF kfuncs")
-Christian acked it and asked for more:
-"I also wouldn't mind follow-up patches that move the xattr bpf kfuncs
-under fs/ as well."
-https://lore.kernel.org/bpf/20240726-clown-geantwortet-eb29a17890c3@brauner/
-
-Aug 2024. Song moved bpf_get_file_xattr() there:
-commit fa4e5afa9758 ("bpf: Move bpf_get_file_xattr to fs/bpf_fs_kfuncs.c")
-"We are putting all fs kfuncs in fs/bpf_fs_kfuncs.c."
-
-Every xattr kfunc since then went there: bpf_get_dentry_xattr(),
-bpf_{set,remove}_dentry_xattr(), bpf_cgroup_read_xattr() from Song,
-bpf_sock_read_xattr() from Christian.
-David's v1 in April put the new one next to them.
-It cannot be in fs/ and in security/ at the same time.
-
-> One might question the placement of some of the other BPF kfuncs
-> located in bpf_fs_kfuncs.c as the file is conditionally built based on
-> CONFIG_BPF_LSM as opposed to CONFIG_BPF_SYSCALL or some other generic
-> BPF Kconfig knob, but there is no sense in worrying about that until
-> we settle this.
-
-Back in 2024 all kfuncs in that file were for BPF LSM progs. Matt's v2
-from Mar 2024 even called the set lsm_kfunc_set_ids. They moved to fs/
-anyway. Hence CONFIG_BPF_LSM.
-
-> The lsm_get_xattr_slot() function is intended for use by LSMs
-> (it's not an external LSM "hook") and the fact that the kfunc in
-> question calls into it (and not a single VFS function) is one of the
-> reasons why I'm arguing strongly that this is purely a LSM kfunc and
-> should be located in security/bpf_lsm_funcs.c.
-
-BPF LSM is in kernel/bpf/bpf_lsm.c since 2020 and includes lsm_hooks.h
-since then. bpf_bprm_opts_set(), bpf_ima_inode_hash(), bpf_ima_file_hash()
-helpers that only BPF LSM progs can call are there too.
-security/bpf/hooks.c is 43 lines that register it.
-
-I don't feel we will converge here.
-
-Linus,
-it's your call. If you think the kfunc should move I'll send a follow up.
-bpf progs don't see which file a kfunc is in, so there is no need to
-hold the pull request for that.
-imo xattrs are VFS territory.
