@@ -1,150 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792651607;
-	b=Qqig49pDGq4tuq6YppP+zq5Yy4Hwsq63T83Q8r91X2eORiv7NNrWFa30TLxNZ3/T1OsG
-	 M4m+g22fsB5rUr+jvANqpw0I867758P+n1gNDuJmXc/bHX9pQIshPhLJHUFW+CayLnKmU
-	 T0mge/ZN2CeHubNCAaFQCb+aHZ3krCT2GU83/zqfdPZpG4fZs1XUhpTChipXtQ5tjn/1A
-	 fwFyCWKC9VHew5bd1RWY/bntdqvIYkGtmf1m/FoxmlFEgPtC9BSzuvxH3eczoyWY2Fa/P
-	 wyiOEC3tRWKejs6hqGbHfpDidIBEZDdEI9BT/HLtDzSkQWoAC+/7NK6EcWlVDZPB+TA==
+	t=1792651699;
+	b=TzwTuqq1s2hUqFuYb0Lnooy6dTPbFI7Trs8eCfdPO+8D/ypTW+SrRBUPDfAl8qXlIAkD
+	 DyG5GqMT+tv+tu+7E4THtgTjc4ZiKn1S5J5idFRYVTo46r8iUPjL+X31PA62OmFaiY8Mt
+	 21Mug1nqSXjyT2ckBZJMBsrb8/GeFS1LwXpKFQCTKbg8JiRKokyjdUm/6TvSfff0LZBxY
+	 9p9wJnLjlw11BlIJbV9mkQ/IBWEELGDCiHHKF4d+6D/A3prl6z1dEtVtslyiK0IqNy97V
+	 jFE/0qKLYhD6sGDxbrwakvvQ6jmC2XKouMxekeJNAsSRuYJJeFMMtcpoDl6jzeOBHXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792651607;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Autocrypt:Content-Type:Content-Transfer-Encoding:
-	 User-Agent:MIME-Version;
-	bh=TKtpG0ZG3GV7aCNX13qQJC+OLUZxo8z1O02EgwHPjyE=;
-	b=bKIWqco1OiU5grV9L1eMacrScxkudJJYC5u6rJXC9RBjJ0jnu2nagvefwDfKgD8VeYCh
-	 OpvSSw9p8s203bTgsaBRF1Q6uA68A40U8t72ZLokVg9hqcz6ovtMfLK7FM9yyzbGenrf3
-	 7q9TF0LQ6eeDVc87DtXwjyz6t1rPVtXpfp7g5uo+EizZI5KroWOapqdFJM6WIWTWFYqg/
-	 Ug1ErFvBrhYU9DIqBYvVeXDOsyLOeUuxud6trLnhi5E8dRhNyWIgONnTEkLcIham6OZZn
-	 kodmO+K2T5LLFul6nVoHOa6PNrp6rMVLenp6jYgT+fhJiGtClFnAMgQb9jPiGPvwxnw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792651699;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=Ry9buNjD4dWmSmNLfetdWfkhyUMM3EO/GXmrykqBL64=;
+	b=Q7r9TovvKTM97zGekYVC6UNjPU3vDpZ/CGmFA6+QpmsQFP/zfRA+JAaNa3SuOKTG74r5
+	 pMPXhUnsGJOqg4PSnTimdwAGAp7kYXXZuja7BzwglK3Jy1Yz/H6YF95pRN5P2jwS7eEHH
+	 1vLlu8jQC7bQhT19oXDRL9zO0cGXF5AwlTa6pPiF3UlKouo9Bsr9lIiwle1rNS2nmEfnR
+	 mKyEXSvKPDwA8iMW/EJKB+DxhvrGPEUXmxNWt4a2gCad+hsBeCQ/Uaj0JtQyn10O+Zv+A
+	 nfI/+Wtu5GwscvQns3zGUDPFpnJUTbOlMgIjW96ahkZxl2Y3aNGJXPT6vYq0tw/qxVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=fMI5v+Bn;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Y3BfEey6;
-	arc=none smtp.remote-ip=170.10.129.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ly3wJWFi;
+	arc=none smtp.remote-ip=220.197.31.2
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8B7606A32F
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 06:46:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C8B7606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F17606A330
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 06:48:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2F17606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=fMI5v+Bn;
-	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Y3BfEey6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792651606;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=TKtpG0ZG3GV7aCNX13qQJC+OLUZxo8z1O02EgwHPjyE=;
-	b=fMI5v+Bn9trqXkvWKIV78QHC9NDmRLqsK+4DvqyZM58VfIskk3jHLoGtCu2fejjfDb5z/g
-	8ZwBeMvpSgM2obqHNUiGPrK8/vPRJZSx+WXtY40Q7nTzeSNsTGNUgUIvVCbNJVSlg5brhN
-	eLYHeB9Qy8j7AHaP4YtPX4GDyeJre94=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-203-FuCyqg7QPF-pl2VoixFW4A-1; Thu, 22 Oct 2026 02:46:44 -0400
-X-MC-Unique: FuCyqg7QPF-pl2VoixFW4A-1
-X-Mimecast-MFC-AGG-ID: FuCyqg7QPF-pl2VoixFW4A_1792651603
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-48df02b91f9so305414f8f.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 23:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1792651603; x=1793256403; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TKtpG0ZG3GV7aCNX13qQJC+OLUZxo8z1O02EgwHPjyE=;
-        b=Y3BfEey6N8msn+41QVUavFWYnbJoP4nREg7/9BXIXfXA+yFBO7Kc8oWI8t0tOiAUSc
-         DUKHMPiA0TK1mm3k6Z5rWF3HWbMoszgyVz3zJL8f8fMdnxG/yvi6nIdiEBpJx+oxbyYa
-         e5/qoazr8OrWoiXBh4kcsrAH4123p2AHgWGd7hGDymRp/b9gsnCYRJ187wCqAlja6PRJ
-         SAl53I6dLPNgkPqj4ezSRVwj3UZBjPMFAdl6GXR20iPa/elcrj+F1cAZgnO9HlSBVJaT
-         gn1a8HEnCwZPnCq9dDhwhUhap9xs15HdKipE4O5GmUdTKhPpEDeyYX2kcMSCsYtqj7c1
-         REDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792651603; x=1793256403;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=TKtpG0ZG3GV7aCNX13qQJC+OLUZxo8z1O02EgwHPjyE=;
-        b=dLWlfqxi6Qc+WoKroKIvdlbMEDcCbonr6iu8E/cOtTluigYsAcySdU0tNr18TdWh63
-         m2Ni7NoOKHui/6mh+N+ITiCoD5SdpCgSo/r4/cNqyD0urQnIviFajWC+5CcCWUZuKLLx
-         xiZRz4oVrsRPpaNemiGJHgL7CZWl4kbGAcgdWw1Ncs/CdkIvJpGUjHJEI/2MLkX0VJbi
-         Q/Yi8jLVKReyE/YtuGUldalwe7oKaYTXVz5Y5rJ5K7ckQCe1Fi7QtMwbJ8ZT6iJQ9UdB
-         99whSK9BvqQgVroLi8WFCgoTzSVmNDVGgyM6OqRmv7wC8xaL2BFP+xiW7B0GdfXPjUpi
-         SiDA==
-X-Forwarded-Encrypted: i=1; AKwUvBwdBtz6zLfubZWsnzBRcI80ClcfpRnfZa5lpjZwcOv4MWoa0A3mqhUsprxtoahtfwTGpAU=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIlc4FsvCbMgNPbJNItHJ39ZzeIGxDlBiA50x1P/CyAEuTuLmpU
-	NSxUm7138J+GHVVbbX6Jw227Mm7j3uxusvz67tWLOY7ns4q3MgbrocA8Kb3GaQxqrYRV3JvSvQd
-	swDGDIJbjHEovqWnNfkIA7lTFzJ979boMNH3AXRxi0Yiuz48zFGrGmQ==
-X-Gm-Gg: AYBFou2M44PC8QR4Ll1LYB5Jqq0sNkQT9xpP1cQT4zcaRTbx8FMSIjpCh8uiG6xy0jN
-	lmIdHW5FwSZt/jpBfi6x8XYYMPmYMxx9/y0p6/rZaTn+182dDCgLmhxCu8CH3QR9EUFRdYQrq4j
-	q2GbHmsRsiyF0rnItX0hCzWDdsVtfT6VREWr3wIzTwsXvQuMSmCsVO8VsYPN1eDXNUj0WKW2pZo
-	i+oDpNjd/BlA/30abXZm1Hn1fM5ELJNJ40PWPwEIKrPEXgntwufLp6oXtHg+mqM+VGBKn3KKp62
-	Vpc/mmjDsLwYHEybmys/7Xg37aZma5XXpW7bVJZhs2XRAXy6O3uDLRngEWBZMxGZZI20GFdPf5z
-	Gy/05URXBxk32N0ZtwyO+i4wwqyjr
-X-Received: by 2002:a05:6000:4b11:b0:48c:54ec:ea3 with SMTP id ffacd0b85a97d-48e2d24e4acmr3010775f8f.13.1792651603092;
-        Wed, 21 Oct 2026 23:46:43 -0700 (PDT)
-X-Received: by 2002:a05:6000:4b11:b0:48c:54ec:ea3 with SMTP id ffacd0b85a97d-48e2d24e4acmr3010732f8f.13.1792651602647;
-        Wed, 21 Oct 2026 23:46:42 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([195.174.133.173])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e25840115sm10061810f8f.48.2026.10.21.23.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 23:46:42 -0700 (PDT)
-Message-ID: <f147fa9dfc553767ce92802b66723a85cf804e46.camel@redhat.com>
-Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: John Ogness <john.ogness@linutronix.de>, Steven Rostedt
-	 <rostedt@goodmis.org>
-Cc: Nam Cao <namcao@linutronix.de>, Tomas Glozar <tglozar@redhat.com>, 
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Wen Yang <wen.yang@linux.dev>, Tobias Schaffner	
- <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
-Date: Thu, 22 Oct 2026 08:46:40 +0200
-In-Reply-To: <87h5ifvw3p.fsf@jogness.linutronix.de>
-References: <20261001152042.124445-1-gmonaco@redhat.com>
-	 <DLXSI4BSRE5F.1TLKCBUAGNDFQ@gmail.com>
-	 <b1fb01e1c58893795dd4be346f233d39fe653aaa.camel@redhat.com>
-	 <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
-	 <878q3xtptq.fsf@jogness.linutronix.de>
-	 <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
-	 <87bj8s8ih9.fsf@jogness.linutronix.de>
-	 <DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
-	 <87v770uuyr.fsf@jogness.linutronix.de>
-	 <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
-	 <87ik2zryzo.fsf@jogness.linutronix.de>
-	 <0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
-	 <CAP4=nvR2i092924zszA8Qh0UUYnwXfAsa+7KjPe-NpwC+bbLXw@mail.gmail.com>
-	 <8580176d216258e9008c344e0529509117dcc18b.camel@redhat.com>
-	 <CAP4=nvTc297yQHz8aumZFAQ3+JK=5Z_=416WdosT0S6nHEeNfQ@mail.gmail.com>
-	 <87pkx5q1w4.fsf@jogness.linutronix.de>
-	 <0d4f11b1999588ddba9d855db43fc492eda32de1.camel@redhat.com>
-	 <87h5ifqy6w.fsf@yellow.woof>
-	 <a8d8b080f403eed617242a3276717706b4081ed1.camel@redhat.com>
-	 <20261021094853.29b9f7be@gandalf.local.home>
-	 <fb5c20f226f723cbb4df5092462dfcf5f2686367.camel@redhat.com>
-	 <87h5ifvw3p.fsf@jogness.linutronix.de>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
- cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
- T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
- eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
- 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ly3wJWFi
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ry
+	9buNjD4dWmSmNLfetdWfkhyUMM3EO/GXmrykqBL64=; b=ly3wJWFiqYFMJLWXKh
+	l3Fd7uZn8Es2fp9s/SlXszKzze6LYyMETO5u7mRqDb6YVqSLG2avTHAu2leks4Yj
+	IS6sIABZYCgR8ExSycQWHmCEqnv8RgfxS4irux5mLC4aCLjEXx4lfQmhRynbxIgH
+	iUJ3VZDRTnSHmIHFch3KK2S9w=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3X81_sdlqJUabBw--.32400S2;
+	Thu, 22 Oct 2026 14:47:29 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev
+Cc: bpf@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: Propagate btf_add_type() errors in btf_check_all_metas()
+Date: Thu, 22 Oct 2026 14:47:27 +0800
+Message-Id: <20261022064727.747304-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -154,66 +68,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3X81_sdlqJUabBw--.32400S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFWxCr4UZFyDurW5tr1UJrb_yoW8AFWfpw
+	4UJFZ7ZrWvgr43uanFyFs8ur15J395J3y8GFyqvr1IkF45Xr48ta1UJ3yjv3WSkFs5Cw4Y
+	qFn0qrZ0vws7uFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U6q2_UUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8QGdFmrZsYEQPAAA3U
 
-On Wed, 2026-10-21 at 18:53 +0206, John Ogness wrote:
-> On 2026-10-21, Gabriele Monaco <gmonaco@redhat.com> wrote:
-> > > BTW, I'm curious if it isn't possible to keep both in-kernel and BPF
-> > > monitors? That is, for those cases that do not change often and has a
-> > > well known model, to simply keep those as modules and hard coded.
-> >=20
-> > In my opinion it is possible and I'm designing every change with that
-> > coexistence in mind.
-> >=20
-> > I would say we could only drop in-kernel if BPF does such a great job
-> > to cover every single technical and non-technical requirement or
-> > use-case, AND if it makes maintaining the whole thing easier.
->=20
-> I am wondering if coexistence should be the goal. For example, the
-> monitor classes (DA, LTL, HTA) are only implemented in the kernel and
-> provide kfuncs for the state transition functions to be available to BPF
-> monitors. I would expect that this would allow BPF monitors to have the
-> full functionality as in-kernel monitors, since the events, errors, and
-> reactors would all trigger from the monitor class code.
+From: Feng Yang <yangfeng@kylinos.cn>
 
-Well, this would be yet another hybrid requiring BPF monitors registration =
-in
-the kernel like I proposed in the RFC [1], which was the main point of
-contention (that fully shared reactors and sysfs interface, by the way).
+btf_check_all_metas() ignores the return value of btf_add_type(), so a
+type that could not be registered is silently dropped while the loop
+keeps walking over the type section.
 
-For this I would argue, though, that such monitors would be BPF just on pap=
-er,
-we wouldn't be able to use many advantages BPF provides (e.g. BPF maps).
+Both failure modes are reachable:
 
-The current implementation already shares the header with in-kernel monitor=
-s, so
-the actual logic is shared. What isn't shared is the storage type and some =
-glue
-around it.
-I used BPF maps because they offer some nice flexibility especially around =
-per-
-task and per-obj monitors. On top of using more battle tested code.
-I would like to keep that.
+  - -E2BIG.  Once the types array reaches its capacity (BTF_MAX_TYPE),
+    every following btf_add_type() fails the same way, so
+    btf_check_all_metas() still returns 0 and the BTF object is created
+    with btf->nr_types capped while hdr->type_len claims more records.
 
-Besides, we'd need to be extra careful on controlling the callers. Right no=
-w
-handlers are static, so it's easier to make sure no rogue caller messes up =
-with
-monitoring.
+  - -ENOMEM.  btf->nr_types is not incremented and the array is not
+    grown, so the next type is recorded at the slot of the dropped one
+    and btf->types[] stays off by one with respect to the type ids for
+    all remaining types.  btf_type_by_id() then returns the wrong type
+    for those ids for the whole lifetime of the object, and the last
+    type is silently left unresolved.
 
-What else definitely isn't shared, which is the main point of this whole
-conversation, is trace events.
-Those could be kfuncs. And no matter what you do, BPF monitors will need to
-share the trace events (unlike in-kernel that have separate events per moni=
-tor).
+Propagate the error so that the object is rejected instead.
 
-In short, I don't think this would be easy to achieve and wouldn't earn us =
-that
-much. (Plus I'd lose the hardly earned Alexei's blessing ;) )
+Fixes: 69b693f0aefa ("bpf: btf: Introduce BPF Type Format (BTF)")
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+---
+ kernel/bpf/btf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-What do you think?
-
-Gabriele
-
-[1] - https://lore.kernel.org/lkml/20260831090524.106845-1-gmonaco@redhat.c=
-om
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index d870bc5e50bc..80b6f96263f1 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5459,6 +5459,7 @@ static int btf_check_all_metas(struct btf_verifier_env *env)
+ 	struct btf *btf = env->btf;
+ 	struct btf_header *hdr;
+ 	void *cur, *end;
++	int err;
+ 
+ 	hdr = &btf->hdr;
+ 	cur = btf->nohdr_data + hdr->type_off;
+@@ -5473,7 +5474,10 @@ static int btf_check_all_metas(struct btf_verifier_env *env)
+ 		if (meta_size < 0)
+ 			return meta_size;
+ 
+-		btf_add_type(env, t);
++		err = btf_add_type(env, t);
++		if (err)
++			return err;
++
+ 		cur += meta_size;
+ 		env->log_type_id++;
+ 	}
+-- 
+2.25.1
 
