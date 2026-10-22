@@ -1,74 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=121.127.44.73
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792633701;
-	b=AZNvd9fR782gBR1c5mBIVkiyW0FFcbmA/ECKe9mUracAd/xG3TW1X0MhMPI7wvQCNegd
-	 3o9IAsVnEEvQKOM/LTCaOaiVb+/3jkTYu6wSLMzt6GQwqB9ZQCSY4K6pPctNIrrRLK+6V
-	 sJG/jWUb9QZVWEUOlZEQWp4/xptpXbT+g7kdlwBO2nt6suqk46h9RQCQWRdZ1gkyX7PfL
-	 EQTUozHm50bu4mpxwy6cX43hDE9VqZ2h7TSbr++zEEGxmtNrGdnBtLwvue+yoKFNY0PwF
-	 Olw/iW8ddBLMaNenL4GdVnKodbYKTw2gE4dZrPCPVb+YoZhekiSyZTUOkj+1UJhMALw==
+	t=1792634236;
+	b=4XE0bmMAHW4RNn4v3Kre4VUQwSlY7jD3MKX0lH+NAMgxNE98B4ATDVCuOJv+aQRsrdEj
+	 p6Ua5IEQDN+qa1aVECHh/ZydZB1Jq+MS2RxArkxLxmLkFYvSU3aDdgrmUaHTWzn/nWJBi
+	 +4pTdQFnRZLOLb3kkUpxDOOUG+SIeigZxyWoDZprKVykBXU1whbqIb2xE6phjZb1rBHuJ
+	 xB47TPy7vpYsksbYY+PCEwtI2GTaF/6yiZPAVsboOJUvD3KQyqifCuz+fS2yHWMNaro1x
+	 jamLNfQqLtMhmHSitJlx3xv4do2DLJ/C4kyv4BMx3cahz4EWR5PudjOPpULDRpho02w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792633701;
-	h=DMARC-Filter:DKIM-Signature:X-Forward-Email-ID:
-	 X-Forward-Email-Sender:X-Forward-Email-Version:
-	 X-Forward-Email-Website:X-Complaints-To:X-Report-Abuse:
-	 X-Report-Abuse-To:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=LW0K1y3Aru8asUab0ZoHmJkJJzy67mmJNwo7if4GdpQ=;
-	b=qsvgkLaXviJcNnnEOcdAgF1ARVHg7EQG918IxZW8HLpBZlV4Nj34/p5Xfy2/bYs+s0ml
-	 JETsW7YfjrXCeqMSMSb6xJgvBWfUT9soHwJ7owjnictyJLgglpILcn4cLyE1drpQFT4n7
-	 hlV+fLfHm5kEDfsfZLYXuJpVSTPMhE7IUiJpZT/aNRdJyE4kz4OcrfEai73UEVR/Qh4L9
-	 ae4CGR7MfhHzHBCMBIGX5sQW3a8CFoNatl/4/9ynNqqC+RUS2KpCYi+Kul4++5SgXNTop
-	 MobInup/dQD3iaIq/SwvFyC8aGQx9GfM1KmAkcFxIcAxM2ji2LUmZ30zLIBIdDyG5lA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792634236;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=jDvqirGSK7roV0OwhESQvxR+V4XuKQKeS3pYEmaAuqs=;
+	b=Uo+D/nIShDY9CNjEBvbrHpVfwpyjnj08SAowEJyCIV+I0Iovw/pIehzwLBpCNYI3zSq5
+	 do+YAQj8usS7A+PdkfVA45iZ58Vq6tF6onY5sb6qjbBczCgbxjvNMp0YyTPwBPvzl1kEe
+	 wdQsJDTbB93IROe26Pvo4XtvNWjZ2UkZplDp5QkxSwn7ro8erJogolBWQwmQsCni/NLJC
+	 SaS/Jg5Q0Gw/bkZy73tu5WIndLQhCOlsSVntBMBnGsKm9ShNA3zwh9k5LUIbNPuCh+o2s
+	 pJ0qVx+pyoNdWGlGV1o3mxUOnoM4vo/jSLCwcCTSoFvSDF3WeorRxqxaJUDO0EVNBmg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=skyn3tlab.com;
-	spf=pass smtp.mailfrom=fe-bounces.skyn3tlab.com;
-	dkim=pass header.d=skyn3tlab.com header.i=@skyn3tlab.com header.a=rsa-sha256 header.s=fe-ef0e585ad0 header.b=7qH8gXmA;
-	arc=none smtp.remote-ip=121.127.44.73
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [121.127.44.73])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=G+1LWwBp;
+	arc=none smtp.remote-ip=209.85.210.176
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11270606A31B
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 01:48:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11270606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=skyn3tlab.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.skyn3tlab.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2EF606A31B
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 01:57:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DC2EF606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=skyn3tlab.com header.i=@skyn3tlab.com header.a=rsa-sha256 header.s=fe-ef0e585ad0 header.b=7qH8gXmA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skyn3tlab.com;
- h=Content-Transfer-Encoding: Content-Type: MIME-Version: References:
- In-Reply-To: Message-ID: Date: Subject: Cc: To: From; q=dns/txt;
- s=fe-ef0e585ad0; t=1792633694;
- bh=LW0K1y3Aru8asUab0ZoHmJkJJzy67mmJNwo7if4GdpQ=;
- b=7qH8gXmAz3OVXnfk/hQIziwQDU+o9HmfBYfTmXqY6L+ef47uOrQq/XEQ9JrRxL91OkS1uPPtd
- QkEyqMbUzcaKkOn3qRZnXdJ/e7OEIPMmAtzuAXSI8paKxmGJvgPMawqWTa68LJg3iWbQTiR4I6y
- PwiA5+ylUBTDRqGSI9zooN4=
-X-Forward-Email-ID: 6ad96b5cf76a2e0ef8b0ba48
-X-Forward-Email-Sender: rfc822; gr3yf0x87@skyn3tlab.com,
- smtp.forwardemail.net, 121.127.44.73
-X-Forward-Email-Version: 2.18.9
-X-Forward-Email-Website: https://forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Report-Abuse-To: abuse@forwardemail.net
-From: Mark Severson <gr3yf0x87@skyn3tlab.com>
-To: Jonathan Corbet <corbet@lwn.net>,
-	Federico Vaga <federico.vaga@vaga.pv.it>
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	bpf@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=G+1LWwBp
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a06c60065fso871857b3a.1
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 18:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792634235; x=1793239035; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jDvqirGSK7roV0OwhESQvxR+V4XuKQKeS3pYEmaAuqs=;
+        b=G+1LWwBpOgMOZ8HbZpfC7grGyIlYmSp+qoBv3SfE1ODmH3HHtPJL4bo6AgKogLa49b
+         qW724hfjp5QlrGBmXDjLEVsFzhoOa3kpfvAhWfTc2BLc3l9apiERkdackT2/FBLPP7xc
+         FITW0WpnqlsZbRjzjvyVjPJQqnSwiRkWfLqECt4QOwraGHDjXjnQwwcZ4bs1CNF8RdGo
+         hFDRAznOHctS3esTtUtpsCsinXZ59akUq6QKrEBbUZ45W4hFXIn/0jGCyIwRQ6N9cIgo
+         3a3tVL8IypEwcVjCkcaYPLg3NhJz7ayAbLhdeT6bJE+GCRAQCf9MmhqgLzm0hZbK4Y6s
+         Qc2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792634235; x=1793239035;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jDvqirGSK7roV0OwhESQvxR+V4XuKQKeS3pYEmaAuqs=;
+        b=XeZxvusy6kczifJeCdJD7W/Q3MLesA8tmNz4ejcfbo98Jd1NfYcKut6ADjI5md+wiV
+         DzLCVT0J1V4enhkJe5wOxgWCc5IVssa7eVrVf7mfmx2ZeiSFJNoxFjlnMdDR02HWXrCc
+         K8IgS9s32sQ0rGQJGNSpB9B91yr/lK4x7OBCEi1J7rgMJRhF5ntIQTdej4oFBn1M+MLu
+         llzCeJDqOVCWwg+MKjVbaTB3/cyZ0krOYvCjmtk5m/GhHNseCIxoZr3JJEogPjq9xXWs
+         nLs+EaTFp/z3LPbV3w1egZQA/3Rfg8LIiP20PI5fZgLn/g2ThgE4/O+69yRINpmqOACX
+         AXYg==
+X-Gm-Message-State: AFq9FYLlPt2npWTcH2H58byJEk6q2SAcDCSPMWGLrN/j2Xkd9zitskmQ
+	Uy/TSXWJCQcwDLQCRw0AY28lz4DWjLmUt44fOoS6kDytB2Z9VtWGfOs+GmyFvw==
+X-Gm-Gg: AYBFou0b1jOwNOH7oakx99Qt7jbtMKsi9hIg7UduUxQrjK2peYIsq3tjcAwJTPxsPSU
+	7Y3lBFqW0DW/05D9TAMre3TnFQsvsH8FXlE+Qq9CJ/FOXeFVUuJl2YLwYVtsJRZKMI3QXwo57Zt
+	2ey9ghcpOBvHrmt2d2SsGoVgIHJamhgFVGkxIog3lQs7U+FFNK5a+V891WWGDudm9d+T6dfMVn3
+	J/OSbuJHlCU2FHal//UxwoMZ0pyU/zEWmW9awTCRJFA+5JO72s06h20ih2bATMFUQhb+pYMMVL8
+	lhXLMoc580xHrIksnvz6uGhDg4rjoWOcr2DE2Bk/KIgi0KdS+D793z4GOeqMzHpvAppzSEOXfXR
+	vzW41/HoiOBRV9oBWaCGeOyRFTMBvTtVaBWQgv/1fLxY12YUUaeJEfBeXG+l88TLMWqeePw99X/
+	mmnV10MM3Wj7RRs2h3XfuHohIpTnG95+32ftBr+74Sj6uZNEcZE+/zYwX8/WlHzR8ZR5OXm5gMk
+	9PlZhFDwkgCdAfz46hQuZ/W5T54PL4hUvjefNrqx9L2n4K9u7iOC7QzlVutFon6SXLcNqxz2Llm
+	yt8bWHM/LzIW3jlUgFL9Qs0dI4OQjfygZfhkydvFBsA1s23Kewgbt0xS/zPDq1XKLEg/TX7kfBq
+	oggLKsrvKLPh+paCaFrVmZT8b
+X-Received: by 2002:a05:6a00:1493:b0:880:5fe5:a818 with SMTP id d2e1a72fcca58-8a089d7c431mr2804454b3a.59.1792634235101;
+        Wed, 21 Oct 2026 18:57:15 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a089614ce0sm1426295b3a.55.2026.10.21.18.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Oct 2026 18:57:14 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	oleg@redhat.com,
+	peterz@infradead.org,
+	mhiramat@kernel.org,
+	jolsa@kernel.org,
+	akpm@linux-foundation.org,
+	liam@infradead.org,
+	ljs@kernel.org,
+	surenb@google.com,
+	david@kernel.org,
+	vbabka@kernel.org,
+	jannh@google.com,
+	hughd@google.com,
+	kees@kernel.org,
+	mingo@redhat.com,
+	tglx@kernel.org,
+	x86@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] docs: changes.rst: set the pahole minimum back to 1.22
-Date: Wed, 21 Oct 2026 21:48:11 -0400
-Message-ID: <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com>
-References: <20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com>
+Subject: [PATCH bpf-next 0/9] uprobes: Don't stall fork() when mmap_lock is busy
+Date: Thu, 22 Oct 2026 01:57:03 +0000
+Message-ID: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,89 +115,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Commit fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF
-annotation emission") removed the paragraph saying that kfuncs annotated
-with KF_IMPLICIT_ARGS need pahole v1.26, because resolve_btfids now
-emits the kfunc BTF annotations that pahole used to produce. That
-paragraph was the reason the requirements table lists pahole 1.26, and
-the table was left unchanged. The text below the table and
-lib/Kconfig.debug (DEBUG_INFO_BTF depends on PAHOLE_VERSION >= 122)
-both still say 1.22.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Set the table back to 1.22, in the English document and in the Italian
-translation, which carries the same table, and remove the Italian
-translation's copy of the paragraph that the English document no longer
-has.
+uprobe_register() and uprobe_unregister() stall every fork() in the system
+when some process keeps its mmap_lock busy:
+- register_for_each_vma() sleeps on that mmap_lock with dup_mmap_sem held
+  for writing.
+- fork() of that process sleeps on that mmap_lock with dup_mmap_sem held
+  for reading. The next register_for_each_vma() waits for it, and other
+  forks wait for the writer. The process doesn't have to map the file.
 
-Checked by building linux-next 20261021 with pahole v1.25 and
-CONFIG_DEBUG_INFO_BTF=y: in the vmlinux BTF,
-bpf_task_work_schedule_signal has four arguments and the bpf_kfunc decl
-tag, and bpf_task_work_schedule_signal_impl keeps the
-struct bpf_prog_aux * argument, as Documentation/bpf/kfuncs.rst
-describes for KF_IMPLICIT_ARGS.
+We found it the hard way by using uprobes in production. uprobes were
+attached to libraries and binaries that many processes map, on a large
+number of hosts. On some of them every fork() was stuck for minutes while
+uprobe was being registered.
 
-Fixes: fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF annotation emission")
-Assisted-by: Claude
-Signed-off-by: Mark Severson <gr3yf0x87@skyn3tlab.com>
----
-v2:
-- Also remove the Italian translation's copy of the KF_IMPLICIT_ARGS /
-  pahole 1.26 paragraph, which fd5425b67355 removed from the English
-  document only; v1 left the Italian text contradicting its own table.
-  Found by the Sashiko review of v1.
-v1: https://lore.kernel.org/all/20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com/
+Patch 5 fixes the first one. Patch 6 fixes the second one. Patch 1 is
+a helper for them and patch 9 is the selftest.
 
-checkpatch reports the Assisted-by tag as non-standard; it follows the
-Attribution section of Documentation/process/coding-assistants.rst as
-published on docs.kernel.org. Not run: make htmldocs; the change keeps
-the table's column widths and removes a whole paragraph.
+The rest fix old bugs that patches 5 and 6 make easier to hit:
+- Patch 2: exit_mmap() runs under dup_mmap_sem.
+- Patches 3, 4: x86. The removal of optimized uprobe that failed half-way
+  is never finished, and SIGKILL triggers WARN_ON_ONCE().
+- Patch 7: the child loses the breakpoint of an inherited perf event.
+- Patch 8: the tracer that is killed leaves its breakpoints behind.
 
- Documentation/process/changes.rst                    | 2 +-
- Documentation/translations/it_IT/process/changes.rst | 8 +-------
- 2 files changed, 2 insertions(+), 8 deletions(-)
+A process loops over mmap(4G, MAP_POPULATE) and munmap(). Another process
+calls fork() in a loop. The longest fork() while uprobes are being attached
+and the time to attach, in msec. 32 cpu VM, HZ=1000, no debug options,
+median of 15-45 runs:
 
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 28f2ca633..13093c5c2 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -53,7 +53,7 @@ mcelog                 0.6              mcelog --version
- mkimage (optional)     2017.01          mkimage --version
- nfs-utils              1.0.5            showmount --version
- openssl & libcrypto    1.0.0            openssl version
--pahole                 1.26             pahole --version
-+pahole                 1.22             pahole --version
- pcmciautils            004              pccardctl -V
- pigz (optional)        2.4              pigz --version
- PPP                    2.4.0            pppd --version
-diff --git a/Documentation/translations/it_IT/process/changes.rst b/Documentation/translations/it_IT/process/changes.rst
-index 0be1292a8..b4accd428 100644
---- a/Documentation/translations/it_IT/process/changes.rst
-+++ b/Documentation/translations/it_IT/process/changes.rst
-@@ -57,7 +57,7 @@ mcelog                 0.6              mcelog --version
- mkimage (opzionale)    2017.01          mkimage --version
- nfs-utils              1.0.5            showmount --version
- openssl & libcrypto    1.0.0            openssl version
--pahole                 1.26             pahole --version
-+pahole                 1.22             pahole --version
- pcmciautils            004              pccardctl -V
- PPP                    2.4.0            pppd --version
- procps                 3.2.0            ps --version
-@@ -149,12 +149,6 @@ Dalla versione 5.2, quando viene impostato CONFIG_DEBUG_INFO_BTF, il sistema di
- compilazione genera BTF (BPF Type Format) a partire da DWARF per vmlinux. Più
- tardi anche per i moduli. Questo richiede pahole v1.22 o successivo.
- 
--Dalla versione 7.0, le kfunc annotate con KF_IMPLICIT_ARGS richiedono pahole
--v1.26 o successivo. Senza questa versione, tali kfunc avranno prototipi BTF
--errati in vmlinux, causando il fallimento del caricamento dei programmi BPF con
--l'errore "func_proto incompatible with vmlinux". Molte kfunc in sched_ext sono
--interessate da questo problema.
--
- A seconda della distribuzione, lo si può trovare nei pacchetti 'dwarves' o
- 'pahole'. Oppure lo si può trovare qui: https://fedorapeople.org/~acme/dwarves/.
- 
+                                       fork()          attach
+                                    before  after   before  after
+the busy process maps the file
+  uprobe_multi, 1 uprobe               201   0.25      217    232
+  uprobe_multi, 4 uprobes              422   0.34     1483   1558
+  perf_event, 4 uprobes                421   0.47     3150   3322
+it forks and doesn't map the file
+  uprobe_multi, 1 uprobe               198   0.07      212    9.6
+  uprobe_multi, 4 uprobes              203   0.08      213   13.4
+  perf_event, 4 uprobes                419   0.08      630   12.3
+nobody keeps mmap_lock busy
+  uprobe_multi, 1000 processes        1.93   1.83     4.24   4.49
+  uprobe_multi, 5000 processes        8.88   8.60     8.33   9.23
+
+I don't care which tree it goes through. It targets bpf-next only because
+BPF CI will run the patches, including the new selftest.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+Alexei Starovoitov (9):
+  mm: Bring back mmap_write_trylock()
+  uprobes: Don't run exit_mmap() under dup_mmap_sem
+  uprobes/x86: Finish an unoptimization which failed half-way
+  uprobes/x86: Don't WARN if an optimized probe can't be written
+  uprobes: Don't sleep on mmap_lock under dup_mmap_sem
+  uprobes: Don't sleep on mmap_lock with dup_mmap_sem held in dup_mmap()
+  fork: Let the new task point to its mm before uprobes can find it
+  uprobes: Don't leak the breakpoints if the unregistering task is
+    killed
+  selftests/bpf: Test uprobes and fork() with busy mmap_lock
+
+ arch/x86/kernel/uprobes.c                     |  23 +-
+ include/linux/mmap_lock.h                     |  12 +
+ include/linux/uprobes.h                       |   5 +
+ kernel/events/uprobes.c                       | 260 ++++++++--
+ kernel/fork.c                                 |  13 +-
+ mm/internal.h                                 |   3 +-
+ mm/mmap.c                                     |  33 +-
+ mm/nommu.c                                    |   3 +-
+ .../selftests/bpf/prog_tests/uprobe_busy_mm.c | 447 ++++++++++++++++++
+ .../selftests/bpf/progs/uprobe_busy_mm.c      |  22 +
+ 10 files changed, 766 insertions(+), 55 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_busy_mm.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uprobe_busy_mm.c
+
 -- 
-2.43.0
+2.55.0
 
