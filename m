@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792670728;
-	b=0cKL+pynMr/LjAdXF0F6J9SmoLgGPFSrU99qDG9ZDMfmHPWdG5chBFR4zSfT//fLKPIq
-	 1Jbb2lYZoVKqQMvCz8E40b8baJo6r+IBiFYFFIG7fZ6RN8oqWWi9iqnYhDWQ/XxVuPF/q
-	 +nNKz4IlAKTNsY2ZWHphGGhE65LpVnweSwaXnmS9E9qGCNxz9snBOH9w//GLAehkLOubk
-	 nHvDw1BuRTlIejvy7opbSWTLvtzhjlhFOWYAU0X8i+yLIIp0lJLf86M+JPakiow80ACTY
-	 kJg3o44qfBT4DmT+8G/6UT9jaPocmSPCKrNYfFtoha7872OdTCsPVxbK9Q3PqPrcHsg==
+	t=1792673049;
+	b=e0fSf+IoDH6gi3m3Hxh2Hxwd1PkJQbx/x0sgvbIR3qFZM6kJG3iEiasl/XsvFVycwH33
+	 LMhXpl8FWjfZ2wuFQQYH+O917dz+FqYlyPmmlRbhnZn6bSFiPts9TN7brbwps7qA2htk0
+	 48UYcYSAwED0JF+CDOcavh+Dt16nKqAte5MisYA+BjYKxFnsU9knGtYdZrUYMVJzwWgLl
+	 Ae0rK+14Gbxv9kmn9Fpmzy/oGm/J8mwdoUKckRKJ5IjAj2kGHRtEodjFZIa6PIAnYAtOm
+	 bEk9g+YI7hh4SwCVyuNHSMnDpzcUnvYngfeZFqLgAs35RY7P61C5VcYz6QLTWeaKcaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792670728;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792673049;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=BvlhOXWWUN/L06dzJGiCJmHB45x99YGwdoXxYD3mGQ0=;
-	b=q/PdWNYTTGHJnOSvJxvz9fTKCa+mzvP3iF59xBNxgh8ACYWaiO6FOEPpWl7oFuWjWBY4
-	 hNkdCvDdB/GZWntLy0J+Bh4I12uzFOPK2/qeNVt+aMEkSjyqJXudu+mpmqHEibk/cIAri
-	 i6V1rODg/tT3N0Gqf+qjFmcaRd5T4tdISOoqMpxyoKLaGaPV9U7RLup3TnPO3oKNm8OA9
-	 kzEl2+fCgkfd4IwmGmYSlSAWXsW7YiooVC7PvoaifvguJzUl1IPapkK6XGy03RVhtBXO3
-	 IDb1pD3Kb+Oc5DARYLrBPXB20hxsuOPdg1sNGmGqBYT6XZg8VVWRTQc2REcVTMfftXA==
+	bh=a6EMyBFfNowmG5YNJ/9G4LYrXwUhOiBFWZ8ljyUI6b4=;
+	b=1SZwYYnNzGFDEbS9QQ7lJ7yxWaJV5ox7QKq7iDvKtI5nKyvPqO+6zEUMeiH2v75HySG6
+	 lQgYoOBClDTsFoZKeNqHk2Sip5euxJwYan9aa7br97HPqNiHefH9RB/25wFYpqJok7XH3
+	 ecXprMnIMeLyN+uCY76hRZtWDL7aHqjOsDtqGPec6kd5M1SZdJlPqmTih/ZZ20tNKtYSD
+	 JUNIhKwjbGJtCKQbdBYKv3W8frZxHfXj3JFWkyPM24Kz48wKKotK0Mm9eKEByXMFkIduV
+	 VkzpV8Ka/UztyWyHxzX7vGdLufndHQyq9XK6z23tgMN7AyBQvis9/PhhbiEHZ/sTnpg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="DXj/Yis2";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="PYeK9/Uu";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E9E606A319;
-	Thu, 22 Oct 2026 12:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B6D606A31A
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 12:44:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DXj/Yis2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC731F000C1;
-	Thu, 22 Oct 2026 12:05:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PYeK9/Uu
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E931F000C2;
+	Thu, 22 Oct 2026 12:44:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792670727;
-	bh=BvlhOXWWUN/L06dzJGiCJmHB45x99YGwdoXxYD3mGQ0=;
+	s=k20260515; t=1792673048;
+	bh=a6EMyBFfNowmG5YNJ/9G4LYrXwUhOiBFWZ8ljyUI6b4=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DXj/Yis2i7vhI5zmDqlK1CRIlRpf0thfdcRZdayh1IsSxseGxBPEQIXkTYnvqnOsn
-	 Cjxmf6s5G3ElMTriImzYQziZhoxlNBA76PThv4IXT1YwpjDfyfRsDlYrI3wmlJSrNv
-	 WBghf5yi+oAyH7MGB6ZVmkPygrMIHGA12rV/kHyeSbr1W2iA53Y1SDTyCJHot0DUZ7
-	 zsxTRB6v3tM/ugBE5CuocO6h6nVECA6D1+zZmv1bcM+PDaQZhkuZmvb/JqRSV1Vnv1
-	 eJ8XR0ex12wdnrx7xnZGDQpMhDAv6WG/DmFb1V0gFlNXUy2Kn4zbM+msYYfQQ6h4Yd
-	 Z/GOVR3ZmBlHQ==
-Content-Type: multipart/mixed; boundary="===============7744310823040091790=="
+	b=PYeK9/UunPmVIxKJiuXvkcvXNxsBLQh6t8JTn6KYOTnIjkuaNQrUyTE87uO/Ac1uc
+	 5dpSS9M1EuZT/6FloqMd8Iw4dVLRS5foo/d3BsBxstcrMhYz0jAGqhlfSbf46y1PlZ
+	 zXGusOyYwjPbIyAqBh2le/dEGjPHHcVGR8nya8gc3hoShFJ3pZBvog4nCBflj6fkZW
+	 cWSN1eskI0yZKLvRSMmzvP0Zx8/wqRN+i1uP/cU1oZXv9Ue1SBXSDze4tv/3cuYnsB
+	 qz+cIDqZaTCA8CRjuI8UDq0CRfmwRs4UyeRWyCDVKeGvNvsvYgVKjQmrJKLaegEelI
+	 TVaUgcqQQUbcA==
+Content-Type: multipart/mixed; boundary="===============0872173899795700015=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,88 +49,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <9e67828ba31a6f6e2d7c4b86bfdbba903cfa05cd468b58d4c03558cb8f453f3a@mail.kernel.org>
-In-Reply-To: <20261022112312.31563-1-ayushmanrout27@gmail.com>
-References: <20261022112312.31563-1-ayushmanrout27@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Use memmove() to load bytes from an skb and an xdp_buff
+Message-Id: <6896375813cf93e6e3c7ae7a8f329d9fa73568dadcb55b7ab364e5c18ce817c3@mail.kernel.org>
+In-Reply-To: <20261022-jit_size_fix-v2-2-4bee6921b218@meta.com>
+References: <20261022-jit_size_fix-v2-2-4bee6921b218@meta.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test JIT jumps which change at a repeated image length
 From: bot+bpf-ci@kernel.org
-To: ayushmanrout27@gmail.com,bpf@vger.kernel.org
-Cc: ayushmanrout27@gmail.com,daniel@iogearbox.net,john.fastabend@gmail.com,sdf@fomichev.me,martin.lau@linux.dev,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,davem@davemloft.net,edumazet@kernel.org,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,hawk@kernel.org,drosen@google.com,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 22 Oct 2026 12:05:27 +0000 (UTC)
+To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com
+Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 22 Oct 2026 12:44:08 +0000 (UTC)
 
---===============7744310823040091790==
+--===============0872173899795700015==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Use memmove() to load bytes from an skb and an xdp_buff
+> selftests/bpf: Test JIT jumps which change at a repeated image length
 
-TL;DR: memmove() fix leaves the multi-frag xdp path (bpf_xdp_copy_buf) using
-forward memcpy(), so bpf_dynptr_read() into an overlapping rdwr slice may
-still corrupt data; the store path looks similar.
+TL;DR: Test issue: the new jit_insns subtest asserts the program was JITed, so
+it may fail instead of skipping when no JIT is available (JIT disabled or
+unsupported architecture); suggests gating on is_jit_enabled().
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns.c b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
+> --- a/tools/testing/selftests/bpf/prog_tests/jit_insns.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
 
 [ ... ]
 
-> @@ -4298,7 +4298,7 @@ BPF_CALL_4(bpf_xdp_load_bytes, struct xdp_buff *, xdp, u32, offset,
->  	if (!ptr)
->  		bpf_xdp_copy_buf(xdp, offset, buf, len, false);
->  	else
-> -		memcpy(buf, ptr, len);
-> +		memmove(buf, ptr, len);
->
->  	return 0;
+> @@ -2881,6 +2881,63 @@ static void test_convergence(void)
+>  	}
 >  }
+>
+> +/*
+> + * On x86-64 a backward jump sized from its own previous-pass address grew
+> + * here while others shrank, so two passes gave the same image length with
+> + * jumps still changing. The fillers are 7 and 2 bytes of native code, the
+> + * conditional jumps are never taken.
+> + */
+> +static void test_same_len_not_converged(void)
+> +{
 
-The commit message says "A read that spans xdp frags still goes through
-bpf_xdp_copy_buf() and is not changed here."
+[ ... ]
 
-Can the same corruption still happen on that path?
+> +	int fd;
+> +
+> +	fd = load_prog(insns, ARRAY_SIZE(insns), "same len not converged");
+> +	if (fd < 0)
+> +		return;
+> +	ASSERT_GT(jited_len(fd), 0, "same len not converged jited");
 
-bpf_xdp_copy_buf() copies segment by segment and writes into buf as it goes:
+This isn't a bug, but should this assertion be skipped when no JIT is
+available?
 
-    memcpy(dst, src, copy_len);
+jited_len() returns 0 when the program was not JITed, and test_jit_insns()
+itself is not gated on is_jit_enabled(); only serial_test_jit_insns_blinded()
+is, and it calls test__skip() when there is no JIT.
 
-For an xdp dynptr, bpf_dynptr_slice_rdwr() with a NULL buffer returns a
-direct pointer into whichever frag holds the requested range, so buf can
-still be a slice of the same packet.
+On a kernel without CONFIG_BPF_JIT_ALWAYS_ON and with
+net.core.bpf_jit_enable=0, or on an architecture without an eBPF JIT,
+__bpf_prog_select_runtime() falls back to the interpreter.  The load
+succeeds, jited_prog_len is 0, the program still runs correctly, and this
+subtest fails on ASSERT_GT(jited_len(fd), 0, ...).
 
-Consider a linear part of 100 bytes and a 4096 byte frag0:
+Other selftests treat a missing JIT as a condition to skip or ignore, for
+example bpf_obj_id.c:
 
-    dst = bpf_dynptr_slice_rdwr(&ptr, 110, NULL, 64);   /* frag0 + 10 */
-    bpf_dynptr_read(dst, 64, &ptr, 90, 0);
+	env.jit_enabled && !prog_infos[i].jited_prog_len
 
-    bpf_dynptr_read()
-      __bpf_dynptr_read()
-        __bpf_xdp_load_bytes()
-          bpf_xdp_load_bytes()
-            bpf_xdp_pointer(xdp, 90, 64)   /* NULL, since 90 + 64 > 100 */
-            bpf_xdp_copy_buf(xdp, 90, dst, 64, false)
+and btf_rust.c, which calls test__skip() when !info.jited_prog_len.
 
-The first memcpy() copies linear[90..100) onto frag0[10..20), which
-clobbers source bytes that have not been read yet.
+Would something like this keep the check for JIT-enabled setups, where it
+catches a silent fallback to the interpreter, without failing when no JIT is
+configured?
 
-The next memcpy() then copies frag0[0..54) onto frag0[20..74), a forward
-copy over an overlapping range.
+	if (is_jit_enabled())
+		ASSERT_GT(jited_len(fd), 0, "same len not converged jited");
 
-A user-space model of this loop with forward copying returned 44 of 64 bytes
-wrong.
+> +	prog_run(fd, 1, 2, 11, "same len not converged");
+> +	close(fd);
+> +}
+> +
 
-The skb side does not look affected, since skb slices are always in the
-linear head and skb_copy_bits() copies into a destination below the source.
-
-Would it make sense to make the multi-segment copy overlap safe, for example
-by going through a bounce buffer, or else to say in the commit message that
-the xdp frag case remains broken?  The store path
-(bpf_xdp_store_bytes() -> bpf_xdp_copy_buf(..., true)) has the same shape.
+[ ... ]
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39772397846
---===============7744310823040091790==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39777661721
+--===============0872173899795700015==--
