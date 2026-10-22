@@ -1,72 +1,40 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=154.81.10.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792668920;
-	b=JcB9EiwcKB4XXv0Q/aEG+gVDCS8XHpuXQolOuG7LU7/7yiBBI/egXY4boUDJv/IUZK2G
-	 m+DiH5MCTyrC779OukRldsUM22QJupgykqR/lHjTpUErGt2WFVP2fhg/6Zc5g+XIv5fGl
-	 ZZByEZlRpnJzdZJN5rssZZ6i/9RyZvCU2uVZrP5KA5T/b0Bud9Ay2jLppD4vp4b6EzhNI
-	 N9OyCZKfHtmGASDqQAAyZRn8N4Uq61GXsIZeUebmn5Zdvq527hWxOhVKozeGDY17KFF5M
-	 ugcBaNIZGAr7rx3DQSeh3+0pcnnO0LfndLESC6XzqOiCQjgsUmkpKoeWsrT+7T/OC8Q==
+	t=1792669253;
+	b=y/TVrOCuZnp5EFWuOK4ucg9f83JAsvEcGTUttJ6tUseb+J/KvNNuX4NmMOD3+y+v/sTQ
+	 OJKWC54ZBd4dMX8PZXiqQt3+YmpGblKwFeqNBvYCAmSLpUVB25cF35v5qxBkF+x/+j9tm
+	 bctEJdQkJRrIjYKuZvhSntImlLx/xLYyUGblLFC5ionsuVUuH9WR1Zcaxx7rYvGj/mBf2
+	 55EoX+CKE7xogk1Udy7H3E8W3Ya8+bTiwFAJHccPVn3STzKrKSfKcv8SvaZ7XUjX8bJuV
+	 8KIMbbjXs+rHobfthyg/2KEYrFmwciWsrunh73E7cExan99dVLrZMW+oCRlrfGRZ0eA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792668920;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=VhH6+z3kKO1Bl5/znvKizz61KSkOxaasQ1jNB2IaQFU=;
-	b=aYtLrOiPAfe/FFicjzzU1bPKHNyHr1lvH+ylZS+IDsds28K8fZP8eQe/4uI4GtvBoiYY
-	 1qv6zgs+IDLRdMuF61DKjcHuGNyRVk6TotbNsfDl7TepBZhgSb2H/gNWpWWmRqrJ0wbQZ
-	 nKDASEmBYsZMY0kMo0s6MJi5IKzp9srumHyeYU+uj3n8n3PmVJfMYhMNA2RmtY8EmeBoN
-	 4LkDlKnuwDsvosXQ0ipy3YoKTnqVbTxHdJlrtwc3tzG2Ws4Y2gp/duOwU9wlkmhE2F02o
-	 qN79ZG5JaAnKIIkRlyJ98ySZXAG0Q98q9FobyFEUpoW8RxsV9CqM8NITdQrZJtQ4IyA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792669253;
+	h=DMARC-Filter:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
+	bh=U0Xvu1qIA/L+bG5Y4RTEQS4ShKfxcS6BTZgoVihscQU=;
+	b=Umcu5pYYtVAN/QN46x9yVPtw/6jJ7kE+/F9VjplRlvNEuxCCbEzgiayEHc4PWXKpNVHL
+	 yU8+sE++1wKClBS/nB+fU7MWMiD3G2puBDkt2uVb7naGIiIKnFRT5BWbn1ijkb2SfoBnf
+	 39UmezHlhQgheQF98VulLFRENs1cEHSwSWfqKXirLxFvoSAsduc8nvraZiE3QQ1bEI2uO
+	 oazIFvmiFWGYvzlFmKmVNTNKaurg85DAfpdBtlcGbSxTbpWK58K3ekV6uA90OkAak1W9L
+	 SpTcDTMxj040mmvqjzpT0kfflRglHjkxfW/p0M6HpyI80FCrpEUxFOJ35IYqc4kMw8g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zbvy/0NS";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=easystack.cn;
+	spf=pass smtp.mailfrom=easystack.cn;
+	arc=none smtp.remote-ip=154.81.10.170
+Received: from mail-m10170.netease.com (mail-m10170.netease.com [154.81.10.170])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A72A606A31A;
-	Thu, 22 Oct 2026 11:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zbvy/0NS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 772231F000C2;
-	Thu, 22 Oct 2026 11:35:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792668919;
-	bh=VhH6+z3kKO1Bl5/znvKizz61KSkOxaasQ1jNB2IaQFU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Zbvy/0NS5hi8ZwGaL0mHdj6PEHhtbpZcgsb2Xp7eB8vNm91KXm6vAJ7shxoujBAe1
-	 dhfj5zW9GQjv2ICnLKITKYEVzIPUmr/T43Jte0mZvaglbKkhuJTD/V6vQcS26uTCFt
-	 OXasMXASP+V7SWvLS7aqv6WgFIHv/Z8rVTdNyptNUr0oy2H7iDd5b7kUaf0Cyoam5X
-	 uCgKS1SFyrbOMkuvNTg7wMFXssb/Zd5v96NUXlFCeDqopZEQD/tE8951DjZUUkufjP
-	 zYi24h+tNP9MH/3GJ/iZijRpORTplyqr7Cmi85uhX3LidPPNuictm20cp7A+p/XIxm
-	 nQb5r+beBBOWQ==
-Date: Thu, 22 Oct 2026 19:15:12 +0800
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Ong Boon Leong <boon.leong.ong@intel.com>, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] net: stmmac: disable TX checksum offload
- for jumbo frames on bugged cores
-Message-ID: <atnwQKwf8mfQT-2n@xhacker>
-References: <20261012-stmmac-xdp-tx-pre-fixes-v1-0-05fd0c90f7e1@oss.qualcomm.com>
- <20261012-stmmac-xdp-tx-pre-fixes-v1-2-05fd0c90f7e1@oss.qualcomm.com>
- <6d1d99b5-1c3c-4e59-a0b2-e4d671e594ce@bootlin.com>
- <ata8k2EVDCDTmeE6@xhacker>
- <atbbRqSJIJ_glwuf@xhacker>
- <3ca537e7-c9a3-4306-a2f4-9c7d57123bfc@lunn.ch>
- <athAoWfW-xesPhFP@xhacker>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E317606A319;
+	Thu, 22 Oct 2026 11:40:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E317606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
+Received: from [192.168.0.59] (unknown [218.94.118.90])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 205a7933a;
+	Thu, 22 Oct 2026 19:40:40 +0800 (GMT+08:00)
+Message-ID: <94d07572-0b9e-493f-98e4-c751e5838e7e@easystack.cn>
+Date: Thu, 22 Oct 2026 19:40:39 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,55 +44,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <athAoWfW-xesPhFP@xhacker>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/7] mm/page_owner: add bpf_iter and kfuncs
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, vbabka@kernel.org, surenb@google.com,
+ mhocko@suse.com, brendan.jackman@linux.dev, hannes@cmpxchg.org,
+ ziy@nvidia.com, shuah@kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
+ <20261021115240.f195a2a55364fe300cbb6983@linux-foundation.org>
+From: "zhen.ni" <zhen.ni@easystack.cn>
+In-Reply-To: <20261021115240.f195a2a55364fe300cbb6983@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Tid: 0aa16369cb290229kunm3eba54192ba45d
+X-HM-MType: 1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaH0JIVh8fSk1OGktLHh9IHVYVFA
+	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
+	lPT09IVUpLS1VKQktLWQY+
 
-On Wed, Oct 21, 2026 at 12:33:37PM +0800, Jisheng Zhang wrote:
-> On Tue, Oct 20, 2026 at 02:28:26PM +0200, Andrew Lunn wrote:
-> > > > Here I want to query a generic rule from netdev maintainers:
-> > > > can XDP frame enable HW checksum on dwmac IP? Per my understanding, the
-> > > > dwmac can only do HW checksum for normal particular packets layouts, such as
-> > > > TCP, UDP. What about if XDP transmits a non-IP frame?
-> > > 
-> > > or a generic XDP guide from netdev maintainers:
-> > > Since XDP can tranmist arbitrary Eth frames, so how does the eth driver cope
-> > > with HW checksum if the HW checksum is intended for supported IP packet
-> > > layouts rather than arbitrary layer2 frames?
-> > > 
-> > > choices:
-> > > c1. Simply disabled HW checksum by default. Then XDP prog must provide
-> > > checksums themselves, lost the HW offload cap for IP packets.
-> > > 
-> > > c2. detect the frame in eth driver's xdp code path, then enable/disable
-> > > HW checksum accordingly. Then how? Any example in exisiting eth drivers
-> > > is appreciated.
-> > 
-> > Why is this specific to XDP? Cannot the network stack transmit
-> > arbitrary layer2 frames? Isn't this a generic problem?
-> > 
+
+
+在 2026/10/22 02:52, Andrew Morton 写道:
+> On Wed, 21 Oct 2026 19:24:30 +0800 Zhen Ni <zhen.ni@easystack.cn> wrote:
 > 
-> network stack normal tx supplies the skb->ip_summed metadata, and
-> dwmac driver specifically can decide to enable/disable HW csum
-> by checking the protocol which is extraced from skb, example
-> stmmac_has_ip_ethertype()
-> But XDP path doesn't have the necessary metadata, and I'm not sure
-> whether stmmac_has_ip_ethertype xdb version can be implemented or
-> not. That's the reason I request generic XDP guidence from netdev
-> maintainers.
+>> page_owner records who allocated every page and is a core memory-debug
+>> facility, but it currently reaches userspace as the debugfs flat dump:
+>> slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
+>> means streaming and parsing the entire file in userspace, which is
+>> expensive on large hosts and hard to query live.
+> 
+> Confused.  Your series 8570b65220e8 ("mm/page_owner: add print_mode
+> filter") addressed this significantly?
+> 
 > 
 
-Hi,
+Thank you. I'd like to share some background on how this new approach
+came about.
 
-Given above, I think the dwmac hw csum needs to be disabled by default
-to make XDP always behave properly. Since this patch2/2 has been
-merged, I will update my patch:
-https://lore.kernel.org/netdev/20260929121025.20821-1-jszhang@kernel.org/
+After series 8570b65220e8 ("mm/page_owner: add print_mode filter"), I
+attempted to further extend the filter capabilities so that userspace
+could more selectively capture page owner results. This effort led to
+the series [PATCH v3 0/8] mm/page_owner: Add PID/TGID/COMM and cgroup
+filtering.
 
-1.rebase on the lastest net-next or wait for new rc1
+During that discussion, we gradually reached a consensus that "a BPF
+iter" might be a better solution to this problem. The main concerns
+with continuing to extend the kernel-side filter approach were:
 
-2.update the commit msg of my patch to include above reply.
+  1. As filter capabilities grow, the kernel side needs to handle
+  increasingly complex parameter parsing and various combinations of
+  different filter attributes, which is not conducive to maintainability.
 
-Kindly let me know if this way can be accepted or not
+  2. More fundamentally, kernel-side filters cannot provide truly
+  flexible filtering because the filtering logic is hardcoded in the
+  kernel.
 
-Thanks
+At that point, I did a POC to verify the BPF iter direction:
+
+  
+https://lore.kernel.org/linux-mm/99a94068-ab37-47c0-878c-7c1ada5204b2@easystack.cn/
+
+It seems there is broad agreement on this direction. This new series is
+the implementation of that approach.
+
+
+Thanks,
+Zhen
+
+
