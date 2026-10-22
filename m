@@ -1,99 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792663236;
-	b=eeCV0iZaQ8neqg61iZtDwjKtRGIFhjaKDu/O29yoBedN1iD8cmNHK1eCAjl5oyeSUheB
-	 dA95/fiv6BSPlz/Co2BuNhvCxePQo4f3HJPJyxFgd3gIDjgPlqgvCaGA1BDH5mnQUqmA/
-	 tOKV2ZEtZTHRqRcVUjJn9TzAyZcpZwN4lhraLQ/H4/hP515XMagD0OWb/JcqvgOR8YKnW
-	 nPxvyfta7mxWlVNAhk8wKwX4syrvrwZw3rMwgAbCvtX4wyEnlPOnNL2KfCddB2Ipx9R0/
-	 AsLx5gsOZAddELpwW9Fz0SngnVanA8uXOKBAZsFninMOYG5kE/SXxHLKEbib4KjErEg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792663236;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.50
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792663303;
+	b=RyfffkQCKNGKn+9c8VeqF9rubSEZYb6SGsb8+7kpFSXFX808PYd3zuqw4o0N/c7Xa5Qn
+	 EaSUktEsnFXtcb3mLwzBvQepx7vKYziRaYP+E8oqqBh8mRR6WaA4Kt1Kr3yInobOg1PXd
+	 7dbIV9yRA3NFDitJ7NXjqjESAgVECCVTFP8mcwguq278KmfjgJSK1LYGI/pNBkOFnAE7+
+	 7oF4Mx+4S8NL3joH+fsGBHNVNC/SXP9pkSAlIIbtx+OM78KqEI/GGtrADXm4c6K9pBkpu
+	 ryVUDke9RPzR55IHFbogjRzgbWSJypxwFx1ER8YRnJD2Uy5BgEyP+CLkvOhaRLJHrAg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792663303;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=6cCL9T5a4uVS6vl4D3kqOpjQoXbPvB1BeBo3YEtKIFk=;
-	b=3HXDzOlPiGCF44/M2t8NKg+TgEHEgAiTG6gdHVkeifZWtCdnHp4ebjSAowu9Xd6RhlN+
-	 YHoyW91a0/0v1oDRswv1/jlJm/5TRa58WY96s8ainYgLw1d4c94r20opKnpCor+d8r/dk
-	 pmGGbkqFxAqbb5exY7ZVWwWcnlhlRyPlA9Ldx+ierW8aRk+NPygfCw05acOo7JhGvS2Mt
-	 fIDaOoJKyy/ai6xpCdgtsjHlnuovCiVKsS9Wh5dD5VuSDfULLyWrouUH0CLwGVkwwfeXw
-	 0VcXXFax3gb55GFH5uJwB30LG7wqLuW4BTQqPZ+CJayOjyJXj05MKD7cdTAtNOaF9oQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=AdFl+c9HTfOJHnKVulHF/KABJga7rr2KkdaAezk90/U=;
+	b=KViYrPnDKHspkvSIr791hC3qBoyXUXf9w7Tg62fPjh6TTCUVgAqwobjpk4NjG5L+6x6x
+	 fm0HG9JQi8gfbXX4xztxHEP+Z+pIn46p+UMHX72ixH3w8pyDaUj4L5WWHUvpY3EGI/kJv
+	 oBWFr9h0Z6HbWh2JE1ErEYdxw94+DNoyqlhy7HAiRjLn0jwq1vQeIrB79+kNKlQQ+/KFM
+	 i30dCX8q4IKuug2StYZC89U9dSH+HWVGpVNdohKRsxd4HY/5jh8o12g/K19/uQPVSIh7d
+	 gPD/+d8EFuKhBbTuiEpKzUJS604inar2t7jkGiam3/yOy6t2IqtPRJKzrnJsISVUQmw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="UbB/yb8n";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.46
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C6ohaFvw;
+	arc=none smtp.remote-ip=209.85.218.50
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA13C606A31A
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 10:00:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EA13C606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFD9606A31D
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 10:01:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2FFD9606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UbB/yb8n
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c414e5d282eso207291966b.1
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 03:00:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792663234; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LstmM3KkPqXBR/NC9DDe7xdE2RXz3Asf6KL4myWbKQjLZBv05OmBbyYV+2eb/JOuEU
-         lFGXVCoEsbAXtABp2RNHR0edYDvvHswboYedZ9WHMfEQfXiHcrnuyEvdPaPE0fieEEgD
-         KqG7f3ae4mhrMq9O7ABuRipSR2svecpK7HAkEBJ8R+Q3tlK2F9PU70H0n3xAUrjTcfhg
-         48nmkrBKCkDMvp8K11sCkH6++K8cPy4oYHe4Rxv0v5WDC1Nn2isZAkQv4LaXmUViJBuO
-         Km3DsPVy9AW0RUizWUvQvo7bt5E45PyufNzYBOp7K4Btj022RaTYGVdufKnOCVasbZG5
-         LABw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6cCL9T5a4uVS6vl4D3kqOpjQoXbPvB1BeBo3YEtKIFk=;
-        fh=hNX7o5oQCb8jQ7/GdWS04+RSUObQQvwJK3z7r7XKgHI=;
-        b=KY9VoaCmiCC0lOz2jFLrilgIgqy/iy5wwmWKIUo5JU9pDR4UIK1Wpk1a/xBc5lb0s3
-         XwUQc4UtSuVTWjt3vBgj2l+prvzs9y4TT7ObjEXRI40g5bbflTF91SLUzVvP/uAofj1e
-         7SlpBUXhPiMB9pStbVPC+u1s0Q8WxjTLgK41uMa9YnnSI1/kyy61h6iSzGbL+RMHLt61
-         f/Gk9ZetiUcBgrk00cPtEwNJwMu9inT5nnjRN6UO9rSiY9/4huQyX50uSKgkLnXI2/Rp
-         v9AS6KdFuqn05rdcWsn7IxwSYMNCcYFY2WF9Y4sral9QsojQZE8SJCQmmpL4sD8c/Jq0
-         Ni8A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=C6ohaFvw
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c34bff61551so211406666b.2
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 03:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792663234; x=1793268034; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792663301; x=1793268101; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=6cCL9T5a4uVS6vl4D3kqOpjQoXbPvB1BeBo3YEtKIFk=;
-        b=UbB/yb8nrrcAzdxwr8C6/+QLb8qZ0rsrG0TrG2Xbg6ikemTI21LVkvYMlsIJyTPXmO
-         Pipw+vVkf6MdakldaJarYvyYTRb/m0nFUbBGKpeZxJC4woi5JLmgHUcMFrIxBJIv/vKX
-         8ZJsNxKCOIvD+bS/2gYJVfKIoA6m3rUG/PW2i4O+ivmHDWA0wHFjFd1MRTRYZxgmpZDx
-         aFhukbxrL43DR5FEET7mPQz01Tv/B6xU6UH41MkFTMKXxbNDBf5AuzzwwqBW+ctxNaPQ
-         HUtVETfgDVg3b4PAEB5VT3wlHTzNMt4YDr54SFcPXnF/kkD/9UD+SVeMrRyPIkOOdGrl
-         c3Ew==
+        bh=AdFl+c9HTfOJHnKVulHF/KABJga7rr2KkdaAezk90/U=;
+        b=C6ohaFvwBXq3n1+WrpazbmGLbZXHZy60WksniPnyv0/fNqqeJc2ArAPv1CA0E3vAAD
+         UFehNO6fcMQRNycAOm8AQyoEL008xSbsc90gUFwfKXoG0xYSxGRwnj70jKu96m/OxoQn
+         SSFTnKp1uAFXptEyosauGwZ2SyWFiXSNSDxwSNCBiqiw23NELBMP2OC7siYj1jqnWmVt
+         xZE+4bXdGFB+XvfVDEzsKUKFnNMGI9lUR2FnWa85Pnn6mHSJBp9s4XHY5HgdBVQzPemW
+         TJihuhTHNCarHGh5O9KpXHR7Cy83DyDmN0sOoohXmyq5L6E/8hHgDUN0yuADfu8lyP6p
+         512g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792663234; x=1793268034;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792663301; x=1793268101;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6cCL9T5a4uVS6vl4D3kqOpjQoXbPvB1BeBo3YEtKIFk=;
-        b=CeX/I8uahylytk7J5fEAHetzlji3MWM36AmG9L3sElOdYc/VKfeOT/wuqy1/taXxNg
-         pAzCpkLj4KdMPwRPpkJKlzXWZRnykGVq+TFfVPqfilr0Wjc8z2E4nEZX3mNOar7W+MRX
-         FMx4NvxxtsqblomzIEzHqadyk2S9ltTOlhI2qIVViKkTJqUZn04HwpzQ/DuXRuHApwO2
-         ZFlyB9HdQ1lIy6pzH28C6NUaOVL3sXoT/IuipDj5b39PRKJNIRpcbZbMPVIdZ2RIkblE
-         IIZH7+v4Isr1DG7lbJkJDJ9J/ejY7+tR0oXBZnffKsf/pnuAaKYMkslq6grBAiuqpTo+
-         sRew==
-X-Gm-Message-State: AFq9FYIl4cmlYoIxjNu0sEnTqfZDSnZ60/F4PP6RDfzWETwh/tPh2n5D
-	wTmCPxgPAtnUHECospcEnc3Nebb5srylDWLzTb/b6DNOMpajxI5GLrjdFSdj62hKnsNz8OASVeM
-	OQhRilHZJhK2UKgGULgCak3S4P+n1YmQ=
-X-Gm-Gg: AYBFou3iPaJGqc//wfsWEx6MikQk2mJMzvY1HTF7WfyKCBBQX6QCs0vXNEfI0iZhuAF
-	/SW3SyhLEhRSJEePtUl9H2cramfMJ8rEdlrCijsbNQ7tjtKF81/u78T64cLWFcWg9lZ4o5o9O3O
-	nECHYfuzmy4C0i11/huyjJ+5g0rMfgQ301UYEC9TCVPWeetIEknSQANQ2iiIknuln9+p1ChlZry
-	WTaRZPkNV5l41BnYyQNC2odhl7QKiCp3xhXk6fj3BYJEam4bHdW1eWkdzrXvSw/c3c/Uulqhu3H
-	VdHp61cIvywfGusJtvhAMKkukoLlwRrRMUA86qjoolFN32vRtRwx+DBGVjA/LlvhS9jYfNCHuqa
-	PimRgxXkETU0EyVOsSlJgLRIEyJDj38FQcvvwtlnt5ggyT0D7fhIb
-X-Received: by 2002:a17:907:1c84:b0:c40:aa04:18d0 with SMTP id
- a640c23a62f3a-c46795f1c0amr411927366b.17.1792663233900; Thu, 22 Oct 2026
- 03:00:33 -0700 (PDT)
+        bh=AdFl+c9HTfOJHnKVulHF/KABJga7rr2KkdaAezk90/U=;
+        b=GmxBwNhGREJAVWq6ZRcrmuLz5apAG4BfNTs1aZmQ5t8D1eQAuseFbjTSi6Mm2+hcXM
+         E7UZsxnc8mKNR+2VcN80LfChtU/BP9hMjtJHlM7B7TnBJuo6vSF6Jk/dzKIwxAquyOGi
+         GwvPHvurhtDvXEH8+6OxEXCeTnG25dbw/fbz4u3n87pCYWfHmC3RVbtGPJ/CjIA+uwoM
+         AirKVc54lGC7b2Li9hRll72JnfhROrSAmViF2gxEbnl96Nzp9JGZ8rWiCpBq36tEufo2
+         SlU2WiN07mQAcZ6jazGnklaeqw7EJ+8xT2oTlmMpGd4szia9qOe1RBC5UKQl2ORsWJ2+
+         5g3A==
+X-Forwarded-Encrypted: i=1; AKwUvBx2KbSHIISz4NeOYI0nRT0f9nQq/aYsHuFIaykSowRiaAmvczH4CuchBdJFguSZcsNPxWc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKD5vwg40mkyQdu6Qiqz08ZBu5Ezn7aUpWofC0p2s4TbVfgpPcU
+	pZNK+cKWYdDPDLdqQApycThPkG2xX7nWTM1dk7Q4ODSlWibMyD/Rjno1
+X-Gm-Gg: AYBFou0ORlHeGy9FWKhshaH6mkYUk7cNnKBe3OoiSlqThG4WalQjJvK7LOsTc8py0gr
+	9GrFmGL2N8dtnV1Lv0tvWTxrqY7OWsGNpA1awo3Wvy9dEiPPocPJbOmv7DnjDpO+XhEWizxGzrT
+	zuYt3vlIAVQk9dfKJe7FMEalEpjWjdjmoynBOYgbejXD9Tj29Mqry87ciToJuyxp3dhEH2fExyE
+	yYKce/4SmBVi/9qIr2sy2ooIyl202LhU4Gn/wgFpqfrMMqYJsylegNCtulJRb0KGhsnCYTe6RjX
+	Ed4kuaj9Hf/Utak1SPBN2o5bkb4LxU8vXE3St8ZXJ/Q8CjP81zFhfQpW1dNDe58DE4SeZz84a+F
+	5rz0FQmAXL+sn6owY2vPBIk0+iBRdP++W0bmp0K8DJT7TlEcjzzlcFdwKsr8bDa9Fj0BUF/1kJp
+	bxyo9MpQfrfb0HE8UivskXeqmFr8m7EoT8e9tVS4nwAtc5vBjQL9i/OzNLgpsSb3YrSRB6yhb1j
+	u4ilSg7AZU9r85Vt6DpqpO4NNCTYJHMrvb+QOkCl64=
+X-Received: by 2002:a17:906:dc89:b0:c40:f9ea:7387 with SMTP id a640c23a62f3a-c46791a979emr451363266b.6.1792663301007;
+        Thu, 22 Oct 2026 03:01:41 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e2a034fc2sm7287470f8f.5.2026.10.22.03.01.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2026 03:01:40 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 22 Oct 2026 12:01:37 +0200
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [RFC bpf-next 0/9] bpf: Add support to allocate user page
+Message-ID: <atnfAUWzdsoWQKe8@krava>
+References: <20261021195759.119421-1-jolsa@kernel.org>
+ <DMAUMG9WL4X6.12UEJJMJSW54Z@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,211 +104,151 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261021185117.650403-1-puranjay@kernel.org> <ac40b5a677a32b6a04824bf86b78bbb432813792d8b6ecf721c7a6a41ce9db5b@mail.kernel.org>
-In-Reply-To: <ac40b5a677a32b6a04824bf86b78bbb432813792d8b6ecf721c7a6a41ce9db5b@mail.kernel.org>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Thu, 22 Oct 2026 11:00:20 +0100
-X-Gm-Features: AclHuK-rCpiM1zcE6C9r2QQU_kAXeH6eoLQXflhvxQCxHISd0RVGXY8aalzAENY
-Message-ID: <CANk7y0jM5A4pBLpPJ1LaLunAo7SSbjzitji_Su6tEiCHi2hnFA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Drop percpu_counter from the htab
- element count
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	song@kernel.org, yonghong.song@linux.dev, mykyta.yatsenko5@gmail.com, 
-	martin.lau@kernel.org, mason@kernel.org, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DMAUMG9WL4X6.12UEJJMJSW54Z@gmail.com>
 
-On Wed, Oct 21, 2026 at 8:23=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
->
-> > bpf: Drop percpu_counter from the htab element count
->
-> TL;DR:
-> - On 32-bit kernels, torn s64 elem_count reads or NMI races may make
->   is_map_full() wrong: spurious -E2BIG, or inserts past max_entries
-> - Two comment-style nits
->
-> > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> > index bf78e09f4d51..6e2115477cb9 100644
-> > --- a/kernel/bpf/hashtab.c
-> > +++ b/kernel/bpf/hashtab.c
->
-> [ ... ]
->
-> > @@ -94,10 +94,10 @@ struct bpf_htab {
-> >               struct bpf_lru lru;
-> >       };
-> >       struct htab_elem *__percpu *extra_elems;
-> > -     /* number of elements in non-preallocated hashtable are kept
-> > -      * in either pcount or count
-> > +     /* number of elements in non-preallocated hashtable. With
-> > +      * use_percpu_counter it only follows map.elem_count in steps of
-> > +      * PERCPU_COUNTER_BATCH, see is_map_full()
-> >        */
-> > -     struct percpu_counter pcount;
-> >       atomic_t count;
-> >       bool use_percpu_counter;
-> >       bool has_hash;
->
-> this isn't a bug, but this multi-line comment still has text on the openi=
-ng
-> /* line.  Since the comment is being rewritten anyway, could the /* go on=
- its
-> own line, as is preferred under kernel/bpf/?
->
-> [ ... ]
->
-> > @@ -739,29 +739,20 @@ static struct bpf_map *htab_map_alloc(union bpf_a=
-ttr *attr)
->
-> [ ... ]
->
-> > +/* is_map_full() needs htab->max_entries - cur_number_of_elems to be m=
-ore than
-> > + * batch * nr_cpu_ids for the percpu counter to be faster than atomic_=
-t. In
-> > + * practice the average bpf hash map size is 10k. With batch count of =
-32 a 10k
-> > + * hash map on a system with 64 cpus can be filled up to 80%:
-> >   * 10k - 8k > 32 _batch_ * 64 _cpus_
-> > - * and __percpu_counter_compare() will still be fast. At that point ha=
-sh map
-> > + * and is_map_full() will still be fast. At that point hash map
-> >   * collisions will dominate its performance anyway. Assume that hash m=
-ap filled
-> >   * to 50+% isn't going to be O(1) and use the following formula to cho=
-ose
-> > - * between percpu_counter and atomic_t.
-> > + * between the percpu counter and atomic_t. The batch has to be a powe=
-r of 2.
-> >   */
-> >  #define PERCPU_COUNTER_BATCH 32
->
-> this isn't a bug, but the same applies to the rewritten comment above
-> PERCPU_COUNTER_BATCH, which also starts its text on the opening /* line.
-> Could it use the /* on its own line style as well?
->
-> [ ... ]
->
-> > @@ -1162,30 +1151,33 @@ static void htab_put_fd_value(struct bpf_htab *=
-htab, struct htab_elem *l)
-> >
-> >  static bool is_map_full(struct bpf_htab *htab)
-> >  {
-> > -     if (htab->use_percpu_counter)
-> > -             return __percpu_counter_compare(&htab->pcount, htab->map.=
-max_entries,
-> > -                                             PERCPU_COUNTER_BATCH) >=
-=3D 0;
-> > -     return atomic_read(&htab->count) >=3D htab->map.max_entries;
-> > +     s64 count =3D atomic_read(&htab->count);
-> > +
-> > +     /* each cpu's elem_count is ahead of count by less than the batch=
- */
-> > +     if (htab->use_percpu_counter &&
-> > +         count + nr_cpu_ids * PERCPU_COUNTER_BATCH >=3D htab->map.max_=
-entries)
-> > +             count =3D bpf_map_sum_elem_count(&htab->map);
-> > +     return count >=3D htab->map.max_entries;
-> >  }
->
-> Can a torn read of the per-cpu s64 elem_count on 32-bit kernels make
-> is_map_full() return the wrong answer here?
->
-> bpf_map_sum_elem_count() does READ_ONCE(*pcount) on each s64, which on 32=
--bit
-> is split into two 32-bit loads (see include/asm-generic/rwonce.h).  A per=
--cpu
-> elem_count crosses zero regularly, since an element is often freed on a
-> different CPU from the one that allocated it.
->
-> A 0 -> -1 update rewrites both halves:
->
->     0x00000000_00000000 -> 0xffffffff_ffffffff
->
-> If another CPU in htab_map_update_elem() -> alloc_htab_elem() ->
-> is_map_full() reads the counter in the middle of that update, it can see
-> 0x00000000_ffffffff (+4294967295).  Then "count >=3D htab->map.max_entrie=
-s" is
-> true and alloc_htab_elem() returns -E2BIG for a map that is not full.
->
-> A -1 -> 0 update can read as -4294967296, which lets an insert go past
-> max_entries.
->
-> The old slow path was percpu_counter_sum(), which reads s32 per-cpu count=
-ers
-> and fbc->count under fbc->lock.  Near max_entries fbc->count is a large
-> positive value, so a torn read could not affect that decision.  Before th=
-is
-> patch, torn elem_count reads only affected the iterator statistics.
->
-> >
-> >  static void inc_elem_count(struct bpf_htab *htab)
-> >  {
-> > -     bpf_map_inc_elem_count(&htab->map);
-> > +     s64 cnt =3D this_cpu_inc_return(*htab->map.elem_count);
-> >
-> > -     if (htab->use_percpu_counter)
-> > -             percpu_counter_add_batch(&htab->pcount, 1, PERCPU_COUNTER=
-_BATCH);
-> > -     else
-> > +     if (!htab->use_percpu_counter)
-> >               atomic_inc(&htab->count);
-> > +     else if (!(cnt & (PERCPU_COUNTER_BATCH - 1)))
-> > +             atomic_add(PERCPU_COUNTER_BATCH, &htab->count);
-> >  }
-> >
-> >  static void dec_elem_count(struct bpf_htab *htab)
-> >  {
-> > -     bpf_map_dec_elem_count(&htab->map);
-> > +     s64 cnt =3D this_cpu_dec_return(*htab->map.elem_count);
-> >
-> > -     if (htab->use_percpu_counter)
-> > -             percpu_counter_add_batch(&htab->pcount, -1, PERCPU_COUNTE=
-R_BATCH);
-> > -     else
-> > +     if (!htab->use_percpu_counter)
-> >               atomic_dec(&htab->count);
-> > +     else if (!((cnt + 1) & (PERCPU_COUNTER_BATCH - 1)))
-> > +             atomic_sub(PERCPU_COUNTER_BATCH, &htab->count);
-> >  }
->
-> The same concern applies to inc_elem_count() and dec_elem_count().
-> this_cpu_inc_return() on the s64 per-cpu elem_count uses
-> this_cpu_add_return_8, which x86 only defines under CONFIG_X86_64.
-> Elsewhere it falls back to this_cpu_generic_add_return(), a
-> raw_local_irq_save() read-modify-write that an NMI can interrupt.
->
-> On x86-32, if an NMI perf_event program updates another bucket of the sam=
-e
-> map in that window, it can see the same return value as the interrupted
-> context.  If that value is a multiple of PERCPU_COUNTER_BATCH, both conte=
-xts
-> run:
->
->     atomic_add(PERCPU_COUNTER_BATCH, &htab->count);
->
-> (or both run atomic_sub() on the dec side).  htab->count then stays 32 of=
-f
-> from the sum of 32 * floor(elem_count / 32) permanently, and the error gr=
-ows
-> over time.
->
-> That breaks the "each cpu's elem_count is ahead of count by less than the
-> batch" invariant that the fast path in is_map_full() relies on.  A downwa=
-rd
-> drift lets the fast path return false while the map is already full.
->
-> The old x86-32 fast path used this_cpu_try_cmpxchg() on s32 counters
-> (HAVE_CMPXCHG_LOCAL), which an NMI cannot split.
->
-> This seems to contradict the commit message statement "so that is exact, =
-in
-> NMI as well" for 32-bit kernels.  Should the batched elem_count scheme be
-> limited to configurations with native 64-bit per-cpu ops, or should the
-> summing side handle torn values?
+On Wed, Oct 21, 2026 at 09:53:47PM +0000, Alexei Starovoitov wrote:
+> On Wed, Oct 21, 2026 at 12:57 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> > hi,
+> > we have few use cases where having the ability to allocate normal
+> > or executable user space memory would help (like to replace function
+> > in live process or change environment variables)
+> 
+> I think it's better to do what debuggers do:
+> vm_mmap() with the final prot and
+> access_process_vm(FOLL_FORCE | FOLL_WRITE), like PTRACE_POKETEXT,
+> to fill it. It faults the pages in, writes into r-x private mapping
+> and copy_to_user_page() takes care of icache.
+> Then no need for bpf_user_page_exec(), do_mprotect_pkey_locked(),
+> the marker, READ_IMPLIES_EXEC special case, get_user_pages(), etc.
+> No mm changes.
 
-We don't really care about 32-bit kernels in this code path, so I will
-not do any change to this unless someone else really thinks it is
-necessary.
+great, much better, will use it in next version, thanks
+
+> 
+> Like:
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 648abe1..ca1d88d 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/task_work.h>
+>  #include <linux/irq_work.h>
+>  #include <linux/buildid.h>
+> +#include <linux/mman.h>
+> 
+>  #include "../../lib/kstrtox.h"
+> 
+> @@ -3834,6 +3835,60 @@ __bpf_kfunc int bpf_copy_from_user_task_str(void *dst, u32 dst__sz,
+>  	return ret;
+>  }
+> 
+> +/**
+> + * bpf_copy_to_user_task() - Copy data to a task's address space
+> + * @unsafe_ptr__ign: Destination address in the task's address space
+> + * @src:             Source address, in kernel space
+> + * @src__sz:         Number of bytes to copy
+> + * @tsk:             The task whose address space will be used
+> + * @flags:           Reserved for future use; must be zero
+> + *
+> + * Faults in the destination and writes the way ptrace(PTRACE_POKETEXT) does:
+> + * a private mapping doesn't have to be writable.
+> + *
+> + * Return: 0 on success, -EINVAL if @flags is non-zero, or -EFAULT if the copy
+> + * fails or is partial.
+> + */
+> +__bpf_kfunc int bpf_copy_to_user_task(void __user *unsafe_ptr__ign, const void *src,
+> +				      u32 src__sz, struct task_struct *tsk, u64 flags)
+> +{
+> +	int ret;
+> +
+> +	if (unlikely(flags))
+> +		return -EINVAL;
+> +
+> +	if (unlikely(!src__sz))
+> +		return 0;
+> +
+> +	ret = access_process_vm(tsk, (unsigned long)unsafe_ptr__ign, (void *)src,
+> +				src__sz, FOLL_FORCE | FOLL_WRITE);
+> +	return ret == src__sz ? 0 : -EFAULT;
+> +}
+> +
+> +/**
+> + * bpf_user_mmap() - Map private anonymous memory into the current process
+> + * @len:  Length of the mapping
+> + * @prot: PROT_* flags of mmap(2)
+> + *
+> + * Return: The address of the mapping on success, or a negative error code.
+> + */
+> +__bpf_kfunc long bpf_user_mmap(unsigned long len, unsigned long prot)
+> +{
+> +	return vm_mmap(NULL, 0, len, prot, MAP_PRIVATE | MAP_ANONYMOUS, 0);
+> +}
+> +
+> +/**
+> + * bpf_user_munmap() - Unmap a range of addresses of the current process
+> + * @addr: Start of the range
+> + * @len:  Length of the range
+> + *
+> + * Return: 0 on success, or a negative error code.
+> + */
+> +__bpf_kfunc int bpf_user_munmap(unsigned long addr, unsigned long len)
+> +{
+> +	return vm_munmap(addr, len);
+> +}
+> +
+>  /* Keep unsigned long in prototype so that kfunc is usable when emitted to
+>   * vmlinux.h in BPF programs directly, but note that while in BPF prog, the
+>   * unsigned long always points to 8-byte region on stack, the kernel may only
+> @@ -5139,6 +5194,25 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
+>  	.set   = &generic_btf_ids,
+>  };
+> 
+> +BTF_KFUNCS_START(user_mem_btf_ids)
+> +BTF_ID_FLAGS(func, bpf_copy_to_user_task, KF_SLEEPABLE | KF_PERFMON)
+> +BTF_ID_FLAGS(func, bpf_user_mmap, KF_SLEEPABLE | KF_PERFMON)
+> +BTF_ID_FLAGS(func, bpf_user_munmap, KF_SLEEPABLE | KF_PERFMON)
+> +BTF_KFUNCS_END(user_mem_btf_ids)
+> +
+> +static int user_mem_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
+> +{
+> +	if (!btf_id_set8_contains(&user_mem_btf_ids, kfunc_id))
+> +		return 0;
+> +	return security_locked_down(LOCKDOWN_BPF_WRITE_USER);
+
+ah right.. all of those kfuncs should be behing write_user lockdown
+
+> +}
+> +
+> +static const struct btf_kfunc_id_set user_mem_kfunc_set = {
+> +	.owner  = THIS_MODULE,
+> +	.set    = &user_mem_btf_ids,
+> +	.filter = user_mem_kfunc_filter,
+> +};
+> +
+>  BTF_ID_LIST(generic_dtor_ids)
+>  BTF_ID(struct, task_struct)
+>  BTF_ID(func, bpf_task_release_dtor)
+> @@ -5266,6 +5340,8 @@ static int __init kfunc_init(void)
+>  	};
+> 
+>  	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &generic_kfunc_set);
+> +	/* Sleepable kprobe prog can only be attached to uprobe */
+> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &user_mem_kfunc_set);
+>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
+>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
+>  	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
+> 
+> But I'm not at all sure that it's a good idea
+> to inject code into a process.
+
+well FWIW it's still guarded with the LOCKDOWN_BPF_WRITE_USER same as
+bpf_probe_write_user helper
+
+at the moment we have fragile way of live patching a userspace process,
+this would give us a more direct and reliable way for that
+
+thanks,
+jirka
