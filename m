@@ -1,64 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792651699;
-	b=TzwTuqq1s2hUqFuYb0Lnooy6dTPbFI7Trs8eCfdPO+8D/ypTW+SrRBUPDfAl8qXlIAkD
-	 DyG5GqMT+tv+tu+7E4THtgTjc4ZiKn1S5J5idFRYVTo46r8iUPjL+X31PA62OmFaiY8Mt
-	 21Mug1nqSXjyT2ckBZJMBsrb8/GeFS1LwXpKFQCTKbg8JiRKokyjdUm/6TvSfff0LZBxY
-	 9p9wJnLjlw11BlIJbV9mkQ/IBWEELGDCiHHKF4d+6D/A3prl6z1dEtVtslyiK0IqNy97V
-	 jFE/0qKLYhD6sGDxbrwakvvQ6jmC2XKouMxekeJNAsSRuYJJeFMMtcpoDl6jzeOBHXQ==
+	t=1792652506;
+	b=CczeTQm1I3CJ2yQYOfbGPCjT5vM7NvBWba8sre2To/wCkGTsiXHB95G034RfBHYmDLn7
+	 EisAh5aUqDijL32PGhSZmG5CL1HH034uMFC6QtcNcR+c5vZPcaR9QphkxLb47x791p4Zq
+	 3bJXPSoK2BWAId2gusoNDlg7RRUbIaxlisxPUqPYhpUIXmGivUp1xJDZM4mqXmtEQo/sU
+	 xhwCuYCuhWjVdOW4jOJ+c1o6qh5id41a71yb6FWkOMZHV5qaEOmoXZlZrRHllsv0OvsaN
+	 j0VtQgdPv59GvCcVwKm4p6+N6FdBqrlXo4GDLACIjfhHWveI2iqy0TLXQ6UYX2DKNSg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792651699;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=Ry9buNjD4dWmSmNLfetdWfkhyUMM3EO/GXmrykqBL64=;
-	b=Q7r9TovvKTM97zGekYVC6UNjPU3vDpZ/CGmFA6+QpmsQFP/zfRA+JAaNa3SuOKTG74r5
-	 pMPXhUnsGJOqg4PSnTimdwAGAp7kYXXZuja7BzwglK3Jy1Yz/H6YF95pRN5P2jwS7eEHH
-	 1vLlu8jQC7bQhT19oXDRL9zO0cGXF5AwlTa6pPiF3UlKouo9Bsr9lIiwle1rNS2nmEfnR
-	 mKyEXSvKPDwA8iMW/EJKB+DxhvrGPEUXmxNWt4a2gCad+hsBeCQ/Uaj0JtQyn10O+Zv+A
-	 nfI/+Wtu5GwscvQns3zGUDPFpnJUTbOlMgIjW96ahkZxl2Y3aNGJXPT6vYq0tw/qxVQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792652506;
+	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:Date:Subject:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	 References:In-Reply-To:To:Cc:X-Developer-Signature:X-Developer-Key;
+	bh=sCvs1/SP9Or5kUcquJYMmgtgDpHHNPbARp5a+KoBLQA=;
+	b=3OB5bUItwDmc77vnnMO3ilURTLHFMATMyMLWeL32g/ZV6gHIN6RS8ADCru1IO3taH0gC
+	 4oWtBoW8399M8CNg8A25VcZDo5dRdb74geWp7/kw0Vy5R4Bv9kjSd5dNpLxqWNxU9v0Ub
+	 cw5XT6FDllXfCk39G8uL5U5ixVYEYY1sq1jI2oZcMsadq5HyMKKE+tSVZUZPQlVWE1ifJ
+	 DtjCrXh+igTFG94kvs3ac05KA1u98QjeDkpOpsXWOBCa8tyAs/FJld4JK9nrYzVfOKguT
+	 fd0JGQiH5LZZdl/otAsHovxCxLM2ZeKmId7wJKQ8GSdBF6BnBrnaX4RV5++QAL9X7Zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ly3wJWFi;
-	arc=none smtp.remote-ip=220.197.31.2
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=tFVIKvpR;
+	dkim=temperror header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b="KoNL7y/D";
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F17606A330
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 06:48:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F2F17606A330
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2C7606A31B;
+	Thu, 22 Oct 2026 07:01:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E2C7606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=ly3wJWFi
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ry
-	9buNjD4dWmSmNLfetdWfkhyUMM3EO/GXmrykqBL64=; b=ly3wJWFiqYFMJLWXKh
-	l3Fd7uZn8Es2fp9s/SlXszKzze6LYyMETO5u7mRqDb6YVqSLG2avTHAu2leks4Yj
-	IS6sIABZYCgR8ExSycQWHmCEqnv8RgfxS4irux5mLC4aCLjEXx4lfQmhRynbxIgH
-	iUJ3VZDRTnSHmIHFch3KK2S9w=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3X81_sdlqJUabBw--.32400S2;
-	Thu, 22 Oct 2026 14:47:29 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev
-Cc: bpf@vger.kernel.org
-Subject: [PATCH bpf-next] bpf: Propagate btf_add_type() errors in btf_check_all_metas()
-Date: Thu, 22 Oct 2026 14:47:27 +0800
-Message-Id: <20261022064727.747304-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=tFVIKvpR;
+	dkim=temperror header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=KoNL7y/D
+From: Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1792652502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sCvs1/SP9Or5kUcquJYMmgtgDpHHNPbARp5a+KoBLQA=;
+	b=tFVIKvpRFJp3wOUXQX6Kwgc0ZrJ6vaf9TqGEBeqjAOVQAZ2i1GmhX4SUabMswbvsFre4Ld
+	MR0/mdKLFXZGl5Xn4wRTkbeDAzgg+RRlQy965PrTQn7ni/eBcWtwHYoC6CDxgj6PrPidpY
+	MZdwWd9/uHQA3Rgb9jMxpq+pODUriiUfQVVUiVtj+LK8CcESBTRxTM33nBBNgWx/7PSuQS
+	qyLhnlTXR7dtwBzBlCh2nzo3dQy8b+KfVeDOZ/6M/li/e3Mfpc+fa/6ULIyQI4Dpxof0Kq
+	0qaDOJ52BB8n1433jKEvkeS7WhAmO89zPZ+CQTz2URVY0l70aSbhlHKyr+xv9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1792652502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sCvs1/SP9Or5kUcquJYMmgtgDpHHNPbARp5a+KoBLQA=;
+	b=KoNL7y/Dmw5u0J6gOeG2fEpDl+lZoFl8ySlSm1oTMlfWTfOAZ/7RJiQsSRxp+LuPvc42oJ
+	SPEpRzuebnfEabBA==
+Date: Thu, 22 Oct 2026 09:01:34 +0200
+Subject: [PATCH net-next v4 1/2] net: stmmac: Disable NAPI before stopping
+ Tx queues in stmmac_xdp_release()
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,66 +69,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3X81_sdlqJUabBw--.32400S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZFWxCr4UZFyDurW5tr1UJrb_yoW8AFWfpw
-	4UJFZ7ZrWvgr43uanFyFs8ur15J395J3y8GFyqvr1IkF45Xr48ta1UJ3yjv3WSkFs5Cw4Y
-	qFn0qrZ0vws7uFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U6q2_UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8QGdFmrZsYEQPAAA3U
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261022-stmmac_xsk_crashes-v4-1-15c0c750bb96@linutronix.de>
+References: <20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96@linutronix.de>
+In-Reply-To: <20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96@linutronix.de>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@kernel.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Song Yoong Siang <yoong.siang.song@intel.com>, 
+ Mohd Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>, 
+ Ong Boon Leong <boon.leong.ong@intel.com>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Nicolai Buchwitz <nb@tipi-net.de>, netdev@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+ Kurt Kanzenbach <kurt@linutronix.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2497; i=kurt@linutronix.de;
+ h=from:subject:message-id; bh=OCa+em1H5J5wWafzD28gkNIjAwMCgeaJcWpy7TC3QkE=;
+ b=owEBbQKS/ZANAwAKAcGT0fKqRnOCAcsmYgBq2bTUeVH21Hx1P3muZy32DL2GnrrXQTEnZuAeP
+ tE6dL3oiI6JAjMEAAEKAB0WIQS8ub+yyMN909/bWZLBk9HyqkZzggUCatm01AAKCRDBk9HyqkZz
+ gl+uD/9ixxcXpdcbbYW2t/aWk7A+IHI8onqg8MPMTrA9oTTxrevRAhmOj8+4oXQfSSw+EIQBWLe
+ foEtvIE1toLsFo0ZPOAW5UfG6lF/GFvEVuFsUoV4zjpL8insByxC+At62DANpTXKXYjikd2Rjqz
+ fyzfv075quf56G86L6LoPWxhrHyt5rjXbrzPiFqsC7H8qCNNQ6djxqc7EIflqhItXytUOpTHNRe
+ IRlE3AC21F5CmWXxmHO2lkgKkxJ6TfT64IYEjL7E7TpgjZ4ibUmgUwXOnhGM6eWMZiDbLbn+F5a
+ 1xDFO3v+BN+/KiUkafhCNW8E56M8LX7EMNemwXidHHjYJEJBALCQXKjqj7s20x5b8HAwN2EP4ov
+ euW+8ikPGlWQRzCZPc3G3ZTgLHVdkmpVTZcXz5CzfugTTY5H/vdiNf6ZuMEYrtiQWYdAfzqiBC0
+ AIoBp6zmWgSDCu6AMKZnG704E+2vXNftEaAsQvtmgXvg5FL7Y1IRNlmIW8YEU/M4vIffOFMPlBY
+ IuJ6qOTp1l9QLhrKHMgitsNyIpDkuLmMKEX5W3jCO7sWK4EzoVzBQrRkgwae/dLYFrzSaX8mY8k
+ gRPX5RdwJq5EFqO/DtA+CqIsdf/g1nUMzAeHv7sgeVZ6MZLyWW5SyiiWgqaZOBK2lwD2mR/aK13
+ Fn+9N7EklnmkQdA==
+X-Developer-Key: i=kurt@linutronix.de; a=openpgp;
+ fpr=BCB9BFB2C8C37DD3DFDB5992C193D1F2AA467382
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Attaching an XDP program while Tx traffic is running results in kernel
+crashes in stmmac_xmit() -> dwmac4_set_addr().
 
-btf_check_all_metas() ignores the return value of btf_add_type(), so a
-type that could not be registered is silently dropped while the loop
-keeps walking over the type section.
+Loading an XDP program tears down and reallocates all DMA resources via
+stmmac_xdp_release() and stmmac_xdp_open(). stmmac_xdp_release() stops
+the Tx queues before disabling NAPI:
 
-Both failure modes are reachable:
+ stmmac_xdp_release:
+   netif_tx_disable
+   stmmac_disable_all_queues
+   ...
+   free_dma_desc_resources
 
-  - -E2BIG.  Once the types array reaches its capacity (BTF_MAX_TYPE),
-    every following btf_add_type() fails the same way, so
-    btf_check_all_metas() still returns 0 and the BTF object is created
-    with btf->nr_types capped while hdr->type_len claims more records.
+A Tx NAPI poll may still be in flight at that point. stmmac_tx_clean()
+takes the Tx queue lock, reaps completed descriptors and wakes the queue
+again when it observes it stopped with enough descriptors available.
+Nothing stops the queue afterwards, so the Tx path resumes while
+free_dma_desc_resources() releases the descriptor rings underneath it.
 
-  - -ENOMEM.  btf->nr_types is not incremented and the array is not
-    grown, so the next type is recorded at the slot of the dropped one
-    and btf->types[] stays off by one with respect to the type ids for
-    all remaining types.  btf_type_by_id() then returns the wrong type
-    for those ids for the whole lifetime of the object, and the last
-    type is silently left unresolved.
+On non-coherent platforms dma_free_coherent() tears down the vmalloc
+mapping of the descriptors, so the subsequent stmmac_xmit() faults on an
+unmapped address instead of corrupting memory silently.
 
-Propagate the error so that the object is rejected instead.
+Disable NAPI first and stop the Tx queues afterwards, which is the order
+already used by __stmmac_release().
 
-Fixes: 69b693f0aefa ("bpf: btf: Introduce BPF Type Format (BTF)")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+The issue can be easily reproduced by:
+
+ 1. Run iperf
+ 2. Run application which opens an AF_XDP/ZC socket
+
+Assisted-by: LLM
+Fixes: 77711683a504 ("net: stmmac: ensure tx function is not running in stmmac_xdp_release()")
+Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
+Tested-by: Nicolai Buchwitz <nb@tipi-net.de> # stm32mp215
+Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
 ---
- kernel/bpf/btf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index d870bc5e50bc..80b6f96263f1 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5459,6 +5459,7 @@ static int btf_check_all_metas(struct btf_verifier_env *env)
- 	struct btf *btf = env->btf;
- 	struct btf_header *hdr;
- 	void *cur, *end;
-+	int err;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index fb53b1f17714..27c4a249e560 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7222,15 +7222,15 @@ void stmmac_xdp_release(struct net_device *dev)
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	u8 chan;
  
- 	hdr = &btf->hdr;
- 	cur = btf->nohdr_data + hdr->type_off;
-@@ -5473,7 +5474,10 @@ static int btf_check_all_metas(struct btf_verifier_env *env)
- 		if (meta_size < 0)
- 			return meta_size;
+-	/* Ensure tx function is not running */
+-	netif_tx_disable(dev);
+-
+ 	/* Disable NAPI process */
+ 	stmmac_disable_all_queues(priv);
  
--		btf_add_type(env, t);
-+		err = btf_add_type(env, t);
-+		if (err)
-+			return err;
+ 	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+ 		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+ 
++	/* Ensure tx function is not running */
++	netif_tx_disable(dev);
 +
- 		cur += meta_size;
- 		env->log_type_id++;
- 	}
+ 	/* Free the IRQ lines */
+ 	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+ 
+
 -- 
-2.25.1
+2.47.3
 
