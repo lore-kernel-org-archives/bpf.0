@@ -1,110 +1,151 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792668229;
-	b=EVjmKxy9LthJyg5d69SAMN5nJ6fF5heX2b9ElcV4DqZuQvndfMSkzBjT/ppkvlG1CoZl
-	 C2GtBTIslZuFxmPH5Nt5BkxwKja+/jS9Em1pFamyRAvLVxuqe9nRLQCeH1YSOtNKW+A54
-	 3WiLBByf/43d/7WeAT+lRUBmEIUMCRbFAXrdKN3gsZtfH24blCJQ6OB3VqQHpRp1SnKHG
-	 gTgvI/FH31nWxMFu7Lybqzn4Yd4ZUELTDTqFHXFJE12YbykPLurD0vVzbtjnt3fkHpUeS
-	 O/yMSNYvMD/QQCpfCskGLpIk8E7mEDNsc41alePcNHObbkdLoBG7xKUvyeJbNoJ+yfQ==
+	t=1792668867;
+	b=eg2uQ0mwCDJyW1xAjYT1UVsu/CK0+3ylGRcRgl7aRinBFRTpJXAuCHxpgHY2bCvcdxn5
+	 06XNYAdGf1FbIWv1pbJsuyvD7sP1FKobaGmKLqdOIE1keVvUvd5xaWoPXWww1ie9aIkah
+	 YqFvexFzv/PkmhsMLylhkcLSmcqfRD8Kd6DAkO+KieeLfBo8u4LGLw5UUOEMC0KB3IIlX
+	 ZiuKxsakKNWalwBLm76+p6MJsTn9SfeZkIQrDw8xSMAq3dBWAyWEjSJQSeK44vofxQbsW
+	 HLUM/QQeBRh7lNAhEvR0q5Bt5chuTyL86sYUeAVkgwiS1/ztNVYAdFsuH1AQul7vxNQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792668229;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=xPX5Pyvu3KPuA/BeOQ2DAl4emTBwilJ3yODW3aKnjPs=;
-	b=TYvU0CcMfQxPfCd/OXb+SE09E6QBpJGOIozPh2LAncJS+DXmP1qJU/ZbMiLmzeSprsXk
-	 PjRpjBVqpi9Lz1bZSyZINOas/A+4fJNaUgBabvcBLqphO85sU+6yELQqJ0s4+KkEkR6L3
-	 z31ZnycfaqLOf7XX2FNlmQr3MZ8rrZnDVUfbMlfaRYTkTUuJwdMXWrhHISXWmudlLBPja
-	 xxkZng6niICJMthYvk4BdtQ+rv0ilyA+1lx4eE1IeUCDeACemUimjxXZvTEhQLewmHrJZ
-	 Any1VEL3GSuZysfzYOI8ulIKxb1xvE6PuUdakzDAKLeKQb7WsMHeZCi/cCW/jQ4wWww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792668867;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Autocrypt:Content-Type:Content-Transfer-Encoding:
+	 User-Agent:MIME-Version;
+	bh=lMj2kvVg1lQ863+tJTpQ87BpPz8MFNV5FHGdt2SXwU0=;
+	b=WZwq1ABaPeax2f5DPQiG/GlAjBnhB/RDMBxU/RAozzGxK7ZVVw/8XlCeNTqAtqTeRvrn
+	 MpJhF+Em2NgRFY+c+tdi6q29pHL0XOce3c2iksKfpJkfLi5rzS8ZQR06fnUd8x0wXFTt5
+	 sbUkOSvu9FZu0JgJrSpqd3C9a87wHFo8XNAglzKnTWe6QHcnyZ4WYOd1kQ3soejop3x9Y
+	 J+JRmkV4Jt9it8JkmAA3WIL6GaxQ6sAJS63Q3V/AcU0pkBL1cCOTb4zTedIHtnFpC6Eak
+	 GzP4vpjF7KgH/8hWZ6RfhkiYyeqCqSayTptsFxx/nnyaJ2r3xzDdNhekYsLD1oqIXzg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qnMao6zB;
-	arc=none smtp.remote-ip=74.125.82.54
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=MHzgJm8j;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=VNCn1lRY;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D62606A31D
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 11:23:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38D62606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8ADD606A31F
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 11:34:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B8ADD606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qnMao6zB
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-15dd124bbe7so3239726c88.1
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 04:23:49 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=MHzgJm8j;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=VNCn1lRY
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792668865;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=lMj2kvVg1lQ863+tJTpQ87BpPz8MFNV5FHGdt2SXwU0=;
+	b=MHzgJm8j0rW4IXqwVTGj9d5GsXNjj3+tsfSdZZUx1asvx5fpKz6jurYby0075TmSzHR5zj
+	XppaOzr9k888Z7P/3rRDWXpTI9WRaSJDLpr4iSzvHN/BRG15oEZKr6a91Mzn/ud6JIkQge
+	HaapCW1L28r1eIk0IpYYQO/kmrWeVto=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-84-k8n8JzzDPmOUA_QoUua1pw-1; Thu, 22 Oct 2026 07:34:24 -0400
+X-MC-Unique: k8n8JzzDPmOUA_QoUua1pw-1
+X-Mimecast-MFC-AGG-ID: k8n8JzzDPmOUA_QoUua1pw_1792668862
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-48dfa054f26so1315608f8f.2
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 04:34:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792668228; x=1793273028; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xPX5Pyvu3KPuA/BeOQ2DAl4emTBwilJ3yODW3aKnjPs=;
-        b=qnMao6zBmkB8laPqkwE731uNdh2Rfbbc/wwRETP88zq+ppjznHTWEr74A9TFIiCXKs
-         8QTyqZmT91XGxm47SdmAOIzeCMOFOlxkkg0GbWzlUDocTOnSqkK1gzuTirc/ts5/jfBg
-         jrjSM5OdRHUF0wwJnas3KFENmnU0Dvz2EtprKgPTymzylLeVcq5wIKvVeUGRrdtYpRoY
-         TdiyFajkatu7UxuFuOxvT3PVmTH+ErB4kS7LsXyIwale85eQm+5E8u1r3RbpYo++PQoR
-         bguTebPwKYv7/iWhGZ8xFpD0xTGIgDf5do/g/wMJapjt+qG/8M4L5A0HTIP7ql+3dpw0
-         qePA==
+        d=redhat.com; s=google; t=1792668862; x=1793273662; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=lMj2kvVg1lQ863+tJTpQ87BpPz8MFNV5FHGdt2SXwU0=;
+        b=VNCn1lRY7rpV/OiJouz+F2pkDLyV+PsgeLgGJMRTPGEI2a0N7zUtxz/mwWqJENDnMa
+         ZE7bcaGtpZVs6n+swUKT7VguHdnmCNRVbUM6ico7YQuFuswg1u6Qg/XuzXuqwSXdrgK9
+         mEthcSss0sqpMUDm0X+EWhHZythFQLHCOCFITGPYMUPYzzGVkBLj2XpG93gaez2KhEzV
+         wYC+qimg3G43g4JbzFIexSMHbnd8xsQtWKR3WVPGBr3w2ySYNc5sz3a3pKcm5Cps6oIg
+         C/0Y3I1qutrrq8iLkRWkHBu/DMizS7h7IBgbGax8lcaGElil4UBjG4DG/AulKdkGRnKv
+         t71w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792668228; x=1793273028;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=xPX5Pyvu3KPuA/BeOQ2DAl4emTBwilJ3yODW3aKnjPs=;
-        b=Yzr0fWMs3fiugfJ1k7m1RR8WwvI/iEG8jdUIAaDAvX7MxwkTN+u4rGcO17Tpr96kXk
-         cWi9KoStZjHi6Y+Jir9BgJ3PjK9g5Floo3hPoB0itspkmDAGkL5kvjfq/0fVShvJczj4
-         ONiQUJUgTRs/rPm4vno/EW86qyB/ooZM5D+ZOXhxLrRV8TpoJ3RYIo1VfIesZ/qciTce
-         a7AA86PcXvxM1QUA8tt84HdCahSB+viQPNvKMW4oIAntZZ0OgMmdByJWMrUICm6qd1Jf
-         R5XDKOEB2HDBICrO9kelYDAlsKNsn8h/rj2u8jBQ6CgNo4VlkkTJKp16vWS1J2jZDpNL
-         /7jQ==
-X-Gm-Message-State: AFq9FYIr5uwZYWnAwZh0RrFi/jwr0Aq+7zakm8o9Xj2vlXZiDbHp6XR3
-	ULaR7knloCDthQ40gyMrq4jsZQr0KC31dfsf90qI+6AmzJ3Nmp9Jksd4wxBQ/cUJ
-X-Gm-Gg: AYBFou0AvCib8FIx8bObor6/83oX8RFOknAfuzqz8HG61hVVmr1rDZXyWwZQO41CGv/
-	5N06vGAgPLSeVZw9j0cVzg+exSI/eJBooZXs6pMvf7G452TViXfaAaCYMNzzCwd5PK4ZQrMKmZ6
-	0BDOk3Kzl9ohPPgDvfW8OFjN8fZiWuJCGhr00rlfXs1ogjVP3hjqkGxpsUqVAUKlE2fkr7JUhDP
-	cWTbsl+fxv7HG0HNbRNbpHEKjIy2sV2psi2YEiz27DVssQ3cpU6xBdvsUzNXSQAxuPzgCjdfVwd
-	8gXFYu9oYy5Yf4YHZy8kPZN10Yoauv2Zom+EBw5wQyZKrb7I/K5zYJDNKisIZRyBdGtLR54VoEV
-	+46532YwlwuIEiUBcySN5SUM3cknR6hszg+9qS9iCQBrGL8rewaPBpZ2ISn5+1iRGdeVm406w/A
-	l1INGzCdo9V573L9rmZ4v3E7kKSAFkvKYFTV/rC9xGmnFq0CvJUuU+fqp+7+FKbLSabWFiink29
-	KeelbGnSrfVAOWhbBtCeBqKvXX9oCdFtvWrzmxWdcnrQZrlRhZa5oUK6aWv+2NUIAD8UynQ4Qe/
-	wKCtVArDbStwGaA2ZeZUkRrDhDLTnhhklK1MlVHt08WKMOH3PD7J0QQjX9MfgWM/yisptYY9SIs
-	=
-X-Received: by 2002:a05:7022:1187:b0:194:3a84:e67d with SMTP id a92af1059eb24-1943a84ea04mr1111760c88.44.1792668228302;
-        Thu, 22 Oct 2026 04:23:48 -0700 (PDT)
-Received: from nixos ([2405:201:c40d:9039:d12e:70e6:689a:f754])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903a275026sm21529104c88.5.2026.10.22.04.23.38
+        d=1e100.net; s=20260707; t=1792668862; x=1793273662;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=lMj2kvVg1lQ863+tJTpQ87BpPz8MFNV5FHGdt2SXwU0=;
+        b=FrZ+T+ZKlY4k/se9LUpETXU9nBiARiKxnQgb+FN1mkAGeKQfgz2bYauaUOzwVeS/dj
+         4QVy9UcvbTWouV06sjcpqM631VnbMUUzt+unY9VKzweE1xnGtwxiCHkTWXztrwUeMh61
+         Rgwb0hOBWkmmxgHWLSeCZRdrwYPMOgs0BTRcZ0y2G0c9jfrJBk1Oh1ZtNtqVXZKqdzmC
+         Sg+6x50BGca1nNFj5DdZw8XMxEaDkaY+HlTGbM1h+71JQWKr1bQH7OClPydrfMTq309v
+         hgTjjYLrPuHSwB4m2VqqC6rPXSqo3x+3AucFFt+S+ZhC6g2kgt3buBRyqVKtYwGyHyP3
+         /7Fw==
+X-Forwarded-Encrypted: i=1; AKwUvBzppOl3E6R1o5Qaysao/x9GhSObruvtnOvHyD6xMJsoplpTu5Vbaf/Uw/0e28CI26bHp90=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLnVD12XErWAS5qZ1aS0MLrN+ZWnZxCTED1RgdbKLO8ilwyiJ/a
+	17tYQY1k615CxFbX+h8fd6f0pvvI1tx6b4p+mMvalgKrZNTCczQCbLRWFhLwHkxogJN0ZPqYU+x
+	Hmyc6NZLIosNmdZZRsK6kkEP1tMhnJGrUyM6qT242T04wgkkphkeUJQ==
+X-Gm-Gg: AYBFou1HMaX8ii4ONdxXp5Krq3/i9qr9+6guf0vyVMTHwTOWclZvVFKz3L2IcEsPBS+
+	cDsrX//4wRQtYHNNfePhrq7I7+BHYUA09//p7nFxPYsunT3m6593wyywOCe4faUUTVLyq0rgxWM
+	Lr76eyjgNvu8L13swcOZLODvDbgZyexWLqLWZJSH5WSpYiMSQBDM7Mh12Ivj+Kxx5Skx3XMQEIF
+	4nh15mgm/gXRVjzWeZgO8Q58qpV6KAnZOOvt/27uOv9I9TDVazNefpsjjj4gFWE28mZnsyYL0oF
+	xhskhHbRQSCguRe+paYv3pDge7owD4TOuqzW8FaHpB9fvWsXtTz/NO/x46DWDWkF/U3KM+PU13t
+	vBdin0EcZ+UMiqGEHnYVTk4hyeFLD
+X-Received: by 2002:a05:6000:1606:b0:48a:f404:6960 with SMTP id ffacd0b85a97d-48e264a38a1mr7689380f8f.9.1792668861981;
+        Thu, 22 Oct 2026 04:34:21 -0700 (PDT)
+X-Received: by 2002:a05:6000:1606:b0:48a:f404:6960 with SMTP id ffacd0b85a97d-48e264a38a1mr7689341f8f.9.1792668861445;
+        Thu, 22 Oct 2026 04:34:21 -0700 (PDT)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([195.174.133.173])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e2584afe1sm13501902f8f.56.2026.10.22.04.34.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 04:23:47 -0700 (PDT)
-From: Ayushman Rout <ayushmanrout27@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Ayushman Rout <ayushmanrout27@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Rosenberg <drosen@google.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] bpf: Use memmove() to load bytes from an skb and an xdp_buff
-Date: Thu, 22 Oct 2026 16:53:11 +0530
-Message-ID: <20261022112312.31563-1-ayushmanrout27@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        Thu, 22 Oct 2026 04:34:20 -0700 (PDT)
+Message-ID: <382ed6c3bf6ab5f2c31ab9c9becae1b4f53c15de.camel@redhat.com>
+Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: John Ogness <john.ogness@linutronix.de>, Steven Rostedt
+	 <rostedt@goodmis.org>
+Cc: Nam Cao <namcao@linutronix.de>, Tomas Glozar <tglozar@redhat.com>, 
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Wen Yang <wen.yang@linux.dev>, Tobias Schaffner	
+ <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
+Date: Thu, 22 Oct 2026 13:34:18 +0200
+In-Reply-To: <e778bbd7d5e2d2fc07ee365f37db59af04d9a36f.camel@redhat.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+		 <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
+		 <878q3xtptq.fsf@jogness.linutronix.de>
+		 <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
+		 <87bj8s8ih9.fsf@jogness.linutronix.de>
+		 <DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
+		 <87v770uuyr.fsf@jogness.linutronix.de>
+		 <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
+		 <87ik2zryzo.fsf@jogness.linutronix.de>
+		 <0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
+		 <CAP4=nvR2i092924zszA8Qh0UUYnwXfAsa+7KjPe-NpwC+bbLXw@mail.gmail.com>
+		 <8580176d216258e9008c344e0529509117dcc18b.camel@redhat.com>
+		 <CAP4=nvTc297yQHz8aumZFAQ3+JK=5Z_=416WdosT0S6nHEeNfQ@mail.gmail.com>
+		 <87pkx5q1w4.fsf@jogness.linutronix.de>
+		 <0d4f11b1999588ddba9d855db43fc492eda32de1.camel@redhat.com>
+		 <87h5ifqy6w.fsf@yellow.woof>
+		 <a8d8b080f403eed617242a3276717706b4081ed1.camel@redhat.com>
+		 <20261021094853.29b9f7be@gandalf.local.home>
+		 <fb5c20f226f723cbb4df5092462dfcf5f2686367.camel@redhat.com>
+		 <87h5ifvw3p.fsf@jogness.linutronix.de>
+		 <f147fa9dfc553767ce92802b66723a85cf804e46.camel@redhat.com>
+		 <874ieetakx.fsf@jogness.linutronix.de>
+	 <e778bbd7d5e2d2fc07ee365f37db59af04d9a36f.camel@redhat.com>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
+ cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
+ T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
+ eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
+ 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -114,73 +155,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bpf_dynptr_read() on an skb or xdp dynptr ends in bpf_skb_load_bytes()
-or bpf_xdp_load_bytes(). The destination can be a slice of the same
-packet, so it can overlap the source, which memcpy() does not allow.
-On x86 with FSRM memcpy() copies forward, so a destination above the
-source gets the first bytes repeated:
+On Thu, 2026-10-22 at 12:09 +0200, Gabriele Monaco wrote:
+> Exporting all handlers functions is probably going to require a significa=
+nt
+> redesign of the current RV internals.
+> Handlers have access to the monitor headers (everything is static/inlined=
+),
+> kfuncs wouldn't.
 
-  p = bpf_dynptr_slice_rdwr(&ptr, 8, NULL, 64);
-  bpf_dynptr_read(p, 64, &ptr, 0, 0);
+I gave it some more thought, while you could generalise the DA monitor
+definition structure (imposing size limits and taking up that space anyway =
+or
+doing some /smart/ things the BPF verifier probably wouldn't enjoy) then pa=
+ss
+that to the handlers, I cannot think how to have a kfunc call the LTL funct=
+ions
+defined in BPF. You'd probably need a helper macro that is essentially doin=
+g
+what the "shared" functions do now.
 
-leaves bytes 8-71 of the packet as bytes 0-7 repeated, not bytes 0-63.
-Reproduced with BPF_PROG_TEST_RUN on both an xdp and a tc program.
+I could fire up an LLM and get some /original/ ways to work around that, bu=
+t all
+I can think of is essentially rewriting RV from scratch.
 
-Use memmove(), as the store side does since commit 1db084f42884
-("bpf: Use memmove() to store bytes in an skb") and commit ab08863c58b1
-("bpf: Use memmove() to store bytes in an xdp_buff"). A read that spans
-xdp frags still goes through bpf_xdp_copy_buf() and is not changed
-here.
+Again, the easiest thing to do is kfunc only what goes out (tracepoints and
+eventually reactors) and keep the rest in BPF.
 
-bpf_skb_load_bytes_relative() has the same pattern and is reachable
-from tc and sk_filter programs, so use memmove() there as well.
-Reproduced with BPF_PROG_TEST_RUN on a tc program: loading into a
-slice at offset 8 gave wrong bytes before the change and correct
-bytes after.
-
-Fixes: 2012c867c800 ("bpf: verifier: Accept dynptr mem as mem in helpers")
-Signed-off-by: Ayushman Rout <ayushmanrout27@gmail.com>
-Assisted-by: LLM
----
-v1: https://lore.kernel.org/bpf/20261021103957.17532-1-ayushmanrout27@gmail.com/
-v1 -> v2: also use memmove() in bpf_skb_load_bytes_relative() (review by bot and Alexei)
-
- net/core/filter.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index b7ac145b68b1..09c60a58c82a 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1789,7 +1789,7 @@ BPF_CALL_4(bpf_skb_load_bytes, const struct sk_buff *, skb, u32, offset,
- 	if (unlikely(!ptr))
- 		goto err_clear;
- 	if (ptr != to)
--		memcpy(to, ptr, len);
-+		memmove(to, ptr, len);
- 
- 	return 0;
- err_clear:
-@@ -1871,7 +1871,7 @@ BPF_CALL_5(bpf_skb_load_bytes_relative, const struct sk_buff *, skb,
- 	ptr = start + offset;
- 
- 	if (likely(ptr + len <= end)) {
--		memcpy(to, ptr, len);
-+		memmove(to, ptr, len);
- 		return 0;
- 	}
- 
-@@ -4298,7 +4298,7 @@ BPF_CALL_4(bpf_xdp_load_bytes, struct xdp_buff *, xdp, u32, offset,
- 	if (!ptr)
- 		bpf_xdp_copy_buf(xdp, offset, buf, len, false);
- 	else
--		memcpy(buf, ptr, len);
-+		memmove(buf, ptr, len);
- 
- 	return 0;
- }
--- 
-2.54.0
+Gabriele
 
