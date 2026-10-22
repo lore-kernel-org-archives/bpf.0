@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792627625;
-	b=Ng28LaC7PRetVTzlXSh6lTYkQzdkXv0zAq21kiv4WW8k/wQzXElHLHQ7J4PRjLoNOGdM
-	 QcCndpYwtf0i8vPX5n+qL2hPsPRLicpfBPmxaTusYvzxT8McgIaYexDg9FYLbnhnQLhmS
-	 v4/HDKwSmWf1BVgXe2ASFX6Wx4u2AQdasXh//VaNrRCi8DtZ0oWAfedeFipbD1+/zW8EN
-	 uK1JjEEumXgd57nw/jvZELFtXGhgZbURxHWypRbjRKdqthrv5OCOzOPVCfgNqywl6LlEf
-	 KJpjTCb2UA9cssV4RBn5LEUmDtodumwCCI0IF20HQVFWHgdSzJK5QEjk9UHzGR14NYw==
+	t=1792627630;
+	b=h3YVt06ZOGh2Rhy5hxntLvRej+GjNYk/hRpwvP+dSzZfy5USGGoRhh+11FSv6szZG/XQ
+	 K6wztC+M0H4dbGYw08quVepH5rpmta2fFRVCOSDqqk2XATSZeNujbW4N/5F/4sr8JJCK0
+	 qKRPzBixwiVTeZe70wUY5ZN917zYOokM7Ff2PMSdhzjo6G65wYOAnxWIHqZjLcv+oxunK
+	 MshoOz0ZekbGIk40q+Tl3VftLb8fjw+j0YwjtRxjSgwrS4HIR6scbxXgt6it2Sr9dPPpa
+	 VtL5b9xOWBv2JXluj+7Sqiw6YSaqAHgynO4YukALd9YkqHD7dybrGsbTkYfysYL6mUg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792627625;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792627630;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=vhJPPbPPep/NKmBM2GPQOvhuWsdva5kFxdCaYldPz6E=;
-	b=xWeJKub2zlqxubhjtRq7m75pYLD4fyGmwP2Nv3zQ+jSkqZE/eK3540C+AHo5KNLRENpZ
-	 lxwjfvpyMkfFC0o5ZNdMOMeHSymRDZ3lXU8TvsguxWP7n+0IhXQ9Yd9IV9h7J/dZiQN+C
-	 +49vQkvCyDc6S0kSYowbZAcsbUHAqk/rNiluiUUUiEcoSVl5H1G3LjXSEIcEFOdpcgTV3
-	 ZUwjBgcmbu/3F8gxTTvT6435gSbbmRVPY6ql9FZDjVhgj7mPHHCQm4n721aQl38bwY6Lr
-	 w2c+GqMiOs30o0XlXNAGHvWbSAnEb8aoXRI2VxHo7ttKmYc4AKCnGfOehlUP3s7rJqA==
+	bh=be/4y5Gr86A5bUUWrbeD4xA6mFb/f77D9SJgTHpWQPA=;
+	b=SNPheeMrzikZfT/fYXrdG1reyhKaIuzncaxd9DoduVYHr27Tpu29ZOgnpkKWxbDA8rW1
+	 JfD3BCCl2MYg2vVrQ77f1Pn9Ot662abyp4Xdp533d7T4hJI5Lnq9d0b6sDmCOEQYNMkmc
+	 yQ30yvdqqW53ymkfLz2xV5Q7OxWKpv6d3JcRUinhjaA2IkmUQfWK0Nr/tNyFdWQ3jwIqe
+	 ogRpQRJa5jRuwgsj3d8aYHKvQZq7p6yXCnrxyE5YcQE4yS4btscElA33uvXHERIxIgl7x
+	 hOxocbTo4HI5wLXC6hB8G3p9IFsDoRiZHwHGYkhgxjcOxWNZAr+KaDlEKSUr+6Zioyg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=E9lD7E8Y;
-	arc=none smtp.remote-ip=74.125.82.46
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BfCcb27S;
+	arc=none smtp.remote-ip=74.125.82.54
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8A5606A319
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 00:07:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5C8A5606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59FA606A319
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 00:07:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D59FA606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=E9lD7E8Y
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-181516de561so123223c88.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:07:04 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BfCcb27S
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-16079d54c17so2384701c88.0
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 17:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792627624; x=1793232424; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792627629; x=1793232429; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vhJPPbPPep/NKmBM2GPQOvhuWsdva5kFxdCaYldPz6E=;
-        b=E9lD7E8YjxMrfVvlvWjYpq3oi0EZtltjY8BnOgR7wkv4lXoK1Ejrqp2YiigLPwLhl5
-         ldfSn6zAUVyKraxNNN2aiEou+n8KTcfW6Tk1YwPGfzddO3FnOMuhc2l9UQPq1W0T52OC
-         n4GVZAjZbi5JDoVGP2Zsq36/0VuEaDH49u3iEmZRqbm2SS+FaOaOuCrRgvWmCzc2A5VO
-         zK01huMZDuBcUn9vlT3yQTf2NRUlzzmon0+OxOxisA3pUNMQM/p2X25nOIatKsTeHG9t
-         8sQ1M/px4bVh0y+mefbdBMuFLj6/gEDejzawa2vw0MGj4V7m467P4c03npQUPx/4uUdN
-         Jy3w==
+        bh=be/4y5Gr86A5bUUWrbeD4xA6mFb/f77D9SJgTHpWQPA=;
+        b=BfCcb27SjvR0Od1idZCUBxQTaYQWesQ2IZgmSRqHqbuAmmPtnnp+F8sNI6XrPWmxqo
+         +dFl9K9zXuze6w8nVI0mBaQLK1yOYV1G97y2h+7CHxEcanW9ZuY22+RmnATGWU7V579t
+         px1jeO42+OUqOrfqOR5KoQoW9XkR3Ywlcvg/2lEHqVSHP2w8OrVfcvPca9vSn3vxNPeQ
+         1ucQRxMU6mqSvE7WoxbPLv+paElLg2hhegQhLcbWS8pNwTTN0JsxsQSWmfO7eGo9Goo2
+         RLCBmsgvdi4cJH+K6vdLoqN24HxJK0NRKOqwwA+YCZb+Noj5B8q70hpSzTfvH29OO5AZ
+         WU2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792627624; x=1793232424;
+        d=1e100.net; s=20260707; t=1792627629; x=1793232429;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vhJPPbPPep/NKmBM2GPQOvhuWsdva5kFxdCaYldPz6E=;
-        b=amlWAzeboZUoqJIpp+bOHTMRRjHf88KgDUPQh/nLmaSonNMyzDC33U4Jn/kMjj3xfS
-         DZffJg5vJhj5LJqF3tuGSE7/CKChl0U22j5YNAgZi0HvehxynGh+SJaAm3K514F/lZcL
-         l3hMNxkcyUpQJxun5NnUaGQ1N0ML/Uacea8KtarF92Ov6jwFPDLoh7h1oBPf/275gt+5
-         ZsHQV14DrRIZYNUFwjPMYV3+xasdOjkaYSZRRldFwFx95dkNFXUupajxkFBzY5EO0TGc
-         02Za+ZuijwSRPzCKAqMbPlmAOGBC1gAafwu1NoCvEEKsRJnlbkH0iddXsbXpwXn8N7dm
-         6oUQ==
-X-Gm-Message-State: AFq9FYJfTvLFmD0ZC4XA9A7Ewilomb8Us6NI63dOYbkStcR/+8/1AK+V
-	EC76TVufe1BKAeJvvqDdDlXlKOcJ8C6GrtKswjAU3icVFGq1Fik3CQFkJ3gmohkpqw==
-X-Gm-Gg: AYBFou1uy2THh3ipKnn5VOy+ADzcm3KFul2G9bY/UMKnCNIIGK53vQVVS2R5yUMnreV
-	AdtKyT6VgK/3JE5IHk47u9wQFqGVLgFKsVmR3uWqvrxty8ZhGzjUFOPWtiTiopTacymDage0iV/
-	8scAseDj7fQqY2+/IHCOknQR4dFfRZrNTVCQbsVzpGISJPgK2l1pxANbs4/XirVlL2fyMeIUmVh
-	gfJGBpimKHvpIiCoqVGkWy/AgeMrmAH+VMeCsRB+QrZ5a1LO24J51UBw5Yidhceie0uH1MfDvud
-	MgWJLUgaBf02Ck4Sw3Q9da7KCxHeKazDZRXULFRdc55yaeP4aHfpsJydBkCIHL4d4Zfpf5pnlIA
-	qiMVhwUcoX9zwPL7x0iGKbkWIPZ4aqn20vDoZxe9M59ByHBapZtn4qPKHsWYpOLZkxz9j9ZgTms
-	osGDDJfV+TFSDoHYKxh0F06+KVNA4W678h8VPlE8Iz9r261Hu5my4lMbkyu0Ap1LZWRUk9dCc0V
-	3FYPGpYCbLzZ/e8LPxEyEF/UzRgBIIFoYUIoHVJ6+80Tb/fYmjnE4pXMtJ83GLnqw==
-X-Received: by 2002:a05:7023:905:b0:184:60dc:c381 with SMTP id a92af1059eb24-192f113b4c6mr1168163c88.23.1792627623993;
-        Wed, 21 Oct 2026 17:07:03 -0700 (PDT)
+        bh=be/4y5Gr86A5bUUWrbeD4xA6mFb/f77D9SJgTHpWQPA=;
+        b=wFwcXq/vFsRgg/C6cEm5ixMBbVqskxHZImh3Dw91m9yg7o6qIOfEpWfDr/kp8qtRku
+         UlG0DqH+p4JpLgvhO6CJAq1rpGhhxazDrId7GF/8Bp1izvVotiSu01xOI2RLERNBMZ2H
+         hFLIhu9ZaG+5BRoMe49NZMhGVIUtoth+yKYakfUDWmuJDFfa6mOMiJ283g/pFtSWkPSU
+         EiWL3/rhd/kyLFPKkpm7Vqk6pw08tXr2xuOF5mwCvXAvfXpv/1U8Ug1lQYZmUVeTsQbb
+         dk5Y2v4VJKHZbdrTiddoc6X6Po7txj38Bm0/jdpyL/7maAOFCMpyEhKQUhLiBdot6D5G
+         wupA==
+X-Gm-Message-State: AFq9FYKRN+RPulkyCxWgTh/BCfOt4xIRSifskGEYMjzLDy3o9V9WNy5K
+	sCRUsmukliafITO3zheFl7CEzfQZnmqyzHAG1QojLbH2ZJeNbSec6TzF48PMKwPn5g==
+X-Gm-Gg: AYBFou3i+FDESDE7vTgcu4AtQyqBLxtrVgA8EPZnJI0vapI1/4ipxkZO8Ukz5RcNk+C
+	aQUjcQBK8qZcQ7QCemr7Dv3LLCUVLAiAnMoNgJtpnXWfUwgTzJneO6CUi8FEBb7JXJjLjIjnxX2
+	JImzBCoaxiYoTaBrRpaIyaULLdMLAgStyWU/59YTpCvwoGQlkbXCJJoX1zVBGCIsXnW3IL1QQZL
+	JOf77+dKxLUik/yvVk9nujbuLmlwp2ZmJ37nQJe4XbnKfz1vP6noXZ6NcNPhb/VZxOnoqnjyxPb
+	xPOPHBfi8wVbbNuKE9jBQ75aB9u06+ISrpVvXZTDV9i2YtMFQUdXilfZ4OxvcIKQB+/AFERx2VE
+	jbfHwUSV71GxFygdmps5vMduY2t69EB89SGWXAraJ0rt9Qb3eYAhad0f8kT4zCW2cIEKyU3+pKQ
+	/NWv7+fuYa4BWxv7EMkVqU7OWmSRtOWjD+FdWZKn4+tPmhTS6cQv/NoGRN+MZkR21N+W9dS0Lbb
+	kO6mFxmByDxhKxHIbgUoNwgIvIV8+0H1lpcL2DhLzrJgsKs2Rt+ouQiV+HUF5KOgg==
+X-Received: by 2002:a05:701b:42c1:10b0:16c:eaf1:335d with SMTP id a92af1059eb24-190a67fdd85mr4492204c88.30.1792627628617;
+        Wed, 21 Oct 2026 17:07:08 -0700 (PDT)
 Received: from localhost.localdomain ([185.220.238.36])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1902f96dc4bsm10682022c88.0.2026.10.21.17.07.02
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1902f96dc4bsm10682583c88.0.2026.10.21.17.07.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 17:07:03 -0700 (PDT)
+        Wed, 21 Oct 2026 17:07:08 -0700 (PDT)
 From: Wang Yibo <szwyb123@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH bpf-next 1/3] bpf: report kfunc sets that fail BTF sanity check
-Date: Thu, 22 Oct 2026 08:07:00 +0800
-Message-Id: <20261022080500.100-2-szwyb123@gmail.com>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: name the failing registration in bpf_testmod_init
+Date: Thu, 22 Oct 2026 08:07:05 +0800
+Message-Id: <20261022080500.100-3-szwyb123@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20261022080500.100-1-szwyb123@gmail.com>
 References: <20261022080500.100-1-szwyb123@gmail.com>
@@ -97,43 +97,68 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-register_btf_kfunc_id_set() returns -EINVAL when a kfunc in the set has
-no valid FUNC/FUNC_PROTO pair in the BTF of the registering object, but
-nothing is logged: the caller (typically a module init function)
-propagates the error, insmod fails with -EINVAL and dmesg stays silent.
-The only hint is a warning from resolve_btfids at build time, which is
-easy to miss.
-
-This happened with bpf_testmod built by pahole 1.30: that version does
-not encode __int128, so the three i128 test kfuncs had no BTF func
-entries, their ids in the set stayed 0 and loading the module failed
-with -22, with nothing printed to dmesg.
-
-Log the offending kfunc id, the object that owns the BTF and the error
-code when the sanity check fails.
+bpf_testmod_init() chains its registrations with ret = ret ?: ...;
+when one of them fails the module only reports the final error code,
+and there is no way to tell which call failed without instrumenting
+the code. Wrap the calls in a macro that prints the failing expression
+and its return value instead.
 
 Signed-off-by: Wang Yibo <szwyb123@gmail.com>
 ---
- kernel/bpf/btf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 41 +++++++++++--------
+ 1 file changed, 25 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 538129ed2..af07206f9 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -10128,8 +10128,12 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
- 	for (i = 0; i < kset->set->cnt; i++) {
- 		ret = btf_check_kfunc_protos(btf, btf_relocate_id(btf, kset->set->pairs[i].id),
- 					     kset->set->pairs[i].flags);
--		if (ret)
-+		if (ret) {
-+			pr_err("register_btf_kfunc_id_set: kfunc id %u in BTF of %s failed sanity check, ret %d\n",
-+			       kset->set->pairs[i].id,
-+			       kset->owner ? kset->owner->name : "vmlinux", ret);
- 			goto err_out;
-+		}
- 	}
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 6380f52f4..625b6dc3b 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -2593,22 +2593,31 @@ static int bpf_testmod_init(void)
+ 	void **tramp;
+ 	int ret;
  
- 	ret = btf_populate_kfunc_set(btf, hook, kset);
+-	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &bpf_testmod_common_kfunc_set);
+-	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_testmod_kfunc_set);
+-	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set);
+-	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set);
+-	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set);
+-	ret = ret ?: register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set);
+-	ret = ret ?: register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops);
+-	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2);
+-	ret = ret ?: register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3);
+-	ret = ret ?: register_bpf_struct_ops(&testmod_st_ops, bpf_testmod_st_ops);
+-	ret = ret ?: register_bpf_struct_ops(&testmod_multi_st_ops, bpf_testmod_multi_st_ops);
+-	ret = ret ?: register_btf_id_dtor_kfuncs(bpf_testmod_dtors,
+-						 ARRAY_SIZE(bpf_testmod_dtors),
+-						 THIS_MODULE);
+-	if (ret < 0)
+-		return ret;
++#define TRY(expr)							\
++	do {								\
++		ret = (expr);						\
++		if (ret < 0) {						\
++			pr_err("%s: %s failed, ret %d\n",		\
++			       __func__, #expr, ret);			\
++			return ret;					\
++		}							\
++	} while (0)
++
++	TRY(register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC, &bpf_testmod_common_kfunc_set));
++	TRY(register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_testmod_kfunc_set));
++	TRY(register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_testmod_kfunc_set));
++	TRY(register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_testmod_kfunc_set));
++	TRY(register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmod_kfunc_set));
++	TRY(register_btf_fmodret_id_set(&bpf_testmod_trampoline_count_fmodret_set));
++	TRY(register_bpf_struct_ops(&bpf_bpf_testmod_ops, bpf_testmod_ops));
++	TRY(register_bpf_struct_ops(&bpf_testmod_ops2, bpf_testmod_ops2));
++	TRY(register_bpf_struct_ops(&bpf_testmod_ops3, bpf_testmod_ops3));
++	TRY(register_bpf_struct_ops(&testmod_st_ops, bpf_testmod_st_ops));
++	TRY(register_bpf_struct_ops(&testmod_multi_st_ops, bpf_testmod_multi_st_ops));
++	TRY(register_btf_id_dtor_kfuncs(bpf_testmod_dtors,
++					ARRAY_SIZE(bpf_testmod_dtors),
++					THIS_MODULE));
++#undef TRY
+ 	if (bpf_fentry_test1(0) < 0)
+ 		return -EINVAL;
+ 	sock = NULL;
 -- 
 2.51.0
