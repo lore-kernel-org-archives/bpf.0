@@ -1,101 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792697962;
-	b=yV3rbpcGiPep80T8hhzOVz+abl495Nu1e+TOixJn3BeAFqqJGxXSdROUPf0uPKmedUDQ
-	 k91POheUyATH6EeNmqbbRLpbLsPS1gxNl4GQ+mP3H4oMrtxT2CcDdYL3MGuXDEDay3jK4
-	 b3keGMYD/h8dpU2AD6mqjrk5ucNG1v4aczUMwSNfKrz/s3NjL8+B4+074NRSQ2RlsVLV8
-	 MiJAJ+tNIfUhFLpVdzO6+/WbFYtN/N4vNc25ktyPHof2VzuxuaVoQ107d8n+egfwIrdhD
-	 23mD654bJhYHD1swbEZ72goldpfEo7ZyA/RQoWpn3bYodgGQWoWDCsAtnx0mfxdvPPQ==
+	t=1792700750;
+	b=qlMbvxLurgN/EyOGnpI0nWqrHYTqloV53sdXM17atBJA780TUetwdrSh4jV00BL/8Mwa
+	 B/HmYP2yrYGgtUYUs3ttBI1r9Dw/G1OhMnoHob64cWa9R8iXvWnrOWpdCD62CwtDfJS2u
+	 g0/7BTuZWVQUY9RLZp6sMgPnWjXKTPqQAK9j3MfV7qrJuDG4kFKkO/70wIVNv1z3yiCqb
+	 3Er9CwvjNmPKD++SyEiIg+3NBkprpz/oL+h4+EXLWcZXD08skCHTK2NsVElbhUCjgBQrW
+	 mjTnkewNNSeRoB0V4RJficO9s2FQoh//+2zH7zKWWjcfbvAM1GsPhtfm+9ZUVuvaPrg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792697962;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=CXFOQ58yRb7ArLvRTOCPZICunogkgYzN7mdYgP5TB4k=;
-	b=bGawv1xgE3/ThDoi6paH5AtBWWGObMNMen1CPxR6EPiesj/WrUKxQ4hfyY4jFZRvaGUD
-	 v/ataQClfhgA1u6ommCHLTZ1Ire7IWcH6sw0KhIrdj4RXk45+fflkrcU9ZfYykQpERM3m
-	 H5fN7jN6Qpt8FCSh9gFjxefg57DaNEwZU61OlaeirbnGuK+ld+AifcocZOH31VEndItud
-	 mj9uIVY+wMHuZfm+OSDiX/cxAeKwwQEbjBSc7eMezwFYG83nvQDw34NFjmyMWQWhDYKVf
-	 yiqbOaZt8fl40Rt2OmiOhXGz9RqyTkwBcog9HsejVgIhRbTwNrsmKTVY78GwAVBQKiw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792700750;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
+	b=IkGWQrenxz9YaKisx5AOISX8OYTFS4dzlQuAewGGj6LhovLppxzTuptCeSCtdzCPJ2J0
+	 52neKcY2WTDu85NgMNakA7YkRxblITC8BEln323gcIefO+r3MH5tNv4a7mJtIACNupz1C
+	 kCbmM4swCT2JDDSCczt1fkc33UofDH5l0Uu4ZMrt5Cs/Yv1kxR7FrEOO0agOqb6fXplEH
+	 n0uRXR9IXZXnwOXzuuUyCm/DM8rLE6MC6BoFBcYIWXmsTp4IfPvQBSCbyGG95YaNyePzH
+	 KvZPCKbAmubXZW1B2Oawjq7wg9L1Isdww9si2qNPtAWyf/gS+u0sr2N8OLRrHgRGaiQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GI6wq92a;
-	arc=none smtp.remote-ip=209.85.128.49
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24383606A31F
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 19:39:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24383606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5986606A323
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GI6wq92a
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a1df4c0966so538525e9.1
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 12:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792697960; x=1793302760; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=CXFOQ58yRb7ArLvRTOCPZICunogkgYzN7mdYgP5TB4k=;
-        b=GI6wq92amG3nXNJXsW0bjacM5JKVAtiI+15FQxc2gYUuHQaZoVQXWcmIeHMtniURgc
-         BWFJLZ0UhbDA8ScFjafYyvw6eQ/FrxXuLcfbrcZN9O+pczbA6iP5FlGylaiD/OnrSmPt
-         rBPznyHGS7EWacu+54N5982SnUgeW9KwCAkW1BxJ8KkqJmyTikQx0VpItb+6KYw+dFG+
-         P7uX6jcpYfdLqmNC/rKD42LaTtyh7ItkDB9U3gNiVAtuReY5gJxz96/Nl5fThSbgROZG
-         13jJZfqJeTcen7XZX2fnE9IRfWJMCN6AWv/reSUKzZKsK4XylhuQLfU1Y0wc/d0VBUrf
-         cfxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792697960; x=1793302760;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CXFOQ58yRb7ArLvRTOCPZICunogkgYzN7mdYgP5TB4k=;
-        b=rreoLs/po58JYy0G5EpGnN/PqrYSxm8ZtI8c2Tp9jKlen8ETd0eo1cbOe1QA1sHnqC
-         ws3orNmAfL6eV7KVPcZNQ/TRVO8NZyLF3rk64B+NL8ZcDpN3FYuzWZ5VQc/3U4A/tb6x
-         JoNyPYwXkmzhhFdGJ6gLhWL3N3z5Tlcy9pQugZQQO2zmcUGTrCKXnxFjiqJ32MKiskOL
-         1zQnhvybxr8CQyGMw25zm/y20caR0aXEV9s3qt2ocjPknDO7xBP5B/lS5RZIV9/Lu2DB
-         ri9BIBx0KjJbNML4leFbSU19qwXTcXeCke9gLx592aQhYsTC1q2PPF9K2STc8XcMgOLZ
-         sg/w==
-X-Forwarded-Encrypted: i=1; AKwUvBxaurTru2Ufsh62FAoKlDUxHf/VqAV9oZL2fJ6Ax0NCe2JChQGv4gYAd1dGEB2n6j79va8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLoqeUyxptn2gOQKFo6K2nQK46dwOLe7NLyH8eOj1r7NOx3+0GK
-	+I0otmEI8TId9Eo5x6thFgagt3qwXSU3ZxxnB1z3xA7vc5lFZYCK1SNX
-X-Gm-Gg: AYBFou3DkhjU4Ebdw6/oW6V69PF2jsG3B95wkgje60QU68LJB2TTJoNOAhdPKXvskS9
-	Q16EY9OJBjUDWK3t6UfzIq5xat9v3EM5UOAzLfP3+i3hBi1oIdy0o+3CVq6DUMOujB6PFYAvi7y
-	O3J4GXYx9adG+PolU8pmNpZVbOy02wNc5cNBaoZ0HouBaDL3TMXQW4sbK1Z8gdrFIZoKytlSO9d
-	SeNPK25+xbsk2LdjUlI/mTcMguzNa7KprbRW0iUpkpIIOY4Hc/Z5M9B1DcAFF3M7tSF3iZzZmnv
-	ITjjhlOWe37E7cy7+ZOb8pFdN35Tw7G0LdpyacX5LFMsC3iuZZ9yBs41JfkS0aMSzGyo0T9+71S
-	u+ClPPjVjL6WDJyEW3xHjsJ73lezJ0MtRN3wrxr+NKKBWGYlE4a3BNJkCmePI1fO92PDgkqHbkG
-	TG5gi2F4z+0wdkIKkFklPeKfCyGSwyBkQQRGuDKcPXU+pY7Lvk9hpqbZmNMn2SAmeJPfHwCyJJo
-	/+81SZ0IeSKc9Pz1N1akpwFdkv0MruglCYjzrQ66j4=
-X-Received: by 2002:a05:600c:1d1e:b0:4a0:34a:588c with SMTP id 5b1f17b1804b1-4a211c859dbmr1721105e9.14.1792697960247;
-        Thu, 22 Oct 2026 12:39:20 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a2101cedcesm20827015e9.0.2026.10.22.12.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 12:39:19 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 22 Oct 2026 21:39:18 +0200
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, linux-mm@kvack.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [RFC bpf-next 3/9] mm: Expose locked mprotect operation
-Message-ID: <atpmZt_Je09hdlja@krava>
-References: <20261021195759.119421-1-jolsa@kernel.org>
- <20261021195759.119421-4-jolsa@kernel.org>
- <atnjEc2-6CuKjFzH@gremlin>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8679F1F031E1
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792700749;
+	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=RLMS0l8SrlVSlB+xSKm6w6FYJ1BVIP2OUvpbyz9MikbM20bH8i83IdqYLHnzS4qj9
+	 vo6B8FxfAsRueY9WSJTqmuWYCQSQkIN60PxS1EOjtlPkF8g30tel+vLlAPnohHXmRv
+	 /Vbi1+UaOcDgUZ0i0fi6x/na8nusRwiADaFX9FXU32HXstuRnUFimv6wlTGqn34WfD
+	 QMfTzkYILeeei8YsWI50/UKTnIXVBnU/aSI39gffsIi6/ScqbVu8/ubBXYIWQU9gCd
+	 GSwDnvTkIbRy4NYjw2TbXlJoApzGgMFRPZgGDgCAPArwrn6dScfyWS8TCD77ysDeE5
+	 19uIGvmDPyrRA==
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-14394530ec6so221905c88.1
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 13:25:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxA8gXXR5eQKZX+7TF89F+/bOAsEQ1Y0JMdFTUxw95L78LmvK7sjNYxL0fbkM55add5Z3U=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLEs8T1nCDKSMiNMGecdzsLYqO/2qpFQsINWuSOag5wHf34+C/k
+	mHcEC0RgBb4BfWZjRTNo0iv6BNPyDLmSXzZPbOQ1mbwK1VvJib69zKtf9wi02XUQa4HHCIdrYYl
+	aczjCaups/hgZaQQZ5pp0ckw6y0+wUPE=
+X-Received: by 2002:a05:7022:1707:b0:166:9e0d:3b56 with SMTP id
+ a92af1059eb24-1959a382fb4mr475195c88.38.1792700748990; Thu, 22 Oct 2026
+ 13:25:48 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,106 +59,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <atnjEc2-6CuKjFzH@gremlin>
+References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
+ <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
+ <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org> <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
+In-Reply-To: <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
+From: Fan Wu <wufan@kernel.org>
+Date: Thu, 22 Oct 2026 13:25:36 -0700
+X-Gmail-Original-Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
+X-Gm-Features: AclHuK-w0c1onI8im_hxrE8Vj8Tb7-7Hy-SNC8hLk4Qv6iomWwee3Oh6ZTdAJrg
+Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
+To: Manuel Huber <manuelh@nvidia.com>
+Cc: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 22, 2026 at 11:25:31AM +0100, Lorenzo Stoakes (ARM) wrote:
-> On Wed, Oct 21, 2026 at 09:57:52PM +0200, Jiri Olsa wrote:
-> > The bpf_user_page_exec() in following patch needs to change page
-> > protections while holding current->mm's mmap write lock.
-> >
-> > Exposing the do_mprotect_pkey_locked helper for that.
-> 
-> Err, we'll need some more justification than this for exposing internal mm
-> logic to the rest of the kernel please.
-> 
-> Note that you're already allowing any caller to bypass
-> CONFIG_ARCH_HAS_PKEYS here which is immediately a broken thing.
-> 
-> >
-> > Assisted-by: Codex:GPT-6
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> 
-> It's a no to this in its current form.
+On Thu, Oct 22, 2026 at 11:02=E2=80=AFAM Manuel Huber <manuelh@nvidia.com> =
+wrote:
+>
+> On Mon, Oct 19, 2026 at 04:15:57PM -0700, Fan Wu wrote:
+> > You might need to explain why the existing keyrings, i.e.
+> > builtin/secondary/platform cannot be used in your scenario. Like the
+> > firmware is not trusted?
+>
+> As touched upon in [1], the scenario uses an ephemeral VM whose
+> IEP policy would be assembled after boot. There is a mix of explicitly
+> trusted dm-verity root hashes and possibly signed dm-verity layers
+> which can vary per VM, so the final IPE policy would not necessarily
+> be known ahead of time.
+>
+> This specific scenario is Kata Containers on Kubernetes. Each
+> Kubernetes pod runs in a headless Kata VM with a static dm-verity
+> protected rootfs, while its container image layers are delivered
+> dynamically as dm-verity protected block devices. The kata-agent acts
+> as trusted bootstrap userspace and would author the IPE policy for that
+> particular guest before starting its workload containers.
+>
+> The firmware is trusted in this scenario. A public policy-signing
+> certificate could be compiled into the builtin keyring or provisioned
+> through the platform or secondary keyrings. Because the policy would be
+> authored inside the guest, however, the corresponding private key would
+> also have to be shipped as a static artifact in the guest rootfs and
+> shared by every guest using that build.
+>
+> Instead, the kata-agent would generate an ephemeral, per-guest
+> policy-signing key pair, provision its public certificate, sign the
+> policy, destroy the private key, and restrict the keyring before
+> allowing untrusted code to execute.
+>
+> A dedicated .ipe keyring thus provides a purpose-specific runtime
+> provisioning path for this scenario. Once the certificate has been
+> added, the keyring can be restricted against further enrollment.
+>
+> I envision other scenarios with similar characteristics may benefit from
+> a dedicated .ipe keyring as well.
+>
+> I could elaborate more on this, e.g., on the how users' deployed
+> container images translate to dm-verity protected image layers etc.
+> (the erofs snapshotter is used and there is no filesystem sharing
+> between host and guest, image layer transport is realized via block
+> device attachment), but I am trying to keep this response brief. Some
+> more breadcrumbs on the combination of containerd, IPE, Kata can be
+> found in [2] and [3].
+>
+> [1] https://lore.kernel.org/r/SJ1PR12MB61246B0BF58BC2B6F0A79D30DE9F2@SJ1P=
+R12MB6124.namprd12.prod.outlook.com
+> [2] https://github.com/containerd/containerd/issues/12081
+> [3] https://github.com/kata-containers/kata-containers/issues/10943
 
-yes I suspected it'd be a problem, but as you mentioned
-in the other reply, Alexei's proposal takes care of that
+Thanks for the explanation. This clarifies a lot. Please include this
+context in the commit message and doc for v2.
 
-thanks,
-jirka
+Also, one thing I missed earlier: before the policy verification call,
+please also check:
 
-> 
-> > ---
-> >  include/linux/mm.h |  3 +++
-> >  mm/mprotect.c      | 20 +++++++++++++++-----
-> >  2 files changed, 18 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 63f40e615754..47e853093601 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -3435,6 +3435,9 @@ extern long change_protection(struct mmu_gather *tlb,
-> >  extern int mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
-> >  	  struct vm_area_struct *vma, struct vm_area_struct **pprev,
-> >  	  unsigned long start, unsigned long end, vm_flags_t newflags);
-> > +/* Caller must hold current->mm's mmap write lock. */
-> > +int do_mprotect_pkey_locked(unsigned long start, size_t len,
-> > +			    unsigned long prot, int pkey);
-> >
-> >  /*
-> >   * doesn't attempt to fault and will return short.
-> > diff --git a/mm/mprotect.c b/mm/mprotect.c
-> > index 2888ee638d87..8d800830d3e1 100644
-> > --- a/mm/mprotect.c
-> > +++ b/mm/mprotect.c
-> > @@ -868,8 +868,8 @@ mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
-> >  /*
-> >   * pkey==-1 when doing a legacy mprotect()
-> >   */
-> > -static int do_mprotect_pkey(unsigned long start, size_t len,
-> > -		unsigned long prot, int pkey)
-> > +int do_mprotect_pkey_locked(unsigned long start, size_t len,
-> > +			    unsigned long prot, int pkey)
-> >  {
-> >  	unsigned long nstart, end, tmp, reqprot;
-> >  	struct vm_area_struct *vma, *prev;
-> > @@ -899,8 +899,7 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
-> >
-> >  	reqprot = prot;
-> >
-> > -	if (mmap_write_lock_killable(current->mm))
-> > -		return -EINTR;
-> > +	mmap_assert_write_locked(current->mm);
-> >
-> >  	/*
-> >  	 * If userspace did not allocate the pkey, do not let
-> > @@ -1013,10 +1012,21 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
-> >  		error = -ENOMEM;
-> >
-> >  out:
-> > -	mmap_write_unlock(current->mm);
-> >  	return error;
-> >  }
-> >
-> > +static int do_mprotect_pkey(unsigned long start, size_t len,
-> > +			    unsigned long prot, int pkey)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (mmap_write_lock_killable(current->mm))
-> > +		return -EINTR;
-> > +	ret = do_mprotect_pkey_locked(start, len, prot, pkey);
-> > +	mmap_write_unlock(current->mm);
-> > +	return ret;
-> > +}
-> > +
-> >  SYSCALL_DEFINE3(mprotect, unsigned long, start, size_t, len,
-> >  		unsigned long, prot)
-> >  {
-> > --
-> > 2.54.0
-> >
-> 
-> --
-> Cheers, Lorenzo
+ipe_keyring->restrict_link->check =3D=3D restrict_link_reject
+
+so we make sure the restriction function is the right one.
+
+Fan
