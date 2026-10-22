@@ -1,100 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.47
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792656270;
-	b=MWe5nOorFRsdf/oQaSM657tmcDUIVwqToh5F7MXpcu3xhXp8HjNFqPfjT1Ugc1TRfhQS
-	 a6199hV/cePnT+mgChLeAJJXDyqbeQy4iI5PU6km6vHthyudGv4XPwPih3cuTzX9t6B1V
-	 KH4Ijf3v7Z7CEq08f16yC5qGDwMT5UqqC4ksTSOwwTuoGyHCOIlPCpqkbc868ZhcI03Jn
-	 z3vaEkAu1TE4YjoC8PZZw/NMK0cGbXQnyk/CSyD+tVKEvMATWAaHddpO/q9nucybcK8oW
-	 YmmS8vN9jseJzSj+3x1vtGBSLJvG9HcBq7Bf4B7sX4CtBMosdC1rEPxvHHUYrpbItTA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792656270;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=UvDK0wI43J9wCVFly8Sel32okFV+wP/02Pa6wIx7AmQ=;
-	b=uu691aXCPviMgTxLRghdMgZWt1WosRfIcEvRN09pKnNPFIEFMiUDnmjbUQks2UFKjNlK
-	 1EevIhrKkIoX3jLoqLNz1RFo1xrvmHwevU5CS2M8KW1N0WdS/HI4+KYXqdP3NXGeu8D6z
-	 HB8yHAND8eJzATOP4noKRp906XytrgX4z69XNLwrgpL90/RiAgtj+Qg+0yU8w98+VfXtF
-	 IC+yftfChACdjhcwpdKsJCI3Tl/kE541IKb6ZbStoYT3gISHaMF4ZTJf1btzj5xmrFYeQ
-	 JkOfvD1o1jIJhzwlpClGoQP8+PoDFSKuA1Wdqf03vgPlCnM8rD4fRYqJ5ls/Kl4dh/Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=nebusec.ai;
-	spf=pass smtp.mailfrom=nebusec.ai;
-	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=M1i9kRr2;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.47
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792656947;
+	b=U6RFlOc+Dds9ZDTk7L9n6VAB29dmJlQneMuqwJTU8SR5QSt1q2aOuhdTl7ft/HKfmR+F
+	 NfqJnnXreaRgOirl/YB4csFOF6AHX2jM7lQiQLJVAQ4r1CkqTd9aUzGCXXLf4SCHkxcZl
+	 tpo7SZ5tLH8nn1gQsdJIsEIFsiMx7lluFeqRq6V1ozPZMwo9nCkNSHYl17pr9ewH4U2JS
+	 pz2Lm+9WxrUzdjmFAlNznFxHqYYYlIhTfNqVG651O1Jct4RLAQLqQs0k3DJkL4vV5Z7m8
+	 M50TJ9bqUloV9CzQ8Ws0dCHfL9T+EdKIHK6TjWj1KN2Z9saDhVai/6FW3fdKBzE4K1A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792656947;
+	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:To:Cc:Subject:
+	 In-Reply-To:References:Date:Message-ID:MIME-Version:Content-Type;
+	bh=J5vbUlRNCs7S8y6HZc8htFWDT7aYGvGDyqB/FQ/diuk=;
+	b=p4MxzyNZ6DgbySuHTTO1eu2XZGLRVnnB8SJkgDqoIEtBud2c5tlP36PT8vie0AsbBOus
+	 HBhn6pXOKTbfbGT+zc2gOzJpBZWgfUfBgyMZmUFtLA9Urp8wff8PZHyiAapAnUCIqrGW5
+	 95ulpOuadivJ6Coqn+fAka6ltJJyR97JOc23oZ+FBurX89c8K36s6FsPfdfGQjcJc8n7F
+	 wy9O8+JhbxzmkCw5xGrJDrKk/R2zheA5juGXzLSixze7krzO+XN4x+OEiara3ey/PkC+H
+	 xRPrxsBbEa1sPvFd0pgwpUCVbMM8X7fLqESZYF4nvqxYIKEeQt36UXgE5SERK3Zpzbg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linutronix.de;
+	spf=pass smtp.mailfrom=linutronix.de;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pb3tIRh4;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=d6RpW0SI;
+	arc=none smtp.remote-ip=193.142.43.55
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9165F606A31A
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 08:04:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9165F606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8B1606A319;
+	Thu, 22 Oct 2026 08:15:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE8B1606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=M1i9kRr2
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-679a2b5fe87so1445704d50.3
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 01:04:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792656268; cv=none;
-        d=google.com; s=arc-20260327;
-        b=T7SWEZniMTNgYnGDi3sqJjHvZcEDgt9OiU8zWTFawUzVPK8ENA9woQHngyVKig5PW+
-         5dYXOlcj0iohfq82PjDDtwFtHWV1ZYGLoqkVHFTTpOrT4uNt/Hjl5xvbI/vWp4/23xQr
-         8bhBp/Z0eOtqPq0UweuDuTTiUz8ZWBwZxmk6kk+W/xvBSGXB3ul0Fjz/RIjtY4Qxvld8
-         v/BzV1hiYpWt2JScnOX0sLK0bUFQFBgxnRyxjOzeVjL44SzxXX3xqdEAsPpeioY2nbEb
-         0QayGCQBOQ9b28WIuAmwkk11yCdhcHkQuEPuzPBqIb8lJN5jOnf8Ou5KBa4Z4avv0SH1
-         f6uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UvDK0wI43J9wCVFly8Sel32okFV+wP/02Pa6wIx7AmQ=;
-        fh=Sc8Ecu71TzE0YoxyEYjVzvhP8y/zVlWGetZqw/h2Khk=;
-        b=s6JZ/ruTak02O+89jt9s3pGv3Q+XYLvtgfi+4Nn9ec51w00mHDn8P+bt+vXn9BxC8v
-         ux14dDARGbV63Gh6KGilj1Zu+xPm8iyxMQALA9KZ/VBR574SDGQmEjp/kTT35oHrAlU2
-         L6dSLQp+ip6faajhDQF6VxO7emxkFl47VxiA1+nmYGldkstmeZfQvyCIqcA8yQFtz4UL
-         hqTC5kM3MwO1ckEdvGhTmOLRn9igPgHN6D5plamxjVSNU0uNPnmN77SGJLqf59FGRcwg
-         9KJWO6y1d5fFKU382QlmfpfukgjZvkh5vR88jlha5Sgo93mCdqpwpj6NHQ5gqhMth1j4
-         q6tg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nebusec.ai; s=google; t=1792656268; x=1793261068; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UvDK0wI43J9wCVFly8Sel32okFV+wP/02Pa6wIx7AmQ=;
-        b=M1i9kRr2So/mB54OOe7b24fDDZPhcuzLofxb1mTsd6/CnM7bhwcEYTqi+oH6KFV17j
-         TbyI6v69ifh4j32NTNGCafeDMq/LAnZJ34jGKvMBl1Iz82n/4PRSJ7f0arcuVbFIm60K
-         lgAK3Ut5OOBpnpbPm8eMhZf7+AEGMivWguzvGcE+1aM/fUA2v4xsXWjTeLA64ov47KA7
-         EogOzuBwe5ACbOt9FG5bC7SPYjyU8QPHSvMenVAduMIFIHoeltXL4G2ri/P8MqvIjRUP
-         gsKjU+NJasCWaqeoryJCSQtYYpxAaSjFZHQhZovpREwdvk1kllptrF2nhqveSzIWBg/l
-         sswg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792656268; x=1793261068;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UvDK0wI43J9wCVFly8Sel32okFV+wP/02Pa6wIx7AmQ=;
-        b=KOPRcGIWvbAmUul9oiXigtfZuCY6xez/U+/x9jZ94R4nLGPnsGSniXI/jR2ZFHAO4s
-         xAjFyV6Db1JiMsEpjCVz2XmmCgU2MqXUApD6SiJYKgsFRpN+iPfLhLtyWRkE6Urdm+xZ
-         o55M74eMAB4SKkF0Roka59wtNMyZD/v7ME5PiVfvWuoEAmQ81SM1QE8WdLVmLBOBFC2u
-         aJTQlnQKsy+XCa4mETFU5Ix4BMhMEU2kwLjMTxOOFrc+3gChutNIkY0B29wd4Ts0pZZ5
-         +E7My6zAOpDjcHfW1UTZrvQRstajb+u3/S61oPmAcW6amTHHSi3LdUgY1elBO13ofGaD
-         fG2w==
-X-Forwarded-Encrypted: i=1; AKwUvBwop9e4fyHClsaOm2Tl/E1BXfW3SppGNP8Q6Y3T1RTl6a/fvVd+0Vh6Lpchm/di9OC2i34=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKO8Qqklau0QF7Kzh9ZlmwIeWs4MnplmE0jhKkV795F69WUHhzF
-	I6lIq+cEepebBhor/MnL0inNw1tjTLc8I4ecckXNFG281kuM4AemTaqHjezjx3bjgllWGfUeM94
-	LEfO02XAtf7F13biSxUzP+wwg2zyU8hXFyjJYSdKAO2g=
-X-Gm-Gg: AYBFou1BsGHzJ6iY5BKf6gdF3su1Mhg53vmsJ88hzGzHA9iA9v0Tp2qAKfnJPXF18Yr
-	ms0IK839m0m/0+5+yU3wgojJElApzFvDUfn+7aloV05eGSXi6dJgBfC7L0SvI96vr0blHbO/sWf
-	ZVaoJFA0323fvGSWmzRJfI0AmEwJbrndAfk1dXAK8nJYG/9Dm+UUEV07KlOvYiRkf2Xqbz0yxmA
-	BRQBK8zOU3WD2UW1fr71UFRSGzQKBtzW3nN7bYOtju2OupyfkeqWTGWMcwwPS4EviSu7UZRZzw8
-	ggdJG0yUKYKhIcTek3XNDmb+kSQva4q+apE8fXhZGQ7gzot9B89to4b/qx0A0Qcmcad7/mKvIvz
-	BH3BuEuwd1AkTwERwFjMlUANB1MmRyVLDMA/EtIwLZY+uNlKs2Nw82gAOLQ==
-X-Received: by 2002:a05:690e:43cf:b0:679:a353:7a7d with SMTP id
- 956f58d0204a3-67a0e499423mr1493514d50.53.1792656268256; Thu, 22 Oct 2026
- 01:04:28 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pb3tIRh4;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=d6RpW0SI
+From: John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1792656943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J5vbUlRNCs7S8y6HZc8htFWDT7aYGvGDyqB/FQ/diuk=;
+	b=pb3tIRh4qt//ziCyq6bXR09LSLhWXItxh/VvgzpKAy+noDQsJb8Zx2HRtFqr50N3q/9EPk
+	r3gdYLhKu0jKQM2O8e/iWuS5jTaRnZdpk4SgAoYZvVMiItDag6FXXBPHTikNa8It3qziud
+	1miGLbmdpTOOusdX63FgYBzjl43g+q1/sHOpzFnEUEXE8/bsrsP/TbJAzzatzVlBw81DXC
+	kMPSie8EkZ1VY68hVQbibJ0hckMAW0T7GsPf/bFi/etFyKokjglg4EzfKNoi4sDoTmjshO
+	baRQcTTAjYiu8DA0ezpK+v/7n7Y2GBX32sAmQEiWTmLkqsl2kfkG1fdq9ysJYg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1792656943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J5vbUlRNCs7S8y6HZc8htFWDT7aYGvGDyqB/FQ/diuk=;
+	b=d6RpW0SIcYw3QOU8+HZa/z8hLhxYcGe+jyeP/DU772pZunn+T50KIaSSSZW2ZUOi4cUcNd
+	fFF0azj++viFPdAw==
+To: Gabriele Monaco <gmonaco@redhat.com>, Steven Rostedt <rostedt@goodmis.org>
+Cc: Nam Cao <namcao@linutronix.de>, Tomas Glozar <tglozar@redhat.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Wen Yang <wen.yang@linux.dev>, Tobias Schaffner
+ <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
+In-Reply-To: <f147fa9dfc553767ce92802b66723a85cf804e46.camel@redhat.com>
+References: <20261001152042.124445-1-gmonaco@redhat.com>
+ <DM6H7SK4YZ7A.F0MM6C0I77OR@gmail.com>
+ <878q3xtptq.fsf@jogness.linutronix.de>
+ <8B3FF026-6159-48CF-8FEA-AF2FACD2E4EB@redhat.com>
+ <87bj8s8ih9.fsf@jogness.linutronix.de>
+ <DM78SVMBI2XW.2XHVC67VON48A@gmail.com>
+ <87v770uuyr.fsf@jogness.linutronix.de>
+ <DM7I2PYHNKXE.3AYY3N1HATXLW@gmail.com>
+ <87ik2zryzo.fsf@jogness.linutronix.de>
+ <0055967d4571e7c8549dfa476fa6b15b93013701.camel@redhat.com>
+ <CAP4=nvR2i092924zszA8Qh0UUYnwXfAsa+7KjPe-NpwC+bbLXw@mail.gmail.com>
+ <8580176d216258e9008c344e0529509117dcc18b.camel@redhat.com>
+ <CAP4=nvTc297yQHz8aumZFAQ3+JK=5Z_=416WdosT0S6nHEeNfQ@mail.gmail.com>
+ <87pkx5q1w4.fsf@jogness.linutronix.de>
+ <0d4f11b1999588ddba9d855db43fc492eda32de1.camel@redhat.com>
+ <87h5ifqy6w.fsf@yellow.woof>
+ <a8d8b080f403eed617242a3276717706b4081ed1.camel@redhat.com>
+ <20261021094853.29b9f7be@gandalf.local.home>
+ <fb5c20f226f723cbb4df5092462dfcf5f2686367.camel@redhat.com>
+ <87h5ifvw3p.fsf@jogness.linutronix.de>
+ <f147fa9dfc553767ce92802b66723a85cf804e46.camel@redhat.com>
+Date: Thu, 22 Oct 2026 10:21:42 +0206
+Message-ID: <874ieetakx.fsf@jogness.linutronix.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,48 +94,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <cover.1792654486.git.zhilinz@nebusec.ai> <179265618778.3290.6590304416142136273@kernel.org>
-In-Reply-To: <179265618778.3290.6590304416142136273@kernel.org>
-From: zhilin zou <zhilinz@nebusec.ai>
-Date: Thu, 22 Oct 2026 16:04:16 +0800
-X-Gm-Features: AclHuK-ttxpk1qZkWA7RJa0y-e5ZRmyvNmGza_feFtiOdaTdxm9Ij-dj8EOUrr8
-Message-ID: <CANB6i5zgeY7U+2sjEWjvKxCJBM1vcwYVz_rJP2E6y56wjTxOLA@mail.gmail.com>
-Subject: Re: [PATCH net 0/1] xsk: validate fill-ring producer index
-To: netdev-bot+sinfo@kernel.org
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, sdf@fomichev.me, davem@davemloft.net, 
-	edumazet@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	vega@nebusec.ai
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Oct 22, 2026 at 4:03=E2=80=AFPM <netdev-bot+sinfo@kernel.org> wrote=
-:
+On 2026-10-22, Gabriele Monaco <gmonaco@redhat.com> wrote:
+>> I am wondering if coexistence should be the goal. For example, the
+>> monitor classes (DA, LTL, HTA) are only implemented in the kernel and
+>> provide kfuncs for the state transition functions to be available to BPF
+>> monitors. I would expect that this would allow BPF monitors to have the
+>> full functionality as in-kernel monitors, since the events, errors, and
+>> reactors would all trigger from the monitor class code.
 >
-> Hi!
->
-> This is an automated message. This series looks like a fix, but its
-> commit messages seem to be missing some information:
->
->  - How the issue was discovered, e.g. hit in production, hit during
->    development, syzbot report, manual code inspection, LLM or static
->    analysis tool scan.
->
-> Please do not repost the series just to address the above. Instead,
-> reply to this email with the missing information, so that reviewers
-> can take it into account. If the series needs another revision for
-> other reasons, please include the information in the commit messages
-> then.
->
-> The evaluation is done by an LLM so it may be wrong, if you think
-> that is the case please reply and explain.
+> Well, this would be yet another hybrid requiring BPF monitors registration in
+> the kernel like I proposed in the RFC [1], which was the main point of
+> contention (that fully shared reactors and sysfs interface, by the way).
 
-Hi,
+I think there is a difference, because the registration could be via
+kfunc interface rather than requiring kernel patches. Similarly, the
+kernel is able to load drivers that it does not know about it advance.
 
-Please disregard the mismatch between the cover letter subject and the
-patch subject. This was my mistake, and I apologize for the confusion. The
-patch subject is the intended one; the patch itself is unchanged.
+> For this I would argue, though, that such monitors would be BPF just
+> on paper, we wouldn't be able to use many advantages BPF provides
+> (e.g. BPF maps).
 
-Best regards,
-Zhiling
+It seems to me that your main motivation of BPF is to move the
+RV-machinery into BPF. For example, moving include/rv/ltl_monitor.h into
+BPF. But that code should not require the flexibility that BPF
+offers. It is the monitors themselves that I think benefit from BPF. For
+example, kernel/trace/rv/monitors/wakeup/wakeup.c
+
+I do not understand why you would call it BPF on paper, when the
+semantics of the states and transitions is all coded in BPF. Everything
+that makes two monitors using the same monitor class different from each
+other. Only the generic state machine (with its tracepoints for events
+and errors) and calling of reactors is in the kernel.
+
+> The current implementation already shares the header with in-kernel monitors, so
+> the actual logic is shared.
+
+When you say "shared" you really mean "copied". If it was "shared" (in
+the kernel) then the whole tracepoint/reactor topic would nearly solve
+itself.
+
+> Besides, we'd need to be extra careful on controlling the callers. Right now
+> handlers are static, so it's easier to make sure no rogue caller messes up with
+> monitoring.
+
+That problem is orthogonal. But I expect kfunc flags, capabilities,
+and/or signed BPF objects will be the direction to take.
+
+The reason for my suggestion of a "true" hybrid approach is because I
+feel like you were trying to completely relocate RV to BPF, and now due
+to the tracepoint/reactor requirements, we're trying to find some hacks
+to somehow make it work good enough.
+
+I was suggesting to take a step back and consider an approach where
+there are in-kernel pieces to leverage the benefits of in-kernel
+(generic state machine, tracepoints, reactors) and BPF pieces to
+leverage the benefits of BPF (freedom to define the semantics of states
+and transitions for any domain-specific monitor).
+
+John
