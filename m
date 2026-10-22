@@ -1,40 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=154.81.10.170
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792669253;
-	b=y/TVrOCuZnp5EFWuOK4ucg9f83JAsvEcGTUttJ6tUseb+J/KvNNuX4NmMOD3+y+v/sTQ
-	 OJKWC54ZBd4dMX8PZXiqQt3+YmpGblKwFeqNBvYCAmSLpUVB25cF35v5qxBkF+x/+j9tm
-	 bctEJdQkJRrIjYKuZvhSntImlLx/xLYyUGblLFC5ionsuVUuH9WR1Zcaxx7rYvGj/mBf2
-	 55EoX+CKE7xogk1Udy7H3E8W3Ya8+bTiwFAJHccPVn3STzKrKSfKcv8SvaZ7XUjX8bJuV
-	 8KIMbbjXs+rHobfthyg/2KEYrFmwciWsrunh73E7cExan99dVLrZMW+oCRlrfGRZ0eA==
+	t=1792670702;
+	b=Lj7W9TIIb8vl1r+w+Yc8vhrXAFlMwxz6BBuhP0FjFO5HAJ6I6ykfnO9SHB9v0wYpXeVp
+	 B6gjeAcRrNMlN8Q1f8kDg2AULfH+G5+tnpYpgz0kPg5J5cq/UN7i8Au8PnqZNrZ//gi/6
+	 prujtaM5hVO6YVa8dZm/JdpHuVVfzyFcibbtTy4ZRk8wOxsjpGrbhmKfi3NGnXf/u05HJ
+	 QBseqsnI9810zGXSp3Q9eP0xFNp7B4SuyqDNaKic/F+6Iw+Kn36UOftNTbcmJEVpUPsVj
+	 AD3wxeOU3r53M29ffTGvpC9Vf1lcsTUTtfCshipSwsTrN3+7vjr3/yxg8v+LQq33dsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792669253;
-	h=DMARC-Filter:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-HM-Tid:X-HM-MType:X-HM-Spam-Status;
-	bh=U0Xvu1qIA/L+bG5Y4RTEQS4ShKfxcS6BTZgoVihscQU=;
-	b=Umcu5pYYtVAN/QN46x9yVPtw/6jJ7kE+/F9VjplRlvNEuxCCbEzgiayEHc4PWXKpNVHL
-	 yU8+sE++1wKClBS/nB+fU7MWMiD3G2puBDkt2uVb7naGIiIKnFRT5BWbn1ijkb2SfoBnf
-	 39UmezHlhQgheQF98VulLFRENs1cEHSwSWfqKXirLxFvoSAsduc8nvraZiE3QQ1bEI2uO
-	 oazIFvmiFWGYvzlFmKmVNTNKaurg85DAfpdBtlcGbSxTbpWK58K3ekV6uA90OkAak1W9L
-	 SpTcDTMxj040mmvqjzpT0kfflRglHjkxfW/p0M6HpyI80FCrpEUxFOJ35IYqc4kMw8g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792670702;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:Subject:Date:
+	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:
+	 X-Developer-Key;
+	bh=2+PL0BdhymuszaAqzLGLWPySod9WjSM2hocAOAcpS5g=;
+	b=M0oPZCnP6nGpcWo69Z20NtoBlyhybJCbCDcPqSpC5jpLOsUvUGRGEhVYMKIF4cTNVppi
+	 QIwzI81YL77YQhhzl8SFp5/ykhkh3qSwbO45siX8d7EXyKX2aOQi1wfG4BvgTeRnRo9pC
+	 YJkMtPthFG7YWt2ZR3SFdyVSO19ko+QcoeNqY/PjKPdKsuUOJ1BixCQlmiecTVi9mplep
+	 PkXwKdxiQfhEfDkS30+9ZYkqQuDM7yl+t8njtuXlZH6JlKBJsgCOqJPspewz0Wx6usGmF
+	 qvsz+AuEk7EyB5xuvc/E2oovMhKboy890hkO5Y1h5wswBrW/+UCUoogeQw03teK/5lw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=easystack.cn;
-	spf=pass smtp.mailfrom=easystack.cn;
-	arc=none smtp.remote-ip=154.81.10.170
-Received: from mail-m10170.netease.com (mail-m10170.netease.com [154.81.10.170])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=E2EpafJP;
+	arc=none smtp.remote-ip=209.85.128.174
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E317606A319;
-	Thu, 22 Oct 2026 11:40:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9E317606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=easystack.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=easystack.cn
-Received: from [192.168.0.59] (unknown [218.94.118.90])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 205a7933a;
-	Thu, 22 Oct 2026 19:40:40 +0800 (GMT+08:00)
-Message-ID: <94d07572-0b9e-493f-98e4-c751e5838e7e@easystack.cn>
-Date: Thu, 22 Oct 2026 19:40:39 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7509606A319
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 12:05:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7509606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=E2EpafJP
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-8b0dba37a7fso14399937b3.0
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 05:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792670701; x=1793275501; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=2+PL0BdhymuszaAqzLGLWPySod9WjSM2hocAOAcpS5g=;
+        b=E2EpafJP5cJo5QW4SJbq4FouSv2GzHYYp28vuODIlfawbzLrkrIS8rWD55l8z8p3q9
+         L9APJBeBNXpCXohGiyDU88iuZsPbCQZjCCETwBNKkA6z1VzLrpXYBPe0Uc7WpbOQG2Kc
+         ZnE0NWc/YJJ1ZT86RyqzOKE8k0hu6HgcFq0ZcvcBPBOucSa3Ryi3fduIBi3KMRm7Pxgd
+         zCNSrds1sbc1fQd71FSKX9kGB29CgmVRrRSxDfgydER4Al/PaKhWN2S+9pcdcNVzaK+D
+         utULW60/7H0rn4NyubI84GiM3Mf8fvU2sDsxxxnFKdIFzK2/Myl24K0p2QEMXg9ZmiNx
+         LDng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792670701; x=1793275501;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=2+PL0BdhymuszaAqzLGLWPySod9WjSM2hocAOAcpS5g=;
+        b=cdJnC271Hy4XhSgBo6h5cF8BIqIvXZ8l3MLn+mP7wZ/BBPTes9jBAAFImDOUWTRtNF
+         JfuPN+EE0cGCZR1xUvwxGbIwLBdaiYJxFOOz7l6YWF5jjLsecqz/SJkrv4UZpdIpO+eF
+         Cdn8V4O++cdYIBhOl/jXcIhzVvzDZyEbZl6TCm6E0QRkGWT1YnRrMsi/a+VvhwnERIOs
+         PZE7xzJeo3itinDCvXsvb9NPRsAuPCM6s2XhErwnjAImRcX7w48yPW/y535ew5ZtL12X
+         3bBxAU4LhCSwAz+POtQ7hjE8Kqe26L8O3lJI7elfk0tT3Oxzaop7FGVitzil/1wrDrvj
+         AUAA==
+X-Gm-Message-State: AFq9FYLMoaCWYaBAjhIhoLZdSk9dxWoJ07oGp6HKJvDzQHT7Wp4sBmGj
+	mtTBbl0eHzbSEFpOD4bvpdRnRyvJH73CNfmd9ihg+jcDnfjHJbA1Uax5
+X-Gm-Gg: AYBFou0DejDXOT15ibJhnH0TiNcgAY3x6UtBtHnWrfwr+iW2zoGJ5k3yX9b5IB5yKu9
+	eB/oNetN5lI6yDk86R65QUK6s3eYNIa093f38X5zmhcfSVe2DjSDle4qR3o+n1WP36guaWn6oO7
+	c0un1GyYsxOR131fdY+NNxHHimHwu4QsnLzwLMGcGNg+Qilm7lTQT3L7FsmvPaK1mQw/7r1+lAv
+	SvOhS+H2owVnIZZEGUb28mkd7whvEzoh+gmvBaYvyAgZLrG+wwvfuXj49gXmo/dtJ5FLVuS7D7h
+	rce2lW8DvGOSKTlXdyhzU+OQGkt1jtCOwMH0rwnJylHZwSdqEfmLdjndyfnY2JEYire5jELmdog
+	RNTRjukoEJheBid4sLcztvauxmVyoe6zZlir0k7iAW2Df20YSpRqyP+6qJY5y0kS1YZrZ4evgEs
+	cE0bkWK2JJW0iX3apYbxmaY86CkcZ+ZD7pEu3dQYMj2lsnAnwIikzMQsocTgQYL+RRjkrJvY7nJ
+	5ZtdVcr3ff04rYLoyn/PZ8qMwD9jfJ8UKMRw7J1O+HKVg==
+X-Received: by 2002:a05:690c:962:b0:8b0:acc6:8e89 with SMTP id 00721157ae682-8b133fa1bc8mr25174197b3.11.1792670700647;
+        Thu, 22 Oct 2026 05:05:00 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:8::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b130073596sm25519317b3.11.2026.10.22.05.04.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2026 05:05:00 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v2 0/2] bpf: Fix x86 JIT stopping before jumps
+ converge
+Date: Thu, 22 Oct 2026 05:04:54 -0700
+Message-Id: <20261022-jit_size_fix-v2-0-4bee6921b218@meta.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -44,76 +91,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/7] mm/page_owner: add bpf_iter and kfuncs
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, vbabka@kernel.org, surenb@google.com,
- mhocko@suse.com, brendan.jackman@linux.dev, hannes@cmpxchg.org,
- ziy@nvidia.com, shuah@kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261021112437.1799213-1-zhen.ni@easystack.cn>
- <20261021115240.f195a2a55364fe300cbb6983@linux-foundation.org>
-From: "zhen.ni" <zhen.ni@easystack.cn>
-In-Reply-To: <20261021115240.f195a2a55364fe300cbb6983@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0aa16369cb290229kunm3eba54192ba45d
-X-HM-MType: 1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFJQjdXWRgWCB1ZQUpXWS1ZQUlXWQ8JGhUIEh9ZQVkaH0JIVh8fSk1OGktLHh9IHVYVFA
-	kWGhdVGRETFhoSFyQUDg9ZV1kYEgtZQVlJSkNVQk9VSkpDVUJLWVdZFhoPEhUdFFlBWU9LSFVKS0
-	lPT09IVUpLS1VKQktLWQY+
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOb72WoC/23NSwqDMBRG4a2Ef2yKiUXUUfdRRGJyU2/BB0mQt
+ OLeC447PvCdA5ECU0QnDgTaOfK6oBO6ELCTWV4k2aET0KWuVamVfHMaIn9p8JylM5Wqx8bdW21
+ RCGyBPOeLe2LcvFwoJ/SFwMQxreFzfXZ19f/krmQpx6b1rtLWeFc/ZkrmZtcZ/XmeP8NWywKxA
+ AAA
+X-Change-ID: 20261021-jit_size_fix-da316b8d492c
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
+ memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792670698; l=1643;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=heTurfQcR1GwW8nEI64/AfElAhckC7B7x6r1aELGaAQ=;
+ b=0ijA3L0UgekmaLQiaquPBnEOcRfpXOpkaNdEkMpVV/nyb0TirulPC0MRDCHG5TfL7yi8vffeV
+ 8GemmhOQZRQCnKpdbdi0AlLK00uMNd0VMGSMWO4Y5q1C0FaowlFlkQp
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
+The x86 JIT stops its sizing passes once two passes give the same image
+length. A backward jump can grow while other jumps shrink, so the length
+may repeat with jump sizes still changing. The final pass then emits code
+of a different size than was sized, hits "bpf_jit: fatal error" and the
+program fails to load with -ENOTSUPP.
 
+Patch 1 sizes backward jumps by the insns they jump over, so no insn
+grows between passes and a repeated length means nothing moved.
+Patch 2 adds a selftest which fails to load without the fix.
 
-在 2026/10/22 02:52, Andrew Morton 写道:
-> On Wed, 21 Oct 2026 19:24:30 +0800 Zhen Ni <zhen.ni@easystack.cn> wrote:
-> 
->> page_owner records who allocated every page and is a core memory-debug
->> facility, but it currently reaches userspace as the debugfs flat dump:
->> slicing allocations by pid, comm, NUMA node, cgroup or stack, etc.,
->> means streaming and parsing the entire file in userspace, which is
->> expensive on large hosts and hard to query live.
-> 
-> Confused.  Your series 8570b65220e8 ("mm/page_owner: add print_mode
-> filter") addressed this significantly?
-> 
-> 
+This was hit in CI by cgroup_tcp_skb with the unpublished branch
+inversion series, whose layout change happened to trigger it.
 
-Thank you. I'd like to share some background on how this new approach
-came about.
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Changes in v2:
+- Size backward jumps by the insns they jump over instead of checking
+  for moved insns, drop the ja -1 special case and the imm8 limit of 123
+  (Alexei)
+- Start every insn at BPF_MAX_INSN_SIZE, so none grows in the first pass
+- Check that the selftest program is JITed
+- Link to v1: https://patch.msgid.link/20261021-jit_size_fix-v1-0-b89fd32cafd6@meta.com
 
-After series 8570b65220e8 ("mm/page_owner: add print_mode filter"), I
-attempted to further extend the filter capabilities so that userspace
-could more selectively capture page owner results. This effort led to
-the series [PATCH v3 0/8] mm/page_owner: Add PID/TGID/COMM and cgroup
-filtering.
+---
+Mykyta Yatsenko (2):
+      bpf: Size backward jumps by the insns they jump over
+      selftests/bpf: Test JIT jumps which change at a repeated image length
 
-During that discussion, we gradually reached a consensus that "a BPF
-iter" might be a better solution to this problem. The main concerns
-with continuing to extend the kernel-side filter approach were:
+ arch/x86/net/bpf_jit_comp.c                        | 109 ++++++---------------
+ tools/testing/selftests/bpf/prog_tests/jit_insns.c |  59 +++++++++++
+ 2 files changed, 90 insertions(+), 78 deletions(-)
+---
+base-commit: 65953903cd7bce4c4392ad6ab629cba78f24644e
+change-id: 20261021-jit_size_fix-da316b8d492c
 
-  1. As filter capabilities grow, the kernel side needs to handle
-  increasingly complex parameter parsing and various combinations of
-  different filter attributes, which is not conducive to maintainability.
-
-  2. More fundamentally, kernel-side filters cannot provide truly
-  flexible filtering because the filtering logic is hardcoded in the
-  kernel.
-
-At that point, I did a POC to verify the BPF iter direction:
-
-  
-https://lore.kernel.org/linux-mm/99a94068-ab37-47c0-878c-7c1ada5204b2@easystack.cn/
-
-It seems there is broad agreement on this direction. This new series is
-the implementation of that approach.
-
-
-Thanks,
-Zhen
-
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
