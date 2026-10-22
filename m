@@ -1,101 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792644398;
-	b=Gq5/M8QdHWgVi0kTwFjcmbCu26M8sRpndSVPVKmh/zvd4ODa3FgU/oTnf2VgfCoAx7Dk
-	 kKxJqV+80vPJKU8GucZHU5GVsdHFT8+3E55qhTUszihjtlzgPG+qCnTzreHepAFZjw9lo
-	 nyEGAejwmMJEfeHp7+r8qJr2LqcZLlfmCu/iQo4OqdHKsZWSwetEbolKLqOnmU7prN/+w
-	 xto82llM3E4b2EJKUOnLBFySvdgqaff8BhItr1c1QKhocd9iJWc9g/7TNASZ3p1tGYpIA
-	 +8u3oEYlDjLJUad6UJpvXiBBEQFugnnQUXVCSY5krYmaAFf/4OW2H6lSuS4BZRLBEcA==
+	t=1792644701;
+	b=iu29j6wqkkmAaYMuVc+93gRtvKAlr73m1nqe37zmuEgKyR1/I7dfVV33k0sm7Pawgelm
+	 FhT9AGcTvH565ECwAaTDDvkRV5NbxfJbNob2hqrMDy2y0f/7oUtuC5gio4GmyuEFBomll
+	 hqN2ZdsPbNfST/1InfuGx5Xv3g9lq4H9ilNujIKJopw6rzZhG9i2oyA8I3UZrrkk4f6Qo
+	 j+oE0zbQOjsIkr2sV+P1DS+rGdbG+KWArRpcLyWknVCrHA/7HMm+aP6/htuyXRBcu5m3A
+	 Ax0/QAuZM0WrcXJ0Xn6U+cv63gspLAaBxkyMSSclQkK2Hz3Lgj9YE9G/1Xd2z3XVDOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792644398;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792644701;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
 	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=5+SumxBfrxjsgvn/QRWIFxElRphz0iCgG1RZWJvYrNA=;
-	b=e8vh3W5aUkweOQQaOxvy9D6sc83pRPEzTje9CM5Ed8Nqp+NvaqjMsr4NBNdqkXuihHD0
-	 3sdYOX8UkPsLIkwOtxpNR7PjgedtF2CNN4EB0hFBEI/uUevRdqq8ECWTgCm+1Tu7oD7MT
-	 2yJocaere1qRnCeSyd09RjFdZCGoM8eWoDTlaNiBe7fctcsxmjyTwwd1NdPO3K4Ypf3rZ
-	 6Mp7Y02x2hK7mRB0r9kigHbkMrTZIC3PEA9UHSSbqdomJceh/X6azPogcfpTpW3v1JvRl
-	 jMQ1s98heCQ4IGSYY9msJ1Db4yxjzmIhF2S5RUUjPOk0Whi/eCnJKXumDdobablLqBQ==
+	bh=DFC31NsFJ2XDzScIay+VXMbA+N/Gyxq9s/ZOy9ayIXY=;
+	b=FTUAgUWwm2px7wkoDwstnZ1eFpva/vRnZT8i2XMX2UT7VFBTRj5zTywTOH6q+qZwMaly
+	 gx24QipN1SRMnbshkKG59dURG4AgbsM3IIWWV0o6AnoQBM/t48Nvust2TVyZo79JTFjTM
+	 qbXsDZev8/1RLTlMqPKacaWPMZmR2jvrE4LVyu1/z2H55YzjJyhQKCxEoHk5GzPqyABq6
+	 bRE9jbCPV2THs1BD1QpcYfZWWKn0GEyD+5BsMcvotU5yOwZxEd0vQZ1SRVaIBoUqOao1C
+	 T2PR91Ua4TXome7xmaSYOD0MQhU2XCjXMdzJK2xssMm1mdemGTihTBv8FUC0LpJpSfw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cWRKB84X;
-	arc=none smtp.remote-ip=209.85.214.178
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=s+xEObBv;
+	arc=none smtp.remote-ip=209.85.210.170
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A947606A319
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 04:46:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8A947606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D76606A319
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 04:51:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A7D76606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=cWRKB84X
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e8fe8e343fso9595355ad.2
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 21:46:37 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=s+xEObBv
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-88cfa501c5cso598534b3a.3
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 21:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792644397; x=1793249197; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792644700; x=1793249500; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=5+SumxBfrxjsgvn/QRWIFxElRphz0iCgG1RZWJvYrNA=;
-        b=cWRKB84XbahQi2H3i46ML90oKr8CoWeebcyTgeT4j29KM45JaBHNkY3VVfQToaWRCY
-         BGNsb8PfqrzJsbVEzZvQCYt5KGMeUYhIhPJNpLzQSbuy1vGgt9seEBMk4IpgKNd6djdU
-         vqSr/AcJTa0uq4ffUsVtNbx/0nhEePAqgJUPllxtYC8LA8rdxYXo8Ii0M1jSkPbJNKTd
-         2/by9H4JWo+P4e4Lt4Dhn9wL5ezmyy0QNutBAnHpxeX09Zx6cgFu7/DoyBc/o7Ou8MRT
-         7D9IdTPjmWfRm6Anb0/PpfQKnsabgtQ5SoXX3gp+mGf25XKu3vCamXHGCAb6wLLe0lgp
-         117w==
+        bh=DFC31NsFJ2XDzScIay+VXMbA+N/Gyxq9s/ZOy9ayIXY=;
+        b=s+xEObBvSzv+8tBVMNm5K3hdxlyvV6gdGuyskh+Tf29P6ButleLb1Ipz4H9Vv8p1ok
+         jv/s7pq1bz16Rw5t/6lfFFclmG2IgJyzpT4lEyav7qy2Pu7xc+NnsDHlULxS4QUMq9xl
+         oJRiEVJP+etWqH1VgvXBCcyoo8axRLesDrw4GB/QXKMcpM5Exkp586L+ZsYEfJV09Sv2
+         7PvF5dQfHGRus3NsGhZPPMpIWn3ml13Ns1k6YLNMPRt/0fpplG+4QDROzPw42aZJFQRe
+         B6YR9eSrJeQeOPsWFxHuli+Yy+veovUkREyt+CNfjbhvCGSPjqh5xJ50GQDP9/LP4vnY
+         9Hmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792644397; x=1793249197;
+        d=1e100.net; s=20260707; t=1792644700; x=1793249500;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5+SumxBfrxjsgvn/QRWIFxElRphz0iCgG1RZWJvYrNA=;
-        b=LkZkw+Xm+V63b2TrFA/IitZLvLlEJbGh6vwsuvEJCBPikBRENiyvmKfTouLIKcBWjV
-         KRUcPan+7O3diNObjxCj1moLRNPU7fWnSg1VHLpH3XOLD0ocNmgTh0GLP3uoHZ7lCRrG
-         VZmVM6rk/RHfq/CzPqyl9rip8q8xBRW2RTmxYtM2pLRqa1jECLjdzcAjZ80eK65iTUmm
-         /SAclfqdMaq3yMxJzFE2sDRQnwYLT6YRT5jQSfNVrjzygNyjZkDBcXrbC/TRrkEk1DyC
-         +xDbhEw1b1TgG+EdYiO++DeL33VgInBwdMI/dEUzm4rNYLaClDXY0WXEsQsdXnJeGCyB
-         yxWw==
-X-Forwarded-Encrypted: i=1; AKwUvBzlMkQ9quSrlPvW3LD5G+EoB9/rFlAnER4tqwxLsJ9F6TXWuMVfQvTR6zJYcB5kQolUWnk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYI72+xJt8tMJEOXCCOOx4rhb1XNOPVfUppoi/5VpKBCOAQI9dYq
-	6d71JVcaDMRJDtGRTb1tk5E4HlqIeWcQv40/tgZdha4Ae4N1V+qDOPrh
-X-Gm-Gg: AYBFou2QiCttHuH7lG/XV6Z2CdiooS7f/ILgU0P/XuS7kZF4JLH4h1u7mQoRqjdnHrH
-	3xl/2/0tcBEyMN14FsqRiftwPBCltp/0cov353uTqDKbCPFAhGQe+QLjX19zlnacMnQxJ17PFMd
-	oCkUxuftVtQ9+xy9IjV2ncRirQamr4JMVr081t5yyHct43YP/YEobPOvkbHygecfqohQZg3d8hd
-	meSHbLtUofHJdOclxRUAsWxmGMidjGnCv+9WGv8ox+7UcLLVgciTrknyIJWLGox0fSkSZr9lvpP
-	rCPxiH7/lnPuC8YYpfM3Dca44+sYZXQLutVsK6B98EkWZ8YfPGxsvR6QfGd+5Nuv0LZivXpnWMT
-	8Qo9tLF37gk/mCSoEv3dQueHrAzaGsZF7LutxIFuFKUJZhL+gs8KRSL0Y3VDl+kjGVXfIY+SIoh
-	BRh5TDH4lonLI/0Aofv6KAs9RvY9sMYEFo8QLFEpx98eqT3EwPl5Og36gvqeeoI4sFstS/7NKze
-	X4wFnumW7jxwzlHxkq3uIeDBjPH5M2Lul6m+yB0ZQADdv7QnU4L8ov1T7x2QqtP2n38/EHdS5xZ
-	Iybg/IVp8w9bidGSNJj0Tkr0MrKH6X56H5dr3ETjMoz3x7FdYUojOKXs23veTpRC6mdMwbjw2bx
-	rCI5acg==
-X-Received: by 2002:a17:90b:28cc:b0:3ac:86a0:5764 with SMTP id 98e67ed59e1d1-3ad86f43109mr3159843a91.64.1792644396689;
-        Wed, 21 Oct 2026 21:46:36 -0700 (PDT)
-Received: from localhost ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ada490e5edsm2287101a91.8.2026.10.21.21.46.36
+        bh=DFC31NsFJ2XDzScIay+VXMbA+N/Gyxq9s/ZOy9ayIXY=;
+        b=kcJFMW9d7WGElDHFohgDWFrro6o3rvLJDomsJPRqlaGKCvbB81hlcfV+O+BQjiKeXM
+         K8AE2ToO9n2RemXToYsjmY2JwgWGFP1fhQXvGmyl0u+lQd9Gw4DUiTm22/23v9UCYgN6
+         RMqzQICxC5HwF8cEi8n6EnfAdeEab2YNPHqV1a2na0WSFm9WuVdV7+9Sa4lLfPG7Zyny
+         cEwCCSvkZSZXPc+EpOxuV0yFIZV82AE1CNVwXnY95jccffXnP1WDa+aDSkb749ieuSpQ
+         rk9job1DPaDW0dcnT41rni5UXxVCmHfSL/zdIQy47xRDTATAP4UMdRFvT+GD4dlBO5vy
+         KxNg==
+X-Forwarded-Encrypted: i=1; AKwUvBxhtihtjFWEJVGq2VgxVywI9caFzUThzdY4SymklRIndvlxw8hBV+yNIYS2S4oeogK/HIc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIQ5sD4YaGizHnnyFQLBWChpTbEyYlHgDZh4t5rFSkgjTZMVCnb
+	DHvxuqsmFteN6qTwT59gblGSh+Hvd9m/5bi4PTNTzTJWKrZak1gkdL6Q
+X-Gm-Gg: AYBFou0uUxn/KPyEggQGO20Cm+QVTyo3vKo9d9D+q+fK2uw64e0O/AXrrdH/kyv/71u
+	ZthiK4VD7/MX48q5HMpqpfYXIzBdHm2/hIBjIHv39wz5N3hXRD8Rtge5ZC5obr9jaHhHh27ZDSG
+	6kzv/Nt+BKCLVnivdasDSnIwreLkMtszL+oK4m2hvsirHF4TpipbRtg4kfZdeqXWRb6vbPjzLn2
+	lQSZ/D5ylrqqsmEju8PptBDkalZPFlY/cXZVCXqPDg8W5fffMBSiLXaL96fHFvHMa9vj4/lmHzV
+	ipZpoAdCwccTNoyxAd2Vh58rB/aXOhIS81Ph6gEXO5DgCjf4M0XN+nHjrTNlggeZ3ikkDKL6iFn
+	qvAXWWQQh578l/92DtcOAsCn7dUYTK1vyEg0/e4e8OHHtLZZGWp+prPGEyKXQ/FBeJ2c423HNcV
+	FGSd0apf72Xd54hw/LD7iZOYij3RPqbYuXaa4eSgkpG2dUBn7KyJ0WkoY99UNZLxZa0C8qWmxE2
+	V9AJiOFvsvVdLg0ZBUzLyhRB+ILiLgIZFQ4AcoXVolSyG52r1UYxa+OAX++drbHWlekqw/Fq9lL
+	YXhDV6VcXAAVBB9aUmgaBFfSyUwy9t4RMZV0zSqC/eQj3I3WeiXPrvHPdvCj
+X-Received: by 2002:a05:6a00:228b:b0:89d:f19f:5dc5 with SMTP id d2e1a72fcca58-8a089cdf21emr3765607b3a.13.1792644699895;
+        Wed, 21 Oct 2026 21:51:39 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a08933d1cesm1590253b3a.6.2026.10.21.21.51.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Oct 2026 21:46:36 -0700 (PDT)
+        Wed, 21 Oct 2026 21:51:39 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Oct 2026 04:46:35 +0000
-Message-Id: <DMB3EIGZSALV.3C9PAPO7TB923@gmail.com>
-Cc: "Amery Hung" <ameryhung@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Nicholas Carlini" <npc@anthropic.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v2 00/11] bpf: Scope callback arguments to
- their frame
+Date: Thu, 22 Oct 2026 04:51:39 +0000
+Message-Id: <DMB3IDSRNEC7.1SYPQ5OXG7QR3@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <yonghong.song@linux.dev>, <martin.lau@kernel.org>,
+ <mason@kernel.org>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Reject unwind_goto and unwind_exit in
+ offloaded progs
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
-In-Reply-To: <d2369629-846e-4fd8-b567-a0fd8863256c@linux.dev>
-References: <20261009202759.50520-1-ihor.solodrai@linux.dev> <DM6EVHTVM3IR.3RCFLKV9WC80J@gmail.com> <d2369629-846e-4fd8-b567-a0fd8863256c@linux.dev>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, <bot+bpf-ci@kernel.org>,
+ <bpf@vger.kernel.org>
+In-Reply-To: <1ffe4765-ce81-4ff6-a483-e978dce5b234@linux.dev>
+References: <20261020231942.2568163-3-alexei.starovoitov@gmail.com> <1cc7789274018beba70932ec8806130f1ff07eed56b62e0afbed41385630e4b7@mail.kernel.org> <DMA2VC8SJY0S.8O3PIVXWV2J4@gmail.com> <1ffe4765-ce81-4ff6-a483-e978dce5b234@linux.dev>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
@@ -108,50 +104,24 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Tue, Oct 20, 2026 at 11:32 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
-> Slices are not reached. A slice's parent_id is the dynptr id, and the
-> walk from frame_id finds that id only while the dynptr is still in a
-> register or a stack slot. R1 is caller-saved, so the bpf_dynptr_data()
-> call that creates the slice usually clobbers it.
+On Tue, Oct 20, 2026 at 07:23 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+> But I don't think we should remove "nit" passes from the review bots.
 >
-> This can be fixed in your diff with:
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index bc12df55d2e2..57859c3baeeb 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11470,6 +11470,7 @@ void mark_frame_scoped_arg(struct bpf_verifier_env *env, struct bpf_func_state *
->  {
->  	if (!callee->frame_id)
->  		callee->frame_id = ++env->id_gen;
-> +	callee->regs[regno].id = callee->frame_id;
->  	callee->regs[regno].parent_id = callee->frame_id;
->  }
->
-> i.e. the reg is its own parent again.
+> If people don't read commit messages carefully, and review bots don't
+> either, then we are increasing the amount of sloppy or outright
+> incorrect claims in the git history.
 
-got it. you're right. Let's take your one-liner.
-I think the reg->id != id hunk can still stay out. The reg is
-invalidated in the same pass, so the second pop of frame_id in
-invalidate_reference() finds nothing and the loop ends.
+An incorrect claim in the commit log is not a nit. Bots should keep
+reading the logs and keep reporting those.
+The problem is that a nit is delivered the same way as a bug.
+The bot said "Code looks correct" and "This isn't a bug in the code",
+ended the mail with "Please fix the bug or email reply why it's not a bug"
+and turned ai-review and PR summary checks red in patchwork.
 
-> I don't quite understand the concern with the series as is.
-> I'm guessing a new weird REF_TYPE in refs[] which is not an actual
-> acquirable object gives an ick. Or is it the plumbing?
-> I take it you agree that we need some kind of frame-tied lifetime
-> tracking, right?
+> And also what's the cost of a respin with a bot fixing a bot-detected
+> nit?  2 minutes? 5?
 
-Yes, we need it. I guess it's the plumbing that bothers me a bit.
-The id belongs to the frame, but refs[] is in bpf_verifier_state and
-the callback runs in a pushed state. That's why setters had to move
-out of setup_func_entry(), take a state argument and handle errors,
-and why refsafe() and check_reference_leak() need REF_TYPE_FRAME
-cases. A u32 in the frame needs none of that.
-
-> I added some refactoring patches in attempt to avoid growing
-> bpf_func_state vs v1 (Eduard mentioned we create a lot of these
-> objects), and that is what you've just suggested.
-
-Right, it grows. With padding that's 8 bytes on a 960 byte struct,
-880 of which is regs[]. I feel it's cheaper than patches 1-3,
-but I don't insist.
+I could live with nits if they were like comments on github PR
+that are easy to ignore or one click 'accept the suggestion' button,
+but here we're spaming the list and people already make fun
+of 'This isn't a bug...' opening.
