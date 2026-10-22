@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.235
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792640025;
-	b=w4xxtP/bAMqCaiZdtPjNzDoFnB5UPuARLesyphRY0F9b5hR844l0BD5xhYvFe3NaN6yj
-	 LheA0ZnBJJE0sbK4Ni2PeyR87UEcDHb8aiZH16BEsVJyTJgkktMoWNcW0PL/yKMVnvUrU
-	 JZzwAsGMGda8Hs0d/NC/BWpmq6AgaJiUOqb916hqNL3v6dzhU64MqvvRg97pOGiag3+Ft
-	 jPVuLFqBZEu15ZS4tXpX8Dro875txNiSeK5V+OjoTqvj3xwokOZfQcN026Sz8yi18Sjin
-	 t3N9vq1YtEE4H9fdvdiQdspIHypmtosSbUO8JuKezHZXMR4UhBiFxsgNCQkHD7l872g==
+	t=1792640235;
+	b=UEV71fXwmbH19rJQQ2XyZScvrXY91Tuf+4K9dgiC4YxXcalLfRCG3KQ1PSA0CzvB9JS9
+	 fGyV3mxIGaSRmHItGnWSkdElMk7S245BMx1lARpSuRMLTS6ON4O0icE0KldnMbAv5lDy+
+	 Bego6ZxVXwt42zNvVV64lmweexcFkQv4bwO0rpyRIHBt2gHP0g2NJLdDosxa9CR78mrpr
+	 kD5/1wZE/VcUdQraCVgVZPgG4S9lPpMH+r+lnktqCvdh9eR89Okx81hpC5TJ5ZQZcmsS0
+	 8gffFEu8d7L4fqqEQJ4r/22TB6qcm3oGi8KYEFomuiIFcun24nAYpDlf9QndY8l4H9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792640025;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792640235;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=g6pc1fQDzYo8LIZ3Sj7DNdz27l4PFMKRWuYTt7q4Z0w=;
-	b=u2fpnhy5glcjr7jd/f0TCvd9hNiRRtMyRGGI2wlIi+IApGsPo/DXNmbxQYOo6Ur2ds1f
-	 ur5z7GS48L8rZtWSS3Q/1i4yQIJmNIgQ8QQRquao3CfwloPLbjH7p01OuQidZdYATOzdc
-	 VN0FyPUJ3HD3YS0Vr8Uk0uaDE16xTlpE4MKKTpZvO6QOqHwD6sv+oYCsIjD8Nl3dF1Lce
-	 XeXgiMimsawlv+POU6PPfdDRqGIrMheQEIZXoFI/oeKOuWXQ8M3CsoYlqd6K6CXpuQZex
-	 WQ0Fm9uRUJ1Yn6usyl0462dc9fzZLVYZjVC7HV/Lku1h/R23Ttn6B1O7PlfrmlNibZA==
+	bh=mgKk29cEMPjhkL/nlf6+/Mbk4gVlKk12lMtS/g48E/Y=;
+	b=5mwTnAuQS4azQI1jzCqFqPwP5ZWxplPPwBna3LdUZaFITnnwYGZoOOC9qm07N8A37mo8
+	 kq9KB471WciyEypICiJCSpxkx3FZgei+VSZ/bK63yBg+7yzWOYJK8F+V4vd+QxIrVzepr
+	 cLPRi1w12tpCgZNXnEKs90dO1m7e4g0S+aP5hVl7QYDZ2wWOq6IsecbU/TMHA9fgAIsB3
+	 VYm6q24+fQSNVRQg4DGG5NdtmUCty7Z/MpLJF5/X1UA7ONsi2zWU31nCs/EJ2Ldp2DmfR
+	 +JjIXFVKsK1csthgMdBtHnRqCkaMWriEvtIVYG3kk4WBlTgcQSjBqT2WreeM2jXcPjQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=szsLEv9T;
-	arc=none smtp.remote-ip=91.218.175.235
-Received: from mta0.migadu.com (out-235.mta0.migadu.com [91.218.175.235])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pPKMCILm;
+	arc=none smtp.remote-ip=95.215.58.138
+Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1DF606A319
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 03:33:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D1DF606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F281606A319
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 03:37:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7F281606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=szsLEv9T
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=pPKMCILm
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9FwKodjy2WUetZrat7gSS2lB32jHVe2L5jLOFxiXhxM=;
+DKIM-Signature: a=rsa-sha256; bh=v/+HvHqCDL8KYF8wOBFc643AIKQ4/I0Ny3wDaVlxt+E=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792640021; v=1; x=1793244821;
- b=szsLEv9TpkLZM9yh8PvrqQjqMimh67Y/GxZZQlYDRlTZs6S15SDHLjVNITUrhujzAyD4Utjg
- P3QKhvMhfovuCGodMnBxRH5nmuQWkcy6sIbLPj4KBtz/c4TD4l3oyq5cKzOiRyAaUVOwvmYySby
- b8eXP/ycY8wJR2j2Ql2moOcw=
+ t=1792640232; v=1; x=1793245032;
+ b=pPKMCILmja6Z+PWBaYW7Eo7OZuyOR4KCx329VPpB251MHNPXPiQlV8fqD2mrk9qG3WQMtpaJ
+ ses3l/V5Y0XIm8z3OF0q6vt+ImzMHFUMiGlUcf5Uq0dy3VC3qt39MVtHuBYk+nW4PZYXAq+EG88
+ tvllewqy1caWKwXOPXYky3ic=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 303f6392ea5a033f;
-	Thu, 22 Oct 2026 03:33:41 +0000
-X-Mizu-Trace-ID: 303f6392ea5a033f
+Received: by smtp.migadu.com with ESMTPS id 75c4dd5b6378d2f3;
+	Thu, 22 Oct 2026 03:37:12 +0000
+X-Mizu-Trace-ID: 75c4dd5b6378d2f3
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <2254edd4-3b97-46d5-9cca-3490f2ea155b@linux.dev>
-Date: Thu, 22 Oct 2026 11:33:34 +0800
+Message-ID: <a9d1939f-1787-4b9a-ae5d-f2f9852ddc67@linux.dev>
+Date: Thu, 22 Oct 2026 11:37:10 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,54 +59,32 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/1] tcp: release congestion control reference on
- rejection
+Subject: Re: [PATCH bpf] bpf, sockmap: use READ_ONCE/WRITE_ONCE for
+ saved_data_ready in the verdict path
 To: bpf@vger.kernel.org
-References: <cover.1792607608.git.zhilinz@nebusec.ai>
- <2773af2572ff59055933e407a135b39bca537381.1792607608.git.zhilinz@nebusec.ai>
+References: <20261021155629.68813-1-phx0fer@gmail.com>
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <2773af2572ff59055933e407a135b39bca537381.1792607608.git.zhilinz@nebusec.ai>
+In-Reply-To: <20261021155629.68813-1-phx0fer@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
-On 10/22/26 2:57 AM, Zhiling Zou wrote:
-> tcp_set_default_congestion_control() takes a reference to the selected
-> algorithm before checking whether a non-init netns may select a
-> restricted algorithm. When the check fails, the function returns -EPERM
-> without dropping the reference.
+On 10/21/26 11:56 PM, Dudu Lu wrote:
+> sk_psock_start_verdict() and sk_psock_stop_verdict() access
+> psock->saved_data_ready with plain loads and stores, while the sibling
+> sk_psock_stop_strp() uses WRITE_ONCE for the same field.  sock_map_link()
+> / sock_map_unref() touch the same psock from another CPU without the
+> lock, so KCSAN reports the race:
 >
-> For BPF struct_ops algorithms this keeps the struct_ops map and its
-> programs alive. For module-backed algorithms it leaks the module
-> reference as well. A network namespace administrator can repeatedly
-> trigger the rejected request after the algorithm has been loaded.
+>    BUG: KCSAN: data-race in sock_map_link / sock_map_unref
+>    BUG: KCSAN: data-race in sk_psock_start_verdict / sock_map_unref
 >
-> Drop the reference on the rejection path.
+> Use READ_ONCE() for the reads and WRITE_ONCE() for the writes, matching
+> the strp sibling.
 >
-> Fixes: 8d432592f30f ("net: Only allow init netns to set default tcp cong to a restricted algo")
-> Cc: stable@vger.kernel.org
-> Reported-by: Vega <vega@nebusec.ai>
-> Assisted-by: LLM
-> Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
-> ---
->   net/ipv4/tcp_cong.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
-> index 8e83ef81fc187..907c63af14785 100644
-> --- a/net/ipv4/tcp_cong.c
-> +++ b/net/ipv4/tcp_cong.c
-> @@ -293,6 +293,7 @@ int tcp_set_default_congestion_control(struct net *net, const char *name)
->   	} else if (!net_eq(net, &init_net) &&
->   			!(ca->flags & TCP_CONG_NON_RESTRICTED)) {
->   		/* Only init netns can set default to a restricted algorithm */
-> +		bpf_module_put(ca, ca->owner);
->   		ret = -EPERM;
->   	} else {
->   		prev = xchg(&net->ipv4.tcp_congestion_control, ca);
+> Fixes: 2ef2b20cf4e0 ("net: annotate data-races around sk->sk_{data_ready,write_space}")
 
 
-Can we just move net_eq before bpf_try_module_get ?
+I think it's just an incomplete fix which you shouldn't  blame.
 
-Since we are not allowed to load it, I think we should aslo not touch it ?
 
