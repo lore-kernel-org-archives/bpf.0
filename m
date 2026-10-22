@@ -1,88 +1,139 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792674326;
-	b=Ug9qoDHHXyERtF1KxC7RsTzQokcRl72Y4eeu1PvmHivI8iUVOiUHCsJbNu3PK7uw+/kY
-	 jU+Zf7rYjS35E4vKREynVKJy52SDrkgHcroQvLXTiQ72yncjV6H8auw11qTQnmPoUZLP1
-	 48hWrKfWBS/CDAhcXevrCCVGN4ixpApIleKhwHABS2U12rVYpzN9M2/CwovNa6jcA/eKT
-	 NK1lWNar0agjwR6UoBpqErEO8FtcIdRLMOSwBrTGOzq3WXrqHUbmhbyAAndW+2KBNxEG7
-	 CRQgu+W3UD8j7SzHP4FgIl2gv6C6DyLeS+RR7r6LimQq0WaGITaiGXCWeDje7doob+A==
+	t=1792674946;
+	b=dBr/rJV7ioU2UrYw+Kw/QP4ff5kveWl+oqnvlWVQrJ1Ov1frTXtzuopqELyHE+tgH+CA
+	 K9S4OUt5A4VY84/BG+F6GOc5qt7KU/7U6kvz5dhoP2JUgLBqZi26d7muzIALN9cq13HXY
+	 viSHaszF3ZA4TmmCzfG88FJyxyMHHohLAbPX47TdX7VW3fIqg8aiIC8eSJc6tGV2EoMui
+	 sKgtVWS4ld+BVNCLBInL0GNjZ+Rh83HuXtboYFpSBG9HD+j+sP6JG6gUqKds/53TcjN5L
+	 LP/8tv0iBfrmkiOUxybDZB2TOyayO/OeeMYAFYqDd6kDPFstz7I9raa+Tnb/r4YrQeQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792674326;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=icFNT5ZLs9kOkqCAigqmx2IVCcUIeokw1bAR3h5f560=;
-	b=uch3K+QCLK+gRjVqNRcV3QHEKJeeSfXLaLu9CL/l2Qz3T4c/FR8mrB4zvLwDVeKTV9Um
-	 hiVbsoTifOeUV0FdW9xHHVDwM+TLRmvdH+pdk44WOAu/w+3zlqZKhMMzYTOjXwpnqGg1u
-	 KTMj9SAtjho0H4VwVpw0JJp6MHApmzlsXIOv+TYm5dp4IK30vY10ASQyFEaX2i8hxJFT4
-	 oFB5vPv9u80PFnRgNF3TNtckwgfNuVKGXYdDCYWQveFptnNmvxwtd7FQPg1KJYXw1OZLV
-	 JlL+99ItNLuno2DR74Z6AlrKz9zhvRBJuHvAkiZY1v1cEnYjF0ydECObL2khvqMPSpg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792674946;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=TJhxwzQVV2Bitil/P+RgNQfU0rtSwWSbTvYT//HoKb8=;
+	b=ZfKabTOIu/9eNHpMNqMAgWlWTUgVrSjhlWqhKsvS01ml16r2or9XIGQrrYv513425pd2
+	 CQ55I9NP8o6vuaI7mfcmMlCNpyhQ9vEWltI7K2qYxpknovlNGJGxC+5jZeXubynDGGqCt
+	 VOcdjHN5IhcD5oKEmtlZqIS6ucu4yHsL/lV+VG9WAQKEG3yftPVCA9FH5Gd11A1hGmOa1
+	 19b1WTtD8664miuctxGwBflH+1QHh/sCuhhOLUIMxz2xilikEQmBFoAIuNF1lo3iGI6nb
+	 wr2u46PoyDDJcOrSVytrY0Kin81qVqLdvbZseE1w3JxncSoKby+cGZGD1muhn3pV49A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=aG6BRZaD;
-	arc=none smtp.remote-ip=209.85.218.42
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=eo54TOrg;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Nx2Qe0Od;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736EE606A319
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 13:05:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 736EE606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E36606A31E
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 13:15:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46E36606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=aG6BRZaD
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c43373ae89aso272265066b.3
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 06:05:26 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=eo54TOrg;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=Nx2Qe0Od
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792674943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TJhxwzQVV2Bitil/P+RgNQfU0rtSwWSbTvYT//HoKb8=;
+	b=eo54TOrg55GBUdtK7Xgqnks5RyzCPX7hCbzKBCOfMMWN+dLPSLs6VCvk5608ZFOBv2Lp5L
+	rhRwCRR/hqr0jkLrVuTwZ6mOQ9b/FnF7U+dlfM5VB+rQ19FMuYgH0aTbuyQ4hFZtU+ofZQ
+	+FZwIJpnNM6iq3VIscmzPqxpx5Bescg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-172-lnEVaioUNhqvz_CwYvqEMQ-1; Thu, 22 Oct 2026 09:15:42 -0400
+X-MC-Unique: lnEVaioUNhqvz_CwYvqEMQ-1
+X-Mimecast-MFC-AGG-ID: lnEVaioUNhqvz_CwYvqEMQ_1792674941
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-495689bfcc8so13080705e9.1
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 06:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792674325; x=1793279125; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=icFNT5ZLs9kOkqCAigqmx2IVCcUIeokw1bAR3h5f560=;
-        b=aG6BRZaDcD/gyJ9pdCFc3HQg1ClvBDAS49gzv2iEjEP2pptIyzSqK9oNRK0d6kC8eZ
-         3Dk+69llrQnaThq9kCbysj5Oby5lKmx9lrSBUi/ydb5T/Ym9Fj5RW2etCW9QMh5vP4bn
-         /XcdZGgubhbJn24j7oaq9smwlcBWCWvOaV2RSj0CzTQVMhpzxrxKF6HUaYBfi7vChEhT
-         TzbvpcRWHCv6sRfwSiImBu8cpHMxboxKOzFx6o5ro7aIWBk6HhFjo5U8v2wzKgBxvp3d
-         ZOZolMuS4W54I2WgAwz9DJUhGgN8iCK3sy60bdw9SAsjZVUsCJxYjXCvMuXz2vQ4XVe/
-         aXAw==
+        d=redhat.com; s=google; t=1792674941; x=1793279741; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TJhxwzQVV2Bitil/P+RgNQfU0rtSwWSbTvYT//HoKb8=;
+        b=Nx2Qe0OdCKTwUZNGToxKUf3/hJLkQv5fRTuI27dc0P/fTuHoDUeZdpW3W8MZHkyozu
+         7+kfj1XeVDMm6WKlniCdnhAWSHYeLp8GvpphZqxrzaHTxUAuTyRaeyg1NLpohCaLA+cs
+         Qw8RnRBMkB423wG9P63SDN87xBc5NuSUA1CUWbgCFr2TcECvjPIIjr0VAzkUqJXCa7af
+         r2N/KOwg8/Z6T5LB0RNMwTGXxrKL339fAvrIvk14CTwiJhr+fYCDsY64pRuCwhnSghuC
+         jQLC5zl7HTNCPLZdSt7SGFHvqXj2dYVkfFHxLSo6e2N8aDPIkhFcFp4IbzLUU+a7ko4B
+         WL4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792674325; x=1793279125;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=icFNT5ZLs9kOkqCAigqmx2IVCcUIeokw1bAR3h5f560=;
-        b=gXLVM71Mp7VlO7S+nIY+xnmg6DxM5kJHRmUoPPrGITP0YNA+BMsz+f8m9jOA/tPasN
-         ifS2Yr2SPEOpMv5qhHKrmP+sqecoZ3xwFNfZP9QIutpfDjf/UmOvFiB2Wjbu8hjBDZAP
-         9kcrvkArc0E9o8Q1hhFfqgcRC9Lnr881qFqCwk5ooPKNKCtTGUHiFMbq6swcaN2MqbuO
-         QkPhPnfNdgsRuA+JxRYJu6juHvsZCL1AftluyQG06slGW5nWr9sY8wwTDQ+XrS3RrElj
-         a+wGi70TaKGOd5HfNsyuUD44EzoJpA8Tq61y04rB2VL7jkgcTYOUPbrhD7l/rqzPd2/T
-         zmeA==
-X-Forwarded-Encrypted: i=1; AKwUvBzxzbIvrAedjqRfLPTfw/Ac+JQhKZIJMxLJD6AopLtn4r4t5jMEBUY6i3ito1Xtwv9ZM/I=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJyFONcFbWr46uAEoAyIwdU7Yj67NyPb7S9y0pBgCkAAQ2STAt8
-	oFr+1SsQy5IXIBuYqsu7ZB9VteyF7Mk3XzZ+zmiqnpv5fmX1eTH1GwhY
-X-Gm-Gg: AYBFou0vAF/DC4UAPsuH5d8NUtst5SwunXjJLxr1vsuCbr+M/RlZqF4OVUICPHlbBI+
-	d3NBNOYfZBZQAkTIwMP1BKoqcRqNPVcKBjGN4yTf4PR7Y9yWOauErQZl7O5Fksdsrn8frcM4cnv
-	Rsigchis7rjVv+jJ5BTfTrt1pnEwTR5aaxPdfnrJduf0REtFeaqNm63MPXInaE6C9A10rD+hmU2
-	zea/5N144w9oyuc1H6YoFoBGdMH8CDRPZ4hxzKkDe1HSNMxwgk7TY4ZG02PllrIjW213s3uHrti
-	422wpwcXZPfxa5672P8fpIZzVd4ofQ0ZZtoY1ZeLmDXf+Z2SBdgW6a1Me2KGENHqsIm2GRBrwXn
-	8XPIAOG1/FWgSyz4Kk523Bi/FSNNptaCv+WkgDDMP0VJn2IQhTlvi3M+55LNzMBa7YUpvwlrsb3
-	pStoq+DMwoVBtjWZ33vJ7pY8sD0Vk2nupJL4woTJ7OH+xT2C0G9Q/nb5xPx/EfGAA0rkQ1UxELQ
-	Ftd5DcSU0/3goceR5+rkLmU6vp2MwhJrO6s337l8i4/dEvbALKiL1ZGhgi0mYK7b2SeWpWv5JGz
-	LsbBhawXlQ91GHHNfKypz6+3hTMygMVkckzRQVI=
-X-Received: by 2002:a17:906:9fd1:b0:c3e:e677:5608 with SMTP id a640c23a62f3a-c46795ee0c7mr532331966b.12.1792674324624;
-        Thu, 22 Oct 2026 06:05:24 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:215d:2010:17d7:cab8? ([2a02:8109:a307:d900:215d:2010:17d7:cab8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c468a1ef356sm104192266b.9.2026.10.22.06.05.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Oct 2026 06:05:24 -0700 (PDT)
-Message-ID: <2de8122f-45de-42b1-b070-acf60ffe7c96@gmail.com>
-Date: Thu, 22 Oct 2026 14:05:22 +0100
+        d=1e100.net; s=20260707; t=1792674941; x=1793279741;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=TJhxwzQVV2Bitil/P+RgNQfU0rtSwWSbTvYT//HoKb8=;
+        b=EDzsyIW9LyTOVA7Y0qCDW7WRCV2ERiEe/1buWLWbrHu2nhcu0/ammUfdvEw3G5ds79
+         RRehMGbt6uXZ9xeG/TEjJ8+bx3XJCYQ7SxWs0+kUlppQzHAw93DNBGybnDlosqScf3Dh
+         LsOCW01OBo2aLqjYa3I9xRG/co4Qrr6w1HXo8QvmJ8g53ZZ1JH/t376I2R4JOf0igDz+
+         91DIhfr8Rb9JFaWhE+Kx4Y+OrYxggTpuASLvuC9MBtIEdKys2xVhkE1VaGbOsq3D7TAk
+         jKcuetnfPOVqXpaz4W1IZYUyU0Y62A7CbFXYenCZiRUGz3KVvWrqUzGzkhtstKIEC0jZ
+         Tkag==
+X-Forwarded-Encrypted: i=1; AKwUvBw61sDUy/DhPIh84mQUI1rS9UTYRXi7SXrKYio+Ou6QfQR2qXyJiwmeqPo77vmmZ1Ni0Yo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLsTVGt9K/hgyE/TzDaYhfi1FewQlwT56E4D2nebObJ1yPorPX3
+	6ywLhi9NmiBbj+sjF+5Ch2v44Scnu3y9Yex2QaThkGJgLv65XV6OOshcnoSDjr6r9Ndj239qTz5
+	mZEcnzfBvQow3zO5sKJuwn4Y6hnWH36VzBoqeS16S86axcyto4iwtng==
+X-Gm-Gg: AYBFou3UQkqeXXwLM8+su8IJvX+EThIWCjONioYxn8J9OGaCzNsM1eGpOexTZd79VQ4
+	GB0sUiO6eMu2TYmz7yes4G+uLTTywhZHldWghy0d7eHeTZrpyxhow61OC2rQN+r5JjRQaAnYf3s
+	P16QR6DXsQqXVs7xVEYepzIrttPektsHMGp2dY5owtQUFUPpF2K6wclVJYWD1NMIGFdhSWpApbb
+	ss2eXvwqtrJIQhh2IVY3TX5vO1ehzP5g7F+HLtRoLZEZxIlHeNZX5AtkoyIrdUOq0sM7148ylGZ
+	00IP7uPsL66mbwyU9G6oUbxeMZjClvQ6DAspD67e8m1JhAXyfOyRX40BP4WPXye9+hE=
+X-Received: by 2002:a05:600c:34c4:b0:4a2:1a:a10a with SMTP id 5b1f17b1804b1-4a2001aa275mr98637705e9.29.1792674940587;
+        Thu, 22 Oct 2026 06:15:40 -0700 (PDT)
+X-Received: by 2002:a05:600c:34c4:b0:4a2:1a:a10a with SMTP id 5b1f17b1804b1-4a2001aa275mr98636665e9.29.1792674939765;
+        Thu, 22 Oct 2026 06:15:39 -0700 (PDT)
+Received: from redhat.com ([2a0d:6fc0:1536:fc00:b838:383:1c7:6e81])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a203963f3fsm81299735e9.2.2026.10.22.06.15.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2026 06:15:38 -0700 (PDT)
+Date: Thu, 22 Oct 2026 09:15:34 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc: Nick Simpson <nick.simo@gmail.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Song Yoong Siang <yoong.siang.song@intel.com>,
+	Rusty Russell <rusty@rustcorp.com.au>,
+	Max Krasnyansky <maxk@qualcomm.com>,
+	Sridhar Samudrala <sri@us.ibm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/3] xsk: validate checksum offload requests in copy
+ mode
+Message-ID: <20261022091241-mutt-send-email-mst@kernel.org>
+References: <20261021180329.26358-1-nick.simo@gmail.com>
+ <20261021180329.26358-2-nick.simo@gmail.com>
+ <87a4o66lio.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -92,101 +143,117 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test JIT jumps which
- change at a repeated image length
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, kernel-team@meta.com,
- eddyz87@gmail.com, memxor@gmail.com
-Cc: yatsenko@meta.com, martin.lau@kernel.org, yonghong.song@linux.dev,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261022-jit_size_fix-v2-2-4bee6921b218@meta.com>
- <6896375813cf93e6e3c7ae7a8f329d9fa73568dadcb55b7ab364e5c18ce817c3@mail.kernel.org>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <6896375813cf93e6e3c7ae7a8f329d9fa73568dadcb55b7ab364e5c18ce817c3@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87a4o66lio.fsf@all.your.base.are.belong.to.us>
+
+On Thu, Oct 22, 2026 at 01:07:59PM +0200, Björn Töpel wrote:
+> Nick Simpson <nick.simo@gmail.com> writes:
+> 
+> > In copy mode, XDP_TXMD_FLAGS_CHECKSUM turns the csum_start and
+> > csum_offset from the TX metadata into a CHECKSUM_PARTIAL skb.
+> > xsk_skb_metadata() only checks that the checksum fits in the frame, so
+> > csum_start can point into the Ethernet or IP header.
+> >
+> > On a veth, the skb reaches the peer namespace still CHECKSUM_PARTIAL.
+> > When that namespace forwards IPv6 with nf_defrag_ipv6 loaded,
+> > nf_ct_frag6_reasm() moves the IPv6 header forward by the 8 bytes of the
+> > fragment header without adjusting csum_start, the forward hook accepts
+> > the reassembled packet, and ip6_fragment() then completes the checksum
+> > with skb_checksum_help(), writing two bytes into the accepted header.
+> > With csum_start = 22 and csum_offset = 22 on a fragmented IPv6/UDP
+> > datagram from fd00:1::100, the write lands on source address bytes
+> > 14-15: an nftables forward rule matching "ip6 saddr fd00:1::100"
+> > accepted the packet and the fragments sent out carried saddr
+> > fd00:1::e87. For an unfragmented packet the same write happens at
+> > egress when the output device does not offload the checksum; with
+> > csum_start = 14 and csum_offset = 22 the packet left as fd00:1::ebf. A
+> > csum_start that ends up before the network header (14 to 21 on the
+> > fragmented path) makes skb_checksum_help() warn instead:
+> >
+> >   offset (-2) >= skb_headlen() (640)
+> >   WARNING: net/core/dev.c:3647 at skb_checksum_help+0x4c8/0x850
+> >   Call trace:
+> >    skb_checksum_help
+> >    ip6_fragment
+> >    ip6_finish_output
+> >    ip6_output
+> >    ip6_forward
+> >    ipv6_rcv
+> >    ...
+> >    __dev_direct_xmit
+> >    __xsk_generic_xmit
+> >    xsk_sendmsg
+> >
+> > socket(AF_XDP) only requires CAP_NET_RAW in the user namespace that owns
+> > the network namespace, so the sender can be a container that owns one
+> > end of the veth. With panic_on_warn, the warning panics the forwarding
+> > host.
+> >
+> > The interface is documented for L4 checksums. Leave CHECKSUM_PARTIAL in
+> > place only when the request designates the TCP or UDP checksum field of
+> > an unfragmented IPv4 or IPv6 packet, not IP-in-IP or GRE encapsulated,
+> > on an Ethernet device, and complete any other request in software, as
+> > XDP_UMEM_TX_SW_CSUM would, before the frame is handed to the device.
+> > The frame is dissected from its Ethernet type, as skb->protocol is not
+> > set for xsk skbs. The pending "net: resolve uncommon partial checksums
+> > at ingress" applies the same rule to virtio_net_hdr sources.
+> >
+> > A request on a frame that is itself an IP fragment is therefore
+> > completed over that fragment alone, which is also all a device could
+> > compute, so the reassembled datagram does not carry a valid transport
+> > checksum. Before, if every fragment carried such a request, the
+> > reassembled datagram stayed CHECKSUM_PARTIAL and was completed on
+> > refragmentation; now conntrack marks it invalid.
+> >
+> > Skbs without a linear part (IFF_TX_SKB_NO_LINEAR, i.e. virtio_net) are
+> > left unchanged: their data stays in the umem, where user space can
+> > still modify it after any check, and they go to the device rather than
+> > to the local stack.
+> >
+> > The problem was found with LLM-assisted code review.
+> 
+> AI;DR. Ask you agent to be terse, please.
+
+Or better read it please.
+
+> Also, please do a proper write
+> down of how to test/reproduce. The slop in the cover is no fun to read.
+> :-(
+> 
+> > @@ -1277,6 +1330,11 @@ static int __xsk_generic_xmit(struct sock *sk)
+> >  			continue;
+> >  		}
+> >  
+> > +		if (unlikely(xsk_skb_resolve_csum(skb))) {
+> > +			xsk_drop_skb(skb);
+> > +			continue;
+> > +		}
+> > +
+> 
+> Yes, we need to validate the csum offsets, similar to the virtio-net
+> work MST is doing. Look what MST is doing in [1]. When that lands, move
+> the helpers to ip.h as the TODO says, and use for XSK.
+
+Yea now this is useful maybe I should add it directly there?
+Or a patch on top is better after all?
+
+The idea of a self-consistent small single patch died on the vine
+at this point anyway...
+
+Willem?
 
 
+Anyway, pls post a patch on top of my series. I sent v5...
 
-On 10/22/26 1:44 PM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Test JIT jumps which change at a repeated image length
 > 
-> TL;DR: Test issue: the new jit_insns subtest asserts the program was JITed, so
-> it may fail instead of skipping when no JIT is available (JIT disabled or
-> unsupported architecture); suggests gating on is_jit_enabled().
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/jit_insns.c b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
->> --- a/tools/testing/selftests/bpf/prog_tests/jit_insns.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/jit_insns.c
-> 
-> [ ... ]
-> 
->> @@ -2881,6 +2881,63 @@ static void test_convergence(void)
->>  	}
->>  }
->>
->> +/*
->> + * On x86-64 a backward jump sized from its own previous-pass address grew
->> + * here while others shrank, so two passes gave the same image length with
->> + * jumps still changing. The fillers are 7 and 2 bytes of native code, the
->> + * conditional jumps are never taken.
->> + */
->> +static void test_same_len_not_converged(void)
->> +{
-> 
-> [ ... ]
-> 
->> +	int fd;
->> +
->> +	fd = load_prog(insns, ARRAY_SIZE(insns), "same len not converged");
->> +	if (fd < 0)
->> +		return;
->> +	ASSERT_GT(jited_len(fd), 0, "same len not converged jited");
-> 
-> This isn't a bug, but should this assertion be skipped when no JIT is
-> available?
-> 
-
-We should probably skip this entire test file if JIT is off. Out of scope
-of this change though.
-
-> jited_len() returns 0 when the program was not JITed, and test_jit_insns()
-> itself is not gated on is_jit_enabled(); only serial_test_jit_insns_blinded()
-> is, and it calls test__skip() when there is no JIT.
-> 
-> On a kernel without CONFIG_BPF_JIT_ALWAYS_ON and with
-> net.core.bpf_jit_enable=0, or on an architecture without an eBPF JIT,
-> __bpf_prog_select_runtime() falls back to the interpreter.  The load
-> succeeds, jited_prog_len is 0, the program still runs correctly, and this
-> subtest fails on ASSERT_GT(jited_len(fd), 0, ...).
-> 
-> Other selftests treat a missing JIT as a condition to skip or ignore, for
-> example bpf_obj_id.c:
-> 
-> 	env.jit_enabled && !prog_infos[i].jited_prog_len
-> 
-> and btf_rust.c, which calls test__skip() when !info.jited_prog_len.
-> 
-> Would something like this keep the check for JIT-enabled setups, where it
-> catches a silent fallback to the interpreter, without failing when no JIT is
-> configured?
-> 
-> 	if (is_jit_enabled())
-> 		ASSERT_GT(jited_len(fd), 0, "same len not converged jited");
-> 
->> +	prog_run(fd, 1, 2, 11, "same len not converged");
->> +	close(fd);
->> +}
->> +
-> 
-> [ ... ]
+> I *think* the IFF_TX_SKB_NO_LINEAR csum_partial scenario is OK, since
+> we'll end up at a virtio device, but TBH I'm a bit skeptic about the
+> whole reference to UMEM via an skb case...
 > 
 > 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> Björn
 > 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39777661721
+> [1] 5de86f1afe1165a1a13ac4ef0615b19f4a10cb7a.1792565282.git.mst@redhat.com
 
