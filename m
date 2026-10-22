@@ -1,57 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792635828;
-	b=tg4M+aEna0RUXzVWZNWiDLf4LtbDHYwPwCdzI9DbKhh6OSRR/4XDRoqrlTbc5wF2HeWm
-	 tQQrC1hPHbh+q+s4Ap7WlX0SeZ4x/AjgX+lE59xDu7AB/ORF5J/GtsFWc4M1INzVIx8aW
-	 Shl0iM1s9HAGtBBjJnxzEfkKiQQK9eqyYGaZkbydmcL15iSMTFy2TsM5CKlvg2H0GUaY6
-	 EmrVVtdPW5gSGJGCUhcWqDC28TPSrQJgk+rI8A7I4maZ0zDHgdpUlNg3cSUV8eY4JGOCr
-	 T1Z8ecoQnax1iaBMzmFXenZIL8JC9CW7U62Tv852O1pFR4kBbQQHdTI69MKYcVbsD6g==
+	t=1792636650;
+	b=cnJMEUboowI9QslXdEoMkkec+DtLDdmHtreUPNdznIHu0igDc5i6Ao5etIVU/889fipZ
+	 xNxBs4262GfhG272qkfOjZA3pLd7eK4+2hy6n09CfpkP11yjlL0Dl0tswyO1CQEhKZCiN
+	 EGBuoPA0xrI3Os9P+Ek4ol4kyYw1QrnYox3tJAGUSFN0F5/rH7JPM0b+ZZ9SpRlcOYhIe
+	 QlPisIG8VBtNhjafiYVLoyEZABiMkY7kiJgIBwIxKH1fprcLVb8Ou3P08cbhNzMiUyukq
+	 52b+yEAhB+rDsoabzCl/tbiL8YRzjyMlodIy00lt25mLbO+0B6qHH9EUKVS7v+OKfQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792635828;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=mBLFTHurzlOVyM6uH/HHo/O74KxQ81dFv20NSPnPgsE=;
-	b=VcxICI6IGlaqPC0dgCoEdPnzLCrhp9nFXld1rGsANVdMpkf9vIuBSRhHbe5Wvx1+x+jE
-	 VuZltqNPua2Il9eJV2zD2JkMpGGeQD4W9icwGuTtSGjPyFx6NMtonlXpxUP9/gPfipd0U
-	 NzlqUUHvmUfsuvs6vFzvG5UcjTvb+LNUBZs/ysPeqJrv/aUFZ1wSQ9NgMXLe77eInEigy
-	 sYGwN9OakjzpLGHLOVG79d4PXJWmdwriVe1mRInie7tjEbouXfa1TYT9ptWEf0xiE0hbL
-	 ZE5UFXfWNO8JTOwiD+8wRkPV7EmqDWBBITPIn8mKch5CWgP2YzTsodKmR5WrzATI55g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792636650;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=HE+3rCvUY47UpTl2ZHSutTG/UW4Ug8nC9fT+NbrJFCg=;
+	b=n/NWpDGy46gMnhYnu32a1RunZbnS/Rl33pROWHGeiLcK8fg6NIDc1u2cHlr8Z6a3jiqn
+	 eEBhPanQ2c9W/zpnrE4VS+FAhXTwiEv2S0eAGgSW90HGEWBLF9KHfag3ssW+1yvn4FiNz
+	 wySUAtNgQXZbdqNV6FVfyNnCpu46EzQNmkrmj1bBQCjw6xeRNPp9CfD8ihbKg7S2u6H2i
+	 ev6kr3C4w2u2fAmzq1bV8RIQRHK2t7TtKJlHS8YoUu3HoheaeTYMttZZ+qH5lt+y//xRD
+	 QN11udlCcS371tERsS6W0R8fX+mYqgK54jNCGmaJr9n1jMcwABL08kvaBun63qnMQbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q15zNXKK;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cwuehG8n;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E1A606A31A;
-	Thu, 22 Oct 2026 02:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087B3606A322;
+	Thu, 22 Oct 2026 02:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Q15zNXKK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D9D1F000C1;
-	Thu, 22 Oct 2026 02:23:46 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=cwuehG8n
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325D61F000C8;
+	Thu, 22 Oct 2026 02:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792635827;
-	bh=mBLFTHurzlOVyM6uH/HHo/O74KxQ81dFv20NSPnPgsE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Q15zNXKKzoqGf8aAZ5Pu3S3PrJGW0I6NP4zEdzaVJ3YREoUIdN7leXcVKZ9DnnQfH
-	 eRk8fLDOhhNB/3DyUYR2cfpwOF0o7BKb/Z59liUY/1fdQQRa+4ptJJr5g+5J39TlI5
-	 i7tKgkQcwBwdK9fike9k6Qp59yQ5qWcTVRGpLSPW0x2kdVyxkSvZl1CmvRMSiYTTmj
-	 d/EDpLB3WMoJHOvJDw/UiSROEimsHsNOc+8tjCEU5UN5Z1WgtUcceEyN3xPMzoH1dU
-	 q1suCFGadz+fcFEtwQYF2ZjRFYk8i1XTuZdB9E+PuKqUwgR3yI1tb8DNlPrUr1/sd0
-	 6OTs6rHF7br2g==
-Message-ID: <sashiko-outbox-180866@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 7/9] fork: Let the new task point to its mm
- before uprobes can find it
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, oleg@redhat.com, peterz@infradead.org, mhiramat@kernel.org, jolsa@kernel.org, akpm@linux-foundation.org, liam@infradead.org, ljs@kernel.org, surenb@google.com, david@kernel.org, vbabka@kernel.org, jannh@google.com, hughd@google.com, kees@kernel.org, mingo@redhat.com, tglx@kernel.org, x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20261022015712.1297331-8-alexei.starovoitov@gmail.com>
-References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
- <20261022015712.1297331-8-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 22 Oct 2026 02:23:45 +0000
+	s=k20260515; t=1792636649;
+	bh=HE+3rCvUY47UpTl2ZHSutTG/UW4Ug8nC9fT+NbrJFCg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=cwuehG8nqKWmnvGciE5SgD1NChwhoKyhe8hO/5bLbdtgMQSD9gOzOacuMpdSdcUXw
+	 w8RY7uwhgwnhYOHDDIvulKZjtAHPTeuuITqZtzmBlRY2JD+sbhBwI0uBFVDQ5+Hlxv
+	 2sb/ZKQ7jyOH+L43lzkRv01jGrVCAxdacxSDxKHmlcqMEIyhboUqNhp04IrfVjFaot
+	 DIdigI8sECfJpdoWEhpAScd6llt+gzcmHSDFYevbbmlV9ak5mDiR3CSo5SHQ7EZf6X
+	 M9/cVYgLYdQVyy85ZTZRBsZ/fhJCfVW9faFU8a9D2eZ+sN1clB+n9hekMS+tGoCTLF
+	 p7YS7HbM04O+w==
+Content-Type: multipart/mixed; boundary="===============7594496370134435936=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,112 +48,102 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <778cae554b4280123e66d54fd1a7a92759259acc26f80e41c8779fce9b268ac7@mail.kernel.org>
+In-Reply-To: <20261022015712.1297331-6-alexei.starovoitov@gmail.com>
+References: <20261022015712.1297331-6-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 5/9] uprobes: Don't sleep on mmap_lock under dup_mmap_sem
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,oleg@redhat.com,peterz@infradead.org,mhiramat@kernel.org,jolsa@kernel.org,akpm@linux-foundation.org,liam@infradead.org,ljs@kernel.org,surenb@google.com,david@kernel.org,vbabka@kernel.org,jannh@google.com,hughd@google.com,kees@kernel.org,mingo@redhat.com,tglx@kernel.org,x86@kernel.org,linux-trace-kernel@vger.kernel.org,linux-mm@kvack.org,linux-perf-users@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 22 Oct 2026 02:37:29 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] fork: clear p->mm under task_lock() before mmput() in bad_fork_cle=
-anup_mm
---
+--===============7594496370134435936==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit ec1e952207350f8b07e6038358df3fabd0496801
-Author: Alexei Starovoitov <ast@kernel.org>
+> uprobes: Don't sleep on mmap_lock under dup_mmap_sem
 
-fork: Let the new task point to its mm before uprobes can find it
+TL;DR: Question, possibly not a bug: uprobe_dup_mmap() edits oldmm page tables
+inside dup_mmap() before vma_start_write(), so it may race with per-VMA read
+lockers (page fault, MADV_DONTNEED); the review suspects it is safe.
 
-This commit sets tsk->mm under task_lock() at the end of dup_mmap() before
-uprobe_end_dup_mmap() releases dup_mmap_sem, so that uprobe filters on
-inherited perf events can match the child's mm. It also clears tsk->mm under
-task_lock() if dup_mm() fails after dup_mmap() succeeds.
+> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> --- a/kernel/events/uprobes.c
+> +++ b/kernel/events/uprobes.c
 
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 2e125623cdbc3..a1042e370bdb8 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -1537,7 +1537,7 @@ static struct mm_struct *dup_mm(struct task_struct =
-*tsk,
->  	if (!mm_init(mm, tsk))
->  		goto fail_nomem;
-> =20
-> -	err =3D dup_mmap(mm, oldmm);
-> +	err =3D dup_mmap(tsk, mm, oldmm);
->  	if (err)
->  		goto free_pt;
-> =20
-> @@ -1550,6 +1550,13 @@ static struct mm_struct *dup_mm(struct task_struct=
- *tsk,
->  	return mm;
-> =20
->  free_pt:
-> +	/*
-> +	 * dup_mmap() has set it if it succeeded. get_task_mm() must not find
-> +	 * it after the mmput() below.
-> +	 */
-> +	task_lock(tsk);
-> +	tsk->mm =3D NULL;
-> +	task_unlock(tsk);
->  	/* don't put binfmt in mmput, we haven't got module yet */
->  	mm->binfmt =3D NULL;
->  	mm_init_owner(mm, NULL);
+[ ... ]
 
-[Severity: High]
-dup_mm() clears tsk->mm under task_lock(tsk) before calling mmput(mm) so
-that get_task_mm() cannot find a freed mm when dup_mm() fails. However,
-what happens if copy_process() fails after copy_mm() has already succeeded?
+>  void uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm)
+>  {
+> +	struct uprobe_walk *walk;
+> +	struct map_info *info;
+> +
+> +	list_for_each_entry(walk, &uprobe_walks, list) {
+> +		/*
+> +		 * fork() that is being killed fails in copy_process().
+> +		 * There will be no child. Leave oldmm to the walk.
+> +		 */
+> +		if (fatal_signal_pending(current))
+> +			break;
+> +		for (info = walk->busy; info; info = info->next)
+> +			if (info->mm == oldmm)
+> +				register_one_mm(walk, info, true);
+> +	}
+> +
 
-In kernel/fork.c:copy_process(), perf_event_init_task() runs before
-copy_mm() and links inherited perf events (with event->hw.target =3D p) onto
-parent_event->child_list and uprobe filter->perf_events:
+A subsystem pattern flags this call as potentially concerning, so this may
+not be a bug.
 
-kernel/fork.c:copy_process() {
-	...
-	retval =3D perf_event_init_task(p, clone_flags);
-	if (retval)
-		goto bad_fork_sched_cancel_fork;
-	...
-	retval =3D copy_mm(clone_flags, p);
-	if (retval)
-		goto bad_fork_cleanup_signal;
+uprobe_dup_mmap() is called from dup_mmap() with mmap_write_lock_killable()
+held on oldmm, and before the copy loop reaches vma_start_write_killable()
+on each vma:
 
-If a later step in copy_process() fails (for example, copy_namespaces(),
-copy_io(), copy_thread(), alloc_pid(), cgroup_can_fork(), or
-fatal_signal_pending(current) after waiting in dup_userfaultfd_complete()),
-execution jumps to bad_fork_cleanup_mm:
+dup_mmap()
+    mmap_write_lock_killable(oldmm)
+    uprobe_dup_mmap(oldmm, mm)
+        register_one_mm(walk, info, true)
+            install_breakpoint() / remove_breakpoint()
+                set_swbp() / set_orig_insn()
+                    uprobe_write()
+                        get_user_pages_remote()
+                        folio_walk_start() + __uprobe_write()
+                        collapse_pte_mapped_thp()   (unregister path)
+                            try_collapse_pte_mapped_thp()
+                                pmdp_collapse_flush() + pte_free_defer()
+    ...
+    vma_start_write_killable(mpnt)
 
-bad_fork_cleanup_mm:
-	sched_cache_fork_cleanup(p);
-	if (p->mm) {
-		mm_clear_owner(p->mm, p);
-		mmput(p->mm);
-	}
-	...
-bad_fork_cleanup_security:
-	security_task_free(p);
-bad_fork_cleanup_audit:
-	audit_free(p);
-bad_fork_cleanup_perf:
-	perf_event_free_task(p);
+The guide for the VMA locking code says to report functions that hold
+mmap_write_lock and access page tables or PTE pages before calling
+vma_start_write(vma), because other threads of the forking process may
+still hold per-VMA read locks on the same vma, for example in a page fault
+or in MADV_DONTNEED with CONFIG_PT_RECLAIM.
 
-Here mmput(p->mm) drops the reference and frees the mm, but p->mm is left
-non-null while teardown continues through exit_fs(p), exit_files(p), and
-security_task_free(p) before perf_event_free_task(p) detaches the inherited
-events.
+Can uprobe_write() and collapse_pte_mapped_thp() run against oldmm here
+while another thread of the forking process holds a per-VMA read lock on
+the same vma?
 
-During this window, can a concurrent caller of get_task_mm(p) (such as
-perf_event_set_addr_filter() -> perf_event_for_each_child() ->
-perf_event_addr_filters_apply() in kernel/events/core.c) or bpf helpers like
-bpf_find_vma() and bpf_iter_task_vma_new() in kernel/bpf/task_iter.c (for
-instance from security_task_free(p)) observe the non-null p->mm under
-task_lock(p) and call mmget() on the already-freed mm_struct?
+For context, the existing register_for_each_vma() -> register_one_mm()
+walk already did this with only mmap_write_lock held.  What this patch adds
+is a second caller of that code inside dup_mmap(), which did no page table
+access on oldmm before vma_start_write().
 
-Similarly, when perf_event_free_task(p) -> uprobe_perf_close() runs (or a
-concurrent uprobe_perf_filter() runs), trace_uprobe_filter_remove() and
-__uprobe_perf_filter() in kernel/trace/trace_uprobe.c read
-event->hw.target->mm and compare that dangling pointer against active
-mm_structs.
+On the other side, uprobe_write() takes the page table lock through
+folio_walk_start() and retries when fw.page does not match the expected
+page, and try_collapse_pte_mapped_thp() re-checks pmd_same() under the
+locks before pmdp_collapse_flush().  khugepaged's retract_page_tables()
+also retracts page tables without mmap_lock at all.  So it may be that
+this access is safe without the per-VMA write lock.
 
-Should bad_fork_cleanup_mm in copy_process() also clear p->mm under
-task_lock(p) before calling mmput()?
+Could you confirm whether the vma_start_write() rule is meant to apply to
+the uprobe_write() path called from uprobe_dup_mmap()?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261022015712.1297=
-331-1-alexei.starovoitov@gmail.com?part=3D7
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39710454342
+--===============7594496370134435936==--
