@@ -1,57 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792664737;
-	b=F8N+0plVdoAkFXzKZjm6QnPValtQ3M5VS9V8IVywGyBeGC0UM4hN1tRXPUtsgYnkI44g
-	 6CNnRTAG0d9za2vqLfAqPQ2HZ73E/eMAra51R+OzsTb13YoqFnz/u1vgEbtm6T5VwHyVO
-	 vxEZiFnuQtH2OaGfMFYJUCR5xGtJmAaET69dbrWYU7J3oVA0K1+UkyCrOlU6ZR0BkbpRG
-	 X6yk6oAlJFGrYZ4fuLos2R/Vv1jmCAT8/keAypJdQPwLPo8lS1rf9jD0T+PffNfyZj6PZ
-	 i4SU+OpI8dYk+xeSMWJStf3uKviIbqM4Ya4z/9ekeGlKe+CASiN8uGYVP6RbFE2fiiA==
+	t=1792664854;
+	b=VNSWMupYYr27AdVsw4x4BTPI4ju6/xnn571sUJ/vfkAsLJaEdrRzE8hDSg14vAcWg1I7
+	 7C1n9EAvMIVU+N1UAkPexd+ur2cx8m2AKM9terW/B+n9T/gFsZUaBGF2YddT7oOpEBcBe
+	 eU13zvoTHJLZUrHveAaFuxpBR+sefKV73+i8dPAKrTkq/xCAVgSjeUYCotBoj+eUws7t6
+	 T3iwCyRWzlk3CWDZfgp9xTW2tPnsQkxyq17h7vtIKYhgHdDJkHBZ1No66I3XSZ8UTlgav
+	 LVYUQJoyUjENhUrm1W5IuYnSwhoXCGtDyh723ZfKUyzPh96UcdeiYeQcxeArHTLkfUQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792664737;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792664854;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=NDsI0V/DrB0oah071lr270oK5k2KUhctBjE7DETfs40=;
-	b=va3ltC9pRP/U0rrrH0anq9ci/sGfQ+YYJoQiZSWYyuHeYVt5Ga+CFYJSfVGnObkIRCRN
-	 7RNjAL9WJBFHahtqDHjFaxKpUjDlg57hQ2tvm2/8pfpsHSZvXXCvtCfj1PFt+Ud8NrIpx
-	 MLTgPSHx3qgCmWyrdh1/9I6YP78PdXBcrqZzfN1JT2i2QKT8wu5qphgx77wCoAxDQolVQ
-	 FWQFhcjGpOXYRm5gq5I4i4tSiyOOG0mJKIlYLIzh+Y0k6iOoOc0A5VxoILMtXLrPhNTLc
-	 Nkxb/PlDh3RLkyx0sPHRlWlCbD1rFMQ7P7WRl8i8UlBPPbFAfDZTsqjpamcwTG5QaWg==
+	bh=5i/bEbxuGcfxHFgBF33/3ognHBBD4uli9jC93OptmuQ=;
+	b=TSw4WgI9i60hA1p9vM40ocQS/kMlyGi8MQtFjT9zFSjOw7wofBPCsLJk9GMYbC6eesvH
+	 VJCB1/K1x5G0bTy2lBd4vyRhSqLqlH9Q8THJ7U3KHkmmTuUb9VGwq+mdBVR7+zwK+l6ct
+	 M9fpv+jJnLJyEcBwLzW+hCSmLobqnL8bKaSx91pK+XRof0y0iuCHpxab3XdzolatrhRBC
+	 Q474JU2Jns+Y/3fl9iI0xpxEJ2TegnjcSTnn9C41yFln93aWcaNQZPbMOLhpB/bAeYNdR
+	 lSPRsBXwJ/BuFlnt+mrEQKXIfT2+FWz8up5tXIFN2k4/0IVB8Wcr8au4wJEucCGWu4g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iQeZti5A;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=msyIHhIt;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE1A606A319;
-	Thu, 22 Oct 2026 10:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706B4606A32A;
+	Thu, 22 Oct 2026 10:27:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iQeZti5A
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BF01F000C1;
-	Thu, 22 Oct 2026 10:25:33 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=msyIHhIt
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE27D1F000C2;
+	Thu, 22 Oct 2026 10:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792664736;
-	bh=NDsI0V/DrB0oah071lr270oK5k2KUhctBjE7DETfs40=;
+	s=k20260515; t=1792664854;
+	bh=5i/bEbxuGcfxHFgBF33/3ognHBBD4uli9jC93OptmuQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iQeZti5A3LdIdAWPvUzMpxpmbMHI195SAFMfniFpmwTfM2Tdf2f2a5+3uRRnsMJco
-	 21chjCodtp6w6WFflNdaWUHSjRqg96YHecPIoDkSM+OnpdRdPn4Ea89ucr+YeihBTQ
-	 ZgXq0WLhbXPux6BGXVbIIWncwK702hzgm5s6kr2Qz3BTKhzx09DuWBkcb3lLKLtfBE
-	 COoHsjMoWDcUV8Gs4XXuGiBSXTRbXOhdrLW4ONiWs4DMdqE2sULTv67HyUaPY8+Rhg
-	 U90V0/SmTUz2sZdXd2QQ2e3PwIGLe/F3GIE/0SaWwa5uQojXaMZnode5rwkyC5EnOJ
-	 thTp8OZXHHKWA==
-Date: Thu, 22 Oct 2026 11:25:31 +0100
+	b=msyIHhItxYKTq5jN2FoTYszCQmBbsyMEdqNkkA32J/6maH5H4ZVWFZHljKJHN60uv
+	 poiaB6oeeUhom1gG63UWLiobxbTQJb1J2RhsigElHV+uyio8Prca260ioYuHGqhlke
+	 ucHRvG1j50mu7u72qrDcWfTG3+OY7O6mBFrITHF9gXXs/2PRtMgunqARusriUEpKLv
+	 E/JglBMz12mGed1hL+yePPEbEc9ZYdk8CnmWTZU3PbA+KVM/7Y6Dk7SxIOOw//l/Pv
+	 WT6aAYyNGtcBkMSV7KYWSUZwZvjijOs+SFQyK6aZGtvxyxTgGUW5Y9mtHgSEZvCcJs
+	 D0eq7s/O/0WxQ==
+Date: Thu, 22 Oct 2026 11:27:28 +0100
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jiri Olsa <jolsa@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
 	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, linux-mm@kvack.org, 
 	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
 	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
 	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [RFC bpf-next 3/9] mm: Expose locked mprotect operation
-Message-ID: <atnjEc2-6CuKjFzH@gremlin>
+Subject: Re: [RFC bpf-next 0/9] bpf: Add support to allocate user page
+Message-ID: <atnk5kjaeHLhbxVh@gremlin>
 References: <20261021195759.119421-1-jolsa@kernel.org>
- <20261021195759.119421-4-jolsa@kernel.org>
+ <DMAUMG9WL4X6.12UEJJMJSW54Z@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,96 +63,25 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261021195759.119421-4-jolsa@kernel.org>
+In-Reply-To: <DMAUMG9WL4X6.12UEJJMJSW54Z@gmail.com>
 
-On Wed, Oct 21, 2026 at 09:57:52PM +0200, Jiri Olsa wrote:
-> The bpf_user_page_exec() in following patch needs to change page
-> protections while holding current->mm's mmap write lock.
+On Wed, Oct 21, 2026 at 09:53:47PM +0000, Alexei Starovoitov wrote:
+> On Wed, Oct 21, 2026 at 12:57 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> > hi,
+> > we have few use cases where having the ability to allocate normal
+> > or executable user space memory would help (like to replace function
+> > in live process or change environment variables)
 >
-> Exposing the do_mprotect_pkey_locked helper for that.
+> I think it's better to do what debuggers do:
+> vm_mmap() with the final prot and
+> access_process_vm(FOLL_FORCE | FOLL_WRITE), like PTRACE_POKETEXT,
+> to fill it. It faults the pages in, writes into r-x private mapping
+> and copy_to_user_page() takes care of icache.
+> Then no need for bpf_user_page_exec(), do_mprotect_pkey_locked(),
+> the marker, READ_IMPLIES_EXEC special case, get_user_pages(), etc.
+> No mm changes.
 
-Err, we'll need some more justification than this for exposing internal mm
-logic to the rest of the kernel please.
-
-Note that you're already allowing any caller to bypass
-CONFIG_ARCH_HAS_PKEYS here which is immediately a broken thing.
-
->
-> Assisted-by: Codex:GPT-6
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-
-It's a no to this in its current form.
-
-> ---
->  include/linux/mm.h |  3 +++
->  mm/mprotect.c      | 20 +++++++++++++++-----
->  2 files changed, 18 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 63f40e615754..47e853093601 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3435,6 +3435,9 @@ extern long change_protection(struct mmu_gather *tlb,
->  extern int mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
->  	  struct vm_area_struct *vma, struct vm_area_struct **pprev,
->  	  unsigned long start, unsigned long end, vm_flags_t newflags);
-> +/* Caller must hold current->mm's mmap write lock. */
-> +int do_mprotect_pkey_locked(unsigned long start, size_t len,
-> +			    unsigned long prot, int pkey);
->
->  /*
->   * doesn't attempt to fault and will return short.
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 2888ee638d87..8d800830d3e1 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -868,8 +868,8 @@ mprotect_fixup(struct vma_iterator *vmi, struct mmu_gather *tlb,
->  /*
->   * pkey==-1 when doing a legacy mprotect()
->   */
-> -static int do_mprotect_pkey(unsigned long start, size_t len,
-> -		unsigned long prot, int pkey)
-> +int do_mprotect_pkey_locked(unsigned long start, size_t len,
-> +			    unsigned long prot, int pkey)
->  {
->  	unsigned long nstart, end, tmp, reqprot;
->  	struct vm_area_struct *vma, *prev;
-> @@ -899,8 +899,7 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
->
->  	reqprot = prot;
->
-> -	if (mmap_write_lock_killable(current->mm))
-> -		return -EINTR;
-> +	mmap_assert_write_locked(current->mm);
->
->  	/*
->  	 * If userspace did not allocate the pkey, do not let
-> @@ -1013,10 +1012,21 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
->  		error = -ENOMEM;
->
->  out:
-> -	mmap_write_unlock(current->mm);
->  	return error;
->  }
->
-> +static int do_mprotect_pkey(unsigned long start, size_t len,
-> +			    unsigned long prot, int pkey)
-> +{
-> +	int ret;
-> +
-> +	if (mmap_write_lock_killable(current->mm))
-> +		return -EINTR;
-> +	ret = do_mprotect_pkey_locked(start, len, prot, pkey);
-> +	mmap_write_unlock(current->mm);
-> +	return ret;
-> +}
-> +
->  SYSCALL_DEFINE3(mprotect, unsigned long, start, size_t, len,
->  		unsigned long, prot)
->  {
-> --
-> 2.54.0
->
+OK thanks that addresses my concerns :)
 
 --
 Cheers, Lorenzo
