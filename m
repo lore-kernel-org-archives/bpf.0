@@ -1,65 +1,66 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792656947;
-	b=U6RFlOc+Dds9ZDTk7L9n6VAB29dmJlQneMuqwJTU8SR5QSt1q2aOuhdTl7ft/HKfmR+F
-	 NfqJnnXreaRgOirl/YB4csFOF6AHX2jM7lQiQLJVAQ4r1CkqTd9aUzGCXXLf4SCHkxcZl
-	 tpo7SZ5tLH8nn1gQsdJIsEIFsiMx7lluFeqRq6V1ozPZMwo9nCkNSHYl17pr9ewH4U2JS
-	 pz2Lm+9WxrUzdjmFAlNznFxHqYYYlIhTfNqVG651O1Jct4RLAQLqQs0k3DJkL4vV5Z7m8
-	 M50TJ9bqUloV9CzQ8Ws0dCHfL9T+EdKIHK6TjWj1KN2Z9saDhVai/6FW3fdKBzE4K1A==
+	t=1792657518;
+	b=DexybkusxP+PFkb38gZE63aTjMYWIiaR+dNcvrYrEvXx6c/kvkso+es8B7Z+2ZwBDGGb
+	 73KwYqRXleDT58Me7KpKX5aqVhuHvx/XRRA6503juhEpuAcmaZM8wlcUvvkqGwLLN4kCP
+	 8QIxrUKCubd6joeUbd+dow3GD7T4wKOL3ECxj29flEwSFS6XDDzopWI2OIwmPDABe9ILu
+	 +NtC51XDUxxfLbJQth7/pLcMfVAmSAXDINkVIBQ6qXHk24p5GlsTp0V8DtmfTAbQsUtXc
+	 dYLWv03+UFVDGySGvf0dlcXM/5cRueqVhU2xKU7dAv9VoA356+G7ouaV8bE3Y6fgQTQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792656947;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792657518;
 	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:To:Cc:Subject:
 	 In-Reply-To:References:Date:Message-ID:MIME-Version:Content-Type;
-	bh=J5vbUlRNCs7S8y6HZc8htFWDT7aYGvGDyqB/FQ/diuk=;
-	b=p4MxzyNZ6DgbySuHTTO1eu2XZGLRVnnB8SJkgDqoIEtBud2c5tlP36PT8vie0AsbBOus
-	 HBhn6pXOKTbfbGT+zc2gOzJpBZWgfUfBgyMZmUFtLA9Urp8wff8PZHyiAapAnUCIqrGW5
-	 95ulpOuadivJ6Coqn+fAka6ltJJyR97JOc23oZ+FBurX89c8K36s6FsPfdfGQjcJc8n7F
-	 wy9O8+JhbxzmkCw5xGrJDrKk/R2zheA5juGXzLSixze7krzO+XN4x+OEiara3ey/PkC+H
-	 xRPrxsBbEa1sPvFd0pgwpUCVbMM8X7fLqESZYF4nvqxYIKEeQt36UXgE5SERK3Zpzbg==
+	bh=IdtW1rAGsIKxN6Wm0qAXHuMt9ue8GvhTyEgWLvkduZ0=;
+	b=MYGxvI1x8cepj1elnJJPEGSbOqc3fYNs4T2ttio+0H+ZHjLKvxYO3etV5hno5a3SJKv4
+	 1W1Anyw7rzC0XdS/6INVBVQQfvk1LVzX4CE/fbIBQ/KiUM0+KZe0YC9E2O102q1OgG0/6
+	 VcPzxzQ7eMKYDXHm2x7DioOpl+wvsKZUCrlOil10G5/it5ACpfJKvqUVcJEJeo4Egn1oO
+	 3tUgr6NpV5s65fTJVmig3ZohGzJUUxQMKAqhNQh5XjVpwbOE6VlGFuWxvbuzTkSt2vUd6
+	 ute+M94drtQniSGrVkMp5gGViUgbcRuWamUmmAgkl9NEa8egOSOfg8Dk4ff2bYklHIw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linutronix.de;
 	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pb3tIRh4;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=d6RpW0SI;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=KZKBtfkL;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=HHOqeu7g;
 	arc=none smtp.remote-ip=193.142.43.55
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8B1606A319;
-	Thu, 22 Oct 2026 08:15:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DE8B1606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D80606A319;
+	Thu, 22 Oct 2026 08:25:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B3D80606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=pb3tIRh4;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=d6RpW0SI
-From: John Ogness <john.ogness@linutronix.de>
+	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=KZKBtfkL;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=HHOqeu7g
+From: Nam Cao <namcao@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1792656943;
+	s=2020; t=1792657515;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=J5vbUlRNCs7S8y6HZc8htFWDT7aYGvGDyqB/FQ/diuk=;
-	b=pb3tIRh4qt//ziCyq6bXR09LSLhWXItxh/VvgzpKAy+noDQsJb8Zx2HRtFqr50N3q/9EPk
-	r3gdYLhKu0jKQM2O8e/iWuS5jTaRnZdpk4SgAoYZvVMiItDag6FXXBPHTikNa8It3qziud
-	1miGLbmdpTOOusdX63FgYBzjl43g+q1/sHOpzFnEUEXE8/bsrsP/TbJAzzatzVlBw81DXC
-	kMPSie8EkZ1VY68hVQbibJ0hckMAW0T7GsPf/bFi/etFyKokjglg4EzfKNoi4sDoTmjshO
-	baRQcTTAjYiu8DA0ezpK+v/7n7Y2GBX32sAmQEiWTmLkqsl2kfkG1fdq9ysJYg==
+	bh=IdtW1rAGsIKxN6Wm0qAXHuMt9ue8GvhTyEgWLvkduZ0=;
+	b=KZKBtfkLOohZWzF4oIYIRhvdb09VOKMPhLw2V8fDhpRHj3h9GnYQMpv0t293qqJqKRwesI
+	poOjDC6dfJ/O5p34g8bc4PnV3htPx95LK0LWkXwXie/8G+gvy4siPKGJfubiFgaq9J6U9w
+	gcpebuoexjQuyTcFnXnb19cVnUFpKQ6ay4CX4kILN1I97fjvvC1Xh0ZeMv+O/MIbELpwdn
+	3enNKb+SEJwwTdgctZJc8VjSa4/UBOANhfkm1mmAPmdN9W6xnZf+LYfqAYLg4PKe1o8RDe
+	nI7G8YmDmgyhVjsfrFFGy75F73uQcEPfcBSpTI/YqJgghv4Yj1IEmqOh2FTsng==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1792656943;
+	s=2020e; t=1792657515;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=J5vbUlRNCs7S8y6HZc8htFWDT7aYGvGDyqB/FQ/diuk=;
-	b=d6RpW0SIcYw3QOU8+HZa/z8hLhxYcGe+jyeP/DU772pZunn+T50KIaSSSZW2ZUOi4cUcNd
-	fFF0azj++viFPdAw==
-To: Gabriele Monaco <gmonaco@redhat.com>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Nam Cao <namcao@linutronix.de>, Tomas Glozar <tglozar@redhat.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Wen Yang <wen.yang@linux.dev>, Tobias Schaffner
- <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
+	bh=IdtW1rAGsIKxN6Wm0qAXHuMt9ue8GvhTyEgWLvkduZ0=;
+	b=HHOqeu7gLFukHBH/txj8Tw027E18BDEDbfJ71r0uSGIt2a11SNlupFhE0o+/vx1+iw1evk
+	eac6JX00Eb8FlUAg==
+To: Gabriele Monaco <gmonaco@redhat.com>, John Ogness
+ <john.ogness@linutronix.de>, Steven Rostedt <rostedt@goodmis.org>
+Cc: Tomas Glozar <tglozar@redhat.com>, Alexei Starovoitov
+ <alexei.starovoitov@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Wen Yang
+ <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>,
+ Viktor Malik <vmalik@redhat.com>
 Subject: Re: [PATCH v2 10/15] tools/rv: Add BPF monitors
 In-Reply-To: <f147fa9dfc553767ce92802b66723a85cf804e46.camel@redhat.com>
 References: <20261001152042.124445-1-gmonaco@redhat.com>
@@ -83,8 +84,8 @@ References: <20261001152042.124445-1-gmonaco@redhat.com>
  <fb5c20f226f723cbb4df5092462dfcf5f2686367.camel@redhat.com>
  <87h5ifvw3p.fsf@jogness.linutronix.de>
  <f147fa9dfc553767ce92802b66723a85cf804e46.camel@redhat.com>
-Date: Thu, 22 Oct 2026 10:21:42 +0206
-Message-ID: <874ieetakx.fsf@jogness.linutronix.de>
+Date: Thu, 22 Oct 2026 10:25:13 +0200
+Message-ID: <871p9ita52.fsf@yellow.woof>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,61 +97,46 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On 2026-10-22, Gabriele Monaco <gmonaco@redhat.com> wrote:
->> I am wondering if coexistence should be the goal. For example, the
->> monitor classes (DA, LTL, HTA) are only implemented in the kernel and
->> provide kfuncs for the state transition functions to be available to BPF
->> monitors. I would expect that this would allow BPF monitors to have the
->> full functionality as in-kernel monitors, since the events, errors, and
->> reactors would all trigger from the monitor class code.
->
+Gabriele Monaco <gmonaco@redhat.com> writes:
 > Well, this would be yet another hybrid requiring BPF monitors registration in
 > the kernel like I proposed in the RFC [1], which was the main point of
 > contention (that fully shared reactors and sysfs interface, by the way).
-
-I think there is a difference, because the registration could be via
-kfunc interface rather than requiring kernel patches. Similarly, the
-kernel is able to load drivers that it does not know about it advance.
-
-> For this I would argue, though, that such monitors would be BPF just
-> on paper, we wouldn't be able to use many advantages BPF provides
-> (e.g. BPF maps).
-
-It seems to me that your main motivation of BPF is to move the
-RV-machinery into BPF. For example, moving include/rv/ltl_monitor.h into
-BPF. But that code should not require the flexibility that BPF
-offers. It is the monitors themselves that I think benefit from BPF. For
-example, kernel/trace/rv/monitors/wakeup/wakeup.c
-
-I do not understand why you would call it BPF on paper, when the
-semantics of the states and transitions is all coded in BPF. Everything
-that makes two monitors using the same monitor class different from each
-other. Only the generic state machine (with its tracepoints for events
-and errors) and calling of reactors is in the kernel.
-
+>
+> For this I would argue, though, that such monitors would be BPF just on paper,
+> we wouldn't be able to use many advantages BPF provides (e.g. BPF maps).
+>
 > The current implementation already shares the header with in-kernel monitors, so
-> the actual logic is shared.
-
-When you say "shared" you really mean "copied". If it was "shared" (in
-the kernel) then the whole tracepoint/reactor topic would nearly solve
-itself.
-
+> the actual logic is shared. What isn't shared is the storage type and some glue
+> around it.
+> I used BPF maps because they offer some nice flexibility especially around per-
+> task and per-obj monitors. On top of using more battle tested code.
+> I would like to keep that.
+>
 > Besides, we'd need to be extra careful on controlling the callers. Right now
 > handlers are static, so it's easier to make sure no rogue caller messes up with
 > monitoring.
+>
+> What else definitely isn't shared, which is the main point of this whole
+> conversation, is trace events.
+> Those could be kfuncs. And no matter what you do, BPF monitors will need to
+> share the trace events (unlike in-kernel that have separate events per monitor).
+>
+> In short, I don't think this would be easy to achieve and wouldn't earn us that
+> much. (Plus I'd lose the hardly earned Alexei's blessing ;) )
+>
+> What do you think?
 
-That problem is orthogonal. But I expect kfunc flags, capabilities,
-and/or signed BPF objects will be the direction to take.
+What about we refactor the in-kernel monitors' trace events into a
+single one. I am picturing two functions for ALL classes and ALL
+monitors:
 
-The reason for my suggestion of a "true" hybrid approach is because I
-feel like you were trying to completely relocate RV to BPF, and now due
-to the tracepoint/reactor requirements, we're trying to find some hacks
-to somehow make it work good enough.
+    void rv_error(const char *monitor_name, const char *message);
+    void rv_event(const char *monitor_name, const char *message);
 
-I was suggesting to take a step back and consider an approach where
-there are in-kernel pieces to leverage the benefits of in-kernel
-(generic state machine, tracepoints, reactors) and BPF pieces to
-leverage the benefits of BPF (freedom to define the semantics of states
-and transitions for any domain-specific monitor).
+which trigger the tracepoints. And we make those kfuncs. This allows
+sharing trace events between in-kernel monitors and BPF monitors.
 
-John
+Then everything else (kernel reactors, users, perhaps even eBPF reactors
+in the future) hook into those tracepoints.
+
+Nam
