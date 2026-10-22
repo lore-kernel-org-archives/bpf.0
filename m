@@ -1,65 +1,64 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792652506;
-	b=CczeTQm1I3CJ2yQYOfbGPCjT5vM7NvBWba8sre2To/wCkGTsiXHB95G034RfBHYmDLn7
-	 EisAh5aUqDijL32PGhSZmG5CL1HH034uMFC6QtcNcR+c5vZPcaR9QphkxLb47x791p4Zq
-	 3bJXPSoK2BWAId2gusoNDlg7RRUbIaxlisxPUqPYhpUIXmGivUp1xJDZM4mqXmtEQo/sU
-	 xhwCuYCuhWjVdOW4jOJ+c1o6qh5id41a71yb6FWkOMZHV5qaEOmoXZlZrRHllsv0OvsaN
-	 j0VtQgdPv59GvCcVwKm4p6+N6FdBqrlXo4GDLACIjfhHWveI2iqy0TLXQ6UYX2DKNSg==
+	t=1792652505;
+	b=PtlPqe2rNxPx4q4rzvUg8uhXg3uJXcXO779i7H0iKBL/4lntWK6Dk51E+EzKfOYOZzcf
+	 9/HLybPsbycnbYNlaBmAfGxKIARpf+FoBcVp87LxtfTlCAZnSqYQb8KH07aX5TbEN6Md0
+	 EytCADbS8424tw3GYR5C1VHrm9l2z2WuG7xj6zw1Bcd+oPShlcrPayjLSLW4KGUwiN635
+	 XXLMXQ8ot8DLKp9nF4aW1tD4j7eHO2aj1j2uLwgSSuyvSCXkuxYri+ugAaB7/mi+DnU96
+	 lh+1d15NkEKUGpPllyIriWM0xSGJbu6P1xhydAC3IdpgpYgpdnX9hdRIpVvVZUp0xRg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792652506;
-	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:Date:Subject:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	 References:In-Reply-To:To:Cc:X-Developer-Signature:X-Developer-Key;
-	bh=sCvs1/SP9Or5kUcquJYMmgtgDpHHNPbARp5a+KoBLQA=;
-	b=3OB5bUItwDmc77vnnMO3ilURTLHFMATMyMLWeL32g/ZV6gHIN6RS8ADCru1IO3taH0gC
-	 4oWtBoW8399M8CNg8A25VcZDo5dRdb74geWp7/kw0Vy5R4Bv9kjSd5dNpLxqWNxU9v0Ub
-	 cw5XT6FDllXfCk39G8uL5U5ixVYEYY1sq1jI2oZcMsadq5HyMKKE+tSVZUZPQlVWE1ifJ
-	 DtjCrXh+igTFG94kvs3ac05KA1u98QjeDkpOpsXWOBCa8tyAs/FJld4JK9nrYzVfOKguT
-	 fd0JGQiH5LZZdl/otAsHovxCxLM2ZeKmId7wJKQ8GSdBF6BnBrnaX4RV5++QAL9X7Zg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792652505;
+	h=DMARC-Filter:From:DKIM-Signature:DKIM-Signature:Subject:Date:
+	 Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Developer-Signature:
+	 X-Developer-Key;
+	bh=yl5Q0Yhg+88xllrX1kMC1NiLLtnuA2INxcGfBrE9LpI=;
+	b=nVQN69lV1itx7thWf2xl0w6xklIWs48X7oYiDYEYJAt0Qd/deGgCzVUDWtwCxfqiGlaG
+	 CchSWeI9q6B+/7cxFHdshCZcI1K0n7AHTZxv7YXlS6/p8M76NBYHBbSLYUvtXpbQ1KLeT
+	 ktUqLkQQXsMpQ5vlt8H1nJHPnkJAxE23FqgOWFrgA2yGsWqkE7eXF8G5MUhrcpv7/sRwY
+	 aRT9EY4qcE6Yqzqf2huBPePxAuZIQw5E0LLx31HT7kvVZNImjjB+tAGX/rsbWokOiRWfM
+	 6vqmNs+YSSRTRvTH+CZD923A4IC42nC+boZDKUKtRIfabmweG+0U3mv3/RbS7Svuk9w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linutronix.de;
 	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=tFVIKvpR;
-	dkim=temperror header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b="KoNL7y/D";
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=dbA+IJmf;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=qa9LZRM6;
 	arc=none smtp.remote-ip=193.142.43.55
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2C7606A31B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E20F606A319;
 	Thu, 22 Oct 2026 07:01:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E2C7606A31B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E20F606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=tFVIKvpR;
-	dkim=temperror header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=KoNL7y/D
+	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=dbA+IJmf;
+	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=qa9LZRM6
 From: Kurt Kanzenbach <kurt@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1792652502;
+	s=2020; t=1792652501;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sCvs1/SP9Or5kUcquJYMmgtgDpHHNPbARp5a+KoBLQA=;
-	b=tFVIKvpRFJp3wOUXQX6Kwgc0ZrJ6vaf9TqGEBeqjAOVQAZ2i1GmhX4SUabMswbvsFre4Ld
-	MR0/mdKLFXZGl5Xn4wRTkbeDAzgg+RRlQy965PrTQn7ni/eBcWtwHYoC6CDxgj6PrPidpY
-	MZdwWd9/uHQA3Rgb9jMxpq+pODUriiUfQVVUiVtj+LK8CcESBTRxTM33nBBNgWx/7PSuQS
-	qyLhnlTXR7dtwBzBlCh2nzo3dQy8b+KfVeDOZ/6M/li/e3Mfpc+fa/6ULIyQI4Dpxof0Kq
-	0qaDOJ52BB8n1433jKEvkeS7WhAmO89zPZ+CQTz2URVY0l70aSbhlHKyr+xv9w==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yl5Q0Yhg+88xllrX1kMC1NiLLtnuA2INxcGfBrE9LpI=;
+	b=dbA+IJmf4k/suoYUrdFptKfzRxSbhEQ7jZiVFdAZ6TrwiDGUw/zysfnHprKtLDoICu+cqD
+	QDWSNiooTP7H5zHoTzA70qVJqnNxH6qviwSQNJtQY2rLGr7S+do91ST07Jg/pHYar0NyBj
+	23BEz/BeroANW/o3lEENWh4+KAEW0v63NPL7PAY0SY0IKdolkDB9A6/nQ42oyJZCs1l814
+	7dlh1dFFW5doJyRWY5x6VajgmcH1PMJR969bEsowy2ffj/h6pQtiZWz7LSOlipczZgVgmr
+	T0Js6QFB2s1gjTiiqr+qrIi+awuIvziaNfNioRNB88zGE8w6rKxwoVeb+u0LZQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1792652502;
+	s=2020e; t=1792652501;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sCvs1/SP9Or5kUcquJYMmgtgDpHHNPbARp5a+KoBLQA=;
-	b=KoNL7y/Dmw5u0J6gOeG2fEpDl+lZoFl8ySlSm1oTMlfWTfOAZ/7RJiQsSRxp+LuPvc42oJ
-	SPEpRzuebnfEabBA==
-Date: Thu, 22 Oct 2026 09:01:34 +0200
-Subject: [PATCH net-next v4 1/2] net: stmmac: Disable NAPI before stopping
- Tx queues in stmmac_xdp_release()
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yl5Q0Yhg+88xllrX1kMC1NiLLtnuA2INxcGfBrE9LpI=;
+	b=qa9LZRM6NfQ+MtC/BIOnd6FjneUzpjrFH4DtdbEfuigupMVXcShC/XHmcHLoyn+yJZmVc5
+	1c9R5IhTdN9JcECw==
+Subject: [PATCH net-next v4 0/2] net: stmmac: Fix XSK crashes on stm32mp2
+Date: Thu, 22 Oct 2026 09:01:33 +0200
+Message-Id: <20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96@linutronix.de>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -71,9 +70,12 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261022-stmmac_xsk_crashes-v4-1-15c0c750bb96@linutronix.de>
-References: <20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96@linutronix.de>
-In-Reply-To: <20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAM602WoC/23PwWrDMAwG4FcpPs9DcmyX7rT3GKM4rrx4W5xhu
+ SEj5N3nZKWMkYtASPp+NAumHInF02EWmcbIcUi10Q8H4TuX3kjGS+2FAmXhhFpy6XvnzxN/nH1
+ 23BFLBHc8BovatUbUw69MIU4b+iISFZloKuL1d8LX9p18Wc11t4tchvy95Y+4XdyizF7UiBIko
+ TamCT7U+vwZ07XkIcXp8UJbyKjuDALsM6oy2noLvnVWK9xjmj8MNrtMUxkDwdf/T+CC+s8sy/I
+ DJI/I+GIBAAA=
+X-Change-ID: 20260914-stmmac_xsk_crashes-10a77f614ab5
 To: Maxime Chevallier <maxime.chevallier@bootlin.com>, 
  Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
@@ -93,88 +95,72 @@ Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>,
  linux-stm32@st-md-mailman.stormreply.com, 
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
  Kurt Kanzenbach <kurt@linutronix.de>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2497; i=kurt@linutronix.de;
- h=from:subject:message-id; bh=OCa+em1H5J5wWafzD28gkNIjAwMCgeaJcWpy7TC3QkE=;
- b=owEBbQKS/ZANAwAKAcGT0fKqRnOCAcsmYgBq2bTUeVH21Hx1P3muZy32DL2GnrrXQTEnZuAeP
- tE6dL3oiI6JAjMEAAEKAB0WIQS8ub+yyMN909/bWZLBk9HyqkZzggUCatm01AAKCRDBk9HyqkZz
- gl+uD/9ixxcXpdcbbYW2t/aWk7A+IHI8onqg8MPMTrA9oTTxrevRAhmOj8+4oXQfSSw+EIQBWLe
- foEtvIE1toLsFo0ZPOAW5UfG6lF/GFvEVuFsUoV4zjpL8insByxC+At62DANpTXKXYjikd2Rjqz
- fyzfv075quf56G86L6LoPWxhrHyt5rjXbrzPiFqsC7H8qCNNQ6djxqc7EIflqhItXytUOpTHNRe
- IRlE3AC21F5CmWXxmHO2lkgKkxJ6TfT64IYEjL7E7TpgjZ4ibUmgUwXOnhGM6eWMZiDbLbn+F5a
- 1xDFO3v+BN+/KiUkafhCNW8E56M8LX7EMNemwXidHHjYJEJBALCQXKjqj7s20x5b8HAwN2EP4ov
- euW+8ikPGlWQRzCZPc3G3ZTgLHVdkmpVTZcXz5CzfugTTY5H/vdiNf6ZuMEYrtiQWYdAfzqiBC0
- AIoBp6zmWgSDCu6AMKZnG704E+2vXNftEaAsQvtmgXvg5FL7Y1IRNlmIW8YEU/M4vIffOFMPlBY
- IuJ6qOTp1l9QLhrKHMgitsNyIpDkuLmMKEX5W3jCO7sWK4EzoVzBQrRkgwae/dLYFrzSaX8mY8k
- gRPX5RdwJq5EFqO/DtA+CqIsdf/g1nUMzAeHv7sgeVZ6MZLyWW5SyiiWgqaZOBK2lwD2mR/aK13
- Fn+9N7EklnmkQdA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1762; i=kurt@linutronix.de;
+ h=from:subject:message-id; bh=CKFc4YQcze+zKieJAJ02zDARwoapA5QsLlCRMkFAJKs=;
+ b=owEBbQKS/ZANAwAKAcGT0fKqRnOCAcsmYgBq2bTU0TnmPz9H28QeFJNjxPJy7hEvZVJVduAF8
+ frD8w3LjDqJAjMEAAEKAB0WIQS8ub+yyMN909/bWZLBk9HyqkZzggUCatm01AAKCRDBk9HyqkZz
+ gqs8D/9rsgS5BD242m5ZHhGynFavy7JQfGNQfvZ3z1nmCZlHSHejvOrfg9VAGHLluF5QRYGdMFi
+ PQxC/pJSTTx6/zSz6KGftJn3qcF5/WkgJcrVv/thIiUJ+m2ISMerEo1cMSMlwvty3vVe7oJRGbm
+ LHPg1dmpcNveiC84UEzwNR5zXS3Z8O4470wGb8xLmhwjm43peFl+9BP6fB231GUB5ziiryJfP/o
+ ShKvGaafWmD720C3xxO5to3TH6Wa6MZI1ZNm24IsoV5pBrozo1vazD7poYtzRBQxPtSDmFvF4O+
+ q71OgXu5AfB6MCOpwO12nNMwDlkeMX7CqPx+cGN6cGgPd0HsSXJq1MZXPNyBKTXD4riNBlhBaAE
+ pQz1YsKxxpx9ZNjFnWtsqz6s/qGAykH16wmH8QX2znKkifInbcu4PiJvuSArqArvde8PFNjy4g4
+ y3pUSIBM/j5ZGleWKW+RGFxIjzSFMYtoW5WzwE9wdI3MYwVPgrjleYaMv9K8oFuOy/EBa2zEgD/
+ dILFswFrE0iOL80LKZVf3PlLe/QKcTLo1OOozzdczDXJfQR3elt993JICMT1XNHjj+U99XPswBl
+ 49uma5Gb1G5BCuKihUCLsFFl1kGkFkZc3W0oDT0VRQxn2iAcNpfOn+qrtytx78vMZe81kQw1+zH
+ hEEgvslF6u/md7w==
 X-Developer-Key: i=kurt@linutronix.de; a=openpgp;
  fpr=BCB9BFB2C8C37DD3DFDB5992C193D1F2AA467382
 
-Attaching an XDP program while Tx traffic is running results in kernel
-crashes in stmmac_xmit() -> dwmac4_set_addr().
+Hi,
 
-Loading an XDP program tears down and reallocates all DMA resources via
-stmmac_xdp_release() and stmmac_xdp_open(). stmmac_xdp_release() stops
-the Tx queues before disabling NAPI:
+while looking at the TBS thingy [1], I've noticed kernel crashes. That
+happens when opening or closing an AF_XDP/ZC socket while parallel Tx
+traffic is going on.
 
- stmmac_xdp_release:
-   netif_tx_disable
-   stmmac_disable_all_queues
-   ...
-   free_dma_desc_resources
+So far, I see two issues:
 
-A Tx NAPI poll may still be in flight at that point. stmmac_tx_clean()
-takes the Tx queue lock, reaps completed descriptors and wakes the queue
-again when it observes it stopped with enough descriptors available.
-Nothing stops the queue afterwards, so the Tx path resumes while
-free_dma_desc_resources() releases the descriptor rings underneath it.
+ - Patch #1: stmmac_xdp_release() seems to have the teardown order wrong
+ - Patch #2: stmmac_xdp_(en|dis)able_pool() does not stop the Tx queue
+   at all
 
-On non-coherent platforms dma_free_coherent() tears down the vmalloc
-mapping of the descriptors, so the subsequent stmmac_xmit() faults on an
-unmapped address instead of corrupting memory silently.
+The kernel crashes can be reproduced instantly on the stm32mp2 like this:
 
-Disable NAPI first and stop the Tx queues afterwards, which is the order
-already used by __stmmac_release().
+ - Run iperf3
+ - Run application which opens an AF_XDP/ZC socket
 
-The issue can be easily reproduced by:
+[1] - https://lore.kernel.org/all/20260812-stm32mp2_txtime-v1-1-f9e2462cc85d@linutronix.de/
 
- 1. Run iperf
- 2. Run application which opens an AF_XDP/ZC socket
-
-Assisted-by: LLM
-Fixes: 77711683a504 ("net: stmmac: ensure tx function is not running in stmmac_xdp_release()")
-Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
-Tested-by: Nicolai Buchwitz <nb@tipi-net.de> # stm32mp215
 Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes in v4:
+- Rebase to net-next (Jakub)
+- Add tags (Nicolai)
+- Link to v3: https://patch.msgid.link/20261013-stmmac_xsk_crashes-v3-0-50fca7790af2@linutronix.de
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index fb53b1f17714..27c4a249e560 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7222,15 +7222,15 @@ void stmmac_xdp_release(struct net_device *dev)
- 	struct stmmac_priv *priv = netdev_priv(dev);
- 	u8 chan;
- 
--	/* Ensure tx function is not running */
--	netif_tx_disable(dev);
--
- 	/* Disable NAPI process */
- 	stmmac_disable_all_queues(priv);
- 
- 	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
- 		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
- 
-+	/* Ensure tx function is not running */
-+	netif_tx_disable(dev);
-+
- 	/* Free the IRQ lines */
- 	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
- 
+Changes in v3:
+- Remove txq_trans_cond_update() (Maciej)
+- Add queue stop check for XDP TX etc. (Nicolai)
+- Add tags (Nicolai and Maxime)
+- Link to v2: https://patch.msgid.link/20261005-stmmac_xsk_crashes-v2-0-46c60cba6421@linutronix.de
 
--- 
-2.47.3
+Changes in v2:
+- Remove RFC. No comments.
+- Link to v1: https://patch.msgid.link/20260915-stmmac_xsk_crashes-v1-0-e14553fcf553@linutronix.de
+
+---
+Kurt Kanzenbach (2):
+      net: stmmac: Disable NAPI before stopping Tx queues in stmmac_xdp_release()
+      net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
+
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 10 +++++++---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c  | 13 +++++++++++++
+ 2 files changed, 20 insertions(+), 3 deletions(-)
+---
+base-commit: f71ff7d406523748bfb8236830c7eaa6a308aaa1
+change-id: 20260914-stmmac_xsk_crashes-10a77f614ab5
+
+Best regards,
+--  
+Kurt Kanzenbach <kurt@linutronix.de>
 
