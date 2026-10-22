@@ -1,55 +1,73 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.152.16
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792700750;
-	b=qlMbvxLurgN/EyOGnpI0nWqrHYTqloV53sdXM17atBJA780TUetwdrSh4jV00BL/8Mwa
-	 B/HmYP2yrYGgtUYUs3ttBI1r9Dw/G1OhMnoHob64cWa9R8iXvWnrOWpdCD62CwtDfJS2u
-	 g0/7BTuZWVQUY9RLZp6sMgPnWjXKTPqQAK9j3MfV7qrJuDG4kFKkO/70wIVNv1z3yiCqb
-	 3Er9CwvjNmPKD++SyEiIg+3NBkprpz/oL+h4+EXLWcZXD08skCHTK2NsVElbhUCjgBQrW
-	 mjTnkewNNSeRoB0V4RJficO9s2FQoh//+2zH7zKWWjcfbvAM1GsPhtfm+9ZUVuvaPrg==
+	t=1792708351;
+	b=uRj+KekEFzZkFbDrV8Rsr0kF0fRql8EUrERhihdE3q3HKGymtO/tEH93TEI9rDvuTrXR
+	 +w7TfW2A+IXcAnclOcqiyrNdYFJjKycqxg24lFa9ZgjP+c2GYSnTjOV+r887yTm83IELH
+	 zS+wvgChf8VR3Th3zjhPJRkPxfmn7V7+3kKTo2ZCvUrRCg1fB8SfSVl1YlzNIaYS0OMXe
+	 SIKw3x3a6z9H/7xtYb9CqcTgsb47oj9+XyVTTZrgC1B9w9KQIKYZECrltRF8RUy8WMmNg
+	 jtsHAHzHpCZ06rq1eleR4Il74J4qGV2wNbOS8CSiJW2NcYRGqUlClmCNJGBqzPWIYnA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792700750;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
-	b=IkGWQrenxz9YaKisx5AOISX8OYTFS4dzlQuAewGGj6LhovLppxzTuptCeSCtdzCPJ2J0
-	 52neKcY2WTDu85NgMNakA7YkRxblITC8BEln323gcIefO+r3MH5tNv4a7mJtIACNupz1C
-	 kCbmM4swCT2JDDSCczt1fkc33UofDH5l0Uu4ZMrt5Cs/Yv1kxR7FrEOO0agOqb6fXplEH
-	 n0uRXR9IXZXnwOXzuuUyCm/DM8rLE6MC6BoFBcYIWXmsTp4IfPvQBSCbyGG95YaNyePzH
-	 KvZPCKbAmubXZW1B2Oawjq7wg9L1Isdww9si2qNPtAWyf/gS+u0sr2N8OLRrHgRGaiQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792708351;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
+	 X-ClientProxiedBy:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Authority-Analysis:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details;
+	bh=UJWPwNKtGiCZj1X2hJ2nZgMG1fzERRtv7qWYjsCeSYU=;
+	b=qts4qA1M6oFghFQcgPNO/VCNQpr61yDNiLB0+4QfWyrZl4CfJiydQeoKGW508FabKmei
+	 wsw9+FRf8/A6OvZcw2klYHR9e/Ds4eXCWark6IzjfosdwqRvgK4qohm07bTO7C2gBV+/P
+	 mSj6KsvwIw3RV6dq8Beb/lWrVJE1eoWIHpgl8DYJ7/2VE332DN0l4MXy/5UWPVEaLg0zi
+	 X49EKyC7oS3HI5BWEjCnhMDHOSQ0ieTNaE64jdqZUl4JxMO1orLxTkYo9UnPJFPiCIcEI
+	 XruGiFoy525GuHlU4KmwqEOsiX1W83u4zHnz9JdP3ZPeElQ/2EJUdh1xw74N+Q4CFzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=crowdstrike.com;
+	spf=pass smtp.mailfrom=crowdstrike.com;
+	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=GBSURbed;
+	arc=none smtp.remote-ip=148.163.152.16
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5986606A323
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD70606A31D
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 22:32:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2FD70606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RLMS0l8S
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8679F1F031E1
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 20:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792700749;
-	bh=ux1UTnRjOyGqJzOYM5Hv6XVTNeyYxnuotg3pXhf5HHs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=RLMS0l8SrlVSlB+xSKm6w6FYJ1BVIP2OUvpbyz9MikbM20bH8i83IdqYLHnzS4qj9
-	 vo6B8FxfAsRueY9WSJTqmuWYCQSQkIN60PxS1EOjtlPkF8g30tel+vLlAPnohHXmRv
-	 /Vbi1+UaOcDgUZ0i0fi6x/na8nusRwiADaFX9FXU32HXstuRnUFimv6wlTGqn34WfD
-	 QMfTzkYILeeei8YsWI50/UKTnIXVBnU/aSI39gffsIi6/ScqbVu8/ubBXYIWQU9gCd
-	 GSwDnvTkIbRy4NYjw2TbXlJoApzGgMFRPZgGDgCAPArwrn6dScfyWS8TCD77ysDeE5
-	 19uIGvmDPyrRA==
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-14394530ec6so221905c88.1
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 13:25:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxA8gXXR5eQKZX+7TF89F+/bOAsEQ1Y0JMdFTUxw95L78LmvK7sjNYxL0fbkM55add5Z3U=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLEs8T1nCDKSMiNMGecdzsLYqO/2qpFQsINWuSOag5wHf34+C/k
-	mHcEC0RgBb4BfWZjRTNo0iv6BNPyDLmSXzZPbOQ1mbwK1VvJib69zKtf9wi02XUQa4HHCIdrYYl
-	aczjCaups/hgZaQQZ5pp0ckw6y0+wUPE=
-X-Received: by 2002:a05:7022:1707:b0:166:9e0d:3b56 with SMTP id
- a92af1059eb24-1959a382fb4mr475195c88.38.1792700748990; Thu, 22 Oct 2026
- 13:25:48 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=GBSURbed
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69MHN7Sc3008702;
+	Thu, 22 Oct 2026 22:32:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=UJWPwNKtGiCZj1X2hJ2nZgMG1fzERRtv7qWYjsCeSYU=; b=GBSU
+	RbedXiG6Fp3rAIsQPG6iWFjpBr/ys6w4RfNJDOw2fouYs0tRSiP4AizhSv8SwKKW
+	SBRgMbinineJefuPbCtRFJ8ysCZGf8p91ehyA77g7SkDs3vLhPSoyBVRMBB59jmD
+	Db6512Y0RztVOWN03YfAtbqz0ZfiBhMo6Cp3zUBqclrBfT73k4dkiqc6n7yb1QpA
+	vwDyblgV6JA8zSHMANLBagAjnujK6CeYthsu1NXqj+90+8yyEQIypq4qNIIZ0nvX
+	e7qMEwTcL7ueU3lq36NiCFGCyLwEvHHgxd9n05FuB37O+fGZwTowTILrXPcr5PMF
+	grS5LfswYIt7PEZ96A==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4hf97mvktg-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 22 Oct 2026 22:32:16 +0000 (GMT)
+Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.53; Thu, 22 Oct 2026 22:32:15 +0000
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+To: <bpf@vger.kernel.org>, <andrii@kernel.org>
+CC: <ast@kernel.org>, <martin.kelly@crowdstrike.com>,
+        <slava.imameev@crowdstrike.com>
+Subject: [PATCH bpf-next v7 1/7] libbpf: Reject gen_loader set after PREPARE step.
+Date: Thu, 22 Oct 2026 18:32:06 -0400
+Message-ID: <20261022223212.1217849-2-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261022223212.1217849-1-andrey.grodzovsky@crowdstrike.com>
+References: <20261022223212.1217849-1-andrey.grodzovsky@crowdstrike.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,93 +77,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
- <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
- <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org> <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
-In-Reply-To: <DM4PR12MB61369D00ED2FCFEDAE0E4597DE652@DM4PR12MB6136.namprd12.prod.outlook.com>
-From: Fan Wu <wufan@kernel.org>
-Date: Thu, 22 Oct 2026 13:25:36 -0700
-X-Gmail-Original-Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
-X-Gm-Features: AclHuK-w0c1onI8im_hxrE8Vj8Tb7-7Hy-SNC8hLk4Qv6iomWwee3Oh6ZTdAJrg
-Message-ID: <CAKtyLkF3mVu8AXWybMGr3+=0F4OMndcV=M-2m-PGz5afE4H1cw@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
-To: Manuel Huber <manuelh@nvidia.com>
-Cc: Fan Wu <wufan@kernel.org>, David Howells <dhowells@redhat.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, 
-	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH015.crowdstrike.sys (10.100.11.67) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Proofpoint-ORIG-GUID: J_aZ_9apN9fXIXLgoyaMD0PrHclFyWEF
+X-Proofpoint-GUID: J_aZ_9apN9fXIXLgoyaMD0PrHclFyWEF
+X-Authority-Analysis: v=2.4 cv=CMW/zhrD c=1 sm=1 tr=0 ts=6ada8ef0 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=VwQbUJbxAAAA:8
+ a=pl6vuDidAAAA:8 a=JR1emnCqaZKiK-aq2YQA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIyMDA4OSBTYWx0ZWRfXy6bOfkTqV5Dx
+ PqrPa3ACDX99YC1v2IKXa4Et0AHGjtc1UOCFDzr4vJZxswuOo32jayK85jJpyBXtdV0Il3n+z+O
+ gokzyeiwQGlBIlv+Lk3YQ0xRHOCvJvzWzuMwPhOzAUV+fC1JD/csn2d4SXC8AS95NMZoGjXXdS5
+ MzrwsiW2Sqexy7mO6LxWQbZCNyNrKi7Zx37k7VoPeSr1d1eG86KqziEEan2knT28jNqXHpJxYYH
+ C3pREAdNz/+NhEG3DaumjbHeP+CLfSMcykl0MKdDAjo7n14NiYHAXHvLCZNP8NeamLDCZp3vlJ/
+ Sx0ecwfod5haPTUAEI2bhmcHczEETVLOCWDmfgLvYJhpkYSzYdBhjkmRnzez0xn72LAgyYUfhg8
+ 9k8Bcb8MeWoUMOwVOPKc4i8Y2G8q4i5m5FGI/gK9k+f6BmU59WaWlY12zSyy6TYDf9FXWHdI5KB
+ qa6hmFIoKJFDT7zqoig==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIyMDA4OSBTYWx0ZWRfX4VHGTPeRk5AI
+ 4A9W+UEn48F1Iu0ef2Ce1YF8RR5doYIgI/VU+Vl1Pzcxpfo0BFfUqUaL2L1NI67HGdHE27159eB
+ Lf6C/QPfQ1VDHGlr8RUOE3hUOHbee5iQ7m4PNirwXxxidgIrH63y
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11943
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
+ malwarescore=0 spamscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610220089
 
-On Thu, Oct 22, 2026 at 11:02=E2=80=AFAM Manuel Huber <manuelh@nvidia.com> =
-wrote:
->
-> On Mon, Oct 19, 2026 at 04:15:57PM -0700, Fan Wu wrote:
-> > You might need to explain why the existing keyrings, i.e.
-> > builtin/secondary/platform cannot be used in your scenario. Like the
-> > firmware is not trusted?
->
-> As touched upon in [1], the scenario uses an ephemeral VM whose
-> IEP policy would be assembled after boot. There is a mix of explicitly
-> trusted dm-verity root hashes and possibly signed dm-verity layers
-> which can vary per VM, so the final IPE policy would not necessarily
-> be known ahead of time.
->
-> This specific scenario is Kata Containers on Kubernetes. Each
-> Kubernetes pod runs in a headless Kata VM with a static dm-verity
-> protected rootfs, while its container image layers are delivered
-> dynamically as dm-verity protected block devices. The kata-agent acts
-> as trusted bootstrap userspace and would author the IPE policy for that
-> particular guest before starting its workload containers.
->
-> The firmware is trusted in this scenario. A public policy-signing
-> certificate could be compiled into the builtin keyring or provisioned
-> through the platform or secondary keyrings. Because the policy would be
-> authored inside the guest, however, the corresponding private key would
-> also have to be shipped as a static artifact in the guest rootfs and
-> shared by every guest using that build.
->
-> Instead, the kata-agent would generate an ephemeral, per-guest
-> policy-signing key pair, provision its public certificate, sign the
-> policy, destroy the private key, and restrict the keyring before
-> allowing untrusted code to execute.
->
-> A dedicated .ipe keyring thus provides a purpose-specific runtime
-> provisioning path for this scenario. Once the certificate has been
-> added, the keyring can be restricted against further enrollment.
->
-> I envision other scenarios with similar characteristics may benefit from
-> a dedicated .ipe keyring as well.
->
-> I could elaborate more on this, e.g., on the how users' deployed
-> container images translate to dm-verity protected image layers etc.
-> (the erofs snapshotter is used and there is no filesystem sharing
-> between host and guest, image layer transport is realized via block
-> device attachment), but I am trying to keep this response brief. Some
-> more breadcrumbs on the combination of containerd, IPE, Kata can be
-> found in [2] and [3].
->
-> [1] https://lore.kernel.org/r/SJ1PR12MB61246B0BF58BC2B6F0A79D30DE9F2@SJ1P=
-R12MB6124.namprd12.prod.outlook.com
-> [2] https://github.com/containerd/containerd/issues/12081
-> [3] https://github.com/kata-containers/kata-containers/issues/10943
+It's wrong running the loader post prepare because
+gen_loader records the BTF load, map creation and extern/CO-RE
+relocation steps while the object is being prepared. If it is enabled
+after bpf_object__prepare(), those steps are never recorded.
 
-Thanks for the explanation. This clarifies a lot. Please include this
-context in the commit message and doc for v2.
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+---
+ tools/lib/bpf/libbpf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Also, one thing I missed earlier: before the policy verification call,
-please also check:
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8fcb8cf39cc0..6bb5887090cd 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10698,6 +10698,9 @@ int bpf_object__gen_loader(struct bpf_object *obj, struct gen_loader_opts *opts)
+ 		return libbpf_err(-EFAULT);
+ 	if (!OPTS_VALID(opts, gen_loader_opts))
+ 		return libbpf_err(-EINVAL);
++	if (obj->state >= OBJ_PREPARED)
++		return libbpf_err(-EINVAL);
++
+ 	gen = calloc(1, sizeof(*gen));
+ 	if (!gen)
+ 		return libbpf_err(-ENOMEM);
+-- 
+2.34.1
 
-ipe_keyring->restrict_link->check =3D=3D restrict_link_reject
-
-so we make sure the restriction function is the right one.
-
-Fan
