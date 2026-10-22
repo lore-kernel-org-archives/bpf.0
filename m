@@ -1,83 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792637852;
-	b=sVL/Y/DDTeZyXRqrvtjeDNp+bLb/DqOeLSuq12zAcG2qyiqu/+o3pAQSingJH3nDDmjI
-	 Ws9vBllHGweSPHwek+jISbgDBpdCAR29pOietdzBEkh6b+UpPcfkJYfviXQyJwUQwZVA/
-	 3V0sFNmzGNaNPqrTdy05DvxxpRM4PdZmyFkJrYtVLe+/EK+m2HWuLfXT3aflxOIy6UEpC
-	 oxIGOKzoq8Lj4GJk6S0x9bLUrOZ16hG0Ti/z7Y9bYJ60KMnCNC56543qKhSgfc8pbCYtV
-	 T7GI9oPOlvLIfoyzHTVsiGHlVLbAjR0UjyFaICaph0HM6SEMgQqcMKCa111JO8L2S6A==
+	t=1792639115;
+	b=1pz9+kDFrFqKTT61Ax/1T9r/NHvwwN+8ruHP+4AQXQNuX/BPujMfQDzVxTMdS/AZ/KHZ
+	 xlCdnIE+EdQ1IMlJWhek6xDVMBEltztxV5+1ngkZmlsNAIw3++G3IqI7T8Ukz8mD0BF5q
+	 aIBss72p2GYhZPG9VMxRvcafBcj2WNPKCHHLBv6U14MtqxaIOOtq+rrKZyh6+ENJDkelW
+	 BSpK07KwTcosLpr9U5QF9ENhqUzwsMEJFurIt/1962QkGpMW3o1SaGYlI6ct6f68ji77U
+	 jVugl+FoC34bQ+Fvob0nPbxeu8qP/V1C8+RkatnJTd6Hm8Hbb/FaZ2YqemvKO7l8otA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792637852;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792639115;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id:X-Mailer;
-	bh=jbCDllRU5wYbKPFOhnGrl1xB/avA24qTnso9VdtaQCs=;
-	b=iYS8TEUUcg2q6g+Km4jKePKZsRRgPG9YIlrJib3GP9gowvTcVx7EW8S8Mt/ALhZzP15L
-	 AaRv4q/Ie+DJsyr/PYUbWnO4T+ljglHOQI6EDyHhUSjtD5eHWo2yxEbN4/4iauEPOZy99
-	 rwU2DUzdqsXRcS9cc26ynx6TfmX+OMfpBokS9RdZyWWAyggePl/ElbuqNJ9bJrWv467o8
-	 poO8Pv5kNxc/g8Nkh+1sAsdlR1HB6JxzivyROhMaFO9j3N5a3pfB5yXewD1T60J+wqR0Z
-	 IUoyiQWKxW4MLCcR1CLFMStLC4ORwR7ICLGa1XhS9VCbD9//CLrw3j4ZAA6HOQ61MaA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=a6D5xQQ5xgzdVz3zr/f0pP7qJp5HwDVkL3hDOzlNwK4=;
+	b=Z3gOfl9/VxMH+kBLOrB8h/BsV37Dje4jWRrNGN3VR2+4jzuw2rQmwzbjmci5pCRZqO+5
+	 JwwHPaVUYTCh+WVoqavte537FeRIyTxgnSzlGwDls7v9neHnZ3buKUTcOHjwg83HzKIYE
+	 /4u7wbdV+2QJeBixqm/489RuXlKhxtJz1rfAPCXg+xufHLr7Rsg0sCPrmztR/zZZ5VZ3y
+	 /soDKMIcvmrc7JBijRuNh/y/ORPRm8T+8RP8I91yx99DWT9O9DTSmUuO97uTiQMxlD47E
+	 oDeyM5MJaoJNnW0qkgyXTUZbwo6xOJhOc3pPouD+/Bw7ghYLEPoM32qpIohakwwJzUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=gourry.net;
-	spf=pass smtp.mailfrom=gourry.net;
-	dkim=pass header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b="koa/V6Uj";
-	arc=none smtp.remote-ip=209.85.222.174
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AsJwjAOO;
+	arc=none smtp.remote-ip=209.85.214.181
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67EA8606A31B
-	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 02:57:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 67EA8606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C266606A31D
+	for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 03:18:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0C266606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gourry.net header.i=@gourry.net header.a=rsa-sha256 header.s=google header.b=koa/V6Uj
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-93e503815adso129495285a.1
-        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 19:57:31 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AsJwjAOO
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2e608cd460eso8565715ad.3
+        for <bpf@vger.kernel.org>; Wed, 21 Oct 2026 20:18:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1792637850; x=1793242650; darn=vger.kernel.org;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=jbCDllRU5wYbKPFOhnGrl1xB/avA24qTnso9VdtaQCs=;
-        b=koa/V6UjBswa4FuSyaK1aj7mCWWDpckd3P8cm34TWWyRP4wzh2NLGZFSH6Q4M4DXu3
-         qzvnXX9HeaVR6rcKzXOZbL4uzEnVmqZL+MMzzyWUGBG2X6ItbpmKYvjiIE7ZPOD6pDdX
-         PykgPTns0Qtfo8nduMQ1sHSyApXHEviCMbeUO00ZvHROPMI86Ykmx6SQl+abfVMyiKWf
-         CvkbnJxDfiv3XJxFjZ82pcIdZyeNVZqTP/ETC6T9H+76M973HmqPv2qbgfT+YBQjViJJ
-         TAOrklU+ENqV10WidZ/pbmFlwYkvtftj2K/YJxpRPZem9Bu3acDn5HeG7eCd8A/aUPfS
-         BT4g==
+        d=gmail.com; s=20251104; t=1792639114; x=1793243914; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=a6D5xQQ5xgzdVz3zr/f0pP7qJp5HwDVkL3hDOzlNwK4=;
+        b=AsJwjAOOHRgzlL1D2RSH3Gg4TIDJIApo88aNnw+ops/C71R7BWDARUKAAErQIsJdyn
+         k+/xy9sEgzldd+BeQlGIUtcpjnaKsqKGNuWuLkXhTKNqC+ritg6DtviQYPFNjOUTYmP5
+         f1EhjoWNljG6wWcG+8uMPOhl8by4rBhGMcpGPz7I6UfFNuT5k6tu3caNqVQmVT77LB8H
+         +lqM7KXt9N4uo96kCiuhvTjolkiKbKTrZk59HMnBwKefH8AXZaPlOw21mFnNBXfLaqsB
+         kOdSIcTqtslinU7xn62DtiOKUFFaO5Tl1jV3xqgBH5RfOCz3UxPobDvw90E7AAfMp6hD
+         mnww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792637850; x=1793242650;
-        h=message-id:date:references:in-reply-to:cc:to:from:subject
-         :content-transfer-encoding:content-type:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792639114; x=1793243914;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jbCDllRU5wYbKPFOhnGrl1xB/avA24qTnso9VdtaQCs=;
-        b=0jkRbBOL+G424xMWC4oAP+/tY3ILSFn8CKV2WEuMMBl/FABF3DAAV9pXB+7aNAfJnE
-         0iy+ww54emRkenZxZG8cGnuq0RXUYFNPHmF2s0S0sBo6qbz9CCvyME6yf/OHSW/84p6d
-         jzTLE/eZQS4hIh/UGqCNFhD5RCZvBWZAIL2Li5Gn1ReJuht/SA5r99CoYeZBV6li0d1j
-         Ur5gXBsBMw6gurkAdQaTYlhQ97TVesK9el2EHLjBi/D1KpFxdin38jPCmhF67tmIWTbm
-         5bjPKj1xc0Ge+YJAIy/7ZpX9mSUkHciNK53RQ9DgHt9Vjx6jsIhNacjCgRxOUY34/v9N
-         4zlA==
-X-Gm-Message-State: AFq9FYIsC0UjNsVf7BCHw8sFXTMmRVPBSAeFTsia5L+fU5n6Ee1DYQBD
-	BsIJV2+Huy/4I2OUJL3KuvPVfQ2SXHce5R0SQ7PLOHXoTUhDIG7+A8Vdm6MixfuG+o4=
-X-Gm-Gg: AYBFou2dB/hfUVqRJF0/MdXDRIPTWSqKYEURQ+iPS3N0BS/2iDFxFsCsp9+syHK4w3c
-	xgpGhbAh7c0Bg4SEAdDs/sirFtb9seIPaLtOwvjVmw0SzRPVoz5XAK7Cdfe3TODwyWko70l+0W3
-	CcXAs4aqZy86xlpcioSBuZz0t+45XfA31Wmy08IWdlGncw5K4exkjGdjwVm3zutozgH8XDh9Nx9
-	WdSCTrgUnXmXz8QRf6pTvByr6BgP2AoRxGJ7a1GHBnK1O3stHFZNoUUkzmLkoLll/c6cEnkPjly
-	Yw7k2CAUdn0+Wg/52XfP05Fq2mOqlksHbEqVKNv9vM+Qs6F/yNPtFh/iIy8X02yMOSCflEl+egM
-	Pws0Q+4Sxuz5Zowa3arXA2rXcGGfgAGY+xB6lpHGDY12AgnWValopD2cHjkYObbgJ9sit/kWnOz
-	lK6u7DK927qxecQTnZS3ZEcjD06tYCshpKaOWtmC0B1l6faJ81nR2SfMJqRsDh8JIy/cDN36cx8
-	sw8SPQ3Df0IpM6wgyU4txxPwIxvxuolAiyiUXpTFlKQZMUNYXW1jEuTu3kLc3T/A0fF1GN8uRT1
-	aWKV74eYS9BdLVTCmFTzw8t5iVM=
-X-Received: by 2002:a05:620a:2415:10b0:93f:5cc0:5978 with SMTP id af79cd13be357-93f5cc05b2cmr353949485a.37.1792637850409;
-        Wed, 21 Oct 2026 19:57:30 -0700 (PDT)
-Received: from [192.168.86.58] (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f56e30610sm406637385a.43.2026.10.21.19.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 19:57:28 -0700 (PDT)
+        bh=a6D5xQQ5xgzdVz3zr/f0pP7qJp5HwDVkL3hDOzlNwK4=;
+        b=EyIC96ZNTl33nXW9iiz0EuizVteAaQiO96nkKQ4ZgoHHx4ECrosfB8Ms0YLjm+zDfy
+         ziPgQkZmxdfzaekWAOw9ga7Su4GswDJrXKKoglKaT6Xd/rA1A2PUsL5wEhLi3eEE/wV/
+         +fS3sCuSnQrp4zZQyH56Tnk/4i/+FaTuDSe2vk0+ttZR7dFjLn7VZHWhsfkgmVELIhO1
+         bDM+m/iAhBkJCgdwGZm1nxhBsWSETmIn6hQbYWmVAw9FM5e9R60QrqxiueFvS7AkcI5k
+         GbquAAux2CEdRvna8odKzCOAWIgguHUW7LVmkRndBBWY89GaEl4h3Kb64sYOv0v3Yi1H
+         6YNg==
+X-Forwarded-Encrypted: i=1; AKwUvBx8MhZCDHvBe1IpKfhPUboXZsKUc1hDOcWQ3mc5wG2HXXw1IIdt/YTshzACKqa3wZd7IKc=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLvfEsfD0igeS7eSuv9uMdHapzzBVhuSpeUz01t4j07I9oaj0L6
+	r0UUqbRkv3ERwFJHEHVBBFiWgyoyD/Ky6noIPHdl/krORPXOws0Ayoru
+X-Gm-Gg: AYBFou1FMYWZ6I2oP0jHQFF+e2NOhisHkd8Dn78mRk/0mTnzGg2o0Zfh9aWRvrd/mtj
+	oW8w4u2ISlKDR0vTr32A15QZjkYPti94vJ6t9u2V/tJvwOerNudHwpizXP4adoCRdEguVy7mtA3
+	3SOh06hF3yaJMKKDZre1AEhRfUCVH+aqiYA3S0XeBZAqDCCJGL2nj8Hp8ba5TcMHrs+0LV/O6k/
+	DJ9lCFrraHx+mYTBk2QSuoEGMKf/EO8Pe2hw3JobNCWpE4VMX7HDet4TVHY6LxAI6sLv8eD+aSD
+	CbaBSRgayaWprtAqoQp/uIyYLgBxocvh1UeaQD2FZm84dcUlNJXHBeJUJiHDSaMjS02Wx5hMqd5
+	lmHsY4SrpY5tRLvciund/u2FeIh/fZAzz4Oh5kSLqAgukYVVtvSr4IXyVZxXLWd/dDraWpXgFjd
+	3tO4/eG7wdlrMsFvjLsqCG+dysAwgf/KxSSpxy8S3xZj8bPMV3UL+IgehpOORe+XoJrp9sUsIZC
+	DAkpH/lDJywruFXtAswKPiHiwsdl1ayHU/JcQIZ4xkfohCQsSZzQoIeos4lgUNAQdCcClzCwrd6
+	g+NcIPH0Suvyi9NuVyC2Q7x0h9Zo2XEXOaG30HdcbpGdOnjqSTS6rvmqVzb8
+X-Received: by 2002:a17:902:ecc9:b0:2e9:7719:40fe with SMTP id d9443c01a7336-2ea437b0c71mr32086145ad.2.1792639114110;
+        Wed, 21 Oct 2026 20:18:34 -0700 (PDT)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea3b4addfbsm17136755ad.74.2026.10.21.20.18.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2026 20:18:33 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 22 Oct 2026 03:18:32 +0000
+Message-Id: <DMB1J3GT728H.2KEOF9XKYSGEO@gmail.com>
+Cc: <torvalds@linux-foundation.org>, <bpf@vger.kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <linux-security-module@vger.kernel.org>,
+ <brauner@kernel.org>, <dwindsor@gmail.com>, <kpsingh@kernel.org>,
+ <matt@bobrowski.net>
+Subject: Re: [GIT PULL] BPF changes for 7.4
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Paul Moore" <paul@paul-moore.com>
+In-Reply-To: <CAHC9VhQz1aam-P+xh8CT=3V9fNtdrcFSZ6VEOWUGx1cKWV+WYQ@mail.gmail.com>
+References: <20261021210147.3450677-1-alexei.starovoitov@gmail.com> <CAHC9VhQGeZtDLKZ7iLYx-d1ua_CojCN03uSG25oVDqOm9GKFag@mail.gmail.com> <DMAVQ90EWW3Q.44GJKDHWOSFC@gmail.com> <CAHC9VhQz1aam-P+xh8CT=3V9fNtdrcFSZ6VEOWUGx1cKWV+WYQ@mail.gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,63 +103,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH bpf-next 3/9] uprobes/x86: Finish an unoptimization
- which failed half-way
-From: "Gregory Price (Meta)" <gourry@gourry.net>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
- eddyz87@gmail.com, memxor@gmail.com, oleg@redhat.com, peterz@infradead.org, 
- mhiramat@kernel.org, jolsa@kernel.org, akpm@linux-foundation.org, 
- liam@infradead.org, ljs@kernel.org, surenb@google.com, david@kernel.org, 
- vbabka@kernel.org, jannh@google.com, hughd@google.com, kees@kernel.org, 
- mingo@redhat.com, tglx@kernel.org, x86@kernel.org, 
- linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261022015712.1297331-4-alexei.starovoitov@gmail.com>
-References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
- <20261022015712.1297331-4-alexei.starovoitov@gmail.com>
-Date: Wed, 21 Oct 2026 22:57:26 -0400
-Message-Id: <179263784614.2549665.557126403507804820.b4-reply@b4>
-X-Mailer: b4 0.17-dev
 
-On 2026-10-22 01:57 +0000, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> int3_update_unoptimize() restores optimized nop10 in three writes:
-> 
->   48 8d 64 24 80 e8 d0 d1 d2 d3    lea -0x80(%rsp),%rsp; call tramp
->   cc 8d 64 24 80 e8 d0 d1 d2 d3    1. trap new entries
->   cc 2e 0f 1f 84 e8 d0 d1 d2 d3    2. restore bytes 1..4
->   66 2e 0f 1f 84 e8 d0 d1 d2 d3    3. restore byte 0
-> 
-> uprobe_write() can fail with -ENOMEM, or with -EINTR when the task is being
-> killed. When the 2nd write fails the result of the 1st one stays. Byte 0 is
-> a breakpoint and it works. But the next set_orig_insn() doesn't find lea in
-> byte 0, takes it for a plain breakpoint and restores one byte:
-> 
->   66 8d 64 24 80 e8 d0 d1 d2 d3    lea -0x80(%rsp),%sp; call tramp
-> 
-> Nothing recognizes these bytes anymore. The process keeps the call into
-> uprobe trampoline, which can be unmapped already.
-> 
-> Teach is_optimized() to recognize the half-way state, and let the 1st write
-> of int3_update_unoptimize() skip what is already done.
-> 
-> The failure wasn't reproduced, but the state can be made by hand. Attach to
-> nop10, call it to get it optimized, write 0xcc over byte 0, detach.
-> 
-> "uprobes: Don't sleep on mmap_lock under dup_mmap_sem" needs this. There
-> fork() removes the breakpoint from its mm. When fork() is killed in
-> the middle register_for_each_vma() removes it for the second time.
-> 
-> Fixes: 554ba38456da ("uprobes/x86: Move optimized uprobe from nop5 to nop10")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+On Wed, Oct 21, 2026 at 06:26 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> "... just as the maintenence of bpf_fs_funcs.c falls to the VFS." is
+> the rest of that sentence.  We're not asking for a type of
+> cross-subsystem relationship without precedent.
 
-This was a nice read.
+That file has a history.
 
-Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
+Nov 2023. Song added bpf_get_file_xattr() for BPF LSM progs to
+kernel/trace/bpf_trace.c:
+commit ac9c05e0e453 ("bpf: Add kfunc bpf_get_file_xattr")
 
--- 
-Gregory Price (Meta) <gourry@gourry.net>
+Mar 2024. Matt's v2 was adding more kfuncs for BPF LSM progs next to it.
+Christian replied:
+"Conditio sine qua non is that all such kfunc definitions must live in
+the respective file in fs/. They won't be hidden somewhere in
+kernel/bpf/."
+https://lore.kernel.org/bpf/20240306-zeitumstellung-darben-7857ca9817c0@brauner/
+
+Jul 2024. After discussions with Christian at LSFMMBPF Matt created
+fs/bpf_fs_kfuncs.c in v3:
+commit d08e2045ebf0 ("bpf: introduce new VFS based BPF kfuncs")
+Christian acked it and asked for more:
+"I also wouldn't mind follow-up patches that move the xattr bpf kfuncs
+under fs/ as well."
+https://lore.kernel.org/bpf/20240726-clown-geantwortet-eb29a17890c3@brauner/
+
+Aug 2024. Song moved bpf_get_file_xattr() there:
+commit fa4e5afa9758 ("bpf: Move bpf_get_file_xattr to fs/bpf_fs_kfuncs.c")
+"We are putting all fs kfuncs in fs/bpf_fs_kfuncs.c."
+
+Every xattr kfunc since then went there: bpf_get_dentry_xattr(),
+bpf_{set,remove}_dentry_xattr(), bpf_cgroup_read_xattr() from Song,
+bpf_sock_read_xattr() from Christian.
+David's v1 in April put the new one next to them.
+It cannot be in fs/ and in security/ at the same time.
+
+> One might question the placement of some of the other BPF kfuncs
+> located in bpf_fs_kfuncs.c as the file is conditionally built based on
+> CONFIG_BPF_LSM as opposed to CONFIG_BPF_SYSCALL or some other generic
+> BPF Kconfig knob, but there is no sense in worrying about that until
+> we settle this.
+
+Back in 2024 all kfuncs in that file were for BPF LSM progs. Matt's v2
+from Mar 2024 even called the set lsm_kfunc_set_ids. They moved to fs/
+anyway. Hence CONFIG_BPF_LSM.
+
+> The lsm_get_xattr_slot() function is intended for use by LSMs
+> (it's not an external LSM "hook") and the fact that the kfunc in
+> question calls into it (and not a single VFS function) is one of the
+> reasons why I'm arguing strongly that this is purely a LSM kfunc and
+> should be located in security/bpf_lsm_funcs.c.
+
+BPF LSM is in kernel/bpf/bpf_lsm.c since 2020 and includes lsm_hooks.h
+since then. bpf_bprm_opts_set(), bpf_ima_inode_hash(), bpf_ima_file_hash()
+helpers that only BPF LSM progs can call are there too.
+security/bpf/hooks.c is 43 lines that register it.
+
+I don't feel we will converge here.
+
+Linus,
+it's your call. If you think the kfunc should move I'll send a follow up.
+bpf progs don't see which file a kfunc is in, so there is no need to
+hold the pull request for that.
+imo xattrs are VFS territory.
