@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.166
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792794440;
-	b=lvWIEtDjkjeWJhwjX4mRNY3T/kQ2LluB1ApO9PG3q6Esh3mH4VatXPN/Fs3JIbx/Dfsd
-	 rWBC2RHPS6+xS4pqhF3U5JfZHLAmSqE8L+8AEY1JHL4Aw84AJcRxngUGeskOlG3npuZ5w
-	 cAJ0PcH4/DHwll1eOyef7OLyb1NuNIXr/YTp27G8CemM3tgSjWj9WC6B5WuEFdGYOcStK
-	 UatLPrA2CA/IcSP1icOuHtyhWh2lbTeDNzY5768F4xZI4Y1NJ5OCQ27SvJLr2KSzage8m
-	 qIPU5z4sihUBRZe7fUU/KIWYmajS04CqWVEARkG1IDRrjT7Mte4hAPV/wFsyHxq/2aw==
+	t=1792794447;
+	b=AoWczJyNx8w3vY097QbIIEOAqWeYYqvs7uqoTLUqD7G7Mu02Ttm/ipCSyWyizkh4nSIb
+	 cubyx/KbJFIQz4gC/b6O8D0x+g7onsNPmeEwzc6nrtYW69k+HGrSwDPsxLlaYm+AS+R67
+	 a7yHu4VYXnHqo9y/RJZMEkdfKoNR5+p7gmrlK6JfEyU47mfS8LGxf00hZcLRkhhKGGobp
+	 ktmWK3NBUWxFKfVDGESFEWS/SPUOAiHsefLLFB8jh+ti1QndRY2mog8sOWPW16gVpUIhC
+	 KRRB4/6vZlOlQokt8ppVKzGxeYh0JhwJf8KAiHErxNS5pemSJix+F0fCYJSseY7guoQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792794440;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792794447;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=F8QjwYYOERsVlx8wSfewFG1QNWj8XmS2pbah2E2XFhY=;
-	b=tKTkIpq23GR22CDQpEcqy+DwwVnq9mvgjLux1cjYu5rmY9X1XCVH5PEQVDF6kuHnaVTD
-	 9JjTjSAZEKmUh0WZJt9clwTeqYEyR40I3WJ4uLdxx+Us+SNKy8oowlLXb8rYIsTG/lXH4
-	 EHRQqYNAJZXYIhuWHQvYzI3kHI+U2FXndSkB+oNZ90s3/PP2E/1hwBL7HethOw6wSR+fX
-	 fYM9WbT1kzJCm4TVYV0iMtA0tgn+pOWOJRWgEsoaLKMfRoQfxEyYJaGTfO8oG/9t32Jdf
-	 nLGc46fiGDYBBgfW28Vb8ZxXAJuYZk2KOPYllaYaPt6Ym7pzocaqkf+/c6hDN8ljIvA==
+	bh=LFYL4E9LqM0EHpQKQmKEgdTpvOQQnQGSxzNySVSz7BE=;
+	b=jyNH1yfdUNEjVzHUdtXQ2ueWO323mDkTuC4JqMtqto/jFlFF7NPOgiW0rqMdJ0KNu9tm
+	 JVWxZQZjl8iS7dK7eVpygPViUsK+ZjeUGzMGBqn/Vx9qUJaAFIoV7MyINKss5LwiM9jQe
+	 AwqFwOTspT732Wm86CY8oHO2B2lAUxe/mitU0f6kmOVtuu4pu63v11l44sCRkO0KeZ02s
+	 OK+c9Lw8jGltVEegk4Pw92enhLpdpbpj3CRFyKV9GZUpgyy54whzfEwjOsJobjgAB0LUM
+	 HskU75BxQ1dbkxzJhNnOEi/e8Dr3+sqH1TPE4ysPjbv+HeykYEv3ElTCOj7sEuyXdSw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DuSPWZav;
-	arc=none smtp.remote-ip=91.218.175.166
-Received: from mta0.migadu.com (out-166.mta0.migadu.com [91.218.175.166])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="j2d/TxVd";
+	arc=none smtp.remote-ip=91.218.175.172
+Received: from mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A05606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:27:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49A05606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE49B606A31B
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:27:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE49B606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=DuSPWZav
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=j2d/TxVd
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=iqplr58JFPVVk7W6u+yMUpnlrUQcQiHYVwR1y12ovRs=;
+DKIM-Signature: a=rsa-sha256; bh=zyPqRdPYoD4kVIuDIZ26sgnfEPq9s+M9WKNd7HvJ3no=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792794437; v=1; x=1793399237;
- b=DuSPWZavIFpxc4rU53Sx91WP6w6EV57HrY+ImsZ9haYtB3O7dARh4zqU/ghkWgfN2vUZcXcI
- FDiDGpFD2nLI52MpEvQZzPpIY+wGyknfhrNADUO/LOoI6DLifEE2boP3UMPE5NXtr8Nu7PK5UjC
- cZofqG3D9N0ThMcCuiENwxWQ=
+ t=1792794444; v=1; x=1793399244;
+ b=j2d/TxVdmo45q7ClCPTWmUaA6bsgBQKELUEj/9mM0tLYyJSaoDM4JABBHKzYDisf7OWYEomM
+ 3suGRkhfHmAWoNFrNdhe1q6lo5fsQbUTDkm81rKIfQYF1xItwBkIpT5bxlnjbher+yRRpu43nZO
+ kYqm+o6wbC5A9yrSorZWlaAU=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id f7e2f564baada6d3;
-	Fri, 23 Oct 2026 22:27:16 +0000
-X-Mizu-Trace-ID: f7e2f564baada6d3
+Received: by mta10.migadu.com with ESMTPS id bf4000ac44c457d1;
+	Fri, 23 Oct 2026 22:27:24 +0000
+X-Mizu-Trace-ID: bf4000ac44c457d1
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v2 1/8] libbpf: Look up BTF strings without making BTF modifiable
-Date: Fri, 23 Oct 2026 15:26:45 -0700
-Message-ID: <20261023222652.3927736-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 2/8] selftests/bpf: Cover unknown BTF header-extension bytes in btf dump
+Date: Fri, 23 Oct 2026 15:26:46 -0700
+Message-ID: <20261023222652.3927736-3-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
 References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
@@ -79,121 +79,110 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-btf__find_str() needs a hash index of the string section, and gets one
-by making BTF modifiable. That copies types and strings out of the raw
-data, and fails with -EOPNOTSUPP on BTF with unknown extension bytes.
+libbpf can parse BTF with a header carrying unknown nonzero extension
+bytes, such as BTF from a newer kernel, but refuses to modify it.
 
-btf__add_str() and split btf__dedup() look up strings in the base BTF
-first. So adding a string to split BTF, or deduping it, makes the base
-modifiable as a side effect, and fails if the base comes from a newer
-kernel with new header fields.
+It is expected for a C dump of a BTF with extension bytes to match the
+dump of the same BTF without them, but there is no test for this.
 
-Build the string index without making BTF modifiable, and reuse it if
-BTF becomes modifiable later. The index can now exist on read-only
-BTF, so btf__free() frees it unconditionally.
+Add a test case to bpftool_btf_dump to cover it.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/lib/bpf/btf.c | 36 ++++++++++++++++++++++--------------
- 1 file changed, 22 insertions(+), 14 deletions(-)
+ .../bpf/prog_tests/bpftool_btf_dump.c         | 55 ++++++++++++++++---
+ 1 file changed, 48 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index d2ff6f5d6d5b..d8907281c0ef 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -153,9 +153,9 @@ struct btf {
- 	 */
- 	int start_str_off;
- 
--	/* only one of strs_data or strs_set can be non-NULL, depending on
--	 * whether BTF is in a modifiable state (strs_set is used) or not
--	 * (strs_data points inside raw_data)
-+	/* strs_data points inside raw_data until BTF becomes modifiable,
-+	 * then strings live in strs_set. Before that, strs_set may exist
-+	 * as a lookup index for btf__find_str().
- 	 */
- 	void *strs_data;
- 	/* a set of unique strings */
-@@ -1258,9 +1258,9 @@ void btf__free(struct btf *btf)
- 		 * which will be unconditionally freed below.
- 		 */
- 		free(btf->types_data);
--		strset__free(btf->strs_set);
- 		free(btf->layout);
- 	}
-+	strset__free(btf->strs_set);
- 	btf_free_raw_data(btf);
- 	free(btf->raw_data_swapped);
- 	free(btf->type_offs);
-@@ -2042,6 +2042,21 @@ static void btf_invalidate_raw_data(struct btf *btf)
- 	btf->named_start_id = 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+index 534aa79a4278..9104c059a315 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+@@ -109,17 +109,11 @@ static struct btf *mk_loc_btf(void)
+ 	return btf;
  }
  
-+static int btf_ensure_strs_set(struct btf *btf)
+-static int btf_to_tmpfile(const struct btf *btf, char *path)
++static int raw_to_tmpfile(const void *raw, __u32 sz, char *path)
+ {
+ 	ssize_t written;
+-	const void *raw;
+-	__u32 sz;
+ 	int fd;
+ 
+-	raw = btf__raw_data(btf, &sz);
+-	if (!ASSERT_OK_PTR(raw, "raw_data"))
+-		return -1;
+-
+ 	snprintf(path, PATH_MAX, "/tmp/bpftool_btf_dump.XXXXXX");
+ 	fd = mkstemp(path);
+ 	if (!ASSERT_OK_FD(fd, "mkstemp_btf"))
+@@ -135,6 +129,18 @@ static int btf_to_tmpfile(const struct btf *btf, char *path)
+ 	return 0;
+ }
+ 
++static int btf_to_tmpfile(const struct btf *btf, char *path)
 +{
-+	struct strset *set;
++	const void *raw;
++	__u32 sz;
 +
-+	if (btf->strs_set)
-+		return 0;
++	raw = btf__raw_data(btf, &sz);
++	if (!ASSERT_OK_PTR(raw, "raw_data"))
++		return -1;
 +
-+	set = strset__new(BTF_MAX_STR_OFFSET, btf->strs_data, btf->hdr.str_len);
-+	if (IS_ERR(set))
-+		return PTR_ERR(set);
-+
-+	btf->strs_set = set;
-+	return 0;
++	return raw_to_tmpfile(raw, sz, path);
 +}
 +
- /* Ensure BTF is ready to be modified (by splitting into a three memory
-  * regions for types, strings and layout. Also invalidate cached
-  * raw_data, if any.
-@@ -2049,7 +2064,6 @@ static void btf_invalidate_raw_data(struct btf *btf)
- static int btf_ensure_modifiable(struct btf *btf)
+ static char *dump_c(const char *btf_path, bool sorted)
  {
- 	void *types, *layout = NULL;
--	struct strset *set = NULL;
- 	int err = -ENOMEM;
+ 	char args[MAX_BPFTOOL_CMD_LEN];
+@@ -262,6 +268,39 @@ static void test_loc_dump(const char *btf_path)
+ 	free(dump);
+ }
  
- 	if (btf_is_modifiable(btf)) {
-@@ -2077,18 +2091,14 @@ static int btf_ensure_modifiable(struct btf *btf)
- 		       btf->hdr.layout_len);
- 	}
- 
--	/* build lookup index for all strings */
--	set = strset__new(BTF_MAX_STR_OFFSET, btf->strs_data, btf->hdr.str_len);
--	if (IS_ERR(set)) {
--		err = PTR_ERR(set);
-+	err = btf_ensure_strs_set(btf);
++static void test_hdr_extra(const struct btf *btf)
++{
++	const __u32 extra_sz = 4;
++	char path[PATH_MAX];
++	__u32 hdr_len, sz;
++	const void *raw;
++	char *ext;
++	int err;
++
++	raw = btf__raw_data(btf, &sz);
++	if (!ASSERT_OK_PTR(raw, "raw_data"))
++		return;
++
++	hdr_len = ((const struct btf_header *)raw)->hdr_len;
++
++	ext = calloc(1, sz + extra_sz);
++	if (!ASSERT_OK_PTR(ext, "alloc_ext"))
++		return;
++
++	memcpy(ext, raw, hdr_len);
++	ext[hdr_len] = 0xA5; /* any nonzero value */
++	memcpy(ext + hdr_len + extra_sz, raw + hdr_len, sz - hdr_len);
++	((struct btf_header *)ext)->hdr_len = hdr_len + extra_sz;
++
++	err = raw_to_tmpfile(ext, sz + extra_sz, path);
++	free(ext);
 +	if (err)
- 		goto err_out;
--	}
++		return;
++
++	test_dump(path, true);
++	unlink(path);
++}
++
+ void test_bpftool_btf_dump(void)
+ {
+ 	char path[PATH_MAX];
+@@ -278,6 +317,8 @@ void test_bpftool_btf_dump(void)
+ 		test_dump(path, true);
+ 	if (test__start_subtest("c_unsorted"))
+ 		test_dump(path, false);
++	if (test__start_subtest("hdr_extra"))
++		test_hdr_extra(btf);
+ 	unlink(path);
  
- 	/* only when everything was successful, update internal state */
- 	btf->types_data = types;
- 	btf->types_data_cap = btf->hdr.type_len;
- 	btf->strs_data = NULL;
--	btf->strs_set = set;
- 	if (layout)
- 		btf->layout = layout;
- 	/* if BTF was created from scratch, all strings are guaranteed to be
-@@ -2107,7 +2117,6 @@ static int btf_ensure_modifiable(struct btf *btf)
- 	return 0;
- 
- err_out:
--	strset__free(set);
- 	free(types);
- 	free(layout);
- 	return err;
-@@ -2130,8 +2139,7 @@ int btf__find_str(struct btf *btf, const char *s)
- 			return off;
- 	}
- 
--	/* BTF needs to be in a modifiable state to build string lookup index */
--	err = btf_ensure_modifiable(btf);
-+	err = btf_ensure_strs_set(btf);
- 	if (err)
- 		return libbpf_err(err);
- 
+ 	btf__free(btf);
 -- 
 2.56.0
 
