@@ -1,60 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.223
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792718688;
-	b=Gzqy+zxjSO2mezMLphWuP3ngk4nK6PFUWJr2QLencsAGWjyF062P9UEMLxiiIfwgPDb2
-	 4HxCvo0FSDyV3XvI9+cewbk84bV9JdHGUyCHqJMnlT1ZtMlA5H5eQmnbHo5FFR/szdHAZ
-	 zHml4nfhXdOEL8AUDLR6eZlKUKndVZ6wI6kC1cyAun7DaNa/WiJJJZUafES7ARN7pn1jn
-	 0kutKgI5XABkANWNoVWFd5yGGn/LtvPVbtXbn3ZE5NG25TvpDqERE+DtCJVpbUEZg1kIQ
-	 oGWj2gEIZ8LWCP6aqcFh6Amln9lXKiY+pvHVq7Z1C6Jxh1rg7gYsru/Vk/gWp+gR4Bw==
+	t=1792720954;
+	b=Hj3J5zRiW2W7QvgRpq2vGl6leKSSlJBKNVC78gOv1g1RAHOk0ZEE0MVnZTQ0ub2irjuS
+	 tle+bYx7jrrG9n6aBI78C5Z39QTe7+MY+/BJ1yjXSDie30RYd7Az654gjKNMKAFOmNPSc
+	 N4VPCHpu35Eev7pylhJbm7oXFAkVtBHuwcQNJ9uuDotqrcwfo9FuMprtzoOiQe5ioGwxk
+	 fQhEBnIwXf/J4zz3QwR4d5OWXJgXYVe4Qo3BMth/PbySJcX8m6mo5LnHAeE94pjcKvfcN
+	 KELD6DKxNOLcqGxprYSYSnAOBeQg3UejZVx1xxjdNEQWr1dARkWDf0B5giDU6pYLOJQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792718688;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=QfwiiMEIJLM6wtWCzdveJsVg3jUOpd7xifwJvw6jT6c=;
-	b=OPklP/18XdlscOgHI7ALnCxXAE1hMCCHh++ZLm5CldnQcnQGBOIdf6/1cdxOfTbdzsE8
-	 MFFqsUkfzmtv5Ko9A37m9xdjVGQYJMPlmBcEfxk/pL4BNrsn3Q43z1cbXNGoiDR8ZF+W8
-	 Xuw7WYkFiSgdylKx+x4hQ+nFL/Yc9O6M64PqigviZ12pwNzU6FfyMh+/GfuwPh6pAN6iN
-	 mgsUunm+CaYwAGzca+O3qsS22Ul5UGNwVFoYCXRpIBlMVt3iz/3o4pULd0YWcJCfOoPMp
-	 fUyEd+qPzE7J5utML2SO9vczQuG8ndFNNHBbrQY295uSzDo5yLGdzL99fHTFsZE2MUA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792720954;
+	h=DMARC-Filter:dkim-signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:To:CC:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+	bh=O0paVXdQ4B7tiVvakZnTvQOueqcpWaGjY3MAerZlPlA=;
+	b=Fievgw8xDNiQYuNaoswRHQoM11BaeEThqEdWKyXtJfIGfgMVaH1cB5mMh5QQFr2xTpfY
+	 JJv3/e1+tSTAwb4HlWBRZrDLQdmKyL92cb4AUYZwhASGoDqd3Hh8PTIJT3LqHxs7noltP
+	 GZzmU60k7p6tzH+TgJ1aLf7VAEPbqKFtgaVfqEb5FJSiCryeds4OVx+T+AIO6WkgBJlKD
+	 Dze5bgxXgrQXnWyvV5qwrUvKnYz+lZH2wzRb/oqMBIBXl+lqu+HcKOBkPKP85IljGumGP
+	 zRkxc9vFql9uyF617KLB2ObETjBsCsO99d3wjClNfHA/8PyJrVSpx9ziPZyOlnjRwyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZQSpi8UE;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=huawei.com;
+	spf=pass smtp.mailfrom=huawei.com;
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b="DmNtro/P";
+	arc=none smtp.remote-ip=113.46.200.223
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AC6606A319;
-	Fri, 23 Oct 2026 01:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99D9606A31B;
+	Fri, 23 Oct 2026 02:02:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A99D9606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZQSpi8UE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BAE81F01825;
-	Fri, 23 Oct 2026 01:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792718687;
-	bh=QfwiiMEIJLM6wtWCzdveJsVg3jUOpd7xifwJvw6jT6c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ZQSpi8UEwcsqoxxHVT+yb48q4b9dZZ0j0njxnfkUMKcSvlhmo6JNd3ndN19Ubbu/C
-	 fscbYwACtSeoXhplh0vPRdE7V+SZ8SBzp+mJlj5EvY7BbUawZjZWTNzH3ssQ3qaO+t
-	 0b4JoQoW80ib2f3Bs/NMT3ASfa8N+uqSf1J+yJK5O8I6eafnocI8k4McDiLi5E2a2j
-	 uloHDf+uXhuepSzQ6uNKaIj7kVTZFGFa/5nOAS9ke5JzlrwDttY9KcQmrF6RkCAEFE
-	 EAXScGwIJnyjEOBnfVgw6MFNws2W9QtG1+SEOeersyFXmQTcZX3UlfYmkcxoIDr+HE
-	 JukHHoNpAsOIA==
-Date: Thu, 22 Oct 2026 18:24:46 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
- <magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <pabeni@redhat.com>,
- <tushar.vyavahare@intel.com>, <kerneljasonxing@gmail.com>,
- <bjorn@kernel.org>
-Subject: Re: [PATCH v4 net-next 09/15] selftests: xsk: run one test case per
- xskxceiver invocation
-Message-ID: <20261022182446.64516c7f@kernel.org>
-In-Reply-To: <atovTlRGERDYjB4q@boxer>
-References: <20261016174338.787135-1-maciej.fijalkowski@intel.com>
-	<20261016174338.787135-10-maciej.fijalkowski@intel.com>
-	<20261021150145.65a22a61@kernel.org>
-	<atovTlRGERDYjB4q@boxer>
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=DmNtro/P
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=O0paVXdQ4B7tiVvakZnTvQOueqcpWaGjY3MAerZlPlA=;
+	b=DmNtro/PwoYvttzX/X03x6IAJNmcK1zSPVVafirZdz0CSpt/MuiqoGlZ+jCQQ5NVS596z7OCt
+	uLBVAoDPYtisv/9Tsqg6v7w/any3xI3Fq8SCf8Gtd66Up/bTrqn6doz0Wyk/43MeqD+qjx53Etf
+	qREZD3LRzZcH+BACbQE3bsI=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4j9mVn5VLGzmV7N;
+	Fri, 23 Oct 2026 10:02:25 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id C412640563;
+	Fri, 23 Oct 2026 10:02:28 +0800 (CST)
+Received: from [10.67.110.154] (10.67.110.154) by
+ kwepemf100007.china.huawei.com (7.202.181.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Fri, 23 Oct 2026 10:02:27 +0800
+Message-ID: <fe835795-7184-4c21-8020-07117c10ddef@huawei.com>
+Date: Fri, 23 Oct 2026 10:02:26 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,52 +62,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 4/7] bpf, riscv: JIT UHMUL and SHMUL on RV64
+To: Yazhou Tang <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, David Vernet <void@manifault.com>,
+	<bpf@ietf.org>
+CC: John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin
+ Monnet <qmo@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai
+	<xukuohai@huaweicloud.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+	<bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+	<will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Luke Nelson
+	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, Jonathan Corbet
+	<corbet@lwn.net>, <linux-doc@vger.kernel.org>, Yazhou Tang
+	<tangyazhou518@outlook.com>, Tianci Cao <ziye@zju.edu.cn>, Shenghao Yuan
+	<shenghaoyuan0928@163.com>
+References: <20261023-bpf-hmul-v3-0-b99e808cb28b@outlook.com>
+ <20261023-bpf-hmul-v3-4-b99e808cb28b@outlook.com>
+Content-Language: en-US
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20261023-bpf-hmul-v3-4-b99e808cb28b@outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-On Thu, 22 Oct 2026 17:44:14 +0200 Maciej Fijalkowski wrote:
-> > Really not loving the amount of "library" code added here.
-> > Do you need this just to run it over veth in net/ and over
-> > real HW in drivers/net/ ? Are the test cases very different?  
+
+
+On 2026/10/23 0:28, Yazhou Tang wrote:
+> From: Yazhou Tang <tangyazhou518@outlook.com>
 > 
-> Now that you bring this up, would be good to clarify expectations of this
-> work. The lib input is what veth and hw runners share to avoid code
-> repetition. The separation comes from a fact that we still want to cover
-> SKB and DRV modes (via veth at net/test_xsk.py) and ZC mode is covered by
-> drivers/net/hw/xsk.py.
+> On RV64, the RISC-V M extension provides MULHU and MULH instructions that
+> return the high 64 bits of an unsigned or signed 64-bit multiplication,
+> respectively.
 > 
-> My assumption was that would not hurt much to carry common code within lib
-> file. I might have been wrong tho.
-
-We should try to avoid pushing things into lib whenever possible.
-
-> > I wonder if we could solve this by parameterizing the env
-> > class to use veth instead of netdevsim and then have unified tests?  
+> Add the missing MULH encoder and use MULHU and MULH to lower the UHMUL and
+> SHMUL BPF_MUL variants for both register and immediate sources. Keep the
+> existing low-half and ALU32 multiplication lowering unchanged.
 > 
-> Tell me more regarding the unified tests. Is that okay'ish to run
-> veth-based tests from drivers/net/hw ? I thought it was not and I shared
-> my insights on similar work which does the same kind of migration
-> (xdp_features bpf->drivers/net/hw) and it seemed to be heavily veth
-> dedicated - the bpf sh runner was basically veth based, but so does the
-> xskxceiver and I moved away from this after Bjorn's input (turned out to
-> be a good thing).
+> Opt the RV64 JIT into HMUL support by returning true from
+> bpf_jit_supports_hmul().
+> 
+> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+> Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+> Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+> Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
+> Acked-by: Björn Töpel <bjorn@kernel.org>
+> ---
+>   arch/riscv/net/bpf_jit.h        |  5 +++++
+>   arch/riscv/net/bpf_jit_comp64.c | 23 ++++++++++++++++++++---
+>   2 files changed, 25 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+> index 5c4f53060c91..21a190a6a6d9 100644
+> --- a/arch/riscv/net/bpf_jit.h
+> +++ b/arch/riscv/net/bpf_jit.h
+> @@ -436,6 +436,11 @@ static inline u32 rv_mul(u8 rd, u8 rs1, u8 rs2)
+>   	return rv_r_insn(1, rs2, rs1, 0, rd, 0x33);
+>   }
+>   
+> +static inline u32 rv_mulh(u8 rd, u8 rs1, u8 rs2)
+> +{
+> +	return rv_r_insn(1, rs2, rs1, 1, rd, 0x33);
+> +}
+> +
+>   static inline u32 rv_mulhu(u8 rd, u8 rs1, u8 rs2)
+>   {
+>   	return rv_r_insn(1, rs2, rs1, 3, rd, 0x33);
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 788fcc21fd5b..371405598faa 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -197,6 +197,19 @@ static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
+>   		emit_addi(rd, rd, lower, ctx);
+>   }
+>   
+> +static void emit_mul(u8 rd, u8 rs, bool is64, s16 off,
+> +		     struct rv_jit_context *ctx)
+> +{
+> +	if (!is64)
+> +		emit(rv_mulw(rd, rd, rs), ctx);
+> +	else if (off == BPF_UHMUL)
+> +		emit(rv_mulhu(rd, rd, rs), ctx);
+> +	else if (off == BPF_SHMUL)
+> +		emit(rv_mulh(rd, rd, rs), ctx);
+> +	else
+> +		emit(rv_mul(rd, rd, rs), ctx);
+> +}
+> +
+>   static void __build_epilogue(bool is_tail_call, struct rv_jit_context *ctx)
+>   {
+>   	int stack_adjust = ctx->stack_size, store_offset = stack_adjust - 8;
+> @@ -1526,7 +1539,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   		break;
+>   	case BPF_ALU | BPF_MUL | BPF_X:
+>   	case BPF_ALU64 | BPF_MUL | BPF_X:
+> -		emit(is64 ? rv_mul(rd, rd, rs) : rv_mulw(rd, rd, rs), ctx);
+> +		emit_mul(rd, rs, is64, off, ctx);
+>   		if (!is64 && !aux->verifier_zext)
+>   			emit_zextw(rd, rd, ctx);
+>   		break;
+> @@ -1662,8 +1675,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   	case BPF_ALU | BPF_MUL | BPF_K:
+>   	case BPF_ALU64 | BPF_MUL | BPF_K:
+>   		emit_imm(RV_REG_T1, imm, ctx);
+> -		emit(is64 ? rv_mul(rd, rd, RV_REG_T1) :
+> -		     rv_mulw(rd, rd, RV_REG_T1), ctx);
+> +		emit_mul(rd, RV_REG_T1, is64, off, ctx);
+>   		if (!is64 && !aux->verifier_zext)
+>   			emit_zextw(rd, rd, ctx);
+>   		break;
+> @@ -2303,3 +2315,8 @@ bool bpf_jit_supports_callx(void)
+>   {
+>   	return true;
+>   }
+> +
+> +bool bpf_jit_supports_hmul(void)
+> +{
+> +	return true;
+> +}
+> 
 
-The other way around. We can add mixed HW and non-HW tests in
-drivers/net When run against non-HW we need to be careful to XFail
-instead of failing or Skipping, so that SW CI "is green".
-
-> each runner can have single ksft_run() call, right? So, do you think
-> separate files for veth and hw runners is still okay?
-
-SW and HW testing are done by separate executors. We'd have some
-trouble (read: we'd need extra wrapping) if we we needed multiple 
-envs for SW testing, but SW vs HW is easy. Executor will either
-run with no env exports and get the SW test, or it will be exporting
-$NETIF etc and test will run against $NETIF.
-
-> In veth runner I don't even instantiate NetDrvEpEnv as I have veth pair
-> being created 'manually', however having a param similar to existing
-> netdevsim one would be nice and xdp-features set could benefit from that
-> as well. 
-
-Yup!
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
+Tested-by: Pu Lehui <pulehui@huawei.com>
