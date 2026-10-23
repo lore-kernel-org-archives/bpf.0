@@ -1,92 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.224.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792770236;
-	b=gXHNYsEQG/FoVMvdila9HVO1ttxzXJ39btzvnqj+NvLu/etFNBsr444mKqyBZIQI4zE/
-	 4w1q1EMZgtQ1i75G4w+kfz3h7q361ur5rxaaz0RHc1pvUCEhGNwOK5Bh1mP/pmzX53sIX
-	 0GZClEXSea/vjVL/guT9Q1UAKUfnsccLV/2y21mQR+J2SMDMlU9CwMD/ECi3xpkhfyQsv
-	 l2imaFBHEs0hY4g1PuciDcsS9nY+V1ylZyngkdorfCCGgqUex+yIGjKQ/uX5CbZNu9E7a
-	 H2yL4CoiyKBfRD247sR3ciOVXFiIEXwNyKygLavPjizGl3IW0StphRwXnU9a+jwcrBg==
+	t=1792770543;
+	b=tuA4Rm4ynT4Z4uy1kesYwfjvQvGAefN7KOUtv3W0XprhrkmsAfPI49gNzf+KGZRR1baY
+	 GC9rNE56rbsuEAbfYfO33fEkktxiS3i+EpqqIYIJjlSeBlniVOMqx5zudT5hSOP55AEAV
+	 KGmbiXiaqhia4Nw+LiTaQI+dFSy3XDTabKHCzYBdet0p2jZJpZ4l9H2qI18azmA0jVRpK
+	 xMp/ysGwLKffjHp70xF8QQ/FLpL2mMI3G7WZmxm2zdMHW4ZGUYjYSlzYrJ/JCrGKwVCIa
+	 CjFSFvSSU02RAb1r48bPnRzMK0g+OM2A6npJlB1m1EOlIIPCAXRBj3fBZCgW5y8iKFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792770236;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792770543;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=wmrev9NkIy9R1ylq/ysJErXdhy8YhOPDELOqdlbYmtQ=;
-	b=muRlUsUamJ7vAizx6rgYe1o8vsV7TAJYNMiy6qwyrNytWIyOeNjiK/csxk43wCQkbKJq
-	 cvr4U30fjDlfJIX32Cd2QImlhEWkXc6SsYLOezGSHklAfcMGl1V4Na4Dlus2w19iBoT8/
-	 9VShG4FKnyKrjJmAeN4ttPOHXOGCIR8EBchS2IcQb6QdLJz1D91TRsPNboTJHYrOtiycW
-	 90g7eWpfBnfGRG7a7Hlpnhp2y+qbWnxsgiLvRJWNqDqhxlkAQnuhX8bq+fg3nltut213U
-	 wAdj67Itqupv2vcZ+37zZPlG3lmXKeDKAWZ/VgYhnSv02bpdsOLk46VmfurAF6tApZQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=60Xs15W9jQQ2oWcJEMPCLV3YnsgNH1/hIQ/HS3LOjiI=;
+	b=FrrTjs9pV2+aQbAtvDiN12OtyDdHdNGhB8Nf1AAo9xlSGaxJ2/49wna81tOP3cUJY+l2
+	 u5lZTtg+MtHKIgegGVqMfh+9khxziOuH2Fm4btnaLtFIQMSgKDujhHaELuCEZq39EvFjH
+	 +40HcJnZv/IuakZ+GjFRWxN5+I79NTWkqgPl4rjrogXfzkpyhb2b8Imc270n+DLzCSHEb
+	 GTPLCSG17L8yIsHgpu/PU6chOnvv8q5Kl7jZW8Z7CZdl5gsLAjsDnBpnkaM9uXoXQoa2G
+	 +mPPB49AXk+qyslGjQORTGzIHr+MfXJF5K6M0XBb1WTD64k3mwoku0AjgXJ+7K+JDhg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=nbRKrW+v;
-	arc=none smtp.remote-ip=74.125.224.52
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XGD6UvWX;
+	arc=none smtp.remote-ip=209.85.210.172
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4510C606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 15:43:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4510C606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53D4606A336
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 15:49:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A53D4606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=nbRKrW+v
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-679a2b5fe87so1010318d50.3
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 08:43:56 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XGD6UvWX
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8a070781f63so501583b3a.1
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 08:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792770235; x=1793375035; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792770542; x=1793375342; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=wmrev9NkIy9R1ylq/ysJErXdhy8YhOPDELOqdlbYmtQ=;
-        b=nbRKrW+vEd07S0Z92afqbHaYljzCeQuEYIfi8YU/RjH2Hqzsru8AgC/9NX/VqYHueA
-         vrPsuk8HXf8OBxBAge4TXdiojPigx0HWOwuH+OKF+pGWv8HigwbqedH+rbddhKGWu3nK
-         4ehIZnJaeLwU2mgs0heT1n7YgWDy1IFD2GyvT0tNqm8L9zmUsV8mi3xSfj9JUm7OLRXx
-         jFsLeLPgcSicKW2WMHOwcPXa+Pn5sD2bm+in0snPMpYylLn7t+mVIV8cuWgtbop9/HnY
-         sfEsMnQ9KE2Bmj3rJhPZaBBTykaypz+hG2FWA/dcOOuPojD6T5IuJlmIG6PNDC3KUW2P
-         H7bw==
+        bh=60Xs15W9jQQ2oWcJEMPCLV3YnsgNH1/hIQ/HS3LOjiI=;
+        b=XGD6UvWXxifq9S1XOEE05GyMGXg4B3IUDQzD7to/TAOkeLd4rCov112YIO2g9IHwaY
+         9Ppbqaa3EDp0qaDBTjWj0qDxFK//F3JPLHhCqNCvguu8rDs1PZd0zHB8vzenMBwaDoW/
+         X3jaVLUB7R6JK9l++9xRNnvjI+T9yn1QyYBD1K4pJRgfUMfBNmmtm4OnqRrYTr+Pwzhg
+         Wrk9g4gymtEF5SQMBbQP8pa2KkCw/oExRPtb0lfaa6G3EW9Md/5JMR5FtM4RmHzFR8jL
+         HJr7VIIKlb+E/h3qjD1YKqkjyXmzZ3pPf111/3DhzTSc61SGNLqC41n8Uxq4W0LIWd4w
+         34dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792770235; x=1793375035;
+        d=1e100.net; s=20260707; t=1792770542; x=1793375342;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=wmrev9NkIy9R1ylq/ysJErXdhy8YhOPDELOqdlbYmtQ=;
-        b=pOSDZvOygagPhDQJ7SvnpK7AbsVmdtHz+9X7XXxAmmmEgtwmD1YSHALUx5JtHv8Gq8
-         H4dED32aQVb6GBuO6PEdsLsDiIFcjqyC90E2K71sIYonfAmL4BwgQELvWY4tKgEWGV4t
-         CZ7wMs7n4LSvrx4iyW2dbXJPeLMU5krfQdGdIPoxvMNrEWS+OSMENiFDXOMll7SlusI/
-         83VgqZ0bhPPWPcDZpCcNvWfyjk3biEuP/QPQvY30ogaakNPHNY0tt5e7O5llStPSN6RG
-         mH0XRF8borw5PL8wAKzr+8zWo5VolHVXVvFNMaZMbQKT/jkTxbn64XrEhFkagM7w4WuK
-         qhow==
-X-Gm-Message-State: AFq9FYJxCK/pq/kN9/bXDrs/cGRwG0SCUy5RL9qFkB7sEGibpCdi+te6
-	kC0RG8nb577SJECkFkAHrYRx+4qnJSeUps3Gzu8SA8VhTrpv9tVw8V44
-X-Gm-Gg: AYBFou1nSgiJl0wZM8lbdWqEO753ptDKRIsH0QPirq5Q5sxU5Sf0gFfpr5YPV91gSdr
-	S92g297dpSKRbx7+PSRYo/Hchs9gxl40zyt+2CHzxT3c6UH5kmMrnNfQ1Homl0riLC6VJmcgOY/
-	Q1mleh5fxQNIAJdexyc6/XC/cruaEADrGX1Bg/9jPoADPfzlIOP1iVBONulvBMmw/BdNVoclb68
-	T+1cJ1z3NO3qEhbXh6gMyZhfNLK/TGFTFygvgP3NNQlJlJOpaRYo+VzwpIupcbByJGArkOWq6l7
-	pV6cUwge7hOO9OkBSB63Nx8wdh6w8Uw5o/sLstglS8E4rGusZ3emYWrVPh9A6Fcvc1AZ6On6DII
-	uXQtBMUTBEJzee7ColDN3zyj/n4vsioym086l4ye7UoPRU7bE3baKb5d4kOQ7O/bYaX2WdBhZDH
-	gmV2deoIKFzJJn6TQucNc8TcUrEMDU7LLUwCYhKwmCHH+h0SigkttXeCCixocn1k41irpEc2bxc
-	yVXiOK0yy9MfATBf6V06zETX89PL3JXArrQ5sacwN4v3357V3sPEQT7WQ==
-X-Received: by 2002:a05:690e:1406:b0:679:8f04:229f with SMTP id 956f58d0204a3-67a35c135a4mr1202609d50.161.1792770234983;
-        Fri, 23 Oct 2026 08:43:54 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:acd0:a70d:cc94:a8fa])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67a427f1861sm139502d50.3.2026.10.23.08.43.54
+        bh=60Xs15W9jQQ2oWcJEMPCLV3YnsgNH1/hIQ/HS3LOjiI=;
+        b=DGy+zdHkey6SfAbsX3KHQR/bYGXc+HBLKyjqnVRUEiXd0JhCZRftp6zKmziRD1RQNd
+         Ch+NIMo9+od0KXN22mvBTlYxizp/YoicnZS/jcZf9+w1qpQJ5dqwJRpmIWAb/iQgX76A
+         w0f6eTM+2PiS9fgiHdIkaBlnROuBXoy0cFVnlrsCFChnyppVST/YemYb8AeMW8tWaVrh
+         7LHJJ5l1s7WEKhJPhTnUW/8yo3HajDEpzo19YIq/MnWzfAxIkmrcgJwyU/8EhisitJWX
+         aOShvCOG+2knS4OZRo/Zm7Jho7aBmsH/3iRhwy8f6MZWGI6dJ8/EgbbTJrP4ShnRHQXV
+         5uhA==
+X-Forwarded-Encrypted: i=1; AKwUvByMXT4mzHDRkH29jmsZl3qj75806J80Uq5XuJTkNIXoFg3R3i+aKS8csJR5cxDqzGGLtgM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIwfhAYHdSPpn1WWcXGVM0TufqK6+BseQy82dQp8+g7LghPRHt/
+	zG0nNMAwLQH7U/QbR5CuAWQKReJqvse1tOwLqWV1azijGhWgCC9bBNOG
+X-Gm-Gg: AYBFou2eJ/7Mx0c6KTMcFacDAFAEHZVNsnjTISxabhYt2SGJN+n7yr7k890jPaIGbiw
+	AnKYiwL163Z+ZfmwfWykZf2A14oetycgHyupxvr6rk0fpZOCSmM4MXvEvTAwxqnGI7jg5eRkJY/
+	XEJ2KO2/fp1Uc24DwKlnA0QYmJv88LV64pXcOTOnDeug5D4Yn+bZVKX1fk4D/FyXEAC/b4Btcxg
+	L/O4yKvH7SRKQZJLJZXE8Frio2XoHxbzC6eLtB3dfpXbOmYHC6kWt+4mXysN8pYxY3ESwR6CUyI
+	67XXc3+trZFMwJUIaPSeUafJDbQWA+r6bGtNtqG8gsUwGwz/ym/JvldRPwwKZUHmxVUvjMcD+Co
+	Q0tZWvsRRCGseV4+jk1PLQuZgLBuLzkvHhfyJMpdXCMXjMA2MxlK/x/8xm3EsYwgeWFDKSfrFMd
+	LGVYc2OjYQO/HaJFyz0tz6zoaVppnTG5Yflbr8oMtZq8VU5IcGkCzsfNoakQ1LB15ANV6fjuDrY
+	VG/9eJUo0bnMyGFx7vVsRx/ugmg9UDqJQTGhjRjY2irnxD69j1/9KW6hb+ryQ+o1e1lzFqEoeC4
+	m1Z6v8Sl9BngL9VYEg==
+X-Received: by 2002:a05:6a00:3e23:b0:8a0:5dd9:7983 with SMTP id d2e1a72fcca58-8a2c626dc87mr2265345b3a.12.1792770541818;
+        Fri, 23 Oct 2026 08:49:01 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a338ef4903sm149223b3a.26.2026.10.23.08.48.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 08:43:54 -0700 (PDT)
-Date: Fri, 23 Oct 2026 11:43:54 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, ameryhung@gmail.com, 
-	yonghong.song@linux.dev, puranjay@kernel.org
-Subject: Re: [PATCH bpf-next v7 0/2] bpf: Track borrowed iterator result
- lifetimes
-Message-ID: <att73Z9XpompG3k1@zenbox>
-References: <20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn>
+        Fri, 23 Oct 2026 08:49:01 -0700 (PDT)
+Date: Fri, 23 Oct 2026 17:48:48 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Feng Yang <yangfeng59949@163.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Fix out-of-bounds btf->types write for
+ split BTF
+Message-ID: <atuB4OmqU8CsyDDq@gmail.com>
+References: <20261023063133.563998-1-yangfeng59949@163.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -98,109 +102,88 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn>
+In-Reply-To: <20261023063133.563998-1-yangfeng59949@163.com>
 
-On Thu, Oct 22, 2026 at 05:07:52AM +0800, Xu Yunxiang wrote:
-> Make non-RCU, non-acquired struct iterator results borrow the current
-> element lifetime by default. KF_ITER_RET_INDEPENDENT marks the explicit
-> exception for results whose lifetime is independent of the iterator.
+On Fri, Oct 23, 2026 at 02:31:33PM +0800, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
 > 
-> Trusted field loads and dynptr constructors propagate the source lifetime
-> so derived pointers stay in the invalidation graph. Next preserves the
-> iterator itself and invalidates old dependents before both return
-> outcomes; destroy propagates outstanding-child errors.
+> btf_add_type() bounds the btf->types array by BTF_MAX_TYPE, but for a
+> split BTF the type ids it registers are start_id .. start_id +
+> nr_types - 1, so what is actually left of the id space is
+> BTF_MAX_TYPE - start_id.  Two things follow from that:
 > 
-> As Alexei pointed out, the trusted-field rule is generic. Patch 1 now
-> explains why an inode pointer loaded from an acquired file becomes
-> invalid when that file reference is released, and how the same rule
-> applies to fields derived from an iterator result. Patch 2 adds VFS
-> tests for the valid before-release access and the rejected after-release
-> access alongside the existing iterator lifetime tests.
+>  - the limit check is an equality test,
+>    'start_id + btf->types_size == BTF_MAX_TYPE'.  It is evaluated only
+>    when the array has to grow, with btf->types_size == btf->nr_types,
+>    and the growth (T' = min(BTF_MAX_TYPE, T + max(T / 4, 16)), starting
+>    from 0) is clamped to BTF_MAX_TYPE, which it lands on exactly (...,
+>    928143, then min(BTF_MAX_TYPE, 1160178)).  So unless
+>    BTF_MAX_TYPE - start_id is one of the 48 sizes that sequence hits,
+>    the check does not fire for a split BTF at all;
 > 
-> The field-propagation overlap with Kumar's related work remains. This
-> series introduces no general kfunc borrowed-return annotation; the
-> separate bpf_real_data_inode() return-lifetime gap remains outside its
-> scope. The iterator policy has no dependency on that annotation.
+>  - new_size is clamped to BTF_MAX_TYPE instead of
+>    BTF_MAX_TYPE - start_id, so the array can still grow to
+>    BTF_MAX_TYPE entries even though only BTF_MAX_TYPE - start_id type
+>    ids exist.
 > 
-> Changes in v7:
->   - Explain the generic trusted-field lifetime rule and the file/inode
->     example in patch 1's commit log, as requested by Alexei.
->   - Add a positive and negative VFS test for that example in patch 2.
->   - Rebase onto bpf-next b116ac6087541. The implementation's added and
->     removed lines are unchanged from posted v6; the field-load hunk's
->     context now includes the upstream __nullable handling.
+> As a result nr_types can reach BTF_MAX_TYPE for a split BTF while its
+> type ids have already gone past BTF_MAX_TYPE; a type never validates its
+> own id, only the ids it references (btf_ref_type_check_meta()).  At that
+> point btf->types_size == btf->nr_types == BTF_MAX_TYPE and the growth
+> branch computes the same size again: it allocates a fresh BTF_MAX_TYPE
+> entry array, copies the entries, and the loop is left with
+> btf->types_size != btf->nr_types, so that branch is not taken anymore.
+> Every type after this writes btf->types[btf->nr_types++] past the end of
+> the array: BTF_MAX_TYPE * 8 == 8388600 bytes are requested, so the first
+> such write lands in the 8 byte rounding slack of the 8MB allocation, and
+> each further type writes another 8 bytes beyond it.
 > 
-> v6:
-> https://lore.kernel.org/r/20260927120406.1041915-1-xyx2021@mail.ustc.edu.cn
-> Alexei's v6 review:
-> https://lore.kernel.org/r/DMA2SZ5PRG4N.3I51MHSTWUUTS@gmail.com
-> Kumar's related work:
-> https://lore.kernel.org/r/DLGYPZAL708V.3GFLANAPH2L8O@gmail.com
->
-It seems like my patcheset [1] is partially duplicitive of this work.
-My fault. I think I got confused by patch 1 subject and only thought it
-was an iterator fix.
+> Fix both by bounding the array with BTF_MAX_TYPE - start_id and by
+> turning the equality check into a '>=' one, so that the array stops
+> exactly where the id space ends. Base BTF behavior (start_id ==
+> 0) is unchanged.
+> 
+> Fixes: 951bb64621b8 ("bpf: Add in-kernel split BTF support")
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 
-Seeing as you are further along, I'll yield to you for the iterator
-lifetime fixes and the trusted field lifetime fixes :) (everything in
-this set)
+Reviewed-by: Mahe Tardy <mahe.tardy@gmail.com>
 
-I'll continue my series and focus on the __derives_ret suggested by
-Kumar and the RCU trusted pointer fixes / "Don't apply the trusted
-field lists to an RCU-protected parent" suggestion by Alexei instead.
-Plus selftests.
+Indeed taking toy BTF_MAX_TYPE = 10 and start_id = 2 we can see the
+array can grow from 0 to 10 directly, get filled, enter the growth
+branch then the condition is for E2BIG is 2 + 10 which is already beyond
+10 and thus never match: we re-allocate the array, copy and write out of
+bounds. Fix looks reasonable to me (but disclaimer I just read that code
+for the first time).
 
-Just sending this to deconflict.
-
-Thanks,
-Justin
-
-[1] https://lore.kernel.org/bpf/20261020145059.2146170-1-utilityemal77@gmail.com/
-> Validation on this candidate with a matching bpf_testmod:
->   - W=1 verifier, full kernel and modules builds passed.
->   - Changed BPF objects and required fixture compiled strictly.
->   - iters: 1/122 passed; 0 skipped.
->   - dynptr: 2/137 passed; 0 skipped.
->   - file_reader: 1/10 passed; 0 skipped.
->   - verifier_vfs_accept: 1/7 passed; 0 skipped.
->   - verifier_vfs_reject: 1/13 passed; 0 skipped.
->   - kmem_cache_iter: 1/3 passed; 0 skipped.
->   - dmabuf_iter: 1/4 passed; 0 skipped.
+> ---
+>  kernel/bpf/btf.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> The new before-release VFS program loaded on both the unmodified
-> baseline and this candidate. The after-release program loaded on the
-> baseline and was rejected by this candidate with the expected scalar
-> access diagnostic. These annotated programs are load-only.
-> 
-> The VMs used panic_on_warn and panic_on_oops. No WARN_ON report,
-> Oops or panic was found. Unprivileged BPF was enabled only in the
-> isolated guests.
-> 
-> The broad test_progs build used BPF_STRICT_BUILD=0; no compile skips
-> were reported. The unfiltered full
-> suite, sanitizer and architecture matrices were not run. The fresh
-> baseline comparison covers the new VFS example.
-> 
-> Please queue the verifier fix for stable after it reaches the BPF tree.
-> 
-> Xu Yunxiang (2):
->   bpf: Track borrowed iterator results by default
->   selftests/bpf: Test borrowed iterator result lifetimes
-> 
->  Documentation/bpf/bpf_iterators.rst           |  10 +
->  include/linux/btf.h                           |   1 +
->  kernel/bpf/btf.c                              |  13 +-
->  kernel/bpf/verifier.c                         | 103 ++++-
->  .../selftests/bpf/progs/iters_testmod.c       | 370 ++++++++++++++++++
->  .../selftests/bpf/progs/verifier_vfs_accept.c |  17 +
->  .../selftests/bpf/progs/verifier_vfs_reject.c |  19 +
->  .../selftests/bpf/test_kmods/bpf_testmod.c    |  25 ++
->  .../selftests/bpf/test_kmods/bpf_testmod.h    |   4 +
->  .../bpf/test_kmods/bpf_testmod_kfunc.h        |   5 +
->  10 files changed, 548 insertions(+), 19 deletions(-)
-> 
-> 
-> base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 80b6f96263f1..6e54cd6c2eb5 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -1724,15 +1724,17 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+>  		/* Expand 'types' array */
+>  
+>  		struct btf_type **new_types;
+> -		u32 expand_by, new_size;
+> +		u32 expand_by, new_size, max_size;
+>  
+> -		if (btf->start_id + btf->types_size == BTF_MAX_TYPE) {
+> +		if (btf->start_id >= BTF_MAX_TYPE ||
+> +		    btf->start_id + btf->types_size >= BTF_MAX_TYPE) {
+>  			btf_verifier_log(env, "Exceeded max num of types");
+>  			return -E2BIG;
+>  		}
+>  
+> +		max_size = BTF_MAX_TYPE - btf->start_id;
+>  		expand_by = max_t(u32, btf->types_size >> 2, 16);
+> -		new_size = min_t(u32, BTF_MAX_TYPE,
+> +		new_size = min_t(u32, max_size,
+>  				 btf->types_size + expand_by);
+>  
+>  		new_types = kvzalloc_objs(*new_types, new_size,
 > -- 
-> 2.43.0
+> 2.25.1
 > 
