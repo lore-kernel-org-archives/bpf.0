@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792714864;
-	b=XqRI78gz29wrTQIeV4O/4Bz5AS0en7KVHJYK1ra8YnxLyhc0u2GoXatZC2LyIKgK54/S
-	 jiO9z0Kg7sGE9u9nEZAD0xWBn314k6xN+d/fDUK96ZRTxQ+1igjsT2QlZTcONF4CheV4v
-	 FG6orZt7TH1ENPi5K+YYvvFA34y9MhBpYQdWEeuS3vHBziMk0mj9LlI+okg5njBGvzdMK
-	 1HvLpkYcLOvYz+fFdhjqEXnS/b6EbIChiaD1izMFU7tQU2hd4o+S0UvfczKEFd1CA6ySA
-	 aO/qa+XJ7R/K/WP493iSN08MD9onWmanmSnd7avklWpaCeMwJptLkFGVbWviDQmmjag==
+	t=1792714865;
+	b=c0at9kP5c3BnJOXr/g0x0Cca0a6Uy28oRKWuoCgfkKffkPtqzsKjXs8HjlEExGpMrVoY
+	 Sa5ivDw/TD2KnrtU5DKLOMYOnvf9hWqTsImxeIvS7+FXk+bx46ToU7tfF/snXSfXHK947
+	 xf0siJRMpNff1pFMS3A18QiTDUOUiGtq7kcpuomefgMYzE2qdaavy8bBcodYcnL6Cf1Az
+	 DoLdHCFpR9xrDZYAnCzG0k/XnjpaJP4jZaKDHfKl7INFwBK/C85FN3D7TaA7ym2SsiiR/
+	 tmyFzBnzwlvszm0EDhm7OsvZn9Lk+g+6PxHOKeh/8w9Hi0bss+OxzZSndCWPvkug5QQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792714864;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792714865;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=kttcivgKPkfHRJEKlV9hpJuxI1L+qc9obH5MubJcPtk=;
-	b=iXQWnBbO4emdRyPhJkbV4oq6dP8SVK3k8cnu+sk4fYsgWcQW0JmFdcAbJ14Jg1ZHFYsk
-	 m65J9MMd4OwrYLmfUY2LXQrQgHFvzrxz0s0w3h7tbVVWUKDSy0Jq88T0tU6MZAq+b6sw7
-	 dLEFk963qWliICG0iaZjrjpwF5ILNHjyrLMTbwKUNyvpjOKKeWNWMQkQ/BIqFTd8fL/Y9
-	 oQ8HEjatq6HjrA7ufzNjeqj/NK8Gr0hkhSId7tVib1EP0ncxc8lmYFSoxayhRTp7II+YL
-	 /EPJe97MC/0ApjXS9NfRVqeY7uVniJV4fwsOe9wqAu7gSxjeyTzG7DjLu6sqc5dlENg==
+	bh=2fTA9m+UUrMBbiYCM6pVt1Oys+TDTRqDsD3bGnYf8oY=;
+	b=sSPJSThC7OwmfLAY9oSpo1GjBTzO0jsdk4lgIPvaHEPgSGsxzKci+/Q/6lZPmHpEEu+M
+	 EJMyh0tNDMYDAO++2bxmc4ARI0vbyAbe1rqW9lGq9QakltHkY8Ww/fpqLbemnZy4LEs4g
+	 CuaJDPB/fbYxiX9A9TeMpZP8F2p4YaQwANxLKNoqroxsQ8xn9OnFYwquAblBarkdubB21
+	 BZMIUxTaQeZSsjcmjmLcaONWM6UAjydceDtJhsqPvyEwFm2HNAByR2DHPAtHpCCrBcjJS
+	 eayPnqZzxsLaw/gOWpQhFgbQ/2RqQK73y78rA/WAmqvSf3LpzdCqPDHP2tLBFnBOkSQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=X+FYo+3d;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=F8SUdvNS;
+	arc=none smtp.remote-ip=209.85.210.176
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A43606A31E
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 00:21:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E5A43606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715B1606A31E
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 00:21:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 715B1606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=X+FYo+3d
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc7e79c1eaaso140393a12.2
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 17:21:03 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=F8SUdvNS
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8a06e79e152so204405b3a.0
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 17:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792714863; x=1793319663; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792714865; x=1793319665; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=kttcivgKPkfHRJEKlV9hpJuxI1L+qc9obH5MubJcPtk=;
-        b=X+FYo+3dzRO+j5iVLuooqfrPaFX1BNrdxcJiGk2ombxkjD/FEut0/XsOYs4WT3CCH8
-         fNmpx/VSEgjznk83h8Leb5DoNyuX1/RHg788Er/fwPFxkGaglG/+/V/KmyfdQO4sWUZ4
-         RgTNRWo7bzuDkxufqVGmRJuP3m1PjiQfOLVPCf2SQ9aHNo5ScboYvEmS6ptY72xFrzn7
-         x7jpUxTOx0otvl/ZH6ZKUSL4VhIzPsicTbK+if45MNGiIbH2RUW/vX5i80ThkDH2voP2
-         gLz+5U2Q9oOre46aEgz38l6cfyxYcghU/yuUMPmJwCVQu1Pa4fDUE0xDBZKqtkSfLaxw
-         9Q1w==
+        bh=2fTA9m+UUrMBbiYCM6pVt1Oys+TDTRqDsD3bGnYf8oY=;
+        b=F8SUdvNS36JJXU0BjXNFlVJuG9mUPl5N7LyG1D0t8H8747XlqlSVktQfqoP5YGEP+z
+         uYsZxosPemPjKt+u61fckN7/779oXDUcV1JruYKKi05nO0/CNYIC4gRNLjcVobD2Bv9r
+         7zZqWIYjVMTZT6VsrBCwg1PUI1eWK27KwYExwgaSuy4Hb7yVLL/FUV9qVR4FOro5OnQx
+         mTQiOoRZagONcNg3buAjpsqNFf/sIDTo3rFG99QPCAXkLNimrbpFAsHox+76yEdumY2B
+         LN9DafUpZPxdkwWRql+8VVdWDeinurNmXH//kSZRCIpfaQYUcx8bJZ/hi1uQHS4Os7b5
+         A2WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792714863; x=1793319663;
+        d=1e100.net; s=20260707; t=1792714865; x=1793319665;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kttcivgKPkfHRJEKlV9hpJuxI1L+qc9obH5MubJcPtk=;
-        b=BGyXCoHfRrusQ+xAi+7od98PnF54vZabEf+v6mWuL4lnpm7btdRPV827zhzccHiRtr
-         WDygL7tAJCZP4/DqL+sr+NgFLoKpOch8V5WJ5ora9GBgCbisUPtNvQ127HMl/hsU2duy
-         SANCF6qgk7M8qDKWmjdwKMIq4vAnvvyCxyJhZm8t+Bacgc08nJbao0nU7Bpj5128T3yF
-         4xCdQC9x2V7nN/Vgsk4qOc1/cCj1qVoIOGvT86B7738o4J2EFQh04jUhHfjLOQkbZOtb
-         sF3s1uuqsRcvmFIxfpU8TzHuj2DxMPMkxtbJZbOOnrecyLJW2MGfCtLeyhe5ejVL7BBT
-         Szog==
-X-Gm-Message-State: AFq9FYLByuZvD4mNIOj6amEiXotcWu5D1kKzKZ5EJpIqn7YfyFS2MK8T
-	++ILoRQTPw4u3P1+ewTtFxZhSc9nDIFkY6coTkqFW7O/K7qnbPLeGNwTTwRjhTMamgRV9uAfc2a
-	x4gJQLVmpRg==
-X-Gm-Gg: AYBFou22F5cd87GTMVl/i6dg9AMZOvQQL9v+NSBF5JBuwGmxnpOzn8JxQ8GCy/CIIx5
-	CZDy7AGM4lD1l6GuffseiI4rW3UCHpKMqs5VGNtOpBFk6o/F+EayYYfVph3OCIzMUXwO0BKQaaZ
-	R3ndEv87wW0tgHzoHTiLhIlgpFkXovmmjAwQ850cpQ9nMRSVCrQ1QpemqOTnt5WhnyMiWMP9fAm
-	Gm8Rk4EIZxQt/JsR7OTwp5BwQaWxp2ARbli2Yq7+DH56u/ZpKP2DYgwVcGhkEtwqJ5S9CT9dbyq
-	jsWVZ/xb4yIxe7c/6dMeQ2OQ2x2pCxC6OT7XHEfM8JeQLnIl0dbAXoAStO8slTDi1EfHa9Yn836
-	Tx95f85snGGAv1QlV47ExHD+S3089oY5pqqEg9BI8bswfnU92qKFH8zn1SO/8u2q69o5R9GWGln
-	hpjObmOOMQnmWDhNlHXXtEIth0Cq4UF/PEu4d8LxqjjnBMC56l1a/GYVL7qFV4ASY5ZcEbXQuW0
-	IL59+TxJ5Gs4U1n+NFjIMraqvBUNoFcaYrDcX7wvS6OcBYqbNp1EpzDZ9oxTr54oUXtTvyUqgfo
-	BXwW2xEzUMqpg4Fylw==
-X-Received: by 2002:a17:90b:4d06:b0:3ad:4a8b:c6fd with SMTP id 98e67ed59e1d1-3adce738f1amr359624a91.28.1792714863266;
-        Thu, 22 Oct 2026 17:21:03 -0700 (PDT)
+        bh=2fTA9m+UUrMBbiYCM6pVt1Oys+TDTRqDsD3bGnYf8oY=;
+        b=GNOnmsan2wZx827H/NUkSlWHODDaruHAlXoVlafOeY35zvw8TBVUgpwh05CyNrgxFk
+         Rb7v9ZYOqid5yvzXvoKaT3iopC9meYHcwGwldmHRbAi3Nedaqha0wJ/5sMd9g0a3IvTg
+         RhJg42LyBIBUexChU7BchD1j6znDYmImoLeu0sdRH1N4qMI/5zI2lVzbqiKG8YMJCwwu
+         9A8joycqQmF7z9BI7zslrZGg7QUXx2zG76I7TJ39IjKPFeBR+zGvMk954IEuBF4smd3h
+         AAp/yxquo6gROfKZgKTJ5+xPg/tTAaP07kkmzuI5A+8NNK9JjaKTrK+rw7rvQx9V4O3U
+         MLVA==
+X-Gm-Message-State: AFq9FYLkxDh7NYiu/O2ZgmnE1gNYNjHPGCZs3YoGcjh2aIHolIyqqNce
+	6WajVbaiQp97lf4/j7sm0dsvmaz+8oZkZzvgX1EeYJA4/bPoioXuoPOKTzDDLIKzUpqPIcguqVg
+	ylO4YJxnQkg==
+X-Gm-Gg: AYBFou0Q3eLqckvoopX8VlL7w7RctBnpU4616oOxvPdf4V3U3AjoH4fBqgkuZY8Bt0p
+	PPUx6cM0ACZl2C22cwJ771BqJ60V4l7eIoSq85bdf0eZUM4RUlXaFWvJBOZkwsEbrkfybMpIkEG
+	T/SVCO0uilF4NUaFexhVuA/4dVqGsL0AoOTz+uH9zO+jOIFCrDOX9v+BUnhlG+6F3h2Rg+zh2qu
+	ZDAVRkwHvubWwA85sfv0oWoGuqg2eUwdVH/AnyQj6hhpyjU5nXkTJV6s+kpa0zy+fFCKww9rCLt
+	BzJywCSB2YvuyV/l4it4bqVFcx1jsK8Nv9p4DuGy+WA8SolCFlIG9bCF5RR+UKw/TsjSJKscqZo
+	3+548iUK36hGoZpHR4Zkz5mC04M6I6nUSmGBOFz5D0bwCxWlJI3WkkMydln0/Dt/eRsi+sVjm4C
+	ygoNUibF6h8VSJdkEWnh9ArgfNymrNa1fNxF+frDg5vus5DZpGB5qQSe6EmZuTy+d4H2JqxN2TA
+	Is3GCExRnrQTX5l8Znvm+JczKicIkdxdVK/3mjTlIEMPWgYrW6Nozbu0YaVjMHBlESj3ELox0Tv
+	rWxipNLdqsHCmsX8fdfZl625msQKdR7R/G9mCDM=
+X-Received: by 2002:a05:6a21:7a8e:b0:3e2:b905:12c7 with SMTP id adf61e73a8af0-3e3766e0aa8mr340187637.78.1792714864585;
+        Thu, 22 Oct 2026 17:21:04 -0700 (PDT)
 Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ba8892c4sm218649a12.11.2026.10.22.17.21.02
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ba8892c4sm218649a12.11.2026.10.22.17.21.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 17:21:02 -0700 (PDT)
+        Thu, 22 Oct 2026 17:21:03 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -86,9 +86,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v3 2/7] selftests/bpf: Add a parallel buddy allocator benchmark
-Date: Fri, 23 Oct 2026 00:20:51 +0000
-Message-ID: <20261023002056.6647-3-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 3/7] selftests/bpf: libarena: Add buddy per-CPU caches
+Date: Fri, 23 Oct 2026 00:20:52 +0000
+Message-ID: <20261023002056.6647-4-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261023002056.6647-1-emil@etsalapatis.com>
 References: <20261023002056.6647-1-emil@etsalapatis.com>
@@ -103,420 +103,407 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a benchmark for measuring buddy allocator latency under concurrent
-load. Each worker performs a configurable number of allocations followed
-by the corresponding frees, and the summary reports the mean latency of
-allocations and frees separately. The frees chain the objects through
-their first word, so the allocation size must be large enough to hold a
-pointer.
+Every small allocation currently reaches the central buddy allocator and
+takes its lock. This serializes otherwise independent callers and touches
+the buddy metadata on every allocation and free.
 
-Add a cross-CPU variant in which each worker publishes its list in a
-shared slot, takes the list left there by the previous invocation and
-frees it. With more than one pinned worker, most objects are then freed
-on a different CPU from the one that allocated them.
+Add a fixed-size LIFO array for each cached order and CPU. Keep the
+per-CPU cache pointers in struct buddy and allocate each CPU's packed
+cache from the buddy during initialization. Cache the eight smallest
+allocation orders, up to 2 KiB. Each array holds 16 objects, bounding each
+CPU's cache to about 1.5 KiB.
 
-Add both benchmarks to the libarena runner alongside the existing
-single-threaded cases, sweeping the producer count from 1 to 8 with a
-fixed allocation size and count to expose lock contention.
+Allocations pop from the local array and frees push onto it without taking
+the buddy lock. Empty and full arrays fall through to the central buddy
+allocator. Packed arrays keep the fast path to a bounds check and a single
+slot access.
 
-Report the existing libarena-malloc and libarena-calloc results in
-ns/allocation and summarize them by total allocation count, so that all
-libarena benchmarks share one output format. This replaces the previous
-ns/op unit and the invocation and allocations-per-invocation fields.
+BPF programs only disable migration, so another task can preempt a cache
+operation and run on the same CPU, and an IRQ or NMI program can interrupt
+one. Claim the CPU with a cmpxchg on a per-CPU flag before touching its
+arrays, following the model used by the main BPF memory allocator. An
+operation that finds the CPU already claimed falls through to the central
+buddy allocator.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- tools/testing/selftests/bpf/bench.c           |   4 +
- .../selftests/bpf/benchs/bench_libarena.c     | 118 ++++++++++++++++--
- .../bpf/benchs/run_bench_libarena.sh          |  16 +++
- .../bpf/libarena/benchs/bench_malloc.bpf.c    | 110 ++++++++++++++++
- 4 files changed, 237 insertions(+), 11 deletions(-)
+ .../bpf/libarena/include/libarena/buddy.h     |  34 +++
+ .../bpf/libarena/include/libarena/common.h    |   4 +
+ .../bpf/libarena/selftests/test_buddy.bpf.c   |   9 +
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 220 +++++++++++++++++-
+ 4 files changed, 262 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index d5f494184f9d..fbbd55399019 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -589,6 +589,8 @@ extern const struct bench bench_bpf_nop;
- extern const struct bench bench_xdp_lb;
- extern const struct bench bench_libarena_malloc;
- extern const struct bench bench_libarena_calloc;
-+extern const struct bench bench_libarena_malloc_free;
-+extern const struct bench bench_libarena_malloc_xfree;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -675,6 +677,8 @@ static const struct bench *benchs[] = {
- 	&bench_xdp_lb,
- 	&bench_libarena_malloc,
- 	&bench_libarena_calloc,
-+	&bench_libarena_malloc_free,
-+	&bench_libarena_malloc_xfree,
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+index f150e1c37e3d..66349915745b 100644
+--- a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+@@ -65,10 +65,44 @@ struct buddy_chunk {
+ 	struct buddy_chunk __arena	*next;
  };
  
- static void find_benchmark(void)
-diff --git a/tools/testing/selftests/bpf/benchs/bench_libarena.c b/tools/testing/selftests/bpf/benchs/bench_libarena.c
-index 24e432244bf5..4096b54db520 100644
---- a/tools/testing/selftests/bpf/benchs/bench_libarena.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_libarena.c
-@@ -25,6 +25,10 @@ static struct {
- 	struct libarena_bench *skel;
- 	int bench_fd;
- 	int reset_fd;
-+	bool reset_each_run;
-+	bool stop;
-+	int stopped;
-+	int samples;
- } ctx;
- 
- enum {
-@@ -36,7 +40,7 @@ static const struct argp_option opts[] = {
- 	{ "alloc_size", ARG_LIBARENA_ALLOC_SIZE, "BYTES", 0,
- 	  "Size of each arena allocation" },
- 	{ "nallocs", ARG_LIBARENA_NALLOCS, "ITERS", 0,
--	  "Number of allocation per measurement" },
-+	  "Number of allocations per invocation" },
- 	{},
- };
- 
-@@ -68,12 +72,17 @@ const struct argp bench_libarena_argp = {
- 	.parser = parse_arg,
- };
- 
--static void validate(void)
-+static void validate_common(void)
- {
- 	if (env.consumer_cnt != 0) {
- 		fprintf(stderr, "benchmark doesn't support consumers\n");
- 		exit(1);
- 	}
-+}
-+
-+static void validate(void)
-+{
-+	validate_common();
- 
- 	if (env.producer_cnt != 1) {
- 		fprintf(stderr, "benchmark supports exactly one producer\n");
-@@ -81,6 +90,21 @@ static void validate(void)
- 	}
- }
- 
-+static void malloc_free_validate(void)
-+{
-+	validate_common();
-+
-+	if (env.producer_cnt < 1) {
-+		fprintf(stderr, "benchmark requires at least one producer\n");
-+		exit(1);
-+	}
-+
-+	if (args.alloc_size < sizeof(void *)) {
-+		fprintf(stderr, "allocation size must hold a pointer\n");
-+		exit(1);
-+	}
-+}
-+
- static void setup_common(void)
- {
- 	struct arena_alloc_reserve_args reserve_args = {
-@@ -114,38 +138,62 @@ static void setup_common(void)
- 	ctx.skel->bss->bench_alloc_size = args.alloc_size;
- 	ctx.skel->bss->bench_nallocs = args.nallocs;
- 	ctx.reset_fd = bpf_program__fd(ctx.skel->progs.arena_buddy_reset);
-+	ctx.reset_each_run = false;
-+	ctx.stop = false;
-+	ctx.stopped = 0;
-+	ctx.samples = 0;
- }
- 
- static void malloc_setup(void)
- {
- 	setup_common();
- 	ctx.bench_fd = bpf_program__fd(ctx.skel->progs.bench_malloc);
-+	ctx.reset_each_run = true;
- }
- 
- static void calloc_setup(void)
- {
- 	setup_common();
- 	ctx.bench_fd = bpf_program__fd(ctx.skel->progs.bench_calloc);
-+	ctx.reset_each_run = true;
-+}
-+
-+static void malloc_free_setup(void)
-+{
-+	setup_common();
-+	ctx.bench_fd = bpf_program__fd(ctx.skel->progs.bench_malloc_free);
-+	ctx.skel->bss->bench_collect = false;
-+}
-+
-+static void malloc_xfree_setup(void)
-+{
-+	setup_common();
-+	ctx.bench_fd = bpf_program__fd(ctx.skel->progs.bench_malloc_xfree);
-+	ctx.skel->bss->bench_collect = false;
- }
- 
- static void *producer(void *input)
- {
- 	int err;
- 
--	while (true) {
-+	while (!__atomic_load_n(&ctx.stop, __ATOMIC_ACQUIRE)) {
- 		err = libarena_run_prog(ctx.bench_fd);
- 		if (err) {
- 			fprintf(stderr, "libarena benchmark failed: %d\n", err);
- 			exit(1);
- 		}
- 
--		err = libarena_run_prog(ctx.reset_fd);
--		if (err) {
--			fprintf(stderr, "libarena alloc reset failed: %d\n", err);
--			exit(1);
-+		if (ctx.reset_each_run) {
-+			err = libarena_run_prog(ctx.reset_fd);
-+			if (err) {
-+				fprintf(stderr, "libarena alloc reset failed: %d\n", err);
-+				exit(1);
-+			}
- 		}
- 	}
- 
-+	__atomic_add_fetch(&ctx.stopped, 1, __ATOMIC_RELEASE);
-+
- 	return NULL;
- }
- 
-@@ -155,6 +203,13 @@ static void measure(struct bench_res *res)
- 	res->hits = atomic_swap(&ctx.skel->bss->bench_hits, 0);
- }
- 
-+static void malloc_free_measure(struct bench_res *res)
-+{
-+	if (++ctx.samples == env.warmup_sec)
-+		__atomic_store_n(&ctx.skel->bss->bench_collect, true,
-+				 __ATOMIC_RELAXED);
-+}
-+
- static void report_progress(int iter, struct bench_res *res, long delta_ns)
- {
- 	double latency_ns = 0.0;
-@@ -162,7 +217,7 @@ static void report_progress(int iter, struct bench_res *res, long delta_ns)
- 	if (res->hits)
- 		latency_ns = res->duration_ns / (double)res->hits;
- 
--	printf("Iter %3d (%7.3lfus): latency %8.3lf ns/op (%ld allocations)\n",
-+	printf("Iter %3d (%7.3lfus): latency %8.3lf ns/allocation (%ld allocations)\n",
- 	       iter, (delta_ns - 1000000000) / 1000.0, latency_ns, res->hits);
- }
- 
-@@ -182,9 +237,30 @@ static void report_final(struct bench_res res[], int res_cnt)
- 		return;
- 	}
- 
--	printf("Summary: %.3lf ns/op, %.0lf invocations for %u allocations/invocation)\n",
--	       duration_ns / (double)hits, hits / (double)res_cnt,
--	       ctx.skel->bss->bench_nallocs);
-+	printf("Summary: %.3lf ns/allocation (%ld allocations)\n",
-+	       duration_ns / (double)hits, hits);
-+}
-+
-+static void malloc_free_report_final(struct bench_res res[], int res_cnt)
-+{
-+	long alloc_ns, free_ns, hits, free_hits;
-+
-+	__atomic_store_n(&ctx.stop, true, __ATOMIC_RELEASE);
-+	while (__atomic_load_n(&ctx.stopped, __ATOMIC_ACQUIRE) != env.producer_cnt)
-+		usleep(1000);
-+
-+	alloc_ns = __atomic_load_n(&ctx.skel->bss->bench_duration_ns, __ATOMIC_RELAXED);
-+	free_ns = __atomic_load_n(&ctx.skel->bss->bench_free_duration_ns, __ATOMIC_RELAXED);
-+	hits = __atomic_load_n(&ctx.skel->bss->bench_hits, __ATOMIC_RELAXED);
-+	free_hits = __atomic_load_n(&ctx.skel->bss->bench_free_hits, __ATOMIC_RELAXED);
-+
-+	if (!hits || !free_hits) {
-+		printf("Summary: no runs measured\n");
-+		return;
-+	}
-+
-+	printf("Summary: %.3lf ns/allocation, %.3lf ns/free (%ld allocations)\n",
-+	       alloc_ns / (double)hits, free_ns / (double)free_hits, hits);
- }
- 
- const struct bench bench_libarena_malloc = {
-@@ -208,3 +284,23 @@ const struct bench bench_libarena_calloc = {
- 	.report_progress = report_progress,
- 	.report_final = report_final,
- };
-+
-+const struct bench bench_libarena_malloc_free = {
-+	.name = "libarena-malloc-free",
-+	.argp = &bench_libarena_argp,
-+	.validate = malloc_free_validate,
-+	.setup = malloc_free_setup,
-+	.producer_thread = producer,
-+	.measure = malloc_free_measure,
-+	.report_final = malloc_free_report_final,
-+};
-+
-+const struct bench bench_libarena_malloc_xfree = {
-+	.name = "libarena-malloc-xfree",
-+	.argp = &bench_libarena_argp,
-+	.validate = malloc_free_validate,
-+	.setup = malloc_xfree_setup,
-+	.producer_thread = producer,
-+	.measure = malloc_free_measure,
-+	.report_final = malloc_free_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_libarena.sh b/tools/testing/selftests/bpf/benchs/run_bench_libarena.sh
-index 10afe4d52ebf..2dfa32cd95cc 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_libarena.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_libarena.sh
-@@ -29,3 +29,19 @@ printf "\t-------------------\n"
- 			"$($RUN_BENCH --alloc_size "$size" --nallocs "$nallocs" libarena-calloc)"
- 	done
- done
-+
-+header "libarena parallel malloc/free\n"
-+
-+for producers in 1 2 4 8; do
-+	summarize_libarena "$producers producers:" \
-+		"$($RUN_BENCH -a -p "$producers" --alloc_size 64 --nallocs 1000 \
-+		libarena-malloc-free)"
-+done
-+
-+header "libarena parallel cross-CPU malloc/free\n"
-+
-+for producers in 1 2 4 8; do
-+	summarize_libarena "$producers producers:" \
-+		"$($RUN_BENCH -a -p "$producers" --alloc_size 64 --nallocs 1000 \
-+		libarena-malloc-xfree)"
-+done
-diff --git a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-index e06397dc9a40..dedecee6d80f 100644
---- a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-@@ -9,6 +9,9 @@ u32 bench_alloc_size;
- u32 bench_nallocs;
- long bench_hits;
- long bench_duration_ns;
-+long bench_free_duration_ns;
-+long bench_free_hits;
-+bool bench_collect;
- 
- SEC("syscall")
- int bench_malloc(void)
-@@ -49,3 +52,110 @@ int bench_calloc(void)
- 	__sync_add_and_fetch(&bench_hits, i);
- 	return 0;
- }
-+
-+struct bench_alloc {
-+	struct bench_alloc __arena *next;
-+};
-+
-+SEC("syscall")
-+int bench_malloc_free(void)
-+{
-+	struct bench_alloc __arena *next, *obj, *head = NULL;
-+	u64 alloc_ns = 0, free_ns = 0, start_ns;
-+	u32 i, nallocs;
-+	bool collect;
-+
-+	collect = READ_ONCE(bench_collect);
-+	for (i = zero; i < bench_nallocs && can_loop; i++) {
-+		start_ns = bpf_ktime_get_ns();
-+		obj = arena_malloc(bench_alloc_size);
-+		alloc_ns += bpf_ktime_get_ns() - start_ns;
-+		if (!obj)
-+			break;
-+
-+		obj->next = head;
-+		head = obj;
-+	}
-+	nallocs = i;
-+
-+	for (i = zero; head && can_loop; i++) {
-+		next = head->next;
-+		start_ns = bpf_ktime_get_ns();
-+		arena_free(head);
-+		free_ns += bpf_ktime_get_ns() - start_ns;
-+		head = next;
-+	}
-+
-+	if (nallocs != bench_nallocs)
-+		return -ENOMEM;
-+
-+	if (!collect)
-+		return 0;
-+
-+	__sync_add_and_fetch(&bench_duration_ns, alloc_ns);
-+	__sync_add_and_fetch(&bench_free_duration_ns, free_ns);
-+	__sync_add_and_fetch(&bench_hits, nallocs);
-+	__sync_add_and_fetch(&bench_free_hits, nallocs);
-+	return 0;
-+}
-+
-+/* List left behind by the last bench_malloc_xfree() invocation. */
-+struct bench_alloc __arena *bench_xfree_head;
-+
-+SEC("syscall")
-+int bench_malloc_xfree(void)
-+{
-+	struct bench_alloc __arena *next, *obj, *old, *cur, *head = NULL;
-+	u64 alloc_ns = 0, free_ns = 0, start_ns;
-+	u32 i, nallocs, nfrees;
-+	bool collect;
-+
-+	collect = READ_ONCE(bench_collect);
-+	for (i = zero; i < bench_nallocs && can_loop; i++) {
-+		start_ns = bpf_ktime_get_ns();
-+		obj = arena_malloc(bench_alloc_size);
-+		alloc_ns += bpf_ktime_get_ns() - start_ns;
-+		if (!obj)
-+			break;
-+
-+		obj->next = head;
-+		head = obj;
-+	}
-+	nallocs = i;
++/* Constants related to the buddy allocator's object caches. */
++enum buddy_cache_consts {
++	/*
++	 * Do not cache larger allocations to avoid excessive
++	 * memory consumption from the per-cpu lists.
++	 */
++	BUDDY_CACHE_NUM_ORDERS = 1 << 3,
 +
 +	/*
-+	 * Publish this list and take the one left by the previous invocation,
-+	 * usually allocated by a worker on another CPU. If the exchange does
-+	 * not complete, free our own list instead.
++	 * Just like arena spinlocks, hardcode percpu state to a maximum number of CPUs.
++	 * Since arena spinlocks are a hard dependency, use the exact same limit.
 +	 */
-+	old = READ_ONCE(bench_xfree_head);
-+	while (can_loop) {
-+		cur = cmpxchg(&bench_xfree_head, old, head);
-+		if (cur == old) {
-+			head = old;
-+			break;
++	BUDDY_CACHE_MAX_CPUS = 1024,
++
++	/*
++	 * Objects retained locally for each allocation order.
++	 */
++	BUDDY_CACHE_CAPACITY = 16,
++};
++
++struct buddy_cache_order {
++	u32 elems;
++	u32 __pad;
++	void __arena *objects[BUDDY_CACHE_CAPACITY];
++} __attribute__((aligned(64)));
++
++/* Dynamically allocated packed per-CPU slot slab. */
++struct buddy_cache {
++	/* Claimed by an in-flight cache operation on this CPU. */
++	unsigned int active;
++	struct buddy_cache_order orders[BUDDY_CACHE_NUM_ORDERS];
++};
++
+ struct buddy {
+ 	struct buddy_chunk __arena *first_chunk;		/* Pointer to the chunk linked list. */
+ 	arena_spinlock_t lock;			/* Allocator lock */
+ 	u64 vaddr;				/* Allocation into reserved vaddr */
++	struct buddy_cache __arena *percpu[BUDDY_CACHE_MAX_CPUS];
+ };
+ 
+ #ifdef __BPF__
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
+index a6220355a697..a20947911d34 100644
+--- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
+@@ -22,6 +22,10 @@
+ #define __maybe_unused __attribute__((__unused__))
+ #endif
+ 
++#ifndef min
++#define min(a, b) ((a) < (b) ? (a) : (b))
++#endif
++
+ #define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
+ 
+ #define ARENA_PAGES (1UL << (32 - __builtin_ffs(__PAGE_SIZE) + 1))
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
+index 5628f0987012..85a7ea8b2e97 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/test_buddy.bpf.c
+@@ -34,9 +34,18 @@ __weak int test_buddy_create(void)
+ 		if (ret)
+ 			return ret;
+ 
++#ifndef BPF_ARENA_ASAN
++		if (!buddy.percpu[0]) {
++			buddy_destroy(&buddy);
++			return -EINVAL;
 +		}
-+		old = cur;
-+	}
++#endif
 +
-+	for (i = zero; head && can_loop; i++) {
-+		next = head->next;
-+		start_ns = bpf_ktime_get_ns();
-+		arena_free(head);
-+		free_ns += bpf_ktime_get_ns() - start_ns;
-+		head = next;
-+	}
-+	nfrees = i;
+ 		ret = buddy_destroy(&buddy);
+ 		if (ret)
+ 			return ret;
++		if (buddy.percpu[0])
++			return -EINVAL;
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+index 6dfaa23089a9..769f465fded0 100644
+--- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+@@ -7,6 +7,9 @@
+ 
+ #include <bpf_arena_spin_lock.h>
+ 
++_Static_assert(BUDDY_CACHE_MAX_CPUS == _Q_MAX_CPUS,
++	       "buddy caches must cover every CPU arena spinlocks support");
 +
-+	if (nallocs != bench_nallocs)
+ /*
+  * Buddy allocator arena-based implementation.
+  *
+@@ -38,18 +41,167 @@
+  * and their allocation state. It also includes the freelist
+  * heads for the allocation itself.
+  */
++static u8 idx_get_order(struct buddy_chunk __arena *chunk, u64 idx);
++static int idx_is_allocated(struct buddy_chunk __arena *chunk, u64 idx, bool *allocated);
++static u64 arena_next_pow2(__u64 n);
++static u64 size_to_order(size_t size);
++static void __arena *buddy_alloc_memory(struct buddy __arena *buddy, size_t size,
++					int order, size_t norder);
++static int buddy_free_unlocked(struct buddy __arena *buddy, u64 addr);
++
++#define buddy_lock(buddy, flags) (arena_spin_lock_irqsave(&(buddy)->lock, (flags)))
++#define buddy_unlock(buddy, flags) (arena_spin_unlock_irqrestore(&(buddy)->lock, (flags)))
++
++/*
++ * Per-CPU caching is disabled in ASAN builds because its additional call-chain
++ * stack usage causes instrumented programs to exceed BPF's 512-byte stack limit.
++ */
++#ifdef BPF_ARENA_ASAN
++#define buddy_order_cached(order) false
++#else
++#define buddy_order_cached(order) ((order) < BUDDY_CACHE_NUM_ORDERS)
++#endif
++
++static __always_inline struct buddy_cache __arena *
++buddy_cache_enter(struct buddy __arena *buddy)
++{
++	struct buddy_cache __arena *cache;
++
++	/* The caches only exist between buddy_init() and buddy_destroy(). */
++	cache = buddy->percpu[bpf_get_smp_processor_id()];
++	if (unlikely(!cache))
++		return NULL;
++
++	/*
++	 * No support for cache operations from contexts that interrupted or
++	 * preempted an in-flight operation on the same CPU, just like the
++	 * kernel's BPF memory allocator.
++	 */
++	if (cmpxchg(&cache->active, 0, 1))
++		return NULL;
++
++	return cache;
++}
++
++static __always_inline void buddy_cache_exit(struct buddy_cache __arena *cache)
++{
++	/*
++	 * Only contexts on this CPU claim the cache, so a compiler barrier is
++	 * enough to keep the cache updates before the claim is released.
++	 */
++	barrier();
++	WRITE_ONCE(cache->active, 0);
++}
++
++static __always_inline void __arena *
++buddy_cache_pop(struct buddy_cache __arena *cache, int order)
++{
++	struct buddy_cache_order __arena *slots;
++	void __arena *addr;
++	u32 elems;
++
++	slots = &cache->orders[order];
++	elems = READ_ONCE(slots->elems);
++	if (!elems)
++		return NULL;
++
++	addr = READ_ONCE(slots->objects[elems - 1]);
++	WRITE_ONCE(slots->elems, elems - 1);
++
++	return addr;
++}
++
++static __always_inline int buddy_cache_push(struct buddy_cache __arena *cache,
++					    int order, void __arena *obj)
++{
++	struct buddy_cache_order __arena *slots;
++	u32 elems;
++
++	slots = &cache->orders[order];
++	elems = READ_ONCE(slots->elems);
++	if (elems >= BUDDY_CACHE_CAPACITY)
 +		return -ENOMEM;
 +
-+	if (!collect)
-+		return 0;
++	WRITE_ONCE(slots->objects[elems], obj);
++	WRITE_ONCE(slots->elems, elems + 1);
 +
-+	__sync_add_and_fetch(&bench_duration_ns, alloc_ns);
-+	__sync_add_and_fetch(&bench_free_duration_ns, free_ns);
-+	__sync_add_and_fetch(&bench_hits, nallocs);
-+	__sync_add_and_fetch(&bench_free_hits, nfrees);
 +	return 0;
 +}
++
++void __arena *buddy_cache_alloc(struct buddy __arena *buddy, size_t order)
++{
++	struct buddy_cache __arena *cache;
++	void __arena *address = NULL;
++
++	if (!buddy_order_cached(order))
++		return NULL;
++
++	cache = buddy_cache_enter(buddy);
++	if (!cache)
++		return NULL;
++
++	address = buddy_cache_pop(cache, order);
++	buddy_cache_exit(cache);
++
++	return address;
++}
++
++/*
++ * Retrieve the order of an allocation from the address. Reject addresses
++ * that do not start an allocated block so that the locked path can report
++ * them, instead of caching memory that overlaps a live allocation. Cached
++ * objects stay marked as allocated, so freeing an object that is already
++ * cached is not detected.
++ */
++static int buddy_cache_get_order(void __arena *addr)
++{
++	struct buddy_chunk __arena *chunk;
++	bool allocated;
++	u64 idx;
++
++	if ((u64)addr & (BUDDY_MIN_ALLOC_BYTES - 1))
++		return BUDDY_CHUNK_NUM_ORDERS;
++
++	chunk = (void __arena *)((u64)addr & ~BUDDY_CHUNK_OFFSET_MASK);
++	idx = ((u64)addr & BUDDY_CHUNK_OFFSET_MASK) / BUDDY_MIN_ALLOC_BYTES;
++
++	if (idx_is_allocated(chunk, idx, &allocated) || !allocated)
++		return BUDDY_CHUNK_NUM_ORDERS;
++
++	return idx_get_order(chunk, idx);
++}
++
++int buddy_cache_free(struct buddy __arena *buddy, void __arena *addr)
++{
++	struct buddy_cache __arena *cache;
++	int order;
++	int ret = 0;
+ 
++	/* Skip the metadata lookup when caching is compiled out. */
++	if (!buddy_order_cached(0))
++		return -EINVAL;
++
++	order = buddy_cache_get_order(addr);
++	if (!buddy_order_cached(order))
++		return -EINVAL;
++
++	cache = buddy_cache_enter(buddy);
++	if (!cache)
++		return -EAGAIN;
++
++	ret = buddy_cache_push(cache, order, addr);
++	buddy_cache_exit(cache);
++
++	return ret;
++}
+ 
+ enum {
+ 	BUDDY_POISONED = (s8)0xef,
+ 
+ 	/* Number of pages to be allocated per chunk. */
+-	BUDDY_CHUNK_PAGES	= BUDDY_CHUNK_BYTES / __PAGE_SIZE
++	BUDDY_CHUNK_PAGES	= BUDDY_CHUNK_BYTES / __PAGE_SIZE,
+ };
+ 
+-#define buddy_lock(buddy, flags) (arena_spin_lock_irqsave(&(buddy)->lock, (flags)))
+-#define buddy_unlock(buddy, flags) (arena_spin_unlock_irqrestore(&(buddy)->lock, (flags)))
+-
+ /*
+  * Reserve part of the arena address space for the allocator. We use
+  * this to get aligned addresses for the chunks, since the arena
+@@ -557,6 +709,41 @@ static struct buddy_chunk __arena *buddy_chunk_get(struct buddy __arena *buddy)
+ 	return chunk;
+ }
+ 
++static int buddy_cache_init(struct buddy __arena *buddy)
++{
++	struct buddy_cache __arena *cache;
++	unsigned int cpu, order;
++	int ret;
++
++	if (!buddy_order_cached(0))
++		return 0;
++
++	if (CONFIG_NR_CPUS > BUDDY_CACHE_MAX_CPUS)
++		return -E2BIG;
++
++	for (cpu = zero; cpu < CONFIG_NR_CPUS && can_loop; cpu++) {
++		ret = buddy_alloc_bulk(buddy, sizeof(*cache), 0,
++				       (void __arena * __arena *)&buddy->percpu[cpu]);
++		if (ret)
++			return ret;
++
++		cache = buddy->percpu[cpu];
++		WRITE_ONCE(cache->active, 0);
++		for (order = zero; order < BUDDY_CACHE_NUM_ORDERS && can_loop; order++)
++			WRITE_ONCE(cache->orders[order].elems, 0);
++	}
++
++	return 0;
++}
++
++static void buddy_cache_destroy(struct buddy __arena *buddy)
++{
++	unsigned int cpu;
++
++	for (cpu = zero; cpu < min(CONFIG_NR_CPUS, BUDDY_CACHE_MAX_CPUS) && can_loop; cpu++)
++		WRITE_ONCE(buddy->percpu[cpu], NULL);
++}
++
+ __weak int buddy_init(struct buddy __arena *buddy)
+ {
+ 	struct buddy_chunk __arena *chunk;
+@@ -590,7 +777,16 @@ __weak int buddy_init(struct buddy __arena *buddy)
+ 
+ 	buddy_unlock(buddy, flags);
+ 
+-	return chunk ? 0 : -ENOMEM;
++	if (!chunk)
++		return -ENOMEM;
++
++	ret = buddy_cache_init(buddy);
++	if (ret) {
++		buddy_destroy(buddy);
++		return ret;
++	}
++
++	return 0;
+ }
+ 
+ /*
+@@ -606,6 +802,8 @@ __weak int buddy_destroy(struct buddy __arena *buddy)
+ 	if (!buddy)
+ 		return -EINVAL;
+ 
++	buddy_cache_destroy(buddy);
++
+ 	/*
+ 	 * Traverse all buddy chunks and free them back to the arena
+ 	 * with the same granularity they were allocated with.
+@@ -840,9 +1038,17 @@ int buddy_alloc_bulk(struct buddy __arena *buddy, size_t size, size_t norder,
+ __weak
+ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
+ {
++	void __arena *address;
+ 	int order;
+ 
++	if (!buddy)
++		return NULL;
++
+ 	order = size_to_order(size);
++	address = buddy_cache_alloc(buddy, order);
++	if (address)
++		return address;
++
+ 	return buddy_alloc_memory(buddy, size, order, 0);
+ }
+ 
+@@ -939,6 +1145,10 @@ __weak int buddy_free(struct buddy __arena *buddy, void __arena *addr)
+ 	if (!addr)
+ 		return 0;
+ 
++	ret = buddy_cache_free(buddy, addr);
++	if (!ret)
++		return 0;
++
+ 	ret = buddy_lock(buddy, flags);
+ 	if (ret)
+ 		return ret;
 -- 
 2.52.0
 
