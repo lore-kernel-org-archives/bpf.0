@@ -1,57 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792715123;
-	b=PqCIse+e5YN5LZSRTzlFQwo8LiEDIOoQfLiWLIR0sNc/PoDHoBdji/9JB8EaUlgvHJKH
-	 Ec6nZhJDnaZwH6hG+cuI8niuCpAaCe8MfVNRZ7fnTswT+ObMvXk9+D5hm1DkXXv4Hu4sA
-	 MU2X6ZJ0/7bdfP+SRH5nXO2IFgfuzgDsw47Eq3nlwlP/8KSRMOAstKhLl1ZVRpR4jPmLc
-	 5sPH9aHY8xFT/bbERTNN0W1iPT5HwhItYnASHaLa4AB191NqFMNqNP9DQ9s6VfARbRQN2
-	 pfylNkN0E5cOq7mkCMgVX8S3YqCrWlzC0bEuPPVD+u8gO6GQ/98gOFJG7HTw4NNcFrg==
+	t=1792716597;
+	b=p53M2wGNo49/g2WtKnz6/V5GomDJmFwFdWomUaLPVNrJ2doMzZCLcRGR0GGSleZbjvep
+	 Y59PtVPbmnrwQrNrwhT8s/HgLZciiMegrftx6kki+KOzmQINYgfZzV81Xo1+UE5z6mL23
+	 jG6Jt0OPJDzLVFYk8t97LIRiwH+NayzBQBUlRJSieaFW3tjT+8X0fB0os+nmzSgT7RUut
+	 NrhpmKLBftg8QtS5AQ8Tvmm1FFXUR4Rtq0ehchgmOQROP8IuI+l3Z8WKi9amQDwQnAGQ0
+	 hV7ymrB+D+YGWTCmy+6drGot9eKCHeIPT/4KuEHSSxSkD65qWwg8IEclv2mKiTf2ZPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792715123;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=Wyu1xOC4o4z4P+RM+5EbOtREZ5dwr9M81ncT2/vacFc=;
-	b=mkLC4siO+GhIfmFw+9N8MjXtWo1xyqLD+PxIUZl6DiJrS4lKZLcapuVZPUYTMZMGkSms
-	 JDVWZmUw8m+2Dz0PfoFxUt5Ml3HPldDgAeZABfxrAXu7rFeSS/KtJgd9kvrHgY96PXkFS
-	 ++hNUeSyhE8sDTHhF5a4KjAOt6Q8u2tIEdxUCqd6wFw7JRfWYeYsAFOclcgwCSB/dUIai
-	 GqB6dyZCdbyv2QfP1fxE8XFr7VofsiEkOyBNFw+8m45qz9rT/Z7LVh3aDzA34cX4WBJLa
-	 0mshpOHEXeZJ5Qr6Ah+C5j7OBtFW3uDcandxZ5jZ65bKemkPj78Y4kUepF0I7kjDYzw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792716597;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=5IT8lcQuEHk4+YLkTHf+j9Bw5J6DUkGoAxexESbLW2w=;
+	b=u7U0vzF2EqUazPssncuOZZiOkEEl/RYxc9kNzDd8r+Q2pmJhPIt1KyUBMtc9EjzjTGEK
+	 PO0KiGvlT0t1spRqVU257xUbF/x5QSc+WUTxSts/kd/rYLS1eD2/1DngIL4LjLGZyiD4v
+	 iYe13e/x81QnA4qOhpILWVDwiKdpHwr2hQqqPgiXUwk6rAWm58DHehHnuxV9MT/dxW4Bs
+	 naPOy995yzZi3KJq3PnEZ2FLSZxkTvrW+Ih7vF4dyXg5KNDbLL6Z/lU8Q/mrzRITxoBe1
+	 8EgoFBakwd//sHkcAAm/cF6PmW1YPfaqht6bWg1r1hPcQQ0N+6/BhhZI6jfRbjEFEhg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T98x9TSL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NWJFB4Dc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0292D606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 00:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E902606A319
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 00:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T98x9TSL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E291F01825;
-	Fri, 23 Oct 2026 00:25:22 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NWJFB4Dc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6821C1F01825;
+	Fri, 23 Oct 2026 00:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792715122;
-	bh=Wyu1xOC4o4z4P+RM+5EbOtREZ5dwr9M81ncT2/vacFc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=T98x9TSL7Gyw48oIsEDCvf+1yEBAEBM5ndwG17QLe6yfzA6IBBN9HmSpplbE4MUgu
-	 ZFgcRLCYqb4SQTnrMYkhmaiacowugc6pY/0RFQn1BqpkekrxzNSBs4I08ieBceQgCh
-	 f59OujLF4wKYA5SDdQh9QxEJlt/R/9Efg888nniQXyy3MclYnzK6p3/XKB3nqbLoLh
-	 JyvoZafA4KN+gzD9QpOAYCkW5z8K9wo1ZCRDVpzljW4CgLmkTSPfjFBNqFdvDFXVPK
-	 2XpSVN/6TJcBvZruKqF5g1Mme6MZPseWFwzCwygM+9V3UAKb2/6s//ex6YsbqFTjjr
-	 YLkePN/buh0uQ==
-Message-ID: <sashiko-outbox-182165@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 6/6] selftests/proc: Add KALLSYMS_QUERY
- tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Samuel Wu" <wusamuel@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261023001603.560210-14-wusamuel@google.com>
-References: <20261023001603.560210-8-wusamuel@google.com>
- <20261023001603.560210-14-wusamuel@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 23 Oct 2026 00:25:21 +0000
+	s=k20260515; t=1792716597;
+	bh=5IT8lcQuEHk4+YLkTHf+j9Bw5J6DUkGoAxexESbLW2w=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=NWJFB4DcsqwLOGXnQ1CrCIrXTuVeLWzyAk1usmtWmchPA8nUqlDL0rT+MUOXu3XJV
+	 NFD5zxr/AnqmiM5HkrUhKUyOfBJ+W5ApjdB8ycCHuGsDQK9kmnbwtzuN9Uygco7ybx
+	 yzHOue8C4rmageqfan3SRZFwEQcnJKMlThzO6eSsHVLHSff8HJkfAGX9AvjYPVjqO7
+	 Fw9c75C9vXIcXb2qBCqwfDQ8fOjWtCRgeHkZoX0wKHOIyOptGHf8u/5KkdoeoPGbrT
+	 qnJvfZy92F94d96D6jA2nk9guhH+qIu8i9ErqaUIBsu3FafUDaAJDq787aVOCXtN6u
+	 l3MohBmUGGjag==
+Content-Type: multipart/mixed; boundary="===============1835415968709184545=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,118 +48,90 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Message-Id: <34442f2421f6736cd80dee1fedf5e6754a900344c0d5e48568cad914507e03ab@mail.kernel.org>
+In-Reply-To: <20261023002056.6647-2-emil@etsalapatis.com>
+References: <20261023002056.6647-2-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v3 1/7] selftests/bpf: libarena: Add bulk buddy allocation helpers
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,daniel@iogearbox.net,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 23 Oct 2026 00:49:56 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] selftests/proc: main() bypasses kselftest reporting and ksft_exi=
-t_*() wrappers
-- [Medium] selftests/proc: main() skips silently with bare KSFT_SKIP and no=
- reason message
---
+--===============1835415968709184545==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 309c42ade27ce014cdfb65d22ab97d40bf7dcd32
-Author: Samuel Wu <wusamuel@google.com>
+> selftests/bpf: libarena: Add bulk buddy allocation helpers
 
-selftests/proc: Add KALLSYMS_QUERY tests
+TL;DR: Nit only: the comment and commit message say buddy_free_bulk() fails
+only when the lock can't be taken, but it also returns -EINVAL for NULL
+arguments. No functional problem.
 
-This commit adds a selftest in tools/testing/selftests/proc/proc-kallsyms-q=
-uery.c
-to exercise symbol-to-address and address-to-symbol lookups via the
-kallsyms_query ioctl on /proc/kallsyms.
-
-> diff --git a/tools/testing/selftests/proc/proc-kallsyms-query.c b/tools/t=
-esting/selftests/proc/proc-kallsyms-query.c
-> new file mode 100644
-> index 0000000000000..229cde432d6aa
-> --- /dev/null
-> +++ b/tools/testing/selftests/proc/proc-kallsyms-query.c
+> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
 
 [ ... ]
 
-> +int main(void)
+> @@ -900,4 +950,40 @@ __weak int buddy_free(struct buddy __arena *buddy, void __arena *addr)
+>  	return ret;
+>  }
+>
+> +/*
+> + * Fails only when the buddy lock cannot be taken, in which case nothing was
+> + * freed. Objects that buddy_free_unlocked() rejects are reported there.
+> + */
+> +__weak int buddy_free_bulk(struct buddy __arena *buddy, void __arena * __arena *addrs, size_t naddrs)
 > +{
-> +	const char *sym_name =3D "vfs_read";
-> +	char resolved_name[KSYM_NAME_LEN];
-> +	char long_name[KSYM_NAME_LEN + 1];
-> +	size_t page_size =3D sysconf(_SC_PAGESIZE);
-> +	unsigned long long exp_addr;
-> +	struct kallsyms_query_ext q1;
-> +	struct kallsyms_query q;
-> +	char *page_buf;
-> +	int err;
-> +	int fd;
+> +	unsigned long flags;
+> +	unsigned int i;
+> +	int ret;
 > +
-> +	fd =3D open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0) {
-> +		if (errno =3D=3D ENOENT)
-> +			return KSFT_SKIP;
-> +		ksft_exit_fail_msg("open(/proc/kallsyms) failed: %s\n",
-> +				   strerror(errno));
-> +	}
+> +	if (!buddy)
+> +		return -EINVAL;
 > +
-> +	if (!find_vmlinux_symbol(sym_name, &exp_addr)) {
-> +		close(fd);
-> +		return KSFT_SKIP;
-> +	}
+> +	if (!naddrs)
+> +		return 0;
 > +
-> +	/* CASE 1: Valid vmlinux symbol query (or -EPERM when addresses are hid=
-den) */
-> +	err =3D query_symbol(fd, sym_name, &q);
-> +	if (err =3D=3D -ENOTTY) {
-> +		close(fd);
-> +		return KSFT_SKIP;
-> +	}
-
-[Severity: Medium]
-In main() in tools/testing/selftests/proc/proc-kallsyms-query.c, when
-opening /proc/kallsyms fails because the file does not exist, when
-find_vmlinux_symbol() does not find vfs_read, or when query_symbol() fails
-because the ioctl is not supported by the running kernel, the function
-returns directly without printing a skip message.
-
-Unlike the hidden-address check right below that calls ksft_exit_skip() with
-a reason string, returning silently here leaves test logs with no indication
-of which prerequisite was missing.
-
-Should these three skip paths call ksft_exit_skip() with a descriptive
-reason message instead?
-
-> +	if (!exp_addr) {
-> +		assert(err =3D=3D -EPERM);
-> +		close(fd);
-> +		ksft_exit_skip("kallsyms addresses are hidden, only -EPERM checked\n");
-> +	}
-> +	assert(err =3D=3D 0);
-> +	assert(q.sym_addr =3D=3D exp_addr);
+> +	if (!addrs)
+> +		return -EINVAL;
+> +
+> +	ret = buddy_lock(buddy, flags);
+> +	if (ret)
+> +		return ret;
+> +
 
 [ ... ]
 
-> +	/* CASE 16: KALLSYMS_QUERY_BY_ADDR invalid inputs return -EINVAL or -EF=
-AULT */
-> +	assert(query_addr(fd, exp_addr, resolved_name, 0, &q) =3D=3D -EINVAL);
-> +	assert(query_addr(fd, exp_addr, NULL, sizeof(resolved_name), &q) =3D=3D=
- -EFAULT);
-> +
-> +	close(fd);
-> +	return 0;
-> +}
+This isn't a bug, but is the comment above buddy_free_bulk() accurate?
 
-[Severity: Medium]
-Although tools/testing/selftests/proc/proc-kallsyms-query.c includes
-kselftest.h and uses ksft_exit_fail_msg() and ksft_exit_skip() in main(),
-it never calls ksft_print_header() or ksft_set_plan(), evaluates all 16 test
-cases with libc assert(), and exits main() with a bare return 0.
+It says the function "fails only when the buddy lock cannot be taken", but
+buddy_free_bulk() also returns -EINVAL for a NULL buddy and for a NULL addrs
+with a non-zero naddrs, before the lock is ever attempted.
 
-When run under kselftest runners or automated test parsers, this produces no
-plan, per-test result lines, or summary output on completion, and aborts the
-process via assert() on failure instead of reporting structured test failure
-results.
+Nothing is freed on any of those paths either, so the contract that a
+non-zero return means the array still owns its objects does hold.  The later
+transfer cache patch relies on this: buddy_cache_spill() in f23ed100d6eb
+("selftests/bpf: libarena: Add a transfer cache") treats a non-zero return
+that way.
 
-Could main() use the kselftest.h reporting helpers (such as
-ksft_print_header(), ksft_set_plan(), ksft_test_result(), and
-ksft_exit_pass() or ksft_finished()) or the kselftest_harness.h macros
-instead of raw assert() and return 0?
+Could the comment say something like "Fails only when the arguments are
+invalid or the buddy lock cannot be taken; in either case nothing was
+freed"?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261023001603.5602=
-10-8-wusamuel@google.com?part=3D6
+The commit message has the same sentence:
+
+> buddy_free_bulk() fails only when it cannot take the allocator lock, in
+> which case nothing was freed.
+
+and could be adjusted the same way.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39878206535
+--===============1835415968709184545==--
