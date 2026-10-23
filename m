@@ -1,98 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792771460;
-	b=kRbk83AssOc/+i7ZvP4T5yFEPUYln657GkUHpPT9rtLks16Jf2NnvD+rI7HJdlIzNxYV
-	 4mIhBZbyU9AIhJ/w3t2imuy8h3ujhqXbbvGBdGjSAz4lyBZskfX4lm84dGrjN8KY2+LOL
-	 7YtjV7MXbrzoeBBSkoWKQa8jlgqF15EOCcq+jdIyNJECJluF+X/EzbpnUVNhQ3e+0YvPs
-	 bv9XNLF3c/sH0gxMqbQIzi73QPIxi1khhaqGwP85OQU6ZnLOnbstLFKrAxDskzRq/I1XB
-	 SW/80yYAEl3J7Xt/vm01OEnxa8OtIxtVWS3vx6UMggHnOYZwJ3ZRr42BbgF0Oe0RWdQ==
+	t=1792771519;
+	b=MQGfrIBhvbXxj12xg1yJOPoHCxwp/x91gMYDZw2rfzLqqWbReDOGh50aORmmUw0T7WaA
+	 4X0bAdhZwnQNXh/LQX+azY1gKfY2HCpNmIEjloZS2ftxiyffxGOyNGqJ1Wk6vRa+5ocdT
+	 5RPst1iEY1iV/OqKz9FFGrKu73DAEl/jkhbq3fFXvJ6bwq417Rux1OeUgoWKpkDfcSY3D
+	 N3JLKpfXIEdma6zMcU1oP0UNRDE6EpyssuqbSbDr0yIaSHFUfA9VZ9uSxPbYbT1C5txAD
+	 b4DA56iTlB6oWVUlYhhM+I1hRBL162xX1lkNMBXQeNwctw1AxmLvW3ueDcrForogjlg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792771460;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=EcU6RfKr4ZzY1Q/TbJYZK1jW/7NnBQPjgUilPcVqQc8=;
-	b=cjQACs7W/BY0UV94J8CbeV5Gjvrdpch0KY9e7c6I1Ov6jGKErsIdCeVXnvUsV+0iwdNQ
-	 5tHFZt9KlTg1ErybSc4nvJtE9oQVrePMD0oJpRCMFlLsQlN0Ok+WjWqYsNO4cC+Kr0qlq
-	 /swqJ0tV4y3yXWLsrDYX8DKLR5CiwnCfhGQvE/MhejXItQYqX5pRzoL7AAhX8+IN53gFt
-	 hWl5oHtnaUwIBTa22nrAO4Ti1KB2/lrt+8zVVdpic9+u1LKezXt0KzG5pBbXV8xFqGK1H
-	 cpFZTe13V8wWOoAVcadEUIz2SdKGamPv1D2FiMyAIDMuaCojFVuWCDrGLL5+FKbg5Qg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792771519;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=UocDU7ImLSN8bUn3qE+8ros6Ps+AObI529MubY0oH/4=;
+	b=SCktZS6IfcJtK/qt3V4mAut/sVcKob7xwsyioJe/8qngW8lwJ6Gu3ViECdmTAH/NePoE
+	 9lDww3BtYzRxQKoRVuZ/r4cMcQMmvcUpurM8tmR9dUKksW412jPMUjRfuAW2kJ4vwf6ky
+	 g7mo+ZugFnXQACByQ2+gGHhHeX3Uow26ANJVTXW7JfI5Tyw86sfKAvv8SBpsnvxUBg4IO
+	 kQZo00lDY7wG9sTYm+ruPoXp2xsqbsGY0zLtecdEB1lzeD4NDF+VDI9vucm7tARA5kNTg
+	 AZnAT79KQYi58votDdBM7gKPxo8pFBz/YWlsvPN1bAeei0lITLbFb4frtFWBGAvBLyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=F7eRWv8L;
-	arc=none smtp.remote-ip=209.85.210.174
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CHzppK64;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76773606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 16:04:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76773606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC6D606A326;
+	Fri, 23 Oct 2026 16:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=F7eRWv8L
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8a070781f63so510950b3a.1
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 09:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792771460; x=1793376260; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EcU6RfKr4ZzY1Q/TbJYZK1jW/7NnBQPjgUilPcVqQc8=;
-        b=F7eRWv8LDdWj1TmIyy6wRG7ZEbN3aBGk/y+JCwl3JEZH7XAH1SrDdldqBgtqPo+iW7
-         lQDCRWi63YCNnKtIgefVtWO0rB6dq6VBTrAJEbZ8YBrdo8kgBlYda6dEigJPamdFKB7d
-         4DgaIeX6cK/nbWY2aGRxYqmFV6EJxTLRWaKBoRtxPpRax9BY4G8Q5wtwJbI4qDAt6Wii
-         rrAQ+H2E8RsIPHWhDwVp+673WIyz1Z2PmZY0DXO1ki8JQtTK0VlUV0fMaJLX4kcVZCVe
-         80jCl39Kli1qLij9fOzHlZVlZsvv7lyqTVQG5RiM2JinzFBA6KLT7+mlT3BPcf0YxbjQ
-         GzYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792771460; x=1793376260;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EcU6RfKr4ZzY1Q/TbJYZK1jW/7NnBQPjgUilPcVqQc8=;
-        b=M0wZuwLgbOVQkod6qWDO55a+eMC4po2+zsFB4+Um3ui84H4/ohTFk9ASUY1+1Ks71i
-         NB7p0tA8L3vfdYpIvLeNPpg+8IlHz1S8P+1eBOjoLs8qFj6NZPPagTy/pkvySHYXJLW3
-         kddMggT4nE795NUillu9oCvJ51ZtjgfqjG+mTk81aipqkMhvNBq0XppSUi44GYfalCyh
-         UgZqu367PhCyDCq/Z8sFIuY0JpfkjsBEGP15Ares0A+kJry5XnzRKkqJBK5dq/gpNUAf
-         bjT3of9JOM8Qc7xzXlceqwcrCs1fEJSdpk/WVVMynvcRtMGtaWHW28pwW7wWF0FARY6Q
-         rm3A==
-X-Forwarded-Encrypted: i=1; AKwUvByY4JmAk61T+X09KcVI2BqN0/2k7a5T9TC4SmLF1qCjljMShZbsobUoO76BEJcFK3E4bz0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIICw8GvpwXt20+4QQlgWGBcFjgL2NNo12/AUZFuJvLPzxT7RY+
-	W10OEFtNrsLndsL0i3KlQY7j7FBZcbavWVcVMvlzkxA6zoouBXYOfvMN
-X-Gm-Gg: AYBFou3I0SiL1zHu1j4dbzdzK1m1F/lY6GCPlVR8RO6TpG/NzMfkd1z5mO57xf7MQpU
-	GVxDBKX+Eqo5AC0OQw9p6Io2WY4Z85XVZeXt+qnuWHCKy7FFGwEvgZklwsH6hg/f2n4x+/5CmuJ
-	W6rwRLdj1G12aRj4Y2rDZGRkKhO/A7Q4o8g+BnXChUib/Vn8d0chNBS9CzWwEDYIkVGlUFmjF8D
-	5H1IRO2GyhIQICxVO1ehjDvqC5iPda2KNaRQ18ydvgRZXooUjL3ywEkO/tIgnLD+s9sNiKNrmHJ
-	PUQvy+F7evKZYakkmT1LUv0MyLnGYyAsR9OgcPTgTuOkxf+2g2Rm6MutYA5M4iNVJYEU3NIoiOJ
-	F2IrqrfI8rnp/0Ad/FbXrwPiyf73qSBCemz4DGP87usdD5/WlerCAfVM/4AiZ2gNbxATk/V4eS3
-	oqN+sQbThkUzcYcSiF1H4H5rgV4kPQbAbV20AxCzSLbql9ZhR+2Ns4hy3i5+8AypuKPdvv+L+8T
-	i/cQtNrAFer52l0Xyz+iCUGQnv0UedgFVb2+9q380UCYUBtUwSvypUt5qF86W5VsZ/0+RKxbsXt
-	jtIcPhw7QFzaILlHfUZT1z8J+3L4e7KsC9QM66YIUPVB7vt0FvFOuHsZytmSiw==
-X-Received: by 2002:a05:6300:618d:b0:3cc:45cc:c401 with SMTP id adf61e73a8af0-3e36923d731mr2426629637.13.1792771459736;
-        Fri, 23 Oct 2026 09:04:19 -0700 (PDT)
-Received: from localhost ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8cb00a17fsm18537a12.18.2026.10.23.09.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Oct 2026 09:04:19 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Oct 2026 16:04:18 +0000
-Message-Id: <DMCCFYFSY28Z.2BL8TJ1R2QZ1F@gmail.com>
-Cc: <zhoujinghao24b@gmail.com>, <rafael@kernel.org>,
- <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
- <bpf@vger.kernel.org>
-Subject: Re: [RFC PATCH] cpufreq: ext: serialize BPF registration with
- governor teardown
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Hungyu Lin" <dennylin0707@gmail.com>, <zouyipeng@huawei.com>
-In-Reply-To: <20261023083131.58291-1-dennylin0707@gmail.com>
-References: <20240927101342.3240263-2-zouyipeng@huawei.com> <20261023083131.58291-1-dennylin0707@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CHzppK64
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD6B1F01825;
+	Fri, 23 Oct 2026 16:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792771518;
+	bh=UocDU7ImLSN8bUn3qE+8ros6Ps+AObI529MubY0oH/4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=CHzppK641dtPEq3WhYoFez5r9mHJ+3OBQKq4TIHeNzjw38VFpwUEiF3RYFs9B3iua
+	 T85cXDpCsvvYQFzcXZjNlA5VpGfMv8kC7mjzqNFtQlEBCBzsNIQpL6SvLUg6AAmKVQ
+	 hzZOaEL+qqGjfnYwCbAZNLmDMU3MHmNqUTDldMWvcZ9TxRH1KHLR/ERa1VUdiTWsAc
+	 zMsfB4zdUqK46YYgfdifXHG6UtmADc4uub/3BdOP1sWPmZADl+OMSbrQg3PCqGHJTM
+	 XFQUfZ2roPk4Htm0v2LLF8bdsxUDS7pBFGoNmRf/KD3bniFMoebjqu+i6nvId9nuNF
+	 PH92+H5cd+9vw==
+Message-ID: <b28db1fb-ea02-4f83-be99-c8d4b180dc6b@kernel.org>
+Date: Fri, 23 Oct 2026 17:05:10 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,13 +51,138 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add bpf_ksock_bind() kfunc
+To: Mahe Tardy <mahe.tardy@gmail.com>, bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, willemb@google.com,
+ eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
+ kuba@kernel.org, horms@kernel.org, liamwisehart@meta.com,
+ martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org,
+ netdev@vger.kernel.org, sdf.kernel@gmail.com, yonghong.song@linux.dev,
+ jolsa@kernel.org, kuniyu@google.com, memxor@gmail.com, emil@etsalapatis.com,
+ martin.lau@kernel.org, mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261022181620.247201-1-mahe.tardy@gmail.com>
+ <e31194dd72efd3c182707e870b7e7a6d67b78be23cea06aded0275678373c64c@mail.kernel.org>
+ <atseCFvfx9FbTXP3@gmail.com>
+Content-Language: en-GB
+From: Alan Maguire <almagui@kernel.org>
+In-Reply-To: <atseCFvfx9FbTXP3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 23, 2026 at 01:31 AM Hungyu Lin <dennylin0707@gmail.com> wrote:
-> The 2025 fix addresses a separate policy-state lookup error. This
-> teardown bug is present in the original, unmerged RFC as well.
+On 10/23/26 9:42 AM, Mahe Tardy wrote:
+> On Thu, Oct 22, 2026 at 06:45:34PM +0000, bot+bpf-ci@kernel.org wrote:
+>>> bpf: Add bpf_ksock_bind() kfunc
+>>
+>> TL;DR: bpf_ksock_bind() called from a bpf_wq callback runs with kworker's full
+>> capabilities, so a CAP_BPF-only SYSCALL program may bypass the privileged-port
+>> (CAP_NET_BIND_SERVICE) check; the review asks whether to block it.
+> 
+> Honestly don't know if it makes sense to prevent it given you are
+> creating this kernel socket from a BPF context, if anyone with more
+> experience on this can help?
+> 
+> If the answer is yes, I imagine preventing bind() to run from a
+> workqueue is the easy answer so that all creds are respected as usual
+> and it's not a huge limitation (we mostly care about being able to
+> send()/sendto() from a wq).
+> 
 
-Your bot is going nuts.
-drivers/cpufreq/cpufreq_ext.c doesn't exist.
-Stop sending slop. This is how you get blocked.
+I suppose one way out of this would be to forbid bind()ing to the privileged
+port range; that would sidestep the issue I think. Hard to know how restrictive
+that would be in terms of real use cases, what do you think?
+>>
+>>> diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+>>> index 37168f43c16c..c7b487d90cd0 100644
+>>> --- a/net/core/bpf_ksock.c
+>>> +++ b/net/core/bpf_ksock.c
+>>
+>> [ ... ]
+>>
+>>> @@ -178,6 +178,33 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
+>>>  	return NULL;
+>>>  }
+>>>
+>>> +/**
+>>> + * bpf_ksock_bind() - Bind a BPF kernel socket to a local address.
+>>
+>> [ ... ]
+>>
+>>> +__bpf_kfunc int bpf_ksock_bind(struct bpf_ksock *ks,
+>>> +			       const union bpf_ksock_addr *addr, u32 addr__sz)
+>>> +{
+>>> +	struct sockaddr_storage sa;
+>>> +	int addrlen;
+>>> +
+>>> +	addrlen = bpf_ksock_addr_to_sockaddr(addr, addr__sz, &sa);
+>>> +	if (addrlen < 0)
+>>> +		return addrlen;
+>>> +
+>>> +	return __sys_bind_socket(ks->sock, &sa, addrlen);
+>>> +}
+>>> +
+>>
+>> Can the CAP_NET_BIND_SERVICE check for privileged ports be bypassed when
+>> this runs from a bpf_wq callback?
+>>
+>> bpf_ksock_bind() is added to ksock_init_kfunc_btf_ids, the same set as
+>> bpf_ksock_connect().  Commit 60bbe76a3f9e ("bpf: Allow ksock connect/send
+>> calls from wq") made the kfuncs in this set callable from bpf_wq callbacks
+>> of SYSCALL programs, and tools/testing/selftests/bpf/progs/ksock_wq.c
+>> already calls bpf_ksock_connect() from such a callback.
+>>
+>> bpf_wq_work() runs that callback in a kworker, where current->cred is
+>> init_cred with cap_effective set to CAP_FULL_SET (see init/init_task.c).
+>>
+>> The bind path is:
+>>
+>>   bpf_ksock_bind()
+>>     __sys_bind_socket()
+>>       security_socket_bind()
+>>       inet_bind() -> inet_bind_sk() -> __inet_bind()
+>>
+>> and __inet_bind() then does:
+>>
+>>     snum = ntohs(addr->sin_port);
+>>     err = -EACCES;
+>>     if (!(flags & BIND_NO_CAP_NET_BIND_SERVICE) &&
+>>         snum && inet_port_requires_bind_service(net, snum) &&
+>>         !ns_capable(net->user_ns, CAP_NET_BIND_SERVICE))
+>>             goto out;
+>>
+>> __inet6_bind() has the same check.  With init_cred, cap_capable_helper()
+>> walks up to init_user_ns and finds the capability raised, so the check
+>> passes for any netns.
+>>
+>> For example, a task holding only CAP_BPF can load a SYSCALL program, since
+>> is_net_admin_prog_type() does not ask for CAP_NET_ADMIN for that type.
+>> Such a program could bind its ksock to UDP port 53, 123 or 514 from a wq
+>> callback, while the same call made synchronously from the SYSCALL program
+>> returns -EACCES.  A bpf_task_work callback looks like it has the same
+>> problem in a different form, since the check would be evaluated against
+>> whichever task the work was scheduled on.
+>>
+>> Commit 60bbe76a3f9e only argued about LSM checks ("bypassing LSM checks for
+>> BPF-created sockets could be acceptable"), and connect and send on a UDP
+>> ksock have no capability gate.  bind appears to be the first ksock
+>> operation that does, and the commit message does not address the wq
+>> context.
+>>
+>> Should bpf_ksock_bind() refuse to run from kthread context, the way
+>> bpf_ksock_create() does with its PF_KTHREAD check?  Alternatively, should
+>> it be kept out of the set that is reachable from wq callbacks, or should
+>> the commit message state that bypassing the privileged-port check is
+>> intended?
+>>
+>> No fix for this was found in the provided range; 76406b1f799f
+>> ("selftests/bpf: Test bpf_ksock_bind() kfunc") only adds tests.
+>>
+>>
+>> ---
+>> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+>> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>>
+>> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39831790314
+> 
 
-pw-bot: cr
