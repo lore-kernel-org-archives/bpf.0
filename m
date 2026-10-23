@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.185
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792794462;
-	b=eP0HmkiDNPUh9ejwwVx5P6zFiGz+laYcKXDhX+d+0UAOilNvHkonvKvv0llQjfyKxzyN
-	 nlABwmWSh/Wgqj3VFXx6F0jpTpBFlohwrvEgnHUytKAsIahudyJYTjxnlP6o9rY2ymrYW
-	 lUB3wcabG5+BMaf/oqDOikVx7JDjJ1E+H371Lrqq4z7f7xoxoSeUW/ZnzNWHlkQapWieQ
-	 IM7T2IE0DK7C7SnlEwPMIi2IdEhNgCFKWx3Avr2CXwmz76QCwOU1Lz54jU38SRFi1DR7n
-	 lxhLCPxPhcHWcRTCtAXxvrjg+kwLcbPL5xC8vGnAgQVAc3CdoIjrvZ2QgzKTDvtkU0w==
+	t=1792794466;
+	b=HP/Ta/nmPYt+JoUrgaQn1GyGaVW46EiprqxQsHMsYLi95pHCxgmfZhsDfLPxEaPDPiiI
+	 PxQE9ebLS5EDsekhO1TaNbn5puwuIso0+UGkPfXjEYaqSSRV2fYgNjM8v9xa9FBgh3zUp
+	 l4wDKuUlrRucaDp1peACupCGEGhEaEFkzrUs4rTuJYkeTHmZKErnYf19uwgYFRurUfd/V
+	 bgA7SJZTqWAxnxbXp9/sS4eHpbiqdZgDB4a7m9GTssccMRr4kYxf96SPxdYmP/CdqC7t4
+	 czLJph2DKZ2eDr0u0E3ZicSh5h7bCdqcbjPbGz3EqMUl8IPAp0lZhCuIlRcMvaGT8hw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792794462;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792794466;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=OeHh3AaRca1sCxgd4NjV6R8yzIKkvRHrJoAfrZ4R5lI=;
-	b=yH6vIFF+P2BIQOnRMndlnMpnK0BziZ2GMhxDgOK1LiRGFKbWWfYbCmh0j2gWqxRs395a
-	 YFnzL5mMLQk/pX5PXzwKaBrbuwNJMfjB00mYfnhjKsAPFa8+ivH+Emfqzvng5/0Wts+4i
-	 8nmv3sfHd/uKSRF1a08BkBk+S+V3sN9OK5jFCyiLO2XxOUTOiWopJYTu3vuj5uWGsLwXa
-	 aOh64itNm+Cd55HvtloJCtDJaeSQD8QItUmq4qfBlUyscqBxrVPFF/6Z6Z8Y8T1Hr8t2Y
-	 KrlV/GtFJ+mQpFUOZ0ACHRyrfUphGr0lkKbUmQQn4nG8G8J8ZTcASyB71HcSStXS1kg==
+	bh=1LmCta+E11bwos0r0fzb+F8GgIxUxhmDUudltqscimw=;
+	b=Evp2e7RYdHJWwlr5CU45NHrVt4ji7E1qegKxLI7sSt+ebxBF2FhEHNTCvBpu6By9MmV4
+	 TfCR+rI08CtWAiigNlJgb8fZSMOVJ9MqFXRH/OGXqG/PNY7iedY9dMfevVZIwm8KlG895
+	 kq0/KgdWF/hUOHXQS3gCe7QfU35WOrwY5/l+nbn/zC23QtU9vqS3Z8aupCRfMBx4yugaB
+	 DHDDtaONimChnlrwhYgiG0CQzWiVfxWQ8/5SZV0PdZjiZ9lpli9UejGoALtKg6zmUtSBR
+	 5vDpUauycXZZ7jyhH/brzjwQJnPI0TNglayGhqgbYL5pWjosVta61/1PprmmOrCCp5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="s/45cEzQ";
-	arc=none smtp.remote-ip=91.218.175.180
-Received: from mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RP++P2J1;
+	arc=none smtp.remote-ip=91.218.175.185
+Received: from mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B48606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:27:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01B48606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB23606A31B
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:27:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1DB23606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=s/45cEzQ
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=RP++P2J1
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=azfXhD0l3bMg83jHpdyvflFINn66BPwKceVvdkz2JH4=;
+DKIM-Signature: a=rsa-sha256; bh=7hHZa94DsysRIGv+4xVSycVDgMvWKBdWVSbG1A27dwQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792794460; v=1; x=1793399260;
- b=s/45cEzQ0V/00SPjPHYYHDI1Ye8AYvty2AF0cKrsUZVlnVPOWIY7YkmDsatAhXXNvyyXOTsY
- /tSRYpXOStALwIKCabC0kCEpHxmQjknCubvcFmg5/J/T/WCwAeWuxKtfQU3LJfNGvY7fZ1DgGea
- 2todDxuA1q1dhTIp/gML8b1M=
+ t=1792794464; v=1; x=1793399264;
+ b=RP++P2J1GTHRfpseMDCCf80wjflok+wr/zj1EtytugUuFYvapgk7EKELT2u8J6U/IyxjDCr2
+ l36rYt1NzBVL2tQOhzD1HXDEczpYb1TReqq6HFJbJTh/xcdTKDJds1HeSrPjlv0Jrd85E+eEKyb
+ IM0OYpYWB0D9B+NnKP7JQktY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id c756654e26e70556;
-	Fri, 23 Oct 2026 22:27:39 +0000
-X-Mizu-Trace-ID: c756654e26e70556
+Received: by mta10.migadu.com with ESMTPS id fef41547452717e3;
+	Fri, 23 Oct 2026 22:27:44 +0000
+X-Mizu-Trace-ID: fef41547452717e3
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v2 4/8] bpftool: Skip __bpf_relocatable on verifier-rewritten context types
-Date: Fri, 23 Oct 2026 15:26:48 -0700
-Message-ID: <20261023222652.3927736-5-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 5/8] bpftool: Emit __bpf_static_offset on verifier-rewritten context types
+Date: Fri, 23 Oct 2026 15:26:49 -0700
+Message-ID: <20261023222652.3927736-6-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
 References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
@@ -79,158 +79,122 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The verifier translates accesses to UAPI context and socket types,
-such as __sk_buff and bpf_sock, into accesses to kernel structures.
-It picks the kernel field by the instruction's offset and keeps the
-base register. For example, in bpf_convert_ctx_access() [1]:
+The verifier translates accesses to some UAPI context and socket types
+into accesses to kernel structures. These accesses require an
+unmodified base and an immediate field offset.
 
-	switch (si->off) {
-	...
-	case offsetof(struct __sk_buff, mark):
-		...
-		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
-				      bpf_target_off(struct sk_buff, mark,
-						     4, target_size));
+Leaving preserve_access_index (PAI) off does not stop the compiler
+from merging loads at different field offsets into one load through an
+adjusted pointer. The verifier rejects the resulting program.
 
-So these accesses require a load or store with an immediate offset
-from an unmodified pointer. Their UAPI field offsets are fixed, so
-CO-RE relocation is unnecessary. With preserve_access_index, the
-compiler can instead emit pointer arithmetic, for example
-for ((u8 *)&skb->mark)[1].  The verifier then rejects an otherwise
-valid program.
+preserve_static_offset (PSO), available since Clang 18, preserves
+static field offsets in load and store instruction immediates. Apply
+it to the 13 types that need static offsets in vmlinux.h through
+__bpf_static_offset.
 
-Omit the attribute from the 13 such types when dumping C. Also omit it
-from their nested anonymous records: keeping it there can root
-relocations at an unnamed type, which libbpf cannot resolve.
+Eduard introduced PSO in Clang and proposed annotating BPF context
+types in 2023 [1]. His v3 RFC [2] left pt_regs annotations in
+architecture headers unresolved. However, since commit
+de6c7d99f898 ("bpf: Relax fixed offset check for PTR_TO_CTX"), program
+types without convert_ctx_access() accept fixed offsets from modified
+context pointers. pt_regs can now keep PAI, while PSO on
+bpf_perf_event_data covers its regs member.
 
-The last addition to this set was bpf_sk_lookup, introduced in 2020 by
-commit e9ddbb7707ff ("bpf: Introduce SK_LOOKUP program type with a
-dedicated attach point"). Keep the set hardcoded in bpftool so the
-exclusion also works with older kernels.
+PSO creates no CO-RE relocations, so BPF_NO_PRESERVE_ACCESS_INDEX does
+not disable it.
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/filter.c?h=v7.2#n9939
+Clang 18 through 23 crash on __builtin_preserve_field_info over a PSO
+record, including bpf_core_field_*() and the CO-RE bitfield helpers.
+-D__bpf_static_offset= can disable PSO for affected programs. The
+crash has already been forward fixed in LLVM [3].
+
+[1]: https://lore.kernel.org/bpf/20231208000531.19179-1-eddyz87@gmail.com/
+[2]: https://lore.kernel.org/bpf/20231220133411.22978-1-eddyz87@gmail.com/
+[3]: https://github.com/llvm/llvm-project/pull/234280
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/bpf/bpftool/btf.c | 84 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 82 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/btf.c                          | 16 ++++++++++++++--
+ .../bpf/bpftool_btf_dump_sorted.expected         |  8 ++++++++
+ .../bpf/bpftool_btf_dump_unsorted.expected       |  8 ++++++++
+ 3 files changed, 30 insertions(+), 2 deletions(-)
 
 diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 5a2c5341b736..5c88f665e6b9 100644
+index 5c88f665e6b9..c7f446ab6afe 100644
 --- a/tools/bpf/bpftool/btf.c
 +++ b/tools/bpf/bpftool/btf.c
-@@ -6,6 +6,7 @@
- #endif
- #include <errno.h>
- #include <fcntl.h>
-+#include <linux/bitmap.h>
- #include <linux/err.h>
- #include <stdbool.h>
- #include <stdio.h>
-@@ -1092,22 +1093,101 @@ static struct sort_datum *sort_btf_c(const struct btf *btf)
- 	return datums;
- }
+@@ -1174,12 +1174,17 @@ static int btf_c_annotate_records(struct btf *btf)
  
-+/*
-+ * The verifier translates field accesses of some types into accesses
-+ * to kernel structures, see bpf_convert_ctx_accesses().
-+ * The translation keys on the immediate offset of each load or store,
-+ * so offsets into these types must stay immediates.
-+ */
-+static const char * const btf_c_static_offset_types[] = {
-+	"__sk_buff",
-+	"bpf_perf_event_data",
-+	"bpf_sk_lookup",
-+	"bpf_sock",
-+	"bpf_sock_addr",
-+	"bpf_sock_ops",
-+	"bpf_sockopt",
-+	"bpf_sysctl",
-+	"bpf_tcp_sock",
-+	"bpf_xdp_sock",
-+	"sk_msg_md",
-+	"sk_reuseport_md",
-+	"xdp_md",
-+};
-+
-+static bool btf_c_needs_static_offset(const struct btf *btf, const struct btf_type *t)
-+{
-+	const char *name;
-+	size_t i;
-+
-+	if (!btf_is_struct(t))
-+		return false;
-+
-+	name = btf__name_by_offset(btf, t->name_off);
-+	for (i = 0; i < ARRAY_SIZE(btf_c_static_offset_types); i++) {
-+		if (!strcmp(name, btf_c_static_offset_types[i]))
-+			return true;
-+	}
-+	return false;
-+}
-+
-+/*
-+ * Anonymous records within types that need static offsets must not start
-+ * CO-RE access chains. Named records, typedefs and pointer targets are
-+ * separate types.
-+ */
-+static void btf_c_mark_no_pai(const struct btf *btf, __u32 id, unsigned long *no_pai)
-+{
-+	const struct btf_type *t = btf__type_by_id(btf, id);
-+	const struct btf_member *m = btf_members(t);
-+	__u32 i;
-+
-+	__set_bit(id, no_pai);
-+	for (i = 0; i < btf_vlen(t); i++, m++) {
-+		const struct btf_type *mt;
-+		__u32 mid = m->type;
-+
-+		mt = btf__type_by_id(btf, mid);
-+		while (btf_is_array(mt) || btf_is_mod(mt)) {
-+			mid = btf_is_array(mt) ? btf_array(mt)->type : mt->type;
-+			mt = btf__type_by_id(btf, mid);
-+		}
-+		if (btf_is_composite(mt) && !mt->name_off && !test_bit(mid, no_pai))
-+			btf_c_mark_no_pai(btf, mid, no_pai);
-+	}
-+}
-+
- static int btf_c_annotate_records(struct btf *btf)
- {
- 	__u32 i, cnt = btf__type_cnt(btf);
-+	unsigned long *no_pai;
- 	int err;
- 
-+	no_pai = bitmap_zalloc(cnt);
-+	if (!no_pai)
-+		return -ENOMEM;
-+
-+	for (i = 1; i < cnt; i++) {
-+		if (btf_c_needs_static_offset(btf, btf__type_by_id(btf, i)))
-+			btf_c_mark_no_pai(btf, i, no_pai);
-+	}
-+
  	for (i = 1; i < cnt; i++) {
  		const struct btf_type *t = btf__type_by_id(btf, i);
++		const char *attr;
  
  		if (!btf_is_composite(t))
  			continue;
-+		if (test_bit(i, no_pai))
-+			continue;
- 		err = btf__add_decl_attr(btf, "__bpf_relocatable", i, -1);
+-		if (test_bit(i, no_pai))
++		if (!test_bit(i, no_pai))
++			attr = "__bpf_relocatable";
++		else if (btf_c_needs_static_offset(btf, t))
++			attr = "__bpf_static_offset";
++		else
+ 			continue;
+-		err = btf__add_decl_attr(btf, "__bpf_relocatable", i, -1);
++		err = btf__add_decl_attr(btf, attr, i, -1);
  		if (err < 0)
--			return err;
-+			goto out;
+ 			goto out;
  	}
+@@ -1228,6 +1233,13 @@ static int dump_btf_c(struct btf *btf,
+ 	printf("#define __bpf_relocatable\n");
+ 	printf("#endif\n");
+ 	printf("#endif\n\n");
++	printf("#ifndef __bpf_static_offset\n");
++	printf("#if __has_attribute(preserve_static_offset)\n");
++	printf("#define __bpf_static_offset preserve_static_offset\n");
++	printf("#else\n");
++	printf("#define __bpf_static_offset\n");
++	printf("#endif\n");
++	printf("#endif\n\n");
+ 	printf("#ifndef __ksym\n");
+ 	printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
+ 	printf("#endif\n\n");
+diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
+index 97664633931f..9166a99a6077 100644
+--- a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
++++ b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
+@@ -9,6 +9,14 @@
+ #endif
+ #endif
  
--	return 0;
-+	err = 0;
-+out:
-+	bitmap_free(no_pai);
-+	return err;
- }
++#ifndef __bpf_static_offset
++#if __has_attribute(preserve_static_offset)
++#define __bpf_static_offset preserve_static_offset
++#else
++#define __bpf_static_offset
++#endif
++#endif
++
+ #ifndef __ksym
+ #define __ksym __attribute__((section(".ksyms")))
+ #endif
+diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
+index edc8c5b708d7..ef01a8a4e6ad 100644
+--- a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
++++ b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
+@@ -9,6 +9,14 @@
+ #endif
+ #endif
  
- static int dump_btf_c(struct btf *btf,
++#ifndef __bpf_static_offset
++#if __has_attribute(preserve_static_offset)
++#define __bpf_static_offset preserve_static_offset
++#else
++#define __bpf_static_offset
++#endif
++#endif
++
+ #ifndef __ksym
+ #define __ksym __attribute__((section(".ksyms")))
+ #endif
 -- 
 2.56.0
 
