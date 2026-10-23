@@ -1,82 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=103.117.158.93
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792759618;
-	b=wJ+vujBORhCuobqWNF59K2SlNH6y6bRnqDYux2PzMNuMEi4BUvwj5wymTWvLq6lRk4tj
-	 4RzUeJKaFyWpGKJHyv3r9cjBfoYUEnfKbO0mI3kBXao+XecqCv9dTYibRYCxm+qzMwobU
-	 nwEbp9/juUqVmADQQMJgt0fWMRhj9tKHC6lkVzRoeqSifplvC8nDIrig/8mEifTi4dPwz
-	 XNE+VTOlCRjtfylWXX4qVHHmMoB2ql+92oziJlKxpMMgD4xjlxeEm1/LxfxWijMWArkpe
-	 n4/Yo6a9QbQqbIathi9rKnDVIhbp/LdYRG1EarpzkZqhW+HlnVykyYLoM3O+z/7Qn/Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792759618;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Importance:User-Agent:X-Mailer;
-	bh=jKGpNzJlpQU9HdMndBuwrQolERcgxUCu0cmVRINNp2w=;
-	b=Bd0+jyZhn025ZG51ijQAhaMQmlLzVtNCni9AhLtla54Tx2ojhk+ISzOdVVPhlQizSVKo
-	 TKeoxUY+d9edBP6899aflkvQT5wYLnrbbqiMWXgpMepnbY5WBYwwo0Im54wDEk+L60pge
-	 Zr1ryAxoUADeKv6s8FSOqxPOpjrsUuXlCYgBulOk0ZebwkTj30OAiG/VamYipknPqmYPv
-	 vHbq4CzwJzvFP8mm3G4efE2G9uKXwLr/QmVMMJEmhdsKJ37wBbr6/xBwZ4ibbIaiWQoE4
-	 fF3rSuy039rjulhHofkS1X5SGtH/SREKFMbBcIc3nDj3kQtsHnp7WPpY8VZILT5/OTQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=zohomail.in;
-	spf=pass smtp.mailfrom=zohomail.in;
-	dkim=pass header.d=zohomail.in header.i=adi.sharma@zohomail.in header.a=rsa-sha256 header.s=zoho header.b=yF34Q8X6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=103.117.158.93
-Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792764427;
+	b=syX9h+O+uhO0PUK8jFrz5DkjGOVp9/x/IWnL/MtngWU1eOFOzvrAHbN+0IJ5E2MDsbqB
+	 o9i1ZhL4GcVSyzXRlxxl9pltySiTB4LAOatfxKLADjiBIajMZX6DLU/nEPCtZs0yyx7d7
+	 HEcmyyVcqlcDZ5lvi/K9vUebfBC3pAKogzAKU/cXOeJYFBotyjvmRjA/omLSSGlai1t9j
+	 Dmu2TKha+3Ko7cHk82B6yWqH37IyonzMesrQOfb/ueTIb3gVT+M6R89QETnahbZmygDoL
+	 shAB+lOV2E86G50fZQaUr6qmTjZ+xW2A6Znf0pG3rntCe2GSg7Blp4e5P5NjU7EH9DA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792764427;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=e+5avhVAYzoklRMOevcq39Nv/JRuzKbPDrhcz4Dvwt8=;
+	b=U5zz91FJOgQe1cUbPsOXFYcGa6qJOjFTZmRSTYmN6uMhcANMHq5DniTSZZNymzUidMbv
+	 CkjvFI+ZxztzY7FVTaVgUDC8GNOQ/5Ytr0yXWkxlyrR8CIsVj1vdUpLLlAkpGnyE9fMdZ
+	 GWrDyR3bWRFz0dM1ajDTwm71qKJ4/pQWWGx6UKybPXIeBa0Dm3qPjMlB95CTXv9GMNAfT
+	 6sAHOTBOYJBqxCkP/10LKTQveP2kXTnSweFRLkCnbmsqm0fkABs8Vomi/BCbUmSLxQKEj
+	 zugNZ62dpInP8drnPdaCCwV+2TAhoJLx6M/HkaWdZWkHCfYKRWl35dk9IL2KUWZT19A==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m2nA5oC3;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDAF606A322;
-	Fri, 23 Oct 2026 12:46:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FDAF606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DB6606A326;
+	Fri, 23 Oct 2026 14:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.a=rsa-sha256 header.s=zoho header.b=yF34Q8X6
-ARC-Seal: i=1; a=rsa-sha256; t=1792759556; cv=none; 
-	d=zohomail.in; s=zohoarc; 
-	b=TSVDsccwJ0O3wjYlVfv2+Y0kHd55rTVY3I74MKTvKNIJxLY33apzqe576ygeRg5pNSVWYacnbJ4sAJIRFULOv3wPAViB5kWXe/FGh0/TJkEwz6BX12cmU87uTmJh8uhhTa/Z3YUv8CL0occngFqxXA1jfwpHBhPvTogxwt+bnrk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-	t=1792759556; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=jKGpNzJlpQU9HdMndBuwrQolERcgxUCu0cmVRINNp2w=; 
-	b=cQNEi+l9n/mTTg9k2QcHtnJAM/dLgEQa91l3VKKujxKzf+kh6FcxpoQxVTJgpi3Gdv/1VeO/S0CFUCwPE1ik7mP7Zk8GGC06kP+R9VINSpfv+QZlUyQGPc5Zp1Jy1mKsd939LDk+7N3FNr6FyUP5ey/e5tPP0VpYJ15P5WGmRpg=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-	dkim=pass  header.i=zohomail.in;
-	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
-	dmarc=pass header.from=<adi.sharma@zohomail.in>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1792759556;
-	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=jKGpNzJlpQU9HdMndBuwrQolERcgxUCu0cmVRINNp2w=;
-	b=yF34Q8X6zg8/+DSFfmyI9IlpeeeTqpLXoTNXupyvwiRzWO8JlRa55GWzZKqDnr0M
-	uJQ20n7Ilgb0Bi5CiQcaMjBAHExw8riV/EKT62sYPwxC1UIwlHXAKQaTZbron7jMkTH
-	vu5gglNg0QjuxRUChfxcefRMbnrfqGpOJIG3T5x4=
-Received: from mail.zoho.in by mx.zoho.in
-	with SMTP id 1792759554228386.54064309795945; Fri, 23 Oct 2026 18:15:54 +0530 (IST)
-Received: from  [14.139.128.24] by mail.zoho.in
-	with HTTP;Fri, 23 Oct 2026 18:15:54 +0530 (IST)
-Date: Fri, 23 Oct 2026 18:15:54 +0530
-From: Aditya Sharma <adi.sharma@zohomail.in>
-To: "bpf" <bpf@vger.kernel.org>, "andrii" <andrii@kernel.org>
-Cc: "ast" <ast@kernel.org>, "daniel" <daniel@iogearbox.net>,
-	"eddyz87" <eddyz87@gmail.com>, "memxor" <memxor@gmail.com>,
-	"martin.lau" <martin.lau@linux.dev>, "song" <song@kernel.org>,
-	"yonghong.song" <yonghong.song@linux.dev>,
-	"jolsa" <jolsa@kernel.org>, "emil" <emil@etsalapatis.com>,
-	"ihor.solodrai" <ihor.solodrai@linux.dev>,
-	"kpsingh" <kpsingh@kernel.org>, "matt" <matt@bobrowski.net>,
-	"rostedt" <rostedt@goodmis.org>, "mhiramat" <mhiramat@kernel.org>,
-	"mathieu.desnoyers" <mathieu.desnoyers@efficios.com>,
-	"shuah" <shuah@kernel.org>, "puranjay" <puranjay@kernel.org>,
-	"linux-kernel" <linux-kernel@vger.kernel.org>,
-	"linux-trace-kernel" <linux-trace-kernel@vger.kernel.org>,
-	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
-	"Aditya Sharma" <adi.sharma@zohomail.in>
-Message-ID: <1a168cbe0aa.30b7e048183449.4003649852775097641@zohomail.in>
-In-Reply-To: <20261001072449.1377267-1-adi.sharma@zohomail.in>
-References: <20261001072449.1377267-1-adi.sharma@zohomail.in>
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix bpf_send_signal_task() from
- kernel thread context
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m2nA5oC3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56781F01825;
+	Fri, 23 Oct 2026 14:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792764427;
+	bh=e+5avhVAYzoklRMOevcq39Nv/JRuzKbPDrhcz4Dvwt8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=m2nA5oC3gMeQOgRPik05P2p9Mv7ORwhnttE0a0GpEYExkRr7AFe5ALdq58c8EXJ25
+	 +9vCqZIMQl8ekvWVTglC3nmPVOOvCs2V7ZX0tdla+MxYfMpypXTHm/QA8NIR8UNak1
+	 B6Zo/XvPz/p6S6S26Croj4+rcApVimYjYMVf7U/8gXdxL4CYXwvtq+eM10as+txo5T
+	 pwaRtB9IV6u8gSSjTqAdfzecCKpBpNTgtd/oDjukjEmrshMuPDPK/KhssFSzC0al18
+	 BudOCjltCEmwgO//GXBgA89E5WLtxYmBnha3Dn1gVKRFTC0IkAYeRfvmfyL15EZGRU
+	 U96D5Ogl7Ge3g==
+Date: Fri, 23 Oct 2026 15:06:59 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "Liam R. Howlett" <liam@infradead.org>
+Cc: Jann Horn <jannh@google.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, oleg@redhat.com, peterz@infradead.org, 
+	mhiramat@kernel.org, jolsa@kernel.org, akpm@linux-foundation.org, surenb@google.com, 
+	david@kernel.org, vbabka@kernel.org, hughd@google.com, kees@kernel.org, 
+	mingo@redhat.com, tglx@kernel.org, x86@kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 4/9] uprobes/x86: Don't WARN if an optimized
+ probe can't be written
+Message-ID: <attpuy6TvlOgB7yJ@gremlin>
+References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
+ <20261022015712.1297331-5-alexei.starovoitov@gmail.com>
+ <CAG48ez0cG532aaXZF_asCDk+fsnQmE9L5PA9T+JN6OGdx6yjGQ@mail.gmail.com>
+ <dabdsge2cphfoulqobeswzj7xxkvlq2qyyi3iauqgmftfj6vg6@hbmosdt6t4bd>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -86,20 +67,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dabdsge2cphfoulqobeswzj7xxkvlq2qyyi3iauqgmftfj6vg6@hbmosdt6t4bd>
 
-Hi,
+On Thu, Oct 22, 2026 at 03:33:16PM -0400, Liam R. Howlett wrote:
+> On 26/10/22 07:56PM, Jann Horn wrote:
+> > On Thu, Oct 22, 2026 at 3:57 AM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > > @@ -1197,7 +1194,7 @@ static int __arch_uprobe_optimize(struct arch_uprobe *auprobe, struct mm_struct
+> > >         if (IS_ERR(tramp))
+> > >                 return PTR_ERR(tramp);
+> > >         ret = swbp_optimize(auprobe, vma, vaddr, tramp->vm_start);
+> > > -       if (WARN_ON_ONCE(ret) && new_mapping)
+> > > +       if (ret && new_mapping)
+> > >                 WARN_ON_ONCE(do_munmap(mm, tramp->vm_start, PAGE_SIZE, NULL));
+> >
+> > Not an issue with your patch, just FYI regarding this preexisting
+> > WARN_ON_ONCE():
+> > A failing small GFP_KERNEL allocation could theoretically cause
+> > do_munmap() to fail; the VMA tree has the ugly quirk that you can't
+> > reliably _remove_ elements without memory allocation.
+>
+> During munmap() we may need an allocation of one or two vma(s)
+> (splitting a vma or punching a hole) - and those may have anon vma
+> chains that need to be allocated, we may need to allocate for uffd
+> reasons, and we may need to allocate for the maple tree.
+>
+> That said, this path exclusively uses GFP_KERNEL which means we will
+> invoke the shrinker.  If the shrinker comes back unsuccessful, we will
+> invoke OOM.  This either succeed or it does not matter (we'll kill this
+> task).
 
+But you'd still get the WARN_ON() in the 'does not matter' case right?
 
-Gentle ping on this series.
+>
+> The other two possibilities is that the OOM is disabled during
+> hibernate/suspend calls, or error injection caused the failure.
 
-Andrii - patch 1 now removes the nmi_uaccess_okay() check entirely, as
-suggested on v1. Is this what you had in mind, or should I change
-something?
+Fatal signals too?
 
-Thanks,
-Aditya
+Might be some other cases too there.
+
+In general I'd say this WARN_ON() is probably not helpful.
+
+--
+Cheers, Lorenzo
