@@ -1,100 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792792041;
-	b=wG8/u9G1OvTn+h/Ue94w4LzbN5JvO4bBtdO5d5AQV1Gg7uFeUa/1u4kSHVpTsExHSUET
-	 QYQymfk8nspQ2mROUNCR+VtHAqlFd6+SxvfubtoD5CiwigKeeCguj1J33rLGfTkBPSt4L
-	 h3kPdxYEYjBhB8nOECc72P3BsMxPwNdWoqJx1vqr8iiCSSgRQJKMe4JnuOofrERGmCEVp
-	 7hOdBNUup/7OHiLrm02Z1vhe0+V51V+1m+6xKiPygLuRfPY3M4zgdoaU088aUCiSId+Co
-	 CRm6A9NKjtEs6xZL6bReozqDrBZh8EIuZk+nPSIz8Do0egs1nStc8IK/q2/Suo2lyqA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792792041;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
-	b=0FO8t7ZOpVHtNRQa6zg54V002K7wkQPRACRXJShP5AEzSwH5sK5JyzYkuHh0/OVXsuNv
-	 wdL0xDcpAJG1ZmdKP9E3NfHDpnNcBMDnHGcL1Ie/A7CGdpFQ+nMqmiocm+uEmErITj61p
-	 bppsJgmP2AJZau/LjqOBI1KPWCnOyXL0BspZlI1FnKysRcTAVdXi3Y95WrzlYvFry9l4H
-	 4qoGWllxAQDhpPIVMgWvM+IbyqYR8AB8RzQHvKznIPB//OCdUrQWjzel/KUDQtoL3EJO2
-	 u3jQREnTpq1ueddicCJlCmITqJdUr0QcjlzJxr2Tlp1UjdMpe+bFzH2OieWDXP5TexQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hLDmu77i;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792792361;
+	b=a00Tlly6h30gDLOoANufxoPJvO0JAp3N64doutpo+jQ7BS7UaYRWskF6SnDn4KUqz7k2
+	 PmsQqGf/tA65jrbY5yaOh5KT8lFyN4qdiNBvlYaljainLHlPjRAJ4Lqkt3UyERkZzClR7
+	 KaQDEl+AhdDnxMd1eEO81wl0OD4Ty3v+oJVK+rCaixt5cHyRyAyqGnTnQRjo6nPBvjZpB
+	 tQH94LoiwTAW1ilCOqFkiZl0k6ui5Kve8myOEz5RVPOCQ/2X42aCJTGTYjdN/2acgy49M
+	 mTAZDeDgWYEB8YRz/3GKx/oXEaVsyjmkgiCE3wVamDR0aDfdSbJMBiPTEazcNdOGnSQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792792361;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=ApQ4cefWNqlNnQY8ZpeeiZZTqkahMNzeIzWJ3YtXoVY=;
+	b=jVnpAL7eDMXvf6XaEriBkMPB3XmiWrhRELhUxyFOEAf9F0Fpglj8MphuelSMu1dZyf/m
+	 L2ZG/Hsf2Jt7WqpQQ7EIjEF2TB9cIs7D/lFFKynutggII+VlabnuCQ6Lito6ioIuhX5Xt
+	 CigaDIdPnNnhR9lcyyC2h628D0CI5tw4lFuVDYJS40OyFP+hVabMY8JZw/ABkPuvYSyUO
+	 5HqiqEV/Ff97sI8HiHpVnk1xBbiPicOZg+63AUln21hLO63OjbNaxdoxfL+gDf5FohuFL
+	 vo9T6OAYhsRjwtgr6Gaatv28Nxib9tlePY5GJW1DqhTeiOgaGj63k2irC2heazUVXjg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LAETnXLk;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF6D606A31E
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 21:47:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAF6D606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0A9606A31A
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 21:52:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hLDmu77i
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ad2b3b1c02so721587a91.1
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 14:47:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792792040; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Mw076PBOnky5ooDBUTbxnCoacf/xYl+I8oGOp3yOwx1Hg68CDaiUZLRTx+4nPp4WXB
-         m3kwvPaI46zUqG0NVWM544lkYQeMExGLAUCkZHkK45i2uvx/vDNmiW5VOTMTg+qiU9So
-         mGEMWv/fzAIND30JxMNtlfpU1GTN8X/Ctj0iaRgNuowetfe5aVHcjzwyL8U3HWOTZ68y
-         qAKIP4kRn/sc1t7icyU1bejlRhHUGgVRkXTMlrWHVox5sZcCiYMWddiyMuD7O+pMZcfa
-         2eJ7Bu4UyUQ5FOIWBnknmZ1YYgHosinx/BGTt811Tn71Sz33Tj933EZp1oA8VZNT8jpA
-         IK+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
-        fh=N47WTb2B9rLpCzJJeHseJ2NdKM38+YsOAEzG+wHkKg4=;
-        b=nh8SAf7c6qPfYu2sawMmOxPOx/T8IorGzpwfBHarSvh0IlnuTW3WNFLN6OmNMbx//C
-         IPfsxEC1L9k2ORz9kDfxp6SDmPjeOlI2GISOKi+XspfVv751WdGRtoKuC2X0PB2eiiWY
-         VHYArLwRCr2QRf7BOyDKXg2q/mHjiwt3sJ8j9Gbldtd+uF8OB7ZWWiNwM4bQS03naayp
-         0tRiNxNn3RgqDjRmwXHLuOtDPgW35MbjBfQYyyiqzxhmYoT/l9TZGgnNLSar6QhPCz/Y
-         QaYOA/epMOkXH2x2XUy3rNV5HPmiI35J0E10c5n8VOFpN5q9xAWUOvlDWtsjMGLycldI
-         /njQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792792040; x=1793396840; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
-        b=hLDmu77ierYiamVgBV5vcAPXLaG8aupRNyDiDX7DkFNKpzAxzPIc63o3dmGM4zJaa9
-         4NGe3YwDiymWhnQ/OCBGllsswfzcFZye7tQgoEq0wKR8ICoXlpOSA+BkFePJ+1A4Qtfs
-         5B9uWQyifczwR83ZzMfzQhkVojser9lK+7Vg1COy1KYe+paFJC2NeFMJ0Pwj/pPj/iD2
-         gXyhQWok5F1Qlv02XKngGqq1rGnm/5QhU+mrMgvZNpLlK+CJNtiedln6Mz0k16xq27uZ
-         SIpi3iMCyeGt/gxH2+Gr5wKnY0+0nxLC7O7+qOh1rB8DPqu6rw1b+PmW+IOO7JtIQdHd
-         VdsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792792040; x=1793396840;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
-        b=F/3qN6rAHErVTz6L16SkaAtVzpxn4znfAFW6iq0jyirCX5sZbhSGcpHv2MHyCsSkTH
-         rp+Mjwh5RJTyoXjB/YGTMyFYEu+ZnhhOXwUAbZ8NbmfjRs0wmwzgeN6WfsN4bWgZEMLG
-         cSaExs0FSAQs06rb8ia+q/Ux5RlNFy6DmbumuVoer3qX7l2r3T+Do4XfBVb23qmtU9gN
-         f56ofR8GaLt0jp1hZfdXdPu2lk+98oLdWQBv3A21oi3o2EL3uZbp6FQESFBuLti2L/ya
-         Yb2sOR7/rGq2B+GN9+LKm30hMQh2eXKWs/eiwwET1sFpkW5x1Q0LJTJuQZRZ7ZQyvq8y
-         jTiA==
-X-Gm-Message-State: AFq9FYLLzOABArisUA9uxJ1YzQXvFnROUi4NL84jfin/FewMQ//9lGFQ
-	8v57CN9Fid85AS4W+BIvItYWmffHOLvbaLxyNe4mHyT+SGlExrwucEFTA8WSG7rfL/0dFVXsmND
-	YfVR1ocnnZ4pqPvEsvL0cY8QsrTgbQkI=
-X-Gm-Gg: AYBFou3Yl3AdVTOiIvSIa7ScBrP4qfvw5w+R3v/2VekfJp6gBvvh3/XXD5CsdptOMGm
-	EJTf/085DS1pFdNVITgfqKmd45TRP9o5Zu0ghDQIvgz9SprZwliwGtVGIj7H83fs1co/aXpg1lV
-	GDoX4yxVkJqrN3Lqxx4kGxfAE9dF+yJvSY6rp4Zyxu8S1IodpIAbvLF/fU7eVZI9sol7PspgIYO
-	IHUQceE8DWlshv8fGdBTdwpfsKvunsowwzcVY89rtqlNmopxiq8HXb25hHAjFvIyz6y1OHcMWQG
-	JmKJEL2aaWMjeg0nBPSVcfpeLjpSkt0ky2EM+kLF2WHlRtrxyC24GM4CGRiJsOEf+RR85SneY9a
-	2jRH+dgFhyK0Wc0mpy51hE9/9AXvsmlzUW4Cl/C6fSC8rHD5Eb9yYCFucCrdrVFXhkqAyQQcfAC
-	EBXp1/dRFutz1+AcCSAmuyaaecUk7/X09wLLjaPXE=
-X-Received: by 2002:a17:90b:17c1:b0:3ac:8af9:4a77 with SMTP id
- 98e67ed59e1d1-3adea8952f8mr420926a91.10.1792792040157; Fri, 23 Oct 2026
- 14:47:20 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LAETnXLk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C21F1F01825;
+	Fri, 23 Oct 2026 21:52:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792792360;
+	bh=ApQ4cefWNqlNnQY8ZpeeiZZTqkahMNzeIzWJ3YtXoVY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LAETnXLkZ1jHCHCfy3tbYYOEIKYGDtFfYsYZKM6B/eBohlVAkdv/lRWmEfhrtQA+o
+	 VP1XpGQ3aTYqy8YpIN5H7S26n67D3hEya/S1U7oiANSqYI3F0u5U0QozpaeqEr1Q/A
+	 MPpurfhOlf3wEH6i2cc6ORzhBl8WJ/JLFp+iqpW5v5I/9sU9w/9Y6ZMlCouSGNST3/
+	 fMrzzGgjTgoja8k8KH0ft6c8JIhnwWSyNbh/GUC9NDxoHcVSLDclGpjE53vUSLqxgZ
+	 +P4fQ+fB/Ra1p1g4viy9VFr2kuhe68CNePiE0UeyFOa6OnxSAgG09oxWf2uPeS9GwE
+	 GK+GDuCVPxgvA==
+Message-ID: <sashiko-outbox-183265@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 3/5] bpf: Add a __derives_ret kfunc argument
+ annotation
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Justin Suess" <utilityemal77@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261023212041.884996-4-utilityemal77@gmail.com>
+References: <20261023212041.884996-1-utilityemal77@gmail.com>
+ <20261023212041.884996-4-utilityemal77@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 23 Oct 2026 21:52:39 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,45 +60,103 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261001072449.1377267-1-adi.sharma@zohomail.in> <1a168cbe0aa.30b7e048183449.4003649852775097641@zohomail.in>
-In-Reply-To: <1a168cbe0aa.30b7e048183449.4003649852775097641@zohomail.in>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 23 Oct 2026 14:47:05 -0700
-X-Gm-Features: AclHuK9klZKtZiNDzc9m6HVwMpKUt6CjANLrIawUWNF0dNjLjk5PlT3PLx4p-yQ
-Message-ID: <CAEf4BzYveiSZg0qg5h=EPiMQacnSXwp=8O+x74FM=89qrHV4=g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix bpf_send_signal_task() from
- kernel thread context
-To: Aditya Sharma <adi.sharma@zohomail.in>
-Cc: bpf <bpf@vger.kernel.org>, andrii <andrii@kernel.org>, ast <ast@kernel.org>, 
-	daniel <daniel@iogearbox.net>, eddyz87 <eddyz87@gmail.com>, memxor <memxor@gmail.com>, 
-	"martin.lau" <martin.lau@linux.dev>, song <song@kernel.org>, 
-	"yonghong.song" <yonghong.song@linux.dev>, jolsa <jolsa@kernel.org>, emil <emil@etsalapatis.com>, 
-	"ihor.solodrai" <ihor.solodrai@linux.dev>, kpsingh <kpsingh@kernel.org>, matt <matt@bobrowski.net>, 
-	rostedt <rostedt@goodmis.org>, mhiramat <mhiramat@kernel.org>, 
-	"mathieu.desnoyers" <mathieu.desnoyers@efficios.com>, shuah <shuah@kernel.org>, 
-	puranjay <puranjay@kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 23, 2026 at 5:46=E2=80=AFAM Aditya Sharma <adi.sharma@zohomail.=
-in> wrote:
->
-> Hi,
->
->
-> Gentle ping on this series.
->
-> Andrii - patch 1 now removes the nmi_uaccess_okay() check entirely, as
-> suggested on v1. Is this what you had in mind, or should I change
-> something?
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] bpf: check_func_arg() fails to propagate parent_id into meta->=
+ref_obj
+--
 
-Hi, yes, it looks good to me, sorry it fell off the radar. bpf-next is
-closed right now so I can't apply this just yet, but I'll apply one we
-can do that
+commit 3a36b9b9ff614d7729738b098cb55d91d05fb314
+Author: Justin Suess <utilityemal77@gmail.com>
 
-> Thanks,
-> Aditya
+bpf: Add a __derives_ret kfunc argument annotation
+
+This commit adds a __derives_ret parameter name suffix for kfunc pointer
+arguments whose lifetime bounds the returned pointer. When a kfunc with a
+__derives_ret argument is called, the verifier propagates the argument's
+reference lifetime (via parent_id) or RCU protection (via MEM_RCU) to the
+returned register.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4a32875d70778..5a13b5ef688b7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -9848,6 +9856,13 @@ static int check_func_arg(struct bpf_verifier_env =
+*env, u32 arg, u32 slot, u32 p
+>  	if (reg_is_referenced(env, reg))
+>  		update_ref_obj(&meta->ref_obj, reg);
+> =20
+> +	/* The return of a __derives_ret kfunc lives exactly as long as this ar=
+gument. */
+> +	if (btf_arg && is_kfunc_arg_derives_ret(meta->btf, btf_arg)) {
+> +		meta->derives_ret.found =3D true;
+> +		meta->derives_ret.rcu =3D is_rcu_reg(reg);
+> +		meta->derives_ret.parent_id =3D reg_lifetime_id(env, reg);
+> +	}
+
+[Severity: Critical]
+When a pointer returned by a __derives_ret kfunc is kept alive by a parent
+reference (where reg->id is not in cur_state->refs, but reg->parent_id holds
+the active reference ID), should check_func_arg() and update_ref_obj() also
+propagate reg_lifetime_id(env, reg) into meta->ref_obj?
+
+Currently, in kernel/bpf/verifier.c:check_func_arg(), update_ref_obj() is
+only called when reg_is_referenced(env, reg) is true, and update_ref_obj()
+records reg->id rather than reg_lifetime_id(env, reg):
+
+kernel/bpf/verifier.c:update_ref_obj() {
+	ref_obj->id =3D reg->id;
+	ref_obj->parent_id =3D reg->parent_id;
+	ref_obj->cnt++;
+}
+
+If a BPF program acquires a referenced object, passes it to a __derives_ret
+kfunc to obtain a borrowed PTR_TO_BTF_ID | PTR_TRUSTED pointer with id =3D=
+=3D 0
+and parent_id !=3D 0, and then passes that derived pointer to another helper
+or kfunc that relies on meta->ref_obj.id, meta->ref_obj.id remains 0:
+
+1. In check_func_arg() -> process_dynptr_func() -> mark_stack_slots_dynptr()
+   (for example, via bpf_dynptr_from_file() or bpf_dynptr_from_skb()),
+   mark_stack_slots_dynptr() sets:
+
+	parent_id =3D ref_obj->id;
+	if (dynptr_type_referenced(type)) {
+		id =3D acquire_reference(env, insn_idx, parent_id);
+
+   Because ref_obj->id is 0, the dynptr and any child reference it acquires
+   are created with parent_id =3D=3D 0 instead of the underlying reference =
+ID,
+   so releasing the original reference neither rejects an unreleased file
+   dynptr nor invalidates the dynptr or its slices.
+
+2. In check_kfunc_call(), for a non-__derives_ret kfunc returning PTR_TO_ME=
+M:
+
+	if (meta.derives_ret.found) {
+		regs[BPF_REG_0].parent_id =3D meta.derives_ret.parent_id;
+	} else if (meta.ref_obj.id) {
+		err =3D validate_ref_obj(env, &meta.ref_obj);
+		if (err)
+			return err;
+		regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
+	}
+
+   When passed a __derives_ret-derived pointer, meta.ref_obj.id is 0, leavi=
+ng
+   regs[BPF_REG_0].parent_id as 0 (and bypassing validate_ref_obj() if
+   another referenced argument was also passed).
+
+3. In check_helper_call() for socket pointer-casting helpers
+   (is_ptr_cast_function()), meta.ref_obj.id is 0, so the cast pointer is
+   not bound to the original reference.
+
+Can this allow derived dynptrs, memory pointers, or cast socket pointers to
+outlive release_reference() on the original acquired object and cause a
+use-after-free?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261023212041.8849=
+96-1-utilityemal77@gmail.com?part=3D3
