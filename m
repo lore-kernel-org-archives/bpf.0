@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792716675;
-	b=ilqPX/OLqNsjaucBhmgvrWaj3VgWEWqlMHvCn8QP9zvlBd5/7vTaLwbn32sVV/rGvbuk
-	 SgC0oB46XuX0tFV/1Iuq7vGt7Vvki0ZXfTjl2hBK/JKYds8E7XXby4fcs7H/a3vboGtwd
-	 rL+VtEGSSkt8l4PTcdeTU7LLEoOsgd41pngsV/FkQKuRHZflg1uoxkHcbybM4KVKTGjn2
-	 97uHs500eO6edIAUkSfijiC4HjvBOlEcWqJ2c0CU5wAg6KFeYoM/XaZfGlb3ye7F6uFq+
-	 5uKY3cZtl9cnFo1WWOl2J6yF870SgRW3Q5NtebTWhY0EGmQddMgqv3poqgJgLQvYBdA==
+	t=1792716673;
+	b=kx/RDaDHMkh0zcII4jwQIAVrP2fKJDke3yqlMN2HdbUggpyNPUwBW29V1WJimrxkLota
+	 gzYt7HQcLKsSYr8XDk7dRfnyd3S1eipwkzbpVGX0dl3kZ8NbHOTYWkjKWpCaWjcEM5rXW
+	 l1JrS6MENx2aT9erdLKM68ut76mRcI2YO/FjRLFsfK4JI0Hdsub+ARvEFUNVEFPlSZaCW
+	 TSg6BU1+rbBPJG5jfWVh8ehKkbrYaUOpZ1hXx8lSKi59vP4sIBwSdamM1dS0ts/f7H/WC
+	 KhlxgJPIu5zD3A5s+6bOCiWAodsNKzIDy1L2Yeooh/T8ABv2Q1yxWPk74EnS8KAsamQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792716675;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792716673;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=X5GYCdh8xmF1VOcwMI9Rmm9Dlopew8Em98MYwDhZlz0=;
-	b=ENBJa2j/Vz0kXtjh+cviIoXgNfVccn14qTrgWtXFXMFyLqdoTVMv0m7ke99pVirHmJim
-	 Ld0atMM9AXndlA5vfInaCPp2XdyVzwfAtt69kxfIDBZrc2r9wK1HeXgz10VeZ6g9WtEjd
-	 CkjN/BD8RBbPcQ9cz+IrgdDLnXAMVJkfkG+ypeZ9tpZ2vfwsdQhE5DaX6L0d5kyt1eSYn
-	 Yq5xNmUw73I+rtpcnUZgjCWKxIrxIDHYYmUL6Rp4xCtbOdwTrua2vS94+Z3bldicUKo6H
-	 nUz6Xv2+5C8pTug6a2DFAK32aL69J/w9KUjX3szrPaXEkZmk5BtCWl/aesiFrUzjCwQ==
+	bh=kyCno0YF2wqPIAAdsCxncdDRe1RSuPSRu0+FBtFLEGY=;
+	b=A24VUiBr5WkJj8wkH1GCOAxLe6m/lxHqy630+M8gJ4EOmMzpxaqha2+AGYx3WW+slhB7
+	 jYbVM75U735GnRervhCkMfNsqEsifSV8NVJ6z4lnghICHVVuGikiih7Q0U7goaTwfSHzO
+	 9rm5Az9Vn83Q/7eDQ2swgWTavDUMtg4NhDjJTS6z67xdPI1WmGFHQlNWLoxX+8x7s6ELM
+	 qnc+9jQmklQfks5QeTfk4Ggz/3YCf91nvfbK9ct3H1dfda/84J5M4XpaB3sYP0KnoMzQJ
+	 APTaAwWjfexlk6vxG8pVe16dIucqE/z28qZHFvARQj3Lq6ei7pUjZjoiQ/ZA7imElLA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PjdbaiF2;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bfr+NFYS;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F92606A320;
-	Fri, 23 Oct 2026 00:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AD5606A319;
+	Fri, 23 Oct 2026 00:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PjdbaiF2
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9401F01825;
-	Fri, 23 Oct 2026 00:51:13 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Bfr+NFYS
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA9A1F01825;
+	Fri, 23 Oct 2026 00:51:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792716675;
-	bh=X5GYCdh8xmF1VOcwMI9Rmm9Dlopew8Em98MYwDhZlz0=;
+	s=k20260515; t=1792716672;
+	bh=kyCno0YF2wqPIAAdsCxncdDRe1RSuPSRu0+FBtFLEGY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=PjdbaiF2zllHQoqqlIrAUp9LjOt6GiwrLwHJUctXypc7wQuyWRR8+0Y34F6xNbbQi
-	 YMZJjhQb/GC54H5a+z/c6yMCNA2isQLWBgg3zeVk+dcAbBjPWhWFFFGOsf7oG0ydeX
-	 NO7pFbDj9Xf1psUs3tsGeyy0lM31+ziZUNurXLMoQDRV4hB6z5qMFMWC4NLWNI9+zE
-	 Ib3vVwSS8E5wWh4ETKbbsQUJOTP8c+Exxmtql3go55k/HllI7H0lkifDAt3nKSQtu2
-	 mbvqSKbndlGzOYDKdHzdqSrGt2Elee41qCu+sbkQ9+Bs8ZsfqQSfJDvHy36M38LyUI
-	 yEWeOozZ1qgxQ==
-Content-Type: multipart/mixed; boundary="===============0694406438474598081=="
+	b=Bfr+NFYSSVTbTN85zYznM5T9GO58XFRdN3RX73ZriInUEN3YUL4z/fV204y1WsVve
+	 TU0CDIB7YmyU69/VrC4bHlfxn7AbM1ZyB88WBBgMl3tReLxckSa7mpg7/TFcr1qZ7h
+	 2qhQMKtmEbDK+qOOf6lFz140zdjYYpQjj57sVr9wn8iyAw949oT6yOA7nYCq/6Uv3p
+	 vWc1erP/dTmXjFGnM4K8p5QcGzMtvqEvnlgRAO8CWiRV+Q/JkNr8FydvnXamf79eF8
+	 1AwEN/PfRmAD2HYiE9mMn+TGRD2FWLns5R7nQGuzCipyowmhmnnKrlqSsRdb3JGghu
+	 8D5QzM1Eis/ww==
+Content-Type: multipart/mixed; boundary="===============8304986485767963012=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,177 +49,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <90371d2279a5eb08966a82325922e1f15eb93560d4019f5c9020956cadb4120a@mail.kernel.org>
-In-Reply-To: <20261023001603.560210-12-wusamuel@google.com>
-References: <20261023001603.560210-12-wusamuel@google.com>
-Subject: Re: [PATCH bpf-next v2 4/6] libbpf: Resolve typeless ksyms via KALLSYMS_QUERY ioctl
+Message-Id: <a925a7a8362e8e9aa0270c2b252aedcc10694857db29c31f66d6f7c5ba89ac08@mail.kernel.org>
+In-Reply-To: <20261023001603.560210-9-wusamuel@google.com>
+References: <20261023001603.560210-9-wusamuel@google.com>
+Subject: Re: [PATCH bpf-next v2 1/6] kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
 From: bot+bpf-ci@kernel.org
 To: wusamuel@google.com,corbet@lwn.net,skhan@linuxfoundation.org,rdunlap@infradead.org,viro@zeniv.linux.org.uk,brauner@kernel.org,jack@suse.cz,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
 Cc: wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,linux-fsdevel@vger.kernel.org,linux-doc@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 23 Oct 2026 00:51:13 +0000 (UTC)
+Date: Fri, 23 Oct 2026 00:51:11 +0000 (UTC)
 
---===============0694406438474598081==
+--===============8304986485767963012==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> libbpf: Resolve typeless ksyms via KALLSYMS_QUERY ioctl
+> kallsyms: Add KALLSYMS_QUERY ioctl to /proc/kallsyms
 
-TL;DR:
-- Possible regression: ioctl lookup ignores .llvm. suffixed symbols, so
-  typeless ksyms may fail to load or resolve to 0 on LTO kernels
-- Fallback to kallsyms parsing may miss -EACCES (SELinux/seccomp), failing
-  loads that worked before
+TL;DR: KALLSYMS_QUERY_BY_ADDR may return BPF JIT symbol names that
+bpf_jit_kallsyms=0 or bpf_jit_harden hide in /proc/kallsyms, possibly leaking
+JIT image locations to openers with show_value.
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 8fcb8cf39cc0..0e94d2335bd7 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index aec2f06858af..7caaf3e421c7 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
 
 [ ... ]
 
-> @@ -9644,8 +9662,64 @@ static int kallsyms_cb(unsigned long long sym_addr, char sym_type,
->  	return 0;
->  }
->
-> -static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-> +static int bpf_object__query_ksyms(struct bpf_object *obj)
+> @@ -922,11 +923,142 @@ const char *kdb_walk_kallsyms(loff_t *pos)
+
+[ ... ]
+
+> +static int do_kallsyms_query(struct kallsym_iter *iter, void __user *uarg)
 > +{
-> +	struct kallsyms_query q;
-> +	struct extern_desc *ext;
-> +	int err = 0;
-> +	int fd;
-> +	int i;
+
+[ ... ]
+
 > +
-> +	fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	for (i = 0; i < obj->nr_extern; i++) {
-> +		ext = &obj->externs[i];
-> +		if (ext->type != EXT_KSYM || ext->ksym.type_id)
-> +			continue;
-> +
-> +		q = (struct kallsyms_query){
-> +			.size = sizeof(q),
-> +			.query_flags = KALLSYMS_QUERY_BY_SYMBOL,
-> +			.sym_name_addr = ptr_to_u64(ext->name),
-> +		};
-> +
-> +		if (ioctl(fd, KALLSYMS_QUERY, &q) < 0) {
-> +			err = -errno;
-> +			if (err == -ENOENT) {
-> +				err = 0;
-> +				continue;
-> +			}
-> +			if (err == -EADDRNOTAVAIL)
-> +				pr_warn("extern (ksym) '%s': resolution is ambiguous\n",
-> +					ext->name);
-> +			break;
-> +		}
-
-Can this regress typeless ksyms on CONFIG_LTO_CLANG kernels?  The old
-kallsyms_cb() deliberately matched data symbols that carry a suffix:
-
-    res = strstr(sym_name, ".llvm.");
-    if (sym_type == 'd' && res)
-        ext = find_extern_by_name_with_len(obj, sym_name, res - sym_name);
-
-That was added by commit c56e59776f46 ("libbpf: Handle <orig_name>.llvm.<hash>
-symbol properly") after test_ksyms failed on a CONFIG_LTO_CLANG_THIN kernel,
-where bpf_link_fops had been renamed to bpf_link_fops.llvm.<hash>.  That
-commit also lists tk_core, fake_dst_ops and __fs_reclaim_map as real
-renamed symbols.
-
-On the kernel side, KALLSYMS_QUERY only matches names exactly:
-kallsyms_lookup_names() does a strcmp() on the expanded name, and
-kallsyms_mod_find_cb() also uses strcmp().  So a lookup for "bpf_link_fops"
-returns -ENOENT when only "bpf_link_fops.llvm.<hash>" exists.
-
-Here -ENOENT is treated as "not found", err is cleared and the loop
-continues.  bpf_object__resolve_typeless_ksyms() then falls back only on
--ENOTTY or -EPERM, so libbpf_kallsyms_parse() is never reached.  On a
-kernel that has this ioctl:
-
- - a strong "extern const void foo __ksym;" now makes bpf_object__load()
-   fail with "extern 'foo' (strong): not resolved" (-ESRCH), where it
-   loaded before
- - a weak one silently gets address 0 instead of the real address
-
-The selftests helper kallsyms_find() in trace_helpers.c still strips
-".llvm." from 'd' symbols, so it and libbpf now disagree about what
-test_ksyms (bpf_link_fops) should resolve to.
-
-The commit message notes this difference, but gives no reason for dropping
-behavior that libbpf added on purpose.  libbpf kept the .llvm. handling
-elsewhere to avoid regressions, and commit f8a05692de06 says "we'd like to
-not regress".
-
-Would it work to fall back to libbpf_kallsyms_parse() for typeless externs
-that are still unresolved after the ioctl pass?  That only costs extra time
-when a symbol is actually missing.  Alternatively, the kernel query could
-match the .llvm. suffix for data symbols.  I did not find a fix for this in
-the rest of the series.
-
-> +		ext->is_set = true;
-> +		ext->ksym.addr = q.sym_addr;
-> +		pr_debug("extern (ksym) '%s': resolved in kernel to 0x%llx\n",
-> +			 ext->name, ext->ksym.addr);
-> +	}
-> +	close(fd);
-> +	return err;
-> +}
-> +
-> +static int bpf_object__resolve_typeless_ksyms(struct bpf_object *obj)
->  {
-> +	int err;
-> +
-> +	err = bpf_object__query_ksyms(obj);
 > +	/*
-> +	 * Fall back to parsing /proc/kallsyms only if the ioctl is not
-> +	 * accessible: not present (-ENOTTY on older kernels) or kallsyms
-> +	 * addresses hidden from this opener (-EPERM, e.g. kptr_restrict).
+> +	 * The text interface shows zero addresses to openers without permission.
+> +	 * A zeroed point query result is useless (and an address-to-symbol query
+> +	 * would leak KASLR), so fail instead.
 > +	 */
-> +	if (err != -ENOTTY && err != -EPERM)
-> +		return err;
+> +	if (!iter->show_value)
 
-Does this fallback miss other ways the ioctl can be blocked while reading
-/proc/kallsyms is still allowed?
+[ ... ]
 
-The old code never issued an ioctl on this file.  Now every KALLSYMS_QUERY
-goes through security_file_ioctl().  For this command selinux_file_ioctl()
-takes the default case and calls ioctl_has_perm(cred, file, FILE__IOCTL,
-(u16)cmd), which returns -EACCES when the policy grants read on the
-kallsyms label but not ioctl, or limits ioctl commands with allowxperm.  A
-seccomp filter that makes ioctl() return an errno other than EPERM has the
-same effect.
+> +	case KALLSYMS_QUERY_BY_ADDR:
+> +		if (!karg.sym_name_size)
+> +			return -EINVAL;
+> +		addr = karg.sym_addr;
+> +		/* Reject addresses that do not fit in unsigned long (32-bit). */
+> +		if (addr != karg.sym_addr)
+> +			return -ENOENT;
+> +		if (!kallsyms_lookup(addr, NULL, NULL, NULL, namebuf))
+> +			return -ENOENT;
 
-In those setups bpf_object__query_ksyms() returns -EACCES (or similar),
-bpf_object__resolve_typeless_ksyms() returns it as-is, and
-bpf_object__resolve_externs() turns it into -EINVAL:
+Can KALLSYMS_QUERY_BY_ADDR hand out BPF JIT symbol names that /proc/kallsyms
+is configured to hide?
 
-    err = bpf_object__resolve_typeless_ksyms(obj);
-    if (err)
-        return -EINVAL;
+kallsyms_lookup() reaches kallsyms_lookup_buildid() and falls through to
+bpf_address_lookup() -> bpf_ksym_find(), which searches bpf_tree without any
+policy check.  bpf_ksym_add() always inserts into bpf_tree
+(bpf_prog_kallsyms_add() only requires bpf_prog_kallsyms_candidate() and
+CAP_BPF).
 
-So an object with any typeless ksym now fails to load, even though parsing
-the text file would have worked as it did before this patch.
+The text listing of the same file goes through get_ksymbol_bpf() ->
+bpf_get_kallsym(), which starts with:
 
-The failure is also hard to diagnose.  Apart from -EADDRNOTAVAIL, nothing
-from the ioctl or from open() is reported.  The open() failure path is a
-bare:
+    if (!bpf_jit_kallsyms_enabled())
+        return ret;
 
-    fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-    if (fd < 0)
-        return -errno;
+bpf_jit_kallsyms_enabled() returns false when net.core.bpf_jit_harden is
+non-zero or net.core.bpf_jit_kallsyms is 0.  bpf_get_kallsym() is the only
+caller of bpf_jit_kallsyms_enabled() in the tree, so hiding the names in
+/proc/kallsyms is now the only thing these sysctls do.  Commit af91acbc6299
+("bpf: Fix bpf jit kallsym access") says so directly:
 
-without the "failed to open /proc/kallsyms" pr_warn() that
-libbpf_kallsyms_parse() prints, so the user only sees "failed to load
-object".
+    It should only skip addr->name resolution for 'cat /proc/kallsyms'.
+    That's what bpf_jit_kallsyms and bpf_jit_harden protect.
 
-Should the fallback cover any error other than -EADDRNOTAVAIL (and other
-real lookup errors), or at least -EACCES as well, with a pr_warn() for the
-errors that are not handled?
+With this patch, a process whose open of /proc/kallsyms has show_value set
+can call ioctl(KALLSYMS_QUERY) with query_flags=KALLSYMS_QUERY_BY_ADDR and
+get back names like bpf_prog_<tag>_<name> (plus trampolines, dispatchers and
+__cfi_ prefixes) for addresses inside JIT images.  That gives it an
+address->name oracle for finding JIT image locations, which these sysctls
+are meant to withhold from /proc/kallsyms.
+
+The comment above the show_value check argues for matching the text
+interface ("The text interface shows zero addresses to openers without
+permission ... an address-to-symbol query would leak KASLR, so fail
+instead"), but the code applies only the show_value gate and skips the
+BPF-specific gate.  The uapi comment and the commit message both say
+BY_ADDR covers "BPF JIT images", but neither mentions bpf_jit_kallsyms or
+bpf_jit_harden.
+
+This is reachable whenever CONFIG_KALLSYMS and CONFIG_BPF_JIT are enabled, a
+JITed program loaded with CAP_BPF exists, and either sysctl hides BPF
+symbols.  No later commit in the series changes kernel/ code to address
+this.
+
+Should the BY_ADDR path return -ENOENT when kallsyms_lookup() resolves to a
+BPF address (for example, is_bpf_text_address(addr) is true and the address
+is not in vmlinux or a module) unless bpf_jit_kallsyms_enabled() is true?
 
 
 ---
@@ -227,4 +159,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39878338337
---===============0694406438474598081==--
+--===============8304986485767963012==--
