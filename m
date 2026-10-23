@@ -1,65 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.114
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792737139;
-	b=JZP0LNzdUvrPTdl8b4MSXGcRJWlE2b3Ljmz5Uxs2sfvZKSy5TDPshABI1FwB8ABpWEO4
-	 cYYP59KAcs0LfNUJWzVXtG8piY293cl/mS38RoTkPo74RS6H3XzLYnjDL1ZcGgaFs6siY
-	 v6cN9EpcIZj9h1/zEJNlmbmQcup+ff/eJprJY8G8zWGhlXcoUmm0r8dIWCv2U3LiUMv/7
-	 lvIl5xdvvjsNHzbYajemOX8xv4QqYImzWuTZ1IFI9hhBPc1qItLrq8ay4Vl6jHet+N7MD
-	 +7yCMCRjEWJPDLGu3aMOJ/DUCCJgptSEHeFS7NZAHYRfp3PsCdoSkx36gFz6zBh1avg==
+	t=1792737172;
+	b=dVxSYYCU68C2NBsKkyvJRppmkgsp18yOP4jmWaOOE/fCh0AnXtsTPndQXNtcz+TvNaqZ
+	 XhwkYX7kJlN67Uf6wlZxotRdNesUpCoDyJ/yQ5eRtyd/CBVExpx5BHuufKkNKoPW+dFsG
+	 gj1J7gZ57AVDWgK60bXltZFw/vC6/TYB5m38cTMwhSvdHzQI1iYMQF5yBjoGusBKveQaX
+	 rEBlDNobAznkwuaS+3hREfdmKqfVbpiSkuNjhsNxlqbjfkMWerBayR3rs48FdbKvWa+Os
+	 uBB9yBGPDQDesOXbeMHrkp9rTYJBQa6mRTvXQm9nd8nZCji9TzKDxZo7WtRwD5Vf+nQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792737139;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=53q4hKUwSxmOGTdqj6wVD4BacLZd8aKY6NwLSWD1Qbo=;
-	b=ALBrDoD7Fh728tMLdIX9LQzGbPRYHsconEwuTlIqESWm2HtP5SyJA4lRLDaA68Z66gXQ
-	 ZjXSNBCq/d9etCcjQmUBeklPQRmSOkYw9rxku/dldIeptc1mIiYrEqE24ua/nv12cMPqm
-	 Fdvje4N2P0DbySdrgQ5n7GukQkXf68vUaYYTahc+zQwd9FkEfyWTk0XwYvEJ/TdJjwtLR
-	 INdcFGRviVyQAQ+yTvQq9P1R7nsAMlPd1mVYJ2kMz9gAcEcy1TBNEnloGuP8XujtTMMJN
-	 SbXFzwEEZ+MdRK816eOhV4+ylYYcsr7OW6C5kxrYJOgpoE7LCOqmDEhY1MJRpdMkX4g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792737172;
+	h=DMARC-Filter:DKIM-Signature:Subject:User-Agent:In-Reply-To:
+	 Message-Id:Mime-Version:Content-Transfer-Encoding:To:Date:Cc:From:
+	 Content-Type:X-Lms-Return-Path:References:X-Original-From;
+	bh=A/KkeSW0iJwwqF3dTal22x/IVE71KQpeS559w4ryEuE=;
+	b=O/ckKB/4paKRKbx2j8wj7l1WF3WaVwYJRqKaaAJIIDsb8Sut8MmvFTWJK/CU+jDAQkgk
+	 JQlL0WA+WR4vsDBQ3rUIZrDZy0mVbwe/bQ4lcAEXc2R/ryscUMVkJ2mQ1pPPQmiarPxZj
+	 9Vf46jJjPAkpDs13BQEC4b+vmKhx3z3h6ME6dxvS4PnF6QIjUQdYTGGIcwDFad8He7u0o
+	 WuybVZ9/GUNF6qrQ4NIsD/Gh27ATCNh22F9R+Jkzmp+U2dO2VNQsIgGov5y9ArMVaav6K
+	 5xVnW7B4mXiOj0aCSv8cNDEuulHSbDbBsatISbg/9Fe5BqjubHFiMMr00qhBNzP3DTQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=163.com;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=gLkNvysd;
-	arc=none smtp.remote-ip=220.197.31.5
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=bytedance.com;
+	spf=pass smtp.mailfrom=bytedance.com;
+	dkim=pass header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=ZunCuudQ;
+	arc=none smtp.remote-ip=209.127.231.114
+Received: from va-2-114.ptr.blmpb.com (va-2-114.ptr.blmpb.com [209.127.231.114])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA8A606A31B;
-	Fri, 23 Oct 2026 06:32:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EFA8A606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE7B606A31B
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 06:32:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5FE7B606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=gLkNvysd
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=53
-	q4hKUwSxmOGTdqj6wVD4BacLZd8aKY6NwLSWD1Qbo=; b=gLkNvysdOjvphNNUNN
-	IWR0nm78no+N9bg+1S9l2PNUM6aANbT0r4M0bssRp95U4wyLzBb+huJEceKa46WG
-	qVsOJjXiwBqdtkUCAzlGsD+JL6OWcmixTCjPaztYjBzXakfU4+gyrVppTf3b7rrA
-	GRaA1hWkLlLeFbfOXeEiUGHFY=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgAHkJ5H_9pqSnUzBg--.1818S2;
-	Fri, 23 Oct 2026 14:31:36 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] bpf: Fix out-of-bounds btf->types write for split BTF
-Date: Fri, 23 Oct 2026 14:31:33 +0800
-Message-Id: <20261023063133.563998-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key, unprotected) header.d=bytedance.com header.i=@bytedance.com header.a=rsa-sha256 header.s=2212171451 header.b=ZunCuudQ
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1792737158; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=A/KkeSW0iJwwqF3dTal22x/IVE71KQpeS559w4ryEuE=;
+ b=ZunCuudQz4sc9UuX1ESe/ATn26vRhp++gXavBXjrKaHnJU56X9Rlw4VohHcBtmWcla3Hln
+ 3Y6ph4OaBoN2Kvv19x6ZuQIlcqiA91Ekf5U315QjVc0Jy8TFADK+rx42J4kh2/hE5IQ6hX
+ cLQt+QIUK1/x8wfJEpCt7XApTdjGJGjbtnXBMLqs7nfoZ7DyHYpSIetABw2PR3OwO+Hmt3
+ RqkGcDfCbcQW+SpelP/ZMADf4Kfh64E6uuJ9rG7nKMuCFTfsMUPJczP/biADXu1nAYpT/J
+ Cm7MCVlga+ealsDvcK5JvolBOmGANKCnBoKiyfi3sYoiLs96LdRtVu6L64XaBQ==
+Subject: Re: [RFC PATCH v3 bpf-next 0/5] BPF-based per-cgroup NUMA balancing mode selection
+User-Agent: Mozilla Thunderbird
+In-Reply-To: <20261019064157.29885-1-laoar.shao@gmail.com>
+Message-Id: <f68e7f9e-6037-4087-b7cd-a17ea4dba279@bytedance.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,84 +55,145 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgAHkJ5H_9pqSnUzBg--.1818S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZFWxGFykKFWUXFWrtFy3XFb_yoW5Aw13pr
-	4rCFs5Cw4fW3WxXa47ta45Wa18Kw1rC3y7Jr90yrWFyF4j9r10vF1UJrW293sFqFn7GrWY
-	yr409r9Ygw48WrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjuWLUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8ghj22ra-0iXPQAA3v
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+To: "Yafang Shao" <laoar.shao@gmail.com>, <ast@kernel.org>, 
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>, 
+	<memxor@gmail.com>, <mingo@redhat.com>, <peterz@infradead.org>, 
+	<juri.lelli@redhat.com>, <vincent.guittot@linaro.org>, 
+	<akpm@linux-foundation.org>, <david@kernel.org>, <gourry@gourry.net>, 
+	<tj@kernel.org>, <hannes@cmpxchg.org>, <mkoutny@suse.com>, 
+	<shakeel.butt@linux.dev>, <roman.gushchin@linux.dev>, 
+	<yu.c.chen@intel.com>, <zhao1.liu@intel.com>, 
+	<tim.c.chen@linux.intel.com>
+Date: Fri, 23 Oct 2026 14:32:08 +0800
+Cc: <bpf@vger.kernel.org>, <linux-mm@kvack.org>, <cgroups@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>
+From: "Li Zhe" <lizhe.67@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+X-Lms-Return-Path: <lba+26adaff84+45ab06+vger.kernel.org+lizhe.67@bytedance.com>
+References: <20261019064157.29885-1-laoar.shao@gmail.com>
+X-Original-From: Li Zhe <lizhe.67@bytedance.com>
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On 10/19/26 2:41 PM, Yafang Shao wrote:
+> The Problem
+> ===========
+>
+> In our large fleet of Kubernetes-managed servers, NUMA balancing has
+> been historically disabled globally on each server. With the increasing
+> deployment of multi-socket AMD EPYC servers, cross-NUMA access has
+> become a critical performance issue, which made us reconsider enabling NUMA
+> balancing to address it.
+>
+> Enabling NUMA balancing globally is still not acceptable since it can
+> introduce latency spikes for latency-sensitive workloads. What we need is
+> to choose per workload whether NUMA balancing runs at all, and which mode
+> it runs in. A latency-sensitive service wants NUMA balancing disabled,
+> while a batch service wants its PMEM-resident memory promoted when hot
+> without paying for scheduler-driven migration. No single global setting
+> serves both.
+>
+> The Design
+> ==========
+>
+> This series introduces the fine-grained per-cgroup NUMA balancing
+> control. It grows out of Tejun's suggestion to store the existing
+> NUMA_BALANCING_* bitmask per cgroup and expose it through BPF kfuncs.
+> cgroup::numab_mode holds the request: NUMAB_FOLLOW_SYSTEM (-1) defers
+> to the global sysctl state, anything else is a bitmask.
+> bpf_numab_set_mode() writes a request, bpf_numab_get_mode() reads the
+> combined request of the cgroup and of every ancestor back. The hot
+> paths walk the same chain at read time behind a static key, so while no
+> cgroup makes a request the overhead is one patched-out branch.
+>
+> An opt-out wins and binds the subtree: a DISABLED request anywhere in
+> the chain opts the cgroup's tasks out entirely. Otherwise the requested
+> bits OR together and the kernel reads them independently, the way
+> kernel.numa_balancing reads them, so a combined NORMAL|TIERING engages
+> both modes. A DISABLED request only speaks for the cgroup's tasks,
+> never for its memory, which follows the remaining requests of its
+> ancestors.
+>
+> The cost of the additive combination is that an ancestor cannot cap
+> tiering short of a full opt-out: a descendant's TIERING request
+> re-engages promotion for its own memory, and promotion is the mode that
+> consumes the shared fast tier.
 
-btf_add_type() bounds the btf->types array by BTF_MAX_TYPE, but for a
-split BTF the type ids it registers are start_id .. start_id +
-nr_types - 1, so what is actually left of the id space is
-BTF_MAX_TYPE - start_id.  Two things follow from that:
 
- - the limit check is an equality test,
-   'start_id + btf->types_size == BTF_MAX_TYPE'.  It is evaluated only
-   when the array has to grow, with btf->types_size == btf->nr_types,
-   and the growth (T' = min(BTF_MAX_TYPE, T + max(T / 4, 16)), starting
-   from 0) is clamped to BTF_MAX_TYPE, which it lands on exactly (...,
-   928143, then min(BTF_MAX_TYPE, 1160178)).  So unless
-   BTF_MAX_TYPE - start_id is one of the 48 sizes that sequence hits,
-   the check does not fire for a split BTF at all;
+I am not sure that this matches the usual cgroup hierarchy semantics.
+If promotion consumes the shared fast tier, why is a descendant allowed
+to re-enable TIERING when an ancestor cannot cap it short of a full
+opt-out?
 
- - new_size is clamped to BTF_MAX_TYPE instead of
-   BTF_MAX_TYPE - start_id, so the array can still grow to
-   BTF_MAX_TYPE entries even though only BTF_MAX_TYPE - start_id type
-   ids exist.
+Thanks,
+Zhe
 
-As a result nr_types can reach BTF_MAX_TYPE for a split BTF while its
-type ids have already gone past BTF_MAX_TYPE; a type never validates its
-own id, only the ids it references (btf_ref_type_check_meta()).  At that
-point btf->types_size == btf->nr_types == BTF_MAX_TYPE and the growth
-branch computes the same size again: it allocates a fresh BTF_MAX_TYPE
-entry array, copies the entries, and the loop is left with
-btf->types_size != btf->nr_types, so that branch is not taken anymore.
-Every type after this writes btf->types[btf->nr_types++] past the end of
-the array: BTF_MAX_TYPE * 8 == 8388600 bytes are requested, so the first
-such write lands in the 8 byte rounding slack of the 8MB allocation, and
-each further type writes another 8 bytes beyond it.
-
-Fix both by bounding the array with BTF_MAX_TYPE - start_id and by
-turning the equality check into a '>=' one, so that the array stops
-exactly where the id space ends. Base BTF behavior (start_id ==
-0) is unchanged.
-
-Fixes: 951bb64621b8 ("bpf: Add in-kernel split BTF support")
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- kernel/bpf/btf.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 80b6f96263f1..6e54cd6c2eb5 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -1724,15 +1724,17 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
- 		/* Expand 'types' array */
- 
- 		struct btf_type **new_types;
--		u32 expand_by, new_size;
-+		u32 expand_by, new_size, max_size;
- 
--		if (btf->start_id + btf->types_size == BTF_MAX_TYPE) {
-+		if (btf->start_id >= BTF_MAX_TYPE ||
-+		    btf->start_id + btf->types_size >= BTF_MAX_TYPE) {
- 			btf_verifier_log(env, "Exceeded max num of types");
- 			return -E2BIG;
- 		}
- 
-+		max_size = BTF_MAX_TYPE - btf->start_id;
- 		expand_by = max_t(u32, btf->types_size >> 2, 16);
--		new_size = min_t(u32, BTF_MAX_TYPE,
-+		new_size = min_t(u32, max_size,
- 				 btf->types_size + expand_by);
- 
- 		new_types = kvzalloc_objs(*new_types, new_size,
--- 
-2.25.1
-
+>
+> The readback contract is worth spelling out: bpf_numab_get_mode()
+> returns the combined request of the cgroup and its ancestors, and the
+> kernel reads it the same way it reads a single request, each bit
+> independently as kernel.numa_balancing does, so a combined
+> NORMAL|TIERING engages both modes. When any cgroup in the chain makes a
+> request, the value read back is the mode in effect for the cgroup's tasks;
+> when none does, the readback is NUMAB_FOLLOW_SYSTEM (-1) and the sysctl
+> decides. The answer speaks for the cgroup's tasks only: its memory follows
+> the remaining requests of its chain when it opts out, and that folio-side
+> view is not exposed by the kfuncs. These are deliberate simplifications;
+> both can be revisited if callers turn out to need them.
+>
+> The sysctl's own documentation is untouched; the override is documented
+> where it lives, in the CONFIG_BPF_NUMAB Kconfig help and the kfunc docs.
+>
+> The override was measured with schbench, 384 workers, on a two-node
+> 384-core machine. Whatever kernel.numa_balancing is set to, a cgroup
+> request puts the cgroup at the throughput of the equivalent
+> system-wide setting, within a fraction of a percent: the override
+> itself costs nothing measurable, performance follows the effective
+> state alone. The two states themselves differ by less than a percent
+> under this load.
+>
+> Changes
+> =======
+>
+> RFC v2->RFC v3:
+> - The struct_ops interface is replaced by two kfuncs, following
+>    Tejun's suggestion.
+> - Improve on the function naming and simplify the code (David)
+>
+> RFC v2: https://lwn.net/Articles/1099962/
+>
+> RFC v1->RFC v2:
+> v1 keyed the hook on the memory cgroup and temporarily embedded the cgroup
+> id into the struct-ops value, because the cgroup struct_ops integration was
+> still under development. v2 attaches through the cgroup struct_ops support
+> that has since landed in bpf-next, keys the task surface on the task's
+> cgroup and the memory surface on the folio's memcg, and adds the
+> memory-tiering mode alongside enable and disable.
+>
+> RFC v1: https://lwn.net/Articles/1054030/
+>
+> Yafang Shao (5):
+>    sched: fix stale get_pref_llc() stub for !CONFIG_SCHED_CACHE
+>    sched: use static_branch_likely() for the NUMA balancing tick check
+>    sched: add helpers for numa balancing
+>    sched: add BPF-based per-cgroup NUMA balancing mode selection
+>    selftests/bpf: add tests for the numab kfuncs
+>
+>   include/linux/cgroup-defs.h                   |  10 +
+>   include/linux/sched/numa_balancing.h          | 149 ++++++++++++
+>   init/Kconfig                                  |  20 ++
+>   kernel/cgroup/cgroup.c                        |  14 ++
+>   kernel/sched/bpf_numab.c                      | 195 +++++++++++++++
+>   kernel/sched/build_policy.c                   |   4 +
+>   kernel/sched/fair.c                           |  33 +--
+>   kernel/sched/sched.h                          |   1 -
+>   mm/memory-tiers.c                             |   9 +-
+>   mm/mempolicy.c                                |   3 +-
+>   mm/migrate.c                                  |   7 +-
+>   mm/vmscan.c                                   |   6 +-
+>   .../selftests/bpf/prog_tests/bpf_numab.c      | 227 ++++++++++++++++++
+>   tools/testing/selftests/bpf/progs/bpf_numab.c |  32 +++
+>   14 files changed, 681 insertions(+), 29 deletions(-)
+>   create mode 100644 kernel/sched/bpf_numab.c
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_numab.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_numab.c
