@@ -1,56 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792737970;
-	b=OEbMa0Tcu3zMJvm1BNeyAz6j6r4md9Uce2OKB0eD2c6G7gTmeUL+r2tTCwwAdl/RsvNc
-	 IFTSja8UyNJS5N7/4PXlJRpQR8gIQ161EU8iHZFYALVtxkWgJV/G9+ch/SSGYKJ540VxG
-	 DdhpDDz5xI6OATz8pPDw7YMQ9g+tSb7+8EbWOIK2qi/fGrxWTUErmwEFm7IFbcJQj1uo4
-	 gZ2pji8nwfKcCx7X5yLgBdEJ7E4nMy88knem94DchVbrv2zCMVezdG1hkmO9KOL0O/Tc5
-	 c4z+wtB4g6tVNR8g8fNHWbOszUSUoziTlSwXEFEr/2CYOrGhV7bQqq3aUioopKZmY+w==
+	t=1792738962;
+	b=333MXu8wSNcj8xs3K1+0EwU66jUYQsCEVsiU6IBpaEsfqdVEKVta5aW4z1Rfv+bA0e2y
+	 +lRhRVweqFfjXGM1W8GFZiK+Fx+6yr6LnHNuKOAjmd1YNy2fsQnX1OEIuqc+KtjYQ/aSB
+	 E5X3U4Y5R/XKG3wM1LvMwoSjoG9LaoSpw9U4VX5JSVlwXgf8JjKMrHAvPdaLu/bxvj+E+
+	 rhUV2OEAJ+fOKRNp+/RLEHPlyyG68d2lYcH70CerxnVGQ+sEbXy12NE9qCzNOcPYMZBLJ
+	 SYiIsQI8nHN071vjXWiaVZNac7EdkHmlCYesvptOJwL1+6f2KMDpzErZ5Cs8qf33zBA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792737970;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792738962;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=j6/6uTawOgJeBwn+MQ7klMygO913tJ57a3jTPJFBRZ8=;
-	b=j/TKVM5SXTxn1q+/Fffn+XjMbddRFmj7JxXB9fF7IXRfkRm/sEV2miQt8DX7XG40yZdF
-	 7rv5sjHAooVI/xGummJPhkYbvo8ugRAhVNutNPtY4Dm7k0R4vghHdT5zuSPkC2jOby1HN
-	 uhTLfJdJTgzciY7algEICI8zR7q3qT1Ce0X3wBqLxVGcBtxyAO//sG2ogMONRBKDDFJQt
-	 XBJabWpxCezz/Z1BAuwNiSfeT1wNCYD9qMZbpytLVjH21Z1IPd1eKEw9t9tcKyeht5F9y
-	 yS8EYELxB0WUXzsAO2QzESp8+/yKZxKqfNMaUM6G+Ac44VNsATEcVnXuZ+97mDcNQ7A==
+	bh=SxH/ebTcWg5HUSaM82Z0/U2PzsQ+jG1838i8v13X41s=;
+	b=eWrzCI0aMGeJco+p3A0LO17pH+0XVQ9A/m6jVdRGb0oYWPiEOK9oqHQdLdp1eycVJPMI
+	 LHNmo0nPpILqZ4Qee658afsmKNE7j4QIcrPTu4Is38K2bYMiq4NXtJTWQxa1G3mTccee6
+	 MGLiUH2+p5GeFP/MdoTYetUUINxtHqwDVWBuXIIvMa+aq+8U/3n88FlwBv0Ein+VDH/yY
+	 c9QeKKWVU8yFxy2BDVSt4P9EHhMQEPAiwkJwLYVuiHckfNifw15XD7sej/Esi6MNibSkA
+	 LIJOztxsVrjiayCExbIcRBH1pc40DzwC/I1wwyaKXefZhVUwdo1iv5hxoAM05nYDDBw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kdsdcG5Y;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A94HX6Ia;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78751606A31D
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 06:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32486606A32C
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 07:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kdsdcG5Y
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD621F01825;
-	Fri, 23 Oct 2026 06:46:08 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A94HX6Ia
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7A41F01825;
+	Fri, 23 Oct 2026 07:02:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792737969;
-	bh=j6/6uTawOgJeBwn+MQ7klMygO913tJ57a3jTPJFBRZ8=;
+	s=k20260515; t=1792738961;
+	bh=SxH/ebTcWg5HUSaM82Z0/U2PzsQ+jG1838i8v13X41s=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kdsdcG5YFfdebH2Njp9ZZrbDCjyTPve+tWiSSNIoFLqqaiUqBm593T4Fgl8WlQV0e
-	 tIXv5A8fwuzvXWSWk4NzF8fFnA/eKHxdf0+sc8fuJADY4MSh/yRZqdL10/nMNEjFaP
-	 EPwBN1+NcN6hkUP1N4Vn/RNTTNRx+eIWTTV9fdtqF/nwctD2TMUa5ZKx/zm/mO73Yi
-	 +J8r3fv55zEHFScpg+V6v40DN6UOvsGfhKbauAm59GTCYSdpZJr/h21ToOYIplORZN
-	 SHMcKLTfvWSWlcwiQzG3TnjsgnKulB15BbdTFAjXzDk4H3xOZeEsmBsfxcek37Nat4
-	 90JOuQAuehBYA==
-Message-ID: <sashiko-outbox-182361@kernel.org>
+	b=A94HX6IawBMP+VzqYSRjIS+oc9+EsHsh3KPTaH709HhRjPTM+5RlIFeN/6M7gWKeJ
+	 VujPtyBkWNSiPL+2IwcmW30jaNXKMgxJz76m8iysmy8K623sY0kCNns7wb3hAr9oqk
+	 NUNsDdLrmFa8k5364yn/pc01pCi9GBaDuy1UwEGnRcl/34g76KL8iLeA+TVVAjWiY4
+	 8bMfL4Qr/WUOMTFZ8fin1FJ3Wb95VU+7XoGdWMg1YDu6tsajMNvLn1Hn8bqvzJV/1P
+	 j/CN2D0o2IWIV+TWU6N2y5ojVEihyvbkHOoBG8PWoKhvH3TlNfpsitn8YmkWWEeymV
+	 Q2tI7FryI5Ufg==
+Message-ID: <sashiko-outbox-182377@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Fix out-of-bounds btf->types write for
- split BTF
+Subject: Re: [PATCH net-next v4 2/2] net: stmmac: Stop Tx queue when
+ (en|dis)abling XSK pools
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Feng Yang" <yangfeng59949@163.com>
+To: "Kurt Kanzenbach" <kurt@linutronix.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20261023063133.563998-1-yangfeng59949@163.com>
-References: <20261023063133.563998-1-yangfeng59949@163.com>
+In-Reply-To: <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
+References: <20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96@linutronix.de>
+ <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 23 Oct 2026 06:46:07 +0000
+Date: Fri, 23 Oct 2026 07:02:41 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,110 +63,91 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] bpf: unchecked btf_add_type() return value in btf_check_all_metas()
+- [High] net: stmmac: stmmac_xdp_xmit() flushes TX descriptors when queue i=
+s stopped
 --
 
-commit 4ac38a4f66ed4b8171a028c6c026eb14f1efb57a
-Author: Feng Yang <yangfeng@kylinos.cn>
+commit c900d4172ba56a5bcf30305f3561e2f9948f9892
+Author: Kurt Kanzenbach <kurt@linutronix.de>
 
-bpf: Fix out-of-bounds btf->types write for split BTF
+net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
 
-This commit bounds the btf->types array growth in btf_add_type() by
-subtracting btf->start_id from the maximum type limit and replacing the
-equality check with a greater-than-or-equal check to prevent out-of-bounds
-writes when parsing split BTF.
+This commit stops the network device Tx queue while enabling or disabling
+XSK pools so that concurrent transmissions do not access Tx DMA descriptors
+while the Tx ring is being freed and reallocated. It also adds a check in
+stmmac_xdp_xmit_xdpf() to bail out when the Tx queue is stopped.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 538129ed24188..7949704712791 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -1752,15 +1752,17 @@ static int btf_add_type(struct btf_verifier_env *=
-env, struct btf_type *t)
->  		/* Expand 'types' array */
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 27c4a249e560f..2083520179a69 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5270,6 +5270,10 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv=
+ *priv, int queue,
+>  	if (unlikely(xdp_frame_has_frags(xdpf)))
+>  		num_frames +=3D sinfo->nr_frags;
 > =20
->  		struct btf_type **new_types;
-> -		u32 expand_by, new_size;
-> +		u32 expand_by, new_size, max_size;
+> +	/* Ring may be torn down for an XSK pool switch */
+> +	if (netif_tx_queue_stopped(netdev_get_tx_queue(priv->dev, queue)))
+> +		return STMMAC_XDP_CONSUMED;
+> +
+>  	if (stmmac_tx_avail(priv, queue) < max(num_frames, txq_thr))
+>  		return STMMAC_XDP_CONSUMED;
 > =20
-> -		if (btf->start_id + btf->types_size =3D=3D BTF_MAX_TYPE) {
-> +		if (btf->start_id >=3D BTF_MAX_TYPE ||
-> +		    btf->start_id + btf->types_size >=3D BTF_MAX_TYPE) {
->  			btf_verifier_log(env, "Exceeded max num of types");
->  			return -E2BIG;
->  		}
 
 [Severity: High]
-Does returning -E2BIG (or -ENOMEM when kvzalloc_objs() fails) in
-btf_add_type() actually stop BTF verification when its sole caller,
-btf_check_all_metas(), ignores the return value?
+In drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c,
+stmmac_xdp_stop_tx_queue() releases nq->_xmit_lock immediately after setting
+__QUEUE_STATE_DRV_XOFF, so stmmac_disable_tx_queue() and
+stmmac_enable_tx_queue() run without holding nq->_xmit_lock.
 
-In kernel/bpf/btf.c:btf_check_all_metas():
+If stmmac_xdp_xmit() in drivers/net/ethernet/stmicro/stmmac/stmmac_main.c is
+invoked concurrently with XDP_XMIT_FLUSH while the queue is stopped for an
+XSK pool switch, stmmac_xdp_xmit_xdpf() returns STMMAC_XDP_CONSUMED and bre=
+aks
+out of the frame loop, but stmmac_xdp_xmit() still executes the flush block:
 
-	while (cur < end) {
-		struct btf_type *t =3D cur;
-		s32 meta_size;
+	for (i =3D 0; i < num_frames; i++) {
+		int res;
 
-		meta_size =3D btf_check_meta(env, t, end - cur);
-		if (meta_size < 0)
-			return meta_size;
+		res =3D stmmac_xdp_xmit_xdpf(priv, queue, frames[i], true);
+		if (res =3D=3D STMMAC_XDP_CONSUMED)
+			break;
 
-		btf_add_type(env, t);
-		cur +=3D meta_size;
-		env->log_type_id++;
+		nxmit++;
 	}
 
-	return 0;
+	if (flags & XDP_XMIT_FLUSH) {
+		stmmac_flush_tx_descriptors(priv, queue);
+		stmmac_tx_timer_arm(priv, queue);
+	}
 
-When btf_add_type() returns an error here, it returns before appending the
-type to btf->types[btf->nr_types++], but btf_check_all_metas() continues
-looping over the remaining types and returns 0.
+stmmac_flush_tx_descriptors() reads tx_q->dma_tx_phy and tx_q->cur_tx and
+writes to the hardware Tx tail pointer register via
+stmmac_set_queue_tx_tail_ptr():
 
-In the btf_parse() path, btf_check_all_types() only iterates up to
-btf->nr_types, so if no earlier type references the dropped tail types,
-verification succeeds with a silently truncated btf->types array.
-
-In the btf_parse_base() and btf_parse_split() paths, btf_check_all_types() =
-is
-not called at all:
-
-kernel/bpf/btf.c:btf_parse_split() {
+static void stmmac_flush_tx_descriptors(struct stmmac_priv *priv, int queue)
+{
+	struct stmmac_tx_queue *tx_q =3D &priv->dma_conf.tx_queue[queue];
 	...
-	err =3D btf_check_all_metas(env);
-	if (err)
-		goto errout;
+	wmb();
 
-	err =3D btf_check_modifier_chain_length(env, btf, btf_nr_types(base_btf));
-	if (err)
-		goto errout;
-
-	return btf;
+	stmmac_set_queue_tx_tail_ptr(priv, tx_q, queue, tx_q->cur_tx);
 }
 
-If a split BTF exceeds the limit and an earlier split BTF type references a
-dropped type ID at the boundary (which still passes the metadata check in
-btf_check_meta()), btf_parse_module() -> btf_parse_split() succeeds with a
-truncated btf->types array. Subsequent relocation in btf_relocate() ->
-btf_mark_embedded_composite_type_ids() in tools/lib/bpf/btf_relocate.c then
-looks up that dropped ID:
+Meanwhile, stmmac_disable_tx_queue() frees the old ring without resetting
+tx_q->cur_tx, and stmmac_enable_tx_queue() updates tx_q->dma_tx_phy, resets
+tx_q->cur_tx to 0, programs the tail pointer to 0, and starts Tx DMA before
+netif_tx_wake_queue() is called.
 
-	while (next_id) {
-		t =3D btf_type_by_id(r->btf, next_id);
-		switch (btf_kind(t)) {
+Can a concurrent stmmac_xdp_xmit() call corrupt the hardware Tx tail pointer
+register with a stale tx_q->cur_tx or arm tx_q->txtimer while the Tx queue =
+is
+being reconfigured, and should thestopped-queue check be performed in
+stmmac_xdp_xmit() (or skip flushing when no frames were transmitted)?
 
-Because next_id is >=3D btf->start_id + btf->nr_types, btf_type_by_id() ret=
-urns
-null and btf_kind(t) dereferences it, while btf_relocate_rewrite_type_id() =
-can
-also read past the end of r->id_map[].
-
-Similarly, if kvzalloc_objs() fails in btf_add_type(), btf_check_all_metas()
-can return 0 with btf->types left null or with types shifted after a transi=
-ent
-allocation failure.
-
-Should btf_check_all_metas() check and propagate the error returned by
-btf_add_type()?
+>
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261023063133.5639=
-98-1-yangfeng59949@163.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261022-stmmac_xsk=
+_crashes-v4-0-15c0c750bb96@linutronix.de?part=3D2
