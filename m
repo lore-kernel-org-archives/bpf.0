@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792790498;
-	b=LNo1xq9oi2ntYr/3LMF7eA6spSUNZwg/I1ph4DZ/rupoxs6ujni9wmqKFaPTSFwylq0C
-	 4pkhAMYdYaSshb71W1iLQC+Af+Lv8U2x/lxdRWc/+AMOO1HA5kQ57yXUYnHxbMHhR8bCE
-	 Ig9dmo0dfP69TAwl7vfLcZq5RIiwrqY9IEyepx35x1t/5TpHcLydbPtORu6Zx3dsD9aNP
-	 F4H9wgbO4EO2fEI8gQ2glh6QhekTSuOCph9NDSWjdanzte1om4s1PLuDgp4IWdUlkoJOa
-	 lSk68hNeDr1rOmFNE4wnfrVh/JDC82ban1sJyJp4TFYbo1l6dztjr/c0xWzMml3nvog==
+	t=1792790503;
+	b=RTyWVGUJgDR4cOPuZdBuoDOeRwHynAfeXgK89XCkp6sI55UiTUcghPLtJBi+AUConeTP
+	 Cr0a81+LkvNTEq3NJfw0kow71Ta04VmBNg39QuZLy7aU7r8FygWwmtlIil8aGn0keA7aH
+	 5enSrNFJ7Q6qRypMJF7e3L/qn6jjWJ+nS6NFIN6hwU5axlY6tZ1tDNW+WY5FyD+DuPznw
+	 3W6RhM1n6maIGKDPE4jy672fPxinONqgCkJl70JlZcq9hNBx5jlOQFJTlgK1nbQdVqZeN
+	 rJx+l/X8I9jfiuz+ZucXQwBcP0ms6ldM99B4KRXLZ2VgTEHUkow4cYiBCbBCACMbMgw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792790498;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792790503;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=541CjRYRq1Ame9KcsbUzxtaQvKuIIhHMIDtTn0eszSE=;
-	b=zWD8u63va7pUdJQs0/EBDLlu+I499UP/yLS8jzpjytkYZlNfXR8nZZQfWveuWopPlW1o
-	 ncfkl0DD6RHPVq2zHNloqhle69hp/3kT9hffMRu9yfBkR4FPz2OJTiemaDuOssrG1roBG
-	 ittFLrsOVQfbZ+kcD5tczfMKsQlUvoKvPgIF5yhe8ffOI5aeyI/Zx4IdLKqKrXpcCYw9J
-	 Fgp9Gi3lwWpU8cvjBoppuf3yqmjM9aoE6BbVYn571CopbE3ry9WOFc+30DWIrADBEgLRu
-	 29fc0V7keZEVa+KDGxGY0fWlOUknItuwbuMJgiwj14Pn+ItxyuV/KaH5Nm29KitcZNw==
+	bh=Cxf5OGVtt64HO/EUorQIz6/17tnDBQQtKzhVw0jTRWc=;
+	b=iUV6/fD0RizFcbRPPAA61ttdYK4E//NIagr95jzZ82ZHTYdV3aXrWttkAd/H75zQVevS
+	 RyqLsKpn26GHCEz+jPhURjZ0/NHruiwff1XZ+nQG8sPeRqazuOg1jHLyAhaOyU/ZI+6zk
+	 qApauG311rAWRYRNUxnBTt90+XL+A7BO6fVfFi4Tet1IFtnEf/1cB/va3OIAaD6DJT/As
+	 IgJUbD8rCcIm9uYNVwgxePX/rs6T2TNsWKzliHnsA2OMEDOfJ8BcCYenKd5yGfXsg5Vlv
+	 10GS3A8CbENvNFlU+4LoHLkAfDWQU8EV68FC1fPJSI9i4o5gD84pvgkv04ZBjDQKuPw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Mx9lM0gy;
-	arc=none smtp.remote-ip=209.85.128.175
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bOpOBHsA;
+	arc=none smtp.remote-ip=209.85.128.169
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F8B606A320
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 21:21:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 51F8B606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793AD606A326
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 21:21:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 793AD606A326
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Mx9lM0gy
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8ab395abf79so13043697b3.0
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 14:21:38 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=bOpOBHsA
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-8b05bf699easo13462717b3.2
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 14:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792790497; x=1793395297; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792790502; x=1793395302; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=541CjRYRq1Ame9KcsbUzxtaQvKuIIhHMIDtTn0eszSE=;
-        b=Mx9lM0gygze4DxRHjDv/5iKcf50Jxqb7pKoxCkNBcSoqS3Dki80jB6wvtq5fOkdQGH
-         oeAgP7fSrYaBCTzM1edf2bO5Ub18vzDi+wYMiSz7xEIa2RU2fWi4T9E3Nv+RbtxQHlqW
-         0ZqyWXwPkrZsNrOGX/fkYdjdjMlzIfpjS0dlSxMEAvH36H5StU8dHF0sQT/4klxPP/Ff
-         7e05VgUv/e3owLz01vRLFNDeLdTfluEpZ+07PiewcxeVxG2aXYz23Gi4io8qNkuQhq6/
-         Z2XZ3CBk+VYSNXEdMp8J7qeWijV7SpSha0tLfO5WdVWeQLZiOg3RYZHyg64qZMxPXKM3
-         s9UA==
+        bh=Cxf5OGVtt64HO/EUorQIz6/17tnDBQQtKzhVw0jTRWc=;
+        b=bOpOBHsABxjSxWcPp5eQxR6H6gks1skbOR8mrJWnFMEVnKaNiY2jVDA45gCMp1X1AJ
+         HUpGyB70LIn7QJpGbnEjMq92Du+O6gN8XcmUB1nHYUDav+j9FPtsawO68ygIQlpjpW+P
+         KmwSjNfl/xlPzPTba3aOOUGhndLhS8GumHSXNxbekErxvJ+cXqfYpgbfy88gBUJC8zAI
+         +EL+O/dgQ3av+ww5ALCiLByjdz9eMViK1mgLTb4uM/0YaJUkuUWD08XaNfMEdTurnsbk
+         wERMAMzTvDR6ZiAynE+/nvF9ST+rB5y7V0leVPYSIpv0bW9a9L4AuYpsIm/rHSLNlv+R
+         paFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792790497; x=1793395297;
+        d=1e100.net; s=20260707; t=1792790502; x=1793395302;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=541CjRYRq1Ame9KcsbUzxtaQvKuIIhHMIDtTn0eszSE=;
-        b=NQivIqcMwxWw9FMl6mut+RZRuKrIDzGqoaPvh1D/QabndhssaYxYBGm4dgzFS6zRQM
-         7oFfurrh9JYmLCgzrmxioP+5JeWL26+x6U/043l9U7wnxdSwen60+DixqHMwYmwA3W4F
-         vIL+7G4OPxJw7ptPgK8uZApjdMHmtXALUfRo8thJ5k+hSuGgZl85mzIVTKY/gp1TlTIB
-         3VvmI9SOBdhwZDvOBOh70Hr0ihfjSJSHFS62Vp6hr/gcqLGS48TyVmKiR8CERuS3MrKA
-         WBTOdOEFmHv3GSJfT14+61Lim9RooaF/EEb2DIYDHS3+xRqLpy2VvAT3khw1ip8fPnkf
-         fa7g==
-X-Forwarded-Encrypted: i=1; AKwUvByvPuXgr6f5uaw5L7zzr/4yydU5b8Ayhfw3nTynP7n4HUTXsHKP6heRzd0oRs/vl6JtRYw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJdjhxIou1j+av4wvUJyVoSjm65vR3Olaa5gv61nPjeHq1uImFC
-	HY1jsFGHGdo9XyR45ZGtmBKq1asZwxMggNYKVfR0CuoknP/SBqvYbERkP4JGrQ==
-X-Gm-Gg: AYBFou3S/9l50GjsVIe6stAI5u7HOWRBNA+J8g27/bXuEjY0lD/GhCCzv68bNbkm9xV
-	W9eXKEzZnN+Z/k6OQDtGLJ2t+eZ31E1lWc4VQnfJ4Py9cEXsQSbsP4olgf11zDlBCMXFh1z8pAI
-	yqKuK+0mbrkbmP4xYbgq/KGwj9UquR/nPd9ejpIqouoYU7Onncji0SrnFim4pb5vY1sENrODJXO
-	Ty5V+1fIhHWY477bD/Aj03Be5xp98PmfP5ycviUY7ZoWWn2B+xBJaSIEyhZI+AIw9NW1j3HP35x
-	rq0ikGSeNOtbyVvpKKG6/Gmbod96lyjNMmMFMCHDFtpf20xWXlCNqEaM1BXvIfDd2tVbOMJ6qin
-	lOuajYr2VSPKDjsiA8Fhsf77IAoDKOcX/Bf32C8trL/laBbMrNSxpuYQqtjffraIdgppJxPBCOM
-	QrfRXbSZuoLoffz/ieWFboXFYDIuEm6gJP6AYXoZp4OU2DrWlQkUannR1VynoY4lfWjsc3HwBn4
-	geW4Sdh/hwDSRUVdlmyVmyWDKoiTOOq+MtioUJBUVnEBGHSOWP/1yUgaw==
-X-Received: by 2002:a05:690c:60c1:b0:8ac:927:f7c9 with SMTP id 00721157ae682-8b166c1ae39mr3925367b3.26.1792790497097;
-        Fri, 23 Oct 2026 14:21:37 -0700 (PDT)
+        bh=Cxf5OGVtt64HO/EUorQIz6/17tnDBQQtKzhVw0jTRWc=;
+        b=os29RRk7XR7k2Pfif8bDraG6w5igPSRfD19sno2podaYmFmvNl/h65aIv3XaqGMuVi
+         y9Pi4MwZSs5ClnXR2sC0AmYQnJeeYumvXSQbjgvoCDaRvIb6I0EoEoPFw5QPNJTrnUxu
+         MS8ILh1gMYHAkbm3+uhDULHwF3JQPrD859EL6pUpzSUnpyqn7XXBMd+k6V0rAMkQL40P
+         j7yef0XLmhXV0aMZCzsSlL4BoOb4ONIDI1L+J+Ve9B02X6nrbTZKmxrzh7YVZrU15tCl
+         FTfk1ZLORvzLSYbs43p/vFPWIozefN8pJVFlPGGVxc9qa6tehqHpIlZ8qM9pTY/pubA+
+         qkhw==
+X-Forwarded-Encrypted: i=1; AKwUvBz25DKTCXh/6JAMMbdXj+LO8ZkwZX/PR4cxEhF0fqDu0WFb+wFezXRgrHcP6DwOxJ46P5M=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIcc3nbkhoaF1bD6fan2X8xA9LgnFC9XkD8S7iILeEiCQOcK/vK
+	7NU+2v0Xehu3cT0hCGtSS/513YPE/hU3ZcFSn/YMiilzmHi2ZuBEf8YU
+X-Gm-Gg: AYBFou3dZhWbodSltGQYjLZtSU50eIKcrslTJ+9v5XaOp542XQ2Y2S1lU1zj7IeLUtu
+	01mmKthocF7w3ar6w4hfb190qPhtdpsT44zZqhg6NI2IGb3qNbbQmjCYSYp+q71EwB+4QwPfv3c
+	C44h7yA6UWtZVR+t7H7Iv1fSHNWyAo+uq3zOpcM1cP1Mce4zmRsk7q5RvBCMWOp/Bobh7iYOCQb
+	lypFEMCo413qmWxJPSrz4ve0G0Jo0gLEwtnOEggIy1Td9M9qlm209BA5c1/s2rA2hHSz46hf2j4
+	5cYjvgLTL5SkrZahxeQFngWTJiHh0pvse7kr2zRe37T8GDbYrcReEeNG/k2H7fHQXmJtJmkydL3
+	JMALIUx8qHnCMmZCsnZPqbWDX824nnwNE8RzhuhLMyhUpjph8eEpZ6GSKUXdt7voMA9mK9FZbi+
+	1SoBTZoa1FkqPuGvDLgwNFmRJd+Do8WjUGlSrRwhtDSdWS/GzUgMQAbyE3NNOaALBC8rt92t1XM
+	uOEJyUm4/1s76opt+t7tPlQbv7MdZbEnR1mCezt8xE7gy6IwJO8Xh7ZyQ==
+X-Received: by 2002:a05:690c:e3ce:b0:8a8:8945:c423 with SMTP id 00721157ae682-8b166c5d5ebmr2992637b3.56.1792790502422;
+        Fri, 23 Oct 2026 14:21:42 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:35e2:98f8:e90a:1695])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b166e46a93sm1915667b3.26.2026.10.23.14.21.36
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b166e46a93sm1915667b3.26.2026.10.23.14.21.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 14:21:36 -0700 (PDT)
+        Fri, 23 Oct 2026 14:21:42 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -90,9 +90,9 @@ Cc: Song Liu <song@kernel.org>,
 	Christian Brauner <brauner@kernel.org>,
 	bpf@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next v3 1/5] bpf: Don't apply the trusted field lists to an RCU-protected parent
-Date: Fri, 23 Oct 2026 17:20:37 -0400
-Message-ID: <20261023212041.884996-2-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next v3 2/5] selftests/bpf: Test f_inode of an RCU-protected file
+Date: Fri, 23 Oct 2026 17:20:38 -0400
+Message-ID: <20261023212041.884996-3-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261023212041.884996-1-utilityemal77@gmail.com>
 References: <20261023212041.884996-1-utilityemal77@gmail.com>
@@ -107,79 +107,112 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Walking a field in the __safe_trusted or __safe_trusted_or_null set
-yields PTR_TRUSTED whenever the parent is trusted or RCU-protected. For
-an RCU-protected parent that is wrong: RCU only keeps the parent's
-memory valid, and the resulting pointer survives bpf_rcu_read_unlock()
-as fully trusted. mm->exe_file read under bpf_rcu_read_lock() is
-MEM_RCU, and file->f_inode walked out of it escapes the RCU critical
-section as a trusted inode that can be dereferenced without PROBE_MEM
-and passed to kfuncs expecting trusted arguments after the grace period.
+Walking file->f_inode out of an RCU-protected mm->exe_file must yield
+an RCU pointer that may be NULL rather than a trusted one. Add reject
+tests where the inode is dereferenced without a NULL check and where it
+is used as a trusted argument after bpf_rcu_read_unlock(), and an
+accept test where it is checked and dereferenced inside the RCU
+critical section.
 
-Substituting MEM_RCU for PTR_TRUSTED on an RCU parent is not a fix
-either. A field of an RCU-protected object is only safe to read under
-RCU if the object it points to is itself RCU-freed: inode is, but
-mm_struct is not, as __mmdrop() does kmem_cache_free() without a grace
-period, so an RCU-protected vma would hand out vma->vm_mm as an RCU
-pointer that can be freed under the reader.
-
-Apply the trusted lists only to a trusted parent, so a field of an
-RCU-protected parent falls through to the RCU lists and is otherwise
-untrusted. Add file->f_inode to the __safe_rcu_or_null list: inode is
-RCU-freed, and struct file is SLAB_TYPESAFE_BY_RCU, so a file read
-under RCU may have been freed and reused, in which case init_file() has
-zeroed f_inode. The field may be NULL and programs have to check it.
-exe_file->f_inode is now rcu_ptr_or_null_inode, bounded by the critical
-section like every other RCU pointer.
-
-Fixes: 6fcd486b3a0a ("bpf: Refactor RCU enforcement in the verifier.")
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- kernel/bpf/verifier.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_vfs_accept.c | 24 +++++++++
+ .../selftests/bpf/progs/verifier_vfs_reject.c | 51 +++++++++++++++++++
+ 2 files changed, 75 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5601d2056218..4a32875d7077 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6517,6 +6517,11 @@ BTF_TYPE_SAFE_RCU_OR_NULL(struct request_sock) {
- 	struct sock *sk;
- };
- 
-+/* struct file is SLAB_TYPESAFE_BY_RCU. A reused file has f_inode == NULL. */
-+BTF_TYPE_SAFE_RCU_OR_NULL(struct file) {
-+	struct inode *f_inode;
-+};
-+
- /* full trusted: these fields are trusted even outside of RCU CS and never NULL */
- BTF_TYPE_SAFE_TRUSTED(struct bpf_iter_meta) {
- 	struct seq_file *seq;
-@@ -6593,6 +6598,7 @@ static bool type_is_rcu_or_null(struct bpf_verifier_env *env,
- 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct mm_struct));
- 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct sk_buff));
- 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct request_sock));
-+	BTF_TYPE_EMIT(BTF_TYPE_SAFE_RCU_OR_NULL(struct file));
- 
- 	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id, "__safe_rcu_or_null");
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+index 55398c04290a..34919abcff04 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_accept.c
+@@ -100,4 +100,28 @@ int BPF_PROG(inode_rename, struct inode *old_dir, struct dentry *old_dentry,
+ 	return 0;
  }
-@@ -6798,10 +6804,14 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 		 *
- 		 * A regular RCU-protected pointer with __rcu tag can also be deemed
- 		 * trusted if we are in an RCU CS. Such pointer can be NULL.
-+		 *
-+		 * If the parent is not trusted, the field can't regain trusted status.
- 		 */
--		if (type_is_trusted(env, reg, field_name, btf_id)) {
-+		bool trusted = is_trusted_reg(env, reg);
+ 
++SEC("lsm.s/bprm_committed_creds")
++__success
++int BPF_PROG(trusted_field_used_in_rcu_cs, struct linux_binprm *bprm)
++{
++	struct mm_struct *mm = bprm->mm;
++	struct inode *inode;
++	struct file *file;
++	ino_t ino = 0;
 +
-+		if (trusted && type_is_trusted(env, reg, field_name, btf_id)) {
- 			flag |= PTR_TRUSTED;
--		} else if (type_is_trusted_or_null(env, reg, field_name, btf_id)) {
-+		} else if (trusted && type_is_trusted_or_null(env, reg, field_name, btf_id)) {
- 			flag |= PTR_TRUSTED | PTR_MAYBE_NULL;
- 		} else if (in_rcu_cs(env) && !type_may_be_null(reg->type)) {
- 			if (type_is_rcu(env, reg, field_name, btf_id)) {
++	if (!mm)
++		return 0;
++
++	bpf_rcu_read_lock();
++	file = mm->exe_file;
++	if (file) {
++		inode = file->f_inode;
++		if (inode)
++			ino = inode->i_ino;
++	}
++	bpf_rcu_read_unlock();
++	__sink(ino);
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+index b5f456d57669..067b4f979902 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
++++ b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
+@@ -173,4 +173,55 @@ int BPF_PROG(inode_rename, struct inode *old_dir, struct dentry *old_dentry,
+ 		return -EACCES;
+ 	return 0;
+ }
++
++__weak int subprog_trusted_inode(struct inode *inode __arg_trusted)
++{
++	return inode->i_ino;
++}
++
++SEC("lsm.s/bprm_committed_creds")
++__failure __msg("invalid mem access 'rcu_ptr_or_null_'")
++int BPF_PROG(trusted_field_of_rcu_parent_unchecked, struct linux_binprm *bprm)
++{
++	struct mm_struct *mm = bprm->mm;
++	struct file *file;
++	ino_t ino = 0;
++
++	if (!mm)
++		return 0;
++
++	bpf_rcu_read_lock();
++	file = mm->exe_file;
++	/* The file may have been recycled under RCU: f_inode can be NULL. */
++	if (file)
++		ino = file->f_inode->i_ino;
++	bpf_rcu_read_unlock();
++	__sink(ino);
++	return 0;
++}
++
++SEC("lsm.s/bprm_committed_creds")
++__failure __msg("R1 type=untrusted_ptr_ expected=ptr_, trusted_ptr_, rcu_ptr_")
++int BPF_PROG(trusted_field_escapes_rcu_cs, struct linux_binprm *bprm)
++{
++	struct mm_struct *mm = bprm->mm;
++	struct inode *inode;
++	struct file *file;
++
++	if (!mm)
++		return 0;
++
++	bpf_rcu_read_lock();
++	file = mm->exe_file;
++	if (!file) {
++		bpf_rcu_read_unlock();
++		return 0;
++	}
++	inode = file->f_inode;
++	bpf_rcu_read_unlock();
++
++	/* inode is an RCU pointer like file and is untrusted after unlock. */
++	subprog_trusted_inode(inode);
++	return 0;
++}
+ char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
