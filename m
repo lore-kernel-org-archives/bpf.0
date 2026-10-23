@@ -1,49 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792797010;
-	b=XroEU0xLGh3bX6LWp2vFf9LSMq6v0yRFWOy8mQQ//fpakf1aAhxklPClMNeDjc6igREK
-	 jp1tD3QsQN/ag3Mmvp3JrNq3BgYkUv2Hnszf3ctl6nbWe/sAZwCj8c4Rw2m4QjzN4aNej
-	 YN/lVv+HCLEhJCeWcJVUwqraBqhlk9tgAr7EzrLD6BXPxtLdOweR3DaYMXLFeSxjUQnAT
-	 vvAkJBpkMn4l5NIL5AN7EtvprYT5nqz3kva41km+DMc3fneVjL42uyqp4VryrW2cDj/ej
-	 5LbxxM2v3tsBSZMl6bXXe673aqnqqXx8zGuwVzaiXh8LrjjasLCjyGIcMIrTdOPQzkw==
+	t=1792797134;
+	b=R0OhZnuX7AbgvWNb6S5z9wPjBPDbq1m4r+PmSmA/FUJrWYHRDusiQTx7nwmQbQZAiM3s
+	 IxsUQNkUpYdMZGDAvopWLIhHLX43gxDDYhTueWpqnmVCNk0QpHrF3/xUtzpGQkgXXZwv0
+	 fUI8yCecrMX9+0/picMEA5wW09OmuEDx5ZI4EExgOPoZvAEtx94oOnhBdWVvKqtO7iSu+
+	 9FOXX8/FdNBHAZL/qfbggSY//j9ocRm+l0qtEWTzdVU5p7VZPqlDNibuP7J9VsoMkYMDX
+	 XRkFwwHCkr39nv9mCssdeqMWayJhmpyalprGg4Tm1RPYqhv+O8DGZ+tNTJ66cDXHN/Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792797010;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=MIrAFhWXAPIb7lEuheQJc4PPEjxhRvQnGG7L3QhTTS0=;
-	b=3CFm6r63lDg0csYzU9ZfNB1ZTfiffce+/M49PqFwRjcbOBC+RKtKO6IeK0/Mu4FBY03S
-	 KrbO7vQeT8oDfOxZntzCZ0P5sPMWvp0WC5FTH60huVfDjK06MA1c/ZIi7c3KfxnPMJFmq
-	 Mg4qWCCjkeIirSSMzm02t6rSN7pWLGNX4oD+PSc7jPolahzVEOA7gYGJVLVpdJRLe1eHk
-	 ZMh4CDxK2t2bfK1LvqmsP9K6KHffi1qn4NEHc+R9r1dmGiFOvqepk1WEBKfO4ORElOznv
-	 +XZFHpiCzaIFkhUb5EjK+Ix8AkV4GFio88h6m1NtMGjs2YhmU4WV5XXCTPJ09P7yUFw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792797134;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=BQiokQz7+NHbLU1YUgJvJRz+8rmHmPrtiNBnIP9oN2s=;
+	b=ReEy27qFMiTQw/nyJKvcAMN8yCbmGo86GVAbfWdq6qnj/GWYxXy284mMgtdgDbSR7Ae+
+	 zfz4z9EpHaKkKzFXqTUSpSG2uDFQS133EEFSJmLBlcYI0tdUZbnPWtR5Cn/F9cl6DcDZw
+	 99mXIrpa8D2nwPXYkMMBnrE0uKzK9eaZiJLdu0cOttkBUt3gNyy9MsB26iw8njR6Wv8Q1
+	 c7oSPIlorDTcBAHGdKR8YePCWo+mP3jtoCnhmxh6ckGvjj74UBhUzganNmqqzto3cVtWU
+	 6CxfaSOe2fO+bmsFZ2Jzw5MFqfCxzaHwCGjum1Cg4JqWGDOGL0iTl7MrznETDcqoT9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tk1mxgaO;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Auw3Hr+A;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB9C606A334;
-	Fri, 23 Oct 2026 23:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B748F606A31A;
+	Fri, 23 Oct 2026 23:12:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Tk1mxgaO
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA6B1F031E2;
-	Fri, 23 Oct 2026 23:10:09 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Auw3Hr+A
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D8A1F01825;
+	Fri, 23 Oct 2026 23:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792797009;
-	bh=MIrAFhWXAPIb7lEuheQJc4PPEjxhRvQnGG7L3QhTTS0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Tk1mxgaOl0SDRmoaEBsgEEIIES2z/ZAHOArtAag04sG953btzUd5zLyLbGYJqZe4u
-	 yp7qeKz+bpBYAmJW2lf6632XWrKqdroOrMlCxjwReRd1EZ9MzHwqVO3r5PoTSI3Hdk
-	 JI0ct+DgU3jLWF45gWWYTzoNPjFvT2zQTiKB5wJ2ZkiEqvxETct7nyZT2pMrTlQZTi
-	 o8otwmSe6xepkfSHQ6qPJbDsQU3UmLKrJ8LJaopLuQ2aZ37vLKfzPd0j5fFAmvuUq6
-	 PlGWRZX2P2mZ/rKa74x4pI3W/rCy0oDT2saDrxjFXrcUL0xoHQOAcEjw26NYsKXpoK
-	 rrZ/hfCIXtiCg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4449F391B16B;
-	Fri, 23 Oct 2026 23:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1792797133;
+	bh=BQiokQz7+NHbLU1YUgJvJRz+8rmHmPrtiNBnIP9oN2s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Auw3Hr+Askp6mRbjjuPJMs0tBFF1JuRnyVrW7tUx1pIBKHJKfS8H0zGSYfxTc9KWX
+	 dkPk6GBpFWHzwCfDvHQE804NfgFbSBp+zTPEm7MwyMh1YyhO+XJwvdwUUPaNHctYI2
+	 waamrRZhZsMkl/zsHCeXH7L6tqdNFdhoLrfjnpGLdgs2vfdZXSNQa8gnG49Tq3mnu7
+	 2S8knSjsFdW5w/YWqBWL63355f+/lwEM1oOnZ5ZzvBp5xcRY0bQqY7nJRARocwSTMs
+	 qIOOqAv8iXQ9c5bznIefJaoQznc34M+gMJ4ezuIFJmVgOy2YHZohxFCg2J8GMfrLQf
+	 lERdhpM1sE+tw==
+Date: Fri, 23 Oct 2026 16:12:11 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Paul Moses <p@1g4.org>, <netdev@vger.kernel.org>,
+ <magnus.karlsson@intel.com>, <sdf@fomichev.me>, <davem@davemloft.net>,
+ <edumazet@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <stable@vger.kernel.org>
+Subject: Re: [PATCH net] xsk: restore UMEM flags after failed pool
+ assignment
+Message-ID: <20261023161211.74b2acb6@kernel.org>
+In-Reply-To: <atpDcGN3zWhixRj1@boxer>
+References: <20261021224705.2078753-1-p@1g4.org>
+	<atnKf5dNv0Vk1sCo@boxer>
+	<xFs3DcEr8aRQdjIeuzTZ4fmeQ3Ay8_x_94KB387XkLZDamj_rLyn4IGiFdZMi0u69fpiYrPQq9P6o1j_xixC1WbF-tl3JxDLmcMZZkPk70k=@1g4.org>
+	<atpDcGN3zWhixRj1@boxer>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,47 +65,21 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] veth: fix stale peer max_mtu on XDP program
- replacement
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179279700781.1316845.9472584301770180599.git-patchwork-notify@kernel.org>
-Date: Fri, 23 Oct 2026 23:10:07 +0000
-References: <20261020020147.790274-1-yanxia@cmss.chinamobile.com>
-In-Reply-To: <20261020020147.790274-1-yanxia@cmss.chinamobile.com>
-To: Xia Yan <yanxia@cmss.chinamobile.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- lorenzo@kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 20 Oct 2026 10:01:47 +0800 you wrote:
-> veth_xdp_set() calculates the peer MTU limit from the incoming program's
-> XDP fragment capability, but only stores it when no program was attached.
-> Replacing a program with one having a different fragment capability
-> therefore leaves the peer's max_mtu stale.
+On Thu, 22 Oct 2026 19:10:08 +0200 Maciej Fijalkowski wrote:
+> > Right, evidence suggests igc handles it gracefully, I had attempted 
+> > to provide multiple examples of real world impact to satiate Sashiko,
+> > but only igc survived final edit. It needs to be open for the failed 
+> > bind and successful retry, it can be closed after and bad state 
+> > remains. If you're looking for greater impact, look at stmmac. I'll
+> > send out a v2 without naming drivers specifically soon.  
 > 
-> Replacing a regular program with an xdp.frags program keeps rejecting
-> otherwise valid jumbo MTUs. The opposite replacement leaves a larger
-> limit in place and permits MTUs which a fresh attachment of the regular
-> program would reject.
-> 
-> [...]
+> Not really needed to go with v2 with reworded message. Let us wait for
+> bot reports first.
 
-Here is the summary with links:
-  - [net] veth: fix stale peer max_mtu on XDP program replacement
-    https://git.kernel.org/netdev/net/c/c955325db639
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Bots look happy, but I'm slightly confused by Paul's "only igc survived
+final edit" statement. Was this issue discovered in normal development
+or by an LLM bug hunt? Was it tested on I225-V hardware, or LLM just
+suggest that HW as a NIC that would be impacted?
