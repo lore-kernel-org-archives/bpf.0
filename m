@@ -1,54 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.193
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792794533;
-	b=VnAezP/O0RJAAnxm3EtfYVr0MSZWLeV8U2STs5hPk2YRp6Ixa3M7P6pkvaHPyL0vsbLz
-	 w1b9/zHB7T6biBLNhPIgQhKk7yorKIWuMUQ8DMDfwJWHJZOYXnzHKScnlD6gTtULFCiOB
-	 UKv3pn1QZkp+t3ttMjNap9MGfXtlu2diYT1j4k9/48RzAC1MNp2k8p0ohOU+IgRxVKBD6
-	 T9pOvYkwDtFf2hEqfILNz4MXGYhiUcKAh9c/NPfHjDuqGx4FmMAmzMp5vDejKW57oqnE3
-	 l2Z1zM6ykLmkluJTa7H1YuXlPyH7SNPWw9Y9eXEpCeTRKU/fHWFVvLmXdeZ0FRBMChA==
+	t=1792795195;
+	b=t5EmmncvPjHclo1ea+CmDcGeXbJGzbp1FfD3qzCJMLZS5JYX0Z8C/rVDTId2ZU6MoACo
+	 OYA+DFPW5AICetg1ePHLDkDnYus4CrT+mGmy9CYH/W9yz+7E1jOF3z5VHWgLjzuQraj0/
+	 2DZTg9hyuDlpuBDHh+m7OB7uuK44hV6wAjx371dYHtOEG6xz0l2VXdwGaKHXTcQ/wxuue
+	 MVy43ud5LuhtOVboW8K2tMJ3DJgeuTRSWfeSxUIJxtGjdwj+0f5nQg5jUIRiEhiI7IYfk
+	 p5WPn26I0gnz7KdkSKKmxTiRx1ZSa78LkoQDY/XADzIiS9HhnRq0NmBqKhOlDU9nmDg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792794533;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=lERYG3uyAw47Hs3uFjYBtyFNr1OwJXCxC0QuK0OOpeY=;
-	b=owNEAQi0Y+yBrlVKrT+jJPe+WmnkD+cEfURC5xDIar2MMnCJp9Hc7ZqfQzBnVxUKqMfX
-	 hLfE1WuXZtkKILW5Kh9/efvaGrMVihihZ9eOt8AGeM7btcjICZug5GkZEsE5+kttCfWSq
-	 Q122BjJIKv3+ChA0J3pgrRjlxRADevj0s5w0RRq7jnPc6wqgkgX8LNeuWQnoH4FOF17IB
-	 OBJ2q8FR1X+KieypL+XGHtONPfjaT67cFtvkhlgukpfNin5NmtdyfrlSHxQAGsOzK6L0s
-	 yTemTjnb9VQpJp4AXwmFyNavYbdygmSK3Nw2rSgd77+sWNeeZNn2MP8Batwq0OxKofw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792795195;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=MIiAtjEErB3ya4h+aFmQeF8V9i1u1wWUI7h5Xtk8D/4=;
+	b=LynocyAIBtjMjzIpkwwZaP0n7Gv+eVxgmgaHbG7/3W82OC0FBNElB3sfv4A2+dDr/Z3A
+	 V4H3KBwNFJN8Dy7mPBCIbIo63GVHWjcBRSlCrwSR/nBGJUaUNunUKuv5ZVvpmeV5sHlaw
+	 19HDzU2YU7zpg1T0yDOD32nkc8Y4IVOql63WEXfNcUQsItgEx9YNLsEmpAiGHSVPC2r0A
+	 Aq6vRvG/weWeyzLByGvYW5IX0DrFjvJQjBdXmRKsvaSUq3EWnYn80X0GXJN81LzS99MVN
+	 Dn74y9BPcc1lQ+aUgyZNxefX/nIhifsmWCTGpniLNx3s1rTQw9vM2G3T/Dg/mFO/83w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=f+6MYXBd;
-	arc=none smtp.remote-ip=95.215.58.193
-Received: from mta1.migadu.com (out-193.mta1.migadu.com [95.215.58.193])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IqVlhxkW;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C23F606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:28:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C23F606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827C7606A31A
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=f+6MYXBd
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=3flmrgIB54BI9umvSMuyJ9h+zDfDtTwLe2nqZzNViZg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792794530; v=1; x=1793399330;
- b=f+6MYXBdzFOhvK4cFWNbnheAjBsOETBX7+xJg7ZtjklnzrFYuutdnzHb4mABFIPsc0ECm5dv
- Hn8UWSaMLqCpYqJHGrpUeaDHqnx5MyQtbECcHBqfhi59/mrnEZ0n3nCuzweg+wQDAhiJ8jRLbKf
- ISAObz8n8UYW5FXXz4+OuRzY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7020c0f8bf4c5a31;
-	Fri, 23 Oct 2026 22:28:50 +0000
-X-Mizu-Trace-ID: 7020c0f8bf4c5a31
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5225ee82-984b-4150-918c-bb6b9a05096c@linux.dev>
-Date: Fri, 23 Oct 2026 15:28:45 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IqVlhxkW
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE6021F031E1;
+	Fri, 23 Oct 2026 22:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792795195;
+	bh=MIiAtjEErB3ya4h+aFmQeF8V9i1u1wWUI7h5Xtk8D/4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IqVlhxkWx1vTlYO+TEdWPppsVlMV5k6VNwwjOPvt/EXCh/HL1xOjgnIIQ60wZmgTD
+	 +iP2yi2FhJ7n0fnKXrFTng1nN4qTk17oMXNogNByupo6vALfQn55upMQLnmdfD4hG3
+	 aFfCfsFk+sj9Dgli4cQ9w8u/kFk9vRVwXwPDuYmtKSgpLA7RVqtYx3EKL8wOjnZIVn
+	 krczVc60utYaQkfX3TbiEqLEy07RCrqGiCT05bzGkZamX391ZBU6NbhRv5uIPOuH7O
+	 oEetpECiaU4KBsZffYGjyNqlDN8q/wNwhNZHVGow1zIapE7t0a73riWP/iy9NwvvX+
+	 OeUngPWOKH6pA==
+Message-ID: <sashiko-outbox-183298@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/8] libbpf: Look up BTF strings without
+ making BTF modifiable
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261023222652.3927736-2-ihor.solodrai@linux.dev>
+References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
+ <20261023222652.3927736-2-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 23 Oct 2026 22:39:54 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,102 +60,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 0/8] bpftool: Per-record CO-RE attributes in
- the C dump
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Quentin Monnet <qmo@kernel.org>
-Cc: bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Cupertino Miranda <cupertino.miranda@oracle.com>,
- Ian Rogers <irogers@google.com>, "Jose E . Marchesi"
- <jose.marchesi@oracle.com>, Yonghong Song <yonghong.song@linux.dev>,
- David Faust <david.faust@oss.qualcomm.com>
-References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-+CC David's new email
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] libbpf: non-standard multi-line comment style in struct btf
+--
 
-On 10/23/26 3:26 PM, Ihor Solodrai wrote:
-> bpftool's C dump wraps its output in a clang attribute pragma:
->
->    #pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
->
-> GCC-BPF implements preserve_access_index, but not the pragma. Since
-> the commit 675b4e24bc50 ("bpf: Temporarily define
-> BPF_NO_PRESEVE_ACCESS_INDEX for GCC") the BPF selftests build GCC
-> objects with -DBPF_NO_PRESERVE_ACCESS_INDEX, which drops CO-RE from
-> vmlinux.h altogether.
->
-> This series replaces the pragma with an explicit attribute on each
-> record definition, and uses the same mechanism to annotate the context
-> types that the verifier rewrites with preserve_static_offset.
->
-> Jose proposed per-record attributes in May 2024 [1]. It stalled on a
-> requirement from preserve_static_offset (PSO) work [2] to add
-> attributes on selected types only, which a fixed string cannot
-> express.
->
-> BTF decl tags can carry an arbitrary attribute list since commit
-> 51d1b1d42841 ("libbpf: Introduce kflag for type_tags and decl_tags in
-> BTF"), and btf_dump renders them on record definitions, since
-> 76ea31239021 ("libbpf: Render decl_tags in btf_dump"). This allows
-> bpftool to put any attribute on any subset of records, with no new
-> libbpf API.
->
-> [1] https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@oracle.com/
-> [2] https://lore.kernel.org/bpf/20231208000531.19179-1-eddyz87@gmail.com/
->
-> ---
->
-> v1->v2:
->    * Rename __bpf_core_pai to __bpf_relocatable
->    * Rename __bpf_core_pso to __bpf_static_offset
->    * Use a split BTF to add decl_tags in bpftoo instead of a detached
->      copy (Alexei, Alan)
->      * New patch "libbpf: Look up BTF strings without making BTF
->        modifiable" lets btf__find_str() build its string index without
->        making BTF modifiable
->      * Dropped patch "bpftool: Dump C from a detached BTF copy"
->    * The Clang crash on __builtin_preserve_field_info over PSO types is
->      fixed in LLVM. PSO stays on by default; -D__bpf_static_offset=
->      remains the documented workaround for Clang 18 through 23
->    * GCC-BPF gets __bpf_relocatable from patch #3, so its narrow loads
->      from context types fail verification until patch #4 (bpf-ci bot),
->      left as is
->    * Commit message and documentation rewording
-> v1: https://lore.kernel.org/bpf/20261016000012.2232059-1-ihor.solodrai@linux.dev/
->
-> ---
->
-> Ihor Solodrai (8):
->    libbpf: Look up BTF strings without making BTF modifiable
->    selftests/bpf: Cover unknown BTF header-extension bytes in btf dump
->    bpftool: Apply __bpf_relocatable per record on BTF dump
->    bpftool: Skip __bpf_relocatable on verifier-rewritten context types
->    bpftool: Emit __bpf_static_offset on verifier-rewritten context types
->    selftests/bpf: Cover record attributes in bpftool BTF dumps
->    selftests/bpf: Cover context and socket accesses through vmlinux.h
->    bpftool: Document __bpf_relocatable and __bpf_static_offset
->
->   .../bpf/bpftool/Documentation/bpftool-btf.rst |  24 +++
->   tools/bpf/bpftool/btf.c                       | 154 ++++++++++++++++--
->   tools/lib/bpf/btf.c                           |  36 ++--
->   .../bpf/bpftool_btf_dump_sorted.expected      |  48 +++++-
->   .../bpf/bpftool_btf_dump_unsorted.expected    |  48 +++++-
->   .../bpf/prog_tests/bpftool_btf_dump.c         | 102 +++++++++++-
->   .../selftests/bpf/prog_tests/verifier.c       |   2 +
->   .../bpf/progs/verifier_ctx_rewritten.c        |  59 +++++++
->   8 files changed, 423 insertions(+), 50 deletions(-)
->   create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_rewritten.c
->
->
-> base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
+commit 0c3dbaeec612c1bd0bf2896a8ba4e0a1a8431c92
+Author: Ihor Solodrai <ihor.solodrai@linux.dev>
 
+libbpf: Look up BTF strings without making BTF modifiable
+
+This patch updates btf__find_str() to build the string lookup index via a
+new btf_ensure_strs_set() helper without making the BTF instance
+modifiable, and updates btf__free() to unconditionally free strs_set.
+
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index d2ff6f5d6d5b6..d8907281c0efd 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -153,9 +153,9 @@ struct btf {
+>  	 */
+>  	int start_str_off;
+> =20
+> -	/* only one of strs_data or strs_set can be non-NULL, depending on
+> -	 * whether BTF is in a modifiable state (strs_set is used) or not
+> -	 * (strs_data points inside raw_data)
+> +	/* strs_data points inside raw_data until BTF becomes modifiable,
+> +	 * then strings live in strs_set. Before that, strs_set may exist
+> +	 * as a lookup index for btf__find_str().
+>  	 */
+
+[Severity: Low]
+In struct btf in tools/lib/bpf/btf.c, should the opening /* of this
+multi-line comment be placed on its own line to follow the BPF comment
+style?
+
+	/*
+	 * strs_data points inside raw_data until BTF becomes modifiable,
+	 * then strings live in strs_set. Before that, strs_set may exist
+	 * as a lookup index for btf__find_str().
+	 */
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261023222652.3927=
+736-1-ihor.solodrai@linux.dev?part=3D1
