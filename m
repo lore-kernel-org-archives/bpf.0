@@ -1,57 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792738962;
-	b=333MXu8wSNcj8xs3K1+0EwU66jUYQsCEVsiU6IBpaEsfqdVEKVta5aW4z1Rfv+bA0e2y
-	 +lRhRVweqFfjXGM1W8GFZiK+Fx+6yr6LnHNuKOAjmd1YNy2fsQnX1OEIuqc+KtjYQ/aSB
-	 E5X3U4Y5R/XKG3wM1LvMwoSjoG9LaoSpw9U4VX5JSVlwXgf8JjKMrHAvPdaLu/bxvj+E+
-	 rhUV2OEAJ+fOKRNp+/RLEHPlyyG68d2lYcH70CerxnVGQ+sEbXy12NE9qCzNOcPYMZBLJ
-	 SYiIsQI8nHN071vjXWiaVZNac7EdkHmlCYesvptOJwL1+6f2KMDpzErZ5Cs8qf33zBA==
+	t=1792739599;
+	b=3cwmqSdFyGddgXgre2yQVZykAfp0SYwHAuKKbz/gECvStZs1Q8sWOA/zkm6cFU7oN41F
+	 aKTW2aYZQPlC41sOktHbbtEwPZHcipurKuXYh4f9WQyHORcwsa3mQL/ZzPILFIcpXP/m0
+	 NhEBlxGs1r8HhoGvYo5YoGaH6ubtMcj0v4Iv7odrxAMYMpakgfshVUXR0ufVbyt3U7eyJ
+	 SPImOeBItoOnKJF4UCBmtqh7YZ4YHLHjb81Yq/T3hTiX1Lbaw9DOlUYuXwpGxETJ48Bft
+	 EMhp9fEEh16D4iipFM8XCLE9vCMV8UZnh4R5vjjxYTKpgAJ1Gst+cx3ei+YD+k3GESw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792738962;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=SxH/ebTcWg5HUSaM82Z0/U2PzsQ+jG1838i8v13X41s=;
-	b=eWrzCI0aMGeJco+p3A0LO17pH+0XVQ9A/m6jVdRGb0oYWPiEOK9oqHQdLdp1eycVJPMI
-	 LHNmo0nPpILqZ4Qee658afsmKNE7j4QIcrPTu4Is38K2bYMiq4NXtJTWQxa1G3mTccee6
-	 MGLiUH2+p5GeFP/MdoTYetUUINxtHqwDVWBuXIIvMa+aq+8U/3n88FlwBv0Ein+VDH/yY
-	 c9QeKKWVU8yFxy2BDVSt4P9EHhMQEPAiwkJwLYVuiHckfNifw15XD7sej/Esi6MNibSkA
-	 LIJOztxsVrjiayCExbIcRBH1pc40DzwC/I1wwyaKXefZhVUwdo1iv5hxoAM05nYDDBw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792739599;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
+	 X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=XNgOedYkG+DZgIJoTAqem0cgXoeI7a/tKZ3psjHCVOM=;
+	b=zPYh58i9aosVAwd1eGahJvvZDPv3MsGSONbSJCAODvh0z/FS01ExOIs1Qg1gKfpY/F6o
+	 6qSNrYS2DsS5KmHL9br1UoFIUIkIDTb8BpJ8zpO49t9upGRNo2uHBGqJ4o/bU+G2Mq3vI
+	 I+9nsHpTajG8ex5a6WxkB1wVzcs7ab+9F5McWpaK9s4w+u46xC9AOyj4XIdoSDDa0Ddw1
+	 PZIQzYz6jhtypmUFw5u2IX2dR2ZOCH0nTe/WscbUpWMefNrzUWIbiFllIvNINzLmhAsVY
+	 g5yZQqrdjb7h7PC9bGZpTt38uBHR5DWHIz14cbk+Dd5R7ZDcYf6wdQTptEJIzir0smw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A94HX6Ia;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PgIl7hnN;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32486606A32C
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 07:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D975E606A320
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 07:13:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D975E606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=A94HX6Ia
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC7A41F01825;
-	Fri, 23 Oct 2026 07:02:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792738961;
-	bh=SxH/ebTcWg5HUSaM82Z0/U2PzsQ+jG1838i8v13X41s=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=A94HX6IawBMP+VzqYSRjIS+oc9+EsHsh3KPTaH709HhRjPTM+5RlIFeN/6M7gWKeJ
-	 VujPtyBkWNSiPL+2IwcmW30jaNXKMgxJz76m8iysmy8K623sY0kCNns7wb3hAr9oqk
-	 NUNsDdLrmFa8k5364yn/pc01pCi9GBaDuy1UwEGnRcl/34g76KL8iLeA+TVVAjWiY4
-	 8bMfL4Qr/WUOMTFZ8fin1FJ3Wb95VU+7XoGdWMg1YDu6tsajMNvLn1Hn8bqvzJV/1P
-	 j/CN2D0o2IWIV+TWU6N2y5ojVEihyvbkHOoBG8PWoKhvH3TlNfpsitn8YmkWWEeymV
-	 Q2tI7FryI5Ufg==
-Message-ID: <sashiko-outbox-182377@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 2/2] net: stmmac: Stop Tx queue when
- (en|dis)abling XSK pools
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kurt Kanzenbach" <kurt@linutronix.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
-References: <20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96@linutronix.de>
- <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 23 Oct 2026 07:02:41 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PgIl7hnN
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a1df146015so3624675e9.0
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 00:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792739597; x=1793344397; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=XNgOedYkG+DZgIJoTAqem0cgXoeI7a/tKZ3psjHCVOM=;
+        b=PgIl7hnNL2QdgYF8XRVPQYVuzZqRwz4qq5TwpsYKDRimBKA3LUYzBwLW/MzRYyLL+S
+         s9859MsRRxRDpqxkJC6USW1Pl0y0uyUpOsi1iyEBgSNnVPt/AvNMDUSSjbM8ccW3psqY
+         vfwV881aWZeC/xCoVJKiqXN+gzppdvWMuuutgf2al4Z4YGw0MQY8q0YaaZmiXIicPU05
+         OEQ4yuF7oQSrxoT2uIkU9lUdY7FIHqHFUskdwzGcT4be7Zy13eH/kG2e0fRu36LIb/Tv
+         TGERRy8ygGjhkALaEgJseD1JgBs8QoK4paB5TE1iNALXnxC7pPKEMEn4GHHqowJuKO2n
+         kx+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792739597; x=1793344397;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XNgOedYkG+DZgIJoTAqem0cgXoeI7a/tKZ3psjHCVOM=;
+        b=d86ROSIdK03DqrEuiE/emDMpEx5cpSXpaRJP7hKDXIEjnfnq6ImWysvmEOfU3Em3nP
+         K/QLfPdzIFW9j160JV8fmkfGkazI6fvAk6Olv2HRWdg0irhXNvcmPHDoGQQP/cLoP/uD
+         c8wnTPq9rZVOHI1rczE5JOwv/KN5eTNoGuaUltvU997Pqa4Bfp38jm9OQ3WuvFlrUHVk
+         W0X6KtQXg+oX+Pa8ePfpNunDkSRTHBrmThey5MGronaC/3KuehdDZeRmcSQe5pb0oMy5
+         DjcEhVf9YpfCDcSWpyU9gflCHIAuvUQUc5oallxnW+Xv2/0rCFHbgO06GDBKYCMTK0XC
+         BMmA==
+X-Gm-Message-State: AFq9FYIEd+QClrEH19Nypkuso9Ka7JMKp+f/+sxqlAMH5i1fYuwJ08m+
+	znKgNbmnsw+A85SzGge2s/gmMw7MTPO45B4lbiuOZoiKbFlSIet7AE8x
+X-Gm-Gg: AYBFou3Fe6vxLeFVUU680A97YeBXaEB1eRRNgMysL9v5o6eHBhmuMaEFxfXBb6yipqG
+	oVcKBHnMqKWJvCyzy5eyoPj9l6f9zIkuaKyeBcbbooTPk1yoegsQW0eFEVjdyIEfwGZNZ6B7bXW
+	WIKmZVyd1gmXp79pUigIWEgoWHQrrahygFCeWhJvPSBM3lYaMFg5xkOMNXvO2UY2IsTE2UnOoZG
+	TvNKPVfcpcW2dTosx1UCNYnd5r8VdlwuMB9xKRRHWQqFnzU/VbXqRyp72PN1LXrJa3kE/KZjx3c
+	s0UXIZmPmNHQwWO25okhL0dvyfA8D6RSYqMbNyqXMut0Px64nqcj4/8FZn2Vz1fpHJ7oG9QY0Hf
+	lsEr46evbyuxswWU6e+ldYDYogZ3PXO4G/E/nKmnq8+yNaTaWqjimKHHh5xuAY0ud0BEUwUEs+5
+	T4hV/96+RNF+ZcZMPWBgRANT0+P4kxHtSFeN6uemMX2aR0Ph66x7xpvPduODfkvusUZyD8vNzQI
+	25LtPXnAHtWy3z8RinGdlZJ+oJ1
+X-Received: by 2002:a05:600c:1c05:b0:4a1:6c79:fd31 with SMTP id 5b1f17b1804b1-4a211c9e009mr24676825e9.12.1792739596914;
+        Fri, 23 Oct 2026 00:13:16 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::25dc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a2103622f0sm54943425e9.6.2026.10.23.00.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Oct 2026 00:13:16 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 23 Oct 2026 09:13:13 +0200
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, oleg@redhat.com,
+	peterz@infradead.org, mhiramat@kernel.org,
+	akpm@linux-foundation.org, liam@infradead.org, ljs@kernel.org,
+	surenb@google.com, david@kernel.org, vbabka@kernel.org,
+	jannh@google.com, hughd@google.com, kees@kernel.org,
+	mingo@redhat.com, tglx@kernel.org, x86@kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 3/9] uprobes/x86: Finish an unoptimization which
+ failed half-way
+Message-ID: <atsJCamloi-SWUGh@krava>
+References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
+ <20261022015712.1297331-4-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,94 +103,88 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261022015712.1297331-4-alexei.starovoitov@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] net: stmmac: stmmac_xdp_xmit() flushes TX descriptors when queue i=
-s stopped
---
+On Thu, Oct 22, 2026 at 01:57:06AM +0000, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> int3_update_unoptimize() restores optimized nop10 in three writes:
+> 
+>   48 8d 64 24 80 e8 d0 d1 d2 d3    lea -0x80(%rsp),%rsp; call tramp
+>   cc 8d 64 24 80 e8 d0 d1 d2 d3    1. trap new entries
+>   cc 2e 0f 1f 84 e8 d0 d1 d2 d3    2. restore bytes 1..4
+>   66 2e 0f 1f 84 e8 d0 d1 d2 d3    3. restore byte 0
+> 
+> uprobe_write() can fail with -ENOMEM, or with -EINTR when the task is being
+> killed. When the 2nd write fails the result of the 1st one stays. Byte 0 is
+> a breakpoint and it works. But the next set_orig_insn() doesn't find lea in
+> byte 0, takes it for a plain breakpoint and restores one byte:
+> 
+>   66 8d 64 24 80 e8 d0 d1 d2 d3    lea -0x80(%rsp),%sp; call tramp
+> 
+> Nothing recognizes these bytes anymore. The process keeps the call into
+> uprobe trampoline, which can be unmapped already.
+> 
+> Teach is_optimized() to recognize the half-way state, and let the 1st write
+> of int3_update_unoptimize() skip what is already done.
+> 
+> The failure wasn't reproduced, but the state can be made by hand. Attach to
+> nop10, call it to get it optimized, write 0xcc over byte 0, detach.
+> 
+> "uprobes: Don't sleep on mmap_lock under dup_mmap_sem" needs this. There
+> fork() removes the breakpoint from its mm. When fork() is killed in
+> the middle register_for_each_vma() removes it for the second time.
+> 
+> Fixes: 554ba38456da ("uprobes/x86: Move optimized uprobe from nop5 to nop10")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-commit c900d4172ba56a5bcf30305f3561e2f9948f9892
-Author: Kurt Kanzenbach <kurt@linutronix.de>
+nice, great there's simple fix for that
 
-net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-This commit stops the network device Tx queue while enabling or disabling
-XSK pools so that concurrent transmissions do not access Tx DMA descriptors
-while the Tx ring is being freed and reallocated. It also adds a check in
-stmmac_xdp_xmit_xdpf() to bail out when the Tx queue is stopped.
+thanks,
+jirka
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 27c4a249e560f..2083520179a69 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5270,6 +5270,10 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv=
- *priv, int queue,
->  	if (unlikely(xdp_frame_has_frags(xdpf)))
->  		num_frames +=3D sinfo->nr_frags;
-> =20
-> +	/* Ring may be torn down for an XSK pool switch */
-> +	if (netif_tx_queue_stopped(netdev_get_tx_queue(priv->dev, queue)))
-> +		return STMMAC_XDP_CONSUMED;
-> +
->  	if (stmmac_tx_avail(priv, queue) < max(num_frames, txq_thr))
->  		return STMMAC_XDP_CONSUMED;
-> =20
 
-[Severity: High]
-In drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c,
-stmmac_xdp_stop_tx_queue() releases nq->_xmit_lock immediately after setting
-__QUEUE_STATE_DRV_XOFF, so stmmac_disable_tx_queue() and
-stmmac_enable_tx_queue() run without holding nq->_xmit_lock.
-
-If stmmac_xdp_xmit() in drivers/net/ethernet/stmicro/stmmac/stmmac_main.c is
-invoked concurrently with XDP_XMIT_FLUSH while the queue is stopped for an
-XSK pool switch, stmmac_xdp_xmit_xdpf() returns STMMAC_XDP_CONSUMED and bre=
-aks
-out of the frame loop, but stmmac_xdp_xmit() still executes the flush block:
-
-	for (i =3D 0; i < num_frames; i++) {
-		int res;
-
-		res =3D stmmac_xdp_xmit_xdpf(priv, queue, frames[i], true);
-		if (res =3D=3D STMMAC_XDP_CONSUMED)
-			break;
-
-		nxmit++;
-	}
-
-	if (flags & XDP_XMIT_FLUSH) {
-		stmmac_flush_tx_descriptors(priv, queue);
-		stmmac_tx_timer_arm(priv, queue);
-	}
-
-stmmac_flush_tx_descriptors() reads tx_q->dma_tx_phy and tx_q->cur_tx and
-writes to the hardware Tx tail pointer register via
-stmmac_set_queue_tx_tail_ptr():
-
-static void stmmac_flush_tx_descriptors(struct stmmac_priv *priv, int queue)
-{
-	struct stmmac_tx_queue *tx_q =3D &priv->dma_conf.tx_queue[queue];
-	...
-	wmb();
-
-	stmmac_set_queue_tx_tail_ptr(priv, tx_q, queue, tx_q->cur_tx);
-}
-
-Meanwhile, stmmac_disable_tx_queue() frees the old ring without resetting
-tx_q->cur_tx, and stmmac_enable_tx_queue() updates tx_q->dma_tx_phy, resets
-tx_q->cur_tx to 0, programs the tail pointer to 0, and starts Tx DMA before
-netif_tx_wake_queue() is called.
-
-Can a concurrent stmmac_xdp_xmit() call corrupt the hardware Tx tail pointer
-register with a stale tx_q->cur_tx or arm tx_q->txtimer while the Tx queue =
-is
-being reconfigured, and should thestopped-queue check be performed in
-stmmac_xdp_xmit() (or skip flushing when no frames were transmitted)?
-
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261022-stmmac_xsk=
-_crashes-v4-0-15c0c750bb96@linutronix.de?part=3D2
+> ---
+>  arch/x86/kernel/uprobes.c | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+> index 65a2de82ecd2..62bbe41c6466 100644
+> --- a/arch/x86/kernel/uprobes.c
+> +++ b/arch/x86/kernel/uprobes.c
+> @@ -896,6 +896,9 @@ static int verify_insn(struct page *page, unsigned long vaddr, uprobe_opcode_t *
+>  	case EXPECT_OPTIMIZED:
+>  		if (is_opt_insns(&old_opcode[0]))
+>  			return 1;
+> +		/* An earlier attempt got this far and failed, nothing to write. */
+> +		if (is_swbp_opt_insns(&old_opcode[0]))
+> +			return 0;
+>  		break;
+>  	case EXPECT_SWBP_OPTIMIZED:
+>  		if (is_swbp_opt_insns(&old_opcode[0]))
+> @@ -1109,6 +1112,17 @@ static bool __is_optimized(struct mm_struct *mm, uprobe_opcode_t *insn, unsigned
+>  		s32 raddr;
+>  	} *call = (struct __arch_relative_insn *)(insn + LEA_INSN_SIZE);
+>  
+> +	/*
+> +	 * INT3 followed by the rest of the optimized instructions is what is
+> +	 * left if int3_update_optimize() or int3_update_unoptimize() failed
+> +	 * half-way. It works as a breakpoint, but to restore the original
+> +	 * instruction it has to be unoptimized like a completely optimized one.
+> +	 * The same has to be done if a debugger has put its INT3 on top of an
+> +	 * optimized uprobe. The trampoline can be gone already, so do not look
+> +	 * at the target of the call.
+> +	 */
+> +	if (is_swbp_opt_insns(insn))
+> +		return true;
+>  	if (!is_opt_insns(insn))
+>  		return false;
+>  	return __in_uprobe_trampoline(mm, vaddr + OPT_INSN_SIZE + call->raddr);
+> -- 
+> 2.55.0
+> 
