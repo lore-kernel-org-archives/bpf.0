@@ -1,57 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792795195;
-	b=t5EmmncvPjHclo1ea+CmDcGeXbJGzbp1FfD3qzCJMLZS5JYX0Z8C/rVDTId2ZU6MoACo
-	 OYA+DFPW5AICetg1ePHLDkDnYus4CrT+mGmy9CYH/W9yz+7E1jOF3z5VHWgLjzuQraj0/
-	 2DZTg9hyuDlpuBDHh+m7OB7uuK44hV6wAjx371dYHtOEG6xz0l2VXdwGaKHXTcQ/wxuue
-	 MVy43ud5LuhtOVboW8K2tMJ3DJgeuTRSWfeSxUIJxtGjdwj+0f5nQg5jUIRiEhiI7IYfk
-	 p5WPn26I0gnz7KdkSKKmxTiRx1ZSa78LkoQDY/XADzIiS9HhnRq0NmBqKhOlDU9nmDg==
+	t=1792795641;
+	b=VwIYAj0JYdyBH6IbOfFEN16Ro0S49oNilTPGfq/KbSVW+DWgim5rRFJB1pn7O1AM5cId
+	 K1T3KlZmTuCUj6OvaA3A+2hfPnEh6XJfnXIcQRgknWn2BokAafGeABLQExSzhK6wy1W8f
+	 5DyLvlmJ0LIcqtfvfzOxxY/3F/3qu3NeujvMKn4z/YHZs8Xjlhg/UOFJjoKChT5vKWNEG
+	 Gope7mIh9Ubdnukdg1gclYKfpCAVgH2hCP57/eXIgZXC3ABtfHpRaQ3cBSSsPuKOAaNTj
+	 enXbqNdK15q17iwC0/VRI+OiKG1dHdeKosXRCiY0Iwa6SKDfvgGIAodKgwFC9Qi2/Gg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792795195;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=MIiAtjEErB3ya4h+aFmQeF8V9i1u1wWUI7h5Xtk8D/4=;
-	b=LynocyAIBtjMjzIpkwwZaP0n7Gv+eVxgmgaHbG7/3W82OC0FBNElB3sfv4A2+dDr/Z3A
-	 V4H3KBwNFJN8Dy7mPBCIbIo63GVHWjcBRSlCrwSR/nBGJUaUNunUKuv5ZVvpmeV5sHlaw
-	 19HDzU2YU7zpg1T0yDOD32nkc8Y4IVOql63WEXfNcUQsItgEx9YNLsEmpAiGHSVPC2r0A
-	 Aq6vRvG/weWeyzLByGvYW5IX0DrFjvJQjBdXmRKsvaSUq3EWnYn80X0GXJN81LzS99MVN
-	 Dn74y9BPcc1lQ+aUgyZNxefX/nIhifsmWCTGpniLNx3s1rTQw9vM2G3T/Dg/mFO/83w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792795641;
+	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
+	 In-Reply-To:References;
+	bh=NYqDm/1QvLb9/cOBOgwdPYESEm3xrv+yvgkisJotDv4=;
+	b=4PlmQ5Ae/hPUw+oZacxuDVhU0+NIdaoTKPQZI5HUXcJ88nkUQ+lN/vvcL1YMdhIBwkVv
+	 bhKNX/BxOGYd5v6nd9XJJl+aFb9NBseR1nAHGP/RxOWIj3ANJ6bMrUwKOxMIFe2HPUh4t
+	 ZdSiDDY3NKmzjBU2MD71Z2zlZ5M7uyvyU0prXu28amWySAK3fZUg77UlltB8FCuLAX7M6
+	 jMjCpE3ues7hsfIbfuXFhaQJVn67uAbwCEsQlrnH5mlhtqJ1CIFvyveqvqvqwQtUBc0ed
+	 UpoVayl4tepDAZEY3s0irNv11D06f1bqqx+BRBhkjWL8ytMvBn8emaVAgc1WwtSzxbg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IqVlhxkW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FPXcpDeL;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827C7606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38A3B606A31A;
+	Fri, 23 Oct 2026 22:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IqVlhxkW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE6021F031E1;
-	Fri, 23 Oct 2026 22:39:54 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FPXcpDeL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994111F01825;
+	Fri, 23 Oct 2026 22:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792795195;
-	bh=MIiAtjEErB3ya4h+aFmQeF8V9i1u1wWUI7h5Xtk8D/4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IqVlhxkWx1vTlYO+TEdWPppsVlMV5k6VNwwjOPvt/EXCh/HL1xOjgnIIQ60wZmgTD
-	 +iP2yi2FhJ7n0fnKXrFTng1nN4qTk17oMXNogNByupo6vALfQn55upMQLnmdfD4hG3
-	 aFfCfsFk+sj9Dgli4cQ9w8u/kFk9vRVwXwPDuYmtKSgpLA7RVqtYx3EKL8wOjnZIVn
-	 krczVc60utYaQkfX3TbiEqLEy07RCrqGiCT05bzGkZamX391ZBU6NbhRv5uIPOuH7O
-	 oEetpECiaU4KBsZffYGjyNqlDN8q/wNwhNZHVGow1zIapE7t0a73riWP/iy9NwvvX+
-	 OeUngPWOKH6pA==
-Message-ID: <sashiko-outbox-183298@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/8] libbpf: Look up BTF strings without
- making BTF modifiable
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261023222652.3927736-2-ihor.solodrai@linux.dev>
-References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
- <20261023222652.3927736-2-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 23 Oct 2026 22:39:54 +0000
+	s=k20260515; t=1792795640;
+	bh=NYqDm/1QvLb9/cOBOgwdPYESEm3xrv+yvgkisJotDv4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=FPXcpDeLDDUrNjD122pYRGp9vXVSRY9A3Vj2VTwesPT4PstebgEpsheDmXw2k4Z+R
+	 9G1Zmrw51U4tOvPe1zd9V5WOhPXlD21dWUUxtHn+pPKlwoNyAXUQkr2QseEYReunXV
+	 KwL5DZy5bHETzAAmpM/ATU5pojkhoMcx2YVJt4oe/b4nVf3gM7vHpPh+pfC1LWGyTT
+	 8tozX1vMyuO6cNNIKCUcM+GP7fdXRE40GAC6F1+YMgmni6/3KD61v4pMy80bBYqoEY
+	 Xpc+7bYY69s17OszXi3RPaJUogLO63TYUp1kPaeJa0PRkYsx2cZZVSTR/GybijZYQe
+	 2ELfAvmxrnsgA==
+Date: Fri, 23 Oct 2026 12:47:19 -1000
+Message-ID: <a5551d69c989776eeb576456f0056fb9@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Qiliang Yuan <odys.yuan@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	sched-ext@lists.linux.dev
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Fix a struct_ops use-after-free behind a flaky assoc_in_timer test
+In-Reply-To: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
+References: <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,47 +67,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] libbpf: non-standard multi-line comment style in struct btf
+Hello,
+
+The following is a Claude-generated review.
+
+On Thu, Oct 22, 2026 at 04:48:35PM +0800, Qiliang Yuan wrote:
+> grace period of bpf_map_put(), so nothing waits for a prog that reads
+> the association in between.
+
+sched_ext hits the same use-after-free. Its kfuncs find the scheduler
+through bpf_prog_get_assoc_struct_ops() in scx_prog_sched(), from bpf_timer
+callbacks too, such as central_timerfn() in scx_central. The series fixes
+that as well.
+
+5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period optional") is in
+the bpf-next-7.4 pull, so the bug lands in 7.4-rc1. Can the fix go through
+bpf for 7.4-rc?
+
+Thanks.
+
 --
-
-commit 0c3dbaeec612c1bd0bf2896a8ba4e0a1a8431c92
-Author: Ihor Solodrai <ihor.solodrai@linux.dev>
-
-libbpf: Look up BTF strings without making BTF modifiable
-
-This patch updates btf__find_str() to build the string lookup index via a
-new btf_ensure_strs_set() helper without making the BTF instance
-modifiable, and updates btf__free() to unconditionally free strs_set.
-
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index d2ff6f5d6d5b6..d8907281c0efd 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -153,9 +153,9 @@ struct btf {
->  	 */
->  	int start_str_off;
-> =20
-> -	/* only one of strs_data or strs_set can be non-NULL, depending on
-> -	 * whether BTF is in a modifiable state (strs_set is used) or not
-> -	 * (strs_data points inside raw_data)
-> +	/* strs_data points inside raw_data until BTF becomes modifiable,
-> +	 * then strings live in strs_set. Before that, strs_set may exist
-> +	 * as a lookup index for btf__find_str().
->  	 */
-
-[Severity: Low]
-In struct btf in tools/lib/bpf/btf.c, should the opening /* of this
-multi-line comment be placed on its own line to follow the BPF comment
-style?
-
-	/*
-	 * strs_data points inside raw_data until BTF becomes modifiable,
-	 * then strings live in strs_set. Before that, strs_set may exist
-	 * as a lookup index for btf__find_str().
-	 */
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261023222652.3927=
-736-1-ihor.solodrai@linux.dev?part=3D1
+tejun
