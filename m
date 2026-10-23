@@ -1,100 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792717454;
-	b=DDu13yPuDUbWVvq+IhavfevG638m+Qu/V0zX2DhvLS3xAiUHjQfqpHZntZG8aPieascj
-	 hI9RnDfORA/yVy9n93ef3cfDbZfNQKQ/CzW5zE4r6wRB20BMq/CP38QzfQSQ56/2u/8we
-	 7F/GuRB0jFBskKj2rGzkbmjCHgcJctDassocxlV56Qje0PqHMsY9wFADzEJa5iNcM0HCd
-	 S2QGRE9p1zkB4OvGFVGlwt2uy7+BiS7A2YScA5BA4vKY5/JY+uqu7hugxYdvy8AI17qPk
-	 Bt2dIBt3u7hD7r5lLtI6p+qMvo5409G/RL2rB3BoSd6o7QS5KZ8LLDXdR176Y0NgisA==
+	t=1792718688;
+	b=Gzqy+zxjSO2mezMLphWuP3ngk4nK6PFUWJr2QLencsAGWjyF062P9UEMLxiiIfwgPDb2
+	 4HxCvo0FSDyV3XvI9+cewbk84bV9JdHGUyCHqJMnlT1ZtMlA5H5eQmnbHo5FFR/szdHAZ
+	 zHml4nfhXdOEL8AUDLR6eZlKUKndVZ6wI6kC1cyAun7DaNa/WiJJJZUafES7ARN7pn1jn
+	 0kutKgI5XABkANWNoVWFd5yGGn/LtvPVbtXbn3ZE5NG25TvpDqERE+DtCJVpbUEZg1kIQ
+	 oGWj2gEIZ8LWCP6aqcFh6Amln9lXKiY+pvHVq7Z1C6Jxh1rg7gYsru/Vk/gWp+gR4Bw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792717454;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=bdGaF6C6K0NkhVjXmOTPr6zMoMo2uM6TutA0fZAEkWY=;
-	b=QYdG1+arElx/Af9qRlCVLYJRS1+HO4RUxDbPsu8VvCRfJpmWu9MqfpNleUggW9mdpHw9
-	 eyH0O54JCt1SchSrdt7HXa/kI3eOJ7Js0lTWtfOcNLhEMUj61XrnEHr/BqzjfCwEMXuUk
-	 FUh/hjOgxSgI0ItuQJnNb9WeLF+x0PGhmeO2F2fQUk7KqVMR2KQZ2iy7XQogOQafEXl5v
-	 xdqjRdJClmJk5FBhgJZPEFZWGtpAqZ8N9mIiDdD6hqQPITuZHIdbmuz1FexyAoSwcwN9B
-	 WBDDqydGwP0PSHrKkOvj+0/53KdeBZQ3pWu/KQ/UBttwK/XILIxB1XNw0K6c2VQRBtg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792718688;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=QfwiiMEIJLM6wtWCzdveJsVg3jUOpd7xifwJvw6jT6c=;
+	b=OPklP/18XdlscOgHI7ALnCxXAE1hMCCHh++ZLm5CldnQcnQGBOIdf6/1cdxOfTbdzsE8
+	 MFFqsUkfzmtv5Ko9A37m9xdjVGQYJMPlmBcEfxk/pL4BNrsn3Q43z1cbXNGoiDR8ZF+W8
+	 Xuw7WYkFiSgdylKx+x4hQ+nFL/Yc9O6M64PqigviZ12pwNzU6FfyMh+/GfuwPh6pAN6iN
+	 mgsUunm+CaYwAGzca+O3qsS22Ul5UGNwVFoYCXRpIBlMVt3iz/3o4pULd0YWcJCfOoPMp
+	 fUyEd+qPzE7J5utML2SO9vczQuG8ndFNNHBbrQY295uSzDo5yLGdzL99fHTFsZE2MUA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=czX4NKZs;
-	arc=none smtp.remote-ip=74.125.82.49
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZQSpi8UE;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145B5606A319
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 01:04:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 145B5606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AC6606A319;
+	Fri, 23 Oct 2026 01:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=czX4NKZs
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-16079d54c17so796054c88.0
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 18:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792717453; x=1793322253; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=bdGaF6C6K0NkhVjXmOTPr6zMoMo2uM6TutA0fZAEkWY=;
-        b=czX4NKZs0dUQNwHwJWza9sSNlV6Q2VPBojwg21XgOhgfUq8AzesOBNMokxRKne1+NX
-         vSojqkSWA2h33ovyalbWkPox2WTbwzgCka3QuZFBp+EL/R5R14+EXJttQgP2jW27BX3V
-         5wNiCO+FOEv1Zzmml14YXKprPBwcqCCgFYqQd90F7r5/F4qzbWFb+nNsuz7mGWB7ULf4
-         8/EcJ3BlHqub05qYQNR1sLBU+Rmg2lLu2vZQndi+gtHjcKEVRwfwOI8UuJhclLDfepvJ
-         6yg2DXjjMfYzPTeczJfMNoCT3e0T9+1ayBpGkpRBq6N8lO7PipzhgSZBqI/YnZr5iDJ2
-         ew7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792717453; x=1793322253;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bdGaF6C6K0NkhVjXmOTPr6zMoMo2uM6TutA0fZAEkWY=;
-        b=Ybu1pnAQJRlE3+XOFCTZVBoPrPKE9R0+iycmD8ZiRFiIFmXQFhyYcUxJEolKpuYnJV
-         WdViIsyQtouTfWtfaREuxMttOu8lLUdY77+wBKFk11bmyKqj/4z+1y+P8vp4GAM7f3jo
-         E2BQOzUte1ILwkRjhYk4nOB91X46OGj0e/aV17euQxfd29UDKG7aZtZ16+n8t7nfohfI
-         ZAu//vtXB68B64imybrKm3R2VTsZTG1v+Goykzlznk6Ba7CTNEfPl9M26Sldlbenjgzv
-         PYGGW7C0CG0uIXhvJlkzABEtFIJYhmZPcqpUEoK23gE9BG8M1IvieOMf+rCfm8CTu3NW
-         p9Bw==
-X-Forwarded-Encrypted: i=1; AKwUvBx5h/AKf6TIkyKITTRZltycYd0HogcfmPHnR+j0zwu887tj4qTayYBdOJTVgDTuvdNsQBg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJMMEK+b8/WHq7/JTDo5LuSUFh8yu8Vs694XGJYv7P8TX0xpyr5
-	F79LKtlfCrzv+aXbt8MEQtz2k6Br05o2Y1E0F4VzA6wCOkDKYBvTP4CS
-X-Gm-Gg: AYBFou20MhYe/0XPMQw7yjrBeERxeMKgWhZpr9lqK7VibIorwevb02OdtcxsZLMIAdQ
-	L2M5AA5GoooUDj3So8DmCHWyfJJGwHcnFAzpIX6fHFdwwaaD/PW6KBuXQlf2ptq09jHq0ywe3Rh
-	imUjI2k61h7b5RWV8GHg6BV37t6RKImKWc7iXexjU/8PXUcR0XJ3+QVFxm2UzcUWTHDqcaV8KXM
-	MUt3KgvQg8/dT/RqmZj+sbPrtTzXJrL7SfzJBqNf3lqPp48p3RTp+3V+/o23KN3Q1hPrZwv1UBr
-	3m3kuIIlOtplmkWL9PECh+k63LPhC4s11d3DLqU+WYxNLBZ8UCi338gakvLRVst94Myrm6hXBcD
-	uh8fYf8O7qGnpiuF9XA/gqGROOTRqPVdKgtV6P/2fc+kr++OHlvN80Rzphwv58Qn7K8h13f4HN7
-	XXbFlcCd7nUqtMqfg1u7FC80BXL3OPwLmye6GuU835/K7kqQUAJcwTgiO8fGY1PaMXdy/JYGi06
-	4+zxLkJOMpVP/V0xdc5O0T4HPaenaTVhnM4/GYz6qW8DFUAEw10/b6Q9RBa2eJsuWz9LltjaIkL
-	dJyy8m7makReFQ0EI8Fyh31T4jQE+nwgK3XIsME2KBxLZr4Dbwks8TNItQ==
-X-Received: by 2002:a05:701b:4349:b0:143:3617:c5ae with SMTP id a92af1059eb24-195bc01df6fmr1172037c88.2.1792717452933;
-        Thu, 22 Oct 2026 18:04:12 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:73e9:911d:b3e8:57f? ([2620:10d:c090:500::6:1122])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-195e9e9cbdcsm1654823c88.5.2026.10.22.18.04.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 18:04:12 -0700 (PDT)
-Message-ID: <a7b9422e00b9a3f5438e996f01e97bef476040e0.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: reject pointer operands for 32-bit
- recurrences/latches
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
-	andrii@kernel.org
-Cc: daniel@iogearbox.net, kernel-team@fb.com, yonghong.song@linux.dev, 
-	memxor@gmail.com
-Date: Thu, 22 Oct 2026 18:04:11 -0700
-In-Reply-To: <fefe4448c7a9f9938c78f1597dd20fa96f180002.camel@gmail.com>
-References: <20261021185609.607075-1-eddyz87@gmail.com>
-		 <DMAV87WUFF7M.1PU3M3CCZJDQJ@gmail.com>
-	 <fefe4448c7a9f9938c78f1597dd20fa96f180002.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZQSpi8UE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BAE81F01825;
+	Fri, 23 Oct 2026 01:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792718687;
+	bh=QfwiiMEIJLM6wtWCzdveJsVg3jUOpd7xifwJvw6jT6c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=ZQSpi8UEwcsqoxxHVT+yb48q4b9dZZ0j0njxnfkUMKcSvlhmo6JNd3ndN19Ubbu/C
+	 fscbYwACtSeoXhplh0vPRdE7V+SZ8SBzp+mJlj5EvY7BbUawZjZWTNzH3ssQ3qaO+t
+	 0b4JoQoW80ib2f3Bs/NMT3ASfa8N+uqSf1J+yJK5O8I6eafnocI8k4McDiLi5E2a2j
+	 uloHDf+uXhuepSzQ6uNKaIj7kVTZFGFa/5nOAS9ke5JzlrwDttY9KcQmrF6RkCAEFE
+	 EAXScGwIJnyjEOBnfVgw6MFNws2W9QtG1+SEOeersyFXmQTcZX3UlfYmkcxoIDr+HE
+	 JukHHoNpAsOIA==
+Date: Thu, 22 Oct 2026 18:24:46 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <pabeni@redhat.com>,
+ <tushar.vyavahare@intel.com>, <kerneljasonxing@gmail.com>,
+ <bjorn@kernel.org>
+Subject: Re: [PATCH v4 net-next 09/15] selftests: xsk: run one test case per
+ xskxceiver invocation
+Message-ID: <20261022182446.64516c7f@kernel.org>
+In-Reply-To: <atovTlRGERDYjB4q@boxer>
+References: <20261016174338.787135-1-maciej.fijalkowski@intel.com>
+	<20261016174338.787135-10-maciej.fijalkowski@intel.com>
+	<20261021150145.65a22a61@kernel.org>
+	<atovTlRGERDYjB4q@boxer>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,37 +64,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, 2026-10-21 at 15:50 -0700, Eduard Zingerman wrote:
-> On Wed, 2026-10-21 at 22:22 +0000, Alexei Starovoitov wrote:
-> > On Wed, Oct 21, 2026 at 11:56 AM Eduard Zingerman <eddyz87@gmail.com> w=
-rote:
+On Thu, 22 Oct 2026 17:44:14 +0200 Maciej Fijalkowski wrote:
+> > Really not loving the amount of "library" code added here.
+> > Do you need this just to run it over veth in net/ and over
+> > real HW in drivers/net/ ? Are the test cases very different?  
+> 
+> Now that you bring this up, would be good to clarify expectations of this
+> work. The lib input is what veth and hw runners share to avoid code
+> repetition. The separation comes from a fact that we still want to cover
+> SKB and DRV modes (via veth at net/test_xsk.py) and ZC mode is covered by
+> drivers/net/hw/xsk.py.
+> 
+> My assumption was that would not hurt much to carry common code within lib
+> file. I might have been wrong tho.
 
-...
+We should try to avoid pushing things into lib whenever possible.
 
-> > le64 does the same without zext32.
-> >=20
-> >      r7 =3D map_value, r1 =3D 0
-> >   l: r7 =3D le64 r7
-> >      if r7 < 100 goto out
-> >      if r7 > 1000 goto out
-> >      r7 +=3D 8
-> >      r1 +=3D 1
-> >      if r1 !=3D 4 goto l
-> >=20
-> > On little endian transfer() treats le64 as a nop, so r7 at the header
-> > is (linear r7 8), while check_alu_op() makes it an unknown scalar.
-> > At the backedge r7 is a scalar 108..1008 and bpf_clamp_scev_regs()
-> > intersects it with 0..24, the offsets of map_value at the loop entry:
-> >   verifier bug: scev clamp produced empty range for r7
+> > I wonder if we could solve this by parameterizing the env
+> > class to use veth instead of netdevsim and then have unified tests?  
+> 
+> Tell me more regarding the unified tests. Is that okay'ish to run
+> veth-based tests from drivers/net/hw ? I thought it was not and I shared
+> my insights on similar work which does the same kind of migration
+> (xdp_features bpf->drivers/net/hw) and it seemed to be heavily veth
+> dedicated - the bpf sh runner was basically veth based, but so does the
+> xskxceiver and I moved away from this after Bjorn's input (turned out to
+> be a good thing).
 
-Actually, I don't think there is anything to fix:
-- check_alu_op() errors out if le64 is applied to a pointer.
-- (linear r7 8) means that every path over the loop body
-  is guaranteed to construct the linear equation.
+The other way around. We can add mixed HW and non-HW tests in
+drivers/net When run against non-HW we need to be careful to XFail
+instead of failing or Skipping, so that SW CI "is green".
 
-Meaning that le64 would remain visible to the main verification pass
-and would be rejected.
+> each runner can have single ksft_run() call, right? So, do you think
+> separate files for veth and hw runners is still okay?
 
-I'll re-spin these two patches as a part of bigger series with a
-correct fixes tag but otherwise unchanged.
+SW and HW testing are done by separate executors. We'd have some
+trouble (read: we'd need extra wrapping) if we we needed multiple 
+envs for SW testing, but SW vs HW is easy. Executor will either
+run with no env exports and get the SW test, or it will be exporting
+$NETIF etc and test will run against $NETIF.
+
+> In veth runner I don't even instantiate NetDrvEpEnv as I have veth pair
+> being created 'manually', however having a param similar to existing
+> netdevsim one would be nice and xdp-features set could benefit from that
+> as well. 
+
+Yup!
