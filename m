@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.144
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.180
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792794455;
-	b=WuiZhBZGrFLsfQnru3/BZ0hvNq7v60h2hge3MqdqQQdJrt0YHrRETxYl9yUjuMR6NVya
-	 D2nNkv9tMEiCo63fE+b0GQsXswFLcr6CgvRcA8+q03lvIviDGEgqOAv0C8J/EiuPeKIjU
-	 uIiKFnhD/syzvvQ8K2KbhzG6olnr6O69fnq3G1j3wj11SO39W4ou+TqxgJNxBkIHcfXLm
-	 WDjAzVxxB3V2i0tw273M1/v+Tjo0DO0waD0I1KvjvkXeXJWk4tg7T9SoT9wu0pntJmAEB
-	 Kiig3MOKrEtXowvAMzNbpRlDffdAYjhvC23aWLV+Qccc11e6DNoLTt+4edNHzwTAtlA==
+	t=1792794462;
+	b=eP0HmkiDNPUh9ejwwVx5P6zFiGz+laYcKXDhX+d+0UAOilNvHkonvKvv0llQjfyKxzyN
+	 nlABwmWSh/Wgqj3VFXx6F0jpTpBFlohwrvEgnHUytKAsIahudyJYTjxnlP6o9rY2ymrYW
+	 lUB3wcabG5+BMaf/oqDOikVx7JDjJ1E+H371Lrqq4z7f7xoxoSeUW/ZnzNWHlkQapWieQ
+	 IM7T2IE0DK7C7SnlEwPMIi2IdEhNgCFKWx3Avr2CXwmz76QCwOU1Lz54jU38SRFi1DR7n
+	 lxhLCPxPhcHWcRTCtAXxvrjg+kwLcbPL5xC8vGnAgQVAc3CdoIjrvZ2QgzKTDvtkU0w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792794455;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792794462;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Q5AF+XFDjk7butA7mSCRTc7j88RDHvfQWk0fB+6qECg=;
-	b=AOs/4sVVPgfV2uBD2I1W+hUVFT7/wqfux2TrpTi11FWjCkIJAzRlNoRT1SGbnjoB1v5c
-	 bNGc64wHo0V3lmbwJyFYo47E+F5tsK5vCHWrsCjImCUDZ/fliyBBbvYh6mcHoKusUHDYs
-	 ofdDYan404yZR7bcWQJ3cYvUv7mIMWQyS8MdEDu6uy9sLeqXLXLjKXcaeScbPw96JxwRZ
-	 C5Rn+g0Ghmmyw+ULaj/Aj/+NUDugJ0taA6UixFuJEjJutQBUvifiUxj6lA6c1SPwC3DSc
-	 I15iprsijoaiJJ4+XIxVfSJk/ZqwwwKQ+/qqMSzlVGizAkYSCGI0+MVb50LDpNKUpCw==
+	bh=OeHh3AaRca1sCxgd4NjV6R8yzIKkvRHrJoAfrZ4R5lI=;
+	b=yH6vIFF+P2BIQOnRMndlnMpnK0BziZ2GMhxDgOK1LiRGFKbWWfYbCmh0j2gWqxRs395a
+	 YFnzL5mMLQk/pX5PXzwKaBrbuwNJMfjB00mYfnhjKsAPFa8+ivH+Emfqzvng5/0Wts+4i
+	 8nmv3sfHd/uKSRF1a08BkBk+S+V3sN9OK5jFCyiLO2XxOUTOiWopJYTu3vuj5uWGsLwXa
+	 aOh64itNm+Cd55HvtloJCtDJaeSQD8QItUmq4qfBlUyscqBxrVPFF/6Z6Z8Y8T1Hr8t2Y
+	 KrlV/GtFJ+mQpFUOZ0ACHRyrfUphGr0lkKbUmQQn4nG8G8J8ZTcASyB71HcSStXS1kg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="NxNE9/CX";
-	arc=none smtp.remote-ip=95.215.58.144
-Received: from mta1.migadu.com (out-144.mta1.migadu.com [95.215.58.144])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="s/45cEzQ";
+	arc=none smtp.remote-ip=91.218.175.180
+Received: from mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C3B606A31B
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:27:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 72C3B606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B48606A31A
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:27:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01B48606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=NxNE9/CX
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=s/45cEzQ
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JIv66zWdN2zwBdjUXFLXICOWFDvMbcDXpyD1GitV5ys=;
+DKIM-Signature: a=rsa-sha256; bh=azfXhD0l3bMg83jHpdyvflFINn66BPwKceVvdkz2JH4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792794452; v=1; x=1793399252;
- b=NxNE9/CXn2cMg1JQKIw8RwT+EaQ2xnDwDw0wAk8oCd4j1xAGXAwS9utVqoETekm4w0iBQ4Wq
- hP/TQ5RpGPtArXm+GsIZpr//YCFuotpJjQlZduq8I8mZFoTTOuabkRF9+B9lvpJsqV6h/MH+qTN
- R+vZiOZObA+D55TVP5KJtQHw=
+ t=1792794460; v=1; x=1793399260;
+ b=s/45cEzQ0V/00SPjPHYYHDI1Ye8AYvty2AF0cKrsUZVlnVPOWIY7YkmDsatAhXXNvyyXOTsY
+ /tSRYpXOStALwIKCabC0kCEpHxmQjknCubvcFmg5/J/T/WCwAeWuxKtfQU3LJfNGvY7fZ1DgGea
+ 2todDxuA1q1dhTIp/gML8b1M=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id ad946f9876a3b876;
-	Fri, 23 Oct 2026 22:27:31 +0000
-X-Mizu-Trace-ID: ad946f9876a3b876
+Received: by mta10.migadu.com with ESMTPS id c756654e26e70556;
+	Fri, 23 Oct 2026 22:27:39 +0000
+X-Mizu-Trace-ID: c756654e26e70556
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -62,9 +62,9 @@ Cc: bpf@vger.kernel.org,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	Vineet Gupta <vineet.gupta@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next v2 3/8] bpftool: Apply __bpf_relocatable per record on BTF dump
-Date: Fri, 23 Oct 2026 15:26:47 -0700
-Message-ID: <20261023222652.3927736-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 4/8] bpftool: Skip __bpf_relocatable on verifier-rewritten context types
+Date: Fri, 23 Oct 2026 15:26:48 -0700
+Message-ID: <20261023222652.3927736-5-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
 References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
@@ -79,231 +79,158 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpftool wraps the C dump in a clang attribute pragma that applies
-preserve_access_index to every struct and union, so field accesses
-through vmlinux.h types get CO-RE relocations. GCC-BPF supports the
-attribute but not the pragma, so it gets no CO-RE from the header.
+The verifier translates accesses to UAPI context and socket types,
+such as __sk_buff and bpf_sock, into accesses to kernel structures.
+It picks the kernel field by the instruction's offset and keeps the
+base register. For example, in bpf_convert_ctx_access() [1]:
 
-Jose proposed replacing the Clang pragmas with per-record attributes
-in May 2024 [1]. The declaration attribute support in btf_dump [2] now
-provides the per-type control discussed in that thread.
+	switch (si->off) {
+	...
+	case offsetof(struct __sk_buff, mark):
+		...
+		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg,
+				      bpf_target_off(struct sk_buff, mark,
+						     4, target_size));
 
-Apply the attribute to each struct and union definition instead, as
-kflagged decl tags rendered by btf_dump. Add the tags to a split BTF
-over the input, so the input stays read-only. The tags use the
-__bpf_relocatable macro, which by default expands to
-preserve_access_index if compiler supports it.
+So these accesses require a load or store with an immediate offset
+from an unmodified pointer. Their UAPI field offsets are fixed, so
+CO-RE relocation is unnecessary. With preserve_access_index, the
+compiler can instead emit pointer arithmetic, for example
+for ((u8 *)&skb->mark)[1].  The verifier then rejects an otherwise
+valid program.
 
-Clang output is unchanged.
+Omit the attribute from the 13 such types when dumping C. Also omit it
+from their nested anonymous records: keeping it there can root
+relocations at an unnamed type, which libbpf cannot resolve.
 
-GCC-BPF programs now can get CO-RE relocations from vmlinux.h, however
-the selftests GCC-BPF build defines BPF_NO_PRESERVE_ACCESS_INDEX and
-is unaffected yet.
+The last addition to this set was bpf_sk_lookup, introduced in 2020 by
+commit e9ddbb7707ff ("bpf: Introduce SK_LOOKUP program type with a
+dedicated attach point"). Keep the set hardcoded in bpftool so the
+exclusion also works with older kernels.
 
-[1]: https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@oracle.com/
-[2]: https://lore.kernel.org/bpf/20260929234608.48503-1-ihor.solodrai@linux.dev/
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/filter.c?h=v7.2#n9939
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/bpf/bpftool/btf.c                       | 62 +++++++++++++++----
- .../bpf/bpftool_btf_dump_sorted.expected      | 16 ++---
- .../bpf/bpftool_btf_dump_unsorted.expected    | 16 ++---
- 3 files changed, 65 insertions(+), 29 deletions(-)
+ tools/bpf/bpftool/btf.c | 84 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 82 insertions(+), 2 deletions(-)
 
 diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index abd661db91e6..5a2c5341b736 100644
+index 5a2c5341b736..5c88f665e6b9 100644
 --- a/tools/bpf/bpftool/btf.c
 +++ b/tools/bpf/bpftool/btf.c
-@@ -1092,22 +1092,61 @@ static struct sort_datum *sort_btf_c(const struct btf *btf)
+@@ -6,6 +6,7 @@
+ #endif
+ #include <errno.h>
+ #include <fcntl.h>
++#include <linux/bitmap.h>
+ #include <linux/err.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+@@ -1092,22 +1093,101 @@ static struct sort_datum *sort_btf_c(const struct btf *btf)
  	return datums;
  }
  
--static int dump_btf_c(const struct btf *btf,
-+static int btf_c_annotate_records(struct btf *btf)
++/*
++ * The verifier translates field accesses of some types into accesses
++ * to kernel structures, see bpf_convert_ctx_accesses().
++ * The translation keys on the immediate offset of each load or store,
++ * so offsets into these types must stay immediates.
++ */
++static const char * const btf_c_static_offset_types[] = {
++	"__sk_buff",
++	"bpf_perf_event_data",
++	"bpf_sk_lookup",
++	"bpf_sock",
++	"bpf_sock_addr",
++	"bpf_sock_ops",
++	"bpf_sockopt",
++	"bpf_sysctl",
++	"bpf_tcp_sock",
++	"bpf_xdp_sock",
++	"sk_msg_md",
++	"sk_reuseport_md",
++	"xdp_md",
++};
++
++static bool btf_c_needs_static_offset(const struct btf *btf, const struct btf_type *t)
 +{
-+	__u32 i, cnt = btf__type_cnt(btf);
-+	int err;
++	const char *name;
++	size_t i;
 +
-+	for (i = 1; i < cnt; i++) {
-+		const struct btf_type *t = btf__type_by_id(btf, i);
++	if (!btf_is_struct(t))
++		return false;
 +
-+		if (!btf_is_composite(t))
-+			continue;
-+		err = btf__add_decl_attr(btf, "__bpf_relocatable", i, -1);
-+		if (err < 0)
-+			return err;
++	name = btf__name_by_offset(btf, t->name_off);
++	for (i = 0; i < ARRAY_SIZE(btf_c_static_offset_types); i++) {
++		if (!strcmp(name, btf_c_static_offset_types[i]))
++			return true;
 +	}
-+
-+	return 0;
++	return false;
 +}
 +
-+static int dump_btf_c(struct btf *btf,
- 		      __u32 *root_type_ids, int root_type_cnt, bool sort_dump)
++/*
++ * Anonymous records within types that need static offsets must not start
++ * CO-RE access chains. Named records, typedefs and pointer targets are
++ * separate types.
++ */
++static void btf_c_mark_no_pai(const struct btf *btf, __u32 id, unsigned long *no_pai)
++{
++	const struct btf_type *t = btf__type_by_id(btf, id);
++	const struct btf_member *m = btf_members(t);
++	__u32 i;
++
++	__set_bit(id, no_pai);
++	for (i = 0; i < btf_vlen(t); i++, m++) {
++		const struct btf_type *mt;
++		__u32 mid = m->type;
++
++		mt = btf__type_by_id(btf, mid);
++		while (btf_is_array(mt) || btf_is_mod(mt)) {
++			mid = btf_is_array(mt) ? btf_array(mt)->type : mt->type;
++			mt = btf__type_by_id(btf, mid);
++		}
++		if (btf_is_composite(mt) && !mt->name_off && !test_bit(mid, no_pai))
++			btf_c_mark_no_pai(btf, mid, no_pai);
++	}
++}
++
+ static int btf_c_annotate_records(struct btf *btf)
  {
- 	struct sort_datum *datums = NULL;
--	struct btf_dump *d;
-+	struct btf_dump *d = NULL;
-+	struct btf *split;
-+	size_t ptr_sz;
- 	int err = 0, i;
+ 	__u32 i, cnt = btf__type_cnt(btf);
++	unsigned long *no_pai;
+ 	int err;
  
--	d = btf_dump__new(btf, btf_dump_printf, NULL, NULL);
--	if (!d)
-+	split = btf__new_empty_split(btf);
-+	if (!split)
- 		return -errno;
- 
-+	/* Retain the native default if the pointer size cannot be inferred. */
-+	ptr_sz = btf__pointer_size(btf);
-+	if (ptr_sz)
-+		btf__set_pointer_size(split, ptr_sz);
++	no_pai = bitmap_zalloc(cnt);
++	if (!no_pai)
++		return -ENOMEM;
 +
-+	err = btf_c_annotate_records(split);
-+	if (err)
-+		goto done;
-+
-+	d = btf_dump__new(split, btf_dump_printf, NULL, NULL);
-+	if (!d) {
-+		err = -errno;
-+		goto done;
++	for (i = 1; i < cnt; i++) {
++		if (btf_c_needs_static_offset(btf, btf__type_by_id(btf, i)))
++			btf_c_mark_no_pai(btf, i, no_pai);
 +	}
 +
- 	printf("#ifndef __VMLINUX_H__\n");
- 	printf("#define __VMLINUX_H__\n");
- 	printf("\n");
--	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
--	printf("#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)\n");
-+	printf("#ifndef __bpf_relocatable\n");
-+	printf("#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)\n");
-+	printf("#define __bpf_relocatable preserve_access_index\n");
-+	printf("#else\n");
-+	printf("#define __bpf_relocatable\n");
-+	printf("#endif\n");
- 	printf("#endif\n\n");
- 	printf("#ifndef __ksym\n");
- 	printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
-@@ -1130,10 +1169,10 @@ static int dump_btf_c(const struct btf *btf,
- 				goto done;
- 		}
- 	} else {
--		int cnt = btf__type_cnt(btf);
-+		int cnt = btf__type_cnt(split);
+ 	for (i = 1; i < cnt; i++) {
+ 		const struct btf_type *t = btf__type_by_id(btf, i);
  
- 		if (sort_dump)
--			datums = sort_btf_c(btf);
-+			datums = sort_btf_c(split);
- 		for (i = 0; i < cnt; i++) {
- 			int idx = datums ? datums[i].index : i;
- 
-@@ -1146,20 +1185,17 @@ static int dump_btf_c(const struct btf *btf,
- 				goto done;
- 		}
- 
--		err = dump_btf_kfuncs(d, btf);
-+		err = dump_btf_kfuncs(d, split);
- 		if (err)
- 			goto done;
+ 		if (!btf_is_composite(t))
+ 			continue;
++		if (test_bit(i, no_pai))
++			continue;
+ 		err = btf__add_decl_attr(btf, "__bpf_relocatable", i, -1);
+ 		if (err < 0)
+-			return err;
++			goto out;
  	}
  
--	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
--	printf("#pragma clang attribute pop\n");
--	printf("#endif\n");
--	printf("\n");
- 	printf("#endif /* __VMLINUX_H__ */\n");
- 
- done:
- 	free(datums);
- 	btf_dump__free(d);
-+	btf__free(split);
- 	return err;
+-	return 0;
++	err = 0;
++out:
++	bitmap_free(no_pai);
++	return err;
  }
  
-diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-index 5470b2b43229..97664633931f 100644
---- a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-+++ b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-@@ -1,8 +1,12 @@
- #ifndef __VMLINUX_H__
- #define __VMLINUX_H__
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
-+#ifndef __bpf_relocatable
-+#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
-+#define __bpf_relocatable preserve_access_index
-+#else
-+#define __bpf_relocatable
-+#endif
- #endif
- 
- #ifndef __ksym
-@@ -30,19 +34,15 @@ struct holey {
- 	long: 32;
- 	long: 32;
- 	int tail;
--};
-+} __attribute__((__bpf_relocatable));
- 
- struct s {
- 	int f;
--};
-+} __attribute__((__bpf_relocatable));
- 
- 
- /* BPF kfuncs */
- #ifndef BPF_NO_KFUNC_PROTOTYPES
- #endif
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute pop
--#endif
--
- #endif /* __VMLINUX_H__ */
-diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-index 4310adc2ed51..edc8c5b708d7 100644
---- a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-+++ b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-@@ -1,8 +1,12 @@
- #ifndef __VMLINUX_H__
- #define __VMLINUX_H__
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
-+#ifndef __bpf_relocatable
-+#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
-+#define __bpf_relocatable preserve_access_index
-+#else
-+#define __bpf_relocatable
-+#endif
- #endif
- 
- #ifndef __ksym
-@@ -26,7 +30,7 @@ struct holey {
- 	long: 32;
- 	long: 32;
- 	int tail;
--};
-+} __attribute__((__bpf_relocatable));
- 
- enum {
- 	E0 = 1,
-@@ -34,15 +38,11 @@ enum {
- 
- struct s {
- 	int f;
--};
-+} __attribute__((__bpf_relocatable));
- 
- 
- /* BPF kfuncs */
- #ifndef BPF_NO_KFUNC_PROTOTYPES
- #endif
- 
--#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
--#pragma clang attribute pop
--#endif
--
- #endif /* __VMLINUX_H__ */
+ static int dump_btf_c(struct btf *btf,
 -- 
 2.56.0
 
