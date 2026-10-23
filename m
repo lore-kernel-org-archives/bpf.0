@@ -1,54 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.124
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792790804;
-	b=CrgTEBedZTFlNsGwzj2Msz+c/xZcol7sOCwW+K6NTSmjdrFD1ohpLKwgJCBm0JjoAT1T
-	 XhmqObrmoXJDfhCsUu6sYHzWxO6JsLTmpUbRIjE04do1zwbkGDo6on1pyIhE7HuSV8TQP
-	 Ht37X9Ml+GyrImeHFnwrL66ki9+BMf2O2Fxv4jZkdaHuPxeeHRrgXrCxt0/asZ63nnPos
-	 Y5qV3ZqjEMrtdhHalVjdzBMl6trQgpdM6wbT3fU6zzP2bi1FUr8RiZhou70w9eno5/A++
-	 BozKySaFwVlC+1RXJs0tlOrEFQddfMuUKkJ9AU4/wGm2xrpcKeEBtf0k7duiBAILowg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792790804;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792792041;
+	b=wG8/u9G1OvTn+h/Ue94w4LzbN5JvO4bBtdO5d5AQV1Gg7uFeUa/1u4kSHVpTsExHSUET
+	 QYQymfk8nspQ2mROUNCR+VtHAqlFd6+SxvfubtoD5CiwigKeeCguj1J33rLGfTkBPSt4L
+	 h3kPdxYEYjBhB8nOECc72P3BsMxPwNdWoqJx1vqr8iiCSSgRQJKMe4JnuOofrERGmCEVp
+	 7hOdBNUup/7OHiLrm02Z1vhe0+V51V+1m+6xKiPygLuRfPY3M4zgdoaU088aUCiSId+Co
+	 CRm6A9NKjtEs6xZL6bReozqDrBZh8EIuZk+nPSIz8Do0egs1nStc8IK/q2/Suo2lyqA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792792041;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=yMi17/MqNjP0MWioHfo8kgIuC2hzzI8pK0AqrIdQJYU=;
-	b=K+N3YFWt4uDv58UzwA7yOLiGvkrvx9xAA43d0rL4fZT2PVkOyiF6CU4hz4d7E2mgtGUI
-	 GQ852FPPqs7b5ziWnKstA2lN224UpYn7ICAqBh9BG8ODhH8oc1/oK+XS6HS70XrrcKEui
-	 YILNeZCWIGJmBKvej9QH9ifvFZr6MchRsD9iutJ84RLyKLbPSlXTRLNufkRm+6XGuzZBv
-	 8JYFYtO8YAldoJ2I2iJ8JfA6mfj++UuM7Fq4oELQ4QZFrK+ZpvwGgO/6ulXPWj8MoiGvn
-	 /EOAL1R7tGXOENph9lJDG4RcU8yhNq8I8fMBfg+fEO3F6EyYwccOjCWxq4ClLNk62oQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=R+zPwgHR;
-	arc=none smtp.remote-ip=91.218.175.124
-Received: from mta0.migadu.com (out-124.mta0.migadu.com [91.218.175.124])
+	bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
+	b=0FO8t7ZOpVHtNRQa6zg54V002K7wkQPRACRXJShP5AEzSwH5sK5JyzYkuHh0/OVXsuNv
+	 wdL0xDcpAJG1ZmdKP9E3NfHDpnNcBMDnHGcL1Ie/A7CGdpFQ+nMqmiocm+uEmErITj61p
+	 bppsJgmP2AJZau/LjqOBI1KPWCnOyXL0BspZlI1FnKysRcTAVdXi3Y95WrzlYvFry9l4H
+	 4qoGWllxAQDhpPIVMgWvM+IbyqYR8AB8RzQHvKznIPB//OCdUrQWjzel/KUDQtoL3EJO2
+	 u3jQREnTpq1ueddicCJlCmITqJdUr0QcjlzJxr2Tlp1UjdMpe+bFzH2OieWDXP5TexQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hLDmu77i;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.43
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D595D606A31A
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 21:26:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D595D606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF6D606A31E
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 21:47:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DAF6D606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=R+zPwgHR
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=hqiuokBG/jTzR0/fra60HM5YTJO2GY0DMkGtGA0/BBE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792790800; v=1; x=1793395600;
- b=R+zPwgHR/9aCAdzTjPUCuioykddReIRZZdAOD1aJoF8/7RExy7Zt1ufZhWxhFdJWskDjq2ty
- GbUef/YvA480YkIQPx9wbMtgRSAQwAO0tJIfYLGerp2mPUvlm0QVY254g5l3NXLk8VNbpAg/Mdg
- AQqZTtSpZyG3xk58s4OW1XGk=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7a376c29d8fb16a6;
-	Fri, 23 Oct 2026 21:26:40 +0000
-X-Mizu-Trace-ID: 7a376c29d8fb16a6
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a50c3d55-b5f6-4046-82b2-e583fce71077@linux.dev>
-Date: Fri, 23 Oct 2026 14:26:37 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=hLDmu77i
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ad2b3b1c02so721587a91.1
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 14:47:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792792040; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Mw076PBOnky5ooDBUTbxnCoacf/xYl+I8oGOp3yOwx1Hg68CDaiUZLRTx+4nPp4WXB
+         m3kwvPaI46zUqG0NVWM544lkYQeMExGLAUCkZHkK45i2uvx/vDNmiW5VOTMTg+qiU9So
+         mGEMWv/fzAIND30JxMNtlfpU1GTN8X/Ctj0iaRgNuowetfe5aVHcjzwyL8U3HWOTZ68y
+         qAKIP4kRn/sc1t7icyU1bejlRhHUGgVRkXTMlrWHVox5sZcCiYMWddiyMuD7O+pMZcfa
+         2eJ7Bu4UyUQ5FOIWBnknmZ1YYgHosinx/BGTt811Tn71Sz33Tj933EZp1oA8VZNT8jpA
+         IK+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
+        fh=N47WTb2B9rLpCzJJeHseJ2NdKM38+YsOAEzG+wHkKg4=;
+        b=nh8SAf7c6qPfYu2sawMmOxPOx/T8IorGzpwfBHarSvh0IlnuTW3WNFLN6OmNMbx//C
+         IPfsxEC1L9k2ORz9kDfxp6SDmPjeOlI2GISOKi+XspfVv751WdGRtoKuC2X0PB2eiiWY
+         VHYArLwRCr2QRf7BOyDKXg2q/mHjiwt3sJ8j9Gbldtd+uF8OB7ZWWiNwM4bQS03naayp
+         0tRiNxNn3RgqDjRmwXHLuOtDPgW35MbjBfQYyyiqzxhmYoT/l9TZGgnNLSar6QhPCz/Y
+         QaYOA/epMOkXH2x2XUy3rNV5HPmiI35J0E10c5n8VOFpN5q9xAWUOvlDWtsjMGLycldI
+         /njQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792792040; x=1793396840; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
+        b=hLDmu77ierYiamVgBV5vcAPXLaG8aupRNyDiDX7DkFNKpzAxzPIc63o3dmGM4zJaa9
+         4NGe3YwDiymWhnQ/OCBGllsswfzcFZye7tQgoEq0wKR8ICoXlpOSA+BkFePJ+1A4Qtfs
+         5B9uWQyifczwR83ZzMfzQhkVojser9lK+7Vg1COy1KYe+paFJC2NeFMJ0Pwj/pPj/iD2
+         gXyhQWok5F1Qlv02XKngGqq1rGnm/5QhU+mrMgvZNpLlK+CJNtiedln6Mz0k16xq27uZ
+         SIpi3iMCyeGt/gxH2+Gr5wKnY0+0nxLC7O7+qOh1rB8DPqu6rw1b+PmW+IOO7JtIQdHd
+         VdsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792792040; x=1793396840;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xPSo9ItcVa4fj2ri5oc6bVUN+cUX/ExSvpmY9Grzytk=;
+        b=F/3qN6rAHErVTz6L16SkaAtVzpxn4znfAFW6iq0jyirCX5sZbhSGcpHv2MHyCsSkTH
+         rp+Mjwh5RJTyoXjB/YGTMyFYEu+ZnhhOXwUAbZ8NbmfjRs0wmwzgeN6WfsN4bWgZEMLG
+         cSaExs0FSAQs06rb8ia+q/Ux5RlNFy6DmbumuVoer3qX7l2r3T+Do4XfBVb23qmtU9gN
+         f56ofR8GaLt0jp1hZfdXdPu2lk+98oLdWQBv3A21oi3o2EL3uZbp6FQESFBuLti2L/ya
+         Yb2sOR7/rGq2B+GN9+LKm30hMQh2eXKWs/eiwwET1sFpkW5x1Q0LJTJuQZRZ7ZQyvq8y
+         jTiA==
+X-Gm-Message-State: AFq9FYLLzOABArisUA9uxJ1YzQXvFnROUi4NL84jfin/FewMQ//9lGFQ
+	8v57CN9Fid85AS4W+BIvItYWmffHOLvbaLxyNe4mHyT+SGlExrwucEFTA8WSG7rfL/0dFVXsmND
+	YfVR1ocnnZ4pqPvEsvL0cY8QsrTgbQkI=
+X-Gm-Gg: AYBFou3Yl3AdVTOiIvSIa7ScBrP4qfvw5w+R3v/2VekfJp6gBvvh3/XXD5CsdptOMGm
+	EJTf/085DS1pFdNVITgfqKmd45TRP9o5Zu0ghDQIvgz9SprZwliwGtVGIj7H83fs1co/aXpg1lV
+	GDoX4yxVkJqrN3Lqxx4kGxfAE9dF+yJvSY6rp4Zyxu8S1IodpIAbvLF/fU7eVZI9sol7PspgIYO
+	IHUQceE8DWlshv8fGdBTdwpfsKvunsowwzcVY89rtqlNmopxiq8HXb25hHAjFvIyz6y1OHcMWQG
+	JmKJEL2aaWMjeg0nBPSVcfpeLjpSkt0ky2EM+kLF2WHlRtrxyC24GM4CGRiJsOEf+RR85SneY9a
+	2jRH+dgFhyK0Wc0mpy51hE9/9AXvsmlzUW4Cl/C6fSC8rHD5Eb9yYCFucCrdrVFXhkqAyQQcfAC
+	EBXp1/dRFutz1+AcCSAmuyaaecUk7/X09wLLjaPXE=
+X-Received: by 2002:a17:90b:17c1:b0:3ac:8af9:4a77 with SMTP id
+ 98e67ed59e1d1-3adea8952f8mr420926a91.10.1792792040157; Fri, 23 Oct 2026
+ 14:47:20 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,120 +104,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC] reworking the review-prompts subsystem guide
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Chris Mason <mason@kernel.org>, sashiko@lists.linux.dev, ast@kernel.org,
- kuba@kernel.org, bpf <bpf@vger.kernel.org>
-References: <91e21331-ed6d-4ac0-b237-b01aeadca2d1@app.fastmail.com>
- <f8295279-7af7-4b3e-bc9b-112bfc49816b@linux.dev>
- <69794757-5b55-4796-8388-35a074842708@linux.dev>
- <7ia4fqxwdv6f.fsf@castle.c.googlers.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <7ia4fqxwdv6f.fsf@castle.c.googlers.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20261001072449.1377267-1-adi.sharma@zohomail.in> <1a168cbe0aa.30b7e048183449.4003649852775097641@zohomail.in>
+In-Reply-To: <1a168cbe0aa.30b7e048183449.4003649852775097641@zohomail.in>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 23 Oct 2026 14:47:05 -0700
+X-Gm-Features: AclHuK9klZKtZiNDzc9m6HVwMpKUt6CjANLrIawUWNF0dNjLjk5PlT3PLx4p-yQ
+Message-ID: <CAEf4BzYveiSZg0qg5h=EPiMQacnSXwp=8O+x74FM=89qrHV4=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Fix bpf_send_signal_task() from
+ kernel thread context
+To: Aditya Sharma <adi.sharma@zohomail.in>
+Cc: bpf <bpf@vger.kernel.org>, andrii <andrii@kernel.org>, ast <ast@kernel.org>, 
+	daniel <daniel@iogearbox.net>, eddyz87 <eddyz87@gmail.com>, memxor <memxor@gmail.com>, 
+	"martin.lau" <martin.lau@linux.dev>, song <song@kernel.org>, 
+	"yonghong.song" <yonghong.song@linux.dev>, jolsa <jolsa@kernel.org>, emil <emil@etsalapatis.com>, 
+	"ihor.solodrai" <ihor.solodrai@linux.dev>, kpsingh <kpsingh@kernel.org>, matt <matt@bobrowski.net>, 
+	rostedt <rostedt@goodmis.org>, mhiramat <mhiramat@kernel.org>, 
+	"mathieu.desnoyers" <mathieu.desnoyers@efficios.com>, shuah <shuah@kernel.org>, 
+	puranjay <puranjay@kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	linux-kselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/23/26 1:22 PM, Roman Gushchin wrote:
-> Ihor Solodrai <ihor.solodrai@linux.dev> writes:
-> 
->> [...]
->>
->> Some stats:
->>   * Same outcome (review posted vs clean) on 90% of commits.
->>   * Medium/high issues: posted on 7.4% of commits, vs 5.9% before.
->>   * Low/nit-only reviews: 10.3% of commits, vs 15.8% before.
->>   * Cost +6%, same wall time.
->>
->> Interesting findings:
->>   * Old vs new prompts differ about as much as two runs of the old
->>     prompts do: on an unchanged patch reposted in the next version,
->>     production reproduces only about half of its own findings.
->>   * The new guides are consulted in every review, but only 3 of 114
->>     new findings cite a guide answer, and the old prompts found those
->>     too. No clear wins attributable to the guides yet.
->>   * The new prompts no longer produce the "A subsystem pattern flags
->>     this as potentially concerning" items (mostly selftests style).
-> 
-> Thanks, Ihor!
-> 
-> Quick question: once it's merged, how kernel maintainers are supposed to
-> change prompts or the idea is to completely stop doing it?
+On Fri, Oct 23, 2026 at 5:46=E2=80=AFAM Aditya Sharma <adi.sharma@zohomail.=
+in> wrote:
+>
+> Hi,
+>
+>
+> Gentle ping on this series.
+>
+> Andrii - patch 1 now removes the nmi_uaccess_okay() check entirely, as
+> suggested on v1. Is this what you had in mind, or should I change
+> something?
+>
 
-haha, I like how you said it's a "quick question"
+Hi, yes, it looks good to me, sorry it fell off the radar. bpf-next is
+closed right now so I can't apply this just yet, but I'll apply one we
+can do that
 
-Just speculating below, I'm not an AI expert by any means.
-
-I don't think we should stop editing the prompts. They at least need
-to be up to date matching both the source code, project development
-process and maintainers' expectations. If we outright stop, the
-prompts will rot and become stale, which will mislead the AI and burn
-tokens even if it self-corrects.
-
-At the same time, it appears that attempts to improve / fine tune the
-prompts to improve the *quality* of the output or efficiency of the
-workflow quickly hit diminishing returns.
-
-The low hanging fruits in my experience are picked up fast by giving
-an LLM samples of the real-world traces and ask it to improve the
-prompts. It works.
-
-Again, lots of salt here, but out of curiosity I looked at things like
-GEPA [1]. While projects like this advertise significant improvements,
-evaluations that I saw show only marginal gains. My guess is that a
-new big LLM release would immediately eat all those improvements for
-most use-cases.
-
-And that's setting aside the problem that it's very difficult to
-evaluate the results if the output is open-ended; and the fact that
-it's costly to run. If we do all that, why not just build and add a
-"Linux code review corpus" into the RLHF pass of the base LLM? I'd be
-surprised if it's not happening in some form already at the big labs.
-
-[1] https://github.com/gepa-ai/gepa
-
-
-> 
-> E.g. are they supposed to add new questions? Or edit the final result
-> directly?
-
-Maintainers feedback is essential to make the auto-review systems
-work. They are the ultimate consumers and judges of the reviews.
-The question is how exactly to capture the feedback.
-
-The first versions of the review-prompts read like an algorithm
-written in english: phase 0, step 1, ... step 13 - skip if X, etc.
-
-IMO if you are using a frontier LLM + harness, this is now
-unnecessary. The AIs can figure out the steps themselves.
-
-What is necessary:
-  - describe the desired outcome as precisely as possible
-  - explain where and how to search for context and details
-  - configure / explain what it can and can not do in terms of tool
-    usage: e.g. don't try curl if you're sandboxed
-    AI is prone to try hard even when it's deliberately limited. That's
-    how it's been trained so far.
-
-I think the most impactful and important part is steering the "desired
-outcome" through the prompt. And that one is subjective in many cases.
-
-Do you want only bugs that are reproducible, or do you want suspicious
-code flagged as well? Do you want nits or nah? Commit message style?
-How about a high-level design review for a big series? Would you trust
-an AI to do that?
-
-So, replying to AI reviews (even with "this is bullshit") is useful.
-Adding {subsystem,project}-specific rules about what to look for and
-what to drop is also very useful.
-
-Obsessing over wording or writing prompts like programs - too time
-consuming vs the value you'd get out of it.
-
-Opinions are my own :)
-
-
-> 
-> Thanks
-
+> Thanks,
+> Aditya
