@@ -1,63 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.101
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792793350;
-	b=Z1M4W/6IuWXukOKfbqg+MT+XDjeMlN/tO3pq2KDubwVQ61QbnEd+8mVSDEbE7pzo4oXd
-	 GtKVuXByiuhZgHQc4l5x1mu6n7MSQ/kFZGa0wlT4tT4gEc2AVzq8sRzAJlfcwBncu8vhA
-	 ibSp1b6LWaLOkHxESij5Bxr3ATvO/D++47hJAV4GtcD+d1Mn4sSuLeaqWBU6YRv4sma5H
-	 GH+ntw776ypDyp0VEZdp8mcGugTEA0GkUeMgXrjYtEL+ENR7+kpTZGRL8O6J96sx9InXA
-	 7L15PGYMTc26aSUdbIsgLm5NLCfA14ap+t+XdkCYRTzeEfJMDj7JUVrh0ZHXivrXyPw==
+	t=1792794345;
+	b=glRcVzLXVWL8iP2TvUtccPrBmWRPJqstpRhX00jJ1RTcnaAFvcOXfmw3vLqVh1tQCGMt
+	 HPradiH31TZ7iyWI9pTlIDYSkGZFh8I/bGqaawbttNUpiwuyaDlj7ctLz5dyCcKMM8zGI
+	 yFYB1/0iKZDslCjpCQ1EQ1Wx7fwGvUeg4/W4/M0qXs18ffFc2qaWrCZaTCoQhwBvKl191
+	 P1fPnHDqjul2baefqzirWMDfxQf6uyQxTK4Yy95lEp3RenjFMhvxTr3XIk7iywebRVAFN
+	 lVXqjLgqwQUeEOIoGZe2O6aPC6oBDbw8iiAOHRpdpkANLDF/9K0adO5B477TLOxfy7A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792793350;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Stat-Signature:X-Rspamd-Server:
-	 X-Rspamd-Queue-Id:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=F/szoS2mK5zh+IKcX8gQnqvf+pfueUDCbGAQFHFPWOA=;
-	b=XKzh78/b8N/iSpHw2RATJ76NQCgWOGoM2BCLIKa1PRMT4EQwS4OYhEj0LnWWxxJftHz3
-	 bDk8CEF3nkyXMONWTOBktV7r6ugH6fEPne5uh83XAmwZGkYnXuWc2cQbxeccmhR1qQoYW
-	 ullCLbHpcdptWdPbTLUuE/lQEYOITTeiDfCIMJkTAA8TNusBuxiulNl8SphDMsjnkfqUn
-	 MjFUfrAl4DTNTKe2zGnpb1c6yv+rojwsvWRBTfz0iTGcn5WvTZJnaZm1blvHFkTMXvF4Y
-	 WCt+WmFQ39UsF+TC1w0dDtS4fu4gRN08vcdWoWRkkQ/G2RShC3X9Iy4L/3U0dkPPWUA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792794345;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ZW4f/bR0z9X+iXbSmnF3Tp6NyBRkbBWJTCRV7Fj2AnU=;
+	b=LGWXJUET88kzrfpwq+i64sVAsCWqNumK5cbMqRCNmj5CdbZJAvbWOh+f8BJWjEp56r7k
+	 7A3kF2JuaWAckrBxlqFLilJ14Yiufbd4QbP3IdbfZpfTQzKmXblLgfD7VLowYO4DPkpUk
+	 /jYLvFKzo38cWgpE1mUkw3fjVFP3aeEyMbB9v42uyir1lfoZbn3bIXfIynOD62/iIiN+9
+	 umm8eJuF2ZUTYRYH5OumsH/YmCr/SZ/SjVvgVW1+RiBCe6DjP8La5S/zHFKvIJoZsxhlD
+	 8EaT4e3om2Ma/8bxNaeonQVCYPN9ISMXLhOQWTDqD/bhjDhf42VnASu5ugW0d03QRKw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=jsMojqdA;
-	arc=none smtp.remote-ip=216.40.44.14
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b="P/lDtrff";
+	arc=none smtp.remote-ip=95.215.58.101
+Received: from mta1.migadu.com (out-101.mta1.migadu.com [95.215.58.101])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1420606A31A;
-	Fri, 23 Oct 2026 22:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F1420606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4045606A31E
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 22:25:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B4045606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=jsMojqdA
-Received: from omf03.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id A760D14028B;
-	Fri, 23 Oct 2026 22:09:06 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id 1E1806000C;
-	Fri, 23 Oct 2026 22:09:04 +0000 (UTC)
-Date: Fri, 23 Oct 2026 18:09:02 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Vineet Gupta <vineet.gupta@linux.dev>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, mhiramat@kernel.org,
- mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org,
- peterz@infradead.org, linux-trace-kernel@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com,
- stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] tracing: fgraph: allocate shadow stacks inline
- with GFP_NOWAIT
-Message-ID: <20261023180902.2bf7cef4@gandalf.local.home>
-In-Reply-To: <75b66acc-354e-4cd2-b9cb-4c22e8a02635@linux.dev>
-References: <20261021174406.2891598-1-vineet.gupta@linux.dev>
-	<20261021174406.2891598-2-vineet.gupta@linux.dev>
-	<CAEf4BzaTYgNwiBtvYoSw1wzuFZchs-2CCP93gh2OeDt-919-eQ@mail.gmail.com>
-	<20261023143816.48163575@gandalf.local.home>
-	<75b66acc-354e-4cd2-b9cb-4c22e8a02635@linux.dev>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=P/lDtrff
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=u2RfliYPbv+3w6elZKzr8CHYPnDNw3MYZtq8+QF/6MI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792794341; v=1; x=1793399141;
+ b=P/lDtrffUrzzLvqruj7aLeNYurvmbTFl4CckgrCjD5s7Jf+X63XXt8oSvG6cHXFuNqIA6Fwd
+ UgFZifqJmUUTcmYMvd+1XCOJZJLOhon/26JixWxWPVay1KRdunENsZ8okZo9KgK4v7b24kOU1vU
+ qxBuc00zEy8ZkI2PbAmv3H3o=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id aee3234f182cf0bb;
+	Fri, 23 Oct 2026 22:25:41 +0000
+X-Mizu-Trace-ID: aee3234f182cf0bb
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <88f41f2c-4226-4122-9627-4fc29a29b99b@linux.dev>
+Date: Fri, 23 Oct 2026 15:25:33 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,38 +58,50 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] tracing: fgraph: allocate shadow stacks inline
+ with GFP_NOWAIT
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, mhiramat@kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com, andrii@kernel.org,
+ peterz@infradead.org, linux-trace-kernel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com,
+ stable@vger.kernel.org
+References: <20261021174406.2891598-1-vineet.gupta@linux.dev>
+ <20261021174406.2891598-2-vineet.gupta@linux.dev>
+ <CAEf4BzaTYgNwiBtvYoSw1wzuFZchs-2CCP93gh2OeDt-919-eQ@mail.gmail.com>
+ <20261023143816.48163575@gandalf.local.home>
+ <75b66acc-354e-4cd2-b9cb-4c22e8a02635@linux.dev>
+ <20261023180902.2bf7cef4@gandalf.local.home>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20261023180902.2bf7cef4@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: t8c4c1oeinfubypt9y96ounpn1cq8i6r
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 1E1806000C
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18c7xFN/AyP36lmveAraBHyJYFfDlwqjks=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=F/szoS2mK5zh+IKcX8gQnqvf+pfueUDCbGAQFHFPWOA=; b=jsMojqdAIncuOJPK06fYzxnkXNJ9VAWIExLNmei7vHl1OKcMjHbJfZhtVrX5inu4UllXDRHLpxMXwSgbh9dbZx1DnV/Vo/yptzPfWGI3kUD9qfqKIITP/abxiiGkuKZ4c5GorYNuD197JSiUqczf39nCDATrpqXvfiSzoF55z2E=
-X-HE-Tag: 1792793344-780753
-X-HE-Meta: U2FsdGVkX18r58hygf06VDzyjSvq05C8+pMawJrbnCrbRcfIifeJ8azbJMqg7kb4Nls+RwctJyFyFMZm/QQ6RqvMvmiVdNiMkj3oQNli3QZSBEjGkq7yUxk+zu3D/RgH3j3ScIjh0TZ2WyMtjgjaxNHCDgaooLArLg6LKwHIXOyR/pkdgutn7aZ3R+ftIP3WOM/lIuPFrWeF7T1q753SR6/jn9GKLVh6pY9Bi/nabZY9P8IfQAJQOWhtAtPQXDFSh4b3Ge6dWELYLQ4iqJYAXfPS47oh5o7gRwyiOhxRngIxH5TH1rEBxF46tXi0vwD5Db78Hy6TThwXeUG6HngxhRU+8GSyB7YUaqz69NwcXN0QJm/LVf/Mcg==
 
-On Fri, 23 Oct 2026 13:13:41 -0700
-Vineet Gupta <vineet.gupta@linux.dev> wrote:
+On 10/23/26 3:09 PM, Steven Rostedt wrote:
+> On Fri, 23 Oct 2026 13:13:41 -0700
+> Vineet Gupta <vineet.gupta@linux.dev> wrote:
+>
+>> On 10/23/26 11:38 AM, Steven Rostedt wrote:
+>>> On Fri, 23 Oct 2026 11:13:44 -0700
+>>> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>>>   
+>>>> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>>>>
+>>>> I presume this will go through Masami and Steven's tree, is that right?
+>>> Yes, but it came in during the merge window, and since it's just a speed up
+>>> and not fixing something that's broken, I was going to let this go in the
+>>> next merge window. I rather have a change like this sit through a full -rc
+>>> release.
+>> It is a speed up but not for optimization sake but to cure rcu stalls in
+>> production at Meta. IMHO it should go in sooner than wait a full release
+>> cycle.
+>>
+> Either way, I'd like to give it a bit more testing first. That is, the
+> earliest it will go is after -rc1.
 
-> On 10/23/26 11:38 AM, Steven Rostedt wrote:
-> > On Fri, 23 Oct 2026 11:13:44 -0700
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >  
-> >> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> >>
-> >> I presume this will go through Masami and Steven's tree, is that right?  
-> > Yes, but it came in during the merge window, and since it's just a speed up
-> > and not fixing something that's broken, I was going to let this go in the
-> > next merge window. I rather have a change like this sit through a full -rc
-> > release.  
-> 
-> It is a speed up but not for optimization sake but to cure rcu stalls in 
-> production at Meta. IMHO it should go in sooner than wait a full release 
-> cycle.
-> 
+That's fair.
 
-Either way, I'd like to give it a bit more testing first. That is, the
-earliest it will go is after -rc1.
-
--- Steve
+Thx,
+-Vineet
