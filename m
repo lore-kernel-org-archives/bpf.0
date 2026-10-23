@@ -1,75 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.197
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792714668;
-	b=aigaFhXhcDyTIO2UaqfBv+xXIxiE22dFgbxc6zprixjqdCdMdz/QLRjrrhkEChhDD5nr
-	 mIwc4VSZQeGRlO4DBiTzsW/1BSSOWAz1DPSj2pvBS3LOV+gxrVV9mcxpDcfIwzkmC5Xy8
-	 irohT1HxPKqngPzBRiid9BK2e1URMgOxTeO8zKbJH1HxSbatQhoEoJwhbQ3CCZqJMhewX
-	 aOM1tw3YueU8o6RsoJ8qfQvQ3J6e7UdWinzh9nA7zJmShqZnmxHcfJEkzn09Q0IOMEEmK
-	 VPDnOHDFTyvnryWHqvC6+pWuYVFYKca7JxWRQJb2Jmi6Q5OLDEscu7Y0+MGyM37WAVA==
+	t=1792714862;
+	b=p22XHlmiP6uryRGW/erLVakiuByjWelcJgub30aPhQEIPiZQT3f1E0+moCYcWF/2uYlm
+	 38euFFpGx5f64ysP/mnUusEoWJNJLIWjv99v0ziciGXYlcMiNkPySXXTEzdJmrJUBsAof
+	 iTu6E4kz7YCSYO6Q4FULEzw2crXUvC18+j7LIPj/MGDa7KTS3wvtO1FYElSXnOliMSIAA
+	 kHL+cEwNiDB8BoLRiqYO+B9AccUClw3VB0SG0z0DU3NSbZP/qpUHITHC3WOViEF2sEni0
+	 Umi/mvCAaQyjPTePBv1HHNOWHlLCxr+s/iMjMI3RlW/qIbM1HQTyWIMOVu3stM9sC/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792714668;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792714862;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=7EFy5TBdHMksgH+69ZcrASpy/wdwGEGDCoyxJAdEsHI=;
-	b=y5CE6f0Pd8AtYJCD157QokVnfcWsG2R+0ZWyKosq2CPHhcoAk8F5/2IOEcTPEkcsA2H8
-	 VoiidSnr4tpXgj9Aa6l/U0/7zKepKYd7RaeWOfkwWDC1bpR1alxy3wjML1z0JbMBo7I/D
-	 XRb3bzDvWGE3SJiUD5JB+JSJZyokOcAwa+G+xwX4zPl+b4n9ZUNqm6yar541Si0dC5JMN
-	 UvLNyhHVPgBCzBxCcXSLyTfnCQRuGWhqp/F3ot+1xlqMZrAXY0gvsKzJu50/JViboZKDw
-	 lcNSx642S02kwKekXyLkVYzLQSCJh0t7Ps2zkyTJ3/IFsO+kjw5mTH3/OtUCnGKgZ1Q==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=HyYdTFRiZysDo1DqqSwOc7X9Bwa3BZ+6rEpkd+doREY=;
+	b=Gel8jrEpJcRuLeJgIh0VNC+jxffTYKkACLIxR71zHF8rMrko81khhpOPswVdas+O8sN9
+	 2sdah75uNCVC3Gqlz//V2iSLPs138fNFFYKPfw9f7A2PIWsk3Ek3AnwmsHDKPpWWOkAoB
+	 r54sZfj3Pd/hHM+7MmsNGP/d9dQOFx6V9q6GGlPdSXZW8bjMRuS9uWBq2Qu9tiGQomLNm
+	 tXAAQVZFoUOzxkE9f4fm4ys1NLdFtZoG/ElHnajLO4sIq4/C/7XtQyp1TeuNPHQ4LqTMv
+	 KKKuX/p0xBNr3uagUD54SK5T06eYyhF5Zi+t7paU+z02NqWQX1AQYPMnHWNzxFp67qg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=TFQQx6U2;
-	arc=none smtp.remote-ip=74.125.82.197
-Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=SIaNa5Tf;
+	arc=none smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716A0606A32D
-	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 00:17:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 716A0606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6826C606A31A
+	for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 00:21:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6826C606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=TFQQx6U2
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-3692c5b061bso1028190eec.1
-        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 17:17:48 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=SIaNa5Tf
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8a0924e2741so242711b3a.3
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2026 17:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792714668; x=1793319468; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7EFy5TBdHMksgH+69ZcrASpy/wdwGEGDCoyxJAdEsHI=;
-        b=TFQQx6U2EiKbu6SJnHUGVeigXOoIYMVy+4L7g4STrrNBF8WunQytKeEpCGzzGCs76r
-         vo1R3xq9X83PauDnlHEMqNZnoFwhVRlvlZkICLLehriSd2PxNJJfr9Jz0TmB+jPaX3n6
-         B6dakkjvsoP9Icza5n7eEmEjuFmlcxpvC9GYmbBEO/aZh+ctE+0Xmu9q7CbS9QZstBGK
-         mmgjZ3G12sUasm8wZwRktdTA/5GujKpKQRNiV0/SRcudBxnlkHmYb52PhDadiuJFWlw6
-         mYjoBju0sgpJ2gmOtvqloecYQLsjKDGYOF4grRhxNZVxeUnQeAlfz8OBEum0cSi24ZLy
-         t3Vw==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1792714861; x=1793319661; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HyYdTFRiZysDo1DqqSwOc7X9Bwa3BZ+6rEpkd+doREY=;
+        b=SIaNa5Tfpq+WLXL59JzsHTegfKkSmajF2YtHx2IMXyrDQZgWk+HmQoesr5XpbvtFao
+         pYQn72vFU6X+xINdaw+KqMDMBDEXdwsbV48oFpDV1u5q2pIZGL+mdWwvQMl3kSX7N2+m
+         c6+K0SmExL0BY3fnFZ4SkGQ6Pw2xrs872A+TVsETTtDl1vRByWBIbZV8Dlmmjs65nmNP
+         08fHXGPpFxJRfs90kf7fg1M/XQrXRdQ/Z8KIUWX8AnHyM2d5JRc68ePDpbqHdxEG652L
+         ILTRa/WVfeInPPAChPoFU8FFZqT3HmNBLvQhDtwwmzMW6pQxRmU9Mg9iGUrnvR1ReTiN
+         MIiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792714668; x=1793319468;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1792714861; x=1793319661;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7EFy5TBdHMksgH+69ZcrASpy/wdwGEGDCoyxJAdEsHI=;
-        b=NmtmWgGQAkCp+6mWfeCHNGiUvbW5GZEiJFaCLKjQFD+KK+2w9re6+YKB+gi09tS7d0
-         1OSY/eaLdES/UQjpJREQYt/hfGWAmueaF8kk387uLYbbx8F8RabNUHolq22WNAFPn9SG
-         5+dxAtqktYLlBWhIYnU7EEeZrFNFDpZTdb9qs+YiRVZPGKRghgRJafQnrmDaADBsg0js
-         08/TQKLiisu+wxWsYppsZyaPKJk+DwyFU26dhDdjY6MKKPEawfQvOqCHDQzwp8mVFZ3C
-         ym0xasxPx4/xBWGn+6B7Kk5kULgRS1fBQjhNg1kAlVVpFTHcVv7iaR94se2F9o8JnHTR
-         rcXQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwiRgtAycjRKFUWsWPIfSGIWjV8VxhWv1+meKlthDBAZ6j+45X0kPQG+YD2Hhh/2yeGOvo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLGWzBlHDrUXD2CXEIElLTmOJB5h0BouskRsJJXyaP3BsejV07C
-	U82eHu6YEX5YUuuSDL7/AyTexwBd9BIhnCamoKyTijGuIX1BH6UVZZkMN0K/5lMevmNyKIxgOCK
-	BGDfj7wzAdBjFtQ==
-X-Received: from dydr21.prod.google.com ([2002:a05:7300:50f5:b0:369:45ee:40a0])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:693c:881c:20b0:366:c497:610c with SMTP id 5a478bee46e88-369d9833dfdmr918007eec.33.1792714667128;
- Thu, 22 Oct 2026 17:17:47 -0700 (PDT)
-Date: Thu, 22 Oct 2026 17:16:07 -0700
-In-Reply-To: <20261023001603.560210-8-wusamuel@google.com>
+        bh=HyYdTFRiZysDo1DqqSwOc7X9Bwa3BZ+6rEpkd+doREY=;
+        b=VWy/ZuL9ZVUgXdBL392bdh58kdsJfTO+HqI5Jmv6su69hsaQwWRJLRd60dK2iyLe1O
+         uXOZm1EOTjyUOuWpfPxPA1Hcr37hixo1lTO5ZHRHllqs7DGeuTemSphlSZZBIw1V6RHn
+         BM3ECvvMfG6uc+f6dLcrLaSwSDOLAsYJjzCMTipm63/hmX6rdMIdyJZfmumUn9U5IWgC
+         Z0DbAg0YpbCQ/ZRVKAMib9/FQ6CPhI2708OwXAgrPbr9Te26FctGPvDY7O7d4o74wK9N
+         Om4n6dourHGf64OwMnkQiuYKiVyKW+B+WjWRnRM4X/rFRT5MjiwYGC/8AaaxSsN4nCqB
+         MYRw==
+X-Gm-Message-State: AFq9FYIUWMo+rKWyMzQfsDWlA1JsJb8lRlIHB8nWnzb4u4BzhfNSuHMW
+	+S2w0I8NXZF6tu727+OMWfiwtLZXQGj4kWaITN9K0q3n0adQ6w8kN6/18/HE3lfY05gEwWxMJHq
+	Va/4nzVAhwg==
+X-Gm-Gg: AYBFou0OQrIAS5MwD0NY7HJliJXoxoc2qB8NoJ4RM1GvMuu2fKj50dVF5vRq2mZPRmz
+	lhEyTvxvpiyDWiLK7P3+d4Cz3F/VYz/VrEonl67vZC1bAAbBqUsHFV3JBNtHWdWhNf8bkHD4FZG
+	U4VpWJs78crB7xwj6HHsovzvSzfu/RwRkyImpDzZTwAFz6GjmYHg7vrVgUaWrceaggxZ/1661FW
+	/pIShJfHF2/U9mkObwUyjTao1xrABoKHgREcIsOtpP0eZKkFzpIJeuqpMZpgg7KRZV82d+L3hLt
+	IXx+fKGN+BMRbToU3xX4QJQ+z2VIgnBg60cNHsXVSqjVjd2hTyojENLNTjeNFR+wvm4K0di37QR
+	ldZ6wJNOpgUAxttPRq/vEjYCZ9x9KZvjSxNqz0lIiEXWHJ9woBvgLsf8phZR93uY2ENn9zK43dw
+	mwNVJRKsRYHadygn4l52TeikHC1SNK8FNSTJ9MpN5qxUiPN/p2tO5rhzq3G6RPk6VdMlPwz7RT6
+	JFlJS7cl/SpI7UYyn1d+snK42aeL2dY95aPmn9TFZPqgqirr7SlFzhDUyOHLPIi6yft5fTCKmDw
+	z0vU2YHyEHBAU/ef1EBKeUem6sBO4Y0tZfipYpc=
+X-Received: by 2002:a05:6a20:9f86:b0:3e2:21c0:3dff with SMTP id adf61e73a8af0-3e37674de3bmr457188637.65.1792714860721;
+        Thu, 22 Oct 2026 17:21:00 -0700 (PDT)
+Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ba8892c4sm218649a12.11.2026.10.22.17.20.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2026 17:20:59 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Harry Yoo <harry@kernel.org>
+Subject: [PATCH bpf-next v3 0/7] bpf libarena allocator improvements
+Date: Fri, 23 Oct 2026 00:20:49 +0000
+Message-ID: <20261023002056.6647-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,290 +97,124 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261023001603.560210-8-wusamuel@google.com>
-X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
-Message-ID: <20261023001603.560210-14-wusamuel@google.com>
-Subject: [PATCH bpf-next v2 6/6] selftests/proc: Add KALLSYMS_QUERY tests
-From: Samuel Wu <wusamuel@google.com>
-To: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Add a selftest for the KALLSYMS_QUERY ioctl() on /proc/kallsyms.
+The libarena buddy allocator's design has up until now prioritized
+ease of verification. With new verifier features like unlimited
+global stack frames and a large stack size we can now improve
+the allocator's performance and robustness.
 
-For symbol-to-address lookup (KALLSYMS_QUERY_BY_SYMBOL), cover valid
-lookups, missing symbols (-ENOENT), input validation (-EINVAL, -EFAULT,
--ENAMETOOLONG, -E2BIG), and extensible struct size handling.
+This patch introduces per-CPU caches for the allocator. The overall
+caching design is inspired by tcmalloc. Each CPU has its own static
+object LIFOs, one for each allocator order. This speeds up allocation
+and freeing for BPF programs that have some degree of locality. The
+CPU caches are lockless. The caches are replenished from and spilled
+into "transfer caches", per-order caches shared between the CPUs that
+amortize the cost of spilling/refilling. Data from the transfer caches
+is in turn moved from and to the allocator.
 
-For address-to-symbol lookup (KALLSYMS_QUERY_BY_ADDR), cover lookups at
-exact symbol start and interior offsets, buffer truncation
-(-ENAMETOOLONG), unmapped addresses (-ENOENT), and input validation
-(-EINVAL, -EFAULT).
+The patchset additionally includes code for allocator reentrancy and
+bulk allocations. The reentrancy code lets us safely allocate from an
+NMI context in general, and from a BPF syscall program context
+locklessly. The bulk allocation API is useful for replenishing the
+allocator caches and also on its own right for speeding up allocations
+during initialization.
 
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- tools/testing/selftests/proc/.gitignore       |   1 +
- tools/testing/selftests/proc/Makefile         |   1 +
- .../selftests/proc/proc-kallsyms-query.c      | 213 ++++++++++++++++++
- 3 files changed, 215 insertions(+)
- create mode 100644 tools/testing/selftests/proc/proc-kallsyms-query.c
+Benchmark results from patch 2, run with the options from
+run_bench_libarena.sh (-a, 64-byte allocations) in a 16-vCPU VM, as the
+mean of three runs. Rows are the number of consecutive allocations, and
+then frees, in each benchmark iteration. Columns are the number of
+producers. Each entry shows the latency in ns before and with this
+series, followed by the speedup: the latency before divided by the
+latency with this series, so higher is better.
 
-diff --git a/tools/testing/selftests/proc/.gitignore b/tools/testing/selftests/proc/.gitignore
-index 9c9735570abf..1762c28f524c 100644
---- a/tools/testing/selftests/proc/.gitignore
-+++ b/tools/testing/selftests/proc/.gitignore
-@@ -4,6 +4,7 @@
- /fd-003-kthread
- /proc-2-is-kthread
- /proc-fsconfig-hidepid
-+/proc-kallsyms-query
- /proc-loadavg-001
- /proc-maps-race
- /proc-multiple-procfs
-diff --git a/tools/testing/selftests/proc/Makefile b/tools/testing/selftests/proc/Makefile
-index a7de2bb6d8be..dc3c28e6b83b 100644
---- a/tools/testing/selftests/proc/Makefile
-+++ b/tools/testing/selftests/proc/Makefile
-@@ -29,6 +29,7 @@ TEST_GEN_PROGS += setns-sysvipc
- TEST_GEN_PROGS += thread-self
- TEST_GEN_PROGS += proc-multiple-procfs
- TEST_GEN_PROGS += proc-fsconfig-hidepid
-+TEST_GEN_PROGS += proc-kallsyms-query
- TEST_GEN_PROGS += proc-pidns
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/proc/proc-kallsyms-query.c b/tools/testing/selftests/proc/proc-kallsyms-query.c
-new file mode 100644
-index 000000000000..229cde432d6a
---- /dev/null
-+++ b/tools/testing/selftests/proc/proc-kallsyms-query.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Tests for KALLSYMS_QUERY ioctl() on /proc/kallsyms.
-+ */
-+#undef NDEBUG
-+#include <assert.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <unistd.h>
-+#include <linux/fs.h>
-+
-+#include "kselftest.h"
-+
-+#define KSYM_NAME_LEN 512
-+
-+struct kallsyms_query_ext {
-+	struct kallsyms_query v0;
-+	__u64 extra;
-+};
-+
-+static int do_query(int fd, void *q)
-+{
-+	return ioctl(fd, KALLSYMS_QUERY, q) < 0 ? -errno : 0;
-+}
-+
-+static struct kallsyms_query sym_query(const char *name)
-+{
-+	return (struct kallsyms_query){
-+		.size = sizeof(struct kallsyms_query),
-+		.query_flags = KALLSYMS_QUERY_BY_SYMBOL,
-+		.sym_name_addr = (__u64)(uintptr_t)name,
-+	};
-+}
-+
-+static int query_symbol(int fd, const char *name, struct kallsyms_query *q)
-+{
-+	*q = sym_query(name);
-+	return do_query(fd, q);
-+}
-+
-+static int query_addr(int fd, unsigned long long addr, char *buf,
-+		      size_t buf_sz, struct kallsyms_query *q)
-+{
-+	*q = (struct kallsyms_query){
-+		.size = sizeof(*q),
-+		.query_flags = KALLSYMS_QUERY_BY_ADDR,
-+		.sym_name_addr = (__u64)(uintptr_t)buf,
-+		.sym_addr = addr,
-+		.sym_name_size = buf_sz,
-+	};
-+	return do_query(fd, q);
-+}
-+
-+static bool find_vmlinux_symbol(const char *target, unsigned long long *addr_out)
-+{
-+	char name[KSYM_NAME_LEN];
-+	char line[1024];
-+	char type;
-+	char mod;
-+	FILE *f;
-+
-+	f = fopen("/proc/kallsyms", "r");
-+	if (!f)
-+		return false;
-+
-+	while (fgets(line, sizeof(line), f)) {
-+		if (sscanf(line, "%llx %c %511s %c", addr_out, &type, name, &mod) == 3 &&
-+		    strcmp(name, target) == 0) {
-+			fclose(f);
-+			return true;
-+		}
-+	}
-+	fclose(f);
-+	return false;
-+}
-+
-+int main(void)
-+{
-+	const char *sym_name = "vfs_read";
-+	char resolved_name[KSYM_NAME_LEN];
-+	char long_name[KSYM_NAME_LEN + 1];
-+	size_t page_size = sysconf(_SC_PAGESIZE);
-+	unsigned long long exp_addr;
-+	struct kallsyms_query_ext q1;
-+	struct kallsyms_query q;
-+	char *page_buf;
-+	int err;
-+	int fd;
-+
-+	fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-+	if (fd < 0) {
-+		if (errno == ENOENT)
-+			return KSFT_SKIP;
-+		ksft_exit_fail_msg("open(/proc/kallsyms) failed: %s\n",
-+				   strerror(errno));
-+	}
-+
-+	if (!find_vmlinux_symbol(sym_name, &exp_addr)) {
-+		close(fd);
-+		return KSFT_SKIP;
-+	}
-+
-+	/* CASE 1: Valid vmlinux symbol query (or -EPERM when addresses are hidden) */
-+	err = query_symbol(fd, sym_name, &q);
-+	if (err == -ENOTTY) {
-+		close(fd);
-+		return KSFT_SKIP;
-+	}
-+	if (!exp_addr) {
-+		assert(err == -EPERM);
-+		close(fd);
-+		ksft_exit_skip("kallsyms addresses are hidden, only -EPERM checked\n");
-+	}
-+	assert(err == 0);
-+	assert(q.sym_addr == exp_addr);
-+
-+	/* CASE 2: Missing symbol returns -ENOENT */
-+	assert(query_symbol(fd, "__nonexistent_kallsyms_symbol__", &q) == -ENOENT);
-+
-+	/* CASE 3: Empty symbol name returns -EINVAL */
-+	assert(query_symbol(fd, "", &q) == -EINVAL);
-+
-+	/* CASE 4: NULL sym_name_addr returns -EFAULT */
-+	assert(query_symbol(fd, NULL, &q) == -EFAULT);
-+
-+	/* CASE 5: Symbol name >= KSYM_NAME_LEN returns -ENAMETOOLONG */
-+	memset(long_name, 'a', KSYM_NAME_LEN);
-+	long_name[KSYM_NAME_LEN] = '\0';
-+	assert(query_symbol(fd, long_name, &q) == -ENAMETOOLONG);
-+
-+	/* CASE 6: Symbol name == KSYM_NAME_LEN - 1 returns -ENOENT */
-+	long_name[KSYM_NAME_LEN - 1] = '\0';
-+	assert(query_symbol(fd, long_name, &q) == -ENOENT);
-+
-+	/* CASE 7: Zero, multiple, or unknown query_flags return -EINVAL */
-+	q = sym_query(sym_name);
-+	q.query_flags = 0;
-+	assert(do_query(fd, &q) == -EINVAL);
-+	q.query_flags = KALLSYMS_QUERY_BY_SYMBOL | KALLSYMS_QUERY_BY_ADDR;
-+	assert(do_query(fd, &q) == -EINVAL);
-+	q.query_flags = 1ULL << 63;
-+	assert(do_query(fd, &q) == -EINVAL);
-+
-+	/* CASE 8: Non-zero output fields on input in symbol mode return -EINVAL */
-+	q = sym_query(sym_name);
-+	q.sym_addr = 1;
-+	assert(do_query(fd, &q) == -EINVAL);
-+	q = sym_query(sym_name);
-+	q.sym_name_size = 1;
-+	assert(do_query(fd, &q) == -EINVAL);
-+
-+	/* CASE 9: size < minimum size returns -EINVAL */
-+	q = sym_query(sym_name);
-+	q.size = KALLSYMS_QUERY_SIZE_VER0 - 8;
-+	assert(do_query(fd, &q) == -EINVAL);
-+
-+	/* CASE 10: size > PAGE_SIZE returns -E2BIG */
-+	q = sym_query(sym_name);
-+	q.size = page_size + 8;
-+	assert(do_query(fd, &q) == -E2BIG);
-+
-+	/* CASE 11: Larger extensible struct with zeroed trailing bytes succeeds */
-+	q1 = (struct kallsyms_query_ext){ .v0 = sym_query(sym_name) };
-+	q1.v0.size = sizeof(q1);
-+	assert(do_query(fd, &q1) == 0);
-+	assert(q1.v0.sym_addr == exp_addr);
-+
-+	/*
-+	 * CASE 12: Larger struct with non-zero trailing bytes returns -E2BIG.
-+	 * Set the last byte of a page-sized struct so that future fields do
-+	 * not change the result.
-+	 */
-+	page_buf = calloc(1, page_size);
-+	assert(page_buf);
-+	q = sym_query(sym_name);
-+	q.size = page_size;
-+	memcpy(page_buf, &q, sizeof(q));
-+	page_buf[page_size - 1] = 1;
-+	assert(do_query(fd, page_buf) == -E2BIG);
-+	free(page_buf);
-+
-+	/* CASE 13: Valid address-to-symbol query (exact start + interior offset) */
-+	memset(resolved_name, 0, sizeof(resolved_name));
-+	assert(query_addr(fd, exp_addr, resolved_name, sizeof(resolved_name), &q) == 0);
-+	assert(strcmp(resolved_name, sym_name) == 0);
-+	assert(q.sym_addr == exp_addr);
-+	assert(q.sym_name_size == strlen(sym_name) + 1);
-+
-+	memset(resolved_name, 0, sizeof(resolved_name));
-+	assert(query_addr(fd, exp_addr + 1, resolved_name, sizeof(resolved_name), &q) == 0);
-+	assert(strcmp(resolved_name, sym_name) == 0);
-+	assert(q.sym_addr == exp_addr + 1);
-+	assert(q.sym_name_size == strlen(sym_name) + 1);
-+
-+	/* CASE 14: KALLSYMS_QUERY_BY_ADDR with buffer too small returns -ENAMETOOLONG */
-+	assert(query_addr(fd, exp_addr, resolved_name, strlen(sym_name), &q) == -ENAMETOOLONG);
-+
-+	/* CASE 15: KALLSYMS_QUERY_BY_ADDR on unmapped address returns -ENOENT */
-+	assert(query_addr(fd, ~0ULL, resolved_name, sizeof(resolved_name), &q) == -ENOENT);
-+
-+	/* CASE 16: KALLSYMS_QUERY_BY_ADDR invalid inputs return -EINVAL or -EFAULT */
-+	assert(query_addr(fd, exp_addr, resolved_name, 0, &q) == -EINVAL);
-+	assert(query_addr(fd, exp_addr, NULL, sizeof(resolved_name), &q) == -EFAULT);
-+
-+	close(fd);
-+	return 0;
-+}
+libarena-malloc-free, where each worker frees its own objects:
+
+Allocation latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    269/68 3.9x    641/68 9.4x  1568/68 22.9x  4550/69 66.4x
+     4    251/63 4.0x    557/63 8.9x  2326/67 34.5x  5221/74 70.4x
+    16    247/61 4.0x  1027/64 16.0x  2570/67 38.1x  5315/74 71.8x
+    64    242/75 3.2x  1129/146 7.8x 2469/190 13.0x 5521/374 14.8x
+   256   242/102 2.4x  1314/184 7.1x 2664/249 10.7x 5542/457 12.1x
+
+Free latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    243/55 4.4x    273/56 4.9x  1428/55 25.9x  4371/56 78.2x
+     4    242/51 4.7x    414/52 8.0x  2303/52 44.5x 5266/51 103.1x
+    16    241/50 4.8x  1056/50 20.9x  2580/50 51.6x 5330/51 105.4x
+    64    240/64 3.8x  1079/86 12.5x 2454/131 18.8x 5538/309 17.9x
+   256   238/124 1.9x 1206/107 11.2x 2681/178 15.0x 5546/406 13.7x
+
+libarena-malloc-xfree, where each worker frees the objects allocated by
+the previous invocation, so with more than one producer most frees
+happen on a different CPU from the allocation:
+
+Allocation latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    291/65 4.5x   857/65 13.2x  1165/67 17.5x  4172/70 59.8x
+     4    243/63 3.9x   754/64 11.7x  2170/66 32.6x  4931/79 62.2x
+    16    231/61 3.8x  1163/63 18.5x  2572/71 36.2x  5438/93 58.7x
+    64    229/75 3.1x  1249/158 7.9x 2824/213 13.3x 5760/411 14.0x
+   256   228/100 2.3x  1269/210 6.0x 2746/264 10.4x 5669/466 12.2x
+
+Free latency (before/after ns, speedup):
+
+allocs         1 prod         2 prod         4 prod         8 prod
+     1    266/55 4.8x   558/56 10.0x  1052/56 18.8x  4050/56 72.3x
+     4    231/51 4.5x   583/52 11.2x  2032/51 39.6x  4875/52 93.9x
+    16    223/50 4.5x  1019/50 20.3x  2492/50 49.6x 5396/51 106.5x
+    64    222/63 3.5x  1156/84 13.8x 2801/122 23.0x 5735/320 17.9x
+   256   221/124 1.8x 1202/113 10.7x 2736/160 17.1x 5656/387 14.6x
+
+Cc: Harry Yoo <harry@kernel.org>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+v2 -> v3 (https://lore.kernel.org/bpf/20261021232641.10063-1-emil@etsalapatis.com/)
+
+- Release the per-CPU cache claim with barrier() and WRITE_ONCE()
+  instead of smp_store_release(), since only contexts on the same CPU
+  claim the cache (Harry).
+
+v1 -> v2 (https://lore.kernel.org/bpf/20261020181900.6755-1-emil@etsalapatis.com/)
+
+- In the transfer cache, avoid taking two locks per free when it is full:
+  check the transfer array's count before taking its lock, and spill the
+  local batch with buddy_free_bulk() when the array is full or busy
+  (Alexei).
+- Simplify the per-CPU caches: keep the guard in struct buddy_cache,
+  claim the cache once per miss or full cache with the refill and spill
+  paths out of line, keep the cache state in struct buddy, and move the
+  definitions into buddy.h (Alexei).
+- Make buddy_free_bulk() fail only when nothing was freed (Alexei).
+- Time frees in the benchmark, add a cross-CPU variant, and add before
+  and after numbers to the cover letter (Alexei).
+- Addressed bot feedback.
+
+Emil Tsalapatis (7):
+  selftests/bpf: libarena: Add bulk buddy allocation helpers
+  selftests/bpf: Add a parallel buddy allocator benchmark
+  selftests/bpf: libarena: Add buddy per-CPU caches
+  selftests/bpf: libarena: Handle NMI reentrancy
+  selftests/bpf: libarena: Refill local caches in batches
+  selftests/bpf: libarena: Add a transfer cache
+  selftests/bpf: libarena: Cover buddy cache fast paths
+
+ tools/testing/selftests/bpf/bench.c           |   4 +
+ .../selftests/bpf/benchs/bench_libarena.c     | 118 +++-
+ .../bpf/benchs/run_bench_libarena.sh          |  16 +
+ .../bpf/libarena/benchs/bench_malloc.bpf.c    | 110 +++
+ .../bpf/libarena/include/libarena/buddy.h     |  56 ++
+ .../bpf/libarena/include/libarena/common.h    |   4 +
+ .../bpf/libarena/selftests/test_buddy.bpf.c   | 273 ++++++++
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 635 +++++++++++++++++-
+ 8 files changed, 1171 insertions(+), 45 deletions(-)
+
 -- 
-2.56.0.257.gf7497c7d27-goog
+2.52.0
 
