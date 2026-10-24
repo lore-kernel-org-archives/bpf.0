@@ -1,99 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792825033;
-	b=PhSrDDVQe5+oS5tFVKZ+j7s+pKgUB9XVIPhSrNP+f5RcyMAZVKYc7YKhIcwN5uFgrRI2
-	 MIuSW+9rChd+YffhuXm2hedOLydYWwFWR28OaCLgA+tYz/z7cGThhXEwA/pkOIkVViVZW
-	 Y5VbcC0BQk8CDOKOPsTz2WGpivnNCJBbSXP+sjqHXE8txX/qC5hFh0CacKG9QjXjmlr9g
-	 5AfOKpsYyOeQdyc9Enbw3cZnjEf4JD/TH0/NkYT0bDCNlo6yfutdJ0UnVORE2m2pHvc5v
-	 HGBbBQYE16Js5x0MMvKZkVYqFZN4OZe4ihfINXOeuYZ4tr+v5PjeWb2VGxwjP7bcpfA==
+	t=1792825528;
+	b=USv6k8/JDkKBhkDicoWJEpmEDeuBeFXyLHGcpvkEbqpfRyGlUkiy81mnroMFuq+vgJcj
+	 CumBiwe9LFvwUtWkl2LusH60wtLKgswD8dwVV9Liheiwu/Fx1Og7EX7U/Q4EyhuG5Ipeq
+	 O7bHTx/jsvFohmnnRAtgDO1hjREWNBylQxOgt5IiUq1hOES57bti6jss1LVTKCx6/O+Dw
+	 IoIzdfxtlLj4FkdfetIfOTnQzNsQ29jaEyiSJSPJSm+fdZA/hm655U9jxXnYaRC48TKlM
+	 VYauXHb4OQQK5l+AJcW2cXHtP6sQA8Xe59cyJ5cqI1pV+Ap7bVKFdiNHnh+Sjm82doQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792825033;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Content-Transfer-Encoding:User-Agent:MIME-Version;
-	bh=Afbmn384NjtXVMN6vbYrCXcl1LL7Rr708dWruA4+rrQ=;
-	b=BL3NEBzeTkRTsZgya2MvUJlommRTudGxnLhwOQtWxoiGe8QwLk5C5QetpEezFj3f13gA
-	 7ltQocdu1E57XQiLmk4aU9ZPc/XbP97fuBR0sZNThPDDDpwYyKGUwjTUvYrlNSX93WA/p
-	 JrsQM5UJRfST1A7CYBTX4ElJPWAGcPfLZZ0EluHVZ/0jRvpzkQMROlt6A2AV9VYYK1gMF
-	 0tsGRkxcHvOBELULNSFfiiQWHBEZI+Xh6K/P16AAcnZ/9wSO1OiJ/5by9WTM61tjFl051
-	 BNmTTPd/961/husaOkeOQRfVAdVX6tXDUBZGdyzjPMKQzxbdxE5pIYxYFmHIBAk3gRA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792825528;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=rAuzurPfsLQhSEiLbgaU/pfbgL67ZN11Nrab8/1fyE8=;
+	b=QoRJr7UyZE8mxACpwr8hPEv1maDdXFR7fCkYQ3YaG6sjrTTGic73rvpe4H60ZSE+EtDe
+	 Zk8tIfyHxI98YjRRMW4iDe63Yu2htK2w3cA7cvC/4749twr4HfoQK2UOy5frmMMOxy03i
+	 FHJbprrIgKu/qIVKlmiiIwYQDp5eLhkvp9EvMei51/wofuvtj+sZq59e94PAoIW0HORYa
+	 gYPEERlGq64fZdODdG7GMExuax1kOLwutJt+UJX9nPqfpQFzVm0+84KrcqhJZnluEOLpY
+	 aCNbD7SeBFQb9tL4Zpzxm6sl2aIMjcUOq2DKJ4sIK4igOr+49nv63NgRPadF3rBn5UQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GQztE9LZ;
-	arc=none smtp.remote-ip=209.85.214.182
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TbR7RRDy;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93AE606A31B
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 06:57:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B93AE606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FDD606A31A;
+	Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GQztE9LZ
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e7e742a2c7so10238705ad.0
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 23:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792825032; x=1793429832; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=Afbmn384NjtXVMN6vbYrCXcl1LL7Rr708dWruA4+rrQ=;
-        b=GQztE9LZDoU2DzSyVSmLMXH0ot90P79SC63HQJieUp35V+F4CVsptBC+pMFS9oL45t
-         j04GOFehzKNTM8PSJOIKAI/P5Cv+o9Et2LfpgR33yh5Au1kOhAsp73Nq4/pfrBMXebIt
-         dF3UYyIkIGORt2HcYntKeBT7V/2PVL0x84gXMH32mYu3OOE7QVFLeNyV1zrBrHaHiMUK
-         J2DqYc19IxpOxBX0EdoB4CfMselFpaJyw5qVQzq9yWwLWvKcIl2aN8WWO/XKA0LP9axq
-         +ZaURM2vQ1ugU2ei3nS2flxzTNsOWpKb3aNfRZOd15T6UGxViaYMri5I7RrRvIghdiq5
-         2DiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792825032; x=1793429832;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Afbmn384NjtXVMN6vbYrCXcl1LL7Rr708dWruA4+rrQ=;
-        b=b7hdjFmDtrHQ3wQMs1L9vhzJ/CN8rRJcCZ0Z/a3q69QgIvIOf4og0f3egHB+yWStRu
-         tRphobUXUIQ+nJMm3GuMyk/TUgcVYAGp8p6oH0s03W+EKlfRjSPquFqrfl/iRWlNxlPX
-         JjLzYU6/JHqs7fL0F3TZjHkhvstZG75swbFmn53dD9QmE5KLkU/nUj740mc42XKtie82
-         QqmcoPgAZHFPNsbLj6cogW4v+ULlKiCK7pkLqukhAsN+AVMpUZqxRe2Uw79KJ1XqX3Ip
-         cWrO3PnWc34nWwJ1koVvpupo3jvsu7wcwuJUpkV/1Iy8JcLD2cxwevV37sBXDNQHQviz
-         GRKQ==
-X-Forwarded-Encrypted: i=1; AKwUvByejSSD9PtivXQp696F7mMXldtfMiSjJoaZObVFqANK50ibj+punlLrCUqkc6JYE6/Xn38=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJPjVPnr0KVF4GlYhv4lL85SuTdhN955hdQ/uRWZLcCGT+pkmAA
-	ny7KZnCataeQ9Cvs7YhTRWCdRcuooB3gNvphE1yA79nuNFjvIEcTLMsm
-X-Gm-Gg: AYBFou1BSNJBXI3Zt4DTQEoEioyeXX5S5V2Low/pfC4PvHCtNeEvjs+OfIXcDdYf3J4
-	4nvHUStIqidWr9tqxqYkBKvwuPHPyBVV6o7mO8MReXBLxf5ISTdfVLn/RK2ZUo/oPg5ASixw4f0
-	x7Y8bkacwZW/vxhlLrYV+kc+UV2h7oaK78FJvS0RoNBDyhbXz4LjfspbXVGG5qyYP5L5ii4Oekn
-	ku1Vh99aOBjI1oTVWVJQpbffCCajG1lj5/EAHSDVv2mu/YaK9pOVb7HzW3IQi+l2ijyUvuZp+dA
-	OaqiXOYkiATlu4EWsvFGNyHtjO9HoT7fmsVjZjylnh3sAY5HNPuT9MLFEecatpH9em1UGebEpKX
-	ZOigQzpRYfxrC4jryKS6neb4wKP9KSdrlCbvWpwL9774oBAWCsFvvc1ZeQSX/J61+mJRIhOxbCc
-	h2pa6TlHb3ct1TZutPhcf6YW3t1Q3jnO8ILGYOsCfCyI6jjCkZdKgCs/rsahvRKMv1rjrne5LOv
-	BHNie7q+wcDMu8JroonIYI4c3RATjcG8w4LEPkatVNXszyMxZPZxkWsn8ILcsKzLCKR35DyUhse
-	fPFtALE=
-X-Received: by 2002:a17:902:ef4d:b0:2e4:ade3:7290 with SMTP id d9443c01a7336-2ea9c8f9844mr7616685ad.30.1792825032094;
-        Fri, 23 Oct 2026 23:57:12 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1e4de3sm3164905ad.66.2026.10.23.23.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 23:57:11 -0700 (PDT)
-Message-ID: <4656dc2d7b8749adb9c9b26490a3ef37aea58715.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 02/11] bpf: do not intersect with current
- register range on clamp
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, kernel-team@fb.com, 
-	yonghong.song@linux.dev, martin.lau@kernel.org, mason@kernel.org, 
-	ihor.solodrai@linux.dev
-Date: Fri, 23 Oct 2026 23:57:09 -0700
-In-Reply-To: <8443794e24eae423d0f499a1d2f24576aa5bb70f6e5f6e015914cb0d1a72210a@mail.kernel.org>
-References: <20261023-scev-simpler-clamp-v1-2-d43a07eda7af@gmail.com>
-	 <8443794e24eae423d0f499a1d2f24576aa5bb70f6e5f6e015914cb0d1a72210a@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=TbR7RRDy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637B61F01825;
+	Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792825527;
+	bh=rAuzurPfsLQhSEiLbgaU/pfbgL67ZN11Nrab8/1fyE8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TbR7RRDyKk7k20qZjfNpSBmbfuECJu/WQfwP2rVMhAoTTHCsnaQyaNGie8bCVqgtH
+	 DIkrKoG3DwOIQBfRuLcMFtBEBQ61RJkcmcGhnzKtp+2Qt01XORo0sp9aqXBqLrxSph
+	 tiajVXiLwzrToRWyWWaWyDI9ohjyL/ikt+pHdV60pD+oKKT+xaf+8ThtA3UaMnpGGH
+	 g/9HfLMP2CEsV8Pp+Oan0z8HJiNbESeAcULccpn26NlOBTou1JYq8ClHB/zsO182NM
+	 UoG3VG9KW4rRTh8Jbvc3nfn7IIpxEMbEfU4vMMsW2B87XZvsRLlhq3h7aj6bf8YVcN
+	 6Hf1qEZiU9pnw==
+Content-Type: multipart/mixed; boundary="===============2269967893526965054=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,48 +49,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Message-Id: <4fc72796a6ccf2acff87fc27a0f73bb64b74199cad21829b1c6a59fbf0b474d4@mail.kernel.org>
+In-Reply-To: <20261024062329.264086-1-hackerowskiy@gmail.com>
+References: <20261024062329.264086-1-hackerowskiy@gmail.com>
+Subject: Re: [PATCH] bpftool: fix line info in multi-function CFG dumps
+From: bot+bpf-ci@kernel.org
+To: hackerowskiy@gmail.com,bpf@vger.kernel.org
+Cc: qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,hackerowskiy@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 24 Oct 2026 07:05:27 +0000 (UTC)
 
-On Sat, 2026-10-24 at 00:41 +0000, bot+bpf-ci@kernel.org wrote:
+--===============2269967893526965054==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-...
+> bpftool: fix line info in multi-function CFG dumps
 
-> Since bisection can land on this commit, could that change be folded into
-> this patch or ordered before it?
+TL;DR:
+- Selftest's expected string likely never matches: it doesn't escape '>' in
+  "skb->len", unlike the DOT output
+- Even if fixed, the check may not distinguish fixed from old code
 
-Commits should remain separate for documentation purposes.
-Full test suite passes on both.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
+> new file mode 100644
+> index 000000000000..7d5b80927b65
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
+> @@ -0,0 +1,41 @@
 
-> A related question about the end of the series.=C2=A0 cf18840bc068 only h=
-elps
-> when the current frame has no active loop.=C2=A0 Consider states inside a=
-n inner
-> loop that is entered again on the second iteration of a terminating outer
-> loop.=C2=A0 current_loop() finds the inner loop in both states, but its
-> entry_state differs, because handle_loop_entry_exit() splits a new one on
-> each entry.=C2=A0 So the EXACT check runs, and loop_stack_safe() does not
-> compare entry_state.
->=20
-> With the outer induction variable now the same on every outer iteration, =
-a
-> program like the one below looks like it would still hit "infinite loop
-> detected" after cf18840bc068 (with the old code the outer induction
-> variable was [1..9] on the second outer iteration and the EXACT compare
-> failed):
->=20
-> =C2=A0=C2=A0=C2=A0 w1 =3D 1;
-> =C2=A0=C2=A0=C2=A0 *(u32 *)(r10 - 8) =3D r1;
-> =C2=A0=C2=A0=C2=A0 r6 =3D 0;
-> 1:=C2=A0 r7 =3D 0;
-> 2:=C2=A0 *(u32 *)(r10 - 4) =3D 1;=C2=A0=C2=A0 /* fp-8 spill -> STACK_MISC=
- */
-> =C2=A0=C2=A0=C2=A0 r7 +=3D 1;
-> =C2=A0=C2=A0=C2=A0 if r7 < 3 goto 2b;
-> =C2=A0=C2=A0=C2=A0 r6 +=3D 1;
-> =C2=A0=C2=A0=C2=A0 if r6 < 10 goto 1b;
-> =C2=A0=C2=A0=C2=A0 r0 =3D *(u32 *)(r10 - 8);
-> =C2=A0=C2=A0=C2=A0 exit;
->=20
-> Is that case covered somewhere I missed?
+[ ... ]
 
-This example is valid. Need to relax the condition in the
-current_loop() or bpf_is_state_visited().
+> +void test_bpftool_cfg(void)
+> +{
+> +	struct bpftool_cfg *skel = NULL;
+> +	struct bpf_prog_info info = {};
+> +	__u32 info_len = sizeof(info);
+> +	char output[MAX_BPFTOOL_OUTPUT_LEN];
+> +	char cmd[MAX_BPFTOOL_CMD_LEN];
+> +	const char *expected = "return\\ bpf_ktime_get_ns()\\ ?\\ skb->len\\ :\\ 0;";
+> +	int err;
+
+Can this expected string ever match the bpftool output?
+
+The DOT output prints source lines through btf_dump_linfo_dotlabel() ->
+dotlabel_puts(), which escapes '>' as well as ' ':
+
+    static void dotlabel_puts(const char *s)
+    {
+        for (; *s; ++s) {
+            switch (*s) {
+            ...
+            case '<':
+            case '>':
+            case '|':
+            case ' ':
+                putchar('\\');
+
+So the line "return bpf_ktime_get_ns() ? skb->len : 0;" is printed as:
+
+    return\ bpf_ktime_get_ns()\ ?\ skb-\>len\ :\ 0;
+
+The expected string escapes the spaces but not the '>', so it contains
+"skb->len" where the output has "skb-\>len".  Would the string need to be
+"skb-\\>len" for the strstr() in ASSERT_HAS_SUBSTR() to find it?
+
+As far as I can tell, no other part of the visual output contains this source
+text unescaped, since print_insn_for_graph() escapes '>' as well.
+
+[ ... ]
+
+> +	err = get_bpftool_command_output(cmd, output, sizeof(output));
+> +	if (ASSERT_OK(err, "dump program CFG")) {
+> +		ASSERT_HAS_SUBSTR(output, "cluster_1", "second function in CFG");
+> +		ASSERT_HAS_SUBSTR(output, expected, "second function line info");
+
+Even with the escaping corrected, can this check tell the fixed code from the
+old code?
+
+In this program the main function is only two instructions (call; exit) and
+helper() is longer.  With the old function-relative lookup, the basic blocks
+of helper() at relative index 2 or higher already resolve to helper()'s own
+line info records, because their global insn_off is also 2 or higher, and
+those records all point at this same source line:
+
+    return bpf_ktime_get_ns() ? skb->len : 0;
+
+So that line probably appears in cluster_1 before the fix as well.
+
+The commit message says the selftest "checks the second function source line
+in visual output".  Would it discriminate better to check that the main
+function's line, "return\ helper(skb);", does not appear in cluster_1, or that
+the helper() line comes right before the first instruction of the cluster?
+
+> +	}
+> +
+> +cleanup:
+> +	bpftool_cfg__destroy(skel);
+> +}
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40071369261
+--===============2269967893526965054==--
