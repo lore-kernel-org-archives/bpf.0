@@ -1,48 +1,48 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792800034;
-	b=BxkNoeYGV8vsqAqmWoe1j9fcFAblIJ3sYj2wtyJD63kOo+7WMbvsomM/yDVKaBya+H45
-	 TcWJCB3N/ZB0+GLwUI3ilonvqMQ3Z83ZqKpJu8qJIUy0hulFSwlYw3zm5jyZERVOXaE6o
-	 GwK4s1nCR0e89pMSSszUY632Pb22e0Wwgj8dhStxBPJQI+5STkmg3I/jl5HdIgRtM+cLA
-	 bDvSMmysdOIbdKF8Su+TU7yDgLmit61OmsGEm4vyKLLWzmeDTNWTadxs1CbUNQIYhTTBr
-	 hKscET1hxVXsW5Gn0xsIZaEVT7Mou4V5qcUBBaqXDA1q95E4+5kJ1tlu6hhuMcVuMjA==
+	t=1792800035;
+	b=sBV4cTby4PyVoJFzO30/VUDqJ8+OaxCSqQ2n98L71TzbyFNtTJ+VRpQXCZgraCUOy3ZP
+	 XcW4pkPX4Q8PNGFevBWVvZKHopiomm8C9imrVcqtoUbMSUoplFNs2ZLYTJI3SjbjYEzn0
+	 D4L4QWmFUzTgSIL89NeBShsNNT84x5Gu5EYE0HHe/500J4V5cjQLSvq0JXVXeQj46IZ6l
+	 gHOTQ29PhP7Ppe3MYUV5tSONdR6U6grLabhX0QceKF0Cno7I9XaOTXx+NyLIueakCfPWW
+	 GE5qrWjTis/LjwXObA2/JfwVAs3AClwzgHEXDS+UcWlSAEVx0ek3ExAVhKHxAQn+sIw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792800034;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792800035;
 	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
 	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
 	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
 	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
 	bh=REGw816tEEamUVlWNbWxyi2802DVT9MRoRXje0bK5sk=;
-	b=bfD4A3Fd3vViRtE/H+Oi7AX5bNV2mce9DJcyaKdP6jEO43l6Sz07/CwbtZUnwf4kC64+
-	 b+IWutvTvFvGQOpnXN/c1Ny02H4N3RTOLT5pEbjdM/pBnCX/b5GruEu7hpgBiEkrJ/ebD
-	 Bzzj0xKPZ/PfixNOHEYpMv5IMPnpGJIqletsjmA37fa9faRNstl7H+FrRnuaV5UOpV+M/
-	 6Louf7brLC9/zNgjbG1EvTyHpGNsCAPzSj5bVf0j4zi9aZv7y01tq7Y2v4hWlv3CgnfGo
-	 vD3JFyL1lzailbAqFIAyWtC90siIlkfkY4djP52bMumoU+/ECAhvm4OgjNgQpEevgCw==
+	b=GFCNwBylDNWsBWIV8fC0m/BxOvLmq8mqNP5vsf98pYXGMVWUD/lk2IB6s7zjcOjRQ+hZ
+	 OrcOIlyiqoeYuZhKEDvnHC2fyzmOVq/APu/z0VbLQ/hCyXE7DHe7geClqS7FfiU730X6S
+	 HJW/CpA5CPnMnf6DnHnsWFQmN6dUfyegcLJf6jAx3+fzlngduheSc0hiDxAwI1u/YfkMl
+	 xzbu7u1gAUN8faIWmXJ/j4y97Bc8e42JzpR4F1sr28g4l2grCbJVo57Zd06usbrgqzhB4
+	 cxB5yHUZuM/uH57Dq4WyDvTyu8tn2ZIsUkddRySrZdO0qaiWjimR3DNIYguZCcnfkdQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jXtlTKHT;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xphgsepa;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF8F606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDD4606A31D
 	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jXtlTKHT
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 571F91F01825;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Xphgsepa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E2091F01828;
 	Sat, 24 Oct 2026 00:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1792800034;
 	bh=REGw816tEEamUVlWNbWxyi2802DVT9MRoRXje0bK5sk=;
 	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=jXtlTKHTNWeqIRCa+BXhboOcCqWnhT7VAZ056V4CoyAZoIQCpMEkZH9N3ynnm9uI4
-	 vlCHSTANxvxKbQrs+X997Rb45Sgp1asGgpQIYWdams619PTUWJ+2klb4vRhe5ANyP/
-	 hXIcipt0Wkbl2YJz9GQj5oOmpVObJhx0JIeoR88xBIgdehpC3PYICc98+CHPTesvZw
-	 9kxnVbn0njZvX/K1zfdm1I4/xMQpnsZPbn5gkHi9PoTaLHdG/EvnMCPTWp6XQ9FsGP
-	 4AWmo+X9C68ZehMFPizGV0vfPY+oFQOhhHq16wrCW3DpHHuuQ3LzysN7c9z6hpseWa
-	 Z6h3n83kFdOFw==
+	b=XphgsepaP817fNkUG/jilI179q7nnIqSJ+98vsug0U3CBHG/RjA3Mb6s0qLwTo52l
+	 KunTlzkHoUSC3dpuEakyIQMApsDAmVfUg8fQ9TBFyhTTSNIt88ghdGBP3dRKwu7qh1
+	 pZjq/udPEoISF1C0VHqtzLiAuhTYSxdSs427x5PLglbaRMFq196oHPZBU+1/Ptz1ug
+	 NKBtuxK7wdvlx06BY4bWnQf8CCDr+0QUgKfCMvil7l+UGVUjB9Zt/wJQ88FifaHUDq
+	 B+aQPw70tE+K/Bh+/w3R0jb1+5TcJPL2vkvVoiU+cLriF0AgCGZB0NkBGENkuGtLp4
+	 2EjE359p12ayg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4461D391B16C;
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 45731391B16D;
 	Sat, 24 Oct 2026 00:00:34 +0000 (UTC)
 Subject: Re: [GIT PULL] BPF changes for 7.4
 From: pr-tracker-bot@kernel.org
@@ -55,8 +55,8 @@ X-PR-Tracked-Commit-Id: b116ac6087541d3d98031e786adbe9c733cd6df3
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
 X-PR-Merge-Commit-Id: 55fbedcec622a943cb09a969aef1ddcba87ee40a
-Message-Id: <179280003328.1343641.10134281535989457172.pr-tracker-bot@kernel.org>
-Date: Sat, 24 Oct 2026 00:00:33 +0000
+Message-Id: <179280003284.1344554.14144093348465192737.pr-tracker-bot@kernel.org>
+Date: Sat, 24 Oct 2026 00:00:32 +0000
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: torvalds@linux-foundation.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, Alexei Starovoitov <ast@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
