@@ -1,55 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792826550;
-	b=Dl9Twz4ppReHrfx6skitzoypDlKyrKOigNqiDyAkTIOP4ZO8pkNmJnOZ0lwH9Gnw/evz
-	 rQl5wPNZOu1kc7tYLD/1oaWwzyREScMjySLC78MHkWs8fpZjeovwv5Z72q6DV2xYObJ3b
-	 x7QiZA3TbutkTdjZyQvgZg3LlOtVMsPbNtn9XOdUAytIIIShsLsF48ZSl1OiXzF11H3Bk
-	 /aQG+773zR7cG0RNl9v9R+LW3km1DhOOekLSA2NqwqRBoxa86Kbp3JJXEzCf6rqUNN73J
-	 5QVVpNP/J0LczoDRfROIGhw5tqUs8ChrA77C/IjE3rmfpjV7xdUB2FvwRKr36hgg4pg==
+	t=1792827450;
+	b=aBy6GoNKlS1hatYbon21KMohNw3en2C/ZjDNQfJK3lpKIjIN326B7bRb+Mkoi1WvF83e
+	 sbll9/4HwDS/GGlOODHacAohqqYEMIvjUQSErJTShUcx3Mc7jS7kArzt5iUmY76TM+Fwt
+	 ovLTwCe/U5h1WOcWQ2HxEnSZKlMS6MeyzZD4qK7exeXG32Lr1omFoARZtoRCd7VcP1RzE
+	 oUMr+RfCJZxExra/Kk6sOYvLKdi0x5zCwius3Gh/BWzeBsqN7vYYjLpW7NLs1hAv2hjXB
+	 UmppP/o8CLxnT4/OjEYTBzS7t1MkWoke6/QNJ2+q9wMCQ0hGntrHON7ewX0EmJ1ykZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792826550;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=TkGvhbo8uCfcmT5BQSwIkA1ZNaWITnDyLwroqOawhFA=;
-	b=hpBwrZanMobpQ6HNtsgz7geRo/iCfZJZhaQljHBRiNauBkeh+Un8BFpVUQL534WhKh+q
-	 yyJvoBIYKJUC80zfItN1Gq3sPpLmIZyCWwxhpjCdRP5s39yJNU9usWg3fV+uHdOLkVQnD
-	 /k0HLGoJUiG/M1zdMc0nvDGcITc/EnCExtPLdN8qzdaJeaNMF4IhLMO+b7+GPkdhL7Tsv
-	 KJprezntn8NnCWV2FSTCYnA+8hCslrbMk8k5B3DiI87MRmF/n+O53mJe4a9ZL7v72nfqR
-	 IIfneLxkdk8IdfGPTc/C8U2kIA/4z20BvTVElNsGffV/qy1qIL8BmL/CeVhQuo08L/A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792827450;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-Virus-Scanned;
+	bh=NiKIO0+gHf2u0X3ei2M2noY8Ivx3JPmLwxx5fcklIfk=;
+	b=IqrsheTJmKKVgQlktkp3vm3Rw4VOUnid6kEbDNTlmD0BAS9T8bvEe2/HLBnfRqtAsEpS
+	 l5cTfF806fgNMjG0nYivPIW0FW8KCtkgNk5k/+PZBSW/qqqBle7JyL4Dwa3GiZdLiqKMo
+	 oMUrpUvUOqrjmLkmlLscN5w3FkH9m+xNk7IlRN5gWMmCibhP2V1fDLRXRH0tOARwJeg5f
+	 gojqkKC4k++1yqyNJuuFTMJNadtQaeWzHwAO8dE8z9iSr86dKr03FkyoQrg4UkHYL1YqF
+	 lwdv2q6LDo2QfsVpAc2i/3bVVFHxpLsm5YhqUzMMz8SdtQiNElsNWG4Bce7wbxcrZbw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C66Wz9GK;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=iogearbox.net;
+	spf=pass smtp.mailfrom=iogearbox.net;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=U0yZYDm8;
+	arc=none smtp.remote-ip=213.133.104.62
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D37D606A31A
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 07:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB53606A31A
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 07:37:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DBB53606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C66Wz9GK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A6E1F01825
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 07:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792826549;
-	bh=TkGvhbo8uCfcmT5BQSwIkA1ZNaWITnDyLwroqOawhFA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=C66Wz9GKMH9eWP3KjPne9n1gdC4LfnIDpgTBj18latoVkXOi5f8/BiwnoQ+pw7Jym
-	 9Ugyp50w53PhzBHJjiWK5gPvLwW3lcjB7mZ+FMvTtWxwkUpX/8WRGr2LCXCwRhvrrH
-	 hki5q9lJcrQt0yNY8OSjhrztMPEqhUFkY0aW4JZ0oV9VAmRfBNU0v/o7HSNBxbql64
-	 7qYTzvgL8jFqSuiSrnxfgM7CDFATdqkG6601ofKjJk+qESWsqs01zXqPh8ksRUEutG
-	 gnm2pNyCoGLuIqwU7AkaV9uweRXZfdeHEZTBtMrOENMVC0zaaIBcJ/tEWOFGYmuVY4
-	 7uJlMNZ6dw8EQ==
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-93f3c616c84so122392985a.1
-        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:22:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzNMYs/cSoNcpWC1Rp26Hot2R8V9aBv7HUZmVn/7AX3WMqCPJcnVk0Yaz3frQPJYHrctSc=@vger.kernel.org
-X-Gm-Message-State: AFq9FYICgjJB3YJMG6G0ZQ9SgyTgpktkiRsLdzmNJM1eBG2Itc8vRy1S
-	/WRX49ofWdE3xQ5j2q+Kj+lOwJIggBTSILuNBeLgUC+ip3ixKDxQdYrCeN+L3A9TuM7jGblAVo+
-	il+FgtdupqP5FQmSQK88bJHqOHTGJIZg=
-X-Received: by 2002:a05:620a:4385:b0:93f:953:9a1d with SMTP id
- af79cd13be357-940ef9bc448mr169348385a.67.1792826548495; Sat, 24 Oct 2026
- 00:22:28 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=U0yZYDm8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=NiKIO0+gHf2u0X3ei2M2noY8Ivx3JPmLwxx5fcklIfk=; b=U0yZYDm8BEuCPLH1YdZzkiwirA
+	PXNiG76ZXcnQO9Ay01o7ToztepEVnKwKx48GgKr2Vh9n5xpyr+N9XZj7qMSnypuDrzPu9FqEpEPYB
+	V7cvW/wHf91AUZ058o6dbgOQa8OMVkTD179BIsDShM+o+/cyQtHSMK3FLMJHLRbGjdiDZYOy6+ecZ
+	FEmKm8OzDP7sBSk5CJyGIuOeWtWVFVvAMy0SuayYEke7ibehKQg8yWi79k+dYMapT/sHizAS7oF33
+	Q7ldGtfELUuG1MoT2PVoQKo8CQEItNMl3yWjJ0D04CCuwC7AuhqXJtPmj2Lz3iLCzM86vw4Q3bAV4
+	h8zUA++g==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xKWJV-000MYj-0J;
+	Sat, 24 Oct 2026 09:37:13 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	jolsa@kernel.org,
+	Menglong Dong <dongml2@chinatelecom.cn>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH bpf 1/2] x86/ftrace: Use jmp mode only where functions are aligned
+Date: Sat, 24 Oct 2026 09:37:11 +0200
+Message-ID: <20261024073712.1074591-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,47 +70,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019034426.2354049-1-ridong.chen@linux.dev> <20261019035252.2357900-2-ridong.chen@linux.dev>
-In-Reply-To: <20261019035252.2357900-2-ridong.chen@linux.dev>
-From: Barry Song <baohua@kernel.org>
-Date: Sat, 24 Oct 2026 15:22:17 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4yQrp3kKJfkXPyLN35Zk_O_gBvnPnUmbwxCU2GVzrE-Zw@mail.gmail.com>
-X-Gm-Features: AclHuK89s87eEZ3BnSPuNzTPl5Fwn-4GMSCXcuFKmZMlVEBMhQsRB9l0-sHv3zY
-Message-ID: <CAGsJ_4yQrp3kKJfkXPyLN35Zk_O_gBvnPnUmbwxCU2GVzrE-Zw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/9] mm/vmscan: move vmscan tracepoints to a local header
-To: Ridong Chen <ridong.chen@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Muchun Song <muchun.song@linux.dev>, 
-	Qi Zheng <qi.zheng@linux.dev>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
-	Ridong Chen <chenridong@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.6/28162/Fri Oct 23 08:24:08 2026)
 
-On Mon, Oct 19, 2026 at 11:53=E2=80=AFAM Ridong Chen <ridong.chen@linux.dev=
-> wrote:
->
-> From: Ridong Chen <chenridong@xiaomi.com>
->
-> Move include/trace/events/vmscan.h to mm/trace_vmscan.h so that the
-> tracepoints can be extended to reference vmscan-internal structures such
-> as struct scan_control, which is not visible outside mm/.  This mirrors
-> what several other subsystems already do with their trace headers (e.g.
-> fs/fuse/fuse_trace.h, fs/gfs2/trace_gfs2.h, fs/lockd/trace.h).  As they
-> do, set TRACE_INCLUDE_PATH to "." and add mm/ to the include path of
-> vmscan.o, the only user that defines CREATE_TRACE_POINTS.
->
-> No functional change.
->
-> Assisted-by: LLM
-> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
-> ---
+Since commit 0c3772a8db1f ("x86/ftrace: Implement DYNAMIC_FTRACE_WITH_JMP")
+ftrace_call_replace() emits a jmp instead of a call when bit 0 of the
+target is set, the mark of a direct trampoline that is entered by a jmp.
+ftrace_update_ftrace_func() and arch_ftrace_update_trampoline() use it
+too, for the call of the ftrace callback in ftrace_caller, ftrace_regs_caller
+and the ftrace trampolines, but a callback is a C function and can start
+at an odd address. It does with gcc13 and CONFIG_CC_OPTIMIZE_FOR_SIZE=y:
+gcc13 has no -fmin-function-alignment, so CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT
+is not set, and the -falign-functions=16 used in its place does not apply
+to functions optimized for size. Here ftrace_ops_list_func() starts at:
 
-Reviewed-by: Barry Song <baohua@kernel.org>
+  ffffffff810e0147 T ftrace_ops_list_func
+
+ftrace_regs_call then becomes a jmp to the byte before it:
+
+  ftrace_regs_call ffffffff810374f3: e9 4e 8c 0a 00
+
+That byte is the last one of the preceding function's tail jump, and with
+the first two of ftrace_ops_list_func() it decodes as an inc DWORD PTR
+[rcx+0x57], which swallows the push %r15 of the prologue. Entered without
+a return address and one push short, the list function returns through
+the pt_regs that ftrace_regs_caller saved, here to the saved R14:
+
+  BUG: unable to handle page fault for address: ffff888116c29f40
+  #PF: supervisor instruction fetch in kernel mode
+  RIP: 0010:0xffff888116c29f40
+  R13: 0000000000000000 R14: ffff888116c29f40 R15: 0000000000000000
+  Call Trace:
+   ? bpf_trampoline_6442499918+0x1/0x149
+   ? bpf_lsm_file_open+0x5/0x8
+   ? bpf_lsm_file_open+0x5/0x8
+   ? security_file_open+0x19/0x46
+   ? do_dentry_open+0x16c/0x32a
+
+The list function is installed whenever two ftrace_ops are registered,
+and a function that two of them trace calls it. A kprobe next to a BPF
+trampoline is one such case, and with the single ftrace_ops of the BPF
+trampolines every update_ftrace_direct_mod() is another, as it registers
+a stub ops for the sites it modifies. Here, detaching one of several BPF
+LSM programs from a busy hook crashed the tasks that ran the hook during
+the update.
+
+Bit 0 has that meaning only for the direct trampolines that a dyn_ftrace
+record can point to, so jmp mode relies on every other target being even.
+Select HAVE_DYNAMIC_FTRACE_WITH_JMP only where it is, with
+CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT or without CONFIG_CC_OPTIMIZE_FOR_SIZE.
+arm64 does the same for HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS, which depends
+on function alignment as well, but tests CONFIG_CC_IS_CLANG instead of
+CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT, which also covers gcc 14 and its
+-fmin-function-alignment. Other builds use the call mode for BPF
+trampolines, as they did before that commit and as a trampoline sharing
+its site with an IPMODIFY ops still does.
+
+Fixes: 0c3772a8db1f ("x86/ftrace: Implement DYNAMIC_FTRACE_WITH_JMP")
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Menglong Dong <dongml2@chinatelecom.cn>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+---
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3907f2f3d5b1..56118fcf036b 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -232,7 +232,7 @@ config X86
+ 	select HAVE_DYNAMIC_FTRACE_WITH_ARGS	if X86_64
+ 	select HAVE_FTRACE_REGS_HAVING_PT_REGS	if X86_64
+ 	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+-	select HAVE_DYNAMIC_FTRACE_WITH_JMP	if X86_64
++	select HAVE_DYNAMIC_FTRACE_WITH_JMP	if X86_64 && (CC_HAS_SANE_FUNCTION_ALIGNMENT || !CC_OPTIMIZE_FOR_SIZE)
+ 	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if X86_64
+ 	select HAVE_EBPF_JIT
+-- 
+2.43.0
+
