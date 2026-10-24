@@ -1,122 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.148.77
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792806947;
-	b=S0Tf48KnRNcI3dn4nkX/3YYMBY2e+vHGQbpDYu8R7SrKQg+peTvtXWIvtFBcZjv5rdHZ
-	 vmC1eCzy/uJGHUd0JTYj/i2+4V+s6P7pwJ4e6TsvKXlnVgim9+19vouFwfBcAOoeVK/k0
-	 hNyA1JFOzi4oH4vRGNIt/9TpHDD99no6hTTZwjjVJ4vOagPz7nvlOmWyZrgRsTrNyAPnA
-	 NgJPVlnfZC3cExgfvn3z8Puxpcf9KnUrzNx2DlD4r3HoyXWgHACDCPiU105Y4GRrLLVdb
-	 2NpLQGnY3Ly+HUMukes2w/a2DN4koDLfST4qTQV40vrIWCkt9RzwEERTwQuWM5PdrEw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792806947;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:Subject:To:Cc:Content-Type:
-	 Content-Transfer-Encoding:X-Authority-Analysis:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=3zuRZPnf8NmOtPITygHO4O6eFGhGEbk3NE+q2TVvrlk=;
-	b=wQju0pVmDqHWPfXzHF8kvCMVCrk2cBFJ/eJe5BgTJZiXKFxjlYC26qrvO4tPZNarCPH8
-	 127mqPhH1FemEtCm4sfWronRFn9fnsMbTYJLRf/+DrfZmT5gvQph6/lAGZ5xw1rPwuaYx
-	 8jPhq9Yq6Krrl66gP9R4+x955olNCrpu/80C9HaeREX4ttFFB/gbcemeOwuuIdEdrdULM
-	 3tvk5wRGE+ia46Bg68He1YsSXhZh9btuFV4e5KhLUCWXOCE2KZrSIbphMhST4GVZN7UQN
-	 KteIF/P4XO/dEoKrOEjJoUu5HJ2LyNdMdMfaWhoVA1UeRXJYgFciPv21kxwlnTxQUDw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=crowdstrike.com;
-	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=CtdTHN8o;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b="F4H/dtQ4";
-	arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.148.77
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792807429;
+	b=kRuUSz6KcdZggAtye1m8DvDfMWgI3K+lBCRpZ/X/HPgc8M6W7jsuBpYLRRrqneKGVEdS
+	 dGE8cxgfhIZqEJynTKnu9dJVsNmtiCoEklHBIEEPMVWfxKYAFZnXcIyK0hDjyYAEWzxvS
+	 /fbBFqYHei98k9yb//hhYK/L8+IC8Ssr+lX8LUjVx3H/2wV3YaiSB7WpIbeN4mowbPTkI
+	 ONoDai6l7OiKKCLNWq9p8vbuFbIQf7WyWDG346bP9GvaoRayP44/KKJQtmXDvaKmehmge
+	 qEx6Nhd1ZgdZMPGA/YdWzaBW5ceDVZ1lOFVo87VZ0mD5TLmj8f0dJCx42NX5NsfP32Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792807429;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=sdFICaZ8J7EHHigJYcTlAAkH6ih5kLObMfVCJVlIcjM=;
+	b=0t4jRoAIPwwQjKb7uqa0u8eM1T4815XQG6PoPVQlLru9JVqZTVcriD1I0E4okY9AfRgx
+	 7C7oaagwNn3nIbrJn6TYAsL8XhMyerELGpBpb6x79W0Mr25U4WibnjMc1fZGVR9fe46OM
+	 U7bwmAN6veRZbnw0RaUl4vAFmure7wDNlavNSkq2YVnvEPXBNu7F+4AdPGQXXKtl8G1a5
+	 lnKMuQvtdyE9ybidaQimXCXaViPONV0sGncFZXEfGseOnmyBpBXW9KZSdcguoy/bstDW5
+	 0RLtzkC8zmNdrTC+fYNU70eGit4Tv8tRJvI3TpxuPMyHKgslncHXkduOcH0+vIK/8SQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n2JbrehE;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C509606A321
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 01:55:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C509606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D8B606A31A
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 02:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=CtdTHN8o;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=google header.b=F4H/dtQ4
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69O0c1Bk502336
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 01:55:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=3zuRZPnf8NmOtPITygHO4O6eFGhGEbk3NE+q2TVvrlk=; b=CtdT
-	HN8osfqbh+ta/7xXp6mSBq2pnBalGGY4BCyb0/P2FP9Lvj7KKalLGaGkVcc9IWJf
-	haS98GZNggeGqgr2wIalH4J+AA/5OOiWwAHh9UL57wGhYboeUcWH++yvKV9uBcWI
-	pqnNYg7AqDoCA2CKEEal3PS8YC80WE3dcGllQpg8wWksTXTyUkqmTkNRuU6+6oVO
-	8h2fFzmwk3o/UQIrlEKmlhDRkW5o9UNZTxQ6xF2htu27QbtYn76KMnsh7Yq4Q0r+
-	by4hfGCkzWQ3q3ryI5kv8wIU+308AtuNURkN8GKaX47n6g+yBK16Zyhb6Y3z3lUm
-	l8s8TnkZACDfx6jUAQ==
-Received: from mail-yx1-f70.google.com (mail-yx1-f70.google.com [74.125.224.70])
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4hgja6r4e7-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 01:55:45 +0000 (GMT)
-Received: by mail-yx1-f70.google.com with SMTP id 956f58d0204a3-679a3664e1fso2407774d50.1
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 18:55:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792806944; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Z6ohXHa4uWUN7orShXFRtHqY7tRtvppqgw3eJ3d8BO9GLxCmN69WNhP7h9feswGn2A
-         V8lu5OWtE21Vi5Xv6b0sTabLu/eUdwoN8unnLtLjKsiE+cBxE/UP/VHqxwnj0601Sv4C
-         1hGPfV+7ZeEMWP1J64CJLJJxrWdhBkngGBziVJwD7WYFsfLtuN4mYbpO08b/JnPmQrV0
-         JvHVn8nHk4k6zj9ndyf56RBkTWlYFB99pBk1uwI0+CYbEwGu/CCx1PYSjhhNRYzEFhOd
-         9r0dnJih9Yf5Zrw98q32UqSuFejMjekpGMqkKOKQwrbuGoRvs+GbPNtG7tUX0r30et2N
-         rsqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3zuRZPnf8NmOtPITygHO4O6eFGhGEbk3NE+q2TVvrlk=;
-        fh=zxca8D0yP/A58Gmh/uG4ojyhu1MM8SPLKRaDXn52Dzg=;
-        b=ej2VT4m5anwixlMKaETi/7V0fN8zVqgf9VkD8iL/9rF3QwLpUxcmJrmjmyyvnSBHvY
-         exnvbgsQE64elVzs4b+we+n2KK0p1aryD8HXG8xw/Wrg2jKqOZ56skZfptUed0DAELl1
-         RlAsx/6/DEUk9YqOMfdnUGa7t78DulG2bVNwZzCm8PY9HB/7FUDiz3sLmSpIZ7HsBWCC
-         Yp4PU06mbuan60AYeq9Nw0HqFVbT3igAv02Z2//PL5PZorADNDBiBxQ3Y2vKiuGO+vLb
-         4hXKFyHBE44hST5sr0ybqjMYXBzTEcL7S680IQOh50d2nM9sfI/lNqAUfnfsyuYPWz4S
-         uHOw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1792806944; x=1793411744; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3zuRZPnf8NmOtPITygHO4O6eFGhGEbk3NE+q2TVvrlk=;
-        b=F4H/dtQ40i45sntp4LcyRawoo71Eepp11Nk3kuL8hsKrjEh8Xkm7Lg051PczHs9uOl
-         GRDJICJxiUKzSW7oT9WZky8CEc41xLji/rKTM5QES2fsPcdtczq/dJoUz0HuwPdCAF6w
-         OvTXwYgveYM7qEWi384FKPhP5TXcbTS7rUZKmcwVsZ/d34MNK8h4Y0AMT1ZBgnLVWk/R
-         XNkdzdJ+jq/vGof/TbimNi2rbsTeN11FDenk14nfoGg0qpnwG0Z7T3zHd9PvDUUU5kl9
-         hyE9gG0gfReg2rbhqeXnmeigG2ySqWUn6s//rCfVLADWwXLhdL1H7JQCu6TFVTY6UdXq
-         FgNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792806944; x=1793411744;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3zuRZPnf8NmOtPITygHO4O6eFGhGEbk3NE+q2TVvrlk=;
-        b=i6rUmDiP8uuRYrYQcYuSgoglP7BcprFTEpX6CiD8O3Wp530pwjuTqsibBH2cmWjPcU
-         hgq6r06JlBt7yyi3PDh3/cbL0UUDkXO/CLeudtpq2C+jy6np7SG+ptJfO/6F2FJEaVql
-         9g7oG7OJc4ArWFKtyJZsph2EUSPY9lXgcTaH9wqbOjgOpB/rK+HQJmMpeGYPz4YJQe8M
-         dmj2KUCuNhK0LPkP0kA+R/8Wc+ZGM4Vu2czpI9h3pXsU+wE0BViIFYMoNiwgJ6XzQlD3
-         TPBzjyuXRY6K72nb24JvI0pFwakrxrVnu8+MvJOi0eLvnMuTYGRQn6ry4apRVzyjiS/R
-         i+Tg==
-X-Gm-Message-State: AFq9FYIClZlUY1V7UUG5irhvvmArzd1pbI3VgN5EEsI84oHMwJTal95l
-	ihUxtAd2J2ZMc6aXipW1lPVTzb1937HI+280aldLbiwJ6N9OATcAtGOUYU//+FCw2ESh4R3rQi4
-	v2HG0JA0rnMOOd0zp659IbB9b5WX1e5djaL7ZHOum/v1WyYC6/BMO5FD4d6C+/GLU20+WlicHy5
-	xkrSPG6dzz7hNYxxvZZJGtmTJSBVMs
-X-Gm-Gg: AYBFou2glYRfghzNKB8zjSoXvx3rSLuRvWE9jn12BXfFNsy2YUNLXn8p5hRwzvc5uXE
-	wTN/jHtHnoidJ/0vOKAx1wmC4lGTOeM0vOozvXJBG8/TQeOmedTK2Y8V7C/TYaW9+ZpNF8PG7Aw
-	N7P0XEcjijqwQdl7MZyVidY7cZeljN1/DFbk6RnpAhVPjkz60389ze2F41mg==
-X-Received: by 2002:a53:b194:0:b0:671:26c4:3ac6 with SMTP id 956f58d0204a3-67a453cb821mr557345d50.37.1792806944524;
-        Fri, 23 Oct 2026 18:55:44 -0700 (PDT)
-X-Received: by 2002:a53:b194:0:b0:671:26c4:3ac6 with SMTP id
- 956f58d0204a3-67a453cb821mr557328d50.37.1792806943955; Fri, 23 Oct 2026
- 18:55:43 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n2JbrehE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD77F1F01825;
+	Sat, 24 Oct 2026 02:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792807428;
+	bh=sdFICaZ8J7EHHigJYcTlAAkH6ih5kLObMfVCJVlIcjM=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=n2JbrehE8+zLTzt+G2g2HEGBujt75uYIYNdGl4NUYViHw++pIaqk7IpO2rgMbHkko
+	 nzLvwnYLfpvzpKk3aFvXL5q4I46YWLz4aYyIDV/T+2f2YeiJ57mB/1LndDO9DwR3Bt
+	 KLCTjOpWcq60r5vizHDWRSwa4O80lr0OgEG18RC0z8aVvWon7jOfMOiN4rx8RsDk27
+	 sCBna1KnTFZccQnjtsq56KoSf1UCFCr9iA5C/fkShbv0y8UlsCkACg3TtpcnZ4Y8Ny
+	 gIT8LJY/f/m0gmt22+nrer+QonwakOs1s7E/fZaAgT6edUCsKPWoOppSzTgfQrKf2F
+	 7Yb2kavj8hJBA==
+Message-ID: <sashiko-outbox-183505@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v8 3/7] libbpf: BPF programs manual loading and
+ attaching
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, bpf@vger.kernel.org
+In-Reply-To: <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
+References: <20261024014514.2959514-1-andrey.grodzovsky@crowdstrike.com>
+ <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 24 Oct 2026 02:03:48 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -125,292 +59,241 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261010143156.379864-1-andrey.grodzovsky@crowdstrike.com>
- <20261010143156.379864-4-andrey.grodzovsky@crowdstrike.com> <CAEf4BzbF3d08Osi5pQJDFcEKaJiaRW4tH4LM1vzBOOmOrXFpGQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzbF3d08Osi5pQJDFcEKaJiaRW4tH4LM1vzBOOmOrXFpGQ@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Fri, 23 Oct 2026 21:55:32 -0400
-X-Gm-Features: AclHuK-Awucw5gZMwetFY2wXq38H-UiqcVOX2c0crI1TBsHREUtvaDT4o_AsmTs
-Message-ID: <CAOu3gNhd8hLWkXeX04VY0K1UxJ7Wb5WjmX0i8qZEmTQ61LQP6w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 3/7] libbpf: BPF programs manual loading and attaching
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        martin.kelly@crowdstrike.com, slava.imameev@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Authority-Analysis: v=2.4 cv=UKlIjyfy c=1 sm=1 tr=0 ts=6adc1021 cx=c_pps
- a=S/uc88zpIJVNbziUnJ6G4Q==:117 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=t04HzT_fAfAF5W-3wVZy:22 a=Pgacwa0oAAAA:8 a=pGLkceISAAAA:8 a=pl6vuDidAAAA:8
- a=opz5rEvCd2MSMhsKk2wA:9 a=QEXdDO2ut3YA:10 a=nd2WpGr1bMy9NW-iytEl:22
- a=xnLNWz09G3ZUmE6K9NTY:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI0MDAwNyBTYWx0ZWRfX/s4AzUA91XoQ
- BPtQz+IFSuprPQ+5UtNUvtL6il97ZRQWws3kppyP6RnsxuO5JSkoxRZeoXHsfmF+88xKOUaCBSg
- NlFD1A3GgI9HARlpWR9erXnx2m2FAF2LtXRiBKehJjSjMV5si3da
-X-Proofpoint-ORIG-GUID: 5uRPhfCHJ2oon6ASgxevQEtDYU9I13g4
-X-Proofpoint-GUID: 5uRPhfCHJ2oon6ASgxevQEtDYU9I13g4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI0MDAwNyBTYWx0ZWRfX07zGEkTBlpC8
- kj64ArTjXkmLGLmI+v09mwhIXheS9A6Q0Id0KFSqo2pPzHUeksjbv78TJ2PXnUdr6tR1Hx0bT9i
- Ny4usEy1mWYq9QCux31DmOBPTDIExCgGbRc5ebuMZDnMysx98fJbg7cCOnPUQwaKUTtCNrMCtHu
- VtrbXnQ8YWf4evq9JuZQzg1xq+sj6D6TYRc68sQSQvkz9rN/zjkNyLWmdi0Vu3QeHtqw60i+4hv
- 5dHU/xLqQRBqVbBQPar0LiPa8lorQJiOEMsBHhhatpzcgkv8MM2+CVJsAhKSEZJ176FgvA1v2G2
- 1ydWzCm6b3FhHyvMCGC6bXJnY/d9UHs8Jk3QxtxJZpO54Kyn5+NBF1hu7aCZU7TfxD8SrjVb8q0
- Y5Io9K7dDccH+4KqexE0WJEIMJrUokaKBoa5ASM2YFjnJ0mQSeU8XBpUp6wm83FlVVv7DqMMLpo
- elVPTHfEiaJs50IyzkA==
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11944
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
- adultscore=0 bulkscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610240007
 
-On Fri, Oct 16, 2026 at 3:24=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sat, Oct 10, 2026 at 7:32=E2=80=AFAM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
-> >
-> > From: Slava Imameev <slava.imameev@crowdstrike.com>
-> >
-> > BPF programs designated as manually loaded can be loaded and
-> > attached independently after the initial bpf_object loading and
-> > attaching.
-> >
-> > These programs can also be reloaded and reattached multiple times,
-> > enabling more flexible management of a resident BPF program set.
-> >
-> > A key motivation for this feature is to reduce load times for
-> > utilities that include hundreds of BPF programs. When the selection
-> > of a resident BPF program set cannot be determined at the time of
-> > bpf_object loading and attaching, all BPF programs would otherwise
-> > need to be marked as autoload, leading to unnecessary overhead.
-> > This patch addresses that inefficiency.
-> >
-> > A manual-strategy program is loaded via bpf_program__load()
-> > and unloaded via bpf_program__unload(). It only requires that
-> > bpf object is already in PREPARE state (BTF loaded, maps created,
-> > relocations applied) rather than requiring a full bpf_object__load().
-> > Manual programs are skipped by the object's own autoload pass.
-> >
-> > A few key changes described below:
-> >
-> > gen_loader is rejected if any manual program is present since
-> > this loader is finalized during bpf_object__load()
-> > and so it will miss any manual programs loaded later.
-> >
-> > To support veristat conversion from clone to manual loading
-> > a few commits later, several changes to libbpf had to be applied:
-> >
-> > 2 program log related APIs were relaxed to work post OBJ_LOADED
-> > state to fix regression where verifier logs were lost in case of
-> > bpf_object__prepare failure. It makes sense to relax those for MANUAL
-> > programs as they can load post OBJ_LOADED state so the log buff still
-> > can be set at this point.
-> >
-> > Failures with BPF_PROG_TYPE_STRUCT_OPS were encountered and so in sever=
-al
-> > places code related to struct_ops logic was altered to take into accoun=
-t
-> > struct_ops program with MANUAL strategy set. The general idea is to rej=
-ect
-> > this type of programs for manual loading since those programs cannot
-> > load/unload independently of each other per a given struct ops.
-> > SEC("!...") style declaration is rejected for them. On the other hand,
-> > bpf_program__set_load_strategy() accepts them because otherwise
-> > veristat is rejecting them.
-> >
-> > Assisted-by: Claude:claude-sonnet-5
-> > Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
-> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c   | 218 +++++++++++++++++++++++++++++++++++----
-> >  tools/lib/bpf/libbpf.h   |  38 ++++++-
-> >  tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.map__;!!BmdzS3=
-_lV9HdKG8!06H-ciaovlRMIRnVoq3s3M1SHjFpts8xXiR6Tp_S74BpRCUtK3EVqsj55TyzxE8MS=
-JRifdvVgsQgKmA3aa1i-F__23YwyxqUffCxfw$  |   1 +
-> >  3 files changed, 233 insertions(+), 24 deletions(-)
-> >
->
-> [...]
->
-> >  static void bpf_program__exit(struct bpf_program *prog)
-> >  {
-> >         if (!prog)
-> >                 return;
-> >
-> > -       bpf_program__unload(prog);
-> > +       bpf_program_unload_full(prog);
-> >         zfree(&prog->name);
-> >         zfree(&prog->sec_name);
-> >         zfree(&prog->insns);
-> > @@ -1222,6 +1241,15 @@ static int bpf_object_adjust_struct_ops_autoload=
-(struct bpf_object *obj)
-> >                 if (prog->type !=3D BPF_PROG_TYPE_STRUCT_OPS)
-> >                         continue;
-> >
-> > +               /*
-> > +                * We avoid this for MANUAL programs to allow veristat
-> > +                * conversion from clone() to MANUAL loading. Setting A=
-UTO
-> > +                * for a program would cause it to be rejected during m=
-anual
-> > +                * loading.
-> > +                */
->
-> it's weird to refer to veristat from inside the libbpf, just say that
-> if user set load strategy to MANUAL, we don't mess with struct ops
-> autoload guessing anymore (or something along those lines), assuming I
-> understand the intent correctly
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [Medium] libbpf: bpf_object__free_relocs() frees reloc_desc for manual pr=
+ogs
+- [Medium] libbpf: bpf_program__load() reload fails for jump and func_ptr m=
+aps
+- [Medium] libbpf: bpf_program__load() allows loading after failed prepare/=
+load
+- [Medium] libbpf: bpf_map__init_kern_struct_ops() clobbers manual load str=
+ategy
+--
 
-You understand correctly; fixed in the later series sent.
+commit 2dd11a6f941c4fbe6a6982f6a14ae6a049d19390
+Author: Slava Imameev <slava.imameev@crowdstrike.com>
 
->
-> > +               if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_M=
-ANUAL)
-> > +                       continue;
-> > +
-> >                 for (j =3D 0; j < obj->nr_maps; ++j) {
-> >                         const struct btf_type *type;
-> >
->
-> [...]
->
-> > @@ -16220,10 +16338,41 @@ void bpf_object__destroy_skeleton(struct bpf_=
-object_skeleton *s)
-> >
-> >  int bpf_program__set_load_strategy(struct bpf_program *prog, enum bpf_=
-prog_load_strategy strategy)
-> >  {
-> > -       if (prog->obj->state >=3D OBJ_LOADED)
-> > +       struct bpf_object *obj =3D prog->obj;
-> > +
-> > +       /*
-> > +        * obj->has_manual_prog is set once in bpf_object_prepare_progs=
-()
-> > +        * and never recomputed; once the object is prepared, no transi=
-tion
-> > +        * into or out of MANUAL may change which programs are MANUAL,
-> > +        * regardless of direction. AUTO<->DISABLED transitions never t=
-ouch
-> > +        * MANUAL and keep the looser, pre-existing OBJ_LOADED gate.
-> > +        */
-> > +       if (strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL ||
-> > +           prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL) {
-> > +               if (obj->state >=3D OBJ_PREPARED)
-> > +                       return libbpf_err(-EINVAL);
-> > +       } else if (obj->state >=3D OBJ_LOADED) {
-> >                 return libbpf_err(-EINVAL);
-> > +       }
->
-> see my comment on previous patch, we should accept any change before
-> preparation step, and reject any change after, so there is nothing
-> special about MANUAL here, is there?
+libbpf: BPF programs manual loading and attaching
 
-Makes sense.
+This commit adds BPF_PROG_LOAD_STRATEGY_MANUAL and bpf_program__load() so
+that designated BPF programs can be skipped during bpf_object__load() and
+loaded, unloaded, and reloaded on demand afterwards.
 
->
-> > +
-> > +       if (strategy =3D=3D prog->load_strategy)
-> > +               return 0;
->
-> why this special check?
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index e4cdbc2f467db..1d5d59b95c4e8 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
-It was a left over from the saved_autoattach save/restore in v4/v5
-that we now removed. Dropped in  later series that was sent.
+[ ... ]
 
-Andrey
+> @@ -882,12 +883,30 @@ void bpf_program__unload(struct bpf_program *prog)
+>  	zfree(&prog->subprogs);
+>  }
+> =20
+> +void bpf_program__unload(struct bpf_program *prog)
+> +{
+> +	if (!prog)
+> +		return;
+> +
+> +	/*
+> +	 * MANUAL programs retain their data here so bpf_program__load()
+> +	 * can reload them later; object teardown paths call
+> +	 * bpf_program_unload_full() instead to always release it fully.
+> +	 */
+> +	if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL) {
+> +		zclose(prog->fd);
+> +		return;
+> +	}
 
->
-> > +
-> > +       switch (strategy) {
-> > +       case BPF_PROG_LOAD_STRATEGY_DISABLED:
-> > +       case BPF_PROG_LOAD_STRATEGY_AUTO:
-> > +               prog->load_strategy =3D strategy;
-> > +               break;
-> > +       case BPF_PROG_LOAD_STRATEGY_MANUAL:
-> > +               if (prog_is_subprog(obj, prog))
-> > +                       return libbpf_err(-EINVAL);
-> > +
-> > +               prog->load_strategy =3D BPF_PROG_LOAD_STRATEGY_MANUAL;
-> > +               break;
-> > +       default:
-> > +               return libbpf_err(-EINVAL);
-> > +       }
->
-> [...]
->
-> >  /**
-> >   * @brief **bpf_program__set_load_strategy()** sets the load strategy =
-of a
-> >   * BPF program, controlling whether and when it gets loaded into the k=
-ernel.
-> >   *
-> > - * Can only be called before the enclosing bpf_object is loaded.
-> > + * Can only be called before the enclosing bpf_object is loaded for
-> > + * non MANUAL-> non MANUAL transitions. For manual it only
-> > + * before bpf_object is prepared.
-> >   *
-> >   * @param prog BPF program to update
-> >   * @param strategy new load strategy for the program
-> > - * @return 0 on success; negative error code if the object was already=
- loaded
-> > + * @return 0 on success; negative error code error.
-> >   */
-> >  LIBBPF_API int bpf_program__set_load_strategy(struct bpf_program *prog=
-,
-> >                                               enum bpf_prog_load_strate=
-gy strategy);
-> > @@ -2150,6 +2170,16 @@ LIBBPF_API int bpf_program__set_load_strategy(st=
-ruct bpf_program *prog,
-> >   */
-> >  LIBBPF_API enum bpf_prog_load_strategy bpf_program__load_strategy(cons=
-t struct bpf_program *prog);
-> >
-> > +/**
-> > + * @brief **bpf_program__load()** loads a MANUAL BPF program. The encl=
-osing
-> > + * bpf_object must already beprepared.
->
-> typo
->
-> > + *
-> > + * @param prog BPF program to load; non MANUAL programs, already loade=
-d
-> > + * programs and subprograms are rejected.
-> > + * @return 0 on success; negative error code otherwise
-> > + */
-> > +LIBBPF_API int bpf_program__load(struct bpf_program *prog);
-> > +
-> >  #ifdef __cplusplus
-> >  } /* extern "C" */
-> >  #endif
-> > diff --git a/tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.ma=
-p__;!!BmdzS3_lV9HdKG8!06H-ciaovlRMIRnVoq3s3M1SHjFpts8xXiR6Tp_S74BpRCUtK3EVq=
-sj55TyzxE8MSJRifdvVgsQgKmA3aa1i-F__23YwyxqUffCxfw$  b/tools/lib/bpf/https:/=
-/urldefense.com/v3/__http://libbpf.map__;!!BmdzS3_lV9HdKG8!06H-ciaovlRMIRnV=
-oq3s3M1SHjFpts8xXiR6Tp_S74BpRCUtK3EVqsj55TyzxE8MSJRifdvVgsQgKmA3aa1i-F__23Y=
-wyxqUffCxfw$
-> > index 689de28fe436..9835e660350b 100644
-> > --- a/tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.map__;!!B=
-mdzS3_lV9HdKG8!06H-ciaovlRMIRnVoq3s3M1SHjFpts8xXiR6Tp_S74BpRCUtK3EVqsj55Tyz=
-xE8MSJRifdvVgsQgKmA3aa1i-F__23YwyxqUffCxfw$
-> > +++ b/tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.map__;!!B=
-mdzS3_lV9HdKG8!06H-ciaovlRMIRnVoq3s3M1SHjFpts8xXiR6Tp_S74BpRCUtK3EVqsj55Tyz=
-xE8MSJRifdvVgsQgKmA3aa1i-F__23YwyxqUffCxfw$
-> > @@ -464,6 +464,7 @@ LIBBPF_1.8.0 {
-> >                 bpf_program__attach_tracing_multi;
-> >                 bpf_program__clear_flags;
-> >                 bpf_program__clone;
-> > +               bpf_program__load;
->
-> as before, please move to 1.9 section now
->
->
-> >                 bpf_program__load_strategy;
-> >                 bpf_program__set_load_strategy;
-> >                 btf__add_loc_param;
-> > --
-> > 2.34.1
-> >
+[Severity: Medium]
+What happens when a BPF_PROG_LOAD_STRATEGY_MANUAL program that uses jump
+tables or indirect function call tables in read-only data is unloaded here
+and then reloaded via bpf_program__load()?
+
+During bpf_object_prepare() -> bpf_object__relocate() ->
+bpf_object__relocate_data(), libbpf creates per-program frozen internal
+maps once via create_jt_map() (for RELO_INSN_ARRAY) and
+create_func_ptr_map() (when map->autocreate && map->func_ptr_cnt &&
+prog->has_callx), patching their file descriptors directly into
+prog->insns:
+
+tools/lib/bpf/libbpf.c:bpf_object__relocate_data() {
+    ...
+    if (map->autocreate && map->func_ptr_cnt && prog->has_callx) {
+        int map_fd;
+
+        /* the program gets its own map with pointers to its functions */
+        map_fd =3D create_func_ptr_map(obj, prog, relo->map_idx);
+        ...
+        insn[0].imm =3D map_fd;
+    }
+    ...
+}
+
+On the first bpf_program__load() call, the kernel verifier claims these
+maps permanently:
+
+1. For jump table maps, bpf_insn_array_init() sets insn_array->used to 1 via
+   atomic_xchg(&insn_array->used, 1), which is only released on verifier
+   failure and never cleared when a loaded program is later freed.
+
+2. For function pointer maps, resolve_func_ptrs() sets BPF_MAP_USER_PATCHED
+   on map->user and overwrites the subprogram byte offsets in the frozen
+   map in-place with JITed kernel addresses; __bpf_free_used_maps() does
+   not clear BPF_MAP_USER_PATCHED or restore the offsets when the program
+   is closed.
+
+When bpf_program__unload() closes prog->fd and bpf_program__load() is
+called again, prog->insns still references those same map file descriptors.
+Won't the kernel verifier reject the reload with -EBUSY in
+bpf_insn_array_init() or bpf_map_claim()?
+
+[ ... ]
+
+> @@ -1228,6 +1247,14 @@ static int bpf_object_adjust_struct_ops_autoload(s=
+truct bpf_object *obj)
+>  		if (prog->type !=3D BPF_PROG_TYPE_STRUCT_OPS)
+>  			continue;
+> =20
+> +		/*
+> +		 * If the user set the load strategy to MANUAL, don't guess it
+> +		 * from map autocreate: a MANUAL program is loaded explicitly
+> +		 * with bpf_program__load(), which rejects any other strategy.
+> +		 */
+> +		if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL)
+> +			continue;
+
+[Severity: Medium]
+Can bpf_map__init_kern_struct_ops() overwrite prog->load_strategy before
+bpf_object_adjust_struct_ops_autoload() reaches this check?
+
+In bpf_object_prepare(), bpf_object__init_kern_struct_ops_maps() ->
+bpf_map__init_kern_struct_ops() runs immediately before
+bpf_object_adjust_struct_ops_autoload(). Inside
+bpf_map__init_kern_struct_ops(), if a struct_ops member is absent in the
+running kernel's BTF and zeroed in shadow data, or if the slot was cleared
+or replaced in shadow data, it unconditionally resets load_strategy to
+BPF_PROG_LOAD_STRATEGY_DISABLED:
+
+tools/lib/bpf/libbpf.c:bpf_map__init_kern_struct_ops() {
+    ...
+    if (!kern_member) {
+        ...
+        if (st_ops->progs[i]) {
+            st_ops->progs[i]->load_strategy =3D BPF_PROG_LOAD_STRATEGY_DISA=
+BLED;
+            st_ops->progs[i] =3D NULL;
+        }
+        ...
+    }
+    ...
+    if (btf_is_ptr(mtype)) {
+        prog =3D *(void **)mdata;
+        if (st_ops->progs[i] && st_ops->progs[i] !=3D prog)
+            st_ops->progs[i]->load_strategy =3D BPF_PROG_LOAD_STRATEGY_DISA=
+BLED;
+    ...
+}
+
+If the user explicitly set BPF_PROG_LOAD_STRATEGY_MANUAL on that program via
+bpf_program__set_load_strategy(), won't bpf_map__init_kern_struct_ops()
+clobber it to BPF_PROG_LOAD_STRATEGY_DISABLED (or cause
+bpf_object_adjust_struct_ops_autoload() to set it to
+BPF_PROG_LOAD_STRATEGY_AUTO if referenced by another autocreated map)?
+
+[ ... ]
+
+> @@ -16298,3 +16430,32 @@ enum bpf_prog_load_strategy bpf_program__load_st=
+rategy(const struct bpf_program
+>  {
+>  	return prog->load_strategy;
+>  }
+> +
+> +int
+> +bpf_program__load(struct bpf_program *prog)
+> +{
+> +	int err;
+> +	struct bpf_object *obj =3D prog->obj;
+> +
+> +	/*
+> +	 * This function cannot be called before OBJ_PREPARED -
+> +	 * Program's data is initialized on object prepare.
+> +	 */
+> +	if (obj->state < OBJ_PREPARED)
+> +		return libbpf_err(-EINVAL);
+
+[Severity: Medium]
+Is checking obj->state < OBJ_PREPARED sufficient if bpf_object_prepare() or
+bpf_object_load() previously failed?
+
+When bpf_object_prepare() or bpf_object_load() fails, it tears down the
+object via bpf_object_unload(obj) and sets obj->state =3D OBJ_LOADED:
+
+tools/lib/bpf/libbpf.c:bpf_object_prepare() {
+    ...
+    if (err) {
+        bpf_object_unpin(obj);
+        bpf_object_unload(obj);
+        obj->state =3D OBJ_LOADED;
+        return err;
+    }
+}
+
+Because OBJ_LOADED is greater than OBJ_PREPARED, a subsequent call to
+bpf_program__load() passes this state check and attempts to load the
+program after bpf_object_unload() has already closed all map file
+descriptors and called bpf_program_unload_full() (freeing prog->func_info,
+prog->line_info, and prog->subprogs to NULL while leaving their counts
+non-zero, or before prog->insns was relocated and sanitized).
+
+> +
+> +	if (prog_is_subprog(obj, prog) || prog->load_strategy !=3D BPF_PROG_LOA=
+D_STRATEGY_MANUAL)
+> +		return libbpf_err(-EINVAL);
+> +
+> +	if (prog->fd >=3D 0)
+> +		return libbpf_err(-EBUSY);
+> +
+> +	err =3D bpf_object_load_prog(obj, prog, prog->insns, prog->insns_cnt,
+> +				   obj->license, obj->kern_version, &prog->fd);
+> +	if (err) {
+> +		pr_warn("prog '%s': failed to load: %s\n", prog->name, errstr(err));
+> +		return libbpf_err(err);
+> +	}
+
+[Severity: Medium]
+Could CO-RE relocation failure diagnostics in the verifier log be lost here
+when bpf_program__load() is called after bpf_object__load()?
+
+During bpf_object_prepare() -> bpf_object__relocate() ->
+bpf_object__relocate_core(), CO-RE relocations are recorded in
+prog->reloc_desc for all non-disabled programs, and unguarded failing CO-RE
+instructions are poisoned with call 195896080.
+
+However, at the end of bpf_object__load_progs(), libbpf calls
+bpf_object__free_relocs(obj), which frees prog->reloc_desc and zeroes
+prog->nr_reloc for all programs in the object, including
+BPF_PROG_LOAD_STRATEGY_MANUAL programs that were skipped during the
+autoload loop:
+
+tools/lib/bpf/libbpf.c:bpf_object__free_relocs() {
+    ...
+    for (i =3D 0; i < obj->nr_programs; i++) {
+        prog =3D &obj->programs[i];
+        zfree(&prog->reloc_desc);
+        prog->nr_reloc =3D 0;
+    }
+}
+
+When bpf_program__load() later calls bpf_object_load_prog() and
+verification fails on a poisoned CO-RE relocation, fixup_verifier_log() ->
+fixup_log_failed_core_relo() -> find_relo_core() searches prog->reloc_desc
+up to prog->nr_reloc, finds nothing, and leaves the raw poisoned call error
+in the verifier log instead of reporting the failed CO-RE relocation
+details.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261024014514.2959=
+514-1-andrey.grodzovsky@crowdstrike.com?part=3D3
