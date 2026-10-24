@@ -1,93 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.78
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792856255;
-	b=xTd4WFJqWf7y5dxa7oFSc09gGLzG3oVnonrNKQZ9+tKj+99vUWqj/syYMdlQqs71xwjv
-	 dmCBbh2wM/tGxTPFfVhz7RS4pnoOEaumrLFoYDi4bmFXV0hdsvRfOKj3F9vtkUeKfBlhK
-	 W1XrVFi+alQSldcat0RoBHHRfe/4RnfHzOXs43HqRPsfKC2f9p4I+b/HvVlz9BQs4Xj2p
-	 6+AWzVnToSyuBH0BfLhMxIDZENtK8KyTTPPSHVv1HVkGJoWxE0hbCnVi41wO43i+tAQ6Q
-	 AypiowcUI/GTcvCizwL94K7+Mesq+DW50mU6hzzvTjaE2KLz5rHvapbjNlT3unGzf5Q==
+	t=1792857026;
+	b=aegMvM7tK7fn4qNCMMXO5gYQaa+ZOsPbx042p44FG5tEZc0iKO4c6M9Fg02RxIIos6Ro
+	 fWo7cvpIh1RVtjhW7f9u8MWBnpwMOQjviAyQ5y+4z/f3z4O/27mX1bJ8ByeNYvSdJJN41
+	 LSJZtXycue4modZj/cZEg+t/guTjEDk0wDBWY5WTsfOsC3J/gllizOFZ4h36z2ZRrjQNQ
+	 5SWYELBqFM4Cvm1w/vIkr2onDYSPH5ARaPM7Sj5tBRvvRXWDvk1abzBwVcVFzsCy7MeKp
+	 izgpwaUg8SmqWtxTG7pRIWLhV4Nbwrll5rscHZJfWWHQ08pmbI/d8O2ueJIsAlR/6KA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792856255;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=0snQJAJEeIQvzghZPviPgsDMbmQk5aO0CmuvXYpWi4A=;
-	b=CRIx38M95RECZlFKaf7/P0fDcnPIqt6tJ4jp1mv8SraFyUH7/srgK68Pb13lNMvyFa6K
-	 hMT6e83nhpSm2yF3W24r9cicCzXn6o+srlt5o+/q4eA2eN6Daz3VpI3tESbGWZc9FCMm4
-	 Zeby3EU14CSV+TN0Vj/dEPA5180H/Bl3XPsRu6uYtjeZi+d12HKdPpXMfxA+frXX9bjM4
-	 chADVtkr/pJw0WZwbm4Qp/wy/Tw79e2ZstInPswxVuyQZTjs2UIooUw1hBakVBwMW07hO
-	 zqGiiyrLNcNSM1S9c25L26XAGsn6ocjyeMgqruLmsuW1gk3WnvmUP/NY7bBZpxqn+Hg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792857026;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=QuEcmckjn1bH0vLDTThMnlHrk/QCYnuUxCX8RFo1zUQ=;
+	b=I7qIIyoUbfyndmjsqFH+t8FN6cPRgpBJZQXqpwD/fgL9vAmb5XihJYMs6XXWNCPU8I05
+	 I23vQRnHRkdEfL2GXJqPWgWBkI0Nq3OZ72wPibWcP/44R3EaRPb5fWGa6/2EyymLeyrxg
+	 qDdTPEnTL0LrmtrJ4vZLzCgUZV/nENnC7+F4403+PH8K8Kl2pLL4YqXVZ/LyaPd858ls1
+	 zpCcLPnorHIEU1BMVlvoDPlCVPl4IAKAXgPqypCMW8pXT7pD5+1750q870zSylr9mRL7b
+	 NXZ9QOHhaTKOeasUHpvgfuBi1dKqrkUfBBrX7SGoV1P/LntmW0h/O1AMQnzttZGrnMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xw3gLBwg;
-	arc=none smtp.remote-ip=95.215.58.78
-Received: from mta1.migadu.com (out-78.mta1.migadu.com [95.215.58.78])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OKBtCfiL;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BC2606A31A
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 15:37:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B7BC2606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61506606A31A;
+	Sat, 24 Oct 2026 15:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=xw3gLBwg
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nEQMMNENapKXlnk+aM8jOHITclygvSpZEqoOyChWqzA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792856253; v=1; x=1793461053;
- b=xw3gLBwgyx3GGigjTt1ucX5hmJ6m43s3xV4VHU9Io3J2Y0ng58Sj26bGE5Baf/i7izqUNqvx
- yrCOukLjX2ZeT7+mQb3Y39uYLC10BrNf7LG2vVBijilkSCKWmeMsiraDLZ/wSOBVysiLWJqMpa9
- QlZHaL0XMnhhbjrPIh0fnlgw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 54e1ff86750f1880;
-	Sat, 24 Oct 2026 15:37:33 +0000
-X-Mizu-Trace-ID: 54e1ff86750f1880
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Masashi Honma <masashi.honma@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v4 6/6] selftests/bpf: Add tests to verify link_create logs
-Date: Sat, 24 Oct 2026 23:36:07 +0800
-Message-ID: <20261024153608.58569-7-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261024153608.58569-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OKBtCfiL
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31ED1F01825;
+	Sat, 24 Oct 2026 15:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792857026;
+	bh=QuEcmckjn1bH0vLDTThMnlHrk/QCYnuUxCX8RFo1zUQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=OKBtCfiL88VqWQhLb7QMraDGHIOpsPV1wrPPhZ736VCqXnGPxcVCkhCwjh5Ouxe6U
+	 WtUgO2He5xLqQDvb9NyWhvHQKg1fzH4SjA8aPKwACRUxoi+Myr8Qp3Yaw6U9G9TgT5
+	 Ni1EoLA8Ej1xTeC3M5iMI1dQV5faD79b4o+qs1m58mI81nTXrMsAH+SS2OyspOalxw
+	 ydz+SHNmArrlBlV1wpCtxY7u8rxUi6e3U4cMKHbFg0YK8EBMOlhh5cWpWHY+cHkzm9
+	 +8vj99i7jcK85dMD2VoHWO3HPCjSerbDocMNI5bwxeoLPKnqzyW9+vWBdZyWWXonV5
+	 UlA7LqiaqytHA==
+Message-ID: <sashiko-outbox-183784@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 1/6] bpf: Add syscall common attrs support
+ for link_create
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+In-Reply-To: <20261024153608.58569-2-leon.hwang@linux.dev>
 References: <20261024153608.58569-1-leon.hwang@linux.dev>
+ <20261024153608.58569-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 24 Oct 2026 15:50:25 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -96,127 +60,131 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add tests to verify the new logs in link_create and xdp link_create,
-including a log reported via extack when fail to create an xdp link.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: incorrect error log messages and ordering in link_create()
+--
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/xdp_link.c       | 102 ++++++++++++++++++
- 1 file changed, 102 insertions(+)
+commit f2293d2ca04aeb83f219d17a0904b9b58058c572
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-index e7e9f3c22edf..d1bca773ca2f 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@ -150,3 +150,105 @@ void serial_test_xdp_link(void)
- 	test_xdp_link__destroy(skel1);
- 	test_xdp_link__destroy(skel2);
- }
-+
-+static void test_link_create(int prog_fd, int ifindex, enum bpf_attach_type attach_type,
-+			     __u32 flags, int exp_err, const char *msg)
-+{
-+	char log_buf[128] = {};
-+	LIBBPF_OPTS(bpf_log_opts, log_opts,
-+		    .buf = log_buf,
-+		    .size = sizeof(log_buf),
-+		    .level = 1,
-+	);
-+	LIBBPF_OPTS(bpf_link_create_opts, opts,
-+		    .flags = flags,
-+		    .log_opts = &log_opts,
-+	);
-+	int fd;
-+
-+	fd = bpf_link_create(prog_fd, ifindex, attach_type, &opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_link_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_EQ(fd, exp_err, "fd");
-+	ASSERT_STREQ(log_buf, msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(msg) + 1, "log_size");
-+}
-+
-+static void test_link_create_invalid_prog_fd(void)
-+{
-+	const char *msg = "Invalid prog_fd.\n";
-+
-+	test_link_create(-1, IFINDEX_LO, BPF_XDP, 0, -EBADF, msg);
-+}
-+
-+static void test_link_create_invalid_prog_type(void)
-+{
-+	const char *msg = "Invalid prog type.\n";
-+	const struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd;
-+
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_LIRC_MODE2, NULL, "GPL", insns,
-+				ARRAY_SIZE(insns), NULL);
-+	if (!ASSERT_GE(prog_fd, 0, "bpf_prog_load"))
-+		return;
-+
-+	test_link_create(prog_fd, 0, BPF_LIRC_MODE2, 0, -EINVAL, msg);
-+
-+	close(prog_fd);
-+}
-+
-+static void test_link_create_attach(int ifindex, enum bpf_attach_type attach_type, __u32 flags,
-+				    const char *msg)
-+{
-+	struct test_xdp_link *skel;
-+
-+	skel = test_xdp_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_xdp_link__open_and_load"))
-+		return;
-+
-+	test_link_create(bpf_program__fd(skel->progs.xdp_handler), ifindex, attach_type, flags,
-+			 -EINVAL, msg);
-+
-+	test_xdp_link__destroy(skel);
-+}
-+
-+static void test_link_create_invalid_attach_type(void)
-+{
-+	const char *msg = "Invalid attach_type.\n";
-+
-+	test_link_create_attach(IFINDEX_LO, BPF_CGROUP_INET_INGRESS, 0, msg);
-+}
-+
-+static void test_link_create_xdp_invalid_target_ifindex(void)
-+{
-+	const char *msg = "Invalid target_ifindex.\n";
-+
-+	test_link_create_attach(0, BPF_XDP, 0, msg);
-+}
-+
-+static void test_link_create_xdp_extack(void)
-+{
-+	const char *msg = "Invalid XDP flags for BPF link attachment\n";
-+
-+	test_link_create_attach(IFINDEX_LO, BPF_XDP, XDP_FLAGS_REPLACE, msg);
-+}
-+
-+void test_link_create_log(void)
-+{
-+	if (test__start_subtest("invalid_prog_fd"))
-+		test_link_create_invalid_prog_fd();
-+	if (test__start_subtest("invalid_prog_type"))
-+		test_link_create_invalid_prog_type();
-+	if (test__start_subtest("invalid_attach_type"))
-+		test_link_create_invalid_attach_type();
-+	if (test__start_subtest("xdp/invalid_target_ifindex"))
-+		test_link_create_xdp_invalid_target_ifindex();
-+	if (test__start_subtest("xdp/extack"))
-+		test_link_create_xdp_extack();
-+}
--- 
-2.55.0
+bpf: Add syscall common attrs support for link_create
 
+This commit adds syscall common attributes support to link_create(),
+creating and finalizing a verifier log instance to report errors for invalid
+prog_fd, attach_type, and prog type.
+
+Link: https://lore.kernel.org/bpf/20260514004634.3DA09C19425@smtp.kernel.or=
+g/
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 90bc7230afa8a..db870e795d044 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -5862,8 +5862,11 @@ static int bpf_map_do_batch(const union bpf_attr *=
+attr,
+>  }
+> =20
+>  #define BPF_LINK_CREATE_LAST_FIELD link_create.uprobe_multi.path_fd
+> -static int link_create(union bpf_attr *attr, bpfptr_t uattr)
+> +static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_=
+common_attr *attr_common,
+> +		       bpfptr_t uattr_common, u32 size_common)
+>  {
+> +	struct bpf_verifier_log *log;
+> +	struct bpf_log_attr attr_log;
+>  	struct bpf_prog *prog;
+>  	int ret;
+> =20
+> @@ -5873,14 +5876,24 @@ static int link_create(union bpf_attr *attr, bpfp=
+tr_t uattr)
+>  	if (attr->link_create.attach_type =3D=3D BPF_STRUCT_OPS)
+>  		return bpf_struct_ops_link_create(attr);
+> =20
+> +	log =3D bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, =
+size_common);
+> +	if (IS_ERR(log))
+> +		return PTR_ERR(log);
+> +
+>  	prog =3D bpf_prog_get(attr->link_create.prog_fd);
+> -	if (IS_ERR(prog))
+> -		return PTR_ERR(prog);
+> +	if (IS_ERR(prog)) {
+> +		bpf_log(log, "Invalid prog_fd.\n");
+> +		ret =3D PTR_ERR(prog);
+> +		prog =3D NULL;
+> +		goto out;
+> +	}
+> =20
+>  	ret =3D bpf_prog_attach_check_attach_type(prog,
+>  						attr->link_create.attach_type);
+> -	if (ret)
+> +	if (ret) {
+> +		bpf_log(log, "Invalid attach_type.\n");
+>  		goto out;
+> +	}
+> =20
+>  	switch (prog->type) {
+>  	case BPF_PROG_TYPE_CGROUP_SKB:
+> @@ -5959,12 +5972,20 @@ static int link_create(union bpf_attr *attr, bpfp=
+tr_t uattr)
+>  			ret =3D bpf_uprobe_multi_link_attach(attr, prog);
+>  		break;
+>  	default:
+> +		bpf_log(log, "Invalid prog type.\n");
+>  		ret =3D -EINVAL;
+>  	}
+
+[Severity: Medium]
+Can calling bpf_prog_attach_check_attach_type() before switching on
+prog->type cause link_create() to log the wrong error message or skip
+logging on mismatched attach types?
+
+First, in kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type(), a
+cgroup skb program checks permissions before validating the attach type:
+
+	case BPF_PROG_TYPE_CGROUP_SKB:
+		if (!bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
+			/* cg-skb progs can be loaded by unpriv user.
+			 * check permissions at attach time.
+			 */
+			return -EPERM;
+
+When that capability check fails, link_create() still logs
+"Invalid attach_type.\n" even though attach_type may be valid.
+
+Second, for program types that are not supported by link_create() and have
+no mapping in attach_type_to_prog_type() (such as socket filter, sched act,
+raw tracepoint, or syscall programs), bpf_prog_attach_check_attach_type()
+hits its default branch and returns -EINVAL before link_create() reaches
+switch (prog->type):
+
+	default:
+		ptype =3D attach_type_to_prog_type(attach_type);
+		if (ptype =3D=3D BPF_PROG_TYPE_UNSPEC || ptype !=3D prog->type)
+			return -EINVAL;
+		return 0;
+
+Doesn't that cause link_create() to log "Invalid attach_type.\n" and jump
+to out, leaving the new default branch that logs "Invalid prog type.\n"
+unreachable for almost all unsupported program types?
+
+Third, for tracing and lsm programs, bpf_prog_attach_check_attach_type()
+only checks that attach_type maps to prog->type in
+attach_type_to_prog_type(), while the check against
+prog->expected_attach_type happens later inside switch (prog->type) in
+link_create():
+
+	case BPF_PROG_TYPE_LSM:
+	case BPF_PROG_TYPE_TRACING:
+		if (attr->link_create.attach_type !=3D prog->expected_attach_type) {
+			ret =3D -EINVAL;
+			goto out;
+		}
+
+Should that mismatch also log "Invalid attach_type.\n"?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261024153608.5856=
+9-1-leon.hwang@linux.dev?part=3D1
