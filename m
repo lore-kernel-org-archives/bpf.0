@@ -1,91 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792811450;
-	b=N8hKhOvvbTHorak2PuAJVE3fMhruLams1SBfgJy86543/pzcTEy3F4h7ujA4EyH3gKvz
-	 YoP2rYfmrSJ/mDhfGqTJYli0zhFuPjrADEFK2nMjpQAJV+FKMS7XCsktHjbvcoEqSzl8U
-	 kgbhB2aaeOelEZX8KvbjnBWUqo0hcKnPhdE2sZAY1sjz76aQTPAt9dkAMXd/BsaSFgySg
-	 uUgwPKZ8OSHmeJzupsps9iVvWrKdkWv6UElHGtYeJk7c7jigkKhoraOqerZB4iKI40r9/
-	 B7RVu9BMq2QcQKJFmWgBsOOmmqddMa8Otjir8z52ezsyG/ExArsF8J4s1PVnz8Gq6MA==
+	t=1792813428;
+	b=OtptUOUPskjjdiHgBSpMfdtVYbwQ1B4rv14i4ZKo18CxmajWoALsqXatwZCIVPFQqUQd
+	 fsEo7p8iNI5g30bSUquQRpYxDnJiGxJpV4YSTF4bXCAoT1XBlWgkgIrcYjYdyKJ9+3PLs
+	 jYYgv5TbkBoyDZoN8lYZXp1PyG+T14LE5+Utv3qfmXh5mBhwNkWNRf8G7BwfJQNo1nKCq
+	 fTc1lKhbzpoVPOrwtgq3kEtyb13sTm5IATOHXQsjv50cxmhJYHJKvIVWdccrTnJPQJhvW
+	 48yUxpIJMFyd+K9FZWBXoRAm+/vahsGAAqLf0aSCg0ZdC5At7vTVsHHK4zDFC/9/yxQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792811450;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792813428;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=vQ5V0JdVK/DourOvShwq0GjzUxcMzKpKOWRqkoWmqEE=;
-	b=YVhIJsxe2YLbXOm0DFR3GoPXsC8wFSNqGoHgL36OiVMuCa3E6F85Q9RzcKpqI8hxd0fL
-	 yOago/gHMExJfhPaoboWBvI8d18YOfd6zPXDuWQ2aFXPfYlQwkmi/RHrZ2Jms02+bbYUh
-	 aUNyRelTI3RSwywYAXgZ7SqPk7hHJ+FzPRI/mcXgbEBvoMPo5D/mY8chdhRxUjKjekM+z
-	 uwet3ErLke9pmHfWb+huf9nHSy+swx3KFKbSNNk0SeeqRfphzT544/o39WrX+FVqUyj/Q
-	 4Uq4oVCaDuPZAQLly+9eYIPyM6ddPqhKnvCHIEByo0DkFyh3ok0G1DrUeSUJ9KnhBTQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=d5tL+X233SBVjpK2kn/G74H36r+U4Cu/y1SW36/sfhE=;
+	b=vQ+4C4t1Lg0SR3dXfF+7xyTirK+aRIA+yjJ2B5w5ZTwF5Onxyqvp0eFQAKLF7z4HuCfd
+	 0rOUyjxxdw8dvpF0JizwIQahsvWqiLf/xySuky9Oex0RJKa84qRmGLCnCuq+uBTrLf1RD
+	 unZebIqUDz5APdrFkgKwOZlUTe3X/M37k7n1oYSP6KHWEKFd9ku7ZGEqxjzj3oTI4BCKg
+	 /ngW5LY2GOue5pXJ3d/qi6/CPdvyYnighkXrFz2b0n2+PU0rg8KywKpW5uNdYz4fFmeWN
+	 vh3pyhgpP8jb5SrzK5wEsmVVVIEFkjck2hdQln+OFwDB11wXh6Pcslo+ISbmE4NVElw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=i3q2h7Ks;
-	arc=none smtp.remote-ip=209.85.216.41
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QFn+R6Je;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC5A606A31A
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 03:10:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4EC5A606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D43D606A31A
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 03:43:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D43D606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=i3q2h7Ks
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3acc96a256dso862399a91.3
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 20:10:50 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QFn+R6Je
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3acdcfa2bd3so1143939a91.3
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 20:43:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792811450; x=1793416250; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vQ5V0JdVK/DourOvShwq0GjzUxcMzKpKOWRqkoWmqEE=;
-        b=i3q2h7KsXMgjqiuWR6nfLazSNTs8SSCi9UlLgrcwcXy9nYxMVkAEjF7UmFl3Ka4fop
-         ZTHqGXNFqP9qjKNdbPpZmTeiIBqtHMU/PtJ2nOC6lpdWdKJhl8vhVfyOwwIlGm0wDsvM
-         iNqbuzY4OVimr8gVUpGOCaldFfxJ4IU/Wa0jWyHz7FC3i1K+RYWXxdFDlz6Vwlmg134z
-         blhe0nrTih4UnsXvu62vgu7pGGXs2vBZbC2UV+/+fARPQ2nG6Qf0X5//i+MX/RVGSiX4
-         aT2tYo5sl3JvANVlrcFwqPMcdFuMCXD5zRgN/oGcypmlftjXGX+tHWUzjJcEULGNHcay
-         2LIA==
+        d=gmail.com; s=20251104; t=1792813427; x=1793418227; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=d5tL+X233SBVjpK2kn/G74H36r+U4Cu/y1SW36/sfhE=;
+        b=QFn+R6JextFEPaRC0BMn5EM/nsFvDDthBDlOomgr6taVDislzkWrrlDQMdLA7OsXgj
+         d0y2akaGps4lrDwko20zptIIzs5Wg2lp6gVjsY7nq9wF60GMEuAFm/srcL70SRPuSeYA
+         W9hggHShU5J2pbJDFZlLeDEx8lgFb5xQoDA85MeAfh5Zo61hLyMFh0vaiMPtt4EQdyKT
+         0umpCIhfxSkzLkIJ5eQY0JTrQga3Yw54iMbY6LRN4UBXPsXwN1+mWtGTtTeT012ROcL1
+         pF7epFhQAVPu2OtVcghfxY9Qik4nexWU10Mz7ASV3WTIOSJttv4tmdZi+5cG9YFGy/oB
+         2LTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792811450; x=1793416250;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=vQ5V0JdVK/DourOvShwq0GjzUxcMzKpKOWRqkoWmqEE=;
-        b=fck8OSZrq8ceb4JpAetBuU5h5dYBwgrgPfL4x478HjuriK1FPmbeqVzsZWDPNNSn0J
-         jMktMx4rYwz9qo88v0/NUMyboel9xzOe58XUpLviV3tyV2C7zjRfUUM/0t9COphgDrqY
-         JpkfiHmhxb2eJcl/8x80GZ+Fvpv2Bmmx7NEmBVGN9D03Zz31zwpfSvzP5ajpB4A0vXUn
-         mLbXdd4EmBmovCIMkVrpQxTMmI1035kMdgYrrMGbOIu3F3NtxN9bZZFVUtFDrFvyHI4a
-         gG53++r+T67RaPURtOlXYqMto8rpDWSHNMcpOs2qoZfRdCxGgi6xuLpUQU0WEzYztJv0
-         b3gQ==
-X-Gm-Message-State: AFq9FYKNTb3Jh34UUQokgZBNr4il0c7fKUlRfumlMA9hhra7X/kjKzsq
-	PEo64qO+ULvWC+98fmfraCoRmT1omr6i/uxAUh2+ym9eObKZN0tpw5Tbw2p1Zg==
-X-Gm-Gg: AYBFou1CRi4b+vnu4YvU61Zac+/TuzX1bJklXkpET0B3v2eh8uZ0XwTshfX14Q30kY2
-	QYzrCc5QXkGdMo0By5X9P6pqhRChkGTXs+36RtsA+P5ssHsUY/D/Ho/nNg6gS7gbfPEWCaSIo1X
-	OJfFdq9bmhr/PlOXfh53RxhbPHVhGQ98g2wldHdR1FlL1VeW73tPtOAByrKSSXb6w4HKCNu5zPs
-	ITSjUSnk/bMYpqD2xtjSEF8QoA/JwwJ5COGp6eA69kTKatQVE2OLOgeqgCqNmbUc5AzDvTjY4AN
-	t3kms9C7UaLrX3KeIAuscdZudxOA3ncP/0cBNH+0OJzLcNlBtMw+N/cMHYb4PN9GuJHcx9dkuN9
-	OvSZ7yQi04205lZ6AJPdWe2XB1aBFp2XtV0CKx3VkNS94bL72mEbE6gT55OWJMcI2hYdOj41H1F
-	OkwqUkAQgHDXwTWX2KCGqzbU+7vnvo9I7FvqSRdC2RkbU1LrpgQDGzTiDGTxoOqniZzrykEulyM
-	mtFaMT4NgBi/mMfFRLaYrfDqLdirheRhFMv6ZeXGpFEj9hEUISnRZVS+vgajTylWnPPSIurBDOM
-	/rpLCpBsm6rmublXTFYTpn3dyPrEEnpZHvrSi7ltEhmpecGUXY/KJ7Mh/rmxuwqirX1DXEXA+qp
-	ikqTxz+lk/x9cJGpX/TdjXavC
-X-Received: by 2002:a17:90b:3d8e:b0:3ac:80dc:f40c with SMTP id 98e67ed59e1d1-3adea8985fdmr921983a91.14.1792811449591;
-        Fri, 23 Oct 2026 20:10:49 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba38910sm781374a91.1.2026.10.23.20.10.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 20:10:48 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf] bpf: Don't hold pack_mutex over arm64 IPIs
-Date: Sat, 24 Oct 2026 03:10:46 +0000
-Message-ID: <20261024031046.625578-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20260707; t=1792813427; x=1793418227;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=d5tL+X233SBVjpK2kn/G74H36r+U4Cu/y1SW36/sfhE=;
+        b=IbYU0TJx2ZenA0xcKW6vH2fd2Wviej4K4kjJcaDUsJozJr4hWBKbzgopm0zqAjCHSR
+         SsipZG6YXA0as7VkTVcoPeWOC09R1ma3yjYpPScytcocoX21Z4zr+itarUikb3RGPhW/
+         xYEqPqNSTVYLBH+OdoQyJLi3lG4AtuLUgL8a7kzb1kugCm2OV2v+A2srgnGks2Y+6dzv
+         S/MP3jgUm1Vnt8uGApTYrlvSE4u0M75sVdeJr/jkR5PUO63CEQD9EsRaphLlmjpA1Qr+
+         KY+1xjHUY/p53vOgW5EWByLy86KPPTnybbx6T7WCkJTg2aCERF5zEjIp92ddmUkxcq9V
+         90BQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx49TmzxSDWECGGEt7ZAr/l3GMkCOFAX610bKjRHKe3PEuk2E/diLiiYYFwXAZxcc9mULk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLSzyvRHBaW9CkISd4WfJvg3mE/pFt6xrrD1j03GGmTTSdNo/B6
+	vnPnEeMbSbdiV8b0lI6qucVMh0yTQ9RvLAwX7un2Nui3UJLND0jh0mtm
+X-Gm-Gg: AYBFou20zop1aZFpjF9MGTzC3pRkUHntVNh+taFWCpxxXA9RK2SoOTG/BBcVvY2G9Xr
+	v0B/NIJab3IeIkuE8ORgkQapyBFauqG9/i8OJ0XL/dgzbqVIfOH+TYwnysyClLo98mXzBQEXFS0
+	7uP5qotVULI7pJl23JkqX3qd7I1FrjxuXXsZZviK+WIBNUtKgZES/FdCbNU0pY9SHKuDwrf31K+
+	Yxlbvcd/2SsgWirBAzlejiV1kieqFCPbAtpLSc/x5sXaL7ID9kmP0/R4Rzrbxigx3K+YKQJnCIJ
+	jJ8KsYRU5P/TpK1C2Dv1SbK2dX4dG5TV9sbVxZ1PcfqDaT/WZ5FKRXszmffG1Smy1GrhkbGCAPw
+	kJDQrki+Dv4IqopV2J3AdoJ1Lqe2gBvk/dIEZ3RbgOnbK1MGICYbh6146Swc4+9tnkxR58bFaxR
+	mWQ4VSnteAQO+TSnmZTGW7GKmKLx/TwhQCVp3e5BD2wlJJSpFSpTJIraGo62rqId7QTExhZa4O5
+	BkUQitIu1j+9ZjsJQcnHb9MsJyRcafEdgkSFsDGLj5RsdUr4gmCIajDg1SpN+2bJqUf1Qt+OP8k
+	HZKTWDrGAZXztKEhRaQp+FaAdGnD/fOk3y1F04LXvBS1YFjYCvPV85HQapxN
+X-Received: by 2002:a17:90b:2645:b0:3a8:878:ebab with SMTP id 98e67ed59e1d1-3adead4c29bmr977187a91.35.1792813426692;
+        Fri, 23 Oct 2026 20:43:46 -0700 (PDT)
+Received: from localhost ([153.61.198.255])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebb75254sm688046a91.4.2026.10.23.20.43.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Oct 2026 20:43:46 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 24 Oct 2026 03:43:45 +0000
+Message-Id: <DMCRBHQKJP8Y.1KLS4ZA48PV06@gmail.com>
+Cc: <martin.kelly@crowdstrike.com>, <slava.imameev@crowdstrike.com>
+Subject: Re: [PATCH bpf-next v8 3/7] libbpf: BPF programs manual loading and
+ attaching
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>,
+ <bpf@vger.kernel.org>, <andrii@kernel.org>
+In-Reply-To: <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
+References: <20261024014514.2959514-1-andrey.grodzovsky@crowdstrike.com> <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -95,86 +101,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Fri, Oct 23, 2026 at 06:45 PM Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
+> -void bpf_program__unload(struct bpf_program *prog)
+> +static void bpf_program_unload_full(struct bpf_program *prog)
 
-bpf_prog_pack_free() calls bpf_arch_text_invalidate() with pack_mutex
-held. On arm64 it interrupts all other CPUs and waits for them:
+[...]
 
-  bpf_prog_free_deferred
-    bpf_jit_free
-      bpf_prog_pack_free
-        bpf_arch_text_invalidate
-          aarch64_insn_set
-            flush_icache_range
-              kick_all_cpus_sync
+> +	if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL) {
+> +		zclose(prog->fd);
+> +		return;
+> +	}
+> +
+> +	bpf_program_unload_full(prog);
 
-When many progs are freed at once, every prog load waits in
-bpf_prog_pack_alloc() for all of these broadcasts. On arm64 hosts with
-many CPUs we saw hung task reports with sk_attach_filter() blocked on
-pack_mutex for minutes.
+No need for two kinds of unload.
+func_info, line_info and subprogs are filled by bpf_object__relocate().
+Nothing depends on them being freed in bpf_program__unload().
+Let it close the fd of any prog and free the rest in
+bpf_program__exit(). Then bpf_program_unload_full(), the strategy check
+and the second paragraph of the new doc in libbpf.h go away.
+Do it as a prep patch.
+Something like this:
 
-The bits of the range are still set in the bitmap during the
-invalidation, so nobody can allocate it and the pack cannot be freed.
-Drop pack_mutex around bpf_arch_text_invalidate() and take it again to
-clear the bits.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8fcb8cf..dd15842 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -876,10 +876,6 @@ void bpf_program__unload(struct bpf_program *prog)
+ 		return;
 
-Do it on arm64 only. x86, riscv, powerpc and loongarch take text_mutex in
-bpf_arch_text_invalidate(). The frees would wait there instead, and the
-load would wait for them in bpf_arch_text_copy().
+ 	zclose(prog->fd);
+-
+-	zfree(&prog->func_info);
+-	zfree(&prog->line_info);
+-	zfree(&prog->subprogs);
+ }
 
-Tested in arm64 KVM guests with 16 and 96 cpus on a 96 cpu host. cpus/2
-processes attach a cBPF filter to 256 sockets and close them in a loop
-for 20 sec. One more process attaches a filter every msec. Median of
-5 runs.
+ static void bpf_program__exit(struct bpf_program *prog)
+@@ -888,6 +884,9 @@ static void bpf_program__exit(struct bpf_program *prog)
+ 		return;
 
-The loops get more done. Sockets attached and closed in 20 sec, in
-millions (higher is better):
+ 	bpf_program__unload(prog);
++	zfree(&prog->func_info);
++	zfree(&prog->line_info);
++	zfree(&prog->subprogs);
+ 	zfree(&prog->name);
+ 	zfree(&prog->sec_name);
+ 	zfree(&prog->insns);
 
-             before  after
-  16 cpus       1.6    4.7
-  96 cpus      0.38    4.2
 
-setsockopt(SO_ATTACH_FILTER) of the process that attaches every msec
-takes less time, in msec (lower is better):
+> -	bpf_object_post_load_cleanup(obj);
+> +	bpf_object_post_load_cleanup(obj, true);
 
-                16 cpus          96 cpus
-             before  after    before  after
-  avg          0.97   0.18        11   0.54
-  p99            20    2.8       421    4.0
-  max           204     90      1738    255
+I really dislike bools.
+bpf_object__close() is the only caller that passes true.
+Clear obj->has_manual_progs there before the call.
 
-Fixes: 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- kernel/bpf/core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> +	err = bpf_object_load_prog(obj, prog, prog->insns, prog->insns_cnt,
+> +				   obj->license, obj->kern_version, &prog->fd);
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3030beb531d9..0fef87cfa152 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1069,8 +1069,17 @@ void bpf_prog_pack_free(void *ptr, u32 size)
- 	nbits = BPF_PROG_SIZE_TO_NBITS(size);
- 	pos = ((unsigned long)ptr - (unsigned long)pack->ptr) >> BPF_PROG_CHUNK_SHIFT;
- 
-+	/*
-+	 * arm64 sends IPI to all CPUs in bpf_arch_text_invalidate().
-+	 * Don't hold pack_mutex across it. The bits are still set,
-+	 * so the range cannot be reused and the pack cannot be freed.
-+	 */
-+	if (IS_ENABLED(CONFIG_ARM64))
-+		mutex_unlock(&pack_mutex);
- 	WARN_ONCE(bpf_arch_text_invalidate(ptr, size),
- 		  "bpf_prog_pack bug: missing bpf_arch_text_invalidate?\n");
-+	if (IS_ENABLED(CONFIG_ARM64))
-+		mutex_lock(&pack_mutex);
- 
- 	bitmap_clear(pack->bitmap, pos, nbits);
- 
+After bpf_object__load() this loses the fixup of the verifier log.
+bpf_object__load_progs() ends with bpf_object__free_relocs(), which
+frees reloc_desc of every prog, MANUAL ones too.
+When a MANUAL prog has a CO-RE relocation that didn't resolve on this
+kernel, fixup_verifier_log() -> find_relo_core() finds nothing
+and the user sees
+  invalid func unknown#195896080
+instead of
+  failed to resolve CO-RE relocation <byte_off> [..] struct foo.bar
+The same prog loaded between bpf_object__prepare() and
+bpf_object__load() gets the proper message.
+Progs that depend on what the kernel supports is the use case
+from the cover letter.
+Keep reloc_desc of MANUAL progs. bpf_program__exit() frees it.
 
-base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
--- 
-2.55.0
-
+pw-bot: cr
