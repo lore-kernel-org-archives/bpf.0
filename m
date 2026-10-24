@@ -1,68 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.135
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792827450;
-	b=N76b1dRhHIw9el360cQhQf31jC3JhdHARu9oIFO2qSB9fbGCOS+Uhygb3HWQ3yMmkoco
-	 JZ4Ic/DKnaVuO9pXUGoHoS93F50DxZ9h/bDi1wvR8kKu0fFPZttncSuj8EkdgMWSZdAh3
-	 2pwhq5+97SGkuO6ie9BHi0K+gtcyuWOAd78nEEPTJiksMoEu6QYqrsCz6kiCCYqG7xv6+
-	 k46VK9v+7LJ8nRQy5hR3nC3e48eC63FnjEBWPeJj2EuH2qAuERe/ej/OO5PqvPULEhL7M
-	 DABuQWznLDkiE2fnKREJOCo+nMj45iJAZVDCmPDAu7DWuMDSwr2F3A18T56wz5K0e1g==
+	t=1792833188;
+	b=K70LVUEvj98kFDTJ4BIj+WGGs/FWIXUqAwAig6+mtHO8RdlTwBvnjV8RhQ4mWOmOxL9d
+	 uhw4PxV2//uIr8NUPjxaHOjzyKvMjlLyNPZ2dDEvslg9epg88GWet3RbdcWmXgLGIpwLi
+	 ojO8G74Tr71CiWX1IVYhH0RJtxihJ0TH54pwAC/MLWcTmqL/ubwj4NGmRLF84WIdzijzM
+	 w91Le2KLbwv/Vlwqq8aveUJCXrUy6Cruh/K49pISztQFPE9Orq4KRQSmC7bqdaeE6b9U+
+	 Hu2IutDRaSOmKx2AXWzyxccj31Wa9+r7Gz2oDovyH7nmjNkEdTyt/DMU/GuEeRT/caQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792827450;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=QLl3K3NbhvyBUyt3G6F/2Tn6IpOlRe56J82JooDIwDQ=;
-	b=qZIdpffKDqEDDZSgOOqH5E7FbDHQQMAMx+6E8RMWiyULdDiPplEuAiePSYiY2G1vTNZz
-	 VaLpnBEnJ/RIMC03m881hgI8lZlwhpV/BpMjoTr38W1AVOjQIfI5jRyDvoUBqN1dPVIaj
-	 YGx4xOiaHAzwBBzFeO7I28PHPBL226bcjooPtwVQ9ScpnTgiYXwHmIdwM5W22/1ZPAbHq
-	 fIh+YnYs6HRmB+ZIPB0U0wFFg7Uo17YjRxof2dRhXObEsoG4W/IRQX878RGzzIxqg305B
-	 HB0r225Q+NnK6gwLRooL5wPrxByqjWMoMB+WF3LZYmoUCzzD9wFoBkN77nuuG4IuRIg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792833188;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=YDNhZ9YjK/zlIe5trqHYSdI1fhNBLfzLRTmRchXqEEw=;
+	b=Tktx8TdKZ2VaT7J+9th70Jo5w+WoTDVlBrd6XDIQuC634gAhj0kQ+Dl1GnZsIm8Oaxax
+	 n8+Bl1jNobvXjnw7dCeOBQ8JsVlxz29nxDJRaYhFz5Dqb1iwoJvlD90el7h0Tv8mSjSev
+	 u5CM/PLQGVfSCQ/2QL1HYRj6/dI2ss4xhsWlE/RV2C4XTQdGY15Ch+Ny3yVtPri2ybvoj
+	 kel7KTX4mManHyQTdup83LychKYwGmR2HX8HN4EMFA7P7bJM04q3nJO11rqn+Yu8Be5f3
+	 cjD5EbQpaGf8m4xPq1uhR0tRGQ7KgmChC3/SPWoBUtQTS32YUSbfrqrdCZQW4hI4G7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=DAJeOcJD;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gF6+xCNs;
+	arc=none smtp.remote-ip=74.125.227.135
+Received: from mail-pj2-f7.google.com (mail-pj2-f7.google.com [74.125.227.135])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB6F606A31B
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 07:37:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DBB6F606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E30606A31E
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 09:13:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05E30606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=DAJeOcJD
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=QLl3K3NbhvyBUyt3G6F/2Tn6IpOlRe56J82JooDIwDQ=; b=DAJeOcJDGu6rfDD4JE2aKjzR7Q
-	9YCPY8q8IE+YHCqH91kZTW87Ga2MFts4OAUWsXZ4An0FTftK/67wBofrm0eKrzlCLEBjv7TaVj7eK
-	EJLmuurULL46i3kgsXpU0D1pWgm+nIUGalocM1YhMZq9nsUaA6nFBWViUwJ1GTzqZ76BMjDLedh6m
-	VYPCHvtyE/dOwf713DKjKYW8mMD8Uf8oxl4volyToWxIFPnsBxGPxrYuYU8bBi4MnWg3HpVGWhHeZ
-	YYwHx5l1EuxVPh+DR4dbiqOZOhfjZSCO41LzBqiwK/SvhD3kGH7KbQO6utCBG//lvaCqymIH+VJqW
-	Q5rAaBUg==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xKWJV-000MYx-2Z;
-	Sat, 24 Oct 2026 09:37:13 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	jolsa@kernel.org,
-	Menglong Dong <dongml2@chinatelecom.cn>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH bpf 2/2] selftests/bpf: Test kprobe and fentry programs on one function
-Date: Sat, 24 Oct 2026 09:37:12 +0200
-Message-ID: <20261024073712.1074591-2-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261024073712.1074591-1-daniel@iogearbox.net>
-References: <20261024073712.1074591-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gF6+xCNs
+Received: by mail-pj2-f7.google.com with SMTP id 98e67ed59e1d1-3ac63aee1ecso329679a91.0
+        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 02:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792833187; x=1793437987; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YDNhZ9YjK/zlIe5trqHYSdI1fhNBLfzLRTmRchXqEEw=;
+        b=gF6+xCNsFTFYDaeJwwaq/P0+Cter9G1tJ7K2lri5LvrpFg2QxpZ/855aj5nDmzMM/l
+         ncGai+D5muYDxpER3I+DJZSavGtTB7ugxRCv26Jw6osKn7nIozGUxE7ZKgYwXIaZIIIP
+         iTc++CeBx3MPgD3F+BcsNRzeou49sF3M2jVfz8fjtAhHLVJDiF8r8ubrVxQRl/I928zg
+         5fnxLcu1bzDSlpy42jrX4iQOkWIzXMiP4/yOoKIYabdouie/84SUTboFMjGMMYtBDS9H
+         1zuSC5Bsu4OkmVbl2+LBl5ilM7kzRyAsfmsCirmoKEr3dSWH1JfckoCWIWPHoxXcQDqZ
+         /DrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792833187; x=1793437987;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=YDNhZ9YjK/zlIe5trqHYSdI1fhNBLfzLRTmRchXqEEw=;
+        b=xhBOpz6cB+4tu5FixOhp3T5E8ud41DMgo+vC2AoFwJqVonfhCoIweve96+e7l8Q/KI
+         nVehhpB2EVfdNJjk10vLh2v/47bdZS0sKW9ms4ToNcwWkc4zao93AgaNsaMxuq3kiAKx
+         zzo4QBoq6EoVHR16ZlGS3300LeT0kWc7gnBxMDRCpIpGIwB0KlbP4R6WT72GU2otzOvf
+         ARYQFwOE5KML0Bsmbe4//uURC+giySUIzq3atVuAtQTG853Zwe+3owxa2lHlCOYH5X/0
+         t5reLdE1NyIyWxq6p1DOFPneUpHiT5q9gGeBqcHx2bmoJ6wn2sYqvXcoN9WVVuMEIBpo
+         8hlA==
+X-Forwarded-Encrypted: i=1; AKwUvBxhoR/xF7qavOMwDRhF3uygUKVXRkPMSfsyGpRs1oN8pwn7W7zqmLXlb+k9Gbp+efg+QJA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJrxumyE/EvJUDQa2Ux5Kze1ewgq2CAxgeDYDyc+p6+5bezwG7+
+	/fsJ+6yoJ5AAJWu8LYkBEFCJhJWvbo4J5ZdG5wakK0OMF4XZdGMaQicw
+X-Gm-Gg: AYBFou3LTiGXn9lSeWe467msYzaxY8uCTIymRU2AsWwTVvk8cL0Y1T3ZQPKhZFCIA2E
+	exvpkp4USdH/h+l5ovKVuLLd4soR6a+M/P0EAtRRaG9D7mvY2PxZppNlrMxB2jnHdB+OxpLq0Dq
+	eKj4V9TLFSJ8J+vJkTtyijMA/zK4ZYacT7fY1NAkzU0MchfuZkRO+NTOA7x0yOji75OEraa1SIS
+	DIMEzHhRXQW2JYyJ79/pbtkhTAucanJYnwuP5ejpWc02QSJk0t0Er/KbupJ0sTN2NjxWWyuPvN+
+	WE4DVfP/BbqEhVqnL1ZzsD7EO3BjoTY8d3sKMETUcZs0qIu7gutvPb+iwzLi8mt9lmQIkWGygqw
+	6v6q1xNXJIkda7rBsmvnZo9PPzVYrny94JoiLA7d3OmXDfKm3XV5u7GIrY5dScugVQ/3swIHIB4
+	R9PZQRmitgSw98WJXOxPUmw9RCryYP3MeIMdO3ssZo8VB3lFx7TNM6U3hPkOmY7wHX7BAWzEDpy
+	7mfwB5ZTZg5HCgbtGyMdbw8idJQUbwIZ9tNWourYkAlnsHyPcEp+TkEkYY82E/eZ6xfuacoPH5x
+	leM=
+X-Received: by 2002:a17:90a:da85:b0:3ac:9a5e:9ce9 with SMTP id 98e67ed59e1d1-3adeabde800mr1418906a91.29.1792833187236;
+        Sat, 24 Oct 2026 02:13:07 -0700 (PDT)
+Received: from 192.168.1.7 ([2409:8a1e:2330:4ef0:20e4:738f:8d42:88af])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebbb1a13sm2231965a91.2.2026.10.24.02.13.04
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 24 Oct 2026 02:13:06 -0700 (PDT)
+From: Rongzheng Wang <testwrzwrz@gmail.com>
+To: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Stanislav Fomichev <sdf@fomichev.me>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	stable@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net] xsk: defer software checksum until the skb is complete
+Date: Sat, 24 Oct 2026 17:12:56 +0800
+Message-Id: <20261024091256.17918-1-testwrzwrz@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -73,142 +100,406 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28162/Fri Oct 23 08:24:08 2026)
 
-A kprobe next to a BPF trampoline makes the ftrace site of the function
-call ftrace_regs_caller and from there the list of ftrace callbacks,
-the path that crashed while ftrace_ops_list_func() started at an odd
-address. No test covers a function traced by both. Thus, attach an
-fentry program and a kprobe to bpf_fentry_test1(), then a second fentry
-program, which modifies the trampoline of the shared site, then detach
-the kprobe. After each step, check that every attached program ran once
-for the call and saw its argument.
+When XDP_UMEM_TX_SW_CSUM is used with multi-buffer TX, xsk_skb_metadata()
+calls skb_checksum_help() while only the first descriptor has been added to
+the skb. The checksum therefore covers just the first fragment, and
+skb_checksum_help() sets ip_summed to CHECKSUM_NONE, so the remaining
+fragments are never included in the checksum.
 
-Without the previous fix the test crashes the kernel, but only where
-ftrace_ops_list_func() is at an odd address (in my test with gcc +
-CONFIG_CC_OPTIMIZE_FOR_SIZE=y). With the fix it passes:
+Move the software checksum calculation to the point where the last
+descriptor has been added to the skb.
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t fentry_kprobe_shared
-  [...]
-  #147     fentry_kprobe_shared:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0/0 FAILED
+On a checksum failure the packet is now dropped instead of being returned
+to the application for a retry. This path is not reachable with the
+existing metadata validation, but the behavior change is intentional.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Menglong Dong <dongml2@chinatelecom.cn>
-Cc: Steven Rostedt <rostedt@goodmis.org>
+Add a selftest that sends the same packet as a single descriptor and as two
+descriptors, verifies the expected UDP checksum, and compares the frames
+captured on the peer.
+
+Fixes: 11614723af26 ("xsk: Add option to calculate TX checksum in SW")
+Cc: stable@vger.kernel.org
+Signed-off-by: Rongzheng Wang <testwrzwrz@gmail.com>
 ---
- .../bpf/prog_tests/fentry_kprobe_shared.c     | 54 +++++++++++++++++++
- .../bpf/progs/fentry_kprobe_shared.c          | 40 ++++++++++++++
- 2 files changed, 94 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
+ net/xdp/xsk.c                                 |  25 +-
+ .../selftests/bpf/prog_tests/xdp_metadata.c   | 299 ++++++++++++++++++
+ 2 files changed, 316 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
-new file mode 100644
-index 000000000000..b53ddb983f6f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "fentry_kprobe_shared.skel.h"
-+
-+static void trigger(struct fentry_kprobe_shared *skel)
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..845ae6bde987 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -1011,14 +1011,6 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+ 		skb->csum_start = hr + csum_start;
+ 		skb->csum_offset = csum_offset;
+ 		skb->ip_summed = CHECKSUM_PARTIAL;
+-
+-		if (unlikely(pool->tx_sw_csum)) {
+-			int err;
+-
+-			err = skb_checksum_help(skb);
+-			if (err)
+-				return err;
+-		}
+ 	}
+ 
+ 	if (flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
+@@ -1030,6 +1022,14 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
+ 	return 0;
+ }
+ 
++static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *pool)
 +{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err;
++	if (!pool->tx_sw_csum || skb->ip_summed != CHECKSUM_PARTIAL)
++		return 0;
 +
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry1), &topts);
-+	ASSERT_OK(err, "test_run");
++	return skb_checksum_help(skb);
 +}
 +
-+/*
-+ * With a kprobe next to the trampoline, the ftrace site of the function
-+ * reaches the trampoline through the list of ftrace callbacks, and so does
-+ * the site of a trampoline that is modified to add or remove a program.
-+ */
-+void test_fentry_kprobe_shared(void)
+ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+ 					      struct xdp_desc *desc)
+ {
+@@ -1270,6 +1270,15 @@ static int __xsk_generic_xmit(struct sock *sk)
+ 			continue;
+ 		}
+ 
++		if (!xp_mb_desc(&desc)) {
++			err = xsk_skb_sw_csum(skb, xs->pool);
++			if (unlikely(err)) {
++				xskq_cons_release(xs->tx);
++				xsk_drop_skb(skb);
++				goto out;
++			}
++		}
++
+ 		xskq_cons_release(xs->tx);
+ 
+ 		if (xp_mb_desc(&desc)) {
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+index 5c31054ad4a4..21a11300076a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+@@ -6,9 +6,12 @@
+ #include "xdp_metadata.h"
+ #include "xsk.h"
+ 
++#include <arpa/inet.h>
+ #include <bpf/btf.h>
+ #include <linux/errqueue.h>
++#include <linux/if_ether.h>
+ #include <linux/if_link.h>
++#include <linux/if_packet.h>
+ #include <linux/net_tstamp.h>
+ #include <netinet/udp.h>
+ #include <sys/mman.h>
+@@ -38,6 +41,22 @@
+ #define TX_MAC "00:00:00:00:00:01"
+ #define RX_MAC "00:00:00:00:00:02"
+ 
++#define MB_TX_NAME "mb_tx0"
++#define MB_RX_NAME "mb_rx0"
++#define MB_NETNS_NAME "xdp_mb_csum"
++#define MB_UMEM_NUM 4
++#define MB_UMEM_FRAME_SIZE XSK_UMEM__DEFAULT_FRAME_SIZE
++#define MB_UMEM_SIZE (MB_UMEM_FRAME_SIZE * MB_UMEM_NUM)
++#define MB_METADATA_LEN sizeof(struct xsk_tx_metadata)
++#define MB_PAYLOAD_LEN 128
++#define MB_SPLIT_LEN 64
++#define MB_PKT_LEN (sizeof(struct ethhdr) + sizeof(struct iphdr) + \
++		    sizeof(struct udphdr) + MB_PAYLOAD_LEN)
++#define MB_TX_ADDR "10.1.0.1"
++#define MB_RX_ADDR "10.1.0.2"
++#define MB_SOURCE_PORT 1234
++#define MB_DEST_PORT 8080
++
+ #define VLAN_ID 59
+ #define VLAN_PROTO "802.1Q"
+ #define VLAN_PID htons(ETH_P_8021Q)
+@@ -543,3 +562,283 @@ void test_xdp_metadata(void)
+ 	SYS_NOFAIL("ip netns del " RX_NETNS_NAME);
+ 	SYS_NOFAIL("ip netns del " TX_NETNS_NAME);
+ }
++
++static int open_xsk_mb(int ifindex, struct xsk *xsk)
 +{
-+	struct fentry_kprobe_shared *skel;
++	const struct xsk_socket_config socket_config = {
++		.rx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
++		.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
++		.bind_flags = XDP_COPY | XDP_USE_SG,
++	};
++	const struct xsk_umem_config umem_config = {
++		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
++		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
++		.frame_size = MB_UMEM_FRAME_SIZE,
++		.flags = XDP_UMEM_UNALIGNED_CHUNK_FLAG | XDP_UMEM_TX_SW_CSUM |
++			 XDP_UMEM_TX_METADATA_LEN,
++		.tx_metadata_len = sizeof(struct xsk_tx_metadata),
++	};
++	int ret;
 +
-+	skel = fentry_kprobe_shared__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	skel->bss->pid = getpid();
++	xsk->umem_area = mmap(NULL, MB_UMEM_SIZE, PROT_READ | PROT_WRITE,
++			      MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
++	if (!ASSERT_NEQ(xsk->umem_area, MAP_FAILED, "mmap"))
++		return -1;
 +
-+	skel->links.fentry1 = bpf_program__attach(skel->progs.fentry1);
-+	if (!ASSERT_OK_PTR(skel->links.fentry1, "attach_fentry1"))
++	ret = xsk_umem__create(&xsk->umem, xsk->umem_area, MB_UMEM_SIZE,
++			       &xsk->fill, &xsk->comp, &umem_config);
++	if (!ASSERT_OK(ret, "xsk_umem__create"))
++		return ret;
++
++	ret = xsk_socket__create(&xsk->socket, ifindex, QUEUE_ID, xsk->umem,
++				 &xsk->rx, &xsk->tx, &socket_config);
++	if (!ASSERT_OK(ret, "xsk_socket__create"))
++		return ret;
++
++	return 0;
++}
++
++static void close_xsk_mb(struct xsk *xsk)
++{
++	if (xsk->socket)
++		xsk_socket__delete(xsk->socket);
++	if (xsk->umem)
++		xsk_umem__delete(xsk->umem);
++	if (xsk->umem_area && xsk->umem_area != MAP_FAILED)
++		munmap(xsk->umem_area, MB_UMEM_SIZE);
++}
++
++static __sum16 mb_build_packet(u8 *pkt)
++{
++	struct ethhdr *eth = (void *)pkt;
++	struct iphdr *iph = (void *)(eth + 1);
++	struct udphdr *udph = (void *)(iph + 1);
++	__sum16 expected;
++
++	memset(pkt, 0, MB_PKT_LEN);
++	memcpy(eth->h_dest, RX_MAC, ETH_ALEN);
++	memcpy(eth->h_source, TX_MAC, ETH_ALEN);
++	eth->h_proto = htons(ETH_P_IP);
++
++	iph->version = 4;
++	iph->ihl = 5;
++	iph->tot_len = htons((u16)(MB_PKT_LEN - sizeof(*eth)));
++	iph->id = htons(1);
++	iph->ttl = 64;
++	iph->protocol = IPPROTO_UDP;
++	iph->saddr = inet_addr(MB_TX_ADDR);
++	iph->daddr = inet_addr(MB_RX_ADDR);
++	iph->check = build_ip_csum(iph);
++
++	udph->source = htons(MB_SOURCE_PORT);
++	udph->dest = htons(MB_DEST_PORT);
++	udph->len = htons((u16)(sizeof(*udph) + MB_PAYLOAD_LEN));
++	memset(udph + 1, 0xaa, MB_PAYLOAD_LEN);
++
++	expected = build_udp_v4_csum(iph, udph);
++	udph->check = ~csum_tcpudp_magic(iph->saddr, iph->daddr,
++					 ntohs(udph->len), IPPROTO_UDP, 0);
++	return expected;
++}
++
++static int mb_send_packet(struct xsk *xsk, const u8 *pkt, bool split)
++{
++	struct xsk_tx_metadata *meta;
++	struct xdp_desc *tx_desc;
++	u32 idx, num = split ? 2 : 1;
++	u8 *frame;
++	int ret;
++
++	ret = xsk_ring_prod__reserve(&xsk->tx, num, &idx);
++	if (!ASSERT_EQ(ret, num, "xsk_ring_prod__reserve"))
++		return -1;
++
++	if (split) {
++		frame = xsk_umem__get_data(xsk->umem_area, MB_UMEM_FRAME_SIZE);
++		meta = (struct xsk_tx_metadata *)frame;
++		memcpy(frame + MB_METADATA_LEN, pkt, MB_SPLIT_LEN);
++
++		tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx);
++		tx_desc->addr = MB_UMEM_FRAME_SIZE + MB_METADATA_LEN;
++		tx_desc->len = MB_SPLIT_LEN;
++		tx_desc->options = XDP_TX_METADATA | XDP_PKT_CONTD;
++
++		frame = xsk_umem__get_data(xsk->umem_area,
++					   2 * MB_UMEM_FRAME_SIZE);
++		memcpy(frame + MB_METADATA_LEN, pkt + MB_SPLIT_LEN,
++		       MB_PKT_LEN - MB_SPLIT_LEN);
++
++		tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx + 1);
++		tx_desc->addr = 2 * MB_UMEM_FRAME_SIZE + MB_METADATA_LEN;
++		tx_desc->len = (u32)(MB_PKT_LEN - MB_SPLIT_LEN);
++		tx_desc->options = 0;
++	} else {
++		frame = xsk_umem__get_data(xsk->umem_area, 0);
++		meta = (struct xsk_tx_metadata *)frame;
++		memcpy(frame + MB_METADATA_LEN, pkt, MB_PKT_LEN);
++
++		tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx);
++		tx_desc->addr = MB_METADATA_LEN;
++		tx_desc->len = (u32)MB_PKT_LEN;
++		tx_desc->options = XDP_TX_METADATA;
++	}
++
++	memset(meta, 0, sizeof(*meta));
++	meta->flags = XDP_TXMD_FLAGS_CHECKSUM;
++	meta->request.csum_start = (u16)(sizeof(struct ethhdr) + sizeof(struct iphdr));
++	meta->request.csum_offset = (u16)offsetof(struct udphdr, check);
++
++	xsk_ring_prod__submit(&xsk->tx, num);
++
++	ret = sendto(xsk_socket__fd(xsk->socket), NULL, 0, MSG_DONTWAIT,
++		     NULL, 0);
++	if (!ASSERT_GE(ret, 0, "sendto"))
++		return -1;
++
++	return 0;
++}
++
++static int mb_wait_completion(struct xsk *xsk, u32 num)
++{
++	struct pollfd pfd = {
++		.fd = xsk_socket__fd(xsk->socket),
++		.events = POLLOUT,
++	};
++	u32 idx;
++	int ret, i;
++
++	for (i = 0; i < 100; i++) {
++		ret = xsk_ring_cons__peek(&xsk->comp, num, &idx);
++		if (ret == num) {
++			xsk_ring_cons__release(&xsk->comp, num);
++			return 0;
++		}
++		poll(&pfd, 1, 1);
++	}
++
++	return -1;
++}
++
++static int mb_recv_packet(int fd, u8 *buf, size_t len)
++{
++	struct sockaddr_ll sll;
++	socklen_t sll_len;
++	struct pollfd pfd = {
++		.fd = fd,
++		.events = POLLIN,
++	};
++	struct ethhdr *eth;
++	struct iphdr *iph;
++	struct udphdr *udph;
++	int ret;
++
++	for (;;) {
++		ret = poll(&pfd, 1, 1000);
++		if (ret <= 0)
++			return -1;
++
++		sll_len = sizeof(sll);
++		ret = recvfrom(fd, buf, len, 0, (struct sockaddr *)&sll,
++			       &sll_len);
++		if (ret < 0)
++			return -1;
++		if (ret < (int)(sizeof(*eth) + sizeof(*iph) + sizeof(*udph)))
++			continue;
++
++		eth = (void *)buf;
++		if (eth->h_proto != htons(ETH_P_IP))
++			continue;
++		iph = (void *)(eth + 1);
++		if (iph->protocol != IPPROTO_UDP)
++			continue;
++		udph = (void *)(iph + 1);
++		if (udph->dest != htons(MB_DEST_PORT))
++			continue;
++
++		return ret;
++	}
++}
++
++void test_xdp_metadata_mb_csum(void)
++{
++	struct nstoken *tok = NULL;
++	struct sockaddr_ll sll = {};
++	struct udphdr *single_udp;
++	struct udphdr *multi_udp;
++	__sum16 expected_csum;
++	u8 pkt[MB_PKT_LEN];
++	u8 single[MB_PKT_LEN];
++	u8 multi[MB_PKT_LEN];
++	struct xsk xsk = {};
++	int tx_ifindex, rx_ifindex;
++	int pkt_fd = -1;
++	int single_len;
++	int multi_len;
++	int ret;
++
++	SYS_NOFAIL("ip netns del " MB_NETNS_NAME);
++	SYS(out, "ip netns add " MB_NETNS_NAME);
++	tok = open_netns(MB_NETNS_NAME);
++	if (!ASSERT_OK_PTR(tok, "setns"))
 +		goto out;
-+	skel->links.kprobe1 = bpf_program__attach(skel->progs.kprobe1);
-+	if (!ASSERT_OK_PTR(skel->links.kprobe1, "attach_kprobe1"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 1, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 1, "kprobe_hits");
 +
-+	skel->links.fentry2 = bpf_program__attach(skel->progs.fentry2);
-+	if (!ASSERT_OK_PTR(skel->links.fentry2, "attach_fentry2"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 2, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 1, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 2, "kprobe_hits");
++	SYS(out, "ip link add " MB_TX_NAME " type veth peer name " MB_RX_NAME);
++	SYS(out, "ip link set dev " MB_TX_NAME " up");
++	SYS(out, "ip link set dev " MB_RX_NAME " up");
 +
-+	bpf_link__destroy(skel->links.kprobe1);
-+	skel->links.kprobe1 = NULL;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 3, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 2, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 2, "kprobe_hits");
++	tx_ifindex = if_nametoindex(MB_TX_NAME);
++	rx_ifindex = if_nametoindex(MB_RX_NAME);
++	if (!ASSERT_NEQ(tx_ifindex, 0, "if_nametoindex(tx)") ||
++	    !ASSERT_NEQ(rx_ifindex, 0, "if_nametoindex(rx)"))
++		goto out;
++
++	ret = open_xsk_mb(tx_ifindex, &xsk);
++	if (!ASSERT_OK(ret, "open_xsk_mb"))
++		goto out;
++
++	pkt_fd = socket(AF_PACKET, SOCK_RAW | SOCK_CLOEXEC, htons(ETH_P_ALL));
++	if (!ASSERT_GE(pkt_fd, 0, "socket(AF_PACKET)"))
++		goto out;
++
++	sll.sll_family = AF_PACKET;
++	sll.sll_protocol = htons(ETH_P_ALL);
++	sll.sll_ifindex = rx_ifindex;
++	if (!ASSERT_OK(bind(pkt_fd, (struct sockaddr *)&sll, sizeof(sll)),
++		       "bind(AF_PACKET)"))
++		goto out;
++
++	expected_csum = mb_build_packet(pkt);
++
++	if (!ASSERT_OK(mb_send_packet(&xsk, pkt, false), "send single"))
++		goto out;
++	single_len = mb_recv_packet(pkt_fd, single, sizeof(single));
++	if (!ASSERT_EQ(single_len, (int)MB_PKT_LEN, "recv single"))
++		goto out;
++	single_udp = (void *)(single + sizeof(struct ethhdr) + sizeof(struct iphdr));
++	if (!ASSERT_EQ(single_udp->check, expected_csum, "single checksum"))
++		goto out;
++	if (!ASSERT_OK(mb_wait_completion(&xsk, 1), "complete single"))
++		goto out;
++
++	if (!ASSERT_OK(mb_send_packet(&xsk, pkt, true), "send multi"))
++		goto out;
++	multi_len = mb_recv_packet(pkt_fd, multi, sizeof(multi));
++	if (!ASSERT_EQ(multi_len, (int)MB_PKT_LEN, "recv multi"))
++		goto out;
++	multi_udp = (void *)(multi + sizeof(struct ethhdr) + sizeof(struct iphdr));
++	if (!ASSERT_EQ(multi_udp->check, expected_csum, "multi checksum"))
++		goto out;
++	if (!ASSERT_OK(mb_wait_completion(&xsk, 2), "complete multi"))
++		goto out;
++
++	ASSERT_EQ(memcmp(single, multi, MB_PKT_LEN), 0,
++		  "single and multi-buffer packets differ");
++
 +out:
-+	fentry_kprobe_shared__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
-new file mode 100644
-index 000000000000..aae8d9d29d37
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int pid;
-+int fentry1_hits;
-+int fentry2_hits;
-+int kprobe_hits;
-+
-+static bool from_test(int a)
-+{
-+	return (bpf_get_current_pid_tgid() >> 32) == pid && a == 1;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry1, int a)
-+{
-+	if (from_test(a))
-+		fentry1_hits++;
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry2, int a)
-+{
-+	if (from_test(a))
-+		fentry2_hits++;
-+	return 0;
-+}
-+
-+SEC("kprobe/bpf_fentry_test1")
-+int BPF_KPROBE(kprobe1, int a)
-+{
-+	if (from_test(a))
-+		kprobe_hits++;
-+	return 0;
++	if (pkt_fd >= 0)
++		close(pkt_fd);
++	close_xsk_mb(&xsk);
++	if (tok)
++		close_netns(tok);
++	SYS_NOFAIL("ip netns del " MB_NETNS_NAME);
 +}
 -- 
-2.43.0
+2.39.5 (Apple Git-154)
 
