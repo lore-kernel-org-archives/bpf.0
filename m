@@ -1,112 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.38.64.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792834109;
-	b=hFGeLBSZc993tOIkIV+SxKux7vZrgdg+tSF82fXKhK2jOSFV7m3LHwTm6/DWc9VyXZ8V
-	 jLKGTuiVlod028YrR38mN2APpQtkOvyze6nk//CaXqoQnx3JBfzKeNzcPbYVmCzwZIaZz
-	 rraR2pdzvx3T3GoujJfpczdpMY4SbmMRnvE4v8QLmsa+Tm7LP0M+lefPHqeXoFUNdZJP8
-	 k6tUv7AWnAHSJXwkiF0qmxJnqssOc916pzCUpihubtThtqd3BoI5g9C8iUFGyH36kCtGZ
-	 g0FFdjKgJoaRlqGN+k4waAsCgjJkA+fhahgi1VjcjgfSsknyTv/rH9TCYUo31QfI43Q==
+	t=1792836427;
+	b=2lqatdmDdNZmUJeclLEZwnw3rWPbwNvJnqVysAbxFV42Mx0AngO+rhN44dYmPF9dYeBD
+	 0EqyWmdhmkgkTy48Cd9OviwCvsE0o63QZL+jqiAPZ+KNV4o36NmeZW68fUZGoKbz2Rd5F
+	 //VzRXjdqEvbSDpy6imRutAIxKCnc10Ch3sBf636hegSJZKMA9FKdcdYuElR6DFSVXRqk
+	 Skq1jM2WQCV7+gmht8HaFIiIEMuN9LIzk8ToLzyPH/WRbJLl98CbjxYpMrhZInFWyZzLA
+	 NfnOuwO5Tza48GZnf98xTEW+1VjjzOf+zyRKTJi0ArUEgIfTmRx2QiFxvPfLR0rhqcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792834109;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
-	b=iZYJeuv3cmqkzAZRKRobYK1jZi+WRR7pteaQgVk2NeIHO6ewvpUfBbr6fYPl6ygNnRTx
-	 58Z3oQpdPExIWewNtqnlPbh7L4KGi+0A3fA3NAiYwgNR+ywMfeJFREpCmIhc4mFnfD96L
-	 gaw0oYRd/avPh8McVjNUx8EjCjQATKHgBgoaCev/FNdw2NPn6bRYyw1tbsnhwSINh9+LV
-	 vTqRokO5bHY4KsJ8q2FFX2T9rs/ZkGbyvuW8/FvS6i8xNCXoH2ARWxOzYUuP9wUYBbmtJ
-	 K6sA+vg/ORCbTZVqkoKV2/BelJJzzf5z+nSLrq4P3JSCjZ8vudFbZzYpPgBvLh1/pdg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792836427;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
+	 X-CM-SenderInfo;
+	bh=pkOGBjJkn90du8/AW1s2nHmUoCTXp8rWI6dWLnDkEWc=;
+	b=ABZfKEGKbY3bMiEJf18PobD/02ueogngEn8JHGCRAtDvgWFEqHxzdgkHLFWy5I1SPPhM
+	 bJZl7tEwdwJ8BeC1dqgRVgH/TgPqI+22+u/luT4U4hZ/ygQs6jK0y3vJ/bUlrxWuEW1Oc
+	 xPbbbFCXVaL7iO56gaK10HRNmuepN8kGFxpS2xj20013qYMlslLCSFkG9S+2PipP7W6mO
+	 EWrITZ97+IEeu9JjbuXHwmBgyQVgfhoP+PzpWmW3C4UCRjubScXpURLJv2e+qSOwnW/is
+	 60RvqXh3mp+egndqeJxzBx9bzDiozyO+ZpxNEaV16/M4kmjjuoPw1d7itDnw4lDcTIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=b9nh1GtH;
-	arc=none smtp.remote-ip=74.125.82.173
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46704606AC01
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 09:28:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46704606AC01
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	dmarc=pass header.from=mail.ustc.edu.cn;
+	spf=pass smtp.mailfrom=mail.ustc.edu.cn;
+	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=xBCum1OF;
+	arc=none smtp.remote-ip=202.38.64.46
+Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B56B606A31B
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 10:07:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B56B606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=b9nh1GtH
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-36681e85e87so159556eec.1
-        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 02:28:28 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=xBCum1OF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792834107; x=1793438907; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
-        b=b9nh1GtH2+skTNF5DZP9gibDmo1B8XDJqOyw8/vQ6Hd74v9sFQ35s9Tesqt2FOb1pP
-         Qo+VkuBPh1UAfxNNdXvzZGy5dqQMvfL8wWV0KkiOjlsFAuZ0jB6LU7PN3kr0OA5okfZ1
-         dCa8a0oNrk/TJERvUoac8eX8GqwJLdaZZWx8w6Oy6xH8AeLiCbXskMox7qS6zJHcGA/U
-         Lba7qXFG+eJRjcwzpwWBJ3wKgSpWdlLk6fRDtV/K8AOowXnUzZknZB8RmFwwORREa4Eu
-         pmaYVLGyAojs5xhQUTZoEUiULZRwwY9pWKlF4nr5LKVBGz3/bIONFndeO7oDFWw+ILxa
-         2Ycg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792834107; x=1793438907;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BlUUlyu0tLkS0StKgW3SUYx8agTboJGWzFSZtZkcXsU=;
-        b=UbaquUdNQ0ItIULZS5/OpCdWdvwa/NZcOj6VCaiMhoT7t9Bzw/ZKSNnpU2LSixeRkL
-         1qsI+7JBLMwjD/ECj69YpQCqRIENyl+/pk5UlZ8+8+MNAJRmDkgsfzuEF21ZEc0KZjkE
-         1sLRJWdFwTHGq7Nzbkldu0+nGLwRcTDX2GwoG2XOLzIsCwMbfGTvMZB+5rhxoijpNX1g
-         I+jY72qS3y25B1WZXVpdEH2L2aVHXSbV613FP/EC+3YjWx9SL6lyTE+zXsh+of3YppyT
-         1x+bqUPdQbqGeUt8MmGG/dCHoWP2c+sc3jNwfDvdihzaHYm7duY3uSLPg+GgR6ZpyEyN
-         zs4Q==
-X-Gm-Message-State: AFq9FYKhkhs8ZZyo9g6SwTBBRxiyEP0b4ASSsLG/FuzlkT5qxSKZ/AN8
-	D62mWGb6ar43E+MNT0H8eBDorxDGgov8latc0xFUjD65i3Vt1RqTPNB1Zp83Xrdr
-X-Gm-Gg: AYBFou1BzEkJFhbNPMi+aD7DaUZC6qxhwWv8zXXfhStZToX5t8qau1mjOIs3gnfxD1v
-	vGq3+K/9KAAc4vK0kzr9u6zcrWmabZQHsPik6MbwVwXXOa3YX8lJ4PQpDuhhGSd/qrnE9PDxBp4
-	9odGaCjlJ8wNd6c4CVqiYxbeFDamPpnhKx6fTE4h2YbOUUiFRttAPvLyrVxG5Xcn+vz3OyyngKH
-	EtqQGckz35qsM8un9GpsEsOw2CTWe0Wh9z6bJeTU9qB/+kJdva3FL8tfFWK+hBNANlLFP1OqJcI
-	ngjlhBs/xaVtEyrjLYqK9wEpE7hhqZzxqW2wdCRG8IUSMNvy4YBkFJ3+pB454HYAgT95kcoM4VB
-	k85Nd8KFMyJ3ga+yQtWIun8deAazsBI87/XNxZ0yvA9blNnryqEh/SZX0SRcsuRal/PCI2mzuW8
-	aGZrs/4eToR0pTrzdSPimJN5uHXoIbAAGGGO47OLkDLDV+p3jok1RwlSMMrXEOR9nr/4aWv/hm4
-	AvcVWqX6ltOMjZ2pi8+Mi04l7xb6yzpXqhrDGm1w5sjpCpObtL7sF809hvzdJmX5AsZxWHjfSPR
-	XKjkYsa9yxs4+luVhr9xz6VPyFmudLxy0FJfQYn10SFKUpBbOheZLMYUtAnqJs0nMhsP3MsQIg=
-	=
-X-Received: by 2002:a05:7300:d086:b0:366:dbf9:32bd with SMTP id 5a478bee46e88-369e842df55mr2190770eec.9.1792834107430;
-        Sat, 24 Oct 2026 02:28:27 -0700 (PDT)
-Received: from nixos ([2405:201:c40d:9039:e1f8:b9bb:b037:3cab])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8daf444sm5236604eec.18.2026.10.24.02.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Oct 2026 02:28:26 -0700 (PDT)
-From: Ayushman Rout <ayushmanrout27@gmail.com>
+	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+	Message-ID:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=pkOGBjJkn90du8/AW1s2nHmUoCTXp8rWI6
+	dWLnDkEWc=; b=xBCum1OFq899l4MPD4zgmnxVrVd0me9emFltM9l7bo8HXuAUb3
+	b1KTIlb8JShtl5R0ALcUUKwMFDKUvDsAkeCkPyYY0k1s5gyVzYK44WaudxVI6ANI
+	DjzmL1haFQtgAG9jdPfc/4rGCfO+3W2DBbNEoVaQEplZfncIivipMwQX8=
+Received: from localhost (unknown [222.195.81.103])
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgDXTjM+g9xqAzY7AA--.622S2;
+	Sat, 24 Oct 2026 18:06:54 +0800 (CST)
+From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
-	Ayushman Rout <ayushmanrout27@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf 3/3] selftests/bpf: Test overlapping dynptr copies on xdp frags
-Date: Sat, 24 Oct 2026 14:56:58 +0530
-Message-ID: <20261024092659.76422-4-ayushmanrout27@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261024092659.76422-1-ayushmanrout27@gmail.com>
-References: <20261024092659.76422-1-ayushmanrout27@gmail.com>
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	ameryhung@gmail.com,
+	yonghong.song@linux.dev,
+	puranjay@kernel.org,
+	utilityemal77@gmail.com
+Subject: [PATCH bpf-next v8 1/2] bpf: Track borrowed iterator results by default
+Date: Sat, 24 Oct 2026 18:06:46 +0800
+Message-ID: <20261024100647.2579244-2-xyx2021@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261024100647.2579244-1-xyx2021@mail.ustc.edu.cn>
+References: <20261024100647.2579244-1-xyx2021@mail.ustc.edu.cn>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,188 +68,309 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:3pYKCgDXTjM+g9xqAzY7AA--.622S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfJr43Xr1rCF4kur45GFy3Arb_yoW8Jr18Jo
+	WxGr4fta1xKF1kArW0yF1xtF15Za9xC3s5JF45Wws5u3W7XryUtr17G3y5Xas7uF1fKF4D
+	Aa4kCas3trykAr1fn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYM7k0a2IF6w4kM7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0
+	x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
+	1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0
+	I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+	C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x0
+	82IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXw
+	Av7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48J
+	M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwVW8tw
+	CF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j
+	6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64
+	vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0x
+	vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b0iSJUUUUU=
+X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Add four dynptr tests. Three use an xdp packet with frags, and in each
-the range goes from the linear part into frag0:
+An open-coded iterator can return a struct pointer borrowed from its
+current element. The verifier has not tied such results to iterator
+state since the task_vma iterator was introduced, so a saved result
+can still be used after destroy. Commit bee9ef4a40a27 ("bpf: switch
+task_vma iterator from mmap_lock to per-VMA locks") also made next
+release the protection of the prior element. A later snapshot
+conversion made vm_file explicitly borrowed from that element.
 
-- test_dynptr_copy_xdp_overlap: bpf_dynptr_copy() of 1200 bytes with
-  the destination 100 bytes above the source.
-- test_dynptr_read_xdp_overlap: bpf_dynptr_read() into a slice of the
-  same packet.
-- test_dynptr_write_xdp_overlap: bpf_dynptr_write() from a slice of the
-  same packet.
+Associate non-RCU, non-acquired struct results with the iterator
+reference by default. Invalidate dependents before next forks its
+NULL and non-NULL paths, while retaining the iterator itself. Let
+destroy propagate child-reference errors. Add KF_ITER_RET_INDEPENDENT
+for results that outlive the current element, preserving existing
+RCU and acquired-reference rules.
 
-The fourth, test_dynptr_skb_load_overlap, reads a range that spans the
-head and the frags of an skb. It passes with and without the fixes and
-checks that skbs are not affected.
+Trusted pointer field loads also need to preserve the source lifetime.
+Loading a trusted field does not acquire a reference to the pointed-to
+object. Set the field pointer's parent_id to the source's reference ID
+if the source is referenced, or inherit its parent_id if it is borrowed.
+This is a generic rule, including accesses unrelated to iterators. For
+example, the following access is now rejected:
 
-The new tests set err when the data is wrong. The existing
-test_dynptr_copy_xdp does not, so it can pass on corrupted data.
+  file = bpf_get_task_exe_file(task);
+  if (!file)
+          return 0;
+  inode = file->f_inode;
+  bpf_put_file(file);
+  ino = inode->i_ino;
 
-Without the fixes to bpf_xdp_copy_buf() and bpf_dynptr_copy(), the three
-xdp tests fail. With them, all four tests pass.
+The inode pointer borrows the file's lifetime. Releasing the acquired
+file reference removes that lifetime guarantee, so the verifier must
+invalidate the derived inode pointer as well. This does not imply that
+bpf_put_file() immediately frees the file or inode. Reading the inode
+while the file reference is held remains valid. Fields with independent
+RCU protection retain their existing lifetime rules.
 
-Signed-off-by: Ayushman Rout <ayushmanrout27@gmail.com>
-Assisted-by: LLM
+For an iterator result, the same propagation keeps trusted fields such
+as vm_file and f_inode tied to the current element. Propagate the backing
+object's lifetime through dynptr construction too, so its descendants
+remain in the invalidation graph. Share the invalidation traversal
+between next and release, so advancing the iterator preserves its own
+reference.
+
+Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfuncs")
+Suggested-by: Amery Hung <ameryhung@gmail.com>
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 ---
- .../testing/selftests/bpf/prog_tests/dynptr.c |   4 +
- .../selftests/bpf/progs/dynptr_success.c      | 128 ++++++++++++++++++
- 2 files changed, 132 insertions(+)
+ Documentation/bpf/bpf_iterators.rst | 10 +++++
+ include/linux/btf.h                 |  1 +
+ kernel/bpf/btf.c                    | 13 +++++-
+ kernel/bpf/verifier.c               | 68 ++++++++++++++++++++++++-----
+ 4 files changed, 79 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-index 4396560365e8..08382ed076a2 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -22,6 +22,10 @@ static struct {
- 	{"test_dynptr_data", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_copy", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_copy_xdp", SETUP_XDP_PROG},
-+	{"test_dynptr_copy_xdp_overlap", SETUP_XDP_PROG},
-+	{"test_dynptr_read_xdp_overlap", SETUP_XDP_PROG},
-+	{"test_dynptr_write_xdp_overlap", SETUP_XDP_PROG},
-+	{"test_dynptr_skb_load_overlap", SETUP_SKB_PROG_NONLINEAR},
- 	{"test_dynptr_memset_zero", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_memset_notzero", SETUP_SYSCALL_SLEEP},
- 	{"test_dynptr_memset_zero_offset", SETUP_SYSCALL_SLEEP},
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index b668ebd61fc7..b6c3abb66e4b 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -759,6 +759,134 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
- 	return XDP_DROP;
+diff --git a/Documentation/bpf/bpf_iterators.rst b/Documentation/bpf/bpf_iterators.rst
+index 189e3ec1c6c8e..72435e32ffa16 100644
+--- a/Documentation/bpf/bpf_iterators.rst
++++ b/Documentation/bpf/bpf_iterators.rst
+@@ -86,6 +86,16 @@ Constructor/next/destructor implementation contract is as follows:
+     resources and marks stack space used by `struct bpf_iter_<type>` as usable
+     for something else. Destructor is marked with KF_ITER_DESTROY flag.
+ 
++The verifier treats a non-RCU, non-acquired struct result as borrowed from
++the iterator's current element. It invalidates the previous result and its
++tracked derived pointers on the next call, including when it returns NULL,
++and on destruction of the iterator. Resources borrowing that lifetime must
++be released first. A next method whose struct result has an independent
++lifetime must use ``KF_ITER_RET_INDEPENDENT``. This flag requires
++``KF_ITER_NEXT`` and a struct pointer return type, and cannot be combined
++with ``KF_ACQUIRE``. RCU-protected and acquired results retain their own
++lifetime rules.
++
+ Any open-coded BPF iterator implementation has to implement at least these
+ three methods. It is enforced that for any given type of iterator only
+ applicable constructor/destructor/next are callable. I.e., verifier ensures
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index b66e20a18c54f..a18254b7521bd 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -82,6 +82,7 @@
+ #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
+ #define KF_SPINLOCK_SAFE (1 << 17) /* kfunc is allowed inside bpf_spin_lock-ed region */
+ #define KF_PERFMON      (1 << 18) /* kfunc requires CAP_PERFMON */
++#define KF_ITER_RET_INDEPENDENT (1 << 19) /* next result outlives the current element */
+ 
+ /*
+  * Tag marking a kernel function as a kfunc. This is meant to minimize the
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 538129ed24188..e360c0aefc375 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -9716,6 +9716,10 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
+ 	if (!flags || (flags & (flags - 1)))
+ 		return -EINVAL;
+ 
++	if ((func_flags & KF_ITER_RET_INDEPENDENT) &&
++	    (!(flags & KF_ITER_NEXT) || (func_flags & KF_ACQUIRE)))
++		return -EINVAL;
++
+ 	/* any BPF iter kfunc should have `struct bpf_iter_<type> *` first arg */
+ 	nr_args = btf_type_vlen(func);
+ 	if (nr_args < 1)
+@@ -9756,6 +9760,12 @@ static int btf_check_iter_kfuncs(struct btf *btf, const char *func_name,
+ 		t = btf_type_skip_modifiers(btf, func->type, NULL);
+ 		if (!t || !btf_type_is_ptr(t))
+ 			return -EINVAL;
++		/* The opt-out applies only to non-acquired struct results. */
++		if (func_flags & KF_ITER_RET_INDEPENDENT) {
++			t = btf_type_skip_modifiers(btf, t->type, NULL);
++			if (!t || !__btf_type_is_struct(t))
++				return -EINVAL;
++		}
+ 	}
+ 
+ 	if (flags & KF_ITER_DESTROY) {
+@@ -9822,7 +9832,8 @@ static int btf_check_kfunc_protos(struct btf *btf, u32 func_id, u32 func_flags)
+ 	if (!func || !btf_type_is_func_proto(func))
+ 		return -EINVAL;
+ 
+-	if (func_flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY)) {
++	if (func_flags & (KF_ITER_NEW | KF_ITER_NEXT | KF_ITER_DESTROY |
++			  KF_ITER_RET_INDEPENDENT)) {
+ 		err = btf_check_iter_kfuncs(btf, func_name, func, func_flags);
+ 		if (err)
+ 			return err;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5601d20562186..c223bf3bc9cdb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -211,6 +211,9 @@ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx, int par
+ static int __release_reference_nomark(struct bpf_verifier_state *state, int id);
+ static int release_reference_nomark(struct bpf_verifier_env *env, int id);
+ static int release_reference(struct bpf_verifier_env *env, int id);
++static int invalidate_reference(struct bpf_verifier_env *env, int id);
++static u32 reg_lifetime_id(struct bpf_verifier_env *env,
++			   const struct bpf_reg_state *reg);
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
+ static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env);
+ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env);
+@@ -793,8 +796,8 @@ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_
+ 		if (err)
+ 			return err;
+ 
+-		/* Track parent's id if the parent is a referenced object */
+-		parent_id = ref_obj->id;
++		/* All non-clone constructors take their backing object in R1. */
++		parent_id = reg_lifetime_id(env, &cur_regs(env)[BPF_REG_1]);
+ 
+ 		if (dynptr_type_referenced(type)) {
+ 			int id;
+@@ -1074,7 +1077,7 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 				   struct bpf_reg_state *reg, int nr_slots)
+ {
+ 	struct bpf_func_state *state = bpf_func(env, reg);
+-	int spi, i, j;
++	int spi, i, j, err;
+ 
+ 	spi = iter_get_spi(env, reg, nr_slots);
+ 	if (spi < 0)
+@@ -1084,8 +1087,11 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 		struct bpf_stack_state *slot = bpf_stack_slot(state, spi - i);
+ 		struct bpf_reg_state *st = &slot->spilled_ptr;
+ 
+-		if (i == 0)
+-			WARN_ON_ONCE(release_reference(env, st->id));
++		if (i == 0) {
++			err = release_reference(env, st->id);
++			if (err)
++				return err;
++		}
+ 
+ 		bpf_mark_reg_not_init(env, st);
+ 
+@@ -1627,6 +1633,12 @@ static bool reg_is_referenced(struct bpf_verifier_env *env, const struct bpf_reg
+ 	return find_reference_state(env->cur_state, reg->id);
  }
  
-+static __always_inline int fill_xdp(struct bpf_dynptr *ptr, __u32 start, __u32 n)
++static u32 reg_lifetime_id(struct bpf_verifier_env *env,
++			   const struct bpf_reg_state *reg)
 +{
-+	__u8 b;
-+	int i;
-+
-+	bpf_for(i, 0, n) {
-+		b = (start + i) % 251;
-+		if (bpf_dynptr_write(ptr, start + i, &b, 1, 0))
-+			return 1;
-+	}
-+	return 0;
++	return reg_is_referenced(env, reg) ? reg->id : reg->parent_id;
 +}
 +
-+static __always_inline int check_xdp(struct bpf_dynptr *ptr, __u32 at, __u32 n, __u32 from)
-+{
-+	__u8 b;
-+	int i;
-+
-+	bpf_for(i, 0, n) {
-+		if (bpf_dynptr_read(&b, 1, ptr, at + i, 0))
-+			return 1;
-+		if (b != (__u8)((from + i) % 251))
-+			return 1;
-+	}
-+	return 0;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_copy_xdp_overlap(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 off = data_end - data - 1000;
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, off, 1300)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_copy(&ptr, off + 100, &ptr, off, 1200);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, off + 100, 1200, off))
-+		err = 2;
-+	return XDP_DROP;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_read_xdp_overlap(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 lin = data_end - data;
-+	struct bpf_dynptr ptr;
-+	char *dst;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, lin - 10, 84)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	dst = bpf_dynptr_slice_rdwr(&ptr, lin + 10, NULL, 64);
-+	if (!dst) {
-+		err = 2;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_read(dst, 64, &ptr, lin - 10, 0);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, lin + 10, 64, lin - 10))
-+		err = 3;
-+	return XDP_DROP;
-+}
-+
-+SEC("?xdp")
-+int test_dynptr_write_xdp_overlap(struct xdp_md *xdp)
-+{
-+	void *data_end = (void *)(long)xdp->data_end;
-+	void *data = (void *)(long)xdp->data;
-+	__u32 lin = data_end - data;
-+	struct bpf_dynptr ptr;
-+	char *src;
-+
-+	bpf_dynptr_from_xdp(xdp, 0, &ptr);
-+	if (fill_xdp(&ptr, lin - 64, 118)) {
-+		err = 1;
-+		return XDP_DROP;
-+	}
-+	src = bpf_dynptr_slice_rdwr(&ptr, lin - 64, NULL, 64);
-+	if (!src) {
-+		err = 2;
-+		return XDP_DROP;
-+	}
-+	err = bpf_dynptr_write(&ptr, lin - 10, src, 64, 0);
-+	if (err)
-+		return XDP_DROP;
-+	if (check_xdp(&ptr, lin - 10, 64, lin - 64))
-+		err = 3;
-+	return XDP_DROP;
-+}
-+
-+SEC("?tc")
-+int test_dynptr_skb_load_overlap(struct __sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+	char ref[24];
-+	char *dst;
-+
-+	bpf_dynptr_from_skb(skb, 0, &ptr);
-+	if (bpf_dynptr_read(ref, 24, &ptr, 20, 0)) {
-+		err = 1;
-+		return 0;
-+	}
-+	dst = bpf_dynptr_slice_rdwr(&ptr, 10, NULL, 24);
-+	if (!dst) {
-+		err = 2;
-+		return 0;
-+	}
-+	if (bpf_dynptr_read(dst, 24, &ptr, 20, 0)) {
-+		err = 3;
-+		return 0;
-+	}
-+	if (bpf_memcmp(dst, ref, 24))
-+		err = 4;
-+	return 0;
-+}
-+
- char memset_zero_data[] = "data to be zeroed";
+ static int release_lock_state(struct bpf_verifier_env *env, int type, int id, void *ptr)
+ {
+ 	struct bpf_verifier_state *state = env->cur_state;
+@@ -6848,9 +6860,14 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		flag &= ~PTR_MAYBE_NULL;
  
- SEC("?tp/syscalls/sys_enter_nanosleep")
+ 	if (atype == BPF_READ && value_regno >= 0) {
++		u32 parent_id = reg_lifetime_id(env, reg);
++
+ 		ret = mark_btf_ld_reg(env, regs, value_regno, ret, reg->btf, btf_id, flag);
+ 		if (ret < 0)
+ 			return ret;
++		if ((regs[value_regno].type & PTR_TRUSTED) &&
++		    !(regs[value_regno].type & (MEM_RCU | MEM_PERCPU | MEM_USER)))
++			regs[value_regno].parent_id = parent_id;
+ 	}
+ 
+ 	return 0;
+@@ -8636,6 +8653,21 @@ static bool is_iter_destroy_kfunc(struct bpf_call_arg_meta *meta)
+ 	return meta->kfunc_flags & KF_ITER_DESTROY;
+ }
+ 
++static bool iter_next_borrows_struct(struct bpf_call_arg_meta *meta)
++{
++	const struct btf_type *t;
++
++	if (!(meta->kfunc_flags & KF_ITER_NEXT) ||
++	    (meta->kfunc_flags & (KF_ITER_RET_INDEPENDENT | KF_ACQUIRE)))
++		return false;
++
++	t = btf_type_skip_modifiers(meta->btf, meta->func_proto->type, NULL);
++	if (!t || !btf_type_is_ptr(t))
++		return false;
++	t = btf_type_skip_modifiers(meta->btf, t->type, NULL);
++	return t && __btf_type_is_struct(t);
++}
++
+ static bool is_kfunc_arg_iter(struct bpf_call_arg_meta *meta, int arg_idx,
+ 			      const struct btf_param *arg)
+ {
+@@ -8746,6 +8778,13 @@ static int process_iter_arg(struct bpf_verifier_env *env, struct bpf_reg_state *
+ 		meta->iter.frameno = reg->frameno;
+ 		update_ref_obj(&meta->ref_obj, &bpf_stack_slot(state, spi)->spilled_ptr);
+ 
++		/* The iterator stays. What was borrowed from the previous element goes. */
++		if (iter_next_borrows_struct(meta)) {
++			err = invalidate_reference(env, meta->ref_obj.id);
++			if (err)
++				return err;
++		}
++
+ 		if (is_iter_destroy_kfunc(meta)) {
+ 			err = unmark_stack_slots_iter(env, reg, nr_slots);
+ 			if (err)
+@@ -11073,8 +11112,8 @@ static int idstack_pop(struct bpf_idmap *idmap)
+ 	return idmap->map[--idmap->cnt].old;
+ }
+ 
+-/* Release id and objects derived from it iteratively in a DFS manner */
+-static int release_reference(struct bpf_verifier_env *env, int id)
++/* Invalidate id and objects derived from it iteratively in a DFS manner */
++static int invalidate_reference(struct bpf_verifier_env *env, int id)
+ {
+ 	u32 mask = (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+@@ -11089,11 +11128,6 @@ static int release_reference(struct bpf_verifier_env *env, int id)
+ 	if (err)
+ 		return err;
+ 
+-	if (find_reference_state(vstate, id)) {
+-		err = release_reference_nomark(env, id);
+-		WARN_ON_ONCE(err);
+-	}
+-
+ 	while ((id = idstack_pop(idstack))) {
+ 		/*
+ 		 * Child references are inaccessible after parent is released,
+@@ -11145,6 +11179,14 @@ static int release_reference(struct bpf_verifier_env *env, int id)
+ 	return 0;
+ }
+ 
++static int release_reference(struct bpf_verifier_env *env, int id)
++{
++	if (find_reference_state(env->cur_state, id))
++		WARN_ON_ONCE(release_reference_nomark(env, id));
++
++	return invalidate_reference(env, id);
++}
++
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_func_state *unused;
+@@ -15822,6 +15864,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			regs[BPF_REG_0].btf = desc_btf;
+ 			regs[BPF_REG_0].type = type;
+ 			regs[BPF_REG_0].btf_id = ptr_type_id;
++			if (iter_next_borrows_struct(&meta) && !(type & MEM_RCU))
++				regs[BPF_REG_0].parent_id = meta.ref_obj.id;
+ 		}
+ 
+ 		if (is_kfunc_ret_null(&meta)) {
 -- 
-2.54.0
+2.43.0
 
