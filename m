@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1792800245;
-	b=N4z17KQadmQvindbhvWjk76wM9E7YhnIGxnphu6ohszrkpHh9GPOQoUdOMfIUQjLRND+
-	 61fX8I+sx64A+sqJUA//9pYD3AlAgk3drZwNJjWW83Ql0yVL60Y7rS1aSTkael3ZSa7e2
-	 2KPHtuVkOWFPnaxBkHyr0uUA2QWfOb/s691Rr/EaWXaJYu8OEw7eQJnrYM38KEgtsFPz8
-	 Xzrdw2ATlMk+kxNkeXUm9MKbBQMIfs3L0OdbEKVC5M5ZlVlz+ExmLOdNRHL5NwFJL8Qx3
-	 3mE32HHQFnEY6b4jX9ryEzVxKqoXF3qHkkPos1nW0kY+FzVYYGFwRyNQI3EmCSkk9WA==
+	b=lKJKm3CGdc24i5J1I5RUaNy6ilFHPbSnhlaMyrIlKHL7nd/U3WnKroHhdhYNnpBkv3vZ
+	 QvNI8i3wgAwB4ZfwmFPXKaJsnnXxwKvZXYUzzwYWk+9c+f3Yn2G4/P5gXS49tCU/PWAS9
+	 9261Yt9Ryx1trK2YzInPW1OTt+oaYDmfl2LKJZh6fXLJj0oTrj3aFe+GWslg9dA40UJ3w
+	 6O3zcTtmqSwATMzQl4honOgpMaydxdyCCGT+IB0QKAMF+AR81x/NOvvLA08BprliNtmMe
+	 l7v5rHgN25NJG5Uk0M6O6+gUozwjW02aRC16EcatFUNP5dy64XJxfSP62m+JNJSM/vw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792800245;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Type:X-Change-ID:
-	 Content-Transfer-Encoding;
-	bh=0MvOWP8q3jjHxQXzuneqM8MkkyYA2riDTAktDqhG12E=;
-	b=tkIxHaL2nJ0UPqQG30LFMmKDy2WWjh5ETb3hqiehPy18DcXvbwtuoXgV8wBYDPF1nGYv
-	 Mv66U8fdJKX2tzTc1/KfE1ZGbXa9dxWlI1fNdNYe2wtFAK0M0i4lje1+Ie8wYLQpeOc9E
-	 QK/VQJfS6LZUybb/hUss23+WFpYM20LtaBp+AVBS4Jv4HLLgek4PxlvrGHSWeAyRt2+D0
-	 RxwT7NRl+Xah7SFCHTTdFRz6KyU2gzuwS9CNZ0A5opNub/FyfzJ+8kt+9iZtFfJg6b7iz
-	 8v1pRfd6JZapqvTS7XLSQjfRxkmmPb4xZ9c5me9kaon/U0jj3bdUvcgnRfL7oes0IPQ==
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=yWcmeThpcGx6rGZgPANk4Kk6TMJByCg2kVqo+CRdpgk=;
+	b=AQ0YJ4fRROT+T9Gxu1iBP2AFyJKjaSHf50gPHFhgOIo97eRbRFz5QPd76VAHMnN6IbOx
+	 0h7atusd12YHEEGODpRCu7WpKi1lRpSIZD7csMTDYA/TRuzTbm0vNYluDvXUWa8uLBwNt
+	 yYyIdYrJ8upENvGI6qeKu1WF4fAHwrJ9pPX781AEi/y6MMijJoCUtvTIZvqInjy7MTJMF
+	 hjATinRug1yLKif+i7HEbZzbMKowJYDwMj+51Ofn59zvzGk4nkLHIXzGqea6lEuDBJc49
+	 PcZKB3CoE8Dfe7b3BRPq+SkObuX5RXlQ8qRvsLIXqryDaGgQDxHq+9Xq/whiMJuXBHg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rNwg0eL7;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OeTd5Ikg;
+	arc=none smtp.remote-ip=209.85.216.45
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B145A606A31A
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:04:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B145A606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8346D606A31F
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:04:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8346D606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rNwg0eL7
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc4b1f7e8f4so539511a12.1
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 17:04:04 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OeTd5Ikg
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so1016844a91.1
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 17:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792800244; x=1793405044; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0MvOWP8q3jjHxQXzuneqM8MkkyYA2riDTAktDqhG12E=;
-        b=rNwg0eL7BCuYoPyTg6K7mT6U64jHT//2BKY5e//mLLIrhYvBvcC3hPMXMkFzIp1fvE
-         EAD3+NpBXkaurTe/XI5hZ+uuXOSpkf/iYF65M5cLnp8qc+MSrtrShsrYaTsU7PYAm7Ae
-         q+TjT6+B+Erf3TMJ/gyceYyoX1MvEUApbqvBDe9SJ/XIQTrBfx525PxLHPeODzbtGr7z
-         nifwHk13Qb4ihkf7nWfmsi9Ln+TK7RHPMnnj+foxt/Ax85nqai5jf+RWlBILZFsNbZsC
-         HmGDYmieOsEOqzfA/Pv3SARVRKt8xbBu9rFViAIRxeIH3aRqns3k9zmfCFPl/1GyALX5
-         yyiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792800244; x=1793405044;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792800245; x=1793405045; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=0MvOWP8q3jjHxQXzuneqM8MkkyYA2riDTAktDqhG12E=;
-        b=yKNDbve9pDPhM9uQ1MdkP9OjtnReOMR3u27V4umKMHJfIo6nviwWu3UjtVYKEzlgvt
-         kEjX/dsRNAj27W5Y3D5ROIGluYz81Tidzx7eYvKKwryFi/FSrp1wC1N2rqdlmglZuDI3
-         HPU52fDRkgeHR+5RSqV7lYdiQv4rfROpPKtiSoG+yrL7zYFdgtFGUXdSlj1d2bvuJ7QU
-         gMRNB5A4mVExbmXl0qrNz8gzgz+pU/lyxDiir2dRDY35IK2SZhBtFf/wE5O/WFrmXwpX
-         yWR2yrzUYMPCpjb2LfO7gewHSBXevTG4zdSz64HonMhuLb1bvKwF4JMnsugiIaQBOFby
-         b6NQ==
-X-Gm-Message-State: AFq9FYIuWHg71fieIQZu0Aa8QFajn7u7RJO+eFqPE1Ukhm12uxbIJzqn
-	ZSCy8IMDGj06/aJ2b+0ghKj4KS/Rnu1vHS3g9sY7O4J3p+onIUTuOa1WojEdF2U1
-X-Gm-Gg: AYBFou0wdlpLhHF4aLxZfTISXirC/PG7SLWtwToSBNIciIhuHfwty7IXzA1LCSzKEZy
-	lNYMT6n9rpsPUdGdsAn8Haak+VowB46csgMtvW8a2tw+rS4TcWGRfmlWDlFiAMmooiN2CuU5KaH
-	G6uafy2I6ZztvMnOxxpFRZAs+TVSL0uV5fRhY08p3LP7ZfZ8dsLtpzRSPmEpBi5y6YAl2ua+kMC
-	ietZvXAaVX7aZP1PvLqYuAbW76obmYqRp/N87+bIOZgqngjORck+1LTZKHzFY2mwvJJsYeTv+62
-	gX9kAk+vejgwCKsh4rcGHXXnklEqFytohjnAr1vZEaoX1NOLML+U/ptrSlt7d0zRDQeC4bkk7ra
-	wGSSUFZFtlD/IbNNvI7L83CYCV/R6f3XI71OLwFY1J/dNSEPpOrO8a/2KLHnp5K6p+NWRvXDwPq
-	uZEYIye3Q7mmcttu1SSBEuL4+SjLEGJGLmAPc8/xUpMGO2c+iLmtvkPwobQreQZJVopCmbcvih0
-	rvdnowVfljl2pf1gBjhdlX4aVZcS11zp6gwftE3rShwnWIav5VYbdlWBkaM90XsVI2y7gUJLdFr
-	/eb5fUCv+MNnuJyhyA==
-X-Received: by 2002:a17:90a:e705:b0:3aa:fc22:8ab4 with SMTP id 98e67ed59e1d1-3adeafab04fmr587251a91.29.1792800244041;
+        bh=yWcmeThpcGx6rGZgPANk4Kk6TMJByCg2kVqo+CRdpgk=;
+        b=OeTd5IkgSJnkdXRe1eYhlrKAuhMgq4GuErGeH4qd5AQEdoOO6PB3oJoEKkHNCkMrTR
+         2XnI1ioleJ1io/AxHfFpWVcZ5gr+FDPTAv8Fh8u9ZIGVS9Bd5YthA0l3OgXHFhu2B7bo
+         BWg6OXCrV3+N+lF8fdQ0FK4gv4fLvBAlkwU//u78UVf17hhku0xUR+BBffsoqeCLEtby
+         hP7GO7X9Hl9BadBnM8BPkn9xUxpwnOaxvt8DghIV1OntMml5gPfkge+5MDHIAKaGiXtL
+         Z6K2XESWqxL4Mt2qiZbHkDNMcY2uUqBRVHds8MsBY3aeS7B0OC/BhyJ0DEe0FS5926m4
+         TDqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792800245; x=1793405045;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yWcmeThpcGx6rGZgPANk4Kk6TMJByCg2kVqo+CRdpgk=;
+        b=BVMCIpMNDAOvbLrg4eVY6m1/t7Vd+twPEOK+M7f1ShcBKBLid/yqH/zE0QNclhSrzA
+         ga3xyWOHWg7ss71PCrdYGc+bpPiE/vs6Tw7VMMB+EbxocIlI67pr7CP3JWjYaA/MWCKN
+         dGkgd9stOyx2v8HHy2JuH/14EDEWUs4+yrihdvk5CcB2lCJKym9uYr9Q0uzgaWeVuV+m
+         /MtfKde+emSENCr8hKoquR/JC3bu3dLN+E3NMr1rhqpz4Gd5PsKXvnLITTCy5BwzKzHT
+         6DoUEKwhfpNDwnMNoH4xr1ysKcChT20knbo24EWrYC/EdC4eTEbgDCcqlmBHmy40EWfg
+         EhAg==
+X-Gm-Message-State: AFq9FYIyulXHgCDr3qGoLxvBpFm4ZLUE1zYn1UEGmVKxlMxXOPIZTLNd
+	NF1PRFi2YQqfUKOJ+ikDBtyLzDmI5IfRpIRyrylAQcEZzM/ucAWdC7vcr9mlHzBw
+X-Gm-Gg: AYBFou1Cl1yHDD24rqQSs8+B8q3vfGIaIYeuYDlYt6tWEDbO+sDVWhIrcfod2r0NcYX
+	+A/2R+CigU1CwXiFyEaAX7ZbKst0raYnjMV5nsi3PwMMMmuN4uQcKra/qZON8Vpdgned7SdOItQ
+	iJcB9dpBycE1o7CD9QnPOkqNQYNKCFNO6MsyLd3I1nCrEhIG3pvpHyRYavPbQMQ05Cdtw6r0VVO
+	tCnqCVi0jM5VuTHa9B7hbUcAE6s0b48O39HU60kQ09D09nYXl2Oa/4JI6vfZOX66L/UKgSo8mD1
+	+YdRoLv0ZiXfcSXGryLuYMHpqYgMg3URKtcEThB9smHP4+eNCSFGu2YWZ78qpeEzSq1LHNVdH1c
+	dd+RM6YP9FIyeBYfUEeU87Ervd/iI+H3LLmDV3VKi0awd4wnOomK4l0nvTsyqsuIob8aGY00Pdx
+	9W04b9o7lYElKbJVW3r5HR2jR/D1p4+OW2BBUVfA0YguMdBvZhLXQhWrVreDsYRV2DNGwCVvQzS
+	9QSIXr+zX/xYjddW4TWGMF1helmzuaHBMI7fSw4iyMhBL8uwTPPz5U6xo8CgnKKb++Pn0Iu
+X-Received: by 2002:a17:90b:1b04:b0:3ac:8446:c1b5 with SMTP id 98e67ed59e1d1-3adeae8b8e9mr636372a91.31.1792800244813;
         Fri, 23 Oct 2026 17:04:04 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba31797sm547433a91.1.2026.10.23.17.04.03
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba31797sm547433a91.1.2026.10.23.17.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 17:04:03 -0700 (PDT)
+        Fri, 23 Oct 2026 17:04:04 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -85,10 +85,12 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 00/11] bpf: fixes and follow-ups for 32-/64-bit scalar evolution
-Date: Fri, 23 Oct 2026 17:03:42 -0700
-Message-ID: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
+Subject: [PATCH bpf-next 01/11] bpf: reject pointer operands for 32-bit recurrences/latches
+Date: Fri, 23 Oct 2026 17:03:43 -0700
+Message-ID: <20261023-scev-simpler-clamp-v1-1-d43a07eda7af@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
+References: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,96 +101,76 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20261022-scev-simpler-clamp-4b5486b201d2
 Content-Transfer-Encoding: 8bit
 
-Fixes:
-- bpf: look for current loop in upper frames in states_equal()
-- bpf: do not intersect with current register range on clamp
-- bpf: reject pointer operands for 32-bit recurrences/latches
+Avoid inferring loop bounds for the following program shapes:
 
-Follow-ups:
-- bpf: (zext32 (zext32 X)) -> (zext32 X) SCEV simplification rule
-- bpf: check the iteration count before the predicted exit value
+     32-bit latch (A)      |    32-bit recurrence (B)
+  -------------------------+--------------------------
+     r1 = ... pointer ...  |    r1 = ... pointer ...
+     r2 = ... pointer ...  |    r2 = ... pointer ...
+  l: r1 += 8               | l: w1 += 8
+     ...                   |    ...
+     if w1 < w2 goto l     |    if r1 < r2 goto l
 
-Note: this supersedes [1].
+(A) Scalar bounds for pointers represent only offsets from their
+    common origin values. The 32-bit operations also depend on the
+    runtime base address: the addresses can wrap at 32 bits without
+    the tracked offsets wrapping. Thus, offsets alone do not determine
+    the iteration count.
 
-[1] bpf: reject pointer operands for 32-bit recurrences/latches
-    https://lore.kernel.org/bpf/a7b9422e00b9a3f5438e996f01e97bef476040e0.camel@gmail.com/
+(B) 32-bit operations on pointers either prohibited (wX += 1)
+    or convert them to scalars (wX = wX). No need to deal with
+    this at SCEV level.
 
-There are some veristat improvements after clamping changes and new
-zext32 simplification rule.
-
-A: master; B: scev-simpler-clamp. Corpora: cilium, meta, scx, selftests.
-Object exclusions: verifier_scev.bpf.o.
-Histogram: selected programs, without the table filters.
-
-Total progs: 8071
- -85 .. -75  %: 1
- -35 .. -25  %: 3
- -25 .. -20  %: 18
- -20 .. -10  %: 5
- -10 .. 0    %: 13
-   0 .. 5    %: 8031
-
-Tables: success in both runs; baseline Insns >= 5,000.
-Ranked by percentage change, then instruction-count change, file, program.
-Meta names are anonymized; numbered objects are distinct files.
-
-Top wins
---------
-
-File                       Program                            Insns (A)  Insns (B)      Insns (DIFF)
--------------------------  ---------------------------------  ---------  ---------  ----------------
-profiler-06.bpf.o          on_perf_event                          94751      64595  -30156 (-31.83%)
-profiler-19.bpf.o          sched_switch_offcpu                    21906      15726   -6180 (-28.21%)
-profiler-12.bpf.o          sched_switch                           12105       9015   -3090 (-25.53%)
-profiler-26.bpf.o          handle_cu_mem_address_reserve          12702       9738   -2964 (-23.33%)
-profiler-26.bpf.o          handle_cu_mem_create                   12702       9738   -2964 (-23.33%)
-profiler-26.bpf.o          handle_malloc                          12702       9738   -2964 (-23.33%)
-profiler-26.bpf.o          handle_cu_mem_map                      12900       9936   -2964 (-22.98%)
-profiler-09.bpf.o          on_custom_event_start                  12951       9987   -2964 (-22.89%)
-profiler-09.bpf.o          trace_func_entry                       12951       9987   -2964 (-22.89%)
-profiler-19.bpf.o          sched_waking                            6642       5160   -1482 (-22.31%)
-profiler-27.bpf.o          handle_cuda_launch_exc                  6665       5183   -1482 (-22.24%)
-profiler-27.bpf.o          handle_cuda_launch                      6678       5196   -1482 (-22.19%)
-profiler-12.bpf.o          on_custom_event_begin                   6885       5403   -1482 (-21.53%)
-profiler-12.bpf.o          on_custom_event_end                     6889       5407   -1482 (-21.51%)
-profiler-26.bpf.o          handle_mtia_cached_alloc               13870      10906   -2964 (-21.37%)
-profiler-26.bpf.o          handle_mtia_allocate_enter             13931      10967   -2964 (-21.28%)
-profiler-26.bpf.o          handle_pytorch_malloc                  14223      11259   -2964 (-20.84%)
-profiler-19.bpf.o          oncpu                                   7178       5696   -1482 (-20.65%)
-profiler-12.bpf.o          on_task_enqueued                        7223       5741   -1482 (-20.52%)
-profiler-12.bpf.o          sched_waking                            7258       5776   -1482 (-20.42%)
-profiler-12.bpf.o          on_task_dequeued                        7398       5916   -1482 (-20.03%)
-profiler-12.bpf.o          on_request_context_event                7489       6007   -1482 (-19.79%)
-profiler-12.bpf.o          on_pytorch_event                        7490       6008   -1482 (-19.79%)
-profiler-12.bpf.o          on_task_stats                           7572       6090   -1482 (-19.57%)
-profiler-12.bpf.o          oncpu                                   7676       6194   -1482 (-19.31%)
-profiler-12.bpf.o          get_crochet_walltime_stacks            22063      18973   -3090 (-14.01%)
-profiler-24.bpf.o          get_task_stacks                        64928      61154    -3774 (-5.81%)
-
+Fixes: 32e962577d2d ("bpf: Support 32-bit linear scalar evolution")
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
-Eduard Zingerman (11):
-      bpf: reject pointer operands for 32-bit recurrences/latches
-      bpf: do not intersect with current register range on clamp
-      bpf: look for current loop in upper frames in states_equal()
-      bpf: check the iteration count before the predicted exit value
-      bpf: (zext32 (zext32 X)) -> (zext32 X) SCEV simplification rule
-      bpf: print 32-bit SCEV bounds as 32-bit numbers
-      selftests/bpf: pointer operands for 32-bit recurrences/latches
-      selftests/bpf: cases with empty range error under old clamping logic
-      selftests/bpf: case reporting infinite loop w/o current_loop() changes
-      selftests/bpf: 32-bit copy of the counter compared at the latch
-      selftests/bpf: Restore stack pointer subrange pruning coverage
+ kernel/bpf/scev.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
- include/linux/bpf_verifier.h                       |   1 +
- kernel/bpf/log.c                                   |   8 +
- kernel/bpf/scev.c                                  |  47 +++--
- kernel/bpf/states.c                                |  10 +-
- tools/testing/selftests/bpf/progs/verifier_scev.c  | 235 ++++++++++++++++++++-
- .../selftests/bpf/progs/verifier_stack_ptr.c       |  30 +--
- 6 files changed, 289 insertions(+), 42 deletions(-)
----
-base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
-change-id: 20261022-scev-simpler-clamp-4b5486b201d2
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index fea77772ca96..f9e2ca6a5a12 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -2024,7 +2024,8 @@ static void log_incompatible_scev_values(struct bpf_verifier_env *env, const cha
+ }
+ 
+ static bool scev_value_compatible(struct bpf_verifier_env *env, struct bpf_func_state *st,
+-				  const struct scev_value *a, const struct scev_value *b)
++				  const struct scev_value *a, const struct scev_value *b,
++				  const struct linear_latch *latch)
+ {
+ 	const struct bpf_reg_state *ra, *rb;
+ 
+@@ -2035,7 +2036,7 @@ static bool scev_value_compatible(struct bpf_verifier_env *env, struct bpf_func_
+ 	}
+ 	ra = scev_reg_for_read(env, st, a->ptr_reg);
+ 	rb = scev_reg_for_read(env, st, b->ptr_reg);
+-	if (ra && rb && bpf_same_memory_origin(ra, rb))
++	if (ra && rb && bpf_same_memory_origin(ra, rb) && !latch->zext32 && !latch->jmp32)
+ 		return true;
+ 
+ incompatible:
+@@ -2267,7 +2268,7 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
+ 		}
+ 		return false;
+ 	}
+-	if (!scev_value_compatible(env, st, &initial_val, &bound_val))
++	if (!scev_value_compatible(env, st, &initial_val, &bound_val, latch))
+ 		return false;
+ 
+ 	initial = initial_val.value;
+@@ -2700,6 +2701,9 @@ int bpf_compute_loop_iters(struct bpf_verifier_env *env, struct bpf_verifier_sta
+ 		reg = scev_reg_for_linear(cur_func, r);
+ 		/* If SCEV for r is (linear <reg> <slope>) */
+ 		if (reg && is_simple_linear(scev, r_scev, &coefs) && is_widenable_reg_type(reg)) {
++			/* 32-bit ALU operations on pointers convert them to scalars */
++			if (coefs.zext32 && reg->type != SCALAR_VALUE)
++				goto cant_widen;
+ 			/* Spills at varying offsets lose precision */
+ 			if (test_bit(r, loop->store_base_regs)) {
+ 				spill_base = true;
+
+-- 
+2.53.0
