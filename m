@@ -1,96 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792800252;
-	b=Vixdd0Jb+l/38Aq6vg1mpPFF04dg38eVvuvh05EmxbNLX7edFqStOE62NRabzyQUbvTl
-	 2NXrAxieBaFCocxfmr31OBriscMSNUuAU+MaZrDfVtW0DzaSB1ulJ/iq1u/Uahybzcb6s
-	 /iCETm8R+tOJnhceibF0kjgZmFCIv4hvcTA49nHqCrm/g7rZFFsY8WTCCEv0svu13jbC9
-	 FQPizNes65sjwRswu/wA/9PWJBW9NZxTdjotxGO41wvbrGin36jZyRA1Zp7P6BukbRxhG
-	 LTnjxtaF+pqVt5F8XMNOo6/GKH+l2axoLYkYsUrB8l6jJb8Syn/GkCsv7W3dVzL0OSA==
+	t=1792801639;
+	b=ZG3qIw1Hm9yXm5BIpgbuBUQh6b4DU+/eQ5sLRVQ6TGdUJS4mhYCaPEhOoS+ximgytZUK
+	 35J6DD7BnA3Uh/8+S0nc3sDzP0+Z7yDBn5L5wQTZwtIxgNtJn+gUqiMKyC09NHe+I+jkI
+	 ONmanbFudJH0q3RAs1f25QPwUGchO2sa79fzAYuNkuy2IK2S7/SAkK14LerKY9tBS0SyV
+	 c6QTVBadOij1zBlQrE6Uu50JspAN51Z2AZ/gea9r8E11fGIfQKJyhaU4sXHhPZylxITWy
+	 GEKPMkk+gLOXdlIylpwzcLNy7VFXKkLrkUL6EcMTXLGMtAll6zPO079xLYwyMz9D45g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792800252;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=BN3DXWA+R50v9nawNHUN+/FxFUGm5F6PajH6R7DV3ZA=;
-	b=FcaA2g4IXDf5J4weB7Eip8+ayStnXkdF39Ejy3OhHYn8sXy6OSVAsfwWX41IjI+xzoU2
-	 465NUoMZiC0nCy7ye6g1baeYgIizWGxVnjAOBfSJmRqDfzd8+X/NmC8Vfo770E1RgNhii
-	 BbBoSmnMJ/6QL85hQYtXJjAz4LKMd/7uCo4/6nup/Rw3KHQGCGmoYWlNw/xrrwJKpq8I1
-	 Laq4R6V3XxTMLnODgYi6jyHUBAEmYKupUQTSgZcxRLMzeZ/5HSOWCcZTdm/nkdct/DgS2
-	 g071Y9q6zfWltG38RWehvgoikCXrUSoH4mn8yO33dIn5rFwJqIEG7W0t8c1OwTGFnCw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792801639;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=6SG3wx8m3rJE08LeUxdFVqARqL8l7bSJBZIDCVAPEns=;
+	b=gKlxKhLzhOknROBAnjYQefsw6xEeJFZMXkZ1JeoexLfYLr9+WUQTsNowuWzIk9rthgH2
+	 qPjdU6jF0nNk7VPgIqEAferS2tX2vV/mhSDsIHfS4jq8yA0tdgioqwsE5bWn3hZplxm5a
+	 bNAOxtCmSefyBvZkVd7+Te2m2B6yzkNfQmKEOofRRQZQuDhkT0tvNwJbzbdu2QrcsIaAk
+	 cydqS0tNkqsfVMAszzm1IHy3PTQTMYEXTwF8MwOiawjAPyziOROSzdc2ydxCK59lDJXon
+	 T+H0VMhBWCo5cbglStXHUk5Lb56bF3eFIehUR0R528z9PSJe93NFBA9R5zExikFqqRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OpICM0qu;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j3eWaD+9;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468D6606A320
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:04:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 468D6606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0126C606A31A
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:27:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OpICM0qu
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e9d1114320so10275305ad.3
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 17:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792800251; x=1793405051; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BN3DXWA+R50v9nawNHUN+/FxFUGm5F6PajH6R7DV3ZA=;
-        b=OpICM0quiu2SNqzwyRe/f+JvXOQAREeB3X+LzZL0ffU6Pt8b7JLcOUNZv0eisdFZZF
-         h3zky0iP3F2PfgIGcrLxGRFVhdttNrA7iAvDHVkBo/EEyYR4DZQmukhT/QGeG9Re3INY
-         emHalzGc/IUX6dna9SuP76b0q5ga6vN7dqwslrE3qFIcCcPmc/QZUeQBenW++OhoN+HJ
-         5b7dVhOTl+uyZPbcuyoEX35mH2WsV7k+sngmpLXPe9TT0i7wQj6yo+3AFDEHQRE12tIP
-         +6PMDbSaTqwr22HucJ6iyDQfHVYSeAUWsmWRD/MWGL4ACy+W2obtKV1w/KGtRDXdFV0i
-         oCsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792800251; x=1793405051;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BN3DXWA+R50v9nawNHUN+/FxFUGm5F6PajH6R7DV3ZA=;
-        b=xoSxmWVZLyHaeNTGqwNHaIy8aN3pCxqDrotvyO1Ywq+TIxt6v4d+C0K9xEHcCMgx2O
-         9kexhwvcWjdx9p+57xfpwMEbmvsmXlixk+jNnsL3gz5Hn2kzgq33T+nnwwYjsAMddnxA
-         7EhVcjm3IHOJN3YkODcngj7TYhFEIqTdNA0MqwEJGXlH3GIhzqcKEu4w0soD6ztyqRm/
-         rnjGUCKeZ7jXB3J5rlv7SysSnl7bFC2Wpr2ZSuTeL9hxoL5tUhIDlkCHrssa/1oUWDuJ
-         Rl6GCkRGWCiG9YcNAX+DA7uvqjTwMQzohe7P8PBlzb/WjVgeBFWlEDqnOJsscD5AYo+z
-         qkVg==
-X-Gm-Message-State: AFq9FYIhC+r8j3tadpuyNMPoHPYo3+tlsF98hIb9fFrE+sA/5ynQWZXG
-	Gmin0xEn8mPfQ5s+FVQZ/oUIUozEMTKM1JCn7ea5s3UkmBDVWSH/2Iebvn1TUnBo
-X-Gm-Gg: AYBFou0bfM9elZxRVWJsQYQnig/0kwCfUEHDOfN6M3+8ZtPM+5tEivQKzlOt245o9lN
-	zZKETBwmH9kPGL9eg4yshlJv6yIbiMwgao/8c6kvBHIRtBsncV1jq0gGKReSFTfhysS5DiJ09v9
-	TQYOPcT3LfgWGOjk8xr6T58YvyXvTGBozQAxE1JT5x9euktNwe1eQ99EeDF8pETllmasOgKJ0WO
-	mbvaaWGLYlfqr766fVc3vmDcjwJSdSq4dz4gT1U7rQ5BSmJz5pof20ViRg9Roe4eN2pZKwt/lIU
-	rfooOczXoYC+BG1dUX+Xb7TOzYT5wP1gz7A6N/wBZaloFfUiwVTLSMgYVsxpFm2AYIpBlMuVED7
-	UcCKZ2FTjcWvJFKzC3/tylJxjRrAfFv3uVD1F/2+z405EgJxxREIKioildl1tYF8pC4CCJVBc2n
-	WIIUw32dbSKLY/ZlpPo1BLOUDun6tPzbF4saS2HLYyrSN8P0fxuVGFNRdgsSL8pFzYVSi1TX6tq
-	ydbRNYONOQvcrQxzs9cn1Y1vpAAlE9KzpWkWYq3MU7zRc22NFsT5OYbZ20WeCXWaW47VikH
-X-Received: by 2002:a17:90a:ec8e:b0:3ac:e9d4:5530 with SMTP id 98e67ed59e1d1-3adeae84a18mr627439a91.24.1792800251602;
-        Fri, 23 Oct 2026 17:04:11 -0700 (PDT)
-Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba31797sm547433a91.1.2026.10.23.17.04.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 17:04:11 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 09/11] selftests/bpf: case reporting infinite loop w/o current_loop() changes
-Date: Fri, 23 Oct 2026 17:03:51 -0700
-Message-ID: <20261023-scev-simpler-clamp-v1-9-d43a07eda7af@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j3eWaD+9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7659D1F01825;
+	Sat, 24 Oct 2026 00:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792801638;
+	bh=6SG3wx8m3rJE08LeUxdFVqARqL8l7bSJBZIDCVAPEns=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=j3eWaD+9vzKicEViua/d0wAlmy2JRQfP97norW3rkqZ4HM2COjRp0KyawN2uj9gl8
+	 /RW42+R+Y7mWVF3BeUT8TfoiJK1DMaBOEPz5vAfFhMC0hdvS8qV0CrWrmlPGLpxi2h
+	 dAlJHLh4wu4XSrtI24DHqp1ytHo4rAhskXviQi8yZCuUnoHYHK8b5EAKSbOf0k4Cx5
+	 buyCpLkSK0I2H4dQmViQRbt0eRchGSBT7XVN9H6G/WtNwT7MixKgVoPqSFtxsCEqRP
+	 0JMnHqoo7YX4WrNxZT8wMksIMFwNo7ztJLd8pbDFDUKxl3av96mCzV86zUDXgUjhhT
+	 5Gxd02Mt75QoQ==
+Message-ID: <sashiko-outbox-183459@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 03/11] bpf: look for current loop in upper
+ frames in states_equal()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261023-scev-simpler-clamp-v1-3-d43a07eda7af@gmail.com>
 References: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
+ <20261023-scev-simpler-clamp-v1-3-d43a07eda7af@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 24 Oct 2026 00:27:18 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,95 +59,120 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-Add a test equivalent to the following pseudo-code:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: current_loop() ignores outer loops when inner loop is re-en=
+tered
+--
 
-  void scrub_slot_callee(u32 *slot)
-  {
-          slot[1] = 1;        /* turn the caller's spill into STACK_MISC */
-          ... checkpoint on first iteration ...
-  }
+commit 999e70b9b80c780cef9257c5cc41cf3820aa644f
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-  int caller(void)
-  {
-          u32 slot[2];
+bpf: look for current loop in upper frames in states_equal()
 
-          slot[0] = 1;        /* 32-bit spill */
-          for (int i = 0; i < 10; i++) {
-                  scrub_slot_callee(slot);
-          }
-          return slot[0];
-  }
+This commit updates current_loop() to search upper call frames for an active
+loop entry when checking if the current loop exploration terminates in
+bpf_is_state_visited(). This allows checkpoints inside callees invoked from=
+ a
+bounded loop to be pruned and to skip false-positive infinite loop checks.
 
-Verification proceeds as follows:
-- First iteration: the stack slot is a spill at the call site and
-  STACK_MISC at the callee's return.
-- Backedge: the counter is clamped to 0..9, but the stack slot is now
-  STACK_MISC, so the state does not match the header checkpoint.
-- Second iteration: the stack difference prevents a match at the call
-  site, but the states match exactly at the callee's return.
-- The callee frame has no active loop. If current_loop() checks only
-  that frame, bpf_is_state_visited() reports an infinite loop.
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> index d7df6632a5c47..306ad208a8e41 100644
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
+> @@ -1361,10 +1361,14 @@ static bool need_loop_checkpoint(struct bpf_verif=
+ier_env *env, int insn_idx)
+>  static struct loop_stack_entry *current_loop(struct bpf_verifier_state *=
+st)
+>  {
+>  	struct bpf_func_state *frame =3D st->frame[st->curframe];
+> +	int fr;
+> =20
+> -	if (frame->loop_stack_cnt =3D=3D 0)
+> -		return NULL;
+> -	return &frame->loop_stack[frame->loop_stack_cnt - 1];
+> +	for (fr =3D st->curframe; fr >=3D 0; fr--) {
+> +		frame =3D st->frame[fr];
+> +		if (frame->loop_stack_cnt)
+> +			return &frame->loop_stack[frame->loop_stack_cnt - 1];
+> +	}
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- tools/testing/selftests/bpf/progs/verifier_scev.c | 40 +++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+[Severity: Medium]
+What happens if a terminating outer loop enters a terminating inner loop
+(either in a callee or nested in the same function) on a subsequent outer
+iteration without having been pruned at the outer loop header?
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index 213a2b6a5027..078803e71197 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -2567,6 +2567,46 @@ __naked void no_widen_any_stack_origin(void)
- "	::: __clobber_all);
- }
- 
-+__naked __noinline __used static int scrub_slot_callee(void)
-+{
-+	asm volatile ("					\
-+	*(u32 *)(r1 + 4) = 1;				\
-+	call %[bpf_get_prandom_u32];			\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * The callee turns the caller's fp-8 into misc, so the states at the call site
-+ * differ between the first and the second iteration, while the states inside
-+ * the callee are identical. Verification fails with an infinite loop error if
-+ * states.c:current_loop() does not search upper frames for active loops.
-+ */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__msg("loop header at 3, widening r6 to 0..9 step 1")
-+__msg("loop header at 3, clamping r6 to 0..9 step 1")
-+__msg("12: safe")
-+__naked void clamp_callee_state_pruning(void)
-+{
-+	asm volatile ("					\
-+	w1 = 1;						\
-+	*(u32 *)(r10 - 8) = r1;				\
-+	r6 = 0;						\
-+1:	r1 = r10;					\
-+	r1 += -8;					\
-+	call scrub_slot_callee;				\
-+	r6 += 1;					\
-+	if r6 < 10 goto 1b;				\
-+	r0 = *(u32 *)(r10 - 8);				\
-+	exit;						\
-+"	::: __clobber_all);
-+}
-+
- /*
-  * r7 starts as 1 + 6*k and invariant r8 as 1 + 9*k (0 <= k <= 3).
-  * The (any r7 r8) union must preserve base 1 and step gcd(6, 9) = 3.
+On each fresh entry into the inner loop, handle_loop_entry_exit() allocates=
+ a
+new entry_state via bpf_split_cur_state():
 
--- 
-2.53.0
+kernel/bpf/verifier.c:handle_loop_entry_exit() {
+	...
+	/* Create a loop_entry checkpoint before widening */
+	err =3D bpf_split_cur_state(env);
+	if (err)
+		return err;
+
+	entry->min_header_count =3D iters.min_header_count;
+	entry->max_header_count =3D iters.max_header_count;
+	entry->entry_state =3D cur->parent;
+	entry->terminates =3D true;
+	...
+}
+
+When the outer loop takes its backedge into a second iteration (for example,
+when a 32-bit stack spill becomes STACK_MISC during iteration 1 so the outer
+header does not immediately prune) and re-enters the inner loop, the inner
+loop receives a distinct entry_state from the one recorded in the first out=
+er
+iteration's checkpoint.
+
+Because current_loop() unconditionally returns the innermost active loop en=
+try,
+bpf_is_state_visited() only compares the inner loop's entry_state pointers:
+
+kernel/bpf/states.c:bpf_is_state_visited() {
+	...
+	old_loop =3D current_loop(&sl->state);
+	cur_loop =3D current_loop(cur);
+	if (old_loop && cur_loop &&
+	    old_loop->terminates && cur_loop->terminates &&
+	    old_loop->entry_state =3D=3D cur_loop->entry_state) {
+		if (states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
+			loop =3D true;
+			goto hit;
+		}
+		goto skip_inf_loop_check;
+	}
+	...
+}
+
+Since old_loop->entry_state !=3D cur_loop->entry_state for the re-entered i=
+nner
+loop, this check fails without noticing that an enclosing terminating loop =
+in
+the same or upper frame still has a matching entry_state.
+
+Execution then falls through to the infinite loop check, where
+loop_stack_safe() does not compare entry_state:
+
+kernel/bpf/states.c:loop_stack_safe() {
+	...
+	for (i =3D 0; i < old->loop_stack_cnt; i++) {
+		if (old_stack[i].loop_id =3D=3D cur_stack[i].loop_id &&
+		    old_stack[i].max_header_count =3D=3D cur_stack[i].max_header_count &&
+		    old_stack[i].terminates =3D=3D cur_stack[i].terminates)
+			continue;
+		return false;
+	}
+	...
+}
+
+Won't states_maybe_looping() and states_equal(env, &sl->state, cur, EXACT)
+then match the inner loop checkpoint from the previous outer iteration and
+falsely reject the program with an infinite loop error?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261023-scev-simpl=
+er-clamp-v1-0-d43a07eda7af@gmail.com?part=3D3
