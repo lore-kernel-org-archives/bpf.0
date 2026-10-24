@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792800247;
-	b=oVJVnDkUpfUPTzfnpU9eGUOPzk2oZU5mu1C6rLkiZ1AwI88UxRx0vTz0xnEzK5Wi71eO
-	 aj77oMNP5s94RiMPDtpI0l/iGqlvvkLWsh0bNjJWFA6KD5LNGs+fzbiv7rezbXgnVotC1
-	 uumxM4lbHGAknTOF71y1b7gQMI4OhaMLU1b7Dz+EU2TnfOwh8OhsKz4UpQE0SIaZYDbA6
-	 253cZMKGmz0TG6vo+5SFtpv/aJT7s1ELGCjUKGU+i4mYxH56Z5Q/2K2n6AFllBeYfruyB
-	 eVJVbAC+9F8niSMKlNUx8DsyRvmV0dUyLyemMh7tUPzb2dCe4ln9UNms+79g+RsOiCg==
+	t=1792800248;
+	b=coaUwLuzVXMOzL42GTsTEuM6tTbig6wPFtTrTfxuvyldq4qA65TWoQpGAxtETXcpjigI
+	 dUd6ngcPoBoQVhjKeOHg2OE9L2/unTZIKprzRzypHc88RFt3LnmNNoDEtUZ7tNcgpMTGT
+	 YJb4RsWUnVmU3EPVRtJFr/szxSloenW/eHAlJ1CEE8sDx8CwDzhp+RQmvVrm/GCngnJaa
+	 iXTrJTp06X8R03RPzNM2G/8WNFEGxG9BPerPkXLJZ4Ye1qGeYeIT29DQDuiHX6JmJM7Is
+	 77mceSNVkIk6Cz/J3iDga49v4Yn4MNGvioQUccWBNuTXmQWvuIHk/Yw84fB5i4+SHbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792800247;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792800248;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=zW3NSS+FozOVr5gEsZP3p+5MhUDIs3oKfokoYjpawi4=;
-	b=fqgsshG3OEIsvHj1VRcz92N0dEhqFQpGO+rHHRLf9JrAKpADIA2d6m/oZuiCeeoannJc
-	 bcHfFAQwZ+uJS6EQPFVdTDDS0C4cSzFIGGmgLW1x3PfMz/+cejR8QU2BQox5mRZ9U30MC
-	 StQct3Nt+Ar3NgqbnxBG8ZLx53OOoveY1k5DnC6fjfzD6GIJBC//SZRfheRDCt22Aj7n5
-	 LCS6c59RN3AuwrWBz3EPWoa4jj8/UPQ4nBCrCuFSJGeKzZUP7h1d8PE/bY3uGS98JS19J
-	 wJhPANtR8N4hZPzVwSVbpQi9ecWOn8ERfReSrTxOwkf9EatasRjgUCERpEdRU95pLsg==
+	bh=xeWkpdV4nGYGVAm2Of+7Cp+1ZdNfjHkdE99+xSiAysE=;
+	b=0bssikXicrxUvJN1y94F2TGFwcBqbj1BZeQnDRoKPS3jKk9d5Aff1zmaJOXZ/7e34dCm
+	 0CcEqXHjkMF2HvhpD1VoHHBk5V3wUIWMfNpZlMpmPm2emthHFtGRlFg5H0G/0qWejozWo
+	 /Z8o4k0Xm3iFyndw42DmmpNWLFJVs13/M02IzofViTFMTaLOQbaWhPmMmsmKck/CGYy8K
+	 lw/t1o3W0uNQguzOUmexxjCYMPYzGfAIOZ3NpjNVKvIeObkZAwGOdY+fU7yNCfMNJccjD
+	 0gc5DTzmCMSatfiLaiplysZqOd3C8/NStGKPYqEyzh9Yjr+ZgU5vgtkad+sBfSmIE6w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="J49AS/iC";
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EN+kBIha;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363DB606A31D
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:04:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 363DB606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B23606A324
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:04:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 56B23606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=J49AS/iC
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ab41538192so1052127a91.0
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 17:04:07 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EN+kBIha
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3ad787b79ffso808093a91.1
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 17:04:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792800247; x=1793405047; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792800248; x=1793405048; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=zW3NSS+FozOVr5gEsZP3p+5MhUDIs3oKfokoYjpawi4=;
-        b=J49AS/iC8MJBf6zbMU2wqp3T+tu3Gc4AYv84fSBQ2tvhG39fhYtQTrs6IMTjRoeA+7
-         TyHNBd1C7C1czZywz6rad6vdOibAbJ5LLGcRrsTFK497sVXU9knXua5upp5vJ/7xY9hV
-         cl6luhf/WZx1LEvbr4CD1Gj2VKn4H7YRlCB3wGxYKuVE3pDBkES8eEtrq+yLr377sBIJ
-         UVnAbeL2NdOjTFuXCcsGo/NtzXeRgLe/3mwCdy3dSHPdVn+HoCbR4b9vC2N3gPuxadct
-         7QPRhDH3cZ+1l0dFHVidTxGs/SV4vO7qmJN9Cs3OBp93Dnyiia5/2/CwgZ1QBPHFboQK
-         RbTQ==
+        bh=xeWkpdV4nGYGVAm2Of+7Cp+1ZdNfjHkdE99+xSiAysE=;
+        b=EN+kBIhaCEj8SdLLX5RkB/SpkwTwuOEBAMQ+t6sR9Iagk6PAGoqET5rAGfoUKRR3gl
+         XxChCl/qihyo/NqFr53u6oDnhfOn3VBpYWyvYaYU/3CKl/6FUpYXP0MAoQc3+UgautjR
+         z1ocf9azCwIKjfNW7B8xumIXFMl+JOF6I+38RE6eOMQf3T+SXkhPg8SXVWv754XCzpUR
+         ym5+B7KVwNY5iyQISSTh64dr8325sYWplJgvvTUsBxqq78sPi1oNH9e86hl6dI4+3WWT
+         83isBBXQnCWNzDHUfjHiYl5fvfAlJdCP1rMchL+Ht6Q7+836waHMnHWFtFB0Z7M9gf6Q
+         Z5cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792800247; x=1793405047;
+        d=1e100.net; s=20260707; t=1792800248; x=1793405048;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zW3NSS+FozOVr5gEsZP3p+5MhUDIs3oKfokoYjpawi4=;
-        b=Q4AjX39/JsDqjjEwRkgHG0NDehti12l4yvEs4cCUrE9FefF777InyS8VGPIMGMnXP1
-         t1i6sF9kkghlkqXyqYlOTXOx6/AzLRe75XS354Z4Xl3tBeMsHqu4kDlJstzYiyrH6bjm
-         bVS5Fu7mGuKoLSugNnVR6V3HIfySCovJpk8yTA2fHrvieut8J+B60VrHJWnG+a2SvonA
-         SorowhtSk+kvJIYuRp/Agnk/DbNDfY2tvaXlt/1p+yRcWC5ebrx4dVrWqnkQxlqmL/fc
-         3/FrqXxEPOjRGrKsc58AW+M4Ni+N0YwDxnMKPkAddZlnSpghcHsenj+0DjBWQOeuXhPq
-         KjPA==
-X-Gm-Message-State: AFq9FYJjB+wGlPTkmfRrdmkRQSz7dVL2TXZjSPvTwQYVS5bsEyW3usZs
-	/GdQ2w04KNGzgG5ZAJ7X5O1+Sm4DVESp1d+QjwJcoeb7ZphsMu/7gFo/1sJeFI5R
-X-Gm-Gg: AYBFou36OYQGnpWvcr8SgFbF6V8wtJoo5TpVTQVfzRJVEA0oNvPqHIzSPjizk1I0QAl
-	3Af1fx02p2XtndVy+4Haz2IyPzUe2jwoEH4KB3R9I2p5CvGr8Y723BVuqMtPc9u99vkKCKn/vf8
-	7p3s1rMkmR8tlp1oblKZFMd33GoA8RhqzdZv3Y9AXFqbVr0KOzowfa8yD54HudHuYXZE4YJvWRf
-	FVLLwL/PidojMnqDlH+P8MCgTm/O0C/T2Jh7M13ixXFTPfRGA+vPnbC56i0rGAoP0jmcmrJlaBp
-	pF2M3vL56BhwN/kddv46ANUYYxtstQUoBPtwRKBf35GHP96H8QVNsry02Vih8Jh1KxgK3XvcHDQ
-	AB3KhIYG1Jwn9SM03cTj84LG2oNHPZ3Dy9yZ2exiA9Kd9F7VngU8CDkP6MyP8rIIIswOMmU43r0
-	qjOnw75/uF/fw+HKa+Chl0g6sERkGJcBVSeGb9+AfL+q3XIUrM/dbi0yBs+XzXevQValxKvgqm7
-	9vfGfr2Z/U7+dkR7+maxQYtuRcnMgyCuF7dfDI66JODrL/M2gEZf2gmxsPFjvsp/DWpz3sirQ==
-X-Received: by 2002:a17:90b:588d:b0:3ac:4e18:2390 with SMTP id 98e67ed59e1d1-3adea1ad729mr668140a91.7.1792800246656;
-        Fri, 23 Oct 2026 17:04:06 -0700 (PDT)
+        bh=xeWkpdV4nGYGVAm2Of+7Cp+1ZdNfjHkdE99+xSiAysE=;
+        b=Q4Pk284N7Zdg3YxaTEw2V22eZ9DpJStGrK6ATEbjf7wRyukUSUp3S8GGneSO8bcH+A
+         wLbZJokWHqqHdKQrIexOPvlRdiSPI6pis5upLEFLM+6MmIYbSQ2yBEmo1o8iILTIj/0f
+         bY2GNVhFAQxK44wDsvxNV/5t4fN5wzLET6Ww0rrLReae0gk39h33GC4RMn65Wr2Pqe6q
+         wqIkMLgE+vkmgkb75Vg9AjZCxeVOgp/Sm2xRjJpcI533jv8GcNADhswra/VKyB/+ydVb
+         +rdEpJIRrfGW0scwDbf5+YHlD+7wyjuapxxrHLIX4wzHRorNPB7VfYUBx1Mcc8r1Ggp3
+         i8eQ==
+X-Gm-Message-State: AFq9FYLDezpjV2tFmC9DT9ayQtmtd1ROOazF+sKT7ASSsKboCI2Qdya4
+	GzHwrVeSzW1s79/s+jnHF5bBG/Z3IP1k9/RVKaeY9s/HGt2tOOIEx4KkhLd1hv3Y
+X-Gm-Gg: AYBFou2CVBp8tkz9a8UhjYuNAU2XGgL+cabDAfJYRicQZ0xQoMRYNi+dQIyQYnhZkk4
+	36sKqohCwm10qk7GtxHP4bdtmUi3VkMo8Q+uUbtvr9X2EGK3T2odtmwYXv/Z0A+QqF7vUrIDi2W
+	KfceimimhhJXR+bigYLQ0zH9JHfagm6i1Nl+/ehVKSvZYe019jjhoWGAfE4C+Es0mEtuTdho5HF
+	VlGR7quMjVbWWvUGPkfzHba0WCw5ux3ygWN0oyZwQ7vMtbtHJJkEAKel84BPq+IkMfmRTyTcdoe
+	UFksNabAaOvUQLGygsfYE+4oZ8urcgJJGJdnXlJI5k9TG72Kqn0QrsuCLo2V698cGx5jEXiOp6M
+	o74yX11LK7r/zTKdfoooBYRBq/V3FOEh2iyKHaMGUWysHzjR7AlDJVCirgqSPG053JrbCptTfXf
+	8NpODIzPK5723RRn40pRaSFdo/kUA6NeDMXxWHnOcEsi35KeI38zC5fvBDA0KVi2+qsImyREvIx
+	pmDsCPJs9igfmAtDjMwKfcedhaJ0be9zE192tc0LT88VyVHEI2CXdmzqwnnoIoe9TI7qBio
+X-Received: by 2002:a17:90b:2ecb:b0:39e:6c69:7777 with SMTP id 98e67ed59e1d1-3adead4dd00mr618262a91.32.1792800247691;
+        Fri, 23 Oct 2026 17:04:07 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba31797sm547433a91.1.2026.10.23.17.04.05
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba31797sm547433a91.1.2026.10.23.17.04.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 17:04:06 -0700 (PDT)
+        Fri, 23 Oct 2026 17:04:07 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -85,9 +85,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 03/11] bpf: look for current loop in upper frames in states_equal()
-Date: Fri, 23 Oct 2026 17:03:45 -0700
-Message-ID: <20261023-scev-simpler-clamp-v1-3-d43a07eda7af@gmail.com>
+Subject: [PATCH bpf-next 04/11] bpf: check the iteration count before the predicted exit value
+Date: Fri, 23 Oct 2026 17:03:46 -0700
+Message-ID: <20261023-scev-simpler-clamp-v1-4-d43a07eda7af@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
 References: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
@@ -103,67 +103,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-When checking if current loop exploration terminates, look for active
-loops in upper frames as well. E.g. for the following program:
+The comment before `total_change` computation:
 
-  int main(...) {
-    for (int i = 0; i < 10; i++) {
-      ...
-      foo(...);
-      ...
-    }
-  }
+    /*
+     * compute_backedge_taken_count() guarantees that 'total_change'
+     * does not overflow in 64-bit domain.
+     */
+    total_change = initial + step * backedge_taken_count;
 
-  void foo(...) {
-    ...
-  }
+Is not true before the check:
 
-Checkpoints created inside foo() now count as loop checkpoints,
-plus states.c:bpf_is_state_visited() does skip_inf_loop_check
-for states inside foo().
+    if (backedge_taken_count >= U32_MAX - 1)
+        return false;
 
-Doing skip_inf_loop_check is necessary after the previous patch:
-- Clamping now reproduces the widened range at every back edge.
-- Meaning that induction variable ranges no longer vary between
-  iterations.
-- So a loop calling a subprogram can reach a callee state identical
-  to the one from a previous iteration.
-- Hence for states inside a callee an infinite loop check in
-  states.c:bpf_is_state_visited() might report:
+Move the check before `total_change` computation in order to reconcile
+the code with comments. Old position is not a bug the check was
+performed either way.
 
-    infinite loop detected at insn 12
-
-See selftest clamp_callee_state_pruning introduced later in this
-series.
-
-Fixes: 6ccf49f79327 ("bpf: Use SCEV to widen bounded loops")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/states.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ kernel/bpf/scev.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index d7df6632a5c4..306ad208a8e4 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -1361,10 +1361,14 @@ static bool need_loop_checkpoint(struct bpf_verifier_env *env, int insn_idx)
- static struct loop_stack_entry *current_loop(struct bpf_verifier_state *st)
- {
- 	struct bpf_func_state *frame = st->frame[st->curframe];
-+	int fr;
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index d67e793d7a18..e3c2220f89c9 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -2307,11 +2307,15 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
+ 	if (!compute_backedge_taken_count(op, initial, step, bound, &backedge_taken_count))
+ 		return false;
  
--	if (frame->loop_stack_cnt == 0)
--		return NULL;
--	return &frame->loop_stack[frame->loop_stack_cnt - 1];
-+	for (fr = st->curframe; fr >= 0; fr--) {
-+		frame = st->frame[fr];
-+		if (frame->loop_stack_cnt)
-+			return &frame->loop_stack[frame->loop_stack_cnt - 1];
-+	}
-+	return NULL;
- }
++	/*
++	 * max_header_count is u32 and U32_MAX means "infinite",
++	 * check to avoid overflow below.
++	 */
++	if (backedge_taken_count >= U32_MAX - 1)
++		return false;
++
+ 	if (latch->zext32 || latch->jmp32) {
+-		/*
+-		 * compute_backedge_taken_count() guarantees that 'total_change'
+-		 * does not overflow in 64-bit domain.
+-		 */
++		/* total_change is guaranteed not to overflow at this point */
+ 		total_change = initial + step * backedge_taken_count;
+ 		if (latch->jmp32 && is_signed_op(op)) {
+ 			if ((s64)total_change < S32_MIN || (s64)total_change > S32_MAX)
+@@ -2322,13 +2326,6 @@ static bool compute_max_iters(struct bpf_verifier_env *env,
+ 		}
+ 	}
  
- int bpf_is_state_visited(struct bpf_verifier_env *env, int insn_idx)
+-	/*
+-	 * max_header_count is u32 and U32_MAX means "infinite",
+-	 * check to avoid overflow below.
+-	 */
+-	if (backedge_taken_count >= U32_MAX - 1)
+-		return false;
+-
+ 	/* The header executes once on entry and once for each taken backedge, hence +1. */
+ 	iters->max_header_count = backedge_taken_count + 1;
+ 	/*
 
 -- 
 2.53.0
