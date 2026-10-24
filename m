@@ -1,60 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.38.64.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792836429;
-	b=Ba73dnUyat2hceulY23MyNAVpMtko7ji1ZYatJZyb+l6HT6XLBE5VSRpUuWB5x39VzFX
-	 T4pFoSIubQs6LQWH9Ifwu6XTeDayHa78FPq8MsTMFP9e9aATmktVw+ywIz/YyQ/5njzoS
-	 9Xc9Q7ROycAyLjssO0fHbNai4RSVz85O1P6aO0Gu1AzWIrO4XYsHTLuUKNREQgtDdTReu
-	 XSX+OrSOMHaxc8FKSYbo85xwrum1aUEufvoXnz9hqY59aHon0gGIWT+8Xx0pDNR9PnfIP
-	 seo4U5TJ3ttUuBFQckEJXKvdtDt3z7okoT50Vo1WiemkY52L77mYeAgwostxfBZKdjQ==
+	t=1792836596;
+	b=NVqfR8PRQcAbFP7QtBimf6LcwV3Dd0/SUskzBeIRvpQlGBHkwuLMJA8JWorBpMJBzgKo
+	 uFEyAVcyF2Z2LcyZFGK2q5x6P2TPTOOp3qLd3NzvM4Zymn0jBfo6mitKoo0wzefZExc5x
+	 3yKzJHs/1CGaZMAUcYglXbyzqLqcUXEnnhZkOQ+I2SHsE9Ec4+Ol2nzsqZsexCxwg4FAA
+	 7hE+4qxIY/Z49kYPtiDI73c9v7Rd9L6fPLh+7siHbsr2DIqONbR+y/2/MFo4P38SKLFBH
+	 uDISU8MJDmrRnFmLVq8ORcDY8LBbSyY6D3hnIiVPWtB+VV64rd/djQ9mAEGvKf7tV9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792836429;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
-	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
-	bh=SazYImGiQqMDzwN6m1nAxE6q6PUSCx7mF2GdxvRYCsI=;
-	b=5VQ2Gh4/0Du+FCyno1A1sYNBRiEMWTty9zgcBcnyDSg3upyTboRM5sDRAA17wOAWky3+
-	 MqNozTpYBfRQpyUKmYgDUE/3VDYBDi3xKw6G/onFSn6Yw8LGJq4HXW5Dr8ENNdc+ycQ0R
-	 IcfKzN0Q/5FRe3sCMb6vp2LPzQOyVRWzOA3/Kq253a/wc/LClQeEPjbbq9cg03pLdwgwk
-	 RBYWe88SNjJjhSSdZ6pDqs4T8US5Cd/3du1dZ5hMS+fQdMzsYMYdIx6uTBgHsQB6BUW1r
-	 iMwtu+nPGoBhSwRq0UTBG22Le4OsAryKc7PhiMCbZoUaBOyOtIta5l/8OJxoNhGQhKA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792836596;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=gBmeT5JJ7GeeblMXaEFca81tlnSg9rFzTcGutmMmxPA=;
+	b=IZYXccud4n2TOoQx5w0AyRHsygSyeZuprFg7i88thQ1jGItK1FvjyJGNuWaQyuXPoA61
+	 zFOEy3zB3ajWax/+lQ6sjKTNijNlyCNrMwBNjJ8V5MoNYWlgXPjDi2d6KzX1AUaPT/v/r
+	 9nBj1riAJLuoj+OMbKn7iH/E6RQij1FPAuo0MXXg08WfuxH7VvOhwNus5a1bQhCB7kkl4
+	 4cHHlb9oxH1JQ9LoSqJgAhbkYDNA7Sh7xp8yOazMRiU6dSkDAHIF1kx3AoSF1Y7+AUWz6
+	 TVLhmlbAiRa9BhJbAnK4otW8thftXImNIYDRcenqTp6s8idHMxsB51th0pg7Cpp+YFA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=mail.ustc.edu.cn;
-	spf=pass smtp.mailfrom=mail.ustc.edu.cn;
-	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=p2iQtcmt;
-	arc=none smtp.remote-ip=202.38.64.46
-Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88DBA606A31E
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 10:07:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 88DBA606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TqAKNBFG;
+	arc=none smtp.remote-ip=209.85.214.175
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C69D606A31B
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 10:09:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C69D606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=p2iQtcmt
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TqAKNBFG
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e9f6a16aedso10427555ad.2
+        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 03:09:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=SazYImGiQq
-	MDzwN6m1nAxE6q6PUSCx7mF2GdxvRYCsI=; b=p2iQtcmtGC1tfx4BQYl4zHZj03
-	fxKVGAIB8nK/D2lNCAgwGWPu9IymumapwmfnZq1xevFq16LsgYB4edn7lCZCuGfZ
-	F78ZkEk4WyIIp49j1FqZySUc0TmVIei70Bte1Tg/5obDwqEc/91kW1KHf5h3Fpd2
-	moM7cITsxjWFhs9Qk=
-Received: from localhost (unknown [222.195.81.103])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgCXETY6g9xq8zU7AA--.649S2;
-	Sat, 24 Oct 2026 18:06:50 +0800 (CST)
-From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ameryhung@gmail.com,
-	yonghong.song@linux.dev,
-	puranjay@kernel.org,
-	utilityemal77@gmail.com
-Subject: [PATCH bpf-next v8 0/2] bpf: Track borrowed iterator result lifetimes
-Date: Sat, 24 Oct 2026 18:06:45 +0800
-Message-ID: <20261024100647.2579244-1-xyx2021@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.43.0
+        d=gmail.com; s=20251104; t=1792836594; x=1793441394; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gBmeT5JJ7GeeblMXaEFca81tlnSg9rFzTcGutmMmxPA=;
+        b=TqAKNBFGu7Oay7kVjz7Sb1PxLYaXAZZlnGcKtDpMpW1Kkd/7x/OSpK9LruS07mebPB
+         tKE1MRySUZvQYWM4iaaWg5mPC5JYbvK9zx8R50JsXjQCmWlk9va8JwWhVL/HqjZrFab4
+         5F/HurqY1cuGtt5otkp9ge6GQ69QnVgkvSfIOh4eeuhNTwmPzbWuxQL88EPBGWvx2y7J
+         J1oDcjYxDhRYkk1VETe0ofRev+SMfWEBuxl+qdIkIoN/26fgAPAO0ruvxdhUSsWj6ImW
+         8KqUlV6s2/2rKJE0BlmvWgMbPJBeO/yFq74Z97y4/3qLCHrOL9crycND2eD5xdaVZbw5
+         DsyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792836594; x=1793441394;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gBmeT5JJ7GeeblMXaEFca81tlnSg9rFzTcGutmMmxPA=;
+        b=J3hfMm1oyQGEH4KdDP9Hf2uYjXvW3oxUoXBAuy6oS2eDGnw/cIdpTHbe+DYLu/6d26
+         BV1SORoDval4j2z9ADvL2Hjp3yxoRTtwWtox7FhPtqOdKvSOhkHYu7ynEVKrd7k+qvWW
+         SIt6BeKzJhdQS49kDGecxZFTJ4PO6pKOIcQti2CkLXNom+McOBnFpiuxbKfJtpc9xx01
+         dMskgNBchN4wJkAx/p/hj6MnE+Zrgap5x80DgPMYY0vN9rod1aFm8w754OY4kYeQBdZS
+         k8jt6IOjSk74ZhYrp3PsKU95UcwaV071cRf2hTeev7diayhcxXZPNLKdnBc2Apmb5wBC
+         NJvg==
+X-Forwarded-Encrypted: i=1; AKwUvBwb7FmdD7pXPKJSP6KRAL0nP7cw9Iu+BOxDL46n8pV4kIIzTJ2LypdeAF3BN9VvWT3Sl3Q=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL+xeZbscy5v+x8YB36oJFJdMbzYYoW7XWul0NF5TE1Q5Wsz1F5
+	x9LzYIueT7X7ONB9N+4A+ruEm6W6I/4C5V99Kgv1bUPC3NKSOZ//i+DaE1Gzu1KX
+X-Gm-Gg: AYBFou0t9fRCoNc+FkXe9P6aPN9R2XkQ8479/XBEz4U2Goa6oFI3u9JF0kUWFSZKvep
+	Z3I5GPqZ7Iuxem6dHrvE9ZiRRD7ZbUNvtqy7iMMhXTfh+cXNiG1FaIObkFlTP1oQCQ7GvEoq4bI
+	xhsjZ4Dh1+Uag0VbvlV9eIDWeQvtm6fZsdS3ugy0p1juhLExvlAbrUmiT0lA2MHPeYRnosWmckJ
+	xJommdkwf3j6KDSqS2YXkg8QQCOTf/bG7KrMTXjvfBXQYu3s4AVO4yBK5FBLwg0z8gbffnR78tp
+	OR1vTk+aAdA3YUKz6pkWG31AZpnzEzHsQKNOqETYn8wyi5MQuwmNldHuerEa+gzCF/20hJY8Ksg
+	ntZdSYnHIAiTsZbeql/zuWNbSjO2M6t6eqXbdMG6Ea+TW21C654tcbEkX+8B6DhRa5OR4k4Ap6w
+	YXHPMRVsKpCRyPuHovgOa+kjvLMRI4HMGZukZ/Ay305SPsHveg1cwbWOwPKGcNL6uG6raaJaqdC
+	bnqdBcofW9+oc1mgHGxkqw8TVi9iuxu3If3KVnlPUNX5IwKvzjqvuRWIT4ZiDj4tkptXof0ppkv
+	gWbHguI=
+X-Received: by 2002:a17:902:d50a:b0:2e5:54b9:6b5c with SMTP id d9443c01a7336-2ea9c66bb6emr12267095ad.20.1792836594441;
+        Sat, 24 Oct 2026 03:09:54 -0700 (PDT)
+Received: from localhost.localdomain ([14.187.77.45])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1982d2sm4635355ad.41.2026.10.24.03.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Oct 2026 03:09:54 -0700 (PDT)
+From: Nguyen Duc Thinh <ducthinh100812@gmail.com>
+To: Mark Severson <gr3yf0x87@skyn3tlab.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Federico Vaga <federico.vaga@vaga.pv.it>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	bpf@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nguyen Duc Thinh <ducthinh100812@gmail.com>
+Subject: Re: [PATCH v2] docs: changes.rst: set the pahole minimum back to 1.22
+Date: Sat, 24 Oct 2026 17:09:45 +0700
+Message-ID: <20261024100945.34029-1-ducthinh100812@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
+References: <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,140 +104,20 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgCXETY6g9xq8zU7AA--.649S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFyfWF1fCr47GFy7Kw47CFg_yoW7uw43pF
-	WkGr43tFs7Jw47Grs7Ca17WFyF9a95JF15JFn5t3sYvrs8tF1kAFWIkF4rZFZ0yrnYkFy3
-	Zw12q3Z5Ja4UA37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
-	A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28I
-	cVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx
-	0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwAC
-	I402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14v_Gw1l42
-	xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-	GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-	8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-	MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-	8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07b5-ewUUUUU=
-X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Make non-RCU, non-acquired struct iterator results borrow the current
-element lifetime by default. KF_ITER_RET_INDEPENDENT marks the explicit
-exception for results whose lifetime is independent of the iterator.
+On Wed, Oct 21, 2026 at 21:48:11 -0400, Mark Severson wrote:
+> Set the table back to 1.22, in the English document and in the Italian
+> translation, which carries the same table, and remove the Italian
+> translation's copy of the paragraph that the English document no longer
+> has.
+> 
+> Fixes: fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF annotation emission")
+> Signed-off-by: Mark Severson <gr3yf0x87@skyn3tlab.com>
 
-Trusted field loads and dynptr constructors propagate the source lifetime
-so derived pointers stay in the invalidation graph. Next preserves the
-iterator itself and invalidates old dependents before both return
-outcomes; destroy propagates outstanding-child errors.
+Hi Mark,
 
-This revision addresses Alexei's implementation review. Share the pointer
-invalidation traversal through invalidate_reference(), with root reference
-release performed separately by release_reference(). Iterator next calls
-invalidation directly. The existing result classification already keeps
-MEM_RCU results out of the iterator dependency graph, so the duplicate
-RCU checks at next are unnecessary. The traversal excludes STACK_ITER,
-so it also needs no special guard for the iterator's own stack identity.
+Thank you for catching the mismatching requirements (pahole)
+alongside the Italian documentation update. The patch makes 
+complete sense and resolves the contradiction cleanly.
 
-Patch 1 retains the generic trusted-field rule and its file/inode lifetime
-explanation. Patch 2 retains the iterator lifetime tests and the VFS
-before-release and after-release controls unchanged.
-
-Justin has coordinated the overlapping work and dropped the iterator
-and acquired-parent trusted-field fixes from his v3 series. This series
-keeps those fixes; his series covers RCU-parent field classification and
-the __derives_ret kfunc argument annotation, including bpf_real_data_inode().
-The two series are based independently on bpf-next. They overlap at
-reg_lifetime_id() and the struct-return parent_id assignment and will need
-those sites reconciled when combined.
-
-Changes in v8:
-  - Remove the duplicate RCU checks before iterator-next invalidation.
-  - Separate pointer invalidation from root reference release, removing
-    release_root and its unreachable root-alias guard. Keep the existing
-    inline acquired-child leak check in the shared traversal.
-  - Retain the test code and carry Amery's Reviewed-by tags from v7.
-  - Rebase onto bpf-next 4169c9c90532 without changing either patch diff.
-  - Remove the obsolete Assisted-by trailer for the current submission
-    tooling; retain the AI-assistance disclosure in this cover.
-  - Document the scope coordination with Justin and add him to Cc.
-
-Changes in v7:
-  - Explain the generic trusted-field lifetime rule and the file/inode
-    example in patch 1's commit log, as requested by Alexei.
-  - Add a positive and negative VFS test for that example in patch 2.
-  - Rebase onto bpf-next b116ac6087541. The implementation's added and
-    removed lines were unchanged from posted v6; the field-load hunk's
-    context includes the upstream __nullable handling.
-
-v7:
-https://lore.kernel.org/r/20261021210754.3270023-1-xyx2021@mail.ustc.edu.cn
-Alexei's v7 review:
-https://lore.kernel.org/r/DMB212RCKZ56.LTNAJWB2D39T@gmail.com
-v6:
-https://lore.kernel.org/r/20260927120406.1041915-1-xyx2021@mail.ustc.edu.cn
-Alexei's v6 review:
-https://lore.kernel.org/r/DMA2SZ5PRG4N.3I51MHSTWUUTS@gmail.com
-Justin's scope-coordination reply:
-https://lore.kernel.org/r/att73Z9XpompG3k1@zenbox
-Justin's v3:
-https://lore.kernel.org/r/20261023212041.884996-1-utilityemal77@gmail.com
-Kumar's related work:
-https://lore.kernel.org/r/DLGYPZAL708V.3GFLANAPH2L8O@gmail.com
-
-These lifetime paths were investigated through AI-assisted source
-inspection and annotated verifier programs. The regressions check loading
-and diagnostics. The independent-lifetime control uses a small bpf_testmod
-iterator; the VFS control uses existing kfuncs. No delay or fault injection
-is used to force runtime reclamation.
-
-Validation on this candidate with a matching bpf_testmod:
-  - W=1 verifier, full kernel and modules builds passed.
-  - Changed BPF objects and required fixture compiled strictly.
-  - iters: 1/122 passed; 0 skipped.
-  - dynptr: 2/137 passed; 0 skipped.
-  - file_reader: 1/10 passed; 0 skipped.
-  - verifier_vfs_accept: 1/7 passed; 0 skipped.
-  - verifier_vfs_reject: 1/13 passed; 0 skipped.
-  - kmem_cache_iter: 1/3 passed; 0 skipped.
-  - dmabuf_iter: 1/4 passed; 0 skipped.
-  - verifier_ref_tracking: 1/57 passed; 0 skipped.
-  - task_kfunc: 1/47 passed; 0 skipped.
-
-The before-release VFS program loaded on both the unmodified
-baseline and this candidate. The after-release program loaded on the
-baseline and was rejected by this candidate with the expected scalar
-access diagnostic. These annotated programs are load-only.
-
-The VMs used panic_on_warn and panic_on_oops. No WARN_ON report,
-Oops or panic was found. Unprivileged BPF was enabled only in the
-isolated guests.
-
-The complete test_progs build used BPF_STRICT_BUILD=1. The unfiltered
-full suite, sanitizer and architecture matrices were not run. The
-fresh baseline comparison covers the VFS example retained from v7.
-
-Please queue the verifier fix for stable after it reaches the BPF tree.
-
-Xu Yunxiang (2):
-  bpf: Track borrowed iterator results by default
-  selftests/bpf: Test borrowed iterator result lifetimes
-
- Documentation/bpf/bpf_iterators.rst           |  10 +
- include/linux/btf.h                           |   1 +
- kernel/bpf/btf.c                              |  13 +-
- kernel/bpf/verifier.c                         |  68 +++-
- .../selftests/bpf/progs/iters_testmod.c       | 370 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_vfs_accept.c |  17 +
- .../selftests/bpf/progs/verifier_vfs_reject.c |  19 +
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  25 ++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |   4 +
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   5 +
- 10 files changed, 519 insertions(+), 13 deletions(-)
-
-
-base-commit: 4169c9c90532df9585c0a2ae513337a58f5e59ab
--- 
-2.43.0
-
+Reviewed-by: Nguyen Duc Thinh <ducthinh100812@gmail.com>
