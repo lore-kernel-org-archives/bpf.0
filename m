@@ -1,73 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792806337;
-	b=R0pP6uiv4XMl15MEbEIiQ81qLZ+OTKhxmuQ/BVxhN3zccwS6GKYBvBwfAlMtuDpuMDW3
-	 Zyq6aurLQAgJfmWUokIvFfcvNE6spK7s+eAUivFpSIh2Cfj4R+dD+mYXjGsk7oW9VCbaZ
-	 ZpW8guBTGqyzOrl3V/g9Fzpg19VKFIYfYVYCmPe5wbWhsJhn1EzgaaKqghmaaRhUPijCe
-	 jNYPqfR38g6xP8p4f+2Pcpm9ra8whitZ+/A1wn8cgI3w5/YW2JBA1bOCsV6mTJSNTfy6o
-	 kPaEHUv5Y8TOFhWKRv52BQTD5b3XIPJZX7AyqRYziguG+jSAayG+F8PRP/EksN2hDQg==
+	t=1792806893;
+	b=D+E3AMdGQ6PqmxiA2G83dZkesYbRxeQNuvBw9KMtxIZPIDbERCn1RQEHyV4N3rI79auY
+	 HsUg/lwTqdlrd/sy75ih/vKy4Y42M8wIaQSK32LvjVqHbYC7EHRmxBKWNVLqOqaTh4gee
+	 6uyMEMzAxzRsJOPQqJG4ELQR480fuHO93OD+kp8NoWQngVQrw0LPjs9jQxk56TtTJYatM
+	 0ruRmPoaTNdjSaRjqEyWGZngmTUyN3cCsU5tYjPotH9ryfJF+pBzCpJXFEzUMpjZhIV4o
+	 Lxil54ZOOGf8zW6ozS/NlxKaDA58BgcxFwEnQMy8Cv7eMTBn+T5dUQgXC58WHmdc3pQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792806337;
-	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type:X-Originating-IP:
-	 X-ClientProxiedBy:X-Proofpoint-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=6MEdM/BpjHOaoBdT/dBRPh6er+/KKufybVCXP3Iy2Kg=;
-	b=LV6y8DXiSyXq79dzp1RihaEKJSMLIucDlXtWTdCCbC94xoYpa0EkA+1tX/V02LFf5PfU
-	 OWpQT9F1uGSZBjS2y/R14T3oMmPVrHr4iWDi8r642QB1vnc0AP7RoN3XDerMyrydiwvGr
-	 pL+XppPX1q0HojtHJ9oxyQg1fwReJyAGZUzcKUqvl0ihoJ6hHarW2m1PT+tAQx3aDreS7
-	 oO33YoVmbhLFb7Zra1HpNzwodin4vb/KEFSPcKysxjmCpaVHDilS2Mgb+KGmdJULmP7M9
-	 8m6ObqPHCNk4ueLuN0lEuHWu6OozI0eDN7m5jOR3va53LrLTrVJQiNtqSEj6bzF9v+Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792806893;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=sVy1DLt8tqxiA0mD3KYuViL2ycpG4LNnv4DdzQGd/N0=;
+	b=IkEF+xL4UWavM8msdC9KdhIEdDHbnG1wxCvcL8Xcyuq7IiFrNGHeex9CDa9stQX9Btj7
+	 fsVr5EYdIoJ2ZXmDv3Z5C0F4zbPHs2aOmr582JRonrDIFU6TkNUCWqjAMisJcfn5+pVrT
+	 szOnfHK9wMkl3WBM4NiU9PRdHVuGeoWwEpOV6Csa9L7BogLxp9wHnZw9wZUHm3R/3k8le
+	 nvvPfcVh++w9U2M59/tOdyhzcDllVah0PZE1uvTIXOWVo715ZDohRh/wt6+R643tRC3Qx
+	 V1r0haxFsDUE7EjhhE7RqVtUr63a0+9w+jLrMz7AjcIjXjQbYJzk88GAjq5i3/pARLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=crowdstrike.com;
-	spf=pass smtp.mailfrom=crowdstrike.com;
-	dkim=pass header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=NHLzVUyC;
-	arc=none smtp.remote-ip=148.163.152.16
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gNspuK2z;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E1E606A339
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 01:45:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6E1E606A339
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29452606A31A
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 01:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=crowdstrike.com header.i=@crowdstrike.com header.a=rsa-sha256 header.s=default header.b=NHLzVUyC
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69O1c6nj3411319;
-	Sat, 24 Oct 2026 01:45:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=6MEdM/BpjHOaoBdT/dBRPh6er+/KKufybVCXP3Iy2Kg=; b=NHLz
-	VUyC5mfEaOoYZFcErwqecX6MEmHJAsQtNMpvdPAt5G5NOFGIjnmSHcfCr8zmKqqi
-	4BVdc4Bkb9R/j1LQH+eDJ4FI0v6BkqRc7h3ov2gErvhhFYsPEHLA+JGpy9wCksV0
-	bCVTU7B6Q5kDWJyqHYsg4MzAkY5tx11fEx+RrcXpQYFc/ZpC+q4oSPX6W9GZ41e5
-	gVsnouknMhcXtATrCyPJp0iT9iS4KXwoyejSHwpCEtrKtO6wN3wGuHHKthWwm5Ej
-	pElddlZASn6ldj1qITDptuQVS10wKaZ7/qJswjuwEdvmoYY435rRsWpZemYJGIli
-	gk4IC+y7npCtdtc+XQ==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4hfvhpv735-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 24 Oct 2026 01:45:21 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.53; Sat, 24 Oct 2026 01:45:19 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>, <andrii@kernel.org>
-CC: <ast@kernel.org>, <martin.kelly@crowdstrike.com>,
-        <slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next v8 3/7] libbpf: BPF programs manual loading and attaching
-Date: Fri, 23 Oct 2026 21:45:10 -0400
-Message-ID: <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261024014514.2959514-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gNspuK2z
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B4941F01825;
+	Sat, 24 Oct 2026 01:54:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792806892;
+	bh=sVy1DLt8tqxiA0mD3KYuViL2ycpG4LNnv4DdzQGd/N0=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=gNspuK2z+sn+bEGBg9F1v4o2EKizksrbH8X0LrzCYWYYSKihvVKmz0vYBDFMqNuJs
+	 bpr7WNHCXqFye0EUO5GCMu2OoY5Vzkp0dJCChISJMNXTOJ92Q5p6EW3sLQ+M/WFLsJ
+	 uUTAg6/nn6v1NftchY/+RxXH83zOCbo+T9pZAFYvFi9LrdHotFoI8d8ENMkR7xA4bS
+	 Nurtra7VgVTTWXqCXoQH5os7QjweYpNdH9i+rXtSMcrUWaTjT6TWcJpLKE8WuGkioe
+	 CrQn1cWRJv2QbdDNOzgzS4PK1gf28AUU62xlVpc6622ikRjjh8pENSZKKe5efwRBD2
+	 eDmIRjzL2GG3g==
+Message-ID: <sashiko-outbox-183497@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v8 5/7] selftests/bpf: Cover BPF program load
+ strategy transitions
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>, bpf@vger.kernel.org
+In-Reply-To: <20261024014514.2959514-6-andrey.grodzovsky@crowdstrike.com>
 References: <20261024014514.2959514-1-andrey.grodzovsky@crowdstrike.com>
+ <20261024014514.2959514-6-andrey.grodzovsky@crowdstrike.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 24 Oct 2026 01:54:52 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,577 +59,98 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH007.crowdstrike.sys (10.100.11.74) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-GUID: fL2g9F01b3gl6dAuSclmIClgPn2AvRnr
-X-Authority-Analysis: v=2.4 cv=DvXDa2/+ c=1 sm=1 tr=0 ts=6adc0db1 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=660iZSQnnn4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=vDKVRhTs-M86Ea50iKLw:22 a=pl6vuDidAAAA:8
- a=DXphi_zH5SVEUbXBll8A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI0MDAwNiBTYWx0ZWRfX4dtM/gz+Lgzh
- gM+2bRg07ZDhxrCPfXXAwUERGNv3iyla2DotwByF14ix3uP0zW26Vj5Pz8QejmOa1kWhI8u68X1
- aAK5KIK4KbPLd/eML+OZKoCAXMghA1WKeqVJlp/NTX5f+vA8Km7ZsUpjUloJ3t68D1Q4Km5gtXy
- Mtj4C7wAq7vqao4laTTJl1jlYg4H5xCwBYy0X95whUYK6e/UnyQHFNHZJ0dc7i1Wl6bF8ZRKzG+
- by+RX+yfFg6k5yymY6AiC08aiu85Pl8gFTG9gbRRuzbI9C9okGayEeq1bqfttak/YnNpKr9s7f5
- Gl1Qe7LnfUeQ5hcYg0stMjhiFE+HRMHTZAj5+Hory3q5ln0QWz3VSc0iRwn15RW8AZQVL6C2Wjj
- v33onPvU6cvOv0rYhndVkJAYiy9Dfqvn+Yo2N6C0tHaTlb/khzNsM2caS5EwpwGaA1UV25/NVze
- ic+NhPqaaYRbgQ6nO3A==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI0MDAwNiBTYWx0ZWRfX7vOj8IfAqrJk
- f/Upi/lP1W14qjkSPs5NB+sbpvbR917fZaONLmrGq3jdzQ7POhLx2f8HyAL68Yj+BNb6BN7x9Co
- ypKMPJFa4Qk9t4PQApHUG5wQWA22mFVJPkunOYrx5UOU5oaR/73T
-X-Proofpoint-ORIG-GUID: fL2g9F01b3gl6dAuSclmIClgPn2AvRnr
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11944
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0
- phishscore=0 priorityscore=1501 clxscore=1015 spamscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610240006
 
-From: Slava Imameev <slava.imameev@crowdstrike.com>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] selftests/bpf: redundant standalone load_type test duplicates autol=
+oad test
+--
 
-BPF programs designated as manually loaded can be loaded and
-attached independently after the initial bpf_object loading and
-attaching.
+commit a706cefdc370f05d909294879af1c74efbca1c5c
+Author: Slava Imameev <slava.imameev@crowdstrike.com>
 
-These programs can also be reloaded and reattached multiple times,
-enabling more flexible management of a resident BPF program set.
+selftests/bpf: Cover BPF program load strategy transitions
 
-A key motivation for this feature is to reduce load times for
-utilities that include hundreds of BPF programs. When the selection
-of a resident BPF program set cannot be determined at the time of
-bpf_object loading and attaching, all BPF programs would otherwise
-need to be marked as autoload, leading to unnecessary overhead.
-This patch addresses that inefficiency.
+This commit adds a standalone load_type selftest covering BPF program load
+strategy transitions between disabled, auto, and manual modes,
+bpf_program__set_autoload() compatibility, and the manual load and attach
+cycle after the object is loaded.
 
-A manual-strategy program is loaded via bpf_program__load()
-and unloaded via bpf_program__unload(). It only requires that
-bpf object is already in PREPARE state (BTF loaded, maps created,
-relocations applied) rather than requiring a full bpf_object__load().
-Manual programs are skipped by the object's own autoload pass.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/load_type.c b/tools/t=
+esting/selftests/bpf/prog_tests/load_type.c
+> new file mode 100644
+> index 0000000000000..7e344c0b04450
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/load_type.c
+> @@ -0,0 +1,154 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include <time.h>
+> +#include "test_load_type.skel.h"
+> +
+> +void test_load_type(void)
+> +{
+> +	struct bpf_link *link =3D NULL;
+> +	struct test_load_type *skel;
+> +	int err;
+> +
+> +	skel =3D test_load_type__open();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		return;
 
-A few key changes described below:
+[ ... ]
 
-gen_loader is rejected if any manual program is present since
-this loader is finalized during bpf_object__load()
-and so it will miss any manual programs loaded later.
+> diff --git a/tools/testing/selftests/bpf/progs/test_load_type.c b/tools/t=
+esting/selftests/bpf/progs/test_load_type.c
+> new file mode 100644
+> index 0000000000000..3d9b81691d7ad
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_load_type.c
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +
+> +bool prog1_called =3D false;
+> +bool prog2_called =3D false;
+> +bool prog3_called =3D false;
+> +
+> +SEC("raw_tp/sys_enter")
+> +int prog1(const void *ctx)
+> +{
+> +	prog1_called =3D true;
+> +	return 0;
+> +}
 
-Two program log related APIs were relaxed to work post OBJ_LOADED
-state to fix regression where verifier logs were lost in case of
-bpf_object__prepare failure. It makes sense to relax those for MANUAL
-programs as they can load post OBJ_LOADED state so the log buff still
-can be set at this point. Also add proper documentation to the setters.
+[Severity: Low]
+tools/testing/selftests/bpf/prog_tests/autoload.c and
+tools/testing/selftests/bpf/progs/test_autoload.c already exist in the same
+directories to test bpf_program__set_autoload() and selective program
+loading using prog1, prog2, prog3 and prog1_called, prog2_called,
+prog3_called:
 
-Failures with BPF_PROG_TYPE_STRUCT_OPS were encountered and so in several
-places code related to struct_ops logic was altered to take into account
-struct_ops program with MANUAL strategy set. The general idea is to reject
-this type of programs for manual loading since those programs cannot
-load/unload independently of each other per a given struct ops.
-Hence, SEC("!...") style declaration is rejected for them while
-bpf_program__set_load_strategy() does accept them to allow certain
-flexibility in the API future usage.
+tools/testing/selftests/bpf/prog_tests/autoload.c:test_autoload() {
+	int duration =3D 0, err;
+	struct test_autoload* skel;
+...
+	/* don't load prog3 */
+	bpf_program__set_autoload(skel->progs.prog3, false);
+}
 
-Assisted-by: Claude:claude-sonnet-5
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- tools/lib/bpf/libbpf.c   | 205 ++++++++++++++++++++++++++++++++++-----
- tools/lib/bpf/libbpf.h   |  56 +++++++++++
- tools/lib/bpf/libbpf.map |   1 +
- 3 files changed, 240 insertions(+), 22 deletions(-)
+Since bpf_program__set_autoload() is a thin wrapper around
+bpf_program__set_load_strategy(), and commit ("selftests/bpf: Cover BPF
+program manual loading") in the same series also adds
+tools/testing/selftests/bpf/prog_tests/manual_load.c and
+tools/testing/selftests/bpf/progs/test_manual_load.c with the same
+prog1, prog2, prog3 raw_tp/sys_enter programs and post-load manual
+load/attach sequence in manual_load_verify_main_cycle(), could these
+bpf_program__set_load_strategy() transition checks extend test_autoload()
+in prog_tests/autoload.c or be consolidated as a subtest in
+prog_tests/manual_load.c instead of adding standalone prog_tests/load_type.c
+and progs/test_load_type.c files?
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e4cdbc2f467d..1d5d59b95c4e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -758,6 +758,7 @@ struct bpf_object {
- 
- 	bool has_subcalls;
- 	bool has_rodata;
-+	bool has_manual_progs;
- 
- 	struct bpf_gen *gen_loader;
- 
-@@ -870,7 +871,7 @@ static Elf_Data *elf_sec_data(const struct bpf_object *obj, Elf_Scn *scn);
- static Elf64_Sym *elf_sym_by_idx(const struct bpf_object *obj, size_t idx);
- static Elf64_Rel *elf_rel_by_idx(Elf_Data *data, size_t idx);
- 
--void bpf_program__unload(struct bpf_program *prog)
-+static void bpf_program_unload_full(struct bpf_program *prog)
- {
- 	if (!prog)
- 		return;
-@@ -882,12 +883,30 @@ void bpf_program__unload(struct bpf_program *prog)
- 	zfree(&prog->subprogs);
- }
- 
-+void bpf_program__unload(struct bpf_program *prog)
-+{
-+	if (!prog)
-+		return;
-+
-+	/*
-+	 * MANUAL programs retain their data here so bpf_program__load()
-+	 * can reload them later; object teardown paths call
-+	 * bpf_program_unload_full() instead to always release it fully.
-+	 */
-+	if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL) {
-+		zclose(prog->fd);
-+		return;
-+	}
-+
-+	bpf_program_unload_full(prog);
-+}
-+
- static void bpf_program__exit(struct bpf_program *prog)
- {
- 	if (!prog)
- 		return;
- 
--	bpf_program__unload(prog);
-+	bpf_program_unload_full(prog);
- 	zfree(&prog->name);
- 	zfree(&prog->sec_name);
- 	zfree(&prog->insns);
-@@ -1228,6 +1247,14 @@ static int bpf_object_adjust_struct_ops_autoload(struct bpf_object *obj)
- 		if (prog->type != BPF_PROG_TYPE_STRUCT_OPS)
- 			continue;
- 
-+		/*
-+		 * If the user set the load strategy to MANUAL, don't guess it
-+		 * from map autocreate: a MANUAL program is loaded explicitly
-+		 * with bpf_program__load(), which rejects any other strategy.
-+		 */
-+		if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL)
-+			continue;
-+
- 		for (j = 0; j < obj->nr_maps; ++j) {
- 			const struct btf_type *type;
- 
-@@ -5874,6 +5901,20 @@ static int init_prog_array_slots(struct bpf_object *obj, struct bpf_map *map)
- 			continue;
- 
- 		targ_prog = map->init_slots[i];
-+
-+		/*
-+		 * Be careful about manual progs, reject if they weren't loaded before
-+		 * this step to not insert invalid FDs into the map, otherwise we will
-+		 * get a much less clear rejection from the kernel on the element update
-+		 * below.
-+		 */
-+		if (targ_prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL &&
-+		    targ_prog->fd < 0) {
-+			pr_warn("map '%s': slot [%u] prog '%s' is MANUAL but not loaded\n",
-+				map->name, i, targ_prog->name);
-+			return -EINVAL;
-+		}
-+
- 		fd = bpf_program__fd(targ_prog);
- 
- 		err = bpf_map_update_elem(map->fd, &i, &fd, 0);
-@@ -9330,6 +9371,8 @@ static int bpf_object_prepare_progs(struct bpf_object *obj)
- 
- 	for (i = 0; i < obj->nr_programs; i++) {
- 		prog = &obj->programs[i];
-+		if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL)
-+			obj->has_manual_progs = true;
- 		err = bpf_object__sanitize_prog(obj, prog);
- 		if (err)
- 			return err;
-@@ -9356,6 +9399,18 @@ static int bpf_object_init_progs(struct bpf_object *obj, const struct bpf_object
- 		prog->type = prog->sec_def->prog_type;
- 		prog->expected_attach_type = prog->sec_def->expected_attach_type;
- 
-+		/*
-+		 * struct_ops programs declared SEC("!...") are rejected here
-+		 * at declarative parse time for manual loading since those programs cannot
-+		 * load/unload independently of each other per a given struct ops.
-+		 */
-+		if (prog->type == BPF_PROG_TYPE_STRUCT_OPS &&
-+		    prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL) {
-+			pr_warn("prog '%s': struct_ops programs do not support manual loading\n",
-+				prog->name);
-+			return -EINVAL;
-+		}
-+
- 		/* sec_def can have custom callback which should be called
- 		 * after bpf_program is initialized to adjust its properties
- 		 */
-@@ -9556,7 +9611,7 @@ static int bpf_object_unload(struct bpf_object *obj)
- 	}
- 
- 	for (i = 0; i < obj->nr_programs; i++)
--		bpf_program__unload(&obj->programs[i]);
-+		bpf_program_unload_full(&obj->programs[i]);
- 
- 	return 0;
- }
-@@ -9947,7 +10002,7 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
- 	return 0;
- }
- 
--static void bpf_map_prepare_vdata(const struct bpf_map *map)
-+static int bpf_map_prepare_vdata(const struct bpf_map *map)
- {
- 	const struct btf_type *type;
- 	struct bpf_struct_ops *st_ops;
-@@ -9963,16 +10018,32 @@ static void bpf_map_prepare_vdata(const struct bpf_map *map)
- 		if (!prog)
- 			continue;
- 
-+		/*
-+		 * Manual struct_ops programs don't get along well with manual
-+		 * loading: all the progs belonging to the same struct_ops must
-+		 * load and unload together, which is the opposite of the manual
-+		 * load concept.
-+		 * Still, we allow manual progs here as long as they were loaded
-+		 * before this step because this way they do work.
-+		 */
-+		if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL && prog->fd < 0) {
-+			pr_warn("map '%s': struct_ops member prog '%s' is MANUAL but not loaded\n",
-+				map->name, prog->name);
-+			return -EINVAL;
-+		}
-+
- 		prog_fd = bpf_program__fd(prog);
- 		kern_data = st_ops->kern_vdata + st_ops->kern_func_off[i];
- 		*(unsigned long *)kern_data = prog_fd;
- 	}
-+
-+	return 0;
- }
- 
- static int bpf_object_prepare_struct_ops(struct bpf_object *obj)
- {
- 	struct bpf_map *map;
--	int i;
-+	int i, err;
- 
- 	for (i = 0; i < obj->nr_maps; i++) {
- 		map = &obj->maps[i];
-@@ -9983,7 +10054,9 @@ static int bpf_object_prepare_struct_ops(struct bpf_object *obj)
- 		if (!map->autocreate)
- 			continue;
- 
--		bpf_map_prepare_vdata(map);
-+		err = bpf_map_prepare_vdata(map);
-+		if (err)
-+			return err;
- 	}
- 
- 	return 0;
-@@ -9999,10 +10072,19 @@ static void bpf_object_unpin(struct bpf_object *obj)
- 			bpf_map__unpin(&obj->maps[i], NULL);
- }
- 
--static void bpf_object_cleanup_btf(struct bpf_object *obj)
-+static void bpf_object_cleanup_btf(struct bpf_object *obj, bool force)
- {
- 	int i;
- 
-+	/*
-+	 * Module BTF fds and btf_vmlinux are still needed by
-+	 * programs that have not been manually loaded yet, so defer freeing
-+	 * them to the end of the object lifetime, unless the caller forces
-+	 * immediate cleanup.
-+	 */
-+	if (!force && obj->has_manual_progs)
-+		return;
-+
- 	/* clean up module BTFs */
- 	for (i = 0; i < obj->btf_module_cnt; i++) {
- 		close(obj->btf_modules[i].fd);
-@@ -10019,15 +10101,42 @@ static void bpf_object_cleanup_btf(struct bpf_object *obj)
- 	obj->btf_vmlinux = NULL;
- }
- 
--static void bpf_object_post_load_cleanup(struct bpf_object *obj)
-+static void bpf_object_post_load_cleanup(struct bpf_object *obj, bool force)
- {
--	/* clean up fd_array, and the slots handed out with it */
--	zfree(&obj->fd_array);
--	obj->fd_array_cap = 0;
--	obj->fd_array_used = 0;
-+	/*
-+	 * The fd array, and the slots handed out with it, are needed for
-+	 * manually loaded programs, so defer freeing them in that case
-+	 * to the end of the object lifetime.
-+	 */
-+	if (force || !obj->has_manual_progs) {
-+		zfree(&obj->fd_array);
-+		obj->fd_array_cap = 0;
-+		obj->fd_array_used = 0;
-+	}
- 
- 	/* clean up BTF */
--	bpf_object_cleanup_btf(obj);
-+	bpf_object_cleanup_btf(obj, force);
-+}
-+
-+static int bpf_object_check_gen_loader(struct bpf_object *obj)
-+{
-+	struct bpf_program *prog;
-+
-+	if (!obj->gen_loader)
-+		return 0;
-+
-+	/*
-+	 * gen_loader only records programs loaded by bpf_object__load_progs(),
-+	 * which skips MANUAL ones.
-+	 */
-+	bpf_object__for_each_program(prog, obj) {
-+		if (prog->load_strategy != BPF_PROG_LOAD_STRATEGY_MANUAL)
-+			continue;
-+		pr_warn("prog '%s': gen_loader does not support manually-loaded programs\n",
-+			prog->name);
-+		return -EOPNOTSUPP;
-+	}
-+	return 0;
- }
- 
- static int bpf_object_prepare(struct bpf_object *obj, const char *target_btf_path)
-@@ -10039,7 +10148,8 @@ static int bpf_object_prepare(struct bpf_object *obj, const char *target_btf_pat
- 		return -EINVAL;
- 	}
- 
--	err = bpf_object_prepare_token(obj);
-+	err = bpf_object_check_gen_loader(obj);
-+	err = err ? : bpf_object_prepare_token(obj);
- 	err = err ? : bpf_object__probe_loading(obj);
- 	err = err ? : bpf_object__load_vmlinux_btf(obj, false);
- 	err = err ? : bpf_object__resolve_externs(obj, obj->kconfig);
-@@ -10122,7 +10232,7 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
- 			err = bpf_gen__finish(obj->gen_loader, obj->nr_programs, obj->nr_maps);
- 	}
- 
--	bpf_object_post_load_cleanup(obj);
-+	bpf_object_post_load_cleanup(obj, false);
- 	obj->state = OBJ_LOADED; /* doesn't matter if successfully or not */
- 
- 	if (err) {
-@@ -10590,7 +10700,7 @@ void bpf_object__close(struct bpf_object *obj)
- 	 * bpf_object__load(), we need to clean up stuff that is normally
- 	 * cleaned up at the end of loading step
- 	 */
--	bpf_object_post_load_cleanup(obj);
-+	bpf_object_post_load_cleanup(obj, true);
- 
- 	usdt_manager_free(obj->usdt_man);
- 	obj->usdt_man = NULL;
-@@ -10599,7 +10709,6 @@ void bpf_object__close(struct bpf_object *obj)
- 	bpf_object__elf_finish(obj);
- 	bpf_object_unload(obj);
- 	btf__free(obj->btf);
--	btf__free(obj->btf_vmlinux);
- 	btf_ext__free(obj->btf_ext);
- 
- 	for (i = 0; i < obj->nr_maps; i++)
-@@ -10925,7 +11034,13 @@ __u32 bpf_program__log_level(const struct bpf_program *prog)
- 
- int bpf_program__set_log_level(struct bpf_program *prog, __u32 log_level)
- {
--	if (prog->obj->state >= OBJ_LOADED)
-+	/*
-+	 * Here and below, OBJ_LOADED is not a relevant restriction for
-+	 * manual programs as those can load after the bpf object is
-+	 * already loaded.
-+	 */
-+	if (prog->obj->state >= OBJ_LOADED &&
-+	    prog->load_strategy != BPF_PROG_LOAD_STRATEGY_MANUAL)
- 		return libbpf_err(-EBUSY);
- 
- 	prog->log_level = log_level;
-@@ -10944,7 +11059,8 @@ int bpf_program__set_log_buf(struct bpf_program *prog, char *log_buf, size_t log
- 		return libbpf_err(-EINVAL);
- 	if (log_size > UINT_MAX)
- 		return libbpf_err(-EINVAL);
--	if (prog->obj->state >= OBJ_LOADED)
-+	if (prog->obj->state >= OBJ_LOADED &&
-+	    prog->load_strategy != BPF_PROG_LOAD_STRATEGY_MANUAL)
- 		return libbpf_err(-EBUSY);
- 
- 	prog->log_buf = log_buf;
-@@ -13730,7 +13846,7 @@ static int collect_func_ids_by_glob(const struct bpf_program *prog, const char *
- 	err = collect_btf_func_ids_by_glob(btf, pattern, ids);
- 
- cleanup:
--	bpf_object_cleanup_btf(obj);
-+	bpf_object_cleanup_btf(obj, false);
- 	return err;
- }
- 
-@@ -16287,10 +16403,26 @@ void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
- 
- int bpf_program__set_load_strategy(struct bpf_program *prog, enum bpf_prog_load_strategy strategy)
- {
--	if (prog->obj->state >= OBJ_PREPARED)
-+	struct bpf_object *obj = prog->obj;
-+
-+	if (obj->state >= OBJ_PREPARED)
- 		return libbpf_err(-EINVAL);
- 
--	prog->load_strategy = strategy;
-+	switch (strategy) {
-+	case BPF_PROG_LOAD_STRATEGY_DISABLED:
-+	case BPF_PROG_LOAD_STRATEGY_AUTO:
-+		prog->load_strategy = strategy;
-+		break;
-+	case BPF_PROG_LOAD_STRATEGY_MANUAL:
-+		if (prog_is_subprog(obj, prog))
-+			return libbpf_err(-EINVAL);
-+
-+		prog->load_strategy = BPF_PROG_LOAD_STRATEGY_MANUAL;
-+		break;
-+	default:
-+		return libbpf_err(-EINVAL);
-+	}
-+
- 	return 0;
- }
- 
-@@ -16298,3 +16430,32 @@ enum bpf_prog_load_strategy bpf_program__load_strategy(const struct bpf_program
- {
- 	return prog->load_strategy;
- }
-+
-+int
-+bpf_program__load(struct bpf_program *prog)
-+{
-+	int err;
-+	struct bpf_object *obj = prog->obj;
-+
-+	/*
-+	 * This function cannot be called before OBJ_PREPARED -
-+	 * Program's data is initialized on object prepare.
-+	 */
-+	if (obj->state < OBJ_PREPARED)
-+		return libbpf_err(-EINVAL);
-+
-+	if (prog_is_subprog(obj, prog) || prog->load_strategy != BPF_PROG_LOAD_STRATEGY_MANUAL)
-+		return libbpf_err(-EINVAL);
-+
-+	if (prog->fd >= 0)
-+		return libbpf_err(-EBUSY);
-+
-+	err = bpf_object_load_prog(obj, prog, prog->insns, prog->insns_cnt,
-+				   obj->license, obj->kern_version, &prog->fd);
-+	if (err) {
-+		pr_warn("prog '%s': failed to load: %s\n", prog->name, errstr(err));
-+		return libbpf_err(err);
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index a91e43cbba20..dd5380bc355e 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -473,6 +473,17 @@ LIBBPF_API int bpf_program__pin(struct bpf_program *prog, const char *path);
-  * @return 0, on success; negative error code, otherwise
-  */
- LIBBPF_API int bpf_program__unpin(struct bpf_program *prog, const char *path);
-+
-+/**
-+ * @brief **bpf_program__unload()** unloads a BPF program, closing its fd.
-+ *
-+ * If the program's load strategy is BPF_PROG_LOAD_STRATEGY_MANUAL, only the
-+ * fd is closed and the program's data is retained so it can be reloaded
-+ * later via bpf_program__load(). For any other load strategy, the program's
-+ * data is also freed and it cannot be reloaded.
-+ *
-+ * @param prog BPF program to unload
-+ */
- LIBBPF_API void bpf_program__unload(struct bpf_program *prog);
- 
- struct bpf_link;
-@@ -1055,8 +1066,39 @@ LIBBPF_API int bpf_program__clear_flags(struct bpf_program *prog, __u32 flags);
-  * interactions.
-  */
- LIBBPF_API __u32 bpf_program__log_level(const struct bpf_program *prog);
-+
-+/**
-+ * @brief **bpf_program__set_log_level()** sets the verifier log level used
-+ * when the BPF program is loaded.
-+ *
-+ * Fails with -EBUSY once the enclosing bpf_object is loaded, unless the
-+ * program's load strategy is BPF_PROG_LOAD_STRATEGY_MANUAL, as such a program
-+ * can still be loaded afterwards with bpf_program__load().
-+ *
-+ * @param prog BPF program to set the log level for
-+ * @param log_level verifier log level, 0 requests no logging on the first
-+ * load attempt
-+ * @return 0, on success; negative error code, otherwise
-+ */
- LIBBPF_API int bpf_program__set_log_level(struct bpf_program *prog, __u32 log_level);
- LIBBPF_API const char *bpf_program__log_buf(const struct bpf_program *prog, size_t *log_size);
-+
-+/**
-+ * @brief **bpf_program__set_log_buf()** sets the buffer the verifier log of
-+ * the BPF program is written to when it is loaded.
-+ *
-+ * Fails with -EBUSY once the enclosing bpf_object is loaded, unless the
-+ * program's load strategy is BPF_PROG_LOAD_STRATEGY_MANUAL, as such a program
-+ * can still be loaded afterwards with bpf_program__load().
-+ *
-+ * @param prog BPF program to set the log buffer for
-+ * @param log_buf buffer for the verifier log, or NULL to use the object's
-+ * kernel_log_buf
-+ * @param log_size size of @log_buf in bytes; must be 0 if @log_buf is NULL and
-+ * non-zero otherwise
-+ * @return 0, on success; -EINVAL if @log_buf and @log_size are inconsistent or
-+ * @log_size exceeds UINT_MAX; -EBUSY as described above
-+ */
- LIBBPF_API int bpf_program__set_log_buf(struct bpf_program *prog, char *log_buf, size_t log_size);
- 
- LIBBPF_API struct bpf_func_info *bpf_program__func_info(const struct bpf_program *prog);
-@@ -2122,10 +2164,14 @@ LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const struct bpf_pro
-  *
-  * - BPF_PROG_LOAD_STRATEGY_DISABLED: the program is not loaded.
-  * - BPF_PROG_LOAD_STRATEGY_AUTO: the program is autoloaded when the bpf_object is loaded.
-+ * - BPF_PROG_LOAD_STRATEGY_MANUAL: the program is loaded and attached manually.
-+ *   It is skipped by the skeleton's auto-attach, whatever its autoattach
-+ *   setting is.
-  */
- enum bpf_prog_load_strategy {
- 	BPF_PROG_LOAD_STRATEGY_DISABLED = 0,
- 	BPF_PROG_LOAD_STRATEGY_AUTO,
-+	BPF_PROG_LOAD_STRATEGY_MANUAL,
- };
- 
- /**
-@@ -2150,6 +2196,16 @@ LIBBPF_API int bpf_program__set_load_strategy(struct bpf_program *prog,
-  */
- LIBBPF_API enum bpf_prog_load_strategy bpf_program__load_strategy(const struct bpf_program *prog);
- 
-+/**
-+ * @brief **bpf_program__load()** loads a MANUAL BPF program. The enclosing
-+ * bpf_object must already be prepared.
-+ *
-+ * @param prog BPF program to load; non MANUAL programs, already loaded
-+ * programs and subprograms are rejected.
-+ * @return 0 on success; negative error code otherwise
-+ */
-+LIBBPF_API int bpf_program__load(struct bpf_program *prog);
-+
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index c06fc6b68efd..a45666f546fa 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -476,6 +476,7 @@ LIBBPF_1.8.0 {
- 
- LIBBPF_1.9.0 {
- 	global:
-+		bpf_program__load;
- 		bpf_program__load_strategy;
- 		bpf_program__set_load_strategy;
- } LIBBPF_1.8.0;
--- 
-2.34.1
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261024014514.2959=
+514-1-andrey.grodzovsky@crowdstrike.com?part=3D5
