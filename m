@@ -1,82 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792800250;
-	b=lg9Qg9ToU3XIukf9rZJL4r7mdtEvpYSC7nq1461rbU4eGeafHU5NmJBfRIFbcuZVvcZF
-	 lqXBcMK0aeOchmh0Be6pBvtzoE0W0jb874sh+Xx1nhr4yc7/1IeGi6J5J0GRSzHcda7BI
-	 PqSzAcxynpakuI7G3cB2/eaytb98R6SKYYBo37x+tLsIQnPuUOEqDfOAuWoyRoPiK806l
-	 weeSiS+4L4VZXgVijK3OOtu+dfaV0VHBOD+670a8+ha2kg4lJ5kmM+TPDExpAs18c/ELV
-	 WGarf48NNk9ypFzEKY4sW9qID6/vk6DzUxG3SXMuFS5IuX74idqUa6xIHEAsdpPwMrA==
+	t=1792800251;
+	b=iclvxSvlmUheBrQASOXDcn5r0NdZXI4N8rt9RksuWFHFQNFkNEX3z8evxpL2Go7zXKrS
+	 pSuKfFyssMRnLb54Zt8TQpkNJi9WO8byG5Ew5JvtBDNobYhZ4m1AWhnm/wjQ0GHu1G9xv
+	 0eb1/5/CO9ArVDUTXL8izJ0FR6BZCd/hBCXqDWHwA5HIfTrxkSLP8iXNfzv3NTssyCr91
+	 rxVjXdB+x0Bie0pzbRFf55QiJ7QVVIcBNITDYvfKwxQyvaZozqacSWlvSaWi1J9lGe56D
+	 lSY6UuKDgFZKrBdiTUCL06keLbH/wabnhSbNmgkS/vJOol2xPtsNIHsYSqlIOGw7ACQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792800250;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792800251;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=dh4RV6KjLiyutepNxuHw1bsZCM35vr2Eq32a79rgIrg=;
-	b=RP8zeKpTPsyFOhHeeMtdZh8fnBOkk8MU1kGCvg9QBxVyekORrDfQnAMr+jEhLG5NFNLy
-	 0R5bNiktV2Pq5H7Yy2Q5izfSHgZB3E+yD+oIO3frqLseVTN7nqyxVOyAjuIFgwlzkl5FS
-	 BYz6/1+w36hK45EF8MkzTRO2nv6Zwp7Jj67qkez2na9CXSrCyk/Na8wgnHe5vLs3WO+V7
-	 64B3iK6MnRISz4Yd5ti1QVdidKD+8hsOxzHhhkWptSiSjt7gecUVflbxWu/fhhufPYRbR
-	 VUQJA4eMR+tMAl+PKLHXgNsorpSLFhHoVYSYjweT75m6H6v9QP26B6O1MLCXkEY762w==
+	bh=wCS5T/2b3NrZp1+b3dn6uTHs4arCEsu5dHbl1PSdqF4=;
+	b=xZNak/AflBerTnfbt7u6aQtpwM6YmbHcT1E6ra26iPybUiUX7NR5Z1qzwx7M1w4XJcI+
+	 tREE9LUmSUp8CzBDnIy1C7rkcSEfoyNYu/ibkw//OH6Y2F355OT3wGWE84HdH6TC1GNn+
+	 mESxwe6fC8Vy+DukhdheJutm3WhHdB+YV7KNBNDuGCItkb6bfsPCZGKXZDt+c7rVfQQyd
+	 9XG32qU4HkV7yZcMUhA65qhYs21lM+KFfNyg+qi3rwI08K0bct8IC7TX3fSO5N+l5qu9R
+	 fjPD2lXoxOk+km43xYYmflITfG9TPYd0nTuXN1P2uo1nq6VE5ymVNWqFHqLzpYMLRrQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="PCH/P+m0";
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rFP4xDK6;
+	arc=none smtp.remote-ip=209.85.216.41
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D390606A322
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:04:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D390606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0B4606A320
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 00:04:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0A0B4606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PCH/P+m0
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ea1e7fad99so7005525ad.1
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 17:04:09 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=rFP4xDK6
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3ada4c06b7bso692038a91.2
+        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 17:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792800249; x=1793405049; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792800250; x=1793405050; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=dh4RV6KjLiyutepNxuHw1bsZCM35vr2Eq32a79rgIrg=;
-        b=PCH/P+m0uoKoApbjAC/tCrf5ooiuAp+TruwbDRQt66sxzZAbldoxoN+N7an4n7l7AR
-         PtJ5sHm0t9xbzmp4nXz9Hj0Xnwcq03MdkK8an4A/5nMvw19Ui+US5qPgn3HQem64SQb8
-         tE72QrBxnZ/PfX/H/KQkOIlnKOkeOlyktKM+xlEiS9B0lryVyk7z2ORStmkOtQHHbnHi
-         +2n3XCBT1xks13aXuFpokr/8NA4CQ+7q65sEO2dKAbLzTk6No85IY2+VrnnQ+qKQRTO6
-         UG6a9S46kNu91WKFsaB7a/5McqRxhQvRMAtFPNUGJCuEKDRZXfaIhUKXkcel4c+5la+/
-         FOOQ==
+        bh=wCS5T/2b3NrZp1+b3dn6uTHs4arCEsu5dHbl1PSdqF4=;
+        b=rFP4xDK6F6yKfu5sCyaoltAC0plkcaCaSHCEp7JOq0ZWB/pBrgdEic6YXX/+qBf6Pg
+         bpWpsDu89/Gun92YCwDBy0vAE4AA74qN9KcMcqUWqyzrQ051AQeeShptZ0H5nVPPHtQA
+         BOeH/cxNaw1uekWijjrGJgIuQarRD1VDt8EsiC+5I3j5zwJIyo1yN91fgy9Q7NpsoeLf
+         yxCq1uRphaTP4VwayJ9nsFHatWSrqae2ff+Tzg4vAoVj5UWgkQDhl9O0k8bEPB5jfqP3
+         d/8LVhUMcqQvu2ja5qfYppDFftaDjulinwTb4KUFZiCvbHtBPgtELVM8t5QheyzD97Jx
+         FH6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792800249; x=1793405049;
+        d=1e100.net; s=20260707; t=1792800250; x=1793405050;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=dh4RV6KjLiyutepNxuHw1bsZCM35vr2Eq32a79rgIrg=;
-        b=ShROh+tVPlEquItadf4rLOXD/eX16wEmYq429QpKpsHtlKTgv27+TdXLG3RYtjZYNh
-         tCPiWm2hpeJXVs4E4hAQYnUr72rvIoo48jhBgUCr3sz5o7ZtENhNeOfr/6CHOSA4PL07
-         reLEDPG4/DPp5tPectfZAafKjokyzrbfep6FpJIEAV5i8PHohDc4a6P7uEl1Ei8NmqQN
-         e7JNN1QkusSE4E6XdofJDmizme+cDBede9PMnbsqqarfLsShkLqcsrLR9W9uZ9zl3S7O
-         41nO1cGvE9HkNIW5nALWOKObXBEJjoHnL4mHENv+/SftccVjhdgInS+xtLqjF11NVtS8
-         Z+QA==
-X-Gm-Message-State: AFq9FYI7W0vX1GkNi623FasUYf7PL2AHOZQOL8rdBAkcdWyRV/hS818j
-	lJhW7IeRmWZL/PpJ9IJy+NBGDkm12Ptn4Kk17JImyan7BQoh/pP1K+r2E+j5zHzP
-X-Gm-Gg: AYBFou1Unnryon83ln4c8IDiiVzD0Ul7frsdDPLNEaYOp25RxykUJFfFCCW6/eso5GR
-	hhIO+i5M8eEh/vpP53+aPjYd6EvOuWS9aaTM/v2FgqAk2W4DijJFG26BdWXGz5GvI6BPiDEm9E7
-	DIIn0bwp+8RHP9mtPslgZivDeP3dR5E7spsjjCYilfhbT0WNaMNHC7gd/HzEKOqJ5gUS/WBbS40
-	ybNGvq4FLJ63CdGwfKt99ZuUdJOAYKvekKNL+OEg6RSGpvHPpSnEM9x5AdMHBR20AITplCdhw7t
-	CpBpoykC9iCNQ1Xzh6Rp9mkqmBaMAngxvp0b+VfBeN16+Ml4qrppBI3yhLvwk38blJHNZhEIjuW
-	Hbi8lVr2H7F7nlAb4GyqtVwY7HrruTxgzIrPria4lATDVmNz7HAMjxYOkilA/nhLTZOHvZgPkOw
-	vOyr7H72a2Jq0oGYO67tw5OlNXePsi9RCqy4fJAazIpIT8ZcQc7hT3qbaGONbI26vuphY7jJ/CB
-	+Gs1hg8sVMSJ6DT+tIqM3Iqx0gShLHX7C3zUlnYvysVvziNBhXwZ8ENikZGOXOI/zBf8Ty3
-X-Received: by 2002:a17:90b:224b:b0:3ac:d19e:85f1 with SMTP id 98e67ed59e1d1-3adeafd6bc7mr582047a91.53.1792800249247;
-        Fri, 23 Oct 2026 17:04:09 -0700 (PDT)
+        bh=wCS5T/2b3NrZp1+b3dn6uTHs4arCEsu5dHbl1PSdqF4=;
+        b=dBvrQDjKEPMgwHRtNoKJzuvJKS+Ffxwn3ha+EvFC/Y3XNhE37oQVWxamNafpzaNwKQ
+         IcoJWAzgIEx78xacOzK4f2jxhUMtGBoJa5W4yEmLcRH0xOBgalN28gPsT5BftBfbo9M+
+         wV8EdRig3AASZVISkiVrmDUQvFr+R02vdtP0HJSe9M9SiZSOzvvW3uTPpebRx7INv6q9
+         TrIsdW7MHne02Ot/+YRaJihYjuIMWkmJ/nodBn8AXXcGz7QnjrfoYJjcLFiUK8TUHaVi
+         eQNWqA0htt/Nif+2dMiUynv0GO4wTWfwSu1WP78iclOxbhM5Rs0cPL1G4uPezFCzMakS
+         Gg1A==
+X-Gm-Message-State: AFq9FYI7ip0F8CkABohsmM/QxW5GZcE0/Denavd0m7bFKPQe5Nrq9D1t
+	/2DOayDoMFtyk9XW/95MhLmqVe37stybmhTpQkJGbtw1Gr3jsw3Zbfz1aagqseMk
+X-Gm-Gg: AYBFou2jnn3wayr/IIJJdrA1mif5YbNxUX5HK3cRIoIoic+o2SIqB9gX7kZY/VcYmT4
+	CTaGGPUCxwRiKQEGKpzLKt5CcGsw6EBPxrimAzinuZuuc6+Vo4sDbu9WVuyHCXzpVoeVvWtLPOh
+	mXrHSs9GTmeEDtxUrQlIVhxQvSY3+kfo+DldYIlj5BuEdLqGSi9FkihAah3wK+5ffYOYeW+yHUD
+	A7vB6ar5AJ8NLJP/zR4K1AY7cm82uvQIL7GH7nkUsRM/M6vt7SGXJlju2BFLVp7ioDICGCh4GI5
+	bI4aMu8rRlyY5OizYorWG08i6bdeCaYNfEjPF82IOc7XJmnXy7mq6K2aBtbXLI/jrU7LmmYWYNz
+	HbOfr1Z68ZMalQ/zMmONymBoQAp+LDmNDZkyedWwokbx6dO+xWKql8dyYC/+0WTRnLvxB5/7KtZ
+	Vr4dyzf2tFdGKV56XGeXaOnIz1AiFZ/nN32Ma4pLl4WN5IsGw+kLD0ZtgBieYXkgPaWKOPvMoJD
+	9dTK0k62rXYYAHR2dAFYmZWDT1540189MxfPs76OGd+fHZ3v2QA3V1whXjFFz9O8DzatC4E9nVb
+	8oy4EdjVO7/WDKWA2w==
+X-Received: by 2002:a17:90b:53cf:b0:3ac:a11a:7c84 with SMTP id 98e67ed59e1d1-3adeb126f28mr565916a91.65.1792800250084;
+        Fri, 23 Oct 2026 17:04:10 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba31797sm547433a91.1.2026.10.23.17.04.08
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba31797sm547433a91.1.2026.10.23.17.04.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 17:04:08 -0700 (PDT)
+        Fri, 23 Oct 2026 17:04:09 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -85,9 +86,9 @@ Cc: andrii@kernel.org,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next 06/11] bpf: print 32-bit SCEV bounds as 32-bit numbers
-Date: Fri, 23 Oct 2026 17:03:48 -0700
-Message-ID: <20261023-scev-simpler-clamp-v1-6-d43a07eda7af@gmail.com>
+Subject: [PATCH bpf-next 07/11] selftests/bpf: pointer operands for 32-bit recurrences/latches
+Date: Fri, 23 Oct 2026 17:03:49 -0700
+Message-ID: <20261023-scev-simpler-clamp-v1-7-d43a07eda7af@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
 References: <20261023-scev-simpler-clamp-v1-0-d43a07eda7af@gmail.com>
@@ -103,92 +104,142 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-bpf: Simplify printing of SCEV bounds
+Add four tests for pointer operands in 32-bit SCEV analysis.
+Check that loop bounds are not inferred for the following program shapes:
 
-- Print large 32-bit bounds without sign extension.
-- Omit 32-bit bounds when they coincide with 64-bit bounds.
-
-Before:
-  loop header at ..., widening r0 to 0x80000000..0xffffffff (s32 0xffffffff80000000..-1) step 1
-  loop header at ..., widening r0 to 0..3 (s32 0..3) step 1
-
-After:
-  loop header at ..., widening r0 to 0x80000000..0xffffffff (s32 0x80000000..-1) step 1
-  loop header at ..., widening r0 to 0..3 step 1
+     32-bit latch          |    32-bit recurrence
+  -------------------------+--------------------------
+     r6 = ... pointer ...  |    r6 = ... pointer ...
+     r7 = ... pointer ...  |    r7 = ... pointer ...
+  l: r6 += 1               | l: w6 += 1
+     ...                   |    ...
+     if w6 < w7 goto l     |    if r6 < r7 goto l
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h                      | 1 +
- kernel/bpf/log.c                                  | 8 ++++++++
- kernel/bpf/scev.c                                 | 8 +++++---
- tools/testing/selftests/bpf/progs/verifier_scev.c | 2 +-
- 4 files changed, 15 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/progs/verifier_scev.c | 109 ++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5926f13ff43c..e51984cb3035 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1280,6 +1280,7 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
- 				  u32 insn_off,
- 				  const char *prefix_fmt, ...);
- void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num);
-+void bpf_verbose_snum32(struct bpf_verifier_env *env, s32 num);
- 
- #define verifier_bug_if(cond, env, fmt, args...)						\
- 	({											\
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index 5432c0fc442b..fa29d9b994e4 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -535,6 +535,14 @@ void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num)
- 		verbose(env, "%#llx", num);
- }
- 
-+void bpf_verbose_snum32(struct bpf_verifier_env *env, s32 num)
-+{
-+	if (is_snum_decimal(num))
-+		verbose(env, "%d", num);
-+	else
-+		verbose(env, "%#x", (u32)num);
-+}
-+
- int tnum_strn(char *str, size_t size, struct tnum a)
- {
- 	/* print as a constant, if tnum is fully known */
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 12b147faa32a..04d4962448e2 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -2456,11 +2456,13 @@ static void log_bounds(struct bpf_verifier_env *env, const struct bounds *bounds
- 	bpf_verbose_snum(env, cnum64_smin(bounds->r64));
- 	bpf_log(log, "..");
- 	bpf_verbose_snum(env, cnum64_smax(bounds->r64));
--	if (bounds->r32.size < U32_MAX) {
-+	if (bounds->r32.size < U32_MAX &&
-+	    (cnum32_smin(bounds->r32) != cnum64_smin(bounds->r64) ||
-+	     cnum32_smax(bounds->r32) != cnum64_smax(bounds->r64))) {
- 		bpf_log(log, " (s32 ");
--		bpf_verbose_snum(env, cnum32_smin(bounds->r32));
-+		bpf_verbose_snum32(env, cnum32_smin(bounds->r32));
- 		bpf_log(log, "..");
--		bpf_verbose_snum(env, cnum32_smax(bounds->r32));
-+		bpf_verbose_snum32(env, cnum32_smax(bounds->r32));
- 		bpf_log(log, ")");
- 	}
- 	bpf_log(log, " step %u", bounds->step);
 diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index 14594ba5dbfd..96c98443f346 100644
+index 96c98443f346..8eeb4d73da98 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_scev.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -1771,7 +1771,7 @@ __success
- __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
- __msg("loop header at 1, header_count is 4")
--__msg("loop header at 1, widening r0 to 0..3 (s32 0..3) step 1")
-+__msg("loop header at 1, widening r0 to 0..3 step 1")
- __msg("loop header at 1, clamping r0")
- __msg("4: R0=3")
- __naked void pre_cond_je32(void)
+@@ -2971,6 +2971,115 @@ __naked void ptr_stack_other_frame(void)
+ "	::: __clobber_all);
+ }
+ 
++SEC("xdp")
++__success
++__log_level(2)
++__msg("scev: incompatible latch operands r6 (map_value), r7 (map_value)")
++__msg("loop header at 11, can't compute iterations count at 14")
++__naked void ptr_map_value_jmp32(void)
++{
++	asm volatile ("					\
++	*(u64 *)(r10 - 8) = 0;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map] ll;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 2f;				\
++	r6 = r0;					\
++	r7 = r6;					\
++	r7 += 4;					\
++	r9 = 0;						\
++1:"	LIMIT_ITERATIONS				\
++"	r6 += 1;					\
++	if w6 < w7 goto 1b;				\
++2:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__failure
++__log_level(2)
++__msg("loop header at 11, can't compute iterations count")
++__msg("R6 32-bit pointer arithmetic prohibited")
++__naked void ptr_map_value_alu32_latch(void)
++{
++	asm volatile ("					\
++	*(u64 *)(r10 - 8) = 0;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map] ll;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 2f;				\
++	r6 = r0;					\
++	r7 = r6;					\
++	r7 += 4;					\
++	r9 = 0;						\
++1:"	LIMIT_ITERATIONS				\
++"	w6 += 1;					\
++	if r6 < r7 goto 1b;				\
++2:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__msg("loop header at 11, can't compute iterations count")
++__naked void ptr_map_value_alu32_latch2(void)
++{
++	asm volatile ("					\
++	*(u64 *)(r10 - 8) = 0;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map] ll;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 2f;				\
++	r6 = r0;					\
++	r7 = r6;					\
++	r7 += 4;					\
++	r9 = 0;						\
++1:"	LIMIT_ITERATIONS				\
++"	r6 += 1;					\
++	w8 = w6;					\
++	if r8 < r7 goto 1b;				\
++2:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__success
++__log_level(2)
++__msg("loop header at 8, can't widen r0, expr is (zext32 (+ r0 1))")
++__naked void ptr_map_value_alu32_non_latch(void)
++{
++	asm volatile ("					\
++	*(u64 *)(r10 - 8) = 0;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map] ll;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 2f;				\
++	r1 = 0;						\
++1:	r1 += 1;					\
++	w0 = w0;					\
++	w0 += 1;					\
++	if r1 < 4 goto 1b;				\
++2:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map)
++	: __clobber_all);
++}
++
+ /* Metadata and packet data have different origins. */
+ SEC("xdp")
+ __success
 
 -- 
 2.53.0
