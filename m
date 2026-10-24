@@ -1,102 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792823015;
-	b=nhAAoCL/qpxE28hxFNar6Whk8L6IdHte+EkcErBE27qRFDZd6gLWNnBmJAEZQn7EUEYJ
-	 uYOTx4aBImJL46ke4PPlqGjocq+mV/cGBbx8+YiufY/3ybhaVo/Dmk0Hx1g/f5EkLpF6l
-	 eCvnDM4oFiaaDPowQ58YJUPg/V0oMc6Ho3OJ6yV3miiUWnSZUV3rB9m1nA/kraiSAq0Rp
-	 K4ewQtjYAFAnkOGZx3qzcGQeMhlvXrrhoe2/inj+P3A3XuHIvPICfu6gWJ7tAxcUyFyRU
-	 rwZvUQk45QxE2VRKkGpqCGrjW6pkWnMJIlmVVL4NZXE/2r3PzLMd3l++LzZdmdJP1Sg==
+	t=1792823928;
+	b=OgfSUlXxt8mqgzTwztsGJr+xJhjWkXx2P9yJMt4MneaZT3lJLxhU00wPpFJAIpUJaFBK
+	 NZfCTktjA6WLQ6NJls7MO/kRpMHEBq7jn7DUTl+MtioLu4JIodB1BnFW1vMEuHJmG6wyc
+	 e8brzLa6asOcIN0l6MG6ABs/2nCiBhsXOBHpnRETfKQ8aml1odTsEBjETTTOdXaN1r/3q
+	 6OTsbnKSdDwSKTh44XflbWJDFqJbtVMiehKkkHrqqADOuLIna2PMw/xKAazajuf+PlxiH
+	 dvIQIqKV8ATBxxk3bl74iftkXfmaRwQ6Fd6b7Om/OGuvkKXz5cGiVRrqmvTIFBk3eJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792823015;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=8F8HFsYfAHizugxAtruo/TQMfMkYFk3uqtVD3fXKtyA=;
-	b=FckARCkO0qVdt7rum9zJkUX/02M95zdNKLGbk4OEDUiVGoLceRBm5k6WJ6I3UbmXARtQ
-	 4kzFtn74YKtOJA6yU6w5YFK+7VtL4zoniUulUALw2tpUlC1Kl7u85HWyGxpj1TvFg9FdJ
-	 NBqxsdPDpKbS/csMGby4BAMz+5OgilXnqqzJe6oEsEH03s+oeneXaQroMSLYAKvkJT+dB
-	 er6SCrupCFSKNiPUmfLpxCCoSJnQvAzjbtcWDjqygrwVfCmkxTjrISAcAPPXYMsDs2p00
-	 e/EXkQzscL86lF+bnCGaVQCj9NUIdteRKwnU0VUY8DEMzTt75mCB7mRTW5J2LEdwyig==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792823928;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=hHvyayL/H+H3ZN1WHdf6p0nRk1BCb+XkXk1BJp47Pr0=;
+	b=XaCKpmbCEDpetHjTJOZlc49cZF3PCToeUS81RNZpff1V8I3cX0hccQBCgds1PQeWGEV/
+	 gkEBVWkV4S1zkWsVIQ6/ZA+8w0muyw6eJtdcXzh+Yd8ecV2a2/bQmtSPYFr6fJgbEHRkW
+	 RgyW+JLaBePN9odXtPT33MMynaXXU4b7OnFvSZf9NHNFY5GJEPk1i22hxN/+WM0dGFmbd
+	 uQHDLfRe82seilYTV3TSaIsMaXSUWDoqxxZQfh/EVxG739X5CdhMiqB7wRyRUNnCbSkUN
+	 h8mS+BkL3j05+cyQ2v0tfxcGkf+EgEY70Bnvk94sYnH5d/8WxXRJsPOdtTgDRIbQAKQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jK09oEFw;
-	arc=none smtp.remote-ip=209.85.167.42
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NwZOaZGJ;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC490606A31D
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 06:23:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC490606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3767606A31A
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 06:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jK09oEFw
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5ba3ec92031so1827635e87.2
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 23:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792823013; x=1793427813; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8F8HFsYfAHizugxAtruo/TQMfMkYFk3uqtVD3fXKtyA=;
-        b=jK09oEFwLGaCaAW5UOad/IBCAAJTRhsjViMJ55Kkx72oPWMJadURHpLlS8jXIlWy3p
-         3u9j8RFClSGCR5+Kp6QGXy43JY1poEwYMOmDynAtR55Z//KP4oi2pbPmJUUoRxAe+e6S
-         DvMCEheSKTAzVycfFkNhB5XqLDUvSQ1S19Fh1flsatGFejJvyro4u2R+TGmJgWspk5Dl
-         HO8mwg47pmNO+yo3iUP/Zhm/3QuUTxrWMdwE7mbJdRIqD1MuPk39klBB5Qg+tHCOPypk
-         zm7+Xj0tV59XI6/g9vJQK9xhN0dqKYh9UC4oTKbzO1kbm6d2VNXXD+2gaDkV4zpMLJRw
-         JQpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792823013; x=1793427813;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8F8HFsYfAHizugxAtruo/TQMfMkYFk3uqtVD3fXKtyA=;
-        b=ngf7Lw2D2ueNlWW8uaP6g2FlDW+1peN462G352ROY+JRASAuFIPYm2H5QLSVBSr0tX
-         uOtUUwTd4HvTREvVnH0uSGL54UY1UFdAVGz626GVaqBMHRbmhtFm3ONg633/4urFX5ol
-         9xshGnjfkXw0o/S97iIIKMXg93Sp8neDTG30ZfK+LmIFBkiAjDbXb1Xnx5sQxrzjuGR0
-         JfmMALaTYiZyFJgnKZssmxdcKl8pERsu99q15vfTBwcZ+JftIsxaaciM/OQO0vfMTnz3
-         CZSVsOTjCBzPYAecAjoH+GTYARvkCidQtL8kNXbGtjFMoAqj0QiJnNBBVEL6NqC+XMcA
-         KMsQ==
-X-Gm-Message-State: AFq9FYIgPTGH5In3+g7CXB+8NPbhlDgCIlnB2UygdQ+ymI+SO4kAob6p
-	OC97ieIag+mABBb5yHTv8Z1kui6xHxTkcRquu/7EgsdQp2C19dMjPuOOnHn8VfOILzUqHw==
-X-Gm-Gg: AYBFou0qQsRyrBthAxqOfxRATVQVBMCHcyGtnjow6flrOlxlpOTquxLwP7grblrbxHf
-	DU4lsqi7hHT4A//XFr2kbAZ7yxMSDk3zOzzQjLtlECvpHmQrlyqEc4hv4L9ETILnF1Dz0BpjR/F
-	HSB7E63WsNvQUN74ZcE2XtEwxKGM74giw7wfPI1JSb7mUjqM38qrDDJpw1O2RmMi7TQEGaiiL+j
-	KbVMqzKgn7SR4P5GfIxWziaw930lzWkvRA7jiVbjBXbKXq4DbTN4eLB2LLmMKBMO+YWQ3JnWurE
-	d38utPKzwNPOqYD3YhHe2BevKQAwyb/CxjsciUcttTkdMbnRmhKfCMwk1U+Nsln9IqxAIsUOIx4
-	yc0tT8kt9sV77MTB4DWzj+CcFr9ugylXqKmCGmwkqktApp0N4D7Qon0o1eBUt3hYetBRvKVlDkc
-	ZT8oAcEEIFAxepc81y1a7AMbSkmElPtWwft1sT5P0BsD6XjQ6glEreHE7kP1gpTtQenBR4o5Kx9
-	V9jy4YrMVUowO1GNV/xlKRIISBiRnYLdghn2LoWZ7pKH504Q9ZPXRwosjEqLDpu7h/JkZ9I+rH1
-	SYfAVj553k0doW5qK9XZxu2EdBr/VChykGo=
-X-Received: by 2002:a05:6512:10c9:b0:5bf:b22f:19b3 with SMTP id 2adb3069b0e04-5bfb71b7e83mr399244e87.27.1792823012464;
-        Fri, 23 Oct 2026 23:23:32 -0700 (PDT)
-Received: from localhost ([196.240.54.42])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bfb7a75e0bsm211262e87.41.2026.10.23.23.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2026 23:23:31 -0700 (PDT)
-From: Eduard Zateev <hackerowskiy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: qmo@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Eduard Zateev <hackerowskiy@gmail.com>
-Subject: [PATCH] bpftool: fix line info in multi-function CFG dumps
-Date: Sat, 24 Oct 2026 08:23:29 +0200
-Message-ID: <20261024062329.264086-1-hackerowskiy@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NwZOaZGJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B45E1F01825;
+	Sat, 24 Oct 2026 06:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792823927;
+	bh=hHvyayL/H+H3ZN1WHdf6p0nRk1BCb+XkXk1BJp47Pr0=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=NwZOaZGJnot8e0Xr5ayL0aJgg/0QgZD2KWVLdvHpQSsWCAC1DkAS/cMiDby0bfWuB
+	 JUoOaBckLH/ndgqncduMMFtGSM6zbVk6oNSrNWX7EjdIsqgX18TiPWXkQ5ch9sXvtZ
+	 txJTowUWPADXw6t242G/58PXvbwb79WSyw98ZAxxoV7IqUm5So7htsQ/pLV47sKjXH
+	 rdF9WJbdvFMzMwDPPRKWujTOzJCWMFQTbgH5O9SV4YOlwcqE2OGRxk/wIQZWBNpW8b
+	 c0l+AkD5Gl+z5M+LycQtSo5mVpLZwDB4Nbq8Z8c6nRbLfg5rJP68zEke7VEeFYwvgK
+	 YeCcNwBTyWOmA==
+Message-ID: <sashiko-outbox-183570@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpftool: fix line info in multi-function CFG dumps
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zateev" <hackerowskiy@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261024062329.264086-1-hackerowskiy@gmail.com>
+References: <20261024062329.264086-1-hackerowskiy@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 24 Oct 2026 06:38:46 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,236 +57,150 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The CFG dumper computes BTF line-info offsets relative to each function, but bpf_prog_linfo__lfind() expects offsets from the start of the whole program. As a result, line annotations in later functions can resolve to source lines from the first function.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpftool: function-relative bpf_func_info offset in dump_xlated_f=
+or_graph()
+--
 
-Pass the program instruction base to the graph dumper and use the global instruction offset for line-info lookup and display. Keep function-info matching relative to the function as before.
+commit 880c182e492fbe51e0cdd7cbcdc7fcfdb2fe9c94
+Author: Eduard Zateev <hackerowskiy@gmail.com>
 
-Add a selftest with a BPF-to-BPF call that checks the second function source line in visual output.
+bpftool: fix line info in multi-function CFG dumps
+
+This commit passes the program start pointer into the CFG graph dumper so t=
+hat
+BTF line-info lookups and displayed instruction indices use the global
+instruction offset rather than a function-relative offset, while keeping
+function-info matching relative to each function. It also adds a BPF selfte=
+st
+for multi-function visual CFG output.
 
 Link: https://github.com/libbpf/bpftool/issues/178
-Signed-off-by: Eduard Zateev <hackerowskiy@gmail.com>
----
- tools/bpf/bpftool/cfg.c                       | 19 +++++----
- tools/bpf/bpftool/xlated_dumper.c             | 10 +++--
- tools/bpf/bpftool/xlated_dumper.h             |  3 +-
- .../selftests/bpf/prog_tests/bpftool_cfg.c    | 41 +++++++++++++++++++
- .../testing/selftests/bpf/progs/bpftool_cfg.c | 16 ++++++++
- 5 files changed, 75 insertions(+), 14 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpftool_cfg.c
 
-diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
-index e3785f9a6..65ec45469 100644
---- a/tools/bpf/bpftool/cfg.c
-+++ b/tools/bpf/bpftool/cfg.c
-@@ -383,7 +383,7 @@ static void cfg_destroy(struct cfg *cfg)
- 
- static void
- draw_bb_node(struct func_node *func, struct bb_node *bb, struct dump_data *dd,
--	     bool opcodes, bool linum)
-+	     struct bpf_insn *prog_start, bool opcodes, bool linum)
- {
- 	const char *shape;
- 
-@@ -400,11 +400,11 @@ draw_bb_node(struct func_node *func, struct bb_node *bb, struct dump_data *dd,
- 	} else if (bb->idx == EXIT_BLOCK_INDEX) {
- 		printf("EXIT");
- 	} else {
--		unsigned int start_idx;
-+		unsigned int start_idx = bb->head - func->start;
-+
- 		printf("{\\\n");
--		start_idx = bb->head - func->start;
- 		dump_xlated_for_graph(dd, bb->head, bb->tail, start_idx,
--				      opcodes, linum);
-+				      prog_start, opcodes, linum);
- 		printf("}");
- 	}
- 
-@@ -432,12 +432,12 @@ static void draw_bb_succ_edges(struct func_node *func, struct bb_node *bb)
- 
- static void
- func_output_bb_def(struct func_node *func, struct dump_data *dd,
--		   bool opcodes, bool linum)
-+		   struct bpf_insn *prog_start, bool opcodes, bool linum)
- {
- 	struct bb_node *bb;
- 
- 	list_for_each_entry(bb, &func->bbs, l) {
--		draw_bb_node(func, bb, dd, opcodes, linum);
-+		draw_bb_node(func, bb, dd, prog_start, opcodes, linum);
- 	}
- }
- 
-@@ -458,7 +458,8 @@ static void func_output_edges(struct func_node *func)
- }
- 
- static void
--cfg_dump(struct cfg *cfg, struct dump_data *dd, bool opcodes, bool linum)
-+cfg_dump(struct cfg *cfg, struct dump_data *dd, struct bpf_insn *prog_start,
-+	 bool opcodes, bool linum)
- {
- 	struct func_node *func;
- 
-@@ -466,7 +467,7 @@ cfg_dump(struct cfg *cfg, struct dump_data *dd, bool opcodes, bool linum)
- 	list_for_each_entry(func, &cfg->funcs, l) {
- 		printf("subgraph \"cluster_%d\" {\n\tstyle=\"dashed\";\n\tcolor=\"black\";\n\tlabel=\"func_%d ()\";\n",
- 		       func->idx, func->idx);
--		func_output_bb_def(func, dd, opcodes, linum);
-+		func_output_bb_def(func, dd, prog_start, opcodes, linum);
- 		func_output_edges(func);
- 		printf("}\n");
- 	}
-@@ -483,7 +484,7 @@ void dump_xlated_cfg(struct dump_data *dd, void *buf, unsigned int len,
- 	if (cfg_build(&cfg, insn, len))
- 		return;
- 
--	cfg_dump(&cfg, dd, opcodes, linum);
-+	cfg_dump(&cfg, dd, insn, opcodes, linum);
- 
- 	cfg_destroy(&cfg);
- }
-diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
-index 5579173a6..847241bbe 100644
---- a/tools/bpf/bpftool/xlated_dumper.c
-+++ b/tools/bpf/bpftool/xlated_dumper.c
-@@ -353,7 +353,7 @@ void dump_xlated_plain(struct dump_data *dd, void *buf, unsigned int len,
- }
- 
- void dump_xlated_for_graph(struct dump_data *dd, void *buf_start, void *buf_end,
--			   unsigned int start_idx,
-+			   unsigned int start_idx, struct bpf_insn *prog_start,
- 			   bool opcodes, bool linum)
- {
- 	const struct bpf_insn_cbs cbs = {
-@@ -374,6 +374,7 @@ void dump_xlated_for_graph(struct dump_data *dd, void *buf_start, void *buf_end,
- 
- 	for (; cur <= insn_end; cur++) {
- 		unsigned int insn_off;
-+		unsigned int linfo_offset;
- 
- 		if (double_insn) {
- 			double_insn = false;
-@@ -381,7 +382,8 @@ void dump_xlated_for_graph(struct dump_data *dd, void *buf_start, void *buf_end,
- 		}
- 		double_insn = cur->code == (BPF_LD | BPF_IMM | BPF_DW);
- 
--		insn_off = (unsigned int)(cur - insn_start + start_idx);
-+		insn_off = (unsigned int)(cur - insn_start) + start_idx;
-+		linfo_offset = (unsigned int)(cur - prog_start);
- 		if (btf && record) {
- 			if (record->insn_off == insn_off) {
- 				btf_dumper_type_only(btf, record->type_id,
-@@ -396,14 +398,14 @@ void dump_xlated_for_graph(struct dump_data *dd, void *buf_start, void *buf_end,
- 		if (prog_linfo) {
- 			const struct bpf_line_info *linfo;
- 
--			linfo = bpf_prog_linfo__lfind(prog_linfo, insn_off, 0);
-+			linfo = bpf_prog_linfo__lfind(prog_linfo, linfo_offset, 0);
- 			if (linfo && linfo != last_linfo) {
- 				btf_dump_linfo_dotlabel(btf, linfo, linum);
- 				last_linfo = linfo;
- 			}
- 		}
- 
--		printf("%u: ", insn_off);
-+		printf("%u: ", linfo_offset);
- 		print_bpf_insn(&cbs, cur, true);
- 		printf("\\l\\\n");
- 
-diff --git a/tools/bpf/bpftool/xlated_dumper.h b/tools/bpf/bpftool/xlated_dumper.h
-index db3ba0671..d2af7bd10 100644
---- a/tools/bpf/bpftool/xlated_dumper.h
-+++ b/tools/bpf/bpftool/xlated_dumper.h
-@@ -8,6 +8,7 @@
- #define MODULE_MAX_NAME	64
- 
- struct bpf_prog_linfo;
-+struct bpf_insn;
- 
- struct kernel_sym {
- 	unsigned long address;
-@@ -36,7 +37,7 @@ void dump_xlated_json(struct dump_data *dd, void *buf, unsigned int len,
- void dump_xlated_plain(struct dump_data *dd, void *buf, unsigned int len,
- 		       bool opcodes, bool linum);
- void dump_xlated_for_graph(struct dump_data *dd, void *buf, void *buf_end,
--			   unsigned int start_index,
-+			   unsigned int start_idx, struct bpf_insn *prog_start,
- 			   bool opcodes, bool linum);
- 
- #endif
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
-new file mode 100644
-index 000000000..7d5b80927
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <bpftool_helpers.h>
-+#include <test_progs.h>
-+#include <linux/bpf.h>
-+#include "bpftool_cfg.skel.h"
-+
-+#define MAX_BPFTOOL_OUTPUT_LEN (64 * 1024)
-+
-+void test_bpftool_cfg(void)
-+{
-+	struct bpftool_cfg *skel = NULL;
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	char output[MAX_BPFTOOL_OUTPUT_LEN];
-+	char cmd[MAX_BPFTOOL_CMD_LEN];
-+	const char *expected = "return\\ bpf_ktime_get_ns()\\ ?\\ skb->len\\ :\\ 0;";
-+	int err;
-+
-+	skel = bpftool_cfg__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "bpftool_cfg__open_and_load"))
-+		return;
-+
-+	err = bpf_obj_get_info_by_fd(bpf_program__fd(skel->progs.bpftool_cfg),
-+				     &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-+		goto cleanup;
-+
-+	err = snprintf(cmd, sizeof(cmd), "prog dump xlated id %u visual linum",
-+		       info.id);
-+	if (!ASSERT_GT(err, 0, "format bpftool command"))
-+		goto cleanup;
-+
-+	err = get_bpftool_command_output(cmd, output, sizeof(output));
-+	if (ASSERT_OK(err, "dump program CFG")) {
-+		ASSERT_HAS_SUBSTR(output, "cluster_1", "second function in CFG");
-+		ASSERT_HAS_SUBSTR(output, expected, "second function line info");
-+	}
-+
-+cleanup:
-+	bpftool_cfg__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpftool_cfg.c b/tools/testing/selftests/bpf/progs/bpftool_cfg.c
-new file mode 100644
-index 000000000..db01f20c8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpftool_cfg.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+static __noinline int helper(struct __sk_buff *skb)
-+{
-+	return bpf_ktime_get_ns() ? skb->len : 0;
-+}
-+
-+SEC("socket")
-+int bpftool_cfg(struct __sk_buff *skb)
-+{
-+	return helper(skb);
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+> diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
+> index e3785f9a697de..65ec45469743b 100644
+> --- a/tools/bpf/bpftool/cfg.c
+> +++ b/tools/bpf/bpftool/cfg.c
+> @@ -383,7 +383,7 @@ static void cfg_destroy(struct cfg *cfg)
+> =20
+>  static void
+>  draw_bb_node(struct func_node *func, struct bb_node *bb, struct dump_dat=
+a *dd,
+> -	     bool opcodes, bool linum)
+> +	     struct bpf_insn *prog_start, bool opcodes, bool linum)
+>  {
+>  	const char *shape;
+> =20
+> @@ -400,11 +400,11 @@ draw_bb_node(struct func_node *func, struct bb_node=
+ *bb, struct dump_data *dd,
+>  	} else if (bb->idx =3D=3D EXIT_BLOCK_INDEX) {
+>  		printf("EXIT");
+>  	} else {
+> -		unsigned int start_idx;
+> +		unsigned int start_idx =3D bb->head - func->start;
+> +
+>  		printf("{\\\n");
+> -		start_idx =3D bb->head - func->start;
+>  		dump_xlated_for_graph(dd, bb->head, bb->tail, start_idx,
+> -				      opcodes, linum);
+> +				      prog_start, opcodes, linum);
+>  		printf("}");
+>  	}
+> =20
 
+[ ... ]
+
+> diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated=
+_dumper.c
+> index 5579173a61e3b..847241bbe91e2 100644
+> --- a/tools/bpf/bpftool/xlated_dumper.c
+> +++ b/tools/bpf/bpftool/xlated_dumper.c
+> @@ -353,7 +353,7 @@ void dump_xlated_plain(struct dump_data *dd, void *bu=
+f, unsigned int len,
+>  }
+> =20
+>  void dump_xlated_for_graph(struct dump_data *dd, void *buf_start, void *=
+buf_end,
+> -			   unsigned int start_idx,
+> +			   unsigned int start_idx, struct bpf_insn *prog_start,
+>  			   bool opcodes, bool linum)
+>  {
+>  	const struct bpf_insn_cbs cbs =3D {
+> @@ -374,6 +374,7 @@ void dump_xlated_for_graph(struct dump_data *dd, void=
+ *buf_start, void *buf_end,
+> =20
+>  	for (; cur <=3D insn_end; cur++) {
+>  		unsigned int insn_off;
+> +		unsigned int linfo_offset;
+> =20
+>  		if (double_insn) {
+>  			double_insn =3D false;
+> @@ -381,7 +382,8 @@ void dump_xlated_for_graph(struct dump_data *dd, void=
+ *buf_start, void *buf_end,
+>  		}
+>  		double_insn =3D cur->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW);
+> =20
+> -		insn_off =3D (unsigned int)(cur - insn_start + start_idx);
+> +		insn_off =3D (unsigned int)(cur - insn_start) + start_idx;
+> +		linfo_offset =3D (unsigned int)(cur - prog_start);
+>  		if (btf && record) {
+>  			if (record->insn_off =3D=3D insn_off) {
+
+[Severity: Medium]
+Should struct bpf_func_info matching in dump_xlated_for_graph() also use the
+global instruction offset from the start of the program rather than the
+function-relative insn_off?
+
+In the kernel verifier and in dump_xlated_plain(), record->insn_off is the
+global instruction offset from the start of the whole program (0 for the ma=
+in
+program, and the subprogram start offset for each subprogram).
+
+In dump_xlated_for_graph(), record is initialized to dd->func_info at the
+start of each basic block:
+
+    struct bpf_func_info *record =3D dd->func_info;
+    ...
+        insn_off =3D (unsigned int)(cur - insn_start) + start_idx;
+        linfo_offset =3D (unsigned int)(cur - prog_start);
+        if (btf && record) {
+            if (record->insn_off =3D=3D insn_off) {
+                btf_dumper_type_only(btf, record->type_id,
+                                     func_sig,
+                                     sizeof(func_sig));
+                if (func_sig[0] !=3D '\0')
+                    printf("; %s:\\l\\\n", func_sig);
+                record =3D (void *)record + dd->finfo_rec_size;
+            }
+        }
+
+Because draw_bb_node() computes start_idx as bb->head - func->start, every
+subprogram's entry basic block starts at insn_off =3D=3D 0. When
+dump_xlated_cfg() -> cfg_dump() -> func_output_bb_def() -> draw_bb_node() ->
+dump_xlated_for_graph() runs on the second function (cluster_1), insn_off =
+=3D=3D 0
+matches func_info[0] (record->insn_off =3D=3D 0) and prints the first funct=
+ion's
+prototype at the entry of the second function.
+
+Then record advances to func_info[1], whose record->insn_off is the global
+instruction offset of the second function (for example, 2 in bpftool_cfg.c).
+When the loop reaches function-relative insn_off =3D=3D 2 inside the second
+function's entry block (global instruction 4), record->insn_off =3D=3D insn=
+_off
+matches mid-block and emits the second function's prototype before instruct=
+ion
+4 instead of instruction 2 (or omits it if the entry basic block is shorter
+than the global offset).
+
+If draw_bb_node() passes start_idx as bb->head - prog_start (or if
+dump_xlated_for_graph() computes the global offset from prog_start and walks
+dd->func_info up to that offset), wouldn't that fix the function prototype
+annotations in cluster_1 as well and avoid needing both start_idx and
+prog_start?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261024062329.2640=
+86-1-hackerowskiy@gmail.com?part=3D1
