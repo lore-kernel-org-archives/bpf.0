@@ -1,97 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792813428;
-	b=OtptUOUPskjjdiHgBSpMfdtVYbwQ1B4rv14i4ZKo18CxmajWoALsqXatwZCIVPFQqUQd
-	 fsEo7p8iNI5g30bSUquQRpYxDnJiGxJpV4YSTF4bXCAoT1XBlWgkgIrcYjYdyKJ9+3PLs
-	 jYYgv5TbkBoyDZoN8lYZXp1PyG+T14LE5+Utv3qfmXh5mBhwNkWNRf8G7BwfJQNo1nKCq
-	 fTc1lKhbzpoVPOrwtgq3kEtyb13sTm5IATOHXQsjv50cxmhJYHJKvIVWdccrTnJPQJhvW
-	 48yUxpIJMFyd+K9FZWBXoRAm+/vahsGAAqLf0aSCg0ZdC5At7vTVsHHK4zDFC/9/yxQ==
+	t=1792813808;
+	b=z7n8NJaBegycUV0i7T4/o/FjaoWCaYUglEVmEzVdEkD8/bd8QpSnH6uz7/+DcJ3BPASR
+	 Af+GqC/94A0mdyfa6k+l+QUA0xHEaHtweeRcnwDVVX0Dr1MCK7Y9xn/+BkFAvlDcymJOL
+	 oeTCIeO8Xz7Hge6/T2wdN0XgvPiAgp96/GhlB+fu80KPpKN1LhSjbpIi2EtQ2T7mE+B9Z
+	 FTpfgtDx2qAqnWAter1qWmEuLzcSFcSnS8tf996u889aWK/zfj63cOA/b99g0BekO4Ju9
+	 Op2lkvst/vD/3jmCggNJJSA9qfuM1Dq6H9SbAplJyuzRePoR0AchbyajyweLesFoYXQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792813428;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=d5tL+X233SBVjpK2kn/G74H36r+U4Cu/y1SW36/sfhE=;
-	b=vQ+4C4t1Lg0SR3dXfF+7xyTirK+aRIA+yjJ2B5w5ZTwF5Onxyqvp0eFQAKLF7z4HuCfd
-	 0rOUyjxxdw8dvpF0JizwIQahsvWqiLf/xySuky9Oex0RJKa84qRmGLCnCuq+uBTrLf1RD
-	 unZebIqUDz5APdrFkgKwOZlUTe3X/M37k7n1oYSP6KHWEKFd9ku7ZGEqxjzj3oTI4BCKg
-	 /ngW5LY2GOue5pXJ3d/qi6/CPdvyYnighkXrFz2b0n2+PU0rg8KywKpW5uNdYz4fFmeWN
-	 vh3pyhgpP8jb5SrzK5wEsmVVVIEFkjck2hdQln+OFwDB11wXh6Pcslo+ISbmE4NVElw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792813808;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=+4MejMJKUNb+D836272CdqqFDwtARUtaxiK/ZKGgMMo=;
+	b=wQUgIA5KQTopcpwwLTfpTGmieRjj8/2ayJJGCZbMOTR6VAiicgECjUNy7TZPC4onZp8y
+	 Tp8TKDzYneW2ayHveZsvoBFyI49FtZ0u6rpCd24j6GlG03FQR9bhl31VsoyoQ8HbQMr5f
+	 BAX0XbePrWC0SklsdOD/1v//HqKtfHzDhgLRhxDdq4vGReiWhNcgwoilGx8Oa6nwpcsLv
+	 3dNO/NW7imK+tmA+HHuEASJNkUSSrErwnJQZVZ0rA2tim4HY/iir8m6in0fdf3DZr2I40
+	 tx2KT0/lcd3k1om7xaIDq0g38zsxKP1G3XcBtgMHHSBoR4pmfMpSSePB0/MdTP4MV3g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QFn+R6Je;
-	arc=none smtp.remote-ip=209.85.216.42
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eMAYmtgD;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D43D606A31A
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 03:43:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D43D606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541BD606A31A;
+	Sat, 24 Oct 2026 03:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QFn+R6Je
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3acdcfa2bd3so1143939a91.3
-        for <bpf@vger.kernel.org>; Fri, 23 Oct 2026 20:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792813427; x=1793418227; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=d5tL+X233SBVjpK2kn/G74H36r+U4Cu/y1SW36/sfhE=;
-        b=QFn+R6JextFEPaRC0BMn5EM/nsFvDDthBDlOomgr6taVDislzkWrrlDQMdLA7OsXgj
-         d0y2akaGps4lrDwko20zptIIzs5Wg2lp6gVjsY7nq9wF60GMEuAFm/srcL70SRPuSeYA
-         W9hggHShU5J2pbJDFZlLeDEx8lgFb5xQoDA85MeAfh5Zo61hLyMFh0vaiMPtt4EQdyKT
-         0umpCIhfxSkzLkIJ5eQY0JTrQga3Yw54iMbY6LRN4UBXPsXwN1+mWtGTtTeT012ROcL1
-         pF7epFhQAVPu2OtVcghfxY9Qik4nexWU10Mz7ASV3WTIOSJttv4tmdZi+5cG9YFGy/oB
-         2LTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792813427; x=1793418227;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=d5tL+X233SBVjpK2kn/G74H36r+U4Cu/y1SW36/sfhE=;
-        b=IbYU0TJx2ZenA0xcKW6vH2fd2Wviej4K4kjJcaDUsJozJr4hWBKbzgopm0zqAjCHSR
-         SsipZG6YXA0as7VkTVcoPeWOC09R1ma3yjYpPScytcocoX21Z4zr+itarUikb3RGPhW/
-         xYEqPqNSTVYLBH+OdoQyJLi3lG4AtuLUgL8a7kzb1kugCm2OV2v+A2srgnGks2Y+6dzv
-         S/MP3jgUm1Vnt8uGApTYrlvSE4u0M75sVdeJr/jkR5PUO63CEQD9EsRaphLlmjpA1Qr+
-         KY+1xjHUY/p53vOgW5EWByLy86KPPTnybbx6T7WCkJTg2aCERF5zEjIp92ddmUkxcq9V
-         90BQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx49TmzxSDWECGGEt7ZAr/l3GMkCOFAX610bKjRHKe3PEuk2E/diLiiYYFwXAZxcc9mULk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLSzyvRHBaW9CkISd4WfJvg3mE/pFt6xrrD1j03GGmTTSdNo/B6
-	vnPnEeMbSbdiV8b0lI6qucVMh0yTQ9RvLAwX7un2Nui3UJLND0jh0mtm
-X-Gm-Gg: AYBFou20zop1aZFpjF9MGTzC3pRkUHntVNh+taFWCpxxXA9RK2SoOTG/BBcVvY2G9Xr
-	v0B/NIJab3IeIkuE8ORgkQapyBFauqG9/i8OJ0XL/dgzbqVIfOH+TYwnysyClLo98mXzBQEXFS0
-	7uP5qotVULI7pJl23JkqX3qd7I1FrjxuXXsZZviK+WIBNUtKgZES/FdCbNU0pY9SHKuDwrf31K+
-	Yxlbvcd/2SsgWirBAzlejiV1kieqFCPbAtpLSc/x5sXaL7ID9kmP0/R4Rzrbxigx3K+YKQJnCIJ
-	jJ8KsYRU5P/TpK1C2Dv1SbK2dX4dG5TV9sbVxZ1PcfqDaT/WZ5FKRXszmffG1Smy1GrhkbGCAPw
-	kJDQrki+Dv4IqopV2J3AdoJ1Lqe2gBvk/dIEZ3RbgOnbK1MGICYbh6146Swc4+9tnkxR58bFaxR
-	mWQ4VSnteAQO+TSnmZTGW7GKmKLx/TwhQCVp3e5BD2wlJJSpFSpTJIraGo62rqId7QTExhZa4O5
-	BkUQitIu1j+9ZjsJQcnHb9MsJyRcafEdgkSFsDGLj5RsdUr4gmCIajDg1SpN+2bJqUf1Qt+OP8k
-	HZKTWDrGAZXztKEhRaQp+FaAdGnD/fOk3y1F04LXvBS1YFjYCvPV85HQapxN
-X-Received: by 2002:a17:90b:2645:b0:3a8:878:ebab with SMTP id 98e67ed59e1d1-3adead4c29bmr977187a91.35.1792813426692;
-        Fri, 23 Oct 2026 20:43:46 -0700 (PDT)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebb75254sm688046a91.4.2026.10.23.20.43.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Oct 2026 20:43:46 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 24 Oct 2026 03:43:45 +0000
-Message-Id: <DMCRBHQKJP8Y.1KLS4ZA48PV06@gmail.com>
-Cc: <martin.kelly@crowdstrike.com>, <slava.imameev@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v8 3/7] libbpf: BPF programs manual loading and
- attaching
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>,
- <bpf@vger.kernel.org>, <andrii@kernel.org>
-In-Reply-To: <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
-References: <20261024014514.2959514-1-andrey.grodzovsky@crowdstrike.com> <20261024014514.2959514-4-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eMAYmtgD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C84C81F01825;
+	Sat, 24 Oct 2026 03:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792813807;
+	bh=+4MejMJKUNb+D836272CdqqFDwtARUtaxiK/ZKGgMMo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=eMAYmtgDJz5a7ZDzdgMnxmnHA5Dwh38jeasxLTyZlZQ4ipP1bdAcbNjsVSLTr8EOO
+	 f0AC0NeL71EJib5TaYSQLr9QZfYCQXf7V0RBoBLZ2oK+qmWBw9mwmUTmwxKdbXR0Ou
+	 8954kxymnh3W0g0rIAc+TW4bvOTjjh4xTAGlJMYLkBQVRug3aQMvke0DMHoe90Xow3
+	 hwRf7+vY1X0LPPUfhRZEsPZQLo4pmKHhXUIkis2Y2ROz42enSsKc3rGimfbpTCC0Tx
+	 CJXVszNMSNCyY69b9bERrROb6inl+YXQ4gTgoEwh9/a2O16iTUBkPGlCd0DgFAjZ9Y
+	 gwKnWQKW8RFPQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BE7BC391B179;
+	Sat, 24 Oct 2026 03:50:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,79 +53,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Fix a struct_ops use-after-free
+ behind a flaky assoc_in_timer test
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179281380657.1449642.15113400726872173798.git-patchwork-notify@kernel.org>
+Date: Sat, 24 Oct 2026 03:50:06 +0000
+References: 
+ <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
+In-Reply-To: 
+ <20261022-selftests-bpf-struct-ops-assoc-timer-v6-0-2c0f18e82582@gmail.com>
+To: Qiliang Yuan <odys.yuan@gmail.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, shuah@kernel.org, ameryhung@gmail.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Fri, Oct 23, 2026 at 06:45 PM Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
-> -void bpf_program__unload(struct bpf_program *prog)
-> +static void bpf_program_unload_full(struct bpf_program *prog)
+Hello:
 
-[...]
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> +	if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL) {
-> +		zclose(prog->fd);
-> +		return;
-> +	}
-> +
-> +	bpf_program_unload_full(prog);
+On Thu, 22 Oct 2026 16:48:35 +0800 you wrote:
+> st_ops_assoc_in_timer_no_uref drops every reference to a struct_ops map
+> and expects a timer callback of its prog, 500ms later, to find no
+> struct_ops associated anymore. It fails now and then while test_progs
+> runs other tests in parallel.
+> 
+> Since commit 5db69b0fbdc8 ("bpf: Make struct_ops tasks_rcu grace period
+> optional"), a struct_ops map clears the association only after the RCU
+> grace period of bpf_map_put(), so nothing waits for a prog that reads
+> the association in between. A timer callback can then return into a
+> freed trampoline, and the kernel hits an int3 Oops.
+> 
+> [...]
 
-No need for two kinds of unload.
-func_info, line_info and subprogs are filled by bpf_object__relocate().
-Nothing depends on them being freed in bpf_program__unload().
-Let it close the fd of any prog and free the rest in
-bpf_program__exit(). Then bpf_program_unload_full(), the strategy check
-and the second paragraph of the new doc in libbpf.h go away.
-Do it as a prep patch.
-Something like this:
+Here is the summary with links:
+  - [bpf-next,v6,1/4] bpf: Protect the struct_ops association with a spinlock
+    https://git.kernel.org/bpf/bpf/c/232475c32994
+  - [bpf-next,v6,2/4] bpf: Dissociate struct_ops progs before the grace period of the map
+    https://git.kernel.org/bpf/bpf/c/377ab5f2ef79
+  - [bpf-next,v6,3/4] selftests/bpf: Test freeing a struct_ops map under a running prog
+    https://git.kernel.org/bpf/bpf/c/a451867eb5f6
+  - [bpf-next,v6,4/4] selftests/bpf: Wait for the struct_ops map to be freed in assoc_in_timer
+    https://git.kernel.org/bpf/bpf/c/ac3df711a428
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8fcb8cf..dd15842 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -876,10 +876,6 @@ void bpf_program__unload(struct bpf_program *prog)
- 		return;
-
- 	zclose(prog->fd);
--
--	zfree(&prog->func_info);
--	zfree(&prog->line_info);
--	zfree(&prog->subprogs);
- }
-
- static void bpf_program__exit(struct bpf_program *prog)
-@@ -888,6 +884,9 @@ static void bpf_program__exit(struct bpf_program *prog)
- 		return;
-
- 	bpf_program__unload(prog);
-+	zfree(&prog->func_info);
-+	zfree(&prog->line_info);
-+	zfree(&prog->subprogs);
- 	zfree(&prog->name);
- 	zfree(&prog->sec_name);
- 	zfree(&prog->insns);
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-> -	bpf_object_post_load_cleanup(obj);
-> +	bpf_object_post_load_cleanup(obj, true);
-
-I really dislike bools.
-bpf_object__close() is the only caller that passes true.
-Clear obj->has_manual_progs there before the call.
-
-> +	err = bpf_object_load_prog(obj, prog, prog->insns, prog->insns_cnt,
-> +				   obj->license, obj->kern_version, &prog->fd);
-
-After bpf_object__load() this loses the fixup of the verifier log.
-bpf_object__load_progs() ends with bpf_object__free_relocs(), which
-frees reloc_desc of every prog, MANUAL ones too.
-When a MANUAL prog has a CO-RE relocation that didn't resolve on this
-kernel, fixup_verifier_log() -> find_relo_core() finds nothing
-and the user sees
-  invalid func unknown#195896080
-instead of
-  failed to resolve CO-RE relocation <byte_off> [..] struct foo.bar
-The same prog loaded between bpf_object__prepare() and
-bpf_object__load() gets the proper message.
-Progs that depend on what the kernel supports is the use case
-from the cover letter.
-Keep reloc_desc of MANUAL progs. bpf_program__exit() frees it.
-
-pw-bot: cr
