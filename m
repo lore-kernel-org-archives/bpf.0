@@ -1,55 +1,55 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792880658;
-	b=kD4zLWY1NL2Y91drso5UDuj/YSgRoRh1RhWGyPp/e9s2VVJXYb58wsWxIZl8vD3xZQ5d
-	 83y1gXcuvGIHHxQH1Dn2KT9y8cmVgiFcE0+PwyHKqAPvhrEQuT16N4AwhD62fC3V4OK3V
-	 SZhCO5JZdwzgNJCZ4gQu8VsRsD1AEAipHKZDFV9hvppImcV7/dkv3a/ihLhvaYMHO1K1r
-	 vqddE1Z3C1p5qq8fM1E6Fe7QEZgZEeBYfNlvP0DvavtqyNG8qJ6tT7Yt8gYFFIneAPISH
-	 oHqdpS5e9vaFw1uCf5AeA04aduafgQcCxI84NRhMaDufN1NbMZlBIPqtSuLElTzIelA==
+	t=1792880868;
+	b=EXGE1y5lU8wOMhrKoF4dCVkX1x/Y6/ZDrsbLMNBh/RC+4uGzp89NAEkzas9PBTV2WeMu
+	 WgCUH5WYWgk+aKzsG0vSuVOiyNIe8MUKvdAu1FQUXDfIOAla0tkhN7Kw5rJHbzB+aS6CZ
+	 hY/8BDk8QJbh91c0EC4IlV+3/+rSBfEhTxrWsUvc+gXYAqfVD9J9WXlu2cNMT6v9sl4eB
+	 lf6HM9MhRyFKYDXl6Ah0nNcDU8B5B+41d0YJWWbldRnb76X6ggJIqczqBjU18vnvYTlTk
+	 73nEAUaL6205oV8phMpz92oOJQg2ddLjDUDUjhlLg17fxBOcF5R2D0zhPIEkhBtJAsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792880658;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792880868;
 	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
 	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
 	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=ZO95lvl9Nqr2fnKfjhNvY3odHppkPAvE0sy9YV0MAyE=;
-	b=5kF69BAgSsVZRsECZIDxo0wMxtMWEEdDcmH4Haw+Z+ueGbFLqxwSOAciLH91zpce50X+
-	 3CwA1yheI+9GY/gJZGDJOpGrM+Fh2hLITvJAfwlGPUpTJJe77a6vrRrom0mHy3ktAoJcR
-	 CmPcZPzy7od5ivK9YOevFbwlZf4FVgwbbYE4beiZ2KJAcuasC1ll6RT4hMMLF2diCL6br
-	 e9yyj2Tx1IE4JfKpus8mHZXsVNaTmB7GHhIMrehsN2Z4JT1AWNDT62NfqvQG3U/lIe0W3
-	 6MNP5XQvpJdD/6qotBVhE7dIGGzZ+mLRvHbK56wRwmG9T9OjCncpV2pEZsTV+onecYg==
+	bh=vZIKDKKS2FdRJ5bhHVdKxJNVCBF7h98gzdI0qBLThok=;
+	b=MxmQGMl3su8wBzx9s6Ifx5fWiRiMM2mAteIuJx5kmOo8TmmqEm+prGuknwCYGwEGJpOr
+	 R3Ai01gEk36Qqj5aMbjvC7PcnyXW0gIckckYPt6SR7X6/dBHlEETnXi4Oq0VGCBPcYCKI
+	 43acW+CnL+Rt0miAEgt89FFfvwf2EcpLXv1vvA3bYVvvC0qmA/xhf6ut5Rf7jrkFtn1qy
+	 Dd+ZMdTD42gnQaR6hTpH/aUG8ersmnCMnAVAZRQ3WT6yRcKGhYS8zZuzJh9752ju725aJ
+	 hLXNBVojk/MQTn6Tm1hmJkkE3N1Ze9fdkabNVNgUAu8eZ3qJrjltU2GoI2Nv5frjm6w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DcwlgpnI;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fSsZEjmF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F273F606A31D
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 22:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F589606A32F
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 22:27:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DcwlgpnI
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD77A1F031EA
-	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 22:24:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fSsZEjmF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FB11F031EC
+	for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 22:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792880657;
-	bh=ZO95lvl9Nqr2fnKfjhNvY3odHppkPAvE0sy9YV0MAyE=;
+	s=k20260515; t=1792880867;
+	bh=vZIKDKKS2FdRJ5bhHVdKxJNVCBF7h98gzdI0qBLThok=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=DcwlgpnI8DL+2mapwB28c0Uuo/uZkOQbIkpHc/v1SllyC8AnQiHsey8hJ4aUWdbT4
-	 prMadH1kOhGswoIzNgX1P+u7U3KoTwqUBcWHh2XYWZ5bxDbPXCFaxmk+P2urzWr1Rm
-	 tN/5ED+hsmoVE+0QG0XA0UDNI4BCf1ZefiXFb5Qd5/jU4/xxPiEDB4jLllmx0hbm3K
-	 EN3bqey/NcRl3d0IV+S3TGGgleI5BqCIn+v74y01Z2wbeUWXGv7IvSemJyMiXrTytO
-	 jmFrvEKOiSx/o2gKOwmTm2S066vyIZyZSIob0mQDj8qkp6Et+Vy3xhiiFLqwSXFeD6
-	 V70By5SJLar2w==
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-917ad52d7b6so18811136d6.2
-        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 15:24:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvByUlIwq+P2mNX0ylAmep2qzjzefDwx6AJQI7tOcpDGJkqZVCXG4tfSltc3uYJBnMnY3Xpg=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIodpIm1735tC+KeWQj/UcQP7c1Pfpd3Y6vWyNN+oC44JIftGdw
-	x4kqHAQqmIXeZ77mpEGGA2xM2rNU3R39f55DEnc9KtZGEfyCRyio4QF/pUySKZD0bH6L0oEf/nb
-	Ltj4k8DJ6i4D3w/yeqtvmNxnhEK9vFPQ=
-X-Received: by 2002:a05:620a:2616:b0:93e:c06a:7313 with SMTP id
- af79cd13be357-940ef914186mr385330485a.13.1792880657009; Sat, 24 Oct 2026
- 15:24:17 -0700 (PDT)
+	b=fSsZEjmFpPx7gWLUDKT75qvXylgPoUNbQkOLf+Oyt8mLrKmFtp/pm60U21UnyGh75
+	 WzjMSWgFxIV+yWtziTLWDffjK7YhV1XUbIFFjO8XC1WL2sPRkwOCFcKSx8XAyHcgga
+	 G3sYpF0HbFKOAHNF3nud48Ggy90jwVzbO7GrmvOrfY437cSqqSuDPith1EwwSbFFKp
+	 oqLpiX1q/nbOBAaLJ8EOFpB8klsCYVZgl9CXGLTV7QKO2QaOHHfMGJk4oWdhz6yeYE
+	 vgRC3E/qPSlyX21qeNFVV4o8z4dPn1EPpzpl5BB4pAjI0zHZbYUBKG5pd0c9l1UYZs
+	 sSx2LzUZO4r9A==
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-93f560af6aeso202186285a.0
+        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 15:27:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzDaStTL+xIR0N0vtdbJFhlMHuvgSsxL0s6ixqBUVlvHBfMPCBW4Ahgtu/6X0s10pdKA20=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI+pXpSjBeyu61ExUQt5MX1FcbnmCyR9YjoSuHtWdLlaEVYHoeN
+	eXqSefKEdGMVCLZLKWPgguhMylP8W/qES5AL80l7WQPAtnIWbJf0yyHa9blyr7B3GBJre92mneQ
+	CoSMVmn3kfK1o94mM76Kz7M6uq1Ukygg=
+X-Received: by 2002:a05:620a:6ccd:b0:93f:43a4:a47e with SMTP id
+ af79cd13be357-940ef8db9ffmr456761185a.43.1792880867226; Sat, 24 Oct 2026
+ 15:27:47 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,14 +59,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019034426.2354049-1-ridong.chen@linux.dev> <20261019042308.2372396-2-ridong.chen@linux.dev>
-In-Reply-To: <20261019042308.2372396-2-ridong.chen@linux.dev>
+References: <20261019034426.2354049-1-ridong.chen@linux.dev> <20261019035252.2357900-3-ridong.chen@linux.dev>
+In-Reply-To: <20261019035252.2357900-3-ridong.chen@linux.dev>
 From: Barry Song <baohua@kernel.org>
-Date: Sun, 25 Oct 2026 06:24:06 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4z7u_PtSkjm+kH7JX_ZZDLSnGr1teHq6By0ovgB23O8_w@mail.gmail.com>
-X-Gm-Features: AclHuK9i0KBXAHQuNAppLi1kJlXPAo77Un_nGJoXjbM4tmAAAAcT3v5pEG65SEY
-Message-ID: <CAGsJ_4z7u_PtSkjm+kH7JX_ZZDLSnGr1teHq6By0ovgB23O8_w@mail.gmail.com>
-Subject: Re: [PATCH v4 7/9] mm/vmscan: pass scan_control to mm_vmscan_balance_pgdat_end
+Date: Sun, 25 Oct 2026 06:27:36 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4zuFsooOk+PEaSxCGJXm__uS0d_sGbGKsniB+vkdMqAGw@mail.gmail.com>
+X-Gm-Features: AclHuK-TQu5lTS1fOR976skmXR1N0B8TphWnkqZazAAO_9122YtVC3DM7Ag6eek
+Message-ID: <CAGsJ_4zuFsooOk+PEaSxCGJXm__uS0d_sGbGKsniB+vkdMqAGw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/9] mm/vmscan: move struct scan_control to a dedicated header
 To: Ridong Chen <ridong.chen@linux.dev>
 Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
 	Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
@@ -83,29 +83,34 @@ Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 19, 2026 at 12:24=E2=80=AFPM Ridong Chen <ridong.chen@linux.dev=
+On Mon, Oct 19, 2026 at 11:53=E2=80=AFAM Ridong Chen <ridong.chen@linux.dev=
 > wrote:
 >
 > From: Ridong Chen <chenridong@xiaomi.com>
 >
-> balance_pgdat() passes sc.order and sc.nr_reclaimed to
-> mm_vmscan_balance_pgdat_end as bare arguments. Pass the enclosing
-> struct scan_control instead and read the fields out in TP_fast_assign,
-> consistent with the other reclaim tracepoints. highest_zoneidx stays a
-> separate argument: it is a balance_pgdat() parameter, and
-> sc.reclaim_idx may differ from it by the time the end event fires.
+> The definition of struct scan_control has lived inline at the top of
+> mm/vmscan.c. Move it out to a new mm/vmscan.h so the reclaim-internal
+> state can be referenced from other reclaim translation units without
+> duplicating the definition.
 >
-> No functional change. The tracefs event format (TP_STRUCT__entry and
-> TP_printk) is unchanged, so tracefs-based consumers are unaffected.
-> BPF programs attached via raw_tp/tp_btf see the new TP_PROTO and need
-> to be adjusted; tracepoints are not a stable ABI (see
-> Documentation/bpf/bpf_design_QA.rst).
+> The header uses an ordinary include guard and pulls in only what the
+> struct needs (nodemask_t, gfp_t and struct reclaim_state).
+>
+> mm/trace_vmscan.h includes the new header directly so that any
+> translation unit pulling in the trace events (mm/vmscan.c, mm/shrinker.c)
+> sees the full definition of struct scan_control regardless of include
+> order.
+>
+> No functional change.
 >
 > Assisted-by: LLM
 > Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> ---
 
-Could we combine patches 4=E2=80=937 into a single patch? The changes
-seem a bit too scattered across separate patches.
+Well, vmscan.c is way too long, so moving some common
+code out of it seems like a good idea, beyond just serving
+the needs of tracepoints. We may move more code out of it
+in the future.
 
 Best Regards
 Barry
