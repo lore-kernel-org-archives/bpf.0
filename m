@@ -1,60 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792931241;
-	b=FQqpWIZ7NzYIeFpP2NB7jUren1eYHOOzjKcF84wqI0bbqXnzo6yXXXrXzz7/c+rmZr5x
-	 dHZxxuOvatAG7KrZnfyQOBBaPDlVEZWC3R4Oog+bRpQXRt7HPSdtM7oqarismMl5aqppf
-	 4LviSCPi1Vf9st/1baJSinuvEpyXvjQyMQ8G4soaCardbdns17gcLijnQ+gbddSChCIb8
-	 OS83MS+eFITMX6ORZmoP831iCH7Wi0ObjQN8ZcmacbflBxw3EHGGwOoQ1HFt/MIJ5ImJM
-	 Oqi3WenknXa0sXg1n9RW0qSyQChDXysycM5FcgoKzEC/a/Hg8bJQAtTfQQMlw2twjwA==
+	t=1792934337;
+	b=eNOyrtqOzTOThiNWO4+XcVrFvZkUEX2MxleE4Yy/w9ZGaDwqgbkYYn8cVmO+Rs9gcEfS
+	 4QbmBWCqhQpUNBkCAZcypZvhF5gsZFcKFhZfLPbxNflratAeFD/eBdTZ3TUUwK/eSpEQQ
+	 AUSDE2YvafsPh9NKDfhxJFx7k4Gc5nn4Heb+SS6Y9XWRiYQj3NUT0uNAbgRYiP+EYWpG/
+	 DK6ztxoEgBT9gJiHYS79Nkj9SH6cmPcigN55KijeLAZRuoMH5My2zdrdCv8vqUNAVJclo
+	 MprAJtPa3wRZ8BANpgJDJslHMeXayOMyaOWKmQclIO3OlgGHHOAfoFr3nXgdib9SkXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792931241;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=HaTBAqVWN8l8NtR7a+7TI1wWGP43M5MdEGvYDuOrNEM=;
-	b=I9YJi6sR4XrcmBALQIvnen4t628dHYvoC511kz8AoIkGvSqsbV06loQV5CQ5hWhxVF8a
-	 8suLollAeh/o61r5LerBfLNOpBiXToF+61symj1oVNvuepduf+f7juRoPD2r3WRAcZL/m
-	 WZipQNBZ0AgFh2ZWcMrEZeK41YOdfVmVaUOf37uIa+efSN7qyJYXJQ8Xk2BbhQliHExn9
-	 2d8/EAbGy4YhI99znHAVfZg+GNlAF/POpiv/fdYK+b9s0waifcdGbr8MUMTrxy4GP08YS
-	 MWxcsjfNdgCSPlKv2x1fCY3TrjhBTQ0b9xlYueHEYtg+irb2su48lNXISt6yVTzNbHQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792934337;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=DP7yAHiJHNXgOEkd7w8o5Vce5wXP1kX+DYHQnqG0YTA=;
+	b=w0xpLSA0xhSQFM1WQdaJdq0ITHXGe+Cxr/1FsclCRh5vOC1VIGUM0ac9maj/ARFXw0z3
+	 iXZUPl1wz+dYPDfFWPhhRzXNefeASpEwdDiPtLzSzjlGRPNfaniOWHiZ/CHf8LO2Rmj/5
+	 fvdtJmlvfDigB7eBPwCS6Hzlbx18NkJEtsn8Mt3YbGXHhuOkepHJqRV6YmvNQZMKx88ih
+	 XNQN2YPmaGfKw2YNGTpOzF+/Y9r1E+lpHYKpf+Vn8LiHSVk7rfkSDaKSwppUqUEaFi3VY
+	 sAjh4jG45wnSc6MZ6RJ9M9gJV9QsRvTQECZCq9n9QYmWvpHFU9pnEjjliQVw/67ZJDg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RSfRzNkS;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=NhXEoDSS;
+	arc=none smtp.remote-ip=209.85.221.51
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20686606A31A;
-	Sun, 25 Oct 2026 12:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B384606A31A
+	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 13:18:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0B384606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RSfRzNkS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2F7D1F01825;
-	Sun, 25 Oct 2026 12:27:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792931240;
-	bh=HaTBAqVWN8l8NtR7a+7TI1wWGP43M5MdEGvYDuOrNEM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=RSfRzNkS5OrYf0rLyP1zaSUtfu/gFWTbT/0lMEwe1VYf2BhKJRdNLA5olY49WdKaK
-	 sBz9VPxODFMuevQ9+Ao+S/Cb2oVrE1UwnssGu9JUAAQyoJ017NnzqUyLDoPeligL1y
-	 DejPsCJNHfDMNHLmeFRoZMJYzvyBWqw1EqS77tsnS/r0MJ6FGGTz3yMWvb9BhezC0I
-	 hg44SVxZO8r14F1A0N5MAu32/pxf6oYBdUp0F3ZZJgLqJ2YoTn0dlJIurmOrNGZTqw
-	 tNk7KfjRq6Ji0B7tg/0p2xefJGM8b1+6g+Oa1OMplQTvumZwtf8tPn2j+/1MRSglIN
-	 tkyiqAjDTWdHw==
-Subject: Re: [PATCH net v4] net/sched: clamp skb->queue_mapping before
- indexing the tx queue
-From: netdev-bot+sashiko@kernel.org
-To: jhs@mojatatu.com
-Cc: netdev@vger.kernel.org, victor@mojatatu.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, hawk@kernel.org, daniel@iogearbox.net,
- sashiko-bot@kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
-Date: Sun, 25 Oct 2026 12:27:19 +0000
-Message-ID: <179293123940.3134.1149128679923234677@kernel.org>
-In-Reply-To: <QDISC-MD1X.v4.r0.20261021042722-1@mojatatu.com>
-References: <QDISC-MD1X.v4.r0.20261021042722-1@mojatatu.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=NhXEoDSS
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48df54150dfso1150730f8f.0
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 06:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792934335; x=1793539135; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DP7yAHiJHNXgOEkd7w8o5Vce5wXP1kX+DYHQnqG0YTA=;
+        b=NhXEoDSSTyKdC9o/Sj9s+FZloL/xsNUjfS5kK6TZ/yWKFHWQ0fWKxT6iTqIW+JyefH
+         G5ktan3A5UwjbfY3maLj/UjXUsZXev5LqEEcr6napTzMlK7AMoTce5I1yMzX/PUv9WLM
+         0sdQ7raDO8qbwlxJD2oP1UL2vj3EtUE9XMCJeLMupFhYXqSD09XoP7U9IF3vKefaL39k
+         WpjN9CPzqZ7ynvHXSWa2IZ7QCyFoE1v+a/BnB/g5a3fN3IV6Q4WlPppVF+XbGUBEDdtf
+         eXP/jmmtjtM9PD4VTNzK/J4MxUVpiCfqkghSuEUrmWP5mQCaxEtiM0lvg/fLlk9biPm6
+         sMgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792934335; x=1793539135;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DP7yAHiJHNXgOEkd7w8o5Vce5wXP1kX+DYHQnqG0YTA=;
+        b=YVu9LCuP0/XA/RxzTiQ+txvpoqc/kZfOu38UQ734vBvlM7iq5o1/aJcA+Hq+FHXkA1
+         98jyA1vzhWomXnUpMKGkBIlnAFCM0kd14297K7D/oWf1KlPZB56odtrqywD8kUA7gJHP
+         HPNaz0ZBXS+cKy1fFhdvD/FVu6FndtEAwZvkj0jDVmgiKi2nIFyHtwH/wGSKx31ZuVal
+         HdXSef5pf4AiWB26crWxqUfu99xDVvGRMZZplYyJH6ad1Ql/VUQx5B6KIPPj7NJFBSnK
+         Gi9PM5wygPJuFh244yjYWgcyEoS+5HkZUKEDHb9uBrUegTh7YyImpcdvmSjf/9hq9w6x
+         waxQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx7xbkXhSEBlpoXVh6bC/b+GILxMXe28kyWW6l8azim+GXTO/+cxnukJ6QXHpv/etxssFQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLtKtvYevf8LkUrvYQJsC4JrCUnY1bCoDBUlMYz1sQ7fjhmHP0c
+	p4T/UEwQ6Rql1E9GlgrelZ7e9ikZ5bQBH4LbN6QUL0TFyCFdAcUJsI4taoMsbe1l
+X-Gm-Gg: AYBFou3XyPlk1d3gFYwJjSAjLIC+aCM6nrb9UnlKdlpnV3q4OidLY59TUXm3WRl5/qG
+	CMioQFBj98wizkV2NHUA6O8wDZdCI0q9tMCMPSOe7lsSJ91vUFwAVH8pDCmsZe+i21MfiFqCeql
+	jkb+xsF0qtbmuK1aGXwj776jxa9tD5aoef7o0p4vWvSxJbAXv2awlPPbFoojFpBj0JSYAYzdFcX
+	irBVF63oXjJf4Tes6xHA4OIwrtS25+J6fRcF0cuPgJicF6T7GCQX/vtxY8nIgEQGytbKuY8c+8t
+	9zniUqTk+Kz2Tgxo4k/OSNl3bUSpl1xu8GyNGdqx/PEvXx+6ujaB5MbeAI64vQLRiN4FqL1uoRI
+	noNc4WqRVovh2Ie9lD6XufLgBoiHTohhXtIB+TTZlbKouQjcfgEvXA54bWdhvHq2mEILCnxPydE
+	gTrXWckhpTG4s+w2nwRyQ86E4bT45ivdDw8xh47nDlWbC+UDN5UBnj9cdO4N78kncuZrCXzLz+A
+	NX+69bSvvO/AM9jMfUo0RA2dAlRHnZaxvpgU2+8ncw=
+X-Received: by 2002:a05:6000:4910:b0:487:767:b301 with SMTP id ffacd0b85a97d-48e3eba5e15mr6824961f8f.57.1792934335178;
+        Sun, 25 Oct 2026 06:18:55 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e412cc164sm9402669f8f.7.2026.10.25.06.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 06:18:54 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 25 Oct 2026 14:18:53 +0100
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+	andrii@kernel.org, Menglong Dong <dongml2@chinatelecom.cn>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf 1/2] x86/ftrace: Use jmp mode only where functions
+ are aligned
+Message-ID: <at4BvTcsjWwDuvbl@krava>
+References: <20261024073712.1074591-1-daniel@iogearbox.net>
+ <DMDB1EESN4U0.KLEICFNC4NUP@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,158 +99,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DMDB1EESN4U0.KLEICFNC4NUP@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Sat, Oct 24, 2026 at 07:10:57PM +0000, Alexei Starovoitov wrote:
+> On Sat, Oct 24, 2026 at 12:37 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> > Bit 0 has that meaning only for the direct trampolines that a dyn_ftrace
+> > record can point to, so jmp mode relies on every other target being even.
+> > Select HAVE_DYNAMIC_FTRACE_WITH_JMP only where it is, with
+> > CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT or without CONFIG_CC_OPTIMIZE_FOR_SIZE.
+> 
+> Disabling it for -Os builds is not great.
+> Can we fix the users of ftrace_call_replace() instead ?
 
-Critical: 0 · High: 1 · Medium: 0 · Low: 1
+looks good, it takes care of the C function targets, the rest
+should be aligned ftrace trampolines (static or dynamic) or
+direct api targets
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+jirka
 
-- [High] Incomplete fix: the patch re-caps a queue_mapping stored by tc
-  BPF only at dequeue time, in dequeue_skb(), __skb_dequeue_bad_txq()…
-- [Low] For TCQ_F_ONETXQUEUE qdiscs, qdisc_cap_skb_tx_queue() overwrites
-  every skb's queue_mapping with q->dev_queue's index, including valid…
-
---
-
-net/sched: clamp skb->queue_mapping before indexing the tx queue
-
-This patch re-caps skb->queue_mapping in the qdisc dequeue path
-(dequeue_skb(), __skb_dequeue_bad_txq() and the bulk helpers). The goal is
-to stop a tc BPF store made after netdev_core_pick_tx() from indexing past
-dev->_tx[]. For TCQ_F_ONETXQUEUE qdiscs the mapping is pinned to
-q->dev_queue; for other qdiscs it goes through netdev_cap_txqueue().
-
-Closes: https://lore.kernel.org/netdev/179033713973.2160803.4914570693994398206@kernel.org/
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-9R8V.v2.20260924072708%40mojatatu.com
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v1.20261005193231%40mojatatu.com
-Link: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v3.r0.20261015165943-1%40mojatatu.com
-Link: https://lore.kernel.org/netdev/20261015125822.GH83879@horms.kernel.org/
-
-> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-> index 6f6a6f0d5eb0d..fdd070840cb55 100644
-> --- a/net/sched/sch_generic.c
-> +++ b/net/sched/sch_generic.c
-> @@ -96,9 +96,37 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
->  
->  #define SKB_XOFF_MAGIC ((struct sk_buff *)1UL)
->  
-> +/* A tc BPF program may change skb->queue_mapping after the tx queue
-> + * was picked, so re-cap it before use. A TCQ_F_ONETXQUEUE qdisc is
-> + * bound to a single tx queue, so pin the mapping to q->dev_queue.
-> + */
-> +static u16 qdisc_cap_skb_tx_queue(struct Qdisc *q, struct sk_buff *skb)
-> +{
-> +	u16 queue = skb_get_queue_mapping(skb);
-> +	struct net_device *dev = qdisc_dev(q);
-> +	u16 capped;
-> +
-> +	if (q->flags & TCQ_F_ONETXQUEUE)
-> +		capped = q->dev_queue - netdev_get_tx_queue(dev, 0);
-
-[Severity: Low]
-This isn't a memory safety issue, and the commit message does describe
-the pinning. Should the change in steering behaviour still be called out
-for stable users?
-
-For TCQ_F_ONETXQUEUE qdiscs, this overwrites every skb's queue_mapping
-with the index of q->dev_queue. That includes valid in-range values set
-by a filter on a per-queue child, for example in tcf_skbedit_act():
-
-	if (params->flags & SKBEDIT_F_QUEUE_MAPPING &&
-	    skb->dev->real_num_tx_queues > params->queue_mapping) {
-
-Before this patch, qdisc_restart() used skb_get_tx_queue() and honoured
-an in-range mapping on the head skb. Under mq, mqprio, htb offload or
-taprio offload children on multiqueue devices, that steering is now
-silently replaced with the child's own queue.
-
-The pre-patch try_bulk_dequeue_skb() already sent followers under the
-head's tx lock whatever their mapping was. The TCQ_F_ONETXQUEUE comment
-in include/net/sch_generic.h also documents the invariant being restored.
-
-However, Documentation/networking/tc-queue-filters.rst describes
-"skbedit queue_mapping $tx_qid" without saying where the filter has to
-sit. Would a note there help?
-
-> +	else
-> +		capped = netdev_cap_txqueue(dev, queue);
-
-[ ... ]
-
-> @@ -322,6 +358,8 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
->  	skb = q->dequeue(q);
->  	if (skb) {
->  bulk:
-> +		/* cap the head; the bulk helpers cap every appended element */
-> +		qdisc_cap_skb_tx_queue(q, skb);
-
-[Severity: High]
-This caps the mapping at dequeue time. Can the same BPF-stored value
-still reach a consumer on the enqueue side that uses it as an array
-index?
-
-taprio_enqueue() in net/sched/sch_taprio.c indexes q->qdiscs[], which
-has dev->num_tx_queues entries, without a bounds check:
-
-net/sched/sch_taprio.c:taprio_enqueue() {
-    ...
-	queue = skb_get_queue_mapping(skb);
-
-	child = q->qdiscs[queue];
-	if (unlikely(child == &noop_qdisc))
-    ...
-}
-
-This path looks reachable with software-mode taprio as the root:
-
-  - taprio_attach() installs the taprio root on every tx queue
-  - a prio child is grafted onto a taprio class
-  - a cls_bpf filter on that prio stores a large
-    __sk_buff->queue_mapping (bpf_convert_ctx_access() only rejects
-    values >= NO_QUEUE_MAPPING)
-  - a duplicating netem sits on one of the prio bands
-
-netem_enqueue() clones the skb, and __copy_skb_header() copies
-queue_mapping. It then re-enqueues the clone at the root:
-
-net/sched/sch_netem.c:netem_enqueue() {
-    ...
-	if (skb2) {
-		struct Qdisc *rootq = qdisc_root_bh(sch);
-
-		skb2->tc_depth++; /* prevent duplicating a dup... */
-		rootq->enqueue(skb2, rootq, to_free);
-    ...
-}
-
-netem inherits its dev_queue from prio, and taprio is grafted on every
-tx queue, so rootq is the taprio root. That gives:
-
-netem_enqueue()
-  taprio_enqueue()
-    child = q->qdiscs[queue]   /* out of bounds */
-    taprio_enqueue_one()
-      qdisc_enqueue()          /* calls child->enqueue */
-
-All of this runs before dequeue_skb(), so the new cap never sees the
-clone.
-
-Commit ea4d4b5dddb5 cited this taprio_enqueue() out-of-bounds access. It
-left the "tc BPF program attached to a transmit qdisc" store path for a
-separate followup.
-
-Does closing that case need a check on the store or enqueue side, or in
-taprio_enqueue() itself?
-
->  		if (qdisc_may_bulk(q))
->  			try_bulk_dequeue_skb(q, skb, txq, packets, budget);
->  		else
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/QDISC-MD1X.v4.r0.20261021042722-1%40mojatatu.com
+> 
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 17d6edf..654c3f2 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -190,11 +190,11 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+>  	const char *new;
+> 
+>  	ip = (unsigned long)(&ftrace_call);
+> -	new = ftrace_call_replace(ip, (unsigned long)func);
+> +	new = text_gen_insn(CALL_INSN_OPCODE, (void *)ip, func);
+>  	smp_text_poke_single((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
+> 
+>  	ip = (unsigned long)(&ftrace_regs_call);
+> -	new = ftrace_call_replace(ip, (unsigned long)func);
+> +	new = text_gen_insn(CALL_INSN_OPCODE, (void *)ip, func);
+>  	smp_text_poke_single((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
+> 
+>  	return 0;
+> @@ -503,7 +503,7 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
+> 
+>  	mutex_lock(&text_mutex);
+>  	/* Do a safe modify in case the trampoline is executing */
+> -	new = ftrace_call_replace(ip, (unsigned long)func);
+> +	new = text_gen_insn(CALL_INSN_OPCODE, (void *)ip, func);
+>  	smp_text_poke_single((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
+>  	mutex_unlock(&text_mutex);
+>  }
+> 
