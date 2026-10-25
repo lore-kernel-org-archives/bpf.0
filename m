@@ -1,62 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792911297;
-	b=L/uyj+s0TlvpMqqOvBAuzXayDTtUyxkX5NqsxS9ZqUU2zl+JWTdfSqcXkdn/7FfO4ucb
-	 33rfvi1d5tL1kV3E6C6bYlaBPRijNrFJp55+LKW0/fAfsZEu7nlHkfbziSCjqGd6R/YnO
-	 3yyXu4jzzQUF1aEe4lyDRcUIS8NgNmy4jcbHz4O2mYyBpjBkxyMs04958dE/xgGylj/x9
-	 TTfejaYJmFWcdZuv3gfJ6H+cMuxN/+44YihsZLdmMPTy18Jn2Dhqazeh/LaR6sejskixo
-	 oQk1Eii6V5eoeDmftJfgocw7vRgYvvNzBiUh8ahIPJ0BOCNO5IkMx6KK94Y0BxZS8RQ==
+	t=1792913166;
+	b=5kiwOteuMEfYyZolrL+F7//+6cNSVEQsw4EQ3CnJlpLroka9yp+Sp2YvaOmEcxEvq85/
+	 8QP5X+/mwt5HBQgjMRe0lK1qgIVIcyEFTLFHTCf3cegsvUp7RisdcyI2VvG0dh9E1JUMg
+	 4rcvf/gg/d/rPpPLxFHZFQMwOa9YNo78UNHIfBVHQ8lhqKWQBNNAj04vHlHBKyzbEks13
+	 raB46s4PJbY77sQveWNjRHTEZzk56ihWLmyyhd+ZrIcJtaOn0TuDNrhiIIHLOBoOe4drf
+	 N95A3MvexPCYrfiqV2koRWKJOd5/nmLxaUUDNujW++PFRrggzXB0y5VcMcXlYG5v6vw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792911297;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
-	 In-Reply-To:References:Auto-Submitted:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
-	b=jvKSmq1E+niMC4qsGngKABoNCliNmvrzWx6QPea/M2eaN1QjsO+6UE9qie5cSuKQ6iPV
-	 Fguqq5O08x0+5do/rULipwG+YOc7gheqlFrPtXawH07ccUEZiJUM+TfGy3b4TcKOijeqd
-	 ARFEbKGZYWhZPM7TO3yBKKx4+K3caRkJckNsSQCpjGw7T45iaaDYOy0lM6zezuk0NwJa6
-	 NbhIpMcxdkAFpmNIPqjuhrpIDIJQc8+VdbB9Kyr+wNl1xC2GY41sx0OPUInDMgHUIQzN9
-	 8C+MN9u09OaCwxZMhaB+NioyHHh2iFbteY1vbYnPzhtoUyc7YOE/FbBejK1J9uXKEbA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792913166;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=j9KSsqg4A137dhfxHCtQJ3v4H0Z3Fv0RGgyT9sIdyTM=;
+	b=3DL5H4xagYuDk+ioTFTL5Rm51S+tpTatcQ9qsRKRA7ObuoHOgzFrGrsOjMt7vTjjw3GA
+	 Tn52TCU3jAz0DJ5TZl6QdOZ+dWZ5K9FohuOlYjHIxo24NRhsCBSa62SPlz0wkERnPyBYT
+	 xHlEOeu6iFiCrt5yq8G1pj0SbciRLWlT1ZCaLrgWOajuYGxck6war7FKBkxJWXLFaeriM
+	 7NzF4GjVPQVkgmEZLxDaQjASfgKEsJ7cpNNqPrdOyczOMTdEFZ1TZd33enFbOh3tclu14
+	 CmMQjOqL1RYt/HAVH5CuOiAaWglS7JTFkqrG+OwvFNK8zGlEgOd0BezKAipWWWU19yg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eUuObwtx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SrylrmSI;
+	arc=none smtp.remote-ip=95.215.58.108
+Received: from mta1.migadu.com (out-108.mta1.migadu.com [95.215.58.108])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69270606A31A;
-	Sun, 25 Oct 2026 06:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D458606A31E
+	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 07:26:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8D458606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eUuObwtx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC381F01825;
-	Sun, 25 Oct 2026 06:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792911297;
-	bh=URC7r36kokGjXCV5G6Ei8oKV54JoMbconYpCKkPt2AY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=eUuObwtxlCS5ixSyxR/x30C7Nq5o4ZSft39jpn9B6wt6S21EsmPwPqoZZpk0ftxSR
-	 vH3dXWkRzP08YTm/2ZBS/VXU+RcJBjYVV3ExXw4AarQJ2FN4gAhrsikGBTiKF0ajpX
-	 gMe9eW9gPMv68NkempL4taQIZdhI10ynO0Dmt5CUoD3ry6Bn3FKMvc0dF1N79zC+Oq
-	 dznpag+W7uzKpEM+h6z4rKmSgGAgh7VPz6du/9qarE9BiE/aERNzHXdUdZwJSroQIu
-	 3yVtomi9E5QS2x4B1SYGobZ2JtkAjwATAKlPjx622L5SWSpdWx8Upqb7tW1R8tQzCx
-	 a79BtE+4LLpSQ==
-From: netdev-bot+sinfo@kernel.org
-To: Paul Moses <p@1g4.org>
-Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org,
- kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
- hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
- maciej.fijalkowski@intel.com, vedang.patel@intel.com, jithu.joseph@intel.com,
- andre.guedes@intel.com, intel-wired-lan@lists.osuosl.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] igc: track rx frame boundaries independent of skbs
-Date: Sun, 25 Oct 2026 06:54:55 +0000
-Message-ID: <179291129544.3327.5095110589717245850@kernel.org>
-In-Reply-To: <20261025065154.2037149-1-p@1g4.org>
-References: <20261025065154.2037149-1-p@1g4.org>
-Auto-Submitted: auto-generated
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=SrylrmSI
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=EX8dlYfY5NSf0gGAQukKQCIqou6iNOsLwD+U7YkkxHM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792913161; v=1; x=1793517961;
+ b=SrylrmSI51G99gfF6hP20BW1YezhxVFD2E9TcQm9rb+kJyGod8R9UFeYM6oOD81yF6EmKP2a
+ Cc7uTvxq0o6eOPxCE4pAEqTqOXP3yM9Z7W4JamGMlFNRx6/ZfN5JtJTLvu3e35ENVW7M1jFEBZL
+ wR28/ZW6JvosYCN7CyRmoWgg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 483da7f721b1c77a;
+	Sun, 25 Oct 2026 07:25:59 +0000
+X-Mizu-Trace-ID: 483da7f721b1c77a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c9df96da-983e-4803-9082-472f5294d50e@linux.dev>
+Date: Sun, 25 Oct 2026 15:25:46 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,29 +58,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 7/9] mm/vmscan: pass scan_control to
+ mm_vmscan_balance_pgdat_end
+To: Barry Song <baohua@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Dave Chinner <david@fromorbit.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Muchun Song <muchun.song@linux.dev>, Qi Zheng <qi.zheng@linux.dev>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Axel Rasmussen <axelrasmussen@google.com>,
+ Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+ Baoquan He <baoquan.he@linux.dev>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
+ cgroups@vger.kernel.org, bpf@vger.kernel.org,
+ Ridong Chen <chenridong@xiaomi.com>
+References: <20261019034426.2354049-1-ridong.chen@linux.dev>
+ <20261019042308.2372396-2-ridong.chen@linux.dev>
+ <CAGsJ_4z7u_PtSkjm+kH7JX_ZZDLSnGr1teHq6By0ovgB23O8_w@mail.gmail.com>
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <CAGsJ_4z7u_PtSkjm+kH7JX_ZZDLSnGr1teHq6By0ovgB23O8_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi!
 
-This is an automated message. This series looks like a fix, but its
-commit messages seem to be missing some information:
 
- - How the issue was discovered, e.g. hit in production, hit during
-   development, syzbot report, manual code inspection, LLM or static
-   analysis tool scan.
+On 10/25/2026 6:24 AM, Barry Song wrote:
+> On Mon, Oct 19, 2026 at 12:24 PM Ridong Chen <ridong.chen@linux.dev> wrote:
+>>
+>> From: Ridong Chen <chenridong@xiaomi.com>
+>>
+>> balance_pgdat() passes sc.order and sc.nr_reclaimed to
+>> mm_vmscan_balance_pgdat_end as bare arguments. Pass the enclosing
+>> struct scan_control instead and read the fields out in TP_fast_assign,
+>> consistent with the other reclaim tracepoints. highest_zoneidx stays a
+>> separate argument: it is a balance_pgdat() parameter, and
+>> sc.reclaim_idx may differ from it by the time the end event fires.
+>>
+>> No functional change. The tracefs event format (TP_STRUCT__entry and
+>> TP_printk) is unchanged, so tracefs-based consumers are unaffected.
+>> BPF programs attached via raw_tp/tp_btf see the new TP_PROTO and need
+>> to be adjusted; tracepoints are not a stable ABI (see
+>> Documentation/bpf/bpf_design_QA.rst).
+>>
+>> Assisted-by: LLM
+>> Signed-off-by: Ridong Chen <chenridong@xiaomi.com>
+> 
+> Could we combine patches 4–7 into a single patch? The changes
+> seem a bit too scattered across separate patches.
+> 
+Sure, I split the patches just to make them easier to review, since each one 
+contains only small changes.
 
- - Whether the issue was actually triggered, or is only theoretical
-   (e.g. found by code inspection). If it was triggered please include
-   the symptoms, like the stack trace or error messages.
+-- 
+Best regards
+Ridong
 
- - What hardware the change was tested on. For driver fixes please
-   mention the device (and if relevant firmware version) used for
-   testing, or say that the change was not tested on real hardware.
-
-Please do not repost the series just to address the above. Instead,
-reply to this email with the missing information, so that reviewers
-can take it into account. If the series needs another revision for
-other reasons, please include the information in the commit messages
-then.
-
-The evaluation is done by an LLM so it may be wrong, if you think
-that is the case please reply and explain.
