@@ -1,80 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
 	t=1792971945;
-	b=MCvgJphM1b79H+F1TmWGQhCjFIf8ZORBXQqQEwRz/SmL3V4491OSOLASgGS0ZXAmjpUv
-	 JDZpMFxQP/xO7Y8+r+9b9ujffo572MUsUFw1iAFFAx6iS6LLcua7eRz0YSoYy4vB85Fif
-	 kLq1wkObSH24XrcQMYcqNsVfOB3X63pQXJoc8aQSHukpIpw2GK4lIIu4k8zd5VwSspxlQ
-	 Y3uXNXtS8j6KQFpuzKGLzwsmIdWT9NRioDCG1apdkGJbHjhBQ8muoYmcibAzaHtHUkmXk
-	 iKhBfNdOQnWaTGl7LCP08NK0deH9Q9gLNbSrvoHb4j5bkT/LluwZ+zk9hRKAkotkjnw==
+	b=Yo5mDd/YtTLo92aMceRzm875fdanFe2AkWAQgLE7eJhMUJwu6wcQz13hey2sQXKzGyeQ
+	 u658CUAafcTYMkT0gow0LNfkW+1Z0RvW6GBC67FZfRuHV+fDhysTIYWKD/Xh+K3oXWVrf
+	 niyJupzNOQJdNA7p3ROKK2RDGWk0sw54PrXKpax4AEvn3AEk5rV2YGPhZWUux09RSVAMt
+	 Rwn2x6Y8w6J6iE+yEa9O94MkQ7zyRK5DZWBb2RFdkzFK1s5OAyOW5MO1Nx89A3m/H3vYI
+	 DvMXbydnULkEMEJGsYx7QM+qYGCZ4Ve0O5n9dOYyOsp1CniibpVnV2GxPU7E1hh+D4g==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1792971945;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Endpoint-Received:X-Original-From:Reply-To;
-	bh=nDw9i3Z2SirvRvn+BaVz+MSjkgG+3Zolh5xd3HzvrVo=;
-	b=mr2Z4JKva9yfBMVuL0kVPutN1QUfWwsfEGeJ1Q797eLZudziEJhxqEDiZWjn28u6FMLo
-	 qQZGgvLe3hvQYb3UW1P3O5z+UgDIsKknodR14QM1+GGLelmC8rikSNa9MU0Qhk1rNKZcM
-	 l11kwRawlw0dobjGQNJdkAxmO0sCW2GzlNLAW43f+LnEUUrETyVBmjMWL3lSmdtKjKORr
-	 weFMo9kKH7+d0xnBpr3tBT7+p7QBlAu1NQqn94Brs5y6ljVjU5MHq0JPuTGwY77bJp74V
-	 QpPPkWeuEqqyBRvBHd5ROE+cgv2SWvnLQCzMxEliqKL5ALWhuR05TMYlqX3TgCsU/HQ==
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=vuNoKJQhKwFEYoYDrBeFBAdFshlRv+mGsc6F55GADDo=;
+	b=GB9W2hREm5P8KjIH8q8wgLdZMoRzkA4ICa4MzqffJAfeE1pd6bhm1roYTcv7/IfDuT7Y
+	 jaO+NY1M1t3+Hxx+ERMaaQx92Pcawe2U0+2qAE4a35m2v8P2FMT2zW1WBcjf/CC47znvv
+	 b/ElGtXyaV3W1MtBYLUhglHQBPFE1PJy/4kvf4QNSL7cuf8F6uHZMbMzlofZiwid0kqxE
+	 0VRNRfyTlAzbeDcei0W69OVoQ4xI1ey3re6A6L0qRdgmxf13y1qb/anBXHn7ZmUTm3FO+
+	 5Ysgcssm3fJYr7xVmFBqX94xM+m95iaFnlZfMbFxfZXHHQ5KRntJLUBC1qdtojWyV0Q==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ergdZ05P;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zi4Es+mX;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1D2606A31A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E201F606A31B;
 	Sun, 25 Oct 2026 23:45:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ergdZ05P
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zi4Es+mX
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
 	t=1792971944;
-	b=K9k9lyhSXnfRapDSnG9lvMWg5wxZqez+wIiZPoos7L8/lYvq7U74PbxMVAJWB9Ci/Js5
-	 WQDanfb9DhwwgatB+0Tgg4QM+IuvNXAoBuLB+twUhNoybuuZNtgKL8O9x3gWTXX8C078U
-	 IvIYUZSmlh4b2Eq7l+AB58XE2b+EWgq2oIEfZ33kUznkK+KaGghsFunBWMHY7Vk9B8re7
-	 vZP1yIRqSaTAjwIaFw6gWF5vPVSitXPq08ZU84XRtEV4+Ai3uhSnjDSFUHCWrk6k1apNf
-	 JYlLUIfw+CTSpcbHVCYzNUBf8f6J9I8TxSMkhQq2lSZ1J62LMQdWpuk5R0aKxF+zaRQ==
+	b=q/WK6olmnDLwftS+R3/Rr1U9Azyk4W/Y4NLB/4QaRugF8tRRLNg2DYyz+whmZCE7oUHe
+	 Wo3FNQr2ho6v7GPoHx/71+Roq99LhFkl9I2WGVqazUxBxFpdZ5RGsJzCWd0miMocBEXYQ
+	 Oh7G9vraNIVAYimG+scJlMLojJofxTIKnfy0v/MG4Z71lXxd+Mbi9+4Gu5BjlpjpWwiZP
+	 zb6y98TfWcAWaXK2drKJx8zq9a1IvCFssmiiJAeFXbCzfGpFBLfx8G6VQfaswfjgcK+qQ
+	 anmtdW35ogzOVFlbLRaFyVIPbA0uzDtchXZvj9LA2ET2hX8yE85UWaIMGheugxJNT1Q==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
 	c=relaxed/relaxed; t=1792971944;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=nDw9i3Z2SirvRvn+BaVz+MSjkgG+3Zolh5xd3HzvrVo=;
-	b=aATNW+gR4PlQ9JWNDL4lxHUIstI6uBYDIqKGrYO5PGY8iqS6LXo7j6MHjcccwMPei4b7
-	 k4sGbgHIvEupCWHeDyXRl4iokUOYKIn5ZR8pavXj0awD1M7ks5TAOWoeqn+gBKqjYwB6Z
-	 H+JIoQqYgOlqc71EQbD3RlE6wEKqf4TTwFLTjfenxk03SNRSSk1nqz2wYigjgWNS4wbWI
-	 beSghhn2/0SM4ul2GJxS4SpZyhsqi74ioj2SjOCbcT9kUzAj2iBfgqnJm1PixynZWumCO
-	 w/xMwjIVVKJaKvmHXuSnV15S/hRiv5SrhIcv2PKV/d85v5oiBQzR58RtNa6hvilQG5Q==
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=vuNoKJQhKwFEYoYDrBeFBAdFshlRv+mGsc6F55GADDo=;
+	b=MyvHWyVjNaDaRH7XPJfsJqhC+eR2fJGp95HV5OLAYKrWRRmnT/hn6gZzOMFvNWO3yuTt
+	 sXWcjcpmO3PVGifJAd+9eOjD4TmnSLw8DQ/pa0r6cHd2O//IvZ/PX7HL3oYi2vbucXSBi
+	 YxOQw1k49cTtRz06buy2mufl3qxlS2q42uir5EyJc3aitNyDoI5O26ZEoILdA1PEseJFR
+	 rVNPmaY3gKRKS4bUrVswgeb/my3OEYKj9iMewCf68BD4W59hQPNQ19dXRcn7w97QBZXTt
+	 SUoGVTtBQ8nZBuYa8h3U2Q8nqJ36WCKqh26r1FFfT12J+7oy2zg3apikbi3S+M+IrsQ==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id DA6E31F01825;
+	by smtp.kernel.org (Postfix) with ESMTPS id EC9861F01828;
 	Sun, 25 Oct 2026 23:45:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1792971944;
-	bh=nDw9i3Z2SirvRvn+BaVz+MSjkgG+3Zolh5xd3HzvrVo=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=ergdZ05PSlkrgvyJUE0RMjWhQ/BFYhPHbsfaJnvbF9a81FFeO2m0lkty8VHXSndL2
-	 rosTagI37VyeYY/3AHK9+JrT+9iw0dFRPf3RS34iJl6EmNXdajMKgMprLHL0T3L27B
-	 n3OEiMeUPpBH9U4QeKmPba9gAsUoM9/5lV28RTOEYZ50j4ehYAfaokT02WjBF/498T
-	 scao/9HVjvbN67OUr9U5/9mHv+efE0pgupeoVwC/W6qig4iSddFjG3jsdMOUAtjBYP
-	 uqavIS3XKZZBDNvmf0NapMFWBq9njUfJ07fua8ow5OQnWo4MxoHLYxcV8CGsbo70QC
-	 Tqtis3PW9dyjw==
+	bh=vuNoKJQhKwFEYoYDrBeFBAdFshlRv+mGsc6F55GADDo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=Zi4Es+mXVJ16X1hZoscjxn+XceaYUy2vlidLzKPs864tvDVOJ8UGVPzK4xyususd/
+	 ocf5WdvkN9NWArQ+K5m2x0Mqeg+v6f/bTd/NFG9HyeRbklI8flkVXIT+oxZdheQNTw
+	 PtKf481uS6UWnZ9/gtT0gAbTQ4qFqAf00eHM4mzq0ZUoWC8bhh0e493vDy8ZV/eplJ
+	 XmxOCFGwah7Q/ps0SZq/vwa6EzVg4xzA5WPsDFxvwBO3i7Gxf2h8ZfQqv1p3vuNobT
+	 KWi/JT7Mlv3jqxwdpHFw6iC+Rc1HjkUXNLIm9x4MrKAKpIL2u8uqmagksruZTrkNWM
+	 bRkRt3xVW5gpA==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 6804F44B2D;
+	by lkml.kernel.org (Postfix) with ESMTP id 75EF944B1F;
 	Sun, 25 Oct 2026 23:45:43 +0000 (UTC)
 From: Eli Skeggs via B4 Relay <devnull+kernel.eliskeggs.com@kernel.org>
-Subject: [PATCH bpf 0/2] bpf, sockmap: Fix dropped data and EPIPE on empty
+Date: Sun, 25 Oct 2026 16:41:57 -0700
+Subject: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on zero-length
  skb redirect
-Date: Sun, 25 Oct 2026 16:41:56 -0700
-Message-Id: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,11 +84,9 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMwQrCMBAFf6W8swtJhCr+inhI1o2uYhqyVYTSf
- zfqcQZmFpg0FcNhWNDkpaZT6eA3A/gay0VIz50RXBi9C45s4vsjVkqxCWUtJD7v/eh4y7uEntU
- mWd+/5RGpZpz+0p7pJjx/Z1jXDweIJxJ5AAAA
-X-Change-ID: 20261020-sockmap-bare-fin-e1f8160c3c7b
+Message-Id: <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
+References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
+In-Reply-To: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
 To: John Fastabend <john.fastabend@gmail.com>, 
  Jakub Sitnicki <jakub@cloudflare.com>, 
  Jiayuan Chen <jiayuan.chen@linux.dev>, 
@@ -107,59 +104,66 @@ Cc: Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Eli Skeggs <kernel@eliskeggs.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792971941; l=1845;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792971941; l=2155;
  i=kernel@eliskeggs.com; s=20261021; h=from:subject:message-id;
- bh=Wlyiie0CKDzxYgDQSpvxa4sS+tMNMfU2M/Qk54ENhjw=;
- b=tbyYi/j3qg52YiRw/uGwHTvdc1MwNPTaY4YyjbYq3J6a31YmybW5d/zOUFmKzo8P67EOjxD7h
- kZuWm2tJq1YBrVWeIvDgbj0Jp5hebWFSYVm5EGihK9IZk/NKBTSYo5y
+ bh=tMsJNHGrPmApxQR/k04sdDxy9WoPcaNMSS8fSsBnQhE=;
+ b=aqOQiUQEIH5hPFtqejVgawPtZtjmbWIer2omhEGNDqEVU8Wi6bSfPUeGRerJbm9UpJT86HvRe
+ 5QQD3b2EqgpCCK7UqRblzXI9yZLAkfs46dNpxxTr6MuytG4PjkHfCJZ
 X-Developer-Key: i=kernel@eliskeggs.com; a=ed25519;
  pk=38k+FqQ3STTnr2H4HZ7IEseBOHWRDYVhvyMmQlB51gc=
 X-Endpoint-Received: by B4 Relay for kernel@eliskeggs.com/20261021 with
  auth_id=1252
 X-Original-From: Eli Skeggs <kernel@eliskeggs.com>
 Reply-To: kernel@eliskeggs.com
+Content-Transfer-Encoding: 7bit
 
-When a socket receives a bare FIN, tcp_read_skb() hands an empty skb to
-the attached BPF stream_verdict program. The program may redirect that
-skb to another socket. Doing so causes the target socket to report EPIPE
-and stop transmitting redirected data. A proxy may see the erroneous
-EPIPE and truncate a half-closed connection. Instead of treating a
-redirected empty skb as an error, treat a 0 return as an error only when
-there is more data to send.
+From: Eli Skeggs <kernel@eliskeggs.com>
 
-Patch 2 adds a selftest that fails without patch 1.
+A FIN can arrive on a packet with no data. In that case, tcp_read_skb()
+produces an empty skb, and the attached BPF stream_verdict program may
+choose to redirect the skb to another socket. Further data redirected to
+that socket from any socket gets dropped, and the target socket starts
+reporting EPIPE. A userspace application may see that EPIPE and decide
+the socket is no longer usable. For a BPF-based proxy, this can break a
+bidirectional stream, truncating the response instead of leaving the
+socket half-open.
 
-Tested on x86_64 with virtme-ng, under QEMU without KVM. The new subtest
-fails on bpf/master without patch 1, and passes with it. The full
-test_progs -t sockmap passes all seven tests and 802 subtests with patch
-1.
+Prior to the introduction of tcp_read_skb(), tcp_read_sock() never
+passed a zero-length skb to its actor, sk_psock_verdict_recv(). When a
+redirected skb landed in sk_psock_backlog(), it was always non-empty.
+tcp_read_skb() deviated from the historical behavior by passing any
+zero-length skbs to recv_actor(), exposing this latent bug by adding
+zero-length skbs to a queue that hadn't previously received them.  When
+sk_psock_backlog() encounters a zero-length skb, it interprets ret == 0
+as a hard error, reports EPIPE, and clears the transmit flag.
 
-The bug dates from v6.0 (965b57b469a5), so please consider queueing
-patch 1 for stable.
+Treat a return of 0 as success when there is no data to send, while
+continuing to fail on a 0 return with residual bytes. The loop exits
+without incident on an empty skb, and the skb gets cleaned up as usual.
+On an ingress redirect, the empty message is still queued as before, but
+the target socket no longer reports EPIPE.
 
-Found while building a sockmap proxy between TCP and MPTCP sockets,
-running out-of-tree MPTCP sockmap patches, where the EPIPE caused
-half-closed connections to prematurely abort. An LLM helped locate and
-reproduce the issue, and proposed an initial fix. I traced the code
-path, reviewed and verified the LLM-written test, and simplified its
-proposal to a one-line fix.
-
+Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
 Signed-off-by: Eli Skeggs <kernel@eliskeggs.com>
 ---
-Eli Skeggs (2):
-      bpf, sockmap: Stop reporting EPIPE on zero-length skb redirect
-      selftests/bpf: Redirect a bare FIN to another socket's egress
+ net/core/skmsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- net/core/skmsg.c                                   |  2 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c       | 74 ++++++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_pass_prog.c   |  8 +++
- 3 files changed, 83 insertions(+), 1 deletion(-)
----
-base-commit: f909e534f5e34feb2ea2701d54df63e21aa506fc
-change-id: 20261020-sockmap-bare-fin-e1f8160c3c7b
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index df385a5a961e..f9b2e3486cfb 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -716,7 +716,7 @@ static void sk_psock_backlog(struct work_struct *work)
+ 			if (!sock_flag(psock->sk, SOCK_DEAD))
+ 				ret = sk_psock_handle_skb(psock, skb, off,
+ 							  len, ingress);
+-			if (ret <= 0) {
++			if (ret < 0 || (!ret && len)) {
+ 				if (ret == -EAGAIN) {
+ 					sk_psock_skb_state(psock, state, len, off);
+ 					/* Restore redir info we cleared before */
 
-Best regards,
---  
-Eli Skeggs <kernel@eliskeggs.com>
+-- 
+2.56.0
 
 
