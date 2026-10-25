@@ -1,101 +1,116 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.45
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792934588;
-	b=hWiE9pzznhwar83zowX7J03pfmtv/dCpAcBmsZxB7Ir3TZm/8FaLiXyXZ3owoU+gPEjg
-	 qV/OEE+0YLAfabIEkME3AinZ17taONB4y5e8RUP0r0430gQ8tIqeh0RMQ8TUxxwNBIW5u
-	 dLpD65U3jXxsuu7DDZulC0E6h6kE0IhsGdlEze+TBR7f8FrTTM0S7NUo91hDkl0iiPkno
-	 MzuIsdpH8P00/udVnxt8kYagP4tdmU01Db+utKj5NoWzZ1kj89DiglmV048y4QwHGlCs7
-	 E8YhEB56gV4DIEpls1KgmLqurO0ZeMP1UaJM1cS7H8hKuT3MkEup/Wcyfd7qBCaMmQg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792934588;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792935146;
+	b=hGG6+bmALh9tF6xweEMEyCxgNmyIROOGkfLP5GJ6SXLZH9Z2esTAKPvVJ6qaz9ZkhQIV
+	 B/CNWukHQi9RkKKJRm8IGENemE1xCRWA/mxpt2AicnXWaAXMnSNQJSSJb3dALSMtuJgPO
+	 MNxZknUFPsYhnMpoupRHyHkOCN6QW6I16B/5Czj/bHTPQactd4LJRhV1PvZxgGRHbNfUh
+	 D0/cbsxXJ9vPKa9pPqCsVmwWl47Se1Ct6ad4G7NdD0f+fa8kExTqhoE1rP5gKIy8J7M8n
+	 y2+PfyQac2SgZiDci/Ha5DWrRs2+DdLR5zPb5DpYNJ+bhWSiy8WnfOYVGLLrwYPHJ5Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792935146;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=X6vbMJkh4xPzuEcl9o4UTbdDi9m9a6y5s+AAwaTb/VE=;
-	b=1/suA2A49Rq6xdKgBoKHNDTiBCwg7DdULG69cX+RwQ/m3s94FDTmrbDfP/ugZy9SkpRV
-	 JQIQcXxbS3eO4SscOiRb+OZ83TtUs0WrPkWYu0PmB3l/B5D5/YCuKB1ZmEJHTyYBRG7OS
-	 Acm7NrNlmqBayRxLR3YI79tVk/xgx2VcG+Ew1c3qWGxNnPyWh/sO7AdjWue9IcPigPq4R
-	 pOmPJ5LNF1sLoG2zAb3XY9st4gKWLtadWYwNKcXY5Y2IKRlV2MgV999lXdkp+mDl/9/cx
-	 b/M1kSH30HeGKBiqsYFtgZwxg+QS/UVNHuqwmy/IH9CMl7H4RaFhYVsq/NOR+CAiuyQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=OcGgvWRppF08rxdxED6gZ5Zn9Wj39GXAsFDDIxUPXPQ=;
+	b=ko0zW6KdCUk4nyM0ceulQsvgr2S5IWKVUfcW+gKG5NzLiF7IkkSU/+n2uxUIMlEIQumA
+	 6LSOoQteSGkbPfyETmH7iOSuKOzYKtndMi7htDNZf3tkXMlRLcCA/ZhuHJA7DB4g7KEvz
+	 /7D+/eaMksTaOZ5q7C8o79Gu5p41yHikrw8NQhRCpFgYlVKbixZmyVuXBcvZWjPhNS6On
+	 8QrzbsRbQN1+lqSdVbALR/CMp4+wFGJclIkt1cAZb8CPRWZxJSlL+4uT5bAK+3t6Nw71K
+	 IreKsgdzLwPs4ZrgilKeO4jWjBZV3kiooXmqVLeAm97OdvIB5HQL87mcH5t9rn0ThCw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jPKsLWh1;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.219.45
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ezv5wTN+;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FA9606A31B
-	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 13:23:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 50FA9606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FA2606A31D
+	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 13:32:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 08FA2606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jPKsLWh1
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-91b55859245so13209166d6.0
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 06:23:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792934587; cv=none;
-        d=google.com; s=arc-20260327;
-        b=gturA8+d69XrXrhrBxNVSzQO1D652kGKsZP+OopFeRxVqKBW1XT2WhzwyyIXjL48rw
-         MqUzOIovmhwuBkufSS2KpV5rODCcKm6zgjfnIE40sUFJwPV/AB0H1rRkZR3q3z8tDQt0
-         My5fH62xp3qzisXVxLwHykKddUh3RvFXcrDtl5jx78R5OWogWsEoTQGwP2G9hzQokzWd
-         mKU9kzUAImSG9nDnxlLEnfA2XAt5Grx2OhaVEdwpl8TEQZ+W4UJgIYOFa8NmcjR9Z6WH
-         XUuZ/rwqacRFWz8X6DLwqUcQ4T9PfqC21YnHP+zZiC8GJCNU9wyCiGD0SBVMs7rm4WDt
-         utaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=X6vbMJkh4xPzuEcl9o4UTbdDi9m9a6y5s+AAwaTb/VE=;
-        fh=KQiOw23zBCsv7fl0SxToe1+AsqIO/+K6sYEi2ZtSCdA=;
-        b=hxSJ5K3kSaBJyLHz32gdYIY8h2doXtmyxjFeeWFffui3XoMj/WnUFd73IWmhAEJJm5
-         isMUqJ+XPetHw2afoHlAk6i/SJdZwJKlgWssS6JEECbJyQAO8Eenxz87PyFSGbRACowO
-         qmS+E7wdT7rLm4fKSTNQWI/mwNokwE8bj31H2B2R0kL+ereFhjKvNr8lr4jZv6yY+LVD
-         OOF+zQZD1MFdc6DnBt8EASgUDTq4JRo6CbcIM4D6WVTtxXwiiLBzy97gwFuHBAiP9EZB
-         XDL7qp3r0JzaopkSOHBVMi+LGduPbodDRIHV5DD8i0iLdi8VIikn6q7NbqjxkwJrcptG
-         mzew==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ezv5wTN+
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3acb512a7a0so1132558a91.1
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 06:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792934587; x=1793539387; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792935145; x=1793539945; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=X6vbMJkh4xPzuEcl9o4UTbdDi9m9a6y5s+AAwaTb/VE=;
-        b=jPKsLWh1wQCx+uFkDMaGoQAlzMDmG0XPhV4wljunZLrs09EJyBKRKiDA58n7EuJ/4V
-         je2zRLXEtjn1PhsqD28scCYrTMNv37rUYlCCKHjmP+gT4bsRCiOOOEyB14bQkkJ+OgdW
-         RADNOn1ivHmCwSQ1sGI/l7e6xuwW/Gpdm2UHqe2TOEQ8on+feWUGlDCprsBXttntqwcv
-         ALq9IW+2izLruIIjjsX2CbLCXSzafBAHmkmV7kAQhcM6h2DfnpxJw5CFdp10njk3vDHb
-         mfxKOsQgrAX3CcjwG/Joa2GQFssuEbcS2WIHTr3cvhdk35eCu7wCsMeMNYb3UiA0FwXa
-         oHEg==
+        bh=OcGgvWRppF08rxdxED6gZ5Zn9Wj39GXAsFDDIxUPXPQ=;
+        b=ezv5wTN+Mz3AWK1OaUJWXsaICNfy+Yd2zilEQZqjly9YBxd9mwUCcXydPRHI4GJdRH
+         Gdj0/4I8OdnsnIADtZAbWvDM6JlFyTSAc0iYtf6U3I1wujYFFiSssfSEkS+vgelyAbEh
+         i7sscFY6kGy4Ivh/8iJw6kIhY7Ms/VEpKTmSTl4Cz5oo+lG7E3TZflkIRtrcnRR47bgA
+         4SbE+EqNUJL1w7PlgjiYzy/8Wa6JNTRcnGhZV5dJFlM4iTa268QmhXY//yngOUtI3ahH
+         1sRH8O4YqxJalctaBfzHSfmZ9J81PiyHpPRlgfRSHQEqEj+RjAVUc8hxT3vLTZTrQ6sj
+         AaYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792934587; x=1793539387;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1792935145; x=1793539945;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=X6vbMJkh4xPzuEcl9o4UTbdDi9m9a6y5s+AAwaTb/VE=;
-        b=JDBH8LY34SZWE7SCGnCxJ83u+wxrWjvS+D4V+kOzydOJOfiztt9v0H/Y2A/yHPDAxj
-         ult4Q/E/0Atj/Y2lEoniJ0RgGfjjEjjd4aRjEbYTX6Rk1II3o8CoCyM2AS1MyTYtubq5
-         c1RV+iAEkG71jzqJ0svVWKTWDwnKXjx6pKQzWyupMkznm+yNCrcG9anvCSlCBep21bJz
-         pibEAu0D5n6KEAWi7UvKW9zJLLnozag5H8QCuWpXBSdGfxtt1hD87yD5Dlrfb2VUwuej
-         xjNI/UEo1edExacOe4w1llubNqTTPvJOewr6I8B+FYwfGRft2Seo98OaFNNGJS5dWIXg
-         9m5w==
-X-Forwarded-Encrypted: i=1; AKwUvBxCI0NauVXiPzZRbp3FO+sA2fJU5uDDMW17j9Wpba0qv8Xi0hPAmSlS9DnhRw97yxBGJ8I=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJmjC2pOq1/qhSuKXiiVXXtvv05u3SmsgNr7PlZCPVhiufcmwmZ
-	4fmcgSoLPamtofC5lurvLS0rgaD0U0wFFSQflpya+8/mqAv9JdrfP4xs1ketpPNoniW/fS1MQrB
-	9F+Y38AZ4/OQmm7awO7CGeB4QZFb7BM0tzEq3
-X-Gm-Gg: AYBFou0V1yi5RezHg5LneYJzJF3c2/LBKTfRRJ7JWRI9tKcvvOlNf1SM+AB6iCM6WNb
-	UkQyLAjNLpRTuDgquO8Wci0/9+BYOxxhPxvkf29ZoD0rjh7ZVyYvhJmt2tJ/JZM01uWPmDmpFyq
-	zH6GFze2BMc2+EbMN3JUXID7hnXADuCpK+GzdWv8Y0AzSz8ynzz4SlG8oXrOKMbgALq9thBbb89
-	WBehNlr0GIb5gKhlzR5j1o0egeNYVQ0iR22ajWeaRcFI3lpRRXlq8zzDRhN7ljItFdCOAAHk8cC
-	TTRyDuy5wU/yK8vD4I/TWX6Uhy8kPmHPdCcVi3WzpL9gFdcpq7IIllABkalAIP49ar7oPNDRAB4
-	RmWO0yLJdO65Oqm4deqxt2Bxr4pHLEfoNKpzSy6WbtN4CGZngV2rjGx3v3V5RTh54Y5fOWvRaZD
-	ftJz5TdxJgk/zSzsc/ZgQQGW9tbhw/WxinifixR47t5qEw2vtmFgKrHxrKiq+eUVMEZaMyE2ML
-X-Received: by 2002:a05:6214:53c3:b0:91b:b26a:9791 with SMTP id
- 6a1803df08f44-91c48f150camr69861666d6.56.1792934587195; Sun, 25 Oct 2026
- 06:23:07 -0700 (PDT)
+        bh=OcGgvWRppF08rxdxED6gZ5Zn9Wj39GXAsFDDIxUPXPQ=;
+        b=W84D9bmP24Dc4+C789hu8abCZofwL0R1RvY3awY0eTVW/TD+XEqp3JPbzCOxZmA9aW
+         pYsVcd8X3T1vtAWMoLJTcmK2fk7kgYZyAEd1WJ5BxOz42a2Az9x0oxAccwpo3aT19qzq
+         rU2kdhhS2vMT343Se5VTeTnD54K4VOjC9Yn+DZsxA7Rl795treqfj+Tt/xpJ0r80oKVC
+         2vOaMA9G28l6Y1MhiPFixl7rvXwR7YxoVq9yAGGdGccY8QQEDEHoVFnFufosf+3r3YYb
+         9ndWFn+zr96jXq+bkkI7M85Ro8OyVrK3rcIvd99Os0Q3Bf9/JO/V/7USCRnUuc6mzWf8
+         6mVA==
+X-Forwarded-Encrypted: i=1; AKwUvBwhFUUz+I0z17+13iLJzYDIEABaqY8xUaAjrkKpW/VL9/HUbydGR+pvY88KdzexAgPpN1s=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKEmKAtJFvl/4sc1GUjwk6HG+jI8kiDtepwD9R/Zy2hbdl/1FNH
+	tfbyvLrnhZELzo+DIrCLYuhbuUrP7ni8JllgYaHez+piIweqRgyiQr1D
+X-Gm-Gg: AYBFou0B/5wYg2SEXyp3mlgrj8jeFx3xXPQDF6FG1YzhtDJEDy7dV2WQ2SrDFcsnefq
+	9sTVYuwlF2BD1TqivRp3K5291pqbxtdZVA0IZbwfWisy6x9tzQbcSziog5B6lsTHMS800I9NK6a
+	ZL6ebbCjBk4zSsKMO7lC0KjpU4GN24VDOhflh/ssrWxN2wqE9ajN65YSqN6E2PXluiaC2AE7QTz
+	SiPNHhmUDGSuff6uxvbNxQxJlKrwyh6dn2kKlWmCdpTivgfHDBSMTJVoIWd/wj1uz2NSufHNGkg
+	2LS5T6YJdO2kDK8tiemsRw3guaGGmckZuJyCBA9B0dnyglvmRnwEazd83g9+gxKkloj5UmvZP3r
+	Y/cvvtze7tzEUPJ64p9ouHEcAiRO8YdfCQsmEXBkkGVsE9WAgrYM+pN7klNlIqn/lQWAKgbgZaw
+	22kLrmK6zIMhyhtNhKgEc5LfJYrTRJsogkBMzJ4nt0CK1gbRG4a9VZZOlL9xhIUDmyvvwnxSxwO
+	uI7LEjH+fCSnKLwGcryOGC2NMigLyjBiodoyna0cSyUtt6U2ynSb8jYOo1xlT/qp+9FFLh/GdDT
+	BSPXTBIiRY5Ik56fZhwGMeaGUmc04NpZ4ft+vA==
+X-Received: by 2002:a17:90a:e7d2:b0:3a8:c0cd:57f9 with SMTP id 98e67ed59e1d1-3adead2426fmr3897098a91.25.1792935145198;
+        Sun, 25 Oct 2026 06:32:25 -0700 (PDT)
+Received: from yafangs-Air ([240e:46e:1b00:3755:d15e:318f:88ff:4335])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adec0bf7cbsm5070368a91.16.2026.10.25.06.32.18
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 25 Oct 2026 06:32:24 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: tj@kernel.org
+Cc: akpm@linux-foundation.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	daniel@iogearbox.net,
+	david@kernel.org,
+	eddyz87@gmail.com,
+	gourry@gourry.net,
+	hannes@cmpxchg.org,
+	juri.lelli@redhat.com,
+	laoar.shao@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	lizhe.67@bytedance.com,
+	memxor@gmail.com,
+	mingo@redhat.com,
+	mkoutny@suse.com,
+	peterz@infradead.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	tim.c.chen@linux.intel.com,
+	vincent.guittot@linaro.org,
+	yu.c.chen@intel.com
+Subject: [RFC PATCH v3 bpf-next 0/5] BPF-based per-cgroup NUMA balancing mode selection
+Date: Sun, 25 Oct 2026 21:32:04 +0800
+Message-ID: <20261025133212.51440-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <7bcbfa61a8c69e6ffd81e97652d981b0@kernel.org>
+References: <7bcbfa61a8c69e6ffd81e97652d981b0@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,156 +120,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com> <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
-In-Reply-To: <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
-From: Daniel Pereira <danielmaraboo@gmail.com>
-Date: Sun, 25 Oct 2026 10:22:55 -0300
-X-Gm-Features: AclHuK9yewKN0-UZdNUV7XZr57BksERgCEoIcvborAR-JnzTIy1oVpZl5H1ou6Q
-Message-ID: <CAMAsx6dgDhfNvw+3NWD1pBxyJfHTa7rUD+-9Y4L5K2FpDXJS6A@mail.gmail.com>
-Subject: Re: [PATCH v2] docs: changes.rst: set the pahole minimum back to 1.22
-To: gr3yf0x87@skyn3tlab.com
-Cc: corbet@lwn.net, federico.vaga@vaga.pv.it, skhan@linuxfoundation.org, 
-	rdunlap@infradead.org, ihor.solodrai@linux.dev, eddyz87@gmail.com, 
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 21, 2026, Mark Severson wrote:
-> Set the table back to 1.22, in the English document and in the Italian
-> translation, which carries the same table, and remove the Italian
-> translation's copy of the paragraph that the English document no longer
-> has.
+Hello Tejun,
 
-Hi Mark,
+> On Mon, Oct 19, 2026 at 02:41:52PM +0800, Yafang Shao wrote:
+>> An opt-out wins and binds the subtree: a DISABLED request anywhere in
+>> the chain opts the cgroup's tasks out entirely. Otherwise the requested
+>> bits OR together and the kernel reads them independently, the way
+>> kernel.numa_balancing reads them, so a combined NORMAL|TIERING engages
+>> both modes. A DISABLED request only speaks for the cgroup's tasks,
+>> never for its memory, which follows the remaining requests of its
+>> ancestors.
+>
+> Can you explain the reasoning behind the basic design decisions?
 
-I went through v2 against the tree (docs-next at f857ff5bf):
+I missed your mail before. Sorry about the late response.
 
-- In Documentation/process/changes.rst the table says pahole 1.26,
-while the text below it and lib/Kconfig.debug (DEBUG_INFO_BTF
-depends on PAHOLE_VERSION >=3D 122) say 1.22, so the table is the odd
-one out.
-- tools/bpf/resolve_btfids/main.c now rewrites the prototype of
-KF_IMPLICIT_ARGS kfuncs itself, which is consistent with the
-explanation in the changelog for dropping the 1.26 requirement.
-- The English document has no KF_IMPLICIT_ARGS paragraph any more, so
-removing the Italian copy brings it_IT back in line with it.
-- You mention that htmldocs was not run, so I built
-SPHINXDIRS=3Dprocess and SPHINXDIRS=3Dtranslations/it_IT with the patch
-applied: no new warnings compared to the unpatched tree. The
-undefined-label warnings that show up in these two files also show
-up without the patch in partial builds.
+> - The folio paths resolve through folio_memcg() while the task paths use
+>  the task's cgroup. Why isn't the whole thing tied to memcg?
 
-One process remark, which I leave to Jon: "Assisted-by:" is not a tag
-that Documentation/process/ describes in docs-next, and checkpatch
-flags it. I could not find the "Attribution" section of
-coding-assistants.rst that the note mentions in this tree; it may be in
-another one.
+On the unified hierarchy the task's cgroup and its memcg are the same node
+wherever the memory controller is enabled, so tying the whole thing to
+memcg is behaviorally identical in the common case.
 
-Reviewed-by: Daniel Pereira <danielmaraboo@gmail.com>
+The only difference shows up on cgroups without the memory controller
+enabled: today a request there still reaches the task paths (the field
+lives on struct cgroup), while the folio paths could never see it, since
+folios charge to the nearest memcg-enabled ancestor. That asymmetry is
+exactly what your question points at.
 
-Thanks,
-Daniel
+I'm fine with anchoring both sides on memcg, and bpf_numab_set_mode()
+will reject cgroups that don't have the memory controller enabled.
+Deployments that don't enable the memory controller anywhere can
+still make a system-wide request through the root memcg.
 
+> - Why do the task and folio paths combine the chain differently? DISABLED
+>  binds the subtree for tasks but is skipped for folios.
 
-Em qua., 21 de out. de 2026 =C3=A0s 22:48, Mark Severson
-<gr3yf0x87@skyn3tlab.com> escreveu:
->
-> Commit fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF
-> annotation emission") removed the paragraph saying that kfuncs annotated
-> with KF_IMPLICIT_ARGS need pahole v1.26, because resolve_btfids now
-> emits the kfunc BTF annotations that pahole used to produce. That
-> paragraph was the reason the requirements table lists pahole 1.26, and
-> the table was left unchanged. The text below the table and
-> lib/Kconfig.debug (DEBUG_INFO_BTF depends on PAHOLE_VERSION >=3D 122)
-> both still say 1.22.
->
-> Set the table back to 1.22, in the English document and in the Italian
-> translation, which carries the same table, and remove the Italian
-> translation's copy of the paragraph that the English document no longer
-> has.
->
-> Checked by building linux-next 20261021 with pahole v1.25 and
-> CONFIG_DEBUG_INFO_BTF=3Dy: in the vmlinux BTF,
-> bpf_task_work_schedule_signal has four arguments and the bpf_kfunc decl
-> tag, and bpf_task_work_schedule_signal_impl keeps the
-> struct bpf_prog_aux * argument, as Documentation/bpf/kfuncs.rst
-> describes for KF_IMPLICIT_ARGS.
->
-> Fixes: fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF annotation=
- emission")
-> Assisted-by: Claude
-> Signed-off-by: Mark Severson <gr3yf0x87@skyn3tlab.com>
-> ---
-> v2:
-> - Also remove the Italian translation's copy of the KF_IMPLICIT_ARGS /
->   pahole 1.26 paragraph, which fd5425b67355 removed from the English
->   document only; v1 left the Italian text contradicting its own table.
->   Found by the Sashiko review of v1.
-> v1: https://lore.kernel.org/all/20261022013432.2638010-1-gr3yf0x87@skyn3t=
-lab.com/
->
-> checkpatch reports the Assisted-by tag as non-standard; it follows the
-> Attribution section of Documentation/process/coding-assistants.rst as
-> published on docs.kernel.org. Not run: make htmldocs; the change keeps
-> the table's column widths and removes a whole paragraph.
->
->  Documentation/process/changes.rst                    | 2 +-
->  Documentation/translations/it_IT/process/changes.rst | 8 +-------
->  2 files changed, 2 insertions(+), 8 deletions(-)
->
-> diff --git a/Documentation/process/changes.rst b/Documentation/process/ch=
-anges.rst
-> index 28f2ca633..13093c5c2 100644
-> --- a/Documentation/process/changes.rst
-> +++ b/Documentation/process/changes.rst
-> @@ -53,7 +53,7 @@ mcelog                 0.6              mcelog --versio=
-n
->  mkimage (optional)     2017.01          mkimage --version
->  nfs-utils              1.0.5            showmount --version
->  openssl & libcrypto    1.0.0            openssl version
-> -pahole                 1.26             pahole --version
-> +pahole                 1.22             pahole --version
->  pcmciautils            004              pccardctl -V
->  pigz (optional)        2.4              pigz --version
->  PPP                    2.4.0            pppd --version
-> diff --git a/Documentation/translations/it_IT/process/changes.rst b/Docum=
-entation/translations/it_IT/process/changes.rst
-> index 0be1292a8..b4accd428 100644
-> --- a/Documentation/translations/it_IT/process/changes.rst
-> +++ b/Documentation/translations/it_IT/process/changes.rst
-> @@ -57,7 +57,7 @@ mcelog                 0.6              mcelog --versio=
-n
->  mkimage (opzionale)    2017.01          mkimage --version
->  nfs-utils              1.0.5            showmount --version
->  openssl & libcrypto    1.0.0            openssl version
-> -pahole                 1.26             pahole --version
-> +pahole                 1.22             pahole --version
->  pcmciautils            004              pccardctl -V
->  PPP                    2.4.0            pppd --version
->  procps                 3.2.0            ps --version
-> @@ -149,12 +149,6 @@ Dalla versione 5.2, quando viene impostato CONFIG_DE=
-BUG_INFO_BTF, il sistema di
->  compilazione genera BTF (BPF Type Format) a partire da DWARF per vmlinux=
-. Pi=C3=B9
->  tardi anche per i moduli. Questo richiede pahole v1.22 o successivo.
->
-> -Dalla versione 7.0, le kfunc annotate con KF_IMPLICIT_ARGS richiedono pa=
-hole
-> -v1.26 o successivo. Senza questa versione, tali kfunc avranno prototipi =
-BTF
-> -errati in vmlinux, causando il fallimento del caricamento dei programmi =
-BPF con
-> -l'errore "func_proto incompatible with vmlinux". Molte kfunc in sched_ex=
-t sono
-> -interessate da questo problema.
-> -
->  A seconda della distribuzione, lo si pu=C3=B2 trovare nei pacchetti 'dwa=
-rves' o
->  'pahole'. Oppure lo si pu=C3=B2 trovare qui: https://fedorapeople.org/~a=
-cme/dwarves/.
->
-> --
-> 2.43.0
->
->
+DISABLED is an opt-out of work, not a freeze of memory: it speaks for
+the cgroup's tasks and never for its memory. A folio charged to an
+opted-out cgroup can still be hot for tasks that opted in; freezing it
+would let one cgroup's opt-out block the promotion of the memory they
+share
+
+> - Some of the folio paths already have the faulting task.
+>  should_numa_migrate_memory() takes @p, and the do_numa_page() and
+>  migrate_misplaced_folio() checks run in the faulting task's context.
+>  Why not use the task there?
+
+It comes down to the common migration backend, which runs for user
+tasks and for kswapd alike: folio_migrate_flags().
+
+Fault path (user task):
+
+  do_numa_page
+  + mpol_misplaced
+     + should_numa_migrate_memory
+       + folio_numab_in_tiering_mode
+  + migrate_misplaced_folio
+     + migrate_pages
+        + folio_migrate_flags
+           + folio_numab_in_tiering_mode
+
+Kswapd demotion (no task):
+
+  kswapd
+  + migrate_pages
+    + folio_migrate_flags
+      + folio_numab_in_tiering_mode     
+
+folio_migrate_flags() must key on the folio: kswapd has no task to
+ask. And one migration asks the same question twice: once to decide
+whether the folio moves, once to reset its access time. The two
+answers must agree. If one check keyed on the task and the other on
+the folio, a folio whose toucher and owner disagree would move by
+one rule and reset by another. 
+
+So the rule is simple: if a folio is available, key on the folio;
+otherwise, key on the task. This also makes the keying robust to
+future refactoring: if one of these functions is ever called by a
+kernel thread, the answer does not change.
+
+> Stepping back, the basic design decisions don't seem to have been
+> thought through, and the descriptions restate them at length without
+> explaining them. I'm not the best person to judge how useful the
+> feature is in practice, but getting this version into acceptable shape
+> is likely a lot more work than having someone who knows how to do it
+> just write it. I don't think it makes sense to drag this out and force
+> it into shape over many review rounds.
+
+You're right — the descriptions restate the design at length without
+explaining it. I'm not a native speaker, so I had an LLM rewrite my
+commit logs, and it restated them at length without explaining
+anything — the exact symptom you called out. In the next version I
+will write them myself and only use the LLM to fix grammar.
