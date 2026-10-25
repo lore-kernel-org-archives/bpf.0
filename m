@@ -1,64 +1,115 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.129.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792942096;
-	b=jC9K/quCrFyoeKpTaQ3762pW/3399K7p0GDiiJV+bdkAPJt1RFf2PiaodBk7hzhyho0m
-	 jCX9WIx77UOKDRgLOVpg5JxfeY+yZuvGcZ185cQn/cFNytxx3W83tzfGgABfV8MVGjhZP
-	 JOA9Bb8p8sa8EUZxH5r259A5KbCSzkiYQegoPe2qFdAQuL/ip3uxMzwftbiFRVRWyNJ4M
-	 MgzDhG5oY73VafqnX3vP3NfrHwr9if92C1Q1Tk14xVIXQvSOloTp7JVeVYmegUqJtYkEL
-	 cX7wfA0vC2PFV0Zd+XHd6zI0VlxhjocC7ZYd5O2d2rNAAdicBC820Z6LfVTCuA4Tm5A==
+	t=1792947098;
+	b=g1SwBIOgvF4uAHHP6mzuIO8VKmz7jyj/U7/ngmgRaDj7EhKWaWLhd1Ur+KX72fmpisBK
+	 iiWOrxikJEgFmaOzwz+0q5gNFq1V1dsb2rDI7Yfm6Qv6ht3j8mRVW32aCdwnYqHM+bQtD
+	 d4Yaws8RGq+vGuGiBgVBgrO0bAr289W4krcar/AcoPYkaw/g9HIcWdrCbTDuF0q1PG2Wh
+	 9WCjrpx0878tDKcpt3FzQF1b82U+2Wlb9B9dyt67h4xpn3rYWClf/B70abMICDqPF9Ypp
+	 nBmewaWRWkR3F2orclJq9/rbHEByoipqWtdEi6E4a6LoCqtNPqv5R7kPNA0XaMD/MWQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792942096;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=Rthwxh+zT2y3t40uv7dYDirQ7LAJVYO14/tkgXayeX0=;
-	b=dtOGvOewTRYUDj2EKdaLOuf4kb0IzXtREToIqeZeBX0I3+EVOhHKLgF1a3rPU1x4sW1D
-	 Pm4feTspxf7nGZF6lM3fL3CmbuG56gtp2LzxvorIe6SrXUmm5JOw9FN3vcgNVQHJ40xV5
-	 D02GSSimyTV/5YHSrLoUkj0iCNgUB/CLmEeQWgvTll5vBXlkYhPVUUUgdsVuX1SCFMMvm
-	 tyD2P1Gk+XaEDRYX+M4E93QrYwRSboyeqGtbzwHMDBNrUWFHPEiP9ThWmTopVvtsg9ITK
-	 ceViu1Ms8UWe/amrtIZJtex1ZCG9Fe88mOK0QD7yGd+oxEc8KiCEpv4hLZMMp/LU+kw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792947098;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:Date:From:To:Cc:Subject:Message-ID:References:
+	 MIME-Version:Content-Type:Content-Disposition:
+	 Content-Transfer-Encoding:In-Reply-To;
+	bh=xzHKgSVVoFQfSfmD7ehsFWGCtvBBsi/8d+yY9tqmJak=;
+	b=VthlTI92z/LE1Bg0cCbpEVz1fZqZYcrsVrYY1QVe8airgfwppt5vhwYudIyMfD56l7C/
+	 eQwih0/sz9rxD8nexa+CPuVzaPlPg1ncndYDkgF1f/7H529lmOiUMAJAnDK/8JO3Pf5WN
+	 PK3ix5/Mdx7RI4Ly2ZzIHvcNAdPmdVyaXA2DPnjMlh7oG/Lh2HMYdGzEFY4FeSUzLvAJm
+	 fB39CYp54jPg6buQ7tWQTFDDBwFv3SlKEnf13dxlettyEJe6V5sp7TDY8crAKy5d44Gpk
+	 P/HEdrM1+jOPc8/a34cZ8RrwD1eskX5WN7vVH+WReQ9xCBCWZehFzg6tcDb68jAGbRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=maly4NUO;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AXSMHcmt;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=gHK+tJLQ;
+	arc=none smtp.remote-ip=170.10.129.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87901606A31A
-	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 15:28:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87901606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C27BE606A31A
+	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 16:51:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C27BE606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=maly4NUO
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Rthwxh+zT2y3t40uv7dYDirQ7LAJVYO14/tkgXayeX0=; b=maly4NUOlUjFcoWPXMynZaHJU3
-	rrY2G6OXH1QcukMdKghELmpj6Q1OImFHL1llo22z4zKtF7fV8opIQ3gfRjCz4k+mxypmmNcXRYi9X
-	s3bteezcLA9qYKVjTz87m5WEyJM+9zz+lhu7vlQkkB4PThRzUE4FZ7+Xdp1QsQtWbT7gJQ8HeOVlZ
-	H2tteV2Xy1ZHQERBlRXQ4QpZl/QwSYH8vwJ1jzqmrzJMnqDBocLda3sh25lvb+huVcVssxNAkS1yK
-	rcjqusZOIJJjNVY1lelwttM8oR3Lkiu7jzPT2EHGxnSVbzN3lgHIV6p98ghy214Yuo1W76jLq9FM1
-	d67Eb+3A==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xL08a-0006dr-2t;
-	Sun, 25 Oct 2026 16:27:56 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xL08a-0000px-0b;
-	Sun, 25 Oct 2026 16:27:56 +0100
-Message-ID: <8c2784c0-2b13-4cc2-b770-51bbb8006f26@iogearbox.net>
-Date: Sun, 25 Oct 2026 16:27:55 +0100
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=AXSMHcmt;
+	dkim=pass (2048-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=google header.b=gHK+tJLQ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792947096;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xzHKgSVVoFQfSfmD7ehsFWGCtvBBsi/8d+yY9tqmJak=;
+	b=AXSMHcmtnswIVtza7//H6rjMutf3+x+gD0Ad01CQsFQk6ibPAKnfzJV7nsrN6u/1MLGuLp
+	cZ5wRtUiE3VV3oa7jygUaTc+Z+/rSKFQTWK7vdymCHLtkOogiG6EXd2wh1rGj9b++/F5fx
+	63jTODNhVzmE1AcVFwZ6apRpXS8BWGw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-373-kwvujUUGMjaPk7l2Wi4TkQ-1; Sun, 25 Oct 2026 12:51:35 -0400
+X-MC-Unique: kwvujUUGMjaPk7l2Wi4TkQ-1
+X-Mimecast-MFC-AGG-ID: kwvujUUGMjaPk7l2Wi4TkQ_1792947094
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-4870142f030so1378883f8f.2
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 09:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1792947094; x=1793551894; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xzHKgSVVoFQfSfmD7ehsFWGCtvBBsi/8d+yY9tqmJak=;
+        b=gHK+tJLQASjCX6mh6NkeGsl0txW4VqTM8bH49P6YkapJfaxn5Rs/+xawYoWWzt9dNk
+         P1H/VXyiAag0xR3rw2nGeF06tlMYXMuxWKoB6Rrh4lThnopHUVTDXIyFpipegA/E+YDC
+         UYh7IJPtZoaZE1IOzgI4jyFVVD5W0KuZt6j8GIKP+AhlCVq1BXaDvS28G25Bt/3jOp6O
+         o94CbejzTxxCj2vyKJspYQxNBuZIR7+soZz3mevbys3GgwcExKbeYd4wVYdaywx7VE7z
+         PtFGF6Dr9fjajJQEzbu5Pe9skXldQMc0XBaSnAdoIryov98Owe2LsC7/1mSl89B6pynG
+         OnuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792947094; x=1793551894;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=xzHKgSVVoFQfSfmD7ehsFWGCtvBBsi/8d+yY9tqmJak=;
+        b=I2joSVMWSyPoe4bBVvlxBoIG/mgY2SVwoRm4e3dp9Y3wPRwhlvc7erTTcT4hsKIh26
+         9aXc5eFmDAEdNMvgaELkMiS5AtI/KYwovXq5ZGdqBXjcWRvuQUoQPYeYQoyo/Na9p8BK
+         R1oOKn9Tmq6oPunwFJM64qgqGhH7waGkKE4gBrpT8JuGQhMCprnAHKuk5FJ84+0iKddG
+         jsDeNJKsibhW3uv8iAltkCPXyzLgcpMm+SdfY7SbZEGA9WJegvvQFlT+f0N6Js6Tg2Co
+         AB9XKo5Z6rc2UOEU5Boispkg/Mggf0f3ynNAZry5ulrWt6t9axGQJ9DiJiJqNKg9MN0P
+         vMlw==
+X-Forwarded-Encrypted: i=1; AKwUvBxHRMy1gX00HjZFu028J6fZeSKQaAPt8zRCr5m6hKJTQx+ZY5Skm1a70bCmOq7ZlHTfnIw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJFCx098+gsydaVgxayIfw9TjtGhv5KIH5ln/ZCELvPb5zSm0NQ
+	HP68F1ayIBK8BYLKt0/nNNz/hoVReN639YE83E9Dt8RX5Q8ghIB77CecyWc4s3c01BknFy50qXA
+	hFpffOqFxEEFnxLoVpV8HRCAW4BNbq0jYynEbRuys+Qv390wZg87EQw==
+X-Gm-Gg: AYBFou038X0iqWjnl8rXfZoljBoRzFslT5TRWBLmg5VnAqAOfxcUuAy8oGWu0Wzticp
+	1ap0w5rAAwIGNBaOQttqchjF3Kv39U5Z3XJ26ZViSrM/F/E6yjUQrqMlyT3RmFUoOSX8wAgmh5Q
+	kK6RQw144Qg9/CrHwbZnrUFcfjzcniSnkIU6f8OVyf54iWJAArPOp3hxWiZh/tl5EN8yrIgJcoi
+	CyY92j4QPPPnTU9gEwkB6NYtas2ts4OdZJVvDFcRygAygirXMXCt/e4m6eCQ8iTpcIWUmcoS8ag
+	hYQ717CmexopMfAjR8IJmZ6XxyytkZkQiJYy0FIYqgVtSGmDEj8yKyZ3KHih/zqbuGY=
+X-Received: by 2002:a05:6000:481b:b0:48e:82f:48fc with SMTP id ffacd0b85a97d-48e3eb971ccmr8796923f8f.31.1792947093881;
+        Sun, 25 Oct 2026 09:51:33 -0700 (PDT)
+X-Received: by 2002:a05:6000:481b:b0:48e:82f:48fc with SMTP id ffacd0b85a97d-48e3eb971ccmr8796894f8f.31.1792947093370;
+        Sun, 25 Oct 2026 09:51:33 -0700 (PDT)
+Received: from redhat.com ([2a0d:6fc0:1536:fc00:b838:383:1c7:6e81])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd8c05sm14148518f8f.49.2026.10.25.09.51.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 09:51:31 -0700 (PDT)
+Date: Sun, 25 Oct 2026 12:51:28 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: linux-kernel@vger.kernel.org, willemb@google.com, davem@davemloft.net,
+	edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, maxk@qualcomm.com, rusty@rustcorp.com.au,
+	netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net v3] net: gso: validate transport header before
+ computing segment length
+Message-ID: <20261025124546-mutt-send-email-mst@kernel.org>
+References: <52b8bfe4ee848aff8ace47752352de486171d45f.1792595507.git.mst@redhat.com>
+ <179290180493.3134.5235549211177646736@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,72 +119,192 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] x86/ftrace: Use jmp mode only where functions are
- aligned
-To: Jiri Olsa <olsajiri@gmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org,
- Menglong Dong <dongml2@chinatelecom.cn>, Steven Rostedt <rostedt@goodmis.org>
-References: <20261024073712.1074591-1-daniel@iogearbox.net>
- <DMDB1EESN4U0.KLEICFNC4NUP@gmail.com> <at4BvTcsjWwDuvbl@krava>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-In-Reply-To: <at4BvTcsjWwDuvbl@krava>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28164/Sun Oct 25 07:24:12 2026)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179290180493.3134.5235549211177646736@kernel.org>
 
-On 10/25/26 2:18 PM, Jiri Olsa wrote:
-> On Sat, Oct 24, 2026 at 07:10:57PM +0000, Alexei Starovoitov wrote:
->> On Sat, Oct 24, 2026 at 12:37 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>> Bit 0 has that meaning only for the direct trampolines that a dyn_ftrace
->>> record can point to, so jmp mode relies on every other target being even.
->>> Select HAVE_DYNAMIC_FTRACE_WITH_JMP only where it is, with
->>> CONFIG_CC_HAS_SANE_FUNCTION_ALIGNMENT or without CONFIG_CC_OPTIMIZE_FOR_SIZE.
->>
->> Disabling it for -Os builds is not great.
->> Can we fix the users of ftrace_call_replace() instead ?
+On Sun, Oct 25, 2026 at 04:16:44AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
 > 
-> looks good, it takes care of the C function targets, the rest
-> should be aligned ftrace trampolines (static or dynamic) or
-> direct api targets
+> Critical: 0 · High: 1 · Medium: 0 · Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [High] The patch is incomplete for the producer its own commit message
+>   names.
+> 
+> --
+> 
+> net: gso: validate transport header before computing segment length
+> 
+> This patch makes the GSO segment length helpers in net/core/gso.c check
+> the TCP header before they read it. If the transport header is unset, or
+> the TCP header is not in the linear data, skb_gso_validate_network_len()
+> and skb_gso_validate_mac_len() now report that the skb does not fit. It
+> also adds two helpers, skb_inner_transport_header_was_set() and
+> skb_transport_header_linear(), to include/linux/skbuff.h.
+> 
+> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > index d6894f463bf43..11c8b295bd260 100644
+> > --- a/include/linux/skbuff.h
+> > +++ b/include/linux/skbuff.h
+> 
+> [ ... ]
+> 
+> > @@ -3250,6 +3257,29 @@ static inline int skb_transport_offset(const struct sk_buff *skb)
+> >  	return skb_transport_header(skb) - skb->data;
+> >  }
+> >  
+> > +/* Is the (inner) transport header, as specified by
+> > + * skb->transport_header/inner_transport_header, in the linear data?
+> > + */
+> > +static inline bool skb_transport_header_linear(const struct sk_buff *skb,
+> > +					       unsigned int hlen)
+> > +{
+> > +	int thoff;
+> > +
+> > +	if (!skb_transport_header_was_set(skb))
+> > +		return false;
+> > +
+> > +	if (skb->encapsulation) {
+> > +		if (!skb_inner_transport_header_was_set(skb))
+> > +			return false;
+> > +
+> > +		thoff = skb_inner_transport_offset(skb);
+> > +	} else {
+> > +		thoff = skb_transport_offset(skb);
+> > +	}
+> > +
+> > +	return thoff >= 0 && thoff + hlen <= skb_headlen(skb);
+> 
+> [Severity: High]
+> 
+> The commit message names bpf_skb_adjust_room() as a way to leave a bad
+> transport header behind. It also says:
+> 
+>     Qdisc length estimation has carried a guard against exactly this since
+> 
+> Is that guard enough for the bpf_skb_adjust_room() case? In
+> qdisc_pkt_len_segs_init(), the only check is for an unset transport
+> header. Nothing there matches the thoff >= 0 check added here:
+> 
+> net/core/dev.c:qdisc_pkt_len_segs_init() {
+>     ...
+> 	if (!skb->encapsulation) {
+> 		if (unlikely(!skb_transport_header_was_set(skb)))
+> 			return SKB_NOT_DROPPED_YET;
+> 		hdr_len = skb_transport_offset(skb);
+> 	} else {
+> 		hdr_len = skb_inner_transport_offset(skb);
+> 	}
+> 	/* + transport layer */
+> 	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
+> 		const struct tcphdr *th;
+> 
+> 		if (!pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
+> 			return SKB_DROP_REASON_SKB_BAD_GSO;
+> 
+> 		th = (const struct tcphdr *)(skb->data + hdr_len);
+> 		tlen = __tcp_hdrlen(th);
+>     ...
+> }
+> 
+> bpf_skb_net_hdr_pop() moves mac_header and network_header forward. It
+> leaves transport_header where it was, unless it was equal to
+> network_header:
+> 
+> net/core/filter.c:bpf_skb_net_hdr_pop() {
+>     ...
+> 		skb->mac_header += len;
+> 		skb->network_header += len;
+> 		if (trans_same)
+> 			skb->transport_header = skb->network_header;
+>     ...
+> }
+> 
+> When the DECAP_L4 or DECAP_IPXIP flags remove the last tunnel GSO bit,
+> bpf_skb_net_shrink() also clears skb->encapsulation.
+> 
+> Take a locally VXLAN-encapsulated TCP TSO skb whose transport_header
+> points at the outer UDP header. If a tc program calls
+> bpf_skb_adjust_room(skb, -50, BPF_ADJ_ROOM_MAC,
+> BPF_F_ADJ_ROOM_DECAP_L4_UDP | ...), the transport offset ends up at -16
+> and encapsulation is 0.
+> 
+> A simpler BPF_ADJ_ROOM_NET shrink of 40 bytes on a plain Ethernet/IPv4
+> TSO skb gives an offset of -6.
+> 
+> If the program then redirects to egress with bpf_redirect(), this path
+> runs before any of the validators hardened in this patch:
+> 
+> __bpf_tx_skb()
+>   dev_queue_xmit()
+>     __dev_queue_xmit()
+>       qdisc_pkt_len_segs_init()
+> 
+> In that function hdr_len is an unsigned int, so -16 becomes 0xfffffff0.
+> hdr_len + sizeof(struct tcphdr) is then truncated to 4 when passed as the
+> unsigned int len argument of pskb_may_pull(), so the pull succeeds.
+> 
+> Wouldn't __tcp_hdrlen(th) then read about 4GB past skb->data on 64-bit?
+> 
+> Should qdisc_pkt_len_segs_init() get the same check, for example by
+> using skb_transport_header_linear()? If not, could the commit message
+> be changed so it does not say the qdisc path already guards against
+> this?
+> 
+> > +}
+> > +
+> >  static inline u32 skb_network_header_len(const struct sk_buff *skb)
+> >  {
+> >  	DEBUG_NET_WARN_ON_ONCE(!skb_transport_header_was_set(skb));
+> 
+> [ ... ]
+> 
 
-I had the below first as well, but then saw that there were similar issues
-regarding function alignment in the past and they were solved on kconfig
-level, some picks:
 
-- b3f11af9b2ce ("arm64: ftrace: forbid CALL_OPS with CC_OPTIMIZE_FOR_SIZE")
-- a743f26d03a9 ("arm64: ftrace: Don't forbid CALL_OPS+CC_OPTIMIZE_FOR_SIZE with Clang")
-- c41bf4326c7b ("riscv: ftrace: align patchable functions to 4 Byte boundary")
-- 9315e22b0c0a ("arm64: ftrace: allow DIRECT_CALLS without CALL_OPS")
+Indeed. Not nice.
 
-But I can also spin a v2 with the code change instead if preferred.
+Eric, you seem to have strong opinions about how to fix these
+bugs, so, before I spend time testing: a fix like the below, acceptable?
 
->> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
->> index 17d6edf..654c3f2 100644
->> --- a/arch/x86/kernel/ftrace.c
->> +++ b/arch/x86/kernel/ftrace.c
->> @@ -190,11 +190,11 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
->>   	const char *new;
->>
->>   	ip = (unsigned long)(&ftrace_call);
->> -	new = ftrace_call_replace(ip, (unsigned long)func);
->> +	new = text_gen_insn(CALL_INSN_OPCODE, (void *)ip, func);
->>   	smp_text_poke_single((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
->>
->>   	ip = (unsigned long)(&ftrace_regs_call);
->> -	new = ftrace_call_replace(ip, (unsigned long)func);
->> +	new = text_gen_insn(CALL_INSN_OPCODE, (void *)ip, func);
->>   	smp_text_poke_single((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
->>
->>   	return 0;
->> @@ -503,7 +503,7 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
->>
->>   	mutex_lock(&text_mutex);
->>   	/* Do a safe modify in case the trampoline is executing */
->> -	new = ftrace_call_replace(ip, (unsigned long)func);
->> +	new = text_gen_insn(CALL_INSN_OPCODE, (void *)ip, func);
->>   	smp_text_poke_single((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
->>   	mutex_unlock(&text_mutex);
->>   }
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+
+---
+
+diff --git a/net/core/dev.c b/net/core/dev.c
+index e76762e29360..bef7f0a00140 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4174,7 +4174,8 @@ EXPORT_SYMBOL_GPL(validate_xmit_skb_list);
+ static enum skb_drop_reason qdisc_pkt_len_segs_init(struct sk_buff *skb)
+ {
+ 	struct skb_shared_info *shinfo = skb_shinfo(skb);
+-	unsigned int hdr_len, tlen;
++	unsigned int tlen;
++	int hdr_len;
+ 	u16 gso_segs;
+ 
+ 	qdisc_skb_cb(skb)->pkt_len = skb->len;
+@@ -4197,6 +4198,8 @@ static enum skb_drop_reason qdisc_pkt_len_segs_init(struct sk_buff *skb)
+ 	} else {
+ 		hdr_len = skb_inner_transport_offset(skb);
+ 	}
++	if (unlikely(hdr_len < 0))
++		return SKB_NOT_DROPPED_YET;
+ 	/* + transport layer */
+ 	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
+ 		const struct tcphdr *th;
+
+
+
+
+-- 
+MST
+
