@@ -1,80 +1,79 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792926246;
-	b=lhVYB8ldGWxNJK/BVRXpKOYQlw3ZKybq5LlP/yWyLvqqVAVCELonCzdba/qOB0LNwDd3
-	 TGcI5u6e3pSZQMPHOVI7mEg8rT4BZ+ju+PpeBl6DGZ8z8D6CdQPiG6BeLWyDA9AGP/iDo
-	 sYykmhuq7gfeKBp38jsltzyLNX2LZ+7PChXX7aVZuEhm+TveXFi8Jbgr3V+tPyly+zWpA
-	 uMRneuu0Zn2oSLzoYu/PO0P4tXXkt+ljdO+uXhW1xJwB8/3SY2gmfec/+0tyO3N+Bbn6D
-	 omIvvDyDwnZ0BxYNGzI+aouuflPQXvT9/Ehtenpf7T7jZRBBB5AxBkpQFqhxoReSMsw==
+	t=1792926251;
+	b=Dch3v3eACBpiOzJQ3KHsN4nH1DEDXd4WVBbDA3jfO7jaTO4JrGsAIjPvBN8bkvFKxdif
+	 GcFsjUthi8cvBXb4yniRRs3YXkqgOGVRhr5p8sJ5c+FoFY/QQwKNGzbZ+aLTDRt1Sv9uk
+	 ueFzQpb1pAEDKW6jd/4sIYkXbWEOOXMA6bUQsSHGiMjS8lSc4uF/Fkib2rJI+pyI9CurP
+	 shwxRwdiX2SDQcl87BxYc7YAP8QZmz3JhPztRMIFboe2uX2RwJ+QREhUo0Q8vcFJvC4e6
+	 Y8UTEn8PSKRL8Q+Iu2fNW+7/eoVIxfIP+p5/kfLWmR8jpfoM2CW87wPrfHM45upssqg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792926246;
-	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:
-	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=HE4Jx0M2O5Itj9ngGTTbasKCnkUhZR6Ef2q3CTUSEBE=;
-	b=eUVuzgvQgvq4bKZJE1Y8TxvAd07aaf6zChNzdPNayweQZECCmPsdHijcm9YGs/EQW1tY
-	 nyyib7J2j58SlgLARpIljalV4Bf38H7y232Rqd664XB1OY+VVWkq/W8NAg/K7AZWKDRff
-	 3n0NihOpYj7waVPXt0YUwwsLJ3HLSXnN6Zc0pKz0wUW6fNU4VoEeX56Rf7JWKffTxpjN/
-	 R7hQxfuvGKynu9Svx/++rmkVAxPH9Eqh5YokB99iFn7dQEFQShszCIXv0JBP/1c9wbmnd
-	 EOLf8QgNumDX7Hggpg7roChsHc6z5Iw/ClrHNM3tYxGuNqA2wRaJYMY2Vd1H0zkhMcA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792926251;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=ISuBoUvMJ7kEOnnLWzxJks2SuDZwYGjQZJJOiq9GIfU=;
+	b=zO8XAfR75qZc6meHj/B4eKLvAtkL27S9xm8/iQ/hujRp/TCIveA34oSFWRaRO8DC2CCK
+	 3Z16FoO1JG24fg0xwkSb4lPLNPa1IQWRnP3xLs1eUQ25NfSVAhC0N6jHPYocHVZhEENIV
+	 T6W6o8yywNBGN/1nRW0IFxi/KBxdx9vEsnCIocV/011kQDuiC4U3yQ4mIb8t+z8yj+dsg
+	 D+7sk9/EyyZ5jVdDc2Zdt/G6ApEbxI2Xzi4ytVlysG/dR08YkLMf3f8PW6Fy0sgEweg4b
+	 7x25z7LQXWOeI4jkuUm3mBZVtVhl+NmeJTi5/9Ypqf5YgHAzprjOnQyww7WJkH/Nz6w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PGhqSY+0;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XgS9Gnag;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34811606A321;
-	Sun, 25 Oct 2026 11:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21244606A320;
+	Sun, 25 Oct 2026 11:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PGhqSY+0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XgS9Gnag
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1792926246;
-	b=FUhlDT5/ct/xREPezgO8G3r0A55vCa6ytW/eL9DQzvlozfYZKuPg3Ph5BYTidvC9jX/U
-	 MTeT7tYDz6DZcJpBzsXoQ6FgIcBcQiZwr8/1YmFKtuR7+O3oyAJEz1eYuo7I4GyItkoCg
-	 /15ighrlv49Fl/lYjS0OJM5XG0b1220O5ItPT1jm3ff1GxFqW7LFUPwlFJJngt8X5SKdW
-	 oIXwE9VFgA3/2t5beiqzb2HL0ukYzGaCuoPi11AU6M+7SY35OANosJK4pAaaNeFJUffTC
-	 UrK4O3rSxtIP7nDKP5mWI7MldjZ95eKuhZmymxxZ5W2ob8wzIedVXvMSkhRTYIvEtgw==
+	t=1792926245;
+	b=cDGEu7HVkh/nV0lIcfZZAc4gDkZk0DRpamesdHGYBSJduUJoCIOfvUyQQ2bsy2yKAUrf
+	 we7OvrntBxe0LLn/JIM325FeFz8Y2+EFO3zzUpjzNwm0T5VAHDYGmXLvRgGcn+v2X6m4R
+	 mJLdnvxe/u7wvwR9o0cYePLc3Iopb/qnYb0sho0i3CiCl8xz40RHVqwbH3l9VaxwIYNu0
+	 VD2hJjy1+Jx+cgIEbuTl3wxswpezI3NpL9VYFBNK/AEfSzReaexktLQITl7KMnJPFMDBW
+	 omSwIhenyMn8SAJDefIQPrewBt940+ATyG2/STReSXv5MmchzKsbrtWUKcda9o0bmuA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792926246;
-	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:To:Cc:X-Mailer:
+	c=relaxed/relaxed; t=1792926245;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To;
-	bh=HE4Jx0M2O5Itj9ngGTTbasKCnkUhZR6Ef2q3CTUSEBE=;
-	b=ZUNyp4O4w0To7fQsprwkwtR1OW2P9miHqzSFD0gpslKNtV1msZR746zYN08Mm/0s7anH
-	 8eaxwn/svJXilbFLefeW+XLDMGoFmWsnl+613K/H/hZDbq/JZ2fUhlCighlvba/nDg3Wd
-	 JDi65AfE1NZO2pkmqb7x4OmOiGL+/bCz0UDsKwUVqGkzDrNtA982FDUReAxdf2s5J+WwZ
-	 0hKNj81rohgRz/Ygxz5/SmgVUHyPRVJq73J+7uMvz1umW6RNtnlzkEr5dhhadnIZMXgn4
-	 AwZVmKLLB2mdIymeDvMBIOS8xyznwxfWOJ8v3URGh2nAu/L0R+7Tn6OlXC6NBqcR5SQ==
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=ISuBoUvMJ7kEOnnLWzxJks2SuDZwYGjQZJJOiq9GIfU=;
+	b=qguA+Z+O8EEBPeDwco6f+HBwwV963+Skn7gbusydN5JsQCn3azl8pKpgkGRme7XyMuGs
+	 XB4//7ykO627/hQBYY7MXWAbThQDHNOAgMk5WF5MpL1Qun+J+2mx2SiuYhntoytWCnJzs
+	 wOZGRqo+x+jI5NTVDGsihLd5HBgmk10v9e0c2R+/JBlZiZEJa50jENmWiaNHeTKAHyxt8
+	 t9VmHb0sr1ZCebcaaE7KfH7RCHL5D550wYYL/tcGEP4V07GU9P5oNltnGlaWrQ/T5R8TY
+	 jR31MgMK+CmdhzzTwM4FrSy3MllUx37y0TS5y2h+XUveGobRLUh9/RksRB7Fd1I+rTw==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 8F3EC1F01825;
+	by smtp.kernel.org (Postfix) with ESMTPS id 8F4A61F01828;
 	Sun, 25 Oct 2026 11:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792926246;
-	bh=HE4Jx0M2O5Itj9ngGTTbasKCnkUhZR6Ef2q3CTUSEBE=;
-	h=From:Subject:Date:To:Cc:Reply-To;
-	b=PGhqSY+0oF+wbRWh41G/NRDcrFlI4k81ewT97p3BMZiI0YBKcy2XR/ztl37Vsi+Q7
-	 erxkltu4Im8Cz6dmcVy4nDvJbsUk/rG1I/s/B5BOSFZcSTvnErYk1tUH0r5eFc4FXZ
-	 3wJs7yN22vlk6Qpx/L/H59Y3mr2eaLph407YS63wyZ3y06DiyUD+o9I6KIs8BcNBcw
-	 WhHkfmALCGOcwOW2O0CJ1OHrzXGqUwwwG6nHa25V5ZlZH1hRyvG7a9XZwvxvUOTHXz
-	 Sqnu5ZkdKda7mksSE10wkDERU4M1bbYOjaOKn3F3ye6/3JsEHnUcYZOXzmkocAt+Dl
-	 ZZylREIePaHHQ==
+	s=k20260515; t=1792926245;
+	bh=ISuBoUvMJ7kEOnnLWzxJks2SuDZwYGjQZJJOiq9GIfU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=XgS9GnagqR1ifM5j3z/6PnsICs3XEV6r4nDIDoJwwcrIJ6d3JHj9qqN5RVWyE/oSa
+	 WXFrF4guytrzZNrjE8Z/mQzzaXnTiFZJXbN+H9vA1S7PGIQjXviQ2c0bnuPdn39p7a
+	 4VU0IxkB11MysUnxcyjG5o9aE0CauTU3SScaitEWeXZfV4VQEreblrngsiUL9W1o7Q
+	 6WlE1NPOFw8PLatq5/lILFmyWsV88BkKCnrBWqZd1Lquri1MvBMsq9s5A+ynMgKrQe
+	 CKTmTCwRO/Tb65xm3BPCwA/wQMJEM1nD+EIwPz4GBim6JvS4b4yodbwtVcohJStC3f
+	 kQzEGEdZe1teQ==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id E49AC449E7;
+	by lkml.kernel.org (Postfix) with ESMTP id F3729449B4;
 	Sun, 25 Oct 2026 11:04:03 +0000 (UTC)
 From: Mike Bazov via B4 Relay <devnull+mikeba.sentinelone.com@kernel.org>
-Subject: [PATCH RFC bpf-next 0/2] bpf: Do not let preemption cause false
- recursion drops in trampoline progs
-Date: Sun, 25 Oct 2026 13:02:57 +0200
-Message-Id: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+Date: Sun, 25 Oct 2026 13:02:58 +0200
+Subject: [PATCH RFC bpf-next 1/2] bpf: Keep recursion-checked trampoline
+ programs non-preemptible on !PREEMPT_RT
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -85,10 +84,9 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOLh3WoC/x2MQQqDMBQFryJ/3Q8mWE27LfQA3ZYuoj7thxpDE
- oog3t3ocgZmVooIgkj3YqWAv0SZXQZ1Kaj7WjeCpc9MutS1KvWV24pbP3AKdvLzTxzYB2Dyia2
- qVGNuxhr0lPvsB1nO95tez8fhjtRhSfTZth2fjKKzfAAAAA==
+Message-Id: <20261025-b4-bpf-trampoline-preempt-v1-1-198dcdc0c6ac@sentinelone.com>
+References: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
+In-Reply-To: <20261025-b4-bpf-trampoline-preempt-v1-0-198dcdc0c6ac@sentinelone.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
 Cc: Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -99,225 +97,100 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mike Bazov <mikeba@sentinelone.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1792926242; l=9082;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1792926242; l=3369;
  i=mikeba@sentinelone.com; s=20261022; h=from:subject:message-id;
- bh=75UQ+QrC7KlIgE8x2+nWzHWRN7CbqCTK/qMOGy0MIe4=;
- b=cXo8/qjYGeZesl4tLjcsQl3LZg5928jT7pT1hgmFq0KIhnr9E2AxbAldDMUGb2Ed5pf/dWNbU
- GZTEHrIgK4eBby7dAKYJJGDzo7T5t1R8bj+AguTregHXRhOvQ2ZZiCr
+ bh=im30M5hxZEzaHqyEhAAnmhe/8ENnb4qNYKDcXtbtVVo=;
+ b=GrLfHA1TCeRD1/d8BI/1u+pE6udJo7/utUi8Et3C/aczd72dGCkpJjvj6+21yG6GPVJsVToff
+ tgyp5k/12nuBMhR/8xDWMNTdHniBbK+QYY7GABsqk2+s73MsjpXNA9f
 X-Developer-Key: i=mikeba@sentinelone.com; a=ed25519;
  pk=DBXcQ0qoCkgacRsRwT1JU7oOWpWSYuTyLiXMfNLcP+A=
 X-Endpoint-Received: by B4 Relay for mikeba@sentinelone.com/20261022 with
  auth_id=1284
 X-Original-From: Mike Bazov <mikeba@sentinelone.com>
 Reply-To: mikeba@sentinelone.com
+Content-Transfer-Encoding: 7bit
 
-Problem
-=======
+From: Mike Bazov <mikeba@sentinelone.com>
 
-Non-sleepable fentry and fexit BPF programs silently skip invocations
-from unrelated tasks whenever the task currently executing the program
-on that CPU is preempted. Every skipped invocation is counted in
-prog->stats->recursion_misses, even though no recursion occurred.
+__bpf_prog_enter_recur() acquires the per-CPU recursion counter
+(prog->active) under rcu_read_lock_dont_migrate(), which disables CPU
+migration but leaves preemption enabled.
 
-In __bpf_prog_enter_recur() (kernel/bpf/trampoline.c), the per-CPU
-recursion counter prog->active is acquired under
-rcu_read_lock_dont_migrate(), which disables CPU migration but leaves
-preemption enabled:
+When a task executing a non-sleepable fentry/fexit program on CPU N is
+preempted mid-program, prog->active remains 1 on CPU N while the
+preempted task is off-CPU. Any unrelated task scheduled onto CPU N that
+triggers the same hook observes prog->active != 1 in
+bpf_prog_get_recursion_context(), increments recursion_misses, and has
+its BPF program invocation silently skipped, even though no recursion
+occurred.
 
-  CPU N
-  -----
-  Task A enters fentry/foo -> prog->active on CPU N becomes 1
-  Task A is preempted mid-program on CPU N (prog->active stays 1)
-  Task B runs on CPU N, calls foo() -> __bpf_prog_enter_recur()
-    bpf_prog_get_recursion_context() sees prog->active == 2 != 1
-    increments recursion_misses and returns 0 (skips BPF program)
-  Task A resumes on CPU N, finishes, drops prog->active to 0
-
-Before Linux 7.0 this was hidden on most distribution kernels because
-they defaulted to PREEMPT_VOLUNTARY, and non-sleepable BPF programs
-contain no voluntary preemption points. Commit 7dadeaa6e851 ("sched:
+Before Linux 7.0 this was mostly masked on distribution kernels that
+defaulted to PREEMPT_VOLUNTARY, because non-sleepable BPF programs
+contain no voluntary scheduling points. Commit 7dadeaa6e851 ("sched:
 Further restrict the preemption modes") removed PREEMPT_NONE and
-PREEMPT_VOLUNTARY on x86 and arm64, leaving only lazy and full
-preemption. As a result, every distribution kernel on 7.0+ now preempts
-tasks inside non-sleepable fentry/fexit programs during normal operation
-and silently drops unrelated tasks' events on the same CPU.
+PREEMPT_VOLUNTARY on x86 and arm64, so every distribution kernel now
+runs with lazy or full preemption and triggers these false recursion
+drops during normal multi-task execution on the same CPU.
 
-BPF program authors cannot work around this from inside the program:
-prog->active is tested by the trampoline before the first BPF
-instruction executes, and bpf_preempt_disable() cannot span tail calls.
-By contrast, kprobes and classic perf tracepoints run BPF programs with
-preemption disabled (trace_call_bpf() asserts cant_sleep(), and commit
-16718274ee75 ("tracing: perf: Have perf tracepoint callbacks always
-disable preemption") explicitly kept preemption disabled for perf
-tracepoint callbacks), so the same BPF logic has different completeness
-guarantees depending solely on whether it attaches via fentry/fexit or
-kprobe/tracepoint.
+Simply switching prog->active to per-task tracking is not sufficient:
+since commit a76ab5731e32 ("bpf: Find eligible subprogs for private
+stack support"), recursion-checked trampoline programs also rely on
+prog->active to guarantee exclusive ownership of the single per-CPU
+private stack (prog->aux->priv_stack_ptr), as well as per-CPU scratch
+maps.
 
-Why This Matters in Practice
-============================
+Match the guarantee already provided by kprobe and classic perf
+tracepoint BPF callbacks (commit 16718274ee75 ("tracing: perf: Have perf
+tracepoint callbacks always disable preemption")) by disabling
+preemption in __bpf_prog_enter_recur() / __bpf_prog_exit_recur() when
+!IS_ENABLED(CONFIG_PREEMPT_RT). This preserves preemptible BPF execution
+on PREEMPT_RT while eliminating false recursion drops and protecting
+per-CPU private stacks on non-RT kernels.
 
-We hit this in a production security agent that attaches paired
-fentry/fexit probes to inet_sendmsg(), inet6_sendmsg(), inet_recvmsg(),
-and inet6_recvmsg() to inspect stateful application-layer protocols:
-
-1. Broken entry/exit pairing: the fentry program snapshots the msghdr /
-   iov_iter state into per-socket storage and the fexit program consumes
-   that snapshot once the call completes with the byte count. Because
-   each program has its own prog->active counter, preemption skips one
-   half of the pair independently -- either dropping the payload and
-   leaving stale per-socket state (when fexit is skipped) or losing the
-   capture entirely (when fentry is skipped).
-2. Broken stateful protocol parsing: for stateful protocols (HTTP/1.1
-   keep-alive/pipelining/chunked framing, HTTP/2 header state, database
-   wire protocols, or per-session first-message classification), a
-   single skipped sendmsg/recvmsg call desynchronizes the state machine
-   for the remainder of the connection.
-3. Kprobes are not a drop-in replacement: on hot socket paths fentry is
-   ~2x faster than kprobe (40M/s vs 20M/s in trig-fentry vs trig-kprobe),
-   and kretprobe relies on a fixed maxactive instance pool that can be
-   exhausted on blocking calls like inet_recvmsg().
-
-Minimal Standalone Reproducer (47 lines)
-========================================
-
-repro.bpf.c:
-
-  #include <linux/bpf.h>
-  #include <bpf/bpf_helpers.h>
-
-  char LICENSE[] SEC("license") = "GPL";
-  static int cb(__u32 i, void *ctx) { return 0; }
-
-  SEC("fentry/__set_task_comm")
-  int on_fentry(void *ctx) { bpf_loop(1000000, cb, NULL, 0); return 0; }
-
-  SEC("fexit/__set_task_comm")
-  int on_fexit(void *ctx) { bpf_loop(1000000, cb, NULL, 0); return 0; }
-
-repro.c:
-
-  #define _GNU_SOURCE
-  #include <sched.h>
-  #include <stdio.h>
-  #include <unistd.h>
-  #include <sys/prctl.h>
-  #include <sys/wait.h>
-  #include <bpf/bpf.h>
-  #include <bpf/libbpf.h>
-  #include "repro.skel.h"
-
-  int main(void)
-  {
-      int stats = bpf_enable_stats(BPF_STATS_RUN_TIME);
-      struct repro *skel = repro__open_and_load();
-      struct bpf_program *p;
-      cpu_set_t cpu;
-
-      repro__attach(skel);
-      CPU_ZERO(&cpu);
-      CPU_SET(sched_getcpu(), &cpu);
-      sched_setaffinity(0, sizeof(cpu), &cpu);
-
-      pid_t pid = fork();
-      for (int i = 0; i < 100; i++) {
-          prctl(PR_SET_NAME, "repro");
-          if (!pid) usleep(50);
-      }
-      if (!pid)
-          return 0;
-      wait(NULL);
-
-      bpf_object__for_each_program(p, skel->obj) {
-          struct bpf_prog_info info = {};
-          __u32 len = sizeof(info);
-
-          bpf_prog_get_info_by_fd(bpf_program__fd(p), &info, &len);
-          printf("%-9s expected=200 run_cnt=%-4llu recursion_misses=%llu\n",
-                 bpf_program__name(p), info.run_cnt, info.recursion_misses);
-      }
-      repro__destroy(skel);
-      close(stats);
-  }
-
-Results across 10 runs (2,000 total calls per probe) on the same x86_64
-VM, comparing unmodified mainline (a804c5742bff) with this series:
-
-  Kernel & Preemption Mode        fentry skipped       fexit skipped
-  -----------------------------   ------------------   ------------------
-  6.8.0-55 stock (voluntary)         0 / 1000 ( 0%)       0 / 1000 ( 0%)
-  6.8.0-55 stock (full)            254 / 1000 (25%)     263 / 1000 (26%)
-  7.3.0 mainline (lazy)            553 / 2000 (28%)     691 / 2000 (35%)
-  7.3.0 mainline (full)            694 / 2000 (35%)     713 / 2000 (36%)
-  7.3.0 + patch  (lazy)              0 / 2000 ( 0%)       0 / 2000 ( 0%)
-  7.3.0 + patch  (full)              0 / 2000 ( 0%)       0 / 2000 ( 0%)
-
-Why This Fix (and Why Not Per-Task Recursion Tracking)
-======================================================
-
-Relaxing prog->active to check whether current is the same task would
-not be safe on its own:
-
-1. Per-CPU private stack: since commit a76ab5731e32 ("bpf: Find eligible
-   subprogs for private stack support"), recursion-checked trampoline
-   programs allocate a single per-CPU private stack
-   (prog->aux->priv_stack_ptr) and rely on prog->active to guarantee
-   that at most one task on a CPU uses that stack at a time. Allowing a
-   second task on the same CPU to enter the program while the first task
-   is preempted would corrupt the first task's private stack frames.
-2. Per-CPU scratch maps: existing fentry/fexit programs rely on the
-   same per-CPU non-reentrancy guarantee when building events in
-   BPF_MAP_TYPE_PERCPU_ARRAY scratch buffers.
-
-Therefore, Patch 1 disables preemption (preempt_disable_notrace() +
-rcu_read_lock()) in __bpf_prog_enter_recur() / __bpf_prog_exit_recur()
-when !IS_ENABLED(CONFIG_PREEMPT_RT), matching classic perf tracepoint
-and kprobe BPF execution while leaving PREEMPT_RT and sleepable
-trampoline programs (__bpf_prog_enter_sleepable_recur) unchanged.
-
-Testing
-=======
-
-- A/B reproducer above on mainline 7.3 (lazy and full preemption):
-  drops go from 28-36% to 0%.
-- True same-task recursion (fentry/htab_map_delete_elem deleting from
-  its own map, as in prog_tests/recursion.c): still blocked 10/10 times.
-- Debug kernel with CONFIG_DEBUG_ATOMIC_SLEEP=y, CONFIG_DEBUG_PREEMPT=y,
-  CONFIG_PROVE_LOCKING=y, and CONFIG_PROVE_RCU=y: zero lockdep, RCU, or
-  atomic-sleep warnings across both the reproducer and the full
-  test_progs run (debug_locks remains 1).
-- Full test_progs A/B comparison on mainline 7.3: zero new failures
-  introduced; all fentry/fexit/trampoline/recursion test suites pass.
-- Selftests bench trigger throughput (3 x 5s runs, pinned producer):
-    trig-fentry:  39.93M/s (base) -> 42.05M/s (patched)
-    trig-fexit:   31.98M/s (base) -> 33.54M/s (patched)
-- CONFIG_PREEMPT_RT=y kernel (7.3.0-rt): builds cleanly with W=1; booted
-  and verified that trampoline_preempt skips via __kconfig while the
-  recursion selftest passes.
-
-Question for Discussion
-=======================
-
-Is disabling preemption in __bpf_prog_enter_recur() on !PREEMPT_RT the
-preferred fix for fentry/fexit, or would you prefer a different
-mechanism for reconciling preemptible execution with prog->active and
-the per-CPU private stack?
-
+Fixes: ca06f55b9002 ("bpf: Add per-program recursion prevention mechanism")
+Assisted-by: Devin:gemini-4-argon-high
 Signed-off-by: Mike Bazov <mikeba@sentinelone.com>
 ---
-Mike Bazov (2):
-      bpf: Keep recursion-checked trampoline programs non-preemptible on !PREEMPT_RT
-      selftests/bpf: Add trampoline preemption false-recursion test
+ kernel/bpf/trampoline.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
- kernel/bpf/trampoline.c                            |  17 +-
- .../selftests/bpf/prog_tests/trampoline_preempt.c  | 222 +++++++++++++++++++++
- .../selftests/bpf/progs/trampoline_preempt.c       |  56 ++++++
- 3 files changed, 293 insertions(+), 2 deletions(-)
----
-base-commit: a804c5742bff224d4cb4d25dd383554d598be32b
-change-id: 20261025-b4-bpf-trampoline-preempt-a1417898a8ed
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index bf4cb3dd444d..632c104112b2 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -1339,7 +1339,15 @@ static __always_inline u64 notrace bpf_prog_start_time(void)
+ static u64 notrace __bpf_prog_enter_recur(struct bpf_prog *prog, struct bpf_tramp_run_ctx *run_ctx)
+ 	__acquires(RCU)
+ {
+-	rcu_read_lock_dont_migrate();
++	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
++		rcu_read_lock_dont_migrate();
++	} else {
++		/* prog->active and the private stack are per-CPU: don't let
++		 * another task run on this CPU while we hold them.
++		 */
++		preempt_disable_notrace();
++		rcu_read_lock();
++	}
+ 
+ 	run_ctx->saved_run_ctx = bpf_set_run_ctx(&run_ctx->run_ctx);
+ 
+@@ -1388,7 +1396,12 @@ static void notrace __bpf_prog_exit_recur(struct bpf_prog *prog, u64 start,
+ 
+ 	update_prog_stats(prog, start);
+ 	bpf_prog_put_recursion_context(prog);
+-	rcu_read_unlock_migrate();
++	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
++		rcu_read_unlock_migrate();
++	} else {
++		rcu_read_unlock();
++		preempt_enable_notrace();
++	}
+ }
+ 
+ static u64 notrace __bpf_prog_enter_lsm_cgroup(struct bpf_prog *prog,
 
-Best regards,
 -- 
-Mike Bazov <mikeba@sentinelone.com>
+2.43.0
 
 
