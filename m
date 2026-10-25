@@ -1,47 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792959640;
-	b=ynX8M1xlOZPHkqn6b1tR+YvvcZLZHAQZjUO4Hwt4L9BDHk/A5a/+xaI5PXwNHvAIwC2/
-	 sNfrpDNaGPYyDhg6ZAgZB6CXDrdXFsXbvtjK3maV/xVNNZqaCxtgVuN1DpJWNZnk58YXx
-	 oeoMmkwO70ZRdDi06m7Ge7J38S7V9mTYzruGNDwWIMn/JnDlgBYQR1NLxRcOE3wURrjDm
-	 HDw1WuruP37ZsEOXf8byj1pRNew3TC1984DrtjbUoVSf9mPzIetURDLJ1ZCdchQUNnQlC
-	 Gl93Dp+PNp+alVqQC2vt9DBT4vPcYHIXeV1lGJ3CZ75bHDDHOwppKFpq5PVW5u/L2Ug==
+	t=1792965314;
+	b=3b2vyXPpvdmYtSL+5kYosTFxVFEwTbQ70Jsn0hL5UrUsMtutWGQSM8hA/oIOajxgnL58
+	 P6bibo04UhaqulJ+lQ/H1eZAxot14Uphw0BAV5fYw1fl5hRiPGYCCUNTH+9kslTDhaDfX
+	 wfAfUCd3UbJXA15SFUyWDKaVROs7vw/8qd+O9slGO6dO/1jfeSw2NkZMHy6gwrXkJx7fG
+	 7J6g8OlkDeEls2FA3ZewUL7AmvHoifPSkyO2LjEpIhgZOHMETr6H7BRAmfX1A+HWUcLPZ
+	 Hz+XBoqGu7O4jE5DP873fi+iBRyA2kjNLC/RntEZ4TnPMTaJQbevRszGAMMcGX4jekg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792959640;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:Autocrypt:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=pTFtW/TKWLkTwiR6xWWBlEqf5jzq3pCBP93iDmWfJFc=;
-	b=avw1TJMzlTYTmkX65kEfSffbpeWGbCrT2l1jiRd8dVo2AVLlW0xSBtagyzn5NHE/5THP
-	 vSUwRvv3tkAqVtuP66U17D//XOldLPQr4jOSayCsA/wDbSqltZ+WTZSeVfGjfQj29M4mr
-	 GVCsAjNfLN3AA24YKykTWqbd4MS9VkjJl5R95FFaIcOkKBlONNXuM74nTByUT3AokJgUp
-	 mPXB8/OY+cxf5qlYKXRrQmD/A/3/8X06/igYGHqTWHJQzb8O9BL/EdXM7Aj4CdR5oQhaZ
-	 84mGGbopBhFoFyucMgcje56qZ7Luon10qIr4ZjvR6BdMKPIpZfF/MyeSgXKHqB30+sw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792965314;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Content-Type;
+	bh=Zt7QpncNg8RgMDpa8gtNEv/aMDccF33cLy1R11uT760=;
+	b=vULJvvBuSjQcgxhgomKMfswt4NwRAThvJ4kt1RuvRLcsB16aNO3ee6rZLfbgNnJ3mcew
+	 sWc4KJSJVCBpOKu6OmAN4kPATAvsdXwe+92sCXs7BPTnrKLiVSHQAzwQtOQMFB9J0vnoH
+	 LlC7W4vuQC6kp5V1HaYp+L88y6W5wlsPdjjQr9Dg0sznu1+IN91z83lmZkOvGOU0jaJNo
+	 N0c7jMtGj4iGwlD+mwiuU1aRpdEFZdsB7btYCPmdgV+xJqYmEW1iWOLiCbjpgaGcrdNEe
+	 wvBNrzhiTtNkGa3XnIydO/Py8O0ay4okDIKNDvuiyWfVspGe99r8LBzx9FPFaBIXifg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="j1gVT/nK";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--irogers.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=QK9pL7Po;
+	arc=none smtp.remote-ip=74.125.82.199
+Received: from mail-dy1-f199.google.com (mail-dy1-f199.google.com [74.125.82.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DDC606A31A;
-	Sun, 25 Oct 2026 20:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF5F606A31D
+	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 21:55:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7EF5F606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=j1gVT/nK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BBC01F031E4;
-	Sun, 25 Oct 2026 20:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792959639;
-	bh=pTFtW/TKWLkTwiR6xWWBlEqf5jzq3pCBP93iDmWfJFc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=j1gVT/nKNhO2IyuskMUAiJ1oAHVhAD17eOH7/kKsSQjiSelbjMLsDMYLsnoZZ+ocl
-	 Jx8EXT/xZZ22uXPzCnjKtmy5T1SjeptGr/Rms8mCcvsM7FEJe0qMZ9FvbLsOuZQsk/
-	 aFMTscNp7TFm0RGG4Lh16YlyWwn8NxvTPxBmzqp9R6dfzYUEfEpxLsq1+ihoIL+vTM
-	 I1L/COd+h6vL+BnYvlwLO3jbDoHxQtdWYOe6ifRe8wCuXTJ3AfmGTUSkcapOqsH7dM
-	 RGZtUADdl5YVvCvT0ViqjkjmCnsSF2hobr+7pGA75RpRCYEmUNpVe1UCHrH2HaGnpI
-	 Lcz098gERiP7Q==
-Message-ID: <2c3750cf-58e2-4b18-8f5d-8ccb010d2c2d@kernel.org>
-Date: Sun, 25 Oct 2026 21:20:32 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=QK9pL7Po
+Received: by mail-dy1-f199.google.com with SMTP id 5a478bee46e88-35cbea41088so3826437eec.1
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 14:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792965313; x=1793570113; darn=vger.kernel.org;
+        h=content-type:to:from:subject:message-id:mime-version:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Zt7QpncNg8RgMDpa8gtNEv/aMDccF33cLy1R11uT760=;
+        b=QK9pL7Pokm+Dr16jmVw+fckfMh7IrOQTGJYQHgRFKgn+qoPBYNzIV1kr7LgemD5w2G
+         oQCEE/eENURG4JP0BAe/uGqnpu9sDhyqsWA2d8YzLCjvdaJDgVWP2ivwNZ5fss48HWpz
+         b6xiCrqONmQzzUqhwkHr0/fb8gZDPuzkvNwIE0y0b0f1VH5OQCfIeIW5Y0SYjqq+BIqN
+         rGVET2A3C8DiB40mw6ay+S8gISusBgr7odUZC57LZgK/4bHqsE23i4znfCUODXZcXrqM
+         Q3QEz4zzcs5U34P14xyRVUYdKayMguiY3IyYJ5TvUtsFfVXixv3ch7fDg97Wu73tHpmu
+         5+lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792965313; x=1793570113;
+        h=content-type:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Zt7QpncNg8RgMDpa8gtNEv/aMDccF33cLy1R11uT760=;
+        b=0rpzs5KdrWY0LqPbgUWt5KsrQbd3GWdtbg0MxEciHKgJycKYCtPU8WiKpSGKAgtjOl
+         eb8nY4mjChMsVeZCd9wXlrGsJjv+Pw0jp732iT2bw0gC6FiKNWkhsq+bGMGFhPMdQKUB
+         PkHy9v0Ab7A/OiFE955KGWtKLF7AF0Moe6nAgDnbjSYUobS6WdvvN4We5HgkyaWSTzaY
+         NvgnKwBSPvKl5hyRF1p2ZcTckE52FcgBbNeRiiVVNYyL8hsw5rIh4QZzys9BwGkvR8qi
+         1jwjzM79InWffSub16AcLAUTeTzoTVvwGh0oomqfxaJxFMhTmepVnzr1sm7XxoQUbsMQ
+         fpVg==
+X-Forwarded-Encrypted: i=1; AKwUvBwn/XipIj34SRAVRtg3NeXoKzUJT+R+Kdj5pu7dNja2bbQPS/R9SNwNiBLS/D2vY21xqKM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKyZgC5TetK4w+6PeIn1fbLa/cH6Try6gK2e96zmP6RemYbg4ix
+	msn0VNJ7Uv7GWFKALYklppu5KUAf555rgXroWGqLxeHf26VTN3fKna9pG/3Oq0dQSvMgdJVs2+V
+	1gq23Ugl7wg==
+X-Received: from dlbou3.prod.google.com ([2002:a05:7022:1103:b0:19b:4a9b:8cc1])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:e803:b0:16e:4723:5f86
+ with SMTP id a92af1059eb24-19936a60764mr8643547c88.29.1792965312166; Sun, 25
+ Oct 2026 14:55:12 -0700 (PDT)
+Date: Sun, 25 Oct 2026 14:55:07 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -50,86 +75,45 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] docs: changes.rst: set the pahole minimum back to 1.22
-To: Mark Severson <gr3yf0x87@skyn3tlab.com>, Jonathan Corbet
- <corbet@lwn.net>, Federico Vaga <federico.vaga@vaga.pv.it>
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- workflows@vger.kernel.org, linux-doc@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com>
- <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <20261022014811.2803450-1-gr3yf0x87@skyn3tlab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
+Message-ID: <20261025215508.1237480-1-irogers@google.com>
+Subject: [PATCH v1 1/2] perf/core: Include attr.defer_output in is_sb_event()
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 22/10/2026 03:48, Mark Severson wrote:
-> Fixes: fd5425b67355 ("docs, resolve_btfids: Document kfunc BTF annotation emission")
-> Assisted-by: Claude
-> Signed-off-by: Mark Severson <gr3yf0x87@skyn3tlab.com>
-> ---
-> v2:
-> - Also remove the Italian translation's copy of the KF_IMPLICIT_ARGS /
->   pahole 1.26 paragraph, which fd5425b67355 removed from the English
->   document only; v1 left the Italian text contradicting its own table.
->   Found by the Sashiko review of v1.
-> v1: https://lore.kernel.org/all/20261022013432.2638010-1-gr3yf0x87@skyn3tlab.com/
-> 
-> checkpatch reports the Assisted-by tag as non-standard; it follows the
-> Attribution section of Documentation/process/coding-assistants.rst as
-> published on docs.kernel.org. Not run: make htmldocs; the change keeps
-> the table's column widths and removes a whole paragraph.
+Events configured with attr.defer_output = 1 receive deferred callchain
+sideband records (PERF_RECORD_CALLCHAIN_DEFERRED) via perf_iterate_sb().
+Include attr->defer_output in is_sb_event() so that such events are
+attached to the sideband event list even when no other sideband flags
+(such as mmap or comm) are enabled on the event.
 
-As checkpatch asked you, drop the tag. Claude is anyway wrong value for
-it (older value was LLM).
+Fixes: c69993ecdd4d ("perf: Support deferred user unwind")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ kernel/events/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index c4217c996f5a..b43883a42566 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -5347,7 +5347,7 @@ static bool is_sb_event(struct perf_event *event)
+ 	    attr->comm || attr->comm_exec ||
+ 	    attr->task || attr->ksymbol ||
+ 	    attr->context_switch || attr->text_poke ||
+-	    attr->bpf_event)
++	    attr->bpf_event || attr->defer_output)
+ 		return true;
+ 
+ 	return false;
+-- 
+2.56.0.307.g5fe7bd680c-goog
+
