@@ -1,101 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.182
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792905049;
-	b=kzRuDdTqOcE1j/seRdZ6LF348dDzvgijynYK60HstCLJ6tKtlCGtn7YhzASGuLrgrQrp
-	 +qwaw43nH1jN0RojqZ8RQiRLtx+q83QxUcl+o+bQHiAXgk3Ajw9olizeuiNnwxar7QvmP
-	 aBLdAljg9piUpXEVnUbkIozy796VyBRGrAmgEC42D+JhaWYIjMH3RsfBpDEB+XoO6H7m9
-	 I1dylfgGjlO6kC5BZzSK41dm59bd0Jte9mBUopPjk0FFV+BLpuDyoM7oihJi3bZr+3Aaz
-	 KAhKEP3oJQneevwSdZ219YmqFC+SuyXQyBCUjLk8RC69Uiys1jHP46M+HZfZDFwOnog==
+	t=1792905887;
+	b=KkeHR4t6C/nlVR1T9tqa71tx+5Y255b7id+rqOaXPPChT5HYJ2VwamM3H3zj8Ztnjbmm
+	 oeaP8v56Zdr6RzNBtiNzLuqh8u9t7NNw/EqJJVsmyoTsB5a9WbZq0r/unqzAMmnZ7qxaD
+	 Ae1OR8Y+rPOIeYjS8bbAhBP1iMNxHb5A/R6+hNhqZzGYDnD1cL/o+ySC3uLD5gAi1ebtn
+	 wy0s5RDcooeCp0qUO2mUfhjcPLPxyLuoJCoGWBppkqgum3yN5aHExE88jdMLqhSp9Y1Yr
+	 HPnsMeb8lpXitzUoxOILtuzbKo8tlYUBcO920gwQlxWEynuI7StFDksfo88gD4Jd2+g==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792905049;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792905887;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
-	b=ygBXKFlFoB8wC03YcYS9/JwgOLh0q/lY3g8S28zJobyPj54iD0ZVzgHzca9Xc76k1K3V
-	 kGFQoxWtztOQ5qtchdePbBNoyUurlqHK6ohPsyoTLigae6u+h0pG3sNQ0DHTBmE4n9IOA
-	 jOtDXeLT+Z25LRfzUXTTLkbPMkl9ZC1R6XcF0X9hZIAtf7BjQFwJiUVakNSypid5aUELj
-	 UVe0jgBI1DoRQmNakkB1MQhE/PX3rPggjuR9S4W4sH+nIiCpR5UjAaFidFZrgHNd/fCUV
-	 I54P37rp+sdC1PCiNzlCqnZd8Lqr4lZCuU4zX+vRiD+pAhSZugKNagTPQ/4YaK0dlSQ==
+	bh=JmvqmuS3RCRgSY960jsRVEbpfVE9FxMYov5P7FF7wYA=;
+	b=XzaWBrPKTuj8mY1XIF6T8Ah2D/8I4H5wcrHU+2Q8C5sDkKI6daEc9s6ivlyV97mRjLt1
+	 DSImTmVuKEmU6DSC/llTlG3ADu8W3NOEe1MJm2Nc/P1xvcTanSixC0JBiNM9/H06kanRk
+	 mLoKORlY3YC2ROVKDfRQ3i/CA7a7Ir1injqMLo/MRs3W6gF3d63j6cRk0I904uS4MQlcE
+	 yutuvV7YvnyzOPuUo6ginpl8LnotRuStmKxgME4xYQOfvU5A0w1jM0ltOGYz2iU8AD10n
+	 07wiDqzKf0vSPoIU0xwotsZ8xzxribOxL4ULVAcbNOJJLhgHcBUaUFctE5gyjLcIK+A==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Q6lUOAKf;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.171
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="XD97Po/b";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.182
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D156606A31A
-	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 05:10:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D156606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7E7606A31B
+	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 05:24:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC7E7606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Q6lUOAKf
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e8b20a899fso11766565ad.1
-        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 22:10:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792905049; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XD97Po/b
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2e8f2c3ad6bso12792775ad.1
+        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 22:24:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792905886; cv=none;
         d=google.com; s=arc-20260327;
-        b=raZicvOXvnzAtVWUk0Y+k0Qvi5dpxdwLpUsoGe0/Q0UBcLWoXhBSm0hM8xTrtWI0wm
-         05n/zvtsvQYOZiXLh244n3jmcwTaJZh9WtzRibRnLX92UThlk+Uk2xdgVXC6fn4KcOGe
-         +RGyOwDHWA+pLezLIQlRpwvMKhRJtYNkwgIdy+0LjaEcG6/QTr+HrLQ2h1keQ6Y/ztil
-         lUvxrfOWyCK6SR8BSMkXlsu+2k3wQiAfuuAMHDbZfzoxkqdq/wOWofYgqET/InvXE5Gg
-         kUJsqVbz/xEGK0LdY8czrIM13pWl8dN5ZTcrt/Nv+bBNQRUsiRTtXJZAIolbAvXefw8Z
-         ucMw==
+        b=AO/G6DFgtHxz+AsLy/PIlyDyRMmAwa9kVScj4J91O3j/BHapvLQdIL/8a5rb97LJfA
+         mHM5pjKqIH+n383ivv77Q0ZlbvAjGxjK0lcmz3frg6ue2AkAnyIyiXN1QNirvljIE6fU
+         hV/VDd+ctD3w/8fpK1bVohih4zS7xhZJxROfLIB9g+yHWBrnoVMFpnHd1TBDGgnHyG3N
+         QwBLq5OEqNEeOf+9+B+EyoX46KM+a3E2zYW+b/4OhplQN07hoG7zKLNk8pJbfqCGbjcu
+         Pcl+VljO2x5t/GDZCX0Cgk3t1E7mkFVFFnvGb9O1EBaR1sBj8LAD92xr1HWMQo36SyZI
+         Ornw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
-        fh=bSPJnovnuUroZ2uN1+F9ONA+s4cy/SXPPEI0oSUQ9to=;
-        b=mXC5JkeLb4wo6C6dS1F7Uc0i03miW/mp6kWqv4JXe1RB+CBcbjjy4Tkf9zHY/tIyEz
-         0CZorZva0LK7/5A9HZ7PLhnou45BHWsalr7gngADPAD70CTn6jmZdBQ2G89DtGQwrmiB
-         SX5xpUSm3qm8bki55q5+eZCaJk667/+rVy8fA7R2XP0giTPl6Z8qB6uMbVzblaNsLXAP
-         FERNkISOYPUs2+g7/uSGADe+YhS25boloHnzdNdDPM4GhzqjFWeezjts7TYVLtIACbli
-         3f1p2SX0J05nrC1KzjVVnKFBVPJAOIT8q4nOWFe4GUmZVQy1W4PX1gTnCc9AleSPw1qr
-         480A==;
+        bh=JmvqmuS3RCRgSY960jsRVEbpfVE9FxMYov5P7FF7wYA=;
+        fh=Mofsf32okvksuebGt9ZocbUw8bNHDNNLAzAXOxVFoO8=;
+        b=UFr4FGLFrF/vpaso7xS1xO0oLVdR2pJfPoCegEfJgn+bBeK+vxMZEotWLQ2Y1qmDeU
+         b4ZRRAatuWwd9pVccgHaePlNg3HSAIydgdIJrPPkHGEGxVCxUvzoedzSE3fXuSspSl8Z
+         JYCOlAWjPpj/ypjvea5V7eQ19wwDtfoGRb/RUYoymLW1Vs4UZoyUWsE8pXUJSEyFx1XL
+         B+mWLYFZii+Q7n4XPQgF4DlPw8pQfpXTI2O9j++f4aiFu+kVG3wVlehChkjnXNUwZCtP
+         yjsiVWTPjygUrW+xfDGHrO9XMkm4yDoIlJGRm8WQDbAq58I1lKm7k63Z5/1k9iD0CLQC
+         QZYg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792905049; x=1793509849; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792905886; x=1793510686; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
-        b=Q6lUOAKfyFlp+V1zGTNXPJBCHRDgoRq0CSPXMp0fhXRzC75n7MbA3774SpJtdNT18z
-         MiukDtWWcgGF8s3FXYiYn7qRU43HLduAB3MvKJK4b+BAXIjDoP2dAvuAzeZuGVtBEpjG
-         EG9mr8/ZcKtTEzd496D/evjqGp5Oc3SrZXMKxtXdM46EZikChUV/9WnKb7FBhWIz/rHh
-         r10URtDuodiq+KLF2iWUKs4l0OS/exzoVg0HO7aPMzHLc/2PfXTdTRr85T79tXThhplw
-         X7pDDd5Qu5N7pKTBaKt04+pK/oPUWFC/U7Z5E5Aj87dpQUrVON4L3BBEPoMjV6LM+AVQ
-         6yiQ==
+        bh=JmvqmuS3RCRgSY960jsRVEbpfVE9FxMYov5P7FF7wYA=;
+        b=XD97Po/bsdn/g2XoNidnUFRJA217vmNABupyxVihkQ+H5Z6mH9BkDj1w0JIMDWI9YW
+         Cotc6EblhC6WfhLvKl0LQ/AAzp3L9AAJ9PhB4o6A5I2WGjej2k3UhBB7JjHyhdmnPadM
+         ku9/7m1dsoH6vDJY53V2eIdWvejjPDUD1lCh6sntVjvnVq/5dOYHSjCpOD/oR9qUMeh5
+         2smrSV2/OUcC7e1KAP0S6szKp+MDLBv4ADAD/exL2GyNUpSvjQLT2M2pvX3+v5ssdZCb
+         ycdOQ3Yp3PX9C7mnGiXVOQ7G2T3MHF/t95ayjdOLsDBlztJVpiIAzMj4ZNtUfhqkEjKa
+         vVqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792905049; x=1793509849;
+        d=1e100.net; s=20260707; t=1792905886; x=1793510686;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
-        b=W9puq9CniTvv6U1EL7qsBePyAqmaw73yXItZrOOYzBiE9BllwBIrEa1Df0/M/4aL84
-         NQ+Hh54vUPVmEbxDrUB+bh4GCfqfmRdv7pmJwtzf973852nvp8mkzj69OCrGgkovWbCJ
-         V/2s06uV4YWLGI++4O0Pceo1Sk2TLkSgo6DhgDrJ0Q2AuRJ/mhLpbn4fAooABc9xOUyH
-         uIUC4e8AfUzs09RELgyDLklc/sWDF72nUgsRGItcBg6f80a7+pvLhasGcswN1J9NIRTs
-         vGsHvs3A1JLPuVr9JDKfFw+la1k+7IrdzOMqRVdAa+KACkXru3+hFUlH9FCIVk1sYCKK
-         bQnQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwdmoyT4LzJynIIOmseh9Oxzh0dePmLSdd+F3mftLGgEl5nhcFncJkQNVyKuS6m2YJtO2o=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIZTrvwg/pqV1P3KfVB/J59669uTaruUp8gsMm2UE/KotEb/hqV
-	wnzHbgyX1zaabVAN6gLFkxShNk7yxzenYejzaEPelNUXdbyipb2Zj1IutpsbbQ9eN36yCejNEIw
-	4hYJAQ7uDuSTTvdI1Q4/CYYJg1U5M89M=
-X-Gm-Gg: AYBFou15TWYB7lrRgFMtIQTbzczMlC2SFsvjiQuiQSPQtJEB+reg3Wvxl4MBegIKJDU
-	mFKOlOdjxs67cBFeOlvbulmC/r1kV57+jVEF/VW6vN33mWLPBwbvBTw9Q5QhYINdJVasVAUGEaY
-	QA/zKMaIFTjfoJBWJxevskJvMansrsFuPpwQukeqYaOB/86gGAtqs45vdNBSsHG3GZLheBJmubB
-	scxY60IqYsu+Hf8dpkhha7Xg5sqhaZvqfYeQRqCaKD6lOv4glUn0VzNQUCn/AGEi0lThDy/aO+i
-	LpHZf9SPHMZsu23NT+RmVMmO9q66XXB1TBN99S+7U2piwnqjGZBH4Kxfqw7QZI/V8ZX4D1wFANy
-	mODVen+Zy6HOM2KjY5PT0HL8mBQ3ul1/jG4+0xCoK56y6/4l6ffohpDzwE+MddautcdYAxqrKCC
-	hZ+ZGPjc6wxrteXAP1Ai98rmr1ZJdrgBE1R3jaGsX+h+ONjkZSTQ7Uvdg=
-X-Received: by 2002:a17:903:943:b0:2ea:9012:649 with SMTP id
- d9443c01a7336-2ea9c8f2b22mr29297105ad.57.1792905048638; Sat, 24 Oct 2026
- 22:10:48 -0700 (PDT)
+        bh=JmvqmuS3RCRgSY960jsRVEbpfVE9FxMYov5P7FF7wYA=;
+        b=2F2HuvyWI8YtV5aQbKplGOZLHTB2khsrtK6+MQJgQiM+ts98b0/enJTgaiDOi4GgVC
+         ihW0UJpSH5XRvaEWEOTkNt4iZGlne+DoMRY7r7Yysr1+3HvKbkb/4O/cz6NUs7nt+z1m
+         mnqk4HoYBYZmUV0oo+xA0L1ectTj/bLHUk4H5sXZyY82UOlXxPnrBHcTDZT/R0vHBlXY
+         RuC6v4m1DnpnEQNeiJimIWnly7JDmOMHYuaE+8AQLBGToewHmaZ51WLpMWYF3YT6Q7Xi
+         w3fMMTLWqKzNx/We7RPp0O5oDJ2YmRVNyZIGYehLm1v8O5WDKquSbOXo0tnw7QDwB4oJ
+         CgrQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx+ryFfBASaWhQHpMxpvGbq80EeiJ/UjonzcoTuUHQeoaB8k7XB+lDLUxHpoUGvv9ApFmQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI/8EGyWMiqojZqSKGjpXCRt99nxiBIkB1Nw46cwGktp6BTM9tc
+	MRjKXhdXhcgcExn0B5JxYjmMAix3l2gkwqjbbE5KDJjK8d9BGfwvSIIz1fxnxTChoBbzfPFTqmk
+	d7kUJDng02TmfK1Ye2Ni8e/lP9S+ZJ77Dig==
+X-Gm-Gg: AYBFou2EahY0aYMnxW9WW2HlNoCkvOekKff4a14hoqKPFZBuvG1lBAYCS55URpQbviv
+	f4pXs2NFl5/AeUDblesTed/UKpUbz79mHyPeoseYK5D4BGI7P6j8XUUVRLWKo8+qx+w7g6Nqkba
+	iMMkusl1g+pvpAI5IKYc0OIaJGnGpYSdDIENoTLqRBGJD3xP+ZhMzXs6nCjrUqRM7r9umETnZ0Y
+	46cyhCguJbNq7DhDyLjCT6hINEnsUPewvTWvRxxI1KhCGAtv0HghV1W+R/SERFyB2V0dflDp6Xj
+	CMnOO4bRovP3+2x2aBYYUowQsAZOF1XjyYlz+8T2sAnPYqmYjebUUNq+5obE0lcd2XEdadhp/OA
+	rvyPBEuoN91mEnviuxDc9mJGeprv1GKTMTpx0O2gOZkwPMt1zAFWzKPVJWZg3kLF/LY/ZhZem9h
+	pkFCvAm3fAmvCrfy677GOzRXQ1wD4HvcK+2d6/9iuBstAQ95IeDmAn2qY=
+X-Received: by 2002:a05:6a21:200a:b0:3de:7854:8549 with SMTP id
+ adf61e73a8af0-3e7bfa32cf0mr2230656637.22.1792905885861; Sat, 24 Oct 2026
+ 22:24:45 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,104 +105,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023-scev-simpler-clamp-v1-2-d43a07eda7af@gmail.com>
- <8443794e24eae423d0f499a1d2f24576aa5bb70f6e5f6e015914cb0d1a72210a@mail.kernel.org>
- <4656dc2d7b8749adb9c9b26490a3ef37aea58715.camel@gmail.com> <DMDIJ0LUPMZX.3B6KY51D9ZRB1@gmail.com>
-In-Reply-To: <DMDIJ0LUPMZX.3B6KY51D9ZRB1@gmail.com>
+References: <sashiko-outbox-182361@kernel.org> <20261023073359.642990-1-yangfeng59949@163.com>
+In-Reply-To: <20261023073359.642990-1-yangfeng59949@163.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 24 Oct 2026 22:10:37 -0700
-X-Gm-Features: AclHuK8JbPxpK7Qp2eZDEfR8FS301VIB6GoR_v9NIl1CPBXf1AHANcj6vac-5oo
-Message-ID: <CAADnVQLgRWzEnAPJQ7FWZOYWEqYeGaWqQXEvitNaVw8w6oq_3w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 02/11] bpf: do not intersect with current
- register range on clamp
-To: Eduard Zingerman <eddyz87@gmail.com>, bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kernel Team <kernel-team@fb.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <mason@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
+Date: Sat, 24 Oct 2026 22:24:34 -0700
+X-Gm-Features: AclHuK8D9FBqPFBi3PBiJgDdszVKktCBL1MTcZWmWKw0faNK82LJi68mzP3chsU
+Message-ID: <CAADnVQKUu+xTzLYOby49UGX8+CnenxTGhxL4_Cr2rJrUWao5nA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Fix out-of-bounds btf->types write for
+ split BTF
+To: Feng Yang <yangfeng59949@163.com>
+Cc: sashiko <sashiko-bot@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	sashiko-reviews@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 24, 2026 at 6:03=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Fri, Oct 23, 2026 at 12:38=E2=80=AFAM Feng Yang <yangfeng59949@163.com> =
+wrote:
 >
-> On Sat Oct 24, 2026 at 6:57 AM UTC, Eduard Zingerman wrote:
-> > On Sat, 2026-10-24 at 00:41 +0000, bot+bpf-ci@kernel.org wrote:
-> >
-> > ...
-> >
-> >> Since bisection can land on this commit, could that change be folded i=
-nto
-> >> this patch or ordered before it?
-> >
-> > Commits should remain separate for documentation purposes.
-> > Full test suite passes on both.
-> >
-> >> A related question about the end of the series.  cf18840bc068 only hel=
-ps
-> >> when the current frame has no active loop.  Consider states inside an =
-inner
-> >> loop that is entered again on the second iteration of a terminating ou=
-ter
-> >> loop.  current_loop() finds the inner loop in both states, but its
-> >> entry_state differs, because handle_loop_entry_exit() splits a new one=
- on
-> >> each entry.  So the EXACT check runs, and loop_stack_safe() does not
-> >> compare entry_state.
-> >>
-> >> With the outer induction variable now the same on every outer iteratio=
-n, a
-> >> program like the one below looks like it would still hit "infinite loo=
-p
-> >> detected" after cf18840bc068 (with the old code the outer induction
-> >> variable was [1..9] on the second outer iteration and the EXACT compar=
-e
-> >> failed):
-> >>
-> >>     w1 =3D 1;
-> >>     *(u32 *)(r10 - 8) =3D r1;
-> >>     r6 =3D 0;
-> >> 1:  r7 =3D 0;
-> >> 2:  *(u32 *)(r10 - 4) =3D 1;   /* fp-8 spill -> STACK_MISC */
-> >>     r7 +=3D 1;
-> >>     if r7 < 3 goto 2b;
-> >>     r6 +=3D 1;
-> >>     if r6 < 10 goto 1b;
-> >>     r0 =3D *(u32 *)(r10 - 8);
-> >>     exit;
-> >>
-> >> Is that case covered somewhere I missed?
-> >
-> > This example is valid. Need to relax the condition in the
-> > current_loop() or bpf_is_state_visited().
+> On Fri, 23 Oct 2026 06:46:07 +0000 sashiko-bot@kernel.org wroted:
 >
-> so you're going to respin it or follow up?
+> > [...]
+> > Should btf_check_all_metas() check and propagate the error returned by
+> > btf_add_type()?
 >
-> It's fine to ignore CI in patch 3.
-> We'll be removing states.c soon.
+> The previous patch at https://lore.kernel.org/all/20261022064727.747304-1=
+-yangfeng59949@163.com/
+> has fixed this issue.
 
-respin. The better fix is probably:
--               bounds.r64 =3D cnum64_intersect(reg->r64, bounds.r64);
--               bounds.r32 =3D cnum32_intersect(reg->r32, bounds.r32);
--               if (cnum64_is_empty(bounds.r64)) {
--                       verifier_bug(env, "scev clamp produced empty
-range for r%d", r);
--                       return -EFAULT;
-+               r64 =3D cnum64_intersect(reg->r64, bounds.r64);
-+               r32 =3D cnum32_intersect(reg->r32, bounds.r32);
-+               /*
-+                * The state at the head doesn't know how the
-variables depend on each other.
-+                * It lets r6 =3D 0, r7 =3D 9 into the loop when both
-count from 0, and r7 =3D 10
-+                * comes back. No run gets here like that, so any
-range is right for r7.
-+                * Take the one it has at the head: the rest of the
-state is still compared
-+                * with the head, and what was pruned on the way here
-relies on that.
-+                */
-+               if (!cnum64_is_empty(r64) && !cnum32_is_empty(r32)) {
-+                       bounds.r64 =3D r64;
-+                       bounds.r32 =3D r32;
+Pls respin targeting bpf tree.
