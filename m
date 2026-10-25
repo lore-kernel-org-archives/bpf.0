@@ -1,62 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792901808;
-	b=Y54YLG8Dk9mEthvXDS5YEtyzc4GNQwO0LNlXKa4qtG8ys1d3nLBn6InCEDVaOg2OpuQs
-	 jjwyqQLTTQsfjDUKY7C5AyyYZLLy4q8CGO7IBmEYQ2HWiUXPI9zxa2sAD4Qq6HPQLw+hW
-	 rPf/fBYpWGMspc+iLbY++XspqiCkIOjWKag2KXYy/TtrSkduVZlBTDVXw7rOfYGh5P0wr
-	 PNuE91RZivQwTgA3KaOec9Bt+kyK6baI0J7oJvaJ+VWsVr33o+5dNUkdRMiIExTFNOu8o
-	 3BkRYy0HOPW0I3wbD1MuBsB1J74wTLnGJ7wZFWVZGRtL+AE6JN/RjShQmfzysg7T9EA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792901808;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=qGKFNIgR0aINQjRdPsD8xXBsvzRYD+GNKrD/JJJosXU=;
-	b=Lc2FhcqUvbYFb54VwEA7DjEs0HaRuNAPq6H5D17KtArUF9ec1EsTNbAyWQFNID3SZ6sj
-	 nIbJqCz8B8m77un6RajkMJNaRhWKjmlVQBTDFTN0YLQOjxQOiXJfW9UAoz36QWI+j0EII
-	 ZHRwUF9UAsBnP3nY/6V7XrT71D+SZxGj5dlLBEwcykfG02WFj8abbLyIDgDM3Xftt03n0
-	 5ddkxaZU492TO00LoxCnu34+idammbn+CeFF+opT7StYXO7jXkAAXi3zhUayTuV0yduDl
-	 D/+w4oOvw+o4a4UfCrKakUROHeQBUHVTOkP3RnfhYoxdV5ZmfZnAbUBcULgj3H2z6Wg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fYyEfdzL;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.171
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792905049;
+	b=kzRuDdTqOcE1j/seRdZ6LF348dDzvgijynYK60HstCLJ6tKtlCGtn7YhzASGuLrgrQrp
+	 +qwaw43nH1jN0RojqZ8RQiRLtx+q83QxUcl+o+bQHiAXgk3Ajw9olizeuiNnwxar7QvmP
+	 aBLdAljg9piUpXEVnUbkIozy796VyBRGrAmgEC42D+JhaWYIjMH3RsfBpDEB+XoO6H7m9
+	 I1dylfgGjlO6kC5BZzSK41dm59bd0Jte9mBUopPjk0FFV+BLpuDyoM7oihJi3bZr+3Aaz
+	 KAhKEP3oJQneevwSdZ219YmqFC+SuyXQyBCUjLk8RC69Uiys1jHP46M+HZfZDFwOnog==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792905049;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
+	b=ygBXKFlFoB8wC03YcYS9/JwgOLh0q/lY3g8S28zJobyPj54iD0ZVzgHzca9Xc76k1K3V
+	 kGFQoxWtztOQ5qtchdePbBNoyUurlqHK6ohPsyoTLigae6u+h0pG3sNQ0DHTBmE4n9IOA
+	 jOtDXeLT+Z25LRfzUXTTLkbPMkl9ZC1R6XcF0X9hZIAtf7BjQFwJiUVakNSypid5aUELj
+	 UVe0jgBI1DoRQmNakkB1MQhE/PX3rPggjuR9S4W4sH+nIiCpR5UjAaFidFZrgHNd/fCUV
+	 I54P37rp+sdC1PCiNzlCqnZd8Lqr4lZCuU4zX+vRiD+pAhSZugKNagTPQ/4YaK0dlSQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Q6lUOAKf;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001E3606A31D;
-	Sun, 25 Oct 2026 04:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D156606A31A
+	for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 05:10:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D156606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=fYyEfdzL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02DB51F01829;
-	Sun, 25 Oct 2026 04:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792901807;
-	bh=qGKFNIgR0aINQjRdPsD8xXBsvzRYD+GNKrD/JJJosXU=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=fYyEfdzLjF5YVZdR7cKTzPFApnnylC3CCJhwW8Vq1dWEZNunm9No5MUjvKbaNVd4S
-	 asaujq8OruRcl56e7/Eix/gEfFuaEVSyAC3D1hmz1c5SFZ40Kf5kx55G8a6vdMSnlI
-	 8nyfmbF6/bWzklERnnJzOQjRZJrz/86zx83Y1nfqLWPACn2h8r6NIr6QJ4AcQBX99l
-	 /S3ZGNsFCQxSrxX8OiYS7w43zWtNo2v/11sx2BD0/wtS+hOSyxICL60ONkHfFWCdWv
-	 QcRQr4Eg3XbsMIncx7Qb510aOP9w7dlibb9J93wQFvSzafACly0iIiYXTjbrQBpfvY
-	 tGbf+tGdRl6zw==
-Subject: Re: [PATCH v3] net: gso: validate transport header before computing
- segment length
-From: netdev-bot+sashiko@kernel.org
-To: mst@redhat.com
-Cc: linux-kernel@vger.kernel.org, willemb@google.com, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- rusty@rustcorp.com.au, maxk@qualcomm.com, netdev@vger.kernel.org,
- bpf@vger.kernel.org
-Date: Sun, 25 Oct 2026 04:16:46 +0000
-Message-ID: <179290180655.3134.12380616706567480368@kernel.org>
-In-Reply-To:
- <52b8bfe4ee848aff8ace47752352de486171d45f.1792596586.git.mst@redhat.com>
-References:
- <52b8bfe4ee848aff8ace47752352de486171d45f.1792596586.git.mst@redhat.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Q6lUOAKf
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2e8b20a899fso11766565ad.1
+        for <bpf@vger.kernel.org>; Sat, 24 Oct 2026 22:10:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792905049; cv=none;
+        d=google.com; s=arc-20260327;
+        b=raZicvOXvnzAtVWUk0Y+k0Qvi5dpxdwLpUsoGe0/Q0UBcLWoXhBSm0hM8xTrtWI0wm
+         05n/zvtsvQYOZiXLh244n3jmcwTaJZh9WtzRibRnLX92UThlk+Uk2xdgVXC6fn4KcOGe
+         +RGyOwDHWA+pLezLIQlRpwvMKhRJtYNkwgIdy+0LjaEcG6/QTr+HrLQ2h1keQ6Y/ztil
+         lUvxrfOWyCK6SR8BSMkXlsu+2k3wQiAfuuAMHDbZfzoxkqdq/wOWofYgqET/InvXE5Gg
+         kUJsqVbz/xEGK0LdY8czrIM13pWl8dN5ZTcrt/Nv+bBNQRUsiRTtXJZAIolbAvXefw8Z
+         ucMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
+        fh=bSPJnovnuUroZ2uN1+F9ONA+s4cy/SXPPEI0oSUQ9to=;
+        b=mXC5JkeLb4wo6C6dS1F7Uc0i03miW/mp6kWqv4JXe1RB+CBcbjjy4Tkf9zHY/tIyEz
+         0CZorZva0LK7/5A9HZ7PLhnou45BHWsalr7gngADPAD70CTn6jmZdBQ2G89DtGQwrmiB
+         SX5xpUSm3qm8bki55q5+eZCaJk667/+rVy8fA7R2XP0giTPl6Z8qB6uMbVzblaNsLXAP
+         FERNkISOYPUs2+g7/uSGADe+YhS25boloHnzdNdDPM4GhzqjFWeezjts7TYVLtIACbli
+         3f1p2SX0J05nrC1KzjVVnKFBVPJAOIT8q4nOWFe4GUmZVQy1W4PX1gTnCc9AleSPw1qr
+         480A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792905049; x=1793509849; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
+        b=Q6lUOAKfyFlp+V1zGTNXPJBCHRDgoRq0CSPXMp0fhXRzC75n7MbA3774SpJtdNT18z
+         MiukDtWWcgGF8s3FXYiYn7qRU43HLduAB3MvKJK4b+BAXIjDoP2dAvuAzeZuGVtBEpjG
+         EG9mr8/ZcKtTEzd496D/evjqGp5Oc3SrZXMKxtXdM46EZikChUV/9WnKb7FBhWIz/rHh
+         r10URtDuodiq+KLF2iWUKs4l0OS/exzoVg0HO7aPMzHLc/2PfXTdTRr85T79tXThhplw
+         X7pDDd5Qu5N7pKTBaKt04+pK/oPUWFC/U7Z5E5Aj87dpQUrVON4L3BBEPoMjV6LM+AVQ
+         6yiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792905049; x=1793509849;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=I9HIL3LoF+huKxPct+Fn089zAG/PdllSpNpMVi9VcmI=;
+        b=W9puq9CniTvv6U1EL7qsBePyAqmaw73yXItZrOOYzBiE9BllwBIrEa1Df0/M/4aL84
+         NQ+Hh54vUPVmEbxDrUB+bh4GCfqfmRdv7pmJwtzf973852nvp8mkzj69OCrGgkovWbCJ
+         V/2s06uV4YWLGI++4O0Pceo1Sk2TLkSgo6DhgDrJ0Q2AuRJ/mhLpbn4fAooABc9xOUyH
+         uIUC4e8AfUzs09RELgyDLklc/sWDF72nUgsRGItcBg6f80a7+pvLhasGcswN1J9NIRTs
+         vGsHvs3A1JLPuVr9JDKfFw+la1k+7IrdzOMqRVdAa+KACkXru3+hFUlH9FCIVk1sYCKK
+         bQnQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwdmoyT4LzJynIIOmseh9Oxzh0dePmLSdd+F3mftLGgEl5nhcFncJkQNVyKuS6m2YJtO2o=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIZTrvwg/pqV1P3KfVB/J59669uTaruUp8gsMm2UE/KotEb/hqV
+	wnzHbgyX1zaabVAN6gLFkxShNk7yxzenYejzaEPelNUXdbyipb2Zj1IutpsbbQ9eN36yCejNEIw
+	4hYJAQ7uDuSTTvdI1Q4/CYYJg1U5M89M=
+X-Gm-Gg: AYBFou15TWYB7lrRgFMtIQTbzczMlC2SFsvjiQuiQSPQtJEB+reg3Wvxl4MBegIKJDU
+	mFKOlOdjxs67cBFeOlvbulmC/r1kV57+jVEF/VW6vN33mWLPBwbvBTw9Q5QhYINdJVasVAUGEaY
+	QA/zKMaIFTjfoJBWJxevskJvMansrsFuPpwQukeqYaOB/86gGAtqs45vdNBSsHG3GZLheBJmubB
+	scxY60IqYsu+Hf8dpkhha7Xg5sqhaZvqfYeQRqCaKD6lOv4glUn0VzNQUCn/AGEi0lThDy/aO+i
+	LpHZf9SPHMZsu23NT+RmVMmO9q66XXB1TBN99S+7U2piwnqjGZBH4Kxfqw7QZI/V8ZX4D1wFANy
+	mODVen+Zy6HOM2KjY5PT0HL8mBQ3ul1/jG4+0xCoK56y6/4l6ffohpDzwE+MddautcdYAxqrKCC
+	hZ+ZGPjc6wxrteXAP1Ai98rmr1ZJdrgBE1R3jaGsX+h+ONjkZSTQ7Uvdg=
+X-Received: by 2002:a17:903:943:b0:2ea:9012:649 with SMTP id
+ d9443c01a7336-2ea9c8f2b22mr29297105ad.57.1792905048638; Sat, 24 Oct 2026
+ 22:10:48 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -66,228 +105,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261023-scev-simpler-clamp-v1-2-d43a07eda7af@gmail.com>
+ <8443794e24eae423d0f499a1d2f24576aa5bb70f6e5f6e015914cb0d1a72210a@mail.kernel.org>
+ <4656dc2d7b8749adb9c9b26490a3ef37aea58715.camel@gmail.com> <DMDIJ0LUPMZX.3B6KY51D9ZRB1@gmail.com>
+In-Reply-To: <DMDIJ0LUPMZX.3B6KY51D9ZRB1@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 24 Oct 2026 22:10:37 -0700
+X-Gm-Features: AclHuK8JbPxpK7Qp2eZDEfR8FS301VIB6GoR_v9NIl1CPBXf1AHANcj6vac-5oo
+Message-ID: <CAADnVQLgRWzEnAPJQ7FWZOYWEqYeGaWqQXEvitNaVw8w6oq_3w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 02/11] bpf: do not intersect with current
+ register range on clamp
+To: Eduard Zingerman <eddyz87@gmail.com>, bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kernel Team <kernel-team@fb.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <mason@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+On Sat, Oct 24, 2026 at 6:03=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sat Oct 24, 2026 at 6:57 AM UTC, Eduard Zingerman wrote:
+> > On Sat, 2026-10-24 at 00:41 +0000, bot+bpf-ci@kernel.org wrote:
+> >
+> > ...
+> >
+> >> Since bisection can land on this commit, could that change be folded i=
+nto
+> >> this patch or ordered before it?
+> >
+> > Commits should remain separate for documentation purposes.
+> > Full test suite passes on both.
+> >
+> >> A related question about the end of the series.  cf18840bc068 only hel=
+ps
+> >> when the current frame has no active loop.  Consider states inside an =
+inner
+> >> loop that is entered again on the second iteration of a terminating ou=
+ter
+> >> loop.  current_loop() finds the inner loop in both states, but its
+> >> entry_state differs, because handle_loop_entry_exit() splits a new one=
+ on
+> >> each entry.  So the EXACT check runs, and loop_stack_safe() does not
+> >> compare entry_state.
+> >>
+> >> With the outer induction variable now the same on every outer iteratio=
+n, a
+> >> program like the one below looks like it would still hit "infinite loo=
+p
+> >> detected" after cf18840bc068 (with the old code the outer induction
+> >> variable was [1..9] on the second outer iteration and the EXACT compar=
+e
+> >> failed):
+> >>
+> >>     w1 =3D 1;
+> >>     *(u32 *)(r10 - 8) =3D r1;
+> >>     r6 =3D 0;
+> >> 1:  r7 =3D 0;
+> >> 2:  *(u32 *)(r10 - 4) =3D 1;   /* fp-8 spill -> STACK_MISC */
+> >>     r7 +=3D 1;
+> >>     if r7 < 3 goto 2b;
+> >>     r6 +=3D 1;
+> >>     if r6 < 10 goto 1b;
+> >>     r0 =3D *(u32 *)(r10 - 8);
+> >>     exit;
+> >>
+> >> Is that case covered somewhere I missed?
+> >
+> > This example is valid. Need to relax the condition in the
+> > current_loop() or bpf_is_state_visited().
+>
+> so you're going to respin it or follow up?
+>
+> It's fine to ignore CI in patch 3.
+> We'll be removing states.c soon.
 
-Critical: 0 · High: 2 · Medium: 0 · Low: 0
-
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] The patch adds a transport-header check only to the GSO length
-  validators in net/core/gso.c.
-- [High] net: gso: xfrm crypto offload tunnel TSO packets dropped in
-  xfrm_output()
-
---
-
-net: gso: validate transport header before computing segment length
-
-This patch adds a check to the GSO segment length helpers in
-net/core/gso.c. For TCP GSO packets, the (inner) transport header must
-now be set, and the TCP header must sit in the linear data, before
-tcp_hdrlen() is read. If the check fails, skb_gso_validate_network_len()
-and skb_gso_validate_mac_len() report the packet as not fitting, and a
-new helper, skb_transport_header_linear(), is added to skbuff.h for the
-check.
-
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index d6894f463bf43..11c8b295bd260 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-
-[ ... ]
-
-> @@ -3250,6 +3257,29 @@ static inline int skb_transport_offset(const struct sk_buff *skb)
->  	return skb_transport_header(skb) - skb->data;
->  }
->  
-> +/* Is the (inner) transport header, as specified by
-> + * skb->transport_header/inner_transport_header, in the linear data?
-> + */
-> +static inline bool skb_transport_header_linear(const struct sk_buff *skb,
-> +					       unsigned int hlen)
-> +{
-> +	int thoff;
-> +
-> +	if (!skb_transport_header_was_set(skb))
-> +		return false;
-> +
-> +	if (skb->encapsulation) {
-> +		if (!skb_inner_transport_header_was_set(skb))
-> +			return false;
-> +
-> +		thoff = skb_inner_transport_offset(skb);
-> +	} else {
-> +		thoff = skb_transport_offset(skb);
-> +	}
-> +
-> +	return thoff >= 0 && thoff + hlen <= skb_headlen(skb);
-> +}
-
-[Severity: High]
-Does this break TSO over IPsec tunnel mode with crypto offload?
-
-In xfrm_output(), when xfrm_dev_offload_ok() succeeds for an
-XFRM_DEV_OFFLOAD_CRYPTO state, encapsulation is set on the skb before
-any inner header offsets have been recorded:
-
-net/xfrm/xfrm_output.c:xfrm_output() {
-    ...
-		xfrm_get_inner_ipproto(skb, x);
-		skb->encapsulation = 1;
-
-		if (skb_is_gso(skb)) {
-			...
-			skb_shinfo(skb)->gso_type |= SKB_GSO_ESP;
-			goto out;
-		}
-    ...
-}
-
-The xfrm_output_gso() branch elided above is only taken when
-skb->inner_protocol is already set. A plain TCP skb, whether locally
-generated or forwarded, still has inner_protocol and
-inner_transport_header at 0 here, so it goes to xfrm_output2(). The
-inner offsets are only filled in by the tunnel encap helpers, and that
-happens after the size check has run:
-
-xfrm_output2()
-  xfrm_output_resume()
-    xfrm_output_one()
-      xfrm_outer_mode_output()
-        xfrm4_prepare_output()
-          xfrm_inner_extract_output()
-            xfrm4_tunnel_check_size()
-              skb_gso_validate_network_len()
-          xfrm4_tunnel_encap_add()
-            skb_set_inner_transport_header()
-
-The IPv6 path through xfrm6_prepare_output() has the same ordering.
-
-So skb_gso_validate_network_len() is called with encapsulation set
-and inner_transport_header == 0. With this patch, the following
-happens:
-
-- skb_inner_transport_header_was_set() returns false.
-- skb_gso_transport_seglen() returns -EINVAL.
-- The packet is reported as not fitting.
-
-xfrm4_tunnel_check_size() (when DF is set, as it normally is for TCP)
-and xfrm6_tunnel_check_size() then report the MTU to the local socket
-or send an ICMP too big error, and return -EMSGSIZE. xfrm_output_one()
-then frees the skb. As a result, every TSO packet over such an SA is
-dropped.
-
-The commit message expects the caller to fall back to software
-segmentation, but here a false return is treated as a hard MTU
-failure. The MTU reported back is the one the flow is already using,
-so it is not clear what would make the sender stop building these
-packets.
-
-Before this patch, the same call read inner_tcp_hdrlen() from
-skb->head and computed thlen against a zero inner offset. The result
-was meaningless, but in practice it let these packets through.
-
-Should xfrm_output() record the inner network and transport offsets
-at the point where it sets encapsulation for the crypto offload case?
-Or is there another way you would prefer to handle this, before the
-new check starts requiring a valid inner transport header whenever
-encapsulation is set?
-
-[Severity: High]
-
-The commit message says:
-
-  Qdisc length estimation has carried a guard against exactly this since
-
-  commit a0dce8752193 ("net: Skip GSO length estimation if transport
-  header is not set");
-
-Does that hold for the bpf_skb_adjust_room() case named later in the
-commit message?
-
-The guard in qdisc_pkt_len_segs_init() in net/core/dev.c only rejects an
-unset transport header on a non-encapsulated skb:
-
-net/core/dev.c:qdisc_pkt_len_segs_init() {
-    ...
-	if (!skb->encapsulation) {
-		if (unlikely(!skb_transport_header_was_set(skb)))
-			return SKB_NOT_DROPPED_YET;
-		hdr_len = skb_transport_offset(skb);
-	} else {
-		hdr_len = skb_inner_transport_offset(skb);
-	}
-	/* + transport layer */
-	if (likely(shinfo->gso_type & (SKB_GSO_TCPV4 | SKB_GSO_TCPV6))) {
-		const struct tcphdr *th;
-
-		if (!pskb_may_pull(skb, hdr_len + sizeof(struct tcphdr)))
-			return SKB_DROP_REASON_SKB_BAD_GSO;
-
-		th = (const struct tcphdr *)(skb->data + hdr_len);
-		tlen = __tcp_hdrlen(th);
-    ...
-}
-
-It does not reject a transport offset that is set but negative.
-bpf_skb_net_hdr_pop() in net/core/filter.c can leave one behind. After
-bpf_skb_generic_pop() moves skb->data forward, only mac_header and
-network_header are moved too:
-
-net/core/filter.c:bpf_skb_net_hdr_pop() {
-    ...
-	ret = bpf_skb_generic_pop(skb, off, len);
-	if (likely(!ret)) {
-		skb->mac_header += len;
-		skb->network_header += len;
-		if (trans_same)
-			skb->transport_header = skb->network_header;
-	}
-    ...
-}
-
-Two cases leave transport_header in front of the new skb->data:
-
-- MAC-mode decap of a locally encapsulated VXLAN packet with
-  BPF_F_ADJ_ROOM_DECAP_L4_UDP. transport_header still points at the
-  outer UDP header, and encapsulation is cleared.
-- A NET-mode shrink with len > off.
-
-If the tc program then calls bpf_redirect() to egress, the skb reaches
-the estimator before any of the newly guarded validators run:
-
-__bpf_redirect_common()
-  __bpf_tx_skb()
-    dev_queue_xmit()
-      __dev_queue_xmit()
-        qdisc_pkt_len_segs_init()
-
-In qdisc_pkt_len_segs_init(), an offset of -16 does the following:
-
-- It is stored in the unsigned hdr_len as 0xFFFFFFF0.
-- hdr_len + sizeof(struct tcphdr) is truncated to 4 when passed to
-  pskb_may_pull(), so the check passes.
-- th ends up about 4GiB past skb->data on 64-bit, and __tcp_hdrlen(th)
-  then reads th->doff from it.
-
-Could this oops, or read unrelated memory and compute a garbage length?
-
-The encapsulated branch also calls skb_inner_transport_offset() without
-any of the rules this patch adds: inner header not 0 or ~0U, outer
-header set, offset >= 0, and header inside the linear data. As a
-result, the qdisc estimator and the GSO validators now apply different
-rules to the same TSO skb.
-
-Should qdisc_pkt_len_segs_init() also use skb_transport_header_linear(),
-or should the commit message describe this as a gap that remains?
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/52b8bfe4ee848aff8ace47752352de486171d45f.1792596586.git.mst%40redhat.com
+respin. The better fix is probably:
+-               bounds.r64 =3D cnum64_intersect(reg->r64, bounds.r64);
+-               bounds.r32 =3D cnum32_intersect(reg->r32, bounds.r32);
+-               if (cnum64_is_empty(bounds.r64)) {
+-                       verifier_bug(env, "scev clamp produced empty
+range for r%d", r);
+-                       return -EFAULT;
++               r64 =3D cnum64_intersect(reg->r64, bounds.r64);
++               r32 =3D cnum32_intersect(reg->r32, bounds.r32);
++               /*
++                * The state at the head doesn't know how the
+variables depend on each other.
++                * It lets r6 =3D 0, r7 =3D 9 into the loop when both
+count from 0, and r7 =3D 10
++                * comes back. No run gets here like that, so any
+range is right for r7.
++                * Take the one it has at the head: the rest of the
+state is still compared
++                * with the head, and what was pruned on the way here
+relies on that.
++                */
++               if (!cnum64_is_empty(r64) && !cnum32_is_empty(r32)) {
++                       bounds.r64 =3D r64;
++                       bounds.r32 =3D r32;
