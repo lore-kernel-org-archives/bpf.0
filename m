@@ -1,54 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.196
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.240.27.27
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792979947;
-	b=oll88rwxFm0iJj+o6tjkQOMEk9FCZkFBstxu7QDO1NKbXoODliAVEsMYaQjA7BV+kuC7
-	 jbGrGjGOJk76x8hFL7A3H81W59T7WFSXVDG/1KX9AdXZmhyvsxOP8gTJBjbJC5DYojcyf
-	 vk9upm5SyMY/VgtjBUruh646QPJ10PmaBlIO5DgGi3nfnEJz4cyKLhJFZdIgoUSzOYrMU
-	 s8PbkbLEn36pC7wsgHoUzM4YAcYXtnxFm1Gqi7+olbBb025W4LpMEnHCHXjk5R5acq0mx
-	 R+z8oN2vpee6dBQZiHngul+WO9urOVItlXW39ERUkYgzTtwJhlaang3GgBgYf+SEBrA==
+	t=1792981521;
+	b=pssHGJ8odug59Ig+2cW4TbYBcN4O3fVDWvu8G9WAvZ5Jyc9v6S1PqzDE82D0AFCqsxpe
+	 IyiOFSQtqqUSNri42OjjbFNU73H4Yr1L74RQX2hjaszKPM5Rx6iIYaOcqNoLH+3Ki1gI0
+	 BCkDUo7NpaZ+nXGJvitJ4BrUKOV53x3l00XlV7ZprpVrmcemknknxDEK0r0uOb/rt5cRc
+	 pxgsiToiij1FlU/bysnIEVcRVyV5rMgnv+St+qxWQClT44LcCTppycXijYuas6SkdAIU+
+	 Tdfo7AVKdtN7bLkpCxAMClHRku6ppQEshaZmLD1h8SAxKyrzBzRzteiJo12Jy1iWCTg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792979947;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=nIRWTvPlLkG36D1roRwTAzMyx7v2xnLdlNLfoFx9rlM=;
-	b=HPih0HuHG/Iqjj25wpt7JpcoVC5jBqM1j3WtSGIXfhseJMDm3c4x8kjF2laMh/Yje/6B
-	 NnzjRLdSbDJAaMTFmE/0UMQBzkWc703b04UgPDmmoQFfhzDBMJxv5dJSJUT5Lx9C7VQPZ
-	 476MrPI5k7/Mke8wTHd96nWF+oEYSLbrSiV4/HCpWlORGXM4eWbGDxbOg76+sPJvwnbrm
-	 OUqXigU9WLzypLME3R6jb9Qaj0RTIIycIfV6/Qo3AkNJkTV0Q8nf8jVGowHHZzDzZWWfQ
-	 xxJKF/2urzYYr01g23VBwgRP8k5TMIBGDcZFYLnjcqsA5/k6fk4AGJmPHZvWKBRHnAA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792981521;
+	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:Feedback-ID:X-SES-Outgoing;
+	bh=mOSnnefzNqn/6aThbNT9VG6t46jh9yA3DrEsrzMoR2o=;
+	b=5KqHW+XdR8ZFgduSkHqzPDrjsOWiTuKF/mdlsI3e9CuwUmnauVlIt1FcGQxQ7zl5DKDz
+	 npMVKH3/4ofJWdOScvDZZtjkWTYH6Q//lmNgOaGLHZ/8WlgSI7f/0MqWRgYLDUcXt7MIr
+	 EqXAN99nDc4JYt0BsJ/JYAiTVvLpxqauBxs4o4YMpJ8HQt5k60psHcyn3HWRedBStDekV
+	 HSjpZu1YKK1/ViN8Z7bBhlO/Vpjtw7LLBbgSJ8NVjSjb+Qh7Vj8xr6vum53aPyuuLklTq
+	 sQezwsDmD+P4faPqgr0f2MFUVtzyULurUodxAcp5LPQbkSbso3cRB5S2SVpAbYdQMtw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HaSqEAfC;
-	arc=none smtp.remote-ip=91.218.175.196
-Received: from mta0.migadu.com (out-196.mta0.migadu.com [91.218.175.196])
+	dmarc=pass header.from=eliskeggs.com;
+	spf=pass smtp.mailfrom=us-west-2.amazonses.com;
+	dkim=pass header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=nvLgzNL9;
+	dkim=pass header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=uRbAHSEA;
+	arc=none smtp.remote-ip=54.240.27.27
+Received: from a27-27.smtp-out.us-west-2.amazonses.com (a27-27.smtp-out.us-west-2.amazonses.com [54.240.27.27])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2F5606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 01:59:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B2F5606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E860B606A31A;
+	Mon, 26 Oct 2026 02:25:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E860B606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eliskeggs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=us-west-2.amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=HaSqEAfC
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Fivt3j3l99lInPNUAk/uJJjJe/iIb8iOoXTIz7OncWQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792979943; v=1; x=1793584743;
- b=HaSqEAfCYEa0PTLMpF9gcbY1pAuru6jSnZqQBSd+gR7UJecMMJc6S80LgYA5H7aKkv3zpoNT
- 3o8cMbMb7D15vxIbo5rKkycHzW2rgrFy/R3Dnte+YfkMatUSmdjlr2rt1PYs42cltfKOhXCVtlf
- v0m7dzFpNq8NUnYqBHb4zogE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7163a4a6614d0ede;
-	Mon, 26 Oct 2026 01:59:03 +0000
-X-Mizu-Trace-ID: 7163a4a6614d0ede
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
-Date: Mon, 26 Oct 2026 09:59:00 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=nvLgzNL9;
+	dkim=pass (1024-bit key, unprotected) header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=uRbAHSEA
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk; d=eliskeggs.com; t=1792981520;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
+	bh=35YpjmCQnDHx1pTvHTeuKBReAyIAyciGpvzy/nmgkfo=;
+	b=nvLgzNL9sMCAAgNUnV73o92WKlsOZuOraGO2WRUzWEPtCGelFWa/7iY3D6qiuJwr
+	OfBi/4xjkD3P2NVJKfb4t0UwWDsgXXwxb3Esog6CQxDCguaJF+BFiftnkRXyGH7BpBE
+	NqbChxFSMyFUzXtsF3IBdDjGf1N9MWydM1D+8L9Q=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1792981520;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Feedback-ID;
+	bh=35YpjmCQnDHx1pTvHTeuKBReAyIAyciGpvzy/nmgkfo=;
+	b=uRbAHSEAJogdrDohGdkpYULAkw8oMI61hWMQ1C6KTKs9oWLIHuFiYATMRNPOkvR8
+	SEIxNXdxk29TNvNt355YnD2wZ+UDoYFnTHnOKez3fNXOS2tfYCGIXbuYG4R8VXvsbIJ
+	QRiqwNrEX5cHtXFW5XWTJ/DnRLk8ma6PJgrCmBPg=
+Date: Mon, 26 Oct 2026 02:25:20 +0000
+From: Eli Skeggs <kernel@eliskeggs.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	"David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Cong Wang <cong.wang@bytedance.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on
+ zero-length skb redirect
+Message-ID: <010101a17606cf6f-5e824e65-23b0-4539-835b-e8527b8c1f57-000000@us-west-2.amazonses.com>
+References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
+ <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
+ <DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,85 +85,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on zero-length
- skb redirect
-To: bpf@vger.kernel.org
-References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
- <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com>
+Feedback-ID: ::1.us-west-2.aEUYuRRC8Z+WeC8mlWAQBpqJLV0VswmaEnHpVsice/Y=:AmazonSES
+X-SES-Outgoing: 2026.10.26-54.240.27.27
 
+On Mon, Oct 26, 2026 at 01:51:43AM +0000, Alexei Starovoitov wrote:
+> On Sun, Oct 25, 2026 at 04:41 PM Eli Skeggs via B4 Relay <devnull+kernel.eliskeggs.com@kernel.org> wrote:
+> > On an ingress redirect, the empty message is still queued as before, but
+> > the target socket no longer reports EPIPE.
+> 
+> That leaves the target broken.
+> Nothing dequeues the empty sk_msg. __sk_msg_recvmsg() sees
+> sge->length == 0, returns -EFAULT and leaves it at the head of ingress_msg.
+> tcp_bpf_recvmsg_parser() finds FIN in is_next_msg_fin(), returns 0 and
+> does copied_seq++ on a socket that didn't receive any FIN.
+> So every recv() on the target returns 0 and moves its copied_seq further
+> past rcv_nxt, and the data redirected from other sockets stays behind
+> that msg forever.
 
-On 10/26/26 7:41 AM, Eli Skeggs via B4 Relay wrote:
-> From: Eli Skeggs <kernel@eliskeggs.com>
->
-> A FIN can arrive on a packet with no data. In that case, tcp_read_skb()
-> produces an empty skb, and the attached BPF stream_verdict program may
-> choose to redirect the skb to another socket. Further data redirected to
-> that socket from any socket gets dropped, and the target socket starts
-> reporting EPIPE. A userspace application may see that EPIPE and decide
-> the socket is no longer usable. For a BPF-based proxy, this can break a
-> bidirectional stream, truncating the response instead of leaving the
-> socket half-open.
->
-> Prior to the introduction of tcp_read_skb(), tcp_read_sock() never
-> passed a zero-length skb to its actor, sk_psock_verdict_recv(). When a
-> redirected skb landed in sk_psock_backlog(), it was always non-empty.
-> tcp_read_skb() deviated from the historical behavior by passing any
-> zero-length skbs to recv_actor(), exposing this latent bug by adding
-> zero-length skbs to a queue that hadn't previously received them.  When
-> sk_psock_backlog() encounters a zero-length skb, it interprets ret == 0
-> as a hard error, reports EPIPE, and clears the transmit flag.
->
-> Treat a return of 0 as success when there is no data to send, while
-> continuing to fail on a 0 return with residual bytes. The loop exits
-> without incident on an empty skb, and the skb gets cleaned up as usual.
-> On an ingress redirect, the empty message is still queued as before, but
-> the target socket no longer reports EPIPE.
+Thanks, I'd missed that detail of __sk_msg_recvmsg().
 
-The target can't receive anything after that though. The empty msg sits
-at the head of psock->ingress_msg and nothing ever dequeues it:
+> Lets skip empty skbs instead. That covers both directions.
+> The socket's own FIN that goes through the backlog is not queued either,
+> but SOCK_DONE check in tcp_bpf_recvmsg_parser() returns 0 anyway.
 
-__sk_msg_recvmsg()
-   sge->length == 0 -> copy == 0 -> copied = -EFAULT; goto out;
-
-The goto skips sk_psock_dequeue_msg() at the end of the loop. Then
-tcp_bpf_recvmsg_parser() sees -EFAULT, is_next_msg_fin() finds the FIN
-flag on the redirected skb and returns 0. Every later recv() hits the
-same msg and returns 0 again, while data queued behind it is never read.
-Only sk_psock_purge_ingress_msg() on psock teardown frees it.
-
-So the user gets EOF on a socket whose peer never closed, and everything
-redirected to it after the FIN is lost. Without a verdict prog on the
-target it is worse, tcp_bpf_recvmsg() returns -EFAULT forever.
-
-Since this patch is already about the zero-length skb, can you handle
-the ingress side too? E.g. in sk_psock_skb_ingress(), don't queue an
-empty msg when len is 0 and the skb was redirected (skb->sk != sk). The
-self PASS case must keep its empty msg since is_next_msg_fin() depends
-on it.
-
-
-> Fixes: 965b57b469a5 ("net: Introduce a new proto_ops ->read_skb()")
-> Signed-off-by: Eli Skeggs <kernel@eliskeggs.com>
-> ---
->   net/core/skmsg.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index df385a5a961e..f9b2e3486cfb 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -716,7 +716,7 @@ static void sk_psock_backlog(struct work_struct *work)
->   			if (!sock_flag(psock->sk, SOCK_DEAD))
->   				ret = sk_psock_handle_skb(psock, skb, off,
->   							  len, ingress);
-> -			if (ret <= 0) {
-> +			if (ret < 0 || (!ret && len)) {
->   				if (ret == -EAGAIN) {
->   					sk_psock_skb_state(psock, state, len, off);
->   					/* Restore redir info we cleared before */
->
+That does sound much cleaner. v2 will skip empty skbs entirely, and I'll
+add a corresponding selftest for the ingress pathway.
