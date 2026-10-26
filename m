@@ -1,98 +1,76 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793057931;
-	b=RB3WR7/jfUF7h78DFlmhOCrfZnQ+bngV+OK0BPN5kRcz5nNda7Rr1jUqRtZy4r0LaTck
-	 wcwBTB81fHltglHhx0nA75gFT5awXqIJneFzAU1+HZ/F65wP8d9iousqpUgADj+4WG5CT
-	 Gay9xGIMmd6SwjUIQyOZQMF/qwP0++MZiI9J73w+6ctR1CVCXdfeTe7+3hnsRteIZi6ep
-	 6sl38tSCIyKNYUwAhvcjImMLjVj8mVX3VcWkWKK3hpmbXF03GKJq9f2/nESyVdN4nteXS
-	 iAv7tBF19iXXk6qXMvJn9iUFJiaZRI9X2JzTX47lxcmNCn8OQec8nlKKPfLXSnxinjQ==
+	t=1793058117;
+	b=AvQ/6TrDvZ4PEG6n5hgdR4mDcmULOu0Tl0qku+VIM++VwZQrBm1hqA4hOek73lDxz8Xk
+	 eFapVLBkneFWKlzbLrntOQ0tcD+U8KRIqhoywd134FRn1US9zlAYUMm3UkFk2ZIBmWxHx
+	 0hfPRJdJjbfbUxt0PUWqWKCQKSM8br3AKtSHwp6nEUMuUaM0VAtMPRQasUTFA3UaebKnc
+	 2Y7HORqFaJDKBby5/jtAljnk5TQ5hBXM/MTGoijpurnofbePk2/+woTQwXLbRb1vmHYpE
+	 x5HsEGTOu11XbjN6P9FqgsnKDm9aRuNj0HMs6Z4fV99p9cS2ThaRBTE8r/9GaqIK+Ew==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793057931;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793058117;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=MiyoOEDIy6UwCAKNpLsQRRitB38C0qV+MqJRsMVax6g=;
-	b=KIl2dBr4HtIQcTgXwdMxflLAtnCf0FzOqcjx3Vc9XpXdThlX+F931GeEiVw0ZU5JlSHs
-	 Gy+z/pv3Q475MHG+TmEASj1LqKoO1TZ4TwEoVPhKZSzE/tUL6zlmB4SxzRnFLpx/p8cHA
-	 xUD8YdBhEL0B1+BDOZEUYRmsPM6Jyx7QwJp99Fne1vGcH2vbsWtNTJGj9GQL21MKaphA2
-	 dP39QmcaIBaMhYtQIHEYSl1dLAz42QzTP6hbbqbhBw2HMYi9rPDT17ftaJODUDhBnW1RP
-	 dwUBQlqCRPKH+5k3Kl27W37GkFo6+d9jyVfvrsvtuiB9p7SShO284QrvPGkYJwyStow==
+	bh=OpV2CXxIZjHnFgwnEW1Our7mkEl1DYiqfIv6pgFa/1c=;
+	b=ZQYA7L1yaBp1tveCzRNdZKP21IPLiMcfdNARrxIPb0RxbJ9E9t0SgELFI4Z2UBoM/Znj
+	 YWzPfMFCvDyuzzYxxtG/wXjSO7s+S2tdxIetEiOQbJ9klYx/ycUs15mu7ccoVADREo/Dw
+	 4yFz4K8r5Tvrg4lJf3TBl4sv2eNyBE4ts+Cb0mW9YWR95upznCoImhrgqV9B2gGsGcln0
+	 elK+bb3gAY1UXV2vEc8xBPd0dBvBESkbeX1GZJj6QAsxkZt0baeL8YE7Q8O7gjcHd0h7X
+	 r1jT6piLu5wGIB/TArGirhhvYgikC1l2h4a+EJHNN7EDhIExd29SvLv+wfrGePWZxbQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Jt9vG3gN;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=WbJh7H2x;
+	arc=none smtp.remote-ip=209.85.216.72
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DA3606A31D
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 23:38:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 95DA3606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD132606A322
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 23:41:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BD132606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Jt9vG3gN
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e940d5d2beso13530275ad.0
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 16:38:50 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=WbJh7H2x
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3ab1e771632so275612a91.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 16:41:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793057930; x=1793662730; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=MiyoOEDIy6UwCAKNpLsQRRitB38C0qV+MqJRsMVax6g=;
-        b=Jt9vG3gNORD5Gr4tKkaKSxLR5kmu5rBKpRKlj77Ub05WDJO6aAtKwzhGDycr+awR/1
-         QU3cXOD63USUR1Xl/fsWCiMwJLr2PevazUriWkgbI0Zi7dPKma6swxxtWDPPjUdTDLwn
-         gDVhMeSE0XfWlt/rWNv0PvtFFbUPhYVVZffTPukaM/BWIlwfMeHOngwJcHPDrKlJuu69
-         1Hkaf+epzSQ5kL0u+qbP5hHqcvkMyYZrcrgTcEl7ggEgkMEv10hpt13w5HDe4V+eAZzb
-         udcdUgWVmxdcHyXZEFTN9JJ6HTCADxkh6tibXdvktiVLOmHodB0eZwCVg9h0JN5oxrtw
-         l43A==
+        d=google.com; s=20251104; t=1793058116; x=1793662916; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=OpV2CXxIZjHnFgwnEW1Our7mkEl1DYiqfIv6pgFa/1c=;
+        b=WbJh7H2xfNzPzGtyN2CnN1kSzgv+XUp7mQLMTr3lqSBQFkjLtZxuZ+WWbHPjiuOk0/
+         2F0A8D4uhfk3lGrAdrpEQKQL3dMcUTqASiF0S5fqMX4dB1/0JPseIa9iC8Z5ptpgOjJA
+         vKpYym1YJnxCcoPVLhqfgLrywOwlm7spEFGhdXaZMZAIZ5eHY5ys5Ql8TSyizdk2XTYO
+         9ULTcTBL53xZsOSFzjn3+3ed7aicqQxgxKzC0wqt48H0y1zIL+G9y3duKzCvnkP0fLja
+         0C4n+jQ8v3WWVGxnR29Tng2LJNFaahwIdUwgKwyxBrt91SGngHnmbhYWxQZzediGLcsP
+         ofKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793057930; x=1793662730;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1793058116; x=1793662916;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MiyoOEDIy6UwCAKNpLsQRRitB38C0qV+MqJRsMVax6g=;
-        b=dCFbYbgArOZ9boSFzyrCQ5QHTCBWXNV/o4pFyh5sEIKe7t6LNH1Fq9ZsrSMH5OoOWN
-         vry0BzHCF77ZiwTzojUVVjsN7xesacPvQP0IXmDdepifOLLvGvWziPKxGK1pvsAxYEhN
-         1Y7jmgOV/e2QuwFDTACkNfTZLBufXHPqTlN8/XEYrL+nVsS8fqAhZYVjzlTOjek/KLeo
-         0DS60wDzVr4EXfInHLp+DxO0a0od9FBdrmdJh/Ej3kN7NR9YLLyuAY2zMETRG1x4tRf9
-         mjD/QwQyhDgaCnLznUn2VCUy7Vl8ewTN+IsrOpyM9E1VmmE0J5e1OAA0Oql3Ktj+5mz8
-         vXxw==
-X-Gm-Message-State: AFq9FYKAYxKEl5IfVVKU+eL/NkWY9ZGMtgydIxYObOg6iWgb+ZsrPT6v
-	TRVFpVZ9ZZp21NMRpCO0mDagtbvI2NDm3/4UugqNGBBqZke8aDr01t78ZYzFCQ==
-X-Gm-Gg: AYBFou0fVAKUxwg2fmkQ4exJ6rOgmTPCAl226Vuuy8NKDo+xGdrW7E4N+i1HPmBIGzR
-	zMAmJI8JPp08zZtWCLtdWfUmz+5YwqM/GXEdYNqv/6Xnq1jddkPUis24vYS1S0drMRL/DlgsTqE
-	DJN9JBjHA3/jTUZddUDOQphGRfWjzcRkKzuUU4a8U8QOTC/92rs9s3YMSQRuLypPHO4Fms9JEZI
-	oOxCSBxF8pBF/F8d8ZiDqnAWlT6PBuiIvOQGrUZZugu/wyvjAfoMytt5RgU5pT1ekm/Lq8LIEXP
-	42N2NG7yWl1Q5GF27N3d+Q2bF3m1/a+9xUFyR0XBIoCZq6NVUTX7Wxzgd13cxeuTnWP5lyylyFH
-	zc+WX8r7f7TZCL43uVC1EAPGqA13RlTt/ASguLLC0yDOgOxZVA7aZ0IfmWMuj84NruhdmnD8Slg
-	++OMgg2o1rQKfsPEIxbxi65Gqeg6ad8CGp0pv1bm94wG8GCxM7Xfhljz1BnYcGLoj9Rh1qMSPcY
-	w9hRKuys4PLVoWRGoS1c4sY9dxU2U0HhfjqoFPTLRzaHAOLGhIazX4xagybMO8gz7l5GA/Fbc6S
-	lYi5z6/aceqol6luKZMPW6mjTjROgW53OUpvVpv0eeEoXN1n9a+fwvigi6QeLCx2HlXFJ1NN
-X-Received: by 2002:a17:90b:5186:b0:3ac:d39d:ee4f with SMTP id 98e67ed59e1d1-3adeb0fbb1emr6127766a91.44.1793057929905;
-        Mon, 26 Oct 2026 16:38:49 -0700 (PDT)
-Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae40455eb5sm1167437a91.12.2026.10.26.16.38.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 16:38:49 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org
-Cc: daniel@iogearbox.net,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf v2 11/11] selftests/bpf: Restore stack pointer subrange pruning coverage
-Date: Mon, 26 Oct 2026 16:38:31 -0700
-Message-ID: <20261026-scev-simpler-clamp-v2-11-f373aec9825f@gmail.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
-References: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
+        bh=OpV2CXxIZjHnFgwnEW1Our7mkEl1DYiqfIv6pgFa/1c=;
+        b=XGXu2J5pEJ2oR4JpDB8Etn8s8raj/Ho6Ha7Uw9R2aTtcDVRowKyCKKkmv5ll7kHHbl
+         RQ99B/PkThOcd8Mwk0v3VCfJUGg7a0Pfpcd0GHcTdpmafwn6A39m2QzvPSA71wLxQF7o
+         eWwEpvkTzYtoM6vfC3ogpAgrGW72TOdoDXWkD2NJxGRXDXc6MFyRFcO8mQVKZrysYWsv
+         higLEeWJRwpvrukvrwPNwTACEfzjmQMK1wq47vCnYhqtcePENZGuY8rS+YRm1xyPls6I
+         1yS2shPpJN3cFGnhWUao1zRUiqd+DiUB48g0McQVenA1y40UEx5xoWuktXR//0Gbgzpy
+         36BA==
+X-Forwarded-Encrypted: i=1; AKwUvByVybeRmRpZT+Az2gsXjQv42+9PYCROTS8CJcKjEfPwNT/oiMFsJJOINKX8+RAgple8ptA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJItucQSlE+0cpYxZ4w7Ce0bTxKAdkvYkoN/dkIL4CmpmkOjfiH
+	cmZAqH1hIfNQ+5NBnvyw2Yf5/LG0yoDCm/sJZtn2o1voYdgf4i+hnir4l4Ai6Gazc75H5sETp0y
+	uZsceIuk7o3UCQe5sHtnZSg==
+X-Received: from plso3.prod.google.com ([2002:a17:902:bcc3:b0:2e9:4eb5:953d])
+ (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90a:d60c:b0:3ac:b764:8521 with SMTP id 98e67ed59e1d1-3ae4041abb8mr609334a91.38.1793058115737;
+ Mon, 26 Oct 2026 16:41:55 -0700 (PDT)
+Date: Mon, 26 Oct 2026 23:41:54 +0000
+In-Reply-To: <b9959bd7711dee7a83a07b012b5967980d178c95eae90adeebebcb6040fc526f@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -101,73 +79,343 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <b9959bd7711dee7a83a07b012b5967980d178c95eae90adeebebcb6040fc526f@mail.kernel.org>
+X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
+Message-ID: <20261026234155.4028467-1-jthoughton@google.com>
+Subject: Re: [RFC PATCH 06/10] uaccess: Refuse and warn on user copies when
+ current->mm is NULL
+From: James Houghton <jthoughton@google.com>
+To: bot+bpf-ci@kernel.org
+Cc: James.Bottomley@HansenPartnership.com, acme@kernel.org, 
+	akpm@linux-foundation.org, andrii@kernel.org, arnd@arndb.de, 
+	asml.silence@gmail.com, ast@kernel.org, axboe@kernel.dk, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, david@kernel.org, dsterba@suse.com, eddyz87@gmail.com, 
+	ihor.solodrai@linux.dev, io-uring@vger.kernel.org, jmattson@google.com, 
+	john.fastabend@gmail.com, jpoimboe@kernel.org, jthoughton@google.com, 
+	kees@kernel.org, kvm@vger.kernel.org, liam@infradead.org, 
+	linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-perf-users@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, ljs@kernel.org, martin.lau@kernel.org, 
+	mason@kernel.org, mathieu.desnoyers@efficios.com, mhiramat@kernel.org, 
+	mhocko@suse.com, mingo@redhat.com, mkp@kernel.org, namhyung@kernel.org, 
+	pbonzini@redhat.com, peterz@infradead.org, rostedt@goodmis.org, 
+	rppt@kernel.org, seanjc@google.com, surenb@google.com, tglx@kernel.org, 
+	vbabka@kernel.org, viro@zeniv.linux.org.uk, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-After the clamping changes, r7 returns to the header with [-72, -16]
-instead of the narrower [-64, -16], so the test no longer checks subrange
-pruning. Assign an invariant fp-16 pointer to r7 in the loop, giving r7 an
-ANY SCEV that is not clamped and restoring strict-subrange coverage.
+On Mon, Oct 26, 2026 at 3:42=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > uaccess: Refuse and warn on user copies when current->mm is NULL
+>
+> TL;DR:
+> - Possible spurious -EFAULT on valid kernel addresses on xtensa/nios2 fro=
+m
+>   mm-less tasks (kworkers), e.g. d_path
+> - nofault helpers may hit the new WARN_ON_ONCE (BPF/tracing); fix is late=
+r in
+>   series, breaking bisection
+>
+> > diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> > index eddbbb65ccc4..e54a6d804bf9 100644
+> > --- a/include/linux/uaccess.h
+> > +++ b/include/linux/uaccess.h
+> > @@ -50,6 +50,23 @@
+>
+> [ ... ]
+>
+> > +static __always_inline bool uaccess_should_fail(void)
+> > +{
+> > +     if (WARN_ON_ONCE(!current->mm))
+> > +             return true;
+> > +     return should_fail_usercopy();
+> > +}
+>
+> [ ... ]
+>
+> > @@ -114,7 +131,7 @@ __copy_from_user(void *to, const void __user *from,=
+ unsigned long n)
+> >
+> >       might_fault();
+> >       instrument_copy_from_user_before(to, from, n);
+> > -     if (should_fail_usercopy())
+> > +     if (uaccess_should_fail())
+> >               return n;
+> >       check_object_size(to, n, false);
+> >       res =3D raw_copy_from_user(to, from, n);
+>
+> Can this refuse legitimate kernel address copies on xtensa and nios2?
+>
+> On both architectures __copy_from_user() and __copy_to_user() also sit un=
+der
+> the generic kernel nofault accessors.  Neither architecture defines
+> __get_kernel_nofault or arch_get_kernel_nofault, so both use the fallback=
+ in
+> include/linux/uaccess.h, which goes through __get_user()/__put_user() on =
+the
+> kernel address:
+>
+>     #define __get_kernel_nofault(dst, src, type, label)    \
+>     ...
+>             if (__get_user(data, p))                       \
+>                     goto label;                            \
+>
+> On xtensa, 8-byte __get_user()/__put_user() are implemented with
+> __copy_from_user()/__copy_to_user() (arch/xtensa/include/asm/uaccess.h):
+>
+>     case 8: {
+>             u64 __x;
+>             if (unlikely(__copy_from_user(&__x, ptr, 8))) {
+>     ...
+>             retval =3D __copy_to_user(ptr, &__v64, 8) ? -EFAULT : 0;
+>
+> On nios2, __put_user_common() sends any size other than 1, 2 or 4 to
+> __copy_to_user().
+>
+> Neither architecture selects HAVE_EFFICIENT_UNALIGNED_ACCESS, so
+> copy_from_kernel_nofault() and copy_to_kernel_nofault() (mm/maccess.c) us=
+e
+> the u64 loop whenever dst and src are both 8-byte aligned and at least 8
+> bytes remain:
+>
+>     if (!(align & 7))
+>             copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
+>
+> With this patch, every such access from a task with current->mm =3D=3D NU=
+LL
+> (kworkers, khungtaskd, kernel_init before exec, the idle task in IRQ, kgd=
+b
+> entered from idle) hits WARN_ON_ONCE(!current->mm), and __copy_from_user(=
+)
+> returns n.  copy_from_kernel_nofault() then returns -EFAULT on valid kern=
+el
+> memory.
+>
+> Concrete generic callers include:
+>
+>   d_path() -> prepend() -> prepend_copy() (fs/d_path.c) fills the compone=
+nt
+>   with 'x' and stops the walk.  This is reachable from LSM/IMA path hooks
+>   run by kworkers, for example async firmware loading.
+>
+>   print_worker_info() (kernel/workqueue.c), called from
+>   dump_stack_print_info() and sched_show_task() for kworkers, which copie=
+s
+>   wq->name and worker->desc.
+>
+>   copy_to_kernel_nofault() from kgdb_hex2mem()/kgdb_ebin2mem() on nios2,
+>   which selects HAVE_ARCH_KGDB.
+>
+> Before this patch these accesses worked on kernel addresses, since
+> raw_copy_{from,to}_user() on these architectures is a plain fixup-protect=
+ed
+> copy and access_ok() is not involved.  Only opt-in fault injection could
+> make them fail.
+>
+> The commit message rationale ("Accessing user memory from a task that has=
+ no
+> mm is always a bug") does not apply to kernel addresses.  The commit mess=
+age
+> also says get_user()/put_user() are not covered, which does not hold for
+> 8-byte accesses on these two architectures.
+>
+> No later commit in this series appears to touch these paths.
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- .../selftests/bpf/progs/verifier_stack_ptr.c       | 27 +++++++++++++---------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+This analysis is correct. Implementing copy-from-kernel functions with call=
+s to
+uaccess functions is a little hard to make sense of. :/
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-index dc176f407c36..e6a9021b197b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-@@ -588,32 +588,37 @@ __naked void stack_check_size_512_with_may_goto(void)
- 
- /*
-  * Verify that old PTR_TO_STACK state is considered a super-set of
-- * new PTR_TO_STACK state when new variable range is a sub-range
-- * of the old range, e.g. old [-72, -16] vs new [-64, -16].
-+ * new PTR_TO_STACK state when the new offset is within the old range,
-+ * e.g. old [-72, -16] vs new {-16}.
-  */
- SEC("socket")
- __success
- __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
- /*
-- * r7 is widened to [-72, -16] at the loop header (insn 3),
-- * the loop body sees [-64, -8] after 'r7 += 8'
-+ * r7 is widened to [-72, -16] at the loop header (insn 5),
-+ * the loop body sees [-64, -8] after 'r7 += 8'.
-  */
--__msg("loop header at 3, widening r7 to -72..-16 step 8")
-+__msg("loop header at 5, widening r7 to -72..-16 step 1")
- __msg("R7=fp(smin=smin32=-64,smax=smax32=-8")
--/* back-edge state is clamped to the widened range and pruned at the header */
--__msg("loop header at 3, clamping r7 to -72..-16 step 8")
--__msg("from 5 to 3: safe")
--__msg("processed 9 insns")
-+/* 'r7 = r8' sets r7 to fp-16; its ANY SCEV is not clamped. */
-+__msg("R7=fp-16 R8=fp-16 loop_stack=5")
-+__not_msg("clamping r7")
-+/* back-edge state is pruned because {-16} is within [-72, -16]. */
-+__msg("from 8 to 5: safe")
-+__msg("processed 12 insns")
- __naked void stack_ptr_subrange_in_loop(void)
- {
- 	asm volatile ("					\
- 	r7 = r10;					\
- 	r7 += -72;					\
-+	r8 = r10;					\
-+	r8 += -16;					\
- 	r6 = 0;						\
--	r7 += 8;					\
-+1:	r7 += 8;					\
-+	r7 = r8;					\
- 	r6 += 1;					\
--	if r6 < 8 goto -3;				\
-+	if r6 < 8 goto 1b;				\
- 	r0 = 0;						\
- 	exit;						\
- "	::: __clobber_all);
+I've included a patch at the front of my v2 for xtensa and nios2. I don't t=
+hink
+any other architecture has this problem. I've placed the patch at the botto=
+m of
+this reply. I've also adjusted the wording for patch 6.
 
--- 
-2.56.0
+>
+> [ ... ]
+>
+> > diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
+> > index 5bb752ff7c61..565b3125e752 100644
+> > --- a/lib/strncpy_from_user.c
+> > +++ b/lib/strncpy_from_user.c
+> > @@ -115,7 +115,7 @@ long strncpy_from_user(char *dst, const char __user=
+ *src, long count)
+> >       unsigned long max_addr, src_addr;
+> >
+> >       might_fault();
+> > -     if (should_fail_usercopy())
+> > +     if (uaccess_should_fail())
+> >               return -EFAULT;
+> >       if (unlikely(count <=3D 0))
+> >               return 0;
+>
+> Can strncpy_from_user_nofault() now trip this WARN_ON_ONCE() from context=
+s
+> where current->mm is NULL by design?
+>
+> In this tree strncpy_from_user_nofault() (mm/maccess.c) has no current->m=
+m
+> check and no nmi_uaccess_okay() check.  It goes straight to
+> strncpy_from_user():
+>
+>     pagefault_disable();
+>     ret =3D strncpy_from_user(dst, unsafe_addr, count);
+>     pagefault_enable();
+>
+> and strncpy_from_user() now calls uaccess_should_fail(), which does:
+>
+>     if (WARN_ON_ONCE(!current->mm))
+>             return true;
+>
+> The callers of strncpy_from_user_nofault() are tracing helpers that run i=
+n
+> whatever context the probe fires in, including kernel threads and IRQs ta=
+ken
+> while the idle task runs:
+>
+>   bpf_probe_read_user_str() via bpf_probe_read_user_str_common()
+>   (kernel/trace/bpf_trace.c), and bpf_probe_read_str() for addresses belo=
+w
+>   TASK_SIZE.
+>
+>   bpf_trace_printk()/bpf_snprintf() through bpf_trace_copy_string()
+>   (kernel/bpf/helpers.c).  With CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_S=
+PACE
+>   (x86, arm64, ...), any '%s' argument below TASK_SIZE takes this path,
+>   including a NULL pointer.  So bpf_printk("%s", ptr) with ptr =3D=3D NUL=
+L in a
+>   kprobe that fires in a kworker now triggers the warning.
+>
+>   kprobe/fprobe/eprobe ustring fetch args (fetch_store_string_user() in
+>   kernel/trace/trace_probe_kernel.h).
+>
+>   The .ustring event filters (test_ustring() in
+>   kernel/trace/trace_events_filter.c).
+>
+>   Synthetic event string fields (trace_string() in
+>   kernel/trace/trace_events_synth.c).
+>
+>   The bpf_copy_from_user_str_dynptr family (copy_user_str_nofault()).
+>
+> Before this patch these calls either failed quietly with -EFAULT or read =
+the
+> lazily loaded mm.  Now a tracing user (CAP_BPF plus CAP_PERFMON, or trace=
+fs
+> access) can trigger a warning splat, and a panic with panic_on_warn, just=
+ by
+> tracing a function that kernel threads run.
+>
+> The same applies to copy_to_user_iter_nofault() in lib/iov_iter.c, which =
+this
+> patch also switches to uaccess_should_fail().  The commit message lists
+> copy_to_user_nofault() as intentionally covered, but it does not account =
+for
+> the nofault helpers being used from mm-less contexts by design.
+>
+> A fix appears later in the series, e8bf23b5b30d ("uaccess: Fail user nofa=
+ult
+> helpers quietly when current->mm is NULL").  It adds an early !current->m=
+m
+> return to copy_{from,to}_user_nofault(), strncpy_from_user_nofault() and
+> strnlen_user_nofault(), and switches copy_to_user_iter_nofault() back to
+> should_fail_usercopy().  Its message describes this exact problem
+> (bpf_probe_read_user_str() from a BPF program attached to a function call=
+ed
+> by a kernel thread would now trip the WARN_ON_ONCE() in
+> strncpy_from_user()).
+>
+> This commit on its own still introduces the regression, which breaks
+> bisection.  Could that fix be folded into this patch, or ordered before i=
+t?
+
+Ah, yes. I'll flip the order of patch 6 and 7 in the v2. Thanks.
+
+Okay, the xtensa/nios2 patch is here:
+
+-------
+
+    xtensa, nios2: Don't use __copy_{from,to}_user() in __{get,put}_user()
+   =20
+    Architectures that don't define __get_kernel_nofault() or
+    arch_get_kernel_nofault() use the generic fallback in
+    include/linux/uaccess.h, which accesses *kernel* addresses with
+    __get_user() and __put_user(). That relies on __get_user() and
+    __put_user() being raw accessors, i.e. plain fixup-protected loads and
+    stores with no extra checks that only make sense for user memory.
+   =20
+    xtensa and nios2 use this fallback, but don't quite meet that: on
+    xtensa, 8-byte __get_user() and __put_user() are implemented with
+    __copy_from_user() and __copy_to_user(), and on nios2, __put_user() of
+    any size other than 1, 2 or 4 bytes (i.e. 8-byte puts) uses
+    __copy_to_user(). __copy_{from,to}_user() do more than a plain copy: th=
+ey
+    inject failures with CONFIG_FAULT_INJECTION_USERCOPY, check the kernel
+    object size with CONFIG_HARDENED_USERCOPY, and, with a later patch in
+    this series, refuse and warn on user accesses when current->mm is NULL.
+   =20
+    As neither architecture selects HAVE_EFFICIENT_UNALIGNED_ACCESS,
+    copy_from_kernel_nofault() and copy_to_kernel_nofault() use 8-byte
+    accesses when both pointers are 8-byte aligned, so kernel nofault
+    accesses (used e.g. by d_path() and print_worker_info()) end up in
+    __copy_{from,to}_user() on kernel addresses. With the NULL mm check,
+    copy_from_kernel_nofault() would then fail on valid kernel memory when
+    called from kernel threads.
+   =20
+    Use raw_copy_{from,to}_user() instead, as asm-generic's
+    __get_user_fn()/__put_user_fn() do, and as nios2 already does for 8-byt=
+e
+    gets (__get_user_8()). This only drops the extra checks and KASAN/KCSAN
+    instrumentation for 8-byte accesses, making them consistent with the 1,
+    2 and 4-byte cases, which are plain inline asm.
+   =20
+    The fallback itself is fine and is still needed: it's used by alpha,
+    arc, csky, hexagon, microblaze, nios2, openrisc, sh, sparc and xtensa.
+    Of those, only xtensa and nios2 have __get_user()/__put_user() that
+    aren't raw. The others use either asm-generic's, which call
+    raw_copy_{from,to}_user(), or inline asm for all sizes. The remaining
+    architectures (arm, arm64, loongarch, m68k, mips, parisc, powerpc,
+    riscv, s390, um and x86) define their own __get_kernel_nofault() or
+    arch_get_kernel_nofault(), which don't use __get_user()/__put_user() or
+    __copy_{from,to}_user().
+
+    Signed-off-by: James Houghton <jthoughton@google.com>
+   =20
+diff --git a/arch/nios2/include/asm/uaccess.h b/arch/nios2/include/asm/uacc=
+ess.h
+index 5e6e05cc6efc..f20f11bd21dc 100644
+--- a/arch/nios2/include/asm/uaccess.h
++++ b/arch/nios2/include/asm/uaccess.h
+@@ -161,7 +161,7 @@ do {									\
+ 	default:							\
+ 		/* XXX: This looks wrong... */				\
+ 		__pu_err =3D 0;						\
+-		if (__copy_to_user(__pu_ptr, &(__pu_val),		\
++		if (raw_copy_to_user(__pu_ptr, &(__pu_val),		\
+ 			sizeof(*__pu_ptr)))				\
+ 			__pu_err =3D -EFAULT;				\
+ 		break;							\
+diff --git a/arch/xtensa/include/asm/uaccess.h b/arch/xtensa/include/asm/ua=
+ccess.h
+index 6538a29a2bbd..30c8805d1c83 100644
+--- a/arch/xtensa/include/asm/uaccess.h
++++ b/arch/xtensa/include/asm/uaccess.h
+@@ -76,7 +76,7 @@ do {									\
+ 	case 4: __put_user_asm(x, ptr, retval, 4, "s32i", __cb); break;	\
+ 	case 8: {							\
+ 		     __typeof__(*ptr) __v64 =3D x;			\
+-		     retval =3D __copy_to_user(ptr, &__v64, 8) ? -EFAULT : 0;	\
++		     retval =3D raw_copy_to_user(ptr, &__v64, 8) ? -EFAULT : 0;	\
+ 		     break;						\
+ 	        }							\
+ 	default: __put_user_bad();					\
+@@ -176,7 +176,7 @@ do {									\
+ 	case 4: __get_user_asm(x, ptr, retval, 4, "l32i", __cb);  break;\
+ 	case 8: {							\
+ 		u64 __x;						\
+-		if (unlikely(__copy_from_user(&__x, ptr, 8))) {		\
++		if (unlikely(raw_copy_from_user(&__x, ptr, 8))) {	\
+ 			retval =3D -EFAULT;				\
+ 			(x) =3D (__typeof__(*(ptr)))0;			\
+ 		} else {						\
