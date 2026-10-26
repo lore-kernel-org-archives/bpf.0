@@ -1,80 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.228.5
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793025891;
-	b=fvJ1dqRyDkLmaxcmiHO41FAQ4+L/6UsAr1Z8lLDlSBAzUtgvZsxdXqj6CBkMZX3H9APZ
-	 IpZfHoMMG7bi8KqfjNUO0fYYe9Gz9QiUzFn6RqnJIkBMPOGIATqdata6nNB2PwozAidte
-	 pktJmcojVfexNkvUCSDp4zN8PB43y2oXpfb8ERbg9tSVIQpNsQ9fDwyYIXOXpEqtVX+sK
-	 sI7PNfsvZpPNY0U1APSSBzR9IBH8uqnlJL6KXiaY7+b+idg1KpPG3YJ/iGEkIHS+U2zWV
-	 BN3jkoW+0T7rltp7KZxytg3XA1u5XSjsF3so+t/GDdJsL8sY3KI6TfKTY/JlVrEMh0Q==
+	t=1793026543;
+	b=5Chte+PNhwX4cAvfsHDZoPucri0f64ZtYXhr8CWtlKygt7rOwsKOj/qEhI9ufWGQCHsT
+	 nfbbpRR0XfDD7Mxx0YtXJsayomd07Ckv/E7N0Zf5v0o5eicUqXzbhJIDavwZEDFkfTts9
+	 IaR8EC8rm520fKmjgjJK8o39ZkEjUvpui2z8ePVfR42NdR+Jcw1ZZttP/B6K6vVvyX2/3
+	 Y++Rl81A/rT6KSn/KqRB9F6axV5+G/62+g0BL5G7FyZKMHNFRP7YPDM1vBmDEMC2j5vtT
+	 b1xijliTMcaQ7AybSjPEbRxNYWxaKSL0zNv3kLG6djGTuV+GYjVju4UqlL9kU5D3pRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793025891;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
-	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
-	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=OdAPy/CoPz/vfWZ7wRu1j+eYID0az22RSj0i/Go1qnw=;
-	b=4gwPUu919Vz877hlugWEqiu5kZxTIyyDEEmIxrdzNjgee6vPmEtoA/Qzq+VQV2G3HOiY
-	 skhzZdNiu7lP5l8kQEtMLKcuK05un67oAoUgDnGuKa5raeOUXN5t4zJmNlA6oYriIF/QL
-	 mgcM85jsRUIdr6rGL6HadEGNLfuHtTd/tiFLGuVqeFabTyl2/es4u9gHM2K2B+b9c6oiR
-	 WvgDa7SpMHTRrCza/CSTK1toiyltcuwc+osG+uM2i6u2eTmIndcU4rgQCJr9V9/waqu6m
-	 0wIwI2q5GOXkJjSkGW7C/M1Cytf6SfKpoL7toVbGWuItRkvmRfDai8s1rrlvjXdUDnw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793026543;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=N3UVCZ01NtzZBTQTfy6B2Rj4m9gham0iwhTudNRqEe4=;
+	b=sn2uPEzf3Zikqi/2HDdN2/+AQ/tUdmGv+r0F3CpLTlAO42STQ9444IpMLSNmqAPR/Zp8
+	 px4Tln37ugnfZobtlXRAhJOPL+RHnF/E+ValGVRegMj6tIcbGW0YWE0UuNssNp/L1Ywqa
+	 x3FosBHXMInESzmOIUNvqLMXO1n2aEg0uSYmy8ZsQDyX02P9Kd/R5AkzAz/wYUyvxdTDM
+	 HhUPJnDaZlrcg+As9MVc0wrXa039keLZLanb+BVuvQwIMfqvNw95+eqhtwTqdFT0cB/H3
+	 yb2BKEMRyjpYEACwBBjLxxoIZ5qJjKXWY03ZCL2XvZ0pNTsLsyC+j4otIA45+AgGfAA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=intel.com;
-	spf=pass smtp.mailfrom=intel.com;
-	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kyNjs3ta;
-	arc=none smtp.remote-ip=198.175.65.14
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Ya7N+tEq;
+	arc=none smtp.remote-ip=74.125.228.5
+Received: from mail-pz2-f5.google.com (mail-pz2-f5.google.com [74.125.228.5])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFF6606A32E
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:44:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FFF6606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DA9606A325
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:55:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 85DA9606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kyNjs3ta
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1793025890; x=1824561890;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8TsUWj36XD1mav8rJ6nSKUgTGR7eWwxtagWA+FEHNFI=;
-  b=kyNjs3tapG5sFl+/9wDiX3FNCxkr2MS+Hjp3EMceczU5njjVNwS6fdOi
-   zviwvUKryJR3rbIBtf6kD8lOSTkixgFyjQ2PNoOr8FS9lNdFzUEGtS48o
-   LqNfsHcJQyRFVfqxPILzevP+/yI6iHv3rs01NiKxnDnMT4a1wWwGyCXpH
-   u8QYu4zmUMPG3xR/jqqIHhSQbRcQzcD0CfjimwD+L7Bwp+FE7R+uMYOj1
-   U2YK+4xOVv1kbhaqlLgmLQouq4O7il5nGyA4p/MPsqHaaUc4ebWgqh3C9
-   cXZpNr+FfI1/ZNVWxWe3Him80UvRwmj2IL1KobPut3FStrUFhktDDHrfj
-   g==;
-X-CSE-ConnectionGUID: aFmX7o3QTSS83J8BlrVL2g==
-X-CSE-MsgGUID: P1KGbtn8RAeDqVQ4ut/Vww==
-X-IronPort-AV: E=McAfee;i="6800,10657,11947"; a="1571155"
-X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
-   d="scan'208";a="1571155"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 07:44:50 -0700
-X-CSE-ConnectionGUID: +0iof/m5TlKvDtfl6P1bWQ==
-X-CSE-MsgGUID: wiHeEfSzRta+QfuDd07drw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
-   d="scan'208";a="4431735"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Oct 2026 07:44:48 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xLLwK-00000000W4Q-3vjC;
-	Mon, 26 Oct 2026 14:44:44 +0000
-Date: Mon, 26 Oct 2026 22:43:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: Re: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a
- prog
-Message-ID: <202610262241.4DF09B1A-lkp@intel.com>
-References: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=Ya7N+tEq
+Received: by mail-pz2-f5.google.com with SMTP id 41be03b00d2f7-cdac05f11bcso225246a12.0
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 07:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793026543; x=1793631343; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=N3UVCZ01NtzZBTQTfy6B2Rj4m9gham0iwhTudNRqEe4=;
+        b=Ya7N+tEqw7L5wqauN62InhvMjZ07hzBv8z1qv4xYl2l7+7mOtjMxFicn89wJu8WQVz
+         pVHjA1mp2HdRtfukIy/YsDoV3KYlr0G5uIegku1JE/42fMSxxJPmKtGDklYBwnkSwnI8
+         TElChyK1/vUWAws789Aq0wc2r/GMyal2jK+81TKfc0m73RDr1V5P5Za1VVzQUNCedoqA
+         478ec51dXrH/qGDIYhLjmf2T/uMmtN8c3aPqOKGIoiyNNn2Otxpq9Uo4VzNamliEKvoB
+         Dg5S3jC5fM8ztd4zHkXjLifKH00SYCtNXc+pmNaBbQtEdgWdBOS4Mg1srpwqPYC9flbK
+         aMKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793026543; x=1793631343;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=N3UVCZ01NtzZBTQTfy6B2Rj4m9gham0iwhTudNRqEe4=;
+        b=COQxg6psf0NR2yYN7lYHTYvEGRuW2UQVLZ0QbraliZRS/ySmpX4b4OycJHuesG2gTg
+         ox7yUZdpy4s312wCcxL4buGSXV2DvkDEtfk3VRzj3j/gzR0EbnyDotU55+v65+Vcc/PP
+         X01hA3/VKJSFW89NisJxRlfWYaYyPnGjnzqObkvFuJ6sSBzJ/EcFvtYxjRpaUwBx34c1
+         /gdnqKqOYC/HIgyVyA3yHvNvJ+HYYNYCbwfGE4WN0EdAcE3JGphuu/ioorqy9Qc0eGUL
+         BS9CZCaUz9EBhRoYVlylIsRhOuNcUjP/pNUf1+NSn9pswKiMRa/e5rBHjaSSfn4mNwUF
+         yyNA==
+X-Forwarded-Encrypted: i=1; AKwUvBzVve7dl3ei1LX1T7YZQ5O/VQw/ZuFY6mEKwgOLgwsBiQ8r/eyuqarHvYJnXtJPtIOeHWg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJcTdpnyNRk5Jdr8X9ooH0GaykdguQ/iNoIddUpiUOG81jdBoct
+	nuUmN5fWk7+hJEZPSFp76orImDH3zoQa+vDJZjqL7hJfRrYe57wV92IT
+X-Gm-Gg: AYBFou2qqeHeuDXS0XTAwzT6jGlFCFuygruX2cMMbAcmMQS2AfD6Bq+hB0ScGTeLkfX
+	M3BsdKeqd6E2pRg8wLXrkdg6gaS3l8Q7/q6e5YY6zSMcO1u5IwS9wJm7HmJJAjqWeMnufrLc0Pu
+	66F50dHj4cPb6qLPVs8Xst5lVrUERAPwPqEVGG9ubTdc8PGqAKX5dP+x8OzN1wSO4MUCbF49y5A
+	lChr73MKInJR3zdr39tWH9t4/aDIjDnZa55YctILwamYz+fM4QKrZNRyjG+qcrqMwRCpEpORmlq
+	FKxHMxSzoeu7RX0fXBbHfMuEItc2h4VeqgIm2Lu0J3jO30XhsQ50noTea9fs9tSwiyp45oXfsJ0
+	7Pcm7JtLvSp7W6hp8po3BkBGwGwkWo7w8boKHq4K0uaeyx5nkteTOm/ZtvelbrdXJ9kxFsnxjo9
+	Rd/7gogXT1Sg736+GDxyQ7UCtL3U3pnAzEN1LuKYA+1W5ywHKti/iGgy7l1VFXK29xliSrOdd7L
+	2InhOylXP40gMsBRxdFsFITgsQp2I3yrj7vkxQiEFpC+4/pKE+RRXhGpTOZrpivtlKHfU/8pvaQ
+	ZgRpB7Mry3i3/ZKY
+X-Received: by 2002:a05:6a00:3a23:b0:8a0:1dab:fd50 with SMTP id d2e1a72fcca58-8a367a2e5bamr5994625b3a.20.1793026542774;
+        Mon, 26 Oct 2026 07:55:42 -0700 (PDT)
+Received: from localhost.localdomain ([240e:46d:2300:286:8580:7ae4:15b1:705])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a36b469507sm1361172b3a.31.2026.10.26.07.55.37
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 26 Oct 2026 07:55:42 -0700 (PDT)
+From: Rongzheng Wang <testwrzwrz@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	stable@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH net v2 2/2] selftests/bpf: cover AF_XDP multi-buffer TX software checksum
+Date: Mon, 26 Oct 2026 22:55:30 +0800
+Message-Id: <20261026145530.46896-1-testwrzwrz@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <179293961591.3134.5478895656850588086@kernel.org>
+References: <20261024141157.59301-3-testwrzwrz@gmail.com> <179293961591.3134.5478895656850588086@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,62 +106,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Alexei,
+Hi Sashiko,
 
-kernel test robot noticed the following build warnings:
+Thanks for the review.
 
-[auto build test WARNING on bpf/master]
+> Should RX_MAC and TX_MAC be copied here? In this file they are text
+> strings meant for the ip link commands:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexei-Starovoitov/selftests-bpf-Remove-tests-for-global-data-in-arena/20261026-025822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20261026025943.404450-8-alexei.starovoitov%40gmail.com
-patch subject: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a prog
-config: um-defconfig (https://download.01.org/0day-ci/archive/20261026/202610262241.4DF09B1A-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261026/202610262241.4DF09B1A-lkp@intel.com/reproduce)
+No. This is a regression I introduced in v2. RX_MAC and TX_MAC are the
+text strings used for the ip link commands, so copying ETH_ALEN bytes
+from them copies only the first six ASCII characters, "00:00:".
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610262241.4DF09B1A-lkp@intel.com/
+The root cause is that I reused the ASCII macros intended for the ip
+link commands as packet bytes. The test only checks the UDP destination
+port, so it still passed with the wrong Ethernet addresses. In v3 I will
+restore the binary literals and add an Ethernet MAC check so this
+regression is caught.
 
-All warnings (new ones prefixed by >>):
+> Should the condition be retries-- > 0 instead?
 
->> kernel/bpf/core.c:3633:6: warning: no previous prototype for function 'bpf_prog_begin_run' [-Wmissing-prototypes]
-    3633 | void bpf_prog_begin_run(const struct bpf_prog *prog)
-         |      ^
-   kernel/bpf/core.c:3633:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    3633 | void bpf_prog_begin_run(const struct bpf_prog *prog)
-         | ^
-         | static 
-   1 warning generated.
+This check is pre-existing and not introduced by this series. I will
+send a separate patch for it rather than mixing it into this fix.
 
+Thanks,
+Rongzheng
 
-vim +/bpf_prog_begin_run +3633 kernel/bpf/core.c
-
-  3628	
-  3629	/*
-  3630	 * The kernel is about to call an async callback of @prog on this cpu: a run begins.
-  3631	 * The main prog does the same in its first insns.
-  3632	 */
-> 3633	void bpf_prog_begin_run(const struct bpf_prog *prog)
-  3634	{
-  3635		struct bpf_prog_aux *aux;
-  3636	
-  3637		if (!prog)
-  3638			return;
-  3639		aux = prog->aux->main_prog_aux;
-  3640		if (aux->may_goto_budget) {
-  3641			this_cpu_write(aux->may_goto_budget->start, 0);
-  3642			this_cpu_write(aux->may_goto_budget->count, BPF_MAX_TIMED_LOOPS);
-  3643		}
-  3644	}
-  3645	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+pw-bot: cr
