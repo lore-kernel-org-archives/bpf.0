@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983980;
-	b=mMTIoJSdUO4i8as8IhVSlLd6yTZfDOPfgTRxDb28+jno8Ex1bK5yBLNlARWBAsL9YuF1
-	 u5FTEgOkyGW7iEsRzMnbRnJkOOZ4uqfNVNLlBbiamQOSGSwEVp2a9CGsBL9nCR6gI9qj6
-	 /4QGqy/cpinl6SUyrnMGoDjThGLN3b21iIYObqqy45Y9EwOoe4HKRvQ7KFUGJ3gMC6zgz
-	 ty9eqNOtHuwb3IchqD5NRjd+/h0sNgD3u7QqPW4qzJjUecSOIHbUtkdVhYUdO1emVkAmk
-	 SbdjGiGcyVv18bieTxuqs4sGsE/S9Quh44HvufDvzeIogQqaiAUqXza572+G+gxTFQg==
+	t=1792983986;
+	b=AZrFcNSeGzsfFLpQp7ilmkfMIYI+7hWdV3V2w/wl5XwNRnocD5HQX3pcPiJreAgQRfXG
+	 d+T+/2zXHp6AF0ki+mVra9ojpJ87IxJKotRNETGUJ06Ufa2cJ3hSErxd39FOSdixezTsf
+	 gv4Ln/HMDGGkFj3qoy07wglrOJ/YdAzXRQZBOg9Mf4n75B3SmQQi44mWZ/6JYxlQXzjop
+	 5lc44o9Rz41MqTVawuuJyiyeQ2+lnnGwQOnRnNCWJnXJ/+awm8aiDWSAFwKwmd89B7Ftr
+	 /VJbaBTd4tvAcr8BgmGbUTrhBO6nwWlLnH7dbutK9DwGM3sbYqJvVfnPcfkNwd294kQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983980;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983986;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=P43EFHxWNYcGPZGupIdCGH+n+HkHoKnERxi7qoEppzE=;
-	b=GsYmiu4nfX9TA9u9ob2uxClzWXkysW8SGgRjEcvDKxbdHP8s2caUf6psRCwAhxfBmiAc
-	 nYqSOs3vpXQy4ZuvCWXDKZu8wo/2NqKWw/qcUswfQYwMR8ReM9EgnAPzWDhfJ/77ZWF/+
-	 KD8zLS4l7qAmwRHMU7PRdqkBZLt5shuefSqL/7JCnStecPi1VtBL7IbgokDk3YqOGen3S
-	 ISaSWHpbOZ8YuO2ap70qlxlSHbtuIhwTTQ+fsXnF/QYaOf0O4XhtSULodS2iEaHvGCSEY
-	 ViXf0UbGQcFIC9HHjCI9MnPRT1sXTIZnfYNX6By5/UO3ZA7bQkW4IbZHj689gAfE4Ew==
+	bh=sGzv3R1j6EFLJeeGgiQmOVPKP9XVxq7VnIee8kXCifQ=;
+	b=hFuHKnZW9Lze9r9w38r2ipX6vctcuOsm4ptjVYR/bvimEe2qM/bVRvpdcgPuCyfEoZHP
+	 CdOfJJJEmXv/+SGTE95PajtphTUTR5aVVdj8PILCB0se7L1jdzsUSMcjysKKrcO2XxD2F
+	 SoSovFAav5YVUTiTOpwnuu26c0BeWkiwtUrEkP4nny//yKyG6F7kFCywnhTdx25AUcF+w
+	 Z1znIY697Jay/cw/gSoGnuafh2ExZeIAZJWgbHfm8Vea7DqHk3CrvNE8MsVbQDUmqxErf
+	 Q8xz0TQtTlx6LdAtgic055pmibgrPYgwdt8uzsg3TaJXUU1bpYoGjslus3uc3C/F6UA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=n3Mt9OWI;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fB7YuyM3;
+	arc=none smtp.remote-ip=209.85.215.175
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB46C606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:06:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CB46C606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF27606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:06:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ACF27606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=n3Mt9OWI
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ea7190aea1so11040615ad.1
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:06:19 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fB7YuyM3
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cc758830601so1502654a12.2
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:06:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983979; x=1793588779; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983985; x=1793588785; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=P43EFHxWNYcGPZGupIdCGH+n+HkHoKnERxi7qoEppzE=;
-        b=n3Mt9OWIH+lBOFC3x7HgtLo8fAxQjyHX3Z5NVHDiPgMYB5vyG257ExKl7c7djIRY5f
-         av+btqUsyG2w923BCuYZwomRrTk8HSjZu68CJ2MTBMVzciIqnaRk2JTq3QL6AIIU2w20
-         RB9OsYZ1ibF328kbE7eCc6CkfxXcKrE5wJu0q5yOOffo0UY9xS7WcbbVIREdA7uYnymk
-         kRFHmVSAJP9fN7Ty90p6PZFlyruNSaU6l61W2gu4zq5nBaMqmdeP1nvgzUI4Qdd1ocwS
-         R2BS30CHxlCFUa+90VQ0FL1Nvl4wNdIgTqnxaTa0tj8fdcTnEl+YV1CWMVQOGRCHg6dT
-         idpg==
+        bh=sGzv3R1j6EFLJeeGgiQmOVPKP9XVxq7VnIee8kXCifQ=;
+        b=fB7YuyM3EWyD9mUxR+W2FETpdbYdiyNIJjjGUJjD973ZNiXtwE3uEWGLf0voJ/KfyU
+         xHifMQfhYLLfBnhUFaw3aTx7oDRy+TvT5GkJ5zQ09MynhhZIRagQH0lz3fqbUoIb3bNc
+         u7S6HDCHB1Hq+VoBgHPK/wzbgvkR7CJ/S7N5p9b2076Lvy50+UWHrZSCRpYroaS7erui
+         ZnO62hO/rjpNF+hVuvzIeNk5BxB0ORRBBtz34ZB4+2TndqRsiRa8Z9sZicfw5dESuWjz
+         i/900Ki6SJkz4dW/RWy90KeNYdtyW3Vo/xGsbDJsKqI5QAGFrZL1P3+pZIyQXVx70w40
+         mZHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983979; x=1793588779;
+        d=1e100.net; s=20260707; t=1792983985; x=1793588785;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=P43EFHxWNYcGPZGupIdCGH+n+HkHoKnERxi7qoEppzE=;
-        b=mToJsT+F5IX2v2ijdSESzyvhXZkBvwbrw+9UlUY8YF4+ymnk9fJEVsOmYfBjyC+0pG
-         uObINtLmLAJGq4qbJfg1I1eaYO80OBTDcasHZXwOJAj+SYPE5KF0OEoIuExcVAx53k2i
-         YM7inxsAhAeWQ494g6dDC2pYiPEOaJfrBoQ6GySYLCxQo2CqNA5GYXbyxbanAxdFJMk5
-         oJFtgRhpJgWs8QjtSCUmmOpQFd+C2JewX5SWNAwVb5Hw1gkKkY6zQt7+tC3L+809oXHM
-         ItKxV9wYTGLm/xkZrelWdKL1cgigcPc+LRIyQTGYHfjCtooKKv8/oIE4FJax3UV2TiNr
-         S3uw==
-X-Gm-Message-State: AFq9FYJZCU+PNku/R6nlIMKc+3Lh7tiVxRHslj0Uef6RCxjiatKLGYek
-	V0RLhlcLpww32SICD+67Hmo221fSd7v5HZUxM7nRQOdxdJqntuWyA6Dzk6NEkA==
-X-Gm-Gg: AYBFou1NZi7QdKd8zGfxwdKWpMfeiKRQlW8lOlUrou0DVdfKVAOIaiGWY03ul3lJTMN
-	QcypvMWVFJfB8U6YKoRcFeU2wbAu1jk6/v9c/wFgkRXWjmUSlNWHzxQhPSPKFGUl95CeiqjspPB
-	SzTxImNHd/i+bQ/swrGNKNAI+eKSsaXHS9Wy8bqNo3eguzlBFFLXuhBD99GkeBx0S5MZJuj1yFC
-	/SSCAJ5sFWw5KdgWod2yMTpyR3NeyaqWrZI8NStmk3ckzxwPNILN5mAsha5csu5HfHbX/mpklZJ
-	ZhyRjJqPS4Cp94wtXQ+INA18YEpya+NmEBs6MR9RVAKwwITnmIA0ofzPSqMK5icU25/3OInJ8st
-	vkEgFFh0ySMX8mAqMJpkf7WICHhHF6OrqcjoZudtBCIgs/X4/N/dTyX/KmiIaBdURXO1UJyfdAC
-	cYXKRQOYtphpKBNUHwLzUAH85ZSbDSKyZpV4Pa7bQQRjfFDVAkN/Q870EGCZL/ozTNsUA8SS+S7
-	uViqQrbHXKpZCOevX9OwynmwCu2FSF3YT2vmZRtneHBMPQZo06QW5QkJY1Clg7w1IdHkdWgI0xf
-	QssBq+u/o0wg+na8EMwJB7jNj2SbhCQ6SvpLEyMqNYbYALmjTfJv3TvpF9KwIZhDcBUpY7QAAVg
-	6IFe1BYTRY0gmLQHVc3aAxBYs
-X-Received: by 2002:a17:90b:1cc4:b0:3a8:195f:186 with SMTP id 98e67ed59e1d1-3adeb0f893fmr4394060a91.42.1792983978997;
-        Sun, 25 Oct 2026 20:06:18 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebfa3794sm6385835a91.14.2026.10.25.20.06.18
+        bh=sGzv3R1j6EFLJeeGgiQmOVPKP9XVxq7VnIee8kXCifQ=;
+        b=DDbhQEzASmO4vHwWnULZ2HCLyaeZGkIXvL/HejCTpQa6/VJeWv4FWHbENY523rM+Cs
+         5ye7Fsfe1Znimm59JwLz8nDvFBEYFtuXQzJ9c9tRTFxeVZ9IDIcoU1eBTnGIS+ogtAnk
+         X5tCy+F9ulTT8NBno7CwlHQelFn+LK0jU1l5GUO5IchShhAEmq33CfboX41zlBh4oAhW
+         IqQspRmBSa3+QoXTkERIQEtkGEYWtCawFOOidjZGIMkH5r/+73pCS1dnWp08upQ+tPN5
+         2LI1NInMpAbn1SiKFRwSDBpw+n6ZYhrAzAQ6UBNZyZbijLZMXDatdKGNIgEFGBqB1WeV
+         Za/w==
+X-Gm-Message-State: AFq9FYJq8UIzMiH2oVuDfQ2QNxOXMeGeLWkvH4LbPO3cxDtG1EHIBIk1
+	gOcLPCnkozBkpwiG0JEO2daCOMsAtPJ8h57vu3yIa7/oi1Q4/bN38V18TWF0FA==
+X-Gm-Gg: AYBFou3jddO9+gBnwurqQ4VWQMxN+/3kVUQqq31Mgjko27OsOVj+45WTKEwTj1atgmW
+	yeWWNrLC1nmqo29inXDYI7JnWumOIlF8HrekTKSUGksxE3h8TQgqkuOeeMSBFSjsPm+MxRK3ZNg
+	CuuuSLqFTJMOXryd3Eo45EoyiKD3aeNQvdVeS8K1/QJqJHv7++Nb/AjIWJJjK8cIdnXZB6WrSdM
+	j5HJRJ1LHUwnGntjNgq8GL/8JQnoO3yLcy8xbDG5s3U1RsX0ahAYbH5RL/71VsjGXvi3CII2soI
+	MYLRJPg1LLoFIF1+DEsj0r3xuSlfXtwf0UbOWpjavG99/qUO94ebZsiMw2AQHzeCC8L38ZgUOBK
+	P9X/N4RFf0RM1YM/NPOjo0CJB5Av/JQXRZTXretS/cx4BmKzYyaARpXAyPZms3FpRa00/w6lSII
+	EPdgqigbh44xA/p3OaeS6VNkS9TM6s82e8qlWVtv+LSCAzyRSpUDmth4j9l6tIIgd7Mm13XQGkp
+	MWnLmul/oVPy+/mcaaCeIPu1qXcI5KJZPOpyfn6mLTcuRzHl0Hq+sy2i1ETwVZEGFZvMfMwCB40
+	8tQANmtRERUVhejVe5R804PzLV9DcOhY2qkutxUZAS7fFHbu/mMpcrqnVbNuied/GjdKu1ft7dx
+	YIMT3RPA4Am2+utWGBbi1K3/S
+X-Received: by 2002:a17:90b:1dc7:b0:3ad:183f:5e3a with SMTP id 98e67ed59e1d1-3ade9b2edcemr4941249a91.4.1792983984805;
+        Sun, 25 Oct 2026 20:06:24 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebacc885sm6428881a91.5.2026.10.25.20.06.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:06:18 -0700 (PDT)
+        Sun, 25 Oct 2026 20:06:24 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 67/81] bpf: Remove leftovers of precision tracking and read marks
-Date: Mon, 26 Oct 2026 02:59:28 +0000
-Message-ID: <20261026025943.404450-68-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 68/81] bpf: Track a pointer to one of a set of functions
+Date: Mon, 26 Oct 2026 02:59:29 +0000
+Message-ID: <20261026025943.404450-69-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,259 +103,365 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-"bpf: Remove precision tracking" removed the 'precise' bit and backtrack.c.
-This code has no purpose after that:
- - __mark_reg_unknown() and __mark_reg_const_zero() have the argument env
-   only to set the bit. Replace the first function with
-   bpf_mark_reg_unknown(). Remove env from the second function.
- - Only backtrack.c used BPF_REGMASK_ARGS.
+'ops[i](x)' in C compiles to a load from a table of functions at a variable
+offset and then callx. A call of a method of a trait object in Rust
+compiles to the same code. At the load the verifier splits the state into N
+states, one for each function that the load can return. The states differ
+only in this register, but the verifier verifies the code from the load to
+callx N times.
 
-The verifier has no read marks, and nothing sets longest_mark_read_walk.
-Remove it. veristat and other tools parse the statistics line of the
-verifier log. Thus the line continues to show "mark_read 0".
+The states also count against the limit of 1024 states at one insn
+(BPF_FLOW_MAX_STATES). In a prog of rust-bpf (Rust compiled to BPF) fmt()
+of a trait object has 245 implementations. 3 states get to the load, and
+each adds 244 states. The result is 732 states at one insn.
 
-No functional changes.
+Do not split the state at the load. The register holds a pointer to one of
+N functions until an insn must know the function.
+
+             before                             this patch
+
+     r3 = *(u64 *)(r3 + 8)                r3 = *(u64 *)(r3 + 8)
+      /        |        \                           |
+   r3=f1     r3=f2 ...  r3=fN               r3 = one of f1 .. fN
+     |         |          |                         |
+    ...       ...        ...                       ...
+     |         |          |                         |
+  callx r3  callx r3   callx r3                 callx r3
+     |         |          |                    /    |    \
+    f1        f2         fN                  f1    f2 ... fN
+
+callx verifies each function of the set. Thus the verifier verifies the
+same calls as before. The verifier log shows the register in this way:
+
+  r3 = *(u64 *)(r3 +8)          ; R3=func(one_of=245)
+
+The register holds the number of a set (func_set), and equal sets have the
+same number. Thus the code that compares states does not change.
+
+  insn that must know the function  what the verifier does
+  --------------------------------  ---------------------------------------
+  callx, func_is_on_its_own()       A copy of the state of the caller waits
+                                    for the exit states of the function.
+  callx, other functions            Each function gets a state at callx.
+  call of a helper or a kfunc,      Each function gets a state at the call.
+  the pointer is an argument        A callback is one function.
+
+func_is_on_its_own() is true for most functions. The verifier verifies such
+a function for the states at its entry, and not again for each caller. The
+copy that waits is not a state at an insn. Thus it does not count against
+the limit.
+
+Limitations:
+ - Only the load makes a set. Two pointers to functions that come from two
+   branches of a prog continue to be two states.
+ - The verifier does not know that two copies of the pointer are equal.
+   After 'r6 = r2; callx r2' a subsequent 'callx r6' verifies all N
+   functions. Code that is dead only when the two calls go to the same
+   function stays in the prog.
+
+In the prog above the largest number of states at one insn changes from 732
+to 159.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  6 ----
- kernel/bpf/states.c          |  2 --
- kernel/bpf/verifier.c        | 53 +++++++++++++++---------------------
- 3 files changed, 22 insertions(+), 39 deletions(-)
+ include/linux/bpf_verifier.h |  15 +++-
+ kernel/bpf/log.c             |   2 +
+ kernel/bpf/verifier.c        | 168 +++++++++++++++++++++++++++++------
+ 3 files changed, 158 insertions(+), 27 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index f46963591e18..0cd7fa277fe5 100644
+index 0cd7fa277fe5..3bd2965e531e 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -274,10 +274,6 @@ enum bpf_stack_slot_type {
- #define BPF_HALF_REG_SIZE	4
- #define STACK_SLOT_SZ		4
+@@ -121,7 +121,11 @@ struct bpf_reg_state {
+ 			unsigned long raw2;
+ 		} raw;
  
--#define BPF_REGMASK_ARGS ((1 << BPF_REG_1) | (1 << BPF_REG_2) | \
--			  (1 << BPF_REG_3) | (1 << BPF_REG_4) | \
--			  (1 << BPF_REG_5))
--
- #define BPF_MAIN_FUNC (-1)
- 
- #define BPF_DYNPTR_SIZE		sizeof(struct bpf_dynptr_kern)
-@@ -1088,8 +1084,6 @@ struct bpf_verifier_env {
- 	 * memory consumption during verification
+-		u32 subprogno; /* for PTR_TO_FUNC */
++		struct { /* for PTR_TO_FUNC */
++			u32 subprogno;
++			/* if not 0: one of env->func_sets[func_set - 1], subprogno is 0 */
++			u32 func_set;
++		};
+ 	};
+ 	/* For scalar types (SCALAR_VALUE), this represents our knowledge of
+ 	 * the actual value.
+@@ -1036,6 +1040,9 @@ struct bpf_verifier_env {
  	 */
- 	u32 peak_states;
--	/* longest register parentage chain walked for liveness marking */
--	u32 longest_mark_read_walk;
+ 	struct bpf_func_ptr *func_ptrs;
+ 	u32 func_ptr_cnt;
++	/* What a pointer that was read from a table of functions may point to. */
++	struct bpf_func_set **func_sets;
++	u32 func_set_cnt;
+ 	bool has_callx;
  	/*
- 	 * The program's fd_array comes in two shapes, told apart by whether
- 	 * the caller passed fd_array_cnt. They are mutually exclusive:
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 91c3a23b6e12..8b7c13be9265 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -5,8 +5,6 @@
- #include <linux/cnum.h>
- #include <linux/filter.h>
+ 	 * Call graph edges created by callx instructions. A bitmap of
+@@ -1402,6 +1409,12 @@ static inline bool bpf_register_is_null(struct bpf_reg_state *reg)
+ }
  
--#define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
--
- /* check %cur's range satisfies %old's */
- static bool range_within(const struct bpf_reg_state *old,
- 			 const struct bpf_reg_state *cur)
+ bool bpf_map_is_rdonly(const struct bpf_map *map);
++/* Sorted, no function is there twice */
++struct bpf_func_set {
++	u16 cnt;
++	u16 subprog[] __counted_by(cnt);
++};
++
+ struct bpf_func_ptr *bpf_map_func_ptrs(struct bpf_verifier_env *env,
+ 				       const struct bpf_map *map, u32 *cnt);
+ struct bpf_func_ptr *bpf_map_range_func_ptrs(struct bpf_verifier_env *env,
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 0013ab01e72d..3d26b0b7ed46 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -656,6 +656,8 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 		verbose_a("parent_id=%d", reg->parent_id);
+ 	if (type_is_non_owning_ref(reg->type))
+ 		verbose_a("%s", "non_own_ref");
++	if (t == PTR_TO_FUNC && reg->func_set)
++		verbose_a("one_of=%d", env->func_sets[reg->func_set - 1]->cnt);
+ 	if (type_is_map_ptr(t)) {
+ 		if (reg->map_ptr->name[0])
+ 			verbose_a("map=%s", reg->map_ptr->name);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 17a9d1bf5318..21ea43422133 100644
+index 21ea43422133..6c6980d74fd6 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -847,15 +847,12 @@ static int unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_re
- 				      : reg->id);
+@@ -6935,7 +6935,52 @@ static void mark_reg_func_ptr(struct bpf_verifier_env *env, struct bpf_reg_state
+ 	regs[regno].subprogno = subprog;
  }
  
--static void __mark_reg_unknown(const struct bpf_verifier_env *env,
--			       struct bpf_reg_state *reg);
+-/* a read from a table of functions branches into that many states at most */
++static int cmp_u16(const void *a, const void *b)
++{
++	return *(const u16 *)a - *(const u16 *)b;
++}
++
++/*
++ * Pointers to functions have a join: the set of the functions. The states would differ in
++ * nothing else up to the call, and there every function of the set is verified.
++ * Equal sets have the same number, so registers are compared as they are.
++ */
++static int mark_reg_func_set(struct bpf_verifier_env *env, struct bpf_reg_state *regs, int regno,
++			     u16 *subprogs, u32 cnt)
++{
++	struct bpf_func_set **sets, *set;
++	u32 i, n = 0;
++
++	sort(subprogs, cnt, sizeof(*subprogs), cmp_u16, NULL);
++	for (i = 0; i < cnt; i++)
++		if (!n || subprogs[n - 1] != subprogs[i])
++			subprogs[n++] = subprogs[i];
++	mark_reg_func_ptr(env, regs, regno, n == 1 ? subprogs[0] : 0);
++	if (n == 1)
++		return 0;
++
++	for (i = 0; i < env->func_set_cnt; i++) {
++		set = env->func_sets[i];
++		if (set->cnt == n && !memcmp(set->subprog, subprogs, n * sizeof(*subprogs)))
++			break;
++	}
++	if (i == env->func_set_cnt) {
++		sets = krealloc_array(env->func_sets, i + 1, sizeof(*sets), GFP_KERNEL_ACCOUNT);
++		if (!sets)
++			return -ENOMEM;
++		env->func_sets = sets;
++		set = kzalloc_flex(*set, subprog, n, GFP_KERNEL_ACCOUNT);
++		if (!set)
++			return -ENOMEM;
++		set->cnt = n;
++		memcpy(set->subprog, subprogs, n * sizeof(*subprogs));
++		sets[env->func_set_cnt++] = set;
++	}
++	regs[regno].func_set = i + 1;
++	return 0;
++}
++
++/* a read from a table of functions yields one of that many at most */
+ #define BPF_MAX_FUNC_PTR_TARGETS BPF_MAX_SUBPROGS
+ /* and that many pointers at most are next to what is read at variable offset */
+ #define BPF_MAX_FUNC_PTR_RANGE 4096
+@@ -6968,7 +7013,7 @@ static u32 count_read_offsets(struct tnum offs, u64 min_off, u64 max_off, u32 li
+  * is possible at, e.g. var_off is the stride of the elements of an array.
+  * A read of exactly one pointer yields PTR_TO_FUNC. When the offset is variable
+  * and only pointers can be read, which is how an element of a table of
+- * functions is loaded, the verification continues with each of them. Other
++ * functions is loaded, it is one of them, see mark_reg_func_set(). Other
+  * reads that overlap with a pointer are rejected, because their result is not
+  * known until the program is jitted.
+  *
+@@ -6981,7 +7026,6 @@ static int check_func_ptr_read(struct bpf_verifier_env *env, struct bpf_reg_stat
+ 	struct tnum offs = tnum_add(reg->var_off, tnum_const(off));
+ 	struct bpf_reg_state *regs = cur_regs(env);
+ 	struct bpf_map *map = reg->map_ptr;
+-	struct bpf_verifier_state *branch;
+ 	u16 *targets __free(kfree) = NULL;
+ 	struct bpf_func_ptr *ptrs;
+ 	u32 i, cnt, n = 0;
+@@ -7032,16 +7076,7 @@ static int check_func_ptr_read(struct bpf_verifier_env *env, struct bpf_reg_stat
+ 	if (err)
+ 		return err;
+ 
+-	for (i = 0; i < n - 1; i++) {
+-		branch = push_stack(env, env->insn_idx + 1, env->insn_idx,
+-				    env->cur_state->speculative);
+-		if (IS_ERR(branch))
+-			return PTR_ERR(branch);
+-		mark_reg_func_ptr(env, branch->frame[branch->curframe]->regs, value_regno,
+-				  targets[i]);
+-	}
+-	mark_reg_func_ptr(env, regs, value_regno, targets[n - 1]);
+-	return 0;
++	return mark_reg_func_set(env, regs, value_regno, targets, n);
+ 
+ overlap:
+ 	verbose(env, "read of %d bytes at offset [%llu,%llu] of map '%s' overlaps with a pointer to a function\n",
+@@ -11757,13 +11792,92 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+  * PTR_TO_FUNC register identifies the callee, so from here on callx is verified
+  * as a direct call of that static subprog.
+  */
++static int check_func_callx_one(struct bpf_verifier_env *env, int subprog, int *insn_idx)
++{
++	int err;
++
++	err = btf_check_subprog_call(env, subprog);
++	if (err == -EFAULT)
++		return err;
++
++	err = record_callx_edge(env, cur_func(env)->subprogno, subprog);
++	if (err)
++		return err;
++
++	return check_static_func_call(env, subprog, insn_idx);
++}
++
++/* The insn needs to know the function: go on with each function of the set. */
++static int split_func_set(struct bpf_verifier_env *env, int regno)
++{
++	struct bpf_reg_state *reg = reg_state(env, regno);
++	struct bpf_verifier_state *branch;
++	struct bpf_func_set *set;
++	u32 i;
++
++	if (reg->type != PTR_TO_FUNC || !reg->func_set)
++		return 0;
++	set = env->func_sets[reg->func_set - 1];
++	reg->func_set = 0;
++	for (i = 0; i < set->cnt; i++) {
++		reg->subprogno = set->subprog[i];
++		if (i == set->cnt - 1)
++			break;
++		branch = push_stack(env, env->insn_idx, env->insn_idx, false);
++		if (IS_ERR(branch))
++			return PTR_ERR(branch);
++	}
++	return 0;
++}
++
++/*
++ * callx of one of the functions of a set. A function that is verified on its own
++ * gets a copy of the state that waits for it. Nothing meets at an insn.
++ */
++static int check_func_callx_set(struct bpf_verifier_env *env, int regno, int *insn_idx)
++{
++	struct bpf_verifier_state *cur = env->cur_state, *copy, *branch;
++	struct bpf_reg_state *reg = reg_state(env, regno);
++	struct bpf_func_set *set = env->func_sets[reg->func_set - 1];
++	int err = 0;
++	u32 i;
++
++	/* once, and not in every copy */
++	account_current_path(env);
++	reg->func_set = 0;
++	for (i = 0; i < set->cnt && !err; i++) {
++		reg->subprogno = set->subprog[i];
++		if (!func_is_on_its_own(env, cur, set->subprog[i])) {
++			branch = push_stack(env, *insn_idx, *insn_idx, false);
++			if (IS_ERR(branch))
++				return PTR_ERR(branch);
++			continue;
++		}
++		copy = kzalloc_obj(*copy, GFP_KERNEL_ACCOUNT);
++		if (!copy)
++			return -ENOMEM;
++		err = bpf_copy_verifier_state(copy, cur);
++		if (!err) {
++			env->cur_state = copy;
++			err = check_func_callx_one(env, set->subprog[i], insn_idx);
++			env->cur_state = cur;
++		}
++		bpf_free_verifier_state(copy, true);
++		if (err == PROCESS_BPF_EXIT)
++			err = 0;
++		else if (verifier_bug_if(!err, env, "callx: func#%d doesn't wait", set->subprog[i]))
++			err = -EFAULT;
++	}
++	/* all that is to be done has a state of its own */
++	return err ?: PROCESS_BPF_EXIT;
++}
++
+ static int check_func_callx(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			    int *insn_idx)
+ {
+-	struct bpf_func_state *caller = cur_func(env);
+ 	struct bpf_reg_state *reg;
+ 	const char *reason;
+-	int err, subprog;
++	int err;
+ 
+ 	err = check_reg_arg(env, insn->dst_reg, SRC_OP);
+ 	if (err)
+@@ -11796,16 +11910,9 @@ static int check_func_callx(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		return err;
+ 
+ 	/* PTR_TO_FUNC is a pointer to a static subprog */
+-	subprog = reg->subprogno;
+-	err = btf_check_subprog_call(env, subprog);
+-	if (err == -EFAULT)
+-		return err;
 -
- static void mark_reg_invalid(const struct bpf_verifier_env *env, struct bpf_reg_state *reg)
- {
- 	if (!env->allow_ptr_leaks)
- 		bpf_mark_reg_not_init(env, reg);
- 	else
--		__mark_reg_unknown(env, reg);
-+		bpf_mark_reg_unknown(reg);
- }
- 
- static int dynptr_ref_cnt(struct bpf_verifier_env *env, int v_parent_id)
-@@ -1998,7 +1995,7 @@ static void __mark_reg_known_zero(struct bpf_reg_state *reg)
- 	__mark_reg_known(reg, 0);
- }
- 
--static void __mark_reg_const_zero(const struct bpf_verifier_env *env, struct bpf_reg_state *reg)
-+static void __mark_reg_const_zero(struct bpf_reg_state *reg)
- {
- 	__mark_reg_known(reg, 0);
- 	reg->type = SCALAR_VALUE;
-@@ -2343,16 +2340,10 @@ void bpf_mark_reg_unknown(struct bpf_reg_state *reg)
- 	reg_step_reset(reg);
- }
- 
--static void __mark_reg_unknown(const struct bpf_verifier_env *env,
--			       struct bpf_reg_state *reg)
--{
--	bpf_mark_reg_unknown(reg);
--}
+-	err = record_callx_edge(env, caller->subprogno, subprog);
+-	if (err)
+-		return err;
 -
- static void mark_reg_unknown(struct bpf_verifier_env *env,
- 			     struct bpf_reg_state *regs, u32 regno)
+-	return check_static_func_call(env, subprog, insn_idx);
++	if (reg->func_set)
++		return check_func_callx_set(env, insn->dst_reg, insn_idx);
++	return check_func_callx_one(env, reg->subprogno, insn_idx);
+ }
+ 
+ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
+@@ -20484,7 +20591,7 @@ static void null_to_arena(struct bpf_verifier_env *env, int regno)
+ 
+ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
  {
--	__mark_reg_unknown(env, regs + regno);
-+	bpf_mark_reg_unknown(regs + regno);
- }
+-	int err;
++	int err, i;
+ 	struct bpf_insn *insn = &env->prog->insnsi[env->insn_idx];
+ 	u8 class = BPF_CLASS(insn->code);
  
- static int __mark_reg_s32_range(struct bpf_verifier_env *env,
-@@ -2378,7 +2369,7 @@ static int __mark_reg_s32_range(struct bpf_verifier_env *env,
- void bpf_mark_reg_not_init(const struct bpf_verifier_env *env,
- 			   struct bpf_reg_state *reg)
- {
--	__mark_reg_unknown(env, reg);
-+	bpf_mark_reg_unknown(reg);
- 	reg->type = NOT_INIT;
- }
- 
-@@ -3973,7 +3964,7 @@ static void mark_reg_stack_read(struct bpf_verifier_env *env,
- 		/* Any access_size read into register is zero extended,
- 		 * so the whole register == const_zero.
- 		 */
--		__mark_reg_const_zero(env, &state->regs[dst_regno]);
-+		__mark_reg_const_zero(&state->regs[dst_regno]);
- 	} else {
- 		/* have read misc data from the stack */
- 		mark_reg_unknown(env, state->regs, dst_regno);
-@@ -4115,10 +4106,10 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 
- 				if (spill_cnt == size &&
- 				    tnum_is_const(reg->var_off) && reg->var_off.value == 0) {
--					__mark_reg_const_zero(env, &state->regs[dst_regno]);
-+					__mark_reg_const_zero(&state->regs[dst_regno]);
- 				} else if (zero_cnt == size) {
- 					/* similarly to mark_reg_stack_read(), preserve zeroes */
--					__mark_reg_const_zero(env, &state->regs[dst_regno]);
-+					__mark_reg_const_zero(&state->regs[dst_regno]);
- 				} else {
- 					mark_reg_stack_read(env, reg_state, off, off + size,
- 							    dst_regno);
-@@ -7744,7 +7735,7 @@ static int check_stack_range_initialized(
- 		    (ss->spilled_ptr.type == SCALAR_VALUE ||
- 		     env->allow_ptr_leaks)) {
- 			if (clobber) {
--				__mark_reg_unknown(env, &ss->spilled_ptr);
-+				bpf_mark_reg_unknown(&ss->spilled_ptr);
- 				for (j = 0; j < BPF_REG_SIZE; j++)
- 					scrub_spilled_slot(&ss->slot_type[j]);
- 			}
-@@ -8709,7 +8700,7 @@ static int process_iter_next_call(struct bpf_verifier_env *env, int insn_idx,
- 
- 	/* mark current iter state as drained and assume returned NULL */
- 	cur_iter->iter.state = BPF_ITER_STATE_DRAINED;
--	__mark_reg_const_zero(env, &cur_fr->regs[BPF_REG_0]);
-+	__mark_reg_const_zero(&cur_fr->regs[BPF_REG_0]);
- 
- 	return 0;
- }
-@@ -15815,7 +15806,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		ret_nregs = mark_kfunc_ret_regs(env, regs, t->size);
- 		if (meta.btf == btf_vmlinux && (meta.func_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
- 		    meta.func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave]))
--			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
-+			__mark_reg_const_zero(&regs[BPF_REG_0]);
- 	} else if (btf_type_is_struct(t)) {
- 		struct btf_member_path path = {};
- 		const char *member_note = "";
-@@ -16445,14 +16436,14 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 		/* Taint dst register if offset had invalid bounds derived from
- 		 * e.g. dead branches.
- 		 */
--		__mark_reg_unknown(env, dst_reg);
-+		bpf_mark_reg_unknown(dst_reg);
- 		return 0;
- 	}
- 
- 	if (BPF_CLASS(insn->code) != BPF_ALU64 && !to_scalar) {
- 		/* 32-bit ALU ops on pointers produce (meaningless) scalars */
- 		if (opcode == BPF_SUB && env->allow_ptr_leaks) {
--			__mark_reg_unknown(env, dst_reg);
-+			bpf_mark_reg_unknown(dst_reg);
- 			return 0;
- 		}
- 
-@@ -16516,7 +16507,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 	}
- 
- 	if (to_scalar) {
--		__mark_reg_unknown(env, dst_reg);
-+		bpf_mark_reg_unknown(dst_reg);
- 		return 0;
- 	}
- 
-@@ -17463,7 +17454,7 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 	int ret;
- 
- 	if (!is_safe_to_compute_dst_reg_range(insn, &src_reg)) {
--		__mark_reg_unknown(env, dst_reg);
-+		bpf_mark_reg_unknown(dst_reg);
- 		return 0;
- 	}
- 
-@@ -19392,7 +19383,7 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	if (insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
- 	    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE) {
- 		if (map->map_type == BPF_MAP_TYPE_ARENA) {
--			__mark_reg_unknown(env, dst_reg);
-+			bpf_mark_reg_unknown(dst_reg);
- 			dst_reg->map_ptr = map;
- 			bpf_diag_mod_end(env);
- 			return 0;
-@@ -20487,7 +20478,7 @@ static void null_to_arena(struct bpf_verifier_env *env, int regno)
- 	reg = &cur_regs(env)[regno];
- 	if (reg->type != SCALAR_VALUE || !tnum_equals_const(reg->var_off, 0))
- 		return;
--	__mark_reg_const_zero(env, reg);
-+	__mark_reg_const_zero(reg);
- 	reg->type = PTR_TO_ARENA;
- }
- 
-@@ -20983,9 +20974,9 @@ static int push_budget_exit(struct bpf_verifier_env *env)
- 		return PTR_ERR(branch);
- 	branch->unwound = sub->bail_unwinds;
- 	regs = branch->frame[branch->curframe]->regs;
--	__mark_reg_const_zero(env, &regs[BPF_REG_0]);
-+	__mark_reg_const_zero(&regs[BPF_REG_0]);
- 	if (bpf_ret_reg_pair(env, cur_func(env)->subprogno))
--		__mark_reg_const_zero(env, &regs[BPF_REG_2]);
-+		__mark_reg_const_zero(&regs[BPF_REG_2]);
- 	return 0;
- }
- 
-@@ -21070,7 +21061,7 @@ static int check_loop_guard(struct bpf_verifier_env *env)
- 			aux->guard_zero |= BIT(i);
- 	for (i = BPF_REG_0; i < BPF_REG_FP; i++)
- 		if (aux->guard_zero & BIT(i))
--			__mark_reg_const_zero(env, &regs[i]);
-+			__mark_reg_const_zero(&regs[i]);
- 
- 	func = branch->frame[branch->curframe];
- 	branch->insn_idx = aux->guard_to;
-@@ -22721,12 +22712,12 @@ static void print_verification_stats(struct bpf_verifier_env *env)
- 				env->subprog_info[i].stack_depth);
- 		}
- 	}
--	/* user space parses this line. There is no limit. */
-+	/* user space parses this line. There is no limit and there are no read marks. */
- 	verbose(env, "processed %d insns (limit 0) max_states_per_insn %d "
--		"total_states %d peak_states %d mark_read %d\n",
-+		"total_states %d peak_states %d mark_read 0\n",
- 		env->insn_processed,
- 		env->max_states_per_insn, env->total_states,
--		env->peak_states, env->longest_mark_read_walk);
-+		env->peak_states);
- }
- 
- int bpf_prog_ctx_arg_info_init(struct bpf_prog *prog,
+@@ -20566,6 +20673,12 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 				return check_func_callx(env, insn, &env->insn_idx);
+ 			if (insn->src_reg == BPF_PSEUDO_CALL)
+ 				return check_func_call(env, insn, &env->insn_idx);
++			/* a callback is one function */
++			for (i = BPF_REG_1; i <= BPF_REG_5; i++) {
++				err = split_func_set(env, i);
++				if (err)
++					return err;
++			}
+ 			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL)
+ 				return check_kfunc_call(env, insn, &env->insn_idx);
+ 			return check_helper_call(env, insn, &env->insn_idx);
+@@ -24878,6 +24991,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	kvfree(env->gotox_tmp_buf);
+ 	kvfree(env->callx_edges);
+ 	kvfree(env->func_ptrs);
++	for (i = 0; i < env->func_set_cnt; i++)
++		kfree(env->func_sets[i]);
++	kfree(env->func_sets);
+ 	bpf_diag_free(env);
+ 	kvfree(env->idoms);
+ 	kvfree(env);
 -- 
 2.55.0
 
