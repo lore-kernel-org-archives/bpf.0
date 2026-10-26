@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986787;
-	b=GgQ3yrp91QbkJ89lLFAcNYt2RyEKM9KG495j+U0iIvnibzB21Nf/FaLjuRYJt3kvA75J
-	 jTas0LT/tSajuY9Jd+ZR92S5YSsRpXQDX4vngFLVzYq+95r86Gi1sz69Aa7kKVGljG69h
-	 J3g5snJqGMUc2SDOTOL/i1NNx04/4Uu9rm3yLvsDBnJab3OYZP6xmQqtG1BJQQW8VUhq9
-	 9p5U3BOyK2ScPP8sHGHb39H7m4mXHlbnB3dI0LBP9aLfPioez9J62dHEL9v99wdcnNE2C
-	 ajCNJrUdPbQa4N2Mt/61C6FGf1Wmp1eKvh8wSOSx1z8mwcRyXKqPYxWuapwanTCrKlw==
+	t=1792986789;
+	b=D1P4OEE9nsHOeneXkcG7xOYwBYQBYaKVIV/RkhOr1nifAaHUtRqzth57sZotxpt+D/dP
+	 ZQEQCnA/a2bACG7oVzMVOY/4B/Jqdq3WWMOPAk9cM7txkTzgyDsyiZHXfiaH1IRLgrqzp
+	 9Uad7nqYY48CAygZGqc8Gy+Nb1QC+t4MsjuP7+zD/200RLU6gB6CRzMpuuXgIlMIcRUVr
+	 5Ilr+MSF1y0Msv57PeHvGr5lv+rPa5n+sn4ePMFYsC+pi6+nTosgVLDW2ASTpWqOBKhZk
+	 Gn3+z3WsRHu2hazhvKuRAcGsBy1H/vAW7y8fhVNs2pUO9a8ljcSZaTeAFlejWcGibbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986787;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986789;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=JVqKKyGaEOMbBLeAjQBq7tiBBPkO66xsAitbMHTNlZc=;
-	b=jbGC/ZC7ZKgIEFC/nhIbZNVoIuImbOaBAnHj4kEMmsfX16yhOzpr/GvQDO04KfVrLnNJ
-	 8KTNbN0iDugiklgjBG5p5b3NESGnO4oiwcrwkAFQjqMWx2RoOAzpSUorJzbDgTgXLOp2f
-	 nF5w6GbgZ4AkEHYCiJUHD1TtABpmvovpHeCeD5Iu4RKElL2rr4tLxkNb1y/oNqs0lwHHj
-	 KtSrK36BLf7/+KiuDNfYZhKtz/ZuR+qmrMz6yYkpAiaYQnvSFcGevdxhXv3zvR+5QJfF8
-	 oiukuG4iHI4T6IuK3ljPm2LcHSr5NzL+dvwqAvgyY73CKoG4S25eSC9keYPLgVQMXdg==
+	bh=rg+8qdArxbE6fvNnmqWdWPY/6nA1dN4zrSdk5N6bcIw=;
+	b=a8ssKXoLGz0Z3OOnrFfgeMey5fX4s4Qjp/drYkX8L8sAlA1CGXEnJzkPkI+aY1YYM8F4
+	 oRkdEKzfpoJDKKth7yYelG75mR3g0Axaeopw5M3HSPcXMzoZpfW8Wi+d+qyOs5ldY7D1L
+	 POn8jtGF+qmZcwqO/rvGQkSsiZ/WyvUh5uIqasjRCE+zLSpiYJTQ7voVdOYwV396ppCcS
+	 DckWTSbGj+zPFohu8l862g+EKC8Pbc1s3snpCDm6XZMmDh4QSP9Zr13FNKbzQO314J6wm
+	 HHMh9gmW06X4vHIUbriaYWXpx4eRJHLUxwArqaU72jWD5Nvf40LdmT105Ti3/id5AMA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IMNbWdvp;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z+8zkVAf;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C56F606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031C6606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IMNbWdvp
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687111F01825;
-	Mon, 26 Oct 2026 03:53:06 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Z+8zkVAf
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C42B1F01825;
+	Mon, 26 Oct 2026 03:53:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986786;
-	bh=JVqKKyGaEOMbBLeAjQBq7tiBBPkO66xsAitbMHTNlZc=;
+	s=k20260515; t=1792986788;
+	bh=rg+8qdArxbE6fvNnmqWdWPY/6nA1dN4zrSdk5N6bcIw=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=IMNbWdvpqOFhySLoNbDLuzM98LUqcyw93EuTihFlNCt51c4lGK0PiCQWTipkSu7Js
-	 wIej3rdt729FVIRP11ahkV4SZwzCsW75LgHNugIGlSoT8g39f0amLQd1KIaQvFqMa4
-	 L9SmwuGhY6s8KtgIIuCVWvfVShyLk6sJRWnl72vE4+QONUVXaTI611Y/fRcRpq4u1Q
-	 NCdCGv/vQ7rezA39kOxhVlktqfxQTEqfpHcjaMugHWwtQXSJP//+NyeH5QpsNvpM/C
-	 m37MH4j61k8v+1gCPaf29quEsaMWdOIvYP4P7q3kZbBZbcdoxJaEYh6noR672n0Jw9
-	 OOExLNbu/e0ww==
-Content-Type: multipart/mixed; boundary="===============7759510558170164353=="
+	b=Z+8zkVAfQMAQsNhl9cMGG1PivFRDeF2DGGxv1xmEW8EIuBWjyo8OJZWWb/DJADTKC
+	 smNsGfr8rR730saBO7hLRYPvkf8Gu7DV8PX9vJKRzb88cL8s5Z4EG3Q0RhoWj3pl1g
+	 pAlgsAu+a9/Et0Pj4ShmGbl8wOrjJABaqTxp7z5A3ZH58ND6QcfKY7Qa5lB+RAj0IM
+	 eIYxtJqw57oma8QazwSIV8Jt9pwqtUTH6uS4Bbzp2+Wp8JhkCgQjKCy9JIuujVXrFw
+	 SNsImsdcehYWdLTlJjOn8/yuN33Lrm+RchHG2Qq4sYw4KGc1+XKOq5KLUvnKlA+7BV
+	 /pxHx1I1b7AYg==
+Content-Type: multipart/mixed; boundary="===============3898424796731597585=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,115 +49,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <3f8bb194092b69358f64d6578900fd63ce1bb5f0a719276109d92b62fcfb0cce@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-66-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-66-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 65/81] bpf: Update comments about paths, pruning and explored states
+Message-Id: <e0720b9a3b3c0aeaeae687bf72a57da257acfc9b26719d9e5e4a4a74a3ddfa96@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-58-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-58-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 57/81] selftests/bpf: Test 32 and 33 call frames
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:06 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:08 +0000 (UTC)
 
---===============7759510558170164353==
+--===============3898424796731597585==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Update comments about paths, pruning and explored states
+> selftests/bpf: Test 32 and 33 call frames
 
-TL;DR: Comment-only patch; the new verifier.c comment may overstate that
-joining makes analysis length follow program size, since flow.c keeps states
-apart and enforces limits. Suggests rewording.
+TL;DR: Test issue: with the JIT disabled, the new 32-frame selftests may hit
+the combined stack size limit (512 bytes) at frame 17 first, so
+global_func3_32_frames may fail to load and global_func3's message may not
+match.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
+> index b66abb350fb0..3b816afaa278 100644
+> --- a/tools/testing/selftests/bpf/progs/test_global_func3.c
+> +++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
 
 [ ... ]
 
-> @@ -62,19 +62,16 @@ static bool bpf_global_percpu_ma_set;
->
->  /* bpf_check() is a static code analyzer that walks eBPF program
->   * instruction by instruction and updates register/stack state.
-> - * All paths of conditional branches are analyzed until 'bpf_exit' insn.
->   *
-> - * The first pass is depth-first-search to check that the program is a DAG.
-> + * The first pass is depth-first-search over the control flow graph.
->   * It rejects the following programs:
-> [ ... ]
-> - * The second pass is all possible path descent from the 1st insn.
-> - * Since it's analyzing all paths through the program, the length of the
-> - * analysis is limited to 64k insn, which may be hit even if total number of
-> - * insn is less then 4K, but there are too many branches that change stack/regs.
-> - * Number of 'branches to be analyzed' is limited to 1k
-> + * The second pass goes from basic block to basic block, starting at the 1st
-> + * insn. States that meet at the start of a block are joined, so the length of
-> + * the analysis follows the size of the program and not the number of paths
-> + * through it. See flow.c.
->   *
->   * On entry to each instruction, each register has a type, and the instruction
->   * changes the types of the registers depending on instruction semantics.
+> +static __attribute__ ((noinline))
+> +int f32(struct __sk_buff *skb)
+> +{
+> +	return f31(skb);
+> +}
+> +
+> +SEC("tc")
+> +__success
+> +int global_func3_32_frames(struct __sk_buff *skb)
+> +{
+> +	return f31(skb);
+> +}
+> +
+>  SEC("tc")
+> -__failure __msg("the call stack of 17 frames")
+> +__failure __msg("the call stack of 32 frames")
+>  int global_func3(struct __sk_buff *skb)
+>  {
+> -	return f16(skb);
+> +	return f32(skb);
+>  }
 
-Is it accurate to say that states meeting at the start of a block are
-joined, and that the length of the analysis therefore follows the size of
-the program?
+Can these two programs fail when the JIT is disabled?
 
-The commit message itself says the verifier drops a state that is covered,
-"Otherwise it joins the two states or keeps the two", and flow_merge() in
-kernel/bpf/flow.c deliberately keeps joinable states apart while there is
-room:
+With bpf_jit_enable=0 on a kernel without CONFIG_BPF_JIT_ALWAYS_ON,
+round_up_stack_depth() gives every frame at least 32 bytes:
 
-    /*
-     * States that have a join are kept apart while there is room: half of
-     * every limit.  After that they are joined, which may lose what the
-     * prog needs, and does not run into the limit.
-     */
-    if (!widen && flow_has_room(env, flow->nr_states[insn_idx]) &&
-        flow_null_differs(&t->st, &s->st))
-            continue;
+    if (env->prog->jit_requested)
+            return round_up(stack_depth, 16);
     ...
-    if (!widen && flow_has_room(env, flow->nr_states[insn_idx]) &&
-        (flow_unset_differs(&t->st, &s->st) ||
-         flow_join_makes_up(flow, &t->st, &s->st)))
-            continue;
+    return round_up(max_t(u32, stack_depth, 1), 32);
 
-States of a different flow_kind() are never compared or joined, and when
-bpf_states_join() finds no join (for example scalars that differ while
-env->explore_alu_limits is set, which the sanitize_ptr_alu() comment in
-this same patch describes as keeping states apart), the state is added to
-the set with list_add_tail(&s->node, set).
+and env->stack_limit is MAX_BPF_STACK (512).  check_max_stack_depth_subprog()
+adds the frame's depth before it descends to the next call, so the walk goes
+main=32, f31=64, ..., f15=544, and fails at the 17th frame:
 
-bpf_flow_loop_enter() also walks some loops one iteration at a time, with
-each trip a separate kind of state:
+    combined stack size of 17 calls is 544. Too large
 
-    /*
-     * There is no summary of what the loop does to something that is
-     * live.  Go through the iterations one by one if that is not too long.
-     */
-    if (err == 2 && flow_walk_factor(cur) * iters.max_header_count *
-                    loop->nr_insns <= BPF_FLOW_MAX_WALK) {
-            ...
-            entry->apart = true;
+That happens before the MAX_CALL_FRAMES (32) check is reached.  So
+global_func3_32_frames, which is marked __success, would be rejected, and
+global_func3 would fail with the combined stack size message instead of "the
+call stack of 32 frames", so its __msg() would not match.
 
-For such a loop the work follows the trip count, up to BPF_FLOW_MAX_WALK
-insns, which is not the size of the program.
+The main pass cannot catch the chain first.  func_is_on_its_own() is true
+for every fN (r1 is PTR_TO_CTX), so each callee is verified in a one-frame
+state and setup_func_entry() never sees the chain.
 
-What bounds the work is the set of limits in flow.c
-(BPF_FLOW_TOTAL_PER_INSN / BPF_FLOW_MAX_STATES), and a program over them
-fails with -E2BIG ("too many states for %d insns" or "more than %d states
-that cannot be joined").  The new text drops every mention of a limit and
-gives joining as the reason for the bound.
+Before this patch the 17 frame chain was rejected in the main pass by
+setup_func_entry() ("the call stack of 17 frames") before
+check_max_stack_depth() ran, so the test also passed without the JIT.
 
-The header comment in flow.c describes the three outcomes (dropped, joined,
-added) correctly.  Could this summary match it, for example:
+Would adding __load_if_JITed() to both programs be appropriate?
+test_global_func1.c and verifier_unwind.c already handle JIT vs interpreter
+differences with __load_if_JITed() or with a {{[0-9]+}} regex in the combined
+stack size message.
 
-    A state that arrives at the start of a block is dropped if a state
-    there covers it, joined with one if possible, or kept; the number of
-    states is bounded by the size of the program, see flow.c.
-
-No later commit in be06e70f1a7f..51224d16c11b changes this comment.
-
-[ ... ]
+No later commit in the series changes this file or round_up_stack_depth().
+The tools/testing/selftests/bpf/config.* files set CONFIG_BPF_JIT_ALWAYS_ON=y,
+so only runs with the JIT off are affected.
 
 
 ---
@@ -165,4 +143,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============7759510558170164353==--
+--===============3898424796731597585==--
