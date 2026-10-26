@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986812;
-	b=0rXyNnt4NRF+EVUYbruD799BTyQJ+L7sCHSIAiY3Zf3NS8AXr/cuyvFey6vWjDMx8gR2
-	 6xwouXovrRlG32fyBAJk4QtmTOihRHxSLiJRqhNdAt/xXEZ8RALqWB4VL8QhN+N52YsFv
-	 U8eK0RNalyAqoO1JIwi6VeSl30ZbFiUindOsHgzmnf0MnDJBZEO5RTlJepEqJtQMiYv6K
-	 YDdtZvdbckp+aOM5sPXFzJgCEzZmlE44AlvwZBNHOHdOjszpx5vC3pOuMKn4qPkMzwznP
-	 t6Z/eIwxdN75quxF5eobuN2Aj58ekeQJ7imTtKr3fh7AESpIADpP4wYhBuVyO6KjG5w==
+	t=1792986813;
+	b=Zj1fO6Iqn+ivZ8l8ioLdJQ/z2tIaRWUxO0rOz/fYCM+dCdh6l6S4KuDVUMnbNqgZ7EnK
+	 WPBTo9K6QPnpFXYjov+K4cLIo6m20Gt6aYDyHNK4tnO3G2p0MV+GrJ8x91AANKbWaei6w
+	 yZrgEeMUttFrzQo+BO66cdARaE13DSWNjZJKhqjsJnGDHovuqrT9R8QE5W8+l/GhsdAlR
+	 WJq5tg1IJV4YzvlxQBmW0Ha9BEmhi2Kal2Go12mVnW4TD/MS37XVTbHbW5dbyN4UIqfzN
+	 PlV0tnx0Xv2N9cCR1GGF2gJLtfMmFTbbg6HZ3jzcnQjqeyQXjb7eA1p3phiBuu0KzsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986812;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986813;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=gr5bd6ASZLpKx3VE50upVp87ktwHSO9E0Gux1U4rgGA=;
-	b=ak117ngLK+jKSoH88bOqw5rEIbpnphxNO2jds32vPfq+KiWZ3NxeJCrarDQbKeWc1lKb
-	 DUA+V9xQFqInHe/beuS42SiDNxZeM8nqIqhgje4tKMrKQ9uRuT9IoGCLURoV5t6HRzwqa
-	 VYuaAQXOI1pDQHrGuQ08bQH9p0DsMhRMEQbDnOS7Sz6EXePh7qdEVH0xG9GhYIk40vmRJ
-	 nNmmWDF+6H+nDM84wsZDjHPDKba5By07iYFg3jGy9BMT/05gmETOgeqySJb+YlHiPokwb
-	 K9K8k1wyZvP87zKg51kbqTxYPubCMvuMTnckDsjCllhC4DpuRFez9zUUNZPmEuDQyUg==
+	bh=UNDQPEA+KibyuGxw0Fjs36ybrMmPf8cBwq1JgY++Tnk=;
+	b=MJYbNfsuZEvBNPD2Z7ajcEoCgeyu6+jkUsn1ekeZ3m5LATqvtQ6zo5308Bpuc8SiU6Oo
+	 Lc8Jd9FaEJ2BxYE8m217vSnOhy22QzQopv/lRiEIiQaHnBN+KA2qsWKKbJHM541KLVH/g
+	 NdCkDolpZSTsnQfyv9rpXPKlkOEg9KMcrAPTT1IpcAwJH4aaF8QvyN/cjzVi/cuKaUuFj
+	 WseP5osWnE+cTDXLKq39ILpJoHKSqSZYd/xnML9JU7L9sy5YNSR5kPSv93liDEWO+Aw4s
+	 YuAth9xs9//jc269126NArIr5AjqOvkzs/kupeauA89k2CFE4/zORJFAPFXxA4undCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="DrDvl/KS";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Zrt/f5b4";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EAE1606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585B2606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DrDvl/KS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B1B1F01825;
-	Mon, 26 Oct 2026 03:53:31 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Zrt/f5b4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E391F01825;
+	Mon, 26 Oct 2026 03:53:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986811;
-	bh=gr5bd6ASZLpKx3VE50upVp87ktwHSO9E0Gux1U4rgGA=;
+	s=k20260515; t=1792986813;
+	bh=UNDQPEA+KibyuGxw0Fjs36ybrMmPf8cBwq1JgY++Tnk=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DrDvl/KSD22q6XVcfxLR+3f+yHMcQ7/IsAFaj/jgs/XQ2+vOw/7sFmhgx6LOYqACU
-	 DYjjIy/AiCHek/Am9bwwwj8VfUQN1GwCCsF0ysjyWNWwdz4Kz9ft1dOv146dXT8um+
-	 ZryDrF1V8/S0Zpiui6+dGVfebELpu8UbpzPS/F59HQ6e0lYtvxWjD7RTt/8nMXYYFv
-	 Puy/yna/T22za/Q3iuaieZKC6EKxEb9QUFypUvzUFGGiUa0Njr36iVk7x/JBIGuvX/
-	 XrIUylnSrE0iBANnuhhc6TdqXSzMJcnMRQTwaobZTp7CweM97GXBUB4mucxBJrKV8R
-	 VeVjt6LQxziJw==
-Content-Type: multipart/mixed; boundary="===============1829468745535374825=="
+	b=Zrt/f5b4Xy/ex2jntYJG4YXTcogWLXzQwbC64K1sVut59AdIxeEefzoMTfPUyWcS9
+	 UCaofzb4ohEGXE1j/dLC7cF0zSKWtzphabs21qbILfwVM1iRu8Y3pSUxAbWdbE5f7Y
+	 UgJYI/p6/SQ+jAzSLvtHyVfTaqcsQGWpNptYn6Bppzl6/oPjShyIK8dLhCPcEs1Qlc
+	 laLJqzNBAx/b9k2jlcGhpxc1l6ev1QH/LmiuejdwypwqPqdeJtkmoA41VxKTCVj9MA
+	 CE+h7Pf+h83FS8n4NTY2tvvrxwyCWcRWlhmtWTo8sSd2aWtrFdUiDR9E64rUxts/l1
+	 b6AtyfStO1pLQ==
+Content-Type: multipart/mixed; boundary="===============2995944056318544606=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,191 +49,221 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <2b2536f8f0678071cb788723e28f742532055e086986db3bf5d3185a71a6c199@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-74-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-74-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 73/81] selftests/bpf: Adjust tests of loops
+Message-Id: <f3f414792a2e460ce25aa844391bed149528afa4db892f06dad84b4f5458e528@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-47-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-47-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 46/81] bpf: Finish the insn in the state that maybe_fork_scalars() splits off
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:31 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:32 +0000 (UTC)
 
---===============1829468745535374825==
+--===============2995944056318544606==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Adjust tests of loops
+> bpf: Finish the insn in the state that maybe_fork_scalars() splits off
 
-TL;DR: Test issues only: the hard-coded insn number in loop_detection may fail
-on cpuv4/gcc builds, and the movsx and scev test changes may no longer catch
-the regressions they were meant to.
+TL;DR:
+- Changelog may understate: pruning a forked r1=0 state in a terminating loop
+  looks reachable, so the verifier could accept unsafe programs; maybe needs
+  Fixes: tag
+- Forked path loses its verifier log record of the insn (log-only regression)
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-> index a76bce7278e7..a48b48fb2e51 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+> bpf: Finish the insn in the state that maybe_fork_scalars() splits off
+>
+> When a register is -1 or 0, maybe_fork_scalars() splits the state in two
+> before an 'and' or an 'or' with a constant. The result is more accurate for
+> each value alone. The verifier continues with -1. It pushes a copy of the
+> state with 0 and verifies the copy later, from the same insn.
+>
+>            today                              this patch
+>
+>   N:   r1 &= 8    r1 is -1 or 0      N:   r1 &= 8    r1 is -1 or 0
+>         /     \                            /     \
+>     r1 = -1   r1 = 0                   r1 = -1   r1 = 0
+>     r1 &= 8   push to N                r1 &= 8   r1 &= 8
+>        |                                  |      push to N+1
+>   N+1: ...                           N+1: ...
+>
+> At insn N the copy is a part of the state that it came from. If pruning
+> compared the two states, it would drop the copy, and no one would verify
+> the case r1 = 0. Today that does not occur for one reason only: the first
+> state has branches that are not explored, and pruning does not use such
+> states.
+>
+> Do not depend on that. Do the insn in the copy too, and push the copy to
+> the next insn. All other code that pushes a state does the same.
+>
+> No verdict changes in selftests, Cilium and scx. Each fork processes one
+> insn less, and the sequence in which the verifier explores states changes
+> slightly. 68 of 144 progs of Cilium process a different number of insns,
+> from -4.8% to +3.3%. The total is 1151838 -> 1151493.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+
+The changelog says the copy is not dropped today because "the first state has
+branches that are not explored, and pruning does not use such states".  Is
+that accurate for the parent commit?
+
+bpf_is_state_visited() can prune against a stored state that still has
+branches > 0, when both states are in the same loop and SCEV has proved
+that loop terminates:
+
+kernel/bpf/states.c:bpf_is_state_visited() {
+    ...
+			old_loop = current_loop(&sl->state);
+			cur_loop = current_loop(cur);
+			if (old_loop && cur_loop &&
+			    old_loop->terminates && cur_loop->terminates &&
+			    old_loop->entry_state == cur_loop->entry_state) {
+				if (states_equal(env, &sl->state, cur, RANGE_WITHIN)) {
+					loop = true;
+					goto hit;
+				}
+    ...
+}
+
+The sequence below needs a loop for which bpf_compute_loop_iters() returned 1,
+so that handle_loop_entry_exit() set entry->terminates and
+entry->entry_state:
+
+(1) cur reaches a prune point N inside the loop body that holds 'r1 |= 8',
+    with r1 in [-1, 0].  bpf_is_state_visited() adds a checkpoint S at N
+    through bpf_split_cur_state(), so S->branches == 1.
+
+(2) maybe_fork_scalars() pushes the copy B at insn N, so S->branches == 2.
+
+(3) cur, with r1 = -1, takes 'if r1 s< 0 goto exit' and ends.
+    bpf_update_branch_counts() brings S->branches down to 1.
+
+(4) B is popped at N.  handle_loop_entry_exit() changes nothing, because N is
+    not the loop header.  bpf_is_state_visited() then finds S at N with
+    branches == 1.  current_loop() of S and of B is the same terminating loop
+    with the same entry_state, because B is a copy.  states_equal(S, B,
+    RANGE_WITHIN) holds, because B equals S except that r1 = 0, which is
+    within [-1, 0], and RANGE_WITHIN compares scalar ranges whatever the
+    precision.
+
+B is then pruned, and the r1 = 8 path is never verified.  That path could be
+the out-of-bounds map access of or_scalar_fork_rejects_oob in
+progs/verifier_bounds.c, placed inside such a loop.
+
+So in this tree the problem looks reachable, and this patch fixes a real
+soundness hole.  The other paths that use states with branches > 0
+(is_iter_next_insn(), may_goto, bpf_calls_callback()) cannot match an ALU
+insn.
+
+Should the changelog describe the bug as reachable?  Should it also carry a
+Fixes: tag?  The candidate would be:
+
+  Fixes: 6ccf49f79327 ("bpf: Use SCEV to widen bounded loops")
+
+That commit added pruning against states with branches > 0 in terminating
+loops.  Before it, c845894ebd6f ("bpf: Fix unsound scalar forking in
+maybe_fork_scalars() for BPF_OR") had already made the copy resume at the
+same insn.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f065e7e829c6..b44a5c63a922 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -94,7 +94,7 @@ static int loop_detection_cb(__u32 idx, struct num_context *ctx)
+> @@ -17386,19 +17389,25 @@ static int maybe_fork_scalars(struct bpf_verifier_env *env, struct bpf_insn *ins
+>  	else
+>  		return 0;
+>
+> -	branch = push_stack(env, env->insn_idx, env->insn_idx, false);
+> +	branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
+>  	if (IS_ERR(branch))
+>  		return PTR_ERR(branch);
+>
+> -	regs = branch->frame[branch->curframe]->regs;
+> +	reg = &branch->frame[branch->curframe]->regs[insn->dst_reg];
+>  	if (alu32) {
+> -		__mark_reg32_known(&regs[insn->dst_reg], 0);
+> +		__mark_reg32_known(reg, 0);
+>  		__mark_reg32_known(dst_reg, -1ull);
+>  	} else {
+> -		__mark_reg_known(&regs[insn->dst_reg], 0);
+> +		__mark_reg_known(reg, 0);
+>  		__mark_reg_known(dst_reg, -1ull);
+>  	}
+> -	return 0;
+> +	/*
+> +	 * The insn is done with in the branch too, and what gets to the next insn is a state
+> +	 * like any other. At this insn the branch is a part of the state that is looked at:
+> +	 * it must not be compared with it.
+> +	 */
+> +	clear_scalar_id(reg);
+> +	return adjust_scalar_min_max_vals(env, insn, reg, *src_reg);
 >  }
->  
->  SEC("?raw_tp")
-> -__failure __msg("infinite loop detected")
-> +__failure __msg("loop at insn 12 never exits")
->  int loop_detection(void *unused)
->  {
->  	struct num_context loop_ctx = { .i = 0 };
 
-Will this expectation hold for the test_progs-cpuv4 flavor?  loop_detection()
-is compiled from C, and the message hard-codes the index of the loop in the
-callback, which depends on how many insns the compiler emits for the main
-prog:
+Does the branch pushed here lose the verifier log record of insn N?
 
-    struct num_context loop_ctx = { .i = 0 };
+maybe_fork_scalars() runs inside the diagnostic modification scope of
+check_alu_op().  push_stack() saves the log position at the fork, which is
+before bpf_diag_mod_end() adds the BPF_DIAG_HISTORY_MOD event for insn N, and
+that event is added on the current path only:
 
-With the default -mcpu=v3, the zero initialization of this 16-byte struct is
-'r1 = 0; *(u64 *)(r10 - 8) = r1; *(u64 *)(r10 - 16) = r1', which gives the
-12 insns the test expects.
+check_alu_op()
+    bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE)
+    adjust_reg_min_max_vals()
+        adjust_scalar_min_max_vals()
+            maybe_fork_scalars()
+                push_stack()
+                    elem->diag_log_pos = bpf_diag_event_log_save(env)
+    bpf_diag_mod_end(env)    <- event for insn N, current path only
 
-With -mcpu=v4 (which test_progs-cpuv4 builds with), and with bpf-gcc, the
-compiler emits BPF_ST instead, so the two zero stores become
-'*(u64 *)(r10 - 8) = 0; *(u64 *)(r10 - 16) = 0'.  The main prog is then one
-insn shorter, the callback loop starts at insn 11, and the __msg() does not
-match.
+When the branch is popped, pop_stack() calls
+bpf_diag_event_log_restore(env, head->diag_log_pos), which cuts the log back
+to before that event.
 
-The tree has run into this before.  Commit 898f55f50a00 ("selftests/bpf:
-relax expected log messages to allow emitting BPF_ST") says:
+Before this patch the branch resumed at insn N, and check_alu_op() ran again
+and recorded an event of its own.  For 'r6 |= 8' that was R6 0 -> 8, and for
+a 32-bit fork the old and new snapshots also differ.  Now the branch resumes
+at N+1, and its event log has no change of dst_reg at insn N.
 
-  Expected messages in these tests hard-code instruction numbers for BPF
-  programs compiled from C. These instruction numbers change when BPF_ST is
-  allowed because single BPF_ST instruction replaces a pair of
-  BPF_MOV/BPF_STX instructions
+This would show up with log_level >= 1 when that path later fails and the
+report follows dst_reg's lineage through diag_build_lineage().  For example:
 
-Commit 9786d424a36b ("selftests/bpf: Fix chained_global_func_calls_success()
-for cpu v4") fixed a test_progs-cpuv4 failure caused by hard-coded insn
-counts in a C prog.
+    r6 s>>= 63
+    r6 |= 8
+    if r6 s< 0 goto out
+    r0 = r6
+    exit
 
-The old expectation, "infinite loop detected", had no insn number.  Would
-matching with __msg("loop at insn {{[0-9]+}} never exits") keep the test
-independent of codegen?  The other new 'loop at insn N' expectations in this
-series are in naked asm progs, where the index is fixed.
+or 'r2 = r6' before a helper call.  In such a report the Causal path would
+say that r6 last changed at the 's>>= 63' insn, with signed range [-1, 0],
+and leave out the insn that made r6 equal to 8.
 
-[ ... ]
+The new comment says "The insn is done with in the branch too", and the
+commit message says "Do the insn in the copy too".  Neither holds for this
+part of the insn.  The same applies to reg_bounds_sanity_check(), which
+check_alu_op() runs only on regs[] of the current state.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-> index 195b27a51224..280ccee33663 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-> @@ -226,7 +226,7 @@ l0_%=:							\
->  
->  SEC("socket")
->  __description("MOV32SX, S8, var_off u32_max")
-> -__failure __msg("infinite loop detected")
-> +__success
->  __failure_unpriv __msg_unpriv("back-edge from insn 2 to 0")
->  __naked void mov64sx_s32_varoff_1(void)
->  {
+The cast fork in check_helper_call() shows how to keep the history there:
 
-Does this change leave the privileged run of this test unable to catch the
-bug it was added for?
+kernel/bpf/verifier.c:check_helper_call() {
+    ...
+    bpf_diag_mod_end(env);
+    ...
+    branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
+    ...
+    bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
+    ...
+}
 
-The test came in with a62293c33b05 ("selftests/bpf: Add a few tests to
-cover") as the reproducer for 380d5f89a481 ("bpf: Add missed var_off setting
-in set_sext32_default_val()").  Before that fix, var_off was left stale after
-'w7 = (s8)w3', so the verifier took w7 to be in [0, 127] and decided that
-'if w7 >= 0x2533823b goto l0_%=' was never taken.  It walked only the
-fall-through and the program loaded.  Once var_off was fixed, both branches
-were possible and the back-edge led to "infinite loop detected".  So
-'__failure __msg("infinite loop detected")' was what told the fixed verifier
-from the broken one.
+Would calling bpf_diag_mod_end() before push_stack() and bpf_diag_mod_begin()
+again after it work here too?
 
-With this series, a loop that has an exit is accepted and gets may_goto, so
-the fixed verifier loads the program.  A verifier that has lost the
-'reg->var_off = tnum_subreg(tnum_unknown)' line in set_sext32_default_val()
-also loads it, because it never reaches the back-edge.  Both outcomes match
-__success.
-
-The unprivileged expectation does not help here, since the back-edge is
-rejected before any range is tracked.  No other test in verifier_movsx.c
-covers this case:  mov64sx_s32_varoff_2 and _3 mask the input to 0xf, and
-mov32sx_s8_range gets a fully unknown input, so a stale var_off is harmless
-there.  No later commit in the series changes this test.
-
-Could the test check something that only a correct verifier produces?  For
-example, __log_level(2) together with a __msg() for the R7 state after
-'w7 = (s8)w3' (var_off=(0x0; 0xffffffff), smin32=-128), or for the loop at
-insn 0 being verified or getting its may_goto.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-> index b30802c9e9e3..f4ea854d3212 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-> @@ -2005,18 +2256,15 @@ __msg_next("  r1=(+ r1 2) / (linear (+ r1 2) 2)")
-[ ... ]
->  __msg("16: (a5) if r0 < 0x8 goto pc-6")
-> -__msg("exiting loop 11")
-> -__msg("17: (95) exit")
->  /* second iteration */
->  __msg("loop header at 11, clamping r0")
->  __msg("loop header at 11, clamping r1")
->  /* iteration convergence */
-> -__msg("from 16 to 11: safe")
->  __not_msg("{{^}}11:")
-> -/* map lookup error path */
-> -__msg("from 7 to 17: safe")
-> +/* loop exit */
-> +__msg("exiting loop 11")
-> +__msg("17: (95) exit")
-
-Can the "iteration convergence" check in correlated_regs() still fail?
-
-Before this change the test asserted convergence with
-__msg("from 16 to 11: safe"), and the __not_msg("{{^}}11:") span ran from
-there to "from 7 to 17: safe".  The new version drops the positive
-convergence line, so the __not_msg() now sits between
-"loop header at 11, clamping r1" and "exiting loop 11".
-
-match_negative_msgs() in test_loader.c only searches for a negative pattern
-between the end of the previous positive match and the start of the next
-one.  Both neighbouring messages are logged while insn 16
-('if r0 < 0x8 goto pc-6') is processed.
-
-check_cond_jmp_op() pushes the taken branch, so flow_drain() calls
-bpf_flow_deliver(11) first, and:
-
-    bpf_flow_loop_enter()
-      maybe_clamp_scev_regs()
-        bpf_clamp_scev_regs()
-
-prints the 'clamping' lines.  flow_merge() then prints either
-'from 16 to 11: within' or, if the state does not converge,
-'from 16 to 11: widened', and makes the state at 11 pending.
-
-Still inside the same do_check_block(), the fall-through goes to:
-
-    bpf_flow_deliver(17)
-      flow_arrive()
-        bpf_flow_loop_leave()
-          loop_stack_pop()
-
-which prints 'exiting loop 11'.  A pending state at 11 is only verified
-again after do_check_block() returns and bpf_flow_next() picks it, so any
-'11: (bf) r2 = r6' lines from a second pass come after 'exiting loop 11' and
-fall outside the span.  The only line that can appear inside the span is
-'from 16 to 11: within|widened', and it does not start with '11:'.
-
-Nothing else in the test checks convergence (there is no 'processed N insns'
-line), so the test passes even when the first back edge does not converge.
-
-Would __msg("from 16 to 11: within") bring the convergence check back?
-Other tests in this series use that kind of message, for example
-__msg("from 18 to 9: within") in verifier_subprog_precision.c.  Moving the
-__not_msg() between "exiting loop 11" and "17: (95) exit" would also work,
-since flow_compute_order() finishes the loop before insn 17.
+Verdicts are not affected, this is a verifier log regression only.  Later in
+the series, b3ab9c9b1713 ("bpf: Remove prune points, levels of state
+comparison and pop_stack()") removes diag_log_pos and the per-path restore,
+which replaces the mechanism this depends on.
 
 
 ---
@@ -241,4 +271,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============1829468745535374825==--
+--===============2995944056318544606==--
