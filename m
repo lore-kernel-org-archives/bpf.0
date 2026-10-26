@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986815;
-	b=Q8S2pJ0TIixbtO2ASC8oIlKHPmUepJtbLhEmzV56ndyFaHJJbAp3g3skWe9qeHDbXctP
-	 x92aQUFSbKvdCvEmDbdAq3LogRfTLl6fRfF4xzyK0CS0U1psn98uQXCd78JP/HiPZ0LdK
-	 SBFfurL52pCfxHYdkv/IlV6g8B8w428BtvTVBJfP83QWLM1/Rm8bcid2bmZU/XJ+X7XsO
-	 v2TH9emo21CJ9qgJlaqS5eciLaF0UR90vBqDHhAf3G2WfaHmu7yWycYZv/fw8BN11VNEl
-	 h5TQe9fwQ/aRPErHqI4JXPd2Ra/4T8eaNhXFkk6KzG48+uLaNhE95ceJGDjL4MnFeHg==
+	t=1792986817;
+	b=CSgfMCf7p8RVtI5XNCHJA7eq07FNVH0RIVloxK77VUrN2VjbjWMwXFUskKK9HA9i8jkA
+	 vATkpwRUNhx9isZgevo1utyq6U/W/JWbImLDbU+4oTKhisvkhsCfGlOEZrtHf/5HAKXyY
+	 xVcRz2IYZIw4mXkfd/LyUm19AXjOUooLqv6EMEv+Hiw5XkJ/3C5ss3KhAZfxpMmNgCyZ4
+	 Zk+YHnRXxiVzNstrxfxMmY/r/qQX+liMHDrI0+a5TSJT8UWfgh4FAo4BytTtUyUqSt1PT
+	 LD6yNF4OB9bagfriN7SrZuscyfwSHesrmm7q8JyuwMk+BipXJM6HyYCqvjiBBl1PuyA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986815;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986817;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=kSFl8h37gT5AbDgvQG6TYNei4P3Rzfpk+IJJWzclt78=;
-	b=LdZ+gWpI6l4Z6wcxZESwQAPBlelFZKW4AAX6yPq/q++yMXiSAitcJVHfSuXJxRH4/REs
-	 gDRCG44BlzpwnwlfNydj7tT+83gMueDJC3fWd1dEsS+R/3ksnb1jiHyz2hX+wQZipwy4i
-	 vuv66NhfnUG1UhdrR5cabvnhoMY8fAiNa7EKcGdrIO1SMWNWudq5gVjAeGjROW71m6Uu0
-	 l5BU3L2g/SZ1wmFOLQKmZ10U8Un+QjFXI5RGlfba1vS8FEr27dmug7PVjC/jeVJj6bfxt
-	 7RfGoyoCq7922YVNMjK/Br331H0oanFJ/Sbl6uje59fjAvoDadjQx97mMPmAIQSqEow==
+	bh=sT/VwNX6vzlk57rRtc6M6DV45JCs5BdrEJd6M5vrkPU=;
+	b=fVF0Cu1ODeYdtku4LTiEIQySBEFNXDvfA7OedRZsFpq1AWc5gZBHCqwtjGxag0H1WeQY
+	 KdxdrWop9hlD3frf86Uajf++M/CpdNOQAS9PE7JCCjW5a9HE0yRPJynHt3ntpWdd+clcL
+	 YM4q+VU8KsV1nobhJjwgCkVE3kQV1don28Ttw/+IMbN3LCGYTV9moRqdG1qLoDkAl6Ct1
+	 XaTLR93FxR9MCt/oGwScgFSeRkhnjTm9qTwdVr0DNxUczbs6+YEQo2w3LHkPnmL+dYGob
+	 DgmdjMpGdOwT11dVFLFUlE5TR8J3r5vvmu8cqtErcFwOEePBAZLCugdoyZ3apMzlIkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C1Bd7xjf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GBk6kpZH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41544606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B67606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=C1Bd7xjf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E274A1F01825;
-	Mon, 26 Oct 2026 03:53:34 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GBk6kpZH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 920BD1F01825;
+	Mon, 26 Oct 2026 03:53:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986815;
-	bh=kSFl8h37gT5AbDgvQG6TYNei4P3Rzfpk+IJJWzclt78=;
+	s=k20260515; t=1792986816;
+	bh=sT/VwNX6vzlk57rRtc6M6DV45JCs5BdrEJd6M5vrkPU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=C1Bd7xjfjYlL9QoXidIr9xSAG0mFJwBOrnPCbHU9u47jRXpNG+auIYmFnGJ3kfXpH
-	 Ng7f0swt/OXxtlAZ/PYbCmuhN8yWOcWZ8fOlRTW+zIwjqCleskvL1vSQnfbsW1z7ZV
-	 jXY3kXVzsOY8lDtCIG6O2nYR42/bpzYPfVhqcrwVrqnMOu0uCQ4Hv9ZO9NdBOyDumu
-	 LKL2PL4vf5BCDCC9h69G5ztP+vcIiDmwNFrX+soqHmv5b+yWqBBj4U5lYvpc6gNetL
-	 BZtdWM7Jj30GFyF7d+2ap5zwih+7vwm4EguPytd3dzCbl9cSZtKEIgo17Kq7na72bn
-	 kzHIre8oyWUDA==
-Content-Type: multipart/mixed; boundary="===============8113903478147373790=="
+	b=GBk6kpZHjr29JAcvJkMPMZaGYVVCg1T1TUooJxetdJzopF4Grs0UiqyvdJLIXD8K0
+	 nckVpi1oIvHC2NAJezPfGQociX2nKUQ1TYFAVgh5NWIbBqq2ybgsIm+AulLQcupawL
+	 Kd5Hj9fs7CYDVaOMOKClvWzFXyOwIqXeN4xkIcio2RonYrqzFa7RXpyFINl9InBLu5
+	 HSoIebBqHq5dRYECJIazPYl3//ztJECotEFGfA4dyKOvfUfT8EyfvYzSUD4I0//5L5
+	 DhYcUJdz19a/XHVqBdE/AoIlpRjzTJUzDStQqiFBuE9mThIznLZhQEntNJ0wPs6BBq
+	 62A7tJhxbBowQ==
+Content-Type: multipart/mixed; boundary="===============5834216013433517412=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,472 +49,213 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <fe248f316797d71d68a81f9c55ff33b42f3882a438c3ec22bc114fca2a5748bb@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-72-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-72-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 71/81] selftests/bpf: Adjust tests of linked registers and spills
+Message-Id: <4cb2464229b1698c5115bbfa785e78f4b9d4b83bfc0270e7add3a85c2dc2c995@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-44-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-44-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 43/81] bpf: Tell user space that a run of a prog was cut short
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:34 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:36 +0000 (UTC)
 
---===============8113903478147373790==
+--===============5834216013433517412==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Adjust tests of linked registers and spills
+> bpf: Tell user space that a run of a prog was cut short
 
 TL;DR:
-- Test issue: rewritten stacksafe() spill-vs-STACK_MISC selftests may be
-  decided by r0, not stacksafe(), losing coverage
-- Stale or wrong comments mentioning precision tracking
+- Possible build failure with CONFIG_BPF_JIT=y and BPF_SYSCALL=n:
+  bpf_prog_report_unwound lacks a prototype
+- The unwound bit may stay unset on x86 without ORC unwinder
+- Unwinds in exception callbacks and epilogue-generated progs may go
+  unreported
 
-> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-> index f0077d951a25..2671323255cd 100644
-> --- a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-> @@ -110,64 +110,49 @@ __naked int aggregate_ret_static_uninit_fail(void)
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+
+[ ... ]
+
+> @@ -3463,6 +3464,7 @@ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+>  void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
+>  void bpf_prog_report_arena_violation(bool write, unsigned long addr, unsigned long fault_ip);
+>  void bpf_prog_begin_run(const struct bpf_prog *prog);
+> +u64 bpf_prog_report_unwound(u64 ret);
+
+This prototype sits inside the large '#ifdef CONFIG_BPF_SYSCALL' block, and
+there is no stub in the '#else /* !CONFIG_BPF_SYSCALL */' branch.  Both JITs
+call the function unconditionally:
+
+  arch/x86/net/bpf_jit_comp.c:bpf_unwind_target()
+    return e ? ret_addr + e->fixup : bpf_prog_report_unwound(ret_addr);
+
+  arch/arm64/net/bpf_jit_comp.c:bpf_unwind_fixup()
+    return e ? e->fixup : bpf_prog_report_unwound(0);
+
+Those files are built for CONFIG_BPF_JIT, which does not depend on
+CONFIG_BPF_SYSCALL.  Doesn't an x86_64 or arm64 config with CONFIG_NET=y,
+CONFIG_BPF_JIT=y and CONFIG_BPF_SYSCALL=n (cBPF JIT only) now fail with
+'implicit declaration of function bpf_prog_report_unwound'?
+
+kernel/bpf/core.c is obj-y and defines the function unconditionally, so with
+CONFIG_BPF_SYSCALL=n it also has no prototype in scope, which
+-Wmissing-prototypes would flag.
+
+A static inline stub in the #else branch would clash with that definition.
+Should the prototype move outside the CONFIG_BPF_SYSCALL block, for example
+next to bpf_jit_bypass_spec_v4()?
+
+I don't see a later patch in the series that changes this.
+
+[ ... ]
+
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+
+[ ... ]
+
+> @@ -3639,6 +3640,28 @@ static noinline void bpf_prog_report_may_goto_violation(void)
+>  #endif
 >  }
 >
->  static __naked __noinline u128 static_agg_precise(void)
->  {
->  	asm volatile (
->  	"r0 = 0;"
->  	"r2 = 4;"	/* second half; its value is made precise below */
->  	"exit;"
->  	);
->  }
->
->  SEC("tc")
->  __load_if_JITed()
->  __success __retval(0)
-> -__log_level(2)
-> -__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
-[ ... ]
-> -__msg("mark_precise: frame1: regs=r2 stack= before 11: (b7) r2 = 4")
->  __naked int aggregate_ret_static_precise(void)
->  {
->  	asm volatile (
->  	"call %[static_agg_precise];"
->  	"r6 = r2;"		/* derived from the aggregate's second half */
->  	"r6 &= 7;"		/* keep it in [0, 7] to index the stack */
->  	"r1 = r10;"
->  	"r1 += -8;"
->  	"r1 += r6;"		/* ptr += scalar marks r6 (hence R2) precise */
+> +/*
+> + * Nothing caught the unwinding. The prog or the async callback returns to the kernel.
+> + * There is no return value that is right for every hook, so what to do about it is up
+> + * to user space. Returns @ret: the caller has its return value there.
+> + */
+> +u64 bpf_prog_report_unwound(u64 ret)
+> +{
+> +#ifdef CONFIG_BPF_SYSCALL
+> +	struct bpf_stream_stage ss;
+> +	struct bpf_prog *prog;
+> +
+> +	prog = bpf_prog_find_from_stack();
+> +	if (!prog)
+> +		return ret;
+> +	WRITE_ONCE(prog->aux->unwound, true);
 
-The patch removes the __log_level(2) and all of the mark_precise:
-expectations from aggregate_ret_static_precise(), but the comments in the
-programs still describe the removed behavior.  Is "its value is made precise
-below" still accurate?
+Can this early return leave 'unwound' clear on valid x86 configs?
 
-Nothing marks a register precise any more, and nothing in the test checks it.
-The test now only checks that the load succeeds and that the return value is
-0.
+bpf_prog_find_from_stack() relies on arch_bpf_stack_walk(), which on x86 does
+nothing unless CONFIG_UNWINDER_ORC is set:
 
-The comment "ptr += scalar marks r6 (hence R2) precise" is repeated in
-aggregate_ret_global_precise() further down in this file, and in
-aggregate_ret_kfunc_precise() in aggregate_ret_kfunc.c:
+  arch/x86/net/bpf_jit_comp.c:arch_bpf_stack_walk() {
+  #if defined(CONFIG_UNWINDER_ORC)
+          ...
+  #endif
+  }
 
-> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-> index 0361a7b42c9b..102156175ba0 100644
-> --- a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-> @@ -22,31 +22,24 @@ void __kfunc_btf_root(void)
-[ ... ]
->  SEC("tc")
->  __arch_x86_64 __arch_arm64
->  __load_if_JITed()
->  __success __retval(0)
-> -__log_level(2)
-> -__msg("mark_precise: frame0: last_idx 7 first_idx 0 subseq_idx -1")
-[ ... ]
-> -__msg("mark_precise: frame0: regs=r2 stack= before 2: (85) call bpf_kfunc_call_test_i128")
->  __naked int aggregate_ret_kfunc_precise(void)
->  {
->  	asm volatile (
->  	"r1 = 1;"
->  	"r2 = 2;"
->  	"call %[bpf_kfunc_call_test_i128];"
->  	"r6 = r2;"		/* second return half */
->  	"r6 &= 7;"		/* keep it in [0, 7] to index the stack */
->  	"r1 = r10;"
->  	"r1 += -8;"
->  	"r1 += r6;"		/* ptr += scalar marks r6 (hence R2) precise */
+On x86, bpf_jit_supports_unwind() and bpf_jit_supports_timed_may_goto()
+return true unconditionally, and check_unwind_insns() only needs
+bpf_jit_supports_unwind().  So with CONFIG_UNWINDER_FRAME_POINTER=y, progs
+with unwind_exit still load and run, but every report path returns early:
+this function for the main prog, the async callback path in
+bpf_unwind_target(), and bpf_prog_report_may_goto_violation().
+bpf_prog_info.unwound stays 0 and stderr stays empty.
 
-The same patch deletes the matching "force r0 to be precise" comments in
-verifier_scalar_ids.c.  Should these three comments be reworded to say what
-the tests check now, for example "ptr += scalar needs the range of r6 (from
-R2)", or dropped?
+Other users of the stack walk are gated on bpf_jit_supports_exceptions(),
+which is IS_ENABLED(CONFIG_UNWINDER_ORC) on x86.  For example, the timed
+may_goto budget setup in bpf_do_misc_fixups() checks it:
 
-The same question applies to the comment inside
-global_func15_tricky_pruning():
+  if (!subprogs[i].stack_extra || !bpf_jit_supports_timed_may_goto() ||
+      !bpf_jit_supports_percpu_insn() || !bpf_jit_supports_exceptions() ||
+      ...
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_global_func15.c b/tools/testing/selftests/bpf/progs/test_global_func15.c
-> index 201cc000b3f4..497f09dc8876 100644
-> --- a/tools/testing/selftests/bpf/progs/test_global_func15.c
-> +++ b/tools/testing/selftests/bpf/progs/test_global_func15.c
-> @@ -2,55 +2,50 @@
-[ ... ]
->  SEC("cgroup_skb/ingress")
-> -__log_level(2) __flag(BPF_F_TEST_STATE_FREQ)
->  __failure
-> -/* check that fallthrough code path marks r0 as precise */
-> -__msg("mark_precise: frame0: regs=r0 stack= before 2: (b7) r0 = 1")
-> -/* check that branch code path marks r0 as precise */
-> -__msg("mark_precise: frame0: regs=r0 stack= before 0: (85) call bpf_get_prandom_u32#7")
->  __msg("At program exit the register R0 has ")
->  __naked int global_func15_tricky_pruning(void)
->  {
->  	asm volatile (
->  		"call %[bpf_get_prandom_u32];"
->  		"if r0 s> 1000 goto 1f;"
->  		"r0 = 1;"
->  	"1:"
->  		"goto +0;" /* checkpoint */
->  		/* cgroup_skb/ingress program is expected to return [0, 1]
->  		 * values, so branch above makes sure that in a fallthrough
->  		 * case we have a valid 1 stored in R0 register, but in
->  		 * a branch case we assign some random value to R0.  So if
->  		 * there is something wrong with precision tracking for R0 at
->  		 * program exit, we might erroneously prune branch case,
->  		 * because R0 in fallthrough case is imprecise (and thus any
->  		 * value is valid from POV of verifier is_state_equal() logic)
->  		 */
+For the main prog the verifier already knows which prog it is.
+bpf_insert_arena_stack() passes aux directly with
+BPF_LD_IMM64(BPF_REG_1, (long)aux).  Could the main prog report do the same
+and avoid the stack walk?
 
-This comment explains the test in terms of "precision tracking for R0" and
-the "is_state_equal() logic", while this hunk removes the annotations that
-checked r0 precision.  Is it meant to stay as it is?
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-> index 256547048cc4..92331e1a6c63 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-[ ... ]
-> @@ -132,18 +109,15 @@ __naked void linked_regs_bpf_x_dst(void)
->
->  /* Same as linked_regs_bpf_k, but break one of the
->   * links, note that r1 is absent from regs=... in __msg below.
->   */
->  SEC("socket")
->  __success __log_level(2)
-> -__msg("7: (0f) r3 += r0")
-> -__msg("frame0: regs=r0 stack= before 6: (bf) r3 = r10")
-> -__msg("frame0: parent state regs=r0 stack=:")
-> -__msg("frame0: regs=r0 stack= before 5: (25) if r0 > 0x7 goto pc+0")
-> -__msg("frame0: parent state regs=r0,r2 stack=:")
-> -__flag(BPF_F_TEST_STATE_FREQ)
-> +/* r1 is not there */
-> +__msg("5: (25) if r0 > 0x7 goto pc+0         ; R0=" LINKED("1", 7, 0x7) " R2=" LINKED("1", 7, 0x7) "{{$}}")
-> +__msg("8: (bf) r1 = r1                       ; R1=0")
->  __naked void linked_regs_broken_link(void)
-
-The header comment still points to "regs=..." in the __msg below.  That was
-the "frame0: parent state regs=r0,r2 stack=:" line of precision tracking,
-which this patch removes, and the new __msg contains no "regs=" text.
-
-The patch also adds "/* r1 is not there */" a few lines further down, so the
-test now has two comments saying the same thing, and one of them names a log
-format that no longer exists.  Should the header say something like "note
-that R1 is absent from the registers printed after the jump in __msg below"
-and the added comment be dropped?
+> +	bpf_stream_stage(ss, prog, BPF_STDERR, ({
+> +		bpf_stream_printk(ss, "ERROR: The program was unwound\n");
+> +	}));
+> +#endif
+> +	return ret;
+> +}
 
 [ ... ]
-> @@ -595,21 +478,19 @@ __naked void check_ids_in_regsafe_2(void)
->   * If such IDs *are* generated the 'l1' below would be reached in
->   * two states:
->   *
->   *   (1) r1{.id=A}, r2{.id=A}
->   *   (2) r1{.id=C}, r2{.id=C}
->   *
-> - * Thus forcing 'if r1 == r2' verification twice.
-> + * neither of which is within the other one.
->   */
 
-Is "neither of which is within the other one" correct for the two states
-listed just above it?  (1) r1{.id=A}, r2{.id=A} and (2) r1{.id=C},
-r2{.id=C} have the same shape, so check_scalar_ids()/check_ids() map A<->C
-one to one and each state is within the other.
-
-The listing was already inaccurate before this patch, but the new sentence
-now contradicts it.  The states the program would produce at l1 if constants
-got ids use r3 and r4:
-
-  (1) r3{.id=A}, r4{.id=A}   from "r3 = r1; r4 = r1;"
-  (2) r3{.id=B}, r4{.id=C}   from "r3 = r1; r4 = r2;"
-
-For that pair check_ids() fails in both directions, because one id would
-have to map to two ids, and so "from 7 to 14: within" would not appear.
-Could the listing be updated to those states?  no_scalar_id_for_const32()
-relies on this comment through "Same as no_scalar_id_for_const()".
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
 
 [ ... ]
-> @@ -743,109 +620,95 @@ __naked void ignore_unique_scalar_ids_old(void)
-[ ... ]
-> -/* Check that two different scalar IDs in a verified state can't be
-> - * mapped to the same scalar ID in current state.
-> +/* Check that two different scalar IDs in the state that is there can't be
-> + * mapped to the same scalar ID in the state that arrives.
->   */
->  SEC("socket")
->  __success __log_level(2)
-> -/* The exit instruction should be reachable from two states,
-> - * use two matches and "processed .. insns" to ensure this.
-> - */
-> -__msg("16: (95) exit")
-> -__msg("16: (95) exit")
-> -__msg("processed 22 insns")
-> -__flag(BPF_F_TEST_STATE_FREQ)
-> +__not_msg("from 10 to 11: within")
-> +__msg("11: R0=0 R6=" ALONE(255, 0xff) " R7=" ALONE(255, 0xff))
->  __naked void two_old_ids_one_cur_id(void)
->  {
->  	asm volatile (
->  	/* Give unique scalar IDs to r{6,7} */
->  	"call %[bpf_ktime_get_ns];"
->  	"r0 &= 0xff;"
->  	"r6 = r0;"
->  	"r8 = r0;"
->  	"call %[bpf_ktime_get_ns];"
->  	"r0 &= 0xff;"
->  	"r7 = r0;"
->  	"r9 = r0;"
->  	"r0 = 0;"
->  	/* Maybe make r{6,7} IDs identical */
-> -	"if r6 > r7 goto l0_%=;"
-> -	"goto l1_%=;"
-> -"l0_%=:"
-> +	"if r6 <= r7 goto l1_%=;"
->  	"r6 = r7;"
->  "l1_%=:"
-[ ... ]
->  	"r2 = r10;"
->  	"r2 += r6;"
->  	"r2 += r7;"
->  	/*
->  	 * keep r8 and r9 live, otherwise r6->id and r7->id
->  	 * will become singular and reset to zero before if r6 > r7
->  	 */
 
-Is this comment still accurate?  The program has no "if r6 > r7" any more,
-because the patch replaces it with "if r6 <= r7 goto l1_%=;".
+> +/*
+> + * Say so when the main prog unwinds. JITs make exit of that, see bpf_prog_can_unwind().
+> + * It's done after bpf_do_misc_fixups(), that takes a call for a call of a helper.
+> + */
+> +int bpf_insert_unwound_reports(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_prog *new_prog;
+> +	struct bpf_insn buf[3];
+> +	int i;
+> +
+> +	if (env->prog->type == BPF_PROG_TYPE_EXT)
+> +		return 0;
+> +	for (i = 0; i < env->subprog_info[1].start; i++) {
 
-The timing also differs under the new verifier.  bpf_clear_singular_ids() is
-now called from flow_arrive() when a state arrives at a block, that is at
-the two arrivals at l1 after the "if r6 <= r7" jump, and not before the jump
-as is_state_visited() used to do.  Should this read something like "when the
-states arrive at l1"?
+Is an unwind_exit in an exception callback left unreported here?
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-> index 4d1374885f6d..b41f390df3af 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-> @@ -515,21 +515,12 @@ __msg("4: (7b) *(u64 *)(r10 -16) = r0        ; R0=0 R10=fp0 fp-16=0")
->  __msg("6: (71) r2 = *(u8 *)(r10 -1)          ; R2=0 R10=fp0 fp-8=0")
->  /* similarly, when R2 is assigned from spilled register, it is initially
->   * imprecise, but will be marked precise later once it is used in precise context
->   */
->  __msg("10: (71) r2 = *(u8 *)(r10 -9)         ; R2=0 R10=fp0 fp-16=0")
->  __msg("11: (0f) r1 += r2")
-> -__msg("mark_precise: frame0: last_idx 11 first_idx 0 subseq_idx -1")
-[ ... ]
-> -__msg("mark_precise: frame0: regs=r0 stack= before 3: (b7) r0 = 0")
->  __naked void partial_stack_load_preserves_zeros(void)
+The exception callback is subprog >= 1, so this loop over the range up to
+subprog_info[1].start never looks at it.  The JITs don't report it either:
+bpf_prog_can_unwind() returns false when aux->exception_cb is set, so x86
+do_jit() and arm64 build_insn() emit a plain exit and bpf_unwind_target() /
+bpf_unwind_fixup() never run.
 
-This patch removes the mark_precise: expectations from
-partial_stack_load_preserves_zeros(), but the comments above them still
-describe precision tracking.  They talk about "IMPRECISE" spills, and say
-R2 "will be marked precise later once it is used in precise context".
+The verifier accepts unwind_exit there, since it is checked at frame 0
+through process_bpf_exit_full() -> check_return_code() with no
+unwind-specific restriction.  bpf_throw() calls aux->bpf_exception_cb(), and
+as the comment on bpf_prog_can_unwind() says, 'An exception callback returns
+from the frame of the main prog'.  So nothing can catch that unwind_exit,
+which is the same situation as for the main prog.
 
-There is no precise field in struct bpf_reg_state any more, and the
-annotations that showed the later marking are gone.  In the same file the
-patch changes the matching wording in stack_load_preserves_const_precision()
-and stack_load_preserves_const_precision_subreg() from "IMPRECISE fake
-register spill" to "fake register spill" and from "spilled IMPRECISE ... const
-reg" to "spilled const reg".  Should the comments here be updated the same
-way?
+The commit message says 'The kernel sets the bit when a run is cut short'
+and lists only the main prog and async callbacks.  With a panic in an
+exception callback, the hook gets an arbitrary r0, bpf_prog_info.unwound
+stays 0, and stderr is empty.  Should this case be covered, or called out in
+the commit message?
+
+> +		if (!bpf_is_unwind_exit(&env->prog->insnsi[i]))
+> +			continue;
+
+Can this test miss the main prog's unwind_exit when an epilogue is
+generated?
+
+This runs after bpf_convert_ctx_accesses(), and that pass can already have
+replaced the main prog's exit insns, unwind_exit included, with a generated
+epilogue.  The check there looks only at the code, not src_reg:
+
+  kernel/bpf/fixups.c:bpf_convert_ctx_accesses() {
+      } else if (insn->code == (BPF_JMP | BPF_EXIT) &&
+                 epilogue_cnt &&
+                 i + delta < subprogs[1].start) {
+              /* Generate epilogue for the main prog */
+              ...
+              memcpy(insn_buf, epilogue_buf,
+                     epilogue_cnt * sizeof(*epilogue_buf));
+
+For a later exit it emits only a BPF_JMP32_A back to the first epilogue.
+The epilogue from bpf_qdisc_gen_epilogue() (net/sched/bpf_qdisc.c), used for
+the Qdisc_ops reset and destroy progs, ends with BPF_EXIT_INSN(), so its
+src_reg is 0 and bpf_is_unwind_exit() is false.  bpf_testmod's
+st_ops_gen_epilogue behaves the same way.
+
+The verifier accepts unwind_exit in those progs, since check_unwind_insns()
+has no prog-type limit and void return values are not checked.  In that case
+no 'r1 = r0; call bpf_prog_report_unwound' is inserted, so a run that
+unwinds to the kernel never sets bpf_prog_info.unwound and prints nothing to
+stderr.  The commit message says 'unwind_exit in the main prog: a call that
+the verifier adds before it', so is this case expected to be covered?
+
+> +		buf[0] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_0);
+> +		buf[1] = BPF_EMIT_CALL(bpf_prog_report_unwound);
+> +		buf[2] = env->prog->insnsi[i];
 
 [ ... ]
-> @@ -1115,159 +1045,142 @@ l0_%=:	r1 >>= 32;					\
-[ ... ]
-> -/* stacksafe(): check that stack spill of a precise scalar in old state
-> - * is not considered equivalent to STACK_MISC in cur state.
-> +/* stacksafe(): check that the state with STACK_MISC is not considered to be
-> + * within the state with a stack spill of a known scalar, which is there.
->   */
->  SEC("socket")
->  __success __log_level(2)
-> -/* verifier should visit 'if r1 == 0x2a ...' two times:
-> - * - once for path entry - label 2;
-> - * - once for path entry - label 1 - label 2.
-> - */
-> -__msg("if r1 == 0x2a goto pc+0")
-> -__msg("if r1 == 0x2a goto pc+0")
-> -__msg("processed 15 insns")
-> -__flag(BPF_F_TEST_STATE_FREQ)
-> +/* what is loaded is not known to be 42 */
-> +__msg("8: (79) r1 = *(u64 *)(r10 -8)         ; R1=scalar() R10=fp0 fp-8=mmmmmmmm")
-> +__msg("9: (15) if r1 == 0x2a goto pc+0       ; R1=scalar()")
-> +__msg("processed 11 insns")
->  __naked void old_precise_scalar_vs_cur_stack_misc(void)
->  {
->  	asm volatile(
->  	/* get a random value for branching */
->  	"call %[bpf_ktime_get_ns];"
->  	"if r0 == 0 goto 1f;"
->  	/* conjure STACK_MISC at fp-8 */
->  	"call %[bpf_ktime_get_ns];"
->  	"*(u64*)(r10 - 8) = r0;"
->  	"*(u32*)(r10 - 4) = r0;"
-> +	"goto 2f;"
-> +"1:"
-> +	/* conjure scalar at fp-8 */
-> +	"r0 = 42;"
-> +	"*(u64*)(r10 - 8) = r0;"
->  "2:"
-> -	/* read fp-8, should not be considered safe on second visit */
->  	"r1 = *(u64*)(r10 - 8);"
-> -	/* use r1 in precise context */
-> +	/* the value of r1 matters */
->  	"if r1 == 42 goto +0;"
->  	"exit;"
-
-After this rewrite, is the outcome decided by fp-8 or by r0?  The comment
-says the test checks "that the state with STACK_MISC is not considered to be
-within the state with a stack spill of a known scalar", but with the new
-block order it looks like r0 decides it.
-
-The label 1 state (r0 = 42, fp-8 = spill of 42) reaches insn 8 first.  The
-fall-through state (r0 = unknown from bpf_ktime_get_ns(), fp-8 = mmmmmmmm)
-arrives second.  flow_merge() first calls flow_within(t, s), which is
-bpf_state_subsumes(old = spill state, cur = MISC state).  func_states_equal()
-runs regsafe() on the live registers before it calls stacksafe(), and r0 is
-live there because exit reads it:
-
-    regsafe(old r0 = 42, cur r0 = unknown)    fails range_within()
-
-so stacksafe() is never reached in the direction the comment describes.  The
-second check, flow_within(s, t), succeeds through:
-
-    if (env->allow_uninit_stack && old_type == STACK_MISC)
-            continue;
-
-and that alone gives the expected "R1=scalar()" and "processed 11 insns".
-
-Suppose stacksafe() wrongly accepted MISC in place of a spilled known
-scalar, which is the unsound pruning the original test guarded against.  Would
-the r0 mismatch still reject the "within" and leave this test passing?
-Before precision tracking was removed, r0 was imprecise at the checkpoint and
-only fp-8 was precise (through "if r1 == 42"), so stacksafe() decided the
-outcome.  Now that every scalar is compared by range, "r0 = 42" decides it.
-
-old_imprecise_scalar_vs_cur_stack_misc() has the same problem: its
-"r0 = 42" label 1 state fails the first check on r0, so the 64-bit scalar
-spill vs MISC handling (im == 0) in stacksafe() is never what decides it.
-
-Would making r0 dead at label 2, for example with "r0 = 0;" before exit,
-help?  Then fp-8 would decide the first check, and a stacksafe() bug would
-show up as "from 5 to 8: within" and R1=42.
-
-[ ... ]
-> @@ -1307,41 +1220,40 @@ __naked void stack_noperfmon_spill_32bit_onto_64bit_slot(void)
-[ ... ]
->  /*
-> - * stacksafe(): check if 32-bit scalar spill in old state is considered
-> - * equivalent to STACK_MISC in cur state.
-> + * stacksafe(): the state with a 32-bit scalar spill is there, the state with
-> + * STACK_MISC arrives. The first one is within the second one.
->   * 32-bit scalar spill creates slot[0-3] = STACK_MISC, slot[4-7] = STACK_SPILL.
->   * Without 32-bit spill support in stacksafe(), the STACK_SPILL vs STACK_MISC
-> - * mismatch at slot[4] causes pruning to fail.
-> + * mismatch at slot[4] keeps the states apart.
->   */
->  SEC("socket")
->  __success __log_level(2)
-> +__msg("8: R0=scalar() R10=fp0 fp-8=????mmmm")
->  __msg("8: (79) r1 = *(u64 *)(r10 -8)")
-> -__msg("8: safe")
-> -__msg("processed 11 insns")
-> -__flag(BPF_F_TEST_STATE_FREQ)
-> +__msg("processed 10 insns")
->  __naked void old_imprecise_scalar32_vs_cur_stack_misc(void)
->  {
->  	asm volatile(
->  	/* get a random value for branching */
->  	"call %[bpf_ktime_get_ns];"
->  	"if r0 == 0 goto 1f;"
-> -	/* conjure 32-bit scalar spill at fp-8 */
-> -	"r0 = 42;"
-> -	"*(u32*)(r10 - 8) = r0;"
-> -	"goto 2f;"
-> -"1:"
->  	/* conjure STACK_MISC at fp-8 */
->  	"call %[bpf_ktime_get_ns];"
->  	"*(u16*)(r10 - 8) = r0;"
->  	"*(u16*)(r10 - 6) = r0;"
-> +	"goto 2f;"
-> +"1:"
-> +	/* conjure 32-bit scalar spill at fp-8 */
-> +	"r0 = 42;"
-> +	"*(u32*)(r10 - 8) = r0;"
->  "2:"
-
-Does this test still run the stacksafe() code it was written to guard?
-7b4f1a29c704 ("selftests/bpf: Test 32-bit scalar spill pruning in
-stacksafe()") added it for the im == 4 handling from 596bef1d718d ("bpf:
-Support 32-bit scalar spills in stacksafe()").
-
-With the branches swapped, the 32-bit spill state A (r0 = 42, slot[4-7] =
-STACK_SPILL, slot[0-3] = STACK_INVALID) reaches insn 8 first.  The
-STACK_MISC state B (r0 = scalar(), fp-8 = ????mmmm) arrives from insn 5.
-flow_merge() makes two checks.
-
-The first is flow_within(A, B), i.e. bpf_state_subsumes(old = A, cur = B).
-func_states_equal() compares the live registers before it calls stacksafe(),
-and r0 is live at insn 8 because exit reads it:
-
-    regsafe(old r0 = 42, cur r0 = scalar())    fails range_within()
-
-so stacksafe() is never called.
-
-The second is flow_within(B, A), i.e. stacksafe(old = B, cur = A).  Every
-byte of B is STACK_INVALID or STACK_MISC, and stacksafe() skips both before
-it reaches the scalar spill code:
-
-    if (old_type == STACK_INVALID || old_type == STACK_POISON)
-            continue;
-
-    if (env->allow_uninit_stack && old_type == STACK_MISC)
-            continue;
-    ...
-    if (im == 0 || im == 4) {
-            old_reg = scalar_reg_for_stack(env, old_slot, im);
-
-allow_uninit_stack must be true in this run, otherwise the 8-byte read of
-????mmmm at insn 8 would be rejected and the test expects __success.
-
-So the im == 4 handling is never executed here.  If it were removed, A would
-still be within B, and the log would still have
-"8: R0=scalar() R10=fp0 fp-8=????mmmm" and "processed 10 insns".  Is the
-edited sentence "the STACK_SPILL vs STACK_MISC mismatch at slot[4] keeps the
-states apart" still correct?  Without 32-bit spill support the states would
-be joined in exactly the same way, so reverting 596bef1d718d would not fail
-this test.
-
-The same root cause affects the neighbouring tests.
-old_imprecise_scalar_vs_cur_stack_misc() (the 64-bit im == 0 path from
-6efbde200bf3) is decided by the same two steps, and
-old_precise_scalar_vs_cur_stack_misc() is decided by regsafe() on r0
-(42 vs scalar()) rather than by stacksafe().
-
-To get the coverage back, could the two branches leave the same r0, with the
-32-bit spill holding an unbounded scalar and the STACK_MISC state reaching
-the join after the spill state?  Then "from N to 8: within" would be printed
-only when stacksafe() accepts the spill.  Another option is a
-__caps_unpriv(CAP_BPF) variant, like the nearby stack_noperfmon tests, where
-allow_uninit_stack is false and the MISC bytes go through
-scalar_reg_for_stack().  No later patch in this series changes these tests or
-stacksafe().
 
 
 ---
@@ -522,4 +263,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============8113903478147373790==--
+--===============5834216013433517412==--
