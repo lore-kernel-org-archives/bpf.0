@@ -1,51 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.71
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792996369;
-	b=dPf40gSA3RBxlp7hCYlZ/sfNVTWy3V72LcMPnKx2KS+tQ1RPrKp/BF+zGh9FAzqXcepF
-	 WAxarjCHg57w4I5BxMvBMtWysqsu83/7kWdt0NpZpc9RyTuHTMENXar3jfRRokkZ66qiQ
-	 wLYXhphl0JSnTER3BdJEaBEGpVMpDmWAQdo+gfy8LckS2KXVkO4z9Vbv06RfQL/cciVOq
-	 mmJ5imoEpPxaI4lPv3qrFtwc3P7G20wSZIb7uSHpYXxHonkr22Qhi0LfZMXZzsQlxqylE
-	 0wRNEJr7oIAdVvPGZDDdC+t7NDo7kjFDV20gxNhd97Opl/zRoV+luin3WnP1jzmKLtA==
+	t=1792997541;
+	b=okS7rBT5z9hu4c/SSK0XI5vFIm8/Q0pRgBK53eicsm6oGNhyaKojHrgjrrO/btjcUtOA
+	 g380jvQ6vGOnxqQY+nrRjWjsNE0aDPKXGSSVW2MN52E67Ic55UhZQUqMwpqt3/b+gE5zz
+	 2boIZpjMK7/9W/Lf5qopEVO6dSAKUlK62a2UV/TscpY9herd/bjD6SxolYsYSlsRCcoui
+	 KKn5ZAsR0Gd/iyGap3tMbjPn0SgC9e5RD/57dN6NPJVv3TEQv1H6NY2ZvmryrYtiWjNWM
+	 hL5vtz3esq7NDQIAAuvP6y2CTuwSEeDn1eqitaGmq78m80cqWkLshb3lHhqqb+r631Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792996369;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=CC59iY1aw6OyV8aTURcQLbLL17pBSNRBVzyiXs5pORM=;
-	b=JfLmFKA9AZIE2/mIyzE9Pa8PxEf+Kv7oiHGb/HfR5Uixg++0kdOc5w6lwd3YefoeyZ+P
-	 +Zp6ZvbnL8X+UAezz4AAvzca0K6XMO+L+ZmjXC9/hehZoPYUdPvjLuWiMwYyny5aCJ3/B
-	 GAgnv3FF21i2GGJa54W8CZ79DuV1ucSDi5MZbse0e6GdqnxMuy8t7WF6XxXo4WkV9e65B
-	 G1NwrdQ5D0TksnBZ9Vs3uSBB8VsGTNC1VGF/QEfgOERTCWER3bEk9f/Rmu9jgaOIUwtaf
-	 vyRkseoxWciSetWrbUocT1Buq85Y7WZ747eQu6Pqwd/p+hHWTBaby4alktOwjUXX6ww==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792997541;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=WlFgFnIJ6H+PFS/md3WjifcK6os996SyL523DySm45I=;
+	b=zoTRwnSZHfffOTrP/LyJvXZ59XXqeqmcOQFDpTpRkSU0aRXh2l1ULIdvDQjYiDmM+MxP
+	 N5BcqDaIxahRA8cFxCAHfXxWHpaqaBx14p+s/Mo7h+2JnqSh261jgdYXW7b30Mog+CQwj
+	 8pyNRXY9/SI9LmUYvx/bT1LuFz3dYEoWPQdTy7O9wpScdgXuUfbqbz6bBjUZgPqZ9bEVe
+	 layqWHLCSyMWfKmFi7BXsLRcb7yGNOKI+1eDdm7SivbHhfVkH0dn5tOyoxIbt1Ych5xZ6
+	 5RF72BwSGCt/hQ+NTw7oet4yBMiaTZVcE2Apv67VeHfYXBxZnLCgnOsQFPtZu3d4d2A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	arc=none smtp.remote-ip=91.218.175.71
-Received: from mta0.migadu.com (out-71.mta0.migadu.com [91.218.175.71])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y0jfaQvy;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE40A606A31E
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 06:32:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AE40A606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CC59iY1aw6OyV8aTURcQLbLL17pBSNRBVzyiXs5pORM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792996358; v=1; x=1793601158;
- b=i+8Ult+S6zvD9Bg7VMNe5iRbHrfBhZVRsULgmUnxm37S/8jDYdapDB+FvUaGp2zrcK/aaEFE
- D8uzEsO15Z75t2TuY3WKWU/zKZGkAG0ewvT/UeMW/bCmF9V8zzU8BjTtMkycyGJ2BJD8jbI40oI
- AMmWhlsG/2P/E2gnd59fe7fw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b6a4888feb48e90f;
-	Mon, 26 Oct 2026 06:32:38 +0000
-X-Mizu-Trace-ID: b6a4888feb48e90f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <50b12d32-891c-46d4-bd5f-8924cb8db60f@linux.dev>
-Date: Mon, 26 Oct 2026 14:32:23 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF484606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 06:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Y0jfaQvy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627FD1F01825;
+	Mon, 26 Oct 2026 06:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792997540;
+	bh=WlFgFnIJ6H+PFS/md3WjifcK6os996SyL523DySm45I=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Y0jfaQvysQzIVWOeMQpkE29ZV2HFvBbwzVX8SszINIZUJppjYFcOvMbsCAO8Rs2el
+	 fq5xvxgM1Wpk6hvkWWM5L9NQOxRRvDd17/Mn89mhUX5I6pI6oMpN+C12telC5W77i8
+	 soB1rWVlE2r6nNJ9utvvUkPseMHu222uXkyX+0Q1e8ATnR6O89zss5wLnHdcRBCOXT
+	 Uwb71djC3kTC03vjpXO+RWHWeaeoETtmQfXdB72NgB0KzdoLcLKUle1Wy06rd+NnR9
+	 YUqcHL0BB4+ZeFg7QVN6DwFjpHa7lU6TYfGPp9lb0rW7cg9uOOOYFKn6vhdJrhqFYE
+	 SZ3WidDcfXWkg==
+Message-ID: <sashiko-outbox-184616@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] igc: track rx frame boundaries independent of skbs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Paul Moses" <p@1g4.org>
+Cc: intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org
+In-Reply-To: <20261025065154.2037149-1-p@1g4.org>
+References: <20261025065154.2037149-1-p@1g4.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 26 Oct 2026 06:52:19 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -54,87 +58,116 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on zero-length
- skb redirect
-To: Eli Skeggs <kernel@eliskeggs.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Geliang Tang <geliang@kernel.org>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
- <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
- <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
- <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] igc: off-by-one in TSIP length check in igc_clean_rx_irq() and zc =
+variant
+--
 
-On 10/26/26 11:17 AM, Eli Skeggs wrote:
-> On Mon, Oct 26, 2026 at 09:59:00AM +0800, Jiayuan Chen wrote:
->> On 10/26/26 7:41 AM, Eli Skeggs via B4 Relay wrote:
->>> From: Eli Skeggs <kernel@eliskeggs.com>
->>>
->>> Treat a return of 0 as success when there is no data to send, while
->>> continuing to fail on a 0 return with residual bytes. The loop exits
->>> without incident on an empty skb, and the skb gets cleaned up as usual.
->>> On an ingress redirect, the empty message is still queued as before, but
->>> the target socket no longer reports EPIPE.
->> The target can't receive anything after that though. The empty msg sits
->> at the head of psock->ingress_msg and nothing ever dequeues it:
->>
->> [...]
->>
->> So the user gets EOF on a socket whose peer never closed, and everything
->> redirected to it after the FIN is lost. Without a verdict prog on the
->> target it is worse, tcp_bpf_recvmsg() returns -EFAULT forever.
->>
->> Since this patch is already about the zero-length skb, can you handle
->> the ingress side too? E.g. in sk_psock_skb_ingress(), don't queue an
->> empty msg when len is 0 and the skb was redirected (skb->sk != sk). The
->> self PASS case must keep its empty msg since is_next_msg_fin() depends
->> on it.
-> Yep, thanks for pointing that out.
->
-> Alexei suggested skipping empty skbs in sk_psock_backlog():
-> https://lore.kernel.org/all/DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com/
->
-> To your point, I think the critical difference between these approaches
-> happens when the sk's backlog queue is not empty and the socket's own
-> FIN (the self PASS FIN) gets queued. In that case, we rely on the empty
-> msg to correctly update copied_seq, and skipping it means the copied
-> sequence number ends up 1 behind rcv_nxt.
->
-> This path is already broken: when a socket's FIN gets queued behind
-> other skbs, the backlog reports the erroneous EPIPE just as in the
-> redirect case.
->
-> I do like the simplicity of skipping the empty skbs entirely. I don't
-> immediately see what the consequence is for copied_seq being behind in
-> this terminal state, but the approach that updates copied_seq does seem
-> strictly more correct.
->
-> Is that the right interpretation? Let me know what direction I should
-> take for v2.
+commit 7b71c87cde8117fd4a451a2a079f34aaf64bd069
+Author: Paul Moses <p@1g4.org>
 
+igc: track rx frame boundaries independent of skbs
 
-Yes, go with Alexei's suggestion. Skipping zero-length skbs in
-sk_psock_backlog() also covers the ingress redirect case I raised,
-since the empty msg is never queued. copied_seq being 1 behind
-rcv_nxt is fine now, plain TCP sits in that state until the user reads
-EOF, and nothing on the psock side depends on it.
+This commit tracks RX frame boundaries per ring via rx_in_frame so that
+inline RX timestamps are stripped only from the first descriptor buffer.
+It also rejects unsupported split frames before XDP, drains continuation
+descriptors, and updates NAPI budget accounting in both standard and
+AF_XDP zero-copy RX paths.
 
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethe=
+rnet/intel/igc/igc_main.c
+> index 1fb5f3cbe93c5..9ca5558c762c9 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+
+[ ... ]
+
+> @@ -2635,21 +2635,34 @@ static int igc_clean_rx_irq(struct igc_q_vector *=
+q_vector, const int budget)
+>  		dma_rmb();
+> =20
+>  		rx_buffer =3D igc_get_rx_buffer(rx_ring, size, &rx_buffer_pgcnt);
+> +		tsip =3D first && igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP);
+> +
+> +		if ((!first && !skb) ||
+> +		    (first && igc_xdp_is_enabled(adapter) &&
+> +		     !igc_test_staterr(rx_desc, IGC_RXD_STAT_EOP)) ||
+> +		    unlikely(tsip && size < IGC_TS_HDR_LEN)) {
+> +			if (first)
+> +				dev_core_stats_rx_dropped_inc(rx_ring->netdev);
+> +			xdp_res =3D IGC_XDP_CONSUMED;
+> +			goto xdp_done;
+> +		}
+> +
+>  		truesize =3D igc_get_rx_frame_truesize(rx_ring, size);
+> =20
+>  		pktbuf =3D page_address(rx_buffer->page) + rx_buffer->page_offset;
+> =20
+> -		if (igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP)) {
+> +		if (tsip) {
+>  			ctx.rx_ts =3D pktbuf;
+>  			pkt_offset =3D IGC_TS_HDR_LEN;
+>  			size -=3D IGC_TS_HDR_LEN;
+>  		}
+
+[Severity: High]
+Should the length check in igc_clean_rx_irq() be size <=3D IGC_TS_HDR_LEN
+instead of size < IGC_TS_HDR_LEN?
+
+When a first descriptor has IGC_RXDADV_STAT_TSIP set and size =3D=3D
+IGC_TS_HDR_LEN, the buffer contains only the 16-byte inline timestamp
+header and no packet payload. With size < IGC_TS_HDR_LEN, the check passes
+and size -=3D IGC_TS_HDR_LEN leaves size as 0.
+
+If XDP is disabled and this is a non-EOP descriptor followed by a
+continuation descriptor of at least 60 bytes (ETH_ZLEN),
+igc_construct_skb() or igc_build_skb() creates an skb with zero linear
+headlen, and igc_add_rx_frag() attaches the continuation buffer as a paged
+fragment where skb->len =3D=3D skb->data_len >=3D 60. Because skb->len >=3D
+ETH_ZLEN, igc_cleanup_headers() -> eth_skb_pad() does nothing, and
+igc_process_skb_fields() -> eth_type_trans() -> __skb_pull(skb, ETH_HLEN)
+then triggers BUG() because skb->len drops below skb->data_len.
+
+If EOP is set on the 16-byte descriptor, size =3D=3D 0 runs XDP on an empty
+buffer where XDP_TX calls igc_xdp_xmit_back() ->
+igc_xdp_init_tx_descriptor() with a 0-byte length, and normal RX or
+XDP_PASS allocates a 0-byte skb that eth_skb_pad() zero-pads to 60 bytes
+and hands to napi_gro_receive().
+
+[ ... ]
+
+> @@ -2829,11 +2855,20 @@ static int igc_clean_rx_irq_zc(struct igc_q_vecto=
+r *q_vector, const int budget)
+>  		dma_rmb();
+> =20
+>  		bi =3D &ring->rx_buffer_info[ntc];
+> +		tsip =3D first && igc_test_staterr(desc, IGC_RXDADV_STAT_TSIP);
+> +		eop =3D igc_test_staterr(desc, IGC_RXD_STAT_EOP);
+> +
+> +		if (!first || !eop || unlikely(tsip && size < IGC_TS_HDR_LEN)) {
+> +			if (first)
+> +				dev_core_stats_rx_dropped_inc(ring->netdev);
+> +			res =3D IGC_XDP_CONSUMED;
+> +			goto xdp_done;
+> +		}
+> =20
+>  		ctx =3D xsk_buff_to_igc_ctx(bi->xdp);
+>  		ctx->rx_desc =3D desc;
+> =20
+> -		if (igc_test_staterr(desc, IGC_RXDADV_STAT_TSIP)) {
+> +		if (tsip) {
+>  			ctx->rx_ts =3D bi->xdp->data;
+> =20
+>  			bi->xdp->data +=3D IGC_TS_HDR_LEN;
+
+[Severity: High]
+Similarly, in igc_clean_rx_irq_zc(), should the check be size <=3D
+IGC_TS_HDR_LEN so a 16-byte TSIP descriptor does not result in size =3D=3D 0
+after subtracting IGC_TS_HDR_LEN, which would pass a 0-byte xdp_buff to
+__igc_xdp_run_prog() and igc_dispatch_skb_zc()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261025065154.2037=
+149-1-p@1g4.org?part=3D1
