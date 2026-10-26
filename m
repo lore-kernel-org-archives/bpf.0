@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986803;
-	b=DKZJbCTLQIP0rDMCCU3iIbH0grpXMlB1uC950FW398yBdZhLQHMpxosocW8CNbylnJ0C
-	 Rj8QfEGZGlI7t7zeKHgNtLvlE9UismxSJibmZia1Tx4PGNpacmB68OmyV8xp0LpBJY5Ar
-	 KG3zhpff3U+Yw6j/VUBjgF0dWSdxHRfQEIPIbZcGNO8F3NkEKF0oWsY7zPnLrD5hU4yNS
-	 o8O776HBlYctxrlTLpN9PWvbwv6t4EUriPJ9bCY2nNW6fk8W5VGjz2c/YnYx0IFuNTFj7
-	 Z2Izc2OvZ55F3ZyrpznB75QP+R0A6Foa3sN32a2wfOlHEqCxmjbkCdR31rbTBOzkKiA==
+	t=1792986804;
+	b=oOz9T5sNz8GrAQUjUJ5Rv7XaA5Miar41Vw526QPYwQAcAhntu+cYeleMVjAILq/K2lLq
+	 PWQu1//KNmWFXc79FdtyRptN55Um2NdFl/1yyr8zRJm7ADXcwBOG0BZE4G76gmdYysV50
+	 lMGpaaNmEQk7KKO6KQ6kkzC02got4vIH+YXHw3bv+braBgheuUVA6kykUi3m4omwGN1Bt
+	 I+ZGGf9QpzGyquznyAu1Iz5xGDjVaJx3bSn+YE+uAOg9n4hrB37gbIuJVpDfLJyVkTLny
+	 PqIRV8Tzj/CMKZxOe/grXOTd26ytzeiP3qGgvqIt7qE1FchI9q27K6NznpuY5ltXRdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986803;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986804;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=BmgtSFwZ88zLivY6TbE/0McFrSb2rkQ+P7wTZ7ogeMk=;
-	b=E74KPIEV1l9/J0zD6KPSzufO6MxjuPbveiDVKTJGCUZR+Vi3WaypIWsPfowpRfIHT+ei
-	 aUQEvEKWVyhfHWW4NWtwbWXA8hwRZvG2+wLs/bV0JEVHQXRzDrh/oFzED/Sog7/sXIn5S
-	 FljauFzbXVf7aMS1Vi9JpDsT0VnonkWfCyQ3aPf408XFtFC5O0Lt3a3DURfy9mpD7jQEq
-	 T8IFYEgYCZcapXrSFfkortBIOJmhPGO8nTy/p5eqQX18chLbdDN119dPoyw87Q/SXd1lG
-	 ogLJaMIe6c7X5SqOZCd4z3QswGaUQmCn9ILLBKRu329LPT33iH8+znOEGp7z001pILA==
+	bh=Z93rlBeGbchKL3yH+VaQZpF9u7QbpirjekmRwfcYck0=;
+	b=ALMMs5PO+VbDxGNJrjdkCKrsMOEl/VeoQwTzEPhC0dAk1OnKONNVoDr/MlOrmpoj0fR5
+	 NEkDb/XDbsz0GRrJRXfmOxUojWD9UJNnDRpm0c/AJaBknWUs9prbPtJUmqF1alkBj4VyK
+	 bOf33XjSl2X+faTu/OTnGPR4KEIXWFyOcHJSO9dJkDJSlf3zMG4rPcyW1plVQNM+wgNaM
+	 8y8GWLW5e4sw6AMgBDy4h/c2jglCG6dXVE5/Rlapq8VR7bkiTBzLCB98cfu3MckxdhTvt
+	 lwp4s8JWpWNT+r/tiHZHXJUu/KaeMdRzD2WStens7Pl/DPjrLE+XnPYWIjYLXsH8EoQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NCIoSWmK;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WK1Jcxqy;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B89606A31D
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965A6606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NCIoSWmK
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C411F01825;
-	Mon, 26 Oct 2026 03:53:22 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WK1Jcxqy
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF0A1F01825;
+	Mon, 26 Oct 2026 03:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986802;
-	bh=BmgtSFwZ88zLivY6TbE/0McFrSb2rkQ+P7wTZ7ogeMk=;
+	s=k20260515; t=1792986804;
+	bh=Z93rlBeGbchKL3yH+VaQZpF9u7QbpirjekmRwfcYck0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NCIoSWmKUAdgmznTGEynDQxLq5KvAQ0K1pfuTdeLvNluX63ANitR2an8IY3JgHZb6
-	 hyBtq2UP0z4OVxT4MYjTABTpATdk2uHmRsWlaKd7kjd/je6a5n94lwwwAFMmAL9qoQ
-	 1iCcLNuoJFOWEIyvABl4k6LMRFZziDQe8T1iF0qZgjE0d12zAQPlx8pU0WtcOyzi+1
-	 /m9uCtXiveu/OzCWT5U9tnQ0mnX6hrtzy6XV5xSqltbapiDlJCo/8Zwr8KlHy5/Pv9
-	 v85ZKwVLgAEwEckCJIvr9i/Wzk6X1KGMhc6Q7zwZQYj2gVaiWiAFViHc+8a2a+E6Ku
-	 g4mz9NoVCFP2A==
-Content-Type: multipart/mixed; boundary="===============5699443303493392689=="
+	b=WK1Jcxqy1LBuPVJeYbNT5BeHq6FFC1ImvKn6vu7vKQ72fTOI2j5jnOOK5GLF3e4G+
+	 KSZ1WTZBlYSY6YjqpCNTLo0ve5GGsTy2f01fv4TiD8dKBTlgjgsnFGN15bvvj++3N2
+	 XwsW7Uj71pQqS/3Px7GMYulpgL3lgxsxgc/ecj080fmem1qPMGE0ZJ8ohrM8xFtMTe
+	 HXSTvjGxGIg8/m+QIv4AkcZxJbRTdboSw/rnYCQ48cBid369y3fW9B7QyItoS5GaZ1
+	 IdUyB3w9CKSeC0ZQwQXA1LbqoIdBwcOvz2xlEyC1KjUx/kxYz0TGMqFRn2hed9AVJR
+	 jYD4xjc1DI4Dw==
+Content-Type: multipart/mixed; boundary="===============5795186193844349436=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,148 +49,137 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <abd26bab64571a7f77d3120b006a2254d94f8941e5e27d2d6ed92f6ad9da5ced@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-57-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-57-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 56/81] bpf: Bump MAX_CALL_FRAMES to 32
+Message-Id: <9416321c938fdfde7bfac100f97951ee580af1bb34e4de442d1150d1cb304424@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-55-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-55-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 54/81] bpf: Allow 24 arguments of static subprogs
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:22 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:24 +0000 (UTC)
 
---===============5699443303493392689==
+--===============5795186193844349436==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Bump MAX_CALL_FRAMES to 32
+> bpf: Allow 24 arguments of static subprogs
 
 TL;DR:
-- Possible kernel stack overflow at program load: liveness analyze_subprog()
-  recursion now reaches 32 levels (estimates, unmeasured)
-- Stale packed-layout comments (nit)
+- BPF_MAX_ARG_IDS (32) may be too small for 24 args; dropped ids could lose a
+  returned pointer's parent link, allowing writes to a ringbuf record after
+  submit
+- MAX_BPF_FUNC_ARGS comment inaccurate for global functions
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index c0227e74899b..6139e889c86a 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -458,7 +458,7 @@ struct bpf_func_state {
->  	struct loop_stack_entry *loop_stack;
->  };
->  
-> -#define MAX_CALL_FRAMES 16
-> +#define MAX_CALL_FRAMES 32
->  
->  /* instruction history flags, used in bpf_jmp_history_entry.flags field.
->   * Frame number and SPI are stored in dedicated fields of bpf_jmp_history_entry.
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 2ff1a2c97328..d8cd7c63f157 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1035,13 +1035,20 @@ static_assert(__BPF_RET_TYPE_MAX <= BPF_BASE_TYPE_LIMIT);
+>  /* The longest tracepoint has 12 args.
+>   * See include/trace/bpf_probe.h
+>   *
+> - * Also reuse this macro for maximum number of arguments a BPF function
+> + * Also reuse this macro for maximum number of arguments a global BPF function
+>   * or a kfunc can have. Args 1-5 are passed in registers, args 6-12 via
+>   * stack arg slots. The JIT may map some stack arg slots to registers based
+>   * on the native calling convention (e.g., arg 6 to R9 on x86-64).
+>   */
+>  #define MAX_BPF_FUNC_ARGS 12
 
-Can this bump overflow the kernel stack while the program is being loaded?
+The updated comment says a global BPF function can have up to
+MAX_BPF_FUNC_ARGS arguments, with args 6-12 passed via stack arg slots.
+Is that accurate?
 
-analyze_subprog() in kernel/bpf/liveness.c calls itself once for each static
-callee (or callback) that receives a frame-pointer-derived argument.  Its
-only depth limit is:
+btf_check_arg_slots() rejects any global function with more than 5 slots:
 
-    if (depth == MAX_CALL_FRAMES - 1)
+    if (is_global) {
+            bpf_log(log,
+                    "global function %s() needs %d > %d argument slots, "
+                    "stack args not supported\n", ...);
             return -EINVAL;
+    }
 
-so the deepest recursion now goes from 16 to 32 nested calls.  Each level
-holds this array, whose address is passed to the recursive call:
+The commit message table also says "global subprog  5, no change".
 
-    struct arg_track callee_args[MAX_AT_TRACK_REGS] = {};
+MAX_BPF_FUNC_ARGS also remains the limit for the BTF-described arguments of
+static subprogs (bpf_subprog_info.args[MAX_BPF_FUNC_ARGS] and the slot checks
+in btf_prepare_func_args()).
 
-MAX_AT_TRACK_REGS is MAX_BPF_REG + MAX_STACK_ARG_SLOTS = 11 + (24 - 5) = 30.
-With the u32 mask change in this patch, sizeof(struct arg_track) grows from
-10 to 12 bytes (4-byte alignment plus 2 bytes of tail padding), so
-callee_args is 360 bytes per level.  32 levels need 11,520 bytes for this
-array alone, compared to 16 * 300 = 4,800 bytes before the patch.
-
-That lower bound does not count saved registers, return addresses, the
-64-byte acc bitmap in merge_may_write() (static with one caller, so probably
-inlined), the bpf() syscall path above bpf_compute_subprog_arg_access()
-(which has its own u32 callsites[MAX_CALL_FRAMES], 128 bytes), or the frame
-of compute_subprog_args() at the deepest level.  That frame holds
-at_out[MAX_AT_TRACK_REGS] plus at_stack_arg_entry[MAX_STACK_ARG_SLOTS], 588
-bytes, and its kvmalloc() calls can enter reclaim.
-
-On 32-bit configs with 8KB kernel stacks (arm and x86_32 without KASAN),
-11.5KB is larger than THREAD_SIZE.  On x86-64 and arm64 with 16KB stacks, at
-roughly 450-500 bytes per level this comes to about 14-16KB before reaching
-the leaf, which leaves little or no headroom.  These per-frame numbers are
-estimates, not measurements.
-
-The call path is:
-
-bpf_check()
-  bpf_compute_live_registers()
-    bpf_compute_subprog_arg_access()
-      analyze_subprog()   <- recurses up to 32 levels
-
-This runs before do_check_main() and check_max_stack_depth(), and
-sort_subprogs_topo() only rejects recursion, so nothing earlier limits call
-depth.  A chain of 32 static subprogs that each forward a stack pointer
-(for example r1 = r10 - 8 passed down), loaded by a CAP_BPF loader or a BPF
-token holder, reaches 32 levels.  That is the Rust use case named in the
-commit message.  It also happens on configs that reject the program later,
-such as the interpreter, where the 32-byte minimum frame limits
-check_max_stack_depth() to 16 frames.
-
-The result would be a kernel stack overflow during program load (a guard
-page oops/panic with CONFIG_VMAP_STACK, silent corruption without it).  The
-verifier otherwise avoids recursion (see the "non-recursive
-depth-first-search" comment in bpf_check_cfg()), and the commit message
-does not mention verifier stack use.
-
-The selftest added later in the series (08f1453d610f) passes only skb
-through its 32-frame chain, so has_fp_args() is false and this path is not
-exercised.  analyze_subprog() is unchanged up to 51224d16c11b, and no later
-commit in that range addresses this.
-
-Should the walk be made iterative with a heap-allocated stack, should
-callee_args move off the kernel stack (for example as per-depth scratch in
-env), or should the liveness recursion limit be kept independent of
-MAX_CALL_FRAMES?
+Could the comment say that kfuncs and trampolines get 12, global subprogs
+get 5, and static subprogs get MAX_BPF_STATIC_FUNC_ARGS?
 
 [ ... ]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 50e24237a6b7..e55ba1db2e1f 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3654,8 +3654,8 @@ static void mark_non_stack_access(struct bpf_verifier_env *env, int idx)
->  }
->  
->  /* Layout of one packed linked register in the jump history, see linked_regs_pack() */
-> -#define LR_FRAMENO_BITS	4
-> -#define LR_INDEX_BITS	11
-> +#define LR_FRAMENO_BITS	5
-> +#define LR_INDEX_BITS	10
->  #define LR_FRAMENO_MASK	((1u << LR_FRAMENO_BITS) - 1)
->  #define LR_IS_REG	BIT(LR_FRAMENO_BITS)
->  #define LR_INDEX_OFF	(LR_FRAMENO_BITS + 1)
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 41ffe9b694a6..c0227e74899b 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -499,7 +499,7 @@ static_assert(MAX_CALL_FRAMES <= (1 << 4));
+>  static_assert(MAX_BPF_STACK_SLOTS <= (1 << 12));
+>
+>  /* Maximum number of bpf_reg_state objects that can exist at once */
+> -#define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
+> +#define MAX_STACK_ARG_SLOTS (MAX_BPF_STATIC_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
+>  #define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK_SLOTS + MAX_STACK_ARG_SLOTS) * \
+>  			 MAX_CALL_FRAMES)
 
-This isn't a bug, but the comments describing this packed layout still show
-the old widths.  The comment above linked_regs_pack() says:
+With MAX_STACK_ARG_SLOTS going from 7 to 19, can the id renaming for
+functions verified on their own run out of room and lose the link between a
+returned pointer and its parent object?
 
- * Pack linked registers for a jump history entry, one u16 each:
- * - 4 bits frameno
- * - 1 bit  is_reg
- * - 11 bits register or stack slot index
+The previous patch in the series (0535bc235aed "bpf: Verify programs as a
+fixpoint over the control flow graph") added:
 
-and the linked_regs comment in struct bpf_jmp_history_entry in
-include/linux/bpf_verifier.h says:
+    #define BPF_MAX_ARG_IDS         32
 
-    Each is packed as 4 bits of frame number, one bit telling a register
-    from a stack slot and 11 bits of register or slot index, see
-    linked_regs_pack().
+    static u32 add_arg_id(const struct bpf_verifier_state *state, u32 *ids,
+                          u32 n, u32 id)
+    {
+            ...
+            if (!id || n == BPF_MAX_ARG_IDS || inherited_id(state, id) != id)
+                    return n;
 
-Should both be updated to 5 bits of frame number and 10 bits of index to
-match LR_FRAMENO_BITS and LR_INDEX_BITS, and the commit message's own "the
-index of a register or a stack slot loses one bit"?
+collect_arg_ids() adds up to two ids, id and parent_id, for each live R1-R5
+and for each of the bpf_in_stack_arg_cnt(sub) stack args.
 
-There is no functional impact, since bpf_push_jmp_history() returns 0 before
-it records anything in this tree.  Both comments are deleted later in the
-series by 1dc2b8088ff9 ("bpf: Remove precision tracking"), so this only
-matters if this patch is taken without that one.
+With 5 + 7 arguments that was at most 24 ids, so the cap of 32 was never
+hit.  With 5 + 19 it can be 48, and add_arg_id() silently drops everything
+after the 32nd id.
+
+For a dropped id, callee_id() in call_func_on_its_own() does not find it, so
+the callee's copy keeps the caller's raw id.  At return, bpf_flow_return()
+rebuilds idmap from the same truncated ids[] list, and then:
+
+    reg->id = fresh_id(env, idmap, reg->id);
+    reg->parent_id = fresh_id(env, idmap, reg->parent_id);
+
+gives R0 a brand-new id instead of mapping it back to the caller's id.
+
+For parent_id that looks unsafe, because release invalidates children by
+matching parent_id (in release_reference(), "if (reg->parent_id == id)
+idstack_push(...)").
+
+Consider a caller that holds a ringbuf dynptr D and has a slice S from
+bpf_dynptr_data(&D), so S.parent_id == D.id.  D.id is not an acquired-ref
+id, so add_arg_id() does not skip it as inherited.
+
+The caller then calls a static subprog with about 22 arguments.
+func_is_on_its_own() rejects only PTR_TO_STACK and CONST_PTR_TO_DYNPTR in
+stack args, so the arguments can be 16 maybe-null slices from 16 local
+dynptrs (id + parent_id each, 32 ids), followed by S as stack arg 17.
+
+If the subprog returns S, R0.parent_id in the caller is a fresh id.  Then
+bpf_ringbuf_submit_dynptr(&D) does not invalidate R0, and the program could
+write to the ringbuf record after it was submitted.
+
+This cannot happen with 12 arguments, and nothing later in the series
+(fcfc283e9ac3..51224d16c11b) changes BPF_MAX_ARG_IDS or add_arg_id().
+
+Should BPF_MAX_ARG_IDS be 2 * MAX_BPF_STATIC_FUNC_ARGS, or should
+func_is_on_its_own() refuse the call when collect_arg_ids() hits the cap?
+
+[ ... ]
 
 
 ---
@@ -198,4 +187,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============5699443303493392689==--
+--===============5795186193844349436==--
