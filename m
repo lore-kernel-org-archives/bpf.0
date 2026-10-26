@@ -1,84 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793009592;
-	b=TVBNCG7/GKoIGmhBO07/z5Q1STi0oeGvDIKPOw4F2bJFmJ3ZjOGyWRhOc/iP/T4q8sE5
-	 /qt6C9eRFyMCd8i+UaKun6YnJR+e/AWXouIyYBPfElwvXzTu458E7xavSMOpp9rOcW7KA
-	 At2Nsmw4e3KwzAJBqJ/YMCVh0ytZT0+nhMOMMZ5oM6WfxTpwjKfiXme78a9yl1zc5M7jC
-	 jbvPirC3MJM23/qt9Ww6kl8mA4ziW7OS8MBqxu5QAbFTwSA1Lt1FchLQf9G0iyw45lzts
-	 wjgqxhnT/SLNZAjcLF/lG7AXHeLfAFX/L0F5Kjt5gRxkt+x8fFxcZRQVahS+BHPTTJA==
+	t=1793009867;
+	b=11dORDg2EF0iKGr8X1ytZDL3iPzjupLsAmD/wGkDSvQiyOPSYAs974bMQ1ZAOze0+tGR
+	 ybRAygpbmnbYSvcuf0/fEYEWS3hBKA9SN+zEoEQwa6CG2HUmxEhs/V7VrtICksSTubBZJ
+	 J6Ikyu4X/t7yA1/pD6DL5hcmFvplAbECZ6DTtKNtdEEOs9mRYfCwUluCohVYJyqQlK/1y
+	 BUfZuh+WHMk3uWi0zCaPH0pAxOV7DmA1HYElIuXf+ksWuEsVR4yL+/k6vg1TKUWUTuX11
+	 evPzodBu4TUj2VdvVmisdkgWTP3zyd57oDZcF22TkURYhTILND+CBzxKhpwQ/12dPqg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793009592;
-	h=DMARC-Filter:Date:DKIM-Signature:DKIM-Signature:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To;
-	bh=W4JDUkT65UJKUap/Q3QCQO+wt9GFW6OJmeRPM0Y//64=;
-	b=3uqA5elsoSpeaHV0zldTvhnVY+vqBUXVFvoYI6fc0glgihKgy2ElJZJgI6P2ZT2KmOZk
-	 u1+6MluYXRvM4EJNs5ebS5Z1SBP1+JnZ1pfKspdm4LsapXU+8QMXYp2sMVSZ+VGO22naE
-	 eWjYzIuV2JKox72Nu52K3DrT00eUVGtyVcfMp7Mv9llILqtfASM23Qzmma7KVxwhwjc+Y
-	 1zRubmhNJxwMQed42Tla/Mo0P62DjF12Qf+sJBUFxXJydpE4VxG3tht4oYZLJfUbefGWB
-	 0swjVWWM9mI66o/ySTN6Bbjdj2qKCbLMHqlDg8vrVz9BKe0xcs3iHctQY6uqfd8giSQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793009867;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:References:
+	 Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=QdTmk1Vq8xr84K8e9cM58PhZ34X5e3vHVUHu7vqDrHk=;
+	b=wWZzxWXqzK3WqSmFCF4e/fN8SDNBsUou1mUuSblnsmRkblhhesBGH+QrFXOkDoI19L2u
+	 zevcM4jTxu3nSUi74zy/Ss6STaFcionD6qhC57ASgQa5qtoAEgz0G4DeYQ+SVidPze5i2
+	 kB5xcKsUColpSkN4DP4jItclleRKjfD1T9DqNvPdzoJeXjTUQfVywqVeOggf/LvlLB8Tq
+	 gDW+HxVm8ehaKbZC8wNN13rEkh6TbgATpPs69Re91eJkB7uH9IBUs+FLUqJ4d2NmXXuJh
+	 zfaSsX0gohN/Vluvm1/9+ql5KLmfuHPjty/WmAR1+u/nPg6IINyJJ3abPcAMMrO712Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linutronix.de;
-	spf=pass smtp.mailfrom=linutronix.de;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=RkbyZFMY;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=PEbwae9S;
-	arc=none smtp.remote-ip=193.142.43.55
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DcNgpJuA;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9971606A326;
-	Mon, 26 Oct 2026 10:13:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D9971606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1AC606A31B;
+	Mon, 26 Oct 2026 10:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=linutronix.de header.i=@linutronix.de header.a=rsa-sha256 header.s=2020 header.b=RkbyZFMY;
-	dkim=pass header.d=linutronix.de header.i=@linutronix.de header.a=ed25519-sha256 header.s=2020e header.b=PEbwae9S
-Date: Mon, 26 Oct 2026 11:13:08 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1793009590;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W4JDUkT65UJKUap/Q3QCQO+wt9GFW6OJmeRPM0Y//64=;
-	b=RkbyZFMYs0L7R5zuL0JWZHga3ct9XtrUDTrWCMaMRGYIq91pY/d1SQuVEGMtzPYQCzfyOS
-	vcyZOBvAk9c/CHwlROUnxw954sKtPMGSZQar7+581RlNofCmaeTr4yHBim4sqz+fhCf4+/
-	iwMmLzjYdSKG1DD6AqttRb1Q52l7SOp1GnFMz6BElwB/c2hlN2EXbdHxv2g3XkbIKaJ1sb
-	xfzyM1ZY6PBOB5LIiJJW2AUV6GpdQjUkWW7abNmFEhdquFLWnFu6+CYd5HUOjMi4QK4OFI
-	LJhkteHZgnRoKkGg3636s4fVssuTg/7U/Tt6ClnXqPRZmqkCuv2Q1FPjUdIeWw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1793009590;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=W4JDUkT65UJKUap/Q3QCQO+wt9GFW6OJmeRPM0Y//64=;
-	b=PEbwae9SGq63+8A+pJEll85BEiUCOOXC2cD2cFdcb2Kv2zumeDW0KxCdtxjtUc2UI7XpRa
-	CvMm07pet+3HKLCw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Daniel Zahka <daniel.zahka@gmail.com>,
-	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/4] eth: mpnic: count packets, bytes, and
- drops per ring
-Message-ID: <20261026101308.P7PJXd9E@linutronix.de>
-References: <20261012-mpnic-counters3-v2-0-8afba81c2d5a@gmail.com>
- <20261012-mpnic-counters3-v2-1-8afba81c2d5a@gmail.com>
- <20261016220930.i32JEcqe@linutronix.de>
- <DM8U47F4MNK3.2V54CCQ9YTNBY@gmail.com>
- <20261019215405.OCzrrKYw@linutronix.de>
- <20261019190543.419e70bc@kernel.org>
- <20261020212155.47v0ot4g@linutronix.de>
- <68046007-3737-4f85-bcd1-559daa5835d4@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DcNgpJuA
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96631F031E0;
+	Mon, 26 Oct 2026 10:17:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793009866;
+	bh=QdTmk1Vq8xr84K8e9cM58PhZ34X5e3vHVUHu7vqDrHk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=DcNgpJuAatbRuyVX8CSXplGTRyzTTqrGuSFRCXihxjC6taPRCzczpFUezWm6uasm7
+	 nYhVqt6qgkupiAyB2aIj6mzC5cHKsSAEixMsXLPuR08871vcrmFCMg6QKS1MRdIeBG
+	 7IWRRBku1stWhFHJICNuqrVpMv9rwtOKTqTZzpW+5Aqp4gskDsOrTvbdQeAHDp777e
+	 B6e0ui64hqjdQhyem8La1oE8D9tdjM9/qb6Q9vO/fXGb81Qo0wb8yjnjB2rmL5purZ
+	 7Qxq+jCWsoTx1xfmjdf3EwE269NlG86dtk0/rYPSKAkEpJ1MomeWjH+cBuQIB0t9Dd
+	 /wCj5RDbg9FJw==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, magnus.karlsson@intel.com, sdf@fomichev.me
+Subject: Re: [ANN] AF_XDP office hours
+In-Reply-To: <aqPxxX9MeGmAqGy6@boxer>
+References: <aqPxxX9MeGmAqGy6@boxer>
+Date: Mon, 26 Oct 2026 11:17:42 +0100
+Message-ID: <8733ts7ol5.fsf@all.your.base.are.belong.to.us>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -89,21 +57,30 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <68046007-3737-4f85-bcd1-559daa5835d4@redhat.com>
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-10-21 10:26:12 [+0200], Paolo Abeni wrote:
-> > Right. If you think is all makes sense and is needed then why not. It
-> > just looks odd.
-> Sebastian, my understanding is that your doubts are mostly because you
-> are unfamiliar with the current reference NIC stats scheme. That has
-> evolved significantly in recent time.
-> 
-> I think the approach here is actually quite nice, I don't see blockers.
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-That might be it. As I just wrote in my recent reply, if you have a
-driver recommendation what is currently recommended I would take a look.
+> Hi!
+>
+> We feel that there are efforts on various sides related to AF_XDP
+> development so we thought it would be nice to have a mechanism to have
+> cross-company syncs or discussions.
+>
+> Therefore, let us introduce AF_XDP office hours. Plan is to have a meeting
+> every Wednesday 9am pacific time. Similar to what BPF did, we're gonna
+> have a public spreadsheet where people can put topics for discussions:
+>
+> https://docs.google.com/spreadsheets/d/16GL6AbdjDyT81cJ3-qUnYvFxqO-RlhtYT=
+S68bfQQDbw/
+>
+> At this point we are planning to meet even though agenda is empty for
+> given week, this might change in a future.
 
-> /P
+Heads-up; We had to update the meeting link -- the new link is [1]. The
+document above is updated as well.
 
-Sebastian
+
+Bj=C3=B6rn
+
+[1] https://meet.google.com/ibt-mikr-ycu
