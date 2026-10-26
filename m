@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986806;
-	b=mhRk3nZygS9mUx5FBeRqr0giQcmx2/IThGjAR69zcpxck4XoYGLxPvQiUD1PctcP7xGj
-	 rMZ/YwWeBhQVYbK9c2UZ/y0RpdC7WuPo0dvKqWx+t7BBUIllqujGSy2yUzJw0wcD/pxv4
-	 4USopNdj6SqiThcKk4yLxgM2uTtVRsP+18exst/HWmA4R9NtZcWufj6uZLxM+AtjFoHnK
-	 RUeyTSImNnwIvB4wS32GSDwoskQHUAcbbOy6TuTWiqksPIXprGlM/YcDU1nEoOUQUlAe9
-	 Ru+50XdDuseQXtRxtKrq3ui2K+e/FAgU6InTLYFbQ/Yiv3DttAKXqHhlvF5lRwdj1Hw==
+	t=1792986808;
+	b=SH1BfE4a+6Yxmw0gzbblwpYBqNpXlp56Cjv0orac3l728YZ9NKSvdYvA6lQU18lXSCDc
+	 vqYASTY5epc2Ed7KnlzIhPF4nGWyd9UcDt6MXMPt0L3toPcxACEgCaUaN89h/gVTWjCL/
+	 JgLr4473cLfegyDctqpqpAZq5HX9ZOxwLT0NDOsXEb7iFt+0BbaB2BzeiyuGVjBnJnh8n
+	 52YjLMadZgf9umIvKq68HTlQ5/4Jj44mfgaTRKZLb4uyKViVHlXKmXSasBtwT3hRGZEIR
+	 unEWCLCmEXTHUim9wn57i0o5B96Sq8a4q1FUFxTCvaFiD7zt99oWTvQtz4bhGCllCzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986806;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986808;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=btqKNhS8T2/5/KBA/4BtdwosZWSqIunQEU3E6IcYmFY=;
-	b=Py2KS0Cl9mkUkrPmK3Z4y2xbBB4GbBO0+Oc9dw0/n27qe6tOIOHqKYIDHqZcTLSW/DWy
-	 UDhXOQD7dPjqzjBB1xLrrF2cG+AOR2mRKQSXbpoOoY0GWOrbgHplaskjRu9nFM8qKUeN/
-	 5PxZ0GDoYkMXDv2KGvgLxGdOwyoLPWgxsl1eTrq3C9ttPs+YogJ1poxSXN5BLtF6imoU/
-	 uUkw7yhi2bL+NxfCBSVL0pI6kbfm1dW9qmyR/4ihYXS1w3U1OWEqM8T7/yJK+uqpgHSVk
-	 XraeqB0DPb199RhwvGa8MwyFbUDC7PGsXHzbmkLNk5dmNG5hcPRYOwFE/PwKIjiU6mg==
+	bh=mu/8MBry/zWpkDI7jHHr6uGxmrq8+ALSg/iyxGvlNRM=;
+	b=LGccrwttx9CN2DpavGeeD3B9Qu1hIk/5p773mEuVnlsgcYuuHNQTJnSZZsFX2YlTCbFj
+	 DmLBUyvsX8kPZBNqIOUiJK2iRU8Ey4gMwjj2b8yfmzMDotspBTPZsJq9ckn9sr2q24Gby
+	 qFx8AOq3DTqUqpirJM4zejcDKaJvzuMRYw2MW3cjK4OnSyLFDonm4hhsLYVQ4p8aqJ7Le
+	 MQQaCG9WrkMffsJGIEA1dwO/ivuZUgVvE2LSdbIlJQcZPhU3WDIIz+t2gCFdMIKTf/X77
+	 a8ZZ2s2u3M7sqIVjo5QwEAXh5ZeggbCeYD93dQOXP8C5hSdPbmIUjQCxV0UC1/e+7MA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X1zG6dol;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hYVvUb96;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323C4606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52608606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X1zG6dol
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D34B41F01825;
-	Mon, 26 Oct 2026 03:53:25 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hYVvUb96
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6F11F01825;
+	Mon, 26 Oct 2026 03:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986806;
-	bh=btqKNhS8T2/5/KBA/4BtdwosZWSqIunQEU3E6IcYmFY=;
+	s=k20260515; t=1792986807;
+	bh=mu/8MBry/zWpkDI7jHHr6uGxmrq8+ALSg/iyxGvlNRM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=X1zG6dol7oaQWmL9iwY4zTYlYnqNr5A6ZsodbC44WVYwKCRIZE+bVO2+ebvnUMkQG
-	 Qoq6SEjNPxEcxlq2yLNKUqRkgzqeSHnSyggv2VDtzRShOrBjr/Nag7OFPfXkpVc/q6
-	 WkUfSIesfTncsbBXJ9DOqjzrzuYw3VjMAVid0aU3nKjU0b2uRVUaegsnrJKxnILCIw
-	 jVfZ00QKPqWgPLj9QduOXg0Yi11IWqcOPYqfL8gpHvDXvddVy4U9gzXuaRGct9MLfD
-	 W3VZK45oZTyHKNkmAKCF+FCL31CtO68GKP4u48Tjb+z3xmHD9nCdv7E6MT/09SbQt6
-	 iFXjIyP7fdPQg==
-Content-Type: multipart/mixed; boundary="===============7748978955032573617=="
+	b=hYVvUb96odAJqByEhzBvmH43rO/pRPHBU885a2Tl/zVXRqCVs1Tq9ai31CHO+THMo
+	 uCLbIrfiYpzbOBLGJM0UYjbV1PNMwaZtB5bce+W3n9GEgFdxX6CDU11KlL3rZwX/rh
+	 CaAFuOPYUym7s2xEhwalmPvRVPY8sA4Iq802UMubuRN+OX8l6JMt24vZ+QXfFYWCf0
+	 NDfJlqPxjwATz82f4zVaimF9sUb0IfmzliUd5G63pvy2DYdAKK54DjDWKUlV3yjjHV
+	 YlLk7RWq6ANQnDtKWsZ1psPCpd/RewGAOUAAAbQJOr4fXcOlXK1F5Z/ldEEgNNtnYp
+	 P6efRPU9W5YXQ==
+Content-Type: multipart/mixed; boundary="===============4763334453890846221=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,108 +49,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <4a603950f9a236bc0adefc6df257d4b9ae8b0f949d9ff0a934f774a609783e35@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-42-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-42-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 41/81] selftests/bpf: Test range of a packet pointer after a number is added
+Message-Id: <17e2d5bac9b276ed93500fb6e09ec66618711e724137c4c011db5cea8f6ed549@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-69-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-69-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 68/81] bpf: Track a pointer to one of a set of functions
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:25 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:27 +0000 (UTC)
 
---===============7748978955032573617==
+--===============4763334453890846221==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Test range of a packet pointer after a number is added
+> bpf: Track a pointer to one of a set of functions
 
-TL;DR: Test issue: the new packet-pointer selftests lack
-__flag(BPF_F_ANY_ALIGNMENT), so on kernels without efficient unaligned access
-(e.g. riscv64) they may be rejected for misaligned access, and the __msg()
-checks may not match.
+TL;DR: Nit, not a bug: the explicit account_current_path() in
+check_func_callx_set() seems redundant, since process_bpf_exit accounts the
+path anyway; the comment's rationale doesn't match, so drop the call or
+explain it.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-> index 139ff019d87d..aa4abe22655f 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 21ea43422133..6c6980d74fd6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -1098,4 +1098,379 @@ l0_%=:	r0 = 0;						\
->  	: __clobber_all);
->  }
->  
-> +/* 54 bytes are checked. What is added is 38 at most, so there are 16 left. */
-> +SEC("tc")
-> +__description("direct packet access: a number in a range is added to a checked pointer")
-> +__success __retval(0)
-> +__naked void pkt_add_range_keeps_range(void)
+> @@ -11757,13 +11792,92 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+
+[ ... ]
+
+> +/*
+> + * callx of one of the functions of a set. A function that is verified on its own
+> + * gets a copy of the state that waits for it. Nothing meets at an insn.
+> + */
+> +static int check_func_callx_set(struct bpf_verifier_env *env, int regno, int *insn_idx)
 > +{
-> +	asm volatile ("					\
-> +	r2 = *(u32*)(r1 + %[__sk_buff_data]);		\
-> +	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
-> +	r4 = *(u32*)(r1 + %[__sk_buff_mark]);		\
-> +	r5 = r2;					\
-> +	r5 += 54;					\
-> +	if r5 > r3 goto l0_%=;				\
-> +	if r4 > 38 goto l0_%=;				\
-> +	r2 += r4;					\
-> +	r0 = *(u64*)(r2 + 0);				\
-> +	r0 = *(u64*)(r2 + 8);				\
-
-Without __flag(BPF_F_ANY_ALIGNMENT), can this test be loaded on kernels
-that don't have CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS, such as riscv64 with
-its default config?
-
-bpf_check() sets strict alignment in that case:
-
-    env->strict_alignment = !!(attr->prog_flags & BPF_F_STRICT_ALIGNMENT);
-    if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
-            env->strict_alignment = true;
-    if (attr->prog_flags & BPF_F_ANY_ALIGNMENT)
-            env->strict_alignment = false;
-
-check_mem_access() calls check_ptr_alignment() before check_packet_access(),
-and check_pkt_ptr_alignment() adds NET_IP_ALIGN (2), var_off and the
-instruction offset before checking the alignment against the access size:
-
-    reg_off = tnum_add(reg->var_off, tnum_const(ip_align + off));
-    if (!tnum_is_aligned(reg_off, size)) {
-            ...
-            "misaligned packet access off %d+%s+%d size %d\n",
-
-Here r2 = pkt + r4, and r4 is only bounded by "if r4 > 38 goto", so var_off
-is (0x0; 0x3f) and the 8-byte loads at r2 + 0 and r2 + 8 are not 8-aligned.
-Wouldn't the verifier reject this __success test with:
-
-    misaligned packet access off 2+(0x0; 0x3f)+0 size 8
+> +	struct bpf_verifier_state *cur = env->cur_state, *copy, *branch;
+> +	struct bpf_reg_state *reg = reg_state(env, regno);
+> +	struct bpf_func_set *set = env->func_sets[reg->func_set - 1];
+> +	int err = 0;
+> +	u32 i;
+> +
+> +	/* once, and not in every copy */
+> +	account_current_path(env);
+> +	reg->func_set = 0;
+> +	for (i = 0; i < set->cnt && !err; i++) {
 
 [ ... ]
 
-> +SEC("tc")
-> +__description("direct packet access: a number in a range is added, load past range")
-> +__failure __msg("invalid access to packet, off=47 size=8, R2(id={{[0-9]+}},off=47,r=54)")
-> +__naked void pkt_add_range_load_past_range(void)
-[ ... ]
-> +	r0 = *(u64*)(r2 + 9);				\
+this isn't a bug, but is the explicit account_current_path() call needed in
+check_func_callx_set()?
 
-The same applies to this test, and to pkt_add_range_twice and
-pkt_add_negative_drops_range, which also do 8-byte loads at unaligned
-offsets from a pointer with a variable offset (r2 + 9, r2 + 5, r2 + 6 and
-r2 + 0 with r4 in [-4, 4]).
+The copies made with bpf_copy_verifier_state() start with insns_subtotal at
+0, since copy_func_state() sets dst->insns_subtotal = 0 (its comment says
+"Instruction accounting is path-local, not part of verifier state."), so
+the account_current_path() that runs on each copy adds nothing, and the
+states from push_stack() do not carry the count either.
 
-Those three are __failure tests, so on such kernels would they be rejected at
-the alignment check instead?  The expected message, for example:
+check_func_callx_set() then returns PROCESS_BPF_EXIT, and do_check_block()
+goes to process_bpf_exit:, which calls account_current_path(env) on the same
+cur state:
 
-    invalid access to packet, off=47 size=8, R2(id={{[0-9]+}},off=47,r=54)
+    check_func_callx_set()
+        account_current_path(env);
+        ...
+        return err ?: PROCESS_BPF_EXIT;
+    do_check_block()
+        process_bpf_exit:
+            account_current_path(env);
 
-would then never appear in the log, and the __msg() would not match.
+That call would account the path exactly once even without the one in
+check_func_callx_set(), so the explicit call does not seem to change any
+total, and the reason given in the comment ("once, and not in every copy")
+does not match how the copies behave.
 
-Other tests in this file that do multi-byte packet loads at a variable or
-unaligned offset, such as the "x += pkt_ptr" tests test20 to test24 and
-"checked pointer minus non-negative unknown keeps range", set
-__flag(BPF_F_ANY_ALIGNMENT).  Should these four tests set it as well?
+If the call stays, could the comment say why?
 
 
 ---
@@ -158,4 +134,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============7748978955032573617==--
+--===============4763334453890846221==--
