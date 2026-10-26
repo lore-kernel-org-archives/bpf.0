@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983994;
-	b=DZQ7j6Ewe5ITwtkvvYp6BQrDr14vdvRZK8BPG/PzTH15eLww6RDkwIosKCELcZVergcs
-	 a69+mIqRdw90WY5TppnLHY6I19C7UDbIxC7NE+AbuOXjKx1DtKcnmaeiPeFZ/HdU3g4t2
-	 X9CEeFQxWrx/kkwNHlYGGnjqC60mS9oeXWahrFiSNX216zA79EWBpJM/s5pAFBuQyBC+q
-	 zbLy2SX0q/nCyKxwoOFZMknYtOOcN4j8HEy/lHPBlnn9ZRBEWp3JLU8lTvJcqNFLGA3wF
-	 rm5LWd2q/9CcueLA8a5Pa37sjM4RsPiGugLQqFMNgcI0h9tRavnzYc3tZm0ljm4dX9w==
+	t=1792983999;
+	b=x9J1rNPdG+0aRLUCj5VNZWE6Sn2uJkd8MNl1XiQwGqmG6pkzJVnOJQIO//OETfpgKPu8
+	 glym3WB2qF1G2O99uOzRZIXAQiBZfQ5pXgpsBMzlJ9NfAt59144cE3TbnDX+98MvnsnJ7
+	 QPq9HKSPEYZ1434JfHCCWksxrIgOtrSnkP2ntEyVEwTvKSC2oLR9sZQjt9Wah+99EDsSk
+	 pP6sRquXbvLxQ1y0/ARhZgQVeNNfH8tneghil8uxddcpa7QDlwEmHZaN1lbp/1BsPwHaC
+	 jLGZM0pbR0ZmEzd6kfNVF+rHRoMMYGXzVCIyg3DhMTeFDr2lfopzNS+CpKqAksjj5lw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983994;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983999;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=z/lWuyt/DufABuw0/+SM0nQ9TVTYY7Bk2e21c0YiD8k=;
-	b=MqtZ/H3aseEP26L3aREig02NBXPYfuWCeMShvfrhq5jhCQpWMvmay2nvEQ2uV6v8cPAr
-	 s58hheWbDGRR1clb4y+b5OK8vjkbYVVwWfflle+MoY8FQu9488A8mvgB0Agg7Zl1Ejs3Z
-	 QYyKaki5qsBVdUctkpWb1yrSvqYjyjZwdK5g+QCFuLjz+R5oNBlD1PwD5Wsyof6iWaSC1
-	 kGagjUOrlLrvExWRLm/r9Li4dEu62Owy/nUajAQZnYxEdDnxNhETmnXy9vt1MhxL9p5+M
-	 RK5eWmAagGpFEWzFHgUALTAKloE9EFTkZoTizxb3hqFdDte8X3aFCLDjnmntDRQtytQ==
+	bh=KG1ECDNSdawq7foy0QrdeDUD61fR3jRnf5HdCiMa+e4=;
+	b=BwQw9wzupAxmv6GHjtXT9dYB7nhnRTB1pCw//64Pz3WiKRfs6Y/lEq19EmOQgncZCpYp
+	 Zuzm7DHMq/FRENd+x0mGOsAGrI7/jK02BVVTaO7irqAnvbO2YDzE8yG3/ywSST9SlmrXi
+	 awl/4fEHFxdwhLjTOgI+yyzbRGV/4TvNuXHcoTEWkNfE1Cvg066aLOfczroKPpxIBkpgX
+	 LjxSabIvluDPlJ/YO2w/8mmE+vUsI0+xlfe+N8jToftE0XnQyy4a3y8nOE2KcsGIyfo/b
+	 T+tomeZ/u7cJzHJDqKOgyMzBAQlnkSct5+gy0+PNBSscjEAsTh71ur4O8sbE8scSHbA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=iZk6WJJ8;
-	arc=none smtp.remote-ip=209.85.214.169
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=J8+kCt4f;
+	arc=none smtp.remote-ip=209.85.215.175
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA573606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:06:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA573606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E90606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:06:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34E90606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=iZk6WJJ8
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e977109392so14066805ad.0
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:06:32 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=J8+kCt4f
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cd6a7e1f4e4so813200a12.2
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983992; x=1793588792; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983997; x=1793588797; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=z/lWuyt/DufABuw0/+SM0nQ9TVTYY7Bk2e21c0YiD8k=;
-        b=iZk6WJJ8539VDtCBNKzKOImXlw7FSVcRF7cw9A1bDIeofJ5UX7O9JxJacygTwMl3wC
-         gshXMLg1gkh0Veddf++41yjtPlSrjTu6aySm2BSkMtY+svqweFz1gWEaTIl8NIgC+sKs
-         /416+258VHrVfp1GRoeERQvfE0htT5hfTJ61I5rLtZJitMZEMTOPzxgYkd9PWq4CcpNP
-         mm84m/Gidnvr7JeXx5c91uCTJ5mFoKV7VlxTZSNtM2c9YkWjd3u4OQ38SZxdH1HxY9Tz
-         H3GbJq1Y+aiOyi9w7f4reKBaxWBX0ORw6uzy3SlYVKk6bFaIVUM5Pxjf3o1RyUqTL0lB
-         SO6Q==
+        bh=KG1ECDNSdawq7foy0QrdeDUD61fR3jRnf5HdCiMa+e4=;
+        b=J8+kCt4fwa+SjLawb9dwrLo3Hz01CPA6dnPMSFZHscVAsyc5qkxNK0pXB87vcnfZzG
+         Y8MMINSu1Yp4Sot6Lm6vQuRUX5eUgVlpbdxvv6owGjJQztEysv2u4kSUf0Gs7oDSoq64
+         9lBzngq7f7d0Dd0GdTFLtsNttIga20FImaVeVpU5fRpRfUj2LjE6yDxYnuhbaDxrJVfT
+         mB8qHTg5hJh3GMY6BoRaCFJetAgxrgi4SVu3+vB/XLAmGpIljVH9fW70Jj34gzlg6CsX
+         MInwcRJOWhqo7eX9uYejg3F61j+eOJU7USD4DIvAnfg8w/1jt/+RW1BTdhgXcAG7+w1s
+         +M/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983992; x=1793588792;
+        d=1e100.net; s=20260707; t=1792983997; x=1793588797;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=z/lWuyt/DufABuw0/+SM0nQ9TVTYY7Bk2e21c0YiD8k=;
-        b=vgH6SrkTpbQg1ld9RmOv3krEOZJmbj+bv4GU2PaHbShzl30nt3Ak0jdbL+BpLPVUaY
-         N59PAj342OfVqaSQJYvg9RhT+GTiRxSlHnsBpJHuAhhOJLfdKl+bH2jy6UGOp60QUcXE
-         NpAuEc0M3meFob/cPcJCWn31Cx4+Ac51/bsdwdo7+BshDbEuQXrfdnpWQLVmdmxM0DSn
-         5dvTCAuFSli5H4QbLDw9QrPchKfLfdJx8lojF2e8Rq/j8sA61VSap87T0FVzGJOi5JQ6
-         EasOhcd+JFxlX7L0SDzQNzxs6Ii/dpvQ4PGotS0PO2D5SLAi3SkxeqAI9Jo9+E/fEmNf
-         OgWA==
-X-Gm-Message-State: AFq9FYJXvCMNe+FpSDwYA5jDCdmuAHyTTMJC9+JyESpcN4Vz9fnp5a2l
-	ZZqFk7cSTfTj/XSVcA+y6kYT6dVbQ8R2n8SoDhDZSxzA4CngPbBd7jCbwT9ALw==
-X-Gm-Gg: AYBFou2wGn4O64hziz8i/Ici+dKy7w2opSeJbUZ9tWl0QbuJU6qM+o/glBGp/v5gws8
-	fuP11UUVagT/6MeF0qZ3GjjKMuBd1iIA5y5Slnz9wSsgxueecDYsdWJag7NamdowWkY2L91AMyC
-	TZ2jd8JJ541wb6/3dQzvuqyfrHHg+h5vJw5cAFhV6cvd6gMhz8oWfiVpjWzoIXaOOLrIhTPgNLo
-	wSH4kYMa6eQeizTXQBjy9w/qSYnGNQ9Hnm77HDXzj/o7JbhxWo0VGMbedUBBt2yb0OziVJBdwRR
-	XyuTu6ayZC1UJa0Ke7LG38KUmkr0wFzQvW06paRxnHbTwjAElVnAGhl+x1jU01SBj5G6dbvmggX
-	uEUbwzakg69Rr5ngDDA/sm9Qqw9cHRnSKj4Blz/PCDRXaeLmellE8qO9k6rH75IKUuWeuXSCWTF
-	DM7HKJZe06LrPzJZSQMDxYCTnc2QvvDhLifGWGSwBE+hjbV6IzUSuz0hYVeKUSycmKwrlSKHX/w
-	Yepgk19lbRB23Ew4g4INsjkhjV7Zs+F/CqGzx0eSt0thh30HjP+54HcZBk/7yZMrD1JsNjANKj1
-	3MLWE2+cJWWpFo8dc7xq3AsN0YNyug6PWM62lddW043538sTuX6YUQ7V87YBDIHAlnEZE8O9zMX
-	0GQNVFxdC754ZWdwjZmconhvD
-X-Received: by 2002:a17:903:245:b0:2e6:943:39de with SMTP id d9443c01a7336-2ea9c6c829amr48380125ad.30.1792983990731;
-        Sun, 25 Oct 2026 20:06:30 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1def72sm9793025ad.59.2026.10.25.20.06.30
+        bh=KG1ECDNSdawq7foy0QrdeDUD61fR3jRnf5HdCiMa+e4=;
+        b=aaeVxWAUIazQOlQRrp/t37o4wjXNc+Q6A1xazJOcJ1GFGi+z+8YZa2p6vCJDY6izP8
+         tF7u4EHVi27hKMfJF/jd2WTyljaWbai5nvxWzarjmTHQ8BXi0i42htVdK718ikDVMI1y
+         KMGztI2R/c1cyJ8kJD8igRIruknUJmT4+aOJMz3l6ij6Fr8D3L7iSzHuoOALjsQNzcCv
+         rv6pavOucVcvJv6rVYgvrWIqP1qBGTwRROgBsvi6JQ12gsMZ0QxUqaemE3XIfQlWO8Xi
+         OJBiu3UzlzXfsEB0rdkzz4BiigHrjM0aEyJ70SG2RyveG1wNGIrLJRwaOZmFFRD87xws
+         DSgg==
+X-Gm-Message-State: AFq9FYJ3GGlsBF6NFQ8YzUKwrwAfbbkDhvuTdko2MU6Eov+5p6y1606r
+	HNLnHfQrN2Z7iTzcCwsM8x0HPlqSalib1ap6UFAddz9hnUQ/vxXRSD+XEQoowQ==
+X-Gm-Gg: AYBFou2FnVq3uYg6rCrydwGZcoHtxCCDPeuhbJleoQlLzGKLADeP7h7zal2MpcAg5Rb
+	hH/r4bb07chDYwRMoXy4l1gG/zSaa1I+LZ18cwZ2CfDu4/wvVLltxTg5iTo2+jK3gunlvTvhzz/
+	pclkcQbFKyFmx4imVfj37/C1Wuan7GJLQfdeBugbcXnHHmYF3qOIjLRL0sUFd1PgDz/84RBfSq3
+	4ce60q2ENhpqZJ3mD1lgwEkolQLiIHrAhFcrvcbJtt9dbCr5QLVt0UTODiqek02iAb83oaqFikF
+	TP5EkibGA3HJCt30BTotJYSc/SaBm+HZpjnV0m6EeRMIEi3wTp73bVXj9GdvKEPBbbAMk/sEAA2
+	AR3VBDIs1vmXsgYFtS+eQ37uZu7BgGFOPcBLScxmU/55g7jOYqfdGh8FsQuUMfVsEUkQ8UiXza0
+	1xlPQhCsnOZqyJRk5lyRcVjzoy7/8Dw0Tsj6Y/MdpH+SlhkS3b7NgFEs9SXLc1zZCJSvMhbuolC
+	7Rdl/L7bCDm7W5P+j6rqtFyllfDIPREvsggSA/CK+M30UxJeHBjJGdX4z8If8crWe8EZn1qC7iD
+	5zO7JPm+XmlKPVSnKiXk48RBzvZAECLI5q67xV342Mz/9FsFoh7saUhXAnHFdiCgzmviZJVYvH0
+	cExe/VwO02cwlbcUJiidn9iO00A==
+X-Received: by 2002:a17:90b:1652:b0:3a7:82ef:bcdd with SMTP id 98e67ed59e1d1-3adead4f65fmr5256691a91.41.1792983996620;
+        Sun, 25 Oct 2026 20:06:36 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebadfeb1sm6201170a91.9.2026.10.25.20.06.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:06:30 -0700 (PDT)
+        Sun, 25 Oct 2026 20:06:36 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 69/81] bpf, docs: Rewrite verifier.rst
-Date: Mon, 26 Oct 2026 02:59:30 +0000
-Message-ID: <20261026025943.404450-70-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 70/81] selftests/bpf: Adjust tests of precision tracking
+Date: Mon, 26 Oct 2026 02:59:31 +0000
+Message-ID: <20261026025943.404450-71-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,1795 +103,1308 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-verifier.rst describes a verifier that follows each path of a prog and
-prunes. The main pass of the verifier is now a data-flow analysis. It
-verifies one basic block at a time, and it joins the states that meet at a
-block. Most of the other text is from 2014-2018 and is also incorrect.
+Precision tracking went back from a check through the insns of a path. It
+found the scalars that the check depends on. At log level 2 it printed each
+step as a "mark_precise:" line. These tests match 358 such lines.
+"bpf: Remove precision tracking" removed the mechanism and the lines.
 
-  verifier.rst says                           the verifier
-  ------------------------------------------  ---------------------------
-  It descends all paths and prunes.           It joins states.
-  A DAG check disallows loops.                It permits loops.
-  Signed and unsigned bounds are separate.    One range holds the two.
-  A pointer has a fixed offset and a          A pointer has one offset.
-  variable offset.
-  PTR_TO_MAP_VALUE_OR_NULL is a type.         "Can be NULL" is a flag.
-  The log shows R0=inv1.                      The log has a new format.
+Keep the progs. Each prog moves a scalar along a difficult route. Then it
+uses the scalar where the verifier must know the value, for example as an
+offset.
 
-Rewrite the file.
+  file                          the route of the scalar
+  ----------------------------  -------------------------------------------
+  verifier_precision.c          neg, byte swap, atomic insns, load-acquire,
+                                store-release
+  verifier_subprog_precision.c  static and global subprogs, callbacks,
+                                spills into the frame of the caller
+  stack_arg_precision.c         stack arguments of a subprog and of a kfunc
 
-  section                   contents
-  ------------------------  -----------------------------------------------
-  The stages                from the first checks to the JIT
-  What a state contains     registers, ranges, ids, stack, held objects
-  The check of one insn     the rule for each insn, with its message
-  Direct packet access      the comparison with the end of the packet
-  Data-flow analysis        the main part
-    Overview, Terms         what a join is, one meaning for each term
-    The algorithm           a flow chart: drop, join or add a state
-    Examples 1 to 4         what the verifier joins, what a join loses
-    Examples 5 to 8         loops, widening, the added may_goto
-    Examples 9 to 11        subprogs, tables of functions, recursion
-    The limits              why the analysis ends
+Match the value that the log shows for the scalar.
 
-Each example shows the control flow graph with the states on its edges, or
-the insns with the states adjacent to them. Two lines below most examples
-compare the algorithm with a verifier that follows each path. The states,
-the messages and the numbers in the examples are the output of the kernel.
+  before  mark_precise: frame0: regs=r2 stack= before 1: (87) r2 = -r2
+  after   1: (87) r2 = -r2                      ; R2=-8
 
-The text does not use names of verifier functions. It shows a state in its
-own notation, { r6=0 r7=1 }, and not in the format of the log. The names
-and the format change frequently.
+The four tests in verifier/precise.c examine only the verdict and the
+return value. No expected verdict changes.
 
-Remove the section "Understanding eBPF verifier messages". The table of the
-checks has the messages adjacent to the rules.
-
-bpf_design_QA.rst lists a limit on the insns that the verifier processes
-and a limit on pending branches. These limits do not exist. kfuncs.rst
-refers to pruning. Update the two files.
+The tests in progs/ also drop BPF_F_TEST_STATE_FREQ. The flag made the
+verifier save states for pruning more frequently. It has no effect now.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- Documentation/bpf/bpf_design_QA.rst |    7 +-
- Documentation/bpf/kfuncs.rst        |    2 +-
- Documentation/bpf/verifier.rst      | 1661 ++++++++++++++++++---------
- 3 files changed, 1144 insertions(+), 526 deletions(-)
+ .../selftests/bpf/progs/stack_arg_precision.c |  48 +--
+ .../selftests/bpf/progs/verifier_precision.c  | 166 +++------
+ .../bpf/progs/verifier_subprog_precision.c    | 348 +++---------------
+ .../testing/selftests/bpf/verifier/precise.c  |  69 +---
+ 4 files changed, 112 insertions(+), 519 deletions(-)
 
-diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-index 98d70b8a2533..f86b272920ae 100644
---- a/Documentation/bpf/bpf_design_QA.rst
-+++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -92,11 +92,8 @@ Q: What are the verifier limits?
- A: The only limit known to the user space is BPF_MAXINSNS (4096).
- It's the maximum number of instructions that the unprivileged bpf
- program can have. The verifier has various internal limits.
--Like the maximum number of instructions that can be explored during
--program analysis. Currently, that limit is set to 1 million.
--Which essentially means that the largest program can consist
--of 1 million NOP instructions. There is a limit to the maximum number
--of subsequent branches, a limit to the number of nested bpf-to-bpf
-+The largest program can consist of 1 million instructions.
-+There is a limit to the number of nested bpf-to-bpf
- calls, a limit to the number of the verifier states per instruction,
- a limit to the number of maps used by the program.
- All these limits can be hit with a sufficiently complex program.
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 47d3bed73b83..9fc272345138 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -155,7 +155,7 @@ An example is given below::
- Here, bpf_obj_new uses local_type_id argument to find out the size of that type
- ID in program's BTF and return a sized pointer to it. Each type ID will have a
- distinct size, hence it is crucial to treat each such call as distinct when
--values don't match during verifier state pruning checks.
-+values don't match when the verifier compares and joins states.
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
+index c9564776d733..bf42ca629a01 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
+@@ -23,7 +23,7 @@ int __btf_kfunc_gen(struct __sk_buff *ctx)
+ }
  
- Hence, whenever a constant scalar argument is accepted by a kfunc which is not a
- size parameter, and the value of the constant matters for program safety, __k
-diff --git a/Documentation/bpf/verifier.rst b/Documentation/bpf/verifier.rst
-index 510d15bc697b..cc1e6eae5471 100644
---- a/Documentation/bpf/verifier.rst
-+++ b/Documentation/bpf/verifier.rst
-@@ -3,558 +3,1179 @@
- eBPF verifier
- =============
+ /*
+- * Test precision backtracking across bpf-to-bpf call for kfunc stack arg.
++ * Test that the range of a stack arg is known across bpf-to-bpf call for kfunc stack arg.
+  * subprog_call_mem_kfunc receives a size as incoming stack arg (arg6)
+  * and forwards it as mem__sz (arg7) to bpf_kfunc_call_stack_arg_mem.
+  */
+@@ -52,52 +52,12 @@ static long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long
+ }
  
--The safety of the eBPF program is determined in two steps.
-+The verifier checks each program at load time. The kernel runs only a program that the verifier
-+accepts. The verifier accepts a program only when it can show that no run breaks these rules:
+ SEC("tc")
+-__description("stack_arg: precision backtracking across bpf2bpf call for kfunc")
++__description("stack_arg: range across bpf2bpf call for kfunc")
+ __success
+ __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
++__msg("from 9 to 11: joined")
++__msg("13: (79) r1 = *(u64 *)(r11 +8)        ; R1=scalar(smin=umin=smin32=umin32=4,smax=umax=smax32=umax32=6,var_off=(0x4; 0x2))")
+ __btf_func_path("btf__stack_arg_precision.bpf.o")
+-__msg("mark_precise: frame1: last_idx 26 first_idx 13 subseq_idx -1")
+-__msg("mark_precise: frame1: regs= stack= before 25: (b7) r5 = 5")
+-__msg("mark_precise: frame1: regs= stack= before 24: (b7) r4 = 4")
+-__msg("mark_precise: frame1: regs= stack= before 23: (b7) r3 = 3")
+-__msg("mark_precise: frame1: regs= stack= before 22: (b7) r2 = 2")
+-__msg("mark_precise: frame1: regs= stack= before 21: (b7) r1 = 1")
+-__msg("mark_precise: frame1: regs= stack= before 20: (7b) *(u64 *)(r11 -16) = r1")
+-__msg("mark_precise: frame1: regs=r1 stack= before 19: (7b) *(u64 *)(r11 -8) = r2")
+-__msg("mark_precise: frame1: regs=r1 stack= before 18: (07) r2 += -8")
+-__msg("mark_precise: frame1: regs=r1 stack= before 17: (bf) r2 = r10")
+-__msg("mark_precise: frame1: regs=r1 stack= before 16: (7b) *(u64 *)(r10 -8) = r2")
+-__msg("mark_precise: frame1: regs=r1 stack= before 14: (18) r2 = 0x807060504030201")
+-__msg("mark_precise: frame1: regs=r1 stack= before 13: (79) r1 = *(u64 *)(r11 +8)")
+-__msg("mark_precise: frame1: parent state regs= stack=:  frame1: R10=fp0")
+-__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+-__msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13")
+-__msg("mark_precise: frame1: regs= stack= before 11: (85) call pc+1")
+-__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 7 subseq_idx 11")
+-__msg("mark_precise: frame0: regs= stack= before 9: (05) goto pc+1")
+-__msg("mark_precise: frame0: regs= stack= before 8: (7a) *(u64 *)(r11 -8) = 4")
+-__msg("mark_precise: frame1: last_idx 26 first_idx 13 subseq_idx -1 ")
+-__msg("mark_precise: frame1: regs= stack= before 25: (b7) r5 = 5")
+-__msg("mark_precise: frame1: regs= stack= before 24: (b7) r4 = 4")
+-__msg("mark_precise: frame1: regs= stack= before 23: (b7) r3 = 3")
+-__msg("mark_precise: frame1: regs= stack= before 22: (b7) r2 = 2")
+-__msg("mark_precise: frame1: regs= stack= before 21: (b7) r1 = 1")
+-__msg("mark_precise: frame1: regs= stack= before 20: (7b) *(u64 *)(r11 -16) = r1")
+-__msg("mark_precise: frame1: regs=r1 stack= before 19: (7b) *(u64 *)(r11 -8) = r2")
+-__msg("mark_precise: frame1: regs=r1 stack= before 18: (07) r2 += -8")
+-__msg("mark_precise: frame1: regs=r1 stack= before 17: (bf) r2 = r10")
+-__msg("mark_precise: frame1: regs=r1 stack= before 16: (7b) *(u64 *)(r10 -8) = r2")
+-__msg("mark_precise: frame1: regs=r1 stack= before 14: (18) r2 = 0x807060504030201")
+-__msg("mark_precise: frame1: regs=r1 stack= before 13: (79) r1 = *(u64 *)(r11 +8)")
+-__msg("mark_precise: frame1: parent state regs= stack=:  frame1: R10=fp0")
+-__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+-__msg("mark_precise: frame1: last_idx 11 first_idx 11 subseq_idx 13 ")
+-__msg("mark_precise: frame1: regs= stack= before 11: (85) call pc+1")
+-__msg("mark_precise: frame0: parent state regs= stack=:  R10=fp0")
+-__msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx 11 ")
+-__msg("mark_precise: frame0: regs= stack= before 10: (7a) *(u64 *)(r11 -8) = 6")
+ __naked void stack_arg_precision_bpf2bpf(void)
+ {
+ 	asm volatile (
+diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
+index 2ec3ee7821c0..aacb75dffb52 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_precision.c
++++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
+@@ -16,10 +16,7 @@ struct {
  
--First step does DAG check to disallow loops and other CFG validation.
--In particular it will detect programs that have unreachable instructions.
--(though classic BPF checker allows them)
-+- Each load and each store uses a valid pointer and stays in the object of the pointer.
-+- Each helper and each kfunc gets the arguments that its prototype requires.
-+- At exit the program holds no reference and no lock, and r0 is valid for the program type.
-+- Each loop and each recursion ends: the verifier counts the iterations, or the kernel stops it.
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0xfffffff8 goto pc+2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 1: (87) r2 = -r2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 8")
++__msg("1: (87) r2 = -r2                      ; R2=-8")
+ __naked int bpf_neg(void)
+ {
+ 	asm volatile (
+@@ -36,10 +33,7 @@ __naked int bpf_neg(void)
  
--Second step starts from the first insn and descends all possible paths.
--It simulates execution of every insn and observes the state change of
--registers and stack.
-+The stages
-+==========
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0x0 goto pc+2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 1: (d4) r2 = le16 r2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 0")
++__msg("1: (d4) r2 = le16 r2                  ; R2=0")
+ __naked int bpf_end_to_le(void)
+ {
+ 	asm volatile (
+@@ -57,10 +51,7 @@ __naked int bpf_end_to_le(void)
  
--At the start of the program the register R1 contains a pointer to context
--and has type PTR_TO_CTX.
--If verifier sees an insn that does R2=R1, then R2 has now type
--PTR_TO_CTX as well and can be used on the right hand side of expression.
--If R1=PTR_TO_CTX and insn is R2=R1+R1, then R2=SCALAR_VALUE,
--since addition of two valid pointers makes invalid pointer.
--(In 'secure' mode verifier will reject any type of pointer arithmetic to make
--sure that kernel addresses don't leak to unprivileged users)
--
--If register was never written to, it's not readable::
-+::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0x0 goto pc+2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 1: (dc) r2 = be16 r2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 0")
++__msg("1: (dc) r2 = be16 r2                  ; R2=0")
+ __naked int bpf_end_to_be(void)
+ {
+ 	asm volatile (
+@@ -82,10 +73,7 @@ __naked int bpf_end_to_be(void)
  
--  bpf_mov R0 = R2
--  bpf_exit
-+  1. checks       Each insn has a valid encoding. Each jump stays in its function. Each insn is
-+        v         reachable: unreachable insn 2
-+  2. analyses     Constants, call graph, loops, live and tested registers, scalar evolution.
-+        v         A jump that constants decide becomes goto. Stage 3 does not see its dead branch.
-+  3. main pass    It executes the program on states and checks each insn against them. See
-+        v         "Data-flow analysis". It verifies a global subprogram alone, from its prototype.
-+  4. rewrites     Add may_goto and recursion checks (examples 8 and 11). Remove dead code. Convert
-+        v         context accesses. Guard division by 0. Inline some helpers.
-+  5. JIT          It compiles each function to machine code.
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 2: (55) if r2 != 0x0 goto pc+2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 1: (d7) r2 = bswap16 r2")
+-__msg("mark_precise: frame0: regs=r2 stack= before 0: (b7) r2 = 0")
++__msg("1: (d7) r2 = bswap16 r2               ; R2=0")
+ __naked int bpf_end_bswap(void)
+ {
+ 	asm volatile (
+@@ -104,10 +92,8 @@ __naked int bpf_end_bswap(void)
  
--will be rejected, since R2 is unreadable at the start of the program.
-+What a state contains
-+=====================
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r3 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 2: (db) r2 = load_acquire((u64 *)(r10 -8))")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("2: (db) r2 = load_acquire((u64 *)(r10 -8)){{ *}}; R2=8 R10=fp0 fp-8=8")
++__msg("4: (0f) r3 += r2                      ; R2=8 R3=fp8")
+ __naked int bpf_load_acquire(void)
+ {
+ 	asm volatile (
+@@ -115,7 +101,7 @@ __naked int bpf_load_acquire(void)
+ 	"*(u64 *)(r10 - 8) = r1;"
+ 	".8byte %[load_acquire_insn];" /* r2 = load_acquire((u64 *)(r10 - 8)); */
+ 	"r3 = r10;"
+-	"r3 += r2;" /* mark_precise */
++	"r3 += r2;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -126,10 +112,8 @@ __naked int bpf_load_acquire(void)
  
--After kernel function call, R1-R5 are reset to unreadable and
--R0 has a return type of the function.
-+::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r2 = r10")
+-__msg("mark_precise: frame0: regs=r1 stack= before 2: (79) r1 = *(u64 *)(r10 -8)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (db) store_release((u64 *)(r10 -8), r1)")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("1: (db) store_release((u64 *)(r10 -8), r1){{ *}}; R1=8 R10=fp0 fp-8=8")
++__msg("4: (0f) r2 += r1                      ; R1=8 R2=fp8")
+ __naked int bpf_store_release(void)
+ {
+ 	asm volatile (
+@@ -137,7 +121,7 @@ __naked int bpf_store_release(void)
+ 	".8byte %[store_release_insn];" /* store_release((u64 *)(r10 - 8), r1); */
+ 	"r1 = *(u64 *)(r10 - 8);"
+ 	"r2 = r10;"
+-	"r2 += r1;" /* mark_precise */
++	"r2 += r1;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -184,10 +168,6 @@ __success __log_level(2)
+ __msg("8: (bd) if r2 <= r10 goto pc+3")
+ __msg("9: (35) if r1 >= 0xffe3fff8 goto pc+0")
+ __msg("10: (b5) if r2 <= 0x8 goto pc+0")
+-__msg("mark_precise: frame1: last_idx 10 first_idx 0 subseq_idx -1")
+-__msg("mark_precise: frame1: regs=r2 stack= before 9: (35) if r1 >= 0xffe3fff8 goto pc+0")
+-__msg("mark_precise: frame1: regs=r2 stack= before 8: (bd) if r2 <= r10 goto pc+3")
+-__msg("mark_precise: frame1: regs=r2 stack= before 7: (05) goto pc+0")
+ __naked void bpf_cond_op_r10(void)
+ {
+ 	asm volatile (
+@@ -203,9 +183,6 @@ __success __log_level(2)
+ __msg("3: (bf) r3 = r10")
+ __msg("4: (bd) if r3 <= r2 goto pc+1")
+ __msg("5: (b5) if r2 <= 0x8 goto pc+2")
+-__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r2 stack= before 4: (bd) if r3 <= r2 goto pc+1")
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r3 = r10")
+ __naked void bpf_cond_op_not_r10(void)
+ {
+ 	asm volatile (
+@@ -223,9 +200,6 @@ SEC("lsm.s/socket_connect")
+ __success __log_level(2)
+ __msg("0: (b7) r0 = 1                        ; R0=1")
+ __msg("1: (84) w0 = -w0                      ; R0=0xffffffff")
+-__msg("mark_precise: frame0: last_idx 2 first_idx 0 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r0 stack= before 1: (84) w0 = -w0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 0: (b7) r0 = 1")
+ __naked int bpf_neg_2(void)
+ {
+ 	/*
+@@ -258,9 +232,6 @@ SEC("lsm.s/socket_connect")
+ __success __log_level(2)
+ __msg("0: (b7) r0 = 1                        ; R0=1")
+ __msg("1: (87) r0 = -r0                      ; R0=-1")
+-__msg("mark_precise: frame0: last_idx 2 first_idx 0 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r0 stack= before 1: (87) r0 = -r0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 0: (b7) r0 = 1")
+ __naked int bpf_neg_4(void)
+ {
+ 	/*
+@@ -291,11 +262,8 @@ __naked int bpf_neg_5(void)
  
--Since R6-R9 are callee saved, their state is preserved across the call.
-+  part          contents
-+  ------------  ----------------------------------------------------------------------------------
-+  frame         r0-r10 and the stack slots of one function. A state has the frame of the current
-+                function. In some cases it also has the frames of the callers. See example 9.
-+  register      Not set, a scalar, or a pointer to one kind of object: context, stack, map value,
-+                packet, kernel object, arena and others. Some pointers can be NULL.
-+  range         The value of a scalar, or the offset of a pointer in its object. See below.
-+  known bits    The pair (value; mask) for the same number. A 1 in mask is an unknown bit. A load
-+                of a byte gives (0x0; 0xff), |= 0x40 gives (0x40; 0xbf), += 1 gives (0x0; 0x1ff).
-+  step          The distance between the possible values: r0=[0,7], then r0 *= 12 gives step 12.
-+  id            Registers and stack slots with the same id change together at a jump or a release.
-+  stack slot    8 bytes: a spilled register with its full description, or a mark for each byte
-+                (not written, zero, unknown), or part of a dynptr or iterator, or saved irq flags.
-+  held objects  References, locks, saved irq flags, open rcu and preempt-disable sections.
-+
-+A range is one arc on the circle of all values. It can wrap around. Thus one range holds signed
-+and unsigned bounds. ``[-5,10]`` goes from -5, the unsigned value 2^64 - 5, through 0 to 10. After
-+``if r0 > 3`` the branch that is not taken has ``r0=[0,3]``. The other branch needs two arcs,
-+``[-5,-1]`` and ``[4,10]``. Thus it keeps ``r0=[-5,10]``. A second range describes the low 32
-+bits.
-+
-+The check of one insn
-+=====================
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
++__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
+ __naked int bpf_atomic_fetch_add_precision(void)
+ {
+ 	asm volatile (
+@@ -304,7 +272,7 @@ __naked int bpf_atomic_fetch_add_precision(void)
+ 	"r2 = 0;"
+ 	".8byte %[fetch_add_insn];"	/* r2 = atomic_fetch_add(*(u64 *)(r10 - 8), r2) */
+ 	"r3 = r10;"
+-	"r3 += r2;"			/* mark_precise */
++	"r3 += r2;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -315,11 +283,8 @@ __naked int bpf_atomic_fetch_add_precision(void)
  
- ::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_xchg((u64 *)(r10 -8), r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("3: (db) r2 = atomic64_xchg((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
++__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
+ __naked int bpf_atomic_xchg_precision(void)
+ {
+ 	asm volatile (
+@@ -328,7 +293,7 @@ __naked int bpf_atomic_xchg_precision(void)
+ 	"r2 = 0;"
+ 	".8byte %[xchg_insn];"		/* r2 = atomic_xchg(*(u64 *)(r10 - 8), r2) */
+ 	"r3 = r10;"
+-	"r3 += r2;"			/* mark_precise */
++	"r3 += r2;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -339,11 +304,8 @@ __naked int bpf_atomic_xchg_precision(void)
  
--  bpf_mov R6 = 1
--  bpf_call foo
--  bpf_mov R0 = R6
--  bpf_exit
--
--is a correct program. If there was R1 instead of R6, it would have
--been rejected.
--
--load/store instructions are allowed only with registers of valid types, which
--are PTR_TO_CTX, PTR_TO_MAP, PTR_TO_STACK. They are bounds and alignment checked.
--For example::
--
-- bpf_mov R1 = 1
-- bpf_mov R2 = 2
-- bpf_xadd *(u32 *)(R1 + 3) += R2
-- bpf_exit
--
--will be rejected, since R1 doesn't have a valid pointer type at the time of
--execution of instruction bpf_xadd.
--
--At the start R1 type is PTR_TO_CTX (a pointer to generic ``struct bpf_context``)
--A callback is used to customize verifier to restrict eBPF program access to only
--certain fields within ctx structure with specified size and alignment.
--
--For example, the following insn::
--
--  bpf_ld R0 = *(u32 *)(R6 + 8)
--
--intends to load a word from address R6 + 8 and store it into R0
--If R6=PTR_TO_CTX, via is_valid_access() callback the verifier will know
--that offset 8 of size 4 bytes can be accessed for reading, otherwise
--the verifier will reject the program.
--If R6=PTR_TO_STACK, then access should be aligned and be within
--stack bounds, which are [-MAX_BPF_STACK, 0). In this example offset is 8,
--so it will fail verification, since it's out of bounds.
--
--The verifier will allow eBPF program to read data from stack only after
--it wrote into it.
--
--Classic BPF verifier does similar check with M[0-15] memory slots.
--For example::
--
--  bpf_ld R0 = *(u32 *)(R10 - 4)
--  bpf_exit
--
--is invalid program.
--Though R10 is correct read-only register and has type PTR_TO_STACK
--and R10 - 4 is within stack bounds, there were no stores into that location.
--
--Pointer register spill/fill is tracked as well, since four (R6-R9)
--callee saved registers may not be enough for some programs.
--
--Allowed function calls are customized with bpf_verifier_ops->get_func_proto()
--The eBPF verifier will check that registers match argument constraints.
--After the call register R0 will be set to return type of the function.
--
--Function calls is a main mechanism to extend functionality of eBPF programs.
--Socket filters may let programs to call one set of functions, whereas tracing
--filters may allow completely different set.
--
--If a function made accessible to eBPF program, it needs to be thought through
--from safety point of view. The verifier will guarantee that the function is
--called with valid arguments.
--
--seccomp vs socket filters have different security restrictions for classic BPF.
--Seccomp solves this by two stage verifier: classic BPF verifier is followed
--by seccomp verifier. In case of eBPF one configurable verifier is shared for
--all use cases.
--
--See details of eBPF verifier in kernel/bpf/verifier.c
--
--Register value tracking
--=======================
--
--In order to determine the safety of an eBPF program, the verifier must track
--the range of possible values in each register and also in each stack slot.
--This is done with ``struct bpf_reg_state``, defined in include/linux/
--bpf_verifier.h, which unifies tracking of scalar and pointer values.  Each
--register state has a type, which is either NOT_INIT (the register has not been
--written to), SCALAR_VALUE (some value which is not usable as a pointer), or a
--pointer type.  The types of pointers describe their base, as follows:
--
--
--    PTR_TO_CTX
--			Pointer to bpf_context.
--    CONST_PTR_TO_MAP
--			Pointer to struct bpf_map.  "Const" because arithmetic
--			on these pointers is forbidden.
--    PTR_TO_MAP_VALUE
--			Pointer to the value stored in a map element.
--    PTR_TO_MAP_VALUE_OR_NULL
--			Either a pointer to a map value, or NULL; map accesses
--			(see maps.rst) return this type, which becomes a
--			PTR_TO_MAP_VALUE when checked != NULL. Arithmetic on
--			these pointers is forbidden.
--    PTR_TO_STACK
--			Frame pointer.
--    PTR_TO_PACKET
--			skb->data.
--    PTR_TO_PACKET_END
--			skb->data + headlen; arithmetic forbidden.
--    PTR_TO_SOCKET
--			Pointer to struct bpf_sock_ops, implicitly refcounted.
--    PTR_TO_SOCKET_OR_NULL
--			Either a pointer to a socket, or NULL; socket lookup
--			returns this type, which becomes a PTR_TO_SOCKET when
--			checked != NULL. PTR_TO_SOCKET is reference-counted,
--			so programs must release the reference through the
--			socket release function before the end of the program.
--			Arithmetic on these pointers is forbidden.
--
--However, a pointer may be offset from this base (as a result of pointer
--arithmetic), and this is tracked in two parts: the 'fixed offset' and 'variable
--offset'.  The former is used when an exactly-known value (e.g. an immediate
--operand) is added to a pointer, while the latter is used for values which are
--not exactly known.  The variable offset is also used in SCALAR_VALUEs, to track
--the range of possible values in the register.
--
--The verifier's knowledge about the variable offset consists of:
--
--* minimum and maximum values as unsigned
--* minimum and maximum values as signed
--
--* knowledge of the values of individual bits, in the form of a 'tnum': a u64
--  'mask' and a u64 'value'.  1s in the mask represent bits whose value is unknown;
--  1s in the value represent bits known to be 1.  Bits known to be 0 have 0 in both
--  mask and value; no bit should ever be 1 in both.  For example, if a byte is read
--  into a register from memory, the register's top 56 bits are known zero, while
--  the low 8 are unknown - which is represented as the tnum (0x0; 0xff).  If we
--  then OR this with 0x40, we get (0x40; 0xbf), then if we add 1 we get (0x0;
--  0x1ff), because of potential carries.
--
--Besides arithmetic, the register state can also be updated by conditional
--branches.  For instance, if a SCALAR_VALUE is compared > 8, in the 'true' branch
--it will have a umin_value (unsigned minimum value) of 9, whereas in the 'false'
--branch it will have a umax_value of 8.  A signed compare (with BPF_JSGT or
--BPF_JSGE) would instead update the signed minimum/maximum values.  Information
--from the signed and unsigned bounds can be combined; for instance if a value is
--first tested < 8 and then tested s> 4, the verifier will conclude that the value
--is also > 4 and s< 8, since the bounds prevent crossing the sign boundary.
--
--PTR_TO_PACKETs with a variable offset part have an 'id', which is common to all
--pointers sharing that same variable offset.  This is important for packet range
--checks: after adding a variable to a packet pointer register A, if you then copy
--it to another register B and then add a constant 4 to A, both registers will
--share the same 'id' but the A will have a fixed offset of +4.  Then if A is
--bounds-checked and found to be less than a PTR_TO_PACKET_END, the register B is
--now known to have a safe range of at least 4 bytes.  See 'Direct packet access',
--below, for more on PTR_TO_PACKET ranges.
--
--The 'id' field is also used on PTR_TO_MAP_VALUE_OR_NULL, common to all copies of
--the pointer returned from a map lookup.  This means that when one copy is
--checked and found to be non-NULL, all copies can become PTR_TO_MAP_VALUEs.
--As well as range-checking, the tracked information is also used for enforcing
--alignment of pointer accesses.  For instance, on most systems the packet pointer
--is 2 bytes after a 4-byte alignment.  If a program adds 14 bytes to that to jump
--over the Ethernet header, then reads IHL and adds (IHL * 4), the resulting
--pointer will have a variable offset known to be 4n+2 for some n, so adding the 2
--bytes (NET_IP_ALIGN) gives a 4-byte alignment and so word-sized accesses through
--that pointer are safe.
--The 'id' field is also used on PTR_TO_SOCKET and PTR_TO_SOCKET_OR_NULL, common
--to all copies of the pointer returned from a socket lookup. This has similar
--behaviour to the handling for PTR_TO_MAP_VALUE_OR_NULL->PTR_TO_MAP_VALUE, but
--it also handles reference tracking for the pointer. PTR_TO_SOCKET implicitly
--represents a reference to the corresponding ``struct sock``. To ensure that the
--reference is not leaked, it is imperative to NULL-check the reference and in
--the non-NULL case, and pass the valid reference to the socket release function.
-+  insn               rule, and the message for a program that breaks it
-+  -----------------  -----------------------------------------------------------------------------
-+  each insn          It reads only registers that are set: R2 !read_ok
-+                     It does not write r10: frame pointer is read only
-+  call               The program type permits the helper or kfunc. r1-r5 agree with its prototype.
-+                     Then r1-r5 are not set, r0 has the result, and r6-r9 do not change.
-+  pointer, scalar    64-bit += and -= change the offset. The scalar must have a lower bound. Other
-+                     ops (*=, &=, <<=) give a scalar. No op is permitted on a pointer that can be
-+                     NULL, a socket, the end of a packet. No -= on a pointer to the stack.
-+  pointer, pointer   -= gives a scalar. Other ops: R2 pointer += pointer prohibited
-+  pointer to arena   Each op is permitted and gives a pointer to arena.
-+  conditional jump   Each branch gets its ranges: if r0 > 8 gives r0=[9,U64_MAX] and r0=[0,8].
-+                     Copies of r0 have its id and get the same ranges. A NULL check changes all
-+                     copies of the pointer: not NULL in one branch, the scalar 0 in the other.
-+  acquire, release   The acquired pointer has the id of a reference. A release makes all pointers
-+                     with this id scalars. At exit: Unreleased reference id=2 alloc_insn=12
-+  load, store        The address is a pointer that cannot be NULL: R1 invalid mem access 'scalar'
-+    context          A callback of the program type checks the offset. It gives the result type.
-+    stack            In the frame, and aligned. The load of a spilled register gives it back.
-+    map value        Smallest offset >= 0, and largest offset + size <= size of the value.
-+    packet           See "Direct packet access".
-+    kernel object    BTF gives the type of the member at the offset. A load that faults gives 0.
-+                     A callback of the program type must permit a store: only read is supported
-+    arena            No check. The JIT keeps each access in the arena. A load that faults gives 0.
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_or((u64 *)(r10 -8), r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("3: (db) r2 = atomic64_fetch_or((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
++__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
+ __naked int bpf_atomic_fetch_or_precision(void)
+ {
+ 	asm volatile (
+@@ -352,7 +314,7 @@ __naked int bpf_atomic_fetch_or_precision(void)
+ 	"r2 = 0;"
+ 	".8byte %[fetch_or_insn];"	/* r2 = atomic_fetch_or(*(u64 *)(r10 - 8), r2) */
+ 	"r3 = r10;"
+-	"r3 += r2;"			/* mark_precise */
++	"r3 += r2;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -363,11 +325,8 @@ __naked int bpf_atomic_fetch_or_precision(void)
  
- Direct packet access
- ====================
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_and((u64 *)(r10 -8), r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("3: (db) r2 = atomic64_fetch_and((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
++__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
+ __naked int bpf_atomic_fetch_and_precision(void)
+ {
+ 	asm volatile (
+@@ -376,7 +335,7 @@ __naked int bpf_atomic_fetch_and_precision(void)
+ 	"r2 = 0;"
+ 	".8byte %[fetch_and_insn];"	/* r2 = atomic_fetch_and(*(u64 *)(r10 - 8), r2) */
+ 	"r3 = r10;"
+-	"r3 += r2;"			/* mark_precise */
++	"r3 += r2;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -387,11 +346,8 @@ __naked int bpf_atomic_fetch_and_precision(void)
  
--In cls_bpf and act_bpf programs the verifier allows direct access to the packet
--data via skb->data and skb->data_end pointers.
--Ex::
--
--    1:  r4 = *(u32 *)(r1 +80)  /* load skb->data_end */
--    2:  r3 = *(u32 *)(r1 +76)  /* load skb->data */
--    3:  r5 = r3
--    4:  r5 += 14
--    5:  if r5 > r4 goto pc+16
--    R1=ctx R3=pkt(id=0,off=0,r=14) R4=pkt_end R5=pkt(id=0,off=14,r=14) R10=fp
--    6:  r0 = *(u16 *)(r3 +12) /* access 12 and 13 bytes of the packet */
--
--this 2byte load from the packet is safe to do, since the program author
--did check ``if (skb->data + 14 > skb->data_end) goto err`` at insn #5 which
--means that in the fall-through case the register R3 (which points to skb->data)
--has at least 14 directly accessible bytes. The verifier marks it
--as R3=pkt(id=0,off=0,r=14).
--id=0 means that no additional variables were added to the register.
--off=0 means that no additional constants were added.
--r=14 is the range of safe access which means that bytes [R3, R3 + 14) are ok.
--Note that R5 is marked as R5=pkt(id=0,off=14,r=14). It also points
--to the packet data, but constant 14 was added to the register, so
--it now points to ``skb->data + 14`` and accessible range is [R5, R5 + 14 - 14)
--which is zero bytes.
--
--More complex packet access may look like::
--
--
--    R0=inv1 R1=ctx R3=pkt(id=0,off=0,r=14) R4=pkt_end R5=pkt(id=0,off=14,r=14) R10=fp
--    6:  r0 = *(u8 *)(r3 +7) /* load 7th byte from the packet */
--    7:  r4 = *(u8 *)(r3 +12)
--    8:  r4 *= 14
--    9:  r3 = *(u32 *)(r1 +76) /* load skb->data */
--    10:  r3 += r4
--    11:  r2 = r1
--    12:  r2 <<= 48
--    13:  r2 >>= 48
--    14:  r3 += r2
--    15:  r2 = r3
--    16:  r2 += 8
--    17:  r1 = *(u32 *)(r1 +80) /* load skb->data_end */
--    18:  if r2 > r1 goto pc+2
--    R0=inv(id=0,umax_value=255,var_off=(0x0; 0xff)) R1=pkt_end R2=pkt(id=2,off=8,r=8) R3=pkt(id=2,off=0,r=8) R4=inv(id=0,umax_value=3570,var_off=(0x0; 0xfffe)) R5=pkt(id=0,off=14,r=14) R10=fp
--    19:  r1 = *(u8 *)(r3 +4)
--
--The state of the register R3 is R3=pkt(id=2,off=0,r=8)
--id=2 means that two ``r3 += rX`` instructions were seen, so r3 points to some
--offset within a packet and since the program author did
--``if (r3 + 8 > r1) goto err`` at insn #18, the safe range is [R3, R3 + 8).
--The verifier only allows 'add'/'sub' operations on packet registers. Any other
--operation will set the register state to 'SCALAR_VALUE' and it won't be
--available for direct packet access.
--
--Operation ``r3 += rX`` may overflow and become less than original skb->data,
--therefore the verifier has to prevent that.  So when it sees ``r3 += rX``
--instruction and rX is more than 16-bit value, any subsequent bounds-check of r3
--against skb->data_end will not give us 'range' information, so attempts to read
--through the pointer will give "invalid access to packet" error.
--
--Ex. after insn ``r4 = *(u8 *)(r3 +12)`` (insn #7 above) the state of r4 is
--R4=inv(id=0,umax_value=255,var_off=(0x0; 0xff)) which means that upper 56 bits
--of the register are guaranteed to be zero, and nothing is known about the lower
--8 bits. After insn ``r4 *= 14`` the state becomes
--R4=inv(id=0,umax_value=3570,var_off=(0x0; 0xfffe)), since multiplying an 8-bit
--value by constant 14 will keep upper 52 bits as zero, also the least significant
--bit will be zero as 14 is even.  Similarly ``r2 >>= 48`` will make
--R2=inv(id=0,umax_value=65535,var_off=(0x0; 0xffff)), since the shift is not sign
--extending.  This logic is implemented in adjust_reg_min_max_vals() function,
--which calls adjust_ptr_min_max_vals() for adding pointer to scalar (or vice
--versa) and adjust_scalar_min_max_vals() for operations on two scalars.
--
--The end result is that bpf program author can access packet directly
--using normal C code as::
-+Programs for tc, XDP and other network hooks access packet data through pointers. The verifier does
-+not know the length of a packet. Thus the program compares a pointer with the end of the packet::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_xor((u64 *)(r10 -8), r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("3: (db) r2 = atomic64_fetch_xor((u64 *)(r10 -8), r2){{ *}}; R2=8 R10=fp0 fp-8=mmmmmmmm")
++__msg("5: (0f) r3 += r2                      ; R2=8 R3=fp8")
+ __naked int bpf_atomic_fetch_xor_precision(void)
+ {
+ 	asm volatile (
+@@ -400,7 +356,7 @@ __naked int bpf_atomic_fetch_xor_precision(void)
+ 	"r2 = 0;"
+ 	".8byte %[fetch_xor_insn];"	/* r2 = atomic_fetch_xor(*(u64 *)(r10 - 8), r2) */
+ 	"r3 = r10;"
+-	"r3 += r2;"			/* mark_precise */
++	"r3 += r2;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -411,12 +367,8 @@ __naked int bpf_atomic_fetch_xor_precision(void)
  
-   void *data = (void *)(long)skb->data;
-   void *data_end = (void *)(long)skb->data_end;
--  struct eth_hdr *eth = data;
--  struct iphdr *iph = data + sizeof(*eth);
--  struct udphdr *udp = data + sizeof(*eth) + sizeof(*iph);
-+  if (data + 14 > data_end)                         { data=packet, 0 bytes are safe }
-+          return 0;
-+  return *(__u16 *)(data + 12);                     { data=packet, 14 bytes are safe }
-+
-+- The largest offset of the compared pointer gives the number of safe bytes.
-+- All pointers to the packet with the same id get this number: copies, and copies plus a constant.
-+- An access has the check of a map value, with this number as the size of the value. A load of 2
-+  bytes at ``data + 13``: ``invalid access to packet, off=13 size=2, R1(id=0,off=13,r=14)``
-+- ``pointer += variable`` makes a new id. The pointer keeps the number only if the variable is >= 0
-+  and the largest offset stays below it. If not, the program must compare the new pointer.
-+- After a helper that can change the packet (``bpf_skb_pull_data()``) all pointers to it are
-+  scalars.
-+
-+Data-flow analysis
-+==================
-+
-+Overview
-+--------
-+
-+The verifier must show that no run of a program does an unsafe operation. It executes the program
-+on states. A state represents all runs that arrive at an insn with the same types in registers
-+and stack.
-+The sections above describe the contents of a state and the check of one insn against a state.
-+This section describes how states move through a program.
-+
-+The main pass is a forward data-flow analysis over the control flow graph. Where two paths meet,
-+the verifier makes one state from the two states. This operation is a join::
-+
-+     follow each path                       join
-+
-+          [if]                              [if]
-+         /    \                            /    \
-+      r1=1    r1=5                      r1=1    r1=5
-+         \    /                            \    /
-+         [next]                            [next]
-+    verified 2 times:                 verified 1 time:
-+    r1=1, then r1=5                   r1=[1,5]
-+
-+The work depends on the size of the program. It does not depend on the number of paths.
-+
-+Three properties are different from a textbook analysis:
-+
-+- A basic block has a set of states, not one state. The verifier joins two states only when the
-+  join keeps the facts that programs use. See examples 1 to 4.
-+- Scalar evolution describes a loop before the verifier iterates the loop. See examples 5 to 7.
-+- The verifier does not prove termination. The kernel stops a loop or a recursion at run time.
-+  See examples 8 and 11.
-+
-+Examples 9 to 11 show subprograms. The limits are at the end.
-+
-+How to read the examples:
-+
-+- The kernel loaded each program below, and ran it where the text gives a return value. The
-+  states, the messages and the numbers are the output of the kernel.
-+- ``r7=[0,7]`` is a scalar in this range. ``{ r6=0 r7=1 }`` is a state. The examples omit the
-+  registers that are not important.
-+- The lines ``paths:`` and ``joins:`` below an example compare two algorithms.
-+
-+The two algorithms::
-+
-+  paths:  processed 9 insns         a verifier that follows each path
-+  joins:  processed 7 insns         the algorithm of this section
-+
-+A verifier that follows each path goes from the entry to exit, depth first. It stops a path when
-+a state that it saw before at the same insn covers the current state. Each branch can double the
-+number of paths. Thus such a verifier needs a limit on the number of insns that it processes. The
-+limit in the examples is 1 million.
-+
-+Terms
-+-----
-+
-+The text uses each term with one meaning only::
-+
-+  term              meaning
-+  ----------------  ---------------------------------------------------------------------------
-+  state             It represents the runs that arrive at one insn with the same types. It
-+                    contains the type of each live register and stack slot, the range and the
-+                    known bits of each scalar and of each pointer offset, and the references and
-+                    locks that the program holds.
-+  live, dead        A register is live at an insn if this insn or a later insn can read its
-+                    value. If not, it is dead. The same applies to a stack slot.
-+  function          The main program or a subprogram.
-+  block             A basic block of the control flow graph.
-+  set(B)            The set of states of block B.
-+  new state         A state in a set that the verifier did not use yet.
-+  t covers s        State t describes each run that state s describes. Thus s cannot arrive at
-+                    an insn at which t does not arrive.
-+  join(s, t)        A state that covers s and covers t.
-+  no join           No useful state covers s and t. The verifier keeps the two states.
-+  tested register   A register or a stack slot whose value arrives, without a change, at a later
-+                    jump that compares it with a constant.
-+  gap               The values between two ranges: -1 and 0 are the gap between -2 and 1.
-+  head              The first insn of a loop.
-+  latch             The jump from the end of a loop to the head.
-+  counted loop      A loop for which scalar evolution calculates the number of iterations.
-+  unrolled loop     A loop that the verifier verifies iteration by iteration, with the real
-+                    values. Each iteration has its own state.
-+  widening          A join at a head that removes the bound that grows.
-+  added may_goto    A may_goto insn that the verifier adds to a loop.
-+  time slice        250 ms. All loops that have may_goto share it in one run of a program.
-+  entry state       The state at the first insn of a subprogram. It contains the arguments and
-+                    nothing from the frame of the caller.
-+  exit state        The state at an exit of a subprogram.
-+  landing pad       The target of unwind_goto: the cleanup code of a caller.
-+  room              Less than half of each limit on the number of states is in use.
-+
-+The algorithm
-+-------------
-+
-+Each block has a set of states. At the start all sets are empty, and the entry state is a new
-+state at insn 0.
-+
-+::
-+
-+  1. Take the first block, in the order of the program, that has a new state.
-+  2. Verify the insns of the block with that state.
-+  3. Send the result to each successor of the block.
-+  4. In the successor:
-+
-+              state S arrives at block B
-+                          |
-+                          v
-+            +---------------------------+  yes
-+            | a state of set(B)         |------>  drop S
-+            | covers S ?                |
-+            +---------------------------+
-+                          | no
-+                          v
-+            +---------------------------+  yes
-+            | S and a state T of set(B) |------>  replace T with join(S, T)
-+            | have a join ?             |         the join is a new state
-+            +---------------------------+
-+                          | no
-+                          v
-+              add S to set(B)
-+              S is a new state
-+
-+  5. Stop when no block has a new state.
-+
-+The verifier accepts the program when it stops and no insn failed.
-+
-+The order of the program is reverse post order, with the insns of a loop kept together:
-+
-+- The verifier verifies a block after the predecessors of the block. Thus the states from all
-+  predecessors meet before the verifier uses them.
-+- The verifier completes a loop before it verifies the code after the loop.
-+
-+A state contains only live registers and live stack slots. Two states that differ only in a dead
-+register are equal.
-+
-+**Live registers and stack slots.** A register is live at an insn if this insn or a later insn can
-+read its value. If not, it is dead. The same applies to a stack slot.
-+
-+::
-+
-+     insn                        live before the insn     states that arrive
-+     0: r0 = random()            -
-+     1: r1 = 0                   r0
-+     2: if r0 == 0 goto 4        r0 r1
-+     3: r0 = 1                   r1                       { r1=0 }
-+     4: r0 = r1                  r1                       { r1=0 } from 2,  { r1=0 } from 3
-+     5: exit                     r0
-+
-+A run that arrives at 4 from 2 has 0 in r0. A run that arrives from 3 has 1 in r0. Insn 4 writes r0
-+and does not read it, thus r0 is dead at 4. The two states are equal. The verifier drops the second
-+state and verifies block 4 one time.
-+
-+A dead register also cannot prevent a join. See r6 at insn 14 of example 2.
-+
-+The verifier calculates the live registers and stack slots one time, before the main pass:
-+
-+- The calculation goes backward through the control flow graph until nothing changes.
-+- A call of a static subprogram reads those of r1-r5 that are live at the entry of the subprogram.
-+- The calculation follows pointers to the stack through copies, spills and arguments. Thus it knows
-+  which stack slots of a caller a subprogram reads and writes.
-+
-+1. Two paths meet: join
-+-----------------------
-+
-+::
-+
-+            +--------------------------+
-+            | 0: r0 = random()         |
-+            | 1: r7 = r0               |
-+            | 2: r7 &= 7               |
-+            | 3: if r0 > 100 goto 5    |
-+            +--------------------------+
-+        r7=[0,7] |                | r7=[0,7]
-+                 v                |
-+       +--------------+           |
-+       | 4: r7 += 16  |           |
-+       +--------------+           |
-+      r7=[16,23] |                |
-+                 v                v
-+            +--------------------------+
-+            | 5: r0 = r7               |     join: r7=[0,23]
-+            | 6: exit                  |
-+            +--------------------------+
-+
-+Block 4 is before block 5 in the order. Thus the state from insn 3 waits in set(5).
-+
-+::
-+
-+  event                           set(5)
-+  ------------------------------  ------------------------------
-+  r7=[0,7] arrives from 3         { r7=[0,7] }      new state
-+  the verifier verifies block 4   { r7=[0,7] }      new state
-+  r7=[16,23] arrives from 4       { r7=[0,23] }     the join, new state
-+  the verifier verifies block 5   { r7=[0,23] }
-+
-+The verifier verifies block 5 one time.
-+
-+::
-+
-+  paths:  processed 9 insns         5 and 6 are verified 2 times
-+  joins:  processed 7 insns
-+
-+The next program has 20 such ifs in sequence. Each ``if`` sets a different bit of r7. At the end
-+``r7 & 63`` is an index. The program has 75 insns and 2^20 paths. r7 is different in each path,
-+and the value of r7 is important.
-+
-+::
-+
-+  if (a) r7 |= 1;                  2 paths
-+  if (b) r7 |= 2;                  4 paths
-+  ...
-+  if (t) r7 |= 1 << 19;            2^20 paths
-+  x = arr[r7 & 63];
-+
-+  paths:  BPF program is too large. Processed 1000001 insn
-+  joins:  processed 74 insns
-+
-+2. No join: why a block has a set of states
-+-------------------------------------------
-+
-+::
-+
-+  p = lookup(&map, &key);
-+  found = p != NULL;
-+  ...
-+  if (found)
-+          x = *p;
-+
-+     6: r0 = lookup(hash map)    pointer or NULL
-+     7: r6 = r0
-+     8: r7 = 0
-+     9: if r6 == 0 goto 11
-+    10: r7 = 1
-+    11: r0 = 0                   { r6=0 r7=0 }      { r6=map_value r7=1 }
-+    12: if r7 == 0 goto 14       taken              not taken
-+    13: r0 = *(u8 *)(r6 + 0)                        { r6=map_value }
-+    14: exit                     { r0=[0,255] }
-+
-+Two states arrive at 11. A scalar and a pointer have no join, thus the verifier keeps the two
-+states.
-+
-+::
-+
-+                    9: if r6 == 0
-+                    /            \
-+        { r6=0 r7=0 }            { r6=map_value r7=1 }
-+                    \            /
-+    set(11) = { r6=0 r7=0 }, { r6=map_value r7=1 }         2 states, no join
-+                    |            |
-+            12: taken            12: not taken
-+                    |            |
-+                    |            13: the load uses a pointer
-+                    \            /
-+    set(14) = { r0=[0,255] }                               r6 and r7 are dead: 1 state
-+
-+One state for each block is not sufficient here. In one state r6 is "a pointer or a scalar". The
-+program can do nothing with such a register. The state also loses the fact that r7 shows which of
-+the two r6 is.
-+
-+::
-+
-+  paths:  processed 17 insns
-+  joins:  processed 16 insns
-+
-+The rule: **the verifier joins scalars. States that differ in other properties have no join.**
-+
-+::
-+
-+  in state s                 in state t                  join
-+  -------------------------  --------------------------  -------------
-+  scalar 1                   scalar 5                    scalar [1,5]
-+  scalar                     pointer                     no join
-+  pointer to map A           pointer to map B            no join
-+  pointer to function f      pointer to function g       no join
-+  a reference                no reference                no join
-+  a lock                     no lock                     no join
-+  iterator is active         iterator is drained         no join
-+  called from insn 2         called from insn 7          no join
-+
-+This rule keeps the facts that programs use: NULL checks, and error paths that release an object.
-+
-+**A register that only one state sets.**
-+
-+::
-+
-+  ret = get(&p);                 inlined: get() writes p when ret is 0
-+  if (ret < 0)
-+          goto drop;
-+  return p->x;
-+
-+This pattern is frequent in C. On the error path p is not NULL. It has no value at all, because
-+the compiler has no reason to write r8 there.
-+
-+::
-+
-+     6: r0 = lookup(hash map)
-+     7: r6 = -2                  ret = -ENOENT
-+     8: if r0 == 0 goto 11
-+     9: r8 = r0                  p
-+    10: r6 = 0                   ret = 0
-+    11: w7 = 0                   { r6=-2 }          { r6=0 r8=map_value }
-+    12: if r6 s< 0 goto 15       taken              not taken
-+    13: r0 = *(u32 *)(r8 + 0)                       { r8=map_value }
-+    14: exit
-+    15: r0 = 0                   { }
-+    16: exit
-+
-+These two states have a join. In a textbook "not set" joins with each value, and the result is
-+"not set"::
-+
-+        { r6=-2 }          { r6=0 r8=map_value }
-+                 \          /
-+          join: { r6=[-2,0] }                  r8 is not set
-+                      |
-+        12: if r6 s< 0 goto 15                 the two directions are possible
-+                      |
-+        13: r0 = *(u32 *)(r8 + 0)              no pointer in r8: the verifier rejects the load
-+
-+This join is not useful:
-+
-+- r8 is in the second state because r8 is live. A later insn reads it.
-+- The first state does not arrive at that insn. A jump sends it in a different direction.
-+- The join cannot select the direction. It arrives at the read without r8.
-+
-+Thus the verifier keeps the two states. The method that the program uses to separate them is not
-+important: ``if (ret < 0)``, ``if (flags & 1)``, or a test 300 insns later.
-+
-+::
-+
-+  paths:  processed 18 insns
-+  joins:  processed 18 insns
-+
-+3. Scalars that the verifier does not join
-+------------------------------------------
-+
-+Two scalars always have a join. In some programs the join is not correct for the program.
-+
-+::
-+
-+  p = NULL;
-+  ret = find(key, &p);           -ENOENT, 1: nothing to do, 0: p is the entry
-+  if (ret < 0)
-+          goto err;
-+  if (ret > 0)
-+          goto skip;
-+  return p->x;
-+
-+     0: r0 = random()            key
-+     1: r8 = 0                   p = NULL
-+     2: r6 = 1                   ret = 1
-+     3: if r0 == 0 goto 14
-+        ...
-+     9: r0 = lookup(hash map)
-+    10: r6 = -2                  ret = -ENOENT
-+    11: if r0 == 0 goto 14
-+    12: r8 = r0                  p
-+    13: r6 = 0                   ret = 0
-+    14: if r6 s< 0 goto 18       { r6=1 r8=0 }   { r6=-2 r8=0 }   { r6=0 r8=map_value }
-+    15: if r6 s> 0 goto 18       { r6=1 r8=0 }                    { r6=0 r8=map_value }
-+    16: r0 = *(u32 *)(r8 + 0)                                     { r8=map_value }
-+    17: exit
-+    18: r0 = 0                   { }
-+    19: exit
-+
-+The third state has no join with the other two: r8 is a pointer. The first two states differ only
-+in a scalar. This is the result if the verifier joins them::
-+
-+        { r6=1 r8=0 }          { r6=-2 r8=0 }
-+                     \          /
-+              join: { r6=[-2,1] r8=0 }         the join contains ret = 0
-+                          |
-+        14: if r6 s< 0    |  not taken for 0
-+        15: if r6 s> 0    |  not taken for 0
-+                          v
-+        16: r0 = *(u32 *)(r8 + 0)              R8 invalid mem access 'scalar'
-+
-+The rule: **a join must not contain a value that no input has, if a later jump tests this value.**
-+The rule has two parts.
-+
-+**Part 1: the tested registers.** The verifier calculates them one time, before the analysis. The
-+calculation goes backward until nothing changes, like the calculation of live registers.
-+
-+::
-+
-+  insn                           effect
-+  -----------------------------  ------------------------------------------------------------
-+  if rX < constant               rX is tested
-+  rX = constant, rX += ...       the insn writes rX: rX is not tested before the insn
-+  rX = rY                        if rX is tested after the insn, rY is tested before it
-+  *(u64 *)(r10 - 8) = rX         if the slot is tested after the insn, rX is tested before it
-+  rX = *(u64 *)(r10 - 8)         if rX is tested after the insn, the slot is tested before it
-+  call helper                    the call writes r0-r5
-+  call static subprogram         the registers of r1-r5 that the subprogram tests
-+
-+Only a value without a change counts: a copy, a spill, a fill. Arithmetic stops the calculation.
-+The result for the example::
-+
-+     9: r0 = lookup(hash map)    -
-+    10: r6 = -2                  r0
-+    11: if r0 == 0 goto 14       r0 r6
-+    12: r8 = r0                  -
-+    13: r6 = 0                   -
-+    14: if r6 s< 0 goto 18       r6
-+    15: if r6 s> 0 goto 18       r6
-+    16: r0 = *(u32 *)(r8 + 0)    -
-+
-+The distance to the jump and the number of jumps are not important.
-+
-+**Part 2: the decision.** States a and b have a join. The verifier examines the tested registers
-+of the block.
-+
-+::
-+
-+  the tested registers in a and in b                          decision
-+  ----------------------------------------------------------  --------------------
-+  one register: its two ranges have a gap                     keep the two states
-+  two registers: each has two ranges with no common value     keep the two states
-+  all other cases                                             join
-+
-+A gap on the number line::
-+
-+    -2   -1    0    1
-+     a    .    .    b          the join [-2,1] contains -1 and 0. No input has them.
-+
-+     0    1
-+     a    b                    the join [0,1] contains only the inputs.
-+
-+  a gap:    -2 and 1      0 and -155     [0,7] and [16,23]
-+  no gap:   0 and 1       -1 and 0       -134 and -135      [0,7] and [8,15]      [0,7] and [4,9]
-+
-+**After the decision** no more rules are necessary:
-+
-+- The two states are new states in the set of the block. The verifier uses each of them.
-+- Each jump has one known direction for each state.
-+- After the last jump that tests r6, r6 is dead. A dead register is not part of a state.
-+- From there the usual steps apply to each state that arrives at a block: drop, join or add.
-+
-+The result::
-+
-+      the paths meet            the last test of r6
-+            |                          |
-+            v                          v
-+    --------+==========================+----------------->  insns
-+                   2 states                 r6 is dead: the states can join
-+
-+  paths:  processed 24 insns
-+  joins:  processed 22 insns
-+
-+**Two registers.** This pattern is from a real program::
-+
-+  ret = 0;
-+  state = lookup(&map, &key);
-+  if (!state) {
-+          err = update(&map, &key, &new);
-+          ret = err < 0 ? DROP : 0;
-+          ...
-+          if (err < 0)
-+                  goto out;
-+          state = lookup(&map, &key);
-+          if (!state)
-+                  return 0;
-+  }
-+  out:
-+  if (ret < 0)
-+          goto drop;
-+  return state->x;
-+
-+    25: r0 = update(hash map)    r8=0: state is NULL
-+    26: w9 = 0                   ret = 0
-+    27: if w0 s> -1 goto 29
-+    28: w9 = -155                ret = DROP
-+    29: w6 = 0                   { w0>=0 w9=0 r8=0 }         { w0<0 w9=-155 r8=0 }
-+    30: if w0 s< 0 goto 38       not taken                   taken
-+        ...
-+    35: r0 = lookup(hash map)
-+    36: r8 = r0
-+    37: if r8 == 0 goto 41
-+    38: if w9 s< 0 goto 41       { w9=0 r8=map_value }       { w9=-155 r8=0 }
-+    39: r0 = *(u32 *)(r8 + 0)    { r8=map_value }
-+    40: exit
-+    41: r0 = 0
-+    42: exit
-+
-+A join at 29 contains err < 0 together with ret = 0. This state goes from 30 to 38 with NULL in
-+r8. The jump at 38 is not taken. At 39 the result is ``R8 invalid mem access 'scalar'`` again.
-+
-+::
-+
-+  paths:  processed 46 insns
-+  joins:  processed 43 insns
-+
-+0 and -155 have a gap, thus the first line of the table is sufficient here. Now change err and ret
-+to flags, 0 or 1. No register has a gap. The second line of the table applies::
-+
-+               ret=0    ret=1
-+    err=0        a        x            a, b: the inputs
-+    err=1        x        b            x:    pairs that only the join contains
-+
-+  paths:  processed 53 insns
-+  joins:  processed 46 insns
-+
-+More cases::
-+
-+  the states that meet             the later jumps              decision
-+  -------------------------------  ---------------------------  ------------------------
-+  ret=-2 and ret=1                 ret < 0, then ret > 0        a gap: keep
-+  ret=-134 and ret=-135            ret < 0                      no gap: join
-+  ret=-134 and ret=-160            ret < 0, then ret == -158    a gap: keep
-+  (a>=0 b=0) and (a<0 b=-155)      a < 0, then b < 0            a gap: keep
-+  (a=0 b=0) and (a=1 b=1)          a != 0, then b != 0          two registers: keep
-+  i=0 and i=1                      i < 64                       no gap: join
-+  the 20 ifs of example 1          no jump tests r7             join
-+
-+The rule only refuses a join. Thus it cannot make the verifier accept an unsafe program. The rule
-+does not apply at a head, where the verifier uses widening (example 7). It also does not apply
-+when there is no room, see "Why the analysis ends, and the limits".
-+
-+The programs of this example, and ``ret = get(&p)`` of example 2, also load when a compiler makes
-+them from C.
-+
-+4. What a join loses
-+--------------------
-+
-+A join loses the relation between scalars.
-+
-+::
-+
-+  if (c) { i = 3; n = 4; } else { i = 7; n = 8; }
-+  arr[n - i]
-+
-+           c                        !c
-+      { i=3 n=4 }              { i=7 n=8 }           n - i is 1 in each input
-+                 \              /
-+          join: { i=[3,7] n=[4,8] }                  n - i is [-3,5]
-+
-+  paths:  processed 25 insns
-+  joins:  R8 min value is negative, either use unsigned index or do a if (index >=0) check.
-+
-+No jump tests i or n, thus the verifier joins them.
-+
-+The second case is a scalar that guards the range of a different scalar, when its own values have
-+no gap::
-+
-+  ret = idx < 64 ? 0 : -1;
-+  ...
-+  if (ret < 0)
-+          goto drop;
-+  return val->data[idx];
-+
-+      { ret=0 idx=[0,63] }          { ret=-1 idx>=64 }
-+                          \          /
-+               join: { ret=[-1,0] idx=scalar }       -1 and 0 have no gap, no jump tests idx
-+
-+  paths:  processed 24 insns
-+  joins:  math between map_value pointer and register with unbounded min value is not allowed
-+
-+With -EINVAL as a replacement for -1 there is a gap. Then the program loads: 22 insns.
-+
-+Recommendation: test a scalar at the place where the program uses it.
-+
-+**All rules that keep two states.** Each line is a pair of states that has a join. The verifier
-+does not use the join, because programs depend on the difference.
-+
-+::
-+
-+  the states differ in                      example                         applies
-+  ----------------------------------------  ------------------------------  ---------------------
-+  a register that only one state sets       example 2                       while there is room
-+  a tested register, with a gap             example 3                       while there is room
-+  two tested registers                      example 3                       while there is room
-+  a scalar that is 0 in one state only      if (h->v4) .. else if (h->v6)   while there is room
-+  a constant that a subprogram returns      true or false, an enum          while there is room
-+  a constant that becomes a stack offset    a[n++] = p                      while there is room
-+  a constant that a helper or a kfunc       the size argument of            always
-+  must know                                 bpf_ringbuf_reserve()
-+  the iteration of bpf_loop(), for 8        bpf_loop(4, cb, ...)            always
-+  iterations or less
-+  the iteration of an unrolled loop         example 6                       always
-+
-+At a head the verifier uses widening. There only the rule for the stack offset and the two rules
-+for iterations apply.
-+
-+About the stack offset: ``if (x) a[n++] = p; else b[m++] = p;`` is one store insn. A store at an
-+unknown offset removes the pointers from all slots that it can write.
-+
-+5. A counted loop
-+-----------------
-+
-+::
-+
-+     8: r6 = 0
-+     9: r1 = r0                  <- head.  r6=[0,63]   r0: map value of 64 bytes
-+    10: r1 += r6
-+    11: r2 = 0
-+    12: *(u8 *)(r1 + 0) = r2
-+    13: r6 += 1
-+    14: if r6 < 64 goto 9        r6=[1,63] goes to 9: covered
-+    15: ...                      r6=64
-+
-+Scalar evolution finds that r6 is {0,+,1}, and that the latch permits 64 iterations. Thus the loop
-+is a counted loop.
-+
-+::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r3 = r10")
+-__msg("mark_precise: frame0: regs=r0 stack= before 4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 3: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r0 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2){{ *}}; R0=8 R2=0 R10=fp0 fp-8=mmmmmmmm")
++__msg("6: (0f) r3 += r0                      ; R0=8 R3=fp8")
+ __naked int bpf_atomic_cmpxchg_precision(void)
+ {
+ 	asm volatile (
+@@ -426,7 +378,7 @@ __naked int bpf_atomic_cmpxchg_precision(void)
+ 	"r2 = 0;"
+ 	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u64 *)(r10 - 8), r0, r2) */
+ 	"r3 = r10;"
+-	"r3 += r0;"			/* mark_precise */
++	"r3 += r0;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -435,19 +387,14 @@ __naked int bpf_atomic_cmpxchg_precision(void)
+ 	: __clobber_all);
+ }
  
--  if (data + sizeof(*eth) + sizeof(*iph) + sizeof(*udp) > data_end)
--	  return 0;
--  if (eth->h_proto != htons(ETH_P_IP))
--	  return 0;
--  if (iph->protocol != IPPROTO_UDP || iph->ihl != 5)
--	  return 0;
--  if (udp->dest == 53 || udp->source == 9)
--	  ...;
-+           r6=0
-+             |     the verifier changes the state before it adds the state to set(9):
-+             v     each induction variable gets its range for all iterations
-+    +--> 9:  head     { r6=[0,63] }
-+    |        body     verified 1 time. The store stays in the 64 bytes.
-+    |   13:  r6 += 1
-+    +-- 14:  if r6 < 64           { r6=[1,63] } returns to the head: { r6=[0,63] } covers it
-+             |
-+             v
-+        15:  { r6=64 }
+-/* Regression test for dual precision: Both the fetched value (r2) and
+- * a reread of the same stack slot (r3) are tracked for precision. After
+- * the atomic operation, the stack slot is STACK_MISC. Thus, the ldx at
+- * insn 4 does NOT set INSN_F_STACK_ACCESS. Precision for the stack slot
+- * propagates solely through the atomic fetch's load side (insn 3).
++/* Both the fetched value (r2) and a reread of the same stack slot (r3) are used.
++ * The fetched value is known. After the atomic operation, the stack slot is
++ * STACK_MISC, so what is reread is not.
+  */
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r2,r3 stack= before 4: (79) r3 = *(u64 *)(r10 -8)")
+-__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("5: (bf) r4 = r2                       ; R2=8 R4=8")
++__msg("6: (0f) r4 += r3                      ; R3=scalar() R4=scalar()")
+ __naked int bpf_atomic_fetch_add_dual_precision(void)
+ {
+ 	asm volatile (
+@@ -460,7 +407,7 @@ __naked int bpf_atomic_fetch_add_dual_precision(void)
+ 	"r4 += r3;"
+ 	"r4 &= 7;"
+ 	"r5 = r10;"
+-	"r5 += r4;"			/* mark_precise */
++	"r5 += r4;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -471,12 +418,8 @@ __naked int bpf_atomic_fetch_add_dual_precision(void)
  
--which makes such programs easier to write comparing to LD_ABS insn
--and significantly faster.
-+No block of the loop has a new state after one pass. The loop is complete.
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r0,r3 stack= before 5: (79) r3 = *(u64 *)(r10 -8)")
+-__msg("mark_precise: frame0: regs=r0 stack= before 4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 3: (b7) r2 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r0 = 8")
+-__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
+-__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__msg("6: (bf) r4 = r0                       ; R0=8 R4=8")
++__msg("7: (0f) r4 += r3                      ; R3=scalar() R4=scalar()")
+ __naked int bpf_atomic_cmpxchg_dual_precision(void)
+ {
+ 	asm volatile (
+@@ -490,7 +433,7 @@ __naked int bpf_atomic_cmpxchg_dual_precision(void)
+ 	"r4 += r3;"
+ 	"r4 &= 7;"
+ 	"r5 = r10;"
+-	"r5 += r4;"			/* mark_precise */
++	"r5 += r4;"
+ 	"r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -501,9 +444,7 @@ __naked int bpf_atomic_cmpxchg_dual_precision(void)
  
--Pruning
--=======
-+6. A loop that is not counted
-+-----------------------------
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r1 stack= before 10: (57) r1 &= 7")
+-__msg("mark_precise: frame0: regs=r1 stack= before 9: (db) r1 = atomic64_fetch_add((u64 *)(r0 +0), r1)")
+-__not_msg("falling back to forcing all scalars precise")
++__msg("9: (db) r1 = atomic64_fetch_add((u64 *)(r0 +0), r1){{ *}}; R0=map_value({{.*}}) R1=scalar()")
+ __naked int bpf_atomic_fetch_add_map_precision(void)
+ {
+ 	asm volatile (
+@@ -518,7 +459,7 @@ __naked int bpf_atomic_fetch_add_map_precision(void)
+ 	".8byte %[fetch_add_insn];"	/* r1 = atomic_fetch_add(*(u64 *)(r0 + 0), r1) */
+ 	"r1 &= 7;"
+ 	"r2 = r10;"
+-	"r2 += r1;"			/* mark_precise */
++	"r2 += r1;"
+ 	"1: r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -531,9 +472,7 @@ __naked int bpf_atomic_fetch_add_map_precision(void)
  
--The verifier does not actually walk all possible paths through the program.  For
--each new branch to analyse, the verifier looks at all the states it's previously
--been in when at this instruction.  If any of them contain the current state as a
--subset, the branch is 'pruned' - that is, the fact that the previous state was
--accepted implies the current state would be as well.  For instance, if in the
--previous state, r1 held a packet-pointer, and in the current state, r1 holds a
--packet-pointer with a range as long or longer and at least as strict an
--alignment, then r1 is safe.  Similarly, if r2 was NOT_INIT before then it can't
--have been used by any path from that point, so any value in r2 (including
--another NOT_INIT) is safe.  The implementation is in the function regsafe().
--Pruning considers not only the registers but also the stack (and any spilled
--registers it may hold).  They must all be safe for the branch to be pruned.
--This is implemented in states_equal().
-+::
-+
-+     9: r7 = 0
-+    10: r7 += 3                  <- head.  r7=scalar
-+    11: r1 = *(u64 *)(r6 + 0)    memory that a different cpu can change
-+    12: if r1 != 0 goto 10       r7=scalar goes to 10: covered
-+    13: r0 = r7
-+    14: exit
-+
-+There are two questions, and they have two answers.
-+
-+::
-+
-+  question                       answer
-+  -----------------------------  ---------------------------------------------------------------
-+  Are all iterations safe?       The fixpoint shows it, see below.
-+  Does the loop end?             The verifier does not prove it. See example 8.
-+
-+The number of iterations is not known. But scalar evolution knows what the loop changes: r7 is
-+{0,+,3}. Without a limit on the iterations r7 can have each value. Thus the verifier makes r7 an
-+unknown scalar in the state that enters the loop. After one pass the state that returns to the
-+head is covered.
-+
-+::
-+
-+  paths:  BPF program is too large. Processed 1000001 insn      r7 differs in each iteration
-+  joins:  processed 18 insns
-+
-+**The verifier unrolls first.** It verifies the first iterations one by one, with the real values:
-+``r7=0`` in the first iteration. Many loops exit in the first or second iteration. In other loops
-+constants decide all exits. The verifier stops the unroll when a jump that exits the loop can go
-+in the two directions. In this example that occurs in the first iteration.
-+
-+::
-+
-+  loop                                               method
-+  -------------------------------------------------  -------------------------------------------
-+  counted, scalar evolution describes all registers  ranges at the head, example 5
-+  counted, a register has no description             unroll, 100000 insns at most
-+  not counted                                        unroll while constants decide the exits,
-+                                                     4096 insns at most. Then this example and
-+                                                     example 7
-+
-+Scalar evolution describes these registers and stack slots of a counted loop::
-+
-+  what the loop does with the register               the register at the head
-+  -------------------------------------------------  -------------------------------------------
-+  nothing                                            no change
-+  computes the same constant in each iteration       no change
-+  adds a constant                                    range from the number of iterations
-+  sets it to one of some values that do not change   union of the values
-+  loads it again in each iteration                   unknown scalar
-+  clears bits of [0, maximum]: &, zero extension     no change
-+  moves a pointer to arena                           pointer to arena, it has no offset
-+
-+7. Widening
-+-----------
-+
-+::
-+
-+     9: r7 = 1
-+    10: r7 *= 3                  <- head
-+    11: r7 &= 63
-+    12: r1 = *(u64 *)(r6 + 0)
-+    13: if r1 != 0 goto 10
-+    14: r6 += r7                 r7=[0,63]
-+    15: r0 = *(u8 *)(r6 + 0)     r6: map value of 64 bytes
-+
-+r7 is not an add recurrence. Thus scalar evolution has no description of it. The verifier iterates
-+the loop::
-+
-+  pass   r7 at the head     r7 at the latch     step
-+  -----  -----------------  ------------------  ------------------------------------------------
-+  1      1                  3                   the verifier unrolls this iteration (example 6)
-+  2      3                  9                   not covered, the upper bound grows: [3, S32_MAX]
-+  3      [3, S32_MAX]       [0,63]              not covered, the lower bound grows: [0, S32_MAX]
-+  4      [0, S32_MAX]       [0,63]              covered: the loop is complete
-+
-+With a usual join a range can grow by a small step in each pass, and 2^64 passes are possible.
-+Widening moves the bound that grows directly to one of a small number of stops::
-+
-+  lower bound:    S64_MIN  <--  S32_MIN  <--  0
-+  upper bound:                                0  -->  S32_MAX  -->  U32_MAX  -->  S64_MAX
-+
-+Thus a range can grow only a small number of times.
-+
-+The edge from 13 to 14 has ``r7=[0,63]``, the value of r7 after ``&= 63``. Thus the access at 15 is
-+correct. Widening at the head does not change a value that the body calculates again.
-+
-+::
-+
-+  paths:  infinite loop detected at insn 10
-+  joins:  processed 31 insns
-+
-+8. A loop ends at run time: may_goto
-+------------------------------------
-+
-+It is possible that the loop of example 6 never ends. The verifier adds a may_goto insn before the
-+latch.
-+
-+- may_goto decrements a count.
-+- After 65535 iterations it reads the clock.
-+- It jumps to its target when the time slice is over.
-+
-+One run of a program has one time slice and one count. All loops and all subprograms of the run
-+share them.
-+
-+::
-+
-+                    one run of a program on a cpu
-+    +---------------------------------------------------------------+
-+    |   start of the time slice (250 ms)        count (65535)       |
-+    +---------------------------------------------------------------+
-+                             |  entry: the subprogram starts from the count that is left
-+                             |  exit:  the subprogram gives back the count that it has left
-+                             v
-+    +----------------+      +----------------+      +----------------+
-+    | main program   | call | subprogram f   | call | subprogram g   |
-+    | loop, may_goto | ---> | loop, may_goto | ---> | loop, may_goto |
-+    +----------------+      +----------------+      +----------------+
-+
-+Thus a run reads the clock even if each loop in each subprogram is short. Each frame on the stack
-+does at most 65535 iterations between two reads of the clock.
-+
-+This is the program that runs::
-+
-+    17: r7 += 3
-+    18: r1 = *(u64 *)(r6 + 0)
-+    19..25: may_goto 30
-+    26: if r1 != 0 goto 17
-+    27: r0 = r7
-+    28: exit
-+    ...
-+    30: r0 = 0                   after the last insn of the function, for all its added may_goto
-+    31: exit
-+
-+With 0 in memory it returns 3. With 1 in memory it returns 0 after 250 ms.
-+
-+The edge of the added may_goto is also an edge for the analysis. The state at the latch goes to
-+exit with r0 = 0. The verifier checks it as it checks each exit: the program must hold nothing,
-+and 0 must be a valid return value.
-+
-+The verifier adds may_goto only where it is necessary::
-+
-+  loop                                                         the verifier
-+  -----------------------------------------------------------  ---------------------------------
-+  counted                                                      adds nothing
-+  unrolled to its end                                          adds nothing
-+  each iteration executes may_goto or bpf_iter_*_next()        adds nothing
-+  no exit                                                      rejects the program:
-+                                                               loop at insn N never exits
-+  all other loops                                              adds may_goto
-+
-+No return value is correct for each program type. Thus the kernel informs user space that it
-+stopped a run. It sets ``unwound`` in ``struct bpf_prog_info``. It also writes the cause to the
-+stderr stream of the program.
-+
-+**The target of an added may_goto.** An added may_goto has one target, and the verifier verifies
-+only this edge. The verifier selects the target at load time::
-+
-+          does the frame hold a lock, a reference or an rcu section
-+          that it did not hold at its entry ?
-+               | no                                | yes
-+               v                                   v
-+       exit from the function               exit from the loop
-+       (insn 30 above)                      (insn 27 above: jump across the latch)
-+
-+Three programs show that one target for all loops is not possible.
-+
-+Program 1: exit from the function.
-+
-+::
-+
-+  do { p = lookup(hash map); } while (!p);
-+  return *p;
-+
-+  paths:  infinite loop detected at insn 1
-+  joins:  processed 14 insns.  With an empty map it returns 0 after 251 ms
-+
-+The code after the loop uses the fact that the latch found: p is not NULL. A jump across the latch
-+sends NULL to that code.
-+
-+Program 2: exit from the loop.
-+
-+::
-+
-+  lock(&v->l);
-+  do { v->cnt++; } while (v->flag);
-+  unlock(&v->l);
-+  return 1;
-+
-+  paths:  infinite loop detected at insn 13
-+  joins:  processed 24 insns.  With flag = 1 it returns its own 1 after 250 ms, the lock is free
-+
-+The program cannot exit with the lock. The code after the loop releases the lock.
-+
-+Program 3: no target is possible.
-+
-+::
-+
-+  rcu_read_lock();
-+  do { p = lookup(hash map); } while (!p);
-+  x = *p;
-+  rcu_read_unlock();
-+
-+  paths:  infinite loop detected at insn 2
-+  joins:  R0 invalid mem access 'map_value_or_null'
-+
-+The program cannot exit in the rcu section, and after the loop p can be NULL. There is no third
-+target. Code that releases objects and then exits is a landing pad. Landing pads belong to calls,
-+not to loops.
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r0 stack= before 12: (57) r0 &= 7")
+-__msg("mark_precise: frame0: regs=r0 stack= before 11: (db) r0 = atomic64_cmpxchg((u64 *)(r6 +0), r0, r1)")
+-__not_msg("falling back to forcing all scalars precise")
++__msg("11: (db) r0 = atomic64_cmpxchg((u64 *)(r6 +0), r0, r1){{ *}}; R0=scalar() R1=0")
+ __naked int bpf_atomic_cmpxchg_map_precision(void)
+ {
+ 	asm volatile (
+@@ -550,7 +489,7 @@ __naked int bpf_atomic_cmpxchg_map_precision(void)
+ 	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u64 *)(r6 + 0), r0, r1) */
+ 	"r0 &= 7;"
+ 	"r2 = r10;"
+-	"r2 += r0;"			/* mark_precise */
++	"r2 += r0;"
+ 	"1: r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -563,9 +502,7 @@ __naked int bpf_atomic_cmpxchg_map_precision(void)
  
--Some technical details about state pruning implementation could be found below.
-+**Exit from the function.**
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r1 stack= before 10: (57) r1 &= 7")
+-__msg("mark_precise: frame0: regs=r1 stack= before 9: (c3) r1 = atomic_fetch_add((u32 *)(r0 +0), r1)")
+-__not_msg("falling back to forcing all scalars precise")
++__msg("9: (c3) r1 = atomic_fetch_add((u32 *)(r0 +0), r1){{ *}}; R0=map_value({{.*}}) R1=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
+ __naked int bpf_atomic_fetch_add_32bit_precision(void)
+ {
+ 	asm volatile (
+@@ -580,7 +517,7 @@ __naked int bpf_atomic_fetch_add_32bit_precision(void)
+ 	".8byte %[fetch_add_insn];"	/* r1 = atomic_fetch_add(*(u32 *)(r0 + 0), r1) */
+ 	"r1 &= 7;"
+ 	"r2 = r10;"
+-	"r2 += r1;"			/* mark_precise */
++	"r2 += r1;"
+ 	"1: r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -593,9 +530,7 @@ __naked int bpf_atomic_fetch_add_32bit_precision(void)
  
--Register liveness tracking
----------------------------
-+::
-+
-+  the may_goto is in                                         insns at the target
-+  ---------------------------------------------------------  -----------------------------------
-+  the main program, the callback of a timer                  r0 = 0; exit
-+  a subprogram, and unwind_goto follows each call of it      r0 = 0; unwind_exit
-+                                                             the callers continue at their
-+                                                             landing pads
-+  a different subprogram, a callback of bpf_loop()           not possible: exit from the loop
-+
-+Some states at the may_goto can hold an object while other states hold nothing. Then the target
-+is the exit from the loop for all states.
-+
-+**Exit from the loop.**
-+
-+::
-+
-+  position of the may_goto         target                      is the edge in the program?
-+  -------------------------------  --------------------------  ---------------------------------
-+  before a jump that exits the     the target of that jump     yes. The facts about the loops
-+  loop                                                         stay correct.
-+  at the head, when no such jump   an exit of this loop and    no. The edge skips the body.
-+  is in each iteration             of all loops around it
-+
-+The body can contain the insn that stops a loop around it, for example a call of
-+``bpf_iter_num_next()``. Thus a may_goto at the head exits from all loops around it.
-+
-+9. Subprograms
-+--------------
-+
-+::
-+
-+     1: r1 = random()
-+     2: call low3                waits.  r1=scalar goes to 10
-+     3: r6 = r0                  r0=[0,7]
-+        ...
-+     7: call low3                r1=scalar goes to 10: covered.  r0=[0,7] is known
-+     8: r0 += r6
-+     9: exit
-+    10: r0 = r1                  low3(x) { return x & 7; }
-+    11: r0 &= 7
-+    12: exit                     r0=[0,7] goes to the calls that wait
-+
-+The verifier verifies a static subprogram for each entry state, not for each chain of calls.
-+
-+::
-+
-+     2: call low3  ---- { r1=scalar } ----+
-+                                          v
-+                                +------------------+
-+     7: call low3  -- covered ->| 10: r0 = r1      |      verified 1 time
-+                                | 11: r0 &= 7      |
-+                                | 12: exit         |
-+                                +------------------+
-+                                          |
-+     3: r6 = r0    <--- { r0=[0,7] } -----+
-+     8: r0 += r6   <--- { r0=[0,7] } -----+
-+
-+- The entry state arrives at the first block of the subprogram like each state at a block. The
-+  verifier drops it, joins it or adds it.
-+- The call waits. The verifier saves the state of the caller.
-+- Each exit state goes to all calls that wait for this entry state.
-+
-+The result::
-+
-+  paths:  processed 16 insns
-+  joins:  processed 13 insns        each insn 1 time
-+
-+The next program has 12 subprograms. Each subprogram calls the next one 2 times. It has 103 insns.
-+
-+::
-+
-+  paths:   f1 --> f2 f2 --> f3 f3 f3 f3 --> ...         2^11 calls of f12
-+  joins:   f1 --> f2    --> f3          --> ...         each subprogram 1 time
-+
-+  paths:  processed 45052 insns
-+  joins:  processed 103 insns
-+
-+In some cases the verifier verifies a subprogram in the context of the caller. Then the frames of
-+the callers are part of the state, and states with different chains of calls have no join. The
-+most important cases:
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("mark_precise: frame0: regs=r0 stack= before 12: (57) r0 &= 7")
+-__msg("mark_precise: frame0: regs=r0 stack= before 11: (c3) r0 = atomic_cmpxchg((u32 *)(r6 +0), r0, r1)")
+-__not_msg("falling back to forcing all scalars precise")
++__msg("11: (c3) r0 = atomic_cmpxchg((u32 *)(r6 +0), r0, r1){{ *}}; R0=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff)) R1=0")
+ __naked int bpf_atomic_cmpxchg_32bit_precision(void)
+ {
+ 	asm volatile (
+@@ -612,7 +547,7 @@ __naked int bpf_atomic_cmpxchg_32bit_precision(void)
+ 	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u32 *)(r6 + 0), r0, r1) */
+ 	"r0 &= 7;"
+ 	"r2 = r10;"
+-	"r2 += r0;"			/* mark_precise */
++	"r2 += r0;"
+ 	"1: r0 = 0;"
+ 	"exit;"
+ 	:
+@@ -626,11 +561,9 @@ __naked int bpf_atomic_cmpxchg_32bit_precision(void)
+ /*
+  * Verification takes two paths: with r1 being scalar zero on path (1)
+  * and with r1 being some other scalar on path (2).
+- * Check that the verifier does not use checkpoints created
+- * on path (1) to prune path (2).
++ * Check that the state of path (1) does not stand for path (2).
+  */
+ SEC("?tc")
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __failure __msg("R1 type=scalar expected=fp")
+ __naked int null_mem_arg_zero_size(void)
+ {
+@@ -667,11 +600,9 @@ __weak int subprog_mem_arg(int *p)
+ /*
+  * Verification takes two paths: with r1 being scalar zero on path (1)
+  * and with r1 being some other scalar on path (2).
+- * Check that the verifier does not use checkpoints created
+- * on path (1) to prune path (2).
++ * Check that the state of path (1) does not stand for path (2).
+  */
+ SEC("?raw_tp")
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __failure __msg("R1 type=scalar expected=fp")
+ __naked int null_mem_arg_global_subprog(void)
+ {
+@@ -689,9 +620,8 @@ __naked int null_mem_arg_global_subprog(void)
+ 		: __clobber_all);
+ }
  
--In order to make state pruning effective, liveness state is tracked for each
--register and stack slot. The basic idea is to track which registers and stack
--slots are actually used during subseqeuent execution of the program, until
--program exit is reached. Registers and stack slots that were never used could be
--removed from the cached state thus making more states equivalent to a cached
--state. This could be illustrated by the following program::
-+- The subprogram gets a pointer to the stack of the caller, or a dynptr.
-+- The subprogram gets a pointer that can be NULL. It does the NULL check for the caller.
-+- The call is in an unrolled loop. The iterations must not meet in the subprogram.
-+- The subprogram is a callback.
+-/* Same as above, check that path with r3 == 0 does not prune the path with r3 != 0 */
++/* Same as above, check that path with r3 == 0 does not stand for the path with r3 != 0 */
+ SEC("?tc")
+-__flag(BPF_F_TEST_STATE_FREQ)
+ __failure __msg("R3 type=scalar expected=fp")
+ int null_kfunc_arg_dynptr_slice(struct __sk_buff *skb)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+index dc0c7034c04f..3f9a65ff134e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
++++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+@@ -39,31 +39,20 @@ static unsigned long callback_subprog()
  
--  0: call bpf_get_prandom_u32()
--  1: r1 = 0
--  2: if r0 == 0 goto +1
--  3: r0 = 1
--  --- checkpoint ---
--  4: r0 = r1
--  5: exit
-+The verifier verifies a global subprogram alone, after the main program. The entry state has the
-+arguments of its BTF prototype. At a call of a global subprogram the verifier checks the arguments
-+against the prototype. It does not enter the subprogram. After the call the return value is an
-+unknown scalar. The program must not hold a lock at the call.
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("7: (0f) r1 += r0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 6: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r0 stack= before 5: (27) r0 *= 4")
+-__msg("mark_precise: frame0: regs=r0 stack= before 11: (95) exit")
+-__msg("mark_precise: frame1: regs=r0 stack= before 10: (bf) r0 = r1")
+-__msg("mark_precise: frame1: regs=r1 stack= before 4: (85) call pc+5")
+-__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
++__msg("7: (0f) r1 += r0                      ; R0=12 R1=map_value(map=.data.vals,ks=4,vs=16,imm=12)")
+ __naked int subprog_result_precise(void)
+ {
+ 	asm volatile (
+ 		"r6 = 3;"
+-		/* pass r6 through r1 into subprog to get it back as r0;
+-		 * this whole chain will have to be marked as precise later
+-		 */
++		/* pass r6 through r1 into subprog to get it back as r0 */
+ 		"r1 = r6;"
+ 		"call identity_subprog;"
+ 		/* now use subprog's returned value (which is a
+-		 * r6 -> r1 -> r0 chain), as index into vals array, forcing
+-		 * all of that to be known precisely
++		 * r6 -> r1 -> r0 chain), as index into vals array
+ 		 */
+ 		"r0 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r0->r1->r6 chain is forced to be precise and has to be
+-		 * propagated back to the beginning, including through the
++		/* here r0 has to be known: the constant went through the
+ 		 * subprog call
+ 		 */
+ 		"r1 += r0;"
+@@ -98,26 +87,18 @@ static unsigned long sneaky_fp_leaking_subprog()
  
--Suppose that a state cache entry is created at instruction #4 (such entries are
--also called "checkpoints" in the text below). The verifier could reach the
--instruction with one of two possible register states:
-+10. A call through a table of functions
-+---------------------------------------
-+
-+::
-+
-+  static const op_fn ops[16] = { op0, op1, ... op15 };
-+  return ops[kind & 15](3);
-+
-+     3: w1 &= 15
-+     4: r1 <<= 3                 r1=[0,120] in steps of 8
-+     5: r2 = ops
-+     7: r2 += r1
-+     8: r2 = *(u64 *)(r2 + 0)    { r2=one of 16 functions }
-+     9: w1 = 3
-+    10: callx r2                 waits for each of the 16.  r1=3 goes to all of them
-+    11: exit                     r0 of each of them arrives here, and the verifier joins them
-+
-+The load at 8 can give 16 different pointers. The verifier does not make 16 states. It makes one
-+state, in which r2 holds one of a set of functions.
-+
-+::
-+
-+    +-----+-----+-------+------+
-+    | op0 | op1 |  ...  | op15 |    8: load  -->  { r2=one of 16 functions }   1 state
-+    +-----+-----+-------+------+
-+                                   10: callx r2
-+                                          |    the entry state { r1=3 } goes to each function
-+             +------------+---------------+------------+
-+             v            v                            v
-+            op0          op1            ...           op15
-+             |            |                            |
-+             +------------+---------------+------------+
-+                                          v    the exit states arrive at 11: join
-+                                   11: exit
-+
-+16 states are not useful here. They differ only in the function, and they are parallel from the
-+load to the call. At the call the verifier verifies each function of the set with the arguments
-+of the call, as for a direct call.
-+
-+::
-+
-+  paths:  processed 118 insns
-+  joins:  processed 73 insns
-+
-+- Only a load from a table makes a set. Two pointers to different functions that arrive from two
-+  branches have no join (example 2).
-+- A helper or a kfunc that gets a callback must know the callback. There the verifier makes one
-+  state for each function of the set.
-+
-+11. Recursion
-+-------------
-+
-+::
-+
-+  depth(n) { return n ? (depth(n - 1) + 1) & 255 : 0; }         called with 5
-+
-+Recursion uses the mechanisms of examples 7 and 9. The verifier handles the entry of a recursive
-+subprogram like a head. A call of a subprogram that the verifier verifies at that time waits like
-+each other call.
-+
-+::
-+
-+        main program: call depth       entry state { r1=5 }
-+                          |
-+                          v
-+    +-->  entry of depth()             like a head: join and widening
-+    |        ...
-+    +---  call depth(n - 1)            entry state { r1=4 }. The call waits.
-+             ^
-+             |
-+          exit of depth()              each exit state goes to all calls that wait.
-+                                       The call in depth() is one of them.
-+
-+Two values must become stable::
-+
-+  n at the entry      step
-+  ------------------  ---------------------------------------------------------------------
-+  5                   from the main program
-+  [0,5]               4 arrives from the call in depth(): join and widening,
-+                      the lower bound moves to 0
-+  [0,5]               [0,4] arrives from that call: covered. Stable.
-+
-+  the return value    step
-+  ------------------  ---------------------------------------------------------------------
-+  0                   n == 0. It goes to the calls that wait.
-+  [0,1]               (0 + 1) & 255 arrives at the exit
-+  [0,S32_MAX]         the range grows on a cycle: widening
-+  [0,S32_MAX]         ([0,S32_MAX] + 1) & 255 = [0,255] arrives at the exit: covered. Stable.
-+
-+The depth of the recursion is not known, like the number of iterations in example 6. Thus each
-+subprogram on a cycle of the call graph gets a check at its entry. The check counts, for each
-+program and cpu, the stack that recursive frames use and the calls in this run.
-+
-+::
-+
-+  limit for one run of a program              value
-+  ------------------------------------------  ---------------------------------------------
-+  kernel stack of recursive frames            4096 bytes
-+  stack in arena of recursive frames          the part of this stack that is free
-+  calls of recursive subprograms              8M
-+
-+     kernel memory                      arena
-+    +----------------------+          +---------------------------+
-+    | BPF stack     <- r10 |          | stack in arena     <- r12 |
-+    |  frames without      |          |  frames without           |
-+    |  recursion           |          |  recursion                |
-+    +----------------------+          +---------------------------+
-+    |  recursive frames:   |          |  recursive frames:        |
-+    |  4096 bytes          |          |  the remaining part       |
-+    +----------------------+          +---------------------------+
-+
-+When a run hits a limit, the subprogram returns 0. If unwind_goto follows each call of the
-+subprogram, it uses unwind_exit as a replacement. The kernel marks the program as in example 8.
-+
-+::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("6: (0f) r1 += r0")
+-__msg("mark_precise: frame0: last_idx 6 first_idx 0 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r0 stack= before 4: (27) r0 *= 4")
+-__msg("mark_precise: frame0: regs=r0 stack= before 3: (57) r0 &= 3")
+-__msg("mark_precise: frame0: regs=r0 stack= before 10: (95) exit")
+-__msg("mark_precise: frame1: regs=r0 stack= before 9: (bf) r0 = (s8)r10")
+-__msg("7: R0=scalar")
++__msg("3: R0=scalar() R6=")
++__msg("6: (0f) r1 += r0                      ; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
+ __naked int fp_precise_subprog_result(void)
+ {
+ 	asm volatile (
+ 		"call fp_leaking_subprog;"
+ 		/* use subprog's returned value (which is derived from r10=fp
+-		 * register), as index into vals array, forcing all of that to
+-		 * be known precisely
++		 * register, so it's unknown), as index into vals array
+ 		 */
+ 		"r0 &= 3;"
+ 		"r0 *= 4;"
+ 		"r1 = %[vals];"
+-		/* force precision marking */
+ 		"r1 += r0;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -129,31 +110,18 @@ __naked int fp_precise_subprog_result(void)
  
--* r0 = 1, r1 = 0
--* r0 = 0, r1 = 0
-+  paths:  recursive call from depth() to depth()
-+  joins:  processed 19 insns.  It returns 5
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("6: (0f) r1 += r0")
+-__msg("mark_precise: frame0: last_idx 6 first_idx 0 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r0 stack= before 4: (27) r0 *= 4")
+-__msg("mark_precise: frame0: regs=r0 stack= before 3: (57) r0 &= 3")
+-__msg("mark_precise: frame0: regs=r0 stack= before 11: (95) exit")
+-__msg("mark_precise: frame1: regs=r0 stack= before 10: (bf) r0 = (s8)r1")
+-/* here r1 is marked precise, even though it's fp register, but that's fine
+- * because by the time we get out of subprogram it has to be derived from r10
+- * anyways, at which point we'll break precision chain
+- */
+-__msg("mark_precise: frame1: regs=r1 stack= before 9: (bf) r1 = r10")
+-__msg("7: R0=scalar")
++__msg("3: R0=scalar() R6=")
++__msg("6: (0f) r1 += r0                      ; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
+ __naked int sneaky_fp_precise_subprog_result(void)
+ {
+ 	asm volatile (
+ 		"call sneaky_fp_leaking_subprog;"
+ 		/* use subprog's returned value (which is derived from r10=fp
+-		 * register), as index into vals array, forcing all of that to
+-		 * be known precisely
++		 * register, so it's unknown), as index into vals array
+ 		 */
+ 		"r0 &= 3;"
+ 		"r0 *= 4;"
+ 		"r1 = %[vals];"
+-		/* force precision marking */
+ 		"r1 += r0;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -165,35 +133,25 @@ __naked int sneaky_fp_precise_subprog_result(void)
  
--However, only the value of register ``r1`` is important to successfully finish
--verification. The goal of the liveness tracking algorithm is to spot this fact
--and figure out that both states are actually equivalent.
-+Why the analysis ends, and the limits
-+-------------------------------------
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("9: (0f) r1 += r0")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 8: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r0 stack= before 7: (27) r0 *= 4")
+-__msg("mark_precise: frame0: regs=r0 stack= before 5: (a5) if r0 < 0x4 goto pc+1")
+-__msg("mark_precise: frame0: regs=r0 stack= before 4: (85) call pc+7")
++__msg("9: (0f) r1 += r0                      ; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
+ __naked int global_subprog_result_precise(void)
+ {
+ 	asm volatile (
+ 		"r6 = 3;"
+ 		/* pass r6 through r1 into subprog to get it back as r0;
+-		 * given global_identity_subprog is global, precision won't
+-		 * propagate all the way back to r6
++		 * given global_identity_subprog is global, nothing is known
++		 * about what it returns
+ 		 */
+ 		"r1 = r6;"
+ 		"call global_identity_subprog;"
+ 		/* now use subprog's returned value (which is unknown now, so
+-		 * we need to clamp it), as index into vals array, forcing r0
+-		 * to be marked precise (with no effect on r6, though)
++		 * we need to clamp it), as index into vals array
+ 		 */
+ 		"if r0 < %[vals_arr_sz] goto 1f;"
+ 		"r0 = %[vals_arr_sz] - 1;"
+ 	"1:"
+ 		"r0 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r0 is forced to be precise and has to be
+-		 * propagated back to the global subprog call, but it
+-		 * shouldn't go all the way to mark r6 as precise
+-		 */
+ 		"r1 += r0;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -213,11 +171,9 @@ static unsigned long loop_callback_bad()
+ 		"if r0 s> 1000 goto 1f;"
+ 		"r0 = 0;"
+ 	"1:"
+-		"goto +0;" /* checkpoint */
++		"goto +0;"
+ 		/* bpf_loop() expects [0, 1] values, so branch above skipping
+-		 * r0 = 0; should lead to a failure, but if exit instruction
+-		 * doesn't enforce r0's precision, this callback will be
+-		 * successfully verified
++		 * r0 = 0; should lead to a failure
+ 		 */
+ 		"exit;"
+ 		:
+@@ -228,14 +184,8 @@ static unsigned long loop_callback_bad()
  
--Understanding eBPF verifier messages
--====================================
-+- A state in a set can only grow. With widening it grows only a small number of times.
-+- Two states stay in a set only if they have no join, or if a rule of example 4 keeps them. Real
-+  programs have a small number of such states at an insn, because a state contains only live
-+  registers.
-+- It is possible to write a program that has many such states. Thus the verifier limits the number
-+  of states. The limits depend on the size of the program.
+ SEC("?raw_tp")
+ __failure __log_level(2)
+-__flag(BPF_F_TEST_STATE_FREQ)
+-/* check that fallthrough code path marks r0 as precise */
+-__msg("mark_precise: frame1: regs=r0 stack= before 11: (b7) r0 = 0")
+-/* check that we have branch code path doing its own validation */
+-__msg("from 10 to 12: frame1: R0=scalar(smin=umin=1001")
+-/* check that branch code path marks r0 as precise, before failing */
+-__msg("mark_precise: frame1: regs=r0 stack= before 9: (85) call bpf_get_prandom_u32#7")
+-__msg("At callback return the register R0 has smin=1001 should have been in [0, 1]")
++/* 0 of the fallthrough code path doesn't stand for what the branch code path has */
++__msg("At callback return the register R0 has {{.*}} should have been in [0, 1]")
+ __naked int callback_precise_return_fail(void)
+ {
+ 	asm volatile (
+@@ -256,41 +206,15 @@ __naked int callback_precise_return_fail(void)
  
--The following are few examples of invalid eBPF programs and verifier error
--messages as seen in the log:
-+For a program of N insns::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-/* First simulated path does not include callback body,
+- * r1 and r4 are always precise for bpf_loop() calls.
+- */
+ __msg("9: (85) call bpf_loop#181")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
+-__msg("mark_precise: frame0: parent state regs=r4 stack=:")
+-__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
+-__msg("mark_precise: frame0: regs=r4 stack= before 8: (b7) r4 = 0")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
+-__msg("mark_precise: frame0: parent state regs=r1 stack=:")
+-__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
+-__msg("mark_precise: frame0: regs=r1 stack= before 8: (b7) r4 = 0")
+-__msg("mark_precise: frame0: regs=r1 stack= before 7: (b7) r3 = 0")
+-__msg("mark_precise: frame0: regs=r1 stack= before 6: (bf) r2 = r8")
+-__msg("mark_precise: frame0: regs=r1 stack= before 5: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 4: (b7) r6 = 3")
+-/* r6 precision propagation */
+-__msg("14: (0f) r1 += r6")
+-__msg("mark_precise: frame0: last_idx 14 first_idx 9")
+-__msg("mark_precise: frame0: regs=r6 stack= before 13: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r6 stack= before 12: (27) r6 *= 4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 11: (25) if r6 > 0x3 goto pc+4")
+-__msg("mark_precise: frame0: regs=r0,r6 stack= before 10: (bf) r6 = r0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 9: (85) call bpf_loop")
+-/* State entering callback body popped from states stack */
+-__msg("from 9 to 17: frame1:")
+ __msg("17: frame1: R10=fp0 cb")
+ __msg("17: (b7) r0 = 0")
+ __msg("18: (95) exit")
+ __msg("returning from callee:")
+ __msg("to caller at 9:")
+-__msg("frame 0: propagating r1,r3,r4")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r1,r3,r4 stack= before 18: (95) exit")
+-__msg("from 18 to 9: safe")
++/* the callback changes nothing for the caller */
++__msg("from 18 to 9: within")
++__msg("14: (0f) r1 += r6                     ; R1=map_value(map=.data.vals,ks=4,vs=16,smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4) R6=scalar(smin=smin32=0,smax=umax=smax32=umax32=12,var_off=(0x0; 0xc),step=0+4)")
+ __naked int callback_result_precise(void)
+ {
+ 	asm volatile (
+@@ -309,9 +233,7 @@ __naked int callback_result_precise(void)
+ 		"if r6 > 3 goto 1f;"
+ 		"r6 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r6 is forced to be precise and has to be propagated
+-		 * back to the bpf_loop() call, but not beyond
+-		 */
++		/* here the range of r6 has to be known */
+ 		"r1 += r6;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 	"1:"
+@@ -326,15 +248,7 @@ __naked int callback_result_precise(void)
  
--Program with unreachable instructions::
-+  states at one insn      1024
-+  states at one time      16 * N + 4096
-+  states in total         256 * N + 64K
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("7: (0f) r1 += r6")
+-__msg("mark_precise: frame0: last_idx 7 first_idx 0")
+-__msg("mark_precise: frame0: regs=r6 stack= before 6: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r6 stack= before 5: (27) r6 *= 4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 11: (95) exit")
+-__msg("mark_precise: frame1: regs= stack= before 10: (bf) r0 = r1")
+-__msg("mark_precise: frame1: regs= stack= before 4: (85) call pc+5")
+-__msg("mark_precise: frame0: regs=r6 stack= before 3: (b7) r1 = 0")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
++__msg("7: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
+ __naked int parent_callee_saved_reg_precise(void)
+ {
+ 	asm volatile (
+@@ -348,9 +262,7 @@ __naked int parent_callee_saved_reg_precise(void)
  
--  static struct bpf_insn prog[] = {
--  BPF_EXIT_INSN(),
--  BPF_EXIT_INSN(),
--  };
--
--Error::
-+The verifier rejects a program that hits a limit. The messages are
-+``more than 1024 states that cannot be joined at insn N`` and ``too many states for N insns``.
+ 		"r6 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r6 is forced to be precise and has to be propagated
+-		 * back to the beginning, handling (and ignoring) subprog call
+-		 */
++		/* here r6 has to be known: the subprog call doesn't change it */
+ 		"r1 += r6;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -362,13 +274,7 @@ __naked int parent_callee_saved_reg_precise(void)
  
--  unreachable insn 1
-+The rules of example 4 do not cause a program to hit a limit. Most of them apply only while there
-+is room::
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("7: (0f) r1 += r6")
+-__msg("mark_precise: frame0: last_idx 7 first_idx 0")
+-__msg("mark_precise: frame0: regs=r6 stack= before 6: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r6 stack= before 5: (27) r6 *= 4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 4: (85) call pc+5")
+-__msg("mark_precise: frame0: regs=r6 stack= before 3: (b7) r1 = 0")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
++__msg("7: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
+ __naked int parent_callee_saved_reg_precise_global(void)
+ {
+ 	asm volatile (
+@@ -382,9 +288,7 @@ __naked int parent_callee_saved_reg_precise_global(void)
  
--Program that reads uninitialized register::
-+    0                     half of a limit                      limit
-+    |--------------------------|-------------------------------|
-+      room: the rules keep         no room: the verifier         the verifier
-+      two states                   uses each join that exists    rejects the program
+ 		"r6 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r6 is forced to be precise and has to be propagated
+-		 * back to the beginning, handling (and ignoring) subprog call
+-		 */
++		/* here r6 has to be known: the subprog call doesn't change it */
+ 		"r1 += r6;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -396,36 +300,14 @@ __naked int parent_callee_saved_reg_precise_global(void)
  
--  BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (bf) r0 = r2
--  R2 !read_ok
--
--Program that doesn't initialize R0 before exiting::
--
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_1),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (bf) r2 = r1
--  1: (95) exit
--  R0 !read_ok
--
--Program that accesses stack out of bounds::
--
--    BPF_ST_MEM(BPF_DW, BPF_REG_10, 8, 0),
--    BPF_EXIT_INSN(),
--
--Error::
--
--    0: (7a) *(u64 *)(r10 +8) = 0
--    invalid stack off=8 size=8
--
--Program that doesn't initialize stack before passing its address into function::
--
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--  BPF_LD_MAP_FD(BPF_REG_1, 0),
--  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (bf) r2 = r10
--  1: (07) r2 += -8
--  2: (b7) r1 = 0x0
--  3: (85) call 1
--  invalid indirect read from stack off -8+0 size 8
--
--Program that uses invalid map_fd=0 while calling to map_lookup_elem() function::
--
--  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--  BPF_LD_MAP_FD(BPF_REG_1, 0),
--  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (7a) *(u64 *)(r10 -8) = 0
--  1: (bf) r2 = r10
--  2: (07) r2 += -8
--  3: (b7) r1 = 0x0
--  4: (85) call 1
--  fd 0 is not pointing to valid bpf_map
--
--Program that doesn't check return value of map_lookup_elem() before accessing
--map element::
--
--  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--  BPF_LD_MAP_FD(BPF_REG_1, 0),
--  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--  BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 0),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (7a) *(u64 *)(r10 -8) = 0
--  1: (bf) r2 = r10
--  2: (07) r2 += -8
--  3: (b7) r1 = 0x0
--  4: (85) call 1
--  5: (7a) *(u64 *)(r0 +0) = 0
--  R0 invalid mem access 'map_value_or_null'
--
--Program that correctly checks map_lookup_elem() returned value for NULL, but
--accesses the memory with incorrect alignment::
--
--  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--  BPF_LD_MAP_FD(BPF_REG_1, 0),
--  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--  BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
--  BPF_ST_MEM(BPF_DW, BPF_REG_0, 4, 0),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (7a) *(u64 *)(r10 -8) = 0
--  1: (bf) r2 = r10
--  2: (07) r2 += -8
--  3: (b7) r1 = 1
--  4: (85) call 1
--  5: (15) if r0 == 0x0 goto pc+1
--   R0=map_ptr R10=fp
--  6: (7a) *(u64 *)(r0 +4) = 0
--  misaligned access off 4 size 8
--
--Program that correctly checks map_lookup_elem() returned value for NULL and
--accesses memory with correct alignment in one side of 'if' branch, but fails
--to do so in the other side of 'if' branch::
--
--  BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--  BPF_LD_MAP_FD(BPF_REG_1, 0),
--  BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--  BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
--  BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 0),
--  BPF_EXIT_INSN(),
--  BPF_ST_MEM(BPF_DW, BPF_REG_0, 0, 1),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (7a) *(u64 *)(r10 -8) = 0
--  1: (bf) r2 = r10
--  2: (07) r2 += -8
--  3: (b7) r1 = 1
--  4: (85) call 1
--  5: (15) if r0 == 0x0 goto pc+2
--   R0=map_ptr R10=fp
--  6: (7a) *(u64 *)(r0 +0) = 0
--  7: (95) exit
--
--  from 5 to 8: R0=imm0 R10=fp
--  8: (7a) *(u64 *)(r0 +0) = 1
--  R0 invalid mem access 'imm'
--
--Program that performs a socket lookup then sets the pointer to NULL without
--checking it::
--
--  BPF_MOV64_IMM(BPF_REG_2, 0),
--  BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_2, -8),
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--  BPF_MOV64_IMM(BPF_REG_3, 4),
--  BPF_MOV64_IMM(BPF_REG_4, 0),
--  BPF_MOV64_IMM(BPF_REG_5, 0),
--  BPF_EMIT_CALL(BPF_FUNC_sk_lookup_tcp),
--  BPF_MOV64_IMM(BPF_REG_0, 0),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (b7) r2 = 0
--  1: (63) *(u32 *)(r10 -8) = r2
--  2: (bf) r2 = r10
--  3: (07) r2 += -8
--  4: (b7) r3 = 4
--  5: (b7) r4 = 0
--  6: (b7) r5 = 0
--  7: (85) call bpf_sk_lookup_tcp#65
--  8: (b7) r0 = 0
--  9: (95) exit
--  Unreleased reference id=1, alloc_insn=7
--
--Program that performs a socket lookup but does not NULL-check the returned
--value::
--
--  BPF_MOV64_IMM(BPF_REG_2, 0),
--  BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_2, -8),
--  BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--  BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
--  BPF_MOV64_IMM(BPF_REG_3, 4),
--  BPF_MOV64_IMM(BPF_REG_4, 0),
--  BPF_MOV64_IMM(BPF_REG_5, 0),
--  BPF_EMIT_CALL(BPF_FUNC_sk_lookup_tcp),
--  BPF_EXIT_INSN(),
--
--Error::
--
--  0: (b7) r2 = 0
--  1: (63) *(u32 *)(r10 -8) = r2
--  2: (bf) r2 = r10
--  3: (07) r2 += -8
--  4: (b7) r3 = 4
--  5: (b7) r4 = 0
--  6: (b7) r5 = 0
--  7: (85) call bpf_sk_lookup_tcp#65
--  8: (95) exit
--  Unreleased reference id=1, alloc_insn=7
-+A join without the rules can lose a fact that the program uses. But 20 flags do not make a million
-+states.
+ SEC("?raw_tp")
+ __success __log_level(2)
+-/* First simulated path does not include callback body */
+-__msg("12: (0f) r1 += r6")
+-__msg("mark_precise: frame0: last_idx 12 first_idx 9")
+-__msg("mark_precise: frame0: regs=r6 stack= before 11: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r6 stack= before 10: (27) r6 *= 4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 9: (85) call bpf_loop")
+-__msg("mark_precise: frame0: parent state regs=r6 stack=:")
+-__msg("mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx 9")
+-__msg("mark_precise: frame0: regs=r6 stack= before 8: (b7) r4 = 0")
+-__msg("mark_precise: frame0: regs=r6 stack= before 7: (b7) r3 = 0")
+-__msg("mark_precise: frame0: regs=r6 stack= before 6: (bf) r2 = r8")
+-__msg("mark_precise: frame0: regs=r6 stack= before 5: (b7) r1 = 1")
+-__msg("mark_precise: frame0: regs=r6 stack= before 4: (b7) r6 = 3")
+-/* State entering callback body popped from states stack */
+-__msg("from 9 to 15: frame1:")
++__msg("12: (0f) r1 += r6                     ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
+ __msg("15: frame1: R10=fp0 cb")
+ __msg("15: (b7) r0 = 0")
+ __msg("16: (95) exit")
+ __msg("returning from callee:")
+ __msg("to caller at 9:")
+-/* r1, r4 are always precise for bpf_loop(),
+- * r6 was marked before backtracking to callback body.
+- */
+-__msg("frame 0: propagating r1,r3,r4,r6")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r1,r3,r4,r6 stack= before 16: (95) exit")
+-__msg("mark_precise: frame1: regs= stack= before 15: (b7) r0 = 0")
+-__msg("mark_precise: frame1: regs= stack= before 9: (85) call bpf_loop")
+-__msg("mark_precise: frame0: parent state regs= stack=:")
+-__msg("from 16 to 9: safe")
++/* r6 is what it was before the callback */
++__msg("from 16 to 9: within")
+ __naked int parent_callee_saved_reg_precise_with_callback(void)
+ {
+ 	asm volatile (
+@@ -442,9 +324,7 @@ __naked int parent_callee_saved_reg_precise_with_callback(void)
+ 
+ 		"r6 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r6 is forced to be precise and has to be propagated
+-		 * back to the beginning, handling (and ignoring) callback call
+-		 */
++		/* here r6 has to be known: the callback doesn't change it */
+ 		"r1 += r6;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -458,19 +338,7 @@ __naked int parent_callee_saved_reg_precise_with_callback(void)
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("9: (0f) r1 += r6")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 8: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r6 stack= before 7: (27) r6 *= 4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 6: (79) r6 = *(u64 *)(r10 -8)")
+-__msg("mark_precise: frame0: parent state regs= stack=-8:")
+-__msg("mark_precise: frame0: last_idx 13 first_idx 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 13: (95) exit")
+-__msg("mark_precise: frame1: regs= stack= before 12: (bf) r0 = r1")
+-__msg("mark_precise: frame1: regs= stack= before 5: (85) call pc+6")
+-__msg("mark_precise: frame0: regs= stack=-8 before 4: (b7) r1 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 3: (7b) *(u64 *)(r10 -8) = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
++__msg("9: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
+ __naked int parent_stack_slot_precise(void)
+ {
+ 	asm volatile (
+@@ -492,9 +360,7 @@ __naked int parent_stack_slot_precise(void)
+ 
+ 		"r6 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r6 is forced to be precise and has to be propagated
+-		 * back to the beginning, handling (and ignoring) subprog call
+-		 */
++		/* here r6 has to be known: the subprog call doesn't change it */
+ 		"r1 += r6;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -506,15 +372,7 @@ __naked int parent_stack_slot_precise(void)
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("9: (0f) r1 += r6")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 0")
+-__msg("mark_precise: frame0: regs=r6 stack= before 8: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r6 stack= before 7: (27) r6 *= 4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 6: (79) r6 = *(u64 *)(r10 -8)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 5: (85) call pc+6")
+-__msg("mark_precise: frame0: regs= stack=-8 before 4: (b7) r1 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 3: (7b) *(u64 *)(r10 -8) = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
++__msg("9: (0f) r1 += r6                      ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
+ __naked int parent_stack_slot_precise_global(void)
+ {
+ 	asm volatile (
+@@ -536,9 +394,7 @@ __naked int parent_stack_slot_precise_global(void)
+ 
+ 		"r6 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r6 is forced to be precise and has to be propagated
+-		 * back to the beginning, handling (and ignoring) subprog call
+-		 */
++		/* here r6 has to be known: the subprog call doesn't change it */
+ 		"r1 += r6;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -550,38 +406,14 @@ __naked int parent_stack_slot_precise_global(void)
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-/* First simulated path does not include callback body */
+-__msg("14: (0f) r1 += r6")
+-__msg("mark_precise: frame0: last_idx 14 first_idx 10")
+-__msg("mark_precise: frame0: regs=r6 stack= before 13: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r6 stack= before 12: (27) r6 *= 4")
+-__msg("mark_precise: frame0: regs=r6 stack= before 11: (79) r6 = *(u64 *)(r10 -8)")
+-__msg("mark_precise: frame0: regs= stack=-8 before 10: (85) call bpf_loop")
+-__msg("mark_precise: frame0: parent state regs= stack=-8:")
+-__msg("mark_precise: frame0: last_idx 9 first_idx 0 subseq_idx 10")
+-__msg("mark_precise: frame0: regs= stack=-8 before 9: (b7) r4 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 8: (b7) r3 = 0")
+-__msg("mark_precise: frame0: regs= stack=-8 before 7: (bf) r2 = r8")
+-__msg("mark_precise: frame0: regs= stack=-8 before 6: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs= stack=-8 before 5: (7b) *(u64 *)(r10 -8) = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 4: (b7) r6 = 3")
+-/* State entering callback body popped from states stack */
+-__msg("from 10 to 17: frame1:")
++__msg("14: (0f) r1 += r6                     ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=12) R6=12")
+ __msg("17: frame1: R10=fp0 cb")
+ __msg("17: (b7) r0 = 0")
+ __msg("18: (95) exit")
+ __msg("returning from callee:")
+ __msg("to caller at 10:")
+-/* r1, r4 are always precise for bpf_loop(),
+- * fp-8 was marked before backtracking to callback body.
+- */
+-__msg("frame 0: propagating r1,r3,r4,fp-8")
+-__msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r1,r3,r4 stack=-8 before 18: (95) exit")
+-__msg("mark_precise: frame1: regs= stack= before 17: (b7) r0 = 0")
+-__msg("mark_precise: frame1: regs= stack= before 10: (85) call bpf_loop#181")
+-__msg("mark_precise: frame0: parent state regs= stack=:")
+-__msg("from 18 to 10: safe")
++/* fp-8 is what it was before the callback */
++__msg("from 18 to 10: within")
+ __naked int parent_stack_slot_precise_with_callback(void)
+ {
+ 	asm volatile (
+@@ -604,9 +436,7 @@ __naked int parent_stack_slot_precise_with_callback(void)
+ 
+ 		"r6 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r6 is forced to be precise and has to be propagated
+-		 * back to the beginning, handling (and ignoring) subprog call
+-		 */
++		/* here r6 has to be known: the subprog call doesn't change it */
+ 		"r1 += r6;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+ 		"exit;"
+@@ -621,27 +451,18 @@ __naked int parent_stack_slot_precise_with_callback(void)
+ __noinline __used
+ static __u64 subprog_with_precise_arg(__u64 x)
+ {
+-	return vals[x]; /* x is forced to be precise */
++	return vals[x]; /* x has to be known */
+ }
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("8: (0f) r2 += r1")
+-__msg("mark_precise: frame1: last_idx 8 first_idx 0")
+-__msg("mark_precise: frame1: regs=r1 stack= before 6: (18) r2 = ")
+-__msg("mark_precise: frame1: regs=r1 stack= before 5: (67) r1 <<= 2")
+-__msg("mark_precise: frame1: regs=r1 stack= before 2: (85) call pc+2")
+-__msg("mark_precise: frame0: regs=r1 stack= before 1: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 0: (b7) r6 = 3")
++__msg("8: (0f) r2 += r1                      ; R1=12 R2=map_value(map=.data.vals,ks=4,vs=16,imm=12)")
+ __naked int subprog_arg_precise(void)
+ {
+ 	asm volatile (
+ 		"r6 = 3;"
+ 		"r1 = r6;"
+-		/* subprog_with_precise_arg expects its argument to be
+-		 * precise, so r1->r6 will be marked precise from inside the
+-		 * subprog
+-		 */
++		/* subprog_with_precise_arg needs to know its argument */
+ 		"call subprog_with_precise_arg;"
+ 		"r0 += r6;"
+ 		"exit;"
+@@ -666,7 +487,7 @@ static __u64 subprog_spill_reg_precise(void)
+ 		 * verifier log output)
+ 		 */
+ 		"*(u64 *)(r10 - 16) = r2;"
+-		/* use both spills as return result to propagete precision everywhere */
++		/* use both spills as return result */
+ 		"r0 = *(u64 *)(r10 - 16);"
+ 		"r2 = *(u64 *)(r1 + 0);"
+ 		"r0 += r2;"
+@@ -676,32 +497,14 @@ static __u64 subprog_spill_reg_precise(void)
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("10: (0f) r1 += r7")
+-__msg("mark_precise: frame0: last_idx 10 first_idx 7 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r7 stack= before 9: (bf) r1 = r8")
+-__msg("mark_precise: frame0: regs=r7 stack= before 8: (27) r7 *= 4")
+-__msg("mark_precise: frame0: regs=r7 stack= before 7: (79) r7 = *(u64 *)(r10 -8)")
+-__msg("mark_precise: frame0: parent state regs= stack=-8:  R8=map_value(map=.data.vals,ks=4,vs=16) R10=fp0 fp-8=P1")
+-__msg("mark_precise: frame0: last_idx 18 first_idx 0 subseq_idx 7")
+-__msg("mark_precise: frame0: regs= stack=-8 before 18: (95) exit")
+-__msg("mark_precise: frame1: regs= stack= before 17: (0f) r0 += r2")
+-__msg("mark_precise: frame1: regs= stack= before 16: (79) r2 = *(u64 *)(r1 +0)")
+-__msg("mark_precise: frame1: regs= stack= before 15: (79) r0 = *(u64 *)(r10 -16)")
+-__msg("mark_precise: frame1: regs= stack= before 14: (7b) *(u64 *)(r10 -16) = r2")
+-__msg("mark_precise: frame1: regs= stack= before 13: (7b) *(u64 *)(r1 +0) = r2")
+-__msg("mark_precise: frame1: regs=r2 stack= before 6: (85) call pc+6")
+-__msg("mark_precise: frame0: regs=r2 stack= before 5: (bf) r2 = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 4: (07) r1 += -8")
+-__msg("mark_precise: frame0: regs=r6 stack= before 3: (bf) r1 = r10")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 1")
++__msg("10: (0f) r1 += r7                     ; R1=map_value(map=.data.vals,ks=4,vs=16,imm=4) R7=4")
+ __naked int subprog_spill_into_parent_stack_slot_precise(void)
+ {
+ 	asm volatile (
+ 		"r6 = 1;"
+ 
+ 		/* pass pointer to stack slot and r6 to subprog;
+-		 * r6 will be marked precise and spilled into fp-8 slot, which
+-		 * also should be marked precise
++		 * r6 will be spilled into fp-8 slot
+ 		 */
+ 		"r1 = r10;"
+ 		"r1 += -8;"
+@@ -716,8 +519,8 @@ __naked int subprog_spill_into_parent_stack_slot_precise(void)
+ 
+ 		"r7 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r7 is forced to be precise and has to be propagated
+-		 * back to the beginning, handling subprog call and logic
++		/* here r7 has to be known: it's what the subprog spilled into
++		 * the stack slot of its caller
+ 		 */
+ 		"r1 += r7;"
+ 		"r0 = *(u32 *)(r1 + 0);"
+@@ -730,32 +533,12 @@ __naked int subprog_spill_into_parent_stack_slot_precise(void)
+ 
+ SEC("?raw_tp")
+ __success __log_level(2)
+-__msg("17: (0f) r1 += r0")
+-__msg("mark_precise: frame0: last_idx 17 first_idx 0 subseq_idx -1")
+-__msg("mark_precise: frame0: regs=r0 stack= before 16: (bf) r1 = r7")
+-__msg("mark_precise: frame0: regs=r0 stack= before 15: (27) r0 *= 4")
+-__msg("mark_precise: frame0: regs=r0 stack= before 14: (79) r0 = *(u64 *)(r10 -16)")
+-__msg("mark_precise: frame0: regs= stack=-16 before 13: (7b) *(u64 *)(r7 -8) = r0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 12: (79) r0 = *(u64 *)(r8 +16)")
+-__msg("mark_precise: frame0: regs= stack=-16 before 11: (7b) *(u64 *)(r8 +16) = r0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 10: (79) r0 = *(u64 *)(r7 -8)")
+-__msg("mark_precise: frame0: regs= stack=-16 before 9: (7b) *(u64 *)(r10 -16) = r0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 8: (07) r8 += -32")
+-__msg("mark_precise: frame0: regs=r0 stack= before 7: (bf) r8 = r10")
+-__msg("mark_precise: frame0: regs=r0 stack= before 6: (07) r7 += -8")
+-__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r7 = r10")
+-__msg("mark_precise: frame0: regs=r0 stack= before 21: (95) exit")
+-__msg("mark_precise: frame1: regs=r0 stack= before 20: (bf) r0 = r1")
+-__msg("mark_precise: frame1: regs=r1 stack= before 4: (85) call pc+15")
+-__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 1")
++__msg("17: (0f) r1 += r0                     ; R0=4 R1=fp-4")
+ __naked int stack_slot_aliases_precision(void)
+ {
+ 	asm volatile (
+ 		"r6 = 1;"
+-		/* pass r6 through r1 into subprog to get it back as r0;
+-		 * this whole chain will have to be marked as precise later
+-		 */
++		/* pass r6 through r1 into subprog to get it back as r0 */
+ 		"r1 = r6;"
+ 		"call identity_subprog;"
+ 		/* let's setup two registers that are aliased to r10 */
+@@ -777,11 +560,10 @@ __naked int stack_slot_aliases_precision(void)
+ 		"r0 = *(u64 *)(r8 + 16);"
+ 		"*(u64 *)(r7 - 8) = r0;"
+ 		"r0 = *(u64 *)(r10 - 16);"
+-		/* get ready to use r0 as an index into array to force precision */
++		/* get ready to use r0 as an index into array */
+ 		"r0 *= 4;"
+ 		"r1 = %[vals];"
+-		/* here r0->r1->r6 chain is forced to be precise and has to be
+-		 * propagated back to the beginning, including through the
++		/* here r0 has to be known: the constant went through the
+ 		 * subprog call and all the stack spills and loads
+ 		 */
+ 		"r1 += r0;"
+@@ -820,15 +602,11 @@ static unsigned long identity_tail_call(void)
+ SEC("?raw_tp")
+ __failure __log_level(2)
+ __msg("13: (85) call bpf_tail_call#12")
+-__msg("mark_precise: frame1: last_idx 13 first_idx 0 subseq_idx -1 ")
+ __msg("returning from callee:")
+ __msg("frame1: R0=scalar() R6=3 R10=fp0")
+ __msg("to caller at 4:")
+ __msg("R0=scalar() R6=map_value(map=.data.vals,ks=4,vs=16) R10=fp0")
+ __msg("6: (0f) r1 += r0")
+-__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r1 = r6")
+-__msg("mark_precise: frame0: regs=r0 stack= before 4: (27) r0 *= 4")
+-__msg("mark_precise: frame0: parent state regs=r0 stack=:  R0=Pscalar() R6=map_value(map=.data.vals,ks=4,vs=16) R10=fp0")
+ __msg("math between map_value pointer and register with unbounded min value is not allowed")
+ __naked int subprog_result_tail_call(void)
+ {
+@@ -860,36 +638,22 @@ static int ld_abs_subprog(void)
+ }
+ 
+ /*
+- * Buggy verifier did not properly backtrack early subprogram exit
+- * modelled for BPF_LD | BPF_ABS instruction, causing a segfault.
++ * BPF_LD | BPF_ABS instruction is modelled as an early exit of the subprogram.
++ * r7 is known on both paths.
+  */
+ SEC("socket")
+ __success
+ __log_level(2)
+-/* early exit path */
+-__msg("3: (0f) r1 += r7")
+-__msg("mark_precise: frame0: regs=r7 stack= before 2: (bf) r1 = r10")
+-__msg("mark_precise: frame0: regs=r7 stack= before 9: (20) r0 = *(u32 *)skb[0]")
+-__msg("mark_precise: frame1: regs= stack= before 8: (bf) r7 = r1")
+-__msg("mark_precise: frame1: regs= stack= before 7: (bf) r6 = r1")
+-__msg("mark_precise: frame1: regs= stack= before 1: (85) call pc+5")
+-__msg("mark_precise: frame0: regs=r7 stack= before 0: (b7) r7 = -8")
+-/* fallthrough path */
+-__msg("3: (0f) r1 += r7")
+-__msg("mark_precise: frame0: regs=r7 stack= before 2: (bf) r1 = r10")
+-__msg("mark_precise: frame0: regs=r7 stack= before 10: (95) exit")
+-__msg("mark_precise: frame1: regs= stack= before 9: (20) r0 = *(u32 *)skb[0]")
+-__msg("mark_precise: frame1: regs= stack= before 8: (bf) r7 = r1")
+-__msg("mark_precise: frame1: regs= stack= before 7: (bf) r6 = r1")
+-__msg("mark_precise: frame1: regs= stack= before 1: (85) call pc+5")
+-__msg("mark_precise: frame0: regs=r7 stack= before 0: (b7) r7 = -8")
++/* the early exit and the exit of the subprogram give the same state */
++__msg("from 10 to 2: within")
++__msg("3: (0f) r1 += r7                      ; R1=fp-8 R7=-8")
+ __naked int ld_abs_backtrack_both_paths(void)
+ {
+ 	asm volatile (
+ 		"r7 = -8;"
+ 		"call ld_abs_subprog;"
+ 		"r1 = r10;"
+-		"r1 += r7;" /* mark r7 as precise */
++		"r1 += r7;"
+ 		"*(u64 *)(r1 + 0) = 0;"
+ 		"r0 = 0;"
+ 		"exit;"
+diff --git a/tools/testing/selftests/bpf/verifier/precise.c b/tools/testing/selftests/bpf/verifier/precise.c
+index a9242103dc47..de9d35ed8a4b 100644
+--- a/tools/testing/selftests/bpf/verifier/precise.c
++++ b/tools/testing/selftests/bpf/verifier/precise.c
+@@ -36,26 +36,7 @@
+ 	},
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ 	.fixup_map_array_48b = { 1 },
+-	.result = VERBOSE_ACCEPT,
+-	.errstr =
+-	"mark_precise: frame0: last_idx 26 first_idx 20\
+-	mark_precise: frame0: regs=r2 stack= before 25\
+-	mark_precise: frame0: regs=r2 stack= before 24\
+-	mark_precise: frame0: regs=r2 stack= before 23\
+-	mark_precise: frame0: regs=r2 stack= before 22\
+-	mark_precise: frame0: regs=r2 stack= before 20\
+-	mark_precise: frame0: parent state regs=r2 stack=:\
+-	mark_precise: frame0: last_idx 19 first_idx 10\
+-	mark_precise: frame0: regs=r2 stack= before 19\
+-	mark_precise: frame0: regs=r9 stack= before 18\
+-	mark_precise: frame0: regs=r8,r9 stack= before 17\
+-	mark_precise: frame0: regs=r0,r9 stack= before 15\
+-	mark_precise: frame0: regs=r0,r9 stack= before 14\
+-	mark_precise: frame0: regs=r9 stack= before 13\
+-	mark_precise: frame0: regs=r9 stack= before 12\
+-	mark_precise: frame0: regs=r9 stack= before 11\
+-	mark_precise: frame0: regs=r9 stack= before 10\
+-	mark_precise: frame0: parent state regs= stack=:",
++	.result = ACCEPT,
+ },
+ {
+ 	"precise: test 2",
+@@ -95,24 +76,8 @@
+ 	},
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ 	.fixup_map_array_48b = { 1 },
+-	.result = VERBOSE_ACCEPT,
++	.result = ACCEPT,
+ 	.flags = BPF_F_TEST_STATE_FREQ,
+-	.errstr =
+-	"26: (85) call bpf_probe_read_kernel#113\
+-	mark_precise: frame0: last_idx 26 first_idx 22\
+-	mark_precise: frame0: regs=r2 stack= before 25\
+-	mark_precise: frame0: regs=r2 stack= before 24\
+-	mark_precise: frame0: regs=r2 stack= before 23\
+-	mark_precise: frame0: regs=r2 stack= before 22\
+-	mark_precise: frame0: parent state regs=r2 stack=:\
+-	mark_precise: frame0: last_idx 20 first_idx 20\
+-	mark_precise: frame0: regs=r2 stack= before 20\
+-	mark_precise: frame0: parent state regs=r2 stack=:\
+-	mark_precise: frame0: last_idx 19 first_idx 17\
+-	mark_precise: frame0: regs=r2 stack= before 19\
+-	mark_precise: frame0: regs=r9 stack= before 18\
+-	mark_precise: frame0: regs=r8,r9 stack= before 17\
+-	mark_precise: frame0: parent state regs= stack=:",
+ },
+ {
+ 	"precise: cross frame pruning",
+@@ -153,17 +118,7 @@
+ 	},
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ 	.flags = BPF_F_TEST_STATE_FREQ,
+-	.errstr = "mark_precise: frame0: last_idx 5 first_idx 5\
+-	mark_precise: frame0: parent state regs=r4 stack=:\
+-	mark_precise: frame0: last_idx 4 first_idx 2\
+-	mark_precise: frame0: regs=r4 stack= before 4\
+-	mark_precise: frame0: regs=r4 stack= before 3\
+-	mark_precise: frame0: last_idx 5 first_idx 5\
+-	mark_precise: frame0: parent state regs=r0 stack=:\
+-	mark_precise: frame0: last_idx 4 first_idx 2\
+-	mark_precise: frame0: regs=r0 stack= before 4\
+-	5: R0=-1 R4=0",
+-	.result = VERBOSE_ACCEPT,
++	.result = ACCEPT,
+ 	.retval = -1,
+ },
+ {
+@@ -182,23 +137,7 @@
+ 	},
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ 	.flags = BPF_F_TEST_STATE_FREQ,
+-	.errstr = "mark_precise: frame0: last_idx 7 first_idx 7\
+-	mark_precise: frame0: parent state regs=r4 stack=:\
+-	mark_precise: frame0: last_idx 6 first_idx 4\
+-	mark_precise: frame0: regs=r4 stack= before 6: (b7) r0 = -1\
+-	mark_precise: frame0: regs=r4 stack= before 5: (79) r4 = *(u64 *)(r10 -8)\
+-	mark_precise: frame0: regs= stack=-8 before 4: (7b) *(u64 *)(r3 -8) = r0\
+-	mark_precise: frame0: parent state regs=r0 stack=:\
+-	mark_precise: frame0: last_idx 3 first_idx 3\
+-	mark_precise: frame0: regs=r0 stack= before 3: (55) if r3 != 0x7b goto pc+0\
+-	mark_precise: frame0: regs=r0 stack= before 2: (bf) r3 = r10\
+-	mark_precise: frame0: regs=r0 stack= before 1: (57) r0 &= 255\
+-	mark_precise: frame0: parent state regs=r0 stack=:\
+-	mark_precise: frame0: last_idx 0 first_idx 0\
+-	mark_precise: frame0: regs=r0 stack= before 0: (85) call bpf_get_prandom_u32#7\
+-	mark_precise: frame0: last_idx 7 first_idx 7\
+-	mark_precise: frame0: parent state regs= stack=:",
+-	.result = VERBOSE_ACCEPT,
++	.result = ACCEPT,
+ 	.retval = -1,
+ },
+ {
 -- 
 2.55.0
 
