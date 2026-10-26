@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983921;
-	b=JYhJxBLLHJs/9ORQWoMxpvVordoXm9BSlW3F1CgZX0kAs2ygeUOIBzcDa7kTUYb3ygK5
-	 gKWaji7SKcnGCIEk1R581MwQG55NLw3WCwoTeOspWWsFCdNTuDkHbKIMCB2OIC3M119zD
-	 Dtu9LsFV/RGqvYMR0fSb/bAA3iZuCBEWiC8NkqOMzGa05CozbEGEI1uVdv6vGf8nryYWl
-	 kWbzmm/rNIl25gipWeCvyszF91fj4KcIt8MmuEKiRaSOkC1LzccHxGatjxP5bBP/wk5dK
-	 XK/Rk+X8FNbcHYUy7vEZtGtuZYSPuhETTzno3LP1TRJ+nrzncnA/Z5Nwd90C7cQ9FgA==
+	t=1792983927;
+	b=1cL5XyaNSy3vqNZVVio1cu4TETVqiJN6WSoR/ft3k0xjcpodQS8MbDBwGSpi+gVmQhsM
+	 Y/ajnDQ5SFsliZahQOL0YRYtl5qBiRxD+73i06HT/ZuROf6+EZlC89ID6E6cVrMvgmbhw
+	 +xvE0XdKIXPpl9DPsgO1LK/1s6U/adzJDO67W6pqV6pbjSFq1QdZk4s9nn5VspurvR5E0
+	 iY5vzi6/2arPKtRXXlhReIqksmHZgp6V9yiBD1KL/GY3+WMW0nX1uBBiNtubmNlpk5Iua
+	 rPewrp1R70Xrq5uAMQCf+jehQNbod83lSclMv0q3Icu8kSxwEGhqYK4IdyUTZlbInEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983921;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983927;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=B3e3d9Thn8bseHsVpC/9G/U0vgtBNm9MfmIERy+ZLnE=;
-	b=J158bDiZYAk4KFbazfZgtSuFIAyuFpwaVMTAb6v2Gs+2SGBJrUSun/m6cg17P9lUZwK/
-	 647s7CiiDHECQ9K7mNLWLxK49d0DRyFtSOVxg0FLQEwFPABkrTi+CsZHBZ94o4eUZe5/9
-	 7rYkapo1xNMBWejsaxKVSzqfBbNmn/9Wvps9sH7S7KW+05FLsWtkfr00nHMYDvsFkJa+1
-	 9qtgTi0RgEay3aBbzmMFyPdkKN+KTsk2/5k0FE1iSZNgnPa5qEUC+XnT6cPTTiZz1vsMi
-	 wtipZrdAfx6J7aLZS6UwaU1HLTB352ijWG6t6n+QmEPdoU4dlPWU3RxxTxMN7S0kBqA==
+	bh=jG3upgMBWkK2QfhlpI5beUeY/wB9VCpfp8ItfJsfE/g=;
+	b=AACRPyuZ2LwNLcJcOWB6FJACjrS+T463p27Xq4WeFo89PNp8dS2D4Diav26iN5gO+1US
+	 Nd9GZsGYRPT2fXH/sLGH5Fbta1NoNxCFCsnCJSq7moDdV6SuBDyUHce+Y3K6Pn6Gaf87k
+	 p/GARjv+Fu7ll98nqO1SEBulq73pjsYK+mDVy4dz7hXLb7U6Ccu8nZaIve1K6vF44QGTn
+	 Ww9zogXbVwYK9HFp3LTYWyPQiCSUidKtjUdOx/SnAP//+t3v8eRpQBQBwAKpeHMtPUxLE
+	 hUv3GATgjcpClTn2iS2Z6HZDuOUxptifrbwc/JiPDu9R0EWdye6Nr/WZ5keUshkPoGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gHHENuY7;
-	arc=none smtp.remote-ip=209.85.210.175
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P7Ld2NLG;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BDC9606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2BDC9606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7491606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E7491606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gHHENuY7
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8a05da1cc1fso795366b3a.2
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:21 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P7Ld2NLG
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3ab752f6244so2328222a91.2
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983920; x=1793588720; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983926; x=1793588726; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=B3e3d9Thn8bseHsVpC/9G/U0vgtBNm9MfmIERy+ZLnE=;
-        b=gHHENuY7eDgB12IFjs+CP2sEJ34KJx1S7RyJxtzSq9EZnl+NfUoVtvHjgQQ0dLgwPV
-         tpcMw0YwStu4vGW+bjUJxfFxH+QtU9rRrmHrFLl+bXxMLx7TDJdUVX5qwGli/sSxnMPU
-         OqDwNrqPOrDC+Xm0qepPn8JooGOySITVjm+j4OnY/yS/BGg2drKO7CgMpmi9crGhNice
-         +dD4KbgyUMhbAMfDB4OvKfGIATAcCM3CeMRYpn4tmIWUAcYFYcriBBUw8PGAunmBnEaV
-         PG+wRbwKGUkQkAb8cPJGyyER30Q0HyuH6bebD5GBkYJgvg9fdesnUMC9tQy0SOpDuCot
-         a6bg==
+        bh=jG3upgMBWkK2QfhlpI5beUeY/wB9VCpfp8ItfJsfE/g=;
+        b=P7Ld2NLGYcC60p6lrElkENOZ/BUm7Z7FZ34JqzTug0tuaC1w12NpE8GNT0vrF8kSIE
+         ffioj3C1GtIinLwlLBz7kSORKO2OMLZ/JMCaDo6URAa+CdNSZkVyjVBedid2qkYFFPQ9
+         UrzIIafH5FtUYoucBMyquZI2Ij+ONvF1w8zD78gX3f/MEFltxIvYETPfyzArc5Eu8VbQ
+         wErNb61BhYdmdv/v29WEd80sdabYqUuFXBm49+3hC+X3HdxFRTgQE5YeB/i63QvPtprN
+         AXhxhlZkF6q03OhNdNwvMWnVnOIxG5HMHNyEQd4dS0SqJegnExhjiE/eNYcmbyIdGaM7
+         7z5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983920; x=1793588720;
+        d=1e100.net; s=20260707; t=1792983926; x=1793588726;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=B3e3d9Thn8bseHsVpC/9G/U0vgtBNm9MfmIERy+ZLnE=;
-        b=0zyhH5vuoh/x1KlbJL5ERdWJ5dIMEUl/78z72qInNBEmlXrsd3BuOHfr3C/oyuxXpP
-         b1jsRJQvZV8w6q/qKqaV+hcTxIxcEyEyld3AnoqAtxfPCH0WMgEi9AEQqUPny+Cp6v9T
-         qzd7nZ2755LLP53ZtRq8xNAAcpmcvZCFjmUrR9skZhcjuhj1hPzXy+0EE4mclPVf1wcF
-         LMB6FHuvNPoksPBImAS2Ar3SZj0kgmWKUt7f+w+TcUv2DYk44H2dYckDseUITV2Rnj2K
-         SB0fei7T09IYklRxKVhncF7SNSwxwfnmk+AaKSw0e62yYqbiemz7P3WPby9o2ukk6d5b
-         D3lg==
-X-Gm-Message-State: AFq9FYIGqj0iwlofo5EF9Lk9qtc1ptNRty2NuHiIZzmF2sJtsm/7wqr1
-	ORuVlWoZlIhjhpjYwCgXjHCPVhTDAWJPP0KXYYWYi6+niR1DzShCKYVCjexdDw==
-X-Gm-Gg: AYBFou3myfbFohbK2W7dsRUTj3Zm5dlXi8pkTMOMBkb9hHSuN7YrhlkuML1knbNjdcY
-	Cp/0VrP1GtHwF7F5zZrEzFhlwq97n2oTC4g9b6L3mH1LjXLkH5oWc4aB/dgu2zBZDFJRPW1z83B
-	iz9sBIRsPTYbLrR9OhqffDs/9DYw6hRzPsaMl5K6/N44MUCHUXNkv4c3pn8JYXuTnpYkqg/7Cvp
-	8z1tMbs1jvmG6ccTnbqvRt3TJ3Chy/KirtUm/JF8dfwQR20O+J2sNPjvNHkAeaSRfK+moEpOUMS
-	N9Mz7biid7oj2ee4ul0Fns4vw9YeFxCQCjaLvaFe8LcIBt2BGyLuEKAUjGvIcVnhspI3LP+eTOv
-	uqlBY8qXkBNH7vU+Nj+84+2jE7Q2S2dlDxN9P4u2pDqUp+jZdpAiinj1/u0OSDXVSli9tF2yfXX
-	uI137pVnDojZ698ojlbcMcdSeg1iEwmViY7SUAZWr/LVGU2uSy9rAtzR0dG7TJvH4vO1gNZYzBO
-	c2DFzp+OH6S8JIQXWHoWnfQulyUhhq6hT40LNr5HXljmQZrdtaKJDpivit6daVIUglRhKjeB+wS
-	5rEVL04vh8WC5RFsEfOQPNHSyQ/HPLOxkOMb2lACfbv0ZQmxzx7+AnZ9wtR3iIKQvsNuY5uO9d1
-	P/ix3bxVlk0GsIamsYtaTy0Bx
-X-Received: by 2002:a05:6a00:3286:b0:89e:43ee:6538 with SMTP id d2e1a72fcca58-8a367255177mr4296618b3a.36.1792983920342;
-        Sun, 25 Oct 2026 20:05:20 -0700 (PDT)
+        bh=jG3upgMBWkK2QfhlpI5beUeY/wB9VCpfp8ItfJsfE/g=;
+        b=CC+ykHPQ+h126N7Vh80JLgRE+1E/GC0EORz3B0CHc8IIY3WS/kCZewlSt1kbx65fgL
+         WaxL/+jVIo5TnyK8TiMqtKKaTvrsRSVeuWEDPaxAiwvAmMfDoCrwU84Tlu0Lxjz1u/nk
+         cnDSjTaTROoDWDISUqzQ2JBGfyrCXZw3qEEhBzknBhxa2PJSNwr1qeFBMVK/jjrY6edV
+         hy64YEKKnSIjWcgLqteWxoKtKc8EyitfgatHbFWYCmm/fiyO1IoKgjedKIRdAKe5eGUG
+         8UVilLcNtVHhB5ymagrY9axC42GCB/lg16Ic0j6caAPVqgDBva6PaiyWH+DQ1cZWbr1R
+         sPVQ==
+X-Gm-Message-State: AFq9FYLKefhyHFku8turPp7785KIPV8rcuA/L2mEYGC6PvE7weaIuA+3
+	WhSjts3W27xU0XRg2bsW3kPXz2tN/9hXYG/3BPOg+8yNh+wUYkwkIq1R5j6DTw==
+X-Gm-Gg: AYBFou05WqKE33BNLVKXqf+oVO/eZ6y3ufAojjT/FCue4MXshDSOk7+MBad94pym7a0
+	EQH/AUoT+yMqpwugzG4ocIMdbV4KmlZfKBB3lDI/4LvOWzNrKpS1DrmgaDqJPQieWqdb2Yu97xh
+	kKHMNEUh7PD9gwjuAvZMcu2TsRwJqfNeLJzDILuVbxmyMHM2xStc8fn388cyVDHGkkpyS+goEkI
+	3j10O0dTdImEN45GLn1ogXkFHjbDk7XW4GSDETrsFLrJM53O7Q8MMSPBZa5vxT3srJO1aoO43Te
+	YFQJY/Z27I/2s+kzFS9TUR/f64D1CbdFvhlX365Xj+6zX/gEoJqu58yNxD+gf+Z6qzhlRszXzPB
+	ttyBG4/2g7IyrZuaovw7E5kOrd31/VSOw3DygMqdaVT8hJWiunTmvBdlMjmntCg93HhWOzmCYCW
+	+rJWI3ZlmYNAg/9C2FY0rjSXY4EJ+fr4t1YqHRndXRQpUTFy4Tw/fkG39wGEOLOChH/0MCj3JAE
+	eRxufuL5rDwV4K6so8wEfPQqr7s6IrFj+TIV78lff6EOqDJScqEI0SwFYl+ucEuofMd/6tZTaM8
+	X1bW8Kb7QXW32m8JzZjsGrGkHMLd4pq/IXxBdWE+M8bey6poETXl/+EvhGfHX/CRxQ3LaGpYomE
+	fsEU4ndMGZZ9D7bcmMPWhM4Jk
+X-Received: by 2002:a17:90b:2f4c:b0:39e:6d82:dca with SMTP id 98e67ed59e1d1-3adead489b3mr5707907a91.30.1792983926073;
+        Sun, 25 Oct 2026 20:05:26 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a36c10088fsm804147b3a.45.2026.10.25.20.05.19
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebbb1a13sm6171713a91.2.2026.10.25.20.05.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:05:20 -0700 (PDT)
+        Sun, 25 Oct 2026 20:05:25 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 57/81] selftests/bpf: Test 32 and 33 call frames
-Date: Mon, 26 Oct 2026 02:59:18 +0000
-Message-ID: <20261026025943.404450-58-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 58/81] bpf: Bump BPF_MAX_SUBPROGS to 1024
+Date: Mon, 26 Oct 2026 02:59:19 +0000
+Message-ID: <20261026025943.404450-59-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,149 +103,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-test_global_func3 has a chain of static subprogs that is one frame longer
-than the limit. The limit is 32 now. Make the chain longer, and add a prog
-that has exactly 32 frames.
+A prog that uses Rust crates can have more than 256 functions that the
+compiler does not inline. The verifier rejects a prog with 777 subprogs:
 
-  prog                     frames                      result
-  -----------------------  --------------------------  -----------------
-  global_func3_32_frames   main prog, f31 .. f1: 32    loads
-  global_func3             main prog, f32 .. f1: 33    rejected
+  too many subprograms
 
-The message for 33 frames shows 32:
+Bump the limit to 1024.
 
-  the call stack of 32 frames
-
-Two places in the verifier check the limit. The main pass counts the frames
-in a state. But it verifies these subprogs for the states at their entry,
-without the frames of the callers. Thus it does not see the chain.
-check_max_stack_depth() finds the chain, and it does not count the main
-prog.
+Two arrays in struct bpf_verifier_env grow: subprog_info[] and
+subprog_topo_order[]. The verifier allocates the struct with kvzalloc(),
+thus the size is not a problem. A load from a table of functions can give
+BPF_MAX_SUBPROGS different pointers. This limit grows too.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/test_global_func3.c   | 107 +++++++++++++++++-
- 1 file changed, 105 insertions(+), 2 deletions(-)
+ include/linux/bpf_verifier.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
-index b66abb350fb0..3b816afaa278 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func3.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
-@@ -101,9 +101,112 @@ int f16(struct __sk_buff *skb)
- 	return f15(skb);
- }
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 6139e889c86a..51abcaead6b9 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -974,7 +974,7 @@ struct bpf_verifier_log *bpf_log_attr_create_vlog(struct bpf_log_attr *attr_log,
+ 						  u32 size);
+ int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier_log *log);
  
-+static __attribute__ ((noinline))
-+int f17(struct __sk_buff *skb)
-+{
-+	return f16(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f18(struct __sk_buff *skb)
-+{
-+	return f17(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f19(struct __sk_buff *skb)
-+{
-+	return f18(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f20(struct __sk_buff *skb)
-+{
-+	return f19(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f21(struct __sk_buff *skb)
-+{
-+	return f20(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f22(struct __sk_buff *skb)
-+{
-+	return f21(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f23(struct __sk_buff *skb)
-+{
-+	return f22(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f24(struct __sk_buff *skb)
-+{
-+	return f23(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f25(struct __sk_buff *skb)
-+{
-+	return f24(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f26(struct __sk_buff *skb)
-+{
-+	return f25(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f27(struct __sk_buff *skb)
-+{
-+	return f26(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f28(struct __sk_buff *skb)
-+{
-+	return f27(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f29(struct __sk_buff *skb)
-+{
-+	return f28(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f30(struct __sk_buff *skb)
-+{
-+	return f29(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f31(struct __sk_buff *skb)
-+{
-+	return f30(skb);
-+}
-+
-+static __attribute__ ((noinline))
-+int f32(struct __sk_buff *skb)
-+{
-+	return f31(skb);
-+}
-+
-+SEC("tc")
-+__success
-+int global_func3_32_frames(struct __sk_buff *skb)
-+{
-+	return f31(skb);
-+}
-+
- SEC("tc")
--__failure __msg("the call stack of 17 frames")
-+__failure __msg("the call stack of 32 frames")
- int global_func3(struct __sk_buff *skb)
- {
--	return f16(skb);
-+	return f32(skb);
- }
+-#define BPF_MAX_SUBPROGS 256
++#define BPF_MAX_SUBPROGS 1024
+ 
+ /*
+  * A pointer to a static subprog in the value of a frozen read-only array map:
 -- 
 2.55.0
 
