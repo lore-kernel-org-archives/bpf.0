@@ -1,101 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793046699;
-	b=fUhTeHDw5vUpwPWVS9i0BQu1YcNk0BGG/ghTI73R49usS9L9E3BijVmrtZbcD6+Whbwk
-	 slTyhiVXeI9C5mhOUGCm3lfJ1RG7OgNo8RyxhWS+R80M7PqDc4wMq7FDob6QA7WV4l81l
-	 lRMqu/hy4wI8AQMMlEU1nzU5jJqRq2RkHQ5iuoMCVBgMBB/qDHLm+HG/P0/XGT5xOxKWD
-	 si9SMaosJSHB3prnUsK7mRwTfuEiCYkEorjiqzSj1rHOFbqMJs/7ixLsH/VCmulOc1PVX
-	 ReFjha+SGufO7NHGzsHEQ0Jdkdk7cEwduX0GSRRYu5ch3Eg9Fn2OC4UizhRtYnXpCvg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793046699;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
-	b=aXPKpSi0ykGm/2UxbWdTqO1cY2yCcorgqRWqNEdeZFU1W6HYSsWRBJOLV9bR/ZwrwYpO
-	 O3UIO//RngRSW1KjSIA2g3ypSADdXwpinArfmBPIYXfYKy2acxROqJ9kXz4afRDwLcHh5
-	 b4kvHznaUbJ1hngXu+DXc83J6vJKM9oZaMaYOBZtuISDLFYgLZ3bANkkJM9fBlYlrrggH
-	 RVq0HU1rXglmcOv12lqXB0LkUoK+AyUKZBANzlCO+l7ab7bq4NCnsrlHx5ib+XnCUR1SU
-	 D0KjDJGDSrEqBK+eG7V5UselFmdUVFxp2dE63ZqH/b6uW8J+qrBVFOdPAPSBgaTg+xA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=paul-moore.com;
-	spf=pass smtp.mailfrom=paul-moore.com;
-	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=L+wootqW;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.77
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793047614;
+	b=SnFpA4tIJh9+YVdTj9v6HkeCrY9X/XrFRCaEucuuX7qWqaWbFuOhE4BOWDSJz6Qo+KHl
+	 q19VNidJiq3RA8AXmPPKSip8wrXWWRwHJ3INVopuJnTlLoY75ehlg831ypIQzpO3+ZorM
+	 T7+YIimnBps5DaJXxZQGfwZ+493qQT46r5fzEclyWjGJcpGBLDBmD1I0LCk0ICb0e8J36
+	 Y8YzfnW6rUVhoxTZdH5+6NNtwVjqKaRZxGlPM6LEWU/hcDEwb9YyPJT16qZ09ejSAD60t
+	 dGfgz8nM40mFnn3TJua3Cntkh5vmF0mdu2CX4U1uFmlh1zUQPEvcTw8gIDpme+TqeUQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793047614;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=kh5e2W/fnEYGpxBeGCaqV9/JbXLam61+Dk9J7TB/zlA=;
+	b=w0EVj8m2qsMMEWndkStUjqgEt8U2Gg0y6xYGB3pkIH4n5MwgaO3u0GCxUL8+ookcGRr2
+	 2naJrbcNccZ1JBqaZgsk5k4ZJ++aPrSWlZzA4gcITT4HkuYQdDjtVbcJY79Q/d6e1q1D0
+	 3sFWCldrpXk77aEZly0S4PjeV5/xVn4fm783ghBdaVOpEQ7Xtr01aGS3saH4MSf1hEhPr
+	 AdKVTCk6dQrxS7KHw5XgIel/q0NmsUEd5mBKIWCJ31rCU7UZz0/T++OiSuTdGvlc/qm4B
+	 vTLIX4Sg6+HFNUy76vrpS2bO0ki8tcCgH0cefOGhosjaorNRSeu5dLIogdhRpWtKxkQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=onB49kUt;
+	arc=none smtp.remote-ip=91.218.175.77
+Received: from mta0.migadu.com (out-77.mta0.migadu.com [91.218.175.77])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABDD606A31D
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 20:31:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9ABDD606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2925E606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 20:46:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2925E606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=L+wootqW
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e9995ce866so31806165ad.0
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 13:31:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793046698; cv=none;
-        d=google.com; s=arc-20260327;
-        b=WCggMXudwmdCHt2NYQx0EwLkeEXPyqGCYZvPCBr46fDcb4lgECDYJNMsP+q+AjCSR3
-         XOo1cJpl3Qk/RKhKiO13/YssWgb++e2OmCLGbarMnWiMnCQuay5GKZvDeZnUKA4HhAM0
-         rtFsvetaXjwlPhhAUCRgU/pQjCqyQFkdHFC94R2NyXI3hc1docM++dkhtFXvlBa2mzsF
-         oIoRu8ZIlW+pt2uFtt9n2WpogryFOe1qIMvSx8ImzFL91uF+M9UwTVvyAdAHSt5wmm6i
-         V2859No9dl1zgjr4xeV3Ll8MpbdoLAAtLTFNyq0sNv0MxZyCb25z9soIbOAzPdic0uaU
-         XFYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
-        fh=Wm5L619v7n3PFgr0cxgKi+7JwabOEyLv9wXgxydqiNM=;
-        b=cPwJlm8E2uOKvG31oyRu2ApKPZeCfryR3VTIs1hFVS3C1qCj4MdBS5wIMMkE86BZEj
-         QWoVBFccqxkXA99nodCmM2wFwlzzxJtK2yhQWbUbD17B/rRxKd+/EWE2gZrxBygvrLpj
-         W4XE0JrxCATfRDLc1jbVn/Uh7u8QdL0K7GzW098ptUiCK13EWjyryuDFRPPmV9Wg9jKc
-         /7tqxqY3WIE3jDBb+ls07D9JNLqa9s/LQdnyqlff/29nWyYPHpTFkwQp3Gn1WP8tGDTs
-         Kwv5jpTb5bzTMDgabQ3RYbTQCqCUXZHRkyfGXOA48SvZ2YhkUnd3Q9vtg+tTWGU2uhIr
-         jkqw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1793046698; x=1793651498; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
-        b=L+wootqW5T77UGOryyw3TrOnPRmPjLL2i4uoI36Fb52hAChavbUjC2oAErcwcWcJq1
-         gwgn++rWkrUiN4eZmtVkxuIBOAsAZefl8wqr6EQCDZZBTjk1hO2UkuEyI8i5m5RjX7DJ
-         EK1ndGeANRMX4aTbpO+nvR7fIU63VxFQ9ffp4FXCojFjYD+fdWAL9RHBV9A1L4pnrwWe
-         CwArxDWTNOmGZ0DS0oKM86YGqSE9zdjWjrY330iiwsDo23ENOID23IQ7tNUIGTMjbHgT
-         BUbvwez+Hzl4lCCb8TSHKJZNqHNNnbu8YjtxV98iTts8xUYoVruc0kCp8wqVv0S6jf5w
-         /EUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793046698; x=1793651498;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
-        b=iyswZlvXpKewUuOCRVmm7EhIlhRdMeGXhsh59Ax7FlK5DhY7cwsPCfLzlIie29XsV/
-         NV3buM988APpmiYTJ1nM516pdXAyDNRo7tes+GnbHeBzkTMk03e+9TBR2apxl95P+DPD
-         C2Jc7lj7Wa53uvXVntEeIOYaMhoBxTV0or65t8VUTH+tBCZWoho8GHXkhiza0i0VFexU
-         wf9OO6t1+U1H9QcBeFdbH/9Q6CmbCWrBvJWS2UNdAKMEPFuKVcdIIAAZ8kQzqXgTGncv
-         7v8pkQF/Oe7toBU4zbQnSdsYCpS3LKBg9r/XF/zRiMgeb5rkT4Smly8ysbn5h77OBn+x
-         0aAQ==
-X-Forwarded-Encrypted: i=1; AKwUvByO5VYT2dmByGybFxGX+pLKaZ+PdQLdsxRS3NviLvL8DUtbGPKz4h+4w+dk4ogJIKOWJOw=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIiCPn2Qqh+tA+dd+zFMikitE/u37vE4S/Ckwa8nOoHxRhT7QFJ
-	fDQ84boXSp4d3qxeOeogYSNhsQ8ej5rS1RbpLoNcDIn5UhscoHNeuVEE1yczjMz7BJC0gfrW+q2
-	RMKxDUkROiFM26yEKTMZISsd/Kl12pT7Y7scRRMdh
-X-Gm-Gg: AYBFou0SPzhzd/sf4rNkg0slg9PiwRZo9kJyXx3q+m+Ub3x8fzJcnqjWdv5PKWdRkKG
-	Dh4mhCqnvO1qdU1RYA1bngWKqyhBBNRGwtwT3OTg53WrC/yqrEqZthM+A00IbYKEisbcAgWXlbi
-	18hFybJ2rISLvLQrAbqhY4aK/5IFDVDs38XvKuIWmn5f7Bo/nzr1xVJaRYLoD2kDC24Mu17wzXK
-	cerC3MYjDCawoBpRsgKEMdVce/CLMKCaAcJkdiOvyWL5aiYqlZ8Gwe5mhyTxhwRJZQf67vuot70
-	msEqAO/wz7g3E4dBBTNqxPZpHruhcu06zES58i3gMUz+jfxc2Z1gGDfg39aoyFXMNebkl5DnUUF
-	aehIKDPEx00dQccC9IiwO0hmH1myAqxx9ynY5D7/X+In1ATR4ibZuDr/9Uwr5/qw5uY9FFL0kJv
-	1hTHz4kKVdI1E/Xg==
-X-Received: by 2002:a17:902:ecd2:b0:2e8:30dd:523d with SMTP id
- d9443c01a7336-2ea9c620609mr71569325ad.13.1793046697876; Mon, 26 Oct 2026
- 13:31:37 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=onB49kUt
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=C4Y13M+jrENBRCet6RI0EFW34E6acTeziluGPaYgzMg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793047610; v=1; x=1793652410;
+ b=onB49kUt0BJOzdc8ukrKdL3OTPSXIiiEx2fxGvUojzpSnnFjRCP92hfR8Vmy5gjiTtuWRFPz
+ Qr9DbGybS6JyS4cguMls/Baql4WYbtsacKY0yAXdGO08864Sp0/+/2v+2HXZNYnQtLbnkGC0Yf1
+ hh8TaGBPS5zKpDW6W/3W6ouY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 415063d7dbed8587;
+	Mon, 26 Oct 2026 20:46:50 +0000
+X-Mizu-Trace-ID: 415063d7dbed8587
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <8653c48c-8bdb-40be-adf7-8ea2db8f4298@linux.dev>
+Date: Mon, 26 Oct 2026 13:46:45 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,109 +58,220 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
-In-Reply-To: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 26 Oct 2026 16:31:25 -0400
-X-Gm-Features: AclHuK_MBYtdpmV00LiIGiHwgdDyciJ8YZFfqnRLK0ynU1qoZWOLvejR9vdc3xM
-Message-ID: <CAHC9VhR4rMydWiD-RFv-ABiYSG_txJuyrtdaowEXPY=CHEvFXA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] ns: fixes for the namespace LSM hooks
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 06/12] bpf: Track low-32 scalar equality
+ across sign-extending movs
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+ <20261020161907.2115379-7-vineet.gupta@linux.dev>
+ <sashiko-outbox-179390@kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <sashiko-outbox-179390@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 26, 2026 at 5:57=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
+On 10/20/26 9:57 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] bpf: empty range after reg_bounds_sync() in sync_linked_regs()
+> --
 >
-> I tried to switch systemd-nsresourced over to the namespace_free LSM
-> hook that went in this cycle. I explicitly developed it to work nicely
-> with that. But the version that is merged is broken for that case.
+> commit ad01f18c15eb8cfa9a97b984758db9dd254aace2
+> Author: Vineet Gupta <vineet.gupta@linux.dev>
 >
-> The namespace_free hook is never called. security_namespace_free() bails
-> if ns->ns_security is NULL and that's only allocated if an LSM requests
-> a namespace blob. Nobody does. Landlock doesn't care as it only uses
-> namespace_init and namespace_install but a bpf program attached to
-> namespace_free never runs. And it can't work around that either. We
-> could make the bpf LSM request a blob but that would just be a way to
-> make the hook fire. So call it unconditionally like we do for
-> superblocks, files and bpf maps.
+> bpf: Track low-32 scalar equality across sign-extending movs
 >
-> The bpf LSM also marks the arguments of namespace_init and
-> namespace_free as trusted. Curiously that patch was also dropped.
+> This commit adds BPF_REG_LINK_SEXT to track low-32 scalar equality across
+> 32-bit sign-extending moves, using sext_32_to_64() and tnum_sext() to
+> propagate bounds in sync_linked_regs().
 >
-> namespace_init is called before the namespace is set up and if anything
-> fails afterwards the namespace is freed without looking at its reference
-> count. namespace_free is called on the way out. There's no kfunc that
-> takes a namespace yet but once there is one a program could take a
-> reference to a namespace that's about to be freed. So add both hooks to
-> untrusted_lsm_hooks.
->
-> The namespace_init hook also always sees a namespace id of zero because
-> the id is only allocated after the hook has run. The id is the only
-> identifier of a namespace that is never recycled. So it's what a bpf LSM
-> wants to use to track a namespace from namespace_init until
-> namespace_free.
->
-> The inode number is recycled way too quickly for that. So allocate the
-> id in __ns_common_init() before the hook is called. Then ns_tree_add()
-> doesn't need to allocate ids anymore and ns_tree_add_raw() can go.
-> Landlock keeps logging zero for denied namespace creation because that's
-> what it documents.
->
-> I'd want to get the first three patches into v7.4 since the hooks are
-> new this cycle. The systemd change I have for this uses the
-> namespace_free hook whenever the kernel has it. On a kernel with the
-> hook but without the first fix it would never learn about dead user
-> namespaces.
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 6afd718ede647..4621b476b206e 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>> @@ -6090,6 +6090,25 @@ static void zext_32_to_64(struct bpf_reg_state *reg)
+>>   	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
+>>   }
+>>   
+>> +/*
+>> + * The sign-extending counterpart. Signed bounds carry over directly because
+>> + * sign extension is monotonic over the signed 32-bit range.
+>> + */
+>> +static void sext_32_to_64(struct bpf_reg_state *reg)
+>> +{
+>> +	/*
+>> +	 * See comment at reg_step_check_unsigned(). Sign extension subtracts
+>> +	 * 2^32 from every value with bit 31 set, which preserves a residue
+>> +	 * mod step only when step divides 2^32, so the line cannot be kept.
+>> +	 * The zero-extending twin calls reg_step_check_unsigned(reg, 32) for
+>> +	 * the same reason; the unsigned form does not apply here because the
+>> +	 * result is not the low 32 bits but the low 32 bits moved.
+>> +	 */
+>> +	reg_step_reset(reg);
+>> +	reg->var_off = tnum_sext(reg->var_off, 4);
+>> +	reg_set_srange64(reg, reg_s32_min(reg), reg_s32_max(reg));
+>> +}
+> [ ... ]
+>> @@ -18795,9 +18843,26 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+>>   			scalar32_min_max_add(reg, &fake_reg);
+>>   			scalar_min_max_add(reg, &fake_reg);
+>>   			reg->var_off = tnum_add(reg->var_off, fake_reg.var_off);
+>> -			if (reg->link_kind == BPF_REG_LINK_ZEXT ||
+>> -			    known_reg->link_kind == BPF_REG_LINK_ZEXT)
+>> +			if (reg->link_kind == BPF_REG_LINK_SEXT) {
+>> +				sext_32_to_64(reg);
+>> +			} else if (reg->link_kind == BPF_REG_LINK_ZEXT ||
+>> +				   known_reg->link_kind == BPF_REG_LINK_ZEXT ||
+>> +				   known_reg->link_kind == BPF_REG_LINK_SEXT) {
+>> +				/*
+>> +				 * Either @reg is itself the zero extension, or
+>> +				 * @reg has no 32-bit kind and @known_reg does
+>> +				 * -- the reverse direction, where the guard
+>> +				 * above has already proved @reg fits 32 bits.
+>> +				 * Then @reg is @known_reg's low half with
+>> +				 * nothing above it, whichever way @known_reg
+>> +				 * filled its own high half, so the zero
+>> +				 * extension is the reconstruction for both
+>> +				 * kinds. BPF_REG_LINK_FULL is not here on
+>> +				 * purpose: it relates all 64 bits and must not
+>> +				 * be truncated.
+>> +				 */
+>>   				zext_32_to_64(reg);
+>> +			}
+>>   			/*
+>>   			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
+>>   			 * link over a wide base does not propagate back, so the
+> [Severity: Medium]
+> Can sync_linked_regs() leave reg with CNUM64_EMPTY and CNUM32_EMPTY after
+> reg_bounds_sync(), triggering a register invariants violation on the next
+> instruction that inspects the register?
 
-From what I'm reading the LSM framework patches don't meet the typical
-LSM criteria for stable/RC fixes: there is no serious bug/panic, and
-there is no functional regression from a previous release.  It also
-appears that the existing Landlock namespace code still works as
-expected.  This looks like one of those unfortunate circumstances
-where a new use case wasn't tested thoroughly enough before the merge
-window, so it can wait for the next one.  We've already identified
-other LSM/namespace issues that are targeting Linux v7.5, the
-security_namespace_free() change is one of those as far as I'm
-concerned.
+Yes and actually two things:
 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
-> Christian Brauner (8):
->       lsm: always call the namespace_free hook
->       bpf: don't mark namespace_init and namespace_free arguments as trus=
-ted
->       selftests/bpf: add verifier tests for the namespace LSM hooks
->       landlock: pass the namespace id to log to check_ns_type()
->       ns: allocate the namespace id before the namespace_init hook
->       nstree: drop ns_tree_add_raw()
->       lsm: fix the security_namespace_init() kernel-doc
->       selftests/bpf: add a lifecycle test for the namespace LSM hooks
+  - tnum_intersect() has no tnum_overlap() precheck, so two disagreeing 
+known bits become a known 1 rather than a detected contradiction.
+  - range_bounds_violation() tests only cnum32/64_is_empty, and it runs 
+*before* reg_bounds_sync(). A contradiction that only materialises 
+inside the sync through __update_reg_bounds() or 
+deduce_bounds_32_from_64() is therefore not caught by the restore that 
+4/12 added.
+
+So the guard added in 4/12 is narrower than the problem it is named for.
+
+The reproducer in your 4/12 report does not fire, though, and the log 
+says why. Built as a socket filter on a patch-10 kernel it verifies 
+clean, and the walk goes 0..7 then straight to 10:
+
+       5: R7=scalar(id=1+0,...,var_off=(0x4; 0x1))
+       6: (45) if r6 & 0x2 goto pc+1
+       6: R6=scalar(id=1,...,var_off=(0x4; 0xffffffff00000001))
+       7: (05) goto pc+2
+      10: (b7) r0 = 0
+
+The "r9 = 0; r7 %= r9" pair at 8 and 9 is never walked. r6's var_off has 
+bit 1 known zero: value 0x4, and bit 1 is not in the mask, so "if r6 & 
+2" is resolved statically and the contradicting path is pruned.
+
+r6 knows that because of 8/12 itself: its reverse arm pinned the base's 
+low half from r7, which is why R6 carries smin32/umin32=4, 
+smax32/umax32=5 and the low var_off (0x4; 0x1) by instruction 6. The 
+same issue hid the original 4/12 bug, 8/12 keeps masking things rather 
+than fixing them.
+
+Rather than keep on chasing which reproducers survives patch 8's 
+masking, v4 does what you suggested at the end of the 4/12 report: ask 
+tnum_overlap() before tnum_intersect(), and check 
+range_bounds_violation() after reg_bounds_sync() as well as before. Both 
+arms now go through one helper:
+
+     static void sync_bounds_or_revert(struct bpf_reg_state *reg,
+                       const struct bpf_reg_state *prev)
+     {
+         if (range_bounds_violation(reg)) {
+             *reg = *prev;
+             return;
+         }
+         reg_bounds_sync(reg);
+         if (range_bounds_violation(reg))
+             *reg = *prev;
+     }
+
+Thx,
+-Vineet
+
+
+
+> At the end of the differencing block in sync_linked_regs():
 >
->  fs/namespace.c                                     |   6 +-
->  include/linux/ns_common.h                          |  16 ++-
->  include/linux/nstree.h                             |  29 +----
->  ipc/namespace.c                                    |   3 +-
->  kernel/bpf/bpf_lsm.c                               |   2 +
->  kernel/nscommon.c                                  |   7 +-
->  kernel/nstree.c                                    |   2 +-
->  net/core/net_namespace.c                           |   4 +-
->  security/landlock/ns.c                             |  11 +-
->  security/security.c                                |   9 +-
->  .../selftests/bpf/prog_tests/ns_lifecycle.c        | 145 +++++++++++++++=
-++++++
->  tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
->  .../selftests/bpf/progs/test_ns_lifecycle.c        |  88 +++++++++++++
->  .../selftests/bpf/progs/verifier_lsm_namespace.c   |  38 ++++++
->  .../testing/selftests/bpf/test_kmods/bpf_testmod.c |   5 +
->  .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |   1 +
->  16 files changed, 314 insertions(+), 54 deletions(-)
-> ---
-> base-commit: 21a7f44fd0765fcc5194130b28767786eba1d1e7
-> change-id: 20261026-work-security-namespace_free-7aaf89b5b00e
+> 	cnum64_intersect_with(&reg->r64, prev.r64);
+> 	cnum32_intersect_with(&reg->r32, prev.r32);
+> 	reg->var_off = tnum_intersect(reg->var_off, prev.var_off);
+> 	if (range_bounds_violation(reg))
+> 		*reg = prev;
+> 	reg_bounds_sync(reg);
+>
+> range_bounds_violation(reg) is only checked before reg_bounds_sync(reg),
+> and tnum_intersect() is called without checking tnum_overlap(). When a
+> contradiction occurs across domains (between r64, r32, and var_off) rather
+> than within r64 or r32 individually, the pre-sync range_bounds_violation()
+> check passes, and reg_bounds_sync(reg) then turns the cross-domain
+> disjointness into CNUM64_EMPTY / CNUM32_EMPTY without restoring prev.
+>
+> This can be triggered in two ways with BPF_REG_LINK_SEXT:
+>
+> 1. Cross-domain contradiction between r64 and r32 via sext_32_to_64():
+>
+>     Suppose r6 is a 64-bit unknown scalar and r7 = (s32)r6 links r7 to r6
+>     with BPF_REG_LINK_SEXT.
+>
+>     - Narrow r7 with signed 64-bit jumps to [-0x7ffffff0, 0x7ffffff0], so
+>       r7.r64 is [-0x7ffffff0, 0x7ffffff0] and r7.r32 is the arc
+>       [0x80000010, 0x7ffffff0].
+>     - Execute if w6 < 0x7ffffff0 goto out. Because [0x7ffffff0, 0xffffffff]
+>       and [0x80000010, 0x7ffffff0] overlap in two disjoint arcs,
+>       cnum32_intersect() over-approximates by keeping the smaller arc
+>       [0x7ffffff0, 0xffffffff] for r6.r32 and r7.r32, while r7.r64 remains
+>       [-0x7ffffff0, 0x7ffffff0].
+>     - Execute if w6 != w8 goto out where w8 has r32 = [0x7ffffff8, 0x80000007].
+>     - In sync_linked_regs() for r7, reg->r32 is [0x7ffffff8, 0x80000007],
+>       which straddles S32_MAX / S32_MIN. sext_32_to_64(reg) sets reg->r64 to
+>       [S32_MIN, S32_MAX].
+>     - Intersecting reg->r64 with prev.r64 gives [-0x7ffffff0, 0x7ffffff0]
+>       (non-empty) and intersecting reg->r32 with prev.r32 gives
+>       [0x7ffffff8, 0x80000007] (non-empty).
+>     - range_bounds_violation(reg) is false, so *reg = prev is skipped.
+>     - reg_bounds_sync(reg) calls deduce_bounds_32_from_64(reg), which
+>       intersects [0x7ffffff8, 0x80000007] with [0x80000010, 0x7ffffff0] and
+>       leaves reg->r32 = CNUM32_EMPTY and reg->r64 = CNUM64_EMPTY.
+>
+> 2. Contradiction between var_off and r64/r32 via tnum_intersect():
+>
+>     Suppose r6 is a 64-bit unknown scalar, r7 = (s32)r6, and r7 is narrowed
+>     to [-4, 3].
+>
+>     - Execute if w6 & 8 goto out. On the fallthrough branch,
+>       regs_refine_cond_op() calls __mark_reg_unbounded(&r6) and clears bit 3
+>       in var_off; sync_linked_regs() narrows r7 to [0, 3] with
+>       var_off = TNUM(0, 3).
+>     - Execute if w6 & 4 goto target. On the taken branch, r6 gets low-32
+>       var_off = TNUM(4, 0xfffffff3) and r32 = [-0x7ffffffc, 0x7ffffff7].
+>     - In sync_linked_regs() on r7, cnum64_intersect_with() and
+>       cnum32_intersect_with() both produce [0, 3] (non-empty), while
+>       tnum_intersect() without a tnum_overlap() check combines
+>       TNUM(4, 0xfffffffffffffff3) and TNUM(0, 3) into TNUM(4, 3) ([4, 7]).
+>     - range_bounds_violation(reg) is false before reg_bounds_sync(reg), and
+>       __update_reg_bounds() inside reg_bounds_sync(reg) then intersects
+>       [0, 3] with [4, 7], leaving r7 with CNUM32_EMPTY and CNUM64_EMPTY.
+>
+> Should sync_linked_regs() check !tnum_overlap(reg->var_off, prev.var_off)
+> and also check range_bounds_violation(reg) after reg_bounds_sync(reg) before
+> committing the updated state?
+>
+>>   			/*
+>>   			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
+>>   			 * link over a wide base does not propagate back, so the
+> [ ... ]
+>
 
---=20
-paul-moore.com
