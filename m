@@ -1,47 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792999473;
-	b=y4XByslXKxHgcve8rTxKA4j/MWtH0Y/BTubLl6qeXACISly+r8n1K669OaOAVqe9O3+c
-	 cFXbpKl3e0DnX35UJOzYR/k/LG/PJwAGpd7y724yNrR0VAvaPVlLWCWEoIcwfANdAMkZ7
-	 j1pNVQ/WXhnmXGiOdBiz9AYepefi16BTTD0f1u6aEoSCYTkXXzkemzFHz9nezPGkmcgL3
-	 FdWKoutdh8hKSnBArk16ixmtXexix8nM1g9Ec8NuUYwTjvozl6SlGgTKszWNxXyp1w+Xz
-	 Po66eFvRHH44QUb9DRaETZZpRLfU4SCrYjh7HDMPfF6Zzp5VCR3Zgq9keJkhxW+QCfA==
+	t=1792999470;
+	b=sTt8NacWroCDET9AgtpqGTgNtTiDtEEfOe0II6afoFC9N7vG1ko00n/QOD03WhS/dzSm
+	 80pd95vj3sAsf1VaTx2MfI5A3BqC6oF6DiqDfggQMqch1t9HKTD3RRX7yNAwDIJSxXg2X
+	 Qp7GSP1s0QjHalFtIK65ZxTQlMwq+XANPCOmw/W0tuST7TVXHEcROfinp+vyk50f5vhbW
+	 731jP6Mw5pL16FMQaP4FLm4vqfNfGgGfJ6b0xVJwbPW0gGgdDSrgYNdv79sFoUj72SXwI
+	 xI6UFE37N9TCywFai5bdOYwtvUv+l1Ma/buCEkJXUS0KUGQQWXQ1Lx2ARiFkN9Dkr9A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792999473;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792999470;
 	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
 	 In-Reply-To:References:X-sashiko-severity:Content-Type:
 	 Content-Transfer-Encoding:MIME-Version;
-	bh=ldgyxicD8gnQHJGZVb85PMLZcL/wCOWM/4iau2IrFgM=;
-	b=2kmUmZPSLvEWlGwzkyO/q/EoRoTukYzzNgVZpXOVoUMpWQw+qRVslWaHANlctUQ9IVQZ
-	 sO0a6lSRjY+f3XvtQBVrbxpf8wX2XvBF/5KeSm2+axrrb5D7K1YkMYJVFbu5zYhozhrb9
-	 RASAOlbTofpCHoOsGhOG0dFeuV8jwXvqrWkYYWnLD27vZC4+QPrblBOskLus0RksNUbMQ
-	 Jm8n5NjogEdfTQ9FIjgWgJwpyKAVOSevf2pumlCalLzrvcpaGaY3TdVgwhJywW3II/vtR
-	 k3tKsfq7T2S36khdVuoOZz+ovpCh+sjXRKREV1cZd5HNnCoEf1jzssE3LXarV0liu/w==
+	bh=JJgpvEkPumvlVtURp/qLJngATfKKtQ96oi4A6w8xMPs=;
+	b=bDoGyp7JXwVnAIsAffudwo2gWIKjlTrTdJq+6BNanPDpI7YBqDcLvIAywZq3Jpwq+oBd
+	 Fv75SExA0vMTB/AVGJ0F77jA2s6qZUVHKuRQaqaJKLiGH9+XPnrUa4rf/iCZ5/thClvs2
+	 DJht1G01ALQMyCKsRN7WzqnWlTAFmn+U53MHDNjSsTXq6rm/bd55varV29gqUW2bJ9IBI
+	 EEtLLIl64h1Z1CaKw2s1pFsdXQudJyA04GPUb0buf8y3RC3hb6SP5bhAb8bhlB91BZFga
+	 u+bF0CRL6mKCax6AMFI/yDuRk1U/tPXXBuJG+zSCnP50/Q+TCVzKvMbA2bjIdqbf+iA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jZJkoGKg;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gn0pQZO7;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7E9606A321;
-	Mon, 26 Oct 2026 07:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jZJkoGKg
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0804E1F01825;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFF4606A31E;
 	Mon, 26 Oct 2026 07:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gn0pQZO7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FAE31F01825;
+	Mon, 26 Oct 2026 07:24:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792999472;
-	bh=ldgyxicD8gnQHJGZVb85PMLZcL/wCOWM/4iau2IrFgM=;
+	s=k20260515; t=1792999470;
+	bh=JJgpvEkPumvlVtURp/qLJngATfKKtQ96oi4A6w8xMPs=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=jZJkoGKg21VTjATUMXnCP0794AoDjR/0znSEi9GZ6GHom7CutHnTmLg6IRYHItz3h
-	 nEJ78KeSinWe/RGVQURDCpimrJ2ZEENMuzeUWm1jONtLBChXB0TSNFspdiMh6K6DC8
-	 AiRdX6M9lZcuJe5f0tkIOjF6LOQo3hI47cyyBroCnLuZ6zVl1dpuTmltVMWbeAU7vP
-	 pxWCHLo5p0vjdofhnZTj/vx/GPHZPzvCw26NM7FgsNGHKXbvPh1GX0FxDgIcZK4tFp
-	 BVwkJwdr68osFD8NIV17Aub/k3DQDCyy++RPvbmJoJouQ4MacCTPi5hL8ZQsqxcXwz
-	 61SHFdgNe2LIQ==
-Subject: Re: [PATCH net-next v4 2/2] net: stmmac: Stop Tx queue when
- (en|dis)abling XSK pools
+	b=Gn0pQZO73NyS8gRkUMi8fTS8Q1RCv5iL7aBMd14ewKA2GUoXzCc0jBPy4yd2ADuSm
+	 TDDcuBZblCYDpN33YCQAplP6xvngTlEXevDS6QxrrUuFHcLnLaJRQMOR6Q2ige0+zT
+	 IfSDFERGaV9jBA4mZUqvfaBtZN7D44GGxSOxVStovSTbVO79UQmezteDeHwRJ/aeAe
+	 BERuCjUzgWlrNHm4CBdTxeg9PY5xMfI6M9MkyD8MEH5bgbBCRICxRAB6DTKT8ygSWI
+	 FJ/X+MatIUb+YAxhzP+wlHcHuxW7yyxoQrzD5KiXi9wbpXL8fVqGUSEFbfF6yCA0U8
+	 mfP+joOIxYdBA==
+Subject: Re: [PATCH net-next v4 1/2] net: stmmac: Disable NAPI before stopping
+ Tx queues in stmmac_xdp_release()
 From: netdev-bot+sashiko@kernel.org
 To: kurt@linutronix.de
 Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -53,10 +53,10 @@ Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
  nb@tipi-net.de, netdev@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com,
  linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Date: Mon, 26 Oct 2026 07:24:30 +0000
-Message-ID: <179299947058.3134.16617492920924670801@kernel.org>
-In-Reply-To: <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
-References: <20261022-stmmac_xsk_crashes-v4-2-15c0c750bb96@linutronix.de>
+Date: Mon, 26 Oct 2026 07:24:28 +0000
+Message-ID: <179299946882.3134.17106790246487017966@kernel.org>
+In-Reply-To: <20261022-stmmac_xsk_crashes-v4-1-15c0c750bb96@linutronix.de>
+References: <20261022-stmmac_xsk_crashes-v4-1-15c0c750bb96@linutronix.de>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -70,10 +70,10 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 3 potential
+Thank you for your contribution! Sashiko AI review found 2 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 (1) · Medium: 2 · Low: 0
+Critical: 0 · High: 2 (1) · Medium: 0 · Low: 0
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -81,226 +81,188 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] stmmac_xdp_enable_pool() (stmmac_xdp.c:59) and
-  stmmac_xdp_disable_pool() (stmmac_xdp.c:102) now call…
-- [Medium] The patch only works if __QUEUE_STATE_DRV_XOFF stays set from
-  stmmac_xdp_stop_tx_queue() until the ring is rebuilt.
-- [Medium] In stmmac_xdp_xmit_xdpf(), first_entry and entry are read from
-  tx_q->cur_tx when the locals are declared (stmmac_main.c:5263-5264).
+- [High] stmmac_xdp_release() now runs napi_disable (via
+  stmmac_disable_all_queues()), then hrtimer_cancel() on every…
+- [High] The commit says the Tx queue must not be woken again after
+  netif_tx_disable() in stmmac_xdp_release(), and it fixes this only for…
 
 Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but if
-  __alloc_dma_tx_desc_resources() fails during an XSK pool switch, tx_q…
+- [High] This problem wasn't introduced by this patch, but
+  stmmac_xdp_set_prog() discards the return value of stmmac_xdp_open()…
 
 --
 
-net: stmmac: Stop Tx queue when (en|dis)abling XSK pools
+net: stmmac: Disable NAPI before stopping Tx queues in stmmac_xdp_release()
 
-This patch stops the netdev Tx queue while an XSK pool is enabled or
-disabled on a running interface. It does this because
-stmmac_disable_tx_queue() and stmmac_enable_tx_queue() free and reallocate
-the Tx DMA ring. The queue is woken once the ring is rebuilt, and
-stmmac_xdp_xmit_xdpf() now drops XDP frames while the queue is stopped.
+This patch reorders stmmac_xdp_release() so that NAPI is disabled and the
+Tx coalescing timers are cancelled before netif_tx_disable(). The goal is
+to stop stmmac_tx_clean() from waking the Tx queue after it was stopped,
+which let stmmac_xmit() run on descriptor rings freed by
+free_dma_desc_resources().
 
 > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 27c4a249e560..2083520179a6 100644
+> index fb53b1f17714..27c4a249e560 100644
 > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5270,6 +5270,10 @@ static int stmmac_xdp_xmit_xdpf(struct stmmac_priv *priv, int queue,
->  	if (unlikely(xdp_frame_has_frags(xdpf)))
->  		num_frames += sinfo->nr_frags;
+> @@ -7222,15 +7222,15 @@ void stmmac_xdp_release(struct net_device *dev)
+>  	struct stmmac_priv *priv = netdev_priv(dev);
+>  	u8 chan;
 >  
-> +	/* Ring may be torn down for an XSK pool switch */
-> +	if (netif_tx_queue_stopped(netdev_get_tx_queue(priv->dev, queue)))
-> +		return STMMAC_XDP_CONSUMED;
+> -	/* Ensure tx function is not running */
+> -	netif_tx_disable(dev);
+> -
+>  	/* Disable NAPI process */
+>  	stmmac_disable_all_queues(priv);
+>  
+>  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+>  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+>  
+> +	/* Ensure tx function is not running */
+> +	netif_tx_disable(dev);
 > +
 
-[Severity: Medium]
-Is this check early enough? first_entry and entry have already been read
-from tx_q->cur_tx at the top of stmmac_xdp_xmit_xdpf():
+[Severity: High]
+With this order, ndo_start_xmit is still live while the hrtimer_cancel()
+loop runs. Can stmmac_xmit() or stmmac_tso_xmit() re-arm txtimer after it
+has been cancelled?
 
-	unsigned int first_entry = tx_q->cur_tx;
-	unsigned int entry = tx_q->cur_tx;
+Both of them end with stmmac_tx_timer_arm(), which does:
 
-The pool switch path does not hold the Tx lock while it rebuilds the ring
-or wakes the queue. stmmac_enable_tx_queue()->stmmac_reset_tx_queue() sets
-cur_tx and dirty_tx to 0. After that, netif_tx_wake_queue() clears XOFF
-without taking the lock.
+stmmac_tx_timer_arm() {
+    ...
+	if (unlikely(!napi_is_scheduled(napi))) {
+		if (unlikely(!(hrtimer_active(&tx_q->txtimer))))
+			hrtimer_start(&tx_q->txtimer,
+				      STMMAC_COAL_TIMER(tx_coal_timer),
+				      HRTIMER_MODE_REL);
+    ...
+}
 
-Take an XDP sender (stmmac_xdp_xmit_back() or stmmac_xdp_xmit()) that:
+Nothing makes this check-then-start sequence atomic with respect to
+napi_disable() and hrtimer_cancel(). One possible interleaving:
 
-1. takes __netif_tx_lock() while the queue is stopped
-2. loads the old cur_tx == N
-3. is delayed past the whole rebuild and wake, for example by being
-   preempted on PREEMPT_RT
-4. then finds the queue running and passes stmmac_tx_avail()
+CPU1 (stmmac_xmit, holding txq lock)
+  napi_is_scheduled(napi) -> false
+                                CPU0 (stmmac_xdp_release)
+                                stmmac_disable_all_queues()
+                                hrtimer_cancel(&tx_q->txtimer)
+                                  timer not armed, returns at once
+  hrtimer_start(&tx_q->txtimer, ...)
+                                netif_tx_disable(dev)
+                                  only waits for CPU1 to drop txq lock
 
-Could that sender fill and OWN-mark descriptors at the stale index N on
-the new ring and then set cur_tx = N + 1?
+Nothing later in stmmac_xdp_release() cancels the timer. It stays queued
+for tx_coal_timer, which is 5ms by default and up to 100ms via ethtool -C.
+A hardirq on CPU1 widens the window. On PREEMPT_RT it can be arbitrarily
+long.
 
-DMA restarts at descriptor 0, which nobody owns. That looks like it would
-stall Tx. stmmac_tx_clean() would then walk entries 0..N-1 as if they had
-completed.
+stmmac_xdp_set_prog() then calls stmmac_xdp_open() right away, and that
+function does:
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> index 9af9e0cb366c..14445683a5c3 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> @@ -6,6 +6,15 @@
->  #include "stmmac.h"
->  #include "stmmac_xdp.h"
+stmmac_xdp_open() {
+    ...
+		hrtimer_setup(&tx_q->txtimer, stmmac_tx_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+    ...
+}
+
+Would this re-initialize an hrtimer that is still linked in the per-CPU
+timerqueue and corrupt the hrtimer base?
+
+Before this patch, netif_tx_disable() ran first and serialized against
+in-flight xmit callers. Only NAPI could arm the timer, and NAPI was
+disabled before the cancel.
+
+Would the order napi disable, then netif_tx_disable(), then the
+hrtimer_cancel() loop avoid this?
+
+>  	/* Free the IRQ lines */
+>  	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
 >  
-> +static void stmmac_xdp_stop_tx_queue(struct stmmac_priv *priv, u16 queue)
-> +{
-> +	struct netdev_queue *nq = netdev_get_tx_queue(priv->dev, queue);
-> +
-> +	__netif_tx_lock_bh(nq);
-> +	netif_tx_stop_queue(nq);
-> +	__netif_tx_unlock_bh(nq);
-> +}
 
-[Severity: Medium]
-Can stmmac_tx_err() undo this stop while the pool switch is still running?
+[Severity: High]
+The commit message says the problem is the Tx queue being woken again
+after netif_tx_disable(), and this patch covers the stmmac_tx_clean()
+waker. Is there still a waker in IRQ context?
 
-stmmac_tx_err() runs in hardirq context from stmmac_dma_interrupt() and
-stmmac_msi_intr_tx() when the channel status is tx_hard_error. It takes no
-lock and always finishes by waking the queue:
+netif_tx_disable() still runs before stmmac_free_irq() and
+stmmac_stop_all_dma(). At that point the DMA interrupt handlers are still
+installed and Tx DMA is still running.
+
+stmmac_xdp_release() never sets STMMAC_DOWN, so the STMMAC_DOWN check in
+stmmac_interrupt() and stmmac_msi_intr_tx() does not stop the handlers.
+
+On a Tx fatal bus error (tx_hard_error), stmmac_dma_interrupt() or
+stmmac_msi_intr_tx() calls stmmac_tx_err(), which ends with an
+unconditional wake:
 
 stmmac_tx_err() {
-	...
-	stmmac_stop_tx_dma(priv, chan);
-	dma_free_tx_skbufs(priv, &priv->dma_conf, chan);
-	stmmac_clear_tx_descriptors(priv, &priv->dma_conf, chan);
-	stmmac_reset_tx_queue(priv, chan);
-	stmmac_init_tx_chan(priv, priv->ioaddr, priv->plat->dma_cfg,
-			    tx_q->dma_tx_phy, chan);
-	stmmac_start_tx_dma(priv, chan);
-
+    ...
 	priv->xstats.tx_errors++;
 	netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, chan));
 }
 
-The switch does not seem to keep it out. dwmac4_disable_dma_irq() clears
-only RIE and TIE, so AIE, RPS, RBU and FBE stay enabled. There is also no
-synchronize_irq().
+The qdisc is still active in the XDP reconfigure path. In ndo_stop,
+dev_deactivate_many() has already run, but not here. So the wake can
+start stmmac_xmit() again:
 
-Stopping RX DMA during the switch raises RPS, and with it AIS.
-dwmac4_dma_interrupt() decodes AIS together with TPS or FBE as
-tx_hard_error.
+stmmac_xdp_release()
+  netif_tx_disable(dev)
+                            stmmac_dma_interrupt()
+                              stmmac_tx_err()
+                                netif_tx_wake_queue()
+  stmmac_free_irq()
+  stmmac_stop_all_dma()
+  free_dma_desc_resources()
+                            stmmac_xmit()
+                              writes into tx_q->dma_tx / dma_etx
 
-TPS is never acknowledged, because only the enabled bits get written back:
+free_irq() only waits for handlers that are already running. It does not
+undo the wake, and nothing stops the queue again after it.
 
-	writel(intr_status & intr_en,
-	       ioaddr + DMA_CHAN_STATUS(dwmac4_addrs, chan));
+Could stmmac_xmit() then write descriptors into rings that
+free_dma_desc_resources() has already freed?
 
-That means TPS can stay latched from an earlier Tx DMA stop.
-
-Suppose tx_hard_error is decoded inside the stop-to-wake window. Wouldn't
-stmmac_tx_err() then work on the freed or half-rebuilt ring and restart
-DMA on freed coherent memory? It would also reopen the queue for
-stmmac_xmit() and the XDP Tx paths.
-
-The source alone does not show whether the hardware reports exactly
-tx_hard_error in that window. For example, a latched RI bit would change
-the status value.
-
-[ ... ]
-
-> @@ -46,6 +56,7 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
->  		stmmac_enable_rx_queue(priv, queue);
->  		stmmac_enable_tx_queue(priv, queue);
->  		napi_enable(&ch->rxtx_napi);
-> +		netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, queue));
+Moving netif_tx_disable() after stmmac_free_irq() might close this path.
+Another option is a teardown flag that stmmac_tx_err() and the ISRs
+check. The last patch of the series ("net: stmmac: Stop Tx queue when
+(en|dis)abling XSK pools") does not seem to cover this case.
 
 [Severity: High]
-What happens here if stmmac_enable_tx_queue() failed? It returns void.
-When an allocation fails, it only logs a message and returns:
+This is a pre-existing issue and was not introduced by this patch. It is
+on the same release/reopen path, though. stmmac_xdp_set_prog() ignores
+the return value of stmmac_xdp_open():
 
-stmmac_enable_tx_queue() {
-	...
-	ret = __alloc_dma_tx_desc_resources(priv, &priv->dma_conf, queue);
-	if (ret) {
-		netdev_err(priv->dev, "Failed to alloc TX desc.\n");
-		return;
-	}
-	...
+drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c:stmmac_xdp_set_prog() {
+    ...
+	if (if_running && need_update)
+		stmmac_xdp_open(dev);
+    ...
 }
 
-The state left behind depends on which allocation in
-__alloc_dma_tx_desc_resources() failed:
+stmmac_xdp_open() can fail in alloc_dma_desc_resources(),
+init_dma_desc_rings() or stmmac_request_irq(). On failure it frees the
+descriptor resources and returns before stmmac_enable_all_queues(),
+netif_carrier_on() and netif_tx_start_all_queues(). Userspace is still
+told the XDP update succeeded.
 
-- tx_q->tx_skbuff_dma or tx_q->tx_skbuff is NULL, or
-- dma_tx/dma_etx/dma_entx still point at the coherent ring that
-  __free_dma_tx_desc_resources() just freed. That function never clears
-  those pointers.
+What happens on the next ifdown in that state? The call chain
+stmmac_release()->__stmmac_release()->stmmac_disable_all_queues() calls
+napi_disable() on NAPI instances that stmmac_xdp_release() has already
+disabled. In napi_disable_locked():
 
-stmmac_reset_tx_queue() is skipped as well, so cur_tx and dirty_tx keep
-their old values.
+	val = READ_ONCE(n->state);
+	do {
+		while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
+			usleep_range(20, 200);
+			val = READ_ONCE(n->state);
+		}
 
-Once this unconditional wake runs, stmmac_xmit() can execute:
+Both bits are already set, so wouldn't this loop forever while holding
+rtnl_lock and the netdev instance lock? Another XDP program change would
+take the same path through stmmac_xdp_release().
 
-	WARN_ON(tx_q->tx_skbuff[first_entry]);
-
-It would then write tx_skbuff/tx_skbuff_dma entries, and descriptors via
-stmmac_get_tx_desc(), into NULL or freed memory. The new
-netif_tx_queue_stopped() check in stmmac_xdp_xmit_xdpf() is open again
-too.
-
-stmmac_xdp_disable_pool() gets the same unconditional wake.
-
-The commit message says the crash comes from Tx touching the ring while it
-is freed and reallocated. On this error path, that still seems reachable.
-
-Could stmmac_enable_tx_queue() return the error, so the queue stays
-stopped (or the switch is unwound) instead of being woken?
-
-[ ... ]
-
-> @@ -87,6 +99,7 @@ static int stmmac_xdp_disable_pool(struct stmmac_priv *priv, u16 queue)
->  		stmmac_enable_tx_queue(priv, queue);
->  		napi_enable(&ch->rx_napi);
->  		napi_enable(&ch->tx_napi);
-> +		netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, queue));
->  	}
->  
->  	return 0;
-
-[Severity: High]
-This is a pre-existing issue and was not introduced by this patch. After
-stmmac_enable_tx_queue() fails, tx_q looks set up for a double free on the
-next teardown.
-
-__alloc_dma_tx_desc_resources() does no unwind. It returns -ENOMEM at the
-first step that fails:
-
-	tx_q->tx_skbuff_dma = kzalloc_objs(*tx_q->tx_skbuff_dma,
-					   dma_conf->dma_tx_size);
-	if (!tx_q->tx_skbuff_dma)
-		return -ENOMEM;
-
-	tx_q->tx_skbuff = kzalloc_objs(struct sk_buff *, dma_conf->dma_tx_size);
-	if (!tx_q->tx_skbuff)
-		return -ENOMEM;
-	...
-	addr = dma_alloc_coherent(priv->device, size,
-				  &tx_q->dma_tx_phy, GFP_KERNEL);
-	if (!addr)
-		return -ENOMEM;
-
-__free_dma_tx_desc_resources() never clears dma_tx/dma_etx/dma_entx,
-tx_skbuff or tx_skbuff_dma. The next teardown therefore calls it again on
-the stale pointers. That teardown can be stmmac_disable_tx_queue() during
-another pool switch, or free_dma_tx_desc_resources() from stmmac_release().
-
-Wouldn't that call dma_free_coherent() a second time on the ring that was
-already freed?
-
-If the tx_skbuff_dma allocation was the one that failed, two more things
-happen:
-
-- dma_free_tx_skbufs() dereferences the NULL tx_skbuff_dma in
-  stmmac_free_tx_buffer()
-- kfree(tx_q->tx_skbuff) frees the old array a second time
+Should stmmac_xdp_set_prog() propagate the error, and should the device
+be left in a state that a later close can handle?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96%40linutronix.de
