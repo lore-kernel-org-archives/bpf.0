@@ -1,99 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.173
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793018069;
-	b=xcfZLdc80OcveU6WKCWotnAB1aT4XDYBEfau37D6OZvh12jOO+1yC07gdKDKESQ71TEE
-	 7Gowr9OYuQM42l6owHSf6fC1dte3YbiCnQ+qC2jce2A/lwmACyQK9q0FVv+0XQ2EbCh6f
-	 uiP+gtvGMnF6rv5g2zWjR1a21lVx4JNEiTNY7t3bUYz4xPU47E7bYkYlkttc6zGArbs5e
-	 vRau8htcbbw6h481sTX9V1u+Znt6VNZlbBR2F1DCpB/2ly1JVhlKuNMWMK/ovnawgqnN6
-	 Czye5QPBKaseRKFqPNWsY6UPnjhoncasNwrZkcZQRc5pBq9pQWlCxwrfKzrdK6QBuZQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793018069;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=SaxBkLbIzbkEbnKAF/XTN2o3bSo+ZWaTXQ9XQ6IuC4s=;
-	b=Yu5kjcVX6/GKboXKvEADmbyYVBtbZhEMRMaDnwoZeDnGdSXigC7xdpkyqKqQAxF3x3l/
-	 9JFFDtFwSDVxtpJWGGCIUCXxJIIiH7oHrFv3hoxxCICWlqafmKonxgjy+U/p9q3N8D42F
-	 ugrC/7yjRrUSAIF4kA6Oj58PotQkIqhLBhpTNjeC9izJs7ehOVw/MjmVsClLYqcpayPWg
-	 37GxvcV/oTcPk0H8ISC9Z9V+1N2XTFbQOS0mfx+oWbJvzIFg31j6VHpJ+yGRocYSugXtI
-	 FSDuKQlnJUHmQmVQJhXzbzYulnRlBcMLvG4TL/spa+m08eAdj9AdDh0FkNeIeAHiU5A==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HdtFncM0;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.173
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=192.198.163.7
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793019079;
+	b=vE7TfZS3LBJ10aGNoSK00Z2CGlKQ+gvraeKR2hTeMQaDFIDP9exmP8wkJvyKJtCiEzDY
+	 QTjDM7xH9RtLbcjyx2lJJGzMFlcXWCquMOEtpFYYOXLcOi6KkY9eyHeEqOJUd0a/VSz+3
+	 MBwerTzeE7LqV/NRs8cgKsbPn+BludH3sSreVRlRRHcgvOhmkr7QPPWJvpcrTJV2mIcFl
+	 oOgBiwYf5En1FwzFuG6Oy1tJ9dT3RqoK3RgL769zbn7iGBWAdcLfxKuKvUi8Jgem+QsOT
+	 M+jIChp0/AvIUYtzbowEctmV/dpD764rCYsLjNrFCcYb+X/ib5irjrDbkkc8iuv2TDA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793019079;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=xC9fPSQ6xDr4OD0G323ztnNOq3mubFnIHeok17w1PaM=;
+	b=yhiqHImC/LZ7depmxefb6H5SmpH5Gq3ODX7Xy0+44HzKgNXEJdCMY+UdvYbGFwUCkN22
+	 eCJ1VdPqQqP7FKQ/zDozCY5lwB8jX1mxW8cZElyuMLrRHwBdWULdKUoJSNMN651KmeHuG
+	 LnsC6P9wPpWF+kG+/Fronbaw6T/npNPEoJ5Jq6bN1RkX1Nyoxys49OBqH6BPKlo62+Oap
+	 MjY7NJ3rwMtUUDfZrClIEi8Vn67th0zwcDAW2S/KRsUpVkPV72MQI+uBCjTbSqrqu5KBj
+	 O2Z5gcqrjwl6gxBoyoP6NJGI54R9CuTxDQAL8lUxwqZAYQcNdrI+ciWJpnphCjvJ/PQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b="Oswgdaf/";
+	arc=none smtp.remote-ip=192.198.163.7
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB2C606A31E
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 12:34:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADB2C606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 829A3606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 12:51:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 829A3606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HdtFncM0
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2e9d1114320so22003435ad.3
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 05:34:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793018068; cv=none;
-        d=google.com; s=arc-20260327;
-        b=YEX/x4ghjLB/WBuVBFRqwpNmAho2ZcDVEtdcqBtjlfE1Em12TFBYFtPxHMt398yQlG
-         ifo7rMAnTNsUKJftTiKjQjOTmKq5fAFWTIvmQ97i6rW/toiLw5ghl2l4iF+IlVvsr4eF
-         1HQn7NI3BTBgdAUtNJj3Gazs32u04OvEb/kOGGbxKH+z+9WqHSqyqtS/D1UIZba5Gh9c
-         g8Pw1pm1xiJp47CWpgfOzcxDnXpcPTq+hNPgfWYOhBUTg38hgMJ+kOL4+CgRjDvk4Zo0
-         A4tAv1ql9WpeNmFhSxlRgTFthyzPPAfwoMIt9vMb3v6QNmRwIm0shzWG8WH1+8QM7SUt
-         dwMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=SaxBkLbIzbkEbnKAF/XTN2o3bSo+ZWaTXQ9XQ6IuC4s=;
-        fh=lMlxpi5RnkmoRhfW4xxOgcGHZQM4C2e4TqZgcji5xO4=;
-        b=lxSfu1zfpJ7BPytrXWzXny9uv4ooDf7p+NbZDgqDmqVosBUdhUpfZYjxPb/8Mqj6dM
-         T2G+9/OfJcL1QW1i6l9EFX+FszYQVdKiYMZLmpNx4L0EQMW4olCt8tZBfMJ0zqx7/xAk
-         tF1kh6nOf7YcQi8D8noC90O3ieV74OVnVRulce17I1QhXukIyO42DSF0gRXpo2oQWzNX
-         Kz8Sksy/IasHuYxA6mfldQS4RyEt0O7XUyriC3BPX8S7V+r9CXCFRLwoyn7K/Iyhx4J3
-         gprRN/1J1EfeQuaG53QMso2r55qybZjasfzqVCGM9kAFQJtNRxIFi3GT28pC1Zmdy5dl
-         TAAA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793018068; x=1793622868; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SaxBkLbIzbkEbnKAF/XTN2o3bSo+ZWaTXQ9XQ6IuC4s=;
-        b=HdtFncM04w4/76lIdgLfZLw/0vgYLnhbPuHclib1LzHCRj0B1KxFZekGEulO7gtq0i
-         POQFwKjj3LXA2dcopzYhgWNgZVrCWwBJLkmFGbQaQmsO/c6Q1q4XO0ouSL8XC7x45/dG
-         um54EGBS+m6o8La2GkzbOUNBl00ocendPMUC4FY8qPvHfiBE14TfsV8EHQymgVVUgUJ3
-         rCQ0Q8nLVU2lfnQDMCfYtUF915/7YSDk499Rh45X2gFlBYLHwdKfTlBzUSIQrxjWe4tU
-         Bnwlr+e+VjVQX273sUjj3mClGgrORgkouFyUX0sQzGugEhDMrQrX5xTow4oT9R47UA2T
-         JfkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793018068; x=1793622868;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=SaxBkLbIzbkEbnKAF/XTN2o3bSo+ZWaTXQ9XQ6IuC4s=;
-        b=mNnVXkEZ8CFYmk2eNahliHsnHCR1bYTuVU9zHn/b+wlchIt04avQjkXCVKytODns4G
-         Ze/QviWzDxJJSYdDsDrBDLfw8GP7OOq3zVZMLDHWdEzbApu64xs4l74IQNOjp70ScO/1
-         uUcvynetLTH9xmqQxFo1SFo9R7J8MiwoMjWfgs9Y1vK/4xQIwiyM1ss5iTN5EzJfprFK
-         A8eL9WULqlk2ONYSKXOSH6v/S5biODT7cVn/4cke3bqLDKFST7DkYdiAR5ohaZxCncqD
-         OP4K/E0nUjHIRgpttbyXPVmHQaM08tra+74aRFuLVmMzUx8LGGQCKjZ/nQCEWVAHWptT
-         zSJQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxjH1V+8dOhGILxhvpFCB4olZlfJ+SwrbAVJGIJnO/i4Nf7QtmI2URuTQI1/0k3cJgfgrA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLl1NKYKjAAxCg9wAVg1u8mIxi5lql+FxvCEFKKgukVwsJEXauO
-	Y47MBi91eYgljvUdT5MZTEUc3MuKjt/5n5sUs3Gzt+xV8mBbVnLY+tnl+088wa2FpKzxaRf73Br
-	kGeaqanDrowkkvefXg1vjDyt8NNOJRpU=
-X-Gm-Gg: AYBFou1fqluJw0g6p2QyfC+YhFkffcd79Hb+O6fRqDD/Mhq4lQgfNOXdDvIuCbflPkK
-	1yey8/ivTmQEHQf0Fl4iF73dNUL9FpUAGvqUCLdpVc7MrGXdUgp3UZYZy9hH/dlYWgNcYCvXItM
-	K7Z4oS+W42+jtQEfYtxx88j/DxXF2NsUAe1G6b5/RUSi0/89iCAc0Fm3Z/eM/apPz8zZjvvMLIu
-	fzePVUjgf+S9GyuzqS0HaMjUTilh+dI800e5voyyLQfGA5uOW7lU7ZHxa5Oa6assiJmdZEqtPNS
-	aS/WjAHLdQbE6Jd0dzY9/YdbgncmRBT1W6R6is3XhPfCJ68O1H8n6ciFP3/Jm3d0ia7YOLXWebW
-	GszkIwGkqrk7ygVIsr4+od3kFMkoHvtsh1xRqDdk=
-X-Received: by 2002:a17:903:3ba5:b0:2ea:33eb:7375 with SMTP id
- d9443c01a7336-2ea9c7fb26fmr60059095ad.45.1793018067828; Mon, 26 Oct 2026
- 05:34:27 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=Oswgdaf/
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793019078; x=1824555078;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=03rdcH42nn8tmGzo0tvY92dQC/c0boKbcsBt01VW9jw=;
+  b=Oswgdaf/7uOFJ42isduJRN3kdC3GK0sMu8PWmYE4lnpCVZMW9GeBMVBs
+   bSR2NHIjHFOrhBLpoTdo7SZwFZqf3RlTl/B+ytnRvMh1ipr70jc4nN8Nu
+   2NSUnpphBPeuukmQMaDqBB+RselP1vXdA101he13AlCky5VN8omtUu5VB
+   5JhcoPr/SbvaLuKxO3Zp5IKZ8UR57AaXS0K3Zm/zD9kdLBL+yURW0JSAS
+   h//RRJjEoyfL4//9QsIvqjU5YbD8gJIUhs2gJH33Vld1hBqnvWBaNqEYb
+   HoxZtSV6r3FUXpYISqMdDIyA75sPbqY8txjol7GyTMFe9eW6wDzpeZzv8
+   g==;
+X-CSE-ConnectionGUID: NW2CeybpQzWgv/hosRCvTg==
+X-CSE-MsgGUID: 7wZ3d+3xSvGSFMfXqFkanQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11946"; a="1580207"
+X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
+   d="scan'208";a="1580207"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 05:51:18 -0700
+X-CSE-ConnectionGUID: IU0SW4qyRGORhRp1TSRzKA==
+X-CSE-MsgGUID: yZEotI56SzGx5RTrEnuB5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
+   d="scan'208";a="6083942"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa013.fm.intel.com with ESMTP; 26 Oct 2026 05:51:17 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xLKAT-00000000Vvs-33yq;
+	Mon, 26 Oct 2026 12:51:13 +0000
+Date: Mon, 26 Oct 2026 20:50:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com
+Subject: Re: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a
+ prog
+Message-ID: <202610262044.OQsV3p74-lkp@intel.com>
+References: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,107 +83,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261024091256.17918-1-testwrzwrz@gmail.com> <20261024141157.59301-1-testwrzwrz@gmail.com>
- <20261024141157.59301-2-testwrzwrz@gmail.com> <at82NLzM7g8HGgum@boxer>
-In-Reply-To: <at82NLzM7g8HGgum@boxer>
-From: Magnus Karlsson <magnus.karlsson@gmail.com>
-Date: Mon, 26 Oct 2026 14:34:15 +0200
-X-Gm-Features: AclHuK86Nf4MoOy1SZ-DK_sdM59j4Q0Ek644A1GPV_2QYD872VpQvocWDHsm21I
-Message-ID: <CAJ8uoz0bU0ETmEp0Nv9V4Q-H272D9dmyuK8vFj+B_un-rA4VoA@mail.gmail.com>
-Subject: Re: [PATCH net v2 1/2] xsk: defer software checksum until the skb is complete
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Rongzheng Wang <testwrzwrz@gmail.com>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
 
-On Mon, 26 Oct 2026 at 13:32, Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> On Sat, Oct 24, 2026 at 10:11:56PM +0800, Rongzheng Wang wrote:
-> > When XDP_UMEM_TX_SW_CSUM is used with multi-buffer TX, xsk_skb_metadata()
-> > calls skb_checksum_help() while only the first descriptor has been added to
-> > the skb. The checksum therefore covers just the first fragment, and
-> > skb_checksum_help() sets ip_summed to CHECKSUM_NONE, so the remaining
-> > fragments are never included in the checksum.
-> >
-> > Move the software checksum calculation to the point where the last
-> > descriptor has been added to the skb.
-> >
-> > On a checksum failure the packet is now dropped instead of being returned
-> > to the application for a retry. This path is not reachable with the
-> > existing metadata validation, but the behavior change is intentional.
-> >
-> > Fixes: 11614723af26 ("xsk: Add option to calculate TX checksum in SW")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Rongzheng Wang <testwrzwrz@gmail.com>
-> > ---
-> >  net/xdp/xsk.c | 22 ++++++++++++++--------
-> >  1 file changed, 14 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 33475b180ea6..65be2a368325 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -1011,14 +1011,6 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
-> >               skb->csum_start = hr + csum_start;
-> >               skb->csum_offset = csum_offset;
-> >               skb->ip_summed = CHECKSUM_PARTIAL;
-> > -
-> > -             if (unlikely(pool->tx_sw_csum)) {
-> > -                     int err;
-> > -
-> > -                     err = skb_checksum_help(skb);
-> > -                     if (err)
-> > -                             return err;
-> > -             }
-> >       }
-> >
-> >       if (flags & XDP_TXMD_FLAGS_LAUNCH_TIME)
-> > @@ -1030,6 +1022,14 @@ static int xsk_skb_metadata(struct sk_buff *skb, void *buffer,
-> >       return 0;
-> >  }
-> >
-> > +static int xsk_skb_sw_csum(struct sk_buff *skb, struct xsk_buff_pool *pool)
-> > +{
-> > +     if (!pool->tx_sw_csum || skb->ip_summed != CHECKSUM_PARTIAL)
->
-> If i am reading this right check against ip_summed is a way to tell that
-> first frag had XDP_TXMD_FLAGS_CHECKSUM flag set.
->
-> Agreed with Jason to preserve unlikely() when checking pool->tx_sw_csum.
->
-> Regarding skb drop, I am leaning towards this, I don't see much sense in
-> retry when packet is malformed? Not sure how this could be communicated up
-> to user space.
+Hi Alexei,
 
-Do we need a new error statistics counter, e.g. tx_malformed_packet or
-tx_invalid_packet? We do have one for invalid descriptors, but that
-does not really apply here.
+kernel test robot noticed the following build warnings:
 
-> > +             return 0;
-> > +
-> > +     return skb_checksum_help(skb);
-> > +}
-> > +
-> >  static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
-> >                                             struct xdp_desc *desc)
-> >  {
-> > @@ -1275,6 +1275,12 @@ static int __xsk_generic_xmit(struct sock *sk)
-> >               if (xp_mb_desc(&desc)) {
-> >                       xs->skb = skb;
-> >                       continue;
-> > +             } else {
-> > +                     err = xsk_skb_sw_csum(skb, xs->pool);
-> > +                     if (unlikely(err)) {
-> > +                             xsk_drop_skb(skb);
-> > +                             goto out;
-> > +                     }
-> >               }
-> >
-> >               err = __dev_direct_xmit(skb, xs->queue_id);
-> > --
-> > 2.39.5 (Apple Git-154)
-> >
->
+[auto build test WARNING on bpf/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexei-Starovoitov/selftests-bpf-Remove-tests-for-global-data-in-arena/20261026-025822
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20261026025943.404450-8-alexei.starovoitov%40gmail.com
+patch subject: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a prog
+config: csky-defconfig (https://download.01.org/0day-ci/archive/20261026/202610262044.OQsV3p74-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 16.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261026/202610262044.OQsV3p74-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610262044.OQsV3p74-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/core.c:3633:6: warning: no previous prototype for 'bpf_prog_begin_run' [-Wmissing-prototypes]
+    3633 | void bpf_prog_begin_run(const struct bpf_prog *prog)
+         |      ^~~~~~~~~~~~~~~~~~
+
+
+vim +/bpf_prog_begin_run +3633 kernel/bpf/core.c
+
+  3628	
+  3629	/*
+  3630	 * The kernel is about to call an async callback of @prog on this cpu: a run begins.
+  3631	 * The main prog does the same in its first insns.
+  3632	 */
+> 3633	void bpf_prog_begin_run(const struct bpf_prog *prog)
+  3634	{
+  3635		struct bpf_prog_aux *aux;
+  3636	
+  3637		if (!prog)
+  3638			return;
+  3639		aux = prog->aux->main_prog_aux;
+  3640		if (aux->may_goto_budget) {
+  3641			this_cpu_write(aux->may_goto_budget->start, 0);
+  3642			this_cpu_write(aux->may_goto_budget->count, BPF_MAX_TIMED_LOOPS);
+  3643		}
+  3644	}
+  3645	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
