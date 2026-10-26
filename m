@@ -1,106 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.221
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051769;
-	b=KVY5qDnspsB0WAZ57tgeYjrn7rf7a1kMrhc0OIj6xedpxUSKzQ3eWPYBi/70D75I8QL6
-	 INWGY2dugDDmgxh/6S/dQc+MmjYxMmmZMorvIYaNRaVlfe3uvKlECd13ZxHlq6QTgw7Hr
-	 xxPDY6Ep/wddiqz1QMhJk8KYhnL24kPUl1i9GHL0LK8R7DhnJazMwgJrAZPqsqaH8Gj4U
-	 93dkwazAzoCAJE2dv//pZhQzuYhjWe0OZUDT+3ZAluYgzoORO2yxXyGpa2cCAUDr/P6/L
-	 p/huF23WeXLlU/f6k9eJ+lmqcXrpHobLkP/eQzUt+OF/O3uxuEw9r99mV8CNFtbGg3g==
+	t=1793052093;
+	b=yQDHhQtL62dpRlzlDYrPtnEfEOP0GhT/VN0uRFTzidXX/CoNFps3AQBFs5jJ9+g5t5M3
+	 UTSNag3NPYE0pq6myF//UxyushzRMWiJIS5PWlwycJUeF36PxovkbfBW1VTv9eZUqkgBd
+	 tvENlcQxYwbFYfuUS9fgHxtmpsZy8QBQmgcZlRwKjzMTR3zd30NqFIgTwzGlXlYc2sBiO
+	 /68Lz+hV1iQR9uIflHZYmsGN8bnsFwEF/E1kVz1Ga6wgdOzJqXk0doGorjBLixyvyRGDw
+	 4YiQyhMi65ChruOnSVHfaTlewSOoblaVi7EigjbRdv9ANpkX1+M3lST9fKpAqyKUlyw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051769;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=MCaOqkvghFdjPjEBy1YWJcxG17ikaMSWnkn1If8Ln38=;
-	b=GYhkiacng+jj17qSE2JwpOu0fOq8SuvrVXoBzbub//td8LUfYqI5DywR0Zr0gdPW5mCk
-	 oE+Gyum/gXBs5v1xviGJ2fCj2vWpFNtDNdLYP6Nj/Mxk7oTIwA0XL07eyq2Mlw1WrcaCy
-	 ifwSZ9NUlHP5dBerqN1FC34MjGQcX/tSj2u2T2aV3dTu7MmouJ4eveObSjR3qsFMxIEJx
-	 9SIpRoYaO0+M5JA6/cg1WgQB0EtLLNyVHJSMiP2QuCUpqvwlaV3PqJGboBCJfhFcBC37A
-	 WUdtXbm5qL6Cx/0PoqFiGcALdcfOKM7qBphjswBEL6eVL4oF82BhC6Id8CxVnyiiTiA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793052093;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=JfoDqe96Kwk1JhgIOwUU/4TvSCsIa9add42yravEH04=;
+	b=v4saDl2+tbKNLyAl8o1YomfGmgd5l4WspzSmK/XP2k3U9yw0pO7H+RJr8jgaRmyclq/3
+	 T0Jfvf15NRD16rjsn2eu5/sHJeZ6VKH0/X/9QAlDqOLKiwNYkwvYFkeDq2q2haDS7nOlI
+	 aXkarbTUeV/yskDc9UKsT/38Mg3y6+4ND5+J5WOa8n5ivze0zX7ap8wBYmzHNjiN5X/QQ
+	 Nb9YsZfGQnTzeV4i+K34ddlZbffZ/fIrWqOa9OZ7i/ScVd/ync94syT8OOOTWKc2lCcUd
+	 bU/ZOdwBpf3+90nXd4v9EfsUAsMUkodzyChUGTLfjlTvdRVkZ9Pns19m+I/cLZPUJuw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=bobrowski.net;
-	spf=pass smtp.mailfrom=bobrowski.net;
-	dkim=pass header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=r6qzBHbJ;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=K2DGESd1;
+	arc=none smtp.remote-ip=95.215.58.221
+Received: from mta1.migadu.com (out-221.mta1.migadu.com [95.215.58.221])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0512D606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:56:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0512D606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bobrowski.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0628606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 22:01:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0628606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=r6qzBHbJ
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e942864693so18398035ad.1
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bobrowski.net; s=google; t=1793051767; x=1793656567; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=MCaOqkvghFdjPjEBy1YWJcxG17ikaMSWnkn1If8Ln38=;
-        b=r6qzBHbJ+Y6VySD4piiJQaxG3nmkcim5EedbVvJDLrFKh/z/zfWGVfhzESZgtJcOTT
-         mOo5hPQeKtOllDCqHQ+bRmmdG88imPwjlx7DaOoM0KaMz1KXsKT7apGPB22NyoerYTZQ
-         /4vIHuibqhucsMEMxk6fldlNHvt+fNxp1ovjKGI/eW/I63Ib5IBoE4CjQEJudyO76Wtf
-         1D4vXfgdUVq64lyBYfYwd63VG89p4VOSXiOVGnpeaDouPGJAbGZiYCtI1VTyrXIr7v33
-         A771pKw10Qc39HU/IR1PbeHnB+RlD52C7qD/1DVFZS4Ju3IhXtUDcV290iNJz9ZhBNR4
-         wpoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793051767; x=1793656567;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MCaOqkvghFdjPjEBy1YWJcxG17ikaMSWnkn1If8Ln38=;
-        b=TCRVNWeqgTb2Wm2KZmNannj+C8P8F5NvBAWkXvRa3TTZTdNN7ebmJlJYHD9Bdq3gGl
-         VQqJzN8luFXaW6t+MPiXwr9NYgrBO72nv9RC2kqAT6KSAEjeol2RreFz77NABR1XI1n6
-         92Vf8vNfEkLyDjhEBoc+q2XJaN9uLkRXuyBSDQ1XBK1U5G5PW/offJ/1KfQiK6qBIVTI
-         TcO3auhFMo9aXN42/bcAMgF5w3O4//HDSZMV+sQafSsrtfafzj9jPYP0/87gbMQMdoKU
-         mFxfkddJbxJBcdg8TX8xDoV0X+eGnmoionjmuPT2aSNUmZOAh4hAF3Ys2N/AKNF9j2aX
-         zxyg==
-X-Gm-Message-State: AFq9FYJndvSZ8kJ9dU/2N5y2ayeK00eRQK32L9AeJZuD4e12Cr2CcUVn
-	NP/HWsI/pUPCe3ymktY0uPDfyQFKbqJG0W51vl63UpuYX/v+w3duE+UFgSWPDD3nCn1k
-X-Gm-Gg: AYBFou0E2brOsF2Lq646tbMbAEBL/8EACnQG0l2Jw4xkXGzjoqxWONo35ViQgF7NYlb
-	DCmI+tVr6G6LQvys0hNvUBYYVyXtf8+M0EKegbPIhBvnxUKHIYOKIs7WJjf1BDs1Ko0+PAzzfLT
-	42giymAqvyHD259EfjSHXQOd4xy85H82SgZ67B7FdULxbFWunVZ1cyZ+4CA/ItKopwW7X+oZi85
-	eldz1ElEOOdz74dMHVcI3WKhInGeNW425OokkcEbPmGJfvtATdoYEpuVVxDqgpwZwx2RfTQIbvO
-	S1mu4rFI0mCs+aJp51Mud7SPHUtS9wp2KeqawBooops2QCA8AKY5vSEbCIluLQPQD/rbR9+TZDc
-	2tFyk1mNtFqJl0MYVr+4sd3PBPyhEL57uf9NGhUz2CXXv9vtxFJL+gOR1sNpfWay86YBohVtLT3
-	PFGrBDafssiiwahiI2UxfdrGTCDYek4FE6g3qZkfC4KY79EZphT+8CSsQiORSSbtpKLgigMYSlT
-	EHauzdcQbROKh+vgQorlYnEXbsconBfCJEvfwUvLF3Og9R9s68cq3I6tagkj2YEXKmIcZu1/xqs
-	76GwliQLbKOp1DR0D1Qhc9210RoAggkESA==
-X-Received: by 2002:a17:902:db0f:b0:2df:9a7e:d41f with SMTP id d9443c01a7336-2ea9c8740edmr75437265ad.41.1793051767231;
-        Mon, 26 Oct 2026 14:56:07 -0700 (PDT)
-Received: from lima-development (163-53-146-70.ip4.superloop.au. [163.53.146.70])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6455a00sm1186455ad.2.2026.10.26.14.55.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 14:56:06 -0700 (PDT)
-Date: Tue, 27 Oct 2026 08:55:57 +1100
-From: Matt Bobrowski <matt@bobrowski.net>
-To: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf: fix crash in bpf_path_d_path() for
- exiting tasks
-Message-ID: <at_MbcW0OlciNLrE@lima-development>
-References: <20261020105014.97985-1-matt@bobrowski.net>
- <20261020105014.97985-2-matt@bobrowski.net>
- <DM9VJTFJGVXB.3GH9LO3NGV5PO@gmail.com>
- <atiawbBo6WRPA6QA@lima-development>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=K2DGESd1
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=d/XH3OknxfPjStHsj+pXLKFQsWfu7QdbdcYVcusQH88=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793052090; v=1; x=1793656890;
+ b=K2DGESd1ORM+nfGVKFRn1bNSIcfkuCoHPjkJGL4Z/8dhPAxUPA9s5NpdIN9r4nwCdGBhDekk
+ d3fN9p1kyWhnhDOZFxz59mJXu96m6aV1Ba6GycMUNuHfDLXxYWAsgsTBzfZ2VlR788evjAE0Ejl
+ lDvVTJ4S4DHmvNrPZAzoZ9gA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 313bf9c5a9775fab;
+	Mon, 26 Oct 2026 22:01:30 +0000
+X-Mizu-Trace-ID: 313bf9c5a9775fab
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c6955dac-49bd-4b9a-9313-49f7b9753eb1@linux.dev>
+Date: Mon, 26 Oct 2026 15:01:28 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -110,99 +58,229 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <atiawbBo6WRPA6QA@lima-development>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 12/12] [do not merge] selftests/bpf: Cover the
+ low-32 link for narrowing stack spills
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+ <20261020161907.2115379-13-vineet.gupta@linux.dev>
+ <sashiko-outbox-179354@kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <sashiko-outbox-179354@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 21, 2026 at 09:58:09PM +1100, Matt Bobrowski wrote:
-> On Tue, Oct 20, 2026 at 06:24:42PM +0000, Alexei Starovoitov wrote:
-> > On Tue, Oct 20, 2026 at 03:50 AM Matt Bobrowski <matt@bobrowski.net> wrote:
-> > > Fix this by returning -EINVAL from bpf_path_d_path() when current->fs
-> > > is NULL. Only the task itself clears its fs, in exit_fs(), so the check
-> > > cannot race with that.
-> > 
-> > The crash is gone, but so is the path. file_release progs will get
-> > -EINVAL for every file that a task still has open when it exits.
-> > 
-> > It also breaks what works today. The d_dname branch in d_path() returns
-> > before it looks at current->fs, so at task exit a pipe or a socket
-> > resolves to "pipe:[123]" now and to -EINVAL with this patch.
-> > 
-> > And it's not specific to bpf. The comment in fs/cachefiles/namei.c says
-> > that current->fs == NULL in do_exit() breaks d_path() called from ext4
-> > open.
-> > 
-> > can we fix it in d_path() instead ?
-> > With an empty root prepend_path() goes up to the global root, the same
-> > way d_absolute_path() does. Then the check in bpf_path_d_path() is not
-> > needed and the selftest can expect the path. A chrooted task gets the
-> > path from the global root, but it doesn't have a root anymore.
-> > 
-> > Something like this (compile tested only):
-> 
-> Prior to sending out the fix, I also considered addressing this directly
-> within d_path(), much like you've proposed here, but decided against
-> it. d_path()'s contract is to build a pathname relative to the current
-> root. It does fall back to a root-independent name when the path isn't
-> reachable from that root, but that fallback still presupposes the caller
-> has a root to measure against. An exiting task past exit_fs() has no
-> root, so d_path() has no correct answer to give in that state, and I'm
-> not convinced we should invent one for it.  That's what
-> d_absolute_path() is for.
-> 
-> You're right that my patch regresses the d_dname case though, since
-> pipes and sockets resolve today without ever looking at current->fs.
-> Rather than replicating the d_dname check in bpf_path_d_path(), which
-> would mean duplicating VFS logic such as the mounted pseudo-inode
-> special case, I think the cleaner fix is to move the "no root, no
-> answer" check into d_path() itself, after the d_dname branch:
-> 
-> 	if (unlikely(!current->fs))
-> 		return ERR_PTR(-ENOENT);
-> 
-> That keeps d_path()'s semantics intact, keeps pipe:[N] and socket:[N]
-> working at exit, and turns the oops into an error for every caller,
-> including the ext4 open path you mentioned. Nothing that works today
-> changes behaviour; only calls that currently oops are affected.  Callers
-> that want a name in that state then have to choose one explicitly, which
-> I take to be Al's point.
-> 
-> For BPF, that choice could be a new BPF kfunc wrapping
-> d_absolute_path(), so programs can pick whichever semantics they actually
-> want, and file_release programs that need a name at exit get one whose
-> format doesn't depend on how far the task got through do_exit(). I'd
-> prefer that over silently falling back to d_absolute_path() inside
-> bpf_path_d_path(), which would return chroot-relative names before
-> exit_fs() and absolute ones after, and still wouldn't help pipes and
-> sockets since d_absolute_path() rejects internal mounts.
-> 
-> Al, would a check like the above in d_path() be acceptable to you?
+On 10/20/26 9:32 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [Medium] selftests/bpf: fill before narrow in zext_narrowing_spill_byte_no_link()
+> - [Medium] selftests/bpf: tautological test in sext_fill_of_narrowing_spill_drops_zext()
+> - [Low] selftests/bpf: stale inline comment in zext_narrowing_spill_drops_link()
+> --
+>
+> commit a341902044eb0b749136bbae6f269759e4c0ffcd
+> Author: Vineet Gupta <vineet.gupta@linux.dev>
+>
+> selftests/bpf: Cover the low-32 link for narrowing stack spills
+>
+> This patch adds six verifier selftests to verifier_linked_scalars.c to test
+> low-32 register linking behavior across narrowing stack spills and subsequent
+> fills.
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> index ab78285153fb1..8ade4836e1b2f 100644
+>> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> @@ -1217,6 +1217,128 @@ __naked void zext_fill_byte_forms_no_link(void)
+>>   	: __clobber_all);
+>>   }
+>>   
+> [ ... ]
+>
+>> +/*
+>> + * A narrowing spill stores only the source's low 32 bits, so the slot is their
+>> + * zero-extension. Filling it back is a mov, though, and that drops the link
+>> + * for the same reason zext_chain_drops_link does, so a later narrowing of the
+>> + * source does not reach the filled register.
+>> + */
+>> +SEC("socket")
+>> +__failure
+>> +__msg("div by zero")
+>> +__naked void zext_narrowing_spill_drops_link(void)
+>> +{
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
+>> +	*(u32 *)(r10 - 8) = r6;	/* narrowing spill, forms the link */ \
+>> +	r2 = *(u32 *)(r10 - 8);	/* fill it back */		\
+>> +	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
+> [Severity: Low]
+> This isn't a bug, but is this inline comment in
+> zext_narrowing_spill_drops_link() left over from the earlier version of the
+> test? Since the preceding fill into r2 drops BPF_REG_LINK_ZEXT, narrowing w6
+> here does not propagate to r2.
 
-Al, what do you think about what I've proposed above?
+Yes. It said the narrowing propagates to r2, which is the opposite of what
+the test is named for. Fixed.
 
-> > diff --git a/fs/d_path.c b/fs/d_path.c
-> > index c253090..ea49d33 100644
-> > --- a/fs/d_path.c
-> > +++ b/fs/d_path.c
-> > @@ -265,7 +265,7 @@ static void get_fs_root_rcu(struct fs_struct *fs, struct path *root)
-> >  char *d_path(const struct path *path, char *buf, int buflen)
-> >  {
-> >  	DECLARE_BUFFER(b, buf, buflen);
-> > -	struct path root;
-> > +	struct path root = {};
-> > 
-> >  	/*
-> >  	 * We have various synthetic filesystems that never get mounted.  On
-> > @@ -284,7 +284,9 @@ char *d_path(const struct path *path, char *buf, int buflen)
-> >  		return path->dentry->d_op->d_dname(path->dentry, buf, buflen);
-> > 
-> >  	rcu_read_lock();
-> > -	get_fs_root_rcu(current->fs, &root);
-> > +	/* Past exit_fs() there is no root to stop at, go up to the global one. */
-> > +	if (current->fs)
-> > +		get_fs_root_rcu(current->fs, &root);
-> >  	if (unlikely(d_unlinked(path->dentry)))
-> >  		prepend(&b, " (deleted)", 11);
-> >  	else
-> > 
-> > pw-bot: cr
+
+>> +	if r2 == 0 goto 1f;					\
+>> +	r0 /= 0;						\
+>> +1:								\
+>> +	r0 = 0;							\
+>> +	exit;							\
+>> +"	:
+>> +	: __imm(bpf_get_prandom_u32)
+>> +	: __clobber_all);
+>> +}
+>> +
+> [ ... ]
+>
+>> +/*
+>> + * A sub-word spill is below the low-32 model, so no link is formed there.
+>> + * The fill is a byte load too, so this pins the spill-side and fill-side
+>> + * size gates together rather than either on its own.
+>> + */
+>> +SEC("socket")
+>> +__failure __msg("div by zero")
+>> +__naked void zext_narrowing_spill_byte_no_link(void)
+>> +{
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r6 |= r0;						\
+>> +	*(u8 *)(r10 - 8) = r6;	/* 1-byte spill: no link */	\
+>> +	r2 = *(u8 *)(r10 - 8);					\
+>> +	if w6 != 0 goto 1f;					\
+>> +	if r2 == 0 goto 1f;	/* not deduced */		\
+> [Severity: Medium]
+> Does zext_narrowing_spill_byte_no_link() actually test the size gate in
+> check_stack_write_fixed_off()?
+
+No, fixed in v4.
+
+The narrowing now happens while the value is still on the stack, before 
+the fill, as you suggest and as zext_narrowing_spill_reaches_fill 
+already does. As written, the fill had already dropped any link, so the 
+test would have passed even if the 1-byte spill had formed one.
+
+
+> Here, r2 is filled from fp-8 before w6 is narrowed:
+>
+> 	*(u8 *)(r10 - 8) = r6;	/* 1-byte spill: no link */
+> 	r2 = *(u8 *)(r10 - 8);
+> 	if w6 != 0 goto 1f;
+>
+> As demonstrated by zext_narrowing_spill_drops_link() above, filling a
+> BPF_REG_LINK_ZEXT slot into r2 before narrowing w6 drops the zero-extending
+> link on the fill, so narrowing w6 afterwards would not propagate to r2 even if
+> the 1-byte spill had formed a link.
+>
+> Should the narrowing branch "if w6 != 0 goto 1f" happen while the value is
+> still on the stack before filling r2, matching the instruction order in
+> zext_narrowing_spill_reaches_fill()?
+>
+>> +	r0 /= 0;						\
+>> +1:								\
+>> +	r0 = 0;							\
+>> +	exit;							\
+>> +"	:
+>> +	: __imm(bpf_get_prandom_u32)
+>> +	: __clobber_all);
+>> +}
+>> +
+>>   #ifdef CAN_USE_MOVSX
+> [ ... ]
+>
+>> @@ -1800,6 +1952,35 @@ __naked void sext_byte_fill_drops_sext_link(void)
+>>   }
+>>   #endif /* CAN_USE_MOVSX */
+>>   
+>> +/*
+>> + * The same, with the zero-extending link coming from a narrowing spill rather
+>> + * than a mov. The spill truncated the slot to 32 bits, so the fill is not
+>> + * narrowing and assigns no link kind of its own; the slot's zero-extending
+>> + * one must not survive the sign-extending load.
+>> + */
+>> +SEC("socket")
+>> +__failure __msg("div by zero")
+>> +__naked void sext_fill_of_narrowing_spill_drops_zext(void)
+>> +{
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
+>> +	*(u32 *)(r10 - 8) = r6;	/* narrowing spill: slot is ZEXT */ \
+>> +	r2 = *(s32 *)(r10 - 8);	/* sign-extending, not narrowing */ \
+>> +	if w6 != -1 goto 1f;	/* slot low 32 bits are all ones */ \
+>> +	if r2 s>= 0 goto 1f;	/* taken only if r2 was rebuilt zext */ \
+>> +	r0 /= 0;						\
+> [Severity: Medium]
+> Can sext_fill_of_narrowing_spill_drops_zext() ever reach the is_ldsx link
+> clearing in check_mem_access() with BPF_REG_LINK_ZEXT still intact?
+
+nope it can't: v4 drops the test.
+
+Thx,
+-Vineet
+
+> In check_stack_write_fixed_off(), the 4-byte narrowing spill
+> "*(u32 *)(r10 - 8) = r6" truncates fp-8 to 32 bits via
+> zext_32_to_64(&ss->spilled_ptr) and sets BPF_REG_LINK_ZEXT.
+>
+> When "r2 = *(s32 *)(r10 - 8)" then runs in check_stack_read_fixed_off(),
+> get_reg_width(reg) is at most 32, so narrowing is false. Because size == 4,
+> spill_size == 4, and !narrowing all hold, check_stack_read_fixed_off() calls
+> assign_scalar_id_before_mov(env, reg) before copying *reg to
+> state->regs[dst_regno]:
+>
+> kernel/bpf/verifier.c:check_stack_read_fixed_off() {
+>      ...
+> 	if (env->bpf_capable && size == 4 &&
+> 	    (subreg_link || (spill_size == 4 && !narrowing)))
+> 		assign_scalar_id_before_mov(env, reg);
+> 	state->regs[dst_regno] = *reg;
+>      ...
+> }
+>
+> And assign_scalar_id_before_mov() immediately clears BPF_REG_LINK_ZEXT and
+> assigns a fresh scalar ID unlinked from r6:
+>
+> kernel/bpf/verifier.c:assign_scalar_id_before_mov() {
+> 	if (src_reg->link_kind && src_reg->link_kind != BPF_REG_LINK_SEXT)
+> 		bpf_clear_scalar_id(src_reg);
+> 	if (!src_reg->id && !tnum_is_const(src_reg->var_off))
+> 		src_reg->id = ++env->id_gen;
+> }
+>
+> So BPF_REG_LINK_ZEXT is already cleared by the normal 4-byte fill path (the
+> same path tested by zext_narrowing_spill_drops_link()) before the is_ldsx
+> handling in check_mem_access() runs.
+>
+> Additionally, even if r2 kept r6's ID and BPF_REG_LINK_ZEXT past
+> check_mem_access(), coerce_reg_to_size_sx() restricts r2's 64-bit bounds to
+> [S32_MIN, S32_MAX]. When "if w6 != -1 goto 1f" calls sync_linked_regs(),
+> rebuilding r2 with zext_32_to_64() yields 0xffffffff, which is disjoint from
+> [S32_MIN, S32_MAX], causing range_bounds_violation() to revert r2 to its prior
+> bounds and still hit "r0 /= 0".
+>
+>> +1:								\
+>> +	r0 = 0;							\
+>> +	exit;							\
+>> +"	:
+>> +	: __imm(bpf_get_prandom_u32)
+>> +	: __clobber_all);
+>> +}
+>> +
+>>   #endif /* CAN_USE_LDSX */
+>>   
+>>   char _license[] SEC("license") = "GPL";
+
