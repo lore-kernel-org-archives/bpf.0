@@ -1,95 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.240.27.27
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792984062;
-	b=j71xzj5MmbabIVXekx7QHnaJkEGF48dGpjEtWWFH1DvnJD1a9CAmIiAOWtG1r3xBPNwR
-	 nUlqj1YyC4h1r9HqiX6kalQUoSAuw+f+sothfbyZf19ae9Ppx3Fq9yk5rCM3Ih3xMQ2fc
-	 RxcEEZ5Fi9W8LgjfYINZk5pTxVGnryFMauMm7Xh9Z3Gur5Z6qquZK+1QZgP4kk9HPFCY8
-	 2+zqg6/JfaJVSKDjm9WGbFOdQ8D8gHE9P/+oHxJ33IonczapLlvRlrfqGtE0wmRsC/ZGF
-	 s4a0pAa9dUWCKNNwXNGLgJ2Ulcpca5VTIZJCYWHorMQCiAFZ38lWN9Cp0F9Bv5e/uDA==
+	t=1792984623;
+	b=Y1Gnmx6PkzxzObLgvnd/CUffXgsSqU2O2u3dprG9EV9MuE5CxfcG5xZr/zfXB982ecx1
+	 a34IXmiYBKNhI0Yh2ZJQPvHgKNmlhhgu4hIgMgLFwox7o/UFKVNilQ4mI//R8Q6cSpLFf
+	 wJA8JLLyrY37ScmO1AZUvubPSDVlGEFGrLlu7sPGfOKheaNwLb1+5f9nBD53CzEfrgv+O
+	 px3gc74hK46vfysnUi2ZAtRomfhLcVIpb74VwgBE818895zN6B1tvKYgjj7+c9K4fVz7P
+	 dhBL1z9mE8Wg5jYU0iebPArcrENY10sH5TLIfttomHrVPi5B+tgnzr2MB2Cwr/qOH+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792984062;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=mUaC2nBwlRz6CLsNn8h/VtsmMRJkQZiqypod4sMRqmU=;
-	b=ROzBlrpJKgdXTgP7z/2Oa1zyTsRoao9LF/jVCvf3Q3fNUbAZPf42jq4zmjlEweKjyKyp
-	 bNYXQ+2HNcHeZ8SGNdvDAJujqeGAuYPDB+akK945FYnoGczp1n1IdacZ1ovjd5ibE0p8K
-	 Pgh0bwRAkY9ZTa4ZbbgxM6qvO+LQ/HEqrBKoskX/M9bM6J3Ambk1dvSX1QzZYaLFd9D7x
-	 HjmJAZ32ojV1rzBXmA+nZ4l0xjANg66CGSRVrhita9RHq28Qx2JynRssyD6y2Zg59s252
-	 ek6IW+28131NEP90NeHSMD+MJQvoqcIjQjvBO2DHpFJJ/jfj0dUtdReymYfzvwao5jA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792984623;
+	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:Feedback-ID:X-SES-Outgoing;
+	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
+	b=f4GSGujn37LyepSbaajVAuIAWnT1zUfQvGAE98vk72b7GZK9dYL5Ad0vfSAmZN9dfUPY
+	 JnOpmRRwm9N3DtduNj8E210FdZybFmCEYFqKW6tcFXoP7k3bmZ4Os+/i0qZRDVqcq+5UP
+	 EWjFkL3EOGIejn8DgAvHce+K87rXlKpJ1zVT5Sp4JLQRuKwNFemBgYoyNgyhnC4WTz0Hl
+	 slCci+2PbcG6Ru39SeOB5WC5UMD8WO/OjCCh2yK2eKBG7dKaFbAW8Aukjvz6mc6SLvneV
+	 Vr4Tjhn6fcr0ZVpUp2XfIfMbpJZFxd4q9+j/rX69kmBQJ/uuzRTvgzfDT7fhD0zJhJg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XalTvxq+;
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	dmarc=pass header.from=eliskeggs.com;
+	spf=pass smtp.mailfrom=us-west-2.amazonses.com;
+	dkim=pass header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=aMIieMyq;
+	dkim=pass header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=iLi5uCYL;
+	arc=none smtp.remote-ip=54.240.27.27
+Received: from a27-27.smtp-out.us-west-2.amazonses.com (a27-27.smtp-out.us-west-2.amazonses.com [54.240.27.27])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E02C606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:07:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3E02C606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6186A606A322;
+	Mon, 26 Oct 2026 03:17:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6186A606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eliskeggs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=us-west-2.amazonses.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XalTvxq+
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e9f6a16aedso16364735ad.2
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792984062; x=1793588862; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mUaC2nBwlRz6CLsNn8h/VtsmMRJkQZiqypod4sMRqmU=;
-        b=XalTvxq+/yVZCwtiDWHzF5ruSfCI3Rl1b4ofbYPinmr0aYMiWRdpbV0PHoLvlBI9oM
-         pbvDyI1tpvybQZ/XYby0vCTkN8i6cdTntuHM8S6gR9wv4uKqwaDDY0ONnjNfkgW9571H
-         9tteCDmimWUkN23iA+jehiIZdRb/FwsSGsoz9jhQnVVoRjYks7EbvVnM6juK6/e0l6Bx
-         1lTzxwyjbpYTcY8Og8o4TL2xPXQ5el0OFMxY0tXhTDiwkBaiLAngQ0L2QLQEOYu1+Azt
-         Ono4BGv8dfUQ31Ji4BrTszkUI9rf8gwCkgfoZGrM+uLU09YE48G16vr5lh1Pel8XSDl7
-         ejMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792984062; x=1793588862;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mUaC2nBwlRz6CLsNn8h/VtsmMRJkQZiqypod4sMRqmU=;
-        b=frXlI10tq39PlJNXvZxDYBwLYwuv04GM1Xuvso9Ms6om28Ny63yG5jGiOHGAO3wQK8
-         VXAk6TBdBNnChNkq0wzMjKybs23XQAN6lM9k7L+gxu7YzmqtkDp/2j3o81h6lqYmT3HL
-         M1Cakc1PDz05VUsj1EUmDiQ86dhiUZdUZbgJ99R0fFF2mvBE0qXE32oTNnMm3cGdCUn8
-         9NqJr8dquk5SeLBlvUhfRU6/81S3cNQ/hNalSXObEPR4guDPB18H6nmr37xaWawnMd/+
-         sTYgRq9tQe2u/6WABqZ6XMhU3crNxybw6Mrmn6BPzuZVxMv5Qv7d3A6mi0o1Fu6oLONy
-         CK+Q==
-X-Gm-Message-State: AFq9FYLJ0s+J34FkUMlqNtbZOCqaBppWJV4u+2+a6826sopirGtw9Vnw
-	80fQXvTLefirO+2k5upZc+Wb5d80laX2oqCV3DMTgmZiekmqHnyY6C888M9UFw==
-X-Gm-Gg: AYBFou1SEvrOGjY0so/Uz/M+BwPKZdxOR/1JsxG6paaqx17lKRFh8FgPlzHYsGor9Vf
-	bdcRDYYGo+RzT4ov3hAuJ/Vv2bKNWeXJW7PzvyYw+S+c0i2Gez0gD5cy2mPncGMV9wkE+aKqLZD
-	bbZqMwWTFKfpemoi1CCBzaw7xoHI/BOQXB+dHKL8Yb0PPPCbTVlpnCYCBYAgdG31mehejYB8Jxu
-	OsvHkVjiTbT8p9XFZFvIAh66LZvNIRDvEJy3LQskk3lqeQSGXY+sCviZY0m1zJHMIH5H2DX/0SG
-	zCxucYaVSHfGRlOHkDc5jynR0/34yOc8Og4a87VXW4Tb2KgRIHKVcIan+WRVJTKGs1TRIJBKZQ9
-	+6//n2rW+2ZS9QgEeoY8hHqEvNDFtl/AxIGQpoIPwyjHqGLt42rhF4LBt1EDxkHn7E2bFHnR4qg
-	3wDd/H2BjRNwMrNoIfIhR5+P11KIMpIzY18/32dG+m/5U5ek1FYAFhpZQtHF5+YithUrokuDnK5
-	zcz2LzVNVNk0EYqSLHnqxV6B0+BNSsIqVXp/Yyv89EfshDoBE8qcEsL86HjmoeZv6zByjExhbWG
-	feOWsNULbxmT9S1n0jcCzplwA27rQ3I27bDnVH5/qMy2Mo8C+H80KLVuwKtLP9mcFOtALcNXw9E
-	V53NOffVqgrDt24CRlC0m6gbe
-X-Received: by 2002:a17:90b:4ece:b0:3a8:59d3:530f with SMTP id 98e67ed59e1d1-3adeae83491mr5134484a91.57.1792984061548;
-        Sun, 25 Oct 2026 20:07:41 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebafacd4sm3937450a91.2.2026.10.25.20.07.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:07:40 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com
-Subject: [PATCH bpf 81/81] selftests/bpf: Test callx of one of a set of functions
-Date: Mon, 26 Oct 2026 02:59:42 +0000
-Message-ID: <20261026025943.404450-82-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=aMIieMyq;
+	dkim=pass (1024-bit key, unprotected) header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=iLi5uCYL
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk; d=eliskeggs.com; t=1792984622;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
+	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
+	b=aMIieMyqNmiWx5SOQvYw/09ThJHTSl0FHiX1rGynNpEov/suluJAC5W0VjmvIDdI
+	LkXm9GjwRhLuo8mtFs0s9tnMeogzIaK5m/vDaEFuedukU5RD9PQFVx8SmHZGqQgyOBp
+	Jpdu+cOaXgS+akchCwEcb/Q5siMP/2gGozanjEQM=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1792984622;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Feedback-ID;
+	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
+	b=iLi5uCYLf2AE1CoxngD8YySv3oj7AGYaAU8tetFyCThPuzNBMLfp2oVjtWWQik+4
+	C3wEYhpzsmJBU9K87XNj321/nuSZivjf+p94infmSheOkArLpkvsaDbjxtFg99FZWkO
+	Dn/OhE1HUOO7DAjta2U5phrokcqYYBmbTG3KSjeM=
+Date: Mon, 26 Oct 2026 03:17:02 +0000
+From: Eli Skeggs <kernel@eliskeggs.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, 
+	"David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on
+ zero-length skb redirect
+Message-ID: <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
+References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
+ <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
+ <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,390 +84,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
+Feedback-ID: ::1.us-west-2.aEUYuRRC8Z+WeC8mlWAQBpqJLV0VswmaEnHpVsice/Y=:AmazonSES
+X-SES-Outgoing: 2026.10.26-54.240.27.27
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Mon, Oct 26, 2026 at 09:59:00AM +0800, Jiayuan Chen wrote:
+>
+> On 10/26/26 7:41 AM, Eli Skeggs via B4 Relay wrote:
+> > From: Eli Skeggs <kernel@eliskeggs.com>
+> >
+> > Treat a return of 0 as success when there is no data to send, while
+> > continuing to fail on a 0 return with residual bytes. The loop exits
+> > without incident on an empty skb, and the skb gets cleaned up as usual.
+> > On an ingress redirect, the empty message is still queued as before, but
+> > the target socket no longer reports EPIPE.
+>
+> The target can't receive anything after that though. The empty msg sits
+> at the head of psock->ingress_msg and nothing ever dequeues it:
+>
+> [...]
+>
+> So the user gets EOF on a socket whose peer never closed, and everything
+> redirected to it after the FIN is lost. Without a verdict prog on the
+> target it is worse, tcp_bpf_recvmsg() returns -EFAULT forever.
+>
+> Since this patch is already about the zero-length skb, can you handle
+> the ingress side too? E.g. in sk_psock_skb_ingress(), don't queue an
+> empty msg when len is 0 and the skb was redirected (skb->sk != sk). The
+> self PASS case must keep its empty msg since is_next_msg_fin() depends
+> on it.
 
-A load from a table of functions at a variable offset gives one register
-that holds a pointer to one of N functions, func(one_of=N). See
-"bpf: Track a pointer to one of a set of functions".
+Yep, thanks for pointing that out.
 
-  test, callx_rodata_...            the case                        result
-  --------------------------------  ------------------------------  ------
-  one_of_two                        a table of two functions        loads
-  same_function_twice               the same function two times     loads
-  callback_one_of_two               bpf_loop() gets the register    loads
-  one_of_two_at_loop_head           callx in a loop, 4 iterations   reject
-  one_of_two_at_loop_head_ok        callx in a loop, 3 iterations   loads
-  callback_one_of_two_at_loop_head  bpf_loop() in a loop            reject
-  400_functions                     3 states, 400 functions         loads
+Alexei suggested skipping empty skbs in sk_psock_backlog():
+https://lore.kernel.org/all/DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com/
 
- - one_of_two expects R2=func(one_of=2) in the log, and callx must call the
-   function that the index selects. same_function_twice expects R2=func().
- - In the tests with a loop, callx or bpf_loop() is the loop head. The prog
-   is unsafe only in the fourth iteration, and only with one of the two
-   functions.
- - In 400_functions three states that the verifier cannot join get to the
-   load. One state for each function gives 1200 states at one insn, and the
-   verifier rejects that with
-   "more than 1024 states that cannot be joined". With a set there are
-   3 states.
+To your point, I think the critical difference between these approaches
+happens when the sk's backlog queue is not empty and the socket's own
+FIN (the self PASS FIN) gets queued. In that case, we rely on the empty
+msg to correctly update copied_seq, and skipping it means the copied
+sequence number ends up 1 behind rcv_nxt.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_callx_many.c |  90 +++++++
- .../bpf/progs/verifier_callx_rodata.c         | 220 ++++++++++++++++++
- 3 files changed, 312 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_many.c
+This path is already broken: when a socket's FIN gets queued behind
+other skbs, the backlog reports the erroneous EPIPE just as in the
+redirect case.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 017b15fa4b6a..3b56cad22156 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -36,6 +36,7 @@
- #include "verifier_btf_unreliable_prog.skel.h"
- #include "verifier_call_large_imm.skel.h"
- #include "verifier_callx.skel.h"
-+#include "verifier_callx_many.skel.h"
- #include "verifier_callx_rodata.skel.h"
- #include "verifier_cfg.skel.h"
- #include "verifier_cgroup_inv_retcode.skel.h"
-@@ -231,6 +232,7 @@ void test_verifier_btf_flex_array(void)       { RUN(verifier_btf_flex_array); }
- void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
- void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
- void test_verifier_callx(void)                { RUN_JITED(verifier_callx); }
-+void test_verifier_callx_many(void)           { RUN_JITED(verifier_callx_many); }
- void test_verifier_callx_rodata(void)         { RUN_JITED(verifier_callx_rodata); }
- void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_many.c b/tools/testing/selftests/bpf/progs/verifier_callx_many.c
-new file mode 100644
-index 000000000000..5f8ee8490076
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_many.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * callx through a table of many functions. libbpf appends the functions that read-only
-+ * data points to to every prog of the object that has callx, hence a file of its own.
-+ */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "../../../include/linux/filter.h"
-+
-+/* gcc doesn't support indirect calls */
-+#if defined(__clang__) && (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+    (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
-+
-+/*
-+ * Read-only data with pointers to functions, where the compiler puts tables
-+ * of functions, structures of operations and vtables. libbpf resolves
-+ * a pointer to the offset of the function in the program and the kernel
-+ * recognizes it by that value.
-+ */
-+#define DATA(SECTION, NAME, ...)				\
-+	".pushsection " SECTION ",@progbits;"			\
-+	".balign 8;"						\
-+	#NAME "_%=:"						\
-+	__VA_ARGS__						\
-+	".type " #NAME "_%=, @object;"				\
-+	".size " #NAME "_%=, .-" #NAME "_%=;"			\
-+	".popsection;"
-+
-+#define RODATA(NAME, ...) DATA(".rodata,\"a\"", NAME, __VA_ARGS__)
-+
-+#define REP10(M, p) M(p##0) M(p##1) M(p##2) M(p##3) M(p##4) M(p##5) M(p##6) M(p##7) M(p##8) M(p##9)
-+#define REP100(M, p) REP10(M, p##0) REP10(M, p##1) REP10(M, p##2) REP10(M, p##3) REP10(M, p##4) \
-+		     REP10(M, p##5) REP10(M, p##6) REP10(M, p##7) REP10(M, p##8) REP10(M, p##9)
-+#define REP400(M) REP100(M, 0) REP100(M, 1) REP100(M, 2) REP100(M, 3)
-+
-+#define MANY_FUNC(n)						\
-+__naked __noinline __used static unsigned long many##n(void)	\
-+{								\
-+	asm volatile ("r0 = r1; r0 += 1; exit;");		\
-+}
-+#define MANY_QUAD(n) ".quad many" #n ";"
-+
-+REP400(MANY_FUNC)
-+
-+/* 3 states that have no join get to a table of 400 functions: 3 states, and not 1200 */
-+SEC("socket")
-+__success __retval(11)
-+__naked void callx_rodata_400_functions(void)
-+{
-+	asm volatile (
-+		RODATA(big, REP400(MANY_QUAD))
-+		"r7 = r1;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 == 1 goto 1f;"
-+		"r7 = r10;"
-+		"if r0 == 2 goto 1f;"
-+		"r7 = 0;"
-+	"1:"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 399 goto 2f;"
-+		"r0 <<= 3;"
-+		"r2 = big_%= ll;"
-+		"r2 += r0;"
-+		"r2 = *(u64 *)(r2 + 0);"
-+		"r1 = 10;"
-+		"callx r2;"
-+		"if r7 != 0 goto +0;"
-+		"exit;"
-+	"2:"
-+		"r0 = 11;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__success
-+int dummy(void *ctx)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-index 85141cd73298..2575313a977a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-@@ -173,6 +173,226 @@ __naked void callx_rodata_array_of_structs(void)
- 		: __clobber_all);
- }
- 
-+/* one state with one of two functions, and not two states */
-+SEC("socket")
-+__success __retval(11)
-+__log_level(2)
-+__msg("r2 = *(u64 *)(r2 +0)          ; R2=func(one_of=2)")
-+__naked void callx_rodata_one_of_two(void)
-+{
-+	asm volatile (
-+		FUNC_TABLE2(tbl, add1, add2)
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 = r0;"
-+		"r6 &= 1;"
-+		"r3 = r6;"
-+		"r3 <<= 3;"
-+		"r2 = tbl_%= ll;"
-+		"r2 += r3;"
-+		"r2 = *(u64 *)(r2 + 0);"
-+		"r1 = 10;"
-+		"callx r2;"
-+		"r0 -= r6;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+SEC("socket")
-+__success __retval(11)
-+__log_level(2)
-+__msg("r2 = *(u64 *)(r2 +0)          ; R2=func()")
-+__naked void callx_rodata_same_function_twice(void)
-+{
-+	asm volatile (
-+		FUNC_TABLE2(tbl, add1, add1)
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 1;"
-+		"r0 <<= 3;"
-+		"r2 = tbl_%= ll;"
-+		"r2 += r0;"
-+		"r2 = *(u64 *)(r2 + 0);"
-+		"r1 = 10;"
-+		"callx r2;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static unsigned long loop_cb_stop(void)
-+{
-+	asm volatile (
-+		"r0 = 1;"
-+		"exit;"
-+	);
-+}
-+
-+__naked __noinline __used
-+static unsigned long loop_cb_go_on(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"exit;"
-+	);
-+}
-+
-+/* a helper needs to know the callback */
-+SEC("socket")
-+__success __retval(0)
-+__naked void callx_rodata_callback_one_of_two(void)
-+{
-+	asm volatile (
-+		FUNC_TABLE2(cbs, loop_cb_stop, loop_cb_go_on)
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 1;"
-+		"r0 <<= 3;"
-+		"r2 = cbs_%= ll;"
-+		"r2 += r0;"
-+		"r2 = *(u64 *)(r2 + 0);"
-+		"r6 = r2;"
-+		"r1 = 2;"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_loop];"
-+		/* libbpf resolves the pointers for progs that have callx */
-+		"callx r6;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32), __imm(bpf_loop)
-+		: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static unsigned long not_three(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"if r1 != 3 goto +1;"
-+		"r10 = 0;"
-+		"exit;"
-+	);
-+}
-+
-+/*
-+ * callx is the head of a loop whose iterations are looked at one by one, because of r1.
-+ * The states with one function each are in the iteration of the state with both.
-+ */
-+SEC("socket")
-+__failure __msg("frame pointer is read only")
-+__naked void callx_rodata_one_of_two_at_loop_head(void)
-+{
-+	asm volatile (
-+		FUNC_TABLE2(tbl, add1, not_three)
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 1;"
-+		"r0 <<= 3;"
-+		"r6 = tbl_%= ll;"
-+		"r6 += r0;"
-+		"r6 = *(u64 *)(r6 + 0);"
-+		"r7 = 0;"
-+		"r1 = 0;"
-+	"l_%=:"
-+		"callx r6;"
-+		"r7 += 1;"
-+		"r1 = r7;"
-+		"if r7 < 4 goto l_%=;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+/* and the last iteration leaves the loop. It is not run: a loop that is not left has no end. */
-+SEC("socket")
-+__success __log_level(2)
-+__msg("r0 = r7 {{.*}}R7=3")
-+__naked void callx_rodata_one_of_two_at_loop_head_ok(void)
-+{
-+	asm volatile (
-+		FUNC_TABLE2(tbl, add1, not_three)
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 1;"
-+		"r0 <<= 3;"
-+		"r6 = tbl_%= ll;"
-+		"r6 += r0;"
-+		"r6 = *(u64 *)(r6 + 0);"
-+		"r7 = 0;"
-+		"r1 = 0;"
-+	"l_%=:"
-+		"callx r6;"
-+		"r7 += 1;"
-+		"r1 = r7;"
-+		"if r7 < 3 goto l_%=;"
-+		"r0 = r7;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static unsigned long loop_cb_set_flag(void)
-+{
-+	asm volatile (
-+		"r1 = 1;"
-+		"*(u64 *)(r2 + 0) = r1;"
-+		"r0 = 0;"
-+		"exit;"
-+	);
-+}
-+
-+/* the same for the helper that needs to know the callback, and that the callback comes back to */
-+SEC("socket")
-+__failure __msg("frame pointer is read only")
-+__naked void callx_rodata_callback_one_of_two_at_loop_head(void)
-+{
-+	asm volatile (
-+		FUNC_TABLE2(cbs, loop_cb_set_flag, loop_cb_go_on)
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 1;"
-+		"r0 <<= 3;"
-+		"r6 = cbs_%= ll;"
-+		"r6 += r0;"
-+		"r6 = *(u64 *)(r6 + 0);"
-+		"r7 = 0;"
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"r1 = 1;"
-+		"r2 = r6;"
-+		"r3 = r10;"
-+		"r3 += -8;"
-+		"r4 = 0;"
-+	"l_%=:"
-+		"call %[bpf_loop];"
-+		"r1 = *(u64 *)(r10 - 8);"
-+		"if r1 == 0 goto +2;"
-+		"if r7 != 3 goto +1;"
-+		"r10 = 0;"
-+		"r7 += 1;"
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"r1 = r7;"
-+		"r2 = r6;"
-+		"r3 = r10;"
-+		"r3 += -8;"
-+		"r4 = 0;"
-+		"if r7 < 4 goto l_%=;"
-+		/* libbpf resolves the pointers for progs that have callx */
-+		"r2 = r10;"
-+		"r2 += -8;"
-+		"callx r6;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32), __imm(bpf_loop)
-+		: __clobber_all);
-+}
-+
- /* and the data of the element that the index selects can be read */
- SEC("socket")
- __success __retval(16)
--- 
-2.55.0
+I do like the simplicity of skipping the empty skbs entirely. I don't
+immediately see what the consequence is for copied_seq being behind in
+this terminal state, but the approach that updates copied_seq does seem
+strictly more correct.
 
+Is that the right interpretation? Let me know what direction I should
+take for v2.
