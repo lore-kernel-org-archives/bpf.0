@@ -1,70 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793022408;
-	b=y2RLi2qq0nqx9aHv3AHeBZ3JvLGvDhav7Jqg8Ray4lXV8qTJyYs+L42o3CeQfUUHqjNF
-	 kKUEuFOhuI4t0v4vvWSIK0OVXrRuz3MlaGYsn+YjFMEE6uvtiR7jP/45IdWWXR22bEdGA
-	 zXHYI/AXUhqq+PozbOwhrQ570dLQWFvIgtEN/WjCBYO21VzeL+3m60/4BuXcWRt8XykEa
-	 ICgZjwZZP5HcTE7ss/9EohtrNdOOeQdh5X0zIx/asaWMeNk0GAt/G94KyUWh+ONMUcQPN
-	 3k7EZNRrUtPuZOlW47+90NQ/+q9o+dpQLDHBuMLuW3HtuFxHZfybmzcgD+ISh0n7VdA==
+	t=1793024843;
+	b=SOh58VuALEKboZ12zWDGwjuAUt6EDYNAwEA8UWzEbM2vugWgqDdZI0+Ox8YeCDNGqhBb
+	 QvQPgiv2/VEF1AvLIM7+kcu0V0tGzoVdzu3Q4h7HOAP7L4hrP+FfqQASLVkaNE8V6vTs8
+	 7y2G6ZU8MlFbBB4Rn1rJy4Su9zq3Z93Szdivxb77Ga1RL8waPBw7OA+xDXqvnqXNL7sJT
+	 5GUwRPIfGRIRZV0OqUuHUqTTHeYhjoU5jNv/aZDh4HAUdlf4i8wnkg6+LA7wvAwLF7u8s
+	 hcK/vb41IQqLsWIme6xME5VLlVBRvzJNcyeibQVFnx1S0es7iArF7zDSzarZ9j+KHpA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793022408;
-	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:From:Date:
-	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-ID:X-B4-Tracking:X-Change-ID:To:CC:X-Mailer;
-	bh=rPticPiLc3pCUn/0LDVPtmHtdlDPQ08+ktThrCe8zzA=;
-	b=GKnIKvPLU8RPtuFW1SbD292+yvTSHxSJWrvLMAJWi2GqOCE+g1zOwUrE/52PKAYjz1w2
-	 FVsTLEdN63DbNdmWyfgPbir6AJb9uA1oQG/JsQEWZs4X+Wm7KLTp9BGpmUwcyCu7HkKaF
-	 Y20elwJq8/yTM4JF/Fq28tOX7sZ7YpZNElGQYixZjmehx/4R+iKcpHzIi+CWFanlLnn6D
-	 TJe8CML3Or6yXcT+NP1B4SsVFqiZDbkW8IQVg19vs4vdSLtucjdFC9uKVOZvioWEjecvr
-	 Fu1JRCVh8f6ZYVRTaXRHMxOJ/3WAW0eGLVgTp1aeYjl42As5JhBRVHtjrCaO3lvzu3Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793024843;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=pWNIDudccydM955IzkAINXE2ZjY/ipVqw0niCy80XBs=;
+	b=OUlzpWCi/LAxBDQ0IVF7qqFCfnElJGHOR8/WYIG6lFB0sYTpYk18TjuRzQUS2FY52Ei0
+	 holYuy2Un6UJqNWY3OJncvrfQITd1KKlyOu2NL5S1Mu4DJvghn9lnQtRyEnZG5ddOD8Ru
+	 k/yzvAzAIOYTZyqueSFq11Plva4TzZB66erVDJw/idaUJXSZMBIijZZH+Up1OnP+B8dwh
+	 ABiOOTox3Na98mEmrjyUgtHaJvqTqg/pHEnqG2ZwWpfGxuKT4XBMgaz2st/ophGHoW/Dz
+	 P6gINFQJJU452A2EsJYYVpwiiOfAVZojRP0hy9sAA4V8qBYn6o9w3tNzWeRaPPT3P9A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=microchip.com;
-	spf=pass smtp.mailfrom=microchip.com;
-	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=UEuiWBP5;
-	arc=none smtp.remote-ip=68.232.154.123
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XhlxvgU1;
+	arc=none smtp.remote-ip=74.125.227.138
+Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E3B4606A328;
-	Mon, 26 Oct 2026 13:46:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5E3B4606A328
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08C6606A31E
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:27:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D08C6606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=UEuiWBP5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1793022408; x=1824558408;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=/KcO045JT01u3I/kXvlahPmG41Mc678leFr4DDSet04=;
-  b=UEuiWBP5ApL8Ut/1I1857wQi+SD/a9yKr6/z5Mmy1c34c+glhjdQjstJ
-   vXmnQNWUHe9JMTmg2o3qkwkAdWOsis9p5BNebs9M/D5MlY+t3riKh+Lv3
-   PAVeTlvXzT0+LAweKRV9a/+bDeCKgp3b0TsEPP/jPJFO2GXQO7KgJIv6q
-   0hZ/9eAdEO2BPWUE+sG4HA25zwGJpi+zWp8TCZBJ0fa6dbJk0INRUWP6I
-   BRfSskU2214oENZuxL2WggpsMdIfH3DgyhwHK6YVGzUnygr/kWw6IvRAH
-   nJTCfIq9ZCrZrgJG6zPtCcJh/azZFzESxAaegvtW4vrRXIz6+s5XgGFZB
-   A==;
-X-CSE-ConnectionGUID: 5CF51qDfQ+2dIdLlRmS61Q==
-X-CSE-MsgGUID: jBm1vDtITHOWoDsRL38gUw==
-X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
-   d="scan'208";a="232637425"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 06:46:47 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.49; Mon, 26 Oct 2026 06:46:47 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Mon, 26 Oct 2026 06:46:44 -0700
-From: Daniel Machon <daniel.machon@microchip.com>
-Date: Mon, 26 Oct 2026 14:46:39 +0100
-Subject: [PATCH net] net: lan966x: fix the DB dataptr of frames from
- ndo_xdp_xmit
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XhlxvgU1
+Received: by mail-pj2-f10.google.com with SMTP id d9443c01a7336-2df921c1d0eso13749765ad.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 07:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793024842; x=1793629642; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=pWNIDudccydM955IzkAINXE2ZjY/ipVqw0niCy80XBs=;
+        b=XhlxvgU1GrMaPNJspEjfRmGarJy5LJYRRhTg1Hq/82/Zw43IZLmp1XR/SVpCsCs05U
+         BoGs9OSrt8nbSJESb3b6dLlIhykpaBy28HH8+8wK9xG+vb2OSN/fiGslwFxR/GKZEZ8z
+         m19YStf2V0YttCwB+h1Ew2WhtANJutgxfoX0HLvXOn6juDf2bZROzyGtjQ4vvRzF+7XO
+         pm4XP+AZgP36L+2ig5rDwJ0P1QJdE8Q0aVP36TEb1uirPl3ZKJ1WrDZOhzgckhWRNmIn
+         GkkvbnCuyiz50A6qCwqJCiz9XxLWrqnGx7fqHQfrfdSw5/PXSL0VMpNbQxZQedFvav1G
+         +gzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793024842; x=1793629642;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pWNIDudccydM955IzkAINXE2ZjY/ipVqw0niCy80XBs=;
+        b=H2NpnGfgkN2tTMQ1EgVO0NIVHs4+cEEasfif3EDhbaiAE5svZRWoNYSVBxLtgr6gwk
+         sabdvD+H5aVggFEuLHhnRNOkvz349crnPg6Sg6edmtRB2fyB8K/lLldl4EuNpxMIP9kJ
+         8cTtZdTon6Y+XDPbz+fH9xEINMz86h13w/pjifkQPnDFICRijrYlV0e+C/Far4JpfssR
+         3ihYuPGzfcAF27edvbJeyOOfAmaoZkA/pMNgxBKRnUqcqDfQCbi5xM2rRak6XLSZmhuA
+         QOjwsLsSzlgPBz4Q/m+UKYSBDttsipDlDkc6KF82Sk4UwUP6AkkfITO52CPdjTNUsmt/
+         UFoA==
+X-Forwarded-Encrypted: i=1; AKwUvByeuFjRgyYWeCEDl1Gmsn8Qu0VahGnHQeBlxCh+b4BtwvBQE5e3ECvJo4JSO+Rj8yz6Xgo=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK86DxCdvqgRTvWas1X2sDVaG3KNCLlV4vQ46AjtRGoD0YJMWHV
+	oVNdO4qXtFau6sQnv81z3kaxSwVk1bXrxDN14+2IGjG14/DPfP58q5bP
+X-Gm-Gg: AYBFou1/7ZA1YEF7ro5AgeQKNBhVGePpuFA9O0c0uLZKjCFWs1YpsWn2KGWir8aJvqh
+	9xg/Dho68QNMLotAygwxde4nWXS2b3zC4JqeDkICpfvPYWGqyk/BRbmR+JONmOkABpfqXx+226u
+	54+sGBAzCQvhc89GsLcMazRJgqGErxWUyxz+xz0SaCml8M/DNJiqzK+Qo8xzJWtErTgeydoG9Mp
+	0KvssaC7ZYb88dXNKqEse4F8G+ytCPP39j25ZJlrCEUDDIW1WuagylAXkyyiPfzD52TwP7vVABT
+	OQOxeSacvJxWp2YrULEZZ6G5DHzvo9Ifj3TK25T7KqrMxDEhPrgbsCrIQVUA/dlRMiqMmsODj2V
+	o2H5c/64bM6Dv1BxnXkplJYp6ob7mIRa0Eh9E6iAgGdfjV3PsQKd/OEHyrWTx3IERo3il2yM22e
+	mqZQXxqRvh4WoGXIyujI3D2i7G14FWpzUnIj0J9140UwnJZaAAsoJ+4e5/8A9z3x9CbYfZpt+0K
+	ZoSQeACoQFSV32OOgkYYnR3CqDUtZV7AaOUve38uNyBRuz4pQvFOItaTg8PMP8lqzrGQST+0muB
+	WVeokJH1tl0C1lqH
+X-Received: by 2002:a17:902:f68d:b0:2e9:a090:dd80 with SMTP id d9443c01a7336-2ea9c69710dmr55298395ad.22.1793024842080;
+        Mon, 26 Oct 2026 07:27:22 -0700 (PDT)
+Received: from localhost.localdomain ([240e:46d:2300:286:8580:7ae4:15b1:705])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b121725sm17638495ad.14.2026.10.26.07.27.14
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 26 Oct 2026 07:27:20 -0700 (PDT)
+From: Rongzheng Wang <testwrzwrz@gmail.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	stable@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] xsk: defer software checksum until the skb is complete
+Date: Mon, 26 Oct 2026 22:27:05 +0800
+Message-Id: <20261026142705.4564-1-testwrzwrz@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <at82NLzM7g8HGgum@boxer>
+References: <20261024091256.17918-1-testwrzwrz@gmail.com> <20261024141157.59301-1-testwrzwrz@gmail.com> <20261024141157.59301-2-testwrzwrz@gmail.com> <at82NLzM7g8HGgum@boxer>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -74,67 +104,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20261026-lan966x-xdp-xmit-dataptr-v1-1-d0dd068324de@microchip.com>
-X-B4-Tracking: v=1; b=H4sIAL5Z32oC/x3MwQqEIBCA4VeJOTdgxkr1KtFhzNltoExUQojeP
- dnjd/j/GxJH4QRTc0PkS5KcvqJrG1g38j9GcdWglTad0j3u5EdjChYXsByS0VGmkCNaRcwfY1d
- nB6h5iPyV8l/P4DnD8jwv8uOvwW8AAAA=
-X-Change-ID: 20261023-lan966x-xdp-xmit-dataptr-b0aee56bcdb8
-To: Horatiu Vultur <horatiu.vultur@microchip.com>,
-	<UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-lan966x_fdma_xmit_xdpf() transmits both XDP_TX frames and xdp_frames
-from ndo_xdp_xmit, and builds the DB with
-lan966x_fdma_xdp_tx_dataptr_cb(), which adds XDP_PACKET_HEADROOM to the
-stored DMA address.
+Hi Maciej,
 
-Before this patch, the headroom is also added for xdp_frames. For
-XDP_TX the stored address is the start of the page pool page, but for an
-xdp_frame it is the mapping of the IFH placed in front of the frame
-data, so frames from ndo_xdp_xmit are read from XDP_PACKET_HEADROOM
-bytes after their IFH.
+Thanks for the review.
 
-Use the plain tx dataptr callback for xdp_frames.
+Yes. xsk_skb_metadata() is only called for the first descriptor when
+skb is NULL; continuation fragments do not call it. So
+skb->ip_summed == CHECKSUM_PARTIAL means the first fragment requested
+the checksum.
 
-Found by an AI code review agent. Reproduced on a lan9668 board with an
-XDP program redirecting frames from one port to another: none of the 20
-frames arrived intact on the link partner. With the fix all 20 did.
+I'll preserve unlikely() around pool->tx_sw_csum like this:
 
-Fixes: 29cc3a66a81d ("net: lan966x: use FDMA library for adding DCB's in the tx path")
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+    static int xsk_skb_sw_csum(struct sk_buff *skb,
+                               struct xsk_buff_pool *pool)
+    {
+            if (unlikely(pool->tx_sw_csum &&
+                         skb->ip_summed == CHECKSUM_PARTIAL))
+                    return skb_checksum_help(skb);
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index a7940eca5df31..8ea86b800af75 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -686,7 +686,8 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
- 		       FDMA_DCB_STATUS_BLOCKO(0) |
- 		       FDMA_DCB_STATUS_BLOCKL(next_dcb_buf->len),
- 		       &fdma_nextptr_cb,
--		       &lan966x_fdma_xdp_tx_dataptr_cb);
-+		       len ? &lan966x_fdma_xdp_tx_dataptr_cb :
-+			     &lan966x_fdma_tx_dataptr_cb);
- 
- 	/* Start the transmission */
- 	lan966x_fdma_tx_start(tx);
+            return 0;
+    }
 
----
-base-commit: 6430fb7f1cc4e329e386521b7b208df443de92f2
-change-id: 20261023-lan966x-xdp-xmit-dataptr-b0aee56bcdb8
+For the drop path: xsk_drop_skb() increments tx_invalid_descs and
+consumes the skb; sendto() returns the error from skb_checksum_help().
+Since the descriptors are already consumed, retrying is not useful. The
+current metadata validation makes the malformed-packet path effectively
+unreachable, so this is a defensive drop.
 
-Best regards,
--- 
-Daniel Machon <daniel.machon@microchip.com>
+I verified the propagation in a local QEMU test kernel. For the test
+only, I temporarily changed xsk_skb_sw_csum() to:
 
+    static int xsk_skb_sw_csum(struct sk_buff *skb,
+                               struct xsk_buff_pool *pool)
+    {
+            if (unlikely(pool->tx_sw_csum &&
+                         skb->ip_summed == CHECKSUM_PARTIAL))
+                    return -EINVAL;
+
+            return 0;
+    }
+
+and ran test_xdp_metadata. It failed at the first generate_packet()
+sendto:
+
+    generate_packet:FAIL:sendto unexpected sendto: actual -1 < expected 0
+    Summary: 0/0 PASSED, 0 SKIPPED, 1/0 FAILED
+    TEST_RC=1
+
+The normal kernel still passes. The test harness does not print errno,
+so I can only state that sendto() returned -1; the injected error was
+-EINVAL. I restored the source after the test.
+
+Magnus suggested a distinct counter for malformed packets. I agree that
+would be more precise than tx_invalid_descs, but I'd prefer to do that
+in a separate patch instead of extending the UAPI in this stable fix.
+
+I'll address the remaining feedback and send v3 as a new thread.
+
+Thanks,
+Rongzheng
