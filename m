@@ -1,110 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.108
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793055807;
-	b=s98Cd4UbJ3OOdHdrr5bhdRLgllDzDZMcN+L0IAERH7OJb4oFg16sU6R6Kbokb0fEpcKM
-	 Y1dhP1BPyZso/83b3lg8la4CbN3xjQnSgCPkphsyxp5DUapTbNXLzEDt2YQbUe5O9HGaT
-	 WMAdw5PlxU90sL7EzxOa7M3dDTPa6M5aay8/E4+mbADjXmrvbOFEYUE9yIL3mIbs8p7tL
-	 naV023u1njAiLdX6Tu2cCG2Y2vUZ5TrHFaOZDxAip0YDdfKHLKbCw8OdzQ+am1wf/YTmj
-	 8+D/PcBkCZJ7MO+8GFO1/8rNraNSBGbBIbIVrghaW0Gt7DI5c7GLJe+P6yyXYMQr2Cg==
+	t=1793056027;
+	b=AgkjpxUV4MLQC9fFCckB9VgPZFWeYYGx95foBpefGSYZIMHtjFDxKaVyOXp86ZnuQIuF
+	 999ewL0cUv9xO39k7EVkv2WrBo7Br7XEY9O4tkzdQBVf3aKvX4n1sfT/AfgCwtQvmcxIz
+	 0rTD/uTsG+uipVdmAgfrFsACHCtztou1ub39mAypVDX1xsKhvA2Ien8XJjOUiRC7EUl1q
+	 fqxi7/Q+3y8ZrvF0fj8Ysuf5Ut+zd6mHO+dZKgf0ApkuYGYl/CftEEMqVlCgxM4Xwh8oA
+	 exFv7DFhftZtq8MqPGcDA4XEXJ2JE72dc9hmOfGgFyM1iwx4fi4TT6m+sN2Qsl68SvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793055807;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=D7+yWhNEfwBLVAnh4DVgwdCxL54hx3J7AhdglfNEalQ=;
-	b=ys9veLtOx3AuqACrrz8J0pmHVoQfkvU7oxtuFMz4d3m5+AqliieDdaHnxyyzqbiRhidV
-	 rDE4bvaze7ufp31446oK+TdG0rq6GKrmObRPEk6v56EmtD6jS8DPhAryfHwu83VSp6nFX
-	 sBAVX/aJ3ERb1NeJqKXp0LfKWz6TCtAPY8B40JnKvf4c2Ctg2rTnNMao+NW4sOPeAQTMm
-	 FeVUHyRek6mWLI/hclPlRCQntEzMC4lhb1/3jKyEZpRFhrHZsCIgRxkc+gSMqN15ZHfcC
-	 bmOHKznCQyaycxldE4LuKFyAvQZ1lcui5tPg82vMIJcJYmzT9I0re+6e9bDe/wEZ2Mg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793056027;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=MmCr4GWGRh0uwYsGnfv+lbVyfI96m/7W5/i1rwe1uaI=;
+	b=O6NRbJ/KJUyUqbMN6Ls3lvVl6d1XgYp26grkcfS80YzyPTfprTYI1u1ewFBOmdZubPrT
+	 rQ854r/ORA7eso77e/hYcMGs+fsroK/3TkIohvLy3qUWUSllJwcdIrHTulPkmAFnt8eon
+	 ZEYeU1j4M0r9wBPi07QQzbIttaOLd2vL1Gmwb0ZUR7zVOvhN3bPc7BDv6eEHJwlIWfPW7
+	 z1cY3FU+wiYdoBXmBQs6EJUEjAt2+swca/RvpkNqJl88bNH7ye7BdIXwryb9yLDGVD++Q
+	 N1LqcHisiOQYkkivNydtESo9O6+oq5lnIstIZpluoiCTDb98vedJZQ5jF1HoWIfgXoA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b="YnCT/mJB";
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Z9BmjjcB;
-	arc=none smtp.remote-ip=103.168.172.139
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.108
+Received: from mta1.migadu.com (out-108.mta1.migadu.com [95.215.58.108])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC34606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 23:03:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1AC34606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=YnCT/mJB;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Z9BmjjcB
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.phl.internal (Postfix) with ESMTP id 152FB138029B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 19:03:26 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Mon, 26 Oct 2026 19:03:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793055790;
-	 x=1793062990; bh=D7+yWhNEfwBLVAnh4DVgwdCxL54hx3J7AhdglfNEalQ=; b=
-	YnCT/mJB73FAGmQIu27ctvo5RESP4K+pTIiK9EhLFaGH8j7kXKQE+tSbzesbfDxs
-	bV+9wV/9mJE87FIh60l/aPw0vUFP1oQOrI5riJBeeRGczFUwDyCLA8/y4BcBY12w
-	wRegLgnRHobHCSF6BA6i0C+reNBRVR2FKTT/gbMwVrLZscUYxkn/44Vw8eG0qSvi
-	tWJdiyjuyg2ickLmpnfR0RB/KUcSZm6NPyieIrb9GtPlZj+tCTyGrh4XFyNGGvj3
-	0mNzbe0+txL9uJr9T4IbJyuT48LYOX1e+ZzKJe7AQTdcUWk+BiA6E+y23Kktm4eF
-	0OdWKJ+MXJqpGpYEJntcLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793055790; x=
-	1793062990; bh=D7+yWhNEfwBLVAnh4DVgwdCxL54hx3J7AhdglfNEalQ=; b=Z
-	9BmjjcB8Ht97U3XpSdkutzu7KGGU83nJYqys9fKA8A8LFo89cKjsWQGjTr4pUO1L
-	aP9kjNesX0okG+vOVw+RbXwBhTP1dlNpD+KBb13+OcK03C9JQt4JuFOOxyE3GGLG
-	ZspFTpPuZDfO6wPr4qEO2A5TQRvlMMTy9lXbOlVikLCqKHWaoSShkmyr2lAQA0MW
-	I75SaI19xADFJtpVucfW5iXU1oSN1+WUXqV2eC8N5VxDvuOCOwE0yDQK4eXGJuSC
-	Y9wL+SsocvtYeidK4mRb5GFh4Lq5vzciH3Z2KUk3zskK7IRDyEhPwx+HWzKZpC0W
-	mE1pSP6ArkmhYFD6hOYlw==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793055790; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:l7uJ3x0lHyc2sZvzvjhdcTMPgvNwsfDZ53I24Zh8Dz3nqm1
-	+D0YEiI3/4160+Ez2vK3dh+MLPj6rwgADv0ZGNq+UKZDP3ea6EdkIM7/mdeYUgTQ
-	/4RGpxXilFNIlvJkB0c4sWD1WM1w8rKRufZul9+eC909IvC7BLh0AFUyjI26UMQ4
-	kisaav7s9uKtbaQgpH51yHX2icWRfW+VpXmaGZsO0H2VPs3L2L7UnWuYJqWzwrc1
-	oYfZwhE+8+qNzK3BbR3OYMYIunr7UctqA/vLDHdSD5tzGDPb1KvY2VQwTZ1Vhn9G
-	osH/sz+6CtgCWWyZQFsQ9OgZc0tHjky1fW27VNA==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:t7TmO85uHz3Bu9BudK5SiRDodgnhLHm1Jzu0xBGeMzU=:nc6weggs1vuexqOORIgzQ+8Q4IQMXclbAa/HauyeO68=;
-X-ME-Sender: <xms:I9zfarVlhcJ2BCr_X0f-Oqe3MJ-tfizxDxcVqqJu0UTFnur8n55_Vw>
-    <xme:I9zfaua_l0AUV_QUaHlFQ6Xk6c6S9hDoF9LDP0z9ZWTiBfyLFB6bGMt2m3Qf-Wf2r
-    Gp1aY7E3hmIDYnxO6ClUpLNdypmMNJMMAjKb_KTlIEA5DbBcFarl32S>
-X-ME-Proxy-Cause: dmFkZTG2ipuQjn7o/dduxIouS3rexG2Fs38Yf1mgntfcBayDO96egVm+yZQ4lqIIentjs/
-    mqWlr4cScm3wkM9Qig2xKeks6qaebjWFYjqSr1PEW0Un0mkdsaFkbg+xdJQiG2O2dvowLj
-    8E21v7JskZMeciXQK6+wWU3W5TpMrftfB6Bs3P2KNxD6AlDYn9LdKl79i+Pap9CUN0lvH5
-    Kmf7XF9ELL/4XciMlrED2crBvL0Cr1f1u2ohCkkGXPJJyr9NhF3TZ6Ev/Xhe+zrfxeWaDU
-    CHzGxCZtrUFf0j+qOyVHd7hT7F2sM8dBpGw742e3r2mvfUUQKFeZdDheW6KomSHxo+nEDw
-    iI6qO2cDvY1NeToTkMsmxh+Idwqe78oXaZf4JBivXyC6kcFQnAnTHzPS/v1istw/y4OU7I
-    Ig5+4LcAMjuaK21mmbb4bb1DmpocpNGdDRw9yq3nlrcPMsuuD3uvsbn3xyT972zofrrKbr
-    ymQ2KeWkMRr8lrdJKsZ996mCPszGebzucdgyrtSsUPulGKB9lpIv0RpYgf85X7CxFkC5mx
-    0ahqqI390L+Dj1eTAd45HDhy64TtvMVlHqpgXnFPGAYR24gTjdAn2Wh1e+VqFY1QE9IKWw
-    dT6VBuP/aA1R/oxwzZkn1goeGaMw0LOVAE7QiXpixIzvdkU0wv6eIJAHAEFA
-X-ME-Proxy: <xmx:KdzfajHGJ6tf5pxLJ3v2PfbGRd6Rt6Io_8hyQBlkYOXCV7Lb2b01Vw>
-    <xmx:Kdzfapg-6ACQ-dUEsnrl6Ji_ntio6Ly_-zbhQjCdP4T2kZZPc2mbjg>
-    <xmx:KdzfapZpLCwDwzVm3OeHceISOSkLUArE0NE7AI0C6AgT-FmN177JAA>
-    <xmx:Kdzfam27dS94lXZ5VmP_WcqDu7eLBRosip4J-91RpWhTlpq7UwmFJg>
-    <xmx:LtzfasvLSVKrc-K83R8kLrDibnrCdXZT8NkkCjHCIPMKCuEvlTPp1urH>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id C999832A0097; Mon, 26 Oct 2026 19:02:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A58606A327
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 23:07:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05A58606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=RoUshqVKi1ljNDPmLDkiOgHJlgJjpKr22TIGJgZYagU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793056024; v=1; x=1793660824;
+ b=xucMTRbVYDG8qDBLS7ajm2GWJpoPOY2Ie12+9+C1fcatgQO2pSh0hOreVUl3W8NJB/Zvje1e
+ W7iw+2mfUOnYVDpFjpVptBUXPnq1wjelciFdhUa0cFF0ZSr0pyhPFjITXvj1xQZMDoYDl7XDh4a
+ kRPX3wH/S+PViI/dgYgXcsKw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e482058481cc1443;
+	Mon, 26 Oct 2026 23:07:03 +0000
+X-Mizu-Trace-ID: e482058481cc1443
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a298b36d-25a9-42db-a044-177bdd7610fc@linux.dev>
+Date: Mon, 26 Oct 2026 16:06:57 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -114,78 +55,136 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AmKN4IVPaSCN
-Date: Tue, 27 Oct 2026 00:02:38 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "James Houghton" <jthoughton@google.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>
-Cc: "Thomas Gleixner" <tglx@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Kees Cook" <kees@kernel.org>,
- "David Hildenbrand (Red Hat)" <david@kernel.org>,
- "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
- "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
- "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
- "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
- "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-Id: <3b0a8fc4-d140-4a90-b810-cbc1283fc083@app.fastmail.com>
-In-Reply-To: <20261026215226.3713941-11-jthoughton@google.com>
-References: <20261026215226.3713941-1-jthoughton@google.com>
- <20261026215226.3713941-11-jthoughton@google.com>
-Subject: Re: [RFC PATCH 10/10] uaccess: Move the NULL mm warning out of line
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 04/12] bpf: Track low-32 scalar equality
+ across zero-extending movs
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
+ <20261020161907.2115379-5-vineet.gupta@linux.dev>
+ <sashiko-outbox-179367@kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <sashiko-outbox-179367@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 26, 2026, at 22:52, James Houghton wrote:
-> uaccess_without_mm() is inlined into every user copy, including every
-> copy_{to,from}_user() call site on architectures that define
-> INLINE_COPY_USER, such as arm64. Each inlined WARN_ON_ONCE() adds its
-> own __bug_table entry.
+On 10/20/26 9:39 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] bpf: empty or corrupted range after intersection in sync_linked_regs()
+> --
 >
-> Keep the NULL current->mm check inline, but move the warning into a
-> single out-of-line, __cold function, uaccess_warn_without_mm().
+> commit 05d23d7192de1c6009703f8fbe1537ad78dda89e
+> Author: Vineet Gupta <vineet.gupta@linux.dev>
 >
-> The trade-off is that only the first offending access in the system
-> warns, rather than the first one from each call site. The stack trace
-> still identifies the caller, and the access is refused either way.
+> bpf: Track low-32 scalar equality across zero-extending movs
 >
-> Compared to the base of this series, with defconfig + KVM:
+> This commit extends linked-scalar tracking across zero-extending 32-bit moves
+> from wide 64-bit source registers using BPF_REG_LINK_ZEXT. Because a wide base
+> cannot be inverted across all 64 bits, sync_linked_regs() propagates bounds
+> forward only and intersects the derived bounds with the destination register's
+> existing state.
 >
->                      inline WARN_ON_ONCE()    out-of-line warning
->   x86_64 total       +5,884 B (+0.014%)       +9,714 B (+0.023%)
->   arm64  total      +40,948 B (+0.10%)       +24,609 B (+0.06%)
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index b9c20a5cc6d6f..6afd718ede647 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
 >
-> On arm64, this removes the ~16 KB of __bug_table growth, while text
-> size is unchanged, as a call is the same size as the inline brk. On
-> x86_64, the call is larger than the inline ud2 and causes more .cold
-> splitting, so this is a slight regression.
->
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
-> NOTE: This patch is included for reference only, to show the cost of the
->       inline warning.
+>> @@ -18749,6 +18798,27 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+>>   			if (reg->link_kind == BPF_REG_LINK_ZEXT ||
+>>   			    known_reg->link_kind == BPF_REG_LINK_ZEXT)
+>>   				zext_32_to_64(reg);
+>> +			/*
+>> +			 * Intersect rather than overwrite. A BPF_REG_LINK_ZEXT
+>> +			 * link over a wide base does not propagate back, so the
+>> +			 * base can be wider than what @reg has already proved
+>> +			 * about itself; replacing it would lose that.
+>> +			 */
+>> +			cnum64_intersect_with(&reg->r64, prev.r64);
+>> +			cnum32_intersect_with(&reg->r32, prev.r32);
+>> +			reg->var_off = tnum_intersect(reg->var_off, prev.var_off);
+>> +			/*
+>> +			 * An empty intersection means the two sides contradict,
+>> +			 * so this path is unreachable. Say nothing rather than
+>> +			 * say it with an empty range: reg_bounds_sync() below
+>> +			 * refuses to touch one, and the first later
+>> +			 * reg_bounds_sanity_check() would report it as a
+>> +			 * verifier bug, which it is not. Keeping the wider
+>> +			 * pre-intersect state only costs precision on a path
+>> +			 * that cannot be taken.
+>> +			 */
+>> +			if (range_bounds_violation(reg))
+>> +				*reg = prev;
+>>   			reg_bounds_sync(reg);
+>>   		}
+>>   		if (e->is_reg)
+> [Severity: Medium]
+> Can a contradiction in var_off or linear step still leave an empty range on
+> reg, or corrupt reg into a bogus constant, after sync_linked_regs() finishes?
 
-I would suspect that the growth is larger on architectures that
-don't implement __WARN_FLAGS() but rely on the generic WARN_ON().
+Yes to both. I answered the shared half on 6/12 report: v4 route both 
+arms with one helper which checks range bound both before and after the 
+sync.
 
-This would mainly affect 32-bit arm and mips machines, some of which
-are very memory limited, most of the 64-bit architectures have it.
 
-      Arnd
+> First, tnum_intersect() in kernel/bpf/tnum.c assumes its arguments overlap:
+>
+> /* Note that if a and b disagree - i.e. one has a 'known 1' where the other has
+>   * a 'known 0' - this will return a 'known 1' for that bit.
+>   */
+> struct tnum tnum_intersect(struct tnum a, struct tnum b)
+> {
+> 	u64 v, mu;
+>
+> 	v = a.value | b.value;
+> 	mu = a.mask & b.mask;
+> 	return TNUM(v & ~mu, mu);
+> }
+>
+> When reg->var_off and prev.var_off disagree on a known bit without
+> tnum_overlap(reg->var_off, prev.var_off) being checked first, tnum_intersect()
+> turns the conflicting bit into a known 1.
+>
+> Second, range_bounds_violation(reg) only checks cnum32_is_empty(reg->r32) ||
+> cnum64_is_empty(reg->r64), and is only called before reg_bounds_sync(reg). Any
+> contradiction between the intersected r64/r32 ranges and var_off (via
+> __update_reg_bounds()) or base/step (via __update_bounds_from_step()) happens
+> inside reg_bounds_sync(reg), after the range_bounds_violation(reg) check has
+> already passed.
+>
+> For example, in a socket filter:
+>
+>    w7 = w6;                /* r6 is unknown 64-bit; r7 gets BPF_REG_LINK_ZEXT */
+>    if w7 < 4 goto out;
+>    if w7 > 5 goto out;
+>    if w7 & 2 goto out;     /* r7: r64=[4, 5], var_off=(0x4; 0x1) */
+>    if r6 & 2 goto l1;
+>
+> At l1, r6 has var_off=(0x2; ~2ULL), so after zext_32_to_64(reg), reg has
+> r64=[2, U32_MAX] and var_off=(0x2; 0xfffffffd). Intersecting r64 and r32 with
+> prev produces [4, 5], which is non-empty, so range_bounds_violation(reg) is
+> false. However, tnum_intersect() produces (0x6; 0x1) ([6, 7]), and
+> reg_bounds_sync(reg) then intersects [4, 5] with [6, 7], leaving reg->r64 and
+> reg->r32 empty and triggering a verifier warning on a subsequent r7 %= r9 (with
+> r9 = 0).
+>
+> Worse, if w7 was narrowed to a single constant 4 (r64=[4, 4],
+> var_off=(0x4; 0x0)) before "if r6 & 2 goto l1", tnum_intersect() fabricates
+> the constant var_off=(0x6; 0x0)... calls ___mark_reg_known(reg, 6), overwriting
+> r7 == 4 with the contradicted constant r7 == 6.
+
+This is not empty range, but wrong value.
+
+> Even when tnum_overlap(reg->var_off, prev.var_off) holds, reg_bounds_sync(reg)
+> can still empty r64/r32 if the intersected cnum range and intersected tnum (or
+> base/step in __update_bounds_from_step()) have no common points.
+>
+> Should sync_linked_regs() verify tnum_overlap(reg->var_off, prev.var_off)
+> before calling tnum_intersect(), and also check range_bounds_violation(reg)
+> after reg_bounds_sync(reg) to restore *reg = prev?
+
+Yes to both.
+
+Thx,
+-Vineet
