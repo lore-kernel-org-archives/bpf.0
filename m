@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051586;
-	b=3ptqPa4akjS79OuxDSBhpjq89MKbvOoMwIiTXryzHFcdkq/ndhEhfYJ1gAmzMDLjOviS
-	 C2uG7RY4Dh65HGG88pyokmV+Si3r+tknqnG1RoenqTjFcyXl7K+JaxUmkzY5D2Xe+Io17
-	 OZd6jW+f8skupj4xbcEu1QEgI5o0rpx4cyiWJEoasKfoVsgNf0l5lY6x5ztwAelbapOB/
-	 tqa2LVdK5waFaufx86ioQsjyaOsapuEUP6QlhVSOJuI/4KK8hQ/VdR35uo9YtKeC8sxUG
-	 GHD3cK5nJ9/3w9snSchFHfCwjrfabANicwa70HHKKWVeKck7osonOvLy4d609FYmDJw==
+	t=1793051577;
+	b=dgRLwdFrT+iUEpaKepAfWX92YV4H65FGXU7P0NGKO+yICZfj2q42uFH00h8LT4yLj0BI
+	 pmNWEYheaa/19vRkQnxAgz6cEiFbIe0A6xdFFkM3K++ytr0psYSYAndb6rIIF3syAP/DQ
+	 k8dC2EvajWgQ+ZyLPx1eMSHMwFjiMApmfslGQA9mZPXB3OrIYIY/7G2gdhp2J69dYZKEs
+	 8QtlI3JGdBqeBVrXx2VVEmymaAKo6w6ZjqAeD+q7RIIy6HOLoOYwiUYZEhDXdju+2LcEG
+	 JEtITzC6lfw8t2DGLfCnKx7a0zc4JmeUU/vog0TD/k29hHtBvrIm+X7+abpCL9M9lFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051586;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793051577;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=CxmWryDZw0sLLhu4Yu8pG4ro8w6TSaSVJ3F6CzsZUrg=;
-	b=NeNzhahB/vDIAOB/72vWDQsxiryycVzhJE5eqCO1lPxowY5uW85jaHAj7QHmIRS6mRgV
-	 DONJGTiduAMY1ughHvonrFb620pdNylVp1M2yL4uCM+oijy5ugtUIkjrN/ObRrbph+/uY
-	 Dev2RJ+9QyZ+a015wiFDVKfNnluyNy9/0+RsV14TWP+rkc3Q2x02fO2HHB9q+tugiOW83
-	 xmdLFTYzjOjqoc2hqoYBHGbKpBvKfAyV1/foHCx7F8tZ+1odxF4co+NuC1iKMSTCnBSki
-	 p/p+8Mp7Mo9Sa+hs3klUliVoyXIPH0eFuGdkw51bGFjYv6xrAnDwfM6U1j5jheSQleQ==
+	bh=0zQfCS+xbNCI3ecGYMw9q9f4jA1EzYR8/pz81vPbgxA=;
+	b=pR7NW6W83JDdOzyXHSSytaA7QJI+iz46Xt3t/HSdWQqFhL4KkSOZgF57pzNCuVbx+t8d
+	 q8+tio/UEyssp1QKk5dr9axBgNfUXs4Mse77oEyTxCok1KAqnSlZPQZh0PJijfnXQSDC1
+	 ZKVW3WeVY2zeYdEYHRdXw/YoG6vcre9ByqjNyWYaCf6kej28XDh/Fq9TrxJWoE8ns13om
+	 fQJk9GRTKRQeacl2/sksW6M2WSjORdDw3htag/6AbuaOpJ4Z4dDMYpRLwLFnrLZqjpcH7
+	 +hgWPS1DpjlxGPqa/ip9gk+ZYX1xFUZQQh1R1nZl4Ed++/VEFKkGMZy3U25WZAP5isQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=vwBVk4Eg;
-	arc=none smtp.remote-ip=209.85.215.199
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Kqiy+Ob4;
+	arc=none smtp.remote-ip=209.85.210.199
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5738460A6F5B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:52:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5738460A6F5B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A804606B4D2
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:52:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1A804606B4D2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=vwBVk4Eg
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cc1ca15334cso4944337a12.1
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:52:56 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Kqiy+Ob4
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8a59717b0c0so1041666b3a.3
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1793051576; x=1793656376; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1793051571; x=1793656371; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CxmWryDZw0sLLhu4Yu8pG4ro8w6TSaSVJ3F6CzsZUrg=;
-        b=vwBVk4Eg09FolRMa6tRB7d5lsew1CjWLZH1mRph6PMJYmgjTNheP7Sd4o5eGAMvAyY
-         V6sX3O8qxifPaSM8SAimDe/+474bzlMc2Hcqs3VRVifNP9e/pO75qbo0cfoBQ/27vhk+
-         JXvvG9sZISWS1NB0aufLlMc0OIIJHXqaCUXAPnJL4/0XCYPBLthPEcFHCd3d1mhXVjBH
-         uW0/e9bzH62zgLC2NePzoB0tOVy9OUIaj99j0tsvFGNNDGBEBfG+TbAY7CA/G1KN9e2s
-         0j7vDCaNYVA+byW3gUlOfgD/e4GxYBsUCGsfK3BvvvyuSSHn51A+ijlMc9HrDdl/yQvB
-         Gu+w==
+        bh=0zQfCS+xbNCI3ecGYMw9q9f4jA1EzYR8/pz81vPbgxA=;
+        b=Kqiy+Ob4bSiepbdF/N+HCw9a9Ypov8HtKYAWKHLmMbdMoQ6/AQK8N+3/9GSPszOCs/
+         1wDw9g6G84lPjg+5wnqK7GtKOgVXqBV6g60MSjrdYOR6qiIDrhmWrnkvTapXpk3t5+aT
+         hq8wJ5b/uxQvjGqh0YiMIwILe8l+czxItEMT+zJ4ZtkENFNlAT9HnocU0M1kD6x4BmQb
+         r6bsNPbldLhR8EOtCoFFvhafOcZ8Ol+iWaiupqeMir9Atbgnv2A2OMD0tKsJD9WbmYwb
+         osWTHPRSBSi+yCRc08AKi5oB3BSbsJN6aXIdfxr7eCzW6nmLWMpzC3ngMIalK5Ey9Fgw
+         7pHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793051576; x=1793656376;
+        d=1e100.net; s=20260707; t=1793051571; x=1793656371;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CxmWryDZw0sLLhu4Yu8pG4ro8w6TSaSVJ3F6CzsZUrg=;
-        b=m9HhOy1uq4zRSJYPeCs61DvF28dxyLNqKnHDFnSRfTofcrkTnk6tThLAWE1ecZPoOh
-         pxGqdWvN5bKQ2bqs2VvUavAqqTSS2QFZKa/7am9qQNd5yxwRKbBoIh4jC7AjiUxibXdN
-         s/ENMzg6Fe+IAy+HrqpA9NViPtTAJtK2FACQYO4VMy16FECmJjqxNPcZr3zyk+fWbkqP
-         /7zr9VhqaM3LNKKwO74Zf1ousCn+46y4x7yiinvzDjzvaomE0CWUUWRwwmeSlRKiHf2b
-         JKY5BNWtF74r4MLnID2DCQYQXtutGnUFbcX1VJAQDEGImDO1qHJDLwHlU8hOen5j+ejH
-         F94A==
-X-Forwarded-Encrypted: i=1; AKwUvBxcpKCmBHue+oAqy5zYblgSoh7JPez+dN9UxSpWDAW+xJOSd133iQwu++5WnGsZIZhhEEk=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ6f7+JGx+Vu1by3qmPH1pBH0S4DUDKr73wsu3vtNPgNVFkWpdZ
-	9/56rR8Ki5CFWDSpbHgBMICsafsmql8kpUQWsysESZGu9PwL/KnTymAc8z8yw/VMd3y62l2LsSV
-	mOjKJ/MSC6o9L2UT4pFWkyw==
-X-Received: from pjuy5.prod.google.com ([2002:a17:90a:d705:b0:3a8:211b:6c8b])
+        bh=0zQfCS+xbNCI3ecGYMw9q9f4jA1EzYR8/pz81vPbgxA=;
+        b=Mkf3aOmBPQlhMlHJD8raWNTNbRPUsPIC1m248we2ERwSMiMzTIZG10TK2XCsZsH0EI
+         a6AIgkpiFy3T0CTIRFTQ8Jhwqloob7JzpYjf/RjKc2RPDMZa44P/TuDishHggoYe4oAB
+         6T8AGv9sSGW1Nbf6Ka8igw3flCBs1ZJA5ESNdLHV4TtbIDC99N8TN1h5IHUgQQvjDNTA
+         IWKQEtr89mVxl46UyDhJ0xVlYnG9Baw3WaFJuazfeAOToEE0KgCFgzdngVmQRaOssm4/
+         9VlnpaXHcaqQkM5xtjrDfKjqNAdUn4EhK41sLMNpBdIM1JCMsDbluLiQOHzZriGyjf/2
+         kqoA==
+X-Forwarded-Encrypted: i=1; AKwUvBwGE02cp8Im6w6fqydCUeL589a1gwyo77LR6l+BGSxwOHQ6mjWGf7XEqvwVYm8/RbhZT74=@vger.kernel.org
+X-Gm-Message-State: AFq9FYInXfUtqqaIv0sLq6HC0RQUc7P2aNJfr/BfzAnDUGDcTaFPiM6U
+	gT/mPjy/JlGtsljQZbOz4sUXHy4NLO3H0xdiJ1B2mrvoar9ehrUrEUas5F6Og2CB+2jzceMNYM4
+	6zj/aR3m0IgKTth/m+t9hAg==
+X-Received: from pfbho14.prod.google.com ([2002:a05:6a00:880e:b0:8a0:6a08:e927])
  (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3b8f:b0:3ac:450a:f9d4 with SMTP id 98e67ed59e1d1-3adeb16364bmr7181921a91.64.1793051575471;
- Mon, 26 Oct 2026 14:52:55 -0700 (PDT)
-Date: Mon, 26 Oct 2026 21:52:25 +0000
+ 2002:a05:6a00:bd81:b0:87c:e44e:5694 with SMTP id d2e1a72fcca58-8a366b88ce9mr5902881b3a.21.1793051571129;
+ Mon, 26 Oct 2026 14:52:51 -0700 (PDT)
+Date: Mon, 26 Oct 2026 21:52:20 +0000
 In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261026215226.3713941-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
-Message-ID: <20261026215226.3713941-10-jthoughton@google.com>
-Subject: [RFC PATCH 09/10] uaccess: Refuse and warn on more user accesses
- without an mm
+Message-ID: <20261026215226.3713941-5-jthoughton@google.com>
+Subject: [RFC PATCH 04/10] stacktrace: Don't unwind the user stack without an mm
 From: James Houghton <jthoughton@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
 Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
@@ -106,117 +105,55 @@ Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ke
 	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Several generic user access paths don't go through the copy helpers
-that check for a NULL current->mm. Add the uaccess_without_mm() check to
-them as well, so that they warn and fail without attempting the access:
+stack_trace_save_user() only refuses to unwind the user stack of tasks
+with PF_KTHREAD set. That doesn't cover all tasks without an mm:
 
- - __scoped_user_access_begin(), covering scoped_user_*_access() and
-   get_user_inline()/put_user_inline() on all architectures, including
-   when masked user access is used.
- - strnlen_user().
- - check_zeroed_user().
- - The iov_iter user copy routines that call into architecture-specific
-   helpers: copy_to_user_iter_mc() (copy_mc_to_user()),
-   copy_from_user_iter_nocache() (copy_from_user_inatomic_nontemporal()),
-   copy_from_user_iter_flushcache() (copy_from_user_flushcache()) and
-   zero_to_user_iter() (clear_user()).
+ - A user task that has already gone through exit_mm(), e.g. when an
+   event fires from exit_files(), exit_task_work() or the final context
+   switch in do_exit().
+ - PID 1 before it execs init, and usermode helper children before they
+   exec, which are created with user_mode_thread() and don't have
+   PF_KTHREAD set. E.g. booting with trace_options=userstacktrace and
+   an event enabled with trace_event= unwinds PID 1's "user stack"
+   during initcalls.
 
-Only check for a NULL mm here rather than using uaccess_should_fail(),
-so as not to start injecting failures in these paths.
+With the ftrace userstacktrace option enabled, the architecture
+unwinders then read the user stack without an mm. That access does not
+reliably fail: the user half of the address space belongs to whatever
+mm happens to be lazily loaded, if any, so the unwinder may read
+another task's memory.
 
-Paths implemented entirely by architectures, e.g. get_user(),
-put_user(), clear_user(), and direct users of user_access_begin() or
-masked_user_access_begin(), are still not covered.
+Use is_user_task() instead, which also checks current->mm, as perf
+already does for the same reason since commit 76ed27608f7d ("perf:
+sched: Fix perf crash with new is_user_task() helper"). This also stops
+unwinding the user stack of PF_USER_WORKER threads, which never run in
+user space, matching perf.
 
+Fixes: 214d8ca6ee85 ("stacktrace: Provide common infrastructure")
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- include/linux/uaccess.h | 2 ++
- lib/iov_iter.c          | 8 ++++++++
- lib/strnlen_user.c      | 3 +++
- lib/usercopy.c          | 3 +++
- 4 files changed, 16 insertions(+)
+ kernel/stacktrace.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index eae204f7261b..7d26d2de9599 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -781,6 +781,8 @@ static __always_inline void __scoped_user_rw_access_end(const void *p)
- ({									\
- 	typeof(uptr) __retptr;						\
- 									\
-+	if (uaccess_without_mm())					\
-+		goto elbl;						\
- 	if (can_do_masked_user_access()) {				\
- 		__retptr = masked_user_##mode##_access_begin(uptr);	\
- 	} else {							\
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 21e2ccf1e8f2..a0769874241c 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -204,6 +204,8 @@ static __always_inline
- size_t copy_to_user_iter_mc(void __user *iter_to, size_t progress,
- 			    size_t len, void *from, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	if (access_ok(iter_to, len)) {
- 		from += progress;
- 		instrument_copy_to_user(iter_to, from, len);
-@@ -277,6 +279,8 @@ static __always_inline
- size_t copy_from_user_iter_nocache(void __user *iter_from, size_t progress,
- 				   size_t len, void *to, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	return copy_from_user_inatomic_nontemporal(to + progress, iter_from, len);
- }
+diff --git a/kernel/stacktrace.c b/kernel/stacktrace.c
+index afb3c116da91..f96a5ec12f6c 100644
+--- a/kernel/stacktrace.c
++++ b/kernel/stacktrace.c
+@@ -228,8 +228,12 @@ unsigned int stack_trace_save_user(unsigned long *store, unsigned int size)
+ 		.size	= size,
+ 	};
  
-@@ -296,6 +300,8 @@ static __always_inline
- size_t copy_from_user_iter_flushcache(void __user *iter_from, size_t progress,
- 				      size_t len, void *to, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	return copy_from_user_flushcache(to + progress, iter_from, len);
- }
- 
-@@ -451,6 +457,8 @@ static __always_inline
- size_t zero_to_user_iter(void __user *iter_to, size_t progress,
- 			 size_t len, void *priv, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	return clear_user(iter_to, len);
- }
- 
-diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-index 4a6574b67f82..45709798eb8f 100644
---- a/lib/strnlen_user.c
-+++ b/lib/strnlen_user.c
-@@ -96,6 +96,9 @@ long strnlen_user(const char __user *str, long count)
- 	if (unlikely(count <= 0))
+-	/* Trace user stack if not a kernel thread */
+-	if (current->flags & PF_KTHREAD)
++	/*
++	 * Trace user stack only if this is a user task that still has an mm,
++	 * i.e. not a kernel thread or user worker, and not a task that has
++	 * already gone through exit_mm().
++	 */
++	if (!is_user_task(current))
  		return 0;
  
-+	if (uaccess_without_mm())
-+		return 0;
-+
- 	if (can_do_masked_user_access()) {
- 		long retval;
- 
-diff --git a/lib/usercopy.c b/lib/usercopy.c
-index e2f0bf104a59..9146c729c47a 100644
---- a/lib/usercopy.c
-+++ b/lib/usercopy.c
-@@ -48,6 +48,9 @@ int check_zeroed_user(const void __user *from, size_t size)
- 	if (unlikely(size == 0))
- 		return 1;
- 
-+	if (uaccess_without_mm())
-+		return -EFAULT;
-+
- 	from -= align;
- 	size += align;
- 
+ 	arch_stack_walk_user(consume_entry, &c, task_pt_regs(current));
 -- 
 2.56.0.307.g5fe7bd680c-goog
 
