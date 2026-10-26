@@ -1,92 +1,92 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983956;
-	b=utwYAsmSLot9Z1l24Qou7Zar/6oze7f8U0qD40L+6HqqHzLRSeinlTSberqE6W6Vw8yv
-	 t4TVAuzUWWsdgOUyL8NSDGlCxibbvxOe6XZXgTGJxKNhcmeoRhHzdiGBExq0OrYfklRAl
-	 SkPrB+3LtAPsPYWWzTve6SYmHQumI/4T56Iz/L1wMmiofReh25+D2a9aqvDWueFKbifqm
-	 ruhvryeCRW2atV3epCRL2HZrNZxTZ3akFQkI9psL2OJxvDe3M74WUzRKlrDU8T5dQXdcl
-	 npPVVo5r51dpAYVwPtKs8IPbYdIZXOR58ng0zIHf4qfiK0QXrJLCz2YRVsvBYV5hhxw==
+	t=1792983962;
+	b=APLmgZoEaLC/4dmHldb/vmCxKXUgsLvjZfQP8PFnwTDDdg3EiW7ZtdNF2nxt/gvBHciE
+	 SKdCW4JSMWp0gXjzjGHXniHXKaUzHY79tobhmcOEZ1YkurYoLWMC1OHtre3MaxJkPVfEB
+	 Oj4QlaccObbPy6i5c6+nUemyeTXgH3bBas2gQOCLGYlUk0ila2ODeK0LubRKeWiEWmbLK
+	 af8SDSFOAC0NfmXa0x+m+92N5p+7zJtMArz+PXUVFTrgSP3osmVuUi2ir5PM0NjRV7EOE
+	 ZQJiBfrnHFRXFSZUrdvG4BmgDNePysRE7KBXGMqiAWzVImie4xyjh6FZI9BGaYAo0qw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983956;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983962;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=J2c3bJFh675GOEGEQjKu2jvgrRWteRPZAPo8Kdj2QdA=;
-	b=Qx97Uz8xW3yQkx/WsHJUQdg5Sm2zssNNzxLqU7m2RQl2+2tVwh4Ys+gXPKZRrngGeCUs
-	 RwxWPV2kNGcRR/4kXyOGTQh6rrnybFZHtfIIVvJhzbEJsylVwB8o7XU8BYIb8Ri4ZpAJU
-	 1kKjnzWibyVvLTSaK+o8OGCgCfaTThPnVBK5cb7HUtDn8v5aoJTPzb4n6rZM43ljxR6Ln
-	 0tPcd//QLlyDxdxTDtNcNwKDIcGuIBtWYf5u9aiHvP4QBJ6YrqUCIpjlOqOLkk8SfpO2Z
-	 V0eDA3glRvq1XSoN2NzBMbh8ZLHDk4h2DK/8zj9oX7PR9Brg8GFTM3EZwZhtMCPBYGQ==
+	bh=UiMLyocnAOdUbCbj0WdqDY557Lucv/NoBZW6bZwyCw8=;
+	b=M/UU3eqy2TNotBsqIoFECed/P5bjdiwhLkPFQTbYHV/ixnPrKiJ8HFMRF9Zi1yD2y6uy
+	 93xsrk/grUBADKJCOixgchBxQLuoAs2B7BhrqPSbKK01njLJaHOaBF5F2nHG3CNn898e8
+	 gWrHMiEiUM0O5aiKWW6QLkgmq3Y5DINbZ2uv9Sn4hHPa8QSK4w+cR5Lay04jkIgyK04wp
+	 sFzVAZ30q06LAGfm2d/EFXqSdX287fL3eF3ybxrKWzfQgxs0lRu2FoDj4Al9ZeVLnd67d
+	 54Jf21/x271T10vFP4hraEae4gRDnGIgYx6u0SHo97l6PCzZdhpxc/TQKELUX4LlqEw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MtUSoADJ;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=G6HHhAUs;
 	arc=none smtp.remote-ip=209.85.214.169
 Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCC1606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2CCC1606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3939606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:06:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F3939606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MtUSoADJ
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e987a2ba0cso15848465ad.3
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:56 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=G6HHhAUs
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e7e742a2c7so16039285ad.0
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983955; x=1793588755; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983961; x=1793588761; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=J2c3bJFh675GOEGEQjKu2jvgrRWteRPZAPo8Kdj2QdA=;
-        b=MtUSoADJnZUSQZDcNpeaaBUEOpZjBD+ArTdwUpZlT4W9fsYTl/TFny3UgpxvYZxF27
-         vLoaTkDwfxTaYlkG+IotxAVz46aqrvC1vyMIGMgZtB/Bnhf270F5VsyS4O6RrpK4TW0k
-         aDCzqP0Taha3CiztffYWMTIiCMi8qRrU4RTe4oWiNmDERHbOF1XTKEcacSrLbmuw+lvq
-         N9c1qwlOo+ZGReg+IwN9fGuReRVsX5dY38m0hFp8VCM2UgmKx97yrIPqQ/uwvjCTplFI
-         wOimFNwvjRfEDOFKkNfRxqnNFLwVWJ4KrmucC0vozXTYgN2r/Z2s4kXJHO3Rw8Gm8pef
-         mKQA==
+        bh=UiMLyocnAOdUbCbj0WdqDY557Lucv/NoBZW6bZwyCw8=;
+        b=G6HHhAUsZeJ6vrgxezse13w7FvCsWXYLfYQOdlJ9+/7u4LNE8H5vEOaADfe8ElWP44
+         1LX2lygXpje/oP6L5bZ4c4quxw4ASXHGE7K/e+/XB2mpT4Xwzsws6IiuivVzogPi3TYD
+         P9Qx3a7ttE+wMpvNoL2cH0xURJ+peL0E76r22suH5WserWLgtSHZRLvvy0QnYqg5duYv
+         TohJHnmA31OT8VcUvHaZJTvBYt+7lyC+6HJEW+izfi0VbaxE0fGwFYL2lRSkWWuDVcbJ
+         ECjyJ9c8JOZUwGzjD1jXp0fU4GiEG02Ei0vgsWtLBUSVwlakvanQK9OCMQy2/99VvgLt
+         q6wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983955; x=1793588755;
+        d=1e100.net; s=20260707; t=1792983961; x=1793588761;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=J2c3bJFh675GOEGEQjKu2jvgrRWteRPZAPo8Kdj2QdA=;
-        b=LlKzNwGKZ87xIdTqB8pNOAb86C1Z5NXFSYMX8ZN4oS+QIku6txw1Xz2RR7PPUVhHfh
-         LZ2w1lmCgBGfOZ5BSEhRQJNidTVy9YirR6WEaW48VQ4wZDY6Lpue0OMfFn1WcdnhyENN
-         ia9FGTmuKxAoEfXCx2C3umW6hgnDM3IGA2ZK8kyO373n1D0dXCn+B4+gTe6uVAmEmNoR
-         19LpzK33+pmiiQyyoW3OopYEr/PxPkPKZ1eMgyS4m26jsqVb6fv7s+ky+cy4mlaEc2EZ
-         8xflx93RbMYgscZYIuLgKOiWLrcG/bzi8vBRhQ40f7gV0Gayr4Qtauu4yIxcihEFWNNc
-         uwNA==
-X-Gm-Message-State: AFq9FYIWyOJyXMaxVEZlfj3kAdDmNZ+4cP16ReFvD8wVkF0eCHK8W8aN
-	Uioax6QBnLy+GYjfG+Bnl3IXEU5qmj6OYxdubXGClwGOPV33wDin7pcHm7tt2Q==
-X-Gm-Gg: AYBFou0mWePl05QF90JK3b3rD+rHL8+6t5xvED38kgRlpMF9dPR55ExiHHutznEfiXo
-	COK/Qaedhr9j7EiO0bUwJhzEG8AdWD89h/M1VsGcUZFHJgF3R2Bs40T7C5MclzD7pi+XBvZwSyj
-	YCGb8tGDiMgwyAEJugz8PHHRVwLKmj5ZNFaOVwO5xUxzCRs+ZUeH+3udvPVMUDOZIOr7AzpaCrM
-	qZR5tVzlcvXhWsELm9mOrdOsHSI/LWjqF2w+/euS8dEFu81Y0H7b/1Hi7SLep7cz8/OJaPYbhgF
-	epb6C8ROAnIOzoS2uif4P5+EN9BTG+34H+hHtFKVCI2GtAfNpC4YP0W0dp5UZQwvajZraXZV6Pj
-	E4W5Yp1fsrTBwFv3TUDv9suEJ2ukym8QgZ/rZkF6ndc+EVm3u+++wXGi6IKK4G87hppZK0417d/
-	I0pOpb0w0ENJy4B68yshojmTNfs9DyOwh1EKcT3FbWUe0uddiVhreC35fuE+qXNxQrhISe8dXoX
-	BEYMv3oavcsAMU9FpvmqHcxdPHwXrhlBN5sFMo4Spdlrb7t7h0Ry6/Hef+RBMB2qRPIgvajlfjL
-	im5atlETsCEy7nRvU7sbZHnmgKKtueafxIqKB+jlGaAvkFTcyebsGM2r0O6Gw8vc12q2e5x+hLG
-	ziHVjnnNKy5CLQDalz/8S8+ob
-X-Received: by 2002:a17:903:8c6:b0:2e9:9c65:1aff with SMTP id d9443c01a7336-2ea9c92422dmr43400415ad.45.1792983955429;
-        Sun, 25 Oct 2026 20:05:55 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1a748csm10264295ad.55.2026.10.25.20.05.54
+        bh=UiMLyocnAOdUbCbj0WdqDY557Lucv/NoBZW6bZwyCw8=;
+        b=IYTo5uI6hAf4IeOXMKOAr0vz8iXOb2I6s4KSaET37duFq7LkHsJDdaVrata0tjlHBT
+         fK54YMcTTbkEvv2Vj/7HZe3f2mnrxOqCawZwwQL3EQI/5SoEgLqmiU4RzY9MJIWctzdF
+         vID2Bvgg3P3Vx2Mh2iI4OeJR5efRRWLREpTBNCoh29gisi+UqcPIQhCytUa1OU3lZNwL
+         rdNFyeOeUp9RC3ZotkvZsd2QSuXeoYjOrk1NsI/AgGJGtt+woU2KTDWPYsDVkTAnFPif
+         PUsgqke4GS6nqgKctcFQZ9Wvca6cZE7YkK24QHr3aCcmEcuo23S3/jBCyzCj10GiayHG
+         eClQ==
+X-Gm-Message-State: AFq9FYLqWWhuOMNqNuU9FLrtz4lusVT1LVa6PLvMgRrVp+BMYnHwGdxb
+	ZnpJkwRMc3gkKflugr4qsod77sc/FLsFl5p1eNY6JUwjm1dqb5KO35UnVnhJhg==
+X-Gm-Gg: AYBFou3DWhRa9SN33CGw9M7WEGvcZsiEq3IivkdM8d9w1BLjf8kC5B+U835ong0VzD6
+	6ujr3K8dDlJWwKLA7PPqJtGLAJaBpun/xCeq/usfCRJgXc/NttDq0kx5uz96VfItXXfB39kZ6yV
+	ggUVYHexrsS9g4FhiJyzsbR87AjoPHWQU+cXus4r1luxC6kX3Rj3yUuo36i0PIWwltJHTjAKqNJ
+	mKxeVxiHWB2KfSZqTmccXlpgMm+RLIdZV7x9SwSVrJWxnjhx8CefMX7uQzPr0kXsMzX/AzvAiZY
+	nhmhKklAK2ksYmwWFenoAnJ4iK5RXNru05JAOjCvYRd/o4QoKlYXUBHV7cYfIF78YwKiNOn1M0V
+	UYMSFg7VyT2m1ZsnoaTjVJgVns64gfrXBvrNCZ8dSkw3LYcRzAnAlgVBgPfY83ie3pKIXXskGRy
+	y203AmZTAxVwzUlD50Aj8YY2OmjqZWz/J5l6FUDNqyD/2bIR/1pmWB5TNGZs7V4tELOM8qQdX2J
+	Cq/NJ/5I2F1Z0am1B6QSBlPCpwKSm/O7OxIN257haF5gEbHnceptGM9uOwF4OEPCCg66cpkUsla
+	Yp1vRzZPzXXhS7hPA35F3551lIyVopuobw4MKdHYiVIAvUyNjlhg/5F4I2Fw+YffQ6qEPD4HHWy
+	fX7tuuRnRhtLV9T1YdiEK3VWm
+X-Received: by 2002:a17:903:f16:b0:2e9:6468:1ffc with SMTP id d9443c01a7336-2ea9c87534fmr17452745ad.20.1792983961268;
+        Sun, 25 Oct 2026 20:06:01 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1982d2sm11173945ad.41.2026.10.25.20.06.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:05:55 -0700 (PDT)
+        Sun, 25 Oct 2026 20:06:00 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 63/81] bpf: Print 0 as the limit in the statistics line
-Date: Mon, 26 Oct 2026 02:59:24 +0000
-Message-ID: <20261026025943.404450-64-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 64/81] bpf: Remove bpf_compute_scc()
+Date: Mon, 26 Oct 2026 02:59:25 +0000
+Message-ID: <20261026025943.404450-65-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,54 +103,279 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The last line of the verifier log shows the number of processed insns and
-the limit for it:
+bpf_compute_scc() finds the strongly connected components (SCC) of the
+control flow graph and gives each insn the number of its SCC. An SCC is an
+outermost loop together with the loops in it. When the verifier followed
+each path of a prog, is_state_visited() used the numbers to find the moment
+when all paths through a loop were explored. Then it propagated precision
+marks over the back edges of the loop.
 
-  processed %d insns (limit %d) ...
+"bpf: Remove is_state_visited()" removed the user of the numbers, and
+"bpf: Remove precision tracking" removed the marks. The main pass finds
+loops through loop_header in bpf_insn_aux_data.
 
-The limit was BPF_COMPLEXITY_LIMIT_INSNS. Since
-"bpf: Verify programs as a fixpoint over the control flow graph" the
-verifier does not limit the number of processed insns. It limits the number
-of states, see BPF_FLOW_MAX_STATES. BPF_COMPLEXITY_LIMIT_INSNS is now the
-maximum length of a prog. Thus the line shows a limit that does not exist.
-
-veristat and other tools parse this line. Keep the format and print 0.
+Remove the calculation. The "Program dump" of log level 2 loses the scc
+column.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h   | 1 +
- kernel/bpf/verifier.c | 5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ include/linux/bpf_verifier.h |   6 --
+ kernel/bpf/cfg.c             | 190 -----------------------------------
+ kernel/bpf/verifier.c        |  10 +-
+ 3 files changed, 1 insertion(+), 205 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d8cd7c63f157..8cd82f506e0d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2636,6 +2636,7 @@ struct bpf_array {
-  */
- int bpf_array_get_next_key(struct bpf_map *map, void *key, void *next_key);
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 9b107553461e..edac38665f54 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -759,11 +759,6 @@ struct bpf_insn_aux_data {
+ 	u64 jump_target:1;
  
-+/* the longest program. There is no limit on what it takes to verify it. */
- #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
- #define MAX_TAIL_CALL_CNT 33
+ 	unsigned int orig_idx; /* original instruction index, initialized once */
+-	/*
+-	 * CFG strongly connected component this instruction belongs to,
+-	 * zero if it is a singleton SCC.
+-	 */
+-	u32 scc;
+ 	/* registers alive before this instruction. */
+ 	u16 live_regs_before;
+ 	/*
+@@ -1632,7 +1627,6 @@ int bpf_prune_dead_branches(struct bpf_verifier_env *env);
+ int bpf_check_cfg(struct bpf_verifier_env *env);
+ void bpf_free_subprog_jts(struct bpf_verifier_env *env);
+ int bpf_compute_postorder(struct bpf_verifier_env *env);
+-int bpf_compute_scc(struct bpf_verifier_env *env);
  
+ struct bpf_map_desc {
+ 	struct bpf_map *ptr;
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index 64eccc28703a..8973ec413b8c 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -784,193 +784,3 @@ int bpf_compute_postorder(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+ 
+-/*
+- * Compute strongly connected components (SCCs) on the CFG.
+- * Assign an SCC number to each instruction, recorded in env->insn_aux[*].scc.
+- * If instruction is a sole member of its SCC and there are no self edges,
+- * assign it SCC number of zero.
+- * Uses a non-recursive adaptation of Tarjan's algorithm for SCC computation.
+- */
+-int bpf_compute_scc(struct bpf_verifier_env *env)
+-{
+-	const u32 NOT_ON_STACK = U32_MAX;
+-
+-	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	const u32 insn_cnt = env->prog->len;
+-	int stack_sz, dfs_sz, err = 0;
+-	u32 *stack, *pre, *low, *dfs, *dfs_pos;
+-	u32 i, j, t, w;
+-	u32 next_preorder_num;
+-	u32 next_scc_id;
+-	bool assign_scc;
+-	struct bpf_iarray *succ;
+-
+-	next_preorder_num = 1;
+-	next_scc_id = 1;
+-	/*
+-	 * - 'stack' accumulates vertices in DFS order, see invariant comment below;
+-	 * - 'pre[t] == p' => preorder number of vertex 't' is 'p';
+-	 * - 'low[t] == n' => smallest preorder number of the vertex reachable from 't' is 'n';
+-	 * - 'dfs' DFS traversal stack, used to emulate explicit recursion;
+-	 * - 'dfs_pos[k] == j' => the frame 'dfs[k]' resumes visiting its
+-	 *   successors at index 'j'.
+-	 */
+-	stack = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
+-	pre = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
+-	low = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
+-	dfs = kvcalloc(insn_cnt, sizeof(*dfs), GFP_KERNEL_ACCOUNT);
+-	dfs_pos = kvcalloc(insn_cnt, sizeof(*dfs_pos), GFP_KERNEL_ACCOUNT);
+-	if (!stack || !pre || !low || !dfs || !dfs_pos) {
+-		err = -ENOMEM;
+-		goto exit;
+-	}
+-	/*
+-	 * References:
+-	 * [1] R. Tarjan "Depth-First Search and Linear Graph Algorithms"
+-	 * [2] D. J. Pearce "A Space-Efficient Algorithm for Finding Strongly Connected Components"
+-	 *
+-	 * The algorithm maintains the following invariant:
+-	 * - suppose there is a path 'u' ~> 'v', such that 'pre[v] < pre[u]';
+-	 * - then, vertex 'u' remains on stack while vertex 'v' is on stack.
+-	 *
+-	 * Consequently:
+-	 * - If 'low[v] < pre[v]', there is a path from 'v' to some vertex 'u',
+-	 *   such that 'pre[u] == low[v]'; vertex 'u' is currently on the stack,
+-	 *   and thus there is an SCC (loop) containing both 'u' and 'v'.
+-	 * - If 'low[v] == pre[v]', loops containing 'v' have been explored,
+-	 *   and 'v' can be considered the root of some SCC.
+-	 *
+-	 * Here is a pseudo-code for an explicitly recursive version of the algorithm:
+-	 *
+-	 *    NOT_ON_STACK = insn_cnt + 1
+-	 *    pre = [0] * insn_cnt
+-	 *    low = [0] * insn_cnt
+-	 *    scc = [0] * insn_cnt
+-	 *    stack = []
+-	 *
+-	 *    next_preorder_num = 1
+-	 *    next_scc_id = 1
+-	 *
+-	 *    def recur(w):
+-	 *        nonlocal next_preorder_num
+-	 *        nonlocal next_scc_id
+-	 *
+-	 *        pre[w] = next_preorder_num
+-	 *        low[w] = next_preorder_num
+-	 *        next_preorder_num += 1
+-	 *        stack.append(w)
+-	 *        for s in successors(w):
+-	 *            # Note: for classic algorithm the block below should look as:
+-	 *            #
+-	 *            # if pre[s] == 0:
+-	 *            #     recur(s)
+-	 *            #     low[w] = min(low[w], low[s])
+-	 *            # elif low[s] != NOT_ON_STACK:
+-	 *            #     low[w] = min(low[w], pre[s])
+-	 *            #
+-	 *            # But replacing both 'min' instructions with 'low[w] = min(low[w], low[s])'
+-	 *            # does not break the invariant and makes iterative version of the algorithm
+-	 *            # simpler. See 'Algorithm #3' from [2].
+-	 *
+-	 *            # 's' not yet visited
+-	 *            if pre[s] == 0:
+-	 *                recur(s)
+-	 *            # if 's' is on stack, pick lowest reachable preorder number from it;
+-	 *            # if 's' is not on stack 'low[s] == NOT_ON_STACK > low[w]',
+-	 *            # so 'min' would be a noop.
+-	 *            low[w] = min(low[w], low[s])
+-	 *
+-	 *        if low[w] == pre[w]:
+-	 *            # 'w' is the root of an SCC, pop all vertices
+-	 *            # below 'w' on stack and assign same SCC to them.
+-	 *            while True:
+-	 *                t = stack.pop()
+-	 *                low[t] = NOT_ON_STACK
+-	 *                scc[t] = next_scc_id
+-	 *                if t == w:
+-	 *                    break
+-	 *            next_scc_id += 1
+-	 *
+-	 *    for i in range(0, insn_cnt):
+-	 *        if pre[i] == 0:
+-	 *            recur(i)
+-	 *
+-	 * Below implementation replaces explicit recursion with array 'dfs'.
+-	 */
+-	for (i = 0; i < insn_cnt; i++) {
+-		if (pre[i])
+-			continue;
+-		stack_sz = 0;
+-		dfs_sz = 1;
+-		dfs[0] = i;
+-		dfs_pos[0] = 0;
+-dfs_continue:
+-		while (dfs_sz) {
+-			w = dfs[dfs_sz - 1];
+-			if (pre[w] == 0) {
+-				low[w] = next_preorder_num;
+-				pre[w] = next_preorder_num;
+-				next_preorder_num++;
+-				stack[stack_sz++] = w;
+-			}
+-			/* Visit remaining 'w' successors */
+-			succ = bpf_insn_successors(env, w);
+-			for (j = dfs_pos[dfs_sz - 1]; j < succ->cnt; ++j) {
+-				if (pre[succ->items[j]]) {
+-					low[w] = min(low[w], low[succ->items[j]]);
+-				} else {
+-					/*
+-					 * Once DFS for succ->items[j] is complete,
+-					 * pre[succ->items[j]] is non-zero, hence
+-					 * resuming at 'j' allows to follow the
+-					 * low[w] = min(...) update branch above.
+-					 */
+-					dfs_pos[dfs_sz - 1] = j;
+-					dfs_pos[dfs_sz] = 0;
+-					dfs[dfs_sz] = succ->items[j];
+-					dfs_sz++;
+-					goto dfs_continue;
+-				}
+-			}
+-			/*
+-			 * Preserve the invariant: if some vertex above in the stack
+-			 * is reachable from 'w', keep 'w' on the stack.
+-			 */
+-			if (low[w] < pre[w]) {
+-				dfs_sz--;
+-				goto dfs_continue;
+-			}
+-			/*
+-			 * Assign SCC number only if component has two or more elements,
+-			 * or if component has a self reference, or if instruction is a
+-			 * callback calling function (implicit loop).
+-			 */
+-			assign_scc = stack[stack_sz - 1] != w;	/* two or more elements? */
+-			for (j = 0; j < succ->cnt; ++j) {	/* self reference? */
+-				if (succ->items[j] == w) {
+-					assign_scc = true;
+-					break;
+-				}
+-			}
+-			if (bpf_calls_callback(env, w)) /* implicit loop? */
+-				assign_scc = true;
+-			/* Pop component elements from stack */
+-			do {
+-				t = stack[--stack_sz];
+-				low[t] = NOT_ON_STACK;
+-				if (assign_scc)
+-					aux[t].scc = next_scc_id;
+-			} while (t != w);
+-			if (assign_scc)
+-				next_scc_id++;
+-			dfs_sz--;
+-		}
+-	}
+-exit:
+-	kvfree(stack);
+-	kvfree(pre);
+-	kvfree(low);
+-	kvfree(dfs);
+-	kvfree(dfs_pos);
+-	return err;
+-}
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 864009dbac47..3bc0dcbeaa60 100644
+index 3bc0dcbeaa60..51106df0e76e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -22783,9 +22783,10 @@ static void print_verification_stats(struct bpf_verifier_env *env)
- 				env->subprog_info[i].stack_depth);
- 		}
- 	}
--	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
-+	/* user space parses this line. There is no limit. */
-+	verbose(env, "processed %d insns (limit 0) max_states_per_insn %d "
- 		"total_states %d peak_states %d mark_read %d\n",
--		env->insn_processed, BPF_COMPLEXITY_LIMIT_INSNS,
-+		env->insn_processed,
- 		env->max_states_per_insn, env->total_states,
- 		env->peak_states, env->longest_mark_read_walk);
- }
+@@ -24525,13 +24525,9 @@ static void log_program(struct bpf_verifier_env *env)
+ 	u64 pos, insn_pos;
+ 	u32 i, j;
+ 
+-	verbose(env, "Program dump (scc? loop_header? idom insn#: live_regs_before):\n");
++	verbose(env, "Program dump (loop_header? idom insn#: live_regs_before):\n");
+ 	for (i = 0; i < insn_cnt; ++i) {
+ 		verbose_linfo(env, i, "    ; ");
+-		if (env->insn_aux_data[i].scc)
+-			verbose(env, "%3d ", env->insn_aux_data[i].scc);
+-		else
+-			verbose(env, "    ");
+ 		if (env->insn_aux_data[i].loop_header >= 0)
+ 			verbose(env, "%3d ", env->insn_aux_data[i].loop_header);
+ 		else
+@@ -24742,10 +24738,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+-	ret = bpf_compute_scc(env);
+-	if (ret < 0)
+-		goto skip_full_check;
+-
+ 	/* must precede the first bpf_ret_reg_pair() user below */
+ 	ret = bpf_compute_subprog_ret_regs(env);
+ 	if (ret < 0)
 -- 
 2.55.0
 
