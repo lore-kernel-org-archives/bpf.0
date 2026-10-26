@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983874;
-	b=MGifDHYHnH1opSGa8As67V5vIU9AnrgoQUsAUmCG+EpDxxU6dUDEsMLAg3249hckdHP5
-	 nHvzl8PsgF58mQOwB+ZzP2AeDIwhv9+EnlgWLEumVKiLRNW42L5tebG/9h6OJpYrjui7C
-	 JhVcHhCdYMjLT0ZmgdQJLstHTFxUk5xrc7NixWwrNoG1WuYZ4ssOHhkMARfjwkfjlWbX+
-	 vG7rt6cOm74pczLX2tK3DC/GIczn11fcSef4Cpzohjx8qaV1sNsxivOxQz4DalknnAmnn
-	 oTyFGM/F46Cvg3SYNqd45kYCirpMrtBSlAT8oP+c/+mgcQzMWMeEwhwEabu0K1KtpYg==
+	t=1792983880;
+	b=ILEb3QZzZMi47EEXY45Qr52ORqpPJIznn+uX0aK/iMa5Lc+wSROCfYzFVRyYDs8vDQyb
+	 DsKu2OvhiLh9XlAL+xYHQDqVgU8D9FevLcK9h6i0bw3LfVyef8f23ZKVh48xg1zOfNNCk
+	 12ovddixv2Ofn/d9d7kFishg62Hyv/G3EgERi0m41qWu3KIXvoPMJlHq3i/p8LkTGLyxL
+	 SqTR1JhTY8rkmxlrO0KIG49g2q19eHD7RcB4C9yHXdsvQeEn5bWZA5sQbyijrK+bhampu
+	 aLzD+MFg033YmsOmE1Pkep48giFsM1JLwKE4qogZKGGLqb1CzUcKpzTyGm8SDa9jSNw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983874;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983880;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Hn2/drErc92/US3ik/1cVatbJarCdIsTX3J4xeOhZ+E=;
-	b=NqdVXdCbPtj3CIkueWMpT59eTnOCB3OHvx001a5Z95gCH3/OI394PzMgVoQQYDH4yxEQ
-	 7MV+TK2Yb2ArSBPFPrgzQ5WMOqFpOgoL41QjUrkCJ+pP//2hXY0w8BD5GtyyR+bh5G6yO
-	 +Nc2QYblLgptEikkng0sSzKsqfx0BA+ykM+Qlr0njPZvgkN8XrfnAVfR6794Wctfkhg4Z
-	 BA4mgPTnDhZ6qwhbZjnCgxPJatrJGbrOtJXehSQpE7+33uEHmd60dqx1PRq9l9zydDypd
-	 7gq0RNxkQUrf1kfzhY0bLX2bIgf8uJZnBy0VYfE7YBmuihUAx58lnLDzpCwezQJaKYA==
+	bh=/HnZdDf6BTWHsvhBySpEwNWr2wb/3OiF6XQWorYoy9g=;
+	b=B7KQ4lkk7grtFbvjWhVJWvzre0hvKNJt6SJXg5oa+BNIm+Qd3/tYUlV0/VEteoQZVHkH
+	 +1v+5C6dFA9PytBSR6mJ7vvKfVjA1UU2tgA8PoQRGG9WtcpgUEAUkokETEQddJLBvKs/a
+	 vyu6ZZqinBAufq19wC5PEjhrVGU6k53knjTHn8TJ1YK09smJCWiYoORLUEhM7eVNv4kkq
+	 C4iTHtyb97m5Z+PalcRWCoABKmhsQrV8tt3E4tJ4OdQSf7PNUO5hXMiyMTBehyXfyfuZv
+	 EX829YhJYRt2yeDYSlqr3+ATwtJq2DiNDqg7XYfRlo97gIwahK3tUyin41kcTeAx35A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TbMspFe3;
-	arc=none smtp.remote-ip=209.85.214.180
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=p4aJcQ1C;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DE7606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:04:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19DE7606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED315606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:04:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ED315606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TbMspFe3
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e9f6a16aedso16351035ad.2
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:04:33 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=p4aJcQ1C
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc4c02ddd62so1503748a12.0
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983873; x=1793588673; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983879; x=1793588679; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Hn2/drErc92/US3ik/1cVatbJarCdIsTX3J4xeOhZ+E=;
-        b=TbMspFe3QjiFeyknefOJIgl3mf7Rokx18Wc3mlHpNatIB4Empz0uqbmcAz+3/hdPDt
-         LIeJDFkg63w6lRpmOgAaSPT9tqoOd3NWpQRUPEJvUHj0jSQJXE7y016Aixq1nTvzdZCP
-         QFclGGAtCLZI1LHAlDzy5eAs/XwGs48hWWKMOR0wRoyZfSn5d4G5UH4PaZMpj8viOyfx
-         jbhCiGI8UNGdIwDb2BoJ5zmR9cVG9/k8uAE0ALMVid15oxeUEZKMtwEp8/cCppPTgqtg
-         OOi3XnOqWNXrxUgPXY5FGNFR2kOvvNoiB/uYVy6p/+iQ9XwUwwEq3Ucazx0+vwnND5FK
-         wNMQ==
+        bh=/HnZdDf6BTWHsvhBySpEwNWr2wb/3OiF6XQWorYoy9g=;
+        b=p4aJcQ1C1W/tS9SFiu8qlaTCOPMkhMj0jyRaCXoKWHwc4qRjJdizc2uA2WVCYSVSSe
+         inagU8ebfAQDbEHKEp10odXQ7Y7CkpKIWE9iGjfTBDUW/rzz8GjbvfZ1ZHOUtsqEf0xe
+         g1tey9C201oF1m+0LF2pjaBUP7yx9TOblttknYBf7PwoHE10rSEWfWBbhIRbNdygsjFd
+         2NrdSLIymqaZoWRUns0ibBO5NziFuLUe8Uqy70No0Ukfo1UsIQED8ghcNt0QnzQaTGvX
+         0udL6p1FmSX3VBs8Uo+P2F5qNP+5uNIJ29QH+hZTsDsx5yhgcsHrbk4HYhiOKIcrMes7
+         B12g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983873; x=1793588673;
+        d=1e100.net; s=20260707; t=1792983879; x=1793588679;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Hn2/drErc92/US3ik/1cVatbJarCdIsTX3J4xeOhZ+E=;
-        b=t3Ph5gYb29wigsZsDaDglM88qNM6Den5CH1gUv/4hvbCews3cD/bWCTIUp8BtKNaOx
-         SY7LGTQW8BYF4eC+x4u7FvOxnfiRT+J6SwrpyXSMq8aCnXe3AlYg5ZbFwesvO5f0/sRh
-         lIulGGJ8drVzv5acFQqDdQzOm/XynjA/kPLtnBlL4eY2Ftv+X0sY0hdZSLHkEK24HYN9
-         jafM4IlV2MlaU8Tbj1LF77v8sofXC5RpIxAuA3cioXteTnGp1GDXoA3Ks2KEqrM9Rb+w
-         wMIvEg+eBCyEfNisQ3NIFwMOKBUxh2D48RNhM7u8VH3R6f2c0sd9OTFln65GmTTXpIif
-         soqw==
-X-Gm-Message-State: AFq9FYIRJ3/LXKWYKZs1sp/2Pn38f4VQ1zWi+6flDdPe62wUUTZT/QO/
-	KuHPFG2c0AWKMYMxgsyUYInNEyTXA9Q1xc166EHC05usan5uc++DWDMH1gOLHg==
-X-Gm-Gg: AYBFou12zG9zmPoesYsNzHgwojZTmFLEvNqDdM9iPZe5286LKnvN5BZlwUwUvjHVKCF
-	A18EJbgBuKzRqGzScO7orY9H4d5XrlWwpx8qHuJkhcRKYDwf7mIwA6cIN8tW6vVlB3iQyN4sMGm
-	Eu7h+2Z6fZeNde+Yi8NwHMS12nu9jj5wHtKlVOnhq2wRIIIj8Jhl12C1V5rGda19t5roUtaFDjq
-	2ppLzQg/Svk7ERPP1IvRohUtE0wNseE6DIjrnyj4McREwcpJ6leVpguqBRkz8WmnEeE8DORd1p4
-	jHpyCAgUViLN8z8SFuE6088jw2u1Px1qroKDdw/mnAP3kLIUk7jX1RxFHiUwHuksIUbWNTrf+2i
-	Qkg+/UjLioiS8bvG2ENaGLwMBlb5E6OlkczirrfhXj94YhtxgrjIgpkDeTdbDsz+dJKl34qW40X
-	OtLtbM8BhmRJ7360vRwIscYcJvYy62wA1GoHLJj8bH89bwhVS4nl8hKlIli9P7xNCV8cUoMfBjj
-	mJ56aPF5eJFEjTFBGKwfWqrYPH9R9EJoE9Ij/CSfruQI3wYBQ21oHAuTy5H8QZcVp+SjPEDNULR
-	bwvT4b9xQWjSKkrluhzE5zPc19H/R8f6nVqhKhuPNzRyho4xgAs8a1PF2X10+CNw3OfNSAdgXZl
-	0mQOQHE502a74GYQj4Jpyxr2hjO4by0pz1qmE6MfHH82tEA==
-X-Received: by 2002:a17:90b:57e5:b0:39e:4c80:f67b with SMTP id 98e67ed59e1d1-3adeaae625fmr4738962a91.26.1792983873198;
-        Sun, 25 Oct 2026 20:04:33 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebb24a83sm6288563a91.17.2026.10.25.20.04.32
+        bh=/HnZdDf6BTWHsvhBySpEwNWr2wb/3OiF6XQWorYoy9g=;
+        b=vDPIBwWeE/adiIyuQE3ywa84697rihpzx2D54rJ4KMpAR6oku6NQgHImvfhYnrQ+3g
+         hrY5AN8ejO8uo5jRE2bh7U02SUK6/8rdJ1N0bWQ3QZ+Xa12u95WwtqdtnzESLqhmbjK9
+         rGrMYl1iuohyZJ6PuzV8rXsBofnViCj4lbx8hGGdIIwXBkq8pAvFa/pyss1sFV2QywAB
+         TkKbQsrF5HXaEkvgMBFbjVTaNUH2SO+9xexGUmLq9OzAC7yyp4rLfVuAiCmYHPr25XUm
+         GgnOgEHyw6Ub4IgIRFPDnZlIx+BClMrbMFGeqGF3zAWQ2tahGchgEJPN8WgEYUWwlIyi
+         MRKg==
+X-Gm-Message-State: AFq9FYLE81uz8GnO0b4XYfiRgPBmrWFNyIastEjF3TRyMF9dmQJgaYEd
+	NmBAoFFIoWEmSPgbJL0nkFuYMhHKOhc/98ssbjHu4ZIAYmHLJ0mbvBSJCkBx2g==
+X-Gm-Gg: AYBFou2JQ8SBP+MxRkgPuODDy40vSAJP315gUeqKTG1gmPa5VbEfttyQ/xI4pMbTKnH
+	CCpKEKYlffRo49sMk8YaGUAbCNhDMYfKeIIo5/AY/Olnc31KP97DJuVywGZGYySCwQ0Z3hPnOc8
+	5cFGe+p0waIZU5TO1fXpGWGMz39sXblu6KFhbQkx+sGEkPhkrPs1m91ORREjFQoECWgLs1n0u++
+	Y9BEWHHCj5mTdHzTvFTYqE0Pl0q7vLhKJELaV89hRJvFZi5/w/LnUZCdBhcoSuQ4Kn/lPlv+2bd
+	hKOT8gIUaaWe/+vj+c8mwjU7HtRui90ri2/TEThrKYufftFwFEH1MrW4z5tMEAtd6pw+M0h7biH
+	OZsJB8STvizKSL1p/rPbs6vnHYkOVeQV6NLzbLYOwsoR7tQzkxeJ23AL7BMN+8C15JWN1HRH2QY
+	sJBeUFi//wybmKbhpJfFMVjS7KSYmR+Gt4dQz3VjoaXRgTFzF8msDHkDr+BqO4XRGcJd5U6Tnt9
+	3hFzv5igFJAYZEFsCMFSWEwwWxZ+nX/KALpQJCXRBQXQRE+v7vJ9KGU2fDzoBx8QIsymwgVh3ox
+	Ecgv09LvOt1YcGUP/bmt2PDWysgTSoWIEODhSRZ++mD8U3Q3+I+4asu2iZiWLpfrjBCsFvDev8G
+	wLGDSbhPfdZSPHaV9ZJhOGT3x
+X-Received: by 2002:a17:90b:6c3:b0:3ac:8897:7b88 with SMTP id 98e67ed59e1d1-3adeaf9c9c2mr4546336a91.58.1792983879002;
+        Sun, 25 Oct 2026 20:04:39 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebe8f09csm6662538a91.7.2026.10.25.20.04.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:04:32 -0700 (PDT)
+        Sun, 25 Oct 2026 20:04:38 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 49/81] selftests/bpf: Adjust tests to loops that are counted now
-Date: Mon, 26 Oct 2026 02:59:10 +0000
-Message-ID: <20261026025943.404450-50-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 50/81] bpf: Add may_goto to the loops that the verifier marks
+Date: Mon, 26 Oct 2026 02:59:11 +0000
+Message-ID: <20261026025943.404450-51-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,125 +103,373 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-"bpf: Describe loops that scalar evolution cannot count exactly" counts
-more loops. Three tests expected a loop that is not counted. All progs
-load.
+"bpf: Verify programs as a fixpoint over the control flow graph" verifies a
+loop with one state that covers all iterations. This shows that each
+iteration is safe. It does not show that the loop ends. Thus the kernel
+must stop such a loop at run time.
 
-  test                          the test expects now
-  ----------------------------  -------------------------------------------
-  no_widen_small_spill_counter  header_count is [0..266]
-  uninit_slot_counter           header_count is [0..11]
-  state_loop_first_last_equal   the prog loads
-  kfunc_implicit_arg (new)      r5 is not live before the call of the kfunc
+may_goto is the insn for that: after 250 ms it jumps to its target. The
+verifier adds may_goto to each loop that it cannot count. It adds nothing
+when each iteration already executes may_goto or bpf_iter_*_next().
 
-The first two loops count from a stack slot with unknown contents. The
-count has an upper bound for each first value.
+The jump of the added may_goto is a new edge in the prog. It must pass the
+verifier like each other edge. One target for all loops is not possible:
 
-state_loop_first_last_equal examined the log of precision backtracking in a
-loop that was not counted. 'r0 += 1; r0 += 1' is now a step of 2, and the
-loop is counted. Keep the prog as a load test:
-"bpf: Remove precision tracking" removes backtracking.
+  do {                                  lock();
+          p = lookup();                 do { ... } while (...);
+  } while (!p);                         unlock();
+  x = *p;
 
-The verifier fills in r5, the implicit argument of bpf_stream_vprintk().
+  It cannot exit from the loop:         It cannot exit from the prog:
+  p is NULL after the loop.             only the code after the loop
+                                        unlocks.
+
+Thus the verifier selects the target for each added may_goto:
+
+          Does the frame hold a lock or a reference
+          that it did not hold at its entry?
+                | no                       | yes
+                v                          v
+       exit from the subprog        exit from the loop
+
+  may_goto is in                              exit from the subprog
+  ------------------------------------------  ---------------------------
+  the main prog                               r0 = 0; exit
+  a subprog, unwind_goto follows each call    r0 = 0; unwind_exit
+  of it
+  all other subprogs, thus all subprogs in C  not possible: exit from the
+                                              loop
+
+'call f; unwind_goto pad' continues at pad, the cleanup code of the caller,
+when f leaves with unwind_exit. Thus the callers release what they hold.
+The verifier rejects a prog in which the selected edge is not safe.
+
+The main pass selects and verifies the edge, and records it in
+insn_aux_data. bpf_insert_loop_guards() adds the insns after the main pass.
+No code sets loop_guard in this patch, thus no prog changes.
+
+  short form             long form
+
+  may_goto target        may_goto +1
+  insn                   goto +N            the usual path: skip N insns
+                         rX = 0, ...
+                         goto target        or: exit
+                         insn
+
+'r0 = 0; exit' goes after the last insn of the subprog, one time for all
+its added may_goto. The long form has one more jump in each iteration. It
+has two causes:
+ - may_goto has a 16-bit offset. A may_goto that is more than 4096 insns
+   before the end of the subprog gets its own 'r0 = 0; exit'.
+ - The usual place of may_goto is before a conditional jump that exits the
+   loop, with the same target. When no such jump is in each iteration,
+   may_goto is at the loop head and its edge skips the body. Then the code
+   after the loop can read registers and stack slots that have no value at
+   the loop head. The long form sets them to 0.
+
+Progs without such a loop get the same code. An added may_goto costs the
+same as a may_goto of the prog. On x86-64 (Zen 5):
+
+  each iteration, tight loop  7 insns            +0.17 .. +0.24 nsec
+  once in 65535 iterations    read of the clock  150 nsec
+  each run                    2 stores, 16 bytes of stack in each frame
+  may_goto in a subprog       4 insns in each run, 16 bytes per cpu,
+                              5 insns at the entry and 7 at the exit of
+                              each call
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/progs/compute_live_registers.c        | 13 ++++++++++
- .../selftests/bpf/progs/verifier_precision.c  | 25 ++-----------------
- .../selftests/bpf/progs/verifier_scev.c       |  6 +++--
- 3 files changed, 19 insertions(+), 25 deletions(-)
+ include/linux/bpf_verifier.h |  13 +++
+ kernel/bpf/fixups.c          | 216 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c        |   3 +
+ 3 files changed, 232 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-index 1ff24bbc7beb..de0496ce7d5e 100644
---- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
-+++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
-@@ -538,6 +538,19 @@ void gotox(void)
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index f0f054f98dc1..31b1fa866e49 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -807,6 +807,11 @@ struct bpf_insn_aux_data {
+ 	u64 cast_arena:1; /* addr_space_cast of an address in arena */
+ 	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
+ 	u64 bb_end:1; /* last instruction of a basic block */
++	u64 loop_guard:1; /* may_goto is added in front of this instruction */
++	u64 guard_place:1; /* it's the place for may_goto if the loop needs one */
++	u64 guard_at_header:1; /* there is no better place than the head of the loop */
++	u64 guard_unwind:1; /* the subprog unwinds when may_goto is out of budget */
++	u64 guard_no_unwind:1; /* it cannot unwind from here, at least sometimes */
+ 	u64 need_scev:1;
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+ 	/* true if STX or LDX instruction is a part of a spill/fill
+@@ -870,6 +875,11 @@ struct bpf_insn_aux_data {
+ 	 * For a loop header, identifies the parent loop instead.
+ 	 */
+ 	s32 loop_header;
++	/* where may_goto in front of this instruction goes */
++	s32 guard_to;
++	/* registers and stack slots that are set to 0 on the way: read there, not written here */
++	u16 guard_zero;
++	u64 guard_zero_slots;
+ 	/* additional information about the loop if this instruction is a loop header */
+ 	struct bpf_loop *loop;
+ };
+@@ -1010,6 +1020,8 @@ struct bpf_subprog_info {
+ 	 * a hidden pointer to the result, a pair in two registers, no dead arguments.
+ 	 */
+ 	bool stack_args_from_code: 1;
++	/* it can leave with unwind_exit: it has one, or unwind_goto follows every call of it */
++	bool bail_unwinds: 1;
+ 	u8 code_stack_args:4;
+ 	u8 arg_slot_cnt:4;
  
- #endif /* gotox: x86, arm64, riscv64 */
+@@ -1450,6 +1462,7 @@ int bpf_states_join(struct bpf_verifier_env *env, struct bpf_verifier_state *dst
+ 		    bool widen);
+ void bpf_join_free(struct bpf_verifier_env *env);
  
-+extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *args,
-+			      __u32 len__sz) __weak __ksym;
-+
-+/* The verifier fills in the implicit argument of the kfunc. The prog does not pass r5. */
-+SEC("syscall")
-+__log_level(2)
-+__msg(": .1234..... (85) call bpf_stream_vprintk")
-+int kfunc_implicit_arg(void *ctx)
++int bpf_insert_loop_guards(struct bpf_verifier_env *env);
+ int bpf_insert_unwound_reports(struct bpf_verifier_env *env);
+ bool bpf_insn_leaves_loop(struct bpf_verifier_env *env, int h, int n);
+ bool bpf_jump_leaves_loop(struct bpf_verifier_env *env, int h, int n);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 6a591c954c31..937274c164e8 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -393,6 +393,222 @@ static int bpf_adj_moved_insn(struct bpf_insn *insn, u32 delta)
+ 	return 0;
+ }
+ 
++static bool jumps_to_itself(const struct bpf_insn *insn)
 +{
-+	bpf_stream_printk(1 /* BPF_STDOUT */, "x");
-+	return 0;
++	u8 class = BPF_CLASS(insn->code), op = BPF_OP(insn->code);
++
++	return (class == BPF_JMP || class == BPF_JMP32) && op != BPF_CALL && op != BPF_EXIT &&
++	       insn->code != (BPF_JMP32 | BPF_JA) && insn->off == -1;
 +}
 +
- /* to retain debug info for BTF generation */
- void kfunc_root(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
-index f4459561bf39..2ec3ee7821c0 100644
---- a/tools/testing/selftests/bpf/progs/verifier_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
-@@ -150,24 +150,7 @@ __naked int bpf_store_release(void)
- #endif /* v4 instruction */
++/* How a subprog leaves when it is out of budget, see push_budget_exit() */
++static struct bpf_insn budget_exit_insn(struct bpf_verifier_env *env, struct bpf_subprog_info *sub)
++{
++	if (!sub->bail_unwinds)
++		return BPF_EXIT_INSN();
++	sub->can_unwind = true;
++	env->prog->jit_required = 1;
++	return BPF_RAW_INSN(BPF_JMP | BPF_EXIT, 0, BPF_UNWIND_EXIT, 0, 0);
++}
++
++/*
++ * may_goto has 16 bits for the offset, and what is between it and its target is going
++ * to grow: may_goto itself becomes 7 insns.
++ */
++#define BPF_GUARD_NEAR	4096
++
++static bool guard_leaves_subprog(const struct bpf_insn_aux_data *aux)
++{
++	return aux->loop_guard && !aux->guard_no_unwind;
++}
++
++/*
++ * 'r0 = 0; exit' behind the last insn of the subprog, for all its guards that are near.
++ * Returns the number of insns that were added.
++ */
++static int append_budget_exit(struct bpf_verifier_env *env, int s)
++{
++	struct bpf_subprog_info *sub = &env->subprog_info[s];
++	int last = (sub + 1)->start - 1, n = 0, i;
++	struct bpf_prog *new_prog;
++	struct bpf_insn buf[4];
++
++	for (i = max_t(int, sub->start, last + 1 - BPF_GUARD_NEAR); i <= last; i++)
++		if (guard_leaves_subprog(&env->insn_aux_data[i]))
++			break;
++	if (i > last)
++		return 0;
++
++	buf[n++] = env->prog->insnsi[last];
++	buf[n++] = BPF_MOV64_IMM(BPF_REG_0, 0);
++	if (bpf_ret_reg_pair(env, s))
++		buf[n++] = BPF_MOV64_IMM(BPF_REG_2, 0);
++	buf[n++] = budget_exit_insn(env, sub);
++	new_prog = bpf_patch_insn_data(env, last, buf, n);
++	if (!new_prog)
++		return -ENOMEM;
++	env->prog = new_prog;
++	/* the original insn is the first one of the patch, not the last one */
++	swap(env->insn_aux_data[last], env->insn_aux_data[last + n - 1]);
++	for (i = last + 1; i < last + n; i++)
++		env->insn_aux_data[i].seen = 1;
++	return n - 1;
++}
++
++/*
++ * Add may_goto in front of the insns that the main pass marked, see
++ * check_loop_guard(). It verified the edge from the insn to where may_goto goes.
++ */
++int bpf_insert_loop_guards(struct bpf_verifier_env *env)
++{
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	int len = env->prog->len, i, r, s, to, n, jmp, delta = 0, err = 0;
++	struct bpf_insn *patch;
++	struct bpf_prog *new_prog;
++	u32 *before;
++	int *target, *leave, *moved;
++	u16 *zero;
++	u64 *slots;
++	s64 off;
++
++	for (i = 0; i < len; i++)
++		if (aux[i].loop_guard)
++			break;
++	if (i == len)
++		return 0;
++
++	/*
++	 * Where the subprog has 'r0 = 0; exit', 0 if it has none. And how far that moved
++	 * the subprog: guard_to is from the time before.
++	 */
++	leave = kvcalloc(2 * env->subprog_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
++	if (!leave)
++		return -ENOMEM;
++	moved = leave + env->subprog_cnt;
++	for (s = env->subprog_cnt - 1; s >= 0; s--) {
++		leave[s] = append_budget_exit(env, s);
++		if (leave[s] < 0) {
++			err = leave[s];
++			kvfree(leave);
++			return err;
++		}
++	}
++	for (s = 0, n = 0; s < env->subprog_cnt; s++) {
++		moved[s] = n;
++		n += leave[s];
++		if (leave[s])
++			leave[s] = env->subprog_info[s + 1].start - leave[s];
++	}
++	aux = env->insn_aux_data;
++	len = env->prog->len;
++
++	/* the number of insns added in front of the insn, where the guard of the insn goes */
++	before = kvcalloc(len + 1, sizeof(u32), GFP_KERNEL_ACCOUNT);
++	target = kvcalloc(len, sizeof(int), GFP_KERNEL_ACCOUNT);
++	zero = kvcalloc(len, sizeof(u16), GFP_KERNEL_ACCOUNT);
++	slots = kvcalloc(len, sizeof(u64), GFP_KERNEL_ACCOUNT);
++	patch = kvcalloc(80, sizeof(*patch), GFP_KERNEL_ACCOUNT);
++	if (!before || !target || !zero || !slots || !patch) {
++		err = -ENOMEM;
++		goto out;
++	}
++	for (i = 0; i < len; i++) {
++		s = bpf_find_containing_subprog(env, i) - env->subprog_info;
++		target[i] = aux[i].loop_guard ? aux[i].guard_to + moved[s] : -1;
++		zero[i] = aux[i].loop_guard ? aux[i].guard_zero : 0;
++		slots[i] = aux[i].loop_guard ? aux[i].guard_zero_slots : 0;
++		if (guard_leaves_subprog(&aux[i])) {
++			/* see push_budget_exit() */
++			slots[i] = 0;
++			if (leave[s] && leave[s] - i <= BPF_GUARD_NEAR) {
++				target[i] = leave[s];
++				zero[i] = 0;
++			} else {
++				target[i] = -2;
++				zero[i] = BIT(BPF_REG_0);
++				if (bpf_ret_reg_pair(env, s))
++					zero[i] |= BIT(BPF_REG_2);
++			}
++		}
++		before[i + 1] = before[i];
++		if (aux[i].loop_guard)
++			before[i + 1] += zero[i] || slots[i] ?
++					 3 + hweight16(zero[i]) + hweight64(slots[i]) : 1;
++	}
++
++	for (i = 0; i < len; i++) {
++		to = target[i];
++		if (to == -1)
++			continue;
++		/*
++		 *	may_goto to		or	may_goto +1
++		 *	insn				goto +N
++		 *					rX = 0, ...
++		 *					goto to, or exit
++		 *					insn
++		 */
++		n = 0;
++		if (zero[i] || slots[i]) {
++			patch[n++] = BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 1, 0);
++			patch[n++] = BPF_JMP_A(hweight16(zero[i]) + hweight64(slots[i]) + 1);
++			for (r = BPF_REG_0; r < BPF_REG_FP; r++)
++				if (zero[i] & BIT(r))
++					patch[n++] = BPF_MOV64_IMM(r, 0);
++			for (r = 0; r < 64; r++)
++				if (slots[i] & BIT_ULL(r))
++					patch[n++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP,
++								-(r + 1) * BPF_REG_SIZE, 0);
++		}
++		jmp = n++;
++		/*
++		 * What is behind moves with this patch and is adjusted by
++		 * the patches to come. What is in front is where it is going to be.
++		 */
++		if (to == -2)
++			off = 0;
++		else if (to > i)
++			off = to - i + n - jmp - 1;
++		else
++			off = (s64)to + before[to] - (i + delta + jmp) - 1;
++		if (!zero[i] && !slots[i] && (off > S16_MAX || off < S16_MIN)) {
++			verbose(env, "exit of the loop is too far from insn %d for may_goto\n", i);
++			err = -ERANGE;
++			break;
++		}
++		patch[jmp] = zero[i] || slots[i] ? BPF_JMP32_A(off) :
++			     BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, off, 0);
++		if (to == -2)
++			patch[jmp] = budget_exit_insn(env, bpf_find_containing_subprog(env,
++										      i + delta));
++		patch[n] = env->prog->insnsi[i + delta];
++		/* A jump to itself is a back edge. It goes through may_goto like the others. */
++		if (jumps_to_itself(&patch[n]))
++			patch[n].off -= n;
++		else
++			err = bpf_adj_moved_insn(&patch[n], n);
++		if (err) {
++			verbose(env, "insn %d cannot be patched due to 16-bit range\n", i);
++			break;
++		}
++		n++;
++		new_prog = bpf_patch_insn_data(env, i + delta, patch, n);
++		if (!new_prog) {
++			err = -ENOMEM;
++			break;
++		}
++		env->prog = new_prog;
++		delta += n - 1;
++	}
++out:
++	kvfree(leave);
++	kvfree(before);
++	kvfree(target);
++	kvfree(zero);
++	kvfree(slots);
++	kvfree(patch);
++	return err;
++}
++
+ /*
+  * For all jmp insns in a given 'prog' that point to 'tgt_idx' insn adjust the
+  * jump offset by 'delta'.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 32b256bc1513..c3fac4586c92 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24393,6 +24393,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret == 0 && env->callx_edges)
+ 		ret = sort_subprogs_topo(env);
  
- SEC("?raw_tp")
--__success __log_level(2)
--/*
-- * Without the bug fix there will be no history between "last_idx 3 first_idx 3"
-- * and "parent state regs=" lines. "R0=6" parts are here to help anchor
-- * expected log messages to the one specific mark_chain_precision operation.
-- *
-- * This is quite fragile: if verifier checkpointing heuristic changes, this
-- * might need adjusting.
-- */
--__msg("2: (07) r0 += 1                       ; R0=6")
--__msg("3: (35) if r0 >= 0xa goto pc+1")
--__msg("mark_precise: frame0: last_idx 3 first_idx 3 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r0 stack= before 2: (07) r0 += 1")
--__msg("mark_precise: frame0: regs=r0 stack= before 1: (07) r0 += 1")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (05) goto pc-4")
--__msg("mark_precise: frame0: regs=r0 stack= before 3: (35) if r0 >= 0xa goto pc+1")
--__msg("mark_precise: frame0: parent state regs= stack=:  R0=P4")
--__msg("3: R0=6")
-+__success
- __naked int state_loop_first_last_equal(void)
- {
- 	asm volatile (
-@@ -175,11 +158,7 @@ __naked int state_loop_first_last_equal(void)
- 	"l0_%=:"
- 		"r0 += 1;"
- 		"r0 += 1;"
--		/* every few iterations we'll have a checkpoint here with
--		 * first_idx == last_idx, potentially confusing precision
--		 * backtracking logic
--		 */
--		"if r0 >= 10 goto l1_%=;"	/* checkpoint + mark_precise */
-+		"if r0 >= 10 goto l1_%=;"
- 		"goto l0_%=;"
- 	"l1_%=:"
- 		"exit;"
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index a68a2368aa71..b30802c9e9e3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -1188,7 +1188,8 @@ __success
- __log_level(2)
- __msg("scev at header 2:")
- __msg_next("  *fp-8=(+ *fp-8 1) / (linear *fp-8 1)")
--__msg("loop header at 2, can't compute iterations count")
-+/* whatever is in the other bytes of the slot */
-+__msg("loop header at 2, header_count is [0..266] ")
- __not_msg("widening")
- __naked void no_widen_small_spill_counter(void)
- {
-@@ -2405,7 +2406,8 @@ __naked void sibling_inner_loops(void)
- SEC("socket")
- __success
- __log_level(2)
--__msg("loop header at 0, can't compute iterations count")
-+/* whatever is in the slot */
-+__msg("loop header at 0, header_count is [0..11] ")
- __naked void uninit_slot_counter(void)
- {
- 	asm volatile ("					\
++	if (ret == 0)
++		ret = bpf_insert_loop_guards(env);
++
+ 	if (ret == 0 && bpf_prog_is_offloaded(env->prog->aux))
+ 		ret = bpf_prog_offload_finalize(env);
+ 
 -- 
 2.55.0
 
