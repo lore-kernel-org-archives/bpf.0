@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986785;
-	b=Ok+fCl0diSSzHLGpIsEZdx796aIM/p+X1+KA4mgYRbzf8iyWMmcZCUoBP/bXwnf3gnFB
-	 X0GsNfZdtcT4te4U6GK0Opk5C+BE6ScxOlvQfPoMCtnvh51LMlI0H68H1LVqu5a1n56SK
-	 JTDVnTPRjkaOHhbnp6k0+HAzbTFG9z2YFEO35p4LDPQIQPpJ0UrXQjHt8vyo4jWV4AP/p
-	 CgWplADdQPUxiU4X8EbEsJgBTIQP30i6EyldXIwr4L1nVi87+Hwzga2tjkhwr1aWNP3yO
-	 ElgGGnb0WBnTfG+xAwu5AD7ZKo4nCMMDmjA8Gxr6IffNRdoo4BpkUXf7aEQIYDxBJhQ==
+	t=1792986787;
+	b=GgQ3yrp91QbkJ89lLFAcNYt2RyEKM9KG495j+U0iIvnibzB21Nf/FaLjuRYJt3kvA75J
+	 jTas0LT/tSajuY9Jd+ZR92S5YSsRpXQDX4vngFLVzYq+95r86Gi1sz69Aa7kKVGljG69h
+	 J3g5snJqGMUc2SDOTOL/i1NNx04/4Uu9rm3yLvsDBnJab3OYZP6xmQqtG1BJQQW8VUhq9
+	 9p5U3BOyK2ScPP8sHGHb39H7m4mXHlbnB3dI0LBP9aLfPioez9J62dHEL9v99wdcnNE2C
+	 ajCNJrUdPbQa4N2Mt/61C6FGf1Wmp1eKvh8wSOSx1z8mwcRyXKqPYxWuapwanTCrKlw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986785;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986787;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=NsFfu/sXKFJpsDGm6iUv6pJpvpw9JPPT7rW+0ayVxwM=;
-	b=WaRR1hy4M5VaIyvqRQZA/okeUelWOH+b4B+jjGaLSBGYPAif3j6oIroJksKT/eW4YxIg
-	 Opm5mFWQ4Ff0a6eA7z9S8Xg7o2IoqcYD1jLaix2nzrsLF26OTFe3/kQ1u20WJQOyS7BdA
-	 ZRM4xJTywAsPi3Mpbx/vWVJrKiu7D0TIoqwNNU1QcPuWJ1C1k6u2fr07tG7AXTWMrmRQ4
-	 j1bLq+OU4BnRcsuqrnO3HSDyL0UPvaDWoskXdt+Wn3/ay8Gusi+8QZt7qR+LH00XNfA+E
-	 aZ4hovbeIg5NOfjrdIGMMdguY7eF4/o74UHHWqEPIhnc8vaAZ+MNRIPG+A3TNnejuhw==
+	bh=JVqKKyGaEOMbBLeAjQBq7tiBBPkO66xsAitbMHTNlZc=;
+	b=jbGC/ZC7ZKgIEFC/nhIbZNVoIuImbOaBAnHj4kEMmsfX16yhOzpr/GvQDO04KfVrLnNJ
+	 8KTNbN0iDugiklgjBG5p5b3NESGnO4oiwcrwkAFQjqMWx2RoOAzpSUorJzbDgTgXLOp2f
+	 nF5w6GbgZ4AkEHYCiJUHD1TtABpmvovpHeCeD5Iu4RKElL2rr4tLxkNb1y/oNqs0lwHHj
+	 KtSrK36BLf7/+KiuDNfYZhKtz/ZuR+qmrMz6yYkpAiaYQnvSFcGevdxhXv3zvR+5QJfF8
+	 oiukuG4iHI4T6IuK3ljPm2LcHSr5NzL+dvwqAvgyY73CKoG4S25eSC9keYPLgVQMXdg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=izwRtOQH;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IMNbWdvp;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD70606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C56F606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=izwRtOQH
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A64FC1F01825;
-	Mon, 26 Oct 2026 03:53:04 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IMNbWdvp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687111F01825;
+	Mon, 26 Oct 2026 03:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986784;
-	bh=NsFfu/sXKFJpsDGm6iUv6pJpvpw9JPPT7rW+0ayVxwM=;
+	s=k20260515; t=1792986786;
+	bh=JVqKKyGaEOMbBLeAjQBq7tiBBPkO66xsAitbMHTNlZc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=izwRtOQHz0QyWhl15StYaRbthNFXdB5Qg4SFgW4OgXm84vc4TJ6WW1RwXSgv9H8Y7
-	 ha5PL2pMMByA9r7o3WvMR8VieGZ0DEJ5FWq1CjRxxsuFYZLJxBSK5burOOu+Kl4lLu
-	 g3HdWqGZ8cRCqB4p0L0y6H+DSch6BB+bMR6tfI6xBZLhpBQlDqSKt7ZQoyvOA38gNO
-	 3ZmjOPiek7ocxkHfAlC7Th42hppDekHnzibruzG9+8qXa+ECK2Ls7UnY/Rm/aQFWLb
-	 N17M6kHlF+Cd7Ixt5mjhn+spzStyrERta+RUtvvNHxAxNM34bJG4t8B18V+PjnKULD
-	 Oq/dQEbLGq87w==
-Content-Type: multipart/mixed; boundary="===============9131374652357019046=="
+	b=IMNbWdvpqOFhySLoNbDLuzM98LUqcyw93EuTihFlNCt51c4lGK0PiCQWTipkSu7Js
+	 wIej3rdt729FVIRP11ahkV4SZwzCsW75LgHNugIGlSoT8g39f0amLQd1KIaQvFqMa4
+	 L9SmwuGhY6s8KtgIIuCVWvfVShyLk6sJRWnl72vE4+QONUVXaTI611Y/fRcRpq4u1Q
+	 NCdCGv/vQ7rezA39kOxhVlktqfxQTEqfpHcjaMugHWwtQXSJP//+NyeH5QpsNvpM/C
+	 m37MH4j61k8v+1gCPaf29quEsaMWdOIvYP4P7q3kZbBZbcdoxJaEYh6noR672n0Jw9
+	 OOExLNbu/e0ww==
+Content-Type: multipart/mixed; boundary="===============7759510558170164353=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,64 +49,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <1c138e2dd8408e916a9f8d0aa9bf54b04e5771ce11e1c012b64b9ab04bf5d494@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-63-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-63-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 62/81] bpf: Remove prune points, levels of state comparison and pop_stack()
+Message-Id: <3f8bb194092b69358f64d6578900fd63ce1bb5f0a719276109d92b62fcfb0cce@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-66-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-66-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 65/81] bpf: Update comments about paths, pruning and explored states
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:04 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:06 +0000 (UTC)
 
---===============9131374652357019046==
+--===============7759510558170164353==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Remove prune points, levels of state comparison and pop_stack()
+> bpf: Update comments about paths, pruning and explored states
 
-TL;DR: Cleanup nit only: with bpf_diag_event_log_save() gone,
-bpf_diag_event_log_restore() is always called with 0, leaving dead branches
-and a stale comment; could it become a plain reset?
+TL;DR: Comment-only patch; the new verifier.c comment may overstate that
+joining makes analysis length follow program size, since flow.c keeps states
+apart and enforces limits. Suggests rewording.
 
-> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index b5204798231d..5acc11788300 100644
-> --- a/kernel/bpf/diagnostics.c
-> +++ b/kernel/bpf/diagnostics.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -392,13 +392,6 @@ static u32 log_pos(const struct bpf_diag_log *log, u32 idx)
->  	return pos < log->cap ? pos : pos - log->cap;
->  }
+> @@ -62,19 +62,16 @@ static bool bpf_global_percpu_ma_set;
 >
-> -u64 bpf_diag_event_log_save(struct bpf_verifier_env *env)
-> -{
-> -	struct bpf_diag *diag = env->diag;
-> -
-> -	return diag ? log_end(&diag->log) : 0;
-> -}
-> -
->  void bpf_diag_event_log_restore(struct bpf_verifier_env *env, u64 log_pos)
->  {
->  	struct bpf_diag *diag = env->diag;
+>  /* bpf_check() is a static code analyzer that walks eBPF program
+>   * instruction by instruction and updates register/stack state.
+> - * All paths of conditional branches are analyzed until 'bpf_exit' insn.
+>   *
+> - * The first pass is depth-first-search to check that the program is a DAG.
+> + * The first pass is depth-first-search over the control flow graph.
+>   * It rejects the following programs:
+> [ ... ]
+> - * The second pass is all possible path descent from the 1st insn.
+> - * Since it's analyzing all paths through the program, the length of the
+> - * analysis is limited to 64k insn, which may be hit even if total number of
+> - * insn is less then 4K, but there are too many branches that change stack/regs.
+> - * Number of 'branches to be analyzed' is limited to 1k
+> + * The second pass goes from basic block to basic block, starting at the 1st
+> + * insn. States that meet at the start of a block are joined, so the length of
+> + * the analysis follows the size of the program and not the number of paths
+> + * through it. See flow.c.
+>   *
+>   * On entry to each instruction, each register has a type, and the instruction
+>   * changes the types of the registers depending on instruction semantics.
 
-This isn't a bug, but now that bpf_diag_event_log_save() is gone, the only
-remaining callers of bpf_diag_event_log_restore() are in verifier.c, and both
-pass 0:
+Is it accurate to say that states meeting at the start of a block are
+joined, and that the length of the analysis therefore follows the size of
+the program?
 
-	bpf_diag_event_log_restore(env, 0);
+The commit message itself says the verifier drops a state that is covered,
+"Otherwise it joins the two states or keeps the two", and flow_merge() in
+kernel/bpf/flow.c deliberately keeps joinable states apart while there is
+room:
 
-With log_pos == 0, the WARN_ON_ONCE(log_pos > end_seq) clamp cannot fire, the
-"if (log_pos <= log->first_seq)" test is always true, and the final
-"log->cnt = log_pos - log->first_seq;" is unreachable.
+    /*
+     * States that have a join are kept apart while there is room: half of
+     * every limit.  After that they are joined, which may lose what the
+     * prog needs, and does not run into the limit.
+     */
+    if (!widen && flow_has_room(env, flow->nr_states[insn_idx]) &&
+        flow_null_differs(&t->st, &s->st))
+            continue;
+    ...
+    if (!widen && flow_has_room(env, flow->nr_states[insn_idx]) &&
+        (flow_unset_differs(&t->st, &s->st) ||
+         flow_join_makes_up(flow, &t->st, &s->st)))
+            continue;
 
-The comment above that test ("A deep abandoned path may have rotated away the
-shared prefix") describes the pop_stack() restore that this patch removes.
+States of a different flow_kind() are never compared or joined, and when
+bpf_states_join() finds no join (for example scalars that differ while
+env->explore_alu_limits is set, which the sanitize_ptr_alu() comment in
+this same patch describes as keeping states apart), the state is added to
+the set with list_add_tail(&s->node, set).
 
-Could bpf_diag_event_log_restore() become a plain reset without the log_pos
-argument, dropping the partial-restore branch and the abandoned-path comment
-along with it?
+bpf_flow_loop_enter() also walks some loops one iteration at a time, with
+each trip a separate kind of state:
+
+    /*
+     * There is no summary of what the loop does to something that is
+     * live.  Go through the iterations one by one if that is not too long.
+     */
+    if (err == 2 && flow_walk_factor(cur) * iters.max_header_count *
+                    loop->nr_insns <= BPF_FLOW_MAX_WALK) {
+            ...
+            entry->apart = true;
+
+For such a loop the work follows the trip count, up to BPF_FLOW_MAX_WALK
+insns, which is not the size of the program.
+
+What bounds the work is the set of limits in flow.c
+(BPF_FLOW_TOTAL_PER_INSN / BPF_FLOW_MAX_STATES), and a program over them
+fails with -E2BIG ("too many states for %d insns" or "more than %d states
+that cannot be joined").  The new text drops every mention of a limit and
+gives joining as the reason for the bound.
+
+The header comment in flow.c describes the three outcomes (dropped, joined,
+added) correctly.  Could this summary match it, for example:
+
+    A state that arrives at the start of a block is dropped if a state
+    there covers it, joined with one if possible, or kept; the number of
+    states is bounded by the size of the program, see flow.c.
+
+No later commit in be06e70f1a7f..51224d16c11b changes this comment.
+
+[ ... ]
 
 
 ---
@@ -114,4 +165,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============9131374652357019046==--
+--===============7759510558170164353==--
