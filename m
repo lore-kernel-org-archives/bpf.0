@@ -1,60 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793002190;
-	b=rsK/WcmKTUlBwij+iCNsRq9U9V66UJU6kdXZo3/yoU+DDyapqlYK9QsRxQEv+eedR7TG
-	 tWljHUHFo+SSeaYqsu8WZOWvkJz0Xih6H7kclwxkXB/+pKiNSKinuaV7R0LgMijkr4yq5
-	 ZveNy8zzSzHDJx/sM6RZvdUwPiwU9Tv+53LxYBjh/5eRUaP3ffvLqXifFWWVdE2axa8ai
-	 QqtOAMZDsaLoHLJGhLJvdnZqtY/zore4qxZ+gNRGJ2GE1cbE8GPOkGGRAhX45W162gn8+
-	 muNh7t0y2roZ9+MleHKh0/4p2bhd+DpG2HX08Qn2UpGX8POOfUA92WQvqadwddNPB6Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793002190;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=IoIcS+gLnmzaBN1aXijYz+gNQYGjmdJtPr2Yly0VmrU=;
-	b=JHKzg67amznxAsig1wlVLET8dD1TEivFKl9f+Q5BTY2abrv4K6HRp/HaSlNa6PbJxGmp
-	 AJIxUE8TrPWHDBdbWGcSCKVBZWaFvIRnQMxM9nOjgs0gCYkjHtVQVDoqi9HcBF/6Nr5oS
-	 lIE5PNZe/QMw+SwIYLaNQQO51DnsdZQ+vmt+/Hry1fVQyHIrUIZdG/RsLhk39nIeKiFab
-	 PozLQmykdr+49DZcnLxqYPsfwPp9KrxpcKWXOfOxYYR7o8i4B5f3zy4oh50lwAOX39KtK
-	 U80RSTNKi/4eJTdq236U8+CYeVtxHWBXkajMRyF1ZbmkHnyBBuioyUpw0aCb3WKpDzw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=1g4.org;
-	spf=pass smtp.mailfrom=1g4.org;
-	dkim=pass header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=qwWnWELw;
-	arc=none smtp.remote-ip=185.70.43.18
-Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793003366;
+	b=SFVhX+0Dow3VUx67NeOFIty8ruVaSBBMNNNRFo2v9rQFpaVCnrrat3xde6HTUOHUp3ED
+	 2df6jYR9CnPx2Ya2GxC2JBZSGdGFLJsjXvxBjGD395x69wUsidtxeS0JNtZ3q9El123e7
+	 ISbBIFkyT16cZokF7MH0r16FcP0j+bwqRUszHyvHF57Ik0T2QeJ50Qfb3ULi/27AxEE1w
+	 TteNn2/ktKlL1+g8It7uqtRqDZsJZJCnSzBRvyUyIYhK9Yo63LHMEkxrzShTJy3YZvHeg
+	 l26OFGDElrEoJ9aJ1K4qMlRIHZGP5qm41FnYtNFUYZy/a7L63SYc2LYq0LA6fMiAzyg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793003366;
+	h=DMARC-Filter:Received:DKIM-Signature:From:Date:Subject:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:Message-Id:References:
+	 In-Reply-To:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=KQlF6PoEcsNhxcyBiIGKVmyhgBC+BfLt7M/wlDsGWb0=;
+	b=SRgoRUr7DfqO4L4L7j2X0htctuQ7Ie5e1+h3LnFwokTVC2qumimUCCbb6BPIDemuXWcj
+	 rKhIIvhsQAHur++njUvDfKAqQx6kI4raZBmWDtIpH8SriDu9WPtaSl26hnCumlKK3MJAV
+	 b+/rNVX+8ydJl91fW+vvikqXyHjgZGzIvojyTl5q1oNUQ+drGDNsWWhwFNRsVFzbIQqHD
+	 lLoIaL+7YSoZ9MlsQYK2s6cAiUxJbtI2G2cVYxo/ssPRVdbl5n93Celzj44IXxI8rZ5F2
+	 ce4fxTuPj1v5aaA7ata3GpAzcPklTFly0G5CgOiIbBKjz83OqBOKuCGOodkcQQU+k/w==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=pengutronix.de;
+	spf=pass smtp.mailfrom=pengutronix.de;
+	dkim=pass header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=SbUVZ4Hs;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=185.203.200.13
+Received: from mx1.white.stw.pengutronix.de (mx1.white.stw.pengutronix.de [185.203.200.13])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053CB606A322;
-	Mon, 26 Oct 2026 08:09:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 053CB606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CCA606A31F;
+	Mon, 26 Oct 2026 08:29:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97CCA606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=qwWnWELw
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
-	s=protonmail; t=1793002186; x=1793261386;
-	bh=IoIcS+gLnmzaBN1aXijYz+gNQYGjmdJtPr2Yly0VmrU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=qwWnWELwy03SN6/MZB/0dV1L2d3FEoHBxaZIzLifsiqlyKdDdvJ/y7WHYDKc740Wj
-	 yhfIUFfm54tUwoBMZy8b6l253LzyHC9vmhQl7m5axdHwNBO00HZz3Tw+KJ6+uSNWZd
-	 t0hbJ+53lf3m4muCp0GMhGz6Oc8b+wpQPBxuF/9n1+rxaNxk1WjJto8WwAvXElWFQK
-	 N1xQ5oTZvTSer3/agHlinJ6Xjzo6+g/V0UcP2JFiruY35Dam/kViW4ynN/TU5Jcb6D
-	 Pi6FUUoDkpvLNaDMRajinaUngbFeJc7oC8Xa/JZjBtqFsCdRT+qzEz5EeDxhW40k5p
-	 pYUHtYXbFibLQ==
-Date: Mon, 26 Oct 2026 08:09:43 +0000
-To: netdev-bot+sashiko@kernel.org
-From: Paul Moses <p@1g4.org>
-Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, maciej.fijalkowski@intel.com, vedang.patel@intel.com, jithu.joseph@intel.com, andre.guedes@intel.com, intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] igc: track rx frame boundaries independent of skbs
-Message-ID: <1EvchnNc6hsP0rVtNzqvcHlIKZ0tWYrRL3c7XpesxOlmd_fe-H2ROdacFthmJCYNjVvWa7k4JxhfQBGebKyUbUsfI5FU6gsB0IOd7_znQoQ=@1g4.org>
-In-Reply-To: <179300059875.3134.14278423796840357371@kernel.org>
-References: <20261025065154.2037149-1-p@1g4.org> <179300059875.3134.14278423796840357371@kernel.org>
-Feedback-ID: 8253658:user:proton
-X-Pm-Message-ID: 617b83583d400fe265873a1b32e7c4248d7cd7b3
+	dkim=pass (2048-bit key, unprotected) header.d=pengutronix.de header.i=@pengutronix.de header.a=rsa-sha256 header.s=20260414 header.b=SbUVZ4Hs
+Received: from ratatoskr.trumtrar.info (unknown [IPv6:2a00:1f:f805:2b01:a03:2f4:308a:7b52])
+	(Authenticated sender: str@pengutronix.de)
+	by mx1.white.stw.pengutronix.de (Postfix) with ESMTPSA id BBDF22019D1;
+	Mon, 26 Oct 2026 09:29:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1793003364;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KQlF6PoEcsNhxcyBiIGKVmyhgBC+BfLt7M/wlDsGWb0=;
+	b=SbUVZ4HsLbi+mMsfNVfSsMzJSEORToKeymYd9A4Mp9lnTDdtVZ7oNSZgeNfJ1SJiutkn/k
+	9oohnDQ9+8nuL6+EWDMoUNU3ahPf24xEHhLA8xsG632PZik7iZUpR89d0q6iC79PAWWnxv
+	yITgIz3889wy92jt+ktZBdmTpxsPCMDnehg2mSEFt7sQQCl+SZ5jPh28GuYvYSfgkukLOl
+	OxGo6NWtK3w2RaMSmdngqzJ1+M6Ogu/7AJJgX/vdmhASKWWVAQ9TRf1G442JzgHHelo9ol
+	bEWF1rWnntqLYHi2fvpHr7TjJbP+7tRc6LucJ36dixKMTPUiFjtBLXZ45AlKDw==
+ARC-Seal: i=1; s=20260414; d=pengutronix.de; t=1793003364; a=rsa-sha256;
+	cv=none;
+	b=Ku4MgVczwoceRwk2AuToIlanv22q7gN4iv0QokoLIbIC+oBZG2j2ytREVSX+/d+27Ff0T3
+	tyTEvDZFV4ldTJsbXodX/GvJ3SOS44YIVJt117gh0fdNgYavCGrelQ4RN1g2u7aZrK0fWE
+	ADGi8YisDq9gx5aDsIRcd+6E+0g8qkWFDMV1Zbjd9c6Yp3YbFuEbVTi+glxON0/bnssfY4
+	ggaHh1kupF5owXSyCmiGnlyn9W73N2A/ksP6Qk0jbddf1lP2W2bnaYvaafcNMpADDLKv9D
+	No0sCXE93gYcY91O6fjSCNymrrTJg6qoM4+9YzpJhW/nxTwxFT52bqEdg4AfTQ==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=str@pengutronix.de smtp.mailfrom=s.trumtrar@pengutronix.de
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=pengutronix.de;
+	s=20260414; t=1793003364;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KQlF6PoEcsNhxcyBiIGKVmyhgBC+BfLt7M/wlDsGWb0=;
+	b=GtAptxFG/4LI3f21e8TmFz3QDm5/67jBenD1r8VK7uMKTro8fl8iwwBDHUxTvyVAa5d9Dw
+	Cm4L+udyO1HnAPnfWDNxRSRd+qHCntII9AKKPiU9RgMJIaCTi2xWANcembt7NuwnRQ9qR1
+	Lksuc+/Xdm8s/V2KGtQyO6RSVI5w5kng/3bEV+Mi2osPh0hEcyHHdHeBo3/B9oCyoj8c9O
+	pJWXLWQYfJrprQyLbCLBiHyR3ofbpjduHiTtQGySpKMUQZUgNph3aaeuiXSDsFjSSMphxX
+	Nz8qbCylLueSKYosQsnaKpzg5PxDnySlzaSSb8k5TxUaoJrcPiPJ7YjNYE/UYQ==
+From: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Date: Mon, 26 Oct 2026 09:29:03 +0100
+Subject: [PATCH RFC v4 3/6] virtio-net: assert header sizes
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -64,215 +83,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261026-v6-7-topic-virtio-net-ptp-v4-3-008af03cd43b@pengutronix.de>
+References: <20261026-v6-7-topic-virtio-net-ptp-v4-0-008af03cd43b@pengutronix.de>
+In-Reply-To: <20261026-v6-7-topic-virtio-net-ptp-v4-0-008af03cd43b@pengutronix.de>
+To: "Michael S. Tsirkin" <mst@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Richard Cochran <richardcochran@gmail.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Jason Wang <jasowangio@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@kernel.org>
+Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>, 
+ virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, kvm@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1371;
+ i=s.trumtrar@pengutronix.de; h=from:subject:message-id;
+ bh=VNqggOE1Eks6kcVJq7bwJA4oYcZtrmSlslNSc9TyIn8=;
+ b=owGbwMvMwCUmtVehiCsuTInxtFoSQ9Z9/sQcmbdGF9M2T35eoL8zOKnmxppn+aUFQksOt05aa
+ 1Gz5fW0jlIWBjEuBlkxRRaVhRV8oh4fPCOniXDBzGFlAhnCwMUpABO5ZMfwTy3IId3osrfbO8t3
+ lvolucquB2WNJl8Q+ZVyiPtQb3b/U4Y/XBW7Z6R6xWak7r/+/hrb/Y2R0QYNE2yN1vzecPP7vdo
+ PvAA=
+X-Developer-Key: i=s.trumtrar@pengutronix.de; a=openpgp;
+ fpr=24A1780E1548F0495996140A1ABD20720A5E5622
 
-On Monday, October 26th, 2026 at 2:43 AM, netdev-bot+sashiko@kernel.org <ne=
-tdev-bot+sashiko@kernel.org> wrote:
+The header is cast from skb->cb and from device buffers, so its layout
+must not change silently. Add static_asserts for the offset of tstamp,
+the total size, the alignment, and that the header fits into skb->cb.
 
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider.
->=20
-> Critical: 0 =C2=B7 High: 0 (2) =C2=B7 Medium: 1 =C2=B7 Low: 0
->=20
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwor=
-k
-> know by including "pw-bot: cr" as a separate line at the end of your repl=
-y
-> (one such reply per series is enough).
->=20
-> - [Medium] The new split-frame discard paths leave frames out of
->   rx_packets and rx_bytes, which contradicts the rtnl_link_stats64=
-=E2=80=A6
->=20
-> Pre-existing issues:
-> - [High] In igc_clean_rx_irq(), the FPE mPacket early exit leaks the RX
->   page and its DMA mapping.
-> - [High] igc_xdp_set_prog(), igc_xdp_enable_pool() and
->   igc_xdp_disable_pool() tear down and rebuild the RX ring while NAPI=
-=E2=80=A6
->=20
-> --
->=20
-> igc: track rx frame boundaries independent of skbs
->=20
-> The patch adds a per-ring rx_in_frame flag so the inline TSIP timestamp
-> header is stripped only from the first buffer of a frame. Split frames
-> that are not supported (XDP enabled, AF_XDP zero-copy) are rejected
-> before XDP runs, and their continuation descriptors are drained. The RX
-> poll functions now return a work_done count that includes discarded
-> descriptors, instead of total_packets.
->=20
-> > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/et=
-hernet/intel/igc/igc_main.c
-> > index 1fb5f3cbe93c5..9ca5558c762c9 100644
-> > --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> > @@ -474,6 +474,7 @@ static void igc_clean_rx_ring(struct igc_ring *ring=
-)
-> >  =09=09igc_clean_rx_ring_page_shared(ring);
-> >
-> >  =09clear_ring_uses_large_buffer(ring);
-> > +=09ring->rx_in_frame =3D false;
-> >
-> >  =09ring->next_to_alloc =3D 0;
-> >  =09ring->next_to_clean =3D 0;
-> > @@ -673,6 +674,7 @@ static void igc_configure_rx_ring(struct igc_adapte=
-r *adapter,
-> >  =09/* reset next-to- use/clean to place SW in sync with hardware */
-> >  =09ring->next_to_clean =3D 0;
-> >  =09ring->next_to_use =3D 0;
-> > +=09ring->rx_in_frame =3D false;
-> >
-> >  =09if (ring->xsk_pool)
-> >  =09=09buf_size =3D xsk_pool_get_rx_frame_size(ring->xsk_pool);
->=20
-> [Severity: High]
-> This isn't a bug introduced by this patch, but these new resets assume
-> NAPI is not polling the ring. Do the XDP reconfiguration paths actually
-> guarantee that?
->=20
-> igc_xdp_set_prog(), igc_xdp_enable_pool() and igc_xdp_disable_pool() all
-> clean the ring before they disable NAPI:
->=20
-> drivers/net/ethernet/intel/igc/igc_xdp.c:igc_xdp_set_prog() {
->     ...
-> =09=09for (i =3D 0; i < adapter->num_rx_queues; i++) {
-> =09=09=09igc_disable_rx_ring(adapter->rx_ring[i]);
-> =09=09=09igc_disable_tx_ring(adapter->tx_ring[i]);
-> =09=09=09napi_disable(&adapter->rx_ring[i]->q_vector->napi);
-> =09=09}
->     ...
-> =09=09=09napi_enable(&adapter->rx_ring[i]->q_vector->napi);
-> =09=09=09igc_enable_tx_ring(adapter->tx_ring[i]);
-> =09=09=09igc_enable_rx_ring(adapter->rx_ring[i]);
->     ...
-> }
->=20
-> igc_disable_rx_ring() does only an RXDCTL write before it calls
-> igc_clean_rx_ring(). Also, napi_enable() runs before
-> igc_enable_rx_ring()->igc_configure_rx_ring().
->=20
-> Suppose igc_clean_rx_irq() is running on another CPU while
-> igc_clean_rx_ring_page_shared() calls dev_kfree_skb(rx_ring->skb) and
-> drains the pages. Could the poll then call igc_add_rx_frag() on the freed
-> skb, or drop page references a second time through igc_put_rx_buffer()?
->=20
-> When the poll exits, it also writes rx_ring->skb, next_to_clean and
-> rx_in_frame back, after the reset. igc_configure_rx_ring() resets
-> rx_in_frame but not rx_ring->skb. A later poll could then see
-> first =3D=3D true with a stale non-NULL skb, and the new (!first && !skb)
-> check would not catch that.
->=20
-> Triggering this needs a CAP_NET_ADMIN user to attach or detach an XDP
-> program, or to bind or unbind an AF_XDP pool while XDP is loaded, while
-> RX traffic keeps a poll running on another CPU.
->=20
-> [ ... ]
->=20
-> > @@ -2635,21 +2635,34 @@ static int igc_clean_rx_irq(struct igc_q_vector=
- *q_vector, const int budget)
-> >  =09=09dma_rmb();
-> >
-> >  =09=09rx_buffer =3D igc_get_rx_buffer(rx_ring, size, &rx_buffer_pgcnt)=
-;
-> > +=09=09tsip =3D first && igc_test_staterr(rx_desc, IGC_RXDADV_STAT_TSIP=
-);
-> > +
-> > +=09=09if ((!first && !skb) ||
-> > +=09=09    (first && igc_xdp_is_enabled(adapter) &&
-> > +=09=09     !igc_test_staterr(rx_desc, IGC_RXD_STAT_EOP)) ||
-> > +=09=09    unlikely(tsip && size < IGC_TS_HDR_LEN)) {
-> > +=09=09=09if (first)
-> > +=09=09=09=09dev_core_stats_rx_dropped_inc(rx_ring->netdev);
-> > +=09=09=09xdp_res =3D IGC_XDP_CONSUMED;
-> > +=09=09=09goto xdp_done;
-> > +=09=09}
-> > +
->=20
-> [Severity: Medium]
-> Should the frames dropped here still count toward rx_packets and
-> rx_bytes?
->=20
-> include/uapi/linux/if_link.h describes rx_packets in rtnl_link_stats64
-> as including "packets which host had to drop at various stages of
-> processing (even in the driver)".
->=20
-> Take a hardware-good first descriptor that is dropped only because XDP is
-> enabled and EOP is not set. It jumps to xdp_done and skips the new
-> total_bytes/total_packets block, so only rx_dropped and work_done are
-> incremented. igc_clean_rx_irq_zc() does the same for !eop frames.
-> igc_update_stats() then exports the ring totals directly as
-> net_stats->rx_packets and rx_bytes.
->=20
-> Frames that the XDP program drops are still counted in the same function,
-> and before this patch every descriptor was counted. The commit message
-> says the exclusion is intentional ("without counting successful RX"), but
-> that doesn't match the documented semantics.
->=20
-> >  =09=09truesize =3D igc_get_rx_frame_truesize(rx_ring, size);
-> >
-> >  =09=09pktbuf =3D page_address(rx_buffer->page) + rx_buffer->page_offse=
-t;
->=20
-> [ ... ]
->=20
-> > -=09=09if (igc_fpe_is_pmac_enabled(adapter) &&
-> > +=09=09if (first && igc_fpe_is_pmac_enabled(adapter) &&
-> >  =09=09    igc_fpe_handle_mpacket(adapter, rx_desc, size, pktbuf + pkt_=
-offset)) {
-> >  =09=09=09/* Advance the ring next-to-clean */
-> >  =09=09=09igc_is_non_eop(rx_ring, rx_desc);
-> >  =09=09=09cleaned_count++;
-> > +=09=09=09work_done++;
-> >  =09=09=09continue;
-> >  =09=09}
->=20
-> [Severity: High]
-> This is a pre-existing issue, but this block is being modified here. Does
-> this early exit leak the RX page and its DMA mapping?
->=20
-> igc_get_rx_buffer() always decrements rx_buffer->pagecnt_bias. This path
-> advances next_to_clean and continues, but it never restores the bias and
-> never calls igc_put_rx_buffer(). That function is the only place that
-> recycles or unmaps the page and clears rx_buffer->page.
->=20
-> The slot still holds the page after next_to_clean has moved past it. If
-> igc_reuse_rx_page() later recycles a buffer into that slot, it overwrites
-> the page without checking:
->=20
-> drivers/net/ethernet/intel/igc/igc_main.c:igc_reuse_rx_page() {
->     ...
-> =09new_buff =3D &rx_ring->rx_buffer_info[nta];
->     ...
-> =09new_buff->page=09=09=3D old_buff->page;
->     ...
-> }
->=20
-> The old page and its mapping are then lost.
->=20
-> If igc_alloc_rx_buffers() reaches the slot first, igc_alloc_mapped_page()
-> reuses the page because bi->page is non-NULL, but the bias is one too
-> low. igc_can_reuse_rx_page() would then always see
-> (rx_buffer_pgcnt - pagecnt_bias) > 1, so the page is never freed.
->=20
-> igc_fpe_handle_mpacket() returns true for any SMD-V or SMD-R frame. With
-> pMAC enabled, the link partner can trigger this with every such frame it
-> sends.
->=20
-> The new drop path in this patch already releases the buffer correctly:
-> pagecnt_bias++ in the IGC_XDP_CONSUMED case, then igc_put_rx_buffer(),
-> cleaned_count++ and igc_is_non_eop(). Could the mPacket case release the
-> buffer the same way?
->=20
-> --
-> Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
-set/20261025065154.2037149-1-p%401g4.org
->=20
+Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Assisted-by: Claude:claude-opus-5-5
+---
+ include/linux/virtio_net.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-I'll review and correct accounting. The other two are out of scope
-unless I introduced regression.=20
+diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
+index 2abd8a614a23f..e7776a37a486b 100644
+--- a/include/linux/virtio_net.h
++++ b/include/linux/virtio_net.h
+@@ -29,6 +29,17 @@ struct virtio_net_common_hdr {
+ 	__le16 tstamp[4];	/* le64 TAI receive time in ns, 0 if none */
+ };
+ 
++/*
++ * The header is cast from skb->cb and from device buffers, the layout must not
++ * change silently.
++ */
++static_assert(offsetof(struct virtio_net_common_hdr, tstamp) == 32);
++static_assert(sizeof(struct virtio_net_common_hdr) ==
++	      offsetofend(struct virtio_net_common_hdr, tstamp));
++static_assert(__alignof__(struct virtio_net_common_hdr) == 2);
++/* virtio_net_common_hdr must fit into skb->cb */
++static_assert(sizeof(struct virtio_net_common_hdr) <= sizeof_field(struct sk_buff, cb));
++
+ static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_type)
+ {
+ 	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
 
-pw-bot: cr
+-- 
+2.52.0
+
