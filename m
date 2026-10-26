@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983622;
-	b=OjVLsHYHx21P6qZXJxehqRDQEuUGXlpQeeIn2ndY7leVQhNCzzOdmMzuVSlTTuclN/Cn
-	 zRv6dYl/EYTd4WIjDebNXCk/EE9dfqbN1nw1JrDlub8u43eEJFJ+pYBct8XVxYQBtRdu7
-	 J0dF+UTdj0exUyN5Zi80xKuMMP9XIJhZppDGZw7MnBXoZLYfVs1w4Mm37UIJ38WtsP1Up
-	 Oy4UKE2he8DIbJCAJiT5969yXWuAgGNv3ikNLN7GaURN1GtUIhPEZ7a4KXVkoZYVAF9sF
-	 a1QyW0lYNuK5D5uZIcylLkIWJWzldfRF6LvHZ4YwcgfOPsizhLWsvsg6Lthlua3jntA==
+	t=1792983629;
+	b=j3iLzCWhYsstQGMUfNc2w3uIGaPav+56LMxf85oxfHlbrJuWCTmn2+dp9dpPtEBxvFxg
+	 OTJ5HGVrU9ny3ffBTdlreFRSbgcZTcoe/oDhv2fcqA+E5Bq385e6xoNEEdf8CMUTmSpD6
+	 AMPiUhsZ9tQmUyfr2kky7+UTthiJ8ex36calN7rLXacXWH8BRIORkDnP3ACLWYq6YGD30
+	 GUTaoMJjPpSwmjGRG9XAfQ+yZjKqstqVowVtsHB31Rxx+TtOqarXtjrT9YzsZ0TlTGtzV
+	 aWdiNlCZZm8sKNjjioSjcPlwDv1DuXQH3ZCCLL4jUJi/lQSh78pILugElGsaqXomyyQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983622;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983629;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=GDOLQZAFyg6AnWLFz2UjtHf/pV9Gd+HVQWbyn+Bu44I=;
-	b=r9lvouxiN/IIWyozD6791yF8W5ydgASpjmCHvh85vGAEboDsxDquv5QvM/+6GeXPvNyP
-	 iZY9YMba/faUW92UTewY26+di95su9nHvGkYsZZB/YnwpweysDgfuxtSWSH3MZ38C/Vlz
-	 QNPbo5VIoVWt/w/BffQDIZ339KOUbNuHvjKlLis1p9yBtsKOlQlQgWR6QwqUsYF924HpV
-	 j8yKmAB4KTV6OH9+pbxspWjiSmaMsK9dL288E9uoqHrFb7Um3GNX6bqh2Iuef4ByTfivx
-	 mwK2WIjca3875l5SNawembqJA8tQB5askaBM38vD8P4anSeibMmUBZfb+eZrIB0wfkw==
+	bh=3GE591d1veMorimorQVo2THTErpeIldienDCH/ySnOw=;
+	b=Q8eq4WNSci7CgUr0u79awINMD43HFtfcBUPe/CY+D0YlGNNAIaCYu+glJIhbpvUvEQ4M
+	 vKhlPDAgajMHCBbzS/u8jAIPaD9uvEj7T30tPbRCExlkc4tu2aE34xYEDtCbeZ9zvaZ25
+	 SN28VWgEmwFgb9ONorut8AGmyJUCdaBy2PNQPI3EogItJibmu7SUfcz9IE6/M2O5VEb5o
+	 8sW982Y0/iXGz9VOi+JbYUiZQYNSPHp5GNE+I66WPKQ1Vw3p29G8Mu5pSTLhfCEUQslQj
+	 lOWkdg7eyTvGLylmqwN+5Ely+Tuwi6hfyf5SiZPtfJ/QdGeoyBvWUhrlQJiwn8sO/5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ICbTK7sN;
-	arc=none smtp.remote-ip=209.85.215.179
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=icLHqcjI;
+	arc=none smtp.remote-ip=209.85.214.179
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6AD606A31D
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:00:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D6AD606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9627C606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:00:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9627C606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ICbTK7sN
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cd67cc518a6so1719507a12.1
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:00:22 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=icLHqcjI
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ea138a3497so15792525ad.2
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983622; x=1793588422; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983628; x=1793588428; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GDOLQZAFyg6AnWLFz2UjtHf/pV9Gd+HVQWbyn+Bu44I=;
-        b=ICbTK7sNy0P92VclyTY22ukog7f3xQk+0gXhQQnqz+1IhHfEFfe9VesKhnaRhHKiBK
-         8RKWHqdNC3oBUh9vjcZBcoy30zY5VngrcWETc8h4xH3x90P6UdnWbK++pvhx4bRpTEfK
-         ctWx57PZm/iKPU2JhKDd2Hvh2KSURAc/yvgB+n3i2eViRMyRSgNySY2/DgarrN7656je
-         zcbbQH04R/cM52Ld3VLrVIJmmhLDr4xTgvSZ3+smwTtPHnCnsGM0dTIKvZDZaiHFVrlU
-         hAGv3lj4EHpb9E+4e6TamPyGf7xWQFcIRHkqeQ3vdnUK2nAMi7dGV9zFnB9viNf0bjx/
-         v0mA==
+        bh=3GE591d1veMorimorQVo2THTErpeIldienDCH/ySnOw=;
+        b=icLHqcjI/F9A/l6mT5UUDwV9nUch9VMfFrMHO1WYAp9NB8LX0kwVTzhLRu9dsjOOxC
+         rvxih7gtadcuM9wjchbIt3SdeHUuW46JziFkrXWM7f1U7uj5rtEBU1U4kKMWQU7u872v
+         XXXLirqojSVoyLt1uLG0rJ6io/KGdk1GlfsecUNhgSy6kLosumR/WcEKqnIhNL/8tzAb
+         FlMFmDlzcA5lwg/j99rqCEukj3YaJNXMRo5gQtoeVbv8FrLBAiMYLgb5LWgzVGX2jVWD
+         0nbS535vHBQvvOBKc9D2OGUH08LW6NYoaN3s3YGSE96hunxnCxEzrvuEY+YsFyH9V+U5
+         Mlpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983622; x=1793588422;
+        d=1e100.net; s=20260707; t=1792983628; x=1793588428;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GDOLQZAFyg6AnWLFz2UjtHf/pV9Gd+HVQWbyn+Bu44I=;
-        b=Dn/8PcwB7BftiloVH8l/5GUvk0Jg/jq9r8jIQI0BT3aCrYZ0TKOXNF25EuP0yhh1IL
-         4/sBBJ8Hyv3ZgKG/pZEdH6VizLZbH4HV4cysOGy+LejlKfmsO4RL5zKLXvGSHc7DqDyh
-         YugOdZ46P7bGhzHlMyVSc7g8bdK6Veb+dlpZ64qOWR/6EQPgRB+ISE4EoeZA7ZkhG33s
-         vYSOjcWAlqLnjf91BTGGePHTkXTu4FMBUQ7GBihB/2Mgjt+gKFpcau5f8Tm/EdWTnjkS
-         8YJwacOPdNIPTbKJFAjuNaSsn9bc/h1eIPPswcWekAyDLi9vpIsKowSWpQelWVCnkvMP
-         BQew==
-X-Gm-Message-State: AFq9FYJNdPvgYLbGU2oyQksB3Sfg5U9leVxtIV2q+vBI5Xo9DpA68EI0
-	tkTXBeVDHxl6L9x051HOSw/37r4Tt++xqvFiYMvz6momy3g8Mm5T7HYTmjAxGw==
-X-Gm-Gg: AYBFou1r3rbcvoJDdQ5SBSC+ehgYUzskFUDQk4yZPuob7Vazg/AxUTDyeBSAufaAkeI
-	jHaBt0FDPY2Gm2h9TQstPYtUgLlv977qEfepSiQqgQycYXV/1S6sMxmxVWmqwN0Iz6Z4iLAFQkF
-	Wbm4EsjPUCMpfzqg7gwONhOIOqA3RTirGerjfzSRoWSNkf4E/U0M7oue5z9y/vaTdElM6tzzf2m
-	QpzafZ/ml1cQlcsjw8+5vdDOnkhTnwk3/P/ydfdRs/1Ddv+/C8nAFwDM0aw2EhQ75AUkJwzM/Vq
-	RwRDxGJd7YVw0wmDP4ASyd8SxKZMxAbZ4NGoRPEKgp63k35yUBGhqixT28FYu1i3arrIqsblmUS
-	36UR1pglIvsbdiNf6QWHkibqRBGpk2T9FIDgXNAPtWICJwWIvM6KxOAAmXrr1MQ9Ory1hYGUe9D
-	XsI09a2seu7aWQjoWQING5o35GT+1oHC2Vi4DjT0H6mCMF1YiWJtkYuOrjHQLFsbz7KyLeGz4Ik
-	CLS3xL8w93YTzhNRN2D8HaLoFeOmqeJFymO7vFAdxOUSoPKDqhrfYcALrfM6INChUtncLWKp++O
-	gAKIoRWeGkmkzMJW+Cm2Awpugfa8B5HvFkEqg/6hLgeJNfoxCN5NKhredYWWlp/lKiMeCPfpFXs
-	Vlb/MtFtFlwXBdfBAhHhKNwJwMmzbGg8XuSRPDLdlj9pjzQ==
-X-Received: by 2002:a17:90b:291:b0:3ac:9f24:44df with SMTP id 98e67ed59e1d1-3adea1ad71dmr3582017a91.2.1792983621520;
-        Sun, 25 Oct 2026 20:00:21 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebe8f0a7sm6512282a91.9.2026.10.25.20.00.21
+        bh=3GE591d1veMorimorQVo2THTErpeIldienDCH/ySnOw=;
+        b=fHKGfuj9FvTL+ameb8DpB0XCx4mJxldniZOrzMiKk9O7tR4Uo6nkUvIasxxECS0dob
+         W/BvsF2oHt1WvVH3vsb1OT2dILPzWcyixW38/xTeqlZvIz6r0xZsImbn6zLNIoN55KDx
+         1g5yQVeGog0ZZiAWNAbfS1CLvz6CSyAB7psozyZTcP8v3RMjLK/kVMdaNjDmghrJICUA
+         EbHo0BTG952h9lonx2XhJcAOm5U4ViELgr3I2hDT0xoTLOBPCGM5N5FTkcbG1ToQIHoo
+         YQ/hZ5xzd2bMb+DYVaeKKX84h8bTaIpFbRjlzhRzSHp0g63pY5NdPltUGOt3Or+CCgIQ
+         ItZQ==
+X-Gm-Message-State: AFq9FYLjSVGgam/VpwBYRNEMNL+l1und07LrHfJDoNcXA7iqrxqK8yBe
+	3staRni6CxpkEOfJWkluvHSvVCFteLOXXaYdYcZxliNAMnAUljph9PAYbS64TQ==
+X-Gm-Gg: AYBFou2Fw7bk6o1E2TvogX4z5v20lBWOxnKm8KTWuSmRIGpJHQPOOc6mrSFHUj7D9oC
+	WscTprzO5xJrdtLV1PQacw6DeU+Hrgwko3WT5wF70sNefhm7IGcYTRngrZ61TPi/aibRDqiYwzI
+	dfmxsb1HMTz9Ta2xGTQkTZEa4vfANfiOwSui2f+HdvR1qeZa0TnU1ouILDjX1eF3chR884TmMSn
+	3dlMU7xiEIGoC14sDxqEzEMvAikj7W19vGe0ANlwBB1xaUPNphJ1llgChjxfGrciqA8BpeNekTj
+	NYqOCCKCL2B0sHdsbaLn4hjY5DuFc2oScxwzPd5VvHVBZPWfES0A7rOOfoKu4DMDYCyXQmP76rD
+	c+OdYcurFM3m7NJBzQn3tE8aDCl0lL2b3xZg7iU6JENTKThGNmchFs7kA9z/rcJ/D3QjyvSjFjh
+	CKJOv/REebAIHpxY/NjUjrpb+o8DbeCJzmBuylxK/RGv9pUAuKRgxB0W0fHowO3fDdtHQ6h486M
+	Fl5PqJbf0J/5hpk9LzKldYbhYbpXhzMJSIOs3XaTD5wGEC1k2X23yVVkRHJ/NhyfOzKen8/gMWK
+	gzJXeFgx7teKBmrVrgscARau8rCYriWpIGdjqNexf++kbbgSXwWES6D6JDJBeFi42xfP9B07KhX
+	RFgRFfi3NBAvvoLxcJ3WxW4vC
+X-Received: by 2002:a17:902:e5cb:b0:2e9:528c:ba02 with SMTP id d9443c01a7336-2ea9c99609amr49394905ad.60.1792983627623;
+        Sun, 25 Oct 2026 20:00:27 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1df613sm9954535ad.61.2026.10.25.20.00.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:00:21 -0700 (PDT)
+        Sun, 25 Oct 2026 20:00:27 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 06/81] bpf, x86: Remove r0_on_stack from fetching atomics in arena
-Date: Mon, 26 Oct 2026 02:58:27 +0000
-Message-ID: <20261026025943.404450-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a prog
+Date: Mon, 26 Oct 2026 02:58:28 +0000
+Message-ID: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,141 +103,379 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-x86 has no fetching AND/OR/XOR. Thus the JIT emits a loop with cmpxchg.
-cmpxchg uses RAX, and RAX holds BPF R0. Thus the JIT saves R0 before the
-loop.
+may_goto stops a loop that the verifier cannot bound: after 250 ms the loop
+must exit. The count and the timestamp are in the stack frame of the
+function that contains the loop. Thus the limit applies to one call of a
+subprog, not to one run of the prog. Loops that nest across calls multiply
+the limit.
 
-  prog                        the address is in   the JIT saves R0 in
-  --------------------------  ------------------  -------------------
-  without the flag            a BPF register      BPF_REG_AX
-  with BPF_F_ARENA_SCALAR     BPF_REG_AX          the stack
+  main:                 sub:
+  1: call sub           1: may_goto 2f
+     may_goto 2f           goto 1b
+     goto 1b            2: r0 = 0
+  2: r0 = 1                exit
+     exit
 
-The flag is removed. Remove the second variant.
+  main  | sub: 250 ms | sub: 250 ms | ... | sub: 250 ms |
+        1             2                   65535         ^
+                                   main reads the clock here
 
+Each call of sub spins for 250 ms. main reads the clock one time in
+65535 iterations. Thus the prog runs for 65535 * 250 ms: 9 insns cause a
+soft lockup. bpf_loop(1 << 23, cb) with such a loop in cb has the same
+result.
+
+The count has the same problem. A subprog that makes fewer than
+65535 iterations in each call never reads the clock. An endless loop that
+calls a subprog with 60000 iterations runs for 3.5 sec. Three levels of
+such loops lock up a cpu.
+
+Give one time slice and one count to the full run. A run is one call of the
+main prog, or of an async callback, by the kernel, together with all the
+subprogs that it calls. The main prog gets a per-cpu budget.
+
+  the kernel calls the prog  budget.start = 0
+            |                budget.count = 65535
+            v
+  entry of a subprog         frame.count = budget.count
+            |
+            v
+  may_goto                   frame.count -= 1
+            |                At 0, read the clock:
+            |                 < 250 ms   refill frame.count, budget.count
+            |                >= 250 ms   budget.count = 0, exit the loop
+            v
+  exit of the subprog        budget.count = min(budget.count, frame.count)
+
+Iterations now add up across calls. After 250 ms the budget is empty:
+ - A subprog that starts after this time exits its loops immediately.
+ - A frame that is already on the stack exits its loop when it reads the
+   clock again.
+
+The progs above return after 250 ms.
+
+Only JITed progs that have may_goto in a subprog or in a callback get
+different code: 0 of 144 progs of Cilium, 53 of 495 progs of scx. The cost
+on x86-64 (Zen 5) with hot caches, in nsec:
+
+  entry of the main prog, once per run    4 insns, 34 bytes   +0.52
+  entry of a subprog with may_goto        3 insns, 19 bytes   +0.03
+  each exit of such a subprog             6 insns, 36 bytes   +0.15
+  async callback (bpf_timer), all progs   reset the budget    +0.35 on 34.6
+  read of the clock, once in 65535        stack walk to find  26 -> 179
+  iterations, all progs                   the budget
+
+An iteration has no added cost. A run with one call of such a subprog costs
++0.97 nsec. It costs +90 nsec when the budget is not in the cache.
+
+Limitations:
+ - A second run of the same prog on the same cpu, in an interrupt or after
+   preemption, starts the time slice again. The timestamp in the frame
+   continues to limit each frame to 250 ms.
+ - The JIT must support a stack walk and per-cpu insns. x86-64 with ORC,
+   arm64 and powerpc64 do. Nothing changes on riscv, loongarch and s390.
+ - Nothing changes for extension progs. They cannot find the start of a
+   run.
+
+Fixes: e723608bf428 ("bpf: Add verifier support for timed may_goto")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/x86/net/bpf_jit_comp.c | 58 +++++++++----------------------------
- 1 file changed, 14 insertions(+), 44 deletions(-)
+ include/linux/bpf.h  | 12 +++++++
+ kernel/bpf/core.c    | 72 ++++++++++++++++++++++++++++++++++----
+ kernel/bpf/fixups.c  | 82 ++++++++++++++++++++++++++++++++++++++++++--
+ kernel/bpf/helpers.c |  4 +++
+ 4 files changed, 160 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 7bfb7210484e..d90b6d238b3a 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1745,26 +1745,20 @@ static int emit_atomic_ld_st_index(u8 **pprog, u32 atomic_op, u32 size,
- /*
-  * A fetching AND/OR/XOR can't be implemented with a single x86 insn, so do a
-  * CMPXCHG loop. @index_reg is X86_REG_R12 for an arena access or -1 otherwise.
-- * Unless @r0_on_stack, the caller has substituted BPF_REG_AX for R0 in
-- * @dst_reg and @src_reg.
-+ * The caller has saved R0 in BPF_REG_AX and has substituted BPF_REG_AX for R0
-+ * in @dst_reg and @src_reg.
-  *
-  * Both the load and the CMPXCHG can fault when accessing the arena, so their
-  * addresses are handed back in @fault[0] and @fault[1]. A fault has to resume
-  * at @resume, which is past the loop and past the move that delivers the old
-  * value, but before R0 is restored. Both are NULL for the non-arena case,
-  * which needs no fixup.
-- *
-- * R0 is expected to be saved in BPF_REG_AX by the caller, or pushed on the
-- * stack if @r0_on_stack. In that case an R0 operand stays in the stack slot,
-- * RAX ends up holding the old value that R0 is to return, and the slot is
-- * dropped rather than popped.
-  */
- static int emit_atomic_fetch_rmw(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
--				 u32 src_reg, int index_reg, bool r0_on_stack,
-+				 u32 src_reg, int index_reg,
- 				 u8 **fault, u8 **resume)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ff0436781293..4c7c3f86ddbd 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1851,6 +1851,15 @@ enum bpf_sig_keyring {
+ 	BPF_SIG_KEYRING_BPF,
+ };
+ 
++/*
++ * What all frames of a run of a prog on this cpu share, see bpf_check_timed_may_goto().
++ * It's reset when a run begins, see bpf_prog_begin_run().
++ */
++struct bpf_may_goto_budget {
++	u64 start;	/* when may_goto looked at the clock for the first time, 0: it didn't yet */
++	u64 count;	/* what is left until the next look at the clock, 0: the time is up */
++};
++
+ struct bpf_prog_aux {
+ 	atomic64_t refcnt;
+ 	u32 used_map_cnt;
+@@ -1916,6 +1925,8 @@ struct bpf_prog_aux {
+ 	const char *attach_func_name;
+ 	struct bpf_prog **func;
+ 	struct bpf_prog_aux *main_prog_aux;
++	/* main prog: there when a subprog has may_goto */
++	struct bpf_may_goto_budget __percpu *may_goto_budget;
+ 	void *jit_data; /* JIT specific data. arch dependent */
+ 	struct bpf_jit_poke_descriptor *poke_tab;
+ 	struct bpf_kfunc_desc_tab *kfunc_tab;
+@@ -3415,6 +3426,7 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+ void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
+ void bpf_prog_report_arena_violation(bool write, unsigned long addr, unsigned long fault_ip);
++void bpf_prog_begin_run(const struct bpf_prog *prog);
+ 
+ static __always_inline u32
+ bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7cf37690d41f..472efced9e40 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -292,6 +292,7 @@ void __bpf_prog_free(struct bpf_prog *fp)
+ 		mutex_destroy(&fp->aux->used_maps_mutex);
+ 		mutex_destroy(&fp->aux->dst_mutex);
+ 		kfree(fp->aux->poke_tab);
++		free_percpu(fp->aux->may_goto_budget);
+ 		kfree(fp->aux);
+ 	}
+ 	free_percpu(fp->stats);
+@@ -3625,21 +3626,78 @@ static noinline void bpf_prog_report_may_goto_violation(void)
+ #endif
+ }
+ 
++/*
++ * The kernel is about to call an async callback of @prog on this cpu: a run begins.
++ * The main prog does the same in its first insns.
++ */
++void bpf_prog_begin_run(const struct bpf_prog *prog)
++{
++	struct bpf_prog_aux *aux;
++
++	if (!prog)
++		return;
++	aux = prog->aux->main_prog_aux;
++	if (aux->may_goto_budget) {
++		this_cpu_write(aux->may_goto_budget->start, 0);
++		this_cpu_write(aux->may_goto_budget->count, BPF_MAX_TIMED_LOOPS);
++	}
++}
++
++static struct bpf_may_goto_budget *bpf_may_goto_budget(void)
++{
++#ifdef CONFIG_BPF_SYSCALL
++	struct bpf_prog *prog = bpf_prog_find_from_stack();
++
++	if (prog && prog->aux->may_goto_budget)
++		return this_cpu_ptr(prog->aux->may_goto_budget);
++#endif
++	return NULL;
++}
++
++/*
++ * The count and the timestamp are those of a stack frame. With nothing else every call of
++ * a subprog has a time slice of its own, and a loop that calls a subprog that uses up its slice
++ * goes on for BPF_MAX_TIMED_LOOPS slices before it looks at the clock itself.
++ *
++ * So there is one time slice for a run of the prog. It starts when the first frame gets here.
++ * When it's over the frames that are entered from then on start to count from 0: they leave
++ * their loops at once. The frames that are there find out when they get here.
++ *
++ * The count is shared as well. A subprog that makes fewer than BPF_MAX_TIMED_LOOPS iterations
++ * per call would never get here, and neither would a loop that calls it, for that many times as
++ * many iterations. Three levels of that take days. So a subprog starts from what is left for
++ * the run, and what it has left when it returns is what is left for the run. No more than
++ * BPF_MAX_TIMED_LOOPS iterations for every frame on the stack pass between two looks at the clock.
++ *
++ * Another run of the prog on this cpu, in an interrupt or after preemption, starts the slice
++ * anew. The slice of the frame is still there for that.
++ */
+ u64 bpf_check_timed_may_goto(struct bpf_timed_may_goto *p)
  {
- 	bool is64 = BPF_SIZE(insn->code) == BPF_DW;
--	bool operand_on_stack = r0_on_stack && src_reg == BPF_REG_0;
- 	u8 *branch_target, *prog = *pprog;
- 	int err;
+-	u64 time = ktime_get_mono_fast_ns();
++	struct bpf_may_goto_budget *run = bpf_may_goto_budget();
++	u64 time = ktime_get_mono_fast_ns(), start;
  
-@@ -1783,15 +1777,7 @@ static int emit_atomic_fetch_rmw(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
- 	 * Perform the (commutative) operation locally, put the result in
- 	 * the AUX_REG.
- 	 */
--	if (operand_on_stack) {
--		/* mov r11, [rsp]: the operand is the R0 saved there, RAX is the old value */
--		if (is64)
--			EMIT4(0x4C, 0x8B, 0x1C, 0x24);
--		else
--			EMIT4(0x44, 0x8B, 0x1C, 0x24);
--	} else {
--		emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
--	}
-+	emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
- 	maybe_emit_mod(&prog, AUX_REG, src_reg, is64);
- 	EMIT2(simple_alu_opcodes[BPF_OP(insn->imm)],
- 	      add_2reg(0xC0, AUX_REG, src_reg));
-@@ -1810,20 +1796,14 @@ static int emit_atomic_fetch_rmw(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
+-	/* Populate the timestamp for this stack frame, and refresh count. */
+-	if (!p->timestamp) {
++	/* Populate the timestamp for this stack frame. */
++	if (!p->timestamp)
+ 		p->timestamp = time;
+-		return BPF_MAX_TIMED_LOOPS;
++	start = p->timestamp;
++	if (run) {
++		if (!run->start)
++			run->start = time;
++		start = min(start, run->start);
+ 	}
+ 	/* Check if we've exhausted our time slice, and zero count. */
+-	if (unlikely(time - p->timestamp >= (NSEC_PER_SEC / 4))) {
+-		bpf_prog_report_may_goto_violation();
++	if (unlikely(time - start >= (NSEC_PER_SEC / 4))) {
++		/* once per run */
++		if (!run || run->count)
++			bpf_prog_report_may_goto_violation();
++		if (run)
++			run->count = 0;
+ 		return 0;
+ 	}
+-	/* Refresh the count for the stack frame. */
++	/* Refresh the count for the stack frame, and for the frames to come. */
++	if (run)
++		run->count = BPF_MAX_TIMED_LOOPS;
+ 	return BPF_MAX_TIMED_LOOPS;
+ }
  
- 	/* ZF tells us whether we won the race. If it's cleared we need to try again. */
- 	EMIT2(X86_JNE, -(prog - branch_target) - 2);
--	/* Return the pre-modification value, which RAX already is for R0 */
--	if (!operand_on_stack)
--		emit_mov_reg(&prog, is64, src_reg, BPF_REG_0);
-+	/* Return the pre-modification value */
-+	emit_mov_reg(&prog, is64, src_reg, BPF_REG_0);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index 41bc37e205e0..fe8d51f8c855 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -1821,6 +1821,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 	struct bpf_map *map_ptr;
+ 	int i, ret, cnt, delta = 0, cur_subprog = 0;
+ 	struct bpf_subprog_info *subprogs = env->subprog_info;
++	struct bpf_may_goto_budget __percpu *budget = NULL;
+ 	u16 stack_depth = subprogs[cur_subprog].stack_depth;
+ 	u16 stack_depth_extra = 0;
  
- 	if (resume)
- 		*resume = prog;
+@@ -2729,13 +2730,69 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 	}
  
- 	/* Restore R0 after clobbering RAX */
--	if (!r0_on_stack)
--		emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
--	else if (operand_on_stack)
--		EMIT2(0x41, 0x5B); /* pop r11, dropping the operand */
--	else
--		EMIT1(0x58); /* pop rax */
-+	emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
+ 	env->prog->aux->stack_depth = subprogs[0].stack_depth;
++	/*
++	 * One time slice for all frames of a run, see bpf_check_timed_may_goto(). It finds
++	 * the prog with a walk of the stack, like bpf_throw() does. An extension is entered by
++	 * the prog that it extends, it has no way to tell one run from another.
++	 */
++	for (i = 1; i < env->subprog_cnt; i++) {
++		if (!subprogs[i].stack_extra || !bpf_jit_supports_timed_may_goto() ||
++		    !bpf_jit_supports_percpu_insn() || !bpf_jit_supports_exceptions() ||
++		    !prog->jit_requested || prog->type == BPF_PROG_TYPE_EXT)
++			continue;
++		budget = alloc_percpu_gfp(struct bpf_may_goto_budget, GFP_KERNEL_ACCOUNT);
++		if (!budget)
++			return -ENOMEM;
++		prog->aux->may_goto_budget = budget;
++		prog->jit_required = 1;
++		break;
++	}
++	/*
++	 * What a subprog has left of the count when it returns is what is left for the run,
++	 * unless its callees have left less, or the time is up. R1-R3 are dead at exit.
++	 */
++	for (i = 1; budget && i < env->subprog_cnt; i++) {
++		int off_count = offsetof(struct bpf_may_goto_budget, count);
++		struct bpf_insn ld[] = { BPF_LD_IMM64(BPF_REG_1, (long)budget) };
++		int j, cnt;
++
++		if (!subprogs[i].stack_extra)
++			continue;
++		for (j = subprogs[i].start; j < subprogs[i + 1].start; j++) {
++			if (bpf_is_ldimm64(&prog->insnsi[j])) {
++				j++;
++				continue;
++			}
++			if (prog->insnsi[j].code != (BPF_JMP | BPF_EXIT))
++				continue;
++			cnt = 0;
++			insn_buf[cnt++] = ld[0];
++			insn_buf[cnt++] = ld[1];
++			insn_buf[cnt++] = BPF_MOV64_PERCPU_REG(BPF_REG_1, BPF_REG_1);
++			insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_FP,
++						      -subprogs[i].stack_depth);
++			insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_1, off_count);
++			insn_buf[cnt++] = BPF_JMP_REG(BPF_JLE, BPF_REG_3, BPF_REG_2, 1);
++			insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_2, off_count);
++			insn_buf[cnt++] = prog->insnsi[j];
++			new_prog = bpf_patch_insn_data(env, j, insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++			env->prog = prog = new_prog;
++			j += cnt - 1;
++		}
++	}
+ 	for (i = 0; i < env->subprog_cnt; i++) {
+ 		int delta = bpf_jit_supports_timed_may_goto() ? 2 : 1;
+ 		int subprog_start = subprogs[i].start;
+ 		int stack_slots = subprogs[i].stack_extra / 8;
++		int off_start = offsetof(struct bpf_may_goto_budget, start);
++		int off_count = offsetof(struct bpf_may_goto_budget, count);
++		/* a run begins. For async callbacks see bpf_prog_begin_run() */
++		bool entry = budget && !i;
+ 		int slots = delta, cnt = 0;
  
- 	*pprog = prog;
- 	return 0;
-@@ -3354,7 +3334,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			}
- 			if (is_atomic_fetch) {
- 				err = emit_atomic_fetch_rmw(&prog, insn, real_dst_reg,
--							    real_src_reg, -1, false,
-+							    real_src_reg, -1,
- 							    NULL, NULL);
- 				if (err)
- 					return err;
-@@ -3383,29 +3363,19 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 		case BPF_STX | BPF_PROBE_ATOMIC | BPF_DW:
- 			if (is_atomic_fetch_op(insn)) {
- 				u32 real_src_reg = src_reg, real_dst_reg = dst_reg;
--				/*
--				 * An access through a number has its address in
--				 * BPF_REG_AX (see arena_scalar_access()), so R0 is
--				 * saved on the stack instead, as div and mod do.
--				 */
--				bool r0_on_stack = dst_reg == BPF_REG_AX;
- 				u8 *fault[2], *resume;
- 				int j;
+-		if (!stack_slots)
++		if (!stack_slots && !entry)
+ 			continue;
+ 		/* We need two slots in case timed may_goto is supported. */
+ 		if (stack_slots > slots) {
+@@ -2744,7 +2801,26 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 		}
  
- 				/* Will need RAX as a CMPXCHG operand so save R0 */
--				if (r0_on_stack) {
--					EMIT1(0x50); /* push rax */
--				} else {
--					emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
--					if (src_reg == BPF_REG_0)
--						real_src_reg = BPF_REG_AX;
--					if (dst_reg == BPF_REG_0)
--						real_dst_reg = BPF_REG_AX;
--				}
-+				emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
-+				if (src_reg == BPF_REG_0)
-+					real_src_reg = BPF_REG_AX;
-+				if (dst_reg == BPF_REG_0)
-+					real_dst_reg = BPF_REG_AX;
+ 		stack_depth = subprogs[i].stack_depth;
+-		if (bpf_jit_supports_timed_may_goto()) {
++		if (budget) {
++			struct bpf_insn ld[] = { BPF_LD_IMM64(BPF_REG_0, (long)budget) };
++
++			/* R0 has nothing at the entry */
++			insn_buf[cnt++] = ld[0];
++			insn_buf[cnt++] = ld[1];
++			insn_buf[cnt++] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
++		}
++		if (entry) {
++			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, off_start, 0);
++			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_0, off_count,
++						     BPF_MAX_TIMED_LOOPS);
++		}
++		if (!stack_slots) {
++			/* nothing to count in this one */
++		} else if (budget && !entry) {
++			insn_buf[cnt++] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, off_count);
++			insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_0, -stack_depth);
++			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth + 8, 0);
++		} else if (bpf_jit_supports_timed_may_goto()) {
+ 			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth,
+ 						     BPF_MAX_TIMED_LOOPS);
+ 			insn_buf[cnt++] = BPF_ST_MEM(BPF_DW, BPF_REG_FP, -stack_depth + 8, 0);
+@@ -2774,7 +2850,7 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 		 * to insn after BPF_ST that inits may_goto count.
+ 		 * Adjustment will succeed because bpf_patch_insn_data() didn't fail.
+ 		 */
+-		WARN_ON(adjust_jmp_off(env->prog, subprog_start, delta));
++		WARN_ON(adjust_jmp_off(env->prog, subprog_start, cnt - 1));
+ 	}
  
- 				err = emit_atomic_fetch_rmw(&prog, insn, real_dst_reg,
- 							    real_src_reg, X86_REG_R12,
--							    r0_on_stack, fault, &resume);
-+							    fault, &resume);
- 				if (err)
- 					return err;
+ 	/* Since poke tab is now finalized, publish aux to tracker. */
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 648abe1ba63a..cd960f65093d 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1242,6 +1242,7 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+ 
+ 	key = map_key_from_value(map, value, &idx);
+ 
++	bpf_prog_begin_run(READ_ONCE(t->cb.prog));
+ 	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+ 	/* The verifier checked that return value is zero. */
+ 
+@@ -1273,6 +1274,7 @@ static void bpf_wq_work(struct work_struct *work)
+ 
+ 	migrate_disable();
+ 
++	bpf_prog_begin_run(READ_ONCE(cb->prog));
+ 	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+ 
+ 	migrate_enable();
+@@ -4611,6 +4613,7 @@ static void bpf_task_work_callback(struct callback_head *cb)
+ 	key = (void *)map_key_from_value(ctx->map, ctx->map_val, &idx);
+ 
+ 	migrate_disable();
++	bpf_prog_begin_run(ctx->prog);
+ 	ctx->callback_fn((u64)(long)ctx->map, (u64)(long)key,
+ 			 (u64)(long)ctx->map_val, 0, 0);
+ 	migrate_enable();
+@@ -4863,6 +4866,7 @@ static void bpf_rcu_run_callback(struct rcu_head *rcu)
+ 	smp_store_release(&rh->armed, 0);
+ 
+ 	rcu_read_lock_dont_migrate();
++	bpf_prog_begin_run(prog);
+ 	callback_fn((u64)(long)map, (u64)(long)key, (u64)(long)value, 0, 0);
+ 	rcu_read_unlock_migrate();
  
 -- 
 2.55.0
