@@ -1,99 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.51
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793025128;
-	b=auw8poGE0IHl8fe5dWwbwpstveQI2ShkSGwkGg9saqavs0V1JXW93BqjCkgc9QC6TIn0
-	 GDtqXqX3/mQN7Mwm4+/IvKsvrrCgx2HCmSXGqsP4BWpuMOoInhUwBU3lCKaWoCasOuA9B
-	 MmYbSkLpJujXH5vO6tP+F510KcXB1NcG5YjbS/SJwZvJArp7y22XC+imDgRM2fG6sXVCX
-	 nvPgTjJ/NQ+aGmgmV6p75dCcuvKlUyzUPA9VcKAuFyabqUP8uIlNbCIH9Pu+0TTy/M6U+
-	 SYrsgIA/WoPt3QF9lTXwWyLqiflqKC+au0EiHpsAhyD6+8RAvWCeUKsoMuHZ3lgvt5g==
+	t=1793025756;
+	b=zKhnOe1tJV1CmhHCIr0iUQxwgFQpCv4FP2MufEyng/1PSdSkI/IDdgqPa296chtHa68l
+	 WskOMn+J8GZjBuunzcC+WQ8ycOEfxVXE1LR32LlfUFFj4ExtXDJLZcNhTcoSh1HlV1lfX
+	 hiYGaJjDcf38XlPcy7cfT+Lzsks9iKc5E0uQZPz2KnbXeaxNy3UaIwZ9VW/pupJ6CARp9
+	 UuY5uvUjMIlL16bZ/IOPMFsQZ2gDxHD30zEGcRBqO9Xj4+ch1WhBOWf0FN2k6wf8iSg1W
+	 O/swRRQMwd49YEo8zNYpkkYkR/0PT+Dgo+kWR029G3zvZbNwmKcP64O05hGIRmKLaLg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793025128;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793025756;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
-	b=BDOvh/0J2LOs8lIDDLektSJ81U7WBQYoXmsSl3KJyLrlWDLpvwqGg5wuLMjW187rTtBY
-	 NGhHAr3212vdKO2DB1h1GVQrOETqeKtH+v2QWRlaWM2HoSN81pB1ydqIm7mAUCVpVds9R
-	 6cqcSZ0H7PvIaUT43EFiSSAz3P+FIZoc2uuMLK/1/YaZ7UcKJjwoJ9p7cPA+GsFfH2fVu
-	 3Fjzb4t2haQSh4L/TQx3lKBg6dJ0w7l9MqEaOjw01/hftUBd+u7MY6qiVf6/6LZyRxsp/
-	 7RG4hVLKKKtNk7I79YfqVlMLL8tHXW0fRAW9adI12S8+FpZWTLvTQGZyH8OG7I7WjPw==
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
+	b=fZR9NcJJaFLJIKx/CO6tn56tg3JTUvQCgoXGK6KUrXQCERFvOj1K42u7aSU6nh/Kly/o
+	 R7SnmDZoJkA758aIU4El9/v8Wgf1GouvrhqoYln9Sbu/HgLzrFmcK2MeX1dxQbKPefOeq
+	 9qxLBCjNn0hWGPSdYeja8yhUzWxnkkF46LO89vmFkV0I5XjzwnpqbSbr8PTLFfKDZh39x
+	 OPtgrMlmBzs3s9dt/eGfsZ3WOQ9gEoR371vc/Zm3QCcVLAvUPzlsooL59Vu+hzxgPGnFx
+	 hHXFl2vdrFJPFvNAkczSRJWpjntmbnlSQRGE1slr3Vb35k5y7gwi0TgLxKKM6Cx5uRA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fvFl2JqY;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GKfIPL5Z;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.51
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DDF606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:32:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5DDF606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0FA606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:42:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C0FA606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fvFl2JqY
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3acb11973c3so2032077a91.3
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 07:32:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793025127; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GKfIPL5Z
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-4932b13c4ccso1573690fac.3
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 07:42:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793025755; cv=none;
         d=google.com; s=arc-20260327;
-        b=Jq+VqW1VsKm3MoJ+pd8pSKMX+g2Wb6ms7pH7360LMPxchWaqK9977ZfXJ7RcJgF66B
-         qaNNsEn3E1+bOyUhZGBh6SiSEaIFOfrqFWjy8BA1KP0zJeTzoRGjJy0BBgMvqqxNJf/p
-         QYRkQDueO/zmPtlfmtolI/BcJkznKbWUq4MEiyM1KerD0uuC/dcILCXdXX89LsJqOFU6
-         JxmbOaSzMsatvZnoLUAX98lSJbBFAfFRT4Ku5mlQ0q4aG9UEh8DwOLw5kX8p9iVyxcIK
-         LkQGpEtnWHp+qCMc1+d90UrUDGr/45h1lKNXlrcFLFmYFBKotPVzeTBcavLNVFmdctao
-         oA1Q==
+        b=polIPEASUX35sHDcIxzAeauIma0g+7/c7xq3ld7/jlWwj7AVhPz/xBiD7FH+57ba6X
+         n//W5pnV3TlmZR4Bdtrw1oryPe3XXP/pmRGn/2UZSN1XhfuIX+kXXpjFNOlGALVmxb/C
+         ZKQbjEnub71QGRHL6OTuo93iA5a3sFN72wReqth/a7uEHDfwKUR9ADe+h4xAyTJIYcpB
+         BO2gHvso2Fc8wTb3yiFWBUYRUMZ76A+d8SO3iqGyy+boMuGcqGlfwlIx52TU7laEYTQA
+         FjVT7s6xVg5bThbbSyQ1AGPhgu5+exQwnPRF7jevRhAJkYZSt1i/y/yilrkE82x0sXvF
+         nj2g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
-        fh=/+/Ip1TorElR3KFkkcfdOYfcxjcNltR8B1Ch6ADVHoY=;
-        b=O8wW6T/lPHD+dJCnB02qGetHVQZt+VH/L3S14lzMnQe99EVXv8CrYS/nkrOyXzBXkl
-         NmrwZVUl+qMwzQn1IdRQPWjcArqHbHDRMBOgpSgp0SOQeohC8lZfqiK8q+clvDDK4ITN
-         JHjIGS2Tm3kSTfQX3gM0sa17dMZSwr30G4tg9scuE4JKqgPSk00NhYBPX+HRDXValex3
-         IlPMkrlA4cau8NLN2/B6l7viNbKcd+YsGj/4jB0ntnWFCF9c8gX9rPKeTl/BV8Y+JcUZ
-         J88yD3kCJopeX/qngVI58Q/jVEZfLBl22ZwRsPJNUKmYTxGfTUzNH9qRcxp06pUmkezb
-         /Y9g==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
+        fh=2EmlKVduRmi4yqT2S/lKwjmkU+P7llwggCKf9gY7GLk=;
+        b=TRsE1lDH6c5lR+eOeE7kD1gDvMytcSw23Oa8ZRsifCEih2dqsMdAHQvFxcIqT5+waB
+         YZ29JfC89C/GgerF5eb80BQhWrie+/a/qZ/KmfMKbLpZeyogycxOpWjXdWWGu7X4e0eH
+         B43m6/VGjdysV23GrpodRsHIntCIEFMH96qnOwDkVoC1SNmsBIuXzR2am+nUndWulz58
+         7kFWwt84oRj+XKESm7hTLTF9FZgyxQkUI+4M9A2bprTB9fCEJxUo0prbMDXdrrozJyqx
+         Gi66/QHTeJEcsB51rRCoY71Wn7h2esC3Iks0FKUAod0JohBqxbcfEoewK7C7QzKEQrcO
+         Td6g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793025127; x=1793629927; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
-        b=fvFl2JqYiK++L9Zn0vfo8qjsAtt8ULXmy4jRMsZWyhMJnRIQKO5Rgi7jeprM6MVIy4
-         /gpHjU/ILM64eE/DWyLU9CpYZROq10UOYB88q2H+bNRGWt/4itLRlgb7IHZmz254KEUJ
-         uyBnRxmPFfHjF2N0bUVo2B5byPKdjvv7n7yrws+I97JBI3bkCFzeSNxO5vtbSRwE8MiE
-         0HiZelCG6u9CtDzypVlb7C/Us/VsX4+woXWZYwOacQWphQIEBAJvEiYJ4K0eVNFK4BwU
-         YE9lJnKghkc2gPV7RauLtKpoQWBEQz+XeynSq1pXEe+p1iupFPzxs9UqunTA7XvO5dcC
-         ZFBg==
+        d=gmail.com; s=20251104; t=1793025755; x=1793630555; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
+        b=GKfIPL5ZKa6e9p2e9kBDTVAckDJTe/+XOPYoEiJxEQfZFvGSFjg1XEuIryHOB8e27W
+         L7FfIWwQSWZSxteWjHhD8wAL6WkiqxJgMkaNVNjvGC4963SIIR7t66OaU2YNyxK+VJxR
+         xH4vmsTmM1IJ8mXg6wjf/YYh1sMIkF+4iiYtxYswLUvogttdUY5CTfzBY/2Bpfbg/M5L
+         4Jg4RqvkpcFddiL2TZLaekEEUVBbC3KBy0eoQZobK7Heag1Twk19EWRR6vUDN2LuOVai
+         rP3DteeycAvBG4eA3MgJeEv/8JlXbnwsaZYgE/tPBK0PcQmTpiHBu52Q63LEZU7Svr1e
+         D20w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793025127; x=1793629927;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
-        b=ah5jdz/sp8cysr+ARAuoBLOqYCC9SmNzQXu8egYPdUa9MrAWskIqoB0C2u8C7w6lgA
-         jKGkAa2gnvwCZlMm0hMzbGIIRGLb5nA2J15+N4btm0aA751GauvHssXu7aBafkv9Z7HY
-         Eg8pW2dEtLkW4+jPU2cUkg8DN07A8+7H+kFOhIcymJYPdMEM9fBgv0okmgGegzOQYN59
-         Ct95ws2v4nEplzR7PnQum+AkRb/I+z7kwjlDfMjYYd2y718Uv6wOE/j8+SiLetBkypiL
-         2zIrUv4mT3zjYLvdZQdVTUY2b0PYqQ/+4ohpvagUukuomsVuyY11l7+L/9Lq5eGCHTGm
-         YR0Q==
-X-Forwarded-Encrypted: i=1; AKwUvBywgvPXENINa+kW86U3xQleAVk7Qh2twOy/lYkGIOJyMW9b0/WtkRL0qS3dzKourutHKPE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJKozSHE2QxsURzx7CfZQe6t5QvD9621ydX/+XfMtQVR/aD3dza
-	qOL9nRf18IuypChgL7pECXzGN5B7fsKh+zyuLOL1w/GOeHdtmJ9gxxrAiTTKxM5s+JVgzhZXmaW
-	yCJHhH04FOL4mp6OFaSWl/6jIjNeKy+Y=
-X-Gm-Gg: AYBFou3jY+yNoRkJTZsFhe4k1i1W4XBwFBX4SNuJ/yfW7/msg9pfDe3pbgGo9GNsrE8
-	acduM31HMaefa1LclMG9taeW1368szGQhuO/ivbjXNeuUUdFl0tzK4+JaqExS+qRHK/EBkYGgJh
-	OLZeBzg30bmWKeAlyEyZ667OfEBStLnB4vO6rBGJiThu1q63pkONIUw4J7Q+ejIK5AUJKDyjHtd
-	8gKQCZFiZ50lKz682TVLoD/ABKY5K3+jcToTNWjDgAWEyz/IVGqvQGUpqe2pguX6oauoqQ5mTQb
-	2dx+Io4jJE/zghhaYrGY6h+dwZ6v/ul6i2x3dpVK1pLs/SRtWdI6TBMxWknObAPr3tac7ElaIwJ
-	FMBMMEw7q6/vD1rXbuvrLwXg8CAlcocL+panucDI=
-X-Received: by 2002:a17:90b:5644:b0:3ab:d45c:59da with SMTP id
- 98e67ed59e1d1-3adeafd21a8mr5767380a91.40.1793025126904; Mon, 26 Oct 2026
- 07:32:06 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1793025755; x=1793630555;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
+        b=r/u2vKj2cnODTAtivF6q38s86jRxkt8BV8p2D2xYDMfpHqaVX3OdhkKwjtnJJBk1Kp
+         7HXNJmz/UcTWT+Ay5ctPu4YO0Stk1yAyAiZ5cKnWa3y21S3BH98VTWO1mjibL8qWkJ8z
+         Jdad0aHuDmS94raxHFh7Xi1FrRIAqDYxjFRS0dwTRgrNhNucDgv8i4pLWo01w66QXF7W
+         LxWACeTvkWsfAvsr/UxAbyz0+FfTOBOqfClfRujhsDmfgWN0Y9nY2xJiKVKxmXmygvFS
+         TAFTKDbxpSmT13Htu6GXyXKIho/r4MQiV7zEyMNuDFKVjEHbQRh4FceIkFvRREfkgkR+
+         0XLA==
+X-Forwarded-Encrypted: i=1; AKwUvBzq1DE/BRDFFo1dyLQ5UCqCbfb36IIeqvDotOUlfKyXw3W1tn8vt3/PzVmnYZmfUUuuXP8=@vger.kernel.org
+X-Gm-Message-State: AFq9FYK/BErry2T7YV/x1sTfVpDGH2gQ3dvI+/8ez7CsGD0RiSmYaZf4
+	zw8XZPBda7RD+8GtDckBP8zok56nDFW5SflLmzYK0hNwxpkVV43wGtYrqP2A6NP152e+p8L+zVK
+	qmE2p4b3gUuXCg6NEHS2D+0GYQEZsTGg=
+X-Gm-Gg: AYBFou3mliGScVptCRMN2rafNH58oGOMtOBBEuv/K/MmudJL5tageBnf5shMobTYhIM
+	ktJmMYoB1vHKS7aTxlr9C9BB9UVoSAso2H6K9zw+uZ5k0GXwcFkKX9gU/4l3G2dwSEz5zH/6c0f
+	9GGH3zw0jEehwamZRJ0wWrcLt59NOAVo0EW9rTb4pi2NefPx1vrcCkjCWGj3TUJ6yvOn04ARoJA
+	BCjr8XKnfpIWf5+6DCnFSQMldpwX/QBgPnlwQ1taMmRSXO3YvYfpOG6iJm86GS16LDafyYEk3Ky
+	nR6kp8T1US0URk3Kfopt7DgDRBjRRZ2CVzzEPZ6zmrdYYqaROzSViSrwgPB1bG+7UsjaQvKKEHm
+	0jdiAcKYwh7lckpLoallSVdKbb+OyjQVBKfVM3g==
+X-Received: by 2002:a05:6871:73a2:b0:491:4a20:8ab8 with SMTP id
+ 586e51a60fabf-4a83f53b47amr3712608fac.28.1793025755162; Mon, 26 Oct 2026
+ 07:42:35 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,85 +104,123 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261024091256.17918-1-testwrzwrz@gmail.com> <20261024141157.59301-1-testwrzwrz@gmail.com>
- <20261024141157.59301-2-testwrzwrz@gmail.com> <at82NLzM7g8HGgum@boxer> <20261026142705.4564-1-testwrzwrz@gmail.com>
-In-Reply-To: <20261026142705.4564-1-testwrzwrz@gmail.com>
-From: Magnus Karlsson <magnus.karlsson@gmail.com>
-Date: Mon, 26 Oct 2026 16:31:54 +0200
-X-Gm-Features: AclHuK89CEpPcFuQ9Zkf80L7rIP62d6arcQxEpIyB7BJW5pfRLgwLFs5gMXbiL8
-Message-ID: <CAJ8uoz0XZg8K2g3eBXOajV3TsA-1Sz3D6t-G2+BYw2YX7A4K=Q@mail.gmail.com>
-Subject: Re: [PATCH net v2 1/2] xsk: defer software checksum until the skb is complete
-To: Rongzheng Wang <testwrzwrz@gmail.com>
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Stanislav Fomichev <sdf@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261019013335.13512-1-yangtiezhu@loongson.cn>
+In-Reply-To: <20261019013335.13512-1-yangtiezhu@loongson.cn>
+From: Hengqi Chen <hengqi.chen@gmail.com>
+Date: Mon, 26 Oct 2026 22:42:24 +0800
+X-Gm-Features: AclHuK9VfDqy3TFsNraLnkzPJtLGJTrw97NH5dTf1M621wbyFJ758LDBDfZcRk0
+Message-ID: <CAEyhmHQhi6rgxXEvg6aCA=5XUVBSUpBUbFrjSyJDoD_bz5dDLw@mail.gmail.com>
+Subject: Re: [PATCH v3] LoongArch: BPF: Fix stack arguments for indirect trampolines
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, loongarch@lists.linux.dev, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 26 Oct 2026 at 16:30, Rongzheng Wang <testwrzwrz@gmail.com> wrote:
+On Mon, Oct 19, 2026 at 9:33=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
 >
-> Hi Maciej,
+> From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 >
-> Thanks for the review.
+> LoongArch passes arguments beyond a0-a7 at the caller stack pointer. The
+> trampoline store_args() helper always reads those arguments at FP + 16,
+> which is correct for a regular fentry trampoline: its prologue leaves FP
+> 16 bytes below the stack pointer at trampoline entry to hold the saved
+> RA/FP frame record of the parent function.
 >
-> Yes. xsk_skb_metadata() is only called for the first descriptor when
-> skb is NULL; continuation fragments do not call it. So
-> skb->ip_summed == CHECKSUM_PARTIAL means the first fragment requested
-> the checksum.
+> A struct_ops indirect trampoline is entered through a function pointer an=
+d
+> only saves its own RA and FP before setting FP to the entry stack pointer=
+.
+> Its stack arguments therefore start at FP, not FP + 16. As a result, ever=
+y
+> stack-passed struct_ops argument is currently read two slots late.
 >
-> I'll preserve unlikely() around pool->tx_sw_csum like this:
+> Select the source offset based on whether the trampoline is indirect. Thi=
+s
+> also prepares the stack-passed arena argument path to consume the actual
+> pointer slot.
 >
->     static int xsk_skb_sw_csum(struct sk_buff *skb,
->                                struct xsk_buff_pool *pool)
->     {
->             if (unlikely(pool->tx_sw_csum &&
->                          skb->ip_summed == CHECKSUM_PARTIAL))
->                     return skb_checksum_help(skb);
+> With this patch, the BPF selftest "./test_progs -t struct_ops_multi_args"
+> passed on LoongArch.
 >
->             return 0;
->     }
->
-> For the drop path: xsk_drop_skb() increments tx_invalid_descs and
-> consumes the skb; sendto() returns the error from skb_checksum_help().
-> Since the descriptors are already consumed, retrying is not useful. The
-> current metadata validation makes the malformed-packet path effectively
-> unreachable, so this is a defensive drop.
->
-> I verified the propagation in a local QEMU test kernel. For the test
-> only, I temporarily changed xsk_skb_sw_csum() to:
->
->     static int xsk_skb_sw_csum(struct sk_buff *skb,
->                                struct xsk_buff_pool *pool)
->     {
->             if (unlikely(pool->tx_sw_csum &&
->                          skb->ip_summed == CHECKSUM_PARTIAL))
->                     return -EINVAL;
->
->             return 0;
->     }
->
-> and ran test_xdp_metadata. It failed at the first generate_packet()
-> sendto:
->
->     generate_packet:FAIL:sendto unexpected sendto: actual -1 < expected 0
->     Summary: 0/0 PASSED, 0 SKIPPED, 1/0 FAILED
->     TEST_RC=1
->
-> The normal kernel still passes. The test harness does not print errno,
-> so I can only state that sendto() returned -1; the injected error was
-> -EINVAL. I restored the source after the test.
->
-> Magnus suggested a distinct counter for malformed packets. I agree that
-> would be more precise than tx_invalid_descs, but I'd prefer to do that
-> in a separate patch instead of extending the UAPI in this stable fix.
+> Fixes: c9ebe2016de9 ("LoongArch: BPF: Support up to 12 function arguments=
+ for trampoline")
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
 
-Correct. If we decide to do anything like that, it should be a
-separate patch for net-next at some later point in time.
+Acked-by: Hengqi Chen <hengqi.chen@gmail.com>
 
-Thanks: Magnus
-
-> I'll address the remaining feedback and send v3 as a new thread.
+> v3:
+>   - Reword the log and comment to clarify that the 16-byte frame record
+>     is saved for the parent function, not the traced function. (bot+bpf-c=
+i)
+>   - Remove a stray blank line after the opening brace of store_args(). (b=
+ot+bpf-ci)
+>   - Reorder the comment sentences to match the true/false branches of
+>     is_struct_ops for better readability.
 >
-> Thanks,
-> Rongzheng
+> Here is the original link:
+> https://lore.kernel.org/bpf/20260821233516.3426127-8-memxor@gmail.com/
+>
+> This version is based on the series:
+> https://lore.kernel.org/loongarch/20261016081006.26069-1-yangtiezhu@loong=
+son.cn/
+>
+>  arch/loongarch/net/bpf_jit.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 1a7c8effc37b..c6784602f029 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -1725,17 +1725,22 @@ int bpf_arch_text_invalidate(void *dst, size_t le=
+n)
+>         return ret;
+>  }
+>
+> -static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_o=
+ff)
+> +static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_o=
+ff, bool is_struct_ops)
+>  {
+> +       /*
+> +        * Indirect struct_ops trampolines place incoming stack arguments=
+ directly at FP.
+> +        * Regular fentry trampolines need to skip the 16-byte RA/FP fram=
+e record saved
+> +        * for the parent function.
+> +        */
+> +       int stack_args_off =3D is_struct_ops ? 0 : 16;
+>         int i;
+>
+>         for (i =3D 0; i < nr_arg_slots; i++) {
+>                 if (i < LOONGARCH_MAX_REG_ARGS)
+>                         emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGAR=
+CH_GPR_FP, -args_off);
+>                 else {
+> -                       /* Skip slots for T0 and FP of traced function */
+>                         emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_G=
+PR_FP,
+> -                                 16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
+> +                                 stack_args_off + (i - LOONGARCH_MAX_REG=
+_ARGS) * 8);
+>                         emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_G=
+PR_FP, -args_off);
+>                 }
+>                 args_off -=3D 8;
+> @@ -2068,7 +2073,7 @@ static int __arch_prepare_bpf_trampoline(struct jit=
+_ctx *ctx, struct bpf_tramp_i
+>         func_meta =3D nr_arg_slots;
+>         emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -func_meta_off, fun=
+c_meta);
+>
+> -       store_args(ctx, nr_arg_slots, args_off);
+> +       store_args(ctx, nr_arg_slots, args_off, is_struct_ops);
+>
+>         if (bpf_fsession_cnt(tnodes)) {
+>                 /* clear all session cookies' value */
+> --
+> 2.42.0
 >
