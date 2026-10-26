@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793022182;
-	b=zJawCeLzC744uz3Vssb1umk8EYM1HbnrXh7xq+4nLgc3MixthXbY4B61Kq6E+EjaY4oA
-	 ElNRzBtUmE6MxmpkyK6IqwnDWuGUbmV9o1mtn5fcX0k6mAIqF+BWnxNRZ/divaAeRtkT4
-	 xsIgLwT+i4ypAksB8/WXgtVZEVHeNwZHtBKwL7SWbdB+sxOzmQNyTbylzBGdIWix7ow+o
-	 mXx3JuRrkA1F3PQfBzc6zJHCmyJAjee+tWsFlcDMkFtVcqSdisDZYF4TqhB/ZgD1wMobc
-	 v4S5ZaR2MHk+wbaJPpKdExMm5XdRQXzkT7fqiNmD+CeL2yxr7oqhaVeqB8iXDtuxf1A==
+	t=1793022194;
+	b=ok68zGS/pvNjnTs+FEAq5IQ3M3BOOX8W60UGKE4sFDHPgBMX1UqZTCTa69+xKUMgBp43
+	 O2BwusA8ewTU/L496GZ40FBnJPoTGUAzm3iVIGd+4n8VVcjXF9z2Ytd/kEi6nQxwRcNPI
+	 jjhR88MB53DIBPF65rLYCZ+Pf2/kBqQ8/vivcs3OJjzIim97se0XOjofzMZwecGyI7KQ0
+	 iDHzuDtsk+jzMfFSpk163AY06h8uFy7JzYCJ0H6o7kQDlV0eAfP3nGuWgUgE08XuMi2Jn
+	 poM9PsNIpzsAqTIgS0kmumTM4ql+iHb6Bcfd0d/jhofUMvJPaegcGcdVnxiYlJSzpxg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793022182;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793022194;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=nWl4ECtXObpUU/bffH0+yhXjtGI+yckqht/vP3iJXgg=;
-	b=z40SM5ivJh/L1sg8aFfnb16VwcFlQV3FQNG28CMgYa5B2zdhy4fDKc4wuGNYM2mK+q4N
-	 qXy+h3+wCS9YUi3Fty14qUXCR5OC0By86Y3j+2BZb84V7ljYEzJ1Mr0xg6R0EEG+I/gZ1
-	 T8eOMWRtm2KpxvxGUwIUefI+JPgt2PoMfWugjHyy3m8KriV6s8UGdY2450wCLmH13bxI4
-	 Zwiw0NLo3Tt/CNW9pzKfY8VnKwBIcWmQn8FOEPn1JuSjyM/B265+jNpIE3PWEWtl0QQSx
-	 wYKbdGyVL7eRO3zaXeqHfX+RXM9D7aW8kVf6ZRnjsh0yi7ipRh38Q4j9peXaX/AevEA==
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=Dty6FKfr0IY8i3C5r+x+Q1A5fbb3pT0Dh4qS07V3mdw=;
+	b=zqYhWl3egm77kO2UL9ilkAqDOzIEykx7C7MyfxkFbrCzsKt5Zylw9qMY6DuTBLBL4Mpd
+	 Ln3QKWQbJeJJb/8zBZT386LUcfOk1lTDD4hzL1WZVVlENhkVCDAHGTjW5LCGGgUdkHIKn
+	 KskXorL0dSh2lk9ZLwQ2dfnRPm5YXdaGyNm9VykTu26Mbp52Jo2HPSQJiQzKgXRVty5Qx
+	 wdG9Q9c5RF5uyeFVrmlLMIEOIRL4qC0PSyGbRXebWwmK7pTLsYcES0uXSieDN3+85uEDu
+	 j0rwnBBjySxhBt80XKUyRokO/svnIpbw666v8dJQ/01gSH0H1q9q20LWqASPLz2WhPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X+00u1u9;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NAdhNx9w;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570CC606A31F;
-	Mon, 26 Oct 2026 13:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525E1606A322;
+	Mon, 26 Oct 2026 13:43:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=X+00u1u9
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3693E1F01825;
-	Mon, 26 Oct 2026 13:42:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NAdhNx9w
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312851F031E4;
+	Mon, 26 Oct 2026 13:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793022181;
-	bh=nWl4ECtXObpUU/bffH0+yhXjtGI+yckqht/vP3iJXgg=;
-	h=From:To:Cc:Subject:Date;
-	b=X+00u1u9tjhZ8YZqzq9a+DTF8qNcUAMogw6s3S4FCNspGPu8nuf+cHXWGgeAardrR
-	 le6fYjXEOmpNuws/h0gyc2CUVTYbkASg7uAy8KjBB4j5ijGkGOsXR/+Lj4geskMpaj
-	 nLI26LPnDqhRJvZydCUW9eXZhgeCkW2Rpxw7q3EoUXiVJAJ/9ZQdhkVisvhbQC8OMc
-	 7EsP7XhG5p/mfHUoiI/HlyyHN2q2ZJIgpUKzFRww5EE+itVETlcjHBfkgndhOq5eCO
-	 BRN4Wxq1tA3I6knWWotcLHfdgiQnyvP4dxcHPZG+bRdFn0wbtgrs5n4sijgRigZ2yS
-	 42paFiEo+J4wQ==
+	s=k20260515; t=1793022193;
+	bh=Dty6FKfr0IY8i3C5r+x+Q1A5fbb3pT0Dh4qS07V3mdw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=NAdhNx9wx0bTqCXTdNGIv7DBHxaJyQAQBYfK3TibJgykCYMcFOTkpfuxEGZOAbTr5
+	 4qMF71NkK/BNYVUa5FoTV+3pv87j2JjZRVWyF7A+DEAMfx/4Pf+NuCT2p3+UTugzuv
+	 n3geqgtumIm3Crn7fY5RxQA2r1TPpj4xYqhaS4CXUWzLvbT7A718UNpTaTxcV9joBX
+	 9wOEuTyngOxtgiXoYzt/3UqDQBcfRtxU196/ArVa5jF4d/TWWOWMadVw9lrkYNbQmR
+	 XHR1CI09oMyRJGSXB5rhRgl0yHp4g+cOHqEBe7g6YH1gywsIFOIROOWNMASBJQAaag
+	 bAzgAIYR7qzbg==
 From: Imre Kaloz <kaloz@kernel.org>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	linux-mips@vger.kernel.org
@@ -57,10 +57,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
 	Paul Burton <paulburton@kernel.org>,
 	bpf@vger.kernel.org
-Subject: [PATCH 0/5] MIPS: Select the R10000 LL/SC workaround at boot
-Date: Mon, 26 Oct 2026 14:41:40 +0100
-Message-ID: <20261026134147.15988-1-kaloz@kernel.org>
+Subject: [PATCH 5/5] bpf, mips: Follow the boot-time R10000 LL/SC choice
+Date: Mon, 26 Oct 2026 14:41:45 +0100
+Message-ID: <20261026134147.15988-6-kaloz@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261026134147.15988-1-kaloz@kernel.org>
+References: <20261026134147.15988-1-kaloz@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,54 +74,113 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Kernels for IP27, IP28 and IP30 select CONFIG_WAR_R10000_LLSC, which
-retries ll/sc sequences with a branch-likely that only R10000s before
-revision 3.0 need. On an R12000 Octane, dropping it makes fork, pipe,
-futex and file creation 1-4% faster.
+Programs are JITed after the R10000 LL/SC workaround has been selected
+at boot. Emit the branch-likely in the atomic and cmpxchg ll/sc loops
+only when the workaround is in use.
 
-This series keeps it built in and decides at boot. Unless an affected
-CPU is present, sc branches become beqz, modules are patched at load,
-and tlbex and the BPF JIT emit beqz.
+Signed-off-by: Imre Kaloz <kaloz@kernel.org>
+---
+ arch/mips/net/bpf_jit_comp.c   |  5 +++--
+ arch/mips/net/bpf_jit_comp.h   | 12 +++++++-----
+ arch/mips/net/bpf_jit_comp32.c |  1 +
+ arch/mips/net/bpf_jit_comp64.c |  5 +++--
+ 4 files changed, 14 insertions(+), 9 deletions(-)
 
-Patch 3 conflicts in context with the IP35 series' "MIPS: SGI-IP27:
-give each CPU its own topology package id"; it resolves in one line.
-
-Patch 5 depends on patch 2, so I'd like the whole series to go through
-the MIPS tree, with an Acked-by from the BPF maintainers on patch 5.
-
-Tested on an R12000 Octane, and the BPF JIT with test_bpf on QEMU
-64-bit Malta. No R10000 before revision 3.0 was available.
-
-Imre Kaloz (5):
-  MIPS: Use SC_BEQZ in the futex and sysmips ll/sc loops
-  MIPS: Select the R10000 LL/SC workaround at boot
-  MIPS: SGI-IP27: Report all CPUs to the R10000 LL/SC workaround
-  MIPS: tlbex: Follow the boot-time R10000 LL/SC choice
-  bpf, mips: Follow the boot-time R10000 LL/SC choice
-
- arch/mips/Kconfig                 |   5 +-
- arch/mips/include/asm/asm.h       |   7 +-
- arch/mips/include/asm/futex.h     |   5 +-
- arch/mips/include/asm/r10k-llsc.h |  29 ++++++++
- arch/mips/kernel/Makefile         |   1 +
- arch/mips/kernel/module.c         |   5 ++
- arch/mips/kernel/r10k-llsc.c      | 111 ++++++++++++++++++++++++++++++
- arch/mips/kernel/setup.c          |   2 +
- arch/mips/kernel/smp.c            |   2 +
- arch/mips/kernel/syscall.c        |   2 +-
- arch/mips/kernel/vmlinux.lds.S    |   8 +++
- arch/mips/mm/tlbex.c              |   3 +-
- arch/mips/net/bpf_jit_comp.c      |   5 +-
- arch/mips/net/bpf_jit_comp.h      |  12 ++--
- arch/mips/net/bpf_jit_comp32.c    |   1 +
- arch/mips/net/bpf_jit_comp64.c    |   5 +-
- arch/mips/sgi-ip27/ip27-smp.c     |   2 +
- 17 files changed, 188 insertions(+), 17 deletions(-)
- create mode 100644 arch/mips/include/asm/r10k-llsc.h
- create mode 100644 arch/mips/kernel/r10k-llsc.c
-
-
-base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
+index 6ee4abe6a1f7..11e50193e205 100644
+--- a/arch/mips/net/bpf_jit_comp.c
++++ b/arch/mips/net/bpf_jit_comp.c
+@@ -112,6 +112,7 @@
+ #include <asm/cacheflush.h>
+ #include <asm/cpu-features.h>
+ #include <asm/isa-rev.h>
++#include <asm/r10k-llsc.h>
+ #include <asm/uasm.h>
+ 
+ #include "bpf_jit_comp.h"
+@@ -432,7 +433,7 @@ void emit_atomic_r(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 code)
+ 		break;
+ 	}
+ 	emit(ctx, sc, MIPS_R_T8, off, dst);
+-	emit(ctx, LLSC_beqz, MIPS_R_T8, -16 - LLSC_offset);
++	emit_llsc_beqz(ctx, MIPS_R_T8, -16 - LLSC_offset);
+ 	emit(ctx, nop); /* Delay slot */
+ 
+ 	if (code & BPF_FETCH) {
+@@ -449,7 +450,7 @@ void emit_cmpxchg_r(struct jit_context *ctx, u8 dst, u8 src, u8 res, s16 off)
+ 	emit(ctx, bne, MIPS_R_T9, res, 12);
+ 	emit(ctx, move, MIPS_R_T8, src);     /* Delay slot */
+ 	emit(ctx, sc, MIPS_R_T8, off, dst);
+-	emit(ctx, LLSC_beqz, MIPS_R_T8, -20 - LLSC_offset);
++	emit_llsc_beqz(ctx, MIPS_R_T8, -20 - LLSC_offset);
+ 	emit(ctx, move, res, MIPS_R_T9);     /* Delay slot */
+ 	clobber_reg(ctx, res);
+ }
+diff --git a/arch/mips/net/bpf_jit_comp.h b/arch/mips/net/bpf_jit_comp.h
+index a37fe20818eb..3129691bccde 100644
+--- a/arch/mips/net/bpf_jit_comp.h
++++ b/arch/mips/net/bpf_jit_comp.h
+@@ -98,11 +98,13 @@ do {								\
+ #define emit(...) __emit(__VA_ARGS__)
+ 
+ /* Workaround for R10000 ll/sc errata */
+-#ifdef CONFIG_WAR_R10000_LLSC
+-#define LLSC_beqz	beqzl
+-#else
+-#define LLSC_beqz	beqz
+-#endif
++static inline void emit_llsc_beqz(struct jit_context *ctx, u8 rs, s16 off)
++{
++	if (r10k_llsc_war)
++		emit(ctx, beqzl, rs, off);
++	else
++		emit(ctx, beqz, rs, off);
++}
+ 
+ /* Workaround for Loongson-3 ll/sc errata */
+ #ifdef CONFIG_CPU_LOONGSON3_WORKAROUNDS
+diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
+index 15a2a153dc87..07aece9edc8e 100644
+--- a/arch/mips/net/bpf_jit_comp32.c
++++ b/arch/mips/net/bpf_jit_comp32.c
+@@ -18,6 +18,7 @@
+ #include <linux/bpf.h>
+ #include <asm/cpu-features.h>
+ #include <asm/isa-rev.h>
++#include <asm/r10k-llsc.h>
+ #include <asm/uasm.h>
+ 
+ #include "bpf_jit_comp.h"
+diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
+index 6681ccac9dd9..fd10c8b0ece8 100644
+--- a/arch/mips/net/bpf_jit_comp64.c
++++ b/arch/mips/net/bpf_jit_comp64.c
+@@ -17,6 +17,7 @@
+ #include <linux/bpf.h>
+ #include <asm/cpu-features.h>
+ #include <asm/isa-rev.h>
++#include <asm/r10k-llsc.h>
+ #include <asm/uasm.h>
+ 
+ #include "bpf_jit_comp.h"
+@@ -407,7 +408,7 @@ static void emit_atomic_r64(struct jit_context *ctx,
+ 		break;
+ 	}
+ 	emit(ctx, scd, t2, off, dst);
+-	emit(ctx, LLSC_beqz, t2, -16 - LLSC_offset);
++	emit_llsc_beqz(ctx, t2, -16 - LLSC_offset);
+ 	emit(ctx, nop); /* Delay slot */
+ 
+ 	if (code & BPF_FETCH) {
+@@ -428,7 +429,7 @@ static void emit_cmpxchg_r64(struct jit_context *ctx, u8 dst, u8 src, s16 off)
+ 	emit(ctx, bne, t1, r0, 12);
+ 	emit(ctx, move, t2, src);      /* Delay slot */
+ 	emit(ctx, scd, t2, off, dst);
+-	emit(ctx, LLSC_beqz, t2, -20 - LLSC_offset);
++	emit_llsc_beqz(ctx, t2, -20 - LLSC_offset);
+ 	emit(ctx, move, r0, t1);       /* Delay slot */
+ 
+ 	clobber_reg(ctx, r0);
 -- 
 2.47.3
 
