@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983611;
-	b=AS3xkZLSERfaaN3TI84nLREw8SpfBxr9wl4HqVSS67gLrOCPn18+66/sQTQBlm3ju4TF
-	 yDR7STh85ppJDvQ+r4BGal6zhTgh+XA5nq/lzpVdel8NkGCRypa8ICDWDN/J7rlGlrhsP
-	 lAymNET5qCPj/ZdWPwmETuuDAlp5pWWMrivQZuJWhWU1un8jv+ZV1YYh5MHvRiX0P3782
-	 4xukry15++kVMGzIrqYQFWP5fN/T7fKn+fgijXhRm8W3z17cKMH8HvMVSkb1X/tWVgPW5
-	 UCBfYAi/Ttku+4O42gG8vquY4HSosVZoYrSKflBaK71+IRpbsu8tqOKWOFJS6NJhw6g==
+	t=1792983617;
+	b=IRefkftqBNmG+arbCmpxQlnPj5aOgtoyvS9Dq8SeWzlOsh5onECumvO61rGAHIHlPHq+
+	 61O4m9vFYwexJ1EWK5u9Cctcw2OgH8w3UIVL3o6TjUqPH+PqIHw2SKTxN6EtMGgTSqe4J
+	 bzfUsVV3aC2nH76bGS27bicksj8IZLfy/BMBIYkKPQM+1PLpgk+X6Rj2IUOuQZv1D16gB
+	 F/sNXDOA+qyL1jlL6wJ/8PqkZE1ysoBT1V+Xb5XVsk6Z9rj/QDEgJ9GEz7i8KEvy01y9U
+	 xr1B99doDb3W8lk+pbzI9jOC+2nckan9R6Fj0CChgWcVdCLz7rvH+OEF9LttJgvVTbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983611;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983617;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=BCHRJTCXHyje/pB0KNRRSXRquenbojGNgU5z6rACWps=;
-	b=RiSeT9wkA7O61DdmADG7OZbMlDiXgjvdAZ1dEyR6gm0prWl9Idbjcn60gUlx30P2ojxz
-	 0pOMzc18oX3Xv6KxYei0yqtvc6JPmjQAAHI4ZPpKrkZneKH9ySIRd31o7pzD/SbZ5Pyjx
-	 4f7vI5x9EeXIyLJH9/DNq09IICQ5HB4InpI5cZJ9dyMOL3RWV6UI5HWVYDLNhOAS0r49d
-	 IYkVz6qVa9hK0NPS03pW5MptV0POlnQIDo55PIXWxEbfJE1bvJKjVzSK6eOODlmwo+qbJ
-	 +vfI1tMwPtz+Hs6ZrKu2cQ2BAIz8Cy5BTbpo6V/4XVe8jTBfmlT1q5R0OAAIlq36sKg==
+	bh=Rq7FJF1LiOMXCVzB7BjlvdTl6sEoOGa9PJfoyk1dsy8=;
+	b=O5/Nk7InDZ9KM2dpDwXWyGrnQDvd/9/y7sjuxBZQG5vUHWtomNbIh85Rq3KtUPOcWkA+
+	 gjMQWHeLh/cBsrAepT06osZDiWM6xckCKKIn9wHz4OsIEImT3hyS0HS+BMi+k1OYsfj0N
+	 2fsd+hO4rBzRykgJxW5zxGSeW739Vu4t1b5j7ot4A6BOy+xSTEF9BYO73rYl5qP05CARa
+	 2BSlJEf8k+Lz+ys0+rlR/+jaGnfesrKwtHhUfmjd/WnVC+I/6MSAhAJrOW6v7SKAz7Mp8
+	 FONc0cVum9B1dI4kw6BJsGCqxvRckZMF8tYXsPf2lXKwAfpPrE8pqK70KRnk4gCI9wg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=B3uXShIE;
-	arc=none smtp.remote-ip=209.85.210.174
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FopGNZWG;
+	arc=none smtp.remote-ip=209.85.216.43
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23CA606A31F
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:00:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E23CA606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E8F606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:00:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01E8F606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=B3uXShIE
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8a070b3f44aso787485b3a.2
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:00:10 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FopGNZWG
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ae25008e2aso103086a91.2
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983610; x=1793588410; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983616; x=1793588416; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BCHRJTCXHyje/pB0KNRRSXRquenbojGNgU5z6rACWps=;
-        b=B3uXShIEIDp9ZBwzuVQZ16g3pLUerpsG33u7HjSUlaYxKb2YtVCTckowmglNp4S5mh
-         K3px+0aHYWjaZotN7nVy964u35xqQ8yZFlNSWio63LBpx8Qkv33uQ5U0oiir7RlWInVR
-         SyxFibrl38QDvXHKmMLl6OY7NTGLvIzRg0fwINzjFUyG9HYDUSrO9dLuipMMMADvJ3Zd
-         3f6ls2baJnkBvL2qRxKDNwkbLh9LFiuKLQzG4GBPIPfrU5Q0vtWEpPdH2xxTw8SutZy2
-         OZhxO0bT3e9m7i6qfDewA3UBobZLbYex02Zwj7PRUW4ppl1n3iPYy2Dg+ia3gNLrxaBX
-         2zeQ==
+        bh=Rq7FJF1LiOMXCVzB7BjlvdTl6sEoOGa9PJfoyk1dsy8=;
+        b=FopGNZWGpmAsOUvRkLzkiBgW4PK4cvbveCGynYZUdfhCYG4jTI7D4HFeV/eKObflHv
+         +2EG5Y6/1672EejPPjblEKtvbiOMPoVUAYNc+AIGlvRN6fZQV5+Ol0ZVWTI9Xdo61mrO
+         zwjhKPEdJ8BMOvmFVmgSZ9HGQWVkCmkekjlWVaMtkcoSy51PdzBWyomp3cqUZ8pm2w0Q
+         jfgpdrhEgVKF6r5gsk0n411t8plq3cXTTuENXQAmM4IXQkx5z532cgJqIBQzQvJtT71p
+         Qj2H0IFivm2HtF4DiwqXShpsm0QO9SoagXo9Uz94nipZmmh8iCSVNgLmn/mwlf/JqGUS
+         kDsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983610; x=1793588410;
+        d=1e100.net; s=20260707; t=1792983616; x=1793588416;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BCHRJTCXHyje/pB0KNRRSXRquenbojGNgU5z6rACWps=;
-        b=ldJvE279gdDI6fpETGSdSb+z7Y1CE+KUt3dr2lgEE680Z0Ow+85OiEXCkeqAArZDue
-         964TEfvhGtoETQwBfpq/TnCSXh7esCGFPtawhsUDJwr+bNV1IJnQnGr0VSwviXpcaus4
-         IZyfg7J4KtmeqB2tKJP7j3TYhHzcLV5AEfFRVKGaz0tsfU21GmFk8I2mmyZD8LW9A3O9
-         DLYKVHM1umDdlRTg7VQg2NPUaVg7FW6JlqDrzZWVwOhgKKiD1vyyW5hDB1umHGlXa4Qm
-         rWB7HfUGAmAejNgCi7bnI5fcr98paCgneAsRXlpEi4GHXuziX88E7l2IAy7h3cCigz/4
-         LpqQ==
-X-Gm-Message-State: AFq9FYJOlkwrNrzry+L8Ah70Fk02XLt+m4IBuG7ovSYpnVSK0io3St8y
-	J/xm6Nrk0zAw5zd3Gac5gz+EeXQh5Hk/VzBm20sm9hWEEVU8rYJ8UFcx5R4DOQ==
-X-Gm-Gg: AYBFou22cvarl10AT9VMWK1H9B/kR/Y9Hvf6ko+Wwyk2+B1aOYWBCrGhxXLcPaZobBW
-	RHfnCoc+21VSCFC652JVYk7K4ifhdLM4BZ6McrUvrsuYk3YwYDNiHH+NCjREbpSjNTNzWncgUd5
-	l2DIIfjiXbE6UXAw7kKXLuD7y65AqzvHxPeNFzV/jXmDz2jN/dzS1NCOxjNAch2t87epVxQAp3f
-	bb+u3jPDrkBu+v6eQUgpdQlOi0pKhPs/V3WpKStKI/cOSpNiV2PzWDHzOBB2mFwOwdQ2hRCuqmI
-	RaB4/mghJqvmWRr/T/mvhn3ZLxJ10FulpW6klzOhyC2SJkESsQvDRa5UqWOvCID1ugoOPAdSFWG
-	ZQ9q630YObfV4lAa/S6K1i7e8lCZt3YZoTqy08h8SCQo8f7rVP2or96hE2unsMhRFbaOpmchevM
-	RYfuxt7sHvXQoafLqarIsGIHzuk4YdRdDpy/MCmep9lnIu4c+Q5S/eJ8Kk89R3kbmpVvqK5NcN2
-	aIyEo2Dsj/Hga3YjT3F5J9XdgfLmYXJRouHeEDLPqnyvcMIIZTDS8o+UdVEo/oQcgubgLW3iS1X
-	nn4LxWUgz3J9R/+PkYEWtfJsRI85bgkLYIuUoLrL6ACaz6UtTOY86kS0PUA6YomUsfyNTWOrHp0
-	Ih7lES0wDLBJLtSwTHKVClHWj
-X-Received: by 2002:a05:6a20:ef1b:b0:3e2:a412:4f1b with SMTP id adf61e73a8af0-3e7bfa53f43mr4129127637.27.1792983609685;
-        Sun, 25 Oct 2026 20:00:09 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ccc21026sm928937a12.6.2026.10.25.20.00.09
+        bh=Rq7FJF1LiOMXCVzB7BjlvdTl6sEoOGa9PJfoyk1dsy8=;
+        b=XaHYiBeMjzXTOmyLTnGz5MZhtjH5NF92tbTo1KV7vfAksJS04gQWbwYlmPfe2nlXyB
+         mVThi5WccwqZzNyGMUMjPEJfOkIUq6vWUrJ17BuVDvJENnr30n8sZ/fDV4ri0kO3E9hH
+         DkI7lmZIIv8HxS2EsABLWJ/dXe2/B0Dt0raYW9MaQB0FsfyFsmto/A5JPWwOstXLtlQN
+         tmLQg8moSIwANnuOVv2FkwP+P6MRu6qQwnr3Tup86fck7BJHxYbYuVg5gk9pASH0UyHQ
+         LBHjf2bVFDO0OfMFHzLaRNXtD1TebeWdcdz/xKOOSketjf9MSbjB0Mr08/eRlhhbwSDq
+         MhoA==
+X-Gm-Message-State: AFq9FYL9AlMzWuLwmzfl2RCUBi8KH07gw7fdNh+UItMlY6fzzb2SFdt9
+	3uozO+nDRANg3lQ7S8TYwP9R7CgB080LXDTeyJ2P+lvDvJgYkpYSqbSrT+80gg==
+X-Gm-Gg: AYBFou0ftQRPEsuFgUvMwMecn8ucMud4wzw1zGKBflJRCotMnTydHFGIagPGHIB5a30
+	GzNJVvCOLSBTcd2FO9/1uFFZMkKk72YQ2fha9+db8+SpSmJ1e2wjUojj3Q8zYGGTVxuofzwCN13
+	WbLXi0VyaW2A+LXtxu/r30taoqn3M9DlkMDdENgrzK1u26WPZXuEpT0lBVnwQPcVaYhi0js5X+x
+	UZOf8IEVW9oFQZWn16HgQflMAWp+dk92KbXpUW926ZmsqtgoAnO88nSo9ASQBZQ+IUAmmvOzr7K
+	SxTNACUsd5H4CsneEAV81y0kLZbC6AOM8MV9uLWxmdHtbYFdpJxzbeyhj6BTaVlS+cbwet0Wmu4
+	/vDs6YmRbSBlpKJtF7U+jSftHeeGiW/fvWxbwg9D7f9JeY/1s7ITbkv4ijtZsSaS9VVtFtuGp+U
+	ikmX1XjRucvz6QIUc/tA5asS8UAyKxnrNceXhAn0T/jIaNj4PJd0qlc/gF5xpKvMaZEykltbpem
+	ODL4Gd5VJmLfD3yKo4Y9pCSdMt5qwocaOR4N8+8V7Ae5OMXJTXWOEqmc5W8V+FsGU0Ub+Qsk6GG
+	q3M5hLUAM22WAytdwncA/5hI0tivYQgPyw1e9uplR7gxPEv0R3X76wMPNXMzLPiooPuShJcn4dQ
+	zPwlzv12wIgXnLhZYZkv8v1Ve
+X-Received: by 2002:a17:90b:564d:b0:3ac:8ee5:e00f with SMTP id 98e67ed59e1d1-3adeafb048dmr4798516a91.57.1792983615667;
+        Sun, 25 Oct 2026 20:00:15 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba32f70sm6235989a91.1.2026.10.25.20.00.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:00:09 -0700 (PDT)
+        Sun, 25 Oct 2026 20:00:15 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 04/81] selftests/bpf: Remove tests for arena access through numbers
-Date: Mon, 26 Oct 2026 02:58:25 +0000
-Message-ID: <20261026025943.404450-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 05/81] bpf: Remove BPF_F_ARENA_SCALAR
+Date: Mon, 26 Oct 2026 02:58:26 +0000
+Message-ID: <20261026025943.404450-6-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,1300 +103,418 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-With BPF_F_ARENA_SCALAR the verifier accepts a load or a store through a
-scalar as an access to arena. The next patch removes the flag. Remove its
-tests.
+Rust has no address spaces. Thus a prog in Rust accesses arena through
+scalars. With BPF_F_ARENA_SCALAR the verifier accepts each load and each
+store through a scalar as an access to arena.
 
-Keep one test. Without the flag the verifier must reject such a load, also
-in a prog that has an arena. Move this test to verifier_arena.c.
+The verifier rewrites one insn at a time. Thus it must add one insn to each
+access. The compiler knows the source of each pointer. It can emit one
+addr_space_cast for each pointer, as it does for the __arena pointers of C.
 
-The removed tests were the only tests of a special path in the x86 JIT for
-the fetching AND/OR/XOR atomics. Only the flag used that path.
-arena_atomics tests the usual path.
+  flag: one move for each access     cast: one cast for each pointer
+
+  ax = (u32)r1                       r1 = addr_space_cast(r1, 0, 1)
+  r2 = *(u64 *)(ax + 0)              r2 = *(u64 *)(r1 + 0)
+  ax = (u32)r1                       r3 = *(u64 *)(r1 + 8)
+  r3 = *(u64 *)(ax + 8)
+
+20 progs of rust-bpf, with the flag and with the casts that a prototype of
+an LLVM pass emits:
+
+                     flag    casts
+  moves or casts     1568      571
+  insns             14864    13938
+  jited bytes       72351    69111
+
+No released kernel has the flag. LLVM does not emit the casts for Rust at
+this time. Until it does, Rust progs that access arena do not load.
+
+This reverts commit 4c651a91bdfc
+("bpf: Treat load and store through a number as arena access"). One part
+stays: BPF_REG_AX in reg2pt_regs[] of the x86 JIT. The fetching AND/OR/XOR
+atomics in arena use it now.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/prog_tests/arena_scalar_blinded.c     |   21 -
- .../selftests/bpf/prog_tests/verifier.c       |    2 -
- .../selftests/bpf/progs/arena_noarena.c       |   15 -
- .../selftests/bpf/progs/verifier_arena.c      |   15 +
- .../bpf/progs/verifier_arena_scalar.c         | 1155 -----------------
- tools/testing/selftests/bpf/test_loader.c     |    2 -
- 6 files changed, 15 insertions(+), 1195 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c
- delete mode 100644 tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
+ arch/arm64/net/bpf_jit_comp.c  |  5 ---
+ arch/x86/net/bpf_jit_comp.c    |  5 ---
+ include/linux/bpf_verifier.h   |  2 --
+ include/linux/filter.h         |  1 -
+ include/uapi/linux/bpf.h       |  6 ----
+ kernel/bpf/core.c              |  9 +----
+ kernel/bpf/fixups.c            | 39 ---------------------
+ kernel/bpf/syscall.c           |  4 ---
+ kernel/bpf/verifier.c          | 64 ++++++++--------------------------
+ tools/include/uapi/linux/bpf.h |  6 ----
+ 10 files changed, 16 insertions(+), 125 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c b/tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c
-deleted file mode 100644
-index 2ac2e9a652fe..000000000000
---- a/tools/testing/selftests/bpf/prog_tests/arena_scalar_blinded.c
-+++ /dev/null
-@@ -1,21 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <test_progs.h>
--#include "sysctl_helpers.h"
--#include "verifier_arena_scalar.skel.h"
--
--/* The same tests with constants of the programs blinded */
--void serial_test_arena_scalar_blinded(void)
--{
--	const char *harden = "/proc/sys/net/core/bpf_jit_harden";
--	char old[16] = {};
--
--	if (!is_jit_enabled()) {
--		test__skip();
--		return;
--	}
--	if (sysctl_set_or_fail(harden, old, "2"))
--		return;
--	RUN_TESTS(verifier_arena_scalar);
--	sysctl_set_or_fail(harden, NULL, old);
--}
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 04740ba37e91..6a494c381266 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -13,7 +13,6 @@
- #include "verifier_and.skel.h"
- #include "verifier_arena.skel.h"
- #include "verifier_arena_large.skel.h"
--#include "verifier_arena_scalar.skel.h"
- #include "verifier_arena_globals1.skel.h"
- #include "verifier_arena_globals2.skel.h"
- #include "verifier_array_access.skel.h"
-@@ -207,7 +206,6 @@ void test_verifier_align(void)                { RUN(verifier_align); }
- void test_verifier_and(void)                  { RUN(verifier_and); }
- void test_verifier_arena(void)                { RUN(verifier_arena); }
- void test_verifier_arena_large(void)          { RUN(verifier_arena_large); }
--void test_verifier_arena_scalar(void)         { RUN(verifier_arena_scalar); }
- void test_verifier_arena_globals1(void)       { RUN(verifier_arena_globals1); }
- void test_verifier_arena_globals2(void)       { RUN(verifier_arena_globals2); }
- void test_verifier_basic_stack(void)          { RUN(verifier_basic_stack); }
-diff --git a/tools/testing/selftests/bpf/progs/arena_noarena.c b/tools/testing/selftests/bpf/progs/arena_noarena.c
-index edbd40cd5be8..1f46e5aa403b 100644
---- a/tools/testing/selftests/bpf/progs/arena_noarena.c
-+++ b/tools/testing/selftests/bpf/progs/arena_noarena.c
-@@ -21,19 +21,4 @@ int arena_arg_no_arena(void *ctx)
- 	return 0;
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index aaa34c739004..33632fb20997 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -3502,11 +3502,6 @@ bool bpf_jit_supports_arena(void)
+ 	return true;
  }
  
--SEC("syscall")
--__flag(BPF_F_ARENA_SCALAR)
--__arch_x86_64
--__arch_arm64
--__description("arena_scalar: no arena, no access through a number")
--__failure __msg("R6 invalid mem access 'scalar'")
--__naked void no_arena(void)
+-bool bpf_jit_supports_arena_scalar(void)
 -{
--	asm volatile ("					\
--	r6 = 0x100000000000 ll;				\
--	r0 = *(u64 *)(r6 + 0);				\
--	exit;						\
--"	::: __clobber_all);
+-	return true;
 -}
 -
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index 1ce9c4b78481..b17a6dfc100d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -610,6 +610,21 @@ int mixed_arena_scalar_alu64_arena_first(void *ctx)
- 	return 0;
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+ {
+ 	if (!in_arena)
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index fd65ac84cfc7..7bfb7210484e 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -5240,11 +5240,6 @@ bool bpf_jit_supports_arena(void)
+ 	return true;
  }
  
-+SEC("syscall")
-+__description("arena: a number is not an address in arena")
-+__failure __msg("R6 invalid mem access 'scalar'")
-+__naked void access_through_number(void)
-+{
-+	asm volatile ("					\
-+	r1 = %[arena] ll;				\
-+	r6 = 0x100000000000 ll;				\
-+	r0 = *(u64 *)(r6 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm_addr(arena)
-+	: __clobber_all);
-+}
-+
- SEC("syscall")
- __success __retval(0)
- int scalar_xor_arena_ptr(void *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c b/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
-deleted file mode 100644
-index 6f0efd9202ca..000000000000
---- a/tools/testing/selftests/bpf/progs/verifier_arena_scalar.c
-+++ /dev/null
-@@ -1,1155 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <linux/bpf.h>
--#include <bpf/bpf_helpers.h>
--#include "../../../include/linux/filter.h"
--#include "bpf_misc.h"
--
--void *bpf_arena_alloc_pages(void *map, void *addr, __u32 page_cnt, int node_id,
--			    __u64 flags) __ksym;
--void bpf_arena_free_pages(void *map, void *ptr, __u32 page_cnt) __ksym;
--
--#ifdef __TARGET_ARCH_arm64
--#define ARENA_VM_START (1ull << 32)
--#else
--#define ARENA_VM_START (1ull << 44)
--#endif
--
--struct {
--	__uint(type, BPF_MAP_TYPE_ARENA);
--	__uint(map_flags, BPF_F_MMAPABLE);
--	__uint(max_entries, 4);
--	__ulong(map_extra, ARENA_VM_START);
--} arena SEC(".maps");
--
--struct {
--	__uint(type, BPF_MAP_TYPE_HASH);
--	__uint(max_entries, 1);
--	__type(key, int);
--	__type(value, long long);
--} hash SEC(".maps");
--
--/* JITs that take BPF_F_ARENA_SCALAR */
--#define __arena_scalar __flag(BPF_F_ARENA_SCALAR) __arch_x86_64 __arch_arm64
--
--/* BTF FUNC records are not generated for kfuncs referenced from inline assembly */
--void __kfunc_btf_root(void)
+-bool bpf_jit_supports_arena_scalar(void)
 -{
--	bpf_arena_alloc_pages(0, 0, 0, 0, 0);
--	bpf_arena_free_pages(0, 0, 0);
+-	return true;
 -}
 -
--/* Tests start with r6 = address of a new page as the user space sees it, a number */
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: load and store of every size")
--__success __retval(0)
--__load_if_JITed()
--__naked void ld_st_sizes(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r7 = r6;					\
--	r1 = 0x1122334455667788 ll;			\
--	*(u64 *)(r6 + 0) = r1;				\
--	*(u32 *)(r6 + 8) = r1;				\
--	*(u16 *)(r6 + 12) = r1;				\
--	*(u8 *)(r6 + 14) = r1;				\
--	*(u64 *)(r6 + 16) = 0x1234;			\
--	*(u32 *)(r6 + 24) = 0x5678;			\
--	*(u16 *)(r6 + 28) = 0x9a;			\
--	*(u8 *)(r6 + 30) = 0xbc;			\
--	r0 = 1;						\
--	r2 = *(u64 *)(r6 + 0);				\
--	if r2 != r1 goto 9f;				\
--	r0 = 2;						\
--	r2 = *(u32 *)(r6 + 8);				\
--	if r2 != 0x55667788 goto 9f;			\
--	r0 = 3;						\
--	r2 = *(u16 *)(r6 + 12);				\
--	if r2 != 0x7788 goto 9f;			\
--	r0 = 4;						\
--	r2 = *(u8 *)(r6 + 14);				\
--	if r2 != 0x88 goto 9f;				\
--	r0 = 5;						\
--	r2 = *(u64 *)(r6 + 16);				\
--	if r2 != 0x1234 goto 9f;			\
--	r0 = 6;						\
--	r2 = *(u32 *)(r6 + 24);				\
--	if r2 != 0x5678 goto 9f;			\
--	r0 = 7;						\
--	r2 = *(u16 *)(r6 + 28);				\
--	if r2 != 0x9a goto 9f;				\
--	r0 = 8;						\
--	r2 = *(u8 *)(r6 + 30);				\
--	if r2 != 0xbc goto 9f;				\
--	/* the address is what it was */		\
--	r0 = 9;						\
--	if r6 != r7 goto 9f;				\
--	r0 = 10;					\
--	r7 >>= 32;					\
--	if r7 == 0 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: load into the register that holds the address")
--__success __retval(0)
--__load_if_JITed()
--__naked void ld_into_base(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r1 = 77;					\
--	*(u64 *)(r6 + 0) = r1;				\
--	r6 = *(u64 *)(r6 + 0);				\
--	r0 = 1;						\
--	if r6 != 77 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: sign extending load")
--__success __retval(0)
--__load_if_JITed()
--__naked void ldsx(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r7 = r6;					\
--	*(u64 *)(r6 + 0) = 0x80;			\
--	.8byte %[ldsx_insn]; /* r2 = *(s8 *)(r6 + 0) */	\
--	r0 = 1;						\
--	if r2 != -128 goto 9f;				\
--	r0 = 2;						\
--	if r6 != r7 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(ldsx_insn, BPF_RAW_INSN(BPF_LDX | BPF_MEMSX | BPF_B,
--					     BPF_REG_2, BPF_REG_6, 0, 0))
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: address loaded from arena")
--__success __retval(0)
--__load_if_JITed()
--__naked void ptr_chase(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	/* page[0] = &page[64]; page[64] = 5; */	\
--	r1 = r6;					\
--	r1 += 64;					\
--	*(u64 *)(r6 + 0) = r1;				\
--	*(u64 *)(r1 + 0) = 5;				\
--	r2 = *(u64 *)(r6 + 0);				\
--	r0 = 1;						\
--	if r2 != r1 goto 9f;				\
--	r3 = *(u64 *)(r2 + 0);				\
--	r0 = 2;						\
--	if r3 != 5 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: atomics")
--__success __retval(0)
--__load_if_JITed()
--__naked void atomics(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r7 = r6;					\
--	*(u64 *)(r6 + 8) = 1;				\
--	r1 = 2;						\
--	lock *(u64 *)(r6 + 8) += r1;			\
--	r1 = 4;						\
--	.8byte %[fetch_add_insn]; /* r1 = atomic_fetch_add((u64 *)(r6 + 8), r1) */ \
--	r0 = 1;						\
--	if r1 != 3 goto 9f;				\
--	r1 = 8;						\
--	.8byte %[xchg_insn]; /* r1 = xchg_64(r6 + 8, r1) */ \
--	r0 = 2;						\
--	if r1 != 7 goto 9f;				\
--	r0 = 8;						\
--	r1 = 16;					\
--	.8byte %[cmpxchg_insn]; /* r0 = cmpxchg_64(r6 + 8, r0, r1) */ \
--	r2 = r0;					\
--	r0 = 3;						\
--	if r2 != 8 goto 9f;				\
--	r2 = *(u64 *)(r6 + 8);				\
--	r0 = 4;						\
--	if r2 != 16 goto 9f;				\
--	r0 = 5;						\
--	if r6 != r7 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(fetch_add_insn, BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH,
--						   BPF_REG_6, BPF_REG_1, 8)),
--	  __imm_insn(xchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_6, BPF_REG_1, 8)),
--	  __imm_insn(cmpxchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, BPF_REG_6, BPF_REG_1, 8))
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: fetching and/or/xor")
--__success __retval(0)
--__load_if_JITed()
--__naked void fetch_and_or_xor(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r7 = 0x11000000110 ll;				\
--	*(u64 *)(r6 + 8) = r7;				\
--	r0 = r6;					\
--	r0 ^= 0x55;					\
--	r1 = 0x1100000011 ll;				\
--	.8byte %[fetch_or_dw]; /* r1 = atomic_fetch_or((u64 *)(r6 + 8), r1) */ \
--	r2 = r6;					\
--	r2 ^= 0x55;					\
--	if r0 == r2 goto 1f;				\
--	r0 = 99;					\
--	goto 9f;					\
--1:	r0 = 1;						\
--	if r1 != r7 goto 9f;				\
--	r7 = 0x11100000111 ll;				\
--	r1 = 0x11000000111 ll;				\
--	.8byte %[fetch_and_dw]; /* r1 = atomic_fetch_and((u64 *)(r6 + 8), r1) */ \
--	r0 = 2;						\
--	if r1 != r7 goto 9f;				\
--	r7 = 0x11000000111 ll;				\
--	r1 = 0x101 ll;					\
--	.8byte %[fetch_xor_dw]; /* r1 = atomic_fetch_xor((u64 *)(r6 + 8), r1) */ \
--	r0 = 3;						\
--	if r1 != r7 goto 9f;				\
--	r7 = 0x11000000010 ll;				\
--	r2 = *(u64 *)(r6 + 8);				\
--	r0 = 4;						\
--	if r2 != r7 goto 9f;				\
--	*(u32 *)(r6 + 16) = 0x110;			\
--	r1 = 0xdead000000000011 ll;			\
--	.8byte %[fetch_or_w]; /* r1 = atomic_fetch_or((u32 *)(r6 + 16), r1) */ \
--	r0 = 5;						\
--	if r1 != 0x110 goto 9f;				\
--	r1 = 0xdead000000000101 ll;			\
--	.8byte %[fetch_and_w]; /* r1 = atomic_fetch_and((u32 *)(r6 + 16), r1) */ \
--	r0 = 6;						\
--	if r1 != 0x111 goto 9f;				\
--	r1 = 0xdead000000000011 ll;			\
--	.8byte %[fetch_xor_w]; /* r1 = atomic_fetch_xor((u32 *)(r6 + 16), r1) */ \
--	r0 = 7;						\
--	if r1 != 0x101 goto 9f;				\
--	r2 = *(u32 *)(r6 + 16);				\
--	r0 = 8;						\
--	if r2 != 0x110 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
--						BPF_REG_6, BPF_REG_1, 8)),
--	  __imm_insn(fetch_and_dw, BPF_ATOMIC_OP(BPF_DW, BPF_AND | BPF_FETCH,
--						 BPF_REG_6, BPF_REG_1, 8)),
--	  __imm_insn(fetch_xor_dw, BPF_ATOMIC_OP(BPF_DW, BPF_XOR | BPF_FETCH,
--						 BPF_REG_6, BPF_REG_1, 8)),
--	  __imm_insn(fetch_or_w, BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH,
--					       BPF_REG_6, BPF_REG_1, 16)),
--	  __imm_insn(fetch_and_w, BPF_ATOMIC_OP(BPF_W, BPF_AND | BPF_FETCH,
--						BPF_REG_6, BPF_REG_1, 16)),
--	  __imm_insn(fetch_xor_w, BPF_ATOMIC_OP(BPF_W, BPF_XOR | BPF_FETCH,
--						BPF_REG_6, BPF_REG_1, 16))
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: fetching and/or/xor with the operand in r0")
--__success __retval(0)
--__load_if_JITed()
--__naked void fetch_and_or_xor_r0(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r7 = 0x11000000110 ll;				\
--	*(u64 *)(r6 + 8) = r7;				\
--	r0 = 0x1100000011 ll;				\
--	.8byte %[fetch_or_dw]; /* r0 = atomic_fetch_or((u64 *)(r6 + 8), r0) */ \
--	r2 = r0;					\
--	r0 = 1;						\
--	if r2 != r7 goto 9f;				\
--	r7 = 0x11100000111 ll;				\
--	r0 = 0x11000000111 ll;				\
--	.8byte %[fetch_and_dw]; /* r0 = atomic_fetch_and((u64 *)(r6 + 8), r0) */ \
--	r2 = r0;					\
--	r0 = 2;						\
--	if r2 != r7 goto 9f;				\
--	r7 = 0x11000000111 ll;				\
--	r0 = 0x101 ll;					\
--	.8byte %[fetch_xor_dw]; /* r0 = atomic_fetch_xor((u64 *)(r6 + 8), r0) */ \
--	r2 = r0;					\
--	r0 = 3;						\
--	if r2 != r7 goto 9f;				\
--	r7 = 0x11000000010 ll;				\
--	r2 = *(u64 *)(r6 + 8);				\
--	r0 = 4;						\
--	if r2 != r7 goto 9f;				\
--	*(u32 *)(r6 + 16) = 0x110;			\
--	r0 = 0xdead000000000011 ll;			\
--	.8byte %[fetch_or_w]; /* r0 = atomic_fetch_or((u32 *)(r6 + 16), r0) */ \
--	r2 = r0;					\
--	r0 = 5;						\
--	if r2 != 0x110 goto 9f;				\
--	r0 = 0xdead000000000101 ll;			\
--	.8byte %[fetch_and_w]; /* r0 = atomic_fetch_and((u32 *)(r6 + 16), r0) */ \
--	r2 = r0;					\
--	r0 = 6;						\
--	if r2 != 0x111 goto 9f;				\
--	r0 = 0xdead000000000011 ll;			\
--	.8byte %[fetch_xor_w]; /* r0 = atomic_fetch_xor((u32 *)(r6 + 16), r0) */ \
--	r2 = r0;					\
--	r0 = 7;						\
--	if r2 != 0x101 goto 9f;				\
--	r2 = *(u32 *)(r6 + 16);				\
--	r0 = 8;						\
--	if r2 != 0x110 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
--						BPF_REG_6, BPF_REG_0, 8)),
--	  __imm_insn(fetch_and_dw, BPF_ATOMIC_OP(BPF_DW, BPF_AND | BPF_FETCH,
--						 BPF_REG_6, BPF_REG_0, 8)),
--	  __imm_insn(fetch_xor_dw, BPF_ATOMIC_OP(BPF_DW, BPF_XOR | BPF_FETCH,
--						 BPF_REG_6, BPF_REG_0, 8)),
--	  __imm_insn(fetch_or_w, BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH,
--					       BPF_REG_6, BPF_REG_0, 16)),
--	  __imm_insn(fetch_and_w, BPF_ATOMIC_OP(BPF_W, BPF_AND | BPF_FETCH,
--						BPF_REG_6, BPF_REG_0, 16)),
--	  __imm_insn(fetch_xor_w, BPF_ATOMIC_OP(BPF_W, BPF_XOR | BPF_FETCH,
--						BPF_REG_6, BPF_REG_0, 16))
--	: __clobber_all);
--}
--
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+ {
+ 	return true;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 5926f13ff43c..de301b32015d 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -782,7 +782,6 @@ struct bpf_insn_aux_data {
+ 	u64 non_sleepable:1; /* helper/kfunc may be called from non-sleepable context */
+ 	u64 is_iter_next:1; /* bpf_iter_<type>_next() kfunc call */
+ 	u64 call_with_percpu_alloc_ptr:1; /* {this,per}_cpu_ptr() with prog percpu alloc */
+-	u64 arena_scalar:1; /* ldx/stx/st/atomic through a number, it's an address in arena */
+ 	u64 bb_end:1; /* last instruction of a basic block */
+ 	u64 need_scev:1;
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+@@ -1074,7 +1073,6 @@ struct bpf_verifier_env {
+ 	bool strict_alignment;		/* perform strict pointer alignment checks */
+ 	bool test_state_freq;		/* test verifier with different pruning frequency */
+ 	bool test_reg_invariants;	/* fail verification on register invariants violations */
+-	bool arena_scalar;		/* load and store through a number is arena access */
+ 	struct bpf_verifier_state *cur_state; /* current verifier state */
+ 	/* Search pruning optimization, array of list_heads for
+ 	 * lists of struct bpf_verifier_state_list.
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index e0218e677a1d..98254742ae37 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1287,7 +1287,6 @@ bool bpf_jit_supports_far_kfunc_call(void);
+ bool bpf_jit_supports_exceptions(void);
+ bool bpf_jit_supports_ptr_xchg(void);
+ bool bpf_jit_supports_arena(void);
+-bool bpf_jit_supports_arena_scalar(void);
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
+ bool bpf_jit_supports_private_stack(void);
+ bool bpf_jit_supports_large_stack(void);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index f29b0aad440c..8d7228834305 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1357,12 +1357,6 @@ enum bpf_perf_event_type {
+ /* The verifier internal test flag. Behavior is undefined */
+ #define BPF_F_TEST_REG_INVARIANTS	(1U << 7)
+ 
 -/*
-- * The page is gone, so the access faults. The fetched register has to come back
-- * 0 and everything else has to be left alone, r0 included. Reading the address
-- * again has to give 0 as well: had the fault been recovered by the arena mapping
-- * its zeroed scratch page instead of by the JIT's exception table entry, the
-- * access would have succeeded and left a 1 there.
+- * Load and store through a number is an access to the arena of the program
+- * at the low 32 bits of the number. It's for programs written in Rust.
 - */
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: fetching or through a number to a freed page")
--__success __retval(0)
--__load_if_JITed()
--__naked void fetch_or_freed_page(void)
+-#define BPF_F_ARENA_SCALAR	(1U << 8)
+-
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+  */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 0a8ba603f44b..7cf37690d41f 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2639,8 +2639,7 @@ static bool bpf_prog_select_interpreter(struct bpf_prog *fp)
+ /*
+  * Whether a function has an insn that works with the arena base, which a JIT
+  * sets up in the prologue when bpf_prog_uses_arena_insns() says so. Decided on
+- * the final insns of the function: an access through an arena pointer, or
+- * through a number in a program loaded with BPF_F_ARENA_SCALAR, has been
++ * the final insns of the function: an access through an arena pointer has been
+  * rewritten to a BPF_PROBE_MEM32 form by then, a cast to the user address
+  * space keeps BPF_ADDR_SPACE_CAST, and a kfunc call with an __arena argument,
+  * which the JIT rebases, has a function model that says so. A load of an
+@@ -3518,12 +3517,6 @@ bool __weak bpf_jit_supports_arena(void)
+ 	return false;
+ }
+ 
+-/* Whether JIT takes BPF_REG_AX as the address of arena access */
+-bool __weak bpf_jit_supports_arena_scalar(void)
 -{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	*(u64 *)(r6 + 8) = 0x55;			\
--	r1 = %[arena] ll;				\
--	r2 = r6;					\
--	r3 = 1;						\
--	call %[bpf_arena_free_pages];			\
--	r0 = r6;					\
--	r0 ^= 0x55;					\
--	r1 = 1;						\
--	.8byte %[fetch_or_dw]; /* faults: r1 = atomic_fetch_or((u64 *)(r6 + 8), r1) */ \
--	r2 = r6;					\
--	r2 ^= 0x55;					\
--	if r0 == r2 goto 1f;				\
--	r0 = 1;						\
--	goto 9f;					\
--1:	r0 = 2;						\
--	if r1 != 0 goto 9f;				\
--	r3 = *(u64 *)(r6 + 8);				\
--	r0 = 3;						\
--	if r3 != 0 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm(bpf_arena_free_pages),
--	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
--						BPF_REG_6, BPF_REG_1, 8))
--	: __clobber_all);
+-	return false;
 -}
 -
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: fetching or with the operand in r0 to a freed page")
--__success __retval(0)
--__load_if_JITed()
--__naked void fetch_or_r0_freed_page(void)
+ bool __weak bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+ {
+ 	return false;
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index f062ef7dd943..41bc37e205e0 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -44,31 +44,6 @@ static bool is_addr_space_cast32(struct bpf_prog *prog, const struct bpf_insn *i
+ 	return false;
+ }
+ 
+-/*
+- * The insn accesses arena through a number. JITs add the base of arena
+- * to the register as it is, so the access goes through the low 32 bits of
+- * the number in BPF_REG_AX. Registers of the program are not changed: the
+- * number may be compared or stored later, and on another path the register
+- * may be PTR_TO_ARENA.
+- *
+- * Constant blinding leaves insns that use BPF_REG_AX alone, so the immediate
+- * of st through a number is not blinded.
+- */
+-static int arena_scalar_access(const struct bpf_insn *insn, struct bpf_insn *buf)
 -{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	*(u64 *)(r6 + 8) = 0x55;			\
--	r1 = %[arena] ll;				\
--	r2 = r6;					\
--	r3 = 1;						\
--	call %[bpf_arena_free_pages];			\
--	r0 = 1;						\
--	.8byte %[fetch_or_dw]; /* faults: r0 = atomic_fetch_or((u64 *)(r6 + 8), r0) */ \
--	r2 = r0;					\
--	r0 = 1;						\
--	if r2 != 0 goto 9f;				\
--	r3 = *(u64 *)(r6 + 8);				\
--	r0 = 2;						\
--	if r3 != 0 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm(bpf_arena_free_pages),
--	  __imm_insn(fetch_or_dw, BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH,
--						BPF_REG_6, BPF_REG_0, 8))
--	: __clobber_all);
+-	bool load = BPF_CLASS(insn->code) == BPF_LDX || bpf_atomic_is_load_acq(insn);
+-	struct bpf_insn *patch = buf;
+-
+-	*patch++ = BPF_MOV32_REG(BPF_REG_AX, load ? insn->src_reg : insn->dst_reg);
+-	*patch = *insn;
+-	if (load)
+-		patch->src_reg = BPF_REG_AX;
+-	else
+-		patch->dst_reg = BPF_REG_AX;
+-	patch++;
+-	return patch - buf;
 -}
 -
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: cmpxchg through r0")
--__success __retval(0)
--__load_if_JITed()
--__naked void cmpxchg_r0(void)
+ /* Return the regno defined by the insn, or -1. */
+ static int insn_def_regno(const struct bpf_insn *insn)
+ {
+@@ -1880,20 +1855,6 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
+ 			/* Convert BPF_CLASS(insn->code) == BPF_ALU64 to 32-bit ALU */
+ 			insn->code = BPF_ALU | BPF_OP(insn->code) | BPF_SRC(insn->code);
+ 
+-		if (env->insn_aux_data[i + delta].arena_scalar) {
+-			cnt = arena_scalar_access(insn, insn_buf);
+-
+-			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+-			if (!new_prog)
+-				return -ENOMEM;
+-
+-			delta += cnt - 1;
+-			prog = new_prog;
+-			env->prog = prog;
+-			insn = prog->insnsi + i + delta;
+-			goto next_insn;
+-		}
+-
+ 		/* Make sdiv/smod divide-by-minus-one exceptions impossible. */
+ 		if ((insn->code == (BPF_ALU64 | BPF_MOD | BPF_K) ||
+ 		     insn->code == (BPF_ALU64 | BPF_DIV | BPF_K) ||
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 90bc7230afa8..60c4d84b9aba 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2971,13 +2971,9 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
+ 				 BPF_F_XDP_HAS_FRAGS |
+ 				 BPF_F_XDP_DEV_BOUND_ONLY |
+ 				 BPF_F_TEST_REG_INVARIANTS |
+-				 BPF_F_ARENA_SCALAR |
+ 				 BPF_F_TOKEN_FD))
+ 		return -EINVAL;
+ 
+-	if ((attr->prog_flags & BPF_F_ARENA_SCALAR) && !bpf_jit_supports_arena_scalar())
+-		return -EOPNOTSUPP;
+-
+ 	bpf_prog_load_fixup_attach_type(attr);
+ 
+ 	if (attr->prog_flags & BPF_F_TOKEN_FD) {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c223bf3bc9cd..c93ef399c420 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5495,19 +5495,6 @@ static bool is_arena_reg(struct bpf_verifier_env *env, int regno)
+ 	return reg->type == PTR_TO_ARENA;
+ }
+ 
+-/*
+- * There are no address spaces in Rust, addresses of arena are plain numbers.
+- * When the program is loaded with BPF_F_ARENA_SCALAR and has an arena a load or
+- * a store through a number is an access to arena at the low 32 bits of it,
+- * like the access through PTR_TO_ARENA is. The register stays a number.
+- */
+-static bool is_arena_scalar(struct bpf_verifier_env *env, int regno)
 -{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	/* The address is in r0. The value at the address is not equal to it. */ \
--	*(u64 *)(r6 + 0) = 3;				\
--	r0 = r6;					\
--	r1 = 5;						\
--	.8byte %[cmpxchg_insn]; /* r0 = cmpxchg_64(r0 + 0, r0, r1) */ \
--	r2 = r0;					\
--	r0 = 1;						\
--	if r2 != 3 goto 9f;				\
--	r2 = *(u64 *)(r6 + 0);				\
--	r0 = 2;						\
--	if r2 != 3 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(cmpxchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, BPF_REG_0, BPF_REG_1, 0))
--	: __clobber_all);
+-	const struct bpf_reg_state *reg = reg_state(env, regno);
+-
+-	return reg->type == SCALAR_VALUE && env->arena_scalar && env->prog->aux->arena;
 -}
 -
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: xchg into the register that holds the address")
--__success __retval(0)
--__load_if_JITed()
--__naked void xchg_into_base(void)
+ static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
+ 			       struct bpf_insn *insn)
+ {
+@@ -5538,7 +5525,7 @@ static bool atomic_ptr_type_ok(struct bpf_verifier_env *env, int regno,
+ 		return false;
+ 	if (is_sk_reg(env, regno))
+ 		return false;
+-	if (is_arena_reg(env, regno) || is_arena_scalar(env, regno))
++	if (is_arena_reg(env, regno))
+ 		return bpf_jit_supports_insn(insn, true);
+ 	if (is_load_acq_unsafe(env, regno, insn))
+ 		return false;
+@@ -7519,22 +7506,6 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
+ static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type type,
+ 			     bool allow_trust_mismatch);
+ 
+-/*
+- * Returns the register to check the access of the current insn with.
+- * For a number in a program with an arena that is 'arena'.
+- */
+-static struct bpf_reg_state *mem_access_reg(struct bpf_verifier_env *env, int regno,
+-					    struct bpf_reg_state *arena)
 -{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	*(u64 *)(r6 + 0) = 3;				\
--	r1 = r6;					\
--	.8byte %[xchg_insn]; /* r1 = xchg_64(r1 + 0, r1) */ \
--	r0 = 1;						\
--	if r1 != 3 goto 9f;				\
--	r2 = *(u64 *)(r6 + 0);				\
--	r0 = 2;						\
--	if r2 != r6 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(xchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_REG_1, 0))
--	: __clobber_all);
+-	if (!is_arena_scalar(env, regno))
+-		return cur_regs(env) + regno;
+-
+-	memset(arena, 0, sizeof(*arena));
+-	arena->type = PTR_TO_ARENA;
+-	env->insn_aux_data[env->insn_idx].arena_scalar = true;
+-	return arena;
 -}
 -
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: xchg into the register that holds a pointer to stack")
--__failure __msg("misaligned access off (0x0; 0xffffffffffffffff)+0 size 8")
--__naked void xchg_into_stack_ptr(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r1 = 0;						\
--	*(u64 *)(r10 - 8) = r1;				\
--	r1 = r10;					\
--	r1 += -8;					\
--	.8byte %[xchg_insn]; /* r1 = xchg_64(r1 + 0, r1) */ \
--	r0 = 0;						\
--	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm_insn(xchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_1, BPF_REG_1, 0))
--	: __clobber_all);
--}
+ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			  bool strict_alignment_once, bool is_ldsx,
+ 			  bool allow_trust_mismatch, const char *ctx)
+@@ -7542,7 +7513,6 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
+ 	struct bpf_reg_state *regs = cur_regs(env);
+-	struct bpf_reg_state arena, *src_reg;
+ 	enum bpf_reg_type src_reg_type;
+ 	int err;
+ 
+@@ -7564,16 +7534,16 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (err)
+ 		return err;
+ 
+-	src_reg = mem_access_reg(env, insn->src_reg, &arena);
+-	src_reg_type = src_reg->type;
++	src_reg_type = regs[insn->src_reg].type;
+ 
+ 	/*
+ 	 * check_stack_read_fixed_off() may refine the modification's origin to
+ 	 * the source stack slot.
+ 	 */
+ 	bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE);
+-	err = check_mem_access(env, env->insn_idx, src_reg, argno_from_reg(insn->src_reg),
+-			       insn->off, BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
++	err = check_mem_access(env, env->insn_idx, regs + insn->src_reg,
++			       argno_from_reg(insn->src_reg), insn->off,
++			       BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
+ 			       strict_alignment_once, is_ldsx);
+ 	/*
+ 	 * Paths through a kernel struct pointer and through other pointers
+@@ -7601,7 +7571,6 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
+ 	struct bpf_reg_state *regs = cur_regs(env);
+-	struct bpf_reg_state arena, *dst_reg;
+ 	enum bpf_reg_type dst_reg_type;
+ 	int err;
+ 
+@@ -7623,12 +7592,12 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	if (err)
+ 		return err;
+ 
+-	dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
+-	dst_reg_type = dst_reg->type;
++	dst_reg_type = regs[insn->dst_reg].type;
+ 
+ 	/* Check if (dst_reg + off) is writeable. */
+-	err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg),
+-			       insn->off, BPF_SIZE(insn->code), BPF_WRITE, insn->src_reg,
++	err = check_mem_access(env, env->insn_idx, regs + insn->dst_reg,
++			       argno_from_reg(insn->dst_reg), insn->off,
++			       BPF_SIZE(insn->code), BPF_WRITE, insn->src_reg,
+ 			       strict_alignment_once, false);
+ 	err = err ?: save_aux_ptr_type(env, dst_reg_type, false);
+ 
+@@ -7638,7 +7607,7 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 			    struct bpf_insn *insn)
+ {
+-	struct bpf_reg_state arena, *dst_reg;
++	struct bpf_reg_state *dst_reg;
+ 	int load_reg;
+ 	int err;
+ 
+@@ -7683,9 +7652,6 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
+-	/* load_reg may be dst_reg. Look at dst_reg before it's marked as unknown. */
+-	dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
 -
--#ifdef CAN_USE_LOAD_ACQ_STORE_REL
+ 	load_reg = bpf_atomic_load_reg(insn);
+ 	if (load_reg >= 0) {
+ 		/* check and record load of old value */
+@@ -7694,6 +7660,8 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 			return err;
+ 	}
+ 
++	dst_reg = cur_regs(env) + insn->dst_reg;
++
+ 	/* Check whether we can read the memory, with second call for fetch
+ 	 * case to simulate the register fill.
+ 	 */
+@@ -20280,17 +20248,16 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 			return check_stack_arg_write(env, state, insn->off, NULL);
+ 		}
+ 
+-		struct bpf_reg_state arena, *dst_reg;
+ 		enum bpf_reg_type dst_reg_type;
+ 
+ 		err = check_reg_arg(env, insn->dst_reg, SRC_OP);
+ 		if (err)
+ 			return err;
+ 
+-		dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
+-		dst_reg_type = dst_reg->type;
++		dst_reg_type = cur_regs(env)[insn->dst_reg].type;
+ 
+-		err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg),
++		err = check_mem_access(env, env->insn_idx, cur_regs(env) + insn->dst_reg,
++				       argno_from_reg(insn->dst_reg),
+ 				       insn->off, BPF_SIZE(insn->code),
+ 				       BPF_WRITE, -1, false, false);
+ 		if (err)
+@@ -23926,7 +23893,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (is_priv)
+ 		env->test_state_freq = attr->prog_flags & BPF_F_TEST_STATE_FREQ;
+ 	env->test_reg_invariants = attr->prog_flags & BPF_F_TEST_REG_INVARIANTS;
+-	env->arena_scalar = attr->prog_flags & BPF_F_ARENA_SCALAR;
+ 
+ 	env->explored_states = kvzalloc_objs(struct list_head,
+ 					     state_htab_size(env),
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index f29b0aad440c..8d7228834305 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1357,12 +1357,6 @@ enum bpf_perf_event_type {
+ /* The verifier internal test flag. Behavior is undefined */
+ #define BPF_F_TEST_REG_INVARIANTS	(1U << 7)
+ 
+-/*
+- * Load and store through a number is an access to the arena of the program
+- * at the low 32 bits of the number. It's for programs written in Rust.
+- */
+-#define BPF_F_ARENA_SCALAR	(1U << 8)
 -
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: load-acquire and store-release")
--__success __retval(0)
--__load_if_JITed()
--__naked void load_acq_store_rel(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r7 = r6;					\
--	r1 = 0x1234;					\
--	.8byte %[store_release_insn]; /* store_release((u64 *)(r6 + 8), r1) */ \
--	.8byte %[load_acquire_insn]; /* r2 = load_acquire((u64 *)(r6 + 8)) */ \
--	r0 = 1;						\
--	if r2 != 0x1234 goto 9f;			\
--	.8byte %[load_acquire8_insn]; /* w2 = load_acquire((u8 *)(r6 + 8)) */ \
--	r0 = 2;						\
--	if r2 != 0x34 goto 9f;				\
--	r0 = 3;						\
--	if r6 != r7 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(store_release_insn,
--		     BPF_ATOMIC_OP(BPF_DW, BPF_STORE_REL, BPF_REG_6, BPF_REG_1, 8)),
--	  __imm_insn(load_acquire_insn,
--		     BPF_ATOMIC_OP(BPF_DW, BPF_LOAD_ACQ, BPF_REG_2, BPF_REG_6, 8)),
--	  __imm_insn(load_acquire8_insn,
--		     BPF_ATOMIC_OP(BPF_B, BPF_LOAD_ACQ, BPF_REG_2, BPF_REG_6, 8))
--	: __clobber_all);
--}
--
--#endif /* CAN_USE_LOAD_ACQ_STORE_REL */
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: number that is not an address in arena")
--__success __retval(0)
--__load_if_JITed()
--__naked void not_in_arena(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	/* nothing is allocated: all loads read 0, stores are dropped */ \
--	r6 = 0xdeadbeef00000000 ll;			\
--	r0 = 1;						\
--	r2 = *(u64 *)(r6 + 0);				\
--	if r2 != 0 goto 9f;				\
--	r0 = 2;						\
--	r2 = *(u8 *)(r6 - 32768);			\
--	if r2 != 0 goto 9f;				\
--	r6 = 0x12345678ffffffff ll;			\
--	r0 = 3;						\
--	r2 = *(u64 *)(r6 + 32760);			\
--	if r2 != 0 goto 9f;				\
--	*(u64 *)(r6 + 32760) = 1;			\
--	*(u8 *)(r6 + 32767) = r2;			\
--	r1 = 1;						\
--	lock *(u64 *)(r6 + 32760) += r1;		\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: store through the address of the stack as a number")
--__success __retval(0)
--__load_if_JITed()
--__naked void stack_addr_as_number(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	*(u64 *)(r10 - 8) = 5;				\
--	r6 = r10;					\
--	r6 |= 0;					\
--	/* r6 is a number now. The store goes to arena, not to the stack. */ \
--	*(u64 *)(r6 - 8) = 7;				\
--	r1 = 9;						\
--	*(u64 *)(r6 - 8) = r1;				\
--	lock *(u64 *)(r6 - 8) += r1;			\
--	r2 = *(u64 *)(r10 - 8);				\
--	r0 = 1;						\
--	if r2 != 5 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: 64-bit math on the address stays 64-bit")
--__success __retval(0)
--__load_if_JITed()
--__naked void alu64_after_access(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r2 = *(u64 *)(r6 + 0);				\
--	r7 = r6;					\
--	r7 += 8;					\
--	r7 -= r6;					\
--	r0 = 1;						\
--	if r7 != 8 goto 9f;				\
--	r7 = r6;					\
--	r7 >>= 32;					\
--	r0 = 2;						\
--	if r7 == 0 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: st of an immediate changes no register")
--__success __retval(0)
--__load_if_JITed()
--__naked void st_keeps_regs(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r0 = r6;					\
--	r1 = 0x1111;					\
--	r2 = 0x2222;					\
--	*(u64 *)(r0 + 0) = 5;				\
--	r3 = r0;					\
--	r0 = 1;						\
--	if r3 != r6 goto 9f;				\
--	r0 = 2;						\
--	if r1 != 0x1111 goto 9f;			\
--	r0 = 3;						\
--	if r2 != 0x2222 goto 9f;			\
--	r0 = 0x3333;					\
--	r1 = r6;					\
--	*(u32 *)(r1 + 8) = -7;				\
--	r3 = r0;					\
--	r0 = 4;						\
--	if r3 != 0x3333 goto 9f;			\
--	r0 = 5;						\
--	if r1 != r6 goto 9f;				\
--	r0 = 6;						\
--	r3 = *(u64 *)(r6 + 0);				\
--	if r3 != 5 goto 9f;				\
--	r0 = 7;						\
--	r3 = *(u64 *)(r6 + 8);				\
--	r4 = 0xfffffff9 ll;				\
--	if r3 != r4 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: access through a number with garbage in the upper half")
--__success __retval(0)
--__load_if_JITed()
--__naked void st_value_garbage(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r1 = 0xdeadbeef00001000 ll;			\
--	*(u64 *)(r6 + 2048) = r1;			\
--	r7 = *(u64 *)(r6 + 2048);			\
--	r8 = *(u64 *)(r6 + 2048);			\
--	r1 = 3;						\
--	*(u64 *)(r8 + 0) = 1;				\
--	r0 = 1;						\
--	if r8 != r7 goto 9f;				\
--	*(u8 *)(r8 + 1) = 1;				\
--	r0 = 2;						\
--	if r8 != r7 goto 9f;				\
--	*(u32 *)(r8 + 4) = r1;				\
--	r0 = 3;						\
--	if r8 != r7 goto 9f;				\
--	r2 = *(u16 *)(r8 + 2);				\
--	r0 = 4;						\
--	if r8 != r7 goto 9f;				\
--	r0 = 5;						\
--	if r1 != 3 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: access through a number without the upper half")
--__success __retval(0)
--__load_if_JITed()
--__naked void st_value_small(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r1 = 0x1000 ll;					\
--	*(u64 *)(r6 + 2048) = r1;			\
--	r7 = *(u64 *)(r6 + 2048);			\
--	r8 = *(u64 *)(r6 + 2048);			\
--	r1 = 3;						\
--	*(u64 *)(r8 + 0) = 1;				\
--	r0 = 1;						\
--	if r8 != r7 goto 9f;				\
--	*(u8 *)(r8 + 1) = 1;				\
--	r0 = 2;						\
--	if r8 != r7 goto 9f;				\
--	*(u32 *)(r8 + 4) = r1;				\
--	r0 = 3;						\
--	if r8 != r7 goto 9f;				\
--	r2 = *(u16 *)(r8 + 2);				\
--	r0 = 4;						\
--	if r8 != r7 goto 9f;				\
--	r0 = 5;						\
--	if r1 != 3 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: atomics through a number that is not an address in arena")
--__success __retval(0)
--__load_if_JITed()
--__naked void atomic_value(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r1 = 0xdeadbeef00001000 ll;			\
--	*(u64 *)(r6 + 2048) = r1;			\
--	r7 = *(u64 *)(r6 + 2048);			\
--	r8 = *(u64 *)(r6 + 2048);			\
--	r1 = 3;						\
--	lock *(u64 *)(r8 + 0) += r1;			\
--	r0 = 1;						\
--	if r8 != r7 goto 9f;				\
--	.8byte %[fetch_add_insn];			\
--	r0 = 2;						\
--	if r8 != r7 goto 9f;				\
--	.8byte %[xchg_insn];				\
--	r0 = 3;						\
--	if r8 != r7 goto 9f;				\
--	r0 = 0;						\
--	.8byte %[cmpxchg_insn];				\
--	r0 = 4;						\
--	if r8 != r7 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(fetch_add_insn, BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH,
--						   BPF_REG_8, BPF_REG_1, 0)),
--	  __imm_insn(xchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_8, BPF_REG_1, 0)),
--	  __imm_insn(cmpxchg_insn, BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, BPF_REG_8, BPF_REG_1, 0))
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: number and pointer to arena at the same insn")
--__success __retval(0)
--__load_if_JITed()
--__naked void mixed_number_arena(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	*(u64 *)(r6 + 8) = 0x1234;			\
--	/* a number that the verifier does not know, 0 at run time */ \
--	r7 = *(u64 *)(r6 + 16);				\
--	r8 = r6;					\
--	if r7 != 0 goto 1f;				\
--	.8byte %[cast_kern_insn];			\
--1:	*(u8 *)(r8 + 0) = 1;				\
--	*(u8 *)(r8 + 1) = r7;				\
--	r2 = *(u8 *)(r8 + 1);				\
--	lock *(u64 *)(r8 + 24) += r7;			\
--	r0 = 0;						\
--	if r7 != 0 goto 9f;				\
--	/* pointer to arena only: JIT adds all 64 bits of r8 to the base */ \
--	r0 = 2;						\
--	r2 = *(u64 *)(r8 + 8);				\
--	if r2 != 0x1234 goto 9f;			\
--	r0 = 3;						\
--	r2 = *(u8 *)(r6 + 0);				\
--	if r2 != 1 goto 9f;				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm_insn(cast_kern_insn, BPF_RAW_INSN(BPF_ALU64 | BPF_MOV | BPF_X,
--						  BPF_REG_8, BPF_REG_8, 1, 1))
--	: __clobber_all);
--}
--
--SEC("syscall")
--__description("arena_scalar: no flag, no access through a number")
--__failure __msg("R6 invalid mem access 'scalar'")
--__naked void no_flag(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r6 = 0x100000000000 ll;				\
--	r0 = *(u64 *)(r6 + 0);				\
--	exit;						\
--"	:
--	: __imm_addr(arena)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: pointer that is NULL is an address in arena")
--__success __retval(0)
--__load_if_JITed()
--__naked void null_ptr(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r1 = 0;						\
--	*(u32 *)(r10 - 4) = r1;				\
--	r2 = r10;					\
--	r2 += -4;					\
--	r1 = %[hash] ll;				\
--	call %[bpf_map_lookup_elem];			\
--	r1 = r0;					\
--	r0 = 1;						\
--	if r1 != 0 goto 9f;				\
--	/* nothing is allocated: the load reads 0 */	\
--	r0 = *(u64 *)(r1 + 0);				\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm_addr(hash),
--	  __imm(bpf_map_lookup_elem)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: pointer that is NULL with an offset is an address in arena")
--__success __retval(0)
--__load_if_JITed()
--__naked void null_ptr_off(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r1 = 0;						\
--	*(u32 *)(r10 - 4) = r1;				\
--	r2 = r10;					\
--	r2 += -4;					\
--	r1 = %[hash] ll;				\
--	call %[bpf_map_lookup_elem];			\
--	r1 = r0;					\
--	r0 = 1;						\
--	if r1 != 0 goto 9f;				\
--	r1 += 8;					\
--	*(u64 *)(r1 + 0) = 5;				\
--	r0 = *(u64 *)(r1 + 0);				\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm_addr(hash),
--	  __imm(bpf_map_lookup_elem)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: number that is less than a page is an address in arena")
--__success __retval(0)
--__load_if_JITed()
--__naked void small_number(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	call %[bpf_get_prandom_u32];			\
--	r1 = r0;					\
--	r1 &= 0xfff;					\
--	r0 = *(u64 *)(r1 + 0);				\
--	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_get_prandom_u32)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: number is not a pointer for a helper")
--__failure __msg("R2 type=scalar expected=")
--__naked void helper_arg(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	r1 = %[hash] ll;				\
--	r2 = r6;					\
--	call %[bpf_map_lookup_elem];			\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm_addr(hash),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm(bpf_map_lookup_elem)
--	: __clobber_all);
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: number and pointer to stack at the same insn")
--__failure __msg("same insn cannot be used with different pointers")
--__load_if_JITed()
--__naked void mixed_number_stack(void)
--{
--	asm volatile ("					\
--	r1 = %[arena] ll;				\
--	r2 = 0;						\
--	r3 = 1;						\
--	r4 = -1;					\
--	r5 = 0;						\
--	call %[bpf_arena_alloc_pages];			\
--	r6 = r0;					\
--	r0 = 100;					\
--	if r6 == 0 goto 9f;				\
--	*(u64 *)(r10 - 8) = 0;				\
--	call %[bpf_get_prandom_u32];			\
--	if w0 != 0 goto 1f;				\
--	r6 = r10;					\
--	r6 += -8;					\
--1:	r0 = *(u64 *)(r6 + 0);				\
--	r0 = 0;						\
--9:	exit;						\
--"	:
--	: __imm_addr(arena),
--	  __imm(bpf_arena_alloc_pages),
--	  __imm(bpf_get_prandom_u32)
--	: __clobber_all);
--}
--
--static int st_cb(__u64 idx, void *ctx)
--{
--	volatile long *p = *(volatile long **)ctx;
--
--	p[idx] = 7;
--	return 0;
--}
--
--SEC("syscall")
--__arena_scalar
--__description("arena_scalar: store through a number in a callback")
--__success __retval(0)
--__load_if_JITed()
--int st_in_callback(void *unused)
--{
--	volatile long *p = bpf_arena_alloc_pages(&arena, NULL, 1, -1, 0);
--
--	if (!p)
--		return 100;
--	bpf_loop(4, st_cb, &p, 0);
--	return p[0] + p[3] + p[4] - 14;
--}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 824e5912ebcb..d24e4fedae46 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -590,8 +590,6 @@ static int parse_test_spec(struct test_loader *tester,
- 				update_flags(&spec->prog_flags, BPF_F_XDP_HAS_FRAGS, clear);
- 			} else if (strcmp(val, "BPF_F_TEST_REG_INVARIANTS") == 0) {
- 				update_flags(&spec->prog_flags, BPF_F_TEST_REG_INVARIANTS, clear);
--			} else if (strcmp(val, "BPF_F_ARENA_SCALAR") == 0) {
--				update_flags(&spec->prog_flags, BPF_F_ARENA_SCALAR, clear);
- 			} else /* assume numeric value */ {
- 				err = parse_int(val, &flags, "test prog flags");
- 				if (err)
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+  */
 -- 
 2.55.0
 
