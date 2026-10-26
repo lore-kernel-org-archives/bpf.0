@@ -1,57 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793030810;
-	b=s6hzQMRprcAMxtRY9oUv0LdlaWG53rqhCNg0WcK1Fq3JTPUFuJ0nxXdAd7T86ibOuLFu
-	 eyxQQ0Iy52XhYgUEOqWIlTbpUho/o2bO6Wig+TBYl3qNwJ+pSGDzzVL2m9yaCpP4cTZkm
-	 dSgIAwDtRKn1xiH+x3Ftvh07NTTCvH5y2RPPlMIqonHgpd229MaAx0sB5ehbdK03V4zAS
-	 ZgXvgpMpDD3nmx/neP5HHtVl13bpbU+ZFlrUX42k3SMzc7NIzejdSMkS76/ph7zsxT+M2
-	 izwuA2UUf7fITI5JgfhAcgnCJZ3IOoA5hu+BqZzLwEugVLI6hmYeX6MfUSegYEWsV7w==
+	t=1793032166;
+	b=oa0Ga3uoXre9y4Hu4HNnqsqIcz+XezaoDNgAmw6XiwgYjnkVOUmpfBETOVqcy4kYeghS
+	 QNdvRDsVL4d6PmTShoc3shc4rXEZczSWL3qU3qykv4qRNqLB+oUCbEiWN9uK3yCvUabEs
+	 hIdhNvVWcSh/zgzcV/Gf5+p0lytEIYHO4MbHxdae+E3HYHz2yswkfgbevcrV1kqwu4bRa
+	 zX1Hkov1j/URxW/lMuv5m8LcnlZKRdp68WgdmZ50OnLDvNSLLVFf4KHAEGhCBPTlruqTr
+	 WpGvcu3w2zkD7XqWv+D8IkjeZQAseExiBhEMeya3YGt13f4289WxqZQEiD1lBZm6E+w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793030810;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=q2504dBjupO3FBfjQT1IaeS/YKt4BaICmOiy1i+7Ec4=;
-	b=VQ9jjnjNez4Hhw2gVoQK8QSLJFdh3bdL+IvQWtqoNUSNW/uQ9N7UODlS5nrvmlyc3e5/
-	 5EcqoLl2vvyFNyqLIABIMMldLa4Iup9X4Iv8GUGW/cwc0FoMhRlofGMMn6M095RGaau44
-	 QL3IKOufOiAqYJB5aP5UT8S64sSIGoxS9gHRXLklpT6Rvya5ibjzVUlxwqB8AoxQkvJhv
-	 RNG83WI2L32G0+Pb6d69zyglYxjCd9bbwDTRoFlSK0nOOmXiwhHuEvwLtapM3onm1tYL8
-	 OIrLBLjGVMZHSydjEcYDRnEXBAlxsyNPNWc06PgnvCXOIiYw6ZuJI7xuJ0NEsWLo1vQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793032166;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=GdsDtNMuAKchgTKFVPQmSqRchOy9Cu80YvZfOAk+T+4=;
+	b=GkJrHVsC4ih9ayvZnXjvyR9fVeVvGyFqNc/qSAZZ2Xuf6rCHNzr0cH3UE3bGIoPqpBaj
+	 0bt9Co/jyzXfltL4Qwzb3A1SaxJaIQHdXv/27ietEtl3OwHQ5odqGa5pzEih7XWiIJkzm
+	 0+83dOCIsLexEHmRwyxOtFNSA/p+N16hbBVmjFQRzmyHrFGHgr9LD7t59rvxvE586NQ7O
+	 /ZIFF+WL0BulYhODWoTENEAVeKKa3Knca1W3rG9k4pHbg8tld1ZBj/1UxvUxA9sBvIrx4
+	 daJw7rtcGn/ylYcaLMzhhcaJGIvfH1a939vz+ewJMn2CeI/12ztB0aEZ2L9+qHr6H5g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AQ20mfiG;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=s88r1f7r;
+	arc=none smtp.remote-ip=74.125.82.178
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2816606A31F;
-	Mon, 26 Oct 2026 16:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3217B606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 16:29:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3217B606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AQ20mfiG
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D9921F01828;
-	Mon, 26 Oct 2026 16:06:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793030809;
-	bh=q2504dBjupO3FBfjQT1IaeS/YKt4BaICmOiy1i+7Ec4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AQ20mfiGtZB6uzWs7Kxushh1rsbLNtzWWtNTg+1AM+6Kut72rzNL++4+DmzHLg8WW
-	 AwyeO58kYaYFYkMYNboo+1owtA8IVwWGDOPsilvCrBFA/3TF0Ial9ubyvEGBLVEZC2
-	 F5OBtjwmRwPMXzgSMbnAIqPO4ZlVB7RsLx+pkOcEDOT3nQmI1eLsH0wuijOgkK7XCs
-	 93nkffo/f4cHeiqJUL5c0Y7zxc0LEtqJwIvLNoYhwZnzlmpQyXEc4kSskW5/rt4EmC
-	 KGYhLRDuq1HpOakJieO1oPYnoX31CeFGjkcP/ySCy7VDsmm/QF+jgEWLH5Ed2PpaiD
-	 ME69Sff6PZ0BA==
-Message-ID: <sashiko-outbox-185494@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 1/6] bpf: Add syscall common attrs support
- for link_create
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20261026154948.99408-2-leon.hwang@linux.dev>
-References: <20261026154948.99408-1-leon.hwang@linux.dev>
- <20261026154948.99408-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 26 Oct 2026 16:06:48 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=s88r1f7r
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3282db206d3so6324737eec.0
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 09:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793032165; x=1793636965; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GdsDtNMuAKchgTKFVPQmSqRchOy9Cu80YvZfOAk+T+4=;
+        b=s88r1f7rBacXuje4OuI2O9BejlXwi39wsHSRSfqEXG6vDmeOBrNik+u18CpdbNpIjp
+         LZeu8HDwQYSWjebKxy9MC1XVK5Jm0Dpp+Zz4ba8as7S66CyLnNAirt0ZAebK0YcT3jmQ
+         4t7fgSo2uA4CIhF71ZiK3rp8v9iOuKlxG8a2Pqlxjk2J4/UEy0lOzrKbw1nWGNlrSNR8
+         aY99L5mt8Tp+Sfeju/KLz4VU7TnYlGm6CXSWNCFLfgp4H97m9LF45zdwGDmdrZHGECEg
+         xoAdGYqCRltg+i9cSz/xZ3G/daPGBryUPdhot2tMxAbTsVihBr1suYom5FXE6IYBvtT+
+         n5PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793032165; x=1793636965;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GdsDtNMuAKchgTKFVPQmSqRchOy9Cu80YvZfOAk+T+4=;
+        b=I1S7sh15lQGDPxl818R8xnlryCZcYvQLKZNSHaHJLVHwXDL1VJxhyeA9wVRRGE/PTg
+         ut6SrfS5eUmEeWwwU1xHwpSLIfd9/xeFbcJ6WdsqVQ98gBRAyNNgt1CxAoQcoLBAI2Zh
+         /R2kTEx0cRNxb0REalMyfKM9kxAc/yqtDem3E4kErSAnjdaCpB+lG10ly/Vmt1yKUIzN
+         0zukBsfdduM0UBKrOqCwyMNhTWrv0v9mqKRg/7ESo5/9vIkNvotpH4dGd53q9msECbji
+         MApkjkl+XTbUDfQX9dvMuRKaadd1xWsE49DliGsZ2TyqSr6/WvVWZ/XPUJ6p1ej6eVf7
+         Xp4g==
+X-Gm-Message-State: AFq9FYLGzdD7Vjj9QO6hK1UVQXE1dVaqt1BG6pvVuukA8hwHMBj+2O0w
+	dNBshgA0rVLp6VH7HeFZPTRP+sl2G4jg2VuMRuhftVgF2JLIWzuK0qLt7MedbXZ2
+X-Gm-Gg: AYBFou0aCxyCDF6bR83D19QAkNRUnI1yLkAVIFNwFxnj3LsZ2KSJav2aPhk7Xhte0TR
+	rOL6KP3Qp64MOCS9IodHwv6TYSzF2bClVptDnLIiFwmkR1Tn6d3fwbaXKN9DMx2d5V/WGpM28Sz
+	eVHZZJ94/e+fzXfAGDVfQJpBY5v4d94Di6iRPtii2r+7OaRnBcv2+yceTSQ5GVqgfmfQfcrra1B
+	tdnA5yN+1drdZA8bfuIzgDKEpES0DKR1dteBcTDATJ6/1QusYtmNDgNf6NFZsKsFntoX5WvU2DZ
+	kYTagI4ItRbYZhgVd/eFEUXXCAXHOgdKC61OaNMucK7Q98GHRTvQk/W620injL/sffh3qUpXUQ8
+	aNtGcICAr0blogtSSLXCGi8kCnf9Y3OiVEqlbVrCTLTWpCAfsH1WRoeW7ODSMmUmPk9JdejpDq/
+	nTL3chzKa9yTVBsohio7M0HY/maKn3amUGkWB6D2Z/bau6oUwlTBcCfPFdWQYyzWaCoqTJ8dpQN
+	+P08O4o90ivS+UlrlowE4oL54dSIQyU1o8Q+BIRB7+DeZatBZFt9kvzflININXuuq8ZmMBWw9Sx
+	Fit5Hn1E3xjc6aMKEqLjJecMRQtrg+pdT4hijeIUe9Cg9zywf5DdS/cEQxQASV0Y3HmrKe+IEVw
+	=
+X-Received: by 2002:a05:7300:8817:b0:369:9062:c392 with SMTP id 5a478bee46e88-369e8622976mr11796578eec.37.1793032164938;
+        Mon, 26 Oct 2026 09:29:24 -0700 (PDT)
+Received: from nixos ([2405:201:c40d:9039:f859:3f74:c064:3281])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8db7b23sm36119014eec.19.2026.10.26.09.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 09:29:24 -0700 (PDT)
+From: Ayushman Rout <ayushmanrout27@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	Ayushman Rout <ayushmanrout27@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf v2 0/2] bpf: Fix overlapping copies in bpf_dynptr_copy()
+Date: Mon, 26 Oct 2026 21:58:07 +0530
+Message-ID: <20261026162810.12862-1-ayushmanrout27@gmail.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,138 +99,35 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: inaccurate attach_type and prog_type error logging in link_=
-create()
---
+bpf_dynptr_copy() can corrupt data when both ranges are in the same xdp
+packet and overlap: a slice of one range is used as the buffer for
+__bpf_dynptr_read() or __bpf_dynptr_write(), and the chunk loop always
+copies forward.
 
-commit bc490436683f8010bb5c27c3e3a1582ddc24a909
-Author: Leon Hwang <leon.hwang@linux.dev>
+Patch 1 does not use a slice as the buffer for a copy within one packet
+and copies from the end when the destination is above the source.
+Patch 2 adds selftests. They pass with the fix.
 
-bpf: Add syscall common attrs support for link_create
+Changes in v2:
+- Dropped the bpf_xdp_copy_buf() change and fixed everything in
+  bpf_dynptr_copy(), as suggested by Alexei
+- Reworked the tests into bpf_dynptr_copy() tests where only one of the
+  ranges crosses into frag0
 
-This commit adds syscall common attributes support to link_create() in
-kernel/bpf/syscall.c, initializing and finalizing a bpf_verifier_log
-instance to report errors for invalid prog_fd, attach_type, and prog_type.
+v1: https://lore.kernel.org/bpf/20261024092659.76422-1-ayushmanrout27@gmail.com/
 
-Link: https://lore.kernel.org/bpf/20260514004634.3DA09C19425@smtp.kernel.or=
-g/
+Ayushman Rout (2):
+  bpf: Fix bpf_dynptr_copy() for overlapping ranges in one packet
+  selftests/bpf: Test overlapping dynptr copies on xdp frags
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 90bc7230afa8a..db870e795d044 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -5862,8 +5862,11 @@ static int bpf_map_do_batch(const union bpf_attr *=
-attr,
->  }
-> =20
->  #define BPF_LINK_CREATE_LAST_FIELD link_create.uprobe_multi.path_fd
-> -static int link_create(union bpf_attr *attr, bpfptr_t uattr)
-> +static int link_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_=
-common_attr *attr_common,
-> +		       bpfptr_t uattr_common, u32 size_common)
->  {
-> +	struct bpf_verifier_log *log;
-> +	struct bpf_log_attr attr_log;
->  	struct bpf_prog *prog;
->  	int ret;
-> =20
-> @@ -5873,14 +5876,24 @@ static int link_create(union bpf_attr *attr, bpfp=
-tr_t uattr)
->  	if (attr->link_create.attach_type =3D=3D BPF_STRUCT_OPS)
->  		return bpf_struct_ops_link_create(attr);
-> =20
-> +	log =3D bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, =
-size_common);
-> +	if (IS_ERR(log))
-> +		return PTR_ERR(log);
-> +
->  	prog =3D bpf_prog_get(attr->link_create.prog_fd);
-> -	if (IS_ERR(prog))
-> -		return PTR_ERR(prog);
-> +	if (IS_ERR(prog)) {
-> +		bpf_log(log, "Invalid prog_fd.\n");
-> +		ret =3D PTR_ERR(prog);
-> +		prog =3D NULL;
-> +		goto out;
-> +	}
-> =20
->  	ret =3D bpf_prog_attach_check_attach_type(prog,
->  						attr->link_create.attach_type);
-> -	if (ret)
-> +	if (ret) {
-> +		bpf_log(log, "Invalid attach_type.\n");
->  		goto out;
-> +	}
-> =20
->  	switch (prog->type) {
->  	case BPF_PROG_TYPE_CGROUP_SKB:
-> @@ -5959,12 +5972,20 @@ static int link_create(union bpf_attr *attr, bpfp=
-tr_t uattr)
->  			ret =3D bpf_uprobe_multi_link_attach(attr, prog);
->  		break;
->  	default:
-> +		bpf_log(log, "Invalid prog type.\n");
->  		ret =3D -EINVAL;
->  	}
+ kernel/bpf/helpers.c                          | 16 +++-
+ .../testing/selftests/bpf/prog_tests/dynptr.c |  3 +
+ .../selftests/bpf/progs/dynptr_success.c      | 90 +++++++++++++++++++
+ 3 files changed, 105 insertions(+), 4 deletions(-)
 
-[Severity: Medium]
-Does calling bpf_prog_attach_check_attach_type() before switch (prog->type)
-in kernel/bpf/syscall.c:link_create() cause misleading or missing log
-messages in a few cases?
+-- 
+2.54.0
 
-First, for almost all program types that are unsupported by link_create()
-(such as BPF_PROG_TYPE_SOCKET_FILTER, BPF_PROG_TYPE_SCHED_ACT,
-BPF_PROG_TYPE_RAW_TRACEPOINT, or BPF_PROG_TYPE_SYSCALL),
-link_create() -> bpf_prog_attach_check_attach_type() hits the default
-branch:
-
-kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type() {
-	...
-	default:
-		ptype =3D attach_type_to_prog_type(attach_type);
-		if (ptype =3D=3D BPF_PROG_TYPE_UNSPEC || ptype !=3D prog->type)
-			return -EINVAL;
-		return 0;
-}
-
-Because attach_type_to_prog_type() never returns those program types for any
-attach_type, bpf_prog_attach_check_attach_type() returns -EINVAL and
-link_create() logs "Invalid attach_type.\n" instead of reaching the default
-branch of switch (prog->type) to log "Invalid prog type.\n".
-
-Second, for BPF_PROG_TYPE_CGROUP_SKB, bpf_prog_attach_check_attach_type()
-also performs a capability check:
-
-	case BPF_PROG_TYPE_CGROUP_SKB:
-		if (!bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
-			return -EPERM;
-
-When this check fails with -EPERM, link_create() still logs
-"Invalid attach_type.\n" even when attach_type is valid.
-
-Third, for BPF_PROG_TYPE_LSM and BPF_PROG_TYPE_TRACING,
-bpf_prog_attach_check_attach_type() only checks that attach_type maps to the
-general program type. The stricter expected_attach_type check happens inside
-switch (prog->type) in link_create():
-
-	case BPF_PROG_TYPE_LSM:
-	case BPF_PROG_TYPE_TRACING:
-		if (attr->link_create.attach_type !=3D prog->expected_attach_type) {
-			ret =3D -EINVAL;
-			goto out;
-		}
-
-If a caller passes an attach_type of the same program type that does not
-match prog->expected_attach_type, link_create() jumps to out without logging
-"Invalid attach_type.\n".
-
-Should the program type validation and attach_type logging be ordered so
-that unsupported program types, -EPERM failures, and expected_attach_type
-mismatches report accurate messages?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261026154948.9940=
-8-1-leon.hwang@linux.dev?part=3D1
