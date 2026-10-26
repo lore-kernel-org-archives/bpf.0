@@ -1,45 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.19
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793054571;
-	b=B7T/neuu5eKFWTj4eDIbafaZix0ObE4pl/aQ+4WZuK94+TcpL9e6d6os9ixA8SQzbXd7
-	 RPzhCdaKysTRkLum7w1125ZdgRD4y8fJ635SW4uiGTTNSYItcMHGw/y7GGeMkIlOZpVyx
-	 9cs/cNhC1US+YFllBwkTu8PYw2WNYY2jC7R6B+X4dhnAO5u06lp6Gf9dpDTFo4cyhm0gM
-	 ACQ8VttFuUMkD7yvNGJ1IBEVyXlMD+uYtetY0U9IWRNscJ6MiAiPF8J5Y6wGPyykWZ+X2
-	 labOgYyQjH4XmSZFZdEA1UD4kvclR3eQ1T8EI8z3tEkfkbFY/np1fVNoelOE9I8A86g==
+	t=1793055156;
+	b=ITAxd8KFZzw8Fx08pGpBOwNZxMnwvCyyIJEBTObpJH7eub12JRkbz3EHFuwjAz61qKx1
+	 TYlOMaKRl+LeenDNiCA7mDRpX36XAUWwfFGvypwMwx9ab0WQ10vQ/y5pKHLLhjQs/6Y2W
+	 SZayb6xrOE+74hDSOLHn1SLDz5hyO+927+GmjQsDGQYu2gn3yVjYEVkcgxO/kOduHD6m8
+	 WvI1oS7AIx+gLWhr6Bv08LTnjQl5vjC8uPX9etaRS4Tmyo7cjFKeEWGcdn9FJ4OccAISL
+	 xkrBN5dnhgjkMUJMZ7xk4Nl+WuCdyoXO/rW5tUIZxt9PG1pEBCMDZcej6RIb9Z9/ghA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793054571;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=zcu2D4FJ8AUuSLc0io/ntAE/p7xplg+q76zeVM6cDrI=;
-	b=5bwOMS+l1bJQ01out63Z5Y0I4oVC8npZT0DsVR4urseF3P33EeFUmSedN9CKnpiRx9wu
-	 kjxgR/Wy0FzskDh/aPVygTBxJvYjvXYQYA/fx9pfm8YNN48Oldr2qarpdpmsjZ4h5PFfB
-	 +XJ78y4AlDggvHKSo2+aQNHpgkD3hvFaVmoeWwKlxvfCzgzYZLfVZJuXBBqCtPjx0hbiB
-	 yvGgnH6L6uZYCKhc4x+uY25lNYk6Xv3DU4K0YSl6qp8GB2XMpUuktUjpikQXH9eHflJcd
-	 jvoTLv8SSNh6RgPk6KWKj7UMTUZ84KTZjDXMbBkojUnAYNsF4eGREudGsUeRweGZpxg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793055156;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=zKAIbj4E71O6v5DHc3HNYXOZPG7g4zgY8frqPiT/8xg=;
+	b=whkhNR64WMlMdf2Fjvl3nExzpmMvSvTBF0h8TXnCTBYvRalnYHkor7ckyx/+8m0/q3VS
+	 YaD/A3a5Tb+bgDEGQCBs5+3s0+6YNgTVi4NToU9kBEnXRIwrHwUSYovEJj+mfNBEU98P/
+	 NFakbgjRruHdtTLp3/sl8UnhXjA1RbD24jVUFlWZbfMVN47ZWG05KESRxUSmT8Zi6ysJn
+	 utTmcPyN72zpMsBfSkoEPI/puLRHkNmbPyOvJGrQGITLdNfVHbCj8z4zuH96NY2XKcCRG
+	 f8nMiUR7WqKUujiar94DFKkBgv4mqZWgKniF4PABj4ysB7xhkZXjEy0HDfYfwsmO8PA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m+uwSINy;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gUrpU0Eo;
+	arc=none smtp.remote-ip=91.218.175.19
+Received: from mta0.migadu.com (out-19.mta0.migadu.com [91.218.175.19])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BF1606A31B;
-	Mon, 26 Oct 2026 22:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CD8606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 22:52:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 82CD8606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=m+uwSINy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 365B01F01825;
-	Mon, 26 Oct 2026 22:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793054571;
-	bh=zcu2D4FJ8AUuSLc0io/ntAE/p7xplg+q76zeVM6cDrI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=m+uwSINyQXwtu73UZ6EyuYN1h51rwPwU+wBhwQ3x6vmKi83kNfW/gfdRbFyu2HNka
-	 7VReOVigciR9zgZA89RZbtbnvj5XXQ/G6TNtz4hWpZsN9YfowyTTvxcAd5CV23+dCo
-	 kwOl5dmVClKxNRL9LoZLcTCJjd7Oi+GEyiutZ+FQrSiTq5KfDAS1cTn+Qetc1J45UA
-	 tlo8YpMhi0rPJU2nlQprIjVkP6LSttyfZaSKzxm5CdW5t1SoWlXNdh7eay4cH9TrvB
-	 dDcwGOzRtd1woJrWVPijYslHDOfGawLoQdVx6NOSD7HbBD401iC78cwGYI3UppwGB3
-	 AB4oKffoYrJrg==
-Content-Type: multipart/mixed; boundary="===============7206656739672881745=="
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=gUrpU0Eo
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Z8funXGuTqu+er/8n1etAxsCUdLvAe+wEnAdyvy1xIQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793055153; v=1; x=1793659953;
+ b=gUrpU0Eorbs3yADq20OuUJ7ELWR1tyFJ+LDvKwMuyQpFrqTSU6y/Ga3rr2eRJExL112ljoBK
+ CBDS18LKpncnGqrL17DH+Rt/TZFhErtsCsIDHiZxBsUl+EyNZidCBF4VGY4K8KRPnDeJMnJ73gh
+ S56GBVe9pUh+oJxrFhd2MMI0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 76e094ffeec065c5;
+	Mon, 26 Oct 2026 22:52:33 +0000
+X-Mizu-Trace-ID: 76e094ffeec065c5
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <66f1317a-4107-4e31-a3cb-6378fc63d07d@linux.dev>
+Date: Mon, 26 Oct 2026 15:52:24 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,203 +58,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <b9959bd7711dee7a83a07b012b5967980d178c95eae90adeebebcb6040fc526f@mail.kernel.org>
-In-Reply-To: <20261026215226.3713941-7-jthoughton@google.com>
-References: <20261026215226.3713941-7-jthoughton@google.com>
-Subject: Re: [RFC PATCH 06/10] uaccess: Refuse and warn on user copies when current->mm is NULL
-From: bot+bpf-ci@kernel.org
-To: jthoughton@google.com,akpm@linux-foundation.org,viro@zeniv.linux.org.uk
-Cc: tglx@kernel.org,peterz@infradead.org,kees@kernel.org,arnd@arndb.de,david@kernel.org,ljs@kernel.org,liam@infradead.org,vbabka@kernel.org,rppt@kernel.org,surenb@google.com,mhocko@suse.com,seanjc@google.com,pbonzini@redhat.com,jmattson@google.com,axboe@kernel.dk,asml.silence@gmail.com,James.Bottomley@HansenPartnership.com,mkp@kernel.org,dsterba@suse.com,mason@kernel.org,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,jpoimboe@kernel.org,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,linux-mm@kvack.org,linux-fsdevel@vger.kernel.org,kvm@vger.kernel.org,io-uring@vger.kernel.org,linux-scsi@vger.kernel.org,linux-btrfs@vger.kernel.org,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-perf-users@vger.kernel.org,linux-kernel@vger.kernel.org,jthoughton@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.
- org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 22:42:50 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 03/12] bpf: Prepare linked scalars for
+ relations narrower than 64 bits
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20261020161907.2115379-4-vineet.gupta@linux.dev>
+ <443e1351eed4f46cf6c202e5f1130b189e9c5eb09cfcffd24d752c6ec73d450c@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <443e1351eed4f46cf6c202e5f1130b189e9c5eb09cfcffd24d752c6ec73d450c@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---===============7206656739672881745==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 10/20/26 10:08 AM, bot+bpf-ci@kernel.org wrote:
+>> bpf: Prepare linked scalars for relations narrower than 64 bits
+> TL;DR: Commit message only: regs_exact() now also rejects states whose linked
+> scalars share a base id in old but not in cur, a stricter infinite-loop check
+> the changelog doesn't mention.
+>
+>> bpf: Prepare linked scalars for relations narrower than 64 bits
+>>
+>> Two scalars sharing an ->id are always related by full 64-bit equality
+>> today: reg == base + delta over all 64 bits (this is true for
+>> BPF_ADD_CONST32 as well, which implies upper bits to be all zero).
+>> Sign-extension needs a genuinely low32 equal only relationship kind
+>> with bit 31 supplying upper 32-bits.
+>>
+>> Today the following 2 relationships exist
+>>
+>>    #define BPF_ADD_CONST64 (1U << 31)
+>>    #define BPF_ADD_CONST32 (1U << 30)
+>>
+>> Model them differently as
+>>
+>>    enum bpf_reg_link_kind { BPF_REG_LINK_NONE, BPF_REG_LINK_FULL,
+>>                             BPF_REG_LINK_ZEXT, BPF_REG_LINK_SEXT };
+>>
+>> So BPF_ADD_CONST64 becomes BPF_REG_LINK_FULL and BPF_ADD_CONST32 becomes
+>> BPF_REG_LINK_ZEXT with the exact same semantics as today. But this paves
+>> the way for a future BPF_REG_LINK_SEXT in the same framework.
+>>
+>> The implementation needs to change as well. Today the above 2 bits are
+>> shoe-horned into ->id, needing masking and OR'ing to get ->id and kind
+>> bits: with more types and bits needed, move them out into an enum
+>> bitfield of its own. To avoid growing the storage (and stay within the
+>> 1K allocator bucket), borrow 2 bits out of ->map_uid, 31 -> 29, which is
+>> still far more ids than a program can generate.
+>>
+>> ->id becomes a plain identifier, so check_scalar_ids() loses its "compare
+>> the compound id, then the base id" dance in favour of one check_ids().
+>>
+>> With the kind out of ->id it also leaves the idmap key, so regs_exact()
+>> and regsafe()'s explore_alu_limits arm have to compare it explicitly.
+>>
+>> One case changes behaviour -- old {r2.id=A+delta32} against
+>> cur {r2.id=B+delta64} was accepted and is now rejected, correctly, since
+>> alu32 and alu64 deltas diverge in sync_linked_regs().
+>>
+>> Clearing a link is no longer just ->id = 0: any stale ->link_kind needs
+>> to be cleared out as well. And given this needs to be done in the newly
+>> added kernel/bpf/scev.c, it is moved into bpf_verifier.h as
+>> bpf_clear_scalar_id().
+>>
+>> The helper also zeroes ->delta, which the open-coded clear left behind.
+>> Unlike ->id that field is inside the memcmp() prefix state comparison
+>> uses, so a leftover value could keep two otherwise-identical states
+>> apart; clearing it can only help pruning.
+>>
+>> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> The changelog lists only the delta32/delta64 mismatch as a case that changes
+> behaviour.  Is that the only one?
+>
+> regs_exact() also changes.  It used to run check_ids() on the compound id,
+> so old {r2.id=A, r3.id=A|BPF_ADD_CONST64} against cur {r2.id=B,
+> r3.id=C|BPF_ADD_CONST64} built two independent idmap entries (A->B and
+> A|flag->C|flag) and was accepted as exact.
+>
+> With the kind moved out of ->id, the same pair now maps A->B and then A->C,
+> and check_ids() rejects it:
+>
+>      return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+>             rold->link_kind == rcur->link_kind &&
+>             check_ids(rold->id, rcur->id, idmap) && ...
+>
+> regs_exact() is reached through regsafe(..., EXACT) from the infinite loop
+> check in bpf_is_state_visited():
+>
+>      states_equal(env, &sl->state, cur, EXACT)
+>
+> so this is a stricter comparison than before.
+>
+> Could the changelog also say that regs_exact() now enforces base-id
+> consistency for linked scalars, which the old compound-id idmap key did not?
 
-> uaccess: Refuse and warn on user copies when current->mm is NULL
+Right. The example you mention is new.
 
-TL;DR:
-- Possible spurious -EFAULT on valid kernel addresses on xtensa/nios2 from
-  mm-less tasks (kworkers), e.g. d_path
-- nofault helpers may hit the new WARN_ON_ONCE (BPF/tracing); fix is later in
-  series, breaking bisection
+Basically v2 had a patch of its own on this topic and it listed two cases
 
-> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-> index eddbbb65ccc4..e54a6d804bf9 100644
-> --- a/include/linux/uaccess.h
-> +++ b/include/linux/uaccess.h
-> @@ -50,6 +50,23 @@
+     old {r1.id=A, r2.id=A+delta}  vs cur {r1.id=B, r2.id=B}
+     old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
 
-[ ... ]
+Both were same category: one register whose kind differs between old and 
+cur, caught by the new
+rold->link_kind == rcur->link_kind line.
 
-> +static __always_inline bool uaccess_should_fail(void)
-> +{
-> +	if (WARN_ON_ONCE(!current->mm))
-> +		return true;
-> +	return should_fail_usercopy();
-> +}
+What you mention here is a different scenario:
 
-[ ... ]
+     old {r2.id=A, r3.id=A|BPF_ADD_CONST64}
+     cur {r2.id=B, r3.id=C|BPF_ADD_CONST64}
 
-> @@ -114,7 +131,7 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
->  
->  	might_fault();
->  	instrument_copy_from_user_before(to, from, n);
-> -	if (should_fail_usercopy())
-> +	if (uaccess_should_fail())
->  		return n;
->  	check_object_size(to, n, false);
->  	res = raw_copy_from_user(to, from, n);
+kinds match but it is still rejected, by check_ids().
 
-Can this refuse legitimate kernel address copies on xtensa and nios2?
+v4 mentions both mechanisms.
 
-On both architectures __copy_from_user() and __copy_to_user() also sit under
-the generic kernel nofault accessors.  Neither architecture defines
-__get_kernel_nofault or arch_get_kernel_nofault, so both use the fallback in
-include/linux/uaccess.h, which goes through __get_user()/__put_user() on the
-kernel address:
+Thx,
+-Vineet
 
-    #define __get_kernel_nofault(dst, src, type, label)    \
-    ...
-            if (__get_user(data, p))                       \
-                    goto label;                            \
+> --
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
 
-On xtensa, 8-byte __get_user()/__put_user() are implemented with
-__copy_from_user()/__copy_to_user() (arch/xtensa/include/asm/uaccess.h):
-
-    case 8: {
-            u64 __x;
-            if (unlikely(__copy_from_user(&__x, ptr, 8))) {
-    ...
-            retval = __copy_to_user(ptr, &__v64, 8) ? -EFAULT : 0;
-
-On nios2, __put_user_common() sends any size other than 1, 2 or 4 to
-__copy_to_user().
-
-Neither architecture selects HAVE_EFFICIENT_UNALIGNED_ACCESS, so
-copy_from_kernel_nofault() and copy_to_kernel_nofault() (mm/maccess.c) use
-the u64 loop whenever dst and src are both 8-byte aligned and at least 8
-bytes remain:
-
-    if (!(align & 7))
-            copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
-
-With this patch, every such access from a task with current->mm == NULL
-(kworkers, khungtaskd, kernel_init before exec, the idle task in IRQ, kgdb
-entered from idle) hits WARN_ON_ONCE(!current->mm), and __copy_from_user()
-returns n.  copy_from_kernel_nofault() then returns -EFAULT on valid kernel
-memory.
-
-Concrete generic callers include:
-
-  d_path() -> prepend() -> prepend_copy() (fs/d_path.c) fills the component
-  with 'x' and stops the walk.  This is reachable from LSM/IMA path hooks
-  run by kworkers, for example async firmware loading.
-
-  print_worker_info() (kernel/workqueue.c), called from
-  dump_stack_print_info() and sched_show_task() for kworkers, which copies
-  wq->name and worker->desc.
-
-  copy_to_kernel_nofault() from kgdb_hex2mem()/kgdb_ebin2mem() on nios2,
-  which selects HAVE_ARCH_KGDB.
-
-Before this patch these accesses worked on kernel addresses, since
-raw_copy_{from,to}_user() on these architectures is a plain fixup-protected
-copy and access_ok() is not involved.  Only opt-in fault injection could
-make them fail.
-
-The commit message rationale ("Accessing user memory from a task that has no
-mm is always a bug") does not apply to kernel addresses.  The commit message
-also says get_user()/put_user() are not covered, which does not hold for
-8-byte accesses on these two architectures.
-
-No later commit in this series appears to touch these paths.
-
-[ ... ]
-
-> diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
-> index 5bb752ff7c61..565b3125e752 100644
-> --- a/lib/strncpy_from_user.c
-> +++ b/lib/strncpy_from_user.c
-> @@ -115,7 +115,7 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
->  	unsigned long max_addr, src_addr;
->  
->  	might_fault();
-> -	if (should_fail_usercopy())
-> +	if (uaccess_should_fail())
->  		return -EFAULT;
->  	if (unlikely(count <= 0))
->  		return 0;
-
-Can strncpy_from_user_nofault() now trip this WARN_ON_ONCE() from contexts
-where current->mm is NULL by design?
-
-In this tree strncpy_from_user_nofault() (mm/maccess.c) has no current->mm
-check and no nmi_uaccess_okay() check.  It goes straight to
-strncpy_from_user():
-
-    pagefault_disable();
-    ret = strncpy_from_user(dst, unsafe_addr, count);
-    pagefault_enable();
-
-and strncpy_from_user() now calls uaccess_should_fail(), which does:
-
-    if (WARN_ON_ONCE(!current->mm))
-            return true;
-
-The callers of strncpy_from_user_nofault() are tracing helpers that run in
-whatever context the probe fires in, including kernel threads and IRQs taken
-while the idle task runs:
-
-  bpf_probe_read_user_str() via bpf_probe_read_user_str_common()
-  (kernel/trace/bpf_trace.c), and bpf_probe_read_str() for addresses below
-  TASK_SIZE.
-
-  bpf_trace_printk()/bpf_snprintf() through bpf_trace_copy_string()
-  (kernel/bpf/helpers.c).  With CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-  (x86, arm64, ...), any '%s' argument below TASK_SIZE takes this path,
-  including a NULL pointer.  So bpf_printk("%s", ptr) with ptr == NULL in a
-  kprobe that fires in a kworker now triggers the warning.
-
-  kprobe/fprobe/eprobe ustring fetch args (fetch_store_string_user() in
-  kernel/trace/trace_probe_kernel.h).
-
-  The .ustring event filters (test_ustring() in
-  kernel/trace/trace_events_filter.c).
-
-  Synthetic event string fields (trace_string() in
-  kernel/trace/trace_events_synth.c).
-
-  The bpf_copy_from_user_str_dynptr family (copy_user_str_nofault()).
-
-Before this patch these calls either failed quietly with -EFAULT or read the
-lazily loaded mm.  Now a tracing user (CAP_BPF plus CAP_PERFMON, or tracefs
-access) can trigger a warning splat, and a panic with panic_on_warn, just by
-tracing a function that kernel threads run.
-
-The same applies to copy_to_user_iter_nofault() in lib/iov_iter.c, which this
-patch also switches to uaccess_should_fail().  The commit message lists
-copy_to_user_nofault() as intentionally covered, but it does not account for
-the nofault helpers being used from mm-less contexts by design.
-
-A fix appears later in the series, e8bf23b5b30d ("uaccess: Fail user nofault
-helpers quietly when current->mm is NULL").  It adds an early !current->mm
-return to copy_{from,to}_user_nofault(), strncpy_from_user_nofault() and
-strnlen_user_nofault(), and switches copy_to_user_iter_nofault() back to
-should_fail_usercopy().  Its message describes this exact problem
-(bpf_probe_read_user_str() from a BPF program attached to a function called
-by a kernel thread would now trip the WARN_ON_ONCE() in
-strncpy_from_user()).
-
-This commit on its own still introduces the regression, which breaks
-bisection.  Could that fix be folded into this patch, or ordered before it?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40410166379
---===============7206656739672881745==--
