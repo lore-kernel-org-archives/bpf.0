@@ -1,54 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.148
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051517;
-	b=tYbPLyWcohMHUeAS/N741CS+wla/IeeNvjEZU7JwmP5QZVIpAtaGbWl4zIIwbj2wit38
-	 DUpuFHp+C8xQEXkpgAMIlpxgqRcd2TRQiFqIQdzhtnRcW46S1LMZoNAfPjKIC9hBvLKpY
-	 Zu8vHdthhtncLVVPdbjDj8JMfGInpopdSTggdbM4Payz/Xpym8kanifxkHJSW48yPGIl+
-	 hPrH++ayO2eMDJGWA5KC99/4Bh9xwzOSoEYwGWiGeXK/kvE4fd0S3JvgGmuWcoxnz5yNJ
-	 Ab+IVoVAI0OGeBeQNxbaHomKI7JNgaSla9b8dSxdkOK82YpMgbI2WgyCRCuwJRjeF7Q==
+	t=1793051569;
+	b=BcJhfG35NnHgsCefdFw7Vxd/b96Ce8Uvn9/3AA0cB850zAZVQhXlU7MXrXyCcdyY0vxk
+	 kO/91h8JrUF0W42W54IngVSy0d5lSzhdpE0TmtH1JpxWsA0Q6mY0sQXdS1v+ORRtpnnl1
+	 JIxSDIMk75mzPy0pwJQlVH7n3E12655s9cEK48FI4Npp0bq8fRjLzgkAssTflATDTSzQ3
+	 U3RUbeFZFWU/zjT4krkzYWXjRBDsLcpwOo6Z/pT/v4irDI2UnXVqLDZEPwfnSweCVn5QI
+	 qrkaKk3GNHs9HrX8rzFZN/+QMJSgWI4pIV/aG95CtVt4I0Hia8HCGJYvT4/2e0rRTzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051517;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=6Hio2H0utwAIyxxhgVH/5n+oK2ZNwQDLtqxwHftDHhI=;
-	b=SXc2DK9QAqt1v5cYzHzb0Z7ia7CzyMMTygI+SI9LIHCFK/Vz7A8SeFjZDC+Uw8GSfpSO
-	 AJ4034ALs3ZKN2aQoIImefJhzGBJiMhgEHdIhhxzbP2i6k9B0z1l1O1/10GE5IwrLBvdE
-	 LHzutRjEb78ctPF6nWpur8w1dyBIOOiQ1gQ3vngnqwdKm85bz852Tl/EgtpftZnCzKCTs
-	 /UAbS3Qqt8wVULGK3FqVY1k3hNexk8ifjQqTS1gyCOjAMOOI2XY0XHQ9X2L6Eg4Rt/PXY
-	 OuQo81iT5b55ovG5bf5jZZd3QcQiZap4HdxlLwOiKbxgtlDn0GmqMS8OB31i2qJJa2g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793051569;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=nNWbrH52AzRslkHtbLVib7oaB3pAEHtIJlP9l4sYI30=;
+	b=G9pjCGv+kWBf1R22wNWYJgKM3jMrPysVyIE/KcEvuWIBOOFiNKW4K9tVSBRnIPzGdnb4
+	 LRXK9cS8TaXVzRVXrsDrJhunPHA+Zfapl0fb44+BzJaAhMT/PU0CmMb636y9xzmVNwCIL
+	 qOVh+yVxEMVj8ExpSD/3LDwjZNMONufisRXS/Yc17+beibtU4KYZHIrqkrlagRnSGn0Wf
+	 RZWdwJHf+CqAgfYZ64bxsVGnLtaEoVpjJxuvcdC57dLqFX+ow2UONSfu3z4MnoiunGEcy
+	 RnvYVxHJP6SHQhYskjHBb4ptXZObwhvz0DVqhCAm+4gBOb2qppKndFnkAEK3Nd2FLAw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IFd6sX2k;
-	arc=none smtp.remote-ip=91.218.175.148
-Received: from mta0.migadu.com (out-148.mta0.migadu.com [91.218.175.148])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=RFIxgHQB;
+	arc=none smtp.remote-ip=209.85.214.199
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4461F606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:51:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4461F606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF465606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:52:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF465606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IFd6sX2k
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Zq216ynIgf+aDyYLsrgqAPxasG85w4rWKWBh7CqEE+I=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793051513; v=1; x=1793656313;
- b=IFd6sX2kje+AKEOZWfjyKw2Ak4t0oAfCfGiwzIsR9KDzBjmDb1OBSEZjeOVi94fz5Js9fihF
- DM1LJjM+iAD9N3s4bkW7HLdy4Jy17JeNkPIUVgctxDhvDPwfIjKk/WkWI7+kqOHl0YVFTbPtBFs
- JcIAsIudNIASH/HFytAF1OcI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b7649b005e064238;
-	Mon, 26 Oct 2026 21:51:52 +0000
-X-Mizu-Trace-ID: b7649b005e064238
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <6709a9b7-a9c0-4f1d-ad29-87a03a12ede3@linux.dev>
-Date: Mon, 26 Oct 2026 14:51:46 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=RFIxgHQB
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2eac6e96bd4so21732965ad.2
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1793051568; x=1793656368; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nNWbrH52AzRslkHtbLVib7oaB3pAEHtIJlP9l4sYI30=;
+        b=RFIxgHQBLA5kwXeKeZ7BbXe0EEOafgFGP6cFlYVWixeuRgrG4hX0zvT1DtthEHURdd
+         4h29lzMH98SKcMcg6ASHzle56OYbArDK7a6MjfuTiMXPxXwo0zPzx/IAwkzjDehcb8sA
+         JV5rcHcILXMzSiTp/BBX54to4mvdoGoA9s0pP15/ZfmclpvyZ7ncKJ3qETO0P+2PtzW+
+         e89gMiBeQnyIvImbQ4X8TbE4LbCYzSe09Gcom0qmEakRnZAAjSNivHZ736gNxEzeHuLh
+         6N4H52f7m6P4cLzI3i5axB9WEX44AJSAZr7me/AQyWAS7HkIClpNysvWlG9RgONwSoaU
+         u2Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793051568; x=1793656368;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nNWbrH52AzRslkHtbLVib7oaB3pAEHtIJlP9l4sYI30=;
+        b=vhZs2f6uFYiIJ9CbJC6DfqfJJjN2/kmCT/B09LDZ/4pEjU2PpqSks7483FRR3+ZZWG
+         ucAQnoL5lyMUyWzVRsafNGOJMpqJDUDVw52hPa17A+plFuHUPQ7GFVWcCfODigyuFbbd
+         4vDXP216TGnn6dRLPbcEXXV7bop+yKNweFbvZaFrrKMPkXJ12A+2CdQ9qk7iD2zZ0pku
+         jM5wj84zxkenUTAKMjN5QYurqf+FdeUhqR9krPJDCLG6x5No73T+cSAND3zuDHGz8Sf/
+         H/b4tJPH/ZejqpWmDuVyfoxiEmzSBZSVJZWtXC4RoM6BxoU3KYnrKYHYRCwD9pY8TQO4
+         rx6Q==
+X-Forwarded-Encrypted: i=1; AKwUvByKPfzxO4QSA2nWUtQqHcodSnKjelV/umiV/7oIvXVtIi0isgLpv5kKXhBZovdMNwJoKSQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLwHB//tZovSUGAASQWzWBLwFZ8HhGh02orbYUOm4nNbvLYavRS
+	0KdhM+6JsulNEGkx2/Dhrl6MGTTbgpYQYBWdimwML1wAXOVjqMowQWsCURujs255I0bCCpbJyTq
+	DGLdy0HlLjznLkyxd6vWjBA==
+X-Received: from pjbfa12.prod.google.com ([2002:a17:90a:f0cc:b0:3ab:c012:2f80])
+ (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:280c:b0:3aa:ff19:42b8 with SMTP id 98e67ed59e1d1-3adead4792bmr6561021a91.27.1793051567868;
+ Mon, 26 Oct 2026 14:52:47 -0700 (PDT)
+Date: Mon, 26 Oct 2026 21:52:16 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,128 +75,224 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 11/12] [do not merge] bpf: Track low-32 scalar
- equality across narrowing stack spills
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20261020161907.2115379-1-vineet.gupta@linux.dev>
- <20261020161907.2115379-12-vineet.gupta@linux.dev>
- <sashiko-outbox-179371@kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <sashiko-outbox-179371@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
+Message-ID: <20261026215226.3713941-1-jthoughton@google.com>
+Subject: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+From: James Houghton <jthoughton@google.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jim Mattson <jmattson@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, David Sterba <dsterba@suse.com>, Chris Mason <mason@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/20/26 9:42 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] bpf: zext_32_to_64() on 4-byte spill loses signed bounds on ldsx fill
-> --
->
-> commit b63f0039bbb8ede3ae56c9d69df1283e246bde61
-> Author: Vineet Gupta <vineet.gupta@linux.dev>
->
-> bpf: Track low-32 scalar equality across narrowing stack spills
->
-> This patch tracks low-32 scalar equality across 4-byte narrowing stack
-> spills by assigning a scalar ID, truncating the spilled slot with
-> zext_32_to_64(), and setting link_kind to BPF_REG_LINK_ZEXT.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 083b5bd70d3fa..de2a5c048a29a 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->> @@ -3927,15 +3928,46 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
->>   	mark_stack_slot_scratched(env, spi);
->>   	if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE && env->bpf_capable) {
->>   		bool reg_value_fits;
->> +		bool subreg_link;
->>   
->>   		reg_value_fits = get_reg_width(reg) <= BITS_PER_BYTE * size;
->> +		/*
->> +		 * A narrowing spill stores the low 32 bits of the source, so
->> +		 * the slot is their zero-extension: record a low-32 link
->> +		 * rather than dropping the relation, as a 32-bit mov does.
->> +		 * A store never sign-extends, so there is only one link kind here.
->> +		 */
->> +		subreg_link = !reg_value_fits && size == 4;
->> +
->>   		/* Make sure that reg had an ID to build a relation on spill. */
->> -		if (reg_value_fits)
->> +		if (reg_value_fits || subreg_link)
->>   			assign_scalar_id_before_mov(env, reg);
->>   		save_register_state(env, state, spi, reg, size);
->> -		/* Break the relation on a narrowing spill. */
->> -		if (!reg_value_fits)
->> -			bpf_clear_scalar_id(&ss->spilled_ptr);
->> +		if (!reg_value_fits) {
->> +			if (subreg_link && reg->id) {
->> +				/*
->> +				 * save_register_state() copies the source
->> +				 * whole, but the store only wrote its low 32
->> +				 * bits, so truncate to those before recording
->> +				 * the kind: a slot asserting BPF_REG_LINK_ZEXT
->> +				 * over the source's wider bounds is a register
->> +				 * state that contradicts itself.
->> +				 *
->> +				 * Keep the source's delta, though: the slot
->> +				 * holds (u32)(base + delta), so resetting it to
->> +				 * 0 would record a relation off by that delta.
->> +				 */
->> +				zext_32_to_64(&ss->spilled_ptr);
->> +				ss->spilled_ptr.link_kind = BPF_REG_LINK_ZEXT;
-> [Severity: Medium]
-> Does calling zext_32_to_64() on ss->spilled_ptr cause a precision
-> regression when the 4-byte slot is subsequently filled by a sign-extending
-> load (ldsx)?
+Hi everyone,
 
-Yes precision regression and it also changes a verdict.
+This series comes out of a set of bugs that were found in KVM where the
+kernel can sometimes write to a random process's user memory[1]. The KVM
+fixes at [1] are still required, even with this uaccess series, as noted
+by Sean here[2] and below in this cover letter. The beginning of this
+series includes fixes for similar bugs found through static analysis
+with Claude Opus 5.5. I don't think any of these bugs are more severe
+than the KVM bugs[1].
 
-Say r6 is given [-16, 15], a small signed range straddling zero, spilled 
-4 bytes and filled back with ldsx.
-On a patch-10 kernel the program verifies; with 11/12 applied it is 
-rejected, because the fill no longer knows r2 <= 15:
+We hit one of the KVM bugs in production, and it was challenging to
+debug. This series makes such bugs, where the kernel is doing uaccess
+without an mm, much more obvious.
 
-     p10      sext_fill_keeps_small_signed_range   success
-     p10+11   sext_fill_keeps_small_signed_range   failure ("div by zero")
+The Cc list is wide because the fixes at the start of the series touch
+several subsystems: SCSI (patch 1), btrfs (patch 2), BPF (patch 3),
+tracing (patch 4) and perf (patch 5). They're included because the new
+warning in patches 6-10 would otherwise fire on those paths. The core
+uaccess change is in patches 6-10.
 
-Thx,
--Vineet
+I have a reproducer only for patch 3 (a bpf_wq callback calling
+bpf_copy_from_user(), which triggers the new WARN without the patch and
+fails with -EFAULT with it); some details are in the notes section of
+patch 3.
 
-> When spilling a scalar register whose signed range straddles zero (for
-> example [-10, 10], where reg_umax(reg) is U64_MAX and get_reg_width(reg)
-> is 64) with a 4-byte store (*(u32 *)(r10 - 8) = rX), subreg_link is true
-> and zext_32_to_64(&ss->spilled_ptr) is called:
->
-> static void zext_32_to_64(struct bpf_reg_state *reg)
-> {
-> 	reg_step_check_unsigned(reg, 32);
-> 	reg->var_off = tnum_subreg(reg->var_off);
-> 	reg_set_urange64(reg, reg_u32_min(reg), reg_u32_max(reg));
-> }
->
-> Because r32 = [-10, 10] straddles zero in unsigned 32-bit arithmetic
-> (u32_min = 0, u32_max = 0xffffffff), zext_32_to_64() overwrites
-> ss->spilled_ptr.r64 with [0, 0xffffffff] while leaving [-10, 10] only in
-> r32.
->
-> If the slot is then reloaded with a sign-extending load (*(s32 *)(r10 - 8),
-> *(s16 *)(r10 - 8), or *(s8 *)(r10 - 8)), check_stack_read_fixed_off()
-> copies ss->spilled_ptr to the destination register and check_mem_access()
-> calls coerce_reg_to_size_sx():
->
-> static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
-> {
-> 	...
-> 	/* If every value fits the signed N-bit range sign extension is a noop. */
-> 	if (reg_smin(reg) >= -limit && reg_smax(reg) < limit)
-> 		return;
->
-> Because coerce_reg_to_size_sx() inspects reg_smin(reg) and reg_smax(reg)
-> from r64 rather than r32, smax is 0xffffffff (>= limit), so the early
-> return no longer triggers and coerce_reg_to_size_sx() falls through to
-> set_sext64_default_val(), resetting both r64 and r32 to [S32_MIN, S32_MAX]
-> (or the full S16/S8 range).
+Patches 1, 2, 4 and 5 are only build-tested (plus syzkaller running on
+the final kernel). Let me know if you'd like to see reproducers (or if
+any of the patches are incorrect and should be dropped).
+
+== Introduction ==
+
+Accessing user memory from a task that has no mm is always a bug. This
+can happen from a kernel thread that is not using kthread_use_mm(), or
+from a task that has already gone through exit_mm(), e.g. when the last
+reference to a file is dropped at exit and its release handler runs
+from exit_task_work(). For example, KVM's nVMX code can write to guest
+memory while a vCPU is being freed during VM destruction[1], and other
+drivers may have similar bugs.
+
+Such an access does not reliably fail. The user portion of the address
+space belongs to whatever mm happens to be lazily loaded, if any. If
+the access faults, the fault handler refuses to handle it and the copy
+fails, but if the page is already mapped, the access silently reads or
+writes another task's memory.
+
+== Fixes ==
+
+Patches 1-5 fix existing places that access current's user memory
+without an mm:
+
+ - Patches 1 and 2 fix io_uring passthrough completions in scsi_bsg and
+   btrfs that copy to the submitter's user memory even when io_uring
+   runs them canceled from a kworker, e.g. after the submitter exited.
+   These are real bugs of the kind this series is meant to catch.
+
+ - Patch 3 makes the sleepable BPF user copy helpers fail when
+   current->mm is NULL, e.g. for bpf_wq callbacks or lsm.s programs
+   running from kernel threads or exiting tasks.
+
+ - Patches 4 and 5 make stack_trace_save_user() (ftrace's
+   userstacktrace option) and get_perf_callchain() (bpf_get_task_stack()
+   on the current task) use is_user_task(), so that they don't unwind
+   the user stack of PID 1 before exec, usermode helpers before exec,
+   or tasks that have gone through exit_mm().
+
+== The New WARN ==
+
+The rest of the series makes the generic uaccess helpers WARN_ON_ONCE()
+and refuse the access when current->mm is NULL:
+
+ - Patch 6 adds uaccess_should_fail(), which combines the existing
+   should_fail_usercopy() fault injection check with the NULL mm check,
+   and uses it in place of should_fail_usercopy(). This covers
+   copy_{to,from}_user() on all architectures (including the masked
+   user access paths, which never call access_ok()), the
+   __copy_{to,from}_user() variants used by KVM's guest memory
+   accessors, the user-backed iov_iter copy routines and
+   strncpy_from_user().
+
+ - Patch 7 makes the user nofault helpers fail quietly when
+   current->mm is NULL. They are meant to be callable from any context
+   (BPF, kprobes, perf), including from kernel threads, where failing
+   is the expected outcome rather than a bug.
+
+ - Patch 8 splits the NULL mm check out into uaccess_without_mm() and
+   adds it to __copy_from_user_inatomic(), without also enabling fault
+   injection there.
+
+ - Patch 9 adds the check to the remaining generic paths: the scoped
+   user access helpers, strnlen_user(), check_zeroed_user(), and the
+   iov_iter routines that call into architecture-specific helpers.
+
+ - Patch 10 is included for reference only. It moves the warning out of
+   line, which removes ~16 KB of __bug_table growth on arm64 (where
+   copy_{to,from}_user() are inlined), at the cost of warning only once
+   system-wide and a slight size regression on x86_64. With defconfig +
+   KVM, patches 6-9 grow vmlinux by +5,884 B (+0.014%) on x86_64 and
+   +40,948 B (+0.10%) on arm64 without it, and by +9,714 B (+0.023%)
+   and +24,609 B (+0.06%) with it.
+
+The checks are deliberately limited to generic code. Accesses
+implemented entirely by architectures (get_user(), put_user(),
+clear_user(), and direct users of user_access_begin() or
+masked_user_access_begin()) are not covered. Please let me know if the
+new check should be placed elsewhere.
+
+The check also cannot catch a valid mm that isn't the one the caller
+expects, e.g. when a file's release or ioctl handlers run in a
+different process than the one that created it. Code that keeps user
+addresses belonging to a specific mm still has to compare current->mm
+against that mm itself. For KVM, Sean's series[1] does exactly that for
+guest memory accesses, and so complements this one: it handles the case
+where the VM is destroyed from another process, which this series cannot
+detect.
+
+Without [1], the nVMX vCPU teardown path described there may trigger
+the new warning when the last reference to a VM is dropped by an
+exiting task or by the delayed fput kworker. The write to guest memory
+is then refused, which is also what [1] does.
+
+For example, running Jim Mattson's selftest for that bug[3] (adapted
+slightly) on a kernel with this series but without [1] gives the
+following warning, and the write to guest memory is refused. The warning
+comes from uaccess_warn_without_mm() because patch 10 was applied;
+without it, it points at the inlined copy helper in the caller instead.
+
+  WARNING: lib/usercopy.c:31 at uaccess_warn_without_mm+0xa/0x12, CPU#2: vmx_shadow_vmcs/5299
+  Call Trace:
+   kvm_write_guest_offset_cached.cold+0xa/0xf
+   __nested_vmx_vmexit+0x1974/0x3fd0
+   nested_vmx_free_vcpu+0xb3/0xd0
+   vmx_vcpu_free+0x96/0x350
+   kvm_arch_vcpu_destroy+0x15c/0x400
+   kvm_destroy_vcpus+0x270/0x3f0
+   kvm_arch_destroy_vm+0xc7/0x230
+   kvm_put_kvm+0x560/0xbf0
+   kvm_vm_release+0x3c/0x50
+   __fput+0x3f8/0xb50
+   fput_close_sync+0x113/0x250
+   filp_close_sync+0x75/0xa0
+   put_files_struct+0x201/0x390
+   exit_files+0x97/0xd0
+   do_exit+0x872/0x2a00
+   do_group_exit+0xd5/0x2a0
+   __x64_sys_exit_group+0x3c/0x50
+
+== Testing ==
+
+Build-tested on x86_64 and arm64. Verified that the KVM reproducer hits
+the new WARN, and that the BPF reproducer hits it without patch 3.
+
+I'm also fuzzing this series with syzkaller on x86_64 (syzbot's
+upstream KASAN config, nested VMX enabled), so far for about a day and
+a half. syzkaller hasn't triggered the new warning yet, i.e. it hasn't
+found any other path that accesses user memory without an mm. Fuzzing
+is ongoing, and I'll report anything it finds in reply to this RFC.
+
+Please let me know what you think. Thank you!
+
+[1] https://lore.kernel.org/kvm/20261001202234.3794060-1-seanjc@google.com
+[2] https://lore.kernel.org/kvm/aqMBidJ_96qroogH@google.com/
+[3] https://lore.kernel.org/kvm/20260911191011.528460-1-jmattson@google.com/
+
+James Houghton (10):
+  scsi: bsg: Don't copy sense data to user memory when canceled
+  btrfs: Don't copy encoded read data to user memory when canceled
+  bpf: Fail sleepable user copy helpers when current->mm is NULL
+  stacktrace: Don't unwind the user stack without an mm
+  perf/core: Don't unwind the user stack without an mm
+  uaccess: Refuse and warn on user copies when current->mm is NULL
+  uaccess: Fail user nofault helpers quietly when current->mm is NULL
+  uaccess: Refuse and warn on __copy_from_user_inatomic() without an mm
+  uaccess: Refuse and warn on more user accesses without an mm
+  uaccess: Move the NULL mm warning out of line
+
+ drivers/scsi/scsi_bsg.c   | 10 +++++++-
+ fs/btrfs/ioctl.c          | 10 ++++++++
+ include/linux/uaccess.h   | 50 +++++++++++++++++++++++++++++++++++----
+ kernel/bpf/helpers.c      | 11 +++++++--
+ kernel/events/callchain.c | 12 ++++++----
+ kernel/stacktrace.c       |  8 +++++--
+ kernel/trace/bpf_trace.c  |  4 ++++
+ lib/iov_iter.c            | 12 ++++++++--
+ lib/strncpy_from_user.c   |  2 +-
+ lib/strnlen_user.c        |  3 +++
+ lib/usercopy.c            |  9 +++++++
+ mm/maccess.c              | 17 +++++++++++++
+ 12 files changed, 131 insertions(+), 17 deletions(-)
+
+
+base-commit: 2a08195e4db5aba84600db6518089a1dbe2d04c7
+-- 
+2.56.0.307.g5fe7bd680c-goog
+
