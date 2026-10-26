@@ -1,64 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.99
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793045372;
-	b=JrRvDFysThJy/CqbtWZfTsIEpGrXXI3ESbXPHeZL//KqQjWusgNQpdVq5oJq4VsfQVDI
-	 IKKhu9aEHi1QVjDPEzB2XuoD4H3Rljqm4nI12yl3heI/hf8YomSFCk7kKMwEVRjoSlZNQ
-	 s47W+QT4Rr/ye7b4v4Vy/CrxwqB1iL4bYcODnoMW6uPHxLOF6levXLMmetBhUYqkuh2qf
-	 b1Ss8aLDsOciiinYCIKhE3XgFg9aQ10aLxVZSt0JTNP/Qd6rqqlqg1T1mv3G8qxrPNrP6
-	 VW23oVyvtp85GOExuP3fvCQI5GPrUV5qMQbB6SNIs/b1vYooRfQAV5u+0mU2Rkl2Wdg==
+	t=1793045856;
+	b=34VcXXHWQEXsoz1kpoxaH3JVQul4mVpwD1nSVeYstZ/7TejvpLo2gYQ9GEpF8rpovnDc
+	 aRdGmhkK00vD16wwD3auaNW1/5bc+L0u1NjAFnD1nw/duUrbeMBAiqiRgT2ylamsfSV3C
+	 IsRzf0hI56xhVxuBzSuW24VZ3hrrevdJf+5jP7chnEdu6RZyIX4vH/qPCSOVgFfL80sG+
+	 wLu6C89mbHKtawfK2W0Gv6TVuTbIhu6/oSOCNQNfTf3ypYCtWWtG5JMtEIBocd5MdEMWR
+	 6cgWbtBWnBw1il6IyZjEh67IyRKzO+VJl9klCTZ690zbpPmtJIe3iUBG95P3CBhVWkA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793045372;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=79LC5Dl9AcWhahgzCfflFREgD/RZkgDqTUCwU/Mt7xk=;
-	b=1c1g/jQIRsIpTmpcGiatwxGlAGB2Ul+u+R/iC0d2qALMy4lNm87aOEJE6BKKbCisYq1H
-	 a5iMjdo39nbS1RRjjcdqyYQQIEwfwzCEJlcNm9hvj0+Gy4501ljMLyl//QZ2sGC2EIKm6
-	 JeOldLVJsFXvYywzJ3AF6md4Uz+tNfsyTfnBP2N3QIHy4xavZpsJLE7CR+B4B72XO7xNJ
-	 MTDZCt4M+Bz1r4HrO6aOzDsCvEuq5hWZ2ifrkGL+QIRSD/72gFQPoa4C9z/fXy7gN0YEO
-	 Dc4A8eeMo/CMQUy+l4k/hAC8pOaEqkZ/VrqOx11wpExxpT5GSCVP2K7zKzypgpuC9eg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793045856;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type;
+	bh=sVSjN/XqWDLZDr7IXQQnJDQT7Ga3u1tyb5UkYEWZhRk=;
+	b=wePaPRFRj5uA4YQlJw1dDVbj+iLUYSONl6OHOrtzfPjms3FHNJ1qmtb6rPFxh3pRMuGn
+	 /9sODUcNBd0o1Y9hQEIUBpZfKHfXpWa3u/lTOTWW2iqO/SRPUDyosNZ9yxv97oh3h8ZgT
+	 9JOY5t0mFFXFHBm0NAYQ/1ptk/uMpV4xymOJERCH5eECsuQr3mplcmoZGnkE91VqiFB6C
+	 QwIhkxbUU4KF/rUUH1ngH63vBYYcy2wbuRosZtYw/xfnFCystrV8a+kio3XrJFLP3U61M
+	 z4UsFB4996oOxbGx6x+S0FptNt/IOICu5Wg2ZQ1GSMadDudH2XFEicGWF8mCJ+L55vA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=OgiiyLfi;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	dmarc=pass header.from=proton.me;
+	spf=pass smtp.mailfrom=proton.me;
+	dkim=pass header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=yvlmz5wuurh5rfsoiol3dfcmfy.protonmail2 header.b=zU2lBZAR;
+	arc=none smtp.remote-ip=79.135.106.99
+Received: from mail-10699.protonmail.ch (mail-10699.protonmail.ch [79.135.106.99])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54352606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 20:09:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 54352606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CEE606A31B;
+	Mon, 26 Oct 2026 20:17:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9CEE606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=OgiiyLfi
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=79LC5Dl9AcWhahgzCfflFREgD/RZkgDqTUCwU/Mt7xk=; b=OgiiyLfiion4+fw2oq3EPhBFh6
-	+7jGUNxBTn9BaIraruuuno+PKUZXeLSWLdBeP+enwZww//MbB/k5MSmuTPF0Z7pSAAKfRZWFOK+0k
-	9aGajyIM9rsO6vfwEnw1JoVCSMAOAgSlHivUfIY0Wrc6zrKH00igiRg6iHeOJLffOGzVXT1Eqp87+
-	5vo2dzJpBN+TYDHSFh4R4TFZup/1o8kftnPucH6YsSN9C/Z94POLk0jg4Y4KAPhQ9ocaheq7a76Gr
-	OgNaBfXhOKhetWgHH+KTpWCZx7tSpZNnFNRRRe4HmrAdt2Fbi/je2WVfyJvIaGvtH/SW4gPyoP1W3
-	VwAmQWQA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xLR0T-0004jG-35;
-	Mon, 26 Oct 2026 21:09:21 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xLR0T-000JHk-1m;
-	Mon, 26 Oct 2026 21:09:21 +0100
-Message-ID: <c750f9be-f62a-49e4-8816-080601f7c192@iogearbox.net>
-Date: Mon, 26 Oct 2026 21:09:21 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=yvlmz5wuurh5rfsoiol3dfcmfy.protonmail2 header.b=zU2lBZAR
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=yvlmz5wuurh5rfsoiol3dfcmfy.protonmail2; t=1793045853;
+	x=1793305053; bh=sVSjN/XqWDLZDr7IXQQnJDQT7Ga3u1tyb5UkYEWZhRk=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=zU2lBZAR2+tXbDzRvPC8eEgaPslt5ccH5CgJ6w6DgGQIWCDYiaWlrkAc90YdsVG0H
+	 iMeWt3zEBBBZwAF01E+bVRJYqKV6oPWPndut+foblGBxfiG8SXEUiLEIlLly/x94nr
+	 TQ8tFAiYAf2rJBwCoEx0POuwvDgGv9xXvOwQLMHabQVY4/4h8O21RIPM3zdREbOqOs
+	 DIhPCcoXZRa2ylzG2mRWwlKunEdsbcOescd62Pk7phVGhshd3wDWMvJovMYgAs6oZ4
+	 5pxZdgru7l4ckNfqzdsR+ZiqdQ8WNqZ6vc1HEPMD6uNrfqyQ0ZHLf8nb6sgvW2R1J1
+	 eIfaJvPymTZtg==
+Date: Mon, 26 Oct 2026 20:17:26 +0000
+To: "brauner@kernel.org" <brauner@kernel.org>, "kees@kernel.org" <kees@kernel.org>, "rostedt@goodmis.org" <rostedt@goodmis.org>
+From: BoxStrikesTeam <BoxStrikesTeam@proton.me>
+Cc: "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>, "jack@suse.cz" <jack@suse.cz>, "mhiramat@kernel.org" <mhiramat@kernel.org>, "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "jkoolstra@xs4all.nl" <jkoolstra@xs4all.nl>, "farid.m.zakaria@gmail.com" <farid.m.zakaria@gmail.com>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: [RFC PATCH] binfmt_misc: add binfmt_misc_select tracepoint
+Message-ID: <cmtfuzYFZMj7WozUoEjFs3RxYWe9UgdY5rK3ZGT7CPwO1mpemvEwNhG4v5ucoKBgUHMqFa7kSzOvLjFcVcxAybfmKdURZ4h-qoKX1lHXlAA=@proton.me>
+Feedback-ID: 205449183:user:proton
+X-Pm-Message-ID: c38ae376d3bc2a6c337eca8d28b04e53faf2a787
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,66 +60,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 09/81] bpf: Clear delta of a register that scalar
- evolution widens
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
- <20261026025943.404450-10-alexei.starovoitov@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-In-Reply-To: <20261026025943.404450-10-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28165/Mon Oct 26 07:27:07 2026)
+Content-Type: multipart/mixed;
+ boundary="b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M"
 
-On 10/26/26 3:58 AM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> After 'r3 = r8; r3 += 4' the verifier knows that r3 == r8 + 4. The two
-> registers have the same id, and r3 keeps the difference in reg->delta. When
-> the prog compares one of them with a constant, sync_linked_regs()
-> calculates the range of the other register from the difference of the two
-> deltas.
-> 
-> At a loop head scalar evolution widens a register: it replaces the register
-> with its range over all iterations. Then the register is not linked to
-> other registers. scratch_widened_reg_id() clears reg->id, but it does not
-> clear reg->delta. A subsequent copy of the register gets the stale delta.
-> Then the range of the copy is incorrect by this delta.
-> 
->      r3 = r8
->      r3 += 4              ; R3=scalar(id=1+4)
->    1:                     ; r3 is widened: no id, delta is still 4
->      r4 = r3              ; id=2 and delta 4 in both
->      r4 += 1              ; R4=scalar(id=2+1)
->      if r3 > 10 goto 3f   ; R3 <= 10, R4 = R3 + 1 - 4 <= 7
->      if r4 <= 7 goto 2f
->      ...                  ; not verified, r4 is up to 11 here
-> 
-> The verifier does not verify code that can run. Clear delta together with
-> id.
-> 
-> Fixes: 6ccf49f79327 ("bpf: Use SCEV to widen bounded loops")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->   kernel/bpf/scev.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> index fea77772ca96..b321bfee36c5 100644
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
-> @@ -2390,6 +2390,7 @@ static void scratch_widened_reg_id(struct bpf_verifier_env *env, struct bpf_reg_
->   	switch (base_type(reg->type)) {
->   	case SCALAR_VALUE:
->   		reg->id = 0;
-> +		reg->delta = 0;
+--b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-small nit when you respin for bpf tree: clear_scalar_id
+Hi,
 
->   		break;
->   	case PTR_TO_PACKET:
->   	case PTR_TO_PACKET_META:
+This is an RFC patch for a binfmt_misc_select tracepoint. The patch
+was tested on v7.3-rc7, but I currently have limited computer access
+and no usable SMTP setup, so I could not send it with git send-email.
+I know patches should be inline; the patch is attached as
+0001-binfmt_misc-select-tracepoint.patch, and I can resend it inline
+once I have access to a suitable environment.
+--b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M
+Content-Type: text/x-diff; name=0001-binfmt_misc-select-tracepoint.patch
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=0001-binfmt_misc-select-tracepoint.patch
+
+RnJvbTogRW5lc2hhbiBFcmRvxJ9hbiBLYXJhY2EgPEJveFN0cmlrZXNUZWFtQHByb3Rvbi5tZT4K
+U3ViamVjdDogW1JGQyBQQVRDSF0gYmluZm10X21pc2M6IGFkZCBiaW5mbXRfbWlzY19zZWxlY3Qg
+dHJhY2Vwb2ludAoKQSBiaW5mbXRfbWlzYyBlbnRyeSBjYW4gc2VsZWN0IGFuIGludGVycHJldGVy
+IGZvciBhbiBleGVjLiAgV2l0aCBhIEJQRgonQicgaGFuZGxlciwgdGhhdCBzZWxlY3Rpb24gY2Fu
+IGJlIG1hZGUgYnkgYSBCUEYgc3RydWN0X29wcyBwcm9ncmFtLgpUaGUga2VybmVsIGNvbW1pdHMg
+dGhlIGRlY2lzaW9uIGluIGJwcm0tPmludGVycCBhbmQgYnBybS0+ZmxhZ3MsIGJ1dCBpdApkb2Vz
+IG5vdCBlbWl0IGFuIGV2ZW50IGF0IHRoZSBzZWxlY3Rpb24gcG9pbnQuCgpFeGlzdGluZyBvYnNl
+cnZlcnMgaGF2ZSB0byByZWNvbnN0cnVjdCB0aGUgZGVjaXNpb24gZnJvbQovcHJvYy9QSUQvZXhl
+LCBBVF9FWEVDRkQsIEFUX0ZMQUdTLCBvciAvcHJvYy9QSUQvbWFwcy4gIFRoZXNlIHNvdXJjZXMK
+YXJlIG1vZGUtZGVwZW5kZW50OiBhIHRyYW5zcGFyZW50IGRpc3BhdGNoIHN0aWxsIHJlcG9ydHMg
+dGhlIG9yaWdpbmFsCmJpbmFyeSBpbiAvcHJvYy9QSUQvZXhlLCBhbmQgYSBzaG9ydC1saXZlZCBw
+cm9jZXNzIGNhbiBleGl0IGJlZm9yZSB0aGUKb2JzZXJ2ZXIgcmVhZHMgaXQuICBBIGNsYXNzaWMg
+ZGlzcGF0Y2ggcmVwb3J0cyB0aGUgaW50ZXJwcmV0ZXIsIGJ1dApub3Qgd2hpY2ggaGFuZGxlciBz
+ZWxlY3RlZCBpdCBvciB3aGljaCBpbnZvY2F0aW9uIGZsYWdzIHdlcmUgdXNlZC4KCkFkZCBhIHRy
+YWNlcG9pbnQgYWZ0ZXIgdGhlIGludGVycHJldGVyIGFuZCB0aGUgaW52b2NhdGlvbiBmbGFncyBh
+cmUKc2VsZWN0ZWQuICBJdCByZXBvcnRzIHRoZSBiaW5hcnkgZmlsZW5hbWUsIHRoZSBzZWxlY3Rl
+ZCBpbnRlcnByZXRlciwKdGhlIGhhbmRsZXIgbmFtZSAoZm9yIEJQRiBoYW5kbGVycyksIHRoZSBp
+bnZvY2F0aW9uIGZsYWdzLCBhbmQgdGhlCnBpZC4gIFRoZSBmbGFncyBhcmUgbWFza2VkIHdpdGgg
+TUlTQ19GTVRfSU5WT0NBVElPTl9GTEFHUyBzbyB0aGF0CnN0YXRpYyBlbnRyeSBzdGF0ZSBkb2Vz
+IG5vdCBsZWFrIGludG8gdGhlIGV2ZW50LgoKVGhlIHRyYWNlcG9pbnQgaXMgb2JzZXJ2YWJpbGl0
+eSBvbmx5OyBpdCBkb2VzIG5vdCBjaGFuZ2UgZXhlYwpiZWhhdmlvci4KCkFzc2lzdGVkLWJ5OiBM
+TE0KU2lnbmVkLW9mZi1ieTogRW5lc2hhbiBFcmRvxJ9hbiBLYXJhY2EgPEJveFN0cmlrZXNUZWFt
+QHByb3Rvbi5tZT4KLS0tCgpUaGlzIGlzIGFuIFJGQy4gIEEgc21hbGwgUG9DIGFuZCBzaG9ydCBB
+L0IgcmVzdWx0cyBhcmUgYXZhaWxhYmxlIGZvcgpjb250ZXh0OyB0aGV5IGFyZSBub3QgbmVlZGVk
+IHRvIHJldmlldyB0aGUgcGF0Y2guCgogZnMvYmluZm10X21pc2MuYyAgICAgICAgICAgICAgICAg
+IHwgIDggKysrKysrKysKIGluY2x1ZGUvdHJhY2UvZXZlbnRzL2JpbmZtdF9taXNjLmggfCA1MiAr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCA2
+MCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZnMvYmluZm10X21pc2MuYyBiL2ZzL2JpbmZt
+dF9taXNjLmMKLS0tIGEvZnMvYmluZm10X21pc2MuYworKysgYi9mcy9iaW5mbXRfbWlzYy5jCkBA
+IC00MSw2ICs0MSw5IEBACiAKICNpbmNsdWRlICJpbnRlcm5hbC5oIgogCisjZGVmaW5lIENSRUFU
+RV9UUkFDRV9QT0lOVFMKKyNpbmNsdWRlIDx0cmFjZS9ldmVudHMvYmluZm10X21pc2MuaD4KKwog
+LyogRW50cnkgc3RhdHVzIGFuZCBtYXRjaCB0eXBlIGJpdCBudW1iZXJzLiAqLwogZW51bSBiaW5m
+bXRfbWlzY19lbnRyeV9iaXRzIHsKIAlNSVNDX0ZNVF9FTkFCTEVEX0JJVAk9IDAsCkBAIC02NDQs
+NiArNjQ3LDExIEBACiAKIAlmbGFncyA9IGVudHJ5X2ludm9jYXRpb25fZmxhZ3MoZm10LCBicHJt
+KTsKIAorCXRyYWNlX2JpbmZtdF9taXNjX3NlbGVjdChicHJtLCBpbnRlcnByZXRlciwKKwkJCQkg
+dGVzdF9iaXQoTUlTQ19GTVRfQlBGX0JJVCwgJmZtdC0+ZmxhZ3MpID8KKwkJCQkgZm10LT5icGZf
+b3BzLT5uYW1lIDogIiIsCisJCQkJIGZsYWdzICYgTUlTQ19GTVRfSU5WT0NBVElPTl9GTEFHUyk7
+CisKIAkvKiBObyBhcmd2IGlzIGJ1aWx0IGZvciBhIHN0YWdlZCBhcmd1bWVudCB0byBsYW5kIGlu
+LiAqLwogCWlmICgoZmxhZ3MgJiAoTUlTQ19GTVRfTE9BREVSIHwgTUlTQ19GTVRfVFJBTlNQQVJF
+TlQpKSAmJgogCSAgICBicHJtLT5icGZfaW50ZXJwX2FyZykKCmRpZmYgLS1naXQgYS9pbmNsdWRl
+L3RyYWNlL2V2ZW50cy9iaW5mbXRfbWlzYy5oIGIvaW5jbHVkZS90cmFjZS9ldmVudHMvYmluZm10
+X21pc2MuaApuZXcgZmlsZSBtb2RlIDEwMDY0NAotLS0gL2Rldi9udWxsCisrKyBiL2luY2x1ZGUv
+dHJhY2UvZXZlbnRzL2JpbmZtdF9taXNjLmgKQEAgLTAsMCArMSw1MiBAQAorLyogU1BEWC1MaWNl
+bnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8KKy8qCisgKiBUcmFjZXBvaW50IGZvciBiaW5mbXRf
+bWlzYyBiaW5hcnkgdHlwZSBoYW5kbGVyIGRpc3BhdGNoLgorICoKKyAqIEZpcmVzIG9uY2UgZm9y
+IGV2ZXJ5IGV4ZWMgYSBiaW5mbXRfbWlzYyBlbnRyeSBtYXRjaGVzLCBhZnRlciB0aGUKKyAqIGlu
+dGVycHJldGVyIGFuZCB0aGUgaW52b2NhdGlvbiBmbGFncyBoYXZlIGJlZW4gc2VsZWN0ZWQuIFVu
+bGlrZQorICogc2NoZWRfcHJvY2Vzc19leGVjICh3aGljaCByZXBvcnRzIGJwcm0tPmZpbGVuYW1l
+KSBhbmQgL3Byb2MvUElEL2V4ZQorICogKHdoaWNoIGEgdHJhbnNwYXJlbnQgZGlzcGF0Y2ggc2V0
+cyB0byB0aGUgYmluYXJ5KSwgdGhpcyByZXBvcnRzIHRoZQorICogaW50ZXJwcmV0ZXIgdGhhdCBh
+Y3R1YWxseSBydW5zLCBzbyBvYnNlcnZlcnMgY2FuIHNlZSB0aHJvdWdoIGEKKyAqIHRyYW5zcGFy
+ZW50IGRpc3BhdGNoLgorICovCisjdW5kZWYgVFJBQ0VfU1lTVEVNCisjZGVmaW5lIFRSQUNFX1NZ
+U1RFTSBiaW5mbXRfbWlzYworCisjaWYgIWRlZmluZWQoX1RSQUNFX0JJTkZNVF9NSVNDX0gpIHx8
+IGRlZmluZWQoVFJBQ0VfSEVBREVSX01VTFRJX1JFQUQpCisjZGVmaW5lIF9UUkFDRV9CSU5GTVRf
+TUlTQ19ICisKKyNpbmNsdWRlIDxsaW51eC90cmFjZXBvaW50Lmg+CisjaW5jbHVkZSA8bGludXgv
+YmluZm10cy5oPgorCitUUkFDRV9FVkVOVChiaW5mbXRfbWlzY19zZWxlY3QsCisKKwlUUF9QUk9U
+TyhzdHJ1Y3QgbGludXhfYmlucHJtICpicHJtLCBjb25zdCBjaGFyICppbnRlcnAsCisJCSBjb25z
+dCBjaGFyICpoYW5kbGVyLCB1bnNpZ25lZCBsb25nIGZsYWdzKSwKKworCVRQX0FSR1MoYnBybSwg
+aW50ZXJwLCBoYW5kbGVyLCBmbGFncyksCisKKwlUUF9TVFJVQ1RfX2VudHJ5KAorCQlfX3N0cmlu
+ZyhmaWxlbmFtZSwJYnBybS0+ZmlsZW5hbWUpCisJCV9fc3RyaW5nKGludGVycCwJaW50ZXJwKQor
+CQlfX3N0cmluZyhoYW5kbGVyLAloYW5kbGVyKQorCQlfX2ZpZWxkKHVuc2lnbmVkIGxvbmcsCWZs
+YWdzKQorCQlfX2ZpZWxkKHBpZF90LAkJcGlkKQorCSksCisKKwlUUF9mYXN0X2Fzc2lnbigKKwkJ
+X19hc3NpZ25fc3RyKGZpbGVuYW1lKTsKKwkJX19hc3NpZ25fc3RyKGludGVycCk7CisJCV9fYXNz
+aWduX3N0cihoYW5kbGVyKTsKKwkJX19lbnRyeS0+ZmxhZ3MgPSBmbGFnczsKKwkJX19lbnRyeS0+
+cGlkID0gY3VycmVudC0+cGlkOworCSksCisKKwlUUF9wcmludGsoInBpZD0lZCBmaWxlbmFtZT0l
+cyBpbnRlcnA9JXMgaGFuZGxlcj0lcyBmbGFncz0lI2x4IiwKKwkJICBfX2VudHJ5LT5waWQsIF9f
+Z2V0X3N0cihmaWxlbmFtZSksIF9fZ2V0X3N0cihpbnRlcnApLAorCQkgIF9fZ2V0X3N0cihoYW5k
+bGVyKSwgX19lbnRyeS0+ZmxhZ3MpCispOworCisjZW5kaWYgLyogX1RSQUNFX0JJTkZNVF9NSVND
+X0ggKi8KKworLyogVGhpcyBwYXJ0IG11c3QgYmUgb3V0c2lkZSBwcm90ZWN0aW9uICovCisjaW5j
+bHVkZSA8dHJhY2UvZGVmaW5lX3RyYWNlLmg+Cg==
+
+--b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M--
 
