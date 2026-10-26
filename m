@@ -1,65 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792999470;
-	b=sTt8NacWroCDET9AgtpqGTgNtTiDtEEfOe0II6afoFC9N7vG1ko00n/QOD03WhS/dzSm
-	 80pd95vj3sAsf1VaTx2MfI5A3BqC6oF6DiqDfggQMqch1t9HKTD3RRX7yNAwDIJSxXg2X
-	 Qp7GSP1s0QjHalFtIK65ZxTQlMwq+XANPCOmw/W0tuST7TVXHEcROfinp+vyk50f5vhbW
-	 731jP6Mw5pL16FMQaP4FLm4vqfNfGgGfJ6b0xVJwbPW0gGgdDSrgYNdv79sFoUj72SXwI
-	 xI6UFE37N9TCywFai5bdOYwtvUv+l1Ma/buCEkJXUS0KUGQQWXQ1Lx2ARiFkN9Dkr9A==
+	t=1793000273;
+	b=ocoJ3b0Wknzq5JlppUT0o2ylJN1DAL58ZED9ZAd5C3VbEQyP+fPP25L/AyzN3I9KIlvr
+	 58qFXCm0vyl+L7vnDi+8642Cupthh3m0RydKkqo7wYQSoZ1AxDuzmwR5zIhUF6mE9zaTU
+	 oYDWM4qd+3Qj28HeyILvosMTsohr8DOuJoUM6f8qwB0MZWWCq+XYkic2SBwQq+U7pbECW
+	 /8y9GJCoZ//9Pec6AjEkECLYQr6tmZwjofIJvkXspVqfpGCsNs8YxVvvI8sRmbJj4k/HU
+	 BPTkPdgASQ4GMG2BSWPNfNH1CtCKuI0qWwvTXMwxxL4puoRcHGhgEQqoPzGdxbtz+Aw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792999470;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=JJgpvEkPumvlVtURp/qLJngATfKKtQ96oi4A6w8xMPs=;
-	b=bDoGyp7JXwVnAIsAffudwo2gWIKjlTrTdJq+6BNanPDpI7YBqDcLvIAywZq3Jpwq+oBd
-	 Fv75SExA0vMTB/AVGJ0F77jA2s6qZUVHKuRQaqaJKLiGH9+XPnrUa4rf/iCZ5/thClvs2
-	 DJht1G01ALQMyCKsRN7WzqnWlTAFmn+U53MHDNjSsTXq6rm/bd55varV29gqUW2bJ9IBI
-	 EEtLLIl64h1Z1CaKw2s1pFsdXQudJyA04GPUb0buf8y3RC3hb6SP5bhAb8bhlB91BZFga
-	 u+bF0CRL6mKCax6AMFI/yDuRk1U/tPXXBuJG+zSCnP50/Q+TCVzKvMbA2bjIdqbf+iA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793000273;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=sNH47+qhqvIkLJM70XO7X5MhEUEpHyY8xi1+x4fP4S8=;
+	b=nS5Iu0YyZKAxLlExgGEqblnwwvDbLXb5GUFb6PEy9O6RhZwk7fIi64Ur9r/2ye5n5t6J
+	 u5jJ3GQAjpZBX8GYrso578RxAal6/+PM9tGtNfmB3uuopjGU5ExiSM7QNke3WEkYCA7ot
+	 x+SoLBww8rg6gOwSnitufVWw1GtzqzVTY5/yXpper7DA+EP5jLgqU4WLFO+iLjqGqXBQM
+	 +XsoQLPFE4B25woXMA6nbqw0AZiEk29+BTE3n9wvJH9oRFIZU38xmzaQSGzOmUlSrtC1n
+	 Yr3cyGKScizGVDNziyLQ1YhqsHgGRa2PRvuyE8ByPCKi9Vgjdb7egEvNGmJD1A8siCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gn0pQZO7;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=163.com;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=oc5b+gSr;
+	arc=none smtp.remote-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFF4606A31E;
-	Mon, 26 Oct 2026 07:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B97606A31A;
+	Mon, 26 Oct 2026 07:37:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A0B97606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Gn0pQZO7
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FAE31F01825;
-	Mon, 26 Oct 2026 07:24:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792999470;
-	bh=JJgpvEkPumvlVtURp/qLJngATfKKtQ96oi4A6w8xMPs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Gn0pQZO73NyS8gRkUMi8fTS8Q1RCv5iL7aBMd14ewKA2GUoXzCc0jBPy4yd2ADuSm
-	 TDDcuBZblCYDpN33YCQAplP6xvngTlEXevDS6QxrrUuFHcLnLaJRQMOR6Q2ige0+zT
-	 IfSDFERGaV9jBA4mZUqvfaBtZN7D44GGxSOxVStovSTbVO79UQmezteDeHwRJ/aeAe
-	 BERuCjUzgWlrNHm4CBdTxeg9PY5xMfI6M9MkyD8MEH5bgbBCRICxRAB6DTKT8ygSWI
-	 FJ/X+MatIUb+YAxhzP+wlHcHuxW7yyxoQrzD5KiXi9wbpXL8fVqGUSEFbfF6yCA0U8
-	 mfP+joOIxYdBA==
-Subject: Re: [PATCH net-next v4 1/2] net: stmmac: Disable NAPI before stopping
- Tx queues in stmmac_xdp_release()
-From: netdev-bot+sashiko@kernel.org
-To: kurt@linutronix.de
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- kuba@kernel.org, pabeni@redhat.com, edumazet@kernel.org,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, yoong.siang.song@intel.com, faizal.abdul.rahim@intel.com,
- boon.leong.ong@intel.com, bigeasy@linutronix.de, maciej.fijalkowski@intel.com,
- nb@tipi-net.de, netdev@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Date: Mon, 26 Oct 2026 07:24:28 +0000
-Message-ID: <179299946882.3134.17106790246487017966@kernel.org>
-In-Reply-To: <20261022-stmmac_xsk_crashes-v4-1-15c0c750bb96@linutronix.de>
-References: <20261022-stmmac_xsk_crashes-v4-1-15c0c750bb96@linutronix.de>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=oc5b+gSr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=sN
+	H47+qhqvIkLJM70XO7X5MhEUEpHyY8xi1+x4fP4S8=; b=oc5b+gSrnG596ADi/5
+	v6LlHYEpRDq+lOpZx056lB4zM9HYvKqCc4OJinLty/ICF9ah4FDm9u82wGEWhIEx
+	cKqXnPOFcVLHEOjwUBzdhrqH7W2OnU2aF+uo/066HBDOzYzfdZhhqC5ak3Rjq/9O
+	klRZpEm+PQ25uKQAIOuOO2GmU=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgDnhy0WA99qbWwVCA--.55172S2;
+	Mon, 26 Oct 2026 15:36:55 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: Fix out-of-bounds btf->types write for split BTF
+Date: Mon, 26 Oct 2026 15:36:54 +0800
+Message-Id: <20261026073654.840705-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -69,200 +69,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgDnhy0WA99qbWwVCA--.55172S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZFWxGFykKFWUXFWrtFy3XFb_yoW5Crykpr
+	4rCFs5Cwsag3WxXa47ta45Wa18Kw1rC3y7JFZ0yrWFyF4j9r10vF1UGrW293sFvFn7GrWY
+	yr4v9rZYgw48WrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjuWLUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbCzxdY0GrfAxdEpQAA3Q
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+From: Feng Yang <yangfeng@kylinos.cn>
 
-Critical: 0 · High: 2 (1) · Medium: 0 · Low: 0
+btf_add_type() bounds the btf->types array by BTF_MAX_TYPE, but for a
+split BTF the type ids it registers are start_id .. start_id +
+nr_types - 1, so what is actually left of the id space is
+BTF_MAX_TYPE - start_id.  Two things follow from that:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+ - the limit check is an equality test,
+   'start_id + btf->types_size == BTF_MAX_TYPE'.  It is evaluated only
+   when the array has to grow, with btf->types_size == btf->nr_types,
+   and the growth (T' = min(BTF_MAX_TYPE, T + max(T / 4, 16)), starting
+   from 0) is clamped to BTF_MAX_TYPE, which it lands on exactly (...,
+   928143, then min(BTF_MAX_TYPE, 1160178)).  So unless
+   BTF_MAX_TYPE - start_id is one of the 48 sizes that sequence hits,
+   the check does not fire for a split BTF at all;
 
-- [High] stmmac_xdp_release() now runs napi_disable (via
-  stmmac_disable_all_queues()), then hrtimer_cancel() on every…
-- [High] The commit says the Tx queue must not be woken again after
-  netif_tx_disable() in stmmac_xdp_release(), and it fixes this only for…
+ - new_size is clamped to BTF_MAX_TYPE instead of
+   BTF_MAX_TYPE - start_id, so the array can still grow to
+   BTF_MAX_TYPE entries even though only BTF_MAX_TYPE - start_id type
+   ids exist.
 
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but
-  stmmac_xdp_set_prog() discards the return value of stmmac_xdp_open()…
+As a result nr_types can reach BTF_MAX_TYPE for a split BTF while its
+type ids have already gone past BTF_MAX_TYPE; a type never validates its
+own id, only the ids it references (btf_ref_type_check_meta()).  At that
+point btf->types_size == btf->nr_types == BTF_MAX_TYPE and the growth
+branch computes the same size again: it allocates a fresh BTF_MAX_TYPE
+entry array, copies the entries, and the loop is left with
+btf->types_size != btf->nr_types, so that branch is not taken anymore.
+Every type after this writes btf->types[btf->nr_types++] past the end of
+the array: BTF_MAX_TYPE * 8 == 8388600 bytes are requested, so the first
+such write lands in the 8 byte rounding slack of the 8MB allocation, and
+each further type writes another 8 bytes beyond it.
 
---
+Fix both by bounding the array with BTF_MAX_TYPE - start_id and by
+turning the equality check into a '>=' one, so that the array stops
+exactly where the id space ends. Base BTF behavior (start_id ==
+0) is unchanged.
 
-net: stmmac: Disable NAPI before stopping Tx queues in stmmac_xdp_release()
+Fixes: 951bb64621b8 ("bpf: Add in-kernel split BTF support")
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+Reviewed-by: Mahe Tardy <mahe.tardy@gmail.com>
+---
+ kernel/bpf/btf.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-This patch reorders stmmac_xdp_release() so that NAPI is disabled and the
-Tx coalescing timers are cancelled before netif_tx_disable(). The goal is
-to stop stmmac_tx_clean() from waking the Tx queue after it was stopped,
-which let stmmac_xmit() run on descriptor rings freed by
-free_dma_desc_resources().
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index fb53b1f17714..27c4a249e560 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -7222,15 +7222,15 @@ void stmmac_xdp_release(struct net_device *dev)
->  	struct stmmac_priv *priv = netdev_priv(dev);
->  	u8 chan;
->  
-> -	/* Ensure tx function is not running */
-> -	netif_tx_disable(dev);
-> -
->  	/* Disable NAPI process */
->  	stmmac_disable_all_queues(priv);
->  
->  	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
->  		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
->  
-> +	/* Ensure tx function is not running */
-> +	netif_tx_disable(dev);
-> +
-
-[Severity: High]
-With this order, ndo_start_xmit is still live while the hrtimer_cancel()
-loop runs. Can stmmac_xmit() or stmmac_tso_xmit() re-arm txtimer after it
-has been cancelled?
-
-Both of them end with stmmac_tx_timer_arm(), which does:
-
-stmmac_tx_timer_arm() {
-    ...
-	if (unlikely(!napi_is_scheduled(napi))) {
-		if (unlikely(!(hrtimer_active(&tx_q->txtimer))))
-			hrtimer_start(&tx_q->txtimer,
-				      STMMAC_COAL_TIMER(tx_coal_timer),
-				      HRTIMER_MODE_REL);
-    ...
-}
-
-Nothing makes this check-then-start sequence atomic with respect to
-napi_disable() and hrtimer_cancel(). One possible interleaving:
-
-CPU1 (stmmac_xmit, holding txq lock)
-  napi_is_scheduled(napi) -> false
-                                CPU0 (stmmac_xdp_release)
-                                stmmac_disable_all_queues()
-                                hrtimer_cancel(&tx_q->txtimer)
-                                  timer not armed, returns at once
-  hrtimer_start(&tx_q->txtimer, ...)
-                                netif_tx_disable(dev)
-                                  only waits for CPU1 to drop txq lock
-
-Nothing later in stmmac_xdp_release() cancels the timer. It stays queued
-for tx_coal_timer, which is 5ms by default and up to 100ms via ethtool -C.
-A hardirq on CPU1 widens the window. On PREEMPT_RT it can be arbitrarily
-long.
-
-stmmac_xdp_set_prog() then calls stmmac_xdp_open() right away, and that
-function does:
-
-stmmac_xdp_open() {
-    ...
-		hrtimer_setup(&tx_q->txtimer, stmmac_tx_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-    ...
-}
-
-Would this re-initialize an hrtimer that is still linked in the per-CPU
-timerqueue and corrupt the hrtimer base?
-
-Before this patch, netif_tx_disable() ran first and serialized against
-in-flight xmit callers. Only NAPI could arm the timer, and NAPI was
-disabled before the cancel.
-
-Would the order napi disable, then netif_tx_disable(), then the
-hrtimer_cancel() loop avoid this?
-
->  	/* Free the IRQ lines */
->  	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
->  
-
-[Severity: High]
-The commit message says the problem is the Tx queue being woken again
-after netif_tx_disable(), and this patch covers the stmmac_tx_clean()
-waker. Is there still a waker in IRQ context?
-
-netif_tx_disable() still runs before stmmac_free_irq() and
-stmmac_stop_all_dma(). At that point the DMA interrupt handlers are still
-installed and Tx DMA is still running.
-
-stmmac_xdp_release() never sets STMMAC_DOWN, so the STMMAC_DOWN check in
-stmmac_interrupt() and stmmac_msi_intr_tx() does not stop the handlers.
-
-On a Tx fatal bus error (tx_hard_error), stmmac_dma_interrupt() or
-stmmac_msi_intr_tx() calls stmmac_tx_err(), which ends with an
-unconditional wake:
-
-stmmac_tx_err() {
-    ...
-	priv->xstats.tx_errors++;
-	netif_tx_wake_queue(netdev_get_tx_queue(priv->dev, chan));
-}
-
-The qdisc is still active in the XDP reconfigure path. In ndo_stop,
-dev_deactivate_many() has already run, but not here. So the wake can
-start stmmac_xmit() again:
-
-stmmac_xdp_release()
-  netif_tx_disable(dev)
-                            stmmac_dma_interrupt()
-                              stmmac_tx_err()
-                                netif_tx_wake_queue()
-  stmmac_free_irq()
-  stmmac_stop_all_dma()
-  free_dma_desc_resources()
-                            stmmac_xmit()
-                              writes into tx_q->dma_tx / dma_etx
-
-free_irq() only waits for handlers that are already running. It does not
-undo the wake, and nothing stops the queue again after it.
-
-Could stmmac_xmit() then write descriptors into rings that
-free_dma_desc_resources() has already freed?
-
-Moving netif_tx_disable() after stmmac_free_irq() might close this path.
-Another option is a teardown flag that stmmac_tx_err() and the ISRs
-check. The last patch of the series ("net: stmmac: Stop Tx queue when
-(en|dis)abling XSK pools") does not seem to cover this case.
-
-[Severity: High]
-This is a pre-existing issue and was not introduced by this patch. It is
-on the same release/reopen path, though. stmmac_xdp_set_prog() ignores
-the return value of stmmac_xdp_open():
-
-drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c:stmmac_xdp_set_prog() {
-    ...
-	if (if_running && need_update)
-		stmmac_xdp_open(dev);
-    ...
-}
-
-stmmac_xdp_open() can fail in alloc_dma_desc_resources(),
-init_dma_desc_rings() or stmmac_request_irq(). On failure it frees the
-descriptor resources and returns before stmmac_enable_all_queues(),
-netif_carrier_on() and netif_tx_start_all_queues(). Userspace is still
-told the XDP update succeeded.
-
-What happens on the next ifdown in that state? The call chain
-stmmac_release()->__stmmac_release()->stmmac_disable_all_queues() calls
-napi_disable() on NAPI instances that stmmac_xdp_release() has already
-disabled. In napi_disable_locked():
-
-	val = READ_ONCE(n->state);
-	do {
-		while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
-			usleep_range(20, 200);
-			val = READ_ONCE(n->state);
-		}
-
-Both bits are already set, so wouldn't this loop forever while holding
-rtnl_lock and the netdev instance lock? Another XDP program change would
-take the same path through stmmac_xdp_release().
-
-Should stmmac_xdp_set_prog() propagate the error, and should the device
-be left in a state that a later close can handle?
-
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7ed1ff71a089..ca49c47f6a45 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1752,15 +1752,17 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+ 		/* Expand 'types' array */
+ 
+ 		struct btf_type **new_types;
+-		u32 expand_by, new_size;
++		u32 expand_by, new_size, max_size;
+ 
+-		if (btf->start_id + btf->types_size == BTF_MAX_TYPE) {
++		if (btf->start_id >= BTF_MAX_TYPE ||
++		    btf->start_id + btf->types_size >= BTF_MAX_TYPE) {
+ 			btf_verifier_log(env, "Exceeded max num of types");
+ 			return -E2BIG;
+ 		}
+ 
++		max_size = BTF_MAX_TYPE - btf->start_id;
+ 		expand_by = max_t(u32, btf->types_size >> 2, 16);
+-		new_size = min_t(u32, BTF_MAX_TYPE,
++		new_size = min_t(u32, max_size,
+ 				 btf->types_size + expand_by);
+ 
+ 		new_types = kvzalloc_objs(*new_types, new_size,
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261022-stmmac_xsk_crashes-v4-0-15c0c750bb96%40linutronix.de
+2.25.1
+
