@@ -1,80 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=54.240.27.27
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792984623;
-	b=Y1Gnmx6PkzxzObLgvnd/CUffXgsSqU2O2u3dprG9EV9MuE5CxfcG5xZr/zfXB982ecx1
-	 a34IXmiYBKNhI0Yh2ZJQPvHgKNmlhhgu4hIgMgLFwox7o/UFKVNilQ4mI//R8Q6cSpLFf
-	 wJA8JLLyrY37ScmO1AZUvubPSDVlGEFGrLlu7sPGfOKheaNwLb1+5f9nBD53CzEfrgv+O
-	 px3gc74hK46vfysnUi2ZAtRomfhLcVIpb74VwgBE818895zN6B1tvKYgjj7+c9K4fVz7P
-	 dhBL1z9mE8Wg5jYU0iebPArcrENY10sH5TLIfttomHrVPi5B+tgnzr2MB2Cwr/qOH+w==
+	t=1792986778;
+	b=w+5rgS+gWARcCL0gxAfq6OEZYL2Vux6gjziHuYm9KfHO8+jOoMIiJszw6cPRNzTCZxau
+	 UQ146p4J77adKJ445uZ0eMv0USxA3tpdYxuPatsh5ClMHbO1qHjGG0miYSI03doq4dSLx
+	 8BtDwmadqr6VyH/Ut7DLZJY0xx9YQ+pjwsqTk+kEV3WO+8WuwjQUw9JDZ3SWz5msXdST2
+	 b71BIm/aClEyH7+7kKseeckhND7aL6Sl5VJtnmYrEx5E/p+NBjqMx7+7RhHqmQWViqgU0
+	 k6+hUpcXgry9PgIcag8yj0X48HqC6xYogQBMxi9hnSxiGVF5OKyug9pIftW7QiNujzw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792984623;
-	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:Feedback-ID:X-SES-Outgoing;
-	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
-	b=f4GSGujn37LyepSbaajVAuIAWnT1zUfQvGAE98vk72b7GZK9dYL5Ad0vfSAmZN9dfUPY
-	 JnOpmRRwm9N3DtduNj8E210FdZybFmCEYFqKW6tcFXoP7k3bmZ4Os+/i0qZRDVqcq+5UP
-	 EWjFkL3EOGIejn8DgAvHce+K87rXlKpJ1zVT5Sp4JLQRuKwNFemBgYoyNgyhnC4WTz0Hl
-	 slCci+2PbcG6Ru39SeOB5WC5UMD8WO/OjCCh2yK2eKBG7dKaFbAW8Aukjvz6mc6SLvneV
-	 Vr4Tjhn6fcr0ZVpUp2XfIfMbpJZFxd4q9+j/rX69kmBQJ/uuzRTvgzfDT7fhD0zJhJg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986778;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=3pzZUgGQvwUINfOBXy8pMJ1dugOTp+5iGtG6RBPfvDo=;
+	b=35AQOeKdafmmxS/Fu6PWVN9HhT1ehHnz11qeK8euN7N/+YEivLKP5U6Jb+kpwdqX7FDY
+	 FN9T2S0SBavguKZuPcIxaKtdvnegONd1tYnq9u9tBjYmVVMOnWOVJl+Qtu+V9xWhkH8RC
+	 JWbefrbFDs8BGcViazuj0kIn7Y6QUqNTqrEjD/xi+2s3xUQcvFZZqyJBcQjcTzc2XjbT8
+	 h3zFD/D2Ao/XPi007ovHtW9gKfwz3PgDc582bCRljwMz69OziVQA2bjCAnKUYjW4HlRBC
+	 8XhhWp2Q/qgz+xLb+C3qNG8OKprR6DSPNflpVH2VovoIHqHQS19zpqKe0VC8t1TmUZA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=eliskeggs.com;
-	spf=pass smtp.mailfrom=us-west-2.amazonses.com;
-	dkim=pass header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=aMIieMyq;
-	dkim=pass header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=iLi5uCYL;
-	arc=none smtp.remote-ip=54.240.27.27
-Received: from a27-27.smtp-out.us-west-2.amazonses.com (a27-27.smtp-out.us-west-2.amazonses.com [54.240.27.27])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WPpY4fo3;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6186A606A322;
-	Mon, 26 Oct 2026 03:17:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6186A606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eliskeggs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=us-west-2.amazonses.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233E5606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=eliskeggs.com header.i=@eliskeggs.com header.a=rsa-sha256 header.s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk header.b=aMIieMyq;
-	dkim=pass (1024-bit key, unprotected) header.d=amazonses.com header.i=@amazonses.com header.a=rsa-sha256 header.s=hsbnp7p3ensaochzwyq5wwmceodymuwv header.b=iLi5uCYL
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=5wf2ig6m4xs5fvcu5nmk6zmaekj5twpk; d=eliskeggs.com; t=1792984622;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
-	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
-	b=aMIieMyqNmiWx5SOQvYw/09ThJHTSl0FHiX1rGynNpEov/suluJAC5W0VjmvIDdI
-	LkXm9GjwRhLuo8mtFs0s9tnMeogzIaK5m/vDaEFuedukU5RD9PQFVx8SmHZGqQgyOBp
-	Jpdu+cOaXgS+akchCwEcb/Q5siMP/2gGozanjEQM=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1792984622;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Feedback-ID;
-	bh=A2LbPxlANFscuDu+5t6LoJ+YO+qfoCuiwkLsdsczSs4=;
-	b=iLi5uCYLf2AE1CoxngD8YySv3oj7AGYaAU8tetFyCThPuzNBMLfp2oVjtWWQik+4
-	C3wEYhpzsmJBU9K87XNj321/nuSZivjf+p94infmSheOkArLpkvsaDbjxtFg99FZWkO
-	Dn/OhE1HUOO7DAjta2U5phrokcqYYBmbTG3KSjeM=
-Date: Mon, 26 Oct 2026 03:17:02 +0000
-From: Eli Skeggs <kernel@eliskeggs.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, 
-	"David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Geliang Tang <geliang@kernel.org>, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf, sockmap: Stop reporting EPIPE on
- zero-length skb redirect
-Message-ID: <010101a176362646-06b53e65-6c20-4ac2-9e05-b74eb5376abf-000000@us-west-2.amazonses.com>
-References: <20261025-sockmap-bare-fin-v1-0-bb8feae7c4a7@eliskeggs.com>
- <20261025-sockmap-bare-fin-v1-1-bb8feae7c4a7@eliskeggs.com>
- <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=WPpY4fo3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B44AE1F01825;
+	Mon, 26 Oct 2026 03:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792986778;
+	bh=3pzZUgGQvwUINfOBXy8pMJ1dugOTp+5iGtG6RBPfvDo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=WPpY4fo3LQtWNIzGbXE7QtxCe83Wn4yvj8IHV4LVt14b+q515CznMrPpfTB0LYO8S
+	 SBr/VY9p+kv+R8YebK//SBw58W7z00X24uWMVs7TRkzBp9OoZJ6AhaF3N0YeVpcW75
+	 Ods0oQxXIXie0TNHMo/FhhmH4aU/ahXput/xgQpDlsZ+SoNGY0eAlFaHb3uK2FoGll
+	 wZiUZVjgsUfYE0z5uTW4EiIPTCLLkhoqvs+SRvrbs+Um6sUlzVKDkBp7pDMdEJyQcU
+	 x5CaymdD6Pn2yhfxvLBsRYtAygU+t4A5zhkgplXN7s/ZjKDpx0Ctdck6FhnfvJpMG3
+	 YXYYJ3i8AFM1Q==
+Content-Type: multipart/mixed; boundary="===============1248595083483076292=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -84,57 +49,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23181ba7-e4ef-4475-92ee-366e0ca2dcf0@linux.dev>
-Feedback-ID: ::1.us-west-2.aEUYuRRC8Z+WeC8mlWAQBpqJLV0VswmaEnHpVsice/Y=:AmazonSES
-X-SES-Outgoing: 2026.10.26-54.240.27.27
+Message-Id: <b2f685123bf7383bd43fe74d2fe05dd6a5f59e59d32c97c5bfca9e010bd8581b@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-64-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-64-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 63/81] bpf: Print 0 as the limit in the statistics line
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 26 Oct 2026 03:52:57 +0000 (UTC)
 
-On Mon, Oct 26, 2026 at 09:59:00AM +0800, Jiayuan Chen wrote:
+--===============1248595083483076292==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> bpf: Print 0 as the limit in the statistics line
+
+TL;DR: Comments only: "no limit on verification" in bpf.h and verifier.c looks
+inaccurate, since flow.c still rejects programs with -E2BIG when states exceed
+bounds. Suggests narrower wording. No code issues raised.
+
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index d8cd7c63f157..8cd82f506e0d 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2636,6 +2636,7 @@ struct bpf_array {
+>   */
+>  int bpf_array_get_next_key(struct bpf_map *map, void *key, void *next_key);
 >
-> On 10/26/26 7:41 AM, Eli Skeggs via B4 Relay wrote:
-> > From: Eli Skeggs <kernel@eliskeggs.com>
-> >
-> > Treat a return of 0 as success when there is no data to send, while
-> > continuing to fail on a 0 return with residual bytes. The loop exits
-> > without incident on an empty skb, and the skb gets cleaned up as usual.
-> > On an ingress redirect, the empty message is still queued as before, but
-> > the target socket no longer reports EPIPE.
+> +/* the longest program. There is no limit on what it takes to verify it. */
+>  #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
+>  #define MAX_TAIL_CALL_CNT 33
 >
-> The target can't receive anything after that though. The empty msg sits
-> at the head of psock->ingress_msg and nothing ever dequeues it:
->
-> [...]
->
-> So the user gets EOF on a socket whose peer never closed, and everything
-> redirected to it after the FIN is lost. Without a verdict prog on the
-> target it is worse, tcp_bpf_recvmsg() returns -EFAULT forever.
->
-> Since this patch is already about the zero-length skb, can you handle
-> the ingress side too? E.g. in sk_psock_skb_ingress(), don't queue an
-> empty msg when len is 0 and the skb was redirected (skb->sk != sk). The
-> self PASS case must keep its empty msg since is_next_msg_fin() depends
-> on it.
 
-Yep, thanks for pointing that out.
+Is it accurate to say there is no limit on what it takes to verify the
+program?  The commit message says the verifier now limits the number of
+states, see BPF_FLOW_MAX_STATES.
 
-Alexei suggested skipping empty skbs in sk_psock_backlog():
-https://lore.kernel.org/all/DMEE6SW3UE97.2DF11HBEBKYYI@gmail.com/
+kernel/bpf/flow.c still rejects a program with -E2BIG in two cases.  The
+first is when a single insn has too many states that cannot be joined:
 
-To your point, I think the critical difference between these approaches
-happens when the sk's backlog queue is not empty and the socket's own
-FIN (the self PASS FIN) gets queued. In that case, we rely on the empty
-msg to correctly update copied_seq, and skipping it means the copied
-sequence number ends up 1 behind rcv_nxt.
+    if (flow->nr_states[insn_idx] >= BPF_FLOW_MAX_STATES) {
+        verbose(env, "more than %d states that cannot be joined at insn %d\n",
+                BPF_FLOW_MAX_STATES, insn_idx);
 
-This path is already broken: when a socket's FIN gets queued behind
-other skbs, the backlog reports the erroneous EPIPE just as in the
-redirect case.
+The second is when the total number of states is too large for the program
+size:
 
-I do like the simplicity of skipping the empty skbs entirely. I don't
-immediately see what the consequence is for copied_seq being behind in
-this terminal state, but the approach that updates copied_seq does seem
-strictly more correct.
+    verbose(env, "too many states for %d insns: %d, %d at a time\n", ...
 
-Is that the right interpretation? Let me know what direction I should
-take for v2.
+with the bound computed as BPF_FLOW_TOTAL_PER_INSN * env->prog->len +
+BPF_FLOW_TOTAL_BASE.
+
+So the effort to verify a program is bounded, and a program of
+BPF_COMPLEXITY_LIMIT_INSNS insns can still be rejected for complexity.  What
+is true is narrower: the number of processed insns (env->insn_processed) is
+no longer compared with any limit.
+
+The same shorthand appears in the verifier.c comment "user space parses this
+line. There is no limit."
+
+Would it be more precise to say the macro is only the maximum program length
+(it is still used by the insn_cnt check in bpf_prog_load(), by
+BPF_MAX_GOTOX_EDGES in cfg.c and for sizing in liveness.c), and that
+complexity is bounded by the number of states?  For example:
+
+    /* the longest program; verification effort is bounded by the number of
+     * states, not by the number of processed insns */
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 864009dbac47..3bc0dcbeaa60 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -22783,9 +22783,10 @@ static void print_verification_stats(struct bpf_verifier_env *env)
+>  				env->subprog_info[i].stack_depth);
+>  		}
+>  	}
+> -	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
+> +	/* user space parses this line. There is no limit. */
+> +	verbose(env, "processed %d insns (limit 0) max_states_per_insn %d "
+>  		"total_states %d peak_states %d mark_read %d\n",
+> -		env->insn_processed, BPF_COMPLEXITY_LIMIT_INSNS,
+> +		env->insn_processed,
+>  		env->max_states_per_insn, env->total_states,
+>  		env->peak_states, env->longest_mark_read_walk);
+>  }
+
+The same wording applies to this comment.  "There is no limit" could be
+narrowed to say there is no limit on the number of processed insns.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
+--===============1248595083483076292==--
