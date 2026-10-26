@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983682;
-	b=wzhBLjvlH+VD8idByKZcdK+ybKNNFGkRgS87APjq079Ca9DOHNIVegVE364t2IotBnP1
-	 3M1XDmrHSeC8u3l6xk3/grs1KAxUQK0uEEo47FMnIAE2MedIiX6I9q7pEhou6AYpgt2gt
-	 EgVcipqEAoVy7U9F3PeE+pRBFCaepJUR/d7PRTDikgGOBvFWyIdK2JdOhR7WFFOcacLPt
-	 ymGH6MGaUTSVlpUL1yDW2vOKI1ReSKEhFVkP9WL7ZIU7YAcifzDBfmgt5jZsefT/eE8N3
-	 H1ZB+P2GOYvGP4EwPTOucj1quabKs4Z4Kx+JQRyccQq2inflYLdDFaMySYOdJZzoxmA==
+	t=1792983687;
+	b=hO+U3m9fuI65WDkSdL1FQ3XxdMO29OW78ypojHku+uJjDDiHZhNFKH7Kah0dvajdzZ6i
+	 S6B58JlBRy5OQU3vPkdN/d/v53rb1H6ZLvNIDszJonuQeVZIGLz3s/o6kl0ni+aye6l6c
+	 XpFNdwhnIH7WL31SiU2jXiTOouy/AFiI/L82uNd0oAhfz/tmKPNJoiQ0rzQ0ExWskcfBh
+	 Q1oJZE3m2RB6dCPdce35ckIulvntf0hOSiRfkStNpVuMDZInUlmDMXJJJdp2LXJCB5FSF
+	 FbF6myZdXPvUtKMPfxMdqflgCMHSIbHLqbzIsVjv7BzCE1qZg2DaVIpXuii8wkmW90A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983682;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983687;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=EaZnlNNY/6YsTRatBLZkhxEvMGlEZmK9MpEM2ZrpRWU=;
-	b=1RmRja/K1HCOuuyxGwO5jvELkC19iktUFzfioGW8sPd43UDLER95kj6kx0AzEtgm2NEk
-	 MYZrR9+D+cQ/+jGJwYP5wCt2MBIFiy1tkuRGiFdRZTafXIx/cTd8dKQGlmuU2LNeYRjhI
-	 DKvLuOERhWa4DGvOvekErE7eF5EqGNFggVrfcWvHYjEKsTYB1P2GZhHpP8Xqgr9m76use
-	 9E1pjHzFyOM4/j37UGVtLywVjFfdJr4D9lsiCgAYaS8QIDbB+hLEDOQdexN6xK4ckNLi/
-	 EsAUl/YHVPXBSfhq94zY2ysu4hnTQ57JSaC4bcG0W6JpS8aPvGu3XAIlD884zPDMHuA==
+	bh=lVE4RWqwuXRo0I+STIlPZNx/szWeCHgqkYceEkrBsj8=;
+	b=QpkrVnt+EmPGSgcKbZm7QC+4K2yjRHT4uKqf+WxYUkxMRhzcbHLka4SSYjB5TV5lzDqb
+	 xpws4v4c2UdwqBuGGtOZufuqzyf9XiwPPt+FOTGw8z8+Wemm4HbtPy57j/BR64uG0SF/s
+	 GYTNhs936yjuHN+b2yQSvwu0jkBzvq3KLZU3cQXdJZ1UGAV3+t8X3DmpbKqLhNd9kyI5r
+	 Hk9ij7g7349lgIJRkabqYsxZqUrIw8kCFYQ2uYgplWHWwTWtO+JTdtEm8bTEW8iSGp61X
+	 CvFuUpW1SYqvde88F2ZMBEadoqIqsV9uSMR+k7wQ2945h1MmhDmOfqPWK/XVgRdgxVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sSTodq5P;
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pJFoQ36y;
+	arc=none smtp.remote-ip=209.85.215.182
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2962606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:01:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2962606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24520606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:01:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24520606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=sSTodq5P
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc751eddf25so1223842a12.3
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:01:21 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pJFoQ36y
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd5d2dafeccso776484a12.2
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983681; x=1793588481; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983686; x=1793588486; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=EaZnlNNY/6YsTRatBLZkhxEvMGlEZmK9MpEM2ZrpRWU=;
-        b=sSTodq5P1BpQFqQHuEqxa0nTnI2VoqxSKUslDFVMUoXZnPsaOy6FluH7s8pp/H7GpA
-         VKGGzIdCKJ/cVz9et98z1x1VZxx5NXolHWer0g8ZtmaTEzBw9TzbjHb7pD2JdgzLgtBV
-         D4D4aZBCeQ6JfsF8KaH+lK/yLMOGFs3DU6Ztsd+NaXTGUOUY1CpP76vAkPlIWw0f94bz
-         zMesieuJNpOh8nkgxldqC4mXE+Kr56fDQ4C7uk9RVubZ+m6iEMenHGIbUiVcSF1KRZmN
-         oah/KNfx9Qx632D6Y4QTeWjYrQDZSiccD1VqZVZPyaIVvggEycWJE36ikBowl8ARPdWC
-         ajsQ==
+        bh=lVE4RWqwuXRo0I+STIlPZNx/szWeCHgqkYceEkrBsj8=;
+        b=pJFoQ36yoxWu951CJxLvigVSg6oDl9ioBacGYWUjBw7RwePOwCq57Tyn5ulaaCZTz+
+         zLjSWpT67YCuJ2aikTPsBjcrCl44uTWbPXuDgPiTF49TrmLe+M8hamCkNDFRcNIyh1X/
+         15exhqE7HyO1mVzgbYMSB1vHMHRXw64fL+ewFnJ2P4RSR3uPQdKTt3oxnbVYMXSkjct+
+         TH2L3suTI/NiYr2FKGoBzMPIhVq1EhcNq/zEiDr+ut0p5NMePjUQWSRK5Dndg3zvzZfi
+         zvONoF9C9zqWFoL1Yw1bpNdwNjRtJvP/pJ85ZDji91HzrQxZ4YQAwnWVEMmFFVJkqBY/
+         Enug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983681; x=1793588481;
+        d=1e100.net; s=20260707; t=1792983686; x=1793588486;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=EaZnlNNY/6YsTRatBLZkhxEvMGlEZmK9MpEM2ZrpRWU=;
-        b=Q1EBPyqE5y2PEc1ErtJoVNfhIn1mQQxCSxsk1T5DpG8+rtCjzBYissz71tKF4gCOg/
-         g1PTM6iyR1CyZi//d3upUUuqccpqPcK184ouX0wAr9sfZHGouWESA0qVHlr7mo/Rk1FF
-         SEK68ZpBuqyVdNPaYbJkpFrYpko+LRd5u+fZ9Yk8F2T6GcLTlwQbOtH58aVX6a2C9OnW
-         Ft87vte7DqwhQowY60qS5P8lPmKBINk4pRZQRCyMx22CTkjIPxhHcKm2zeEnxCgemNa8
-         PEO90ZOKl+CUVGYXabFemL8UY7BuK/HWg3UihMKwzzNiVn7J/sSSc10E0BNIJ4+8ULZL
-         WJaQ==
-X-Gm-Message-State: AFq9FYLh/g6F3XYByIWBEuExHL7nTbVmbTAqm8iY3iILpYibsJn5jVCf
-	6bqyLfI+btc9FEDwESe8sCwKankozKmNu80AOis2ggTPXuY2BVhH6xtw15ZouA==
-X-Gm-Gg: AYBFou2I0b+tZc95/Y3gWwM0isC727z3BPvYo5zP93VOdn8+HIRIZkt1xypsy5UmdRm
-	+iES7m0LuscFxc+oGmKCtKMPgp6rAw+flp8qGmitEkSXd9Rm411LeEyEE2qEreYTRIlJLA3pu4E
-	VQp8MF+mSvuOYuxW2KpxqTME6O0W2ukZ944Ic27PApBnd7PwWRJw9Q+Tkhw4Cm07sEct6ULDSCg
-	1qy5wwLBfCX9pwNnDJexbWqkZ7Fp9I7eYwRz8ryYdhxM0FdzUblJyt+v4ZwLRkzOmOfYZuzosjT
-	VN1Kd/KiTgfCzQBXMfURnP0AgZ/1sl8LqM5UG2pCz0717cV1NMcL95cy+ZD95R86Sw8UDFeoQ3U
-	9qd6zXYLMC6Wb/dTJmTBB2JwdkMO7D6Hv5LVG7ee7JB1sZvUFwPzjaqjrl6LBfPBzrcaI8ocO0r
-	MoDKOFVSHoXLmPmvMY7Mn2utK2Ec8cPTeGfzeHp+zWFlmVxUGA1eTsHSuJZw8eMI/iueGMElsT3
-	UXLnoATVhq5C9/HSyDG/e/d5ChEA94IWYA3ogQJlgeNuao2FYKZ7en+Nmht/5Qdtj04BWa/mRx8
-	24VEVWOhZFa8TzuSIvKUM7oCTm8uoHuvN3+MzDH7JQDGGKUsrqjKABh33WUzzl9ccyABG46yaX8
-	31EggnOrRpyaxw+6oRC3NdwpU
-X-Received: by 2002:a17:90b:51cf:b0:3ac:b7b9:6471 with SMTP id 98e67ed59e1d1-3adeb105a0amr4764971a91.65.1792983680721;
-        Sun, 25 Oct 2026 20:01:20 -0700 (PDT)
+        bh=lVE4RWqwuXRo0I+STIlPZNx/szWeCHgqkYceEkrBsj8=;
+        b=1d14npjIchY37W46DKzFNMUhtDn+3mX7XrnwI+N9JOL+4ZK80g35G33YUklA71Rkg8
+         RHJzMkscfR9Nfp0L6lF1+1Ew/6mWZizTnlBQrIbk6fIXiYwZ32BUF5L+8TXhCeeoC665
+         Sv4f6ku6AZBNq+sU6djG8/xGbweX5pVy/o02du+NxM4hnffQ6JyqJsA31kQqIX3TAZcK
+         oZNXIe/ozCM6K18kmwoYBmIcsJta36Ie+TwwSYVvI86v8weK4xyEvqRW6F6d27EcG0mN
+         8MLmO4+/tpaEpx9wWPQxc3Qyv/SxV3Z4EOzGwRYfbdbPqUgimLVvZ07cyV25A+k2sPpg
+         d00Q==
+X-Gm-Message-State: AFq9FYIzPKGKI53J6YxatBW3Daw+dpIHGbUx6EasAYcNSPfUdsx+K/F9
+	yVz305vNr0PdLv9KS4JYd48QuB+zNkEv8ZnzyD7SBzmfzOCKj4cLQEVcN9+leQ==
+X-Gm-Gg: AYBFou2hkZ75yQy/8eBgNrQFp5A0nD1W29Gkw4Xfmjcy2tc79rA9iJu9ydvwf60csPT
+	F3VygFWNTa0Nxrpvoe1CCPPs7GTq7QggZ6Y0TFcmwlL3YkgdgjQgy8axEbvv2tp+KjjodefkNHK
+	JFa9FZ3D1op0rsHMAPfHxZomeo0DzzQWmJ0mp3m5qVFciWN4qGT2PQeab9TrWLyUxKQdgeqmKrR
+	JdgTpC/y1o1VdSGIDXNEVSB0D2esQD6d0RjUxtyo5FJNN6bDN7e4yrwa0pZ9RSByhI3CpCkD+IF
+	CpLb+VII9l3vZamHUohF7qnMG9faH0HX4iL1+MDQNgY9nSdrJ+KlR+5wh1Lxs3fK2De3EeBOQaG
+	Rkx6HDt/CgfXxJWWd6j0uwFWTehGBVBs1/OvVXNsE1KihE3kgPTBy52yT7rXFHDOli98sn3zhad
+	nh/psWZWw7a3SmCCagJ3b9vOCA7y3WfyV6RCocQoA2HALzydc2GWe8zfplnYCyR36jN50huEk03
+	etFg8rr6H1Ak5ZOAT74/KJ3oZHdXayjk6rYfl0fV3sRrB03SOLX2yFBBF5z9YD91aCWxLoTW19a
+	/SLCciv139LC/4L6ncnWFTTnnX4OwqxiWD9xMhNLoz/ipFmZ1zb6bE+pxgLSD1LQNxnlMkaBYnR
+	4xcq8uhXy0rH8QIbwtUMkyD26
+X-Received: by 2002:a17:90b:35cc:b0:3ad:1b31:92d8 with SMTP id 98e67ed59e1d1-3adeb16ecffmr4115339a91.60.1792983686531;
+        Sun, 25 Oct 2026 20:01:26 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebadfa82sm6352325a91.8.2026.10.25.20.01.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebae7f3csm5169809a91.3.2026.10.25.20.01.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:01:20 -0700 (PDT)
+        Sun, 25 Oct 2026 20:01:26 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 16/81] libbpf: Make arena 1 Gbyte when max_entries is not set
-Date: Mon, 26 Oct 2026 02:58:37 +0000
-Message-ID: <20261026025943.404450-17-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 17/81] selftests/bpf: Test the default size of arena
+Date: Mon, 26 Oct 2026 02:58:38 +0000
+Message-ID: <20261026025943.404450-18-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,51 +103,78 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-max_entries of an arena is its size in pages. The kernel rejects 0. Thus
-each prog must select a number, and the same number is a different size on
-a kernel with a different page size.
+The test declares an arena without max_entries. The kernel rejects such a
+map with -EINVAL, thus libbpf must set the size. See
+"libbpf: Make arena 1 Gbyte when max_entries is not set".
 
-A large arena has almost no cost. The kernel reserves 4 Gbyte of kernel
-addresses for each arena, small or large. Only allocated pages use memory.
-
-When max_entries is not set, make the arena 1 Gbyte. libbpf calculates
-max_entries from the page size.
-
-libbpf maps the full arena into the process that loads the object. Thus
-VmSize of this process grows by 1 Gbyte. If the process called
-mlockall(MCL_FUTURE), the kernel populates all these pages.
+The test makes sure that:
+ - After open, max_entries is 1 Gbyte divided by the page size.
+ - The object loads.
+ - The prog can allocate pages in the arena.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../bpf/prog_tests/arena_default_size.c       | 22 +++++++++++++++++++
+ .../selftests/bpf/progs/arena_default_size.c  | 21 ++++++++++++++++++
+ 2 files changed, 43 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_default_size.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_default_size.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fb8a1f07c5b6..1d4f04aa35f1 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -552,6 +552,12 @@ struct bpf_struct_ops {
- #define STRUCT_OPS_SEC ".struct_ops"
- #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
- #define ARENA_SEC ".addr_space.1"
-+/*
-+ * The size of the arena map when max_entries is not set. It's in bytes:
-+ * max_entries of arena is in pages and the size of a page depends on
-+ * the kernel. Only the pages that are allocated take memory.
-+ */
-+#define ARENA_DEFAULT_SZ ((size_t)1 << 30)
- 
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
-@@ -3148,6 +3154,8 @@ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
- 			return -EINVAL;
- 		}
- 		obj->arena_map_idx = i;
-+		if (!map->def.max_entries)
-+			map->def.max_entries = ARENA_DEFAULT_SZ / sysconf(_SC_PAGE_SIZE);
- 
- 		if (obj->efile.arena_data) {
- 			err = init_arena_map_data(obj, map, obj->efile.arena_data->d_buf,
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_default_size.c b/tools/testing/selftests/bpf/prog_tests/arena_default_size.c
+new file mode 100644
+index 000000000000..0c7efb5c9e5a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_default_size.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <linux/sizes.h>
++#include "arena_default_size.skel.h"
++
++void test_arena_default_size(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct arena_default_size *skel;
++
++	skel = arena_default_size__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++	ASSERT_EQ(bpf_map__max_entries(skel->maps.arena), SZ_1G / getpagesize(), "max_entries");
++	if (!ASSERT_OK(arena_default_size__load(skel), "load"))
++		goto out;
++	ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.alloc), &opts), "run");
++	ASSERT_OK(opts.retval, "retval");
++out:
++	arena_default_size__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_default_size.c b/tools/testing/selftests/bpf/progs/arena_default_size.c
+new file mode 100644
+index 000000000000..1fae38126094
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_default_size.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++
++/* max_entries is not set */
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++} arena SEC(".maps");
++
++SEC("syscall")
++int alloc(void *ctx)
++{
++	return bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0) ? 0 : 1;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
