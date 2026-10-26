@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793032201;
-	b=b8imZkLP1QS8wDXFUWgIhROVutQekGamTJi5Gx1N7xxVdwl1N6c+UdE92lESxNI5iabV
-	 kjlyluM3I3U3E4gDKyOf/v4ZoLpcsp5n9pj/SrTf3vBo0/V3QUL5m2tIoul2BpnrKYc2M
-	 cwxxXWPugRfGOmDvVA7WwLabc+IiRhNfyPmrw7xdBCKD5lWWnB9hr6PUEk8N+q3DtaMKf
-	 SJNTsJYiOF2sUkc2aVznbzFwN3LszzThybTu6RuPuAyZncynUl90kFgTzVWfQnrgjxs6E
-	 hPafP3/mAISjkd1A1+RMuM+pCRKi9AYrOmYw3eabAjB+m4dCkNTHYGQcHfhrU3JhL4Q==
+	t=1793032236;
+	b=lXkd+jlFWQeq03PWFxYJdbzc4tP1t3LzbmDOIjv8jUbhhEnoRk2aDlK2SCy5xnGswFDz
+	 3MWKZi4tuh9f9cb+cDAWS8zCxa0i85O1yKjA7QRNEaWOFtje4sJVFIreOl/Z48eE4oclu
+	 OPllq9ON87C5+p9m4zjUh+xqsbtwYRVWjvZRdFR+VYkPO0OZRp1w1d9wnEsUirMCY1xFH
+	 r+bM/IptEia1NnCmBm3qoWqKe88pn+22r6pVLSTYw2pjGS2KI5S+2oqNdIlLlLaIf1DP9
+	 007prCPs7uYbxzcHxY7fJdxnLvlGORshQtZ860ELOxRjL0uF1mmrg3kF5zeHZWA1KZw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793032201;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793032236;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=jjilxrpwleM7JjznJ3SOmEz03/yuCCXHu5R1S91kJ5I=;
-	b=UIrbT+5kvdJus+UA4X1l71N4CmlFIj5frJteTUyj4Q7D3VyAwsZFaY+rUvtD9WJnGk0a
-	 G6Zn0EQ8E8kzxyu3QsBDudVUbXztNz2430ukUvG87m8aYln1Kha1nNkCn0Hoyr0tW3BdU
-	 g0SAwD6BNI25MtPDgDjh9pWT0+O5RgrZzNrJI6HczOTBxpEcPn9ngkgqJBFw+rkBdGA+0
-	 H2SDtUOxL85jAL0CG4R/9D8N0FP8LC8OSuAyVbh+i96ekflSsU/qHI+8G98BQtlDt6L1S
-	 iexwQQ8NRUY6Uuf/OGuBv8bzyz1t9+lmkdQW2dYJAyxgBq1cGrUKnVHogFchSwMO2tw==
+	bh=WGd8hv6dQ0jpXHntVrEKsl2n+adOY8jZkAHXTXnqh7c=;
+	b=0naAnepWqR3W7iWEyd7IZpLEwt8pnxRifb4I+Wi7tx3S+G1Xq8EkbuST2YKEoqsJ129q
+	 5Zqx1XTcMz+JcFTGyaP7neknEScGtkLIE5ZAYyyWX/O4wKUaMawgYCA2VEUUJBfWS+gKT
+	 oCBzSCfci1x/+3Lbdqflm0aGBjnpQpVJeKt5fJpCgrbgMl9T73lP/PE7RxzpDtpg4JcVc
+	 TgBQi1kdEhuh2KzjL7H/C8U0+t7F9Xa+A8pK4tKepOzthIjPV+uS3O/lKFnP3HPNcS4G8
+	 5IS5n3lmxFscqRmKNk0XFdoiNNMsZjBpQYb4HXA9md4e3L29WOvLMXuoc6utvEa3qVQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MkplGEdg;
-	arc=none smtp.remote-ip=74.125.82.46
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OWgrT87Q;
+	arc=none smtp.remote-ip=74.125.82.178
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D5960A6F44
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 16:30:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89D5960A6F44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254E0606AA36
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 16:30:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 254E0606AA36
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MkplGEdg
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-185fd3a4ca3so2566617c88.0
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 09:30:01 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=OWgrT87Q
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-35c76e9614aso5146622eec.0
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 09:30:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793032201; x=1793637001; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1793032234; x=1793637034; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jjilxrpwleM7JjznJ3SOmEz03/yuCCXHu5R1S91kJ5I=;
-        b=MkplGEdgwv61Zw8JhaNpM5yqOMQ8yrSLA258S+L/taf1GNFtMPZn1LO5xfzNxX2vHQ
-         X6byKfV1WyVJTBy4kDP35Rn4sOSjwFOo7sx+4WGIuYgOZP0xcqgBxTvjW30gdSsPC2Ry
-         gXUxNfNZv6wA84y2fYIZoRqmTjsCiTIi+t0GB5ZrmVkbDIhn0ZxyctJOpiq7rFOmLdW2
-         8PN0rHwTJXzwpv1s6r617NdtDSEqIRMMaKHcZMCpriOSljWCYEAkiUFMSUE5D4lwOvGc
-         +N8FNgdbv9yhn4MHBanaQ8wK0QU9r1955YxxHHGY4yuyHg8vj8ND1tGEhr8puZ0d8MJb
-         1JgQ==
+        bh=WGd8hv6dQ0jpXHntVrEKsl2n+adOY8jZkAHXTXnqh7c=;
+        b=OWgrT87Qj/2zyW8smzZBl773SMPrPIzcvxCXye5uBT8QFVCCjI9Rok0yb22yySWm7Z
+         XxKPx1VpKgrJr1Z9ev71PvTb8vFPBIiAiIBfFBPkCyV5KkbZiZfxLW1hrjRMlIoXXzQv
+         Pi2jcEap2puXyNfA+70UuljWtojYba002F5ZqLUETRQBGKklcmM2NkLVq+uvOYvQxHH1
+         FK25Og2Kk078DLTMCVWxJcKUk6lVI7qlVD3UJcaeKOEYhOscCtsRqlWx2eRPix3JrhTR
+         m7vjPzGwMMuwHNDEd+a41fikRJO53eLxA5tTjkQJBnY2A1xWp+M5V7bzqk69179sGXSa
+         gXLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793032201; x=1793637001;
+        d=1e100.net; s=20260707; t=1793032234; x=1793637034;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jjilxrpwleM7JjznJ3SOmEz03/yuCCXHu5R1S91kJ5I=;
-        b=MWgaF2OGLCL7ORxxwAfXxrHkH3frWdjME86SiGlFoXUWPpZgYz5SjPSmBquBgmu79Y
-         SDPutgro4QbniAe8jV7PywbpXX4nt9UuSPHJCefgVNJbYctj2wjLVyDlipydbZtQv+sW
-         C7rS5GPHU9sMkKXgWjmTpiHf3fLVeAEBnFqkS+IPgS8xwU785JhjAj3L/NNg0hqYQCXJ
-         3W16XwgBK/UnfYF43SSx6+Ohof4A06TAukrpKAmBwdcNdbOcasmniJ/Bp83hpfWdGdYj
-         XGpA+28y5D/VFJbSNPMQP57VnEJbDLoObTVPBfC17Aynqd8q3Ofvj+CgDtVkQykw5tX4
-         fr7w==
-X-Gm-Message-State: AFq9FYLpQ8aNk3dkWMetWY/pu/cAOC6GIlZowwyx1Nhxz0/+qW4BoCe9
-	v7Hwqw+qXVOlH3rJjqADMOlY/PPrtPiEswrP1qtCsm9jZ7L6wZ/es6L4RgNe0l0VlYo=
-X-Gm-Gg: AYBFou2INgMy5uVkpsAL303wuYzgOxLJYsCykSy4pac+xZ0ZWm3uXuC3DIL1lEuunmZ
-	c4zycsTuMNyOk+d5Mw7kTRGsLKIfX9BO/gw6ldW8wQXsgT/VLF/pZY7V7dR55P+Vfp9Tf6qXBxC
-	awTkvyqcKR5yc9BoQ00WN2I+Sr3+k3VL61K13nS0fQgJKcnZPBT3tbZld0wxvUReUKxs3jpugvo
-	h/QTtiD8WBiJevf2CfIVwejmVa9lvFY0mzxn0PLiYXpz/6xeBxNZXVHtUACoqLJ14C6ka3PxI62
-	oAJUG4Cv8yStGWRBH8y9H+FQI7JvTz1E43M8PPlC+XjUoT60c1mbVRSdZabxJADi/k2DT7+yMHv
-	TaxsgiIVrlEg3faXfZFaTOv7wyp4FeAlfJVBG0D6+Ex6Xzf3LhoKGvNbOcMZDJErWSbomTfwjlw
-	yDtsONp1KknPes0EgB2veE/Yituej3Yu0musw7QypH8TBx6P2uib360QOCS9a555aYnt8iSIIlD
-	gRZwBHPZP9uLbFRp7z/mR9ZPfIiIJ3uG2gmy+cs7kGMzk6PUe33kipbTeg8acXLa3w7e5QCWjp/
-	rBDCUWDlsvUu1jw4OQwQtz3mQzUT0e3AkpLltBxpx5jJFd1Dxm0FI8IRI3USlfmq2oTBdRRUuZ4
+        bh=WGd8hv6dQ0jpXHntVrEKsl2n+adOY8jZkAHXTXnqh7c=;
+        b=vSNnUmd9IVht4iCuux+mCqXyjebrLtbgMzQaZlAwzTDzHcHUPcGc8PPU/KVRZ/ha57
+         buaiIrF49j2DkhkseK+ftFEMchH/4Xg5MXnSG4EJv5HFsJIf7Ygi1uKc3Q5dRYeEL+Ya
+         gMHQXjJ51ooiGhJ0MasqAxIhbc3HmEXZ5VKqLmy627JalySxZBVIiHafBhNXXS0U3lp4
+         22IJw3HwN0OruF+krxjHSkcGKslvbqig0AAuAnenuw5bk2RBwFVnivKgA5m4BQ9w62qS
+         Jc0W+nOOKkw3qK0WKz2lRxQbWXqLudw8qcFVKb1N2nq2ns/xhyCXl6+yH1xXLP0dhHRr
+         ywzw==
+X-Gm-Message-State: AFq9FYIeB58PP4BQj1Oyu3JRDgoPtU96fk9NuUXljCmc9R4SRNCA1YPv
+	RYHGZFoKeQrPhYCxUKhSqivZiXjYOCUj8HnBKgjX2oKFBaIpq/rFfVoOkhfozVhD7mg=
+X-Gm-Gg: AYBFou16cKx3hLT8fxE+7kupVKgcxtQNbSBrv/X4qh8EbcWdBMze4XzmpRyeIA2uKif
+	E/DJQIoLewK2uABUzdTZCH98MSpmeru9BDUPy1TnYoyUCD+XSEdZx2ke0ouuE4KzVSgp4IBxckg
+	cXKVWOFh+jJ4Z6+EJChQqnWov/23jmM+BpnxycKiubssWLxYEh7VL4bdHz0LczVbB8aThkaltJg
+	EKAhL38MLntmAQsmZ9HuBFqUSeCuSXLPGxm6fWw/kazyR2Uazcz8QK0Vtlh7y/TVw14WRMzfHni
+	E4zdf+ALAwg188CihdpAV54J5iZ3FHDjechDX/KD9ORPcEBM7tKBeRlI56lGeuBHhF+iVqHk8OM
+	ikbYIT0VztGGOEtu+csTougWaL+uPGUQpq/wNWf0YrnD7CWkbMxgkI1gclruZhZT2eM87GhYcNs
+	jeDzvSEXgVB2q1Ed2bpICDVzAjnEuJk8ULCpKoR84xVIT46URCFVy/yXySXyIChI0y1+OIAK0sb
+	iS14B2aEQOK/5/SOfcYzDj8JT57yhwgRcWop6+BsxuLyampUuKTVEGEAO/8Tyf5TxucAY6wczrw
+	A9xyageudNWX/MSGTN6Q3xYoHSMuqpdKrQit7tenqisrAuOX+5QptkQZgT7tUOYP/cdsrhhgpio
 	=
-X-Received: by 2002:a05:7022:ea44:b0:1a0:9d29:c32a with SMTP id a92af1059eb24-1a09d29c4c2mr4635325c88.9.1793032200306;
-        Mon, 26 Oct 2026 09:30:00 -0700 (PDT)
+X-Received: by 2002:a05:7301:1530:b0:35e:da0a:75b0 with SMTP id 5a478bee46e88-369e84e94a7mr11024368eec.25.1793032233734;
+        Mon, 26 Oct 2026 09:30:33 -0700 (PDT)
 Received: from nixos ([2405:201:c40d:9039:f859:3f74:c064:3281])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8db7b23sm36119014eec.19.2026.10.26.09.29.32
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369e8db7b23sm36119014eec.19.2026.10.26.09.30.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 09:29:59 -0700 (PDT)
+        Mon, 26 Oct 2026 09:30:32 -0700 (PDT)
 From: Ayushman Rout <ayushmanrout27@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -92,11 +92,18 @@ Cc: ast@kernel.org,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 1/2] bpf: Fix bpf_dynptr_copy() for overlapping ranges in one packet
-Date: Mon, 26 Oct 2026 21:58:08 +0530
-Message-ID: <20261026162810.12862-2-ayushmanrout27@gmail.com>
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Test overlapping dynptr copies on xdp frags
+Date: Mon, 26 Oct 2026 21:58:09 +0530
+Message-ID: <20261026162810.12862-3-ayushmanrout27@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261026162810.12862-1-ayushmanrout27@gmail.com>
 References: <20261026162810.12862-1-ayushmanrout27@gmail.com>
@@ -111,87 +118,145 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When both dynptrs point into the same packet and the ranges overlap,
-bpf_dynptr_copy() can copy wrong data in two ways.
+Add dynptr tests for copies within one xdp packet with frags, where the
+source and the destination overlap and the destination is above the
+source:
 
-If one range fits into a segment and the other one does not, the slice
-of the first range is used as the buffer for __bpf_dynptr_read() or
-__bpf_dynptr_write(). The range that crosses into a frag is copied piece
-by piece, and an earlier piece can overwrite bytes that a later piece
-has yet to read.
+- test_dynptr_copy_xdp_overlap: both ranges cross from the linear part
+  into frag0. bpf_dynptr_copy() of 1200 bytes with the destination 100
+  bytes above the source.
+- test_dynptr_copy_xdp_overlap_src_linear: the source is in the linear
+  part and the destination crosses into frag0.
+- test_dynptr_copy_xdp_overlap_dst_frag: the source crosses into frag0
+  and the destination is in frag0.
 
-If neither range fits into a segment, the chunks are copied from the
-start to the end through a 256 byte stack buffer. When the destination
-is above the source, a chunk written to the destination overwrites
-source bytes that later chunks have yet to read. For a copy of 1200
-bytes with the destination 100 bytes above the source, the first chunk
-writes source bytes 100..355 and the second chunk then reads bytes
-256..355 after they were overwritten.
+The new tests set err when the data is wrong. The existing
+test_dynptr_copy_xdp does not, so it can pass on corrupted data.
 
-Do not use a slice as the buffer when both dynptrs share the same data,
-and copy the chunks from the end to the start when the destination is
-above the source, like memmove() does.
+Without the fix to bpf_dynptr_copy(), test_dynptr_copy_xdp_overlap
+fails. With it, all the new tests pass.
 
-The selftests added later in this series pass with this change.
-
-Fixes: daec295a7094 ("bpf/helpers: Introduce bpf_dynptr_copy kfunc")
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Ayushman Rout <ayushmanrout27@gmail.com>
 ---
- kernel/bpf/helpers.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ .../testing/selftests/bpf/prog_tests/dynptr.c |  3 +
+ .../selftests/bpf/progs/dynptr_success.c      | 90 +++++++++++++++++++
+ 2 files changed, 93 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 648abe1ba63a..b74c03669b5f 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3291,8 +3291,10 @@ __bpf_kfunc int bpf_dynptr_copy(const struct bpf_dynptr *dst_ptr, u64 dst_off,
- {
- 	const struct bpf_dynptr_kern *dst = (struct bpf_dynptr_kern *)dst_ptr;
- 	const struct bpf_dynptr_kern *src = (struct bpf_dynptr_kern *)src_ptr;
-+	bool same = src->data == dst->data;
- 	void *src_slice, *dst_slice;
- 	char buf[256];
-+	bool rev;
- 	u64 off;
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index 4396560365e8..cbb2cc9969be 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -22,6 +22,9 @@ static struct {
+ 	{"test_dynptr_data", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_copy", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_copy_xdp", SETUP_XDP_PROG},
++	{"test_dynptr_copy_xdp_overlap", SETUP_XDP_PROG},
++	{"test_dynptr_copy_xdp_overlap_src_linear", SETUP_XDP_PROG},
++	{"test_dynptr_copy_xdp_overlap_dst_frag", SETUP_XDP_PROG},
+ 	{"test_dynptr_memset_zero", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_memset_notzero", SETUP_SYSCALL_SLEEP},
+ 	{"test_dynptr_memset_zero_offset", SETUP_SYSCALL_SLEEP},
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+index b668ebd61fc7..56be4eafc270 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -759,6 +759,96 @@ int test_dynptr_copy_xdp(struct xdp_md *xdp)
+ 	return XDP_DROP;
+ }
  
- 	src_slice = bpf_dynptr_slice(src_ptr, src_off, NULL, size);
-@@ -3303,25 +3305,31 @@ __bpf_kfunc int bpf_dynptr_copy(const struct bpf_dynptr *dst_ptr, u64 dst_off,
- 		return 0;
- 	}
++static __always_inline int fill_xdp(struct bpf_dynptr *ptr, __u32 start, __u32 n)
++{
++	__u8 b;
++	int i;
++
++	bpf_for(i, 0, n) {
++		b = (start + i) % 251;
++		if (bpf_dynptr_write(ptr, start + i, &b, 1, 0))
++			return 1;
++	}
++	return 0;
++}
++
++static __always_inline int check_xdp(struct bpf_dynptr *ptr, __u32 at, __u32 n, __u32 from)
++{
++	__u8 b;
++	int i;
++
++	bpf_for(i, 0, n) {
++		if (bpf_dynptr_read(&b, 1, ptr, at + i, 0))
++			return 1;
++		if (b != (__u8)((from + i) % 251))
++			return 1;
++	}
++	return 0;
++}
++
++SEC("?xdp")
++int test_dynptr_copy_xdp_overlap(struct xdp_md *xdp)
++{
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	__u32 off = data_end - data - 1000;
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_xdp(xdp, 0, &ptr);
++	if (fill_xdp(&ptr, off, 1300)) {
++		err = 1;
++		return XDP_DROP;
++	}
++	err = bpf_dynptr_copy(&ptr, off + 100, &ptr, off, 1200);
++	if (err)
++		return XDP_DROP;
++	if (check_xdp(&ptr, off + 100, 1200, off))
++		err = 2;
++	return XDP_DROP;
++}
++
++SEC("?xdp")
++int test_dynptr_copy_xdp_overlap_src_linear(struct xdp_md *xdp)
++{
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	__u32 lin = data_end - data;
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_xdp(xdp, 0, &ptr);
++	if (fill_xdp(&ptr, lin - 64, 118)) {
++		err = 1;
++		return XDP_DROP;
++	}
++	err = bpf_dynptr_copy(&ptr, lin - 10, &ptr, lin - 64, 64);
++	if (err)
++		return XDP_DROP;
++	if (check_xdp(&ptr, lin - 10, 64, lin - 64))
++		err = 2;
++	return XDP_DROP;
++}
++
++SEC("?xdp")
++int test_dynptr_copy_xdp_overlap_dst_frag(struct xdp_md *xdp)
++{
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	__u32 lin = data_end - data;
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_xdp(xdp, 0, &ptr);
++	if (fill_xdp(&ptr, lin - 10, 84)) {
++		err = 1;
++		return XDP_DROP;
++	}
++	err = bpf_dynptr_copy(&ptr, lin + 10, &ptr, lin - 10, 64);
++	if (err)
++		return XDP_DROP;
++	if (check_xdp(&ptr, lin + 10, 64, lin - 10))
++		err = 2;
++	return XDP_DROP;
++}
++
+ char memset_zero_data[] = "data to be zeroed";
  
--	if (src_slice)
-+	/* The other range is copied piece by piece. A slice of the same packet
-+	 * may overlap with it, so it cannot be the buffer for that.
-+	 */
-+	if (src_slice && !same)
- 		return __bpf_dynptr_write(dst, dst_off, src_slice, size, 0);
- 
--	if (dst_slice)
-+	if (dst_slice && !same)
- 		return __bpf_dynptr_read(dst_slice, size, src, src_off, 0);
- 
- 	if (bpf_dynptr_check_off_len(dst, dst_off, size) ||
- 	    bpf_dynptr_check_off_len(src, src_off, size))
- 		return -E2BIG;
- 
-+	/* like memmove(): from the end if the destination is above the source */
-+	rev = same && dst->offset + dst_off > src->offset + src_off;
- 	off = 0;
- 	while (off < size) {
- 		u64 chunk_sz = min_t(u64, sizeof(buf), size - off);
-+		u64 pos = rev ? size - off - chunk_sz : off;
- 		int err;
- 
--		err = __bpf_dynptr_read(buf, chunk_sz, src, src_off + off, 0);
-+		err = __bpf_dynptr_read(buf, chunk_sz, src, src_off + pos, 0);
- 		if (err)
- 			return err;
--		err = __bpf_dynptr_write(dst, dst_off + off, buf, chunk_sz, 0);
-+		err = __bpf_dynptr_write(dst, dst_off + pos, buf, chunk_sz, 0);
- 		if (err)
- 			return err;
- 
+ SEC("?tp/syscalls/sys_enter_nanosleep")
 -- 
 2.54.0
 
