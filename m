@@ -1,113 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793041433;
-	b=5fj2K4sgipabzwfx1QIiNBxKrlN7+CotCKFpoUKL+z1uNsFDC5ZhYyw2Whe9LsBdREz0
-	 Nm6eDvkziO6+cqAjDpD401RZx+hkMwjKRXi5Qf7CKU9vIKUugEBkCk6b6gGlCtLlS02gM
-	 BP1ONy3L/auOvaPdIOSf4Vhwcn91CkXo/jimvUQayeN9o2hqLQ3s/+UDpp+WwlUrRLye0
-	 NNzHbaERD7xjwTsoFz9Iuo017BPprQtJQchXln0RAfZMccu/ZyEg1f3HjWB5Qq7XTr4Ys
-	 NuDQ3r1bN8PUduSJGDOfjoV+TNp/GDInqe5v4ZfVGjejI8qtuopzoRBRq1HD5/qjGng==
+	t=1793042974;
+	b=auozCznE3nvioEyBlCCzqf4j4LyrnJDnwVdTiSqOhNcQ+N/2fCBWx07Nuyg7+Xmh7x6H
+	 OhnBIThkqoIyj6AZeO2gbui5QUewEJPkyrCBLa/syyWR6Shze6GZYIyg+/7Hv+RBu+rMD
+	 fMOQDcMRWkAcIFsQsgXA0Ni4bE68MkO6NjzxYue8CB7Sy7jYFoA0Kxi06LGq7J0KM1CNo
+	 4+8RCNINnD0G4nKw7c8BSlnyTS68F5x2CPitfrVezTryiVkjsY4Q3sB3A6K76NZrLDlsP
+	 ORsYrgRgTL1TVlYn/YluDEdVS1J324ryI41xeLEZbQgF56iYiclYxcXUoyqPpzSY/aw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793041433;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793042974;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=yCT26Kmbeags0MRsZ4Kpw9oJUlQ0yW2hs9dWp1Ih4k4=;
-	b=x8xoZQFJj+FCTe1dMtiIPjACEXnNNwJJgNT8ZRLlTpBZM/3JnLnYu4OhqGxgYRAPvXH8
-	 KG5fHKBcBwHQOkDRlpr66L6Q358g6JopGmjSrUKahTTY7NzqI8WoQdDEHI+Q9GburbcmT
-	 LJqIrCZoLzV/V8HxQKEdiQn4MMYT7obiVY89I+ozD2T4u/ymOzSWsmGdYhkcrCjvJ3DQj
-	 468M/M03OhikGomGqmO11MwMgb5/IAJT9Q2ChBGYM9ySM1IZN7rUE2sDuAhvPopMfbnPY
-	 YWNOEaPHMmSnTOtivbf7nDhXZbhqL26hCysTMPMTRDbYjcUStSOQPFPbKsJIYTeSMiQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=PLsAYamGtns1wUJWIRBXzV2nj77n8PwlVNkWKYgFpP8=;
+	b=kx5jBhghGdH38BL6BO6GXL5cNcDtadJpt5NRs/7a6mROG4Y91xBbB2iSo9vCCD7DgzYW
+	 Cdfx6EoQmIqkfHIUMvuf5JHGa1VQ8m0zzMQoEW2Uwjsr1vJgkgLt5r+bKiymq34Pq4/pb
+	 HHvW7TL1PGi1FbVKbZBJt+zz7xMrPYn93Wp5HqWFy97NpdrQFAAeIEk1IjgSctWblBBkf
+	 s0kkAnGknDihtAuE3FrTmQCVlLbxJREvoUfs7pvvqjRik13OMzPkQPCWbCXDQXH8eDu3z
+	 pjD7urjU9GHt5xDtlN5fOP7GbiYkXxVduNJmI9TbuYXtrckJQov09dlNJlgGmGFnlHA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=e+zUs2PH;
-	arc=none smtp.remote-ip=209.85.221.49
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qcSAsyGx;
+	arc=none smtp.remote-ip=209.85.221.41
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D893606A324
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 19:03:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D893606A324
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE28F606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 19:29:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EE28F606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=e+zUs2PH
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-48dee593f18so2532772f8f.3
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 12:03:53 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qcSAsyGx
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48e0d885929so2262022f8f.3
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 12:29:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793041432; x=1793646232; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yCT26Kmbeags0MRsZ4Kpw9oJUlQ0yW2hs9dWp1Ih4k4=;
-        b=e+zUs2PHF0Ma2PXz31OAQA/8UkojYWGTXJclYDH0IacEkBLKBqQweYtiS5DFW3YrRe
-         1c2y+aXSxHtZNR2sTm195cIxF5/4tDB1WL8JvnqMubUG4pYQZmOstbQNGpyFZ/MCqNiW
-         fC8cqQG0yuN5pkrf6GKXDQ6pbiC7n/0BmYxDbU9/sLfdA9FJ9mZ68TEzPcWza0dG/azk
-         hqkX15AEgyp/swTsm3Zp3Gom+aqqfg5F/H94RIkTarVy24PUyvbpLQ8wabmThIq/9DBY
-         /SXe+FOKDPZ9Pm2hySeG6TonOUeEh/T90ZSj5a9cI938UVObdewYBKYrlt4nxP2gaflI
-         7i5Q==
+        d=gmail.com; s=20251104; t=1793042972; x=1793647772; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=PLsAYamGtns1wUJWIRBXzV2nj77n8PwlVNkWKYgFpP8=;
+        b=qcSAsyGxZogdu09nH8QzET+JqChi7DRHD6u8/YqYgMBQnfv9tT9aRyMKdKQFVYcJUq
+         O4HCBbYUTzeCXtaXLqDL3IVC7JM8aKxr1DzPowRAQeKpaICSoe2mqsQAfCHNslbGFCLX
+         POG+FV5VNk1LqQtowj223a7AB6VQ9IjcH7GTEVtWFATxrQUdkPeharVHu6I8gajbf31D
+         puKK++usRBIQR/hQqN2dtnqE1hKsIei/NWu+gHuDMwfwTbjTjDU+CpEjxVFZobng8wsN
+         HYyEXUlbffuGRcK5/XCrlrWdZ4iFDUTo4F07n6UqAnE0koEJfTqWRv/VzXPBKXBXfNt6
+         aFEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793041432; x=1793646232;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yCT26Kmbeags0MRsZ4Kpw9oJUlQ0yW2hs9dWp1Ih4k4=;
-        b=wMJ8TaqkoCHdqPQ7rPuqMfh6N6T8ofUVr7JCStHqyNuqGgu2aUsQ/4Z9avcB0Xx/RK
-         Expfo9G4KyTWq2AI9IPN6xfpMadJgqwqI+cnCiDKU6BeXgoDvRsebvi95fDfBLPZTQ4A
-         BvaqnVApBsJUjO1QCOyhdoSRfDsfE2TICYXrsNqBNqXP9rlHOSgV/wI+OCEfibACefi8
-         pZkKcTsVoRm6OICS+qvHhA4ScJq2rrPj4PV3o7mdsm/VRDOS/vBV10cdOmvbBkPL67o7
-         1F5fRDv81NIP+L4P3CAW1a9zRSGwwMiOZ3T7U887Fg3ecubteswtV/xZNzz5oZj8oSe5
-         iRKg==
-X-Gm-Message-State: AFq9FYKKPoE9qCVTwkCGMVhQ1YK3bf81GwZhXuOwRFT6/XQjdjm/3wDf
-	yMFfZF8ik6aAXGW7zZ7FNadoGe38c9Uvf5Upc6Ypgk3OhCqzMPNz4B4OeuLMWghSy8k=
-X-Gm-Gg: AYBFou0Rukmv3xdevbUOTHEohrpL0U9bvmvnsZfynB1Jbe+uzuT80NF5QtAtuOd2jxv
-	JJEUulZQGZuEHS072u+ybiEL3T+VfKYxLSXeBgiih4aTWwaeCuX7PHLvseKOpeWjCzax5aJj4GH
-	jViy3E+ilk/BHzFn6JNgZVT8Cf07V9qy67Z++vGH1Ysnj9072gRkmzNNl2SDm3alMFR7OaJQFFP
-	bRkqKA+DK6uijxj+dgaJBY2lWYH4zRAHg0geogp/LcWwZIcehvOF/nHCPOnEY1YblgDe59MVb3J
-	8OQpp3yWiDrMNItbYrPiDg1hpBLUj4Rm07snQHWF5JBZ3qny7ePUVg775XaMcPZBFYnc2/zSFDk
-	XcdNVdvzWleP5nZVL1d+RftA2RNn2aKuep9vwJCpJ/2C5w1u98B4s0M1tOBGJ3SYdjVWcI86J7q
-	rPMACrbylGPMGKTq5lHgP7fJFrUSbpTdDFmNd4vCQeAGTLpwJbLkwIY7giDsaCB4aBFd68MOktI
-	SkQ6eslhIiAYFRMQnGmBUwYHrQU4/SdhjbUMW5R3pjT5Hk4ob6zCqLO07771OW+i4/rgMBAEXtt
-	Pdb36bYcIlInWq9WcRDW1aVPxBA=
-X-Received: by 2002:a5d:6704:0:b0:48b:118e:7454 with SMTP id ffacd0b85a97d-48e3eb8bdc6mr11129837f8f.31.1793041431604;
-        Mon, 26 Oct 2026 12:03:51 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48e3ecd37f4sm21145713f8f.44.2026.10.26.12.03.50
+        d=1e100.net; s=20260707; t=1793042972; x=1793647772;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PLsAYamGtns1wUJWIRBXzV2nj77n8PwlVNkWKYgFpP8=;
+        b=hYop40Wb6wxjo/6nNIvl5ZKkUbRmLyJ74fzQCF9R5HucL7AV8UPgjaBZliIbMQY5E+
+         XDPyX+5zZ9/uFEsQM1Yh8tWisQ5fSU9Vd4gEff0mbEnRe5JXpO1YyrwUZbkpFI9DiRCK
+         GsAUpnjFBNTivYy7woz6h7SxgqmIZoDW7J+x/BKbF3kvwz/S999chKmD64ey2sQhbUJu
+         UWR3sywa5b3BI2dkwzSXZnher+F+HoIaxCDHlqLlKrwLCSXh1BAdJ1caKKKz0vf2fDrh
+         koSwkQeDN+rPaH9WgsLcPaGN67lULQ3O5e7uTTOZ9f1opgDLHlV9OriwmApzUK10pjgw
+         usOw==
+X-Gm-Message-State: AFq9FYKFL5C7MI0HI56hyAli0WhNem6+eA6xpkBlwC5Qy420gvEsuvb6
+	anyRY7NDbZqlFuga+zYzTSoAtjfas2QaFBwCknCky1NWNKTEBCSpLijr
+X-Gm-Gg: AYBFou3ZPjADjACap5Pvj6c4HG2V1oRcHmn7F3PUO6OrHxlH38Knr42ExGDwcpW74cb
+	Fi/Zdfl33QWLNkNVe7BHXAknZbbL97pxvyzifVPR6d1BoW8Ixk/x9Mm+UHsxA5WirXHKtOBFN8X
+	zAfrUCoiozmFpFbvllPECgCPkmQ4/3NpTryRWD8E7yz/lZ/+sJ6+eMfdn8Rp6UM+JJQOAG3Hvya
+	4zuRh7FLw0Az4fRtVhCedbKNAA2WIo01BHZ6fSAi+27uCk7a2XbBrn9yipArexhjvP2UIRb1auU
+	cfH+9tS5JoOjgdqU0mAuHT4GwWiUmACIgRO2JxyeUIlI/LEUYZUIHXisK4cS6iV7mCj0MqV3/b9
+	vVYB/sLO8EdvQrZhZYhLcSioP1A9bk/8dTBphW48srZLXkZ7F1it4gP7L8spdKxbUG64zVeu5R4
+	p2VmQ5LWHt4ZKtN5trwUemX9RFFO73nfY8Jg01nlWTs2Potk49hGzwG6O4v7l9czjw/t7Aq9pYA
+	/lZ493xTT8ljdtLGVFSk9p6ODora/GWk5k4bnP6Y0k/7Dh4VHd5q65q5dmjN3U7KyPYoqhNWl2A
+	+eGZLpe/HjV5HxXf9g==
+X-Received: by 2002:a05:6000:40dc:b0:48d:f014:63ee with SMTP id ffacd0b85a97d-48e3eb99fd6mr14003619f8f.20.1793042972186;
+        Mon, 26 Oct 2026 12:29:32 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd3555sm17612876f8f.42.2026.10.26.12.29.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 12:03:51 -0700 (PDT)
+        Mon, 26 Oct 2026 12:29:31 -0700 (PDT)
+Date: Mon, 26 Oct 2026 20:29:28 +0100
 From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	willemb@google.com,
-	eddyz87@gmail.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	horms@kernel.org,
-	liamwisehart@meta.com,
-	martin.lau@linux.dev,
-	pabeni@redhat.com,
-	song@kernel.org,
-	netdev@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kuniyu@google.com,
-	memxor@gmail.com,
-	emil@etsalapatis.com,
-	almagui@kernel.org,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test bpf_ksock_bind() kfunc
-Date: Mon, 26 Oct 2026 19:03:42 +0000
-Message-ID: <20261026190342.137069-2-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261026190342.137069-1-mahe.tardy@gmail.com>
-References: <20261026190342.137069-1-mahe.tardy@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com
+Subject: Re: [PATCH bpf-next] bpf: Don't re-sort subprog_info[] for every new
+ subprogram
+Message-ID: <at-qGFFTBcMS0vxH@gmail.com>
+References: <20261023150302.4097865-1-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,132 +96,104 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261023150302.4097865-1-alexei.starovoitov@gmail.com>
 
-Reuse the existing basic ksock test to also bind to a specific source
-and verify that the source address was respected when receiving.
+On Fri, Oct 23, 2026 at 03:03:02PM +0000, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> add_subprog() appends new subprog to env->subprog_info[] and calls sort()
+> on the whole array, though only the last entry can be out of order.
+> Move subprogs that start after the new one up by one entry instead.
+> 'start' is unique, so the order of the array doesn't change. The new entry
+> can land in a used slot, so initialize all of it.
+> 
+> add_subprog() returns the index of the new subprog instead of the last
+> one. The callers check for error only.
+> 
+> It's a trivial prep for rust-bpf [1] that bumps BPF_MAX_SUBPROGS to 1024.
+> Rust crates have more than 256 functions that are not inlined.
+> 
+> Time in add_subprogs() when veristat loads sched_ext schedulers from scx
+> repo, 8 cpu VM, usec:
+> 
+>                  subprogs  before  after
+>  arena_selftest       101     386     27
+>  lavd_enqueue          52      96     16
+>  lavd_dispatch         48      78     11
+> 
+> [1] https://github.com/4ast/rust-bpf
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- .../testing/selftests/bpf/prog_tests/ksock.c  | 22 ++++++++++++++-----
- .../selftests/bpf/progs/ksock_common.h        |  2 ++
- tools/testing/selftests/bpf/progs/ksock_lsm.c | 18 +++++++++++----
- 3 files changed, 33 insertions(+), 9 deletions(-)
+Reviewed-by: Mahe Tardy <mahe.tardy@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ksock.c b/tools/testing/selftests/bpf/prog_tests/ksock.c
-index dd6b167623d9..b319f74bcf3d 100644
---- a/tools/testing/selftests/bpf/prog_tests/ksock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ksock.c
-@@ -10,6 +10,7 @@
+Looks good, why not take advantage from the sorted array! (I know it's
+kinda trivial but trying to review the small patches around here.)
 
- #define NS_TEST "ksock_lsm_ns"
- #define RECV_PORT 7777
-+#define LOCAL_KSOCK_PORT 6666
- #define RECV_TIMEOUT_SEC 5
-
- struct ksock_test_env {
-@@ -63,6 +64,8 @@ void test_ksock_lsm(void)
- 		.sin_family = AF_INET,
- 		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
- 	};
-+	struct sockaddr_in src_addr;
-+	socklen_t src_addrlen = sizeof(src_addr);
- 	struct ksock_lsm *skel;
- 	char recv_data[sizeof(skel->data->send_data)] = {};
- 	ssize_t n;
-@@ -76,9 +79,10 @@ void test_ksock_lsm(void)
- 	if (!ksock_test_env_setup(&env))
- 		goto fail;
-
--	/* Step 1: Run the setup SYSCALL prog to create the ksock */
-+	/* Step 1: Create, bind, and connect the ksock from the SYSCALL prog. */
- 	skel->bss->ipv4_remote = htonl(INADDR_LOOPBACK);
- 	skel->bss->remote_port = RECV_PORT;
-+	skel->bss->local_port = LOCAL_KSOCK_PORT;
- 	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.ksock_setup),
- 				     &opts);
- 	if (!ASSERT_OK(err, "ksock_setup run"))
-@@ -108,10 +112,18 @@ void test_ksock_lsm(void)
- 		       "LSM send bytes"))
- 		goto fail;
-
--	n = recvfrom(env.rfd, recv_data, sizeof(recv_data), 0, NULL, NULL);
--	if (ASSERT_EQ(n, sizeof(recv_data), "recvfrom len"))
--		ASSERT_MEMEQ(recv_data, skel->data->send_data, sizeof(recv_data),
--			     "payload match");
-+	n = recvfrom(env.rfd, recv_data, sizeof(recv_data), MSG_TRUNC,
-+		     (struct sockaddr *)&src_addr, &src_addrlen);
-+	if (!ASSERT_EQ(n, sizeof(recv_data), "recvfrom len"))
-+		goto fail;
-+	if (!ASSERT_EQ(ntohs(src_addr.sin_port), LOCAL_KSOCK_PORT,
-+		       "source address port"))
-+		goto fail;
-+	if (!ASSERT_EQ(ntohl(src_addr.sin_addr.s_addr), INADDR_LOOPBACK + 1,
-+		       "source address ip"))
-+		goto fail;
-+	ASSERT_MEMEQ(recv_data, skel->data->send_data, sizeof(recv_data),
-+		     "payload match");
-
- fail:
- 	if (tfd >= 0)
-diff --git a/tools/testing/selftests/bpf/progs/ksock_common.h b/tools/testing/selftests/bpf/progs/ksock_common.h
-index 2a32cff2fbe9..87321f4ba4f5 100644
---- a/tools/testing/selftests/bpf/progs/ksock_common.h
-+++ b/tools/testing/selftests/bpf/progs/ksock_common.h
-@@ -11,6 +11,8 @@
-
- struct bpf_ksock *bpf_ksock_create(const struct bpf_ksock_create_opts *opts,
- 				   u32 opts__sz, int *err__uninit) __ksym;
-+int bpf_ksock_bind(struct bpf_ksock *ks, const union bpf_ksock_addr *addr,
-+		   u32 addr__sz) __ksym;
- int bpf_ksock_connect(struct bpf_ksock *ks, const union bpf_ksock_addr *addr,
- 		      u32 addr__sz) __ksym;
- struct bpf_ksock *bpf_ksock_acquire(struct bpf_ksock *ks) __ksym;
-diff --git a/tools/testing/selftests/bpf/progs/ksock_lsm.c b/tools/testing/selftests/bpf/progs/ksock_lsm.c
-index 9808451098ef..28da777eea6c 100644
---- a/tools/testing/selftests/bpf/progs/ksock_lsm.c
-+++ b/tools/testing/selftests/bpf/progs/ksock_lsm.c
-@@ -10,6 +10,7 @@
-
- char send_data[32] = "hello from bpf ksock";
-
-+__u16 local_port;
- __be32 ipv4_remote;
- __u16 remote_port;
- int target_pid;
-@@ -32,19 +33,28 @@ int ksock_setup(void *ctx)
- 		return err;
-
- 	addr.sin.sin_family = AF_INET;
-+	addr.sin.sin_port = bpf_htons(local_port);
-+	addr.sin.sin_addr.s_addr = bpf_htonl(0x7f000002); /* 127.0.0.2 */
-+
-+	err = bpf_ksock_bind(ks, &addr, sizeof(addr));
-+	if (err)
-+		goto err_release;
-+
- 	addr.sin.sin_port = bpf_htons(remote_port);
- 	addr.sin.sin_addr.s_addr = ipv4_remote;
-
- 	err = bpf_ksock_connect(ks, &addr, sizeof(addr));
--	if (err) {
--		bpf_ksock_release(ks);
--		return err;
--	}
-+	if (err)
-+		goto err_release;
-
- 	err = ksock_ctx_insert(ks);
- 	if (err && err != -EEXIST)
- 		return err;
- 	return 0;
-+
-+err_release:
-+	bpf_ksock_release(ks);
-+	return err;
- }
-
- SEC("lsm.s/socket_bind")
---
-2.43.0
-
+> ---
+>  kernel/bpf/verifier.c | 29 +++++++++++++----------------
+>  1 file changed, 13 insertions(+), 16 deletions(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5601d2056218..676566f80d97 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2605,12 +2605,6 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
+>  	return &elem->st;
+>  }
+>  
+> -static int cmp_subprogs(const void *a, const void *b)
+> -{
+> -	return ((struct bpf_subprog_info *)a)->start -
+> -	       ((struct bpf_subprog_info *)b)->start;
+> -}
+> -
+>  /* Find subprogram that contains instruction at 'off' */
+>  struct bpf_subprog_info *bpf_find_containing_subprog(struct bpf_verifier_env *env, int off)
+>  {
+> @@ -2645,26 +2639,29 @@ int bpf_find_subprog(struct bpf_verifier_env *env, int off)
+>  
+>  static int add_subprog(struct bpf_verifier_env *env, int off)
+>  {
+> +	struct bpf_subprog_info *subprog = env->subprog_info;
+>  	int insn_cnt = env->prog->len;
+> -	int ret;
+> +	int i;
+>  
+>  	if (off >= insn_cnt || off < 0) {
+>  		verbose(env, "call to invalid destination\n");
+>  		return -EINVAL;
+>  	}
+> -	ret = bpf_find_subprog(env, off);
+> -	if (ret >= 0)
+> -		return ret;
+> +	i = bpf_find_subprog(env, off);
+> +	if (i >= 0)
+> +		return i;
+>  	if (env->subprog_cnt >= BPF_MAX_SUBPROGS) {
+>  		verbose(env, "too many subprograms\n");
+>  		return -E2BIG;
+>  	}
+> -	/* determine subprog starts. The end is one before the next starts */
+> -	env->subprog_info[env->subprog_cnt].exit_idx = U32_MAX;
+> -	env->subprog_info[env->subprog_cnt++].start = off;
+> -	sort(env->subprog_info, env->subprog_cnt,
+> -	     sizeof(env->subprog_info[0]), cmp_subprogs, NULL);
+> -	return env->subprog_cnt - 1;
+> +	/*
+> +	 * Determine subprog starts. The end is one before the next starts.
+> +	 * The array stays sorted: subprogs that start after 'off' move up.
+> +	 */
+> +	for (i = env->subprog_cnt++; i > 0 && subprog[i - 1].start > off; i--)
+> +		subprog[i] = subprog[i - 1];
+> +	subprog[i] = (struct bpf_subprog_info){ .start = off, .exit_idx = U32_MAX };
+> +	return i;
+>  }
+>  
+>  static int bpf_find_exception_callback_insn_off(struct bpf_verifier_env *env)
+> 
+> base-commit: b116ac6087541d3d98031e786adbe9c733cd6df3
+> -- 
+> 2.55.0
