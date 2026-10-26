@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983903;
-	b=AkUIO2c8ifUPaIK4vb5EmJgUNMEGBVen1r9cheVoixoxXWiOs1+UVWyqB2lsyMXT6ixp
-	 Jv3abXvoakEljbtTaig71DoUAlJK6YhgzVs9CeRKFOA1je6PeLKT2TBazVUlvp4Bt+o4e
-	 i1YaPCupV0SmqSRRk5yBNhQcao1vy+EEdgoOsvrTMIZS9Ue+fdu/0iYCkdAUExSBDuweJ
-	 V7kNzkt6fro7bXiw+jzS4fGrWeyzKkdGjuCrK5yUBerueZ3wnRQHAfxpCVqEKOFcyknC8
-	 J+1GZLa2Zwk2O5wJMEWZJ+z4mgWOoCCeMLC27Fsbr18tUMCatSa1lYL0VwdiUQ8fxLQ==
+	t=1792983909;
+	b=ra6CCrGTjzGMjIK2JrepA641XpzYS8s3b79y4bXE9cndNOLzS6QtroXa2JYN4Zdc/0uT
+	 D5TNEbbPwTAmzhDIdx+W2qcbO2MNSFSQGMflDRQh8rZjJQxsKldHlsOeN6hB6ceIcIjIX
+	 0j+9dNFMiDirkz5SPZISLu6XKe6BQm90QTs7Nx7L7imDnlWiTcw5PaFk5Hj8/BOFaFpwI
+	 cODJdx2kwpY+nWvIP47LQeSPBgHDu/qTV75nSnVfNugfH+YsMl/hKkWJA7UkkJQZ+YP32
+	 9ZhQprDm7x+0mOLgmT0f87Q/GqnWpRbNw6rz9wPk/WYqv6o8b8DLn352oOxKIZuQGyg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983903;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983909;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=IqdQ5slnBs1+RTcvfDTU0cDTw4oDvCovJMz8OQrb8bc=;
-	b=5Id/mhBY00O1BeisYd7G4wowHe6ywS7xQZ+ILN6X//vS1q9qciBb3zuLltUdyf9qbR7w
-	 N9AGzQV7UI354RAXQV9zjXBHRS7wtnPK2wwvJub6QnaXh5FcMJ2Ftvd/1R6X6IQAJagHw
-	 ChL5qrLyoAUW2lxLxuqLS0XW8gUsZUA4o5uVhwBnNTrz+/ayzupU4pkCazOFNGqkkxQIv
-	 wj/cWj2pky6Mz+CqtjmDZZXcJm9/DJAoljxK0lcWopSFg+tELXZYdwXku848EJDkXgTYR
-	 y0ivdPiU2COWWC+n18DvZFVrYeexUaq9yS1kUJn6HfEvPvWlUdtIHSVFhEhvgS820cQ==
+	bh=TuYwCzzOhMVm6EYo35DQ/9RsEF3sem7OfEv6MU0QIos=;
+	b=FLd4101ZG6P6x/Nkr45WILAk86YznD2oefmHRHkreF6uJVudg7ohdAvAWOk49v1UxP/Y
+	 cPG0LJ4Z+GbY2wbbFKfq+41DM3GGOXfUr1z0H6zSHQ/utifA5O64Nm4/y34Tc+fJA/+z8
+	 DparzlzUm1UtkrE4OM7B1RhMcYkOOI1nmKzSIH94wAU7Zm+vAgW7XAqhIprBW/+HJ99Dr
+	 G1CenhUw782DEdrGbAEwDXJQbKPtUSHCp2F3rbLpKA4Zz/NkhqI9wMLGXpYXcNfIhgF2F
+	 4CWlJS64rwW86zybQj640/Ph/5NuUEXZcWycBlQ9RkNqeiiw+LL4MMKDdpEubDuCVvQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gAEDoxDQ;
-	arc=none smtp.remote-ip=209.85.215.181
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ooYh5Ocs;
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70508606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 70508606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8072F606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8072F606A31B
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=gAEDoxDQ
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc4be0e5351so748445a12.0
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:03 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ooYh5Ocs
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e99b1e5b4cso13410175ad.0
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983903; x=1793588703; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983909; x=1793588709; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IqdQ5slnBs1+RTcvfDTU0cDTw4oDvCovJMz8OQrb8bc=;
-        b=gAEDoxDQxCLVVg0Xw13Mo6MrZEBVBYgeKzLBeNKfbnd8kzkWQIlfTf0ME+gFT5ZXTl
-         yao2TdgqeyzCGS5ajLzaCYLu7UEWG1a/PxbcB/OLoxO1EKMznfGRvOSj+PdUBmlAyBpY
-         7r+lmy4v9FUNGzZ9IWKjeHTkC9qphjknLPao4Y2H4XH+pj46ThUW/clrh79NJIGsNSwt
-         z2XOEOKAdgY0WpMThaYBhbDZQ5B6nqFnzkwwiLJ+9TCspg5/wtmVghDHvd1FdhIqqkvV
-         I2TmHg5IVpmy8H3Cp+doOe9gtx0lUQ9eRBClyS7m5k/BaCK1PAxJqTPvR1W6eoqdABn6
-         mChg==
+        bh=TuYwCzzOhMVm6EYo35DQ/9RsEF3sem7OfEv6MU0QIos=;
+        b=ooYh5OcsceW+HkUuUL94Rt/pNfzoetGFhXZlAnTWPKFQf8aOG/HorLTiMSJPmlD28G
+         y7PdjX20F/4hGTI5mGwXGh5AhfNKvBYuQ+4Ws3ulha4wDr7jy4mWB2rTkk4SvKOM9lus
+         yxlOu8TWCEa/RlcAxgmJCiwz1RpDGmGUiOwkXydjwiSAJJhVz+Qd4/f3KLvWMzkdtQbz
+         Yl1jYmqMtOBdrjFd1cOCMuZpDvHUwPAxk6h0dlJHyBkwCmC4g2emU+bGCcj2ROXpVIHB
+         fSHtRNCUp7KBaUst97oqg/ui12ZS1334m767PYhPWqc/9IR7x6y6n8nmJ7mNp7HQoWkj
+         c06g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983903; x=1793588703;
+        d=1e100.net; s=20260707; t=1792983909; x=1793588709;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IqdQ5slnBs1+RTcvfDTU0cDTw4oDvCovJMz8OQrb8bc=;
-        b=YTvt4AALASTbVGrVLPCgSi6xByteYLl0JayIonSYDkLpqkJY65Xyse4GbyscWrMupC
-         /T3ldGHJcIOI+ohKfLIYlAYJng4fNDd534nl5D6w0/thSQ6IKnHB5MNZM/YuE+RBs4y/
-         k1l0XCJLJPgmw5+xt2KKhUWtDRy65qqhDpVVOHexa2M6F12lCrJ6KFigwLeBvTc16vCO
-         er5bO9uF7w59iROK9mIeWtX4o/MtPxO4SYEZex4Sk3wrpL7BaiMMVCBz4+xsKiGCAB+j
-         41rAlkxx8d+lt1rIfwzwv7vO+zpHTQjdU6TskoKFU3Mp+QMUaQPDf2605P4K4IslCJFX
-         B4wQ==
-X-Gm-Message-State: AFq9FYLE3H5Got2PJqe1/pSFqQmcFLuSVqEiR6kD+RvffR/z2CZWzGgS
-	+ZQi+USS/B7cLarkhatBzEJWSJqMUbTtEaaj1Pp/9CogxgZWZo4/idVUP52Akg==
-X-Gm-Gg: AYBFou0LDmEvLGnJ9bMg36jctVBQq2HbwxbMg5KERXx/M+6AYYCC5nd7RR4w+Y0Kewt
-	tBhLGMdj6uuNHyXpGlyPZBsbDVTJqWSU8R01WEDKixYSE76Z5Rkr4Nb3PFnjcYbBu1haZCfQ7B8
-	sroGAbPt/Uoar+Hejy2KaccrEEoZcPuo7I9FYEpkPK+BQZb4D9uth8Ysca0y8OaFpiY1XPUOVE+
-	vqoGThQE1+YXvfELbcIsFx87IkqyFlgS4iXhbMqfMyl9dH8i1g1zk06ERboUKSYnwaQ6DsSXQHS
-	GR/72xNs4c0Z75ZPrK4grp5tooNSLjW96IJ0Z9AxsZDPTbrR++HFkuGVQpE8dQXvDirTRWNnvp+
-	Dg2wXMBrKDOpQqKmmgtB9bJZfWSK+QRprhHpU+kOeHWNfTe+6KPYg5SeLN4nDn4EaOrob/Mz/Ua
-	fsfaPKS4GpxvUDgoerzCVOc5Y+m870w3UTz2aBp/vHyXp6mo3jIhhgmIu0HCgpNTq/YD1RwEF/W
-	DR1eOk9conclNbxAvx2MmU9YTxhOwBw3OzToPlrIw7VnFeLUxOLakCgCbHvyC3HoQuEv8kfy5OX
-	F5mygp1VJCXly3IGYzKqwa0UHk0PXQyEXmslZso6PzIlRz8SVuSKhYaau7TJ399KzHP+tJQC2oy
-	T3/EgDljzYFdavNeHN/YVnte2
-X-Received: by 2002:a17:90b:4e83:b0:3a8:6a04:80ef with SMTP id 98e67ed59e1d1-3ade9b2cf01mr4575739a91.6.1792983902601;
-        Sun, 25 Oct 2026 20:05:02 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebadfa82sm6361593a91.8.2026.10.25.20.05.02
+        bh=TuYwCzzOhMVm6EYo35DQ/9RsEF3sem7OfEv6MU0QIos=;
+        b=gbfes64lPP41iUo/D8V7ondA+xkLOVglHgfHtY10mGEMf2QDyKrzb4Q0ncDwocobji
+         Oc25FBQT9wXeAswIpP5ozOE1RvHwi5J3AJnr7eF8E5c6SYBkixyMO+PLrxPys7nRJfFq
+         tbhYJ+L2tfElJnkrsrXdWAFtObJiz5gm8EtJtaiA7CnVmGk8MIT36jrM/u+1gEOTzYsa
+         aA1l9okXzNusLk5OUYasHlZcMdmJIsfbJ3GdpwADUTb508bGZ2bopVdrXALxOLsHWW1q
+         SFCWCJKKcfLeHJcfM+ZETBQOA2WnA1XMiJWnishVUyykH2zkCNTCGAHb3+pDgz7a+IRh
+         wN2g==
+X-Gm-Message-State: AFq9FYKnuFKBYw8sAiu/0o6jnn/6oK8Y64LoJB9Ng1DqQeOLXcYL996C
+	2Rri/C1KsEM4vCMzxN06OIvdJWeO7HckSjL8PqTgR+KfGDj32WlCoIWaUvgkEQ==
+X-Gm-Gg: AYBFou0gMBN5eapZkR7hE+TwomSe925KyOVjfHWDz8R2JPbZxvD35s87/HrrAvBAgjA
+	jjyHOOGZKctgd1Inmx+sGAlZCEozHDn+fDm79qbCl2O6c5pXsJSdJ3GdKvwu80LkmIRsD3yKt9d
+	jKkcERNr1HwD7HXPiiVqDNpyEnoEEpVMHkTrTLzBnl9FtABZlymsAHRoPN0yhenvc3kUkRjznE9
+	6Y2dmMBP08+0DzXLB971E0e0aw0y+WJmuwy7G2l47Opnkvj2yaoxBdGCXPrJjU3kIvztTltZU0T
+	Dp+liT5sNhSEg5ARNNAqP+QUwnei1tFWLAAyAlfGJ7XUSlNaOcReLj6PywiGK2FiQdjZAeAHmnJ
+	M5XNrkvS0OKSxf4Uv5pbZn/gqi+BTU+A6Lura+ksuqCtO0zkDw8tG7IhfOn7Vs6PliyS476uxJS
+	7CWNgjaYnctuHnlzYgn3uOmNj6VOVaeB6PueN77ctz0shTAMiAbUkJwfF8Qlz+x9AkexKYf8jLD
+	gfCyK3pl7WGijrcXpp78jb+s3ZjHWBQ+8VfYZn6vQUuVkh5H1JcgV/8EC/kJNTBAfslQ3D94qTP
+	eZnIXlmLys1OWgvlnSnJbBqipf023b0SC+MyuUtgqD/d9CmvbiT9MzDR8i22ta58klR36NRe+xA
+	tWvqi7hmZj1TH3XQeyuutxQPT
+X-Received: by 2002:a17:902:f64e:b0:2dd:c100:80ba with SMTP id d9443c01a7336-2ea9c9858b7mr47637795ad.53.1792983908756;
+        Sun, 25 Oct 2026 20:05:08 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1a2676sm10342955ad.50.2026.10.25.20.05.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:05:02 -0700 (PDT)
+        Sun, 25 Oct 2026 20:05:08 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 54/81] bpf: Allow 24 arguments of static subprogs
-Date: Mon, 26 Oct 2026 02:59:15 +0000
-Message-ID: <20261026025943.404450-55-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 55/81] selftests/bpf: Test a static subprog with 24 arguments
+Date: Mon, 26 Oct 2026 02:59:16 +0000
+Message-ID: <20261026025943.404450-56-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,154 +103,138 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A BPF function takes 12 arguments at most: 5 in registers and 7 in stack
-slots. Rust needs more, because it passes a slice or a trait object in two
-slots. For a struct with 5 fields derive(Debug) calls
-core::fmt::Formatter::debug_struct_field5_finish(), which takes up to
-23 slots.
+A prog passes 1 .. 24 to a static subprog, in r1 - r5 and in all 19 stack
+slots. The subprog adds them up. The test runs the prog and expects 300.
+Thus it also shows that the JIT has room for each slot.
 
-The limit of 12 is for calls in which the kernel takes part. Only BPF code
-calls a static subprog. Thus a static subprog can have a different limit:
-MAX_BPF_STATIC_FUNC_ARGS.
+The verifier must reject a store to slot 20:
 
-  callee               arguments
-  -------------------  ----------------------------------------
-  kfunc, trampoline    12, no change
-  global subprog       5, no change
-  static subprog       12 -> 24: 5 registers and 19 stack slots
+  stack arg write offset -160 exceeds max 19 stack args
 
-The verifier counts the stack arguments of a static subprog from its code,
-and JITs get the number of stack slots from the verifier. Thus JITs do not
-change.
-
-BTF of a static subprog can now show more than 12 parameters. Before this
-patch that was an error. Now the verifier marks such BTF as unreliable and
-continues.
+The subprog is in asm and its prototype has no parameters. Thus no test
+covers BTF with more than 12 parameters.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf.h          | 9 ++++++++-
- include/linux/bpf_verifier.h | 8 ++++----
- kernel/bpf/backtrack.c       | 2 +-
- kernel/bpf/btf.c             | 5 ++++-
- kernel/bpf/verifier.c        | 4 ++--
- 5 files changed, 19 insertions(+), 9 deletions(-)
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 95 ++++++++++++++++++-
+ 1 file changed, 92 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2ff1a2c97328..d8cd7c63f157 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1035,13 +1035,20 @@ static_assert(__BPF_RET_TYPE_MAX <= BPF_BASE_TYPE_LIMIT);
- /* The longest tracepoint has 12 args.
-  * See include/trace/bpf_probe.h
-  *
-- * Also reuse this macro for maximum number of arguments a BPF function
-+ * Also reuse this macro for maximum number of arguments a global BPF function
-  * or a kfunc can have. Args 1-5 are passed in registers, args 6-12 via
-  * stack arg slots. The JIT may map some stack arg slots to registers based
-  * on the native calling convention (e.g., arg 6 to R9 on x86-64).
-  */
- #define MAX_BPF_FUNC_ARGS 12
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index 5062c5bab5f0..42c241ebe796 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -359,10 +359,99 @@ __naked void stack_arg_shared_store(void)
+ 	);
+ }
  
-+/*
-+ * A static BPF function is called by BPF code only, with what the compiler
-+ * makes of its arguments. A slice or a trait object of Rust takes two slots. The
-+ * function that derive(Debug) calls for a struct with five fields takes 23.
-+ */
-+#define MAX_BPF_STATIC_FUNC_ARGS 24
++/* r1 - r5 and all 19 slots. There is no BTF for it: what it takes is seen in its code. */
++__naked __noinline __used
++static unsigned long subprog_24args(void)
++{
++	asm volatile (
++		"r0 = r1;"
++		"r0 += r2;"
++		"r0 += r3;"
++		"r0 += r4;"
++		"r0 += r5;"
++		"r1 = *(u64 *)(r11 + 8);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 16);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 24);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 32);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 40);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 48);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 56);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 64);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 72);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 80);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 88);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 96);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 104);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 112);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 120);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 128);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 136);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 144);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 152);"
++		"r0 += r1;"
++		"exit;"
++		::: __clobber_all
++	);
++}
 +
- /* The maximum number of arguments passed through registers
-  * a single function may have.
-  */
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 41ffe9b694a6..c0227e74899b 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -499,7 +499,7 @@ static_assert(MAX_CALL_FRAMES <= (1 << 4));
- static_assert(MAX_BPF_STACK_SLOTS <= (1 << 12));
- 
- /* Maximum number of bpf_reg_state objects that can exist at once */
--#define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
-+#define MAX_STACK_ARG_SLOTS (MAX_BPF_STATIC_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
- #define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK_SLOTS + MAX_STACK_ARG_SLOTS) * \
- 			 MAX_CALL_FRAMES)
- 
-@@ -1061,8 +1061,8 @@ struct bpf_subprog_info {
- 	bool bail_unwinds: 1;
- 	/* some call of it is not followed by unwind_goto */
- 	bool plain_call: 1;
--	u8 code_stack_args:4;
--	u8 arg_slot_cnt:4;
-+	u8 code_stack_args;
-+	u8 arg_slot_cnt;
- 
- 	enum priv_stack_mode priv_stack_mode;
- 	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
-@@ -1089,7 +1089,7 @@ struct backtrack_state {
- 	u32 frame;
- 	u32 reg_masks[MAX_CALL_FRAMES];
- 	unsigned long stack_masks[MAX_CALL_FRAMES][BITS_TO_LONGS(MAX_BPF_STACK_SLOTS)];
--	u8 stack_arg_masks[MAX_CALL_FRAMES];
-+	u32 stack_arg_masks[MAX_CALL_FRAMES];
- };
- 
- struct bpf_id_pair {
-diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-index 98539c7e42c5..a42b8b830b0b 100644
---- a/kernel/bpf/backtrack.c
-+++ b/kernel/bpf/backtrack.c
-@@ -226,7 +226,7 @@ static inline unsigned long *bt_stack_mask(struct backtrack_state *bt)
- 	return bt_frame_stack_mask(bt, bt->frame);
- }
- 
--static inline u8 bt_stack_arg_mask(struct backtrack_state *bt)
-+static inline u32 bt_stack_arg_mask(struct backtrack_state *bt)
++SEC("tc")
++__description("stack_arg: static subprog with 24 args")
++__success __retval(300)
++__naked void stack_arg_24args(void)
++{
++	asm volatile (
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"*(u64 *)(r11 - 152) = 24;"
++		"*(u64 *)(r11 - 144) = 23;"
++		"*(u64 *)(r11 - 136) = 22;"
++		"*(u64 *)(r11 - 128) = 21;"
++		"*(u64 *)(r11 - 120) = 20;"
++		"*(u64 *)(r11 - 112) = 19;"
++		"*(u64 *)(r11 - 104) = 18;"
++		"*(u64 *)(r11 - 96) = 17;"
++		"*(u64 *)(r11 - 88) = 16;"
++		"*(u64 *)(r11 - 80) = 15;"
++		"*(u64 *)(r11 - 72) = 14;"
++		"*(u64 *)(r11 - 64) = 13;"
++		"*(u64 *)(r11 - 56) = 12;"
++		"*(u64 *)(r11 - 48) = 11;"
++		"*(u64 *)(r11 - 40) = 10;"
++		"*(u64 *)(r11 - 32) = 9;"
++		"*(u64 *)(r11 - 24) = 8;"
++		"*(u64 *)(r11 - 16) = 7;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"call subprog_24args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
+ SEC("tc")
+ __description("stack_arg: write beyond max outgoing depth")
+ __failure
+-__msg("stack arg write offset -80 exceeds max 7 stack args")
++__msg("stack arg write offset -160 exceeds max 19 stack args")
+ __naked void stack_arg_write_beyond_max(void)
  {
- 	return bt->stack_arg_masks[bt->frame];
- }
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 274ef78b6e1c..955bb65a71f6 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8819,12 +8819,15 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 	}
- 	args = (const struct btf_param *)(t + 1);
- 	nargs = btf_type_vlen(t);
--	sub->arg_slot_cnt = nargs;
- 	if (nargs > MAX_BPF_FUNC_ARGS) {
-+		/* what a static function takes is seen in its code */
-+		if (!is_global)
-+			return -EINVAL;
- 		bpf_log(log, "kernel supports at most %d parameters, function %s has %d\n",
- 			MAX_BPF_FUNC_ARGS, tname, nargs);
- 		return -EFAULT;
- 	}
-+	sub->arg_slot_cnt = nargs;
- 	err = btf_check_arg_slots(log, tname, is_global, nargs, sub);
- 	if (err)
- 		return err;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0c1de0f24b85..50e24237a6b7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4625,7 +4625,7 @@ static void end_stack_arg_loads(struct bpf_verifier_env *env, struct bpf_func_st
- static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_state *state,
- 				 int off, struct bpf_reg_state *value_reg)
- {
--	int max_stack_arg_regs = MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS;
-+	int max_stack_arg_regs = MAX_STACK_ARG_SLOTS;
- 	struct bpf_subprog_info *subprog = &env->subprog_info[state->subprogno];
- 	int spi = -off / BPF_REG_SIZE - 1;
- 	struct bpf_reg_state *arg;
-@@ -15836,7 +15836,7 @@ static void prepare_subprog_args(struct bpf_verifier_env *env)
- 				j++;
- 		}
- 		sub->stack_args_from_code = true;
--		sub->code_stack_args = min(cnt, MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS);
-+		sub->code_stack_args = min(cnt, MAX_STACK_ARG_SLOTS);
- 		/* incoming + max outgoing. Calls add the latter. */
- 		sub->stack_arg_cnt = sub->code_stack_args;
- 		if (env->prog->aux->func_info_aux)
+ 	asm volatile (
+@@ -371,8 +460,8 @@ __naked void stack_arg_write_beyond_max(void)
+ 		"r3 = 3;"
+ 		"r4 = 4;"
+ 		"r5 = 5;"
+-		/* Write to offset -80, way beyond any callee's needs */
+-		"*(u64 *)(r11 - 80) = 99;"
++		/* Write to offset -160, way beyond any callee's needs */
++		"*(u64 *)(r11 - 160) = 99;"
+ 		"*(u64 *)(r11 - 16) = 20;"
+ 		"*(u64 *)(r11 - 8) = 10;"
+ 		"call subprog_7args;"
 -- 
 2.55.0
 
