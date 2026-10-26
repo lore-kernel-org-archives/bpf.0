@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986797;
-	b=aXMVcPm5KWvQ6FwA4GcZDEV6hhRrKS2ay8O7r6ooLxIaeku0m+14rQIyCYAdiSQVHmpJ
-	 Qwy0266gDKBfPtol7AkT0zGKJiQZHTaq/YSCHQTAy346bSqRau6/EPfGHh0xu1fiXnDIx
-	 ZQ6hm8GHpKwgAwQjR6WbAtMz9XRn/s0Go2NC8tCk0RoylUR9Grb1U/boKjLFlSdvkTW6L
-	 JVopnLEafRIAnW/md+bzPNgUO3tWgms71899xMqvq2JKzetsNC/KHJtNYd71vwsW3C7T5
-	 +H53oWJYL/ekSZ4leawlJO/mN2aqOGQXMdJaMIPbzj5z4HWk+AoffG+VsaIdU+464HA==
+	t=1792986799;
+	b=ueBgNaLms9n38k6hVBvWQHtXZphwWrwTaRMwCMlOkW66gkEfiRky5VL6a1VMx8ya0D/0
+	 XXOnHUE737EAqzxJTGjIr9hleDScqFx0OZxT8fp6qSoCXaunJL6fL5lS4/aOEh9hKo5b0
+	 y3fuZzOeyBIVI35usWEJrsjwWtxVhmL9VIYWr12feynaltVPmiaTgdCM5N/C7QLi0jAT+
+	 KZflBTv0J5fVkf3gYhMSc9WpIIHFsypK+moT6lPHiCwy2664gFpeEcOYufO4qcJS3hLCV
+	 X6BRbzi8V9N3yKgJwXWRODOZWQOJt76XzUnt13NH8YlWAcjQAR6/N9o82Cbmp4CiSXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986797;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986799;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=ddbQeZADm9UHgBr9oDthiCtyhwXSGmkPd0DwDo2UVb8=;
-	b=0qyi2y2WQ1s770cVpOfqiGs/ZS8W/JHS0Auqb7/20Jvwq2Q5c1bsSZ5npKLNHgeLT6t3
-	 C1WDecPIuwdyDEWgAzfjYkioCXkLg3UuHq2NHaQM+BvthC7jnphOg7CxHaL/EtMScy7Lj
-	 2mWShEMlEN8gHATFD8FKCLRtzRiuFzFhIPw0leV8BjXCNUS6p1pBfLtZb2RXb/YKpQdBA
-	 X3DgCGHDWN8RSclcrSelb1orPJqziBzuL1852Lzdxre3X9X3T2poMhaeBX9CAQgkGIdLr
-	 A7YF8Ni7tex77MQJcG4251D9kx7xUT4nfsI2yuwrTN64Dm62dNtEZGr7E8XNbNAR8wQ==
+	bh=QT+8K2lc4RF0rsLJo59a7S3ejX4gidqyfcQQjNUUGOs=;
+	b=2SOmkoza8RTKTvEEmFNCzl6xZhbzLsouY80eGa/GyLKQmK+R6dSPJDto4bY8E2avaVxw
+	 dF7u73y/nvQZh7eOnBMJGryU5zUQaMkfJKQUj1O+zbii8Y/8owZa8cLM3vmAN5oVIW5zs
+	 u12ddAY7aKEdwQyodNHJ2JdwAZpAf0FziEw8zi0NpdNY3jjZzcOjHtLWalMz4CTl/Z1ee
+	 HXnv40aX5jutLBnS6U9ZqH+/zlnAITyi78tLuQ43geqCJRfM4/LXDpuw8NYtRlUbvGk1W
+	 Cfkh65MDAsNsbemftvek4OIojTOI19Fx9qqtQzfVi843HanT/VM0bH+IF/uibfdVJ0w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ipPVsgRD;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nxKKViQ1;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64330606A323
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050CC606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ipPVsgRD
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D401F01825;
-	Mon, 26 Oct 2026 03:53:17 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nxKKViQ1
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49F41F01825;
+	Mon, 26 Oct 2026 03:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986797;
-	bh=ddbQeZADm9UHgBr9oDthiCtyhwXSGmkPd0DwDo2UVb8=;
+	s=k20260515; t=1792986798;
+	bh=QT+8K2lc4RF0rsLJo59a7S3ejX4gidqyfcQQjNUUGOs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ipPVsgRD6oQFDUV0PKFPyKWTsblJOH5Bf5XrQI3U3RnkfMoQ+avorfjw+JNuLnht3
-	 +KRjEV+HtZ0WW78e2oLF/0WNt5Ty1ixdd3hEb2Agqp3SHGK83b0hkB9XwN+Tom5w2I
-	 XsDn2TKVeFpFR8v6oP/B2RD6sRrK34DhRCcYVszngbiD390DCdked1M4CpgJ3Md+nV
-	 ZBW0ktN2Shb/j4JtOVa6guUptxdVR3ie82EGYzLOGbYdC5mv9LMZgTcHrrmiSRC54U
-	 ahbh5DMvHTBY0aVQBcS8ZdlzpjZOF9jye1PlhnsuvPG/70WT+S09CUbyLj1Z39s8TK
-	 XTAEUhHcB0PvA==
-Content-Type: multipart/mixed; boundary="===============6895279405081666600=="
+	b=nxKKViQ19e7wyeE4kqkeFexsSiAr4/5dJSKaHNNl4rhjlloua9dGWIwO/TXel5nKw
+	 arrgb2MvSY99aav/rTMXOdiicfudmvrenre8plBdAHOr5etmDnwivaI99rtxOBY2I8
+	 SmGjzeueMWD1Bc77N4NwKW7UQQ45e6qhSNONZKPVnvQfBw6uOPHMYkJSiuZvFDDYkb
+	 tvc0EtbEJB0nnhSHLC8LUvA5GzYvbAn8E5K7L+627U32WSr0LFP+kimhtf+RscYLew
+	 H8/N2v6VqEVCf+Z3bcbeGWbWHB718Q2utmpTZq3qkc+fwJwvqvt6ooHwluLhsXl4I4
+	 QIpqIqns7Co4g==
+Content-Type: multipart/mixed; boundary="===============3883679089565608171=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,115 +49,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <3d8c6e36b30309c183b6b096f97524d381be9a0d34ec149f631bf351012228bb@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-71-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-71-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 70/81] selftests/bpf: Adjust tests of precision tracking
+Message-Id: <6436180eed8c806eab442e4d46c3bc801442867a9a0e6ec557353a7d1ec242ed@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-79-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-79-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 78/81] selftests/bpf: Test progs that run out of budget
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:17 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:18 +0000 (UTC)
 
---===============6895279405081666600==
+--===============3883679089565608171==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Adjust tests of precision tracking
+> selftests/bpf: Test progs that run out of budget
 
-TL;DR:
-- Test issue: stack_slot_aliases_precision may index the stack (R1=fp-4)
-  instead of vals, as r7/r8 are missing from clobbers
-- Nit: comments still describe the removed precision backtracking
+TL;DR: Test issue: recursion_through_callback's bpf_loop() with constant flags
+is likely inlined, so it doesn't test helper-frame (BPF_CALLBACK_OVERHEAD)
+recursion as its comment claims; a non-constant flags value may avoid
+inlining.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-> index dc0c7034c04f..3f9a65ff134e 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_budget.c b/tools/testing/selftests/bpf/progs/verifier_budget.c
+> new file mode 100644
+> index 000000000000..c126ddb6bfd2
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_budget.c
+> @@ -0,0 +1,1159 @@
 
 [ ... ]
 
-> @@ -604,9 +436,7 @@ __naked int parent_stack_slot_precise_with_callback(void)
->  
->  		"r6 *= 4;"
->  		"r1 = %[vals];"
-> -		/* here r6 is forced to be precise and has to be propagated
-> -		 * back to the beginning, handling (and ignoring) subprog call
-> -		 */
-> +		/* here r6 has to be known: the subprog call doesn't change it */
+> +/*
+> + * calls_loop() -> bpf_loop() -> loop_cb() -> calls_loop(): the frames of the helper are on
+> + * the stack too
+> + */
+> +static int loop_cb(__u32 i, void *ctx);
+> +
+> +static __noinline int calls_loop(int x)
+> +{
+> +	bpf_loop(1, loop_cb, NULL, 0);
+> +	return 0;
+> +}
+> +
+> +static __noinline int loop_cb(__u32 i, void *ctx)
+> +{
+> +	return calls_loop(i);
+> +}
+> +
+> +SEC("socket")
+> +__description("budget: recursion through a helper that calls a callback")
+> +__arch_x86_64
+> +__arch_arm64
+> +__success __retval(0)
+> +int recursion_through_callback(void *ctx)
+> +{
+> +	return calls_loop(0);
+> +}
 
-this isn't a bug, but the new comment here says "the subprog call doesn't
-change it" in a prog that calls bpf_loop() with a callback, while the
-register variant (parent_callee_saved_reg_precise_with_callback) says "the
-callback doesn't change it".
+The comment says the frames of the helper are on the stack, but is that the
+case here?  The flags argument is the constant 0 and the callback is always
+loop_cb, so update_loop_inline_state() leaves fit_for_inline set, and
+bpf_optimize_bpf_loop() replaces the call:
 
-The comments next to the rewritten ones still describe the removed
-backtracking, for example in this prog:
-
-    /* ensure we have callback frame in jump history */
+kernel/bpf/fixups.c:bpf_optimize_bpf_loop() {
     ...
-    /* restore reg from stack; in this case we'll be carrying
-     * stack mask when going back into subprog through jump
-     * history
-     */
+		if (is_bpf_loop_call(insn) && inline_state->fit_for_inline &&
+		    !subprogs[inline_state->callback_subprogno].arena_stack_entry) {
+    ...
+}
 
-and "complicate jump history" in parent_callee_saved_reg_precise,
-parent_callee_saved_reg_precise_global, parent_stack_slot_precise and
-parent_stack_slot_precise_global.
+bpf_check() runs that pass before bpf_insert_recursion_checks(), so at run
+time this looks like plain mutual recursion calls_loop() -> loop_cb() ->
+calls_loop() with an inlined loop, with no helper frame between the BPF
+frames.
 
-Since jump history and stack masks no longer exist, should these be
-reworded along with the "here r6 has to be known" comments?
+That is also what recursion_with_inlined_loop covers.  The commit message
+lists "recursion through the callback of bpf_loop()" and "recursion with an
+inlined bpf_loop()" as two separate cases, so was this test meant to be the
+one that is not inlined?
 
-[ ... ]
+That is the case BPF_CALLBACK_OVERHEAD exists for, the frames of the helper
+or kfunc between a callback and its caller.  I could not find a test in this
+commit, or later in the series, that runs such a recursion.
+recursion_via_global_func_and_callback in verifier_global_subprogs.c is only
+loaded.
 
-> @@ -730,32 +533,12 @@ __naked int subprog_spill_into_parent_stack_slot_precise(void)
->  
->  SEC("?raw_tp")
->  __success __log_level(2)
-> -__msg("17: (0f) r1 += r0")
-> -__msg("mark_precise: frame0: regs=r0 stack= before 16: (bf) r1 = r7")
-> [ ... ]
-> -__msg("mark_precise: frame0: regs=r0 stack= before 6: (07) r7 += -8")
-> -__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r7 = r10")
-> [ ... ]
-> +__msg("17: (0f) r1 += r0                     ; R0=4 R1=fp-4")
->  __naked int stack_slot_aliases_precision(void)
->  {
->  	asm volatile (
-> [ ... ]
-
-> @@ -777,11 +560,10 @@ __naked int stack_slot_aliases_precision(void)
->  		"r0 = *(u64 *)(r8 + 16);"
->  		"*(u64 *)(r7 - 8) = r0;"
->  		"r0 = *(u64 *)(r10 - 16);"
-> -		/* get ready to use r0 as an index into array to force precision */
-> +		/* get ready to use r0 as an index into array */
->  		"r0 *= 4;"
->  		"r1 = %[vals];"
-> -		/* here r0->r1->r6 chain is forced to be precise and has to be
-> -		 * propagated back to the beginning, including through the
-> +		/* here r0 has to be known: the constant went through the
->  		 * subprog call and all the stack spills and loads
->  		 */
->  		"r1 += r0;"
-
-this isn't a bug, but the new __msg() expects R1=fp-4 when "r1 += r0" runs,
-so r1 appears to be fp-8 here and not &vals.
-
-The removed log lines show that "r1 = %[vals]" was compiled as "r1 = r7",
-and the asm sets r7 earlier with "r7 = r10; r7 += -8".  The clobber list at
-the end of the asm only names:
-
-    : __clobber_common, "r6"
-
-so the compiler is free to place &vals in r7 or r8, which the asm
-overwrites.  The prog then reads the unwritten stack slot at fp-4 instead
-of vals[1].
-
-Should "r7" and "r8" be added to the clobbers, with R1=map_value(...,imm=4)
-as the expected value?  Otherwise, should "get ready to use r0 as an index
-into array" and "here r0 has to be known" be reworded to say the prog
-indexes the stack?
+Would passing a flags value the verifier cannot see, for example
+bpf_loop(1, loop_cb, NULL, zero) using the existing "unsigned long zero;"
+global, stop the inlining while still being 0 at run time?
 
 
 ---
@@ -165,4 +144,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============6895279405081666600==--
+--===============3883679089565608171==--
