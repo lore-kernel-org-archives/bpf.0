@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986796;
-	b=Axno0c1+EGMaOxwb/Jx7LhaNbQanjHojbkpkXzSdZl0QxNtFJwLlPGTSdC7xs1OvhOLy
-	 8loVlCPGb2WGNswCdNASEmK5h9Kf//r1G7rnVwNVAEBPCUxUnCp9kWpw5laqSDFAQcOFx
-	 OG+N8UFsnH3G7ygpFD8INwvxH87bame+O8jSGyRSsK6Zt7i8tNUCUcOd6V5HdmUPZn8KP
-	 +2VcDPwOzD2aK+GDMvSeRrrZFk5W0TaWR3Cw54oboFG0klKZDbRWHlFGSCZ81gRMJ5PEa
-	 hp67H67FONH3iXSmE6jIMlP+BtURXjI0Vy0C1Mlgl9lqsesr528lBThWs0FSO/ES+mw==
+	t=1792986797;
+	b=aXMVcPm5KWvQ6FwA4GcZDEV6hhRrKS2ay8O7r6ooLxIaeku0m+14rQIyCYAdiSQVHmpJ
+	 Qwy0266gDKBfPtol7AkT0zGKJiQZHTaq/YSCHQTAy346bSqRau6/EPfGHh0xu1fiXnDIx
+	 ZQ6hm8GHpKwgAwQjR6WbAtMz9XRn/s0Go2NC8tCk0RoylUR9Grb1U/boKjLFlSdvkTW6L
+	 JVopnLEafRIAnW/md+bzPNgUO3tWgms71899xMqvq2JKzetsNC/KHJtNYd71vwsW3C7T5
+	 +H53oWJYL/ekSZ4leawlJO/mN2aqOGQXMdJaMIPbzj5z4HWk+AoffG+VsaIdU+464HA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986796;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986797;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=hKH5b2hOEB/W6QoCEybvEAF1YfMruFZvYzwpt5a1UqA=;
-	b=XcPcMHcQ1+fZ7RZO/L7Y8f7+RYnmu+m9fAKJIq7/Fa6mAN08YmNJuAWRfjiW0ZRlN7dH
-	 rLziVzsJm4JujH7w/em3DX+NnEEPDo1ranCyyS7aKQUfkAKdzNOi3/pEE9FTzey15Dh10
-	 BRx1cUvWSgOvWE1U+FercZQf3Pbor5JURkNI8Jzl6yCa5mWqmh8iTpNdJglHlyiaTr0wR
-	 z8VUlO2luzD7hkoaT0aTzfn4dzUggKgXElINhHudtcmq7gCN6wtIRTmE236r4iAzBkCOz
-	 6cOCUAfpdLMqhk01J0CpypZjCV0Y08htsOY1pEndC/u7V0mfcMPsuoDIhiB7YYTTPlg==
+	bh=ddbQeZADm9UHgBr9oDthiCtyhwXSGmkPd0DwDo2UVb8=;
+	b=0qyi2y2WQ1s770cVpOfqiGs/ZS8W/JHS0Auqb7/20Jvwq2Q5c1bsSZ5npKLNHgeLT6t3
+	 C1WDecPIuwdyDEWgAzfjYkioCXkLg3UuHq2NHaQM+BvthC7jnphOg7CxHaL/EtMScy7Lj
+	 2mWShEMlEN8gHATFD8FKCLRtzRiuFzFhIPw0leV8BjXCNUS6p1pBfLtZb2RXb/YKpQdBA
+	 X3DgCGHDWN8RSclcrSelb1orPJqziBzuL1852Lzdxre3X9X3T2poMhaeBX9CAQgkGIdLr
+	 A7YF8Ni7tex77MQJcG4251D9kx7xUT4nfsI2yuwrTN64Dm62dNtEZGr7E8XNbNAR8wQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dtu91btt;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ipPVsgRD;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF68E606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64330606A323
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dtu91btt
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4D41F01825;
-	Mon, 26 Oct 2026 03:53:15 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ipPVsgRD
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D401F01825;
+	Mon, 26 Oct 2026 03:53:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986795;
-	bh=hKH5b2hOEB/W6QoCEybvEAF1YfMruFZvYzwpt5a1UqA=;
+	s=k20260515; t=1792986797;
+	bh=ddbQeZADm9UHgBr9oDthiCtyhwXSGmkPd0DwDo2UVb8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=dtu91bttN6ML2aAWq28I4/lioWm/oYmydwJ4BOMhXp9+kepvEkSfQ4zOpBCerr/oe
-	 Pm1wYkXmzBpK6fUFbxHZXAOEmxiFOwOVCaPpyjsiJSSblFLnj3I/YumAwmXYne7Eq3
-	 fHV7cks+iA01lKGZtmNU6dju73KhzJpJZ+iHutm0TXHPEq3I53IM9Q0gtwgkt6nEc2
-	 f/Lj+2gj6OM669nRANeuerokB4ew8pxC7zPzrxqGgqk3edhCXAABdPzuKabigxA9Fd
-	 ENQPEZ8qyoPkhBIkXBCN+EFVFf5f1DFbE55XxfRfF50aolO9SBu2kllHI/NgjjJH1y
-	 Tcx5C1sTvICGw==
-Content-Type: multipart/mixed; boundary="===============2918621841262129986=="
+	b=ipPVsgRD6oQFDUV0PKFPyKWTsblJOH5Bf5XrQI3U3RnkfMoQ+avorfjw+JNuLnht3
+	 +KRjEV+HtZ0WW78e2oLF/0WNt5Ty1ixdd3hEb2Agqp3SHGK83b0hkB9XwN+Tom5w2I
+	 XsDn2TKVeFpFR8v6oP/B2RD6sRrK34DhRCcYVszngbiD390DCdked1M4CpgJ3Md+nV
+	 ZBW0ktN2Shb/j4JtOVa6guUptxdVR3ie82EGYzLOGbYdC5mv9LMZgTcHrrmiSRC54U
+	 ahbh5DMvHTBY0aVQBcS8ZdlzpjZOF9jye1PlhnsuvPG/70WT+S09CUbyLj1Z39s8TK
+	 XTAEUhHcB0PvA==
+Content-Type: multipart/mixed; boundary="===============6895279405081666600=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,122 +49,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <0321e2f903359c59c44f5cfe2ede2810dec59a76b7345364ec09b53eba862f66@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-33-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-33-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 32/81] bpf: Count stack arguments of a static subprog from its code
+Message-Id: <3d8c6e36b30309c183b6b096f97524d381be9a0d34ec149f631bf351012228bb@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-71-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-71-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 70/81] selftests/bpf: Adjust tests of precision tracking
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:15 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:17 +0000 (UTC)
 
---===============2918621841262129986==
+--===============6895279405081666600==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Count stack arguments of a static subprog from its code
+> selftests/bpf: Adjust tests of precision tracking
 
-TL;DR: Counting stack args from r11 loads may let programs use them on JITs
-lacking support (s390, powerpc, loongarch, mips), possibly emitting
-absolute-address stores and loads; a bpf_jit_supports_stack_args() check seems
-missing.
+TL;DR:
+- Test issue: stack_slot_aliases_precision may index the stack (R1=fp-4)
+  instead of vals, as r7/r8 are missing from clobbers
+- Nit: comments still describe the removed precision backtracking
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fb80bc4d2d01..0f2bae1c2305 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+> index dc0c7034c04f..3f9a65ff134e 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
 
 [ ... ]
 
-> @@ -15204,12 +15212,31 @@ static bool try_btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
->  /* Prepare argument metadata for liveness; the main program is handled separately. */
->  static void prepare_subprog_args(struct bpf_verifier_env *env)
->  {
-> -	int i;
-> +	struct bpf_subprog_info *sub;
-> +	struct bpf_insn *insn;
-> +	int i, j, cnt;
+> @@ -604,9 +436,7 @@ __naked int parent_stack_slot_precise_with_callback(void)
 >  
->  	for (i = 1; i < env->subprog_cnt; i++) {
-> +		sub = &env->subprog_info[i];
->  		if (!try_btf_prepare_func_args(env, i) && bpf_subprog_is_global(env, i))
->  			/* Keep all argument registers live if the prototype is unavailable. */
-> -			env->subprog_info[i].arg_slot_cnt = MAX_BPF_FUNC_REG_ARGS;
-> +			sub->arg_slot_cnt = MAX_BPF_FUNC_REG_ARGS;
-> +		if (bpf_subprog_is_global(env, i))
-> +			continue;
-> +		cnt = 0;
-> +		for (j = sub->start; j < (sub + 1)->start; j++) {
-> +			insn = &env->prog->insnsi[j];
-> +			if (is_stack_arg_ldx(insn))
-> +				cnt = max(cnt, insn->off / BPF_REG_SIZE);
-> +			if (bpf_is_ldimm64(insn))
-> +				j++;
-> +		}
-> +		sub->stack_args_from_code = true;
-> +		sub->code_stack_args = min(cnt, MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS);
+>  		"r6 *= 4;"
+>  		"r1 = %[vals];"
+> -		/* here r6 is forced to be precise and has to be propagated
+> -		 * back to the beginning, handling (and ignoring) subprog call
+> -		 */
+> +		/* here r6 has to be known: the subprog call doesn't change it */
 
-Can this let a program use r11 stack arguments on a JIT that does not
-support them?
+this isn't a bug, but the new comment here says "the subprog call doesn't
+change it" in a prog that calls bpf_loop() with a callback, while the
+register variant (parent_callee_saved_reg_precise_with_callback) says "the
+callback doesn't change it".
 
-Before this patch, a static subprog got a non-zero incoming stack argument
-count only through btf_prepare_func_args() -> btf_check_arg_slots(), and that
-function rejects the case when the JIT lacks support:
+The comments next to the rewritten ones still describe the removed
+backtracking, for example in this prog:
 
-kernel/bpf/btf.c:btf_check_arg_slots() {
+    /* ensure we have callback frame in jump history */
     ...
-	if (!bpf_jit_supports_stack_args()) {
-		bpf_log(log, "JIT does not support function %s() with %d argument slots\n",
-			tname, slot_cnt);
-		return -EFAULT;
-	}
-    ...
-}
+    /* restore reg from stack; in this case we'll be carrying
+     * stack mask when going back into subprog through jump
+     * history
+     */
 
-Here code_stack_args comes from the r11 loads in the instructions, for every
-non-global subprog.  That includes a subprog whose BTF has five or fewer
-argument slots (the rustc case in the commit message), and a program with
-no func_info at all, since bpf_subprog_is_global() needs func_info_aux.
+and "complicate jump history" in parent_callee_saved_reg_precise,
+parent_callee_saved_reg_precise_global, parent_stack_slot_precise and
+parent_stack_slot_precise_global.
 
-Nothing on this path calls bpf_jit_supports_stack_args().  Besides
-btf_check_arg_slots(), the only other caller is in the kfunc call path.
-check_stack_arg_read(), check_stack_arg_write(), check_static_func_call()
-and bpf_fixup_call_args() do not check it.
+Since jump history and stack masks no longer exist, should these be
+reworded along with the "here r6 has to be known" comments?
 
-For example:
+[ ... ]
 
-  main: *(u64 *)(r11 - 8) = r1; call f; exit
-  f:    r0 = *(u64 *)(r11 + 8); exit
+> @@ -730,32 +533,12 @@ __naked int subprog_spill_into_parent_stack_slot_precise(void)
+>  
+>  SEC("?raw_tp")
+>  __success __log_level(2)
+> -__msg("17: (0f) r1 += r0")
+> -__msg("mark_precise: frame0: regs=r0 stack= before 16: (bf) r1 = r7")
+> [ ... ]
+> -__msg("mark_precise: frame0: regs=r0 stack= before 6: (07) r7 += -8")
+> -__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r7 = r10")
+> [ ... ]
+> +__msg("17: (0f) r1 += r0                     ; R0=4 R1=fp-4")
+>  __naked int stack_slot_aliases_precision(void)
+>  {
+>  	asm volatile (
+> [ ... ]
 
-This looks like it now passes check_static_func_call() ->
-check_outgoing_stack_args(), check_stack_arg_read() (incoming count is 1),
-and the max_out_stack_arg_cnt check in bpf_fixup_call_args() (outgoing count
-is 1).  It then reaches bpf_jit_subprogs() on architectures where
-bpf_jit_supports_stack_args() is the __weak version that returns false.
+> @@ -777,11 +560,10 @@ __naked int stack_slot_aliases_precision(void)
+>  		"r0 = *(u64 *)(r8 + 16);"
+>  		"*(u64 *)(r7 - 8) = r0;"
+>  		"r0 = *(u64 *)(r10 - 16);"
+> -		/* get ready to use r0 as an index into array to force precision */
+> +		/* get ready to use r0 as an index into array */
+>  		"r0 *= 4;"
+>  		"r1 = %[vals];"
+> -		/* here r0->r1->r6 chain is forced to be precise and has to be
+> -		 * propagated back to the beginning, including through the
+> +		/* here r0 has to be known: the constant went through the
+>  		 * subprog call and all the stack spills and loads
+>  		 */
+>  		"r1 += r0;"
 
-Those JITs know nothing about BPF_REG_PARAMS (MAX_BPF_REG).  For example,
-reg2hex[] in arch/s390/net/bpf_jit_comp.c has no [BPF_REG_PARAMS] entry, so
-the r11 store and load are emitted using hardware register 0.  On s390,
-powerpc, loongarch and mips a base register of 0 means an absolute address
-equal to the displacement, so the JIT would emit a store to address -8 and a
-load from address 8.
+this isn't a bug, but the new __msg() expects R1=fp-4 when "r1 += r0" runs,
+so r1 appears to be fp-8 here and not &vals.
 
-The "stack args are not supported in non-JITed programs" fallback in
-bpf_fixup_call_args() only runs when the JIT fails to compile the program,
-and these JITs would compile the r11 instructions without complaint.
+The removed log lines show that "r1 = %[vals]" was compiled as "r1 = r7",
+and the asm sets r7 earlier with "r7 = r10; r7 += -8".  The clobber list at
+the end of the asm only names:
 
-Should prepare_subprog_args() (or check_stack_arg_read() and
-check_stack_arg_write()) reject code_stack_args > 0 when
-!bpf_jit_supports_stack_args()?  The later patches in this series don't
-appear to add such a check.
+    : __clobber_common, "r6"
 
-> +		/* incoming + max outgoing. Calls add the latter. */
-> +		sub->stack_arg_cnt = sub->code_stack_args;
-> +		if (env->prog->aux->func_info_aux)
-> +			env->prog->aux->func_info_aux[i].stack_args = sub->code_stack_args;
->  	}
->  }
+so the compiler is free to place &vals in r7 or r8, which the asm
+overwrites.  The prog then reads the unwritten stack slot at fp-4 instead
+of vals[1].
+
+Should "r7" and "r8" be added to the clobbers, with R1=map_value(...,imm=4)
+as the expected value?  Otherwise, should "get ready to use r0 as an index
+into array" and "here r0 has to be known" be reworded to say the prog
+indexes the stack?
 
 
 ---
@@ -172,4 +165,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============2918621841262129986==--
+--===============6895279405081666600==--
