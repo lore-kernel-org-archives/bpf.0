@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983617;
-	b=IRefkftqBNmG+arbCmpxQlnPj5aOgtoyvS9Dq8SeWzlOsh5onECumvO61rGAHIHlPHq+
-	 61O4m9vFYwexJ1EWK5u9Cctcw2OgH8w3UIVL3o6TjUqPH+PqIHw2SKTxN6EtMGgTSqe4J
-	 bzfUsVV3aC2nH76bGS27bicksj8IZLfy/BMBIYkKPQM+1PLpgk+X6Rj2IUOuQZv1D16gB
-	 F/sNXDOA+qyL1jlL6wJ/8PqkZE1ysoBT1V+Xb5XVsk6Z9rj/QDEgJ9GEz7i8KEvy01y9U
-	 xr1B99doDb3W8lk+pbzI9jOC+2nckan9R6Fj0CChgWcVdCLz7rvH+OEF9LttJgvVTbw==
+	t=1792983622;
+	b=OjVLsHYHx21P6qZXJxehqRDQEuUGXlpQeeIn2ndY7leVQhNCzzOdmMzuVSlTTuclN/Cn
+	 zRv6dYl/EYTd4WIjDebNXCk/EE9dfqbN1nw1JrDlub8u43eEJFJ+pYBct8XVxYQBtRdu7
+	 J0dF+UTdj0exUyN5Zi80xKuMMP9XIJhZppDGZw7MnBXoZLYfVs1w4Mm37UIJ38WtsP1Up
+	 Oy4UKE2he8DIbJCAJiT5969yXWuAgGNv3ikNLN7GaURN1GtUIhPEZ7a4KXVkoZYVAF9sF
+	 a1QyW0lYNuK5D5uZIcylLkIWJWzldfRF6LvHZ4YwcgfOPsizhLWsvsg6Lthlua3jntA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983617;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983622;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Rq7FJF1LiOMXCVzB7BjlvdTl6sEoOGa9PJfoyk1dsy8=;
-	b=O5/Nk7InDZ9KM2dpDwXWyGrnQDvd/9/y7sjuxBZQG5vUHWtomNbIh85Rq3KtUPOcWkA+
-	 gjMQWHeLh/cBsrAepT06osZDiWM6xckCKKIn9wHz4OsIEImT3hyS0HS+BMi+k1OYsfj0N
-	 2fsd+hO4rBzRykgJxW5zxGSeW739Vu4t1b5j7ot4A6BOy+xSTEF9BYO73rYl5qP05CARa
-	 2BSlJEf8k+Lz+ys0+rlR/+jaGnfesrKwtHhUfmjd/WnVC+I/6MSAhAJrOW6v7SKAz7Mp8
-	 FONc0cVum9B1dI4kw6BJsGCqxvRckZMF8tYXsPf2lXKwAfpPrE8pqK70KRnk4gCI9wg==
+	bh=GDOLQZAFyg6AnWLFz2UjtHf/pV9Gd+HVQWbyn+Bu44I=;
+	b=r9lvouxiN/IIWyozD6791yF8W5ydgASpjmCHvh85vGAEboDsxDquv5QvM/+6GeXPvNyP
+	 iZY9YMba/faUW92UTewY26+di95su9nHvGkYsZZB/YnwpweysDgfuxtSWSH3MZ38C/Vlz
+	 QNPbo5VIoVWt/w/BffQDIZ339KOUbNuHvjKlLis1p9yBtsKOlQlQgWR6QwqUsYF924HpV
+	 j8yKmAB4KTV6OH9+pbxspWjiSmaMsK9dL288E9uoqHrFb7Um3GNX6bqh2Iuef4ByTfivx
+	 mwK2WIjca3875l5SNawembqJA8tQB5askaBM38vD8P4anSeibMmUBZfb+eZrIB0wfkw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FopGNZWG;
-	arc=none smtp.remote-ip=209.85.216.43
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ICbTK7sN;
+	arc=none smtp.remote-ip=209.85.215.179
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E8F606A31D
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:00:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 01E8F606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6AD606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:00:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D6AD606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=FopGNZWG
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ae25008e2aso103086a91.2
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:00:16 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ICbTK7sN
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cd67cc518a6so1719507a12.1
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:00:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983616; x=1793588416; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983622; x=1793588422; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Rq7FJF1LiOMXCVzB7BjlvdTl6sEoOGa9PJfoyk1dsy8=;
-        b=FopGNZWGpmAsOUvRkLzkiBgW4PK4cvbveCGynYZUdfhCYG4jTI7D4HFeV/eKObflHv
-         +2EG5Y6/1672EejPPjblEKtvbiOMPoVUAYNc+AIGlvRN6fZQV5+Ol0ZVWTI9Xdo61mrO
-         zwjhKPEdJ8BMOvmFVmgSZ9HGQWVkCmkekjlWVaMtkcoSy51PdzBWyomp3cqUZ8pm2w0Q
-         jfgpdrhEgVKF6r5gsk0n411t8plq3cXTTuENXQAmM4IXQkx5z532cgJqIBQzQvJtT71p
-         Qj2H0IFivm2HtF4DiwqXShpsm0QO9SoagXo9Uz94nipZmmh8iCSVNgLmn/mwlf/JqGUS
-         kDsQ==
+        bh=GDOLQZAFyg6AnWLFz2UjtHf/pV9Gd+HVQWbyn+Bu44I=;
+        b=ICbTK7sNy0P92VclyTY22ukog7f3xQk+0gXhQQnqz+1IhHfEFfe9VesKhnaRhHKiBK
+         8RKWHqdNC3oBUh9vjcZBcoy30zY5VngrcWETc8h4xH3x90P6UdnWbK++pvhx4bRpTEfK
+         ctWx57PZm/iKPU2JhKDd2Hvh2KSURAc/yvgB+n3i2eViRMyRSgNySY2/DgarrN7656je
+         zcbbQH04R/cM52Ld3VLrVIJmmhLDr4xTgvSZ3+smwTtPHnCnsGM0dTIKvZDZaiHFVrlU
+         hAGv3lj4EHpb9E+4e6TamPyGf7xWQFcIRHkqeQ3vdnUK2nAMi7dGV9zFnB9viNf0bjx/
+         v0mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983616; x=1793588416;
+        d=1e100.net; s=20260707; t=1792983622; x=1793588422;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Rq7FJF1LiOMXCVzB7BjlvdTl6sEoOGa9PJfoyk1dsy8=;
-        b=XaHYiBeMjzXTOmyLTnGz5MZhtjH5NF92tbTo1KV7vfAksJS04gQWbwYlmPfe2nlXyB
-         mVThi5WccwqZzNyGMUMjPEJfOkIUq6vWUrJ17BuVDvJENnr30n8sZ/fDV4ri0kO3E9hH
-         DkI7lmZIIv8HxS2EsABLWJ/dXe2/B0Dt0raYW9MaQB0FsfyFsmto/A5JPWwOstXLtlQN
-         tmLQg8moSIwANnuOVv2FkwP+P6MRu6qQwnr3Tup86fck7BJHxYbYuVg5gk9pASH0UyHQ
-         LBHjf2bVFDO0OfMFHzLaRNXtD1TebeWdcdz/xKOOSketjf9MSbjB0Mr08/eRlhhbwSDq
-         MhoA==
-X-Gm-Message-State: AFq9FYL9AlMzWuLwmzfl2RCUBi8KH07gw7fdNh+UItMlY6fzzb2SFdt9
-	3uozO+nDRANg3lQ7S8TYwP9R7CgB080LXDTeyJ2P+lvDvJgYkpYSqbSrT+80gg==
-X-Gm-Gg: AYBFou0ftQRPEsuFgUvMwMecn8ucMud4wzw1zGKBflJRCotMnTydHFGIagPGHIB5a30
-	GzNJVvCOLSBTcd2FO9/1uFFZMkKk72YQ2fha9+db8+SpSmJ1e2wjUojj3Q8zYGGTVxuofzwCN13
-	WbLXi0VyaW2A+LXtxu/r30taoqn3M9DlkMDdENgrzK1u26WPZXuEpT0lBVnwQPcVaYhi0js5X+x
-	UZOf8IEVW9oFQZWn16HgQflMAWp+dk92KbXpUW926ZmsqtgoAnO88nSo9ASQBZQ+IUAmmvOzr7K
-	SxTNACUsd5H4CsneEAV81y0kLZbC6AOM8MV9uLWxmdHtbYFdpJxzbeyhj6BTaVlS+cbwet0Wmu4
-	/vDs6YmRbSBlpKJtF7U+jSftHeeGiW/fvWxbwg9D7f9JeY/1s7ITbkv4ijtZsSaS9VVtFtuGp+U
-	ikmX1XjRucvz6QIUc/tA5asS8UAyKxnrNceXhAn0T/jIaNj4PJd0qlc/gF5xpKvMaZEykltbpem
-	ODL4Gd5VJmLfD3yKo4Y9pCSdMt5qwocaOR4N8+8V7Ae5OMXJTXWOEqmc5W8V+FsGU0Ub+Qsk6GG
-	q3M5hLUAM22WAytdwncA/5hI0tivYQgPyw1e9uplR7gxPEv0R3X76wMPNXMzLPiooPuShJcn4dQ
-	zPwlzv12wIgXnLhZYZkv8v1Ve
-X-Received: by 2002:a17:90b:564d:b0:3ac:8ee5:e00f with SMTP id 98e67ed59e1d1-3adeafb048dmr4798516a91.57.1792983615667;
-        Sun, 25 Oct 2026 20:00:15 -0700 (PDT)
+        bh=GDOLQZAFyg6AnWLFz2UjtHf/pV9Gd+HVQWbyn+Bu44I=;
+        b=Dn/8PcwB7BftiloVH8l/5GUvk0Jg/jq9r8jIQI0BT3aCrYZ0TKOXNF25EuP0yhh1IL
+         4/sBBJ8Hyv3ZgKG/pZEdH6VizLZbH4HV4cysOGy+LejlKfmsO4RL5zKLXvGSHc7DqDyh
+         YugOdZ46P7bGhzHlMyVSc7g8bdK6Veb+dlpZ64qOWR/6EQPgRB+ISE4EoeZA7ZkhG33s
+         vYSOjcWAlqLnjf91BTGGePHTkXTu4FMBUQ7GBihB/2Mgjt+gKFpcau5f8Tm/EdWTnjkS
+         8YJwacOPdNIPTbKJFAjuNaSsn9bc/h1eIPPswcWekAyDLi9vpIsKowSWpQelWVCnkvMP
+         BQew==
+X-Gm-Message-State: AFq9FYJNdPvgYLbGU2oyQksB3Sfg5U9leVxtIV2q+vBI5Xo9DpA68EI0
+	tkTXBeVDHxl6L9x051HOSw/37r4Tt++xqvFiYMvz6momy3g8Mm5T7HYTmjAxGw==
+X-Gm-Gg: AYBFou1r3rbcvoJDdQ5SBSC+ehgYUzskFUDQk4yZPuob7Vazg/AxUTDyeBSAufaAkeI
+	jHaBt0FDPY2Gm2h9TQstPYtUgLlv977qEfepSiQqgQycYXV/1S6sMxmxVWmqwN0Iz6Z4iLAFQkF
+	Wbm4EsjPUCMpfzqg7gwONhOIOqA3RTirGerjfzSRoWSNkf4E/U0M7oue5z9y/vaTdElM6tzzf2m
+	QpzafZ/ml1cQlcsjw8+5vdDOnkhTnwk3/P/ydfdRs/1Ddv+/C8nAFwDM0aw2EhQ75AUkJwzM/Vq
+	RwRDxGJd7YVw0wmDP4ASyd8SxKZMxAbZ4NGoRPEKgp63k35yUBGhqixT28FYu1i3arrIqsblmUS
+	36UR1pglIvsbdiNf6QWHkibqRBGpk2T9FIDgXNAPtWICJwWIvM6KxOAAmXrr1MQ9Ory1hYGUe9D
+	XsI09a2seu7aWQjoWQING5o35GT+1oHC2Vi4DjT0H6mCMF1YiWJtkYuOrjHQLFsbz7KyLeGz4Ik
+	CLS3xL8w93YTzhNRN2D8HaLoFeOmqeJFymO7vFAdxOUSoPKDqhrfYcALrfM6INChUtncLWKp++O
+	gAKIoRWeGkmkzMJW+Cm2Awpugfa8B5HvFkEqg/6hLgeJNfoxCN5NKhredYWWlp/lKiMeCPfpFXs
+	Vlb/MtFtFlwXBdfBAhHhKNwJwMmzbGg8XuSRPDLdlj9pjzQ==
+X-Received: by 2002:a17:90b:291:b0:3ac:9f24:44df with SMTP id 98e67ed59e1d1-3adea1ad71dmr3582017a91.2.1792983621520;
+        Sun, 25 Oct 2026 20:00:21 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adeba32f70sm6235989a91.1.2026.10.25.20.00.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebe8f0a7sm6512282a91.9.2026.10.25.20.00.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:00:15 -0700 (PDT)
+        Sun, 25 Oct 2026 20:00:21 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 05/81] bpf: Remove BPF_F_ARENA_SCALAR
-Date: Mon, 26 Oct 2026 02:58:26 +0000
-Message-ID: <20261026025943.404450-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 06/81] bpf, x86: Remove r0_on_stack from fetching atomics in arena
+Date: Mon, 26 Oct 2026 02:58:27 +0000
+Message-ID: <20261026025943.404450-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,418 +103,142 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Rust has no address spaces. Thus a prog in Rust accesses arena through
-scalars. With BPF_F_ARENA_SCALAR the verifier accepts each load and each
-store through a scalar as an access to arena.
+x86 has no fetching AND/OR/XOR. Thus the JIT emits a loop with cmpxchg.
+cmpxchg uses RAX, and RAX holds BPF R0. Thus the JIT saves R0 before the
+loop.
 
-The verifier rewrites one insn at a time. Thus it must add one insn to each
-access. The compiler knows the source of each pointer. It can emit one
-addr_space_cast for each pointer, as it does for the __arena pointers of C.
+  prog                        the address is in   the JIT saves R0 in
+  --------------------------  ------------------  -------------------
+  without the flag            a BPF register      BPF_REG_AX
+  with BPF_F_ARENA_SCALAR     BPF_REG_AX          the stack
 
-  flag: one move for each access     cast: one cast for each pointer
-
-  ax = (u32)r1                       r1 = addr_space_cast(r1, 0, 1)
-  r2 = *(u64 *)(ax + 0)              r2 = *(u64 *)(r1 + 0)
-  ax = (u32)r1                       r3 = *(u64 *)(r1 + 8)
-  r3 = *(u64 *)(ax + 8)
-
-20 progs of rust-bpf, with the flag and with the casts that a prototype of
-an LLVM pass emits:
-
-                     flag    casts
-  moves or casts     1568      571
-  insns             14864    13938
-  jited bytes       72351    69111
-
-No released kernel has the flag. LLVM does not emit the casts for Rust at
-this time. Until it does, Rust progs that access arena do not load.
-
-This reverts commit 4c651a91bdfc
-("bpf: Treat load and store through a number as arena access"). One part
-stays: BPF_REG_AX in reg2pt_regs[] of the x86 JIT. The fetching AND/OR/XOR
-atomics in arena use it now.
+The flag is removed. Remove the second variant.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/arm64/net/bpf_jit_comp.c  |  5 ---
- arch/x86/net/bpf_jit_comp.c    |  5 ---
- include/linux/bpf_verifier.h   |  2 --
- include/linux/filter.h         |  1 -
- include/uapi/linux/bpf.h       |  6 ----
- kernel/bpf/core.c              |  9 +----
- kernel/bpf/fixups.c            | 39 ---------------------
- kernel/bpf/syscall.c           |  4 ---
- kernel/bpf/verifier.c          | 64 ++++++++--------------------------
- tools/include/uapi/linux/bpf.h |  6 ----
- 10 files changed, 16 insertions(+), 125 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 58 +++++++++----------------------------
+ 1 file changed, 14 insertions(+), 44 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index aaa34c739004..33632fb20997 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -3502,11 +3502,6 @@ bool bpf_jit_supports_arena(void)
- 	return true;
- }
- 
--bool bpf_jit_supports_arena_scalar(void)
--{
--	return true;
--}
--
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
- {
- 	if (!in_arena)
 diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index fd65ac84cfc7..7bfb7210484e 100644
+index 7bfb7210484e..d90b6d238b3a 100644
 --- a/arch/x86/net/bpf_jit_comp.c
 +++ b/arch/x86/net/bpf_jit_comp.c
-@@ -5240,11 +5240,6 @@ bool bpf_jit_supports_arena(void)
- 	return true;
- }
- 
--bool bpf_jit_supports_arena_scalar(void)
--{
--	return true;
--}
--
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
- {
- 	return true;
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5926f13ff43c..de301b32015d 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -782,7 +782,6 @@ struct bpf_insn_aux_data {
- 	u64 non_sleepable:1; /* helper/kfunc may be called from non-sleepable context */
- 	u64 is_iter_next:1; /* bpf_iter_<type>_next() kfunc call */
- 	u64 call_with_percpu_alloc_ptr:1; /* {this,per}_cpu_ptr() with prog percpu alloc */
--	u64 arena_scalar:1; /* ldx/stx/st/atomic through a number, it's an address in arena */
- 	u64 bb_end:1; /* last instruction of a basic block */
- 	u64 need_scev:1;
- 	u64 alu_state:5; /* used in combination with alu_limit */
-@@ -1074,7 +1073,6 @@ struct bpf_verifier_env {
- 	bool strict_alignment;		/* perform strict pointer alignment checks */
- 	bool test_state_freq;		/* test verifier with different pruning frequency */
- 	bool test_reg_invariants;	/* fail verification on register invariants violations */
--	bool arena_scalar;		/* load and store through a number is arena access */
- 	struct bpf_verifier_state *cur_state; /* current verifier state */
- 	/* Search pruning optimization, array of list_heads for
- 	 * lists of struct bpf_verifier_state_list.
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index e0218e677a1d..98254742ae37 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1287,7 +1287,6 @@ bool bpf_jit_supports_far_kfunc_call(void);
- bool bpf_jit_supports_exceptions(void);
- bool bpf_jit_supports_ptr_xchg(void);
- bool bpf_jit_supports_arena(void);
--bool bpf_jit_supports_arena_scalar(void);
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
- bool bpf_jit_supports_private_stack(void);
- bool bpf_jit_supports_large_stack(void);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f29b0aad440c..8d7228834305 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1357,12 +1357,6 @@ enum bpf_perf_event_type {
- /* The verifier internal test flag. Behavior is undefined */
- #define BPF_F_TEST_REG_INVARIANTS	(1U << 7)
- 
--/*
-- * Load and store through a number is an access to the arena of the program
-- * at the low 32 bits of the number. It's for programs written in Rust.
-- */
--#define BPF_F_ARENA_SCALAR	(1U << 8)
--
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
-  */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 0a8ba603f44b..7cf37690d41f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2639,8 +2639,7 @@ static bool bpf_prog_select_interpreter(struct bpf_prog *fp)
+@@ -1745,26 +1745,20 @@ static int emit_atomic_ld_st_index(u8 **pprog, u32 atomic_op, u32 size,
  /*
-  * Whether a function has an insn that works with the arena base, which a JIT
-  * sets up in the prologue when bpf_prog_uses_arena_insns() says so. Decided on
-- * the final insns of the function: an access through an arena pointer, or
-- * through a number in a program loaded with BPF_F_ARENA_SCALAR, has been
-+ * the final insns of the function: an access through an arena pointer has been
-  * rewritten to a BPF_PROBE_MEM32 form by then, a cast to the user address
-  * space keeps BPF_ADDR_SPACE_CAST, and a kfunc call with an __arena argument,
-  * which the JIT rebases, has a function model that says so. A load of an
-@@ -3518,12 +3517,6 @@ bool __weak bpf_jit_supports_arena(void)
- 	return false;
- }
- 
--/* Whether JIT takes BPF_REG_AX as the address of arena access */
--bool __weak bpf_jit_supports_arena_scalar(void)
--{
--	return false;
--}
--
- bool __weak bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
- {
- 	return false;
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index f062ef7dd943..41bc37e205e0 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -44,31 +44,6 @@ static bool is_addr_space_cast32(struct bpf_prog *prog, const struct bpf_insn *i
- 	return false;
- }
- 
--/*
-- * The insn accesses arena through a number. JITs add the base of arena
-- * to the register as it is, so the access goes through the low 32 bits of
-- * the number in BPF_REG_AX. Registers of the program are not changed: the
-- * number may be compared or stored later, and on another path the register
-- * may be PTR_TO_ARENA.
+  * A fetching AND/OR/XOR can't be implemented with a single x86 insn, so do a
+  * CMPXCHG loop. @index_reg is X86_REG_R12 for an arena access or -1 otherwise.
+- * Unless @r0_on_stack, the caller has substituted BPF_REG_AX for R0 in
+- * @dst_reg and @src_reg.
++ * The caller has saved R0 in BPF_REG_AX and has substituted BPF_REG_AX for R0
++ * in @dst_reg and @src_reg.
+  *
+  * Both the load and the CMPXCHG can fault when accessing the arena, so their
+  * addresses are handed back in @fault[0] and @fault[1]. A fault has to resume
+  * at @resume, which is past the loop and past the move that delivers the old
+  * value, but before R0 is restored. Both are NULL for the non-arena case,
+  * which needs no fixup.
 - *
-- * Constant blinding leaves insns that use BPF_REG_AX alone, so the immediate
-- * of st through a number is not blinded.
-- */
--static int arena_scalar_access(const struct bpf_insn *insn, struct bpf_insn *buf)
--{
--	bool load = BPF_CLASS(insn->code) == BPF_LDX || bpf_atomic_is_load_acq(insn);
--	struct bpf_insn *patch = buf;
--
--	*patch++ = BPF_MOV32_REG(BPF_REG_AX, load ? insn->src_reg : insn->dst_reg);
--	*patch = *insn;
--	if (load)
--		patch->src_reg = BPF_REG_AX;
--	else
--		patch->dst_reg = BPF_REG_AX;
--	patch++;
--	return patch - buf;
--}
--
- /* Return the regno defined by the insn, or -1. */
- static int insn_def_regno(const struct bpf_insn *insn)
- {
-@@ -1880,20 +1855,6 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env)
- 			/* Convert BPF_CLASS(insn->code) == BPF_ALU64 to 32-bit ALU */
- 			insn->code = BPF_ALU | BPF_OP(insn->code) | BPF_SRC(insn->code);
- 
--		if (env->insn_aux_data[i + delta].arena_scalar) {
--			cnt = arena_scalar_access(insn, insn_buf);
--
--			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
--			if (!new_prog)
--				return -ENOMEM;
--
--			delta += cnt - 1;
--			prog = new_prog;
--			env->prog = prog;
--			insn = prog->insnsi + i + delta;
--			goto next_insn;
--		}
--
- 		/* Make sdiv/smod divide-by-minus-one exceptions impossible. */
- 		if ((insn->code == (BPF_ALU64 | BPF_MOD | BPF_K) ||
- 		     insn->code == (BPF_ALU64 | BPF_DIV | BPF_K) ||
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 90bc7230afa8..60c4d84b9aba 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2971,13 +2971,9 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr, struct bpf_log_at
- 				 BPF_F_XDP_HAS_FRAGS |
- 				 BPF_F_XDP_DEV_BOUND_ONLY |
- 				 BPF_F_TEST_REG_INVARIANTS |
--				 BPF_F_ARENA_SCALAR |
- 				 BPF_F_TOKEN_FD))
- 		return -EINVAL;
- 
--	if ((attr->prog_flags & BPF_F_ARENA_SCALAR) && !bpf_jit_supports_arena_scalar())
--		return -EOPNOTSUPP;
--
- 	bpf_prog_load_fixup_attach_type(attr);
- 
- 	if (attr->prog_flags & BPF_F_TOKEN_FD) {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c223bf3bc9cd..c93ef399c420 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5495,19 +5495,6 @@ static bool is_arena_reg(struct bpf_verifier_env *env, int regno)
- 	return reg->type == PTR_TO_ARENA;
- }
- 
--/*
-- * There are no address spaces in Rust, addresses of arena are plain numbers.
-- * When the program is loaded with BPF_F_ARENA_SCALAR and has an arena a load or
-- * a store through a number is an access to arena at the low 32 bits of it,
-- * like the access through PTR_TO_ARENA is. The register stays a number.
-- */
--static bool is_arena_scalar(struct bpf_verifier_env *env, int regno)
--{
--	const struct bpf_reg_state *reg = reg_state(env, regno);
--
--	return reg->type == SCALAR_VALUE && env->arena_scalar && env->prog->aux->arena;
--}
--
- static bool is_load_acq_unsafe(struct bpf_verifier_env *env, int regno,
- 			       struct bpf_insn *insn)
- {
-@@ -5538,7 +5525,7 @@ static bool atomic_ptr_type_ok(struct bpf_verifier_env *env, int regno,
- 		return false;
- 	if (is_sk_reg(env, regno))
- 		return false;
--	if (is_arena_reg(env, regno) || is_arena_scalar(env, regno))
-+	if (is_arena_reg(env, regno))
- 		return bpf_jit_supports_insn(insn, true);
- 	if (is_load_acq_unsafe(env, regno, insn))
- 		return false;
-@@ -7519,22 +7506,6 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
- static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type type,
- 			     bool allow_trust_mismatch);
- 
--/*
-- * Returns the register to check the access of the current insn with.
-- * For a number in a program with an arena that is 'arena'.
-- */
--static struct bpf_reg_state *mem_access_reg(struct bpf_verifier_env *env, int regno,
--					    struct bpf_reg_state *arena)
--{
--	if (!is_arena_scalar(env, regno))
--		return cur_regs(env) + regno;
--
--	memset(arena, 0, sizeof(*arena));
--	arena->type = PTR_TO_ARENA;
--	env->insn_aux_data[env->insn_idx].arena_scalar = true;
--	return arena;
--}
--
- static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			  bool strict_alignment_once, bool is_ldsx,
- 			  bool allow_trust_mismatch, const char *ctx)
-@@ -7542,7 +7513,6 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *regs = cur_regs(env);
--	struct bpf_reg_state arena, *src_reg;
- 	enum bpf_reg_type src_reg_type;
- 	int err;
- 
-@@ -7564,16 +7534,16 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (err)
- 		return err;
- 
--	src_reg = mem_access_reg(env, insn->src_reg, &arena);
--	src_reg_type = src_reg->type;
-+	src_reg_type = regs[insn->src_reg].type;
- 
- 	/*
- 	 * check_stack_read_fixed_off() may refine the modification's origin to
- 	 * the source stack slot.
- 	 */
- 	bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE);
--	err = check_mem_access(env, env->insn_idx, src_reg, argno_from_reg(insn->src_reg),
--			       insn->off, BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
-+	err = check_mem_access(env, env->insn_idx, regs + insn->src_reg,
-+			       argno_from_reg(insn->src_reg), insn->off,
-+			       BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
- 			       strict_alignment_once, is_ldsx);
- 	/*
- 	 * Paths through a kernel struct pointer and through other pointers
-@@ -7601,7 +7571,6 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
- 	struct bpf_reg_state *regs = cur_regs(env);
--	struct bpf_reg_state arena, *dst_reg;
- 	enum bpf_reg_type dst_reg_type;
- 	int err;
- 
-@@ -7623,12 +7592,12 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (err)
- 		return err;
- 
--	dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
--	dst_reg_type = dst_reg->type;
-+	dst_reg_type = regs[insn->dst_reg].type;
- 
- 	/* Check if (dst_reg + off) is writeable. */
--	err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg),
--			       insn->off, BPF_SIZE(insn->code), BPF_WRITE, insn->src_reg,
-+	err = check_mem_access(env, env->insn_idx, regs + insn->dst_reg,
-+			       argno_from_reg(insn->dst_reg), insn->off,
-+			       BPF_SIZE(insn->code), BPF_WRITE, insn->src_reg,
- 			       strict_alignment_once, false);
- 	err = err ?: save_aux_ptr_type(env, dst_reg_type, false);
- 
-@@ -7638,7 +7607,7 @@ static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
- static int check_atomic_rmw(struct bpf_verifier_env *env,
- 			    struct bpf_insn *insn)
- {
--	struct bpf_reg_state arena, *dst_reg;
-+	struct bpf_reg_state *dst_reg;
- 	int load_reg;
- 	int err;
- 
-@@ -7683,9 +7652,6 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
- 		return -EACCES;
- 	}
- 
--	/* load_reg may be dst_reg. Look at dst_reg before it's marked as unknown. */
--	dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
--
- 	load_reg = bpf_atomic_load_reg(insn);
- 	if (load_reg >= 0) {
- 		/* check and record load of old value */
-@@ -7694,6 +7660,8 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
- 			return err;
- 	}
- 
-+	dst_reg = cur_regs(env) + insn->dst_reg;
-+
- 	/* Check whether we can read the memory, with second call for fetch
- 	 * case to simulate the register fill.
- 	 */
-@@ -20280,17 +20248,16 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
- 			return check_stack_arg_write(env, state, insn->off, NULL);
- 		}
- 
--		struct bpf_reg_state arena, *dst_reg;
- 		enum bpf_reg_type dst_reg_type;
- 
- 		err = check_reg_arg(env, insn->dst_reg, SRC_OP);
- 		if (err)
- 			return err;
- 
--		dst_reg = mem_access_reg(env, insn->dst_reg, &arena);
--		dst_reg_type = dst_reg->type;
-+		dst_reg_type = cur_regs(env)[insn->dst_reg].type;
- 
--		err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg),
-+		err = check_mem_access(env, env->insn_idx, cur_regs(env) + insn->dst_reg,
-+				       argno_from_reg(insn->dst_reg),
- 				       insn->off, BPF_SIZE(insn->code),
- 				       BPF_WRITE, -1, false, false);
- 		if (err)
-@@ -23926,7 +23893,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (is_priv)
- 		env->test_state_freq = attr->prog_flags & BPF_F_TEST_STATE_FREQ;
- 	env->test_reg_invariants = attr->prog_flags & BPF_F_TEST_REG_INVARIANTS;
--	env->arena_scalar = attr->prog_flags & BPF_F_ARENA_SCALAR;
- 
- 	env->explored_states = kvzalloc_objs(struct list_head,
- 					     state_htab_size(env),
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f29b0aad440c..8d7228834305 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1357,12 +1357,6 @@ enum bpf_perf_event_type {
- /* The verifier internal test flag. Behavior is undefined */
- #define BPF_F_TEST_REG_INVARIANTS	(1U << 7)
- 
--/*
-- * Load and store through a number is an access to the arena of the program
-- * at the low 32 bits of the number. It's for programs written in Rust.
-- */
--#define BPF_F_ARENA_SCALAR	(1U << 8)
--
- /* link_create.kprobe_multi.flags used in LINK_CREATE command for
-  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+- * R0 is expected to be saved in BPF_REG_AX by the caller, or pushed on the
+- * stack if @r0_on_stack. In that case an R0 operand stays in the stack slot,
+- * RAX ends up holding the old value that R0 is to return, and the slot is
+- * dropped rather than popped.
   */
+ static int emit_atomic_fetch_rmw(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
+-				 u32 src_reg, int index_reg, bool r0_on_stack,
++				 u32 src_reg, int index_reg,
+ 				 u8 **fault, u8 **resume)
+ {
+ 	bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+-	bool operand_on_stack = r0_on_stack && src_reg == BPF_REG_0;
+ 	u8 *branch_target, *prog = *pprog;
+ 	int err;
+ 
+@@ -1783,15 +1777,7 @@ static int emit_atomic_fetch_rmw(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
+ 	 * Perform the (commutative) operation locally, put the result in
+ 	 * the AUX_REG.
+ 	 */
+-	if (operand_on_stack) {
+-		/* mov r11, [rsp]: the operand is the R0 saved there, RAX is the old value */
+-		if (is64)
+-			EMIT4(0x4C, 0x8B, 0x1C, 0x24);
+-		else
+-			EMIT4(0x44, 0x8B, 0x1C, 0x24);
+-	} else {
+-		emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
+-	}
++	emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
+ 	maybe_emit_mod(&prog, AUX_REG, src_reg, is64);
+ 	EMIT2(simple_alu_opcodes[BPF_OP(insn->imm)],
+ 	      add_2reg(0xC0, AUX_REG, src_reg));
+@@ -1810,20 +1796,14 @@ static int emit_atomic_fetch_rmw(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
+ 
+ 	/* ZF tells us whether we won the race. If it's cleared we need to try again. */
+ 	EMIT2(X86_JNE, -(prog - branch_target) - 2);
+-	/* Return the pre-modification value, which RAX already is for R0 */
+-	if (!operand_on_stack)
+-		emit_mov_reg(&prog, is64, src_reg, BPF_REG_0);
++	/* Return the pre-modification value */
++	emit_mov_reg(&prog, is64, src_reg, BPF_REG_0);
+ 
+ 	if (resume)
+ 		*resume = prog;
+ 
+ 	/* Restore R0 after clobbering RAX */
+-	if (!r0_on_stack)
+-		emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
+-	else if (operand_on_stack)
+-		EMIT2(0x41, 0x5B); /* pop r11, dropping the operand */
+-	else
+-		EMIT1(0x58); /* pop rax */
++	emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
+ 
+ 	*pprog = prog;
+ 	return 0;
+@@ -3354,7 +3334,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+ 			}
+ 			if (is_atomic_fetch) {
+ 				err = emit_atomic_fetch_rmw(&prog, insn, real_dst_reg,
+-							    real_src_reg, -1, false,
++							    real_src_reg, -1,
+ 							    NULL, NULL);
+ 				if (err)
+ 					return err;
+@@ -3383,29 +3363,19 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+ 		case BPF_STX | BPF_PROBE_ATOMIC | BPF_DW:
+ 			if (is_atomic_fetch_op(insn)) {
+ 				u32 real_src_reg = src_reg, real_dst_reg = dst_reg;
+-				/*
+-				 * An access through a number has its address in
+-				 * BPF_REG_AX (see arena_scalar_access()), so R0 is
+-				 * saved on the stack instead, as div and mod do.
+-				 */
+-				bool r0_on_stack = dst_reg == BPF_REG_AX;
+ 				u8 *fault[2], *resume;
+ 				int j;
+ 
+ 				/* Will need RAX as a CMPXCHG operand so save R0 */
+-				if (r0_on_stack) {
+-					EMIT1(0x50); /* push rax */
+-				} else {
+-					emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
+-					if (src_reg == BPF_REG_0)
+-						real_src_reg = BPF_REG_AX;
+-					if (dst_reg == BPF_REG_0)
+-						real_dst_reg = BPF_REG_AX;
+-				}
++				emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
++				if (src_reg == BPF_REG_0)
++					real_src_reg = BPF_REG_AX;
++				if (dst_reg == BPF_REG_0)
++					real_dst_reg = BPF_REG_AX;
+ 
+ 				err = emit_atomic_fetch_rmw(&prog, insn, real_dst_reg,
+ 							    real_src_reg, X86_REG_R12,
+-							    r0_on_stack, fault, &resume);
++							    fault, &resume);
+ 				if (err)
+ 					return err;
+ 
 -- 
 2.55.0
 
