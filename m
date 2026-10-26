@@ -1,54 +1,109 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793039797;
-	b=k3Do5cnt74yAa0h9giMMEXnTZI9GOY0POBsCY92U3LlF/FcvgKspyNq88Wz0joBT756p
-	 zg1IBxOHl/cx7tQ+pIDXVa6j6Tn4Xb0Le/3BGg2hPAYmmwb1cCx2beWdqN7mZvFwJSiOk
-	 NJ6t+LJCnKo5CA+it51P86MA0SQZSpBp8S1yKv7ap226Cr4ibdcnkt6y3Fvz3mSTiw6cf
-	 PrJ5oJFPXtMhSdgaFYHxz2iCsgDLYRyjkIey4AmHeOLUH3T6gEVdwEXpnD8SxGVNcVEf3
-	 IfmCZKVtwZnrywilwUJjWo2MUakKO+3t8TlRzFzmrEsh7K5oNp5/EJPX7h9+yBVGF6w==
+	t=1793041433;
+	b=abDCGiRR96k72/KhmMF6E8Wh4Q6qA+ElAYSqWLk1u4tJW6caV+OlkNFSbC0OIHcfi8bg
+	 R5tRhr9Z/ykinsnPmvO+K93eAQRSZQWn5KtWtvvw8gQhxsMPuo8lLjM4g1QEPVy8PvuPC
+	 47I7dEIpCJnvjIwnKL4j+xWEupduofCQF+oo3rjvLdIVYQzT5eq1RD82VPm4BWs8mw/RH
+	 Uv9WaX6l/7LFhoCutHdHTRfHeYb0/bosE/fAOo4jnrJZUa3BEnX9NOJ4LVw+hDGqvx3WN
+	 bH/tlAKFrJkjyxKrJRjx5r1rzV9FkFRkTXU/TSjxEuakM3nGWOAeTXWldF3dgK2DPuQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793039797;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=EicdVyt3cuI1JNRmtgirZBSbKkrRIqYDXX+D7aKA+VQ=;
-	b=kJ8Cnc82V+/btKtEdvOK17QjQCfqserjtH6avWot/uTlPNhP8x65PhTRIJ5CLOmaYlSc
-	 qqVMAAXVUyXpNdHR8mZRlXSkpfpYNKuN6c1BTS1sftcXzy81jLN9DyNdSQCaTtv4jnnq8
-	 K0nw5L5XCvDkVB1pzDF41YfK4sABZOZtbr3vf3sQ1ZU+VSjnazlK5+DtWD2RCN+jh6bg3
-	 dw197T7lnsUakUsqoO4X4CVAbGdLT3RZd3Y2IOlTWsqaUdL+IPYnlrUNkz35ZItdUcsfy
-	 7TGk1Smyt1+qNIfViaOdbNr23nKEr6wxb1FuTRaN67yZ51bvyAQVbWKa354o6JSAZcA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793041433;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=DOZJrjKX63ZevYgJMuO7XQKY8YyD3Ep4iAtbpx4Y4is=;
+	b=VKZsUymNq4uTRFqowFzEgwYcT/P79IzwPsmq6B8LJOvfPiVBKQRq6rgJ2YGt1CIh7lS5
+	 xL4ovtNQBKT2/R0iBQPkUNKxjPmNQj98pfAml6Nm4DwKzwAfrlPI5v1jenvOVHezTGuV5
+	 sOF1tRGMKq2HqDNuqaFd6fjgSBL7UqWI3MBWnzPnIroUC+mwtj2DsEm6kfdb1ro5zfgyJ
+	 4sO8hNrtwfCifsTGapvnaR/oLha1rfvdttlCdujPCNQP5mhkVtVRAbpRre719bu9uXy5G
+	 gsge9F0MZI3yx/sC6LUzOUMiw6pEmrubVL6WBkE0JpiyUnObm1bJ4HxtW5v7GeL1wog==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cvx8D4lz;
-	arc=none smtp.remote-ip=91.218.175.151
-Received: from mta0.migadu.com (out-151.mta0.migadu.com [91.218.175.151])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TucQYsfO;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7238F60A260E
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 18:36:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7238F60A260E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA56606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 19:03:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CAA56606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=cvx8D4lz
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=O7bendn+vz7GZlgufTDXpvtWbXs4Nv+hlyvLUyv9A6g=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793039794; v=1; x=1793644594;
- b=cvx8D4lzMyNaE6VlzcBxxkQd5kfu5UCI2Rb5Kl+44DEufBBxpibKx+V7R7tEFrYS2IhTxW+J
- xRcvKn3gyJ1vU4/sIsbyXH/U5d8ij4x3fkLemVRjPbpBC4HaMfy9/gB4ECfUxyRstJWjqYyCO0Z
- 95oOFDan1D30a+pVk6VtBCn0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id efd915cbd3990552;
-	Mon, 26 Oct 2026 18:36:34 +0000
-X-Mizu-Trace-ID: efd915cbd3990552
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2a2d0450-01f5-4a87-9e4b-7ebecdbf165a@linux.dev>
-Date: Mon, 26 Oct 2026 11:36:23 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TucQYsfO
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a2153c8525so21709415e9.3
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 12:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793041431; x=1793646231; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DOZJrjKX63ZevYgJMuO7XQKY8YyD3Ep4iAtbpx4Y4is=;
+        b=TucQYsfO6gw6O2eXXY6yhDRXPe+AFkM8MRluiZeiMaP415jhVwdH+vwDuaPsXx3d/a
+         apKVsIYyDfucp16PujRxv7sL/Z4kov6GaCDaiUNTV/+cRt49WVrpibi1V7c2rcgJfdLs
+         Mytqn9PEbiPwu+DOZu1Bi9GJdY7uNyj/YPEV6Q2ImOlv9oiAlDNwAgB0mnjqOda0Jp2M
+         SYvbuawLhTKVqmheMyhW+y1hKJY8bRb1CR3SYbWJJ/WA21zveh4TizfLePQqfCm+Vw0q
+         rvTogdLQLaCU8OjkOEZVGFw4bWu7PAN2M95fSj3YF0bAxqM5Y5Q6gaZjlYOUOXzoGoU0
+         S9qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793041431; x=1793646231;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DOZJrjKX63ZevYgJMuO7XQKY8YyD3Ep4iAtbpx4Y4is=;
+        b=ee1aLBffAo4eJ0Q4XpATHsDVL8pR6gsr4BeiQt6I+Q9G6NaCZiUEWk/ndToS7XkBDR
+         jxaAK23VR8ZmoshVRzUG1p7L02B3NJfkmZOJ/YAa27HiV1tl7xEn4e3NDaZsjO6zVB1k
+         6k0Lcp5YqdKg2INqZwG7/ltWcFSKmOCj+18Zh4VfleRjd3rAgKfD/jiKKCO4Zx+39It9
+         88rjehHqE9sdbEhbV/IdN3r6s5IW/iOL1lxPJ0Pb0dj8+3HGVCvERAur9O6RVUbZwJZv
+         HOcs9eYnPbFiK/Il6aNZuvkihUxed0X0PFwX74UBLl9I+2jTwgOJCCRNQSrcoFfoqw1s
+         M0pQ==
+X-Gm-Message-State: AFq9FYJqZUyMSM8S1T+Lb3CccEYrmAcJoy9+ZRzzSj4YCgg/MqPLW6RX
+	Iw3wZl79mER5jF4W2BdoCtNBrPKDw0k9n+VspD+X5iDL1tVOlMDjPohNntnzhJPKW24=
+X-Gm-Gg: AYBFou3UKoPz65wu4BFdeSnL3ME9VnLrT2LmV1Ohb4kR+Vw0lTrNloNIkEftLy7bP4P
+	hYWhRNl2lpKbU3ERHd4H3iMT64OBbF8C2PHtsAF4V+AG8OMK8dboCZIXkMh1syO9/+VyAa3ooof
+	Zfk25l14kiK7xpTq2HEQMlDjZcauHu4cAbS9vqDXUN3xi+PIR4oOgQMjPaWGT1s3yTLxUMKnWRd
+	hXIJU+5nivWBx5qNLsjdfKAEvesKqHhhVjmyCizveGSGV1NX6yzAaW5lP73P+pQGA/swKAaZ9M0
+	Ng8eb+qEOpiZiNTJ7f9X1za0L4/HXQWICG6/SrqU7KLNLS9v+uPH7Y6rYoan1KfrEu0wyAk/JMi
+	ZOJ2r8KfF4zgYhWp+REQ2rLeAN4QwYJqs1qH65bI2lzY2YnYgwzyWyJ/3tk93N+HznM3o5CQfwz
+	jicvZYUiDXyF6Jxiyq3GIkZp67owUPeX/tQne1XVON/tKtxKEc05VGMg3KS7TgasZYePAYKlJlI
+	DNZIHxXRbeYz6cwmOGyC+KRRGv+Am7XVuaf6IdQ+TO042eBYf5nyXarrKJX9UctTVVlCW9xKPPy
+	VQ4tYIoTWpXVa8YbTBpmTMS8v8c=
+X-Received: by 2002:a05:600c:190c:b0:4a0:1b14:e283 with SMTP id 5b1f17b1804b1-4a35ac394afmr147153975e9.1.1793041430904;
+        Mon, 26 Oct 2026 12:03:50 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48e3ecd37f4sm21145713f8f.44.2026.10.26.12.03.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 12:03:50 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	willemb@google.com,
+	eddyz87@gmail.com,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	liamwisehart@meta.com,
+	martin.lau@linux.dev,
+	pabeni@redhat.com,
+	song@kernel.org,
+	netdev@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	kuniyu@google.com,
+	memxor@gmail.com,
+	emil@etsalapatis.com,
+	almagui@kernel.org,
+	Mahe Tardy <mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v2 1/2] bpf: Add bpf_ksock_bind() kfunc
+Date: Mon, 26 Oct 2026 19:03:41 +0000
+Message-ID: <20261026190342.137069-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,156 +113,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 05/12] selftests/bpf: Cover the low-32 link
- for zero-extending movs
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261020161907.2115379-6-vineet.gupta@linux.dev>
- <3e177386ed0ff37815ee705fb2cb8195952b4301858e4ff4e2b4638d14d94c3d@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <3e177386ed0ff37815ee705fb2cb8195952b4301858e4ff4e2b4638d14d94c3d@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/20/26 9:53 AM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Cover the low-32 link for zero-extending movs
-> TL;DR:
-> - Selftest comment calls the mixed-kind no-sync case unsound, but the program
->    is safe; it is only lost precision
-> - Commit message says "Twelve" programs, but there are thirteen
->
->>      selftests/bpf: Cover the low-32 link for zero-extending movs
->>
->>      Twelve programs, one per decision the previous patch makes:
->>
->>       - zext_mov_narrow_src: narrowing the source reaches the destination
->>       - zext_sync_makes_member_const: and over all 64 bits, since the member
->>         is the zero-extension
->>       - zext_narrow_dst_keeps_base: the reverse must not happen
->>       - zext_u32_src_is_full_link: a provably-u32 source still propagates
->>       - zext_self_mov_no_link: a self-mov mints no id
->>       - zext_chain_drops_link: a second 32-bit mov drops the link
->>       - zext_no_sync_between_mixed_kinds: differing kinds do not reach each
->>         other, in either direction
->>       - zext_no_sync_from_subreg_base: nor does a member reach a base whose
->>         high half it knows nothing about
->>       - zext_sync_between_two_subregs: two low-32 links on one base do
->>       - zext_unlinked_path_stays_reachable: one unlinked path keeps the
->>         guarded div reachable
->>       - zext_mov_breaks_linked_src: forming the link drops the source's own
->>       - zext_sync_keeps_narrower_member: narrowing the base does not widen a
->>         member that already proved itself tighter
->>       - zext_contradiction_keeps_range_sane: a contradiction leaves no empty
->>         range behind, under BPF_F_TEST_REG_INVARIANTS so the violation is a
->>         load failure rather than something only dmesg sees
->>
->>      Written in asm so the bytecode is the same whichever compiler built the
->>      suite.
->>
->>      Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-> The changelog says "Twelve programs", but the list below it has thirteen
-> bullets, and the patch adds thirteen programs:
->
-> zext_mov_narrow_src, zext_sync_makes_member_const,
-> zext_contradiction_keeps_range_sane, zext_narrow_dst_keeps_base,
-> zext_u32_src_is_full_link, zext_self_mov_no_link, zext_chain_drops_link,
-> zext_no_sync_between_mixed_kinds, zext_no_sync_from_subreg_base,
-> zext_sync_between_two_subregs, zext_sync_keeps_narrower_member,
-> zext_unlinked_path_stays_reachable and zext_mov_breaks_linked_src.
->
-> The count looks like it was not updated when
-> zext_contradiction_keeps_range_sane was added.  It is the last bullet, but the
-> third program in the file.  Should "Twelve" be "Thirteen"?
+Part of the effort to make ksock have all basic socket operations. This
+is for example useful when replying to a peer which expects a message
+from a particular source port.
 
-Yes there was a last minute test update and this missed the update.
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
+---
+ net/core/bpf_ksock.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-> [ ... ]
->
->> @@ -710,4 +710,352 @@ l_exit_%=:							\
-> [ ... ]
->
->> +/*
->> + * Two members of one id set carrying different link kinds do not propagate
->> + * to each other: r7 is (u32)base and r8 is base + 3, and the deltas were
->> + * added at different ALU widths, so narrowing r8 says nothing about r7.
->> + * sync_linked_regs() declines the pair on the kinds before the deltas are
->> + * ever consulted. Note neither register is the base -- that is r6.
->> + */
->> +SEC("socket")
->> +__failure __msg("div by zero")
->> +__naked void zext_no_sync_between_mixed_kinds(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	w7 = w6;		/* forms the link */		\
->> +	r8 = r6;						\
->> +	r8 += 3;		/* r8 is BPF_REG_LINK_FULL, r7 is BPF_REG_LINK_ZEXT */	\
->> +	if r8 != 3 goto 1f;	/* must not propagate to r7 */	\
->> +	if w7 == 0 goto 1f;					\
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
->> +}
->                  ^^^^
->
-> This isn't a bug, but is the comment accurate for this direction?  It says
-> narrowing r8 "says nothing about r7", and the asm comment says the narrowing
-> "must not propagate to r7".
->
-> r8 is a BPF_REG_LINK_FULL member, so r8 == r6 + 3 over all 64 bits.  That
-> relation inverts exactly, so knowing r8 pins the base, and r7 == (u32)(r8 - 3)
-> follows.
->
-> In this program the fall-through of "if r8 != 3 goto 1f" forces r6 == 0, so
-> r7 == 0, "if w7 == 0 goto 1f" is always taken, and "r0 /= 0" cannot be reached
-> at runtime.  The program is safe.  The verifier rejects it only because
-> sync_linked_regs() skips every pair with differing kinds:
->
->      if (reg->link_kind && known_reg->link_kind &&
->          reg->link_kind != known_reg->link_kind)
->              continue;
->
-> That check exists for the other direction, a ZEXT known_reg against a FULL
-> member (scalars_alu32_alu64_cross_type), where the 32-bit wrap really does
-> break the relation.  If the differencing arm ran for known=r8 (FULL, delta 3)
-> and reg=r7 (ZEXT, delta 0), it would compute r8 + (0 - 3) and then
-> zext_32_to_64(), which gives exactly (u32)(r8 - 3).  That is sound.
->
-> So this test pins a deliberate loss of precision, not a soundness requirement,
-> but the comment presents it as unsound.  The text is unchanged at the tip of
-> the series.  Someone who later makes the verifier propagate FULL -> ZEXT will
-> see this test fail, and the comment will suggest the improvement is wrong.
->
-> zext_chain_drops_link and zext_mov_breaks_linked_src also reject runtime-safe
-> programs, but their comments say the link is dropped by rule.  Could this one
-> be worded the same way, for example "sync_linked_regs() declines mixed kinds
-> even where, as here, the relation would hold"?
+diff --git a/net/core/bpf_ksock.c b/net/core/bpf_ksock.c
+index 37168f43c16c..25111712b944 100644
+--- a/net/core/bpf_ksock.c
++++ b/net/core/bpf_ksock.c
+@@ -178,6 +178,37 @@ bpf_ksock_create(const struct bpf_ksock_create_opts *opts, u32 opts__sz,
+ 	return NULL;
+ }
 
-Yes this is correct as well, I'll update the comments.
++/**
++ * bpf_ksock_bind() - Bind a BPF kernel socket to a local address.
++ * @ks:		The BPF kernel socket context.
++ * @addr:	Pointer to an IPv4 or IPv6 socket address.
++ * @addr__sz:	Size of the address union.
++ *
++ * Binds the socket to the specified local address and port. A port of zero
++ * selects an ephemeral port.
++ *
++ * This function may sleep, so it can only be used in sleepable BPF programs
++ * (SYSCALL).
++ *
++ * Return: 0 on success, negative errno on error.
++ */
++__bpf_kfunc int bpf_ksock_bind(struct bpf_ksock *ks,
++			       const union bpf_ksock_addr *addr, u32 addr__sz)
++{
++	struct sockaddr_storage sa;
++	int addrlen;
++
++	/* Prevent wq kthread context for CAP_NET_BIND_SERVICE check */
++	if (current->flags & PF_KTHREAD)
++		return -EOPNOTSUPP;
++
++	addrlen = bpf_ksock_addr_to_sockaddr(addr, addr__sz, &sa);
++	if (addrlen < 0)
++		return addrlen;
++
++	return __sys_bind_socket(ks->sock, &sa, addrlen);
++}
++
+ /**
+  * bpf_ksock_connect() - Connect a BPF kernel socket to a remote address.
+  * @ks:		The BPF kernel socket context.
+@@ -285,6 +316,7 @@ __bpf_kfunc_end_defs();
+ BTF_KFUNCS_START(ksock_init_kfunc_btf_ids)
+ BTF_ID_FLAGS(func, bpf_ksock_create, KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_ksock_connect, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_ksock_bind, KF_SLEEPABLE)
+ BTF_KFUNCS_END(ksock_init_kfunc_btf_ids)
 
-Thx,
--Vineet
-
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
+ static const struct btf_kfunc_id_set ksock_init_kfunc_set = {
+--
+2.43.0
 
