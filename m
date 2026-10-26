@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983687;
-	b=hO+U3m9fuI65WDkSdL1FQ3XxdMO29OW78ypojHku+uJjDDiHZhNFKH7Kah0dvajdzZ6i
-	 S6B58JlBRy5OQU3vPkdN/d/v53rb1H6ZLvNIDszJonuQeVZIGLz3s/o6kl0ni+aye6l6c
-	 XpFNdwhnIH7WL31SiU2jXiTOouy/AFiI/L82uNd0oAhfz/tmKPNJoiQ0rzQ0ExWskcfBh
-	 Q1oJZE3m2RB6dCPdce35ckIulvntf0hOSiRfkStNpVuMDZInUlmDMXJJJdp2LXJCB5FSF
-	 FbF6myZdXPvUtKMPfxMdqflgCMHSIbHLqbzIsVjv7BzCE1qZg2DaVIpXuii8wkmW90A==
+	t=1792983693;
+	b=prCSRXWEVZIk0jjG9V/1Vm1Y+IARIruxEojd1is4X/fg21dL3HZzP3RPEkdO8SU32eYt
+	 PFNA3sOcDIUZKKMLA+vsXIAWoE0Q+p6JBVq8v5jtGVwcDYZ+BFnf1rFfAIbUrk/l6LJeb
+	 i6M6lZzE3sYwBV2Csg0MI7j+7MDAj7kd1VdXgvYrm/E90/xw4EBEEGxxlsjnt8MIiKdE/
+	 z4zQZE/BSa/qKUGF5HID3SprxWS93If/TKBfxAHdAhDJdlT3E8L9xVb6ZIdMEXs6mh7Yu
+	 wW9Q8q+EcVUCVSclqDeCnPr7304zB7VNvapveVya2qPzohiUQr6u2GBka4Qe2+1botw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983687;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983693;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=lVE4RWqwuXRo0I+STIlPZNx/szWeCHgqkYceEkrBsj8=;
-	b=QpkrVnt+EmPGSgcKbZm7QC+4K2yjRHT4uKqf+WxYUkxMRhzcbHLka4SSYjB5TV5lzDqb
-	 xpws4v4c2UdwqBuGGtOZufuqzyf9XiwPPt+FOTGw8z8+Wemm4HbtPy57j/BR64uG0SF/s
-	 GYTNhs936yjuHN+b2yQSvwu0jkBzvq3KLZU3cQXdJZ1UGAV3+t8X3DmpbKqLhNd9kyI5r
-	 Hk9ij7g7349lgIJRkabqYsxZqUrIw8kCFYQ2uYgplWHWwTWtO+JTdtEm8bTEW8iSGp61X
-	 CvFuUpW1SYqvde88F2ZMBEadoqIqsV9uSMR+k7wQ2945h1MmhDmOfqPWK/XVgRdgxVA==
+	bh=8pJbuUnHLlClZBnry5+m0/JPpqyAsYC960Jnuq8D538=;
+	b=oUvx3U6Zz7uTy2Q+2eNtuvTPrMGRQDW5VzVk1Q27k6q/soOQnjhilPOOK7HLIUlOorod
+	 0DN4I9HXYdFGnhOuDoxfkWACsdB9ypaq2JO6X1QcF1wDJ8swpi+SeU6PjFedSEX1SRdiX
+	 JJoZMmrnzqg094X49Mq7x6juwjtQKnsj2D9UJaGPo9KgRQSDxv4/Mv3B+ICOZMEtJrudF
+	 euBdqW7F9mtv1abq6VYhykMXKY1xnk0mcavi1BRdRm7TimWouyDQgvx9Rt0iZEjzBBUnL
+	 Jp3IG+9zIt2hh6zE5YiS6pmTnf9R8rgsSJNoc7NkRW3zLgEnBvKM24ZiUu0pOiy2t8A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pJFoQ36y;
-	arc=none smtp.remote-ip=209.85.215.182
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=SVVBxWlY;
+	arc=none smtp.remote-ip=209.85.214.178
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24520606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:01:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24520606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52213606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:01:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 52213606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=pJFoQ36y
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cd5d2dafeccso776484a12.2
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:01:27 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=SVVBxWlY
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2e8f2c3ad6bso15660925ad.1
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:01:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983686; x=1793588486; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983692; x=1793588492; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lVE4RWqwuXRo0I+STIlPZNx/szWeCHgqkYceEkrBsj8=;
-        b=pJFoQ36yoxWu951CJxLvigVSg6oDl9ioBacGYWUjBw7RwePOwCq57Tyn5ulaaCZTz+
-         zLjSWpT67YCuJ2aikTPsBjcrCl44uTWbPXuDgPiTF49TrmLe+M8hamCkNDFRcNIyh1X/
-         15exhqE7HyO1mVzgbYMSB1vHMHRXw64fL+ewFnJ2P4RSR3uPQdKTt3oxnbVYMXSkjct+
-         TH2L3suTI/NiYr2FKGoBzMPIhVq1EhcNq/zEiDr+ut0p5NMePjUQWSRK5Dndg3zvzZfi
-         zvONoF9C9zqWFoL1Yw1bpNdwNjRtJvP/pJ85ZDji91HzrQxZ4YQAwnWVEMmFFVJkqBY/
-         Enug==
+        bh=8pJbuUnHLlClZBnry5+m0/JPpqyAsYC960Jnuq8D538=;
+        b=SVVBxWlY8kh5y/62sylG/8Fy0CKYlSXgi49HX/LW6zepO68urTPGBQJP5z4EEJ+PLl
+         PSfXHnw3D6HfBI7wuvvgI03t95BYrF1qkYL8VaFw4VkCvMdHLmo13Dc+ouqR/dz30A34
+         TWDEVcnUeIa5sZgxNKwDy5bw3afNYk6KFMwtLpKeTu+SgnV10+4HDz/GL+2+rCW6P5n4
+         j6jrKHDdeYWFpcXAlGOjk7bLZTV15U79tPbbitqv+QYFbnDxcGLLuq1gUKo3Zr1jReMw
+         2gq6ZGmlMSZmrfzWEbDPlfHrFzWHJN2ZU6jFoGgm/g4h1x9ow+Jd8lfc4rhl9+5qL45o
+         HLOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983686; x=1793588486;
+        d=1e100.net; s=20260707; t=1792983692; x=1793588492;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lVE4RWqwuXRo0I+STIlPZNx/szWeCHgqkYceEkrBsj8=;
-        b=1d14npjIchY37W46DKzFNMUhtDn+3mX7XrnwI+N9JOL+4ZK80g35G33YUklA71Rkg8
-         RHJzMkscfR9Nfp0L6lF1+1Ew/6mWZizTnlBQrIbk6fIXiYwZ32BUF5L+8TXhCeeoC665
-         Sv4f6ku6AZBNq+sU6djG8/xGbweX5pVy/o02du+NxM4hnffQ6JyqJsA31kQqIX3TAZcK
-         oZNXIe/ozCM6K18kmwoYBmIcsJta36Ie+TwwSYVvI86v8weK4xyEvqRW6F6d27EcG0mN
-         8MLmO4+/tpaEpx9wWPQxc3Qyv/SxV3Z4EOzGwRYfbdbPqUgimLVvZ07cyV25A+k2sPpg
-         d00Q==
-X-Gm-Message-State: AFq9FYIzPKGKI53J6YxatBW3Daw+dpIHGbUx6EasAYcNSPfUdsx+K/F9
-	yVz305vNr0PdLv9KS4JYd48QuB+zNkEv8ZnzyD7SBzmfzOCKj4cLQEVcN9+leQ==
-X-Gm-Gg: AYBFou2hkZ75yQy/8eBgNrQFp5A0nD1W29Gkw4Xfmjcy2tc79rA9iJu9ydvwf60csPT
-	F3VygFWNTa0Nxrpvoe1CCPPs7GTq7QggZ6Y0TFcmwlL3YkgdgjQgy8axEbvv2tp+KjjodefkNHK
-	JFa9FZ3D1op0rsHMAPfHxZomeo0DzzQWmJ0mp3m5qVFciWN4qGT2PQeab9TrWLyUxKQdgeqmKrR
-	JdgTpC/y1o1VdSGIDXNEVSB0D2esQD6d0RjUxtyo5FJNN6bDN7e4yrwa0pZ9RSByhI3CpCkD+IF
-	CpLb+VII9l3vZamHUohF7qnMG9faH0HX4iL1+MDQNgY9nSdrJ+KlR+5wh1Lxs3fK2De3EeBOQaG
-	Rkx6HDt/CgfXxJWWd6j0uwFWTehGBVBs1/OvVXNsE1KihE3kgPTBy52yT7rXFHDOli98sn3zhad
-	nh/psWZWw7a3SmCCagJ3b9vOCA7y3WfyV6RCocQoA2HALzydc2GWe8zfplnYCyR36jN50huEk03
-	etFg8rr6H1Ak5ZOAT74/KJ3oZHdXayjk6rYfl0fV3sRrB03SOLX2yFBBF5z9YD91aCWxLoTW19a
-	/SLCciv139LC/4L6ncnWFTTnnX4OwqxiWD9xMhNLoz/ipFmZ1zb6bE+pxgLSD1LQNxnlMkaBYnR
-	4xcq8uhXy0rH8QIbwtUMkyD26
-X-Received: by 2002:a17:90b:35cc:b0:3ad:1b31:92d8 with SMTP id 98e67ed59e1d1-3adeb16ecffmr4115339a91.60.1792983686531;
-        Sun, 25 Oct 2026 20:01:26 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebae7f3csm5169809a91.3.2026.10.25.20.01.26
+        bh=8pJbuUnHLlClZBnry5+m0/JPpqyAsYC960Jnuq8D538=;
+        b=iLuYMvwYPhKbQlx850yH96OJSaTOpXgpryzH7tXVhytN0z3CS8yZ/2dnLgUOZxukyJ
+         VNwrWqMo42rkVuQB/+3hKOABj0lwNlxK/gfYVvc1hPj8gTqCsBV3AOW4eyRQXYL/ZFnA
+         V1vuHPM4RRniOYmgwMGy2ZZV5i6t27s1uoI2H93DKZ972sa8Wpc3AgrkVYaxhOTEZRkz
+         LvVERCNNnFJ+DzzIFq6a2baSPexKeAOGo/E5cnSrK/J4IFGzovhaLjlHNtdD6sby1NwD
+         yVBACFTKfPc/LiXX5TtjZydGCSebbGacoFPu+M6DdFYULe6BCOEupncI4PvKfrnc3u+f
+         3IMA==
+X-Gm-Message-State: AFq9FYI+0+EOz+SquPhdyhnaJ/16DJgN08h+JIVqeihg3PoeW9A44BlH
+	RiDbY8spmgYgxnoY1wVcGbPht8H/YMBnTvqeN65/bOTSe2SVqs5/XZVKBIAnOA==
+X-Gm-Gg: AYBFou0cjXbcbx3Jp8I1sbraw3Ru/KoaLA5XQOKY2ic3WCaNTHigq44K0VmJGJzUTUq
+	76OdEXlXB4pXNl+Ij6+PVGTr9TJsBMI9Ew47Mgztpu9Quzj64z9z1XcCde6yN9aNztU//gG5Q15
+	5LXjXKcBuCSdLaYz1qptsfButNXAjJwHz6BaXFOIPaq9B9i/4fHPiMhBwwVEEanAdyRaKSU8vUT
+	8vroblJDPoGMSFiyPXCfzJUxuPL44/gsdrmi8Ee6EfZKkbLCr6gqkL8OCKk+Aq/Dxw7Bljhn9ro
+	BQip7SXxm0Af1gndNNO3YoqRiyXWgvnj590M7QraXrgNXsCJd7LQNVkVlPDIx5TErkV5Svovnoo
+	2CilMZV1o4iQqu6AM/BFqGXQ1821PxG6hdr+EtgXOodf0RXdHALhPbc8V3KKvSNU4V2Di/IqfS+
+	vHp6trHqeF34Psvp3/5ExE3BrWm0ZxoFoIRdDq1VQBcz9Fjxi4uETNbkQnXg4CxDUNRvC+F+TFL
+	kkE3tbGHn5q+dQ10ue8wEGBm2yPlDURu25f9PrtibNjr8F0mqy/exFDNK4ayegYDkJVvw6jFYz5
+	ch1IFsidOBNU9iw2Pt3PoEaIczpVx03aQ6RkFBQUW3X3RMa/+GWtO5Af/pVjUY9IGun2lPrNKXz
+	6JhCqcW4wy4EQviG33aD3H2/N
+X-Received: by 2002:a17:903:2a8b:b0:2e2:b7b8:abc5 with SMTP id d9443c01a7336-2ea9c80e15bmr48821545ad.32.1792983692318;
+        Sun, 25 Oct 2026 20:01:32 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b19ea80sm10195445ad.42.2026.10.25.20.01.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:01:26 -0700 (PDT)
+        Sun, 25 Oct 2026 20:01:32 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 17/81] selftests/bpf: Test the default size of arena
-Date: Mon, 26 Oct 2026 02:58:38 +0000
-Message-ID: <20261026025943.404450-18-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 18/81] bpf: Treat addr_space_cast of a pointer that is not in arena as a move
+Date: Mon, 26 Oct 2026 02:58:39 +0000
+Message-ID: <20261026025943.404450-19-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,78 +103,210 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The test declares an arena without max_entries. The kernel rejects such a
-map with -EINVAL, thus libbpf must set the size. See
-"libbpf: Make arena 1 Gbyte when max_entries is not set".
+'rX = addr_space_cast(rY, 0, 1)' makes a pointer to arena from an address
+in arena. The verifier gives rX the type PTR_TO_ARENA and replaces the insn
+with 'wX = wY', which keeps the low 32 bits. The JIT adds the base of the
+arena in each access. Thus an access through PTR_TO_ARENA cannot leave the
+arena, and the verifier does not check it.
 
-The test makes sure that:
- - After open, max_entries is 1 Gbyte divided by the page size.
- - The object loads.
- - The prog can allocate pages in the arena.
+In C the __arena attribute marks the pointers to arena, and clang casts
+only these pointers. Rust has no address spaces. The compiler follows each
+pointer back to its origin, and it does not cast a pointer that comes from
+the kernel. But it cannot always find the origin. For example, two progs of
+an object call the same function. One prog passes a ring buffer record, and
+the other prog passes an object in arena:
+
+  fn fill(e: &mut Event)
+
+  r6 = addr_space_cast(r1, 0, 1)     ; a ring buffer record, or a number
+  *(u64 *)(r6 + 0) = r2
+
+When the compiler does not know the origin, it casts the pointer. The
+verifier does not examine the type of r1. r6 becomes PTR_TO_ARENA in the
+two progs. The first prog loads, and it writes to arena instead of the
+record.
+
+The verifier knows the type of rY. Let the type select what the cast does:
+
+  rY                             the cast becomes      rX
+  -----------------------------  --------------------  ------------
+  number (scalar), PTR_TO_ARENA  wX = wY, as before    PTR_TO_ARENA
+  all other pointers             rX = rY, or nothing   a copy of rY
+                                 when X == Y
+
+All other pointers are kernel pointers, and they are in address space 0
+already. Thus a move is the correct cast. rX is a copy of rY. The verifier
+applies the same checks to the two registers: bounds, NULL, references.
+
+The verifier replaces the cast one time, for all paths. Thus it rejects a
+prog in which the same cast gets a number on one path and a kernel pointer
+on a different path:
+
+  same addr_space_cast insn cannot be used with a number and with a pointer
+
+The analysis of live stack slots follows a pointer to the stack through a
+move. Make arg_track_xfer() follow it through the cast too. Otherwise the
+analysis does not see a read of the stack through rX, and the verifier
+forgets a slot that the prog reads.
+
+The cast continues to be one insn at most. Progs in C get the same code.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/prog_tests/arena_default_size.c       | 22 +++++++++++++++++++
- .../selftests/bpf/progs/arena_default_size.c  | 21 ++++++++++++++++++
- 2 files changed, 43 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_default_size.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_default_size.c
+ include/linux/bpf_verifier.h |  3 ++
+ kernel/bpf/fixups.c          | 18 ++++++++++++
+ kernel/bpf/liveness.c        |  6 ++--
+ kernel/bpf/verifier.c        | 54 ++++++++++++++++++++++++++++++++++--
+ 4 files changed, 76 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_default_size.c b/tools/testing/selftests/bpf/prog_tests/arena_default_size.c
-new file mode 100644
-index 000000000000..0c7efb5c9e5a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_default_size.c
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <linux/sizes.h>
-+#include "arena_default_size.skel.h"
-+
-+void test_arena_default_size(void)
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 7030b997ce2c..ce3f0e275d9c 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -782,6 +782,8 @@ struct bpf_insn_aux_data {
+ 	u64 non_sleepable:1; /* helper/kfunc may be called from non-sleepable context */
+ 	u64 is_iter_next:1; /* bpf_iter_<type>_next() kfunc call */
+ 	u64 call_with_percpu_alloc_ptr:1; /* {this,per}_cpu_ptr() with prog percpu alloc */
++	u64 cast_arena:1; /* addr_space_cast of an address in arena */
++	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
+ 	u64 bb_end:1; /* last instruction of a basic block */
+ 	u64 need_scev:1;
+ 	u64 alu_state:5; /* used in combination with alu_limit */
+@@ -2007,6 +2009,7 @@ int bpf_optimize_bpf_loop(struct bpf_verifier_env *env);
+ void bpf_opt_hard_wire_dead_code_branches(struct bpf_verifier_env *env);
+ int bpf_opt_remove_dead_code(struct bpf_verifier_env *env);
+ int bpf_opt_remove_nops(struct bpf_verifier_env *env);
++void bpf_lower_cast_mov(struct bpf_verifier_env *env);
+ int bpf_opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env, const union bpf_attr *attr);
+ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env);
+ int bpf_jit_subprogs(struct bpf_verifier_env *env);
+diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+index fe8d51f8c855..ae3347e724ca 100644
+--- a/kernel/bpf/fixups.c
++++ b/kernel/bpf/fixups.c
+@@ -723,6 +723,24 @@ int bpf_opt_remove_dead_code(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+ 
++/* addr_space_cast of a pointer that is not in arena is a move, see is_cast_mov() */
++void bpf_lower_cast_mov(struct bpf_verifier_env *env)
 +{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct arena_default_size *skel;
++	struct bpf_insn_aux_data *aux = env->insn_aux_data;
++	struct bpf_insn *insn = env->prog->insnsi;
++	int i;
 +
-+	skel = arena_default_size__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+	ASSERT_EQ(bpf_map__max_entries(skel->maps.arena), SZ_1G / getpagesize(), "max_entries");
-+	if (!ASSERT_OK(arena_default_size__load(skel), "load"))
-+		goto out;
-+	ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.alloc), &opts), "run");
-+	ASSERT_OK(opts.retval, "retval");
-+out:
-+	arena_default_size__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/arena_default_size.c b/tools/testing/selftests/bpf/progs/arena_default_size.c
-new file mode 100644
-index 000000000000..1fae38126094
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_default_size.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define BPF_NO_KFUNC_PROTOTYPES
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_experimental.h"
-+#include <bpf_arena_common.h>
-+
-+/* max_entries is not set */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+} arena SEC(".maps");
-+
-+SEC("syscall")
-+int alloc(void *ctx)
-+{
-+	return bpf_arena_alloc_pages(&arena, NULL, 2, NUMA_NO_NODE, 0) ? 0 : 1;
++	for (i = 0; i < env->prog->len; i++, insn++) {
++		if (!aux[i].cast_mov)
++			continue;
++		if (insn->dst_reg == insn->src_reg)
++			/* bpf_opt_remove_nops() removes it */
++			*insn = NOP;
++		else
++			*insn = BPF_MOV64_REG(insn->dst_reg, insn->src_reg);
++	}
 +}
 +
-+char _license[] SEC("license") = "GPL";
+ int bpf_opt_remove_nops(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index e657e6d95408..f2989a4fd9a7 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -1426,10 +1426,12 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		} /* else if dst->frame is imprecise it stays so */
+ 	} else if (class == BPF_ALU64 && BPF_SRC(insn->code) == BPF_X) {
+ 		if (code == BPF_MOV) {
+-			if (insn->off == 0) {
++			if (insn->off == 0 ||
++			    (insn->off == BPF_ADDR_SPACE_CAST && insn->imm == 1)) {
++				/* the cast of a pointer to stack to as(0) is a move */
+ 				*dst = *src;
+ 			} else {
+-				/* addr_space_cast destroys a pointer */
++				/* the cast to as(1) and sign extension destroy a pointer */
+ 				*dst = none;
+ 			}
+ 		} else {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 84f722bac539..203edbe41397 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17803,6 +17803,51 @@ int bpf_reg_union(struct bpf_verifier_env *env, struct bpf_reg_state *acc,
+ 	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
+ }
+ 
++/*
++ * There are no address spaces in Rust. The compiler doesn't cast a pointer that
++ * comes from the kernel. But it can't always tell, and then it casts the pointer
++ * to as(0) before the access, like an address in arena.
++ * A pointer that the verifier knows is in as(0) already, so the cast is a move.
++ * arg_track_xfer() does the same for pointers to stack.
++ */
++static bool is_cast_mov(const struct bpf_insn *insn, const struct bpf_reg_state *src_reg)
++{
++	/* cast from as(1) to as(0) */
++	if (insn->imm != 1)
++		return false;
++
++	switch (base_type(src_reg->type)) {
++	case SCALAR_VALUE:
++	case PTR_TO_ARENA:
++		return false;
++	default:
++		return true;
++	}
++}
++
++static int check_addr_space_cast(struct bpf_verifier_env *env, struct bpf_insn *insn,
++				 struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg)
++{
++	struct bpf_insn_aux_data *aux = cur_aux(env);
++
++	if (is_cast_mov(insn, src_reg)) {
++		aux->cast_mov = true;
++		*dst_reg = *src_reg;
++	} else {
++		aux->cast_arena = true;
++		mark_reg_unknown(env, cur_regs(env), insn->dst_reg);
++		if (insn->imm == 1) /* cast from as(1) to as(0) */
++			dst_reg->type = PTR_TO_ARENA;
++	}
++
++	/* it's either wX = wY or rX = rY, see bpf_lower_cast_mov() */
++	if (aux->cast_mov && aux->cast_arena) {
++		verbose(env, "same addr_space_cast insn cannot be used with a number and with a pointer\n");
++		return -EINVAL;
++	}
++	return 0;
++}
++
+ /* check validity of 32-bit and 64-bit arithmetic operations */
+ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ {
+@@ -17864,9 +17909,9 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 			if (BPF_CLASS(insn->code) == BPF_ALU64) {
+ 				if (insn->imm) {
+ 					/* off == BPF_ADDR_SPACE_CAST */
+-					mark_reg_unknown(env, regs, insn->dst_reg);
+-					if (insn->imm == 1) /* cast from as(1) to as(0) */
+-						dst_reg->type = PTR_TO_ARENA;
++					err = check_addr_space_cast(env, insn, dst_reg, src_reg);
++					if (err)
++						return err;
+ 				} else if (insn->off == 0) {
+ 					/* case: R1 = R2
+ 					 * copy register state to dest reg
+@@ -24069,6 +24114,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret == 0)
+ 		ret = bpf_optimize_bpf_loop(env);
+ 
++	if (ret == 0)
++		bpf_lower_cast_mov(env);
++
+ 	if (is_priv) {
+ 		if (ret == 0)
+ 			bpf_opt_hard_wire_dead_code_branches(env);
 -- 
 2.55.0
 
