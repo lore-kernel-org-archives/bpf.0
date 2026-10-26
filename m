@@ -1,75 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793011780;
-	b=a9v4w2A+YGJyd6WoWGD9+8ISgyaxnVPFOgcEvqGuOtQaGhxpOrec6dZYkK8htImTA4dN
-	 cDzGMYThJfjEn4DHahXkPnkxRzzGVOw6AVTRYj4UaU9lRGDIYlO/cKNTeuSWIr9I3iwXN
-	 oaezhdlG5EfCt9vw0T3vDoSiiBZ9l/UQLVFwamq7EY8fe+eENaewxehYwB1sz/uTSgbpX
-	 Nqh3S2zXcPCXFdZkH1D8vMhX7EYZhi9FCtKGOzWII60ORJdQmL89C3rHeFaatkb4VmDiV
-	 wfSu7Z5Q1heRWob+fH5dMb1AIjFnFj2HCL28YBbiTeecyEzQh8I8FUC6NU9EqQl5T9A==
+	t=1793012310;
+	b=QWrTX2WrGL7ahxsGtfAkiAnjfvVgBog1oEL8AW9bqeykWaLFJ6FihjxAt3qhUCbn08k5
+	 wktbRkGP55y1k2XJBC47JgGGU67EPs1p1jHqM7QKuO9ItsSCvmIvXBag/BeSynKDlRYaS
+	 LpBotOg/9PY6UsoXK4tiM32WNPjDuvmcSf0wZ3M2ZhMdgeE8sNIUP9SJtXvTGsebqajDe
+	 UpSoeUGIJKNXU4z2ogwZXThc5vqie08flTW34H2f3q0DV+7eKX9tlnFeRDUbfbg68QTjb
+	 YeDImB3xoqgPE7KXIVw31o57xNR5qoI4e+TvA1/+lwuhTiegJGOj7WOaY4n0hQVDiLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793011780;
-	h=DMARC-Filter:DKIM-Signature:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Debian-User;
-	bh=n2gAcLKPEPtariY942tQYn79FVktTDVNyRXUcZb8X68=;
-	b=1gUfFz4NAsHenoaCyWqD06ShU6EyIofwNer9QVeuX1efRC17TYfADoEGMZ1Ibv7l402Z
-	 RsapU7sUq2/AoUplRwFxS2HFzWg5YBGL/wjdFLNWpgPMM0XAq1pKuFjVNUPed2gYczqxY
-	 axoKLibHOAY4ogN3XoOvZDrmBMlrAFabyN9oNfWUQhuoylZy9kpUvtsXg2pWT+UsrIMcF
-	 txn07RJhzeVndouOgMX4bX60q8yoSGnLHJrsO7SrjEMrzwMbmo0Xxv0JZuqt2ZJ0rbYfC
-	 vFtfm5O2so6w2OLjdKt7k1U9EnUULJV1Ouz4+jxHQm9B/aE2dtQEDiM+qhfk8+uYbpA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793012310;
+	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=K+Yo9AfgBYCQQPg349B4iNZddsMgsiAX+VK2TRMdUgA=;
+	b=GwSe+p/yZ3YBtoyKNycG6UagJ+gxmvBDFlAP39zaflQYPZUzIEYbpj4XxBIdPQf4KNmp
+	 7Ww1h3MKP7yx0+djiyGozgRAs11BNlXwfrdxKtp5dJoKvdnsHAoq4Bfp7VjatKbW07kvY
+	 QfnfZV4uQrO1qOPz2cXT7dRLTeL54br8AFXC39/1pScx/KnclAxwidKfdFni+lc4gmm1/
+	 7zfmio7opSbwtFRZEaWQUXJZi2aYbcZvYf0QWTVZyhUHKSD59jtHlgw9dswHqdSNTQR2X
+	 8rw51z9SGgG3k0wCOcIZ7cx52cY8ddMJK+x9pe9aEwmEVRF1sGjjWtspkJ6/8Vu04IQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=debian.org;
-	spf=pass smtp.mailfrom=debian.org;
-	dkim=pass header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Fh7rdCPt;
-	arc=none smtp.remote-ip=82.195.75.108
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RqbfLLRV;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C0E606A31D;
-	Mon, 26 Oct 2026 10:49:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E4C0E606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161F2606A31B;
+	Mon, 26 Oct 2026 10:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=debian.org header.i=@debian.org header.a=rsa-sha256 header.s=smtpauto.stravinsky header.b=Fh7rdCPt
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=n2gAcLKPEPtariY942tQYn79FVktTDVNyRXUcZb8X68=; b=Fh7rdCPtU3hd+QC3aQHZkW8FTb
-	af1unfhyMy9WCodbyNYt3MHOSpUwz+0vpRbw7g+zSCiAgxY8D73mb3hy61rUUNkbMsWve74lIWK0z
-	4Jp8iSOCB6JVLWU0XXs2y41RWlfgtJTwoXadEjvcKRF5ZXvuU/58LBtOzABUMkSPkgAGoYQZrQ4ae
-	yfSbVdYAqt2/xnkSTFu5n9NYfgYi5h6aLWVlxv30okYkYoglT8d3f8OOnbufuKzcuDbSxyoTBu9yX
-	fTJeecigyVIZHuavr3AwF0T8+iEjQEK3BMaiIzOUxK0T1xCutHC3wHk0eMK/q22trKI9AOWD9SYSl
-	l2n7Awxg==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1xLIGa-000coU-0G;
-	Mon, 26 Oct 2026 10:49:24 +0000
-Date: Mon, 26 Oct 2026 03:49:17 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Ido Schimmel <idosch@nvidia.com>, David Ahern <dsahern@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Shuah Khan <shuah@kernel.org>, Eric Dumazet <edumazet@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	david.laight.linux@gmail.com, kernel-team@meta.com
-Subject: Re: [PATCH net-next v3 0/7] ipv4,ipv6: convert the getsockopt
- switches to sockopt_t
-Message-ID: <at8v8Orx3je4KD2i@gmail.com>
-References: <20261015-sockopt_expand_out_v2-v3-0-7d05ef2df448@debian.org>
- <20261019081907.GA2725184@shredder>
- <7ceef2dc-717c-44f5-9974-1ed8f0440fa3@redhat.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RqbfLLRV
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE161F01825;
+	Mon, 26 Oct 2026 10:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793012309;
+	bh=K+Yo9AfgBYCQQPg349B4iNZddsMgsiAX+VK2TRMdUgA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=RqbfLLRVlyH7GstXhr6fF9lEhVYgUIapphRe/P81YcGFINT+z6Fhe+lBJsgn3rMWz
+	 nwPcI/HcXSZLq4QV6LbqzF9rK8XtphsImEu3BLIYRJovrFr9vyf9Xs6PuuRt+L2lQs
+	 Zg3AMz9M2A5pC0eWwAKisCiZWiYxpk5oWXjthXBh8D9qPIyl5orSZle8QQfsbXwzty
+	 y2aL31Ujc54I2eI029xYLGpwylZOTerNomlZgooFoQQXYLwHhbKBEq5+v2pEFuCahV
+	 J8p3gG36je/h1ao/NDOSxh3pmDCEVX5k5Xo4njrbndApsmsVN2IUyxBoaFjzKwpD9p
+	 P9KRVBQabzHVg==
+Message-ID: <88626067-69c0-4487-98b0-f68eb8c5e36c@kernel.org>
+Date: Mon, 26 Oct 2026 10:58:24 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -79,31 +51,154 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ceef2dc-717c-44f5-9974-1ed8f0440fa3@redhat.com>
-X-Debian-User: leitao
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpftool: fix line info in multi-function CFG dumps
+To: Eduard Zateev <hackerowskiy@gmail.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20261024062329.264086-1-hackerowskiy@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20261024062329.264086-1-hackerowskiy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 20, 2026 at 04:05:39PM +0200, Paolo Abeni wrote:
-> On 10/19/26 10:19, Ido Schimmel wrote:
-> > On Thu, Oct 15, 2026 at 03:05:29AM -0700, Breno Leitao wrote:
-> > > This series continues the migration to sockopt_t, as described in [1].
-> > > do_ip_getsockopt() and do_ipv6_getsockopt() still take a sockptr_t pair,
-> > > and everything they forward to now takes a sockopt_t, so convert them
-> > > both.
-> > 
-> > Acked-by: Ido Schimmel <idosch@nvidia.com>
-> > 
-> > Given the user visible changes, the fact that the merge window is now
-> > open and that this isn't the last part of the conversion, my preference
-> > would be for this to be re-posted after the merge window.
+2026-10-24 08:23 UTC+0200 ~ Eduard Zateev <hackerowskiy@gmail.com>
+> The CFG dumper computes BTF line-info offsets relative to each function, but bpf_prog_linfo__lfind() expects offsets from the start of the whole program. As a result, line annotations in later functions can resolve to source lines from the first function.
 > 
-> I agree on the above, also clashiko noted that patch 7 lacks an additional
+> Pass the program instruction base to the graph dumper and use the global instruction offset for line-info lookup and display. Keep function-info matching relative to the function as before.
+
+
+Please wrap your commit description. Also capitalise your title , and
+target your patch to the bpf-next tree ("[PATCH bpf-next v2] bpftool:
+Fix line info...")
+
+
+> Add a selftest with a BPF-to-BPF call that checks the second function source line in visual output.
 > 
-> CONFIG_IP_MULTICAST=y
+> Link: https://github.com/libbpf/bpftool/issues/178
 
-Ack! I will add CONFIG_IP_MULTICAST to patch 7 and submit once the merge
-window is closed and net-next is re-opened.
 
-Thanks,
---breno
+Thanks for picking up this issue. Since you found that page, you must
+also have seen the patch I posted there, and on which yours is based, so
+some crediting would be appreciated.
+
+
+> Signed-off-by: Eduard Zateev <hackerowskiy@gmail.com>
+> ---
+>  tools/bpf/bpftool/cfg.c                       | 19 +++++----
+>  tools/bpf/bpftool/xlated_dumper.c             | 10 +++--
+>  tools/bpf/bpftool/xlated_dumper.h             |  3 +-
+>  .../selftests/bpf/prog_tests/bpftool_cfg.c    | 41 +++++++++++++++++++
+>  .../testing/selftests/bpf/progs/bpftool_cfg.c | 16 ++++++++
+>  5 files changed, 75 insertions(+), 14 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpftool_cfg.c
+> 
+> diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
+> diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
+
+> diff --git a/tools/bpf/bpftool/xlated_dumper.h b/tools/bpf/bpftool/xlated_dumper.h
+
+
+The fix itself looks good to me.
+
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
+> new file mode 100644
+> index 000000000..7d5b80927
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
+> @@ -0,0 +1,41 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <bpftool_helpers.h>
+> +#include <test_progs.h>
+> +#include <linux/bpf.h>
+> +#include "bpftool_cfg.skel.h"
+> +
+> +#define MAX_BPFTOOL_OUTPUT_LEN (64 * 1024)
+> +
+> +void test_bpftool_cfg(void)
+> +{
+> +	struct bpftool_cfg *skel = NULL;
+> +	struct bpf_prog_info info = {};
+> +	__u32 info_len = sizeof(info);
+> +	char output[MAX_BPFTOOL_OUTPUT_LEN];
+> +	char cmd[MAX_BPFTOOL_CMD_LEN];
+> +	const char *expected = "return\\ bpf_ktime_get_ns()\\ ?\\ skb->len\\ :\\ 0;";
+
+
+How did you test this? I would expect bpftool to print "skb-\>len" and
+not "skb->len", so the expected string should never be found?
+
+
+> +	int err;
+> +
+> +	skel = bpftool_cfg__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "bpftool_cfg__open_and_load"))
+> +		return;
+> +
+> +	err = bpf_obj_get_info_by_fd(bpf_program__fd(skel->progs.bpftool_cfg),
+> +				     &info, &info_len);
+> +	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
+> +		goto cleanup;
+> +
+> +	err = snprintf(cmd, sizeof(cmd), "prog dump xlated id %u visual linum",
+> +		       info.id);
+> +	if (!ASSERT_GT(err, 0, "format bpftool command"))
+> +		goto cleanup;
+> +
+> +	err = get_bpftool_command_output(cmd, output, sizeof(output));
+> +	if (ASSERT_OK(err, "dump program CFG")) {
+> +		ASSERT_HAS_SUBSTR(output, "cluster_1", "second function in CFG");
+
+
+Escaping issue aside, I don't think this check would catch the issue in
+the first place? The string is present in bpftool's output regardless of
+your fix. Maybe check that "return\ helper(skb);" does not appear after
+the main block, instead? And please make sure to test it.
+
+pw-bot: cr
+
+
+> +		ASSERT_HAS_SUBSTR(output, expected, "second function line info");
+> +	}
+> +
+> +cleanup:
+> +	bpftool_cfg__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/bpftool_cfg.c b/tools/testing/selftests/bpf/progs/bpftool_cfg.c
+
+
+
+Nit: You're not doing a generic validation of the CFG from bpftool here,
+so I think the names for the new test files should be more descriptive
+to better indicate what the test it about ("bpftool_cfg_func_offset.c"?)
+
+
+
+> new file mode 100644
+> index 000000000..db01f20c8
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bpftool_cfg.c
+> @@ -0,0 +1,16 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +static __noinline int helper(struct __sk_buff *skb)
+> +{
+> +	return bpf_ktime_get_ns() ? skb->len : 0;
+> +}
+> +
+> +SEC("socket")
+> +int bpftool_cfg(struct __sk_buff *skb)
+> +{
+> +	return helper(skb);
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+
