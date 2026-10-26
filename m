@@ -1,100 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.51
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793025756;
-	b=zKhnOe1tJV1CmhHCIr0iUQxwgFQpCv4FP2MufEyng/1PSdSkI/IDdgqPa296chtHa68l
-	 WskOMn+J8GZjBuunzcC+WQ8ycOEfxVXE1LR32LlfUFFj4ExtXDJLZcNhTcoSh1HlV1lfX
-	 hiYGaJjDcf38XlPcy7cfT+Lzsks9iKc5E0uQZPz2KnbXeaxNy3UaIwZ9VW/pupJ6CARp9
-	 UuY5uvUjMIlL16bZ/IOPMFsQZ2gDxHD30zEGcRBqO9Xj4+ch1WhBOWf0FN2k6wf8iSg1W
-	 O/swRRQMwd49YEo8zNYpkkYkR/0PT+Dgo+kWR029G3zvZbNwmKcP64O05hGIRmKLaLg==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793025756;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
-	b=fZR9NcJJaFLJIKx/CO6tn56tg3JTUvQCgoXGK6KUrXQCERFvOj1K42u7aSU6nh/Kly/o
-	 R7SnmDZoJkA758aIU4El9/v8Wgf1GouvrhqoYln9Sbu/HgLzrFmcK2MeX1dxQbKPefOeq
-	 9qxLBCjNn0hWGPSdYeja8yhUzWxnkkF46LO89vmFkV0I5XjzwnpqbSbr8PTLFfKDZh39x
-	 OPtgrMlmBzs3s9dt/eGfsZ3WOQ9gEoR371vc/Zm3QCcVLAvUPzlsooL59Vu+hzxgPGnFx
-	 hHXFl2vdrFJPFvNAkczSRJWpjntmbnlSQRGE1slr3Vb35k5y7gwi0TgLxKKM6Cx5uRA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GKfIPL5Z;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.51
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.14
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793025891;
+	b=fvJ1dqRyDkLmaxcmiHO41FAQ4+L/6UsAr1Z8lLDlSBAzUtgvZsxdXqj6CBkMZX3H9APZ
+	 IpZfHoMMG7bi8KqfjNUO0fYYe9Gz9QiUzFn6RqnJIkBMPOGIATqdata6nNB2PwozAidte
+	 pktJmcojVfexNkvUCSDp4zN8PB43y2oXpfb8ERbg9tSVIQpNsQ9fDwyYIXOXpEqtVX+sK
+	 sI7PNfsvZpPNY0U1APSSBzR9IBH8uqnlJL6KXiaY7+b+idg1KpPG3YJ/iGEkIHS+U2zWV
+	 BN3jkoW+0T7rltp7KZxytg3XA1u5XSjsF3so+t/GDdJsL8sY3KI6TfKTY/JlVrEMh0Q==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793025891;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=OdAPy/CoPz/vfWZ7wRu1j+eYID0az22RSj0i/Go1qnw=;
+	b=4gwPUu919Vz877hlugWEqiu5kZxTIyyDEEmIxrdzNjgee6vPmEtoA/Qzq+VQV2G3HOiY
+	 skhzZdNiu7lP5l8kQEtMLKcuK05un67oAoUgDnGuKa5raeOUXN5t4zJmNlA6oYriIF/QL
+	 mgcM85jsRUIdr6rGL6HadEGNLfuHtTd/tiFLGuVqeFabTyl2/es4u9gHM2K2B+b9c6oiR
+	 WvgDa7SpMHTRrCza/CSTK1toiyltcuwc+osG+uM2i6u2eTmIndcU4rgQCJr9V9/waqu6m
+	 0wIwI2q5GOXkJjSkGW7C/M1Cytf6SfKpoL7toVbGWuItRkvmRfDai8s1rrlvjXdUDnw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kyNjs3ta;
+	arc=none smtp.remote-ip=198.175.65.14
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0FA606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:42:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C0FA606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFF6606A32E
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:44:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4FFF6606A32E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=GKfIPL5Z
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-4932b13c4ccso1573690fac.3
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 07:42:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793025755; cv=none;
-        d=google.com; s=arc-20260327;
-        b=polIPEASUX35sHDcIxzAeauIma0g+7/c7xq3ld7/jlWwj7AVhPz/xBiD7FH+57ba6X
-         n//W5pnV3TlmZR4Bdtrw1oryPe3XXP/pmRGn/2UZSN1XhfuIX+kXXpjFNOlGALVmxb/C
-         ZKQbjEnub71QGRHL6OTuo93iA5a3sFN72wReqth/a7uEHDfwKUR9ADe+h4xAyTJIYcpB
-         BO2gHvso2Fc8wTb3yiFWBUYRUMZ76A+d8SO3iqGyy+boMuGcqGlfwlIx52TU7laEYTQA
-         FjVT7s6xVg5bThbbSyQ1AGPhgu5+exQwnPRF7jevRhAJkYZSt1i/y/yilrkE82x0sXvF
-         nj2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
-        fh=2EmlKVduRmi4yqT2S/lKwjmkU+P7llwggCKf9gY7GLk=;
-        b=TRsE1lDH6c5lR+eOeE7kD1gDvMytcSw23Oa8ZRsifCEih2dqsMdAHQvFxcIqT5+waB
-         YZ29JfC89C/GgerF5eb80BQhWrie+/a/qZ/KmfMKbLpZeyogycxOpWjXdWWGu7X4e0eH
-         B43m6/VGjdysV23GrpodRsHIntCIEFMH96qnOwDkVoC1SNmsBIuXzR2am+nUndWulz58
-         7kFWwt84oRj+XKESm7hTLTF9FZgyxQkUI+4M9A2bprTB9fCEJxUo0prbMDXdrrozJyqx
-         Gi66/QHTeJEcsB51rRCoY71Wn7h2esC3Iks0FKUAod0JohBqxbcfEoewK7C7QzKEQrcO
-         Td6g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793025755; x=1793630555; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
-        b=GKfIPL5ZKa6e9p2e9kBDTVAckDJTe/+XOPYoEiJxEQfZFvGSFjg1XEuIryHOB8e27W
-         L7FfIWwQSWZSxteWjHhD8wAL6WkiqxJgMkaNVNjvGC4963SIIR7t66OaU2YNyxK+VJxR
-         xH4vmsTmM1IJ8mXg6wjf/YYh1sMIkF+4iiYtxYswLUvogttdUY5CTfzBY/2Bpfbg/M5L
-         4Jg4RqvkpcFddiL2TZLaekEEUVBbC3KBy0eoQZobK7Heag1Twk19EWRR6vUDN2LuOVai
-         rP3DteeycAvBG4eA3MgJeEv/8JlXbnwsaZYgE/tPBK0PcQmTpiHBu52Q63LEZU7Svr1e
-         D20w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793025755; x=1793630555;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FiyIo88XtSCmKUOLGbnBLJ62ZVS25doiOE2fXhFGrhU=;
-        b=r/u2vKj2cnODTAtivF6q38s86jRxkt8BV8p2D2xYDMfpHqaVX3OdhkKwjtnJJBk1Kp
-         7HXNJmz/UcTWT+Ay5ctPu4YO0Stk1yAyAiZ5cKnWa3y21S3BH98VTWO1mjibL8qWkJ8z
-         Jdad0aHuDmS94raxHFh7Xi1FrRIAqDYxjFRS0dwTRgrNhNucDgv8i4pLWo01w66QXF7W
-         LxWACeTvkWsfAvsr/UxAbyz0+FfTOBOqfClfRujhsDmfgWN0Y9nY2xJiKVKxmXmygvFS
-         TAFTKDbxpSmT13Htu6GXyXKIho/r4MQiV7zEyMNuDFKVjEHbQRh4FceIkFvRREfkgkR+
-         0XLA==
-X-Forwarded-Encrypted: i=1; AKwUvBzq1DE/BRDFFo1dyLQ5UCqCbfb36IIeqvDotOUlfKyXw3W1tn8vt3/PzVmnYZmfUUuuXP8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYK/BErry2T7YV/x1sTfVpDGH2gQ3dvI+/8ez7CsGD0RiSmYaZf4
-	zw8XZPBda7RD+8GtDckBP8zok56nDFW5SflLmzYK0hNwxpkVV43wGtYrqP2A6NP152e+p8L+zVK
-	qmE2p4b3gUuXCg6NEHS2D+0GYQEZsTGg=
-X-Gm-Gg: AYBFou3mliGScVptCRMN2rafNH58oGOMtOBBEuv/K/MmudJL5tageBnf5shMobTYhIM
-	ktJmMYoB1vHKS7aTxlr9C9BB9UVoSAso2H6K9zw+uZ5k0GXwcFkKX9gU/4l3G2dwSEz5zH/6c0f
-	9GGH3zw0jEehwamZRJ0wWrcLt59NOAVo0EW9rTb4pi2NefPx1vrcCkjCWGj3TUJ6yvOn04ARoJA
-	BCjr8XKnfpIWf5+6DCnFSQMldpwX/QBgPnlwQ1taMmRSXO3YvYfpOG6iJm86GS16LDafyYEk3Ky
-	nR6kp8T1US0URk3Kfopt7DgDRBjRRZ2CVzzEPZ6zmrdYYqaROzSViSrwgPB1bG+7UsjaQvKKEHm
-	0jdiAcKYwh7lckpLoallSVdKbb+OyjQVBKfVM3g==
-X-Received: by 2002:a05:6871:73a2:b0:491:4a20:8ab8 with SMTP id
- 586e51a60fabf-4a83f53b47amr3712608fac.28.1793025755162; Mon, 26 Oct 2026
- 07:42:35 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=kyNjs3ta
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793025890; x=1824561890;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8TsUWj36XD1mav8rJ6nSKUgTGR7eWwxtagWA+FEHNFI=;
+  b=kyNjs3tapG5sFl+/9wDiX3FNCxkr2MS+Hjp3EMceczU5njjVNwS6fdOi
+   zviwvUKryJR3rbIBtf6kD8lOSTkixgFyjQ2PNoOr8FS9lNdFzUEGtS48o
+   LqNfsHcJQyRFVfqxPILzevP+/yI6iHv3rs01NiKxnDnMT4a1wWwGyCXpH
+   u8QYu4zmUMPG3xR/jqqIHhSQbRcQzcD0CfjimwD+L7Bwp+FE7R+uMYOj1
+   U2YK+4xOVv1kbhaqlLgmLQouq4O7il5nGyA4p/MPsqHaaUc4ebWgqh3C9
+   cXZpNr+FfI1/ZNVWxWe3Him80UvRwmj2IL1KobPut3FStrUFhktDDHrfj
+   g==;
+X-CSE-ConnectionGUID: aFmX7o3QTSS83J8BlrVL2g==
+X-CSE-MsgGUID: P1KGbtn8RAeDqVQ4ut/Vww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11947"; a="1571155"
+X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
+   d="scan'208";a="1571155"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2026 07:44:50 -0700
+X-CSE-ConnectionGUID: +0iof/m5TlKvDtfl6P1bWQ==
+X-CSE-MsgGUID: wiHeEfSzRta+QfuDd07drw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,179,1787036400"; 
+   d="scan'208";a="4431735"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 26 Oct 2026 07:44:48 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xLLwK-00000000W4Q-3vjC;
+	Mon, 26 Oct 2026 14:44:44 +0000
+Date: Mon, 26 Oct 2026 22:43:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: Re: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a
+ prog
+Message-ID: <202610262241.4DF09B1A-lkp@intel.com>
+References: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,123 +84,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019013335.13512-1-yangtiezhu@loongson.cn>
-In-Reply-To: <20261019013335.13512-1-yangtiezhu@loongson.cn>
-From: Hengqi Chen <hengqi.chen@gmail.com>
-Date: Mon, 26 Oct 2026 22:42:24 +0800
-X-Gm-Features: AclHuK9VfDqy3TFsNraLnkzPJtLGJTrw97NH5dTf1M621wbyFJ758LDBDfZcRk0
-Message-ID: <CAEyhmHQhi6rgxXEvg6aCA=5XUVBSUpBUbFrjSyJDoD_bz5dDLw@mail.gmail.com>
-Subject: Re: [PATCH v3] LoongArch: BPF: Fix stack arguments for indirect trampolines
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, loongarch@lists.linux.dev, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
 
-On Mon, Oct 19, 2026 at 9:33=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> LoongArch passes arguments beyond a0-a7 at the caller stack pointer. The
-> trampoline store_args() helper always reads those arguments at FP + 16,
-> which is correct for a regular fentry trampoline: its prologue leaves FP
-> 16 bytes below the stack pointer at trampoline entry to hold the saved
-> RA/FP frame record of the parent function.
->
-> A struct_ops indirect trampoline is entered through a function pointer an=
-d
-> only saves its own RA and FP before setting FP to the entry stack pointer=
-.
-> Its stack arguments therefore start at FP, not FP + 16. As a result, ever=
-y
-> stack-passed struct_ops argument is currently read two slots late.
->
-> Select the source offset based on whether the trampoline is indirect. Thi=
-s
-> also prepares the stack-passed arena argument path to consume the actual
-> pointer slot.
->
-> With this patch, the BPF selftest "./test_progs -t struct_ops_multi_args"
-> passed on LoongArch.
->
-> Fixes: c9ebe2016de9 ("LoongArch: BPF: Support up to 12 function arguments=
- for trampoline")
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
+Hi Alexei,
 
-Acked-by: Hengqi Chen <hengqi.chen@gmail.com>
+kernel test robot noticed the following build warnings:
 
-> v3:
->   - Reword the log and comment to clarify that the 16-byte frame record
->     is saved for the parent function, not the traced function. (bot+bpf-c=
-i)
->   - Remove a stray blank line after the opening brace of store_args(). (b=
-ot+bpf-ci)
->   - Reorder the comment sentences to match the true/false branches of
->     is_struct_ops for better readability.
->
-> Here is the original link:
-> https://lore.kernel.org/bpf/20260821233516.3426127-8-memxor@gmail.com/
->
-> This version is based on the series:
-> https://lore.kernel.org/loongarch/20261016081006.26069-1-yangtiezhu@loong=
-son.cn/
->
->  arch/loongarch/net/bpf_jit.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 1a7c8effc37b..c6784602f029 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -1725,17 +1725,22 @@ int bpf_arch_text_invalidate(void *dst, size_t le=
-n)
->         return ret;
->  }
->
-> -static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_o=
-ff)
-> +static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_o=
-ff, bool is_struct_ops)
->  {
-> +       /*
-> +        * Indirect struct_ops trampolines place incoming stack arguments=
- directly at FP.
-> +        * Regular fentry trampolines need to skip the 16-byte RA/FP fram=
-e record saved
-> +        * for the parent function.
-> +        */
-> +       int stack_args_off =3D is_struct_ops ? 0 : 16;
->         int i;
->
->         for (i =3D 0; i < nr_arg_slots; i++) {
->                 if (i < LOONGARCH_MAX_REG_ARGS)
->                         emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGAR=
-CH_GPR_FP, -args_off);
->                 else {
-> -                       /* Skip slots for T0 and FP of traced function */
->                         emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_G=
-PR_FP,
-> -                                 16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
-> +                                 stack_args_off + (i - LOONGARCH_MAX_REG=
-_ARGS) * 8);
->                         emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_G=
-PR_FP, -args_off);
->                 }
->                 args_off -=3D 8;
-> @@ -2068,7 +2073,7 @@ static int __arch_prepare_bpf_trampoline(struct jit=
-_ctx *ctx, struct bpf_tramp_i
->         func_meta =3D nr_arg_slots;
->         emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -func_meta_off, fun=
-c_meta);
->
-> -       store_args(ctx, nr_arg_slots, args_off);
-> +       store_args(ctx, nr_arg_slots, args_off, is_struct_ops);
->
->         if (bpf_fsession_cnt(tnodes)) {
->                 /* clear all session cookies' value */
-> --
-> 2.42.0
->
+[auto build test WARNING on bpf/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexei-Starovoitov/selftests-bpf-Remove-tests-for-global-data-in-arena/20261026-025822
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
+patch link:    https://lore.kernel.org/r/20261026025943.404450-8-alexei.starovoitov%40gmail.com
+patch subject: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a prog
+config: um-defconfig (https://download.01.org/0day-ci/archive/20261026/202610262241.4DF09B1A-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 186e70f4e6a1521991d2340d3d49b23b1beff11f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261026/202610262241.4DF09B1A-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610262241.4DF09B1A-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/core.c:3633:6: warning: no previous prototype for function 'bpf_prog_begin_run' [-Wmissing-prototypes]
+    3633 | void bpf_prog_begin_run(const struct bpf_prog *prog)
+         |      ^
+   kernel/bpf/core.c:3633:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    3633 | void bpf_prog_begin_run(const struct bpf_prog *prog)
+         | ^
+         | static 
+   1 warning generated.
+
+
+vim +/bpf_prog_begin_run +3633 kernel/bpf/core.c
+
+  3628	
+  3629	/*
+  3630	 * The kernel is about to call an async callback of @prog on this cpu: a run begins.
+  3631	 * The main prog does the same in its first insns.
+  3632	 */
+> 3633	void bpf_prog_begin_run(const struct bpf_prog *prog)
+  3634	{
+  3635		struct bpf_prog_aux *aux;
+  3636	
+  3637		if (!prog)
+  3638			return;
+  3639		aux = prog->aux->main_prog_aux;
+  3640		if (aux->may_goto_budget) {
+  3641			this_cpu_write(aux->may_goto_budget->start, 0);
+  3642			this_cpu_write(aux->may_goto_budget->count, BPF_MAX_TIMED_LOOPS);
+  3643		}
+  3644	}
+  3645	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
