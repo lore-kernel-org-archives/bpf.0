@@ -1,102 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.130
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.65
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793034014;
-	b=pwskjCQYSTfszy2MA6LqFfi7X3Echxcx6hprMvyKuDjb2lMD/UJMMg+4L57ZEfmHHwuH
-	 Z+xcR+d2HQ1JVH5uGwbXCkLbWTwZPUnm8uuD5Fp0vnsVOT+u7m2X8IBYcuSg05G2MQCia
-	 0x1OwjqoM7Y6B3amGO9q0Qovy9VUDzW8PT+81cQEy2QyXSmf/gpcSFfx5c76x7aaz5lZI
-	 EKzHm/KeE90XOUDB8W/uhA2ITqSWSRf6mnZwoVLct4bPl9DQZHjtOndFt9YUqN3PoJR1I
-	 Jd0COxNnsBX2zMoYsU2oYbdqjzg11z9J7yUGIWzhVgQxVcATS3dds8+owXN1xS2Fwcw==
+	t=1793036141;
+	b=hSzZbtprABcKl24mgyBxi1/oQIxpEYGMN0NCgcBhQDopW2+VX8dHpRGK42g/ntf30g9G
+	 nrCN1oE3KRmPEjxeSV7nV0y1khSyRgYna/f0FAimK5uIpfeoQ/zve2qIXVV1jzzIPdLT5
+	 mnmDTRlPt2+dMqyiI59ilx7TBQz0H9Gyp6yp+9G/OobTEKTRBFS8iEDSjlJh+/2iw56H3
+	 ETo3QqXZ312mRddWM4srXKsN23kYRCivE4Eh4bxvRTxQE3sLlae506IRo4IXDBh7X5l/W
+	 LEZEW/46ZeOcC7pQpu+Rh7W1lGTcAEMK2r9d+AZoRXp26Pb4iETZuqCjDcviP8rebQw==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793034014;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793036141;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=dpMp/a+YXT4EPeN/ycyUgWnGt0iwKGVxLkTNqZEGg2o=;
-	b=MLr8tWo17/lu5xbMbehWNYxdoEG7oA79DKMarRWXih95o/YlhWj7C+LYophElfvhFeuw
-	 qe+Z33DBr+sd79IjfUIXYXaZ+kTE47hN6+Vogw1QQlh9uhUCw7d8OSmXDjLYMZXDLCQ95
-	 GvbWM1JHLBQGEJAM/e2xVIMZqtGd0mHfEe8n+tRYYdK95Eg07dVHbbMpf8R0bCwHrCzAh
-	 JDofX3NIqb9IyR4bnCzz3oIZTl4kQHyMJE0D4eLbCgfAIZr5xDYkEqLta7xbpU7mmHyA2
-	 jVexG5AAXYWOrZHvjuk/l3nY/2j2RSu3E8HlmTsjHRAP7Os2U9S0LCmVpjZUAsmbdDQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=tLgfmSdv0p6cBpkZmUSgL9B1WtHPSZQAUFmd/cXcMqo=;
+	b=rhn7YwDH83FuIEuuErjM3k6xAZDpSd1WgH1kKvW2uvpxu9wYRQdt7LkGtHmC27aCPqds
+	 vJvyeemIZgV6I7K+HXqVfYUHnAxQrDtIVHX8wDMlzzLUU+jmtA8qsRGUuyQJJPQT7PhmL
+	 QyOrTQKpMEU7NiprmXliwGTM1scvJxdV3hQaCY5vLIK5TynsBE7Mys9olISYxMdVkcIsu
+	 W2bLCH8aPUYn8a9w7+hcHp1ZaV3je9FqtdgebE//H0aCIxq6ExyoIT6D9FEZwkao7yQcM
+	 DJ2u8nzJfNDJ6crr9sAF/id11Gn3bwZsLbV0iIClgJZkI9u5qHbKJNZZ5lt225tCKuw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BPPpA7pe;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.130
-Received: from mail-wm2-f2.google.com (mail-wm2-f2.google.com [74.125.225.130])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qZUJwTf2;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.65
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E79606A323
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 17:00:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E6E79606A323
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9F1606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 17:35:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1C9F1606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=BPPpA7pe
-Received: by mail-wm2-f2.google.com with SMTP id 5b1f17b1804b1-4a210b0d5c3so11907055e9.1
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 10:00:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793034012; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=qZUJwTf2
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-48e0c9fdb31so1292504f8f.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 10:35:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793036139; cv=none;
         d=google.com; s=arc-20260327;
-        b=fkFferI2za7y5oSQCBDlx+GYSALEJ9bhksTDkwHhqoxvLGuBBZrW1E8EEALBLbb2Qb
-         4L7s8vWdarWU9su4yMmxSvmNsTssbGtqMOpsL/HvcjRc0wHw3EHnbGGTYeNoKAdOzZwV
-         iHjM+mDn4bCskKDwFT29EO8UxTiSQeopjd3LLpnu9GVHVI/B+HMZ+bGMwWbQeqCuA20M
-         2azpb7YX1puELLyenUjYa+/T2xg/N/IMIpG1Dc/bxeexFStIPbY45kZni20FZ/LIPgf/
-         hBAHhrjKA5x7f9u2ciSKEOM+PYaLKVLCmP11rS8SfH5RyQ5vOX2zhhoTu+k+rq0Dc01Z
-         cINg==
+        b=ULe9GoevwrxX1hOzMNk1Zacgn3d5Po+WbhXuVBjJguEUbO4D8m6HoFG9FnxCfDomD8
+         jvdI8lKMm7KAYvdDqmW4/PoPJt8tPqdLgfRcGv1n2HjbIppCZKPUkDkC3Q7pYN/eG2SE
+         8JrkfVG3Ier2V0zlHRMv59NqmEaRUu8I0AJzOXKbucTmr3Sh4hJ/URTFHnDWAeO/gsVf
+         B6hX0ANtIHwkDr2oxx7Xn3qb4o0W5V6U8Vyh3/iM9MPiwPEJuA1VNABDr+IQ59OVw/I6
+         j9B92XplKhtYs6/CYXKTeVrHFQGGvdBD5mLlzdkdAp9pbmd2B9YX0b1zYOkVcE6w/1hL
+         y1TQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dpMp/a+YXT4EPeN/ycyUgWnGt0iwKGVxLkTNqZEGg2o=;
-        fh=au0KsrUU+id6iTucuQWKxShsVg4K6h1H8ypdNa7+U54=;
-        b=dUpkZrcB4dVdXLq2W4hK2TU4jGdBpZVQwDOdDh8hAcw3F/CycFivZdSIpBcMzhDRgX
-         GCG5aqDVFiv8cVhO7ZrcA+UpgTXuj9KCGpyRbh7im4dmQEUnH/vxSYpbNOApuH9gI1D6
-         P4X3SZEsKRvl7UMKk8IEJSRu2V0UmCiHp3GZm2XwDRnKE1YyEWcDU/9ujDKwAzKo7LO+
-         yHm1scrhiIycfbPKSocKA3D5JiUPh05RHXfZMmWDpk/73M6fNKBTj4yTLS2K/shSZKro
-         Gvf3YQRTNB4Vwx/qNF5QCueQbXwfIdsd/bdwT1vhNn41hRYXPumkqk64kXXou80ijTmA
-         LNqw==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=tLgfmSdv0p6cBpkZmUSgL9B1WtHPSZQAUFmd/cXcMqo=;
+        fh=nK4o+E/nKAvNbzKwQovufHGBef//cfTPEviVumPIXzA=;
+        b=Sd92YZQJ1Ad/IW2TcJTybzZXRtN58+zCVRZHGud3G256RUj2o0z8q5cu1+01dMiGd4
+         9jaKGGskR1kB3maR4UBgM8op4lJLIy1pdlFxHwLPitirmWMuY1JdJK7DiC7+edUbziTZ
+         wDhW6Dc+Ge7wwjVNjyQr+G/JDuaGZIczsP+m8ktkkcmGfP8RSeyfTs4MX1/hvCvljkAl
+         9ZJ8EfK7T/fgw/QgePweyxKig6so/TUxVwNAjBKfhZ2iq+fIHh9EFshJP2z9NXFx2Cve
+         KRCd7/KqjHvBc5kFVBu7jYPvYk4dCH7aanyHn8ngBcSI9yns+8HJ3RlVBJEJiwsjLRke
+         1mjQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793034012; x=1793638812; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=dpMp/a+YXT4EPeN/ycyUgWnGt0iwKGVxLkTNqZEGg2o=;
-        b=BPPpA7peRXdALTjy9vUkITwGMccq9wDdAov2Nplh29iTgsYyGeG5483PBd3S99LqyD
-         CviD4TqrR9yqe28XS/w7eoa0qcvD778bwwQX3r2Tu/ZRWrf7a7hUiARPykqeUUmW4Oic
-         uVAIBg/3awd5N+BQD3JaHumRt86pR8L7BdmbuOyFQoIgtNkJBfJB2WuUBvTqzjZEFNfn
-         J0mLWTC88VHEdBbILZfMtfeGO9r4z/7K+lvel0rcCjVUbOK1iiODC73xUkAcEFgOo7Rt
-         jHQQEck2GgVrfsDVYUkIn+XMpgErOw0RsLe3PMsbwMPdyWrgwPfhKsybIKvJjUyrKUf/
-         vh8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793034012; x=1793638812;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1793036139; x=1793640939; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=dpMp/a+YXT4EPeN/ycyUgWnGt0iwKGVxLkTNqZEGg2o=;
-        b=SGfNqax1FH9FJLJuP51wmawpj7R7U/R4Cy0uFHnttYll71u+sz0KFwveQ0fjhLSjzb
-         8qVFWQ6ThjsIxFYT6wVWdmeFJSnXpS+pMMZpTOO7r22Z16h2GfLsSXJIz/J2v36zm4vY
-         xnTVsauzw8SXvBQ+A4tBKc/LhrzgOMzjknhBdNB3SPBajtEqBuq5PLkaKeaAzSq7uizm
-         qQ/Ridd0xd96Q0s5XuU/sZizp3Rc+fmNPn1Ko50oUqKpOxmkC4XsttaauwlUrmS1ozew
-         YX9f0ZwmrV7Ct9QwxfNXzMV1iX+OeFIa4ZTbVv67jtrN04KnOs4p9OC7+WHxdY/9fFFv
-         pvMw==
-X-Forwarded-Encrypted: i=1; AKwUvBwf36+D3QrY56qIjMRj527OZyxtr+ntvhJ0WAT8KnxQNn9FgNBCF+U+cRRnpCm6Kuc9YOA=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJD2Sih95KsYSDEB4XV/tLDEVyvCvTJgaJJ9BdazVFPqrFQs6sh
-	5biEHiUnAb9jz+bQnAJ/x1rkF8OsGaDo2KNpcOpqsTcynsIo02peyBtPng3lCkf3F/pYSSy/efi
-	fV6JyXFgRAC5y+8vrPnrUrJdIpjE+SoA=
-X-Gm-Gg: AYBFou20MQX917XsenpG13Y6Nl/cn2lPXle/+sUka7LW71Cifk+PJnVMwDe/OWIBGhp
-	KNnFNH8UtfYfmT6xWV+YXgnPqWahtdZR3yujj5NMLT649dvuJ7K6dl2Mlh+o8qjxRv0LezjQy6n
-	AczVs6FB2pKzYpW/5gC7p02Taw8Rk55kQhCTzs1IjRdo+aD8pIFBynOiaCYqCEkpQCYc/nudagU
-	VaoPDuTFB4viONNQE9ai8XLLwIzr078APSNx6YrikcjiHHI6VoGp2nm3iRD59nZXtFBTclR7nl9
-	W2ZZHznvP9C+xE4EBaM+avQqo0ED7nPnQKJoXy+ZEJaaTsddgGz6CxoWB+WVHZwnDhqjr4ct9z0
-	PPlgoI1Tgw4zLzbnz5gCc2Yfpt3ddCNSszHwTXTrzQm5sFBspfNuAZVuItiCp3Do4xl7/9vHpM1
-	kuK/8/HUb+vlDq9mT4Ir8YQ+ZhHFBKkMR9Uuyfc2MHr+ARQQ0f1hN/yk80Ja0uGvF7Yyy982Ism
-	WMZNnKl8O9RCmon
-X-Received: by 2002:a05:600c:198e:b0:4a1:fcfa:2a07 with SMTP id
- 5b1f17b1804b1-4a35acafde7mr135977925e9.30.1793034011977; Mon, 26 Oct 2026
- 10:00:11 -0700 (PDT)
+        bh=tLgfmSdv0p6cBpkZmUSgL9B1WtHPSZQAUFmd/cXcMqo=;
+        b=qZUJwTf2vgto2ne2MRI9jHYL30Wx6Xq5w1hlaZ3ZDRPUQR6Xx7/qhtADSCouZCyJUj
+         75SCItcdwQdEH3dMQMTyqKRf9J439BwWyTSevxkbUz2loJMAx/H4r38+vN30yov1r9Qp
+         UcMPwhFgIrwPCPlwI4h57TirVtI1McSocFMkIwdAmGlCJcFj2IUBlju/fpRNivPAQPRZ
+         DQGSeRoV5lBFX0YyvRIfa4/K3jSjdJFeCjYKg6uVIf9jpiFXWVInS0CZ8RSsOQckFseC
+         Mrhc0JN13SkawX5UCsettmvqN+QzNF6B1SZzoJcp/cdHgw/P6vQF8ypkyKM4n0Uyq0/P
+         gEHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793036139; x=1793640939;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=tLgfmSdv0p6cBpkZmUSgL9B1WtHPSZQAUFmd/cXcMqo=;
+        b=MaGm0riMPfqJiLgD01U7n43TiSKV4l0lxS+hiKCwLavFX9P/EkyfNL5QoXVKY5RiWp
+         PJ9m5nX32Df9hn6b/tsL5xLCg5BEUJv05VmA7SeK26/z+/7PfIkhUbLTMvQRdmFlySr7
+         a+u1PDyr9evze2pxzB7IXoDyk39xZu6atSkfzuSEcHz4UUTvdYNZPIDpVoukg65ejBMH
+         4exfL3alxuST1GGGqJbfwqrj7AyABdaetd2SpwASMOUoZGx2rEwrehqTCwAfiD5lmJZt
+         ppfr+02ABG4TuuqSQTbwAg5Uip5kdxn1BZU5HdmxlMtFyHxu+Kg9/DtFWbzZfgcZkkDA
+         KrtQ==
+X-Gm-Message-State: AFq9FYJ8E5LJ/IpqX54gUhmZangSxIUCi8rZ2iekgH9nKXEj0gYttqGq
+	clJ3Hhpi+i5sMCOFvZUO7ZM/m/TmoTfu6aJP1xzCFbA1PNDJDwujmEXGE7hiZiTCYv+SYzC3GGC
+	KBHx7qGVP0BxlBjKSVQLCbA2yLIZhaAEZekLP
+X-Gm-Gg: AYBFou0an127QtHcegyl3+PMCOYmIzxvighFcykpx56EyziFTFVQjlcmnKik56qWoeA
+	OfBN97Qjoc7lEUE+20U/JNTKk/MKXPCl2oGB3ounKHU3mEXwfU+LJHK++KzHui1SrIAwYex2y8M
+	pc6BNCAljrAg4GmdMXS4l4EcnIQ3VzBTf3bcQezH8CtesrdRuoLCuJtS2yrEeKAFbfmQ1SNBz0i
+	8bhUcNlgL0FfZddgV5ywM4b0avUPBsaAbIjS18oOb/djhLOFCs1m/PzCBR5Z+uEpiUx/MWW8eAQ
+	YdAGfuaP2f+6ZF3SrJl66itlqdy0vV4TJGpkSa6TSgUJ5AkZMwMKRl/DSpcdfzT4VMT4FAoSaoH
+	kvqBl5iNJ5IFjMzHvI9FCTwR4pL9RjNMBJ8bddWir1JR8BjbcpF4ntGVw3wUU7tNOyWgBvt/wQS
+	eo3CybpR5csvR1U02owwRodryrhjWakiBAWOr9zki+6OVt2TV5e5KyQcHx9yG7DItR7YlC6C/my
+	mL0ap/ipzQD4pEuaIf67pWr/TUx8CJQE5Anmw==
+X-Received: by 2002:a05:6000:27c9:10b0:48e:1299:663f with SMTP id
+ ffacd0b85a97d-48e3ebbc92bmr10115995f8f.56.1793036139114; Mon, 26 Oct 2026
+ 10:35:39 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,49 +104,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
- <20261026025943.404450-17-alexei.starovoitov@gmail.com> <CAEf4BzYrpYHS1V=VXF0PTRXkXQo6FnseWirR-ka-O9wKTv_GcQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzYrpYHS1V=VXF0PTRXkXQo6FnseWirR-ka-O9wKTv_GcQ@mail.gmail.com>
+References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-8-alexei.starovoitov@gmail.com>
+In-Reply-To: <20261026025943.404450-8-alexei.starovoitov@gmail.com>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Mon, 26 Oct 2026 17:59:33 +0100
-X-Gm-Features: AclHuK_gXLdXjhKF9-cIHUlR9r2mDN7OWEuX6hOBoeurzQaruuU-p8s_2zs7U28
-Message-ID: <CAP01T775XCUmtK97tBcWsvOvUsGxR7AKCGqfOCgebf+-_WfhkQ@mail.gmail.com>
-Subject: Re: [PATCH bpf 16/81] libbpf: Make arena 1 Gbyte when max_entries is
- not set
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com
+Date: Mon, 26 Oct 2026 18:35:02 +0100
+X-Gm-Features: AclHuK9cLHIC5ydrOB7Tp_taVgTXB2F0ScoiHbmX8uAl5BPQ12HQ6bMLgcrkTDY
+Message-ID: <CAP01T76T5qLDHd8jMx69_+hcj2vCZt+W6+UsGGqdaRJ0BpwTHA@mail.gmail.com>
+Subject: Re: [PATCH bpf 07/81] bpf: One time slice of may_goto for a run of a prog
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, 26 Oct 2026 at 17:54, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
-rote:
+On Mon, 26 Oct 2026 at 04:00, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Sun, Oct 25, 2026 at 8:01=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > From: Alexei Starovoitov <ast@kernel.org>
-> >
-> > max_entries of an arena is its size in pages. The kernel rejects 0. Thu=
-s
-> > each prog must select a number, and the same number is a different size=
- on
-> > a kernel with a different page size.
-> >
-> > A large arena has almost no cost. The kernel reserves 4 Gbyte of kernel
-> > addresses for each arena, small or large. Only allocated pages use memo=
-ry.
-> >
-> > When max_entries is not set, make the arena 1 Gbyte. libbpf calculates
-> > max_entries from the page size.
+> From: Alexei Starovoitov <ast@kernel.org>
 >
-> Why 1GB then, why not default to full 4GB size? And also why not teach
-> kernel to accept max_entries =3D=3D 0 and treat it as "max allowed size"
-> and set it to 4GB (as of today)?
+> may_goto stops a loop that the verifier cannot bound: after 250 ms the loop
+> must exit. The count and the timestamp are in the stack frame of the
+> function that contains the loop. Thus the limit applies to one call of a
+> subprog, not to one run of the prog. Loops that nest across calls multiply
+> the limit.
 >
+>   main:                 sub:
+>   1: call sub           1: may_goto 2f
+>      may_goto 2f           goto 1b
+>      goto 1b            2: r0 = 0
+>   2: r0 = 1                exit
+>      exit
+>
+>   main  | sub: 250 ms | sub: 250 ms | ... | sub: 250 ms |
+>         1             2                   65535         ^
+>                                    main reads the clock here
+>
+> Each call of sub spins for 250 ms. main reads the clock one time in
+> 65535 iterations. Thus the prog runs for 65535 * 250 ms: 9 insns cause a
+> soft lockup. bpf_loop(1 << 23, cb) with such a loop in cb has the same
+> result.
+>
+> The count has the same problem. A subprog that makes fewer than
+> 65535 iterations in each call never reads the clock. An endless loop that
+> calls a subprog with 60000 iterations runs for 3.5 sec. Three levels of
+> such loops lock up a cpu.
+>
+> Give one time slice and one count to the full run. A run is one call of the
+> main prog, or of an async callback, by the kernel, together with all the
+> subprogs that it calls. The main prog gets a per-cpu budget.
+>
+>   the kernel calls the prog  budget.start = 0
+>             |                budget.count = 65535
+>             v
+>   entry of a subprog         frame.count = budget.count
+>             |
+>             v
+>   may_goto                   frame.count -= 1
+>             |                At 0, read the clock:
+>             |                 < 250 ms   refill frame.count, budget.count
+>             |                >= 250 ms   budget.count = 0, exit the loop
+>             v
+>   exit of the subprog        budget.count = min(budget.count, frame.count)
+>
+> Iterations now add up across calls. After 250 ms the budget is empty:
+>  - A subprog that starts after this time exits its loops immediately.
+>  - A frame that is already on the stack exits its loop when it reads the
+>    clock again.
+>
+> The progs above return after 250 ms.
+>
+> Only JITed progs that have may_goto in a subprog or in a callback get
+> different code: 0 of 144 progs of Cilium, 53 of 495 progs of scx. The cost
+> on x86-64 (Zen 5) with hot caches, in nsec:
+>
+>   entry of the main prog, once per run    4 insns, 34 bytes   +0.52
+>   entry of a subprog with may_goto        3 insns, 19 bytes   +0.03
+>   each exit of such a subprog             6 insns, 36 bytes   +0.15
+>   async callback (bpf_timer), all progs   reset the budget    +0.35 on 34.6
+>   read of the clock, once in 65535        stack walk to find  26 -> 179
+>   iterations, all progs                   the budget
+>
+> An iteration has no added cost. A run with one call of such a subprog costs
+> +0.97 nsec. It costs +90 nsec when the budget is not in the cache.
+>
+> Limitations:
+>  - A second run of the same prog on the same cpu, in an interrupt or after
+>    preemption, starts the time slice again. The timestamp in the frame
+>    continues to limit each frame to 250 ms.
+>  - The JIT must support a stack walk and per-cpu insns. x86-64 with ORC,
+>    arm64 and powerpc64 do. Nothing changes on riscv, loongarch and s390.
+>  - Nothing changes for extension progs. They cannot find the start of a
+>    run.
+>
+> Fixes: e723608bf428 ("bpf: Add verifier support for timed may_goto")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-I would prefer this too. Also, commit log is confusing, it's arguing
-that there is not much additional cost for 4GB region, but then talks
-about the 1GB limit instead...
-
-> > [...]
+Why not copy the state from the caller's frame into the callee iff it
+uses may_goto? At least it will work correctly without various holes
+listed here in the limitations.
