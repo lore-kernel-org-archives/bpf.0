@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983909;
-	b=ra6CCrGTjzGMjIK2JrepA641XpzYS8s3b79y4bXE9cndNOLzS6QtroXa2JYN4Zdc/0uT
-	 D5TNEbbPwTAmzhDIdx+W2qcbO2MNSFSQGMflDRQh8rZjJQxsKldHlsOeN6hB6ceIcIjIX
-	 0j+9dNFMiDirkz5SPZISLu6XKe6BQm90QTs7Nx7L7imDnlWiTcw5PaFk5Hj8/BOFaFpwI
-	 cODJdx2kwpY+nWvIP47LQeSPBgHDu/qTV75nSnVfNugfH+YsMl/hKkWJA7UkkJQZ+YP32
-	 9ZhQprDm7x+0mOLgmT0f87Q/GqnWpRbNw6rz9wPk/WYqv6o8b8DLn352oOxKIZuQGyg==
+	t=1792983915;
+	b=vJu+dAIQgeNxxKoDOWB13gb72fldNFUjYkI9T3W/buDekqBvaXQT56TzIS2rBML7tHLx
+	 KhfQ/RoMvarChZ/p9OWwiflWP2NDFPRpsAuyb90hVjeD2/1fdjRrryalqlGP84IpmuBCw
+	 wcg66poCDUiLpVhPYlfj43OOQ6QVRm3f0xB5UH5dE/6JklgUYRqVniCPIxEHb1peLUryl
+	 E4RWVWi0S9lB40xjyq6qfPK9mJuW4qHGkWPdEnB/IHDiE4gBXpDjgkwOK8h8Z+XIa7w1c
+	 BCeprujbJcHjrXk+OeImB3iReFv5KfnTK/tyZTNOAdVfKnhbxOqmhnfSmTMgui1Pn4A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983909;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983915;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=TuYwCzzOhMVm6EYo35DQ/9RsEF3sem7OfEv6MU0QIos=;
-	b=FLd4101ZG6P6x/Nkr45WILAk86YznD2oefmHRHkreF6uJVudg7ohdAvAWOk49v1UxP/Y
-	 cPG0LJ4Z+GbY2wbbFKfq+41DM3GGOXfUr1z0H6zSHQ/utifA5O64Nm4/y34Tc+fJA/+z8
-	 DparzlzUm1UtkrE4OM7B1RhMcYkOOI1nmKzSIH94wAU7Zm+vAgW7XAqhIprBW/+HJ99Dr
-	 G1CenhUw782DEdrGbAEwDXJQbKPtUSHCp2F3rbLpKA4Zz/NkhqI9wMLGXpYXcNfIhgF2F
-	 4CWlJS64rwW86zybQj640/Ph/5NuUEXZcWycBlQ9RkNqeiiw+LL4MMKDdpEubDuCVvQ==
+	bh=+3IzL2zgK2XfnJonQIiZ2E1J7rS+tEb+mhztSnddzRw=;
+	b=mOPhnI75zAsnoz9ccUTQwarVOd9Ktbmzf86FwWB9GB+85sFEcOKFCiU9ignioCXiwwUU
+	 jOvblwhBvs0lYzxiINpNjNPyVNY5WZXgUjZOaGiiGI8GidJPcDuqgrmWKRWJbtoLVKmb5
+	 pNlEWS0zpUFz1UikYd56FGVdSRJgx8wa/i9YIG5rmDYCT3rkVWkbH4SX7A7wFoUsVLQ3i
+	 bZiBHrCP/anF9wjkCiZQt7dpNCk9Epn24Kt4sMNTHaUc+m1pHJsNqPGE3K2t/9koDdVTl
+	 oqNzQowYrpuunD/wf25qRvFCOq68PYece+8lD8fSl3uBzqE696MgbL5eU3lwa8AWKcw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ooYh5Ocs;
-	arc=none smtp.remote-ip=209.85.214.174
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XwDoRyHX;
+	arc=none smtp.remote-ip=209.85.216.42
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8072F606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8072F606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BA9606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 75BA9606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=ooYh5Ocs
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e99b1e5b4cso13410175ad.0
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:09 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=XwDoRyHX
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3acdcfa2bd3so1839102a91.3
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983909; x=1793588709; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983915; x=1793588715; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TuYwCzzOhMVm6EYo35DQ/9RsEF3sem7OfEv6MU0QIos=;
-        b=ooYh5OcsceW+HkUuUL94Rt/pNfzoetGFhXZlAnTWPKFQf8aOG/HorLTiMSJPmlD28G
-         y7PdjX20F/4hGTI5mGwXGh5AhfNKvBYuQ+4Ws3ulha4wDr7jy4mWB2rTkk4SvKOM9lus
-         yxlOu8TWCEa/RlcAxgmJCiwz1RpDGmGUiOwkXydjwiSAJJhVz+Qd4/f3KLvWMzkdtQbz
-         Yl1jYmqMtOBdrjFd1cOCMuZpDvHUwPAxk6h0dlJHyBkwCmC4g2emU+bGCcj2ROXpVIHB
-         fSHtRNCUp7KBaUst97oqg/ui12ZS1334m767PYhPWqc/9IR7x6y6n8nmJ7mNp7HQoWkj
-         c06g==
+        bh=+3IzL2zgK2XfnJonQIiZ2E1J7rS+tEb+mhztSnddzRw=;
+        b=XwDoRyHXytu90nhZd+O21NZTYELbd4+kvxL7y8g80x0NLQ013+2b4/qXPW3o5qLtOn
+         xkcxkNXDnI7AVno8bdYxGESRLrltLxxrMkzsrzZ3MFXystxB5zGhg4bZXVleCJjZb/eW
+         ig2BZwg/1G3oUgAMihL1lM+TeWSuRt8vJSGeyZ4/09lBcV9+PKCuhABX5ZcCbP0+VYB5
+         LuQFu75hXIK1aBTtwF/GKqSc+1aNgccNv7kYGYLaKaxT4V+PzaGfjepGsRIo9I+fbDbo
+         0wWb+/UF4W1rV0eKTxR8Lfh/Q+FEmtshNP5lqLnpqtPwrRjrolzuG7kWIHQRWeqmNvZI
+         utNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983909; x=1793588709;
+        d=1e100.net; s=20260707; t=1792983915; x=1793588715;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TuYwCzzOhMVm6EYo35DQ/9RsEF3sem7OfEv6MU0QIos=;
-        b=gbfes64lPP41iUo/D8V7ondA+xkLOVglHgfHtY10mGEMf2QDyKrzb4Q0ncDwocobji
-         Oc25FBQT9wXeAswIpP5ozOE1RvHwi5J3AJnr7eF8E5c6SYBkixyMO+PLrxPys7nRJfFq
-         tbhYJ+L2tfElJnkrsrXdWAFtObJiz5gm8EtJtaiA7CnVmGk8MIT36jrM/u+1gEOTzYsa
-         aA1l9okXzNusLk5OUYasHlZcMdmJIsfbJ3GdpwADUTb508bGZ2bopVdrXALxOLsHWW1q
-         SFCWCJKKcfLeHJcfM+ZETBQOA2WnA1XMiJWnishVUyykH2zkCNTCGAHb3+pDgz7a+IRh
-         wN2g==
-X-Gm-Message-State: AFq9FYKnuFKBYw8sAiu/0o6jnn/6oK8Y64LoJB9Ng1DqQeOLXcYL996C
-	2Rri/C1KsEM4vCMzxN06OIvdJWeO7HckSjL8PqTgR+KfGDj32WlCoIWaUvgkEQ==
-X-Gm-Gg: AYBFou0gMBN5eapZkR7hE+TwomSe925KyOVjfHWDz8R2JPbZxvD35s87/HrrAvBAgjA
-	jjyHOOGZKctgd1Inmx+sGAlZCEozHDn+fDm79qbCl2O6c5pXsJSdJ3GdKvwu80LkmIRsD3yKt9d
-	jKkcERNr1HwD7HXPiiVqDNpyEnoEEpVMHkTrTLzBnl9FtABZlymsAHRoPN0yhenvc3kUkRjznE9
-	6Y2dmMBP08+0DzXLB971E0e0aw0y+WJmuwy7G2l47Opnkvj2yaoxBdGCXPrJjU3kIvztTltZU0T
-	Dp+liT5sNhSEg5ARNNAqP+QUwnei1tFWLAAyAlfGJ7XUSlNaOcReLj6PywiGK2FiQdjZAeAHmnJ
-	M5XNrkvS0OKSxf4Uv5pbZn/gqi+BTU+A6Lura+ksuqCtO0zkDw8tG7IhfOn7Vs6PliyS476uxJS
-	7CWNgjaYnctuHnlzYgn3uOmNj6VOVaeB6PueN77ctz0shTAMiAbUkJwfF8Qlz+x9AkexKYf8jLD
-	gfCyK3pl7WGijrcXpp78jb+s3ZjHWBQ+8VfYZn6vQUuVkh5H1JcgV/8EC/kJNTBAfslQ3D94qTP
-	eZnIXlmLys1OWgvlnSnJbBqipf023b0SC+MyuUtgqD/d9CmvbiT9MzDR8i22ta58klR36NRe+xA
-	tWvqi7hmZj1TH3XQeyuutxQPT
-X-Received: by 2002:a17:902:f64e:b0:2dd:c100:80ba with SMTP id d9443c01a7336-2ea9c9858b7mr47637795ad.53.1792983908756;
-        Sun, 25 Oct 2026 20:05:08 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1a2676sm10342955ad.50.2026.10.25.20.05.08
+        bh=+3IzL2zgK2XfnJonQIiZ2E1J7rS+tEb+mhztSnddzRw=;
+        b=jJKxYILdEhSakU4eMOUkmshPE08DsZSlJZ1+84XLWK/7d5SNTsyvd5OGFN4QLyQvQ8
+         xIKmkrqs482uTgeSXVaWUQPFoDSKizWRVEBGPm+vymbsCYN5WqRLY6kGCVBf3hKhAbms
+         g08GyjDpcZM04Z+VrEMPn3EwzlsxMouocQ/1OenwgO+74fk8kyHYp8XWxzSwvzN+PMUH
+         PCLEupfoj/6sE5DpIMuaaojyy6uADLY4lmZpeVBWFtfvi7e0FXKsnM3kv2/o8Bl+laI0
+         8YWPf7vtFWC9izrYnPmyNf/C7nAxI8pKLRKnOYwfBVZ6ldsJ/v0442bF2ME+wg3GtVm8
+         izWg==
+X-Gm-Message-State: AFq9FYJcgzX7fYJiRUS5z+5FYRDml/xWEuVgjptVl3brhlobCRVCC+Fd
+	YvxdUad5mdvpQHR8GEIwX1T01W6F+BoSO7uoMnX2s9BtZxyMkkseuKXA9okKsg==
+X-Gm-Gg: AYBFou1YgE1fZplqghiMsdy1pe2Vsk0m4KbxS5Io5C9yyORzjVZDRiMTzKRvzpQQEUj
+	R7ciWDnbnpgOgFfIgudg7kGeuK4mfiCYkueeo9Xo6w2Em8fPsk0jgUV3pTyo78II8t/x6MrJ5Ow
+	m3u7f6a5N0SjgUr3zvpeZzp1NIMPmbB0UM068nDsFF7QJn98RMk/AQ7L5GtkIbiSyFt+AIhH4BV
+	+vZR7mhSLANGP7mtd0CJHoKhD6X+4pxVXa9MA1mPkY0mvp7Y853G13zJOTRzBKeCnusQkN/cWpq
+	D0yAgGSVlSM6XPNiJLWYX1NcXKDyeRExM/TCQLTk6ZPRPQgWBuo6d8T1hSDWEJy0uxdflKlviTh
+	KI9LJU/YjOmoUx7Hknu7WeqZ0iHyu+Gr+Bv+ZNf4fAliU02g5vH0ByuKtLJaBxLrIT02Ym5bQwE
+	q0OW1YfyQzpVGtwa6d/jNtC6Y0zDTvQFlsOfuhWup/3XdVMsla76L0FBuaZYGAMzFqWlb13KMAJ
+	wlVSomdpAxNG1yE+rUICBJJ/u8+jLnO+ArjKzUmEWwxtUSITYYaPjd06CrPNxJZLqu1QGMAHbnY
+	1JcsxNGGUcDiQ3G3L74RzRF+jRamDflkZWVDPpzt0ypvI4v8o8CiwmW28r86HK6BbDc1ZewcyH2
+	a3LGZtFBmo+nDWeskfcQqqrEY
+X-Received: by 2002:a17:90b:6c7:b0:3a8:bbc2:5551 with SMTP id 98e67ed59e1d1-3ade94716e6mr4520772a91.0.1792983914548;
+        Sun, 25 Oct 2026 20:05:14 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebadfeb1sm6197935a91.9.2026.10.25.20.05.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:05:08 -0700 (PDT)
+        Sun, 25 Oct 2026 20:05:14 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 55/81] selftests/bpf: Test a static subprog with 24 arguments
-Date: Mon, 26 Oct 2026 02:59:16 +0000
-Message-ID: <20261026025943.404450-56-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 56/81] bpf: Bump MAX_CALL_FRAMES to 32
+Date: Mon, 26 Oct 2026 02:59:17 +0000
+Message-ID: <20261026025943.404450-57-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,138 +103,93 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-A prog passes 1 .. 24 to a static subprog, in r1 - r5 and in all 19 stack
-slots. The subprog adds them up. The test runs the prog and expects 300.
-Thus it also shows that the JIT has room for each slot.
+Progs that use Rust crates nest calls deeply and hit the limit of
+16 frames. Bump the limit to 32.
 
-The verifier must reject a store to slot 20:
-
-  stack arg write offset -160 exceeds max 19 stack args
-
-The subprog is in asm and its prototype has no parameters. Thus no test
-covers BTF with more than 12 parameters.
+A frame number now needs 5 bits. Widen it in bpf_jmp_history_entry and in
+the packed linked registers. There the index of a register or a stack slot
+loses one bit. The static_assert next to it shows that the index fits.
+Widen the mask of frames in liveness.c to 32 bits.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_stack_arg.c  | 95 ++++++++++++++++++-
- 1 file changed, 92 insertions(+), 3 deletions(-)
+ include/linux/bpf_verifier.h | 8 ++++----
+ kernel/bpf/liveness.c        | 4 ++--
+ kernel/bpf/verifier.c        | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index 5062c5bab5f0..42c241ebe796 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -359,10 +359,99 @@ __naked void stack_arg_shared_store(void)
- 	);
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index c0227e74899b..6139e889c86a 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -458,7 +458,7 @@ struct bpf_func_state {
+ 	struct loop_stack_entry *loop_stack;
+ };
+ 
+-#define MAX_CALL_FRAMES 16
++#define MAX_CALL_FRAMES 32
+ 
+ /* instruction history flags, used in bpf_jmp_history_entry.flags field.
+  * Frame number and SPI are stored in dedicated fields of bpf_jmp_history_entry.
+@@ -478,10 +478,10 @@ enum {
+ struct bpf_jmp_history_entry {
+ 	/* insn idx can't be bigger than 1 million */
+ 	u32 idx : 20;
+-	u32 frame : 4;	/* stack access frame number */
++	u32 frame : 5;	/* stack access frame number */
+ 	/* special INSN_F_xxx flags */
+ 	u32 flags : 4;
+-	u32 : 4;
++	u32 : 3;
+ 	u32 prev_idx : 20;
+ 	u32 spi : 12;	/* stack slot index */
+ 	/*
+@@ -495,7 +495,7 @@ struct bpf_jmp_history_entry {
+ 	u8 linked_regs_cnt;
+ };
+ 
+-static_assert(MAX_CALL_FRAMES <= (1 << 4));
++static_assert(MAX_CALL_FRAMES <= (1 << 5));
+ static_assert(MAX_BPF_STACK_SLOTS <= (1 << 12));
+ 
+ /* Maximum number of bpf_reg_state objects that can exist at once */
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 985cd39acf3e..8c7629c99400 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -814,7 +814,7 @@ static int print_instances(struct bpf_verifier_env *env)
+ struct arg_track {
+ 	union {
+ 		s16 off[MAX_ARG_OFFSETS]; /* byte offsets; off_cnt says how many */
+-		u16 mask;	/* arg bitmask when arg == ARG_IMPRECISE */
++		u32 mask;	/* arg bitmask when arg == ARG_IMPRECISE */
+ 	};
+ 	s8 frame;	/* absolute frame index, or enum arg_track_state */
+ 	s8 off_cnt;	/* 0 = offset-imprecise, 1-4 = # of precise offsets */
+@@ -1175,7 +1175,7 @@ static struct arg_track fill_from_stack(struct bpf_insn *insn,
+ 					int depth)
+ {
+ 	struct arg_track imp = {
+-		.mask = (1u << (depth + 1)) - 1,
++		.mask = GENMASK(depth, 0),
+ 		.frame = ARG_IMPRECISE
+ 	};
+ 	struct arg_track result = { .frame = ARG_NONE };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 50e24237a6b7..e55ba1db2e1f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3654,8 +3654,8 @@ static void mark_non_stack_access(struct bpf_verifier_env *env, int idx)
  }
  
-+/* r1 - r5 and all 19 slots. There is no BTF for it: what it takes is seen in its code. */
-+__naked __noinline __used
-+static unsigned long subprog_24args(void)
-+{
-+	asm volatile (
-+		"r0 = r1;"
-+		"r0 += r2;"
-+		"r0 += r3;"
-+		"r0 += r4;"
-+		"r0 += r5;"
-+		"r1 = *(u64 *)(r11 + 8);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 16);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 24);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 32);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 40);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 48);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 56);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 64);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 72);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 80);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 88);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 96);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 104);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 112);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 120);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 128);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 136);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 144);"
-+		"r0 += r1;"
-+		"r1 = *(u64 *)(r11 + 152);"
-+		"r0 += r1;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: static subprog with 24 args")
-+__success __retval(300)
-+__naked void stack_arg_24args(void)
-+{
-+	asm volatile (
-+		"r1 = 1;"
-+		"r2 = 2;"
-+		"r3 = 3;"
-+		"r4 = 4;"
-+		"r5 = 5;"
-+		"*(u64 *)(r11 - 152) = 24;"
-+		"*(u64 *)(r11 - 144) = 23;"
-+		"*(u64 *)(r11 - 136) = 22;"
-+		"*(u64 *)(r11 - 128) = 21;"
-+		"*(u64 *)(r11 - 120) = 20;"
-+		"*(u64 *)(r11 - 112) = 19;"
-+		"*(u64 *)(r11 - 104) = 18;"
-+		"*(u64 *)(r11 - 96) = 17;"
-+		"*(u64 *)(r11 - 88) = 16;"
-+		"*(u64 *)(r11 - 80) = 15;"
-+		"*(u64 *)(r11 - 72) = 14;"
-+		"*(u64 *)(r11 - 64) = 13;"
-+		"*(u64 *)(r11 - 56) = 12;"
-+		"*(u64 *)(r11 - 48) = 11;"
-+		"*(u64 *)(r11 - 40) = 10;"
-+		"*(u64 *)(r11 - 32) = 9;"
-+		"*(u64 *)(r11 - 24) = 8;"
-+		"*(u64 *)(r11 - 16) = 7;"
-+		"*(u64 *)(r11 - 8) = 6;"
-+		"call subprog_24args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
- SEC("tc")
- __description("stack_arg: write beyond max outgoing depth")
- __failure
--__msg("stack arg write offset -80 exceeds max 7 stack args")
-+__msg("stack arg write offset -160 exceeds max 19 stack args")
- __naked void stack_arg_write_beyond_max(void)
- {
- 	asm volatile (
-@@ -371,8 +460,8 @@ __naked void stack_arg_write_beyond_max(void)
- 		"r3 = 3;"
- 		"r4 = 4;"
- 		"r5 = 5;"
--		/* Write to offset -80, way beyond any callee's needs */
--		"*(u64 *)(r11 - 80) = 99;"
-+		/* Write to offset -160, way beyond any callee's needs */
-+		"*(u64 *)(r11 - 160) = 99;"
- 		"*(u64 *)(r11 - 16) = 20;"
- 		"*(u64 *)(r11 - 8) = 10;"
- 		"call subprog_7args;"
+ /* Layout of one packed linked register in the jump history, see linked_regs_pack() */
+-#define LR_FRAMENO_BITS	4
+-#define LR_INDEX_BITS	11
++#define LR_FRAMENO_BITS	5
++#define LR_INDEX_BITS	10
+ #define LR_FRAMENO_MASK	((1u << LR_FRAMENO_BITS) - 1)
+ #define LR_IS_REG	BIT(LR_FRAMENO_BITS)
+ #define LR_INDEX_OFF	(LR_FRAMENO_BITS + 1)
 -- 
 2.55.0
 
