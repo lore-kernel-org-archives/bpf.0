@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983951;
-	b=HzquRbE8XUscTU+5I3qH7gkzXGL+zRoGTzDET7GHDf6Cn5oo0cp/+xkZHTk7O9lt+l+y
-	 t91YMxIjyGjbN3+GpNL2TEHJOR+gf7jlLIeaftmc40DsqdmloALgIqyg5EHOPe87IUavq
-	 3BFxMvLrqYbyf8xCnyqfYY04xNReslC9QnTM4Hb0J9R+vpXoEJZZO1rHNaVoHhdcR5PPZ
-	 IevxXAExtMK/5fP/JtRclrJoK1NPTvjU6f1L5l9ZWBlLg9Zn42j2XDsCi5QtF2f38fyLY
-	 YU9gScNNvPLW6bmnlu0EHby87WebhsJ32YSJHJY95zcIvHRKOVIJE/+IEgBlC/jMLCA==
+	t=1792983956;
+	b=utwYAsmSLot9Z1l24Qou7Zar/6oze7f8U0qD40L+6HqqHzLRSeinlTSberqE6W6Vw8yv
+	 t4TVAuzUWWsdgOUyL8NSDGlCxibbvxOe6XZXgTGJxKNhcmeoRhHzdiGBExq0OrYfklRAl
+	 SkPrB+3LtAPsPYWWzTve6SYmHQumI/4T56Iz/L1wMmiofReh25+D2a9aqvDWueFKbifqm
+	 ruhvryeCRW2atV3epCRL2HZrNZxTZ3akFQkI9psL2OJxvDe3M74WUzRKlrDU8T5dQXdcl
+	 npPVVo5r51dpAYVwPtKs8IPbYdIZXOR58ng0zIHf4qfiK0QXrJLCz2YRVsvBYV5hhxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983951;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983956;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=YcIrUMvBoySPAWKsHEStp0ze+H5cdWlgIydL4L4lPXw=;
-	b=axaT/T9Rcqgw1L6vgCdmzqaEFKkMvgAjbmcJvsMNnk/KpzzEz5rydOq/bOIifR0w5wP5
-	 rRYNj993MEG04sBTVkYJDpXonzi+OLpN56hyOEYvr8MzHTBfcukTaRJeK/hc0wS1HMVPs
-	 C/f4Qh8YKwWrnCIdsMkYY1PHig64Q70d1bWyR3GmBQ6D37xvv82r17f2c0hcWfRTPQs/2
-	 CmmWrrm1KeZgrRtoRSz+h9X3KP4YVea+/NEmR/d9PgfSRgEnhWRP2dYd1bwv3n64JOdol
-	 Ylz7tuI+j6ZHqka8UrkFCF7aPN1cZL2dbLkGAtvq78SxQcP3z2N/0mLtHyBhZVPKHiw==
+	bh=J2c3bJFh675GOEGEQjKu2jvgrRWteRPZAPo8Kdj2QdA=;
+	b=Qx97Uz8xW3yQkx/WsHJUQdg5Sm2zssNNzxLqU7m2RQl2+2tVwh4Ys+gXPKZRrngGeCUs
+	 RwxWPV2kNGcRR/4kXyOGTQh6rrnybFZHtfIIVvJhzbEJsylVwB8o7XU8BYIb8Ri4ZpAJU
+	 1kKjnzWibyVvLTSaK+o8OGCgCfaTThPnVBK5cb7HUtDn8v5aoJTPzb4n6rZM43ljxR6Ln
+	 0tPcd//QLlyDxdxTDtNcNwKDIcGuIBtWYf5u9aiHvP4QBJ6YrqUCIpjlOqOLkk8SfpO2Z
+	 V0eDA3glRvq1XSoN2NzBMbh8ZLHDk4h2DK/8zj9oX7PR9Brg8GFTM3EZwZhtMCPBYGQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QCrAFRSv;
-	arc=none smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MtUSoADJ;
+	arc=none smtp.remote-ip=209.85.214.169
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B92606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A4B92606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCC1606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:05:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2CCC1606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=QCrAFRSv
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3adac5c10e3so1299486a91.0
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:50 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MtUSoADJ
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e987a2ba0cso15848465ad.3
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983950; x=1793588750; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983955; x=1793588755; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=YcIrUMvBoySPAWKsHEStp0ze+H5cdWlgIydL4L4lPXw=;
-        b=QCrAFRSv4qGX9hACuEDc8mdvWwVb3NPdqPROwBy9m2ovOy8GHHNJqNZbhX14xMS/Nq
-         D8T4GDppM92GSZqewi7FjtvjbSqqc1Wk8lapzJavIgn4Tt+GiXm3H9eRMBB3679ISQCw
-         Ykx6h6rAjlp/vMHUyQn8tG89YpngwQg3Uge6hpAtnBPAhQDs96adS5tEj8zlTlunmvDG
-         nzUrpiOSEY8N0vnwZMM5Pd5D06Z2v04evdheRoX1slf85aGwaajpeA+DQ610gkGa4zOK
-         AJ2TdBW2jHriATSr8r+Y8ehiKXEYny8E9N9fShlkA/NVSmG22Wy9e+n0ef6qNn9Lfe/p
-         b+Pg==
+        bh=J2c3bJFh675GOEGEQjKu2jvgrRWteRPZAPo8Kdj2QdA=;
+        b=MtUSoADJnZUSQZDcNpeaaBUEOpZjBD+ArTdwUpZlT4W9fsYTl/TFny3UgpxvYZxF27
+         vLoaTkDwfxTaYlkG+IotxAVz46aqrvC1vyMIGMgZtB/Bnhf270F5VsyS4O6RrpK4TW0k
+         aDCzqP0Taha3CiztffYWMTIiCMi8qRrU4RTe4oWiNmDERHbOF1XTKEcacSrLbmuw+lvq
+         N9c1qwlOo+ZGReg+IwN9fGuReRVsX5dY38m0hFp8VCM2UgmKx97yrIPqQ/uwvjCTplFI
+         wOimFNwvjRfEDOFKkNfRxqnNFLwVWJ4KrmucC0vozXTYgN2r/Z2s4kXJHO3Rw8Gm8pef
+         mKQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983950; x=1793588750;
+        d=1e100.net; s=20260707; t=1792983955; x=1793588755;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YcIrUMvBoySPAWKsHEStp0ze+H5cdWlgIydL4L4lPXw=;
-        b=DoPDk4ew+zPEhSkbHM/sijefX1EkCfY4+kgIfj/k5CvVI1vkQBIAIPEDu1MRe662J+
-         Jlm1w7YuGTdXzNg10WEvCqhIsSJePirfByRyA2mY7kjJqQ0lDCP9GcmP2+wN3x1kshNu
-         l35HuVOou0hdh8W0qDxKL2pCJqjaWoMlBwuTsJ8Hio0XjV3PvCIcydQ0+tSJC6EBR9D8
-         dGJsy1Ev7HZMfYx+v3KBiDfRiREO3PKWpOam2FEFBx6Kqvp4R4yt/QbbzTUaUtmSulAQ
-         CE4mtMaBPLZ8Kk8zt7ZIC+CycdeGIBTM4prMReEGSr3jSwtjj5q/0APTs04XYAFZsu0B
-         Dacw==
-X-Gm-Message-State: AFq9FYLLKSDaiDSPNT9K2tHzXggtqcawxaLv5lG4QM6tj0QVkU1uT6QA
-	1fgOXb+klxSbRuvFykbusSi9Yk2vQSBRyCIyl2ASoBnYNzW8Zsj2Wqt8gGuNAw==
-X-Gm-Gg: AYBFou0LY+SjuuzGzyVS58pyCxcwrX20FrWYFb4bS99l3YCWNw8tRIfBILchAME1sxR
-	VjAsGMyNZVbxCc1eNtlAEtX08+Uk0sgxi55UZ58D0PUxdiibhFunZr7iivrnMAOD6NgctSSI5KB
-	GncsKgTH01zPnn1QnejeorPiQvDsOKp/RJA7a/IK6Wno/pXbBPhwVOVdhGw2K+FH9xr3pUeolb4
-	k7C95+3aXO5uo79Tkv1+xpGUPpeIoby0I9prcDrGcHIcy7+EoS8w1s0QzBLiNi1LPKkOmtTEB0V
-	gFE32SOgN/tmJtzRBVZZ6Xyw9zFSrc/Npb1mv9aOtkxNqTchYXbAEM0Dim6sWzX4E2PaxtOXWem
-	atA8TjxkbwP3ca4yKt3frtqHiuEKOzm+G0muqPgbRhmw8X0sX6dJAf7Wl6pWI2POa6XAk5/dzdn
-	YAwGisWfmVoNqfcAdwj5vR201niCFMTFjSXcwdB5CSwuYPXEFip4a47n0OT282vTBv8Xqmb+RO/
-	ipWJDhIcELAB3a+5lzOpfpgoIerWABHQelA90BAllGHJy15qJjKk6qMPu6IAqx8LiNxL72+bPwQ
-	2M/4lcDZMf/5jsTXHMBSKsVeTWeyAWnyGV+Ynxgkzddk2Fekthc+xcEKOhlhB5ZtNDJBJWOUeff
-	ji/xGc6TmvGm5GmuWGoDVWyC0
-X-Received: by 2002:a17:90b:4a12:b0:3a0:8050:2ec9 with SMTP id 98e67ed59e1d1-3adea89874amr5131124a91.16.1792983949664;
-        Sun, 25 Oct 2026 20:05:49 -0700 (PDT)
+        bh=J2c3bJFh675GOEGEQjKu2jvgrRWteRPZAPo8Kdj2QdA=;
+        b=LlKzNwGKZ87xIdTqB8pNOAb86C1Z5NXFSYMX8ZN4oS+QIku6txw1Xz2RR7PPUVhHfh
+         LZ2w1lmCgBGfOZ5BSEhRQJNidTVy9YirR6WEaW48VQ4wZDY6Lpue0OMfFn1WcdnhyENN
+         ia9FGTmuKxAoEfXCx2C3umW6hgnDM3IGA2ZK8kyO373n1D0dXCn+B4+gTe6uVAmEmNoR
+         19LpzK33+pmiiQyyoW3OopYEr/PxPkPKZ1eMgyS4m26jsqVb6fv7s+ky+cy4mlaEc2EZ
+         8xflx93RbMYgscZYIuLgKOiWLrcG/bzi8vBRhQ40f7gV0Gayr4Qtauu4yIxcihEFWNNc
+         uwNA==
+X-Gm-Message-State: AFq9FYIWyOJyXMaxVEZlfj3kAdDmNZ+4cP16ReFvD8wVkF0eCHK8W8aN
+	Uioax6QBnLy+GYjfG+Bnl3IXEU5qmj6OYxdubXGClwGOPV33wDin7pcHm7tt2Q==
+X-Gm-Gg: AYBFou0mWePl05QF90JK3b3rD+rHL8+6t5xvED38kgRlpMF9dPR55ExiHHutznEfiXo
+	COK/Qaedhr9j7EiO0bUwJhzEG8AdWD89h/M1VsGcUZFHJgF3R2Bs40T7C5MclzD7pi+XBvZwSyj
+	YCGb8tGDiMgwyAEJugz8PHHRVwLKmj5ZNFaOVwO5xUxzCRs+ZUeH+3udvPVMUDOZIOr7AzpaCrM
+	qZR5tVzlcvXhWsELm9mOrdOsHSI/LWjqF2w+/euS8dEFu81Y0H7b/1Hi7SLep7cz8/OJaPYbhgF
+	epb6C8ROAnIOzoS2uif4P5+EN9BTG+34H+hHtFKVCI2GtAfNpC4YP0W0dp5UZQwvajZraXZV6Pj
+	E4W5Yp1fsrTBwFv3TUDv9suEJ2ukym8QgZ/rZkF6ndc+EVm3u+++wXGi6IKK4G87hppZK0417d/
+	I0pOpb0w0ENJy4B68yshojmTNfs9DyOwh1EKcT3FbWUe0uddiVhreC35fuE+qXNxQrhISe8dXoX
+	BEYMv3oavcsAMU9FpvmqHcxdPHwXrhlBN5sFMo4Spdlrb7t7h0Ry6/Hef+RBMB2qRPIgvajlfjL
+	im5atlETsCEy7nRvU7sbZHnmgKKtueafxIqKB+jlGaAvkFTcyebsGM2r0O6Gw8vc12q2e5x+hLG
+	ziHVjnnNKy5CLQDalz/8S8+ob
+X-Received: by 2002:a17:903:8c6:b0:2e9:9c65:1aff with SMTP id d9443c01a7336-2ea9c92422dmr43400415ad.45.1792983955429;
+        Sun, 25 Oct 2026 20:05:55 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebb0667asm6442580a91.14.2026.10.25.20.05.49
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ea9b1a748csm10264295ad.55.2026.10.25.20.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:05:49 -0700 (PDT)
+        Sun, 25 Oct 2026 20:05:55 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 62/81] bpf: Remove prune points, levels of state comparison and pop_stack()
-Date: Mon, 26 Oct 2026 02:59:23 +0000
-Message-ID: <20261026025943.404450-63-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 63/81] bpf: Print 0 as the limit in the statistics line
+Date: Mon, 26 Oct 2026 02:59:24 +0000
+Message-ID: <20261026025943.404450-64-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,598 +103,54 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Before "bpf: Verify programs as a fixpoint over the control flow graph" the
-main pass of the verifier followed each path of a prog depth first. It
-compared states at selected insns to prune paths. Some parts of that pass
-have no user. Remove them.
+The last line of the verifier log shows the number of processed insns and
+the limit for it:
 
-  removed               task in the old pass        now
-  --------------------  --------------------------  ---------------------
-  prune_point and       Select the insns at which   States meet at the
-  other marks of insns  the pass compares states.   start of each basic
-                                                    block.
-  NOT_EXACT, EXACT      Two of the three ways to    RANGE_WITHIN is the
-                        compare states.             only way.
-  pop_stack()           Get the next state when a   flow_drain() empties
-                        path ends.                  the stack after each
-                                                    insn.
+  processed %d insns (limit %d) ...
 
-NOT_EXACT ignored scalars without a precision mark. EXACT accepted only
-identical states. RANGE_WITHIN is what bpf_state_subsumes() does: the range
-of each live scalar in the new state must be within its range in the old
-state.
+The limit was BPF_COMPLEXITY_LIMIT_INSNS. Since
+"bpf: Verify programs as a fixpoint over the control flow graph" the
+verifier does not limit the number of processed insns. It limits the number
+of states, see BPF_FLOW_MAX_STATES. BPF_COMPLEXITY_LIMIT_INSNS is now the
+maximum length of a prog. Thus the line shows a limit that does not exist.
 
-push_stack() stays. The code that verifies an insn uses it to make a second
-state, for example for the other branch of a jump. flow_drain() gives these
-states to flow.c.
+veristat and other tools parse this line. Keep the format and print 0.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h | 38 --------------------
- kernel/bpf/cfg.c             | 56 ++---------------------------
- kernel/bpf/diagnostics.c     |  7 ----
- kernel/bpf/diagnostics.h     |  1 -
- kernel/bpf/scev.c            |  4 ---
- kernel/bpf/states.c          | 69 ++++++++----------------------------
- kernel/bpf/verifier.c        | 55 ++++++----------------------
- 7 files changed, 29 insertions(+), 201 deletions(-)
+ include/linux/bpf.h   | 1 +
+ kernel/bpf/verifier.c | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 84deb3974c2e..9b107553461e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -718,7 +718,6 @@ struct bpf_insn_aux_data {
- 	u64 needs_zext:1; /* alu op needs to clear upper bits */
- 	u64 prevent_zext:1; /* alu op cannot be zext (already used with 64-bit scalars) */
- 	u64 non_sleepable:1; /* helper/kfunc may be called from non-sleepable context */
--	u64 is_iter_next:1; /* bpf_iter_<type>_next() kfunc call */
- 	u64 call_with_percpu_alloc_ptr:1; /* {this,per}_cpu_ptr() with prog percpu alloc */
- 	u64 cast_arena:1; /* addr_space_cast of an address in arena */
- 	u64 cast_mov:1; /* addr_space_cast of a pointer that is not in arena, it's a move */
-@@ -750,12 +749,6 @@ struct bpf_insn_aux_data {
- 	u64 non_arena_load:1;
- 
- 	/* below flags are initialized once */
--	u64 jmp_point:1;
--	u64 prune_point:1;
--	/* ensure we check state equivalence and save state checkpoint and
--	 * this instruction, regardless of any heuristics
--	 */
--	u64 force_checkpoint:1;
- 	/* true if instruction is a call to a helper function that
- 	 * accepts callback function as a parameter.
- 	 */
-@@ -1009,7 +1002,6 @@ struct bpf_verifier_env {
- 	const struct bpf_verifier_ops *ops;
- 	struct module *attach_btf_mod;	/* The owner module of prog->aux->attach_btf */
- 	struct bpf_verifier_stack_elem *head; /* stack of verifier states to be processed */
--	int stack_size;			/* number of states to be processed */
- 	bool strict_alignment;		/* perform strict pointer alignment checks */
- 	bool test_reg_invariants;	/* fail verification on register invariants violations */
- 	bool uses_arena_sp;		/* the program has insns with BPF_REG_ARENA_SP */
-@@ -1222,26 +1214,6 @@ void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num);
- 		bpf_log(&env->log, "verifier bug: " fmt "\n", ##args);				\
- 	})
- 
--static inline void mark_prune_point(struct bpf_verifier_env *env, int idx)
--{
--	env->insn_aux_data[idx].prune_point = true;
--}
--
--static inline bool bpf_is_prune_point(struct bpf_verifier_env *env, int insn_idx)
--{
--	return env->insn_aux_data[insn_idx].prune_point;
--}
--
--static inline void mark_force_checkpoint(struct bpf_verifier_env *env, int idx)
--{
--	env->insn_aux_data[idx].force_checkpoint = true;
--}
--
--static inline bool bpf_is_force_checkpoint(struct bpf_verifier_env *env, int insn_idx)
--{
--	return env->insn_aux_data[insn_idx].force_checkpoint;
--}
--
- static inline void mark_calls_callback(struct bpf_verifier_env *env, int idx)
- {
- 	env->insn_aux_data[idx].calls_callback = true;
-@@ -1252,11 +1224,6 @@ static inline bool bpf_calls_callback(struct bpf_verifier_env *env, int insn_idx
- 	return env->insn_aux_data[insn_idx].calls_callback;
- }
- 
--static inline void mark_jmp_point(struct bpf_verifier_env *env, int idx)
--{
--	env->insn_aux_data[idx].jmp_point = true;
--}
--
- static inline void mark_jump_target(struct bpf_verifier_env *env, int idx)
- {
- 	env->insn_aux_data[idx].jump_target = true;
-@@ -1423,11 +1390,6 @@ static inline u32 bpf_frame_insn_idx(struct bpf_verifier_state *st, u32 frame)
- 	       : st->frame[frame + 1]->callsite;
- }
- 
--static inline bool bpf_is_jmp_point(struct bpf_verifier_env *env, int insn_idx)
--{
--	return env->insn_aux_data[insn_idx].jmp_point;
--}
--
- static inline bool bpf_is_spilled_reg(const struct bpf_stack_state *stack)
- {
- 	return stack->slot_type[BPF_REG_SIZE - 1] == STACK_SPILL;
-diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-index f5705ea0bcb9..64eccc28703a 100644
---- a/kernel/bpf/cfg.c
-+++ b/kernel/bpf/cfg.c
-@@ -123,12 +123,8 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
- 		return -EINVAL;
- 	}
- 
--	if (e == BRANCH) {
--		/* mark branch target for state pruning */
--		mark_prune_point(env, w);
--		mark_jmp_point(env, w);
-+	if (e == BRANCH)
- 		mark_jump_target(env, w);
--	}
- 
- 	if (insn_state[w] == 0) {
- 		/* tree-edge */
-@@ -172,13 +168,8 @@ static int visit_func_call_insn(int t, struct bpf_insn *insns,
- 	if (ret)
- 		return ret;
- 
--	mark_prune_point(env, t + insn_sz);
--	/* when we exit from subprog, we need to record non-linear history */
--	mark_jmp_point(env, t + insn_sz);
--
- 	if (visit_callee) {
- 		w = t + insns[t].imm + 1;
--		mark_prune_point(env, t);
- 		merge_callee_effects(env, t, w);
- 		ret = push_insn(t, w, BRANCH, env);
- 	}
-@@ -439,14 +430,12 @@ static int visit_gotox_insn(int t, struct bpf_verifier_env *env)
- 		return -E2BIG;
- 	}
- 
--	mark_prune_point(env, t);
- 	for (i = 0; i < jt->cnt; i++) {
- 		w = jt->items[i];
- 		if (verifier_bug_if(w < 0 || w >= env->prog->len, env,
- 				    "indirect jump from insn %d to %d out of range", t, w))
- 			return -EFAULT;
- 
--		mark_jmp_point(env, w);
- 		mark_jump_target(env, w);
- 
- 		/* EXPLORED || DISCOVERED */
-@@ -521,14 +510,11 @@ static int visit_func_ptrs_insn(int t, struct bpf_verifier_env *env,
- 	}
- 
- 	/* all functions are explored, their effects are known */
--	mark_prune_point(env, t);
- 	for (i = 0; i < cnt; i++) {
- 		w = ptrs[i].xlated_off;
- 		merge_callee_effects(env, t, w);
- 
--		/* the same marks as push_insn() leaves on a branch target */
--		mark_prune_point(env, w);
--		mark_jmp_point(env, w);
-+		/* the same mark as push_insn() leaves on a branch target */
- 		mark_jump_target(env, w);
- 	}
- 	return DONE_EXPLORING;
-@@ -565,28 +551,13 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 		return DONE_EXPLORING;
- 
- 	case BPF_CALL:
--		if (bpf_is_async_callback_calling_insn(insn))
--			/* Mark this call insn as a prune point to trigger
--			 * is_state_visited() check before call itself is
--			 * processed by __check_func_call(). Otherwise new
--			 * async state will be pushed for further exploration.
--			 */
--			mark_prune_point(env, t);
- 		/* For functions that invoke callbacks it is not known how many times
- 		 * callback would be called. Verifier models callback calling functions
- 		 * by repeatedly visiting callback bodies and returning to origin call
- 		 * instruction.
--		 * In order to stop such iteration verifier needs to identify when a
--		 * state identical some state from a previous iteration is reached.
--		 * Check below forces creation of checkpoint before callback calling
--		 * instruction to allow search for such identical states.
- 		 */
--		if (bpf_is_sync_callback_calling_insn(insn)) {
-+		if (bpf_is_sync_callback_calling_insn(insn))
- 			mark_calls_callback(env, t);
--			mark_force_checkpoint(env, t);
--			mark_prune_point(env, t);
--			mark_jmp_point(env, t);
--		}
- 		if (bpf_helper_call(insn)) {
- 			const struct bpf_func_proto *fp;
- 
-@@ -606,21 +577,6 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 			struct bpf_call_arg_meta meta;
- 
- 			ret = bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta);
--			if (ret == 0 && bpf_is_iter_next_kfunc(&meta)) {
--				mark_prune_point(env, t);
--				/* Checking and saving state checkpoints at iter_next() call
--				 * is crucial for fast convergence of open-coded iterator loop
--				 * logic, so we need to force it. If we don't do that,
--				 * is_state_visited() might skip saving a checkpoint, causing
--				 * unnecessarily long sequence of not checkpointed
--				 * instructions and jumps, leading to exhaustion of jump
--				 * history buffer, and potentially other undesired outcomes.
--				 * It is expected that with correct open-coded iterators
--				 * convergence will happen quickly, so we don't run a risk of
--				 * exhausting memory.
--				 */
--				mark_force_checkpoint(env, t);
--			}
- 			/* Same as helpers, if called in a non-sleepable context
- 			 * program will be rejected anyway, so we should end up
- 			 * with precise sleepable marks on subprogs, except for
-@@ -649,18 +605,12 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
- 		if (ret)
- 			return ret;
- 
--		mark_prune_point(env, t + off + 1);
--		mark_jmp_point(env, t + off + 1);
- 		mark_jump_target(env, t + off + 1);
- 
- 		return ret;
- 
- 	default:
- 		/* conditional jump with two edges */
--		mark_prune_point(env, t);
--		if (bpf_is_may_goto_insn(insn))
--			mark_force_checkpoint(env, t);
--
- 		ret = push_insn(t, t + 1, FALLTHROUGH, env);
- 		if (ret)
- 			return ret;
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index b5204798231d..5acc11788300 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -392,13 +392,6 @@ static u32 log_pos(const struct bpf_diag_log *log, u32 idx)
- 	return pos < log->cap ? pos : pos - log->cap;
- }
- 
--u64 bpf_diag_event_log_save(struct bpf_verifier_env *env)
--{
--	struct bpf_diag *diag = env->diag;
--
--	return diag ? log_end(&diag->log) : 0;
--}
--
- void bpf_diag_event_log_restore(struct bpf_verifier_env *env, u64 log_pos)
- {
- 	struct bpf_diag *diag = env->diag;
-diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index a4102fb049ec..55127e045aae 100644
---- a/kernel/bpf/diagnostics.h
-+++ b/kernel/bpf/diagnostics.h
-@@ -52,7 +52,6 @@ const char *bpf_diag_fmt(struct bpf_verifier_env *env, const char *fmt, ...) __p
- const char *bpf_diag_fmt_btf_type(struct bpf_verifier_env *env, const struct btf *btf, u32 type_id);
- const char *bpf_diag_reg_type_plain(struct bpf_verifier_env *env, enum bpf_reg_type type);
- const char *bpf_diag_arg_type_plain(enum bpf_arg_type type);
--u64 bpf_diag_event_log_save(struct bpf_verifier_env *env);
- void bpf_diag_event_log_restore(struct bpf_verifier_env *env, u64 log_pos);
- u32 bpf_diag_irq_depth(const struct bpf_verifier_state *state);
- void bpf_diag_free(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index 4da7ad48f99e..4dbfb4ed27e1 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -1722,10 +1722,6 @@ int bpf_compute_scev(struct bpf_verifier_env *env)
- 			return err;
- 	}
- 
--	for (i = 0; i < env->prog->len; i++)
--		if (aux[i].loop)
--			aux[i].prune_point = true;
--
- 	if (env->log.level & BPF_LOG_LEVEL2) {
- 		err = log_scevs(env);
- 		if (err)
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index d0989d85d2cb..f1f185f9ce13 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -196,8 +196,7 @@ static void __clean_func_state(struct bpf_verifier_env *env,
- 	}
- }
- 
--static int clean_verifier_state(struct bpf_verifier_env *env,
--				 struct bpf_verifier_state *st)
-+int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
- {
- 	int i, err;
- 
-@@ -223,20 +222,10 @@ static bool regs_exact(const struct bpf_reg_state *rold,
- 	       check_ids(rold->map_uid, rcur->map_uid, idmap);
- }
- 
--enum exact_level {
--	NOT_EXACT,
--	EXACT,
--	RANGE_WITHIN
--};
--
- /* Returns true if (rold safe implies rcur safe) */
- static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
--		    struct bpf_reg_state *rcur, struct bpf_idmap *idmap,
--		    enum exact_level exact)
-+		    struct bpf_reg_state *rcur, struct bpf_idmap *idmap)
- {
--	if (exact == EXACT)
--		return regs_exact(rold, rcur, idmap);
--
- 	if (rold->type == NOT_INIT)
- 		/* explored state can't have used this */
- 		return true;
-@@ -425,8 +414,7 @@ static struct bpf_reg_state *scalar_reg_for_stack(struct bpf_verifier_env *env,
- }
- 
- static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
--		      struct bpf_func_state *cur, struct bpf_idmap *idmap,
--		      enum exact_level exact)
-+		      struct bpf_func_state *cur, struct bpf_idmap *idmap)
- {
- 	int i, spi;
- 
-@@ -445,18 +433,6 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 		old_type = old_slot->slot_type[im];
- 		cur_slot = i < cur->allocated_stack ? bpf_stack_slot(cur, spi) : NULL;
- 
--		if (exact == EXACT) {
--			u8 cur_type = cur_slot ? cur_slot->slot_type[im] : STACK_INVALID;
--
--			/* STACK_INVALID and STACK_POISON are equivalent for pruning */
--			if (old_type == STACK_POISON)
--				old_type = STACK_INVALID;
--			if (cur_type == STACK_POISON)
--				cur_type = STACK_INVALID;
--			if (!cur_slot || old_type != cur_type)
--				return false;
--		}
--
- 		if (old_type == STACK_INVALID || old_type == STACK_POISON)
- 			continue;
- 
-@@ -479,7 +455,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 			old_reg = scalar_reg_for_stack(env, old_slot, im);
- 			cur_reg = scalar_reg_for_stack(env, cur_slot, im);
- 			if (old_reg && cur_reg) {
--				if (!regsafe(env, old_reg, cur_reg, idmap, exact))
-+				if (!regsafe(env, old_reg, cur_reg, idmap))
- 					return false;
- 				i += (im == 0 ? BPF_REG_SIZE - 1 : 3);
- 				continue;
-@@ -514,8 +490,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 			 * such verifier states are not equivalent.
- 			 * return false to continue verification of this path
- 			 */
--			if (!regsafe(env, &old_slot->spilled_ptr, &cur_slot->spilled_ptr,
--				     idmap, exact))
-+			if (!regsafe(env, &old_slot->spilled_ptr, &cur_slot->spilled_ptr, idmap))
- 				return false;
- 			break;
- 		case STACK_DYNPTR:
-@@ -569,8 +544,7 @@ static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_state *old,
-  * Outgoing stack args are path-local state and must agree for pruning.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index d8cd7c63f157..8cd82f506e0d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2636,6 +2636,7 @@ struct bpf_array {
   */
- static bool stack_arg_safe(struct bpf_verifier_env *env, struct bpf_func_state *old,
--			   struct bpf_func_state *cur, struct bpf_idmap *idmap,
--			   enum exact_level exact)
-+			   struct bpf_func_state *cur, struct bpf_idmap *idmap)
- {
- 	int i, nslots;
+ int bpf_array_get_next_key(struct bpf_map *map, void *key, void *next_key);
  
-@@ -583,7 +557,7 @@ static bool stack_arg_safe(struct bpf_verifier_env *env, struct bpf_func_state *
- 			  &old->stack_arg_regs[i] : &not_init;
- 		cur_arg = i < cur->out_stack_arg_cnt ?
- 			  &cur->stack_arg_regs[i] : &not_init;
--		if (!regsafe(env, old_arg, cur_arg, idmap, exact))
-+		if (!regsafe(env, old_arg, cur_arg, idmap))
- 			return false;
- 	}
++/* the longest program. There is no limit on what it takes to verify it. */
+ #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
+ #define MAX_TAIL_CALL_CNT 33
  
-@@ -690,7 +664,7 @@ static bool loop_stack_safe(struct bpf_verifier_env *env, struct bpf_func_state
-  * the current state will reach 'bpf_exit' instruction safely
-  */
- static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_state *old,
--			      struct bpf_func_state *cur, u32 insn_idx, enum exact_level exact)
-+			      struct bpf_func_state *cur, u32 insn_idx)
- {
- 	u16 live_regs = env->insn_aux_data[insn_idx].live_regs_before;
- 	u16 i;
-@@ -706,14 +680,13 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
- 
- 	for (i = 0; i < MAX_BPF_REG; i++)
- 		if (((1 << i) & live_regs) &&
--		    !regsafe(env, &old->regs[i], &cur->regs[i],
--			     &env->idmap_scratch, exact))
-+		    !regsafe(env, &old->regs[i], &cur->regs[i], &env->idmap_scratch))
- 			return false;
- 
--	if (!stacksafe(env, old, cur, &env->idmap_scratch, exact))
-+	if (!stacksafe(env, old, cur, &env->idmap_scratch))
- 		return false;
- 
--	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch, exact))
-+	if (!stack_arg_safe(env, old, cur, &env->idmap_scratch))
- 		return false;
- 
- 	if (!loop_stack_safe(env, old, cur))
-@@ -730,10 +703,9 @@ static void reset_idmap_scratch(struct bpf_verifier_env *env)
- 	idmap->cnt = 0;
- }
- 
--static bool states_equal(struct bpf_verifier_env *env,
--			 struct bpf_verifier_state *old,
--			 struct bpf_verifier_state *cur,
--			 enum exact_level exact)
-+/* Everything that @cur describes is described by @old. */
-+bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
-+			struct bpf_verifier_state *cur)
- {
- 	u32 insn_idx;
- 	int i;
-@@ -768,21 +740,10 @@ static bool states_equal(struct bpf_verifier_env *env,
- 		insn_idx = bpf_frame_insn_idx(old, i);
- 		if (old->frame[i]->callsite != cur->frame[i]->callsite)
- 			return false;
--		if (!func_states_equal(env, old->frame[i], cur->frame[i], insn_idx, exact))
-+		if (!func_states_equal(env, old->frame[i], cur->frame[i], insn_idx))
- 			return false;
- 	}
- 
- 	return true;
- }
- 
--int bpf_clean_verifier_state(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
--{
--	return clean_verifier_state(env, st);
--}
--
--/* Everything that @cur describes is described by @old. */
--bool bpf_state_subsumes(struct bpf_verifier_env *env, struct bpf_verifier_state *old,
--			struct bpf_verifier_state *cur)
--{
--	return states_equal(env, old, cur, RANGE_WITHIN);
--}
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 245147ff3b1e..864009dbac47 100644
+index 864009dbac47..3bc0dcbeaa60 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -185,7 +185,10 @@ static bool bpf_global_percpu_ma_set;
-  * reference remains at the end of the program, the verifier rejects it.
-  */
- 
--/* verifier_state + insn_idx are pushed to stack when branch is encountered */
-+/*
-+ * verifier_state + insn_idx are pushed to stack when branch is encountered.
-+ * It's emptied after every insn, see flow_drain().
-+ */
- struct bpf_verifier_stack_elem {
- 	/* verifier state is 'st'
- 	 * before processing instruction 'insn_idx'
-@@ -197,9 +200,6 @@ struct bpf_verifier_stack_elem {
- 	/* it goes there only if the guard at prev_insn_idx has to, see check_loop_guard() */
- 	bool parked;
- 	struct bpf_verifier_stack_elem *next;
--	/* length of verifier log at the time this state was pushed on stack */
--	u32 log_pos;
--	u64 diag_log_pos;
- };
- 
- #define BPF_GLOBAL_PERCPU_MA_MAX_SIZE  512
-@@ -1782,36 +1782,6 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
- 	return 0;
- }
- 
--static int pop_stack(struct bpf_verifier_env *env, int *prev_insn_idx,
--		     int *insn_idx, bool pop_log)
--{
--	struct bpf_verifier_state *cur = env->cur_state;
--	struct bpf_verifier_stack_elem *elem, *head = env->head;
--	int err;
--
--	if (env->head == NULL)
--		return -ENOENT;
--
--	if (cur) {
--		err = bpf_copy_verifier_state(cur, &head->st);
--		if (err)
--			return err;
--		bpf_diag_event_log_restore(env, head->diag_log_pos);
--	}
--	if (pop_log)
--		bpf_vlog_reset(&env->log, head->log_pos);
--	if (insn_idx)
--		*insn_idx = head->insn_idx;
--	if (prev_insn_idx)
--		*prev_insn_idx = head->prev_insn_idx;
--	elem = head->next;
--	bpf_free_verifier_state(&head->st, false);
--	kfree(head);
--	env->head = elem;
--	env->stack_size--;
--	return 0;
--}
--
- static bool error_recoverable_with_nospec(int err)
- {
- 	/* Should only return true for non-fatal errors that are allowed to
-@@ -1839,10 +1809,7 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	elem->insn_idx = insn_idx;
- 	elem->prev_insn_idx = prev_insn_idx;
- 	elem->next = env->head;
--	elem->log_pos = env->log.end_pos;
--	elem->diag_log_pos = bpf_diag_event_log_save(env);
- 	env->head = elem;
--	env->stack_size++;
- 	err = bpf_copy_verifier_state(&elem->st, cur);
- 	if (err)
- 		return ERR_PTR(-ENOMEM);
-@@ -2501,10 +2468,7 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	elem->insn_idx = insn_idx;
- 	elem->prev_insn_idx = prev_insn_idx;
- 	elem->next = env->head;
--	elem->log_pos = env->log.end_pos;
--	elem->diag_log_pos = bpf_diag_event_log_save(env);
- 	env->head = elem;
--	env->stack_size++;
- 	/* Unlike push_stack() do not bpf_copy_verifier_state().
- 	 * The caller state doesn't matter.
- 	 * This is async callback. It starts in a fresh stack.
-@@ -15208,7 +15172,6 @@ bpf_helper_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	return info;
- }
- 
--/* insn_aux_data->is_iter_next is not there before the main pass */
- bool bpf_insn_is_iter_next(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
- 	struct bpf_call_arg_meta meta;
-@@ -15657,7 +15620,6 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+@@ -22783,9 +22783,10 @@ static void print_verification_stats(struct bpf_verifier_env *env)
+ 				env->subprog_info[i].stack_depth);
+ 		}
  	}
- 	meta.fn = &desc->proto;
- 
--	insn_aux->is_iter_next = bpf_is_iter_next_kfunc(&meta);
- 
- 	if (!insn->off &&
- 	    (insn->imm == special_kfunc_list[KF_bpf_res_spin_lock] ||
-@@ -21206,7 +21168,6 @@ static int flow_drain(struct bpf_verifier_env *env)
- 
- 	while ((elem = env->head)) {
- 		env->head = elem->next;
--		env->stack_size--;
- 		if (!err && elem->parked)
- 			err = bpf_flow_park(env, &elem->st, elem->insn_idx, elem->prev_insn_idx);
- 		else if (!err)
-@@ -22474,9 +22435,15 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
- 
- static void free_states(struct bpf_verifier_env *env)
- {
-+	struct bpf_verifier_stack_elem *elem;
-+
- 	bpf_free_verifier_state(env->cur_state, true);
- 	env->cur_state = NULL;
--	while (!pop_stack(env, NULL, NULL, false));
-+	while ((elem = env->head)) {
-+		env->head = elem->next;
-+		bpf_free_verifier_state(&elem->st, false);
-+		kfree(elem);
-+	}
- 	bpf_flow_reset(env);
+-	verbose(env, "processed %d insns (limit %d) max_states_per_insn %d "
++	/* user space parses this line. There is no limit. */
++	verbose(env, "processed %d insns (limit 0) max_states_per_insn %d "
+ 		"total_states %d peak_states %d mark_read %d\n",
+-		env->insn_processed, BPF_COMPLEXITY_LIMIT_INSNS,
++		env->insn_processed,
+ 		env->max_states_per_insn, env->total_states,
+ 		env->peak_states, env->longest_mark_read_walk);
  }
- 
 -- 
 2.55.0
 
