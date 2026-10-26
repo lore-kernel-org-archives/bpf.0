@@ -1,54 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793024891;
-	b=IgoT3G/Jq/QiVSw3t8PmEt2gdJoTp4jYc7hYxSJ0cVcsqaG+zLaAKzt5RVJHql3sDIFc
-	 2S78zRVetPZEUkuac2n34n2zmLvsnEKFmaNeGFZBeXLIioguLGnJyAB+5SEmcmN8qiKwU
-	 3PRCRD1mQ1yt7BGlN5G5EfMUqvP1tWavO3ZcUMvB9t6qbnmseX/0PgXiyKtB/JU5DXWcJ
-	 3DYP3qpWb4C8i2iOIMSYKa0QZm65tWt6zZqMYdZ6c7PioGB6GUParBQW6H6d1Bedn/OkH
-	 O5EqNDcb1kKlzO3vZdLNhslUuu4W+d0eOJwAEU+WxwsdVhoSAJVw/WBJLVQuVHp+lwA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793024891;
-	h=Received:DKIM-Signature:From:To:Subject:In-Reply-To:References:Date:
-	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=yoRAL1VdHDtmhri9kcaJF90SjTo1inDYchp3J27MFt0=;
-	b=G9tjxdwu7uduGOq6SkYttZJ7T+XvV1fKpbCK7PZTLF5MlvKzkYptR0w5pUeIxNhoFNAN
-	 Fkv9xdet/+vSPG1ymVvM9WtsUv3uTk+tQxOkLpu+Tb5dQG0KtZyPekKwPld6vmjvLfd2c
-	 A9Lda+5IrU+/OHDOjva/g3m+zWhHvVcvD+W2kVCDeEQx1NQW27JSoVnAWL3xKrRsJl40G
-	 gB3cpzvs5wPRTGsZNtnJC5hjOOGJOCkSNwickHDfzjupwnbRzWw2Om3nutBSNQWUJYazj
-	 Qxh4qhIHDxC5Y3dJsUIxFtt7GAujVOWX/z3SEp4Qfe9wDodA7XfhT8NcYbmwPmY7L4Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ex7BSezQ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793025128;
+	b=auw8poGE0IHl8fe5dWwbwpstveQI2ShkSGwkGg9saqavs0V1JXW93BqjCkgc9QC6TIn0
+	 GDtqXqX3/mQN7Mwm4+/IvKsvrrCgx2HCmSXGqsP4BWpuMOoInhUwBU3lCKaWoCasOuA9B
+	 MmYbSkLpJujXH5vO6tP+F510KcXB1NcG5YjbS/SJwZvJArp7y22XC+imDgRM2fG6sXVCX
+	 nvPgTjJ/NQ+aGmgmV6p75dCcuvKlUyzUPA9VcKAuFyabqUP8uIlNbCIH9Pu+0TTy/M6U+
+	 SYrsgIA/WoPt3QF9lTXwWyLqiflqKC+au0EiHpsAhyD6+8RAvWCeUKsoMuHZ3lgvt5g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793025128;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type;
+	bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
+	b=BDOvh/0J2LOs8lIDDLektSJ81U7WBQYoXmsSl3KJyLrlWDLpvwqGg5wuLMjW187rTtBY
+	 NGhHAr3212vdKO2DB1h1GVQrOETqeKtH+v2QWRlaWM2HoSN81pB1ydqIm7mAUCVpVds9R
+	 6cqcSZ0H7PvIaUT43EFiSSAz3P+FIZoc2uuMLK/1/YaZ7UcKJjwoJ9p7cPA+GsFfH2fVu
+	 3Fjzb4t2haQSh4L/TQx3lKBg6dJ0w7l9MqEaOjw01/hftUBd+u7MY6qiVf6/6LZyRxsp/
+	 7RG4hVLKKKtNk7I79YfqVlMLL8tHXW0fRAW9adI12S8+FpZWTLvTQGZyH8OG7I7WjPw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fvFl2JqY;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.51
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07480606A31F;
-	Mon, 26 Oct 2026 14:28:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DDF606A31B
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:32:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D5DDF606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ex7BSezQ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6DC1F01825;
-	Mon, 26 Oct 2026 14:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793024890;
-	bh=yoRAL1VdHDtmhri9kcaJF90SjTo1inDYchp3J27MFt0=;
-	h=From:To:Subject:In-Reply-To:References:Date;
-	b=Ex7BSezQNQd93RpzBcXQvGnDsZfYKCJ9dp3U54YKrnpfmbeK8135MGYTVMEJSDLeg
-	 SfMVX61hThT/NN1pjgIpI+6UC30yAcPGhvWa2BMH0CPqK/1xax6R6b5inwt54mc2o9
-	 17v5U40rdAYLzgTxl589AlgVbh0DO1koBG5dFqU8LUgZCdzKpbpIJxnPD9mqdre6b5
-	 IDlrSZpSR1jCLexjrEXUweKtj4h1MVY9zAEysZUZUSrPJPFfTfUMvvqfgQ1jzZz0Yx
-	 ztn/4Ma7QcJgrc1az/XrB1ePZDzdcqRycqQw3pkVKswhZt8qGZIYpL8m3YXlkiVSVW
-	 E9hz4BG+y6g0g==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: sashiko-reviews@lists.linux.dev, Zhiling Zou <zhilinz@nebusec.ai>,
- bpf@vger.kernel.org
-Subject: Re: [PATCH net 1/1] xsk: validate consumer ring producer index
-In-Reply-To: <sashiko-outbox-182466@kernel.org>
-References: <cover.1792654486.git.zhilinz@nebusec.ai>
- <d2b51708a3ada3b12b986224ee8340ca7ef5b3be.1792654486.git.zhilinz@nebusec.ai>
- <sashiko-outbox-182466@kernel.org>
-Date: Mon, 26 Oct 2026 15:28:07 +0100
-Message-ID: <87y0bk5yfc.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=fvFl2JqY
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3acb11973c3so2032077a91.3
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 07:32:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793025127; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Jq+VqW1VsKm3MoJ+pd8pSKMX+g2Wb6ms7pH7360LMPxchWaqK9977ZfXJ7RcJgF66B
+         qaNNsEn3E1+bOyUhZGBh6SiSEaIFOfrqFWjy8BA1KP0zJeTzoRGjJy0BBgMvqqxNJf/p
+         QYRkQDueO/zmPtlfmtolI/BcJkznKbWUq4MEiyM1KerD0uuC/dcILCXdXX89LsJqOFU6
+         JxmbOaSzMsatvZnoLUAX98lSJbBFAfFRT4Ku5mlQ0q4aG9UEh8DwOLw5kX8p9iVyxcIK
+         LkQGpEtnWHp+qCMc1+d90UrUDGr/45h1lKNXlrcFLFmYFBKotPVzeTBcavLNVFmdctao
+         oA1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
+        fh=/+/Ip1TorElR3KFkkcfdOYfcxjcNltR8B1Ch6ADVHoY=;
+        b=O8wW6T/lPHD+dJCnB02qGetHVQZt+VH/L3S14lzMnQe99EVXv8CrYS/nkrOyXzBXkl
+         NmrwZVUl+qMwzQn1IdRQPWjcArqHbHDRMBOgpSgp0SOQeohC8lZfqiK8q+clvDDK4ITN
+         JHjIGS2Tm3kSTfQX3gM0sa17dMZSwr30G4tg9scuE4JKqgPSk00NhYBPX+HRDXValex3
+         IlPMkrlA4cau8NLN2/B6l7viNbKcd+YsGj/4jB0ntnWFCF9c8gX9rPKeTl/BV8Y+JcUZ
+         J88yD3kCJopeX/qngVI58Q/jVEZfLBl22ZwRsPJNUKmYTxGfTUzNH9qRcxp06pUmkezb
+         /Y9g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793025127; x=1793629927; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
+        b=fvFl2JqYiK++L9Zn0vfo8qjsAtt8ULXmy4jRMsZWyhMJnRIQKO5Rgi7jeprM6MVIy4
+         /gpHjU/ILM64eE/DWyLU9CpYZROq10UOYB88q2H+bNRGWt/4itLRlgb7IHZmz254KEUJ
+         uyBnRxmPFfHjF2N0bUVo2B5byPKdjvv7n7yrws+I97JBI3bkCFzeSNxO5vtbSRwE8MiE
+         0HiZelCG6u9CtDzypVlb7C/Us/VsX4+woXWZYwOacQWphQIEBAJvEiYJ4K0eVNFK4BwU
+         YE9lJnKghkc2gPV7RauLtKpoQWBEQz+XeynSq1pXEe+p1iupFPzxs9UqunTA7XvO5dcC
+         ZFBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793025127; x=1793629927;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=VMmBhwH3f++U+Fny1silggx8Fp4rLIZ5/kJA7+I6Zec=;
+        b=ah5jdz/sp8cysr+ARAuoBLOqYCC9SmNzQXu8egYPdUa9MrAWskIqoB0C2u8C7w6lgA
+         jKGkAa2gnvwCZlMm0hMzbGIIRGLb5nA2J15+N4btm0aA751GauvHssXu7aBafkv9Z7HY
+         Eg8pW2dEtLkW4+jPU2cUkg8DN07A8+7H+kFOhIcymJYPdMEM9fBgv0okmgGegzOQYN59
+         Ct95ws2v4nEplzR7PnQum+AkRb/I+z7kwjlDfMjYYd2y718Uv6wOE/j8+SiLetBkypiL
+         2zIrUv4mT3zjYLvdZQdVTUY2b0PYqQ/+4ohpvagUukuomsVuyY11l7+L/9Lq5eGCHTGm
+         YR0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBywgvPXENINa+kW86U3xQleAVk7Qh2twOy/lYkGIOJyMW9b0/WtkRL0qS3dzKourutHKPE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJKozSHE2QxsURzx7CfZQe6t5QvD9621ydX/+XfMtQVR/aD3dza
+	qOL9nRf18IuypChgL7pECXzGN5B7fsKh+zyuLOL1w/GOeHdtmJ9gxxrAiTTKxM5s+JVgzhZXmaW
+	yCJHhH04FOL4mp6OFaSWl/6jIjNeKy+Y=
+X-Gm-Gg: AYBFou3jY+yNoRkJTZsFhe4k1i1W4XBwFBX4SNuJ/yfW7/msg9pfDe3pbgGo9GNsrE8
+	acduM31HMaefa1LclMG9taeW1368szGQhuO/ivbjXNeuUUdFl0tzK4+JaqExS+qRHK/EBkYGgJh
+	OLZeBzg30bmWKeAlyEyZ667OfEBStLnB4vO6rBGJiThu1q63pkONIUw4J7Q+ejIK5AUJKDyjHtd
+	8gKQCZFiZ50lKz682TVLoD/ABKY5K3+jcToTNWjDgAWEyz/IVGqvQGUpqe2pguX6oauoqQ5mTQb
+	2dx+Io4jJE/zghhaYrGY6h+dwZ6v/ul6i2x3dpVK1pLs/SRtWdI6TBMxWknObAPr3tac7ElaIwJ
+	FMBMMEw7q6/vD1rXbuvrLwXg8CAlcocL+panucDI=
+X-Received: by 2002:a17:90b:5644:b0:3ab:d45c:59da with SMTP id
+ 98e67ed59e1d1-3adeafd21a8mr5767380a91.40.1793025126904; Mon, 26 Oct 2026
+ 07:32:06 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,135 +103,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20261024091256.17918-1-testwrzwrz@gmail.com> <20261024141157.59301-1-testwrzwrz@gmail.com>
+ <20261024141157.59301-2-testwrzwrz@gmail.com> <at82NLzM7g8HGgum@boxer> <20261026142705.4564-1-testwrzwrz@gmail.com>
+In-Reply-To: <20261026142705.4564-1-testwrzwrz@gmail.com>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Mon, 26 Oct 2026 16:31:54 +0200
+X-Gm-Features: AclHuK89CEpPcFuQ9Zkf80L7rIP62d6arcQxEpIyB7BJW5pfRLgwLFs5gMXbiL8
+Message-ID: <CAJ8uoz0XZg8K2g3eBXOajV3TsA-1Sz3D6t-G2+BYw2YX7A4K=Q@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/2] xsk: defer software checksum until the skb is complete
+To: Rongzheng Wang <testwrzwrz@gmail.com>
+Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Stanislav Fomichev <sdf@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, stable@vger.kernel.org, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-sashiko-bot@kernel.org writes:
+On Mon, 26 Oct 2026 at 16:30, Rongzheng Wang <testwrzwrz@gmail.com> wrote:
+>
+> Hi Maciej,
+>
+> Thanks for the review.
+>
+> Yes. xsk_skb_metadata() is only called for the first descriptor when
+> skb is NULL; continuation fragments do not call it. So
+> skb->ip_summed == CHECKSUM_PARTIAL means the first fragment requested
+> the checksum.
+>
+> I'll preserve unlikely() around pool->tx_sw_csum like this:
+>
+>     static int xsk_skb_sw_csum(struct sk_buff *skb,
+>                                struct xsk_buff_pool *pool)
+>     {
+>             if (unlikely(pool->tx_sw_csum &&
+>                          skb->ip_summed == CHECKSUM_PARTIAL))
+>                     return skb_checksum_help(skb);
+>
+>             return 0;
+>     }
+>
+> For the drop path: xsk_drop_skb() increments tx_invalid_descs and
+> consumes the skb; sendto() returns the error from skb_checksum_help().
+> Since the descriptors are already consumed, retrying is not useful. The
+> current metadata validation makes the malformed-packet path effectively
+> unreachable, so this is a defensive drop.
+>
+> I verified the propagation in a local QEMU test kernel. For the test
+> only, I temporarily changed xsk_skb_sw_csum() to:
+>
+>     static int xsk_skb_sw_csum(struct sk_buff *skb,
+>                                struct xsk_buff_pool *pool)
+>     {
+>             if (unlikely(pool->tx_sw_csum &&
+>                          skb->ip_summed == CHECKSUM_PARTIAL))
+>                     return -EINVAL;
+>
+>             return 0;
+>     }
+>
+> and ran test_xdp_metadata. It failed at the first generate_packet()
+> sendto:
+>
+>     generate_packet:FAIL:sendto unexpected sendto: actual -1 < expected 0
+>     Summary: 0/0 PASSED, 0 SKIPPED, 1/0 FAILED
+>     TEST_RC=1
+>
+> The normal kernel still passes. The test harness does not print errno,
+> so I can only state that sendto() returned -1; the injected error was
+> -EINVAL. I restored the source after the test.
+>
+> Magnus suggested a distinct counter for malformed packets. I agree that
+> would be more precise than tx_invalid_descs, but I'd prefer to do that
+> in a separate patch instead of extending the UAPI in this stable fix.
 
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] xsk: unbounded re-peek loop in __xp_alloc() despite __xskq_cons_=
-peek() check
-> --
->
-> commit b1eb51f9c983fb773e7eaf99ed508d1895d9b804
-> Author: Zhiling Zou <zhilinz@nebusec.ai>
->
-> xsk: validate consumer ring producer index
->
-> This commit adds a bounds check in __xskq_cons_peek() to clamp q->cached_=
-prod
-> to q->cached_cons when the producer-consumer distance exceeds q->nentries,
-> aiming to bound the consumer loop in __xp_alloc() to the ring size.
->
-> Link: https://bugtracker.nebusec.ai/f/13760
->
->> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
->> index 1bc42c8902f4b..315b656534749 100644
->> --- a/net/xdp/xsk_queue.h
->> +++ b/net/xdp/xsk_queue.h
->> @@ -344,6 +344,9 @@ static inline void __xskq_cons_peek(struct xsk_queue=
- *q)
->>  {
->>  	/* Refresh the local pointer */
->>  	q->cached_prod =3D smp_load_acquire(&q->ring->producer);  /* C, matche=
-s B */
->> +	/* A malformed producer must not make us consume beyond the ring. */
->> +	if (q->cached_prod - q->cached_cons > q->nentries)
->> +		q->cached_prod =3D q->cached_cons;
->>  }
->>=20=20
->>  static inline void xskq_cons_get_entries(struct xsk_queue *q)
->
-> [Severity: High]
-> Does this check in __xskq_cons_peek() actually bound the loop in __xp_all=
-oc()
-> to at most q->nentries descriptors?
->
-> In net/xdp/xsk_buff_pool.c:__xp_alloc(), invalid fill descriptors are con=
-sumed
-> in an unbounded loop that calls xskq_cons_peek_addr_unchecked() on every
-> iteration:
->
-> net/xdp/xsk_buff_pool.c:__xp_alloc() {
-> 	for (;;) {
-> 		if (!xskq_cons_peek_addr_unchecked(pool->fq, &addr)) {
-> 			pool->fq->queue_empty_descs++;
-> 			return NULL;
-> 		}
->
-> 		ok =3D pool->unaligned ? xp_check_unaligned(pool, &addr) :
-> 		     xp_check_aligned(pool, &addr);
-> 		if (!ok) {
-> 			pool->fq->invalid_descs++;
-> 			xskq_cons_release(pool->fq);
-> 			continue;
-> 		}
-> 		break;
-> 	}
-> }
->
-> Whenever pool->fq->cached_cons catches up to pool->fq->cached_prod after
-> consuming a batch of invalid descriptors, the next iteration of the loop =
-does
-> not terminate. Instead, xskq_cons_peek_addr_unchecked() in
-> net/xdp/xsk_queue.h calls xskq_cons_get_entries():
->
-> net/xdp/xsk_queue.h:xskq_cons_peek_addr_unchecked() {
-> 	if (q->cached_prod =3D=3D q->cached_cons)
-> 		xskq_cons_get_entries(q);
-> 	return xskq_cons_read_addr_unchecked(q, addr);
-> }
->
-> xskq_cons_get_entries() then calls __xskq_cons_release() to publish the n=
-ewly
-> advanced q->cached_cons to the user-mapped q->ring->consumer, followed by
-> __xskq_cons_peek() to reload q->cached_prod from q->ring->producer and
-> validate it against the updated q->cached_cons.
->
-> Because __xskq_cons_peek() re-evaluates q->cached_prod - q->cached_cons >
-> q->nentries relative to the newly advanced q->cached_cons on each reload,=
- two
-> cases can still exceed q->nentries in a single __xp_alloc() call:
->
-> 1. On a one-entry ring (q->nentries =3D=3D 1) containing an invalid descr=
-iptor
-> address, a concurrent userspace thread updating q->ring->producer in the
-> mmap'd fill ring as q->ring->consumer advances (for example keeping
-> q->ring->producer equal to q->ring->consumer + 1) satisfies
-> q->cached_prod - q->cached_cons <=3D q->nentries on every re-peek in
-> xskq_cons_get_entries(), keeping the kernel in the __xp_alloc() loop
-> indefinitely in receive context.
->
-> 2. Even without concurrent updates during __xp_alloc(), if k > 0 entries =
-are
-> already cached on entry to __xp_alloc() (q->cached_prod - q->cached_cons =
-=3D=3D k)
-> and userspace has written q->ring->producer =3D q->ring->consumer + k +
-> q->nentries, __xp_alloc() first consumes the k cached invalid descriptors
-> until q->cached_cons reaches q->cached_prod. Then xskq_cons_get_entries()
-> advances q->ring->consumer by k and reloads q->ring->producer, where the
-> remaining distance is now q->nentries <=3D q->nentries, causing __xp_allo=
-c() to
-> consume an additional q->nentries descriptors.
->
-> Should __xp_alloc() also bound the number of iterations or avoid re-fetch=
-ing
-> new batches via xskq_cons_get_entries() once the initial batch of descrip=
-tors
-> has been exhausted?
+Correct. If we decide to do anything like that, it should be a
+separate patch for net-next at some later point in time.
 
-Sashiko has a point IMO (let's wait for the netdev-bot tho).
+Thanks: Magnus
 
-The simplest fix I can see, is changing "continue" in:
-
-  |             if (!ok) {
-  |                     pool->fq->invalid_descs++;
-  |                     xskq_cons_release(pool->fq);
-  |                     continue;
-  |             }
-
-to: "return NULL".
-
-
-Bj=C3=B6rn
+> I'll address the remaining feedback and send v3 as a new thread.
+>
+> Thanks,
+> Rongzheng
+>
