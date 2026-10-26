@@ -1,81 +1,81 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793057926;
-	b=Wqm5pSjJ9FCa+QW1rJ6hZK1uu5uXqF+Oe2SUb42d3pEB1EIRadODbhudexUsE1QIsgGq
-	 /dpePD6ZJrd1iPLyJGTmCdt8j3Il8Zqx82VVVY2/QQOpq16x/u92870ip86sP17d1JPwt
-	 hZjMCWXA4SU0aHIP4npwwbZRSMeXJGJtVxEZTGuJQOYU+NfJjk8H87dhZtTLcO+ovb1UU
-	 Nq/mFMlsRnECpCjcjC5R13pR1aOQok140KcRG12JvhvQL6sUnD2bia1AEXgmk3sMXCLq9
-	 rLw+ZcpAGTyAMDPYb6NikZNcuo/i1bNNTdLKaZNRAa6xIGS0jOsc8wvdjiGwiwvRdzg==
+	t=1793057927;
+	b=bLA+ctZSzsDctFnsffAMGlBG5Gb6oqfPGZn1Nm6NDizknAenjUEAyyM/RZ2UQA7OWuli
+	 tej9D2eyfBrKwIoV+xJ24c0XN8V3RFVLTH8etU9QRBc2gniDJ+FK/2NC0uRkEeN8lPhQ+
+	 j0p87Pw2K3pVo45ANhxYps1gC6Yo8KdfN6m156RHtGomJeQ2r2SDUYScFj5zYMo3xqV/B
+	 tzaMwuRWX8+EEn4LQpvFa13JSrEHE6XpLzO/TlB53UK3jQvLQVjAKuQRfS7Sl/omUsMr9
+	 /MxEX0/b/cOCoxUmSlUO8fJxqt4y6rML5sdbniNsylgxqY1iTtb3i3H+zGeN7hOrCvg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793057926;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793057927;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=xBN2DuiySWj8uurezziKoHvD7JfVDhv79BBtT4xBONg=;
-	b=C/RavTEZHtgDff/ufDkbZis6qXeNXfInaWRWi1qfGr8DRhi4Hf7hrmr+caiJKt7iGdXY
-	 b7P6HxUWqvzDyefDsUsGz7iYfA+sFoIdnzaRWoAF2Xu1xSTla4fHsBOmAq6+blVkLhYDt
-	 K+rBBlB83ZDfXwfquuemhdCgh6K1iD3P4QzJLCXKBw6+L2wjUSlmzhzug4OxGnhxdbd/9
-	 Sd+zBsmB+11aRz775+l6R/CUwwhNuCUuQ87L92RuFEhAFFaly2jtolKbcdwsEyeYd3b+V
-	 WqCLyyS0kzP0meI1glDr1OnkKLUvUmu16GYWRLd+7TliMhd7m5AGSt05l3oygc6ImCg==
+	bh=QeYuCkD+BQ4sWswiWmBK3D+JuBl+p2WiTWLZkfp9jxE=;
+	b=liRPEZmSZbohBpavGN1xY2RL4qxfRihJffBTlONE3f7SBLhtqQ+1r62WuEl5BLhaFhk1
+	 GdoNSzzVlo8Rup01jGvSbbAJq9T7x02XQwVVjZ8wZcqFO6QUxeKeM50HLJazlRhoKUHzt
+	 Oeth7GejcC32T0+IttKoE7NNiir7tnyDugBQvbh3kDiz78m0nzMqUpXL6LQtbtmYTIiqK
+	 k/lJ2YxCLYlvczygFPrOWCWWDc96lRNjHqzjdT+H+bj8XM14es/h1KerwsXRIxcupKdBV
+	 KVokeTdv6xnJ8NJg1PDOAqI+IZGixgLjpUqYEAasNQ7wejHYg3jrGxVhOF/ZGNlm8SA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="WBi/O5Rs";
-	arc=none smtp.remote-ip=209.85.210.172
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=A8NSs9xC;
+	arc=none smtp.remote-ip=209.85.216.50
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBFD606A322
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 23:38:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DBFD606A322
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFAED606A31F
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 23:38:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CFAED606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=WBi/O5Rs
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8a058f74a54so1301377b3a.1
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 16:38:45 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=A8NSs9xC
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3acd21ba21aso2778692a91.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 16:38:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793057925; x=1793662725; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1793057926; x=1793662726; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=xBN2DuiySWj8uurezziKoHvD7JfVDhv79BBtT4xBONg=;
-        b=WBi/O5RsKwbnEUzGVaIPek5YllXfTx7jmmOkNlM2A09u/C5xiodlthTh1Vu4xBeLdb
-         2PwimVSde4OR/81xAtMI+5nryKJfqhpCNINzogkzjeInq/974DTd6fvhS4GWi2/OqWrm
-         +QQjcK131nBK4twQfcNcNWJKeHEa3SpQIpeRqMVyjzvKhZTv4onPrr3BKSEWjwgzepvX
-         delxHmLb+IUK5Lf7RjXfAjwc7tn8bAN6XcKDQaz1BUPiAXmN4ZjLz1COtbjKc1gDrwpf
-         YPflky8ixlQwe/ajDk3lsCuQ8lfHI3kZUxKCv6b6tATDp1Unt0puhLHIBd+SSb3RzAZM
-         nJ2A==
+        bh=QeYuCkD+BQ4sWswiWmBK3D+JuBl+p2WiTWLZkfp9jxE=;
+        b=A8NSs9xC5Tniksexwvk91GSeIjwlqPHHPm1sZTXoP3v8m4o3l8i3ZkD2mLPjtri3qf
+         N2fQm5Z2eSZFGhimP6FTL9afm+Ss+gYp83iZh3rkdo3aLqYE6QbdbvkMtfl9Q+AQVUMx
+         kjlO4SEE7jftoCjVkFdy4oNyzHcO5rSXwQYvAGBMyCALoVEiZXIKxnzm01/zE2ljU9P7
+         cRTC3XaUFZeDO0FQitRQ8iNPkbfqIjrV1fx+4CdlMeZ+e1NOQXY+1Q20A5x+87W4rWSQ
+         Kl+wvEfFqrouqHuTfhQofRCmI+PvuTeUXpbzyvMaUtY1IYzm3UHMQGsQPg6MDkHAtsEm
+         1u3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793057925; x=1793662725;
+        d=1e100.net; s=20260707; t=1793057926; x=1793662726;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xBN2DuiySWj8uurezziKoHvD7JfVDhv79BBtT4xBONg=;
-        b=uL5pMYwxCcJ2YAAvO9ir35vBjq4xTYOFXEabmXo/QmKa3HIN6JydAL/2o1qPGCldWl
-         ZoSFmB/49YHjxQTu4RGdrPvLgzOMwc6Di5G3TVucqN5AB2bF0EzaGH4UcjxetmxuPz7Z
-         /CxsFWAh+Tli4yHQArQQltMef3+mGMInpByUd2gVlIp+bOlVSmDwmweVx/Dm2bDRzsxr
-         +EbJXIeFbPzBw6XE9meuMI75O4FyoTjjH7z//HldpLbZo6XdzxrrYyi6+djQBF9DaB+2
-         4ixDFXxsIR5o9cjfTo+qIlShDn254VDYAh8TZVylhrM/59LQgGXiZ19Ieo+S9ppIfVDi
-         4/ww==
-X-Gm-Message-State: AFq9FYLYuZSDKH1GHQAYloBR84M5MxJ6k3Tpv9TDJdjvBM6QzR4jjyvd
-	hgXH0fgyiTcMzKvU1Q+62Mh0xurdfg/X+kEi5GW41nGFiRTLyINx2LXxnj8VhA==
-X-Gm-Gg: AYBFou13p63FzO8bRQlkJCOO6YzJSZSmkVlaJ48yDAMJwo5uetMNq/WGM2acw8urzzz
-	NaFN0TR2xjkrPRwt7kSO+/Yoo2yYncXhL72LnH+K8n9Awo00smEtaHQFx9RO+9CGD+BKu4Axze0
-	vV87DqmM0mpvHd6iJ2GzR7fcb75sUdCC60Ct4lGahkBYC5C3E57YMKcJdyFJ6p86ck2B0Q+8kes
-	/4S06/QkxlKVvcRZCXCfxqby/VAy8zm+PIXnzzmNnEAZ3efuni1qUZXyeqoQLfEMvLUOfI2zWZ3
-	+UX+mDn2R96Yy0+7XtUklu2mbMCAQ1S/0t60o7TJTfwUlIylcYpqentA5oHfBoGEZJ4QYBwbud4
-	6uUx0qrKAWGLNpID6jbgNWUrRwrfEp83Am8Tp1PqiXQSd9wqdzroYLjlVoPZG49sFz6FSKDUb82
-	d4fvo+EUEZIeSCEzAfSr+RR44cAOBoloVurTJIjua4tWJP0FNywiDif/Pn195khEdW4asFLX5Wn
-	XIjPzWC66TwvW8ZCoH/mybAdSMoLhfi0Fn4SuhPc2vbomeTDNvPAspnyXFzAv4YlIwIeoKGRQ72
-	trZlD5P9ieeFZI4gyrqSud4=
-X-Received: by 2002:a17:90b:52c4:b0:3a4:8c41:fab6 with SMTP id 98e67ed59e1d1-3adead50adamr6564040a91.46.1793057925425;
-        Mon, 26 Oct 2026 16:38:45 -0700 (PDT)
+        bh=QeYuCkD+BQ4sWswiWmBK3D+JuBl+p2WiTWLZkfp9jxE=;
+        b=0RVStEIZOapBfcaun60Ndgwsk+Bb3BiUnXqCZgtDkoSrRvXlnBHBcHXDne9IHKukqy
+         loYf1koAv/MCz2WdC+v9pvmdNxlc56vlJ1towTiqdxTRZ9ZWDCuAggywL4gmGhUBS7IF
+         2quArT/WU1rg0hiwfQ4uwDHZqq9xfzU4hEHsJXzTTxnrhExnlohcfRsBGU7wYTI69psi
+         gml8OpPQxlutlX1Afv/XyWHTq6v63TZSt8x+1NXwSHEVJIkoVCk2YArZyCIuYsSyloAr
+         sMLbk/rUFIHPgJB17cFkZUVirccgE+GlA4xE/tMyQbNkDZ8G6aTGbjqKZF4jFHeO7c8C
+         DP3w==
+X-Gm-Message-State: AFq9FYL5QTa21/TvqP3GCkAlumngQFGrRFpddqymlFsJL2rA2o76wAfQ
+	ybfJLFMjFqLj63qQrrWnn4Awn39Sdt9ghChyYMSx4jpZ30yf0eCmmh6re3K1eA==
+X-Gm-Gg: AYBFou19nziHrRTNM3W0ZgY3kw3B6R7N5lj8fmABDwf0MWqgC7H2weoh/ZIG655Qkmv
+	X2MgY75jJQ33OJCj4Oer1Vbr6T+7ZlE0/5tdCnQBJy8agb919ctBkWGUpEG7r13xu/+ugsWakYv
+	cUY++w2YOZmzr23e3FDdqTdylot9Q6ffKujaN4UfnmUqv9HigSdJKGTYExyXQuuF0lGFbCzeDm/
+	2gllyIw7TWev0tYjHZ7NUzW1hEg2QOi3B2xG4glyOR6Mcd6uRTW8CuI3jOK2QiycSs9l7FPfI5y
+	+cCRfYKUU6Q21kDFpYvfIB0srIGc8JzyJtf5rQ+y+wBOcMgxUC2DL9J+k3cJvW0ARJurMAM5UHt
+	HA8ZppG+r6b24jCloYWEqsvO4m2Gc7adFTe0Z6uIhfAcfIDeJfREj4BcRY+KQpqrDOg6caRjurH
+	7IztC4/K0KtaJWO82dmilxm8NjEKLe489pcpfpiYZOxkvY5r0W+NDT5rhaE67wd+7gOPRSaDAz1
+	8LUuw/BZbTL7qc6ffgGbn5ATWV281Ionh2PJdSRxhK3lJLrDKrNzcallluANjFXTalJz+McilKs
+	LguwYTzkYfb6hCV1P/SUG3oEhv5N879iulDAIZfuqSJcCOYCrkCw/EqtbVfdiUb6MjQqAASf
+X-Received: by 2002:a17:90b:2645:b0:3a0:9640:803a with SMTP id 98e67ed59e1d1-3ade9b2ef4bmr7295287a91.5.1793057926238;
+        Mon, 26 Oct 2026 16:38:46 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae40455eb5sm1167437a91.12.2026.10.26.16.38.44
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae40455eb5sm1167437a91.12.2026.10.26.16.38.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 26 Oct 2026 16:38:45 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -87,9 +87,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf v2 05/11] bpf: (zext32 (zext32 X)) -> (zext32 X) SCEV simplification rule
-Date: Mon, 26 Oct 2026 16:38:25 -0700
-Message-ID: <20261026-scev-simpler-clamp-v2-5-f373aec9825f@gmail.com>
+Subject: [PATCH bpf v2 06/11] bpf: print 32-bit SCEV bounds as 32-bit numbers
+Date: Mon, 26 Oct 2026 16:38:26 -0700
+Message-ID: <20261026-scev-simpler-clamp-v2-6-f373aec9825f@gmail.com>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
 References: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
@@ -105,60 +105,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The compiler can preserve an induction variable across a call by
-copying it to a callee-saved register. For example:
+- Print large 32-bit bounds without sign extension.
+- Omit 32-bit bounds when they coincide with 64-bit bounds.
 
-        w1 = 0;
-loop:
-        w7 = w1;
-        call foo;
-        w1 = w7;
-        w1 += 2;
-        if w7 < 10 goto loop;
+Before:
+  loop header at ..., widening r0 to 0x80000000..0xffffffff (s32 0xffffffff80000000..-1) step 1
+  loop header at ..., widening r0 to 0..3 (s32 0..3) step 1
 
-When building expressions for the loop body, each 32-bit move adds a
-zero extension:
-
-        w7 = w1;    r7 = (zext32 r1)
-        w1 = w7;    r1 = (zext32 (zext32 r1))
-        w1 += 2;    r1 = (zext32 (+ (zext32 (zext32 r1)) 2))
-
-The existing ALU32 simplification rules allow recognizing the header
-SCEV for r1 as:
-
-        (zext32 (linear r1 2))
-
-Substituting this SCEV into r7's expression at the latch produces:
-
-        (zext32 (zext32 (linear r1 2)))
-
-Add the simplification rule:
-
-        (zext32 (zext32 X)) -> (zext32 X)
-
-This allows recognizing the saved induction variable in r7 as a
-32-bit linear SCEV and computing the loop iteration bound.
+After:
+  loop header at ..., widening r0 to 0x80000000..0xffffffff (s32 0x80000000..-1) step 1
+  loop header at ..., widening r0 to 0..3 step 1
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/scev.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/linux/bpf_verifier.h                      | 1 +
+ kernel/bpf/log.c                                  | 8 ++++++++
+ kernel/bpf/scev.c                                 | 8 +++++---
+ tools/testing/selftests/bpf/progs/verifier_scev.c | 2 +-
+ 4 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index e3c2220f89c9..12b147faa32a 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -1502,6 +1502,10 @@ static int simplify(struct scev *scev, u32 id, void *priv)
- 		return t;
- 	}
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 5926f13ff43c..e51984cb3035 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1280,6 +1280,7 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
+ 				  u32 insn_off,
+ 				  const char *prefix_fmt, ...);
+ void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num);
++void bpf_verbose_snum32(struct bpf_verifier_env *env, s32 num);
  
-+	/* (zext32 (zext32 X)) -> (zext32 X) */
-+	if (is_zext32(scev, id, &a) && is_zext32(scev, a, &b))
-+		return a;
-+
- 	return id;
+ #define verifier_bug_if(cond, env, fmt, args...)						\
+ 	({											\
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 5432c0fc442b..fa29d9b994e4 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -535,6 +535,14 @@ void bpf_verbose_snum(struct bpf_verifier_env *env, s64 num)
+ 		verbose(env, "%#llx", num);
  }
  
++void bpf_verbose_snum32(struct bpf_verifier_env *env, s32 num)
++{
++	if (is_snum_decimal(num))
++		verbose(env, "%d", num);
++	else
++		verbose(env, "%#x", (u32)num);
++}
++
+ int tnum_strn(char *str, size_t size, struct tnum a)
+ {
+ 	/* print as a constant, if tnum is fully known */
+diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+index 12b147faa32a..04d4962448e2 100644
+--- a/kernel/bpf/scev.c
++++ b/kernel/bpf/scev.c
+@@ -2456,11 +2456,13 @@ static void log_bounds(struct bpf_verifier_env *env, const struct bounds *bounds
+ 	bpf_verbose_snum(env, cnum64_smin(bounds->r64));
+ 	bpf_log(log, "..");
+ 	bpf_verbose_snum(env, cnum64_smax(bounds->r64));
+-	if (bounds->r32.size < U32_MAX) {
++	if (bounds->r32.size < U32_MAX &&
++	    (cnum32_smin(bounds->r32) != cnum64_smin(bounds->r64) ||
++	     cnum32_smax(bounds->r32) != cnum64_smax(bounds->r64))) {
+ 		bpf_log(log, " (s32 ");
+-		bpf_verbose_snum(env, cnum32_smin(bounds->r32));
++		bpf_verbose_snum32(env, cnum32_smin(bounds->r32));
+ 		bpf_log(log, "..");
+-		bpf_verbose_snum(env, cnum32_smax(bounds->r32));
++		bpf_verbose_snum32(env, cnum32_smax(bounds->r32));
+ 		bpf_log(log, ")");
+ 	}
+ 	bpf_log(log, " step %u", bounds->step);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index 9074b2f043d4..2103c58cfaad 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -1771,7 +1771,7 @@ __success
+ __log_level(2)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __msg("loop header at 1, header_count is 4")
+-__msg("loop header at 1, widening r0 to 0..3 (s32 0..3) step 1")
++__msg("loop header at 1, widening r0 to 0..3 step 1")
+ __msg("loop header at 1, clamping r0")
+ __msg("4: R0=3")
+ __naked void pre_cond_je32(void)
 
 -- 
 2.56.0
