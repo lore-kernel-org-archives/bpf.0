@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983792;
-	b=YdK7hcOvO99G2PPUeN/A7Qkaw3M77hjjm/juSyz4O7wpMXgeBtQ70fNiz1EG4dEHkcmV
-	 p8UW/gQ/oHDGVlE7MuyL3VuGQew/8AkqQQVw7H5qUkQmj/dyrCJL1/P7FwG6MYVz8df47
-	 eryZKOIfU9pYGFmJsx7IgZ2u735pOlskUTNgSb5ixX4ohQ4wia76fRYDYyf4pMr5FSfQe
-	 4Ndmasnos9CRLn+39JYR9uDIdHHmekdJy83zRpBuJEx5RaCQOtkofGF85TyzTZbAUinsy
-	 xAyATjJ0g/zwIRwXoBeOkZ1YTGad7fuxDRQxF6ifTwF/vDZKOskkv08RdVPRbHdb0CQ==
+	t=1792983798;
+	b=c9CxPYzYVUQOIQzHnVLz6iH6O7xBAWcXjEwCWEhn4gskaojYt5pLbvHE20esoTBUk/cn
+	 1KfV31WDL949mG/yyKJSyS9+n+eljXomxSq2TgV62RLWn1YzVe7MZ7IJVHihKWrWnkPjW
+	 K0Di0yyqoTIDMyxj+MArFFcTh4rvQ1CFmixL8PBBGTIbF2iLCKI3V5byAOimf3RYqUGjM
+	 1QuhciNqiDVdvC+rFuwCdHMzyDc6701wWI4sxowRLFCCy2lNLjFsK3PMWZn7aw0zzQLvn
+	 PaY4ZLwk3oIO7O6KndGxJIO/ZO85jiAKz4koZ22OpxKvFalk/MshzilvVpt44MoFwMw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983792;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983798;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=VkxrVmebMxgFbej3ZfdH6SHe5ULw8TQfczZIRNHd+D4=;
-	b=JS5rGKemcsRSWoq+KTuOQkShuH5HEyWNmKNCnofzXzYReDsRS4Yzf/h5gpgYQg6R3qfZ
-	 XHjPkOsQWNt00q3g0t3aqR2Qbf+3Vnxvc/H4R3IYPH2dQArxfEBUm0ITKSBSEv2nwF+K4
-	 aomJ84XWquhkvOV46idtcg0yLjfL5LVZt/0BN0YkcbnctU2dofgBLxDtGdaRGXvq8ryOM
-	 U360N4zOOy68DOXaoR8IHoD9z605mTNGZyg/XTI8IgOt72/OaS4RYTuwiTzhnf8YdQ5Ul
-	 QxAJLZ9OlPEG0y3ycZ805ws5S+TSNflLYDXfSMZvLH1wyDtu8BmvEOopTZSU37Y10Rw==
+	bh=+92ktm3QHdCHdyz+QrLzLVEzYuLZZIUcrgNW2L3cgz0=;
+	b=VqpjUIBfqcdBcquNOY24pg4m5WiQEK026HdRuKQ694Q4/fG6yYwupFAasu6n8eeQVuGg
+	 e2eO18T+GKIbmxvEaSqX8qg/2aBuQ3GQSAVXnvsgMLzchpFNEgyfG/SVgyA9vSkkT3L+B
+	 lD0AIa8MKco4MnW4YfkT3EI3UfgoT60Oi/2M3xvAT/luAA9jSosBCg4473oGXCgcasWSM
+	 23h6qIJzlqNqe45GLN4/goNIgq5xkFu1YtPIUbxoztaSMND9UFyoEpqBPtO+TOqTdSuLO
+	 TJoW3bFd1P8nW7Y6scRSz+NMFUwwpfpk9ZxLZg7o9DK6e613/l3jzSCvvxwV97zxQOA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HAMQSpks;
-	arc=none smtp.remote-ip=209.85.215.173
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jpMlDEMy;
+	arc=none smtp.remote-ip=209.85.210.179
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8066E606A31B
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:03:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8066E606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49561606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:03:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49561606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=HAMQSpks
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cd6a7e1f4e4so812636a12.2
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:03:12 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jpMlDEMy
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8a070755c8cso1041097b3a.0
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983792; x=1793588592; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983798; x=1793588598; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VkxrVmebMxgFbej3ZfdH6SHe5ULw8TQfczZIRNHd+D4=;
-        b=HAMQSpksuKdAX1JejcR+5b/f0Lrx51ObKwUTQPs43jaybYxZRthtTptc8atm3tv4+S
-         vkwnKossbdkfTDR1vscAl/jhLURPYhbjiEFShW6adNLcm0Gy4u4iwkjue3gXQUfQgVuK
-         KybmKhdpkqrNQcvcTnkTvV5bDrD5lI/Q4v6kF83oAclpPRI8D2cCk7GFoEwJ0n1FNx6C
-         iH6/Rs2uV47f5D+rXnL4sHdD/J8fqPHAgDIWBYQ88/dGkVW6gAoDXkQZaic7Y7ycXrlJ
-         hlCObTrT6ghNK8WZLR68Z+ByFR7TDClIdKoG+iUu8AH9b6deTu8djJtDNYXen+KNDRP0
-         HOUQ==
+        bh=+92ktm3QHdCHdyz+QrLzLVEzYuLZZIUcrgNW2L3cgz0=;
+        b=jpMlDEMy/TaqJzq7lz4J93Bp5RPDO8IaMWqjwr82uDPpVIyzcpSeENJMXp6lE9ZMnG
+         LFpGVQIi27LcM4T59J1Om5SRPidFQkvPYG6oz+J4tfdbE/9I379QCsOtgjzxutsQmI+6
+         pHa/GFM/oFhK/x2kvZTskqOWxqnbVRweCoqlTePTmkWjHL5vpAWqF1v/vHfSeZHqi91O
+         oqJw89txYA0q1ekNTxen60gejiFZIAYziu0XKRv9l3oUd4+4FzfHLMSYh6b3iNAmKpBl
+         KCRUv6u3d+0/KqEIaEcBvXvTxh8xrz2hONHuO2KBfCwUIhNhk6ooph53yAkRh7Ajtgb9
+         oDwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983792; x=1793588592;
+        d=1e100.net; s=20260707; t=1792983798; x=1793588598;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VkxrVmebMxgFbej3ZfdH6SHe5ULw8TQfczZIRNHd+D4=;
-        b=fwjl5qYH92jbKlHdQRzX0efoNvL9QncJoT4aYVB4TBNBoNyhI2mo8rcqxVEmOgkvBs
-         /lrnEFbEeNudQdfqFuQgJqzF1Brj3L0qAe2NOmK73uSw308yIarDSUOD3edNpwiVGuIl
-         wQWuVctHXuym29K9v7kLR3gNN1ePDCAvd4UtTsEsILAs5YTeEW2p6HLNwnFTW1qppO+j
-         vu4TCllmB2TSORk0wUv2Hw+XSgSELjWYHYizQz+PoULq9bSV451hk+5e0zATFgaMM0VZ
-         xDu21ZWhEopCoB6p6s/J39zGImqO+G4Kuduz9iUjRMya+4d9yMeczE7yNG9WZ7j0DYd1
-         lqHA==
-X-Gm-Message-State: AFq9FYI2w4p5LuZijL5XBSspdkq+6iEmtcLsIjVQE2zTd+sv5uuOvIf6
-	O3W1wYIbEVTq+/9jRBp8WwMxw9VgW9JZ3PPQzBQl4+m+IU4kf3WzdlYkGopRhg==
-X-Gm-Gg: AYBFou0dKXp9zWxL0rubTgTHCRgfcy2rN/tDLCdAI2V2SG2ffmE/W+8f6ijPmrzCe/k
-	U6gq1gAy1Ro4nVyv3SBcQChNluUuxIlDJX5ROjiQH9UbQTkvnzu/0rf8/i2b3HFMWBPcQm1Yhro
-	iAihGKNfjl+OrSWiZjIQlnDldr5s/L1NevhAhECGRxC/yYcH5kmEOrJdaNHrCZMuqWlQqUbXTxG
-	RA6j+DRjWVzOCOt1VN3D2CkTvxj6ITJ33zPc/2yJWwzkO5yhcrIbxGR0cm+x5cj1pQaQy8joBgE
-	meGjA+Tp1K6P5CgAyTxtnKGtR84q6lJS4/Yg0jRJToq89MW/urHagUjnddXSDRyGZsC+DGocu5Q
-	TJInoQGRsHmb1WZ4w11WluQdjHvOT0XVZ+flX48sAvf18SzYvHAX9Mtb/stuYpPxPSf0gFBDIlZ
-	NQW50eefljeDl7L1PHB3ET0nGkSWywL2+fzGVifgFRUk2NVFeEY62sCCkTCtxz0X/JV4UlLcKrU
-	DBqK3HDEO+X8DtNmOWh5P2viNPL1RJQfjkiu8ltUcWkOE3j4chrlu54fXT1QdNEoYSbZhyHH/4q
-	bRQHhlR+kS0ZdjG4Z/W2z50IVD2xviHwkB+K8hMByCUTteCU9k9+w0WsaN6hrF0OBB3i6fVOa7s
-	8aBNnpbKOvirR46nJCAXGWp94rf8j/j1scUaJspMwwS/UEA==
-X-Received: by 2002:a17:90b:58ef:b0:3ad:93b4:718f with SMTP id 98e67ed59e1d1-3adeafcf07dmr4722454a91.65.1792983791707;
-        Sun, 25 Oct 2026 20:03:11 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adec0bcb18sm6341853a91.15.2026.10.25.20.03.11
+        bh=+92ktm3QHdCHdyz+QrLzLVEzYuLZZIUcrgNW2L3cgz0=;
+        b=vbOFDJo2yq8+fRiMPUidYyvtjGpakSBA1mnRiSnkUcrIf61SH2j/vj5ShIRzLWIBXP
+         TZNN3ASDY32rZFXioOiwUg0UJYMLQNOaMKLuOsxQP5UcAkcPrbdroNiXgViPlYI6FEAY
+         PHepkVRMSoxj6khw+M4jJJj/H4fmadATfZfpBOmx+8xDQDjqccVhgy4BgDDB88Ie8hTO
+         SQXrWmnhQG9UYhl79m4/LHPM82hqg6Y2xgu2cDPhvbewObDOzXtIvVysRFtUQkGi75nD
+         UBi0fcV70QuGDT6Tmd6wejGCO95NcRSZAVTuk9wlFP/Ul1liQ8eZ8xfydVMMqshRq+Al
+         Gm0A==
+X-Gm-Message-State: AFq9FYJd+O2wvp7LtfPsD7idtRReenxDGTy3tuJrYRLEdIWudnp1EuCn
+	sgo5ULYF44HXJ9TMYzOY+pRlDyP+6WJPFm20nsY189SlbL00B6oA06PfiU1WBQ==
+X-Gm-Gg: AYBFou2KN8ihgNELKcHoQDH4RRsRLYgjVqmAW5U/GRPIsVQo18b5wTPqN75AXjCKBmH
+	pmes9gI0QymK+yqLd18SRdi4OJnzMDuEfY6XHqVepXpx8a/TT+mc3l7ygIdmg1lcQRCL1pFKoj0
+	bLOZEGc0FIfat/eBuTTlzj0t/VYv6+NxviPkF5cz9E9ahd/Pzp5tL54u0BDO+H598XYdQoNhDSk
+	16/+afo6fHv+HIqzTVIptkFLcJDKHrC9RKH1iOG3PIe/YxFKFZsXato56WSEN6R9ewdSJ6KttN/
+	pE2Beo0EgBcPEBSn/HJS50ljxlYwU4mBJv6JZVI6mYVVzM8l0tstf40VvTI9y+kfgbX7w8kQN9S
+	UIQOZofH31e9IGnimW0Wox2F0ro/NzJ7MkAoSqIWqhkOo4kIC66zw5nWonhpBQWrde0hVVE7gsH
+	Blszt5+cbtWYs7PG/CFiA9jWTLS3odrcDpJ1jwkYuCg10kc98LHrbmIOmnTa0Q0I2accCvnPk5x
+	cIwYvg2yN42LbiVxVflFeYq0xlxo1jQwmnQnr3vi4OKqQLcv0D4hNUd5FIY6YwAQsZ6KpCrzoyl
+	c7CtbDK6JEkVYFosmels9xp9X7UUiIcCfNVGigcUp+Tgwe5FRkkcFzOzm3F6ues4WRUo8cSQJ+M
+	PV9vzSCLMgcvNkm8s4/KUUw3A
+X-Received: by 2002:a05:6300:6bc9:b0:3e0:df81:23e8 with SMTP id adf61e73a8af0-3e7bfa1ef2emr4248338637.24.1792983797493;
+        Sun, 25 Oct 2026 20:03:17 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8ccc46482sm1021566a12.11.2026.10.25.20.03.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:03:11 -0700 (PDT)
+        Sun, 25 Oct 2026 20:03:17 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 35/81] selftests/bpf: Test scalar evolution with a loop bound in .rodata
-Date: Mon, 26 Oct 2026 02:58:56 +0000
-Message-ID: <20261026025943.404450-36-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 36/81] bpf: Helpers don't write through ARG_ANYTHING
+Date: Mon, 26 Oct 2026 02:58:57 +0000
+Message-ID: <20261026025943.404450-37-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,54 +103,53 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The bound of the loop is 10. It is in .rodata, and the prog loads it in
-each iteration, as clang does for a 'const volatile' variable. The test
-expects that scalar evolution calculates the number of iterations:
+A loop can keep its counter in a stack slot. Scalar evolution calculates
+how many times such a loop runs only if no insn in the loop can write to
+the slot through a pointer. For a call of a helper,
+bpf_helper_stack_access_bytes() tells what the helper does through each
+argument. For an argument type that it does not list, it assumes a read and
+a write of any size. ARG_ANYTHING is such a type.
 
-  loop header at 3, header_count is 10
+strobemeta_nounroll1 calls bpf_probe_read_user_str() in a loop. r3 is the
+address to read from, and its type is ARG_ANYTHING. The liveness analysis
+cannot tell if r3 points to the stack. Thus it assumes that the call can
+write to all stack slots. One of them is the counter of the outer loop:
 
-Without "bpf: Let scalar evolution see loads from read-only maps" the
-message is 'non-linear latch at 5'.
+  loop header at 239, can't compute iterations count
+
+ARG_ANYTHING is a number that the prog selects freely, and the verifier
+does not check it. Thus no helper writes to kernel memory through it.
+bpf_probe_write_user() writes to user space only.
+
+Clear may_write for ARG_ANYTHING. Only scalar evolution uses may_write.
+Keep may_read, because bpf_probe_read_kernel() can read the slot.
+
+  loop header at 239, header_count is 13
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/progs/verifier_scev.c       | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ kernel/bpf/verifier.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
-index 61bb39a12de2..c242724686fc 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scev.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
-@@ -1411,6 +1411,29 @@ __naked void widened_reg_is_not_linked(void)
- 	: __clobber_all);
- }
- 
-+const volatile __u32 rodata_bound = 10;
-+
-+/* for (i = 0; i < rodata_bound; i++): the bound is loaded in every iteration. */
-+SEC("socket")
-+__success
-+__log_level(2)
-+__msg("loop header at 3, header_count is 10")
-+__naked void bound_from_rodata(void)
-+{
-+	asm volatile (
-+	"r6 = 0;"
-+	"r7 = %[rodata_bound] ll;"
-+"1:"
-+	"r6 += 1;"
-+	"r1 = *(u32 *)(r7 + 0);"
-+	"if r6 < r1 goto 1b;"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm_addr(rodata_bound)
-+	: __clobber_all);
-+}
-+
- /* The unknown SCEV of an unbound STACK_MISC slot must not prevent widening. */
- SEC("tracepoint")
- __success
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0f2bae1c2305..4752a4619035 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -15088,6 +15088,14 @@ bpf_helper_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 		 * analyzed separately.
+ 		 */
+ 		return (struct arg_access_info) {};
++	case ARG_ANYTHING:
++		/*
++		 * A number that the program is free to choose. bpf_probe_read_kernel() and
++		 * the like may read what it points to. Nothing in the kernel is written
++		 * through it: bpf_probe_write_user() takes addresses of user space only.
++		 */
++		info.may_write = false;
++		return info;
+ 	default:
+ 		return info;
+ 	}
 -- 
 2.55.0
 
