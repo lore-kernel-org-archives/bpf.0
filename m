@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.181
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792983658;
-	b=5M93x0R37zXRNKQ5KnZGs6onhLbHn6aR1ZVhKVrdAtu0ILP4xgqMzOBtmxoZPJCM86XZ
-	 X+upOxNEBWVPL7N0jE7SRtCcIZtK+aDNza7XOp+Dz6m41sbkroH3d8enQ9OJ/QEHLQTji
-	 +aCj507ftEmWdZZX7Plc4NjOTYkTaVFJuTfUZpty8aYmpRhTrzEH1S40krsq13BjA2QUM
-	 9gAWFyvbWDbEgVBMC71GLUMMz8Cjb7xZEONJ54VWz0pqFLyO7HGEX/SmmCqqp4IQplNFW
-	 58DRL29GdKqGL6Vs66F05oLZ4XGqGQEBPUoAzWn1DMKs1hWyOlr4lrE231MXC49u3qA==
+	t=1792983664;
+	b=tMWZy0T0uQYM0g+LwDlq+6Kn0C3vPA0g8Jsp3LP/iu6pz6IQAXlbDPIWSlikgj0pdjew
+	 9FT4SJGniM3H4le18JjObm8Bf1lkujh9S8CaRKQ/sMmcwN11zLsAj4Ewr20zjEEvI9++X
+	 FwXRxWsluQrs81nHHgdWMe+isw9d2kXhBX9zvl3AeoUjFaQ2oATW/8R82kXsCrYc2E7nB
+	 b20Fnz0qBhAU/7vJQ2AX7FkZJrDjFdDsdj49PYW4Ba6EyhkRkOk28h1szrAWEqyHK0Xa5
+	 QZHl1R3EuEq3lEJzG9jKe/p4j8pDN0ThOPuUiRoZT487BPJVi6u8sZTgXQg+xqpxg5w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792983658;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792983664;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=mhnpjz+VjUtv8RruZ2eKApayTeuASjV5rK8+FhxUGMs=;
-	b=SqVr2mOSkyoMFnMvrdZvlqZoymUO4mBLYL4AbimI8z2icNe1pk3eUd4IR2Oe1x51BNAf
-	 ewGWlFwJ1ADbVaIaIHPedfPgb98YseexDuiTj0IE4OGmpfxqrf2VHdbHnkmKmY14Zpj/+
-	 644FOFq+e2eRu5+ErzbCFz7lz+LtyMBz06gaD66Nmt5SrvCRmICtOt9AJJfjju3JAZDXn
-	 sKesWi0QXj226WqWisaQkVhTvprOhRJdiX3+6+jH81khj08qFN2hhY/++84YmIxsG/7aX
-	 k3k9paequ9GcTFNR135Sw5oNtU7sAm4kuWyMTEk96x+LiueL7EsggU4K/wnOn6Icv2Q==
+	bh=rgmF9HegW6smd+h/nAwt+GLlwHXuG96lfDtNG2UnQ2I=;
+	b=mnDytnbfDOk6iUb6LQp3U7HEZ1jWM+xtQ7DFdGoefkYg8pmqZmjr4p6GUfYLmDJsoFUV
+	 ZbD1eGqJjO/rXBmFAkwamvoi9qX2D5QbV569+0SlEDUiUBZQQ8TYm65Jz/bIkRtgPWH+H
+	 rJR3orS52HvthprSqLGsWSLEJntKEFpTaOxYuVaQKsVsJknBPRQtTsRAD7KWWiMi6AEZA
+	 zg2ebWIBAXabEtmb72bO8zL8W1jPki6rZ/uC9jkd+OZfN186KJCgIZgWPxhryqpaOm/n7
+	 b/O8cwnKi9hc9qa19/z8MJmGf5f/vp1zqvLCbYxnGZD6SCv9riKnBw0FDILOFvkAlyw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=i5tYZsyB;
-	arc=none smtp.remote-ip=209.85.215.173
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AyVGi59h;
+	arc=none smtp.remote-ip=209.85.215.181
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104A1606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:00:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 104A1606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D27B606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:01:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D27B606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=i5tYZsyB
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cd8ca57ef64so487575a12.0
-        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:00:57 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=AyVGi59h
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc4dbcf2b85so788376a12.3
+        for <bpf@vger.kernel.org>; Sun, 25 Oct 2026 20:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792983657; x=1793588457; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792983663; x=1793588463; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mhnpjz+VjUtv8RruZ2eKApayTeuASjV5rK8+FhxUGMs=;
-        b=i5tYZsyBcZeQclj740FoxPtI6BeSAAnCmTOsoPnkptgmLIlOoRI0o//MKg7G6niHaR
-         wFJHhwucRw8IIsyYoALFVj4/pTy4YgBLz9E+pGfiKRvkR80wqvCRP7tBj01pZsDRLW7s
-         ARPBhNJXU3QKolp68vrN0gwr5GtTweujr2WUi3pYopJPSwRxDKGkTrLxGL+CTLSUYTfY
-         ivz7/AYeuvLU7iFinTXPEuvvvYZRnTpPDLjXXafPRuozq1y8wssBuiKwSonKhTI+yTwG
-         3AQO+Jd5Jp/HLgGtnJMZEo72sMNDbaN/E6cK/u+u7BCT4vrFCO8yzY7o6MmrXticW7sz
-         5npQ==
+        bh=rgmF9HegW6smd+h/nAwt+GLlwHXuG96lfDtNG2UnQ2I=;
+        b=AyVGi59hld1CKFhK/+k6CXFTAhtg3IpSypRH+7t/E/mFz/Viw4qIG6g1JU/S5k8BDQ
+         CdygKr2+quE01fhDEmh1c3fmLQ3Uow8EGQwoSM2kjFxMjp9zeZPNrkfZyNW7JO0t8jYd
+         RWLbTsMuICpHyKcNov1t+TK+vg8789JZpuOAhE5wkhTCMkRDPTrhNHg0aDIgO62u/xkM
+         Tuxdp96+rGTxWW3vAiiayTiGb/btVRW4EoLoNtZjfN8DxydubfpF7w4PIs86L1Fc6/+C
+         6APOo3NYD234KqjEEk6Jbu9X74f6N9vKnjNYmbLaPp3NkD6oL6g4zvOpZTHJSLwIrHSa
+         W5lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792983657; x=1793588457;
+        d=1e100.net; s=20260707; t=1792983663; x=1793588463;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mhnpjz+VjUtv8RruZ2eKApayTeuASjV5rK8+FhxUGMs=;
-        b=Eg2O3G838ZsbN85QgpaeDMFyKwKrtLTcRTrtDIUoFKSpOo9wgsUQsFQooVnYs9xZJP
-         s4A/kFWgcS6MuQTqr1py65pER0BB77Ey3iTfDAU0SnGYtM/8R7T8Zlt1Ye0fuhF+Fvss
-         ZhBno31vPXv7/939Jbul0MuNNC7lZQ7spkShaEFV+0eVNWTVbwv5gx9IsYpElQ//0JXP
-         VyRaqDAyEeb7+tTK3FVBhh6AdQHxEd8xFkqvKNXglT8ezTr+GfXU2obdX+lsCy9Ptzo6
-         xLGfeNxk9kv4PkIX14lQLY8Y71bMfR6lK2/6bd1kO+5YBo35JNG/OeqNXdC8597BEm8E
-         zi+A==
-X-Gm-Message-State: AFq9FYILvuQOMbSjJbjxeR4EZ4+LzgY0oYgfXFLbNnunh/AU1AT2kfVn
-	4o548scd8EhA4W1CZiwSItVwgpUFry2nN4bboZr1yjeYftgBEjIfKVlAedBG/w==
-X-Gm-Gg: AYBFou1Gu6qn1KB5tBTQKHisQalVCxkD+WlO3/a8DvIfKjXjCWymp+4af687fpFlvGC
-	VQsr9tDxlHaBiz6SmEKeMYifeiaZkpPEAqyYmx4kwhoXpoije9RMx7UU5Zcz7Tj2WSnoIVMv9hK
-	dUOXD1YI22VyKbfFrmD4H+Kldsxl3L3O+ndTymn6226bmSBtNMGbhZkB76NVIOxrKlxYigoF9wV
-	WXJzdszio3E4GInDgFaX1b3Xp3CFLjfDJ4sxHmoyKg/S6PzGD+lGj4S0qZ16ZFpzsYULCba4VDB
-	voZF12SH00safl4l9/CEPzSNAvQLafZ4FFHj2jx5jE4Gf5Q95RCeMKgadw4Pdr+bX/oJxC5VsKr
-	Jwv8fIsMA6Q/g2yvH+Xgo+Tw4w+OSf7YLt4/ntS3SuIUz45kxc7UEVJPyft7XJ4jHQ3KtDf1vMC
-	GiIdwvzcxatwDHxjUtaPrRy4lmn3/RkYKcjMTQQz0GD/Sxo82PYA8hjjUx017jWQi9qNtD5ijF+
-	HqaTmt1oG27W9DAXeJQwk85gBRJPoTQZVHv7Se4MGFBctshqaF7DcWjOSHUEp6NMuwif+DCk/LU
-	RVrrDoBp9PzMa/1LcZhDPQXXCzUb2xm+/jy1HrdAxyybHbVgH6d0z193JBLSGjEQaHltBvqlVRc
-	U2qFVcHdl+eSIZyDNwnoMYkMf
-X-Received: by 2002:a17:90b:3bcf:b0:3a6:e159:a229 with SMTP id 98e67ed59e1d1-3adeb130d99mr3063234a91.49.1792983657332;
-        Sun, 25 Oct 2026 20:00:57 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adec0bcb18sm6335989a91.15.2026.10.25.20.00.56
+        bh=rgmF9HegW6smd+h/nAwt+GLlwHXuG96lfDtNG2UnQ2I=;
+        b=xEFSksN4Kzi9l9sbo2J8LGHd3M5klbbH+aSt+wqkmLSEsTBwgDqaKeYp+JiaAeoSF8
+         40myStfSpyEb5P1S7CNurEWA4TNBgC4QmdX2uVMWgF2udhA15xcelA+28txS2iyTnL0h
+         b86Ya/6oFfIFX9Akv8GBq5dnkV44gWPbuS5l/NmjYjbYtBA/wkkgv3tqLVCnpwhWWuAo
+         TwLDxwiUPPw5MFzYLb0laQAVr6dc9ySWnFKMtnvmT3PjDbCHSzu74cTurAAwtLIkzUCa
+         VRzLhUDXNlPfVr9d56NAY7ob4kJLAaBE5IjAPKDebDK/W8F0/S0TXI00coxgumIro0re
+         TwEQ==
+X-Gm-Message-State: AFq9FYIUyYLLXIfdU6qWeQoiirVKISrKyJgcmrLtlnjB9aehCQudj528
+	f6ss/vrtT8L2LyrsuNmdvnX40qNSDAAziHe1GYPwouGRxlIqGMvaPsoUhK9DLg==
+X-Gm-Gg: AYBFou3m8fMzRcN8LUP2nRHYl0wKvU8GBBax9XxcZAboR0370jd/V2h4R8E/xuQWSPv
+	QZM/mhY18sOM4wRb0kenfpQewjBleZb3Vsg+53DolXPASfAZo7MuDDRTJi6yjdSgIHbd5mGVvDl
+	rm/h7IAdaz8Ss4KkrPCVDfBBeH271PBEiTvxPZmwUYvBGjVh71k7X1IqP1rMH/6YB0GcXPjDxl3
+	1Dx6iuDVe91F5HjdtqnMKxMuj/rVq7G5+tMA79npRxwAlXSo1Aait2j0lxVtDE5p4s/IIpELuVF
+	tQGROx+Mi0d+YRr02cIIDskIzoIAWr4Fivpf9fVtAIGR6CD/iJptpSu5JNCaf8KxIWVdhdCnBdg
+	IVslmGfXfsubheSI/OeIRjcvOs248QHCsrF0MOm0IaKECoB2Wad0Z7uLptw4vV1pZhX/Ei7SaDp
+	sDpwAPV2ahExR0alFlFZ7JUuJu7enaskBmcT1t+nH6xuQascajudTh+Cxlw9LzjHSPscLJAF8Dq
+	mn8MiCG3JWxUdCxi6cbFU+8yOGsFmrUZRpYQN3wXHfcnnbcqRxSAsnZTLbMU1VqpcUifwRG6U8m
+	+ZDQ7fTv2WsVTOqOUvd+f9jBBGWCvG+iZTLhXhwWTZMwFqb1v4PTlts5+DwKJt+XTeUBmfUAeaI
+	oijpISgQ3gFZk4IlJcx+UkgmuMlHliv8TxoINq6wYWRYPjg==
+X-Received: by 2002:a17:90a:d2c7:b0:3aa:f4af:1e0b with SMTP id 98e67ed59e1d1-3ade9a35e82mr4846112a91.8.1792983663208;
+        Sun, 25 Oct 2026 20:01:03 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebacbf5fsm6544928a91.6.2026.10.25.20.01.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Oct 2026 20:00:57 -0700 (PDT)
+        Sun, 25 Oct 2026 20:01:02 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 12/81] bpf: Don't widen a pointer to a buffer in scalar evolution
-Date: Mon, 26 Oct 2026 02:58:33 +0000
-Message-ID: <20261026025943.404450-13-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf 13/81] selftests/bpf: Test a loop that moves a pointer to a buffer
+Date: Mon, 26 Oct 2026 02:58:34 +0000
+Message-ID: <20261026025943.404450-14-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
@@ -103,59 +103,54 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Scalar evolution widens counted loops. Since that change the verifier
-rejects a loop over the per-cpu values of a map element:
+ptr_buf moves one pointer to a buffer until it gets to a second pointer. It
+never reads through the pointer. It loads only if scalar evolution widens
+the pointer, and that is no longer the case.
 
-  SEC("iter/bpf_map_elem")
-  ...
-  for (i = 0; i < n; i++) {
-          out[i] = *(__u32 *)pptr;
-          pptr += 8;
-  }
+Change it to the loop that real progs have, for example
+bpf_iter_bpf_percpu_array_map.c. It counts in a register and reads through
+the pointer in each iteration. Without
+"bpf: Don't widen a pointer to a buffer in scalar evolution" the verifier
+rejects it with "invalid variable buffer offset".
 
-  loop header at 12, widening r2 to 0..56 step 8
-  R2 invalid variable buffer offset: off=0, var_off=(0x0; 0x38)
-
-pptr is a pointer to a buffer (PTR_TO_BUF). Scalar evolution replaces its
-offset with the range over all iterations. But __check_buffer_access()
-accepts only a constant offset. Thus a prog cannot use a widened
-PTR_TO_BUF.
-
-Do not widen it. Then the verifier verifies the loop one iteration at a
-time, as it did before.
-
-  loop                              before SCEV  with SCEV   this patch
-  --------------------------------  -----------  ----------  ----------
-  counts in i, reads through pptr   loads        rejected    loads
-  counts in p ('p < end'), no read  1M insns     loads       1M insns
-  counts in p, reads through p      1M insns     rejected    1M insns
-
-The verifier cannot decide a comparison of two pointers to a buffer. Thus
-it follows 'p < end' until the limit of 1M insns.
-
-bpf_iter_bpf_percpu_array_map.c and bpf_iter_bpf_percpu_hash_map.c have the
-first loop. They load today only because they also add up the values.
-Scalar evolution has no formula for the sum, and in that case it widens
-nothing.
-
-Fixes: 6ccf49f79327 ("bpf: Use SCEV to widen bounded loops")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/scev.c | 1 -
- 1 file changed, 1 deletion(-)
+ tools/testing/selftests/bpf/progs/verifier_scev.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-index b321bfee36c5..4266651e3fe4 100644
---- a/kernel/bpf/scev.c
-+++ b/kernel/bpf/scev.c
-@@ -2377,7 +2377,6 @@ static bool is_widenable_reg_type(const struct bpf_reg_state *reg)
- 	case PTR_TO_PACKET:
- 	case PTR_TO_PACKET_META:
- 	case PTR_TO_MEM:
--	case PTR_TO_BUF:
- 	case PTR_TO_BTF_ID:
- 		return true;
- 	default:
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scev.c b/tools/testing/selftests/bpf/progs/verifier_scev.c
+index c41f33ee6c70..504cf8230625 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scev.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scev.c
+@@ -3255,21 +3255,23 @@ __naked void ptr_mem_other_reservation(void)
+ 	: __clobber_all);
+ }
+ 
++/* An access to a buffer at a variable offset is rejected: the pointer must not be widened. */
+ SEC("iter/bpf_map_elem")
+ __success
+ __log_level(2)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __msg("header_count is 4 ")
+-__msg("widening r6 to 0..3 step 1")
++__msg("can't widen r6, expr is (+ r6 8)")
+ __naked void ptr_buf(void)
+ {
+ 	asm volatile ("					\
+ 	r6 = *(u64 *)(r1 + %[value]);			\
+ 	if r6 == 0 goto 2f;				\
+-	r7 = r6;					\
+-	r7 += 4;					\
+-1:	r6 += 1;					\
+-	if r6 < r7 goto 1b;				\
++	r7 = 0;						\
++1:	r0 = *(u32 *)(r6 + 0);				\
++	r6 += 8;					\
++	r7 += 1;					\
++	if r7 < 4 goto 1b;				\
+ 2:	r0 = 0;						\
+ 	exit;						\
+ "	:
 -- 
 2.55.0
 
