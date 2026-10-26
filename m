@@ -1,75 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051574;
-	b=5e9DMkTrgcOgWqb/7k3KRhJcNQYbdaVmXu47fGbmYIPi7TjgeK5zlYxGNd6lnw8HKVfu
-	 Dp/V8xGRwoIyI+p1SDNQxavVZqcdX5bdMhp9jGCnNu5sCoxEINSZmfTonLoj2Gyw1JgF9
-	 P1PewFmhsS7J5p76joY1HiRBIctUghjemwyu25v/MYxTGWyZLTDl/znVVTlxKovSI10Sa
-	 BEH4kuvRAg476qxMftHgNlHicM7YeBziakeiPPVNOlahKqVyR2EdN/3iH0KPwxfih6856
-	 eyUioqyZA+LGafrx/uMSYX5eqEQgapOFLpXs6OYeBFN62ycaBkpkfJxTB8gfAyHLlSw==
+	t=1793051769;
+	b=KVY5qDnspsB0WAZ57tgeYjrn7rf7a1kMrhc0OIj6xedpxUSKzQ3eWPYBi/70D75I8QL6
+	 INWGY2dugDDmgxh/6S/dQc+MmjYxMmmZMorvIYaNRaVlfe3uvKlECd13ZxHlq6QTgw7Hr
+	 xxPDY6Ep/wddiqz1QMhJk8KYhnL24kPUl1i9GHL0LK8R7DhnJazMwgJrAZPqsqaH8Gj4U
+	 93dkwazAzoCAJE2dv//pZhQzuYhjWe0OZUDT+3ZAluYgzoORO2yxXyGpa2cCAUDr/P6/L
+	 p/huF23WeXLlU/f6k9eJ+lmqcXrpHobLkP/eQzUt+OF/O3uxuEw9r99mV8CNFtbGg3g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051574;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793051769;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=cYBRYm53aIgyLidEi/RI31/ngJcANLPfjWm3HzPNi4M=;
-	b=KaTKpqoG7o5AvqPavO8o5mpi4U4xYxtTGTD4XUxYGafcMCiAHutjiUYE06lZiMFGf+Jh
-	 9pLVjAK8zw5ibwJKW4lxIhpFP17zuAHdX8O0/4KCLmP50cOQcPa/LefOgYLArFOOtZjL8
-	 YmS0gdVQR+fsPd6f5lOIE02EoaAChvJfeUpTS2FJCt8H8dDSlqHAfvg9cAlsd10RZJv41
-	 ofMU2KjFXPMQIDm4wMxGYXFuhffIefGLWydNEz6JtBAU5xQ1nPFjPG2O+P379BrtlgPjI
-	 JHgQQHa3OYN14OCzGMUtxnFVKGZUGX/sa4cWUnxvEr3Es8k9AA96AjiA01urCn8im6w==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=MCaOqkvghFdjPjEBy1YWJcxG17ikaMSWnkn1If8Ln38=;
+	b=GYhkiacng+jj17qSE2JwpOu0fOq8SuvrVXoBzbub//td8LUfYqI5DywR0Zr0gdPW5mCk
+	 oE+Gyum/gXBs5v1xviGJ2fCj2vWpFNtDNdLYP6Nj/Mxk7oTIwA0XL07eyq2Mlw1WrcaCy
+	 ifwSZ9NUlHP5dBerqN1FC34MjGQcX/tSj2u2T2aV3dTu7MmouJ4eveObSjR3qsFMxIEJx
+	 9SIpRoYaO0+M5JA6/cg1WgQB0EtLLNyVHJSMiP2QuCUpqvwlaV3PqJGboBCJfhFcBC37A
+	 WUdtXbm5qL6Cx/0PoqFiGcALdcfOKM7qBphjswBEL6eVL4oF82BhC6Id8CxVnyiiTiA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=CvG0Fy7g;
-	arc=none smtp.remote-ip=209.85.216.69
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	dmarc=pass header.from=bobrowski.net;
+	spf=pass smtp.mailfrom=bobrowski.net;
+	dkim=pass header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=r6qzBHbJ;
+	arc=none smtp.remote-ip=209.85.214.174
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB81860A2617
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:52:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BB81860A2617
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0512D606A31A
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:56:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0512D606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bobrowski.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=CvG0Fy7g
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3ad704d4760so3182807a91.3
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:52:53 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=bobrowski.net header.i=@bobrowski.net header.a=rsa-sha256 header.s=google header.b=r6qzBHbJ
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e942864693so18398035ad.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 14:56:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1793051573; x=1793656373; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cYBRYm53aIgyLidEi/RI31/ngJcANLPfjWm3HzPNi4M=;
-        b=CvG0Fy7gZIv2FTt2FLi/I4EtmhrrdDUp0LMHK2e4OFiGbeZTP3anWci5lM/QVrw/H/
-         vjprgqeI7Qf9DFSiI1EjYmA+NS+U8yLIMnl0OtrbcRYf5Yx2EdFq4bQctlNGf9haYRxk
-         zNOY3needT5Dpogs2gFazhUPqrGCvlqBMur+MB6IXA8lRBX5MJRSdMIgYwVgDWxC+xVD
-         /gOzfwe4ZxDGF2x8WsA3INU3jvJi5tteYqQn27Fg8BipvdjcomyZJXXlXk3f8l341y6c
-         eOkADpgnRFASfGK7dklKQl3bIpeDuRbf+lJ1Y+nNaXwWEPiWKf9RujwO8Uw/gehBi/kO
-         jo5A==
+        d=bobrowski.net; s=google; t=1793051767; x=1793656567; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=MCaOqkvghFdjPjEBy1YWJcxG17ikaMSWnkn1If8Ln38=;
+        b=r6qzBHbJ+Y6VySD4piiJQaxG3nmkcim5EedbVvJDLrFKh/z/zfWGVfhzESZgtJcOTT
+         mOo5hPQeKtOllDCqHQ+bRmmdG88imPwjlx7DaOoM0KaMz1KXsKT7apGPB22NyoerYTZQ
+         /4vIHuibqhucsMEMxk6fldlNHvt+fNxp1ovjKGI/eW/I63Ib5IBoE4CjQEJudyO76Wtf
+         1D4vXfgdUVq64lyBYfYwd63VG89p4VOSXiOVGnpeaDouPGJAbGZiYCtI1VTyrXIr7v33
+         A771pKw10Qc39HU/IR1PbeHnB+RlD52C7qD/1DVFZS4Ju3IhXtUDcV290iNJz9ZhBNR4
+         wpoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793051573; x=1793656373;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cYBRYm53aIgyLidEi/RI31/ngJcANLPfjWm3HzPNi4M=;
-        b=KrKrfi58N0zzdECP2OzI6WgK+GHaxVTagiyJsX632P0QoXdoMuioWVv/QJtIbXoCyf
-         hVcVrNK5AixcY5YDZrKELb32aIL7fh3Hl/tdT1D0m4V0wP7D1tPxhn2hGxQyJ9QApfdN
-         RJecgxgTBUIdkxqtMMu4pCk9iR3Dq2IqA2cxY2T8SO4XQSk81YK0u2tyNXj1TvgrpifH
-         7ugdyri7a9y+av1cSooS/fxhyLHUdv+LgItk1RAj7vrREPdcuAHK78gdDZEq1lgb07D4
-         51sXVV4QiDKlV/j1N9Q/Ks7UmCrPoHBLJkchOjLhbLmpBAmpwHYOqbyw8rbxlp07qjFD
-         oeWA==
-X-Forwarded-Encrypted: i=1; AKwUvBxPOEXOXcu55PCKf+Y7XwBDeTzjoInNuRLkvi5F2ylZ2ulN4Ao0xCS772LvUmRc2WisRHM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJr14BXmnMae2kf1jFl/N+/UCuWJ0kUqEIFv+sNGUaczg7D3V15
-	Q7pLDnQ2Vi20VEfdp0Dl4tmVJPjGLhky8UaIOamcQKspbMrC8s8FAzeWeMDKtZ19ZXFYWnlrZd4
-	+GHVP4oq6L4IAheDVoWd1dw==
-X-Received: from pjst21.prod.google.com ([2002:a17:90b:195:b0:3ab:3d7f:6c0c])
- (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3ec7:b0:3ad:3715:d21 with SMTP id 98e67ed59e1d1-3adeafb0481mr6464242a91.49.1793051572848;
- Mon, 26 Oct 2026 14:52:52 -0700 (PDT)
-Date: Mon, 26 Oct 2026 21:52:22 +0000
-In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
+        d=1e100.net; s=20260707; t=1793051767; x=1793656567;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MCaOqkvghFdjPjEBy1YWJcxG17ikaMSWnkn1If8Ln38=;
+        b=TCRVNWeqgTb2Wm2KZmNannj+C8P8F5NvBAWkXvRa3TTZTdNN7ebmJlJYHD9Bdq3gGl
+         VQqJzN8luFXaW6t+MPiXwr9NYgrBO72nv9RC2kqAT6KSAEjeol2RreFz77NABR1XI1n6
+         92Vf8vNfEkLyDjhEBoc+q2XJaN9uLkRXuyBSDQ1XBK1U5G5PW/offJ/1KfQiK6qBIVTI
+         TcO3auhFMo9aXN42/bcAMgF5w3O4//HDSZMV+sQafSsrtfafzj9jPYP0/87gbMQMdoKU
+         mFxfkddJbxJBcdg8TX8xDoV0X+eGnmoionjmuPT2aSNUmZOAh4hAF3Ys2N/AKNF9j2aX
+         zxyg==
+X-Gm-Message-State: AFq9FYJndvSZ8kJ9dU/2N5y2ayeK00eRQK32L9AeJZuD4e12Cr2CcUVn
+	NP/HWsI/pUPCe3ymktY0uPDfyQFKbqJG0W51vl63UpuYX/v+w3duE+UFgSWPDD3nCn1k
+X-Gm-Gg: AYBFou0E2brOsF2Lq646tbMbAEBL/8EACnQG0l2Jw4xkXGzjoqxWONo35ViQgF7NYlb
+	DCmI+tVr6G6LQvys0hNvUBYYVyXtf8+M0EKegbPIhBvnxUKHIYOKIs7WJjf1BDs1Ko0+PAzzfLT
+	42giymAqvyHD259EfjSHXQOd4xy85H82SgZ67B7FdULxbFWunVZ1cyZ+4CA/ItKopwW7X+oZi85
+	eldz1ElEOOdz74dMHVcI3WKhInGeNW425OokkcEbPmGJfvtATdoYEpuVVxDqgpwZwx2RfTQIbvO
+	S1mu4rFI0mCs+aJp51Mud7SPHUtS9wp2KeqawBooops2QCA8AKY5vSEbCIluLQPQD/rbR9+TZDc
+	2tFyk1mNtFqJl0MYVr+4sd3PBPyhEL57uf9NGhUz2CXXv9vtxFJL+gOR1sNpfWay86YBohVtLT3
+	PFGrBDafssiiwahiI2UxfdrGTCDYek4FE6g3qZkfC4KY79EZphT+8CSsQiORSSbtpKLgigMYSlT
+	EHauzdcQbROKh+vgQorlYnEXbsconBfCJEvfwUvLF3Og9R9s68cq3I6tagkj2YEXKmIcZu1/xqs
+	76GwliQLbKOp1DR0D1Qhc9210RoAggkESA==
+X-Received: by 2002:a17:902:db0f:b0:2df:9a7e:d41f with SMTP id d9443c01a7336-2ea9c8740edmr75437265ad.41.1793051767231;
+        Mon, 26 Oct 2026 14:56:07 -0700 (PDT)
+Received: from lima-development (163-53-146-70.ip4.superloop.au. [163.53.146.70])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6455a00sm1186455ad.2.2026.10.26.14.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 14:56:06 -0700 (PDT)
+Date: Tue, 27 Oct 2026 08:55:57 +1100
+From: Matt Bobrowski <matt@bobrowski.net>
+To: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	linux-fsdevel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: fix crash in bpf_path_d_path() for
+ exiting tasks
+Message-ID: <at_MbcW0OlciNLrE@lima-development>
+References: <20261020105014.97985-1-matt@bobrowski.net>
+ <20261020105014.97985-2-matt@bobrowski.net>
+ <DM9VJTFJGVXB.3GH9LO3NGV5PO@gmail.com>
+ <atiawbBo6WRPA6QA@lima-development>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,187 +109,100 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261026215226.3713941-1-jthoughton@google.com>
-X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
-Message-ID: <20261026215226.3713941-7-jthoughton@google.com>
-Subject: [RFC PATCH 06/10] uaccess: Refuse and warn on user copies when
- current->mm is NULL
-From: James Houghton <jthoughton@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jim Mattson <jmattson@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, David Sterba <dsterba@suse.com>, Chris Mason <mason@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <atiawbBo6WRPA6QA@lima-development>
 
-Accessing user memory from a task that has no mm is always a bug. This
-can happen from a kernel thread that is not using kthread_use_mm(), or
-from a task that has already gone through exit_mm() (e.g. when the last
-reference to a file is dropped from task_work at exit). KVM has had
-bugs of exactly this kind, and other drivers may have them too.
+On Wed, Oct 21, 2026 at 09:58:09PM +1100, Matt Bobrowski wrote:
+> On Tue, Oct 20, 2026 at 06:24:42PM +0000, Alexei Starovoitov wrote:
+> > On Tue, Oct 20, 2026 at 03:50 AM Matt Bobrowski <matt@bobrowski.net> wrote:
+> > > Fix this by returning -EINVAL from bpf_path_d_path() when current->fs
+> > > is NULL. Only the task itself clears its fs, in exit_fs(), so the check
+> > > cannot race with that.
+> > 
+> > The crash is gone, but so is the path. file_release progs will get
+> > -EINVAL for every file that a task still has open when it exits.
+> > 
+> > It also breaks what works today. The d_dname branch in d_path() returns
+> > before it looks at current->fs, so at task exit a pipe or a socket
+> > resolves to "pipe:[123]" now and to -EINVAL with this patch.
+> > 
+> > And it's not specific to bpf. The comment in fs/cachefiles/namei.c says
+> > that current->fs == NULL in do_exit() breaks d_path() called from ext4
+> > open.
+> > 
+> > can we fix it in d_path() instead ?
+> > With an empty root prepend_path() goes up to the global root, the same
+> > way d_absolute_path() does. Then the check in bpf_path_d_path() is not
+> > needed and the selftest can expect the path. A chrooted task gets the
+> > path from the global root, but it doesn't have a root anymore.
+> > 
+> > Something like this (compile tested only):
+> 
+> Prior to sending out the fix, I also considered addressing this directly
+> within d_path(), much like you've proposed here, but decided against
+> it. d_path()'s contract is to build a pathname relative to the current
+> root. It does fall back to a root-independent name when the path isn't
+> reachable from that root, but that fallback still presupposes the caller
+> has a root to measure against. An exiting task past exit_fs() has no
+> root, so d_path() has no correct answer to give in that state, and I'm
+> not convinced we should invent one for it.  That's what
+> d_absolute_path() is for.
+> 
+> You're right that my patch regresses the d_dname case though, since
+> pipes and sockets resolve today without ever looking at current->fs.
+> Rather than replicating the d_dname check in bpf_path_d_path(), which
+> would mean duplicating VFS logic such as the mounted pseudo-inode
+> special case, I think the cleaner fix is to move the "no root, no
+> answer" check into d_path() itself, after the d_dname branch:
+> 
+> 	if (unlikely(!current->fs))
+> 		return ERR_PTR(-ENOENT);
+> 
+> That keeps d_path()'s semantics intact, keeps pipe:[N] and socket:[N]
+> working at exit, and turns the oops into an error for every caller,
+> including the ext4 open path you mentioned. Nothing that works today
+> changes behaviour; only calls that currently oops are affected.  Callers
+> that want a name in that state then have to choose one explicitly, which
+> I take to be Al's point.
+> 
+> For BPF, that choice could be a new BPF kfunc wrapping
+> d_absolute_path(), so programs can pick whichever semantics they actually
+> want, and file_release programs that need a name at exit get one whose
+> format doesn't depend on how far the task got through do_exit(). I'd
+> prefer that over silently falling back to d_absolute_path() inside
+> bpf_path_d_path(), which would return chroot-relative names before
+> exit_fs() and absolute ones after, and still wouldn't help pipes and
+> sockets since d_absolute_path() rejects internal mounts.
+> 
+> Al, would a check like the above in d_path() be acceptable to you?
 
-Such an access does not reliably fail. The user portion of the address
-space belongs to whatever mm happens to be lazily loaded, if any. If
-the access faults, the fault handler refuses to handle it and the copy
-fails, but if the page is already mapped, the copy silently reads or
-writes another task's memory.
+Al, what do you think about what I've proposed above?
 
-Add uaccess_should_fail(), which combines the existing
-should_fail_usercopy() fault injection check with a
-WARN_ON_ONCE(!current->mm), and use it in place of every
-should_fail_usercopy() call. The user copy is then refused as if it had
-failed, so no access to user memory takes place.
-
-This covers copy_{to,from}_user() on all architectures, including the
-masked user access paths that never call access_ok(), and the
-__copy_{to,from}_user() variants used by KVM's guest memory accessors.
-It also covers __copy_to_user_inatomic() (and so copy_to_user_nofault()),
-the user-backed iov_iter copy routines and strncpy_from_user().
-
-Paths that never called should_fail_usercopy() are not covered, e.g.
-__copy_from_user_inatomic(), copy_from_user_nofault(), strnlen_user(),
-get_user()/put_user(), clear_user() and unsafe_*() accesses within
-user_access_begin() sections.
-
-Signed-off-by: James Houghton <jthoughton@google.com>
----
- include/linux/uaccess.h | 27 ++++++++++++++++++++++-----
- lib/iov_iter.c          |  6 +++---
- lib/strncpy_from_user.c |  2 +-
- 3 files changed, 26 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index eddbbb65ccc4..8ab24e706a22 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -50,6 +50,23 @@
-  #define mask_user_address(src) (src)
- #endif
- 
-+/*
-+ * Return true if a user copy must not be attempted, either because a failure
-+ * is being injected, or because the current task has no mm.
-+ *
-+ * Accessing user memory without an mm (e.g. from a kernel thread that is not
-+ * using kthread_use_mm(), or from a task that has already gone through
-+ * exit_mm()) is always a bug: the user portion of the address space belongs to
-+ * whatever mm happens to be lazily loaded, if any, so the access could
-+ * silently hit another task's memory.
-+ */
-+static __always_inline bool uaccess_should_fail(void)
-+{
-+	if (WARN_ON_ONCE(!current->mm))
-+		return true;
-+	return should_fail_usercopy();
-+}
-+
- /*
-  * Architectures should provide two primitives (raw_copy_{to,from}_user())
-  * and get rid of their private instances of copy_{to,from}_user() and
-@@ -114,7 +131,7 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
- 
- 	might_fault();
- 	instrument_copy_from_user_before(to, from, n);
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return n;
- 	check_object_size(to, n, false);
- 	res = raw_copy_from_user(to, from, n);
-@@ -138,7 +155,7 @@ __copy_from_user(void *to, const void __user *from, unsigned long n)
- static __always_inline __must_check unsigned long
- __copy_to_user_inatomic(void __user *to, const void *from, unsigned long n)
- {
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return n;
- 	instrument_copy_to_user(to, from, n);
- 	check_object_size(from, n, true);
-@@ -149,7 +166,7 @@ static __always_inline __must_check unsigned long
- __copy_to_user(void __user *to, const void *from, unsigned long n)
- {
- 	might_fault();
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return n;
- 	instrument_copy_to_user(to, from, n);
- 	check_object_size(from, n, true);
-@@ -167,7 +184,7 @@ _inline_copy_from_user(void *to, const void __user *from, unsigned long n)
- {
- 	unsigned long res = n;
- 	might_fault();
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		goto fail;
- 	if (can_do_masked_user_access())
- 		from = mask_user_address(from);
-@@ -195,7 +212,7 @@ static inline __must_check unsigned long
- _inline_copy_to_user(void __user *to, const void *from, unsigned long n)
- {
- 	might_fault();
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return n;
- 	if (access_ok(to, n)) {
- 		instrument_copy_to_user(to, from, n);
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 2072c04e99d0..3d6ecb50d778 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -17,7 +17,7 @@ static __always_inline
- size_t copy_to_user_iter(void __user *iter_to, size_t progress,
- 			 size_t len, void *from, void *priv2)
- {
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return len;
- 	if (access_ok(iter_to, len)) {
- 		from += progress;
-@@ -33,7 +33,7 @@ size_t copy_to_user_iter_nofault(void __user *iter_to, size_t progress,
- {
- 	ssize_t res;
- 
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return len;
- 
- 	from += progress;
-@@ -47,7 +47,7 @@ size_t copy_from_user_iter(void __user *iter_from, size_t progress,
- {
- 	size_t res = len;
- 
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return len;
- 	if (can_do_masked_user_access()) {
- 		iter_from = mask_user_address(iter_from);
-diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
-index 5bb752ff7c61..565b3125e752 100644
---- a/lib/strncpy_from_user.c
-+++ b/lib/strncpy_from_user.c
-@@ -115,7 +115,7 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
- 	unsigned long max_addr, src_addr;
- 
- 	might_fault();
--	if (should_fail_usercopy())
-+	if (uaccess_should_fail())
- 		return -EFAULT;
- 	if (unlikely(count <= 0))
- 		return 0;
--- 
-2.56.0.307.g5fe7bd680c-goog
-
+> > diff --git a/fs/d_path.c b/fs/d_path.c
+> > index c253090..ea49d33 100644
+> > --- a/fs/d_path.c
+> > +++ b/fs/d_path.c
+> > @@ -265,7 +265,7 @@ static void get_fs_root_rcu(struct fs_struct *fs, struct path *root)
+> >  char *d_path(const struct path *path, char *buf, int buflen)
+> >  {
+> >  	DECLARE_BUFFER(b, buf, buflen);
+> > -	struct path root;
+> > +	struct path root = {};
+> > 
+> >  	/*
+> >  	 * We have various synthetic filesystems that never get mounted.  On
+> > @@ -284,7 +284,9 @@ char *d_path(const struct path *path, char *buf, int buflen)
+> >  		return path->dentry->d_op->d_dname(path->dentry, buf, buflen);
+> > 
+> >  	rcu_read_lock();
+> > -	get_fs_root_rcu(current->fs, &root);
+> > +	/* Past exit_fs() there is no root to stop at, go up to the global one. */
+> > +	if (current->fs)
+> > +		get_fs_root_rcu(current->fs, &root);
+> >  	if (unlikely(d_unlinked(path->dentry)))
+> >  		prepend(&b, " (deleted)", 11);
+> >  	else
+> > 
+> > pw-bot: cr
