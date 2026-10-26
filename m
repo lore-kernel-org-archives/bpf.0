@@ -1,54 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.187
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793046652;
-	b=0AVQjg6BGeUxXjnxDOU84VveUb8hUVtX5ned4pYfcFoR1tAbGfuMbrt7Cm2xIq3huvWC
-	 013W/vYJMEyIMxMwFbsX2yED69TBqBRpj7PjnDKjnuEoK9RPNY84SX0LWy4TsW9xKgwZz
-	 OPmSFZFANnRopVFZu2HHlMAp2CKNmBDZTc4arcsFbrv2P2Mj0D93wwpCIIpgckIqZvGqo
-	 h5TiigOtQgDGlsbWI0LcBsWA/iohSJf92JN7kRWh8v3sWUXnriV/IMro38OQxWstq/E0k
-	 6codhEI3VTvWUAEteINfI9GBfiCvBnWuy8dMW/DyjCPCK1dY9WG3WTwye7KjN/3aNRQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793046652;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=q91/ZqBRSWos1rOGl7FRZkFKpbVqDazHpwLRukKvSaw=;
-	b=0mHzXNFHP6/T7MxUwIxFkr6Wim6zW2xkTpbVoGEUqcdCVJUDm6b3guu/vs6uY7zumFRm
-	 bNL+5qL1is62FbU56WstTeduWBREmcFhsXbfkJOP2ExynUdVF7501nCfqeuXjonQoxG5d
-	 sYbd3y2Vq4xu0po9Rz695xIsyYojhmgGsnORAUfwp956pIwkkLv5Owz2DwwxTVCrrgcZC
-	 GUwYGk7tMn/aRj0cKROsgDQOQYbPbhJBu3T7UhLmOBsLOKCy6bGJ0CcVOc9MuWu84Musv
-	 Kf6db3RHcdcbeFSHqWVrpdYV9xF3lIiTUrST0J6ngvpyN4an4gL9ad5lKIoKS6Xnt5Q==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jtpKN8BH;
-	arc=none smtp.remote-ip=91.218.175.187
-Received: from mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793046699;
+	b=fUhTeHDw5vUpwPWVS9i0BQu1YcNk0BGG/ghTI73R49usS9L9E3BijVmrtZbcD6+Whbwk
+	 slTyhiVXeI9C5mhOUGCm3lfJ1RG7OgNo8RyxhWS+R80M7PqDc4wMq7FDob6QA7WV4l81l
+	 lRMqu/hy4wI8AQMMlEU1nzU5jJqRq2RkHQ5iuoMCVBgMBB/qDHLm+HG/P0/XGT5xOxKWD
+	 si9SMaosJSHB3prnUsK7mRwTfuEiCYkEorjiqzSj1rHOFbqMJs/7ixLsH/VCmulOc1PVX
+	 ReFjha+SGufO7NHGzsHEQ0Jdkdk7cEwduX0GSRRYu5ch3Eg9Fn2OC4UizhRtYnXpCvg==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793046699;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
+	b=aXPKpSi0ykGm/2UxbWdTqO1cY2yCcorgqRWqNEdeZFU1W6HYSsWRBJOLV9bR/ZwrwYpO
+	 O3UIO//RngRSW1KjSIA2g3ypSADdXwpinArfmBPIYXfYKy2acxROqJ9kXz4afRDwLcHh5
+	 b4kvHznaUbJ1hngXu+DXc83J6vJKM9oZaMaYOBZtuISDLFYgLZ3bANkkJM9fBlYlrrggH
+	 RVq0HU1rXglmcOv12lqXB0LkUoK+AyUKZBANzlCO+l7ab7bq4NCnsrlHx5ib+XnCUR1SU
+	 D0KjDJGDSrEqBK+eG7V5UselFmdUVFxp2dE63ZqH/b6uW8J+qrBVFOdPAPSBgaTg+xA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=L+wootqW;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.214.180
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D39606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 20:30:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59D39606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABDD606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 20:31:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9ABDD606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=jtpKN8BH
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=cIhC+X2D9PeHbpAlmTyQ0l0MeQ/nAc9SVi2AYlpNJD0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793046649; v=1; x=1793651449;
- b=jtpKN8BHuVUBXWCVsWrTSBs+B1RxpFdrgm/3o82kT/UMumKUl13IPxPS0OcFcNWAZVAsv8Tf
- hkWSCJjCCztFDvX00D8wlHd8Mutyw3oK2eaPTnw/CuznmEf4NB/mnkNS+QtmguR/cNM/jhJj/J3
- Jyd3QPU5tTt9KTlDc12O7I5g=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 40420f710c1f9aa8;
-	Mon, 26 Oct 2026 20:30:49 +0000
-X-Mizu-Trace-ID: 40420f710c1f9aa8
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b9fb702d-9782-44b7-803a-26a00fc4206e@linux.dev>
-Date: Mon, 26 Oct 2026 13:30:42 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=L+wootqW
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e9995ce866so31806165ad.0
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 13:31:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793046698; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WCggMXudwmdCHt2NYQx0EwLkeEXPyqGCYZvPCBr46fDcb4lgECDYJNMsP+q+AjCSR3
+         XOo1cJpl3Qk/RKhKiO13/YssWgb++e2OmCLGbarMnWiMnCQuay5GKZvDeZnUKA4HhAM0
+         rtFsvetaXjwlPhhAUCRgU/pQjCqyQFkdHFC94R2NyXI3hc1docM++dkhtFXvlBa2mzsF
+         oIoRu8ZIlW+pt2uFtt9n2WpogryFOe1qIMvSx8ImzFL91uF+M9UwTVvyAdAHSt5wmm6i
+         V2859No9dl1zgjr4xeV3Ll8MpbdoLAAtLTFNyq0sNv0MxZyCb25z9soIbOAzPdic0uaU
+         XFYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
+        fh=Wm5L619v7n3PFgr0cxgKi+7JwabOEyLv9wXgxydqiNM=;
+        b=cPwJlm8E2uOKvG31oyRu2ApKPZeCfryR3VTIs1hFVS3C1qCj4MdBS5wIMMkE86BZEj
+         QWoVBFccqxkXA99nodCmM2wFwlzzxJtK2yhQWbUbD17B/rRxKd+/EWE2gZrxBygvrLpj
+         W4XE0JrxCATfRDLc1jbVn/Uh7u8QdL0K7GzW098ptUiCK13EWjyryuDFRPPmV9Wg9jKc
+         /7tqxqY3WIE3jDBb+ls07D9JNLqa9s/LQdnyqlff/29nWyYPHpTFkwQp3Gn1WP8tGDTs
+         Kwv5jpTb5bzTMDgabQ3RYbTQCqCUXZHRkyfGXOA48SvZ2YhkUnd3Q9vtg+tTWGU2uhIr
+         jkqw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1793046698; x=1793651498; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
+        b=L+wootqW5T77UGOryyw3TrOnPRmPjLL2i4uoI36Fb52hAChavbUjC2oAErcwcWcJq1
+         gwgn++rWkrUiN4eZmtVkxuIBOAsAZefl8wqr6EQCDZZBTjk1hO2UkuEyI8i5m5RjX7DJ
+         EK1ndGeANRMX4aTbpO+nvR7fIU63VxFQ9ffp4FXCojFjYD+fdWAL9RHBV9A1L4pnrwWe
+         CwArxDWTNOmGZ0DS0oKM86YGqSE9zdjWjrY330iiwsDo23ENOID23IQ7tNUIGTMjbHgT
+         BUbvwez+Hzl4lCCb8TSHKJZNqHNNnbu8YjtxV98iTts8xUYoVruc0kCp8wqVv0S6jf5w
+         /EUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793046698; x=1793651498;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oLlOcSCQ32pMuVJGiKdjmwfrqV55t/QVJ+mNxxfwt1w=;
+        b=iyswZlvXpKewUuOCRVmm7EhIlhRdMeGXhsh59Ax7FlK5DhY7cwsPCfLzlIie29XsV/
+         NV3buM988APpmiYTJ1nM516pdXAyDNRo7tes+GnbHeBzkTMk03e+9TBR2apxl95P+DPD
+         C2Jc7lj7Wa53uvXVntEeIOYaMhoBxTV0or65t8VUTH+tBCZWoho8GHXkhiza0i0VFexU
+         wf9OO6t1+U1H9QcBeFdbH/9Q6CmbCWrBvJWS2UNdAKMEPFuKVcdIIAAZ8kQzqXgTGncv
+         7v8pkQF/Oe7toBU4zbQnSdsYCpS3LKBg9r/XF/zRiMgeb5rkT4Smly8ysbn5h77OBn+x
+         0aAQ==
+X-Forwarded-Encrypted: i=1; AKwUvByO5VYT2dmByGybFxGX+pLKaZ+PdQLdsxRS3NviLvL8DUtbGPKz4h+4w+dk4ogJIKOWJOw=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIiCPn2Qqh+tA+dd+zFMikitE/u37vE4S/Ckwa8nOoHxRhT7QFJ
+	fDQ84boXSp4d3qxeOeogYSNhsQ8ej5rS1RbpLoNcDIn5UhscoHNeuVEE1yczjMz7BJC0gfrW+q2
+	RMKxDUkROiFM26yEKTMZISsd/Kl12pT7Y7scRRMdh
+X-Gm-Gg: AYBFou0SPzhzd/sf4rNkg0slg9PiwRZo9kJyXx3q+m+Ub3x8fzJcnqjWdv5PKWdRkKG
+	Dh4mhCqnvO1qdU1RYA1bngWKqyhBBNRGwtwT3OTg53WrC/yqrEqZthM+A00IbYKEisbcAgWXlbi
+	18hFybJ2rISLvLQrAbqhY4aK/5IFDVDs38XvKuIWmn5f7Bo/nzr1xVJaRYLoD2kDC24Mu17wzXK
+	cerC3MYjDCawoBpRsgKEMdVce/CLMKCaAcJkdiOvyWL5aiYqlZ8Gwe5mhyTxhwRJZQf67vuot70
+	msEqAO/wz7g3E4dBBTNqxPZpHruhcu06zES58i3gMUz+jfxc2Z1gGDfg39aoyFXMNebkl5DnUUF
+	aehIKDPEx00dQccC9IiwO0hmH1myAqxx9ynY5D7/X+In1ATR4ibZuDr/9Uwr5/qw5uY9FFL0kJv
+	1hTHz4kKVdI1E/Xg==
+X-Received: by 2002:a17:902:ecd2:b0:2e8:30dd:523d with SMTP id
+ d9443c01a7336-2ea9c620609mr71569325ad.13.1793046697876; Mon, 26 Oct 2026
+ 13:31:37 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,121 +105,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 04/12] bpf: Track low-32 scalar equality
- across zero-extending movs
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261020161907.2115379-5-vineet.gupta@linux.dev>
- <d6b900be6e27a2ab0ff198e30d28c0d35410daa23bf03ead13a359569f9bfdd9@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <d6b900be6e27a2ab0ff198e30d28c0d35410daa23bf03ead13a359569f9bfdd9@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
+In-Reply-To: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 26 Oct 2026 16:31:25 -0400
+X-Gm-Features: AclHuK_MBYtdpmV00LiIGiHwgdDyciJ8YZFfqnRLK0ynU1qoZWOLvejR9vdc3xM
+Message-ID: <CAHC9VhR4rMydWiD-RFv-ABiYSG_txJuyrtdaowEXPY=CHEvFXA@mail.gmail.com>
+Subject: Re: [PATCH 0/8] ns: fixes for the namespace LSM hooks
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org, stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/20/26 10:09 AM, bot+bpf-ci@kernel.org wrote:
->> bpf: Track low-32 scalar equality across zero-extending movs
-> TL;DR: The comment and changelog claim a zero delta from an add is refused
-> composition, but a 32-bit add of known zero records the same link as the mov
-> and composes. Behaviour is sound; the explanation looks inaccurate.
->> @@ -17594,11 +17584,28 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
->>
->>   		if (dst_reg->link_kind) {
->>   			/*
->> -			 * If the register already went through rX += val
->> -			 * we cannot accumulate another val into rx->off.
->> +			 * Only the zero-extending link the mov above records,
->> +			 * BPF_REG_LINK_ZEXT with delta 0, can take a delta:
->> +			 * (u32)((u32)(base + 0) + off) is (u32)(base + off).
->> +			 * The add has to be 32-bit as well, since a 64-bit one
->> +			 * parts company with the link once the low half wraps.
->> +			 *
->> +			 * Everything else still drops the link. A zero delta
->> +			 * reached by an add rather than by the mov, say "r1 +=
->> +			 * r3" with r3 known to be 0, has already spent its
->> +			 * delta; composing onto it keeps a link alive across a
->> +			 * loop's increments, and since the delta is compared
->> +			 * for equality, every value the loop reaches becomes a
->> +			 * state of its own and stops pruning.
->>   			 */
->> +			if (dst_reg->link_kind != BPF_REG_LINK_ZEXT || !alu32 ||
->> +			    dst_reg->delta) {
->> +				/* also the target of the two gotos above */
->>   clear_id:
->> -			bpf_clear_scalar_id(dst_reg);
->> +				bpf_clear_scalar_id(dst_reg);
->> +			} else {
->> +				dst_reg->delta = off;
->> +			}
->>   		} else {
->>   			if (alu32)
->>   				dst_reg->link_kind = BPF_REG_LINK_ZEXT;
-> The comment says a zero delta "reached by an add rather than by the mov"
-> has already spent its delta, and the commit message says allowing
-> composition onto "a zero delta that an add produced rather than the mov
-> still costs 1176 -> 1196".  Can this test actually tell the two apart?
-
-Comment is wrong, fixed in v4.
-
-Walking it through to confirm your reading: a 32-bit add on a register 
-that has an id but no kind takes the else arm,
-
-     } else {
-         if (alu32)
-             dst_reg->link_kind = BPF_REG_LINK_ZEXT;
-         else
-             dst_reg->link_kind = BPF_REG_LINK_FULL;
-         dst_reg->delta = off;
-     }
-
-so "w1 += 0" records exactly what the mov records, ZEXT with delta 0, 
-and a following "w1 += 1" composes onto it.
-
-The example the comment gives, "r1 += r3", is 64-bit, records 
-BPF_REG_LINK_FULL, and is refused for being full link rather than for 
-having spent a delta.
-
-The behaviour is sound: (u32)((u32)(base + 0) + off) is (u32)(base + 
-off) whichever instruction produced the zero. What is actually refused 
-is a *second* delta, and that is what the comment now says.
-
-
-> A 32-bit add or sub of a known zero ("w1 += 0", "w1 -= 0", or "w1 += w3"
-> with w3 known to be 0) on a register that has an id but no link_kind goes
-> through the else arm quoted above and records:
+On Mon, Oct 26, 2026 at 5:57=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
 >
->      dst_reg->link_kind = BPF_REG_LINK_ZEXT;
->      dst_reg->delta = off;    /* off == 0 */
+> I tried to switch systemd-nsresourced over to the namespace_free LSM
+> hook that went in this cycle. I explicitly developed it to work nicely
+> with that. But the version that is merged is broken for that case.
 >
-> That is the same state the mov records, so a following "w1 += 1" passes the
-> "dst_reg->link_kind != BPF_REG_LINK_ZEXT || !alu32 || dst_reg->delta" test
-> and composes.
+> The namespace_free hook is never called. security_namespace_free() bails
+> if ns->ns_security is NULL and that's only allocated if an LSM requests
+> a namespace blob. Nobody does. Landlock doesn't care as it only uses
+> namespace_init and namespace_install but a bpf program attached to
+> namespace_free never runs. And it can't work around that either. We
+> could make the bpf LSM request a blob but that would just be a way to
+> make the hook fire. So call it unconditionally like we do for
+> superblocks, files and bpf maps.
 >
-> Only the 64-bit example from the comment ("r1 += r3", which records
-> BPF_REG_LINK_FULL) is actually refused.
+> The bpf LSM also marks the arguments of namespace_init and
+> namespace_free as trusted. Curiously that patch was also dropped.
 >
-> The result is still sound, since (u32)((u32)(base + 0) + off) is
-> (u32)(base + off).  Should the comment and the changelog limit the claim to
-> 64-bit adds, or does the mov-produced link need to be made distinguishable
-> from the add-produced one?
+> namespace_init is called before the namespace is set up and if anything
+> fails afterwards the namespace is freed without looking at its reference
+> count. namespace_free is called on the way out. There's no kfunc that
+> takes a namespace yet but once there is one a program could take a
+> reference to a namespace that's about to be freed. So add both hooks to
+> untrusted_lsm_hooks.
+>
+> The namespace_init hook also always sees a namespace id of zero because
+> the id is only allocated after the hook has run. The id is the only
+> identifier of a namespace that is never recycled. So it's what a bpf LSM
+> wants to use to track a namespace from namespace_init until
+> namespace_free.
+>
+> The inode number is recycled way too quickly for that. So allocate the
+> id in __ns_common_init() before the hook is called. Then ns_tree_add()
+> doesn't need to allocate ids anymore and ns_tree_add_raw() can go.
+> Landlock keeps logging zero for denied namespace creation because that's
+> what it documents.
+>
+> I'd want to get the first three patches into v7.4 since the hooks are
+> new this cycle. The systemd change I have for this uses the
+> namespace_free hook whenever the kernel has it. On a kernel with the
+> hook but without the first fix it would never learn about dead user
+> namespaces.
 
-Former. Composing is already capped at one so comment says second delta 
-is refused.
+From what I'm reading the LSM framework patches don't meet the typical
+LSM criteria for stable/RC fixes: there is no serious bug/panic, and
+there is no functional regression from a previous release.  It also
+appears that the existing Landlock namespace code still works as
+expected.  This looks like one of those unfortunate circumstances
+where a new use case wasn't tested thoroughly enough before the merge
+window, so it can wait for the next one.  We've already identified
+other LSM/namespace issues that are targeting Linux v7.5, the
+security_namespace_free() change is one of those as far as I'm
+concerned.
 
-Thx,
--Vineet
-
->
->
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> Christian Brauner (8):
+>       lsm: always call the namespace_free hook
+>       bpf: don't mark namespace_init and namespace_free arguments as trus=
+ted
+>       selftests/bpf: add verifier tests for the namespace LSM hooks
+>       landlock: pass the namespace id to log to check_ns_type()
+>       ns: allocate the namespace id before the namespace_init hook
+>       nstree: drop ns_tree_add_raw()
+>       lsm: fix the security_namespace_init() kernel-doc
+>       selftests/bpf: add a lifecycle test for the namespace LSM hooks
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
+>  fs/namespace.c                                     |   6 +-
+>  include/linux/ns_common.h                          |  16 ++-
+>  include/linux/nstree.h                             |  29 +----
+>  ipc/namespace.c                                    |   3 +-
+>  kernel/bpf/bpf_lsm.c                               |   2 +
+>  kernel/nscommon.c                                  |   7 +-
+>  kernel/nstree.c                                    |   2 +-
+>  net/core/net_namespace.c                           |   4 +-
+>  security/landlock/ns.c                             |  11 +-
+>  security/security.c                                |   9 +-
+>  .../selftests/bpf/prog_tests/ns_lifecycle.c        | 145 +++++++++++++++=
+++++++
+>  tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
+>  .../selftests/bpf/progs/test_ns_lifecycle.c        |  88 +++++++++++++
+>  .../selftests/bpf/progs/verifier_lsm_namespace.c   |  38 ++++++
+>  .../testing/selftests/bpf/test_kmods/bpf_testmod.c |   5 +
+>  .../selftests/bpf/test_kmods/bpf_testmod_kfunc.h   |   1 +
+>  16 files changed, 314 insertions(+), 54 deletions(-)
+> ---
+> base-commit: 21a7f44fd0765fcc5194130b28767786eba1d1e7
+> change-id: 20261026-work-security-namespace_free-7aaf89b5b00e
 
+--=20
+paul-moore.com
