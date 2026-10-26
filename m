@@ -1,47 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.222.176
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793012310;
-	b=QWrTX2WrGL7ahxsGtfAkiAnjfvVgBog1oEL8AW9bqeykWaLFJ6FihjxAt3qhUCbn08k5
-	 wktbRkGP55y1k2XJBC47JgGGU67EPs1p1jHqM7QKuO9ItsSCvmIvXBag/BeSynKDlRYaS
-	 LpBotOg/9PY6UsoXK4tiM32WNPjDuvmcSf0wZ3M2ZhMdgeE8sNIUP9SJtXvTGsebqajDe
-	 UpSoeUGIJKNXU4z2ogwZXThc5vqie08flTW34H2f3q0DV+7eKX9tlnFeRDUbfbg68QTjb
-	 YeDImB3xoqgPE7KXIVw31o57xNR5qoI4e+TvA1/+lwuhTiegJGOj7WOaY4n0hQVDiLQ==
+	t=1793012770;
+	b=MFype9+Ocy8M8/9BZ4fZU6pcHTHONQit5FsW31P5EW/46CJHttRcrh7Y5Q2AwzX57oqX
+	 JSLxy6n0yHj4cvW/4+t85cHzwbf+oS/0hlaV5LHUtJpZLvrk+2ZiIL9U3/XJomPicLTPT
+	 IhVAlmzU4uFGMX5b80Matj2MRgzCmHvze1WRJAHa8fUmwsCg84bf3+NDPXnRK+0nzxim5
+	 j5W6ckv4pmBF7KxzQd54nbdJFijbCcfVB8vzJm+7a1vWIw1hddyojhXnpwEij3NEdZ7Km
+	 kd6sRqpI9GCBvXpbg6t6DkYRnkXLTOvBupKAxVzB5gUdhQZOJE1qjH1zM4Zbl9pM07A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793012310;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=K+Yo9AfgBYCQQPg349B4iNZddsMgsiAX+VK2TRMdUgA=;
-	b=GwSe+p/yZ3YBtoyKNycG6UagJ+gxmvBDFlAP39zaflQYPZUzIEYbpj4XxBIdPQf4KNmp
-	 7Ww1h3MKP7yx0+djiyGozgRAs11BNlXwfrdxKtp5dJoKvdnsHAoq4Bfp7VjatKbW07kvY
-	 QfnfZV4uQrO1qOPz2cXT7dRLTeL54br8AFXC39/1pScx/KnclAxwidKfdFni+lc4gmm1/
-	 7zfmio7opSbwtFRZEaWQUXJZi2aYbcZvYf0QWTVZyhUHKSD59jtHlgw9dswHqdSNTQR2X
-	 8rw51z9SGgG3k0wCOcIZ7cx52cY8ddMJK+x9pe9aEwmEVRF1sGjjWtspkJ6/8Vu04IQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793012770;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
+	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
+	bh=tTUSlvJBt7PDLOQ/Qfve+QTEq2GZ/zMWuOJTMyxeOhE=;
+	b=abYfqJvyZGmjVsv3OLhcj131yQX91oRmXvj2FNSmaEe2pfCYR6ODnZxmRNdwVTrOG/pw
+	 XyYnoYfGX1b3osTOwFiXHhUKFeA0fMfj/uc6oiqOU4jgorfrX/15UjAZnASAyXJdoYds/
+	 eI/LUI3IhkthzmXI2rLCGqYAJoYwzKO8TYGCDpGYk4gT0HaFwsXaLTTUoHN6LdV5I/TnF
+	 ElEG/2o4PNtaK2+4v7VTDtceVNa6AG0YgiVJUywVtvsdYa7FHNMGMFvwMHTVjvto553qD
+	 ypG3Zc5q9mE0r9r1EEfYk+dRr7NHg4/OrPKHtnsp+eEgv7BsPcNaal834PZt4XGNi/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RqbfLLRV;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="h0HS3DX/";
+	arc=none smtp.remote-ip=209.85.222.176
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161F2606A31B;
-	Mon, 26 Oct 2026 10:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512D6606A31F
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 11:06:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 512D6606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RqbfLLRV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE161F01825;
-	Mon, 26 Oct 2026 10:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793012309;
-	bh=K+Yo9AfgBYCQQPg349B4iNZddsMgsiAX+VK2TRMdUgA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=RqbfLLRVlyH7GstXhr6fF9lEhVYgUIapphRe/P81YcGFINT+z6Fhe+lBJsgn3rMWz
-	 nwPcI/HcXSZLq4QV6LbqzF9rK8XtphsImEu3BLIYRJovrFr9vyf9Xs6PuuRt+L2lQs
-	 Zg3AMz9M2A5pC0eWwAKisCiZWiYxpk5oWXjthXBh8D9qPIyl5orSZle8QQfsbXwzty
-	 y2aL31Ujc54I2eI029xYLGpwylZOTerNomlZgooFoQQXYLwHhbKBEq5+v2pEFuCahV
-	 J8p3gG36je/h1ao/NDOSxh3pmDCEVX5k5Xo4njrbndApsmsVN2IUyxBoaFjzKwpD9p
-	 P9KRVBQabzHVg==
-Message-ID: <88626067-69c0-4487-98b0-f68eb8c5e36c@kernel.org>
-Date: Mon, 26 Oct 2026 10:58:24 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=h0HS3DX/
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-93e7ad9f78dso353530785a.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 04:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793012769; x=1793617569; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=tTUSlvJBt7PDLOQ/Qfve+QTEq2GZ/zMWuOJTMyxeOhE=;
+        b=h0HS3DX/AajEdG8H6zqVr5GOPIWtpAgYkOty4YtE1JUciY+UMFTUJyAw9+cv8fZl0R
+         9DdUcy7w9DLvg/C3OSv266oOwaX5VzADbsTw7QMaLPCdFPcKa1Gg9YiRT5LLJQSKMFZP
+         KguCMUVMrFs66LBezyTBn6l1yac7pEO263j4ZD6yvV36lsYlYFd4rlxzBnMNu+aN3YMN
+         mmL7HITYGnEVmauzhPaCYlj4ud5mg1qwTtiOj9llVNQy9dAX2IRLPgxxP6UqTLrKPTFM
+         X/O5g975nCh5irO6R5iusXMahvBxLZyApeJ5D7NtlZkR1TKDBsKIFSUQokfHQadp/rGW
+         30eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793012769; x=1793617569;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tTUSlvJBt7PDLOQ/Qfve+QTEq2GZ/zMWuOJTMyxeOhE=;
+        b=2dYBliMOWSk05QRgAne9FHKTiizoaLcr5x7UuWIhPdcKloahFYN3Ckg/CCJBvDjuZZ
+         gAgN15jwtTdJWJ/UX2Wp/s4/dlAQnhZskjH8d9tQmpigJ0Kr/1+5twMlmJzba2POnxjY
+         bzU9kN7Pus/GJPHXlfr2omz86xXBEJWE0pSDMShPWjcl+4hWVbaKHjTWIpUucDHkDsF2
+         fBB5cx2ZijwskRLVL1rjd9hcuLAnPNeaBgkoJwEEvfFGpNZFAIRJiFvvQhRjpbMx/DXI
+         lhwZRxJeESe8V/dC/zb3CpGqn40ydf53j8n9euISvIaoGcqScsKrAv5PRLJUhfu3vY6K
+         v36Q==
+X-Forwarded-Encrypted: i=1; AKwUvBymEoftqzKS+7BWpHO3sUIT82JJ6Ru9KV7dwUIjwbdxyHZGGKylDtsQA9YnqtXDO+6W5jk=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKUJCxfus+J6HNQRo+xHWyTY2wz64dHQCeqpGRCeFLICC52ALP+
+	nJ0e0qcfwfkMtHmGGYtD/XC4lnuAoTpncCQQeOLC7MgKxtivmCSgzuTP
+X-Gm-Gg: AYBFou0ITqWflxQYTHjyg1LO9Jawlrw9a97eA16uz4KipQqRrV8bhCkVeR2VyeH6P7N
+	93OBr2PSBNzsVElwoRiQpARBngAxSeQcSCXrXc/Zjf3IulKixWxQ6MnK5Rl7rEcqkumFRFQ/5Yr
+	PRfpA5dcdMC8Z1XqbZ7wpJabBz2XYVJ4pfPl7dekhIp921ybVBPgp46ovsy1swMRc2zsqbwVt4y
+	Z2X0wyXVxx0F4F6YtwkBHHJXgsSq3aHtSFb0myA+qtRP4omJCKgoddo4a9hubq3Y63tC9dyHMsb
+	m3W5r2RjXCaad+mKzUZ1jKw9GpYpJqj8u5CZxGOwqLKhIDxw5wZv96FYTjBn0J1/Q9BnxB7VGpV
+	9IUeewFGUiA3Nwa0aI8sKMXmdm6X27zuhScKOPhuIxLnP1IGUXa/IDbSbPanm5IOns9PfnRKHST
+	Yk5zV1SODKj23nbIpUf7Tsxl0dWdD7+2eaI5tPIPM4fU36hSMqcUMpijJDMa8cfD3agYxbiQYTb
+	NDkvbYIAgVbLyX6iRXWyodMm1QFV380B0ZRtHy+xqWDcdqicjoDxOY2ELyK
+X-Received: by 2002:a05:620a:280d:b0:93e:c12c:f147 with SMTP id af79cd13be357-940ef955f06mr896905585a.81.1793012769242;
+        Mon, 26 Oct 2026 04:06:09 -0700 (PDT)
+Received: from localhost ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-940f067f330sm660111485a.24.2026.10.26.04.06.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Oct 2026 04:06:08 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -50,155 +86,84 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpftool: fix line info in multi-function CFG dumps
-To: Eduard Zateev <hackerowskiy@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20261024062329.264086-1-hackerowskiy@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20261024062329.264086-1-hackerowskiy@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Mon, 26 Oct 2026 07:06:07 -0400
+Message-Id: <DMEPZAAH894H.2LX47UFLJTCQW@gmail.com>
+Cc: "Daniel Zahka" <daniel.zahka@gmail.com>, "Alexander Duyck"
+ <alexanderduyck@fb.com>, <kernel-team@meta.com>, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Eric Dumazet" <edumazet@kernel.org>,
+ <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 1/4] eth: mpnic: count packets, bytes, and
+ drops per ring
+From: "Daniel Zahka" <daniel.zahka@gmail.com>
+To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>, "Jakub Kicinski"
+ <kuba@kernel.org>
+X-Mailer: aerc 0.21.0-threadmapfix
+References: <20261012-mpnic-counters3-v2-0-8afba81c2d5a@gmail.com>
+ <20261012-mpnic-counters3-v2-1-8afba81c2d5a@gmail.com>
+ <20261016220930.i32JEcqe@linutronix.de>
+ <DM8U47F4MNK3.2V54CCQ9YTNBY@gmail.com>
+ <20261019215405.OCzrrKYw@linutronix.de>
+ <20261019190543.419e70bc@kernel.org>
+ <20261020212155.47v0ot4g@linutronix.de>
+ <20261020145038.4f7eb295@kernel.org>
+ <20261026101117.YTmp0eu2@linutronix.de>
+In-Reply-To: <20261026101117.YTmp0eu2@linutronix.de>
 
-2026-10-24 08:23 UTC+0200 ~ Eduard Zateev <hackerowskiy@gmail.com>
-> The CFG dumper computes BTF line-info offsets relative to each function, but bpf_prog_linfo__lfind() expects offsets from the start of the whole program. As a result, line annotations in later functions can resolve to source lines from the first function.
-> 
-> Pass the program instruction base to the graph dumper and use the global instruction offset for line-info lookup and display. Keep function-info matching relative to the function as before.
+On Mon Oct 26, 2026 at 6:11 AM EDT, Sebastian Andrzej Siewior wrote:
+> On 2026-10-20 14:50:38 [-0700], Jakub Kicinski wrote:
+>> On Tue, 20 Oct 2026 23:21:55 +0200 Sebastian Andrzej Siewior wrote:
+>> > > > Is there any other driver doing this?
+>> > > > There is ::get_sset_count() and so on for the per-queue stats. =20
+>> > >=20
+>> > > You may be mixing up queue stats (netlink) with the old ethtool -S
+>> > > kitchen sink / garbage dump. =20
+>> >=20
+>> > The statistics is folded on device-down into a global counter. So on
+>> > device-up the statistics is still available. At least that is my
+>> > understanding. This means the per-queue stats are lost and global stat=
+s
+>> > don't match the per queue stats anymore.
+>>=20
+>> Yes, that's intentional and recommended by the docs for queue stats.
+>
+> I guess this is Documentation/networking/statistics.rst that I need to
+> study.
+>
+>> > So if this never happens, it might not be needed to preserve this. Tha=
+t
+>> > force-RCU might not be needed. This does happen on down and I would
+>> > assume that the device is no longer processing packets.
+>>=20
+>> The (old) ndo for stats reading runs under RCU, only.
+>> AI will immediately point that out if we remove the sync.
+>>=20
+>> May I ask why you care? Is there another driver you're trying=20
+>> to implement stats in? I'm not sure where you're coming from
+>> and therefore what to explain to you.
+>
+> I tried to be useful and do so some reviews and this stats part is what
+> I did not expect to be "expected". I would expect per-queue stats which
+> are folded into device stats on query time. Anyway. Let me study what is
+> recommended before making noise here again.
+> One last thing: If you replace RCU with SRCU then the logic should
+> remain the same. On the plus side you would have some domain separation
+> and the "synchronize" part will not force/ wait for the global grace
+> period but be limited to the local one.
+>
+> Sebastian
 
-
-Please wrap your commit description. Also capitalise your title , and
-target your patch to the bpf-next tree ("[PATCH bpf-next v2] bpftool:
-Fix line info...")
-
-
-> Add a selftest with a BPF-to-BPF call that checks the second function source line in visual output.
-> 
-> Link: https://github.com/libbpf/bpftool/issues/178
-
-
-Thanks for picking up this issue. Since you found that page, you must
-also have seen the patch I posted there, and on which yours is based, so
-some crediting would be appreciated.
-
-
-> Signed-off-by: Eduard Zateev <hackerowskiy@gmail.com>
-> ---
->  tools/bpf/bpftool/cfg.c                       | 19 +++++----
->  tools/bpf/bpftool/xlated_dumper.c             | 10 +++--
->  tools/bpf/bpftool/xlated_dumper.h             |  3 +-
->  .../selftests/bpf/prog_tests/bpftool_cfg.c    | 41 +++++++++++++++++++
->  .../testing/selftests/bpf/progs/bpftool_cfg.c | 16 ++++++++
->  5 files changed, 75 insertions(+), 14 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpftool_cfg.c
-> 
-> diff --git a/tools/bpf/bpftool/cfg.c b/tools/bpf/bpftool/cfg.c
-> diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
-
-> diff --git a/tools/bpf/bpftool/xlated_dumper.h b/tools/bpf/bpftool/xlated_dumper.h
-
-
-The fix itself looks good to me.
-
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
-> new file mode 100644
-> index 000000000..7d5b80927
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_cfg.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <bpftool_helpers.h>
-> +#include <test_progs.h>
-> +#include <linux/bpf.h>
-> +#include "bpftool_cfg.skel.h"
-> +
-> +#define MAX_BPFTOOL_OUTPUT_LEN (64 * 1024)
-> +
-> +void test_bpftool_cfg(void)
-> +{
-> +	struct bpftool_cfg *skel = NULL;
-> +	struct bpf_prog_info info = {};
-> +	__u32 info_len = sizeof(info);
-> +	char output[MAX_BPFTOOL_OUTPUT_LEN];
-> +	char cmd[MAX_BPFTOOL_CMD_LEN];
-> +	const char *expected = "return\\ bpf_ktime_get_ns()\\ ?\\ skb->len\\ :\\ 0;";
-
-
-How did you test this? I would expect bpftool to print "skb-\>len" and
-not "skb->len", so the expected string should never be found?
-
-
-> +	int err;
-> +
-> +	skel = bpftool_cfg__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "bpftool_cfg__open_and_load"))
-> +		return;
-> +
-> +	err = bpf_obj_get_info_by_fd(bpf_program__fd(skel->progs.bpftool_cfg),
-> +				     &info, &info_len);
-> +	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-> +		goto cleanup;
-> +
-> +	err = snprintf(cmd, sizeof(cmd), "prog dump xlated id %u visual linum",
-> +		       info.id);
-> +	if (!ASSERT_GT(err, 0, "format bpftool command"))
-> +		goto cleanup;
-> +
-> +	err = get_bpftool_command_output(cmd, output, sizeof(output));
-> +	if (ASSERT_OK(err, "dump program CFG")) {
-> +		ASSERT_HAS_SUBSTR(output, "cluster_1", "second function in CFG");
-
-
-Escaping issue aside, I don't think this check would catch the issue in
-the first place? The string is present in bpftool's output regardless of
-your fix. Maybe check that "return\ helper(skb);" does not appear after
-the main block, instead? And please make sure to test it.
-
-pw-bot: cr
-
-
-> +		ASSERT_HAS_SUBSTR(output, expected, "second function line info");
-> +	}
-> +
-> +cleanup:
-> +	bpftool_cfg__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/bpftool_cfg.c b/tools/testing/selftests/bpf/progs/bpftool_cfg.c
-
-
-
-Nit: You're not doing a generic validation of the CFG from bpftool here,
-so I think the names for the new test files should be more descriptive
-to better indicate what the test it about ("bpftool_cfg_func_offset.c"?)
-
-
-
-> new file mode 100644
-> index 000000000..db01f20c8
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpftool_cfg.c
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +
-> +static __noinline int helper(struct __sk_buff *skb)
-> +{
-> +	return bpf_ktime_get_ns() ? skb->len : 0;
-> +}
-> +
-> +SEC("socket")
-> +int bpftool_cfg(struct __sk_buff *skb)
-> +{
-> +	return helper(skb);
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-
+I do appreciate the review. Thanks for the SRCU suggestion. I hadn't
+considered that. Optimizing the writer side performance will become more
+important when we implement ethtool ringparam/channel reconfiguration.
+Another idea we had was to heap allocate the base stats and use
+call_rcu() to free instead. I decided against that for now, because I
+thought it was more complicated, and the writer side is limted to just
+ndo_open/ndo_stop for now.=20
