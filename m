@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792986801;
-	b=vVTN9a2du0L4o/fQ0CrIPtu/BC1e8OYZ6wEZDif8ohko8JLwvVvJmS4FrfVzs31BnPUF
-	 NmkqojAG3FwopnuEgSH33Jr8D3WT7MXirnYChUzKHxj5OeRhywBzLJg36bSAdFG/LmDsk
-	 8KhoiEhIULYEsLVNVG/Wab98AEGu443mydNaZk1pdWJJDzflyQn/hkGZBVxiiPCJg6qWR
-	 nfH4I7L6W1Lvwj/2R/JzvCWry7Xk3RJouFeYwtWwjDGbuczkfFzan6oyYu+OwFZFfvW3n
-	 1a9m7uUqpl1CQT7E0RhIJjD6vJ7PwNabwuRX5utr7qumraS5rPmQeM+8RiYRkKX1/lQ==
+	t=1792986803;
+	b=DKZJbCTLQIP0rDMCCU3iIbH0grpXMlB1uC950FW398yBdZhLQHMpxosocW8CNbylnJ0C
+	 Rj8QfEGZGlI7t7zeKHgNtLvlE9UismxSJibmZia1Tx4PGNpacmB68OmyV8xp0LpBJY5Ar
+	 KG3zhpff3U+Yw6j/VUBjgF0dWSdxHRfQEIPIbZcGNO8F3NkEKF0oWsY7zPnLrD5hU4yNS
+	 o8O776HBlYctxrlTLpN9PWvbwv6t4EUriPJ9bCY2nNW6fk8W5VGjz2c/YnYx0IFuNTFj7
+	 Z2Izc2OvZ55F3ZyrpznB75QP+R0A6Foa3sN32a2wfOlHEqCxmjbkCdR31rbTBOzkKiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792986801;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792986803;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=2aJea8XYDntle1gz9kmV5DwqLszdKJXahYXqu5f8iqQ=;
-	b=Yos+pLzv1StKGlxki3Lx9lVY4LvAm6C7XXVI/rXS41aCIl75F1F8O2BoteXH6Nv/P4iS
-	 StW6AvO5uPyhpKcYmFWAPm7+55DzXh/zU/EP2nRxNqbTkcMeNkTJQVRUj9gWP/LSBj3jh
-	 OBVn0OqwVeWbkbb9kK6KmEO1JNG3zW8MuD1xZrgLeRr5TYxnqdukArt7WcPRJgtT378Y6
-	 /towMMVsDmfcQs45+es/Zquh1ZG+AxRcMskOmaTZTQ5ce6CqICDF27XqZ4Ld9ep9siV4q
-	 /VXtOzFYqxaO0mgWzw7qkKNCjEEQuFIRZwHp0bVaZdI0GQREaIBZ/pMqQrgqJO2+H8Q==
+	bh=BmgtSFwZ88zLivY6TbE/0McFrSb2rkQ+P7wTZ7ogeMk=;
+	b=E74KPIEV1l9/J0zD6KPSzufO6MxjuPbveiDVKTJGCUZR+Vi3WaypIWsPfowpRfIHT+ei
+	 aUQEvEKWVyhfHWW4NWtwbWXA8hwRZvG2+wLs/bV0JEVHQXRzDrh/oFzED/Sog7/sXIn5S
+	 FljauFzbXVf7aMS1Vi9JpDsT0VnonkWfCyQ3aPf408XFtFC5O0Lt3a3DURfy9mpD7jQEq
+	 T8IFYEgYCZcapXrSFfkortBIOJmhPGO8nTy/p5eqQX18chLbdDN119dPoyw87Q/SXd1lG
+	 ogLJaMIe6c7X5SqOZCd4z3QswGaUQmCn9ILLBKRu329LPT33iH8+znOEGp7z001pILA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V6Sx6p2b;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NCIoSWmK;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8404606A31A
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B89606A31D
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 03:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V6Sx6p2b
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716EF1F01825;
-	Mon, 26 Oct 2026 03:53:20 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NCIoSWmK
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C411F01825;
+	Mon, 26 Oct 2026 03:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792986800;
-	bh=2aJea8XYDntle1gz9kmV5DwqLszdKJXahYXqu5f8iqQ=;
+	s=k20260515; t=1792986802;
+	bh=BmgtSFwZ88zLivY6TbE/0McFrSb2rkQ+P7wTZ7ogeMk=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=V6Sx6p2bRo6OqeLMBH3wUQ1Z888k7LuBC7dYwAFPBhngnQ2mgiQyDRNyM+jm8X6yL
-	 yL/DOX50NQCLh8grhYM6zhCFInCtD0ulGlHVeePFfHTMSxukW2O4vS5Wt2PSg+b4Co
-	 4Z/8qLopo87XHwwYnN65AxeZ1RvjxRJH5FYkplyD0/02LTsAu1FCsYwrGoUad41EKU
-	 AdiPobhf3jBZHsUClWxM6x76RZXHctVRKtMIQjhIgXa4CcyC/UECKCLob7EDZkhdvb
-	 nYGC7s1WBbUS2qMZP70zczpzjMidGt9AuUUPhf4UqZ/s5ked6gX+zPUlIuyBKe6ojK
-	 XP87eEpVxdk9Q==
-Content-Type: multipart/mixed; boundary="===============6846121162781710602=="
+	b=NCIoSWmKUAdgmznTGEynDQxLq5KvAQ0K1pfuTdeLvNluX63ANitR2an8IY3JgHZb6
+	 hyBtq2UP0z4OVxT4MYjTABTpATdk2uHmRsWlaKd7kjd/je6a5n94lwwwAFMmAL9qoQ
+	 1iCcLNuoJFOWEIyvABl4k6LMRFZziDQe8T1iF0qZgjE0d12zAQPlx8pU0WtcOyzi+1
+	 /m9uCtXiveu/OzCWT5U9tnQ0mnX6hrtzy6XV5xSqltbapiDlJCo/8Zwr8KlHy5/Pv9
+	 v85ZKwVLgAEwEckCJIvr9i/Wzk6X1KGMhc6Q7zwZQYj2gVaiWiAFViHc+8a2a+E6Ku
+	 g4mz9NoVCFP2A==
+Content-Type: multipart/mixed; boundary="===============5699443303493392689=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,137 +49,148 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <bdad3575392423d5e5540dfcdeccdf33a6ea457b654f9dfd4ba3403139857072@mail.kernel.org>
-In-Reply-To: <20261026025943.404450-73-alexei.starovoitov@gmail.com>
-References: <20261026025943.404450-73-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf 72/81] selftests/bpf: Adjust tests of pruning
+Message-Id: <abd26bab64571a7f77d3120b006a2254d94f8941e5e27d2d6ed92f6ad9da5ced@mail.kernel.org>
+In-Reply-To: <20261026025943.404450-57-alexei.starovoitov@gmail.com>
+References: <20261026025943.404450-57-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf 56/81] bpf: Bump MAX_CALL_FRAMES to 32
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 26 Oct 2026 03:53:20 +0000 (UTC)
+Date: Mon, 26 Oct 2026 03:53:22 +0000 (UTC)
 
---===============6846121162781710602==
+--===============5699443303493392689==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Adjust tests of pruning
+> bpf: Bump MAX_CALL_FRAMES to 32
 
-TL;DR: Test issue: dead_spill_at_merge_enables_pruning and allocated_stack may
-no longer test fp-8 liveness at the merge, since the stackless path arrives
-first and stacksafe() passes trivially, so regressions could go undetected.
+TL;DR:
+- Possible kernel stack overflow at program load: liveness analyze_subprog()
+  recursion now reaches 32 levels (estimates, unmeasured)
+- Stale packed-layout comments (nit)
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-> index 5f9b11a81260..f70b23abc702 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index c0227e74899b..6139e889c86a 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -458,7 +458,7 @@ struct bpf_func_state {
+>  	struct loop_stack_entry *loop_stack;
+>  };
+>  
+> -#define MAX_CALL_FRAMES 16
+> +#define MAX_CALL_FRAMES 32
+>  
+>  /* instruction history flags, used in bpf_jmp_history_entry.flags field.
+>   * Frame number and SPI are stored in dedicated fields of bpf_jmp_history_entry.
+
+Can this bump overflow the kernel stack while the program is being loaded?
+
+analyze_subprog() in kernel/bpf/liveness.c calls itself once for each static
+callee (or callback) that receives a frame-pointer-derived argument.  Its
+only depth limit is:
+
+    if (depth == MAX_CALL_FRAMES - 1)
+            return -EINVAL;
+
+so the deepest recursion now goes from 16 to 32 nested calls.  Each level
+holds this array, whose address is passed to the recursive call:
+
+    struct arg_track callee_args[MAX_AT_TRACK_REGS] = {};
+
+MAX_AT_TRACK_REGS is MAX_BPF_REG + MAX_STACK_ARG_SLOTS = 11 + (24 - 5) = 30.
+With the u32 mask change in this patch, sizeof(struct arg_track) grows from
+10 to 12 bytes (4-byte alignment plus 2 bytes of tail padding), so
+callee_args is 360 bytes per level.  32 levels need 11,520 bytes for this
+array alone, compared to 16 * 300 = 4,800 bytes before the patch.
+
+That lower bound does not count saved registers, return addresses, the
+64-byte acc bitmap in merge_may_write() (static with one caller, so probably
+inlined), the bpf() syscall path above bpf_compute_subprog_arg_access()
+(which has its own u32 callsites[MAX_CALL_FRAMES], 128 bytes), or the frame
+of compute_subprog_args() at the deepest level.  That frame holds
+at_out[MAX_AT_TRACK_REGS] plus at_stack_arg_entry[MAX_STACK_ARG_SLOTS], 588
+bytes, and its kvmalloc() calls can enter reclaim.
+
+On 32-bit configs with 8KB kernel stacks (arm and x86_32 without KASAN),
+11.5KB is larger than THREAD_SIZE.  On x86-64 and arm64 with 16KB stacks, at
+roughly 450-500 bytes per level this comes to about 14-16KB before reaching
+the leaf, which leaves little or no headroom.  These per-frame numbers are
+estimates, not measurements.
+
+The call path is:
+
+bpf_check()
+  bpf_compute_live_registers()
+    bpf_compute_subprog_arg_access()
+      analyze_subprog()   <- recurses up to 32 levels
+
+This runs before do_check_main() and check_max_stack_depth(), and
+sort_subprogs_topo() only rejects recursion, so nothing earlier limits call
+depth.  A chain of 32 static subprogs that each forward a stack pointer
+(for example r1 = r10 - 8 passed down), loaded by a CAP_BPF loader or a BPF
+token holder, reaches 32 levels.  That is the Rust use case named in the
+commit message.  It also happens on configs that reject the program later,
+such as the interpreter, where the 32-byte minimum frame limits
+check_max_stack_depth() to 16 frames.
+
+The result would be a kernel stack overflow during program load (a guard
+page oops/panic with CONFIG_VMAP_STACK, silent corruption without it).  The
+verifier otherwise avoids recursion (see the "non-recursive
+depth-first-search" comment in bpf_check_cfg()), and the commit message
+does not mention verifier stack use.
+
+The selftest added later in the series (08f1453d610f) passes only skb
+through its 32-frame chain, so has_fp_args() is false and this path is not
+exercised.  analyze_subprog() is unchanged up to 51224d16c11b, and no later
+commit in that range addresses this.
+
+Should the walk be made iterative with a heap-allocated stack, should
+callee_args move off the kernel stack (for example as per-depth scratch in
+env), or should the liveness recursion limit be kept independent of
+MAX_CALL_FRAMES?
 
 [ ... ]
 
-> @@ -1372,13 +1370,12 @@ __naked void half_spi_clean_preserves_stack_zero(void)
->   *
->   * Static liveness marks fp-8 dead at merge. clean_verifier_state()
->   * converts path A's STACK_SPILL to STACK_INVALID. Path B has
-> - * STACK_INVALID. stacksafe() matches -> path B pruned -> "6: safe".
-> + * STACK_INVALID. stacksafe() matches -> one state stands for both paths.
->   */
->  SEC("socket")
-> -__flag(BPF_F_TEST_STATE_FREQ)
->  __success
->  __log_level(2)
-> -__msg("6: safe")
-> +__msg("from 5 to 6: within")
->  __naked void dead_spill_at_merge_enables_pruning(void)
->  {
->  	asm volatile (
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 50e24237a6b7..e55ba1db2e1f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3654,8 +3654,8 @@ static void mark_non_stack_access(struct bpf_verifier_env *env, int idx)
+>  }
+>  
+>  /* Layout of one packed linked register in the jump history, see linked_regs_pack() */
+> -#define LR_FRAMENO_BITS	4
+> -#define LR_INDEX_BITS	11
+> +#define LR_FRAMENO_BITS	5
+> +#define LR_INDEX_BITS	10
+>  #define LR_FRAMENO_MASK	((1u << LR_FRAMENO_BITS) - 1)
+>  #define LR_IS_REG	BIT(LR_FRAMENO_BITS)
+>  #define LR_INDEX_OFF	(LR_FRAMENO_BITS + 1)
 
-Does this test still check that fp-8 is dead at the merge?
+This isn't a bug, but the comments describing this packed layout still show
+the old widths.  The comment above linked_regs_pack() says:
 
-When the jump state of "if r0 != 0 goto l_skip" reaches insn 6 first, path B
-is the old state and path A (the one with the spill) is the state being
-compared.  Path B never touches the stack, so its allocated_stack is 0 and
-the loop in stacksafe() has nothing to walk:
+ * Pack linked registers for a jump history entry, one u16 each:
+ * - 4 bits frameno
+ * - 1 bit  is_reg
+ * - 11 bits register or stack slot index
 
-    for (i = 0; i < old->allocated_stack; i++) {
+and the linked_regs comment in struct bpf_jmp_history_entry in
+include/linux/bpf_verifier.h says:
 
-stacksafe() then returns true whatever fp-8 holds in path A.  r6 is the
-constant 7 on both paths and r0 is dead, so "from 5 to 6: within" is
-printed even if liveness reports fp-8 as live and bpf_clean_verifier_state()
-leaves the STACK_SPILL of path A in place.
+    Each is packed as 4 bits of frame number, one bit telling a register
+    from a stack slot and 11 bits of register or slot index, see
+    linked_regs_pack().
 
-Before this patch the fallthrough path with the spill was explored first,
-and path B's empty stack matched it only if fp-8 was dead ("6: safe").  The
-comments updated here still give that reasoning:
+Should both be updated to 5 bits of frame number and 10 bits of index to
+match LR_FRAMENO_BITS and LR_INDEX_BITS, and the commit message's own "the
+index of a register or a stack slot loses one bit"?
 
-    clean_verifier_state() converts path A's STACK_SPILL to STACK_INVALID.
-    Path B has STACK_INVALID. stacksafe() matches
-
-A regression that keeps fp-8 live at the merge (the scx_lavd state growth
-this test models) would no longer fail it.
-
-Could the spilling path be the one that arrives first, for example by
-putting the spill block on the jump-target side the way
-step_prune_hit_const_on_line does?  Another option is to have path B store
-a different kind of value to fp-8 as well.
-
-I did not see a later patch in the series that changes this file.
-
-> @@ -1390,7 +1387,7 @@ __naked void dead_spill_at_merge_enables_pruning(void)
->  	"call %[bpf_get_prandom_u32];"
->  	"r6 = *(u64 *)(r10 - 8);"
->  "l_skip%=:"
-> -	/* fp-8 dead. Path B pruned here -> "6: safe" */
-> +	/* fp-8 dead. The states of both paths are the same here */
->  	"r0 = r6;"
->  	"exit;"
->  	:
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-> index f40e57251e94..f13ff9380947 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-
-[ ... ]
-
-> @@ -272,7 +264,8 @@ l2_%=:	r0 = 0;						\
->
->  SEC("socket")
->  __description("allocated_stack")
-> -__success __msg("processed 15 insns")
-> +/* every insn once: what is written to the stack on one path is dead where the paths meet */
-> +__success __msg("processed 14 insns")
->  __success_unpriv __msg_unpriv("") __log_level(1) __retval(0)
->  __naked void allocated_stack(void)
->  {
-
-Does "processed 14 insns" still depend on the stack written by one path
-being dead where the paths meet?
-
-The new comment explains the count by the dead stack, but the order in
-which the states arrive decides the result.  At "if r0 == 0 goto l0_%=" the
-jump state reaches l0 before the block that spills to fp-8 and fp-9 has
-run.  That jump state has written no stack, so allocated_stack is 0.
-
-The state that did the spills then arrives and is the one being compared.
-stacksafe() loops over old->allocated_stack, which is 0, and returns true.
-The registers that differ (r6, r7) are dead at l0 and r0 is 0 on both
-paths, so the second state is "within" and every insn is processed once.
-This holds even if fp-8 and fp-9 were treated as live, and even if
-stacksafe() went back to rejecting the case where
-old->allocated_stack > cur->allocated_stack.
-
-That means the test no longer covers what 19e2dbb7dd97 ("bpf: improve
-stacksafe state comparison") added it for, an old state with more allocated
-stack than the current one where the extra slots are not live.  Before this
-patch the fallthrough path with the stack was the explored state, and the
-count of 15 depended on those slots being dead.
-
-Could the stack writes be put on the jump-target side of the branch so the
-state that wrote the stack reaches l0 first?
-
-I did not see a later patch in the series that changes this file.
+There is no functional impact, since bpf_push_jmp_history() returns 0 before
+it records anything in this tree.  Both comments are deleted later in the
+series by 1dc2b8088ff9 ("bpf: Remove precision tracking"), so this only
+matters if this patch is taken without that one.
 
 
 ---
@@ -187,4 +198,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40263142572
---===============6846121162781710602==--
+--===============5699443303493392689==--
