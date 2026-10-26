@@ -1,56 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=79.135.106.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.128
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793045856;
-	b=34VcXXHWQEXsoz1kpoxaH3JVQul4mVpwD1nSVeYstZ/7TejvpLo2gYQ9GEpF8rpovnDc
-	 aRdGmhkK00vD16wwD3auaNW1/5bc+L0u1NjAFnD1nw/duUrbeMBAiqiRgT2ylamsfSV3C
-	 IsRzf0hI56xhVxuBzSuW24VZ3hrrevdJf+5jP7chnEdu6RZyIX4vH/qPCSOVgFfL80sG+
-	 wLu6C89mbHKtawfK2W0Gv6TVuTbIhu6/oSOCNQNfTf3ypYCtWWtG5JMtEIBocd5MdEMWR
-	 6cgWbtBWnBw1il6IyZjEh67IyRKzO+VJl9klCTZ690zbpPmtJIe3iUBG95P3CBhVWkA==
+	t=1793046071;
+	b=cdcQ45uAOndjPJXDsPBDP4cN8BNVEx8NINwFjRaiLju7YwJCaEBjGfrhYaJzYAKBqJmF
+	 6cr+0WlzrqH44Lx8oad1bIKoPkFYYYOoXxVlrYXBEmjUlQHOr6cmxlDkjsxNwOz/y7Jie
+	 8dOUXNcodMTctonmZy33fUzEJffYLpKNJJPNTrz4OOH4OXzcmkHvLtfClSpMTIiVKFeTr
+	 eUFXdMUMBXVfUTPtYLy3kGXG46hC0IyxwmO4qLZ59e/NcPfvcdwLkeAdMBkM2mKKr6RbG
+	 JcSPLUhbBao5vond+YVFI93Tf8OmCBC5hyLeWJdvKAqEJPGVmkbTWUooezq+vAvTj5A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793045856;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 Feedback-ID:X-Pm-Message-ID:MIME-Version:Content-Type;
-	bh=sVSjN/XqWDLZDr7IXQQnJDQT7Ga3u1tyb5UkYEWZhRk=;
-	b=wePaPRFRj5uA4YQlJw1dDVbj+iLUYSONl6OHOrtzfPjms3FHNJ1qmtb6rPFxh3pRMuGn
-	 /9sODUcNBd0o1Y9hQEIUBpZfKHfXpWa3u/lTOTWW2iqO/SRPUDyosNZ9yxv97oh3h8ZgT
-	 9JOY5t0mFFXFHBm0NAYQ/1ptk/uMpV4xymOJERCH5eECsuQr3mplcmoZGnkE91VqiFB6C
-	 QwIhkxbUU4KF/rUUH1ngH63vBYYcy2wbuRosZtYw/xfnFCystrV8a+kio3XrJFLP3U61M
-	 z4UsFB4996oOxbGx6x+S0FptNt/IOICu5Wg2ZQ1GSMadDudH2XFEicGWF8mCJ+L55vA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793046071;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=E33wi6Gi4cgpbpmbmSH1yY0fn5sf/GiXkzMRUkbqsVM=;
+	b=N61QeCt8cgjtXidLbaQ0UKJSq5ln2qMb5G9e8NoVFicB3WX8kXsvok9ttNunPKwuNTO4
+	 Fu8goFSgruqXHilq+FFS62VbZcUg2z16IKXEqhc51Eq9X6kiyNy7Cz/1C3W8Wy20WvU3B
+	 iUUE0zd0wI3KdC5qsOry3jIdJju1bdYG1bnBpoGVsvtuVUg51Oa3dIyRoJEWLdgT7A+84
+	 DeZ8Z+2KBS0QKwu8hd2Urp0Q3jV8AOIsSln1Oi/OmevXBPLdNh3/kbj2LrF4CQpmwb6DM
+	 O6u3iCrZieS+dwCDF2IrfDLoI49K0L7Mqdkxiwlh8N6A9UJbvyJGJav3s5JbM0bHw3Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=proton.me;
-	spf=pass smtp.mailfrom=proton.me;
-	dkim=pass header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=yvlmz5wuurh5rfsoiol3dfcmfy.protonmail2 header.b=zU2lBZAR;
-	arc=none smtp.remote-ip=79.135.106.99
-Received: from mail-10699.protonmail.ch (mail-10699.protonmail.ch [79.135.106.99])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Mw2GY1OE;
+	arc=none smtp.remote-ip=95.215.58.128
+Received: from mta1.migadu.com (out-128.mta1.migadu.com [95.215.58.128])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CEE606A31B;
-	Mon, 26 Oct 2026 20:17:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9CEE606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6437606A31E
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 20:21:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6437606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=proton.me header.i=@proton.me header.a=rsa-sha256 header.s=yvlmz5wuurh5rfsoiol3dfcmfy.protonmail2 header.b=zU2lBZAR
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=yvlmz5wuurh5rfsoiol3dfcmfy.protonmail2; t=1793045853;
-	x=1793305053; bh=sVSjN/XqWDLZDr7IXQQnJDQT7Ga3u1tyb5UkYEWZhRk=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=zU2lBZAR2+tXbDzRvPC8eEgaPslt5ccH5CgJ6w6DgGQIWCDYiaWlrkAc90YdsVG0H
-	 iMeWt3zEBBBZwAF01E+bVRJYqKV6oPWPndut+foblGBxfiG8SXEUiLEIlLly/x94nr
-	 TQ8tFAiYAf2rJBwCoEx0POuwvDgGv9xXvOwQLMHabQVY4/4h8O21RIPM3zdREbOqOs
-	 DIhPCcoXZRa2ylzG2mRWwlKunEdsbcOescd62Pk7phVGhshd3wDWMvJovMYgAs6oZ4
-	 5pxZdgru7l4ckNfqzdsR+ZiqdQ8WNqZ6vc1HEPMD6uNrfqyQ0ZHLf8nb6sgvW2R1J1
-	 eIfaJvPymTZtg==
-Date: Mon, 26 Oct 2026 20:17:26 +0000
-To: "brauner@kernel.org" <brauner@kernel.org>, "kees@kernel.org" <kees@kernel.org>, "rostedt@goodmis.org" <rostedt@goodmis.org>
-From: BoxStrikesTeam <BoxStrikesTeam@proton.me>
-Cc: "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>, "jack@suse.cz" <jack@suse.cz>, "mhiramat@kernel.org" <mhiramat@kernel.org>, "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "jkoolstra@xs4all.nl" <jkoolstra@xs4all.nl>, "farid.m.zakaria@gmail.com" <farid.m.zakaria@gmail.com>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: [RFC PATCH] binfmt_misc: add binfmt_misc_select tracepoint
-Message-ID: <cmtfuzYFZMj7WozUoEjFs3RxYWe9UgdY5rK3ZGT7CPwO1mpemvEwNhG4v5ucoKBgUHMqFa7kSzOvLjFcVcxAybfmKdURZ4h-qoKX1lHXlAA=@proton.me>
-Feedback-ID: 205449183:user:proton
-X-Pm-Message-ID: c38ae376d3bc2a6c337eca8d28b04e53faf2a787
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Mw2GY1OE
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=IExywFcdcz5Fqxu4ycRZf/Zm9+V9ZMsYzn4S5XFHY3E=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793046067; v=1; x=1793650867;
+ b=Mw2GY1OE5S52isi1dTMf0MHWi5+QqEfjGm/W0p2Lb7qgfdP0t27lRxfxpfvcWI+l8yjQOFS0
+ vXqFLf0oZufNNMkFR4aoM2ci1QkUyeEkkbvpue6tEc6w0XyVYp2uTMjD//ODKLNl1/p2k5f015T
+ A3V5AJCij9rEZSCGrK6V9Arc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 39f23623df81c01f;
+	Mon, 26 Oct 2026 20:21:07 +0000
+X-Mizu-Trace-ID: 39f23623df81c01f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <2b712ff8-21cf-4371-9663-2395ceed351e@linux.dev>
+Date: Mon, 26 Oct 2026 13:21:02 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,96 +58,128 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 10/12] selftests/bpf: Cover the low-32 link
+ for narrowing stack fills
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20261020161907.2115379-11-vineet.gupta@linux.dev>
+ <fb6e1da8e20593510ea7dbfc1527db1aaf4682c22968a209dbf2ed771646a6fd@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <fb6e1da8e20593510ea7dbfc1527db1aaf4682c22968a209dbf2ed771646a6fd@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+On 10/20/26 9:52 AM, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Cover the low-32 link for narrowing stack fills
+> TL;DR: Test issue: sext_fill_does_not_inherit_zext_link appears never to put a
+> zero-extending link on the stack slot, so it can't distinguish the new
+> check_mem_access() condition from the old one; its comment and commit message
+> look inaccurate.
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> index 69efe1381eca..ab78285153fb 100644
+>> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> +/*
+>> + * A sign-extending fill must not come away with a zero-extending link. The
+>> + * slot below already fits 32 bits, so the fill is not narrowing and assigns
+>> + * no link kind of its own, and "state->regs[dst] = *reg" copies the slot's
+>> + * verbatim; check_mem_access() is what has to drop it, since it would leave
+>> + * r2 recording a zero-extension of a value it has just sign-extended.
+>> + * Asserted on the register dump rather than on a guarded branch, so it pins
+>> + * the rule itself and not a downstream effect.
+>> + */
+>> +SEC("socket")
+>> +__success __log_level(2)
+>> +/* a copied link would print as R2=scalar(id=N+0,smin=... */
+>> +__msg("(81) r2 = *(s32 *)(r10 {{.*}} R2=scalar(smin=")
+>> +__naked void sext_fill_does_not_inherit_zext_link(void)
+>> +{
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
+>> +	w7 = w6;		/* r7 = zext32(r6), fits 32 bits */ \
+>> +	*(u64 *)(r10 - 8) = r7;					\
+> Does this test ever put a zero-extending link on the slot?
 
-Hi,
+Sorry, it doesn't and nothing in this patch can, so it is dropped in v4.
 
-This is an RFC patch for a binfmt_misc_select tracepoint. The patch
-was tested on v7.3-rc7, but I currently have limited computer access
-and no usable SMTP setup, so I could not send it with git send-email.
-I know patches should be inline; the patch is attached as
-0001-binfmt_misc-select-tracepoint.patch, and I can resend it inline
-once I have access to a suitable environment.
---b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M
-Content-Type: text/x-diff; name=0001-binfmt_misc-select-tracepoint.patch
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=0001-binfmt_misc-select-tracepoint.patch
 
-RnJvbTogRW5lc2hhbiBFcmRvxJ9hbiBLYXJhY2EgPEJveFN0cmlrZXNUZWFtQHByb3Rvbi5tZT4K
-U3ViamVjdDogW1JGQyBQQVRDSF0gYmluZm10X21pc2M6IGFkZCBiaW5mbXRfbWlzY19zZWxlY3Qg
-dHJhY2Vwb2ludAoKQSBiaW5mbXRfbWlzYyBlbnRyeSBjYW4gc2VsZWN0IGFuIGludGVycHJldGVy
-IGZvciBhbiBleGVjLiAgV2l0aCBhIEJQRgonQicgaGFuZGxlciwgdGhhdCBzZWxlY3Rpb24gY2Fu
-IGJlIG1hZGUgYnkgYSBCUEYgc3RydWN0X29wcyBwcm9ncmFtLgpUaGUga2VybmVsIGNvbW1pdHMg
-dGhlIGRlY2lzaW9uIGluIGJwcm0tPmludGVycCBhbmQgYnBybS0+ZmxhZ3MsIGJ1dCBpdApkb2Vz
-IG5vdCBlbWl0IGFuIGV2ZW50IGF0IHRoZSBzZWxlY3Rpb24gcG9pbnQuCgpFeGlzdGluZyBvYnNl
-cnZlcnMgaGF2ZSB0byByZWNvbnN0cnVjdCB0aGUgZGVjaXNpb24gZnJvbQovcHJvYy9QSUQvZXhl
-LCBBVF9FWEVDRkQsIEFUX0ZMQUdTLCBvciAvcHJvYy9QSUQvbWFwcy4gIFRoZXNlIHNvdXJjZXMK
-YXJlIG1vZGUtZGVwZW5kZW50OiBhIHRyYW5zcGFyZW50IGRpc3BhdGNoIHN0aWxsIHJlcG9ydHMg
-dGhlIG9yaWdpbmFsCmJpbmFyeSBpbiAvcHJvYy9QSUQvZXhlLCBhbmQgYSBzaG9ydC1saXZlZCBw
-cm9jZXNzIGNhbiBleGl0IGJlZm9yZSB0aGUKb2JzZXJ2ZXIgcmVhZHMgaXQuICBBIGNsYXNzaWMg
-ZGlzcGF0Y2ggcmVwb3J0cyB0aGUgaW50ZXJwcmV0ZXIsIGJ1dApub3Qgd2hpY2ggaGFuZGxlciBz
-ZWxlY3RlZCBpdCBvciB3aGljaCBpbnZvY2F0aW9uIGZsYWdzIHdlcmUgdXNlZC4KCkFkZCBhIHRy
-YWNlcG9pbnQgYWZ0ZXIgdGhlIGludGVycHJldGVyIGFuZCB0aGUgaW52b2NhdGlvbiBmbGFncyBh
-cmUKc2VsZWN0ZWQuICBJdCByZXBvcnRzIHRoZSBiaW5hcnkgZmlsZW5hbWUsIHRoZSBzZWxlY3Rl
-ZCBpbnRlcnByZXRlciwKdGhlIGhhbmRsZXIgbmFtZSAoZm9yIEJQRiBoYW5kbGVycyksIHRoZSBp
-bnZvY2F0aW9uIGZsYWdzLCBhbmQgdGhlCnBpZC4gIFRoZSBmbGFncyBhcmUgbWFza2VkIHdpdGgg
-TUlTQ19GTVRfSU5WT0NBVElPTl9GTEFHUyBzbyB0aGF0CnN0YXRpYyBlbnRyeSBzdGF0ZSBkb2Vz
-IG5vdCBsZWFrIGludG8gdGhlIGV2ZW50LgoKVGhlIHRyYWNlcG9pbnQgaXMgb2JzZXJ2YWJpbGl0
-eSBvbmx5OyBpdCBkb2VzIG5vdCBjaGFuZ2UgZXhlYwpiZWhhdmlvci4KCkFzc2lzdGVkLWJ5OiBM
-TE0KU2lnbmVkLW9mZi1ieTogRW5lc2hhbiBFcmRvxJ9hbiBLYXJhY2EgPEJveFN0cmlrZXNUZWFt
-QHByb3Rvbi5tZT4KLS0tCgpUaGlzIGlzIGFuIFJGQy4gIEEgc21hbGwgUG9DIGFuZCBzaG9ydCBB
-L0IgcmVzdWx0cyBhcmUgYXZhaWxhYmxlIGZvcgpjb250ZXh0OyB0aGV5IGFyZSBub3QgbmVlZGVk
-IHRvIHJldmlldyB0aGUgcGF0Y2guCgogZnMvYmluZm10X21pc2MuYyAgICAgICAgICAgICAgICAg
-IHwgIDggKysrKysrKysKIGluY2x1ZGUvdHJhY2UvZXZlbnRzL2JpbmZtdF9taXNjLmggfCA1MiAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogMiBmaWxlcyBjaGFuZ2VkLCA2
-MCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZnMvYmluZm10X21pc2MuYyBiL2ZzL2JpbmZt
-dF9taXNjLmMKLS0tIGEvZnMvYmluZm10X21pc2MuYworKysgYi9mcy9iaW5mbXRfbWlzYy5jCkBA
-IC00MSw2ICs0MSw5IEBACiAKICNpbmNsdWRlICJpbnRlcm5hbC5oIgogCisjZGVmaW5lIENSRUFU
-RV9UUkFDRV9QT0lOVFMKKyNpbmNsdWRlIDx0cmFjZS9ldmVudHMvYmluZm10X21pc2MuaD4KKwog
-LyogRW50cnkgc3RhdHVzIGFuZCBtYXRjaCB0eXBlIGJpdCBudW1iZXJzLiAqLwogZW51bSBiaW5m
-bXRfbWlzY19lbnRyeV9iaXRzIHsKIAlNSVNDX0ZNVF9FTkFCTEVEX0JJVAk9IDAsCkBAIC02NDQs
-NiArNjQ3LDExIEBACiAKIAlmbGFncyA9IGVudHJ5X2ludm9jYXRpb25fZmxhZ3MoZm10LCBicHJt
-KTsKIAorCXRyYWNlX2JpbmZtdF9taXNjX3NlbGVjdChicHJtLCBpbnRlcnByZXRlciwKKwkJCQkg
-dGVzdF9iaXQoTUlTQ19GTVRfQlBGX0JJVCwgJmZtdC0+ZmxhZ3MpID8KKwkJCQkgZm10LT5icGZf
-b3BzLT5uYW1lIDogIiIsCisJCQkJIGZsYWdzICYgTUlTQ19GTVRfSU5WT0NBVElPTl9GTEFHUyk7
-CisKIAkvKiBObyBhcmd2IGlzIGJ1aWx0IGZvciBhIHN0YWdlZCBhcmd1bWVudCB0byBsYW5kIGlu
-LiAqLwogCWlmICgoZmxhZ3MgJiAoTUlTQ19GTVRfTE9BREVSIHwgTUlTQ19GTVRfVFJBTlNQQVJF
-TlQpKSAmJgogCSAgICBicHJtLT5icGZfaW50ZXJwX2FyZykKCmRpZmYgLS1naXQgYS9pbmNsdWRl
-L3RyYWNlL2V2ZW50cy9iaW5mbXRfbWlzYy5oIGIvaW5jbHVkZS90cmFjZS9ldmVudHMvYmluZm10
-X21pc2MuaApuZXcgZmlsZSBtb2RlIDEwMDY0NAotLS0gL2Rldi9udWxsCisrKyBiL2luY2x1ZGUv
-dHJhY2UvZXZlbnRzL2JpbmZtdF9taXNjLmgKQEAgLTAsMCArMSw1MiBAQAorLyogU1BEWC1MaWNl
-bnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8KKy8qCisgKiBUcmFjZXBvaW50IGZvciBiaW5mbXRf
-bWlzYyBiaW5hcnkgdHlwZSBoYW5kbGVyIGRpc3BhdGNoLgorICoKKyAqIEZpcmVzIG9uY2UgZm9y
-IGV2ZXJ5IGV4ZWMgYSBiaW5mbXRfbWlzYyBlbnRyeSBtYXRjaGVzLCBhZnRlciB0aGUKKyAqIGlu
-dGVycHJldGVyIGFuZCB0aGUgaW52b2NhdGlvbiBmbGFncyBoYXZlIGJlZW4gc2VsZWN0ZWQuIFVu
-bGlrZQorICogc2NoZWRfcHJvY2Vzc19leGVjICh3aGljaCByZXBvcnRzIGJwcm0tPmZpbGVuYW1l
-KSBhbmQgL3Byb2MvUElEL2V4ZQorICogKHdoaWNoIGEgdHJhbnNwYXJlbnQgZGlzcGF0Y2ggc2V0
-cyB0byB0aGUgYmluYXJ5KSwgdGhpcyByZXBvcnRzIHRoZQorICogaW50ZXJwcmV0ZXIgdGhhdCBh
-Y3R1YWxseSBydW5zLCBzbyBvYnNlcnZlcnMgY2FuIHNlZSB0aHJvdWdoIGEKKyAqIHRyYW5zcGFy
-ZW50IGRpc3BhdGNoLgorICovCisjdW5kZWYgVFJBQ0VfU1lTVEVNCisjZGVmaW5lIFRSQUNFX1NZ
-U1RFTSBiaW5mbXRfbWlzYworCisjaWYgIWRlZmluZWQoX1RSQUNFX0JJTkZNVF9NSVNDX0gpIHx8
-IGRlZmluZWQoVFJBQ0VfSEVBREVSX01VTFRJX1JFQUQpCisjZGVmaW5lIF9UUkFDRV9CSU5GTVRf
-TUlTQ19ICisKKyNpbmNsdWRlIDxsaW51eC90cmFjZXBvaW50Lmg+CisjaW5jbHVkZSA8bGludXgv
-YmluZm10cy5oPgorCitUUkFDRV9FVkVOVChiaW5mbXRfbWlzY19zZWxlY3QsCisKKwlUUF9QUk9U
-TyhzdHJ1Y3QgbGludXhfYmlucHJtICpicHJtLCBjb25zdCBjaGFyICppbnRlcnAsCisJCSBjb25z
-dCBjaGFyICpoYW5kbGVyLCB1bnNpZ25lZCBsb25nIGZsYWdzKSwKKworCVRQX0FSR1MoYnBybSwg
-aW50ZXJwLCBoYW5kbGVyLCBmbGFncyksCisKKwlUUF9TVFJVQ1RfX2VudHJ5KAorCQlfX3N0cmlu
-ZyhmaWxlbmFtZSwJYnBybS0+ZmlsZW5hbWUpCisJCV9fc3RyaW5nKGludGVycCwJaW50ZXJwKQor
-CQlfX3N0cmluZyhoYW5kbGVyLAloYW5kbGVyKQorCQlfX2ZpZWxkKHVuc2lnbmVkIGxvbmcsCWZs
-YWdzKQorCQlfX2ZpZWxkKHBpZF90LAkJcGlkKQorCSksCisKKwlUUF9mYXN0X2Fzc2lnbigKKwkJ
-X19hc3NpZ25fc3RyKGZpbGVuYW1lKTsKKwkJX19hc3NpZ25fc3RyKGludGVycCk7CisJCV9fYXNz
-aWduX3N0cihoYW5kbGVyKTsKKwkJX19lbnRyeS0+ZmxhZ3MgPSBmbGFnczsKKwkJX19lbnRyeS0+
-cGlkID0gY3VycmVudC0+cGlkOworCSksCisKKwlUUF9wcmludGsoInBpZD0lZCBmaWxlbmFtZT0l
-cyBpbnRlcnA9JXMgaGFuZGxlcj0lcyBmbGFncz0lI2x4IiwKKwkJICBfX2VudHJ5LT5waWQsIF9f
-Z2V0X3N0cihmaWxlbmFtZSksIF9fZ2V0X3N0cihpbnRlcnApLAorCQkgIF9fZ2V0X3N0cihoYW5k
-bGVyKSwgX19lbnRyeS0+ZmxhZ3MpCispOworCisjZW5kaWYgLyogX1RSQUNFX0JJTkZNVF9NSVND
-X0ggKi8KKworLyogVGhpcyBwYXJ0IG11c3QgYmUgb3V0c2lkZSBwcm90ZWN0aW9uICovCisjaW5j
-bHVkZSA8dHJhY2UvZGVmaW5lX3RyYWNlLmg+Cg==
+> The w7 = w6 above does give r7 BPF_REG_LINK_ZEXT, but the spill that follows
+> clears it.  In check_stack_write_fixed_off(), r7 fits in 32 bits, so
+> assign_scalar_id_before_mov() runs before save_register_state():
+>
+>      if (src_reg->link_kind && src_reg->link_kind != BPF_REG_LINK_SEXT)
+>          bpf_clear_scalar_id(src_reg);
+>      ...
+>      if (!src_reg->id && !tnum_is_const(src_reg->var_off))
+>          src_reg->id = ++env->id_gen;
+>
+> The slot ends up with a fresh id and link_kind == BPF_REG_LINK_NONE.  The
+> 4-byte ldsx is not narrowing, so the fill copies a plain id, and
+> check_mem_access() drops it through the existing !no_sext clear.  The
+> link_kind == BPF_REG_LINK_SEXT part of the new condition never sees a ZEXT
+> kind here.
+>
+> This leaves two problems.
+>
+> First, the in-test comment looks wrong:
+>
+>      /* a copied link would print as R2=scalar(id=N+0,smin=... */
+>
+> print_reg_state() prints +delta only when link_kind is set, so a surviving
+> plain id would print as R2=scalar(id=N,smin=...
+>
+> Second, the commit message says "The last two pin the link-kind checks in
+> check_mem_access()", but this test cannot tell the new check from the old
+> one.  It passes with the pre-series:
 
---b1=_kzBFLx7iHgjUHNurMWuTQCh250lsH2OVRDJ5zxSdQ4M--
+Agreed. Pre-series the fill gets a plain id from 
+assign_scalar_id_before_mov() and check_mem_access() drops it through 
+the existing !no_sext clear, so R2 prints without an id either way and 
+the assertion cannot separate them.
+The changelog said "the last two"; it is now "the last one", counting 
+only sext_byte_fill_drops_sext_link.
+
+
+> That holds even after 3649346488fc ("bpf: Track low-32 scalar equality across
+> narrowing stack spills"), because the fill-side
+> assign_scalar_id_before_mov(reg) clears the slot's new ZEXT kind before the
+> copy.  No later commit in the range (3649346488fc, 73fbac05c8bd) changes this
+> test.
+
+Right.
+
+> Should the comment, the test name and the commit message describe what is
+> actually pinned here (a plain id dropped across a range-changing 4-byte
+> ldsx)?  Or should the test be reworked once a ZEXT-carrying slot is
+> reachable?
+
+Neither: the test is dropped in v4.
+
+Re-describing seems viable but is conceptually wrong. It pins a plain id 
+dropped across a range-changing ldsx which is pre-existing behavior that 
+this series does not touch, so doesn't make sense to introduce here. 
+Reworking after "a ZEXT-carrying slot is reachable" might be better 
+suited, but that is 11/12 and 12/12, which are tagged [do not merge]. 
+12/12's version has the same defect and is dropped too, so both go.
+
+Thx,
+-Vineet
+
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/39458500836
 
