@@ -1,113 +1,48 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793006905;
-	b=G/gsmAPLue0IE65/i2ONfkXUxJIGj3DftfyM6ZW94s73YbYU2QowFYRTomCuWsChAs2g
-	 +pfreJ2N7MFWR58BoLrUpRkJf021q79vACJFdMFX+DwqQirzomJ7CyixhM2QwTLjEZUtr
-	 AbLkdIn8ckgN/XvoYYQ7OTp7Pety2n7Jlbuww/SWzgdYKxBS0QyyWG4RJ7KlfKKkCmqz/
-	 A1bBo7h4vH0o6WUU8EYk9L+GTB1t0mXlVYnmdo6qtiKs/BAm7icUr7tkEsrhrFkT+Fa1j
-	 xsTZioFs3ZZbG5t+cEgOl9iQmI2iTCRKT1wVoW5sj/dB2CaWYYuVVxXhk2B8JxU+1Aw==
+	t=1793008650;
+	b=SFI4gzH+S+pfZJTepDLgx7NEMse3I3Q8GywJ62m1qyJ8Vmk8lM88B0Wzhs5hHdVD1YbN
+	 QGVN+Mjs+msiwRPKYJpSutPgmVwJsZ0wH67DjDEiuoTA2JlRjm5xh8iznmAn9jT/Btx4R
+	 wkEZPS3wC47LnUBQXqN38ZcvmbARSygu3xmR0XnEfsW07OJR9h4bMSQ6/f4/BRq0su5mT
+	 bL79L+VaqlF2unTBY0S3Gd9PubFzutHjkTiA0MLr+9vgsC+QBZuMI7U8ofBovpmWWYVTa
+	 rOuSmLILprhHyd7woDSWdkil+ZXTQvo2gT1YIRar9abw443dPHMx4VZYlXdlw/vfbpg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793006905;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:Date:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=6Q5jKmXgzoo+WiVGo4LfNDJTiePFUGEuuUfFv2a/kxQ=;
-	b=LMpPsnIizuoHn06T09jMMbCj0aSn/FjjipEtFk5u+gHbfmk4NCASYc0EyANNtQsriIDh
-	 cVNqEzF4mNHdXqITqN8JFR1QboUp9auMhXkv+ZaXqeSpwT8WNpH0qTWF4lRS4w02S/G5v
-	 WcSifYGICXg/pvQovuJxf7A6vYIL+SxLseM3V9Sy1R4jAJZ7EfpwKQTq5JanQ7/ld4Fwq
-	 h8TF04v/pOIWWjd6Fz8njkcrqEJBBsY88fjQDynZ4ZRilZ2w0O1PUQ8OOSYFwmtW5uR2g
-	 H1WrDH9x9A5Q+TrY7JAgDbxirjBZieeOMLHqB/KKSRWoiUHZ4nYsCVfY5Bqn9IThN2w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793008650;
+	h=Received:DKIM-Signature:From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
+	 X-Mailer:X-Developer-Signature:X-Developer-Key;
+	bh=vZbI+36cuLWKSblKMENitfEJ+yoA6aEpBQf4/oO9DlE=;
+	b=mwAqnBODCUonBlxs2hnBIE6zpbvHUOPWFiR+lx5vGLqx0D86MsrVoLKw0TYLG6Nw7tel
+	 il3VZYmMXkTWaui/xx981q2qPTeJghdubzmiBIkiZPLy7e9c0duejNjjKY1JiR5mtdqio
+	 t5JI6m/pCnbI82kuJWQk0HZwc28oJjtKvN8Y5GJfaNoO5uWADmsAfI+i0wSQSIVdm2uBg
+	 FDYauXAQCxnBVU4mb6aMKm0HUA2cdpGUfP8+ONxTlg5ESp2qXnuS7Lhvz5hldWRrZNEr3
+	 TOpKOGSwRZKxeCGGH4vzWKJPJcjsOaZhoI20pXH99Am3KRNpKwUIlhIGF/e25scXXnw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CZ4B9P7w;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=o0Sq3nJa;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279A560A262E
-	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 09:28:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 279A560A262E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778FA606A31A;
+	Mon, 26 Oct 2026 09:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CZ4B9P7w
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a1df4c0966so17431495e9.1
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 02:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793006903; x=1793611703; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6Q5jKmXgzoo+WiVGo4LfNDJTiePFUGEuuUfFv2a/kxQ=;
-        b=CZ4B9P7wQDiCoHwSght5HMF1Reu0ZpEa5W9PxymJM4iRKAeArJA9+p8mAQXrRP0Y5A
-         533t1AnsPiaCD41CbQs4XdyVl85RGWOO2pjj95r+rqneOJOXEwburRPd+pn4RRpCkkjO
-         9BynAhJWvsvPV8cU6J/Kj7PEUdurJMpgy/N0wkHcDKZPOtPNtlEZVJBt6agC7TcorWLo
-         ZcoVuCinwHjIjKyFJwHBsfK3FTyHH8JKDImrVugE1Q0JThuEUCMT7WXn+R+Fgm8Zv8Vz
-         F2ab9z3r5ovxvhgO8V5SRxUTac/RZ8vyZAKQD9TaKGf3RXpiJdWrhWVCK1SInHdQ/Qyx
-         98JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793006903; x=1793611703;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6Q5jKmXgzoo+WiVGo4LfNDJTiePFUGEuuUfFv2a/kxQ=;
-        b=jkFSoAIbY8IK1TaT2ub2CYm/p0lCWqT1wULRa6Ihkrz6a5oS+8twB96MQCCYMXKyJO
-         CKPtbG7gqpX6Bsc85RE88uzrmRGY+X7/5dFC9ESbJ6WZz1LGHv2RPKCtNfL3aKI75o9q
-         GIuEITSwo2U56InUaL4iIjmtZkq+rraudcMforRTbGSPOi8jjRbYZdCuZFlmlDJbeVXc
-         v96WJVF/EiqKxAhU7EsnFCXTlbuN9KSI9tHSEy4dDXbOzLgqw9eD1QPPBdaRwE4zjiPK
-         zDQDHaaKGRwRG8R3+YDyh3fgopV/tJQUNbinoIIyuewDcXEbdmOb2GWO+w34h4JJbiWo
-         WobA==
-X-Forwarded-Encrypted: i=1; AKwUvByApWLoE1nlI5mc5L6xh8c4iLBjI6l3MVY1jqY14oZaUXDFWqbv2EQgV22r+fizuwpdtOo=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIWRkp09kzCr6ouKCUiPk5yuk4ek5Gm+CypJ8JY9G2faxYh6DJq
-	YvmmD5LBzMHqGeU6Gd0dFPq75OEQxuFg5+cfXFfSpGT3nD+D7OVaiJ2w
-X-Gm-Gg: AYBFou1HA/v8EiamtQTLEEy2Pv3OkZw++X9qWwFJygvLUeLsGxFi2IjeKiGpHwJXF6p
-	M6eOzzLPdR2rAgHyPVZ1QyLdp9CVs1ujAoj5Ojzm55B596xv0yQGGJ1EP/iQMtTLQiTwUaBMc7O
-	4AQikeFRoyN5e8Mpf55X8a0BSv4LRbNiufyCTxM24TKo+Lt1sIDdrJJW7/BG477/cSznf6yM3BK
-	Q2xUqPhcVSEmNPwKfAHb7fHtZuwQh8jnsJTVqaDuK1GtnNerZuHUPxXIJDoh3XxccSClVMaYK+L
-	nb32hDyGQM0gEM6LRo0eKhPqONDAhcZDZBNI16c+yMZxSKISlPsyHkVtSTmqUK3QiTTVNu/FxpL
-	BmFfDOsO1rRjnA1497hGkRSqjesRkaMmDlulzYKxwKybb5svpS0Lo/ULe2lTkzDu6s+q8AYgM99
-	e6X+NF8VD8ramTGzE+LMqaKJ9twjHz2rRhii6XYn4x0gO9suxt3pqvLdCq4wyLsRrBi5sbIfPpJ
-	LTwEOLvoTIPJydS6RX82O4Q6I9c
-X-Received: by 2002:a05:600c:3553:b0:4a0:20b4:ba93 with SMTP id 5b1f17b1804b1-4a35aead203mr116295105e9.16.1793006903112;
-        Mon, 26 Oct 2026 02:28:23 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::25dc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a359ff2189sm215058535e9.1.2026.10.26.02.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 02:28:22 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 26 Oct 2026 10:28:20 +0100
-To: Samuel Wu <wusamuel@google.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, kernel-team@android.com,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH bpf-next v2 4/6] libbpf: Resolve typeless ksyms via
- KALLSYMS_QUERY ioctl
-Message-ID: <at8dNNb4vwovNZcZ@krava>
-References: <20261023001603.560210-8-wusamuel@google.com>
- <20261023001603.560210-12-wusamuel@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=o0Sq3nJa
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCF11F01829;
+	Mon, 26 Oct 2026 09:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793008650;
+	bh=vZbI+36cuLWKSblKMENitfEJ+yoA6aEpBQf4/oO9DlE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=o0Sq3nJaIGTrjslbLGLcqnd8GPwnDlz0xCnvjLEp0i/i+axxAaa035NKi395WU1Xg
+	 hDRVsuKGFDY2xbAsWfPHhhMUD+tmWCaGPykq6pdC4Jv4CeiwtNrQWXl15NqOYWFUGz
+	 kVRrjJWt9BCAfaqEd2Fxkz7FDmeS3LY60h66pvafTuDyTJaljvKsvPN8BJ/5CflJja
+	 BM8jHg/Em2FadQNsECWj6rWK8zTGh7w6lnh65LE2xpkG+hhcg9XMiOqj/a3F0p7Y9b
+	 OzHrg72jVKoAGT+iqyNNyLA58AIx1hvy50oRqPVigC305acGqMwORQ6ze9gyA2BChR
+	 1UJwGe1/aVDKg==
+From: Christian Brauner <brauner@kernel.org>
+Date: Mon, 26 Oct 2026 10:57:09 +0100
+Subject: [PATCH 1/8] lsm: always call the namespace_free hook
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,93 +52,82 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261023001603.560210-12-wusamuel@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20261026-work-security-namespace_free-v1-1-ffa3ebbf71bd@kernel.org>
+References: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
+In-Reply-To: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
+To: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Paul Moore <paul@paul-moore.com>, netdev@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>, stable@kernel.org
+X-Mailer: b4 0.17-dev-ce4c1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2360; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=C2BO3VYPrmNUuuCqz/uwcSrR57rLhf95j9OE/k19Z48=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTdV2HKM6t3aJrDJvJ0gWz+3FfXjLVifxb81lUQOB1/c
+ uNLlXuzOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACaSXcLIsMejKkgs42SX19mI
+ LT8DHmR19y9fpGErbcz580FnEWNHACPDsp479mV/mX2CXY+V3PvKeeqbbPy6Pxfy8+L4ZDpPla7
+ mBgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Thu, Oct 22, 2026 at 05:16:05PM -0700, Samuel Wu wrote:
+security_namespace_free() returns early if ns->ns_security is NULL and
+skips the namespace_free hook. But ns->ns_security is only allocated if
+an LSM requests a namespace blob via lbs_ns and currently no LSM does.
+So the namespace_free hook is never called at all.
 
-SNIP
+Landlock only uses namespace_init and namespace_install so it doesn't
+care. But the bpf LSM attaches to every hook and a program attached to
+namespace_free never runs. We want to use it in systemd-nsresourced to
+get notified when a user namespace goes away. Right now it has to kprobe
+retire_userns_sysctls() for that.
 
-> +static int bpf_object__query_ksyms(struct bpf_object *obj)
-> +{
-> +	struct kallsyms_query q;
-> +	struct extern_desc *ext;
-> +	int err = 0;
-> +	int fd;
-> +	int i;
-> +
-> +	fd = open("/proc/kallsyms", O_RDONLY | O_CLOEXEC);
-> +	if (fd < 0)
-> +		return -errno;
-> +
-> +	for (i = 0; i < obj->nr_extern; i++) {
-> +		ext = &obj->externs[i];
-> +		if (ext->type != EXT_KSYM || ext->ksym.type_id)
-> +			continue;
-> +
-> +		q = (struct kallsyms_query){
-> +			.size = sizeof(q),
-> +			.query_flags = KALLSYMS_QUERY_BY_SYMBOL,
-> +			.sym_name_addr = ptr_to_u64(ext->name),
-> +		};
-> +
-> +			err = -errno;
-> +			if (err == -ENOENT) {
-> +				err = 0;
-> +				continue;
-> +			}
-> +			if (err == -EADDRNOTAVAIL)
-> +				pr_warn("extern (ksym) '%s': resolution is ambiguous\n",
-> +					ext->name);
-> +			break;
-> +		}
-> +		ext->is_set = true;
-> +		ext->ksym.addr = q.sym_addr;
-> +		pr_debug("extern (ksym) '%s': resolved in kernel to 0x%llx\n",
-> +			 ext->name, ext->ksym.addr);
-> +	}
-> +	close(fd);
-> +	return err;
-> +}
-> +
-> +static int bpf_object__resolve_typeless_ksyms(struct bpf_object *obj)
->  {
-> +	int err;
-> +
-> +	err = bpf_object__query_ksyms(obj);
+Note that a bpf program can't work around this. The size of the
+namespace blob is fixed at boot and the bpf LSM doesn't request one.
+And security_namespace_init() allocates the blob before the
+namespace_init hooks are called anyway.
 
-hi,
-we could also add similar support for libbpf_available_kallsyms_parse and
-probably in some other places like bpf_get_ksyms.. which makes me think it
-could be useful to have KALLSYMS_QUERY support for multiple symbols
+The check isn't needed. __ns_common_free() is only ever called after
+__ns_common_init() succeeded and security_namespace_init() only calls
+security_namespace_free() after the blob has been allocated. So if an
+LSM requests a namespace blob it is always there when the hook runs.
+Call the hook unconditionally like security_sb_free(),
+security_file_free() and security_bpf_map_free() do.
 
-thanks,
-jirka
+The bpf LSM attaches programs to its bpf_lsm_*() stubs so fentry on the
+stubs shows what a bpf LSM program sees. Booted with lsm.debug, which
+prints "LSM: blob(ns) size 0", and created 100 user and uts namespaces:
 
+  bpftrace -e 'fentry:bpf_lsm_namespace_init { @init = count(); }
+               fentry:bpf_lsm_namespace_free { @free = count(); }' &
+  for i in $(seq 100); do unshare -Uu true; done
 
-> +	/*
-> +	 * Fall back to parsing /proc/kallsyms only if the ioctl is not
-> +	 * accessible: not present (-ENOTTY on older kernels) or kallsyms
-> +	 * addresses hidden from this opener (-EPERM, e.g. kptr_restrict).
-> +	 */
-> +	if (err != -ENOTTY && err != -EPERM)
-> +		return err;
-> +
-> +	pr_debug("KALLSYMS_QUERY unavailable (%s), falling back to /proc/kallsyms\n",
-> +		 errstr(err));
->  	return libbpf_kallsyms_parse(kallsyms_cb, obj);
->  }
->  
-> @@ -9922,7 +9996,7 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
->  			return -EINVAL;
->  	}
->  	if (need_kallsyms) {
-> -		err = bpf_object__read_kallsyms_file(obj);
-> +		err = bpf_object__resolve_typeless_ksyms(obj);
->  		if (err)
->  			return -EINVAL;
->  	}
-> -- 
-> 2.56.0.257.gf7497c7d27-goog
-> 
+  before: @init: 200 @free: 0
+  after:  @init: 200 @free: 200
+
+Fixes: f675d2e95569 ("lsm: add LSM blob and hooks for namespaces")
+Cc: <stable@kernel.org> # mainline only
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+ security/security.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/security/security.c b/security/security.c
+index f6583d507395..1e76c097b28d 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -3412,9 +3412,6 @@ int security_namespace_init(struct ns_common *ns)
+  */
+ void security_namespace_free(struct ns_common *ns)
+ {
+-	if (!ns->ns_security)
+-		return;
+-
+ 	call_void_hook(namespace_free, ns);
+ 
+ 	kfree(ns->ns_security);
+
+-- 
+2.53.0
+
