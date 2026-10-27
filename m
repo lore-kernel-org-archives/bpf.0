@@ -1,111 +1,110 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.180.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793108949;
-	b=MoSOtsgUPKMSVtWoTB2dFWK5+sZZsOGelHraNAGgMyIS5+Wle6PtTzAeVYcEgwFmKuy9
-	 KDk4t8vzacI/AKrEzRF5wZwdLlu3Lz2lpptN9B9EKKOuv/woLJVrLRs6NNhjTXOnoJnr1
-	 iVxH1MarkoY0lDPH7xOxB8OntcpVCVmz7pVrpkg5i0PDpD6H4g7bMOgq7ccKsFfhmDkwa
-	 RfN8LHZKPaTLMkuUUHPKyd+1QjOBWC8yTX18HBHNPzloj2IhbL8g+hJZSOc9+hrsuy3zg
-	 G7krSwCwP1uiyctAuXP8gPpIIdAg33+NWrMHJf++76GwHbuTqhIfKWzAOt2RUbCr6Pg==
+	b=BLOrFUmRhtQA53jyTdjHTsrBsRDcmcjU0bUKcdYYuAT9cN5sdzaE4zQEVHnnoc6svbbF
+	 INxju0dTtTSMt7IPqc0iNEykXyoqmrwsrKoUT2WYpcfislcdt8tKhBveX88uvddQBDU6V
+	 Ld95/I8G1//hloCSMxyI/oGvwTjpzcsmhcS6vJx3DlfDNxgElShFdj7OvV5+EJ4L0epRe
+	 Eb41iyK2UYXbofnrboptEOjFz6e39QH52vJKJ7KnSLdUPn9b056Q8j/UrCIcHbl4Gf4Zg
+	 tTL1rGnFH0BJfJqSbb0heH0ZxD7iP6FtcwXjZWDXr+qeKp2Rg7MV9ly46nTlDsthmmA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793108949;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:From:Date:
 	 Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Spam-Details-Enc:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Authority-Analysis:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:X-Authority-Analysis:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-ORIG-GUID:
 	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
-	bh=LZ4WRLlBWNlzgKoZ6xjmyCXgKrbMPKnWr5tgehi8fhg=;
-	b=IN+yTZF9a3FbcZOV5RALS3QH4Qed5dwPfuMCW6PRzA6OLIi8CTFdKEcpFTVp9VlBH3QD
-	 vn54KCtdvbWT0fPu1u4NlPW2UzpTZkBw4oiYsoBcQBs36Klh06TNY6d1y1tN7Qr7LYnfS
-	 3Jw1JQ1bUUAKG43OxDixygYUK8L/mhVtCdoemlRc5MroyUwMn1d9FzGnhDKJbTKk0lpg5
-	 VHL5hwvJNli9NSifslN9C+bcQO6MxOMjqn/NxL95i2cL0Ulgces38rvKGJ6DDcdhDqmn5
-	 laDNgCa/eXhp2ZadDqGRGxkI0MltcSBxoiugrz+1ikY+q4XdqXkW+/+D/4ShRuV49jA==
+	bh=cWBn7ZAhYyu9Hdvf/allBo9irsjsdWVIpt+Znd8jRKk=;
+	b=199OPsISzoj6n0/CsNLPfo+jXlN5EUSB5pwzQ5bSDLWfbA2T2GE4OCF8FvEjZMlBfUAu
+	 PvqUv9++NgXpCTJPwPqjqrYGNQzGDv3e9HafcqD8RpR3dP9dJX+XL1dCVSS0uTkTA+C41
+	 iU+4H7BUwcY6YffYXkDrBqugC926tIPfRq7RbOcZeAxW4FGotH9XkeE+HdL8tKDDycKaE
+	 VU6kvvpMZAcwIZ76YgsnrW7a6eah/gFgVW/cqiCY6IEhBoZlhyMOCeYlYhKK4qWUTuj5/
+	 65Y5bSxHcETo0NXa7lYBYZRVDUQxRsaFzsm/YW+MM6dpxnMMLtqiv1mRplkSsUM+lSQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Y3vVEUsN;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=j3jhpb1R;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=VVaSGVw0;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=PrIc+DKV;
 	arc=none smtp.remote-ip=205.220.180.131
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B946D606A32E
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 13:49:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B946D606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5558B60A2600
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 13:49:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5558B60A2600
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Y3vVEUsN;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=j3jhpb1R
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69RAdxT92458143
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 13:48:59 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=VVaSGVw0;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=PrIc+DKV
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69RAe2CX1921937
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 13:49:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LZ4WRLlBWNlzgKoZ6xjmyCXgKrbMPKnWr5tgehi8fhg=; b=Y3vVEUsNC330BLEp
-	JM0cQuSacvAwmVnVp/VCR0EEQihekahq5pngYSHdDr9MXc937gqUS5o3kIpBgRns
-	lJKWiylUA4bfLfGXugfQOCL8hpYqtlk8PQKPwThLAmePpKf/r9Aj8YA1yTxoNu0Q
-	/AfwSNaK9WVfYQzExYDc3hX7CmBPN9l1ls5Yy6D5WJdTDwtroQAOlc0Itoc09Td8
-	A0Vzk1TlZ++3Mzm/FcVSczhxYRwEPlJaTFgbts7eJCRFyqpf/8MLclCeW39lYF44
-	k81/Nc0rCyS7rr0TVaF+o74VsuS4Ku6Fcwn44zjuxZbH6NBuIl3gIaINGMXdfgps
-	b/37hA==
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hjjbtajj9-1
+	cWBn7ZAhYyu9Hdvf/allBo9irsjsdWVIpt+Znd8jRKk=; b=VVaSGVw0c/4DeoQe
+	FFIo2iPP+suk/zTD0Euu2q8iV5EErkpjwp6/SIV1RJ44OrIJGSBqCOTSqR1t/C9c
+	ZWV/DdlNEyF8y1pDyfV+bmyZouDjHgDAAberJIyS4mcXYDKjeySwMFdeJvkXXEcU
+	AiPS9/jFR+rR/FIDCvAL19aaCON+Qa1d085jQ+jLB1donLg5CrQb/8mDyEPNf0Hi
+	7OHyyCfPzDlEPzBqZagkB2Id8IOLysWyDogpCu+MDIrQ6Ey0/8j2WdLQayoKiEHg
+	sr2Nyvra3vYNw/PGs0VDonP7E1CGL15plgnJQmhT7YHa1M/eAioN+5pSLs9Eudgb
+	Al/FWA==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hjrq695jb-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 13:48:59 +0000 (GMT)
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93f2005ce21so690571585a.3
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 06:48:59 -0700 (PDT)
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 13:49:08 +0000 (GMT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-92e82060977so211081785a.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 06:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793108939; x=1793713739; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1793108948; x=1793713748; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LZ4WRLlBWNlzgKoZ6xjmyCXgKrbMPKnWr5tgehi8fhg=;
-        b=j3jhpb1RnQUWJfpGIsDAVpssfFGpayn2xGE1X308fPm16IW16YJOs0NTdmSPuRAemh
-         WkokmQ3kA0BSSpOaU69c5n+JXxawkt1kFybjf3Wy7zYm2xg/jlYZjoaPj4jJwBy6GBIa
-         tV2GZ50hmfZFfR/5qb1WH1rEs4ajZLaiqV4JzzzXfSX+gZsmsk9zvRvVUJvsVpEb+aEK
-         i7KEiwrqfDY0ecYBMU2eqvQb2ML6Sr+odRlWI9q+v7AWPMf7eB5uhXzHuWK88QunbTUB
-         G4K3kpLL6ieC9VhMMB79e1YvP1l5jOvcPeTVj4nuTCNXLlnFUonMzNlpxf1+DJJy8Yu0
-         6tQg==
+        bh=cWBn7ZAhYyu9Hdvf/allBo9irsjsdWVIpt+Znd8jRKk=;
+        b=PrIc+DKVkU7RiMGE1fUo/TkleL3jYfI+cx6pmOWBxEYvEwxK6uaRtr0aVQi9q4N1Bm
+         gd7Tp5uopHJcb8ZpEuFO+ujL0QdD0f1hjRNGz1/yYTC6Ajg/AfulNHep7QvoqRCpWNS7
+         hCNlpLXDeGc6nH5CIKARwygWzzal1mjR5PKG1vNBAO9pmQC2FE5Bq8thSTdRHHKjda6G
+         ahvVzQz5xDubQBq/sDxQIfDLlGOSuCwNx0mEGiY2Ok8TvDLCsw5HlC4QIBw/PHmBZYs+
+         tu4mkbBVSnG/3RhUzMNMGMa1Ook8DOcbhMTMrUgU180vLaseVpXvw3bmRcqmHoqdnKP1
+         oPEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793108939; x=1793713739;
+        d=1e100.net; s=20260707; t=1793108948; x=1793713748;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LZ4WRLlBWNlzgKoZ6xjmyCXgKrbMPKnWr5tgehi8fhg=;
-        b=m+gsyzhbD7jZ3CNj2Y2w5HgCEZ6p8XjQyzomScdKv2ZGRxr1Dy1WryTjzRg5QZz1a9
-         0RIXp8XZzL6wHKeGH7O09PVQ9JZA55A0ZwaWD0v++/FOD/nqlgwD4iZNhkuyc8RsoiqZ
-         hUANW8Tr87hD++DG78FaR2AuEESwpdOQ25nLiUXLQ9auxByCXi6P0/IRjRjlOMOfTtJ4
-         /xyDeoEvSqEyQzOnOVefQKOXYpU6DSw+GUPJqKjVrBQCXH9zbq0VRZWTYfdq8YReGTZ1
-         cdbOHob8XOFB1BOAZ+7l9iO4bYQxTx6+hrr+B4a0w1kh+Wm9oy2XofSHD7/4Cge6oXIo
-         vWcg==
-X-Forwarded-Encrypted: i=1; AKwUvBxNeBpjkE48hUVbrRAC29BYClFcz8Js5RSYt1c5pyq3D7+FKNd0HQLhMuS/xk4KGmPdAPQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLEJGgPTDqPkq2gEXd+U4mAIits6SrUjg+fYICbx0KENypTXZBE
-	JEpB00Yz7jjUqCiZXW//x/t6gEmU3s82352y6xoiu1SfoEixTs0n6BtlEJBkAO9b7jvbJsOkWMm
-	Q2ko28wSY2eUj3utMPg1d3VCONNvds5NxcohwFyGa0XKfekMsuAuT/DM=
-X-Gm-Gg: AYBFou0XvQeZITC+m9oWjbWsyAzpzKtjsmvdAPu9ywpUNn/uNuZUCfKzc3p2dh07IBf
-	rsw2T7mlqOfIPQ1fewFMshIJs08Lj2x6kr77ttIcLxkOFjEivPaQo3xZeCmR3/l8AA2RlZSxYoR
-	rNB0Voro/ujnZ6Mh5Mvi4OMVULdUgYEM7fkiXsqUDKFi3KD7hgT+KlAYsrqfAG/f3ZdWQGENyuE
-	ZEWn7XNfKIuMk5TffdTqnIRXtMq85u6vFz4bdsCDCHgKxp6VKsdkAn6wf8BK7DKf4UqEjxteW/T
-	SN13fUgmCI2LROnKBDqhNKVe1llmSLENytCeWg5zbP/OpmKHR/elmExq4IP5Diui86aLfkYwzI1
-	0p678xeboIx8=
-X-Received: by 2002:a05:620a:4725:b0:93e:94f2:ada5 with SMTP id af79cd13be357-940ef914f06mr1534343285a.25.1793108938577;
-        Tue, 27 Oct 2026 06:48:58 -0700 (PDT)
-X-Received: by 2002:a05:620a:4725:b0:93e:94f2:ada5 with SMTP id af79cd13be357-940ef914f06mr1534336485a.25.1793108937851;
-        Tue, 27 Oct 2026 06:48:57 -0700 (PDT)
+        bh=cWBn7ZAhYyu9Hdvf/allBo9irsjsdWVIpt+Znd8jRKk=;
+        b=P782Hr+U4yMS+WtU7oG8glhYyIJem9ngZQpnHWrK4Css5hLAuRUh+KW1T1HfEXQJ7H
+         Aa3bsaOaiwgnkY0bl1PTTB/QtYV5Kvv7gPbEsUJysqEK58uDVFwb6ft751JAcouAWGWs
+         z+/dcJ/yD/XRdar6WtrSFIf/NKwmXyNJF+JNwVSE5jy9ODUxPJuG6cGld6q1TH7K1VgZ
+         GXHDDgF3XcMLGAjSfMdTSJRJnAeWGA0Tc4C2VcsQg1h5umjjMpufH04mxktGogpVx2UQ
+         FwvO0i8H98B6EweEtQ38268eq/dq+RVedPiu6yF4mY21Csw477miWefE+sL06HkckMeE
+         XrTg==
+X-Forwarded-Encrypted: i=1; AKwUvBwVaP7MYKoA28Xcr28TNbAY+b7tp16Q4mUYDEjvfNNUgpu1uvTHWyTwva7J7X0E0x/ZdmE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKrzcYrAFpQUa2b6/aGbPOmaIgmnLhdKFvIaH4hgbkvXpOHxkrJ
+	UNGEZPgKVV+drzA/kwddWHnp4e56HvBm84MxL//C8WQw8ovZV4NYEjktLkclYxtSsOZxuUbwWBJ
+	5kvBUsdu9cs7VX2S3M++0Q+kqbGcssflHWy8SLrOJyslwcY14AzkH44M=
+X-Gm-Gg: AYBFou1m6PJr6Xkx4QW+Bh1fG6J2SBdhDq3YO3VKsWalwVdG/D26SheKCvNuttcZKo7
+	1qnYrPLUAy0LbQkbob+m0gpdrvdr6Kgi9tghqJPq0yjvN14D95bcVH+WD6GN6Q71LoRU7L0dOOm
+	RrbT51XQQBlCdevSlVUWYHhHk8Dqpmh4Rr/L+E0LtYiITnXmPpx329bACdQbCG1x4ftjjuBuSaD
+	EDkuZLVQgNahwtkBwuuYb/IvmUFRAoXB0cuBbh254m2eRG0EUm12ctFtjnIzYWxp2jz2XHs0f1J
+	jiFGlI1kS9FAu20eiBS7NugI+sutnWB0fcJs1h3sq+wOA4A2PofLsteo4WTu/BIvLtYi3Qg8seQ
+	e34gnmR7vPWU=
+X-Received: by 2002:a05:620a:4722:b0:93f:4a02:ed99 with SMTP id af79cd13be357-943f4b8ce2amr420871185a.20.1793108947102;
+        Tue, 27 Oct 2026 06:49:07 -0700 (PDT)
+X-Received: by 2002:a05:620a:4722:b0:93f:4a02:ed99 with SMTP id af79cd13be357-943f4b8ce2amr420865485a.20.1793108946506;
+        Tue, 27 Oct 2026 06:49:06 -0700 (PDT)
 Received: from localhost ([93.144.6.81])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c46bd77e1e9sm459291666b.67.2026.10.27.06.48.56
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6b49640f1b9sm40758a12.19.2026.10.27.06.49.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 06:48:57 -0700 (PDT)
+        Tue, 27 Oct 2026 06:49:05 -0700 (PDT)
 From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Date: Tue, 27 Oct 2026 14:48:36 +0100
-Subject: [PATCH net v2 1/6] net: stmmac: take ownership of saved RX state
- at poll entry
+Date: Tue, 27 Oct 2026 14:48:41 +0100
+Subject: [PATCH net v2 6/6] net: stmmac: fix XDP RX buffer DMA sync length
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -117,7 +116,7 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261027-stmmac-xdp-fixes-v2-1-10eae8a093a8@oss.qualcomm.com>
+Message-Id: <20261027-stmmac-xdp-fixes-v2-6-10eae8a093a8@oss.qualcomm.com>
 References: <20261027-stmmac-xdp-fixes-v2-0-10eae8a093a8@oss.qualcomm.com>
 In-Reply-To: <20261027-stmmac-xdp-fixes-v2-0-10eae8a093a8@oss.qualcomm.com>
 To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
@@ -137,285 +136,112 @@ To: Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Oleksij Rempel <o.rempel@pengutronix.de>,
         Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bpf@vger.kernel.org, James Hilliard <james.hilliard1@gmail.com>,
-        Nicolai Buchwitz <nb@tipi-net.de>
+        bpf@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI3MDA1NCBTYWx0ZWRfX+IQDM13ccFZG
- V9IM8Q/UhxHuOve0YO8Zq8mrI+jNjUUczYqMDWMIqXtU/zJxDhLPG0i6nAqZuUnffkhwRYLmUvx
- OvAnb9QwgQEVA53vE7o33ne0UUTiW38=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI3MDA1NCBTYWx0ZWRfX12CDjTNtoD0k
- x/k9KHjDupEYR7aCfjTe6y8zFmZzLVPhcFEOn89BTj4qEOAR1FHLrgoRty9W0O9RKPltN1/EfJm
- UO6Gq+GsDWZlV5nOBmp6G3HSvnYbTHaTFm/ecck4Vj+WWzWDTl4GcwHtp6kqT0nmBmMzctAj1oU
- ZNiN0DPniPuNYUeA1mSg9cvkg4+vlwq8tcnOAsxbQdGBW3HKplrOWyTKwyuXEd1IPqQOvZESXb1
- ImrP0b8ORKRlf6g1BRXQ6ANG42IiLWNZN3c73r7z/+FjUkZBp6bDOFKNTP6ewiMCiyegW/tl85c
- Hr20HZtBRrbxiGERessXUlNB6ozKugtr6ExxbNWWzRsT90K9B0BKppZwV4ZRB7BuYm9m6ZUkkRb
- +ZnzMg/TkWqrmm9OgAWAIofA82woAF7AqoIvkUcGd/p7WAv8pV5k+J+RCnDARwbxiHMZ6C4YKNX
- tr0ZvzUZhwIf8yl1PDA==
-X-Proofpoint-ORIG-GUID: KFh1U2F1Yq1aqyLX7Lx25objsAWl8ZBg
-X-Proofpoint-GUID: KFh1U2F1Yq1aqyLX7Lx25objsAWl8ZBg
-X-Authority-Analysis: v=2.4 cv=XaIcX455 c=1 sm=1 tr=0 ts=6ae0abcb cx=c_pps
- a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=7fYLNvKHbgS61GKHX+yayQ==:17
+X-Authority-Analysis: v=2.4 cv=RYwFmFtv c=1 sm=1 tr=0 ts=6ae0abd4 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=7fYLNvKHbgS61GKHX+yayQ==:17
  a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22
- a=pGLkceISAAAA:8 a=EUspDBNiAAAA:8 a=-gjLCbu4MZEjzEcwt_QA:9 a=QEXdDO2ut3YA:10
- a=PEH46H7Ffwr30OY-TuGO:22
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22
+ a=EUspDBNiAAAA:8 a=xzJaxtAIzuUiCKeOh8cA:9 a=QEXdDO2ut3YA:10
+ a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-GUID: -xkeJMn8DSf0iFRTuV3HpyR7Dypm6KW3
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI3MDA1NCBTYWx0ZWRfX0FUNecF4WEvt
+ IWZqOwp8Q+ktDl93nhNikF4Gw/bXpHiRLyvz90+q/1ournCboHSN5Crje7U1FvwhVlqRgwU+Ixr
+ ku2kn1HZMs0RzkmduWnydS5xEWOE4bk=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI3MDA1NCBTYWx0ZWRfX6KMsKkWs2Clf
+ mFrb2wTDyKBedRKwyiNVfoOPyg5RQkGNjUcicYrdEMAzp1PeiVtXl9+lsjoPWQbEF9ZXxnmcnPV
+ n8EowVBX6E/WN6Bkk2g1W+qVsZhcRuFOVNrtgeX2Q4fKa6JG0ZXFzmEJBL9YU/61VRGeaU3z+/L
+ 0Vov7V0gaCHTC7uln2hDtmoSjtLS6eJlJEOF3tc3gmreGDmz4xP9GBJ8vJtW4f/fDk04kpPF+1f
+ YjJOsFMmIsaUTYuq26iWPRZTmRL/1Hsk4w8bBF8bPE3+zZvOxyxTaxzmg+57Oc4Q9xg1OoA7SWo
+ JUcTodpJlB8011wE5XMnvANZLbC5Ix8zGuuego618HSnT6mkJTqONVZ+F4YtRrUzhY3rmcDQhY0
+ eQjAYhyggLwBLcAMmxcW4bQP2b0GxxDsviw+veNdIwQRhERrgs+Zb8I0OyG7u/6ZFT9jCFFe59l
+ AfhuWpFUrHQUtGIWmMQ==
+X-Proofpoint-ORIG-GUID: -xkeJMn8DSf0iFRTuV3HpyR7Dypm6KW3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-10-27_02,2026-10-21_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 phishscore=0 spamscore=0 bulkscore=0 priorityscore=1501
- clxscore=1015 lowpriorityscore=0 suspectscore=0 impostorscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ clxscore=1015 impostorscore=0 spamscore=0 phishscore=0 bulkscore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
  definitions=main-2610270054
 
-From: James Hilliard <james.hilliard1@gmail.com>
+stmmac_rx() bounded the DMA sync length by the largest data_end seen
+before and after the XDP program and passed it to page_pool_put_page()
+on the XDP_CONSUMED path. bpf_xdp_adjust_tail() zeroes the grown area,
+which dirties the CPU cache, but a later negative adjust only moves
+data_end back. If the program grows and then shrinks the tail, both
+endpoints miss the zeroed range, so those dirty cache lines are not
+written back before the page is reused.
 
-When a saved partial packet completes with a poll budget of one, the
-old loop can leave state_saved and state.skb pointing at an skb that
-has already been delivered or freed. The next poll then reuses that
-pointer, causing a use-after-free or double free.
+The length was also wrong since commit 88095728511e ("net: stmmac: fix
+rx Scatter-Gather support") moved the page_pool DMA window to offset 0
+and set max_len to dma_buf_sz + page_offset: the driver still
+subtracted buf->page_offset, so it synced [base, data_end - page_offset)
+instead of [base, data_end).
 
-Take the saved state at poll entry and clear the stored ownership
-immediately. Save it again only if the packet remains incomplete,
-including when the next descriptor is still DMA-owned.
+On a non-coherent platform those dirty lines can be evicted after the
+device has DMA'd the next frame into the recycled page and corrupt it.
 
-Track the frame-in-progress flag independently of the status read from
-the next descriptor. The old code keyed the save on the status of the
-last descriptor looked at, so a loop stopped at a DMA-owned descriptor
-(rx status not yet valid) could drop the saved error/length bookkeeping
-in stmmac_rx_zc().
+Sync the whole page_pool DMA window on the XDP_CONSUMED path with
+page_pool_recycle_direct(), as the PASS path and page_pool allocation
+already do. The device only writes [page_offset, page_offset +
+dma_buf_sz), so syncing [base, base + max_len) covers every cache line
+it can touch, regardless of how the program adjusted the packet.
 
-Drop the saved state both when the queue parameters are reset and when
-the ring is destroyed. stmmac_reset_rx_queue() is reached from
-__stmmac_open(), stmmac_xdp_open(), stmmac_resume() and
-stmmac_enable_rx_queue(); without draining it there, a partial frame
-saved before suspend (or before a queue is disabled and re-enabled)
-survives while cur_rx and dirty_rx are rewound to zero. On the resume
-path the ring is only re-armed in place: stmmac_clear_descriptors()
-sets the ownership bits and stmmac_init_dma_engine() restores the tail
-pointer, but the RX buffer addresses are not reprogrammed. The first
-poll would then resume the stale skb against a ring position that no
-longer matches the descriptors it was built from.
-__free_dma_rx_desc_resources() releases it on teardown.
-
-Apply the same state handling to stmmac_rx_zc(), which also leaves
-state_saved set when a saved frame finishes at the budget boundary.
-That path saves only error and length bookkeeping, not an skb pointer.
-
-Fixes: ec222003bd94 ("net: stmmac: Prepare to add Split Header support")
-Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Nicolai Buchwitz <nb@tipi-net.de>
-Co-developed-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Fixes: be8b38a722e6 ("net: stmmac: Add support for XDP_TX action")
+Fixes: 88095728511e ("net: stmmac: fix rx Scatter-Gather support")
 Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 72 +++++++++++++----------
- 1 file changed, 42 insertions(+), 30 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 9ded31150fbe..fa7108919e90 100644
+index fb3b7174599e..b038472b9817 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2182,6 +2182,9 @@ static void __free_dma_rx_desc_resources(struct stmmac_priv *priv,
- 	else
- 		dma_free_rx_skbufs(priv, dma_conf, queue);
+@@ -5970,8 +5970,6 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+ 			len -= ETH_FCS_LEN;
  
-+	dev_kfree_skb_any(rx_q->state.skb);
-+	rx_q->state.skb = NULL;
-+	rx_q->state_saved = false;
- 	rx_q->buf_alloc_num = 0;
- 	rx_q->xsk_pool = NULL;
- 
-@@ -5629,12 +5632,12 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 	unsigned int count = 0, error = 0, len = 0;
- 	int dirty = stmmac_rx_dirty(priv, queue);
- 	unsigned int next_entry = rx_q->cur_rx;
-+	bool in_progress = rx_q->state_saved;
- 	u32 rx_errors = 0, rx_dropped = 0;
- 	unsigned int desc_size;
- 	struct bpf_prog *prog;
- 	bool failure = false;
- 	int xdp_status = 0;
--	int status = 0;
- 
- 	if (netif_msg_rx_status(priv)) {
- 		void *rx_head = stmmac_get_rx_desc(priv, rx_q, 0);
-@@ -5645,23 +5648,25 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 		stmmac_display_ring(priv, rx_head, priv->dma_conf.dma_rx_size, true,
- 				    rx_q->dma_rx_phy, desc_size);
- 	}
-+
-+	if (rx_q->state_saved) {
-+		error = rx_q->state.error;
-+		len = rx_q->state.len;
-+		rx_q->state_saved = false;
-+	}
-+
- 	while (count < limit) {
- 		struct stmmac_rx_buffer *buf;
- 		struct stmmac_xdp_buff *ctx;
- 		unsigned int buf1_len = 0;
- 		struct dma_desc *np, *p;
--		int entry;
-+		int entry, status;
- 		int res;
- 
--		if (!count && rx_q->state_saved) {
--			error = rx_q->state.error;
--			len = rx_q->state.len;
--		} else {
--			rx_q->state_saved = false;
-+		if (!in_progress) {
- 			error = 0;
- 			len = 0;
- 		}
+ 		if (!skb) {
+-			unsigned int pre_len, sync_len;
 -
- read_again:
- 		if (count >= limit)
- 			break;
-@@ -5700,6 +5705,8 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 		if (!buf->xdp)
- 			break;
+ 			/* Each frame starts here: reset the FCS handling */
+ 			fcs_stripped = false;
  
-+		in_progress = status & rx_not_ls;
-+
- 		if (priv->extend_desc) {
- 			/* Read the extended status after the own bit */
- 			dma_rmb();
-@@ -5776,7 +5783,7 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 		count++;
- 	}
+@@ -5989,29 +5987,18 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+ 			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
+ 					 buf->page_offset, buf1_len, true);
  
--	if (status & rx_not_ls) {
-+	if (in_progress) {
- 		rx_q->state_saved = true;
- 		rx_q->state.error = error;
- 		rx_q->state.len = len;
-@@ -5818,9 +5825,10 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
- 	struct stmmac_channel *ch = &priv->channel[queue];
- 	unsigned int count = 0, error = 0, len = 0;
--	int status = 0, coe = priv->hw->rx_csum;
- 	unsigned int next_entry = rx_q->cur_rx;
-+	bool in_progress = rx_q->state_saved;
- 	enum dma_data_direction dma_dir;
-+	int coe = priv->hw->rx_csum;
- 	unsigned int desc_size;
- 	struct sk_buff *skb = NULL;
- 	struct stmmac_xdp_buff ctx;
-@@ -5840,25 +5848,28 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 		stmmac_display_ring(priv, rx_head, priv->dma_conf.dma_rx_size, true,
- 				    rx_q->dma_rx_phy, desc_size);
- 	}
-+
-+	if (rx_q->state_saved) {
-+		skb = rx_q->state.skb;
-+		error = rx_q->state.error;
-+		len = rx_q->state.len;
-+		rx_q->state.skb = NULL;
-+		rx_q->state_saved = false;
-+	}
-+
- 	while (count < limit) {
- 		unsigned int buf1_len = 0, buf2_len = 0;
- 		enum pkt_hash_types hash_type;
- 		struct stmmac_rx_buffer *buf;
- 		struct dma_desc *np, *p;
--		int entry;
-+		int entry, status;
- 		u32 hash;
- 
--		if (!count && rx_q->state_saved) {
--			skb = rx_q->state.skb;
--			error = rx_q->state.error;
--			len = rx_q->state.len;
--		} else {
--			rx_q->state_saved = false;
-+		if (!in_progress) {
- 			skb = NULL;
- 			error = 0;
- 			len = 0;
- 		}
+-			pre_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
+-				  buf->page_offset;
 -
- read_again:
- 		if (count >= limit)
- 			break;
-@@ -5887,6 +5898,8 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+ 			ctx.priv = priv;
+ 			ctx.desc = p;
+ 			ctx.ndesc = np;
  
- 		prefetch(np);
+ 			skb = stmmac_xdp_run_prog(priv, &ctx.xdp);
+-			/* Due xdp_adjust_tail: DMA sync for_device
+-			 * cover max len CPU touch
+-			 */
+-			sync_len = ctx.xdp.data_end - ctx.xdp.data_hard_start -
+-				   buf->page_offset;
+-			sync_len = max(sync_len, pre_len);
+-
+ 			/* For Not XDP_PASS verdict */
+ 			if (IS_ERR(skb)) {
+ 				unsigned int xdp_res = -PTR_ERR(skb);
  
-+		in_progress = status & rx_not_ls;
-+
- 		if (priv->extend_desc) {
- 			/* Read the extended status after the own bit */
- 			dma_rmb();
-@@ -5904,11 +5917,10 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 		if (unlikely(error && (status & rx_not_ls)))
- 			goto read_again;
-+
- 		if (unlikely(error)) {
- 			dev_kfree_skb(skb);
--			skb = NULL;
--			count++;
--			continue;
-+			goto next;
- 		}
- 
- 		/* Buffer is good. Go on. */
-@@ -5982,9 +5994,7 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 						      STMMAC_XDP_REDIRECT)) {
- 					xdp_status |= xdp_res;
+ 				if (xdp_res & STMMAC_XDP_CONSUMED) {
+-					page_pool_put_page(rx_q->page_pool,
+-							   virt_to_head_page(ctx.xdp.data),
+-							   sync_len, true);
++					page_pool_recycle_direct(rx_q->page_pool,
++								 virt_to_head_page(ctx.xdp.data));
  					buf->page = NULL;
--					skb = NULL;
--					count++;
--					continue;
-+					goto next;
- 				}
- 			}
- 		}
-@@ -6041,10 +6051,8 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 		/* Remove FCS if needed */
- 		if (!fcs_stripped && pskb_trim(skb, len)) {
- 			dev_kfree_skb_any(skb);
--			skb = NULL;
- 			rx_dropped++;
--			count++;
--			continue;
-+			goto next;
- 		}
- 
- 		stmmac_get_rx_hwtstamp(priv, p, np, skb);
-@@ -6069,14 +6077,15 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 		skb_record_rx_queue(skb, queue);
- 		napi_gro_receive(&ch->rx_napi, skb);
--		skb = NULL;
--
- 		rx_packets++;
- 		rx_bytes += len;
-+next:
-+		in_progress = false;
-+		skb = NULL;
- 		count++;
- 	}
- 
--	if (status & rx_not_ls || skb) {
-+	if (in_progress || skb) {
- 		rx_q->state_saved = true;
- 		rx_q->state.skb = skb;
- 		rx_q->state.error = error;
-@@ -8421,6 +8430,9 @@ static void stmmac_reset_rx_queue(struct stmmac_priv *priv, u32 queue)
- {
- 	struct stmmac_rx_queue *rx_q = &priv->dma_conf.rx_queue[queue];
- 
-+	dev_kfree_skb_any(rx_q->state.skb);
-+	rx_q->state.skb = NULL;
-+	rx_q->state_saved = false;
- 	rx_q->cur_rx = 0;
- 	rx_q->dirty_rx = 0;
- }
+ 					rx_dropped++;
+ 					goto next;
 
 -- 
 2.56.0
