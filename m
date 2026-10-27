@@ -1,54 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.100
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793059304;
-	b=V4pLEeMqbrCwf9sp78LgE6fPYeGydxlgvnrPWlE6ZNl8WOpKwLczCGiNoUvXXkZWM3tc
-	 u1e8rhnTgZv6qj0NL7kt0KoIrsonrRDrmg7ojFCK/EpB5JPq1Yp6S+X1W/Ps3p95lppSh
-	 mv4L6R3P+ciJ+IUnDXcdlLPn2QCsupQXZSBjxIZMDrZ2YXS2xtFtlvBNNSbrTET5KdEh4
-	 e8/3Reb4iezc8HL3Lwu1OiHWtO+RN2vPcvBEe5xsHzksWZrTKUOkStR9yCpR3i6F75/dX
-	 kfmtk/jOuy+0HwvqSjcscAKJOR/qWIPx/yULLo6S9hHF6hI0CZbkEkeznctLTsw16sw==
+	t=1793059451;
+	b=P4cnQGhEVc7Z+QDifijTE13f77nte/rrvWz3MXMOoU57L54rnUPHdRzhpjEs4ZprimrG
+	 PGbSkr13yHHxuahc+N/OU9z6GtAL6qSdWoA0fWNYCFPHw+iqpVJuu+0z8Ltxe1gvud68d
+	 bnjWGuM1t+5lNN6RdkfoubfJqNri/MJ8NIoF29i6zeIJSXe9XHx8omG6Pd+Vk9q4BvvNm
+	 uLztBcb+d5pnrYM4QBk5EWi7bFNV+L8LNssKy765DT2KdhWu9rtS/pwERaRzuo7E+9HLo
+	 huSM6dtL7P8kmsP3ElzFDR8GsqG6+c48SJZOHB5by0AZ8GLVjoDVRDnBg1F0h7ZlR9Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793059304;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793059451;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
 	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=NK2QGtfUYWe9vgs7VX7DVUz7KX6l35unbjPA3QItnLA=;
-	b=dczBgTDu5yFGyfnJt4nKCeIfe/rS6ODYZ0O9rVOwxN/y4D4H/Iqm1YC87UbyGmJlGVMO
-	 jz/d6FUaaU2/AXa5x+o00mb5d59+g0Y5EfcDikZWrvJBrB+ADpGflfWUhh2UMXYbQb1Rh
-	 ux9ObLHEC7T8G/geSV2QW0RovUqFxIC9vsiBT1E8p0XvwgaC5ucevChcdiy99W0efI384
-	 zkNJDv/QCdGpzxsCKwJUy+5ZlmOlzjTDckgD5Xc61MlxcYBuwCBZSCZnk/d+EQ5TqZ+PQ
-	 zyFcWxAFWNt1wzGJBoeAgpsLBoue5FOWVsJkkkwrgbZTQSJ17agPQzXSSjkF99Oo1yw==
+	bh=Msno5cSRpuMAs6wj81BItGvtCMI0plrWFLYPRXrvWdY=;
+	b=yGbXYw1Pu3SjVs5iC+DKnZ42YRfTXMujR7hAoybAU2BVf5nrHF9tbSHU2I02vEsDNZJm
+	 iBeRmbyswp18sYgpxHAk3S5bJ0tmbSZfJtQcezH97zj4Q3S7MBiZTIBmbY6eFJe28znXS
+	 JapznnikB8Ch+5sTDVY4xEEZiJ1GC+jqeJLPRpG9jDImxRu7cyhdjLgWiX+NP35uFAzZ0
+	 VkX8U7T3LNHZ0srr3N4cpGqqymkfcAq2Hge0gb40yWXeAztK8RKnDErlOzEwEclcVI2+w
+	 Von5w0+dqxNYv3b9RU1xxyf7WpAwMxSONSNk35t+rlqIoV4OSD7OyoydFpPWKg0u3vQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=J3UrSagN;
-	arc=none smtp.remote-ip=95.215.58.100
-Received: from mta1.migadu.com (out-100.mta1.migadu.com [95.215.58.100])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=XtNdLaGi;
+	arc=none smtp.remote-ip=91.218.175.175
+Received: from mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAC3606A31B
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:01:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6DAC3606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E08606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:04:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1E08606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=J3UrSagN
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=XtNdLaGi
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=A4HVJVp6MqruJ5rTwb4NlZCuSWIgUG19ZnL3WNOdxmI=;
+DKIM-Signature: a=rsa-sha256; bh=VO14hEUXLDhBzYweiS5ywuk2yUCXWgT9SRC3HcxCQMg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793059300; v=1; x=1793664100;
- b=J3UrSagNl2GDlccuEPWeDu4IshaiuNp9nQ+fA7T6Ivv85OVNrIq6IKmYq19QA569EKqpe204
- WD0Frc/c4+FfYE3ZmxqlJSnpR6dE+Zr8ahbD06O6n9hxuERRDggpbZC/KpeXEtdxqBFP0rFzjzQ
- UgjrTuC1D7Q+IuJ6MNMpPr6M=
+ t=1793059448; v=1; x=1793664248;
+ b=XtNdLaGizzwci9wHDD4POTT637AKAfyyytcst91eRJRChVY+Ou1yj/0Cm12x2PJjd3PTQSJx
+ aE23rSPRV1gSs/QZHuMWCJo8fFCTwQocrFhEQxO4Fm6cm4tc65pO0515+8cMg20uwvBiaXgGx9e
+ JD9AoSGxHILVgMf+7bGXM7s0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id be91d234283c3abd;
-	Tue, 27 Oct 2026 00:01:32 +0000
-X-Mizu-Trace-ID: be91d234283c3abd
+Received: by smtp.migadu.com with ESMTPS id ae09bd6725ce0871;
+	Tue, 27 Oct 2026 00:04:08 +0000
+X-Mizu-Trace-ID: ae09bd6725ce0871
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <5c042467-6aca-48fd-b5d5-e7705e65a158@linux.dev>
-Date: Mon, 26 Oct 2026 17:01:27 -0700
+Message-ID: <f9aee9b2-0010-44b2-afb4-0be3958b332c@linux.dev>
+Date: Mon, 26 Oct 2026 17:04:02 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -65,42 +65,49 @@ To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
 Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
  memxor@gmail.com
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
- <fbb26ce0-00a0-42ba-abc6-82c3c6201d8a@linux.dev>
- <DMF64ZG294VY.LCU9YQI054U2@gmail.com>
+ <fba239f1-febc-4af5-8033-a893f8265191@linux.dev>
+ <DMF6AVOBX25C.28Z0NJS6CEB3J@gmail.com>
 Content-Language: en-US
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DMF64ZG294VY.LCU9YQI054U2@gmail.com>
+In-Reply-To: <DMF6AVOBX25C.28Z0NJS6CEB3J@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2026-10-26 4:45 p.m., Alexei Starovoitov wrote:
-> On Mon, Oct 26, 2026 at 03:28 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->> This series shouldn't land as is. It's not ready.
+On 2026-10-26 4:53 p.m., Alexei Starovoitov wrote:
+> On Mon Oct 26, 2026 at 4:57 PM UTC, Ihor Solodrai wrote:
+>> On 2026-10-25 7:58 p.m., Alexei Starovoitov wrote:
+>>> From: Alexei Starovoitov <ast@kernel.org>
+>>>
+>>> The goal of this series is to load Rust programs as rustc and LLVM compile
+>>> them. These programs keep data, heap and address-taken locals in arena.
+>>> They use trait objects, recursion, unwinding, and loops that have no known
+>>> bound. The test programs are in https://github.com/4ast/rust-bpf
+>>>
+>>> The series has three parts:
+>>>
+>>>     patches  1-15   Fixes and a revert. They do not depend on the other
+>>>                     parts.
+>>>     patches 16-31   A stack in arena.
+>>>     patches 32-81   A verifier that joins states.
+>>
+>> Hi Alexei,
+>>
+>> Just FYI bpf-ci-bot AI review workflow is limited to 50 patches per series.
+>>
+>> The limit was set as a guardrail for commit selection logic (to not
+>> accidentally run review for 10k commits). I chose 50 because usually
+>> we ask people to break up long series into smaller reviewable pieces,
+>> and pre-singulariy >10 patches series would already raise questions.
+>>
+>> Since the approach to patch review on bpf list has obviously changed
+>> recently, what would you suggest as a new limit?
 > 
-> your bot didn't read the cover letter :(
-> that said that parts 2 and 3 were posted for review only
-> Only Part 1 is for landing, but parts 2 and 3 depend on it.
+> I didn't know that there is such limit. I'm not sure there is a good limit.
+> Maybe whitelist it by known developers with commits?
 
-Why not post part 1, land it and then post parts 2-3 as RFC?
-The review was done for the full series, that's the whole point of
-posting the series, no?
+The purpose of the limit is to guard against unintentional blow up of
+compute and token cost. It's not infinite.
+Are there plans for 10k-patch series?
 
-> 
->>     * ask your development bots to ensure that verification of prod BPF
->>       programs (bots can pull those tested by BPF CI from github
->>       artifacts, just ask) has not regressed, and that there is a path
->>       for updating existing programs to work both with old and new
->>       verifier
-> 
-> your bot is wrong again. meta progs are not public.
-
-That was my mistake, I thought we publish the objects as artifacts.
-I'll see if can do that.
-
-But even if they don't become public, we run veristat on them as part of
-upstream BPF CI, and those signals shouldn't be ignored.
-
-Also bpfjailer was open sourced recently:
-https://github.com/facebookincubator/bpfjailer
-> So test on meta progs the whole set had to go as a whole.
-
+I'm sure we can come up with a reasonable limit for a "reviewable"
+series.
