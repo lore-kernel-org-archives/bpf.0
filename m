@@ -1,84 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.203
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793113313;
-	b=M5c3i8MFxaq6MPt68P4JDTvnu8E3lKMwlJALPzD8cgOfmzgzMQ3RCv+Q92bK+iHi6pwg
-	 +wPNt+qVT0Ew2kZ62xH3H/AIav4sMBaSskd3sdwWo1TD25YegMXaJH0yh+odsoR4N4XlX
-	 bse3to37OBO0Z6rIy5f8QxQ5lJYFfFsakqqICdrwHeyIdckqYG/nzKfNAV6kgFnj/3YLF
-	 Ta6ZBiK0S9RCWaOoGRIhjhQrVxivFvxOprzf0aTp6ZbuBA9Prx8P1fn9Mt4Gqx8hpBlXr
-	 eeiOczApI+3TTwsYr7oms/8Zo34sD0EH8bPP/dLCw6GPwTt7nzop7Ys8BMXvRVQr7WA==
+	t=1793113377;
+	b=uMUB7jJo5G53nSqYCfVtVmSZlJZ77NdzYnWGSyafa1IOI/hJiM5xJqfqLxjHDLs61xYZ
+	 YYHEnpTtuYbnPTcF5eelUscgzdU7qFEm5nT6/psqv/T/qXdWLLj6zoayXiDHYICBOB2eJ
+	 ztDfVw9v/X85lSO3uRjl6CTCgP7xINsFj/aVMXOAtXES1Wtl+GHeXALPd2q4oB0G0BWsc
+	 mO0twmcfoLWp+vN/5WgZoy/H9I380SynsGDnEgL4ngIXAVcjNwidYBLb96nlkH4HyAfAq
+	 ebS9eAUIffhRj85vulpcnyyirzq04eOGeAD7e53WYvXJkaN7Jxf+JTyEVF1LBW/qUzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793113313;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793113377;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:To:Cc:Subject:
-	 From:X-Mailer:References:In-Reply-To;
-	bh=4JSSeMn7jD3hzJLmiAPL5D8xsSZOgnxpk+LkLJ9f9Go=;
-	b=AY6vRKDFWwCuK8gWFfS+AUkF9G/XiuGl2bNDOjlnQOMoZ5ITS/vnNRvp41EbkdhUF8YA
-	 44FJJLZmQJ+GCwPUTiDbFX6A70AwLrg71+K65ORgnMxxj/mKZvwls9Od4AdXDs9MUkjAl
-	 JFTzlwyAAb+smNoDiVYlSo8Q1/M0L6r+zGFOyItR7EZOaUH/f1GhZGOXUti9X4CKfdWCu
-	 SaDVYfnLU8TvGJJymuAo3/RDOJ8C7niiGG4Lmjw0KbO7NDhmUtwIozWWJE9dT1lxK1fki
-	 4qXEJ0jZKplqbwOv0CD7qJYZnEP5WgtUOZSZpexC2ZRdlqcH6N2UE9wBtQYIJxolYhQ==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=xMtUtPiKGPudRcl9yoWKWTK5iT7yT/I2Zu+Y8WFqLV4=;
+	b=OSvIrDAXHBW/vPqcSVKKq7861BTH6i7VWKMfvXSSIMrWPuPRBJnkNFxkHdG/gzpy93Ur
+	 NYPVjYhSEHmrixnhceFMXh5S40RaivhUQq7YAp9lQ2/bVhgebPld/y+uMov7hi4fL+Vv4
+	 aTmCgDqseF2QlszkEI8FGXymueet0eaFgBod7uHFk5drq0CXRoBSmLjh898u8HTgbqEf9
+	 xc5XQoNW5ite6h8kOQJCIvOIZHQGMLfX4esR7edO5mePfjTy+TlLAhFVd6bY/EhgBdG+j
+	 ajfwegsYOTSZa75v58wq8/GBPoCCDvXl9alhekbyMK1lHOeGnSoyf0+5Kl+jsT2Q8Pw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y4RCI7rt;
-	arc=none smtp.remote-ip=209.85.215.176
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=O570ZE0j;
+	arc=none smtp.remote-ip=74.125.231.203
+Received: from mail-oi2-f11.google.com (mail-oi2-f11.google.com [74.125.231.203])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B040606BAA7
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 15:01:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B040606BAA7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C264606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 15:02:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C264606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y4RCI7rt
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cc502d509c0so8670a12.2
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 08:01:53 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=O570ZE0j
+Received: by mail-oi2-f11.google.com with SMTP id 5614622812f47-4f3f1adebb0so1552432b6e.0
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 08:02:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793113313; x=1793718113; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=4JSSeMn7jD3hzJLmiAPL5D8xsSZOgnxpk+LkLJ9f9Go=;
-        b=Y4RCI7rtBOy5b9y0FhCXLw7TxjLGKoqP7U6NlrFD6q8Ld/t9Vb2wuRj4d5nvLDYNmW
-         zMd4eYz+V4fCXjWsiScL3PR0/jOkJbs4iZB/1XrWm7L4dnIYl6zkHE/78s3Hrx1q6Waj
-         oRJIZTMGG7SO+raSfVOtWoAkLKKYIlEQb+1KLlQzDppE2+agB1IrvZx0fPK0fPBmKjT9
-         tmPkvXERI+kZg+dU9H69n1AXCmu2e6B/KgFFjnm96LtaYjcsqwxw+UdhXxmTEqT0+3z8
-         iwxmEvIrStDaVsjlO8tSuKQpCLA7DgHptE2QvFviEIcgFaBknjMXm9B00tSUipyu0hGO
-         dOSA==
+        d=gmail.com; s=20260707; t=1793113375; x=1793718175; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xMtUtPiKGPudRcl9yoWKWTK5iT7yT/I2Zu+Y8WFqLV4=;
+        b=O570ZE0jGBbZRJ58fxR+AmHreUcx/FKLecraYYCQdKoAqZa2+G/VoKnXmzjRjnECqf
+         lHZ2X1aWN1t5uzR/OUUYTZJUsxJ5cDStMDeuI9QNJ00TWEs0wHz1w6z9jyz9JS3RyX0L
+         S680qr4RrYY2TJNIQJUqX3DekzV5YdBB3WXcXIkC/A/23U8YdHkhUPZgIMbJEfKOIvG4
+         NQdIo9PVhAGDS1ezeJV8sYIb68wFePf/ZsCA/J+wW4Hq8B4EhPnRNZa08bHZd1l5sFR4
+         8txyC2FMxCTsRtsI2Oj0KsB2KGSMNhO2LNEkbWkdaX6N9m5kseXjA8SkpKZwjS3t5vR2
+         dsRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793113313; x=1793718113;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4JSSeMn7jD3hzJLmiAPL5D8xsSZOgnxpk+LkLJ9f9Go=;
-        b=qx3JVTObkCuzPqA8zzf7el7p+JAOLGRx2JvJPiVRBDdTicoN6adGMDsADZunUt20W+
-         rEiYFhAOWvqZLUD10zyNVmHFAipsAvhiZzV7jKG6LlGPX7LA+o+4IOyMXfkdpDA9winj
-         8h8fIi36LyvGNkYmK8X4t3fomDY1ZlgOTvTSfZHzMnhmjeGzILeT+EgkkMCIsOs8Oe64
-         5cGEzH9+Qd4jY1e1Mnijq/0Qg8YCLVS83PyMuPOuQYbuhKzwjWy09ut42AmDzBDA3PaL
-         Gtk9w26/tmFKTgiM5NowJSWseUy7EmNLkXDMveQyRXjcsQvmwq9/IaBBVKjC7LQ/wGWi
-         ashA==
-X-Gm-Message-State: AFq9FYJKiqZnBUnXCC2wDrT97ZFDfOpMS16oRghfvGUrKG+3iOzbMjfm
-	f3EvVd5SIo3IzB65MWTdMxBJxVUODXMGBO21ssZsMRb7XnKwVkzz6sxY
-X-Gm-Gg: AYBFou3QiZvwBgqzfrwGJfooHAoTYwSW1z4vZ40Qjv+QDWi65agdmsTQ43LsyedoAvo
-	AQKgARxqRYJXjv7pz2i/4j2oWWvcgWLTFWD06151a/fGRiRgaoVwAJybbKQ5TeE4/axY8h13cDn
-	9h0XuQ/NVImYjRTHzjhDhaDjKSS9xYSotvoECEz41y6xCG7GrgJUAIvPt430XPTgft9mhb724eX
-	sOb86mV7F3clOUiDksdu6MtK4MTL6kcE0Mw+nW9EABlnC8oei7wX+lyBCjVGl/qChJHjGkQRNie
-	2ZeOBctdz8pJH4n+18x+fQX9fVL0IKkZQtQTmVT/vL2jOyhs9wKurBpKVPFQXUPBRZZiAaYeKfC
-	hh5iijWDcZz9vA02l2IGBdE9NbQsMgbyRaqu8A+3xGI0sHyZmw/tLdrRPJybZulvEbqVisq5XnL
-	OJsM9X9VpXQ7yrzfxDDufwqYAaSLKyQUrwIStiG+H/QBLpl581DHy+/YxCeA5ICozTl6GCLOA4N
-	upryF43fSceusZgF/TGAjDy+u6REF68ud7sV1WOBbIqIevFFC4/F/zvHS5kfOwerTWIch8KRERQ
-	ZH2WOyF9Tgt6wiONaGpsWVpRk2xyA6x8wsja++j1+DBEfLi+/UQgqEEj4J8sOh0GSW6ak4ra2bM
-	lHV+dZ9th99y3G4X0yjHo6gJ8H3pfJAlU54HEQtfRNWIs53vgJZm2nFI=
-X-Received: by 2002:a05:6a21:71cb:b0:3e0:c102:33d8 with SMTP id adf61e73a8af0-3e7cd5014c5mr6505768637.56.1793113312516;
-        Tue, 27 Oct 2026 08:01:52 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cd8cccd63b6sm2848985a12.29.2026.10.27.08.01.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2026 08:01:51 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1793113375; x=1793718175;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xMtUtPiKGPudRcl9yoWKWTK5iT7yT/I2Zu+Y8WFqLV4=;
+        b=RoVqHETa+ulLjOEWTbVgf2a7KGgv/V4xuSLgzo0saZZ/F9RR+jjWaYvwAiWdpc2Lor
+         iKYFfVjPJyzO/u8n56r31yDunNcbazqL2PQtBJ9XcnZzN0f4dQ9AFF2CBTEMWY7XxlU3
+         US1nffhCUi+AqDfwbFnA+UO9nmSLXZtQ4R3DPSWfzapHylj39n/KffZRSOuZ/cITqXWE
+         zPKxQ5NTkz0NFxkl831JXslhzdwFur4ILt6rVmqZik/YYkph1FPM+2k2Qe7zIIzotkol
+         lp9RP463kmO3M6kWpfyUMS2y0VOt+veEpZsf/oNb4o951ODBRKWGZPXotrXpDCl0PQ9F
+         sqgQ==
+X-Gm-Message-State: AFq9FYIgKhC5wmBtekFiwgBiuwmiBbFLUmgAKFL2z2bBsBIHteu9CZy/
+	yuY1lOpZpuVos5PmJdTOpNXKKVa3AnZIaZ8p1pKPF2hp/oZJ+lOqVwsd
+X-Gm-Gg: AYBFou3OR71vnKjCFdKPl5EcHoW7zXo3XTcuo+MIGcisYcDmoH5RnjAGgesvOmraveR
+	2tFC4JMr9QHasYl9kLVewqK/hALN5fb90TriI1/Jx/PQ+e6rO4ohyNquYal5VU7ee7tMQUliC/0
+	sCLikrgiMPEskL7elHwFYQ5VUbwPIuH69m44dXrnWq7U1NvMwveeAe3E4ES8htsm5iv1WAgqQP9
+	wL5/szRzmawf5Pja/wxo2Y7vN7PpNnKujWvd+HZ/LKMg4VBHeYtl5H4YCMoid6F+NKGHnzNSz/N
+	LsQLXmIQup78cwix5Zi9n1MznHx9mPUq1GobNafsK2+CJLVIGWxjz96XC38IHmDCYjDLg/M2L5W
+	CFJiyTC7Ego3uKOcm1xEtY7a52bU8Co+7F1EuEsVdCVPU2YIbUNoSk8q7Ty1yJ9JkkKv4kNOl2b
+	TweyMeG6OVCJI9lECLN0OZjDw/jseAazOAWEuUYHAWtj27al28LhV2nTi4yCB4Y+AVsCXWEFWpl
+	WApi+2UqgRqhBhryGoOnd7JnpVK22UD+MaoZeY4WF0LBANfrjzS04mtjIviDAzJGnzGOP1YP0eL
+	q2fz/gqY0hmB+pfTWLM=
+X-Received: by 2002:a05:6808:250d:b0:539:ad19:d0af with SMTP id 5614622812f47-55c0020a836mr7093980b6e.11.1793113375046;
+        Tue, 27 Oct 2026 08:02:55 -0700 (PDT)
+Received: from localhost.localdomain ([14.116.239.36])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-55c04248804sm7886907b6e.3.2026.10.27.08.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 08:02:51 -0700 (PDT)
+From: Henry Martin <bsdhenrymartin@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Henry Martin <bsdhenrymartin@gmail.com>
+Subject: [PATCH] bpf: fix out-of-bounds frame access for async callback stack args
+Date: Tue, 27 Oct 2026 23:02:37 +0800
+Message-ID: <20261027150237.938383-1-bsdhenrymartin@gmail.com>
+X-Mailer: git-send-email 2.43.7
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,34 +103,66 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Oct 2026 15:01:50 +0000
-Message-Id: <DMFPMAYUPSDU.2AW3225P0W0ON@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>, "Cai Xinchen"
- <caixinchen1@huawei.com>
-Cc: <bpf@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
- <linux-trace-kernel@vger.kernel.org>, <selinux@vger.kernel.org>,
- <dsterba@suse.cz>, "Chuck Lever" <cel@kernel.org>, "Jeff Layton"
- <jlayton@kernel.org>, "Anna Schumaker" <anna@kernel.org>
-Subject: Re: [PATCH v3 -next 06/18] LSM: pass struct path and struct file to
- the inode xattr hooks
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20261027121151.1887650-1-caixinchen1@huawei.com>
- <20261027121151.1887650-7-caixinchen1@huawei.com>
- <sashiko-outbox-186599@kernel.org>
-In-Reply-To: <sashiko-outbox-186599@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue Oct 27, 2026 at 1:02 PM UTC, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issu=
-e(s) to consider:
-> - [Critical] bpf: missing __nullable on file arg in inode xattr LSM hooks=
- allows NULL deref
+check_stack_arg_read() resolves the caller frame with
 
-bot is correct.
-Please see commit 94e948b7e684 ("bpf: annotate file argument as __nullable =
-in bpf_lsm_mmap_file")
-and add to kernel/bpf/bpf_lsm_proto.c when args can be NULL.
-That's how verifier knows.
+    caller = vstate->frame[vstate->curframe - 1];
+
+without checking whether the current frame is the outermost one
+(curframe == 0). Regular programs always run with curframe > 0 inside
+check_stack_arg_read(), but async callbacks do not: push_async_cb()
+builds a fresh verifier state with frame[0] as the only frame and
+curframe left at its kzalloc default 0.
+
+A static subprogram invoked as an async callback (e.g. via
+bpf_timer_set_callback) may declare up to MAX_BPF_FUNC_ARGS (12)
+arguments, and arguments beyond the fifth are passed on the stack. When
+such a callback executes an r11-based incoming stack argument load
+(is_stack_arg_ldx: src_reg == BPF_REG_PARAMS, off > 0, 8-aligned), the
+spi bound check against bpf_in_stack_arg_cnt() passes while curframe is
+0, and the code above evaluates frame[-1]: an out-of-bounds read behind
+the bpf_verifier_state.frame array. frame[] is embedded in struct
+bpf_verifier_state, so for async callbacks frame[-1] reads the last 8
+bytes of the object preceding the stack element in the verifier state
+allocator, and the resulting garbage pointer is immediately used as
+
+    arg = &caller->stack_arg_regs[spi];
+
+whose contents are copied into the verifier register state. The main
+program path is not affected: do_check_common() forces arg_cnt == 1 for
+subprog 0, so bpf_in_stack_arg_cnt() is 0 there and the bound check
+rejects the load.
+
+Reject r11-based incoming stack argument loads when the current frame
+has no caller (curframe == 0): async callback prototypes cannot declare
+stack arguments in the first place (e.g. the timer callback prototype
+has only 3 arguments), so such a load can never be valid.
+
+This issue was discovered by Tencent CodeBuddy Security.
+
+Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
+---
+ kernel/bpf/verifier.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5f874979b8d75..1fb3e89ac59b5 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4232,6 +4232,11 @@ static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_st
+ 		return -EACCES;
+ 	}
+ 
++	if (vstate->curframe == 0) {
++		verbose(env, "stack arg read with no caller frame\n");
++		return -EINVAL;
++	}
++
+ 	caller = vstate->frame[vstate->curframe - 1];
+ 	arg = &caller->stack_arg_regs[spi];
+ 	cur = vstate->frame[vstate->curframe];
+-- 
+2.43.7
