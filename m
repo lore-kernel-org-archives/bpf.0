@@ -1,92 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793127804;
-	b=h88zk4mAbWjQeaaioue+Gq4CY47NGRQfXC/2TA5hBqk7R3sXu9qHp3r/GvQF5Tm4N9tk
-	 Pib0TWlW3vajyXel/nauX+X+4HXzUZi0F7jM1DL+iQ8RSrrqwt8mqLE5qFAp8sXlhIB8r
-	 xgFuoyNfIdxt0H00mPAP1oR9XPfO6V8a8xBEeVuvqgh/qdtHokI5UGmdyoyDQsdg2dTXu
-	 uNYYmc98DAOniwUivoHtsLWbRU86xZ5zj1LLpIY9yseL+kc92Ld37YurFzoerR45cN7fo
-	 v6zbAz3AbigLPzCz5mYanEqH4YVJHNcYv00YV9/sFa4WnJsrEBattdSIytRWwh15XJg==
+	t=1793127809;
+	b=greiJ7ZW5wYMtYFNFX1jEfsOzDS11gcrQPmhcinyqXiKjr2utWEZgbmiR83+PPpY/Z+C
+	 JpPJHiCSVW2gMvkdxiULRdmeZsIpyT5RocFNhQPF6uz/jUwqRm9AwyDCkrcxFuuRnla4L
+	 EiFNDzMjQThfvhpOqBwX4y4d03zyRU1ohHDPuL0dbA3DaCvtwDyT/OHC8Q5hEQlm6Of96
+	 ojXp+BYlCUij9OqQ7bjuxlgCK3j53Vown4by+Ost3SIZKPJur1Tj7Dx5aCPXyuOnepw/H
+	 e8hue7p3laLGEfuDD022DkItT8SJwsiq5EpFl109wKMfT3hv7mNA3Yo2JfpTy0ZKpfA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793127804;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793127809;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=gY2M4rmGZhMmNpZv7+DLkgBs4khIBBMg0iVQdOwfl6U=;
-	b=pHG/svwJ7LNzcX20n4euJFvZIRDVKvbQLbCHZYAcJem7IPdsL3bjAPm13C2o+oz5jLny
-	 8tulleZeukC6jrnJC63+ZRk4/r2Si8FsqK2jtQV+yx0G5PwCNSpeduCeab5sHFDeX7QQ6
-	 rl2KJlp5V6X1jVD1yeU83ssvZutBKMN5sSjCziGSEbZHQmgG+ltHKJzlks/E6IpU9eYRw
-	 Z8f6NGYChpukfuUSWNqlzgcOPT1O2px4VG2saqfAlEbKq+yl3QNHfnI2X35Tw4Mo/BRd0
-	 u7yJ8z7mDa64mm6NXeLa6yxCFMcAZno66hJIvlGFaZSMHv7qG7zKqxYHm3Npw9ZgCVg==
+	bh=UKEcIIF/q8IfLtSrEYdote0OsSNaZhSQlX9cxu7Shtg=;
+	b=BjbmiQqiDCAuFUOvZqt2YVmfPHR+/6caUHLlVNZNk4OCeMeeGnjPx/9KKnYAUFb25t+N
+	 IsUJN4npPlHmDrBkbcN2ANnhkpOM3GF6IEwIO6xY8vvBNFHOsZpksbVcXtw95QBx7JL9w
+	 lNHp7z+c6gyyrOQSHSwcIxUrUi18M8qriEUz+Wmp3yVAypeBijM8FnmpFgin5whU1lPS2
+	 RmGfpJ2cG9mvHi8NF1eiM6Lsws/b9wESwiQC1e20q2M0umRoZI8SiMnO2WFWjn0XTLJVg
+	 QdVP+EqMLsubfdTc2fbPs3NvNe+aoss2ub+hiojM8ppF9kMYK2fx6Ku848ts4XzYTHQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wVbzyvhX;
-	arc=none smtp.remote-ip=209.85.216.51
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0uybvnui;
+	arc=none smtp.remote-ip=209.85.215.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810C6606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:03:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 810C6606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF76606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:03:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3BF76606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wVbzyvhX
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3ab752f6244so248735a91.2
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:03:23 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0uybvnui
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cdab6ae1ee9so127706a12.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:03:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793127803; x=1793732603; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793127808; x=1793732608; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=gY2M4rmGZhMmNpZv7+DLkgBs4khIBBMg0iVQdOwfl6U=;
-        b=wVbzyvhX5YmGvifT/YNsp0Fw+Kb9amLaBlv2XkR/cTcHIEMUUphGPKACPQYKI8bJTP
-         2kOn+Nqca5+YzXO0Yqasvd/MHIE9JMT1yTjyI933ggyALnE2xOqRuSdHwcRMjyX1zlkc
-         Q52LDhb/zC/sSJIsNyFGVrRAf+QJzqHKb6CqtIL7gyZDUCw4HxbuxpBdbau5zPmpIc0x
-         DnZYFOnMdewvjrwLfWyC1H8WqORsGYeSlqD1boVvj0dMsFoB/9unfYqgTCjcv3TJzJk5
-         GmBNc1q2mFw4vLofPvvZrS09l2v88b/HpfTUhabnGb6OIwHwr4CcR3tAj2cMO4rLtydW
-         r7rg==
+        bh=UKEcIIF/q8IfLtSrEYdote0OsSNaZhSQlX9cxu7Shtg=;
+        b=0uybvnuiaRwR4qN2ntbigwtzIaO4k7ZsrabzB3ycv0JwZus8ZffqndiU/F1lOGNb0E
+         /EMCCmJduU25Al4fpg8NTWonVASObtlhyXeWx0mmvTDt5XLATale9yvYWFUkfbyyvLqS
+         vIgkKuaUpDkgcp17ybyFm/Zsyp45+cgSVR2kDvhL2MYOvc8AKN2+oKzHphGQyMs0aaZP
+         9KzyGsshNQ7AKlVGYynykt5FSVYrOA6kmNgzBrDuI3foGdDxf7jUmAhj5AkhnwJS3LaS
+         QQNLx9Vrt7rSAZck/RzZZID2tsGx8TE2zzRKNvYgUQ3pr2pLjJeBTrcaRq1A2okvLKc7
+         ecMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793127803; x=1793732603;
+        d=1e100.net; s=20260707; t=1793127808; x=1793732608;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gY2M4rmGZhMmNpZv7+DLkgBs4khIBBMg0iVQdOwfl6U=;
-        b=KJe3E/n+BB33ng8iSr48Wm7QT+aeGrP/7RG4mYBW5AR/K28ScmDuBHzfgE02tE0/Jr
-         OPkcbaj18ePTdXLLjy5Tl9Hg8z4sHcNW52EMF+HtWzlDJJ2BBTi/nXv61lewOEU1vL+2
-         1yRjk9WP66WCYMGS+lSj3blCEd8ZM8LQHi7XrObQXYPVd6r7pIrqWYdWYdxvfgBDfP52
-         P16WT6umyl6wWaxTC0K9EXhnPjMcnk9Y548mdZDDrvMNUVWwoTbQtc9uJLrZbsqryaOT
-         +lhoR7m3KVkm1EnVgblEzLruGhbjHmYxRUdlLVQjeTyiNetOcjIkUiMDkskmCL66ia+0
-         yR/Q==
-X-Gm-Message-State: AFq9FYI0LZlU3jxwYUwxe6idNlbmGWyk/BuJ++VKCGt39bmUu4IeqJKf
-	VJ/DHf3W/O5HU57hWjTUdpNog00wbt6N2MPnco+mj7bqeU4qTcQUyYr0b6RZ0Q==
-X-Gm-Gg: AYBFou1MPOU8+Q/tfoU2hKK2PXQWuGYnX5qxru6KGCTFhCgR2z+PTyUEhQzQU5UHCm7
-	4Bf+Yl3o+zgbUlvCfSL46yUfbxS5QWAxxd8MUCGd7e1BoAo25YNALNeduZU4u8O1Zj7zJbyLR1a
-	kZ/630pyNA69Am5jnzS3bUSBMZ9xinIdP2Ulk9fD22UCUA5K+xymXDb/ytnZAlmG9UvccKjaqZ7
-	yLhgYZjXOUnwMC4lGsctq55OCB3LHG3Q+yj0Gbmo6HWjm0E5bZCdC5AdUzNoMLv4WJoJVKv0izw
-	xRvbAW4L/yrPEMHZJxusNOmAR8lGjfiZJ/nm0ERkwMg61Vir0ZvpaNh/YGP2N/kpDgnOHX4FlIw
-	2J5SW8xY30crenHwKVrvGsMMxNS/kQfkBfKPYYvA190xziJNCRtICN4RTDiftYOwjVJjvjqRnj9
-	2pO88iUX4nF1k+ZNloVPnpDz0IONqAI6V6UiVeptnAynZZ+oAl51bAOnANeB8i0hAiQjeUaIbH6
-	BIdpgQ++u2V8ZjTHQjSZtud2MVmfRNgmNTLiBLI3Fyo61cqZ7QHm2SRdwwXP6VJmgaXC6hHPt51
-	XQmzr9IdXYU3biB4oFVxrLhjSeJq6p9s2EeuJyJS/SWjhuotnoUv+tHS1PYqeW7BvMl939mrQkV
-	s2iLVhw/O21oCk0gSxCxYa7rt
-X-Received: by 2002:a17:90b:3c44:b0:3ac:c024:b275 with SMTP id 98e67ed59e1d1-3ae57df3da7mr22795a91.9.1793127802321;
-        Tue, 27 Oct 2026 12:03:22 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae57a1609esm95668a91.2.2026.10.27.12.03.21
+        bh=UKEcIIF/q8IfLtSrEYdote0OsSNaZhSQlX9cxu7Shtg=;
+        b=riXYGKLKI3bhZVEpZrX9vYFM85s4VefchzePDmB0LNPS25ffmOyUi4nZtS9+L32lD0
+         pOoZgiVZLM9ZmkMsK3ue3/Y+lsnIEXAu2hutAzzrLK+y+4rNkqIBPmGw0ADtEurQhFZ4
+         yeNAU414yCETl8Q/JeqJuj1smrwcx2bq7UVlgc5/2MAw3YwWGEeZiKK5A9CXVyoTMNAT
+         xrIr0/ZaQJnmITmkBdL6nW+nuivwiLZGqrcsSY8I8VCINxuBDg6NP17/d5UoPO8ow26a
+         pwwEmpO6kl1kNhibOm7/axDFJfiHtZYdRltr+Ow/fNvVmUVJkUd4ISohGlajBhhAvIUm
+         Uh5Q==
+X-Gm-Message-State: AFq9FYJzh4E+23Tgu/U7MAKLSqcso+c6mm9Ya6J5gFnvwC12rxTF3q5q
+	KIiVbZDtbNn9WKufCYeDW+1ky0TE65V9r3/Qfb4ujFDcWMzln7FfoYI/aAgohg==
+X-Gm-Gg: AYBFou3mX+HCM1x59qREneuc3ay8A+UzPFOov8dDaUbNXOm5aeFzZSEuqdGlwd++cYe
+	LLECt4VVl2iBH6yDiijw+XLJpWyagFfgKu8dqewJ18crtmVahgOXJ5DjPEhpy6aV0bVOytSBOHu
+	GgHLLk0wlkbRxhis06Q27PEXbHBmA/FAFNz+bU8vEtL+q+HYOL+Ym46auM09UnwfPafXsM/NvH9
+	CL3XB5m+B0RrbrIC7/MS2E98GkTV50pPWq9BnLZRsWe4vD31Rav3dAfeo8z0ifzx2xVGq42Ygij
+	460fndq756SAFmxh9p3YfGOTrr7zFJFQKtTx6CLyNX4fiHSQnnVTNqaJEUdY2ybsRCbZVQNXwMF
+	LUVwawKwDJAkD4gbln3mj+q1pe5mJBxk3HO7aPV/dmWBi7uPQfQOZBGkRn/9stRk/pTntHVM6Mm
+	mT8LagHW011et5EqGaoard6fDjHvsL2ZnGXwQVFiigdat7RYoK1r0Ej+yN2T7yLd/HDe5arkafQ
+	7nC3PGa81G2CHbYhPDlbSsLdlBd2K3uwdkryW63yrnxhpq0pcPUXg+wH1us1BPsC+6FSVpFf6Pm
+	zqQvZ4MwLICVG70G0frsZns5A73aNZTh6LteNOF5qU1AXmm5Q9oXTUVpRY1FDgLcLCCh1rP4Kju
+	Da/mc3RWT9Ugee47TN9oRdU6h
+X-Received: by 2002:a17:90b:1647:b0:3ab:c674:d83c with SMTP id 98e67ed59e1d1-3ae58101012mr2555a91.27.1793127808239;
+        Tue, 27 Oct 2026 12:03:28 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae574ec466sm157370a91.1.2026.10.27.12.03.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 12:03:21 -0700 (PDT)
+        Tue, 27 Oct 2026 12:03:27 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH v2 bpf 01/19] selftests/bpf: Remove tests for global data in arena
-Date: Tue, 27 Oct 2026 19:02:56 +0000
-Message-ID: <20261027190314.1440199-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf 02/19] libbpf: Remove .arena.data
+Date: Tue, 27 Oct 2026 19:02:57 +0000
+Message-ID: <20261027190314.1440199-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261027190314.1440199-1-alexei.starovoitov@gmail.com>
 References: <20261027190314.1440199-1-alexei.starovoitov@gmail.com>
@@ -103,678 +103,650 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The .arena.data section and the BPF_F_ARENA_SCALAR flag let a prog in Rust
-keep its global data in arena. The subsequent patches remove the two,
-because the compiler can do this work. First remove the tests for
-.arena.data.
+Rust has no address spaces. Thus a global variable cannot have the __arena
+attribute. The .arena.data section was a workaround. It told libbpf to do
+two things:
+ - Move .data, .bss and .rodata into arena.
+ - Load the progs with BPF_F_ARENA_SCALAR.
 
-One of the tests is a prog in Rust. It has no replacement, because LLVM
-does not put the globals of Rust in arena at this time. No other selftest
-is in Rust. Thus also remove the makefile rules that build Rust.
+The compiler must select the location of a variable, not libbpf. libbpf
+already puts the .addr_space.1 section in arena. The __arena variables of C
+are in this section, and LLVM can use it for Rust too. Until LLVM does
+that, the global data of Rust progs stays in array maps.
+
+This reverts commit 8ab58ed42b08 ("libbpf: Keep global data in arena when
+the object has .arena.data"). libbpf 1.8.0 does not have the section.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          |  12 +-
- .../testing/selftests/bpf/Makefile.buildvars  |  25 --
- tools/testing/selftests/bpf/Makefile.skel     |  18 +-
- .../selftests/bpf/prog_tests/data_in_arena.c  | 216 ------------------
- .../selftests/bpf/progs/data_in_arena.c       | 112 ---------
- .../selftests/bpf/progs/data_in_arena_decl.c  |  37 ---
- .../bpf/progs/data_in_arena_extern.c          |  20 --
- .../selftests/bpf/progs/data_in_arena_fail.c  |  20 --
- .../selftests/bpf/progs/data_in_arena_nomap.c |  20 --
- .../selftests/bpf/progs/data_in_arena_rust.rs |  73 ------
- 10 files changed, 2 insertions(+), 551 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/data_in_arena.c
- delete mode 100644 tools/testing/selftests/bpf/progs/data_in_arena.c
- delete mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_decl.c
- delete mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_extern.c
- delete mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_fail.c
- delete mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_nomap.c
- delete mode 100644 tools/testing/selftests/bpf/progs/data_in_arena_rust.rs
+ tools/lib/bpf/libbpf.c | 433 ++---------------------------------------
+ 1 file changed, 20 insertions(+), 413 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 1e4af62e8312..c99e0f623e10 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -423,16 +423,6 @@ $(LIBARENA_ASAN_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
- 	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS)
- endif
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8fcb8cf39cc0..fb8a1f07c5b6 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -552,26 +552,6 @@ struct bpf_struct_ops {
+ #define STRUCT_OPS_SEC ".struct_ops"
+ #define STRUCT_OPS_LINK_SEC ".struct_ops.link"
+ #define ARENA_SEC ".addr_space.1"
+-/*
+- * An object with this section keeps its global data in arena instead of
+- * array maps. What is in the section doesn't matter. .data, .bss and .rodata
+- * sections become a part of the arena map of the object, like __arena global
+- * variables are. If the object doesn't declare an arena map libbpf creates
+- * one that is just large enough for the data. bpf_object__find_map_by_name()
+- * finds it by the name "arena" and bpf_map__set_max_entries() changes its
+- * size before the object is loaded.
+- * Read-only sections with pointers to functions and sections with constant
+- * strings stay frozen array maps. A constant that a helper or a kfunc takes
+- * by pointer has to be in such section.
+- * Pointers to data that are stored in data become addresses of arena.
+- * The load fails if such pointer points to a section that is not in arena,
+- * or if the arena is pinned or reused.
+- *
+- * It's for programs written in Rust. There are no address spaces in Rust,
+- * the program accesses arena through plain numbers, so programs of the object
+- * are loaded with BPF_F_ARENA_SCALAR.
+- */
+-#define ARENA_DATA_SEC ".arena.data"
  
--# #![no_std] looks for compiler_builtins too. Nothing of it is used.
--ifneq ($(RUST_CORE),)
--$(RUST_CORE): $(RUST_CORE_SRC)
--	$(call msg,RUSTC,,$@)
--	$(Q)mkdir -p $(@D)
--	+$(Q)$(RUSTC_BPF) -A warnings --edition 2024 --crate-name core --out-dir $(@D) $<
--	+$(Q)echo '#![feature(compiler_builtins)] #![compiler_builtins] #![no_std]' | \
--		$(RUSTC_BPF) -A warnings --crate-name compiler_builtins --out-dir $(@D) -
--endif
--
- # Generated test list headers
+ enum libbpf_map_type {
+ 	LIBBPF_MAP_UNSPEC,
+@@ -627,13 +607,6 @@ struct bpf_map {
+ 	/* pointers to functions in the data of an internal map, see obj->func_ptrs */
+ 	struct func_ptr *func_ptrs;
+ 	size_t func_ptr_cnt;
+-	/*
+-	 * Data of the internal map is a part of arena data at arena_off.
+-	 * The map is not created, unless it's a copy that is in arena.
+-	 */
+-	bool in_arena;
+-	bool arena_copy;
+-	size_t arena_off;
+ };
  
- define gen_tests_hdr
-@@ -468,7 +458,7 @@ RUNNER_PREREQS := $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(BPFTOOL)		\
- 		  $(VERIFY_SIG_HDR) $(PRIVATE_KEY) $(VERIFICATION_CERT)	\
- 		  $(LIBARENA_SKEL) $(LIBARENA_ASAN_SKEL)		\
- 		  prog_tests/tests.h map_tests/tests.h			\
--		  $(RUNNER_OBJS) $(RUST_CORE)
-+		  $(RUNNER_OBJS)
+ enum extern_type {
+@@ -808,17 +781,6 @@ struct bpf_object {
+ 	void *arena_data;
+ 	size_t arena_data_sz;
+ 	size_t arena_data_off;
+-	bool data_in_arena;
+-	bool arena_mapped;
+-	/* pointers to data in the data of internal maps, when data is in arena */
+-	struct data_ptr {
+-		int sec_idx;
+-		size_t sec_off;
+-		int targ_sec_idx;
+-		size_t targ_off;
+-		char *sym_name;
+-	} *data_ptrs;
+-	size_t data_ptr_cnt;
  
- # Runtime fixtures for each test_progs flavor.
- RUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
-diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/testing/selftests/bpf/Makefile.buildvars
-index ff3476bc40a4..d2a0c0031b87 100644
---- a/tools/testing/selftests/bpf/Makefile.buildvars
-+++ b/tools/testing/selftests/bpf/Makefile.buildvars
-@@ -109,31 +109,6 @@ HOST_INCLUDE_DIR	:= $(INCLUDE_DIR)
- endif
- RESOLVE_BTFIDS := $(HOST_BUILD_DIR)/resolve_btfids/resolve_btfids
+ 	void *jumptables_data;
+ 	size_t jumptables_data_sz;
+@@ -1644,7 +1606,6 @@ static struct bpf_object *bpf_object__new(const char *path,
+ 	obj->efile.obj_buf = obj_buf;
+ 	obj->efile.obj_buf_sz = obj_buf_sz;
+ 	obj->efile.btf_maps_shndx = -1;
+-	obj->efile.arena_data_shndx = -1;
+ 	obj->kconfig_map_idx = -1;
+ 	obj->arena_map_idx = -1;
  
--# Programs in Rust are built by upstream rustc. It has no prebuilt core for
--# the bpf target, so it has to come with the source of core:
--#   rustup component add rust-src
--# core is built as edition 2024, which it is since rustc 1.87.
--# rustc emits LLVM bitcode and clang makes the object of it, so clang has to be
--# 23 or newer and not older than LLVM of rustc.
--# Otherwise RUST_CORE is empty and the tests are skipped.
--RUSTC ?= rustc
--RUST_CORE_SRC := $(wildcard $(shell $(RUSTC) --print sysroot 2>/dev/null)$\
--			    /lib/rustlib/src/rust/library/core/src/lib.rs)
--ifneq ($(RUST_CORE_SRC),)
--ifeq ($(shell { clang=$$(echo __clang_major__ | $(CLANG) -E -P -x c -) &&		\
--		llvm=$$($(srctree)/scripts/rustc-llvm-version.sh $(RUSTC)) &&		\
--		[ $$($(srctree)/scripts/rustc-version.sh $(RUSTC)) -ge 108700 ] &&	\
--		[ $$clang -ge 23 ] && [ $$clang -ge $$((llvm / 10000)) ]; }		\
--		2>/dev/null && echo y),y)
--RUST_CORE := $(BUILD_DIR)/rust/libcore.rlib
--endif
--endif
--# RUSTC_BOOTSTRAP=1 is to build core with a stable rustc, like the kernel does.
--# panic=abort is a stop gap until panic=unwind is supported.
--RUSTC_BPF = RUSTC_BOOTSTRAP=1 $(RUSTC) -O -C panic=abort --crate-type rlib	\
--	    --target $(if $(IS_LITTLE_ENDIAN),bpfel,bpfeb)-unknown-none		\
--	    -L $(dir $(RUST_CORE))
--
- DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
- ifneq ($(CROSS_COMPILE),)
- CROSS_BPFTOOL := $(SCRATCH_DIR)/sbin/bpftool
-diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
-index 6570c48f92b0..e8699903feef 100644
---- a/tools/testing/selftests/bpf/Makefile.skel
-+++ b/tools/testing/selftests/bpf/Makefile.skel
-@@ -20,8 +20,7 @@ ifneq ($(BPF_CC),)
- BPF_SRCS := $(notdir $(wildcard progs/*.c))
- BPF_OBJS := $(patsubst %.c,$(RDIR)/%.bpf.o,$(BPF_SRCS))
+@@ -3126,136 +3087,6 @@ static int init_arena_map_data(struct bpf_object *obj, struct bpf_map *map,
+ 	return 0;
+ }
  
--SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c	\
--		  data_in_arena_extern.c data_in_arena_nomap.c
-+SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
- 
- LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		linked_vars.skel.h linked_maps.skel.h linked_arena.skel.h \
-@@ -138,21 +137,6 @@ $(LINKED_SKELS_H): $(RDIR)/%.skel.h: $$(addprefix $(RDIR)/,$$($$*.skel.h-deps))
- 		   $(BPFTOOL) $(GEN_SKEL) | $(RDIR)
- 	$(Q)$(cmd_bpf_link_skel)
- 
--# Programs in Rust, see Makefile.buildvars. No skeletons: the objects may be absent.
--ifneq ($(RUST_CORE),)
--ifeq ($(BPF_CC),$(CLANG))
--RUST_OBJS := $(patsubst progs/%.rs,$(RDIR)/%.bpf.o,$(wildcard progs/*.rs))
--BPF_OBJS += $(RUST_OBJS)
--
--$(RUST_OBJS): $(RDIR)/%.bpf.o: progs/%.rs $(RUST_CORE) | $(RDIR)
--	$(call msg,RUSTC,$(BINARY),$@)
--	+$(Q)$(RUSTC_BPF) --edition 2021 -C debuginfo=2 --emit=llvm-bc			\
--		$(patsubst -mcpu=%,-C target-cpu=%,$(filter -mcpu=%,$(BPF_CC_FLAGS)))	\
--		-o $(dir $(RUST_CORE))$(BINARY)-$*.bc $< &&				\
--	$(BPF_CC) $(BPF_CC_FLAGS) -c $(dir $(RUST_CORE))$(BINARY)-$*.bc -o $@ $(call skip_on_fail,BPF)
--endif
--endif
--
- # Programs in C++. No skeletons: gcc doesn't build them.
- ifeq ($(BPF_CC),$(CLANG))
- CXX_OBJS := $(patsubst progs/%.cpp,$(RDIR)/%.bpf.o,$(wildcard progs/*.cpp))
-diff --git a/tools/testing/selftests/bpf/prog_tests/data_in_arena.c b/tools/testing/selftests/bpf/prog_tests/data_in_arena.c
-deleted file mode 100644
-index cb1023507c01..000000000000
---- a/tools/testing/selftests/bpf/prog_tests/data_in_arena.c
-+++ /dev/null
-@@ -1,216 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <test_progs.h>
--#include "data_in_arena.skel.h"
--#include "data_in_arena_decl.skel.h"
--#include "data_in_arena_fail.skel.h"
--
--static int run_prog(struct bpf_program *prog)
+-static bool map_is_const_str(const struct bpf_map *map)
 -{
--	LIBBPF_OPTS(bpf_test_run_opts, topts);
--
--	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(prog), &topts), "test_run"))
--		return -1;
--	return topts.retval;
+-	return map->libbpf_type == LIBBPF_MAP_RODATA &&
+-	       str_has_pfx(map->real_name, RODATA_SEC ".str");
 -}
 -
--static void run(struct data_in_arena *skel, int counter)
+-static bool map_data_goes_to_arena(const struct bpf_object *obj, const struct bpf_map *map)
 -{
 -	int i;
 -
--	ASSERT_EQ(run_prog(skel->progs.use_data), counter + 7 + 1 + 2, "retval");
--	ASSERT_EQ(skel->bss->sum, counter + 7 + 1 + 2, "sum");
--	ASSERT_EQ(skel->data->counter, counter + 1, "counter");
--	ASSERT_EQ(skel->data->pair[1], 5, "pair[1]");
--	for (i = 0; i < 4; i++)
--		ASSERT_EQ(skel->bss->table[i], 10 * (i + 1) + i, "table");
--}
--
--static void test_in_arena(void)
--{
--	struct bpf_map_info info = {};
--	struct data_in_arena *skel;
--	__u32 len = sizeof(info);
--	struct bpf_map *arena;
--	size_t sz;
--
--	skel = data_in_arena__open();
--	if (!ASSERT_OK_PTR(skel, "open"))
--		return;
--
--	arena = bpf_object__find_map_by_name(skel->obj, "arena");
--	if (!ASSERT_OK_PTR(arena, "arena"))
--		goto out;
--	ASSERT_EQ(bpf_map__type(arena), BPF_MAP_TYPE_ARENA, "arena type");
--	ASSERT_EQ(bpf_map__max_entries(arena), 1, "arena pages");
--	ASSERT_OK(bpf_map__set_max_entries(arena, 8), "arena resize");
--	ASSERT_FALSE(bpf_map__autocreate(skel->maps.data), "data autocreate");
--	ASSERT_FALSE(bpf_map__autocreate(skel->maps.bss), "bss autocreate");
--	ASSERT_FALSE(bpf_map__autocreate(skel->maps.rodata), "rodata autocreate");
--	ASSERT_EQ(bpf_map__set_autocreate(skel->maps.data, true), -EOPNOTSUPP, "set_autocreate");
--	ASSERT_EQ(bpf_map__set_value_size(skel->maps.bss, 4096), -EOPNOTSUPP, "set_value_size");
--	ASSERT_EQ(bpf_map__initial_value(skel->maps.data, &sz), skel->data, "initial_value");
--	ASSERT_EQ(sz, sizeof(*skel->data), "initial_value size");
--
--	/* initial values are set the usual way */
--	skel->data->counter = 100;
--
--	if (!ASSERT_OK(data_in_arena__load(skel), "load"))
--		goto out;
--	/* there are no maps behind the sections */
--	ASSERT_ERR(bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.data), &info, &len), "data map");
--	ASSERT_ERR(bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.bss), &info, &len), "bss map");
--	ASSERT_ERR(bpf_map_get_info_by_fd(bpf_map__fd(skel->maps.rodata), &info, &len),
--		   "rodata map");
--	run(skel, 100);
--
--	/* pointers to data next to pointers to functions */
--	ASSERT_EQ(run_prog(skel->progs.use_ops), 42 + 1 + 'e', "use_ops");
--	ASSERT_EQ(skel->data->counter, 102, "counter");
--
--	/* alignment of sections and pointers to data in data */
--	ASSERT_EQ((unsigned long)&skel->bss->aligned64 % 64, 0, "alignment");
--	ASSERT_EQ(run_prog(skel->progs.use_ptrs), 0, "use_ptrs");
--	ASSERT_EQ(skel->data->x, 43, "x");
--	ASSERT_EQ(skel->bss->aligned64.v[7], 7, "aligned64");
--	ASSERT_EQ(skel->data->px, &skel->data->x, "px");
--
--	/* format strings of bpf_printk() and BPF_SNPRINTF() */
--	ASSERT_EQ(run_prog(skel->progs.use_printk), sizeof("43-7"), "use_printk");
--	ASSERT_STREQ(skel->bss->out, "43-7", "out");
--out:
--	data_in_arena__destroy(skel);
--}
--
--/* The object has an arena map and __arena variables */
--static void test_declared_arena(void)
--{
--	struct data_in_arena_decl *skel;
--	struct bpf_map *map;
--	int arenas = 0;
--
--	skel = data_in_arena_decl__open();
--	if (!ASSERT_OK_PTR(skel, "open"))
--		return;
--	bpf_object__for_each_map(map, skel->obj)
--		arenas += bpf_map__type(map) == BPF_MAP_TYPE_ARENA;
--	ASSERT_EQ(arenas, 1, "no second arena");
--	skel->data->counter = 6;
--	if (!ASSERT_OK(data_in_arena_decl__load(skel), "load"))
--		goto out;
--	ASSERT_EQ(run_prog(skel->progs.use_data), 6 + 7 + 11, "retval");
--	ASSERT_EQ(run_prog(skel->progs.use_data), 7 + 7 + 12, "retval");
--	ASSERT_EQ(skel->bss->sum, 7 + 7 + 12, "sum");
--	ASSERT_EQ(skel->data->counter, 8, "counter");
--out:
--	data_in_arena_decl__destroy(skel);
--}
--
--/* A pointer in data that can't be made an address of arena fails the load */
--static void test_ptr_to_map(void)
--{
--	struct data_in_arena_fail *skel;
--
--	skel = data_in_arena_fail__open();
--	if (!ASSERT_OK_PTR(skel, "open"))
--		return;
--	ASSERT_ERR(data_in_arena_fail__load(skel), "load");
--	data_in_arena_fail__destroy(skel);
--}
--
--/* So does a pointer to a variable of the kernel. There is no skeleton: the open fails. */
--static void test_ptr_to_extern(void)
--{
--	struct bpf_object *obj;
--
--	obj = bpf_object__open_file("./data_in_arena_extern.bpf.o", NULL);
--	if (!ASSERT_ERR_PTR(obj, "open"))
--		bpf_object__close(obj);
--}
--
--/* __arena variables and no arena map. There is no skeleton: the open fails. */
--static void test_arena_var_no_map(void)
--{
--	struct bpf_object *obj;
--
--	obj = bpf_object__open_file("./data_in_arena_nomap.bpf.o", NULL);
--	if (!ASSERT_ERR_PTR(obj, "open"))
--		bpf_object__close(obj);
--}
--
--/* The address of an arena that libbpf doesn't create is not known. No pointers in data then. */
--static void test_not_my_arena(bool pin)
--{
--	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
--	struct data_in_arena *skel;
--	struct bpf_map *arena;
--	int fd = -1;
--
--	skel = data_in_arena__open();
--	if (!ASSERT_OK_PTR(skel, "open"))
--		return;
--	arena = bpf_object__find_map_by_name(skel->obj, "arena");
--	if (!ASSERT_OK_PTR(arena, "arena"))
--		goto out;
--	if (pin) {
--		ASSERT_OK(bpf_map__set_pin_path(arena, "/sys/fs/bpf/data_in_arena"), "pin_path");
--	} else {
--		fd = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena", 0, 0, 1, &opts);
--		if (!ASSERT_GE(fd, 0, "map_create"))
--			goto out;
--		ASSERT_OK(bpf_map__reuse_fd(arena, fd), "reuse_fd");
+-	switch (map->libbpf_type) {
+-	case LIBBPF_MAP_DATA:
+-	case LIBBPF_MAP_BSS:
+-		return true;
+-	case LIBBPF_MAP_RODATA:
+-		break;
+-	default:
+-		return false;
 -	}
--	ASSERT_EQ(data_in_arena__load(skel), -ENOTSUP, "load");
--out:
--	if (fd >= 0)
--		close(fd);
--	data_in_arena__destroy(skel);
--}
 -
--/* The object is there if rustc and clang can build it, see Makefile.buildvars */
--static void test_rust(void)
--{
--	const char *file = "./data_in_arena_rust.bpf.o";
--	struct bpf_object *obj;
+-	/*
+-	 * Const strings that kfuncs and helpers take have to be in a frozen
+-	 * map. Pointers to them that are stored in data point to a copy of
+-	 * the strings that is in arena.
+-	 */
+-	if (map_is_const_str(map))
+-		return true;
+-	/*
+-	 * Read-only data with pointers stays a frozen map: the kernel
+-	 * recognizes pointers to functions in it.
+-	 */
+-	if (str_has_pfx(map->real_name, DATA_REL_RO_SEC))
+-		return false;
+-	for (i = 0; i < obj->efile.sec_cnt; i++) {
+-		const struct elf_sec_desc *sec = &obj->efile.secs[i];
 -
--	if (access(file, R_OK)) {
--		test__skip();
--		return;
+-		if (sec->sec_type == SEC_RELO && sec->shdr->sh_info == map->sec_idx)
+-			return false;
 -	}
--	obj = bpf_object__open_file(file, NULL);
--	if (!ASSERT_OK_PTR(obj, "open"))
--		return;
--	if (!ASSERT_OK(bpf_object__load(obj), "load"))
--		goto out;
--	/* libbpf goes on without BTF when the kernel doesn't take it */
--	ASSERT_GE(bpf_object__btf_fd(obj), 0, "btf_fd");
--	ASSERT_EQ(run_prog(bpf_object__find_program_by_name(obj, "list_in_data")),
--		  100 + 20 + 3, "retval");
--out:
--	bpf_object__close(obj);
+-	return true;
 -}
 -
--void test_data_in_arena(void)
+-/* Returns the offset of the data of the map in arena data that is sz bytes so far */
+-static size_t map_arena_off(const struct bpf_object *obj, const struct bpf_map *map, size_t sz)
 -{
--#if !defined(__x86_64__) && !defined(__aarch64__)
--	/* other JITs don't take BPF_F_ARENA_SCALAR */
--	test__skip();
--	return;
--#endif
--	if (test__start_subtest("arena"))
--		test_in_arena();
--	if (test__start_subtest("declared_arena"))
--		test_declared_arena();
--	if (test__start_subtest("ptr_to_map"))
--		test_ptr_to_map();
--	if (test__start_subtest("ptr_to_extern"))
--		test_ptr_to_extern();
--	if (test__start_subtest("arena_var_no_map"))
--		test_arena_var_no_map();
--	if (test__start_subtest("pinned_arena"))
--		test_not_my_arena(true);
--	if (test__start_subtest("reused_arena"))
--		test_not_my_arena(false);
--	if (test__start_subtest("rust"))
--		test_rust();
--}
-diff --git a/tools/testing/selftests/bpf/progs/data_in_arena.c b/tools/testing/selftests/bpf/progs/data_in_arena.c
-deleted file mode 100644
-index 18f38103c0fc..000000000000
---- a/tools/testing/selftests/bpf/progs/data_in_arena.c
-+++ /dev/null
-@@ -1,112 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
+-	size_t align = obj->efile.secs[map->sec_idx].shdr->sh_addralign;
 -
--#include <linux/bpf.h>
--#include <bpf/bpf_helpers.h>
--
--/* global data of the object is in arena */
--char data_in_arena SEC(".arena.data");
--
--int counter = 5;
--long pair[2] = { 1, 2 };
--int x = 42;
--long sum;
--long table[4];
--struct {
--	long v[8];
--} aligned64 __attribute__((aligned(64)));
--const volatile int ro = 7;
--const volatile long ro_table[4] = { 10, 20, 30, 40 };
--
--/* const strings stay in a map for helpers and kfuncs, a copy of them is in arena */
--const char hello[] SEC(".rodata.str.hello") = "hello";
--
--/* pointers to data that are stored in data */
--int *px = &x;
--const char *str = hello;
--int *const volatile cpx SEC(".data.rel.ro") = &x;
--
--SEC("syscall")
--int use_data(void *ctx)
--{
--	int i;
--
--	for (i = 0; i < 4; i++)
--		table[i] = ro_table[i] + i;
--	sum = counter + ro + pair[0] + pair[1];
--	counter++;
--	__sync_fetch_and_add(&pair[1], 3);
--	return sum;
--}
--
--typedef int (*op_fn)(int);
--
--static __noinline int add1(int v)
--{
--	return v + 1;
+-	return roundup(sz, max(align, sizeof(__u64)));
 -}
 -
 -/*
-- * Pointers to functions and to data in read-only data of a program with callx.
-- * Volatile, so that the compiler doesn't replace the pointers with what
-- * they point to.
+- * Make .data, .bss and .rodata a part of arena data. They follow __arena
+- * variables of the object, if there are any.
 - */
--static const volatile struct {
--	op_fn fn;
--	int *data;
--	const char *name;
--} ops SEC(".data.rel.ro") = { add1, &x, hello };
--
--SEC("syscall")
--int use_ops(void *ctx)
+-static int bpf_object__init_arena_data(struct bpf_object *obj)
 -{
--	/* a program has the arena when its code refers to it */
--	counter++;
--#ifdef __clang__
--	return ops.fn(*ops.data) + ops.name[1];
--#else
--	/* gcc doesn't support indirect calls */
--	return add1(*ops.data) + ops.name[1];
--#endif
--}
+-	const size_t page_sz = sysconf(_SC_PAGE_SIZE);
+-	size_t sz = obj->arena_data_sz;
+-	struct bpf_map *map;
+-	void *data;
+-	int i;
 -
--SEC("syscall")
--int use_ptrs(void *ctx)
--{
--	unsigned long addr = (unsigned long)&aligned64;
--	char local[4] = "abc";
+-	if (!obj->data_in_arena)
+-		return 0;
 -
--	/* hide the address from the compiler, it knows that '& 63' is 0 */
--	asm volatile ("" : "+r"(addr));
--	if (addr & 63)
--		return 1;
--	aligned64.v[7] = 7;
--	if (*px != 42)
--		return 2;
--	*px = 43;
--	if (x != 43 || *cpx != 43)
--		return 3;
--	if (str[0] != 'h' || str[4] != 'o' || str[5])
--		return 4;
--	/* the literal is in a map */
--	if (bpf_strncmp(local, sizeof(local), "abc"))
--		return 5;
+-	for (i = 0; i < obj->nr_maps; i++) {
+-		map = &obj->maps[i];
+-		if (map_data_goes_to_arena(obj, map))
+-			sz = map_arena_off(obj, map, sz) + map->def.value_size;
+-	}
+-	if (sz == obj->arena_data_sz)
+-		return 0;
+-
+-	if (obj->arena_map_idx < 0) {
+-		/* bpf_object__init_user_btf_maps() didn't look: there is no .maps section */
+-		if (obj->efile.arena_data) {
+-			pr_warn("elf: sec '%s': to use global __arena variables the ARENA map should be explicitly declared in SEC(\".maps\")\n",
+-				ARENA_SEC);
+-			return -ENOENT;
+-		}
+-
+-		map = bpf_object__add_map(obj);
+-		if (IS_ERR(map))
+-			return PTR_ERR(map);
+-
+-		map->real_name = strdup("arena");
+-		map->name = strdup("arena");
+-		if (!map->real_name || !map->name) {
+-			zfree(&map->real_name);
+-			zfree(&map->name);
+-			return -ENOMEM;
+-		}
+-		map->sec_idx = -1;
+-		map->def.type = BPF_MAP_TYPE_ARENA;
+-		map->def.max_entries = roundup(sz, page_sz) / page_sz;
+-		map->def.map_flags = BPF_F_MMAPABLE;
+-		obj->arena_map_idx = map - obj->maps;
+-	}
+-
+-	data = realloc(obj->arena_data, sz);
+-	if (!data)
+-		return -ENOMEM;
+-	memset(data + obj->arena_data_sz, 0, sz - obj->arena_data_sz);
+-	sz = obj->arena_data_sz;
+-	obj->arena_data = data;
+-	obj->maps[obj->arena_map_idx].mmaped = data;
+-
+-	for (i = 0; i < obj->nr_maps; i++) {
+-		map = &obj->maps[i];
+-		if (!map_data_goes_to_arena(obj, map))
+-			continue;
+-		sz = map_arena_off(obj, map, sz);
+-		map->arena_off = sz;
+-		memcpy(data + sz, map->mmaped, map->def.value_size);
+-		sz += map->def.value_size;
+-		pr_debug("map '%s': data is in arena at offset %zu\n", map->name, map->arena_off);
+-		if (map_is_const_str(map)) {
+-			map->arena_copy = true;
+-			continue;
+-		}
+-		munmap(map->mmaped, bpf_map_mmap_sz(map));
+-		/* make bpf_map__initial_value() and bpf_map__set_initial_value() work */
+-		map->mmaped = data + map->arena_off;
+-		map->autocreate = false;
+-		map->in_arena = true;
+-	}
+-	obj->arena_data_sz = sz;
 -	return 0;
 -}
 -
--char out[16];
+ static int bpf_object__init_user_btf_maps(struct bpf_object *obj, bool strict,
+ 					  const char *pin_root_path)
+ {
+@@ -3348,7 +3179,6 @@ static int bpf_object__init_maps(struct bpf_object *obj,
+ 	err = err ?: bpf_object__init_global_data_maps(obj);
+ 	err = err ?: bpf_object__init_kconfig_map(obj);
+ 	err = err ?: bpf_object_init_struct_ops(obj);
+-	err = err ?: bpf_object__init_arena_data(obj);
+ 
+ 	return err;
+ }
+@@ -4163,11 +3993,6 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 		if (!sh)
+ 			return -LIBBPF_ERRNO__FORMAT;
+ 
+-		/* the second pass has to know it when it sees relocations of data */
+-		name = elf_sec_str(obj, sh->sh_name);
+-		if (name && strcmp(name, ARENA_DATA_SEC) == 0)
+-			obj->data_in_arena = true;
 -
--/* format strings are in a map */
--SEC("syscall")
--int use_printk(void *ctx)
+ 		if (sh->sh_type == SHT_SYMTAB) {
+ 			if (obj->efile.symbols) {
+ 				pr_warn("elf: multiple symbol tables in %s\n", obj->path);
+@@ -4284,8 +4109,6 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 			} else if (strcmp(name, ARENA_SEC) == 0) {
+ 				obj->efile.arena_data = data;
+ 				obj->efile.arena_data_shndx = idx;
+-			} else if (strcmp(name, ARENA_DATA_SEC) == 0) {
+-				/* the marker, see the first pass */
+ 			} else if (strcmp(name, JUMPTABLES_SEC) == 0) {
+ 				obj->jumptables_data = malloc(data->d_size);
+ 				if (!obj->jumptables_data)
+@@ -4310,9 +4133,6 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 			 * have pointers to functions.
+ 			 */
+ 			if (!section_have_execinstr(obj, targ_sec_idx) &&
+-			    !(obj->data_in_arena &&
+-			      (!strcmp(name, ".rel" DATA_SEC) ||
+-			       str_has_pfx(name, ".rel" DATA_SEC "."))) &&
+ 			    strcmp(name, ".rel" RODATA_SEC) &&
+ 			    !str_has_pfx(name, ".rel" RODATA_SEC ".") &&
+ 			    strcmp(name, ".rel" DATA_REL_RO_SEC) &&
+@@ -5064,10 +4884,6 @@ static int bpf_program__record_reloc(struct bpf_program *prog,
+ 	reloc_desc->insn_idx = insn_idx;
+ 	reloc_desc->map_idx = map_idx;
+ 	reloc_desc->sym_off = sym->st_value;
+-	if (map->in_arena) {
+-		reloc_desc->map_idx = obj->arena_map_idx;
+-		reloc_desc->sym_off += map->arena_off;
+-	}
+ 	return 0;
+ }
+ 
+@@ -5286,9 +5102,6 @@ int bpf_map__set_autocreate(struct bpf_map *map, bool autocreate)
+ 	if (map_is_created(map))
+ 		return libbpf_err(-EBUSY);
+ 
+-	if (map->in_arena)
+-		return libbpf_err(-EOPNOTSUPP);
+-
+ 	map->autocreate = autocreate;
+ 	return 0;
+ }
+@@ -5569,45 +5382,6 @@ bpf_object__reuse_map(struct bpf_map *map)
+ 	return 0;
+ }
+ 
+-static struct bpf_map *bpf_object__sec_map(struct bpf_object *obj, int sec_idx)
 -{
--	char buf[sizeof(out)];
--	int i, n;
+-	int i;
 -
--	bpf_printk("counter %d", counter);
--	n = BPF_SNPRINTF(buf, sizeof(buf), "%d-%d", x, ro);
--	for (i = 0; i < sizeof(out); i++)
--		out[i] = buf[i];
--	return n;
+-	for (i = 0; i < obj->nr_maps; i++)
+-		if (bpf_map__is_internal(&obj->maps[i]) && obj->maps[i].sec_idx == sec_idx)
+-			return &obj->maps[i];
+-	return NULL;
 -}
 -
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/data_in_arena_decl.c b/tools/testing/selftests/bpf/progs/data_in_arena_decl.c
-deleted file mode 100644
-index 01bc4fea8f0c..000000000000
---- a/tools/testing/selftests/bpf/progs/data_in_arena_decl.c
-+++ /dev/null
-@@ -1,37 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#define BPF_NO_KFUNC_PROTOTYPES
--#include <vmlinux.h>
--#include <bpf/bpf_helpers.h>
--#include "bpf_experimental.h"
--#include <bpf_arena_common.h>
--
--struct {
--	__uint(type, BPF_MAP_TYPE_ARENA);
--	__uint(map_flags, BPF_F_MMAPABLE);
--	__uint(max_entries, 4);
--} arena SEC(".maps");
--
--/* global data of the object is in arena */
--char data_in_arena SEC(".arena.data");
--
--int counter = 5;
--long sum;
--const volatile int ro = 7;
--
--#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
--int __arena avar = 11;
--#else
--int avar = 11;
--#endif
--
--SEC("syscall")
--int use_data(void *ctx)
+-static int bpf_object__mmap_arena(struct bpf_object *obj, struct bpf_map *map)
 -{
--	sum = counter + ro + avar;
--	counter++;
--	avar++;
--	return sum;
+-	int i, err;
+-
+-	map->mmaped = mmap((void *)(long)map->map_extra,
+-			   bpf_map_mmap_sz(map), PROT_READ | PROT_WRITE,
+-			   map->map_extra ? MAP_SHARED | MAP_FIXED : MAP_SHARED,
+-			   map->fd, 0);
+-	if (map->mmaped == MAP_FAILED) {
+-		err = -errno;
+-		map->mmaped = NULL;
+-		pr_warn("map '%s': failed to mmap arena: %s\n",
+-			map->name, errstr(err));
+-		return err;
+-	}
+-	if (obj->arena_data) {
+-		memcpy(map->mmaped + obj->arena_data_off, obj->arena_data,
+-			obj->arena_data_sz);
+-		zfree(&obj->arena_data);
+-	}
+-	for (i = 0; i < obj->nr_maps; i++) {
+-		struct bpf_map *m = &obj->maps[i];
+-
+-		if (m->in_arena)
+-			m->mmaped = map->mmaped + obj->arena_data_off + m->arena_off;
+-	}
+-	return 0;
 -}
 -
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/data_in_arena_extern.c b/tools/testing/selftests/bpf/progs/data_in_arena_extern.c
-deleted file mode 100644
-index dc1ad5ca3bdd..000000000000
---- a/tools/testing/selftests/bpf/progs/data_in_arena_extern.c
-+++ /dev/null
-@@ -1,20 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
+ static int
+ bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_map *map)
+ {
+@@ -5968,10 +5742,6 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 			continue;
+ 		}
+ 
+-		/* see bpf_object__relocate_data_ptrs() */
+-		if (map->def.type == BPF_MAP_TYPE_ARENA && obj->arena_mapped)
+-			continue;
 -
--#include <linux/bpf.h>
--#include <bpf/bpf_helpers.h>
--
--/* global data of the object is in arena */
--char data_in_arena SEC(".arena.data");
--
--extern const int bpf_prog_active __ksym;
--
--/* the variable of the kernel is not in arena */
--const void *kp = &bpf_prog_active;
--
--SEC("syscall")
--int ptr_to_extern(void *ctx)
+ 		err = map_set_def_max_entries(map);
+ 		if (err)
+ 			goto err_out;
+@@ -6009,9 +5779,22 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 				if (err < 0)
+ 					goto err_out;
+ 			} else if (map->def.type == BPF_MAP_TYPE_ARENA) {
+-				err = bpf_object__mmap_arena(obj, map);
+-				if (err)
++				map->mmaped = mmap((void *)(long)map->map_extra,
++						   bpf_map_mmap_sz(map), PROT_READ | PROT_WRITE,
++						   map->map_extra ? MAP_SHARED | MAP_FIXED : MAP_SHARED,
++						   map->fd, 0);
++				if (map->mmaped == MAP_FAILED) {
++					err = -errno;
++					map->mmaped = NULL;
++					pr_warn("map '%s': failed to mmap arena: %s\n",
++						map->name, errstr(err));
+ 					return err;
++				}
++				if (obj->arena_data) {
++					memcpy(map->mmaped + obj->arena_data_off, obj->arena_data,
++						obj->arena_data_sz);
++					zfree(&obj->arena_data);
++				}
+ 			}
+ 			if (map->init_slots_sz && map->def.type != BPF_MAP_TYPE_PROG_ARRAY) {
+ 				err = init_map_in_map_slots(obj, map);
+@@ -8026,81 +7809,6 @@ static int bpf_program_fixup_func_info(struct bpf_object *obj, struct bpf_progra
+ 	return err;
+ }
+ 
+-/*
+- * Turn pointers to data that are stored in data into addresses of arena.
+- * The arena is created here, ahead of the other maps: the address has to be
+- * known before the maps that hold the pointers are created.
+- */
+-static int bpf_object__relocate_data_ptrs(struct bpf_object *obj)
 -{
--	return *(int *)kp;
+-	struct bpf_map *arena, *map, *targ;
+-	__u64 addr, val;
+-	size_t i;
+-	int err;
+-
+-	if (!obj->data_ptr_cnt)
+-		return 0;
+-
+-	for (i = 0; i < obj->data_ptr_cnt; i++) {
+-		struct data_ptr *p = &obj->data_ptrs[i];
+-
+-		if (p->targ_sec_idx < 0)
+-			continue;
+-		map = bpf_object__sec_map(obj, p->sec_idx);
+-		targ = bpf_object__sec_map(obj, p->targ_sec_idx);
+-		if (map && (map->in_arena || map->autocreate) &&
+-		    (!targ || (!targ->in_arena && !targ->arena_copy))) {
+-			pr_warn("sec '%s': pointer to '%s' at offset %zu can't be resolved: sec '%s' is not in arena\n",
+-				map->real_name, p->sym_name, p->sec_off,
+-				targ ? targ->real_name : "<?>");
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
+-	}
+-
+-	if (obj->gen_loader) {
+-		pr_warn("pointers to data in data are not supported by light skeleton\n");
+-		return -ENOTSUP;
+-	}
+-
+-	if (obj->arena_map_idx < 0)
+-		return 0;
+-
+-	arena = &obj->maps[obj->arena_map_idx];
+-	if (!arena->autocreate)
+-		return 0;
+-	/* libbpf doesn't mmap an arena that it didn't create, so the address is not known */
+-	if (arena->reused || arena->pin_path) {
+-		pr_warn("map '%s': pointers to data in data are not supported with pinned or reused arena\n",
+-			arena->name);
+-		return -ENOTSUP;
+-	}
+-
+-	err = bpf_object__create_map(obj, arena, false);
+-	err = err ?: bpf_object__mmap_arena(obj, arena);
+-	if (err) {
+-		pr_warn("map '%s': failed to create: %s\n", arena->name, errstr(err));
+-		return err;
+-	}
+-	obj->arena_mapped = true;
+-
+-	for (i = 0; i < obj->data_ptr_cnt; i++) {
+-		struct data_ptr *p = &obj->data_ptrs[i];
+-
+-		map = bpf_object__sec_map(obj, p->sec_idx);
+-		if (!map || (!map->in_arena && !map->autocreate))
+-			continue;
+-
+-		addr = (__u64)(unsigned long)arena->mmaped + obj->arena_data_off + p->targ_off;
+-		if (p->targ_sec_idx >= 0)
+-			addr += bpf_object__sec_map(obj, p->targ_sec_idx)->arena_off;
+-
+-		memcpy(&val, map->mmaped + p->sec_off, sizeof(val));
+-		val += addr;
+-		memcpy(map->mmaped + p->sec_off, &val, sizeof(val));
+-	}
+-	return 0;
 -}
 -
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/data_in_arena_fail.c b/tools/testing/selftests/bpf/progs/data_in_arena_fail.c
-deleted file mode 100644
-index ad8afe9afc96..000000000000
---- a/tools/testing/selftests/bpf/progs/data_in_arena_fail.c
-+++ /dev/null
-@@ -1,20 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
+ static int bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_path)
+ {
+ 	struct bpf_program *prog;
+@@ -8123,10 +7831,8 @@ static int bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_pat
+ 		size_t mmap_sz = bpf_map_mmap_sz(arena_map);
+ 
+ 		if (data_sz > mmap_sz) {
+-			pr_warn("map '%s': declared ARENA map size (%zu) is too small to hold global %s of size %zu\n",
+-				arena_map->name, mmap_sz,
+-				obj->data_in_arena ? "data" : "__arena variables",
+-				obj->arena_data_sz);
++			pr_warn("map '%s': declared ARENA map size (%zu) is too small to hold global __arena variables of size %zu\n",
++				arena_map->name, mmap_sz, obj->arena_data_sz);
+ 			return -E2BIG;
+ 		}
+ 
+@@ -8135,10 +7841,6 @@ static int bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_pat
+ 			obj->arena_data_off = mmap_sz - data_sz;
+ 	}
+ 
+-	err = bpf_object__relocate_data_ptrs(obj);
+-	if (err)
+-		return err;
 -
--#include <linux/bpf.h>
--#include <bpf/bpf_helpers.h>
--
--/* global data of the object is in arena */
--char data_in_arena SEC(".arena.data");
--
--int x = 42;
--/* the table is read-only data with pointers. It's not in arena. */
--int *const volatile tbl[1] SEC(".data.rel.ro") = { &x };
--int *const volatile *pp = tbl;
--
--SEC("syscall")
--int ptr_to_map(void *ctx)
+ 	/* Before relocating calls pre-process relocations and mark
+ 	 * few ld_imm64 instructions that points to subprogs.
+ 	 * Otherwise bpf_object__reloc_code() later would have to consider
+@@ -8371,85 +8073,12 @@ static int bpf_object__collect_map_relos(struct bpf_object *obj,
+ 	return 0;
+ }
+ 
+-/*
+- * A pointer to data that is stored in data. When data is in arena
+- * the program dereferences what it loads from data, so the pointer has
+- * to be the address of the target in arena.
+- */
+-static int bpf_object__collect_data_ptr(struct bpf_object *obj, const char *relo_sec_name,
+-					int relo_idx, size_t sec_idx, const Elf64_Rel *rel,
+-					const Elf64_Sym *sym)
 -{
--	return **pp;
+-	Elf_Data *scn_data = obj->efile.secs[sec_idx].data;
+-	const char *sym_name = elf_sym_str(obj, sym->st_name) ?: "<?>";
+-	struct data_ptr *ptrs;
+-
+-	if (ELF64_ST_TYPE(sym->st_info) == STT_SECTION && sym->st_shndx < obj->efile.sec_cnt)
+-		sym_name = elf_sec_name(obj, elf_sec_by_idx(obj, sym->st_shndx)) ?: "<?>";
+-
+-	if (ELF64_R_TYPE(rel->r_info) != R_BPF_64_ABS64 ||
+-	    sym->st_shndx >= obj->efile.sec_cnt ||
+-	    (sym->st_shndx != obj->efile.arena_data_shndx &&
+-	     !bpf_object__shndx_is_data(obj, sym->st_shndx)) ||
+-	    rel->r_offset >= scn_data->d_size ||
+-	    scn_data->d_size - rel->r_offset < sizeof(__u64)) {
+-		pr_warn("sec '%s': relo #%d: can't resolve pointer to '%s' at offset %zu when data is in arena\n",
+-			relo_sec_name, relo_idx, sym_name, (size_t)rel->r_offset);
+-		return -LIBBPF_ERRNO__RELOC;
+-	}
+-
+-	ptrs = libbpf_reallocarray(obj->data_ptrs, obj->data_ptr_cnt + 1, sizeof(*ptrs));
+-	if (!ptrs)
+-		return -ENOMEM;
+-	obj->data_ptrs = ptrs;
+-
+-	ptrs[obj->data_ptr_cnt].sec_idx = sec_idx;
+-	ptrs[obj->data_ptr_cnt].sec_off = rel->r_offset;
+-	/* __arena variables are at the start of arena data */
+-	ptrs[obj->data_ptr_cnt].targ_sec_idx =
+-		sym->st_shndx == obj->efile.arena_data_shndx ? -1 : sym->st_shndx;
+-	ptrs[obj->data_ptr_cnt].targ_off = sym->st_value;
+-	ptrs[obj->data_ptr_cnt].sym_name = strdup(sym_name);
+-	if (!ptrs[obj->data_ptr_cnt].sym_name)
+-		return -ENOMEM;
+-	obj->data_ptr_cnt++;
+-
+-	pr_debug("sec '%s': relo #%d: pointer at offset %zu to '%s'\n",
+-		 relo_sec_name, relo_idx, (size_t)rel->r_offset, sym_name);
+-	return 0;
 -}
 -
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/data_in_arena_nomap.c b/tools/testing/selftests/bpf/progs/data_in_arena_nomap.c
-deleted file mode 100644
-index ccf66321eb36..000000000000
---- a/tools/testing/selftests/bpf/progs/data_in_arena_nomap.c
-+++ /dev/null
-@@ -1,20 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <vmlinux.h>
--#include <bpf/bpf_helpers.h>
--#include "bpf_arena_common.h"
--
--/* global data of the object is in arena */
--char data_in_arena SEC(".arena.data");
--
--int counter = 5;
--/* needs an arena map that is declared. The one that libbpf creates won't do. */
--int __arena_global avar = 11;
--
--SEC("syscall")
--int arena_var(void *ctx)
+-/* Collect pointers in a data section that went to arena */
+-static int bpf_object__collect_data_relos(struct bpf_object *obj,
+-					  Elf64_Shdr *shdr, Elf_Data *data)
 -{
--	return avar + counter;
+-	int i, err, nrels = shdr->sh_size / shdr->sh_entsize;
+-	const char *relo_sec_name;
+-	Elf64_Sym *sym;
+-	Elf64_Rel *rel;
+-
+-	relo_sec_name = elf_sec_str(obj, shdr->sh_name) ?: "<?>";
+-	for (i = 0; i < nrels; i++) {
+-		rel = elf_rel_by_idx(data, i);
+-		sym = rel ? elf_sym_by_idx(obj, ELF64_R_SYM(rel->r_info)) : NULL;
+-		if (!sym) {
+-			pr_warn("sec '%s': failed to get relo #%d\n", relo_sec_name, i);
+-			return -LIBBPF_ERRNO__FORMAT;
+-		}
+-		err = bpf_object__collect_data_ptr(obj, relo_sec_name, i, shdr->sh_info, rel, sym);
+-		if (err)
+-			return err;
+-	}
+-	return 0;
 -}
 -
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/data_in_arena_rust.rs b/tools/testing/selftests/bpf/progs/data_in_arena_rust.rs
-deleted file mode 100644
-index 3dd9d4208232..000000000000
---- a/tools/testing/selftests/bpf/progs/data_in_arena_rust.rs
-+++ /dev/null
-@@ -1,73 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
+ /*
+  * Collect pointers to functions in a read-only data section. They are
+  * R_BPF_64_ABS64 relocations against .text section, where the offset of
+  * a static function in the section is stored in place. Relocations in data
+  * sections were ignored before pointers to functions were supported. Those
+- * that are something else, e.g. pointers to data, still are, unless data
+- * is in arena.
++ * that are something else, e.g. pointers to data, still are.
+  */
+ static int bpf_object__collect_rodata_relos(struct bpf_object *obj,
+ 					    Elf64_Shdr *shdr, Elf_Data *data)
+@@ -8485,15 +8114,6 @@ static int bpf_object__collect_rodata_relos(struct bpf_object *obj,
+ 
+ 		if (ELF64_R_TYPE(rel->r_info) != R_BPF_64_ABS64 ||
+ 		    !sym_is_subprog(sym, obj->efile.text_shndx)) {
+-			int err;
 -
--// Why .data, .bss and .rodata of a program in Rust are in arena.
--//
--// A reference in Rust is an address. It doesn't say what it points to and it
--// can be stored in data. The list below has a node in each of the sections.
--// The nodes are linked by references that are in the data:
--//   IN_BSS.next is stored by the program,
--//   IN_DATA.next is a relocation in .data against .rodata.
--// sum() loads the references back and reads the three nodes with the same insn.
--//
--// When the sections are array maps libbpf skips the relocation in .data, and
--// what sum() loads from a node is a number that can't be dereferenced:
--//   R1 invalid mem access 'scalar'
--// In arena the address of a node is a number to begin with.
+-			if (obj->data_in_arena) {
+-				err = bpf_object__collect_data_ptr(obj, relo_sec_name, i,
+-								   sec_idx, rel, sym);
+-				if (err)
+-					return err;
+-				continue;
+-			}
+ 			pr_debug("sec '%s': relo #%d: not a pointer to a function, skipping...\n",
+ 				 relo_sec_name, i);
+ 			continue;
+@@ -8569,8 +8189,6 @@ static int bpf_object__collect_relos(struct bpf_object *obj)
+ 
+ 		if (obj->efile.secs[idx].sec_type == SEC_RODATA)
+ 			err = bpf_object__collect_rodata_relos(obj, shdr, data);
+-		else if (obj->efile.secs[idx].sec_type == SEC_DATA)
+-			err = bpf_object__collect_data_relos(obj, shdr, data);
+ 		else if (obj->efile.secs[idx].sec_type == SEC_ST_OPS)
+ 			err = bpf_object__collect_st_ops_relos(obj, shdr, data);
+ 		else if (idx == obj->efile.btf_maps_shndx)
+@@ -8914,9 +8532,6 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 	}
+ 	load_attr.log_level = log_level;
+ 	load_attr.prog_flags = prog->prog_flags;
+-	/* the program accesses its data in arena through plain numbers */
+-	if (obj->data_in_arena)
+-		load_attr.prog_flags |= BPF_F_ARENA_SCALAR;
+ 	load_attr.fd_array = obj->fd_array;
+ 	err = bpf_object__bind_arena(obj, prog, &load_attr);
+ 	if (err)
+@@ -8991,7 +8606,7 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 
+ 			for (i = 0; i < obj->nr_maps; i++) {
+ 				map = &prog->obj->maps[i];
+-				if (map->libbpf_type != LIBBPF_MAP_RODATA || map->in_arena)
++				if (map->libbpf_type != LIBBPF_MAP_RODATA)
+ 					continue;
+ 
+ 				if (bpf_prog_bind_map(ret, map->fd, NULL)) {
+@@ -10557,7 +10172,7 @@ static void bpf_map__destroy(struct bpf_map *map)
+ 	zfree(&map->init_slots);
+ 	map->init_slots_sz = 0;
+ 
+-	if (map->mmaped && map->mmaped != map->obj->arena_data && !map->in_arena)
++	if (map->mmaped && map->mmaped != map->obj->arena_data)
+ 		munmap(map->mmaped, bpf_map_mmap_sz(map));
+ 	map->mmaped = NULL;
+ 
+@@ -10642,9 +10257,6 @@ void bpf_object__close(struct bpf_object *obj)
+ 			close(obj->func_ptr_maps[i].fd);
+ 	zfree(&obj->func_ptr_maps);
+ 	zfree(&obj->func_ptrs);
+-	for (i = 0; i < obj->data_ptr_cnt; i++)
+-		zfree(&obj->data_ptrs[i].sym_name);
+-	zfree(&obj->data_ptrs);
+ 
+ 	if (obj->btf_module_allowlist) {
+ 		for (i = 0; i < obj->btf_module_allowlist_cnt; i++)
+@@ -11011,8 +10623,6 @@ int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts
+ 	attr.token_fd = OPTS_GET(opts, token_fd, 0) ?: obj->token_fd;
+ 	if (attr.token_fd)
+ 		attr.prog_flags |= BPF_F_TOKEN_FD;
+-	if (obj->data_in_arena)
+-		attr.prog_flags |= BPF_F_ARENA_SCALAR;
+ 
+ 	prog_btf_fd = OPTS_GET(opts, prog_btf_fd, 0);
+ 	if (!prog_btf_fd && obj->btf)
+@@ -12019,9 +11629,6 @@ int bpf_map__set_value_size(struct bpf_map *map, __u32 size)
+ 	if (map_is_created(map))
+ 		return libbpf_err(-EBUSY);
+ 
+-	if (map->in_arena)
+-		return libbpf_err(-EOPNOTSUPP);
 -
--#![no_std]
--#![no_main]
--
--// Tell libbpf to keep .data, .bss and .rodata in arena.
--#[used]
--#[link_section = ".arena.data"]
--static DATA_IN_ARENA: u8 = 0;
--
--#[used]
--#[link_section = "license"]
--static LICENSE: [u8; 4] = *b"GPL\0";
--
--// panic=abort is a stop gap until panic=unwind is supported.
--// Nothing here panics, so the handler is not a part of the program.
--#[panic_handler]
--fn panic(_info: &core::panic::PanicInfo) -> ! {
--    loop {}
--}
--
--pub struct Node {
--    val: u32,
--    next: Option<&'static Node>,
--}
--
--// no_mangle makes them visible outside, so LLVM can't fold the list into a constant.
--#[no_mangle]
--static IN_RODATA: Node = Node { val: 3, next: None };
--#[no_mangle]
--static mut IN_DATA: Node = Node {
--    val: 20,
--    next: Some(&IN_RODATA),
--};
--#[no_mangle]
--static mut IN_BSS: Node = Node { val: 0, next: None };
--
--#[inline(never)]
--fn sum(mut node: Option<&Node>) -> u32 {
--    let mut sum = 0;
--    // The verifier wants a bound.
--    for _ in 0..8 {
--        let Some(n) = node else { break };
--        sum += n.val;
--        node = n.next;
--    }
--    sum
--}
--
--#[no_mangle]
--#[link_section = "syscall"]
--pub extern "C" fn list_in_data(_ctx: *mut u8) -> u32 {
--    unsafe {
--        let head = &mut *&raw mut IN_BSS;
--        head.val = 100;
--        head.next = Some(&*&raw const IN_DATA);
--        sum(Some(head))
--    }
--}
+ 	if (map->mmaped) {
+ 		size_t mmap_old_sz, mmap_new_sz;
+ 		int err;
 -- 
 2.55.0
 
