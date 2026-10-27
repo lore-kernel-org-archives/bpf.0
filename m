@@ -1,102 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.180
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793123600;
-	b=cgGpQ199x/WiexRoC6Vaxe2wgp6WS/gi7Y13KAGoUhYwNuKlxtxK7m9TLvYEwLeDhgMP
-	 lyOQRg/JEGY6aXeMqsze5raailioLBO+1GHykLox+j9qulf/XvfA0thvEbE/HRTXx5Vg4
-	 44KkriSlhM2aa2xclZHcQxrXKEls1N6Hxf3Br6nyVMPhR2083FXsG4wN+gC/2RF7naKwc
-	 nHlvoDFzmgPY5116V1AoTQZEhfi5DMUo4kuk7kg3hHSpMa/FJQVKXiM4cJfwNWy6ALZNB
-	 Js7kni7hKPYMUc05NFbqGcpfR3be+/mAQEmD+9jhIk3DUbIkvGpFF4qotp0WWmjDO7g==
+	t=1793124224;
+	b=pSY952dp4lLxgHT1DacRvamEsipM85RbtrRI9Z3MBP8qNBEkOccm/V7SUC9/sHcLvjTR
+	 JIyRb3uMdGAJBByNM9hX/4IUhJ0CAJlkYkgrXvcxdrnfRcgc2UyJo/vOJdEEbDg8OQ5hc
+	 744hIy6ULBJ19s5F649RlD9appTgW7h3k/t6jI2BB7LM1X4T+fhjj5W/g3SBJzzNJSFX5
+	 B3v1hD0beSYu5OaKqoktJCwBv/remh7+fCVr/Sqj6doPjYw5/Kh858Lpslw/IlkMR02UB
+	 YWynleXVe94INglK4D37YZ9ZdCpexL4dXrux4JMbtYup8APqy1rdqyAPGAhy8PnD1TA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793123600;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793124224;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=eZ7BfEA5+mgPjgQ08MRW3gJSoX82BS/9Z3gx++ZKTBg=;
-	b=TmvtPpJAlqEVMSQorKZug7hXqxLdvXr5rITkKDZnYf8EAFZTllQP8Qb6otcNy09jf9No
-	 jEBw0SxwGmO3chLzDZXasXehRJ4YQP0DdkfJ7MrC9ukbHGGhvarqk5T/YpU71bc7Wl+rL
-	 gyV6JaepXNK8vP+t7gxkC2YzbnLm/bUjA6fjM0IUj25tYSSpZung9Fi+L36aix6hjqQMg
-	 FmvGBqe5Kgrwf+lcvFDtJ/zfwFJ6sJotX9GFvsQ8tNT+klwqv/Yw2ohxtmtc1s1F9Tb4v
-	 VnrLJhzLyKuNZW8/paJd3X+LsC6HVg9wuiOR5jjzWCnhQbbmBfpOP+pX2j0Tah5UJ4g==
+	bh=JXW9Ju2RkKIXXA9p0LpxSjn7fv3ezYS7dP4uo6hyl+o=;
+	b=FsAqYsTmdck2x/dUdkLcmoJgPGBROucF2CGcboJiiLmE5BltFC5N3svnK0s1hQKR5BrH
+	 a3yrMWblEI+S7gnEfHne1LiIhtpOubYnNGbKIVotQlLzAoQ+d9OxXD0YyWgwVQHFCuf3M
+	 A0oygWIywkxLfPNlDIh0BHE0tqOGtFdJ0M2H8mK6henhA67qLPZwgZ8hURZY9aLaYAEDg
+	 VmWh90nm3Bt3mBWJvBsWnzfQwtlh+r1MZfB6jfnRPnmUuWlj0RYHR55Uvq+3ekMxVPU23
+	 PQWKr02Va7D96iIJNFH/ices5CNGOJFBJ4PBJr6oswLTSJWbdl1ZnDGkwlvHX31DK1w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=inJR6ox6;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.218.48
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=raYQLhVQ;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.180
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6A7606A323
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 17:53:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DF6A7606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C41606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:03:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D0C41606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=inJR6ox6
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c4677aad67bso12560666b.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 10:53:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793123598; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=raYQLhVQ
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cd69954c755so150780a12.3
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 11:03:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793124223; cv=none;
         d=google.com; s=arc-20260327;
-        b=XHayWxfML4CHVCRJVaAAbAV8xr2x40eSNDuaa/yvVQCo7WPWVpeCAUJdOcAy8KUwl0
-         u+JAyt9nCHzCqJUhCzuwVvmKiMgpOJcQ6YYzRE/zcfL8KD/gkPeOryu1eDnbO48i/QP0
-         2SzV034D3XsvnowRbxFY1mcdQwTsbf7SJKU88JzOpysoUd8XRBh70Upifr2pTRIw8bR3
-         nZ2TfQ2X5lYntw+h02K4bC7sOKtpYyNX4r5Gy3fQgBhalf3+sYzubA2qbcYrJRxr8lqR
-         BenEt6ZisCz3BVnjzuvcl66oxPaK6Rmedgc8/TWq9213dBsEKkeaT+d9fuPRmseBZwvA
-         gnfg==
+        b=HRS6QMq/3JzEkQ4joQ6lVlXO97sIEiWLFqhYO5FbJN/Aq20e4S7NrFdbNhXHAC+DY4
+         fKLNHNg+AqMbwMf7wG0odgUAuTF3kFIHNVLIrFNtoe30r33nSku/i45QIvhwP+c/g3al
+         YXa2l+1XCBLOQruAlDMOeKRFevWkFfUfwW331FigZg471Saf8QIpbBp/LBAhJHdhM1vJ
+         d2iKLvwD5d3IypcH+3nunS+Ubm7jvPc5M+ufcmowSp+/YtRabhMM1d2NSY+FeGHL7SN3
+         PTFCeX3k8FAKm5L17c/YzgmLJt5w/O9l2frJ/LiA2sGqZFhp3G4reeakVm2wZSY14xig
+         ln0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=eZ7BfEA5+mgPjgQ08MRW3gJSoX82BS/9Z3gx++ZKTBg=;
-        fh=rAy3WTeFQR3id3SqFVGiGV02RQx65nKjjJbv//Opiik=;
-        b=FV/YQNBLKUmFHN0tSfUhXMwYulIowygYjoCWyfV+xm7IYYMsffhD7knH+PNlB6fvLh
-         taxdTp5M/whkg7xFa/jmz3Qbt0accfvujDoabB7qxbt+eG/Vrk7fpo9qmtmxn483BBdE
-         fVxw9JBSnZRTDMR3n/+lukGrzH+NRskFY9Vi2X5Wnb1cXPVkTRvBlUVfK+gmKgtdwbKs
-         P8gIfpFlTMtX8akd3zTVRdkaEzh16/FNdILfwonspHUsuK/pl0NvTofodEFk40GgufqZ
-         iCEG0MgO5C6mssHnOQk/oV92nFKfVObcIjOiTLrVvoIeG82deSiF42JRnSY0q8PnZt8s
-         1F4w==;
+        bh=JXW9Ju2RkKIXXA9p0LpxSjn7fv3ezYS7dP4uo6hyl+o=;
+        fh=93juHyOGdgEeEu446eMZHu466h5HdxeU3jaZq/qR9pE=;
+        b=bWb4OlwLOStdiBOPna0gzPvv11eh7jTJdnUrC3wcS4JdI8qJ0OgLORLOedXU9yHm6P
+         IbCOrXsEcl0VMWuFWPASkieG3QSBC49HnD6PX226kZs2J+RsqjWxXzFONyZgiKP9/AVP
+         d+7HQCgODePBmlz5Dv4QK3KVznJoLQljsf3SBKl2ArgfezpjE7xHIeKHYPCsM4/YuhkG
+         cCEbcTF5EcTZ509KkVPGJ5k4g48jgXAqLt8017brEauLUMN4EMw7erWX0rRyPfFgz8BA
+         I5732PjcxptJWrTvCmRRaiTTJ6bgDLBmHqnj5yjxpN1TT/G36GN7uIqdshP0ozCMQqxA
+         qS/Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1793123598; x=1793728398; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793124223; x=1793729023; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=eZ7BfEA5+mgPjgQ08MRW3gJSoX82BS/9Z3gx++ZKTBg=;
-        b=inJR6ox6aQPgzkJ0wZYiPBugaLW1/kUDoRUxznaXNPrxE2Wn3DkQl3afONPaEwO9sl
-         vnrt6FP9OFfRf9KWlwZNng3ZlaCrfp3bQxPXGc+Gx+AORrKLJ8WZpN9m6kJEM6IAqHPq
-         Jk4iMXPxJgkZqxRsoYIxQcD6CPbdcJbwTT1mEJs9Oh6VfooqjmJi5DvsYqRTbZ70S79m
-         W2gdT7rvplj4k08tnzQQgxgOTLo5uqZ4a0mScYBLYVaYMXTVeZPwvd3azNIWeu6/sXO8
-         zyeS5P1gD5N0vXZJTHB1IRGypOyTZEZWjLyDPXDDqsHxY4MhwV784zCuBQDBJ99Srvxy
-         lKbg==
+        bh=JXW9Ju2RkKIXXA9p0LpxSjn7fv3ezYS7dP4uo6hyl+o=;
+        b=raYQLhVQg3/XsgS7PEVjWhO9JkaLPmaTyQT3JNT2228GMH4K5Ie4OIuoRTIkLKyyFf
+         FOUUb7v16UZQdDNluARo69lzxDVzZsyb+eK29h1HYKxnbFnQUGKT7qRTcc6FG6U2QqBx
+         bVgDR6Iz7XRkrfvGFIscgloEXIpu1cVW0mQT170o7s5bHGS+idxYP7msfl/GpHpnrtTT
+         lRVNXTb+LQBSHIuEI9iEhjP521RAvtvQ6m6oKJNEFK5blcJtnkYWAfJEBa8SvlAf4gpy
+         K4RyrShrWMCB6s3h15Pwu1HiCvEuYAjgxjLdn5Hj6RUuqrXsUX0X70egxVyTwxwMVHJ9
+         5rMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793123598; x=1793728398;
+        d=1e100.net; s=20260707; t=1793124223; x=1793729023;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=eZ7BfEA5+mgPjgQ08MRW3gJSoX82BS/9Z3gx++ZKTBg=;
-        b=KgFVDRb8Dhhz7oPG/vJX2YYJh4RndkSC4/Ccp/v16tzmmzrt/h/LT3APxlzoU/j0JQ
-         WAbW1it6HbwmcrHmKW5l/1IRqyV20+CVsqpsKuu5pmu/fmMdhigaO1CNtHgPOisX6R7u
-         B4VeoefojcRepG3mPTg3skPjn1zmC0LFbbOWZsjex0Lrgc4hRdNDnhQdF0a3dQs15YLn
-         bIZ/u1m42BZUl0I0hn3QYv5hgVcVpOlg100ANYOrmtkEalu0JyYvlMHCNjHRedOI19VC
-         eDJYAUcJwad4HAXuqkw7eHuASCD9Wflg+ssn5gTuL7UOZVFFqskWoOANNTi8ppfo5Dur
-         9Ciw==
-X-Forwarded-Encrypted: i=1; AKwUvBwe2oNqCGl7uY2L8FJzoO8dhGBXyAP1pTA9tZp8mzmdAH2Xyz3Kg5WM4MD7Vw2aroofOao=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKUR6LzTyW+XAQlrZhauwvVFeA5n6PvTYznfC/JvcvU3AGE+mKF
-	rPO+TmRHWOhEVTJA5MpOZjlr0ZcgPMOC+jXLFJEfOnm0BYL+DZf7dpQwxqND3tA2GL5v6y35ovo
-	kMbiT2LboUzZ9/ABc3CM9k5cLZIG4thvBjCazVwN7
-X-Gm-Gg: AYBFou21F7CB4pHV0AptloeiBvC6eVK7RvEYueko8BG6pjpIYnCMNH4+Dq/maXZhre7
-	z/EJoHbCgwVoyhZ0xuY1AclaUGEc5S6i3IWzI+/BBtDwe0XdQFHiMbzL3pEi4m/pEflejaJXos8
-	X0PDKGN8f8ju6cUBQ3tr7zboWi5pMC5CEhY9mipR1QChxckFkuOW9wE8qKhln9pgH7I7H+TNm4S
-	AfXf2mAvzEUMucf5k2lJMGroP8mfO3XBx3ru5fpAX2VGMPZ8mH+Q54Bsd0AbffgjthBkrLgjMGN
-	b+GbUgPAt0sSgvNhIkQU5QcIg1TgqMN3FfA8dqXTCCtSBVx7F3iRT+0F2Xic8YpewY8jrgquzsV
-	dsc9PG6CJekzWLvwDoqyr8oLBOep8wmdYAXPl32iCRmdi0Gfv3dg2FNt7i9o/IOkk6tbsXEKj4I
-	kUZidiXW9obzPkKqzpaYyr0/NUj0C1Ll8aVxQsPA4VOFb9LbICavD31ns5lr+ZMx1rE9kZRXCWL
-	3oHUkVlEpXA3g==
-X-Received: by 2002:a17:906:dc8e:b0:c31:e958:408c with SMTP id
- a640c23a62f3a-c46bde8b464mr1159692166b.38.1793123597614; Tue, 27 Oct 2026
- 10:53:17 -0700 (PDT)
+        bh=JXW9Ju2RkKIXXA9p0LpxSjn7fv3ezYS7dP4uo6hyl+o=;
+        b=GCPKMdfwazwBC80N6KccIf+Acoh8OHqzuRaNRjW1+/roJC8merAad/4onXBJoAjok/
+         FrdeJC4Fb36QcQ7DAJ9V5+905X6MBJhQi9oqN2q/YwdePmXGWik5p3W7bswETgzH/CFf
+         PSj/bMj6JN5+0I9fTsSTZwKdFHcranWgCZbfbm0t0+6qNVYI5oFB5WBO/tfC9lLsQJZG
+         09r3JqumhoNSedyB4PS3jLnOCdFTgo5IdxSGSLSbOowmmlI+fcwWs4cpMqqPZLXUzGEH
+         mH5mVvGzw9jcfecQ51XcfeR9i7H8M4/7gZbQK7qgdXiGgltswE2PyR0kbGw9c04JsTpm
+         WrsQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwn9WVJdDtG/DrrFOuxDXRHeLqghPKUDPlmI51qJ4GQ+YMKkGj2xxJZWKIdB8n76bMj6TU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYLFZleFpSEseSSwcfoiW3VWgvZIK41knUhM7IAh1iOpq8CjEDQp
+	PU31HLYi9U0QPUrf4GaXa9KK2RWzy05g+0k+MDKXv3bg1oUDvnLgAwPqDMwbG1nh4LNwLaC8omx
+	aCO2Qq7PZDRLaIt6DTUaElX8y4p8AXd0=
+X-Gm-Gg: AYBFou0nIfCnumnmehOhSveWsDwO6A7Zlm7/jUzfhCnwK8Wt32vnx8bjeJjOXnJQ4jI
+	yVrAtCR80hm6x51Bac1PwuT+6HEa/RwqFvMZmxAdwffiOAzFWumyqZllEAsVql8I2sGm/zZVvAe
+	NXXBVDzn4pmzfbjJsUFQwJe7aj5tw9rtz0jv8EmT7pMBSs0JHFDquRe9DYQhUYUePWt9SjEpZ5F
+	9YqYV+h4hz1NN6QpDtMwnFqiI/cCZd54/Eoe+G4BpqC0Or9XclOR6Xkx9Gjsll5CD20nhuUVeB/
+	q6UALSfWxI/acCCiMI8HPCQiQKvumuMnc6pqSNRb03lkfnUymCmA73KjF1tYxXfnQGh1RglkcBb
+	pD+etYDSWxCA+ZtAamx9eRrN0H83gpD6jKEmuZ1EwX2+OcQJifB+S36DX07OrSmFVI+3Kj9mY/w
+	SYtfPVYTKRkHP74/rDEWkd4hItU+qH0wbunw==
+X-Received: by 2002:a17:90b:58e8:b0:3ac:9706:7739 with SMTP id
+ 98e67ed59e1d1-3adead57cf0mr9040823a91.17.1793124223013; Tue, 27 Oct 2026
+ 11:03:43 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -106,39 +105,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261026215226.3713941-1-jthoughton@google.com>
- <20261026215226.3713941-2-jthoughton@google.com> <1ee97e9e-3658-41a7-a879-348f51ab547d@kernel.dk>
-In-Reply-To: <1ee97e9e-3658-41a7-a879-348f51ab547d@kernel.dk>
-From: James Houghton <jthoughton@google.com>
-Date: Tue, 27 Oct 2026 10:52:40 -0700
-X-Gm-Features: AclHuK_7gnb7g4GjAy_SA5zcAxXhabVZixR-oCAtO-qS-tkfEqOEG_LlV9pvyY0
-Message-ID: <CADrL8HVgOYb1hzWDJzm4sCrEAR7PL1xBv-1zTGebTusPoDsGXQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 01/10] scsi: bsg: Don't copy sense data to user memory
- when canceled
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jim Mattson <jmattson@google.com>, Pavel Begunkov <asml.silence@gmail.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, David Sterba <dsterba@suse.com>, Chris Mason <mason@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20261023222652.3927736-1-ihor.solodrai@linux.dev> <20261023222652.3927736-4-ihor.solodrai@linux.dev>
+In-Reply-To: <20261023222652.3927736-4-ihor.solodrai@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 27 Oct 2026 11:03:30 -0700
+X-Gm-Features: AclHuK8sxkU9XZ64X4nL--nqkW0LxYI88meogFhBuG-ssFszgQiTtJIIIjGFqz4
+Message-ID: <CAEf4BzYuEetnwDnm38J_MEG4-ZcQHfZwg=L1FcFtgXvAn7NSAA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/8] bpftool: Apply __bpf_relocatable per
+ record on BTF dump
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org, 
+	Alan Maguire <alan.maguire@oracle.com>, Cupertino Miranda <cupertino.miranda@oracle.com>, 
+	David Faust <david.faust@oracle.com>, Ian Rogers <irogers@google.com>, 
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>, Vineet Gupta <vineet.gupta@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 26, 2026 at 7:41=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
+On Fri, Oct 23, 2026 at 3:27=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
+dev> wrote:
 >
-> Reviewed-by: Jens Axboe <axboe@kernel.dk>
+> bpftool wraps the C dump in a clang attribute pragma that applies
+> preserve_access_index to every struct and union, so field accesses
+> through vmlinux.h types get CO-RE relocations. GCC-BPF supports the
+> attribute but not the pragma, so it gets no CO-RE from the header.
+>
+> Jose proposed replacing the Clang pragmas with per-record attributes
+> in May 2024 [1]. The declaration attribute support in btf_dump [2] now
+> provides the per-type control discussed in that thread.
+>
+> Apply the attribute to each struct and union definition instead, as
+> kflagged decl tags rendered by btf_dump. Add the tags to a split BTF
+> over the input, so the input stays read-only. The tags use the
+> __bpf_relocatable macro, which by default expands to
+> preserve_access_index if compiler supports it.
+>
+> Clang output is unchanged.
+>
+> GCC-BPF programs now can get CO-RE relocations from vmlinux.h, however
+> the selftests GCC-BPF build defines BPF_NO_PRESERVE_ACCESS_INDEX and
+> is unaffected yet.
+>
+> [1]: https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@ora=
+cle.com/
+> [2]: https://lore.kernel.org/bpf/20260929234608.48503-1-ihor.solodrai@lin=
+ux.dev/
+>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
+>  tools/bpf/bpftool/btf.c                       | 62 +++++++++++++++----
+>  .../bpf/bpftool_btf_dump_sorted.expected      | 16 ++---
+>  .../bpf/bpftool_btf_dump_unsorted.expected    | 16 ++---
+>  3 files changed, 65 insertions(+), 29 deletions(-)
+>
 
-Thanks, Jens!
+[...]
+
+>         printf("#ifndef __VMLINUX_H__\n");
+>         printf("#define __VMLINUX_H__\n");
+>         printf("\n");
+> -       printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
+> -       printf("#pragma clang attribute push (__attribute__((preserve_acc=
+ess_index)), apply_to =3D record)\n");
+> +       printf("#ifndef __bpf_relocatable\n");
+> +       printf("#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attri=
+bute(preserve_access_index)\n");
+> +       printf("#define __bpf_relocatable preserve_access_index\n");
+
+why not define __bpf_relocatable as
+__attribute__((preserve_access_index))? then type definitions will be
+a bit cleaner and we can basically drop BPF_NO_PRESERVE_ACCESS_INDEX
+eventually, and instead you'll be able to just `#define
+__bpf_relocatable` to disable relocations (or if some GCC version
+requires some quirk, you'll define it wholesale)
+
+> +       printf("#else\n");
+> +       printf("#define __bpf_relocatable\n");
+> +       printf("#endif\n");
+>         printf("#endif\n\n");
+>         printf("#ifndef __ksym\n");
+>         printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
+
+[...]
+
+> -#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+> -#pragma clang attribute push (__attribute__((preserve_access_index)), ap=
+ply_to =3D record)
+> +#ifndef __bpf_relocatable
+> +#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_a=
+ccess_index)
+> +#define __bpf_relocatable preserve_access_index
+> +#else
+> +#define __bpf_relocatable
+> +#endif
+>  #endif
+>
+>  #ifndef __ksym
+> @@ -30,19 +34,15 @@ struct holey {
+>         long: 32;
+>         long: 32;
+>         int tail;
+> -};
+> +} __attribute__((__bpf_relocatable));
+
+e.g., I was expecting to see just __bpf_relocatable here, without
+__attribute__(()) wrapper
+
+are there any downsides to that? that seems how attributes are
+typically hidden in kernel, for instance
+
+pw-bot: cr
+
+
+[...]
