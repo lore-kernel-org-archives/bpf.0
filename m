@@ -1,101 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793124636;
-	b=1Bx4v6imFYIQmOAXzI/QoajBepAQTgfO8v26V4r4103G2sP+Ys0rZa+1w00lVZouHz7W
-	 swcgn0ArPAXsk3tvPztwDeJlj0y3FY17c3uYeU7NyMKXIx3Sd4hMCApYlbMRHgOryoADd
-	 U8KWoGdRUIeCgUHtjr0f114cx4HWMOSBGESEF5uQ5HLy3tsHhNTzFHnskl5LBt5OlV+OF
-	 M1wXsrF+q5Ch8S3gJcEvuSZCke4pF+PiOWUjx6AjGExeMnGPaAE2SXcl+F6g/zxts2de5
-	 yOPXQZqZWi1t0Bt9jJjSr06gQktyruNBmM9PPPn4gE7m+2mWIrqjmob3QEjuuFJ8LvA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793124636;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=yXQqTdIF02aP0sTve1E8AXpNd4qmvIXhwDjM1R+/7u0=;
-	b=hvrmWx2kK/aRUfN4V/sFVspqKEgxdEBF7cTP0TZfzYON7t6l+n6W4kz8lsloYZ11D1DD
-	 0qY3KK1P4WgRuxiSMQMN9gb36v7GOztNT7PIWc6gT64TQFddEDQXaPKOyL/Zr/OUalcm/
-	 7xeK3TVZzdR8hdTF8RWdWCdAzywAsAjCxLRF1IRrQidliWoqWi83B0vuZwW4/vAowQQP6
-	 tanRtYBK0637P+eMLUrXQOfn5x0cuyc4exaTSiABSYXVUahGafJ1qd9xvLRiOuicmRdCX
-	 tKhzifODgSLlTbDtj6oxjAjPfSC9haVFaFGkYaMiVDKsdCP0MdFt4tz/bBiNfL3e2/Q==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w79kXqx8;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.216.54
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.227
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793124942;
+	b=utB5S0Zsa9gcXOBSw1NHuVmeL2udj1fCZx1L7zBmXfG9BjicvqxrDxtGsXruQ8X3BitT
+	 0UihR0HJP3e9QRK85fYGjBRX/37Z1jTJUttbOt7NhwLW2txNWKeIVAvjcMNq1ebcR4tsb
+	 x9bvi+31ZChzkjn2BXI0uthPvRgCiDS8/k2d1h5g25OqH5eBO54HRO92qSYmu6ZF632s0
+	 69ta2afwfPZ+nhE2bJUG58Tm+iCm+j3pbkyxwfYORfgDHVgiibb2aIc1lDVC2x3Mzdd5U
+	 SfonkyugIdyJ2kbiMM5gtfIFBzt38Xkw8+kMeG2IaQYa4jzDx8zpuNOXxPYiGos9VSg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793124942;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=JYiuW4CSVpwsSczxIY5JITmNLBQP8gvyp6Kv/ySe3s4=;
+	b=G1cILT4zy89yhaz8UIOX3HEcxhAlM/2d2sLhZbVvjB8egT4yNxw3HIhYtjH5GyTvNzyB
+	 ZSkW5kltPTy8A1BKuQ/yImiuTNG6yikGH9NacSbTZ+HP+FINr3bmwl/aGAsMJG6Wby/Z1
+	 GESD3xc0NFB5FK6aDKmNTt3hI9cXM5PBikylajQ0FMYDk26K5+XdLJ8hnnJqiM6Kis87L
+	 wNU3pxh8aFAyG5LHzX9TZK2V8cKNjEPzv+i+nfx1A9W3FXnSG+H+UCRUAJ9qJaEUG8BCg
+	 sn47ioBh655IHHeISEoM6X+j3C7qPWlx6+y8MBt3viCqGuFpMNSeFD2sHS+ivAtuYeQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eJHVL+aU;
+	arc=none smtp.remote-ip=91.218.175.227
+Received: from mta0.migadu.com (out-227.mta0.migadu.com [91.218.175.227])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAA5606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:10:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DCAA5606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB5F606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:15:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9AB5F606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=w79kXqx8
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3ad2b3b1c02so101597a91.1
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 11:10:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793124635; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ceTT5RZPsdKtuHSToyb+VlNmwD+mYSfD9zh5f2Yaj+6UGHPVXIz7kFRdkr96Dz5gMy
-         mkvTwU4sziPPHe7/OolZKP9XYiVfJ8sbH1o6tyjTSXlDC/TaEtBKqRVnSrmaP5ItBbma
-         0rA+/SxKDLN6HcnbQntEmaAn/3yUazINR3Oa+gVq7uNCYWSENAXGwo9/Kvv/DXE+iOdc
-         Ckshpf1wG4VUEbj7ZFNZjyNjLSbGcC4UbTAVeKWhr1gn7cBOxX/Fu1PkTogqwXYFHk9+
-         8NyXXSKNfw9KjM2i8B9GTPc6lG6Bj3g1SsRuXnvgMC0I7OBkWMloQA3SUs7q9dJAgqs9
-         fdyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=yXQqTdIF02aP0sTve1E8AXpNd4qmvIXhwDjM1R+/7u0=;
-        fh=vTLYg1rLsRmTILMqW0WiQq16YJj+YgXTG8NaXBOLijQ=;
-        b=OI1CFXni7O2hBBXmleV+2ZoIJ9zx1Qxrt0/jyx2/eN9vQdJag8cC6TmlWhEE+8iwqz
-         kYSKg6vA4J1/7xDF/ew9YCBv61KzVHqBsdwWgdNDgYsbGX7U8OWhK71z1F+TZcc51mcx
-         qBsXm43LE+xH4G+5XOEZsqIP1/zCWH+CnNSFQV+458WQ53EODCnV/OI9/VzdJgZ1Ar/n
-         WUgaip/d3ry7WdltSzKM5F1eJDoI8ndQc1w2Ifzr7mM91Rhorz67DIl5ad+L8tXfitjZ
-         v9zYm0dVevTs6ylNdVi6xJanUcW4Kjje1EcaOTlm5XiWufhjUoMa+XhaLdjydFVWXDWn
-         FbPw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793124635; x=1793729435; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yXQqTdIF02aP0sTve1E8AXpNd4qmvIXhwDjM1R+/7u0=;
-        b=w79kXqx8VpRLArVzBcZHsJ1+BrTJajnxRGNOiM8D9s1YR/a1LOd4Ffsn+ZInDL0Z/h
-         wObW8latOxsrzqPrTPf+Usa5Po/U+K23ecyENh/XZVVBpnWzeDOEhUYFITwTs0q7YYpc
-         l35dbMMhVTVxjmgAL8F6eqYgg91hzSXCPL7C31FuNmDjksF5MwbmbVHWVCeGcnDNyLZN
-         2qBehDd+4IGbv+a+8olDbC18rrZNq41400ptbD8LEmCB3a5I4me/Wr3HV7LbhoIwJ51I
-         WaBwyrmi2aOveR16v+jTyQMfzyw4RB8dh2AMvgwii7TnpSaoSovujP9TjgrXl7NEdjNz
-         a5jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793124635; x=1793729435;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yXQqTdIF02aP0sTve1E8AXpNd4qmvIXhwDjM1R+/7u0=;
-        b=1mZ+5b4pIWIpD0omvgSl24jKgHtqkILmtnOZhHOSfO6Us2iOAy/sbEk1oFFJ+izNyg
-         RPXITt0twRx9wqB/+AO8MczT+1IS/yBFQ27xkeBdkX3XA6YztInWJLUxaNXfdoU69zfO
-         19xFLSSoQW4nL3ciXtV1zoVRJ3eN0U3+uXamvuFtR+kTqk18PGWWr0xtHmP25Fs69CuQ
-         eAXJ/b/g24ahF05V0bgKEfS1cCSthRN5Luie0xeAPyWr4uaAViZFFaHMk8q4QUENCfqU
-         0XV4yp5F5ZTgEfNRGUEMwepAEwAaR91I61fyWqnjL511JBeB/74FS/QKhJo/rm45ZW1G
-         ZJxg==
-X-Forwarded-Encrypted: i=1; AKwUvBzXjPPN/PQG90NuPZfQ2/Y15TBsIUAeO4Rh/J/WDAt1Y2IoG5G5VLbtiWdDKc6+VS8S4VE=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJKD9Xb6v2iN8sk+JTL45OZqGwdWbeKXtwPprw7JXzxAGmRiTt8
-	Kp4j7PX8AC8/SB35aQ1/utyt2hSNstcRLCZ2bDSAef+fmhsyEFD21IzHypudYfOG5cK/Ywe7/ct
-	DQT3Dlj10OLA6iUlgKWFdo/CYaQP7rgY=
-X-Gm-Gg: AYBFou2vwiHgvAX+KMtJ52Xx8QEngye0WtTumlymoclrHaSptT7ZBLId2Izwpmu/+yy
-	bnHzrruR5ImBIHpJKO4PkILnHy+VqG7QH9PNrMkvsAgRn5HiRDIXdBDW8yi/rcA1OERvnKwo8NR
-	RzDN1Cjue3vFSAx9pZJWfrNmNKJ1fa+nzTimc5JtwV3bMaqaffxJHAJzwlRL9P07TPqB1CuV3v6
-	5/BBRY97i7vk9JQs/gIJxu6IgXnTZDkV4RHvnmaN0n+hPqdGTuiBZT/jthDqFnxNa4ESSV68MXA
-	5Bve/tykVVf9bWcr1LUgRZFfhVCA9+LwwaWzIZp/5MYxy7RBb7soIHE9BeM1RwyATdCler5RNmb
-	CcjNPCh1WW5e645R09Ht9Bg5lyU5uYCWrtyJSUrGLaLGe4O3T7dCMAFJKiSZmKJPyCk5dkFEswx
-	XPXj/vBIxN0N7uloMt24aeeRXUqpcpjcApAQ==
-X-Received: by 2002:a17:90b:4a51:b0:3ab:2737:3396 with SMTP id
- 98e67ed59e1d1-3adeafc9d9cmr9040558a91.65.1793124635043; Tue, 27 Oct 2026
- 11:10:35 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=eJHVL+aU
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Ib5wKXDqdPOov9+i1vxZNv2/J6ARxcDkd9z314p7gxU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793124939; v=1; x=1793729739;
+ b=eJHVL+aUrbMpGHErC1heY6Y7ympp5Tlf4F5/sMzx2e2W2G5tn5leZdhK9nwj2kFuXLs7VhTB
+ zxvxtGBItCSlDMmDCWl8e8i4jIs1GGDBetRN/MR7YYQkc/CiG/Fbks+BxnDuKS+HTaBw9rRniiO
+ lBBFWiyKKrxQgsfY8bT66tYc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4e2801868caebc88;
+	Tue, 27 Oct 2026 18:15:28 +0000
+X-Mizu-Trace-ID: 4e2801868caebc88
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <882895bf-db14-485a-bd6f-0241b1eba1ba@linux.dev>
+Date: Tue, 27 Oct 2026 11:15:19 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,135 +58,140 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261023222652.3927736-1-ihor.solodrai@linux.dev> <20261023222652.3927736-6-ihor.solodrai@linux.dev>
-In-Reply-To: <20261023222652.3927736-6-ihor.solodrai@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 27 Oct 2026 11:10:21 -0700
-X-Gm-Features: AclHuK8DId3Pl6_1U6_nRuwnxuRr1FR-Z3mntq1Abw-xJALIu_lse46bc5GE4ZU
-Message-ID: <CAEf4BzZW9kaP-C_xPk7X1GBWjzrTdNGfZ7NTv19oYWP9Bwvr+Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 5/8] bpftool: Emit __bpf_static_offset on
- verifier-rewritten context types
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org, 
-	Alan Maguire <alan.maguire@oracle.com>, Cupertino Miranda <cupertino.miranda@oracle.com>, 
-	David Faust <david.faust@oracle.com>, Ian Rogers <irogers@google.com>, 
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>, Vineet Gupta <vineet.gupta@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 3/8] bpftool: Apply __bpf_relocatable per
+ record on BTF dump
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Cupertino Miranda <cupertino.miranda@oracle.com>,
+ David Faust <david.faust@oracle.com>, Ian Rogers <irogers@google.com>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+ Vineet Gupta <vineet.gupta@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>
+References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
+ <20261023222652.3927736-4-ihor.solodrai@linux.dev>
+ <CAEf4BzYuEetnwDnm38J_MEG4-ZcQHfZwg=L1FcFtgXvAn7NSAA@mail.gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAEf4BzYuEetnwDnm38J_MEG4-ZcQHfZwg=L1FcFtgXvAn7NSAA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 23, 2026 at 3:27=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
-dev> wrote:
->
-> The verifier translates accesses to some UAPI context and socket types
-> into accesses to kernel structures. These accesses require an
-> unmodified base and an immediate field offset.
->
-> Leaving preserve_access_index (PAI) off does not stop the compiler
-> from merging loads at different field offsets into one load through an
-> adjusted pointer. The verifier rejects the resulting program.
->
-> preserve_static_offset (PSO), available since Clang 18, preserves
-> static field offsets in load and store instruction immediates. Apply
-> it to the 13 types that need static offsets in vmlinux.h through
-> __bpf_static_offset.
->
-> Eduard introduced PSO in Clang and proposed annotating BPF context
-> types in 2023 [1]. His v3 RFC [2] left pt_regs annotations in
-> architecture headers unresolved. However, since commit
-> de6c7d99f898 ("bpf: Relax fixed offset check for PTR_TO_CTX"), program
-> types without convert_ctx_access() accept fixed offsets from modified
-> context pointers. pt_regs can now keep PAI, while PSO on
-> bpf_perf_event_data covers its regs member.
->
-> PSO creates no CO-RE relocations, so BPF_NO_PRESERVE_ACCESS_INDEX does
-> not disable it.
->
-> Clang 18 through 23 crash on __builtin_preserve_field_info over a PSO
-> record, including bpf_core_field_*() and the CO-RE bitfield helpers.
-> -D__bpf_static_offset=3D can disable PSO for affected programs. The
-> crash has already been forward fixed in LLVM [3].
->
-> [1]: https://lore.kernel.org/bpf/20231208000531.19179-1-eddyz87@gmail.com=
-/
-> [2]: https://lore.kernel.org/bpf/20231220133411.22978-1-eddyz87@gmail.com=
-/
-> [3]: https://github.com/llvm/llvm-project/pull/234280
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  tools/bpf/bpftool/btf.c                          | 16 ++++++++++++++--
->  .../bpf/bpftool_btf_dump_sorted.expected         |  8 ++++++++
->  .../bpf/bpftool_btf_dump_unsorted.expected       |  8 ++++++++
->  3 files changed, 30 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-> index 5c88f665e6b9..c7f446ab6afe 100644
-> --- a/tools/bpf/bpftool/btf.c
-> +++ b/tools/bpf/bpftool/btf.c
-> @@ -1174,12 +1174,17 @@ static int btf_c_annotate_records(struct btf *btf=
-)
->
->         for (i =3D 1; i < cnt; i++) {
->                 const struct btf_type *t =3D btf__type_by_id(btf, i);
-> +               const char *attr;
->
->                 if (!btf_is_composite(t))
->                         continue;
-> -               if (test_bit(i, no_pai))
-> +               if (!test_bit(i, no_pai))
-> +                       attr =3D "__bpf_relocatable";
-> +               else if (btf_c_needs_static_offset(btf, t))
-> +                       attr =3D "__bpf_static_offset";
-> +               else
->                         continue;
-> -               err =3D btf__add_decl_attr(btf, "__bpf_relocatable", i, -=
-1);
-> +               err =3D btf__add_decl_attr(btf, attr, i, -1);
->                 if (err < 0)
->                         goto out;
->         }
+On 10/27/26 11:03 AM, Andrii Nakryiko wrote:
+> On Fri, Oct 23, 2026 at 3:27 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> bpftool wraps the C dump in a clang attribute pragma that applies
+>> preserve_access_index to every struct and union, so field accesses
+>> through vmlinux.h types get CO-RE relocations. GCC-BPF supports the
+>> attribute but not the pragma, so it gets no CO-RE from the header.
+>>
+>> Jose proposed replacing the Clang pragmas with per-record attributes
+>> in May 2024 [1]. The declaration attribute support in btf_dump [2] now
+>> provides the per-type control discussed in that thread.
+>>
+>> Apply the attribute to each struct and union definition instead, as
+>> kflagged decl tags rendered by btf_dump. Add the tags to a split BTF
+>> over the input, so the input stays read-only. The tags use the
+>> __bpf_relocatable macro, which by default expands to
+>> preserve_access_index if compiler supports it.
+>>
+>> Clang output is unchanged.
+>>
+>> GCC-BPF programs now can get CO-RE relocations from vmlinux.h, however
+>> the selftests GCC-BPF build defines BPF_NO_PRESERVE_ACCESS_INDEX and
+>> is unaffected yet.
+>>
+>> [1]: https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@oracle.com/
+>> [2]: https://lore.kernel.org/bpf/20260929234608.48503-1-ihor.solodrai@linux.dev/
+>>
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
+>>  tools/bpf/bpftool/btf.c                       | 62 +++++++++++++++----
+>>  .../bpf/bpftool_btf_dump_sorted.expected      | 16 ++---
+>>  .../bpf/bpftool_btf_dump_unsorted.expected    | 16 ++---
+>>  3 files changed, 65 insertions(+), 29 deletions(-)
+>>
+> 
+> [...]
+> 
+>>         printf("#ifndef __VMLINUX_H__\n");
+>>         printf("#define __VMLINUX_H__\n");
+>>         printf("\n");
+>> -       printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
+>> -       printf("#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)\n");
+>> +       printf("#ifndef __bpf_relocatable\n");
+>> +       printf("#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)\n");
+>> +       printf("#define __bpf_relocatable preserve_access_index\n");
+> 
+> why not define __bpf_relocatable as
+> __attribute__((preserve_access_index))? then type definitions will be
+> a bit cleaner and we can basically drop BPF_NO_PRESERVE_ACCESS_INDEX
+> eventually, and instead you'll be able to just `#define
+> __bpf_relocatable` to disable relocations (or if some GCC version
+> requires some quirk, you'll define it wholesale)
 
-[...]
+The problem is in how libbpf dumps the attributes.
 
-> +#ifndef __bpf_static_offset
-> +#if __has_attribute(preserve_static_offset)
-> +#define __bpf_static_offset preserve_static_offset
-> +#else
-> +#define __bpf_static_offset
-> +#endif
-> +#endif
-> +
->  #ifndef __ksym
->  #define __ksym __attribute__((section(".ksyms")))
->  #endif
-> diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expect=
-ed b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-> index edc8c5b708d7..ef01a8a4e6ad 100644
-> --- a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-> +++ b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-> @@ -9,6 +9,14 @@
->  #endif
->  #endif
->
-> +#ifndef __bpf_static_offset
-> +#if __has_attribute(preserve_static_offset)
-> +#define __bpf_static_offset preserve_static_offset
+__attribute__((__vmlinuxh_local_foo)) allows to have a single BTF tag
+emission logic in bpftool: always emit the attributes. And they remain
+opt-out in the generated vmlinux.h because __attribute__(()) is legal.
 
-same as with __bpf_relocatable, I think this should be full attribute defin=
-ition
+In order to enable
 
+  #define __bpf_relocatable __attribute__((preserve_access_index))
 
-> +#else
-> +#define __bpf_static_offset
-> +#endif
-> +#endif
-> +
->  #ifndef __ksym
->  #define __ksym __attribute__((section(".ksyms")))
->  #endif
-> --
-> 2.56.0
->
+We need to move the opt-out to bpftool level, that is: optionally not
+emit the BTF tags. And that then brings up a question of adding a
+runtime flag, passing it through makefiles etc.
+
+This can also potentially break existing progs that depend on
+BPF_NO_PRESERVE_ACCESS_INDEX.
+
+So going with __attribute__(()) looked like the best
+backward-compatible option to me.
+
+I'm open to other ideas though.
+
+> 
+>> +       printf("#else\n");
+>> +       printf("#define __bpf_relocatable\n");
+>> +       printf("#endif\n");
+>>         printf("#endif\n\n");
+>>         printf("#ifndef __ksym\n");
+>>         printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
+> 
+> [...]
+> 
+>> -#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+>> -#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
+>> +#ifndef __bpf_relocatable
+>> +#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
+>> +#define __bpf_relocatable preserve_access_index
+>> +#else
+>> +#define __bpf_relocatable
+>> +#endif
+>>  #endif
+>>
+>>  #ifndef __ksym
+>> @@ -30,19 +34,15 @@ struct holey {
+>>         long: 32;
+>>         long: 32;
+>>         int tail;
+>> -};
+>> +} __attribute__((__bpf_relocatable));
+> 
+> e.g., I was expecting to see just __bpf_relocatable here, without
+> __attribute__(()) wrapper
+> 
+> are there any downsides to that? that seems how attributes are
+> typically hidden in kernel, for instance
+> 
+> pw-bot: cr
+> 
+> 
+> [...]
+
