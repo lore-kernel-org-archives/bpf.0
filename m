@@ -1,54 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793059451;
-	b=P4cnQGhEVc7Z+QDifijTE13f77nte/rrvWz3MXMOoU57L54rnUPHdRzhpjEs4ZprimrG
-	 PGbSkr13yHHxuahc+N/OU9z6GtAL6qSdWoA0fWNYCFPHw+iqpVJuu+0z8Ltxe1gvud68d
-	 bnjWGuM1t+5lNN6RdkfoubfJqNri/MJ8NIoF29i6zeIJSXe9XHx8omG6Pd+Vk9q4BvvNm
-	 uLztBcb+d5pnrYM4QBk5EWi7bFNV+L8LNssKy765DT2KdhWu9rtS/pwERaRzuo7E+9HLo
-	 huSM6dtL7P8kmsP3ElzFDR8GsqG6+c48SJZOHB5by0AZ8GLVjoDVRDnBg1F0h7ZlR9Q==
+	t=1793059745;
+	b=i2dUCMvFxTDgEs9znccXobbWNdFAyQZCwhVyybfgLRtlC6jFuMonjuNs5fn/T2fEpYZu
+	 fC0GGs97LK2s9MTza4e+9BPcGrcwr0WC7XexneP4JVHvc703ny/Ds1zK99Zs6d9+FxOPF
+	 Mp45pp/qxEJmd613WqB0MkYwtxiz3216JavxjeezmhZgwxKz9T+M4L759GoXdWOiNuZvZ
+	 elgU+ICqp2smKiCY5R89A59b7zCdT0VGkov/5ZHzGAIyVmuZ7/PFRz0GMRowmIj2Ib8hN
+	 wyfBqOODIhX5MQyQE8VpIZXOYpcQyZEFwwQzNYk5KJee8Cn+psXIXnKWV9xiOQsPIiw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793059451;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=Msno5cSRpuMAs6wj81BItGvtCMI0plrWFLYPRXrvWdY=;
-	b=yGbXYw1Pu3SjVs5iC+DKnZ42YRfTXMujR7hAoybAU2BVf5nrHF9tbSHU2I02vEsDNZJm
-	 iBeRmbyswp18sYgpxHAk3S5bJ0tmbSZfJtQcezH97zj4Q3S7MBiZTIBmbY6eFJe28znXS
-	 JapznnikB8Ch+5sTDVY4xEEZiJ1GC+jqeJLPRpG9jDImxRu7cyhdjLgWiX+NP35uFAzZ0
-	 VkX8U7T3LNHZ0srr3N4cpGqqymkfcAq2Hge0gb40yWXeAztK8RKnDErlOzEwEclcVI2+w
-	 Von5w0+dqxNYv3b9RU1xxyf7WpAwMxSONSNk35t+rlqIoV4OSD7OyoydFpPWKg0u3vQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793059745;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=RorH4zu2dR20S8Fc3CJxjNXj0kqbdBc/7LYcmfZDYuA=;
+	b=eYxtRp9onl1ptPIOig6ocRppd+H+7JdD63u0svgw0AGgtmKdB3gvCCzD5QyXzUQ5VNN+
+	 +C+H1H+spY5wUAraAnbAyg15CHrLv3PJsM5tNajESYamUsksKQF5DSrxJnDKV7zb/0kWs
+	 hvvYfgg+foaV3b1yD1QAHfy385XFY7jShfYWZqnbQOJhjDGt3e2CcGcikdehB23YYIrog
+	 aqpujRikFNKM3ED53IiBzKQh4xfGUGfCRZnRMWUzwSkAgqx21/k77reTLrHffFJ3F8Qix
+	 Nv8AIy4ELb62zvmjW+E1DOHoFvMaTOQm6Z9uc2Uz0MBuvjcGehIfyAiJeZUrlyai/jg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=XtNdLaGi;
-	arc=none smtp.remote-ip=91.218.175.175
-Received: from mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eN6ArdLk;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E08606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:04:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A1E08606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADACE606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=XtNdLaGi
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=VO14hEUXLDhBzYweiS5ywuk2yUCXWgT9SRC3HcxCQMg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793059448; v=1; x=1793664248;
- b=XtNdLaGizzwci9wHDD4POTT637AKAfyyytcst91eRJRChVY+Ou1yj/0Cm12x2PJjd3PTQSJx
- aE23rSPRV1gSs/QZHuMWCJo8fFCTwQocrFhEQxO4Fm6cm4tc65pO0515+8cMg20uwvBiaXgGx9e
- JD9AoSGxHILVgMf+7bGXM7s0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ae09bd6725ce0871;
-	Tue, 27 Oct 2026 00:04:08 +0000
-X-Mizu-Trace-ID: ae09bd6725ce0871
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f9aee9b2-0010-44b2-afb4-0be3958b332c@linux.dev>
-Date: Mon, 26 Oct 2026 17:04:02 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=eN6ArdLk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA5B1F01829;
+	Tue, 27 Oct 2026 00:09:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793059744;
+	bh=RorH4zu2dR20S8Fc3CJxjNXj0kqbdBc/7LYcmfZDYuA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=eN6ArdLkMHRlnADawpHfeg5HHkFwJvcaVl1jNQUR3KSQPk2GdBix4n4hIutmjBken
+	 U72hyqqXlC/9tCcxWcC55lWMctSYcelaXH/x2tAXXUg7w6eutRvCxsgN9b1fDaZraI
+	 27YNA7cNt61vF6lmAvhVJw6sAKNnz1o0xTTdXb/+URMXMEwAR/bulGT29JZcCsmrYq
+	 gxndqOXC6MQbVSrJDnzXWVfUa42LNSba2JQo+kDI8ZzThmgVoAF9nx8YoAeT5ZtU3G
+	 6xsaKimtvMN/RjyUHiObSx/F7mNfRSbCzeewQYqbAg3vFxWomP6yKTIy+Ij/PTcPDP
+	 TDTdeyRmFuWkA==
+Content-Type: multipart/mixed; boundary="===============7231796188864996388=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,56 +49,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 00/81] bpf: Stack in arena and a verifier that joins
- states
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
- <fba239f1-febc-4af5-8033-a893f8265191@linux.dev>
- <DMF6AVOBX25C.28Z0NJS6CEB3J@gmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DMF6AVOBX25C.28Z0NJS6CEB3J@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <4896d56c7c52fa0a354c9b78f139bde55fec229791cfb49524f411ccce841f8f@mail.kernel.org>
+In-Reply-To: <20261026-scev-simpler-clamp-v2-3-f373aec9825f@gmail.com>
+References: <20261026-scev-simpler-clamp-v2-3-f373aec9825f@gmail.com>
+Subject: Re: [PATCH bpf v2 03/11] bpf: avoid false infinite loop reports after changes in SCEV clamping
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 27 Oct 2026 00:09:04 +0000 (UTC)
+
+--===============7231796188864996388==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 2026-10-26 4:53 p.m., Alexei Starovoitov wrote:
-> On Mon Oct 26, 2026 at 4:57 PM UTC, Ihor Solodrai wrote:
->> On 2026-10-25 7:58 p.m., Alexei Starovoitov wrote:
->>> From: Alexei Starovoitov <ast@kernel.org>
->>>
->>> The goal of this series is to load Rust programs as rustc and LLVM compile
->>> them. These programs keep data, heap and address-taken locals in arena.
->>> They use trait objects, recursion, unwinding, and loops that have no known
->>> bound. The test programs are in https://github.com/4ast/rust-bpf
->>>
->>> The series has three parts:
->>>
->>>     patches  1-15   Fixes and a revert. They do not depend on the other
->>>                     parts.
->>>     patches 16-31   A stack in arena.
->>>     patches 32-81   A verifier that joins states.
->>
->> Hi Alexei,
->>
->> Just FYI bpf-ci-bot AI review workflow is limited to 50 patches per series.
->>
->> The limit was set as a guardrail for commit selection logic (to not
->> accidentally run review for 10k commits). I chose 50 because usually
->> we ask people to break up long series into smaller reviewable pieces,
->> and pre-singulariy >10 patches series would already raise questions.
->>
->> Since the approach to patch review on bpf list has obviously changed
->> recently, what would you suggest as a new limit?
-> 
-> I didn't know that there is such limit. I'm not sure there is a good limit.
-> Maybe whitelist it by known developers with commits?
+> bpf: avoid false infinite loop reports after changes in SCEV clamping
 
-The purpose of the limit is to guard against unintentional blow up of
-compute and token cost. It's not infinite.
-Are there plans for 10k-patch series?
+TL;DR: Nit only: the comment above in_a_terminating_loop() is hard to parse
+and may be missing words; a clearer rewording is suggested. No functional
+issues raised.
 
-I'm sure we can come up with a reasonable limit for a "reviewable"
-series.
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> index d7df6632a5c4..a6ae86f973e3 100644
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
+
+[ ... ]
+
+> @@ -1358,13 +1358,33 @@ static bool need_loop_checkpoint(struct bpf_verifier_env *env, int insn_idx)
+>  	return top->loop_id == insn_idx && top->terminates;
+>  }
+>
+
+[ ... ]
+
+> +/* True if any of the loops call chain is currently in terminates. */
+> +static bool in_a_terminating_loop(struct bpf_verifier_state *st)
+> +{
+> +	struct bpf_func_state *frame;
+> +	int l, fr;
+> +
+> +	for (fr = st->curframe; fr >= 0; fr--) {
+> +		frame = st->frame[fr];
+> +		for (l = frame->loop_stack_cnt - 1; l >= 0; l--)
+> +			if (frame->loop_stack[l].terminates)
+> +				return true;
+> +	}
+> +	return false;
+>  }
+
+this isn't a bug, but is the comment above in_a_terminating_loop() missing
+a word or two?  "True if any of the loops call chain is currently in
+terminates" is hard to parse.
+
+The function returns true when any loop_stack entry, in any frame from
+st->curframe down to frame 0, has ->terminates set.  Would something like
+the following describe that more directly?
+
+  /* True if any loop @st is currently in, in any frame, terminates. */
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40421781646
+--===============7231796188864996388==--
