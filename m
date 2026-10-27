@@ -1,55 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=113.46.200.225
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793101172;
-	b=NYLOH0CUUFVlw7dSAPEiWPApLJkOGS444tootSDNwYcNtbBnEmeYlgNaJFK0RUbX8LrD
-	 4CZDRR6SFGpHjTy8R/CHi5BI7Ck5Lb7WKD7isGwPRn8fp4VbYZ9RCp60DE49jx2lcPQjx
-	 IdNOqtT6B2nmPvB8E/hi5kkW5Go0VEQHvPQ62/ed6TcLn9xzRc7KdRklEk78wf75gdQFJ
-	 vgbiZrb2UFGhM9ry1AJBzyqSGsigUQ7WSkPZ3i03mkeBjPsY2nAMbCCJkHM+6r2woVsnu
-	 KbOO0joN4X1dHs30lflvmXYZpbtYKeBkedg+moSpgid3rzT5R9u1mTPgyCJK0JwYsvg==
+	t=1793101153;
+	b=WYrn2xVL3vp5Yleo6wREGsyhJ4hVgxKEqqZkvhXJEx2HixFSBC/JaI8+7OZLZsVlO0P1
+	 iBGJb5EpUgHDwU4pKvGaA6kmgVmBpJvpMNyBxs506fQ4V0aJxMUDdSXf3L2iw9wnX07UN
+	 2HUwbtzv0bYbWTr3a/BlDOi1TxUT0xbmYfSJJyykWEBZczPQJuQJkrrM44QL5vWhaqzUG
+	 4CXjcAkUi0729T/73ivPu5G13Q6QNwm82DFlSG191cQcQkfu/NO6tDK0aiBH3De4Eg//M
+	 +LNM3QC0uN5vwzIR2TbQypIKStVu7BmIxSqve7F3Pf1Z6iVMmTyX3OGjAcw39li94pQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793101172;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793101153;
 	h=DMARC-Filter:dkim-signature:Received:Received:Received:From:To:CC:
 	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:X-Originating-IP:X-ClientProxiedBy;
-	bh=4gnQWBth/c177Bb08YOlMXVK4RtND6n6IeYO3twMeyU=;
-	b=XOZDy4W0pK9L9C5znw4HKXNBnd+uBjEdq5Bt5/3RNkMjX+goV2MjdmQJSvwIXZy9lqcs
-	 iZ1ezqffof3Bk/GLmDC8VgA4t8UbgQ8Oy4V3/bOPB9T6zZLJtNKXXYaXzaGmFXEqaxMPH
-	 bKl+iXKLKmUZjIM9ASQtk+bDqcBCyuh+DWhPHVprtjZjbiddpxRKWpzTnVipPP3gaWgdT
-	 /C6kRoD+BTqjCzd3u8CkHVDOY2UlcNaMsBxIRTI09hm1FPiLjzaosYjXK17USNVwChr+v
-	 0COAud3cqUoej3crRONL/T3OwgzDSXRdg7xCkpdAapGWWjJW0ClSk2FnVbnrXXPFBdQ==
+	bh=eSoejBy4BiH08FSMPiqiQwZp6ozqcsl7f9UKEi2EenQ=;
+	b=jHjV+C64HuailbzUisMpG3orEPY+Q6AOBkQ3rkdp/7n8FWrYoV4a0k+Q8/vIlGnCa1kP
+	 xnAYKgM95hSO6RqGnWQXOwWFJm6zJt9ecg6z44d/OQUIbv86NoTg1aJyaJmSCUozXwT6k
+	 Gn9N7WGwkX5Fn4sQNdzHa87+wweCKR00BmCbHDpK91VnSbV8Wz5CQ9H9O1xTS5Wg8KVNV
+	 GvKUYZMGDegmkXBhBJFOtfN1AUazes+H+hdDUkIVbnkLhPZwptfo4jg516UZurSevK+Y1
+	 rzb79EpSEkr81SteyyraaIVJW4h7raARF2saVh5CeV5ZwC1kmNA9htNfmsD+WoMqrBQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=huawei.com;
 	spf=pass smtp.mailfrom=huawei.com;
-	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=G1SVNDWK;
-	arc=none smtp.remote-ip=113.46.200.227
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
+	dkim=pass header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=IYh5nymZ;
+	arc=none smtp.remote-ip=113.46.200.225
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C1860A6F6A;
-	Tue, 27 Oct 2026 11:39:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A3C1860A6F6A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFF26072E4E;
+	Tue, 27 Oct 2026 11:39:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3DFF26072E4E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=G1SVNDWK
+	dkim=pass (1024-bit key, unprotected) header.d=huawei.com header.i=@huawei.com header.a=rsa-sha256 header.s=dkim header.b=IYh5nymZ
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=4gnQWBth/c177Bb08YOlMXVK4RtND6n6IeYO3twMeyU=;
-	b=G1SVNDWKcr2QNUjgbDuLk2jxeAvYkuwkX30tA9oqTeZ9bxwp8KDbS69GSj1q9vmV4sEvUVlQJ
-	exZ/ffSO072HZRgGFDNZn4Cz6xPeMgbwA5WACDIBNiJxd63MLTs9hqd7q7iB8W9AF+yFvmrW9c1
-	OfYeTX7VY/CksdLR+h2BeMI=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4jDT6s6LwDznTZW;
-	Tue, 27 Oct 2026 19:39:33 +0800 (CST)
+	bh=eSoejBy4BiH08FSMPiqiQwZp6ozqcsl7f9UKEi2EenQ=;
+	b=IYh5nymZoyJZsxq530x+d7JtOvWC7CZVnW65/y6dNVStjCZU93b2+ZzLdYzxMrsxIJ7GBMbiM
+	olU2KeJ9+tVHMer2BN2nlR56XishTWGTfbhNEi7ObodayqrzhGbpUQNAj0giT7B4ynjMp6rahMd
+	3SBKUCy3WxU/vXcPVaJH28I=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4jDT6D0yKtz1K9B9;
+	Tue, 27 Oct 2026 19:39:00 +0800 (CST)
 Received: from whupemk100010.china.huawei.com (unknown [7.152.184.41])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9DBE64055B;
-	Tue, 27 Oct 2026 19:39:28 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id DFA9B40572;
+	Tue, 27 Oct 2026 19:39:07 +0800 (CST)
 Received: from octopus.huawei.com (10.67.174.191) by
  whupemk100010.china.huawei.com (7.152.184.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Tue, 27 Oct 2026 19:39:23 +0800
+ 15.2.2562.45; Tue, 27 Oct 2026 19:39:02 +0800
 From: Cai Xinchen <caixinchen1@huawei.com>
 To: <mic@digikod.net>, <gnoack@google.com>, <paul@paul-moore.com>,
 	<jmorris@namei.org>, <serge@hallyn.com>, <corbet@lwn.net>,
@@ -88,9 +88,9 @@ CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
 	<linux-trace-kernel@vger.kernel.org>, <apparmor@lists.ubuntu.com>,
 	<linux-integrity@vger.kernel.org>, <selinux@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH v3 -next 17/18] samples/landlock: Add metadata rights to sandboxer
-Date: Tue, 27 Oct 2026 20:11:50 +0800
-Message-ID: <20261027121151.1887650-18-caixinchen1@huawei.com>
+Subject: [PATCH v3 -next 13/18] LSM: rename the inode fileattr hooks to path_file_* hooks
+Date: Tue, 27 Oct 2026 20:11:46 +0800
+Message-ID: <20261027121151.1887650-14-caixinchen1@huawei.com>
 X-Mailer: git-send-email 2.18.0.huawei.25
 In-Reply-To: <20261027121151.1887650-1-caixinchen1@huawei.com>
 References: <20261027121151.1887650-1-caixinchen1@huawei.com>
@@ -107,74 +107,187 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
  whupemk100010.china.huawei.com (7.152.184.41)
 
-Handle the new LANDLOCK_ACCESS_FS_READ_METADATA and
-LANDLOCK_ACCESS_FS_WRITE_METADATA access rights in the sandboxer:
-READ_METADATA is added to the read-only set, WRITE_METADATA to the
-read-write set, and both to ACCESS_FILE.
-
-Update the ABI version fallback switch to remove the metadata rights
-for ABI < 13, and bump LANDLOCK_ABI_LAST to 13.
+The inode_file_getattr and inode_file_setattr hooks receive a struct
+path, so rename them to path_file_getattr and path_file_setattr to
+follow the path_* naming convention used for the other hooks that
+take a struct path (path_chmod, path_chown, ...).  Rename the
+security_inode_file_getattr() and security_inode_file_setattr()
+inline wrappers and the SELinux implementations
+accordingly.
 
 Signed-off-by: Cai Xinchen <caixinchen1@huawei.com>
 ---
- samples/landlock/sandboxer.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ fs/file_attr.c                |  4 ++--
+ include/linux/lsm_hook_defs.h |  4 ++--
+ include/linux/security.h      | 20 ++++++++++----------
+ security/security.c           | 16 ++++++++--------
+ security/selinux/hooks.c      | 16 ++++++++--------
+ 5 files changed, 30 insertions(+), 30 deletions(-)
 
-diff --git a/samples/landlock/sandboxer.c b/samples/landlock/sandboxer.c
-index 1362f08ff14b..29965ef90bed 100644
---- a/samples/landlock/sandboxer.c
-+++ b/samples/landlock/sandboxer.c
-@@ -137,6 +137,8 @@ static int parse_path(char *env_path, const char ***const path_list)
- 	LANDLOCK_ACCESS_FS_EXECUTE | \
- 	LANDLOCK_ACCESS_FS_WRITE_FILE | \
- 	LANDLOCK_ACCESS_FS_READ_FILE | \
-+	LANDLOCK_ACCESS_FS_READ_METADATA | \
-+	LANDLOCK_ACCESS_FS_WRITE_METADATA | \
- 	LANDLOCK_ACCESS_FS_TRUNCATE | \
- 	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
- 	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
-@@ -487,7 +489,8 @@ static bool check_ruleset_scope(const char *const env_var,
- #define ACCESS_FS_ROUGHLY_READ ( \
- 	LANDLOCK_ACCESS_FS_EXECUTE | \
- 	LANDLOCK_ACCESS_FS_READ_FILE | \
--	LANDLOCK_ACCESS_FS_READ_DIR)
-+	LANDLOCK_ACCESS_FS_READ_DIR | \
-+	LANDLOCK_ACCESS_FS_READ_METADATA)
+diff --git a/fs/file_attr.c b/fs/file_attr.c
+index 08b4cdbef9ff..093cb05ae3c4 100644
+--- a/fs/file_attr.c
++++ b/fs/file_attr.c
+@@ -112,7 +112,7 @@ int vfs_fileattr_get(const struct path *path, struct file_kattr *fa,
+ {
+ 	int error;
  
- #define ACCESS_FS_ROUGHLY_WRITE ( \
- 	LANDLOCK_ACCESS_FS_WRITE_FILE | \
-@@ -503,7 +506,8 @@ static bool check_ruleset_scope(const char *const env_var,
- 	LANDLOCK_ACCESS_FS_REFER | \
- 	LANDLOCK_ACCESS_FS_TRUNCATE | \
- 	LANDLOCK_ACCESS_FS_IOCTL_DEV | \
--	LANDLOCK_ACCESS_FS_RESOLVE_UNIX)
-+	LANDLOCK_ACCESS_FS_RESOLVE_UNIX | \
-+	LANDLOCK_ACCESS_FS_WRITE_METADATA)
+-	error = security_inode_file_getattr(path, fa, file);
++	error = security_path_file_getattr(path, fa, file);
+ 	if (error)
+ 		return error;
  
- /* clang-format on */
+@@ -315,7 +315,7 @@ static int do_vfs_fileattr_set(const struct path *const path,
+ 		 * user-facing path.
+ 		 */
+ 		if (path) {
+-			err = security_inode_file_setattr(path, fa, file);
++			err = security_path_file_setattr(path, fa, file);
+ 			if (err)
+ 				goto out;
+ 		}
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 7602a3074375..683c4d7a8024 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -169,9 +169,9 @@ LSM_HOOK(int, 0, path_removexattr, const struct mnt_idmap *idmap,
+ 	 const struct path *path, const char *name, struct file *file)
+ LSM_HOOK(void, LSM_RET_VOID, inode_post_removexattr, struct dentry *dentry,
+ 	 const char *name)
+-LSM_HOOK(int, 0, inode_file_setattr, const struct path *path,
++LSM_HOOK(int, 0, path_file_setattr, const struct path *path,
+ 	 struct file_kattr *fa, struct file *file)
+-LSM_HOOK(int, 0, inode_file_getattr, const struct path *path,
++LSM_HOOK(int, 0, path_file_getattr, const struct path *path,
+ 	 struct file_kattr *fa, struct file *file)
+ LSM_HOOK(int, 0, path_set_acl, const struct mnt_idmap *idmap,
+ 	 const struct path *path, const char *acl_name,
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 305b92c0494c..edba134db8f6 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -464,10 +464,10 @@ int security_path_removexattr(const struct mnt_idmap *idmap,
+ 			      const struct path *path, const char *name,
+ 			      struct file *file);
+ void security_inode_post_removexattr(struct dentry *dentry, const char *name);
+-int security_inode_file_setattr(const struct path *path,
+-				struct file_kattr *fa, struct file *file);
+-int security_inode_file_getattr(const struct path *path,
+-				struct file_kattr *fa, struct file *file);
++int security_path_file_setattr(const struct path *path,
++			       struct file_kattr *fa, struct file *file);
++int security_path_file_getattr(const struct path *path,
++			       struct file_kattr *fa, struct file *file);
+ int security_inode_need_killpriv(struct dentry *dentry);
+ int security_inode_killpriv(const struct mnt_idmap *idmap, struct dentry *dentry);
+ int security_inode_getsecurity(const struct mnt_idmap *idmap,
+@@ -1093,16 +1093,16 @@ static inline void security_inode_post_removexattr(struct dentry *dentry,
+ 						   const char *name)
+ { }
  
-@@ -570,7 +574,7 @@ static int add_quiet_access(const char *const env_var,
+-static inline int security_inode_file_setattr(const struct path *path,
+-					      struct file_kattr *fa,
+-					      struct file *file)
++static inline int security_path_file_setattr(const struct path *path,
++					     struct file_kattr *fa,
++					     struct file *file)
+ {
  	return 0;
  }
  
--#define LANDLOCK_ABI_LAST 12
-+#define LANDLOCK_ABI_LAST 13
+-static inline int security_inode_file_getattr(const struct path *path,
+-					      struct file_kattr *fa,
+-					      struct file *file)
++static inline int security_path_file_getattr(const struct path *path,
++					     struct file_kattr *fa,
++					     struct file *file)
+ {
+ 	return 0;
+ }
+diff --git a/security/security.c b/security/security.c
+index 13778c83fd3a..919763c61994 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -2180,7 +2180,7 @@ void security_inode_post_removexattr(struct dentry *dentry, const char *name)
+ }
  
- #define XSTR(s) #s
- #define STR(s) XSTR(s)
-@@ -780,6 +784,12 @@ int main(const int argc, char *const argv[], char *const *const envp)
- 		ruleset_attr.handled_permissions &=
- 			~(LANDLOCK_PERMISSION_NAMESPACE_USE |
- 			  LANDLOCK_PERMISSION_CAPABILITY_USE);
-+		__attribute__((fallthrough));
-+	case 12:
-+		/* Removes metadata rights for ABI < 13 */
-+		ruleset_attr.handled_access_fs &=
-+			~(LANDLOCK_ACCESS_FS_READ_METADATA |
-+			  LANDLOCK_ACCESS_FS_WRITE_METADATA);
- 		/* Must be printed for any ABI < LANDLOCK_ABI_LAST. */
- 		fprintf(stderr,
- 			"Hint: You should update the running kernel "
+ /**
+- * security_inode_file_setattr() - check if setting fsxattr is allowed
++ * security_path_file_setattr() - check if setting fsxattr is allowed
+  * @path: file to set filesystem extended attributes on (the VFS makes no
+  *        guarantees with regard to @path->mnt)
+  * @fa: extended attributes to set on the inode
+@@ -2191,14 +2191,14 @@ void security_inode_post_removexattr(struct dentry *dentry, const char *name)
+  *
+  * Return: Returns 0 if permission is granted.
+  */
+-int security_inode_file_setattr(const struct path *path,
+-				struct file_kattr *fa, struct file *file)
++int security_path_file_setattr(const struct path *path,
++			       struct file_kattr *fa, struct file *file)
+ {
+-	return call_int_hook(inode_file_setattr, path, fa, file);
++	return call_int_hook(path_file_setattr, path, fa, file);
+ }
+ 
+ /**
+- * security_inode_file_getattr() - check if retrieving fsxattr is allowed
++ * security_path_file_getattr() - check if retrieving fsxattr is allowed
+  * @path: file to retrieve filesystem extended attributes from (the VFS makes no
+  *        guarantees with regard to @path->mnt)
+  * @fa: extended attributes to get
+@@ -2209,10 +2209,10 @@ int security_inode_file_setattr(const struct path *path,
+  *
+  * Return: Returns 0 if permission is granted.
+  */
+-int security_inode_file_getattr(const struct path *path,
+-				struct file_kattr *fa, struct file *file)
++int security_path_file_getattr(const struct path *path,
++			       struct file_kattr *fa, struct file *file)
+ {
+-	return call_int_hook(inode_file_getattr, path, fa, file);
++	return call_int_hook(path_file_getattr, path, fa, file);
+ }
+ 
+ /**
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index e0aaaee537d1..8bafa530806e 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -3572,16 +3572,16 @@ static int selinux_path_removexattr(const struct mnt_idmap *idmap,
+ 	return -EACCES;
+ }
+ 
+-static int selinux_inode_file_setattr(const struct path *path,
+-				      struct file_kattr *fa,
+-				      struct file *file)
++static int selinux_path_file_setattr(const struct path *path,
++				     struct file_kattr *fa,
++				     struct file *file)
+ {
+ 	return dentry_has_perm(current_cred(), path->dentry, FILE__SETATTR);
+ }
+ 
+-static int selinux_inode_file_getattr(const struct path *path,
+-				      struct file_kattr *fa,
+-				      struct file *file)
++static int selinux_path_file_getattr(const struct path *path,
++				     struct file_kattr *fa,
++				     struct file *file)
+ {
+ 	return dentry_has_perm(current_cred(), path->dentry, FILE__GETATTR);
+ }
+@@ -7743,8 +7743,8 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
+ 	LSM_HOOK_INIT(path_getxattr, selinux_path_getxattr),
+ 	LSM_HOOK_INIT(path_listxattr, selinux_path_listxattr),
+ 	LSM_HOOK_INIT(path_removexattr, selinux_path_removexattr),
+-	LSM_HOOK_INIT(inode_file_getattr, selinux_inode_file_getattr),
+-	LSM_HOOK_INIT(inode_file_setattr, selinux_inode_file_setattr),
++	LSM_HOOK_INIT(path_file_getattr, selinux_path_file_getattr),
++	LSM_HOOK_INIT(path_file_setattr, selinux_path_file_setattr),
+ 	LSM_HOOK_INIT(path_set_acl, selinux_path_set_acl),
+ 	LSM_HOOK_INIT(path_get_acl, selinux_path_get_acl),
+ 	LSM_HOOK_INIT(path_remove_acl, selinux_path_remove_acl),
 -- 
 2.18.0.huawei.25
 
