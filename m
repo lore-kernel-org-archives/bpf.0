@@ -1,63 +1,113 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793092259;
-	b=FJ9hghtbo24pz2VgMdv4pQ2IaDleiQjXUEpFEi6rNrCtwSgLm5eS+TZzSL9punsdDo0b
-	 IxFP0aS8fyW3SguklkfBFSq6MPlxZOYsGslG4MjANH5Zqvwe5AJlMQZzCnlLOen0+VSmj
-	 syl/335sUjeVa+SScPoioOKACl0Kail/NunnH5O2eszeyaSNJ6uANtLjQZz8tkalMz+uH
-	 RBhkYOLOKpvWktFKyMcJtwSFPJXnM2U+nZfFIN4xWvZTeoixfHoNP3e+gdIa9B12SUL8r
-	 1InTpH4ZsHgHXqFZvWOjUHtwrh6fu4WN/fa0xT2Q3RhAbnMj4kO7pL8D2ftWcYg7hjw==
+	t=1793092357;
+	b=Rx2fuAGgIBmhGVZYzaG3aO6CgK5jUYtIQrhsM/HuTiyd+pIpbHJDdeUjfAcE9Pe5E+3g
+	 B0ld34Bzmb1RLeSdRZdkYyH500isjgAvs+5EdKTPVuBUmJngXPQfxc6XZAo79HlUHE7sC
+	 8z1ZfHp8rEBRqkF8OvW9XsK13DjIBRDeQhfW3UunwoOaqAquCaT3FKgMri06x/QeyTQLj
+	 T+FNwrA9vCqon1cei9PiVdIvFpHdg6GMFtDC0EPimQEdAXA6keL0To7AEOLo5k9LUm+AI
+	 O2h7h/HIOFtiOgBNGN6z7kMtZPOdXqrlt0CzY8EL6J5A4dEALU0BZYWHj04cf3fmi1w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793092259;
-	h=Received:DKIM-Signature:Subject:From:To:Cc:Date:Message-ID:
-	 In-Reply-To:References:X-sashiko-severity:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=mlggcwoG0DvfTCXP7ejSDYVRjRbl/qkcqpGTFuN6n2s=;
-	b=Obz7toPFb9Xljj7z3G+sbhs1kxzm9m6QxHF1zbmo1mQQEPReeKwIzDjbfjIS7W2mADIq
-	 lTZ1rNf/FjGsNdrzpNCrPLaWcNcrp0O1/Y3wF4DPQYMbyI9xtlTAx+P9LYIorMLoALdUH
-	 X+P2UyUy2kullKLqj4tQ1fBr49xWTiLrUrMir1BEpuce1h6Vgr3kCbp/sxFBZo2Qr6cEV
-	 5JJr+7JTNpRuzKAhIRvYnmVuIUr1310s31u690O2mxvc53T2IfP9vjqgGD5JhvESoKnQE
-	 tkcD1huPU2/jwpHKllEBzO8Q/DuSGPFm7KYnaOWaG9gZDSi9k2XYW30MspyhMZMZ48g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793092357;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=Ndi2448wVUZuF68kqWF0v2z9NaMIBNKc9nVCJQzYI1k=;
+	b=rjaRb46qEYOXDAZ9X/i1VoJZe1Gcn/TRuyDy0c9WWnpvb3Myk5UinkLh23PBLp/qiFwS
+	 y54DxBdmbvGUohsS1ZcEcQmXzWMoY20SYlWRK5AhlCoW4DeJedg9J1aoQL/m470mW+qru
+	 dpRSQyRrhQ8WsM2xGzehzYR6D8Heam3FWpf/4h5k59VTdY9QKLo7Dg7l2/UR6z1Py8UNM
+	 2aT5iwjvS2SOcuNw/Fl5d38zutYWk4BPtwov3EYHljrJxxU+xLEzR5XE0eFUuTSi4co3V
+	 M7dsLlqBon3Q4szDG/r9IXiS5zAeE+3+78L8QigQ5VSwPaD+kzlwPxjkC7d2Y+ml3iA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YsUzvWop;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	arc=none smtp.remote-ip=95.215.58.51
+Received: from mta1.migadu.com (out-51.mta1.migadu.com [95.215.58.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0141606A323;
-	Tue, 27 Oct 2026 09:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YsUzvWop
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 953231F031E1;
-	Tue, 27 Oct 2026 09:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793092258;
-	bh=mlggcwoG0DvfTCXP7ejSDYVRjRbl/qkcqpGTFuN6n2s=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YsUzvWopm3C/u14vd2Db/AOVOM0G0Qyw/Xz2nXXSUQgeLOjWiQqOCDJ0AVroBk6bP
-	 ppvu0E+RoPeukmmAUh70/0DWFBh285VvP2xD88PwA0ZXejzaCMs1r8zfoDy/mh5FXO
-	 i8CAqHmReZ0qAH48AWsmXV1iwJzUv/ZyFFolIyWn+ymenLABah90ekVv44jKGTPoVC
-	 mrqLZm8pA6YjKFauaLH2ZRMaFUuSXOqGX1FkCUHvPywwniDfpIX6WA948vmSSlgNGH
-	 qNWcqPFENOwxPOxIVINLQCYn2EvfgsbUhHwqWgdWBJLq5uxufSG3DqnmjtGlBbUPxX
-	 v+pUdOQPQg+8g==
-Subject: Re: [PATCH net 5/6] net: stmmac: fix VLAN tag stripping on short and
- non-linear RX frames
-From: netdev-bot+sashiko@kernel.org
-To: lorenzo.bianconi@oss.qualcomm.com
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com,
- mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, Jose.Abreu@synopsys.com, boon.leong.ong@intel.com,
- o.rempel@pengutronix.de, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Date: Tue, 27 Oct 2026 09:10:57 +0000
-Message-ID: <179309225715.3134.11251912403308890296@kernel.org>
-In-Reply-To: <20261023-stmmac-xdp-fixes-v1-5-efb37e19f5bd@oss.qualcomm.com>
-References: <20261023-stmmac-xdp-fixes-v1-5-efb37e19f5bd@oss.qualcomm.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207C5606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:12:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 207C5606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Iy2EZRXCQMOBxljPF+GT6qR9TSW/M2vcb/khwUxJInc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793092348; v=1; x=1793697148;
+ b=bA2/gm+InVPxrA8/cUeuKfkv9tlw8WkJfCJkOBEDJtQCHB0HWSave9Iz76npyrcxJMqpPc1t
+ uCc6jbvmBvAjzUUwt9MB4DHn/lLKKxWsS6jwJ3eh4ZlxhovExca29l8pVbWHLXsWABOthurUun7
+ yDoOp3aXMoQ0FUfbTaxkhPds=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id e68cbb451e1e33a5;
+	Tue, 27 Oct 2026 09:12:27 +0000
+X-Mizu-Trace-ID: e68cbb451e1e33a5
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	JP Kobryn <jp.kobryn@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	KP Singh <kpsingh@kernel.org>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Tobias Klauser <tklauser@distanz.ch>,
+	Eyal Birger <eyal.birger@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	Hao Luo <haoluo@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min protection
+Date: Tue, 27 Oct 2026 17:11:58 +0800
+Message-ID: <cover.1793086858.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,179 +117,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found more severe
-issue(s) in other patches of this series. This mail is only an FYI, in case
-you want to address the nit picks below when you respin.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Low priority / nit picks for your consideration:
+This follows the memcg_ext RFC [1], which adds bpf_memcg_ops - a
+struct_ops type attaching memory controller policy to a cgroup - and
+one member, high_policy().  Its cover letter names dynamic protection
+as future work; these two patches are that.
 
-- [Low] In stmmac_rx_vlan()
-  (drivers/net/ethernet/stmicro/stmmac/stmmac_main.c), the patch adds an…
+Why it matters: memory.low and memory.min protect a cgroup by a fixed
+threshold and have no idea whether it is using the memory.  A
+high-priority cgroup that holds a large working set and then goes idle
+keeps suppressing reclaim on its siblings, and that memory is wasted.
+A policy program sees the real activity - page faults, charges - and
+can grant or withdraw protection as it changes.
 
-Pre-existing issues:
-- [Medium] Only one of the two stmmac RX paths that call stmmac_rx_vlan()
-  records XDP metadata in the skb.
-- [Medium] The new VLAN-error drop branch in stmmac_dispatch_skb_zc()
-  does a plain `priv->xstats.rx_dropped++` (line 5567).
+The hooks are not new: [2] proposed the same below-low and below-min
+decision on its own memcg_bpf_ops type.  Only the carrier changes
+here.  bpf_memcg_ops already supplies attach, the ancestor walk,
+result combination and the re-entry guard, so protection costs two
+members and one walk helper shared with high_policy().
 
---
+Patch 1 adds low_policy() and min_policy().  A program gets a
+read-only snapshot of the check the kernel is making - the memcg, the
+reclaim target, the threshold and the usage - and returns a request;
+BPF_MEMCG_PROT_BELOW, the only one so far, treats the cgroup as below
+its threshold, so reclaim skips it and counts it in memory.events.
+The kernel compares elow/emin first and asks BPF only when it found
+the cgroup unprotected, and ORs the answers of the cgroup and every
+ancestor, so a policy can only add protection, never take it away.
 
-net: stmmac: fix VLAN tag stripping on short and non-linear RX frames
+Patch 2 is the prog_tests runner: attach both policies to a child,
+fault 8M of anonymous memory into it, reclaim from its parent, and
+check that both hooks were consulted and that the ctx described the
+check faithfully.  Both answer NO_OPINION, so nothing about reclaim's
+outcome is asserted.  A working example that does answer BELOW, so
+reclaim skips one cgroup and takes the memory from a sibling instead,
+is maintained out of tree at [3], released under GPLv2.
 
-This patch changes stmmac_rx_vlan() so that it pulls ETH_HLEN before
-reading h_vlan_proto, and pulls VLAN_ETH_HLEN before reading the TCI. It
-returns an error so callers can drop frames that claim a VLAN tag but lack
-the full header. It also moves XDP metadata together with the MAC
-addresses when the tag is popped.
+[1] https://lore.kernel.org/all/20260921192559.2619635-1-shakeel.butt@linux.dev/
+[2] https://lore.kernel.org/all/cover.1779760876.git.zhuhui@kylinos.cn/
+[3] https://github.com/teawater/memcg-async-reclaim/tree/memcg_ext_plus
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 8a2faf50d6957..32b2c5834c340 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -5102,22 +5102,35 @@ static netdev_features_t stmmac_features_check(struct sk_buff *skb,
->  	return vlan_features_check(skb, features);
->  }
->  
-> -static void stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
-> +static int stmmac_rx_vlan(struct net_device *dev, struct sk_buff *skb)
->  {
-> -	struct vlan_ethhdr *veth = skb_vlan_eth_hdr(skb);
-> -	__be16 vlan_proto = veth->h_vlan_proto;
-> -	u16 vlanid;
-> +	struct vlan_ethhdr *veth;
->  
-> -	if ((vlan_proto == htons(ETH_P_8021Q) &&
-> +	if (!pskb_may_pull(skb, ETH_HLEN))
-> +		return -EINVAL;
+Hui Zhu (2):
+  memcg_ext: add memory.low and memory.min protection policies
+  selftests/bpf: Add bpf_memcg_ops protection test
 
-[Severity: Low]
-This pull happens before the h_vlan_proto and dev->features checks. A frame
-shorter than ETH_HLEN is now freed and counted in rx_dropped by both
-stmmac_rx() and stmmac_dispatch_skb_zc(), even with CTAG/STAG RX stripping
-disabled. The hw_vlan_en branch in those callers has no matching check.
-
-Is that intended? The commit message says:
-
-    untagged frames, including short ones, are left untouched.
-
-That holds only for frames between ETH_HLEN and VLAN_ETH_HLEN in length.
-
-XDP doesn't seem able to reach this case, because bpf_xdp_adjust_head()
-and bpf_xdp_adjust_tail() both refuse to go below ETH_HLEN. Dropping such
-a runt is also arguably safer than handing it to eth_type_trans().
-
-Could the commit message mention that frames shorter than ETH_HLEN are now
-dropped?
-
-> +
-> +	veth = skb_vlan_eth_hdr(skb);
-> +	if ((veth->h_vlan_proto == htons(ETH_P_8021Q) &&
->  	     dev->features & NETIF_F_HW_VLAN_CTAG_RX) ||
-> -	    (vlan_proto == htons(ETH_P_8021AD) &&
-> +	    (veth->h_vlan_proto == htons(ETH_P_8021AD) &&
->  	     dev->features & NETIF_F_HW_VLAN_STAG_RX)) {
-> +		__be16 vlan_proto = veth->h_vlan_proto;
-> +		u8 meta_len = skb_metadata_len(skb);
-> +		u16 vlanid;
-> +
->  		/* pop the vlan tag */
-> +		if (!pskb_may_pull(skb, VLAN_ETH_HLEN))
-> +			return -EINVAL;
-> +
-> +		veth = skb_vlan_eth_hdr(skb);
->  		vlanid = ntohs(veth->h_vlan_TCI);
-> -		memmove(skb->data + VLAN_HLEN, veth, ETH_ALEN * 2);
-> +		memmove(skb->data - meta_len + VLAN_HLEN,
-> +			skb->data - meta_len, meta_len + ETH_ALEN * 2);
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but skb_metadata_len() can only
-be non-zero for skbs built by stmmac_construct_skb_zc() on the AF_XDP
-zero-copy path:
-
-stmmac_construct_skb_zc() {
-    ...
-	memcpy(skb->data - metasize, xdp->data_meta, datasize + metasize);
-	if (metasize)
-		skb_metadata_set(skb, metasize);
-    ...
-}
-
-On the page_pool path, stmmac_rx() calls xdp_prepare_buff() with
-meta_valid set to true, so bpf_xdp_adjust_meta() succeeds there. The
-XDP_PASS skb is then built without recording the metadata length:
-
-stmmac_rx() {
-    ...
-			/* XDP program may adjust header */
-			head_pad_len = ctx.xdp.data - ctx.xdp.data_hard_start;
-			skb_reserve(skb, head_pad_len);
-			skb_put(skb, buf1_len);
-			skb_mark_for_recycle(skb);
-    ...
-}
-
-So skb_shinfo(skb)->meta_len stays 0 for these skbs. Doesn't that mean
-metadata written by a non-ZC XDP program is lost before tc BPF can see it?
-It would also mean this memmove only moves metadata for zero-copy skbs.
-
-Should stmmac_rx() also call skb_metadata_set() with
-ctx.xdp.data - ctx.xdp.data_meta?
-
-This patch's own claim still holds on that path, since meta_len is 0
-there and data_meta cannot end up pointing at the wrong bytes.
-
->  		skb_pull(skb, VLAN_HLEN);
->  		__vlan_hwaccel_put_tag(skb, vlan_proto, vlanid);
->  	}
-> +
-> +	return 0;
->  }
-
-[ ... ]
-
-> @@ -5546,12 +5559,15 @@ static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
->  	}
->  
->  	stmmac_get_rx_hwtstamp(priv, p, np, skb);
-> -	if (priv->hw->hw_vlan_en)
-> +	if (priv->hw->hw_vlan_en) {
->  		/* MAC level stripping. */
->  		stmmac_rx_hw_vlan(priv, priv->hw, p, skb);
-> -	else
-> -		/* Driver level stripping. */
-> -		stmmac_rx_vlan(priv->dev, skb);
-> +	} else if (stmmac_rx_vlan(priv->dev, skb)) {
-> +		dev_kfree_skb_any(skb);
-> +		priv->xstats.rx_dropped++;
-
-[Severity: Medium]
-This is a pre-existing issue, but priv->xstats.rx_dropped is one
-device-wide unsigned long in struct stmmac_extra_stats. Every channel's
-NAPI poll updates it with a plain read-modify-write:
-
-stmmac_dispatch_skb_zc()
-    priv->xstats.rx_dropped++;
-
-stmmac_rx_zc() and stmmac_rx()
-    priv->xstats.rx_dropped += rx_dropped;
-
-stmmac_napi_add() registers a separate rx_napi/rxtx_napi for each channel,
-so these polls can run at the same time on different CPUs. No lock, atomic
-or u64_stats_sync protects the counter.
-
-Can drop increments be lost this way? stmmac_get_stats64() also reads the
-field without READ_ONCE().
-
-This patch only adds one more site that follows the existing pattern.
-
-> +		return;
-> +	}
-> +
->  	skb->protocol = eth_type_trans(skb, priv->dev);
-
-[ ... ]
+ include/linux/bpf_memcontrol.h                | 104 ++++++++++-
+ include/linux/memcontrol.h                    |  23 ++-
+ mm/bpf_memcontrol.c                           | 162 ++++++++++++++----
+ .../bpf/prog_tests/memcg_ops_protection.c     | 151 ++++++++++++++++
+ .../bpf/progs/memcg_ops_protection.c          |  72 ++++++++
+ 5 files changed, 470 insertions(+), 42 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops_protection.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops_protection.c
 
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261023-stmmac-xdp-fixes-v1-0-efb37e19f5bd%40oss.qualcomm.com
+2.43.0
+
