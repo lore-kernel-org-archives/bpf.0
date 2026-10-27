@@ -1,64 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=68.232.153.233
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793111810;
-	b=CSYmISTYQ3p0Ax+9NOrUKLfluQRFlGDzvNaMtkGr8WU01vsK5H4X/Y0vwBde0ei9gLqp
-	 OWVoGmCE3eXsJmpZ/dVf6iWoTBqLYK792ffQDqYJUia98BshM42swfKsSmCKqtlCOyJAb
-	 BioLo03asGdK1mJzi5ldIpfpsPUuc4Q1nECWS5q9lyRk5IFTrxZT27MiP1duTHRTDaAE/
-	 Vh7GmpEHYNcVQ7FFlqpsBvOKqKDBkKgAt8/KYTZbF/ntI/xYfFPL4868xiEVQtxKTJqp1
-	 5Bkw/E/Fmq4RGIcjIMwGyt3SyrVYxJrObFEpKEsLymL5xGbtTY+emrA3yz8gEbcMxEw==
+	t=1793111970;
+	b=E0atrRXu8qVOOPgt8Io91b/yUVjyqOBCj6cNTfjt3tttjbfRUKY0vQm6jmTId8/ofLqX
+	 45o2bmQ1O8t+u9Npfidg6CFVe9U+6qHPH1c1YHfDSkf3WJNym16BYVvj1Yut46QL8hnNr
+	 BFoC53rS8nKT0NdcA0LLsjZ3dTUlkUH1D9GbIxrLgK1QwHjIYwxnprwIkl+wQsPygzA6s
+	 oWAcGAjVFsdyQtTTKwC+TpDg3oAtH8yShIdcA9q6tGFuq6MrKTi/Mchd34uK8qptt6sBG
+	 zNTfGIWIVolg/X7kY5i3VcOyM3NhNRsNdd8KoUIffaGoQXuQSLcKPYY2ZR3Yu/Ul/2g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793111810;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=DDw7CAOzeMjZ87nEGcA3ulwTRmsKh58E4v2DnTXYC5A=;
-	b=D3nV4nMwjhQ+mvTR8bA644parjsB/5Z1+Zomay/1uA4dhisw5nnY9i/4+JRbW5O6pl3n
-	 tYJJ10+pyau95dQjaF5/2tyfrkcm+1pNhth/0qIo7tWZ+gmWct+wEFZ6/UbzuvWDFQAfa
-	 1dmwJ3hHvQR9TQyQWolLxLIxr8W6P/Dojyr+emOmSHhoYzdf8CmqWJuYEOg20dGE7PAET
-	 kicC9AzU8CjxiKVOEas0rJMuByQHcI+ggfVsQSEVwXZC7GdifHZ612PGpKvIqiwvtfKGX
-	 CaSygyvTWL+LxRYGppkU5wQ9z84zDXUT6GZMe3yRMkcuwktm8C8K7wZoq3McYRiHHCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793111970;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-Amp-Result:Received:Received:Received:Date:From:To:CC:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
+	bh=SsiL9XLFUNHqZME5gVEL6suEGYBNoOa/XtonB3t1YKA=;
+	b=gLSSh6I72V9z5g0DorjdaqDHzUq5Adv4QZ48tdhK9sIpJdMEcktXpnzlVlry3AXZjEml
+	 jAAxMOVDm/j3KzUGnSnum/SuyyrQvei1HC5OWrdloLWE238vPe9cRkK/CTE1npY54wAOd
+	 fwzhKMA6exBjg9t5wjFF3ZXX6Y7+CV6/iigjgAt9Lkqa7+7nALKK9any3bGTPUCz6DglL
+	 /PgD3YPbi5hs8Idg6zVxQpVitaWbJD7L6Qs3DXAN80m/5XSinnjlF87RbwnMRBfkZdSr8
+	 f/hSmChrEEz591zXrh4gXrYDyrIpo/ZU7lBjmh4I98mLLQSdqhp6eOxEpVKJoCEAP/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=J5xjzEEG;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	dmarc=pass header.from=microchip.com;
+	spf=pass smtp.mailfrom=microchip.com;
+	dkim=pass header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=dJL3S+I7;
+	arc=none smtp.remote-ip=68.232.153.233
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFB5606A322;
-	Tue, 27 Oct 2026 14:36:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CAFB5606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08D4606A323;
+	Tue, 27 Oct 2026 14:39:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D08D4606A323
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=J5xjzEEG
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=DDw7CAOzeMjZ87nEGcA3ulwTRmsKh58E4v2DnTXYC5A=; b=J5xjzEEGoiDDRIjOhbFvPXOve4
-	OnXjrVTV7vyOkmrrB4N6aA8XD50a63Ushxk+3Be3pv9fkwDlpi7H+jAiasxMDfRcmGrUUHqlJl23G
-	uQHbMDYGPG1LOrcUeVBauXpNQLXqzZ9f7zj931x6zOfySUFZ5NCrxHqmMM0tZ9+Kyr0NtTz1pCWMT
-	ZM2B9/7qXSL6emdlc4Bv4s5EphfIebkCuwukdNb9U5REr4Zr7UCAN6D3grO6xNhsfwo0ML83i1s5r
-	57XNKpSB6wsndrmbJoHr/QhilfWFhdVUOXzi1/jbBbyyqjxvQv8k46mpxhEybCaygasr4kQOwQOML
-	CSvCIOoA==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xLiIA-00016k-0r;
-	Tue, 27 Oct 2026 15:36:46 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xLiI9-000Omo-0U;
-	Tue, 27 Oct 2026 15:36:45 +0100
-Message-ID: <96db3a96-0fa2-45e1-a981-ed377e5b21b1@iogearbox.net>
-Date: Tue, 27 Oct 2026 15:36:44 +0100
+	dkim=pass (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=dJL3S+I7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1793111970; x=1824647970;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=45CVcKvk/hupgpg0LhGsE87Hx7VpgL7A/4GQdvlKUVk=;
+  b=dJL3S+I7eicpAf3uNE4/IUIzoJXs6Y/9GawFTWOp+v9/DzuoO71cZj/d
+   o8fIpQ1AEH7YDQx/s4/vJV3JQoYbKOTO5xQeDrtccaeLTrX0KfG21gxfg
+   JpRt+9SaQ9P21dUIxviRTa0K9eQFCtMyCEens1XrrC91Y658BXAAAjDvd
+   R0i/2eL0etbUnBSZwcy5nDb2I7VFowyUUwPQeNQIXLuHUXEnv4oNkd7I5
+   9QBLdw52gXFPzTb9GIw6dD0FlNT1LDw8kos0W94ZbFsnUvKH2w/TjG/1T
+   XEuqe0nkIHYGglucN5vUM7Gwq6RM4XX5gaqRcQSvuJIbAvDZ9ZZop0/pD
+   g==;
+X-CSE-ConnectionGUID: MIk20CbjS9SN3RF5nH3gUw==
+X-CSE-MsgGUID: M6K2zDiKRoWUPNn9JG5Jlg==
+X-IronPort-AV: E=Sophos;i="6.27,181,1787036400"; 
+   d="scan'208";a="65617921"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2026 07:39:23 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.56; Tue, 27 Oct 2026 07:39:21 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Tue, 27 Oct 2026 07:39:19 -0700
+Date: Tue, 27 Oct 2026 15:39:18 +0100
+From: Daniel Machon <daniel.machon@microchip.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <horatiu.vultur@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@kernel.org>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <hawk@kernel.org>, <john.fastabend@gmail.com>,
+	<sdf@fomichev.me>, <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net] net: lan966x: don't disable hardirqs in fdma tx
+ clear path
+Message-ID: <20261027143918.zdn3brvcco22ehj7@DEN-DL-M70577.microsemi.net>
+References: <20261026-lan966x-fdma-tx-clear-hardirq-v1-1-5f70f026a2e4@microchip.com>
+ <179310888885.3134.1983716616405342216@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -68,89 +84,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] ns: fixes for the namespace LSM hooks
-To: Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
- netdev@vger.kernel.org, stable@kernel.org
-References: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
- <CAHC9VhR4rMydWiD-RFv-ABiYSG_txJuyrtdaowEXPY=CHEvFXA@mail.gmail.com>
- <20261027-heckklappe-halbmarathon-vorsorgen-849ffdc42aac@brauner>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-In-Reply-To: <20261027-heckklappe-halbmarathon-vorsorgen-849ffdc42aac@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28166/Tue Oct 27 07:24:12 2026)
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179310888885.3134.1983716616405342216@kernel.org>
 
-On 10/27/26 10:24 AM, Christian Brauner wrote:
-> On Mon, Oct 26, 2026 at 04:31:25PM -0400, Paul Moore wrote:
->>  From what I'm reading the LSM framework patches don't meet the typical
->> LSM criteria for stable/RC fixes: there is no serious bug/panic, and
->> there is no functional regression from a previous release.
->> This looks like one of those unfortunate circumstances where a new use
->> case wasn't tested thoroughly enough before the merge window, so it
->> can wait for the next one.
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider.
 > 
-> My original patchset had a selftest that excercised the BPF LSM usability
-> extensively. The hooks are new this cycle and broken for the main use-case I
-> wrote the patchset for.
+> Critical: 0 � High: 1 � Medium: 0 � Low: 0
 > 
-> If we don't fix them now they need to be backported next cycle which I'm sure
-> the stable developers will enjoy.
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
 > 
-> Curiously, your pull request told Linus "I expect that BPF LSM developers will
-> also be making use of the namespace hooks, if they haven't already". So it
-> seems very strange to claim this as a new use-case.
+> - [High] The patch only fixes the normal NAPI case.
 > 
->>From my perspective the timeline looks like this - I'm sure yours differs:
+> --
 > 
->    I wrote an implementation for the BPF LSM to use a set of new hooks in a
->    subsystem I maintain months ago.
+> net: lan966x: don't disable hardirqs in fdma tx clear path
 > 
->    You rejected the hooks because BPF LSM programs cannot serve as justification
->    to introduce new hooks. Only in-tree LSM (selinux, apparmor, landlock, etc) can.
+> This patch changes lan966x_fdma_tx_clear_buf() to take tx_lock with a
+> plain spin_lock() instead of spin_lock_irqsave(). The aim is to stop
+> freeing page_pool backed buffers with hardirqs disabled. That currently
+> triggers the lockdep_assert_no_hardirq() warning in
+> __page_pool_put_page().
 > 
->    I cannot fulfill this requirement because I neither have the expertise nor
->    the use-case for any in-tree LSMs.
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > index a7940eca5df31..a92bd0590b460 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > @@ -336,14 +336,13 @@ static void lan966x_fdma_tx_clear_buf(struct lan966x *lan966x, int weight)
 > 
->    Landlock wants to make use of this by pure chance. So the maintainer offers
->    to take over the patchset. He does.
+> [ ... ]
 > 
-> End result after more than two kernel releases: The patchset that ends up
-> merged into upstream doesn't work with the original motivating use-case because
-> all the BPF LSM bits got dropped. So far, no problem. That may happen as long
-> as we can the fix it rapidly.
+> >       xdp_frame_bulk_init(&bq);
+> >
+> > -     spin_lock_irqsave(&lan966x->tx_lock, flags);
+> > +     spin_lock(&lan966x->tx_lock);
 > 
-> Then I take the time to send this series of fixes to actually restore the
-> original use-case so we don't release a kernel with a new api that doesn't work
-> for the main use-case I developed this for.
+> [Severity: High]
+> Does this cover the netpoll case? The commit message says:
 > 
-> Once again, I get told no. This time because the functionality isn't broken the
-> right way to justify a merge-window follow-up. Instead, we'll release
-> half-working functionality.
+>   tx_clear_buf() runs from the NAPI poll, so disabling hardirqs there is
+>   not needed.
 > 
-> I'm really on the fringes of this endless debacle but this seems to be another
-> iteration of "BPF people don't get along with LSM people" therefore they make
-> each other's lifes and that of innocent bystanders that just want to get work
-> done difficult.
+> However, netpoll can call the NAPI poll with budget 0 after the caller
+> has already disabled hardirqs:
 > 
-> I really don't understand why it's preferable to release a kernel where the
-> original use-case that I was forced to explicitly abandon doesn't work and
-> there's no reliable or cost-efficient way for userspace to detect whether the
-> hook works correctly.
+> netpoll_send_skb()
+>   local_irq_save(flags)
+>   __netpoll_send_skb()
+>     netpoll_poll_dev()
+>       poll_napi()
+>         poll_one_napi()
+>           napi->poll(napi, 0)
+>             lan966x_fdma_napi_poll(weight == 0)
+>               lan966x_fdma_tx_clear_buf(lan966x, 0)
+> 
+> lan966x_fdma_napi_poll() calls lan966x_fdma_tx_clear_buf() whatever the
+> weight is. tx_clear_buf() then does the XDP and page pool frees without
+> checking weight:
+> 
+>                         if (dcb_buf->xdp_ndo)
+>                                 xdp_return_frame_bulk(dcb_buf->data.xdpf, &bq);
+>                         else
+>                                 page_pool_recycle_direct(rx->page_pool,
+>                                                          dcb_buf->data.page);
+>         ...
+>         xdp_flush_frame_bulk(&bq);
+> 
+> Consider netconsole on the port that owns the FDMA NAPI (fdma_ndev, which
+> does not set IFF_DISABLE_NETPOLL), with completed XDP_TX or ndo_xdp_xmit
+> frames in the TX ring. In that case, won't page_pool_recycle_direct() and
+> xdp_flush_frame_bulk() still hit lockdep_assert_no_hardirq() in
+> __page_pool_put_page()?
 
-:(
+This patch fixes the normal NAPI path, where the driver itself disabled
+hardirqs around the frees. Fixing the netpoll case would be checking the budget,
+which seems to be unrelated to this fix.
 
-+1, strong preference to ship the 8 patches as PR given merge win is open as well
-right now and to avoid painful probing complexity in user space. Patches look
-reasonable to me, and I gave them a spin locally as well as we need these too.
-Feel free to also add for bpf side:
-
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Tested-by: Daniel Borkmann <daniel@iogearbox.net>
+> The bulk path always goes through page_pool_recycle_ring_bulk(). The
+> direct path does too once the alloc cache is full. That function takes
+> the producer lock with spin_lock_bh(), and netpoll from process context
+> is not in softirq.
+> 
+> Can spin_unlock_bh() then run __local_bh_enable_ip() with IRQs disabled?
+> That could run pending softirqs or turn IRQs back on inside netpoll's
+> local_irq_save() section.
+> 
+> Documentation/networking/napi.rst says:
+> 
+>   skb Tx processing should happen regardless of the budget, but if
+>   the argument is 0 driver cannot call any XDP (or page pool) APIs.
+> 
+> The skb branch looks fine, because napi_consume_skb(skb, 0) falls back to
+> dev_consume_skb_any(). Could the XDP and page pool part of TX completion
+> be skipped when weight is 0, as other page_pool drivers do?
+> 
+> The missing budget check is older than this patch. Even so, it means the
+> warning this patch is meant to fix can still be triggered from
+> lan966x_fdma_tx_clear_buf().
+> 
+> [ ... ]
+> 
+> --
+> Sashiko AI review � https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20261026-lan966x-fdma-tx-clear-hardirq-v1-1-5f70f026a2e4%40microchip.com
