@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793129069;
-	b=Fqxj8N/1xI4+E0GRmcp+WgSnmPHvdKJ4Vyqknz41Mfv9r3uxGbPmTHiaufB/G4/4eRLN
-	 LboHU8jB/BJ4BOxn9KrYOrHJac7RUysFThmgafo5vXSfHu4fQg0KPrfiyY9WyIdBNpXYk
-	 PQs1WrKmiIn5icCE22CoDK93WFJy0EqTH/zzcYRpGl4o5WvCsdfXO+SaBzyb6Ywd5IF1l
-	 EE83ITrt1+hJjjP/bAm6xMpgLS5Tw30wPW+W9+hRrkGOgSxuq8+BU92EoGSNjxhyr4hzH
-	 IhmT41hP1UEbPR6rfgR3IQIM1FywNR74YhePQ33RT/wZ5hRgUd1mUIfnZQ3iGS4SLvw==
+	t=1793129073;
+	b=SDaTTgwUnp4CEFsHfpto7luXzh7A4BHyErihyc5RH7b6gQtMW4jekwSHDC+OvKwh0xon
+	 U5WV+8aP+JRMTVX+GuYxrMnHqSWZPp39DOcSito1RIJqWzmXzc1aw2x23X187fPHkVL/M
+	 1E3QK3Z+9Te8wpN97Pthn/eVrG8BEZiVLn+NtcKUWWF2Dsek/WTnhe5mMKB3VkGzWwaVf
+	 z08HFejXzJwDB4ESai0Pt3jWMmaSxIANOAWTNO0FY+387H/BVAPKFDFV1ZNtVC3KaQLZw
+	 JZA/5dWouUSLPXMG7DLmhLu0mR6dDCET9BpP4Y2XYqp3d97sgSXUNEG4WyaVVF1dO2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793129069;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793129073;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=lmNt8UHMJZ1LwZOmio/ru6CKGlng7+kmKVOojz71M+A=;
-	b=Och2K6Tmw0hj5248WVPg1tolT68IJwenYk5BjwWStxwMfOPLPvJK18rxGykY9zgfaD15
-	 qTpoad6YqJdikFHUQ0e8KhrrfOIodsfbMAPDrWt0axwWhTQHaf9jyD7CnJ0ru7M2SrxAl
-	 hCD4ldhsJ791lbAsQcgX07VTRvOf5AAK6Dn9MpxrGR2d56dv0+uQcimCaNH0P09zeEzv+
-	 nBNd2ozli1+sqkFnrDX+THUaeHO0/yhBl47zJGlbaM+h1qd/LilNWlfEa1cPKOKbFzcnH
-	 LOk130QJK74OxxrBSmwtgbz3lE+sryInBc0J7iqux4wRyULQhIGml4N/9fAjKUGWV5A==
+	bh=dxcXCNo+EN7f+kfs6bWcfzAqNhLfnjukyECI0v209bc=;
+	b=agfdm7/dCgE8Ybn5HVf31lDs+BTfQeShnTaSO9FInePmJnAibCDeTwt2TeN40Dxyi2yg
+	 Mr+N7/PNamhtew4GEQwedIlhMrma1kzNL7pntxE7z683q9AhXnLd2k/O2jVbveO5N6nRw
+	 hMi+19wCnyvSlUAXqANqk/JRj5Pgmqp+7GXbvFmYizMN3AaQm6ksomp598JoVQ2ObuXjc
+	 IvjXMTDgS7+4+5yljBOiwHhOezHcy8k0llbU9RleQM7n38btoFt8oK/FBInZ/iojUqiNC
+	 /OMaK6C2REeL9grKT9afA63jJRd3K71DfZ6lUZ/iL1BlDiHPHjhv/o5aNlwNfUMd/zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Sq9DV9HW;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=vtnAo6mW;
+	arc=none smtp.remote-ip=209.85.128.47
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477C4606A327
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:24:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 477C4606A327
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4F3606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:24:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5A4F3606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Sq9DV9HW
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so1790815e9.3
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:24:29 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=vtnAo6mW
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4a5b2be99a8so1826395e9.2
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:24:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1793129067; x=1793733867; darn=vger.kernel.org;
+        d=etsalapatis.com; s=google; t=1793129072; x=1793733872; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lmNt8UHMJZ1LwZOmio/ru6CKGlng7+kmKVOojz71M+A=;
-        b=Sq9DV9HWlxYeRwxRg6lsRdjjUcUmmZPBSNtrkEdTPpxfx4b28MLjk/bgF34+zb5Nrr
-         IbG78hiCO/6Z00oGElUdUe+FGpacX5QsrDbQjmlhOZ1DFB13AyFeBSYkDVr6AqTD0Xqw
-         2utoyID/pUOWc3TKUxBoJiUPFSsSL0Tg5XfclBjxvMmtfdu2PFjXAhlMVBi25z2OCqFy
-         ih4s1MXPjNOvCl5WFe2u9nS2etjc9B32H0HlHZb1rC6YPKw4hnaC/I8kbJBB0Jyvw2jO
-         A5ULEHud5NMl9UBC3p7uov/31xGCa/MYGZaOnGlQQ6umGfM28nMf0Eu6m9i0qwRl7XxP
-         fBgw==
+        bh=dxcXCNo+EN7f+kfs6bWcfzAqNhLfnjukyECI0v209bc=;
+        b=vtnAo6mWSTFcX5YZ+IcCuYPbU9IxPsUaVXlqqafEXH/bgGxD4W7SYCppGG/BEZZh2+
+         QgDO+vgNlVFDu9gvqzXGX9elHWiUPMN4GivTI8I8FpdKQtWixEzumn99LQLa7i9Icyp6
+         a5jUKgoCHlQSM/b310LdDYUoqucMl5yA6zTlz+3qQMj1OwRTkt1WzorSePCnvZUz2Ur0
+         vyhcxjzmCpbouEKepS5XHlfojicv5Utq9Gl+hIORYD9MGwwmnKG2AsBNnMnxUfayAUcF
+         O9VKYlIASjO8YQmbgaRbSadCQJQh0jqJE9TbXVAAw2yuXCfUXiYcST28fl1GBFQoUjXj
+         M8Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793129067; x=1793733867;
+        d=1e100.net; s=20260707; t=1793129072; x=1793733872;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lmNt8UHMJZ1LwZOmio/ru6CKGlng7+kmKVOojz71M+A=;
-        b=V2LkqEgwgYx3lkoiBTF7fRuH3uWkXsZ4di4r2cv1V+T/gzfM9JRB4Ne0fmPIWvEVd1
-         JxH/FdrTthi4pXKPWZyn462PoIuXDKRv6A2l0YnykqsmbBdIpfUqdwk6Cn+/dyFCOQ2C
-         3DrVFbXX5znXRCQCdQH3GzCw+i+vjyS6vcP8VB9T2fORdo9JYEkhBrqpH/zMYU+VagDJ
-         TWs430JWtzPj022V9+NkePjhpsdmsp4ageDAe8dts6elL5H62m63eyPIXQGUlw2er0Ke
-         7Qy4mg9jgvVk1MTeM5gMiy2Y+ayXXKbSAA4iO7lfTZg+Hq7uRIw7UtciZnEDR3OXlLzI
-         6hxw==
-X-Gm-Message-State: AFq9FYIANIM6jvD2sSVoS8lLqVpOzMWGYHRcRmnzNCmPZxPTnsDpjDWz
-	c5RRCrGlSDwZWQA/HGYSajnB/lIn4MSVzmWj/NJwX3EuscoNUh5rf6aK1MngeNHPoPMDEI0rhdz
-	IP43xekIxjg==
-X-Gm-Gg: AYBFou2OvUFP3qH+Q29Ra8a9HravOP98fzBQtvjY+fwSVbAk553NcIyos8I4FAieNQd
-	QRTKszwpZi1YMqQ2ImtCMgzYtqK8Bl2zD+2O0SsMcdVkDQqX8+K0uKc2Z46P19+gmp4MvwXSSqV
-	EO138I1H2ELcUaBU4cZM56VQGU8tZ+tSg79bfDNT3WFmlVy6qcPnJENaeW0/AcWgJH9u0CFcSj8
-	k1uHUwIXm6JFER4fZwFd19b4OmmN5wW5g/8yXHHQEnLFU2RuTjYOAgvCaz945mv1x2CJAuaDntj
-	dt/cQCzhH3wXXY5vpE7h2XOGA6YoEYalvGHeByhRMLOCcqyZbM9QhULa4MdfIv2ATUEcbMpJXkO
-	OHlOTErbN/RA3rg6GZmNNAVK2z8Xo0GDqIMo9j2av9i+AVnWzMaXtG3dylyXPNbWJZjQdQ181Cr
-	zVV+Rpop/G4x1e1DxAiS5mPd+1H/L66C6spqE28iNIBaCbEdV1AzVBJWUT66jq72tGlqRM3MLae
-	O+gxsyfTpGX4Nt7CjGLnSgg9Q0IKJFuxS0mRLNJY5zH
-X-Received: by 2002:a05:600c:c4a7:b0:4a2:1655:87e2 with SMTP id 5b1f17b1804b1-4a35acb2316mr209826035e9.19.1793129067380;
-        Tue, 27 Oct 2026 12:24:27 -0700 (PDT)
+        bh=dxcXCNo+EN7f+kfs6bWcfzAqNhLfnjukyECI0v209bc=;
+        b=oGbDpgIQ9Yg01QeCG+r4LIeltgT1jonqlKY+I062A3hIy0sL6FI9W2VivFuF/jbIMq
+         7EkZ4tXWvFmdRLLJM+luYMux4IJkD/5Qg97Qy34mE13N7W6enqaEo9qxmvCQdX5wwl7m
+         29alE9HTdTRL2XkbItUrTr2YT1crfJ5Ueds0AEKf8G4L3JNBA0DoIiPoe/hr19XXWqrR
+         uU8OtNKpvVjullT1hOH9meFkektcDvWfaf/tNw3odPQ9FRKpo5MsrDkGSwg++SfO4KU+
+         khULf69zaBlcJLNNbGxdCouwX7QdDS4lkeZQZ4FNOFrpp84EW0dTpUnU4EAt5DIuAQ2F
+         Qz2Q==
+X-Gm-Message-State: AFq9FYIjVV/R6+Iuk8iMFsNxrHCoR94Kf1bb5gmHXKOYOE4G8FEN+prT
+	z7pjyJLA+YuCZHxHC2Xc+K6cStA5YHCIkOgwxtI0YFefcjNIiTUvzyffMPs8bPXXetQ0FATkJGp
+	zXPJkTGo8DQ==
+X-Gm-Gg: AYBFou1i8Srgc/nVP3fzf0TXNsxOf++3O53adeeVNUK1X4kJ9m8EcRPzupFGwnDfEY2
+	qaosWipesUxUvSuAWK5NP51Mpj7BrsB4Tw3+7vFa0He8dYFZ8DuzB0O8kiPRVZaTd5jg5svcTxP
+	XI8ehqL7Th085WJQKvlCaEAJ5nzzdHew62TwaTI909XK+IApwRdrq+1vfoCahyce28ir7sD42jI
+	bwNDyxnmKyCL+3f7dLEQvh1ux6zxABRS3UTIVAogUWLMrTVkf92xVUyVien571zbHJDHliAZGFF
+	1KgdONZAPXONKrvv6yiKoh55j+1XglqRUBZVPOGHd9uVBKf6uFrI3di8CR3+MNlwWHyFg8HlLiS
+	3jFvksj9M8upy1a18SRRRH3WCeE7LaDPrsxFFKxfktSqKqwWZtzJt5WoMstG7wMjPm0apzqOFPl
+	b1n5fqIhhsBKB8VjZsHDWROBSuqPb9kOFdUH7F3GRlj2msBUugYfhXQjFepgOzRxcjySsulJLy7
+	Ou1AIUhXUj4gxttme5HXF6xKkw7iQefjjNeGvgpRrBb
+X-Received: by 2002:a05:600c:8591:b0:4a5:26b8:4507 with SMTP id 5b1f17b1804b1-4a526b84dc3mr125885655e9.21.1793129071777;
+        Tue, 27 Oct 2026 12:24:31 -0700 (PDT)
 Received: from alpine05.lan ([2620:10d:c090:600::1:2eb1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a92e103d91sm4721385e9.0.2026.10.27.12.24.23
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a92e103d91sm4721385e9.0.2026.10.27.12.24.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 12:24:25 -0700 (PDT)
+        Tue, 27 Oct 2026 12:24:30 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -85,9 +85,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 2/4] selftests/bpf: libarena: make allocator growth on alloc failure optional
-Date: Tue, 27 Oct 2026 19:24:11 +0000
-Message-ID: <20261027192413.5038-3-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2 3/4] selftests/bpf: libarena: add explicit buddy_grow() call
+Date: Tue, 27 Oct 2026 19:24:12 +0000
+Message-ID: <20261027192413.5038-4-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261027192413.5038-1-emil@etsalapatis.com>
 References: <20261027192413.5038-1-emil@etsalapatis.com>
@@ -102,74 +102,59 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The buddy allocator currently always grows when an allocation fails due
-to a lack of allocated arena pages. This behavior assumes that the user
-sizes the arena to be as large as the maximum allocation size, but that
-is not always the case.
-
-Add a nogrow allocation option for users that want to explicitly control
-the total mapped size of the arena. With this API, an allocation request
-that cannot be serviced from currently mapped arena pages fails instead
-of triggering bpf_arena_alloc_pages(). The user instead explicitly maps
-additional memory into the arena with a separate buddy_grow() call.
+Add an API call for explicitly growing the arena through
+page allocation. Useful for programs that do not do so
+implicitly through buddy_alloc().
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
  .../bpf/libarena/include/libarena/buddy.h     |  1 +
- .../selftests/bpf/libarena/src/buddy.bpf.c    | 20 +++++++++++++++++--
- 2 files changed, 19 insertions(+), 2 deletions(-)
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 26 +++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-index 528c69a1f38e..958450fc5f9d 100644
+index 958450fc5f9d..90674ac077df 100644
 --- a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
 +++ b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
-@@ -77,5 +77,6 @@ int buddy_init(struct buddy __arena *buddy);
- int buddy_destroy(struct buddy __arena *buddy);
+@@ -78,5 +78,6 @@ int buddy_destroy(struct buddy __arena *buddy);
  int buddy_free(struct buddy __arena *buddy, void __arena *free);
  void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size);
-+void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size);
+ void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size);
++int buddy_grow(struct buddy __arena *buddy, size_t nr_chunks);
  
  #endif /* __BPF__  */
 diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-index 552ce87875e3..ed359d4af1f4 100644
+index ed359d4af1f4..d12c8924a0ad 100644
 --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
 +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-@@ -747,8 +747,9 @@ static u64 buddy_alloc_from_new_chunk(struct buddy __arena *buddy, struct buddy_
- 
- 	return (u64)address;
- }
--__weak
--void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
-+
-+static __always_inline
-+void __arena *buddy_alloc_maygrow(struct buddy __arena *buddy, size_t size, bool grow)
- {
- 	void __arena *address = NULL;
- 	struct buddy_chunk __arena *chunk;
-@@ -772,6 +773,9 @@ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
- 	if (address)
- 		goto done;
- 
-+	if (!grow)
-+		return NULL;
-+
- 	/* Get a new chunk. */
- 	chunk = buddy_chunk_get(buddy);
- 	if (chunk)
-@@ -796,6 +800,18 @@ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
- 	return address;
+@@ -812,6 +812,32 @@ void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size)
+ 	return buddy_alloc_maygrow(buddy, size, false);
  }
  
 +__weak
-+void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
++int buddy_grow(struct buddy __arena *buddy, size_t nr_chunks)
 +{
-+	return buddy_alloc_maygrow(buddy, size, true);
-+}
++	struct buddy_chunk __arena *chunk;
++	unsigned long flags;
++	size_t chunk_index;
 +
-+__weak
-+void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size)
-+{
-+	return buddy_alloc_maygrow(buddy, size, false);
++	for (chunk_index = zero; chunk_index < nr_chunks && can_loop; chunk_index++) {
++		chunk = buddy_chunk_get(buddy);
++		if (!chunk)
++			return -ENOMEM;
++
++		if (buddy_lock(buddy, flags)) {
++			bpf_arena_free_pages(&arena, chunk, BUDDY_CHUNK_PAGES);
++			return -ENOMEM;
++		}
++
++		chunk->next = buddy->first_chunk;
++		buddy->first_chunk = chunk;
++
++		buddy_unlock(buddy, flags);
++	}
++
++	return 0;
 +}
 +
  static __always_inline int buddy_free_unlocked(struct buddy __arena *buddy, u64 addr)
