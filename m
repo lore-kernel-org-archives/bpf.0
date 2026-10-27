@@ -1,56 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793117031;
-	b=BjnhJ+kgBtsxKMGq0m/MsiGClp1QLa8+pPQBh/GYHvQr+3GESvUE5a7miFY2TcDzsoq1
-	 YzYsjDOVRSjRdfdJwkb0GX26iYuePtQClUqk7B04Ykp2/YVTD+m/ahhTaCi8NUjJySS9Q
-	 uB6yeDdcLN6UCaB1vab0GR8EvO77YU37Le/4oKU5jTNeeHBMijbX8IY2Y6Zv/F5b4+1rl
-	 XqRnat/j/SXN99el09dSap4VLzWqwh8GYC+1hNIodTCa9G2DJgFFu58Ot3tR71fFS8foi
-	 XCT/O9iBbjC1/r/iPhi7Z3lqxK822mk5N6pJLTontBvciPEKaMr0UbhrLZ4COL5xFLQ==
+	t=1793117307;
+	b=g55nXfqXCXGjlL6YITK19US4XP31MCxAHhet6SoM7OawaH+EDxmLduLt531zCJwd0TCQ
+	 Y+oSbfZkIyhwZ1C9/WhjcCKlkUWSo3+5XYVnM6RXc/FNvhlLudQhCIbQadivvAyzs/aRF
+	 2MKFEnndj/67KamLsF/VHjPAcXJDcfJ4zIGPXpL4YkBQi03rEru1/n8/6wfPNNoUDtYs/
+	 mrsa4Dw+ycwv0LzzPJ88oE42tB2uPUKRT4R3ye8vX4F+eoSf6BOXff+cfqRBQNiyV606s
+	 +OhXJpjA5alu0Pn5fCWYnNJvZ0fGawTI4I/3rJSMmY8jaSkMAMmdm7bk74WEpFx2XJg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793117031;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=k9o3Q/4W9c8yfnPaVLDdH/jZEfeF6/ERdOdIStNDpqU=;
-	b=aOm1mi7PTRAMOXA89IJmqWCZBq6OvBPcvbA+TnGjWxOqzSnkonQlww2QZBUJWojda1Kw
-	 FnzvCbDrh/0VZX3qtDwKpV60qBTRfnaD9q+YqAAsuyl050GV6zeS0rwm9sw10B8J35GwZ
-	 c8hxJlqbh0eWGmoI6VrqURKeoriGWULCmzGzssHHgZNLoofjU4082OlqJbOhe2U3rqzuK
-	 M2EFz7PBdWa1KOpNLZDzl7TVpuvxUeyAmmaJSLa8/vc9JyfmCm05Zh6uuB08imWpu8myN
-	 Olne4gL/vCN79SR29iKdc0zzh290zVa3pWEi329gUlx0D3m3Lg+IUpI4aAfqYpdR6SQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793117307;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=4MX40vMMhwSIHoMJnZpT+uK1BwJ4FDZXqJbJwtrNmj0=;
+	b=BMA49qimvqKIDeMKBVm/cn1xwfPca80zGKBRlSeD5SYbOjVW0dvc/oNwoAWMyg/gSfPc
+	 4G+yMiUxfQUQYYsh7H3mu9v2g8UH8+1i6zDttlBmPdFlN9+6qLJrMaEghe5xspL/yP9dP
+	 ct+EjaV+bTeDNH43bY9UUng5/NexaQECgctrOJ15PCHMZArgX7kugorUp4//jyR6cWqeY
+	 wgZZRYwNKPhLNPdFi4z/Tkhgq5lu0QFK8F2oVDtxziVgnt0YqZdQI4AnYh7fAtW8brD0z
+	 bPFtCwT5FzgzGSM6cTQ4/Ns1+cvsdiSsChA/R5Na8T7RB3rDTtWxxy5yyIJgHHXJZsA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MEZn7Qt5;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bJOQ4Ie7;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738B5606A32C
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6FA606A31A;
+	Tue, 27 Oct 2026 16:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=MEZn7Qt5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED671F01825;
-	Tue, 27 Oct 2026 16:03:51 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=bJOQ4Ie7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7811F01825;
+	Tue, 27 Oct 2026 16:08:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793117031;
-	bh=k9o3Q/4W9c8yfnPaVLDdH/jZEfeF6/ERdOdIStNDpqU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MEZn7Qt5kmNnONroexhO48MrBw/rEZQd2TrhwljqHv8TuKLMRJj9lkEzZDAldK0N9
-	 oA4TjkrfOsyMtgkp3bpGzd4c2XOfRyCFvooD1K0p8CExQegKQxMC4eXuuYBvlIjVxW
-	 Xd4lESOQ6rfWT2w5qVPwW+vJ3r10tgeUvy+LBY67nmCNkKjSE+qFfdLyPYh5rQyrbo
-	 hAxVsAtLbmbGbN2nZv44Xbq7w69S8gVPGU6WUQ/ob+QscjFMRrSUKL8VN00hanlUpR
-	 n3P021Jb/Uuny8trSWlxKjF0QNI8VJzLEK6sbt1Nf3PLqN7GRVDwdzL8YLfenCVOyW
-	 qpJtLm52zXFuw==
-Message-ID: <sashiko-outbox-186872@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] bpf: fix out-of-bounds frame access for async
- callback stack args
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Henry Martin" <bsdhenrymartin@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261027154553.1043567-1-bsdhenrymartin@gmail.com>
-References: <20261027154553.1043567-1-bsdhenrymartin@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 Oct 2026 16:03:50 +0000
+	s=k20260515; t=1793117306;
+	bh=4MX40vMMhwSIHoMJnZpT+uK1BwJ4FDZXqJbJwtrNmj0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=bJOQ4Ie75jztOfmmLJtR3Zr7sfWZTccT4f3F6H7QMypZ/Ed5q0hF2WzJZgNabVjGZ
+	 eDHxKLaQa4cCxSJN6CnJSwmQtAYe+YAROMgsCX5hyWKDGfet1YRv7o/PcbziDuyzy4
+	 o1LuIUObpKr2q2h4qYW486ZcsECR/lMVXBRXl4AC/WTJ+EuB+ZGShnTBBtdWcpsSgT
+	 K6WogJB4fsz5WN81jPNmqGkLNRXj57jMdCk07RN/yTaZDfg61LcTJ5HmnkdoZZt69C
+	 ZUsleMbuBFv5/0hDPpnXE7Fyruczg4OfN73Vp44wrr6l0FvbNLECErGsgO6JzYFjug
+	 oVRFOeN+MdolA==
+Date: Tue, 27 Oct 2026 16:08:17 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, oleg@redhat.com, peterz@infradead.org, 
+	mhiramat@kernel.org, jolsa@kernel.org, akpm@linux-foundation.org, liam@infradead.org, 
+	surenb@google.com, david@kernel.org, vbabka@kernel.org, jannh@google.com, 
+	hughd@google.com, kees@kernel.org, mingo@redhat.com, tglx@kernel.org, 
+	x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 7/9] fork: Let the new task point to its mm
+ before uprobes can find it
+Message-ID: <auDGKwWWNuhuB3IE@gremlin>
+References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
+ <20261022015712.1297331-8-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,133 +62,180 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261022015712.1297331-8-alexei.starovoitov@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: NULL or OOB read of stack_arg_regs in check_stack_arg_read()
---
+On Thu, Oct 22, 2026 at 01:57:10AM +0000, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> uprobe_perf_filter() compares event->hw.target->mm with mm. The target of
+> an inherited event is the new task. copy_mm() sets tsk->mm after dup_mm()
+> returned, but register_for_each_vma() can find the new mm as soon as
+> dup_mmap() releases dup_mmap_sem. No task points to this mm yet, so
+> the filter says that nobody wants it.
+>
+> The walk that removes the breakpoint, because another consumer of the same
+> uprobe goes away, sees !filter_chain() and removes it from the child.
+> Nobody installs it again, and the inherited event doesn't see this child.
+>
+> It's an old bug with a short window. The previous patch releases
+> dup_mmap_sem before dup_userfaultfd_complete(), so with UFFD_EVENT_FORK
+> the window is as long as the monitor likes.
+>
+> Set tsk->mm at the end of dup_mmap() before it releases dup_mmap_sem.
+> Not earlier. The new task can be reached via its perf events and from bpf
+> progs. They shouldn't find mm that is half copied. Clear tsk->mm when
+> dup_mm() fails after dup_mmap(). Do both under task_lock() like exec_mmap()
+> and exit_mm().
+>
+> The tasks with such event fork, while another consumer of the same uprobe
+> comes and goes. 5 cpu VM, 90 sec and 7000 children per run. The number of
+> children that the inherited event didn't see:
+>
+>   without this series          11 to 24, 8 runs
+>   patches 1, 2, 5, 6 only      23, 12, 21
+>   this series                  0, 0, 0
+>
+> With UFFD_EVENT_FORK monitor that reads the event after 5 sec the child
+> lost the breakpoint in 5 of 5 runs without this patch, and in 0 of 5 with.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-commit 8bf4e754c411e80ff88d77c6c807380a3c5428eb
-Author: Henry Martin <bsdhenrymartin@gmail.com>
+This feels like a 'fix in the wrong place' thing again really.
 
-bpf: fix out-of-bounds frame access for async callback stack args
+What would a fix in uprobe code look like?
 
-This commit rejects r11-based incoming stack argument loads in
-check_stack_arg_read() when the current frame has curframe =3D=3D 0 or
-state->in_callback_fn set. This prevents async and synchronous callback
-frames from reading unvalidated or out-of-bounds caller frame and stack
-argument state.
+I don't love that core mm fork code is being changed to address uprobe
+problems in general.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5601d20562186..c02776c396bc2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -4653,6 +4653,11 @@ static int check_stack_arg_read(struct bpf_verifie=
-r_env *env, struct bpf_func_st
->  		return -EACCES;
->  	}
-> =20
-> +	if (vstate->curframe =3D=3D 0 || state->in_callback_fn) {
-> +		verbose(env, "stack arg read from a callback frame\n");
-> +		return -EINVAL;
+> ---
+>  kernel/fork.c |  9 ++++++++-
+>  mm/internal.h |  3 ++-
+>  mm/mmap.c     | 14 +++++++++++++-
+>  mm/nommu.c    |  3 ++-
+>  4 files changed, 25 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 8fd6be932afe..5a2f571b64b7 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -1539,7 +1539,7 @@ static struct mm_struct *dup_mm(struct task_struct *tsk,
+>  	if (!mm_init(mm, tsk))
+>  		goto fail_nomem;
+>
+> -	err = dup_mmap(mm, oldmm);
+> +	err = dup_mmap(tsk, mm, oldmm);
+>  	if (err)
+>  		goto free_pt;
+>
+> @@ -1552,6 +1552,13 @@ static struct mm_struct *dup_mm(struct task_struct *tsk,
+>  	return mm;
+>
+>  free_pt:
+> +	/*
+> +	 * dup_mmap() has set it if it succeeded. get_task_mm() must not find
+> +	 * it after the mmput() below.
+> +	 */
+> +	task_lock(tsk);
+> +	tsk->mm = NULL;
+> +	task_unlock(tsk);
+
+It's not great to straddle some task stuff here, and some in
+dup_mmap(). Could it all just live in copy_mm(), where other task stuff is
+done?
+
+It seems like changes you did in the previous patch dictate a move here,
+but the fix that David mentions moves the mmap lock back to dup_mm() anyway
+so a rework should hopefully avoid all that :)
+
+>  	/* don't put binfmt in mmput, we haven't got module yet */
+>  	mm->binfmt = NULL;
+>  	mm_init_owner(mm, NULL);
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 9e3be236f18c..70e40306d881 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -1520,7 +1520,8 @@ int walk_page_range_debug(struct mm_struct *mm, unsigned long start,
+>  			  pgd_t *pgd, void *private);
+>
+>  void dup_mm_exe_file(struct mm_struct *mm, struct mm_struct *oldmm);
+> -int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm);
+> +int dup_mmap(struct task_struct *tsk, struct mm_struct *mm,
+> +	     struct mm_struct *oldmm);
+>
+>  int remap_pfn_range_prepare(struct vm_area_desc *desc);
+>  int remap_pfn_range_complete(struct vm_area_struct *vma,
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 6ce654e33e3b..3167272a77ad 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -46,6 +46,7 @@
+>  #include <linux/pkeys.h>
+>  #include <linux/oom.h>
+>  #include <linux/sched/mm.h>
+> +#include <linux/sched/task.h>
+>  #include <linux/ksm.h>
+>  #include <linux/memfd.h>
+>
+> @@ -1705,7 +1706,8 @@ bool mmap_read_lock_maybe_expand(struct mm_struct *mm,
+>  	return true;
+>  }
+>
+> -__latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+> +__latent_entropy int dup_mmap(struct task_struct *tsk, struct mm_struct *mm,
+> +			      struct mm_struct *oldmm)
+>  {
+>  	struct vm_area_struct *mpnt, *tmp;
+>  	int retval;
+> @@ -1897,6 +1899,16 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+>  	mmap_write_unlock(mm);
+>  	flush_tlb_mm(oldmm);
+>  	mmap_write_unlock(oldmm);
+> +	if (!retval) {
+> +		/*
+> +		 * As soon as dup_mmap_sem is released uprobes can find mm via
+> +		 * the rmap tree and ask the consumers if they want it. The
+> +		 * filter of an inherited perf event looks for mm in tsk->mm.
+> +		 */
+> +		task_lock(tsk);
+> +		tsk->mm = mm;
+> +		task_unlock(tsk);
 > +	}
-> +
->  	caller =3D vstate->frame[vstate->curframe - 1];
->  	arg =3D &caller->stack_arg_regs[spi];
->  	cur =3D vstate->frame[vstate->curframe];
 
-[Severity: High]
-Can check_stack_arg_read() in kernel/bpf/verifier.c still dereference a NULL
-or out-of-bounds caller->stack_arg_regs[spi] (or copy an invalidated NOT_IN=
-IT
-slot) during a non-callback static subprogram call?
+Yeah this isn't lovely, it feels like you're having mm logic handle
+uprobe's problems. I don't like the idea of changing the signature here and
+having core mm deal with the task stuff like this, and now it's being
+fiddled with over 3 separate functions.
 
-For static subprograms, both check_func_call() and check_func_callx() ignore
-all errors from btf_check_subprog_call() except -EFAULT and proceed into
-check_static_func_call() with vstate->curframe >=3D 1 and
-state->in_callback_fn =3D=3D false:
+You should be doing this in the more generic fork code.
 
-kernel/bpf/verifier.c:check_func_call() {
-	...
-	caller =3D state->frame[state->curframe];
-	err =3D btf_check_subprog_call(env, subprog);
-	if (err =3D=3D -EFAULT)
-		return err;
-	...
-}
+Or, ideally, if you could find a solution that doesn't involve changing
+core fork code but rather modified uprobe to stop making what are,
+currently, seemingly broken or at least sub-optimal assumptions that'd be a
+lot better!
 
-kernel/bpf/verifier.c:check_func_callx() {
-	...
-	subprog =3D reg->subprogno;
-	err =3D btf_check_subprog_call(env, subprog);
-	if (err =3D=3D -EFAULT)
-		return err;
+>  	uprobe_end_dup_mmap();
+>  	if (!retval)
+>  		dup_userfaultfd_complete(&uf);
+> diff --git a/mm/nommu.c b/mm/nommu.c
+> index 68b05565e15a..7529e03d3f2c 100644
+> --- a/mm/nommu.c
+> +++ b/mm/nommu.c
+> @@ -1885,7 +1885,8 @@ static int __meminit init_admin_reserve(void)
+>  }
+>  subsys_initcall(init_admin_reserve);
+>
+> -int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+> +int dup_mmap(struct task_struct *tsk, struct mm_struct *mm,
+> +	     struct mm_struct *oldmm)
+>  {
+>  	mmap_write_lock(oldmm);
+>  	dup_mm_exe_file(mm, oldmm);
+> --
+> 2.55.0
+>
 
-	err =3D record_callx_edge(env, caller->subprogno, subprog);
-	if (err)
-		return err;
-
-	return check_static_func_call(env, subprog, insn_idx);
-}
-
-When a static subprogram has more than five BTF argument slots
-(sub->arg_slot_cnt > MAX_BPF_FUNC_REG_ARGS, so bpf_in_stack_arg_cnt(subprog)
-is non-zero), btf_check_subprog_call() can return -EINVAL before
-check_func_args() -> check_outgoing_stack_args() validates and prepares
-caller->stack_arg_regs in two ways:
-
-1. In btf_check_func_arg_match(), after btf_prepare_func_args() succeeds and
-populates sub->arg_slot_cnt and sub->stack_arg_cnt, if any register in
-caller->regs[BPF_REG_1 .. BPF_REG_5] has type =3D=3D NOT_INIT, it returns
--EINVAL before calling check_func_args():
-
-kernel/bpf/verifier.c:btf_check_func_arg_match() {
-	...
-	if (!bpf_subprog_is_global(env, subprog)) {
-		for (i =3D 0; i < min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS); i=
-++)
-			if (caller->regs[BPF_REG_1 + i].type =3D=3D NOT_INIT)
-				return -EINVAL;
-	}
-	return check_func_args(env, &meta, env->insn_idx);
-}
-
-2. In btf_check_subprog_call(), once
-prog->aux->func_info_aux[subprog].unreliable is set to true by an earlier
-call or callback registration that failed BTF validation, any subsequent ca=
-ll
-to that static subprogram returns -EINVAL immediately without calling
-btf_check_func_arg_match() or check_outgoing_stack_args():
-
-kernel/bpf/verifier.c:btf_check_subprog_call() {
-	...
-	if (prog->aux->func_info_aux[subprog].unreliable)
-		return -EINVAL;
-
-	err =3D btf_check_func_arg_match(env, subprog, btf);
-	if (err)
-		prog->aux->func_info_aux[subprog].unreliable =3D true;
-	return err;
-}
-
-When that static subprogram then executes an r11-based incoming stack
-argument load, check_stack_arg_read() passes the spi + 1 <=3D
-bpf_in_stack_arg_cnt(subprog) bound check and the new curframe =3D=3D 0 ||
-state->in_callback_fn check, and then reads caller->stack_arg_regs[spi].
-
-If the caller never allocated stack_arg_regs (caller->out_stack_arg_cnt =3D=
-=3D 0),
-this dereferences NULL; if caller->out_stack_arg_cnt <=3D spi, it reads past
-the end of caller->stack_arg_regs; and if a prior call left invalidated slo=
-ts
-behind, it copies a NOT_INIT register state into cur->regs[dst_regno].
-
-Should check_stack_arg_read() also verify that spi < caller->out_stack_arg_=
-cnt
-and that caller->stack_arg_regs[spi].type !=3D NOT_INIT (or reject the call
-when btf_check_subprog_call() fails for a subprogram with incoming stack
-arguments)?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027154553.1043=
-567-1-bsdhenrymartin@gmail.com?part=3D1
+--
+Cheers, Lorenzo
