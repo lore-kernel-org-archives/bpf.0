@@ -1,92 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793127902;
-	b=xxNJwQ1OmsyiShD7KueCbjzDEAiX2gfwdQfCQW06WYyt0UgY1fabgqvTKw7Q+4L5uTDE
-	 G/bxonKNJHM6FaVZFRIryvpOaTHOlP1aFj2oxVD1KkCo9ZYyql0kSwmABstjV+UEK/AtM
-	 mh/Bq9T6gLYi5qFJG9mL8+GJDsIeHZEP2hCPra9E/u22Lf7ijT8zx5R35D3hyu58Ov6HC
-	 WPEE5Ua1sA/0kZdnP4wPY60StrlMDY7O0lybeOCFIav9IGPRtO93/+JbrFyxsDW/J+eL2
-	 j7aDVDsu+3MUKWd5DD5PYDMqmXBGIPYAwoYTBKjk7sjdsbYnhL60tNNlgyt6biKaxKA==
+	t=1793127908;
+	b=RQStcfK72dim1hKwG7lmAeTPMBdOHt0AXzickPhe5Xo1WiKHbZBKSEBLcHF1FRDpLBGr
+	 iP9RMJjhqPqIaKa/3dNdpj05OXGHxMLWuyHkolPykeAZv1LdbYiuteIMt4nRRJ/fm7vQT
+	 G/JQ6QE7mw5bS1rNTGh/Stir7oHkN0fdWB//yjlvGkb8u11bbKZT8w5IVICdBZbm/egp9
+	 jT48N4QBjyI+Y5IHBuqu6KzQqBYHcmmQLWTr1uCnKSHym63ZDoMZmNRO6taBTZMxECvQ0
+	 jvuHV7mw8YFRXwbApO0lxOzOwfCgvemzzGH0Cm6UXTU4M3rpt8jabY5Ep7vh8X/VDdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793127902;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793127908;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=HOIXMbvjJxbq5fr3ZqHAGVJMwiVhcUsRrmzmhT/uR4U=;
-	b=L/52KLy4OxS3LQ0kfB2PXmJl4lLLR9q/xehOFyCA7fVu1cfFYI/FQG2u8n2pssvxXWmX
-	 G9q6JgceuyCk0he4wJDzCh8DilRqWUUrecraaR7taOdyVHktX+2tazrROrLOgkFudpi26
-	 yU3NVtqhKBb6ZgYP0HUIaMspOHgH7xa6f++C8m0DGZmNGhkxVsPQ6VBinO5+Axf2fYuJT
-	 zrYrn0MP8HYr3u8HvvHgpcFZZJd/XJgjkbEHYvmOk7pfCafWRzdl/vvvmqggN1YL/9xLM
-	 mY4Kl4xboOVH+H9ORoAv0KjEWuv/1fMGTsnJwcoImjZ5c4F/W7i2QbUf0zE0OslRYNw==
+	bh=EF+co8JQJPRkhDw/kZagI7FEhfUNsm5toRJ6sjR203I=;
+	b=xwDzoURp3Kffzt679fUDmf+fx/41wVepmfaj40QuR4NIA9GtVgJpGEmA0oPHGBratD2d
+	 ru0Ypn44FiU3n2udtoJovYXpCapAf9HyK++zjRg9CWpXoxxLeBRc9duYCxDbJ8yhEK+gK
+	 /9Ui6goVSF5hoGKqCIg7b/PcNlQKQQYbjdeV6CEXLDC7rfxG1cNkx4836ezSV4JZkDobA
+	 dd66SfdRrWD8lRqYrg3Vhrh/edIg/YbmgOtEa6Ox3/IKTRwJvrN0j4mSDYjd4Kfe++d6y
+	 7PECkPnuwPbnrn+4O1Odx24RGPOEbjQdTYNrGXSjLtT6/cC+W/tkXo6ia2eNX0J5lRg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MP62x5JE;
-	arc=none smtp.remote-ip=209.85.216.52
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="IncxEk/0";
+	arc=none smtp.remote-ip=209.85.216.53
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86091606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:05:02 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86091606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46920606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:05:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46920606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=MP62x5JE
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so181902a91.1
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:05:02 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IncxEk/0
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3ac7c7b3a90so114752a91.3
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:05:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793127902; x=1793732702; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793127908; x=1793732708; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HOIXMbvjJxbq5fr3ZqHAGVJMwiVhcUsRrmzmhT/uR4U=;
-        b=MP62x5JEt77iE3y55L9Z4rSBdYLr3dRQXdu9GciO0ddOwziQY1OabwvUqAE25gI0GK
-         +2zlq9cShTgPkQf0qi1s67umPsWD4RZng7XEqyg9HiL9aWiAhDNEt32dt5i3HzHK6y4Q
-         fIRWqQkvwBSxNt6uHaMj7xiZTycHPSYX6C8QqChwQ4YwanVxw4RNxfeSEJbNe3/sMPHh
-         VjtCiVMIxcJLvp4PvngE1qMXit7g0vsjtYjJXE1vMX9sbMP/tJ9ZAuRpKuigPaFl6uhz
-         5OoCNMYHwPeTQtnDNbk4qd2AFwJteykwvFEcbYU7+z+gmma3UDsX1CiTR+4x3Sm7x6Ha
-         qndw==
+        bh=EF+co8JQJPRkhDw/kZagI7FEhfUNsm5toRJ6sjR203I=;
+        b=IncxEk/063dq/wJCFU+taFbbcxKYDjjTJnBS28F4jleWGuZuk/sYafUEq/JmuoIHR/
+         JFzZ7Qr5n1WZaO7LXPylB035sONPTXcvT/OxPXUnaghEYxQw8SwTos0eUMOpbBiYK+oz
+         UeIbjIW/hyLhTLu9IyWB7o4F9oJNh/dvPpoC/QIadH0AFFRW/CzA2nB+oN0g1LlL/fpr
+         dwlgB4rYKx7QKJAYNUs0NJKB7lkfgcNb+vGGSxtRaGoK/3jvJN6xOxPG0G0bRGFazlIc
+         k95UK464LKwfBPRdNkFt0BZ87KG1+ZAe8fPPIKxcXB629HB29CKrarqv1uljwAYPOMhg
+         gY/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793127902; x=1793732702;
+        d=1e100.net; s=20260707; t=1793127908; x=1793732708;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HOIXMbvjJxbq5fr3ZqHAGVJMwiVhcUsRrmzmhT/uR4U=;
-        b=joVBFZ8waeKb1/OmTdnjzuW4OjZaotjbLUyv5ZWnrPp/oLbMix/yPR/b3w5TwP73N5
-         qHvpA3dlzId2SuGyaOMVDx0Gcx1sFD+C8RlbvkRXNasgPr2gB3Q++/ucyGbgkblK81Xa
-         0dpHGeBpNDVlj4X7ZCNDWioYN+qv+OI8CN+FbYi6IftRHTqzU7oBpvOF2JtnylapZoHH
-         XqB3ObDP6mwHUya9OayHyz90MEVTF3UxNlMCdYRiwQRXkbikjRMhFb0lU5BLb/ckG/3u
-         H7w33T9kyDOWVTmPapf5q7aAPsy+g+mqZa7wAc9a/ObaUBGHcqz3jIuFyCAwczZtPFAX
-         EyUg==
-X-Gm-Message-State: AFq9FYKOTPwNraqzDKuDDqu5UKiIdLd+b5yUtaget+8lxxTtlvZcyU32
-	TvdARu8s8yvaKH20F6XRaekmn0n0j8OB2xYpSAIwMLvtU8KcI3gvJj2NAfrAnA==
-X-Gm-Gg: AYBFou09+jxZI2/OXZXYHVNd3GwNqeJVbWHECxRk169iEazGM9pXk7j7iRAhi1VhL2y
-	fMZMvbnjCNkIrsAenrF3PsoU6EK4k2QcYEM2iL4pq/Hq4hem+c5poaYMfY65Xn/BEl2BLYOTD7z
-	/hKE4vil7H0r/KBEWj0TVMrGg1IvE5jnmDP8TViKkZWrx+2+OEghMGQP1+a1t203h89PYZDFXyC
-	HKRdo0QHaQLJi4Qe5nz0qHEL84Ph1myWI62bP3CVT73o0GeGdPMO+SwSj2ke96aOcgUKtGyljYB
-	QT0lUd+9j1EffMyg2KvAzcmjRUYn788NhoLeqpYMS92JjhaKBJMJvYB30j5iEqZv+H+wJW9Busy
-	mmkT3vrCPELrLWjPHFGmFGQlg797Tjz2Vq9Qz7OrmQrcO8btTcluPEUY8YES+8HZEKK8m9TXifv
-	UIAsJbTbTvzLP8K5f6pQowDDUpeHWeoU+q+gyKGOUds6uGqhV939BqRn4lMobuf95mRfl0FcOlI
-	MH5dpLowmPTCC6vVlZ+jUsD960BsqhnRIZNXkg2gkT6TDfqTV5rCV1isUFoHiY39XqsCqKXtg0k
-	+MvsBTNFu6VH2W+VtShI3ygF3RNBFa3ZvNzSfKVGJqo7FJb3jD2JbHAoJbaMwAM/KYwyaE2tWuG
-	t9FUKfAXM1D6yiFD0u6+3NjHS
-X-Received: by 2002:a17:90b:3dce:b0:3ad:4a8b:c701 with SMTP id 98e67ed59e1d1-3adeafd64e3mr9810009a91.45.1793127901610;
-        Tue, 27 Oct 2026 12:05:01 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae578ba2edsm129491a91.13.2026.10.27.12.05.01
+        bh=EF+co8JQJPRkhDw/kZagI7FEhfUNsm5toRJ6sjR203I=;
+        b=kHjOdOK2o5KMPtTbL+jbLZruSHUebzgKZlanjoUQKk4F29fJwAaErNuBr9ExEQ5/kH
+         s8lkxkoWLuV7NxCjm9kAhI9AEnzQP/j5C27+6MSLbPrqf1Jw63Y8+JoKy35g9zbSJh5S
+         TA+ENDry/5Epvf2yHDcVKuSltjWYo0KrHdwd8jSylI2e8NhZEWrUE0ZrFSoshriujLqZ
+         otvxXappKqAACMe1BZ21VTAPzyk6+dbeNdgfNUMm8fGXJv/GPjorfqY4tQ+KRsPnQ2s4
+         cuQpUOAfY2NBm9vk75RQCAvNzXVUfKbFmKGSexvVJd5wmuD5SJXuWyKoHk8cQA4ccwKY
+         KT7w==
+X-Gm-Message-State: AFq9FYK1KkVY5y35LtLiG6CuNWw9RcS9pp+iumdkFrxie+cZODaJlYJR
+	wX0smU9S1alvLyuGk3jOHAqttt0GTwmoUvxPU2O+VQAFokAGgGv3DtwSHNso7A==
+X-Gm-Gg: AYBFou09GjvvV45atFCG6CC/G2LyXw7RAX83xx2YKAzvk2LN/s0ry6L2ymgHBmOG8Xz
+	/hg131a5Yffix6uGW9Ya2PKvJLuktc5Ev/JGWonYtgX27yT/ayAPNjhQh/pOLgZ+2f9hDkSq56x
+	YWQyPXuEbrhBwGTiLQ9ksL4qGJB6c1ko+Qs05ODRqu/tPEFViy+zoc0GKPFuAk9zryu7OGbpJ4U
+	eX0s3n40oXMEJj8hSi8uRBBDNggMtK8b6RN6JyRXVUlCRr1954whW7L4ApUYiIm+OmkkhkcejJx
+	rV9KcV4498P4qgP84yugQtegTNgDsKx0K3vnoqJ8XIcl/8C/kYmORWf11VSHJjQQSxdmwwmGaEc
+	QhIrRMXeDgtQ+6HEj0LsEKTsJof/Y6DrTJ6sjPH91jrUeHmQXMq2dufzQPQQq2ZAjX7f5dkR09c
+	qqTe4oeaALUPBajTuaE5nMrIOND7e612G0D/9rSQYnif5N7ZZqgGIBqm6ecmIojDtyyG0uUPIH0
+	J/MkGikmWsalpF8DIf0oKEW4NTv3ZV+0AQnmfp/b4EHFiylZZMlCw1xQMQD6uyx3s7BYTlrRLfu
+	SnckUzyk375DVQdc1N93cKsBQRPS8sGYMVXQaSUF0maoJMfAY3v6Zmox1h7EiUm5QF3U/GliO+J
+	0/Fy96Wf0K9/fSqgZLKFJz77cWAi6A//hC6pR0UAxJ8KgWS8MFWh9gqFZzE2IUIDP+r4dkCLa4l
+	GTvbg7aN2lLmUuYZK/9H4=
+X-Received: by 2002:a17:90b:5607:b0:3ac:6e91:3f14 with SMTP id 98e67ed59e1d1-3ae580a8368mr10522a91.22.1793127907372;
+        Tue, 27 Oct 2026 12:05:07 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae578f1602sm117293a91.15.2026.10.27.12.05.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 12:05:01 -0700 (PDT)
+        Tue, 27 Oct 2026 12:05:07 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH v2 bpf 18/19] bpf: Keep stack arguments in arch_bpf_timed_may_goto()
-Date: Tue, 27 Oct 2026 19:03:13 +0000
-Message-ID: <20261027190314.1440199-19-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf 19/19] selftests/bpf: Test stack arguments across may_goto
+Date: Tue, 27 Oct 2026 19:03:14 +0000
+Message-ID: <20261027190314.1440199-20-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261027190314.1440199-1-alexei.starovoitov@gmail.com>
 References: <20261027190314.1440199-1-alexei.starovoitov@gmail.com>
@@ -103,161 +104,156 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The JITs pass the first stack arguments of a call in registers:
+Each test passes arguments 6-8 on the stack. Thus it uses all the registers
+in which the JITs of x86-64, arm64 and riscv64 pass stack arguments.
 
-  x86-64    r9       argument 6
-  arm64     x5-x7    arguments 6-8
-  riscv64   a5-a7    arguments 6-8
+  may_goto                                     then
+  -------------------------------------------  ---------------------------
+  70000 iterations in the callee               the callee reads the args
+  the time is up in the callee                 the callee reads the args
+  70000 iterations in the caller, after the    the caller calls the callee
+  writes of the args
 
-'*(u64 *)(r11 - 8) = rX' writes such a register in the caller.
-'rX = *(u64 *)(r11 + 8)' reads it in the callee. A call changes these
-registers. Thus the verifier accepts no call between the write and the call
-of the callee, and no call in the callee before the read.
+70000 iterations have one look at the clock. Without the fix on x86-64 the
+second test fails, and the first test fails with the hpet clocksource. The
+third test passes there. The result depends on the registers that the C
+code uses.
 
-may_goto is not a call for the verifier. But one time in 65535 iterations
-it calls arch_bpf_timed_may_goto(), and this function calls C code. It
-saves R0-R5 only.
-
-       *(u64 *)(r11 - 8) = 0      ; the verifier: argument 6 is 0
-       call sub
-  sub:
-    1: may_goto 2f                ; C code changes r9
-       goto 1b
-    2: r2 = *(u64 *)(r11 + 8)     ; r2 is a kernel address
-       r1 = map_value
-       r1 += r2
-       *(u64 *)(r1 + 0) = 0
-
-On x86-64 the C code changes r9 when the time of may_goto is up. With the
-hpet clocksource a look at the clock changes r9 too. The prog above crashes
-the kernel. LLVM does not emit such code: it reads stack arguments at the
-entry of a function, and it writes them immediately before the call.
-
-Save and restore these registers too. The cost is 2 insns on x86-64, 4 on
-arm64 and 6 on riscv64, one time in 65535 iterations.
-
-Fixes: 324c3ca6eed6 ("bpf,x86: Implement JIT support for stack arguments")
-Fixes: 235b2fe772f5 ("bpf, arm64: Add JIT support for stack arguments")
-Fixes: ba754185f902 ("riscv, bpf: Add BPF stack arguments support for RV64 JIT")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- arch/arm64/net/bpf_timed_may_goto.S | 10 ++++++++--
- arch/riscv/net/bpf_timed_may_goto.S | 27 ++++++++++++++++++---------
- arch/x86/net/bpf_timed_may_goto.S   |  3 +++
- 3 files changed, 29 insertions(+), 11 deletions(-)
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 119 ++++++++++++++++++
+ 1 file changed, 119 insertions(+)
 
-diff --git a/arch/arm64/net/bpf_timed_may_goto.S b/arch/arm64/net/bpf_timed_may_goto.S
-index a9a802711a7f..1b4a4f91ffc9 100644
---- a/arch/arm64/net/bpf_timed_may_goto.S
-+++ b/arch/arm64/net/bpf_timed_may_goto.S
-@@ -5,13 +5,16 @@
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index b9f799f6e405..15a12497e074 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -433,6 +433,125 @@ __naked void stack_arg_sequential_calls(void)
+ 	);
+ }
  
- SYM_FUNC_START(arch_bpf_timed_may_goto)
- 	/* Allocate stack space and emit frame record */
--	stp     x29, x30, [sp, #-64]!
-+	stp     x29, x30, [sp, #-96]!
- 	mov     x29, sp
++/*
++ * A JIT passes the first stack arguments in registers. may_goto is not a call: they must be
++ * the same after it, also when it looks at the clock. That is once in 65535 iterations.
++ */
++__naked __noinline __used
++static long loops_then_reads_8args(long a, long b, long c, long d, long e, long f, long g, long h)
++{
++	asm volatile (
++		"r1 = 0;"
++	"1:"
++		"may_goto 2f;"
++		"r1 += 1;"
++		"if r1 < 70000 goto 1b;"
++	"2:"
++		"r0 = *(u64 *)(r11 + 8);"
++		"r1 = *(u64 *)(r11 + 16);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 24);"
++		"r0 += r1;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("stack_arg: may_goto looks at the clock, then the callee reads its args")
++__success __retval(876)
++__naked void stack_arg_may_goto_in_callee(void)
++{
++	asm volatile (
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"*(u64 *)(r11 - 24) = 800;"
++		"*(u64 *)(r11 - 16) = 70;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"call loops_then_reads_8args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used
++static long spins_then_reads_8args(long a, long b, long c, long d, long e, long f, long g, long h)
++{
++	asm volatile (
++	"1:"
++		"may_goto 2f;"
++		"goto 1b;"
++	"2:"
++		"r0 = *(u64 *)(r11 + 8);"
++		"r1 = *(u64 *)(r11 + 16);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 24);"
++		"r0 += r1;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("stack_arg: the time of may_goto is up, then the callee reads its args")
++__success __retval(876)
++__naked void stack_arg_may_goto_timeout_in_callee(void)
++{
++	asm volatile (
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"*(u64 *)(r11 - 24) = 800;"
++		"*(u64 *)(r11 - 16) = 70;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"call spins_then_reads_8args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
++__naked __noinline __used
++static long reads_8args(long a, long b, long c, long d, long e, long f, long g, long h)
++{
++	asm volatile (
++		"r0 = *(u64 *)(r11 + 8);"
++		"r1 = *(u64 *)(r11 + 16);"
++		"r0 += r1;"
++		"r1 = *(u64 *)(r11 + 24);"
++		"r0 += r1;"
++		"exit;"
++	);
++}
++
++SEC("tc")
++__description("stack_arg: may_goto looks at the clock between the stores of the args and the call")
++__success __retval(876)
++__naked void stack_arg_may_goto_in_caller(void)
++{
++	asm volatile (
++		"*(u64 *)(r11 - 24) = 800;"
++		"*(u64 *)(r11 - 16) = 70;"
++		"*(u64 *)(r11 - 8) = 6;"
++		"r6 = 0;"
++	"1:"
++		"may_goto 2f;"
++		"r6 += 1;"
++		"if r6 < 70000 goto 1b;"
++	"2:"
++		"r1 = 1;"
++		"r2 = 2;"
++		"r3 = 3;"
++		"r4 = 4;"
++		"r5 = 5;"
++		"call reads_8args;"
++		"exit;"
++		::: __clobber_all
++	);
++}
++
+ #else
  
- 	/* Save BPF registers R0 - R5 (x8, x0-x4)*/
- 	stp	x8, x0, [sp, #16]
- 	stp	x1, x2, [sp, #32]
- 	stp	x3, x4, [sp, #48]
-+	/* Save stack arguments 6 - 8 (x5-x7) */
-+	stp	x5, x6, [sp, #64]
-+	str	x7, [sp, #80]
- 
- 	/*
- 	 * Stack depth was passed in BPF_REG_AX (x9), add it to the BPF_FP
-@@ -32,9 +35,12 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
- 	ldp	x8, x0, [sp, #16]
- 	ldp	x1, x2, [sp, #32]
- 	ldp	x3, x4, [sp, #48]
-+	/* Restore stack arguments 6 - 8 (x5-x7) */
-+	ldp	x5, x6, [sp, #64]
-+	ldr	x7, [sp, #80]
- 
- 	/* Restore FP and LR */
--	ldp     x29, x30, [sp], #64
-+	ldp     x29, x30, [sp], #96
- 
- 	ret
- SYM_FUNC_END(arch_bpf_timed_may_goto)
-diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
-index fcf850f244c9..6ec37f634aff 100644
---- a/arch/riscv/net/bpf_timed_may_goto.S
-+++ b/arch/riscv/net/bpf_timed_may_goto.S
-@@ -10,15 +10,16 @@
-  *	- output: updated count in BPF_REG_AX (t0)
-  *
-  * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
-- * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (t6, a0-a4) are saved
-- * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
-+ * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (t6, a0-a4) and stack
-+ * arguments 6-8 (a5-a7) are saved across the call; BPF_REG_FP (s5) is
-+ * callee-saved and needs no saving.
-  */
- 
- SYM_FUNC_START(arch_bpf_timed_may_goto)
--	addi	sp, sp, -(8*SZREG)
--	REG_S	ra, 7*SZREG(sp)
--	REG_S	s0, 6*SZREG(sp)
--	addi	s0, sp, 8*SZREG
-+	addi	sp, sp, -(12*SZREG)
-+	REG_S	ra, 11*SZREG(sp)
-+	REG_S	s0, 10*SZREG(sp)
-+	addi	s0, sp, 12*SZREG
- 
- 	/* Save BPF registers R0-R5 (t6, a0-a4) */
- 	REG_S	t6, 5*SZREG(sp)
-@@ -27,6 +28,10 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
- 	REG_S	a2, 2*SZREG(sp)
- 	REG_S	a3, 1*SZREG(sp)
- 	REG_S	a4, 0*SZREG(sp)
-+	/* Save stack arguments 6-8 (a5-a7) */
-+	REG_S	a5, 6*SZREG(sp)
-+	REG_S	a6, 7*SZREG(sp)
-+	REG_S	a7, 8*SZREG(sp)
- 
- 	add	a0, t0, s5
- 	call	bpf_check_timed_may_goto
-@@ -39,9 +44,13 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
- 	REG_L	a1, 3*SZREG(sp)
- 	REG_L	a0, 4*SZREG(sp)
- 	REG_L	t6, 5*SZREG(sp)
-+	/* Restore stack arguments 6-8 */
-+	REG_L	a5, 6*SZREG(sp)
-+	REG_L	a6, 7*SZREG(sp)
-+	REG_L	a7, 8*SZREG(sp)
- 
--	REG_L	s0, 6*SZREG(sp)
--	REG_L	ra, 7*SZREG(sp)
--	addi	sp, sp, 8*SZREG
-+	REG_L	s0, 10*SZREG(sp)
-+	REG_L	ra, 11*SZREG(sp)
-+	addi	sp, sp, 12*SZREG
- 	ret
- SYM_FUNC_END(arch_bpf_timed_may_goto)
-diff --git a/arch/x86/net/bpf_timed_may_goto.S b/arch/x86/net/bpf_timed_may_goto.S
-index 6c6e03f725a3..dd2dde89836b 100644
---- a/arch/x86/net/bpf_timed_may_goto.S
-+++ b/arch/x86/net/bpf_timed_may_goto.S
-@@ -22,6 +22,8 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
- 	pushq %rdx
- 	pushq %rcx
- 	pushq %r8
-+	/* Save stack argument 6. */
-+	pushq %r9
- 
- 	/*
- 	 * r10 has the pointer to count and timestamp. JIT added the frame
-@@ -36,6 +38,7 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
- 	/* BPF_REG_AX=r10 will be stored into count, so move return value to it. */
- 	movq %rax, %r10
- 
-+	popq %r9
- 	/* Restore r5-r0. */
- 	popq %r8
- 	popq %rcx
+ SEC("socket")
 -- 
 2.55.0
 
