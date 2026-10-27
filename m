@@ -1,60 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.99
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793118788;
-	b=W7w3pz71eQmNiK/JHjGwijxlN/Vxs2poUeAg+6t82ejb9ioYK2NuMi8buJFOCJye585y
-	 t52MZUCVKdTfT/9wWTshPPPWARMgROYKXyc/oy3OhmGgrZ/DKoK+x7OsP7AveBT/3bpqi
-	 PuM99A9XPALPUC3NE7OTG/SP4EEbolVfJLHjiL6Rkewwod8CfsGgwyKE8tzhLg+NJ4kvh
-	 imXT2VWx4PgG0/yn5w2WalOv6rJPs419+KZnodjm0BcN0K/Z+wQ0iPXYH0yFHZDIAhBX4
-	 gxrT+CxHuv7vw9RXM2+qiqkK4Qr+NRZvjfrWsBdcpD4WofWanrbHlZH9QyZSQGFt/3Q==
+	t=1793118799;
+	b=H2UDp03kH1R0Koy9z0lOn+ya1U60pKuJRrwdLDsl5AkJgMtHjX3qcllX2ZHzH+9sUQJP
+	 JqccgazevdFjR/Htn1B0frgoFxo1MshKHDW8LI3tnRJwNrOOAqrrCCVrItcXAoyLrlYoJ
+	 ySH6JNKpKHmDTZYZJvjwo942D23/OKh94GyurqRj31Q5c6tFx11bLyqSWXZzfHLSyE5Ch
+	 v9c0g1w9oPU1zjvr0fabcmFXmSqcaCPtosCxxNXNsPBKivIviX1dFZywJS6pNdTYRwU4m
+	 4EeD4h9kO6LP1mrWIZBMeTCwUwnV1rpIM0VON2fEiY0aEP1nnYJ9+0QWpkkJnfo3PWA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118788;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=TbMT5lghyaS7KxQgJ+MM/CluoulGShAxSFb3s558JYY=;
-	b=bW6PhiNXGwtjK2ha10CFqmwBhKl0dvwyqL4IKG4GeHx1cknP5/shMFleP1v+OlTdn3hw
-	 yV3JPnbIowUkmjs5UpuNlqqF1WdC/IyXZ/LksMDnNkA3MYmtelUdDhDblDAemWuNYNTaC
-	 Zs3Z87IAjqL6lB1s+oPhLq5PadcpXLzJlmqH834zFaNZ+755cVPFgLRqExFGT+rZdSno4
-	 5vgLBUEnivY+kh5j7lT1r4G9uZn8sHz2cbT7Ax2oXoxw3+ByiakloZekJ9dKTkmr9UHt7
-	 l1djNc40cgm4JHj3g2ElMOq0Ap37OB6PJdtiuzZGNKn71PP6CpfVFnseAVM5nQNbynw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793118799;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:In-Reply-To:References:User-Agent:Date:Message-ID:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=I0iNj3mQ8BtY35+vPtf2TGLh4aOWNpD/xEhhJMSPSv4=;
+	b=abKiJusFlX8+YDz3o1l/edXl35iW7GIHGQO0JHmQLMw8JEW/0sF7dbcMT1j6KV30T83S
+	 37jhiuqrLWROgpRj/s7bD3QlhnGLB0eCRte63Jn3X5Mg49QIrjt/31BxQxNJzxbi98KSe
+	 JPTE0/FSUU0i+pPydUG98EO2Gznn2P8Ic0i4fn0P5rwTVSj3/ldi+MIGxK+7yeJOG3aAt
+	 7UzbqpHB0mhLbVlS7Vj5x7YMqAEIUszATLgfaGaxQepLc6A00OsFhfdQnDq2oJFYWUWUp
+	 H4kJpsPO5B8//lZB6PYN2TE9HSXavi/BB2MMi9WCxSc1b+OKOVIn0zOMnFoGxbj1OgA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=1g4.org;
-	spf=pass smtp.mailfrom=1g4.org;
-	dkim=pass header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=obR0omlz;
-	arc=none smtp.remote-ip=185.70.43.99
-Received: from mail-4399.protonmail.ch (mail-4399.protonmail.ch [185.70.43.99])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=cloudflare.com;
+	spf=pass smtp.mailfrom=cloudflare.com;
+	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=XEdAllwd;
+	arc=none smtp.remote-ip=209.85.208.52
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77682606A31B
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:33:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77682606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F84606A320
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:33:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1F84606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=obR0omlz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
-	s=protonmail; t=1793118785; x=1793377985;
-	bh=TbMT5lghyaS7KxQgJ+MM/CluoulGShAxSFb3s558JYY=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=obR0omlz+RH9skUK/AijjQJ0MbxcBbLaq7bLBd+ZpUKNrs6DZIiO03GL5wtCPo4tU
-	 oxLSsRs6PHG8SP/+utakZfh3tB6mub8qUPGxwgV/IpqiRTGtsAFyWH/w6biugAASJL
-	 3oRf38MGoR6/+0DToGYWTq/JQckkQg99rkiqXbE+knIq5yKQxZmsMrcJ/PtYNi4whL
-	 mGSW+uToCK9TQO0TECEevVoO/rADbQ1Qm7wx4E7bXCKHanRLimHQngryr1pCy5hU5Z
-	 FS+z6Av0bvsU+H9mKg4N9ixa/kk3bNu4VLmVofYZWHIBWPZTiGMul+YrhgIkRBEgGD
-	 idF/xJ5XQGSQQ==
-Date: Tue, 27 Oct 2026 16:32:59 +0000
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-From: Paul Moses <p@1g4.org>
-Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] igc: return XSK frame copies on XDP_TX failure
-Message-ID: <R7FJ9H2Yqq7aJ5dcgVzcIZN-iI5qNsSVTCHlGTVoz9-HMbzAcMqJ6qCtNLlpjc6DATjNq67fgeC6paxLm4r5hBf4s85vmMOlLqB8MbAFTr0=@1g4.org>
-In-Reply-To: <auBehtniOJTRGfaD@boxer>
-References: <20261023141317.3904442-1-p@1g4.org> <at+yluh1NVm78gn6@boxer> <HTx28-b95D5R6LIxwQGHksxNXb6wWbEOp6IGCfRU51shEKudZgRxqFylE-Ngqd3ufeFJGlo5VccF1yXfAVeWQlqpNoSMp5oxS8tlJNxH4h0=@1g4.org> <auBehtniOJTRGfaD@boxer>
-Feedback-ID: 8253658:user:proton
-X-Pm-Message-ID: 31b7716a514270b0b4fbc73d35c670e646ea2b41
+	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=XEdAllwd
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b408f2d936so160935a12.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1793118797; x=1793723597; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=I0iNj3mQ8BtY35+vPtf2TGLh4aOWNpD/xEhhJMSPSv4=;
+        b=XEdAllwdCkqIgxXu+9bXEkBIi36DzRQwxWRhKQlVdC1xvJN70dwZhU5b18swGOpJj2
+         u9raY4q6DL49OdQYfYyO6HehetZT8xrXylxcIQMVXsrGgalnp5RQkHWtq2y/RKPZ1gCT
+         GLWye7RpdC5QoTtoU3/XYkaAfnOB3Bbn8RlTN7RhqYoCHB+4ZSSumkvf3bXfb5vkYTvK
+         bzCmgsBHCvG9Ghj1JTeuxRpqeRdi0E4AHgiPk7UeyBA4D8Wr01cozDHBPVIzr1epXCI4
+         IVEscegJO1EAvD0GX6MvChjumpmJCw6fH4pIQ6iTdu+iWVpXZLyTKoYey+dzynAYI6xe
+         EJlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793118797; x=1793723597;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=I0iNj3mQ8BtY35+vPtf2TGLh4aOWNpD/xEhhJMSPSv4=;
+        b=NPTDib4HVPn1BHjG2mvYLxJDYw8TpZnzYCuPoVJRsDTEMiX1ZqAfWvkfW/sxnZFzLp
+         Bly1ghLYjNvLBDV2F89HNnoPOt9Xx30VlT11T4s7KECgp0eAo1tUlF5NuNOL2TupzCfQ
+         5ukeSJG/ge1qpAr1f/D45CoECzB2AKuiNXLJB/a2BODEvNVmOkbUE7rqKgNkA3hSZ6qV
+         kGmx/3JsP078YlXDeXqbswZijsAUa+gUcMs5wQ9TMUSVwIJS39yFysedwUuFhK2vOVFA
+         vfCuQYUrt1v1Vt5LnLuDAV0gm0Hb/EdH9PYzA167SuAaqkzgIgyy9Wn5y8xKTPVnKQuj
+         5g5Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzdrTOCoUhWX/oJeWVHZpqJuIL4QFZrJ+28UKw107Exahq/yx67T2vuRtwOJoQQSUtuZH0=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJnT1vU7eQl/Zhds+muKfng+lixnaIEnKkblFo5Ac/FrOPBaO3C
+	JvjhtDqZ9/VNRUcTPW3VT2HOcKOVTQPP+bP9uKusoZCLFssfvldFIVbhEFsvDV3DjUM=
+X-Gm-Gg: AYBFou3sLgKZBeKB4T2h+EKJLTkA2SzU6PU4NQp8T5wKpK9gNzFBJkdUcdcvuqgmhS0
+	ZRTVw5dnW7KoRFU9gKvWXVz9N7jIwcG7eQYm8HZr6aAMdzS4oRI56A0LAWTDB9COEseYYf81dBz
+	lHh/xpUFCffYy+DbUd47OamoCnlYcCMPeOd0G5QuNA1JsWcsO0zaZ3E7h+TViTqPPGlhPxTRuO/
+	/LBcOgZl88iV949EHI2QQaFM9egedkh1rKhwnF21DemrPDsFniCLPIDp5N560s6bzRGM3DGP+Sb
+	EjDvNISBJUnwzHjY8d44K4xXXWmhH8bLYYjlALO657UgwDnsHMtQPLiz0zQzZsN+KZ5NgIPGSuy
+	f9MP4+TJg+3TB5lOjOObod4pcjnG5dU71mznkj6kQe/36s39O+zSUHP+YC1Ap4bXbh53nd1IMZq
+	A1O7Nja3KC2ExO3q7SJQ0qGXQVmOhehYk0+eVfpxyq4G1dynThRRCjJpu22/TN4ksYwA0egsOJo
+	ZpV+yhX8SeMPdN055vvYDXG12bxMb6fYipUPShhyFsLXD1ea0NRn+2vujHLa3hCWdvYOhG24eO3
+	XNCRd/vuo0BB6oF4Ydhak3AVf1xdhegfj+3lEn+6
+X-Received: by 2002:a17:906:7314:b0:c42:102f:15e8 with SMTP id a640c23a62f3a-c46bdd68f4emr1061585666b.14.1793118797178;
+        Tue, 27 Oct 2026 09:33:17 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac6:5067:2dc::49:1e9])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c46bd79b884sm481105066b.75.2026.10.27.09.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 09:33:16 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: phx <phx0fer@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,  John Fastabend
+ <john.fastabend@gmail.com>,  Jiayuan Chen <jiayuan.chen@linux.dev>,
+  Network Development <netdev@vger.kernel.org>,  bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v2] bpf, sockmap: annotate the psock teardown data
+ races
+In-Reply-To: <CAKvCo-zf6=ABrMEn_8r7rJFFvaaXQrz8GAUQ9Uz4h0Ze9gY68w@mail.gmail.com>
+	(phx's message of "Tue, 27 Oct 2026 13:10:52 +0800")
+References: <20261021155629.68813-1-phx0fer@gmail.com>
+	<20261022054811.35008-1-phx0fer@gmail.com>
+	<DMBHB0TQOV1L.38MECMYFGUS5B@gmail.com> <871p9g6ym1.fsf@cloudflare.com>
+	<CAADnVQLTe611mm0iJEf5gJi2GtW42kxNHH3sUPevD039FvzL7g@mail.gmail.com>
+	<87v76o63qv.fsf@cloudflare.com>
+	<CAKvCo-zf6=ABrMEn_8r7rJFFvaaXQrz8GAUQ9Uz4h0Ze9gY68w@mail.gmail.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Tue, 27 Oct 2026 17:33:15 +0100
+Message-ID: <87pkwv5cj8.fsf@cloudflare.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,93 +109,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
+On Tue, Oct 27, 2026 at 01:10 PM +08, phx wrote:
+> Sorry for the long silence =E2=80=94 my laptop died right after v2 and to=
+ok the
+> local mail and the working tree with it. Agreed that the ordering fix is
+> the right one; please go ahead with the commandeer, Jakub.
+>
+> I do still have the reproducer (a KCSAN selftest for this race, verified
+> in QEMU). Say the word and I will post it, or send it to you to fold into
+> your respin.
 
+Feel free to iterate on the patch once you get your dev env restored.
 
+We would also need selftest coverage for the race, if it reproduces
+relatively fast. You can take a look at test_race_insert_listen for an
+example.
 
-
-On Tuesday, October 27th, 2026 at 3:19 AM, Maciej Fijalkowski <maciej.fijal=
-kowski@intel.com> wrote:
-
-> On Mon, Oct 26, 2026 at 10:18:03PM +0000, Paul Moses wrote:
-> > On Monday, October 26th, 2026 at 3:07 PM, Maciej Fijalkowski <maciej.fi=
-jalkowski@intel.com> wrote:
-> >
-> > > On Fri, Oct 23, 2026 at 02:13:42PM +0000, Paul Moses wrote:
-> > > > Converting an XSK buffer to an XDP frame allocates a page and retur=
-ns
-> > > > the original buffer to its pool. If the TX ring is full or DMA mapp=
-ing
-> > > > fails, igc_xdp_xmit_back() returns an error without freeing the cop=
-y.
-> > > > The RX cleaner cannot release it, so the page leaks.
-> > > >
-> > > > Return the copied frame on TX failure. Save the RX memory type befo=
-re
-> > > > conversion so native frames remain RX-owned on failure.
-> > > >
-> > > > Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Paul Moses <p@1g4.org>
-> > > > ---
-> > > > Tested on Intel I225-V with baseline and patched kernels. Physical
-> > > > pause-frame backpressure caused 46 leaked copies on the baseline.
-> > > > With the fix, all 72 rejected copies were returned once and freed,
-> > > > and all 192 copies were accounted for.
-> > > >
-> > > >  drivers/net/ethernet/intel/igc/igc_main.c | 5 +++++
-> > > >  1 file changed, 5 insertions(+)
-> > > >
-> > > > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/ne=
-t/ethernet/intel/igc/igc_main.c
-> > > > index 1fb5f3cbe93c..39263fd04aa9 100644
-> > > > --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> > > > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> > > > @@ -2487,6 +2487,7 @@ struct igc_ring *igc_get_tx_ring(struct igc_a=
-dapter *adapter, int cpu)
-> > > >
-> > > >  static int igc_xdp_xmit_back(struct igc_adapter *adapter, struct x=
-dp_buff *xdp)
-> > > >  {
-> > > > +=09enum xdp_mem_type mem_type =3D xdp->rxq->mem.type;
-> > >
-> > > small nit is we require a concept called RCT (reverse christmas tree)
-> > > which makes you to order variable declarations from longest line to
-> > > shortest.
-> > >
-> > > >  =09struct xdp_frame *xdpf =3D xdp_convert_buff_to_frame(xdp);
-> > > >  =09int cpu =3D smp_processor_id();
-> > > >  =09struct netdev_queue *nq;
-> > > > @@ -2504,6 +2505,10 @@ static int igc_xdp_xmit_back(struct igc_adap=
-ter *adapter, struct xdp_buff *xdp)
-> > > >  =09txq_trans_cond_update(nq);
-> > > >  =09res =3D igc_xdp_init_tx_descriptor(ring, xdpf);
-> > > >  =09__netif_tx_unlock(nq);
-> > > > +
-> > > > +=09if (res && mem_type =3D=3D MEM_TYPE_XSK_BUFF_POOL)
-> > > > +=09=09xdp_return_frame(xdpf);
-> > >
-> > > Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> > >
-> > > > +
-> > > >  =09return res;
-> > > >  }
-> > > >
-> > > > --
-> > > > 2.56.GIT
-> > > >
-> > > >
-> > > >
-> > >
-> >
-> > Never know what to do in these cases, order matters here, so
-> > do I touch more lines to move the assignment down below?
->=20
-> =09struct xdp_frame *xdpf =3D xdp_convert_buff_to_frame(xdp);
-> +=09enum xdp_mem_type mem_type =3D xdp->rxq->mem.type;
-> =09int cpu =3D smp_processor_id();
-> =09struct netdev_queue *nq;
->=20
-> this would satisfy the RCT rule.
->=20
-
-Ok I'll send soon.
