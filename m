@@ -1,55 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.38.64.46
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793079103;
-	b=URMu+IxZfCzOIb0TKBTt3e/67dg6SveoO1JPAifmJZUsV/wX2ZANAKHVPklA6z7YmF3K
-	 fd2J5W+v5vEk6/cTkvMLcBvAacTZNElNwuDcFnmjdHZq7Nplt4v83qbeR4C4YlanLbUbv
-	 D2iWdNXdUfO9wP5G8xcCZXjBRX6OjOJh+lxPjngJnawuIXrGU3iN0ZuKlwuYUjm4ZVcwd
-	 1uRYVuy+w/hPlujqQg06eAjwobTeAFi7qgh34Lul4nBQqO4luOzJ8qMyyvd7XA/UW89S0
-	 HfTMf6DlkWdWjIbnTxZsZJw/dL2IOYmxhE/QE/eSSoMTAjS6Mlh9g1uigTp70CW5i0Q==
+	t=1793081602;
+	b=1rMqDhmSWbkzHOEz4MdPJFV17z/G9NERsklzHnYQv4raImNMer5G4J80sEUhEL2RfvE6
+	 JLx8kii/Rn+AJSeP5FTjFbEoncpa4loBuM00tbFPSqIEbUcNATSqkibxU6NyBgjHjOawp
+	 kP/3bpKx9YpV1gneQFwRvzBNaf3a+JfvbTSCXuaVwez+jKajYh7RV2ZWbxHWLnvaJq2ub
+	 odBRIUpyWxA3mSyvu+3q58rseMtfFmUy6hhe6fhOk3M8Ndp1ns81rsy/ORcSPRyDfWFGc
+	 PjhJG7+8LXwAmOrM8iwpnH61aBno75ln7M8GTgwAOug8fUe28dcbaFImicm2OXxDJNg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793079103;
-	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
-	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
-	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=Vdr4C3PkcbVZsQqqGDmD8tEhG/m1kQL4TeacGRf3vdo=;
-	b=A8xG2Jh1hstZ32YTyCPEKnUGCcN5PL2B/F3npJHjBErhtWqVL6FKGQgts2Ab5zLn+Woc
-	 MRYYEoHBzV/IIkkV0p1uY1JItOLmD82iiJ6nYJ9EWDzC+iwb9vnkBj60ZftQf1+oSm8Vi
-	 bUamXNb/iZkfZ+afxtFdCqV06msh5u8XhvWIDKeeEihydwchsFULBXO46K6hWvH8OyDi7
-	 vuOvmQymmBMZ+8pTDJZFf7PnlhLyPQIbfhZZed/B9BSBwMoBsGQ9nnlAQh9oz4y6cpn3b
-	 IC8zl9Dw0pAPsEwHKqjq8o1kzbhb26n7jt66iXXpOacrefu1A/P/MuWNtvOGHJUZNlg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793081602;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=eTQcM35wkXRP7x9YE5akwcG87yvqzUVbNdPulhmBNkU=;
+	b=b1kJ7oZFDn51l9XY8mKCVPFbOyz82JxcGH2bNMvTRce+hn3qodPBRJpG2bQD6YZTYZWJ
+	 K+g1Ou0/eQWiqetb7yS8CdKJjMrJOLVC8gNDZ2C1BL6VEe1Xk9dex0PTDnvJ1T5SSg/GA
+	 Czc0vJZ6YKXoIIXJXq0F4QHwEJ/gaD8sahuJL+w8kSlh73tMAvpLIW9UTh6ikSgyEl/xJ
+	 y9UfshT9fzTXI/mBr0papYNy+gl8c4RYWvPsNgpkd8m/7zrbPWCzmbWm5wTHXf4HgIGEw
+	 QW8LOdfthCx4JZJXW3Px3Jx3Ggr+LPVoKXvhFy5IcLc5PSH1nSWrNaeZkXHMI31KdNg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kyO1L8zA;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EF5606A31D
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 05:31:41 +0000 (UTC)
+	dmarc=pass header.from=mail.ustc.edu.cn;
+	spf=pass smtp.mailfrom=mail.ustc.edu.cn;
+	dkim=pass header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b="aYhjWkm/";
+	arc=none smtp.remote-ip=202.38.64.46
+Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78FE606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 06:13:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E78FE606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=kyO1L8zA
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8671F01825
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 05:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793079101;
-	bh=Vdr4C3PkcbVZsQqqGDmD8tEhG/m1kQL4TeacGRf3vdo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=kyO1L8zAQpWi9xUkQbRxPY6Jss1nVwpRvCFjx05ldBQvcEb/zrIuYt4szVNe89Qg6
-	 zmtRPChFJtOxHgQHxO0VrMSGeuSJGPZYSR+HWAIHDYpTeI8GDqOaSpH+Qd9q1Ycg+/
-	 8IHawtMy6hfe0KIhBcFIO+/2URBo27mByOov2euanpvGGSrLp49MuY/009gBHToflQ
-	 L35MgGMwd8bCFhVZyFeSoECY2g58JK3/XvqnmLdJ1SXOHTFNuEhHQ/s2UdiNR1ja0v
-	 oW5sF54BYPB1cUIAnhxbCb6CZcWBJz2OHIpZH2WXGBEn9QAuU8eKThiRFeeorV0SHg
-	 FNGbFIYk9Wxhg==
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-4a76f0cce5fso1437817fac.2
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 22:31:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBxTfqorennHTIHaP+ctFXtD4CcKBMfVIyQ19a9HZ3/6+epuqHRYmKkl2XdA3p6mB5IrSx4=@vger.kernel.org
-X-Gm-Message-State: AFq9FYKlOAiMJWpVTqK6AeSdrc+CQpHJ1BZkIJVAkwd1ZSVlnNZuR6uJ
-	jINTd6JBARPpqzqqGF/ZUJQQKKfGWycfJ8mtXjqffsVY38ofhNZYEIXHXBfFFghxDLk0o7L5AxM
-	o9g5dHpJfs2jWRGdGBbZySvV8iDXfz5o=
-X-Received: by 2002:a05:6870:82a2:b0:45e:25a9:5455 with SMTP id
- 586e51a60fabf-4a83f1cb4e4mr5508785fac.2.1793079101053; Mon, 26 Oct 2026
- 22:31:41 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.a=rsa-sha256 header.s=dkim header.b=aYhjWkm/
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=eTQcM35wkX
+	RP7x9YE5akwcG87yvqzUVbNdPulhmBNkU=; b=aYhjWkm/wV6k29MmN7ShwDEehI
+	wpcSZVCk9O3NX7nbTwPnjtZpdMJlDmODv2MnVzUqgWSx6YDQMW9OFwB1/acMSLJe
+	BVpFJH6YwAkWEsNzNLbsvsex3eRa+uEZz510Dco3Q1plCkCoaPHNMZq4Nbi53gDZ
+	oQ+XLVB/yTUGUQmRk=
+Received: from localhost (unknown [222.195.81.103])
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgCXASbzQOBq_t9OAA--.1181S2;
+	Tue, 27 Oct 2026 14:13:07 +0800 (CST)
+From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: [PATCH bpf 0/2] bpf: Fix stack argument precision propagation
+Date: Tue, 27 Oct 2026 14:13:01 +0800
+Message-ID: <20261027061303.1754535-1-xyx2021@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,49 +61,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <71c142b2d45af6a2fe7fc6cd4a5ca52c53afbe23.1793075984.git.zhilinz@nebusec.ai>
- <auAv3AoY0FkcXIEr@google.com>
-In-Reply-To: <auAv3AoY0FkcXIEr@google.com>
-From: Eric Dumazet <edumazet@kernel.org>
-Date: Tue, 27 Oct 2026 06:31:30 +0100
-X-Gmail-Original-Message-ID: <CAL4Wiiqu2Az-B1dZnVRJefW-F52ouzLQ5VQ56L3FxSaeXcXGvA@mail.gmail.com>
-X-Gm-Features: AclHuK-fAzYz3D12aaK1VJX8HEDAnoy13ILnQawpMb1g_qhckuAXvvyZa-sKNj4
-Message-ID: <CAL4Wiiqu2Az-B1dZnVRJefW-F52ouzLQ5VQ56L3FxSaeXcXGvA@mail.gmail.com>
-Subject: Re: [PATCH net v2 1/1] tcp: check congestion control restriction first
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Zhiling Zou <zhilinz@nebusec.ai>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	ncardwell@google.com, davem@davemloft.net, pabeni@redhat.com, 
-	horms@kernel.org, jonathon.reinhart@gmail.com, vega@nebusec.ai
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:3pYKCgCXASbzQOBq_t9OAA--.1181S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KrWktr4DJrW8ZrW7ZFyfCrg_yoW8Aw1Upa
+	s5C3WaqFykAF1Skan3Zr48uFWrXan5Ar1UJr4xJFy7AF15KFn5tF47Ka1Yya45JrsrZ342
+	qw1jqwsxWa15AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Ib7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+	8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x2
+	0xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18Mc
+	Ij6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l
+	c7CjxVAaw2AFwI0_JF0_Jw1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026x
+	CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+	JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+	1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
+	Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8Jb
+	IYCTnIWIevJa73UjIFyTuYvjxUyq-5UUUUU
+X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Le mar. 27 oct. 2026 =C3=A0 06:00, Kuniyuki Iwashima <kuniyu@google.com> a =
-=C3=A9crit :
->
-> On Tue, 27 Oct 2026 12:46:49 +0800, Zhiling Zou wrote:
-> > tcp_set_default_congestion_control() takes a reference to an algorithm
-> > before checking whether a non-init network namespace may select it. A
-> > rejected request returns -EPERM without dropping the reference.
-> >
-> > This affects module-backed algorithms too; BPF is not required. For
-> > example, after root loads tcp_bbr, a user with CAP_NET_ADMIN in a
-> > non-init network namespace can repeatedly request it as the default
-> > although it is not in tcp_allowed_congestion_control. Each rejected
-> > write leaks a module reference. Since module->refcnt is an atomic_t,
-> > 2^31 such writes can make it negative; later module_put() calls warn,
-> > and rmmod can hit the BUG_ON() in try_release_module_ref().
-> >
-> > Check the namespace restriction before acquiring the reference, as
-> > tcp_set_congestion_control() already does.
-> >
-> > Fixes: 8d432592f30f ("net: Only allow init netns to set default tcp con=
-g to a restricted algo")
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Vega <vega@nebusec.ai>
-> > Suggested-by: Eric Dumazet <edumazet@kernel.org>
-> > Assisted-by: LLM
-> > Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
->
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+This series fixes two omissions in scalar precision tracking for BPF
+stack arguments.
 
-Reviewed-by: Eric Dumazet <edumazet@kernel.org>
+State comparison already uses precision marks on outgoing argument slots,
+but state reuse does not propagate their dependencies to the current
+path's ancestors. Earlier checkpoints can therefore fail to distinguish
+scalar argument values later used as memory offsets. The conservative
+all-scalars-precise fallback also omits argument slots.
+
+Patch 1 includes stack argument slots in state-reuse precision propagation
+and in the conservative fallback, including slots owned by caller frames.
+Patch 2 adds nine load-only tests covering the sixth and seventh arguments,
+caller and nested frames, acceptance and rejection controls, and fallback
+log checks. The tests construct instructions and BTF directly, so they do
+not require compiler support for emitting stack arguments.
+
+Built the kernel, modules and complete test_progs with BPF_STRICT_BUILD=1.
+On x86-64 KVM, all nine new tests and 246 existing subtests passed, covering
+verifier_precision, verifier_spill_fill, verifier_subprog_precision,
+verifier_scalar_ids and iters. The unmodified base fails six of the new
+tests as expected. Three existing compiler-dependent stack-argument groups
+were skipped with Clang 20; all new tests ran.
+
+AI assistance was used to prepare the patches, tests and descriptions.
+
+Xu Yunxiang (2):
+  bpf: Propagate scalar precision through stack arguments
+  selftests/bpf: Exercise stack argument precision on state reuse
+
+ kernel/bpf/backtrack.c                             |  11 +
+ kernel/bpf/states.c                                |  14 +
+ .../bpf/prog_tests/stack_arg_precision_reuse.c       | 300 +++++++++++++++++++++
+ 3 files changed, 325 insertions(+)
+
+base-commit: 195a3519ff27bff5575e05b5086e38ee92715776
+
