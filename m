@@ -1,47 +1,99 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793134275;
-	b=WJn1pG8TfE9ADkM3wiJcgg9KtFVBnvWBN4P815d1+x44GACbvraPHE8+2OKMaL5x32nr
-	 lKqHVeqheG8rgo0W8EJv55W/+tOd09vQP36Eov3L30Yl0sR7bQRn0QQgSTZu4VZJrlmQf
-	 fFcuuZjKysLXN7xO65pTMAGJWpdrd/oYSXG1nJsncbMHCNzC3HblZulKI1z2e0lZxsWtx
-	 WBxlndg4dc0bwQQQq187vxGmCZRX7k6w8X30sLic+rmyc6svW5KOsHZBZWUyqlT3LJYQB
-	 /nBH19u44pOQns2xOGviVqfVoXj0u2n68HmBj9vg8PYkKfHmgxSRdfc1sWwXgy+pKMQ==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793134275;
-	h=Received:DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.47
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793134330;
+	b=LY8aQPiYElZWlWHW6td7p3EvVFhdeggDKOjLxwUGob2cZnM0rFrxlRGFyQWLAoMRRlWm
+	 DY0QdFEjJfBRxJLKliwHftq1zP6LCxwqq/17k+vqM81OagAXKLS7Suo5ZPVS7emKNtK83
+	 e84MR/Pcm84aAY+5vPFMYEfdUDyOSPXXETFdRAS0R6BA72nmF/dome32mtY52koV68dz8
+	 mZd3ViBPRSYXdmd8Dj29A9gLP1mAUl3QAFh6xR2j1bzKSiMgOQq8t+HHkW4jqImCCkQGh
+	 7R5VXwxjTlsN9bfnjBNmvMptfxQ40HLZQbYCclGCS23yIF40OXHI4d2C9EocY2k+MTQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793134330;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=CSLm47a7FT6NjfnxYmf/lBzZ+ptNygyn0ERsa1f7ok4=;
-	b=KMbM7l2aroNWA9z8EOpUC5OpitsrEV1hM6s31KjeYanrgLdMBI7OJRQmbXTQJIB/BPSl
-	 OXm7SRYvExvNgMnalENp/555SUVBhwrE7sV4r4kakG01hUXw8vmUd0oB9EfSvZc6RMQjw
-	 nxuMeZWTcZWWc+06SajowJm5IuhNwvo27SPcRMiTGYPz6bxma0I6V9C7fRtMBuuqxooZF
-	 /6ZeOk3bQ0HrjoX4F0cahZV3A7u0G/7w5TRcke2y22pgk96gFd2DUgB2afBKVts6ihqrk
-	 wPCc34LJAHsht8T+Let7kLPMpfyggkAB74dcIB0/P7IHS+LsKWs/rro8V1mhzQUyTBg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IutB40zm;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	bh=7GDvLuXXpL52b0ovddXSOSszIk8p5cQntkA2ZQ4tYQc=;
+	b=XabrPXEdJOJKD+isvefV0WtyPTlT0sJr/3ekGf33ODlpNXST7CsMuhVuO0fe50E3jKF7
+	 vmxO3ZW2yAk0p/DAqyfMZtRMCq7a+ve4EXrdxBjnu1JWSxLD1s3NeE5qtZG3hB0KnjuZG
+	 L0UpfAiaE6EiGOr4NPGo2QiQ0tGutY6q3UCqoBREQ3JdiuwJoHeEhRc9VuAfVsFUhVy1H
+	 +U+QxGhIJMSouZc8rpGRRJx/a/dfbJA+rdtIj4y/sh1Y+lMw6nAKBpH6SvTIe1bQEi+f6
+	 +jECBlwN/cEZWBiGNVm1UKb38w9VJ4064h4RWMjqEXjBFHK+nh84eax+ePn99PBmm5A==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=none header.from=etsalapatis.com;
+	spf=pass smtp.mailfrom=etsalapatis.com;
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b="xTkyCu+/";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.47
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4465F606A31A;
-	Tue, 27 Oct 2026 20:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134D0606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 20:52:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 134D0606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IutB40zm
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 703AD1F01825;
-	Tue, 27 Oct 2026 20:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793134274;
-	bh=CSLm47a7FT6NjfnxYmf/lBzZ+ptNygyn0ERsa1f7ok4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=IutB40zmBKNxx4M3pZNrzksYDpGtSz4o9lVe5YiPqvjlw/+8B2o1ONubnP6N4ozC9
-	 gnxLLJkWCtIaXcepa4/frGNd5mrtK4ttXP5mR6OZCMCGJa6FDRAdlNhNQE0RlNIc/H
-	 mjFMr3Ejx5T7sMcQmnHyUEJNq2JdgQ/p76LSGXb5lFzYvKzC82OU6mUup76APkFQZz
-	 yrMsNnK3WIbqfUk8bVvacmE+/UL1UDBQb7UNkadB0Dy+Z9PtBFJrc84N7KvrWzoTVy
-	 Vfps1n/0cV2H05QJaZ1KQS6sCGwa/6Ed/mNCmYkbEX/pxKBKLXy97xJ3xDn8KiVAMo
-	 H/F+lVMdKTzAg==
-Message-ID: <271e8930-471e-4685-bed7-756748cb1baf@kernel.org>
-Date: Tue, 27 Oct 2026 13:51:14 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=xTkyCu+/
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6798eb0d13fso438445d50.0
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 13:52:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793134329; cv=none;
+        d=google.com; s=arc-20260327;
+        b=U2NBXAQKe0uZnN944HzFHTUYqBhvrglTUW5RRHqyY3G92QNAEscSUXVFBSKrRu6jDk
+         atd9EzJGt7sh3xX0jpKWeNOYh1jpNeU2v/FsCWikGFkyY5Jf2u0OrMKtaiNVIJiAJ1La
+         1VtXJg8DuFcYlfQ31zlHula8EkrmGuEcK0iPPfZ0doL+i2n4rF6EwhNqFRyyIl6rT1+w
+         zwoexF6wQWQBhNxG+5FcFkoWTDf8vBvBxxA87H+9oL98SBy87aXY+tGb1Jd1SSsfzc9W
+         FyqQb+TLuDr+P34Mth+jE9K922t6J/SxWPjlKS6KvBd9rAMsoVjGTe12x/uojxBj9HFQ
+         +IIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7GDvLuXXpL52b0ovddXSOSszIk8p5cQntkA2ZQ4tYQc=;
+        fh=GsizxCaGQ2nVZN5bHfNu+gnasnbmBAOTZ+FBDFs+xqE=;
+        b=b15rOP1el2S888wFMX1njROBKFKJ6ee9r0cYRk1yZ7EvCLMVxoO/tIcXxeCYHH4KC2
+         m8m7m8pVVKQFNhKA81vjFg0gjrK8ZRAJfW/GIoGFbGNtPST7YxMBWZjrQMETirFoOVH1
+         NfOkm7Q7avyMXuspF3m1B6p3YKHRfMPW8Glg6AcNhDAnCJS0WTcdUNyRS/e2aH6KERkH
+         nQSAb7Y75eIi+0h38I+Y0c25mNO/IkfAd/FBdTMybNBgOVmYLu9Ol7/D4OnLL4Q3Dvle
+         amC827pHLBdjaMfOE4Ar5BmNr44UmPFN4BcaXPRZn/conZPRn0z2jyuPMmPuoQtIkG2c
+         Jb8A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis.com; s=google; t=1793134329; x=1793739129; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7GDvLuXXpL52b0ovddXSOSszIk8p5cQntkA2ZQ4tYQc=;
+        b=xTkyCu+/mJweMOMoY0lKnFidgjQG5vXGR1Xcm07VMm5w8NsAV+wQHnjdms5x5lVv3X
+         o+PGvRUqEBblT3Sq6S7BopDE4QE2pWQw66g/7BwnxLshKZFKAnXEy6ecLJZy0ymbFNpI
+         +25Cq0UWcsgSKMhtaykpqfKdoGS3vvGksWCo8hJHJL5Vq7I0k/qT0U5aM6uwAJ+7MU5+
+         2tO+1mE/OBNVlhNqpsgXNnz9RybX+1KTcU5AJfiYLl6weM2pprhT23nHNoErcKfByI6c
+         PmTUCYp22bY3KJx5E11MbzY+6HcXuXFZsDW9m4O2Tjp0vC0I5nixeiFGNC6QFvyGIKsG
+         HnAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793134329; x=1793739129;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7GDvLuXXpL52b0ovddXSOSszIk8p5cQntkA2ZQ4tYQc=;
+        b=x5/o6ZdsmqUHnK1FR6C8eKZntNZF7pkiu+vqffC6HTe9rgfCa2qQMaWjV82OYQ/vVX
+         M3jQylYoJCYeFnX+gcPIIp0tEvol2gtjgTaGQ8X0Yvng3KKKMx8d9YN+8RQrzygESz+T
+         YoWpjqAqCgQU30dWHJuPUoUU9aNAEEialA1QR2NDOy+xSpAtF29P1F0BvoKESzEadJ8p
+         MwoMcBH7EUBlQApJgIV/2oaFU3aWEgrZxascRh//ZvBV5QrjOX/Cw9J0NdLnCO+TSQ0Q
+         i1dD+Loj6K5szVRQBVK2hywqHlP8wXJpW6GGZA22DPeUfv2pC51iXVoCp8Bxk0EpLPLd
+         xDvw==
+X-Gm-Message-State: AFq9FYJ8RUq8Bj0J2Lu2EXvTHF39TUFRf+2LvYVkK7SufpJ2B/nek2AR
+	uOPsVgBhKQagwcqjb/Ga3EtU26OM2bBcwrPmUrQSPXaHP3C7GYiucEMG1/PAdCAbcP5XiuZljiw
+	9Fr9Ajfzj+m3g5ZlgL6m7UiCbT9OaR1UvvDASO9WR0w==
+X-Gm-Gg: AYBFou2OkXxMP0E/73Ljkw5MpQUAUqJ3xr+dcZPIZ9ZkOWqhmcMMwJNltcClu/Uufl+
+	JRp1N9GPDJgW3ZDInzY9hv7zQYqvJJgVli+cIVle0fEjMDk9u3vUQtp3D7mm8sJvlSc1XLSOrf8
+	Rc2sBb1uh0Bbjz0E/uqTCYZEdDU4anui2z+7QY6bJVfp7q8OZmouE21JQVV+7GxEWjmSUGlKL/l
+	fYvE8NUj3KTrFnOsXZeLlh4snfT7xgAG2/hnZSa0OtIoS2zH/DXZgwhO4VFZInfrc6fQFwGsiwr
+	gNp5vtM7DWH2MUR6mz0cJ4oltRQvYwvqNfuYLAHr32ghNvM9Q4CJxPpFyrqg98gXurgya8fGwE+
+	BY/7atcVZbrHwZBxtZQVxWnKjRjaxo2DTfk6wdndE0RuSgLXra56n
+X-Received: by 2002:a05:690e:4391:b0:677:b49d:2fee with SMTP id
+ 956f58d0204a3-67a7bd0ee4emr396093d50.115.1793134328987; Tue, 27 Oct 2026
+ 13:52:08 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -51,70 +103,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 1/4] ipe: add the .ipe policy keyring
-To: Manuel Huber <manuelh@nvidia.com>, David Howells <dhowells@redhat.com>,
- Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
- Andrew Halaney <andrew@amutable.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>,
- "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20261019-b4-ipe-keyring-rfc-v1-0-156f0b93e843@nvidia.com>
- <20261019-b4-ipe-keyring-rfc-v1-1-156f0b93e843@nvidia.com>
- <702ade20-a2f3-4919-97e6-c72faa89399a@kernel.org>
- <DM4PR12MB6136C6E1BE1E6D675AFFF0EDDE602@DM4PR12MB6136.namprd12.prod.outlook.com>
-Content-Language: en-US
-From: Fan Wu <wufan@kernel.org>
-In-Reply-To: <DM4PR12MB6136C6E1BE1E6D675AFFF0EDDE602@DM4PR12MB6136.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20261023002056.6647-1-emil@etsalapatis.com> <20261023002056.6647-7-emil@etsalapatis.com>
+ <DMFVT5P2IT5V.3U8JXPSPQR8CG@gmail.com>
+In-Reply-To: <DMFVT5P2IT5V.3U8JXPSPQR8CG@gmail.com>
+From: Emil Tsalapatis <emil@etsalapatis.com>
+Date: Tue, 27 Oct 2026 20:51:57 +0000
+X-Gm-Features: AclHuK---VK51LUAmKJ9sbG1KDkYhg628BzXX7M1QzVlyIbivEcljk_xmQvtj_Q
+Message-ID: <CABFh=a5LTwnh0qZECGbiJpJwYSOLmyETfpotVc_VCy2ZvUBYkg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 6/7] selftests/bpf: libarena: Add a transfer cache
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, daniel@iogearbox.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/27/2026 1:12 PM, Manuel Huber wrote:
-> On Mon, Oct 19, 2026 at 04:15:57PM -0700, Fan Wu wrote:
->> I would prefer a Kconfig CONFIG_SECURITY_IPE_KEYRING default to N instead,
->> like the fsverity keyring. In the kconfig you can also describe in which
->> cases should this option be turned on.
-> 
-> Thanks to everyone for the discussion. Some of the points raised are
-> actionable, but two review questions still seem to be open:
-> 
-> 1. Whether to use CONFIG_SECURITY_IPE_KEYRING or the 'per-boot
->    provisioning' pattern with a kernel command-line parameter
-> 2. Whether IPE should accept any irreversible keyring restriction or
->    specifically mandate restrict_link_reject.
-> 
-> I want to remain completely neutral here because I am only a potential
-> first-time contributor, and because the scenario I elaborated on can be
-> realized with either resolution. Fan, would you prefer that I:
-> 
-> a. move forward with a non-RFC v2 incorporating your initial
->    suggestions;
-> b. revise the suggestions given the subsequent discussion; or
-> c. wait for more input before making a decision?
-> 
-> Apologies if this follow-up causes unnecessary churn and turnovers. If
-> the thread remains quiet, I will proceed with (a).
+On Tue, Oct 27, 2026 at 7:52=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Oct 22, 2026 at 05:20 PM Emil Tsalapatis <emil@etsalapatis.com> w=
+rote:
+> > When the array is full or its lock is busy, spill the local batch to th=
+e
+> > buddy allocator with buddy_free_bulk(), so the next frees fit in the
+> > local cache instead of each taking the transfer and buddy locks. NMI
+>
+> My earlier feedback must have been lost:
+> Pls add the buddy_free_bulk() spill in patch 5, next to the batched
+> refill. Keep only the transfer array in this patch, on top of it.
+> As posted buddy_cache_spill() arrives here with both branches. Until this
+> patch a free into a full cache takes the buddy lock for every object.
+>
 
-I would prefer using a Kconfig option to enable the keyring itself. If
-you want a kernel command-line parameter, please gate it behind a
-separate Kconfig option and document the detailed scenario for how you
-intend to use it.
+Hi Alexei,
 
-The same applies to the keyring restriction check.
+Yes I must have missed that, sorry about that. I will address and respin.
 
-I also suggest adding a dedicated threat model discussion in your next
-version. The proposed model drifts significantly from IPE's current
-threat model, where the root of trust comes from the kernel image or
-firmware, and please also address the kexec interaction that Luca
-pointed out.
+> Also your libarena compatibility fixups series changes the same lines of
+> buddy.h, it seems. I suspect you want them to go first and rebase this on=
+e.
+>
 
-Fan
+Yes, the plan is to first merge the compatibility fixes then make the large=
+r
+change. I'll respin on top once we handle the compatibility patch.
+
+> pw-bot: cr
