@@ -1,102 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793118799;
-	b=H2UDp03kH1R0Koy9z0lOn+ya1U60pKuJRrwdLDsl5AkJgMtHjX3qcllX2ZHzH+9sUQJP
-	 JqccgazevdFjR/Htn1B0frgoFxo1MshKHDW8LI3tnRJwNrOOAqrrCCVrItcXAoyLrlYoJ
-	 ySH6JNKpKHmDTZYZJvjwo942D23/OKh94GyurqRj31Q5c6tFx11bLyqSWXZzfHLSyE5Ch
-	 v9c0g1w9oPU1zjvr0fabcmFXmSqcaCPtosCxxNXNsPBKivIviX1dFZywJS6pNdTYRwU4m
-	 4EeD4h9kO6LP1mrWIZBMeTCwUwnV1rpIM0VON2fEiY0aEP1nnYJ9+0QWpkkJnfo3PWA==
+	t=1793119009;
+	b=KrSq95gZHk9nqBtcc6yIorAiHxDw6VxXGzt7GxJyr2kOENcXnaVzBzrFW2EK3wyk43dq
+	 L/ehD+Ss737eqeTQmzY6fvWn36Xn0DkXvOz+gL7+YjxoOJqj4lFso3DDiuIHC1ohq4H50
+	 +2lePP6ihYrVfwqelHRPQskfQsRhPigCnY8f9hkYyvPbp2miBJ/O63ryhC15C9GXnH8xO
+	 2IBeJ5gXVUvBo87PRkZDfnJMvAIQR237AsAskzJH9mmXJblyMJ5WB4lFV2xEbucjCxbhP
+	 22kXaQ60NY2w7PPqLNbzEdjz60YRmq+vsJnlF7OlM3pRf5hp6j81FFrXSMyOElAOvNA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118799;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:In-Reply-To:References:User-Agent:Date:Message-ID:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=I0iNj3mQ8BtY35+vPtf2TGLh4aOWNpD/xEhhJMSPSv4=;
-	b=abKiJusFlX8+YDz3o1l/edXl35iW7GIHGQO0JHmQLMw8JEW/0sF7dbcMT1j6KV30T83S
-	 37jhiuqrLWROgpRj/s7bD3QlhnGLB0eCRte63Jn3X5Mg49QIrjt/31BxQxNJzxbi98KSe
-	 JPTE0/FSUU0i+pPydUG98EO2Gznn2P8Ic0i4fn0P5rwTVSj3/ldi+MIGxK+7yeJOG3aAt
-	 7UzbqpHB0mhLbVlS7Vj5x7YMqAEIUszATLgfaGaxQepLc6A00OsFhfdQnDq2oJFYWUWUp
-	 H4kJpsPO5B8//lZB6PYN2TE9HSXavi/BB2MMi9WCxSc1b+OKOVIn0zOMnFoGxbj1OgA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793119009;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=43gKR2cy0rbAWmUana7eTuyU0m3tnOhZamuaAsPd3Xo=;
+	b=SsHrsq51musWnRMqEuYebawNMn9xBgFFTK4eLTDZlTB0rYP8MNBFukI71dwQPXbOk4Ld
+	 HP3gA5HCD8WWcXMln1mhf2mgjPKkaFq4e9VQz+qnc104tCqtbMwNi7vUmIxn0ow+g73VY
+	 Xg2UpZciV7DVOqFKDiC9p23+zx6VEs31pOZHvWIWlzbvpqfa6N6BUS0rdAWH7BI9Bp2o+
+	 HLmq2/FOlDSLKO31+tSlnF1xpiLzrkgeOKk+1MjB7d6+3+OrNTkDOj8lkyGYA5Mmg6m5x
+	 FiZukuwK2I1pfYjQ7FnvukkaQe1olCXFj+rZc1/1cCgEMGssLRoGJg4FN64boEg6gvw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=cloudflare.com;
-	spf=pass smtp.mailfrom=cloudflare.com;
-	dkim=pass header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=XEdAllwd;
-	arc=none smtp.remote-ip=209.85.208.52
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hXRIK8Kh;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F84606A320
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:33:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1F84606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DCD606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=cloudflare.com header.i=@cloudflare.com header.a=rsa-sha256 header.s=google09082023 header.b=XEdAllwd
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6b408f2d936so160935a12.1
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1793118797; x=1793723597; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=I0iNj3mQ8BtY35+vPtf2TGLh4aOWNpD/xEhhJMSPSv4=;
-        b=XEdAllwdCkqIgxXu+9bXEkBIi36DzRQwxWRhKQlVdC1xvJN70dwZhU5b18swGOpJj2
-         u9raY4q6DL49OdQYfYyO6HehetZT8xrXylxcIQMVXsrGgalnp5RQkHWtq2y/RKPZ1gCT
-         GLWye7RpdC5QoTtoU3/XYkaAfnOB3Bbn8RlTN7RhqYoCHB+4ZSSumkvf3bXfb5vkYTvK
-         bzCmgsBHCvG9Ghj1JTeuxRpqeRdi0E4AHgiPk7UeyBA4D8Wr01cozDHBPVIzr1epXCI4
-         IVEscegJO1EAvD0GX6MvChjumpmJCw6fH4pIQ6iTdu+iWVpXZLyTKoYey+dzynAYI6xe
-         EJlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793118797; x=1793723597;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=I0iNj3mQ8BtY35+vPtf2TGLh4aOWNpD/xEhhJMSPSv4=;
-        b=NPTDib4HVPn1BHjG2mvYLxJDYw8TpZnzYCuPoVJRsDTEMiX1ZqAfWvkfW/sxnZFzLp
-         Bly1ghLYjNvLBDV2F89HNnoPOt9Xx30VlT11T4s7KECgp0eAo1tUlF5NuNOL2TupzCfQ
-         5ukeSJG/ge1qpAr1f/D45CoECzB2AKuiNXLJB/a2BODEvNVmOkbUE7rqKgNkA3hSZ6qV
-         kGmx/3JsP078YlXDeXqbswZijsAUa+gUcMs5wQ9TMUSVwIJS39yFysedwUuFhK2vOVFA
-         vfCuQYUrt1v1Vt5LnLuDAV0gm0Hb/EdH9PYzA167SuAaqkzgIgyy9Wn5y8xKTPVnKQuj
-         5g5Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzdrTOCoUhWX/oJeWVHZpqJuIL4QFZrJ+28UKw107Exahq/yx67T2vuRtwOJoQQSUtuZH0=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJnT1vU7eQl/Zhds+muKfng+lixnaIEnKkblFo5Ac/FrOPBaO3C
-	JvjhtDqZ9/VNRUcTPW3VT2HOcKOVTQPP+bP9uKusoZCLFssfvldFIVbhEFsvDV3DjUM=
-X-Gm-Gg: AYBFou3sLgKZBeKB4T2h+EKJLTkA2SzU6PU4NQp8T5wKpK9gNzFBJkdUcdcvuqgmhS0
-	ZRTVw5dnW7KoRFU9gKvWXVz9N7jIwcG7eQYm8HZr6aAMdzS4oRI56A0LAWTDB9COEseYYf81dBz
-	lHh/xpUFCffYy+DbUd47OamoCnlYcCMPeOd0G5QuNA1JsWcsO0zaZ3E7h+TViTqPPGlhPxTRuO/
-	/LBcOgZl88iV949EHI2QQaFM9egedkh1rKhwnF21DemrPDsFniCLPIDp5N560s6bzRGM3DGP+Sb
-	EjDvNISBJUnwzHjY8d44K4xXXWmhH8bLYYjlALO657UgwDnsHMtQPLiz0zQzZsN+KZ5NgIPGSuy
-	f9MP4+TJg+3TB5lOjOObod4pcjnG5dU71mznkj6kQe/36s39O+zSUHP+YC1Ap4bXbh53nd1IMZq
-	A1O7Nja3KC2ExO3q7SJQ0qGXQVmOhehYk0+eVfpxyq4G1dynThRRCjJpu22/TN4ksYwA0egsOJo
-	ZpV+yhX8SeMPdN055vvYDXG12bxMb6fYipUPShhyFsLXD1ea0NRn+2vujHLa3hCWdvYOhG24eO3
-	XNCRd/vuo0BB6oF4Ydhak3AVf1xdhegfj+3lEn+6
-X-Received: by 2002:a17:906:7314:b0:c42:102f:15e8 with SMTP id a640c23a62f3a-c46bdd68f4emr1061585666b.14.1793118797178;
-        Tue, 27 Oct 2026 09:33:17 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac6:5067:2dc::49:1e9])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c46bd79b884sm481105066b.75.2026.10.27.09.33.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 09:33:16 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: phx <phx0fer@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,  John Fastabend
- <john.fastabend@gmail.com>,  Jiayuan Chen <jiayuan.chen@linux.dev>,
-  Network Development <netdev@vger.kernel.org>,  bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v2] bpf, sockmap: annotate the psock teardown data
- races
-In-Reply-To: <CAKvCo-zf6=ABrMEn_8r7rJFFvaaXQrz8GAUQ9Uz4h0Ze9gY68w@mail.gmail.com>
-	(phx's message of "Tue, 27 Oct 2026 13:10:52 +0800")
-References: <20261021155629.68813-1-phx0fer@gmail.com>
-	<20261022054811.35008-1-phx0fer@gmail.com>
-	<DMBHB0TQOV1L.38MECMYFGUS5B@gmail.com> <871p9g6ym1.fsf@cloudflare.com>
-	<CAADnVQLTe611mm0iJEf5gJi2GtW42kxNHH3sUPevD039FvzL7g@mail.gmail.com>
-	<87v76o63qv.fsf@cloudflare.com>
-	<CAKvCo-zf6=ABrMEn_8r7rJFFvaaXQrz8GAUQ9Uz4h0Ze9gY68w@mail.gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Tue, 27 Oct 2026 17:33:15 +0100
-Message-ID: <87pkwv5cj8.fsf@cloudflare.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hXRIK8Kh
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4701F01825;
+	Tue, 27 Oct 2026 16:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793119009;
+	bh=43gKR2cy0rbAWmUana7eTuyU0m3tnOhZamuaAsPd3Xo=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=hXRIK8KhLZnQNQyspuR9CPwltsH2/sV4rIvauKb7bPjKL/SQUxQhz++Dwa4RUhMS/
+	 p+6F34ehIina6rS93d4+TYJQbHPFDMapRnM7mFbuzjWZVDIwxSI7wJWtBwOfAeGfqq
+	 89ucrO3lBS6XWtJFH0Wz/RQ1R+BfJDsxB3lfpImuy7EIMTYV6CVWc8h4Fsqn0qZrVq
+	 a4k5j762HHEU9wcLef4oFwQRctnGkluQFkI4J38RCfvjBjh3cWTDhDrEWVX+Cbm2be
+	 BtvyLuAaaBry+9Gv4KlqW6iYR5ITKUGs75eVSMAmfftzq1vtHDuNKe1Kmz2olx0x5E
+	 25v3TZRsGCFKQ==
+Message-ID: <sashiko-outbox-186933@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/4] libarena: remove in-code licenses
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, bpf@vger.kernel.org
+In-Reply-To: <20261027162916.10996-2-emil@etsalapatis.com>
+References: <20261027162916.10996-1-emil@etsalapatis.com>
+ <20261027162916.10996-2-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 27 Oct 2026 16:36:48 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,23 +58,90 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 27, 2026 at 01:10 PM +08, phx wrote:
-> Sorry for the long silence =E2=80=94 my laptop died right after v2 and to=
-ok the
-> local mail and the working tree with it. Agreed that the ordering fix is
-> the right one; please go ahead with the commandeer, Jakub.
->
-> I do still have the reproducer (a KCSAN selftest for this race, verified
-> in QEMU). Say the word and I will post it, or send it to you to fold into
-> your respin.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: missing license section in libarena_bench.bpf.o
+--
 
-Feel free to iterate on the patch once you get your dev env restored.
+commit 1bfbb56cf90063a6a767e7e64926692dd815ff9b
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-We would also need selftest coverage for the race, if it reproduces
-relatively fast. You can take a look at test_race_insert_listen for an
-example.
+libarena: remove in-code licenses
 
+This commit removes the SEC("license") definitions from the libarena BPF
+source files (asan.bpf.c, buddy.bpf.c, and common.bpf.c) so that consumers
+of libarena provide their own license section.
+
+> diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/=
+testing/selftests/bpf/libarena/src/asan.bpf.c
+> index de656b69d13af..8a0f061106064 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+> @@ -532,5 +532,3 @@ __weak __noasan int asan_init(struct asan_init_args *=
+args)
+>  #pragma clang attribute pop
+> =20
+>  #endif /* BPF_ARENA_ASAN */
+> -
+> -__weak char _license[] SEC("license") =3D "GPL";
+> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools=
+/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> index 2490ab1396de0..552ce87875e3b 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> @@ -899,5 +899,3 @@ __weak int buddy_free(struct buddy __arena *buddy, vo=
+id __arena *addr)
+> =20
+>  	return ret;
+>  }
+> -
+> -__weak char _license[] SEC("license") =3D "GPL";
+> diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tool=
+s/testing/selftests/bpf/libarena/src/common.bpf.c
+> index d1af60b818389..d859bd538c52d 100644
+> --- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+> @@ -85,5 +85,3 @@ __weak void arena_free(void __arena *ptr)
+>  {
+>  	buddy_free(&buddy, ptr);
+>  }
+> -
+> -char _license[] SEC("license") =3D "GPL";
+
+[Severity: Medium]
+Does removing _license from common.bpf.c, buddy.bpf.c, and asan.bpf.c leave
+libarena_bench.bpf.o without a license section and break the libarena
+benchmarks at load time?
+
+In tools/testing/selftests/bpf/libarena/Makefile, libarena_bench.bpf.o is
+linked solely from LIBARENA_CORE_SOURCES and LIBARENA_BENCH_SOURCES:
+
+    LIBARENA_BENCH_OBJECTS =3D $(notdir $(LIBARENA_CORE_SOURCES:.bpf.c=3D.b=
+pf.o) \
+                                      $(LIBARENA_BENCH_SOURCES:.bpf.c=3D.bp=
+f.o))
+
+Unlike the selftests in selftests/test_buddy.bpf.c and
+selftests/test_asan_buddy.bpf.c, the benchmark source in
+tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c does not
+define a SEC("license") section.
+
+When running the libarena-malloc or libarena-calloc benchmarks in
+tools/testing/selftests/bpf/benchs/bench_libarena.c:
+
+    malloc_setup() / calloc_setup()
+      -> setup_common()
+           -> libarena_bench__open_and_load()
+
+libarena_bench.bpf.o now loads with an empty license string, so the BPF
+verifier rejects the programs with -EINVAL when checking GPL compatibility
+for their kfunc calls, kernel BTF accesses, and bpf_trace_printk usage.
+
+Should tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c define
+a SEC("license") section now that the core library sources no longer provide
+one?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027162916.1099=
+6-1-emil@etsalapatis.com?part=3D1
