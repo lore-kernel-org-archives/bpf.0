@@ -1,97 +1,49 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793118564;
-	b=KawXCl2WrhaeEhToCSAxYLXHY2k3dnp1F6uGAVJUrmTAlcsT6drVOOFGi2ESIAchK0IM
-	 mofrNLVbA0u84Cs4/uYQ39R2fbJUWQuwbJqwH8kjSaW0bP+CXz4gbV1Ey9njTMAUoQngD
-	 ZLuMxG2l98dPYv65yBFri414Wra9lbcitj2P6VLfCKAp5QAsdUfoyZDKOHetHTFRXBgct
-	 gVgLKRp9BSkNDNW7Z351DusjJven+zR1MwQAqM8RDd4SOfzaaS8MQbKpU2gDazj9wgk1B
-	 sIFj91Xx+m1TVI2fbSrNhO1WzjSa0e5ON5Q9/Gy5SvlJxW1szfNcF2/J20pfxPuDZJw==
+	t=1793118611;
+	b=uSKH4y2Z+AWSPuOfta8yWc5vZ29fDX7YjyEVVhr0l/8dzCgrcy2+IbPs1Vd7d/qHu11g
+	 m/zbuaG24vClWGU+a8mEd4zeON1wOEtkzokMeqdV6+90NN57A6XeXp8ykutl/SEk7KNIj
+	 YVa8fPJuvevTrtU2/0CT196Sfcna1HI/8zPzg/4r3Ki+0FBOXaAX6TV++chdynf4FpURi
+	 mvgr1Ko6Ys+BUp5ad2YCbiGShRNhyRr4fESiB4aB8y8j3tKLYUHcBNfxWeIIhiiHg/SdZ
+	 8x95m46homLQe1BQAlfVEP4IAdIhSVg8XWKYG2HayaH+SIzFx+/vaxPm6xCQTuqywXw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118564;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=GQZGJeSpKyzleV5tnvZzt+FXSaWm72txTVpShChFQ+4=;
-	b=zJd8INDrSzA6o4PzGl07WDQXD0uip9hh9Cr1iTJnz+KbrfJzhk/CXag4pygTyqs9fcCM
-	 4Piri5w6Y70UYE2+iZrucw1p905XxYM6fHuE9aLNnDYiANOzDhxm+kvveK5bu5pgCkkPi
-	 o2jI+5Y/1WlPyxMsB/zfGFaytIg99tjt856jFghuK/zQZo4Qj93QCpIJNDWuGMqy6VJ6E
-	 iYKqqQBmrMUfPMuKhcz/4imx8ffoMt3q/gETp4GhB2QUWV8FxmtGbOFPEkUnmx4/N2rUz
-	 RQ9Y/1K+wbtT1tcroBZuu7837vRSo7HbSj3CHYG3wtJ8zq3amE9LGEGW5zfbfZWfkkg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793118611;
+	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
+	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc;
+	bh=GB0gRLlV4wVO1bv8u274vyCCN8paUU5WSSz4Hrk9iuA=;
+	b=F4C/2gtggBzV4FpiDBIsYBcOtP06OVfYXpFADN4Pf/pjFcUoNPOSxeTsZsIdVMzKiuRi
+	 RFKkkg9nEOzse+Ejf0YXXgJofAKQS76IGRhkHqQAnnJqCXN+Nc0dspkQ2FHWepUy3gcML
+	 JNirrF1tQ8NVEGLXg7kdob8zhUTg3kAQUmAzyIB0DfidA+5+zKipOK4kdUGIyCrrmDlTQ
+	 1jVX7FyB3on/wON6ZxKLBBT/8uqub0LtTs5I1KKgve+v7grjpxzgHVbj3Uf+eB/4LDQNx
+	 wWKEajMGIJ+87rsDJnUcFqcB3g25PN07GgRdW1g/cgRRC6JBRqUSKdcv3ncp53+eH1g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=etsalapatis.com;
-	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=NyQbr7lk;
-	arc=none smtp.remote-ip=209.85.216.48
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L7U0HaXe;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855CF606A32A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:29:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 855CF606A32A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCE1606A31D
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=NyQbr7lk
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3acc96a256dso63567a91.3
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:29:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1793118564; x=1793723364; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GQZGJeSpKyzleV5tnvZzt+FXSaWm72txTVpShChFQ+4=;
-        b=NyQbr7lkksXldNgOuzG6kzjDwPd1TwOWi1qEN8TKcR+1Z/1L41jyaZNidrd/f5Hj/K
-         SKq/YX7xAgxFdE7VEVDzFVbb1VmxUkTALqjzDYeBEwH3/R2FoObTTpATSbqI71Az6YhU
-         reuQM7oyJpe/0VlH7dYENr3M5sWN49cQV/lPiELXbtdvWqPMJH/1scrZHIX24NGTzLs1
-         VuQZD+/9UQHQWJmLYePyL95wDTJKsWoYmhD4bquSob09CUeVqbIsqyHrcWNwdehmlrGf
-         H/YPJHA2rUQvMbpKAdnf5J32rx9vjJOYWGPY2N/B8QeCf+TYe4n/nuJt3hwd7S4bLGtZ
-         Pw0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793118564; x=1793723364;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GQZGJeSpKyzleV5tnvZzt+FXSaWm72txTVpShChFQ+4=;
-        b=yeiwiPICZE6O18Mf3kuLI6F28vA1Eu6asmP/cGFw909i7Jqf5K/JiKiGHnr+jw4MV6
-         Z3izelq6qugMhooj+NyvkTXQDUnuPlif0k9XkEVsUHTbpKl3jwVeX0V0MOBsXZcWxVqG
-         Gm/O7F/jJ+nTBo/X+Krlv5JHq9C8x92HSqdthL3dXBmKkTpqgHTp6r8pZwv8KADzxTYI
-         ZzasBusL3WamU3OCRdQZxZkTWMlchegmSr8RPwxxASdjfB8XEWlAvWxvG5dj7kkJTffX
-         YEh/vHNKoAt2BWO8cetzQG1OAe3zZD7GyglcJ6I4zhCA7bcD5KntJLXQbpSh1hq/yvYN
-         LGDQ==
-X-Gm-Message-State: AFq9FYJAk2cWmpDp6CEmP6gJRfaBm2nhBvraCLxezp0MSkWinzmVZkDf
-	8RrQWljbeuu8c+3k80VZLAgU4nOwm8rtwjRRTndmakWn/9NL14BmK0OYUcqJEn5IcHDjEqYm3f+
-	ldqKI
-X-Gm-Gg: AYBFou2/JDQrRhDPiYLaw2PgHo3VlYKCcTOZ5ooZdRcRshEA7LdagIiWQJ2w47ZEhJF
-	MZt5GD+7zxJHHqWvH0y87AAcLwdPg7+pA+GeUp4D0BVzo/VoyLiDs5pt9zOqK6AjG5jkWP093ES
-	+qbCOLeES3lJI0i6MIpP99X7Ea2g3/ImBwbm/SNi+cYpjM2KNvHwucQo2mhzYOQR3gGSSpX13Zw
-	7qyJJSfEmd4+J6o7IP4C8fKsY2hfdVbDS0AH8RUjmNLmJf4KGbCBc7rwG7dLGwnJjn3ojIBgR+0
-	C/0uxprw4O4SOGZlQnHVU0E9uB0jB+3ZX9dM7udC6XLzbYU9MeGFzUmMSAfhGzUJsZe47fXRoNm
-	ghMW7Vocowv9yRDsd96nsCWP+ab6e9SujNSm7lwSFztsKYDE4IEr6jlWlnqOv14D1PAvQAlgCQI
-	gaaejMdtOo2aJNi/yMLGfKvz8enkiWqEn6g5zxTJdaD9rJsfBZJv26pJyTaxtTtnuOObNh0TXia
-	aewQnljT+S0DEg2ck44S5pYbfTjLZW2DHkIKrB8yUhQkALsHMks1zzb+NWE7rn+5DF99UYcntko
-	c8eXVdmDzgATkD/jnA==
-X-Received: by 2002:a17:90b:4cd1:b0:3ac:7449:40b4 with SMTP id 98e67ed59e1d1-3adead4f730mr7774136a91.45.1793118563927;
-        Tue, 27 Oct 2026 09:29:23 -0700 (PDT)
-Received: from alpine05.ht.home (107-190-31-93.cpe.teksavvy.com. [107.190.31.93])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3adebb75254sm7288854a91.4.2026.10.27.09.29.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 09:29:23 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next 4/4] selftests/bpf: libarena: Make zero variable type __u32 instead of u32
-Date: Tue, 27 Oct 2026 16:29:16 +0000
-Message-ID: <20261027162916.10996-5-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261027162916.10996-1-emil@etsalapatis.com>
-References: <20261027162916.10996-1-emil@etsalapatis.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L7U0HaXe
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5368F1F01825;
+	Tue, 27 Oct 2026 16:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793118610;
+	bh=GB0gRLlV4wVO1bv8u274vyCCN8paUU5WSSz4Hrk9iuA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=L7U0HaXeO7RjxF6u7VSlVyacQeVEOIwHniR8PC5NY+n9orw6dhQCfEG4KOgO4n+Cm
+	 BchPTfR1Aglqfm4088nrAp2sNkx+zkTJJ59r1BOcdmRu6SanJ60hzu/04jGpEI9bH7
+	 FphX0wrevALtj0CkooPiCUDpy/ipu+QLjUQyWxegd3iQgXhBlSvc90A5i+4hJSDizL
+	 kuPMpO24yUridXMQerBecPrC9X3mMfcFFJQFacE7HdSJ3p7pxKh4udvOs53OXf4TOb
+	 h+uGzkQPAkmlQzep1PRpKvfbHulitArMKMe+6Nm9AGoyn/5hcUvweTFxPmxPpDG6Fi
+	 vlKaTsH5X90Gw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4450D3AA9A95;
+	Tue, 27 Oct 2026 16:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,43 +54,64 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2 00/11] bpf: fixes and follow-ups for 32-/64-bit
+ scalar
+ evolution
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179311860907.198437.13084328897071120006.git-patchwork-notify@kernel.org>
+Date: Tue, 27 Oct 2026 16:30:09 +0000
+References: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
+In-Reply-To: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@fb.com, yonghong.song@linux.dev,
+ memxor@gmail.com
 
-Change the zero variable used for loop convergence to the user-visible
-__u32 type to avoid missing type issues when including the skeleton
-in userspace.
+Hello:
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- tools/testing/selftests/bpf/libarena/include/libarena/common.h | 2 +-
- tools/testing/selftests/bpf/libarena/src/common.bpf.c          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-index a6220355a697..940e82cc2928 100644
---- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-@@ -43,7 +43,7 @@ struct {
-  * imprecise. To force the variable to be imprecise, initialize it with
-  * the opaque volatile variable 0 instead of the constant 0.
-  */
--volatile u32 zero __weak;
-+volatile __u32 zero __weak;
- extern volatile u64 asan_violated;
- 
- int arena_fls(__u64 word);
-diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-index d859bd538c52..c3c5326d8ca2 100644
---- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-@@ -7,7 +7,7 @@
- #include <libarena/buddy.h>
- 
- struct buddy __arena buddy;
--volatile u32 zero = 0;
-+volatile __u32 zero = 0;
- 
- /*
-  * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
+On Mon, 26 Oct 2026 16:38:20 -0700 you wrote:
+> Fixes:
+> - bpf: avoid false infinite loop reports after changes in SCEV clamping
+> - bpf: do not intersect with current register range on clamp
+> - bpf: reject pointer operands for 32-bit recurrences/latches
+> 
+> Follow-ups:
+> - bpf: (zext32 (zext32 X)) -> (zext32 X) SCEV simplification rule
+> - bpf: check the iteration count before the predicted exit value
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v2,01/11] bpf: reject pointer operands for 32-bit recurrences/latches
+    https://git.kernel.org/bpf/bpf/c/c463b378eae7
+  - [bpf,v2,02/11] bpf: do not intersect with current register range on clamp
+    https://git.kernel.org/bpf/bpf/c/0c33d612bdd5
+  - [bpf,v2,03/11] bpf: avoid false infinite loop reports after changes in SCEV clamping
+    https://git.kernel.org/bpf/bpf/c/5dd32c8c1082
+  - [bpf,v2,04/11] bpf: check the iteration count before the predicted exit value
+    https://git.kernel.org/bpf/bpf/c/86d654957d40
+  - [bpf,v2,05/11] bpf: (zext32 (zext32 X)) -> (zext32 X) SCEV simplification rule
+    https://git.kernel.org/bpf/bpf/c/abc9a76a888f
+  - [bpf,v2,06/11] bpf: print 32-bit SCEV bounds as 32-bit numbers
+    https://git.kernel.org/bpf/bpf/c/899cbaae6e4c
+  - [bpf,v2,07/11] selftests/bpf: pointer operands for 32-bit recurrences/latches
+    https://git.kernel.org/bpf/bpf/c/88b1da858326
+  - [bpf,v2,08/11] selftests/bpf: cases with empty range error under old clamping logic
+    https://git.kernel.org/bpf/bpf/c/39cd4e0915c4
+  - [bpf,v2,09/11] selftests/bpf: cases for SCEV interaction with infinite loop detection
+    https://git.kernel.org/bpf/bpf/c/344c14e8b3d4
+  - [bpf,v2,10/11] selftests/bpf: 32-bit copy of the counter compared at the latch
+    https://git.kernel.org/bpf/bpf/c/a0137c789774
+  - [bpf,v2,11/11] selftests/bpf: Restore stack pointer subrange pruning coverage
+    https://git.kernel.org/bpf/bpf/c/8fd732e5a64b
+
+You are awesome, thank you!
 -- 
-2.52.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
