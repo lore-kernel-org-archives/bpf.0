@@ -1,96 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=185.70.43.99
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793118740;
-	b=OLgB4sbPArsw0jsNFFIqYgiHw1nhIrEFwbX5z100EFPLJBSfNvMJ7ovVcHNWFuMO4F1W
-	 GgGWS6FneVe+vmfZEa6pj9tXtpB/kQFl428NJIE+6A0tHv8GDhRZNa6WAGp5aQ/jBNErx
-	 DDxW3aL0GtljvGWKVBf2KQfsmfi7aW9oUlI2TYJ3VErRc2TU8uCgBaU1YpHmZhiFh+CU0
-	 iwqmErTHMGUj/QE5o2aYk/rn6RJU/ljf4aOUuim72kdmwDMLApdwmE6aQIiPUDy/do3Rj
-	 UpFzdQh2hFzwAxoycDQgKbWPK1bmrfdk4QGiUUzpaAh34ojF9HP+ic4IO3sOh34FVAw==
+	t=1793118788;
+	b=W7w3pz71eQmNiK/JHjGwijxlN/Vxs2poUeAg+6t82ejb9ioYK2NuMi8buJFOCJye585y
+	 t52MZUCVKdTfT/9wWTshPPPWARMgROYKXyc/oy3OhmGgrZ/DKoK+x7OsP7AveBT/3bpqi
+	 PuM99A9XPALPUC3NE7OTG/SP4EEbolVfJLHjiL6Rkewwod8CfsGgwyKE8tzhLg+NJ4kvh
+	 imXT2VWx4PgG0/yn5w2WalOv6rJPs419+KZnodjm0BcN0K/Z+wQ0iPXYH0yFHZDIAhBX4
+	 gxrT+CxHuv7vw9RXM2+qiqkK4Qr+NRZvjfrWsBdcpD4WofWanrbHlZH9QyZSQGFt/3Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118740;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
-	bh=0mdL64Frw2gub/zA/rrwkHIJcZJCaoWtWai8A7v56Kc=;
-	b=Cz9cqPpF6Y6BEVL7cbkA4SPpYdkBFunqf1Xl97+1eq5V8CIc+txzrD0tvoqjcHsqHR8q
-	 itcs5StwhUsqhodZ0ejLElQNbluPec1PjYys6kqXJtnxne8vu59Bd0OBHV58JtbODIqF2
-	 1eLKwQNxRJS9G1EmJ5/dKCoseVqP9oPe7wCByV9VUpK+xe9qwSNQSTE+t/l8RmiqOUd4o
-	 DAFhsOTC4pMC1dLKh1wyGY+7NQtjZ/MEv0khhCEAUIFA+h2DcRtDUsXhYabjImWaNlxXz
-	 FsvuRfwvW6DjLVntjy0f4ZCoHovL2CAxH0smq5+8irBpEVkgEaAGJMf72hWzw26IsCA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793118788;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=TbMT5lghyaS7KxQgJ+MM/CluoulGShAxSFb3s558JYY=;
+	b=bW6PhiNXGwtjK2ha10CFqmwBhKl0dvwyqL4IKG4GeHx1cknP5/shMFleP1v+OlTdn3hw
+	 yV3JPnbIowUkmjs5UpuNlqqF1WdC/IyXZ/LksMDnNkA3MYmtelUdDhDblDAemWuNYNTaC
+	 Zs3Z87IAjqL6lB1s+oPhLq5PadcpXLzJlmqH834zFaNZ+755cVPFgLRqExFGT+rZdSno4
+	 5vgLBUEnivY+kh5j7lT1r4G9uZn8sHz2cbT7Ax2oXoxw3+ByiakloZekJ9dKTkmr9UHt7
+	 l1djNc40cgm4JHj3g2ElMOq0Ap37OB6PJdtiuzZGNKn71PP6CpfVFnseAVM5nQNbynw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ba88qj7K;
-	arc=none smtp.remote-ip=209.85.214.179
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=1g4.org;
+	spf=pass smtp.mailfrom=1g4.org;
+	dkim=pass header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=obR0omlz;
+	arc=none smtp.remote-ip=185.70.43.99
+Received: from mail-4399.protonmail.ch (mail-4399.protonmail.ch [185.70.43.99])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E52606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:32:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48E52606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77682606A31B
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:33:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77682606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ba88qj7K
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e985106c0cso37344055ad.2
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793118740; x=1793723540; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0mdL64Frw2gub/zA/rrwkHIJcZJCaoWtWai8A7v56Kc=;
-        b=Ba88qj7K4evVzQpwU4BZMvR0OyAO80pmVJevTUId/DUPyfmmnL006JSHRZh30genZs
-         wXu3oeYEDskhwTfrwMUl9Yxd3eW9vd5Lq+3z2vv1caqz1pYmzxmJyAcW7FcbrHDuUe51
-         4J05BdUhItOXsNLTVaG+X9WuJhb4j8tW0zEuj7T1W1DDjhOAxNTyC/4kEukK46j+c9X1
-         +d4BAT8UfsRWHom4i3geEu1GqgtCTfg6rhKG6mBCMqoesnONm1a1hmpT81jFoTAmnbS9
-         xgdIKtH64xx+SYmQ4G3V2LCuc/4cntH4VTms0cWw8gwkzlHeAgQYF+XUvoCsOEsyHpIo
-         C1Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793118740; x=1793723540;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0mdL64Frw2gub/zA/rrwkHIJcZJCaoWtWai8A7v56Kc=;
-        b=LakMYSvtsXzhU9yNJYs3CdZUIfTy8g/4sZNL3huAE8W/Bj4JR5FMW9BaROH+vIfP9X
-         CD0cN4jWp+HbIofaFXaZe+gazwn9c++epnNBQVWZ+NeYt/o7i8jPGn1FccGdC8m9e8GM
-         +XM6kJShhhLC7VD2sPJX4y450BOIr6UNTJN8/Wd9JmqWe32hgYbv9J5akQyPOyLMhgx9
-         In7LU/gzLtzxsUjx1rrSaLKoOdk86o6z/unRyfgv3P4B1h+eZAKETeCmVj8bJCa+Xb8V
-         fSK2DtRtmPmS3pcrPk9AsIf5W8l1+UO9GrLV3QqXMOVf3dR/drczocCy7smTtULkjpek
-         y3/w==
-X-Forwarded-Encrypted: i=1; AKwUvBxdDjxLT9XpUB0+Pa+tiDEPsr8zktjXE6SL8EPPb33MGSr4dMUQLkkm9aG06zUtwTlq0gs=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIqbfwfTPPfjtk4TXOwgN2A+IzCia0rEUwgy4eDucGWbVXHks9T
-	zRMKxc780BdDxO8sRD4VdZbIeskYTDr2LME2N6nQMR5KapEn+8cB1TNd
-X-Gm-Gg: AYBFou3uoDprPmTQA/OXW8z0y/5Ztu3bpfK/CUHt5PdorxfwsUGoegJKUdHDbbC8iyT
-	Y8AquHAjIMPDRONkgAVvxf5mpg6RiquW3qp9nHyoAx0xlFTvJsixQC8E1Y1gN5Eju7+rTDEUJym
-	zyY9IkbsBOZiF5hjrsQYImjbsGT+EzSJ9Tgso2Z9nPLxN3pOBsfpnMKdLnDbYXOkWEQKOMgallN
-	vlCAeLGhOOY91n2gytIdyBR69wId0L2y+GAuNwRWpSobXGFgsHW+jph77Sb9vdINiVi0iPFHsgm
-	78bBtco9ahkPq5hieFyX4LFfK2BhuXBxh86v/WIaCdkvYDtl7Ssoj/nzC0edbQ8WnBQLKP1GESY
-	yJjkvfgygr2Pb1oEHAYJP7wcUuEOSYoxcguPIlrvh3Ppvk98hJiZBAyuhqqUmO5umRuQ9ExVT1P
-	UcJTahcBYLhXwVMowm8ZBf5mbLlDfTXh1g6FW+6B2xKsh8xvboAaDuRb38mf9/I5IrE4oNhyUoH
-	+A8M0iSaRDro37L9RgEN/ZYPtAu+8zh48hgmSO49mkOc8iA/fzS8utlvX7D4Ae3tra+2GykGS50
-	hHnXe5OXiOYQUpJggJd48dUrukBKMDUvqoxwoEH6JIIRGRgV4JD2+mPtRIdw
-X-Received: by 2002:a17:903:1206:b0:2d7:107c:917b with SMTP id d9443c01a7336-2ea9b8c3f02mr91246485ad.0.1793118739516;
-        Tue, 27 Oct 2026 09:32:19 -0700 (PDT)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6c9d2cesm12356595ad.65.2026.10.27.09.32.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2026 09:32:18 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Oct 2026 16:32:18 +0000
-Message-Id: <DMFRJKE5O9OE.3CSUZC83JX864@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>
-Subject: Re: [PATCH bpf 14/81] bpf: Fix a false verifier bug in the clamp of
- scalar evolution
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <5e87915b1065db0c4ce8f7f4368a8c3109cfe891.camel@gmail.com>
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-15-alexei.starovoitov@gmail.com> <5e87915b1065db0c4ce8f7f4368a8c3109cfe891.camel@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=1g4.org header.i=@1g4.org header.a=rsa-sha256 header.s=protonmail header.b=obR0omlz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
+	s=protonmail; t=1793118785; x=1793377985;
+	bh=TbMT5lghyaS7KxQgJ+MM/CluoulGShAxSFb3s558JYY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=obR0omlz+RH9skUK/AijjQJ0MbxcBbLaq7bLBd+ZpUKNrs6DZIiO03GL5wtCPo4tU
+	 oxLSsRs6PHG8SP/+utakZfh3tB6mub8qUPGxwgV/IpqiRTGtsAFyWH/w6biugAASJL
+	 3oRf38MGoR6/+0DToGYWTq/JQckkQg99rkiqXbE+knIq5yKQxZmsMrcJ/PtYNi4whL
+	 mGSW+uToCK9TQO0TECEevVoO/rADbQ1Qm7wx4E7bXCKHanRLimHQngryr1pCy5hU5Z
+	 FS+z6Av0bvsU+H9mKg4N9ixa/kk3bNu4VLmVofYZWHIBWPZTiGMul+YrhgIkRBEgGD
+	 idF/xJ5XQGSQQ==
+Date: Tue, 27 Oct 2026 16:32:59 +0000
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Paul Moses <p@1g4.org>
+Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] igc: return XSK frame copies on XDP_TX failure
+Message-ID: <R7FJ9H2Yqq7aJ5dcgVzcIZN-iI5qNsSVTCHlGTVoz9-HMbzAcMqJ6qCtNLlpjc6DATjNq67fgeC6paxLm4r5hBf4s85vmMOlLqB8MbAFTr0=@1g4.org>
+In-Reply-To: <auBehtniOJTRGfaD@boxer>
+References: <20261023141317.3904442-1-p@1g4.org> <at+yluh1NVm78gn6@boxer> <HTx28-b95D5R6LIxwQGHksxNXb6wWbEOp6IGCfRU51shEKudZgRxqFylE-Ngqd3ufeFJGlo5VccF1yXfAVeWQlqpNoSMp5oxS8tlJNxH4h0=@1g4.org> <auBehtniOJTRGfaD@boxer>
+Feedback-ID: 8253658:user:proton
+X-Pm-Message-ID: 31b7716a514270b0b4fbc73d35c670e646ea2b41
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -100,15 +64,96 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 26, 2026 at 04:45 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
->> +		if (!bpf_reg_range_is_empty(r64, r32, bounds.base, bounds.step)) {
->> +			bounds.r64 = r64;
->> +			bounds.r32 = r32;
->>  		}
->
-> I'd suggest addressing this as in [1,2]. I'd expect that selective
-> clamping would be a subject to counter-examples as well, just a bit
-> more convoluted.
 
-fine. applied yours and rebase on top.
+
+
+
+On Tuesday, October 27th, 2026 at 3:19 AM, Maciej Fijalkowski <maciej.fijal=
+kowski@intel.com> wrote:
+
+> On Mon, Oct 26, 2026 at 10:18:03PM +0000, Paul Moses wrote:
+> > On Monday, October 26th, 2026 at 3:07 PM, Maciej Fijalkowski <maciej.fi=
+jalkowski@intel.com> wrote:
+> >
+> > > On Fri, Oct 23, 2026 at 02:13:42PM +0000, Paul Moses wrote:
+> > > > Converting an XSK buffer to an XDP frame allocates a page and retur=
+ns
+> > > > the original buffer to its pool. If the TX ring is full or DMA mapp=
+ing
+> > > > fails, igc_xdp_xmit_back() returns an error without freeing the cop=
+y.
+> > > > The RX cleaner cannot release it, so the page leaks.
+> > > >
+> > > > Return the copied frame on TX failure. Save the RX memory type befo=
+re
+> > > > conversion so native frames remain RX-owned on failure.
+> > > >
+> > > > Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Paul Moses <p@1g4.org>
+> > > > ---
+> > > > Tested on Intel I225-V with baseline and patched kernels. Physical
+> > > > pause-frame backpressure caused 46 leaked copies on the baseline.
+> > > > With the fix, all 72 rejected copies were returned once and freed,
+> > > > and all 192 copies were accounted for.
+> > > >
+> > > >  drivers/net/ethernet/intel/igc/igc_main.c | 5 +++++
+> > > >  1 file changed, 5 insertions(+)
+> > > >
+> > > > diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/ne=
+t/ethernet/intel/igc/igc_main.c
+> > > > index 1fb5f3cbe93c..39263fd04aa9 100644
+> > > > --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> > > > +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> > > > @@ -2487,6 +2487,7 @@ struct igc_ring *igc_get_tx_ring(struct igc_a=
+dapter *adapter, int cpu)
+> > > >
+> > > >  static int igc_xdp_xmit_back(struct igc_adapter *adapter, struct x=
+dp_buff *xdp)
+> > > >  {
+> > > > +=09enum xdp_mem_type mem_type =3D xdp->rxq->mem.type;
+> > >
+> > > small nit is we require a concept called RCT (reverse christmas tree)
+> > > which makes you to order variable declarations from longest line to
+> > > shortest.
+> > >
+> > > >  =09struct xdp_frame *xdpf =3D xdp_convert_buff_to_frame(xdp);
+> > > >  =09int cpu =3D smp_processor_id();
+> > > >  =09struct netdev_queue *nq;
+> > > > @@ -2504,6 +2505,10 @@ static int igc_xdp_xmit_back(struct igc_adap=
+ter *adapter, struct xdp_buff *xdp)
+> > > >  =09txq_trans_cond_update(nq);
+> > > >  =09res =3D igc_xdp_init_tx_descriptor(ring, xdpf);
+> > > >  =09__netif_tx_unlock(nq);
+> > > > +
+> > > > +=09if (res && mem_type =3D=3D MEM_TYPE_XSK_BUFF_POOL)
+> > > > +=09=09xdp_return_frame(xdpf);
+> > >
+> > > Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> > >
+> > > > +
+> > > >  =09return res;
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.56.GIT
+> > > >
+> > > >
+> > > >
+> > >
+> >
+> > Never know what to do in these cases, order matters here, so
+> > do I touch more lines to move the assignment down below?
+>=20
+> =09struct xdp_frame *xdpf =3D xdp_convert_buff_to_frame(xdp);
+> +=09enum xdp_mem_type mem_type =3D xdp->rxq->mem.type;
+> =09int cpu =3D smp_processor_id();
+> =09struct netdev_queue *nq;
+>=20
+> this would satisfy the RCT rule.
+>=20
+
+Ok I'll send soon.
