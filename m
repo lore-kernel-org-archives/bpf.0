@@ -1,100 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.54
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793135038;
-	b=2nc/u/++bExp26w1n3PMyLnbYyOy+/7dJsXlYSAfX6Xmx8J/5rvrLspm7b+7AdZ9fQsz
-	 WPHbPCQZDJvm7bxKWbztbGWAfoiJHxgs0OmD/zJwELtOG+tPl6GKp0uovEYIxY44J5ib2
-	 mI2apatkbXZwVI5jXo8+YB/6eqbTCAxoqUIGAKB+AelRcSATZaXL3i9kXcPZplniIZKBt
-	 39Wcj3Id/lZh6NQjCki0upsX1aIEkjJEhBMgifSoRtlSNvDJR/Nla9Dr2tIECqHr2lDk6
-	 FtMxcQeJSbPXuWee6aiKZWyRQ8THa/viPkLTxUU+/WyalfdZZIzjeWgdrrb1Rk9qyHA==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793135038;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
-	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=TBlSo3SUmsFznCzjJdl8PMSorjj9RIHYlB5MBggf8Ow=;
-	b=jrPXUI5LaaKJgaYKpzWs2iZBp7S6LoZM8Aijg/ziT2A2F8Q8uzO+OldlZ5gYOZPgAyYD
-	 9dluRYwFYMZRxlyZgtMRdFqGmdBFi7eb/w9Lvd00IG+ftviNbWaUAwsqLNSAqE08KjTKC
-	 VJzity+p55OcjkocrsBbedDRgBN2swI+ZlYi+tdahQSJB+PSQNBoEjv26KfWvKD1bIpIj
-	 OcsZ2p4TNiO8eMX76MK/Tp0myPg9uqHOtLBu2hCbq5FGZKieXzdidYt8VHlZ6N8W0N2fo
-	 rRCh2UoOyfZYhZChEhpmpK2zHMkwbLk3ZiCnDqx9WzUzBGNb12vpNtcwb/hkd5/a5Lg==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=none header.from=etsalapatis.com;
-	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Jr6oj9xf;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.54
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793135076;
+	b=wvnO2taQHI8F8XDQ/JM6RUWnY0KBxGTntuxbJexVW9ltWjbfJYxnEiDWSQlSv8dVkJPS
+	 gySjP+pLNZrmKRJBxRD46PZu1/uHk2ftt/1l/Ot3JI4/crFe7rpGQgVD5yfcEx5UGzEeq
+	 e4K32isxsvLqvd3e+zfe4pHygrmWypz11ziiKVSaph8CO/7ZjYZQkE+sZjUsyxHM5wzIX
+	 KTijC/2tjcJjxW9o5t26jQBEqebvfy1pdz709yU4AeyCnxNP7Dn9z1PKuezhqoKbzSE0v
+	 mWGylzmJr+DLLxWT1QvLegZrd34fmqkpGX2uRc9xAwqQ0vLgabmJyK9rm8AqD3rl8HA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793135076;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=lPHvtGDdzblXviQeF4RcbSLV7O99Re+MGi5iKsQP6HQ=;
+	b=IIO1uEuvInJyKOPVjW1mQ+YQqg2v6+5KHY6hjdfXQYPjswOy1BZGN940sLvmBSKz7/UY
+	 bGILhzFGADG4divB2R896MSUE1AfuSuEgsltOzgX0pO3j4yBV6PdGy5iYXxksu3Nj+sAQ
+	 08cuoBnOOCN9ufHdM/SwcpyUxmOoFqncZZfZqQg2jQmW26zAYv6YwzTXPtmVJQtSU384s
+	 B92k7jnpZ8HpFEJ15axDakU57MEV7TNhnaJ37k04KwZQv99zlMTH79YX8N4oUs4jMBKBd
+	 HndFRZ1m2bgFQ8xY5GuCOQL1wH8HSltNhBLWIVxmZrsBXQOu0iWbZGGaoioQOIczbPg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c8gTKsSp;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D305606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 21:03:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D305606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42811606A31D
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 21:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Jr6oj9xf
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-677af43eed4so387154d50.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 14:03:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793135037; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SC486VQw3msMvx9LUmWtIIZPFjoXwO3ENjuMgiiMVKbRmQho/jDYCW7ho4wH03/i3O
-         xuLaEvEirijqEyXJCCif+0ONgzP3pOYKMu6CeZaltuQR7ruTEz16QKgCYzcVP7AP86vw
-         vZAL9/QEaQ5QSqI3yn+359KIlSdHXDXf5B0Sd6n0XaziC3x1MPTcm5te9KZEGNLNa4AJ
-         WtG2nP3S8SSUd5dCvWKi0PtnE4RNLLBpQyyx0V7vZ4SV+N+79qnSLc43exgtm/bHTlxX
-         JrwRE78RuLR3G6v+KiXrIG9a6VdfW6IQCdoG85lhvEZHhuXlApnjbglxLnuSsIOZk2Ix
-         Oqdw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TBlSo3SUmsFznCzjJdl8PMSorjj9RIHYlB5MBggf8Ow=;
-        fh=GsizxCaGQ2nVZN5bHfNu+gnasnbmBAOTZ+FBDFs+xqE=;
-        b=LkQ2HF8CJchUNJojNfUAbYOXtnOoASiAS7vTEK6Gq77ZZFlCzr9WBFqA+c82Bs+U9P
-         KFdlpLl1iZ5b3+pXLGd5iq79gdWTJbnYKkKD+jhNTFB9M3Dt/ztPXmvWbz3nSQ+2Rp26
-         PtfEEiEWTQt2QAuQITn2LHSISUMz6emar9gysCw8mBRbVSiSN0GJpqpJVZVdvLHuG5/O
-         GXS18nWopA4EpOqhyMPfh4eNak/7Ovh4LQhmRA/ZgaqzRfXMbErOBQYsgtWHC4VQGAPi
-         +ZgDVcrV3xeei4/stDFoIOkMNDXabzEZmTqfsu+9bRbDrBaoEaIHRWjvOhN5arglE5zb
-         gOFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1793135037; x=1793739837; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TBlSo3SUmsFznCzjJdl8PMSorjj9RIHYlB5MBggf8Ow=;
-        b=Jr6oj9xfI0dB9CnjS4P+jjqlVZUCru7kcy1UZ0MjHh7gPYMij3jWzLpl7Gk9mK6H+f
-         9jKx/1GnydU3L22bs3tAD2JSumf68n7OFfheAfU7gztrb0bKUAxdKCGNWx5OuiCaaPIj
-         zHl/i9VcAcTqs19A70czGltKIxsvTPMJva1wHmPxrO2yYj7saHfpg+7hBN72bquojpzX
-         KUUPQDKoomwdNrTIVqeENsJn5eybj/4ZF1hpE9UCE+wUy8aDdyompxd0TdHyji91iLEe
-         /bAWhxBGO1eIR7q7Yr+bNWn+6W9GzUpoSrvUqV6i1zVOUrcStyg+fAvWiT2jNK7LPtaL
-         IcyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793135037; x=1793739837;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TBlSo3SUmsFznCzjJdl8PMSorjj9RIHYlB5MBggf8Ow=;
-        b=d+zu7pfsxHbi7bIzjLg4NPgVv5enq+rJ64Ym/AqLSMrIL3afIpZgHwSFNIMgrUk1h+
-         MN/NmNH321DwWjzNhCmJVT8vdz4TfoIPAs7f0EbG0xLaQAoZQqp2HFBPkjscvZ59JrL2
-         dUoaGZ5ycSQ7stFjb/ClBtH0gZqVChXc+LJr2xVOOOlpQ+GhlA798TRvGZHNlRH9ymuB
-         Uwpas/ekTsETxcxii+mXcHybOaDMLnWeXSBsOlZh1zUX8yKiUdr168zyYNGDl+KJHT/e
-         cOefHoGv01376XWe7kTebHuRC8BJAqJ8Timr2+Y8sRUoPCYZR65+/9uKwWMVdIK8Wxgl
-         Xrxw==
-X-Gm-Message-State: AFq9FYK98yN3aX8TvHWIfsENeitvRRIj+Q4W0Izi3nRpN4t1TH+TS0dG
-	r+cA+IB5A339d0kLYUHnKTvYmat6AOL6z53DzsdeXsIuAdPasIESHg4L9YECa3gF6/PRx77phif
-	Hl0V1TYQvEeJNcbkR43Hz05LzOlNqVnJfNEt7tCCiAA==
-X-Gm-Gg: AYBFou0lqV2veSw5a/oQy7HYOmmMAl6MLcPgsh+tpTnrPN/w70AggJHyYa9VCxvH1Kk
-	1/dMQJWZU1wnqblXIUxBcKRvOxr5cdYwnPoXNpt0I5WDkWLyYJm6wW/MI1fExvFnrUz12UL9lWJ
-	us8TF4Qt9VZsL7wdpa1iNmdgVq01XDSriB0dk6z9m3Mhka6DRRkWWNmkEe8puqNsC5OldPvWxIE
-	gXjdwPw7W2AEGM6ckDA90Wn11Xnwn3tZSvzOLSM09mJXfE3uszhT4HOxctGkRAtK2yF9i6auZI1
-	Hs9u4GeOFUFbXpusP4ql09kZFsNg1QuaQgFksVXxOJCtSapPNBWZ9UVeZHByu3Gahn2UygTdvch
-	kRphgdUkJautHkhTOdHbjHhE44z5NBd2nhlh4spZ+p4BlIhbnkvrmLNHbqctqtU9QRAzwqnxW8g
-	==
-X-Received: by 2002:a05:690e:1918:b0:676:7f47:5e19 with SMTP id
- 956f58d0204a3-67a7bebed56mr771547d50.93.1793135037063; Tue, 27 Oct 2026
- 14:03:57 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=c8gTKsSp
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D2E1F01825;
+	Tue, 27 Oct 2026 21:04:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793135075;
+	bh=lPHvtGDdzblXviQeF4RcbSLV7O99Re+MGi5iKsQP6HQ=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=c8gTKsSppONrK4hZf2RAH4rUCfWqMAVlpgilDrmo03BkhUxaGKjt5xDijJ8DBs55r
+	 YG9Rr4X5wAUT23rYMjsbJLLts0bc2NFZBIdfa1zfxnTxor6eKxr1fHK7q1Q58eR3cp
+	 Mt2a6kejgkxukRDrFmyD19371b+qafCgPVolAw2NVPL9rrhFT9bzZZodiFZksCm8F/
+	 uGzyQqV/eMKqxoq9iapGSUFgqdIf0ruCo0xu4cEKQNfzoM2KJNlALpH6rYMD9oMmxe
+	 a+B65jQzY3m4DhTRBYz5oeWnIyNTpHZ8s4lvom62ICypxMVpR7JocroLJRDxsX3F5J
+	 M+dcJUiRmisvA==
+Message-ID: <sashiko-outbox-187109@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 1/2] bpf: Keep the valid bytes of a packet pointer
+ in scalar evolution
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261027201436.3192716-2-alexei.starovoitov@gmail.com>
+References: <20261027201436.3192716-1-alexei.starovoitov@gmail.com>
+ <20261027201436.3192716-2-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 27 Oct 2026 21:04:35 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -103,75 +59,252 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261023002056.6647-1-emil@etsalapatis.com> <20261023002056.6647-5-emil@etsalapatis.com>
- <DMFVQMBXF65Z.11AGYWHTHCP4G@gmail.com>
-In-Reply-To: <DMFVQMBXF65Z.11AGYWHTHCP4G@gmail.com>
-From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Tue, 27 Oct 2026 21:03:45 +0000
-X-Gm-Features: AclHuK8eUI0iv6BYa9FcQvp5sebWHF-GPwmq03yEVvq7EpZruLztd5lDt0bJRhU
-Message-ID: <CABFh=a4dT_Ae3Qpzp2pynoR-9WqN2+VaD+1GeLeuFNpndQofLg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/7] selftests/bpf: libarena: Handle NMI reentrancy
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, daniel@iogearbox.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 27, 2026 at 7:49=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Oct 22, 2026 at 05:20 PM Emil Tsalapatis <emil@etsalapatis.com> w=
-rote:
-> > An NMI can interrupt the buddy allocator while it holds the buddy lock,=
- so
-> > code running in NMI context must not take that lock.
-> >
-> > Allow an allocation from NMI context only when the local cache can sati=
-sfy
-> > it without taking the buddy lock.
->
-> can we take the buddy and transfer locks with arena_spin_trylock()
-> in NMI instead ?
-> It succeeds only when the lock has no owner and no waiters, so it's safe
-> in NMI. Every caller handles a lock failure already.
->
-> With this patch nothing refills the caches in NMI, and buddy_cache_init()
-> leaves them empty. A prog that runs only in NMI gets NULL from every
-> buddy_alloc().
->
-> With trylock an empty cache gets a refill and a full cache spills.
-> When trylock fails, buddy_alloc() returns NULL and buddy_free() defers
-> the object.
-> Then bpf_in_nmi() is in one place instead of five by the end of the
-> series, and no need for buddy_deferred_free_start_bulk().
->
-> Something like this (not even compile tested):
->
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Critical] bpf: out-of-bounds packet range in sync_widened_reg() when r64=
+ crosses zero
+- [Critical] bpf: missing range reset in bpf_clamp_scev_regs() corrupts pac=
+ket range
+- [High] bpf: verifier_bug() in bpf_reg_union() when sync_widened_reg() mut=
+ates range
+--
 
-This makes sense, I will try it out when respinning.
+commit f227a7637607cf60f782fa9321486ac435f7a53c
+Author: Alexei Starovoitov <ast@kernel.org>
 
-<SNIP>
+bpf: Keep the valid bytes of a packet pointer in scalar evolution
 
->
-> [...]
->
-> > +     do {
-> > +             head =3D buddy->deferred_free;
-> > +             if (!head)
-> > +                     break;
-> > +             old =3D head;
-> > +
-> > +             /*
-> > +              * The cmpxchg is safe because we never pop from the list
-> > +              * without holding the buddy lock. The next pointer of
-> > +              * the element then cannot have been gotten invalidated.
-> > +              */
-> > +
-> > +     } while (cmpxchg((void __arena * __arena *)&buddy->deferred_free,
-> > +                      old, NULL) !=3D old && can_loop);
->
-> Also one __sync_lock_test_and_set() takes the whole list.
-> No need for the loop.
+This patch updates sync_widened_reg() in bpf_set_reg_range() and
+bpf_reg_union() to reduce reg->range when reg_bounds_sync() lowers umax on a
+widened packet pointer, and clears negative pkt_end marks in
+bpf_widen_scev_regs().
 
-Ack, will do.
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> index 04d4962448e27..f28eddd17d78f 100644
+> --- a/kernel/bpf/scev.c
+> +++ b/kernel/bpf/scev.c
+> @@ -2838,6 +2838,9 @@ int bpf_widen_scev_regs(struct bpf_verifier_env *en=
+v, struct bpf_verifier_state
+>  				bpf_log(log, "\n");
+>  			}
+>  			scratch_widened_reg_id(env, reg);
+> +			/* "at pkt_end" and "beyond pkt_end" are not valid in all iterations =
+*/
+> +			if (type_is_pkt_pointer(reg->type))
+> +				reg->range =3D max(reg->range, 0);
+>  			err =3D bpf_set_reg_range(env, reg, bounds.r64, bounds.r32,
+>  						bounds.base, bounds.step);
+
+[Severity: Critical]
+Should bpf_clamp_scev_regs() also reset reg->range from entry_reg (i.e.
+max(entry_reg->range, 0)) before calling bpf_set_reg_range()?
+
+On every loop backedge, do_check() -> handle_loop_entry_exit() ->
+maybe_clamp_scev_regs() -> bpf_clamp_scev_regs() recomputes bounds from the
+pre-widen loop-entry register entry_reg and calls bpf_set_reg_range() ->
+sync_widened_reg(reg) on the current state's reg without resetting
+reg->range:
+
+kernel/bpf/scev.c:bpf_clamp_scev_regs() {
+    ...
+		linear_bounds(entry_reg, max_header_count, &coefs, &bounds);
+		...
+		scratch_widened_reg_id(env, reg);
+		err =3D bpf_set_reg_range(env, reg, bounds.r64, bounds.r32,
+					bounds.base, bounds.step);
+    ...
+}
+
+This appears to cause two regressions on loop backedges:
+
+1. Stale loop-body range leading to out-of-bounds packet access:
+Suppose before a 2-iteration loop r6 =3D pkt has r64 =3D [0, 0] and range =
+=3D 0
+(widened at the header to r64 =3D [0, 8], range =3D 0), and inside the loop=
+ body
+r6 +=3D 8 advances r6 to r64 =3D [8, 16] followed by if r6 > pkt_end goto e=
+xit.
+find_good_pkt_pointers() sets r6->range =3D reg_umax(r6) =3D 16 (representi=
+ng 0
+valid bytes past r6, since iteration 0 only proved pkt + 8 <=3D pkt_end).
+
+When the backedge returns to the loop header, bpf_clamp_scev_regs() resets
+r6->r64 back to [0, 8] (umax =3D 8) while leaving r6->range =3D 16 from the=
+ loop
+body. If the backedge state is not pruned at the header (for example, when
+another register or stack slot changes), iteration 1 executes at the header
+with r6 having umax =3D 8 and range =3D 16 (8 valid bytes), allowing
+*(u64 *)(r6 + 0) to read 8 bytes past pkt_end when r6 =3D=3D pkt + 8 =3D=3D=
+ pkt_end.
+Similarly, negative AT_PKT_END or BEYOND_PKT_END marks set inside the loop
+body are not cleared by bpf_clamp_scev_regs().
+
+2. Repeated range subtraction preventing loop convergence:
+When entry_reg has range =3D R > 0 before the loop and sync_widened_reg()
+lowers umax by d =3D 2 (for instance, 58 -> 56), bpf_widen_scev_regs() at l=
+oop
+entry sets the header checkpoint state's rold->range =3D R - 2. When the
+backedge reaches the loop header, the current state's reg enters
+bpf_clamp_scev_regs() with reg->range already equal to R - 2.
+
+Because bpf_clamp_scev_regs() recomputes bounds.r64 =3D [0, 58] from entry_=
+reg
+and calls bpf_set_reg_range() -> sync_widened_reg(reg), umax drops from 58
+to 56 a second time and sync_widened_reg() subtracts 2 again, setting
+rcur->range =3D R - 4. In kernel/bpf/states.c:regsafe(), rold->range >
+rcur->range returns false, preventing state pruning at the loop header and
+shrinking reg->range on each pass.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a0a5f075d2018..66d008166f169 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17768,6 +17768,20 @@ bool bpf_same_memory_origin(const struct bpf_reg=
+_state *reg_a,
+>  	}
+>  }
+> =20
+> +/*
+> + * 'range - umax' bytes from a packet pointer are in the packet. reg_bou=
+nds_sync() can make umax
+> + * smaller: with a step of 8, or with 3 zero bits in var_off, 58 becomes=
+ 56. Make the range
+> + * smaller by the same number, so that the number of bytes does not grow.
+> + */
+> +static void sync_widened_reg(struct bpf_reg_state *reg)
+> +{
+> +	u64 umax =3D reg_umax(reg);
+> +
+> +	reg_bounds_sync(reg);
+> +	if (type_is_pkt_pointer(reg->type) && reg->range > 0)
+> +		reg->range =3D max_t(s64, reg->range - (s64)(umax - reg_umax(reg)), 0);
+> +}
+
+[Severity: Critical]
+Can sync_widened_reg() corrupt reg->range when reg->r64 spans negative and
+non-negative offsets (smin < 0 && smax >=3D 0)?
+
+In kernel/bpf/scev.c:linear_bounds(), when a packet pointer is decremented =
+in
+a loop (slope < 0) or starts at a negative offset before the loop,
+bounds.r64 =3D cnum64_from_srange(min_val, max_val) can have min_val < 0 and
+max_val >=3D 0.
+
+In kernel/bpf/cnum_defs.h:cnum64_umax():
+
+ut FN(umax)(struct cnum_t cnum)
+{
+	return FN(urange_overflow)(cnum) ? UT_MAX : cnum.base + cnum.size;
+}
+
+any cnum64 that crosses the U64_MAX/0 boundary returns U64_MAX from
+reg_umax(reg). Using reg_umax(reg) in sync_widened_reg() leads to two cases
+where check_packet_access() can allow out-of-bounds packet reads or writes
+past pkt_end:
+
+1. Range inflation when reg_bounds_sync() rounds smin up to >=3D 0:
+Suppose before a 2-iteration loop:
+
+    r4 &=3D 0x38
+    if r4 < 2 goto exit
+    if r4 > 50 goto exit
+    r6 =3D pkt
+    r6 +=3D r4
+    r5 =3D r6
+    r5 +=3D 8
+    if r5 > pkt_end goto exit
+
+so r6 has r64 =3D [2, 50], var_off =3D (0; 0x38), range =3D 58. If the loop=
+ body
+decrements r6 by 8 (r6 +=3D -8), linear_bounds() produces r64 =3D [-6, 50],
+base =3D 0, step =3D 8.
+
+In sync_widened_reg(), umax before reg_bounds_sync(reg) is U64_MAX because
+[-6, 50] crosses zero. Then reg_bounds_sync(reg) intersects r64 with step =
+=3D 8
+via __update_bounds_from_step(), narrowing r6->r64 to [0, 48] with
+reg_umax(r6) =3D 48. As a result, (s64)(umax - reg_umax(reg)) evaluates to
+(s64)(U64_MAX - 48) =3D -49, and reg->range - (s64)(umax - reg_umax(reg))
+increases r6->range from 58 to 107 instead of reducing it to 56.
+
+2. Failure to shrink range when smin remains < 0:
+If the if r4 < 2 goto exit check is omitted above, linear_bounds() produces
+r64 =3D [-8, 50], step =3D 8, and reg_bounds_sync(reg) tightens r6->r64 to
+[-8, 48]. Because smin is still negative, reg_umax(reg) is U64_MAX both
+before and after reg_bounds_sync(reg), so umax - reg_umax(reg) is 0 and
+r6->range remains 58 instead of shrinking to 56. Inside the loop body,
+r5 =3D r6; r5 +=3D 8 yields r5->r64 =3D [0, 56] with r5->range =3D 58, allo=
+wing a
+2-byte read at r5 + 0 past pkt_end when r4 =3D 48 and pkt_end =3D pkt + 56.
+
+> =20
+>  int bpf_set_reg_range(struct bpf_verifier_env *env, struct bpf_reg_state=
+ *reg,
+>  		      struct cnum64 r64, struct cnum32 r32, u16 base, u16 step)
+> @@ -17776,7 +17790,7 @@ int bpf_set_reg_range(struct bpf_verifier_env *en=
+v, struct bpf_reg_state *reg,
+>  	reg->step =3D step;
+>  	reg->base =3D base;
+>  	reg->var_off =3D tnum_unknown;
+> -	reg_bounds_sync(reg); /* this should infer the tnum alignment */
+> +	sync_widened_reg(reg); /* this should infer the tnum alignment */
+>  	return reg_bounds_sanity_check(env, reg, "bpf_set_reg_range");
+>  }
+> =20
+> @@ -17821,7 +17835,7 @@ int bpf_reg_union(struct bpf_verifier_env *env, s=
+truct bpf_reg_state *acc,
+>  		acc->base =3D base;
+>  		acc->step =3D step;
+>  	}
+> -	reg_bounds_sync(acc);
+> +	sync_widened_reg(acc);
+>  	return reg_bounds_sanity_check(env, acc, "bpf_reg_union");
+>  }
+
+[Severity: High]
+Does calling sync_widened_reg(acc) inside bpf_reg_union() trigger
+verifier_bug(env, "union of incompatible registers") when union_any_reg()
+iterates over multiple leaves?
+
+In kernel/bpf/scev.c:union_any_reg(), bpf_reg_union(env, acc, leaf_reg) is
+called in a loop for each leaf of an ANY expression. On each call,
+bpf_reg_union() checks bpf_reg_union_compatible(acc, src):
+
+kernel/bpf/verifier.c:bpf_reg_union_compatible() {
+	if (a->type !=3D b->type)
+		return false;
+	if (a->type =3D=3D SCALAR_VALUE)
+		return true;
+	return !memcmp(a, b, offsetof(struct bpf_reg_state, var_off)) &&
+	       a->id =3D=3D b->id && a->parent_id =3D=3D b->parent_id && a->map_ui=
+d =3D=3D b->map_uid;
+}
+
+which compares a->range and b->range via memcmp().
+
+For example, if at loop entry r6 has id =3D 1, r64 =3D [0, 50],
+var_off =3D (0; 0x38), range =3D 58 and r5 =3D r6 + 8 has id =3D 1, r64 =3D=
+ [8, 58],
+var_off =3D (0; 0x78), range =3D 58, and the loop body sets r5 =3D r6 so r5=
+ has
+SCEV (any r5 r6):
+
+1. is_widenable_any() succeeds because both leaves have id =3D 1 and
+   range =3D 58.
+2. In union_any_reg(), the first leaf (entry_r5) is unioned into acc.
+   sync_widened_reg(acc) lowers umax from 58 to 56 via var_off and changes
+   acc->range from 58 to 56.
+3. On the second leaf (entry_r6, which still has range =3D 58),
+   bpf_reg_union_compatible(acc, entry_r6) sees acc->range (56) !=3D
+   entry_r6->range (58), triggering verifier_bug(env, "union of incompatible
+   registers") and returning -EFAULT.
+
+In addition, calling sync_widened_reg(acc) on each leaf in union_any_reg()
+can subtract umax reductions multiple times across intermediate leaves, and
+the is_any() branch in bpf_widen_scev_regs() does not clear negative
+pkt_end marks on reg->range before unioning.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027201436.3192=
+716-1-alexei.starovoitov@gmail.com?part=3D1
