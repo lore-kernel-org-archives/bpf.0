@@ -1,51 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793074592;
-	b=dBDqPyFc2z37P2eGcKPcTUr8dpt90ljmcZvxqFYuiSxez6EVjcOtIRZrwqhipZX5j15j
-	 uKs7DiIPn1ZaOnS03rESJQOp8zrPG1YecVOHw+M/Q21+imFwRer+pua20OAGow1ifeuUc
-	 Xvase0BBRIHQIgSKShru2pQmsRZtsd6e8Ky4drOvNnA56DgUHB2JsZJ4pGphAgRKfR2dT
-	 iNZbXYZPZvFj8p14DnXtssvSF+Ago50YQyXctZfRjYkSV9LIYAN29kY5ZDpGXnCKZMhvN
-	 2sHj3+UqPtKy+3pUR4R2Tu2j142g+JZzXLnqYlIOeA5DJd6IORsbFcOrzjWdEZXWZvw==
+	t=1793076422;
+	b=S0P9fLzytgFxywF10EKYNEyq+m5v+LWTmcACKqlQSP3yjV7Pg+yxFoyKxLvUscKtsCHa
+	 EHaCx1UB/0vuJvTVIyBi6u23gHJBwNSgIgxFiVOrAG928aPWLzU3keDiKB/8f5iqUh6Xs
+	 d94bNWC2/TeEiBcaFjNIqpyRphAmIksH0TgXk8vq3hTpHHqLKkDxHx4rRwkAhixcGZjP0
+	 kCDOmMSpgl7dHL1pyKeom1Bauz9n5BcIaGb+1DObU2hwiqdxq9O9dDiV+QmXyAGCLReb7
+	 bQdKgx1Yvp6xpiTkgNYTrb2aKmOR81B7jPLlmZB0lS2XGnvj2jB4+eivlPsF9YFc+Dw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793074592;
-	h=DMARC-Filter:Received:Received:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding:X-CM-TRANSID:
-	 X-CM-SenderInfo:X-Coremail-Antispam;
-	bh=OKh7RMy4z39rK+91H91FMymRIBmqD8DV3FbJDx+waE4=;
-	b=4vevk0u4ZyrvzKxvN1Wj3ZVcHUm0ouFeiQKwkSTD8YluxenEJVrsalV+0DKM3yl3esim
-	 dOyT51hK0/DTlL0nKd4qidPDp4Y5gs++jy0u3Yl/MEW+nlBTnw1Zws9QRxE4b64VUHxWL
-	 kWZI+quKam/DqTrOk2Bdf73z1yJeCB6tZk6Rm1bMcpL0kTkNO7nSoSXzs+YdOmWsSW4BK
-	 uPd9uAi1kxA1yJlgYpnPTRJ0vkVUd8HfwzWBcBKw19KAzaW5qYywWXY1l53gJ5fiYmrNs
-	 /BI3mo0qwlYBraH9lk/pggfDCt04MPVqyenzq4wko632ETAHxCiE9t8+Mgmjjkiim0w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793076422;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=WURMcEEiv9km0HuI6txsDrElGgFNRy2mTCX0NtkHLm4=;
+	b=dOd2XSJUWpqp9xfVFyu1dlCejaBMGZSqIlHu9Tc1S5i5EskkTNL1/6o57XdXfTH7yBS3
+	 fEEo39Y68F1J/ND2Id7SEu+8D+pxHxt1mZ/oLO0tnZSKe9ZV/4OBiyaoWa3BzE9CBQQXF
+	 +9/EZ3amRpPxeJTAUld8rNF0i6gYC8CPuOOxBCH5N80AznA7kR1L+X7KbgzBfLKFZOdrp
+	 jYG9I389MWj/QL6yRqfwaZ+gTGWUHsiWohm+A6x7NmHduY9e0U4P25lAcZz9gl5+sa5/u
+	 B3szcxrHSxpN7lXWPaC/8jrUGFryOg1ziCzakt3qtD3apWCffMZwJlCHZ6nO39TZFDQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=loongson.cn;
-	spf=pass smtp.mailfrom=loongson.cn;
-	arc=none smtp.remote-ip=114.242.206.163
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3959E606A331;
-	Tue, 27 Oct 2026 04:16:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3959E606A331
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Axj9GdJeBq7bIZAA--.9482S3;
-	Tue, 27 Oct 2026 12:16:29 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAx1cycJeBqcY4wAA--.7654S2;
-	Tue, 27 Oct 2026 12:16:29 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: Enable signed division and modulo overflow tests for LoongArch
-Date: Tue, 27 Oct 2026 12:16:27 +0800
-Message-ID: <20261027041627.20792-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+	dmarc=pass header.from=nebusec.ai;
+	spf=pass smtp.mailfrom=nebusec.ai;
+	dkim=pass header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=m6bBvmSW;
+	arc=none smtp.remote-ip=74.125.82.45
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B28A606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 04:47:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3B28A606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=nebusec.ai header.i=@nebusec.ai header.a=rsa-sha256 header.s=google header.b=m6bBvmSW
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-14394530ec6so4477617c88.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 21:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nebusec.ai; s=google; t=1793076421; x=1793681221; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=WURMcEEiv9km0HuI6txsDrElGgFNRy2mTCX0NtkHLm4=;
+        b=m6bBvmSWGHaosFaUuodvNtqp3GmNS1tz0C5ZGlflVDcZ7YcZiKwBrG8N7/58QywOrP
+         nGo7Yeek8LM4Ma338xJnPpxzBdoLYWDiucejDkX5D2uOa6sG03WeW4JT7OnCxU6xVf7y
+         2dG06cKm+PIISj2kww+AwE7IazcUUQVEBOzazPPoltwZ+K/0j/g+Sh2WJ8MRxKnCVFiS
+         qQEJ9GlFgIIyx25iw1VzwoqfOE6Rr2spBipHeoXmiiaT3yAjMa69VJyfh6oFG4kCgXMA
+         VWudhOa3qykkzrUObW5XGPe/bPMS98tSM4C6z9jjn6V4bseCwB1tS3XFYJ+YpdxtmlHY
+         DrXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793076421; x=1793681221;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WURMcEEiv9km0HuI6txsDrElGgFNRy2mTCX0NtkHLm4=;
+        b=qLpOzK9zWaKq6eRxnfVyYY7BrU6yrm45wBA5M10JNfj6o5z9DDK9so+VHyntATqz5L
+         rKrArftDATmiMIoryeQMXn8PPbudHaZJmZY9JjYFPL9mEHU4h/zSN59ygAAi9EelS3IT
+         tSvzXED2YJ6AEzQe10qrr2ZPmlJNaw2uF9p13Bn8lIQLQ7lPU50axOmNoFzWzIfwOElv
+         D6HmeS5Vj+mxzzAoE0nZCZKX+t4ejwaw5MQVdDP143dewht9+DjNlHmeE1iTLYhEtULF
+         r6AwoEQRmcLbzTQsHcOmA3CYRWoigWTUFKi0aFygXlbF+lQrRNPDQ1y1397x8hpfI/eg
+         nWmA==
+X-Forwarded-Encrypted: i=1; AKwUvBzbdv6Vs/QiyUlbhmGHstwIlbqTsPsVcCj4gBrgSgdkW7fb/CY6RH1Sn4Er6AJVHxuC+CY=@vger.kernel.org
+X-Gm-Message-State: AFq9FYI4qZ3prHfCKmsFhxIioc7/TQcHCJ4ZTApU/sDiFxoAuoY6wrpI
+	4j4yVMti+zKyqUWH4Td7gprpbfF0LWzztRGcXSAVVQeXB8ydmhf0ZQy1eO/BWhLiVSI6
+X-Gm-Gg: AYBFou0Z8UiVL8mFlBlizCg30iqT0mQT01l/6+FoburMcTNEc0AqKT2msdkNuOpT+Yy
+	Fi9NvyDQ+ZKBQdBQqs/9NvhRpE/ruA9Yxfi1D0XYu+115fAqZf2Nlt6m3KzGQQDiOYcwO+TJvih
+	DcfB1C4GJsxIaB1tYQhzNd3csu5MBPEFCf4wyIdt2HK0TM8CGe4vfhmlvCEpgIDDliapGj+ZZgx
+	sRSSjU/mJ64W/Tm97TVN6TkEs9owERLETsfOZ/DnIFgPx3Qw+0UGqHoKbQDgG14qCG0DVK25fd4
+	c+r/9pTaQniHs+jCawnMWuf+DYqNby4HccHc42RsN135FC3JC7YbPIxX9yIgsiUhW9lcG0mh9AD
+	5CD8Csm7kSiy1dfzh1pMSiQy2+Mx9eVYvsu2KEGogNsQloxoV53YPFPU8xFoPcGn7sTT6zE725j
+	wPfkWp6MhUeDTRT5dLunjtROrfl4jsvkHi4QkDQPvqvfoFyFSrwBcUAaj82SOZAi2/pq/isrUzF
+	oLwhAXluBPHmEkK1vm6hUh9f2zyJKhWRTj6tMOhRkm/B8VsXZUVrtY3h4/ocuwlLCFXNkpQCO2i
+	Bg/v9i1wHz+OrPBgIcSZH7bED559hR/HTk42oXjaiw==
+X-Received: by 2002:a05:701a:c941:b0:144:fa58:95d8 with SMTP id a92af1059eb24-19935fcbb52mr8965104c88.27.1793076420958;
+        Mon, 26 Oct 2026 21:47:00 -0700 (PDT)
+Received: from Roxy.sysu.edu.cn ([2001:49f0:d0db:fffe:97d4:c0de:15a1:9c01])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-198a32ff780sm28781261c88.22.2026.10.26.21.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 21:47:00 -0700 (PDT)
+From: Zhiling Zou <zhilinz@nebusec.ai>
+To: edumazet@kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: ncardwell@google.com,
+	kuniyu@google.com,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	jonathon.reinhart@gmail.com,
+	vega@nebusec.ai,
+	zhilinz@nebusec.ai
+Subject: [PATCH net v2 1/1] tcp: check congestion control restriction first
+Date: Tue, 27 Oct 2026 12:46:49 +0800
+Message-ID: <71c142b2d45af6a2fe7fc6cd4a5ca52c53afbe23.1793075984.git.zhilinz@nebusec.ai>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -56,129 +103,56 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx1cycJeBqcY4wAA--.7654S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAw47XFyfXr1xKFyruryUurX_yoWrXw1fpF
-	WUuFZIgrs7Xw17uFWYvF4UJFs0q3WkuayrWF1rAw1Iy3s8JFnIq34Igws5Ca1rtFn5uw1F
-	vF17ZasFv3Wjg3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-	vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
-	Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-	Ja73UjIFyTuYvjxUc0eHDUUUU
 
-The LoongArch hardware divider handles signed overflow boundaries (such
-as INT_MIN/-1 or LLONG_MIN/-1) natively and perfectly well on physical
-silicon: (1)for division operations, it naturally returns the dividend
-itself; (2)for modulo operations, it returns 0. Thus enable the signed
-division and modulo overflow tests for LoongArch in verifier_sdiv.c.
+tcp_set_default_congestion_control() takes a reference to an algorithm
+before checking whether a non-init network namespace may select it. A
+rejected request returns -EPERM without dropping the reference.
 
-Before:
+This affects module-backed algorithms too; BPF is not required. For
+example, after root loads tcp_bbr, a user with CAP_NET_ADMIN in a
+non-init network namespace can repeatedly request it as the default
+although it is not in tcp_allowed_congestion_control. Each rejected
+write leaks a module reference. Since module->refcnt is an atomic_t,
+2^31 such writes can make it negative; later module_put() calls warn,
+and rmmod can hit the BUG_ON() in try_release_module_ref().
 
-  $ sudo ./test_progs -t verifier_sdiv | grep "MIN/-1"
-  #731/121 verifier_sdiv/SDIV64, overflow r/r, LLONG_MIN/-1:SKIP
-  #731/123 verifier_sdiv/SDIV64, overflow r/i, LLONG_MIN/-1:SKIP
-  #731/125 verifier_sdiv/SDIV32, overflow r/r, INT_MIN/-1:SKIP
-  #731/127 verifier_sdiv/SDIV32, overflow r/i, INT_MIN/-1:SKIP
-  #731/129 verifier_sdiv/SMOD64, overflow r/r, LLONG_MIN/-1:SKIP
-  #731/131 verifier_sdiv/SMOD64, overflow r/i, LLONG_MIN/-1:SKIP
-  #731/133 verifier_sdiv/SMOD32, overflow r/r, INT_MIN/-1:SKIP
-  #731/135 verifier_sdiv/SMOD32, overflow r/i, INT_MIN/-1:SKIP
+Check the namespace restriction before acquiring the reference, as
+tcp_set_congestion_control() already does.
 
-After:
-
-  $ sudo ./test_progs -t verifier_sdiv | grep "MIN/-1"
-  #731/121 verifier_sdiv/SDIV64, overflow r/r, LLONG_MIN/-1:OK
-  #731/123 verifier_sdiv/SDIV64, overflow r/i, LLONG_MIN/-1:OK
-  #731/125 verifier_sdiv/SDIV32, overflow r/r, INT_MIN/-1:OK
-  #731/127 verifier_sdiv/SDIV32, overflow r/i, INT_MIN/-1:OK
-  #731/129 verifier_sdiv/SMOD64, overflow r/r, LLONG_MIN/-1:OK
-  #731/131 verifier_sdiv/SMOD64, overflow r/i, LLONG_MIN/-1:OK
-  #731/133 verifier_sdiv/SMOD32, overflow r/r, INT_MIN/-1:OK
-  #731/135 verifier_sdiv/SMOD32, overflow r/i, INT_MIN/-1:OK
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Fixes: 8d432592f30f ("net: Only allow init netns to set default tcp cong to a restricted algo")
+Cc: stable@vger.kernel.org
+Reported-by: Vega <vega@nebusec.ai>
+Suggested-by: Eric Dumazet <edumazet@kernel.org>
+Assisted-by: LLM
+Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
 ---
- tools/testing/selftests/bpf/progs/verifier_sdiv.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+changes in v2:
+  - Check the namespace restriction before bpf_try_module_get(), following
+    tcp_set_congestion_control().
+  - Describe the module-backed reference leak and module refcount overflow.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-index d6cbe1e27fd6..5e8bf781e073 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -775,6 +775,7 @@ SEC("socket")
- __description("SDIV64, overflow r/r, LLONG_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r3 = -1")
- __xlated("3: r4 = r2")
-@@ -839,6 +840,7 @@ SEC("socket")
- __description("SDIV64, overflow r/i, LLONG_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r4 = r2")
- __xlated("3: r2 = -r2")
-@@ -887,6 +889,7 @@ SEC("socket")
- __description("SDIV32, overflow r/r, INT_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
-@@ -953,6 +956,7 @@ SEC("socket")
- __description("SDIV32, overflow r/i, INT_MIN/-1")
- __success __retval(1)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w4 = w2")
- __xlated("2: w2 = -w2")
-@@ -1001,6 +1005,7 @@ SEC("socket")
- __description("SMOD64, overflow r/r, LLONG_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r3 = -1")
- __xlated("3: r4 = r2")
-@@ -1061,6 +1066,7 @@ SEC("socket")
- __description("SMOD64, overflow r/i, LLONG_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: r2 = 0x8000000000000000")
- __xlated("2: r4 = r2")
- __xlated("3: w2 = 0")
-@@ -1105,6 +1111,7 @@ SEC("socket")
- __description("SMOD32, overflow r/r, INT_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w3 = -1")
- __xlated("2: w4 = w2")
-@@ -1169,6 +1176,7 @@ SEC("socket")
- __description("SMOD32, overflow r/i, INT_MIN/-1")
- __success __retval(0)
- __arch_x86_64
-+__arch_loongarch
- __xlated("0: w2 = -2147483648")
- __xlated("1: w4 = w2")
- __xlated("2: w2 = 0")
+ net/ipv4/tcp_cong.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/ipv4/tcp_cong.c b/net/ipv4/tcp_cong.c
+index 8e83ef81fc187..e3f462f161dd6 100644
+--- a/net/ipv4/tcp_cong.c
++++ b/net/ipv4/tcp_cong.c
+@@ -288,12 +288,12 @@ int tcp_set_default_congestion_control(struct net *net, const char *name)
+ 	ca = tcp_ca_find_autoload(name);
+ 	if (!ca) {
+ 		ret = -ENOENT;
+-	} else if (!bpf_try_module_get(ca, ca->owner)) {
+-		ret = -EBUSY;
+ 	} else if (!net_eq(net, &init_net) &&
+ 			!(ca->flags & TCP_CONG_NON_RESTRICTED)) {
+ 		/* Only init netns can set default to a restricted algorithm */
+ 		ret = -EPERM;
++	} else if (!bpf_try_module_get(ca, ca->owner)) {
++		ret = -EBUSY;
+ 	} else {
+ 		prev = xchg(&net->ipv4.tcp_congestion_control, ca);
+ 		if (prev)
 -- 
-2.42.0
+2.55.0
 
