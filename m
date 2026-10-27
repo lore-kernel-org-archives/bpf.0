@@ -1,59 +1,114 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793115510;
-	b=NB66UjMNv4dfkTZUGmEUKzG2JcuRoGSZwB1nc7HR0GqRjZD17CqiCOAyafR/vUBRWUN9
-	 hPLeKIjYovm5KslLwTDnMc53LBFqrSykNcl0YEQaQIY4FoNjHRBR4JUROVC/ApxlPlWUY
-	 d9WU5CUxBf8YQFh+mqqP9oyRT2vALN39jIpIUQp3o4U+g8jZrzFwZuaajjk5BknMonu5v
-	 gTK1TPqNDaMm6MLbkB76YmQgxbr7ho/1FBYFHG8zkIdbpbxblzUaob3nvpxxX4QQk+pLD
-	 x7OlrufvMLsrXNbdHzu8ZMRU5+jUnXjSnHIKkGzV+BEeU2JsmwYvEutyqpTgbCDtxsw==
+	t=1793115854;
+	b=jfyT8vuG+IbfycS8XmlaIwgDOd7aVUGCdwuke2nlqa+OAGLjKMi8ryop9gzrpJwEmTFe
+	 vGV2I/Zz12tcm59r77amRphbn5ovUgYjtliruTmCvkIf/2P+aUWJ/4+Rt8poarQXPC/5j
+	 8vvEv4YCg8m7bSWRGMBBIE8Uv34LpHMo8ijXkfCpiPNJjYfMpsdsvmcBiEl743z2wRb6i
+	 oQRNLpl8v1OOqCo5w6Tx0mEe95OssmZI8VBlV5NsdwJV+zSQdenPCvio8mj/sjBL/13EZ
+	 8tJ+/hQUi8PdbEY6yAsZLPKut7qXgqoALIh5LB9jtwzUlwoh0VbOvYLxUjPr7ut/BQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793115510;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=P4QDwDejSsPjI6QsC7K2e4l+YE6idf6liU1KvYAti6A=;
-	b=v6WpV/E4FiSHEu8weAE9ogXFOtccFnxrFs91FNr7nd6qR+/RbzjlYUHJb2AWcsFL3gwS
-	 re77p6cYEA3NRjfEz7Yp4PY3jFBqnTm7LbZeRbMuhOH2FMvKJKQHmFbbZKMP2hYW2vPkD
-	 iK9oRuRMrFLGU+AmRiSxX4Jglp1Fw7AVivgY17z5eX4cNAWfMmnQ/QSjCiPOO1+3AabRk
-	 NuYoQRGc8HzY/a3VZIVbxmtGFaMCJHvglxCVD4E7KnmYL5cSU75qMdnIit3W2vRemdSx8
-	 DzyfK8P/SOLvM4bCb01UVS+MbdMl2URWSh3MiUnQHlGEkqRrMgDDVx4uc7PXfrydtqw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793115854;
+	h=Received:DKIM-Signature:Received:Message-ID:User-Agent:Date:From:To:
+	 Cc:Subject:References:MIME-Version:Content-Type;
+	bh=azcg7d1eP1GSCwwf6vHG33FdrWswOi+yIuOTdqpdfFI=;
+	b=wSSaJ9RlKEaj0PJkC/u3VSh3ki13fxZH5vUwagjwnshA0ftSl2885g+Bt5No7LI/bR56
+	 TPeBQmjYWO61HuvbYbFal/b+1HSnFQdN5TeqJsE23XEOjwNdK1VzDuL7kUeYy3zqywj3O
+	 X+owgdg2MuljzTpGK+fbtMuAwDP/S0dk4yPmudZPupQclahxk6FcmeesT6POKGd6//H4m
+	 S1IfUtn0JXjzwa3TCVN1jBwkJWbxgR+rafTiX0Ix386FRiiLFvomYJRYZ1oB1KweaX3E/
+	 d9hWIEZWr2MNHc+fkcINgkKtXW8GaTEKCdTXMNMvfrGjIr8SuqLP1J+JBem+d6bfcOQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n3PnWGSE;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RmZhbbU0;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DFF606A31B;
-	Tue, 27 Oct 2026 15:38:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52998606A329;
+	Tue, 27 Oct 2026 15:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n3PnWGSE
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E4A1F01825;
-	Tue, 27 Oct 2026 15:38:23 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RmZhbbU0
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141061F031E0;
+	Tue, 27 Oct 2026 15:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793115509;
-	bh=P4QDwDejSsPjI6QsC7K2e4l+YE6idf6liU1KvYAti6A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=n3PnWGSEy63TkshTbN+NH8Lz7qKC2SA8BzUpk+tmV1MeonlnzUWDIuBkzYaozxT3Z
-	 TJuesb05R2Pm5JRavby+Id3CDOR+kOvkFdCodgze+hSIFOYNb0H3jPFqCe8pAWDr+h
-	 QV0ABQe5oaV3oQvreewvONhUys5vgEHtAqlstJ/rjTPZYP0XClTFKPjezt4pZtzYPy
-	 F1cnDPPZQYxciQ7wC+9ibZoYSUUWqMclFS2Ymoq0Ma232n5JNGXX3/RYFcSWnSS7Ai
-	 ppF8o8avIYgpka5fUBCD16Z1rhQ9NYdLIYFPlOzOV36IyZnqZg4rOn9rcyDk8FbuTn
-	 WeSaUXLtumYBA==
-Date: Tue, 27 Oct 2026 15:38:20 +0000
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, oleg@redhat.com, peterz@infradead.org, 
-	mhiramat@kernel.org, jolsa@kernel.org, akpm@linux-foundation.org, liam@infradead.org, 
-	surenb@google.com, david@kernel.org, vbabka@kernel.org, jannh@google.com, 
-	hughd@google.com, kees@kernel.org, mingo@redhat.com, tglx@kernel.org, 
-	x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 6/9] uprobes: Don't sleep on mmap_lock with
- dup_mmap_sem held in dup_mmap()
-Message-ID: <auDApO7ECoVLs-Jp@gremlin>
-References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
- <20261022015712.1297331-7-alexei.starovoitov@gmail.com>
+	s=k20260515; t=1793115854;
+	bh=azcg7d1eP1GSCwwf6vHG33FdrWswOi+yIuOTdqpdfFI=;
+	h=Date:From:To:Cc:Subject:References;
+	b=RmZhbbU0xMF39dlPMHj471aI1Pzkp+I32nSh24gjv327qpWzU7s7VV9ehmUe4iQNj
+	 UyApf1ngkRQLCUDqn0fw07Mviig7WH6AJdutP3yhV8awViS6ysm7mtyniI91Rk2xPl
+	 0lzYKQbWBN0lE6nIS5+RvElHZ8zvVI44Vc//K8/mmdtwOhU0r+MWw4nN+rwNGZvp98
+	 PsY2m+t5ouiWlVRQkOvjcZXRNE0JpbNWr/PGTCvsGbcdmRXg90j4Yn7k8UDdiHosAG
+	 3PB6HbGSniV5mzbDmZTWQpHNOCwrnukDl1Q84p5R3++bYR/RpkW4kjy6S/xZCaa1hu
+	 7G/yhwSD7Ec1A==
+Received: from rostedt by gandalf with local (Exim 4.100.1)
+	(envelope-from <rostedt@kernel.org>)
+	id 1xLjLR-000000078hO-1ium;
+	Tue, 27 Oct 2026 11:44:13 -0400
+Message-ID: <20261027154413.231874596@kernel.org>
+User-Agent: quilt/0.69
+Date: Tue, 27 Oct 2026 11:37:02 -0400
+From: Steven Rostedt <rostedt@kernel.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Vineeth Pillai <vineeth@bitbyteword.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Aaron Conole <aconole@redhat.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Borislav Petkov <bp@alien8.de>,
+ Chanwoo Choi <cw00.choi@samsung.com>,
+ =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ David Airlie <airlied@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Eelco Chaudron <echaudro@redhat.com>,
+ Eric Dumazet <edumazet@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Ilya Maximets <i.maximets@ovn.org>,
+ Ingo Molnar <mingo@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Jiri Pirko <jiri@resnulli.us>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jon Maloy <jmaloy@redhat.com>,
+ Koby Elbaz <koby.elbaz@intel.com>,
+ Konstantin Sinyuk <konstantin.sinyuk@intel.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ "Martin K. Petersen" <mkp@kernel.org>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Maxime Ripard <mripard@kernel.org>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Oded Gabbay <ogabbay@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Philipp Stanner <phasta@kernel.org>,
+ Simona Vetter <simona@ffwll.ch>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ Thomas Gleixner <tglx@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ tipc-discussion@lists.sourceforge.net,
+ Tung Quang Nguyen <tung.quang.nguyen@est.tech>,
+ Xin Long <lucien.xin@gmail.com>,
+ x86@kernel.org,
+ amd-gfx@lists.freedesktop.org,
+ bpf@vger.kernel.org,
+ dev@openvswitch.org,
+ dri-devel@lists.freedesktop.org,
+ linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ linux-scsi@vger.kernel.org,
+ linux-sctp@vger.kernel.org,
+ netdev@vger.kernel.org
+Subject: [PATCH 4/9] dma-buf: Use trace_call__##name() at guarded tracepoint call sites
+References: <20261027153658.703730257@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,192 +118,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261022015712.1297331-7-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 
-On Thu, Oct 22, 2026 at 01:57:09AM +0000, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> dup_mm() takes dup_mmap_sem for reading and then dup_mmap() sleeps on
-> mmap_lock of the parent. When another thread keeps that mmap_lock busy
-> register_for_each_vma() waits for the reader, and every other fork() in
-> the system waits for the writer. The parent doesn't have to map the file:
->
->   A thread 1:  mmap(MAP_POPULATE) -> mmap_read_lock(A)
->   A thread 2:  fork() -> percpu_down_read(&dup_mmap_sem),
->                mmap_write_lock_killable(A) sleeps
->   tracer:      percpu_down_write(&dup_mmap_sem) sleeps
->   others:      fork() -> percpu_down_read(&dup_mmap_sem) sleeps
->
-> dup_mmap() needs both locks. Don't sleep on one of them while holding
-> the other. Sleep on mmap_lock and trylock dup_mmap_sem. If that fails sleep
-> on dup_mmap_sem and trylock mmap_lock, and so on. Taking mmap_lock and then
-> sleeping on dup_mmap_sem is simpler, but then all threads of the parent
-> wait for mmap_lock as long as the writer holds dup_mmap_sem.
->
-> Both are taken in dup_mmap() now, so release dup_mmap_sem there too.
-> Commit 8ac662f5da19 ("fork: avoid inappropriate uprobe access to invalid
-> mm") moved that to dup_mm() to hide the child from uprobes until mmput()
-> when dup_mmap() fails. Since commit 43873af772f8 ("mm: change dup_mmap()
-> recovery") dup_mmap() removes all vmas of such child before it drops
-> mmap_lock.
->
-> dup_mmap_sem is released before dup_userfaultfd_complete(), so the monitor
-> that doesn't read UFFD_EVENT_FORK no longer blocks every fork(). During
-> that wait register_for_each_vma() can find the child, while no task points
-> to its mm. The next patch deals with that.
->
-> Thread 1 of process A loops over mmap(4G, MAP_POPULATE) and munmap().
-> Thread 2 calls fork() in a loop. Nobody maps the file. Process B calls
-> fork() in a loop. 32 cpu VM. Median (max) of 15-25 runs, msec:
->
->                          the longest fork() in B    attach
->                          before      after          before  after
->  uprobe_multi, 1 uprobe  206 (219)   0.10 (0.30)       220   11.7
->  uprobe_multi, 4 uprobes 208 (428)   0.08 (0.32)       219   13.5
->  perf_event, 4 uprobes   419 (424)   0.10 (0.44)       632   11.4
->
-> During detach: 265-293 -> 0.19-0.37.
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  include/linux/uprobes.h |  5 +++++
->  kernel/events/uprobes.c |  5 +++++
->  kernel/fork.c           |  4 ----
->  mm/mmap.c               | 19 +++++++++++++++++--
->  4 files changed, 27 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-> index d34dbc0fbbfe..6d74efa80d04 100644
-> --- a/include/linux/uprobes.h
-> +++ b/include/linux/uprobes.h
-> @@ -211,6 +211,7 @@ extern void uprobe_unregister_sync(void);
->  extern int uprobe_mmap(struct vm_area_struct *vma);
->  extern void uprobe_munmap(struct vm_area_struct *vma, unsigned long start, unsigned long end);
->  extern void uprobe_start_dup_mmap(void);
-> +extern bool uprobe_try_start_dup_mmap(void);
->  extern void uprobe_end_dup_mmap(void);
->  extern void uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm);
->  extern void uprobe_free_utask(struct task_struct *t);
-> @@ -277,6 +278,10 @@ uprobe_munmap(struct vm_area_struct *vma, unsigned long start, unsigned long end
->  static inline void uprobe_start_dup_mmap(void)
->  {
->  }
-> +static inline bool uprobe_try_start_dup_mmap(void)
-> +{
-> +	return true;
-> +}
->  static inline void uprobe_end_dup_mmap(void)
->  {
->  }
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index a9274016c55d..92ccb730278f 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -1927,6 +1927,11 @@ void uprobe_start_dup_mmap(void)
->  	percpu_down_read(&dup_mmap_sem);
->  }
->
-> +bool uprobe_try_start_dup_mmap(void)
-> +{
-> +	return percpu_down_read_trylock(&dup_mmap_sem);
-> +}
-> +
->  void uprobe_end_dup_mmap(void)
->  {
->  	percpu_up_read(&dup_mmap_sem);
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 10f2d05d816a..8fd6be932afe 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -1539,11 +1539,9 @@ static struct mm_struct *dup_mm(struct task_struct *tsk,
->  	if (!mm_init(mm, tsk))
->  		goto fail_nomem;
->
-> -	uprobe_start_dup_mmap();
->  	err = dup_mmap(mm, oldmm);
->  	if (err)
->  		goto free_pt;
-> -	uprobe_end_dup_mmap();
->
->  	mm->hiwater_rss = get_mm_rss(mm);
->  	mm->hiwater_vm = mm->total_vm;
-> @@ -1558,8 +1556,6 @@ static struct mm_struct *dup_mm(struct task_struct *tsk,
->  	mm->binfmt = NULL;
->  	mm_init_owner(mm, NULL);
->  	mmput(mm);
-> -	if (err)
-> -		uprobe_end_dup_mmap();
->
->  fail_nomem:
->  	return NULL;
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 4bf26b0f1e6e..6ce654e33e3b 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1713,8 +1713,22 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
->  	LIST_HEAD(uf);
->  	VMA_ITERATOR(vmi, mm, 0);
->
-> -	if (mmap_write_lock_killable(oldmm))
-> -		return -EINTR;
-> +	/*
-> +	 * Take mmap_lock of oldmm and dup_mmap_sem of uprobes.
-> +	 * Don't sleep on one of them while holding the other.
-> +	 */
-> +	for (;;) {
-> +		if (mmap_write_lock_killable(oldmm))
-> +			return -EINTR;
-> +		if (uprobe_try_start_dup_mmap())
-> +			break;
-> +		mmap_write_unlock(oldmm);
-> +
-> +		uprobe_start_dup_mmap();
-> +		if (mmap_write_trylock(oldmm))
-> +			break;
-> +		uprobe_end_dup_mmap();
-> +	}
+From: Vineeth Pillai <vineeth@bitbyteword.org>
 
-This isn't beautiful :)
+Replace trace_foo() with the new trace_call__foo() at sites already
+guarded by trace_foo_enabled(), avoiding a redundant
+static_branch_unlikely() re-evaluation inside the tracepoint.
+trace_call__foo() calls the tracepoint callbacks directly without
+utilizing the static branch again.
 
-As David says, we have an incoming fix that moves things around, i.e. this will
-no longer actually live in dup_mmap() but rather dup_mm() [which, by the by, I
-do want to move into mm], but that'd just move this there i guess?
+Original v2 series:
+https://lore.kernel.org/linux-trace-kernel/20260323160052.17528-1-vineeth@bitbyteword.org/
 
-I'm concerned by what Jann says re: a livelock here though. I'm not sure this
-should be unbounded, and fork is a super-sensitive time for mm.
+Parts of the original v2 series have already been merged in mainline.
+This patch is being reposted as a follow-up cleanup for the remaining
+unmerged pieces.
 
-I would feel more comfortable with it if it were bounded, and really it'd be
-nice if this was abstracted into its own function too rather than something
-open-coded.
+Link: https://patch.msgid.link/20260515135927.2238823-1-vineeth@bitbyteword.org
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
+Assisted-by: Claude:claude-sonnet-4-6
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ drivers/dma-buf/dma-fence.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Do you have numbers on how many loops you are usually observing? Could you get
-most of the way there by just doing a trylock on uprobe before trying to take
-the mmap write lock?
-
-I mean if 99% of the time you only need 1 iteration, for example, then the fix
-looks a lot more sensible.
-
-All in all it feels a bit egregious for core mm to be held hostage to uprobe
-like this, isn't a better fix possible? Does uprobe actually need to exclude
-fork, or could it just eat the cost of checking to see if something forked
-since?
-
->  	flush_cache_dup_mm(oldmm);
->  	uprobe_dup_mmap(oldmm, mm);
->  	/*
-> @@ -1883,6 +1897,7 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
->  	mmap_write_unlock(mm);
->  	flush_tlb_mm(oldmm);
->  	mmap_write_unlock(oldmm);
-> +	uprobe_end_dup_mmap();
->  	if (!retval)
->  		dup_userfaultfd_complete(&uf);
->  	else
-> --
-> 2.55.0
->
-
---
-Cheers, Lorenzo
+diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fence.c
+index bd58688b81a7..f7dee2f7c0de 100644
+--- a/drivers/dma-buf/dma-fence.c
++++ b/drivers/dma-buf/dma-fence.c
+@@ -554,7 +554,7 @@ dma_fence_wait_timeout(struct dma_fence *fence, bool intr, signed long timeout)
+ 	}
+ 	if (trace_dma_fence_wait_end_enabled()) {
+ 		rcu_read_lock();
+-		trace_dma_fence_wait_end(fence);
++		trace_call__dma_fence_wait_end(fence);
+ 		rcu_read_unlock();
+ 	}
+ 	return ret;
+-- 
+2.53.0
