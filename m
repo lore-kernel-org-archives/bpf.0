@@ -1,56 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793082421;
-	b=h67OvGUa+zeR+xujktil04np8Il4l+Zn59F2VSz5iKKSo0bYv608BQe+/fZCx/cqGflM
-	 Ihm7TFlZRG18m5Pw+fnsQop02c6kybmgG4IWD0glSS2BmWp4fEIiO4N74NofZcreRnqg1
-	 CyLG8lZ086+7219XWv6hxAbL1iMRvXWtAMwlD7hXTsn1HF5j0Aa5XpOtnL5xs2NVuyr0J
-	 OJ+hCpwcZ8GQKwX89Olwwm+LZcuaFuYGFOqkvOTR1Vi9VowXm6y/TATKXGMam5bTh8Jgh
-	 Yq2QtRfgmNg4PKoFpdbEC29cKkrqYgUMGt3aTes4pr9hsXYBll5RIgikrMx0k7Mp6pw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793082421;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=iEQvM9tYUcxwoTJM8knIdkprbqaFsbWcz3X2D6dSsa0=;
-	b=qT1vAolGzdvW4YJwht5kxg8D9TD+x02d/Q6NnmrA6qNKtSC0COJi+xrQ7l3e4N6kVxgZ
-	 MptU5plo3cHdfTEEJho/JegZZLW76MyfleqWTUPTrhvvDO4CjgEtAq+q+L8ecyg73cfD0
-	 r+VR5lSB7rwaOY7DjvJGx4tRfdRHBeizeyoKVloQs3y0t6ukvXLP+pV+Dch6LKBCrea/K
-	 n6e1QYBLHRgEeNpqeg7iB0wZ70tVkrSKav8Jpaal+ITJjgrEJfMx9mSBDUFX/Pz33EehH
-	 z/puRTNDB99N4ZbvH+pDAG1mdnkm5ku36PD51uLGA0ACYG4du0/EUkdURzJ0yp/P/0A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E25om5qx;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.52
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793088842;
+	b=a1webrHHqGqiyhu9oYYpaUaV2kNSpWEcojLhkZK+k8PzkofukqTcBjXoTg1zHN2yqddU
+	 Q+mcehKLaBhT+dDM/wmfgODAODsq2HsR+ELMy/rPDB+AUSq9Rc83NJfTmYh0RuGc/PbCC
+	 KsP4NFWMZJoi/fhlDb6w1Ll9COvZvtuuHocSOgqI6+qV1H7sVm5wyB9oQroLwH0099vHb
+	 xlH96zVwAyR+sX7KHkj5lVdOCT+tS5j2zrjY/lCcxz/jna1qBVxylp3hMBo8tMWvMX7a+
+	 n/COvsqG30d0qJ0wAwfSFrMBlSqUJdAR2svIarjv+s4rCH3XufD7KwhIoZKqN3mFzww==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793088842;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=w8VOaIxB0TFBB/OhvCNXDLo6PM/lUvCeTHrTbRbZxP4=;
+	b=XKjid43HSdLx6kyY33PuYTssZiNu9e+usIDkFYSm+oQE/u60xkGXthM3a4diW6LkBjPZ
+	 s0y8iRc1P8HW/W0Yc3o9bg55q10vC4y75vr159EvDbFv8zjbkFeq3PpQ7FsFufmf0XAp+
+	 XzPb8f53BlLyuP36zf85kxlUs8c/sZWgv2zw1bjDr8Dij6RFewinMbQkHzThYeU1z7Sqr
+	 6QtmCodWRFmGQ7B2qBNfGNsGzv3Kew22eFiNKZpeGle7yYL1za7IfIQM/lsRck/M0SIWA
+	 DDZDLEWPdo8/WwpEy4FGtEnCehFZEJwc1iEjUJGWqNlmNMTOe5q5UuQd6xnC3fGmloA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EbkYUlEv;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.52
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56608606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 06:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20583606A31E
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 08:14:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 20583606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E25om5qx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B3F1F01825;
-	Tue, 27 Oct 2026 06:27:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793082420;
-	bh=iEQvM9tYUcxwoTJM8knIdkprbqaFsbWcz3X2D6dSsa0=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=E25om5qxYsxTAsHgIj7KrnjsVVM2zHAs+HipXfTRSyaXem69U9TV1vvvMPLLMAp8F
-	 Um0dhOKctkj46PnyOhTHM2m6wSZZgoH/O9im5Wj3LnOiW/ZrrkZE8uq5+Jw0qzs7Ty
-	 RrW06FgNBzb2O7dpD4kdtR40/rEVm2oA53y3XYl1T1N94vJsV4L3D1o16Nram5wzLr
-	 wD+5PJi8XBgRD/Z3GRI2ldyV7uZYASmBD6cE3b4zWjO0NroxPFAx5qEiwezAomf0i5
-	 fU89ps97gGg/Ff9hpbvdrB9BDRR6ihxfyQIy+fU4h6zD0uE9yrr6okyfT0w+ilmKlx
-	 d8sCNCq513qbQ==
-Message-ID: <sashiko-outbox-186158@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Exercise stack argument
- precision on state reuse
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Yunxiang" <xyx2021@mail.ustc.edu.cn>, bpf@vger.kernel.org
-In-Reply-To: <20261027061303.1754535-3-xyx2021@mail.ustc.edu.cn>
-References: <20261027061303.1754535-1-xyx2021@mail.ustc.edu.cn>
- <20261027061303.1754535-3-xyx2021@mail.ustc.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 Oct 2026 06:27:00 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=EbkYUlEv
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-48ed188ee81so1927106fac.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 01:14:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793088840; cv=none;
+        d=google.com; s=arc-20260327;
+        b=j+JKnHRQMjZCy3vQmT4RIbdadNXXW+nutT0Exm5GD57XQdQgpf0J/aAyguVbVWUUT0
+         r2r6ZHL+lC5kpmfJazKXynEbShgCUUjjUI2lKqa62nV9b6W5rJoBgny8EnWd8LHxYqoN
+         wDdP6t8oM//mZiZpzqQevfM7ZSOQAbCBI9YJc0a9+KH+KSsu4Y5Rx0ceMLhN1+aFIAFb
+         O/nqjZz4qBLnaOQ5KgaRsC6EY8naIHlZ1XpNJteYzeSaeRQRQOv63NzbInBIhdlMo3/1
+         1nekNCf0JxZOv3i7nbfBcoPlkzYIh5KlY9xThJEiffAgN0xNt5nQuUal4MTDy3Vjvfw3
+         AwjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=w8VOaIxB0TFBB/OhvCNXDLo6PM/lUvCeTHrTbRbZxP4=;
+        fh=/6MfAj4BXjjvz7vnbQDZbctxvlSEnzJk7lB4LlkwlbU=;
+        b=Jltj/XNMLXoci9iuzm/mJqbat3wK+PlIhZLIpU99ootzcsG7fmnUJ6Y9QtWKhC/Hzv
+         KB6n4Ri6bln7QqcoOXrw/3SUKxh67xZ7bJdiKNnE/mqlF1hrv/4EEVn8a/52PAcTMGWZ
+         L0mFk/07S63VYISwPXf5EKKvCDzYxp5LaUSqMo6j5AF50ytmMbN98jCBTRKMf+yWVGQR
+         3kCvxkHtUb5iBxZgKmPWMptyXIlvIi4BAU5Krp5rRh9uNUxawO4kr4FagXJyfmfvmNQy
+         rkvBIS2agph9MzokPWEm1hv9k363MPx4SycvxTNb7xHM63qxQ2N+8aQymyo5RodrWJbP
+         jLbQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793088840; x=1793693640; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=w8VOaIxB0TFBB/OhvCNXDLo6PM/lUvCeTHrTbRbZxP4=;
+        b=EbkYUlEvI54rZurwWBXKCqht4R9252FrTxKpsmrco/FVgLTJbIBcOVOabTmv/4O1FU
+         IizKxH7saDJxzpilr9W+8GW4PmsrOr402uwSpFRrIoAslfGIP+FEFnhTzOnyxRyGgVKl
+         iQ9rnD8Y5RiymicdzvUuOBBhs8IuE2AlLW9Ya0yBBnT0VLa8eC8AMegTerf+/OQnPX0a
+         g49GPpeyqx8AwsVvr0j73uLEvo/M7C75aQkNMRxJCxHhsiSg6wEs41BXUj+BWJlehxHL
+         e7aNuGm3edpoyRl//l8XvUpBRCn9Z3IydbAq70O0FfMB4LXag8897pCCLPZjlSFcjvK+
+         haew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793088840; x=1793693640;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=w8VOaIxB0TFBB/OhvCNXDLo6PM/lUvCeTHrTbRbZxP4=;
+        b=mEGf84iQbNF9wLE8/z+cfjys1LAGL+9+/pojV2+TtsOwhKHf2ViGI0zVNmstFPzyoa
+         gSYg83YFqBNOatOCQzHWQGDBXSOVu07zogvkDk9+oDXiLsEtxoJMS/t3IKQdVzaYrei/
+         XesbzR+wC1ukvyFZjCmEEZrO5w/oTYf5Jc8aaBTV21c+Fve+jXUlp9WDqatrGa3GsuKw
+         eF14x/m4yKAyqur2KbncSa6g2Q0AiX+/j+bFAHwJ0rlF4tsk/FxfZ66lElx9Ioh9DXlQ
+         Al+IcI3smYGrB4QrDafRhPtsyr5CU+vzSy3C9TTcPDphGmw2w0cxxI6dMrw68xzV5Hjo
+         QbIQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwQ+KwdIa4NuajhVYeovh7UFmEwHPPmhFfF5TqlXsa/LMOSqGOK915pS32Z7YCanjc2jvE=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIA4VFdT+EAJQYEEjjL8YW2IUh2UfV8Hto1+YPlpN9wKvHDSS52
+	sUmUJ1j0+3g1IE7ySOXO5PViG9SZOiioQy65HKuOYBpn1O35+SehIsF4VPXPCwKKgV9VHMhe1e/
+	t78SOiuunozhXcyUv7V2yk68ilCMd8XA=
+X-Gm-Gg: AYBFou1QLoe1sgWCH010aQK4YkVLewfpDXLoju9bNFKAeKbkHJCZziM1eeDbMU6jmEu
+	tLViSZ58ZIRWxVI4uGH9kkoI0TtHc7ypg4Uf7wdfjLDg4AQ6NxHmlrDi9XN46qfvtc//5FB4H/P
+	prTxzr/q3QSE9CQX7qgLjfw27Zixb1uWcEbhdvE9t1NtDdgRnavPx8RvLQw+Xo209QdiwAj2Y4G
+	tPipSFW5M1v37JQR6s2MeZXIVXKBix58tH/OpIJ9NMnInjEFGbIYY2bKPwRdEDjhVBhhoBB6+Fk
+	O8tMMW9EDmoTnLRi/DAjk7lpxy+obYVPH1FQW0oqXxhAoAAZ/en1l6NtxZoCElEZ5YDGE4fXgZ1
+	rsgVU6jA9j/AHyb7a5OH0alY8V2Lt2RW63Aq/vw==
+X-Received: by 2002:a05:6870:148d:b0:49d:ff8c:2070 with SMTP id
+ 586e51a60fabf-4a83f64f8a1mr5440798fac.62.1793088839941; Tue, 27 Oct 2026
+ 01:13:59 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,125 +103,70 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+References: <20261016081006.26069-1-yangtiezhu@loongson.cn>
+ <20261016081006.26069-4-yangtiezhu@loongson.cn> <CAEyhmHQe5T6Ai0LXiJnwXzBgy_Xu5=upeqWHbMz7J3X6QntWBA@mail.gmail.com>
+ <b5c793ec-c951-930f-fc9d-06de6f49ac9e@loongson.cn>
+In-Reply-To: <b5c793ec-c951-930f-fc9d-06de6f49ac9e@loongson.cn>
+From: Hengqi Chen <hengqi.chen@gmail.com>
+Date: Tue, 27 Oct 2026 16:13:48 +0800
+X-Gm-Features: AclHuK98IjpjRz-E6wrGUKQi5ueh0VkowRqNb6vJZLkdRKcKoBwQRts6NLE8Z_U
+Message-ID: <CAEyhmHQkJzTjmYfocSqoFYBJ4Q8bq6D=Rojce3EbCAJLWEQSww@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] LoongArch: BPF: Optimize 32-bit operations using
+ native instructions
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Low] selftests/bpf: multi-line comments violate BPF comment style
-- [Low] selftests/bpf: test_stack_arg_precision_reuse() skips supported RV64
---
+On Tue, Oct 27, 2026 at 12:10=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.c=
+n> wrote:
+>
+> On 2026/10/27 =E4=B8=8A=E5=8D=8810:02, Hengqi Chen wrote:
+> > On Fri, Oct 16, 2026 at 4:10=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongso=
+n.cn> wrote:
+> >>
+> >> Currently, the LoongArch BPF JIT emits numerous redundant zero and sig=
+n
+> >> extensions across 32-bit operations, bloating the final JIT image size
+> >> and also leading to runtime overhead, particularly in the division and
+> >> modulo operations. Thus, it is necessary to optimize 32-bit operations
+> >> by emitting LoongArch native 32-bit word instructions.
+>
+> ...
+>
+> >> +               if (cpu_has_div32) {
+> >> +                       if (!off)
+> >> +                               emit_insn(ctx, divwu, dst, dst, src);
+> >> +                       else
+> >> +                               emit_insn(ctx, divw, dst, dst, src);
+> >
+> > For ALU32 SDIV, off !=3D 0, it seems like there is a overflow in S32_MI=
+N / -1.
+> > verifier_sdiv.c has related test cases but annotate with
+> > __arch_x86_64, so it is not run on LoongArch.
+>
+> After enabling the signed division and modulo overflow tests for
+> LoongArch, here are the test results:
+>
+> $ sudo ./test_progs -t verifier_sdiv | grep "MIN/-1"
+> #731/121 verifier_sdiv/SDIV64, overflow r/r, LLONG_MIN/-1:OK
+> #731/123 verifier_sdiv/SDIV64, overflow r/i, LLONG_MIN/-1:OK
+> #731/125 verifier_sdiv/SDIV32, overflow r/r, INT_MIN/-1:OK
+> #731/127 verifier_sdiv/SDIV32, overflow r/i, INT_MIN/-1:OK
+> #731/129 verifier_sdiv/SMOD64, overflow r/r, LLONG_MIN/-1:OK
+> #731/131 verifier_sdiv/SMOD64, overflow r/i, LLONG_MIN/-1:OK
+> #731/133 verifier_sdiv/SMOD32, overflow r/r, INT_MIN/-1:OK
+> #731/135 verifier_sdiv/SMOD32, overflow r/i, INT_MIN/-1:OK
+>
+> That is to say, the current jit code is no problem.
+>
 
-commit 46da3caeb85de86ad2e22a94e1a61ab12b6a1cfc
-Author: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+Great.
 
-selftests/bpf: Exercise stack argument precision on state reuse
+Acked-by: Hengqi Chen <hengqi.chen@gmail.com>
 
-This commit adds load-only BPF verifier selftests in
-tools/testing/selftests/bpf/prog_tests/stack_arg_precision_reuse.c to
-exercise stack argument precision tracking across state reuse and
-conservative precision fallback. It constructs BPF instructions and BTF
-directly so the tests can run even when the compiler cannot emit stack
-arguments.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg_precision_r=
-euse.c b/tools/testing/selftests/bpf/prog_tests/stack_arg_precision_reuse.c
-> new file mode 100644
-> index 0000000000000..4497d959247d7
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/stack_arg_precision_reuse.c
-> @@ -0,0 +1,300 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +
-> +#define BPF_REG_PARAMS 11
-> +
-> +/* Construct BTF and instructions directly so these tests also run with
-> + * compilers which cannot emit stack arguments yet.
-> + */
-> +struct test_program {
-
-[ ... ]
-
-> +static bool build_reuse(struct test_program *p, int map_fd,
-> +			const struct reuse_test *test)
-> +{
-
-[ ... ]
-
-> +	/* M: paths 2 and 3 meet with their offsets still in r6. Path 2
-> +	 * must acquire precision here when it reuses path 1's state at P.
-> +	 */
-> +	jump_to(p, path2, p->insn_cnt);
-
-[ ... ]
-
-> +	/* Different precise r2 values prevent reuse before the callee.
-> +	 * They converge here while the offset is still in the caller's slot.
-> +	 */
-> +	if (test->callee_join) {
-
-[ ... ]
-
-> +static bool build_fallback(struct test_program *p, int map_fd, bool call=
-ee)
-> +{
-
-[ ... ]
-
-> +	/* Subtraction turns r1 into a scalar. Precision backtracking across
-> +	 * the store through its old pointer value needs conservative fallback.
-> +	 * The resulting offset is bounded, so this program is always safe.
-> +	 */
-> +	emit(p, BPF_MOV64_REG(BPF_REG_1, BPF_REG_7));
-
-[Severity: Low]
-This isn't a bug, but in
-tools/testing/selftests/bpf/prog_tests/stack_arg_precision_reuse.c, the four
-multi-line comments above struct test_program, inside build_reuse(), and
-inside build_fallback() place text on the opening /* line. Could these use
-the standard BPF multi-line comment style with /* on its own line?
-
-[ ... ]
-
-> +void test_stack_arg_precision_reuse(void)
-> +{
-> +	const struct reuse_test tests[] =3D {
-> +		{ .name =3D "arg6", .slot =3D 0, .offset =3D 32 },
-> +		{ .name =3D "arg7", .slot =3D 1, .offset =3D 32 },
-> +		{ .name =3D "caller_frame", .slot =3D 0, .offset =3D 32, .callee_join =
-=3D true },
-> +		{ .name =3D "nested_caller_frame", .slot =3D 1, .offset =3D 32,
-> +		  .callee_join =3D true, .nested =3D true },
-> +		{ .name =3D "in_bounds", .slot =3D 1, .offset =3D 8 },
-> +		{ .name =3D "discarded", .slot =3D 0, .offset =3D 32, .discard =3D tru=
-e },
-> +		{ .name =3D "register_control", .slot =3D -1, .offset =3D 32 },
-> +	};
-> +	struct test_program p;
-> +	int map_fd, i;
-> +
-> +	/* Stack argument JIT support currently exists on x86-64 and arm64. */
-> +#if !defined(__x86_64__) && !defined(__aarch64__)
-> +	test__skip();
-> +	return;
-> +#endif
-
-[Severity: Low]
-In test_stack_arg_precision_reuse() in
-tools/testing/selftests/bpf/prog_tests/stack_arg_precision_reuse.c, when
-compiled and run on 64-bit RISC-V, this guard unconditionally calls
-test__skip().
-
-However, arch/riscv/net/bpf_jit_comp64.c implements
-bpf_jit_supports_stack_args() returning true, and other stack argument
-selftests such as tools/testing/selftests/bpf/progs/stack_arg.c enable stack
-argument testing on 64-bit RISC-V.
-
-Should this condition and its comment also include 64-bit RISC-V (for
-example, defined(__riscv) && __riscv_xlen =3D=3D 64) so these verifier test=
-s are
-not skipped on RV64?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027061303.1754=
-535-1-xyx2021@mail.ustc.edu.cn?part=3D2
+> Thanks,
+> Tiezhu
+>
