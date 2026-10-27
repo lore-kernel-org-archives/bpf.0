@@ -1,54 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.38
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.142
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793125607;
-	b=KTo29emqe56lKrcmK3SLhbBK/gCFtu1slpF9ccqSGsk9J2ik26bIpor5rmFcsHXDWc/5
-	 5d5BrNuwX3UxhuccVd7VroKrWZ8mTQbrls6qrI21nU+44NbUQd0g3CslbMg/nt/7EuxK1
-	 z+HsAtIvmYFTgW1k4/xcDjnnraiowryqa9CXgTl0J5/A+S/rcT8eWA2S6soHNbbIgXcSc
-	 abHKMXQ2rOE5iickF25UAJiHdasoGN8GhK8ywho+KPJKWOdSGNct5wzioq8XdLuK1LcQ+
-	 5BfU5ruJStcz1A3NloGizQh9YhGiquTAw6+X+PWjYgM+0XfrzSydf3RMO8giAR/DkSw==
+	t=1793125975;
+	b=k4BmAAycLGG1PCl2C5oLwSQUpVCPxw65GbUa2knwSMqCHqh1FlmyPn/BLbIMtkHSRu03
+	 uNLaEhAEnFE1E0p6JPDWWO+K+4GSKsxUjJHFZiDERArhufXNQc0878i0dov40I2EnwHsP
+	 cM6bbX6jYFFUnyes8KlSK91BBQz9suI3T9IyKrhrEZ3jUYqpjhQyzQo1EGjWxRLg62AOB
+	 9VzDwDwvOhgQCDtpeHNkfbjvluf06RtLGzcRHXFCBxU+Epyb9CI3vLn/1SdpmbGaYqMzF
+	 QwSXup0cF8fMnFKox2/OTVfoF7uFWUeVywSYCiQqHABNkk6A+CWUWMxxgsrQJsyRpzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793125607;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=CaiwK52O6JveeQJueYZooXR3KsamZD6i50fp9vQ+HzU=;
-	b=RfJo/uSP7YYlIaigQpcyKWNwja9mfn8/CNxapqr/Nd9Xz1/kTejOcEFVJwTEsJ4kLw9/
-	 S77borFgWzFfdKV/u8qzIf1wGo366quTihKoKRGVjw9cFSrUXAJX45YOi5VRTNqWL4PAe
-	 waR8Fk3X7gm4dh/Hp7f2SD+Hzffkk+m8+RIJXs06erS6JDD0Q2xMxk4y95pJ91YFJ9wvI
-	 dOod81ASTazRv/niMYNtECqBjfn1D/fcRJ1bg+NjRGZS2NNQ02BPUFz+QaSCtob3aZamU
-	 zhpSPd87u0MDqAag00HVHujldMaT/HVJ5rZYF5MERUyq3SxX67HSRtXc4UTu4GuMoFQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793125975;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=;
+	b=S3zndAJ0bazz7FGwed97Iy1iputJnmMfQhDPqFu/vIb1kUry/WcMrbvgY/ScEeGDIL1u
+	 j9id3gczw2Ac+1xfXNhF54g3h2PBAc+UH2wr/vK+tmR2F3tuDbgToUXH1Neq99VUXJ9jZ
+	 8FX4FMO2gHcz87FuxLoQ/kCPy1DMg7ID/6mt0XuUexgzXAH3G9thpVHcApGc2cL2PB0Er
+	 QFOwyQessmnizU4FqPdKrF/+ucPa8Rr43oacwXOTceTsaWV6M/XeDjw7JzvI8gagxdFIt
+	 cfVD+UAFmPrlXXzJpVkTUt4vP8MRxQ6yHKHNRSIg3Y+sBUdHMsOep0WLJy81torVExg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sGeSsXWs;
-	arc=none smtp.remote-ip=95.215.58.38
-Received: from mta1.migadu.com (out-38.mta1.migadu.com [95.215.58.38])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=nhRbbv7L;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=dqBTENOQ;
+	arc=none smtp.remote-ip=103.168.172.142
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3FF606A31D
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:26:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CE3FF606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416D4606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:32:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 416D4606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=sGeSsXWs
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Sj7RmU3NGIMJfyC+AiEYWymxAuEy0te1KR93Jo/i7Ns=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793125603; v=1; x=1793730403;
- b=sGeSsXWsOCLaNHRzyVAKDNx8Qg5nICpqYxD6V49/pcSZDd97egV5gw5/BMH2WWjhWgUdru+p
- MpnKSfWEudWd55UM5/RMjmHWfHoSj5Ddnoq6Wkq7S1OsHXZM0NLFuoayoaqIOfpKMFmmkI0KGtE
- 1rGF9n2+4TktvrpPf6DeOn7U=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 03b5d29ff8c80ba1;
-	Tue, 27 Oct 2026 18:26:43 +0000
-X-Mizu-Trace-ID: 03b5d29ff8c80ba1
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d81831c3-85f0-45de-acb2-fbf630bdd573@linux.dev>
-Date: Tue, 27 Oct 2026 11:26:36 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=nhRbbv7L;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=dqBTENOQ
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.phl.internal (Postfix) with ESMTP id 3361E1380313
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 14:32:54 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 27 Oct 2026 14:32:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793125958;
+	 x=1793133158; bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=; b=
+	nhRbbv7LCz1ZQpaeWyensFpQo4X/3syWjrNRhf0TPa3WpxX/X2VdpFqv537v9O9I
+	PGhjORRx1kESGQSaPHfa+QRKJpjpqdcACu5FAN3p52dFUSynF/VeBDjNcw+LEo95
+	UNVVfCF+1iy7jr1xBQICX7G6IzE+zAW2IpvIGzT+P30DaFT615CXM7aNuU+rahRd
+	1GUKsYa+gXVhGk/EI4Ywqj2q+VbAxE5UYf7OFubEdoAAzfhu0f2ST004eaCG4GLQ
+	F1D1Q2WkugYqzgcxYwKxVL7pm03H7LMx0dT/XGKTKPQS0mI+iEZcMTRkca0vag3/
+	RDWKomvJBzIYN06yZe7uWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793125958; x=
+	1793133158; bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=; b=d
+	qBTENOQ45NO1fMBSlIFoaed4KzgJDaJVEDwxaWy0AU1ee6zNudEy0DlCDndCnLS6
+	2Mky/tZzM0tAjCf7N4u7bi/4+2ykMhG2ESY1Sf7giCpL6gbAEOpbD5EIxKBbICPt
+	usmzcw6mAAaTgxfbDhYZYxO2tvSv+8uUtfRzlCLEIP3lG32cfLfeY50SbL6O6Io4
+	SgQw2YBRCXwq56w+6p7UjBanfKMGDYqL3wt7dbLsVl8wtknfLVIzXXPvDsCBbGKW
+	AtxiHzQeIKi/D6MVVDwZTvVos2hYu3DWzHZsBX4JLmmgFKlBmi78/sjOEDPTgAML
+	sjhtTrMnUgKadM/vzmJrA==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793125958; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:QjjrL7nVLjLnnJ5myEsaZ2xWYzI4BtjQQQ/0SzDwymLdXKG
+	2pe1o7v8rKOYIl8ZHu49iHGQCybx30tg4GW7yhrS350b66qvCPCaFd/itqNLU+Fe
+	BaoWhi4wYIRN1kTpt/uSGuBAZaQGvBWmreOUsu4oDIosxyldPsJ3/ml4WvC8NDxN
+	M5kNmFLvl5W76lEf5j1BtsK/coxNtYXMXUeLhc4nvDu8krTDttOXP0hm7lgkwGss
+	x65MiN5XDZR+7WeKs6x77VO3+BLxYmQkMnHhTA1XpeO08nQpwMSWzgFc3aDOoItR
+	Ei9EwmhjpOtAyuxdsqldWcbebNtFXi9PHnROXBw==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:C7HxDmq442sA516hPg1WVqijzSVzVZyCGy6pQZqDYDY=:4/DSvQfZqcYprX4ziRRYVwk6oH+PWA9EoraJfbgloO0=;
+X-ME-Sender: <xms:PO7garY621kKyqojOqTb7yy-_Jxdn-Kzm4gl1mIkpb01V8TjHgldxg>
+    <xme:PO7galNXbgg3oxvhvN_4CaBu9hMm0jyCxqhA6a-T7eDOTCaJJJZAFol5ERGDjsLqK
+    2259_D1ZXy5t5UtRcS7lekN3e5e2Iz3wvWTc8ZMKjdCe5rWsux30H3E>
+X-ME-Proxy-Cause: dmFkZTFBrGBMzD/7DKUk8DMjlpJSCDxpPKrzK68BEfeXOQ/MXmVsz3qalb7yQm7DbWy68D
+    mdR7SERoL7p1SipE/Hgrz7O8Jk/YUwS5P3bCp2T9rw+yUUT025kCXndTxgJzUfF2A/LmwU
+    OoshLwBoL+gLtWMZ1eOjSZC00MjyyUjQsfwaX27BJBN1pGwR2iGIXqOSxLJd8LAZ7Ies03
+    pHbxu2/tinn1z/on12HNzhMOuElx6kqVt1d934g47Fvev3+j+hQdPBK+wKrHQuA/MqaMQm
+    +YwFlvGVG7S2iiDu84WQfMEEhxn2uOBT5zg/mL0ozhSd1uzGOGScjRvF7ClHEfMSlJfxcq
+    YnPF1zz+aUEeQFHBKYIkKYLrgp1kUHAokLo109tnO0NExqhQz8UwJIbWoTRGGabU2W726Z
+    Dhb2CJzkcYCahSEgI2QZnhI9rp+Sax2lb2xVGCjVpBRvKLDXz5qYKxyqd2QqtR2ElCh9YH
+    sk3iHLFKWwH3F6St/x0/gv09bz+pznkee8K/sd27QfN9Gwd3fo2BUAJ25G4dopbDOQnb4A
+    P/8JBDeUxH7I8cBQFkugJH97mQ3vUVptVMshXk/wrMwfeGdw1Y1ScOXkp/5PrPH7+diEiQ
+    JTFMCYOkqnX2m+s2VfejdOjHHP+4aWKR319KAAcE5zQTI+rTtC/ZyD4VTbUg
+X-ME-Proxy: <xmx:Qe7gaoJUmon3FH4sGaBdEIKD5fHQ0oH3bMQFHqz81k9r0kK1FDN-iw>
+    <xmx:Qe7gahWdNxTBRCJjJwTwB9P5rA_fL9OS-9G-iMSBpvVqcHmxmO9j9w>
+    <xmx:Qe7gas_yFzXCxWyV59ZvbLz29NvVSPTASADzMdDMlPDM-V9XYgRHIA>
+    <xmx:Qe7garJelIc0ZjXXdljbcuMtjXIos4JgOEY9ZOwRs4BJzuv-Dex5fA>
+    <xmx:Ru7gaoAQZNTTFpuQBw_xTScK29TJcstSl3feioQOcb1p07_GUyAqFEK0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 94CBA32A0097; Tue, 27 Oct 2026 14:32:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -58,178 +114,142 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 3/8] bpftool: Apply __bpf_relocatable per
- record on BTF dump
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org,
- Alan Maguire <alan.maguire@oracle.com>,
- Cupertino Miranda <cupertino.miranda@oracle.com>,
- David Faust <david.faust@oracle.com>, Ian Rogers <irogers@google.com>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>,
- Vineet Gupta <vineet.gupta@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
- <20261023222652.3927736-4-ihor.solodrai@linux.dev>
- <CAEf4BzYuEetnwDnm38J_MEG4-ZcQHfZwg=L1FcFtgXvAn7NSAA@mail.gmail.com>
- <882895bf-db14-485a-bd6f-0241b1eba1ba@linux.dev>
- <CAEf4BzYwORw44UFwt6Kiy+Y3hj3m0=wYzPiH7e7wDsAW58xxBg@mail.gmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAEf4BzYwORw44UFwt6Kiy+Y3hj3m0=wYzPiH7e7wDsAW58xxBg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-ThreadId: AUJ1OXWu3nCJ
+Date: Tue, 27 Oct 2026 19:32:08 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Houghton" <jthoughton@google.com>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
+ "Kees Cook" <kees@kernel.org>,
+ "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
+ "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
+ "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
+ "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
+In-Reply-To: 
+ <CADrL8HXQdzcroeGN-ACjyy-jSAdBNHiT1_BCVVe0P+Y8ZueiyA@mail.gmail.com>
+References: <20261026215226.3713941-1-jthoughton@google.com>
+ <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com>
+ <CADrL8HXQdzcroeGN-ACjyy-jSAdBNHiT1_BCVVe0P+Y8ZueiyA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 10/27/26 11:21 AM, Andrii Nakryiko wrote:
-> On Tue, Oct 27, 2026 at 11:15 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+On Tue, Oct 27, 2026, at 18:29, James Houghton wrote:
+> On Mon, Oct 26, 2026 at 5:13=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
 >>
->> On 10/27/26 11:03 AM, Andrii Nakryiko wrote:
->>> On Fri, Oct 23, 2026 at 3:27 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>>>
->>>> bpftool wraps the C dump in a clang attribute pragma that applies
->>>> preserve_access_index to every struct and union, so field accesses
->>>> through vmlinux.h types get CO-RE relocations. GCC-BPF supports the
->>>> attribute but not the pragma, so it gets no CO-RE from the header.
->>>>
->>>> Jose proposed replacing the Clang pragmas with per-record attributes
->>>> in May 2024 [1]. The declaration attribute support in btf_dump [2] now
->>>> provides the per-type control discussed in that thread.
->>>>
->>>> Apply the attribute to each struct and union definition instead, as
->>>> kflagged decl tags rendered by btf_dump. Add the tags to a split BTF
->>>> over the input, so the input stays read-only. The tags use the
->>>> __bpf_relocatable macro, which by default expands to
->>>> preserve_access_index if compiler supports it.
->>>>
->>>> Clang output is unchanged.
->>>>
->>>> GCC-BPF programs now can get CO-RE relocations from vmlinux.h, however
->>>> the selftests GCC-BPF build defines BPF_NO_PRESERVE_ACCESS_INDEX and
->>>> is unaffected yet.
->>>>
->>>> [1]: https://lore.kernel.org/bpf/20240503111836.25275-1-jose.marchesi@oracle.com/
->>>> [2]: https://lore.kernel.org/bpf/20260929234608.48503-1-ihor.solodrai@linux.dev/
->>>>
->>>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->>>> ---
->>>>  tools/bpf/bpftool/btf.c                       | 62 +++++++++++++++----
->>>>  .../bpf/bpftool_btf_dump_sorted.expected      | 16 ++---
->>>>  .../bpf/bpftool_btf_dump_unsorted.expected    | 16 ++---
->>>>  3 files changed, 65 insertions(+), 29 deletions(-)
->>>>
->>>
->>> [...]
->>>
->>>>         printf("#ifndef __VMLINUX_H__\n");
->>>>         printf("#define __VMLINUX_H__\n");
->>>>         printf("\n");
->>>> -       printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
->>>> -       printf("#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)\n");
->>>> +       printf("#ifndef __bpf_relocatable\n");
->>>> +       printf("#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)\n");
->>>> +       printf("#define __bpf_relocatable preserve_access_index\n");
->>>
->>> why not define __bpf_relocatable as
->>> __attribute__((preserve_access_index))? then type definitions will be
->>> a bit cleaner and we can basically drop BPF_NO_PRESERVE_ACCESS_INDEX
->>> eventually, and instead you'll be able to just `#define
->>> __bpf_relocatable` to disable relocations (or if some GCC version
->>> requires some quirk, you'll define it wholesale)
+>> E.g. on arm64 with CONFIG_ARM64_SW_TTBR0_PAN, the page table base for
+>> the current process is only set in user_access_begin() and would
+>> not point to any task here. Without ttbr0_pan, it should be
+>> covered by cpu_set_reserved_ttbr0() turning off all user space access
+>> for kernel threads.
 >>
->> The problem is in how libbpf dumps the attributes.
->>
->> __attribute__((__vmlinuxh_local_foo)) allows to have a single BTF tag
->> emission logic in bpftool: always emit the attributes. And they remain
->> opt-out in the generated vmlinux.h because __attribute__(()) is legal.
->>
->> In order to enable
->>
->>   #define __bpf_relocatable __attribute__((preserve_access_index))
->>
->> We need to move the opt-out to bpftool level, that is: optionally not
->> emit the BTF tags. And that then brings up a question of adding a
->> runtime flag, passing it through makefiles etc.
->>
->> This can also potentially break existing progs that depend on
->> BPF_NO_PRESERVE_ACCESS_INDEX.
->>
->> So going with __attribute__(()) looked like the best
->> backward-compatible option to me.
->>
->> I'm open to other ideas though.
-> 
-> So we always emit __bpf_relocatable next to a type, but then at the
+>> Should this perhaps be addressed in architecture specific code
+>> instead of in a common place?
+>
+> You're right that whether corruption can actually occur depends on the
+> architecture and config. I'll write a note about this in the v2 cover
+> letter.
+>
+> That being said, I still think the right thing to do is to have the
+> new check(s) in common code. Instances of improper uaccesses are still
+> bugs, even if no corruption occurs.
 
-Actually, I just remembered that it is worse than that.
+I agree we have to do something to prevent the problem for most
+configurations and find any newly introduced bugs.  The questions
+that need to be properly decided are
 
-Per-record, libbpf dump can only emit either:
+ - does there need to be any compile-time configuration to skip
+   the extra checks and/or the warnings?
 
-   __attribute__((%s))
+ - are there any cheaper ways to make it safe than to add a
+   condition on each user access?
+   E.g. the original lazy mm switch was intended to avoid
+   expensive TLB flushes when switching to a kernel thread and
+   back to the original task on 32-bit x86. On modern CPUs,
+   the MMU can deal with multiple ASIDs cheaply, so turning
+   off user access in a kernel thread may be cheaper than
+   adding code to uaccess depending on the architecture.
 
-or, if kflag=0
+>> I would think that user_access_begin() is a more natural place
+>> for the added checks, as this should be called exactly once for
+>> any function that accesses user space and also stays out of the
+>> way of the copy_from_kernel_nofault() etc.
+>
+> user_access_begin() isn't used in a lot of places that I want to
+> catch, including the KVM case. Roughly:
+>
+>   kvm_write_guest_cached() --> __copy_to_user() --> raw_copy_to_user()
+>
+> There's no user_access_begin() in there. :/
 
-   __attribute__((btf_decl_tag(\"%s\")))
+Good point, yes. After the changes described in
+https://lwn.net/Articles/1102061/, I had assumed that all
+__copy_{from,to}_user() are going from common code, but it looks
+like the series so far only touches __{get,put}_user().
 
-See btf_dump_emit_decl_tag().
+There are of course few enough of these left that I think
+we can consider doing the same thing here and turn them all
+into the checking version:
 
-There is no way to emit arbitrary __foo identifier.
+$ git grep -wl __copy_'\(from\|to\)'_user  drivers mm virt
+drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+drivers/gpu/drm/i915/i915_gem.c
+drivers/gpu/drm/i915/i915_query.c
+drivers/usb/gadget/udc/atmel_usba_udc.c
+drivers/vhost/scsi.c
+drivers/vhost/vhost.c
+mm/kasan/kasan_test_c.c
+virt/kvm/kvm_main.c
 
-So the only way to make it work is to employ string replacement hackery.
-We can do that, but I don't think it's worth it.
+> I do think user_access_begin() should have the new check though, so
+> I've added it in the v2.
 
-> top of the header we can define __bpf_relocatable as empty if we want
-> to disable relocations (either because compiler doesn't support this
-> or user defined BPF_NO_PRESERVE_ACCESS_INDEX, or user manually defined
-> __bpf_relocatable).
+I had the details confused here. Seing that user_access_begin()
+and the other accessors always call access_ok() at some
+point, maybe that would be enough?:
 
-With current implementation defining __bpf_relocatable as empty still
-works as opt-out, because __attribute__(()) doesn't affect the
-compilation.
+--- a/include/asm-generic/access_ok.h
++++ b/include/asm-generic/access_ok.h
+@@ -33,6 +33,9 @@ static inline int __access_ok(const void __user *ptr, =
+unsigned long size)
+        unsigned long limit =3D TASK_SIZE_MAX;
+        unsigned long addr =3D (unsigned long)ptr;
+=20
++       if (WARN_ONCE(!current->mm))
++               return false;
++
+        if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
+            !IS_ENABLED(CONFIG_MMU))
+                return true;
 
-> 
-> I must be missing something, why doesn't this work?
-> 
->>
->>>
->>>> +       printf("#else\n");
->>>> +       printf("#define __bpf_relocatable\n");
->>>> +       printf("#endif\n");
->>>>         printf("#endif\n\n");
->>>>         printf("#ifndef __ksym\n");
->>>>         printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
->>>
->>> [...]
->>>
->>>> -#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
->>>> -#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
->>>> +#ifndef __bpf_relocatable
->>>> +#if !defined(BPF_NO_PRESERVE_ACCESS_INDEX) && __has_attribute(preserve_access_index)
->>>> +#define __bpf_relocatable preserve_access_index
->>>> +#else
->>>> +#define __bpf_relocatable
->>>> +#endif
->>>>  #endif
->>>>
->>>>  #ifndef __ksym
->>>> @@ -30,19 +34,15 @@ struct holey {
->>>>         long: 32;
->>>>         long: 32;
->>>>         int tail;
->>>> -};
->>>> +} __attribute__((__bpf_relocatable));
->>>
->>> e.g., I was expecting to see just __bpf_relocatable here, without
->>> __attribute__(()) wrapper
->>>
->>> are there any downsides to that? that seems how attributes are
->>> typically hidden in kernel, for instance
->>>
->>> pw-bot: cr
->>>
->>>
->>> [...]
->>
+(plus the few extra copies of access_ok()/__access_ok())
 
+As a quick fix I would probably start with just the 'if (!mm) return fal=
+se'
+bit here to get something merged while we still discuss the other
+details.
+
+      Arnd
