@@ -1,80 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.8
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793125033;
-	b=oNjDGwAYUjufgXvFqfZDOtk8ygR7JOJkqErv5xf9ugCrtTCgjVgxFACe3TpciUA4EPhk
-	 2pj4SAUl6XnAKVGjRyJ+e42O/hNrzVCvSYoRFrzyRl0pCm3lv1eAThowOmOjjQJypXSuc
-	 KH1RSOtlFNIoykUGS1/Jl3IaQ4XDR3xnfCbRwaF5gNHfPlfQ3sMZXYmPUWTRBxY0IJQLB
-	 wZ5BFcnNayl4WBnAl7XQFpAPNnFrVngiASH95VykkiTPdJR1bdEU4zDMI7B2L/f3l3g7I
-	 99QwHF4YgfBP/WOViJs8W1MLUbOPm8MFjXI1FrHg28xGMcoXzPPuJREtO3D40xE+jpw==
+	t=1793125094;
+	b=d7JxM7JZqA1xldZwmDkHby3Vm4fOhDphN3EpWFykk5wPCL0cZ7wbNe9LOH08NExtA1AD
+	 bYCMVBNmt1rJtyKSuNfjTxg4Jm8/ucZfSidH4egvO5EH0+E1vMbICensbU0NbA935Jat3
+	 FNsH1rCBIDqD3u1GBZA/RXDFVbgaV5CTwmEC9ZfKLmRPsdidVUlsSrQM2sDJHrDXk5scB
+	 1z1bgueE0rG/jfcyvZ+JyuVz4HNWxNKRAddpARh5ye7NZH+sJ7vL+u9aaB75Fsao8V+zT
+	 GQvyEBt0Pa+OmpUiI+k0Z02680cqtIveMEy4FhDZ0UBmRerw6ozc8iqkqS0G3HVU5tQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793125033;
-	h=Received:DKIM-Signature:Date:Message-ID:From:To:Cc:Subject:
-	 In-Reply-To:References;
-	bh=BQlG+dpy8YjBQ/Jf8HDAX4aO1LrQ0VKAd1X1FNGlEsc=;
-	b=ydZxHM1FTxOwNYGeKHuCcwOpP2FCqg1peeharRkys3ckSn4oRIJpFd8sM4rE9WMFAWMs
-	 hOFFNxn5Sf2D5Q5R6s+bzbabmL01o/RpN9Po6PeVyzCYiHDz4+v7Df3d7CXlBYAyb+i3K
-	 QwrlJYMwM17G96vc/+4ZQl2PyukcfMEKcrX+i01uKRrBwD8kQAxRkwztdf/YDdnN92/zZ
-	 M4yhfb+9KWDd36FWutp5kObQs8INneuewYT6jhR+GV5pKISabpDieQHwX/tDoyapb3NSj
-	 cVfUryrC9d9Prniftp89AEJNTLvFmsngl2RTUJFIEFhqXafVPi+XtfvIcfgudgDeVAA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793125094;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=ei6XMbYAS9u8x5NixcKYnlg7x4RBCPwOWVERQ5BIkkA=;
+	b=zDGpJe374d0u+w4PLLHFAOa8F4WlESvrg802jKhhuD06/vJsIT1YrszkkQuM1xT/2W+E
+	 iAPkuGw8B9M9Tz7nId55O94KYMDdYoo8W5t4G9no9DUIK0bK2iLrkyEf47x4l+fKJBXRl
+	 r0jiduLN70X71/2aqsLMRuaXQI+9l9vU3mRqVrDrSzxgK/+s5eYx2l2JaXJkA6Eof77Ww
+	 yI6nB6y35oDuscoUj6MTkGCAV6kdrM/n9bQjP8ojWJA1JdRM7YyT/wVUQOBCgvxgim5cA
+	 SeJyFJq/ZkUCqqWvKvXD7AeT2bKQ3tkEcFLlWD1p8N6FggNQHMOoQBpxtcjI3NXwc3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLPqgKVf;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EvU2AC9P;
+	arc=none smtp.remote-ip=91.218.175.8
+Received: from mta0.migadu.com (out-8.mta0.migadu.com [91.218.175.8])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2CF606A31D;
-	Tue, 27 Oct 2026 18:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CEA4606A321
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:18:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3CEA4606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jLPqgKVf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6511F031E5;
-	Tue, 27 Oct 2026 18:17:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793125032;
-	bh=BQlG+dpy8YjBQ/Jf8HDAX4aO1LrQ0VKAd1X1FNGlEsc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=jLPqgKVfOPVsDgLwoMZ16UseK8OHOo8JpJwNW/YVi0kw3fyQlEsd/UVg32FMZs3OW
-	 r4P5KEJCPIj/KOyDQJDreVJVPyrB9ZKlgbeWThq5yAcHYydcr3eWO39CsPMsWs4YzX
-	 ty8ec6TIzned9CARBFQmSPik48yQoBZn5DuK+GyZh73+m/oGiaCpMUsswuEpUy1+/B
-	 23Ww8KgzPaUGxYKedH2WJ6EK08iuAw/pGCySpsh73GwcFgXbpCs1fGhaD+DjqHzW4p
-	 yCNW05kom5Kf5o1qvD3E9oL7GPtzdiHaTHg/5xmtSzKc2wlh09rM45Nyjj1+dO0iMI
-	 u+HyATTnHHaaA==
-Date: Tue, 27 Oct 2026 08:17:11 -1000
-Message-ID: <769e80ffa618327ac03c13c4657e7229@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Muchun Song <muchun.song@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- davem@davemloft.net, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- KP Singh <kpsingh@kernel.org>, Tao Chen <chen.dylane@linux.dev>,
- Mykyta Yatsenko <yatsenko@meta.com>, Leon Hwang <leon.hwang@linux.dev>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>,
- Tobias Klauser <tklauser@distanz.ch>, Eyal Birger <eyal.birger@gmail.com>,
- Rong Tao <rongtao@cestc.cn>, Hao Luo <haoluo@google.com>,
- Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
- Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com, Jan Hendrik Farr <kernel@jfarr.cc>,
- Christian Brauner <brauner@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Brian Gerst <brgerst@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Willem de Bruijn <willemb@google.com>, Jason Xing <kerneljasonxing@gmail.com>,
- Paul Chaignon <paul.chaignon@gmail.com>, Lance Yang <lance.yang@linux.dev>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Barry Song <baohua@kernel.org>,
- Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH 0/2] memcg_ext: dynamic memory.low and memory.min protection
-In-Reply-To: <cover.1793086858.git.zhuhui@kylinos.cn>
-References: <cover.1793086858.git.zhuhui@kylinos.cn>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EvU2AC9P
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=BjkTiXWt0fBbevv/KWwVwxpG6/7mMcxjAVLE/IT8TSk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793125085; v=1; x=1793729885;
+ b=EvU2AC9PVpErmZ1/OaSyweNF675GRH9Q/qgTnJ7ci/7dCcMFd00jJQuIg3+R+JuURDVmVPBy
+ 82o6pAtZed2QLyTwq1sZTxlPp0IQ3vjehb0EGNPDCNps6PHaiZr6ktNB9SldjNK24LIefGMSPmG
+ ENxualTkHBaaoQRrHJP0B8Yw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 02b3f0cfd3c9568e;
+	Tue, 27 Oct 2026 18:18:04 +0000
+X-Mizu-Trace-ID: 02b3f0cfd3c9568e
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <5718c42b-6cc5-4816-9b67-2a22ddd7f416@linux.dev>
+Date: Tue, 27 Oct 2026 11:17:59 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -83,22 +57,113 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 4/8] bpftool: Skip __bpf_relocatable on
+ verifier-rewritten context types
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Cupertino Miranda <cupertino.miranda@oracle.com>,
+ David Faust <david.faust@oracle.com>, Ian Rogers <irogers@google.com>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+ Vineet Gupta <vineet.gupta@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>
+References: <20261023222652.3927736-1-ihor.solodrai@linux.dev>
+ <20261023222652.3927736-5-ihor.solodrai@linux.dev>
+ <CAEf4Bza2KV8ZbV2eeGyNabErZ43gY+md4WP6N7XPVL0_dw-mAA@mail.gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAEf4Bza2KV8ZbV2eeGyNabErZ43gY+md4WP6N7XPVL0_dw-mAA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello, Hui.
+On 10/27/26 11:06 AM, Andrii Nakryiko wrote:
+> On Fri, Oct 23, 2026 at 3:27 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> 
+>> [...]
+>> +
+>> +/*
+>> + * Anonymous records within types that need static offsets must not start
+>> + * CO-RE access chains. Named records, typedefs and pointer targets are
+>> + * separate types.
+>> + */
+>> +static void btf_c_mark_no_pai(const struct btf *btf, __u32 id, unsigned long *no_pai)
+> 
+> mark_static_offset to keep terminology consistent?
+> 
+>> +{
+>> +       const struct btf_type *t = btf__type_by_id(btf, id);
+>> +       const struct btf_member *m = btf_members(t);
+>> +       __u32 i;
+>> +
+>> +       __set_bit(id, no_pai);
+>> +       for (i = 0; i < btf_vlen(t); i++, m++) {
+>> +               const struct btf_type *mt;
+>> +               __u32 mid = m->type;
+>> +
+>> +               mt = btf__type_by_id(btf, mid);
+>> +               while (btf_is_array(mt) || btf_is_mod(mt)) {
+>> +                       mid = btf_is_array(mt) ? btf_array(mt)->type : mt->type;
+>> +                       mt = btf__type_by_id(btf, mid);
+>> +               }
+>> +               if (btf_is_composite(mt) && !mt->name_off && !test_bit(mid, no_pai))
+>> +                       btf_c_mark_no_pai(btf, mid, no_pai);
+>> +       }
+>> +}
+>> +
+>>  static int btf_c_annotate_records(struct btf *btf)
+>>  {
+>>         __u32 i, cnt = btf__type_cnt(btf);
+>> +       unsigned long *no_pai;
+>>         int err;
+>>
+>> +       no_pai = bitmap_zalloc(cnt);
+> 
+> this will cause problems for github mirror that won't have access to
+> linux-internal include/linux/bitmap.h, 
 
-On Tue, Oct 27, 2026 at 05:11:58PM +0800, Hui Zhu wrote:
-> Why it matters: memory.low and memory.min protect a cgroup by a fixed
-> threshold and have no idea whether it is using the memory.  A
-> high-priority cgroup that holds a large working set and then goes idle
-> keeps suppressing reclaim on its siblings, and that memory is wasted.
-> A policy program sees the real activity - page faults, charges - and
-> can grant or withdraw protection as it changes.
+Good point, haven't thought of that.
 
-This doesn't justify the changes. Why can't the same be achieved by
-adjusting memory.low and memory.min from userspace? The arguments made
-so far are neither convincing nor proven.
 
-Thanks.
+> ...I'd just open-code a simple
+> bitmap or use bool array for simplicity, memory usage increase doesn't
+> really matter here
+> 
+>> +       if (!no_pai)
+>> +               return -ENOMEM;
+>> +
+>> +       for (i = 1; i < cnt; i++) {
+>> +               if (btf_c_needs_static_offset(btf, btf__type_by_id(btf, i)))
+>> +                       btf_c_mark_no_pai(btf, i, no_pai);
+>> +       }
+>> +
+>>         for (i = 1; i < cnt; i++) {
+>>                 const struct btf_type *t = btf__type_by_id(btf, i);
+>>
+>>                 if (!btf_is_composite(t))
+>>                         continue;
+>> +               if (test_bit(i, no_pai))
+>> +                       continue;
+>>                 err = btf__add_decl_attr(btf, "__bpf_relocatable", i, -1);
+>>                 if (err < 0)
+>> -                       return err;
+>> +                       goto out;
+>>         }
+>>
+>> -       return 0;
+>> +       err = 0;
+>> +out:
+>> +       bitmap_free(no_pai);
+>> +       return err;
+>>  }
+>>
+>>  static int dump_btf_c(struct btf *btf,
+>> --
+>> 2.56.0
+>>
 
---
-tejun
