@@ -1,94 +1,102 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793126746;
-	b=GL5EAWiyS5HrQCw/la80MGtIxkK9B1XdlxClQC1cyC5RsxfswbhWbAyxPs1DDnLeDhOu
-	 GAV2opltFIx91AqAeUMYm7LQ931UnCY9aW04810KxAyiQ9NYl1xj2GDuF2f2eITCuR6qA
-	 b6G8aVlq2JZZgiDOAKlSa/vP5X6pzjF/T0Uh8IHOjzxcRUpTHH7UrtTVK9Fk396QqoHkt
-	 fG1CDiB+ukbOUT3An3590H0VrgaXkLbgU37yqRd8OK18tKgZiePK1zmmUPCZyVMxGc4mk
-	 +dRQSouCvH3PquBVqzLEjSxxxOzHGSwI/Z8tUwNrys+X1H1IsZAOS8Uh8yuwluoqSjw==
+	t=1793126907;
+	b=KdawShhuydU5vx5xtSMYo345dgUsbxFjkbFuYDf25sh3hEXTFy7RhGjFbsjLJshwKdOD
+	 iq6Zop5ZKh8JOI/afbNkFMAzOVQySkJtHshKMyttTOtlm+D4NMJ/l4tq5R0Qcne/7B961
+	 +8x8xV/UNTjHR7p7Yv6Q2ORcgzT3zXTj2oDtWHMJjl6yzjZnObTIW12rAvyxrW+1HYkdn
+	 IQ0YaeYXpCgbQNauDJA45Am57J+7ZkfAnNCwAS9IW6mnAL8xefCcOuryrKnesDiAXj0T1
+	 AyDkM2voR+t36Ba2y8dJWC/SkQu3pSPwLC4tdn9i/P8Tf1/jzCwejXZy1xNKfV6mBdQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793126746;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793126907;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=xEd/EOFch2GeJF5HJ5/eqQs7E8sv3533NOGtKb2nOOQ=;
-	b=mQZOUJrw+4/zT1UxbV1iRqlM6PAqVtPtD6L8xzc6W7YcU53KqY6qaBfAZolbfJFzxQUx
-	 n2yPaijbQQjFZg6Qz1aYiOqRCsOArXELm4ETpicezTEG8QlWMW1pGzASAlLi2wU30h8h/
-	 ASKA8G9cMcDNYkgTYSMF3Cej6VgJlaII3oczRjG9M50elY6rp7N6tbUx3Su9GVdADCnON
-	 Y1ufHRGz0xbJtIpqsIVq0Qw6wtVIoU/hF04pIgcdJqGF9iFRB1DVrPS8111uC4IKlEIoJ
-	 8WjDY7/8yTFIGjxk6TK3211OQ8htRw5t6uNHKPrniGPqpF6cnie7ajSkRdE+/MAN0pg==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=LSFaznbuOQ+uxmdx/4va9jmv6eJhsUjrnyeRc7YdC00=;
+	b=GlT9U6/kVT+cEIf1+gv5Nqk1iQrdX/odpjqKaSq2lH0Jk8wfKmBvGy/SkjJkj6bBiIA8
+	 qFXfJU84VQeVRG30Zik8NZAu6Gu8vYvYg//1Fp+MOQhAoOXf+6/s9gBA1cL4i3fhgpw55
+	 cOjZ49RfGuAULJt3ksNiM8eX+VoKqoC6u77BFRYNNDxOs8sIwoyHivrYTeH8EwrL87RYZ
+	 lCB0EOJOs0s2R3LkZYn+OCG33pR4mGkKafVX1UXFOqRlqnq/t7nWtaM6p21ItPLepWxvi
+	 DWa8eeEvTDW6/8zjE/n6MBSSHe+eMdla8tFvZUPVsRk6ZZ/mWfKwS0AX/mqio+jIhZQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iucb3Y88;
-	arc=none smtp.remote-ip=209.85.214.175
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nw5rrMdO;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0710A606A326
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:45:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0710A606A326
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675E0606A31E
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:48:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 675E0606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iucb3Y88
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e8f2c3ad6bso600915ad.1
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 11:45:45 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nw5rrMdO
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a2153c8525so1357625e9.3
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 11:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793126745; x=1793731545; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+        d=gmail.com; s=20260707; t=1793126906; x=1793731706; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=xEd/EOFch2GeJF5HJ5/eqQs7E8sv3533NOGtKb2nOOQ=;
-        b=iucb3Y88eQPSsgKMldw5U6OO6VKebJLGsaSTmZzK3zyLBfferu3Bhvgc8f/mHW2TWL
-         N2WOQQ+UGZvD/NdZHq1uNfzdnqsQLMEe2j7y6/LzHGWiTuAY94P+Zrh9r9DzT1NEJdtu
-         w6VMtdw8OSwnJzH9Ue4R6+Xm+UXpKRRCyBJ3aVUCKtiIqUvo2GBveIzfUYWm/WTs5phg
-         Lupjnrl70Ixhpb9uBJlzjjPK2zijqfgsFdjwr+kCsE7WrcmcaOU2ymGS+tFrlUI7zJEV
-         h/udAUqt5/nbG6ZTgBfkIvj4LFVDhfthaaYBqItKSoN5PuJeqE5nEJPGNBeuSzjY5p0Z
-         jKUQ==
+        bh=LSFaznbuOQ+uxmdx/4va9jmv6eJhsUjrnyeRc7YdC00=;
+        b=nw5rrMdOp0TYEl9JoKQnemMC1gMbq2N680wtMJPF/UINyy1xhTQ+raluWjIibAUI5B
+         q6LzZemepo/DuXqeBqZWNHXnoIhmAUAX9SWiVbhJ4DLMLNDRFXwiC973OCYbpe6eqws8
+         aHCj3srVFBes9syZDCA+HTNf0EhPz6l453dWlWqMldIYFQCSQ3IC8sAflSteWvlmfTGv
+         QJVo95j9BStfCM2hovZru3ovVAX2cRBY2MOBNT6nSjPQWCcTfsiPjic1zLH1BcwFKOQQ
+         wyBt3n2uFHRULjRBDdY4guxXWlrhyyR5gO01GoT4ZvrUYlIgm9BaWBvQEgDEijK+JFuK
+         PXQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793126745; x=1793731545;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793126906; x=1793731706;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xEd/EOFch2GeJF5HJ5/eqQs7E8sv3533NOGtKb2nOOQ=;
-        b=yfyGMiKoDxsjM9DXxDKataazo9Wp1FWjYl/QkEHKSIs9fJGR4goqMiUD1VsTKx/tkc
-         h//hoa52OpRarn5/qGZfbiKGWtEYRJwI57Dr2Vf0Ms3xrrIeKxIsCPi+AkqIGm7TkxMl
-         bgWsNv5IA9CqJnjPIg2QzD8le+x+tGvk0Innrfl3WN+FW7kb2Y/ZNonZiVFHii/Fo0NU
-         YbtOmtl6zFP2lYynJdP4Ox+otu0tbJfUIeZbekZ+yv9qo0C5CrzeI3SZrbK9f/58HrY4
-         8Lxkj1ds0xoi5uYDJa8psbxl3U6Pma28q8Jkcs4w9Qx7QAoLCs6iPqdO1o/bOG5reJKT
-         QPFQ==
-X-Gm-Message-State: AFq9FYJEktmY5h45Cj4tlPRT0hCbfaTqXatiK80Di18qvfXzglgCMeqq
-	Ht5mtfGxgfFs5IvJ/6OAFQcQHr9ighzcpILLXXXzLFEAVS3JMPPObHjeUdaAXQ==
-X-Gm-Gg: AYBFou3KmyT03Y5S4Fa6NHwUUwODwj2Dk5lJNCquR5PfPPXOhxGT9PdvUAmP/oody/p
-	B7gLi4nvdvzcIem55qJ3005CUBl8w97c6xHRcNJTz/njM6UgKFu+VME1LtaboYOT4pQCJZg/myZ
-	DTLzhaePnNYqa8LdVDFga9UeA+vEgBM9OFQbzP/CMeLa0JU/xjnWkvoypTfedQQSpxfzESzoaKg
-	KaRDZpv1prY15HLIgE1+stu+TOjkeQoDP5FuqHfElFhbW5JHAe1yBEFJ6n6/seHzsB8pfTFljm9
-	xHtOfuwwclAUL3xwt+Pup+v/8RNJFTlvHnJJUfJioFaROiccqiQy0ef0LNstR7QKvUmL0W051gz
-	grDwoE4oxOkQLIOgrU+UPqJj5A7sTpWCYC+4DNiRjOHqUrSpKjbOYQnu7OtpYWfvbyIfY5J2GU6
-	D3L0EXBB+dQhvJlXzXtErYsHGFlVVBps442/7z+Okh5VYAWrfnIRCGjGEcvr0LBVyG2ooN20EB8
-	9g+roeO9h5PWZKeXzrwCTYW3BYuogv6I9CsVqweftGq8Qrc/VIrnW7u0EcY0wMFn3L7gR1vyFwv
-	ZviCp63Pplv+wYWY5rr8vLF/rhTAwkB+gBtnuU+doEF4TRzsHWzzf3pip7FX
-X-Received: by 2002:a17:902:d504:b0:2e8:3d48:4d92 with SMTP id d9443c01a7336-2eb003bf1dfmr2299145ad.33.1793126745024;
-        Tue, 27 Oct 2026 11:45:45 -0700 (PDT)
-Received: from localhost ([153.61.198.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6bcdf0bsm13618135ad.27.2026.10.27.11.45.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2026 11:45:44 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Oct 2026 18:45:44 +0000
-Message-Id: <DMFUDQAC6N4S.1CNBGYKG58DMR@gmail.com>
-Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>
-Subject: Re: [PATCH bpf 26/81] bpf: Support BPF_REG_ARENA_SP in the verifier
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-In-Reply-To: <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com>
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-27-alexei.starovoitov@gmail.com> <CAP01T76dRouzrPOZS8AQ4TMnJ0GzyRm8cPJ8RYUTu01bQgf2Xw@mail.gmail.com> <DMF694XH2TJO.P59A31VE6GWP@gmail.com> <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
+        bh=LSFaznbuOQ+uxmdx/4va9jmv6eJhsUjrnyeRc7YdC00=;
+        b=Cdvw4wxjbOU8KWDzmaibCd1jK8hDRdudDk/QFvk1j5nDMc0BsBE7QFB55fxpR2bIJ0
+         ZafNpUq9hiJdyWExgzZUkx38dnmXeHj+4HPmMtIoWTHLwsslNq2L9HDysphstJjwR/H6
+         MMsvHvvds1JoZjqx2QqIwVGlv/ykQMlZe/5/jwm+2/bazv5MF0SZrdNHzJRLbI0cZRxC
+         364yWEfwaRv6vZtRTKCuzqAzsFYc2eHs2w3Oc4wmWrLT4seCEopGpnxDGmGN03OMuwSK
+         JNbWZIfY8YUcEGDNXFlIMLzPNuwtPSLKeFexkw/1HsQlo2UTeajiPV+Z1i43T19sQ3uR
+         N3SQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy39sjjGku5S52GQ4Ki0+Jqzr9WlZN2ZqPmDRt2OTwuuJcsXS+enwOtZnDRLsHRnzGN6qU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKU0RR0kKz2lhEm+Wfa602fPqaWp7RiKMFwrwGicZlcYcIObvfp
+	ZS7tWk+DPbCrpGwuPOvQQAIWW7dPMz5XXSuI/P/6DNYuu3O6E5CBQmjr
+X-Gm-Gg: AYBFou3AVNP37qEYRgbFZsmW5StQrTHK17nkKnnMogbLnPM9tzIvrxkDOmlSsSB2Jea
+	iY/uxr3rCQVKAqJMaU94uYg6Kq+PqyDnJP/yXxfMqp0WJ4AVvpgbVDCwIPWSPXbD9vSI4CmbPHQ
+	RPKoGFVUX7Hvo+wPFhxKtPUBWgbUR2Z5H0ERK6V9NdElgKpfSVN611a/HOBAVKAdhU0FdZpEqPn
+	PqNXDhOHkp8YDxnLYIfnnq5ysXo11LbtGTRcUKud47njLFWRadleXsD6SxqFJOu4fprsTO8403q
+	EwknA6GXMwTn2Twwh/bSyauiRySfZ2c5K/fwiuYgv93ZSi4K6xOTig4FGYGedXMElelk+HrVSv1
+	DbznMeloOo+roPnMbfJM8fKm3dwPMYFvnLVFU6XKVwD7Hp8CAWmCXw8GZuNMeZHXoWKbDAlnAQz
+	ipBSEQUZEMbLLwCJ4m5BFckWdzq8P5BSMedSHzyeKD808KUApo9TLt00vboJhfr8ieCKD88lSNN
+	3h+bLH4yHQluFc9MCe1L36W/xnrVNSHONqIIhgdm0VMtafipaSfcLn7MaIeI6rUa5uMRcf2nq6q
+	5PpJOgsw8xZVddd2hno=
+X-Received: by 2002:a05:600c:4704:b0:4a2:967:dfb8 with SMTP id 5b1f17b1804b1-4a35acb115cmr224336505e9.20.1793126905543;
+        Tue, 27 Oct 2026 11:48:25 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a9493bc4a8sm4645705e9.0.2026.10.27.11.48.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 11:48:25 -0700 (PDT)
+Date: Tue, 27 Oct 2026 19:48:23 +0100
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Mani Tofigh <mt4022@columbia.edu>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, tz2294@columbia.edu
+Subject: Re: [PATCH bpf] bpf: Fix bpf_timer callback running on a freed map
+Message-ID: <auDx91tmsF-aKKdz@gmail.com>
+References: <20261027-bpf-timer-freed-map-v1-1-30402b0ee99b@columbia.edu>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -98,140 +106,173 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261027-bpf-timer-freed-map-v1-1-30402b0ee99b@columbia.edu>
 
-On Mon, Oct 26, 2026 at 5:18 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> Overall, I think it is less clear to me (or anyone looking at patches)
-> as to why you did things this way.
+On Tue, Oct 27, 2026 at 01:03:42PM -0400, Mani Tofigh wrote:
+> A bpf_timer in an inner map can fire after the map has been freed, and
+> bpf_timer_cb() then reads the freed map:
+> 
+>   [   50.709520] BUG: KASAN: slab-use-after-free in bpf_timer_cb+0x249/0x290
+>   [   50.709540] Read of size 4 at addr ff11000003bc1030 by task bpftimer/72
+>   ...
+>   [   50.710783] Freed by task 12:
+>   ...
+>   [   50.710826]  bpf_map_free+0x1a2/0x380
+> 
+> When user space closes the map, its timers are cancelled and their
+> callbacks are cleared.  Since commit 1bfbc267ec91 ("bpf: Enable
+> bpf_timer and bpf_wq in any context"), bpf_timer_set_callback() and
+> bpf_timer_start() run without a lock, so a program that found the timer
+> just before the close can still use it afterwards:
+> 
+>   Task A                  Task B                  Task C
+>   ------                  ------                  ------
+>   bpf_timer_start()
+>     finds the timer
+>                           bpf_timer_set_callback()
+>                             finds the timer
+>                                                   close(map_fd)
+>                                                     clears the callback
+>                                                     cancels the timer
+>                             sets the callback
+>     arms the timer
+>                                                   deletes the map from
+>                                                   the outer map
+>                                                     map is freed
+>   the timer fires
+>     bpf_timer_cb() reads the freed map
+> 
+> The timer is cancelled once more when it is finally freed, but that
+> happens well after the inner map is freed, so a timer started this way
+> can still fire on the freed map.
+> 
+> Clear the timer's map pointer in bpf_async_cancel_and_free() before the
+> map can be freed, and make the bpf_timer and bpf_wq callbacks return
+> early when it is NULL.  The map is not freed until callbacks that are
+> already running have finished, so a callback either sees the map while
+> it is still valid or sees NULL.
+> 
+> The reproducer below calls the two helpers in a loop on two CPUs while a
+> third CPU keeps creating an inner map with a timer, closing it and
+> removing it from the outer map.  This bug was identified and confirmed
+> with the help of a deterministic hypervisor currently under development,
+> but the non-deterministic C reproducer can typically trigger it in the
+> 1-50s time range.  With the fix, nothing is triggered after 600 seconds.
+> 
+> Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
+> Signed-off-by: Mani Tofigh <mt4022@columbia.edu>
 
-point taken.
+Tested-by: Mahe Tardy <mahe.tardy@gmail.com>
 
-I was wrong in my previous email. An iterator over kernel objects
-stays in the r10 stack, and it works today.
+See below for testings details.
 
-> Are there real patterns that existing stack tracking simply cannot
-> salvage?
+Review-by: Mahe Tardy <mahe.tardy@gmail.com>
 
-Yes.
+For the review part, I'm not a concurency expert but this looks good to
+me, bpf_timer_cb() should run within RCU protection from the softirq
+context that calls it and bpf_wq_work() is explicitely calling the
+rcu_rea_lock()/unlock(), thus:
+- the callbacks read the pointer before the cleanup clears it: it's fine
+  since it's not freed yet thanks to RCU protection (and for
+  bpf_wq_work(), the read was moved in the RCU section).
+- the callbacks read the pointer after the cleanup clears it: it's NULL
+  and we have new if (!map) checks so that it returns early.
 
-Pattern 1: one insn, two kinds of memory
+> ---
+> This is a different use-after-free from the one fixed by "bpf:
+> Dissociate struct_ops progs before the grace period of the map" in
+> Qiliang Yuan's v6 struct_ops series [1].  There, a timer callback
+> returns into the freed trampoline of a struct_ops map.  Here, the
+> callback reads the freed map that holds the timer.
+> 
+> [1] https://lore.kernel.org/all/20261022-selftests-bpf-struct-ops-assoc-timer-v6-2-2c0f18e82582@gmail.com/
+> 
+> Reproducer: https://github.com/manitofigh/files/blob/main/linux-repros/bpftimer.c
 
-  sum(&local_array)     r1 = fp-64    --+
-                                        +-->  r2 = *(u64 *)(r1 + 0)
-  sum(&vec)             r1 = arena    --+
-                                              one insn, one JIT form
+I tested the reproducer and indeed on bpf-next HEAD (which was
+4169c9c90532 ("powerpc/irq: Fix build with CONFIG_PROC_FS=n")), I could
+reproduce the issue quickly:
 
-We discussed an idea to let llvm clone such function.
-I tried it, and it didn't work.
-Short summary:
+	[+] bpftimer: bug: the kernel reported an error after 275 rounds, 0.5 s (taint 0 -> 32)
+	LB-RESULT bug rounds=275 seconds=0.5
 
-  case                               why a copy does not help
-  ---------------------------------  ------------------------------------
-  the pointer comes from memory      no kind for the compiler, a scalar
-                                     for the verifier
-  an indirect call: &dyn Trait, fmt  one function for the two kinds
-  if c { &local } else { &*boxed }   one pointer, two kinds, one function
-  n pointer arguments                up to 2^n copies
+with: 
 
-and real case in <&PanicInfo as Display>::fmt().
+	[   16.088731] BUG: KASAN: slab-use-after-free in bpf_timer_cb+0x205/0x270
+	[   16.088772] Read of size 4 at addr ffff888138615838 by task a.out/539
 
-Pattern 2: the address of a local goes to memory, a load gives a scalar
+And after applying your fix:
 
-That's typical rust heap.
+	bpftimer: maps and programs loaded, racing for up to 600 s
+	bpftimer: 17794 rounds, 30 s
+	[...]
+	bpftimer: 350440 rounds, 570 s
+	[+] bpftimer: no bug in 369186 rounds, 600.0 s
+	LB-RESULT none rounds=369186 seconds=600.0
 
-Pattern 3: LLVM removes a bounds check, here in core::fmt::num
-
-  loop { remain /= 10000; offset -= 4; buf[offset] = ...; }
-
-and 'buf' is on stack.
-run-time clamp won't help, since real tracked spill/fills are in r10.
-
-Pattern 4: fp in an argument
-
-...
-
-So an address-taken local must be where the heap is... in arena.
-
-experiments for arena-stack
-
-  where the local is                      what breaks it
-  --------------------------------------  ---------------------------------
-- structs by value, more inlining         an optimization. Pattern 2 stays
-- a second vm area or arena, a map value  a different base: pattern 1
-- arena, a fixed frame for each function  recursion, a second run on the
-  and cpu, as in the private stack        same cpu
-- arena stack, sp in a per-cpu cell       preemption, see below
-- arena stack, sp in bpf_run_ctx          load, add, store in each function
-- arena stack, sp in a hidden argument    an argument and a callee saved
-                                          register. BTF does not match
-- arena stack, sp in a reserved r9        a verifier change too, and one
-                                          register less for the prog
-- arena stack, sp in r12, the kernel      the series. It costs verifier
-  supplies the stack                      code and a register in each JIT
-
-The choices made for this arena-stack design:
-
-  in the series                    what was rejected and why
-  -------------------------------  ----------------------------------------
-- one 'r12 += N', the first insn   'r12 -= rX': the depth has no bound
-  of a function                    several 'r12 += imm': verifier state
-- the verifier tracks nothing      tracked slots: a store through a scalar
-                                     invalidates them
-- 'rX = r12' gives a scalar        PTR_TO_ARENA: after a load from memory
-                                     it is a scalar. Two types at one insn
-- the cast of a kernel pointer is  an error: two progs cannot share
-  a move (patch 18)                  fill(&mut Event), ring buffer and Box
-- the kernel supplies the stacks,  compiler, libbpf: the entry code is in
-  one set for each arena             each object file
-- contiguous, 32 Kbyte at most,    fixed, 4 per cpu: 512 Mbyte of addresses
-  pages at the first use           segments: each function can fail
-                                   pages on a fault: can fail in mid-run
-- regular arena pages              hidden from user space: no gain. It can
-                                     corrupt all other data of the prog
-- a run takes the per-cpu stack:   preemption off: no sleepable progs
-  a counter, local xadd. If it is  two calls, get and put: 4 nsec
-  taken: one of 16 more stacks,    split, sleepable or not: two mechanisms
-  then new pages                   skip the second run: not for a scheduler
-- grows up: r12 - off, like r10    down, r12 + off: harder to read
-- x86-64: R9. Arg 6 of a BPF call  reject 6 arguments: Rust has them
-  is on the stack                  r12 in a frame slot: a load per access
-- a callback takes its own stack   reject r12 there: scx_central needs it
-- bpf_throw() keeps the stack:     a slot in the frame of main: an irq
-  the kernel frees the arena as      overwrites it after rsp = rbp
-  a whole, and Rust unwinds        give back first: no record of new pages
-
-> It might require teaching the compiler not to move certain types on
-> the stack to r12 relative accesses, but it just feels ugly.
-
-it might feel fragile, but it worked for huge corpus of rust crates:
-https://github.com/llvm/llvm-project/pull/235577
-
-Your dsq iterator exapmle is 'alloca [48 x i8]' in the IR, so it works
-(I replied too soon yesteday).
-
-llvm selects the stack by use: 
-
-  rule 1   r10   The function that owns the local passes its address to
-                 a helper or a kfunc: iterator, irq flag, dynptr, map key.
-  rule 2   r10   The prog stores a kernel pointer in it and loads it again.
-                 Also a local that holds the address of such a local.
-  else     r12
-
-> For certain things, like open coded iterators on kernel collections,
-> there is no other choice.
-
-Of the 16 rust sched that I hacked 4 walk dsq and 13 call
-bpf_local_irq_save(). In testing they loaded and *run*.
-
-But I agree that passing them around is fragile.
-The hope is for typed arena to save the day.
-Then rule 2 will go away.
-
-> unsure how various assumptions around address contiguity get affected
-> when stack reuse occurs [...]
-
-A local never changes its stack, and it is contiguous. The compiler selects
-the stack after all IR optimizations, for the full alloca and
-its full life. r12 locals have a stack id of their own, and stack coloring merges
-only objects with the same id. An iterator in one scope and a buffer in the
-next are two allocas, one in each stack.
-
+> ---
+>  kernel/bpf/helpers.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 648abe1ba63a..58e357302850 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1221,7 +1221,7 @@ static void bpf_async_refcount_put(struct bpf_async_cb *cb);
+>  static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+>  {
+>  	struct bpf_hrtimer *t = container_of(hrtimer, struct bpf_hrtimer, timer);
+> -	struct bpf_map *map = t->cb.map;
+> +	struct bpf_map *map = READ_ONCE(t->cb.map);
+>  	void *value = t->cb.value;
+>  	bpf_callback_t callback_fn;
+>  	void *key;
+> @@ -1229,7 +1229,7 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
+>  
+>  	BTF_TYPE_EMIT(struct bpf_timer);
+>  	callback_fn = rcu_dereference_check(t->cb.callback_fn, rcu_read_lock_bh_held());
+> -	if (!callback_fn)
+> +	if (!callback_fn || !map)
+>  		goto out;
+>  
+>  	/* bpf_timer_cb() runs in hrtimer_run_softirq. It doesn't migrate and
+> @@ -1254,7 +1254,7 @@ static void bpf_wq_work(struct work_struct *work)
+>  {
+>  	struct bpf_work *w = container_of(work, struct bpf_work, work);
+>  	struct bpf_async_cb *cb = &w->cb;
+> -	struct bpf_map *map = cb->map;
+> +	struct bpf_map *map;
+>  	bpf_callback_t callback_fn;
+>  	void *value = cb->value;
+>  	void *key;
+> @@ -1265,8 +1265,9 @@ static void bpf_wq_work(struct work_struct *work)
+>  	/* keeps the program that callback_fn belongs to */
+>  	rcu_read_lock_trace();
+>  
+> +	map = READ_ONCE(cb->map);
+>  	callback_fn = READ_ONCE(cb->callback_fn);
+> -	if (!callback_fn)
+> +	if (!callback_fn || !map)
+>  		goto out;
+>  
+>  	key = map_key_from_value(map, value, &idx);
+> @@ -1733,6 +1734,8 @@ static void bpf_async_cancel_and_free(struct bpf_async_kern *async)
+>  	if (!cb)
+>  		return;
+>  
+> +	/* Callbacks that run after this see NULL and return. */
+> +	WRITE_ONCE(cb->map, NULL);
+>  	bpf_async_update_prog_callback(cb, NULL, NULL);
+>  	/*
+>  	 * No refcount_inc_not_zero(&cb->refcnt) here. Dropping the last
+> 
+> ---
+> base-commit: 195a3519ff27bff5575e05b5086e38ee92715776
+> change-id: 20261026-bpf-timer-freed-map-ab8dbd268b51
+> 
+> Best regards,
+> --  
+> Mani Tofigh <mt4022@columbia.edu>
+> 
