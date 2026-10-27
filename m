@@ -1,83 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.138
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793059982;
-	b=RlKcF2aWbFQ5FnC9DUQFpUViC/XkMzZ9GY2sftKHA4mCULmGArtzdg4kPAvwqZcVgO+R
-	 GqdlpWqjDjqKAhTWoCLZcW/84DCesewqUUf0BoUdVr5EwZAADraajAr2qNyMoHLtABJw+
-	 PQ5LhzWFxr2Kl5ScW6K5aq5x694yrExbkv//dmFpdOIfRfj71+n7RAu+HtTEl0mTDjTrx
-	 YR0oTEntNroOmwls1L7aUYjhZ/JIPFNKlzp+UMU4HZtPwuhP7bs50t0GAjLTFDFblHOaU
-	 2nDykzGP3fv3rBkLqkSJ0T5MtiZf5qOdIX++PCBeSookDpKCp7po1ebbPWJe6g6kkhA==
+	t=1793060023;
+	b=nxeN+7Sd338pH5KtLZm7o3UzZA8a6UuJUIdZpIyqyrlpKcsDkJ2LGbxNqOt3DyscImpn
+	 LS4HflXbZAubOU9SmPpN5+TqNFr17VAHa/d/SZydakDrJ1wW+H/fOEiakWqEbdj48GVgq
+	 IMafNBm4jVUwYTuin2zA5B7jrGJsSUsQQyBf4OMm4SQWItx6/fbhwu7QYw4UmvJYXX/Ai
+	 d1fwd+tqcJfDwb0Z6nkLR1ksI0JOJbuXRJyjOl/0EsQJhX/Mh3S7pPH7kq9QodZdwoaIv
+	 KoRPsQ3WFbNiVqh4UbgsMjDpRWaIEbec0T4XpZlR4BWucenk0kTOzkqj/IVSbb7lkLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793059982;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:From:To:Cc:
-	 Subject:X-Mailer:References:In-Reply-To;
-	bh=k+MRSlQhzGoUGKY3YxCZuP6Ii8xmMxd6Dvx8py9gP1E=;
-	b=Z7ujEY1mdSMdynTrS9+eKZ/1AWCHZSHfq4JG3D6eRbRv5J+y2CveO0kzNQtkpOqQLH2W
-	 Ww52Ga5eHCw+pO3oajYB5gcKqJ9D/CHaCsyETwL37jcTkobQwbrwZ7O7/L2aXNVpQBsqd
-	 GTARgm1cjY24Sijwvk8JY/bj7anchl7/kCxe8rz03cOeQ2QamsKqX5jzD+4ZfvbwTj+ul
-	 dTmJChUm/3++6X+9SZeVv4if5e6ZMYq3Lwh3OH6Ks+xfSpqrxkfb7ifIUe2p2FH9BeEtq
-	 Sg1YyN+6J83PcSyT0dWobLCrOr6PJIKbyeLpCB9JuOWK7452geJEZAdHl7bsMuWrd9w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793060023;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=si+Qhande5UvxFya2tFMhl+nVzGoE+GcsU0vRngX6G8=;
+	b=sOs4m5hfGX7QGg01zuAZKqZK6hf5aHAe4cxVsLXzFOWecWAnLs0q14ZtQFBeo/bdO5fP
+	 sFxoiYlIBm/FkS48cvgdITU4OBNDspTtmHNTzygw3uS0TXSpnWUjjGtXZ2J/fgMyg4O6y
+	 VDCK96T27bawicOpxnOmBL8+QfmkieizNbcAHt+AMC7zIeJlCsUejUEm5wXZNmP6nXsv9
+	 CtBkLu3XXWldKB5Omx24bJ6SPjb6kzWctH4RY8Fo1+xvWU+b5TopWcvFmP25DnvbUeDCB
+	 3f+ez204RTfNOs7EUAbgMb9o1Fu+7+4x+7EQHJN4tK1pcV4i6BAMCbxBdvTkadBP4Rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VoQbrbVL;
-	arc=none smtp.remote-ip=209.85.215.180
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=U3YGvdOt;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=sNtb+bIv;
+	arc=none smtp.remote-ip=202.12.124.138
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3681606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:13:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C3681606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF0B606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:13:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1BF0B606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=VoQbrbVL
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cd5c9e52398so1258799a12.1
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 17:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793059981; x=1793664781; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=k+MRSlQhzGoUGKY3YxCZuP6Ii8xmMxd6Dvx8py9gP1E=;
-        b=VoQbrbVLwiHm97e9TnHnWDGWxhcEnJoDvurECn0Htk2q1wpBDYab8mLTT/7PG6cbme
-         O7FBOwyaLAQu4f7VlEa3D2/ztm/8YeL1vBQItbKhLOyWXHXVY5arUh3HLzK8borhq5gz
-         4N4f7VzCuWPr5FjzvaDcNGdJdNsIHpG4AhnBoaTjS1NJm/jUMRtXlFwGxyLjSvyLU1h+
-         eTtsrm6+y7QKDMx0psLAuttqFImjLGkfCQpj2akZnw8wej237XYzPTGZgQ5NMN2dzo18
-         Crjlc+pAr74HXLPpTlqMxq02h4xDi7ijxAOluZO5FVdYOtzrrtwvSD+TDdgfscOmCGR3
-         x7vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793059981; x=1793664781;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=k+MRSlQhzGoUGKY3YxCZuP6Ii8xmMxd6Dvx8py9gP1E=;
-        b=oq+rjwzdtJ01xLsrqvXtlCCZ+Qm36VKqucyAYdzkk6weZrq62/NDXP7+5VNnU9DynL
-         vJwGyZv6K1PNEZ39/FZYZHXh8lhaTMNJBXI02vUiVNiVfZh5Az0bR+rYFTFpZfz1Tqv8
-         spfQRvNQPSOEXDSmzg8EHC3l/IyhX50dF0x7nTwZDOsEefeWnUaLDv11LYw4X6Y0DRtg
-         BJXUazsw1et65srca30SI2UM9ZNB0iOWH9Fsm5jz0wFkN0+owIZISDNszwBxVPUKqgrc
-         XVU3bSeGmxCLdLzTdaxYOcO+pOL0px+NLGQJwPWkf2hDWUFJvn0Fy9UoBc1AqF2J+7DU
-         1fqA==
-X-Gm-Message-State: AFq9FYIziaWroco5BokRkRMFUrYb0BWnIn7GwF9QiGnNZpQ7REyla4T6
-	SlZlxj0XVGT4WT14pvuPu2vsn0dHKOAf+3HaGliRTaHlmnweKLsNOfSt
-X-Gm-Gg: AYBFou0eYT7R9bqSn4We44VdneVdXBrZnpN8SiCY68oNPq8aiZPkDWSqBdSGwQdwe7x
-	JTQUsodgDchnfR2LaO0ZLtXKFf5hFlicazlSF53DAGm1a8xIulFTVkPWrXaLXiUNGq+ujhr/0mT
-	hVDpTqOUP4DkY8XZ75Es3eNHDavDyfCP4nWsXQJ4gPBWv9teSex8Jcp0o/Gmt1xr75YfM5spbeO
-	4EgC9ouuBYwGgFC+UbGoiFS/EE0Yp6TOmzd86xjPHMOMuW/ppV9exFT5pjJJdYIqO4qLSw8GMo2
-	DvDwt0seLyXJI4tanlqHmr4hHX7evYWhHedBvVcGS0rSre1E/0/QfLTQ8uKD9Z/9LCL22XrRwmU
-	LjAMasLA+F0JZWaxoR3tk5LEofXiGBHtTA7MnRimDmV9sJ1LfAlMwTzI2owPUcseXuPgO1aVRHQ
-	I+kzXz5Ld3DsndTPP4Sbl+Hm3NhNTxBUyjEEmBJi70FegUfsGw91vsPkJWEJ/PCJy1iGUMw5Bt7
-	fEG53gmv8V9Ol7vcxq65S+P5muY4L8YJo0pbERLID6qzgBN74NWNsIXYAQBRJR6BBnlkxYCQPQk
-	nIQ8wm27v0A61INqArjbCbfaC0XPcnN06kpTGu/lEv2FiVBPdJVz7ldJYuI1
-X-Received: by 2002:a17:90b:224d:b0:3ac:a1c7:20fd with SMTP id 98e67ed59e1d1-3ade9b30a3emr6861209a91.4.1793059981095;
-        Mon, 26 Oct 2026 17:13:01 -0700 (PDT)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae4066d631sm1184644a91.17.2026.10.26.17.13.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Oct 2026 17:13:00 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=U3YGvdOt;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=sNtb+bIv
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.stl.internal (Postfix) with ESMTP id 226A81302035
+	for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 20:13:42 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Mon, 26 Oct 2026 20:13:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793060001;
+	 x=1793067201; bh=si+Qhande5UvxFya2tFMhl+nVzGoE+GcsU0vRngX6G8=; b=
+	U3YGvdOtK5z0MLENZikfRWb/SLS3tN5q2KIlnncV8n8B6q/88GUIqRcHk/vGydtQ
+	FS8sX9A1oRc3mRQPJMpF50WBg9qz94gDLC3+879cQZLNq1dxKLVBYjC/iOaTUChX
+	mxYIwZLx1N3S7bbCZ/mImfn8wbd38nHV7hIgmF7vOKzU3+YYZrTQArEcc9rh+B/b
+	KMdlqf5SKzL/f6s1EDnpY7XZ8W3nVEZg2L4msxlrfAqv/Jk0j7ZUlk/GsDSjkXPc
+	ldA/XX4CvvPyKEcROFVx1tYb/KKG9fiNGXG9DUyjX7qxlOooitBLu4KPvsZBp7i9
+	9oEthDoRglV3rZfQE2aOZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793060001; x=
+	1793067201; bh=si+Qhande5UvxFya2tFMhl+nVzGoE+GcsU0vRngX6G8=; b=s
+	Ntb+bIvyt+finyiKcLyWraqD04yZyKS+0SUAaPYjEqXDnBV6zHgtFQ/8TfAY9oC2
+	NDiZXZWH0JHbhKyfa1dHcOfE0J4IpkbiAbjxrRL6Y92l1UGmObDGPnVKe7qP6YNt
+	ST33rmDlLN6L8h6ZJEuWP90+wHD72V6+GnQYLlAgKBpi3+n3Tgh5LXp1sVOi4boh
+	Bf6krYfz26TvqByg1xmWAI/FLJ4XaWMrrOUl2SAGfnYbLBUMdXBTuQqeXeSFgFhJ
+	3u/qloOapbu5S9e4vggtczW5heu5UykY3T8a2TZe7BZh1Nhjsya/HZaj/yXAM/kO
+	TVxuIgUxJs7lnyHSGRSHA==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793060001; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
+	s=fm2:rsa-sha256:KvBOAMjag8M0kkVfCn0S/iMQKwPYZHEeYPU4W/6Dg7uB05+
+	fpejvCi0xHMtj/hnlWuCpOICKD5b1ldbTeBZb5/bidSBkzAyrdyy5PgKOslhYurm
+	xs1fQL8bU7GlZwC5yuFSdPSXxB4okSBSzcxLK+p4Cpf9/ZWiBEEzAJi3UZVYD9gN
+	E/Ufo6H581rJ80pVJZgfVuWkTPWGl97akArH4G9Q4/4D7DfkyoLPdP9j6QU1oJg+
+	siBlLQIFiD33m4mQ6N12Xw6wcFCAcJ3Wdj8zUDqgIV7G/lUB2A/mt7Vc0NNy8yvD
+	o6O1XP/Y9zQMozq3842U1qh09ZXebaYSLUItfpQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:HO8bCNZuevoE55ZZzGJNSZMW2blajER/wEIsZJ9pK+U=:caeGQziho4FRHDY3cNygzudu2C/MJTIFaWIByauHPSA=;
+X-ME-Sender: <xms:l-zfarV0xYG9cXbLNAjMRS-NGrB533bJUDrO7tw7IQmuiTHIfxDTsA>
+    <xme:l-zfauYiWBD4kCpdnyho0MnGGS33y2LYgKSF3XrgxyjM0QpY1wMBQocd-rpAOPVla
+    nZ0dh4NOasjKIpo07zSdaKi1DqWFf69ISgOfkfcgdJ9b6UCfL3hL_c>
+X-ME-Proxy-Cause: dmFkZTEkf/YaqXBD6OkPCTBsCAQbPu2YW9sbt7UK3+UhRfBeofSSrl6hJkJHf9dF0rJg3N
+    JfESDt4DvGRtzl+GmwBe7qsV2Za2TtScaDpwb+1nPiSEC23L7O5/QDGDDHkkqePFksREHl
+    XU5dvNKC1hdHByCH0NgqiobHBjKrbj9jbD1I59fEdgTH3JMsZ6ZfDuO/z1c68fjUXFLL2r
+    J8hVDQMrH064UmFfogQ8Sz3DesWwtSvTSw63x8Z2kd6ltXcHMkLp3Ud6vNRQYsKU7hjmRl
+    /dP3RtDx62S+ikAxBE3BB1G+xG8JEObZSy6tVfPtEaGsqzPsdEyV7tjpBYy5RPu8eU7BtS
+    pv/NdncJ9PUvwVRDTUHemZZgQCYS4NTDfHPcBktTUdmOVeXMmbEO8J4RkdFLvOctoGnsjm
+    MVxFXKbZLUEIAQ1qS8Q5E64WXtwtwZQLEOfzHiJJZqf8ZryZPcMBmzKQXQ0QwZaN8ISNoJ
+    S/ftgSQ59xD5mN0KYsovSy7v5Z8EmqiU+uzfw84F4PDmfcqLkrFleRwPnXor2ZPToL7Wwl
+    zTDxlH62iD2P8UDUZF6+tWzflaIgNhpxvWwWeDJ+xjJX2nrXZjEv7k2ySwKy1geKMzAXKF
+    fXgvX+juI9JxqNHFvQYpFjKMgWBUIHvrzcyM5V1fLrWdFMQTCqVFLDiOYoUQ
+X-ME-Proxy: <xmx:nOzfajGF0xNsYNmV8YCc2Pd7UeABRUtRBqoYjhYIYDhiMjlpvI7yag>
+    <xmx:nOzfapiRovMD9ZE1E5hDJaY6sWPoZ7pT4XzsIJ-j-hZWrrCg_-UouA>
+    <xmx:nOzfapbAE3BpExg8FlH_xCskPyBv08PzQc5zXuuGtwgjeA7VlWveEQ>
+    <xmx:nOzfam3GHyXyAuCx5jGFzvSyfiLGeSUA3AocyLyTLvC2vt2ZvIcxnw>
+    <xmx:oezfastyPfBJRPG1FGvyHsNW7nf3RRKHw_57JGdRsQgtKDzwvORkdPKN>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 5628B32A0093; Mon, 26 Oct 2026 20:13:11 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -86,76 +113,105 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Oct 2026 00:13:00 +0000
-Message-Id: <DMF6PRBIH8GS.3LZZSW3LDCMWQ@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Andrii Nakryiko"
- <andrii.nakryiko@gmail.com>
-Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <eddyz87@gmail.com>
-Subject: Re: [PATCH bpf 16/81] libbpf: Make arena 1 Gbyte when max_entries
- is not set
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
- <20261026025943.404450-17-alexei.starovoitov@gmail.com>
- <CAEf4BzYrpYHS1V=VXF0PTRXkXQo6FnseWirR-ka-O9wKTv_GcQ@mail.gmail.com>
- <CAP01T775XCUmtK97tBcWsvOvUsGxR7AKCGqfOCgebf+-_WfhkQ@mail.gmail.com>
-In-Reply-To: <CAP01T775XCUmtK97tBcWsvOvUsGxR7AKCGqfOCgebf+-_WfhkQ@mail.gmail.com>
+MIME-Version: 1.0
+X-ThreadId: AUJ1OXWu3nCJ
+Date: Tue, 27 Oct 2026 01:12:50 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Houghton" <jthoughton@google.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>
+Cc: "Thomas Gleixner" <tglx@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Kees Cook" <kees@kernel.org>,
+ "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
+ "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
+ "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
+ "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com>
+In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
+References: <20261026215226.3713941-1-jthoughton@google.com>
+Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon Oct 26, 2026 at 4:59 PM UTC, Kumar Kartikeya Dwivedi wrote:
-> On Mon, 26 Oct 2026 at 17:54, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
- wrote:
->>
->> On Sun, Oct 25, 2026 at 8:01=E2=80=AFPM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->> >
->> > From: Alexei Starovoitov <ast@kernel.org>
->> >
->> > max_entries of an arena is its size in pages. The kernel rejects 0. Th=
-us
->> > each prog must select a number, and the same number is a different siz=
-e on
->> > a kernel with a different page size.
->> >
->> > A large arena has almost no cost. The kernel reserves 4 Gbyte of kerne=
-l
->> > addresses for each arena, small or large. Only allocated pages use mem=
-ory.
->> >
->> > When max_entries is not set, make the arena 1 Gbyte. libbpf calculates
->> > max_entries from the page size.
->>
->> Why 1GB then, why not default to full 4GB size? And also why not teach
->> kernel to accept max_entries =3D=3D 0 and treat it as "max allowed size"
->> and set it to 4GB (as of today)?
->>
+On Mon, Oct 26, 2026, at 22:52, James Houghton wrote:
 >
-> I would prefer this too. Also, commit log is confusing, it's arguing
-> that there is not much additional cost for 4GB region, but then talks
-> about the 1GB limit instead...
+> This series comes out of a set of bugs that were found in KVM where the
+> kernel can sometimes write to a random process's user memory[1]. The KVM
+> fixes at [1] are still required, even with this uaccess series, as noted
+> by Sean here[2] and below in this cover letter. The beginning of this
+> series includes fixes for similar bugs found through static analysis
+> with Claude Opus 5.5. I don't think any of these bugs are more severe
+> than the KVM bugs[1].
+>
+> We hit one of the KVM bugs in production, and it was challenging to
+> debug. This series makes such bugs, where the kernel is doing uaccess
+> without an mm, much more obvious.
 
-Yeah. commit log could have been more clear.
+Nice work!
 
-The reason I didn't go with 4G since 4k pages on x86 need 8Mbyte
-of kernel memory for empty arena while 1G needs 2Mbyte, which felt ok-ish.
-I didn't go lower than 1G, because poor man per-cpu in arena
-implementation might use default 4K cpus, so just 256k bytes of
-per-cpu space would need 1G of arena.
-4k is a dumb approach, of course, bur CONFIG_NR_CPUS is what we have.
-btw we also have:
-static __always_inline int arena_spin_lock(arena_spinlock_t __arena *lock)
-{
-        int val =3D 0;
+> Such an access does not reliably fail. The user portion of the address
+> space belongs to whatever mm happens to be lazily loaded, if any. If
+> the access faults, the fault handler refuses to handle it and the copy
+> fails, but if the page is already mapped, the access silently reads or
+> writes another task's memory.
 
-        if (CONFIG_NR_CPUS > 1024)
-                return -EOPNOTSUPP;
+This sounds like the problem depends a lot on the architecture,
+and to what degree they implement lazy mm switching. If an architecture
+makes all user pointers invalid for a kernel thread, this does not
+actually happen, right?
 
-For slightlt different reasons.
+E.g. on arm64 with CONFIG_ARM64_SW_TTBR0_PAN, the page table base for
+the current process is only set in user_access_begin() and would
+not point to any task here. Without ttbr0_pan, it should be
+covered by cpu_set_reserved_ttbr0() turning off all user space access
+for kernel threads.
 
-I'm fine going with 4G if folks feel that 8Mbyte per arena (that could be m=
-any)
-is an ok default.
+Should this perhaps be addressed in architecture specific code
+instead of in a common place?
 
+> == The New WARN ==
+>
+> The rest of the series makes the generic uaccess helpers WARN_ON_ONCE()
+> and refuse the access when current->mm is NULL:
+>
+>  - Patch 6 adds uaccess_should_fail(), which combines the existing
+>    should_fail_usercopy() fault injection check with the NULL mm check,
+>    and uses it in place of should_fail_usercopy(). This covers
+>    copy_{to,from}_user() on all architectures (including the masked
+>    user access paths, which never call access_ok()), the
+>    __copy_{to,from}_user() variants used by KVM's guest memory
+>    accessors, the user-backed iov_iter copy routines and
+>    strncpy_from_user().
+...
+> The checks are deliberately limited to generic code. Accesses
+> implemented entirely by architectures (get_user(), put_user(),
+> clear_user(), and direct users of user_access_begin() or
+> masked_user_access_begin()) are not covered. Please let me know if the
+> new check should be placed elsewhere.
+
+I would think that user_access_begin() is a more natural place
+for the added checks, as this should be called exactly once for
+any function that accesses user space and also stays out of the
+way of the copy_from_kernel_nofault() etc.
+
+       Arnd
