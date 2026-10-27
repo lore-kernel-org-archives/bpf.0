@@ -1,59 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793109681;
-	b=r+1BLRy0PinqMj7eS8kBL141cqgy7CPoAhzZyjUSfl+fXP4pv45HzDfDG4fjS5HbGsyr
-	 kgz5UgeDtC8fpzd3E/po8y7yPQ4TrrkWJb62lJZ3cswaHakgqtogZXNoWjaVb3BzTdeLk
-	 jr3aURc9b3e8dg60c32S0zhgUrK5zVl88k/H1YamIqeSViKXara4hqISpkJmLWks/gYS3
-	 SPRxGra8iFHxhhWhA5koUwRvbMa7/0i0RULz0L1DyTOu9EBO37Ap+hB+QRZMiRYeWRAng
-	 Nap4lUJtPXAzY9yd5iwH1FiZNSnvem/4qQRsfohgUt7nuOSbDLnRcgtoBDs5zIqF2Qg==
+	t=1793111810;
+	b=CSYmISTYQ3p0Ax+9NOrUKLfluQRFlGDzvNaMtkGr8WU01vsK5H4X/Y0vwBde0ei9gLqp
+	 OWVoGmCE3eXsJmpZ/dVf6iWoTBqLYK792ffQDqYJUia98BshM42swfKsSmCKqtlCOyJAb
+	 BioLo03asGdK1mJzi5ldIpfpsPUuc4Q1nECWS5q9lyRk5IFTrxZT27MiP1duTHRTDaAE/
+	 Vh7GmpEHYNcVQ7FFlqpsBvOKqKDBkKgAt8/KYTZbF/ntI/xYfFPL4868xiEVQtxKTJqp1
+	 5Bkw/E/Fmq4RGIcjIMwGyt3SyrVYxJrObFEpKEsLymL5xGbtTY+emrA3yz8gEbcMxEw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793109681;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=M/y2iGPGqnOInEfAT6KNTRdsf2PIAzJoNzC+BVcHG8E=;
-	b=ieQ+jUYo9MSK8kjIfCupFzddnUYftGoBWhXlDOmVgMXDzwpIyBql5RSCzqnfK6AyC2Ge
-	 F2L/KH6/60lRSDUqYxCK+jdTioynt8bBWr+O813WqK44BYziNxbC3AkZsg+a8lbUDwXS/
-	 +a4S4R8wsWKu+J5h+6Zs12jvrt+BA/67zLWI4OV4kjw3TYxOrqMigMPRRUGYQ4ns/Wqz5
-	 83ckDaFMfDvMR9E0YXUyyP/FPDnIUsea7u632iRaHJzhQJ6tnsywZO3hYjvjCQOngz0nH
-	 EDaG09x3+PGY+xmUNs8skTH74Y4BLQPtQzemSu23AMfLuc61AifZpyee+Uu6Rtl2iCQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793111810;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Virus-Scanned;
+	bh=DDw7CAOzeMjZ87nEGcA3ulwTRmsKh58E4v2DnTXYC5A=;
+	b=D3nV4nMwjhQ+mvTR8bA644parjsB/5Z1+Zomay/1uA4dhisw5nnY9i/4+JRbW5O6pl3n
+	 tYJJ10+pyau95dQjaF5/2tyfrkcm+1pNhth/0qIo7tWZ+gmWct+wEFZ6/UbzuvWDFQAfa
+	 1dmwJ3hHvQR9TQyQWolLxLIxr8W6P/Dojyr+emOmSHhoYzdf8CmqWJuYEOg20dGE7PAET
+	 kicC9AzU8CjxiKVOEas0rJMuByQHcI+ggfVsQSEVwXZC7GdifHZ612PGpKvIqiwvtfKGX
+	 CaSygyvTWL+LxRYGppkU5wQ9z84zDXUT6GZMe3yRMkcuwktm8C8K7wZoq3McYRiHHCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LXxaE4Lb;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=iogearbox.net;
+	spf=pass smtp.mailfrom=iogearbox.net;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=J5xjzEEG;
+	arc=none smtp.remote-ip=213.133.104.62
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D21606A31B;
-	Tue, 27 Oct 2026 14:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFB5606A322;
+	Tue, 27 Oct 2026 14:36:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CAFB5606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LXxaE4Lb
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E018D1F01825;
-	Tue, 27 Oct 2026 14:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793109680;
-	bh=M/y2iGPGqnOInEfAT6KNTRdsf2PIAzJoNzC+BVcHG8E=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LXxaE4Lbg8WK49qsT405ak5hZRgTuQ5GAFU9NMDtW7nGvjsiGy7SkQrVqk2z4NKCF
-	 c5PhEa11t2/365oUcxiMpGToUDBY5M6VXy3rDKPsjP+iSuTZXEco1di1Lewq6VZoBL
-	 Gox6NWj/GgoXYfWS5N1O3BIwZ/5Rz24H7WtQ14PPII1VgQLWcEUKCGakcbTvLP/83Z
-	 mckh2IWHovfagXKx4cIqVolgup5sAURxDK9ij+ywmmqJrdWgudCWe2i2Ge0Ae35aO0
-	 NmNqaWxbvtjJ0UMl7Id8jRPgrhj2XDQ7RGbUZHo0NSWBYzXrgZDPU9SqvkT4zg6Fd0
-	 VTkfMyLRpec6g==
-Message-ID: <sashiko-outbox-186681@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 -next 09/18] LSM: rename inode_getattr to
- path_getattr and pass struct file
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, selinux@vger.kernel.org, dsterba@suse.cz, "Chuck
- Lever" <cel@kernel.org>, "Jeff Layton" <jlayton@kernel.org>, "Anna
- Schumaker" <anna@kernel.org>
-In-Reply-To: <20261027121151.1887650-10-caixinchen1@huawei.com>
-References: <20261027121151.1887650-1-caixinchen1@huawei.com>
- <20261027121151.1887650-10-caixinchen1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 Oct 2026 14:01:19 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=J5xjzEEG
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=DDw7CAOzeMjZ87nEGcA3ulwTRmsKh58E4v2DnTXYC5A=; b=J5xjzEEGoiDDRIjOhbFvPXOve4
+	OnXjrVTV7vyOkmrrB4N6aA8XD50a63Ushxk+3Be3pv9fkwDlpi7H+jAiasxMDfRcmGrUUHqlJl23G
+	uQHbMDYGPG1LOrcUeVBauXpNQLXqzZ9f7zj931x6zOfySUFZ5NCrxHqmMM0tZ9+Kyr0NtTz1pCWMT
+	ZM2B9/7qXSL6emdlc4Bv4s5EphfIebkCuwukdNb9U5REr4Zr7UCAN6D3grO6xNhsfwo0ML83i1s5r
+	57XNKpSB6wsndrmbJoHr/QhilfWFhdVUOXzi1/jbBbyyqjxvQv8k46mpxhEybCaygasr4kQOwQOML
+	CSvCIOoA==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xLiIA-00016k-0r;
+	Tue, 27 Oct 2026 15:36:46 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xLiI9-000Omo-0U;
+	Tue, 27 Oct 2026 15:36:45 +0100
+Message-ID: <96db3a96-0fa2-45e1-a981-ed377e5b21b1@iogearbox.net>
+Date: Tue, 27 Oct 2026 15:36:44 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,108 +67,90 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/8] ns: fixes for the namespace LSM hooks
+To: Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-security-module@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
+ netdev@vger.kernel.org, stable@kernel.org
+References: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
+ <CAHC9VhR4rMydWiD-RFv-ABiYSG_txJuyrtdaowEXPY=CHEvFXA@mail.gmail.com>
+ <20261027-heckklappe-halbmarathon-vorsorgen-849ffdc42aac@brauner>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+In-Reply-To: <20261027-heckklappe-halbmarathon-vorsorgen-849ffdc42aac@brauner>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.6/28166/Tue Oct 27 07:24:12 2026)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] bpf, lsm: missing __nullable on file arg in bpf_lsm_path_getattr()
-- [Low] tomoyo: missing @file kernel-doc in tomoyo_path_getattr()
---
+On 10/27/26 10:24 AM, Christian Brauner wrote:
+> On Mon, Oct 26, 2026 at 04:31:25PM -0400, Paul Moore wrote:
+>>  From what I'm reading the LSM framework patches don't meet the typical
+>> LSM criteria for stable/RC fixes: there is no serious bug/panic, and
+>> there is no functional regression from a previous release.
+>> This looks like one of those unfortunate circumstances where a new use
+>> case wasn't tested thoroughly enough before the merge window, so it
+>> can wait for the next one.
+> 
+> My original patchset had a selftest that excercised the BPF LSM usability
+> extensively. The hooks are new this cycle and broken for the main use-case I
+> wrote the patchset for.
+> 
+> If we don't fix them now they need to be backported next cycle which I'm sure
+> the stable developers will enjoy.
+> 
+> Curiously, your pull request told Linus "I expect that BPF LSM developers will
+> also be making use of the namespace hooks, if they haven't already". So it
+> seems very strange to claim this as a new use-case.
+> 
+>>From my perspective the timeline looks like this - I'm sure yours differs:
+> 
+>    I wrote an implementation for the BPF LSM to use a set of new hooks in a
+>    subsystem I maintain months ago.
+> 
+>    You rejected the hooks because BPF LSM programs cannot serve as justification
+>    to introduce new hooks. Only in-tree LSM (selinux, apparmor, landlock, etc) can.
+> 
+>    I cannot fulfill this requirement because I neither have the expertise nor
+>    the use-case for any in-tree LSMs.
+> 
+>    Landlock wants to make use of this by pure chance. So the maintainer offers
+>    to take over the patchset. He does.
+> 
+> End result after more than two kernel releases: The patchset that ends up
+> merged into upstream doesn't work with the original motivating use-case because
+> all the BPF LSM bits got dropped. So far, no problem. That may happen as long
+> as we can the fix it rapidly.
+> 
+> Then I take the time to send this series of fixes to actually restore the
+> original use-case so we don't release a kernel with a new api that doesn't work
+> for the main use-case I developed this for.
+> 
+> Once again, I get told no. This time because the functionality isn't broken the
+> right way to justify a merge-window follow-up. Instead, we'll release
+> half-working functionality.
+> 
+> I'm really on the fringes of this endless debacle but this seems to be another
+> iteration of "BPF people don't get along with LSM people" therefore they make
+> each other's lifes and that of innocent bystanders that just want to get work
+> done difficult.
+> 
+> I really don't understand why it's preferable to release a kernel where the
+> original use-case that I was forced to explicitly abandon doesn't work and
+> there's no reliable or cost-efficient way for userspace to detect whether the
+> hook works correctly.
 
-commit b5ecf79579b44f0d69e46ecb8c8c91e302299f23
-Author: Cai Xinchen <caixinchen1@huawei.com>
+:(
 
-LSM: rename inode_getattr to path_getattr and pass struct file
++1, strong preference to ship the 8 patches as PR given merge win is open as well
+right now and to avoid painful probing complexity in user space. Patches look
+reasonable to me, and I gave them a spin locally as well as we need these too.
+Feel free to also add for bpf side:
 
-This commit renames the inode_getattr LSM hook and security_inode_getattr()
-wrapper to path_getattr and security_path_getattr(), and adds a struct file
-parameter passed by file descriptor-based stat operations while path-based
-callers pass NULL. It also updates LSM implementations, BPF LSM/tracing BTF
-IDs, and BPF selftests accordingly.
-
-[ ... ]
-
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index 96ae1b548e8d4..0f7712f516444 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -153,7 +153,8 @@ LSM_HOOK(int, 0, inode_setattr, const struct mnt_idma=
-p *idmap,
->  	 const struct path *path, struct iattr *attr, struct file *file)
->  LSM_HOOK(void, LSM_RET_VOID, inode_post_setattr, const struct mnt_idmap =
-*idmap,
->  	 struct dentry *dentry, int ia_valid)
-> -LSM_HOOK(int, 0, inode_getattr, const struct path *path)
-> +LSM_HOOK(int, 0, path_getattr, const struct path *path,
-> +	 struct file *file)
-
-[Severity: High]
-Can this trigger a NULL pointer dereference when a BPF LSM program attaches
-to lsm/path_getattr or lsm.s/path_getattr?
-
-In fs/stat.c, both vfs_getattr() and vfs_statx() -> vfs_statx_path() pass
-NULL for the file argument when calling security_path_getattr():
-
-    retval =3D security_path_getattr(path, NULL);
-
-and:
-
-    error =3D vfs_statx_path(&path, flags, stat, request_mask, NULL);
-
-In kernel/bpf/bpf_lsm.c, LSM_HOOK() generates the weak hook stub
-bpf_lsm_path_getattr(const struct path *path, struct file *file). Because
-bpf_lsm_path_getattr is not in untrusted_lsm_hooks, btf_ctx_access() in
-kernel/bpf/btf.c marks its pointer arguments as PTR_TO_BTF_ID | PTR_TRUSTED
-without PTR_MAYBE_NULL unless the parameter name has a __nullable suffix:
-
-    info->reg_type =3D PTR_TO_BTF_ID;
-    if (prog_args_trusted(prog))
-        info->reg_type |=3D PTR_TRUSTED;
-
-    if (btf_param_match_suffix(btf, &args[arg], "__nullable"))
-        info->reg_type |=3D PTR_MAYBE_NULL;
-
-Without PTR_MAYBE_NULL on the file argument:
-
-1. bpf_may_fault_on_deref(PTR_TO_BTF_ID | PTR_TRUSTED) returns false in
-   include/linux/bpf_verifier.h, so direct loads from file (such as
-   file->f_inode) are permitted without a NULL check and are not rewritten
-   to BPF_PROBE_MEM by convert_ctx_accesses().
-
-2. Because bpf_lsm_path_getattr is in sleepable_lsm_hooks, a sleepable
-   lsm.s/path_getattr program can pass file without a NULL check to kfuncs
-   expecting a non-NULL trusted struct file * (such as bpf_get_file_xattr()
-   in fs/bpf_fs_kfuncs.c), which immediately dereference file.
-
-Should bpf_lsm_path_getattr() have a strong override in
-kernel/bpf/bpf_lsm_proto.c with struct file *file__nullable, similar to
-bpf_lsm_mmap_file()?
-
-[ ... ]
-
-> diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
-> index c66e02ed8ee3b..c67455e060f74 100644
-> --- a/security/tomoyo/tomoyo.c
-> +++ b/security/tomoyo/tomoyo.c
-> @@ -112,13 +112,14 @@ static int tomoyo_bprm_check_security(struct linux_=
-binprm *bprm)
->  }
-> =20
->  /**
-> - * tomoyo_inode_getattr - Target for security_inode_getattr().
-> + * tomoyo_path_getattr - Target for security_path_getattr().
->   *
->   * @path: Pointer to "struct path".
->   *
->   * Returns 0 on success, negative value otherwise.
->   */
-> -static int tomoyo_inode_getattr(const struct path *path)
-> +static int tomoyo_path_getattr(const struct path *path,
-> +			       struct file *file)
-
-[Severity: Low]
-Does the kernel-doc comment for tomoyo_path_getattr() also need a @file
-entry to avoid a kernel-doc warning under W=3D1 builds?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027121151.1887=
-650-1-caixinchen1@huawei.com?part=3D9
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Tested-by: Daniel Borkmann <daniel@iogearbox.net>
