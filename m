@@ -1,57 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=109.224.244.22
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.179
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793118617;
-	b=g2Ixx6yr29/xD2M108xcGUIxLciwANuScqyvF7GHm2XqxBNNXIt9C6PyDoSi0sMaLi7A
-	 f7Fl93VGFptbGnyo4CI9Pomw4DHYeFD8ULUHlvMAOCCQnXQQe3P1JBICSlpDGBCdEP2OI
-	 1A/5e45oJJrSzMJfaT//mjBSn8eBnlu1hLcuaLHNEyFDCHS1uuI/ekVfyaQzwkwKu/4CE
-	 KfrYW7HCQwDUJjMIkQKeius+DAbRRI9UXJQ4U939pGqRVJuVu3R5mO6ramteej0d8eeG4
-	 lKxQbwF1WABNkJiDX1QgxdwJceW8HEdblYIEk6YGAQGIglh8hJmzuTSNPKamfaam49Q==
+	t=1793118740;
+	b=OLgB4sbPArsw0jsNFFIqYgiHw1nhIrEFwbX5z100EFPLJBSfNvMJ7ovVcHNWFuMO4F1W
+	 GgGWS6FneVe+vmfZEa6pj9tXtpB/kQFl428NJIE+6A0tHv8GDhRZNa6WAGp5aQ/jBNErx
+	 DDxW3aL0GtljvGWKVBf2KQfsmfi7aW9oUlI2TYJ3VErRc2TU8uCgBaU1YpHmZhiFh+CU0
+	 iwqmErTHMGUj/QE5o2aYk/rn6RJU/ljf4aOUuim72kdmwDMLApdwmE6aQIiPUDy/do3Rj
+	 UpFzdQh2hFzwAxoycDQgKbWPK1bmrfdk4QGiUUzpaAh34ojF9HP+ic4IO3sOh34FVAw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118617;
-	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
-	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=z/3jpXuKR8Ek75myDtIS6oISZLc5tTxlxTmwToUVi/Q=;
-	b=3CKE8afuEtLhoG9tACGOmBs1YINAMAgaT20V5PQJEYunLPGVadH1ozr3lJpt4mz3VpOr
-	 G6CY87j/pVedK8iyWWuXSFRIFgiK7Ftiu5L7LmCT96l/PSHNl+xrdJpboUPkoBXvdVbiZ
-	 GhJ9G+wPZ4CaHtOU2Lu5RsTwnbDdv3d5RVLurE0L+a5iJCkibaDBDxyFSLyVhXe4sZkHm
-	 +5d2gnJbt6Js4+lwVssJaP/ehkOu/lGeDaTVQhETtEGXR4jSr0YvSheuCdB1qK6YFtZx4
-	 7Nfd4WfR7gWG+WmeMCeYoKtZAIv4PD8900NbYvceufjPf4ttCfVF1nGbZ1s90jOHJEA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793118740;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:X-Mailer:Content-Transfer-Encoding:MIME-Version;
+	bh=0mdL64Frw2gub/zA/rrwkHIJcZJCaoWtWai8A7v56Kc=;
+	b=Cz9cqPpF6Y6BEVL7cbkA4SPpYdkBFunqf1Xl97+1eq5V8CIc+txzrD0tvoqjcHsqHR8q
+	 itcs5StwhUsqhodZ0ejLElQNbluPec1PjYys6kqXJtnxne8vu59Bd0OBHV58JtbODIqF2
+	 1eLKwQNxRJS9G1EmJ5/dKCoseVqP9oPe7wCByV9VUpK+xe9qwSNQSTE+t/l8RmiqOUd4o
+	 DAFhsOTC4pMC1dLKh1wyGY+7NQtjZ/MEv0khhCEAUIFA+h2DcRtDUsXhYabjImWaNlxXz
+	 FsvuRfwvW6DjLVntjy0f4ZCoHovL2CAxH0smq5+8irBpEVkgEaAGJMf72hWzw26IsCA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=1g4.org;
-	spf=pass smtp.mailfrom=1g4.org;
-	arc=none smtp.remote-ip=109.224.244.22
-Received: from mail-24422.protonmail.ch (mail-24422.protonmail.ch [109.224.244.22])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ba88qj7K;
+	arc=none smtp.remote-ip=209.85.214.179
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D10C606A327
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:30:11 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D10C606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
-	s=protonmail; t=1793118607; x=1793377807;
-	bh=z/3jpXuKR8Ek75myDtIS6oISZLc5tTxlxTmwToUVi/Q=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=nSWkwrSpNgrFzE4n9LAMKt6PEdv8HOS2JVM7mE3Zo09iiDZ13pynId9Ydvnu4M3UB
-	 iH+w5WgWV/iHrwO47RGhPAi6+bmNcOPtitVsUlSfGdJCSIlAHRd6BbG94qmZ+xSyul
-	 rDSTVeY2trT697oMv+92cyxI352rU1n6bk0KSbECfuc/7AlHklW5cKiQrqRDt1KKzg
-	 bYsieFz0X+ril90PfxYHhQ/e3VS4+YLMHW8TcDB2aU7+VihwSB7HXvcxU9l1L2WDkk
-	 mO9hPcQuc43TgjhFE67L2w8U9mRD6Va6YwzNOEfGWgGKoQ6fiaYzjZ2EG12NM0Ibi+
-	 5GqNUmSUtU1pw==
-Date: Tue, 27 Oct 2026 16:30:02 +0000
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-From: Paul Moses <p@1g4.org>
-Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, vedang.patel@intel.com, jithu.joseph@intel.com, andre.guedes@intel.com, intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] igc: track rx frame boundaries independent of skbs
-Message-ID: <eZWITZTcOwr2NglsQ81lTVz7KdBTIb7L8jpSRGGX3Ts-wlGb6eIUGco_iev6GD5OFkaOmIMwKlADpfVh9KE-FdHCRgfFDSs6ZzYCaJbgp8I=@1g4.org>
-In-Reply-To: <auBfnRqpsuF4B+J9@boxer>
-References: <20261025065154.2037149-1-p@1g4.org> <at+t/jHczGvyXKRN@boxer> <XxgY3anjXL5MwVEpWmTA-tZLeDhfNvdTDJ3n_8jTLgnomanMs92AQS6-QHZyNzAi5tSQM4UDHEZyKs1sG39MrfHwma2BkaoxScclyny5KOw=@1g4.org> <auBfnRqpsuF4B+J9@boxer>
-Feedback-ID: 8253658:user:proton
-X-Pm-Message-ID: 2f363783c4d49599380b8b788c0128422907cb62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E52606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:32:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 48E52606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ba88qj7K
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2e985106c0cso37344055ad.2
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793118740; x=1793723540; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=0mdL64Frw2gub/zA/rrwkHIJcZJCaoWtWai8A7v56Kc=;
+        b=Ba88qj7K4evVzQpwU4BZMvR0OyAO80pmVJevTUId/DUPyfmmnL006JSHRZh30genZs
+         wXu3oeYEDskhwTfrwMUl9Yxd3eW9vd5Lq+3z2vv1caqz1pYmzxmJyAcW7FcbrHDuUe51
+         4J05BdUhItOXsNLTVaG+X9WuJhb4j8tW0zEuj7T1W1DDjhOAxNTyC/4kEukK46j+c9X1
+         +d4BAT8UfsRWHom4i3geEu1GqgtCTfg6rhKG6mBCMqoesnONm1a1hmpT81jFoTAmnbS9
+         xgdIKtH64xx+SYmQ4G3V2LCuc/4cntH4VTms0cWw8gwkzlHeAgQYF+XUvoCsOEsyHpIo
+         C1Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793118740; x=1793723540;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0mdL64Frw2gub/zA/rrwkHIJcZJCaoWtWai8A7v56Kc=;
+        b=LakMYSvtsXzhU9yNJYs3CdZUIfTy8g/4sZNL3huAE8W/Bj4JR5FMW9BaROH+vIfP9X
+         CD0cN4jWp+HbIofaFXaZe+gazwn9c++epnNBQVWZ+NeYt/o7i8jPGn1FccGdC8m9e8GM
+         +XM6kJShhhLC7VD2sPJX4y450BOIr6UNTJN8/Wd9JmqWe32hgYbv9J5akQyPOyLMhgx9
+         In7LU/gzLtzxsUjx1rrSaLKoOdk86o6z/unRyfgv3P4B1h+eZAKETeCmVj8bJCa+Xb8V
+         fSK2DtRtmPmS3pcrPk9AsIf5W8l1+UO9GrLV3QqXMOVf3dR/drczocCy7smTtULkjpek
+         y3/w==
+X-Forwarded-Encrypted: i=1; AKwUvBxdDjxLT9XpUB0+Pa+tiDEPsr8zktjXE6SL8EPPb33MGSr4dMUQLkkm9aG06zUtwTlq0gs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIqbfwfTPPfjtk4TXOwgN2A+IzCia0rEUwgy4eDucGWbVXHks9T
+	zRMKxc780BdDxO8sRD4VdZbIeskYTDr2LME2N6nQMR5KapEn+8cB1TNd
+X-Gm-Gg: AYBFou3uoDprPmTQA/OXW8z0y/5Ztu3bpfK/CUHt5PdorxfwsUGoegJKUdHDbbC8iyT
+	Y8AquHAjIMPDRONkgAVvxf5mpg6RiquW3qp9nHyoAx0xlFTvJsixQC8E1Y1gN5Eju7+rTDEUJym
+	zyY9IkbsBOZiF5hjrsQYImjbsGT+EzSJ9Tgso2Z9nPLxN3pOBsfpnMKdLnDbYXOkWEQKOMgallN
+	vlCAeLGhOOY91n2gytIdyBR69wId0L2y+GAuNwRWpSobXGFgsHW+jph77Sb9vdINiVi0iPFHsgm
+	78bBtco9ahkPq5hieFyX4LFfK2BhuXBxh86v/WIaCdkvYDtl7Ssoj/nzC0edbQ8WnBQLKP1GESY
+	yJjkvfgygr2Pb1oEHAYJP7wcUuEOSYoxcguPIlrvh3Ppvk98hJiZBAyuhqqUmO5umRuQ9ExVT1P
+	UcJTahcBYLhXwVMowm8ZBf5mbLlDfTXh1g6FW+6B2xKsh8xvboAaDuRb38mf9/I5IrE4oNhyUoH
+	+A8M0iSaRDro37L9RgEN/ZYPtAu+8zh48hgmSO49mkOc8iA/fzS8utlvX7D4Ae3tra+2GykGS50
+	hHnXe5OXiOYQUpJggJd48dUrukBKMDUvqoxwoEH6JIIRGRgV4JD2+mPtRIdw
+X-Received: by 2002:a17:903:1206:b0:2d7:107c:917b with SMTP id d9443c01a7336-2ea9b8c3f02mr91246485ad.0.1793118739516;
+        Tue, 27 Oct 2026 09:32:19 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6c9d2cesm12356595ad.65.2026.10.27.09.32.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2026 09:32:18 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 Oct 2026 16:32:18 +0000
+Message-Id: <DMFRJKE5O9OE.3CSUZC83JX864@gmail.com>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>
+Subject: Re: [PATCH bpf 14/81] bpf: Fix a false verifier bug in the clamp of
+ scalar evolution
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <5e87915b1065db0c4ce8f7f4368a8c3109cfe891.camel@gmail.com>
+References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-15-alexei.starovoitov@gmail.com> <5e87915b1065db0c4ce8f7f4368a8c3109cfe891.camel@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -61,110 +100,15 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
+On Mon, Oct 26, 2026 at 04:45 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
+>> +		if (!bpf_reg_range_is_empty(r64, r32, bounds.base, bounds.step)) {
+>> +			bounds.r64 = r64;
+>> +			bounds.r32 = r32;
+>>  		}
+>
+> I'd suggest addressing this as in [1,2]. I'd expect that selective
+> clamping would be a subject to counter-examples as well, just a bit
+> more convoluted.
 
-
-
-
-On Tuesday, October 27th, 2026 at 3:24 AM, Maciej Fijalkowski <maciej.fijal=
-kowski@intel.com> wrote:
-
-> On Mon, Oct 26, 2026 at 10:12:51PM +0000, Paul Moses wrote:
-> >
-> >
-> >
-> >
-> > On Monday, October 26th, 2026 at 2:46 PM, Maciej Fijalkowski <maciej.fi=
-jalkowski@intel.com> wrote:
-> >
-> > > On Sun, Oct 25, 2026 at 06:52:06AM +0000, Paul Moses wrote:
-> > > > TSIP remains set on continuation descriptors, but the inline timest=
-amp
-> > > > header exists only in the first buffer. Stripping it from every
-> > > > descriptor truncates split frames and can underflow short buffers.
-> > > >
-> > > > skb ownership cannot identify frame boundaries when XDP consumes th=
-e
-> > > > first buffer or AF_XDP uses zero-copy.
-> > > >
-> > > > Track rx_in_frame per ring and update it as descriptors are consume=
-d.
-> > > > Strip timestamps only from first buffers, reject unsupported split
-> > > > frames before XDP and drain continuations. Account discarded
-> > > > descriptors against NAPI work without counting successful RX.
-> > > >
-> > > > Fixes: e1ed4f92a625 ("igc: Refactor Rx timestamp handling")
-> > > > Fixes: 26575105d6ed ("igc: Add initial XDP support")
-> > > > Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Paul Moses <p@1g4.org>
-> > > > ---
-> > > > - This supersedes "igc: only strip RX timestamp header from first b=
-uffer"
-> > > >   following feedback from Simon Horman, Maciej Fijalkowski and Sash=
-iko.
-> > > >
-> > > > Changes:
-> > > > - track frame boundaries independently of skb ownership
-> > > > - guard timestamp stripping and drain unsupported split frames
-> > > > - cover the AF_XDP zero-copy RX path
-> > > > ---
-> > > >  drivers/net/ethernet/intel/igc/igc.h      |  1 +
-> > > >  drivers/net/ethernet/intel/igc/igc_main.c | 87 ++++++++++++++++---=
-----
-> > > >  2 files changed, 64 insertions(+), 24 deletions(-)
-> > >
-> > > Hi Paul,
-> > >
-> > > I think this implementation went off track. We should make sure we *n=
-ever*
-> > > enter data path for XDP/AF_XDP multi-buffer scenario until we add rea=
-l
-> > > support to it within this driver. Now you sorta handle fragmented pac=
-kets
-> > > in data path.
-> > >
-> > > I tried to argue with bot reports that it hallucinated for
-> > > igc_clean_rx_irq() content (which was concise and to the point) and a=
-greed
-> > > the AF_XDP should *not* be exposed to any fragmented traffic, which s=
-hould
-> > > be addressed on HW RX ring configuration side, not within data path.
-> > >
-> > > Also this should have been a v3 with a link to previous revisions so =
-we
-> > > could keep track what has been changing between versions.
-> > >
-> > > Here's something that would address ZC fragmentation issue. Could you=
- give
-> > > it a spin on your side as I don't currently have igc in my setup hand=
-y.
->=20
-> [...]
->=20
-> >
-> > Looks good to me, passes basic testing, and I would rather you/intel do=
- this patch
-> >
-> > For posterity, I did email Tony with handoff notes stating I'd rather n=
-ot do the
-> > xdp/xsk/af_xdp/fpe side of things, but hadn't heard back so I kept goin=
-g.
->=20
-> I think this was within the thread where AI hallucinated and I stepped in=
-.
-
-No worries, it turned out more interesting than expected.=20
-
-> If you are not fed up yet you can take your v2 and the patch I added here
-> and send this as a change set. From my POV it would be better as you have
-> the HW to test this against and ironically my igc card went into
-> /dev/null's lab.
->=20
-> >
->=20
-Not fed up but sleep deprived, yes, I'll do that.
-
-
+fine. applied yours and rebase on top.
