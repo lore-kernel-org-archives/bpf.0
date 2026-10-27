@@ -1,63 +1,63 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793125492;
-	b=QOBAmNruJD9L1Dvc09Lt7yCM1NG/KNLPZfkWD9BCPnQAR/ZMePbsHaXmDtMRWxCk1lTc
-	 FQrsUV2XGRubU086dQ5+j7tbp8q4Db4IggiARP9CtQFw4PTxb6MukI/fHGg8AsTZxNc9b
-	 QaDD8+DZuVGacFh2W/p0stdEWCCFRdqqYwXeLN1eKDwHFVw2a9fJ+6B0+Ghg7Nd3zyJwN
-	 xV2NoqQa+x7hT1yB4SdY+zoqiu/sZ4DDNKWJXk+MJMjD9oHBzSjUfzX2jQl1AtbNWGSpt
-	 JOeF8o3dy4L3U47h04cmUtvurL6fm8TDm69xjOQDeSjwwUIhdjJaKKtMFYsWi4WOrXg==
+	t=1793125493;
+	b=ZyybU651bjdQkKyOS0TCc8yHumjZpzBF4u9npAMSizrdITpNudmOyy6YU5RAXgs4wzCz
+	 8GLtM7ekvt21OJRIbKKAHeFgm/3OY6Nnrio5Cjm+VsRwsQCd/zz3hwanai5Ij/aiW3X4e
+	 TOv9rSwjUIzQyb5KiLMXKHGoWXB/+cdB9AD1mdirIS5S1f2WvcuKQCpuzBZsitmPbAiZP
+	 59Xkyik4ODceR2kFup4yhhL/aO6Iy9CqqeY+xK79V/rWV05Lsrolc/yCNTjR/TIX5vuCC
+	 5JuBFYZBzP1C0fW7mGRDKFGCadD/XWoAIaR8B8bFWKQUStURG1HvS8HS858mNNT9Piw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793125492;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793125493;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
 	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=z+wrKY39+yQaaJ8k2RYkx52MqiX937lV0kjs/VZz/4U=;
-	b=s50iZPxJqpW8Z1pf564OlNDqQa/RRtkycFSRS6wCPY9YlvlsH6ez/Qwat5syKPz3tjER
-	 9O9d1Qh9QqU5qE5IPSg4UTXjq2jUaXeE069rN1ag1bZZhnSwx1IPIiIaM1hXCYyAYajq/
-	 T4u7azPqPsjLJ4RTMKqT5f35TtP2wuABHByEd+19L0LtoHJ8QWZk8Qt4gFs1YwFQKRTwW
-	 YxTNaYMBdq+73m+IufHhw0mVVeW45PUNTj6AEltmzmCSwBINShvswOwocTtnNWrzvaeb6
-	 71UnnazvfL+nMXEQJzem6sbdc2w9ZlfYpzxlzbpvd5FJgE6Q8RLduBPl3nVTbQt8rfg==
+	bh=0rr9hDxKroVUMK/NU8D0faEJVJCUtx/8yVn3K+Qe/+k=;
+	b=bJqIg309mWp03i47GKhvMvVxyIpYMrS37Yc9QDyFhUqtuJIHPAUIkyb+kInhcJyCNCp2
+	 KUzOYB/Ojjv/BaIQ7LZ4Q100iebTw36RPkthBBWIJi/i1Dh+rmgAZZo4gy64BI9yMnycx
+	 i+JsHB9jp4bNrdFHLM6GLIzh0MzhnM20r4zF5BAsqToxMhUoYkrFfHMv9HZ6sDgNzcfKv
+	 F2Dc78zz89Acdhfyj+ZSHrhvciNdReV4R8Iz2GsiMN6+gxaxbbaIDYIC7FyzW5rerOXS6
+	 0dCy6ThuXocEr0vKsGJyez1ICg/94A7kQQooveAcONasLBbk+KkO6euhpK8GwtcRHqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=iogearbox.net;
 	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=qFNToXZp;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=hevESGmY;
 	arc=none smtp.remote-ip=213.133.104.62
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB63606A32D
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:24:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AB63606A32D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C073606A32A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:24:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4C073606A32A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=qFNToXZp
+	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=hevESGmY
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=z+wrKY39+yQaaJ8k2RYkx52MqiX937lV0kjs/VZz/4U=; b=qFNToXZp26VglwmwvfT/vB6DYp
-	vuleXYG/YVHmJ407nDNY4q3q9qMDI2qnUipty7MXhpmM/pFwO+HqlWNNU9Hr6legfyt/+oh4PtOnO
-	MvMWxR0vk8saYLK+daxwuAjRQ9hOetZBXByZ8zsSG9XYUFMwnXC43sEqQJV/ktKyD59eRnfb255LC
-	zFBghdN7VQ4rOxzuQEYEkGdeJee72Q6e4K1aiXZAQNygcYLcMPCLpfgBG4goiAKKDaKspd3t6xvoV
-	9wJTgRwpov3FcPoK4phRbbY55pd3JLPXH6pZiAQiqDaW5/EliqBiG+FFIefxlGWcm2MTAWzDQZP8X
-	2omJ3Kxw==;
+	bh=0rr9hDxKroVUMK/NU8D0faEJVJCUtx/8yVn3K+Qe/+k=; b=hevESGmYgnljV/llF5wojMuIVE
+	THyVl2TCI3svkkE8UWoUlpsiuzVR56mKVlcWsp8LHQo6b6Ojk0ZahEQDFRfxOVFjaABu+0EttNpPw
+	RdGR+ISFER+zrV11gUjX7XdFbT3QaULE/cSXVs2fP67JYp6y26oi9YESqV3IoQi35Lxg8WA9vuEi5
+	bHm41wG+DzTeAFi0WYcId7VZ1eDERXnOssZ4HEeYltAgDCvfU5uGLJd2YLL3Um0eXN7k1gJOoExic
+	Wn63m+2JedB4BwbMI6DPNP26Abo+QWn0XD/84HHqdp69bFyDso3qqQZASePGeZ04oFcaE4100UB/P
+	LxhcAGhQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1xLlqs-000Ijz-0O;
-	Tue, 27 Oct 2026 19:24:50 +0100
+	id 1xLlqt-000Il8-2g;
+	Tue, 27 Oct 2026 19:24:51 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: puranjay@kernel.org
 Cc: memxor@gmail.com,
 	ast@kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next 06/21] arm64, insn: Add the LDUR/STUR, UMULH/SMULH and TBZ/TBNZ encodings
-Date: Tue, 27 Oct 2026 19:24:30 +0100
-Message-ID: <20261027182445.1156335-7-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 09/21] bpf, arm64: Use the unscaled forms for negative and unaligned offsets
+Date: Tue, 27 Oct 2026 19:24:33 +0100
+Message-ID: <20261027182445.1156335-10-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261027182445.1156335-1-daniel@iogearbox.net>
 References: <20261027182445.1156335-1-daniel@iogearbox.net>
@@ -73,395 +73,123 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.6/28166/Tue Oct 27 07:24:12 2026)
 
-Add the encodings the BPF JIT needs for its shorter sequences:
+A load or store with a negative offset, or with one that is not a multiple
+of the access size, does not fit the scaled unsigned 12-bit immediate form
+and was emitted as a mov of the offset into a temporary followed by the
+register offset form. LDUR and STUR take a signed 9-bit byte offset, so
+use them for the offsets from -256 to 255 the other form cannot encode,
+which saves the mov. The unscaled forms have the same latency and issue
+on the same pipelines as the scaled ones on Neoverse N1 through V3. LLVM
+emits such offsets for every 32-bit and wider header field behind the
+14-byte Ethernet header of a packet parser, and negative ones for the
+container of a list or rbtree node.
 
-  - LDUR, STUR and LDURS{B,H,W}, the loads and stores with a signed
-    9-bit byte offset, for the negative and unaligned offsets the
-    scaled forms cannot encode.
-  - UMULH and SMULH, as data-processing (3 source) instructions with Ra
-    fixed to the zero register, for the division by a constant.
-  - TBZ and TBNZ, the test bit and branch within 32KB.
-  - An extend parameter for the register offset loads and stores, for
-    UXTW of a 32-bit offset register, which keeps the LSL form for
-    UXTX, and a shift type parameter for the shifted register adds and
-    subs, for LSR and ASR next to LSL.
+Before/after for r0 = *(u32 *)(r1 + 26) and r0 = *(u64 *)(r1 - 16):
 
-The JIT is the only user of the two extended encoders and passes what it
-emits today, along with the bpf_jit.h macros for TBZ, TBNZ and the
-shifted adds and subs. The sign extending loads with a register offset
-carried the equivalent SXTX in their template and take UXTX now like the
-other loads and stores, the same access through a 64-bit offset
-register.
+  d280034a  mov x10, #0x1a
+  b86a6808  ldr w8, [x0, x10]
+  b841a008  ldur w8, [x0, #26]
 
-Like the scaled and register offset forms, the unscaled sign extending
-loads reject the 64-bit size, which would encode PRFUM.
+  928001ea  mov x10, #0xfffffffffffffff0
+  f86a6808  ldr x8, [x0, x10]
+  f85f0008  ldur x8, [x0, #-16]
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- arch/arm64/include/asm/insn.h |  33 ++++++++-
- arch/arm64/lib/insn.c         | 135 ++++++++++++++++++++++++++++++++++
- arch/arm64/net/bpf_jit.h      |  28 ++++++-
- 3 files changed, 192 insertions(+), 4 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 53 +++++++++++++++++++++++++++--------
+ 1 file changed, 41 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm64/include/asm/insn.h b/arch/arm64/include/asm/insn.h
-index 1ce75a442638..f469106c1508 100644
---- a/arch/arm64/include/asm/insn.h
-+++ b/arch/arm64/include/asm/insn.h
-@@ -170,6 +170,8 @@ enum aarch64_insn_branch_type {
- 	AARCH64_INSN_BRANCH_RETURN,
- 	AARCH64_INSN_BRANCH_COMP_ZERO,
- 	AARCH64_INSN_BRANCH_COMP_NONZERO,
-+	AARCH64_INSN_BRANCH_TEST_ZERO,
-+	AARCH64_INSN_BRANCH_TEST_NONZERO,
- };
- 
- enum aarch64_insn_size_type {
-@@ -196,6 +198,9 @@ enum aarch64_insn_ldst_type {
- 	AARCH64_INSN_LDST_STORE_REL_EX,
- 	AARCH64_INSN_LDST_SIGNED_LOAD_IMM_OFFSET,
- 	AARCH64_INSN_LDST_SIGNED_LOAD_REG_OFFSET,
-+	AARCH64_INSN_LDST_LOAD_UNSCALED_IMM_OFFSET,
-+	AARCH64_INSN_LDST_STORE_UNSCALED_IMM_OFFSET,
-+	AARCH64_INSN_LDST_SIGNED_LOAD_UNSCALED_IMM_OFFSET,
- };
- 
- enum aarch64_insn_adsb_type {
-@@ -205,7 +210,15 @@ enum aarch64_insn_adsb_type {
- 	AARCH64_INSN_ADSB_SUB_SETFLAGS
- };
- 
--/* option field of add/sub (extended register) */
-+/* shift field of the shifted register forms */
-+enum aarch64_insn_shift_type {
-+	AARCH64_INSN_SHIFT_LSL,
-+	AARCH64_INSN_SHIFT_LSR,
-+	AARCH64_INSN_SHIFT_ASR,
-+	AARCH64_INSN_SHIFT_ROR,
-+};
-+
-+/* option field of add/sub (extended register) and load/store (register) */
- enum aarch64_insn_extend_type {
- 	AARCH64_INSN_EXTEND_UXTB,
- 	AARCH64_INSN_EXTEND_UXTH,
-@@ -247,6 +260,8 @@ enum aarch64_insn_data2_type {
- enum aarch64_insn_data3_type {
- 	AARCH64_INSN_DATA3_MADD,
- 	AARCH64_INSN_DATA3_MSUB,
-+	AARCH64_INSN_DATA3_UMULH,
-+	AARCH64_INSN_DATA3_SMULH,
- };
- 
- enum aarch64_insn_logic_type {
-@@ -353,6 +368,9 @@ __AARCH64_INSN_FUNCS(store_post,	0x3FE00C00, 0x38000400)
- __AARCH64_INSN_FUNCS(load_post,	0x3FE00C00, 0x38400400)
- __AARCH64_INSN_FUNCS(str_reg,	0x3FE0EC00, 0x38206800)
- __AARCH64_INSN_FUNCS(str_imm,	0x3FC00000, 0x39000000)
-+__AARCH64_INSN_FUNCS(stur,	0x3FE00C00, 0x38000000)
-+__AARCH64_INSN_FUNCS(ldur,	0x3FE00C00, 0x38400000)
-+__AARCH64_INSN_FUNCS(signed_ldur, 0x3FE00C00, 0x38800000)
- __AARCH64_INSN_FUNCS(ldadd,	0x3F20FC00, 0x38200000)
- __AARCH64_INSN_FUNCS(ldclr,	0x3F20FC00, 0x38201000)
- __AARCH64_INSN_FUNCS(ldeor,	0x3F20FC00, 0x38202000)
-@@ -396,6 +414,8 @@ __AARCH64_INSN_FUNCS(sub_ext,	0x7FE00000, 0x4B200000)
- __AARCH64_INSN_FUNCS(subs_ext,	0x7FE00000, 0x6B200000)
- __AARCH64_INSN_FUNCS(madd,	0x7FE08000, 0x1B000000)
- __AARCH64_INSN_FUNCS(msub,	0x7FE08000, 0x1B008000)
-+__AARCH64_INSN_FUNCS(umulh,	0xFFE0FC00, 0x9BC07C00)
-+__AARCH64_INSN_FUNCS(smulh,	0xFFE0FC00, 0x9B407C00)
- __AARCH64_INSN_FUNCS(udiv,	0x7FE0FC00, 0x1AC00800)
- __AARCH64_INSN_FUNCS(sdiv,	0x7FE0FC00, 0x1AC00C00)
- __AARCH64_INSN_FUNCS(lslv,	0x7FE0FC00, 0x1AC02000)
-@@ -582,6 +602,10 @@ u32 aarch64_insn_gen_comp_branch_imm(unsigned long pc, unsigned long addr,
- 				     enum aarch64_insn_register reg,
- 				     enum aarch64_insn_variant variant,
- 				     enum aarch64_insn_branch_type type);
-+u32 aarch64_insn_gen_test_branch_imm(unsigned long pc, unsigned long addr,
-+				     enum aarch64_insn_register reg,
-+				     int bit,
-+				     enum aarch64_insn_branch_type type);
- u32 aarch64_insn_gen_cond_branch_imm(unsigned long pc, unsigned long addr,
- 				     enum aarch64_insn_condition cond);
- 
-@@ -606,6 +630,7 @@ u32 aarch64_insn_gen_branch_reg(enum aarch64_insn_register reg,
- u32 aarch64_insn_gen_load_store_reg(enum aarch64_insn_register reg,
- 				    enum aarch64_insn_register base,
- 				    enum aarch64_insn_register offset,
-+				    enum aarch64_insn_extend_type extend,
- 				    enum aarch64_insn_size_type size,
- 				    enum aarch64_insn_ldst_type type);
- u32 aarch64_insn_gen_load_store_imm(enum aarch64_insn_register reg,
-@@ -613,6 +638,11 @@ u32 aarch64_insn_gen_load_store_imm(enum aarch64_insn_register reg,
- 				    unsigned int imm,
- 				    enum aarch64_insn_size_type size,
- 				    enum aarch64_insn_ldst_type type);
-+u32 aarch64_insn_gen_load_store_unscaled(enum aarch64_insn_register reg,
-+					 enum aarch64_insn_register base,
-+					 int imm,
-+					 enum aarch64_insn_size_type size,
-+					 enum aarch64_insn_ldst_type type);
- u32 aarch64_insn_gen_load_literal(unsigned long pc, unsigned long addr,
- 				  enum aarch64_insn_register reg,
- 				  bool is64bit);
-@@ -650,6 +680,7 @@ u32 aarch64_insn_gen_movewide(enum aarch64_insn_register dst,
- u32 aarch64_insn_gen_add_sub_shifted_reg(enum aarch64_insn_register dst,
- 					 enum aarch64_insn_register src,
- 					 enum aarch64_insn_register reg,
-+					 enum aarch64_insn_shift_type shift_type,
- 					 int shift,
- 					 enum aarch64_insn_variant variant,
- 					 enum aarch64_insn_adsb_type type);
-diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
-index 98a047de5e67..544efe1fdefa 100644
---- a/arch/arm64/lib/insn.c
-+++ b/arch/arm64/lib/insn.c
-@@ -331,6 +331,48 @@ u32 aarch64_insn_gen_comp_branch_imm(unsigned long pc, unsigned long addr,
- 					     offset >> 2);
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 4dc465772937..b57420391282 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -346,6 +346,12 @@ static bool is_lsi_offset(int offset, int scale)
+ 	return true;
  }
  
-+/*
-+ * TBZ and TBNZ test @bit of @reg, 0 to 63 with the 64-bit register implied
-+ * from bit 32 on, and reach [-32K, 32K) bytes.
-+ */
-+u32 aarch64_insn_gen_test_branch_imm(unsigned long pc, unsigned long addr,
-+				     enum aarch64_insn_register reg,
-+				     int bit,
-+				     enum aarch64_insn_branch_type type)
++/* The unscaled forms take a signed 9-bit byte offset instead */
++static bool is_lsu_offset(int offset)
 +{
-+	u32 insn;
-+	long offset;
-+
-+	offset = label_imm_common(pc, addr, SZ_32K);
-+	if (offset >= SZ_32K)
-+		return AARCH64_BREAK_FAULT;
-+
-+	switch (type) {
-+	case AARCH64_INSN_BRANCH_TEST_ZERO:
-+		insn = aarch64_insn_get_tbz_value();
-+		break;
-+	case AARCH64_INSN_BRANCH_TEST_NONZERO:
-+		insn = aarch64_insn_get_tbnz_value();
-+		break;
-+	default:
-+		pr_err("%s: unknown branch encoding %d\n", __func__, type);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
-+	if (bit < 0 || bit > 63) {
-+		pr_err("%s: invalid bit %d\n", __func__, bit);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+	/* b5 in bit 31 and b40 in bits [23:19] hold the bit number */
-+	insn |= (u32)(bit >> 5) << 31;
-+	insn |= (bit & 0x1f) << 19;
-+
-+	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RT, insn, reg);
-+
-+	return aarch64_insn_encode_immediate(AARCH64_INSN_IMM_14, insn,
-+					     offset >> 2);
++	return offset >= -SZ_256 && offset < SZ_256;
 +}
 +
- u32 aarch64_insn_gen_cond_branch_imm(unsigned long pc, unsigned long addr,
- 				     enum aarch64_insn_condition cond)
+ /* The A64 size of a BPF load or store, and the scale of its offset */
+ static enum aarch64_insn_size_type a64_ldst_size(const u8 code, int *scale)
  {
-@@ -376,9 +418,15 @@ u32 aarch64_insn_gen_branch_reg(enum aarch64_insn_register reg,
- 	return aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RN, insn, reg);
- }
- 
-+/*
-+ * The offset register is extended per @extend: the 64-bit register as it is
-+ * for UXTX and SXTX, the low 32 bits of it zero or sign extended for UXTW and
-+ * SXTW. It is never scaled by the access size here.
-+ */
- u32 aarch64_insn_gen_load_store_reg(enum aarch64_insn_register reg,
- 				    enum aarch64_insn_register base,
- 				    enum aarch64_insn_register offset,
-+				    enum aarch64_insn_extend_type extend,
- 				    enum aarch64_insn_size_type size,
- 				    enum aarch64_insn_ldst_type type)
- {
-@@ -405,6 +453,20 @@ u32 aarch64_insn_gen_load_store_reg(enum aarch64_insn_register reg,
- 		return AARCH64_BREAK_FAULT;
+@@ -365,18 +371,36 @@ static enum aarch64_insn_size_type a64_ldst_size(const u8 code, int *scale)
  	}
- 
-+	switch (extend) {
-+	case AARCH64_INSN_EXTEND_UXTW:
-+	case AARCH64_INSN_EXTEND_UXTX:
-+	case AARCH64_INSN_EXTEND_SXTW:
-+	case AARCH64_INSN_EXTEND_SXTX:
-+		/* option in bits [15:13], S in bit 12 clear for no scaling */
-+		insn &= ~GENMASK(15, 12);
-+		insn |= extend << 13;
-+		break;
-+	default:
-+		pr_err("%s: invalid extend encoding %d\n", __func__, extend);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
- 	insn = aarch64_insn_encode_ldst_size(size, insn);
- 
- 	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RT, insn, reg);
-@@ -469,6 +531,50 @@ u32 aarch64_insn_gen_load_store_imm(enum aarch64_insn_register reg,
- 	return aarch64_insn_encode_immediate(AARCH64_INSN_IMM_12, insn, imm);
  }
  
-+u32 aarch64_insn_gen_load_store_unscaled(enum aarch64_insn_register reg,
-+					 enum aarch64_insn_register base,
-+					 int imm,
-+					 enum aarch64_insn_size_type size,
-+					 enum aarch64_insn_ldst_type type)
+-/* The A64 type of a BPF load or store, in the immediate or register offset form */
+-static enum aarch64_insn_ldst_type a64_ldst_type(const u8 code, bool reg_offset)
+-{
++/* The forms of a load or store: scaled unsigned immediate, unscaled, register offset */
++enum a64_ldst_form { A64_LDST_IMM, A64_LDST_UNSCALED, A64_LDST_REG };
++
++/* The A64 type of a BPF load or store in the given form */
++static enum aarch64_insn_ldst_type a64_ldst_type(const u8 code, enum a64_ldst_form form)
 +{
-+	u32 insn;
++	static const enum aarch64_insn_ldst_type types[][3] = {
++		[A64_LDST_IMM] = {
++			AARCH64_INSN_LDST_LOAD_IMM_OFFSET,
++			AARCH64_INSN_LDST_SIGNED_LOAD_IMM_OFFSET,
++			AARCH64_INSN_LDST_STORE_IMM_OFFSET,
++		},
++		[A64_LDST_UNSCALED] = {
++			AARCH64_INSN_LDST_LOAD_UNSCALED_IMM_OFFSET,
++			AARCH64_INSN_LDST_SIGNED_LOAD_UNSCALED_IMM_OFFSET,
++			AARCH64_INSN_LDST_STORE_UNSCALED_IMM_OFFSET,
++		},
++		[A64_LDST_REG] = {
++			AARCH64_INSN_LDST_LOAD_REG_OFFSET,
++			AARCH64_INSN_LDST_SIGNED_LOAD_REG_OFFSET,
++			AARCH64_INSN_LDST_STORE_REG_OFFSET,
++		},
++	};
 +
-+	if (imm < -SZ_256 || imm >= SZ_256) {
-+		pr_err("%s: invalid imm: %d\n", __func__, imm);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
-+	switch (type) {
-+	case AARCH64_INSN_LDST_LOAD_UNSCALED_IMM_OFFSET:
-+		insn = aarch64_insn_get_ldur_value();
-+		break;
-+	case AARCH64_INSN_LDST_SIGNED_LOAD_UNSCALED_IMM_OFFSET:
-+		/* With the size of 64 bits this encodes PRFUM */
-+		if (size == AARCH64_INSN_SIZE_64) {
-+			pr_err("%s: invalid size for a signed load %d\n",
-+			       __func__, size);
-+			return AARCH64_BREAK_FAULT;
-+		}
-+		insn = aarch64_insn_get_signed_ldur_value();
-+		break;
-+	case AARCH64_INSN_LDST_STORE_UNSCALED_IMM_OFFSET:
-+		insn = aarch64_insn_get_stur_value();
-+		break;
-+	default:
-+		pr_err("%s: unknown load/store encoding %d\n", __func__, type);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
-+	insn = aarch64_insn_encode_ldst_size(size, insn);
-+
-+	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RT, insn, reg);
-+
-+	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RN, insn,
-+					    base);
-+
-+	return aarch64_insn_encode_immediate(AARCH64_INSN_IMM_9, insn, imm);
-+}
-+
- u32 aarch64_insn_gen_load_literal(unsigned long pc, unsigned long addr,
- 				  enum aarch64_insn_register reg,
- 				  bool is64bit)
-@@ -943,6 +1049,7 @@ u32 aarch64_insn_gen_movewide(enum aarch64_insn_register dst,
- u32 aarch64_insn_gen_add_sub_shifted_reg(enum aarch64_insn_register dst,
- 					 enum aarch64_insn_register src,
- 					 enum aarch64_insn_register reg,
-+					 enum aarch64_insn_shift_type shift_type,
- 					 int shift,
- 					 enum aarch64_insn_variant variant,
- 					 enum aarch64_insn_adsb_type type)
-@@ -967,6 +1074,19 @@ u32 aarch64_insn_gen_add_sub_shifted_reg(enum aarch64_insn_register dst,
- 		return AARCH64_BREAK_FAULT;
+ 	if (BPF_CLASS(code) != BPF_LDX)
+-		return reg_offset ? AARCH64_INSN_LDST_STORE_REG_OFFSET :
+-				    AARCH64_INSN_LDST_STORE_IMM_OFFSET;
++		return types[form][2];
+ 	if (BPF_MODE(code) == BPF_MEMSX || BPF_MODE(code) == BPF_PROBE_MEMSX ||
+ 	    BPF_MODE(code) == BPF_PROBE_MEM32SX)
+-		return reg_offset ? AARCH64_INSN_LDST_SIGNED_LOAD_REG_OFFSET :
+-				    AARCH64_INSN_LDST_SIGNED_LOAD_IMM_OFFSET;
+-	return reg_offset ? AARCH64_INSN_LDST_LOAD_REG_OFFSET :
+-			    AARCH64_INSN_LDST_LOAD_IMM_OFFSET;
++		return types[form][1];
++	return types[form][0];
+ }
+ 
+ /*
+@@ -389,6 +413,7 @@ static void emit_ldst(const u8 code, const u8 rt, const u8 rn, const s32 off,
+ 		      const u8 tmp, struct jit_ctx *ctx)
+ {
+ 	enum aarch64_insn_size_type size;
++	enum aarch64_insn_ldst_type type;
+ 	s32 off_adj = off;
+ 	u8 rn_adj = rn;
+ 	int scale;
+@@ -405,12 +430,16 @@ static void emit_ldst(const u8 code, const u8 rt, const u8 rn, const s32 off,
  	}
  
-+	switch (shift_type) {
-+	case AARCH64_INSN_SHIFT_LSL:
-+	case AARCH64_INSN_SHIFT_LSR:
-+	case AARCH64_INSN_SHIFT_ASR:
-+		/* shift type in bits [23:22], ROR is reserved for add/sub */
-+		insn |= shift_type << 22;
-+		break;
-+	default:
-+		pr_err("%s: invalid shift type encoding %d\n", __func__,
-+		       shift_type);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
- 	switch (variant) {
- 	case AARCH64_INSN_VARIANT_32BIT:
- 		if (shift & ~(SZ_32 - 1)) {
-@@ -1167,11 +1287,26 @@ u32 aarch64_insn_gen_data3(enum aarch64_insn_register dst,
- 	case AARCH64_INSN_DATA3_MSUB:
- 		insn = aarch64_insn_get_msub_value();
- 		break;
-+	case AARCH64_INSN_DATA3_UMULH:
-+		insn = aarch64_insn_get_umulh_value();
-+		break;
-+	case AARCH64_INSN_DATA3_SMULH:
-+		insn = aarch64_insn_get_smulh_value();
-+		break;
- 	default:
- 		pr_err("%s: unknown data3 encoding %d\n", __func__, type);
- 		return AARCH64_BREAK_FAULT;
+ 	if (is_lsi_offset(off_adj, scale)) {
+-		emit(aarch64_insn_gen_load_store_imm(rt, rn_adj, off_adj, size,
+-						     a64_ldst_type(code, false)), ctx);
++		type = a64_ldst_type(code, A64_LDST_IMM);
++		emit(aarch64_insn_gen_load_store_imm(rt, rn_adj, off_adj, size, type), ctx);
++	} else if (is_lsu_offset(off_adj)) {
++		type = a64_ldst_type(code, A64_LDST_UNSCALED);
++		emit(aarch64_insn_gen_load_store_unscaled(rt, rn_adj, off_adj, size, type), ctx);
+ 	} else {
++		type = a64_ldst_type(code, A64_LDST_REG);
+ 		emit_a64_mov_i(1, tmp, off, ctx);
+ 		emit(aarch64_insn_gen_load_store_reg(rt, rn, tmp, AARCH64_INSN_EXTEND_UXTX,
+-						     size, a64_ldst_type(code, true)), ctx);
++						     size, type), ctx);
  	}
+ }
  
-+	if ((type == AARCH64_INSN_DATA3_UMULH ||
-+	     type == AARCH64_INSN_DATA3_SMULH) &&
-+	    (variant != AARCH64_INSN_VARIANT_64BIT ||
-+	     src != AARCH64_INSN_REG_ZR)) {
-+		pr_err("%s: invalid variant or Ra for multiply high\n",
-+		       __func__);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
- 	switch (variant) {
- 	case AARCH64_INSN_VARIANT_32BIT:
- 		break;
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index af570c34a96d..fa2a57e6d90d 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -26,6 +26,13 @@
- #define A64_CBZ(sf, Rt, imm19) A64_COMP_BRANCH(sf, Rt, (imm19) << 2, ZERO)
- #define A64_CBNZ(sf, Rt, imm19) A64_COMP_BRANCH(sf, Rt, (imm19) << 2, NONZERO)
- 
-+/* Test bit & branch (immediate) */
-+#define A64_TEST_BRANCH(Rt, bit, offset, type) \
-+	aarch64_insn_gen_test_branch_imm(0, offset, Rt, bit, \
-+		AARCH64_INSN_BRANCH_TEST_##type)
-+#define A64_TBZ(Rt, bit, imm14) A64_TEST_BRANCH(Rt, bit, (imm14) << 2, ZERO)
-+#define A64_TBNZ(Rt, bit, imm14) A64_TEST_BRANCH(Rt, bit, (imm14) << 2, NONZERO)
-+
- /* Conditional branch (immediate) */
- #define A64_COND_BRANCH(cond, offset) \
- 	aarch64_insn_gen_cond_branch_imm(0, offset, cond)
-@@ -54,7 +61,7 @@
- 
- /* Load/store register (register offset) */
- #define A64_LS_REG(Rt, Rn, Rm, size, type) \
--	aarch64_insn_gen_load_store_reg(Rt, Rn, Rm, \
-+	aarch64_insn_gen_load_store_reg(Rt, Rn, Rm, AARCH64_INSN_EXTEND_UXTX, \
- 		AARCH64_INSN_SIZE_##size, \
- 		AARCH64_INSN_LDST_##type##_REG_OFFSET)
- #define A64_STRB(Wt, Xn, Xm)  A64_LS_REG(Wt, Xn, Xm, 8, STORE)
-@@ -231,11 +238,26 @@
- #define A64_MOVK(sf, Rd, imm16, shift) A64_MOVEW(sf, Rd, imm16, shift, KEEP)
- 
- /* Add/subtract (shifted register) */
--#define A64_ADDSUB_SREG(sf, Rd, Rn, Rm, type) \
--	aarch64_insn_gen_add_sub_shifted_reg(Rd, Rn, Rm, 0, \
-+#define A64_ADDSUB_SHIFT(sf, Rd, Rn, Rm, stype, shift, type) \
-+	aarch64_insn_gen_add_sub_shifted_reg(Rd, Rn, Rm, \
-+		AARCH64_INSN_SHIFT_##stype, shift, \
- 		A64_VARIANT(sf), AARCH64_INSN_ADSB_##type)
-+#define A64_ADDSUB_SREG(sf, Rd, Rn, Rm, type) \
-+	A64_ADDSUB_SHIFT(sf, Rd, Rn, Rm, LSL, 0, type)
- /* Rd = Rn OP Rm */
- #define A64_ADD(sf, Rd, Rn, Rm)  A64_ADDSUB_SREG(sf, Rd, Rn, Rm, ADD)
-+/* Rd = Rn + (Rm << shift) */
-+#define A64_ADD_LSL(sf, Rd, Rn, Rm, shift) \
-+	A64_ADDSUB_SHIFT(sf, Rd, Rn, Rm, LSL, shift, ADD)
-+/* Rd = Rn + (Rm >> shift) */
-+#define A64_ADD_LSR(sf, Rd, Rn, Rm, shift) \
-+	A64_ADDSUB_SHIFT(sf, Rd, Rn, Rm, LSR, shift, ADD)
-+/* Rd = Rn - (Rm << shift) */
-+#define A64_SUB_LSL(sf, Rd, Rn, Rm, shift) \
-+	A64_ADDSUB_SHIFT(sf, Rd, Rn, Rm, LSL, shift, SUB)
-+/* Rd = Rn - (Rm >> shift); signed */
-+#define A64_SUB_ASR(sf, Rd, Rn, Rm, shift) \
-+	A64_ADDSUB_SHIFT(sf, Rd, Rn, Rm, ASR, shift, SUB)
- #define A64_SUB(sf, Rd, Rn, Rm)  A64_ADDSUB_SREG(sf, Rd, Rn, Rm, SUB)
- #define A64_SUBS(sf, Rd, Rn, Rm) A64_ADDSUB_SREG(sf, Rd, Rn, Rm, SUB_SETFLAGS)
- /* Rd = -Rm */
 -- 
 2.43.0
 
