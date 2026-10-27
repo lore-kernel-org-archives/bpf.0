@@ -1,108 +1,107 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=205.220.168.131
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793095086;
-	b=lrU9GJI+w+z3GDdZ6TcnjK3qCPq4cj5Dadn+pdTAD6WnFrMaVOq4DlxGdTBTg+5tcmg1
-	 rKkdxO0aqg/ogbLxpeqo6LYG/OzQVPJpoSl1sm0pXtaYXYJFBlMXSQahRfFKt4UBHNDfy
-	 yhdcVQZQzD8w6V9pz87p27UELhT31Ec3TLeNUnTiguOY9vwApAszkxMV7Nv1QZ7sZZtue
-	 1N6NCbt2zyOl/Sl3vBKcLygQSOB3KkwvLPkzahfi5uwt/VZn6EBqUnpHDZC/O0YgxoojQ
-	 nhrlR9hbx+nkVqo39hA88i/7gDFlVU0BBshelScuy1QJdTFldpxldhcU83TA7Xnv6aw==
+	t=1793096255;
+	b=DJ74+zi9ju8PpXkA18zpp8/8nPKreAfmUoYg13FXUxuW+fvOKPIl7wJZwP7OnTufgDj6
+	 YMdQv4eL3UiHwq5WY9uEsyf4m7PCZGvAHtOw0KzygID6snGyg7IrrNxSmsq145L8eGRUY
+	 esL/4ZzpBvmOkKXRMyRb0Gp+8jMw8dWgsqc4aR72BEtTFu/QT+oyvb9mVZoQVJHvZsYVM
+	 kMcqDupK+4FNCyKggm2g0NP1AmMgBgwoUwOLk99DVw5XBLN0VDvOBavzfLwrdLlIyspob
+	 ecVH0SdQ/nlroXLH1xrBHMuJjOKvLq8JbjB5Dxq1UXyGG6kK8uA01sbX8AFPwZvkgCg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793095086;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793096255;
 	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:X-Received:Received:Date:From:
 	 To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:X-Authority-Analysis:
-	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details;
-	bh=1VJL2AW5tEYY+m1I9bXvobzMC6WHbBSBecMUivpnRRA=;
-	b=Zj7HsnfA8kArmVjHRmrugMc93UB65jWScmppm6bw/WKyhRoN0aUK/Ez4Non75HWKWkv5
-	 IthCnCRszBUw4bcUE5qJH4HMu9sLNIi6neGNkPnTNU+oGr82db1oXaACJPX9tUqbaIp5N
-	 KiQyckGqePsfgMIEmRfMqDEWHY8FaDb8UQZhS07V5z7dxNg5yc+X2cou4qXrerZ+9RlpQ
-	 C+WuEfFtaSIu0kJPTEy3VsTz+mq5zIkeB6IL3uMfW4lcfj0ahb0b8Vao1qDbu2d4lIQNK
-	 6IvYd3ybLuXXD7ue/ApeJEt+4v0KC35NCaWzpM57XbSMshyEVXAKwWe3boJyO4KlCwg==
+	 Content-Disposition:In-Reply-To:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+	bh=/t88iT6pncol1pshGXVfM2oybT+zrFU83dtwkNkrIjE=;
+	b=Kuzj/IQvX8KD4Y95wKfQSRY13XuzOrTZWxmifRlJ7TMmbG/Gln/ing1k3lawUmt9d9Td
+	 sf4fjjoVcU69OqnRsHz3rnWvtKl7MpI4EC3c9Yn5G2FVYgOAJXzIaLtTsQB4oCnGHbT/b
+	 aUJ+iVS9HsEFDR2NcBHgKUKyQtzLaKtlHmhYMcsAkY2TAJDcVRe+XyV6+EaFdkmx/YwFA
+	 MNtbA8Sm0QaU/i1TWocFzAoOZoOSxjvYLImUf83cKSyTcs2t99oyKjWyh8puT193yTMqW
+	 F4TCt0k0GGZt/qO8Rk3YagWLN09UdZXpozib2LGasQGl3zHIhGwDudqRrEbxVyoIHVA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=oss.qualcomm.com;
 	spf=pass smtp.mailfrom=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=ePxgzWzH;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=gsHZVFxp;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Qwl64+46;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=XuSXvN22;
 	arc=none smtp.remote-ip=205.220.168.131
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B18606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:58:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89B18606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB82606A31E
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 10:17:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7AB82606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=ePxgzWzH;
-	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=gsHZVFxp
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69R8fqJ9796163
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:58:04 GMT
+	dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=Qwl64+46;
+	dkim=pass (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=XuSXvN22
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69R8gNIW2747371
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 10:17:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=1VJL2AW5tEYY+m1I9bXvobzM
-	C6WHbBSBecMUivpnRRA=; b=ePxgzWzHzVG/nr5f+N0120PhARbZZVo63Gbfw4YA
-	C6CRZZV7ql7Dc7I2rlH07USA8wIAwGL2EIVDiuCjrNLocNMtxe/4sHv1mZc4oOwu
-	f9QRLnUp0F1dmeGMvOnXhQjnM29QO9YEHZgmBdUn3PXo7NjoHgse4Nl713r4zFA1
-	eCFsURzP566XTnJ/S5l5pg28Xchs1onSpgR4BLmE3SJCMnX2H4wryyPRXvHkcrOd
-	uaD1zvC/VEpbcRX5Lvvf8K8o8EXnJ78kQnTFMGcIg0H9OgzEVfbxY0H5vRa/ZYNE
-	ujyEHNjWtNTDK2ebrvrGN6nrxVAAwPI6Cm6TuF8Xld3SmQ==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hjp2t8x7q-1
+	:references:subject:to; s=qcppdkim1; bh=/t88iT6pncol1pshGXVfM2oy
+	bT+zrFU83dtwkNkrIjE=; b=Qwl64+467SA6hnQNW54Xt65gR/ajEbZk7GPiqWZb
+	y0CafU72GVa68Es1LrghjWsfFPFH1xeRrJ8KSyXlFgl3NItCLYTkYGIQlXTUSQ09
+	CrzmBSRtkkeBDDwFFIuFt2eyZCoAwHWNZDHyqjEIuSDjzA2PbO7nKBYd2bmjxQW8
+	ggKDA9+K5n+lDsmqrNhw0xhJ2JL4fB05zXo1Bq21sN56+2URpe7a4cnFG8U1ClUJ
+	d2l0dwiQdn5WrLKIDDFxrJORNQCEm4Hlv+Ye0KV262w1ktKCOxnmHOr5erIemsbU
+	c55qHE+22sJNuSJqBDca5xwi18n1jsm6B9wXzPoRrBMCHQ==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hje3dah7b-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 09:58:04 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93f568dee56so611461485a.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 02:58:04 -0700 (PDT)
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 10:17:34 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-93f2373e9b4so422815885a.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 03:17:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1793095083; x=1793699883; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1793096253; x=1793701053; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=1VJL2AW5tEYY+m1I9bXvobzMC6WHbBSBecMUivpnRRA=;
-        b=gsHZVFxp5Ky1sS3kCcjTsHELx8vnGLn+xM6hwvns47ScXY/l5Vfxlnm1jti41xBb/x
-         I4xESvzJqfXrucKZtAb/wPegNbSe6a2tkBkjl158POn1wrUiKJsDR2yu95ONIGgDaZ+M
-         jINH+ymmk18K+9LSJ8T/sLqGTQY+HOPQ0Sm4IRJMAMRDJKC5/RuftmGEozUJC1nteFtm
-         FzpLt3Ow431ed4V6wp0LkcpAKaHT4DZb8+hpwFfj+YFAhCMlkHnxxBebwdw2XtHoupoR
-         H6Is6uIobX07D9RtGY4jBCElWsnafhGD9YFZ+5/SqHHh6WETijeDCkgzCWq7OLfM26Hh
-         cC5A==
+        bh=/t88iT6pncol1pshGXVfM2oybT+zrFU83dtwkNkrIjE=;
+        b=XuSXvN224RXW+2VUVZJRrMyEMqQmLZrac4RbjU59LXlSS7+zFMKkMoRCb64HM/DJhf
+         QmF1pd2LrbE7zXN5c+9C/9haIIBoOAjj6hPmiHQODn0TG7sM7K09Ijzh2vP2AwVeS1J3
+         IwwqUhT9l8VluERhU9WJ6ZHnYwQueFEmuQf7/noQ265w4OIGCSHjgCFhCC+nZ/Rj4N7V
+         1qyWdX9e1D4PZOP7Pz6y+qHWPQzPdQvBcAEy2Q6+wIB8cY6TMc/60Dj2SUhbRjRggGk9
+         9/pz2nz4XEQr0nQpzbSZUcAde/5vySZDuuvWWtDOkGfWfjSNPs/A48K9bIXfgyPbtFVj
+         XrxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793095083; x=1793699883;
+        d=1e100.net; s=20260707; t=1793096253; x=1793701053;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=1VJL2AW5tEYY+m1I9bXvobzMC6WHbBSBecMUivpnRRA=;
-        b=xJmMJyfHpAjZLCNmtfp0zLb/dEjiS+jWu13o8/5nNZaxY9bxK78p8mOIDtYGYLdLHj
-         5isepYudLjAm4mIBHg4tLdnX8TT6d4BG87fztV8+fXHfLseWhORRxZvF/zdaZugglc61
-         GbeEIIp9AnePUGOj0bSzQWDq0juqcnupgzfqU/grmwS/dBxOYUV/07ouQ8I1dJdv9ved
-         rpBuSLfILxy11nOp0qFJOyr+Cl7E7qr+qp5BxkSNjLIdPoKYBm2jBeGdX1t3DgJV8dl4
-         EiElJHOGP6U6z/CTb1BKlh0R3Ju0/xTZbeyFfo+gshc6JDTABHxJevLSQNf5lE0KMqVY
-         AdAA==
-X-Forwarded-Encrypted: i=1; AKwUvBwlChw4Wbv1XMLXrfq/pi4rTsi1McDqzU4K8eNPuX65df7Et9KwBRoGdoGE6v73lrHRouY=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJSmMIroTnKG8Os0HcISanmSB4HaMdb9ke74/NU5jsB9Si92cUr
-	3QKeIf2pQ6vwGnXJ3HpqWvLMJB95+GaYxJekhLSbnfvTVa3RMh9gIBC2bdbm6/mj4fYdtsg5RX0
-	k+XfbNFjjhhrRcsgk7+NxHhPAtrkJtRkydSw2j/KxKEiyConXVnQIm/4=
-X-Gm-Gg: AYBFou0oyHYA2lKwzpr1TUxhiNIyDmC1zlVg4GV7A2UHKWnns2aVx4d0SF+Mr59OUcJ
-	6/op/jr+IxLfSAEVBPRsm6P2G6brpfOxE6ZbQU0iCbwaee5qX0TNmxO0KXqJxvVSoYOq6hwhE7t
-	7vfde9xTLtgDBJ83Bfk84mwo/ff8wy1vomNMuRI8UgC1cyuT56nglG1WpAUFU3aheOPwBDnApQT
-	3PTfrNJczqVI7AII1aiTbvof2U6ODRq2XJ7XOh3hw1cfi2upYQsy2UXxSU2vCLd0hE7VVqZursw
-	hIDq9n5Udkz80bfAX4iFGcNl8Y97MzRFfTic/7y2lCQ6cnLmBwT4hul0sBRgd/EbD/hi/wHDZSA
-	mhu94J3PZT/+7JxbWK7FDuisAYlew5i4p7r5TsJbA/NYpHRudsuWhnGwfO00/e6BBLxLTOSlJHw
-	Gk/j6YHvUhcTF2PJ5RCMo4ow==
-X-Received: by 2002:a05:620a:178d:b0:93e:9171:b83 with SMTP id af79cd13be357-940ef8f06b1mr1489272285a.43.1793095083304;
-        Tue, 27 Oct 2026 02:58:03 -0700 (PDT)
-X-Received: by 2002:a05:620a:178d:b0:93e:9171:b83 with SMTP id af79cd13be357-940ef8f06b1mr1489267385a.43.1793095082599;
-        Tue, 27 Oct 2026 02:58:02 -0700 (PDT)
+        bh=/t88iT6pncol1pshGXVfM2oybT+zrFU83dtwkNkrIjE=;
+        b=xBzOaDoJH9Px+E22jhicEYKyGK9gtWFsomHZ9thjNoBREF6AwYKZrWbo171QYkY3lQ
+         2vs+SjC+s00UbFQmk3PholEl7ikSL29L0wjeyOgJYcCPaARa+YVKhNPEHsljSjK8bzaE
+         DbL0SmF86xekooEAwnkJ9M3dUttic99I0WGbF/NwH90Jboo/eJ9Ivjsa3jkPzjHKprBB
+         UP0GjkEE1YZFIA8TWWyEp16Zh8n3D/8hWK9mKo5lDTSMH7x2WejwSLtVaAKrA0EbF7y1
+         X70uokyMa5OMmtp+uu2cxXK7J2wuz0+eOAX/14SQtdJtabB2W2slGAafvrpYg80YNV85
+         Sx8A==
+X-Forwarded-Encrypted: i=1; AKwUvBySX0qzAWguGr4r7w13gNV7wq9X2Cc1XxAf72OOpkCSj0ap6bbdKUvbfaj4HEtOfAz4FRM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJw1tGsBYvmMIoGVgnpzeX77a9VE4oMbX8CrGPhGkztdctIbdSB
+	GBTfj/+2weAvaMrfwhUQ4wNFYdh2qzlGW73fXjGHMnbEXYfCS+l/RDn9/wuM04R9pDt+rY/DrsG
+	dq1VR+SMQhPEn6FilrS7CqNSLAc3Or09OKdjbZD9HEXcDg170VtniCxE=
+X-Gm-Gg: AYBFou0GTd1AcTylLW9pE363mzEq+T3B6Qm/gmRL8JIqiQJ0ZPba7glgeCYvzJa0b6h
+	jfRr1d0aLZBUpicn3ZJrUE74+HtL0HMX9IgccSMaQ6ta5bH6jE/9sB91UcIFgJsOjAkz/PuaLH+
+	X4edKRKmoAPSVZtEo4jpkFfkjjDDPwFsTvIUCZlYieSGs81pXYHDym+HH39DjVLef6W0rv91XVO
+	FgnELA8MSmqE7jjJ+WviN8vzwUMwHHp3YQc88qLg5U6WOdPLUd6oZTPJixy9oYf/L9Omy4SaYau
+	vnhtjIYY3Z0LafCN9RZ4KPxJqIxJtG5Z8Jv0UZW/sXQjEISJqNeby8MckWRluaU+i5UT3/zjZ4V
+	QL8u2Ja37pSnwwbehveCoVx2lf/yB1BNw8tqqWqkW/TRRBVRN
+X-Received: by 2002:a05:620a:a883:10b0:940:f224:5a69 with SMTP id af79cd13be357-940f2245d1emr986102985a.65.1793096253116;
+        Tue, 27 Oct 2026 03:17:33 -0700 (PDT)
+X-Received: by 2002:a05:620a:a883:10b0:940:f224:5a69 with SMTP id af79cd13be357-940f2245d1emr986099185a.65.1793096252391;
+        Tue, 27 Oct 2026 03:17:32 -0700 (PDT)
 Received: from localhost (net-93-144-6-81.cust.dsl.teletu.it. [93.144.6.81])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a359f3e00asm441911695e9.0.2026.10.27.02.58.01
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecd37f4sm25852940f8f.44.2026.10.27.03.17.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 02:58:01 -0700 (PDT)
-Date: Tue, 27 Oct 2026 10:58:00 +0100
+        Tue, 27 Oct 2026 03:17:31 -0700 (PDT)
+Date: Tue, 27 Oct 2026 11:17:30 +0100
 From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 To: netdev-bot+sashiko@kernel.org
 Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
@@ -113,11 +112,11 @@ Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, davem@davemloft.net,
         boon.leong.ong@intel.com, o.rempel@pengutronix.de,
         netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         bpf@vger.kernel.org
-Subject: Re: [PATCH net 1/6] net: stmmac: take ownership of saved RX state at
- poll entry
-Message-ID: <auB1qL6FE7-vTMOB@lore-desk>
-References: <20261023-stmmac-xdp-fixes-v1-1-efb37e19f5bd@oss.qualcomm.com>
- <179309225078.3134.4254254722485703329@kernel.org>
+Subject: Re: [PATCH net 2/6] net: stmmac: drop split frames on AF_XDP
+ zero-copy RX
+Message-ID: <auB6OpACJerXjBec@lore-desk>
+References: <20261023-stmmac-xdp-fixes-v1-2-efb37e19f5bd@oss.qualcomm.com>
+ <179309225249.3134.13360572151220701495@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -128,38 +127,39 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4GXi3iNJ7oQknk1+"
+	protocol="application/pgp-signature"; boundary="GP/MfWl9BvU7lFD7"
 Content-Disposition: inline
-In-Reply-To: <179309225078.3134.4254254722485703329@kernel.org>
-X-Authority-Analysis: v=2.4 cv=AJjzCM5L c=1 sm=1 tr=0 ts=6ae075ac cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=7fYLNvKHbgS61GKHX+yayQ==:17
+In-Reply-To: <179309225249.3134.13360572151220701495@kernel.org>
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI3MDA0MCBTYWx0ZWRfX41KPVQBf+RIR
+ T+DbzKY9S/tiYOEM0NlgI36/ZtcR2GQExkW5llvp/eCLZe5XhuG6InOe3t2BXBbLP2N4j53HDsl
+ Sf88fzVF0FaiQMXZXOGO9rcbbytxSu0=
+X-Proofpoint-GUID: F-0Z9beYstcckScFdZCCvIIaxPFvZmSm
+X-Proofpoint-ORIG-GUID: F-0Z9beYstcckScFdZCCvIIaxPFvZmSm
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI3MDA0MCBTYWx0ZWRfX6qfSddqkWLXU
+ ZCtVgxW49EoDU4ewxQCSFCJ7iRAJGiFkB0GuNl2PX3k09tcC7ldz7fzE6SO6k697u7kuwRoQcK9
+ 6sqTyrUULyfb4ZpUnEck/ra/6qAKJfjTPZaJu2clDT19BOknjV9xJ8lGG3tKJE2GiTpwBzeDFDg
+ PwVNJARcwhOeYtCyLK4QAYL1y6aGHL3hV70fdFUlhCmh2uo8cgAsEP9D6jH8jKwXKiOpnj4SiBq
+ UWbwNaiv72kwKS5FyfSzb4w1nsOenb28iSLZkEaKAJeXVQKCBXy1EzBOU/aO/3fgam3S5ux+aCE
+ bDOlOlWzCb3jl+HRu6P3CGWFlCS4NsoKKEPevzv9Hy+qXL5Nr2bo5b+tMkjfMyBm1GQC2hPmj1P
+ NQrSmKMlSqRqDxleM4EYOC5jGydVF6vZNRgpZigZpWkRzSKAehwLHwTsTdYYH8Cz2LOrRNlNONZ
+ 4EXEdpfyTTJ3Gk8nK3w==
+X-Authority-Analysis: v=2.4 cv=SN/Xx+vH c=1 sm=1 tr=0 ts=6ae07a3e cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=7fYLNvKHbgS61GKHX+yayQ==:17
  a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22 a=9R54UkLUAAAA:8
- a=EUspDBNiAAAA:8 a=rhP4PL_XV0zjteUE_lwA:9 a=QEXdDO2ut3YA:10
- a=NadisKNWRbbon45ccpAA:9 a=bTQJ7kPSJx9SKPbeHEYW:22 a=YTcpBFlVQWkNscrzJ_Dz:22
-X-Proofpoint-GUID: 9PEYmoE31HhzMBFLpxVMg9coRPKEQ85d
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI3MDAzOSBTYWx0ZWRfXwCnmtAGeyy/a
- Xhlu9BI+i8TZhAPHzYpRpeRo7gm/QgMdUpRxVRRThg6+Nvdv4cH8D2lHQow013DXim80Pa3mFlJ
- kt/xp9Ug4KYlwJAm931zzdT+M93d+1I=
-X-Proofpoint-ORIG-GUID: 9PEYmoE31HhzMBFLpxVMg9coRPKEQ85d
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI3MDAzOSBTYWx0ZWRfX9aL1IayuzkMT
- HCfLaGiyA5sMBTS40lFazxYyICM+PqwqBpGdYOkGQEQMYWTJuAJah/NcXslRobheMmdBdUql2PR
- j4UcaGw2qFz5orQrJpgF8wqxbGVKjstm9oI5qF4+dimHsQb7SMWG3k28ZBBgp3G1aZVIzHVy0wo
- jKWUpxpwPNUmiRhAvUmo36H1sScaNEXdpRKVMEPrBtz1R9pqUMakBwW28YATzIaovuurKd+ALRA
- IstK7gR3dhGcyTxxqqAmrOhCTE9/Zq04dvBga3dJ8tsyR+bE7b/ifKfAt62sONNBmNi7OR7QIPm
- JsdD4DtBYJt9P7t+gE1kDyedPBawYIBtjr2NQkQsx1pKrXVfr+PIzVgY2MQtRus+zYEBQGEsU16
- ajtNYvqWS3Zng7jS7HabVCdcWqtTQW4nECSBbuxRip8eUcojaFYUZXDL+kGUTH8Vg6dRVrSYhSZ
- Ob0hJGQZI2xJCUZb95w==
+ a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=9R54UkLUAAAA:8
+ a=EUspDBNiAAAA:8 a=BnUPfLnITP_tn7LcAckA:9 a=QEXdDO2ut3YA:10
+ a=twnd7clgSCzMtR1pb0oA:9 a=NFOGd7dJGGMPyQGDc5-O:22 a=YTcpBFlVQWkNscrzJ_Dz:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
  definitions=2026-10-27_02,2026-10-21_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 bulkscore=0 malwarescore=0 spamscore=0
- clxscore=1015 priorityscore=1501 adultscore=0 lowpriorityscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610190000 definitions=main-2610270039
+ impostorscore=0 spamscore=0 malwarescore=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 suspectscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
+ definitions=main-2610270040
 
---4GXi3iNJ7oQknk1+
+--GP/MfWl9BvU7lFD7
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -167,7 +167,7 @@ Content-Transfer-Encoding: quoted-printable
 > Thank you for your contribution! Sashiko AI review found 1 potential
 > issue(s) to consider.
 >=20
-> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 (1) =C2=B7 Low: 0
+> Critical: 0 =C2=B7 High: 0 (2) =C2=B7 Medium: 1 (2) =C2=B7 Low: 0
 >=20
 > If you believe none of the issues are legitimate, please reply to each
 > issue of Medium severity or higher and explain why the AI is wrong.
@@ -175,170 +175,233 @@ Content-Transfer-Encoding: quoted-printable
 > know by including "pw-bot: cr" as a separate line at the end of your reply
 > (one such reply per series is enough).
 >=20
-> - [High] The commit message says that on resume a saved partial frame
->   would be resumed "with descriptors from the freshly initialized ring",=
-=E2=80=A6
+> - [Medium] The commit message does not describe one behaviour change the
+>   patch makes, and nothing explains the second Fixes tag.
 >=20
 > Pre-existing issues:
-> - [Medium] In stmmac_rx()
->   (drivers/net/ethernet/stmicro/stmmac/stmmac_main.c), the=E2=80=A6
+> - [High] On GMAC4/XGMAC, stmmac_rx() in native (non-ZC) XDP mode still
+>   handles split RX frames wrongly at this commit.
+> - [High] On AF_XDP zero-copy XDP_PASS, stmmac_dispatch_skb_zc() ignores
+>   the csum_none bit from the descriptor status.
+> - [Medium] In stmmac_rx(), if napi_build_skb() fails on the first
+>   descriptor of a multi-descriptor frame, the code does `rx_dropped++;=E2=
+=80=A6
+> - [Medium] priv->xstats.rx_dropped and priv->xstats.rx_errors are device-
+>   wide `unsigned long` counters.
 >=20
 > --
 >=20
-> net: stmmac: take ownership of saved RX state at poll entry
+> net: stmmac: drop split frames on AF_XDP zero-copy RX
 >=20
-> The saved partial-frame RX state is now taken and cleared at the start of
-> stmmac_rx() and stmmac_rx_zc(). It is saved again only if the frame is
-> still incomplete when the poll ends. The saved skb is also dropped in
-> stmmac_reset_rx_queue() and __free_dma_rx_desc_resources().
+> When stmmac_rx_zc() drops a frame that spans more than one RX descriptor,
+> it now sets error, so the remaining descriptors are freed and the tail is
+> not handled as a new frame. The dwmac100/dwmac1000 descriptor callbacks n=
+ow
+> return rx_not_ls together with discard_frame for non-last descriptors. The
+> discard_frame checks in stmmac_rx_zc() and stmmac_rx() change from =3D=3D=
+ to &.
 >=20
 > > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/driver=
 s/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index b20e5038eeadd..fba21599a5e15 100644
+> > index fba21599a5e15..3fa2c15222d88 100644
 > > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 > > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
->=20
-> [ ... ]
->=20
-> > @@ -6032,10 +6042,8 @@ static int stmmac_rx(struct stmmac_priv *priv, i=
-nt limit, u32 queue)
-> >  		/* Remove FCS if needed */
-> >  		if (!fcs_stripped && pskb_trim(skb, len)) {
-> >  			dev_kfree_skb_any(skb);
-> > -			skb =3D NULL;
-> >  			rx_dropped++;
-> > -			count++;
-> > -			continue;
-> > +			goto next;
+> > @@ -5710,18 +5710,21 @@ static int stmmac_rx_zc(struct stmmac_priv *pri=
+v, int limit, u32 queue)
+> >  		if (priv->extend_desc)
+> >  			stmmac_rx_extended_status(priv, &priv->xstats,
+> >  						  rx_q->dma_erx + entry);
+> > -		if (unlikely(status =3D=3D discard_frame)) {
+> > -			xsk_buff_free(buf->xdp);
+> > -			buf->xdp =3D NULL;
+> > -			dirty++;
+> > +
+> > +		if (unlikely(!error && (status & discard_frame))) {
+> >  			error =3D 1;
+> >  			if (!priv->hwts_rx_en)
+> >  				rx_errors++;
 > >  		}
 >=20
-> [Severity: Medium]
-> This isn't a bug introduced by this patch, but can a multi-descriptor
-> frame reach the stack as a truncated fragment when napi_build_skb() fails
-> on a descriptor that is not the last one?
+> [Severity: High]
+> This is a pre-existing issue, but with this test, a dwmac4 frame that only
+> has csum_none set still reaches the XDP program. That covers an L4 payload
+> checksum error without RDES3 ERROR_SUMMARY. On XDP_PASS the frame goes to
+> stmmac_dispatch_skb_zc(), and that function never receives status:
 
 This issue has not been introduced in this patch and it needs to be fixed w=
 ith
 a dedicated patch.
 
 >=20
-> The allocation failure path in stmmac_rx() does not set error:
+> stmmac_dispatch_skb_zc() {
+>     ...
+> 	if (unlikely(!coe) || !stmmac_has_ip_ethertype(skb))
+> 		skb_checksum_none_assert(skb);
+> 	else
+> 		skb->ip_summed =3D CHECKSUM_UNNECESSARY;
+>     ...
+> }
 >=20
-> 	skb =3D napi_build_skb(page_address(buf->page),
-> 			     rx_q->napi_skb_frag_size);
-> 	if (!skb) {
-> 		page_pool_recycle_direct(rx_q->page_pool,
-> 					 buf->page);
-> 		buf->page =3D NULL;
-> 		rx_dropped++;
-> 		count++;
-> 		goto drain_data;
+> dwmac4_dma_rx_chan_op_mode() always sets MTL_OP_MODE_DIS_TCP_EF, so the
+> hardware does not drop these frames. dwmac4_wrback_get_rx_status() reports
+> them with no discard_frame:
+>=20
+> 	if (rdes1 & RDES1_IP_PAYLOAD_ERROR) {
+> 		x->ip_payload_err++;
+> 		ret |=3D csum_none;
 > 	}
 >=20
-> When status & rx_not_ls is set, drain_data jumps back to read_again. At
-> that point skb =3D=3D NULL and error =3D=3D 0, and len still holds the by=
-tes of
-> the dropped prefix.
+> Can a packet with a bad TCP/UDP checksum get marked CHECKSUM_UNNECESSARY
+> on the AF_XDP zero-copy XDP_PASS path and be delivered to sockets?
 >=20
-> With no XDP program attached, stmmac_xdp_run_prog() returns NULL. The next
-> descriptor of the same frame then builds a new skb from a mid-frame
-> buffer.
->=20
-> On the last descriptor, len still includes the dropped prefix. So
-> pskb_trim() does nothing, because len is not smaller than skb->len:
->=20
-> 	return (len < skb->len) ? __pskb_trim(skb, len) : 0;
->=20
-> Wouldn't that pass a mid-payload fragment, with its FCS still attached,
-> to napi_gro_receive()? Its ip_summed would come from the status of the
-> whole frame, and rx_bytes would be counted with the full-frame len.
->=20
-> The same thing seems to happen across a poll boundary. In that case
-> in_progress saves skb =3D=3D NULL, error =3D=3D 0 and len.
->=20
-> The old status & rx_not_ls save condition behaved the same way. Later in
-> the series, "net: stmmac: drop multi-buffer frames in XDP mode" sets
-> error for rx_not_ls when XDP is enabled. The non-XDP path is unchanged.
+> stmmac_rx() checks (status & csum_none) before it sets
+> CHECKSUM_UNNECESSARY. Should stmmac_dispatch_skb_zc() do the same check?
+> The gap is still there at the end of the series.
 >=20
 > [ ... ]
 >=20
-> > @@ -8412,6 +8421,9 @@ static void stmmac_reset_rx_queue(struct stmmac_p=
-riv *priv, u32 queue)
-> >  {
-> >  	struct stmmac_rx_queue *rx_q =3D &priv->dma_conf.rx_queue[queue];
+> > @@ -5730,8 +5733,9 @@ static int stmmac_rx_zc(struct stmmac_priv *priv,=
+ int limit, u32 queue)
+> >  		if (likely(status & rx_not_ls)) {
+> >  			xsk_buff_free(buf->xdp);
+> >  			buf->xdp =3D NULL;
+> > +			rx_dropped++;
+> > +			error =3D 1;
+> >  			dirty++;
+> > -			count++;
+> >  			goto read_again;
+> >  		}
+>=20
+> [Severity: Medium]
+> This is a pre-existing issue, but the rx_dropped count added here is added
+> to the device-wide counter at the end of stmmac_rx_zc():
+>=20
+> 	priv->xstats.rx_dropped +=3D rx_dropped;
+> 	priv->xstats.rx_errors +=3D rx_errors;
+>=20
+> stmmac_rx() does the same thing, and stmmac_dispatch_skb_zc() does
+> priv->xstats.rx_dropped++. These are plain unsigned long read-modify-writ=
+es
+> with no lock, no atomic and no per-queue split.
+>=20
+> NAPI polls for different RX queues can finish at the same time on
+> different CPUs. Can they lose increments here, so that stmmac_get_stats64=
+()
+> under-reports rx_dropped and rx_errors?
+
+This issue has not been introduced in this patch and it needs to be fixed w=
+ith
+a dedicated patch.
+
+>=20
+> [ ... ]
+>=20
+> > @@ -5898,7 +5902,8 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
+t limit, u32 queue)
 > > =20
-> > +	dev_kfree_skb_any(rx_q->state.skb);
-> > +	rx_q->state.skb =3D NULL;
-> > +	rx_q->state_saved =3D false;
-> >  	rx_q->cur_rx =3D 0;
-> >  	rx_q->dirty_rx =3D 0;
-> >  }
+> >  		if (priv->extend_desc)
+> >  			stmmac_rx_extended_status(priv, &priv->xstats, rx_q->dma_erx + entr=
+y);
+> > -		if (unlikely(status =3D=3D discard_frame)) {
+> > +
+> > +		if (unlikely(status & discard_frame)) {
+> >  			page_pool_put_page(rx_q->page_pool, buf->page, 0, true);
+> >  			buf->page =3D NULL;
+> >  			error =3D 1;
+>=20
+> [Severity: Medium]
+> The commit message does not seem to describe this change or explain the
+> second Fixes tag:
+>=20
+>     Fixes: 644b8437ccef9e ("net: stmmac: dwmac4: report Rx checksum error=
+s in status")
+>=20
+> Is this change from =3D=3D to & the actual fix for 644b8437ccef9e?
+> dwmac4_wrback_get_rx_status() sets ret =3D discard_frame on
+> RDES3_ERROR_SUMMARY. It then ORs in csum_none on RDES1_IP_HDR_ERROR or
+> RDES1_IP_PAYLOAD_ERROR, so it can return discard_frame | csum_none.
+>=20
+> The old status =3D=3D discard_frame test missed that value. Frames with C=
+RC,
+> overflow, watchdog or giant errors that also failed the IP checksum were
+> passed to the stack in stmmac_rx(), or to XDP/XSK in stmmac_rx_zc().
+>=20
+> The fix looks correct. However, the body only covers the AF_XDP zero-copy
+> 1:1 drop and the dwmac100/dwmac1000 descriptor change, and this hunk
+> changes the regular non-XDP RX path on every GMAC4/XGMAC system.
+>=20
+> Could the commit message describe this change and the 644b8437ccef9e
+> regression it fixes?
 >=20
 > [Severity: High]
-> The commit message says that without this drain, a partial frame saved
-> before suspend would be resumed "with descriptors from the freshly
-> initialized ring". Is the ring actually freshly initialized on the
-> stmmac_resume() path?
+> This is a pre-existing issue, but does stmmac_rx() in native XDP mode
+> still mishandle split frames on GMAC4/XGMAC? For a non-last descriptor,
+> dwmac4_wrback_get_rx_status() returns rx_not_ls without discard_frame:
 >=20
-> stmmac_resume() does:
+> 	if (likely(!(rdes3 & RDES3_LAST_DESCRIPTOR)))
+> 		return rx_not_ls;
 >=20
-> 	stmmac_reset_queues_param(priv);
+> So the discard_frame drain above never starts, and the XDP program sees
+> the first fragment as a complete frame. On XDP_DROP:
 >=20
-> 	stmmac_free_tx_skbufs(priv);
-> 	stmmac_clear_descriptors(priv, &priv->dma_conf);
+> 				if (xdp_res & STMMAC_XDP_CONSUMED) {
+> 					...
+> 					skb =3D NULL;
 >=20
-> 	ret =3D stmmac_hw_setup(ndev);
+> 					if (unlikely((status & rx_not_ls)))
+> 						goto read_again;
 >=20
-> stmmac_clear_rx_descriptors() calls stmmac_init_rx_desc() on every RX
-> descriptor, and that only sets ownership bits:
+> skb is NULL and error is still 0. The tail then goes through XDP again
+> and can be passed to the stack as a new packet.
 >=20
-> - dwmac4_rd_init_rx_desc() and dwxgmac2_init_rx_desc() OR OWN|BUF1V into
->   des3.
-> - enh_desc_init_rx_desc() and ndesc_init_rx_desc() OR RDES0_OWN into
->   des0.
+> On XDP_TX or XDP_REDIRECT the code does goto next, which clears
+> in_progress. The next iteration resets len to 0, so stmmac_rx_buf1_len()
+> reports the full dma_buf_sz for the tail. Can that expose stale page_pool
+> contents that DMA did not write for this frame?
 >=20
-> Buffer addresses are never reprogrammed and empty slots are not refilled.
-> stmmac_init_dma_engine() then sets the RX tail pointer to buf_alloc_num,
-> which gives every descriptor back to the DMA.
->=20
-> Suppose page_pool_alloc_pages() failed in stmmac_rx_refill() for the
-> slots used by the saved partial frame. The loop then breaks before
-> stmmac_set_desc_addr():
->=20
-> 	if (!buf->page) {
-> 		buf->page =3D page_pool_alloc_pages(rx_q->page_pool, gfp);
-> 		if (!buf->page)
-> 			break;
-> 	}
->=20
-> Those descriptors keep the DMA addresses of pages that state.skb now
-> owns, and buf->page =3D=3D NULL.
->=20
-> With this change, stmmac_reset_rx_queue() returns those pages to the
-> page_pool through dev_kfree_skb_any(). The same descriptors are then
-> re-armed and the DMA is restarted.
->=20
-> Can the device then DMA into pages that have already been recycled or
-> freed?
->=20
-> There is a separate problem on dwmac4 and xgmac. A descriptor that was
-> written back but not refilled before suspend still holds write-back data
-> in des0/des1. For example, dwmac4_wrback_get_rx_vlan_tci() reads the VLAN
-> tag from des0. Re-arming that descriptor would make the DMA treat the
-> write-back data as a buffer address.
->=20
-> The re-arm-without-refill behaviour predates this patch: an earlier
-> upstream re-init on resume was reverted. Before this patch, the stale skb
-> would also have been completed and freed on the first poll after resume,
-> while those descriptors were still armed. So this change frees the pages
-> earlier rather than creating the problem.
->=20
-> Since the resume handling depends on the ring being freshly initialized,
-> should the commit message be corrected? And should the resume path refill
-> and reprogram the RX descriptors before the DMA is restarted?
+> This is the same kind of bug the patch fixes for stmmac_rx_zc(), but here
+> stmmac_rx() is only covered for dwmac100/dwmac1000. The next patch in the
+> series, "net: stmmac: drop multi-buffer frames in XDP mode", appears to
+> fix it. That patch sets error on rx_not_ls in XDP mode, drops frames that
+> use buf2_len, and makes the XDP_CONSUMED path goto next.
 
-I will rework the commit message in v2 but the reported issue has not been
-introduced by this patch and it needs to be fixed with a dedicated patch.
+I will fix the commit message in v2.
+
+>=20
+> [Severity: Medium]
+> This is a pre-existing issue, but stmmac_rx() has a similar problem when
+> napi_build_skb() fails on the first descriptor of a multi-descriptor
+> frame:
+>=20
+> 			skb =3D napi_build_skb(page_address(buf->page),
+> 					     rx_q->napi_skb_frag_size);
+> 			if (!skb) {
+> 				page_pool_recycle_direct(rx_q->page_pool,
+> 							 buf->page);
+> 				buf->page =3D NULL;
+> 				rx_dropped++;
+> 				count++;
+> 				goto drain_data;
+> 			}
+>=20
+> error is not set, so drain_data jumps to read_again with skb =3D=3D NULL =
+and
+> error =3D=3D 0. If allocation succeeds on the next descriptor of the same
+> frame, the if (!skb) branch builds a new skb from only the tail fragment.
+>=20
+> At the last descriptor, pskb_trim(skb, len) does nothing. len still
+> includes the dropped first fragment, so it is larger than skb->len.
+>=20
+> Does this pass the tail to the stack as a standalone packet with its FCS
+> still attached, and count the frame against the budget twice? Should this
+> path set error so the rest of the frame is drained?
+>=20
+> At the end of the series this only happens in non-XDP mode, because XDP
+> mode now sets error on rx_not_ls.
+
+This issue has not been introduced in this patch and it needs to be fixed w=
+ith
+a dedicated patch.
 
 Regards,
 Lorenzo
@@ -348,15 +411,15 @@ Lorenzo
 > Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
 set/20261023-stmmac-xdp-fixes-v1-0-efb37e19f5bd%40oss.qualcomm.com
 
---4GXi3iNJ7oQknk1+
+--GP/MfWl9BvU7lFD7
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCauB1qAAKCRA6cBh0uS2t
-rDzOAQDNEQEZb+doM2iGYJUGbk3wZTR1pCww4pSuhScfzs8jlgD/SXvg0KYcSAG/
-5cZMIL8eDEQYqSVsmD7+0Dudt/kZ4QU=
-=3GMY
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCauB6OgAKCRA6cBh0uS2t
+rOgfAQDIbO8+ywdj3y0cEjOd1Ng1xFi+0PbimDta7J1gyk/25AD/bjfdp9HiQ6wp
+DiTWtNtRQw3Tk4vs7Nv29PoRt8pmpg4=
+=klEX
 -----END PGP SIGNATURE-----
 
---4GXi3iNJ7oQknk1+--
+--GP/MfWl9BvU7lFD7--
