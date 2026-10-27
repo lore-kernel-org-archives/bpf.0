@@ -1,59 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793113872;
-	b=hh3oSsCzLx6/mhXueQmWgcnG0A1Qa21z+XAAXo42X0F4dWYJP0BgWMUwLzJdV5y1yZAC
-	 LWPYMExVilgIUwVGiJSykC8rMWlIemkJVic1Eq14fB2XCmr6uu+JX6RDTMr/W/hglTOf9
-	 mt2h9vY+adUgClxSRCtgw48BijhAMN0odjDtsYJyEcR8FKRPCMG6A4Zt9FvyQtO9rFaR6
-	 tEKan7sygx1DPvLLiMAMr4QCCg0DDWv7ZE6ZgSV9wc7VzYHIzxV6XlSlFmwSL2qiJVBcA
-	 Tf/FZgdyeSJ/WQEAJBm4eMHJPeFdPfty5027Q06jkApdI22DDBWIDiVqbLgz192DBoA==
+	t=1793114107;
+	b=jMo2OYlhoF8vNcx0AmnxS0iMkNdB4FsWNs8M5iQGQDiVIxfx82rf6PbyIcphhQ63+edl
+	 1oczvDdZQhrmxGUfgBoS+ZKXY8ES2UYwk6seBAiCqXM0eFe5vCgd7IYWPGG4Kh/tZtq9p
+	 y6ZFJVGAOYJvFY299CzmS7TSXEd8DPgbcGfPl1Lto+krnJJdU6oitduY1n4fIHlq2aOiR
+	 fFU5QwDQuoecJEm78ZvSn9d9tYmw/tu7dnicbHzM6iO0u33627LdS/kbVyt08X3xS1Zp4
+	 4RR/NS6jB7AlBT63tY/F0CyTLQ78aqS9R7Wakwko89lBIob3G47h/U1imiI86X4I08g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793113872;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793114107;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=WAORpCca99WVFsa9yjQHj3w3E3G9OGYxMnl8hxLGEco=;
-	b=eiaWKYX3L6a76ovH9CeZS0149LetLkoH2yyrucytglRCxFNlWlT/foutEEr3apOvo7uw
-	 rDZHaxm6+RkBy1yhO/mYve/WEpReqFkDVZ4kwr45Ge1DeBL49N96rb6eoMCIQJqL3+VCI
-	 Blt8Yd6BFayYDBpsm6gUqolwVjoiVZKJtFQRW9l+ZCkMF0rqRhd97pzixvV5c3oSWbCeM
-	 gCOEE+jBcrMO4FjQBvaCLDJVWmShUUvkHY+gdZSj4Z8krIBHbhnJ4xqm/Y1Cam0WpVBAf
-	 CHjeXrJIU6nrQm2DRPHUxNPXjEEM7K2Dst6BUdNV0Em4hd5Po58NAIP9g6l9M9GL5LA==
+	bh=8Dg5RqFu1U+WwFY3qsMcMAcDofgLEtToUk7x3ImG0b4=;
+	b=19pb/Kr1w7x9YUKWbBjQrtebRsDjQohbj9Qiy4K8DL/vrvE/hxPkzFLdOFDVjYSODzbY
+	 7EaMsbdtmnYsAFE7+fnRcOX6H1kVWU8/1gNbrHIsLWpk6e7NV88lv1slol6iCQ0ErA7bz
+	 a4CpsJYQiJhwvbpGHzpW5TCqrcbRHq1prv1sJlUYLj/nkzRf7fGuhcNrW/zkxhAbLZbzR
+	 XmTJpSv59c/rvN1DSTCPOLIjLi75BrIECDTPvQ9JebU85BzsfdURAC3SEojgWu2tvP5cn
+	 003/cGQ7xxWWu2slu8bnwnABQWeFXBTusfBTeKC+aj1TH8IBXxlGt9ubHvZ7eFG23Nw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SCwdUWcP;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ivQP5DlF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D14606A31A;
-	Tue, 27 Oct 2026 15:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09328606A321
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 15:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=SCwdUWcP
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8BAE1F01825;
-	Tue, 27 Oct 2026 15:11:10 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ivQP5DlF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B80A1F01825;
+	Tue, 27 Oct 2026 15:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793113871;
-	bh=WAORpCca99WVFsa9yjQHj3w3E3G9OGYxMnl8hxLGEco=;
+	s=k20260515; t=1793114106;
+	bh=8Dg5RqFu1U+WwFY3qsMcMAcDofgLEtToUk7x3ImG0b4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SCwdUWcPJ5GOGJmMBPaMdlKCnxMINtnDlwsm7Wy3p/b/7ZazvgRlOdAn7c6eoUE7l
-	 MiyeWLL83tdWmgZ43WmhtGBV8nkfNRe8WJZrvFpMaKVqNDLM6Aq1S3Ai39+jvlwPXY
-	 lHE1bDqcDl/GFY+RmDmOEM2n9evKzxa1Ur0lwbLcY3p0u68fQLjTtDCM+X4hhJlZhC
-	 kyH31xi5KQ9sYUoRBYyBIKssFDb9Zk2mYjtVBNcp1Hm0MvaxzpzWyOwfoH8D0H2Wzc
-	 08D3A/YXh3TQzjPo4HZA2ojOQd/BOGWFpRcvRGg24EOY8B9AigBU95bLSZfVJ3LXzt
-	 3JSQDSVsEWSiQ==
-Message-ID: <sashiko-outbox-186809@kernel.org>
+	b=ivQP5DlFRMoRl8wE10qVFeq201r/X6NvNgMBRIA5XFe9ULUIrjqDW5SZoM8s/Cm2c
+	 wTr05dX+kcXxT6asUIsRe8mAXlxbd3YczC3DC/sivhkya0hF8GMefUKshrvreJKhHk
+	 HpKDcHiY5tS6MtyKnjKto4r+4HIBZsBO50t8Ps44bgw6gfVZgMM7LjRo5lZ7TJfAQ+
+	 j+YWYi2td6Gy6s9sE1A68sKvrIreP2BZ7ENxoClJTJoSxuK/ejs0UaHyJRg/1E4R/y
+	 ChmpqbYbzSrTRhkt2gPaKK6Vs8SjExU3cJoNaUJZMMp42WF2r2976pgoA+dQHkH10T
+	 V6WM/oJEAwvWQ==
+Message-ID: <sashiko-outbox-186817@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 -next 16/18] selftests/landlock: Add tests for
- metadata access rights
+Subject: Re: [PATCH] bpf: fix out-of-bounds frame access for async callback
+ stack args
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, selinux@vger.kernel.org, dsterba@suse.cz, "Chuck
- Lever" <cel@kernel.org>, "Jeff Layton" <jlayton@kernel.org>, "Anna
- Schumaker" <anna@kernel.org>
-In-Reply-To: <20261027121151.1887650-17-caixinchen1@huawei.com>
-References: <20261027121151.1887650-1-caixinchen1@huawei.com>
- <20261027121151.1887650-17-caixinchen1@huawei.com>
+To: "Henry Martin" <bsdhenrymartin@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20261027150237.938383-1-bsdhenrymartin@gmail.com>
+References: <20261027150237.938383-1-bsdhenrymartin@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 Oct 2026 15:11:10 +0000
+Date: Tue, 27 Oct 2026 15:15:06 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -63,160 +60,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests/landlock: hardcoded GID 0 in chown metadata tests fail=
-s for non-root
-- [Low] selftests/landlock: duplicate linux/fs.h include before sys/mount.h
-- [Low] selftests/landlock: missing MIPS offset in file_getattr/setattr fal=
-lback NRs
+- [Critical] bpf: incomplete caller stack_arg_regs validation in check_stac=
+k_arg_read()
 --
 
-commit 76c1b6128ed1afd1dd4933dbcba43ffec623cd33
-Author: Cai Xinchen <caixinchen1@huawei.com>
+commit a0bf590a32c2dfabebbd87131532c05aca33f96d
+Author: Henry Martin <bsdhenrymartin@gmail.com>
 
-selftests/landlock: Add tests for metadata access rights
+bpf: fix out-of-bounds frame access for async callback stack args
 
-This commit adds selftests covering the LANDLOCK_ACCESS_FS_READ_METADATA and
-LANDLOCK_ACCESS_FS_WRITE_METADATA access rights across chmod, chown,
-utimensat, xattr, stat, fileattr, open-time semantics, and overlayfs. It al=
-so
-updates the ABI version and access mask definitions in the Landlock test
-suite.
+This commit adds a check in check_stack_arg_read() to reject r11-based
+incoming stack argument loads when vstate->curframe =3D=3D 0, preventing an
+out-of-bounds read on vstate->frame[-1] for async callbacks queued via
+push_async_cb().
 
-> diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/s=
-elftests/landlock/fs_test.c
-> index f725882fa4a78..1e819ba952ac6 100644
-> --- a/tools/testing/selftests/landlock/fs_test.c
-> +++ b/tools/testing/selftests/landlock/fs_test.c
-> @@ -12,6 +12,7 @@
->  #include <fcntl.h>
->  #include <libgen.h>
->  #include <linux/fiemap.h>
-> +#include <linux/fs.h>
->  #include <linux/landlock.h>
->  #include <linux/magic.h>
->  #include <sched.h>
-
-[Severity: Low]
-Could adding this include of linux/fs.h before sys/mount.h break compilation
-on toolchains where glibc headers conflict with UAPI linux/mount.h?
-
-Further down in tools/testing/selftests/landlock/fs_test.c, linux/fs.h is
-already included after sys/mount.h and sys/vfs.h with a comment noting the
-ordering requirement:
-
-    /*
-     * Intentionally included last to work around header conflict.
-     * See https://sourceware.org/glibc/wiki/Synchronizing_Headers.
-     */
-    #include <linux/fs.h>
-    #include <linux/mount.h>
-
-Because UAPI linux/fs.h includes linux/mount.h when __KERNEL__ is not
-defined, including linux/fs.h at the top of the file pulls in linux/mount.h
-prior to sys/mount.h and makes the deferred include a no-op.
-
-[ ... ]
-
-> @@ -10916,4 +10921,918 @@ TEST_F(trace_layout1, check_rule_fs_empty_grant)
-
-[ ... ]
-
-> +TEST_F_FORK(layout1, unhandled_metadata)
-> +{
-> +	int file_fd;
-> +	int ruleset_fd;
-> +	const char *const file1 =3D file1_s1d1;
-> +	const char *const file2 =3D file2_s1d1;
-> +	const char *const dir1 =3D dir_s1d1;
-> +	struct stat statbuf;
-> +	const struct rule rules[] =3D {
-> +		{
-> +			.path =3D file1,
-> +			.access =3D LANDLOCK_ACCESS_FS_WRITE_FILE,
-> +		},
-> +		{
-> +			.path =3D file2,
-> +			.access =3D LANDLOCK_ACCESS_FS_READ_FILE |
-> +				  LANDLOCK_ACCESS_FS_WRITE_FILE,
-> +		},
-> +		{
-> +			.path =3D dir1,
-> +			.access =3D ACCESS_RW,
-> +		},
-> +		{},
-> +	};
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5601d20562186..51e07d1aaea4f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4653,6 +4653,11 @@ static int check_stack_arg_read(struct bpf_verifie=
+r_env *env, struct bpf_func_st
+>  		return -EACCES;
+>  	}
+> =20
+> +	if (vstate->curframe =3D=3D 0) {
+> +		verbose(env, "stack arg read with no caller frame\n");
+> +		return -EINVAL;
+> +	}
 > +
-> +	/*
-> +	 * READ_METADATA and WRITE_METADATA are not handled, so metadata
-> +	 * access should be allowed.
-> +	 */
-> +	ruleset_fd =3D create_ruleset(_metadata, ACCESS_RW, rules);
-> +	ASSERT_LE(0, ruleset_fd);
-> +	file_fd =3D open(file1, O_WRONLY | O_CLOEXEC);
-> +	ASSERT_LE(0, file_fd);
-> +
-> +	enforce_ruleset(_metadata, ruleset_fd);
-> +	ASSERT_EQ(0, close(ruleset_fd));
-> +
-> +	EXPECT_EQ(0, test_chmod(file1, 0644));
-> +	EXPECT_EQ(0, test_fchmod(file_fd, 0644));
-> +	EXPECT_EQ(0, test_chmod(file2, 0400));
-> +	EXPECT_EQ(0, test_chmod(dir1, 0700));
-> +
-> +	EXPECT_EQ(0, test_chown(file1, -1, 0));
-> +	EXPECT_EQ(0, test_fchown(file_fd, -1, 0));
-> +	EXPECT_EQ(0, test_lchown(file1, -1, 0));
+>  	caller =3D vstate->frame[vstate->curframe - 1];
+>  	arg =3D &caller->stack_arg_regs[spi];
 
-[Severity: Medium]
-What happens in unhandled_metadata (as well as in write_metadata,
-metadata_open_time, and metadata_transfer) when the test binary runs with a
-non-zero GID or inside a user namespace where GID 0 is unmapped?
+[Severity: Critical]
+Is checking vstate->curframe =3D=3D 0 sufficient to ensure that
+caller->stack_arg_regs[spi] is valid and initialized here?
 
-Landlock selftests support running as a non-root user with capabilities via
-SECBIT_NOROOT in _init_caps(). During fixture setup,
-FIXTURE_SETUP(layout1) -> prepare_layout_opt() -> disable_caps() clears
-effective capabilities and drops CAP_CHOWN from the permitted set, creating
-test files owned by geteuid():getegid().
+Synchronous callbacks (such as those passed to bpf_loop or
+bpf_for_each_map_elem) are queued via push_callback_call(), which advances
+curframe via push_stack() and setup_func_entry() so that curframe >=3D 1 and
+state->in_callback_fn is true:
 
-When getegid() is non-zero and the caller is not a member of group 0,
-chown_common() -> notify_change() -> setattr_prepare() -> chgrp_ok() rejects
-changing the group to hardcoded GID 0 with -EPERM because CAP_CHOWN is not
-held, causing the positive EXPECT_EQ(0, ...) assertions to fail. Similarly,
-if GID 0 is unmapped in the current user namespace, chown_common() fails
-setattr_vfsgid() with -EINVAL before reaching security_path_setattr(),
-causing the EXPECT_EQ(EACCES, ...) checks to fail as well.
+kernel/bpf/verifier.c:push_callback_call() {
+	caller =3D state->frame[state->curframe];
+	err =3D btf_check_subprog_call(env, subprog);
+	if (err =3D=3D -EFAULT)
+		return err;
+	...
+	callback_state =3D push_stack(env, env->subprog_info[subprog].start, insn_=
+idx, false);
+	if (IS_ERR(callback_state))
+		return PTR_ERR(callback_state);
 
-Would passing getegid() instead of 0 to test_chown(), test_fchown(), and
-test_lchown() avoid depending on the caller's GID while still setting
-ATTR_GID in chown_common() and exercising hook_path_setattr()?
+	err =3D setup_func_entry(env, subprog, insn_idx, set_callee_state_cb,
+			       callback_state);
+}
 
-[ ... ]
+When a static subprogram declares more than 5 BTF arguments,
+prepare_subprog_args() caches sub->arg_slot_cnt > 5 (so
+bpf_in_stack_arg_cnt(subprog) > 0), and btf_check_func_arg_match() can retu=
+rn
+-EINVAL before reaching check_func_args() -> check_outgoing_stack_args():
 
-> +#ifndef __NR_file_getattr
-> +#if defined(__alpha__)
-> +#define __NR_file_getattr 578
-> +#else
-> +#define __NR_file_getattr 468
-> +#endif
-> +#endif
-> +#ifndef __NR_file_setattr
-> +#if defined(__alpha__)
-> +#define __NR_file_setattr 579
-> +#else
-> +#define __NR_file_setattr 469
-> +#endif
-> +#endif
+kernel/bpf/verifier.c:btf_check_func_arg_match() {
+	if (!bpf_subprog_is_global(env, subprog)) {
+		for (i =3D 0; i < min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS); i=
+++)
+			if (caller->regs[BPF_REG_1 + i].type =3D=3D NOT_INIT)
+				return -EINVAL;
+	}
+	return check_func_args(env, &meta, env->insn_idx);
+}
 
-[Severity: Low]
-When building against older UAPI headers on MIPS, won't these fallback
-definitions for __NR_file_getattr and __NR_file_setattr evaluate to raw 468
-and 469 without the MIPS ABI base offset (__NR_Linux + 468 and
-__NR_Linux + 469, where __NR_Linux is 4000 for o32, 5000 for n64, and 6000
-for n32), causing test_file_getattr() and test_file_setattr() to fail with
-ENOSYS?
+Similarly, once a static subprogram is marked unreliable by a prior call,
+btf_check_subprog_call() returns -EINVAL immediately without running
+check_outgoing_stack_args() for the new caller frame:
+
+kernel/bpf/verifier.c:btf_check_subprog_call() {
+	if (prog->aux->func_info_aux[subprog].unreliable)
+		return -EINVAL;
+
+	err =3D btf_check_func_arg_match(env, subprog, btf);
+	if (err)
+		prog->aux->func_info_aux[subprog].unreliable =3D true;
+	return err;
+}
+
+Because push_callback_call(), check_func_call(), and check_func_callx()
+ignore -EINVAL from btf_check_subprog_call(), execution can reach
+check_stack_arg_read() with vstate->curframe >=3D 1 without
+check_outgoing_stack_args() having validated the caller's outgoing stack
+arguments.
+
+If caller->out_stack_arg_cnt <=3D spi, won't indexing caller->stack_arg_reg=
+s[spi]
+trigger a NULL pointer dereference or slab out-of-bounds read? And for a
+synchronous callback where the frame invoking the helper wrote an outgoing
+stack argument slot prior to the helper call, push_callback_call() clones
+caller->stack_arg_regs before invalidate_outgoing_stack_args() runs, so
+wouldn't check_stack_arg_read() copy that register state into
+cur->regs[dst_regno] even though the kernel helper does not pass BPF stack
+arguments at runtime?
+
+Should check_stack_arg_read() also reject loads when state->in_callback_fn =
+is
+set, or when spi >=3D caller->out_stack_arg_cnt or
+caller->stack_arg_regs[spi].type =3D=3D NOT_INIT?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027121151.1887=
-650-1-caixinchen1@huawei.com?part=3D16
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027150237.9383=
+83-1-bsdhenrymartin@gmail.com?part=3D1
