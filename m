@@ -1,96 +1,56 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793129076;
-	b=SIhSC1XCA0iGrPlhNwuCP7T4pRgC2aJFDd9ndaBm2URVQHAsUUPjr2iicZDZISREmWMP
-	 7eHA6/Fpk03WTzVMOvpqWlmCE1DRs2iSHaTUOcogHx0/e3W6LDMa/HL/7l5oqoddNdc3D
-	 qYQ1Hk2R0ZGV+OACASS+IvADRP3VmeFOX2MxxxWAqp1ozN2aU07uzR/giH7XWnXmA3eu+
-	 m29RCP3IL//SXafc4HW7zaSmOLaMrD4MwO0uui0S3bkk2kKOKC0nTQATKL/bsNW0VGYRE
-	 loV08Z0FPklSIzID0Qk+Ru5mbiluy04n3ew8nvmh+E/Ek2azg48lXwxU7o5Rx2ns5+w==
+	t=1793129447;
+	b=DkWE7xjxyJV6QA+4R7bGLhPzCPVd7Z9PDrozF+ePDv897SBPvR8BrnsVSifpBrNMDMZW
+	 0NgzjwWgKsHM+jdBRv3hfXcyuuk83PSf6kMJfEfH/8WsnH8/q9RVY4EiBbQnIr59y4uEv
+	 PSENW3CjUu3LNR2FYJgQ7at8Q1kQDFp8CAgkVX3qwdFLvsz5uzeZqS58ZHCGf9uww8u1K
+	 SDZYt93D9FwjO9Rk94qSK3aNuXcgJuWbBu/w4F5sDFfqjJplqQPLAQgvuuG1EYdnM/TIz
+	 BWXYFQyJPack6LXGdAnon1rD8XnL+eehxFbVpDafzeXpldMth/CWTuJWw6oPV+KGBaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793129076;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=GQZGJeSpKyzleV5tnvZzt+FXSaWm72txTVpShChFQ+4=;
-	b=0FziXcuLLajpcglPRdEI6UPkrv6h8xF0ygnsjrGuZuh1uYfZjpGnUu/eMtVg51OBXkA8
-	 YzcL9oWfIEGOtTFmT094OVX+jCfLx6FPNhFBmhiG8IMS/5BIYEAWnDqDLOk3Gh5WrsUV8
-	 qar1aOSONisa7RXASmMyDxAecmRlwzUVzCU3QtTH9Bua4+KmiY9J7V6RqH1fDq9azH/sU
-	 nA+K6t7dbTEIEXdEgRp1JLU/rD+eXXcseKLpsf/pE7XmltKozFMH4qbQs4NhFhdB4W/yV
-	 Oiz3MVI4CRtEVRCqUW4BI8rXZCJsyJBOXt/22+UjR2LSVs/ICuVCoMrNGExaiPqQQxw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793129447;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=//kkAIRvIOwma0JUUomd5dTWJMUKweItzFG0pjpcdAs=;
+	b=ZiNKXIisRLmmMn68jxYbsyJlqSSK2fjfaBaYpSAqvuZylmgi1rhQ+RrUfYL3dU6lRZSa
+	 15IQpnZgLMGe2RpwxTYUSAxJhyLNgxz0pt5jFVcOwXDJPQDzvb07PdoDH5n091yY3+5xx
+	 L/odBRFFTiFNsfs+gql1hZP+QLxFDYEEY1xlEruGyMObA1jcMIngP7iVye0MeI2DeSRyv
+	 WC3Jw2Kb515ehLk0RWPKEdu3ExvEaVVetP0rZO37tL1ycuF6kYyqtrfBBXHBFrM5lLr1U
+	 puAvihFRO1qcx42j06U9P79RqqDeQAg+1yTF3rdy7bxrizJYrM42Au/tUDUOoZj6k1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=etsalapatis.com;
-	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Sq+Ui4RX;
-	arc=none smtp.remote-ip=209.85.221.47
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="i6TWhCl/";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1E5606A31F
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:24:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6C1E5606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322C9606A31F
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Sq+Ui4RX
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48afcd7ba9bso153546f8f.3
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1793129075; x=1793733875; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GQZGJeSpKyzleV5tnvZzt+FXSaWm72txTVpShChFQ+4=;
-        b=Sq+Ui4RXKyG1drkSr8mJYz3B6SR2clt1a2As+03Wvbb8ybxZHO54zvQcPTgjFe1znb
-         vzhqd6IZT+ssEfsgodJU5iPFtdRB3RwkxPhGqZJ/Y0qWLatCX4aGTmNi5Y1XobJfeIn2
-         M5mfApKVt9QE3goId4CjF+2k9DLKiQjGAQ9teuzzuF29jXcHLzkKX+N72oAi/u/AzUn5
-         wo7OpI303JJ5Iqt/26M0kBkPXrn8E7Jnya4UD5B9cUiFVjsdAljk3YC7Fpkzw3ysHl0/
-         NPus9Hmx7tx4dJ2yUG6LSViEHlqrnukTE4NGSCfjnWO4iLpoXFf1GXfA3HyL5jCnroL6
-         V2fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793129075; x=1793733875;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GQZGJeSpKyzleV5tnvZzt+FXSaWm72txTVpShChFQ+4=;
-        b=UIkQIzBh35JekYICQBU/XZme6rk5RRjXjWVAFNNmy+/mUWKZ2XXg7QTQQ4Ox8MpMeb
-         061sEE1B77JCCMIvV7jMA65yyzxa14sbQqJGnXnIDCV4vwlxIO3xgfkLR4+tfCeKsfPb
-         muecBiGW4MWfHo3E0uDRccHaTnMRrEK7UO6rPXdyI806yxP3vPRsgocB2jPE3jbmEuIg
-         rfOBbUqVpLXtAxzUqSGlnMGQpyzmoGDMll0fH2GBXDPQ4PlMbRKkU9mZMxWJLc1/v0OJ
-         z/ElY43F4Qe7k7u9tWQ9YuMMKLx/a3wFc58UnLgtZ4Wm10pwYe7Yja92kW9XOLpwj2P9
-         Jcrg==
-X-Gm-Message-State: AFq9FYJNSjaCY2DyoH2/RU4UmClwOywmOWQuFVcW7XUXV3c82aAFbgf9
-	DwHx1H6eVFLyeNicr8TNUmm90UUGJOc4Vwip95yKh9sBXxb8NCVYuOrNLLWmtcq20X5ALVsiIaX
-	A/6NuA3TPsA==
-X-Gm-Gg: AYBFou00jrD5HmgfNl+/6SW5UxX3C0wgrp4i5xOIp24l4/evUD4A1fv6X+0EdzOynjF
-	jb7gIolrMCkpqrXITJlgm6SXweIMcjVNo5Hh7Ni4renpQoKLNMwEvgtwyaH2ud5OMMkfeoBYVur
-	gBmzcQ+N0pJi49m6QVNgszp1J89WOx3SFoM1PYMcIzHOaimnPK48S88MpDO5O9o9Jl2I4E+pJ0x
-	VbwORa4QAFbIxbnYbaq179jO57khlyz/JHFU7wsHu52wFBEj+FrJk1MsjarfpiFQrv6eRk5WMSZ
-	VAph3ASszrsIRbefcXakNj3cqBosEHjAuj767EEBqdHNc7VVghkZpJkWo3Ofn07TeLRbmhcptjn
-	pJRoYhc7psjkhqIS3rLhW0OjEx3zsCafBjr712RYkZRxbp2iyKWg/xptk5HPK4HICcAJ4bNPTYB
-	iF0r/RP7yDXzat4s1G2b4Je8DmNpDCkwZ/+kY5Oflyf31qrESG0tskXqMqLmDLpaLf1MKYQ8khJ
-	KnDyz7h2BynjbHrPYNDEHJ7kS1qNi3itucOkiJT4nhC
-X-Received: by 2002:a05:600c:4445:b0:4a8:b8b4:6226 with SMTP id 5b1f17b1804b1-4a8b8b4623cmr46757055e9.28.1793129074717;
-        Tue, 27 Oct 2026 12:24:34 -0700 (PDT)
-Received: from alpine05.lan ([2620:10d:c090:600::1:2eb1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a92e103d91sm4721385e9.0.2026.10.27.12.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 12:24:34 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: libarena: Make zero variable type __u32 instead of u32
-Date: Tue, 27 Oct 2026 19:24:13 +0000
-Message-ID: <20261027192413.5038-5-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261027192413.5038-1-emil@etsalapatis.com>
-References: <20261027192413.5038-1-emil@etsalapatis.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i6TWhCl/
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0FDF1F01825;
+	Tue, 27 Oct 2026 19:30:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793129446;
+	bh=//kkAIRvIOwma0JUUomd5dTWJMUKweItzFG0pjpcdAs=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=i6TWhCl/TBd1i6ijQdOtAaK76eOH4m76aHgfqJ8oYeY+3AXeLQynBOmIy2Mm2F+ws
+	 vmJR5fc3dLojfHfPZ8Bx9hUSqNDtAalmnO969xG4rasUEafdhdMWnp7hN/ipY/frVg
+	 0RKwLAXogid5FcbrmSAhkqxkT/a0MY9fRGuX71WWsSRAi7DWd4+VjZzKvBE+OmNCb3
+	 uZwEbdtl4Nfrs68/3gtBeohazgS7EjL1H7cr/wTVP5UAZJ0/VFOQNonXfSp40lYBhW
+	 iWND63bVk2kTzoe5n6KPhhG6uG1gvp3wuMuP1IHsMPC/knVLXzDWHTn+DVCAI7GMrA
+	 FSzdxjb6xSDSw==
+Message-ID: <sashiko-outbox-187068@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 bpf 14/19] bpf: Reset the range of a packet pointer
+ that scalar evolution clamps
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <20261027190314.1440199-15-alexei.starovoitov@gmail.com>
+References: <20261027190314.1440199-1-alexei.starovoitov@gmail.com>
+ <20261027190314.1440199-15-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 27 Oct 2026 19:30:46 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -99,45 +59,147 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Change the zero variable used for loop convergence to the user-visible
-__u32 type to avoid missing type issues when including the skeleton
-in userspace.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] bpf: out-of-bounds packet access via step tightening in bpf_cl=
+amp_scev_regs()
+- [Medium] bpf: bpf_widen_scev_regs() does not reset negative packet pointe=
+r range
+--
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- tools/testing/selftests/bpf/libarena/include/libarena/common.h | 2 +-
- tools/testing/selftests/bpf/libarena/src/common.bpf.c          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit a6747880bf7fa92bdac4e2fa9d3223b8203c86f7
+Author: Alexei Starovoitov <ast@kernel.org>
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-index a6220355a697..940e82cc2928 100644
---- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-+++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
-@@ -43,7 +43,7 @@ struct {
-  * imprecise. To force the variable to be imprecise, initialize it with
-  * the opaque volatile variable 0 instead of the constant 0.
-  */
--volatile u32 zero __weak;
-+volatile __u32 zero __weak;
- extern volatile u64 asan_violated;
- 
- int arena_fls(__u64 word);
-diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-index d859bd538c52..c3c5326d8ca2 100644
---- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-@@ -7,7 +7,7 @@
- #include <libarena/buddy.h>
- 
- struct buddy __arena buddy;
--volatile u32 zero = 0;
-+volatile __u32 zero = 0;
- 
- /*
-  * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
--- 
-2.52.0
+bpf: Reset the range of a packet pointer that scalar evolution clamps
 
+This patch resets a clamped packet pointer's range to max(entry_reg->range,=
+ 0)
+in bpf_clamp_scev_regs() so that packet bounds gained from pkt_end comparis=
+ons
+inside a counted loop do not remain attached to the widened offset range ac=
+ross
+all iterations.
+
+> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
+> index 89f96682af3ff..7b82fd79f9cc9 100644
+> --- a/kernel/bpf/scev.c
+> +++ b/kernel/bpf/scev.c
+> @@ -2914,6 +2914,13 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *e=
+nv, struct bpf_func_state *cur
+>  			bpf_log(log, "\n");
+>  		}
+>  		scratch_widened_reg_id(env, reg);
+> +		/*
+> +		 * The range of a packet pointer goes together with its id and with th=
+e offsets
+> +		 * that it had in the compare with pkt_end. Both are replaced here. Wh=
+at holds for
+> +		 * the new offsets is the range at the entry.
+> +		 */
+> +		if (type_is_pkt_pointer(reg->type))
+> +			reg->range =3D max(entry_reg->range, 0);
+
+[Severity: Medium]
+Should bpf_widen_scev_regs() also clamp reg->range with max(reg->range, 0)
+when widening a packet pointer at loop entry?
+
+When a packet pointer fails a pkt_end comparison before a counted loop,
+mark_pkt_end() sets entry_reg->range to AT_PKT_END (-1) or BEYOND_PKT_END (=
+-2).
+At loop entry, bpf_widen_scev_regs() replaces the packet pointer's id and
+offsets across all iterations without clearing a negative reg->range:
+
+kernel/bpf/scev.c:bpf_widen_scev_regs() {
+	...
+	scratch_widened_reg_id(env, reg);
+	err =3D bpf_set_reg_range(env, reg, bounds.r64, bounds.r32,
+				bounds.base, bounds.step);
+	...
+}
+
+If the loop has a negative slope that moves the pointer backwards into the
+packet on subsequent iterations, is_pkt_ptr_branch_taken() in
+kernel/bpf/verifier.c will still fold pkt_end comparisons on the widened
+register using the stale negative range marker.
+
+In addition, when the backedge reaches the loop header, bpf_clamp_scev_regs=
+()
+sets rcur->range to 0 via max(entry_reg->range, 0) while the widened header
+state still has rold->range < 0, causing regsafe() in kernel/bpf/states.c to
+reject state pruning at the loop header:
+
+kernel/bpf/states.c:regsafe() {
+	...
+	if (rold->range < 0 || rcur->range < 0) {
+		/* special case for [BEYOND|AT]_PKT_END */
+		if (rold->range !=3D rcur->range)
+			return false;
+	}
+	...
+}
+
+>  		err =3D bpf_set_reg_range(env, reg, bounds.r64, bounds.r32,
+>  					bounds.base, bounds.step);
+
+[Severity: Critical]
+Can preserving entry_reg->range across bpf_set_reg_range() here (and in
+bpf_widen_scev_regs()) allow out-of-bounds packet reads and writes past
+pkt_end when bounds.step tightens reg_umax(reg)?
+
+In find_good_pkt_pointers(), comparing a derived packet pointer against
+pkt_end sets reg->range =3D reg_umax(dst_reg), and check_packet_access() ->
+check_mem_region_access() allows accesses of size bytes when
+reg_umax(reg) + off + size <=3D reg->range. As seen in commit b88822d2584f
+("bpf: Fix packet range of pointers sharing an id"), tightening the umax of=
+ a
+packet pointer via var_off alignment while keeping its range is unsafe.
+
+Before a counted loop, a packet pointer can have an unaligned umax paired w=
+ith
+an aligned var_off and step =3D=3D 1:
+
+  r4 &=3D 0x38
+  if r4 > 50 goto exit      ; r4: r64=3D[0, 50], var_off=3D(0x0; 0x38), ste=
+p=3D1
+  r6 =3D pkt_data
+  r6 +=3D r4                  ; r6: pkt(id=3D1, r=3D0, r64=3D[0, 50], var_o=
+ff=3D(0x0; 0x38), step=3D1)
+  r5 =3D r6
+  r5 +=3D 8                   ; r5: pkt(id=3D1, r=3D0, r64=3D[8, 58], var_o=
+ff=3D(0x0; 0x78), step=3D1)
+  if r5 > pkt_end goto exit ; r6: pkt(id=3D1, r=3D58, r64=3D[0, 50], var_of=
+f=3D(0x0; 0x38), step=3D1)
+
+When entering or clamping a 2-iteration loop (max_header_count =3D 2) that
+increments r6 by 8 (slope =3D 8), linear_bounds() in kernel/bpf/scev.c comp=
+utes
+bounds.r64 =3D [0, 58] and promotes tnum_alignment(entry_reg->var_off) into
+bounds.step:
+
+kernel/bpf/scev.c:linear_bounds() {
+	...
+	if (cnum64_is_const(reg->r64) && !overflow) {
+		out->step =3D slope_abs;
+		out->base =3D imod(reg_smin(reg), out->step);
+	} else {
+		out->step =3D 1u << min_t(u32, tnum_alignment(reg->var_off), __ffs(slope_=
+abs));
+		out->base =3D 0;
+	}
+}
+
+Here bounds.step becomes 8. Calling bpf_set_reg_range() -> reg_bounds_sync()
+-> __update_bounds_from_step() -> cnum64_intersect_linear() then rounds
+reg_umax(reg) down from 58 to 56 while reg->range remains 58 (and similarly
+rounds [0, 50] down to [0, 48] with range =3D 50 for a negative slope r6 -=
+=3D 8).
+
+At runtime, if r4 =3D=3D 48 and pkt_len =3D=3D 56, on the second iteration =
+r6 reaches
+pkt_data + 56 =3D=3D pkt_end, but check_packet_access() will permit a 2-byte
+access at r6 + 0 because reg_umax(reg) + 2 <=3D 58.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027190314.1440=
+199-1-alexei.starovoitov@gmail.com?part=3D14
