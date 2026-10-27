@@ -1,57 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793114836;
-	b=yjm+6ij7/GBeAde7t8y9ghdaBfjWQ13BZLYgJZZai5qTWnVGPK1tuh4DNwJ4QR2JoDmB
-	 /l6h4BxBT9Z1kHfKscT1N7GTTRJAp9P+qXwx+KwUSQl28/UqujAlOlOwh+yZQbNrcaUoS
-	 w3H17evLIFfutN+e8PlRsx0hnEMQjnMl61l+Dtyz4mRU0VO3dcX0hi2EoZ0TkMTqpg1I3
-	 dS8EMV+UPsW6OiteREf2mWWpo8CoEUShd650+Ew87vtWirT26jBKTELGMeFZVGj8nTOVH
-	 Mn+scl3kXdYZPBbhDkSQtNxHWSo7OjdLF5ihy8EAyfvhC5MSXWLVyZ9c0/XC1SA84Kg==
+	t=1793115510;
+	b=NB66UjMNv4dfkTZUGmEUKzG2JcuRoGSZwB1nc7HR0GqRjZD17CqiCOAyafR/vUBRWUN9
+	 hPLeKIjYovm5KslLwTDnMc53LBFqrSykNcl0YEQaQIY4FoNjHRBR4JUROVC/ApxlPlWUY
+	 d9WU5CUxBf8YQFh+mqqP9oyRT2vALN39jIpIUQp3o4U+g8jZrzFwZuaajjk5BknMonu5v
+	 gTK1TPqNDaMm6MLbkB76YmQgxbr7ho/1FBYFHG8zkIdbpbxblzUaob3nvpxxX4QQk+pLD
+	 x7OlrufvMLsrXNbdHzu8ZMRU5+jUnXjSnHIKkGzV+BEeU2JsmwYvEutyqpTgbCDtxsw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793114836;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=3Kugn4FylwABJ5llnTbzWYENzG7rdv6plsE22DSTsGM=;
-	b=sICmthV1oiDqYpXgvS8UeuqDQoLnvCGjdTWJy/QmSJeOyDc6olrb8wVV1/Rg2jr4sHSV
-	 +a5TMV0AnG6FnOaT4kN7os9Zz7MJvfnFSQaIJ/+kBNC9WQ6dna17cxPdP2i7zICRDxaPn
-	 nqhGwvEljNIEvPFX30VUYLUj5e8lmhBv24HvUHulO5uYtFL7/vxUYyJ+t2h8XUuxp8XGR
-	 BBlCbXuWmj9rjL4Wh7OcZBdVfYN1LAbGkSLbzLHll/oNGUCma9fdPUGiCmNgxZEIrDrsV
-	 B600ob+BDzfUB2hOXdhKbM08Lz8FObT5SsI0zLeuZVd23C+ocHiC1N10WE6ZEnftaqw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793115510;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=P4QDwDejSsPjI6QsC7K2e4l+YE6idf6liU1KvYAti6A=;
+	b=v6WpV/E4FiSHEu8weAE9ogXFOtccFnxrFs91FNr7nd6qR+/RbzjlYUHJb2AWcsFL3gwS
+	 re77p6cYEA3NRjfEz7Yp4PY3jFBqnTm7LbZeRbMuhOH2FMvKJKQHmFbbZKMP2hYW2vPkD
+	 iK9oRuRMrFLGU+AmRiSxX4Jglp1Fw7AVivgY17z5eX4cNAWfMmnQ/QSjCiPOO1+3AabRk
+	 NuYoQRGc8HzY/a3VZIVbxmtGFaMCJHvglxCVD4E7KnmYL5cSU75qMdnIit3W2vRemdSx8
+	 DzyfK8P/SOLvM4bCb01UVS+MbdMl2URWSh3MiUnQHlGEkqRrMgDDVx4uc7PXfrydtqw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ep2rf2wW;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n3PnWGSE;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51887606A31B
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 15:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DFF606A31B;
+	Tue, 27 Oct 2026 15:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ep2rf2wW
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27711F01828;
-	Tue, 27 Oct 2026 15:27:15 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=n3PnWGSE
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E4A1F01825;
+	Tue, 27 Oct 2026 15:38:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793114836;
-	bh=3Kugn4FylwABJ5llnTbzWYENzG7rdv6plsE22DSTsGM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ep2rf2wWkM3saBfdCgKMiQHg6Cji/gB/t/VAAk5+5OtOC0O3V1bQmBVR8cPmv7/J+
-	 tAIc26Ovy4th0+NWqbkEneyTXs/KaT8crYbNPpfD+uF3OOyFz0EwlPxKbr3lwCKIzZ
-	 37+RkEdKVU0tzGbSDQYvWrdjU50KXBSRyQpnWoIqSy9pqW2j0zSE5GHyeuueT6dDhf
-	 Kz0/q+XrqLr7eiY5AR4jak6RIutpGXqWrKCPdn2h/C3zufBKELYH3h6DN8xC3sWPA4
-	 t8d0lw9S+vnzYiMozBukRhz+1n1i9TsTOVNUI4DalPP77VFgEBytNlkkHCIA153/8L
-	 0YOUa2MTaKjYw==
-Message-ID: <sashiko-outbox-186833@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/1] net: stmmac: rebuild RX descriptors before
- restarting DMA on resume
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Thomas Bourgoin" <thomas.bourgoin@foss.st.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20261027150556.51209-2-thomas.bourgoin@foss.st.com>
-References: <20261027150556.51209-1-thomas.bourgoin@foss.st.com>
- <20261027150556.51209-2-thomas.bourgoin@foss.st.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 Oct 2026 15:27:15 +0000
+	s=k20260515; t=1793115509;
+	bh=P4QDwDejSsPjI6QsC7K2e4l+YE6idf6liU1KvYAti6A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=n3PnWGSEy63TkshTbN+NH8Lz7qKC2SA8BzUpk+tmV1MeonlnzUWDIuBkzYaozxT3Z
+	 TJuesb05R2Pm5JRavby+Id3CDOR+kOvkFdCodgze+hSIFOYNb0H3jPFqCe8pAWDr+h
+	 QV0ABQe5oaV3oQvreewvONhUys5vgEHtAqlstJ/rjTPZYP0XClTFKPjezt4pZtzYPy
+	 F1cnDPPZQYxciQ7wC+9ibZoYSUUWqMclFS2Ymoq0Ma232n5JNGXX3/RYFcSWnSS7Ai
+	 ppF8o8avIYgpka5fUBCD16Z1rhQ9NYdLIYFPlOzOV36IyZnqZg4rOn9rcyDk8FbuTn
+	 WeSaUXLtumYBA==
+Date: Tue, 27 Oct 2026 15:38:20 +0000
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, oleg@redhat.com, peterz@infradead.org, 
+	mhiramat@kernel.org, jolsa@kernel.org, akpm@linux-foundation.org, liam@infradead.org, 
+	surenb@google.com, david@kernel.org, vbabka@kernel.org, jannh@google.com, 
+	hughd@google.com, kees@kernel.org, mingo@redhat.com, tglx@kernel.org, 
+	x86@kernel.org, linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 6/9] uprobes: Don't sleep on mmap_lock with
+ dup_mmap_sem held in dup_mmap()
+Message-ID: <auDApO7ECoVLs-Jp@gremlin>
+References: <20261022015712.1297331-1-alexei.starovoitov@gmail.com>
+ <20261022015712.1297331-7-alexei.starovoitov@gmail.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -60,189 +62,193 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261022015712.1297331-7-alexei.starovoitov@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] net: stmmac: stmmac_resume_descriptors() fails to restore chai=
-ned des3 links
-- [High] net: stmmac: stmmac_resume_rx_descriptors() fails on empty or part=
-ial XSK pool
-- [Medium] net: stmmac: stmmac_init_rx_buffers() ignores flags and uses GFP=
-_ATOMIC
---
-
-commit 8d3c0459b1ad22247b62f5f4182ad5e15b2eab5d
-Author: Thomas Bourgoin <thomas.bourgoin@foss.st.com>
-
-net: stmmac: rebuild RX descriptors before restarting DMA on resume
-
-This commit reconstructs RX descriptors and restores their DMA buffer
-addresses during system resume before clearing descriptors and restarting
-DMA, preventing the DMA engine from treating write-back status fields as
-buffer addresses.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 9ded31150fbe6..198629265c904 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-
-[ ... ]
-
-> @@ -8425,6 +8414,63 @@ static void stmmac_reset_rx_queue(struct stmmac_pr=
-iv *priv, u32 queue)
->  	rx_q->dirty_rx =3D 0;
+On Thu, Oct 22, 2026 at 01:57:09AM +0000, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> dup_mm() takes dup_mmap_sem for reading and then dup_mmap() sleeps on
+> mmap_lock of the parent. When another thread keeps that mmap_lock busy
+> register_for_each_vma() waits for the reader, and every other fork() in
+> the system waits for the writer. The parent doesn't have to map the file:
+>
+>   A thread 1:  mmap(MAP_POPULATE) -> mmap_read_lock(A)
+>   A thread 2:  fork() -> percpu_down_read(&dup_mmap_sem),
+>                mmap_write_lock_killable(A) sleeps
+>   tracer:      percpu_down_write(&dup_mmap_sem) sleeps
+>   others:      fork() -> percpu_down_read(&dup_mmap_sem) sleeps
+>
+> dup_mmap() needs both locks. Don't sleep on one of them while holding
+> the other. Sleep on mmap_lock and trylock dup_mmap_sem. If that fails sleep
+> on dup_mmap_sem and trylock mmap_lock, and so on. Taking mmap_lock and then
+> sleeping on dup_mmap_sem is simpler, but then all threads of the parent
+> wait for mmap_lock as long as the writer holds dup_mmap_sem.
+>
+> Both are taken in dup_mmap() now, so release dup_mmap_sem there too.
+> Commit 8ac662f5da19 ("fork: avoid inappropriate uprobe access to invalid
+> mm") moved that to dup_mm() to hide the child from uprobes until mmput()
+> when dup_mmap() fails. Since commit 43873af772f8 ("mm: change dup_mmap()
+> recovery") dup_mmap() removes all vmas of such child before it drops
+> mmap_lock.
+>
+> dup_mmap_sem is released before dup_userfaultfd_complete(), so the monitor
+> that doesn't read UFFD_EVENT_FORK no longer blocks every fork(). During
+> that wait register_for_each_vma() can find the child, while no task points
+> to its mm. The next patch deals with that.
+>
+> Thread 1 of process A loops over mmap(4G, MAP_POPULATE) and munmap().
+> Thread 2 calls fork() in a loop. Nobody maps the file. Process B calls
+> fork() in a loop. 32 cpu VM. Median (max) of 15-25 runs, msec:
+>
+>                          the longest fork() in B    attach
+>                          before      after          before  after
+>  uprobe_multi, 1 uprobe  206 (219)   0.10 (0.30)       220   11.7
+>  uprobe_multi, 4 uprobes 208 (428)   0.08 (0.32)       219   13.5
+>  perf_event, 4 uprobes   419 (424)   0.10 (0.44)       632   11.4
+>
+> During detach: 265-293 -> 0.19-0.37.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+>  include/linux/uprobes.h |  5 +++++
+>  kernel/events/uprobes.c |  5 +++++
+>  kernel/fork.c           |  4 ----
+>  mm/mmap.c               | 19 +++++++++++++++++--
+>  4 files changed, 27 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
+> index d34dbc0fbbfe..6d74efa80d04 100644
+> --- a/include/linux/uprobes.h
+> +++ b/include/linux/uprobes.h
+> @@ -211,6 +211,7 @@ extern void uprobe_unregister_sync(void);
+>  extern int uprobe_mmap(struct vm_area_struct *vma);
+>  extern void uprobe_munmap(struct vm_area_struct *vma, unsigned long start, unsigned long end);
+>  extern void uprobe_start_dup_mmap(void);
+> +extern bool uprobe_try_start_dup_mmap(void);
+>  extern void uprobe_end_dup_mmap(void);
+>  extern void uprobe_dup_mmap(struct mm_struct *oldmm, struct mm_struct *newmm);
+>  extern void uprobe_free_utask(struct task_struct *t);
+> @@ -277,6 +278,10 @@ uprobe_munmap(struct vm_area_struct *vma, unsigned long start, unsigned long end
+>  static inline void uprobe_start_dup_mmap(void)
+>  {
 >  }
-> =20
-> +static int stmmac_resume_rx_descriptors(struct stmmac_priv *priv,
-> +					struct stmmac_dma_conf *dma_conf,
-> +					u32 queue)
+> +static inline bool uprobe_try_start_dup_mmap(void)
 > +{
-> +	struct stmmac_rx_queue *rx_q =3D &dma_conf->rx_queue[queue];
-> +	int i;
-> +	int ret;
-> +
-> +	for (i =3D 0; i < dma_conf->dma_rx_size; i++) {
-> +		struct dma_desc *p =3D stmmac_get_rx_desc(priv, rx_q, i);
-> +		struct stmmac_rx_buffer *buf =3D &rx_q->buf_pool[i];
-> +		dma_addr_t dma_addr;
-> +
-> +		if (rx_q->xsk_pool) {
-> +			if (!buf->xdp) {
-> +				buf->xdp =3D xsk_buff_alloc(rx_q->xsk_pool);
-> +				if (!buf->xdp)
-> +					return -ENOMEM;
-> +				}
-> +			dma_addr =3D xsk_buff_xdp_get_dma(buf->xdp);
-> +			stmmac_set_desc_addr(priv, p, dma_addr);
-> +			stmmac_set_desc_sec_addr(priv, p, 0, false);
-
-[Severity: High]
-Can this break resume when an AF_XDP zero-copy pool is attached with an
-empty or partially populated fill ring?
-
-In __init_dma_rx_desc_rings(), an unpopulated XSK pool (such as TX-only
-xdpsock) is explicitly allowed:
-
-drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:__init_dma_rx_desc_rings(=
-) {
-	if (rx_q->xsk_pool) {
-		/* RX XDP ZC buffer pool may not be populated, e.g.
-		 * xdpsock TX-only.
-		 */
-		stmmac_alloc_rx_buffers_zc(priv, dma_conf, queue);
-	}
-}
-
-Similarly, if RX frames were consumed in stmmac_rx_zc() before suspend
-(setting buf->xdp =3D NULL) and the frozen userspace fill ring has fewer th=
-an
-dma_conf->dma_rx_size buffers available, xsk_buff_alloc() returns NULL.
-
-Returning -ENOMEM here causes stmmac_resume() to abort at error_unlock,
-skipping stmmac_hw_setup(), stmmac_enable_all_queues(), and
-netif_device_attach() while netif_running(ndev) remains true. Because
-stmmac_suspend() already called stmmac_disable_all_queues(), leaving NAPI
-disabled on a running interface causes a subsequent stmmac_xdp_disable_pool=
-()
-or stmmac_release() to call napi_disable() a second time and hang under
-rtnl_lock().
-
-Additionally, stmmac_resume_rx_descriptors() does not update
-rx_q->buf_alloc_num, which stmmac_hw_setup() -> stmmac_init_dma_engine()
-uses to program the hardware RX tail pointer and
-stmmac_set_queue_rx_buf_size() uses to select
-xsk_pool_get_rx_frame_size(rx_q->xsk_pool).
-
-> +		} else {
-> +			ret =3D stmmac_init_rx_buffers(priv, dma_conf, p, i,
-> +						     GFP_KERNEL, queue);
-> +			if (ret)
-> +				return ret;
-> +		}
-> +	}
-
-[Severity: Medium]
-Here GFP_KERNEL is passed as the flags argument to stmmac_init_rx_buffers(),
-but does stmmac_init_rx_buffers() actually honour the caller's flags?
-
-Looking at stmmac_init_rx_buffers() in
-drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:
-
-static int stmmac_init_rx_buffers(struct stmmac_priv *priv,
-				  struct stmmac_dma_conf *dma_conf,
-				  struct dma_desc *p,
-				  int i, gfp_t flags, u32 queue)
-{
-	struct stmmac_rx_queue *rx_q =3D &dma_conf->rx_queue[queue];
-	struct stmmac_rx_buffer *buf =3D &rx_q->buf_pool[i];
-	gfp_t gfp =3D (GFP_ATOMIC | __GFP_NOWARN);
-
-It ignores the flags parameter and forces GFP_ATOMIC | __GFP_NOWARN for both
-buf->page and buf->sec_page allocations, preventing direct reclaim during
-resume and risking avoidable -ENOMEM failures under memory pressure.
-
-> +
-> +	return 0;
+> +	return true;
+> +}
+>  static inline void uprobe_end_dup_mmap(void)
+>  {
+>  }
+> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+> index a9274016c55d..92ccb730278f 100644
+> --- a/kernel/events/uprobes.c
+> +++ b/kernel/events/uprobes.c
+> @@ -1927,6 +1927,11 @@ void uprobe_start_dup_mmap(void)
+>  	percpu_down_read(&dup_mmap_sem);
+>  }
+>
+> +bool uprobe_try_start_dup_mmap(void)
+> +{
+> +	return percpu_down_read_trylock(&dup_mmap_sem);
 > +}
 > +
-> +static int stmmac_resume_descriptors(struct stmmac_priv *priv,
-> +				     struct stmmac_dma_conf *dma_conf)
-> +{
-> +	u32 rx_queue_cnt =3D priv->plat->rx_queues_to_use;
-> +	u32 tx_queue_cnt =3D priv->plat->tx_queues_to_use;
-> +	u32 queue;
-> +	int ret;
+>  void uprobe_end_dup_mmap(void)
+>  {
+>  	percpu_up_read(&dup_mmap_sem);
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 10f2d05d816a..8fd6be932afe 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -1539,11 +1539,9 @@ static struct mm_struct *dup_mm(struct task_struct *tsk,
+>  	if (!mm_init(mm, tsk))
+>  		goto fail_nomem;
+>
+> -	uprobe_start_dup_mmap();
+>  	err = dup_mmap(mm, oldmm);
+>  	if (err)
+>  		goto free_pt;
+> -	uprobe_end_dup_mmap();
+>
+>  	mm->hiwater_rss = get_mm_rss(mm);
+>  	mm->hiwater_vm = mm->total_vm;
+> @@ -1558,8 +1556,6 @@ static struct mm_struct *dup_mm(struct task_struct *tsk,
+>  	mm->binfmt = NULL;
+>  	mm_init_owner(mm, NULL);
+>  	mmput(mm);
+> -	if (err)
+> -		uprobe_end_dup_mmap();
+>
+>  fail_nomem:
+>  	return NULL;
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 4bf26b0f1e6e..6ce654e33e3b 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1713,8 +1713,22 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+>  	LIST_HEAD(uf);
+>  	VMA_ITERATOR(vmi, mm, 0);
+>
+> -	if (mmap_write_lock_killable(oldmm))
+> -		return -EINTR;
+> +	/*
+> +	 * Take mmap_lock of oldmm and dup_mmap_sem of uprobes.
+> +	 * Don't sleep on one of them while holding the other.
+> +	 */
+> +	for (;;) {
+> +		if (mmap_write_lock_killable(oldmm))
+> +			return -EINTR;
+> +		if (uprobe_try_start_dup_mmap())
+> +			break;
+> +		mmap_write_unlock(oldmm);
 > +
-> +	for (queue =3D 0; queue < rx_queue_cnt; queue++) {
-> +		ret =3D stmmac_resume_rx_descriptors(priv, dma_conf, queue);
-> +		if (ret)
-> +			return ret;
-> +
-> +		stmmac_clear_rx_descriptors(priv, dma_conf, queue);
+> +		uprobe_start_dup_mmap();
+> +		if (mmap_write_trylock(oldmm))
+> +			break;
+> +		uprobe_end_dup_mmap();
 > +	}
-> +
-> +	for (queue =3D 0; queue < tx_queue_cnt; queue++) {
-> +		dma_free_tx_skbufs(priv, &priv->dma_conf, queue);
-> +		stmmac_clear_tx_descriptors(priv, dma_conf, queue);
-> +	}
-> +
-> +	return 0;
-> +}
 
-[Severity: Critical]
-When priv->descriptor_mode =3D=3D STMMAC_CHAIN_MODE and IEEE 1588-2002
-timestamping is enabled without extended descriptors (!priv->extend_desc
-with priv->hwts_rx_en or priv->hwts_tx_en), doesn't the hardware overwrite
-p->des3 with the upper 32 bits of the timestamp on descriptor write-back?
+This isn't beautiful :)
 
-In drivers/net/ethernet/stmicro/stmmac/chain_mode.c, refill_desc3() and
-clean_desc3() note that the device overwrites des3 with a timestamp value:
+As David says, we have an incoming fix that moves things around, i.e. this will
+no longer actually live in dup_mmap() but rather dup_mm() [which, by the by, I
+do want to move into mm], but that'd just move this there i guess?
 
-static void refill_desc3(struct stmmac_rx_queue *rx_q, struct dma_desc *p)
-{
-	struct stmmac_priv *priv =3D rx_q->priv_data;
+I'm concerned by what Jann says re: a livelock here though. I'm not sure this
+should be unbounded, and fork is a super-sensitive time for mm.
 
-	if (priv->hwts_rx_en && !priv->extend_desc)
-		/* NOTE: Device will overwrite des3 with timestamp value if
-		 * 1588-2002 time stamping is enabled, hence reinitialize it
-		 * to keep explicit chaining in the descriptor.
-		 */
-		p->des3 =3D cpu_to_le32((unsigned int)(rx_q->dma_rx_phy +
-				      (((rx_q->dirty_rx) + 1) %
-				       priv->dma_conf.dma_rx_size) *
-				      sizeof(struct dma_desc)));
-}
+I would feel more comfortable with it if it were bounded, and really it'd be
+nice if this was abstracted into its own function too rather than something
+open-coded.
 
-If an RX or TX descriptor was written back before suspend without being
-cleaned by NAPI, p->des3 still holds the timestamp rather than the next
-descriptor's physical DMA address. Neither stmmac_resume_rx_descriptors(),
-stmmac_clear_rx_descriptors(), nor stmmac_clear_tx_descriptors() calls
-stmmac_mode_init() (as __init_dma_rx_desc_rings() and
-__init_dma_tx_desc_rings() do) to restore the chained des3 pointers when
-priv->descriptor_mode =3D=3D STMMAC_CHAIN_MODE. Could the DMA engine then
-fetch the next descriptor from the timestamp address after resume?
+Do you have numbers on how many loops you are usually observing? Could you get
+most of the way there by just doing a trylock on uprobe before trying to take
+the mmap write lock?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027150556.5120=
-9-1-thomas.bourgoin@foss.st.com?part=3D1
+I mean if 99% of the time you only need 1 iteration, for example, then the fix
+looks a lot more sensible.
+
+All in all it feels a bit egregious for core mm to be held hostage to uprobe
+like this, isn't a better fix possible? Does uprobe actually need to exclude
+fork, or could it just eat the cost of checking to see if something forked
+since?
+
+>  	flush_cache_dup_mm(oldmm);
+>  	uprobe_dup_mmap(oldmm, mm);
+>  	/*
+> @@ -1883,6 +1897,7 @@ __latent_entropy int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
+>  	mmap_write_unlock(mm);
+>  	flush_tlb_mm(oldmm);
+>  	mmap_write_unlock(oldmm);
+> +	uprobe_end_dup_mmap();
+>  	if (!retval)
+>  		dup_userfaultfd_complete(&uf);
+>  	else
+> --
+> 2.55.0
+>
+
+--
+Cheers, Lorenzo
