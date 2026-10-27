@@ -1,74 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.198
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.89
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793077228;
-	b=rPVq/Gu9w37s8BimrViB3BalMt7fFr0xZ2SUnxxBrIO7ibBSIHbdt2liApeDypiTNyHt
-	 CRs6PBpI1FCvsUwkI6hhdM+gANdmEkOFXVRHGnqeEiayC/pIjvqD4Kmje20p9Jl88BJy6
-	 Pz1inkOjNqOuCpOaCnPFMfZL2XaVNbUjkm2Kod/2rv3Jskdfqr3zQY+wMDcr2e0K9WZ+E
-	 flTBDerNmD8jSmAb5iY8CODk5/fNj7rvTrNcBRUiQz/MNWl17HoyymrmlOWhWnvWRkzVs
-	 eU2Xve3XoxVB1Fw9BMFka/+xy9rWzg2R1kmzzC7FXjZe+0MrugUQI2qHWPfbgnrsDFA==
+	t=1793077689;
+	b=RzzTiL2xaRZZ4fnPLGGb2d+BjTdHWcXlpAFrbtvqs7OOGqoCypiYBYMnbOWsa4iZTIAg
+	 Zvkd0mO16JFSF0I4bN052/yQa77ZykmO5y4i5uUwkTxUSGxCV7kwVcYhP/4q0mYEhjPYA
+	 qUwc4VIM+Xd37Tt7hHvP28EXrkvBTuuKLwILfZCUIMNaze7d+qhA8wvbiAp03Et6Ck2QK
+	 B+PI8d8bctYfJYlKo1RQlY1YHkxwVQudTxS03uHk+/VRkoRoqWDFl+sQhos2L3QOSZgdU
+	 eQpccgiMq48hSg4hNcw0tKYB8rImf11AurnyPzFWfHqlHk58n2qJ/sa12yQTIn0HMGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793077228;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=VKlzwEOGjd3COIGAE0R3tUx4IhOQwWvT6uNl6vvO1FU=;
-	b=gPbEvdz7fBBMJZd61w7PE3fhvnMnJt+sP31Ui2hSc/3yIXYwZzDWzhUucWqQWsv/zUrn
-	 ktMHk1j8Ph1IG1bLxbMPShpfdANr5ad5o4ZWSsm2V8TI+sE/wOWYAVRkDs2crdW6PuO9g
-	 doD0EKpusnpguQY9DCaeXYqmLlPIsIzmO/yK4xjKft1QrvoXvb3e/cfxM0L68tBnR50xi
-	 4jU/xoIM/UZ6HrJxkRfjHF37dU0cvrupk8UXxp+WVag8yJAe1htEA2gikQ+JZYYykGYds
-	 daKRKoRDI05i/IVX8b44GBcxIQFwE42Yv9a6aojWbvn5bhUKM8lcTj+YByy1sAHeo8w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793077689;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=fBiWcffgRvlI52+Wg0fa2gGufwTKUt42iG8au1rmOOQ=;
+	b=pE2Fu72vxOfRgQjaZwWOc14JkRbXcMxCqr+iSwTQq6Wm+2Iw+6CgKNhilII6FiXkLD5i
+	 N+oG0ar7j5FGY+WTDvqXsiD0BLxVGsznEGWhjozDwveEZaag+2H+bVf80wxj7LVg6XV3+
+	 iiJGmJCC7k3EF26pISEUDEwFKc9vwqUNvNYgBoflXikJNGnRZDD7gwheL5UJhwp6UFnMM
+	 tzUaDReGSNInUkQTo+r30wx8VR15/7Or8/Wm/90g65ybDo1lyiNCfMfAD2/0I8Vm+9mh8
+	 Ow6CP7MpMvzgluNguwjB8j3GS0QytPPu0Lg6EnlKZFpIKLej3ilqjJtN2R1xa++VhkA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=VHMy86sm;
-	arc=none smtp.remote-ip=209.85.214.198
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iYwKO9CN;
+	arc=none smtp.remote-ip=91.218.175.89
+Received: from mta0.migadu.com (out-89.mta0.migadu.com [91.218.175.89])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD9E606A31B
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 05:00:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DFD9E606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5145606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 05:08:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5145606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=VHMy86sm
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2e60770381cso36811215ad.0
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 22:00:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1793077227; x=1793682027; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VKlzwEOGjd3COIGAE0R3tUx4IhOQwWvT6uNl6vvO1FU=;
-        b=VHMy86smowF3rsQFe4WjOhKRk+rU/7dhV+NlV0rtV9NpvDmaiQHwh4r7HkYqPfFy1d
-         sNPYVEk0Xv/MWEcOna+Q6DPa8nrXy2IAesqttpdRKF7ndhEZR3RV50XYuOi+oDIal8+K
-         iKBJuS0yOTqi4PZ2S6KrxQLHWY1vuS0PtkHletoTYCjJXSHRhR3XMePS/SzoWrmpAWoV
-         HqmTA5g5UDh/NxZpaT6Pt7eVIQMqt9Pb8zTj2puLSpCYsQfoie7o3n6A4vnJ6pLsTro5
-         Fb2BTNhQwxZM93qKAk6Z+cnVNCWyhLt5UscPjndfKr0w1d3B/INqWUHqKLhEzmcBl0h/
-         ReBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793077227; x=1793682027;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VKlzwEOGjd3COIGAE0R3tUx4IhOQwWvT6uNl6vvO1FU=;
-        b=lkDbc3urXKl8f8JkL37aiSV3OY9BC03Snn3zRkiWMDDQqxOa2yo6k4qpEN6Sadxxln
-         k3ZXzxkjLlxTJFhqdcPCzw01kRzSDGyQ+WxjiIQU30gB74xirT6XLzik/H9EGjj7wCbr
-         WnOVb1dtdIEaFHA+M6ZUKyhNspp9UwzkDrgZhVfgexw5ulKSgPh1DLOsIv/ShnJSUS18
-         JfA3VK0TNiT0tALJmUhWtMaJFr0dv2X7sjQ6x1vwvxqJZQp86Iy3wsgT3Il/6XckeLUN
-         Y8MMoHex/zuhwm0NB6TMaxQ3mbsilvXhSZTnsknsSS0YDOmgpAIyJ0mliuZhnR97n1Q8
-         HnFQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx+uwU8j/YmIuDEOriRilRCdm9AmHs18bj5P4at/ddfI64TWjECF04uJPEGbXu2Xwy9nkM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLQhq6Xk0c5OfvyGq1lAGtbwlrb8XYbKUl2HGYzs5iPEw7GVF3D
-	qUFQNhC/jcwrsJSP1d2rEuLGT+oeL7NDck1Z9u9o0EufaD+8xP3sGb14nuoNakjXfpUHYhxXPCA
-	0JKvYEw==
-X-Received: from plhv13.prod.google.com ([2002:a17:903:238d:b0:2e5:6ae7:d701])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1a2b:b0:2e9:64b9:a330
- with SMTP id d9443c01a7336-2ea9c6c33f5mr81544755ad.11.1793077227063; Mon, 26
- Oct 2026 22:00:27 -0700 (PDT)
-Date: Tue, 27 Oct 2026 05:00:26 +0000
-In-Reply-To: <71c142b2d45af6a2fe7fc6cd4a5ca52c53afbe23.1793075984.git.zhilinz@nebusec.ai>
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=iYwKO9CN
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=GqnWk2kRqu+9UgZ+qMG/sXslOzm7NeB+4nFuZraWHMg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793077684; v=1; x=1793682484;
+ b=iYwKO9CNwul4lKbmvWp6XaHCn6J1C+sC6lcFkNVFfYkVeO9AgN2uO30C7M9JYzV2fgzwQi68
+ kQzil3TRwf1fYhMGuKogG1dnfcGY4MK7TcI97VwQAh7rqrvQS8UkjqexO4W44crNGSIbmm9XCUJ
+ lxcrerHWNBI6wnBS+7rZ+7Hs=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e7cf6db001b1daed;
+	Tue, 27 Oct 2026 05:08:04 +0000
+X-Mizu-Trace-ID: e7cf6db001b1daed
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <0e447293-7b70-4ce9-b5e4-ef9522da2de2@linux.dev>
+Date: Mon, 26 Oct 2026 22:08:00 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -77,38 +57,136 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <71c142b2d45af6a2fe7fc6cd4a5ca52c53afbe23.1793075984.git.zhilinz@nebusec.ai>
-Message-ID: <auAv3AoY0FkcXIEr@google.com>
-Subject: Re: [PATCH net v2 1/1] tcp: check congestion control restriction first
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Zhiling Zou <zhilinz@nebusec.ai>
-Cc: edumazet@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	ncardwell@google.com, davem@davemloft.net, pabeni@redhat.com, 
-	horms@kernel.org, jonathon.reinhart@gmail.com, vega@nebusec.ai
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 00/81] bpf: Stack in arena and a verifier that joins
+ states
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com
+References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
+ <fba239f1-febc-4af5-8033-a893f8265191@linux.dev>
+ <DMF6AVOBX25C.28Z0NJS6CEB3J@gmail.com>
+ <f9aee9b2-0010-44b2-afb4-0be3958b332c@linux.dev>
+ <DMF6R1UZUOG2.GSKI6FS2KJ1D@gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DMF6R1UZUOG2.GSKI6FS2KJ1D@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 27 Oct 2026 12:46:49 +0800, Zhiling Zou wrote:
-> tcp_set_default_congestion_control() takes a reference to an algorithm
-> before checking whether a non-init network namespace may select it. A
-> rejected request returns -EPERM without dropping the reference.
+On 2026-10-26 5:14 p.m., Alexei Starovoitov wrote:
+> On Tue Oct 27, 2026 at 12:04 AM UTC, Ihor Solodrai wrote:
+>> On 2026-10-26 4:53 p.m., Alexei Starovoitov wrote:
+>>> On Mon Oct 26, 2026 at 4:57 PM UTC, Ihor Solodrai wrote:
+>>>> On 2026-10-25 7:58 p.m., Alexei Starovoitov wrote:
+>>>>> From: Alexei Starovoitov <ast@kernel.org>
+>>>>>
+>>>>> The goal of this series is to load Rust programs as rustc and LLVM compile
+>>>>> them. These programs keep data, heap and address-taken locals in arena.
+>>>>> They use trait objects, recursion, unwinding, and loops that have no known
+>>>>> bound. The test programs are in https://github.com/4ast/rust-bpf
+>>>>>
+>>>>> The series has three parts:
+>>>>>
+>>>>>      patches  1-15   Fixes and a revert. They do not depend on the other
+>>>>>                      parts.
+>>>>>      patches 16-31   A stack in arena.
+>>>>>      patches 32-81   A verifier that joins states.
+>>>>
+>>>> Hi Alexei,
+>>>>
+>>>> Just FYI bpf-ci-bot AI review workflow is limited to 50 patches per series.
+>>>>
+>>>> The limit was set as a guardrail for commit selection logic (to not
+>>>> accidentally run review for 10k commits). I chose 50 because usually
+>>>> we ask people to break up long series into smaller reviewable pieces,
+>>>> and pre-singulariy >10 patches series would already raise questions.
+>>>>
+>>>> Since the approach to patch review on bpf list has obviously changed
+>>>> recently, what would you suggest as a new limit?
+>>>
+>>> I didn't know that there is such limit. I'm not sure there is a good limit.
+>>> Maybe whitelist it by known developers with commits?
+>>
+>> The purpose of the limit is to guard against unintentional blow up of
+>> compute and token cost. It's not infinite.
+>> Are there plans for 10k-patch series?
 > 
-> This affects module-backed algorithms too; BPF is not required. For
-> example, after root loads tcp_bbr, a user with CAP_NET_ADMIN in a
-> non-init network namespace can repeatedly request it as the default
-> although it is not in tcp_allowed_congestion_control. Each rejected
-> write leaks a module reference. Since module->refcnt is an atomic_t,
-> 2^31 such writes can make it negative; later module_put() calls warn,
-> and rmmod can hit the BUG_ON() in try_release_module_ref().
-> 
-> Check the namespace restriction before acquiring the reference, as
-> tcp_set_congestion_control() already does.
-> 
-> Fixes: 8d432592f30f ("net: Only allow init netns to set default tcp cong to a restricted algo")
-> Cc: stable@vger.kernel.org
-> Reported-by: Vega <vega@nebusec.ai>
-> Suggested-by: Eric Dumazet <edumazet@kernel.org>
-> Assisted-by: LLM
-> Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+> yes. they already exist.
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+It doesn't look like you are joking, so let's consider it seriously.
+
+I don't want to come off as too skeptical or critical. I'm just trying
+to be rational. These are difficult problems and there is a lot of
+uncertainty. So please bear with me.
+
+For the sake of argument, let's imagine a 10k-patch series that fixes
+multiple important problems which have to be addressed urgently.
+
+What is the logistics of landing it? Is it going to be posted to the
+mailing list?
+
+Is it expected for people to read the patches? (my guess is no, it's
+too slow)
+
+Is it expected to get independent AI assessments of every patch?
+Sub-sequences? Which ones? Only the whole series?
+
+Can today's SOTA AI "agent" systems even do that - analyse entire
+10k-patch series in one go without dropping any balls? Let's not
+speculate about future better AI, the series has to land *now*, no
+time to wait.
+
+And remember, the same AI with same root prompt can produce different
+results, depending on many factors. Should we run k-of-n or something?
+
+How long does it run? Does the infra to execute this exist?
+How much does it cost? Who pays the bills?
+
+How many independent AI-driven assessments should be done before the
+whole chain of (Linux) command is satisfied with the results and
+pulls the trigger? Pardon my unample metaphors.
+
+Who and how assesses the assessments?
+
+Is there enough confidence in today's AI capability, that these 10k
+patches are landable in the real world and won't create more new
+problems vs what they are fixing?
+
+These questions are just from the top of my head.
+
+There is of course an answer that kinda works: don't worry about most
+of the above, trust the AI output (the agents that generated patches
+*surely* tested them well) and just git push.
+
+But this is a "leap of faith" approach, and it requires for the vast
+majority of participants to be onboard, which doesn't seem to be the
+case yet if ever.
+
+If we are not doing the leap of faith, then the questions above need
+thoughtful answers, before anything approaching 10k-patch series can
+be seriously considered.
+
+If we are, well let's be explicit about it and stop pretending to do
+proper patch reviews (whether with AI or not).
+
+> 
+>> I'm sure we can come up with a reasonable limit for a "reviewable"
+>> series.
+> 
+> There are not reviewable by current infra.
+
+Correct. Current testing / review infra is not able to support regular
+100+ patches, let alone 10k. And that's bpf, which has a pretty good
+infra in comparison to other corners of the kernel.
+
+The questions are: how does the new infra look like, who builds it,
+and who pays for it? Is it even needed? As of today there are no
+answers.
+
+A proof of personhood in text communication hasn't been invented yet,
+so I'll do what I can:
+
+Typed-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
