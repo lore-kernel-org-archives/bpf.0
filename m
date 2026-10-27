@@ -1,82 +1,82 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793129065;
-	b=xe1XcLGSlzLBOLHMuGcx7hg3sI4FCWVTe2o9rAsv+jdVRmWhvjy5nLXkLbAURuKssyHk
-	 kNdHUDXmtGc8ABMAQPp7CB89527fWtHCPHz7ARUeq3DIYR7Jn/n5dsNauglS+eKfAN+lI
-	 9IUxBeqqt6op63KByCJXbE5gq9BnuJp4qdQbzMNrRfNBGnoiFu0WUSOYLkZc4aDSkFhza
-	 QyKSzgTgIRhFAbqA19ynY50s+BlR4AJdScPyHtJ8wrxR3ZeAebpHpH6Dp73AhbQh13TCy
-	 89D7/CjwzYkvXsP/wyGVbZeL/2M6mSX+OWUPbRsVAqazB8T0kJZ6EO5OoLC8XhHTVVg==
+	t=1793129069;
+	b=Fqxj8N/1xI4+E0GRmcp+WgSnmPHvdKJ4Vyqknz41Mfv9r3uxGbPmTHiaufB/G4/4eRLN
+	 LboHU8jB/BJ4BOxn9KrYOrHJac7RUysFThmgafo5vXSfHu4fQg0KPrfiyY9WyIdBNpXYk
+	 PQs1WrKmiIn5icCE22CoDK93WFJy0EqTH/zzcYRpGl4o5WvCsdfXO+SaBzyb6Ywd5IF1l
+	 EE83ITrt1+hJjjP/bAm6xMpgLS5Tw30wPW+W9+hRrkGOgSxuq8+BU92EoGSNjxhyr4hzH
+	 IhmT41hP1UEbPR6rfgR3IQIM1FywNR74YhePQ33RT/wZ5hRgUd1mUIfnZQ3iGS4SLvw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793129065;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793129069;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=naiD4iesaV5pH7Y3WTVOwbtKuOOtNqwIdyHwaDd61M0=;
-	b=nTsYBk5gSz6YxIu3y+ykrA5ogDPkCSlKWg1CExjqX4AwouQ1pKOyGYf2bk5n7jmqPfWL
-	 QGcp6IaoEEBkZCS3qneWr1shKNE12oLyowWYlul+mJ2T+GjiU+BK9dj/I1MW7JtziVeA1
-	 yJLBqxfTqr2SqmT7CYP1g/jv+kni/kmHNtL4fzUXZAQjOKjIXqGVIDSpyVpXJi/NFlRuO
-	 L7bNiAhOnFcCmZ19O7NCaaKucXc3gY6crpGQoGG8eRlCYw5tES1cfw3U4fdVt7qSX4joP
-	 BVpYbaCiEDAvWyUbbTo8Vk9t2Q4oDOuEyRwLuh/HzO517J/laEwqJe1ktcUFRJxeobw==
+	bh=lmNt8UHMJZ1LwZOmio/ru6CKGlng7+kmKVOojz71M+A=;
+	b=Och2K6Tmw0hj5248WVPg1tolT68IJwenYk5BjwWStxwMfOPLPvJK18rxGykY9zgfaD15
+	 qTpoad6YqJdikFHUQ0e8KhrrfOIodsfbMAPDrWt0axwWhTQHaf9jyD7CnJ0ru7M2SrxAl
+	 hCD4ldhsJ791lbAsQcgX07VTRvOf5AAK6Dn9MpxrGR2d56dv0+uQcimCaNH0P09zeEzv+
+	 nBNd2ozli1+sqkFnrDX+THUaeHO0/yhBl47zJGlbaM+h1qd/LilNWlfEa1cPKOKbFzcnH
+	 LOk130QJK74OxxrBSmwtgbz3lE+sryInBc0J7iqux4wRyULQhIGml4N/9fAjKUGWV5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=etsalapatis.com;
 	spf=pass smtp.mailfrom=etsalapatis.com;
-	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=NtFZSfMV;
-	arc=none smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dkim=pass header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Sq9DV9HW;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC466606A31D
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:24:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org CC466606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 477C4606A327
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:24:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 477C4606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=NtFZSfMV
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a214af2076so2029685e9.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:24:24 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=etsalapatis.com header.i=@etsalapatis.com header.a=rsa-sha256 header.s=google header.b=Sq9DV9HW
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a2167bd087so1790815e9.3
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis.com; s=google; t=1793129063; x=1793733863; darn=vger.kernel.org;
+        d=etsalapatis.com; s=google; t=1793129067; x=1793733867; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=naiD4iesaV5pH7Y3WTVOwbtKuOOtNqwIdyHwaDd61M0=;
-        b=NtFZSfMVupjp/ncL2LlulPmDsbLKRtwI5J0yj+1FzsxtSMscly14XlKmbe0pnJIrrG
-         90Sk70sqgZKXN85UO3hbWQheWHq6T1R/feMYLPf49pHshOjz2qbgw4T3rYiWN1168Jm1
-         FEx5aQfXViBRdDuRKHPBKBgRGsgmerBfhnfQ0qXRlHqUZTUPYaSWvOlU8XeziQ1QGiUQ
-         1CCacOdvkAkYjYMMCpeOOMOjEbDHFjXVfZq3JiX6V7Eip0V4we+QuoDqg/jzUlCeoJpA
-         ao5/pwX7N8vaJuM3LQnnnpOXtmkVkOTmvOBusGoUR7KBySR3ql9NrFYoCM/JwaUkRG7B
-         ihwA==
+        bh=lmNt8UHMJZ1LwZOmio/ru6CKGlng7+kmKVOojz71M+A=;
+        b=Sq9DV9HWlxYeRwxRg6lsRdjjUcUmmZPBSNtrkEdTPpxfx4b28MLjk/bgF34+zb5Nrr
+         IbG78hiCO/6Z00oGElUdUe+FGpacX5QsrDbQjmlhOZ1DFB13AyFeBSYkDVr6AqTD0Xqw
+         2utoyID/pUOWc3TKUxBoJiUPFSsSL0Tg5XfclBjxvMmtfdu2PFjXAhlMVBi25z2OCqFy
+         ih4s1MXPjNOvCl5WFe2u9nS2etjc9B32H0HlHZb1rC6YPKw4hnaC/I8kbJBB0Jyvw2jO
+         A5ULEHud5NMl9UBC3p7uov/31xGCa/MYGZaOnGlQQ6umGfM28nMf0Eu6m9i0qwRl7XxP
+         fBgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793129063; x=1793733863;
+        d=1e100.net; s=20260707; t=1793129067; x=1793733867;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=naiD4iesaV5pH7Y3WTVOwbtKuOOtNqwIdyHwaDd61M0=;
-        b=0NEFv0f0Z7N5Q52fQqboc11ZUZgYOj07A4PU1VLdenB0rOn619zfU1JVieDFzKLUAb
-         PjxRAsHJiLJGLHYQ9Gei8LGvFrT8hHuI9VKiCis4yIueF2oA6xWWywE+G9MX4CmtpL3K
-         cuYDMidtvQ9jIE2dnvrteZLXXpzoNSw/YYo6AxCE3uZ8+mnKibHlLC7gj8vXU/NLByN6
-         GHHGrGoJeExGjZliUO7cD3he9vrmlHRZmcNaENcEyEKFPyIEGzBuCRJ5WKvIHroG5leW
-         0KJsGGJJnWBYOK3fcSUBZZwtQaHioF8c2YjWIYNNJn8pGmkZLo2lLypZGsx1ygnSFt0k
-         wcYQ==
-X-Gm-Message-State: AFq9FYIBUbrCC70mVGglj+p0slw0JljL5gmOgJVG33mNyKXvsHNJHmNq
-	53xk/ibMdFH1legG19hVLsJ+9Fr7od8aURFJGtT3AUaip3IP7rw3o2wWT9erEEPWeq4guKJ4Ttm
-	6i/1DLj8bPg==
-X-Gm-Gg: AYBFou3Oojnb8yHQV3YcxbI6K08elSXb4Q7xVhUmMCC/Wf27vy+nKDIprplnMnK9e49
-	ork80E/wJgGUQ0Zkx/d6zSOjcdsK3RkcNRavJI8mER4ernPeY4wKYIdYvPljJWsC3bPtXo0jDmF
-	lVv68jAxiQZFzh7eB6awKntHUyPKX86oz62pSsDJj7GqRgFfl8p0jacWZkVkT+mWkkfVH+oP5Dl
-	IBG6aElJFd+qUkLpyk8OL/UZ3jNf0iuN2jIbvXN3fTtIvBnWGPfMsl5c4mD7UkOuFMflc9a/SUy
-	m0y887YXncrTupT2dcLaw2xqsw+ennxow73cf1uro3BW0GYBprEEJcIL+H68wpUvMtJc5ofntWP
-	QQ+MmDElZ6h9nQa5SY6FrJHZ6KEYiYKRr0rBuwbAXGPp+si/c/N6vJVvjAwuCIUWpegk4VEjVbe
-	pSK6uI0WDdOh599QqtYA/yEpGhepdcmrzehaOXlyAPR2UJum3v6dFw8fmaoO/1dAj96qHzWEs72
-	CzeoZFFunV4PWIv3bEviJbuLTSZD7JhLMpaefm+up836QQMVqMWax5m0w/EfQosnA==
-X-Received: by 2002:a05:600c:3e10:b0:4a1:80d8:aed5 with SMTP id 5b1f17b1804b1-4a35ac8bc6amr207094115e9.6.1793129063018;
-        Tue, 27 Oct 2026 12:24:23 -0700 (PDT)
+        bh=lmNt8UHMJZ1LwZOmio/ru6CKGlng7+kmKVOojz71M+A=;
+        b=V2LkqEgwgYx3lkoiBTF7fRuH3uWkXsZ4di4r2cv1V+T/gzfM9JRB4Ne0fmPIWvEVd1
+         JxH/FdrTthi4pXKPWZyn462PoIuXDKRv6A2l0YnykqsmbBdIpfUqdwk6Cn+/dyFCOQ2C
+         3DrVFbXX5znXRCQCdQH3GzCw+i+vjyS6vcP8VB9T2fORdo9JYEkhBrqpH/zMYU+VagDJ
+         TWs430JWtzPj022V9+NkePjhpsdmsp4ageDAe8dts6elL5H62m63eyPIXQGUlw2er0Ke
+         7Qy4mg9jgvVk1MTeM5gMiy2Y+ayXXKbSAA4iO7lfTZg+Hq7uRIw7UtciZnEDR3OXlLzI
+         6hxw==
+X-Gm-Message-State: AFq9FYIANIM6jvD2sSVoS8lLqVpOzMWGYHRcRmnzNCmPZxPTnsDpjDWz
+	c5RRCrGlSDwZWQA/HGYSajnB/lIn4MSVzmWj/NJwX3EuscoNUh5rf6aK1MngeNHPoPMDEI0rhdz
+	IP43xekIxjg==
+X-Gm-Gg: AYBFou2OvUFP3qH+Q29Ra8a9HravOP98fzBQtvjY+fwSVbAk553NcIyos8I4FAieNQd
+	QRTKszwpZi1YMqQ2ImtCMgzYtqK8Bl2zD+2O0SsMcdVkDQqX8+K0uKc2Z46P19+gmp4MvwXSSqV
+	EO138I1H2ELcUaBU4cZM56VQGU8tZ+tSg79bfDNT3WFmlVy6qcPnJENaeW0/AcWgJH9u0CFcSj8
+	k1uHUwIXm6JFER4fZwFd19b4OmmN5wW5g/8yXHHQEnLFU2RuTjYOAgvCaz945mv1x2CJAuaDntj
+	dt/cQCzhH3wXXY5vpE7h2XOGA6YoEYalvGHeByhRMLOCcqyZbM9QhULa4MdfIv2ATUEcbMpJXkO
+	OHlOTErbN/RA3rg6GZmNNAVK2z8Xo0GDqIMo9j2av9i+AVnWzMaXtG3dylyXPNbWJZjQdQ181Cr
+	zVV+Rpop/G4x1e1DxAiS5mPd+1H/L66C6spqE28iNIBaCbEdV1AzVBJWUT66jq72tGlqRM3MLae
+	O+gxsyfTpGX4Nt7CjGLnSgg9Q0IKJFuxS0mRLNJY5zH
+X-Received: by 2002:a05:600c:c4a7:b0:4a2:1655:87e2 with SMTP id 5b1f17b1804b1-4a35acb2316mr209826035e9.19.1793129067380;
+        Tue, 27 Oct 2026 12:24:27 -0700 (PDT)
 Received: from alpine05.lan ([2620:10d:c090:600::1:2eb1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a92e103d91sm4721385e9.0.2026.10.27.12.24.20
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a92e103d91sm4721385e9.0.2026.10.27.12.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 12:24:22 -0700 (PDT)
+        Tue, 27 Oct 2026 12:24:25 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -85,9 +85,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 1/4] libarena: remove in-code licenses
-Date: Tue, 27 Oct 2026 19:24:10 +0000
-Message-ID: <20261027192413.5038-2-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2 2/4] selftests/bpf: libarena: make allocator growth on alloc failure optional
+Date: Tue, 27 Oct 2026 19:24:11 +0000
+Message-ID: <20261027192413.5038-3-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20261027192413.5038-1-emil@etsalapatis.com>
 References: <20261027192413.5038-1-emil@etsalapatis.com>
@@ -102,61 +102,79 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The libarena code currently specifies a license section in multiple
-locations. These sections are a) inaccurate, since the license is
-actually Dual BSD/GPL, not pure GPL, and b) superfluous, since the
-files already have the license on them and libarena is distributed
-as a source. Remove the license strings: The code that includes the
-the libarena sources should be the one with the license section.
+The buddy allocator currently always grows when an allocation fails due
+to a lack of allocated arena pages. This behavior assumes that the user
+sizes the arena to be as large as the maximum allocation size, but that
+is not always the case.
+
+Add a nogrow allocation option for users that want to explicitly control
+the total mapped size of the arena. With this API, an allocation request
+that cannot be serviced from currently mapped arena pages fails instead
+of triggering bpf_arena_alloc_pages(). The user instead explicitly maps
+additional memory into the arena with a separate buddy_grow() call.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c | 2 ++
- tools/testing/selftests/bpf/libarena/src/asan.bpf.c            | 2 --
- tools/testing/selftests/bpf/libarena/src/buddy.bpf.c           | 2 --
- tools/testing/selftests/bpf/libarena/src/common.bpf.c          | 2 --
- 4 files changed, 2 insertions(+), 6 deletions(-)
+ .../bpf/libarena/include/libarena/buddy.h     |  1 +
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 20 +++++++++++++++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-index e06397dc9a40..636178f1fa6a 100644
---- a/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/benchs/bench_malloc.bpf.c
-@@ -49,3 +49,5 @@ int bench_calloc(void)
- 	__sync_add_and_fetch(&bench_hits, i);
- 	return 0;
- }
-+
-+char _license[] SEC("license") = "Dual BSD/GPL";
-diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-index de656b69d13a..8a0f06110606 100644
---- a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-@@ -532,5 +532,3 @@ __weak __noasan int asan_init(struct asan_init_args *args)
- #pragma clang attribute pop
+diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+index 528c69a1f38e..958450fc5f9d 100644
+--- a/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
++++ b/tools/testing/selftests/bpf/libarena/include/libarena/buddy.h
+@@ -77,5 +77,6 @@ int buddy_init(struct buddy __arena *buddy);
+ int buddy_destroy(struct buddy __arena *buddy);
+ int buddy_free(struct buddy __arena *buddy, void __arena *free);
+ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size);
++void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size);
  
- #endif /* BPF_ARENA_ASAN */
--
--__weak char _license[] SEC("license") = "GPL";
+ #endif /* __BPF__  */
 diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-index 2490ab1396de..552ce87875e3 100644
+index 552ce87875e3..ed359d4af1f4 100644
 --- a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
 +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-@@ -899,5 +899,3 @@ __weak int buddy_free(struct buddy __arena *buddy, void __arena *addr)
+@@ -747,8 +747,9 @@ static u64 buddy_alloc_from_new_chunk(struct buddy __arena *buddy, struct buddy_
  
- 	return ret;
+ 	return (u64)address;
  }
--
--__weak char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-index d1af60b81838..d859bd538c52 100644
---- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-@@ -85,5 +85,3 @@ __weak void arena_free(void __arena *ptr)
+-__weak
+-void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
++
++static __always_inline
++void __arena *buddy_alloc_maygrow(struct buddy __arena *buddy, size_t size, bool grow)
  {
- 	buddy_free(&buddy, ptr);
+ 	void __arena *address = NULL;
+ 	struct buddy_chunk __arena *chunk;
+@@ -772,6 +773,9 @@ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
+ 	if (address)
+ 		goto done;
+ 
++	if (!grow)
++		return NULL;
++
+ 	/* Get a new chunk. */
+ 	chunk = buddy_chunk_get(buddy);
+ 	if (chunk)
+@@ -796,6 +800,18 @@ void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
+ 	return address;
  }
--
--char _license[] SEC("license") = "GPL";
+ 
++__weak
++void __arena *buddy_alloc(struct buddy __arena *buddy, size_t size)
++{
++	return buddy_alloc_maygrow(buddy, size, true);
++}
++
++__weak
++void __arena *buddy_alloc_nogrow(struct buddy __arena *buddy, size_t size)
++{
++	return buddy_alloc_maygrow(buddy, size, false);
++}
++
+ static __always_inline int buddy_free_unlocked(struct buddy __arena *buddy, u64 addr)
+ {
+ 	struct buddy_header __arena *header, *buddy_header;
 -- 
 2.52.0
 
