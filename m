@@ -1,85 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.172
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793060177;
-	b=tUECktTjAFM+8YQFM/mpaP7WnLDiYgeFIjwo6ZRfaTXvDnB/E3vFRQMNfukVIXMrI0kP
-	 Cznsur9KaZxhfvRbaxdi92GaF7toEYc0zxxbeidBqEgqqcZRL5dGQvTxxIhPfMG1EYEDt
-	 xk9gxnJ6BANpIYuQvTMU6RjFS2ltIzvF46zQJogcxznbT2GkNMX/pOBNchtvN7O7iL1d6
-	 7rzMX234WhZ/LX3j4yhamjJsNyRRXUoAO6H3epp1Nu3G2DrFiHKRI8zP9fW5ZAcmmT9Uq
-	 ZiorzKzHohzeZ4f3QAoPVOW+FP4VphWoj6tXrEz9v107kRR99whFxhcwxLzR/MSGGrA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793060177;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.71
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793060330;
+	b=XXozwZZJX3S059Z1UVO5K2dPifXNndeAXDSSFVqrr57K5O1/5IyiJY0ACkCGI14E9x6e
+	 n2qEwbME1C996d78auZSBAVWI87mG0jB9LJbxFdsjxW+LcFCRp3a9AAmbFqee5xwzHxZd
+	 kI25alFnEZHHJcjB9k+QzqWa4MjzIfJSqjDBCuxSpZ9r1pzmiFyiAH0KOmXEm01eoEY1/
+	 Zco7FhsG+E90pqPHnZQRSc2dLvvd1z9138yhxvj/bSFA5eSBVHAEqsq2tbja+weila3M/
+	 N2/Ji5JNZ4VF+nhW9S9PqpZWEjq7GqdlvUXZ6TQyBW/C9U+RQsL02HdTsyDNtGkrciA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793060330;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Mime-Version:Content-Transfer-Encoding:Content-Type:Date:Message-Id:
-	 Cc:Subject:From:To:X-Mailer:References:In-Reply-To;
-	bh=oni2tZocTqmk6MJ9MEIczZjZQGZkv76mwj8XQfOUZt0=;
-	b=BiiQ8cXAJteEXKbQSF+yOxzwGINEa443tDIcb34fi8UTZ5kIE6vCBaRubUodGXsa9oRh
-	 8uvoHB/62FaUHaG1Fqp0rub2PR50Wiyp4+B4crgfFV6sNlGl02t4yXecdiStW/TGU7fcC
-	 pUsm/M58meuoVmnKptGAyWMa4MJ8pzZedVlu/BjF3UMgEN/liBUyZ0NxFR1EbpKM1s3to
-	 y8qosRxIZwIVkTtT/yCdgzxZSKudgvh9z5jq2/MxOaIv8N6IB8AfBKdoS0UOKqhYo05Dh
-	 DYkGXVL24XeQHunMF985/6+zSadjRnU2P29zAbZZr3od2c8r75w+4tbnEEGuo5FDPYA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+	 In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+	 Content-Type;
+	bh=lvNHjFuK7gK6C7+v5tfwbMd32JFC2NAT9TkLomtYJqc=;
+	b=3Pp/NauZxLe93+7BEOR4WaWVyAasBkDg/dfccBNqtdo9aUBF98Usceatr7vy2dL1m8aW
+	 UDIDLlZRNCbASyxAuekebcYjWViPi+ZyPamVsEAqT6twTM343ua6l/VqB5tH9YsK11zPg
+	 eSkEmK1FOZRm++fsEZOth87Jde5xQvruX4eqQEjcUbjM4YaRX1aBa4F6NuHsD0dmz0PMx
+	 p5mC7Gb+PmPpLZ0zIk8UxQ0l2QqZBoX5ewNNTwE7BWIRZU1YvVIEn8JNvtw8AEbC82Bdk
+	 6E2c2K4DuNj6kCCLcL5XyAKmYvwBBDJvG2/zW73h34S4/OHOGXdn6C6jj8L52wfSQ0g==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="et2xRo1/";
-	arc=none smtp.remote-ip=209.85.214.172
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b="jkxdLN/b";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.225.71
+Received: from mail-wr2-f7.google.com (mail-wr2-f7.google.com [74.125.225.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8377E606A31D
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:16:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8377E606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC3A606A31E
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 00:18:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7AC3A606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=et2xRo1/
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2e7e742a2c7so3100445ad.0
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 17:16:17 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jkxdLN/b
+Received: by mail-wr2-f7.google.com with SMTP id ffacd0b85a97d-48e0c9bc8f9so1697717f8f.1
+        for <bpf@vger.kernel.org>; Mon, 26 Oct 2026 17:18:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793060329; cv=none;
+        d=google.com; s=arc-20260327;
+        b=HYb90+tg8Lor6WP6Mf+Zyv90pheB1l+BI9aR3MESLr+VrekWJA1Cs/zasuIodMM1Qy
+         zbWcRE4ayz2AV+8KqqAc87eSBhn16n4Oho7Z99CVwUbAgwUbcAL+f/F59M8fD3DF4sYq
+         l0/yCR+kArU75CSfj1s5d7BvC5qzNgGKn6wpkFlwXrkCYmyofMmOX/cA3V/zG/TH4N5e
+         ztj7nB5NoB6AP4MILpLfrB0Z2ILLe42ul/HuTaTN7kEB9fI5fzHZssKLYVfBqvK6kCdy
+         oWVuhXNm1RE3ShngqNe97McMHeqomJiHES68WnQOHdnWhNq9d/iw2cCYxb0Y8lu3ypCv
+         yZuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=lvNHjFuK7gK6C7+v5tfwbMd32JFC2NAT9TkLomtYJqc=;
+        fh=nK4o+E/nKAvNbzKwQovufHGBef//cfTPEviVumPIXzA=;
+        b=NouqPGPDGwPViHdhi8OKdGJ11SXEFZU2Dw+mD7xsFPlxmSU7J+5ugv4QI0xvZkdgM5
+         JnwcUqE7tGvgfzg334e4fta/X7iQENDGolLI96z+96T0hutrWCTTxEr3pOrJ5xlDt+A+
+         imzAi3AX4j3w5tvdV9dF4MAS5oc+969soaa+1I/A912RiSfssBfcE+eEhAG8l6tS2+Iy
+         ZQiyF7nE4Nfvb38s1YWj+kCuH1Btj3ktdES533PaslpuMGIMbvVZU3Fd+6YvkFsHVEgn
+         1tLb+yoVf8Hx8cAGCEifv2GpS6EkIhQ+dMfpp+AmF8YJ5ts0wUMi0bzh03IU9ObOFJbF
+         e3tw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793060177; x=1793664977; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=oni2tZocTqmk6MJ9MEIczZjZQGZkv76mwj8XQfOUZt0=;
-        b=et2xRo1//C2WzYpLCbFYfJcLOkGDBTO7bfUSHoINOElVkhy2jHhXBpzBJ1mdFy78jd
-         5MXwYWTBrdGnPzWviLEmMMOxySFvFfrsHWDhnbjZ3FG0HpyQET1heBmqaJ72TGT3iCGZ
-         PQZVnB6bGyfI2h+2VT5gIvHGYD2a4DF5zhYJOCJhnKWnpBj8Cx/l1/zhidkwqN2DwL6u
-         Y6fFJBwGmTEpxCpTmwHg7qdE7tVzn4ydrf3jlA3zf30xlzuUrWII3A6KxsnV2UMRGIc+
-         50WcMOh+Uis9waQs/EFLKD/xOHUqttBHaHf1F/QkluXHgnRmiHuOYd56gugYuR0hgGEX
-         8UVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793060177; x=1793664977;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1793060329; x=1793665129; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oni2tZocTqmk6MJ9MEIczZjZQGZkv76mwj8XQfOUZt0=;
-        b=PfL41hETUxIli5wR/9o9pnBKSdSGG77F4ZE89D+HhM7c5m4VKife4Z+amhIvrYDY7Q
-         9VWZUFaopyn7MpYYm7fYFSg6X/HEQl4psWTaWZcirFWvkRwwwd7m4YTFb3e8AEw168h+
-         SqbtH+FTTfCs0sdcEF9LS86zOX1FYcSOgDIwIZM8TgS1NTkBtvWBUb8bOr71lgK2KSR1
-         Hv9t8NLnXMwHzlTqrFduS70MCrlPm+fyk5LblIJXOLvi+fG2Tew1dLDu9mIO3Q9P8xJi
-         g6iJYdCb1gOy4ubi2fKSXpfp20JEK+pFgCgx13jPzd2m+BllhXM0+LtB2uvNda0EYRE6
-         mLbQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxRCChy+2AcIwbkOJz+/4OnVGMrHBe4FkX8s1UcSIFeT0ts4khIT2fabbFP0YKjia2/kJM=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLslqt29zPohmk4SWu3jFWSLamEytzvR5aehpbBLR6KpnLzW5Vk
-	NfZ7F4BnFCZDqOJBmg3MUCmqyt74ombMpwt1ZBrE66hrGhXp1lQRWbT2
-X-Gm-Gg: AYBFou3q6sl4cpw5hgU90WBhC6oQlze9jOvPtyXhIKk1Rsz/fNNT0BfQKz5BiIszB6Q
-	ZYMNJeioQSaJZbeNMP1VZa/3+aTSIZJAhZ8hyw0T4WQIk39I6NMFW66SXbkqPmktpcVho3qqt2B
-	KWSF5REwroe2inBllIMxvuzN4jnJuICpQPVm7ntVq7IMdhDd/E03672Pto7Sy4a472SeArtkB0s
-	AJUd1CnP+RPD/h7Tjy0I7wRRdW9G3Bsui1iHQ+iceGixs3megRnMpsLnL93s2OM4aqIr1YEn2Ft
-	P7aI2ZiCquYcYtO+Aus2zK2kYgJkgBtq72s1DrKXedPGJ/suxez1dWSMlckDhrNdEpW2zPsmqII
-	IQJDzP3e5U1REWyJd2GiT/Xi6NaCXRG9SoO2FzeUYs93mHU1x9tnWsbDlfd4lJTDpaKtrWNNyJ6
-	e/AFC6vZZnR8fp/2+Utywd/Tj6t64E9YIlTABKoI4YMef8jrm31S7TEKyUiyGBJzkZzcgeAASaX
-	YNKsMp5+3pz8dckrxnm4AZxyfqsT+10D2FM9wPK0JOB4t49E9M9m5t0LzUR01xSRBXcbFNXP+ye
-	uhMb7MhI45Hae+LgFsoGUd4621R/V9Qs/KiAVy/oqszjg6wFWDJl5qBfRvvdAs6MXeGjhq00Gye
-	usd0ceg==
-X-Received: by 2002:a17:903:468e:b0:2e9:5d1f:dfee with SMTP id d9443c01a7336-2eae3a9ca29mr6509465ad.25.1793060176825;
-        Mon, 26 Oct 2026 17:16:16 -0700 (PDT)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6be5105sm1615785ad.37.2026.10.26.17.16.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Oct 2026 17:16:16 -0700 (PDT)
+        bh=lvNHjFuK7gK6C7+v5tfwbMd32JFC2NAT9TkLomtYJqc=;
+        b=jkxdLN/bY8nH/RhTARTGhy9jHqSRcnhDSIWUjZFAIP96VkQ5Ad0BSWXkh7WDn2+R9Z
+         6h/jQV2VV/Z2jNiMg5qhFcwfahkR+GHugg8o65uQGUsAVo6FIEDm0jIvdDl04ar/tQp/
+         O4TLP74eIx+xSZ5Ak1u9dzF6x/ARo+Kiu0wflOwwg7GBG9HR+a1pv2/GZ/GSfSMY+Xfv
+         iZNNnGRscZ8i5rA1K9gmriTu+cx4ao6IKQP+5Rv6lt4cL/xr7HGOXqWFuhm+IXquDkPM
+         2wLeaXiv2eP2vpRtA5GvaODXDmAcUQ4x0A4dsAGSNM0/tT14Myn+hvu+ZfCF61vDRCGd
+         UXQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793060329; x=1793665129;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=lvNHjFuK7gK6C7+v5tfwbMd32JFC2NAT9TkLomtYJqc=;
+        b=dDZrtcnRGWph1JLZQjcNgXis5d0Iocs9KbERv1hITCYVvnArvfDymnXur1QhkkzCFK
+         RFBxD+ilBp+KaSRXJ5MHY43+pRD+q+VWOnXbznlfdSR0FSdzNQYKbGrT8mM5rGbd7av+
+         5hpYrtDuzjo3PoluqXX6752ByenrtWtHnNQOIG6svkPp8XQk4kro0iRFpQndeaCamLHU
+         KOvxWR9rXG53Q4Bxgsg+CShiDLwrdt8oKRHNmeC65YPXvElFnX3H7B5iStbBDBsmdQXK
+         Lgq8QCOyXrq6lQPcY6qyKDVShRbspLU0RA6/J0brlac1aWVdZi3Sb2pg9ASapyT20dg7
+         zVqA==
+X-Gm-Message-State: AFq9FYKIkB7ECyGKMRW1SMDulicRx/P+bZIT19QiFy1iYKJdaCxx4L/a
+	2fnk2N0CZcWph8tV9pOPyISvayskZ008p1DeCb6gxquJt8btnPbCTyV3/mgxC5QlcHUmzo8shwj
+	ZNQ5La3kfQiYCRSaeDSPGEo+td0WK4wY=
+X-Gm-Gg: AYBFou2wVcxYZVZCzujS2qX5WvePRkXZZHwf+PH6Am2Tf2e2C64+z14WkN4udSAQWBQ
+	GSQcS/LAmCMJ/pfXyNcxU3YnljJkxdwWgmc+Wj2Ho/okXvGXfyGv5BrQJtHC3UxQt19kqqar668
+	aJQFR2Zw9gQSEk4s8dvzp6Zgmpt0qdirl4WK9RBsvofXWo8ztePtFGC41HiXBpJHIaZhNPO3ojJ
+	HekvILYRYZ4y5abb53pvylgnX7oNAESWacKqk3FcNAfH+yuJ6gthdSIly8TfClJ9tC7ID2eMbjK
+	KAp+YdXdf9eRqLEhj8PQG6iQtoq3YgLPfogpTPreRLBfWdHC3qUH0I8ZIU9s/isGicAJq/YRSFe
+	XyzLgC8i+tax4DAUmiR8UL9kCBHK5lampM3kMQoAU6CEhhX8rnRSOurTWbJo9uRGa+5sFLMiY0K
+	A989bXhYPj+yvw2jgubYN8dQk09zB4ZT5QyKRb8Fs2TYW1G/74BCEW1mSuACriK44vxqKJprNZB
+	HlNannwYdOB8SJ3
+X-Received: by 2002:a05:6000:2905:b0:48e:2a6c:153b with SMTP id
+ ffacd0b85a97d-48e3eb912e7mr17820010f8f.35.1793060328666; Mon, 26 Oct 2026
+ 17:18:48 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -88,53 +103,57 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Oct 2026 00:16:15 +0000
-Message-Id: <DMF6S994J4RU.NK2MX1X2UNF6@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>
-Subject: Re: [PATCH bpf 00/81] bpf: Stack in arena and a verifier that joins
- states
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
+MIME-Version: 1.0
 References: <20261026025943.404450-1-alexei.starovoitov@gmail.com>
- <fbb26ce0-00a0-42ba-abc6-82c3c6201d8a@linux.dev>
- <DMF64ZG294VY.LCU9YQI054U2@gmail.com>
- <5c042467-6aca-48fd-b5d5-e7705e65a158@linux.dev>
-In-Reply-To: <5c042467-6aca-48fd-b5d5-e7705e65a158@linux.dev>
+ <20261026025943.404450-27-alexei.starovoitov@gmail.com> <CAP01T76dRouzrPOZS8AQ4TMnJ0GzyRm8cPJ8RYUTu01bQgf2Xw@mail.gmail.com>
+ <DMF694XH2TJO.P59A31VE6GWP@gmail.com>
+In-Reply-To: <DMF694XH2TJO.P59A31VE6GWP@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 27 Oct 2026 01:18:11 +0100
+X-Gm-Features: AclHuK_rQq4aY4gLsmwJk3J8RAbW9XhaCVV0eE7gQiX4v19sFSvLD7gCnwNjJcw
+Message-ID: <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com>
+Subject: Re: [PATCH bpf 26/81] bpf: Support BPF_REG_ARENA_SP in the verifier
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue Oct 27, 2026 at 12:01 AM UTC, Ihor Solodrai wrote:
-> On 2026-10-26 4:45 p.m., Alexei Starovoitov wrote:
->> On Mon, Oct 26, 2026 at 03:28 PM Ihor Solodrai <ihor.solodrai@linux.dev>=
- wrote:
->>> This series shouldn't land as is. It's not ready.
->>=20
->> your bot didn't read the cover letter :(
->> that said that parts 2 and 3 were posted for review only
->> Only Part 1 is for landing, but parts 2 and 3 depend on it.
+On Tue, 27 Oct 2026 at 00:51, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Why not post part 1, land it and then post parts 2-3 as RFC?
-> The review was done for the full series, that's the whole point of
-> posting the series, no?
-
-To see the whole thing through CI and sashiko lenses.
-
->>=20
->>>     * ask your development bots to ensure that verification of prod BPF
->>>       programs (bots can pull those tested by BPF CI from github
->>>       artifacts, just ask) has not regressed, and that there is a path
->>>       for updating existing programs to work both with old and new
->>>       verifier
->>=20
->> your bot is wrong again. meta progs are not public.
+> On Mon Oct 26, 2026 at 5:47 PM UTC, Kumar Kartikeya Dwivedi wrote:
+> >
+> > Some initial questions without reading the code:
+> > How will this split stack model work with trusted objects whose
+> > pointers on the stack are taken and passed around (dynptrs, iterators,
+> > etc.)?
 >
-> That was my mistake, I thought we publish the objects as artifacts.
-> I'll see if can do that.
->
-> But even if they don't become public, we run veristat on them as part of
-> upstream BPF CI, and those signals shouldn't be ignored.
+> dynptrs and iterators won't work in rust. No need to drag old concepts
+> into rust ecosystem.
 
-No one said they're ignored.
+I am less optimistic about this. For certain things, like open coded
+iterators on kernel collections, there is no other choice. This is
+also true for sched-ext (where we iterate over tasks in a DSQ in
+various places). We also have bpf_local_irq_save(). Likewise for
+certain dynptr types that touch actual kernel objects, even though we
+could replace them with slices/fat pointers in Rust for normal memory
+accesses happening in arena.
+
+It might require teaching the compiler not to move certain types on
+the stack to r12 relative accesses, but it just feels ugly. Also,
+unsure how various assumptions around address contiguity get affected
+when stack reuse occurs, e.g. where a buffer created in same slots
+previously holding trusted contents whose scope ended get reused for
+an address taken buffer. Perhaps the compiler pass works around those.
+
+Overall, I think it is less clear to me (or anyone looking at patches)
+as to why you did things this way. You've mentioned the problem with
+conflicting JIT for the same insn seeing PTR_TO_STACK/PTR_TO_ARENA
+before. Are there real patterns that existing stack tracking simply
+cannot salvage? More information around the motivation and examples
+would be useful in understanding all this.
+
+There are a lot of patches, so perhaps it is explained somewhere that
+I missed, but otherwise existing explanations are very terse. They
+tell how the implementation works but not why certain choices were
+made.
