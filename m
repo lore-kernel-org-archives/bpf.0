@@ -1,95 +1,94 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.169
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793136152;
-	b=XT0dDKSA3L3RPH3UoPPiq7IBR3XytXpKUaS9A71oo5SmpKpCc4Z2gQiDbfPpxl+Z7sqr
-	 IkweXsiddM8QOhpRT/M36G+G+3BESLWoj9BY1pKxZJlASigxGoPyFJJAkOmaC5UWp0Wey
-	 Q2hpifyhE++Mgksz4GL/g1R1wwe5umF/EJriHxr8ZjBKXtuUudoDjOvTvjvcEfWCvrgdU
-	 Qy2NWQuW8+s8VokNiron/opR+CNGpiiWO7ZAabHOy0VCmlN3GKH8BAwmRbsOdd7Ngss4A
-	 16MexxWdmulHqTN2eUHEqof4vhQb3/y25y7+V4awh4ATbLk048mpLgM8Wa8FHNBmkhw==
+	t=1793136199;
+	b=MvUTXhcALPUk6B+mYOXEv37tsbkWXHKA53V52vheznoIvhuRqINd4R5Lboce8Z0V5x0Y
+	 l56Ooyj1DWSeeJrUqUu22HzeUT4A72t/lwG2bZN8WzX9kl8fWmY2vJA7bPyN2SMbe5HoH
+	 73e36DwrW+KgJJ7Xeypq5ya4J/IYQLdNVrG1XgIS6mT8pqtj6ln6hkoiSr+S581JmnUks
+	 2mFKf2lWeBib8shfMuhzvN3LcSifK6HgFEJE+kwx88hZTgq+lAwSEoEQwBc7rmTQjTLQs
+	 kROciaVOsUG9QmsLrvY1nE5+JMLeQtHlWEyq4cqr9UmsO6OdlUnKdJuk7Ry4HHW1baA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793136152;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793136199;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=DdmGG1HqM1PrftPT1v5usIleZje7u24hkEuDG1qQe/Y=;
-	b=M0sgFyjguhMb3EPg0oKH6U4n/Z6CgXQCnVTIBtEFPCjGv+bPKl32VBzEIVTTgWsTLM2H
-	 k7lIvONhJ2Zca2cQvnkv2qiWNdDoZjjPCTKN2RWjrNY3roflcK1G6cAxTIgFIvcb6xiE8
-	 xFIPcH9nLbz+899beI7i0r06sniFDsYdVk0mp5GQJzNi/6zKsatMakLedLVWISymYUM5C
-	 7O+teUCywL0EOg7TlzPDLQSiFF/ZwyET0bBpnut8oJJA/bgdEvWZcOkaHoYP6RMc0teZk
-	 LWUjT6XfjLxss3VVp7nWsRUdcuQCR/PEahG8fpy/DCA7/n8sGqaJYU9PDWkPmsW47nA==
+	bh=9idYOTdTg5vvYVxzKaK7W1ipap2GkVgprvezV8xbRsw=;
+	b=hcJ2TKW/ZvvFe2PulpYAKn/NM9a6HgYuPX1bV7/i/i1r3kq7dMcjhY0rTYo/Aq1oRzv6
+	 Pz/lOzABwFb1cdLdqQ1Ara+EJORQkbAgfvol7gqaaKLOo5TeH2y1kF1q6X7L3tLZbaMjR
+	 h8gUzRzls3N/kXal9/wg5+PFgi9A1WrNWDow+cmX2AlZ1S0D18Gwu3a7ZQLhb/GJmwgNn
+	 dk29wtL6DHw048r8fLni1iyYTDxa9efN6YcCcU//pvYf83/1MGNYMlFDraXPGcgecB56+
+	 cQvVIZaKcP02DdlrsEVorwVUMKF9ebBFUuTXRzj4riI/4R2H3eLXGN+PfM8zloPxxXQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=O7FLJZLy;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pds1exdX;
 	arc=none smtp.remote-ip=209.85.214.169
 Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF76D606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 21:22:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AF76D606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC55606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 21:23:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AC55606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=O7FLJZLy
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2e946155442so1912755ad.3
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 14:22:31 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pds1exdX
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ea1e7fad99so1509775ad.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 14:23:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793136151; x=1793740951; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793136198; x=1793740998; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DdmGG1HqM1PrftPT1v5usIleZje7u24hkEuDG1qQe/Y=;
-        b=O7FLJZLy6wv6WEE7YudMbN3WMx8fyggXGDdjgsdHGlGXSjG1PrrGhLZrkyaNUH/FH5
-         WoAFpOSP3oqDUwnS+gr7Cm9suWoP5erqiX/7+5TKlbL+tvJgkDsTHH5SNZDF/QjOlmTf
-         oki14SZe42cilUbUi2uaEsh1JFlwdsyPu6phAxhscFQPs+FGcRrireUIJulX/Ialtnq6
-         VJO7kXfsKRj9ahLiAn059FvQxxjcoOHaTon0o+ZEn8ER4scJpb1KS26JM6oTXtwiK+F2
-         q+upbiwwqZJSZICCarIuFDQSOP6z1RPNk36TQPHa8p8actD3oLOFPPGvaeLytlvbvUdj
-         hscw==
+        bh=9idYOTdTg5vvYVxzKaK7W1ipap2GkVgprvezV8xbRsw=;
+        b=pds1exdXG3JpU2wrZG5soKLXT18XBUsVHcjDnWlbiqnmjv2OGmpgVMO69A4bglBNnY
+         m0Q1a5pf+smKZXZbZynYlX6PJvZKcL6jzl6cpTiTQjAXMu7peQwiIWH+RfP1CHbmQSID
+         2dYUPEgzHbVPn/VZGs2L4wGPeDTP/mYlpN11j1MYPVP4Z/WeG4K1uXP6lW36sC7ORdUe
+         YLKb5wTesNvaDFR0QT2In3vXaIMNjt0ipqSIyEKCh0DH/iLuTDlc2AaqFf92D6KS8kcs
+         cpSSkAXsr95XlEwy0PbDT1G1XRI7gQrT3m/7bozkScQvIm7zXKfe3DSPPnckXU4RZ5OC
+         0/9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793136151; x=1793740951;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793136198; x=1793740998;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DdmGG1HqM1PrftPT1v5usIleZje7u24hkEuDG1qQe/Y=;
-        b=U6JnutGh7WmTAtxRjELWp5ozbPJ+gYLJ8LmAkkjmLi2b2QUTCety7Bxj733ru7wb+g
-         UWOglaMfMvYR4ky9Ce5vmzu9CDAhGV8+SZqmvbVffBaK8ju/CcZAg0Wd2Qi5h1wixAfb
-         csqIobmVvr1AY2iCb6yQdg4gQrnmExWQSySMdWtUgfwUB6fYavP2PeBPkKzfnG28jNAq
-         umcBYmVG5jqPSb5uU0KWsJeu0m04LoZOa6HYrBjg8XMPFFcbubsW43TBcEmNEorEQTjb
-         XvQ/aM0FdeyjFHuK2xsMBO5gHxWMoBm8gTp5Ira5GpqJjZx+RsDXrrf5Xd9foo0cl0xN
-         aneA==
-X-Forwarded-Encrypted: i=1; AKwUvBwzeyDWd3tJ6PRuB96pepgmwfW5L0PL0WHucg4HX8nt6w8N4KtV2ANv4465Jpv9vrIs9R8=@vger.kernel.org
-X-Gm-Message-State: AFq9FYJwucDUe1D/fuoTLW++PiPMi/BArrCzbSqrkHCCE0+s0c6MIVbj
-	B8fV50gRWTzNIhlK4pI0OLpQp+4ftLiQc0k4vdTXXZHk53qd6Hl0B9lE
-X-Gm-Gg: AYBFou2wolmRKVsufWA4O7lAlBRgpeGwsI5HXHRUPS/RDhYpZrT9zTIaI4AB0lEpHWB
-	PdJDs1fHDzC91IRRX4st/q8lWUc+B08OhGvmYJqPQPefEMvrpWAibErTaM+kAerpie30E453gcU
-	EwTdUnHqZdHpVmUrH389HyVWswgbRYVPMrJjbf2Cf0duQeXsIls02VkZ7xU9wjGYGf9m6DwXsT7
-	j4SwbKa2vwNH1XVZ/kJMJ4yE4vkfo8KZzK8DqrbpJB2p85cltgYAWJXo6Rq2kZAIeTTeFCzKPNp
-	JhrgXoac2TvZhHfsgRqJG2YcpOsmIspN9eXh3HG3VbxLh8RtcFxbbhzDUOnDlcmlusQ109DAX69
-	TF/v4yzvA0GtOBpxfYAVnKUs+6T7p8FxFzkxEU15ECBtSvXF5ka016QdyaZaLagARKyW0Js3XPy
-	OLnqbcpcoTpm8Pg2iWwkrg24k5jGy+UezaSJ9w0Ypm/CyEdQ9T0m5RLEdpj91YzQzqm2/AAhT/T
-	wq/nyw+05NsX86TXofsDlkRxuy3DljNCl3oz4AQ170fiZDzpaYNHfVe66l6xWLIA2OJrA5MwgXN
-	UhY96Zg0r0/iPCm1OXjMZzAihjYN5Z0+vFBg0svrZjfuGleKPQ9F+zuUYJff
-X-Received: by 2002:a17:903:b4c:b0:2dd:ad73:c938 with SMTP id d9443c01a7336-2eb004fc178mr5234955ad.25.1793136150858;
-        Tue, 27 Oct 2026 14:22:30 -0700 (PDT)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6454a37sm14851685ad.3.2026.10.27.14.22.30
+        bh=9idYOTdTg5vvYVxzKaK7W1ipap2GkVgprvezV8xbRsw=;
+        b=I23np2hqJJXBg2WmJ2iIW5H6KyJOVNAaHmex0gNb9XQT6n9D3UoasxX3kBOX/HH7/v
+         FjLzMdwO7gMv1Kp+g94uiEGg4Z7IfmWFVHGM5B6Gcp8TddGQ91JWWkeSqgujWN+sqiq+
+         9x8kmlMay+jeuMuN9LK5C/A5qo9+pJQgEfSoCu1utqmPEsKef5qSosgddyN7V0vKWIZc
+         H5/0AQNNzylJDHkeVbOtAl1iuS4OgIDnbnJE8e+fpvEGUqqKAxYChHpiX5o557IfacJM
+         VkWxI9NwtpI1RvrOXSYzY8CiLUGaFHnQPxzBKt241wMlZ1oVjPWfyu3EPASiOv/ro4o7
+         p8xw==
+X-Forwarded-Encrypted: i=1; AKwUvByd2Eqh+P8X7F9f9cTh4Lbnt1ahd2hsmeQh8XivtMlr1GkSBg8fUXQ5U52rqKLDWy31jtQ=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ65yYTAsqnEIxf/hLEzUmOoBOw0bSeikUQ/HcCMaKVI8eW7eBX
+	e0aN8OWO01FFJ/h/C4/DWBNfUiyw2wskB3CM8GC78uuepUqHl/kOJaAb
+X-Gm-Gg: AYBFou3GuH9lLHzkVoUwyrL1fDGP2xwFom2cm/9/HezDekY65i1D6QIoqvLSFgNgy5j
+	URTr9c5CXA3sS3hf776avo7UZOJQ3rhLEZXVYsDGGJbquCZ9pod6WOG9g44pJ4XKo4Q+vTLutDd
+	fF8Bsssmjt8hjKfE129R/yAaxBzwVwGcvxq4EOcZFIcSe9prKMcP1rFasLgXJPmvuNifsKDXsOw
+	NTchXq1AcnndNGlN9fGPp61KxUw5XzgWfOUnioy4zqgdhzaPBrCV5PSc+R+Sae9drP0IaO3tf+p
+	03LHipHYvsF8Eegmk4OF7J0hI6lfbYUgkSxXdXQwirM0r6WYdC7wiFv0gGLQYlp1+8QIqL2ZrZ8
+	0A6RNniREKLj6qN36pCySBbwOQ75LXKZcMkDbjNIlAq7wqdMIVnn6meV7n44CeLQS1htSUlHMjT
+	46uDjm71YlYkzXIImzTulTElEa2hq1qNagEJKRUJdJ9cAlEHVOOv09tPKov5IeHup85IOxMLhZU
+	ElUvYCoVPO2lup0rgoNHnsOJVLj4Izg+ii1aIAQCGmATh5IeeUJlHOF7VqOW4F49LWal7v9iXQ8
+	Z4TghoqaFrdeG6DSGQLJ1f8jXS/hWytDXpFAOfmHKOxv4z6oWvTzmg7Xjjx7
+X-Received: by 2002:a17:902:d581:b0:2e9:7ff5:5462 with SMTP id d9443c01a7336-2eb003e17d2mr4788335ad.22.1793136198193;
+        Tue, 27 Oct 2026 14:23:18 -0700 (PDT)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6454a37sm14856625ad.3.2026.10.27.14.23.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2026 14:22:30 -0700 (PDT)
+        Tue, 27 Oct 2026 14:23:17 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Oct 2026 21:22:30 +0000
-Message-Id: <DMFXPRARP7T8.JRCWN1DA8NWL@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>, <bpf@vger.kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>
-Subject: Re: [PATCH bpf 16/81] libbpf: Make arena 1 Gbyte when max_entries
- is not set
+Date: Tue, 27 Oct 2026 21:23:17 +0000
+Message-Id: <DMFXQCZ2UNDT.MWVC9S7KIDKT@gmail.com>
+Subject: Re: [PATCH bpf 09/81] bpf: Clear delta of a register that scalar
+ evolution widens
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <CAP01T75GQRJWXWVNhxxYH6w21QfFVvi_eBV-ob0uEHLmx4DQrg@mail.gmail.com>
-References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-17-alexei.starovoitov@gmail.com> <CAEf4BzYrpYHS1V=VXF0PTRXkXQo6FnseWirR-ka-O9wKTv_GcQ@mail.gmail.com> <CAP01T775XCUmtK97tBcWsvOvUsGxR7AKCGqfOCgebf+-_WfhkQ@mail.gmail.com> <DMF6PRBIH8GS.3LZZSW3LDCMWQ@gmail.com> <CAP01T75GQRJWXWVNhxxYH6w21QfFVvi_eBV-ob0uEHLmx4DQrg@mail.gmail.com>
+To: "Daniel Borkmann" <daniel@iogearbox.net>, <bpf@vger.kernel.org>
+Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>
+In-Reply-To: <c750f9be-f62a-49e4-8816-080601f7c192@iogearbox.net>
+References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-10-alexei.starovoitov@gmail.com> <c750f9be-f62a-49e4-8816-080601f7c192@iogearbox.net>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -101,17 +100,11 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Tue, Oct 27, 2026 at 02:11 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->> The reason I didn't go with 4G since 4k pages on x86 need 8Mbyte
->> of kernel memory for empty arena while 1G needs 2Mbyte, which felt ok-ish.
+On Mon, Oct 26, 2026 at 01:09 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>   	case SCALAR_VALUE:
+>>   		reg->id = 0;
+>> +		reg->delta = 0;
 >
-> I re-read the current code (even with your patches in this set), my
-> understanding is that regardless of max_entries, we always commit 8MB
-> of page tables, no? I don't see anything that uses max_entries to
-> decide that bit. So I think this patch is noop regardless.
+> small nit when you respin for bpf tree: clear_scalar_id
 
-ohh. populate_pgtable_except_pte() doesn't look at max_entries :(
-sigh. ok let's do 4G then.
-The only remaining question is whether to do it libbpf or kernel.
-I lean toward libbpf, since it's easier to revisit
-if/when we fix populate_pgtable_except_pte() not to waste memory.
+fyi. this is done in v2
