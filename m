@@ -1,49 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=109.224.244.22
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793118611;
-	b=uSKH4y2Z+AWSPuOfta8yWc5vZ29fDX7YjyEVVhr0l/8dzCgrcy2+IbPs1Vd7d/qHu11g
-	 m/zbuaG24vClWGU+a8mEd4zeON1wOEtkzokMeqdV6+90NN57A6XeXp8ykutl/SEk7KNIj
-	 YVa8fPJuvevTrtU2/0CT196Sfcna1HI/8zPzg/4r3Ki+0FBOXaAX6TV++chdynf4FpURi
-	 mvgr1Ko6Ys+BUp5ad2YCbiGShRNhyRr4fESiB4aB8y8j3tKLYUHcBNfxWeIIhiiHg/SdZ
-	 8x95m46homLQe1BQAlfVEP4IAdIhSVg8XWKYG2HayaH+SIzFx+/vaxPm6xCQTuqywXw==
+	t=1793118617;
+	b=g2Ixx6yr29/xD2M108xcGUIxLciwANuScqyvF7GHm2XqxBNNXIt9C6PyDoSi0sMaLi7A
+	 f7Fl93VGFptbGnyo4CI9Pomw4DHYeFD8ULUHlvMAOCCQnXQQe3P1JBICSlpDGBCdEP2OI
+	 1A/5e45oJJrSzMJfaT//mjBSn8eBnlu1hLcuaLHNEyFDCHS1uuI/ekVfyaQzwkwKu/4CE
+	 KfrYW7HCQwDUJjMIkQKeius+DAbRRI9UXJQ4U939pGqRVJuVu3R5mO6ramteej0d8eeG4
+	 lKxQbwF1WABNkJiDX1QgxdwJceW8HEdblYIEk6YGAQGIglh8hJmzuTSNPKamfaam49Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793118611;
-	h=Received:DKIM-Signature:Received:Content-Type:MIME-Version:
-	 Content-Transfer-Encoding:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc;
-	bh=GB0gRLlV4wVO1bv8u274vyCCN8paUU5WSSz4Hrk9iuA=;
-	b=F4C/2gtggBzV4FpiDBIsYBcOtP06OVfYXpFADN4Pf/pjFcUoNPOSxeTsZsIdVMzKiuRi
-	 RFKkkg9nEOzse+Ejf0YXXgJofAKQS76IGRhkHqQAnnJqCXN+Nc0dspkQ2FHWepUy3gcML
-	 JNirrF1tQ8NVEGLXg7kdob8zhUTg3kAQUmAzyIB0DfidA+5+zKipOK4kdUGIyCrrmDlTQ
-	 1jVX7FyB3on/wON6ZxKLBBT/8uqub0LtTs5I1KKgve+v7grjpxzgHVbj3Uf+eB/4LDQNx
-	 wWKEajMGIJ+87rsDJnUcFqcB3g25PN07GgRdW1g/cgRRC6JBRqUSKdcv3ncp53+eH1g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793118617;
+	h=DMARC-Filter:DKIM-Signature:Date:To:From:Cc:Subject:Message-ID:
+	 In-Reply-To:References:Feedback-ID:X-Pm-Message-ID:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=z/3jpXuKR8Ek75myDtIS6oISZLc5tTxlxTmwToUVi/Q=;
+	b=3CKE8afuEtLhoG9tACGOmBs1YINAMAgaT20V5PQJEYunLPGVadH1ozr3lJpt4mz3VpOr
+	 G6CY87j/pVedK8iyWWuXSFRIFgiK7Ftiu5L7LmCT96l/PSHNl+xrdJpboUPkoBXvdVbiZ
+	 GhJ9G+wPZ4CaHtOU2Lu5RsTwnbDdv3d5RVLurE0L+a5iJCkibaDBDxyFSLyVhXe4sZkHm
+	 +5d2gnJbt6Js4+lwVssJaP/ehkOu/lGeDaTVQhETtEGXR4jSr0YvSheuCdB1qK6YFtZx4
+	 7Nfd4WfR7gWG+WmeMCeYoKtZAIv4PD8900NbYvceufjPf4ttCfVF1nGbZ1s90jOHJEA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L7U0HaXe;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=1g4.org;
+	spf=pass smtp.mailfrom=1g4.org;
+	arc=none smtp.remote-ip=109.224.244.22
+Received: from mail-24422.protonmail.ch (mail-24422.protonmail.ch [109.224.244.22])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCE1606A31D
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=L7U0HaXe
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5368F1F01825;
-	Tue, 27 Oct 2026 16:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793118610;
-	bh=GB0gRLlV4wVO1bv8u274vyCCN8paUU5WSSz4Hrk9iuA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=L7U0HaXeO7RjxF6u7VSlVyacQeVEOIwHniR8PC5NY+n9orw6dhQCfEG4KOgO4n+Cm
-	 BchPTfR1Aglqfm4088nrAp2sNkx+zkTJJ59r1BOcdmRu6SanJ60hzu/04jGpEI9bH7
-	 FphX0wrevALtj0CkooPiCUDpy/ipu+QLjUQyWxegd3iQgXhBlSvc90A5i+4hJSDizL
-	 kuPMpO24yUridXMQerBecPrC9X3mMfcFFJQFacE7HdSJ3p7pxKh4udvOs53OXf4TOb
-	 h+uGzkQPAkmlQzep1PRpKvfbHulitArMKMe+6Nm9AGoyn/5hcUvweTFxPmxPpDG6Fi
-	 vlKaTsH5X90Gw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4450D3AA9A95;
-	Tue, 27 Oct 2026 16:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D10C606A327
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 16:30:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5D10C606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=1g4.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1g4.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1g4.org;
+	s=protonmail; t=1793118607; x=1793377807;
+	bh=z/3jpXuKR8Ek75myDtIS6oISZLc5tTxlxTmwToUVi/Q=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=nSWkwrSpNgrFzE4n9LAMKt6PEdv8HOS2JVM7mE3Zo09iiDZ13pynId9Ydvnu4M3UB
+	 iH+w5WgWV/iHrwO47RGhPAi6+bmNcOPtitVsUlSfGdJCSIlAHRd6BbG94qmZ+xSyul
+	 rDSTVeY2trT697oMv+92cyxI352rU1n6bk0KSbECfuc/7AlHklW5cKiQrqRDt1KKzg
+	 bYsieFz0X+ril90PfxYHhQ/e3VS4+YLMHW8TcDB2aU7+VihwSB7HXvcxU9l1L2WDkk
+	 mO9hPcQuc43TgjhFE67L2w8U9mRD6Va6YwzNOEfGWgGKoQ6fiaYzjZ2EG12NM0Ibi+
+	 5GqNUmSUtU1pw==
+Date: Tue, 27 Oct 2026 16:30:02 +0000
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Paul Moses <p@1g4.org>
+Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@kernel.org, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, vedang.patel@intel.com, jithu.joseph@intel.com, andre.guedes@intel.com, intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net] igc: track rx frame boundaries independent of skbs
+Message-ID: <eZWITZTcOwr2NglsQ81lTVz7KdBTIb7L8jpSRGGX3Ts-wlGb6eIUGco_iev6GD5OFkaOmIMwKlADpfVh9KE-FdHCRgfFDSs6ZzYCaJbgp8I=@1g4.org>
+In-Reply-To: <auBfnRqpsuF4B+J9@boxer>
+References: <20261025065154.2037149-1-p@1g4.org> <at+t/jHczGvyXKRN@boxer> <XxgY3anjXL5MwVEpWmTA-tZLeDhfNvdTDJ3n_8jTLgnomanMs92AQS6-QHZyNzAi5tSQM4UDHEZyKs1sG39MrfHwma2BkaoxScclyny5KOw=@1g4.org> <auBfnRqpsuF4B+J9@boxer>
+Feedback-ID: 8253658:user:proton
+X-Pm-Message-ID: 2f363783c4d49599380b8b788c0128422907cb62
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -53,65 +61,110 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 00/11] bpf: fixes and follow-ups for 32-/64-bit
- scalar
- evolution
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179311860907.198437.13084328897071120006.git-patchwork-notify@kernel.org>
-Date: Tue, 27 Oct 2026 16:30:09 +0000
-References: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
-In-Reply-To: <20261026-scev-simpler-clamp-v2-0-f373aec9825f@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kernel-team@fb.com, yonghong.song@linux.dev,
- memxor@gmail.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Mon, 26 Oct 2026 16:38:20 -0700 you wrote:
-> Fixes:
-> - bpf: avoid false infinite loop reports after changes in SCEV clamping
-> - bpf: do not intersect with current register range on clamp
-> - bpf: reject pointer operands for 32-bit recurrences/latches
-> 
-> Follow-ups:
-> - bpf: (zext32 (zext32 X)) -> (zext32 X) SCEV simplification rule
-> - bpf: check the iteration count before the predicted exit value
-> 
+
+
+On Tuesday, October 27th, 2026 at 3:24 AM, Maciej Fijalkowski <maciej.fijal=
+kowski@intel.com> wrote:
+
+> On Mon, Oct 26, 2026 at 10:12:51PM +0000, Paul Moses wrote:
+> >
+> >
+> >
+> >
+> > On Monday, October 26th, 2026 at 2:46 PM, Maciej Fijalkowski <maciej.fi=
+jalkowski@intel.com> wrote:
+> >
+> > > On Sun, Oct 25, 2026 at 06:52:06AM +0000, Paul Moses wrote:
+> > > > TSIP remains set on continuation descriptors, but the inline timest=
+amp
+> > > > header exists only in the first buffer. Stripping it from every
+> > > > descriptor truncates split frames and can underflow short buffers.
+> > > >
+> > > > skb ownership cannot identify frame boundaries when XDP consumes th=
+e
+> > > > first buffer or AF_XDP uses zero-copy.
+> > > >
+> > > > Track rx_in_frame per ring and update it as descriptors are consume=
+d.
+> > > > Strip timestamps only from first buffers, reject unsupported split
+> > > > frames before XDP and drain continuations. Account discarded
+> > > > descriptors against NAPI work without counting successful RX.
+> > > >
+> > > > Fixes: e1ed4f92a625 ("igc: Refactor Rx timestamp handling")
+> > > > Fixes: 26575105d6ed ("igc: Add initial XDP support")
+> > > > Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Paul Moses <p@1g4.org>
+> > > > ---
+> > > > - This supersedes "igc: only strip RX timestamp header from first b=
+uffer"
+> > > >   following feedback from Simon Horman, Maciej Fijalkowski and Sash=
+iko.
+> > > >
+> > > > Changes:
+> > > > - track frame boundaries independently of skb ownership
+> > > > - guard timestamp stripping and drain unsupported split frames
+> > > > - cover the AF_XDP zero-copy RX path
+> > > > ---
+> > > >  drivers/net/ethernet/intel/igc/igc.h      |  1 +
+> > > >  drivers/net/ethernet/intel/igc/igc_main.c | 87 ++++++++++++++++---=
+----
+> > > >  2 files changed, 64 insertions(+), 24 deletions(-)
+> > >
+> > > Hi Paul,
+> > >
+> > > I think this implementation went off track. We should make sure we *n=
+ever*
+> > > enter data path for XDP/AF_XDP multi-buffer scenario until we add rea=
+l
+> > > support to it within this driver. Now you sorta handle fragmented pac=
+kets
+> > > in data path.
+> > >
+> > > I tried to argue with bot reports that it hallucinated for
+> > > igc_clean_rx_irq() content (which was concise and to the point) and a=
+greed
+> > > the AF_XDP should *not* be exposed to any fragmented traffic, which s=
+hould
+> > > be addressed on HW RX ring configuration side, not within data path.
+> > >
+> > > Also this should have been a v3 with a link to previous revisions so =
+we
+> > > could keep track what has been changing between versions.
+> > >
+> > > Here's something that would address ZC fragmentation issue. Could you=
+ give
+> > > it a spin on your side as I don't currently have igc in my setup hand=
+y.
+>=20
 > [...]
+>=20
+> >
+> > Looks good to me, passes basic testing, and I would rather you/intel do=
+ this patch
+> >
+> > For posterity, I did email Tony with handoff notes stating I'd rather n=
+ot do the
+> > xdp/xsk/af_xdp/fpe side of things, but hadn't heard back so I kept goin=
+g.
+>=20
+> I think this was within the thread where AI hallucinated and I stepped in=
+.
 
-Here is the summary with links:
-  - [bpf,v2,01/11] bpf: reject pointer operands for 32-bit recurrences/latches
-    https://git.kernel.org/bpf/bpf/c/c463b378eae7
-  - [bpf,v2,02/11] bpf: do not intersect with current register range on clamp
-    https://git.kernel.org/bpf/bpf/c/0c33d612bdd5
-  - [bpf,v2,03/11] bpf: avoid false infinite loop reports after changes in SCEV clamping
-    https://git.kernel.org/bpf/bpf/c/5dd32c8c1082
-  - [bpf,v2,04/11] bpf: check the iteration count before the predicted exit value
-    https://git.kernel.org/bpf/bpf/c/86d654957d40
-  - [bpf,v2,05/11] bpf: (zext32 (zext32 X)) -> (zext32 X) SCEV simplification rule
-    https://git.kernel.org/bpf/bpf/c/abc9a76a888f
-  - [bpf,v2,06/11] bpf: print 32-bit SCEV bounds as 32-bit numbers
-    https://git.kernel.org/bpf/bpf/c/899cbaae6e4c
-  - [bpf,v2,07/11] selftests/bpf: pointer operands for 32-bit recurrences/latches
-    https://git.kernel.org/bpf/bpf/c/88b1da858326
-  - [bpf,v2,08/11] selftests/bpf: cases with empty range error under old clamping logic
-    https://git.kernel.org/bpf/bpf/c/39cd4e0915c4
-  - [bpf,v2,09/11] selftests/bpf: cases for SCEV interaction with infinite loop detection
-    https://git.kernel.org/bpf/bpf/c/344c14e8b3d4
-  - [bpf,v2,10/11] selftests/bpf: 32-bit copy of the counter compared at the latch
-    https://git.kernel.org/bpf/bpf/c/a0137c789774
-  - [bpf,v2,11/11] selftests/bpf: Restore stack pointer subrange pruning coverage
-    https://git.kernel.org/bpf/bpf/c/8fd732e5a64b
+No worries, it turned out more interesting than expected.=20
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> If you are not fed up yet you can take your v2 and the patch I added here
+> and send this as a change set. From my POV it would be better as you have
+> the HW to test this against and ironically my igc card went into
+> /dev/null's lab.
+>=20
+> >
+>=20
+Not fed up but sleep deprived, yes, I'll do that.
 
 
