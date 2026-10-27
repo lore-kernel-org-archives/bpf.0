@@ -1,56 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.193
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793129447;
-	b=DkWE7xjxyJV6QA+4R7bGLhPzCPVd7Z9PDrozF+ePDv897SBPvR8BrnsVSifpBrNMDMZW
-	 0NgzjwWgKsHM+jdBRv3hfXcyuuk83PSf6kMJfEfH/8WsnH8/q9RVY4EiBbQnIr59y4uEv
-	 PSENW3CjUu3LNR2FYJgQ7at8Q1kQDFp8CAgkVX3qwdFLvsz5uzeZqS58ZHCGf9uww8u1K
-	 SDZYt93D9FwjO9Rk94qSK3aNuXcgJuWbBu/w4F5sDFfqjJplqQPLAQgvuuG1EYdnM/TIz
-	 BWXYFQyJPack6LXGdAnon1rD8XnL+eehxFbVpDafzeXpldMth/CWTuJWw6oPV+KGBaw==
+	t=1793129615;
+	b=ZSZuMstbZT5+XkFKV9nktYSfLHl4yuDYP6nKzAVcRCZ0yhyMJmGImkuqBswrMhKtMFlJ
+	 6k2hAVbo0EqUgKT+Ip/1BDb+cr8HTBqlG4wDG0shzL0+gpy+UHHwb54yC6uxPNCxxCfg3
+	 Mbb0wzno7Vn/T4ON/cUmlhyaGV6BFCrl3G4PRRoRVh93/1Zll1mtFW0jl0mH6ug6qd7GV
+	 Y/W3U89mDzyppBxnmrY1gy0j2Xngn9SgtjAeElCHxqoaeLhiYm8+HRm3BDQLBJ1t3Aaon
+	 rp/9QB+9MSTzkVkf8TsBFzvpZx7TfPWBU0op3azdn6wkXOqB2xeg1TrEBvyiL1YMXWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793129447;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=//kkAIRvIOwma0JUUomd5dTWJMUKweItzFG0pjpcdAs=;
-	b=ZiNKXIisRLmmMn68jxYbsyJlqSSK2fjfaBaYpSAqvuZylmgi1rhQ+RrUfYL3dU6lRZSa
-	 15IQpnZgLMGe2RpwxTYUSAxJhyLNgxz0pt5jFVcOwXDJPQDzvb07PdoDH5n091yY3+5xx
-	 L/odBRFFTiFNsfs+gql1hZP+QLxFDYEEY1xlEruGyMObA1jcMIngP7iVye0MeI2DeSRyv
-	 WC3Jw2Kb515ehLk0RWPKEdu3ExvEaVVetP0rZO37tL1ycuF6kYyqtrfBBXHBFrM5lLr1U
-	 puAvihFRO1qcx42j06U9P79RqqDeQAg+1yTF3rdy7bxrizJYrM42Au/tUDUOoZj6k1A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793129615;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
+	 Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=UYHoSpCC3bJkRNY60Q75ZtY+/Q28tZmoyETvol+drwU=;
+	b=Y14xHUKmtI0JFJPYesDOeUI0YZsHcB/alt0OmPW6Pq8ducoNTQRn5BJnX4BUTkoYyQvy
+	 jmVsZo7cjVQK5We41GEfrjrHjKRee/0wgL2Arm6MtMae2ccgUUckyUncnX31inCBEoisr
+	 PP7N9FNz2NUkogpVSZ2NTIQzUaUGwc7P9GY9/3cJSml1YxNamxcddBSNkgc5TamF0NUGe
+	 spSFlGglX8t9Y9ggg9qUxeIkyO/t9MEn9kBoA3usWgWQbOQnG6V65ePcR0nQ8bY700fXr
+	 jtF0zTTAswmeq4SsU1EAMXsNoh8SoEsdjnT8DDmYZ9mFXXcRZ6snyzktQOrYoUOVjqA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="i6TWhCl/";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EGolnHug;
+	arc=none smtp.remote-ip=91.218.175.193
+Received: from mta0.migadu.com (out-193.mta0.migadu.com [91.218.175.193])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322C9606A31F
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D3C606A31D
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:33:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19D3C606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=i6TWhCl/
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0FDF1F01825;
-	Tue, 27 Oct 2026 19:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793129446;
-	bh=//kkAIRvIOwma0JUUomd5dTWJMUKweItzFG0pjpcdAs=;
-	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=i6TWhCl/TBd1i6ijQdOtAaK76eOH4m76aHgfqJ8oYeY+3AXeLQynBOmIy2Mm2F+ws
-	 vmJR5fc3dLojfHfPZ8Bx9hUSqNDtAalmnO969xG4rasUEafdhdMWnp7hN/ipY/frVg
-	 0RKwLAXogid5FcbrmSAhkqxkT/a0MY9fRGuX71WWsSRAi7DWd4+VjZzKvBE+OmNCb3
-	 uZwEbdtl4Nfrs68/3gtBeohazgS7EjL1H7cr/wTVP5UAZJ0/VFOQNonXfSp40lYBhW
-	 iWND63bVk2kTzoe5n6KPhhG6uG1gvp3wuMuP1IHsMPC/knVLXzDWHTn+DVCAI7GMrA
-	 FSzdxjb6xSDSw==
-Message-ID: <sashiko-outbox-187068@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf 14/19] bpf: Reset the range of a packet pointer
- that scalar evolution clamps
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <20261027190314.1440199-15-alexei.starovoitov@gmail.com>
-References: <20261027190314.1440199-1-alexei.starovoitov@gmail.com>
- <20261027190314.1440199-15-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 Oct 2026 19:30:46 +0000
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=EGolnHug
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=KDlDFT7/lBze1qf8C7Wzt65hkkCuNYLkslyxyezk8l0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793129610; v=1; x=1793734410;
+ b=EGolnHugYI+f7JE/JFBxWzrgEaore00DVnBAu3DnDO8VIRo311Gnn/5j3Vj6ZP+Yu/sb29V9
+ a5WSiRHSuN8oze/F/V9XiiyKZQRFV6ab2dxY3ZuMN0ZdAQ84X2oiFYAOr/JQWY1VJeKgkrz/RLe
+ 1RWm7p6xndo3RDzu2jVMfjgc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 54aa230a64b7b18a;
+	Tue, 27 Oct 2026 19:33:30 +0000
+X-Mizu-Trace-ID: 54aa230a64b7b18a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <5199fa29-64d8-48ab-b591-cbc854750789@linux.dev>
+Date: Tue, 27 Oct 2026 12:33:25 -0700
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,147 +57,102 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2] bpf: Fix out-of-bounds btf->types write for split
+ BTF
+To: Feng Yang <yangfeng59949@163.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261026073654.840705-1-yangfeng59949@163.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20261026073654.840705-1-yangfeng59949@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] bpf: out-of-bounds packet access via step tightening in bpf_cl=
-amp_scev_regs()
-- [Medium] bpf: bpf_widen_scev_regs() does not reset negative packet pointe=
-r range
---
+On 10/26/26 12:36 AM, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
+> 
+> btf_add_type() bounds the btf->types array by BTF_MAX_TYPE, but for a
+> split BTF the type ids it registers are start_id .. start_id +
+> nr_types - 1, so what is actually left of the id space is
+> BTF_MAX_TYPE - start_id.  Two things follow from that:
+> 
+>  - the limit check is an equality test,
+>    'start_id + btf->types_size == BTF_MAX_TYPE'.  It is evaluated only
+>    when the array has to grow, with btf->types_size == btf->nr_types,
+>    and the growth (T' = min(BTF_MAX_TYPE, T + max(T / 4, 16)), starting
+>    from 0) is clamped to BTF_MAX_TYPE, which it lands on exactly (...,
+>    928143, then min(BTF_MAX_TYPE, 1160178)).  So unless
+>    BTF_MAX_TYPE - start_id is one of the 48 sizes that sequence hits,
+>    the check does not fire for a split BTF at all;
+> 
+>  - new_size is clamped to BTF_MAX_TYPE instead of
+>    BTF_MAX_TYPE - start_id, so the array can still grow to
+>    BTF_MAX_TYPE entries even though only BTF_MAX_TYPE - start_id type
+>    ids exist.
+> 
+> As a result nr_types can reach BTF_MAX_TYPE for a split BTF while its
+> type ids have already gone past BTF_MAX_TYPE; a type never validates its
+> own id, only the ids it references (btf_ref_type_check_meta()).  At that
+> point btf->types_size == btf->nr_types == BTF_MAX_TYPE and the growth
+> branch computes the same size again: it allocates a fresh BTF_MAX_TYPE
+> entry array, copies the entries, and the loop is left with
+> btf->types_size != btf->nr_types, so that branch is not taken anymore.
+> Every type after this writes btf->types[btf->nr_types++] past the end of
+> the array: BTF_MAX_TYPE * 8 == 8388600 bytes are requested, so the first
+> such write lands in the 8 byte rounding slack of the 8MB allocation, and
+> each further type writes another 8 bytes beyond it.
+> 
+> Fix both by bounding the array with BTF_MAX_TYPE - start_id and by
+> turning the equality check into a '>=' one, so that the array stops
+> exactly where the id space ends. Base BTF behavior (start_id ==
+> 0) is unchanged.
+> 
+> Fixes: 951bb64621b8 ("bpf: Add in-kernel split BTF support")
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> Reviewed-by: Mahe Tardy <mahe.tardy@gmail.com>
+> ---
+>  kernel/bpf/btf.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 7ed1ff71a089..ca49c47f6a45 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -1752,15 +1752,17 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+>  		/* Expand 'types' array */
+>  
+>  		struct btf_type **new_types;
+> -		u32 expand_by, new_size;
+> +		u32 expand_by, new_size, max_size;
+>  
+> -		if (btf->start_id + btf->types_size == BTF_MAX_TYPE) {
+> +		if (btf->start_id >= BTF_MAX_TYPE ||
+> +		    btf->start_id + btf->types_size >= BTF_MAX_TYPE) {
 
-commit a6747880bf7fa92bdac4e2fa9d3223b8203c86f7
-Author: Alexei Starovoitov <ast@kernel.org>
+Hi, thanks for the patch.
 
-bpf: Reset the range of a packet pointer that scalar evolution clamps
+The fix makes sense to me, however the commit message is difficult to parse.
+Do you mind respinning with a more concise explanation of the bug and fix?
 
-This patch resets a clamped packet pointer's range to max(entry_reg->range,=
- 0)
-in bpf_clamp_scev_regs() so that packet bounds gained from pkt_end comparis=
-ons
-inside a counted loop do not remain attached to the widened offset range ac=
-ross
-all iterations.
+This should help: https://docs.kernel.org/process/maintainer-tip.html#changelog
 
-> diff --git a/kernel/bpf/scev.c b/kernel/bpf/scev.c
-> index 89f96682af3ff..7b82fd79f9cc9 100644
-> --- a/kernel/bpf/scev.c
-> +++ b/kernel/bpf/scev.c
-> @@ -2914,6 +2914,13 @@ int bpf_clamp_scev_regs(struct bpf_verifier_env *e=
-nv, struct bpf_func_state *cur
->  			bpf_log(log, "\n");
+pr-bot: cr
+
+
+>  			btf_verifier_log(env, "Exceeded max num of types");
+>  			return -E2BIG;
 >  		}
->  		scratch_widened_reg_id(env, reg);
-> +		/*
-> +		 * The range of a packet pointer goes together with its id and with th=
-e offsets
-> +		 * that it had in the compare with pkt_end. Both are replaced here. Wh=
-at holds for
-> +		 * the new offsets is the range at the entry.
-> +		 */
-> +		if (type_is_pkt_pointer(reg->type))
-> +			reg->range =3D max(entry_reg->range, 0);
+>  
+> +		max_size = BTF_MAX_TYPE - btf->start_id;
+>  		expand_by = max_t(u32, btf->types_size >> 2, 16);
+> -		new_size = min_t(u32, BTF_MAX_TYPE,
+> +		new_size = min_t(u32, max_size,
+>  				 btf->types_size + expand_by);
+>  
+>  		new_types = kvzalloc_objs(*new_types, new_size,
 
-[Severity: Medium]
-Should bpf_widen_scev_regs() also clamp reg->range with max(reg->range, 0)
-when widening a packet pointer at loop entry?
-
-When a packet pointer fails a pkt_end comparison before a counted loop,
-mark_pkt_end() sets entry_reg->range to AT_PKT_END (-1) or BEYOND_PKT_END (=
--2).
-At loop entry, bpf_widen_scev_regs() replaces the packet pointer's id and
-offsets across all iterations without clearing a negative reg->range:
-
-kernel/bpf/scev.c:bpf_widen_scev_regs() {
-	...
-	scratch_widened_reg_id(env, reg);
-	err =3D bpf_set_reg_range(env, reg, bounds.r64, bounds.r32,
-				bounds.base, bounds.step);
-	...
-}
-
-If the loop has a negative slope that moves the pointer backwards into the
-packet on subsequent iterations, is_pkt_ptr_branch_taken() in
-kernel/bpf/verifier.c will still fold pkt_end comparisons on the widened
-register using the stale negative range marker.
-
-In addition, when the backedge reaches the loop header, bpf_clamp_scev_regs=
-()
-sets rcur->range to 0 via max(entry_reg->range, 0) while the widened header
-state still has rold->range < 0, causing regsafe() in kernel/bpf/states.c to
-reject state pruning at the loop header:
-
-kernel/bpf/states.c:regsafe() {
-	...
-	if (rold->range < 0 || rcur->range < 0) {
-		/* special case for [BEYOND|AT]_PKT_END */
-		if (rold->range !=3D rcur->range)
-			return false;
-	}
-	...
-}
-
->  		err =3D bpf_set_reg_range(env, reg, bounds.r64, bounds.r32,
->  					bounds.base, bounds.step);
-
-[Severity: Critical]
-Can preserving entry_reg->range across bpf_set_reg_range() here (and in
-bpf_widen_scev_regs()) allow out-of-bounds packet reads and writes past
-pkt_end when bounds.step tightens reg_umax(reg)?
-
-In find_good_pkt_pointers(), comparing a derived packet pointer against
-pkt_end sets reg->range =3D reg_umax(dst_reg), and check_packet_access() ->
-check_mem_region_access() allows accesses of size bytes when
-reg_umax(reg) + off + size <=3D reg->range. As seen in commit b88822d2584f
-("bpf: Fix packet range of pointers sharing an id"), tightening the umax of=
- a
-packet pointer via var_off alignment while keeping its range is unsafe.
-
-Before a counted loop, a packet pointer can have an unaligned umax paired w=
-ith
-an aligned var_off and step =3D=3D 1:
-
-  r4 &=3D 0x38
-  if r4 > 50 goto exit      ; r4: r64=3D[0, 50], var_off=3D(0x0; 0x38), ste=
-p=3D1
-  r6 =3D pkt_data
-  r6 +=3D r4                  ; r6: pkt(id=3D1, r=3D0, r64=3D[0, 50], var_o=
-ff=3D(0x0; 0x38), step=3D1)
-  r5 =3D r6
-  r5 +=3D 8                   ; r5: pkt(id=3D1, r=3D0, r64=3D[8, 58], var_o=
-ff=3D(0x0; 0x78), step=3D1)
-  if r5 > pkt_end goto exit ; r6: pkt(id=3D1, r=3D58, r64=3D[0, 50], var_of=
-f=3D(0x0; 0x38), step=3D1)
-
-When entering or clamping a 2-iteration loop (max_header_count =3D 2) that
-increments r6 by 8 (slope =3D 8), linear_bounds() in kernel/bpf/scev.c comp=
-utes
-bounds.r64 =3D [0, 58] and promotes tnum_alignment(entry_reg->var_off) into
-bounds.step:
-
-kernel/bpf/scev.c:linear_bounds() {
-	...
-	if (cnum64_is_const(reg->r64) && !overflow) {
-		out->step =3D slope_abs;
-		out->base =3D imod(reg_smin(reg), out->step);
-	} else {
-		out->step =3D 1u << min_t(u32, tnum_alignment(reg->var_off), __ffs(slope_=
-abs));
-		out->base =3D 0;
-	}
-}
-
-Here bounds.step becomes 8. Calling bpf_set_reg_range() -> reg_bounds_sync()
--> __update_bounds_from_step() -> cnum64_intersect_linear() then rounds
-reg_umax(reg) down from 58 to 56 while reg->range remains 58 (and similarly
-rounds [0, 50] down to [0, 48] with range =3D 50 for a negative slope r6 -=
-=3D 8).
-
-At runtime, if r4 =3D=3D 48 and pkt_len =3D=3D 56, on the second iteration =
-r6 reaches
-pkt_data + 56 =3D=3D pkt_end, but check_packet_access() will permit a 2-byte
-access at r6 + 0 because reg_umax(reg) + 2 <=3D 58.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027190314.1440=
-199-1-alexei.starovoitov@gmail.com?part=3D14
