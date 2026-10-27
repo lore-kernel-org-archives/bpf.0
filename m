@@ -1,95 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.171
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793130577;
-	b=NBtB7lkd3fIny+YB+LmKzMUwDSGerQCr9yg5khuES0i+f9RjA6WNpGM1P9DrkrLKe+JY
-	 MgyGm8scs/jZkZxPA5nzT1awyzcv/pTS/2Iv66ov2Rn3xX7EbSyoSIp5WP/lZ2pGaA5vC
-	 vqhdozvKc8LG/pz0cm/WkLSSwZ/vCdq1Xd1mTAqDz2Rq3vZ6/ZTD4DNWMwA2Qve2ErkFR
-	 tuOZOgZN0wBhrr5859dAhlJotlku032VYz1qwJSx0QtH06WVogO+WtFLYe+JAr4kTZu6K
-	 t/+g/AzO/4IH7ZC3MJTAscb3HfTm8+ekCBXMIcfkE1JG0bctqukMjKZIwq0YDcHDQSw==
+	t=1793130661;
+	b=ButDTXErwoxh4G8Kn0PPgM6KhOqEbbiRcHNWaJmlhhlwhCk9OujVfdMJJw/cDfCtpTjR
+	 mQ38F1fY9q42/1lmBO/qCwHtGjswHRlvmQb1FdGOy8zswTW7ng0j+IE7X5Wb1COjlau3h
+	 2FsZgOVRtdEzRsOfWsGv3J9J1xulWbRdKmfsbRzBOLa/DGKsPOUNL8j/H2/1u+dobHXmP
+	 jlE8NbFq/HE0JW0pGH3xM+S3v+/jGGXdR/fPYeaKFv9HdB86abH26JAfm2CmWmCXV/2LT
+	 9XYPvllWcIoYoEFdSCr95c7qZr3mbDIkrY40n6kwjv7SK4h9U4fBDsVM3ROyqYvegPw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793130577;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793130661;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=ilRNfn6/bKD7JKWWGxKTwYHt8GP2d4K6GHS01Pj1/t8=;
-	b=GEjHqjfbdv9eb+Mp/Ff3sQPyu8szea2KoL/0lfzr7HFx/eYRj4hVc2kkJgnTdqhXxQ8z
-	 scxBZavnUozLKo/dTX7icLyVPZpHTkvlNeMA8hMlPtRUWmyJ7nAWZZo5ItCxYwO8WGRvI
-	 gh0c02KERTelll2Ms32skcBCapkwYL5XQrBwEE1rSr27IJKRjVqWSYYuXN/SNNPQfPvun
-	 OJpT1xeioBX+vTLKKAnzFre+4qQNh8fCac/ylJLHpiuhz06zLCjv7uyR3843GEEZRvGlo
-	 x1UsMvV2fsnKJ+zx3a0auztt6CailOKaTvr53TvhhmKBr+4MP7JmT1iD0Lkj4n+R+4A==
+	bh=p3LnS5Gulsc9P8LXC3xm2cQUPKUuZYi2P3RaYtCTNvY=;
+	b=UqpN6iWa5jwOmqMxO0Mi9kN4suYHLShmLzPnPdf/Xga64idWrCu7Dge/LJxppM9K6LJb
+	 1FOAVtzhUXtRRLCyRDE5tNHNVsPsWktBioa8zKcGM1x5OwICjeD2m4LWhi1GxlWFoaBwX
+	 zB5juMDSs0GJuAUvkELnicdt/JUYoDuUcHsBgtfQmCx32IgYDMnHT/KFqZHAxQUYDqF3K
+	 WZQxHHnzf1AK8TC/+uEoHlzfIjeNwKJ32a8pixr+79ilC+x8OFEOtVxFH/BurNr7XYrOx
+	 r8I3zYISSTPb/Mrvf/8i3/7ZMaY6AexaRT4znX+wJBlOt3Z2Y6m8Oh7F8h7d0xbSuCQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f8jWOja9;
-	arc=none smtp.remote-ip=209.85.216.44
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="hNOZUyg/";
+	arc=none smtp.remote-ip=209.85.214.171
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA40606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:49:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2CA40606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F05606A31A
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:51:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 93F05606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f8jWOja9
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ab752f6244so295514a91.2
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:49:36 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hNOZUyg/
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ea138a3497so888095ad.2
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 12:51:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793130576; x=1793735376; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ilRNfn6/bKD7JKWWGxKTwYHt8GP2d4K6GHS01Pj1/t8=;
-        b=f8jWOja99rTif1wBYGxto9Q5zo3lubHcO/TNf7UXlG0Lm4HVNdEgxv6z+GV3B0cK45
-         3IewMoSHH414h7qh4fFruNakMzVM6IsrcJhKOHKeYc1y/iSKAWhGq+eEhq92yly2NRCW
-         BsO+I3uZMhPuZfeysu0nh5LkMoVeHmo6W82u0BT0qSMRn+oL4CCFln2xL2lCPi/dtGPW
-         euZ+FUtJdFmj6uOhG9BG8MPmCXcFkresznAo5Y9qIs5hYvEFDBOhVcJotIsb2eeyJTFz
-         vM1co1i92SR4+/vo8hWxoseajN7xznj65inySDpoFYE598XXKWU+2A7p2k4+GmM9qvMX
-         nXqQ==
+        d=gmail.com; s=20260707; t=1793130660; x=1793735460; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=p3LnS5Gulsc9P8LXC3xm2cQUPKUuZYi2P3RaYtCTNvY=;
+        b=hNOZUyg/mwrPzxp2S1lHdyOr1fPY+C+6jXhzJKwsLG45c9nI4YCQoqwaTqNe/iH/EI
+         rtzusSj0y7nQwbNMuOtXn4meDZD0gKt4i4yOwcb1TsHu5K4WcFXLe9wg5qBcrfUrGYvw
+         CVXcsm5Kk1IFwcLedRJu+RB2fmuxWLQ+qmtdBLi+tnKsdd46369QBods2lch3rbBKlfY
+         36TYpAIM4cos1PqVdD7IfydwR730JDx6b+1UcCVs1T9plQhTuQGwrELsbd/SSh0HD3Lg
+         G4k5Wspmq9Eq3nfO8pNtrW2qvNwM2gQrAR2uKNKnRzlbcQ4jMH0v8RFS5KZU1W0/wEQz
+         D2xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793130576; x=1793735376;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793130660; x=1793735460;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ilRNfn6/bKD7JKWWGxKTwYHt8GP2d4K6GHS01Pj1/t8=;
-        b=pGVf2pj0XpGNuTZHcwQWQD4CYzgvhZ8zhQSbCxvuPOxIrtfRpU1f/cU2ZhefL+vrZc
-         6VwfuIEdDunuBEL0VzdBLUStk9Uo6V6CcLYFBL6QdiMveAaiNkz/E2tMMqpT0iIUEavU
-         HOGfdzOiIlfvll2Fj3EGfmykzjWQ92/1PQ8Y+LUQzc/MyNanceG0VI7gOJrNG/gWHB5v
-         wIgstWVVd13z+I8ORrTLRe2ie7Z9hWts9KCzWa4fnGM9NaMAWmbkIGu3nrcr6NoyzAk9
-         KqKp7KghY6jM1as85uctmsr7ZlgZi7egomBx52lHmIScWOy8j5S2dhraCznoqL7QPi2B
-         YpWw==
-X-Forwarded-Encrypted: i=1; AKwUvBw8TegKXriPwwNGoeaMIYvm8vA0ilVAVmAj9aN947/D87Dp/c80I87ggI1jkiVWrlluR04=@vger.kernel.org
-X-Gm-Message-State: AFq9FYIY+IrBtApj/q9YM1aSJhTroQf6ar61FWjJ0SnbKy3KRDwptYTv
-	83FKHuXoq/DByWwDK1k5ruE0C8zcPlIdRde7wHW8jC+OAAh3jdCq7pMC
-X-Gm-Gg: AYBFou1Lelrtk0V+m2R0aGcodlc/u/U+fqKgpwJ/E+5kL8CGnvZZwR7FjxpJWW20dX9
-	D+Q8jOAVJvwE0eAKCySP4Dm+w2GGgKn3DTl8tguKXCbJz7aI/i7ld52fguBuW2CCp1AP+uPk58F
-	794mi7ic3XBbAf6icQubwkqhfJNnns7keTi0MinHHSWIiScUBw2Dphg03/E92LDcLJZK+Cjwj2/
-	UCWKy/66SOgMsQ+owFZ1OpH409ZINnQ2GqK0+c4L+xIjVucLUfaV9zEz4EqfOFMD3B5OAOjeaUw
-	3Q5EQMRlkPmqufgguQjB7km7NyMVgxRmmKItQtA9LLE/sMsXV4MmXpUP1wyArZD6G21FUmJ2PHg
-	lZfj5JLWLtUz/36pH/FZ/+lNZTSzOnngSYZ+yPDfRkbXHok9AZstYjIZL7bTGwm4xztmG5NgIsG
-	PbDGLoUbuKcedQpa6nsKWPsAQ8PNsZFUicPig4+txfG/6yl3yVwh985sZyjYBHN+J9uvzuzCFFs
-	f+SS/U0mzaQR4JQZzmN6LKoCmUVDDyhbPlIhmcr4E2Q1l9bBucVlf2U0YVM/a2nASK0h+J6t7x3
-	wOiMF6TcWkRYmFbG5tAn0IirFSG+33daFIkMRCP1z2Y7iGywrAGlmTnzM2wE
-X-Received: by 2002:a17:90b:54c5:b0:3ac:a204:aa27 with SMTP id 98e67ed59e1d1-3ae58195369mr74040a91.66.1793130576146;
-        Tue, 27 Oct 2026 12:49:36 -0700 (PDT)
-Received: from localhost ([153.61.198.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae57a1aacbsm127797a91.4.2026.10.27.12.49.35
+        bh=p3LnS5Gulsc9P8LXC3xm2cQUPKUuZYi2P3RaYtCTNvY=;
+        b=FoUn1bxD/jLuiLOa1nlmVVhzOw5ml9O/GDcPclN8Ieqx+I0IGOtdM6BYnAx28m1B5w
+         qyFSUd3rfWwWVYcNsiHs9tYnHv+MqJz88vfz2Ls3m38w0L2nCkj1kw5ezu4+LC614WJQ
+         rWeWBYEql+w7dalBBR/6ZUwmMKCLXFr1WU5tzi0TlLpmeCIHa/vM/uNATVcGIsh71XTX
+         03R8LrnZ63l9hsUMRijdhmawJ6OoI43CI/0uGD37Z6vZvuP6wiP8q8KSj9cHe9X3gAXM
+         Xr1IL59QyCIqGsSaGPvUdf0gaxElq38mXcONT1BTWIdQqtxTdNsUX1N8SBGpJFCZymSU
+         yOWA==
+X-Forwarded-Encrypted: i=1; AKwUvBwgvjkz66dfrdxLpb90gzKJJd9nvL30iM8Q5DoUDwgBt6c66T118od5nx5ZX0u9ahB5fIg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJmYSe8W/9CGNpujqXzwWCeN6K64yRx/88mji7p+UL/5qZ38lz/
+	CPPszKd11zgcbDnGc6nC7341vn3p/+GTPX+E0uYllpW/MHd+Poig6ij9oWdHoQ==
+X-Gm-Gg: AYBFou1WootxWHvw4Fvn4gp5pi9MwqlAl30WiLY+UaYIGoLcqmVGF6HxfeWjAycQrNM
+	oZZIyMnA9fA9+VGjp+Dg6SZJ929x8BJu6y9VrUtHkKKzHlHppxRAzO8mkF6C053RTLmXJvByDNE
+	afTw4MvZ9DihltiggHKKky+E+THxVFF2ofDMgzgPA3tNaWSavyoPKrQ/h3327pLCtbCS6pI6XAj
+	Mu7jv5QIiY+FcPbfQU4c+hgo71639/Z0oto02Lah6LciW4FIz7GenyNKseaXpRMQOmcC9Jwg2xl
+	bbS2damPEEQF0yQzmaYyH7PpdrNhmUx+rnzzEYIq0Mbtu5krjvHIpCcjzkIDd7OQDhk1uKRaVrS
+	o2+07PXPl63hjE3mmYDF/o4t2fVf+r1v8YGaZZEyyOs8cNL0GLaO/mmlL4WeCRRBtHtJhbxOqG5
+	7A+s/y1Y4y/1Kw6UakeJWMp2kMh1r9faWpU2DOfJR7JQEs/SJDxY2UJcqpX/QxDPyePOK+Mm9os
+	x5/47mQx/vAMeOgEtaWgUTDEFI0aT+18aEuhVnHoNBZ9dyPcLMYi07Qp0itj/zgg3DmaAa5VHe8
+	QAUtiOdq27FRBmoOgvOiMQ5XVCbUK3Wq9Ycl6cEPZgbRaf/smaW8mAQ4XrDpb7RGTgAv9opKK+9
+	KVpHxA0cPh0EfKYfiTGogpMD7WeKI0X8fjg==
+X-Received: by 2002:a17:903:94d:b0:2e6:2868:e576 with SMTP id d9443c01a7336-2eb003c10a9mr3665665ad.31.1793130659750;
+        Tue, 27 Oct 2026 12:50:59 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6453ea6sm14514935ad.10.2026.10.27.12.50.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Oct 2026 12:49:35 -0700 (PDT)
+        Tue, 27 Oct 2026 12:50:59 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Oct 2026 19:49:35 +0000
-Message-Id: <DMFVQMBXF65Z.11AGYWHTHCP4G@gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/7] selftests/bpf: libarena: Handle NMI
- reentrancy
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+Date: Tue, 27 Oct 2026 19:50:59 +0000
+Message-Id: <DMFVROPTON36.3LX4QMXFDA91K@gmail.com>
 Cc: <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
  <daniel@iogearbox.net>
-In-Reply-To: <20261023002056.6647-5-emil@etsalapatis.com>
-References: <20261023002056.6647-1-emil@etsalapatis.com> <20261023002056.6647-5-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v3 5/7] selftests/bpf: libarena: Refill local
+ caches in batches
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20261023002056.6647-6-emil@etsalapatis.com>
+References: <20261023002056.6647-1-emil@etsalapatis.com> <20261023002056.6647-6-emil@etsalapatis.com>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -102,79 +103,29 @@ Precedence: list
 MIME-Version: 1.0
 
 On Thu, Oct 22, 2026 at 05:20 PM Emil Tsalapatis <emil@etsalapatis.com> wrote:
-> An NMI can interrupt the buddy allocator while it holds the buddy lock, so
-> code running in NMI context must not take that lock.
->
-> Allow an allocation from NMI context only when the local cache can satisfy
-> it without taking the buddy lock.
+> +	if (buddy_alloc_bulk(buddy, size, BUDDY_CACHE_BATCH_ORDER,
+> +			     (void __arena * __arena *)slots->objects))
+> +		return NULL;
 
-can we take the buddy and transfer locks with arena_spin_trylock()
-in NMI instead ?
-It succeeds only when the lock has no owner and no waiters, so it's safe
-in NMI. Every caller handles a lock failure already.
+This asks for one block of order + 3. When the existing chunks have free
+objects of this order, but no such block, it goes to buddy_chunk_get().
+Before this patch the existing chunks served such buddy_alloc().
 
-With this patch nothing refills the caches in NMI, and buddy_cache_init()
-leaves them empty. A prog that runs only in NMI gets NULL from every
-buddy_alloc().
+A sleepable prog takes another 1 MiB chunk.
+A non-sleepable prog loses 1 MiB of buddy->vaddr in every buddy_alloc():
 
-With trylock an empty cache gets a refill and a full cache spills.
-When trylock fails, buddy_alloc() returns NULL and buddy_free() defers
-the object.
-Then bpf_in_nmi() is in one place instead of five by the end of the
-series, and no need for buddy_deferred_free_start_bulk().
+  buddy_alloc()                       the cache is empty
+    buddy_cache_refill()
+      buddy_alloc_bulk()              no free block of order + 3
+        buddy_chunk_get()
+          buddy_alloc_arena_vaddr()   buddy->vaddr += 1 MiB
+          bpf_arena_free_pages()      deferred to a worker
+          bpf_arena_alloc_pages()     the range is still reserved: NULL
+    buddy_alloc_memory()              one object from the existing chunks
+                                      the cache is still empty
 
-Something like this (not even compile tested):
+After 1024 of them buddy_alloc_arena_vaddr() fails for sleepable progs
+too.
 
-static __always_inline int buddy_spin_lock(arena_spinlock_t __arena *lock)
-{
-	if (!bpf_in_nmi())
-		return arena_spin_lock(lock);
-
-	/* NMI could have interrupted the owner of the lock on this cpu */
-	bpf_preempt_disable();
-	if (arena_spin_trylock(lock))
-		return 0;
-	bpf_preempt_enable();
-
-	return -EBUSY;
-}
-
-#define buddy_spin_lock_irqsave(lock, flags)			\
-	({							\
-		int __ret;					\
-		bpf_local_irq_save(&(flags));			\
-		__ret = buddy_spin_lock(lock);			\
-		if (__ret)					\
-			bpf_local_irq_restore(&(flags));	\
-		(__ret);					\
-	})
-
-#define buddy_lock(buddy, flags) buddy_spin_lock_irqsave(&(buddy)->lock, flags)
-
-and in buddy_free():
-
-	ret = buddy_lock(buddy, flags);
-	if (ret) {
-		buddy_deferred_free_start(buddy, addr);
-		return 0;
-	}
-
-[...]
-
-> +	do {
-> +		head = buddy->deferred_free;
-> +		if (!head)
-> +			break;
-> +		old = head;
-> +
-> +		/*
-> +		 * The cmpxchg is safe because we never pop from the list
-> +		 * without holding the buddy lock. The next pointer of
-> +		 * the element then cannot have been gotten invalidated.
-> +		 */
-> +
-> +	} while (cmpxchg((void __arena * __arena *)&buddy->deferred_free,
-> +			 old, NULL) != old && can_loop);
-
-Also one __sync_lock_test_and_set() takes the whole list.
-No need for the loop.
+Should the refill look at the existing chunks only,
+like buddy_alloc_nogrow() in your other series?
