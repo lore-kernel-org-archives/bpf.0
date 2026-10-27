@@ -1,115 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.231.75
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793115854;
-	b=gXEq9gnOGCO5kUBn5dgmaLgNmPS+RcqDRXKuLedW0QRc2Ro18XGfBIFpYINfgcywwiT+
-	 UKHYapk0xzl7YjmqAR755lrI8tr6y0AEJoDg/sNAz6i9vWajX2qx9WMnKyPygR8Bq9vgJ
-	 d1Rr2N/HHyoa0nNCffCEuwX6lrnbU6bkQqtiwe9u0KOcrQdbLbVHpB4CMaov8nEXPn7Kg
-	 +rO0xMRe1zNw9uTM5QoO+91z0zwbocwB6L28KGKpDJtrDdu/15vlMBuwE3rPtCp9U3lTz
-	 T5huqo67ueyV/BBWPe4gJB6CCLlxaJC+A+ZwDS3sLP17Pt85R467c1n3yaisN7+nBJw==
+	t=1793115964;
+	b=bhCRjXPXtvJQfKMQWgj3GxjRzL8Iea0Ie9oJFsu3wqVyEJ8EhYJW7c2LSy3nMaNI1kZO
+	 OkUXqfTSX73N57nChDT3rYGjNVnwZ3Fcf6tPnUBeTeAtK4n4V3elfk/XiZDiuuar2t21+
+	 b0cku3OtCTDyTOLQuSK4EkiQQu1SY0Pre5BsR9gKVsHAdO/AxXLB9RwWzue5IDKp0P1GL
+	 SJyZtOp3N52Kq51KqlZKSWENsua0loRsFqpCqfHM/j1vIRBJLkIuYY0x7VE0tDBtYq+VY
+	 JZ+eP2VgAh5civVB7sjtXe+bQl//4yQDSdhBdsE/HVPbC0j/0mCiUVP3xy59eSpJ3/A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793115854;
-	h=Received:DKIM-Signature:Received:Message-ID:User-Agent:Date:From:To:
-	 Cc:Subject:References:MIME-Version:Content-Type;
-	bh=KzGA3Z1wHw/pEoG+sL3nupeeb8x6YGTMS4RDHQzgvgY=;
-	b=tc54JVH3cTEG+R7G+NJ6y5lrXm0QMexnNN/FAwN9l/xHGFPP0uaqtHjqojAZzJgz3nWw
-	 tlAuRH4r0+OKNhsWqGtbr63Jb5fvmhf8wgYggN+aIb0gSzgeMYA0tipkyaPISpmfN8QlV
-	 uH5A3q6o2JL0yUYKvVr8OTO0l4cDJ8ZxpfN0ijwBxzhvRfnAmWxnX34ktBkk7rwKPabgg
-	 o+Bt7ZEgTB4MVwr0ZjSe1pMwkczN8KMYal4lXdZpI07puwSkoGv18Ey/gr6G4GthnUGQJ
-	 vMxh7+LhCjZJwaXhT3GtB0SyNgfj7qlQZLxHugv8AJdsF8HPSjSFc3vU/Pc0WxvvVtA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793115964;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=1U/f7oPGNubcc6Z6QRWv6i5yV414y9BBz7ooV/FsgrM=;
+	b=B1z3glMnVfAPWyw+5EbgwblzH9qJ8S7oP8EAvftou5isltNLnz5q++4YdUsSqZGBi1Va
+	 k0PP9EwydAFCQ2Juu5vUUsFgbWcRZ8qEmh0tthOuQGVjT/kfRWxCiG2CAH8WjLC0Q7Yg5
+	 gH7O0DXm/MgBYPy0SjMuaEC7j7jMCeu4s0Q0YRszbgZ5am/U+D8Wu1zmpK2jO3/661yG4
+	 Xg/0HHvzoYAw6DHFBMZ/qblLy14E+MBrm0KaB1ozXy1oelwqXXM6/Lq51lNP6GODbHf5H
+	 yIXlDfCgRCol3zV6wTvx1thHrn3pa/W+T9dHvLXRs3qZW+sVURXkuPyjlJSwfxYZomQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AfWSo6hV;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dDxSCKV7;
+	arc=none smtp.remote-ip=74.125.231.75
+Received: from mail-oa2-f11.google.com (mail-oa2-f11.google.com [74.125.231.75])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C57C606A325;
-	Tue, 27 Oct 2026 15:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68405606A327
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 15:46:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68405606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=AfWSo6hV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7F31F01829;
-	Tue, 27 Oct 2026 15:44:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793115853;
-	bh=KzGA3Z1wHw/pEoG+sL3nupeeb8x6YGTMS4RDHQzgvgY=;
-	h=Date:From:To:Cc:Subject:References;
-	b=AfWSo6hVC8lFb2WltHtSejhRNb8UVs4QhxXiq9vQdf1BIByfe9oE6+YTcNLAIj/ij
-	 3gpWorjlfL03ffDe/a0Y7zrHwNXVdr1DR/zvjYR4BpAak7GpvDRWT4ox+fq1KeA0qZ
-	 +WGKSFcSgYCjnPSZerKO5mRsxr8GKU6SWwT2XhPZCzwR6uNubRVKWAWTnDFYdBJf1Z
-	 zjqlXN1fpTmDt8g1X9LtEpEsz+J0GOuyGwQ8YvurX3hCaxpzEsdVHMSLEB+A3VZuD3
-	 yNTB+rSiUQQwCZ4Tx07KoB4EjjXu+sClnPzBaDmhQjDD3Wc9fmInB+d1UCt6ifIqzI
-	 3oU5XNtcbw1LA==
-Received: from rostedt by gandalf with local (Exim 4.100.1)
-	(envelope-from <rostedt@kernel.org>)
-	id 1xLjLR-000000078gI-05dC;
-	Tue, 27 Oct 2026 11:44:13 -0400
-Message-ID: <20261027154412.834382801@kernel.org>
-User-Agent: quilt/0.69
-Date: Tue, 27 Oct 2026 11:37:00 -0400
-From: Steven Rostedt <rostedt@kernel.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Vineeth Pillai <vineeth@bitbyteword.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Aaron Conole <aconole@redhat.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- Alexei Starovoitov <ast@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Borislav Petkov <bp@alien8.de>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Danilo Krummrich <dakr@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- David Airlie <airlied@gmail.com>,
- "David S. Miller" <davem@davemloft.net>,
- Eelco Chaudron <echaudro@redhat.com>,
- Eric Dumazet <edumazet@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Ilya Maximets <i.maximets@ovn.org>,
- Ingo Molnar <mingo@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Jiri Pirko <jiri@resnulli.us>,
- John Fastabend <john.fastabend@gmail.com>,
- Jon Maloy <jmaloy@redhat.com>,
- Koby Elbaz <koby.elbaz@intel.com>,
- Konstantin Sinyuk <konstantin.sinyuk@intel.com>,
- Kyungmin Park <kyungmin.park@samsung.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
- "Martin K. Petersen" <mkp@kernel.org>,
- Matthew Brost <matthew.brost@intel.com>,
- Maxime Ripard <mripard@kernel.org>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Oded Gabbay <ogabbay@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Philipp Stanner <phasta@kernel.org>,
- Simona Vetter <simona@ffwll.ch>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- Thomas Gleixner <tglx@kernel.org>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- tipc-discussion@lists.sourceforge.net,
- Tung Quang Nguyen <tung.quang.nguyen@est.tech>,
- Xin Long <lucien.xin@gmail.com>,
- x86@kernel.org,
- amd-gfx@lists.freedesktop.org,
- bpf@vger.kernel.org,
- dev@openvswitch.org,
- dri-devel@lists.freedesktop.org,
- linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org,
- linux-scsi@vger.kernel.org,
- linux-sctp@vger.kernel.org,
- netdev@vger.kernel.org
-Subject: [PATCH 2/9] accel/habanalabs: Use trace_call__##name() at guarded tracepoint call
- sites
-References: <20261027153658.703730257@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=dDxSCKV7
+Received: by mail-oa2-f11.google.com with SMTP id 586e51a60fabf-462dec1c4c5so25896fac.0
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 08:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793115962; x=1793720762; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1U/f7oPGNubcc6Z6QRWv6i5yV414y9BBz7ooV/FsgrM=;
+        b=dDxSCKV7uirI0zJKGKUITji24Pmx13hWIPnSRXOF0IdrdI73IX7Jp49wDeC8fo0GFy
+         TEP3yqJug5HAfCZQ8dfgAXECgerbozNJLCGWPHWetz0tP15iMl/F9N5PJM4kEu4Gi9tw
+         zX1AorLE67asLZAGd512VBbHcU4zgxFvl7QBAcbJDy8L5kILe+alejUjA6ivBR2JqeYG
+         bOI0WLoDP9Yv4jixhxrviramGCGn4MeTc466GBnhtAWTu/rC06O+10lwkvWJJe0e4b3S
+         GiRDf7rV5T0KAHh14QsnTjUmHb0t0Eb4OAf9bcTBSK/7Tl3gv8OIwpJAL6c2H+XY0haL
+         N3Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793115962; x=1793720762;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1U/f7oPGNubcc6Z6QRWv6i5yV414y9BBz7ooV/FsgrM=;
+        b=nzquETNMcZUhEcvsJMtIcI9OFNKtUr3+u9C8DldbI4Fm3y6uQpsApbLjX/iXF1VYed
+         HDvnEiPk/KdKDqwsNIk/xnmAyY7tzST+eXT+gnhAbchVDcWZ1/GS4sxndseqINBTtNr7
+         E9Ac/so+IUkyPwjN66ljXjUhSawvDAZ2Xi03UTexsPzmU4K24xzdbnDLX1t3uArLeJz7
+         jVlJuxZccgZSuWweEsLMq/RPBqEu2iRarkHtYUBZHfI0i7XvEQ2i/4INsklWTUXC8bL4
+         DLijeD+Qqzhl1+B4DgVeBEd0WSc3a/OHVdILV5lJICO0TS9LOhSMec4shETvXPSbwq6k
+         LE4Q==
+X-Gm-Message-State: AFq9FYKBq/yd97ZDC97kM4TfS8FJzrVkvr4vOUPWOEsk4BGRxoinieZY
+	9utBdcfIFe85UWvIWtG+yvz7WHmJRfOmRvOJsx2YpXvi8hwCNltBrLe9
+X-Gm-Gg: AYBFou2M35sqGWKu/+7L4OBKaH6s1xF5LuA3cAb3xD/R3Q9uiVm5a4SPWwwSuiqrJQg
+	ZvcZ0aZMKM8Lgl/cspGBrt9xw2fMxa3moBNtGwi2oxfnjBzbW2nOGaN9/Y7NlNOwpj42dWnXcdN
+	9Wch8RfQRIE6LlTA19uiE43C17tWPkmQKrlrA/BJ7YOmIy2S+JABHXql6FLDnlC+pzT5Al6MTBS
+	qhrD/nFBa9iyPY21F735Xa/dk6avKfC3mpAV0MM5Jh5BAy/x8qRllRgRwonT/+LhfWD0vgcTnaO
+	SajJY/aHemJBX2I7s+4ccfc1/N3SCsdSKim261yz9MlRBUyn0QvQC5/YCddyMT5o4xBu2JrCZUH
+	AVrDYwA2eHra5ROx5T4Bbv3uv5vmdK3TvqY0Tdc6k43leL8jSvYMlu8RnyyTkPDDu96NCYpH75g
+	dztMQgV6OsuVrsxSzh3PF+EOxN41YBI0KiC1Fj/biSsFIvffnFJTLTP0isek87yewI6AIQyaFhx
+	lRa1QYtEsXNS5zMH6BQIFCm2IwhCvWIVHJUX/zjiw1HHq4fQmkPqDzsXhkDqk0fRGNqutU4dnPW
+	V3tvLVVkRX7qCOMZxLs=
+X-Received: by 2002:a05:6870:ac14:b0:494:7435:ebc9 with SMTP id 586e51a60fabf-4a83f60f8f9mr6048799fac.52.1793115962282;
+        Tue, 27 Oct 2026 08:46:02 -0700 (PDT)
+Received: from localhost.localdomain ([14.116.239.34])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a8b78de44esm445828fac.11.2026.10.27.08.45.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2026 08:46:01 -0700 (PDT)
+From: Henry Martin <bsdhenrymartin@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Henry Martin <bsdhenrymartin@gmail.com>
+Subject: [PATCH v2] bpf: fix out-of-bounds frame access for async callback stack args
+Date: Tue, 27 Oct 2026 23:45:53 +0800
+Message-ID: <20261027154553.1043567-1-bsdhenrymartin@gmail.com>
+X-Mailer: git-send-email 2.43.7
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -119,106 +104,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Vineeth Pillai <vineeth@bitbyteword.org>
+check_stack_arg_read() resolves the caller frame with
 
-Replace trace_foo() with the new trace_call__foo() at sites already
-guarded by trace_foo_enabled(), avoiding a redundant
-static_branch_unlikely() re-evaluation inside the tracepoint.
-trace_call__foo() calls the tracepoint callbacks directly without
-utilizing the static branch again.
+    caller = vstate->frame[vstate->curframe - 1];
 
-Original v2 series:
-https://lore.kernel.org/linux-trace-kernel/20260323160052.17528-1-vineeth@bitbyteword.org/
+and copies caller->stack_arg_regs[spi] into the current register
+state.  It bounds spi against the callee's declared incoming stack
+arguments, but nothing validates the caller side.  Two kinds of
+callback frames reach this code without a validated caller.
 
-Parts of the original v2 series have already been merged in mainline.
-This patch is being reposted as a follow-up cleanup for the remaining
-unmerged pieces.
+Async callbacks (bpf_timer_set_callback and friends) are queued via
+push_async_cb(), which builds a fresh verifier state with frame[0]
+as the only frame and curframe left at its kzalloc default 0, so the
+code above evaluates frame[-1]: an out-of-bounds read behind the
+bpf_verifier_state.frame array whose result is used as a pointer.
 
-Link: https://patch.msgid.link/20260515135914.2238789-1-vineeth@bitbyteword.org
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
-Assisted-by: Claude:claude-sonnet-4-6
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+Synchronous callbacks (bpf_loop, bpf_for_each_map_elem, ...) run with
+curframe >= 1, but push_callback_call() ignores every error from
+btf_check_subprog_call() except -EFAULT, so a callback subprogram
+whose prototype does not match the helper's callback ABI (e.g. more
+than five BTF arguments) is still queued for exploration.  Inside
+such a callback an r11-based incoming stack argument load passes the
+spi bound check, while the kernel helper never passes stack arguments
+at runtime:
+
+  - caller->stack_arg_regs is a heap array sized by the caller's
+    out_stack_arg_cnt; if no outgoing stack arguments were prepared,
+    the load dereferences NULL or reads past the allocation;
+  - if a previous subprogram call left initialized outgoing stack
+    arguments behind, the stale register state is copied into the
+    callback's registers even though the runtime ABI passes nothing
+    there.
+
+Kernel helpers pass at most five callback arguments, all in
+registers, so an incoming stack argument load can never be valid in
+a callback frame.  Reject such loads when the current frame has no
+caller (curframe == 0) or is a callback frame (state->in_callback_fn).
+
+This issue was discovered by Tencent CodeBuddy Security.
+
+Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
 ---
- drivers/accel/habanalabs/common/device.c  | 9 +++++----
- drivers/accel/habanalabs/common/mmu/mmu.c | 3 ++-
- drivers/accel/habanalabs/common/pci/pci.c | 6 ++++--
- 3 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/accel/habanalabs/common/device.c b/drivers/accel/habanalabs/common/device.c
-index 09b27bac3a31..68c6f973d53f 100644
---- a/drivers/accel/habanalabs/common/device.c
-+++ b/drivers/accel/habanalabs/common/device.c
-@@ -132,8 +132,9 @@ static void *hl_dma_alloc_common(struct hl_device *hdev, size_t size, dma_addr_t
+v2: Also reject r11-based incoming stack argument loads in synchronous
+    callback frames (state->in_callback_fn), not just the async
+    curframe == 0 case: push_callback_call() queues callbacks whose
+    prototype failed btf_check_subprog_call() with -EINVAL, leaving
+    caller->stack_arg_regs unvalidated or stale (sashiko review).
+    The curframe check stays necessary because the async timer and
+    workqueue setter set_timer_callback_state() does not set
+    in_callback_fn.
+
+---
+ kernel/bpf/verifier.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5f874979b8d75..c838ec39590b9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4232,6 +4232,11 @@ static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_st
+ 		return -EACCES;
  	}
  
- 	if (trace_habanalabs_dma_alloc_enabled() && !ZERO_OR_NULL_PTR(ptr))
--		trace_habanalabs_dma_alloc(&(hdev)->pdev->dev, (u64) (uintptr_t) ptr, *dma_handle,
--						size, caller);
-+		trace_call__habanalabs_dma_alloc(&(hdev)->pdev->dev,
-+						 (u64) (uintptr_t) ptr,
-+						 *dma_handle, size, caller);
- 
- 	return ptr;
- }
-@@ -2656,7 +2657,7 @@ inline u32 hl_rreg(struct hl_device *hdev, u32 reg)
- 	u32 val = readl(hdev->rmmio + reg);
- 
- 	if (unlikely(trace_habanalabs_rreg32_enabled()))
--		trace_habanalabs_rreg32(&(hdev)->pdev->dev, reg, val);
-+		trace_call__habanalabs_rreg32(&(hdev)->pdev->dev, reg, val);
- 
- 	return val;
- }
-@@ -2674,7 +2675,7 @@ inline u32 hl_rreg(struct hl_device *hdev, u32 reg)
- inline void hl_wreg(struct hl_device *hdev, u32 reg, u32 val)
- {
- 	if (unlikely(trace_habanalabs_wreg32_enabled()))
--		trace_habanalabs_wreg32(&(hdev)->pdev->dev, reg, val);
-+		trace_call__habanalabs_wreg32(&(hdev)->pdev->dev, reg, val);
- 
- 	writel(val, hdev->rmmio + reg);
- }
-diff --git a/drivers/accel/habanalabs/common/mmu/mmu.c b/drivers/accel/habanalabs/common/mmu/mmu.c
-index 6c7c4ff8a8a9..dd8b6fb3aa1f 100644
---- a/drivers/accel/habanalabs/common/mmu/mmu.c
-+++ b/drivers/accel/habanalabs/common/mmu/mmu.c
-@@ -263,7 +263,8 @@ int hl_mmu_unmap_page(struct hl_ctx *ctx, u64 virt_addr, u32 page_size, bool flu
- 		mmu_funcs->flush(ctx);
- 
- 	if (trace_habanalabs_mmu_unmap_enabled() && !rc)
--		trace_habanalabs_mmu_unmap(&hdev->pdev->dev, virt_addr, 0, page_size, flush_pte);
-+		trace_call__habanalabs_mmu_unmap(&hdev->pdev->dev, virt_addr, 0,
-+						 page_size, flush_pte);
- 
- 	return rc;
- }
-diff --git a/drivers/accel/habanalabs/common/pci/pci.c b/drivers/accel/habanalabs/common/pci/pci.c
-index 81cbd8697d4c..12663e8e12e0 100644
---- a/drivers/accel/habanalabs/common/pci/pci.c
-+++ b/drivers/accel/habanalabs/common/pci/pci.c
-@@ -123,7 +123,8 @@ int hl_pci_elbi_read(struct hl_device *hdev, u64 addr, u32 *data)
- 		pci_read_config_dword(pdev, mmPCI_CONFIG_ELBI_DATA, data);
- 
- 		if (unlikely(trace_habanalabs_elbi_read_enabled()))
--			trace_habanalabs_elbi_read(&hdev->pdev->dev, (u32) addr, val);
-+			trace_call__habanalabs_elbi_read(&hdev->pdev->dev,
-+							 (u32) addr, val);
- 
- 		return 0;
- 	}
-@@ -186,7 +187,8 @@ static int hl_pci_elbi_write(struct hl_device *hdev, u64 addr, u32 data)
- 
- 	if ((val & PCI_CONFIG_ELBI_STS_MASK) == PCI_CONFIG_ELBI_STS_DONE) {
- 		if (unlikely(trace_habanalabs_elbi_write_enabled()))
--			trace_habanalabs_elbi_write(&hdev->pdev->dev, (u32) addr, val);
-+			trace_call__habanalabs_elbi_write(&hdev->pdev->dev,
-+							  (u32) addr, val);
- 		return 0;
- 	}
- 
++	if (vstate->curframe == 0 || state->in_callback_fn) {
++		verbose(env, "stack arg read from a callback frame\n");
++		return -EINVAL;
++	}
++
+ 	caller = vstate->frame[vstate->curframe - 1];
+ 	arg = &caller->stack_arg_regs[spi];
+ 	cur = vstate->frame[vstate->curframe];
 -- 
-2.53.0
+2.43.7
