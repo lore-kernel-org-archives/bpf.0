@@ -1,59 +1,131 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793106179;
-	b=IvjKwjFCXtX+11lvZo+kdYY6sVWqramnhhvL5lzhXwve/lh+zZcqjQhoghQQVzz91qE7
-	 JhL2zlEWAXbcguLaKk63ndgxcdZH9oJQyQoKk+wpkiOSkp2J79oMWow8EWPdDhr2UEOUR
-	 TYdEfPmhwCB/E4HOPhfOyl06zTaxGDhAY1mfR0Vf8mWgXxLYyazirqiaOgnNqTfXd3HSj
-	 JoF3v5alT+9D076gl8X9CbiVD3KACfW8bKp5WVP7zjq8KSmEASldIDWCTEGhYHM8tlGYt
-	 Wg1DrDBmdwFZxO+zdvUiIRsjCxseN8L0vwLrau/BeJMglq7slc51P869e7J4e6k3Mrg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793106179;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=AuGd6/0lV3u80K6afDNvZ6QslFjyuo8zZBO2WmTuR6Q=;
-	b=wXM3FDP9+z9ZXeYbdlLdkBf8td6eviZOKtrD+TjZmM9GFZ2fuoyxX35nTRXWlkbdVDl5
-	 Ibtllzz0yG6CjXrlVdJnL/OxOQ3WGGPpR5GTzHz/pDQ6mWFaGSKX0j1dGWIcNs8hGEQJM
-	 5tzVuLTzr6A3scvCVe3AXrz6RDNBrh8jBiuRSOqtrB211EmcDmh0SOpdkiCPTHK0+WXdJ
-	 YjoPzoXTrTOYbonL5J2+FD/r1K2dhlXsE6tSKBbOkViqXle3GBG8T0DGXc/uQxFjjMrSL
-	 AmReBDuuWokcLkb1daWDJ65QbhU8ywjfN6rEqxveA3uX+S8aw+Wew/OjLqllX0Ohz3g==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HCLDFWFq;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=192.198.163.8
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793106701;
+	b=1TyF90fLthwdqLiqzCSgjghJhPi/2eunRFdTznsJlpXvNF9pt4fWydvzo7b/xHBPmE/q
+	 A2ltlECPkxtRna7yF8rHiebMWE5iqCFUmAv9TVCppjMYLCGh1JAl9WX4dDW2c8pJlzDjt
+	 zEe4b1FlWAsZ832ryEXVgkWgzT/I91Ff4nXEDCjNM1t+CljydywN/LNJN1cOANJBmRIws
+	 +j7GbZkUfTrN7z1nSw1byQOTsktBDN1HeCwMEypAe0odinNdAr+VgWTg2s2YkPc30Uxbt
+	 2buzuQ7Q4I/6M5nEQKBkhqq+eyeho2mjW92yK5/ok/dfv6quIDcfhjO95N2tHLiy4KA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793106701;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Received:
+	 Received:Received:Received:Date:From:To:CC:Subject:Message-ID:
+	 References:Content-Type:Content-Disposition:In-Reply-To:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg;
+	bh=DrEfA9EPvz/k0KVZWtWIHcYml3DmJ1oHWulhi91z2f8=;
+	b=bSL2FC94vxBvWO9c5FYa9WjH4IbbJ1C4NkVcEMInLOW6Igbd4PbC9IcqFNe7ang4Ye1i
+	 jUlFHwswplB8wR692ddC7lg0urEHorx8TAS6P4ZNv/jA5JVemhFQLpomJv4P2ICPffaXs
+	 5tq9C74I9vEGPGfw3dZEmwRUrvxffE3SaDxJdSjaZUFAFDo/Rq9oNe2y9kMoY90djDRJW
+	 WdAoFd2V/1dceFAsqKNGIHAiZjHgg5MW3WXqfsZAdYTfvCwrAs8mSXw8sJBKQ7cNyrrze
+	 nziEXglL2K83yPjZjgc12rAuJLxEpn+aedfR3FU5CJN8tOGiMe2vo8plyFb0gozlhVg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=B0uGN5Ye;
+	arc=fail smtp.remote-ip=192.198.163.8
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C87606A31B;
-	Tue, 27 Oct 2026 13:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F055F606A31A;
+	Tue, 27 Oct 2026 13:11:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F055F606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HCLDFWFq
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 972DC1F01825;
-	Tue, 27 Oct 2026 13:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793106179;
-	bh=AuGd6/0lV3u80K6afDNvZ6QslFjyuo8zZBO2WmTuR6Q=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HCLDFWFqpPC5fPv/s1XgegxV2pfFOiq6gDYLjEeL0KW/FEwXvunP3SyV/oAzGvCjS
-	 g8BrXQBlLfguB4lxYcGKFlaxDbT+UhNYIOniJE9dBuc21qbI1/BXZUt2dI5ur/tDZP
-	 tnjmwSpSxC4QLOz9L6YFQvpLmcdhjc9JDYYsAcX+d8QYGOvXMAAa4HV5UNBXTKFlIr
-	 TyICR5pjWpbKKfepf3/oNfoopSxHZQr3uzW0i23FBKh6tYzjegG0tJsPBX6CiN/31R
-	 PujZZArYR/oSwmOHBIOrv0qsVzmvWZLP+/JnJ90MAC33CDPa7mR81KVTShE5wq7E8M
-	 voYqIXBu/VDng==
-Message-ID: <sashiko-outbox-186599@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 -next 06/18] LSM: pass struct path and struct file to
- the inode xattr hooks
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Cai Xinchen" <caixinchen1@huawei.com>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, linux-trace-kernel@vger.kernel.org, selinux@vger.kernel.org, dsterba@suse.cz, "Chuck
- Lever" <cel@kernel.org>, "Jeff Layton" <jlayton@kernel.org>, "Anna
- Schumaker" <anna@kernel.org>
-In-Reply-To: <20261027121151.1887650-7-caixinchen1@huawei.com>
-References: <20261027121151.1887650-1-caixinchen1@huawei.com>
- <20261027121151.1887650-7-caixinchen1@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 Oct 2026 13:02:58 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=B0uGN5Ye
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793106700; x=1824642700;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=XskIaF5ktQty7rN64/2+9v+O2s1niC/FkrOPN4VAAPE=;
+  b=B0uGN5YefIcfcGx51NKR9VwRwPIpv+YodBHnl/JkF7aVw+ixqYeAhXvg
+   vA3aUAmzeKBvSAIOc/mh0m3aFMrgBfeZnlgw3Sie2uMu2X0+uz3d72uM9
+   WKfx1h9t8Xv2qryCCit2d2PV8fOLf9u+0VXydCaRehB3y7iRN08Kqmm0n
+   IHdqmeK1wtvP6hHrulcu+8vhsC9M2dTVD8jpYDUjPR6+X64+LHv/OcBET
+   Dd/qM71RVHBwCS150o7YG5KbIs5Ti4jcLJmasVyP/zMd3FXofN96/cBFC
+   H5LGwHZ1E+s9qT+SsqyxDPyy2MuLWU6g2LdJcmn4jyZBgmXtPuP/2XRnW
+   g==;
+X-CSE-ConnectionGUID: 9FpG42a1QAmgIA+/wNBiJw==
+X-CSE-MsgGUID: Ar/I7zvTTo6xYGwzkI0U6Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11948"; a="1700587"
+X-IronPort-AV: E=Sophos;i="6.27,181,1787036400"; 
+   d="scan'208";a="1700587"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2026 06:11:39 -0700
+X-CSE-ConnectionGUID: 1EGA1ps0QfOWgkjAj/f0HQ==
+X-CSE-MsgGUID: jGeLuHEdRl60c2W68sn0hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,181,1787036400"; 
+   d="scan'208";a="6416663"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa011.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2026 06:11:39 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Tue, 27 Oct 2026 06:11:38 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49 via Frontend Transport; Tue, 27 Oct 2026 06:11:38 -0700
+Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.45) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.49; Tue, 27 Oct 2026 06:11:38 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KuDAYVrwdbTr5ElUu2ox6op5OGTQA6eYrEyf9wz5I7zw9K2rs3DxsbEXUr3Yelofor6twja02jGq+Ncvez8DunAq6PUhKRaRlbHO8s41PCwS2OYLaAz8N3+j2d5H51DmjAIhnffCfSabphVqqugxENCTeBUaNxm+sAHwiHKIgYM0c7teUTmNn/L8FN3I5GZ7olCvBA+rlErAqtL4Ql4bg0v/M1hft5EziKOwWvt4jEmlcFfdENMf9nRJEjx8z0QpW+EJI8zzRV3alv3rQGS7f7bPSuJcanFGmVeIl+1prouSrR03J9abaiEvLODho3z10DAyytIAOZ/Q6dygsCEfsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DrEfA9EPvz/k0KVZWtWIHcYml3DmJ1oHWulhi91z2f8=;
+ b=yY7QMLqXpMFs2bjYKHgAl/ClK7owdsuJI8upRSDrky8JRj6+g/bWkKj8FLhff7oOQlp73IIBq63ErY4iUztVRGHPo66b1EKWttrjExWfmxqAkKNWE7aUtTy99FQp2h+5L7ZCjt4A1WwQtq+iwHcUBc1pvFUlirgVV30MCe+w7Qykf+XAkPvIlq0U537HDuFfwbOjKTQBzhn3XDGaFIZrxVjpb5n1i/eov52c7EVrNizhGO1AzriADmdrl4PSDghWQhs3AazImOzLMq9ElcKBx4qwOR+4mocMqEYc7kn7a8Sw9IEUl0Dn6ylL/nhaurpHw/T3ubC9kCVssB5cYXvJoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from LV2PR11MB868673.namprd11.prod.outlook.com
+ (2603:10b6:408:422::13) by SA3PR11MB9463.namprd11.prod.outlook.com
+ (2603:10b6:806:45e::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Tue, 27 Oct
+ 2026 13:11:36 +0000
+Received: from LV2PR11MB868673.namprd11.prod.outlook.com
+ ([fe80::5bfd:6afe:a9db:b7de]) by LV2PR11MB868673.namprd11.prod.outlook.com
+ ([fe80::5bfd:6afe:a9db:b7de%4]) with mapi id 15.21.0546.021; Tue, 27 Oct 2026
+ 13:11:35 +0000
+Date: Tue, 27 Oct 2026 14:11:24 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Zhiling Zou <zhilinz@nebusec.ai>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<magnus.karlsson@intel.com>, <sdf@fomichev.me>, <davem@davemloft.net>,
+	<edumazet@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+	<john.fastabend@gmail.com>, <vega@nebusec.ai>, <bjorn@kernel.org>
+Subject: Re: [PATCH net 1/1] xsk: validate consumer ring producer index
+Message-ID: <auCi4nDJ1eiGx5hC@boxer>
+References: <cover.1792654486.git.zhilinz@nebusec.ai>
+ <d2b51708a3ada3b12b986224ee8340ca7ef5b3be.1792654486.git.zhilinz@nebusec.ai>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <d2b51708a3ada3b12b986224ee8340ca7ef5b3be.1792654486.git.zhilinz@nebusec.ai>
+X-ClientProxiedBy: DU7P189CA0019.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:10:552::19) To LV2PR11MB868673.namprd11.prod.outlook.com
+ (2603:10b6:408:422::13)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,206 +134,200 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR11MB868673:EE_|SA3PR11MB9463:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1678210-9ab9-45ce-d7fb-08df342bd436
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|23010399003|366016|1800799024|13003099007|261026140227099003|4143699003|11063799006|5023799004|56012099006|261026121527099003|261021121427099003|261022105027099003|261022075727099003|261009223027099003|10067099003|22082099003|18002099003|6133799003;
+X-Microsoft-Antispam-Message-Info: Bx3niPIiNXj53fcMQHW3mGje/3TYUC0Bwv61LouLF0sCadGQxVpigZXHzBnpaHrf+ujLLOfRG19f392XhoNdNi8HAxUTlwbcqN+TAxK9FIdXo0oaKITdrcUqzXmnnL6RHEjpsonmXpagoCkLJQcPZ98jpinlRQ2f6KLfEIpL9eMToHvqvW4hje79HRsRg0kg0DV29AiYY/Q+EO2B6/jylDGrDYmIpbT9WezLThPIcUURLEp7G10U3QRZxAE8SBbgdj/d0ZRO2i9XGjgotrilGcMRzFdyEDjjfwLncAJuvgXv7H8QolzDVw0C0kHcEYwOTrkmYu14NNXHE+qlqte/0uUTgUAmcwWOYY4fM6++lf43z+uEjbx9LQIjfCnQmOHrTMm+TUgpg0B1VMmGNFDK3LQigb1CeFeNmyox//xbqiPK8CJVbqVP8MrxiU8k/n5N6SdyZW9DPIocrpokS9qzCvq+bww1p/tO10v05skuJV3v5rc8LXW4XPBzHXf8bXaLqhS6CO/GtGCd3lhxZ0oib8jaf5eGi8NBsVDieTkDvnx/zHujD+19m/IcqSyILP4+buIS25LPraSbnSyv1tzOAdgkpr3eAa55z/PFaT4GMyo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR11MB868673.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(366016)(1800799024)(13003099007)(261026140227099003)(4143699003)(11063799006)(5023799004)(56012099006)(261026121527099003)(261021121427099003)(261022105027099003)(261022075727099003)(261009223027099003)(10067099003)(22082099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZNI61M0rphAYBDAoeHF1hHeEGtpBe+DCjLbhnyddG4ye+Vh1dcfprEPnYwAH?=
+ =?us-ascii?Q?R7v3fLSFvwc9AhqkaqZxABI6gWqwxTUqizbFTyuvnwLShTiGGaM6inIBnHP3?=
+ =?us-ascii?Q?gye4QJxUtFNcSmGvx8FlXy7iOSfmnTtcEdlFG3SIoCOho5i954YoVVxdmfC/?=
+ =?us-ascii?Q?5diO4pEXKBgHhU1lJ7mlvm4KCsMZ/mH3qTy/3fbMMDJvMbAIRCtDCg4AeRk6?=
+ =?us-ascii?Q?QZSBKtcmVZHny33W6BdUj4a8DEUa5BPY2+cQ6ktww48Tnrcg4lmp3qwSpARn?=
+ =?us-ascii?Q?uzHvB2GmuoW/k7f2jkarYlN8ITyFQ7C+3lFtuGxMYy18v4z2ZWWMm+us06CI?=
+ =?us-ascii?Q?PynufHOwOmipEmuRpG9fyTIn2R7besJp7JwF2Dgbnfn/2HdlFOr3YmmI86wx?=
+ =?us-ascii?Q?OyNhyOEuua5HX5dGrPyzK1xbUcXdqxh8Xnldisn3ag+jXL+japQXjVfiT00r?=
+ =?us-ascii?Q?CIeVIrU0riPQ6D6aIyKg+0xph8XgSeo3Glby9HFwfVY2GFtPRjoWGz+aKK+w?=
+ =?us-ascii?Q?nVUNo7uMW1XvF4lNjxoUvb4ckNirxu/HCGzgEARcl0pfG4TU2mihp6z/MFD/?=
+ =?us-ascii?Q?5xcAvTXWgukNTjZzQnybXbFLwt6pAkY1yyNWY+A4QTunSnl5rqCPGQ7T5AIj?=
+ =?us-ascii?Q?dLHnASIQ9QB7wvKLoeS0UMivkmR1er6a5Dp+sJMlbcD3yeXZRX2Qt2yAKg/x?=
+ =?us-ascii?Q?lheXyHROy8eOxm10PeR7z3mXX5tM/cCMUSJQ1fspSuTpEKZyx9KRUG/4swU1?=
+ =?us-ascii?Q?q8G0cKsjxAKPkgYuC22Pc5u09GmNZ7vUmiLVJZ+ZSBeCFCyMoxO7ahbQoXhR?=
+ =?us-ascii?Q?Ap1AVF+s4TpESJiTguLiGd5G/buguQ9ixrDgvpGONcXks9q8HFf2tjM3jJrA?=
+ =?us-ascii?Q?b8klo2aBu4+hvg90vcLe/1duviMfPRaTom+z2a77Vtqbcl1gPbGeQZmBS8Dv?=
+ =?us-ascii?Q?vxwJdSeAu9FdK+gOjQj6+Xct4qbJnVp7vrxE5UEJACJe/OhgF0SlaGyIMsB2?=
+ =?us-ascii?Q?Do8W45pSgeAFXCW3hS5mEjUILttnK8vvi9ObtMFiXgv7k0mEawbOQIAVUYQz?=
+ =?us-ascii?Q?TKg/xkzFj643tObJKOhDIF+JnWCKX6IATGxn16mF4lJielizd5+PFtB4djAm?=
+ =?us-ascii?Q?Yt/oJgS0f1bVTgra9udoOvfeoLypIGj7LBgTGO7665y/+1llGiQyi0zTU68l?=
+ =?us-ascii?Q?eNtSGA1aTn2mDKQ/ccVSm5dNeHCVj7sa6eI1U9SwiDR2rRen2TZrMFsnKX+u?=
+ =?us-ascii?Q?lj3xNXvYA3ZpEsi4d7oSa4Te9PESFRlnqNyCsRsvnXwpe1wkyNpeqiajUCqw?=
+ =?us-ascii?Q?6JfKeRnZGEP64feGtPav/lTi3WP/eZnFA80fnhzZvoviDJNmogaUaUMYvKIU?=
+ =?us-ascii?Q?2fbW7jDKvAPQ7GUoER9j9s0eQCEEFOuxO5hNF1wvahrzh6apa2Kah0rIzYfh?=
+ =?us-ascii?Q?epQog+2CKn49m6raMly2g3yi6wqFiyXuTTDUSV+tFy7cQj+Qi2V+wBPJFhy/?=
+ =?us-ascii?Q?kyzjFKDUXJYkhyCrLDNflvVtpUYEFDVpDHphBC+D88PBpw3AV98gp9xFjB7a?=
+ =?us-ascii?Q?VWpZVCp9cpcLZZ77iXyWfIIV4C+TZYtA8YwZG196miMEfHQabpwZIiNuR90z?=
+ =?us-ascii?Q?R8/8LXXElM9RGSOU6YFBZJ85pUD5jJUrXc4i/R/804KV24+YEU8M+A6gNu0a?=
+ =?us-ascii?Q?JuG40uTZPjgwCvQzyvVwys1wpH2aggTlqK7xS0qrJfJ9mnQYt7y7kcypqabU?=
+ =?us-ascii?Q?WYyfgNOa8dHpvGUQOyyJalDIp+RLoTM=3D?=
+X-Exchange-RoutingPolicyChecked: Kv2Pf/hZAf02iVOaXh5j1q1qLbuagLhsmuDWPDUz63PnKVNqlc4IbcBmWTI2K7sx7jPRWy5eRYEy3ETlu7tunNI+QNQBrbO+4h4Uzriy4McPWSyVf9IKjylb1ND5csIOpocP2V1wzlh4/6TFMuuSiOXG+OLVMXTmqauSYPBTTP3s002g4uFAXXKPVaeexb7TOrQzUdm5I3L5sAXA8S/zdp32sq1pOi0A1YgVXY4r04bOV3dlHO/TP6+4VRwniDpPYVeMbH/IPtV+4gkOIQdbVNz/7t3eYZvf8bk2C1AXK5if1smZNdxrgPapMHqbLaaBiLEywk4c8ZDWJIYtVambbQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1678210-9ab9-45ce-d7fb-08df342bd436
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR11MB868673.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2026 13:11:35.9571
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eDuQN/TyjLXdkJ9ZwrQC5AxM8/L8OT5OsGpFSfW+wFpeqCpZY8wUNzryMGEz5IG/CUhpt+B4ekEgSKIiz6riTtuB8QpKUwiB3ZMjxNvoMVg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB9463
+X-OriginatorOrg: intel.com
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] bpf: missing __nullable on file arg in inode xattr LSM hooks a=
-llows NULL deref
-- [High] bpf: untrusted path->dentry in inode xattr LSM hooks breaks dentry=
- kfuncs
-- [Low] security: missing @idmap kernel-doc in cap_inode_removexattr()
---
-
-commit e83206fa3b704333b0de2a23321bc120a419f251
-Author: Cai Xinchen <caixinchen1@huawei.com>
-
-LSM: pass struct path and struct file to the inode xattr hooks
-
-This commit updates the inode_setxattr, inode_getxattr, inode_listxattr, and
-inode_removexattr LSM hooks and their callers to take a const struct path
-instead of a struct dentry, and passes the associated struct file when
-available (or NULL for path-based and in-kernel operations). It also updates
-the BPF LSM selftests attached to these hooks to pass path->dentry to the
-dentry xattr kfuncs.
-
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index ea6e0fbaa3b9c..2315961b6d713 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -156,14 +156,16 @@ LSM_HOOK(void, LSM_RET_VOID, inode_post_setattr, co=
-nst struct mnt_idmap *idmap,
->  LSM_HOOK(int, 0, inode_getattr, const struct path *path)
->  LSM_HOOK(int, 0, inode_xattr_skipcap, const char *name)
->  LSM_HOOK(int, 0, inode_setxattr, const struct mnt_idmap *idmap,
-> -	 struct dentry *dentry, const char *name, const void *value,
-> -	 size_t size, int flags)
-> +	 const struct path *path, const char *name, const void *value,
-> +	 size_t size, int flags, struct file *file)
->  LSM_HOOK(void, LSM_RET_VOID, inode_post_setxattr, struct dentry *dentry,
->  	 const char *name, const void *value, size_t size, int flags)
-> -LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
-> -LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
-> +LSM_HOOK(int, 0, inode_getxattr, const struct path *path, const char *na=
-me,
-> +	 struct file *file)
-> +LSM_HOOK(int, 0, inode_listxattr, const struct path *path,
-> +	 struct file *file)
->  LSM_HOOK(int, 0, inode_removexattr, const struct mnt_idmap *idmap,
-> -	 struct dentry *dentry, const char *name)
-> +	 const struct path *path, const char *name, struct file *file)
-
-[Severity: Critical]
-Since path-based xattr syscalls (filename_setxattr(), filename_getxattr(),
-filename_listxattr(), and filename_removexattr() in fs/xattr.c) and in-kern=
-el
-callers pass file =3D NULL to these hooks, can omitting the __nullable suff=
-ix
-on the new file parameter allow a BPF LSM program to trigger a kernel NULL
-pointer dereference?
-
-In kernel/bpf/btf.c:btf_ctx_access(), pointer arguments of trusted BPF LSM
-hooks are marked as non-NULL PTR_TO_BTF_ID | PTR_TRUSTED unless the paramet=
-er
-name ends with __nullable:
-
-kernel/bpf/btf.c:btf_ctx_access() {
-	...
-	info->reg_type =3D PTR_TO_BTF_ID;
-	if (prog_args_trusted(prog))
-		info->reg_type |=3D PTR_TRUSTED;
-
-	if (btf_param_match_suffix(btf, &args[arg], "__nullable"))
-		info->reg_type |=3D PTR_MAYBE_NULL;
-}
-
-Without PTR_MAYBE_NULL on file, bpf_may_fault_on_deref() returns false, so
-convert_ctx_accesses() does not rewrite loads from file (such as walking the
-trusted field file->f_inode via BTF_TYPE_SAFE_TRUSTED(struct file)) to
-BPF_PROBE_MEM. In addition, the verifier allows passing file without a NULL
-check directly to kfuncs that require a non-NULL trusted struct file * and
-immediately dereference it, such as bpf_get_file_xattr():
-
-fs/bpf_fs_kfuncs.c:bpf_get_file_xattr() {
-	struct dentry *dentry;
-
-	dentry =3D file_dentry(file);
-	return bpf_get_dentry_xattr(dentry, name__str, value_p);
-}
-
-Should these four hooks either name the parameter file__nullable or provide
-strong bpf_lsm_* overrides with file__nullable in kernel/bpf/bpf_lsm_proto.c
-(similar to bpf_lsm_mmap_file())?
-
-> diff --git a/security/commoncap.c b/security/commoncap.c
-> index 565c893c6d4b4..0a94b9cd231fa 100644
-> --- a/security/commoncap.c
-> +++ b/security/commoncap.c
-[ ... ]
-> @@ -1044,25 +1048,21 @@ int cap_inode_setxattr(struct dentry *dentry, con=
-st char *name,
->  /**
->   * cap_inode_removexattr - Determine whether an xattr may be removed
->   *
-> - * @idmap:	idmap of the mount the inode was found from
-> - * @dentry:	The inode/dentry being altered
-> + * @path:	The inode/path being altered
->   * @name:	The name of the xattr to be changed
-> + * @file:	the file through which the xattr removal is requested, if any
->   *
->   * Determine whether an xattr may be removed from an inode, returning 0 =
-if
->   * permission is granted, -ve if denied.
->   *
-> - * If the inode has been found through an idmapped mount the idmap of
-> - * the vfsmount must be passed through @idmap. This function will then
-> - * take care to map the inode according to @idmap before checking
-> - * permissions. On non-idmapped mounts or if permission checking is to be
-> - * performed on the raw inode simply pass @nop_mnt_idmap.
-> - *
->   * This is used to make sure security xattrs don't get removed by those =
-who
->   * aren't privileged to remove them.
->   */
->  int cap_inode_removexattr(const struct mnt_idmap *idmap,
-> -			  struct dentry *dentry, const char *name)
-> +			  const struct path *path, const char *name,
-> +			  struct file *file)
-
-[Severity: Low]
-Was the @idmap kernel-doc description above cap_inode_removexattr() dropped
-by mistake? Since const struct mnt_idmap *idmap is still a parameter of
-cap_inode_removexattr(), removing @idmap from the comment block will trigger
-a scripts/kernel-doc warning.
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_get_xattr.c b/tools/t=
-esting/selftests/bpf/progs/test_get_xattr.c
-> index 54305f4c9f2dd..97361ff10e9f1 100644
-> --- a/tools/testing/selftests/bpf/progs/test_get_xattr.c
-> +++ b/tools/testing/selftests/bpf/progs/test_get_xattr.c
-> @@ -56,7 +56,8 @@ int BPF_PROG(test_file_open, struct file *f)
->  }
-> =20
->  SEC("lsm.s/inode_getxattr")
-> -int BPF_PROG(test_inode_getxattr, struct dentry *dentry, char *name)
-> +int BPF_PROG(test_inode_getxattr, const struct path *path, char *name,
-> +	     struct file *file)
+On Thu, Oct 22, 2026 at 03:58:18PM +0800, Zhiling Zou wrote:
+> __xskq_cons_peek() trusts the userspace-controlled producer index without
+> checking that the producer-consumer distance fits in the ring. In
+> __xp_alloc(), an invalid fill descriptor is consumed one at a time until
+> the cached producer is reached. A one-entry ring with an invalid address
+> and a forged producer index can therefore keep the kernel in this loop
+> for billions of iterations in receive context.
+> 
+> Treat producer values beyond the ring capacity as an empty queue. This
+> bounds the consumer to the userspace-provided ring size and prevents the
+> long loop.
+> 
+> Fixes: c5ed924b54c8 ("xsk: Simplify the consumer ring access functions")
+> Cc: stable@vger.kernel.org
+> Reported-by: Vega <vega@nebusec.ai>
+> Link: https://bugtracker.nebusec.ai/f/13760
+> Assisted-by: LLM
+> Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+> ---
+>  net/xdp/xsk_queue.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+> index 1bc42c8902f4b..315b656534749 100644
+> --- a/net/xdp/xsk_queue.h
+> +++ b/net/xdp/xsk_queue.h
+> @@ -344,6 +344,9 @@ static inline void __xskq_cons_peek(struct xsk_queue *q)
 >  {
->  	struct bpf_dynptr value_ptr;
->  	__u32 pid;
-> @@ -69,7 +70,7 @@ int BPF_PROG(test_inode_getxattr, struct dentry *dentry=
-, char *name)
->  	bpf_dynptr_from_mem(value2, sizeof(value2), 0, &value_ptr);
-> =20
->  	for (i =3D 0; i < ARRAY_SIZE(xattr_names); i++) {
-> -		ret =3D bpf_get_dentry_xattr(dentry, xattr_names[i], &value_ptr);
-> +		ret =3D bpf_get_dentry_xattr(path->dentry, xattr_names[i], &value_ptr);
->  		if (ret =3D=3D sizeof(expected_value))
->  			break;
->  	}
+>  	/* Refresh the local pointer */
+>  	q->cached_prod = smp_load_acquire(&q->ring->producer);  /* C, matches B */
+> +	/* A malformed producer must not make us consume beyond the ring. */
+> +	if (q->cached_prod - q->cached_cons > q->nentries)
+> +		q->cached_prod = q->cached_cons;
+>  }
+>  
+>  static inline void xskq_cons_get_entries(struct xsk_queue *q)
 
-[Severity: High]
-Will the BPF verifier reject loading test_inode_getxattr() here (as well as
-test_inode_getxattr() and test_inode_setxattr() in
-tools/testing/selftests/bpf/progs/test_set_remove_xattr.c) when passing
-path->dentry to bpf_get_dentry_xattr(), bpf_set_dentry_xattr(), and
-bpf_remove_dentry_xattr()?
+Clashiko says the proposed fix is not sufficient, see [0].
 
-Previously, dentry was a direct argument to the inode_getxattr and
-inode_setxattr hooks, so btf_ctx_access() marked it as
-PTR_TO_BTF_ID | PTR_TRUSTED.
+I am leaning towards Bjorn's suggestion to return NULL for invalid desc, which
+would imply that the endless loop is pointless and could be removed from
+__xp_alloc().
 
-With the hook argument changed to const struct path *path, dereferencing
-path->dentry goes through check_ptr_to_btf_access(), which only preserves
-PTR_TRUSTED if type_is_trusted() or type_is_trusted_or_null() returns true:
+Thanks,
+MF
 
-kernel/bpf/verifier.c:check_ptr_to_btf_access() {
-	...
-	if (flag & PTR_TRUSTED) {
-		if (type_is_trusted(env, reg, field_name, btf_id)) {
-			flag |=3D PTR_TRUSTED;
-		} else if (type_is_trusted_or_null(env, reg, field_name, btf_id)) {
-			flag |=3D PTR_TRUSTED | PTR_MAYBE_NULL;
-		} else if (in_rcu_cs(env) && !type_may_be_null(reg->type)) {
-			clear_trusted_flags(&flag);
-			flag |=3D MEM_RCU;
-		} else {
-			flag =3D PTR_UNTRUSTED;
+[0]:
+--- Patch [1]: [PATCH net 1/1] xsk: validate consumer ring producer index ---
+commit f0f4eea504a1aeac9437d0c1f025a159991b7029
+Author: Zhiling Zou <zhilinz@nebusec.ai>
+
+xsk: validate consumer ring producer index
+
+This commit adds a check to __xskq_cons_peek(). If the producer index is
+more than nentries ahead of the cached consumer, the queue is treated as
+empty. The goal is to stop __xp_alloc() from skipping invalid fill ring
+descriptors for billions of iterations in receive context.
+
+Link: https://bugtracker.nebusec.ai/f/13760
+
+> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+> index 1bc42c8902f4..315b65653474 100644
+> --- a/net/xdp/xsk_queue.h
+> +++ b/net/xdp/xsk_queue.h
+> @@ -344,6 +344,9 @@ static inline void __xskq_cons_peek(struct xsk_queue *q)
+>  {
+>  	/* Refresh the local pointer */
+>  	q->cached_prod = smp_load_acquire(&q->ring->producer);  /* C, matches B */
+> +	/* A malformed producer must not make us consume beyond the ring. */
+> +	if (q->cached_prod - q->cached_cons > q->nentries)
+> +		q->cached_prod = q->cached_cons;
+>  }
+
+Does this fully prevent the long loop described in the commit message? The
+commit message says:
+
+  Treat producer values beyond the ring capacity as an empty queue. This
+  bounds the consumer to the userspace-provided ring size and prevents the
+  long loop.
+
+The new check limits each producer snapshot to nentries. Nothing limits the
+total work done in a single __xp_alloc() call, though. When it hits invalid
+descriptors, its loop only exits once the queue looks empty:
+
+net/xdp/xsk_buff_pool.c:__xp_alloc() {
+    ...
+	for (;;) {
+		if (!xskq_cons_peek_addr_unchecked(pool->fq, &addr)) {
+			pool->fq->queue_empty_descs++;
+			return NULL;
 		}
+		...
+		if (!ok) {
+			pool->fq->invalid_descs++;
+			xskq_cons_release(pool->fq);
+			continue;
+		}
+		break;
 	}
+    ...
 }
 
-Because struct path is not listed in BTF_TYPE_SAFE_TRUSTED in
-kernel/bpf/verifier.c:type_is_trusted(), walking path->dentry drops
-PTR_TRUSTED (marking the register PTR_UNTRUSTED in sleepable lsm.s programs=
-).
-Since bpf_get_dentry_xattr(), bpf_set_dentry_xattr(), and
-bpf_remove_dentry_xattr() require a trusted struct dentry * argument, the
-verifier rejects the call with -EINVAL ("R1 must be referenced or trusted").
+When cached_cons catches up with cached_prod, the peek does not end the
+scan. It publishes the consumer index and reloads the producer:
 
-Does struct path need to be added to BTF_TYPE_SAFE_TRUSTED in
-kernel/bpf/verifier.c so that path->dentry and path->mnt remain trusted when
-accessed from LSM hooks?
+net/xdp/xsk_queue.h:xskq_cons_peek_addr_unchecked() {
+	if (q->cached_prod == q->cached_cons)
+		xskq_cons_get_entries(q);
+	...
+}
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261027121151.1887=
-650-1-caixinchen1@huawei.com?part=3D6
+Here xskq_cons_get_entries() calls __xskq_cons_release(), which does a
+smp_store_release() on ring->consumer, and then calls __xskq_cons_peek().
+
+The loop is reached through __xsk_rcv()->xsk_buff_alloc()->xp_alloc()->
+__xp_alloc(), or from a zero-copy driver's NAPI refill. There still seem to
+be two ways to keep a CPU in it.
+
+First, xsk_init_queue() only requires a non-zero power of two:
+
+	if (entries == 0 || *queue || !is_power_of_2(entries))
+		return -EINVAL;
+
+So the fill ring can be very large, for example 2^26 u64 entries or more.
+If such a ring is full of invalid addresses, one refresh still allows that
+many iterations.
+
+Second, a user thread can watch the published ring->consumer and set
+producer = consumer + nentries / 2 each time. Each producer value the
+kernel reads is then within nentries of cached_cons but never equal to it.
+Every snapshot passes the new check, and the loop never sees an empty
+queue.
+
+xsk_create() only checks ns_capable(net->user_ns, CAP_NET_RAW). So can an
+unprivileged user namespace with its own netns still cause soft lockups or
+RCU stalls in softirq context?
+
+Would a per-call budget on skipped invalid entries in __xp_alloc() work
+better here? For example, it could return NULL after at most nentries
+skips. The batched xp_alloc_new_from_fq() path already limits its work
+with xskq_cons_nb_entries(pool->fq, max).
+
+Could the commit message also be updated, so stable backporters don't
+assume this change closes the soft lockup?
