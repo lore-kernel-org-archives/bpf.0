@@ -1,110 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.142
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.175
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793125975;
-	b=k4BmAAycLGG1PCl2C5oLwSQUpVCPxw65GbUa2knwSMqCHqh1FlmyPn/BLbIMtkHSRu03
-	 uNLaEhAEnFE1E0p6JPDWWO+K+4GSKsxUjJHFZiDERArhufXNQc0878i0dov40I2EnwHsP
-	 cM6bbX6jYFFUnyes8KlSK91BBQz9suI3T9IyKrhrEZ3jUYqpjhQyzQo1EGjWxRLg62AOB
-	 9VzDwDwvOhgQCDtpeHNkfbjvluf06RtLGzcRHXFCBxU+Epyb9CI3vLn/1SdpmbGaYqMzF
-	 QwSXup0cF8fMnFKox2/OTVfoF7uFWUeVywSYCiQqHABNkk6A+CWUWMxxgsrQJsyRpzQ==
+	t=1793126746;
+	b=GL5EAWiyS5HrQCw/la80MGtIxkK9B1XdlxClQC1cyC5RsxfswbhWbAyxPs1DDnLeDhOu
+	 GAV2opltFIx91AqAeUMYm7LQ931UnCY9aW04810KxAyiQ9NYl1xj2GDuF2f2eITCuR6qA
+	 b6G8aVlq2JZZgiDOAKlSa/vP5X6pzjF/T0Uh8IHOjzxcRUpTHH7UrtTVK9Fk396QqoHkt
+	 fG1CDiB+ukbOUT3An3590H0VrgaXkLbgU37yqRd8OK18tKgZiePK1zmmUPCZyVMxGc4mk
+	 +dRQSouCvH3PquBVqzLEjSxxxOzHGSwI/Z8tUwNrys+X1H1IsZAOS8Uh8yuwluoqSjw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793125975;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=;
-	b=S3zndAJ0bazz7FGwed97Iy1iputJnmMfQhDPqFu/vIb1kUry/WcMrbvgY/ScEeGDIL1u
-	 j9id3gczw2Ac+1xfXNhF54g3h2PBAc+UH2wr/vK+tmR2F3tuDbgToUXH1Neq99VUXJ9jZ
-	 8FX4FMO2gHcz87FuxLoQ/kCPy1DMg7ID/6mt0XuUexgzXAH3G9thpVHcApGc2cL2PB0Er
-	 QFOwyQessmnizU4FqPdKrF/+ucPa8Rr43oacwXOTceTsaWV6M/XeDjw7JzvI8gagxdFIt
-	 cfVD+UAFmPrlXXzJpVkTUt4vP8MRxQ6yHKHNRSIg3Y+sBUdHMsOep0WLJy81torVExg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793126746;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
+	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
+	 Content-Transfer-Encoding:MIME-Version;
+	bh=xEd/EOFch2GeJF5HJ5/eqQs7E8sv3533NOGtKb2nOOQ=;
+	b=mQZOUJrw+4/zT1UxbV1iRqlM6PAqVtPtD6L8xzc6W7YcU53KqY6qaBfAZolbfJFzxQUx
+	 n2yPaijbQQjFZg6Qz1aYiOqRCsOArXELm4ETpicezTEG8QlWMW1pGzASAlLi2wU30h8h/
+	 ASKA8G9cMcDNYkgTYSMF3Cej6VgJlaII3oczRjG9M50elY6rp7N6tbUx3Su9GVdADCnON
+	 Y1ufHRGz0xbJtIpqsIVq0Qw6wtVIoU/hF04pIgcdJqGF9iFRB1DVrPS8111uC4IKlEIoJ
+	 8WjDY7/8yTFIGjxk6TK3211OQ8htRw5t6uNHKPrniGPqpF6cnie7ajSkRdE+/MAN0pg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=nhRbbv7L;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=dqBTENOQ;
-	arc=none smtp.remote-ip=103.168.172.142
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iucb3Y88;
+	arc=none smtp.remote-ip=209.85.214.175
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416D4606A31A
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:32:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 416D4606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0710A606A326
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 18:45:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0710A606A326
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=nhRbbv7L;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=dqBTENOQ
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.phl.internal (Postfix) with ESMTP id 3361E1380313
-	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 14:32:54 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Tue, 27 Oct 2026 14:32:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793125958;
-	 x=1793133158; bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=; b=
-	nhRbbv7LCz1ZQpaeWyensFpQo4X/3syWjrNRhf0TPa3WpxX/X2VdpFqv537v9O9I
-	PGhjORRx1kESGQSaPHfa+QRKJpjpqdcACu5FAN3p52dFUSynF/VeBDjNcw+LEo95
-	UNVVfCF+1iy7jr1xBQICX7G6IzE+zAW2IpvIGzT+P30DaFT615CXM7aNuU+rahRd
-	1GUKsYa+gXVhGk/EI4Ywqj2q+VbAxE5UYf7OFubEdoAAzfhu0f2ST004eaCG4GLQ
-	F1D1Q2WkugYqzgcxYwKxVL7pm03H7LMx0dT/XGKTKPQS0mI+iEZcMTRkca0vag3/
-	RDWKomvJBzIYN06yZe7uWA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793125958; x=
-	1793133158; bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=; b=d
-	qBTENOQ45NO1fMBSlIFoaed4KzgJDaJVEDwxaWy0AU1ee6zNudEy0DlCDndCnLS6
-	2Mky/tZzM0tAjCf7N4u7bi/4+2ykMhG2ESY1Sf7giCpL6gbAEOpbD5EIxKBbICPt
-	usmzcw6mAAaTgxfbDhYZYxO2tvSv+8uUtfRzlCLEIP3lG32cfLfeY50SbL6O6Io4
-	SgQw2YBRCXwq56w+6p7UjBanfKMGDYqL3wt7dbLsVl8wtknfLVIzXXPvDsCBbGKW
-	AtxiHzQeIKi/D6MVVDwZTvVos2hYu3DWzHZsBX4JLmmgFKlBmi78/sjOEDPTgAML
-	sjhtTrMnUgKadM/vzmJrA==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793125958; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+; rt=PGJwZkB2Z2VyLmtlcm5lbC5vcmc+;
-	s=fm2:rsa-sha256:QjjrL7nVLjLnnJ5myEsaZ2xWYzI4BtjQQQ/0SzDwymLdXKG
-	2pe1o7v8rKOYIl8ZHu49iHGQCybx30tg4GW7yhrS350b66qvCPCaFd/itqNLU+Fe
-	BaoWhi4wYIRN1kTpt/uSGuBAZaQGvBWmreOUsu4oDIosxyldPsJ3/ml4WvC8NDxN
-	M5kNmFLvl5W76lEf5j1BtsK/coxNtYXMXUeLhc4nvDu8krTDttOXP0hm7lgkwGss
-	x65MiN5XDZR+7WeKs6x77VO3+BLxYmQkMnHhTA1XpeO08nQpwMSWzgFc3aDOoItR
-	Ei9EwmhjpOtAyuxdsqldWcbebNtFXi9PHnROXBw==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:C7HxDmq442sA516hPg1WVqijzSVzVZyCGy6pQZqDYDY=:4/DSvQfZqcYprX4ziRRYVwk6oH+PWA9EoraJfbgloO0=;
-X-ME-Sender: <xms:PO7garY621kKyqojOqTb7yy-_Jxdn-Kzm4gl1mIkpb01V8TjHgldxg>
-    <xme:PO7galNXbgg3oxvhvN_4CaBu9hMm0jyCxqhA6a-T7eDOTCaJJJZAFol5ERGDjsLqK
-    2259_D1ZXy5t5UtRcS7lekN3e5e2Iz3wvWTc8ZMKjdCe5rWsux30H3E>
-X-ME-Proxy-Cause: dmFkZTFBrGBMzD/7DKUk8DMjlpJSCDxpPKrzK68BEfeXOQ/MXmVsz3qalb7yQm7DbWy68D
-    mdR7SERoL7p1SipE/Hgrz7O8Jk/YUwS5P3bCp2T9rw+yUUT025kCXndTxgJzUfF2A/LmwU
-    OoshLwBoL+gLtWMZ1eOjSZC00MjyyUjQsfwaX27BJBN1pGwR2iGIXqOSxLJd8LAZ7Ies03
-    pHbxu2/tinn1z/on12HNzhMOuElx6kqVt1d934g47Fvev3+j+hQdPBK+wKrHQuA/MqaMQm
-    +YwFlvGVG7S2iiDu84WQfMEEhxn2uOBT5zg/mL0ozhSd1uzGOGScjRvF7ClHEfMSlJfxcq
-    YnPF1zz+aUEeQFHBKYIkKYLrgp1kUHAokLo109tnO0NExqhQz8UwJIbWoTRGGabU2W726Z
-    Dhb2CJzkcYCahSEgI2QZnhI9rp+Sax2lb2xVGCjVpBRvKLDXz5qYKxyqd2QqtR2ElCh9YH
-    sk3iHLFKWwH3F6St/x0/gv09bz+pznkee8K/sd27QfN9Gwd3fo2BUAJ25G4dopbDOQnb4A
-    P/8JBDeUxH7I8cBQFkugJH97mQ3vUVptVMshXk/wrMwfeGdw1Y1ScOXkp/5PrPH7+diEiQ
-    JTFMCYOkqnX2m+s2VfejdOjHHP+4aWKR319KAAcE5zQTI+rTtC/ZyD4VTbUg
-X-ME-Proxy: <xmx:Qe7gaoJUmon3FH4sGaBdEIKD5fHQ0oH3bMQFHqz81k9r0kK1FDN-iw>
-    <xmx:Qe7gahWdNxTBRCJjJwTwB9P5rA_fL9OS-9G-iMSBpvVqcHmxmO9j9w>
-    <xmx:Qe7gas_yFzXCxWyV59ZvbLz29NvVSPTASADzMdDMlPDM-V9XYgRHIA>
-    <xmx:Qe7garJelIc0ZjXXdljbcuMtjXIos4JgOEY9ZOwRs4BJzuv-Dex5fA>
-    <xmx:Ru7gaoAQZNTTFpuQBw_xTScK29TJcstSl3feioQOcb1p07_GUyAqFEK0>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 94CBA32A0097; Tue, 27 Oct 2026 14:32:28 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iucb3Y88
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2e8f2c3ad6bso600915ad.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 11:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793126745; x=1793731545; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xEd/EOFch2GeJF5HJ5/eqQs7E8sv3533NOGtKb2nOOQ=;
+        b=iucb3Y88eQPSsgKMldw5U6OO6VKebJLGsaSTmZzK3zyLBfferu3Bhvgc8f/mHW2TWL
+         N2WOQQ+UGZvD/NdZHq1uNfzdnqsQLMEe2j7y6/LzHGWiTuAY94P+Zrh9r9DzT1NEJdtu
+         w6VMtdw8OSwnJzH9Ue4R6+Xm+UXpKRRCyBJ3aVUCKtiIqUvo2GBveIzfUYWm/WTs5phg
+         Lupjnrl70Ixhpb9uBJlzjjPK2zijqfgsFdjwr+kCsE7WrcmcaOU2ymGS+tFrlUI7zJEV
+         h/udAUqt5/nbG6ZTgBfkIvj4LFVDhfthaaYBqItKSoN5PuJeqE5nEJPGNBeuSzjY5p0Z
+         jKUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793126745; x=1793731545;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xEd/EOFch2GeJF5HJ5/eqQs7E8sv3533NOGtKb2nOOQ=;
+        b=yfyGMiKoDxsjM9DXxDKataazo9Wp1FWjYl/QkEHKSIs9fJGR4goqMiUD1VsTKx/tkc
+         h//hoa52OpRarn5/qGZfbiKGWtEYRJwI57Dr2Vf0Ms3xrrIeKxIsCPi+AkqIGm7TkxMl
+         bgWsNv5IA9CqJnjPIg2QzD8le+x+tGvk0Innrfl3WN+FW7kb2Y/ZNonZiVFHii/Fo0NU
+         YbtOmtl6zFP2lYynJdP4Ox+otu0tbJfUIeZbekZ+yv9qo0C5CrzeI3SZrbK9f/58HrY4
+         8Lxkj1ds0xoi5uYDJa8psbxl3U6Pma28q8Jkcs4w9Qx7QAoLCs6iPqdO1o/bOG5reJKT
+         QPFQ==
+X-Gm-Message-State: AFq9FYJEktmY5h45Cj4tlPRT0hCbfaTqXatiK80Di18qvfXzglgCMeqq
+	Ht5mtfGxgfFs5IvJ/6OAFQcQHr9ighzcpILLXXXzLFEAVS3JMPPObHjeUdaAXQ==
+X-Gm-Gg: AYBFou3KmyT03Y5S4Fa6NHwUUwODwj2Dk5lJNCquR5PfPPXOhxGT9PdvUAmP/oody/p
+	B7gLi4nvdvzcIem55qJ3005CUBl8w97c6xHRcNJTz/njM6UgKFu+VME1LtaboYOT4pQCJZg/myZ
+	DTLzhaePnNYqa8LdVDFga9UeA+vEgBM9OFQbzP/CMeLa0JU/xjnWkvoypTfedQQSpxfzESzoaKg
+	KaRDZpv1prY15HLIgE1+stu+TOjkeQoDP5FuqHfElFhbW5JHAe1yBEFJ6n6/seHzsB8pfTFljm9
+	xHtOfuwwclAUL3xwt+Pup+v/8RNJFTlvHnJJUfJioFaROiccqiQy0ef0LNstR7QKvUmL0W051gz
+	grDwoE4oxOkQLIOgrU+UPqJj5A7sTpWCYC+4DNiRjOHqUrSpKjbOYQnu7OtpYWfvbyIfY5J2GU6
+	D3L0EXBB+dQhvJlXzXtErYsHGFlVVBps442/7z+Okh5VYAWrfnIRCGjGEcvr0LBVyG2ooN20EB8
+	9g+roeO9h5PWZKeXzrwCTYW3BYuogv6I9CsVqweftGq8Qrc/VIrnW7u0EcY0wMFn3L7gR1vyFwv
+	ZviCp63Pplv+wYWY5rr8vLF/rhTAwkB+gBtnuU+doEF4TRzsHWzzf3pip7FX
+X-Received: by 2002:a17:902:d504:b0:2e8:3d48:4d92 with SMTP id d9443c01a7336-2eb003bf1dfmr2299145ad.33.1793126745024;
+        Tue, 27 Oct 2026 11:45:45 -0700 (PDT)
+Received: from localhost ([153.61.198.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6bcdf0bsm13618135ad.27.2026.10.27.11.45.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Oct 2026 11:45:44 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 Oct 2026 18:45:44 +0000
+Message-Id: <DMFUDQAC6N4S.1CNBGYKG58DMR@gmail.com>
+Cc: <bpf@vger.kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf 26/81] bpf: Support BPF_REG_ARENA_SP in the verifier
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+In-Reply-To: <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com>
+References: <20261026025943.404450-1-alexei.starovoitov@gmail.com> <20261026025943.404450-27-alexei.starovoitov@gmail.com> <CAP01T76dRouzrPOZS8AQ4TMnJ0GzyRm8cPJ8RYUTu01bQgf2Xw@mail.gmail.com> <DMF694XH2TJO.P59A31VE6GWP@gmail.com> <CAP01T75HAHkP4bzdGzeazN4n_FNd5w1Pckd3GBN68V0n1PNe_w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -114,142 +98,140 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AUJ1OXWu3nCJ
-Date: Tue, 27 Oct 2026 19:32:08 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "James Houghton" <jthoughton@google.com>
-Cc: "Andrew Morton" <akpm@linux-foundation.org>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Thomas Gleixner" <tglx@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
- "Kees Cook" <kees@kernel.org>,
- "David Hildenbrand (Red Hat)" <david@kernel.org>,
- "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
- "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
- "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
- "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
- "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-Id: <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
-In-Reply-To: 
- <CADrL8HXQdzcroeGN-ACjyy-jSAdBNHiT1_BCVVe0P+Y8ZueiyA@mail.gmail.com>
-References: <20261026215226.3713941-1-jthoughton@google.com>
- <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com>
- <CADrL8HXQdzcroeGN-ACjyy-jSAdBNHiT1_BCVVe0P+Y8ZueiyA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
- current->mm is NULL
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 27, 2026, at 18:29, James Houghton wrote:
-> On Mon, Oct 26, 2026 at 5:13=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
-wrote:
->>
->> E.g. on arm64 with CONFIG_ARM64_SW_TTBR0_PAN, the page table base for
->> the current process is only set in user_access_begin() and would
->> not point to any task here. Without ttbr0_pan, it should be
->> covered by cpu_set_reserved_ttbr0() turning off all user space access
->> for kernel threads.
->>
->> Should this perhaps be addressed in architecture specific code
->> instead of in a common place?
->
-> You're right that whether corruption can actually occur depends on the
-> architecture and config. I'll write a note about this in the v2 cover
-> letter.
->
-> That being said, I still think the right thing to do is to have the
-> new check(s) in common code. Instances of improper uaccesses are still
-> bugs, even if no corruption occurs.
+On Mon, Oct 26, 2026 at 5:18 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> Overall, I think it is less clear to me (or anyone looking at patches)
+> as to why you did things this way.
 
-I agree we have to do something to prevent the problem for most
-configurations and find any newly introduced bugs.  The questions
-that need to be properly decided are
+point taken.
 
- - does there need to be any compile-time configuration to skip
-   the extra checks and/or the warnings?
+I was wrong in my previous email. An iterator over kernel objects
+stays in the r10 stack, and it works today.
 
- - are there any cheaper ways to make it safe than to add a
-   condition on each user access?
-   E.g. the original lazy mm switch was intended to avoid
-   expensive TLB flushes when switching to a kernel thread and
-   back to the original task on 32-bit x86. On modern CPUs,
-   the MMU can deal with multiple ASIDs cheaply, so turning
-   off user access in a kernel thread may be cheaper than
-   adding code to uaccess depending on the architecture.
+> Are there real patterns that existing stack tracking simply cannot
+> salvage?
 
->> I would think that user_access_begin() is a more natural place
->> for the added checks, as this should be called exactly once for
->> any function that accesses user space and also stays out of the
->> way of the copy_from_kernel_nofault() etc.
->
-> user_access_begin() isn't used in a lot of places that I want to
-> catch, including the KVM case. Roughly:
->
->   kvm_write_guest_cached() --> __copy_to_user() --> raw_copy_to_user()
->
-> There's no user_access_begin() in there. :/
+Yes.
 
-Good point, yes. After the changes described in
-https://lwn.net/Articles/1102061/, I had assumed that all
-__copy_{from,to}_user() are going from common code, but it looks
-like the series so far only touches __{get,put}_user().
+Pattern 1: one insn, two kinds of memory
 
-There are of course few enough of these left that I think
-we can consider doing the same thing here and turn them all
-into the checking version:
+  sum(&local_array)     r1 = fp-64    --+
+                                        +-->  r2 = *(u64 *)(r1 + 0)
+  sum(&vec)             r1 = arena    --+
+                                              one insn, one JIT form
 
-$ git grep -wl __copy_'\(from\|to\)'_user  drivers mm virt
-drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-drivers/gpu/drm/i915/i915_gem.c
-drivers/gpu/drm/i915/i915_query.c
-drivers/usb/gadget/udc/atmel_usba_udc.c
-drivers/vhost/scsi.c
-drivers/vhost/vhost.c
-mm/kasan/kasan_test_c.c
-virt/kvm/kvm_main.c
+We discussed an idea to let llvm clone such function.
+I tried it, and it didn't work.
+Short summary:
 
-> I do think user_access_begin() should have the new check though, so
-> I've added it in the v2.
+  case                               why a copy does not help
+  ---------------------------------  ------------------------------------
+  the pointer comes from memory      no kind for the compiler, a scalar
+                                     for the verifier
+  an indirect call: &dyn Trait, fmt  one function for the two kinds
+  if c { &local } else { &*boxed }   one pointer, two kinds, one function
+  n pointer arguments                up to 2^n copies
 
-I had the details confused here. Seing that user_access_begin()
-and the other accessors always call access_ok() at some
-point, maybe that would be enough?:
+and real case in <&PanicInfo as Display>::fmt().
 
---- a/include/asm-generic/access_ok.h
-+++ b/include/asm-generic/access_ok.h
-@@ -33,6 +33,9 @@ static inline int __access_ok(const void __user *ptr, =
-unsigned long size)
-        unsigned long limit =3D TASK_SIZE_MAX;
-        unsigned long addr =3D (unsigned long)ptr;
-=20
-+       if (WARN_ONCE(!current->mm))
-+               return false;
-+
-        if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
-            !IS_ENABLED(CONFIG_MMU))
-                return true;
+Pattern 2: the address of a local goes to memory, a load gives a scalar
 
-(plus the few extra copies of access_ok()/__access_ok())
+That's typical rust heap.
 
-As a quick fix I would probably start with just the 'if (!mm) return fal=
-se'
-bit here to get something merged while we still discuss the other
-details.
+Pattern 3: LLVM removes a bounds check, here in core::fmt::num
 
-      Arnd
+  loop { remain /= 10000; offset -= 4; buf[offset] = ...; }
+
+and 'buf' is on stack.
+run-time clamp won't help, since real tracked spill/fills are in r10.
+
+Pattern 4: fp in an argument
+
+...
+
+So an address-taken local must be where the heap is... in arena.
+
+experiments for arena-stack
+
+  where the local is                      what breaks it
+  --------------------------------------  ---------------------------------
+- structs by value, more inlining         an optimization. Pattern 2 stays
+- a second vm area or arena, a map value  a different base: pattern 1
+- arena, a fixed frame for each function  recursion, a second run on the
+  and cpu, as in the private stack        same cpu
+- arena stack, sp in a per-cpu cell       preemption, see below
+- arena stack, sp in bpf_run_ctx          load, add, store in each function
+- arena stack, sp in a hidden argument    an argument and a callee saved
+                                          register. BTF does not match
+- arena stack, sp in a reserved r9        a verifier change too, and one
+                                          register less for the prog
+- arena stack, sp in r12, the kernel      the series. It costs verifier
+  supplies the stack                      code and a register in each JIT
+
+The choices made for this arena-stack design:
+
+  in the series                    what was rejected and why
+  -------------------------------  ----------------------------------------
+- one 'r12 += N', the first insn   'r12 -= rX': the depth has no bound
+  of a function                    several 'r12 += imm': verifier state
+- the verifier tracks nothing      tracked slots: a store through a scalar
+                                     invalidates them
+- 'rX = r12' gives a scalar        PTR_TO_ARENA: after a load from memory
+                                     it is a scalar. Two types at one insn
+- the cast of a kernel pointer is  an error: two progs cannot share
+  a move (patch 18)                  fill(&mut Event), ring buffer and Box
+- the kernel supplies the stacks,  compiler, libbpf: the entry code is in
+  one set for each arena             each object file
+- contiguous, 32 Kbyte at most,    fixed, 4 per cpu: 512 Mbyte of addresses
+  pages at the first use           segments: each function can fail
+                                   pages on a fault: can fail in mid-run
+- regular arena pages              hidden from user space: no gain. It can
+                                     corrupt all other data of the prog
+- a run takes the per-cpu stack:   preemption off: no sleepable progs
+  a counter, local xadd. If it is  two calls, get and put: 4 nsec
+  taken: one of 16 more stacks,    split, sleepable or not: two mechanisms
+  then new pages                   skip the second run: not for a scheduler
+- grows up: r12 - off, like r10    down, r12 + off: harder to read
+- x86-64: R9. Arg 6 of a BPF call  reject 6 arguments: Rust has them
+  is on the stack                  r12 in a frame slot: a load per access
+- a callback takes its own stack   reject r12 there: scx_central needs it
+- bpf_throw() keeps the stack:     a slot in the frame of main: an irq
+  the kernel frees the arena as      overwrites it after rsp = rbp
+  a whole, and Rust unwinds        give back first: no record of new pages
+
+> It might require teaching the compiler not to move certain types on
+> the stack to r12 relative accesses, but it just feels ugly.
+
+it might feel fragile, but it worked for huge corpus of rust crates:
+https://github.com/llvm/llvm-project/pull/235577
+
+Your dsq iterator exapmle is 'alloca [48 x i8]' in the IR, so it works
+(I replied too soon yesteday).
+
+llvm selects the stack by use: 
+
+  rule 1   r10   The function that owns the local passes its address to
+                 a helper or a kfunc: iterator, irq flag, dynptr, map key.
+  rule 2   r10   The prog stores a kernel pointer in it and loads it again.
+                 Also a local that holds the address of such a local.
+  else     r12
+
+> For certain things, like open coded iterators on kernel collections,
+> there is no other choice.
+
+Of the 16 rust sched that I hacked 4 walk dsq and 13 call
+bpf_local_irq_save(). In testing they loaded and *run*.
+
+But I agree that passing them around is fragile.
+The hope is for typed arena to save the day.
+Then rule 2 will go away.
+
+> unsure how various assumptions around address contiguity get affected
+> when stack reuse occurs [...]
+
+A local never changes its stack, and it is contiguous. The compiler selects
+the stack after all IR optimizations, for the full alloca and
+its full life. r12 locals have a stack id of their own, and stack coloring merges
+only objects with the same id. An iterator in one scope and a buffer in the
+next are two allocas, one in each stack.
+
