@@ -1,64 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=162.62.57.49
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793070430;
-	b=gDqU4I7wuC7F2tOGJJuDFdNV1bU8mZaT77yXD4euF/3riG5iAN833UPrYx73srwnM5M1
-	 lE11veCzp7mhUWJ+6HY1ZgVWdGUT73YEts0C1VDtOsQXMODtHXI7tV7Vn6eUbaxLTBeL8
-	 LqaigjqsEHaKTUkwNBFpjNkNNaKL6yZGo69oXYLknd209XTCUj9q3tesL+Jshdz0ZmVd7
-	 /Z3KQOpIKu4Qj34dU5uIeemkdnD4NtqB4mGhAe5uz6sMHPlWykZRBDiO9LecH+4X9aWZX
-	 dC019OZjQv+k+r10PwtxL+xPZegNwjw7xNIlaEl71duqctTjl9oLnuEj7/aM49jJIpg==
+	t=1793070879;
+	b=hLzs0WAJR5J0/Op1HmBk/+w/80jTpGWTq2ZyxpBhytt8urLf1p6UXrc0kWN7A566cS4c
+	 fRCyagu6N5GxkTLJ7jH9erCdBMth1O0xGsRjMgFN8qOdVohYVha69qLMwwQ07W0oU51fI
+	 Z+wYWEuWV0skcerQzqmbgwh2UTy2KD7dyYe9pKpwRfenyR9MSu8wQkz1MafJB5ip8dZUg
+	 drSnwB1G31Wpd2pQGxHQ9e1Am3Kq3lq4g4GS+odme7YOB+2C7mrLP7wNFHs/Y3rNruL/w
+	 Z4v3ffMHPiCTWzsrW01JcI3VF7kl6vMosdBCd9lgAhcE+AkwHu42DG+VjyGagKp31yA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793070430;
-	h=DMARC-Filter:DKIM-Signature:X-QQ-XMRINFO:X-QQ-XMAILINFO:From:To:Cc:
-	 Subject:Mime-Version:Content-Type:Content-Transfer-Encoding:Date:
-	 X-Priority:Message-ID:X-QQ-MIME:X-Mailer:X-QQ-Mailer:X-QQ-mid;
-	bh=AYABbuvpRmugHL7xKhEUg235XYvNPii8LhIKNTJod1Y=;
-	b=rq+4jx5CWLgTLymO1NlIUy26+J7B7KJO3UaO4jjf+DLJn8sEO57i8TRH9vh+tjZcw5WF
-	 TC3OSsPqMMMWgAZwXpDMpWVL4W0Xcgfu9YBGcoYPeQ2EBwdYycCLfUiee/nNTzPfRmvLM
-	 X9kBkLtLO/+zOY0gvoaOQYM5X2nmqpHnMVDo2/IxrkRqzlCu2ky8VAFZK1yQaD23ehZIY
-	 uQy66PhDJsqdLXD0SNKWf6QfLriwMHKca46x8pTBkKD+X7Q7k2DofzOTSnpSF82d0G2xz
-	 4RdnMMfU9GgerPWR7xn9pzyuP7KbYBHqneTEQ+87UTQ9miKFVktzzaPHxI4Si8coNrA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793070879;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=mFQQatuf+XSoHK+AFooyCL3ewxpPuUu4HT/v5KrUvdg=;
+	b=CL/BH8tAmeUiz/BjYTokFEGsttSTuwW9/UQe0uLAga0z1MhhloKdeqPQ8+NJk2LSLV0O
+	 KsBfnqA6anlG3Vz/JjHV9VBtTfz8J8LnbRYjWrGSLyPaK/efDZa2LH6Xu9xxksWv9YmeZ
+	 P5iIaGJfilcai6FGkMa4VgoMCEN+mvBii5Pgdju53xWkXUOjyTuSalPHq6CXx0IVVqjT9
+	 HYzdCVgDqW4rH4zegOwRNVTA/nTlGZ91zk5iBC/Yy+cyL4/dof9MeM3tKlbAvkQ9AfcBB
+	 yWgT0pZhCXoagWn45QUdUwbLV7tU0Zlry53ERwOnIkwGSDz5kBCmEap7UueJ8rRbc2w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=foxmail.com;
-	spf=pass smtp.mailfrom=foxmail.com;
-	dkim=pass header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256 header.s=s201512 header.b=C9gjPcN+;
-	arc=none smtp.remote-ip=162.62.57.49
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JsnTxSO+;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741DE606A31A;
-	Tue, 27 Oct 2026 03:07:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 741DE606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81819606A31E
+	for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 03:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256 header.s=s201512 header.b=C9gjPcN+
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1793070423;
-	bh=AYABbuvpRmugHL7xKhEUg235XYvNPii8LhIKNTJod1Y=;
-	h=From:To:Cc:Subject:Date;
-	b=C9gjPcN+6iUBmbZmoKNrsDV2qpF7XrAq1lhbHJZxXFSgsIyYsmZPH89+0duyvne5C
-	 PumwOGNr9m3UJHUyYYczKYouIbopxK55xap5mGFcwI6txIk+idQjeN4dEmo1uMdvgY
-	 yoMBCMVx6fWMN04HSffMvJtR3A3NMdQ86f4fYjoc=
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
-X-QQ-XMAILINFO: NMiAo2azIaDAYkkE/EfDdnEpgPxvV2EMCwzHid6acn8ULBvUa3pzkkrd5u+dan
-	 bDiaOcfYFsm0tEpgB1AQer2c1p3q0XYBV3gW6cLoEuJFShq26agMqMX6xbHWbEcFyp3q1ajMiLFf+
-	 2sTM7HZCi/+8NU78CwLcp6hDR35cTND6wIUWSTkRQzNBsdnxRbvlbOss83ZF4FxNIpv2MlXGRVqWk
-	 iAOX1LQ2DAeo9XoJA6CT4rUOeaocr5Jdvh2ZwvI8tUZUzCDiwxX94UFPJsfjR81TlRK6hqBdP7fG5
-	 QE9tLAvdVxaqZFl3F/lCzUY7uB+gRsM0W8nYqMZtN6E7F7LYktJBVUo6n5JnincxygUV4w/RlxQrQ
-	 hZjGc+2q7sDjmEir1XLzb5RRmsNhGlAbWUoxKfs2xFbPD2FQmIoOKWSYvIgoC7jaGMOd8ICdJt/xx
-	 8VM7coxjp9HZpnVYjssVmUuQQInhWiong5ApphWlflxy6hM1yDQ+7XaWL38Z02nXisdFdT1lcq/P3
-	 Xk7TbrPjfBN3EnS0g2qBTRtVwHE0GKGsEsMPfEgyFzuJMFf5/m8LshEZKY8/96EsU0LjGzsD0sgV2
-	 eI2U8qCmAcQ+f2KrEbuq2XcypqHVvRqio+fTCqi0hAq3NoomUWHp5F3a6Gl2eUA26nNFErRSEr7JW
-	 edCuVsCvwzD4oUuPnrUI3NMd6NAuYAIRRm1Syz7Ie4+9AOuQz8/LQrqIzt9u/xfTyjJPN9NdpGkzq
-	 +WnnoOR8yG3s/q+y9PYI2LIc+15x3g24o00MzUlmxl19XCYQ+fO7A6extz9a8W4Gn7y30p1Mao4mS
-	 8ryYMWKR79sLmmS6pBD7ruAI1GsN3IpemIc0V7noI662gtu3gqLy3lWUo0UGuPmepuZXaUAbjr5c1
-	 4Q7hcizws6urf+aSiiv6b+x/a6OcpfEyrFWN+byWAt08lJGT3KapaEiNDK0XfM6KhDWf81rDGvEFe
-	 Og9v4MwvW/JAzXO6CkmrserwpDIOJKJWqloDnBZgIYz2ya6ow3ZdCByHguS9igHS/k4osC4e/hYPL
-	 JQNTihGp4LRgh6Rt+jIxz8W7rvHfArmyiNe0rNLUGHrPepRLhjUjcrqSd0A==
-From: "=?utf-8?B?Ym8gY2Fv?=" <treebacker@foxmail.com>
-To: "=?utf-8?B?YnBm?=" <bpf@vger.kernel.org>
-Cc: "=?utf-8?B?YXN0?=" <ast@kernel.org>, "=?utf-8?B?ZGFuaWVs?=" <daniel@iogearbox.net>, "=?utf-8?B?YW5kcmlp?=" <andrii@kernel.org>, "=?utf-8?B?bmV0ZGV2?=" <netdev@vger.kernel.org>, "=?utf-8?B?c3RhYmxl?=" <stable@vger.kernel.org>
-Subject: [PATCH bpf] bpf: check cpu_possible() in per-cpu helpers
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JsnTxSO+
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE6CF1F01825;
+	Tue, 27 Oct 2026 03:14:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793070879;
+	bh=mFQQatuf+XSoHK+AFooyCL3ewxpPuUu4HT/v5KrUvdg=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=JsnTxSO+KEha6zZ8C2PbZ4hGFcF6zjHuFXjvm0Tg9QmhtmbVc+/vGvO/+vMRfkyTc
+	 Pw5VVf2NAFSw8Ps79Wo4dy7t+5G0DH7QUuiMkhQCMWRPc0WJzxBlitKuViVX9kcY20
+	 b2OQZ+R5phBHqrT02zhEux+0YZdJTN6ZTiYsm9U/eOQIcVrj1q3dkW8JcV2Vp32ZAb
+	 6eWRQGmBZQuaDKYhVNy/DmQEMjY14TtXmkARFrr/wN59sTLrifwai1DMTHE43F30+T
+	 stJjfAk9avgy0lu7vFeI97k/v3OOYefJckKsswZZEesm47CjehUrlne3hlzVpm/2mX
+	 Tk/bMg6uzIg+w==
+Message-ID: <sashiko-outbox-186048@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: check cpu_possible() in per-cpu helpers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "bo cao" <treebacker@foxmail.com>, bpf <bpf@vger.kernel.org>
+In-Reply-To: <tencent_3A8413B414528B9802AB092A67AE015FFE09@qq.com>
+References: <tencent_3A8413B414528B9802AB092A67AE015FFE09@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 27 Oct 2026 03:14:38 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,83 +57,93 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-Date: Tue, 27 Oct 2026 11:07:01 +0800
-X-Priority: 3
-Message-ID: <tencent_3A8413B414528B9802AB092A67AE015FFE09@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
-X-QQ-mid: xmseua11-1t1793070421tirbjsk9n
 
-VHdvIEJQRiBoZWxwZXJzIHRha2UgYSB0YXJnZXQgQ1BVIGlkIGFzIGEgcmF3IHUzMiAoYXJn
-X3R5cGUKQVJHX0FOWVRISU5HLCBzbyB0aGUgdmVyaWZpZXIgZG9lcyBub3QgY29uc3RyYWlu
-IGl0KSBhbmQgb25seSByZWplY3QKY3B1ID49IG5yX2NwdV9pZHMgYmVmb3JlIHRoZSB2YWx1
-ZSBpcyB1c2VkIGFzIGEgcGVyX2NwdV9wdHIoKSBpbmRleC4KCmJwZl9tYXBfbG9va3VwX3Bl
-cmNwdV9lbGVtKCkgZGlzcGF0Y2hlcyB0byB0aGUgcGVyLWNwdSBtYXAKaW1wbGVtZW50YXRp
-b25zLCBhbmQgYWxsIHRocmVlIG9mIHRoZW0gKHBlcmNwdSBhcnJheSwgcGVyY3B1IGhhc2gs
-CnBlcmNwdSBMUlUgaGFzaCkgY2hlY2sgbm90aGluZyBiZXlvbmQgdGhhdCB1cHBlciBib3Vu
-ZDoKCglpZiAoY3B1ID49IG5yX2NwdV9pZHMpCgkJcmV0dXJuIE5VTEw7CgkuLi4KCXJldHVy
-biBwZXJfY3B1X3B0ciguLi4sIGNwdSk7CgpicGZfcGVyX2NwdV9wdHIoKSBoYXMgdGhlIHNh
-bWUgd2VhayBjaGVjayBiZWZvcmUgcmV0dXJuaW5nCnBlcl9jcHVfcHRyKHB0ciwgY3B1KSBm
-b3IgYSBrZXJuZWwgcGVyY3B1IHZhcmlhYmxlLgoKUGVyLWNwdSBtZW1vcnkgaXMgb25seSBh
-bGxvY2F0ZWQgZm9yIHBvc3NpYmxlIENQVXMsIGFuZApfX3Blcl9jcHVfb2Zmc2V0W10gaXMg
-b25seSBpbml0aWFsaXplZCBmb3IgdGhlbSAob24gYXJtNjQsCnNldHVwX3Blcl9jcHVfYXJl
-YXMoKSB3YWxrcyBmb3JfZWFjaF9wb3NzaWJsZV9jcHUpLiAgT24gYSBzeXN0ZW0Kd2l0aCBh
-IHNwYXJzZSBwb3NzaWJsZSBtYXNrIC0gZS5nLiBhbiBhcm02NCBndWVzdCB3aXRoIGEgZGV2
-aWNlLXRyZWUKQ1BVIGhvbGUsIHBvc3NpYmxlIG1hc2sgMCwyLTMgd2l0aCBucl9jcHVfaWRz
-ID0gNCAtIGEgY2FsbCB3aXRoIHRoZQpob2xlIENQVSBpZCBwYXNzZXMgdGhlIHdlYWsgY2hl
-Y2ssIGFuZCBwZXJfY3B1X3B0cigpIGNvbXB1dGVzIHRoZQpyZXR1cm5lZCBwb2ludGVyIGZy
-b20gdGhlIHVuaW5pdGlhbGl6ZWQgX19wZXJfY3B1X29mZnNldFtob2xlXS4KCkZvciBicGZf
-bWFwX2xvb2t1cF9wZXJjcHVfZWxlbSgpIHRoZSBoZWxwZXIgdGhlbiBoYW5kcyB0aGUgQlBG
-CnByb2dyYW0gYSBwb2ludGVyIG91dHNpZGUgYW55IHZhbGlkIHBlci1jcHUgY2h1bmsgb2Yg
-dGhlIG1hcDogcmVhZHMKbGVhayB0aGUgc3RhbGUgYnl0ZXMgdGhyb3VnaCB0aGUgbWFwIHZh
-bHVlLCBhbmQgd3JpdGVzIGNvcnJ1cHQKd2hhdGV2ZXIgdGhlIG9mZnNldCBoYXBwZW5zIHRv
-IGxhbmQgb24uICBGb3IgYnBmX3Blcl9jcHVfcHRyKCkgdGhlCmxlYWsgdGFyZ2V0IGlzIGtl
-cm5lbCBtZW1vcnkgaW5zdGVhZCBvZiBtYXAgdmFsdWVzICh0aGUgcmV0dXJuIHR5cGUKaXMg
-bWFya2VkIE1FTV9SRE9OTFksIHNvIHJlYWRzIG9ubHkpLgoKUmVwcm9kdWNlZCBvbiBhbiBh
-cm02NCBndWVzdCB3aXRoIHBvc3NpYmxlIG1hc2sgMCwyLTMgKFVidW50dQo3LjMuMC05LWdl
-bmVyaWMpOiBhIHNvY2tldCBmaWx0ZXIgcHJvZ3JhbSBwYXNzZXMgdGhlIHBvaW50ZXIKcmV0
-dXJuZWQgYnkgYnBmX21hcF9sb29rdXBfcGVyY3B1X2VsZW0obWFwLCBrZXksIDEpIG9uIGFz
-IHRoZSB2YWx1ZQphcmd1bWVudCBvZiBicGZfbWFwX3VwZGF0ZV9lbGVtKCksIGFuZCB0aGUg
-Y29weSBpbnNpZGUKYXJyYXlfbWFwX3VwZGF0ZV9lbGVtKCkgZmF1bHRzIG9uIGl0OgoKICBw
-YyA6IF9fcGlfbWVtY3B5X2dlbmVyaWMrMHgzYy8weDIzMAogIGxyIDogYXJyYXlfbWFwX3Vw
-ZGF0ZV9lbGVtKzB4MTQ4LzB4MmE4CiAgQ2FsbCB0cmFjZToKICAgX19waV9tZW1jcHlfZ2Vu
-ZXJpYysweDNjLzB4MjMwIChQKQogICBicGZfcHJvZ184MzVhNGJhMmVhNjc1NWYwX3BvYysw
-eDkwLzB4YzAKICAgYnBmX3Rlc3RfcnVuKzB4MmQwLzB4NDYwCiAgIGJwZl9wcm9nX3Rlc3Rf
-cnVuX3NrYisweDRhYy8weDkyMAogICBfX3N5c19icGYrMHg2MTQvMHhiZTgKICAgX19hcm02
-NF9zeXNfYnBmKzB4MzgvMHg3OAoKVGhlIHN5c2NhbGwgc2lkZSBvZiB0aGUgc2FtZSBwcm9i
-bGVtIChCUEZfRl9DUFUgbWFwIG9wZXJhdGlvbiBmbGFncykKd2FzIGZpeGVkIGJ5IGVkNTRi
-ZjU2NGFjNSAoImJwZjogRml4IEJQRl9GX0NQVSB2YWxpZGF0aW9uIGZvciBzcGFyc2UKQ1BV
-IElEcyIpLCB3aGljaCBhZGRlZCBjcHVfcG9zc2libGUoKSB2YWxpZGF0aW9uIHRvCmJwZl9t
-YXBfY2hlY2tfb3BfZmxhZ3MoKS4gIFRoZSBoZWxwZXIgcGF0aHMgZG8gbm90IGdvIHRocm91
-Z2ggdGhhdApmdW5jdGlvbiwgc28gdGhlIHNhbWUgY2xhc3Mgb2YgaG9sZSBDUFUgaWQgbmVl
-ZHMgdG8gYmUgcmVqZWN0ZWQKdGhlcmUgYXMgd2VsbC4KCkZpeCB0aGUgbWFwIGhlbHBlciBj
-ZW50cmFsbHkgaW4gaXRzIGRpc3BhdGNoIHNvIGFsbCBtYXAKaW1wbGVtZW50YXRpb25zIGFy
-ZSBjb3ZlcmVkLCBhbmQgZml4IGJwZl9wZXJfY3B1X3B0cigpIGluIHBsYWNlLgoKRml4ZXM6
-IDA3MzQzMTEwYjI5MyAoImJwZjogYWRkIGJwZl9tYXBfbG9va3VwX3BlcmNwdV9lbGVtIGZv
-ciBwZXJjcHUgbWFwIikKRml4ZXM6IGVhYTZiY2I3MWVmNiAoImJwZjogSW50cm9kdWNlIGJw
-Zl9wZXJfY3B1X3B0cigpIikKQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcKU2lnbmVkLW9m
-Zi1ieTogYm8gY2FvIDx0cmVlYmFja2VyQGZveG1haWwuY29tPgotLS0KIGtlcm5lbC9icGYv
-aGVscGVycy5jIHwgNiArKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyks
-IDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9rZXJuZWwvYnBmL2hlbHBlcnMuYyBiL2tl
-cm5lbC9icGYvaGVscGVycy5jCmluZGV4IDY0OGFiZTFiYTYzYS4uZjlmMmJkNjY1MDM4IDEw
-MDY0NAotLS0gYS9rZXJuZWwvYnBmL2hlbHBlcnMuYworKysgYi9rZXJuZWwvYnBmL2hlbHBl
-cnMuYwpAQCAtMTMzLDYgKzEzMywxMCBAQCBjb25zdCBzdHJ1Y3QgYnBmX2Z1bmNfcHJvdG8g
-YnBmX21hcF9wZWVrX2VsZW1fcHJvdG8gPSB7CiBCUEZfQ0FMTF8zKGJwZl9tYXBfbG9va3Vw
-X3BlcmNwdV9lbGVtLCBzdHJ1Y3QgYnBmX21hcCAqLCBtYXAsIHZvaWQgKiwga2V5LCB1MzIs
-IGNwdSkKIHsKIAlXQVJOX09OX09OQ0UoIWJwZl9yY3VfbG9ja19oZWxkKCkpOworCisJaWYg
-KGNwdSA+PSBucl9jcHVfaWRzIHx8ICFjcHVfcG9zc2libGUoY3B1KSkKKwkJcmV0dXJuIDA7
-CisKIAlyZXR1cm4gKHVuc2lnbmVkIGxvbmcpIG1hcC0+b3BzLT5tYXBfbG9va3VwX3BlcmNw
-dV9lbGVtKG1hcCwga2V5LCBjcHUpOwogfQogCkBAIC03NTMsNyArNzU3LDcgQEAgY29uc3Qg
-c3RydWN0IGJwZl9mdW5jX3Byb3RvIGJwZl9jb3B5X2Zyb21fdXNlcl90YXNrX3Byb3RvID0g
-ewogCiBCUEZfQ0FMTF8yKGJwZl9wZXJfY3B1X3B0ciwgY29uc3Qgdm9pZCAqLCBwdHIsIHUz
-MiwgY3B1KQogewotCWlmIChjcHUgPj0gbnJfY3B1X2lkcykKKwlpZiAoY3B1ID49IG5yX2Nw
-dV9pZHMgfHwgIWNwdV9wb3NzaWJsZShjcHUpKQogCQlyZXR1cm4gKHVuc2lnbmVkIGxvbmcp
-TlVMTDsKIAogCXJldHVybiAodW5zaWduZWQgbG9uZylwZXJfY3B1X3B0cigoY29uc3Qgdm9p
-ZCBfX3BlcmNwdSAqKShjb25zdCB1aW50cHRyX3QpcHRyLCBjcHUpOwotLSAKMi4zOS41IChB
-cHBsZSBHaXQtMTU0KQoK
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] bpf: cpu_possible() check in bpf_map_lookup_percpu_elem() bypa=
+ssed by JIT
+--
 
+commit f9e290dde4ddd182ff551c50398cfc5c7e5ec1bb
+Author: bo cao <treebacker@foxmail.com>
+
+bpf: check cpu_possible() in per-cpu helpers
+
+This commit adds cpu_possible() checks to bpf_map_lookup_percpu_elem() and
+bpf_per_cpu_ptr() to prevent out-of-bounds per_cpu_ptr() calculations when a
+hole CPU ID is passed on systems with a sparse cpu_possible_mask.
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 648abe1ba63ae..f9f2bd665038b 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -133,6 +133,10 @@ const struct bpf_func_proto bpf_map_peek_elem_proto =
+=3D {
+>  BPF_CALL_3(bpf_map_lookup_percpu_elem, struct bpf_map *, map, void *, ke=
+y, u32, cpu)
+>  {
+>  	WARN_ON_ONCE(!bpf_rcu_lock_held());
+> +
+> +	if (cpu >=3D nr_cpu_ids || !cpu_possible(cpu))
+> +		return 0;
+> +
+>  	return (unsigned long) map->ops->map_lookup_percpu_elem(map, key, cpu);
+>  }
+
+[Severity: Critical]
+Does placing the cpu_possible(cpu) check only in bpf_map_lookup_percpu_elem=
+()
+leave 64-bit JITed programs unprotected when calling this helper?
+
+In kernel/bpf/fixups.c:do_misc_fixups(), when prog->jit_requested &&
+BITS_PER_LONG =3D=3D 64 and the map pointer is not poisoned
+(!bpf_map_ptr_poisoned(aux)), the verifier rewrites
+BPF_FUNC_map_lookup_percpu_elem to call ops->map_lookup_percpu_elem directl=
+y,
+bypassing bpf_map_lookup_percpu_elem() in kernel/bpf/helpers.c:
+
+kernel/bpf/fixups.c:do_misc_fixups() {
+    ...
+		if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
+		    (insn->imm =3D=3D BPF_FUNC_map_lookup_elem ||
+		     ...
+		     insn->imm =3D=3D BPF_FUNC_map_lookup_percpu_elem)) {
+			aux =3D &env->insn_aux_data[i + delta];
+			if (bpf_map_ptr_poisoned(aux))
+				goto patch_call_imm;
+    ...
+			case BPF_FUNC_map_lookup_percpu_elem:
+				insn->imm =3D BPF_CALL_IMM(ops->map_lookup_percpu_elem);
+				goto next_insn;
+    ...
+}
+
+When that direct call path is taken, execution goes straight to the map
+callbacks:
+- kernel/bpf/arraymap.c:percpu_array_map_lookup_percpu_elem()
+- kernel/bpf/hashtab.c:htab_percpu_map_lookup_percpu_elem()
+- kernel/bpf/hashtab.c:htab_lru_percpu_map_lookup_percpu_elem()
+
+All three callbacks still only check cpu >=3D nr_cpu_ids before indexing
+per_cpu_ptr(..., cpu):
+
+kernel/bpf/arraymap.c:percpu_array_map_lookup_percpu_elem() {
+	if (cpu >=3D nr_cpu_ids)
+		return NULL;
+
+	if (unlikely(index >=3D array->map.max_entries))
+		return NULL;
+
+	return per_cpu_ptr(array->pptrs[index & array->index_mask], cpu);
+}
+
+Should the !cpu_possible(cpu) check be added to
+percpu_array_map_lookup_percpu_elem(), htab_percpu_map_lookup_percpu_elem(),
+and htab_lru_percpu_map_lookup_percpu_elem() as well so that direct calls f=
+rom
+64-bit JITed programs cannot index __per_cpu_offset[] with an uninitialized
+hole CPU ID?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_3A8413B4145=
+28B9802AB092A67AE015FFE09@qq.com?part=3D1
