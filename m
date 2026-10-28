@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.133
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.72
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793148307;
-	b=D8Bs0LuV68ymdKRAUv/ftgvy/ubDEgVSjYYGz5oSUuP/NQtf8VkTdXD8AYz+TM1RRGwP
-	 B7WsSbixtuZxl4dEyOO7kawSvSZqQ/i4eD1sKonyRpMIhQSpDXewaGASskyH9yHLLh0r9
-	 x7Ufpwi3oQ4uAep6QYnZupjtPNM+9JjAfBscpGE8a5xhY38werD7pjfRr8K0tXyp2PZhy
-	 T/ZbDp9wNdw6a5fO6RTVSMaAStkJfQ++fE4xBoRB02Zi+U5NZPNIkteCsWjxM+L58Kjd/
-	 mtEQiGQrfahTBWaAooddQ86uPjlaOU50cWwlk9D0FLfsaV+/50RhUvOOPS20/nDUxXA==
+	t=1793148309;
+	b=TnK/D+2VG9uXtzY8juxa9sNrqY0CN6r2OpMr3lsNEjbqTFDnsi98AWzEWc524tR7eUtM
+	 pQDkqZuWWnzMcPndYFNP8q14ET0SgJlspvBchC6soeCdegbF/15/7tLWPU1w7fR6HhfMo
+	 ENdkW7PmlMuTHgTF7Rm8dpwCfcma8JhATR01OCR1Ztzb1sdrc36qqTeIFukQaFLA8Gfwb
+	 ag/SrZvKH34iGCbKmTxUUwWp+012EV76Xef6dvrGu2eDjyZkjok5WzBjUHQZ+cXOt+8HO
+	 z4ppblgiZQ5Rq/IV5J8v+KvdUtJqLf9XD07BZJXXKlFnzC/yF3xykhMizEG8PxHXxtg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793148307;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793148309;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 X-Developer-Signature:X-Developer-Key:Content-Transfer-Encoding;
-	bh=Qag8Cg/XKK6bHPjOrJODrcRKXYPMsRlQr3bCAVMAuPs=;
-	b=MJ6zZ225vIbjLqjYXBiMb7UOVVZpe7WgTm0zX4v6S6wwgwsKb3PeXRK6mxQyghb5hLGk
-	 6/8gE+QUUAHL1k5/hsRqLA5izWgLN3QnFacq+JX+DRZbDhm/vwSf5um7mS1HY18r+lEla
-	 y3Lko1VwDI8DYYY9uJrkzfotoqcNyUP69gXuiuAqi8UrjGSWvJhdGiqbkTUFJujdJJuLA
-	 pjMWw7fFWh2C16kmm2+/Di1ppHw7MT+LhpCmqqaqKxSERxr/6KciZgQuVZdDarmb3ZubD
-	 Z36EC8ajuPdYforFWjnEPo+l0+LYLBI+tsttifO4UeVqpLbVyuD6cGMCMg3VvczrgKw==
+	bh=QmzatCzYHImUcFGCoOViqY60uiMo92rPmsGLzb4hPHk=;
+	b=uEzp4QnyWUKxWbJ9XZB4q1XgywlfU3aJ5hI0g8+x/u5J/jgKHzuntUSVATqZsH1LwWUE
+	 15hxfG7YfsrIu9OliyVGVSxCsn7Afa6I117jaR2so1l9TQ3WKuDXEwDXIPj0sRh9sWqEo
+	 1iv+A4dneG8fP6s9uUTJCKq1GTjMqoyNHdjPXfZyKA2QHexhqc1b/Q4Lrs+HDbHpXKlze
+	 nj/sXsX+UFqoP+VzgmlFB5yeV5pm979lbRmFqKkxbhxbuAlOmSWEhnZDSHNmQfhOmtcQk
+	 Fwigr7z5TUlqA77Y+kJDUf0KAxkhLMNRGAG63xD2tWRRy7A2vPfdEgBRshKdh+QmMTg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ih+vNXMk;
-	arc=none smtp.remote-ip=74.125.225.133
-Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="Sl/AHa5P";
+	arc=none smtp.remote-ip=74.125.225.72
+Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239CF606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:45:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 239CF606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF50606A324
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:45:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DF50606A324
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ih+vNXMk
-Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-4a35e178418so1824565e9.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 17:45:06 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Sl/AHa5P
+Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-48df4afd489so107932f8f.0
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 17:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793148305; x=1793753105; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793148307; x=1793753107; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Qag8Cg/XKK6bHPjOrJODrcRKXYPMsRlQr3bCAVMAuPs=;
-        b=ih+vNXMkz6k9h20lAzYmLiT9kWxx3vLEMPwgo5aS3+5La2JFDtMlkhDENAMaQC/oqP
-         SbcmkSEL5Ojbw1aUlSHsHTsvclC8IG5rkknWScC6D65SGYe2RVSThWhteccu0/j38CSC
-         YLDelwxLrVjZbexmtkDwcvv5q58mnU1s2Lcg4ztyEOGdmhqBhoXqJ8auEDAYwMJCnNIM
-         eyAuusDmSII5Ex7v35DT6f8E3qb/x1STS/yFEUSyFo11T8nJIJuNYPdUsy6hYy/CUib2
-         JFfnPQNmaUesoRiWaCIfz92C1L8c4+63/0PsaCFY1/jYpYQ/4RMDWm5kGwu0gnDR4J0D
-         nv2Q==
+        bh=QmzatCzYHImUcFGCoOViqY60uiMo92rPmsGLzb4hPHk=;
+        b=Sl/AHa5P85wt8Z3pv0jL/oD6fyuJR/ZeuKTjgjShYpxMXLn/Gej8VJb1kMnza6CQfp
+         t2BAJXcOFvGlYm33l7HvWqYOp8JPlSPZjQtbFgeTmWZj3S45qYmZBwTYCO4Gh8wxSWpT
+         LZ6+rwUxEL4ULELKVJjtqH2UGunnVj/fA2/CY/l+6tN7AsoohgsY+lsUb9YVIi+jlWde
+         6Qo2uw7U8lTyxKFd8Xg22kfQmU3vT3Ia1+QAPXmnjV4FAFIElvMARSsEpeATSPPw5fBx
+         7yvx3CBwW5W/I/AF5Su7H2lzfIgoPSoxS9e7qs5IvKH2MPhoo9KS+FWmbVV9mweH0PrQ
+         ioxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793148305; x=1793753105;
+        d=1e100.net; s=20260707; t=1793148307; x=1793753107;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Qag8Cg/XKK6bHPjOrJODrcRKXYPMsRlQr3bCAVMAuPs=;
-        b=KvEqw1mkzM8P0dUmAV/ww4UMJKhwzI2R/nczt+X3g/g1abIR/PTCP095uNgR2V3Kmo
-         KITGeeKPPOB0igI1DI8hjLTd7ZgQxakoDkvBGZ4UV6LQMUOisNtsa8G8ktU37uf9bTJ2
-         OUr2mfqyP8fTvs+ZevZUyA0mE4aDODrXd0hPpf2BVKNC5KzmiW+nC+1ihUW95/3nK9PG
-         2Z5vfGhoSgc8Tkdshf8L4g5+E5DahyAHTRhu7Rnk9rx8gt08JderidEs/GNsgwQhkIHO
-         VLPunqI0WScJJe8EuAaIs8n0TEuQDJ5ko+FddhPKI50wQomt/d/Mgcl2RUYaf0dyfLmH
-         l6GQ==
-X-Gm-Message-State: AFq9FYKwukYI4smJPE1PObnWx7AATexI6sC5KD+9dsM4l3PvB9bUwyZv
-	7FdFOeAqjvoKyUwIY5tIScw5ZGVs1dt2N38hS4+v6W7JnOJh3n1hw+SgpYLGOAEm
-X-Gm-Gg: AYBFou2S4S32eIBlQsbJxdtSvLf9YaV80mNFxTBeXVheNw1e4sBs8IzQk5SRvOjCTxW
-	hO2xv6cFDJ1BwJHzS68xTXZ2ECXJbT14EmSC1z1AJYJqSm5oxGFlyJsF0/rKOoByZXCyM6iLKG/
-	imYUulXcJ9rW9x//djqKUXEI1HqL2XO6g7QSuVpZA0/pcW3RQjmckbKq0DqCeRTOgHr/PzAhgHE
-	2Yt20UU0BkZ50ANpmxQ6dqemlCL86q1MG5qJJA+xeu6sG6MTcUzc5A7JWaXSVUfpgukeNhtrNT0
-	0dDuZwXrb+YdfyH3H1FNQSx+2bJg5JpcegdIwG2zHDhoL532clG58CP9HK6TUPNFB4iYINSK0d3
-	cfWLFDs6YK1LRjSHDXLxxSgO9uhUD1yJHXSS+Vs25AdDGgPWxVtsOiFFzrJwtL13dZzN8ZOi8qF
-	FN3usAFOfXz8scKdov7KkRhjRJP8eh9tJo8N6DcIgjwpC3XZ2kwB4aLvnGfWG7TLF92L/WjtF4/
-	d+MlFE507oVoCS5emwqKjh5QMmCIcJ+uIAQsvdgEpQpmKMLcACgsm2NOHCeYM3E/x4Vnz9SHkB2
-	XBzK19/XLsdNkqlTt/ch0YpVlbular3y8kf2sjAWr2UJoINUE7y8VVfftq6jnAJZ1x9WdaWr6hy
-	dI4OAEwkq4mtgqmGj5m1tsRNB8kI3jFnqLFiDL0td7ihhnxX7RDHyxtwwNr29/86n1EAc
-X-Received: by 2002:a05:600c:1d1a:b0:4a3:59c9:a747 with SMTP id 5b1f17b1804b1-4a966c4111amr12092675e9.17.1793148305191;
-        Tue, 27 Oct 2026 17:45:05 -0700 (PDT)
+        bh=QmzatCzYHImUcFGCoOViqY60uiMo92rPmsGLzb4hPHk=;
+        b=kapac7ZvuRUkVXPaYApZihD3CVz8oGOOamFduSRLEY6nYFS1dpbtKks83SeU/V+h7p
+         zEuZxOVWrLKIg3pSb54NX2PjrOyr4hbUSh9SATjxJA1j54k9Cf1chhGeBVN2lwR0UOUL
+         24P2TxtHqT2XAg2AB7bOzwpUqyc/z/3rgEbQS4ocAWqIuBY+TXJRYNzWrzpOoS8GA1nY
+         qSJ4udJOcZQedZI9HmILPnIueniZFLk++o0wpBTl2AlWwz2whXD62XxLdgK2i8bdb+f0
+         VA9OldFNJBjZnWoj7DGeqYEy+oZnLJworgawd0eprG+BeS7MGAjWU/Usz+fmodeGtHf1
+         25oQ==
+X-Gm-Message-State: AFq9FYId5hDLpp055ovyZ0i5wCjK2UJ2mLOhLjVN+Zi1vkbY42enL/CO
+	KrjwPJYv6rhurRzVBZV/NGdevqPrA4DVzcJIXsGNyTfcZBxo6z4Zqt31YASYBi3M
+X-Gm-Gg: AYBFou2TQx7kvSsaBSjyY+4ItFvhIPwEMXc/xQX1xg+c5LsoIf0mM99bmxiZaGhK4r9
+	EjvhrfV+jzG+5oNg7JCmgsJeim7+yK2s8Q/fOMZPsqIWGeLHnqEYRi2vkz9GNbGW87AaDeUQz3i
+	31UNAFkpizt4uMASrdKE+0850i8Tu/qANMiRGk3+SXmpBVcemfUR50CuO4oruxIrKDix5YoYlxS
+	5o2K0a6j3m1FChVBOoU1xRmucFgi7iW9RUgHbY/SQfpE41A9T3/sA6FzhvbSaVvH6HldRoFJPnr
+	LmkEc6wY0SyTwrr/rz1ht/wYLld+hPkk8eSjPiyr+75zSApIhsUsc59qpyN5v10Z90bWJA8HGCF
+	BGnmSkLbzV0SpmT46KNn0rGTHUC+ZT+lDhQb4H7PjdGYVGgyvuUaa8NN/PDiGI1VF4TfkYg8AHB
+	zsPT/GisrJskU7bbiGzF+Plrw1YAp0jEIgeaYFeM+kyrB7Yjmm4k16V8I2ttKmnUN2oUkz0LGTe
+	J6Zs6kT9BBa+0+xOBHfpIOfIGZIkVdpNOX1s9Umhk654c+iXPcHr7E+nT5w0u/uLLwSfTyYP9AG
+	OEi2cGoI/ccm4TewEg8+BePjO7+npV+BIuQx7j3lpXFB3V+gPLONh9UdJl+xw36vpjcTQugwa7U
+	p4Si5U1ULl2lnEROhxWg=
+X-Received: by 2002:a05:6000:98d:b0:48d:dec7:974c with SMTP id ffacd0b85a97d-48e5d567ed1mr2291224f8f.7.1793148306866;
+        Tue, 27 Oct 2026 17:45:06 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a97cebfa16sm10650425e9.13.2026.10.27.17.45.04
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3eb8f36asm25734317f8f.1.2026.10.27.17.45.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 17:45:04 -0700 (PDT)
+        Tue, 27 Oct 2026 17:45:06 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -88,9 +88,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 10/11] selftests/bpf: Test callbacks that unwind
-Date: Wed, 28 Oct 2026 01:44:47 +0100
-Message-ID: <2fb53df72300b10ba5f5aff123c331b80a7c4be5.1793147364.git.memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 11/11] selftests/bpf: Test what a callback unwinds with
+Date: Wed, 28 Oct 2026 01:44:48 +0100
+Message-ID: <b22c7e8b1099de6b60ec5561fcadef26f34527e2.1793147364.git.memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1793147364.git.memxor@gmail.com>
 References: <cover.1793147364.git.memxor@gmail.com>
@@ -103,558 +103,342 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=21895; i=memxor@gmail.com; h=from:subject:message-id; bh=ZKwHhkOjho5h6Tsfu6YizKenrgysrsEwi5Tk39XC+eI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuh4wvTtWd3Xz4p4Kav9v6/e+wXuVdXzeY9VxadGPx6P 3v2gdkfO0pZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRr8oM//T8FhdftnHdd+KC rcDVorkHw/bdDH75qP7ChWPyGbfsDsgxMtz2zu9xnVjVZVh+40xh7EJLs8duG6bGHn9tHvVRdk/ sSyYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14109; i=memxor@gmail.com; h=from:subject:message-id; bh=ruqMPNzi/mdBDRDE7qyjv7qzjS/6nh7Zrb72pGyRQUA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIeuh44tk14kvnCM/lZyqnv3B2G7Jn3ObuCX2Ps6w0P+to /Vg9+2YjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEwkJJ2Rob0gwHBrcW2kpmqV VvWuQ6/7JP67zf916czEAw9yDm/a8YHhD9ecbdPu/TX2v7b7nvW5rD2KHK7eO4r+P1IVNEtr7Mn 1YwIA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-One file for the callbacks of bpf_loop(), bpf_for_each_map_elem() over
-an array, a hash and an rhash the prog fills first, bpf_find_vma() on
-the stack of the current task, and the comparator of bpf_rbtree_add(),
-in both spellings, meeting the one node that is in the tree. Each with
-a callback that unwinds on its first run, where the pad after the call
-returns the number of runs plus what the helper left in r0, which is
-what the callback unwound with, plus 41. One callback of bpf_loop()
-unwinds on its third run, one unwinds through its own pad, one call
-sees a callback that unwinds on one path and one that returns on the
-other, and the pad after a callback that returns is never taken.
-Refused is the call without unwind_goto after it. A loop of no rounds
-never runs its callback: it needs no unwind_goto, and the inlined loop
-leaves the insn after the call alone. The normal path of the helpers is
-what their own tests run.
+What a callback unwinds with reaches the pad as it is. A callback that
+unwinds with a pointer to an element of the array loads, and the pad reads
+through it: 6, which the callback put there, plus 41. A callback that
+unwinds with a reference it took hands it to the pad, which drops it, or
+is refused for leaking it. A pointer into the stack of the callback is
+refused as at any return.
 
-The file includes vmlinux.h for the offsets the find_vma tests need,
-which rules out BPF_RAW_INSN(), so unwind_goto and unwind_exit are raw
-words. The rbtree test is in C with a naked subprog around the call of
-the kfunc, since the unwind_goto has to follow the call.
+The pad knows what the callback unwound with: it adds the 5 of cb_unwinds
+to fp and reads the slot that is there, which an unknown r0 could not do,
+and the index of the run, which the callback may unwind with, it does not
+know. Two callbacks on two paths into one call unwind with 5 and with 100,
+and the pad is checked with each: with 100 the read is out of the frame.
+A loop of one unwinds on its only round. A helper in the pad, after a
+callback unwound on the first of two rounds, starts its rounds afresh, so
+its callback is checked and its call needs an unwind_goto of its own. The
+pad before the call of an inlined bpf_loop() is reached from the inlined
+loop.
 
-The callback of bpf_user_ringbuf_drain() needs samples from user space,
-so its test is a prog_tests one. The callback unwinds on the sample it
-is given, with r0 = 5, and the pad after the call returns the number of
-runs plus 5 plus 41. The drain before any sample returns 0, the one
-after the unwind finds the sample consumed and the busy bit dropped,
-and the one after the next sample unwinds again.
-
-The existing "callback unwinds" test used bpf_loop() to get "callback
-cannot unwind". bpf_loop() has a pad now, so what it lacks is the
-unwind_goto after the call, and that is what the test expects.
+The comparator of bpf_rbtree_add() that unwinds with the node being added
+gets its pad refused for reading through it, and so is a read of the node
+after the call: the kfunc dropped it. What the caller holds of the tree is
+gone with the unwind as well, as at an unlock.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../selftests/bpf/prog_tests/unwind_drain.c   |  71 +++
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/unwind_drain.c        |  69 +++
- .../selftests/bpf/progs/verifier_unwind.c     |   3 +-
- .../selftests/bpf/progs/verifier_unwind_cb.c  | 569 ++++++++++++++++++
- 5 files changed, 713 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/unwind_drain.c
- create mode 100644 tools/testing/selftests/bpf/progs/unwind_drain.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_unwind_cb.c
+ .../selftests/bpf/progs/verifier_unwind_cb.c  | 497 +++++++++++++++++-
+ 1 file changed, 496 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_drain.c b/tools/testing/selftests/bpf/prog_tests/unwind_drain.c
-new file mode 100644
-index 000000000000..54b9cfbef440
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/unwind_drain.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "unwind_drain.skel.h"
-+
-+static int run(struct bpf_program *prog)
-+{
-+	char data[64] = {};
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		.data_in = data,
-+		.data_size_in = sizeof(data),
-+		.repeat = 1,
-+	);
-+
-+	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(prog), &opts), "test_run"))
-+		return -1;
-+	return opts.retval;
-+}
-+
-+static int submit(struct user_ring_buffer *rb)
-+{
-+	void *sample = user_ring_buffer__reserve(rb, 8);
-+
-+	if (!ASSERT_OK_PTR(sample, "reserve"))
-+		return -1;
-+	user_ring_buffer__submit(rb, sample);
-+	return 0;
-+}
-+
-+/*
-+ * The callback unwinds on the sample it is given, with r0 = 5. The pad after
-+ * the call of bpf_user_ringbuf_drain() returns the number of runs plus 5 plus
-+ * 41. The sample is consumed and the busy bit dropped on the way there: the
-+ * next drain finds an empty ring buffer, and the one after that another
-+ * sample.
-+ */
-+void test_unwind_drain(void)
-+{
-+	struct user_ring_buffer *rb = NULL;
-+	struct unwind_drain *skel;
-+	int err;
-+
-+	if (!is_jit_enabled()) {
-+		printf("%s:SKIP:JIT is disabled\n", __func__);
-+		test__skip();
-+		return;
-+	}
-+	skel = unwind_drain__open_and_load();
-+	err = libbpf_get_error(skel);
-+	if (err == -ENOTSUPP) {
-+		printf("%s:SKIP:JIT does not support unwinding\n", __func__);
-+		test__skip();
-+		return;
-+	}
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	rb = user_ring_buffer__new(bpf_map__fd(skel->maps.user_ringbuf), NULL);
-+	if (!ASSERT_OK_PTR(rb, "user_ring_buffer__new"))
-+		goto out;
-+
-+	ASSERT_EQ(run(skel->progs.drain), 0, "empty");
-+	if (submit(rb))
-+		goto out;
-+	ASSERT_EQ(run(skel->progs.drain), 47, "unwinds");
-+	ASSERT_EQ(run(skel->progs.drain), 0, "consumed");
-+	if (submit(rb))
-+		goto out;
-+	ASSERT_EQ(run(skel->progs.drain), 48, "unwinds again");
-+out:
-+	user_ring_buffer__free(rb);
-+	unwind_drain__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 04740ba37e91..10beba6bed20 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -131,6 +131,7 @@
- #include "verifier_uninit.skel.h"
- #include "verifier_unpriv.skel.h"
- #include "verifier_unwind.skel.h"
-+#include "verifier_unwind_cb.skel.h"
- #include "verifier_unpriv_perf.skel.h"
- #include "verifier_value_adj_spill.skel.h"
- #include "verifier_value.skel.h"
-@@ -322,6 +323,7 @@ void test_verifier_typedef(void)              { RUN(verifier_typedef); }
- void test_verifier_uninit(void)               { RUN(verifier_uninit); }
- void test_verifier_unpriv(void)               { RUN(verifier_unpriv); }
- void test_verifier_unwind(void)               { RUN(verifier_unwind); }
-+void test_verifier_unwind_cb(void)            { RUN(verifier_unwind_cb); }
- void test_verifier_unpriv_perf(void)          { RUN(verifier_unpriv_perf); }
- void test_verifier_value_adj_spill(void)      { RUN(verifier_value_adj_spill); }
- void test_verifier_value(void)                { RUN(verifier_value); }
-diff --git a/tools/testing/selftests/bpf/progs/unwind_drain.c b/tools/testing/selftests/bpf/progs/unwind_drain.c
-new file mode 100644
-index 000000000000..1277d1a3e82e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/unwind_drain.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../../../include/linux/filter.h"
-+#include "bpf_misc.h"
-+
-+#define unwind_goto(off) ".8byte %[insn_unwind_goto_" #off "];"
-+#define unwind_exit ".8byte %[insn_unwind_exit];"
-+
-+#define __imm_unwind_goto(off) \
-+	__imm_insn(insn_unwind_goto_##off, \
-+		   BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, BPF_UNWIND_GOTO, off, 0))
-+#define __imm_unwind_exit \
-+	__imm_insn(insn_unwind_exit, \
-+		   BPF_RAW_INSN(BPF_JMP | BPF_EXIT, 0, BPF_UNWIND_EXIT, 0, 0))
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_USER_RINGBUF);
-+	__uint(max_entries, 4096);
-+} user_ringbuf SEC(".maps");
-+
-+/* How many times the callback ran */
-+__u64 runs;
-+
-+/* Unwinds on every sample */
-+__naked __noinline __used
-+static unsigned long cb_unwinds(void)
-+{
-+	asm volatile (
-+		"r1 = %[runs] ll;"
-+		"r2 = *(u64 *)(r1 + 0);"
-+		"r2 += 1;"
-+		"*(u64 *)(r1 + 0) = r2;"
-+		"r0 = 5;"
-+		unwind_exit
-+		:
-+		: __imm_addr(runs),
-+		  __imm_unwind_exit
-+	);
-+}
-+
-+/* The pad returns the number of runs plus what the helper left in r0, 5, plus 41 */
-+SEC("tc")
-+__naked int drain(void)
-+{
-+	asm volatile (
-+		"r1 = %[user_ringbuf] ll;"
-+		"r2 = %[cb_unwinds];"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_user_ringbuf_drain];"
-+		unwind_goto(1)
-+		"exit;"
-+		"r1 = %[runs] ll;"
-+		"r1 = *(u64 *)(r1 + 0);"
-+		"r0 += r1;"
-+		"r0 += 41;"
-+		"exit;"
-+		:
-+		: __imm_addr(user_ringbuf),
-+		  __imm_ptr(cb_unwinds),
-+		  __imm_addr(runs),
-+		  __imm(bpf_user_ringbuf_drain),
-+		  __imm_unwind_goto(1)
-+		: __clobber_common
-+	);
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind.c b/tools/testing/selftests/bpf/progs/verifier_unwind.c
-index 5a21345c34d4..3de145a2d065 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unwind.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unwind.c
-@@ -896,12 +896,13 @@ static unsigned long cb_unwinds(void)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind_cb.c b/tools/testing/selftests/bpf/progs/verifier_unwind_cb.c
+index 8a3dee4330ac..d9db8084b843 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_unwind_cb.c
++++ b/tools/testing/selftests/bpf/progs/verifier_unwind_cb.c
+@@ -11,7 +11,7 @@
+  * BPF_RAW_INSN(), so here they are raw words: the code, src_reg = 1 in the
+  * high nibble of the second byte, off in the next two bytes.
+  */
+-#define unwind_goto(off) ".8byte (" #off " << 16) | 0x10e5;"	/* BPF_JMP | BPF_JCOND */
++#define unwind_goto(off) ".8byte ((" #off " & 0xffff) << 16) | 0x10e5;"	/* BPF_JMP | BPF_JCOND */
+ #define unwind_exit ".8byte 0x1095;"				/* BPF_JMP | BPF_EXIT */
+ 
+ struct {
+@@ -259,6 +259,374 @@ __naked int loop_cb_unwinds_no_pad(void)
  	);
  }
  
-+/* bpf_loop() has a pad for it, so what's missing is the one after the call */
- SEC("tc")
- __description("unwind: callback unwinds")
- __arch_x86_64
- __arch_arm64
- __load_if_JITed()
--__failure __msg("callback cannot unwind")
-+__failure __msg("no unwind_goto after the call of bpf_loop()")
- __naked int callback_unwinds(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind_cb.c b/tools/testing/selftests/bpf/progs/verifier_unwind_cb.c
-new file mode 100644
-index 000000000000..8a3dee4330ac
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_unwind_cb.c
-@@ -0,0 +1,569 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+/*
-+ * A callback that a helper or a kfunc calls unwinds into a pad in the helper,
-+ * which leaves to the pad after the call of the helper. See verifier_unwind.c
-+ * for the insns. vmlinux.h, for the offsets the find_vma tests need, leaves no
-+ * BPF_RAW_INSN(), so here they are raw words: the code, src_reg = 1 in the
-+ * high nibble of the second byte, off in the next two bytes.
-+ */
-+#define unwind_goto(off) ".8byte (" #off " << 16) | 0x10e5;"	/* BPF_JMP | BPF_JCOND */
-+#define unwind_exit ".8byte 0x1095;"				/* BPF_JMP | BPF_EXIT */
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 3);
-+	__type(key, int);
-+	__type(value, int);
-+} array SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 3);
-+	__type(key, int);
-+	__type(value, int);
-+} hash SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RHASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 3);
-+	__type(key, int);
-+	__type(value, int);
-+} rhash SEC(".maps");
-+
-+struct node_data {
-+	long key;
-+	struct bpf_rb_node node;
-+};
-+
-+#define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
-+private(A) struct bpf_spin_lock glock;
-+private(A) struct bpf_rb_root groot __contains(node_data, node);
-+
-+/* How many times the callback ran */
-+__u64 runs;
-+
-+#define count_run()				\
-+	"r1 = %[runs] ll;"			\
-+	"r2 = *(u64 *)(r1 + 0);"		\
-+	"r2 += 1;"				\
-+	"*(u64 *)(r1 + 0) = r2;"
-+
-+/* Unwinds with r0 = 5 on its first run */
++/* Unwinds with a pointer in r0: the element of the array, with 6 in it */
 +__naked __noinline __used
-+static unsigned long cb_unwinds(void)
++static unsigned long cb_unwinds_with_ptr(void)
 +{
 +	asm volatile (
-+		count_run()
-+		"r0 = 5;"
++		"r1 = 0;"
++		"*(u32 *)(r10 - 4) = r1;"
++		"r1 = %[array] ll;"
++		"r2 = r10;"
++		"r2 += -4;"
++		"call %[bpf_map_lookup_elem];"
++		"if r0 == 0 goto 1f;"
++		"r1 = 6;"
++		"*(u32 *)(r0 + 0) = r1;"
 +		unwind_exit
-+		:
-+		: __imm_addr(runs)
-+	);
-+}
-+
-+/* Returns 0 twice, then unwinds */
-+__naked __noinline __used
-+static unsigned long cb_unwinds_third(void)
-+{
-+	asm volatile (
-+		count_run()
-+		"if r2 == 3 goto 1f;"
-+		"r0 = 0;"
-+		"exit;"
 +	"1:"
-+		"r0 = 5;"
-+		unwind_exit
-+		:
-+		: __imm_addr(runs)
-+	);
-+}
-+
-+/* Returns 0: the loop runs to its end */
-+__naked __noinline __used
-+static unsigned long cb_returns(void)
-+{
-+	asm volatile (
-+		count_run()
-+		"r0 = 0;"
 +		"exit;"
 +		:
-+		: __imm_addr(runs)
++		: __imm_addr(array),
++		  __imm(bpf_map_lookup_elem)
++		: __clobber_all
 +	);
 +}
 +
-+__naked __noinline __used
-+static unsigned long always_unwinds(void)
-+{
-+	asm volatile (
-+		"r0 = 5;"
-+		unwind_exit
-+	);
-+}
-+
-+/* What it calls unwinds. Its pad counts the run and unwinds on. */
-+__naked __noinline __used
-+static unsigned long cb_passes_on(void)
-+{
-+	asm volatile (
-+		"call always_unwinds;"
-+		unwind_goto(2)
-+		"r0 = 0;"
-+		"exit;"
-+		count_run()
-+		"r0 = 7;"
-+		unwind_exit
-+		:
-+		: __imm_addr(runs)
-+	);
-+}
-+
-+/*
-+ * The pad after the call of the helper returns the number of runs plus what
-+ * the helper left in r0, which is what the callback unwound with, plus 41.
-+ */
-+#define PAD					\
-+	"r1 = %[runs] ll;"			\
-+	"r1 = *(u64 *)(r1 + 0);"		\
-+	"r0 += r1;"				\
-+	"r0 += 41;"				\
-+	"exit;"
-+
-+/* The loop is inlined, and so is its pad: unwind_goto after the call of the callback */
++/* The helper hands r0 on as it is: the pad reads through the pointer */
 +SEC("tc")
-+__description("unwind cb: the callback of bpf_loop unwinds on its first run")
++__description("unwind cb: the callback unwinds with a pointer in r0")
 +__arch_x86_64
 +__arch_arm64
 +__load_if_JITed()
 +__success __retval(47)
-+__xlated("unwind_goto pc+7")
-+__naked int loop_cb_unwinds(void)
++__naked int loop_cb_unwinds_with_ptr(void)
 +{
 +	asm volatile (
 +		"r1 = 10;"
-+		"r2 = %[cb_unwinds];"
++		"r2 = %[cb_unwinds_with_ptr];"
 +		"r3 = 0;"
 +		"r4 = 0;"
 +		"call %[bpf_loop];"
 +		unwind_goto(1)
 +		"exit;"
-+		PAD
++		"r0 = *(u32 *)(r0 + 0);"
++		"r0 += 41;"
++		"exit;"
 +		:
-+		: __imm_ptr(cb_unwinds),
-+		  __imm_addr(runs),
++		: __imm_ptr(cb_unwinds_with_ptr),
 +		  __imm(bpf_loop)
 +		: __clobber_common
 +	);
 +}
 +
++/* Unwinds with a pointer into its own stack */
++__naked __noinline __used
++static unsigned long cb_unwinds_with_fp(void)
++{
++	asm volatile (
++		"r0 = r10;"
++		"r0 += -8;"
++		unwind_exit
++	);
++}
++
 +SEC("tc")
-+__description("unwind cb: the callback of bpf_loop unwinds on its third run")
++__description("unwind cb: the callback unwinds with a pointer into its stack")
 +__arch_x86_64
 +__arch_arm64
 +__load_if_JITed()
-+__success __retval(49)
-+__naked int loop_cb_unwinds_third(void)
++__failure __msg("cannot return stack pointer to the caller")
++__naked int loop_cb_unwinds_with_fp(void)
 +{
 +	asm volatile (
 +		"r1 = 10;"
-+		"r2 = %[cb_unwinds_third];"
++		"r2 = %[cb_unwinds_with_fp];"
 +		"r3 = 0;"
 +		"r4 = 0;"
 +		"call %[bpf_loop];"
 +		unwind_goto(1)
 +		"exit;"
-+		PAD
-+		:
-+		: __imm_ptr(cb_unwinds_third),
-+		  __imm_addr(runs),
-+		  __imm(bpf_loop)
-+		: __clobber_common
-+	);
-+}
-+
-+/* unwind_goto after a helper whose callback returns: the pad is never taken */
-+SEC("tc")
-+__description("unwind cb: unwind_goto after bpf_loop whose callback returns")
-+__arch_x86_64
-+__arch_arm64
-+__load_if_JITed()
-+__success __retval(3)
-+__naked int loop_cb_returns_pad(void)
-+{
-+	asm volatile (
-+		"r1 = 3;"
-+		"r2 = %[cb_returns];"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_loop];"
-+		unwind_goto(1)
-+		"exit;"
-+		PAD
-+		:
-+		: __imm_ptr(cb_returns),
-+		  __imm_addr(runs),
-+		  __imm(bpf_loop)
-+		: __clobber_common
-+	);
-+}
-+
-+SEC("tc")
-+__description("unwind cb: the exception goes through the pad of the callback")
-+__arch_x86_64
-+__arch_arm64
-+__load_if_JITed()
-+__success __retval(49)
-+__naked int loop_cb_passes_on(void)
-+{
-+	asm volatile (
-+		"r1 = 10;"
-+		"r2 = %[cb_passes_on];"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_loop];"
-+		unwind_goto(1)
-+		"exit;"
-+		PAD
-+		:
-+		: __imm_ptr(cb_passes_on),
-+		  __imm_addr(runs),
-+		  __imm(bpf_loop)
-+		: __clobber_common
-+	);
-+}
-+
-+SEC("tc")
-+__description("unwind cb: no unwind_goto after bpf_loop whose callback unwinds")
-+__arch_x86_64
-+__arch_arm64
-+__load_if_JITed()
-+__failure __msg("no unwind_goto after the call of bpf_loop()")
-+__naked int loop_cb_unwinds_no_pad(void)
-+{
-+	asm volatile (
-+		"r1 = 10;"
-+		"r2 = %[cb_unwinds];"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_loop];"
 +		"exit;"
 +		:
-+		: __imm_ptr(cb_unwinds),
++		: __imm_ptr(cb_unwinds_with_fp),
 +		  __imm(bpf_loop)
 +		: __clobber_common
 +	);
 +}
 +
 +/*
-+ * A loop of no rounds never runs its callback, so the call needs no unwind_goto,
-+ * and the inlined loop gets no pad: the insn after the call is what it was, not
-+ * the jump of a pad.
++ * The pad knows what the callback unwound with: 5, which cb_unwinds leaves in
++ * r0, and reads the slot through it. An unknown r0 would be no offset for fp.
 + */
 +SEC("tc")
-+__description("unwind cb: a loop of no rounds needs no pad")
++__description("unwind cb: the pad knows what the callback unwound with")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(9)
++__naked int loop_cb_r0_known(void)
++{
++	asm volatile (
++		"r1 = 9;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"r1 = 10;"
++		"r2 = %[cb_unwinds];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		unwind_goto(1)
++		"exit;"
++		"r1 = r10;"
++		"r1 += r0;"
++		"r0 = *(u8 *)(r1 - 13);"
++		"exit;"
++		:
++		: __imm_ptr(cb_unwinds),
++		  __imm(bpf_loop)
++		: __clobber_common
++	);
++}
++
++/* Allocates a node and unwinds with it: the reference comes back in r0 */
++static __noinline long cb_unwinds_with_obj(u64 i, void *ctx)
++{
++	struct node_data *n = bpf_obj_new(typeof(*n));
++
++	if (n)
++		asm volatile ("r0 = %[n];" unwind_exit :: [n] "r"(n) : "r0");
++	return 0;
++}
++
++/* The pad drops what came back */
++SEC("tc")
++__description("unwind cb: the callback unwinds with a reference, which the pad drops")
 +__arch_x86_64
 +__arch_arm64
 +__load_if_JITed()
 +__success __retval(7)
-+__naked int loop_none_cb_unwinds(void)
++__naked int loop_cb_obj_dropped(void)
 +{
 +	asm volatile (
-+		"r1 = 0;"
-+		"r2 = %[cb_unwinds];"
++		"r1 = 10;"
++		"r2 = %[cb_unwinds_with_obj];"
 +		"r3 = 0;"
 +		"r4 = 0;"
 +		"call %[bpf_loop];"
++		unwind_goto(1)
++		"exit;"
++		"r1 = r0;"
++		"call %[bpf_obj_drop];"
 +		"r0 = 7;"
 +		"exit;"
 +		:
-+		: __imm_ptr(cb_unwinds),
++		: __imm_ptr(cb_unwinds_with_obj),
++		  __imm(bpf_loop),
++		  __imm(bpf_obj_drop)
++		: __clobber_common
++	);
++}
++
++/* The pad may not leave without dropping it: the reference is the prog's now */
++SEC("tc")
++__description("unwind cb: the callback unwinds with a reference, which the pad leaks")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("Unreleased reference")
++__naked int loop_cb_obj_leaked(void)
++{
++	asm volatile (
++		"r1 = 10;"
++		"r2 = %[cb_unwinds_with_obj];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		unwind_goto(1)
++		"exit;"
++		"r0 = 7;"
++		"exit;"
++		:
++		: __imm_ptr(cb_unwinds_with_obj),
 +		  __imm(bpf_loop)
 +		: __clobber_common
 +	);
 +}
 +
-+/*
-+ * One path passes a callback that unwinds, the other one that returns. The pad
-+ * is there for whoever takes it. 64 bytes come in: the first one.
-+ */
++/* Unwinds with the index of the run, which the pad doesn't know */
++__naked __noinline __used
++static unsigned long cb_unwinds_with_index(void)
++{
++	asm volatile (
++		"r0 = r1;"
++		count_run()
++		unwind_exit
++		:
++		: __imm_addr(runs)
++	);
++}
++
 +SEC("tc")
-+__description("unwind cb: the callbacks of one call may differ")
++__description("unwind cb: the pad doesn't know the index the callback unwound with")
 +__arch_x86_64
 +__arch_arm64
 +__load_if_JITed()
-+__success __retval(47)
-+__naked int loop_cbs_differ(void)
++__failure __msg("math between fp pointer and register with unbounded min value is not allowed")
++__naked int loop_cb_index_unknown(void)
++{
++	asm volatile (
++		"r1 = 9;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"r1 = 10;"
++		"r2 = %[cb_unwinds_with_index];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		unwind_goto(1)
++		"exit;"
++		"r1 = r10;"
++		"r1 += r0;"
++		"r0 = *(u8 *)(r1 - 13);"
++		"exit;"
++		:
++		: __imm_ptr(cb_unwinds_with_index),
++		  __imm(bpf_loop)
++		: __clobber_common
++	);
++}
++
++/* Unwinds with r0 = 100, no offset for the slot */
++__naked __noinline __used
++static unsigned long cb_unwinds_100(void)
++{
++	asm volatile (
++		"r0 = 100;"
++		unwind_exit
++	);
++}
++
++/*
++ * Two callbacks on two paths into one call, unwinding with 5 and with 100. The
++ * pad is checked with each: the second one puts the read out of the frame.
++ */
++SEC("tc")
++__description("unwind cb: the pad is checked with what each callback unwound with")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("invalid read from stack")
++__naked int loop_cbs_differ_pad_checked(void)
 +{
 +	asm volatile (
 +		"r6 = *(u32 *)(r1 + %[len]);"
 +		"r2 = %[cb_unwinds];"
 +		"if r6 == 64 goto 1f;"
-+		"r2 = %[cb_returns];"
++		"r2 = %[cb_unwinds_100];"
 +	"1:"
-+		"r1 = 3;"
++		"r1 = 9;"
++		"*(u64 *)(r10 - 8) = r1;"
++		"r1 = 10;"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		unwind_goto(1)
++		"exit;"
++		"r1 = r10;"
++		"r1 += r0;"
++		"r0 = *(u8 *)(r1 - 13);"
++		"exit;"
++		:
++		: __imm_const(len, offsetof(struct __sk_buff, len)),
++		  __imm_ptr(cb_unwinds),
++		  __imm_ptr(cb_unwinds_100),
++		  __imm(bpf_loop)
++		: __clobber_common, "r6"
++	);
++}
++
++/* A loop of one: the round that unwinds is the last the loop had */
++SEC("tc")
++__description("unwind cb: the callback of a loop of one unwinds")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__success __retval(47)
++__naked int loop_once_cb_unwinds(void)
++{
++	asm volatile (
++		"r1 = 1;"
++		"r2 = %[cb_unwinds];"
 +		"r3 = 0;"
 +		"r4 = 0;"
 +		"call %[bpf_loop];"
@@ -662,178 +446,106 @@ index 000000000000..8a3dee4330ac
 +		"exit;"
 +		PAD
 +		:
-+		: __imm_const(len, offsetof(struct __sk_buff, len)),
-+		  __imm_ptr(cb_unwinds),
-+		  __imm_ptr(cb_returns),
++		: __imm_ptr(cb_unwinds),
 +		  __imm_addr(runs),
 +		  __imm(bpf_loop)
-+		: __clobber_common, "r6"
-+	);
-+}
-+
-+SEC("tc")
-+__description("unwind cb: the callback of bpf_for_each_map_elem over an array unwinds")
-+__arch_x86_64
-+__arch_arm64
-+__load_if_JITed()
-+__success __retval(47)
-+__naked int for_each_array_cb_unwinds(void)
-+{
-+	asm volatile (
-+		"r1 = %[array] ll;"
-+		"r2 = %[cb_unwinds];"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_for_each_map_elem];"
-+		unwind_goto(1)
-+		"exit;"
-+		PAD
-+		:
-+		: __imm_addr(array),
-+		  __imm_ptr(cb_unwinds),
-+		  __imm_addr(runs),
-+		  __imm(bpf_for_each_map_elem)
-+		: __clobber_common
-+	);
-+}
-+
-+/* Two elements go in first. The hash iterators run the callback under RCU. */
-+#define FILL_MAP(map)				\
-+	"r1 = 1;"				\
-+	"*(u32 *)(r10 - 4) = r1;"		\
-+	"*(u32 *)(r10 - 8) = r1;"		\
-+	"r1 = %[" #map "] ll;"			\
-+	"r2 = r10;"				\
-+	"r2 += -4;"				\
-+	"r3 = r10;"				\
-+	"r3 += -8;"				\
-+	"r4 = 0;"				\
-+	"call %[bpf_map_update_elem];"		\
-+	"r1 = 2;"				\
-+	"*(u32 *)(r10 - 4) = r1;"		\
-+	"r1 = %[" #map "] ll;"			\
-+	"r2 = r10;"				\
-+	"r2 += -4;"				\
-+	"r3 = r10;"				\
-+	"r3 += -8;"				\
-+	"r4 = 0;"				\
-+	"call %[bpf_map_update_elem];"
-+
-+SEC("tc")
-+__description("unwind cb: the callback of bpf_for_each_map_elem over a hash unwinds")
-+__arch_x86_64
-+__arch_arm64
-+__load_if_JITed()
-+__success __retval(47)
-+__naked int for_each_hash_cb_unwinds(void)
-+{
-+	asm volatile (
-+		FILL_MAP(hash)
-+		"r1 = %[hash] ll;"
-+		"r2 = %[cb_unwinds];"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_for_each_map_elem];"
-+		unwind_goto(1)
-+		"exit;"
-+		PAD
-+		:
-+		: __imm_addr(hash),
-+		  __imm_ptr(cb_unwinds),
-+		  __imm_addr(runs),
-+		  __imm(bpf_map_update_elem),
-+		  __imm(bpf_for_each_map_elem)
-+		: __clobber_common
-+	);
-+}
-+
-+SEC("tc")
-+__description("unwind cb: the callback of bpf_for_each_map_elem over an rhash unwinds")
-+__arch_x86_64
-+__arch_arm64
-+__load_if_JITed()
-+__success __retval(47)
-+__naked int for_each_rhash_cb_unwinds(void)
-+{
-+	asm volatile (
-+		FILL_MAP(rhash)
-+		"r1 = %[rhash] ll;"
-+		"r2 = %[cb_unwinds];"
-+		"r3 = 0;"
-+		"r4 = 0;"
-+		"call %[bpf_for_each_map_elem];"
-+		unwind_goto(1)
-+		"exit;"
-+		PAD
-+		:
-+		: __imm_addr(rhash),
-+		  __imm_ptr(cb_unwinds),
-+		  __imm_addr(runs),
-+		  __imm(bpf_map_update_elem),
-+		  __imm(bpf_for_each_map_elem)
 +		: __clobber_common
 +	);
 +}
 +
 +/*
-+ * The vma of the stack of the current task. The callback runs under the mmap
-+ * lock, which the helper drops on its way out whichever way the callback left.
++ * The callback unwinds on the first of two rounds. The helper in the pad starts
++ * its rounds afresh, so its callback is checked, and the call needs its own
++ * unwind_goto.
 + */
 +SEC("tc")
-+__description("unwind cb: the callback of bpf_find_vma unwinds")
++__description("unwind cb: a helper in the pad starts its rounds afresh")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("no unwind_goto after the call of bpf_loop()")
++__naked int loop_cb_unwinds_then_loops(void)
++{
++	asm volatile (
++		"r1 = 2;"
++		"r2 = %[cb_unwinds];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		unwind_goto(1)
++		"exit;"
++		"r1 = 1;"
++		"r2 = %[cb_unwinds];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		"exit;"
++		:
++		: __imm_ptr(cb_unwinds),
++		  __imm(bpf_loop)
++		: __clobber_common
++	);
++}
++
++/*
++ * The pad before the call: the inlined loop jumps back to it. Insn 13 is the
++ * unwind_goto, insn 1 the pad: the callback is loaded in the asm, so that the
++ * compiler puts nothing in front of it.
++ */
++SEC("tc")
++__description("unwind cb: the pad before the call of the inlined bpf_loop")
 +__arch_x86_64
 +__arch_arm64
 +__load_if_JITed()
 +__success __retval(47)
-+__naked int find_vma_cb_unwinds(void)
++__xlated("unwind_goto pc+7")
++__naked int loop_cb_pad_before_call(void)
 +{
 +	asm volatile (
-+		"call %[bpf_get_current_task_btf];"
-+		"r6 = r0;"
-+		"r1 = *(u64 *)(r6 + %[mm]);"
-+		"r2 = *(u64 *)(r1 + %[start_stack]);"
-+		"r1 = r6;"
-+		"r3 = %[cb_unwinds];"
-+		"r4 = 0;"
-+		"r5 = 0;"
-+		"call %[bpf_find_vma];"
-+		unwind_goto(1)
-+		"exit;"
++		"goto 1f;"
 +		PAD
++	"1:"
++		"r1 = 10;"
++		"r2 = %[cb_unwinds] ll;"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		unwind_goto(-13)
++		"exit;"
 +		:
-+		: __imm_ptr(cb_unwinds),
++		: __imm_addr(cb_unwinds),
 +		  __imm_addr(runs),
-+		  __imm(bpf_get_current_task_btf),
-+		  __imm(bpf_find_vma),
-+		  __imm_const(mm, offsetof(struct task_struct, mm)),
-+		  __imm_const(start_stack, offsetof(struct mm_struct, start_stack))
-+		: __clobber_common, "r6"
++		  __imm(bpf_loop)
++		: __clobber_common
 +	);
 +}
 +
-+static bool less_returns(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-+{
-+	return true;
-+}
-+
-+/* Not naked: the branch keeps the return reachable. Unwinds with r0 = 5. */
-+static bool less_unwinds(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-+{
-+	runs++;
-+	if (a)
-+		asm volatile ("r0 = 5;" unwind_exit ::: "r0");
-+	return false;
-+}
-+
-+/* The kfunc with a pad after it. The verifier fills r4 and r5. r0 + 42 from the pad. */
+ /*
+  * A loop of no rounds never runs its callback, so the call needs no unwind_goto,
+  * and the inlined loop gets no pad: the insn after the call is what it was, not
+@@ -566,4 +934,131 @@ int rbtree_impl_cb_unwinds(void *ctx)
+ 	return rbtree_cb_unwinds_via(true);
+ }
+ 
++/* Unwinds with the node it is handed first: the one being added */
 +__naked __noinline __used
-+static int rbtree_add_with_pad(void *root, void *node, void *less)
++static bool less_unwinds_with_node(struct bpf_rb_node *a, const struct bpf_rb_node *b)
++{
++	asm volatile (
++		"r0 = r1;"
++		unwind_exit
++	);
++}
++
++/* The pad reads the key of the node that came back in r0 */
++__naked __noinline __used
++static int rbtree_add_pad_reads_node(void *root, void *node, void *less)
 +{
 +	asm volatile (
 +		"call %[bpf_rbtree_add];"
 +		unwind_goto(1)
 +		"exit;"
-+		"r0 += 42;"
++		"r0 = *(u64 *)(r0 - 8);"
 +		"exit;"
 +		:
 +		: __imm(bpf_rbtree_add)
@@ -842,32 +554,16 @@ index 000000000000..8a3dee4330ac
 +}
 +
 +/*
-+ * The other spelling of it, with its own copy of the body and of the pad. It
-+ * takes meta and off from the prog, and the verifier fills them in.
++ * The comparator unwinds with the node being added, which the kfunc drops on
++ * its way to the pad: there is nothing left to read through it.
 + */
-+__naked __noinline __used
-+static int rbtree_add_impl_with_pad(void *root, void *node, void *less)
-+{
-+	asm volatile (
-+		"r4 = 0;"
-+		"r5 = 0;"
-+		"call %[bpf_rbtree_add_impl];"
-+		unwind_goto(1)
-+		"exit;"
-+		"r0 += 42;"
-+		"exit;"
-+		:
-+		: __imm(bpf_rbtree_add_impl)
-+		: __clobber_all
-+	);
-+}
-+
-+/*
-+ * The first node goes in without a comparison. The second one meets it, the
-+ * comparator unwinds, and the kfunc drops the node on its way to the pad. The
-+ * lock is the caller's.
-+ */
-+static __always_inline int rbtree_cb_unwinds_via(bool impl)
++SEC("tc")
++__description("unwind cb: the comparator unwinds with the node the kfunc dropped")
++__arch_x86_64
++__arch_arm64
++__load_if_JITed()
++__failure __msg("invalid mem access")
++int rbtree_cb_unwinds_with_node(void *ctx)
 +{
 +	struct node_data *n, *m;
 +	int ret;
@@ -882,40 +578,83 @@ index 000000000000..8a3dee4330ac
 +	}
 +
 +	bpf_spin_lock(&glock);
-+	if (impl) {
-+		bpf_rbtree_add_impl(&groot, &n->node, less_returns, NULL, 0);
-+		ret = rbtree_add_impl_with_pad(&groot, &m->node, (void *)less_unwinds);
-+	} else {
-+		bpf_rbtree_add(&groot, &n->node, less_returns);
-+		ret = rbtree_add_with_pad(&groot, &m->node, (void *)less_unwinds);
-+	}
++	bpf_rbtree_add(&groot, &n->node, less_returns);
++	ret = rbtree_add_pad_reads_node(&groot, &m->node, (void *)less_unwinds_with_node);
 +	bpf_spin_unlock(&glock);
-+	return ret + runs;
++	return ret;
 +}
 +
++/*
++ * The node the comparator unwound on is not in the tree: the kfunc dropped it
++ * on its way to the pad, and the caller has nothing left to read.
++ */
 +SEC("tc")
-+__description("unwind cb: the comparator of bpf_rbtree_add unwinds")
++__description("unwind cb: the node the comparator unwound on is gone")
 +__arch_x86_64
 +__arch_arm64
 +__load_if_JITed()
-+__success __retval(48)
-+int rbtree_cb_unwinds(void *ctx)
++__failure __msg("invalid mem access")
++int rbtree_cb_unwinds_node_gone(void *ctx)
 +{
-+	return rbtree_cb_unwinds_via(false);
++	struct node_data *n, *m;
++	long key;
++	int ret;
++
++	n = bpf_obj_new(typeof(*n));
++	if (!n)
++		return 1;
++	m = bpf_obj_new(typeof(*m));
++	if (!m) {
++		bpf_obj_drop(n);
++		return 2;
++	}
++
++	bpf_spin_lock(&glock);
++	bpf_rbtree_add(&groot, &n->node, less_returns);
++	ret = rbtree_add_with_pad(&groot, &m->node, (void *)less_unwinds);
++	key = m->key;
++	bpf_spin_unlock(&glock);
++	return ret + key;
 +}
 +
++/*
++ * The comparator was handed the node in the tree as well, and could have
++ * unwound with it, so what the caller holds of the tree is gone too, as at an
++ * unlock.
++ */
 +SEC("tc")
-+__description("unwind cb: the comparator of bpf_rbtree_add_impl unwinds")
++__description("unwind cb: what the caller holds of the tree is gone when the comparator unwinds")
 +__arch_x86_64
 +__arch_arm64
 +__load_if_JITed()
-+__success __retval(48)
-+int rbtree_impl_cb_unwinds(void *ctx)
++__failure __msg("invalid mem access")
++int rbtree_cb_unwinds_first_gone(void *ctx)
 +{
-+	return rbtree_cb_unwinds_via(true);
++	struct node_data *n, *m;
++	struct bpf_rb_node *f;
++	long key = 0;
++	int ret;
++
++	n = bpf_obj_new(typeof(*n));
++	if (!n)
++		return 1;
++	m = bpf_obj_new(typeof(*m));
++	if (!m) {
++		bpf_obj_drop(n);
++		return 2;
++	}
++
++	bpf_spin_lock(&glock);
++	bpf_rbtree_add(&groot, &n->node, less_returns);
++	f = bpf_rbtree_first(&groot);
++	ret = rbtree_add_with_pad(&groot, &m->node, (void *)less_unwinds);
++	if (f)
++		key = ((struct node_data *)((void *)f - offsetof(struct node_data, node)))->key;
++	bpf_spin_unlock(&glock);
++	return ret + key;
 +}
 +
-+char _license[] SEC("license") = "GPL";
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
