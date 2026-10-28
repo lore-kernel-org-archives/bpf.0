@@ -1,98 +1,68 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793218627;
-	b=x66r62ZTFX8xAEq3QajMq7H3nLTRtQwFDDFwVtdi6uknfGtSbm6aTt+EulviS0yYb641
-	 za9prRCVus9zMdUjKuFYY/dh1m2GxP8sjAt0JJLd9MQNCara7w5iUL8iOkOKSglawm+J/
-	 d3KbIxn30aHvZnTNeBJ0PHKTov81rDN5KD2TgF3FIYehRuSJAsPjRETFMYQh2HZy0BvF+
-	 QdUC7/dosdJPi8TOZh1ttYCXMls7SsCcXfBZ+qWNGY8yOT92z+4IlaRA73CPM9c71i1nB
-	 2+IAn3Aip7cSIZfScrV3nm5ItYeDmKTUtbPQVUJO+VM2RLOa9M+plmrtuq5dzZbcA7g==
+	t=1793219037;
+	b=WWdxhv/d8Zh7bMcs2SX60p9LcKMY5RLijscf9FeDg5m3qtOBv/UPwLznh4ILWul2V+BI
+	 UFWbFr0TWc/pxMoU6f+AAqnOGfzLCFSEMvgACLN+M1JG/0E21x5Jt/LAWzdXVYYCKh7KO
+	 M4ze6Df7XWJYrjEBKryEtjsOexJkPu0OaqsmAU2Vej7sXCU8rY9kXKQfGDkDyngiPx+Ul
+	 S8OUxGSu45V3sPBXfYFLzpMO54eBJBU011EKxcKq1KYD02IssPdnpweOQTX93x4KL/vpM
+	 OnC5Ay8Bxdm1tWxxRS3FBYQGylJ+7ZdE2IM9TM9AkF4HOMDc+cEeeWkTh3sAfBoI5QA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793218627;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Content-Type:Date:
-	 Message-Id:Cc:Subject:From:To:In-Reply-To:References:
-	 Content-Transfer-Encoding:MIME-Version;
-	bh=dSMkn2sWOTz70cexfrd27F1/JjDZDTCWFfIcPofUanw=;
-	b=kdkFCBLLwYD9fQ/JTltJzS1T6HMqcwd24tGLUwm5DnqFbx8rSfuwSkltCFkK+5QF/3qf
-	 qtKLYDX3Kul2uzVHbwGw/ZOYVVvPeKlfEjkEst+aZTzXKn9pGXlWNmG21yAH1gt66hU5b
-	 LY1coNXo0izbEv1l1Jd48WJx70B+utguGus4QDyr/RGQ13BhvOSxafC25YMg4Gc0EP+bG
-	 AJJXvr0t5t50WSQKNEc1616Lv4Kmx4FgqSlsfaFkWAovAggaQdnIkBs6E2oMxjCRlRftJ
-	 OyOdGbqoLrzzfQOJWrrgqyZwofqOSiVh7jfjocD6lOR+2fHBV7M7vbW33iAgfcsG+yg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793219037;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-Virus-Scanned;
+	bh=DCCi5eo/fYB6tzKxD/wYOm7N8O32aM+y60ei7JSb/fM=;
+	b=Rw6yYH7eKEky7VznrLeE0iDtqcjXfN8mufO+Pc509p0JgEZfX985a7f/swhKPLkP+Dhj
+	 YVt5U+3bNt7KX2fR6GtTYGZnKZOPJSJg/fA18pdCnqxFk22Zu8uKA/bPwQSYcqhrp8fBC
+	 /6WuLuOdwhGECvCl7u75PC5EcP91mJjLk4kYKxeqQJ70ZIpdoYR5jyPCTWRVPWtb3/yjp
+	 MyzEjhZrshLurPPm6aESozZPknQrvCLWCbcg7dJwX2jqgjoK7ZMCaFuql3KELD4K915P0
+	 uiDYBxOUj5W1Br226xuI0j1U8b75SUx6jBEc7ZRSreaOygJnRtUFKY7VNPCL3Zc7I1A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PxB5Fgln;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=iogearbox.net;
+	spf=pass smtp.mailfrom=iogearbox.net;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=iuCksMNr;
+	arc=none smtp.remote-ip=213.133.104.62
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890DF606A31C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 20:17:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 890DF606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CB9606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 20:23:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5CB9606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PxB5Fgln
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cdab8873d9dso604107a12.1
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 13:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793218627; x=1793823427; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=dSMkn2sWOTz70cexfrd27F1/JjDZDTCWFfIcPofUanw=;
-        b=PxB5FglnjcjBtlTnc90j6ue1sLL2lmdBBRbRYKdrbAoflG9djxBOajiA3NJCHMQ7yd
-         cha4F9zflIvORV32Vi/41qnpMIfu/penj9YMib8NJF++lrFm72knsguYtfFkotDSno8n
-         Oze6K+YhjkPvRcq0iTgEGIojmAUaR+ym7x8TJQTcwPOZR6ZfvU9/ukw8Awy9/x8K8lct
-         Koz/RHlAwAFkGTTVEPeV0KuVH6qC0+IyS5h8b6ZNnfcug0zJtqv8+I/rXtaedYFAVeNV
-         rJEFjYhh+UksyYoUhnNyAmX9Lg7sXBMDvEhFgmQmO9vFZ0qu3wWInXzw5FdWL2OJLCdH
-         5FYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793218627; x=1793823427;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dSMkn2sWOTz70cexfrd27F1/JjDZDTCWFfIcPofUanw=;
-        b=K4hkGzFDnevzObXga7mA3pm9uIYmbQ0gzaCKGScfEAWTFimbeCcRY/y/jjvoDtWI0L
-         siqk+6I4e4+ho5+xMkJuSnODISAoAjr/ThIUKx4uWzbFxND5kB1PqO7u97xAOwNJMRvy
-         BMYQ1rAAI8CEvVfs+My9dpWmavtZCLk5oxa6y8AcU1TtBRrtlue+Ex9Q254rcnnhD22o
-         Qc2XpPDX1b8SdLKdNBSNPRJ/hZ3VenLvPRPvyrUAOtVaI/7yBLeRLtm1MOVe2dzFCbw+
-         XmXvxLNKqKGcMHViZTrKSA8LyNkYdkGoC5AOs6tPuIOk3q+Gv9i4xs/BTctW2VBwGHyP
-         IJKg==
-X-Gm-Message-State: AFq9FYKMCN2UXnpUinIqN8aXJOgvL7zp57YD6yXLofAfEfxnva7G+3Dk
-	2LK3VWYKJa0EKgmMQ5ByFRL9HBQikPPGiY7nNuk8fazgU5tLf8VwRpzx
-X-Gm-Gg: AYBFou3N6m7TY5K+08i+xUl29ELV85HJyzBwuZA+SEfFD+1XzfCq1SONKyI/9wL1Z72
-	MGpFTqOoQnzqEXuh+9/bj4s/JcgoKBO+3KmstQe6CYNWvP1b00n29GXzWZEwKKDEv6KubR1TWp/
-	wZSvi/RnfBESWP18ORbX9sW8Go6G1g0em5oIM3t9fh9HAR5phDkfZmysFlbv7dxfxmTJ0Wef8lw
-	2xLqDCGZOHb31NlcYmZzLI3mrTn5EYPNv3LhVt8yN/UF2ioNWCHIhaKSC7Cny/OiCrpIVQ8NmbC
-	JM7TzW07iWGPY2iK5E0Jn6mmAuohTY9GiLn2ALJYRvNIY1czJG+ZpvteAXefnFfDe6DGxwj7Udp
-	heXNRxp/hibiWAmBfK5IEsavansEK3aweomNoT4rfPS2QytoVnx99lNKtwh78w6JI77IDIszY3c
-	HiHHrg6lxQAifTUfFmS+pmhC/jUoGJYD24OznKkX7cb4+YtLVua7ZTJ/3Hbf63HbhVHKip06qUN
-	7M+vIp1Ey7hsJYcDfoZ4hLcKbhzLbEzW2LNOxQd46Ou+794Ky/7u33d0/rWUtq4pdsvghaECgAb
-	C5IngSAWNtzslaTTzX1tOHIGN7nuXquC7KwLQDofyqFIl3MSmw1q2JfITSmurpwA8aNniZa8Y2n
-	XqrcOrqm7Z0a1b+aIPRpFg855T8cORticSw==
-X-Received: by 2002:a17:90b:224f:b0:3ac:a7ee:6760 with SMTP id 98e67ed59e1d1-3ae57f637d9mr2382708a91.23.1793218626767;
-        Wed, 28 Oct 2026 13:17:06 -0700 (PDT)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6f01e8a5sm324003a91.0.2026.10.28.13.17.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 13:17:05 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Oct 2026 20:17:04 +0000
-Message-Id: <DMGQY7IH5Q3F.4QQNA0FDUWY6@gmail.com>
-Cc: <bpf@vger.kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [RFC PATCH bpf-next v1 00/11] Unwinding for synchronous
- callbacks
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-In-Reply-To: <CAP01T76uO4ULjNOQ217jXTLWtP5XT0rvB7PZxt8MJcoc==GBEw@mail.gmail.com>
-References: <cover.1793147364.git.memxor@gmail.com> <DMG7KVUM9TV8.3QO4MU310J4CU@gmail.com> <CAP01T76uO4ULjNOQ217jXTLWtP5XT0rvB7PZxt8MJcoc==GBEw@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=iuCksMNr
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=DCCi5eo/fYB6tzKxD/wYOm7N8O32aM+y60ei7JSb/fM=; b=iuCksMNrFHfk744rcdNkL5oX4M
+	hBq4vnhastmYlSqSwO3polVP/xIoSrbViPiHDNlKJoCECptZ2S7ZPimx4Vxa70zMK07e5z13GvToX
+	XxfIGEnLbe6jaOxLkzUV+dntJRU7VuevoIh4BVmmYU+uAa5X0UwjN7jkQJRotUtl5/eOkZf9I9P9s
+	TMEwy4wA7ko6CnVvHahJESHcNE6lfq4L9LO1QUSLzFVoulI/BcPrKYPvR4RMhi13HuWMJhtO7upac
+	aWlygwiTCIT87sS9f/XBi2xYMCNP6hCCaRm4p5SraEpny+UOUB5266ElFmyhzt+UsOwxzv9t2JVBa
+	FbdU2xbA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xMABX-0007IS-0r;
+	Wed, 28 Oct 2026 21:23:47 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: rostedt@goodmis.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	jolsa@kernel.org,
+	Menglong Dong <dongml2@chinatelecom.cn>
+Subject: [PATCH bpf v3 2/2] selftests/bpf: Test kprobe and fentry/fexit programs on one function
+Date: Wed, 28 Oct 2026 21:23:45 +0100
+Message-ID: <20261028202345.1215859-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261028202345.1215859-1-daniel@iogearbox.net>
+References: <20261028202345.1215859-1-daniel@iogearbox.net>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -102,25 +72,165 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.6/28167/Wed Oct 28 07:24:17 2026)
 
-On Wed, Oct 28, 2026 at 03:20 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> On Wed, 28 Oct 2026 at 06:06, Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->> I feel that you're too attached to bpf_throw concept.
->> The code was quite intrusive earlier and it is still today.
->> I told my agents that bpf_throw is a dead end. sorry.
->> I really think it's not a kernel job to solve it.
->
-> Huh? This set is about making unwind_goto / unwind_exit work.
+A kprobe next to a BPF trampoline makes the ftrace site of the function
+call ftrace_regs_caller and from there the list of ftrace callbacks,
+the path that crashed while ftrace_ops_list_func() started at an odd
+address. No test covers a function traced by both. Thus, attach an
+fentry program and a kprobe to bpf_fentry_test1(), then a second fentry
+program, which modifies the trampoline of the shared site, then an fexit
+program, after which ftrace_regs_caller enters the trampoline by a jmp,
+then detach the kprobe, after which the site jumps to it directly. After
+each step, check that every attached program ran once for the call and
+saw its argument, and the fexit program its return value.
 
-Sorry. Mixed it up.
-I meant it in the "Eliminate spill overhead for bpf_throw()" thread.
-I don't see the point doing any work for bpf_throw().
-imo it's mainly in the way of any verifier work.
-I'd rather delete all the bpf_throw related code and make it nop.
-It didn't get any traction.
-Originally it was a mechanism to enable bpf_assert() which in turn
-was an idea to stop fighting the verifier.
-That didn't materialize.
-So when I see the title "Eliminate spill overhead for bpf_throw"
-it makes me react the way I did... in the wrong thread :(
+Without the previous fix the test crashes the kernel, but only where
+ftrace_ops_list_func() is at an odd address (in my test with gcc +
+CONFIG_CC_OPTIMIZE_FOR_SIZE=y). With the fix it passes:
+
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t fentry_kprobe_shared
+  [...]
+  #147     fentry_kprobe_shared:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0/0 FAILED
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Menglong Dong <dongml2@chinatelecom.cn>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+---
+ .../bpf/prog_tests/fentry_kprobe_shared.c     | 65 +++++++++++++++++++
+ .../bpf/progs/fentry_kprobe_shared.c          | 49 ++++++++++++++
+ 2 files changed, 114 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
+new file mode 100644
+index 000000000000..751aa49d6106
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "fentry_kprobe_shared.skel.h"
++
++static void trigger(struct fentry_kprobe_shared *skel)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry1), &topts);
++	ASSERT_OK(err, "test_run");
++}
++
++/*
++ * With a kprobe next to the trampoline, the ftrace site of the function
++ * reaches the trampoline through the list of ftrace callbacks, and so does
++ * the site of a trampoline that is modified to add or remove a program.
++ * With the fexit program, the trampoline is entered by a jmp.
++ */
++void test_fentry_kprobe_shared(void)
++{
++	struct fentry_kprobe_shared *skel;
++
++	skel = fentry_kprobe_shared__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++	skel->bss->pid = getpid();
++
++	skel->links.fentry1 = bpf_program__attach(skel->progs.fentry1);
++	if (!ASSERT_OK_PTR(skel->links.fentry1, "attach_fentry1"))
++		goto out;
++	skel->links.kprobe1 = bpf_program__attach(skel->progs.kprobe1);
++	if (!ASSERT_OK_PTR(skel->links.kprobe1, "attach_kprobe1"))
++		goto out;
++	trigger(skel);
++	ASSERT_EQ(skel->bss->fentry1_hits, 1, "fentry1_hits");
++	ASSERT_EQ(skel->bss->kprobe_hits, 1, "kprobe_hits");
++
++	skel->links.fentry2 = bpf_program__attach(skel->progs.fentry2);
++	if (!ASSERT_OK_PTR(skel->links.fentry2, "attach_fentry2"))
++		goto out;
++	trigger(skel);
++	ASSERT_EQ(skel->bss->fentry1_hits, 2, "fentry1_hits");
++	ASSERT_EQ(skel->bss->fentry2_hits, 1, "fentry2_hits");
++	ASSERT_EQ(skel->bss->kprobe_hits, 2, "kprobe_hits");
++
++	skel->links.fexit1 = bpf_program__attach(skel->progs.fexit1);
++	if (!ASSERT_OK_PTR(skel->links.fexit1, "attach_fexit1"))
++		goto out;
++	trigger(skel);
++	ASSERT_EQ(skel->bss->fentry1_hits, 3, "fentry1_hits");
++	ASSERT_EQ(skel->bss->fentry2_hits, 2, "fentry2_hits");
++	ASSERT_EQ(skel->bss->fexit_hits, 1, "fexit_hits");
++	ASSERT_EQ(skel->bss->kprobe_hits, 3, "kprobe_hits");
++
++	bpf_link__destroy(skel->links.kprobe1);
++	skel->links.kprobe1 = NULL;
++	trigger(skel);
++	ASSERT_EQ(skel->bss->fentry1_hits, 4, "fentry1_hits");
++	ASSERT_EQ(skel->bss->fentry2_hits, 3, "fentry2_hits");
++	ASSERT_EQ(skel->bss->fexit_hits, 2, "fexit_hits");
++	ASSERT_EQ(skel->bss->kprobe_hits, 3, "kprobe_hits");
++out:
++	fentry_kprobe_shared__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
+new file mode 100644
+index 000000000000..3d16773aada8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++int pid;
++int fentry1_hits;
++int fentry2_hits;
++int fexit_hits;
++int kprobe_hits;
++
++static bool from_test(int a)
++{
++	return (bpf_get_current_pid_tgid() >> 32) == pid && a == 1;
++}
++
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(fentry1, int a)
++{
++	if (from_test(a))
++		fentry1_hits++;
++	return 0;
++}
++
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(fentry2, int a)
++{
++	if (from_test(a))
++		fentry2_hits++;
++	return 0;
++}
++
++SEC("fexit/bpf_fentry_test1")
++int BPF_PROG(fexit1, int a, int ret)
++{
++	if (from_test(a) && ret == 2)
++		fexit_hits++;
++	return 0;
++}
++
++SEC("kprobe/bpf_fentry_test1")
++int BPF_KPROBE(kprobe1, int a)
++{
++	if (from_test(a))
++		kprobe_hits++;
++	return 0;
++}
+-- 
+2.43.0
+
