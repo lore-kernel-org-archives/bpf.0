@@ -1,45 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.227.132
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793201613;
-	b=eIZoujZd5py4RCHo9vBKjOz2NYAUXYKHDT+NOAQYzeGDW1LDh94adlDdNNbbwTROJos3
-	 e2ffvodl6BdvjP2gf4opF7XX50NbkatYQUlB//3BVOfDy+Jnyi4Rtp37+rbApsXeSVJ6n
-	 w70fQvmAbEP3XgsCLJFbrpOP4bl1uDot3iC+100VpDQv6IAY7ksOTplYZOZvLnYNh/vvP
-	 b53cVFl0SXHv8WDkY6yZWu13bGJhEvbdPR2l8eaLgdHqsVF/S+Wy15yd/IT5/Ggo50B9f
-	 WCgg2MT6PBLIZMrAcIdmrvHeEvNvO0IBLrEvWoV0xrNeIVJB8kKxYpk0I19930b6qIw==
+	t=1793202963;
+	b=jXJmI54NDZ2cpPuzVq7d+HVEBcLZ/PXdjSZeHPN2WvBOafY5FrsYcMf4XIg0qGAbl2OA
+	 lE+svjZGBppRbUu2hOKkqB3MME0ulLEaNfUGxa1Hfr57QOadWm+t+jLRKcwcxqDlQ7Tpr
+	 sd9byjIjdL7uX3gci2T2yeY2UNKd1g/yhisgrQHv5vIlCIWm4eVnJ1fGyJ62MajdX+Xzv
+	 IErZb65clGZl1w3y+nRP7y+uk4Fq1jmUuwsms7+UiLCpjq6wQBwSirFjrRFVypM/uUyNx
+	 spJVCTx8yk5Kgoyx8C+ULsdG9gI6rZaVWQhJe1CCrPUN7s0vIuNzHxkfuFshBZfmh6w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793201613;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=Mk3iDJt5T50uHOGaKewojk6ij6AnqevT7e8ze4YGhNg=;
-	b=kdgQDJHG2UX8FOCbcSkJjibZDyFbmFuWk9pPh3U6mbhsWc1u7m96obmm7NeMyXCz+sPe
-	 PAv7LmfeamBg4803RRZKQheiQzVPvqA2LmCzAjqeZw/biAd4aLX4+bLCX73oWtuMW3gYy
-	 bvDDTJQu9j1MGcBfxG83HU3WaxKsyOAsO/9HXpjf9u+iQ1KpOsjgYLRakwufhzP6Xv+wE
-	 qYb5WcydghJkZDDrmugu02Mv1Z1JR+7F/QX1Q3LDSskwaWxMSokGc2PsuH+MpLi1v6p3t
-	 615UPOp+vUQPXtvEZ6wJwu7yBY5x8P+53Xuq4WAHLNgUNQ50IRMvC71cdUtNQNUy/xw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793202963;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	bh=csOhYfXx1cygq0Nzm1hOlq8/R+R8/dV+gmLXMkdCo4A=;
+	b=pXkfTQCpv9O9oRX8up28gRdUy+cFcUkT3FxKP6lYTykxXAZwZ0I3FAVxBFAWpWwZ+sCV
+	 4cxUEBR72xJ6c7bOlx7PRDauUeLviZhxoWu3hESjVOqMMxwjHrPkpjqVJMUNUUr9Kyo9A
+	 oVODL7FFYOm3LU16yG8fswGljwy3yxzB4Cf+l99U4ixv8peNS1pmgWDtkU5mdz5N2u29A
+	 6lncHBIr95BllMSYDoOccxAsr+/69PQZ/fsmh26jOHlbVoDjfULSqDijjuRnP663QMZ1E
+	 pVRFebXPgkhfG+Q9r9FCYMEzj8x7gdycURZWyQBrKXEphwgdlGgMOwUTyoqwV28AdEg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="onWJ/2mf";
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="halrdo3/";
+	arc=none smtp.remote-ip=74.125.227.132
+Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 803BC606A329;
-	Wed, 28 Oct 2026 15:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10FD606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 15:55:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A10FD606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=onWJ/2mf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E5C1F031E3;
-	Wed, 28 Oct 2026 15:33:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793201613;
-	bh=Mk3iDJt5T50uHOGaKewojk6ij6AnqevT7e8ze4YGhNg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=onWJ/2mfsPmFOOalwByl3eXDdbjjgJ2gN/7iWzacAbLDdGhGigpYF8+cSJqokvBbW
-	 aSUJCOId+FNB98f848eq+C5Ym/hmPnZ6ovYb6zuKOG5mtycnRe2zYZXcVSQBDhbt3/
-	 8rW09EUBpaQ3LqWT9mBnxpjAlr3IGxwnamy3gLoIn3atvQm6DQPU4LNaXgNQ+KM4KB
-	 zoYIzro3bcyWt7uTd+ahPoOLsECrA1y0esopsT6B5JFoLQaR/J7YwVrWaQsKqNBUCv
-	 M64AlWYAvA5+DuJirYEyPPjRyvmsOjjtsGHZDrQ2LL+3r+t5ClkpliCmAR6V2E18RG
-	 fv1HDgVqPIhDg==
-Content-Type: multipart/mixed; boundary="===============5957388155132648867=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=halrdo3/
+Received: by mail-pj2-f4.google.com with SMTP id d9443c01a7336-2e96b8bfb43so3827535ad.0
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 08:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793202957; x=1793807757; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=csOhYfXx1cygq0Nzm1hOlq8/R+R8/dV+gmLXMkdCo4A=;
+        b=halrdo3/n/6UlHBrM3qN3fciZKUoKF3rXjRzZCpuQz0IgnC0ke3WUITCU3zLXQD0k6
+         VcWV/SvMk3WSY3GARWVABDTTh8UENPJ87jPojKjvHfN2JnCdDY8AK1XDZU5tYc+bn1/1
+         U4xCZMBmxL2ZnTIlnr6S8zOZ24GXcuMR9SVnLr2EdKRUce/KKzZKmsbT78R508Xgmnup
+         fQYTiiTGpkYaP7dlEv/BGg5+mD/Yv3/t8b21SEvfXwx3UqaO2bucwt7qA/l2hVDXILxp
+         E03WprrGmeSxfCE7bHzrf5XcS4mzY3X5qew1mW2HBmp49Bl90wJ/RH0k3owYEUODLskc
+         LpLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793202957; x=1793807757;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=csOhYfXx1cygq0Nzm1hOlq8/R+R8/dV+gmLXMkdCo4A=;
+        b=JG58nuekXQy4Nr0Zbl/JSg/1V+gRhcz5uCqbTiCr0fc+sjMXnAFQ0z4tROnVon1n5P
+         uXDz1a9ysKT8ajv66B5s+xuSDIlPgLMfFQyuFy5N1aThYNXEqje+hYMifQspwWngS8hp
+         D6srXJB8lD8jmvavb0wYFKxteZb+/3LrRykiy8wF5QqCtG7mn+agaB6fDOoHz5yb9OrM
+         RKVcqR1Ur2cWSUfgbyleSQl2cge/15QeSJFUv0VVRYHp+IBwHu1rfD7baT+cw3aiYniC
+         5z6t3lDHLwJCzIP1cjicfvty4jHn0U4+q2fK0PgDW3hCrrvWmhnSJfZ7+I4PzFc0VeoF
+         +ZtQ==
+X-Forwarded-Encrypted: i=1; AKwUvByQ7Q02u7J1isE30TygI8pyybEktfZpIcWIksoD70aYTWpIHpqSWhgIN+y4RM8FB51koEU=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIq3gbCgczwqg7HQwDgMvWT/tzw5B/IJby54j4QRBFjlzx2Y0Po
+	VsL5FIarUwqKYQqBrdKRMb9ICg3iCd+4zRNAqQgXaBKyfUkiAUutii9R
+X-Gm-Gg: AYBFou0amVvWkdUFF0G1od4BcKPMxjupEMKtciYy5BJU1gYLFhqHAZU86XRKwCvrmNv
+	mnRYVbxSk+KJsbn22zGstO1GdnDMkRp/DyATONMH/85Re3xk9EnxYKyctStSfOD/PFDAX0wsB9f
+	Zvx1rWHL1rmtId0ILNTt9RVVouCHzr0ql9U+KW8OZxsG/QYmfVtBzyXu10MzTnOqg8pt8PIJp/6
+	rhHHWpyv9wfDv8KFgZ47w9z3wQS9y1Hb/RszX1eNmIYQaK6uVAnLulZoWjqz/gzRu4fDhKP2SnJ
+	eA1ctJFtRaVltf+Cow7wOzSEey+tua1i+ayb7qMWi5lXuXPvbRH8tp70IkcAF3OTAU23nMWcBo3
+	7WG8tBKtG+XBdVHNYIFGMoA+ZkNC27jipZUFqB7Yw0eTJA8W8hxLLkMgEfaXcxy687hoTmU1xvX
+	hTy4RF3yM0+qBDA0gBaBoG+9hfqFV+dtyhnkGY383TaaYTuXTWv7FI4o9LNkCRFC84JGL+wQhY6
+	ZVKzS8oOsCDDm8S5MD/MM8WGhOjGE4i0Ub3lyTZkF9+DpG+kPQlztaNyX7mM30dMwX9m8KmexpZ
+	kY/gbiFL7opRf07Fj1i8/aHwlHOnxM5d2LkZsu+sUeSzUnmkJ3gKDnOAqU/YSM+cay5WBQvDvw=
+	=
+X-Received: by 2002:a17:903:b06:b0:2e9:4175:307a with SMTP id d9443c01a7336-2eb003b2d19mr26567435ad.22.1793202956855;
+        Wed, 28 Oct 2026 08:55:56 -0700 (PDT)
+Received: from 192.168.1.7 ([2409:8a1e:2330:4ef0:1490:f0fa:6df7:f234])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2eae6b77e2csm23700275ad.19.2026.10.28.08.55.51
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 28 Oct 2026 08:55:55 -0700 (PDT)
+From: Rongzheng Wang <testwrzwrz@gmail.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	stable@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v3 2/2] selftests/bpf: cover AF_XDP multi-buffer TX software checksum
+Date: Wed, 28 Oct 2026 23:55:44 +0800
+Message-Id: <20261028155544.12908-1-testwrzwrz@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <auH2yISa8xouAx/3@boxer>
+References: <20261028025026.11401-1-testwrzwrz@gmail.com> <20261028025026.11401-3-testwrzwrz@gmail.com> <auH2yISa8xouAx/3@boxer>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,111 +105,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <db337130fec9f342fe80debfe2b9e4fb4310456bf9a639785e34c931a81e4bbc@mail.kernel.org>
-In-Reply-To: <20261028143534.135968-3-cui.tao@linux.dev>
-References: <20261028143534.135968-3-cui.tao@linux.dev>
-Subject: Re: [PATCH 2/5] blk-iocost: add BPF struct_ops cost model support
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 15:33:33 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============5957388155132648867==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Maciej,
 
-> blk-iocost: add BPF struct_ops cost model support
+Thanks for the review and for the Reviewed-by on 1/2.
 
-TL;DR: Nit only, not a bug: the long iocost_model_ops interface comment in
-blk-iocost.h repeats attach/teardown details documented elsewhere and names
-call sites; suggests trimming it to the model-author contract.
+> nit: breaking RCT - I know it's test but Stan payed attention to keeping
+> the order...
 
-> diff --git a/block/blk-iocost.h b/block/blk-iocost.h
-> index e4e517ef6a0f..6d62b4fd0c54 100644
-> --- a/block/blk-iocost.h
-> +++ b/block/blk-iocost.h
-> @@ -22,6 +22,79 @@
->  #include <asm/local64.h>
->  #include "blk-rq-qos.h"
->
-> +struct bpf_link;
-> +
-> +/*
-> + * Pluggable cost model interface for blk-iocost.
-> + *
-> + * A BPF struct_ops implementation can take over the cost model of one device.
-> + * The device is identified by the dev member, which is set from userspace
-> + * before the program is loaded; the struct_ops core owns the program lifetime.
-> + * Attaching creates the ioc if needed, like an io.cost.model write, and
-> + * switches the device to the BPF model with the queue frozen before
-> + * rq_qos_mutex, like an io.cost.qos write, and delivers iocg_init() to the
-> + * cgroups which already exist on the device. Enabling and disabling the
-> + * controller stays with io.cost.qos.
-> + *
-> + * While a model is attached, io.cost.model selects between it and the builtin
-> + * model: "model=bpf" switches to the attached model and "model=linear" back to
-> + * the builtin. Neither detaches the struct_ops; only detaching does. The
-> + * builtin linear coefficients are kept while the BPF model is in use and take
-> + * effect again when switched back.
-> + *
-> + * While in use, the BPF model prices every charged IO on the device, including
-> + * flushes, from the bio charging path. calc_cost() is called from the IO
-> + * submission path with RCU read lock held and must not sleep. It receives the
-> + * bio itself so that the model can use what it needs (operation flags, size,
-> + * sector, the issuing cgroup through bio->bi_blkg, which is guaranteed
-> + * non-NULL) and returns the cost of the IO in vtime units, where 1 second
-> + * of device time equals VTIME_PER_SEC (2^37,
-> + * available to BPF programs through vmlinux.h). The return value is clamped to
-> + * 1 second of device time per IO.
-> + *
-> + * The struct_ops also carries the transfer cost coefficients, vtime per page
-> + * for reads and writes. While the BPF model is in use, they replace the
-> + * builtin coefficients in the completion-time request sizing of READ and
-> + * WRITE requests, with ZONE_APPEND counted as a write. Taking over the QoS
-> + * side (latency tracking, vrate control) is left for later extensions.
-> + *
-> + * The cgroup callbacks are bound to the iocg policy lifetime, one (cgroup,
-> + * device) pair per invocation. iocg_init() is delivered from ioc_pd_online()
-> + * and on attach to the cgroups already online on the device; iocg_free() on
-> + * detach to the cgroups which still exist then and at pd_free() time for the
-> + * rest, so that init and free pair up exactly. iocg_free() is gated on a
-> + * per-iocg delivered flag, as bios can still be priced between the blkg going
-> + * offline and its free. Both callbacks are called with ioc->lock held and must
-> + * not sleep; the delivery points nest inside queue_lock except for iocg_free()
-> + * from ioc_pd_free() in blkg_free_workfn().
-> + */
+Fixed in v4. The declaration block now follows the width order used in this
+file:
 
-[ ... ]
+	struct xsk_tx_metadata *meta;
+	struct xdp_desc *tx_desc;
+	struct udphdr *udph;
+	struct ethhdr *eth;
+	struct iphdr *iph;
+	u16 first_len;
+	u16 pkt_len;
+	u8 pkt[256];
+	u32 offset;
+	void *data;
+	__u32 idx;
+	u32 addr;
+	int ret;
+	u32 i;
 
-this isn't a bug, but could this interface comment be cut down to the
-contract a model author needs (calling context, units, clamping, locking)?
+> would it be worth exercising this up to MAX_SKB_FRAGS ?
+> then instead of having this flat layout you would loop over the desc
+> count.
 
-The attach description repeats what is already at the top of
-block/blk-iocost-bpf.c:
+Good point. I changed it to loop over the descriptor count and exercise 1,
+2, and MAX_SKB_FRAGS + 1 (18) frames. The extra frame is the linear head;
+the remaining MAX_SKB_FRAGS frames are skb frags, matching the copy-mode
+limit documented in af_xdp.rst. The last descriptor takes the remaining
+length so the fragments cannot overrun pkt_len. The updated selftest passes.
 
- * attaches the model to that device, creating the ioc if needed and switching
- * to the model with the queue frozen before rq_qos_mutex, like io.cost.qos
- * writes, and .unreg detaches it; enabling and disabling the controller stays
- * with io.cost.qos.
+I'll send v4 as a new thread.
 
-The init/free pairing rules and the "bios can still be priced between
-the blkg going offline and its free" reasoning are repeated in the comments
-above ioc_pd_online(), ioc_pd_free() and ioc_bpf_deliver_iocg_callbacks().
-
-The comment also names implementation call sites:
-
- * not sleep; the delivery points nest inside queue_lock except for iocg_free()
- * from ioc_pd_free() in blkg_free_workfn().
-
-Would it be better to leave the attach and teardown mechanics to the
-comments next to that code, so this one does not go stale when those paths
-change?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40710751825
---===============5957388155132648867==--
+Thanks,
+Rongzheng
