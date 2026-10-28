@@ -1,84 +1,84 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.137
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793153728;
-	b=2EvwS869qR0pem+jI/8DYI5QouOqsOS/lQqq0B7GaraZMpiASb7OSfp1XVdRjzvNz3un
-	 MW2AAuA5PDFlek+uGHsr9B1gNpNahp3h5Pvcu0uLcH0tNa21zlvnJZAsn2KJMZlBjx1wZ
-	 pbblumLJNCJmv6XgsNwFBJWH7bDzQV4h5KHAm48gjBbDA50i0WM86Y2oJinZZ57XQ2bCp
-	 Kkkf62cqpz639N3bJzHk71phSnihBPLkXarA8aqm3Gsunyx6qM5a1SRK54XYS4GxqL/U9
-	 bm1/tvYFynPC3iwEGPuKBUE/qzcMhMTsrzzZ+prbYWnYnVkCf0fS9eMQ5nuhqacNy4w==
+	t=1793153730;
+	b=R4tnItZ9bMxByo7r7Bw0x6Gx5wJ5oFCgIeebG2I5yYDtALjZCfoy9hnTUsSax/Qtfaq2
+	 34HeO/6f+OiLw4b4eKSg5YkRtz67kcxRaF3bfpFKkFOgxYYiDLeAI7xxJ/smLwpGyI3DX
+	 Lb30RB+rZYm1j4PNbw0IT72gbYmOi5cG/22TfLMiUoMgr4b+3o6kVBe3ZKbGeSlLRarP1
+	 1a7vriWuEofi4FuF4SzGtfdkPQhKYwxkWD4b3I00fY/p/iOF9Z/7yhd+9ObBFBWEtSZ/V
+	 /TH/CrmBP0bkA3LcoWUfS2rjhjDelBRhgb9w8RE1pQUwA2mJCBat0ZppR7Gw/u6POgQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793153728;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793153730;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=zfiRKc6faNdhkDmzq4FLA4O/f5pTFuJ0W9YK5j1X3XU=;
-	b=reZ1nIJAx3ZD4SdK1pzBedQAkWFR3d5Eem1djl2RM9b47e9kLAmcHqiVDKRiaHmUtt0g
-	 38qA8LTLT7k34kVK4i0TJd3S0iT3ZzkSxVJCqeQ8Q5K7ILFgXuhdwPbLlkI3UDG71I5bu
-	 OsWYl8wR1Mrq+SZl7xJ5++j+T3SNdBx7wgLENFVLsYiIGWc9lZE7fp9AAOiSOU+tGO3La
-	 gr3Q+cNLRcstP6tJD4fwA8bW/nqSbFjmvMVfErY54VMGpWBOSR85ZQDAYiJXAa84A0vw7
-	 1/u/C/bxcwfRrwICM/LeR/nk4LYUmeZ4cXnVG+A9m6mYahtGemDp+I5arZ7YPc7Wtew==
+	bh=VCWn7vikuko6GduGmwqYjNeyExDWwE2i/+p67qQrM6o=;
+	b=zdLXB+oraAs2Y8PP3A0x+3m+g2a259z1BTbqJiYozKEO9E0VYmF1kZKpoKYrHfICvvDt
+	 2utYDsuJEGYeojMofVLsj5qUUqgsSYh+sUIDr2cKmAN5jZx4phhjU9kFvmqk7ed8v4Csj
+	 zCr5uQSe3fEzn7iQF+jXDwJqRKK5C2X1Lktmv1UZM2w96RN97nariJdbA5w8j9a0tVBGu
+	 w+fzbIsJFOaj0mNPGdwv13zSiKbAvcTEANvtDZKA+uilR7Fe4l7wGw/N2mXjBP6gXllFO
+	 8a5gqgIFboj7UIAJFg+9GQ3jXkVbNon7l2Bdw6UHsqjO5kUKNqIUgp90u9UBd7Y1tnA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XE1fVuMs;
-	arc=none smtp.remote-ip=74.125.225.139
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PbAKMIO4;
+	arc=none smtp.remote-ip=74.125.225.137
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5611606A31D
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 02:15:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A5611606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17C7606A31F
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 02:15:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E17C7606A31F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=XE1fVuMs
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-4a5f76661b5so1767045e9.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:15:27 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PbAKMIO4
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6eb11e9cso1978585e9.1
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793153726; x=1793758526; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793153728; x=1793758528; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=zfiRKc6faNdhkDmzq4FLA4O/f5pTFuJ0W9YK5j1X3XU=;
-        b=XE1fVuMsuhYDeI5N8CJnxGtCyslxKj19uDtBXLRB4+llW8DD9D05krrcHrVzfdJXwC
-         6sy3jrI6PTXKWLNkuk+W3834f9iTmqsHG3iC7m/RR9uPKKl8Sm5G64xwaPi37clK/8iN
-         3f7k1WXi4RZPlcOXUA9GT2Yw+ZzNQ+gDktbb2Bkr3EHOmtcdfTmJDoVqnMn/gbgsDeby
-         zeahgyCuWazaVllLV0/QsNHxd7F3csxX6WpJuTNXSXQPIecwGVu2oPDorVhCFQxAuQQ+
-         Q3DRUIDrQ/UYBZYHDh99AmSsMzAKaVUkAsmVaUu5ashPeR2iV0DWmZVXttYNndEE03tM
-         ekEw==
+        bh=VCWn7vikuko6GduGmwqYjNeyExDWwE2i/+p67qQrM6o=;
+        b=PbAKMIO4jtmhksZmq6teWQ8BcxDsAFz2iTtIMmjIwi7sjT5oobGg5tUqn1qr2QVWjt
+         ZhbLX6KzOx61B52/xJSqSgvRQ+XIi2gOZXFwYukY5Eohg7QetUmzNVCuXKEyu1yA5kl8
+         qktmicfXUVvwBPugZcKjiKLI/GbTFUkZKuC5tXUqkGQMQwg1zMUPHOJQpsjQSIc1kkgW
+         APWHpWf6HofEjrW71WKrtvmYGAXzd7E49/iPybv1DcHrUDOvjxUQYPaEv/GCiRhgZ/Jz
+         mfYldm52gNRet6J1LwkALT8TuwCJmufhW/31HzoWAvYZRyzgD/tPDrMRzsJBltPCVTAw
+         /Yqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793153726; x=1793758526;
+        d=1e100.net; s=20260707; t=1793153728; x=1793758528;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zfiRKc6faNdhkDmzq4FLA4O/f5pTFuJ0W9YK5j1X3XU=;
-        b=bodQL/VRN1qvI89M4XurothUL0cuy6YiAwt5FK6P1qWQ5UQTnqTvzuKN6E5zdsM62X
-         7PuCh5y18zjhP+BAzP2DmBKbHApE4tBjPmIueJz9g6i6kwqfQZw7/xjqdYpVxQz9XpZa
-         iHbOSEs3XYU3KmTiRnm56BPNpfmfUx1+hYoo7Hk75hiqyhA2+XifZH43X1SVcCUN2Xzx
-         diggD6A+f7EaIkLWz1kxObFPFtvyOumWmLgLvp8xXIFiymkfF2sYnxEEk1y9GWZG3Lex
-         S5/+F3qV7b4ZESb9KMyDeJYhnaM/u9tCuYkRGjtcoc3pLpYhvOFSKlnOWgfk8VuP8EoL
-         fxwg==
-X-Gm-Message-State: AFq9FYJaWFXpe7WPTOlZl1ISJRESUqbaE3kcj9gM7iSedpCIDTOd2lHF
-	BmnUBfxC+RQIMutI/ZvXLpRv2FipcquQSfsGeVPjejq++O2IlysbdU9Y
-X-Gm-Gg: AYBFou2WQ3k2LQ0ZUZ+smhy2YqlSxlF9jAqEKTQ/9lZ1ISWXWA4QgZrGCGX+woX19Q0
-	AqXi3YPC6vnBxuwcVY+3T/mfgd2YtoWWGZDrDyAyEA5vygonAuaQl9iKSVXCDgB53VntCA7zw4F
-	wptrlh47i0Q5BW8YwZpQwM1Ah7Jr+9JxgIvQlaAz+sqfpmnL07Q3VD0mMUauqngvSGJO5UmbeHn
-	BB8duoTs6zfPlh2ZukPJuz2XWAbrOsIoGTDtnPEm5PGYlXw6nf1Wcf5h7qGiLNA8fsrShs3gygh
-	GgCf/0/FmHlU7rAjJbFnWPf7Nt4R9h20va+0mZzYoLRqfV3aI+gXHuPoBLx2FlVYjWswITYveig
-	K+qT57uH/twKc6qp7mza1NB9DQbZ1MRQuAmy6B8oIRt8WCFex+hVQ3OKoqOcUtW0RhJZKtg7d+W
-	NaLNdi0IhVT+7x1NwQjJMNUmsTWsE87cNAlZsAz1t3BQy91SPf7tLnPFsuyju09DKXLVeyp3QC5
-	9D2pS9VnkwQZNM9m7vmWLpspdigHZ3cHNY5jOJ+PhBGHJi4K7QdUSxHW9lVYWDJ2bZRQKgnX4Wk
-	8QFKlowitS+ADDOiruZCTdTPUAd6A+u8C4iyukTcNx3sLqj7AVNxBplsfw4g97SfnXoaS4796Tp
-	OpuLx9c8/jdewqSZQxx1gMDzNok/2R+lXoEVgDRlEctZoWZtL5z9xQwJHtuss8GGLhIIv
-X-Received: by 2002:a05:600c:3e0b:b0:4a6:42cc:bf7b with SMTP id 5b1f17b1804b1-4a963ffcf7bmr17022925e9.3.1793153726005;
-        Tue, 27 Oct 2026 19:15:26 -0700 (PDT)
+        bh=VCWn7vikuko6GduGmwqYjNeyExDWwE2i/+p67qQrM6o=;
+        b=jUkFbU1M7IPq140oVSLizc0EA8Y8mIN/o9OZYx+1AHnSvEIfxAMv2lpP8PNJwKToZv
+         jggfdzZ8/nXtVaCrZ7KBIoc/HJ9Bht5iHSZ6X0LKD5txztn7aV7J/JGfOoO6xMlfv4fG
+         /hKzwH+TCT1okaDEFOxndM5pMgJlyG89Kjc9VAJGDftCAuJUR8g2tC2PyXM2Ppq5FY4G
+         zxzkF/3Bv9w3mEs4A3dA2ahY80Lu4dGxPj++ndFhAx4AXEGbk/gqXcBDJGHAyZn6J4Dn
+         8cs2XspsCmMPFyDQTLjX2Hi7q1qCSfGGCjeQlWHV9kgmC/RuHV+B86DnKkNJRBqpRFsL
+         yvfQ==
+X-Gm-Message-State: AFq9FYLFVj0MIekchishyTtJzoO9XzOsmFksc0lDgZWMlzUCW0VqVqEO
+	lyCSEjt7FJsJ9HS++/gXI6qaXlFkLAUsQsQNS1eHe95hp/LZwAq9nZ4g
+X-Gm-Gg: AYBFou1o9TLPgmEJQErr0kezwvYa9aBy9fAbmopFqUgDhSoRFeX+vQ8jgPM9w9bbiYr
+	KdEnkD4+eHGUWTYmglsE+xeLLWmg61YNktoIzomqc9DYJwclDXLZO3nE4SamLsRx4s89PTLrJVe
+	KoTMbwznoaBlizhaIAS/xesr7pOvb1vn5USnZ+wp96x6Abq9RvJx/Nuv6/PkXruWp9u/KJ3Vl13
+	AAz5kNJKMR6bhDNxBsY/uzTqyuvJ9H8RaRAWf0KRbn8UysJ8be+//IiAJkl4OMvZDx43/oWMbvV
+	mfR2iJAWjvahINZ8boC+Mb+KH5+dxyZwYsV87QkqY/0pYFNs1kkqhHBr+UiKT3to+AxOrhmF0zU
+	M3LkiczYVShGBmEKHCUcbAwKymaCHs5oK6JIGuFt77IGz6BHaRSavPBER39LIi0p4BQhfneO1vc
+	FiE1+5x9XK69YJW/Khz5CnLk4A0o8R1gtWsZnT7ESJIumDEHAw/dLFODv1JoRgnwoVOzOJHSNfP
+	LuQElIM3CKVXURILph4ANIes0Qt63jKVJmzYPLzSRJTcueNuWlHcoQB1lZb6v4gNuOKc/C0u7oR
+	5QKXT9QDJRxaG1ZkqY34FM+ZJD93fknFqim3JjvttE4jwkOSn4+gKvULhnDku8GHJm6FQJP8WuC
+	rHCSWaLH22dLvLmgJY1MjkgtqDkbo+hgdAc790jGI/vVvqhDSWfXXk3eUyeBXHAxd/Me+
+X-Received: by 2002:a05:600c:154d:b0:49d:34:420d with SMTP id 5b1f17b1804b1-4a967202a2cmr14096205e9.20.1793153728345;
+        Tue, 27 Oct 2026 19:15:28 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a9733d48b4sm12909955e9.0.2026.10.27.19.15.25
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e4115f496sm24606506f8f.5.2026.10.27.19.15.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 19:15:25 -0700 (PDT)
+        Tue, 27 Oct 2026 19:15:26 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org,
@@ -93,12 +93,12 @@ Cc: bpf@vger.kernel.org,
 	martin.lau@kernel.org,
 	yonghong.song@linux.dev,
 	mason@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 09/11] bpf: Let the comparator of bpf_rbtree_add unwind
-Date: Wed, 28 Oct 2026 03:15:24 +0100
-Message-ID: <20261028021524.1203900-12-memxor@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 10/11] selftests/bpf: Test callbacks that unwind
+Date: Wed, 28 Oct 2026 03:15:26 +0100
+Message-ID: <20261028021526.1203900-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <89d5a613d296bb9e00c60395d44a45f8b39da90068939a82f8b27ce08557c584@mail.kernel.org>
-References: <d81d996f09e0fd0b07816dcd0541f39c0f451a23.1793147364.git.memxor@gmail.com> <89d5a613d296bb9e00c60395d44a45f8b39da90068939a82f8b27ce08557c584@mail.kernel.org>
+In-Reply-To: <6588701a3bed9893f94098c228cc7e451f323612c151ba676f712eac8bf80cae@mail.kernel.org>
+References: <2fb53df72300b10ba5f5aff123c331b80a7c4be5.1793147364.git.memxor@gmail.com> <6588701a3bed9893f94098c228cc7e451f323612c151ba676f712eac8bf80cae@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -113,20 +113,14 @@ Content-Transfer-Encoding: 8bit
 
 On Wed Oct 28, 2026 at 2:25 AM CET, bot+bpf-ci wrote:
 > [...]
-> TL;DR:
-> - bpf_rbtree_add() unwind pad may be skipped under fexit/kretprobe/graph
->   tracing, leaving a freed node usable by the program
+> TL;DR: Selftests may fail instead of skip on x86_64/arm64 kernels built with
+> older gcc (no asm goto output), where callback pads are absent: unwind_drain
+> load error and the changed callback_unwinds message expectation.
 
-Right. Every function with a pad is notrace and no kprobe target in the
-next version, as the verifier lets only fentry attach to a subprog that
-unwinds, with a test that fexit on bpf_loop() is refused.
-
-> - unwound path may leave node->owner poisoned, and may run kptr destructors in
->   NMI-unsafe contexts
-
-Right on both. The next version unlinks the node before dropping it, as
-bpf_rb_root_free() does, and refuses bpf_rbtree_add() in tracing
-programs on types with NMI unsafe fields when its comparator can unwind,
-as bpf_obj_drop() is refused there, with tests for both.
+Right: without asm goto outputs the helpers have no pads while the JIT
+unwinds. In the next version check_cb_unwind() says -ENOTSUPP for that,
+as for a JIT that does not unwind, and the tests skip on it; the check
+comes after the one for the unwind_goto, so the message for a missing
+unwind_goto is the same everywhere.
 
 > [...]
