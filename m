@@ -1,56 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793189958;
-	b=l3aJCTBsZbGj50yBQAWPrMx5TwU4XpU9ucveA59a/l3UfkqiFm0u1GlfR1Q2rm8m6QuP
-	 hEc2unxdANf7KPw8buz+HX0lf21i+prH/NQGTmWOmP/KW6i6lma34lg8uCGdXS231EEPS
-	 imNa1N7VQJHyhou2DUid6ZhrtbWCa8MjUlNV6WBTfpEK7EhrZqdTVv12+1Bia8TCPHTER
-	 T0RtilG0qnA00vOmTNJ7dJxxnnV5AE8sRu0+MumTbZCEdxYqkfz/QRY6fvE/nTC7reFVv
-	 CwchE3sQGK3V52AjozUdhHQg4ueHdiPULvni+19GlUlR/gyS5lMv5rftfEujL3BmRiA==
+	t=1793190437;
+	b=A3M3P9ySkNRvfFAmpreyClC8YQBgqWrXu9X+9PDa1/U3rkaqkXYhPXhyofkxmJwS65My
+	 J0r6nvDD/ghYnMQSeGYIXIJtbjeL2UindAax+bhQXUDWYQmoxmV1DW48jes38b64CasIp
+	 ojYCy43xcEHkRB92pNFDbohqD6RBEUJLVmJ7aTw2ZqoyOgHbnyzCc6L+21rFHsU7HqfKl
+	 grYsD1FAbCYmjFJ7SXS0XKBZWEY9jIcBfxXMhbVhsId3Duni0tKl/xURJ9FN4geaEaSYJ
+	 qzJh0iSPe2oMIAPZzQLGn43Ex1Q2vC41iFUToTXKjTA1/XsqFZTAPfGVBaoweDZee7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793189958;
-	h=DMARC-Filter:DKIM-Signature:Subject:Message-Id:X-Mailer:
-	 X-Lms-Return-Path:To:Date:Mime-Version:Cc:Content-Transfer-Encoding:
-	 Content-Type:From:X-Original-From:Received;
-	bh=Jxut/MrKMYK8UeaqLdbANTgLB+m90HMiLTxeFkgxSMM=;
-	b=O4c/WQNlEjNxMrTPQTWP0pQUUFR+LW1rpC34vDqeNrDTeTFv6B0DIXoEs/w2hrLhHl9R
-	 fiCNE7uyKtN5RGcoWUdRtJhVdU5gSqBoVKf5DyJC+ZfCJxXU2U3MPRqOEXaH4S83Y2Cyi
-	 Zym9z6vOeVTKvzyXMhknA8HgLv8CeFlm9+Vj0AHRy//wOhGfH36nyCmXnYmfP4wll2vfa
-	 hw7RNZ2t5haADH/C9w3hvJMj2sqCnfCwm222ej0PuLq8miWCk3c7aYBLG1u/3ajDZGFrO
-	 /RKUnju5xljklsfcBPf1J/2NyZIlruUKNVrB38Qep/ODVnzqY/eFvVeLXLNSXdZpo0A==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793190437;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=5UYxKGaCGMdLxSaQ2XmYt6w2Y4hTPYmZ9ll9tXrG4Is=;
+	b=uZh0yOPMOqEpsLymWC9TsCgDOs65S/RoZ8CLpVBv7iiPnrZUW/1YC/eQ3jjh/iwFgh46
+	 v7Uh3DarkDyHpnTrOxk5EOYJ5MtJSJlgQbFPuybun4xV7/Q/IjqLMB/Jc5EWk3uicPN1d
+	 3Iyx0ZFDyR7ocofgV844gJB+lHC49P/8ywaFbcMp/sHTYQi2UL6QYbeq22R3cPcYd7HCp
+	 VBlH08xZP4WtRcHSpY7ZVrIRNi4bp9MFtlO8FNDK0YVVPOyruYcV5YalQsS9ldTzGwF00
+	 YLgEYFsy02Yt8UKYydcTZdgjPOkn7qRjHoOKpueTjJL2Ew9fcmuvIqJjb0C3Lz2Ql5A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=insta360.com;
-	spf=pass smtp.mailfrom=insta360.com;
-	dkim=pass header.d=insta360.com header.i=@insta360.com header.a=rsa-sha256 header.s=feishu2606151854 header.b="TR6b+d/p";
-	arc=none smtp.remote-ip=209.127.231.43
-Received: from va-2-43.ptr.blmpb.com (va-2-43.ptr.blmpb.com [209.127.231.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mTE2hqjx;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA4B606A31C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 12:19:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4BA4B606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=insta360.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=insta360.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21122606A31A;
+	Wed, 28 Oct 2026 12:27:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=insta360.com header.i=@insta360.com header.a=rsa-sha256 header.s=feishu2606151854 header.b=TR6b+d/p
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=feishu2606151854; d=insta360.com; t=1793189952; h=from:subject:
- mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
- mime-version:in-reply-to:message-id;
- bh=Jxut/MrKMYK8UeaqLdbANTgLB+m90HMiLTxeFkgxSMM=;
- b=TR6b+d/pC+85EqP4rpOJqjpS8YOrRCEADLpIVA18ez8kCWDXaXyruaU1xYp6c2T/iBwhZF
- Yv2v9EHPl7vB27z6NZwgsvNpxMbTREGNgEkTlkp6Qx0ji2P8NcXPAZElHb9ZJX1yFrLtbZ
- n4SyuLd+bo7ciqfb7O6Ap12kua8kBug2qXkN25GzR7dofZnx3aLazfAAFEj6YRhZaBGE7h
- db4+Bc3jokvIm2BBnU9VkKakFr0PpLUNfoA6rPEiViolA7vCfJ1EFyZmYs6Vm6bxdYK+sU
- JO4mNXhjugi/kYhZBZG5EI+Q9u78CWRutyTPrfYmVjh7wc2CVAGe2Fv3t1F4FQ==
-Subject: [PATCH bpf] bpf: Always hold RCU read lock around perf callchain in __bpf_get_stack()
-Message-Id: <20261028121859.994-1-yangsongsen@insta360.com>
-X-Mailer: git-send-email 2.53.0.windows.2
-X-Lms-Return-Path: <lba+26ae1e83e+b68203+vger.kernel.org+yangsongsen@insta360.com>
-To: "Alexei Starovoitov" <ast@kernel.org>, 
-	"Daniel Borkmann" <daniel@iogearbox.net>, 
-	"Andrii Nakryiko" <andrii@kernel.org>
-Date: Wed, 28 Oct 2026 20:18:59 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mTE2hqjx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 394A21F01825;
+	Wed, 28 Oct 2026 12:27:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793190436;
+	bh=5UYxKGaCGMdLxSaQ2XmYt6w2Y4hTPYmZ9ll9tXrG4Is=;
+	h=From:To:Cc:Subject:Date;
+	b=mTE2hqjxI5V/wXS4AH8GRcFSHH/EWrSvAk6lf5XBUzLBqhWY9qYQz1/Vb0uEn1G+2
+	 k5pl1SDf5JM3qqhp/YfX21b1rO7sHvvLx2ytmf5igloG9koCpKbxwaGXe4t0gzNSTk
+	 iiOkqVwsVqctr8088Co0dfHIfgrxv+Jgmyl+IrkvuH3pSnSMA+6BWf2+flOdwCDZN/
+	 pRy2sEOyPXLC61F8iWY2AfcNi70c6QAO9SDxHBUf/NyYAphZrwACiVHpxH4E8QAb6c
+	 EhOCAVD40TdXg27jGY+kYQGQhWy7+3LnfV7I0YC6o6r9yQkirCLnc/DGxyYrfme7TV
+	 thXYYRNShBCjQ==
+From: Eric Dumazet <edumazet@kernel.org>
+To: "David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Willem de Bruijn <willemb@google.com>,
+	Simon Horman <horms@kernel.org>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Eric Dumazet <edumazet@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Aaron Conole <aconole@redhat.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	Ilya Maximets <i.maximets@ovn.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	dev@openvswitch.org,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Ren Wei <weir@nebusec.ai>
+Subject: [PATCH net v2 0/5] net: fix eth_type_trans() crashes on skbs coming from the stack
+Date: Wed, 28 Oct 2026 13:26:58 +0100
+Message-ID: <20261028122703.2093730-1-edumazet@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -59,115 +69,83 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, 
-	"Eduard Zingerman" <eddyz87@gmail.com>, 
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>, 
-	"Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, 
-	"Jiri Olsa" <jolsa@kernel.org>, 
-	"Ihor Solodrai" <ihor.solodrai@linux.dev>, 
-	"Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>, 
-	<linux-kernel@vger.kernel.org>, 
-	<syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset=UTF-8
-From: "Songsen Yang" <yangsongsen@insta360.com>
-X-Original-From: Songsen Yang <yangsongsen@insta360.com>
-Received: from DT-9806 ([61.241.19.90]) by smtp.feishu.cn with ESMTPS; Wed, 28 Oct 2026 20:19:09 +0800
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-__bpf_get_stack() only takes rcu_read_lock() around get_perf_callchain()
-when may_fault is true, assuming that non-faultable callers already run
-inside an RCU read-side critical section.
+eth_type_trans() assumes ETH_HLEN bytes are present in skb->head.
+NIC drivers always provide this, and they should keep using the fast
+version, without an extra pskb_may_pull().
 
-That assumption does not hold for BPF_PROG_TYPE_SYSCALL programs. They
-are always sleepable and bpf_prog_test_run_syscall() only holds
-rcu_read_lock_trace() while running them, yet through
-tracing_prog_func_proto() they are given the non-sleepable
-bpf_get_stack_raw_tp() helper, which calls __bpf_get_stack() with
-may_fault == false. get_callchain_entry() then does
-rcu_dereference(callchain_cpus_entries) without rcu_read_lock() held,
-and lockdep complains:
+Devices looping skbs from their transmit path back to their receive
+path get skbs built by the stack instead. tc actions (act_vlan pop_eth,
+act_ife decode), BPF helpers (bpf_skb_change_head() before a redirect)
+or OVS actions (pop_eth followed by pop_mpls/pop_nsh) can leave fewer
+than ETH_HLEN bytes in the linear part, and eth_type_trans() then hits
+the BUG() in __skb_pull().
 
-  WARNING: suspicious RCU usage
-  kernel/events/callchain.c:163 suspicious rcu_dereference_check() usage!
-  1 lock held by repro:
-   #0: (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: bpf_prog_test_run_syscall
-  Call Trace:
-   lockdep_rcu_suspicious
-   get_callchain_entry
-   get_perf_callchain
-   __bpf_get_stack
-   bpf_get_stack_raw_tp
-   bpf_prog_test_run_syscall
-   __sys_bpf
+Instead of fixing every producer, or adding a check to all
+eth_type_trans() users, fix the few consumers exposed to this:
 
-The callchain buffers are freed with call_rcu(), and an RCU Tasks Trace
-read-side section does not imply a normal RCU read-side section, so
-holding rcu_read_lock_trace() alone is not what get_callchain_entry()
-expects.
+- Patch 1 adds eth_type_trans_careful(), which pulls the Ethernet
+  header first and returns a drop reason on failure.
+- Patch 2 uses it in loopback_xmit().
+- Patch 3 uses it in __dev_forward_skb2(), used by BPF redirects to
+  ingress and by veth, macvlan, ipvlan, netdevsim and l2tp_eth.
+- Patch 4 uses it in OVS internal_dev_recv(), covering both the MPLS
+  (TEB) and NSH pop cases at once (only the MPLS case was tested).
+- Patch 5 (from Jamal) fixes act_ife decode on egress, which was
+  consuming the inner Ethernet header. This is no longer a crash after
+  patch 2, but egress decode never delivered a correct frame.
 
-Take rcu_read_lock() unconditionally. Nesting it inside an existing RCU
-read-side critical section is cheap and harmless, as suggested by Andrii
-in an earlier discussion.
+Other eth_type_trans() users already pull the header or never see
+such skbs:
+- vrf_process_v{4,6}_outbound() already pull ETH_HLEN + IP header
+  before vrf_local_xmit().
+- tun already uses pskb_may_pull_reason(skb, ETH_HLEN).
+- XDP: bpf_xdp_adjust_head() and bpf_xdp_adjust_tail() keep at least
+  ETH_HLEN bytes in the linear part, and multi-buffer tail shrinking
+  only trims frags.
 
-bpf_get_stackid() is not affected: sleepable programs cannot use
-BPF_MAP_TYPE_STACK_TRACE maps, so syscall programs cannot reach it.
+Tested under virtme-ng with AF_PACKET reproducers. Without the series,
+all four cases crash in eth_type_trans():
+- lo egress "action vlan pop_eth", eth/eth/8192 bytes frame
+- lo egress "action ife decode pipe", IFE frame with 8192 bytes payload
+- lo egress "action vlan pop_eth continue", then a BPF program doing
+  bpf_skb_change_head(skb, 1, 0) + bpf_redirect(veth1, BPF_F_INGRESS)
+- OVS flow "pop_eth,pop_mpls(0x6558),0" to the internal port,
+  eth/mpls/eth/4096 bytes frame
+With the series, no crash. An ICMP echo inside an IFE frame decoded
+on lo egress is now received and answered. Normal traffic on lo,
+veth (including 8000 byte pings) and vrf is unchanged.
 
-Testing: on top of bpf/master at commit c8a8a68d3ab4 ("bpf: Don't re-sort
-subprog_info[] for every new subprogram"), x86_64 under QEMU TCG with
-CONFIG_PROVE_RCU=y (syzbot config with KASAN/KCOV/modules disabled), the
-syzbot C reproducer
-triggers the splat above without this patch and does not with it. A
-minimal BPF_PROG_TYPE_SYSCALL program calling bpf_get_stack() was also
-run via BPF_PROG_TEST_RUN: it warns before, and returns 0 without a
-warning after. BPF selftests were not run.
+v2:
+- Patch 3: update the empty_skb BPF selftest. At lwt_xmit, its
+  "veth ETH_HLEN+1" packet is a 1-byte skb, which is now dropped on
+  veth ingress, as veth_xmit() already does on egress (BPF CI).
+- Rebased on latest net, collected tags from Aaron, Willem and Jamal.
+- No kernel code change.
 
-This issue was located, and the fix, changelog and tests were prepared,
-with the help of an AI coding assistant (Claude); the submitter has
-reviewed the change.
+Link: https://lore.kernel.org/netdev/20261005052249.1914367-2-weir@nebusec.ai/
+Link: https://lore.kernel.org/netdev/ACT-N6N4.v3.r0.20261023200137-4@mojatatu.com/
+v1: https://lore.kernel.org/netdev/20261027082604.1485903-1-edumazet@kernel.org/
 
-Fixes: 79a7f8bdb159 ("bpf: Introduce bpf_sys_bpf() helper and program type.")
-Reported-by: syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=72a43cdb78469f7fbad1
-Link: https://lore.kernel.org/all/CAEf4BzYN33yQhO-tsF8pUWDMZoiLAXkV+Z1oP6fJkByocYcjpw@mail.gmail.com/
-Signed-off-by: Songsen Yang <yangsongsen@insta360.com>
----
- kernel/bpf/stackmap.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Eric Dumazet (4):
+  net: add eth_type_trans_careful()
+  loopback: use eth_type_trans_careful()
+  net: use eth_type_trans_careful() in __dev_forward_skb2()
+  openvswitch: use eth_type_trans_careful() in internal_dev_recv()
 
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index f7e8d766d128..e452ca7c859a 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -812,8 +812,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
- 
- 	preempt_disable();
--	if (may_fault)
--		rcu_read_lock(); /* need RCU for perf's callchain below */
-+	rcu_read_lock(); /* need RCU for perf's callchain below */
- 
- 	if (kernel && task) {
- 		trace = get_callchain_entry_for_task(task, max_depth);
-@@ -823,8 +822,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 	}
- 
- 	if (unlikely(!trace) || trace->nr < skip) {
--		if (may_fault)
--			rcu_read_unlock();
-+		rcu_read_unlock();
- 		preempt_enable();
- 		goto err_fault;
- 	}
-@@ -832,8 +830,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
- 	trace_nr = callchain_store(trace, trace->nr, buf, elem_size, flags);
- 
- 	/* trace should not be dereferenced after this point */
--	if (may_fault)
--		rcu_read_unlock();
-+	rcu_read_unlock();
- 	preempt_enable();
- 
- 	return callchain_finalize(buf, size, trace_nr, elem_size, flags, may_fault);
+Jamal Hadi Salim (1):
+  net/sched: act_ife: do not consume the inner header on egress
+
+ drivers/net/loopback.c                        |  8 +++++-
+ include/linux/etherdevice.h                   | 28 +++++++++++++++++++
+ net/core/dev.c                                | 18 ++++++++----
+ net/openvswitch/vport-internal_dev.c          |  8 +++++-
+ net/sched/act_ife.c                           |  4 +++
+ .../selftests/bpf/prog_tests/empty_skb.c      | 19 ++++++++-----
+ 6 files changed, 71 insertions(+), 14 deletions(-)
+
 -- 
-2.50.1
+2.53.0
+
