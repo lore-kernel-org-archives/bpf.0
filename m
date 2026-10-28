@@ -1,54 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.219
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793203706;
-	b=19LHutYlncbF/jhIl/e9wtQQNKwm1AL9nE12JCTkqYKVRXEYR/k/HM70pBE1UJlX1Guh
-	 Fo6B5DLvEQMgBV0IMg+/bRgt1DZljY0qDNnEIFc8KC3A6UUBb25VX/90wpi+z8CaBCTl6
-	 2xeOJjIht3kSujUA3bAIpCxUdL4LY7ZZZyP5JW+YSyA2h+jizmo2SQnLMM2Hq9b1ynkL+
-	 hewYw9DRp/DQ0NjqIak4897iAncqfd5f6Jh15zXZznvoKeSyyTsoHfT5/KSbuEom5l9PH
-	 WXR8dZj8yojXC6W/D9GZJDXjUc43/WJ1r45+f2WrQb43a+Tys/F2ojc2uoDoy2hKT1g==
+	t=1793203944;
+	b=eaN1YqccSLDxkxZpGghRfMqBoZ9dN9MJxdgZUzdcyM5YfL9ZllSdYbW8f1/Y52K09sLt
+	 Zs9Cf8dU6b0fjYh0jcOaztkXZUiEEC9Fj5hSKSSIE/ei54KajpAgJFbuueuEA7Mbl4V5V
+	 t7xksFOQyyjxr554nkFrqW4tqU+qDaknndfrEycU8oRmG8A1qbj5hGPWw5MVgslV1caeY
+	 AJ6XMeeivGapKKYPAT7hxj0XInQYXFWCUM444RKSrXqbnxp0X4dlKEYLmcIYZCtdlcrlI
+	 btSYtA3HqdM09Xkunt89I0IBSGQhuRBopmpdgF0iXA5Ba/WZ/Ak8V6WOfrfHp33v4gA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793203706;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:To:Cc:References:From:Content-Language:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=MxROFele/7xmUBoLLTNHElbT4fiioQcRUV0YBjVBRTI=;
-	b=UzCZmFlSX0ufK/+pRbHY1IMgPpkBEsOYTn+nkULUc6GuQVFr5486c1/naS14jDyL6oe/
-	 Qu0dkros3RpRrFn/5d4UbBB6dGvl4azVSrepEdcrbcr/s6DV3b1c7e5ieZbpOXYMolLT0
-	 eINaa8qjEO+4ic1nJexiGAu9cJzBpWNYcm0TivS4lWMEXpBHkCOtwq86bZl7XPo1ifa67
-	 BBqNMW9dE5TuGGUJ4Thq5unvqkSJkHHvhFuJtpCp+vs6VqqQ3/3QrXmOsMzAIARAsarCv
-	 paSYZKQ0QrL41XQQArnxjyDX0s5bXGpL2PQIxE1k+IYRsVIil8d8/hzSKgPyo2+1ktQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793203944;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=m0w+H9ri4/QR5iS0jHJ5XKqn/LJH5Dn3U0BXDvYkf6o=;
+	b=J9kKxVMykcn7Pd/Zoo5iZZjXu6DUAYyg61rAiZG81Zocnidz/XztV+fSqp+i+hboXW/f
+	 d/rp6cZSPmZOWlMRjkcQtnLoIi9c0m6zGMihaFjDwJGjgZSvGVwrk0m2aJJjN3xbhnGtn
+	 8kRtE5X+LlrAhk2fArSHMu9AmfE9mpDS+vLSfEXvfUSWKQPZJs5/HLYAtx1tKjFh3WfLT
+	 AGCWrk2VUy+b8bJdD+yvNSSlkeyjhft2F5lWn+jYhZD0izFIYJk5Zu4yfN1F3Vq7Tm33z
+	 Bo5iM0t3bgT+cvfOuV/KSMnFJlzwEBOGle6RMGbioskaDf0RLq8DbNbH1hGv8/xWGFw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=w5OyxGnn;
-	arc=none smtp.remote-ip=95.215.58.219
-Received: from mta1.migadu.com (out-219.mta1.migadu.com [95.215.58.219])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlpIHqX8;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802F0606A31C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 16:08:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 802F0606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D385606A31F;
+	Wed, 28 Oct 2026 16:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=w5OyxGnn
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ed1QhX/EeBnT+m6d5f/VEjVqb0pcdtMA5QIcEBWm57k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793203701; v=1; x=1793808501;
- b=w5OyxGnnRiBQzqMvIN/WPsUfZ6dezQYzsS7Ur4iBQg1G8A/x4tFToSBEV7jtEO+O+ZYdp1HJ
- aVDOEZeXyrrDVItPG9hGDEvwEVRluUdtRkHXdlxSPvZOljGnhjy8yOTlK6Tgxu3j3cTZ7vrLSEN
- aKnB+m1E/upH7BAgMHgKpbWM=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 693a6adefefd24b0;
-	Wed, 28 Oct 2026 16:08:21 +0000
-X-Mizu-Trace-ID: 693a6adefefd24b0
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <346c3e4f-9244-47c9-927f-8e866b478fe2@linux.dev>
-Date: Wed, 28 Oct 2026 09:08:13 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=LlpIHqX8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7882B1F01825;
+	Wed, 28 Oct 2026 16:12:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793203943;
+	bh=m0w+H9ri4/QR5iS0jHJ5XKqn/LJH5Dn3U0BXDvYkf6o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LlpIHqX8epKl6KT7s0ykAhklS936gT5waqvqbDERoIHCigfRZVJswLvecz9uMAcBo
+	 cH5JGBUfqZ1Dry+CNlE+2c3Sh1OmUi69syD2XadSM0tovWXf18CpQvPwxfxKKea5TL
+	 uxvyze90UfGUkba42Mp+Aqa6h96fkzdYkzlWphuWFZ5MjTgex3qReSqi3VAfQf7dFj
+	 o5bTsuYIM7vv7el2MTE0qxGjEgs6RB+1F/dn9blbAmQPyOXwfbXk0rgv94YU5GCL0I
+	 +9iMYq0TIJRfQlkB7e5469Xc3fUzcv9Xa8JPBp56lESR91YqddlIpFi8nZ5j0wBLdg
+	 P66CxctDN7mpg==
+Message-ID: <sashiko-outbox-188128@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 8/8] vsock: add datagram tests to vsock_test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sergio Lopez" <slp@redhat.com>
+Cc: virtualization@lists.linux.dev, kvm@vger.kernel.org, bpf@vger.kernel.org, linux-hyperv@vger.kernel.org, "Michael
+ S. Tsirkin" <mst@redhat.com>, "Eugenio Perez" <eperezma@redhat.com>
+In-Reply-To: <20261028-vsock-dgram-support-v1-8-e457cf7cee78@sinrega.org>
+References: <20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org>
+ <20261028-vsock-dgram-support-v1-8-e457cf7cee78@sinrega.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 16:12:23 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -57,78 +60,98 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 1/7] selftests/bpf: Build callx tests with GCC
- that defines __BPF_FEATURE_CALLX
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, john.fastabend@gmail.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- jose.marchesi@oracle.com, david.faust@oss.qualcomm.com,
- martin.lau@kernel.org, mason@kernel.org
-References: <20261028000411.4010967-2-vineet.gupta@linux.dev>
- <804b7fd3c3bf40a5edf65903d90514263e61fc6fa2ef513d35913fe8ed9acad8@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <804b7fd3c3bf40a5edf65903d90514263e61fc6fa2ef513d35913fe8ed9acad8@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 10/27/26 5:46 PM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
-> TL;DR: Nit only: the new __skip() reason in the callx selftests omits riscv64,
-> though riscv64 is supported, so a riscv64 build with a GCC lacking callx
-> prints a misleading skip message.
->
->>
->> +/* clang always emits callx, gcc only when it defines __BPF_FEATURE_CALLX */
->> +#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
->> +     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) &&		\
->> +	(defined(__clang__) || defined(__BPF_FEATURE_CALLX))
->> +#define CAN_USE_CALLX
->> +#endif
->> +
->> @@ -1075,6 +1073,7 @@ int callx_c_ops_on_stack(void *ctx)
->>   #else
->>
->>   SEC("socket")
->> +__skip("callx needs x86/arm64 JIT and compiler support")
->>   __success
->>   int dummy(void *ctx)
->>   {
-> this isn't a bug, but the skip reason leaves out riscv64, even though the
-> CAN_USE_CALLX macro above accepts it.
->
-> The same string is added to the dummy() program in
-> verifier_callx_rodata.c.  The riscv64 JIT implements bpf_jit_supports_callx(),
-> and commit 530dfafc6107 ("selftests/bpf: Enable callx related testcases for
-> RV64") turned these tests on for RV64.
->
-> On a riscv64 build with a bpf-gcc that does not define __BPF_FEATURE_CALLX,
-> the arch supports callx and only the compiler lacks it, yet run_subtest()
-> prints:
->
->    run_subtest:SKIP: callx needs x86/arm64 JIT and compiler support
->
-> That reads as though riscv64 itself were unsupported.
->
-> Could the reason say x86/arm64/riscv64, or leave the arch list out (for
-> example "toolchain or JIT can't do callx", as the new comment in
-> callx_rodata_lskel.c does)?
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Low] vsock/test: missing opening brace in test_cases[] breaks compilation
+- [Low] vsock/test: outdated datagram test IDs documented in README
+--
 
-I'll just leave out the arch list and refer to just toolchain or JIT.
+commit f2fbe86b3992eecc82537eceffe22f137e4055d3
+Author: Sergio Lopez <slp@redhat.com>
 
-Thx,
--Vineet
+vsock: add datagram tests to vsock_test
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40608355234
+This commit adds datagram test cases to vsock_test covering local semantics,
+host/guest transfers, routing, and queue accounting, along with capability
+checks and documentation updates.
 
+> diff --git a/tools/testing/vsock/README b/tools/testing/vsock/README
+> index 680ce666ceb56..be34b032ef135 100644
+> --- a/tools/testing/vsock/README
+> +++ b/tools/testing/vsock/README
+
+[ ... ]
+
+> @@ -51,6 +51,25 @@ suite run, e.g.
+> =20
+>  For more information see Documentation/dev-tools/kmemleak.rst.
+> =20
+> +Datagram tests
+> +--------------
+> +vsock_test includes datagram cases in the client/server runs above. Unsu=
+pported
+> +cases print a skip reason.
+> +
+> +Virtio/vhost datagrams require kernel support on both sides and a VMM th=
+at
+> +negotiates VIRTIO_VSOCK_F_DGRAM. Load vsock_loopback on both host and gu=
+est for
+> +the local cases, and make /dev/vsock available. VMCI's dedicated datagram
+> +transport takes priority when loaded, causing virtio/vhost cases to skip.
+> +
+> +Run only the local datagram cases without a peer or TCP control connecti=
+on:
+> +
+> +  ./vsock_test --local
+> +
+> +Use --list and --pick <test_id> to select individual cases. The BPF admi=
+ssion
+> +test (48, requiring BPF privileges) and nested routing test (49, requiri=
+ng both
+> +virtio and vhost transports) need explicit selection. The VMCI queue-len=
+gth
+> +test (53) runs only with VMCI.
+
+[Severity: Low]
+Are these test IDs off by 3?
+
+In tools/testing/vsock/vsock_test.c, there are 44 existing entries in
+test_cases[] before the new datagram tests (indices 0 through 43, ending wi=
+th
+the three SO_INQ test cases). That places test_dgram_sockmap() at index 51,
+test_dgram_nested_source() at index 52, and test_dgram_vmci_inq() at index =
+56,
+while indices 48, 49, and 53 correspond to test_dgram_connect(),
+test_dgram_source_cid(), and test_dgram_sizes().
+
+> diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock=
+_test.c
+> index 10b9074fb87f7..f4ff6a42a9cb1 100644
+> --- a/tools/testing/vsock/vsock_test.c
+> +++ b/tools/testing/vsock/vsock_test.c
+
+[ ... ]
+
+> @@ -2911,6 +2912,95 @@ static struct test_case test_cases[] =3D {
+>  	{
+>  		.name =3D "SO_INQ option validation",
+>  		.run_client =3D test_so_inq_validation_client,
+> +	},
+> +		.name =3D "SOCK_DGRAM autobind, duplicate bind and wildcard destinatio=
+n",
+> +		.run_client =3D test_dgram_bind,
+> +		.run_server =3D test_dgram_bind,
+> +		.check =3D vsock_dgram_check_local,
+> +		.local =3D true,
+>  	},
+
+[Severity: Low]
+Is there a missing opening brace before the first SOCK_DGRAM entry in
+test_cases[]? Without it, compiling tools/testing/vsock/vsock_test.c fails
+with a syntax error because .name is parsed at the top level of the array
+initializer and the following closing brace terminates test_cases[] early.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261028-vsock-dgra=
+m-support-v1-0-e457cf7cee78@sinrega.org?part=3D8
