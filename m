@@ -1,68 +1,64 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793190455;
-	b=JWou/smgOW6waVwCoOQnKL8gw+bPSAfjaeN9QvM/bdyr6c+xscKZ7mlUzySAXGTEjasM
-	 czUTprzKEhl3jJYcHhyOOWzvJYHOfTscC1aDVKTb2KbHWfEzWsjkFoRUut0FNPMsDClKe
-	 WLs8slW2QjglHWuOnee/Mt3w6Q3tJLHNprMRb9oSEJsT7iz1qxFjzc679AcUTwM3aGDRJ
-	 4kopj3vytfd61u+mJ+/MetU5TNKQ2Hj0NFJErpZHti04ZFmLNhzpRhTACv/rjR43XC6wZ
-	 0WLYjv2XSAirrWm/uup3sEsL7/AeaV38lvIu6GWjNQTVHoMv3ge7zn1nvKnKRjcXTVg==
+	t=1793191124;
+	b=cutJ+FDz+P/BT8XIyJFn9cD8EyBXjrqzHI8w0xM91839SnwPAa03sQ4Wzc26b2Bp65EW
+	 6UQQuJK7SetPSgo44ECd2TUq6ImCpxkNchsuXmy7D/oE5TqBewSVjGlFtEm4vpObToUBN
+	 QFsQNLb1kkn073Jhlq92qsNcmmiyxYo0XqlE2Yf8dgpCqh7AfSybd4qkzShSPshYx99Mg
+	 uOBJP8UhY0iq8J478sxgLFVNLgIFg5m/4js/MVVbwqwOSjOhX/LIAiE1fUdVrNoj2ji0Y
+	 PtGjuLsd/C8bx2QK28wJYEmUfz6RWFsIKNhPnbDEUpUXVJOcVL8Ow0C/92y1sbuT+0A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793190455;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=t7edQ3ltItCPYjYCnj5IiHPcFRQNK/7PckbU6OeRwMI=;
-	b=uS3x8sU1hpiCacv9c8xLhOgRSaKpqcW/gR9KGKX6Mh6oYUJ2H8yhdg3kBqgWQz8C6XNo
-	 3qrISpvheCDN/fUYPEKQL3DKBW1/Zy/MNRg9og0AFj7OnDCHz00GIleBsl8m6FC+TteIm
-	 x1orswYY7OezwYtCHDtXSy43d0sEtSgPpGFkFG+0lzIHvxGNThN6RuRmwAsqZK4Qykb5a
-	 l6HZQNjs2rI5E5LjYYOg17dXUMhLSNWA52Wx5BSQ5sPpYbIhPoNrk6eu1LQi7uoLo9QF+
-	 Y5BM2xYFOeekbYjoQWMMA8Y0gMvRLiLGnTFBCGxc1s1nbFy57cEz4/wMW0xwenjc6aw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793191124;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Virus-Scanned;
+	bh=Y35jB/7Gsfr5AxAtB06a5rjbDLtINtAQhefmyIZOHpI=;
+	b=nQy1cWyCfI39qUcNL1LeCfIxGcihHzs4a+bHEEAFEyIBm/h0WGWFqviC7FmBw0VUJxx4
+	 9QmnYzCXMRytK4VjXA2td2MMi3q1vl5jNWhAK/BixmVFGtIrNPGqJfwY9japn849Yfv5j
+	 nR6DhUnvrqrAsGLMSSrbAqsdw/Tgp+8JPyOLAImHFOL8rDC0SsiinO+A1mZ2P3JJUEmpv
+	 6N/cO95A2zsUAZY1+3UGd4lPKgoy3/hSN8fJ/WuGBw8l+lEpNFaoGfA98dptsIhQ5kAtK
+	 Yqx50xUNwIC19PDaq5vVyI9sli5gjl87yD0CKNmnIWrbuJbbQnU8tv04WRvizVRzesw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E4xHTJ2g;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=iogearbox.net;
+	spf=pass smtp.mailfrom=iogearbox.net;
+	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=Y1cDorAS;
+	arc=none smtp.remote-ip=213.133.104.62
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2F6606A31A;
-	Wed, 28 Oct 2026 12:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EBC606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 12:38:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1EBC606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=E4xHTJ2g
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABEDC1F01825;
-	Wed, 28 Oct 2026 12:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793190455;
-	bh=t7edQ3ltItCPYjYCnj5IiHPcFRQNK/7PckbU6OeRwMI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=E4xHTJ2gx+6IKj4UyCiEiHht/rD3Q08gG8KYWKkaQ+DwO9b5QWba6NgdZry9ETOhD
-	 LJeinzZKPOzwQmSWWUW/yTQz6PBRn9e9ePKyz1pP+b9Ui1CUDl38EJWxMA0W99gtQP
-	 +Jx7p0iINVAK2Ef0201TuM3WJmgt8NpoeZqk+zfIDfqmv7a/zWX481noF3iNP62nA7
-	 xvXwCUY00EUi84F7lNGRzZH2znH1IF1rDWlQ0kSxD8jG8Asnrm9dVpgFYb5nmAKLoB
-	 XIrE0L5TIGwBkihofnjgxcg09Iu7GsK+vafEBG3kU+LtunIsJPOZ7sAf+T9I/XVWeM
-	 VOvpAD+WJPaQg==
-From: Eric Dumazet <edumazet@kernel.org>
-To: "David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Willem de Bruijn <willemb@google.com>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Eric Dumazet <edumazet@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Aaron Conole <aconole@redhat.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Ilya Maximets <i.maximets@ovn.org>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	dev@openvswitch.org,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Ren Wei <weir@nebusec.ai>
-Subject: [PATCH net v2 4/5] openvswitch: use eth_type_trans_careful() in internal_dev_recv()
-Date: Wed, 28 Oct 2026 13:27:02 +0100
-Message-ID: <20261028122703.2093730-5-edumazet@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261028122703.2093730-1-edumazet@kernel.org>
-References: <20261028122703.2093730-1-edumazet@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=Y1cDorAS
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Y35jB/7Gsfr5AxAtB06a5rjbDLtINtAQhefmyIZOHpI=; b=Y1cDorAS1kbemFHldYdME6k6R/
+	884KGZE2yNx34Nzt5E2bbSHDrfK1FG3QfhbeweGAliXrCovYDTou46q428K/RGhbq6bI8e8QvO7Gi
+	VUSLuW3mHRtQuq9V7fAuf9NyMrMsrgK22UQ0+ra/tGOkUSKPvS1GV2I6eLg0wKoH3bCDKRyATTE7O
+	VBEwXq4TSMO7HK3lLS0/nmnp4vg0uDI4fePTfcIRB2rM1WyGEpuAfWFUcTn17ZXBhTwDfYwWjG2J5
+	RVVp3BRo27m1LcMTgW0LDl9H+zNKEiL3uovAGQh/nD8Bg2JRPbe/WSTg81Xr/BzSqkukV7Dd/aneX
+	7MC/MiPA==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xM2vG-0006EW-0m;
+	Wed, 28 Oct 2026 13:38:30 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1xM2vF-0009rL-1S;
+	Wed, 28 Oct 2026 13:38:29 +0100
+Message-ID: <d06830ab-7858-43fa-bbcb-aeab92a3e042@iogearbox.net>
+Date: Wed, 28 Oct 2026 13:38:28 +0100
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,69 +68,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 21/21] selftests/bpf: Extend the JIT instruction
+ tests for arm64 encodings
+To: bot+bpf-ci@kernel.org, puranjay@kernel.org
+Cc: memxor@gmail.com, ast@kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20261027182445.1156335-22-daniel@iogearbox.net>
+ <9832ca99bb2aed8262e1986075a6bab1b7c84ebc69ef5cc3a73bb63da06e4306@mail.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+In-Reply-To: <9832ca99bb2aed8262e1986075a6bab1b7c84ebc69ef5cc3a73bb63da06e4306@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.6/28167/Wed Oct 28 07:24:17 2026)
 
-OVS actions like pop_eth followed by pop_mpls(ETH_P_TEB) or pop_nsh
-can expose an inner Ethernet header which is not in the linear part
-of the skb. Output to an internal port then crashes in eth_type_trans():
+On 10/27/26 8:08 PM, bot+bpf-ci@kernel.org wrote:
+>> selftests/bpf: Extend the JIT instruction tests for arm64 encodings
+> 
+> TL;DR: Nit only, not a bug: the hand-packed INSN()/ATOMIC() macros for
+> load-acquire/store-release in jit_insns_arena.c could use struct bpf_insn with
+> __imm_insn(), dropping the byte-order variants.
+This and the other suggestions look good, I'll implement them and spin a v2.
 
-  flow: in_port(0),eth(),eth_type(0x8847),mpls(lse=0x00010140)
-  actions: pop_eth,pop_mpls(0x6558),0
-  # AF_PACKET SOCK_RAW on dp0: eth / mpls / eth / 4096 bytes of payload
-
-  kernel BUG at include/linux/skbuff.h:2839!
-  RIP: 0010:eth_type_trans (include/linux/etherdevice.h:635 net/ethernet/eth.c:163)
-  Call Trace:
-   internal_dev_recv (net/openvswitch/vport-internal_dev.c:202) openvswitch
-   do_execute_actions (net/openvswitch/actions.c:1296) openvswitch
-   ovs_execute_actions (net/openvswitch/actions.c:1606) openvswitch
-   ovs_dp_process_packet (net/openvswitch/datapath.c:310) openvswitch
-   ovs_vport_receive (net/openvswitch/vport.c:448) openvswitch
-   internal_dev_xmit (net/openvswitch/vport-internal_dev.c:42) openvswitch
-   dev_hard_start_xmit (include/linux/netdevice.h:5455 include/linux/netdevice.h:5464 net/core/dev.c:4057 net/core/dev.c:4073)
-   __dev_queue_xmit (net/core/dev.c:5066)
-   packet_sendmsg (net/packet/af_packet.c:3157 net/packet/af_packet.c:3189)
-
-Use eth_type_trans_careful(), and drop the packet if the Ethernet
-header can not be pulled. This covers all OVS actions at the consumer,
-instead of fixing each producer.
-
-Fixes: b2d0f5d5dc53 ("openvswitch: enable NSH support")
-Fixes: f66b53fdbb22 ("openvswitch: New MPLS actions for layer 2 tunnelling")
-Signed-off-by: Eric Dumazet <edumazet@kernel.org>
-Reviewed-by: Aaron Conole <aconole@redhat.com>
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Tested-by: Jamal Hadi Salim <jhs@mojatatu.com>
----
- net/openvswitch/vport-internal_dev.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/net/openvswitch/vport-internal_dev.c b/net/openvswitch/vport-internal_dev.c
-index 77a16d5ebd54343c80a2def261aadcb8ff0d1274..8f035087f0eec80eddf6b493cf5ba7915a3e01c6 100644
---- a/net/openvswitch/vport-internal_dev.c
-+++ b/net/openvswitch/vport-internal_dev.c
-@@ -188,6 +188,7 @@ static void internal_dev_destroy(struct vport *vport)
- static int internal_dev_recv(struct sk_buff *skb)
- {
- 	struct net_device *netdev = skb->dev;
-+	enum skb_drop_reason reason;
- 
- 	if (unlikely(!(netdev->flags & IFF_UP))) {
- 		kfree_skb(skb);
-@@ -199,7 +200,12 @@ static int internal_dev_recv(struct sk_buff *skb)
- 	nf_reset_ct(skb);
- 
- 	skb->pkt_type = PACKET_HOST;
--	skb->protocol = eth_type_trans(skb, netdev);
-+	reason = eth_type_trans_careful(skb, netdev);
-+	if (unlikely(reason)) {
-+		dev_core_stats_rx_dropped_inc(netdev);
-+		kfree_skb_reason(skb, reason);
-+		return NETDEV_TX_OK;
-+	}
- 	skb_postpull_rcsum(skb, eth_hdr(skb), ETH_HLEN);
- 	dev_sw_netstats_rx_add(netdev, skb->len);
- 
--- 
-2.53.0
-
+Thanks,
+Daniel
