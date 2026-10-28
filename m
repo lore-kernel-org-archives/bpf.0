@@ -1,67 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.30
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793191925;
-	b=iN2foC6YWJE4GmGcEyt1fdJraDTi93J36AyB7tR9ekD7rn/4Uyew7YHPZ2C8FvsFeMdM
-	 Nk68rv7RcPXLB/KgDr6akLCU0kp+MIxK+/TX4CFdu4GyjPUUfykODOnw9QFmHfTNDpWKY
-	 XV18rOUliL8rL/AE6OusWh2TFhw29fWjXS29m1gr4r21rnw3sSsTpkJFT5FuPtUguQuAW
-	 MYlfcEEgMLSpCzw+a2A3NT3+mnXU94mJfBu0b4xfWcyIsh2HAaE7y1Io920+u9E4xE2Px
-	 KXNKC5wEcXKZSiI7E+p7yWf6KcSX+/l/wJ6cFUigqc3beEPsumh+hd2XcJZpnH04sfQ==
+	t=1793192267;
+	b=B+2WccIO/R1pDwteDtys9L1ACkLKg+ddZ27T9PMW3Ydd630ed2yw1hIkaDijhyvJixDP
+	 Rg/fT8C7Vyv1/m8M/BAPLsWlmvRN3PZXV9aAkNi51NgyXXNFRc/Gs+rZHB41LXxvkcCwd
+	 wwVNKteTQEKmRCvyKh7hSUFpjxAAnTn0YEmMZkqTUoMGV88xQZhKNbiAG7ZA2R+GWKT/6
+	 B0rNXJ3uJHIRvvwADw9e0BG+r0C6WBgkfsVyqjZLwnbk9tOvthV3oiID0S2f4ovNBp865
+	 N8RePltVhfPPE2aKNgiu2pDkn+SRHJyn7yeQPGRlVfb/ehN+QQ72nTxWnNdUBrsmSaQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793191925;
-	h=DMARC-Filter:DKIM-Signature:Message-Id:Content-Type:Subject:
-	 X-Original-From:Cc:Content-Transfer-Encoding:X-Mailer:References:
-	 In-Reply-To:Received:To:From:Date:Mime-Version:X-Lms-Return-Path;
-	bh=ruJcFMq+T+PYshOYgwUo5k4oqvbhd5wL7JLOkO0njoo=;
-	b=TtCuJRfBvKZdT98xjj5r04/DIXOBLhvAL7uYScFFdXPpKXleuNki5uMf+3onEFj6crHY
-	 SE9cehBTtHRY1gR2lTdxkWcqWwUkv/2VH1uzoU1NHc6t5BEDYTYvgc+/rgtc9te/8D3gB
-	 4+IDS47dgVzZHgC3roXxgwURmmfGpHCoDmbQ1YjhaPOxV66b27wQQI2Tsm09YwIGZwoJz
-	 hHXPIOFnXWTHIo1+qevrK4/y6fvI8xLEH/UcNSoIj7vOIPK9Sf/w+Ok+Y4aR0iP+s10bn
-	 O49bB11GSh1gC5LmGuj62bsWjJXy/UI82DiHXmFoNqUj89PRCb3UCxMuznTyXzPXh4w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793192267;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=HUM8sXQdO7ct4Idv1B7IM4lRnALIhIQ2wSPtdzHuJ28=;
+	b=hQQKP533A+rJgKXxcgAJ4L3AZpVV96qNgr+a1cNeoAwp9Zr/Xx/h3FqpIMS56Sdd1Z94
+	 8MLlIU5ciO03q0cWr91AggDuzt6nz1y80jtWXZRFNHKXCcGclA5V0151IWvnyeGTw+krE
+	 b0I4VQXOGWnw2cdvjVidcXx7LvCtofG9bRpGhEViYgkjhV+2tbi2HOZ53azuckziRhx0U
+	 22gTYwssigQoBhBEvhE90u76CI/WDo8Qp0wwR2R6yTTolH37ormzVMxjYY2G9Lzus/Gv2
+	 u08petdHDuwZCGjBZYf568Bm0PjeXO8K3ap6l+E4fz7Z93ctMilYsueC6OJuxwgPxgQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=insta360.com;
-	spf=pass smtp.mailfrom=insta360.com;
-	dkim=pass header.d=insta360.com header.i=@insta360.com header.a=rsa-sha256 header.s=feishu2606151854 header.b=q2WpuNEn;
-	arc=none smtp.remote-ip=209.127.231.30
-Received: from va-2-30.ptr.blmpb.com (va-2-30.ptr.blmpb.com [209.127.231.30])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GMPlekMB;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F69D606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 12:52:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F69D606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=insta360.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=insta360.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4B9606A31A;
+	Wed, 28 Oct 2026 12:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=insta360.com header.i=@insta360.com header.a=rsa-sha256 header.s=feishu2606151854 header.b=q2WpuNEn
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=feishu2606151854; d=insta360.com; t=1793191917; h=from:subject:
- mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
- mime-version:in-reply-to:message-id;
- bh=ruJcFMq+T+PYshOYgwUo5k4oqvbhd5wL7JLOkO0njoo=;
- b=q2WpuNEnardC3QCL0XlIgUTNG849iFNdxmtXxDCnkbehfuy6pzCMr+l/asWPKvhvdcTN+o
- /2xQOuIcOC+Vkp2bjqVy2OsE/YCKYVBOBDFO0bC5o9zFOPbfnsA4w8OaoS11F3tjW4o6Tw
- otJYc68qhRLqapRdTBYWAFY902QG6nhtZY2fh2xPN7M49yrSUL8hEty2JwdOKV03DRsv3U
- pkDiAg/BRwn8+mJntQstJUX+WOToWsLaOEiL88zBda/KvG4JU1o/9nfwZJPuDtjLzMf29A
- RefFgTFIc6ioaglfhzkI0qyTmihOIjlwPO8kBhls528VNMn1CqrjqcRxiA2aCQ==
-Message-Id: <20261028125148.1348-1-yangsongsen@insta360.com>
-Content-Type: text/plain; charset=UTF-8
-Subject: Re: [PATCH bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
-X-Original-From: Songsen Yang <yangsongsen@insta360.com>
-Cc: <song@kernel.org>, <jolsa@kernel.org>, <ihor.solodrai@linux.dev>, 
-	<kpsingh@kernel.org>, <matt@bobrowski.net>, <ast@kernel.org>, 
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>, 
-	<memxor@gmail.com>, <martin.lau@linux.dev>, <yonghong.song@linux.dev>, 
-	<emil@etsalapatis.com>, <rostedt@goodmis.org>, <mhiramat@kernel.org>, 
-	<mathieu.desnoyers@efficios.com>, <bpf@vger.kernel.org>, 
-	<linux-trace-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 7bit
-X-Mailer: git-send-email 2.53.0.windows.2
-References: <20261028093548.790977-1-yangfeng59949@163.com>
-In-Reply-To: <20261028093548.790977-1-yangfeng59949@163.com>
-Received: from DT-9806 ([61.241.19.90]) by smtp.feishu.cn with ESMTPS; Wed, 28 Oct 2026 20:51:54 +0800
-To: "Feng Yang" <yangfeng59949@163.com>
-From: "Songsen Yang" <yangsongsen@insta360.com>
-Date: Wed, 28 Oct 2026 20:51:47 +0800
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GMPlekMB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDE01F01825;
+	Wed, 28 Oct 2026 12:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793192267;
+	bh=HUM8sXQdO7ct4Idv1B7IM4lRnALIhIQ2wSPtdzHuJ28=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=GMPlekMBzDJfFhFnZ7ijAVGh64wncgseUdJ5kCVSYiWXGKkQPoi82lyQC9zENv25/
+	 h8LVmqr5cgaEWmbKBtZGc6I7F78DmQdNlrOP11tnG1BW5W+ewbLuJRHpVogmSZlwWT
+	 ImSD5HMofBACYkTYf5TvDmcraocK55BGzRUMrnhvcg7tK/EWkOLDAuUvOQbLWlWEqu
+	 /cG1kzLAODwg2zB5fFs5PxZJRq5JZ8UUlgn+b8/8w1EzQLItZV94g/PSECi0b9GEoG
+	 Cd4P0wB2BBSZamSygLrWYSMI+2oz1Amk5lnFHeD0HTYc6i1XEqwN4/1mbWWQcOIg46
+	 9e69PMZXfmIWg==
+Content-Type: multipart/mixed; boundary="===============5912671814999648148=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -70,50 +48,177 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-X-Lms-Return-Path: <lba+26ae1efeb+57b5aa+vger.kernel.org+yangsongsen@insta360.com>
+MIME-Version: 1.0
+Message-Id: <2775a286c1858223177c92a3bcf151e59f7cadec170a1bb3d4029f731935a68d@mail.kernel.org>
+In-Reply-To: <20261028121859.994-1-yangsongsen@insta360.com>
+References: <20261028121859.994-1-yangsongsen@insta360.com>
+Subject: Re: [PATCH bpf] bpf: Always hold RCU read lock around perf callchain in __bpf_get_stack()
+From: bot+bpf-ci@kernel.org
+To: yangsongsen@insta360.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,emil@etsalapatis.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 28 Oct 2026 12:57:46 +0000 (UTC)
 
-On Wed, Oct 28, 2026 at 05:35:48PM +0800, Feng Yang wrote:
-> Sleepable BPF programs run under rcu_read_lock_trace(), not classic RCU.
-> bpf_get_stack() relies on the caller holding a classic RCU read lock:
-> get_perf_callchain() -> get_callchain_entry() dereferences
-> callchain_cpus_entries, and the returned entry is read until
-> callchain_store().  __bpf_get_stack() takes that lock only for the
-> sleepable variant, i.e. when may_fault is true.
+--===============5912671814999648148==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Hi Feng,
+> bpf: Always hold RCU read lock around perf callchain in __bpf_get_stack()
 
-I hit the same root cause independently via syzbot and sent a fix a
-few hours after yours, without having seen this patch -- sorry for the
-overlap:
+TL;DR:
+- Commit message only: other sleepable program types may also hit this, not
+  just syscall programs
+- Fixes: tag may need to point to 1e6c62a88215
+- Changelog overstates the impact; it looks like only a lockdep warning, not a
+  buffer lifetime problem
 
-  https://lore.kernel.org/bpf/20261028121859.994-1-yangsongsen@insta360.com/
+> bpf: Always hold RCU read lock around perf callchain in __bpf_get_stack()
+>
+> __bpf_get_stack() only takes rcu_read_lock() around get_perf_callchain()
+> when may_fault is true, assuming that non-faultable callers already run
+> inside an RCU read-side critical section.
+>
+> That assumption does not hold for BPF_PROG_TYPE_SYSCALL programs. They
+> are always sleepable and bpf_prog_test_run_syscall() only holds
+> rcu_read_lock_trace() while running them, yet through
+> tracing_prog_func_proto() they are given the non-sleepable
+> bpf_get_stack_raw_tp() helper, which calls __bpf_get_stack() with
+> may_fault == false. get_callchain_entry() then does
+> rcu_dereference(callchain_cpus_entries) without rcu_read_lock() held,
+> and lockdep complains:
+>
+>   WARNING: suspicious RCU usage
+>   kernel/events/callchain.c:163 suspicious rcu_dereference_check() usage!
+>   1 lock held by repro:
+>    #0: (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: bpf_prog_test_run_syscall
+>   Call Trace:
+>    lockdep_rcu_suspicious
+>    get_callchain_entry
+>    get_perf_callchain
+>    __bpf_get_stack
+>    bpf_get_stack_raw_tp
+>    bpf_prog_test_run_syscall
+>    __sys_bpf
+>
+> The callchain buffers are freed with call_rcu(), and an RCU Tasks Trace
+> read-side section does not imply a normal RCU read-side section, so
+> holding rcu_read_lock_trace() alone is not what get_callchain_entry()
+> expects.
+>
+> Take rcu_read_lock() unconditionally. Nesting it inside an existing RCU
+> read-side critical section is cheap and harmless, as suggested by Andrii
+> in an earlier discussion.
+>
+> bpf_get_stackid() is not affected: sleepable programs cannot use
+> BPF_MAP_TYPE_STACK_TRACE maps, so syscall programs cannot reach it.
+>
+> Testing: on top of bpf/master at commit c8a8a68d3ab4 ("bpf: Don't re-sort
+> subprog_info[] for every new subprogram"), x86_64 under QEMU TCG with
+> CONFIG_PROVE_RCU=y (syzbot config with KASAN/KCOV/modules disabled), the
+> syzbot C reproducer
+> triggers the splat above without this patch and does not with it. A
+> minimal BPF_PROG_TYPE_SYSCALL program calling bpf_get_stack() was also
+> run via BPF_PROG_TEST_RUN: it warns before, and returns 0 without a
+> warning after. BPF selftests were not run.
 
-It also covers the syzbot report for BPF_PROG_TYPE_SYSCALL programs
-(always sleepable, run via bpf_prog_test_run_syscall() under
-rcu_read_lock_trace() only), which reach bpf_get_stack_raw_tp() through
-tracing_prog_func_proto():
+[ ... ]
 
-  https://syzkaller.appspot.com/bug?extid=72a43cdb78469f7fbad1
+> Fixes: 79a7f8bdb159 ("bpf: Introduce bpf_sys_bpf() helper and program type.")
+> Reported-by: syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=72a43cdb78469f7fbad1
+> Link: https://lore.kernel.org/all/CAEf4BzYN33yQhO-tsF8pUWDMZoiLAXkV+Z1oP6fJkByocYcjpw@mail.gmail.com/
+> Signed-off-by: Songsen Yang <yangsongsen@insta360.com>
 
-The approach is different: instead of routing sleepable programs to new
-sleepable protos, it simply takes rcu_read_lock() unconditionally in
-__bpf_get_stack() around get_perf_callchain()/callchain_store(), as
-Andrii suggested earlier that an extra nested rcu_read_lock() is
-harmless:
+The changelog says "That assumption does not hold for
+BPF_PROG_TYPE_SYSCALL programs".  Are syscall programs the only ones
+affected?
 
-  https://lore.kernel.org/all/CAEf4BzYN33yQhO-tsF8pUWDMZoiLAXkV+Z1oP6fJkByocYcjpw@mail.gmail.com/
+For BPF_FUNC_get_stack, tracing_prog_func_proto() falls through to
+raw_tp_prog_func_proto(), which returns the non-faultable proto whatever
+prog->sleepable is:
 
-That is a 3+/6- change in kernel/bpf/stackmap.c, it covers every caller
-of __bpf_get_stack() (including the tracepoint, raw_tp, iter and syscall
-cases listed above), and since no helper gains might_sleep it does not
-hold the per-CPU bpf_raw_tp_regs slot across a possible sleep in
-callchain_finalize(), which is the issue the Sashiko review raised here.
+kernel/trace/bpf_trace.c:raw_tp_prog_func_proto() {
+    ...
+    case BPF_FUNC_get_stack:
+        return &bpf_get_stack_proto_raw_tp;
+    ...
+}
 
-It does not do what your patch additionally does, i.e. allow
-BPF_F_USER_BUILD_ID to fault in build IDs from these program types.
+Only kprobe_prog_func_proto() switches to bpf_get_stack_sleepable_proto.
+So the same path looks reachable from other contexts that hold only
+rcu_read_lock_trace() or rcu_read_lock_tasks_trace():
 
-I'm happy to go with whichever the maintainers prefer, or to drop mine.
+  - sleepable fentry/fexit/fmod_ret/iter programs, which enter through
+    __bpf_prog_enter_sleepable() (rcu_read_lock_trace() plus
+    migrate_disable())
+  - sleepable LSM programs, since bpf_lsm_func_proto() also defaults to
+    tracing_prog_func_proto()
+  - sleepable raw tracepoint programs, through __bpf_trace_run()
+    (rcu_read_lock_tasks_trace() plus migrate_disable())
+  - sleepable tracepoint programs, through trace_call_bpf_faultable()
+    and bpf_get_stack_tp()
+  - bpf_wq callbacks, through bpf_wq_work(), which holds only
+    rcu_read_lock_trace()
 
-Thanks,
-Songsen
+Could the changelog mention these, with syscall programs as the example
+that reproduces it?  The same applies to the bpf_get_stackid() paragraph,
+which holds for all sleepable programs because map_needs_no_rcu() does not
+list BPF_MAP_TYPE_STACK_TRACE.
+
+On the Fixes: tag, 79a7f8bdb159 ("bpf: Introduce bpf_sys_bpf() helper and
+program type.") is the first commit where syscall programs reach this path,
+but the broken assumption is older.  At 1e6c62a88215 ("bpf: Introduce
+sleepable BPF programs"), __bpf_prog_enter_sleepable() was just
+rcu_read_lock_trace(), and sleepable fentry/fexit/fmod_ret and LSM programs
+could already reach bpf_get_stack_proto_raw_tp through
+tracing_prog_func_proto().  get_callchain_entry() was already using
+rcu_dereference() then.  The rcu_read_lock_trace() in
+bpf_prog_test_run_syscall() came later, from 87b7b5335e69 ("bpf: Add
+missing bpf_read_[un]lock_trace() for syscall program").
+
+Should the Fixes: tag point to (or also include) 1e6c62a88215 ("bpf:
+Introduce sleepable BPF programs")?  With only the current tag, stable
+tooling would leave out v5.10.y through v5.13.y, which have sleepable
+tracing and LSM programs but no syscall programs.
+
+The changelog also says "The callchain buffers are freed with call_rcu(),
+and an RCU Tasks Trace read-side section does not imply a normal RCU
+read-side section, so holding rcu_read_lock_trace() alone is not what
+get_callchain_entry() expects."  Is this an accurate description of the
+exposure?
+
+__bpf_get_stack() already calls preempt_disable() before
+get_perf_callchain().  The changelog of b1a47b2708d4 ("bpf: Disable
+preemption in __bpf_get_stack") says:
+
+    preempt_disable() also subsumes the buffer-lifetime guarantee the
+    rcu_read_lock() provided, since a preempt-disabled section is an RCU
+    read-side critical section for the callchain buffers' call_rcu()
+    reclaim.
+
+In addition, a program that calls bpf_get_stack() holds a callchain buffer
+reference for its lifetime:
+
+check_helper_call()
+    get_callchain_buffers()
+    env->prog->has_callchain_buf = true;
+
+__bpf_prog_put_noref()
+    if (aux->prog->has_callchain_buf)
+        put_callchain_buffers();
+
+so release_callchain_buffers() and its call_rcu() should not run while the
+program is executing.
+
+If that is right, the problem here is the rcu_dereference() check in
+get_callchain_entry() not seeing rcu_read_lock_held(), and not a buffer
+lifetime problem.  Could the changelog say that the impact is a lockdep
+warning?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40688373762
+--===============5912671814999648148==--
