@@ -1,56 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793150446;
-	b=rs5WrKbl3zloZ2yVTeWfbslbKxbdpKAvF3of5py5gChREb+9ZlTTTlUoYyb5b2lg/lhw
-	 mMRo6tAgsJUT+AsTockyspxk/Uq/AD7sQuraMRX3Dvsu9pP69mmXoQX7mNwhJL3AY/pHU
-	 IFbF2bou53JMQXj0KAjRlxoptNJxAljYKp0x2nJ2iYyz69YF3AdxpIwfQvCSBE6rhzIzx
-	 7KABEz1asCEVmIYJEUQZlQ/2fzye4OIaRmVvhkKBuYn+HhlUPtClyZWUVKj7XXAxfCgIa
-	 N/T3VEH9p0coRB00q68KujsX9ADLXTXNgM7TlMT1MP77N8w92g+soKi2wVVZHCl4DTw==
+	t=1793150482;
+	b=XLvcfUiPJ/ixSpfy2ocdB7J0Sii/7ajxb3r6+2r33xeIT6ahVJ3U0fDS9S9nr6qsE0Y5
+	 R+E0r6CMOkIbV3mZVjK+xcGRcFnz1rqi+j5XzFKHIxA/bPEqSlWqA4edWz9AYx52B/gCW
+	 RZmEhJBtnWLU716hE7A8rnzOpD3oAGxiXKZ1xcPmlo4WpbwmGsKulU2LnE0pZy3kx35Vx
+	 zHlF9jP/tBXaeWrqCRigeVxqddagu5mr2BzaMeV4mfoURqs7AMVfklwDDbbNHFQlB1pHd
+	 8BuUSKG9KFeQsvyGzTq/ZjnV8TTDBha5nVjJGPmBbUjOvmKwoR41OQ6KszqKX2C9Q8Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793150446;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793150482;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=WV+xq2EwzkT02SwUBZq/db/O91jZ3MxXqXM8UCtU/sU=;
-	b=aRy6XqE3oLFy4Uxfqid1telHMSeGdTLO1u1USmPzcRP+ibIHsHXtqFtsSk3l+UpSbU6z
-	 j9hF+K8blB343dajxxUE9JIAN7sxUv/vRRZ+0Ltjf/OYKZ8MYW3whwhvXWjx72h/vCPxi
-	 yzuMMYkwo3nYbozRA7eWLGy0wnYBwPd8Z6c/g8lY1kzHDIXvsQJSiCWSwGDR9Iqr+zggU
-	 +FT0MMXVa9xF+op+JysdnrNFKai8uYBJlscq3uIuQPh6Dg38Fps5D/hGCCf0Q5qfBRc7t
-	 +SjFhFZGH3c9Eru4LJlfVpGDNPsVOZL2mB4ZG0DRIfeCZ7ynKdTmyxxTSeReVvsiS4g==
+	bh=5fX7iPaxo8W+0QMR0uNLxxMcUdE3O6fpqck33aW7dPA=;
+	b=JVB3KwgvdY1igWT6IYKPVvZOWSYnxQcF132b08GzngE12rkOtXa5o/VScUhPiRZbakuL
+	 ehsnW/hW/U+kEc4FkF8DxFF1gfaCxLTPkaSrFKBDBxEWfPAsKmoq+bJ3nij3GKHz2EKiz
+	 XkqTZjNMZRaeBg7d4+W0RDW6LBbmIPXt0nP/AgzbdxpwWS7U7NSaL0zmYcCKV52Nd+Xp+
+	 uuY2qt9m471PfCXK8jJvZGTCEcj3dPnpMgpwRziTUKPM/N4VYw/0bmXJBelLt1FbsU62o
+	 SkTv3NDKHlVwHhI7g2wj88WvICRaEK0ptreU0eSHLu1StXUp62x7Hj/uv8UhfOlaFsQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mWMMkuwf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dh1Ei0Xc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9342606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0CE606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=mWMMkuwf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59C6B1F01825;
-	Wed, 28 Oct 2026 01:20:45 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dh1Ei0Xc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9EE51F01825;
+	Wed, 28 Oct 2026 01:21:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793150445;
-	bh=WV+xq2EwzkT02SwUBZq/db/O91jZ3MxXqXM8UCtU/sU=;
+	s=k20260515; t=1793150482;
+	bh=5fX7iPaxo8W+0QMR0uNLxxMcUdE3O6fpqck33aW7dPA=;
 	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
-	b=mWMMkuwfLLxpiVuCyPBJFFpn6bB8g3+XRN8TQqZn+DE07DK9MlOxoC/wtnCb3RW9E
-	 pUgvLG/I64xtKo1wTwQENenzvj7F4ZraJVeo0HbtaBtBggCLsb9vQw6p2P3UWc+Sik
-	 WcnI2ZHsQA30n7sE2Ux0y+jtgNuNDYhdSr7dxaz1b23kRWEhy+q819Y+h3U47cWhpJ
-	 TPx68spCeqvsKw5a8KV45QxCM7FElsSikI+rPPFsogCt1qoQKlqdHdoAxW6zOg3Re8
-	 hVdg4jxf1LEHFZvv1++uYF4AvdSNGg9o9mGq5u+zDIxgzV/6bycwEYRGguMxSsRRMc
-	 0VRULl9qN9YXg==
-Message-ID: <sashiko-outbox-187312@kernel.org>
+	b=dh1Ei0Xcpv03VIoVhPqucRGSuYpG9uuQy9nwInrrjcrQdqiOO11foD7nBDpbAmnpC
+	 YHopwaewcQig7eYk4OlQuWZ43ZZdZGqfrnjhPPyL+nf6UY+89qbk8Ghp0p5OytkpS2
+	 +Jcg4F2oc6zCfXVEZF12gPuUzRVwu3uYu7kx9faOXs9vYlbOSNQ/Po1PpfvpNXkpVF
+	 qTznzfCQksO2ew5J3gD/ClHOU7JPP64YM3+dvOg4MiqOMHwfn5a7bLPeCR40lGm4dy
+	 nwgGXbVnykjHUTvDtHqPiX4TAFFzi9EAcAk+6qcgz4rFEd3W9qS66lGvOuDLSh9Cps
+	 HEmvk1dAra9BQ==
+Message-ID: <sashiko-outbox-187313@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 01/11] bpf: Give a helper a way to call
- its callback with a pad
+Subject: Re: [RFC PATCH bpf-next v1 09/11] bpf: Let the comparator of
+ bpf_rbtree_add unwind
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf@vger.kernel.org
-In-Reply-To: <03d6c53ccdf3eb0f5503eae9f9ffa5e6570549c3.1793147364.git.memxor@gmail.com>
+In-Reply-To: <d81d996f09e0fd0b07816dcd0541f39c0f451a23.1793147364.git.memxor@gmail.com>
 References: <cover.1793147364.git.memxor@gmail.com>
- <03d6c53ccdf3eb0f5503eae9f9ffa5e6570549c3.1793147364.git.memxor@gmail.com>
+ <d81d996f09e0fd0b07816dcd0541f39c0f451a23.1793147364.git.memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 28 Oct 2026 01:20:44 +0000
+Date: Wed, 28 Oct 2026 01:21:21 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -62,216 +62,196 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: clobber of local register variables during arg evaluation in =
-__bpf_call_cb()
-- [High] bpf: dead-store elimination of return address write in bpf_unwind_=
-leave()
+- [Critical] bpf: clobbered R2 on bpf_rbtree_add() callback unwind causes U=
+AF
+- [High] bpf: __bpf_rbtree_add() leaves node->owner poisoned on comparator =
+unwind
 --
 
-commit d437def6fc298113c802447cf3c5d5281b1f3dd3
+commit 55e1518aab2a62c50b8098afe20794d027a69689
 Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-bpf: Give a helper a way to call its callback with a pad
+bpf: Let the comparator of bpf_rbtree_add unwind
 
-This commit introduces bpf_call_cb() and bpf_unwind_leave() in
-include/linux/bpf_unwind.h, along with bpf_unwind_target() in the x86-64
-and arm64 JITs, so C helpers invoking BPF callbacks can catch callback
-unwinds via an EX_TYPE_BPF exception table entry and redirect their own
-return address to the caller's unwind pad.
+This commit allows the comparator callback of bpf_rbtree_add() and
+bpf_rbtree_add_impl() to unwind via unwind_exit. When the comparator
+unwinds, the kfunc drops the uninserted node before leaving to the landing
+pad, and the verifier invalidates non-owning references and releases the
+caller's owning reference on revisit.
 
-> diff --git a/include/linux/bpf_unwind.h b/include/linux/bpf_unwind.h
-> new file mode 100644
-> index 0000000000000..190d6dbae8568
-> --- /dev/null
-> +++ b/include/linux/bpf_unwind.h
-> @@ -0,0 +1,282 @@
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 648abe1ba63ae..f8708b7181d72 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
 [ ... ]
 
-> +#define __bpf_call_cb(type, fn, a1, a2, a3, a4, a5, r0, unwound)		\
-> +do {										\
-> +	register u64 __fn asm("r11") =3D (u64)(long)(fn);				\
-> +	register u64 __a5 asm("r8") =3D (u64)(long)(a5);				\
-> +	register u64 __c5 asm("r8");						\
-> +	register u64 __c11 asm("r11");						\
-> +	u64 __c1, __c2, __c3, __c4;						\
-> +										\
-> +	asm_goto_output(BPF_KCFI_CHECK(type)					\
-> +		 "	" CALL_NOSPEC "\n"					\
-> +		 "1:\n"								\
-> +		 _ASM_EXTABLE_TYPE(1b, %l[unwound], EX_TYPE_BPF)		\
-> +		 : "=3Da"(r0), "=3DD"(__c1), "=3DS"(__c2), "=3Dd"(__c3), "=3Dc"(__c4),=
-	\
-> +		   "=3Dr"(__c5), "=3Dr"(__c11)					\
-> +		 : [thunk_target] "r"(__fn), "D"((u64)(long)(a1)),		\
-> +		   "S"((u64)(long)(a2)), "d"((u64)(long)(a3)),			\
-> +		   "c"((u64)(long)(a4)), "r"(__a5)				\
-> +		 : "r9", "r10", "memory", "cc"					\
-> +		 : unwound);							\
-> +} while (0)
+> @@ -2784,7 +2788,8 @@ static int __bpf_rbtree_add(struct bpf_rb_root *roo=
+t,
+> =20
+>  	while (*link) {
+>  		parent =3D *link;
+> -		if (cb((uintptr_t)node, (uintptr_t)parent, 0, 0, 0)) {
+> +		bpf_call_cb(cb, node, parent, 0, 0, 0, r0, unwound);
+> +		if (r0) {
+>  			link =3D &parent->rb_left;
+>  		} else {
+>  			link =3D &parent->rb_right;
+> @@ -2796,6 +2801,15 @@ static int __bpf_rbtree_add(struct bpf_rb_root *ro=
+ot,
+>  	rb_insert_color_cached(n, (struct rb_root_cached *)root, leftmost);
+>  	WRITE_ONCE(node->owner, root);
+>  	return 0;
 > +
-> +/*
-> + * The return address of the helper is the word below its canonical frame
-> + * address. The pad is in the frame that BPF code called, see above, so =
-there is
-> + * a pad to go to: a miss is a bug, and the exception would be lost in a=
- return.
-> + */
-> +static __always_inline void bpf_unwind_leave(void)
-> +{
-> +	unsigned long *slot =3D (unsigned long *)__builtin_dwarf_cfa() - 1;
-> +	unsigned long to =3D bpf_unwind_target(*slot);
-> +
-> +	WARN_ON_ONCE(to =3D=3D *slot);
-> +	*slot =3D to;
-> +}
-
-[ ... ]
-
-> +#define __bpf_call_cb(type, fn, a1, a2, a3, a4, a5, r0, unwound)		\
-> +	___bpf_call_cb(__UNIQUE_ID(unwound), type, fn, a1, a2, a3, a4, a5, r0, =
-unwound)
-> +
-> +#define ___bpf_call_cb(lbl, type, fn, a1, a2, a3, a4, a5, r0, unwound)		\
-> +do {										\
-> +	register u64 __fn asm("x15") =3D (u64)(long)(fn);				\
-> +	register u64 __a0 asm("x0") =3D (u64)(long)(a1);				\
-> +	register u64 __a1 asm("x1") =3D (u64)(long)(a2);				\
-> +	register u64 __a2 asm("x2") =3D (u64)(long)(a3);				\
-> +	register u64 __a3 asm("x3") =3D (u64)(long)(a4);				\
-> +	register u64 __a4 asm("x4") =3D (u64)(long)(a5);				\
+> +unwound:
+> +	/*
+> +	 * The comparator left with unwind_exit. The node is not in the tree, a=
+nd
+> +	 * the caller has let go of it: drop it, as the error path above does.
+> +	 */
+> +	__bpf_obj_drop_impl((void *)n - off, rec, false);
+> +	bpf_unwind_leave();
+> +	return r0;
+>  }
 
 [Severity: High]
-Can evaluating the macro arguments in ___bpf_call_cb() on arm64 and
-__bpf_call_cb() on x86-64 clobber the caller-saved local register
-variables before the asm_goto_output() statement is reached?
+Does the unwound path in __bpf_rbtree_add() leave node->owner poisoned with
+BPF_PTR_POISON when the object survives __bpf_obj_drop_impl()?
 
-On arm64, ___bpf_call_cb() in include/linux/bpf_unwind.h initializes x15
-and x0..x4 directly from the macro expressions in sequence:
+At the start of __bpf_rbtree_add() in kernel/bpf/helpers.c, node->owner is
+transitioned from NULL to BPF_PTR_POISON before the traversal loop:
 
-	register u64 __fn asm("x15") =3D (u64)(long)(fn);
-	register u64 __a0 asm("x0") =3D (u64)(long)(a1);
-	register u64 __a1 asm("x1") =3D (u64)(long)(a2);
-	register u64 __a2 asm("x2") =3D (u64)(long)(a3);
-	register u64 __a3 asm("x3") =3D (u64)(long)(a4);
-	register u64 __a4 asm("x4") =3D (u64)(long)(a5);
+	if (cmpxchg(&node->owner, NULL, BPF_PTR_POISON)) {
+		/* Only called from BPF prog, no need to migrate_disable */
+		__bpf_obj_drop_impl((void *)n - off, rec, false);
+		return -EINVAL;
+	}
 
-And on x86-64, __bpf_call_cb() assigns __fn (r11) and __a5 (r8) before
-evaluating a1..a4 in the asm_goto_output() input operands:
+When the comparator callback cb exits via unwind_exit during the while (*li=
+nk)
+loop, control jumps to unwound after cmpxchg() has already set node->owner =
+to
+BPF_PTR_POISON, and before WRITE_ONCE(node->owner, root) is reached.
 
-	register u64 __fn asm("r11") =3D (u64)(long)(fn);
-	register u64 __a5 asm("r8") =3D (u64)(long)(a5);
+If the object contains a bpf_refcount field and another active reference to=
+ it
+exists (for example via bpf_refcount_acquire() before calling bpf_rbtree_ad=
+d()
+or inside the comparator before unwinding), __bpf_obj_drop_impl() decrements
+the refcount and returns without freeing the object:
+
+	if (rec && rec->refcount_off >=3D 0 &&
+	    !refcount_dec_and_test((refcount_t *)(p + rec->refcount_off))) {
+		return;
+	}
+
+Unlike bpf_rb_root_free(), which clears node->owner back to NULL before
+dropping the reference:
+
+	/* Ensure __bpf_rbtree_add() sees the node as unlinked. */
+	smp_store_release(&node->owner, NULL);
+	__bpf_obj_drop_impl(obj, field->graph_root.value_rec, false);
+
+the unwound path in __bpf_rbtree_add() leaves node->owner set to
+BPF_PTR_POISON on the surviving unlinked object, causing any subsequent
+bpf_rbtree_add() or bpf_rbtree_add_impl() call on that object to fail the
+cmpxchg() check with -EINVAL. Should node->owner be reset to NULL before
+calling __bpf_obj_drop_impl() in the unwound path?
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fd63ff36eb909..50c3d44c37e15 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -15738,7 +15738,21 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+>  		id =3D regs[BPF_REG_2].id;
+>  		insn_aux->insert_off =3D regs[BPF_REG_2].var_off.value;
+>  		insn_aux->kptr_struct_meta =3D btf_find_struct_meta(meta.arg_btf, meta=
+.arg_btf_id);
+> -		ref_convert_owning_non_owning(env, id);
+> +		/*
+> +		 * The comparator unwound: the node never went in, and the
+> +		 * kfunc dropped it on its way to the pad. The comparator was
+> +		 * handed the node too, and may have unwound with it in r0, so
+> +		 * every non-owning reference goes. Otherwise the node is in
+> +		 * the tree now.
+> +		 */
+> +		if (env->cur_state->unwound) {
+> +			invalidate_non_owning_refs(env);
+> +			err =3D release_reference(env, id);
+> +			if (err)
+> +				return err;
+> +		} else {
+> +			ref_convert_owning_non_owning(env, id);
+> +		}
+>  	}
+
+[Severity: Critical]
+Can an unwinding comparator callback with a two-register return type clobber
+caller->regs[BPF_REG_2] in prepare_func_exit(), causing check_kfunc_call() =
+to
+release the wrong reference ID and leave a dangling owning pointer to the
+dropped node?
+
+During verifier setup, bpf_compute_subprog_ret_regs() sets ret_reg_pair =3D=
+ true
+for any subprogram whose BTF return type is a 9-16 byte struct, and
+btf_validate_return_type() allows static subprograms to return structs up to
+16 bytes. Neither check_func_arg(), push_callback_call(), nor
+check_cb_unwind() prevents the less callback passed to bpf_rbtree_add() or
+bpf_rbtree_add_impl() from having ret_reg_pair =3D=3D true.
+
+When such a callback executes unwind_exit, prepare_func_exit() in
+kernel/bpf/verifier.c computes nregs =3D 2 (where ret_regs[] =3D { BPF_REG_=
+0,
+BPF_REG_2 }) and copies both registers from the callee frame into the caller
+frame before rewinding *insn_idx to callee->callsite:
+
+	callee =3D state->frame[state->curframe];
+	r0 =3D &callee->regs[BPF_REG_0];
+	nregs =3D bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
 	...
-		 : [thunk_target] "r"(__fn), "D"((u64)(long)(a1)),
-		   "S"((u64)(long)(a2)), "d"((u64)(long)(a3)),
-		   "c"((u64)(long)(a4)), "r"(__a5)
+	if (callee->in_callback_fn && !unwinds) {
+		...
+	} else {
+		for (i =3D 0; i < nregs; i++) {
+			u32 regno =3D ret_regs[i];
 
-Per GCC and Clang local register variable rules, local register variables
-do not reserve caller-saved registers across function calls that occur
-between their assignment and the extended asm statement.
+			bpf_diag_mod_begin(env, &caller->regs[regno], &callee->regs[regno],
+					   BPF_DIAG_MOD_WRITE);
+			caller->regs[regno] =3D callee->regs[regno];
+			bpf_diag_mod_end(env);
+		}
+	}
 
-Later in this series, commit "bpf: Let the callback of
-bpf_for_each_map_elem unwind" updates bpf_each_rhash_elem() in
-kernel/bpf/hashtab.c to pass a helper call and pointer dereferences as
-macro arguments:
+If the caller passed &n1->node (with id =3D n1_id) in BPF_REG_2 while keepi=
+ng a
+copy of n1 in a callee-saved register (R6-R9) or stack spill, and the
+comparator callback acquires an owning reference to a second node n2 of the
+same BTF type (for example via bpf_refcount_acquire() or
+bpf_list_pop_front()), places &n2->node (with id =3D n2_id) into BPF_REG_2,=
+ and
+executes unwind_exit:
 
-	bpf_call_cb(callback_fn, map, elem->data,
-		    rhtab_elem_value(elem, map->key_size), callback_ctx, 0,
-		    ret, unwound);
+1. prepare_func_exit() overwrites caller->regs[BPF_REG_2] with &n2->node
+   (id =3D n2_id).
 
-If evaluating a3 or another argument invokes a function call -- such as an
-out-of-line call to rhtab_elem_value() (which is marked static inline
-rather than __always_inline) or sanitizer instrumentation like
-__asan_load4() under outline KASAN or __tsan_read4() under KCSAN -- that
-call executes after __fn (x15 / r11) and earlier argument registers (x0,
-x1 / r8) have already been populated, clobbering the callback target and
-arguments prior to blr x15 or CALL_NOSPEC.
+2. On the revisit of check_kfunc_call() at bpf_rbtree_add() with
+   env->cur_state->unwound =3D=3D true, check_func_args() succeeds because
+   caller->regs[BPF_REG_2] holds a valid owning pointer of the expected
+   node type, and release_reference(env, id) releases n2_id instead of n1_i=
+d.
 
-Should fn and a1..a5 be evaluated into ordinary C temporary variables
-first before assigning them to the local register variables, similar to
-how include/linux/arm-smccc.h stages register arguments?
-
-> +	register u64 __c0 asm("x0");						\
-> +	register u64 __c1 asm("x1");						\
-> +	register u64 __c2 asm("x2");						\
-> +	register u64 __c3 asm("x3");						\
-> +	register u64 __c4 asm("x4");						\
-> +	register u64 __c15 asm("x15");						\
-
-[ ... ]
-
-> +static __always_inline void bpf_unwind_leave(void)
-> +{
-> +	unsigned long *slot =3D (unsigned long *)__builtin_frame_address(0) + 1;
-> +	unsigned long from =3D ptrauth_strip_kernel_insn_pac(*slot);
-> +	unsigned long to =3D bpf_unwind_target(from);
-> +
-> +	WARN_ON_ONCE(to =3D=3D from);
-> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
-> +	{
-> +		register unsigned long x17 asm("x17") =3D to;
-> +#ifdef __clang__
-> +		register unsigned long x16 asm("x16") =3D (unsigned long)__builtin_spo=
-nentry();
-> +#else
-> +		register unsigned long x16 asm("x16") =3D (unsigned long)__builtin_dwa=
-rf_cfa();
-> +#endif
-> +
-> +		asm("pacia1716" : "+r"(x17) : "r"(x16));
-> +		to =3D x17;
-> +	}
-> +#endif
-> +	*slot =3D to;
-> +#ifdef CONFIG_SHADOW_CALL_STACK
-> +	if (scs_is_enabled()) {
-> +		unsigned long *scs;
-> +
-> +		asm("mov %0, x18" : "=3Dr"(scs));
-> +		scs[-1] =3D to;
-> +	}
-> +#endif
-> +}
-
-[Severity: High]
-Could the compiler eliminate the *slot =3D to store in bpf_unwind_leave()
-(on both x86-64 and arm64) as a dead store to the current function's stack
-frame right before returning?
-
-In include/linux/bpf_unwind.h, both implementations of bpf_unwind_leave()
-compute slot from __builtin_dwarf_cfa() or __builtin_frame_address(0) as a
-non-volatile unsigned long * and perform a plain store:
-
-	*slot =3D to;
-
-Because bpf_unwind_leave() is __always_inline and runs at the end of the
-helper's unwound path immediately before return, nothing in C reads *slot
-before the function exits. In GCC's RTL dead-store elimination pass
-(pass_rtl_dse1, which runs before prologue/epilogue threading),
-non-volatile frame-related stores based on arg_pointer_rtx
-(__builtin_dwarf_cfa()) or hard_frame_pointer_rtx
-(__builtin_frame_address(0)) that are not read before EXIT_BLOCK are
-candidates for elimination. If *slot =3D to is elided, the helper returns to
-its normal call site instead of the caller's unwind pad, losing the BPF
-exception after the helper has already released its resources.
-
-Existing kernel code that overwrites the stack return address via
-__builtin_frame_address(0) in drivers/misc/lkdtm/cfi.c:set_return_addr()
-explicitly marks the store volatile for this reason:
-
-	/* Use of volatile is to make sure final write isn't seen as a dead store.=
- */
-	unsigned long * volatile *ret_addr =3D
-		(unsigned long **)__builtin_frame_address(0) + FRAME_RA_OFFSET;
-
-	/* Make sure we've found the right place on the stack before writing it. */
-	if (no_pac_addr(*ret_addr) =3D=3D expected)
-		*ret_addr =3D (addr);
-
-Should bpf_unwind_leave() use WRITE_ONCE(*slot, to) (and
-WRITE_ONCE(scs[-1], to) on arm64) or qualify slot as volatile so the
-return-address update cannot be optimized away?
+3. At runtime, __bpf_rbtree_add() drops the caller's original node n1 via
+   __bpf_obj_drop_impl(), while in the verifier state at the landing pad af=
+ter
+   unwind_goto, n1_id was never released and the caller's saved pointer to =
+n1
+   remains a valid owning PTR_TO_BTF_ID | MEM_ALLOC pointer to freed memory.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1793147364.gi=
-t.memxor@gmail.com?part=3D1
+t.memxor@gmail.com?part=3D9
