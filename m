@@ -1,72 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.155
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793222382;
-	b=CmQ3nUG81V6UqkGve/r1+B7AOY10vixRaOyb3LhkIFePUYfDPO89nldococJGdo0EExx
-	 Fon1jb3hdUyXzjx7cjcYf6eT5FEZZU/d4nCalerVnzl8KECqFm+SRcpFMKOmBO/8HIOSj
-	 VSjhefhPCOTHeWGsn+5patxJxQbDCFA17+AHDV7lBgcw40OiipLZ2BaMFVvw4PuXMG8a8
-	 xJBSIyQZNZQKjIOg4kROqAPqTBG1JG6lfMeBotghkM8cygNinhp1rLX15I8XVktm5gDaz
-	 pAKTNxPvg3Yx30LpOwbXIfdHSaZj2ATC+er72kIAQFxbl1p9XyccsAUMCPZIaC5efHA==
+	t=1793222557;
+	b=fGo6JFS7vb0wDuSekwut97NEr9a+MAoc1OpOlnpt7Mc9/RyEBlqq9EawUhpUPZXXxK+X
+	 +eX3D/IQg9Nb0q58U1kP5KIFsPpNN5x0xvB4wlEIYUYY3jhLf3Gr+bqSrcEhbEts3fRC1
+	 +uKUBUUvSioHxXjhnnwBkcPuonThA/MqF0HopbKV7ZIkci2YGrqZcEkqEaotCiRPGG0il
+	 bPkdtxb+GNcfqoMi+52YzUJTyf9VYBH7eHZ2xR451YIRNljWxz+cNDP5d1WSV4PP9VxUq
+	 orykA5IdjWKYecui39aJcI8qBfVtX2qRNli9dv2w8a1L0OyFN9cTBBAQdoU6LfJ0BKQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793222382;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=WsUSq2k+2aYiN37qb7aSkQdP06LKemiN8mY/m+NRNe8=;
-	b=Tzwkopx+CQ0iBJ1t+ebpqRaJ3ogErCWKs1yHB+J4QNqV0AHyL9TmGrA+ZHL5SM0dZOxv
-	 JElay9lDfJZmo6gv4MxKhjtadhr3CpyWTqA9b+s9cJuT3Nhl0m3pfeiDwUwHY3MJnJ5i6
-	 8pJiTcyJJoKuF6vMlpT5EmLK9ArzSPkhl0W28MiJSXbDLmM+BU6UiPu7hgb8gDhE1kQfW
-	 t+It7yp1bLrirW2bCaOdOTQebJPcIwse8P6pUqaxZ+9FkzVkovAAEa2VYjBArQBRedHZb
-	 gCLyFZ6aKRO26KBm+l7I3p74bIRIaa4QQQzsPnSPJKphdXLRbTbaGFehQxrZt8khP1w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793222557;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=zw5Rd3tHLsBi/Wx1LPdx2NJDSF078cu37LQJA05ujQk=;
+	b=qr+hnGntxYcaVWRx9fOikn4nKEWUEzRvbaCX8Sd2IQ5gtxd4euAI+MOB6jSlIwNNXyLA
+	 nDHJJ/fLSOb3S8J2VrrEhvL1NsFpzVdHjuVkSEXg8L/38DeoVZccUGKT2qTPs+lqRE+LF
+	 whyzU5GVY8H16eVHYstffejWtq+wcYM+J10S5nM0zEZguy3JLwxEC08hTzCEnk0ekco+C
+	 nmsqM8va1/SCOA1eF9LizBl7VDk8dQmoFPkDyoNmfHlQEve84MFCLyQHm4Lekr3rtTTtE
+	 VdH0mGDe2VYZjBjWpbB7RWam/ho0uzux1aebfxJ0MTqWjKIJQg2eOLkqDiiVJn9COuQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IUTfhChr;
-	arc=none smtp.remote-ip=95.215.58.155
-Received: from mta1.migadu.com (out-155.mta1.migadu.com [95.215.58.155])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lVwhf+Fg;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77670606A324
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 21:19:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 77670606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB0C606A31D;
+	Wed, 28 Oct 2026 21:22:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=IUTfhChr
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NbKq6I63kMRUcieNKpMBmStZcf0/mybvQYK4JY69Rog=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793222373; v=1; x=1793827173;
- b=IUTfhChrGaXdSKAPxL8ULFldU5qp4G0COqGFcI5mxjUvVoJy5CyxRcoohbXmwQUdOH3jHbon
- 5qSplCJKXaRrYyvz1COPD7QThQckz80fFPvwvd//mIAAJhKianmRANYa9wiHbnHnnQUaDTho/9Y
- w6K/S3rFbC4+smuztWa480m4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6dc190b38c415713;
-	Wed, 28 Oct 2026 21:19:33 +0000
-X-Mizu-Trace-ID: 6dc190b38c415713
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	memxor@gmail.com,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next] selftests/bpf: don't count skipped reg_bounds cases as skipped tests
-Date: Wed, 28 Oct 2026 14:19:21 -0700
-Message-ID: <20261028211921.1055711-1-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lVwhf+Fg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2946F1F01825;
+	Wed, 28 Oct 2026 21:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793222556;
+	bh=zw5Rd3tHLsBi/Wx1LPdx2NJDSF078cu37LQJA05ujQk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lVwhf+Fg4q2oYSltVlYMxotSqsNpExaiP4XmNrPCKdKKbUs5LVGjUxVbdVfCfHNfs
+	 ufHJMab4k8e/KivbcqqqFpFz3mMvCi+IisNAEmyHGdzSp3D2KeUUBsjO9IFNqupvaU
+	 6qzaxExxI29wEuC3smf/d6a6gMJ99fkD1othlCEqJfRbbI7Ab90T6KdiS8/N1YGUu3
+	 ptlK0DqaBUAq7zr0GdRdCHllojy8QVPzccBgwA+HTPthf0DkwkzJ6dvUfoGTEfl8no
+	 +FvP3wEOr7PK/YCkNhND1JdubnZ+4J/e9AJyt+/qvk9KTPwfXzb5qCTfSXBkZmYjN2
+	 txoV7at/H2PfQ==
+Content-Type: multipart/mixed; boundary="===============1452548001571172891=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,153 +49,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <e08eb87415801027d75170c930dc709beaea5f20f4afc92ff0affd434faaa9a0@mail.kernel.org>
+In-Reply-To: <20261028204158.1021284-8-vineet.gupta@linux.dev>
+References: <20261028204158.1021284-8-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v2 7/8] selftests/bpf: write the mixed arena/scalar ALU tests in asm
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,jose.marchesi@oracle.com,david.faust@oss.qualcomm.com,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 28 Oct 2026 21:22:36 +0000 (UTC)
 
-test_progs-bpf_gcc reports an order of magnitude more skipped tests than it
-lists.  A recent bpf-next run ends with
+--===============1452548001571172891==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-  Summary: 720/6383 PASSED, 8392 SKIPPED, 105/368 FAILED
+> selftests/bpf: write the mixed arena/scalar ALU tests in asm
 
-but the log for that same run names only 684 skipped subtests which are
-all accounted for; the other ~7700 are just ghosts.
+TL;DR: Test comment only: the new verifier_arena.c comment claiming the r9
+arena load is needed for addr_space_cast looks stale, since libbpf now binds
+the arena via fd_array. Suggest dropping or rewording it.
 
-Nothing here is specific to BPF_GCC; reg_bounds builds its programs
-from hand-written instructions at run time, so the BPF compiler is not
-involved.  That build is just where the inflated total was noticed.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> index 21b66d51c61e..b84d8f1e0b39 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> @@ -539,53 +539,58 @@ int arena_ptr_add_arena_ptr(void *ctx)
+>  	return 0;
+>  }
+>
+> +/*
+> + * The r9 load is never read; it is there so libbpf records the arena map
+> + * as used, which is what lets the verifier accept addr_space_cast at all.
+> + */
+>  SEC("syscall")
+>  __failure __msg("same insn cannot be used with and without arena pointer")
 
-The total is not reproducible either.  Four runs over an identical
-tree reported 8240, 8261, 8405 and 8424 SKIPPED; two of those had
-byte-identical verdicts for every test.
+Is this comment still accurate?  Commit cd7a395838cb ("libbpf: Bind the arena
+of an object to every program in it") is already in the base of this series.
+With it, bpf_object_load_prog() calls bpf_object__bind_arena(), which puts
+the object's arena into a continuous fd_array when the kernel supports
+fd_array_cnt:
 
-The extra skips come from reg_bounds.  Counting the increments by
-test, every heavy contributor is one of its random tests:
+    obj->fd_array[0] = map->fd;
+    load_attr->fd_array = obj->fd_array;
+    load_attr->fd_array_cnt = obj->fd_array_used;
 
-  632 reg_bounds_rand_ranges_s64_u32    576 reg_bounds_rand_consts_s64_u32
-  624 reg_bounds_rand_ranges_u64_u32    564 reg_bounds_rand_consts_u64_u32
-  600 reg_bounds_rand_consts_u64_s32    552 reg_bounds_rand_ranges_u64_s64
+The kernel binds that array before it looks at any insn:
 
-The path, for one of them:
+    process_fd_array_continuous()
+      add_fd_from_fd_array()
+        __add_used_map()
+          check_map_prog_compatibility()
+            env->prog->aux->arena = (void *)map;
 
-  test_reg_bounds_rand_consts_u64_u32()
-  `- validate_rand_ranges()                     100 random cases
-     `- verify_case_opt(..., false /* !is_subtest */)
-        |    if (is_subtest && !test__start_subtest(sb->buf))
-        |            return 0;       <-- no subtest is opened, so
-        |                                env.subtest_state stays NULL
-        `- for (op = OP_LT .. OP_NE)             x6 -> 1200 cases
-           `- verify_case_op()
-              `- if (reg_state_needs_two_arcs(...))
-                    test__skip()
-                    `- else env.test_state->skip_cnt++   <-- once per case
+This happens for every program in verifier_arena.o, including these two,
+whether or not an insn refers to the map.  The addr_space_cast check in
+check_alu_op() (if (!env->prog->aux->arena)) and the prevent_zext/needs_zext
+logic in adjust_reg_min_max_vals() only look at prog->aux->arena, so
+removing the r9 load would not change what either test does with a kernel and
+libbpf from this tree.
 
-skip_cnt feeds the SKIPPED total, so it grows once per case rather than
-once per test.  The variance has the same source: how many cases are
-unrepresentable depends on the seed.
+The comment also describes the mechanism differently from what happens.
+libbpf only relocates the ld_imm64 to the map fd, and the verifier records
+the map as used in add_used_map() during resolve_pseudo_ldimm64().
 
-Report the skip up to verify_case_opt() instead, the one frame that
-knows whether a subtest exists:
+The log of the libbpf commit describes referring to the arena artificially,
+as in asm volatile("" :: "r"(&arena)), as something that change makes
+unnecessary.  The r9 load would only matter on a kernel that rejects
+fd_array_cnt, or with the light skeleton loader, which test_loader does not
+use.
 
-  err = verify_case_op(init_t, cond_t, x, y, sub.op, &skipped);
-  if (skipped) {
-          if (is_subtest)
-                  test__skip();
-          else
-                  ctx->skip_case_cnt++;
-  }
+The same four comment lines are repeated word for word above
+mixed_arena_scalar_alu64_arena_first().  Could the comment be dropped
+together with the r9 load, or be reworded to say the load is a fallback for
+kernels where libbpf cannot bind the arena through fd_array_cnt?
 
-with the tally printed once at the end of the test.  The subtest path
-keeps its old behaviour: test__skip() only sets a bool there.
 
-After the change, a run of reg_bounds_rand_consts_u64_u32 -- the test
-contributing 564 above -- reports 0 SKIPPED and logs
-
-  SKIPPED 480/1200 cases needing two range arcs
-
-The two counts differ because the seeds do.
-
-This also stops the rand_* tests reporting themselves as skipped: with
-no subtest open, any non-zero skip_cnt made print_test_result() call
-the whole test SKIP, so a test that ran 1200 cases and checked them all
-was indistinguishable from one that never ran.  18 of the 32 report OK
-instead; the rest were already OK, their type combinations never
-producing an unrepresentable case.
-
-Fixes: bbc631085503 ("bpf: replace min/max fields with struct cnum{32,64}")
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- .../selftests/bpf/prog_tests/reg_bounds.c     | 25 ++++++++++++++++---
- 1 file changed, 21 insertions(+), 4 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index 7f170a69d1d8..6231258b26cc 100644
---- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -1504,7 +1504,7 @@ struct ctx {
- 	struct range *uranges, *sranges;
- 	struct range *usubranges, *ssubranges;
- 	int max_failure_cnt, cur_failure_cnt;
--	int total_case_cnt, case_cnt;
-+	int total_case_cnt, case_cnt, skip_case_cnt;
- 	int rand_case_cnt;
- 	unsigned rand_seed;
- 	__u64 start_ns;
-@@ -1541,7 +1541,8 @@ static void subtest_case_str(struct strbuf *sb, struct subtest_case *t, bool use
-  * performed)
-  */
- static int verify_case_op(enum num_t init_t, enum num_t cond_t,
--			  struct range x, struct range y, enum op op)
-+			  struct range x, struct range y, enum op op,
-+			  bool *skipped)
- {
- 	char log_buf[256 * 1024];
- 	size_t log_sz = sizeof(log_buf);
-@@ -1581,7 +1582,7 @@ static int verify_case_op(enum num_t init_t, enum num_t cond_t,
- 	    !assert_reg_state_eq(&tr2, &te2, "true_reg2")) {
- 		if (reg_state_needs_two_arcs(&fe1) || reg_state_needs_two_arcs(&fe2) ||
- 		    reg_state_needs_two_arcs(&te1) || reg_state_needs_two_arcs(&te2)) {
--			test__skip();
-+			*skipped = true;
- 			return 0;
- 		}
- 		failed = true;
-@@ -1629,13 +1630,26 @@ static int verify_case_opt(struct ctx *ctx, enum num_t init_t, enum num_t cond_t
- 		return 0;
- 
- 	for (sub.op = first_op; sub.op <= last_op; sub.op++) {
-+		bool skipped = false;
-+
- 		sb->pos = 0; /* reset position in strbuf */
- 		subtest_case_str(sb, &sub, true /* print op */);
- 
- 		if (env.verbosity >= VERBOSE_NORMAL) /* this speeds up debugging */
- 			printf("TEST CASE: %s\n", sb->buf);
- 
--		err = verify_case_op(init_t, cond_t, x, y, sub.op);
-+		err = verify_case_op(init_t, cond_t, x, y, sub.op, &skipped);
-+		if (skipped) {
-+			/*
-+			 * Outside a subtest test__skip() bumps the test's skip
-+			 * counter, which feeds the SKIPPED total; tally these
-+			 * locally instead of reporting each as a skipped test.
-+			 */
-+			if (is_subtest)
-+				test__skip();
-+			else
-+				ctx->skip_case_cnt++;
-+		}
- 		if (err || env.verbosity >= VERBOSE_NORMAL)
- 			ASSERT_OK(err, sb->buf);
- 		if (err) {
-@@ -2167,6 +2181,9 @@ static void validate_rand_ranges(enum num_t init_t, enum num_t cond_t, bool cons
- 	}
- 
- cleanup:
-+	if (ctx.skip_case_cnt)
-+		printf("SKIPPED %d/%d cases needing two range arcs\n",
-+		       ctx.skip_case_cnt, ctx.case_cnt);
- 	/* make sure we report random seed for reproducing */
- 	ASSERT_TRUE(true, ctx.progress_ctx);
- 	cleanup_ctx(&ctx);
--- 
-2.53.0-Meta
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40768193895
+--===============1452548001571172891==--
