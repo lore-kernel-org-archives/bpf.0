@@ -1,84 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.74
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793206593;
-	b=xT5WmsvcMfM5y8SZo8HeT2qPGZAh/8e4Z8L2acHas2uQNgnKNi1OHpPIbkeUPmmxLZPa
-	 Q+roJujFUGMJYHrCxURk/Ehm974JcVNhy0YCA+CJfUyImSqhabc7bRfTJ4jV0LCDMi/GR
-	 wl2Rt1LoBuMtcMo1QdGFbwtP9h2PR+bLQjXnkSKIgJ2lpsKQ40s8H0BBIRIzC92layfO5
-	 FT6YlMZn7NKUUW4baEmosIh7daKO/tYkrr9vPQXnmK/jcf0Qhhyn9qXvP+84kXfN1As3X
-	 UK7AKDy3ea9egA7tSkBvLgfIyIVaglE53ShWGqodyKDK6nSuvprTVw5q8wuxY29Kv/A==
+	t=1793206837;
+	b=OXzvnKcs2szbTA6Ow79NWgg7NJ/IDJQykkrGT0SbcOivr4Y+l8ppXIUNbqUm0bxcHJek
+	 8vX4l/v0lT2i0oymRagFM348saA7epJvnK5+DPVuPPqoBKzxvZ1hBevTEiff4DnPHmM2W
+	 CtnzekRfDmgZwGvtZc9DEuSZYrN36HVw/0J93+ekQCo/FeECu/qfQgTxD8eVJUCiVzTBO
+	 9MePA7SnXtQcQpGjeNL4wCy6OCSBfGGVn9lpxk5TFlF+Lz4MZhEJJNM4Ujf0uUbCALQ4w
+	 VCJwsMYRU2TRFKcPJfvufhuQQ0bqPkx6h7At5VcqNQbPxeR+rF8OrtzzS2Q/BTeBLQg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793206593;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206837;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Mime-Version:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Subject:From:
-	 To:Cc:X-Mailer:References:In-Reply-To;
-	bh=kyFCRoyBUxLKzVM5Ky5RkepOUrjYWuax/Okp6By3xKE=;
-	b=qmSN+s/Ac42/2J13Hh4rSMZZ+A8zLLX3JSpObEyxbaM/1t0jYUcJ84MVxSukPJSSRtYN
-	 Rr9plaoZEqgl45gbwdQSAj88JkI/lFeVNRJb5n7lEiz/LUbuh6syUa4WJMc5lKCiCF+n+
-	 h5y6evXFx2NUQzcw70FBP5l9JxVaJDt51vUhi6QOPpkCIk3tupoi77CDBoOR5pbGAGHwq
-	 yXO6SmSWA1PDkRuqYIbgFjazU8w47v5cAL+G+eire9JE02DVPzaxtzcXBTVdVLzlCWT2L
-	 41aUNmy8fbrRMHs8VzqddU16zAafuYEAgGg/xg3PySRMMfBliwi8ulOVOLDPHdDALrw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=n5NroT65/ceg4aQz6ziv+4l6Cu9nfFdwow8xq6Vbj+8=;
+	b=5oB+QoTVjosKnfx444mtBDsaPTncc+GjFJZIYsM4lAi8MxLLSg5bqr2gw2mWlI5D0Zv0
+	 JmT5EuGLiD8wUpf1/lG9d5gCltqrSuzsbwqyN5jLLLodXuosNcvPJ04iIp3s8PIp9YCtx
+	 uvwk7e7C/uXDH96Usr4ARtxoxDhRnA2hMCeSQFbBDfCd5yhzU0F5E1JeQZfMJmT65G7H0
+	 n8cqNSQUeZiKzRxjsJHLeXc4XiqCPm1BcDgja3RyLuYD1BIneAqVftltRXn6wMgRBpd/g
+	 sb93Z2MzQU0OypyybRLH5AsmvN9k0S0rp2/yGfHFVZQ2NgEloZcdYDy3X3dppVdRT2Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RA0F7wy0;
-	arc=none smtp.remote-ip=74.125.225.74
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E2hUsea2;
+	arc=none smtp.remote-ip=209.85.128.50
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4660960A262F
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 16:56:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4660960A262F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA95606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:00:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8FA95606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=RA0F7wy0
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48df0245ce6so666491f8f.0
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 09:56:33 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E2hUsea2
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a2d6cf958bso7361895e9.1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 10:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793206591; x=1793811391; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=kyFCRoyBUxLKzVM5Ky5RkepOUrjYWuax/Okp6By3xKE=;
-        b=RA0F7wy0NtD1gHt90kWdy3NmqHPLpVlfhvqG0Rp2hPiB10kNUM5sVGW7Luht8zayy8
-         ye91pukA/S7+gdqDa3RJKYjdby9e8RwB0SWwc5WCiWYQZEq114Fm9jo04QAyhp4Sn2Lx
-         Us1CRy07YDmU9c7k0ZoEKkUI8t7ORCOZ74eYiUT0SsW6CdN3sJVCqsPwPYAsRMoysSGf
-         fKn3hANPFx+nVFlkpDpCEGce3d7xPtFpn8FvYwW1d967HvzkTO7zZySWeBZ4desw5RYq
-         cSnmzWQzD2/ej2w3B3vvcRIILdPxxUlbuDgWXy5qy47eROsV9xbwpuVjccngP/v+jFXi
-         EUNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793206591; x=1793811391;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20260707; t=1793206835; x=1793811635; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kyFCRoyBUxLKzVM5Ky5RkepOUrjYWuax/Okp6By3xKE=;
-        b=QOUXtXj4ocQot31iNuXF0mrcimuGLfBZn1FrpUc7am9aL75QO3NV+Zb5pBF276IOx9
-         KyrZgAFU7CSdW5EaYcyXBi7qO+v0WuYAySBP+bkspocAIaM+jBzdfSPMn46xAXB9eUz/
-         M3SSQ2Evp7tMX2QyvTH/Rvu8EimIBfLYPNBqGSht/6kG84UTn1OL0q8uYzn5SSwSmVkc
-         Dth3nQcA821SFurbWqF59btURw9yI5FoaIchCiVewHL1c7Xyaxp6kKu8TQvgHvhKr0Ek
-         2xvVlLoggGBWR+1AWTB6To8Pl+GasXBHZQwQwzpkqENRqrJt93vexC89o1GEgAfkLMAw
-         L6Zw==
-X-Gm-Message-State: AFq9FYLPDUNRwCZ+/sFrsrFWpNRhN9NmIgihzvRTGJUXXLNRGJ1zqTQM
-	jgGJ6EH4yPyVpq4tJZZG1CxyNye+nHvZX/lHbz5FbBI6JeEzB0/H/ETZ
-X-Gm-Gg: AYBFou2xXqz2AI/6ZG+RnMA+6oBbABdWiyAMHUEC/F3PTwbNY9dGmAL4Voll8G80ns1
-	sgMZ4pKwlbJgnyAXUWhc7qZRiLtKlA+lK+XXoGftV+znITVKjz6uF0nRfUATsiJiMulnGNfPG7d
-	SyZXOuUtp2OjH1/bIKFwMOIB9/KjsrqV8iYiRAbrVAtyiSVHqzGDirgC2nxsux8DU97t8mDXAp+
-	VDo9QfsU+c6E5k/22SfxafQkAE5o6e+UQWy6CbjVoqwUHyvHMsUgThBByoSc2doVi8R22AP17DB
-	87U0RrWj61WLKBdpv+i+De2OHjnbQOUgUO8jhxns+LgUii0Fc7dUveSTtVFS44nbHkMpvOW7zAP
-	j8UkFnsTOqyKK8HtkF9hzTb2jrUKM7IwY9adohO+1V2JLwcsi3nUKfSMAsnHbwZ0oIHdCV7JT5n
-	BM0ZMbGOIMIwTzxHsuKiHnMMm7ohh/y/69zVNMtKGForJXpeICEMz+wZ+dxkFyurDzrbexe2SRk
-	e+0+Qep0/1Di6c8uij9ycAlLG5phfMWfWnM3gQUFovHkaO/APlaqK7E0C4gQ3RqD6KI1JWHfTez
-	AJEAsw4S8O8wGLr4TKrEye1e2wQqXX9fUhP3xkICj33XJH8HCmGiRB8reHAQT3rI37lTQ21eltV
-	y7aNy05haKztLNBPQJ/mG2zFjPbJJx8h8fF+wFY7xhFj2kW68R7pgjc8DV3VBuRKxloL+
-X-Received: by 2002:adf:fe8b:0:b0:48d:f99d:a0d2 with SMTP id ffacd0b85a97d-48e5d5909b6mr5268317f8f.15.1793206591394;
-        Wed, 28 Oct 2026 09:56:31 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebc3dd7sm29612267f8f.15.2026.10.28.09.56.30
+        bh=n5NroT65/ceg4aQz6ziv+4l6Cu9nfFdwow8xq6Vbj+8=;
+        b=E2hUsea2LuSYRU4I7G1JbYmRhpRDwH471Lk8D6Ck5EjKQiTRTdeCeAzYNcjoLoOKQD
+         LZUkpfAS7rOoPKC2Vg9BTUxRj7s40cIy+iiJtOSfjQjJhvzbzsWuP9cCXhvROOk0Ncha
+         DHLTLXOHi9JUFrgUg7JdH30muChs9ghQAgDJgcUgr1GZaAI5J6ONsQ7Mrc98/X8KRrp1
+         IZ/yBdOOC7fIIkF9UR9/wxOmedvPOFb+HBsIoRTL7m/Z75NVuMN5Wn8u09cJJIErWYTJ
+         nFj0Q2OlfiBu33aYs/4K9qxkJONU9SxvnWtVCr9c/DrmoZVVIf5bkvocC+T+vW80nhtF
+         ckAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793206835; x=1793811635;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=n5NroT65/ceg4aQz6ziv+4l6Cu9nfFdwow8xq6Vbj+8=;
+        b=YbZzhhkBaLqtLMs6o6fQgtwalH9w8FsLLmjKma5hTcg3B3HRjgyK2HkZ4p8OVRmKW7
+         yjp1hZvG/44Z+Mxr5YCQR7C3Ss/4AHYcl6bfxDSvV6RVXBrXhalpTsGjbofVQ6ms8xTR
+         JbL8hhKjEOFI5UKL7Oh2VMqKl/owh3Kj1tHmHNG/60zQRsQaj7+PCvZbAWoWODVbQUSa
+         DudO/xesWMxXkM++WX/WFrIe6J2J9kLF3TsdCPHckD72mv21eWjt4ODl9IsxOqNUkCOI
+         8PJ6UYL/84dx7LSpo0R6oVGKq0EJ6UZgxfPkGPgFRPRh6x2lKft2N207WmdRe52royBY
+         fvxw==
+X-Forwarded-Encrypted: i=1; AKwUvByxB96qix7fK84KvVj6R0ncfrDHBUmisgDRwZE1Nsa3ANkXhMrzLvCL+247g/3YedjPimg=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIgnt/0Cz4equ3QXvO3Pn5SHHrmUjwPYotZX0QORTVRSniF0cVr
+	tMaEasNYxqqhC29fD0D8r4uabmUjDV0hRPSd8mbjw7uMZIUhKnOlzShM
+X-Gm-Gg: AYBFou1Sm3/TTiwVBHSiEi3qaLqyx2K/agB120FlVDX5ES+7xj89HTeUnyaNCtexKxi
+	ljN3hIAhImTiST+DjVsmnxfFpyryPujMEm/HsYBF1x9b2E51LvWvo0kBlZv88+n2E3UmTzQEz6u
+	C3b2LlmGY9yP0tp82DAzlf7wrxZNSGR6L4uH02tB7vhmumGTh/w/4N4jtvef8AP8AGH+FT+LC5P
+	AvTOGOKuNh9nim8C37awejhfcPGB0SPsrLH30aYgoHmNJe8PLucirZ6KgcfkXWMAtPwzVp+f4xr
+	gZpiyp/v0Pe1YM+0nPkRALO4SJ6Gi9ldro8bitiSW93fkLnh6iJg3+fDIXl5BHTq4Qz34zZ6UB5
+	lrQgwayJjZ9twyReNfdYlRwpwqdf3YZoRbc1vJSeOBTiNNnCYU7KdwamhIZB6dMTJ+DZ41jbJpw
+	KPmCq35QggBKhJaGH6bOVKkGyyybHYaRoqE/J3RVTg483TjHLvbhkonKTrTdXIbHUMA2JI70PcU
+	Yc755BPkJs8HZyTOT08B1OCPA1K0ZDogb8qLJxRK6C44XQy6AlhT7PQYz7y0MAGRQC1gCClJjUF
+	dQzs+udEGYUdDw2TeFDElsvMfMb/1DhLT9nILtwLvL0GWV8ReK4p19NuQSebdtG71D1o
+X-Received: by 2002:a05:600c:8b28:b0:4a8:9a2f:d27 with SMTP id 5b1f17b1804b1-4a9672f91c6mr55353825e9.25.1793206834521;
+        Wed, 28 Oct 2026 10:00:34 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:325:b155:8c68:f317:3997? ([2620:10d:c092:600::1:1503])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ebcb958sm29562988f8f.21.2026.10.28.10.00.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 09:56:30 -0700 (PDT)
+        Wed, 28 Oct 2026 10:00:34 -0700 (PDT)
+Message-ID: <6a6a2500-6f9c-46f9-bf09-05961d8fc53c@gmail.com>
+Date: Wed, 28 Oct 2026 17:00:31 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -87,115 +91,94 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 0/2] bpf: Fix task work use-after-free on
+ deletion
+To: Yun Lu <luyun_611@163.com>, bpf@vger.kernel.org
+Cc: Yun Lu <luyun@kylinos.cn>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Mykyta Yatsenko
+ <yatsenko@meta.com>, Shuah Khan <shuah@kernel.org>
+References: <20261028073525.1035605-1-luyun_611@163.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20261028073525.1035605-1-luyun_611@163.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Oct 2026 17:56:30 +0100
-Message-Id: <DMGMON3EQ62I.20R7XJBDGWJ4U@gmail.com>
-Subject: Re: [PATCH bpf-next 0/7] bpf: Inline IRQ enter/exit instructions
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, "Alexei Starovoitov"
- <alexei.starovoitov@gmail.com>
-Cc: <bpf@vger.kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <daniel@iogearbox.net>
-X-Mailer: aerc 0.21.0
-References: <20261027162820.10887-1-emil@etsalapatis.com>
- <DMFRZIXSG0M2.YYE6X1OWNQWL@gmail.com>
- <CABFh=a6PxhNKnQ7KJJ9TbWhLg_GOQYWPxe3QSEAGEMTQ=o-5Vg@mail.gmail.com>
-In-Reply-To: <CABFh=a6PxhNKnQ7KJJ9TbWhLg_GOQYWPxe3QSEAGEMTQ=o-5Vg@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 
-On Wed Oct 28, 2026 at 2:55 AM CET, Emil Tsalapatis wrote:
-> On Tue, Oct 27, 2026 at 4:53=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Tue, Oct 27, 2026 at 09:28 AM Emil Tsalapatis <emil@etsalapatis.com> =
-wrote:
->> > Add inlining for those functions. The inlining happens in two stages.
->> > First replace the call itself with a special BPF instruction denoting
->> > an IRQ disable-and save, or restore-and-enable. Those instructions
->> > are translated by the architecture-specific JIT into the corresponding
->> > operation.
->>
->> No. That doesn't scale. We cannot add new insns for every to-be-inlined =
-kfunc.
->> See bpf_jit_inlines_helper_call().
->>
->
-> Ack, the code below seems strictly better than reserving an instruction.
->
->> Like:
->>
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 6a2fe3d..c1c9a1c 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
->> @@ -3495,6 +3495,17 @@ populate_extable:
->>                         }
->>                         if (!imm32)
->>                                 return -EINVAL;
->> +                       if (src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL && bpf_=
-jit_inlines_kfunc_call(func)) {
->> +                               if (func =3D=3D (u8 *)bpf_local_irq_save=
-) {
->> +                                       /* pushfq; pop [rdi]; cli */
->> +                                       EMIT4(0x9C, 0x8F, 0x07, 0xFA);
->> +                               } else {
->> +                                       /* test dword ptr [rdi], X86_EFL=
-AGS_IF; je 1f; sti; 1: */
->> +                                       EMIT2_off32(0xF7, 0x07, X86_EFLA=
-GS_IF);
->> +                                       EMIT3(X86_JE, 1, 0xFB);
->> +                               }
->> +                               break;
->> +                       }
->>                         if (src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
->>                                 fm =3D bpf_jit_find_kfunc_model(bpf_prog=
-, insn);
->>                                 if (!fm)
->> @@ -5116,6 +5127,14 @@ bool bpf_jit_supports_kfunc_call(void)
->>         return true;
->>  }
->>
->> +bool bpf_jit_inlines_kfunc_call(void *func)
->> +{
->> +       if (!IS_ENABLED(CONFIG_BPF_SYSCALL) || IS_ENABLED(CONFIG_TRACE_I=
-RQFLAGS) ||
->> +           cpu_feature_enabled(X86_FEATURE_XENPV))
->> +               return false;
->> +       return func =3D=3D bpf_local_irq_save || func =3D=3D bpf_local_i=
-rq_restore;
->> +}
->>
->> ...
->>
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 648abe1..26b6a9d 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -5197,8 +5197,8 @@ BTF_ID_FLAGS(func, bpf_get_kmem_cache, KF_PERFMON)
->>  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
->>  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL=
- | KF_SLEEPABLE)
->>  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SL=
-EEPABLE)
->> -BTF_ID_FLAGS(func, bpf_local_irq_save)
->> -BTF_ID_FLAGS(func, bpf_local_irq_restore)
->> +BTF_ID_FLAGS(func, bpf_local_irq_save, KF_FASTCALL)
->> +BTF_ID_FLAGS(func, bpf_local_irq_restore, KF_FASTCALL)
->>
->> and corresponding bits in bpf_get_call_summary()...
->>
->> but before doing any of that there gotta be performance numbers that it'=
-s worth doing.
->>
->
-> Makes sense, I assume you mean more macro numbers from
-> production-grade programs apart from ubench numbers.
->
 
-While you are it, it would be useful for bpf_preempt_{disable,enable}() to =
-get
-similar treatment.
 
->> pw-bot: cr
+On 10/28/26 7:35 AM, Yun Lu wrote:
+> From: Yun Lu <luyun@kylinos.cn>
+> 
+> This series fixes a task-work use-after-free when a BPF program schedules
+> through a map value pointer retained across deletion. Review of the
+> earlier task-work series [1] pointed out that cancellation can leave
+> the deleted value open to context reinitialization.
+> 
+> The original reader keeps the element alive while it queues new work,
+> but that does not make the new callback part of the grace period freeing
+> the element. If the callback enters RUNNING outside that waiting set, the
+> final destructor cannot stop it from accessing the freed key or value.
+> Patch 1 includes an allowed interleaving and a KASAN stack excerpt from a
+> controlled reproducer on the base unfixed kernel.
+> 
+> Patch 1 retires task-work slots before non-preallocated HASH/RHASH storage
+> is returned to the allocator, including abandoned RHASH candidates. It
+> also orders ordinary cancellation as FREED, conditional unpublish, then
+> map-owned reference disposal. Existing callback read-side protection and
+> element grace periods provide the lifetime guarantee.
+> 
+> Patch 2 adds 24 selftests for the retirement gate and compatibility: both
+> notification modes, live updates, and last-user-reference cleanup followed
+> by reopening the map by ID. Its callback only counts deliveries, allowing
+> an unfixed-kernel comparison without deliberately dereferencing freed
+> storage.
+> 
+> This is a separate series from the captured-task and irq_work BUSY fixes.
+> It is based on bpf-next commit 7c3188f84b54, which contains those fixes.
+> 
+> Testing on x86-64 QEMU/KVM:
+> 
+> - Same test_progs binary on both kernels, with KASAN, PROVE_LOCKING and
+>   PROVE_RCU: the unfixed kernel fails exactly the six retirement
+>   return-value assertions and passes the other 18 cases; the fixed
+>   kernel passes all 24, with no skips.
+> - An out-of-tree reproducer triggers the native KASAN report quoted in
+>   patch 1 on the unfixed kernel on every tested boot; on the fixed kernel
+>   the stale-pointer schedule is rejected with -ENOENT and no report
+>   occurs.
+
+It looks like this problem should affect wq and timers (I did not validate though).
+The change looks very invasive, especially if we take wq and timers into 
+consideration.
+We rejected poisoning of the special fields before
+https://lore.kernel.org/all/20260216131341.1285427-1-mykyta.yatsenko5@gmail.com/
+Maybe this time we should fix it in the allocator as well?
+
+> 
+> [1] https://lore.kernel.org/all/20261012061915.231254-1-luyun_611@163.com/
+> 
+> Yun Lu (2):
+>   bpf: Retire task work before reclaiming hash elements
+>   selftests/bpf: Check task work scheduling on retired values
+> 
+>  include/linux/bpf.h                           |   2 +
+>  kernel/bpf/hashtab.c                          |   7 +
+>  kernel/bpf/helpers.c                          |  80 +++++-
+>  .../bpf/prog_tests/task_work_retire.c         | 240 ++++++++++++++++++
+>  .../selftests/bpf/progs/task_work_retire.c    |  84 ++++++
+>  5 files changed, 403 insertions(+), 10 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_work_retire.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/task_work_retire.c
+> 
+> 
+> base-commit: 7c3188f84b54d8e7643f6ec8454824df2823ba73
 
