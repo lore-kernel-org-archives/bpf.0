@@ -1,50 +1,50 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.229
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.236
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793145877;
-	b=moZjv+mMW2/KMroPYUCxpcRXzxeiGys3w2tCJds/xzn5fMZQcdOaJZDu8dRH5w5mgQ8m
-	 Kl4MH/sY1hyVvaxMZGuX8kzMFer0XqoS9hb4iVqfuRuvw7bDXmZalA6JDiq6tBXN5kDgM
-	 bUE/+qmjF3/Mw6njRj106NmGaqPyJ8vKOOgBK0sL6mgAoNxFaotYCc0suw+LU+02DRLs4
-	 8RTROllPUAuzbUP+F/67fNhvqBmezmt6WtT6YLSUZbvAOohBGjustmH4Rx2R19iYZBMyA
-	 FRUhvVRMY+277vGLYeSkANglGtUS4dNuuye4Ue3mV3R+6oAk8bRpo2fsQ1naxJp7D3w==
+	t=1793145881;
+	b=bXHaYFo/mFKkaj2DSzCrth1ArCyvOnzGi8GZmPy7d82xJLEtZkzFS3pKcZ4umYCcHat2
+	 alM8l0oOeRhONo0X1oIO5Sn2HlAidyGw16JYaZKF2hhx8eo2QBUWpKF2LBREigd6kdXd6
+	 tQc08KJhexQqOg2Rq3mh35lRoT/2Z5nM0NfC9by07AW17hIsGx/kGKbwYggK7AWb93E65
+	 4YtABEYMhe37gILNMpMj6C1+RjU9dBQzFGoz7zs6VrTBqd0JLo4wLfqWalwaQ0PegXsiL
+	 aD4tpW3g6al+UEeotn7myuVsIFZNB32VRTOeofgJWjCtzauZoXxSNh75E92R8/1vqgQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793145877;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793145881;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=hL7+ZwtKr2IcHVKvmMWg/XEq/ceZwQuT1G7zrIVUNRg=;
-	b=MYB4yrSfCoDOx8SeMq7isB8XeEvqHwEh8cxpLmsZASo1VR6Hj9v9ifxi7XHWwOQJXcu0
-	 qvPfbQNOYKHg3XbMO6boI0GtcNSolg3V4zM1T0B4fscbJVooMo5jJ1v2K6kpXgmtVmYn+
-	 FPN4OCpvjvfUt3a/WqmD8eV/fJVfvRbd9Ng1TCEzx6klWAiljPwG4obSCilbrjAF72dP8
-	 vyfnl//wJDKdEr82PmjFojz4EOjvgQY5adwMdeVLZvOgYcciUhy7WQ23nR/IYO1FdmkH4
-	 hH/5SZFkr7GW1Y6KaZdQSNfHi2NP3Jf+OPYjjpebbm9zi6x4q9l9mk3+BsPgtIKmRVA==
+	bh=e2Gu+WtYg+b+BufeEKwovfJrZnzsq5njm/Oj2WFts14=;
+	b=gL8FS34UpLFqbPtwCc/dQGL//HaJyYiCSb5xZBnAgwbWMMToCvl5z7ylNTQFkrMO9PgP
+	 tUsiQi2s9itF3WKIfd2KWnNteMD3fqqS5PH16o7mrLlu7f1ph6LB4hFGoGa3p8vwVuNuM
+	 25/wJW6cfkACsBKxHkUHgfvEbBsgml6moLg/T5ZMHj9+ynMnxHLrDRrTow8GhA8maWAb3
+	 g19IbhxVw/Evbdr6aPBDneKhvSiGAQsJ4be1uqssradJQ3dvstpQQfWVW57KcCfGGtEGZ
+	 sn1QER/OyjtloHAKBEqeyeEt6h6gYoHtQ/eX7bdrHDEizw/gp92QiVnm+/queIbejPA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lo0uH7Po;
-	arc=none smtp.remote-ip=91.218.175.229
-Received: from mta0.migadu.com (out-229.mta0.migadu.com [91.218.175.229])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Kvmhccb4;
+	arc=none smtp.remote-ip=91.218.175.236
+Received: from mta0.migadu.com (out-236.mta0.migadu.com [91.218.175.236])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBD3606A31E
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:04:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0EBD3606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B9D606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:04:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96B9D606A31A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=lo0uH7Po
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=Kvmhccb4
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=3scEEBr+wkqFk/2UiQK9j8vjUCwxDCaoPzf1mtkcNLg=;
+DKIM-Signature: a=rsa-sha256; bh=HvXm1nkfB3D6+zLr/zpDnWhSj8kJjYR8mhYehTdnkX0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793145874; v=1; x=1793750674;
- b=lo0uH7PodoF2qcKdW5A68YJoOVXiTzPJuCe+x3fvLOhlI9HSikegD8EquYpZLn7WmV+xruER
- R5PNcK3JZQQoEj/3X6TR9NSk2eNe/6hlUFbkw1j+BJ9gkmBcJ9b/AyvA2EcvP26TQYiRnOHSNYl
- ENUCLW7I6o7JOvz6BgwmuVHQ=
+ t=1793145878; v=1; x=1793750678;
+ b=Kvmhccb4kEUDhPlHiAivfPegqnm/It+jWq8C8UaIr/rdb+eTIOqJFzdFiCIaEw/mSVcNxswB
+ q+EmWEDIZeRgAzt0/KUXVevCY3KEhPXJA1FEdkn7EOVwkxVpXubVBqG+/D6vS8msqZgq/uX8Vp0
+ jGtRac1hH1qOfrieXf9TfRU8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2f01dc5dbfce6ce0;
-	Wed, 28 Oct 2026 00:04:34 +0000
-X-Mizu-Trace-ID: 2f01dc5dbfce6ce0
+Received: by smtp.migadu.com with ESMTPS id b5640d5ee54acd6a;
+	Wed, 28 Oct 2026 00:04:38 +0000
+X-Mizu-Trace-ID: b5640d5ee54acd6a
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
@@ -66,9 +66,9 @@ Cc: ast@kernel.org,
 	jose.marchesi@oracle.com,
 	david.faust@oss.qualcomm.com,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v1 1/7] selftests/bpf: Build callx tests with GCC that defines __BPF_FEATURE_CALLX
-Date: Tue, 27 Oct 2026 17:04:05 -0700
-Message-ID: <20261028000411.4010967-2-vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v1 2/7] selftests/bpf: don't pass clang-only warning flags to GCC
+Date: Tue, 27 Oct 2026 17:04:06 -0700
+Message-ID: <20261028000411.4010967-3-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.56.0
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,139 +81,89 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 7cd1f73b37ea ("selftests/bpf: Fix build of callx tests with GCC")
-gated the callx progs on __clang__. GCC had indirect call support which was
-recently refurbished along with a __BPF_FEATURE_CALLX macro [1], so gate
-on that as well so once this GCC is released, the tests start passing.
+The clang only togges are passed to every BPF object build, including
+for BPF_GCC build.
 
-Put the arch and compiler conditions in a CAN_USE_CALLX macro in
-bpf_misc.h, and use it all the test programs.
+GCC accepts an unknown -Wno-foo silently until some other diagnostic fires,
+and then appends a note to it, so every warning in a bpf_gcc build comes with
+two lines of noise:
 
-While at it, mark the placeholder programs left for unsupported
-toolchains and arches with __skip(), so they report SKIP rather than OK.
+  cc1: note: unrecognized command-line option '-Wno-initializer-overrides' may have been intended to silence earlier diagnostics
+  cc1: note: unrecognized command-line option '-Wno-microsoft-anon-tag' may have been intended to silence earlier diagnostics
 
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ffe3ead4a8ad704b557b0cfa4f823df647c65a0d
+Collect them in CLANG_BPF_CFLAGS and hand them only to the clang
+flavors, through the per-flavor BPF_CC_FLAGS that Makefile.skel appends
+after BPF_CFLAGS.
 
-Measured on bpf-next with a stock bpf-gcc that defines
-__BPF_FEATURE_CALLX, test_progs before and after: 76 subtests run that
-previously did not exist in the report, 75 OK and one @unpriv SKIP,
-with no failures.  The two dummy placeholders retire and
-callx_rodata_lskel goes SKIP -> OK.
+Only these two are clang-only; -Wno-compare-distinct-pointer-types and
+-fms-extensions are understood by GCC 14 and later and stay in
+BPF_CFLAGS.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- .../testing/selftests/bpf/prog_tests/callx_rodata_lskel.c  | 2 +-
- tools/testing/selftests/bpf/progs/bpf_misc.h               | 7 +++++++
- tools/testing/selftests/bpf/progs/callx_rodata.c           | 4 ++--
- tools/testing/selftests/bpf/progs/verifier_callx.c         | 5 ++---
- tools/testing/selftests/bpf/progs/verifier_callx_rodata.c  | 5 ++---
- 5 files changed, 14 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/Makefile           | 8 ++++----
+ tools/testing/selftests/bpf/Makefile.buildvars | 6 ++++--
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
-index f6ef67c3141e..acd821fb568f 100644
---- a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
-@@ -36,7 +36,7 @@ static void __test_callx_rodata_lskel(void)
- 	if (!ASSERT_OK_PTR(skel, "open"))
- 		return;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 1e4af62e8312..b5303c28973e 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -376,7 +376,7 @@ CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
+ endif
  
--	/* gcc doesn't support indirect calls */
-+	/* toolchain or JIT can't do callx */
- 	if (skel->rodata->skip) {
- 		test__skip();
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index d7f706c3bc4a..1b264480e128 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -295,6 +295,13 @@
- #define CAN_USE_LOAD_ACQ_STORE_REL
- #endif
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+-CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
++CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) $(CLANG_BPF_CFLAGS)
  
-+/* clang always emits callx, gcc only when it defines __BPF_FEATURE_CALLX */
-+#if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
-+     (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) &&		\
-+	(defined(__clang__) || defined(__BPF_FEATURE_CALLX))
-+#define CAN_USE_CALLX
-+#endif
+ # genkey writes both outputs. Pattern rules group them even on make
+ # versions before 4.3, preventing concurrent genkey invocations.
+@@ -521,7 +521,7 @@ BINARY := test_progs
+ BPF_CC := $(CLANG)
+ BPF_CC_MSG := CLNG-BPF
+ BPF_SYS_INCLUDES := $(CLANG_SYS_INCLUDES)
+-BPF_CC_FLAGS := -O2 $(BPF_TARGET_ENDIAN) -mcpu=v3
++BPF_CC_FLAGS := -O2 $(BPF_TARGET_ENDIAN) -mcpu=v3 $(CLANG_BPF_CFLAGS)
+ BPF_DEFINES := -DENABLE_ATOMICS_TESTS
+ include Makefile.skel
+ 
+@@ -537,12 +537,12 @@ $(OUTPUT)/test_progs: $(RUNNER_PREREQS) $(BPF_OBJS) $(ALL_SKELS) FORCE
+ 
+ $(OUTPUT)/test_progs-no_alu32: $(RUNNER_PREREQS) FORCE
+ 	+$(Q)$(RUNNER_MAKE) RUNNER=test_progs FLAVOR=no_alu32 TESTS_DIR=prog_tests \
+-		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v2'
++		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v2 $(CLANG_BPF_CFLAGS)'
+ 
+ ifneq ($(CLANG_CPUV4),)
+ $(OUTPUT)/test_progs-cpuv4: $(RUNNER_PREREQS) FORCE
+ 	+$(Q)$(RUNNER_MAKE) RUNNER=test_progs FLAVOR=cpuv4 TESTS_DIR=prog_tests \
+-		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v4' \
++		$(CLANG_RUNNER_ARGS) BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v4 $(CLANG_BPF_CFLAGS)' \
+ 		BPF_DEFINES=-DENABLE_ATOMICS_TESTS
+ endif
+ 
+diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/testing/selftests/bpf/Makefile.buildvars
+index ff3476bc40a4..8ae2792c0c1e 100644
+--- a/tools/testing/selftests/bpf/Makefile.buildvars
++++ b/tools/testing/selftests/bpf/Makefile.buildvars
+@@ -157,13 +157,15 @@ BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
+ 	     -I$(abspath $(OUTPUT)/../usr/include)			\
+ 	     -std=gnu11		 					\
+ 	     -fno-strict-aliasing 					\
+-	     -Wno-microsoft-anon-tag					\
+ 	     -fms-extensions						\
+ 	     -Wno-compare-distinct-pointer-types			\
+-	     -Wno-initializer-overrides					\
+ 	     #
+ # TODO: enable me -Wsign-compare
+ 
++# Warning flags that only clang has.  GCC accepts an unknown -Wno-foo
++# silently and then notes it on the next diagnostic it emits.
++CLANG_BPF_CFLAGS := -Wno-microsoft-anon-tag -Wno-initializer-overrides
 +
- #if defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86)
- #define SPEC_V1
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/callx_rodata.c b/tools/testing/selftests/bpf/progs/callx_rodata.c
-index e3f8335f80f8..8c28f01b7113 100644
---- a/tools/testing/selftests/bpf/progs/callx_rodata.c
-+++ b/tools/testing/selftests/bpf/progs/callx_rodata.c
-@@ -4,13 +4,14 @@
- #include <stdbool.h>
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
- 
- /* set by user space before the programs are loaded, it's in .rodata too */
- const volatile int bias = 1;
- 
- int op_idx;
- 
--#ifdef __clang__
-+#ifdef CAN_USE_CALLX
- 
- const volatile bool skip = false;
- 
-@@ -48,7 +49,6 @@ int both_ops(void *ctx)
- 
- #else
- 
--/* gcc doesn't support indirect calls */
- const volatile bool skip = true;
- 
- SEC("socket")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
-index 7e59188d9fca..a87e2a85f43d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
-@@ -6,9 +6,7 @@
- #include "bpf_misc.h"
- #include "../../../include/linux/filter.h"
- 
--/* gcc doesn't support indirect calls */
--#if defined(__clang__) && (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
--    (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
-+#ifdef CAN_USE_CALLX
- 
- #define CALLX_INSN(DST, SRC, OFF, IMM) \
- 	BPF_RAW_INSN(BPF_JMP | BPF_CALL | BPF_X, DST, SRC, OFF, IMM)
-@@ -1075,6 +1073,7 @@ int callx_c_ops_on_stack(void *ctx)
- #else
- 
- SEC("socket")
-+__skip("callx needs x86/arm64 JIT and compiler support")
- __success
- int dummy(void *ctx)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-index 6cf58ca9ac5b..29bc2f78315d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-@@ -6,9 +6,7 @@
- #include "bpf_misc.h"
- #include "../../../include/linux/filter.h"
- 
--/* gcc doesn't support indirect calls */
--#if defined(__clang__) && (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
--    (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64))
-+#ifdef CAN_USE_CALLX
- 
- /*
-  * Read-only data with pointers to functions, where the compiler puts tables
-@@ -892,6 +890,7 @@ int callx_c_packed_struct(void *ctx)
- #else
- 
- SEC("socket")
-+__skip("callx needs x86/arm64 JIT and compiler support")
- __success
- int dummy(void *ctx)
- {
+ VERIFY_SIG_SETUP := $(CURDIR)/verify_sig_setup.sh
+ VERIFICATION_CERT   := $(BUILD_DIR)/signing_key.der
+ PRIVATE_KEY := $(BUILD_DIR)/signing_key.pem
 -- 
 2.53.0-Meta
 
