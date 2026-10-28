@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793151553;
-	b=Rz69cfel1tgDE+wNE5WBW6abSs0vzyqeTcZx6Bna8jt8uzGYPCWzQhXRLyJp0F9UsBOs
-	 7KfOyRC6A/YGTcIwP/sawieKC+dv4S4g2oSBWiV5v+bTrveed34qAzExxrMjtu4JImvoE
-	 HtHH/0aecSFGQh2XBm1peStd4WMG759NWvELbP3fZLQQiB+eD0QrOOr6wrLubRNJi9wHA
-	 oGlm+rjexzuxeC2NOGFELaE7oIQYvGNAIvtFhPJIRkbhrt/Ld+GgVb2gGGLQFEBT1NJQf
-	 TZJ2EFx6dD6arEUP4/i9dgUQK6LJuokg8cemk12T4xuHIQwpDljULdV7taqyXQsGuiQ==
+	t=1793151555;
+	b=gdo8LbkBTFyKHAip7aqDYitx6CAzY1hMFREZVqSgSGtoWw0k2UTyv6dHGm3t9ZQQ/uhd
+	 eKG4mUn2dbMisJq+U3vwPKSiL/zZLEHPez69IjFiKgCOaW4/mjcSKxSz1N6/HbAMNTFo7
+	 YXGi9s1O5YpIBlMjQKcfQodBTjZ5hsMT3RQNQK6eTNJ1R2eLZKiP5BszN2TnIdTQnzFM2
+	 ejtIWqk/yYNLeJcVQpVIaOHGaMBbhQTRq826VwDn+VZ2AQockXxpUpzCE1yPXbuy+4Ghf
+	 EcXFcdLa+d//KKZgH0my/NVvUX7nLwTiaBbVDEs3aOheCptExQjxklMoHtVKSAPZSYQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793151553;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793151555;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=PLmIBNYj7yUqLn8gc2g6C2SqsdmwreLoNUxIVKIuE20=;
-	b=TloJSFKrWdRPgOWUmii2cVltAzFtJ+nLPCSAoP2VfNJv73iCj+Ldkt1MUn0rPi5Dbtsp
-	 68ehcAkpuU0L6wpjaeEUvzxSFdoQC02mB07CiGrbiazUb1w9/lT19DlpgydRD+7U/JMZ8
-	 qArng3B9aZ55Tz+Hx11S5H/TXiFn5krevm3LcbDEr+BtYMRtL2Dx0aaO/C5x6Wp89+soG
-	 5KRVCare47gVWUHGTTRF4oXNdBXtF/Uva3SaNxLMZiL8hxUM6vfyXSBGctqHuBCemc+v8
-	 YKA4eo+WWTcuFfICOIPY0P/Yiv6tM9ckpnG6OpUKs8QYkenBC1yn0fGok50zr+NOE2w==
+	bh=A87FZXA9a5ZtfFbaRBNlBmYgipJa+cj+6SnsRzBUS+c=;
+	b=EerKfgj9MCTKN1+Z14S00L16DmiLZ4etRHdS/1tSC/cVZtgLsIsrTBpmgDu0H9jIEXWF
+	 yW9ajLwlfZf3amPWF3p4o+Y1FAQye+efVYKg71yV1E+2bSa/QGRB2ur+ax/0oSTrfzF3L
+	 MOSWvtDa/DN6eaF9UE0xRR1YQ0gQRYrx55JMAqK+8/WgXj7+xwbUh51+dF8Re7ILJq2P/
+	 s+KqKO0HOCNbYt4ryQUj5tjicwX+tGBYCHj23vIV7xPSsIG6CHp5KotmT/Kta+ZqxHYYN
+	 V9VY4dmam9KlexLy3iLLiUZdZACubwk8OETgB60kIoC20sKvGA6urwdXkQs/fkJgTXA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ed8VBWQx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IXSRKBfk;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1E1606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9D2606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ed8VBWQx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE6D1F01825;
-	Wed, 28 Oct 2026 01:39:12 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IXSRKBfk
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86B01F01825;
+	Wed, 28 Oct 2026 01:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793151553;
-	bh=PLmIBNYj7yUqLn8gc2g6C2SqsdmwreLoNUxIVKIuE20=;
+	s=k20260515; t=1793151555;
+	bh=A87FZXA9a5ZtfFbaRBNlBmYgipJa+cj+6SnsRzBUS+c=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ed8VBWQxsfYP5f2HGKHFPp1l5oTqoDgG2zgq+JbDwJnOL2iQjDQGY8UM8Xkd27R2B
-	 ehOkMG/io3aeCTcKvF0sYt6sQNQj+hfDyyjREydvkAr22lp+iQjwIAyFJUP7kAdRwB
-	 giftYntme8vhlZeQR/nw+zAi17Iul+TPoyXEuUlqSYF6HX4wu74FFTle4MPnq1pRt5
-	 H/1B8z2rtS2fN1Kl7mSx0re2Hi9vTMlKQO3kU80Jr6Hw1378or5pMNdjb59UtdHonf
-	 psISKSPaKGodzF2qo/qfJP2J3Wne8EQjviotfqSwDgBSZmRp2pQIQPhIMIHDxQmHoZ
-	 0KXgGDTrlcydQ==
-Content-Type: multipart/mixed; boundary="===============3081443181645041951=="
+	b=IXSRKBfkGyxktM9O3Wy9kqBqcmO9gPXVcbsBf85lzE6GFzoMv33bZs9mODYRWrFId
+	 Y70q0+GaRFqn4WMs9Vy6gKeU0H4uxqkP1mNkWzcmfO5brL8c1R5JhBSygJJC77a6+k
+	 TlLS0nmq2fM0uX1NRDvrLwQYsJLhxHDeE3n3S/mBZqmJyZ03ZyhspaZuiPhCrJ2Smm
+	 tDLksDVkeuF9oLEjFOizHr9g4YrZyoY0Df6BtKEP7EhGsfhXNqgjXRaXDPikXAydzT
+	 CvO+GgWF788WaMKqX08fR43bgxvLUOcah0TEQNltEJBM6I2RehQrvRy9tuUTg8nSfk
+	 R0US2/6J7Rzng==
+Content-Type: multipart/mixed; boundary="===============0395306993928219988=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,170 +49,166 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <64d65cba8dd38be485a909c5b03c403ba78bfb67caf179deab641e22208908a8@mail.kernel.org>
-In-Reply-To: <cc848a0c0e4839fe34514b89561884c082650881.1793147364.git.memxor@gmail.com>
-References: <cc848a0c0e4839fe34514b89561884c082650881.1793147364.git.memxor@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 03/11] bpf: Let a callback unwind into the pad of its helper
+Message-Id: <81df2f63249021a13160d155eccab3bbd591e464d05db9765a15427c3cc97650@mail.kernel.org>
+In-Reply-To: <03d6c53ccdf3eb0f5503eae9f9ffa5e6570549c3.1793147364.git.memxor@gmail.com>
+References: <03d6c53ccdf3eb0f5503eae9f9ffa5e6570549c3.1793147364.git.memxor@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 01/11] bpf: Give a helper a way to call its callback with a pad
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 01:39:12 +0000 (UTC)
+Date: Wed, 28 Oct 2026 01:39:14 +0000 (UTC)
 
---===============3081443181645041951==
+--===============0395306993928219988==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Let a callback unwind into the pad of its helper
+> bpf: Give a helper a way to call its callback with a pad
 
 TL;DR:
-- Tracing (ftrace, kretprobe, fexit) may redirect a pad helper's return
-  address, so unwind could fall through, possibly causing use-after-free or
-  bad r0; not yet reachable
-- Stale comment in backtrack.c (nit)
+- bpf_unwind_leave() may misbehave if the helper is ftrace/kretprobe/fexit
+  traced: unwind lost, pointer or reference treated as scalar
+- With gcc, bpf_call_cb() register variables may be clobbered by KASAN/KCSAN
+  calls, possibly jumping to a bad address
 
-> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-> index 43d5740034c0..ce171be5e754 100644
-> --- a/kernel/bpf/backtrack.c
-> +++ b/kernel/bpf/backtrack.c
-
-[ ... ]
-
-> @@ -562,8 +567,16 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->  			from_subprog_call = subseq_idx - 1 >= 0 &&
->  					    (bpf_pseudo_call(&env->prog->insnsi[subseq_idx - 1]) ||
->  					     bpf_is_callx(&env->prog->insnsi[subseq_idx - 1]));
-> +			/*
-> +			 * unwind_exit of a callback goes back to the call of the
-> +			 * helper, which passes R0 on to the pad after it: R0 is
-> +			 * the callback's, as it is the subprog's after a call.
-> +			 */
-> +			cb_unwinds = !from_subprog_call && bpf_is_unwind_exit(insn) &&
-> +				     subseq_idx >= 0 &&
-> +				     bpf_is_sync_callback_calling_insn(&env->prog->insnsi[subseq_idx]);
->
-> -			r0_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
-> +			r0_precise = (from_subprog_call || cb_unwinds) && bt_is_reg_set(bt, BPF_REG_0);
->  			r2_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_2);
-
-This isn't a bug, but the comment at the top of the BPF_EXIT case says that
-the precision of the return registers is never propagated for an exit from
-a callback:
-
-    * case, we need to propagate the precision of the
-    * return registers, if necessary. In the latter we
-    * never do that.
-
-With this change, unwind_exit of a callback sets cb_unwinds, and
-r0_precise = (from_subprog_call || cb_unwinds) && bt_is_reg_set(bt, BPF_REG_0)
-does propagate r0 to the callback frame.
-
-The new comment above cb_unwinds describes this, but the old sentence is
-still there, so the same case has two comments that disagree.
-
-Should the old comment say that the return registers of a callback are
-dropped unless the callback left with unwind_exit?
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5601d2056218..ac9dbe082181 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11397,6 +11402,55 @@ static int btf_check_subprog_call(struct bpf_verifier_env *env, int subprog)
+> diff --git a/include/linux/bpf_unwind.h b/include/linux/bpf_unwind.h
+> new file mode 100644
+> index 000000000000..190d6dbae856
+> --- /dev/null
+> +++ b/include/linux/bpf_unwind.h
+> @@ -0,0 +1,282 @@
 
 [ ... ]
 
 > +/*
-> + * A sync callback is called by a helper or a kfunc, a C frame between the
-> + * callback and the BPF code that called it. unwind_exit of the callback returns
-> + * to the pad of its caller when there is one, and a helper or a kfunc that
-> + * calls a callback has one where BPF_HAS_CB_PADS and insn_has_cb_pad(): it
-> + * calls the callback with bpf_call_cb(), drops what it holds when the callback
-> + * unwinds and leaves to the pad of its own caller with the r0 of the callback.
-> + * So a call with such a callback that can unwind is a call of something that
-> + * can unwind, and unwind_goto has to follow it.
+> + * The registers the call clobbers are outputs, so that none of them can be an
+> + * operand of anything else. r0 is rax, on the way out and on the way to the pad.
+> + * The return address stays the byte after the call through what
+> + * apply_retpolines() and apply_fineibt() make of the call: they pad in front of
+> + * it, never behind it.
 > + */
-> +static int check_cb_unwind(struct bpf_verifier_env *env, struct bpf_insn *insn,
-> +			   int insn_idx, int subprog)
+> +#define __bpf_call_cb(type, fn, a1, a2, a3, a4, a5, r0, unwound)		\
+> +do {										\
+> +	register u64 __fn asm("r11") = (u64)(long)(fn);				\
+> +	register u64 __a5 asm("r8") = (u64)(long)(a5);				\
+> +	register u64 __c5 asm("r8");						\
+> +	register u64 __c11 asm("r11");						\
+> +	u64 __c1, __c2, __c3, __c4;						\
+> +										\
+> +	asm_goto_output(BPF_KCFI_CHECK(type)					\
+> +		 "	" CALL_NOSPEC "\n"					\
+> +		 "1:\n"								\
+> +		 _ASM_EXTABLE_TYPE(1b, %l[unwound], EX_TYPE_BPF)		\
+> +		 : "=a"(r0), "=D"(__c1), "=S"(__c2), "=d"(__c3), "=c"(__c4),	\
+> +		   "=r"(__c5), "=r"(__c11)					\
+> +		 : [thunk_target] "r"(__fn), "D"((u64)(long)(a1)),		\
+> +		   "S"((u64)(long)(a2)), "d"((u64)(long)(a3)),			\
+> +		   "c"((u64)(long)(a4)), "r"(__a5)				\
+> +		 : "r9", "r10", "memory", "cc"					\
+> +		 : unwound);							\
+> +} while (0)
+
+Can the argument evaluation here clobber the register variables?
+
+__fn is bound to r11 and __a5 to r8 before a1 through a4 are evaluated as
+asm inputs.  The arm64 version has the same shape, binding x15 and x0
+through x4 one after another before later arguments are evaluated.
+
+With gcc, a register variable is only guaranteed to hold its register at the
+asm statement itself.  If evaluating a later macro argument involves a call,
+the earlier binding is not kept across it.
+
+A later patch in this series (7a687425732b) calls:
+
+    bpf_call_cb(callback_fn, map, elem->data,
+                rhtab_elem_value(elem, map->key_size), callback_ctx, 0,
+                ret, unwound);
+
+The map->key_size load becomes a call to __tsan_read4 with CONFIG_KCSAN, or
+to __asan_load4_noabort with CONFIG_KASAN_OUTLINE, and kernel/bpf is not
+excluded from either.  That call is placed after the register variables
+have been set.
+
+On arm64 the call's own argument goes in x0, so the callback could get a
+garbage map pointer, and x15 (the call target) can be clobbered as well.  On
+x86 r11 and r8 are call-clobbered, so the call __x86_indirect_thunk_r11 that
+follows could jump to a garbage address.
+
+clang ties register variables only at the asm itself, so this would only
+affect gcc builds.
+
+Would it be safer to evaluate fn and a1 through a5 into ordinary
+temporaries first, for example typeof(a) __t = a;, and only then declare the
+register variables, the way the arm-smccc.h macros do?
+
+> +
+> +/*
+> + * The return address of the helper is the word below its canonical frame
+> + * address. The pad is in the frame that BPF code called, see above, so there is
+> + * a pad to go to: a miss is a bug, and the exception would be lost in a return.
+> + */
+> +static __always_inline void bpf_unwind_leave(void)
 > +{
-> +	if (!env->subprog_info[subprog].can_unwind)
-> +		return 0;
-> +	if (!BPF_HAS_CB_PADS || !insn_has_cb_pad(insn)) {
-> +		verbose(env, "callback cannot unwind\n");
-> +		return -EINVAL;
-> +	}
+> +	unsigned long *slot = (unsigned long *)__builtin_dwarf_cfa() - 1;
+> +	unsigned long to = bpf_unwind_target(*slot);
+> +
+> +	WARN_ON_ONCE(to == *slot);
+> +	*slot = to;
+> +}
 
-Can a callback that unwinds through one of these helpers end up on the
-fall-through path of the call instead of at the pad?
+Can *slot hold something other than the address in the bpf program that
+called the helper?
 
-check_cb_unwind() accepts the unwind based on BPF_HAS_CB_PADS and
-insn_has_cb_pad(), which are static properties. At run time the pad is only
-reached if the return address slot of the helper still holds the address in
-the BPF program. bpf_unwind_leave() does this:
+bpf_unwind_leave() assumes that it does, and the comment says a miss is a
+bug.  While the helper is traced, though, the slot can be replaced:
 
-    unsigned long *slot = (unsigned long *)__builtin_dwarf_cfa() - 1;
-    unsigned long to = bpf_unwind_target(*slot);
+  - function_graph: prepare_ftrace_return()/ftrace_graph_func() put
+    return_to_handler in *parent
+  - kretprobe/rethook: arch_rethook_trampoline is put there
+  - a bpf fexit/fmod_ret trampoline calls the original function, so the
+    return address is inside the trampoline
 
-    WARN_ON_ONCE(to == *slot);
-    *slot = to;
+On arm64 the same replacement is made to the link register at entry, and the
+prologue then saves it into the frame record that bpf_unwind_leave() reads.
 
-bpf_unwind_target() looks up *slot in the BPF and kernel extables, and
-several kinds of tracing replace or move that return address:
+kernel/bpf/Makefile removes CC_FLAGS_FTRACE only from percpu_freelist.o,
+bpf_lru_list.o, queue_stack_maps.o, lpm_trie.o, ringbuf.o and rqspinlock.o.
+So bpf_loop() (bpf_iter.c), the map iterators (hashtab.c, arraymap.c),
+bpf_find_vma() (task_iter.c) and bpf_rbtree_add (helpers.c) can all be
+graph-traced.  They can also be kretprobed, and so can
+bpf_user_ringbuf_drain().
 
-  - function_graph: prepare_ftrace_return() does *parent = return_hooker
-  - kretprobe/rethook and fprobe exit handlers (kprobe.multi return, session)
-  - a BPF fexit/fmod_ret trampoline: with BPF_TRAMP_F_CALL_ORIG it calls
-    orig_call from the trampoline, so the helper returns into the trampoline
+Later commits in this series give these helpers pads (4e61c40fe5c0,
+7a687425732b, 59e3a600668d, bee41eec3c39, ecd4c98df2ee) and add no notrace,
+NOKPROBE or attach restriction.
 
-None of the helpers that get a pad later in the series is protected against
-this. bpf_loop, bpf_for_each_map_elem and bpf_find_vma become plain noinline
-functions through BPF_CALL_x, and bpf_for_each_array_elem, bpf_rbtree_add_impl
-and the others are ordinary traceable functions.  None of them is in
-btf_id_deny and none is notrace.
+If the callback unwinds in that state, bpf_unwind_target(return_to_handler)
+misses in the bpf table and in the kernel table, and returns its argument:
 
-If the slot was redirected, bpf_unwind_target() finds no entry and returns the
-address unchanged.  WARN_ON_ONCE() fires, the helper does a normal return,
-and the tracer then returns to the instruction after the BPF call.
+    unsigned long to = bpf_unwind_target(*slot);   /* to == *slot */
 
-That instruction is unwind_goto, for which the arch backends emit no branch.
-Execution continues on the fall-through path, which the verifier modelled as
-a normal return of the helper.
+    WARN_ON_ONCE(to == *slot);                     /* fires */
+    *slot = to;                                    /* unchanged */
 
-On that path r0 holds what the callback unwound with, and the helper has
-already done its pad-side work:
+The helper then returns through the tracer to the normal continuation after
+the call instead of to the pad, and the exception is lost after the helper
+has already stopped and dropped what it holds.
 
-  - bpf_loop: the verifier thinks r0 is the scalar returned by bpf_loop(),
-    but it can be a kernel pointer, which could be stored to a map, or a
-    referenced pointer whose reference is never released.
+There is also a typing consequence.  According to b2f03cf6322f the pad gets
+the callback's r0 bit for bit, "a pointer stays the pointer it was, with its
+type and its reference".  On the fallthrough path the verifier instead types
+r0 as the helper's own return (RET_INTEGER, for example).  So a pointer or a
+referenced object the callback unwound with reaches code that treats it as a
+scalar, and the pad that would have consumed or released it never runs.
 
-  - bpf_rbtree_add: on the unwind path the pad has already freed the node
-    with __bpf_obj_drop_impl().  On the fall-through path the verifier ran
-    ref_convert_owning_non_owning() and treats the node as a live non-owning
-    reference, so the program can read and write freed memory.
+bpf_check_attach_target() already refuses the analogous case for bpf
+targets: "Only fentry can attach to %s, which can unwind".  Is there
+something equivalent for the C helpers that have a pad?
 
-bpf_check_attach_target() already refuses anything but fentry on a subprog
-that can unwind ("unwind_exit would return to the trampoline that called the
-target"). Is there an equivalent for the kernel helpers with pads?  The
-verifier has no say over function_graph or kretprobes at all.
-
-This commit only adds the gate, since helper_has_cb_pad() and
-kfunc_has_cb_pad() return false for now.  The path is opened later in the
-series by:
-
-  4e61c40fe5c0 ("bpf: Let the callback of bpf_loop unwind")
-  7a687425732b ("bpf: Let the callback of bpf_for_each_map_elem unwind")
-  59e3a600668d ("bpf: Let the callback of bpf_find_vma unwind")
-  bee41eec3c39 ("bpf: Let the callback of bpf_user_ringbuf_drain unwind")
-  ecd4c98df2ee ("bpf: Let the comparator of bpf_rbtree_add unwind")
-
-No commit up to 5646f059f1bb adds a fix: no notrace or NOKPROBE marking, no
-attach restriction, and no return_to_handler or trampoline handling in
-bpf_unwind_target().
-
-Would it work to make the pad helpers untraceable (notrace plus NOKPROBE, and
-deny them in btf_id_deny for fexit/fmod_ret), or to have bpf_unwind_leave()
-resolve the real return address through the ftrace/rethook shadow stacks?
+Would translating the slot with ftrace_graph_ret_addr() and the rethook
+equivalent (and refusing fexit/fmod_ret on these helpers) cover this?
+Alternatively, could the helpers with pads be made notrace and NOKPROBE, with
+tracing attachment to them denied?
 
 
 ---
@@ -220,4 +216,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40612543702
---===============3081443181645041951==--
+--===============0395306993928219988==--
