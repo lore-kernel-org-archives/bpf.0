@@ -1,45 +1,45 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793150736;
-	b=C42RfcLr3lvXocr/Rv1g2xyPwSh4j33+u7LTEza6PdmF1YdKrEtqqHIZFMXkPx0JPX5R
-	 zNLHFQkjqOBR49y+RrAbgMsIcnd651px6hPik2zW5UqzOOyTA8g2vnZXNNX7QoDqJU+iL
-	 ymJqICsw4civcnVBdhlePYcFduT0i+aSPfyEZQ6sLO5ajoqoQ3mgQ9Z0WtdmVA6NPPVrR
-	 e9kqM5DOGN8TJuO2ZfpGw/kRCs8bWGppj8UIyRRiXM1UL1ucBBhIqPJapKeftivAtcsmv
-	 Xp9qfYzhukYRr2Vw8Z5GD2gMbvYq8JS7PKYlwcoG7KbCDBVOA9wE/gUD1lJ+JF6TWvw==
+	t=1793150737;
+	b=M7iv6bZBQE9Nt40QGeYfV85MEIjaZu9FjXkSglVWU6FP6rF3yYUJ2zDMnrj+svJR1ZMo
+	 ZrmRd82bTkbHQFdicHE6ZJKFGqu6GIr4/cc9lD/FJHhGTCU1fgdqWWpRWc3zjFv5QXsYN
+	 HHf2TqWh5vUIBH8nsLdbnd4SMmMmXklwI/jaIEnoMjpM4RAP909lP6cyF5SwmJnVbpY6Y
+	 puDUJ3XtD/ieKCFVEKvsoZc9/xBSA/PNSguoZEUxrdzU6eMPRo2/OYtzhuqNVaCVxaKy5
+	 KmoEiUCJSTza0gjGL7uL65eGzwzMlMzeI4U1EDRDWlAw7OiKcpUSWU4JE4vUvqlop6g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793150736;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793150737;
 	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
 	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=uwTFqG+Y3Drm9tBRTvZoHX5U5RK5FD2GNGkB/YHfKwE=;
-	b=WF6nsHv3GQ+Xjfe4pj1gYlMLoTIOHVdYgk3P7GnuvxCre5tekv57Qz6zcsJyddcbz8k5
-	 I9W5J3gTf1SQmxX4/kuogas6zyW8Vn0t/cbHLnTxec2nUzNP6lWrdBQjOeYADCbi+wEUF
-	 1gSnqaRSw+e32UGNvH7k5Su4EJTl05wriCxuSRcPinD9OvrNFsqvSWuWOBC9xNPUBudsA
-	 S7oxNFikcXmDVgBvqsW513wxGCM6/iOWAoplyy7JSrRQrRFytdyRUkmRJqSUXaZFVj3hA
-	 r0pAF17GFtMeZ2inw8o3fLqvyGWYop6pFrHzBp8sZk8YcQV5ElkAOPkORYRkYIfk62A==
+	bh=iUFl/fn180TykZ3yONJMrKvZttftbmNs+wwJhjkejPA=;
+	b=uAUnHDy5nvOw/BQyUpnakq68flD+l8qJiXA6tCqy3gNeXGh+fyLehWf/vbtnhuqKfqTf
+	 D5QBFZe+Joc82ynEN67SW1rorUezhKskpD3o158OZkqWGeUIo8CFlxSBXJor1qN8IDDa+
+	 YFGqQWQGej80UVc9j70Z13/ql+Seaa/0iwbo7pgadMXOjtvZyVS1pi6KVd8FaSD6YMsBl
+	 5PodXgK3Gq46Pu0zpiLC3H85t6UwiQqbQxVBZoBKNBIGqopPW8zD6YVor9tr/dqh3/Ykk
+	 JcSwISbFuS4XMolkHyz96mJjdTw0YwpGcZPWRsRa9o9HT96pXNaGV8b6JWXYp9ZtMew==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JF4okSYa;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IdgOPhJ9;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4ED606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7117A606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 01:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JF4okSYa
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED991F01825;
-	Wed, 28 Oct 2026 01:25:34 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IdgOPhJ9
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F6441F01825;
+	Wed, 28 Oct 2026 01:25:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793150735;
-	bh=uwTFqG+Y3Drm9tBRTvZoHX5U5RK5FD2GNGkB/YHfKwE=;
+	s=k20260515; t=1793150736;
+	bh=iUFl/fn180TykZ3yONJMrKvZttftbmNs+wwJhjkejPA=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JF4okSYabP7qtOwwR/K+gYk8lt2OwToVO33cXayfWaUS4UkwicxSd/m7IwXp6Icwy
-	 WSQCsoaJjeVPblW4Mjm8UMOYnKMV3I7Y5Ab/bt0qcd7mM33qRHD7UUEyhUmqOxUSvv
-	 1DDPtIaYd8ulhaVZIFlFvtBlxayQbh5OsjHERdjivVQYfKLlrDmT8NwlV4wVb6f/Sh
-	 ZSHzRCv/bJd7rEbfaemExPDYOgsf05QqGhwXprBBAVwlRttKtLp5TONyoB62f9oBz4
-	 +ZSb5byGewOeJBFolSVf5i6hT7BVR5f3o9kKELi/0GDJmwovwEpG8VhcTvWolKLlSO
-	 CmNbB70hOtcng==
-Content-Type: multipart/mixed; boundary="===============8096680168149290584=="
+	b=IdgOPhJ9xsE3MqiwNMUbjAtMBZzE0XlDWspR6EP+fI+Z2SVHIGA1bQsQNE5Zxr0kA
+	 n3lnVUTKXH+P0FqGkCjJN5AtfOcYPLsw6YDeQKCJhEU3ngYudPiRPW9uT3zWY/xJbY
+	 0N1BbytUHfsOVhFoqXdJA9zkbYGX+3s0uC7fdbsHsmOt8fHXT6NHirwkOI689w0kwz
+	 qL09CgDVaU5K75M4dRQFVCrGxXIc/RGluRwjCCStZwe8GvLZM9jjf4awdtsE8R47ZU
+	 hkPrvWmS71GQu+swkIaiI2Iu/uzcY7WTZ4Ng5Jvsm2SeK4qwPynjgFnzgbs2NEm23P
+	 /CLTXKw0VtI4g==
+Content-Type: multipart/mixed; boundary="===============3508130379299656002=="
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,133 +49,138 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <d7e7a55c00b4ea31b7ff71b901c5e2054ce3f0a67d5c39d9820b29ec215c2208@mail.kernel.org>
-In-Reply-To: <25728094090d9bf3e4cd88feecec336f0493a5a9.1793147364.git.memxor@gmail.com>
-References: <25728094090d9bf3e4cd88feecec336f0493a5a9.1793147364.git.memxor@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 05/11] bpf: Let the callback of bpf_loop unwind
+Message-Id: <6588701a3bed9893f94098c228cc7e451f323612c151ba676f712eac8bf80cae@mail.kernel.org>
+In-Reply-To: <2fb53df72300b10ba5f5aff123c331b80a7c4be5.1793147364.git.memxor@gmail.com>
+References: <2fb53df72300b10ba5f5aff123c331b80a7c4be5.1793147364.git.memxor@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 10/11] selftests/bpf: Test callbacks that unwind
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 01:25:34 +0000 (UTC)
+Date: Wed, 28 Oct 2026 01:25:36 +0000 (UTC)
 
---===============8096680168149290584==
+--===============3508130379299656002==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Let the callback of bpf_loop unwind
+> selftests/bpf: Test callbacks that unwind
 
-TL;DR: If bpf_loop() is traced (fexit, kretprobe, function_graph),
-bpf_unwind_leave() may not find the BPF return address, so it may WARN and
-resume the program in a state the verifier never checked, possibly leaking
-pointers or references.
+TL;DR: Selftests may fail instead of skip on x86_64/arm64 kernels built with
+older gcc (no asm goto output), where callback pads are absent: unwind_drain
+load error and the changed callback_unwinds message expectation.
 
-> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-> --- a/kernel/bpf/bpf_iter.c
-> +++ b/kernel/bpf/bpf_iter.c
-
-[ ... ]
-
-> @@ -749,7 +750,7 @@ const struct bpf_func_proto bpf_for_each_map_elem_proto = {
->  	.arg4_type	= ARG_ANYTHING,
->  };
->
-> -BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
-> +BPF_CALL_x(4, noinline, bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
->  	   u64, flags)
->  {
->  	bpf_callback_t callback = (bpf_callback_t)callback_fn;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/unwind_drain.c b/tools/testing/selftests/bpf/prog_tests/unwind_drain.c
+> new file mode 100644
+> index 000000000000..54b9cfbef440
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/unwind_drain.c
+> @@ -0,0 +1,71 @@
 
 [ ... ]
 
-> @@ -766,13 +767,18 @@ BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
->  		return -E2BIG;
->
->  	for (i = 0; i < nr_loops; i++) {
-> -		ret = callback((u64)i, (u64)(long)callback_ctx, 0, 0, 0);
-> +		bpf_call_cb(callback, i, callback_ctx, 0, 0, 0, ret, unwound);
->  		/* return value: 0 - continue, 1 - stop and return */
->  		if (ret)
->  			return i + 1;
->  	}
->
->  	return i;
+> +void test_unwind_drain(void)
+> +{
+> +	struct user_ring_buffer *rb = NULL;
+> +	struct unwind_drain *skel;
+> +	int err;
 > +
-> +unwound:
-> +	/* The callback left with unwind_exit: the loop is over, and so is the helper */
-> +	bpf_unwind_leave();
-> +	return ret;
+> +	if (!is_jit_enabled()) {
+> +		printf("%s:SKIP:JIT is disabled\n", __func__);
+> +		test__skip();
+> +		return;
+> +	}
+> +	skel = unwind_drain__open_and_load();
+> +	err = libbpf_get_error(skel);
+> +	if (err == -ENOTSUPP) {
+> +		printf("%s:SKIP:JIT does not support unwinding\n", __func__);
+> +		test__skip();
+> +		return;
+> +	}
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+
+The test skips only on -ENOTSUPP, which is what check_unwind_insns() returns
+when !bpf_jit_supports_unwind().  Is that enough on a kernel whose JIT
+supports unwinding but whose helpers have no callback pads?
+
+On x86_64 or arm64 without CONFIG_CC_HAS_ASM_GOTO_OUTPUT (gcc < 11.5,
+12.0-12.3 and 13.0-13.2, see GCC_ASM_GOTO_OUTPUT_BROKEN in
+scripts/Kconfig.toolchain), BPF_HAS_CB_PADS is 0 in
+include/linux/bpf_unwind.h while bpf_jit_supports_unwind() still returns
+true.
+
+Loading drain then goes through:
+
+push_callback_call()
+  check_cb_unwind()
+    verbose(env, "callback cannot unwind\n");
+    return -EINVAL;
+
+unwind_drain__open_and_load() returns NULL with errno = EINVAL, so the
+-ENOTSUPP check is false and ASSERT_OK_PTR(skel, "open_and_load") fails the
+test where it should skip, since the kernel does not offer the feature in
+that configuration.
+
+Should this also skip when the load fails with "callback cannot unwind" in
+the verifier log (for example via bpf_program__set_log_buf()), or should
+the kernel return -ENOTSUPP for that case so that this check catches it?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_unwind.c b/tools/testing/selftests/bpf/progs/verifier_unwind.c
+> index 5a21345c34d4..3de145a2d065 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_unwind.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_unwind.c
+> @@ -896,12 +896,13 @@ static unsigned long cb_unwinds(void)
+>  	);
 >  }
 >
->  const struct bpf_func_proto bpf_loop_proto = {
+> +/* bpf_loop() has a pad for it, so what's missing is the one after the call */
+>  SEC("tc")
+>  __description("unwind: callback unwinds")
+>  __arch_x86_64
+>  __arch_arm64
+>  __load_if_JITed()
+> -__failure __msg("callback cannot unwind")
+> +__failure __msg("no unwind_goto after the call of bpf_loop()")
+>  __naked int callback_unwinds(void)
+>  {
+>  	asm volatile (
 
-Can bpf_unwind_leave() find the BPF caller's return address here when
-bpf_loop() is being traced?
+The new expected message is only what the verifier prints when
+BPF_HAS_CB_PADS is 1.  In include/linux/bpf_unwind.h that is the case only
+for defined(CONFIG_X86_64) && defined(CONFIG_CC_HAS_ASM_GOTO_OUTPUT) and
+the arm64 equivalent; the #else branch sets it to 0 and calls the callback
+the plain way.
 
-bpf_unwind_leave() looks for the return address of the BPF caller in
-bpf_loop()'s own return-address slot (__builtin_dwarf_cfa() - 1 on x86,
-the frame record LR on arm64).  But bpf_loop() is a regular traceable
-kernel function.  bpf_iter.o is built with the ftrace flags (kernel/bpf/
-Makefile only strips them for percpu_freelist, bpf_lru_list,
-queue_stack_maps, lpm_trie, ringbuf and rqspinlock), bpf_loop() has no
-NOKPROBE_SYMBOL, and it is not in btf_id_deny.  Several tracers change
-that slot or add a frame:
+check_cb_unwind() in kernel/bpf/verifier.c tests that first:
 
-- An fexit/fsession BPF trampoline calls the original function with
-  emit_rsb_call(&prog, orig_call, ...) in arch/x86/net/bpf_jit_comp.c, so
-  the return address of bpf_loop() points into the trampoline image.
+    if (!BPF_HAS_CB_PADS || !insn_has_cb_pad(insn)) {
+        verbose(env, "callback cannot unwind\n");
+        return -EINVAL;
+    }
 
-- kretprobe/rethook: arch_rethook_prepare() does
-  stack[0] = arch_rethook_trampoline.
+so on such a kernel the log for this program still says "callback cannot
+unwind" and never reaches "no unwind_goto after the call of bpf_loop()".
 
-- The function_graph tracer and fprobe exit handlers replace the slot with
-  return_to_handler.
+CC_HAS_ASM_GOTO_OUTPUT depends on !GCC_ASM_GOTO_OUTPUT_BROKEN
+(scripts/Kconfig.toolchain), which is y for GCC_VERSION < 11.5, 12.0-12.3
+and 13.0-13.2, while the minimum gcc is 8.1 (scripts/min-tool-version.sh).
+An x86_64 or arm64 kernel built with gcc 11.4 (Ubuntu 22.04), 12.2
+(Debian 12) or 13.2 therefore still has bpf_jit_supports_unwind() == true.
 
-In each case bpf_unwind_target(*slot) does not find a BPF address.
-search_bpf_extables() goes through bpf_prog_ksym_find(), which returns NULL
-for a trampoline ksym (ksym->prog is false), and the kernel and module
-tables have no EX_TYPE_BPF entry there, so the address comes back
-unchanged.  Then WARN_ON_ONCE(to == *slot) fires, which panics with
-panic_on_warn, and bpf_loop() returns ret through the tracer to the
-instruction after "call bpf_loop".  On x86 and arm64 the JIT emits no code
-for unwind_goto, so the program continues along the normal path.
+check_unwind_insns() does not refuse the program there, so __arch_x86_64,
+__arch_arm64 and __load_if_JITed() still let it load, and
+verifier_unwind/callback_unwinds now fails.  Before this hunk the
+expectation was correct on that configuration.
 
-The verifier checked that path only against callback states that returned
-normally, where r0 is RET_INTEGER and the stack and references are as left
-by a normal return.  It checked the unwind_exit state only against the
-pad.  So the BPF program can run in a state the verifier never checked.
-For example:
+Nothing in the test can express the compiler dependency.  The new
+verifier_unwind_cb.c tests in this commit depend on the compiler in the
+same way.
 
-- r0 can be the pointer or reference the callback unwound with
-  (b2f03cf6322f lets a pointer and its reference reach the pad), now seen
-  as a scalar.  The pointer leaks and the reference is never released.
-
-- Callback writes through callback_ctx on the unwind path only (for
-  example a scalar over a spilled pointer) are seen by code that assumes
-  the old slot type.
-
-The trigger is a bpf_loop() call that the verifier does not inline (flags
-not provably 0, or two callbacks at one call site) whose callback has
-unwind_exit, while kretprobe:bpf_loop, an fexit program on bpf_loop(), or
-the function_graph tracer is active.
-
-bpf_check_attach_target() already treats this hazard as real for BPF
-targets:
-
-    /* unwind_exit would return to the trampoline that called the target */
-    ...
-    "Only fentry can attach to %s, which can unwind"
-
-Nothing equivalent covers bpf_loop(), which this patch turns into a frame
-that unwinds.  No later patch in the series addresses this (no notrace,
-NOKPROBE_SYMBOL or btf_id_deny change, and no ftrace_graph_ret_addr() or
-rethook lookup in bpf_unwind_leave()).  The helpers that get pads later in
-the series (bpf_for_each_map_elem and its ops, bpf_find_vma,
-bpf_user_ringbuf_drain, bpf_rbtree_add) look to have the same problem.
-
-Could bpf_loop() and the other helpers with pads be made untraceable
-(notrace plus NOKPROBE_SYMBOL, and a btf_id_deny entry for fexit/fmod_ret),
-or could bpf_unwind_leave() resolve a hijacked return address?
+Can the expectation be made to hold in either configuration, for example
+with a regex that accepts either message, or can the test skip when the
+helpers have no pads?
 
 
 ---
@@ -183,4 +188,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40612543702
---===============8096680168149290584==--
+--===============3508130379299656002==--
