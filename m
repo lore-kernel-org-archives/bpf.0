@@ -1,101 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.174
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793212816;
-	b=3bCoEoyGUBxiINmgSA2BW/cXp5b2xiGqTEZx9U93X9dduJ1FjHZD47fsMoZ0F138CmR0
-	 onFgsRWIfznX4eikh+SrG0dN+dhbYuwg1kKaY12PZrEakDA20EglhxEiZaWTeNxqwvv2D
-	 CfGtKkDHPmEWxjwapIpK9PU1/Jg0piQsVj7xxd5BD3bHzHxl3lwP1wkYdklfKzdRPmPk4
-	 JPy0I5m6wAaONwWS4HyDIhMA816c5UcbNoAOTbJeffskfB8cBZ7r3yfh7M0nH/eUfPWX7
-	 KRdauVkmgeAEIbkzeSgjhBcT3Bevp3nLmjqHDjSuNMxDKhKybuIGnCycihnCpqsXHcQ==
+	t=1793212867;
+	b=IZaZrhXHXZD+FblBKdjw+/X/dzISRzo7rC6Ohlwjzq9iN8HjualBxW53eGTf71xm7KG8
+	 KZ3Irdzkxj4d/WGToqATB6KvE5TN/dY4tlDBDjT46LAKfEz5zdYl6x0JC0DiRjmLtoZRD
+	 Chli+j8kf0O1K8MtGPsiEF2doz7d3bvbic1Ul0A50sOEfG95xal0ueAyn2qjem7cTdnRa
+	 XGjCfdZVg7hwBycWXs+RqWG0yGwqL4bXZQ612JXz/fqry/bFq0Ck7Y234o+5VrPhNYIsa
+	 cpt7YAVmuuAwNB8ZtiizxuVtb73TXRnIoPDEKUzo+rhPZbvxI8jmKvW7NN6wfXpTjAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793212816;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793212867;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=QiKOO0YrqKharvG7Lk0X9XBUnnQ3jxJPKziFFjzJ2Mw=;
-	b=uj3jLIwgzH+PozS5+usNyFwpS8V44ezHHrCFzTT/HRNwliJ8KHeX1W3tIOUP5fT3g138
-	 f4Qn275Q82o7VgW/rCMwucH41HaDGKaro+8i87KB8PfdOnEt4UjTZzmaiF8y0br1TwQAr
-	 N6w1Bidp6+D4G5CZiJ/IxfAAefaSKryLFbI8wg9fvdxdC1s3Y7xJrI4AS1vX3kdA+v/w3
-	 ZoaTZYIu00bG9QlJjBpskvneqZiNTpcVWQzKBMm3tDvuQEZW1EsTNsk61yaVP+iFCwmQ3
-	 x69LSJ6a2vUB9S265FdgCIbW9sHYNSSMIi8kgHQ2eQYpkjxR+yxyNXt61ZLwvjTDSKQ==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=CtcI4A9AUaZ9QE5chm2vJYBlWzSI/cMSN3q2vOlZeo4=;
+	b=Pr4P/l6FgwlqVv4uIef/xoHavZh+9LPYAcAEtQ7oU3S2SPo8P2T7CzfiyCZNLRsQkD1z
+	 KvHcYvgA1d6TRH8mv7eSWDyvjluCMJUe6pQPmi52mD7MI5HEOmYSeRZMuhQXTqkxoQtIz
+	 S5oOWy5+Sw3R+12Hao0WwWGD1N5oNE1KNUl9osS9axtP7JcRP5v/PVBt9719s88J4M2ud
+	 uzmc1Gt1TqJ4W+33avDfNvXTp7IV01krpMPbQnnnFXor5sHGLgDk7gQsADY0hwmO2u2DF
+	 dkY5ICjcb7NXdFNo1YxT/YpdomjCsITmMNCI21V5ErA2MNpm4zwolfLSKkU0buJdsng==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tD3pDpnl;
-	arc=none smtp.remote-ip=209.85.128.43
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=huz7HcSL;
+	arc=none smtp.remote-ip=209.85.215.174
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C9F606A31C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 18:40:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 97C9F606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4D1606A31E
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 18:41:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DA4D1606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tD3pDpnl
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a9a8d6cea8so12506505e9.1
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 11:40:15 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=huz7HcSL
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc52c1b8286so811247a12.1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 11:41:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793212814; x=1793817614; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QiKOO0YrqKharvG7Lk0X9XBUnnQ3jxJPKziFFjzJ2Mw=;
-        b=tD3pDpnlXy0LkVNdZuYH7NK64MjzEnlKvp44lGFujmHV9TJZEVqtcNtNO7rr3Xr1ZK
-         lVY1LdNvqSSMTyOY9ViS94NIYVu2ZhlDf3RffiFOkZP5C14n+w1l+CSqHiBc5sadFRQp
-         zv/KuzK/vMd6L0DHutVe9desnAeYM4Sp5+Gg7MSNfOuUGnHNuddgX5xqM11JvzvIz+/1
-         WAQBnCi/5xS2lvmNPh57WKwjWGJPesDMYtOCYKIEhADpEu9tYzqF6wU2tOAQpRY6kuSl
-         sDHRhK0VCumOdypux/BHZl+g9VAmbM+iCAdnwX8u5uyudAbhr9HOJNxz4r+aAKesYqEw
-         oy6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793212814; x=1793817614;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20260707; t=1793212866; x=1793817666; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QiKOO0YrqKharvG7Lk0X9XBUnnQ3jxJPKziFFjzJ2Mw=;
-        b=QOHLOOy0cB0EDqu/Jq654Xwt4W5jLAgc4wJjM6JsZyO80JIVBEWG/ccZItPq/Zhvld
-         uOelV/TMXDQRijwwxvDPW7lgdVUCeBlRGzHBKcgZ0Q129lItpsn0VtTE7NNR8e69d7Wm
-         gulA4ScctAp8MnnNyZ312NcnEMPP+Rm6cSS1BePVEQPzRZS3Wm8yR1rD6JIKfld00ZqP
-         9sIUBuGvxAETxpNymDNuvpmpcd/AMP0s1F1N/9n3yanNENjTwkXEYS4ZWFyc7gR65bLM
-         errVIKpbISCA5NV903T4LyA8ZqexXHC0WIqbbwOOhwVXKRcb2u6bidkxN14Lpd5aaxzd
-         9EhA==
-X-Gm-Message-State: AFq9FYIVC+9ONqrppyX5CwN+yLLNb4V3m5k1v/g1pbrVQkoiWiVmkDKl
-	a0CG+GLrboXwzV9SBD6l74zwB/cYOHmj7nDz/99oYW8HxqDpfBlQFHBqizjP+74Y
-X-Gm-Gg: AYBFou0S5IriXaZuDAlIbsDY5MK+wqc8dBuHstgkYBZh1h2H1eFy59EiImkgV521mhV
-	HheOz+Ny9epr9lnqoporEER0Ue+l96u/BJHGnYKO1rHwTU1m3oLw37zhNyWanowD5XLTyg+6qB1
-	esJP2JwIfKGC8OpkMsh4zHitCyv1il8LO/NtPRySDLzcGoDSkfKXFJwiIN0GdFflQKLzExO2dvy
-	fxSjJZJ1jzRNciTBLnslWpAKpiGbjXJLZLk/hs9cTB2mGq8+YS9Qn0r6aDA1/1AO7HBSx5sxt/7
-	IpQLL7Ao9jnqTABneHqHw6Laq2SPLxbIRjJXdrFTiJBbOTaN509pW3qeZYxpS2JVrkLeHXU17Aj
-	bHxw4Dvmv755YPUGEtK8cMsbpK4fgYPFMMhl62iywAdOIBp5LhMW+mIKj3xAxCFvajgG8eFGx22
-	m+nu8bzlU6pD/8LxUh+JYYs0qjTCm00bB8AROu94n6SSkMDH7J0o3CiqbWN3ufbs7AgPXyZqS+A
-	Qy2uzqfPbq2FlgI4lKss6LCgeRCY0MIcxGBk/N1kgLzFj42Yot2pKbp/kw8h88oyEPRdXaCcjWg
-	icQmvHhVXtwNpOlvaIWJGiKQtrf7ryYsgwwCFhOpcCenZdcpI1tocc8mwCAgDmjQ70KoywKWHi1
-	dw0/vR3Lp/lzNdimzfACL3A==
-X-Received: by 2002:a05:600c:6555:b0:4a1:d45a:3ae9 with SMTP id 5b1f17b1804b1-4aa8b05fa4bmr7063735e9.15.1793212813465;
-        Wed, 28 Oct 2026 11:40:13 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-48e3ebc39a8sm30862921f8f.11.2026.10.28.11.40.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 11:40:12 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	linux-kernel@vger.kernel.org,
-	John Fastabend <john.fastabend@gmail.com>,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf] libbpf: Reject excessive program counts in generated loaders
-Date: Wed, 28 Oct 2026 18:39:47 +0000
-Message-ID: <20261028183947.9606-1-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=CtcI4A9AUaZ9QE5chm2vJYBlWzSI/cMSN3q2vOlZeo4=;
+        b=huz7HcSLqwNY2lvBvJ6ZXRgjOt+juXzXXlA814WLx4K5PYvEXMgyW3PEcVh9evhMyQ
+         vdViOSWnzxS3Oej+wWbV5AMFgS0om7CFhxI7GubLGNCpW6oUpyxil5L9kTWnnTHsHQWC
+         kLRe5670HTGnNB/TvCK3CHJOA+nARgvTSJelrf4QeV/xDtdQM30xTmCarfxAz++2xymW
+         JN/gjGRgOnmMeNuMsu+CZ3XLTAy+7J0iU4zZnTKMonTUDfWiUIz/YX6gCe2zU0WyRzKk
+         hPJwLer9bdwDEp3QFIBA3l/ItrpFehcLyQ2HxlpogJGF9phdVXEAdjabmBdvW+HfV6CG
+         SkMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793212866; x=1793817666;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CtcI4A9AUaZ9QE5chm2vJYBlWzSI/cMSN3q2vOlZeo4=;
+        b=bpHr3ep3XZdwrOrMBV0plZjPrhaJq/L+tKbeDsj6PRo6aMheB97dQYBVEYUH5m9cRJ
+         ReYsTNcp5qf2MdvC+ioWOl8T5PtHUbtsar27+TQQqxa+n2d2lFXwFMx9jBB2O8zm/J+X
+         xqV6f0GY0jv/aqnRpDTfLbHYekoXLB6XhgZ98KRjD9VqrjQUuvQfHDcx2FdGcdgAoY0v
+         P700C12+mU6VSbjFAWTxn6HeotRNgsKGojR2aVGY8e14zN7ygnjdT3Tf1flzQQ7Uh711
+         +V97Zlu0o84hPD0p6RUu6NlhBbUurcAubQv2b4TaLwC53Qy44/njEzPzQ3SVAWjxjOZe
+         h80A==
+X-Forwarded-Encrypted: i=1; AKwUvByugg+QsNdAebIslltWeHoPmxDH1ACUjGpA3OU0ysh3GhdAfllIxb7srgSLgEpceGUhc3c=@vger.kernel.org
+X-Gm-Message-State: AFq9FYL2r0HHzoQ3LY+eclEe72TmcGblJIeWjUzLKk9N4D2K42faHUDC
+	Dq94Nkg2/PvRqT80x3xSZ/Xa8+auptZLlQxfKsGK8vI74qzrHc3zqlvc
+X-Gm-Gg: AYBFou2sh0FR5oGvyRJTyZH+rJ08AgWoVa7mfWNJS+D2k2Cd3uKpcSrtMyoWwGf8Xv3
+	seaaYZ0pBRJKulVr9Ais8Ak8FMoRx1kToZIhwYB/28MhQ+KJxjL4n5DCD9rvRhriCD1AQtgo12m
+	xpPB/rUCAN1XcyzXrIfADZHi9gHe2tZRCVAXAmzGHdkVAY44oLf5EHtK1OOeN/lfM5VAj0WYIL6
+	z0XKeiNAmDMnl4/lOaSnnmfaE72yzMIyF3SXh6jzNT9YLdJKvcj999xgLCusyUrmuO4udt/mLdz
+	m+KzBUpvDJNHU2Fe0jpYxFUs5GpgkynfsfKgQeCCmYbmS1O+6GRql5sAxH9E0TpXzQe1mYTyzVI
+	UFPXv/REkjY/Zenm6CpZcgHuRf5W/rW0wa58JYqYPKMvXu6O+6vWUY6HwXwS17cqPj7+/6IZfko
+	U+Co3N5RRELz3x521u6fQMGxoEOjWG+SBqejVvvmWTA8tLIpMDCIV/S6beJbntW3oKqMEjL9Tpq
+	hWUnU78jdJfHF4oyJvYVNuoR544hhfbil02owuEUITntW0JBeMRwWlJLJjbrVi5WbFUudcAzckn
+	lC2CUBVEpO862qKSWK9YY7CHxnWlS3m249zrkoTQB18gvpQmVomxHaRnb3Rsfwg325VMYmpIZMF
+	YP/bis1HWBXnlQ102u95+IEihAM1UfXnzVA==
+X-Received: by 2002:a17:90a:c883:b0:3ac:36c7:c144 with SMTP id 98e67ed59e1d1-3ae6ed5ed78mr177339a91.28.1793212866098;
+        Wed, 28 Oct 2026 11:41:06 -0700 (PDT)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9b1506sm582040a91.15.2026.10.28.11.41.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Oct 2026 11:41:05 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 28 Oct 2026 18:41:05 +0000
+Message-Id: <DMGOWPMN84X8.XMJMHFQ87RVI@gmail.com>
+To: "Daniel Borkmann" <daniel@iogearbox.net>, <puranjay@kernel.org>
+Cc: <memxor@gmail.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 19/21] bpf, arm64: Split 24-bit immediates of
+ add, sub and equality compares
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20261027182445.1156335-20-daniel@iogearbox.net>
+References: <20261027182445.1156335-1-daniel@iogearbox.net> <20261027182445.1156335-20-daniel@iogearbox.net>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -105,40 +100,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-An object containing MAX_USED_PROGS+1 (33) programs successfully
-produces a light skeleton that laters fails at load time with -EACCES
-because saving the 33rd FD emits a store at r10 + 0:
+On Tue, Oct 27, 2026 at 11:24 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> An add, sub or compare with an immediate that neither the plain nor the
+> shifted 12-bit field takes moved the immediate into a register first,
+> two moves for most immediates up to 24 bits and then the add. Take two
+> adds or subs instead, of the upper 12 bits shifted and of the lower 12:
+> an instruction fewer, at a cycle more on the path of the operand, as the
+> two depend on each other where the moves did not, so an immediate that a
+> single move produces keeps the move. A compare for equality takes the
+> upper 12 bits off into a scratch register and compares against the lower
+> 12, as the subtraction keeps equality.
 
-	*(u32 *)(r10 +0) = r7
-	invalid write to stack R10 off=0 size=4
+[...]
 
-This catches the unsupported count during generation instead of
-producing a loader that the verifier rejects later.
+>  arch/arm64/net/bpf_jit_comp.c | 113 ++++++++++++++++++++++------------
+>  1 file changed, 74 insertions(+), 39 deletions(-)
 
-Fixes: 67234743736a ("libbpf: Generate loader program out of BPF ELF file.")
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- tools/lib/bpf/gen_loader.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 251392aa8b41..80a6b5306183 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -122,6 +122,11 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level, int nr_progs, int nr_maps
- 	gen->log_level = log_level;
- 	gen->nr_obj_maps = nr_maps;
- 	gen->max_func_ptr_maps = max_func_ptr_maps;
-+	if (nr_progs > MAX_USED_PROGS) {
-+		pr_warn("Total programs exceeds %d\n", MAX_USED_PROGS);
-+		gen->error = -E2BIG;
-+		return;
-+	}
- 	if (nr_maps + max_func_ptr_maps > MAX_USED_MAPS) {
- 		pr_warn("Total maps exceeds %d\n", MAX_USED_MAPS);
- 		gen->error = -E2BIG;
---
-2.43.0
-
+hmm Can we drop this patch?
+It saves 4 bytes and adds a cycle of latency?
+Doesn't seem worth it.
