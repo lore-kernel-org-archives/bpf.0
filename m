@@ -1,48 +1,47 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.2
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793173006;
-	b=0NIH/D0ztOP3uDuoOoipUwnWVTZBd+lJGF8D5DRlAd086qgEbqqf8X3xolVousSNbZmm
-	 gnii0afhElkWJVuNb1kt8cLhE1L6rqsimOM838dVRhWiahX0Bvr0CrGKHaE2TNkYsq6Va
-	 1SHS2V6bJkdQe9LacYn9q0TlS/YR7IsNAtdHWJnd1K0f5L3+IqzDjqAtaYBHRLtTHKpmZ
-	 KZpfoa1ZegfSC6Z/4Y6cYk1nwgDxsk8Qrqs0ndD1Nmr9NWeCISPcjPP6onVlQOQ3g5SEo
-	 ttNr5a4lcT4si5bScuyopyNQ68lUUeFC8Uhk715MxnE4Ky3lT6ZCxz/dBdjk9A7aJCQ==
+	t=1793173005;
+	b=yMjiCAOnzGdw021/Dg4AfOTECIfVFovVoVLOrVftamPE3R6w48nE1RsjhWo254PXJlhF
+	 83DZjcF2KAsmbTcaTtMIrHGiqQ0vSdko+Q6rlbplcgJXXCZ3djGN8VCnU32oTNJGtif8Q
+	 +i2If7vd37Sbd9z2ArU8qMxP+rT7Tnf9VSZJydMecxzjbv4y8j2ZsFSaB2uGS7F4V5rPa
+	 Nivg4lAErR+6CMR13vk2vsscD6nNVbbTQiqS9LyJCOhX08vSPLySZKRM+Ja3fqNfLqd5E
+	 6S60Hh62fm7x+McpJRG1mcrQd3Nib9k8NSRJk2AId3fPsdxrxScwITKJU4eGJeY9XDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793173006;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793173005;
 	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:
-	 X-CM-SenderInfo;
-	bh=yfK2jzQUerhSjLsRGgiw7mZM4o4ZRrozaZSYzwaaumc=;
-	b=Hf38S9T6gp7aykHCBlwDBqLzGFnHMzo4LXKEQIJNnouxuR8O0+6KGo+MWL8GUHF5VGQo
-	 d7WbgslczEjaD2ZQq8fzbdyIQn7ICeUB4B75aZ7KUYOSsn74RQFyRuRJ4hPihYCXh2mpb
-	 0x5dSerBzQdjgs3YddQNd6V2yTp/+8/zHnThEgqttYbeYl27Q7HS/C0xnjlbX8DNMSgJc
-	 HYQqa4DxyizmuimaTBAIrx6jThYcYoSGIu0v5DR8p3yUYLr1/gjgG3TgDIjnDBxOD2ws0
-	 ljjKdcMfuff3Sluyl1uRHIaU7J7RfOl+09L+M0RwpfKTfLXWP+N5dKwiUthXM4zuvuQ==
+	 Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-CM-TRANSID:X-Coremail-Antispam:X-CM-SenderInfo;
+	bh=+sQAJrQYUYl5J2zqbcDsQgoUeZvnqr1kzIH5Uj5NeY4=;
+	b=3+Y+tq2AUrHIuYShd5FQzjNB3f42fMmmTJtZV0FnYT0ufNwVS+hix2FwpW7QLVJvAVzt
+	 tLObXCow2qLFIcYwS4LYh6dE5N4uM07dK5Tc/XLGh/oE6Me6PfL0BblJsUlL8gh88CmHF
+	 nlPoBO5woPi183X1rcpYWzj/6+RQ5QhTGC6OYem1JBbyZQGXxyNl6H2yXbjHL15b4bnKv
+	 oQ/8axIFsyxt4suOuymRt0qlAlHpdrS2f5NZFwsulD7FjG+5SkwL4ZVEqgc9U1DkCULTH
+	 gaw35GbkmGOBt28WXCOpRiJ481hAVlEa7ODZWQQRoqeaGeBmSuFqbo6rgp/XH4Ea7rg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=163.com;
 	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=mJx6JI2Q;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=O21vUMeY;
 	arc=none smtp.remote-ip=220.197.31.2
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C37606A31F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C8F606A31E
 	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 07:36:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D7C37606A31F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 78C8F606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=mJx6JI2Q
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=O21vUMeY
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=yf
-	K2jzQUerhSjLsRGgiw7mZM4o4ZRrozaZSYzwaaumc=; b=mJx6JI2Q8GroOrbmXf
-	StgpobRVcucxbtT9fnD+XI9sMjIhi0r/dLn/ty015R3/QbtuYYSKRx2MZRpecKKz
-	97PoEhMuhtWLR3fTrFeEsGepNBdEXH6n0hDHyyjrV7uEP1HZQ2eNov+62CQ3Pg65
-	ViYShJSJT+eyhsdwTKOTUiDXk=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=+s
+	QAJrQYUYl5J2zqbcDsQgoUeZvnqr1kzIH5Uj5NeY4=; b=O21vUMeY4qayOjViUr
+	3zALZnCn6xsKAen4XRLPf5hH7d3tMPSIc8Lv+gsV/AAyFHI338tyoyaKqWzpRon0
+	ds4jDRDNxoS4wjoKlPLGapS7WAjYPvSpCcCpV5HXvpiDHy82+cv6dHyhTo5fVbFy
+	jvQhMCFjm0GQQZtNH1uHlNWMg=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnL1DDpeFqcENQDg--.35047S4;
-	Wed, 28 Oct 2026 15:35:36 +0800 (CST)
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnL1DDpeFqcENQDg--.35047S2;
+	Wed, 28 Oct 2026 15:35:33 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
 To: bpf@vger.kernel.org
 Cc: Yun Lu <luyun@kylinos.cn>,
@@ -60,12 +59,10 @@ Cc: Yun Lu <luyun@kylinos.cn>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Mykyta Yatsenko <yatsenko@meta.com>,
 	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Check task work scheduling on
-Date: Wed, 28 Oct 2026 15:35:25 +0800
-Message-ID: <20261028073525.1035605-3-luyun_611@163.com>
+Subject: [PATCH bpf-next 0/2] bpf: Fix task work use-after-free on deletion
+Date: Wed, 28 Oct 2026 15:35:23 +0800
+Message-ID: <20261028073525.1035605-1-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261028073525.1035605-1-luyun_611@163.com>
-References: <20261028073525.1035605-1-luyun_611@163.com>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -76,394 +73,70 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnL1DDpeFqcENQDg--.35047S4
-X-Coremail-Antispam: 1Uf129KBjvAXoW3tF43GrW8GFy3KFy5Kr4xtFb_yoW8JFWUWo
-	WfWr4fCw18Gr90y3y8W3s7JFyrW3ykK3ZrZr40grWDAa4jva4Ikrn7Gw47J34xZFyrtay3
-	AFykXw1xuFs7JF1rn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUcGYLUUUUU
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7AiufWrhpcg2ugAA3d
+X-CM-TRANSID:_____wDnL1DDpeFqcENQDg--.35047S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuF18XFWxJF1rZr4kWryDJrb_yoW5Xw4fpF
+	WrXayrKw4kX3WIkws7Aw4xZFyrWws7Jw15Cr1ktryfZ3Z0qFyIyryxKF1YqFy3CrZYyF1Y
+	vr1FqF4Sk3yUZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UKiigUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6wWtfGrhpcUsCQAA3x
 
 From: Yun Lu <luyun@kylinos.cn>
 
-Keep a map value pointer across deletion or non-preallocated HASH
-replacement in a syscall program, then require scheduling through the old
-pointer to return -ENOENT. Run both TWA_RESUME and TWA_SIGNAL cases for
-HASH deletion, RHASH deletion and HASH replacement.
+This series fixes a task-work use-after-free when a BPF program schedules
+through a map value pointer retained across deletion. Review of the
+earlier task-work series [1] pointed out that cancellation can leave
+the deleted value open to context reinitialization.
 
-Run 32 rounds per retirement case. The first exercises a slot with no
-context; subsequent rounds exercise an idle context. After each mutation,
-schedule on the live element and wait for its callback to check that
-retirement does not prevent subsequent scheduling on live storage. This
-does not assume that the allocator returns the same address.
+The original reader keeps the element alive while it queues new work,
+but that does not make the new callback part of the grace period freeing
+the element. If the callback enters RUNNING outside that waiting set, the
+final destructor cannot stop it from accessing the freed key or value.
+Patch 1 includes an allowed interleaving and a KASAN stack excerpt from a
+controlled reproducer on the base unfixed kernel.
 
-Also check live updates on RHASH, ARRAY, preallocated HASH and LRU_HASH in
-both notification modes. Keep a spare LRU slot so an update does not
-evict the target while obtaining a candidate. Drop the last map user
-reference and reopen each of the five map types by ID, covering both an
-unused slot and one with a completed callback. Loaded programs keep the
-map alive while its user reference count is zero. Reserve the old map FD
-number with /dev/null until the reopened map FD is restored, so skeleton
-cleanup cannot close an unrelated descriptor.
+Patch 1 retires task-work slots before non-preallocated HASH/RHASH storage
+is returned to the allocator, including abandoned RHASH candidates. It
+also orders ordinary cancellation as FREED, conditional unpublish, then
+map-owned reference disposal. Existing callback read-side protection and
+element grace periods provide the lifetime guarantee.
 
-Target the calling task and wait with bounded polling and subsequent
-syscalls. A successful scheduling call only queues irq_work, which may
-publish the task work after test_run has returned. Returning from another
-syscall gives TWA_RESUME a further opportunity to execute the callback.
+Patch 2 adds 24 selftests for the retirement gate and compatibility: both
+notification modes, live updates, and last-user-reference cleanup followed
+by reopening the map by ID. Its callback only counts deliveries, allowing
+an unfixed-kernel comparison without deliberately dereferencing freed
+storage.
 
-The 24 subtests comprise six retirement cases, eight live-update cases
-and ten uref-reopen cases. Without the fix, the six retirement cases fail
-at the exact scheduling return-value assertion (0 instead of -ENOENT),
-while the other 18 pass. With the fix all 24 pass. The callback only
-increments a counter and does not dereference the old value, so the
-unfixed-kernel comparison can safely test the retirement gate.
+This is a separate series from the captured-task and irq_work BUSY fixes.
+It is based on bpf-next commit 7c3188f84b54, which contains those fixes.
 
-These are retirement and compatibility tests. They do not force physical
-reclamation, allocator address reuse or concurrent cancellation.
+Testing on x86-64 QEMU/KVM:
 
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
----
+- Same test_progs binary on both kernels, with KASAN, PROVE_LOCKING and
+  PROVE_RCU: the unfixed kernel fails exactly the six retirement
+  return-value assertions and passes the other 18 cases; the fixed
+  kernel passes all 24, with no skips.
+- An out-of-tree reproducer triggers the native KASAN report quoted in
+  patch 1 on the unfixed kernel on every tested boot; on the fixed kernel
+  the stale-pointer schedule is rejected with -ENOENT and no report
+  occurs.
+
+[1] https://lore.kernel.org/all/20261012061915.231254-1-luyun_611@163.com/
+
+Yun Lu (2):
+  bpf: Retire task work before reclaiming hash elements
+  selftests/bpf: Check task work scheduling on retired values
+
+ include/linux/bpf.h                           |   2 +
+ kernel/bpf/hashtab.c                          |   7 +
+ kernel/bpf/helpers.c                          |  80 +++++-
  .../bpf/prog_tests/task_work_retire.c         | 240 ++++++++++++++++++
  .../selftests/bpf/progs/task_work_retire.c    |  84 ++++++
- 2 files changed, 324 insertions(+)
+ 5 files changed, 403 insertions(+), 10 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/task_work_retire.c
  create mode 100644 tools/testing/selftests/bpf/progs/task_work_retire.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_work_retire.c b/tools/testing/selftests/bpf/prog_tests/task_work_retire.c
-new file mode 100644
-index 000000000000..af7637749a06
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_work_retire.c
-@@ -0,0 +1,240 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 KylinSoft Corporation. */
-+#include <test_progs.h>
-+#include <fcntl.h>
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+#include "task_work_retire.skel.h"
-+
-+#define REUSE_ROUNDS 32
-+#define COMPLETION_WAIT_NS 2000000000ULL
-+#define COMPLETION_WAIT_ITERS 2000
-+
-+struct retire_value {
-+	__u64 data;
-+	struct bpf_task_work tw;
-+};
-+
-+static bool run_prog(struct bpf_program *prog, int expected)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+	return ASSERT_OK(err, "test_run") &&
-+	       ASSERT_EQ((__s32)opts.retval, expected, "retval");
-+}
-+
-+static __u64 completed(struct task_work_retire *skel)
-+{
-+	return __atomic_load_n(&skel->bss->completed, __ATOMIC_ACQUIRE);
-+}
-+
-+static bool wait_completed(struct task_work_retire *skel, __u64 expected)
-+{
-+	__u64 deadline = get_time_ns() + COMPLETION_WAIT_NS;
-+	__u64 count;
-+	int i;
-+
-+	for (i = 0; i < COMPLETION_WAIT_ITERS; i++) {
-+		/* irq_work may enqueue task work after test_run returned. */
-+		syscall(__NR_gettid); /* Give TWA_RESUME another return to user mode. */
-+		count = completed(skel);
-+		if (count >= expected)
-+			return ASSERT_EQ(count, expected, "completed");
-+		if (get_time_ns() >= deadline)
-+			break;
-+		usleep(1000);
-+	}
-+	return ASSERT_EQ(completed(skel), expected, "callback_timeout");
-+}
-+
-+static struct task_work_retire *open_test(enum bpf_map_type type, __u32 flags,
-+					  bool use_signal)
-+{
-+	struct task_work_retire *skel;
-+	int err;
-+
-+	skel = task_work_retire__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return NULL;
-+	err = bpf_map__set_type(skel->maps.values, type);
-+	if (!ASSERT_OK(err, "map_type"))
-+		goto fail;
-+	err = bpf_map__set_map_flags(skel->maps.values, flags);
-+	if (!ASSERT_OK(err, "map_flags"))
-+		goto fail;
-+	/* A full LRU map evicts the target in prealloc_lru_pop() before the
-+	 * BPF_EXIST lookup, so keep one spare slot for the update cases.
-+	 */
-+	if (type == BPF_MAP_TYPE_LRU_HASH) {
-+		err = bpf_map__set_max_entries(skel->maps.values, 2);
-+		if (!ASSERT_OK(err, "map_max_entries"))
-+			goto fail;
-+	}
-+	if (!ASSERT_OK(task_work_retire__load(skel), "load"))
-+		goto fail;
-+	/* __open() already exposes the skeleton BSS mapping; writing after
-+	 * load keeps the mode next to the other post-load setup.
-+	 */
-+	skel->bss->use_signal = use_signal;
-+	return skel;
-+fail:
-+	task_work_retire__destroy(skel);
-+	return NULL;
-+}
-+
-+static bool insert_value(struct task_work_retire *skel)
-+{
-+	struct retire_value value = {};
-+	int key = 0;
-+
-+	return ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.values),
-+					   &key, &value, BPF_ANY), "insert");
-+}
-+
-+static void retired_value(enum bpf_map_type type, bool use_signal, bool replace)
-+{
-+	struct task_work_retire *skel;
-+	struct bpf_program *mutate;
-+	int i;
-+
-+	skel = open_test(type, BPF_F_NO_PREALLOC, use_signal);
-+	if (!skel)
-+		return;
-+	mutate = replace ? skel->progs.update_then_schedule :
-+			   skel->progs.delete_then_schedule;
-+	if (!insert_value(skel))
-+		goto out;
-+
-+	for (i = 0; i < REUSE_ROUNDS; i++) {
-+		/* First round has no ctx; later rounds have an idle ctx. */
-+		if (!run_prog(mutate, -ENOENT) ||
-+		    !ASSERT_OK(skel->bss->mutation_err, "mutation") ||
-+		    !ASSERT_EQ(completed(skel), i, "retired_not_called"))
-+			goto out;
-+		if (!replace && !insert_value(skel))
-+			goto out;
-+		if (!run_prog(skel->progs.schedule_live, 0) ||
-+		    !wait_completed(skel, i + 1))
-+			goto out;
-+	}
-+out:
-+	task_work_retire__destroy(skel);
-+}
-+
-+static void live_update(enum bpf_map_type type, __u32 flags, bool use_signal)
-+{
-+	struct task_work_retire *skel;
-+
-+	skel = open_test(type, flags, use_signal);
-+	if (!skel)
-+		return;
-+	if (!insert_value(skel) || !run_prog(skel->progs.schedule_live, 0) ||
-+	    !wait_completed(skel, 1))
-+		goto out;
-+	if (!run_prog(skel->progs.update_then_schedule, 0) ||
-+	    !ASSERT_OK(skel->bss->mutation_err, "update"))
-+		goto out;
-+	wait_completed(skel, 2);
-+out:
-+	task_work_retire__destroy(skel);
-+}
-+
-+static void uref_reopen(enum bpf_map_type type, __u32 flags, bool used)
-+{
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct task_work_retire *skel;
-+	int map_fd, null_fd = -1, reopened_fd = -1;
-+	int err;
-+
-+	skel = open_test(type, flags, false);
-+	if (!skel)
-+		return;
-+	if (!insert_value(skel))
-+		goto out;
-+	if (used && (!run_prog(skel->progs.schedule_live, 0) ||
-+		     !wait_completed(skel, 1)))
-+		goto out;
-+	map_fd = bpf_map__fd(skel->maps.values);
-+	err = bpf_map_get_info_by_fd(map_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "map_info"))
-+		goto out;
-+	null_fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+	if (!ASSERT_GE(null_fd, 0, "open_dev_null"))
-+		goto out;
-+	/*
-+	 * Drop the sole map FD, retaining only program references. Reserve
-+	 * its number so skeleton cleanup cannot close an unrelated new FD.
-+	 */
-+	if (!ASSERT_EQ(dup3(null_fd, map_fd, O_CLOEXEC), map_fd, "drop_uref"))
-+		goto out;
-+	/* Leave the unused case uninitialized until after reopening. */
-+	if (used && !run_prog(skel->progs.schedule_live, -EBUSY))
-+		goto out;
-+	reopened_fd = bpf_map_get_fd_by_id(info.id);
-+	if (!ASSERT_GE(reopened_fd, 0, "reopen_by_id"))
-+		goto out;
-+	if (!ASSERT_EQ(dup3(reopened_fd, map_fd, O_CLOEXEC), map_fd, "restore_map_fd"))
-+		goto out;
-+	if (!run_prog(skel->progs.schedule_live, 0))
-+		goto out;
-+	wait_completed(skel, used ? 2 : 1);
-+out:
-+	if (reopened_fd >= 0)
-+		close(reopened_fd);
-+	if (null_fd >= 0)
-+		close(null_fd);
-+	task_work_retire__destroy(skel);
-+}
-+
-+void test_task_work_retire(void)
-+{
-+	static const struct {
-+		const char *name;
-+		enum bpf_map_type type;
-+		__u32 flags;
-+	} maps[] = {
-+		{ "hash", BPF_MAP_TYPE_HASH, BPF_F_NO_PREALLOC },
-+		{ "rhash", BPF_MAP_TYPE_RHASH, BPF_F_NO_PREALLOC },
-+		{ "array", BPF_MAP_TYPE_ARRAY, 0 },
-+		{ "prealloc_hash", BPF_MAP_TYPE_HASH, 0 },
-+		{ "lru", BPF_MAP_TYPE_LRU_HASH, 0 },
-+	};
-+	char name[80];
-+	int signal, i, used;
-+
-+	for (signal = 0; signal < 2; signal++) {
-+		snprintf(name, sizeof(name), "hash_delete_%s", signal ? "signal" : "resume");
-+		if (test__start_subtest(name))
-+			retired_value(BPF_MAP_TYPE_HASH, signal, false);
-+		snprintf(name, sizeof(name), "rhash_delete_%s", signal ? "signal" : "resume");
-+		if (test__start_subtest(name))
-+			retired_value(BPF_MAP_TYPE_RHASH, signal, false);
-+		snprintf(name, sizeof(name), "hash_replace_%s", signal ? "signal" : "resume");
-+		if (test__start_subtest(name))
-+			retired_value(BPF_MAP_TYPE_HASH, signal, true);
-+		snprintf(name, sizeof(name), "rhash_update_%s", signal ? "signal" : "resume");
-+		if (test__start_subtest(name))
-+			live_update(BPF_MAP_TYPE_RHASH, BPF_F_NO_PREALLOC, signal);
-+		snprintf(name, sizeof(name), "array_update_%s", signal ? "signal" : "resume");
-+		if (test__start_subtest(name))
-+			live_update(BPF_MAP_TYPE_ARRAY, 0, signal);
-+		snprintf(name, sizeof(name), "prealloc_hash_update_%s",
-+			 signal ? "signal" : "resume");
-+		if (test__start_subtest(name))
-+			live_update(BPF_MAP_TYPE_HASH, 0, signal);
-+		snprintf(name, sizeof(name), "lru_update_%s", signal ? "signal" : "resume");
-+		if (test__start_subtest(name))
-+			live_update(BPF_MAP_TYPE_LRU_HASH, 0, signal);
-+	}
-+	for (i = 0; i < ARRAY_SIZE(maps); i++) {
-+		for (used = 0; used < 2; used++) {
-+			snprintf(name, sizeof(name), "%s_uref_reopen_%s", maps[i].name,
-+				 used ? "used" : "unused");
-+			if (test__start_subtest(name))
-+				uref_reopen(maps[i].type, maps[i].flags, used);
-+		}
-+	}
-+}
-diff --git a/tools/testing/selftests/bpf/progs/task_work_retire.c b/tools/testing/selftests/bpf/progs/task_work_retire.c
-new file mode 100644
-index 000000000000..69dc19261724
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/task_work_retire.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 KylinSoft Corporation. */
-+#include <vmlinux.h>
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct elem {
-+	__u64 data;
-+	struct bpf_task_work tw;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct elem);
-+} values SEC(".maps");
-+
-+bool use_signal;
-+int mutation_err;
-+__u64 completed;
-+
-+static int callback(struct bpf_map *map, void *key, void *value)
-+{
-+	/* Also safe on the unfixed kernel: do not dereference key or value. */
-+	__sync_fetch_and_add(&completed, 1);
-+	return 0;
-+}
-+
-+static __always_inline int schedule_value(struct elem *value)
-+{
-+	struct task_struct *task = bpf_get_current_task_btf();
-+
-+	if (use_signal)
-+		return bpf_task_work_schedule_signal(task, &value->tw, &values, callback);
-+	return bpf_task_work_schedule_resume(task, &value->tw, &values, callback);
-+}
-+
-+SEC("syscall")
-+int schedule_live(void *ctx)
-+{
-+	int key = 0;
-+	struct elem *value = bpf_map_lookup_elem(&values, &key);
-+
-+	return value ? schedule_value(value) : -EINVAL;
-+}
-+
-+SEC("syscall")
-+int delete_then_schedule(void *ctx)
-+{
-+	int key = 0;
-+	struct elem *value = bpf_map_lookup_elem(&values, &key);
-+
-+	if (!value)
-+		return -EINVAL;
-+	mutation_err = bpf_map_delete_elem(&values, &key);
-+	if (mutation_err)
-+		return mutation_err;
-+
-+	/* test_run holds the trace read-side section across both operations. */
-+	return schedule_value(value);
-+}
-+
-+SEC("syscall")
-+int update_then_schedule(void *ctx)
-+{
-+	struct elem replacement = {};
-+	int key = 0;
-+	struct elem *value = bpf_map_lookup_elem(&values, &key);
-+
-+	if (!value)
-+		return -EINVAL;
-+	mutation_err = bpf_map_update_elem(&values, &key, &replacement, BPF_EXIST);
-+	if (mutation_err)
-+		return mutation_err;
-+
-+	/* HASH replaces the element; RHASH and ARRAY update it in place. */
-+	return schedule_value(value);
-+}
+
+base-commit: 7c3188f84b54d8e7643f6ec8454824df2823ba73
 -- 
 2.43.0
 
