@@ -1,45 +1,96 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793212456;
-	b=39k8KNZ81FIFujE6jN9W2KLuWNZv+K9bj3W+ShfDtJ8xJmn+6r0XOLUwh+4ilLdXRj3M
-	 KyF5/B1ygGESTsdwYKNSGV+cxvwr86McDj9XagnFdRHuPiCjDNypmA6Lzk3B+SodMuonC
-	 cKpioto6xefJNbzOpROXIqEBRTf5z6/YgLOO9T8qWejzoZDPwL3hVD53LRFZPLAnfR7jC
-	 GTDtHiDHFIOVjggtislnmHsRNnSMnI69poTcZgLYSzDMaZ1xtEJa5eH0fGeTNsXDM+Txh
-	 dgvUYo0lfvaOTBzrr/AqoMcuWReZTqrncH5hop7yKR6cXi2B9JNA6E+V+5QD+CMpFNQ==
+	t=1793212729;
+	b=U7MVaBnS2qgERBmuDpFgWkLnOOSdPq8IaKyU7qUzvlNr4Frlm7SG0ZXy7wkj2g5YenEq
+	 c9Ghn9eqwvZfyL1xBf8BIToHMC8GsJxbOJLXcAIg3Aqwf4kJyIicnPIP3pPFMhyA8Rh8T
+	 jaxbOqHXWzV3le6k6dUaYjJYrfamtFWOBx5hvcoMyYmWqcIFADf9dZvaVIhv1BuVEDH7m
+	 ZNySvAZPL02ChzkSidHNH3r6DU4newZizLXxIAdQcEbjeD370ajh1osWhWUk7lS9fa81F
+	 Vu2moFghUA2rYiMn3jBytMjGVzUz45WTBMBuTs2Uu1DuGWr9TkcFG3/gdER5vM5eoWg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793212456;
-	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
-	 In-Reply-To:References:Subject:From:To:Cc:Date;
-	bh=5tjaJD63ehrQckLPxpHxn/TdycVsGLXT5QibM4ML/c8=;
-	b=lEX+lySy9jAcx5oGHGRw6dqLs3TCJ2HmF3lu3BZkvbxCMijLRerNP08JUvr/KW6Za5Qn
-	 2TVEeDKEcwghMA9oWp6+r0KVB/FnU7aER4iA5KL26HkR8P71krx41u55Yw3dFMNJhuP9B
-	 xbObNkHAfT+IVs1CIf2ib29Za9v1vtCQPtdvWtJG7+gl1TcgqXEv6v97z/ngOAENcmNOe
-	 casZaLK8W+f9bnqzrUDVj0by1YwJGZwoQMqw+RtIyiUqdPbsDrw9JQQUU5Mnui/DiqPO0
-	 PavzwiSwGJnCZkkHG03JmL6FUndZtmQRc6ZpJhFz9JfoKQW1XB1k2Fw+5GDKA3Zyx1Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793212729;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:Content-Transfer-Encoding:MIME-Version;
+	bh=LU0Y6smR+VyXGmLRdK9L1gsHW125um2nXKAEWmDt8ZI=;
+	b=BVrBp2P8Se2gy0RfyCSooRfnZ4EU47c8NTbIwgXDsy40eTx7rFUGARZgrtCJbjbaSJwu
+	 CV0lp+lw3+AIAZxLHHL2yIAvVSx2+obRh12FIcHoc/cASb/FY5azjTOvkxbp4qXZCR31v
+	 hrcvXvTceRoNb0Mu42HDQBfTEYiXbdiRZmiW3IBQnSBjLBqOdcTdqlKqihhXblJqTeKLG
+	 /ofVsS+f0FlwVDHB4v7mEGGVzmzSoYzxOTtl5CuDAa1bnNqlBOCz0F6u+Jh5bsOPpLoen
+	 JHReSKwH2/9Isoep8V/jbZsabxpEEwj11HQ4VyNxpCA7WtpygvTa5Oy7TBKPZCi2zlg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DR4z9Jnc;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y1x+CEj8;
+	arc=none smtp.remote-ip=209.85.215.170
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE150606A320
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 18:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F76606A321
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 18:38:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 86F76606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DR4z9Jnc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547861F01828;
-	Wed, 28 Oct 2026 18:34:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793212455;
-	bh=5tjaJD63ehrQckLPxpHxn/TdycVsGLXT5QibM4ML/c8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DR4z9JncDLAyRPzhtoTfu9E22WGwNqJCa1roerINUGal9mO0+9a2Y5Fqiw1Koj/Pr
-	 ecxsbdtBTrGkcGCmlxJXEmNyv68h5VQZ3VYMX8ao3Q9JcuVVlAm2JqncCsQOO2+Xai
-	 nVMEFfoVB2kDUjRdBzzwnJhU3Tx/++QKL+OVu7+s1sTy/0RikBvNQc/KSb2Rqc3wFn
-	 /Ae634R9VhY+FPXGEXeW+UA6eoeeNSqkqGZ6xvvIxXGZzIsJq2aYw1usLkpnltT3sv
-	 uR+2DhUDp8bZPk3OtBmD2cEOS643NP05/y2PsReZpQ8pOpZJe+lysmf8TwMV0T86EP
-	 0L17iyHEZNK1w==
-Content-Type: multipart/mixed; boundary="===============0091060735852154991=="
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y1x+CEj8
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cc7e79c1eaaso645108a12.2
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 11:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793212729; x=1793817529; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LU0Y6smR+VyXGmLRdK9L1gsHW125um2nXKAEWmDt8ZI=;
+        b=Y1x+CEj8CQZ12gL4ejMsSqDKQWhAPubDjhaASv5iRG14SoNkqJXbsXBvU51IAqD7iE
+         U4BGXOzdTbEAU88gbKMd4fybe66o7c47Dymgf3diePyzzqV5dt0mleRUIp/iuyu9VOyE
+         rHeJPC4y6NFRSieBW6QBrhpsnHTPYCVQwcpJgj2dTEaNykz7k1VgwycObolp9aPetx+Q
+         k5CJm4aJqIkZ71WuzimN/vuqq0ZGeVmLs74RqoqRvHsoTgpjKDi5yQGIi9rzQGT0RVKU
+         mVR8VMwI680st8sLrQ/ZSLUL2KX2Fhg+jQcZbGaHkMtISNFsCSFDJcwqC5uBHtf5Y7xZ
+         NgMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793212729; x=1793817529;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LU0Y6smR+VyXGmLRdK9L1gsHW125um2nXKAEWmDt8ZI=;
+        b=aNbJeFGnh3xGml8czyJitedboun7MYookOsrT/dKh3/V7zHuVgl6O1DaSiMQRVym4N
+         l8+9PjujzaFFKXn6l1OxgOsNWT3bAeMnsuiza6UTBCjAR5xm73UvmwJyOa3qGTG00NsF
+         bpTIunLsfyAZxzRTmBIOStmUKPAXXY8nzJtqgX1Cu29INarvr7cgiXVfiKFOCxgbe+mb
+         4g1Dc1/lEOACnMeaq8rLJBFSZxgDZRHJBxVzCjlyfS8/D79ly03rjopkEkzuFnxTze3/
+         IpuwixhwF1RaIDQVRR7hQky5NS02DH0EPil/YESypJvdQjgQ9OJycN/SBcNWliPEkDwu
+         6u1Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzYl2ouw4jJ+NGermypkWTzGBJ8+W9lVRWrhWDLIE1piFygQRCO0rUZJlIp2XN7w1TybiM=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIFIDeSJLU53tYzLOwao1nYJZX39ywSB63SffYhyoDzHXnODU3a
+	bNX8gOUJsVTZJiW6kiu5Ms2JQ/YkOsXmt+wobUrvP+BB5BT5P9xcMHxwMsK9GQ==
+X-Gm-Gg: AYBFou0YcwoxJX58J629e5YfeN/pOxkSoYDFCCO5FY7llqtxLwqaGFLl132I4p3ga8a
+	KK0Wo0FRAzjgI+hunTNt57mvrkJHexpFjpBQG2J6tWDzOZeHEJrlA6PetD4HvIaWrUxrnZppOJe
+	G13xBJ0L935nVgcO+aFfl9zqKSm22sDToBhW40UFltydpXNusbhfnbQjBrnDU+rut4x19FOQvvM
+	uOCdMrwkje4QiD6jq+O2V0oZVzB8X/2oWRWTg/bPYvQUI/6JIYM4geiWWwKU8rLtdhNE9JHDQFK
+	zQWTnF1bFQbIVIbdgVPAtrTeJDb7JC0q4z/LKM5ohZ7HFbFVCxym83mpPPuZrxihnd1rTP1JW4T
+	zrKhHk6J0dNmLKPdnldzpK84r7WFbW/yi5VQM+AOnbOBsTiAKTDXgJF2tmeQP6SnMABe6JvaMhI
+	pIo4xepOa6ej0CHfVeVmGKu5krrSpebNBTC5nwrUfUl0pH5wnzWmCq/q0CqV1irzdbseR/IDURe
+	UbdXiLILI4gMDLNRY2vSdfZJinpMOZJo/ALQMLm1Gs6cDVkGXBVJ9oplI5qH2cithaUQaQmwXjx
+	5tvpKigisKhJ3mZTouMFEJgiLXzsFacNZtJQuodDPClJbmO/XXJT5qqtMCn2nIab3bhBF0zd1qT
+	XpYgv2wcI/EiSobopK2ZtPGxIMJOb9v5G1g==
+X-Received: by 2002:a17:90b:4c49:b0:3a0:516d:9f88 with SMTP id 98e67ed59e1d1-3ae580cd137mr2392847a91.26.1793212728666;
+        Wed, 28 Oct 2026 11:38:48 -0700 (PDT)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9db612sm607914a91.17.2026.10.28.11.38.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Oct 2026 11:38:48 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 28 Oct 2026 18:38:47 +0000
+Message-Id: <DMGOUYN7S2NQ.PLCLQA04Z3VI@gmail.com>
+Cc: <memxor@gmail.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 07/21] bpf: Move the division magic number
+ computation out of the x86 JIT
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Daniel Borkmann" <daniel@iogearbox.net>, <puranjay@kernel.org>
+In-Reply-To: <20261027182445.1156335-8-daniel@iogearbox.net>
+References: <20261027182445.1156335-1-daniel@iogearbox.net> <20261027182445.1156335-8-daniel@iogearbox.net>
+Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -49,55 +100,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Message-Id: <46be9f5e956f05a9cdb4049d576ff254054f5bbcbccd2c48d2ca1711bba31c14@mail.kernel.org>
-In-Reply-To: <20261028173805.1212039-1-daniel@iogearbox.net>
-References: <20261028173805.1212039-1-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf v2 1/2] x86/ftrace: Mark jmp mode by clearing bit 63 of trampoline address
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,bpf@vger.kernel.org
-Cc: rostedt@goodmis.org,ast@kernel.org,andrii@kernel.org,jolsa@kernel.org,dongml2@chinatelecom.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 28 Oct 2026 18:34:15 +0000 (UTC)
 
---===============0091060735852154991==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Oct 27, 2026 at 11:24 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> bpf_magic_udiv() and bpf_magic_sdiv() compute the multiplier and shift
+> for the division by a constant and have nothing x86 specific, so move
+> them to the core for the other JITs to use. They divide 64-bit values by
+> a divisor only known at run time, which a 32-bit kernel has no inline
+> form for, so they come under CONFIG_64BIT like the JITs which can use
+> them. No functional change.
 
-> x86/ftrace: Mark jmp mode by clearing bit 63 of trampoline address
+emit_div_const() in patch 15 has a copy of 35 lines of the x86
+emit_div_const(): the divisors to skip, corr, pre, the second call of
+bpf_magic_udiv(), the check of the shift.
+Nothing in there is x86 specific either, and it needed
+commit 73a5accbfd21 ("bpf, x86: Mask the shift counts of the magic number division")
+already.
 
-TL;DR: Nit only: the Kconfig help text added for HAVE_DYNAMIC_FTRACE_WITH_JMP
-describes an x86-specific address bit in a generic option; Steven Rostedt
-asked for its removal on v2, but it is still there.
-
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index d8faeb659cfc..69892375648c 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -87,7 +87,8 @@ config HAVE_DYNAMIC_FTRACE_WITH_JMP
->  	bool
->  	help
->  	  If the architecture supports to replace the __fentry__ with a
-> -	  "jmp" instruction.
-> +	  "jmp" instruction. The top bit of its kernel text addresses must
-> +	  be set, as clearing it marks a direct trampoline to jmp to.
-
-Should this added sentence be dropped from the help text?
-
-HAVE_DYNAMIC_FTRACE_WITH_JMP is a generic Kconfig option, and the sentence
-describes an architecture specific implementation detail, namely which
-address bit marks jmp mode.
-
-Steven Rostedt raised this on v2 and suggested removing the addition:
-
-  https://lore.kernel.org/all/20261028135536.200905d2@gandalf.local.home/
-
-The hunk is still present in this commit, and I did not find a reply on the
-list addressing it.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40740152888
---===============0091060735852154991==--
+can we move that part to the core too ?
+Then a JIT makes one call and emits insns. bpf_magic_udiv() and
+bpf_magic_sdiv() stay static, and riscv, s390, etc. don't need
+a third copy.
