@@ -1,68 +1,60 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793209102;
-	b=02z9OdkDY/pkjRiuVcXvU34BJ/kj9wRxo8y13voeSWDrMYaRQ6iVWaoYNbcrqI7W3vjL
-	 1DnPuqSPG22wOT3mvhxq/yh5Sp+OY2bmUE5HyG/BCvqvHVFtipRdDgT0waXh+dWR9ogDG
-	 fKh3SIINsPAxlaf7k2J79HFH6oBXB98NvBnSo6u+nH35bfODiurWbULtNN70o0ZQFeYrO
-	 YdJVheAweiPAkaAYbRHAWT1rKfPIc8i+5sFKoocmMjdR31vcXC5ae78LfJjU0ZBvw5d5N
-	 hIYEUSchudOzirkz/FG16TeCnNbh5Vo7aQbmDEkhEVn7+h+ZVoz9tA1r995tJkpBJ4w==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793209102;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-Virus-Scanned;
-	bh=DCCi5eo/fYB6tzKxD/wYOm7N8O32aM+y60ei7JSb/fM=;
-	b=Ymob/ODxl4pBeGBSfVMQaF2Qzmz4hCcx89g3Z2PC6s1XHB1W3bY96r42RNJZWZIm1W92
-	 RJ5i80hJJjs282jeEvhzl1+3wa4qIR84G296ppjDDnUOn4x2viWM5ZeBAwPa4s0YxAsF3
-	 dEPah5+TYjWNUsefyLYYZ57pRGGMYa28YmUshtNxvg66p43/XMQpyN/6HFf1qCSONQg6p
-	 vTiilX33G4A1pA4VNIgTX78QmzrAw1tHik1Lbbf6q9q1NB4Yd9phR87Iki9y97YcU54qK
-	 z/2JaI/K4xzSwkH/gb3Q/Hqpe6+p/+2b8+mxZipNgFuk4jO5CYdkvwC7XWXmJI8pyjA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=lAhul+Cu;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.172
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793209904;
+	b=mPTs61bR2CYHH6+g2FQx5Ysju3OZQmwtfjh8/sv+ssYknO7P3yi1Ui9eIVOmIiC6YBps
+	 p8nJN31YMcTKNxRvqflLsS1IDlMwhG3bAHuzAWjK5NLl1Ot6djz4T59lJ46n4LGd3kdHv
+	 TtnUtuJ37XSIBYqlK4UOWkvpVP+rfk1oKVnBElYE4M6JmFTbBUoXRWyqesVcUmIPxBCOq
+	 XINoi0xk9lLpz1hPcXMeS/WvvQIkQct3fkOcX2Rg00GMGW2x0OIGpZFZwpuNuO3fnmSIZ
+	 ggZuEA68LNhib3aXyeCpiK3DpL135NmymHrH+CzxG8dVQ0g34q6HNv3yiKEYvfbaXeA==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793209904;
+	h=DMARC-Filter:DKIM-Signature:Date:Subject:In-Reply-To:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:From:To:Cc:Message-ID:
+	 References:X-SimpleLogin-Type:X-SimpleLogin-EmailLog-ID:
+	 X-SimpleLogin-Want-Signing;
+	bh=fmazTGtR1oDTSrNKrvco0aIuxQh0Wi6ZbwjgI0VjrSs=;
+	b=vPXz6jpG0RUo07EdHNqeOqj1gfnjqlE/MH2O8hxlnR0AjHQatOVVsU0bh9AtPuK1v9Mm
+	 YcL/orK7sFSbXRaYYsgVqVzi7EJkUvmzm55n+coaeFIJOp9KlUUlRLmpyp6onepTDtuhS
+	 F24l+ejRCnV8E+BP/4Ctr+baKZ0PN/Mfm7lpXzOi5lzU9G44YtOiOw6gNmdhT+VUuhOha
+	 fdJC2hLKQLeVnuVhWlD/FTDIMy5+Pmjr/RVVQQY8+gbnyfisNOpLrF2brO6MNQodupxiD
+	 UPMLOwj3P6Bca/nI/pvynSPXFhYIxTxyaM8vghwu4LZfXATbeg+fdz04w2yezfR1XKA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=eldare.de;
+	spf=pass smtp.mailfrom=eldare.de;
+	dkim=pass header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b="Z8qQZI/w";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=176.119.200.172
+Received: from mail-200172.simplelogin.co (mail-200172.simplelogin.co [176.119.200.172])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBBB606A324
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:38:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5CBBB606A324
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067B6606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:51:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 067B6606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=eldare.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eldare.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=lAhul+Cu
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=DCCi5eo/fYB6tzKxD/wYOm7N8O32aM+y60ei7JSb/fM=; b=lAhul+Cu2m4Tc5eIILrLDi2itO
-	mDAZ6xmvFGdYRXPggZT5fq5XPDSvqDfVDzbsm3oggGQr0cvM93ySCxLXHE6vNkrDrHkA0Ev9wVXz7
-	SHTUnaYMA2RTayQ+l0XlNz4SE8KzHmHFmTq+x2kDVuk7/1vNw83NtzLPncAd2TJaL1i55bSKHn7vU
-	NyfbkVegXJ2FtyBiQiV6fA+e+uMt6nwPMEmQB1pZS6Agw7w2lQeuTD/FBG/PJmEWJDHHWcQLLabuw
-	7F8f6eJmk8mdRQUxiC7RnsToVHTdcvGKD7tsSYFoDmjp/H+pbRN7/C3Yk2m0L2yKfwA6ezVMx4XdQ
-	vfH8yMjg==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xM7bD-000O1s-2D;
-	Wed, 28 Oct 2026 18:38:07 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: rostedt@goodmis.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	jolsa@kernel.org,
-	Menglong Dong <dongml2@chinatelecom.cn>
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Test kprobe and fentry/fexit programs on one function
-Date: Wed, 28 Oct 2026 18:38:05 +0100
-Message-ID: <20261028173805.1212039-2-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261028173805.1212039-1-daniel@iogearbox.net>
-References: <20261028173805.1212039-1-daniel@iogearbox.net>
+	dkim=pass (1024-bit key, unprotected) header.d=eldare.de header.i=@eldare.de header.a=rsa-sha256 header.s=dkim header.b=Z8qQZI/w
+ARC-Seal: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626; t=1793209901;
+	cv=none; b=w5kHItFYRgf0g9MvnjZe7Cgf621setVXpYeT9kQ0m0yjzjlD7z34JJHDO5E38uSIV3D9ndGMrv40YV5i1vSCwNsq0O67GBuIVFvwcarptIv/plI7591ILvQdNSiubM0gLii/SYkiq2caoQSv90/rEqweq6f9yOg2TsT9U+kV5M+dtnzbjhaWdO3Wbw+gnRbb0jSvxXWUR6JvUNew+LGM2nD9bmGv3KljuE1/JVlW7pI3P9cvRI0FjzxlSWZ2bO9PqCaGOeguwN622LSCWknVclvOyIk+y4E9WpRxRWBG9lUU1IXNo5iWP/rqaG4NPWctf6E7dEhDjKHKJXg9pya7sA==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=simplelogin.co; s=arc-20230626;
+	t=1793209901; c=relaxed/simple;
+	bh=fmazTGtR1oDTSrNKrvco0aIuxQh0Wi6ZbwjgI0VjrSs=;
+	h=Date:Subject:In-Reply-To:From:To:Cc:References; b=aYj6zSTy1rXZDz9VTD7a+MZLGDKnSDyN2IjgCJcp2zpZHiVaxhGeJ89NRKVE3lbqzyF3vDM2TGOBMUb8PwKfC7HFVqP1Flq/bFJ2mwc44L40N/Zt5RSM7V+R4j/OmyFn31g3j6rMZJrSH6fcOwPkywvp72nYBwZ1Qh2Q6BeLtgv63P9m7OFxhVF8W5emraQD5vyr3Diu5J8J7rUycLapopnRLUupBboPOekhYE8GygAPIL6jGp+ytzlWTx1srywJKvztn6P0tAB4ENNN/ZO1Ou0MZFKlhzmV+HDV5falwHPqQ9IkJBq75TNmZACdx0Vysh8IqYik7HWW0dtLW01QGA==
+ARC-Authentication-Results: i=1; mail.protonmail.ch
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eldare.de; s=dkim;
+	t=1793209901;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fmazTGtR1oDTSrNKrvco0aIuxQh0Wi6ZbwjgI0VjrSs=;
+	b=Z8qQZI/wnxpX/I/xd2ojXpgrNV45+/iBHyDxTV0TF1zedRb2ARjUmZv93wsUZBAjEbBxrS
+	DfMbTodP+x7CsL1aGdN2L/P6blvgj1jMZsGuiXFcYltHLmscza4G2eIf0iEfAUOnIKIdxb
+	0mtmCCW7kRnU+7GELRe/aw6qfo6apdw=
+Date: Wed, 28 Oct 2026 17:51:33 +0000
+Subject: Re: [PATCH net v2] vsock/bpf: release sock lock while waiting for
+ data in recvmsg
+In-Reply-To: <179123556339.434549.8635789838298158117@kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -72,165 +64,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28167/Wed Oct 28 07:24:17 2026)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: jrmmhm.kernel@eldare.de
+To: netdev-bot+sashiko@kernel.org
+Cc: Stefano Garzarella <sgarzare@redhat.com>,"David S. Miller"
+ <davem@davemloft.net>,Eric Dumazet <edumazet@kernel.org>,Jakub Kicinski
+ <kuba@kernel.org>,Paolo Abeni <pabeni@redhat.com>,Simon Horman
+ <horms@kernel.org>,"Michael S. Tsirkin"
+ <mst@redhat.com>,virtualization@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,Michal
+ Luczaj <mhal@rbox.co>,stable@vger.kernel.org,Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Message-ID: <179320990081.11.17283545588831385663.1728119957@eldare.de>
+References: <20261001-kbh3-1-022-fix-v2-v1-1-cfae958a1976@eldare.de>
+ <179123556339.434549.8635789838298158117@kernel.org>
+X-SimpleLogin-Type: Reply
+X-SimpleLogin-EmailLog-ID: 1728119992
+X-SimpleLogin-Want-Signing: yes
 
-A kprobe next to a BPF trampoline makes the ftrace site of the function
-call ftrace_regs_caller and from there the list of ftrace callbacks,
-the path that crashed while ftrace_ops_list_func() started at an odd
-address. No test covers a function traced by both. Thus, attach an
-fentry program and a kprobe to bpf_fentry_test1(), then a second fentry
-program, which modifies the trampoline of the shared site, then an fexit
-program, after which ftrace_regs_caller enters the trampoline by a jmp,
-then detach the kprobe, after which the site jumps to it directly. After
-each step, check that every attached program ran once for the call and
-saw its argument, and the fexit program its return value.
+On Mon, 05 Oct 2026 21:26:03 +0000, netdev-bot+sashiko@kernel.org wrote:
+> [Severity: Medium]
+> Can this loop sleep forever on a connection that has already been reset?
+[...]
+> Should the loop also check sk->sk_state and SOCK_DONE, so that case still
+> works after the error has been read?
 
-Without the previous fix the test crashes the kernel, but only where
-ftrace_ops_list_func() is at an odd address (in my test with gcc +
-CONFIG_CC_OPTIMIZE_FOR_SIZE=y). With the fix it passes:
+Yes. I reproduced it by unbinding the guest's virtio-vsock device under an
+established sockmap'd connection: after getsockopt(SO_ERROR), recv() waited
+for the whole SO_RCVTIMEO and returned -EAGAIN, while a socket outside the
+sockmap returned -ENOTCONN at once. v3 ends the wait once the socket is no
+longer TCP_ESTABLISHED, with 0 if SOCK_DONE is set and -ENOTCONN otherwise,
+as __vsock_connectible_recvmsg() does.
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t fentry_kprobe_shared
-  [...]
-  #147     fentry_kprobe_shared:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0/0 FAILED
+> [Severity: Low]
+> Should MSG_OOB be rejected here as well, next to MSG_ERRQUEUE?
+[...]
+> Rejecting MSG_OOB next to the new MSG_ERRQUEUE check would fix both
+> cases.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Menglong Dong <dongml2@chinatelecom.cn>
-Cc: Steven Rostedt <rostedt@goodmis.org>
----
- .../bpf/prog_tests/fentry_kprobe_shared.c     | 65 +++++++++++++++++++
- .../bpf/progs/fentry_kprobe_shared.c          | 49 ++++++++++++++
- 2 files changed, 114 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
+Agreed, both cases reproduce. v3 rejects MSG_OOB with -EOPNOTSUPP before
+the len =3D=3D 0 check, as unix_bpf_recvmsg() does, so it neither returns 0
+nor consumes ordinary bytes.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
-new file mode 100644
-index 000000000000..751aa49d6106
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_kprobe_shared.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "fentry_kprobe_shared.skel.h"
-+
-+static void trigger(struct fentry_kprobe_shared *skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.fentry1), &topts);
-+	ASSERT_OK(err, "test_run");
-+}
-+
-+/*
-+ * With a kprobe next to the trampoline, the ftrace site of the function
-+ * reaches the trampoline through the list of ftrace callbacks, and so does
-+ * the site of a trampoline that is modified to add or remove a program.
-+ * With the fexit program, the trampoline is entered by a jmp.
-+ */
-+void test_fentry_kprobe_shared(void)
-+{
-+	struct fentry_kprobe_shared *skel;
-+
-+	skel = fentry_kprobe_shared__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	skel->bss->pid = getpid();
-+
-+	skel->links.fentry1 = bpf_program__attach(skel->progs.fentry1);
-+	if (!ASSERT_OK_PTR(skel->links.fentry1, "attach_fentry1"))
-+		goto out;
-+	skel->links.kprobe1 = bpf_program__attach(skel->progs.kprobe1);
-+	if (!ASSERT_OK_PTR(skel->links.kprobe1, "attach_kprobe1"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 1, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 1, "kprobe_hits");
-+
-+	skel->links.fentry2 = bpf_program__attach(skel->progs.fentry2);
-+	if (!ASSERT_OK_PTR(skel->links.fentry2, "attach_fentry2"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 2, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 1, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 2, "kprobe_hits");
-+
-+	skel->links.fexit1 = bpf_program__attach(skel->progs.fexit1);
-+	if (!ASSERT_OK_PTR(skel->links.fexit1, "attach_fexit1"))
-+		goto out;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 3, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 2, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->fexit_hits, 1, "fexit_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 3, "kprobe_hits");
-+
-+	bpf_link__destroy(skel->links.kprobe1);
-+	skel->links.kprobe1 = NULL;
-+	trigger(skel);
-+	ASSERT_EQ(skel->bss->fentry1_hits, 4, "fentry1_hits");
-+	ASSERT_EQ(skel->bss->fentry2_hits, 3, "fentry2_hits");
-+	ASSERT_EQ(skel->bss->fexit_hits, 2, "fexit_hits");
-+	ASSERT_EQ(skel->bss->kprobe_hits, 3, "kprobe_hits");
-+out:
-+	fentry_kprobe_shared__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
-new file mode 100644
-index 000000000000..3d16773aada8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_kprobe_shared.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int pid;
-+int fentry1_hits;
-+int fentry2_hits;
-+int fexit_hits;
-+int kprobe_hits;
-+
-+static bool from_test(int a)
-+{
-+	return (bpf_get_current_pid_tgid() >> 32) == pid && a == 1;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry1, int a)
-+{
-+	if (from_test(a))
-+		fentry1_hits++;
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(fentry2, int a)
-+{
-+	if (from_test(a))
-+		fentry2_hits++;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_fentry_test1")
-+int BPF_PROG(fexit1, int a, int ret)
-+{
-+	if (from_test(a) && ret == 2)
-+		fexit_hits++;
-+	return 0;
-+}
-+
-+SEC("kprobe/bpf_fentry_test1")
-+int BPF_KPROBE(kprobe1, int a)
-+{
-+	if (from_test(a))
-+		kprobe_hits++;
-+	return 0;
-+}
--- 
-2.43.0
+> [Severity: High]
+> This isn't a bug introduced by this patch, but the patch rewrites the cod=
+e
+> around it. Can a blocking recv() hang here while data is waiting in
+> psock->ingress_msg?
+[...]
+> Should this fallback also take psock->ingress_skb into account?
+
+I agree with the analysis (from reading the code; I have not reproduced
+it): vsock_has_data() counts psock->ingress_skb while
+sk_psock_queue_empty() looks only at ingress_msg, so data that is still on
+ingress_skb sends the reader to the native path, which never looks at the
+psock queues. It predates this series. The loop adds one more way into the
+same window, but the fix belongs in the fallback condition, so I'll send
+it as a separate patch.
+
+v3 also splits the change into two patches, following Michal's remark on
+v2; it will go out as a new thread.
+
+pw-bot: cr
 
