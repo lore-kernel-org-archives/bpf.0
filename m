@@ -1,100 +1,98 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.180
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793203140;
-	b=MoutNbJ1OWZtSpB/McKd5ERhmkNqaoBds75sORH3dweVmuzw2aV6PzM+jmOzR3D1SslQ
-	 A8mOJ06RMIUrW94rvQcagEE+BRM85bJ4ENFOJjpvW74ELNsOgYo859Qgc5O/5xLGoXl1l
-	 ZUlIACU7fXW/SXSXnEqZQdpUmWRtURN0tulj8P/8XbLzUsbQhZrQ1f9Xmmvtmg7GSeU0J
-	 B47Wo6TAETC+t8U7jIyrbg+7UZCNzXXqINAaXURBRolgrqbli6g443Cq8zNjj7OXQWR0m
-	 1eaD5vXqeNZHC2W9v/3tIQ7fUE65JYTyhnLwTKJpm6EfeAisWmbMUbuSwlDz25Dd9VA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793203140;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.178
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1793203175;
+	b=pCsf6au5oqQtZKkoCyjDjRWfdMBMdZiVZp1ODu1rVdclizEfYMPvOFr0Rqm4gmfMV+1X
+	 8pS4bJIxewOiq67WECsAa7xy/rcJTsPhmLqgDZAP/AvPhBXM0RUJEKs/wVnmNVM48m3ve
+	 7rl1z0t0gwnV/idtpANfH/sqjU2+xEWz8UsUAyXS1N/AVO4RDOgT72Cqmk8wFmb5xtE2K
+	 /Lmt1p6vzS8Il3KMoaC4gf/sUMVPJsucKmZQCEZRPZnIMoMWMULyOB+S3qZpm97XfX6n8
+	 SccBO4MjmH8VfmVfwWrYOZa/k/t3VYmXRll09z1k45AkhaCxbgYKmjw07LP6BPUQg1g==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793203175;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=xZM+6q50K9EVTq33XWXLbwM2IHgwD8amyn3g+mdBYz0=;
-	b=m06n8zxux7liksT/H4Is/LBPWCuvWI7LlSlh6g1FZ49mm6c1lZMQqvtlEN4CYPb4ePzc
-	 AgrvSHj7cPqWRmwQRph+rCvoALTvcGrWWj4dWuTTfJMPE7OD4hrCo50NGoWhBP6ud7gss
-	 W8EztdKh5JAa01OxaOhm7PVKK2my4OTb5Xsh6xp/PchVZxM5FWDpM9rlVrODnopv4rTZI
-	 sf0MGAHDN3q4SP8RXDoqXsJQOhp9ejJu3mYtyK6iLbmRqA03dkkArBUGOkkvElpfD0bHq
-	 jNSWc6v76gWaG46Ls55VD7pFrTMIa3X+u30AixgiO/VlKCAx2N/40rLvi2rnyFOwRqA==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FNS7dRrs;
-	arc=none smtp.remote-ip=209.85.210.180
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
+	b=J7nHC9z6AfOgq9KAVrhEzag5FBMzFmFXnpmaUSVDmfaGhZDCXnUgoxxCT7AUvji8pe0D
+	 HGXPNWRHj3+DKu4bk7Sh46SLbu3m3XBdQcq6HWrxoI0BROxygCqOFslDIEQHbEJf2PJKa
+	 vnsC3jFnJmxzA6sPzPpbh1/lYYdihabZeC87LyCTv+HLbXxJ5AU+0dxJKOCrpS/od73Fi
+	 0koKLvF91JLiTsJf8Vi56a1L333Gz7HPJf+ISQ9bHlsj5kHco1sGGGNsJkpOLPrdd2P80
+	 cSg7X51D1sR2hJlqAz4awPyWkP7FEYJQ9twdntleIkcNmsvHuko5Tfxp0GR1J14vPgA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.215.178
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0262E606A31F
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 15:58:59 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0262E606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FNS7dRrs
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8a06b44bd01so662147b3a.0
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 08:58:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEDB60A262F
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 15:59:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BCEDB60A262F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc4aa18f9afso601912a12.3
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 08:59:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1793203164; cv=none;
+        d=google.com; s=arc-20260327;
+        b=m/mdy7ksQPiTIRhahkmKGRLLt2Y2Y47CWEHZezj/Itacqakngt6cjmMYfH5PcgLWh/
+         +LwjuoeZXESi0B1A4dNpL/jGXw3YzfFdPrhLR66ixX+F+3JVQPUkRnyGDWTcNxDu+uI/
+         WJPm7Jq3cxvC80mBxQUagsGIstSotmut2XrI5lmLUir+yhxiCQz8pHMcGdvu6wJyJDKY
+         cdVIWXlUvgkkBvqFy5dMTMUTFSLGZfTMOeqHJjKfE3F8t8jG0VjEEncmpnm1BC44AwDb
+         9/4veQTZvCdpaRt+xqB0w2l/5ff7qX+GpJBzCCYpJ+r3DqNzmPfO96LG7tq0d2t3g2d1
+         j/hQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
+        fh=3oPUrWPazN3toic8RbMXxRSSGxn+iNfj4fwvqk0qOgk=;
+        b=GHs62+ry9dMakEPbv7oi39wxpupfw16S7n0Uxn0PmZ5v7ysXwtt10f7hWPDCsSb+Cl
+         Ebjzjhb4SMSlj1bJ96mtKAtdMOI84VlKvWSX+fi4vNPuWb8KXMB9lkBKcF2n0Xv7bXd2
+         RmSza2dEPBKSDVT5NTkjxP2rGxIHq201GHNn835LL7wCyP2ryf5S0HfWe3xzb2JSAmfP
+         U25lxaWoPDeV079w8QQtpOFrF9L9oJh32GDZ5BJgIT8xy/PWH9gatgEmixasA6Z9F/xs
+         T+V1RYbQ86jkDLFZ57bla5BxyXHADzY/JoowilGZRw0Fn6FI5AoYzKHqWFyGoKZ1NQJA
+         zgrQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793203139; x=1793807939; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+        d=paul-moore.com; s=google; t=1793203164; x=1793807964; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=xZM+6q50K9EVTq33XWXLbwM2IHgwD8amyn3g+mdBYz0=;
-        b=FNS7dRrsO7vAoMUGi+/AOQHv8b9N6CXKx4+RBXmu0pMb/G4320m4w/vIZxp4y2h3Po
-         Lxmy+vW7bjSjwoXUCgojyI1Rwjhpp0F2gB+xXMXYUgUGVzb8Vr2Eb2jHhzdeUJrnVX3O
-         IIiP+DWWw6garY0zXyCEgbNtp3ex3fccPi0e4B4v3DlfI//cDdpphz6rXjadipK+wI6E
-         RXaDUlqBsaPhfUmcalX75Fmfl4ElvHbGEvUUIMSe7wRpI321XMCS9Ma0sjXuKjvkW6sl
-         rpHHWmhaW2sySP5oSFShvRlijHze5Gc0F6f+yqd3p7ot+iGSchESYtG1bYi6UAeb0GjN
-         jrwA==
+        bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
+        b=Xde8kH+cqlVOr/NMR7Wf2JCxAomM8iaA+yOKnEWQdervZ/w503T0qYZZ6aOIBygAsC
+         qij7djXE5tgEJO6Fg3dvN+llLaU0wfp5K3TXaIKEKfXug0iTHDU8r1pyoHvQ8B8Z6qgt
+         UeXRTBxIPcUoikJFSeVCrlsd1QdQ1PIEIALNNtqalm4GbfnAzTbkILoS8EoRXI+ENlGT
+         pCWcFvtvfNhYIGcmjkVaouZPomu9dr/9De7n53N+UKBzQxVuhbAHnVl9cFD2L8k5xutY
+         S8PhqXCysvqF5qkcIRiApTxBmbXvToeiuo/7lzQYkr6Titoid+3/IYz90R+gzsrC9Oe+
+         jeFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793203139; x=1793807939;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793203164; x=1793807964;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xZM+6q50K9EVTq33XWXLbwM2IHgwD8amyn3g+mdBYz0=;
-        b=PYG8t5Ozs6pNYBx+O1QrZLxgtgByVxH2fnotaQHhTv5NIjEfrBYbIzFTMy5+IOBFIG
-         AMUjIs+b0YPL0tHrHQN6B+1Te3eqSiSTwAlT7LieDOKlghMF3rpDHzHrfMN5pp+/dSq6
-         5HnTyyH04zTLeeiyQDSH4HoQhLTy+1gKUwT8cqh5Tssnf+wcgEpxjxPteJ7Xsv/GwGRr
-         fUxKzr9/YGpGHET+Z4J84s0TtJ5oz1tbDtWpDHX7RCPJljdgLCod0ykIjqEI0a782pwu
-         2N4RgFwNefP3FCn5h927u9vzv3EBOqovKR8ww3EdHPR23X/qSJ++TT8vg9FJhbyhwpoG
-         wPhQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxOVLDPXN1m1MSexpAAAlCDZ0oSAJyfiU4SmyNmWI5ekR/7VZNHS5dl/I3tjeB/vrTDYMQ=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLfvpYrxHYQEI4MY5dcFfM2nSUalLzUYiZUr5Bgb9fW4tjw4f6d
-	MDtUJMFmbFJ10jE/EsJPXYpZfjHc2AA8Of4oBa8twwsIhfIpajaDSsv7
-X-Gm-Gg: AYBFou0wbGNTXSH20iJlxu2aAsUFSwqkOrBIcTjSyNGgZyXhkR9FcLmML5OiltzWpEL
-	l8u1j4pqINqco/u4N+ka6iNyVkiOBtB4R6D41PEtzgchaZqL/qcaJ2S2MnEQ3FbNmiB8GZLEYP5
-	j1iOnzJHebvhQ4k0HBbWTzpEjUfpDZ+9M8dw0Ev9fFc7zyl5yY2x10A+czrOiZak44LReXVdtdv
-	T4GErVsfAWvLguHpmo0OD6BxmRwxsM6LSdf9tPaBMJhmPgop6Jsq3X8KPTWHuvSGS5/mAJva8SL
-	nZ7+pqLxij0QyjeS0EIaRzA7EdViT8O3AVwhP/9opc8HIGn/sRsF2rLFu3mPOwBn/skS1Z0Rg/U
-	7cfJ/FwxcjUP6YyD2ClfUkcMm6jxoRrw1HHzWBHKoAkFmJxs6OUvPtfwcPiYxZ/ntKkmo3xazqU
-	SfXfrrz0xAswGXx+O2s0LE8hiK/z9bCBfMVLIPMmaoLzEq4o1yHZKGTcY0HdHvjMaHkj6jz0UB1
-	SgKbd5tLJDLrA/iovrLS0D4VKJ3AY3YkRm5cLhSfX1j9mEIz2CsQ2FtRYN1Pu/91HvQgkj4WA31
-	g09Ql5LHNFmqxibQ8JU32a5SabmwEcPQNKvu42Ki2Jss46+tOZkQfwEi65wYGSj3G1NLcUzMQEM
-	VfdlxZn0M57BZpHSo5Q5CsKz1gfbUE2CV/9OukcL9OAPNvd7bjoCvgFTG
-X-Received: by 2002:a05:6a20:488:b0:3e2:83bb:a608 with SMTP id adf61e73a8af0-3e902092342mr2324485637.2.1793203139084;
-        Wed, 28 Oct 2026 08:58:59 -0700 (PDT)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8a6a3d5baf4sm1482399b3a.1.2026.10.28.08.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 08:58:58 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Oct 2026 15:58:57 +0000
-Message-Id: <DMGLGKYOLXFA.12EJEMVN58Y5P@gmail.com>
-Cc: <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <daniel@iogearbox.net>,
- <linux-kselftest@vger.kernel.org>, <cuitao@kylinos.cn>,
- <ameryhung@gmail.com>
-Subject: Re: [RFC PATCH v11 0/5] blk-iocost: BPF struct_ops cost model
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Tao Cui" <cui.tao@linux.dev>, <tj@kernel.org>, <josef@toxicopanda.com>,
- <axboe@kernel.dk>
-In-Reply-To: <20261028143534.135968-1-cui.tao@linux.dev>
-References: <20261028143534.135968-1-cui.tao@linux.dev>
-Content-Transfer-Encoding: 8bit
+        bh=Dc4rW2+COMGPVHylYkAJkFpZ/yamBpz19LqtcOFzV+Y=;
+        b=2nUNbRRS2wwpWaSsuj4B/8OfCx5m1tlRYSqOpA48VEXsHrhIPr50n32Y96pO4K5lIV
+         Vq2fwflhfi5lArzmL379MVIQeQ67nxUj2/G4YxxCQEbVOJTVHpSWwfyPMIml/euG/0ey
+         XfyCeoTutstRvIkRYJtoqeoexuWHrGLH6WqaiDGbqFvWsnxGrTYSKhtMsw29oqnwmPcy
+         FTR2TjFkS9Js90dcDeBKXGKO9d+GFDjCKmePS3JAymWDe3Y76kK+yLaclaVL/GGTPS4p
+         PiC5TOnkYQl0ixMsGAjaaZW4v8MYhE6CyzziPxV1r8AWuYoyK/jP7JdyDTZD9ERBD0E3
+         NcWA==
+X-Forwarded-Encrypted: i=1; AKwUvByEJor0oDg1ivvRbwOcwSe2rpS0JZ69jJUlmxmoKgC9J2stzgO9WyURLJL76hh0iNBtDbs=@vger.kernel.org
+X-Gm-Message-State: AFq9FYJc3npmy4cn1S8UisLWN69I8Sg7nAWE9T9kpG2rLFLGogYu+snt
+	NU7uJiAr6rPEBfvbHhhlXXEKNu5hSKVhow9rhLekSDtTRb9rnmfp/7wtzCkppeRGu1o3oWn1xFG
+	Z5SCFwLC4Rq0pc/WvzvbCzwpMFf234a9kYt5/2x53
+X-Gm-Gg: AYBFou1TFJzRoOXtBJxTCM8AHZy+HAEaaiCi8Bo5R2iX4AvZ5W6lOIxO543Qacx4pvi
+	wE4yvLAFCgZTb4foFLS1o2ypH5nVEjLW0iQiy82WOPaZTuTNV3h6IRGRm2Gl6FKl1xIzoa6UmbC
+	CMqSY3iOcia0fjPat9rImhD3XaxtuEKX2tPStoOKDqcCX9EoHAYrQqII5RI1AXqbvgEhB0EPebq
+	NQ5eeBU62n6cefAM1KB+iJwxkyXFmwifcTAEmz9G83K+usaJVDeZYPfsXwG3+lYhY2H4I5cZkqe
+	/o+i2r0C1AZskRJvhwL2GoIm+Oj+VSwLbdNXuqe6Qkb4ZZjN2WxFHDq0Xh4+r2Jn+qq7+ZCTjK8
+	ENhmGNooXPbacdGhSh+D5kwryBWmS/KfmzyZ3F/payoNGtgSVdPtX7WNzwFs/YFAHsUbT+oqEtj
+	JCmZYsdZYW5zV0lw==
+X-Received: by 2002:a05:6a21:6f16:b0:3e2:1823:2b4a with SMTP id
+ adf61e73a8af0-3e901e829e8mr2186510637.0.1793203163924; Wed, 28 Oct 2026
+ 08:59:23 -0700 (PDT)
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -104,445 +102,212 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+References: <20261026-work-security-namespace_free-v1-0-ffa3ebbf71bd@kernel.org>
+ <CAHC9VhR4rMydWiD-RFv-ABiYSG_txJuyrtdaowEXPY=CHEvFXA@mail.gmail.com>
+ <20261027-heckklappe-halbmarathon-vorsorgen-849ffdc42aac@brauner>
+ <CAHC9VhSJMPOY4X78ENEkAiNeVTCpvP76PgVDqTQfwaYfwnYwAQ@mail.gmail.com> <20261028-treiben-probanden-nachkam-e986afed3902@brauner>
+In-Reply-To: <20261028-treiben-probanden-nachkam-e986afed3902@brauner>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 28 Oct 2026 11:59:12 -0400
+X-Gm-Features: AclHuK-yJIwoCb3oIYP-IBqXnljTJgelOwPOEoH9t42fOb1qZ8AgXGe1E7dzuKE
+Message-ID: <CAHC9VhQm+swDGvP31aNefwx6qCCy2mk-CjD4i=4kE74eA+e2zQ@mail.gmail.com>
+Subject: Re: [PATCH 0/8] ns: fixes for the namespace LSM hooks
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-fsdevel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, netdev@vger.kernel.org, stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 28, 2026 at 07:35 AM Tao Cui <cui.tao@linux.dev> wrote:
-> The cgroup callbacks are bound to the iocg policy lifetime and pair
-> up exactly: iocg_init() is delivered from ioc_pd_online(), which
-> blkg_create() only calls after the blkg has been inserted into the
-> radix tree and the queue's blkg list, and on attach to every cgroup
-> which is already online on the device; iocg_free() is delivered at
-> detach to the cgroups which still exist then and at pd_free() time
-> for the rest, gated per iocg on a delivered flag.  The attach and
-> detach walks go over q->blkg_list under q->blkcg_mutex and
-> q->queue_lock, the same locking blkg creation and destruction use.
+On Wed, Oct 28, 2026 at 6:45=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+> On Tue, Oct 27, 2026 at 06:37:43PM -0400, Paul Moore wrote:
+> > The hooks were merged into the LSM tree on August 31st, and due to
+> > timing I'm guessing they appeared in linux-next the next day,
+> > September 1st.  Considering the merge window opened on October
+> > 18th/19th, that's conservatively a month and a half during which
+> > testing could have uncovered this issue and the behavior of the hook
+> > could have been changed to accommodate your use-case.
+>
+> That's what the rc cycle is for.
 
-Who needs iocg_init() and iocg_free()?
-Both example models keep their state in BPF_MAP_TYPE_CGRP_STORAGE.
-The only user of the callbacks is a pair of counters in the selftest.
+I believe the understanding is that basic functional testing occurs
+before the RC cycle.  Considering the NULL check causing problems for
+your use case was present in your first RFC posting back in February,
+it's unlikely that you, or anyone in the BPF LSM space, tested this
+prior to the merge window.
 
-One struct_ops map is bound to one device. So the cgroup storage of
-a model is per (cgroup, device) already.
-The blkg holds the blkcg css until blkg_free_workfn(). The storage is
-freed with the cgroup or with the map. So it outlives the iocg.
+> I'm not asking for changes to behavior
+> of the hooks to accommodate anything.
 
-The v11 changelog says that calc_cost() can run before iocg_init().
-So a model has to create its state in calc_cost() anyway.
-iocg_init() runs under queue_lock and ioc->lock. An allocation there
-is not better than in calc_cost().
+The LSM changes in this patchset do change the behavior, that's the
+point.  The security_namespace_free() hook does not call into the
+individual LSM callbacks if no LSM blobs have been requested; what you
+are proposing now is that we change the hook so that the callback is
+always called, regardless of the LSM blob state.
 
-v8, v9, v10 and v11 all reworked the pairing of these two callbacks.
+> > I know the
+> > Landlock folks were testing the hooks for their usage, but I've gone
+> > back through my inbox and I don't see any reports of BPF LSM failures
+> > using these new hooks in v7.4 until you posted this patchset during
+> > the merge window.
+>
+> Because I sent fixes instead of a bug report.
 
-Lets drop them. A struct_ops can get new members later, when a model
-needs them.
-I'd like to hear from Tejun whether such a model is planned.
+... which you sent *after* the merge window opened.  Once again, I see
+no indication that the use case you are concerned about was ever
+tested prior to the merge window.
 
-Without the callbacks there is no walk of q->blkg_list:
+> > The LSM namespace hooks are new to Linux v7.4, they did not exist in
+> > Linus' tree prior to this merge window which is why I consider both
+> > the BPF LSM and Landlock usage of these hooks to be "new".
+>
+> Yes, they're new. That's the argument for fixing them now. Not against
+> it. No released kernel has these hooks. Once v7.4 is out every one of
+> these fixes is a behavior change in a released kernel, needs a stable
+> backport that by your own rules doesn't qualify.
+>
+> And on top of that nonsense, userspace has to probe for it forever.
 
-  what                v11                          without callbacks
-  ------------------  ---------------------------  ------------------
-  attach takes        freeze, rq_qos_mutex,        freeze,
-                      quiesce, blkcg_mutex,        rq_qos_mutex,
-                      queue_lock, ioc->lock        ioc->lock
-  detach takes        rq_qos_mutex, queue_lock,    rq_qos_mutex,
-                      ioc->lock to check, then     ioc->lock
-                      freeze and the same again,
-                      quiesce, blkcg_mutex,
-                      queue_lock, ioc->lock
-  state per iocg      bpf_iocg_inited              none
-  hooks in            ioc_pd_online(),             none
-                      ioc_pd_free()
-  teardown            ioc_bpf_detach(),            ioc_detach_model()
-                      ioc_bpf_eject()
+It's a one line change in kernel/bpf/bpf_lsm.c to add the
+security_namespace_free() to the existing list of disabled BPF LSM
+callbacks.  No need for a patchset spanning 16 files and over 350
+lines of changes; the BPF LSM callback can be enabled in Linux v7.5
+after it has been properly tested.
 
-calc_cost() runs under rcu_read_lock(). bpf_map_put() frees a struct_ops
-map after an RCU gp. So detach doesn't need to freeze the queue.
-The rest fits into blk-iocost.c and patch 1 is not needed.
+It is probably also worth mentioning again to casual observers that
+the LSM hooks, and their associated callbacks, are intentionally not a
+stable API.  LSMs are advised to implement abstractions before
+exposing the hook/callback API directly to user-visible interfaces
+such as configuration policy, policy as code, etc.
 
-The diff keeps the map reference, the owning link and the
-model=linear/bpf switch. It has no docs, no selftests and no tracepoint.
+> > As mentioned previously, I'm pretty consistent about what goes up to
+> > Linus once the merge window opens: there is the initial pull-request
+> > with the changes from the last development cycle and then after that
+> > I'm pretty strict about only serious bugs/panics and regressions.
+>
+> Your README says "serious problems", not panics.
 
-Something like this (compile tested only):
+Are we really going to argue about how one defines "serious problems"
+and "panics"?  You'll notice that I've used "serious problems" and
+"panic" somewhat loosely in this email thread because the distinction
+doesn't really apply to our discussion.  The issue you've brought up
+is that a use case that was never tested prior to the merge window
+doesn't work like you want it to work.  There is no kernel panic nor
+any functional regression from previous kernel releases (user visible
+or otherwise).  We'll change how the security_namespace_free() LSM
+hook works for the next release which should give you plenty of time
+to test that it works properly.
 
-diff --git a/block/Kconfig b/block/Kconfig
-index 70e4a66..26badf5 100644
---- a/block/Kconfig
-+++ b/block/Kconfig
-@@ -161,6 +161,10 @@ config BLK_CGROUP_IOCOST
- 	distributes IO capacity between different groups based on
- 	their share of the overall weight distribution.
+> A hook that is
+> exported to bpf as an attach point and never called is a serious
+> problem for an API.
 
-+config BLK_CGROUP_IOCOST_BPF
-+	def_bool y
-+	depends on BLK_CGROUP_IOCOST && BPF_SYSCALL && BPF_JIT && DEBUG_INFO_BTF
-+
- config BLK_CGROUP_IOPRIO
- 	bool "Cgroup I/O controller for assigning an I/O priority class"
- 	depends on BLK_CGROUP
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index a81488c..5e65bf4 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -178,8 +178,12 @@
- #include <linux/time64.h>
- #include <linux/parser.h>
- #include <linux/sched/signal.h>
-+#include <linux/bpf.h>
-+#include <linux/bpf_verifier.h>
-+#include <linux/btf.h>
- #include <asm/local.h>
- #include <asm/local64.h>
-+#include "blk.h"
- #include "blk-rq-qos.h"
- #include "blk-stat.h"
- #include "blk-wbt.h"
-@@ -404,6 +408,22 @@ struct ioc_pcpu_stat {
- 	u64				last_rq_wait_ns;
- };
+I'll repeat myself again, a little louder for those in the back: the
+LSM hooks and callbacks are not a stable API, if an individual LSM
+needs a stable API to expose to userspace it needs to provide its own
+abstraction layer.
 
-+enum {
-+	IOCOST_COST_F_MERGE	= 1 << 0,	/* called from the merge path */
-+};
-+
-+/* bpf cost model of one device */
-+struct iocost_model_ops {
-+	/* whole disk, in the encoding of new_decode_dev() */
-+	dev_t dev;
-+
-+	/* used by the completion path instead of LCOEF_[RW]PAGE */
-+	u64 read_vtime_per_page;
-+	u64 write_vtime_per_page;
-+
-+	u64 (*calc_cost)(struct bio *bio, u64 model_flags);
-+};
-+
- /* per device */
- struct ioc {
- 	struct rq_qos			rqos;
-@@ -447,6 +467,12 @@ struct ioc {
- 	int				autop_idx;
- 	bool				user_qos_params:1;
- 	bool				user_cost_model:1;
-+
-+	/* holds a reference on the struct_ops map, NULL if none is attached */
-+	const struct iocost_model_ops	*attached;
-+	struct bpf_link			*attached_link;
-+	/* either NULL (linear) or ->attached */
-+	const struct iocost_model_ops __rcu *model;
- };
+> And it's not how you've handled this before: lsm_get_self_attr() was new
+> in v6.8 and got fixed for apparmor and selinux at v6.8-rc7 (cf. [2]).
+> v7.1-rc5 took Stephen's cred_guard_mutex change for lsm_set_self_attr()
+> without a crash see (cf. [3]).
 
- struct iocg_pcpu_stat {
-@@ -669,6 +695,13 @@ static struct ioc *q_to_ioc(struct request_queue *q)
- 	return rqos_to_ioc(rq_qos_id(q, RQ_QOS_COST));
- }
+There is an important difference between those issues and the one
+you've identified with this patchset: lsm_get_self_attr() and
+lsm_set_self_attr() are syscalls while security_namespace_free() is a
+LSM hook.  Linux syscalls are subject to the Linux kernel stable API,
+LSM hooks are not.  Linux syscalls are directly accessible from
+userspace, LSM hooks are not.  We could dive into other minutiae about
+the differences between those issues, but the distinction between
+syscalls and LSM hooks is really the only one that should matter here.
 
-+static const struct iocost_model_ops *ioc_model(struct ioc *ioc)
-+{
-+	if (!IS_ENABLED(CONFIG_BLK_CGROUP_IOCOST_BPF))
-+		return NULL;
-+	return rcu_dereference_check(ioc->model, lockdep_is_held(&ioc->lock));
-+}
-+
- static const char __maybe_unused *ioc_name(struct ioc *ioc)
- {
- 	struct gendisk *disk = ioc->rqos.disk;
-@@ -806,7 +839,7 @@ static int ioc_autop_idx(struct ioc *ioc, struct gendisk *disk)
- 		return AUTOP_SSD_DFL;
+> > Disabling the BPF LSM support for the new hooks in Linux v7.4 should
+> > be relatively easy, much simpler than this patchset, and eliminate any
+> > claimed harm.
+>
+> No. That's a change to kernel/bpf/bpf_lsm.c which you don't maintain
+> and the people who do have acked the fixes and asked for the whole
+> series in v7.4.
 
- 	/* if user is overriding anything, maintain what was there */
--	if (ioc->user_qos_params || ioc->user_cost_model)
-+	if (ioc->user_qos_params || ioc->user_cost_model || ioc_model(ioc))
- 		return idx;
+ :D
 
- 	/* step up/down based on the vrate */
-@@ -2586,8 +2619,16 @@ out:
+Instead you're asking someone else to accept your changes in a
+subsystem you don't maintain and when they push back due to lack of
+testing and existing conventions you decide the proper approach is to
+bully them and force the issue with Linus?  I'm used to dealing with
+hypocrisy but this is truly something else ...
 
- static u64 calc_vtime_cost(struct bio *bio, struct ioc_gq *iocg, bool is_merge)
- {
-+	const struct iocost_model_ops *model;
- 	u64 cost;
+> You're proposing to rip working functionality out of someone else's code
+> so you don't have to take a three line deletion. namespace_init and
+> namespace_install work fine for bpf.
+>
+> It's also not simpler. The LSM part of this series is deleting three
+> lines I wrote in security.c. The rest is my code and bpf's code with
+> acks. Your version needs a revert in v7.5 so it's two cross-tree changes
+> instead of one.
 
-+	guard(rcu)();
-+	model = ioc_model(iocg->ioc);
-+	if (model) {
-+		cost = model->calc_cost(bio, is_merge ? IOCOST_COST_F_MERGE : 0);
-+		return min(cost, VTIME_PER_SEC);
-+	}
-+
- 	calc_vtime_cost_builtin(bio, iocg, is_merge, &cost);
- 	return cost;
- }
-@@ -2612,8 +2653,16 @@ static void calc_size_vtime_cost_builtin(struct request *rq, struct ioc *ioc,
+Adding security_namespace_free() the the disabled BPF LSM hook list
+should be a one line change in Linux v7.4 (maybe three if you need a
+Kconfig conditional for something) and then a one (maybe three) line
+change in Linux v7.5 to allow it again.  Two patches, each at most
+three lines, all contained within the BPF subsystem.
 
- static u64 calc_size_vtime_cost(struct request *rq, struct ioc *ioc)
- {
-+	const struct iocost_model_ops *model;
- 	u64 cost;
+> > Also, as the ongoing friction between the LSM and BPF developers was
+> > brought up, I want to point out that SELinux support for the new LSM
+> > namespace hooks was delayed to Linux v7.5 due to issues uncovered with
+> > these new hooks during the Linux v7.4 development cycle (well before
+> > the merge window opened).
+>
+> That's not what happened. Stephen posted the fix on September 16, v3 on
+> September 18. I reviewed it on September 25 and offered to carry it in
+> the namespace tree for v7.4.
+>
+> On September 29 you said you'd rather take it through lsm/dev. It's not
+> in lsm/dev. It's not in v7.4. A reviewed fix that was ready three weeks
+> before the merge window didn't get applied. That's the same decision
+> you're making now and it's not a precedent for it.
 
-+	guard(rcu)();
-+	model = ioc_model(ioc);
-+	if (model)
-+		return (blk_rq_stats_sectors(rq) >> IOC_SECT_TO_PAGE_SHIFT) *
-+			(req_op(rq) == REQ_OP_READ ? model->read_vtime_per_page :
-+						     model->write_vtime_per_page);
-+
- 	calc_size_vtime_cost_builtin(rq, ioc, &cost);
- 	return cost;
- }
-@@ -2908,10 +2957,33 @@ static void ioc_rqos_queue_depth_changed(struct rq_qos *rqos)
- 	spin_unlock_irq(&ioc->lock);
- }
+If you look at that thread, you'll notice I ended my last mail with a
+"Are we all okay with that for this patch?" because I wanted to make
+sure everyone was okay with the patch, and the process before merging
+it.  Stephen answered that he was okay with the approach and you never
+responded; I held the patch back exactly because you never explicitly
+okay'd the approach.  I suspect one could make a lot of interesting
+observations both about how that patch was handled, and how that
+handling is now viewed from different perspectives.
 
-+/* Called by .unreg and by device removal, whichever is first. */
-+static void ioc_detach_model(struct ioc *ioc)
-+{
-+#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
-+	const struct iocost_model_ops *ops = ioc->attached;
-+
-+	lockdep_assert_held(&ioc->rqos.disk->queue->rq_qos_mutex);
-+
-+	if (!ops)
-+		return;
-+
-+	spin_lock_irq(&ioc->lock);
-+	rcu_assign_pointer(ioc->model, NULL);
-+	ioc->attached = NULL;
-+	ioc->attached_link = NULL;
-+	spin_unlock_irq(&ioc->lock);
-+
-+	/* calc_cost() can still run. The map is freed after an RCU gp. */
-+	bpf_struct_ops_put(ops);
-+#endif
-+}
-+
- static void ioc_rqos_exit(struct rq_qos *rqos)
- {
- 	struct ioc *ioc = rqos_to_ioc(rqos);
+> > I told you "next merge window", which is far from "no".
+>
+> For v7.4 it is "no". That's the release these hooks go out in. It means
+> v7.4 ships with a namespace_free hook that never fires and v7.4.y stays
+> that way because by your own rules the fix doesn't qualify for stable.
+>
+> > I'll admit to finding it odd that you seem to keep inserting yourself
+> > into that friction point
+>
+> A large portion of code where new security functionality is added or
+> modified all of the time is maintained by me and others.
 
-+	ioc_detach_model(ioc);
- 	blkcg_deactivate_policy(rqos->disk, &blkcg_policy_iocost);
+... and when it suits you, or the BPF developers, you override or
+otherwise steal ownership from the LSM space.  We obviously see things
+different here, but if you're trying to convince me that you are doing
+the Right Thing by inserting yourself into some of these discussions,
+e.g. the recent LSM kfunc discussion, you are wasting your time.  To
+borrow a phrase from Alexei's last email on that subject, "I don't
+feel we will converge here".
 
- 	spin_lock_irq(&ioc->lock);
-@@ -3458,11 +3530,12 @@ static u64 ioc_cost_model_prfill(struct seq_file *sf,
- 		return 0;
+> You're objection is noted and I'll mention it to Linus and then he can
+> decide.
 
- 	spin_lock_irq(&ioc->lock);
--	seq_printf(sf, "%s ctrl=%s model=linear "
-+	seq_printf(sf, "%s ctrl=%s model=%s "
- 		   "rbps=%llu rseqiops=%llu rrandiops=%llu "
- 		   "wbps=%llu wseqiops=%llu wrandiops=%llu "
- 		   "flushiops=%llu\n",
- 		   dname, ioc->user_cost_model ? "user" : "auto",
-+		   ioc_model(ioc) ? "bpf" : "linear",
- 		   u[I_LCOEF_RBPS], u[I_LCOEF_RSEQIOPS], u[I_LCOEF_RRANDIOPS],
- 		   u[I_LCOEF_WBPS], u[I_LCOEF_WSEQIOPS], u[I_LCOEF_WRANDIOPS],
- 		   u[I_LCOEF_FLUSHIOPS]);
-@@ -3499,6 +3572,7 @@ static const match_table_t i_lcoef_tokens = {
- static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
- 				    size_t nbytes, loff_t off)
- {
-+	const struct iocost_model_ops *model;
- 	struct blkg_conf_ctx ctx;
- 	struct request_queue *q;
- 	unsigned int memflags;
-@@ -3535,6 +3609,7 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
- 	spin_lock_irq(&ioc->lock);
- 	memcpy(u, ioc->params.i_lcoefs, sizeof(u));
- 	user = ioc->user_cost_model;
-+	model = ioc_model(ioc);
+Please CC the LSM list and me.  I would also encourage you to disclose
+the lack of testing you have done prior to the merge window as well as
+your insistence that the LSM hooks become a stable API; if Linus is
+going to change any of these policies it would be good to know.
 
- 	ret = -EINVAL;
-
-@@ -3559,7 +3634,11 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
- 			continue;
- 		case COST_MODEL:
- 			match_strlcpy(buf, &args[0], sizeof(buf));
--			if (strcmp(buf, "linear"))
-+			if (!strcmp(buf, "linear"))
-+				model = NULL;
-+			else if (!strcmp(buf, "bpf") && ioc->attached)
-+				model = ioc->attached;
-+			else
- 				goto unlock;
- 			continue;
- 		}
-@@ -3579,6 +3658,7 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
- 	} else {
- 		ioc->user_cost_model = false;
- 	}
-+	rcu_assign_pointer(ioc->model, model);
- 	ioc_refresh_params(ioc, true);
-
- 	ret = 0;
-@@ -3626,6 +3706,158 @@ static struct blkcg_policy blkcg_policy_iocost = {
- 	.pd_stat_fn	= ioc_pd_stat,
- };
-
-+#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
-+static int ioc_bpf_reg(void *kdata, struct bpf_link *link)
-+{
-+	struct iocost_model_ops *ops = kdata;
-+	struct block_device *bdev;
-+	struct request_queue *q;
-+	unsigned int memflags;
-+	struct ioc *ioc;
-+	int ret;
-+
-+	bdev = blkdev_get_no_open(new_decode_dev(ops->dev), false);
-+	if (!bdev)
-+		return -ENODEV;
-+
-+	q = bdev_get_queue(bdev);
-+	if (bdev_is_partition(bdev) || !queue_is_mq(q)) {
-+		blkdev_put_no_open(bdev);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	/* the order of ioc_qos_write() */
-+	memflags = blk_mq_freeze_queue(q);
-+	mutex_lock(&q->rq_qos_mutex);
-+
-+	ret = -ENODEV;
-+	if (!disk_live(bdev->bd_disk))
-+		goto out;
-+
-+	ioc = q_to_ioc(q);
-+	if (!ioc) {
-+		ret = blk_iocost_init(bdev->bd_disk);
-+		if (ret)
-+			goto out;
-+		ioc = q_to_ioc(q);
-+	}
-+
-+	ret = -EBUSY;
-+	if (ioc->attached || !bpf_struct_ops_get(ops))
-+		goto out;
-+
-+	spin_lock_irq(&ioc->lock);
-+	ioc->attached = ops;
-+	ioc->attached_link = link;
-+	rcu_assign_pointer(ioc->model, ops);
-+	spin_unlock_irq(&ioc->lock);
-+	ret = 0;
-+out:
-+	mutex_unlock(&q->rq_qos_mutex);
-+	blk_mq_unfreeze_queue(q, memflags);
-+	blkdev_put_no_open(bdev);
-+	return ret;
-+}
-+
-+static void ioc_bpf_unreg(void *kdata, struct bpf_link *link)
-+{
-+	struct iocost_model_ops *ops = kdata;
-+	struct block_device *bdev;
-+	struct request_queue *q;
-+	struct ioc *ioc;
-+
-+	/* del_gendisk() is in progress or done. ioc_rqos_exit() detaches. */
-+	bdev = blkdev_get_no_open(new_decode_dev(ops->dev), false);
-+	if (!bdev)
-+		return;
-+
-+	q = bdev_get_queue(bdev);
-+	mutex_lock(&q->rq_qos_mutex);
-+	ioc = q_to_ioc(q);
-+	/* the dev_t can belong to another disk and another model by now */
-+	if (ioc && ioc->attached == ops && ioc->attached_link == link)
-+		ioc_detach_model(ioc);
-+	mutex_unlock(&q->rq_qos_mutex);
-+	blkdev_put_no_open(bdev);
-+}
-+
-+static int ioc_bpf_init(struct btf *btf)
-+{
-+	return 0;
-+}
-+
-+static int ioc_bpf_check_member(const struct btf_type *t,
-+				const struct btf_member *member,
-+				const struct bpf_prog *prog)
-+{
-+	return prog->sleepable ? -EINVAL : 0;
-+}
-+
-+static int ioc_bpf_init_member(const struct btf_type *t,
-+			       const struct btf_member *member,
-+			       void *kdata, const void *udata)
-+{
-+	const struct iocost_model_ops *uops = udata;
-+	struct iocost_model_ops *ops = kdata;
-+
-+	switch (__btf_member_bit_offset(t, member) / 8) {
-+	case offsetof(struct iocost_model_ops, dev):
-+		ops->dev = uops->dev;
-+		return 1;
-+	case offsetof(struct iocost_model_ops, read_vtime_per_page):
-+		ops->read_vtime_per_page = uops->read_vtime_per_page;
-+		return 1;
-+	case offsetof(struct iocost_model_ops, write_vtime_per_page):
-+		ops->write_vtime_per_page = uops->write_vtime_per_page;
-+		return 1;
-+	}
-+	return 0;
-+}
-+
-+static int ioc_bpf_validate(void *kdata)
-+{
-+	struct iocost_model_ops *ops = kdata;
-+
-+	if (!ops->dev || !ops->calc_cost ||
-+	    !ops->read_vtime_per_page || !ops->write_vtime_per_page)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+static u64 ioc_bpf_calc_cost_stub(struct bio *bio, u64 model_flags)
-+{
-+	return 0;
-+}
-+
-+static struct iocost_model_ops ioc_bpf_stubs = {
-+	.calc_cost	= ioc_bpf_calc_cost_stub,
-+};
-+
-+static const struct bpf_verifier_ops ioc_bpf_verifier_ops = {
-+	.get_func_proto		= bpf_base_func_proto,
-+	.is_valid_access	= bpf_tracing_btf_ctx_access,
-+};
-+
-+static struct bpf_struct_ops ioc_bpf_struct_ops = {
-+	.verifier_ops	= &ioc_bpf_verifier_ops,
-+	.init		= ioc_bpf_init,
-+	.check_member	= ioc_bpf_check_member,
-+	.init_member	= ioc_bpf_init_member,
-+	.validate	= ioc_bpf_validate,
-+	.reg		= ioc_bpf_reg,
-+	.unreg		= ioc_bpf_unreg,
-+	.cfi_stubs	= &ioc_bpf_stubs,
-+	.name		= "iocost_model_ops",
-+	.owner		= THIS_MODULE,
-+};
-+
-+static int __init ioc_bpf_struct_ops_init(void)
-+{
-+	return register_bpf_struct_ops(&ioc_bpf_struct_ops, iocost_model_ops);
-+}
-+late_initcall(ioc_bpf_struct_ops_init);
-+#endif
-+
- static int __init ioc_init(void)
- {
- 	return blkcg_policy_register(&blkcg_policy_iocost);
-
->  3/5: selftests with two example models (the full builtin linear
->       HDD formula at double cost, and a multi-stream sequentiality
->       model) plus a runner and the selftest kernel config entries
->  4/5: add an iocost_ioc_tick tracepoint emitting the per-period
->       controller state, so model quality can be evaluated without
->       drgn (existing events are state-change driven and silent in
->       steady state)
-
-Also progs/iocost_model.c in patch 3 has SEC("tp_btf/iocost_ioc_tick").
-Patch 4 adds this tracepoint. At patch 3 iocost_model__load() fails.
-Swap the two patches.
-
-pw-bot: cr
+--
+paul-moore.com
