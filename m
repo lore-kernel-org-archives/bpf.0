@@ -1,75 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.10
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793145904;
-	b=dtbOIIhn9Yody+RWhnqaRZnIVWzoTp0OqNHK9+FSDufnpfLVo93kCnIfNIP/0otzZe0M
-	 aNHZkZgY8SonYtU5NyROi7JB1S7fGrUlli4SzSCzRU3wU2OqrEUajCPqybyUA8nXfm8h6
-	 RGseR4nL2TNBDfLU1kYgDCtxntT2DrvgUB59nTh16v+5DCYQUwEI/ftUEvMEm7PpzN1x6
-	 8LHO5Fw0EWkGMTQ001FWqWgZ8ZVk/fM2fbp/3KoD0tQUWibuNnGXat+isDI6qbLiOyMNR
-	 rB5+O1gDf+QoynPw1OQkRKTFAvz3s1HULz1LsOMqJpiHQPtUNZSUV58X4zCLA2RXwBg==
+	t=1793146403;
+	b=Fku4fQgauM9uFK4PmKl415fRbGXicT/vfjBJf02QiKDc10sghB6ftQ8NM7NcF7lnVnVX
+	 18HNnzWEfTEEpv9np39rt+FmiIL9CK4cijeh7gIUXiHJTXCWkw3ejUJdpAHPva2BkEZS8
+	 V7oygrMpXKru+0EQP/wPiDn6v1GX9LjDGTq1yb4F6J96Kw1GMRV5ylY/fNHLhIfPcuJZB
+	 hfLnwcs/xmoT9uCuHuvlbi4pHOhtOOOmUAheYJlmIrfgN2t3VrrtnBAiDsnjiMW34vx3u
+	 u2qQb1p8wFVMulcTqVB2MnGNU98S1R+dZ3NZ8v8QQJsvlA+aWeC2nRd/mKW0OOYr37A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793145904;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=ah4gzw5OiHfYj57lOarZOXCU6RfDPS1zY+caCBQQGnA=;
-	b=ygsYsh7S4jYO2JrFE7pq/aUPPkb83Pzbf/uLwTsp3gXbnHGtFpmXxLiFsazUmyyOARo6
-	 yAToQhMZROOuoq1QSbXQ7vM/KeVBX8DpLFwfcEGn4Y+ACeE7UFQuWQTo7FDAQMhLcItKt
-	 Ve4veIztfYRoZtPdszQAVajiKcU6tZYsDgWP1dwBhupcD5Tsur65As3V77a1SOBPydxrF
-	 CTPLGPDgRDQ+UvqkZ3I3QSC0RZJQbuEvValRLGQC2QUn6bpfAqJ48bTXLzzmEbxwhSQ2B
-	 G4pZYynmd+LL/7bjTquDWRWqw62gqPLsHvjD0ep8cp6pQPMJhm5DiFukvLwQ7QL69lQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793146403;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=9W2x8SvSAMS892x/ZligPLzUAW6gRF9w8HbBlWDqEjU=;
+	b=ayTjcSYYZZqoRRiuEo/kgpSbsZNc0jKmQSRzLa4X0zqJJY20cNbr7Pb5qAN7NOQLfNI5
+	 ks9DqJbwJTn3VzIDbK9CNooCURt0eCGuYu3HHVm0iH6o5DtJjzxjH+d0wfTGKUcnK52lv
+	 HuLkyIaYlVSns3CaRSYgrQsmxlGU2+lMu4zE1D6q2+3t1NxJPniSWporGI33QfAFb/bVV
+	 osI6+i/ZXiDnaH4sEZwj0I4Cs1SrkLRK+hgrrmYmX48RchKHAhD9UvmsqQghUGTz27FlZ
+	 mc4CHr/zl7HxgqRWmpRTDTuOxt1wqV3jokL2T7kUv14/OFTy/EGY4Pq8Aca7WHOk43A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=TwGC2TzJ;
-	arc=none smtp.remote-ip=91.218.175.10
-Received: from mta0.migadu.com (out-10.mta0.migadu.com [91.218.175.10])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="Juqf/BWO";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2510C606A320
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:05:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2510C606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0AC606A31D
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 00:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=TwGC2TzJ
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=psa7zx1Xe6yGIkcQOpjXlYI3zz/TQ9U0VkcLjx2WVoI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793145902; v=1; x=1793750702;
- b=TwGC2TzJdfwSNEmrRrDbN7E/YKUglZXDJk93kXtg8RHIHAsB5m6nJKHM5O2fwADzREZrrYNI
- EoFK+ZeF5WsLxVfkw1cRmFH0xwWGSJoPMOgfP1kzmrkGczu+YNoLm68CPpmEy8THreaVszS5E2e
- AckDE179ZO0DtezqI8nkMtZI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 84ceb785ec4e11b7;
-	Wed, 28 Oct 2026 00:05:02 +0000
-X-Mizu-Trace-ID: 84ceb785ec4e11b7
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	jose.marchesi@oracle.com,
-	david.faust@oss.qualcomm.com,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v1 6/7] selftests/bpf: cast explicitly in the arena subprog and callback faults
-Date: Tue, 27 Oct 2026 17:04:10 -0700
-Message-ID: <20261028000411.4010967-7-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Juqf/BWO
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 437581F01825;
+	Wed, 28 Oct 2026 00:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793146402;
+	bh=9W2x8SvSAMS892x/ZligPLzUAW6gRF9w8HbBlWDqEjU=;
+	h=From:Subject:Reply-To:To:In-Reply-To:References:Date;
+	b=Juqf/BWOx1+edykgOGBtHZIMflH55MDiscbK6EZ8nLsSNHGhbTn9a9JDvk1Pf93Ht
+	 YtUk6uktjSEm7Yr827MgrP3Qqs1C49YotTVl5syaCee94ufBUrg0nRsEto8/OiZCpa
+	 W4KUobdyk7luA6CicX2dFZc1lCM9aO+oXDfnyDrj2zmLip1aZYAatHoQqYNe+iy0ZK
+	 euNznwRd4rmaXoHIqsKClfEzJuBZl/EUJKm+9JyM8YZj4uYUta3ESmqDp3y/GjGBfX
+	 M+beTKUtNNvNyqz6YqQzn6kKzbXUYu9aF6a7YWI+v8lDP/+sbRaBNpftvDdcOyek6R
+	 7fcvwcRyw6wCw==
+Message-ID: <sashiko-outbox-187262@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 3/7] selftests/bpf: report SKIP for arena
+ tests a compiler cannot build
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vineet Gupta" <vineet.gupta@linux.dev>, bpf@vger.kernel.org
+In-Reply-To: <20261028000411.4010967-4-vineet.gupta@linux.dev>
+References: <20261028000411.4010967-4-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 Oct 2026 00:13:21 +0000
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -78,111 +58,84 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Four stream tests fail with BPF_GCC:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: missing __skip_without_arena fallback in jit_insn=
+s_arena.c
+--
 
-  test_stream_arena_fault_address:FAIL:stream__open_and_load unexpected error: -13
-  #479 stream_oversize:FAIL
-  #480 stream_partial_read:FAIL
-  #482 stream_syscall:FAIL
+commit f37e4c1aa3e5f2decfc920dfa156617c4a66522b
+Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-They call stream__open_and_load(), which loads every program in the object,
-and two of those do not verify:
+selftests/bpf: report SKIP for arena tests a compiler cannot build
 
-  #481/11 stream_success/stream_arena_subprog_fault:FAIL
-  #481/12 stream_success/stream_arena_callback_fault:FAIL
+This commit adds a __skip_without_arena macro and #else fallback programs
+to BPF selftest files guarded by __BPF_FEATURE_ADDR_SPACE_CAST so that
+test_progs reports those subtests as skipped when built with a compiler
+that lacks arena address space support.
 
-Both dereference an arena pointer and leave the cast to the compiler:
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
+/selftests/bpf/progs/bpf_misc.h
+> index 1b264480e128f..ed1ed1b5bd097 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
+> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+> @@ -156,6 +160,16 @@
+>  #define __success		__test_tag("test_expect_success")
+>  #define __description(desc)	__test_tag("test_description=3D" desc)
+>  #define __skip(reason)		__test_tag("test_skip=3D" reason)
+> +
+> +/*
+> + * Without compiler arena support, report the test as SKIP rather than l=
+et it
+> + * pass vacuously or fail to load.
+> + */
+> +#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
+> +#define __skip_without_arena
+> +#else
+> +#define __skip_without_arena	__skip("compiler does not support the arena=
+ address space")
+> +#endif
 
-  int __arena *addr = (int __arena *)0xdeadbeef;
-  *addr = 1;
+[Severity: Medium]
+Should tools/testing/selftests/bpf/progs/jit_insns_arena.c also receive an
+#else fallback with a dummy arena_unsupported() program marked
+__skip_without_arena?
 
-Without arena support __arena is only btf_type_tag("arena"), so no
-addr_space_cast is emitted and the store is to a scalar, which the
-verifier rejects.  GCC splits it into byte stores, 0xdeadbeef not
-being aligned:
+In tools/testing/selftests/bpf/progs/jit_insns_arena.c, both BPF programs
+in the file (arena_zero_off() and cast_to_user()) are inside a
+__BPF_FEATURE_ADDR_SPACE_CAST guard without an #else branch:
 
-  r2=3735928559 ll
-  *(u8*)(r2+0)=1            <- plain store, no cast
+tools/testing/selftests/bpf/progs/jit_insns_arena.c:
+    #if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+    SEC("syscall")
+    __success __retval(0)
+    int arena_zero_off(void *ctx)
+    {
+        ...
+    }
 
-Their siblings in the same file do not rely on the compiler; they use
-bpf_addr_space_cast(), which emits the instruction byte by byte and
-works anywhere.  Do the same here.
+    SEC("syscall")
+    __success __retval(0)
+    int cast_to_user(void *ctx)
+    {
+        ...
+    }
+    #endif
 
-The address space has to come off the local as well.  Left on, a
-compiler that supports arenas casts a second time for the
-dereference, on a pointer the explicit cast has already converted:
+    char _license[] SEC("license") =3D "GPL";
 
-  r2 = addr_space_cast(r2, 0, 1)
-  r3 = addr_space_cast(r2, 0, 1)
-  *(u32*)(r3+0)=1
+When built with a compiler that does not define
+__BPF_FEATURE_ADDR_SPACE_CAST, such as stock bpf-gcc, jit_insns_arena.c
+compiles to an object with zero BPF programs. When test_jit_insns() in
+tools/testing/selftests/bpf/prog_tests/jit_insns.c runs:
 
-With it off, GCC with and without arena support and clang all emit the
-same thing, which is what the test wants:
+    test_jit_insns() -> RUN_TESTS(jit_insns_arena) -> test_loader__run_subt=
+ests()
 
-  r2 = addr_space_cast(r2, 0, 1)
-  *(u32*)(r2+0)=1
+it silently executes zero subtests for jit_insns_arena instead of reporting
+a skipped subtest.
 
-What these two assert is the fault report, not how the pointer was
-produced, so nothing they were testing is lost.
-
-Measured on bpf-next with a stock bpf-gcc, test_progs before and after.
-Fifteen results go FAIL -> OK -- every test that loads this object, not
-just the arena ones:
-
-  stream_arena_fault_address             stream_oversize
-  stream_fd        stream_fd/blocking    stream_partial_read
-  stream_fd/edge   stream_fd/empty       stream_success
-  stream_fd/hup    stream_fd/nmi_epoll   stream_success/stream_arena_callback_fault
-  stream_fd/open   stream_fd/nonblock    stream_success/stream_arena_subprog_fault
-                                         stream_syscall
-
-and the five stream_arena_fault_address subtests become visible for the
-first time (read, write, xchg, cmpxchg and load_acquire faults).
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- tools/testing/selftests/bpf/progs/stream.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
-index 1ae015c4e6b4..dc56779cac06 100644
---- a/tools/testing/selftests/bpf/progs/stream.c
-+++ b/tools/testing/selftests/bpf/progs/stream.c
-@@ -5,7 +5,6 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- #include "bpf_experimental.h"
--#include <bpf_arena_common.h>
- 
- struct arr_elem {
- 	struct bpf_res_spin_lock lock;
-@@ -381,9 +380,10 @@ int stream_arena_cmpxchg_fault(void *ctx)
- 
- static __noinline void subprog(void)
- {
--	int __arena *addr = (int __arena *)0xdeadbeef;
-+	int *addr = (int *)0xdeadbeef;
- 
- 	arena_ptr = &arena;
-+	bpf_addr_space_cast(addr, 0, 1);
- 	*addr = 1;
- }
- 
-@@ -404,9 +404,10 @@ int stream_arena_subprog_fault(void *ctx)
- 
- static __noinline int timer_cb(void *map, int *key, struct bpf_timer *timer)
- {
--	int __arena *addr = (int __arena *)0xdeadbeef;
-+	int *addr = (int *)0xdeadbeef;
- 
- 	arena_ptr = &arena;
-+	bpf_addr_space_cast(addr, 0, 1);
- 	*addr = 1;
- 	return 0;
- }
--- 
-2.53.0-Meta
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261028000411.4010=
+967-1-vineet.gupta@linux.dev?part=3D3
