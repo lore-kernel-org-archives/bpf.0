@@ -1,103 +1,107 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793208178;
-	b=5WAEObbiBbN4XRuftKLFimghJdAykuxBKxyQpZW8ZmFwq7DUWELi9r88jlx4/fDhh5HL
-	 ZWw+wNMKgW6a7U1e9Swy3j0ki9gfCPK32oysHJRDjCe9qVFVvqmbiQz3Oyffym9WccTog
-	 iGCkiDCjHDgrxMsAPP8ShM60Al3gFa2T6DXVhxyc4S/Qb1k4reTOrqelnOlUSYGtx3Q/7
-	 KKJlZXfxAy2aVt+JyOK4FiL7zefG6n4msj/nuBq083cZYS/32n2DTR1Y9ze4a/r5/ffoc
-	 Nt7iwtOwBs5cSTImdmqLV6tgpiBk9t13iWiMnNKXo3vxvYxmvLBaBIvVto8a43af4XQ==
+	t=1793208334;
+	b=y4XG0UxSQcEUtdK9/AsZd7FwmKkGRZSknxSCTd9sRkt3G7/OAEPuepQ+hvil9IINt3su
+	 /4jPDEdKiAXqDATbm+iRgXYSv1YMciCcCWyM9NLm5jyTvr3DmLmU0SJ/4Tr07kUTry+Nc
+	 sGwsICGBchuM9w6g+GZck7MEvnZRsBbnTlUjUXIAr+Uxb0SOlqEubKCoS6taVN1nUZz3S
+	 i/Vbzn6s9XDe47e6HFbS0EtMnhsmnuQs5EUKAQULSqMZTttex+Xyo73SEvTDVZXrMRMS3
+	 nHzXKXYzENEaDBhpNUMoaBqN5GXCn8zhztSs4p/zN2BOIVpr4emnux1AcR2OKM7f67g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793208178;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793208334;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
 	 References:Content-Transfer-Encoding:MIME-Version;
-	bh=lZR40KBgJ/2Psdf8gDUdz7tLnIyTakA+gek7ngS14Kk=;
-	b=jJA88Az5Rqfh3JvhUwchQPF01sctfOhohkxCBuBAnGPZ8f2I3fCdD8GE9K59wubvOKvd
-	 zaH6cNmn5lg/3/6BghcJ7k7GooZjHZiBlESaBEZ9eQ3xtFGDKVbIErHjS7sy8WFOWMxOP
-	 ShaYL8/Jmgi3k2vMWHnIv2l7YIWNXSQp28Mu7UEcwadxy8v20tZk3rUlHh2X7qQkSxKmM
-	 l30LUYhL7//witKfCeMc/H2ijsOkl6+/BcqXH3WZvTCWjdXGSDbBKh0Ry4LKxR/XiLJw8
-	 Jz18yL4rd+yKb/4fLnnTBYP1ktF/nWZpzSLj6p4+MgHIbrBQxw5moYaiwnCAlBuGJSQ==
+	bh=XLYiEepDtnyQ6wJ1rlYe5RaJc/i8ARvs/UjwaNMVQRE=;
+	b=lbPcptbHYdlP/gMCavGZpB/Sik6XvYmEp32WW+Md9/HdVJ9TuxGWhiolIIUI2xBEXx2w
+	 OGGBbNsAyDRGpPNrJtv0QmAFMpmOQBtAe0ZRya7oKTerqjxjl6eAp3PP70+3CmYYye3PF
+	 emA3zboYUhWHnrUlg6nVaKothVqaD0jIaJYdhqGPCtOCdhZRwRaM/usj4RgQoJFQ04SLn
+	 xosI8xpFbO6Th03E/g1LjJ0gVEp//NP6Am28NbLvNljqDyyNZWdR/9Em3WxzhF96H94OX
+	 MHO6vQLfSHbVVSw1YgMj/pvS1+TsBsk8yfsACj7tCsr4cktt0D8gHsOd1T05Qwn27zg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGi33GOb;
-	arc=none smtp.remote-ip=209.85.215.172
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Af7y52Ro;
+	arc=none smtp.remote-ip=209.85.216.54
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB589606A31C
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:22:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB589606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC25606A31D
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 17:25:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org DEC25606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JGi33GOb
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc4aa18f9afso641356a12.3
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 10:22:57 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Af7y52Ro
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3acd21ba21aso1066228a91.1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 10:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793208177; x=1793812977; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=lZR40KBgJ/2Psdf8gDUdz7tLnIyTakA+gek7ngS14Kk=;
-        b=JGi33GObSCIPOg5GYE3BnSfBBZVmwwsXZw5eBPhKrmHgpciNqlHmJXek03iCaoShb/
-         Wj5OBASXa5rgtunJBpYz7PgBNVHa4wxO3kmcmagshjYaKew1uehhKGUOb27CVWlGm88H
-         R+IgFuPQe7cRTRJKJGkxDEJN5YOR1VmcahJsqMrmIVOOqyajbYR/YVkTLVq3i3c02P56
-         OdVgC0Si4IJDS5HsNRvud8Gy942JJrfW8OGZ7pETOU8WUou8OHUAbs08DHnRZdexiLCh
-         /Yx51RttoshtFjqmVanlByJJtaRO3GQvNDepyO+yxrJ7lm8uPcrQxH+IktwfOakVl3ta
-         /fmg==
+        d=gmail.com; s=20260707; t=1793208333; x=1793813133; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=XLYiEepDtnyQ6wJ1rlYe5RaJc/i8ARvs/UjwaNMVQRE=;
+        b=Af7y52RoNQXZRESfNzlA5nWU7zYO0dfLPezS+5rNH3Tx4+4DsnOMyhABRaQvfQPhli
+         WGDEJ6zWLk88idrS1IRmCJxUBASFuuPGGngNzQZZ7LzmANcSte3aAEFKuC2VjHtOK2z7
+         yjKMj+n+y7innZ39T/IQMUNxUrOFGpd7ZgkibuW592Y5ybQz3HYIMsH9Gk9Vo/7F25Aa
+         q36OaknOzdG878FRgHSj5M2t3J2VawgIYj7j4isik5KORWNcsNhJEboFyrcCLGCCUvS1
+         gSvujDxwZjfi6G+bKCVFt8XzBT2Fk2cA1mp2Ztj8lzO/DQBvE/UHm9uoMPtJq1mQY/nw
+         HIEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793208177; x=1793812977;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1793208333; x=1793813133;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lZR40KBgJ/2Psdf8gDUdz7tLnIyTakA+gek7ngS14Kk=;
-        b=a8pQAn03oE6yBoOnaE75fDAiOupm5bS8/62kYVeTSlIwKRFliHQ3in3uVs1NRGQ+ux
-         KfvvwUsf7ci4JTOJafCXIQUQ1rSXbUlbRAUz2fkTCyVSzabQucoxa6bTSUlE3YjfbEfN
-         4gDenG3SfUdzLJ+FA0bA140GzEarDW2mLj3EJbFm7Z9pq14o0uQKTVCmAKio+Gn302bz
-         lAlwl7QJcn4DV/1+OnOeauKExkbc5IpwlJEQw0UU904pyBRd3V9Gh6GDMr3aISgPTnZz
-         S2VCI3JeVHOdw3PjBH7yzxWjvqXhXDluVdebtIaNXywbYzUXkMkcEW2z5LPhFA8Wb6xg
-         7V4Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzpZpHqS88F6vofJbHVbBlWuGD8TYIWrh82Pez0aj4wKsgfx65KGKrLR0hn0B+uD66b2+Y=@vger.kernel.org
-X-Gm-Message-State: AFq9FYLyOfTuTPCofCNN5mROV7q9m3srCK9yRqlVvusg3rzSmyLEgkGE
-	6zuGV8yumiHh7D0N8eL6dU0o5TsQygqY9km4nQxgvxjkB2hx+sWlLSpcaPwrAg==
-X-Gm-Gg: AYBFou2bqBfIfs0WtgF2cgUtBmTG4SrxLlXS6rLZyp5SyN+uunjCLS0XyFYkzdmQByZ
-	HhvC3qHbTO/ml7i/QqlV7zZ7YRBTSeTvI0AgUnhvw2iEv86fpXGTaHDOXeRzDoRaOJ7IBF7nV/1
-	cbiBMJc2s+ihmrUO31Mu84xZT9N3XYvnM9MFzWfp2w9AcnCmmc1Bgq5hAVq6m/suq/w6LBhhgey
-	wN+LKDJ2veVmumV+mZgGLE5rMRbmuBx2EqAFUBUxXJkpO3G0HgysusXq/bVIu9/nk6yAgKPRcyu
-	2kJHZIjA8Ci6xRqzvUXvyTlSSdWd2B4ExkbQCeO1Mj9gABjgIHyca1YnLtHgSyirVxK4HUzZ1nz
-	E95AHAA4oMSpkdlg6yszDb1lbc8a1nb7OvwuamMyeMkSUkqCc2SkkdHWeEMn+WHiNKabWVYN2PS
-	XEjmHzhzxt5Kyvgl1d3njYUM+69LhGiCOli96ZKPZ3PmehnYPC14bScFTYBWFzLu6G8T84g2FGn
-	l1itWmw7bE6cHIl688IKL9PLoRKETmamqaSBSoZ0xkb4NY777SOAy7+XmCVVMZUYOnNZ70SxSu8
-	z8FvVphaRZV4LWgxn1pNn+BwsZOmhG5WQlDMWnyeI4TYjolL3q9DassLzS2Xf9Vp/XkkWFNDEwL
-	BoXfQD7ReOQ/ud9a8zc8mzl7VgSGeXq5JMg==
-X-Received: by 2002:a17:90b:4b0e:b0:3ac:929e:691 with SMTP id 98e67ed59e1d1-3ae57f9b30cmr2053159a91.17.1793208177177;
-        Wed, 28 Oct 2026 10:22:57 -0700 (PDT)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e8fb2c5sm380155a91.3.2026.10.28.10.22.56
+        bh=XLYiEepDtnyQ6wJ1rlYe5RaJc/i8ARvs/UjwaNMVQRE=;
+        b=fX6bREoj9J3uNtPi1BA1AXF5MOXCVW+lCeWs+gqBNKlcno0lCb36L89gvo+ewnPlZM
+         YfzaQbt49YPg6ug993INSF7UO9YLF60YI7tkoB0DVqqEY0D/zuIkwncX55i51lHauntM
+         b7/CgQ3BVijL4M4ZharP8u3mKN0uVA6W9WWHQYFE1oiTNaFrXeNjlDgC+C8DFc2Z/1mZ
+         ILQXcNuINfkN1t0Ce5cjxgye+q/rUEyPRDbob0+MCmsoamiiD7P5VCV51Ca3N/ltxlET
+         G2bPfrn47DCmIHXJabOlQjXedt/CQ4zLHHS5r7FLJKCCVRb9LI51QzFFkzvdC4So6CpO
+         T0Cw==
+X-Forwarded-Encrypted: i=1; AKwUvBzYF5qitFL2wDfzm3L/ngvJssoWxbCcyaX1PA62kBBaVFVxizRKo9ac6/I5uAdlEqzNopA=@vger.kernel.org
+X-Gm-Message-State: AFq9FYIxnRQyHuD3/Ot4EJdbbcg0w+bipCGqnKSmFz7KzRYeTh4AH4x5
+	Y5+KKRpWtiJ+oU5p0ae4ZUfkD4QAG7J9hih6nbgOlbh0lyBaL95OfVoT
+X-Gm-Gg: AYBFou0CDsXJK61YAnxnca0MWencvT2L+CGCWgIsv5vkF/wk1ccV7+IrXWMsjiEIsnd
+	g9fPfRh2dSomZzOrnvaNNb219EALL7ga7lTufgCMGM6EG/GtD223vL4eyLvaWVWEqBm8X/wTFnA
+	yXqZv8x/f+xpLuVYuVPb1buiBK7wZg1hxuPOtCClbyDc1gERgB8Fl3lH2jPnxPf607cKBoJgYpT
+	V8vwplswWSQrSCo0qyfUKTX3+36OaYvmgc1ZXFt5ss+Dr0lLNPbrvE0l+PzAm948OhPzMEVoPkf
+	wpyJpx3cVb5QDGwCzCOAfZHol1yf7TzePhKExqEizMnJZKwrapYuZcSDawPYHkLiNrKKLvsMJnK
+	ouxzIoHt4P8Nl4Inw+dHPW4VrNujh7pp8OlSaq7nKhlM92dPwF5OdSKMehFWNN75+gh17SYt5xW
+	KEh98ScAOspqjA7XMEQ3kQCw19E6Um/8Ag8N1/z9S8uTYPEAQINlcgF+Uz3/wncxZz1N+uGdHIt
+	JW447l7Zc07j8QoAUyMp8vXHkMnHLbFp8f2uN4403S3132Wnoq49k7ykP5LFQjsKGgoJ1n/aIF4
+	T/94KUBksoaaVw7IZyHVcMhddCsdkRwdZQsGGxDbRyBjXwQ9Q7+U0RJF9XsGlmgOhKW26ZS7TmA
+	rQQa/jddcTHok3Mb3irzzADYb6wFDMShX9A==
+X-Received: by 2002:a17:90b:3a46:b0:3aa:fdad:7d6e with SMTP id 98e67ed59e1d1-3ae581b7b3fmr2290113a91.10.1793208333116;
+        Wed, 28 Oct 2026 10:25:33 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae6e9583c1sm397200a91.10.2026.10.28.10.25.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2026 10:22:56 -0700 (PDT)
+        Wed, 28 Oct 2026 10:25:32 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 28 Oct 2026 17:22:56 +0000
-Message-Id: <DMGN8VM2BAOR.28NRNN51MCI8I@gmail.com>
-Cc: "Yun Lu" <luyun@kylinos.cn>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Mykyta Yatsenko" <yatsenko@meta.com>, "Shuah
- Khan" <shuah@kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Retire task work before reclaiming
- hash elements
+Date: Wed, 28 Oct 2026 17:25:31 +0000
+Message-Id: <DMGNAV67LK3F.2FNLTD5NVHDEA@gmail.com>
+Subject: Re: [PATCH RFC 0/8] vsock: add datagram support to virtio and vhost
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yun Lu" <luyun_611@163.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20261028073525.1035605-2-luyun_611@163.com>
-References: <20261028073525.1035605-1-luyun_611@163.com> <20261028073525.1035605-2-luyun_611@163.com>
+To: "Sergio Lopez" <slp@redhat.com>, "Stefano Garzarella"
+ <sgarzare@redhat.com>, "Bobby Eshleman" <bobbyeshleman@meta.com>, "David S.
+ Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Bryan Tan" <bryan-bt.tan@broadcom.com>,
+ "Vishnu Dasa" <vishnu.dasa@broadcom.com>, "Broadcom internal kernel review
+ list" <bcm-kernel-feedback-list@broadcom.com>, "Stefan Hajnoczi"
+ <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, "Jason Wang"
+ <jasowangio@gmail.com>, =?utf-8?q?Eugenio_P=C3=A9rez?=
+ <eperezma@redhat.com>, "Xuan Zhuo" <xuanzhuo@linux.alibaba.com>, "Haiyang
+ Zhang" <haiyangz@microsoft.com>, "Wei Liu" <wei.liu@kernel.org>, "Dexuan
+ Cui" <decui@microsoft.com>
+Cc: <virtualization@lists.linux.dev>, <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-hyperv@vger.kernel.org>
+In-Reply-To: <20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org>
+References: <20261028-vsock-dgram-support-v1-0-e457cf7cee78@sinrega.org>
 Content-Transfer-Encoding: 8bit
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -109,94 +113,61 @@ List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 
-On Wed, Oct 28, 2026 at 12:35 AM Yun Lu <luyun_611@163.com> wrote:
-> Leave ERR_PTR(-ENOENT) in task-work slots before returning non-preallocated
-> HASH and RHASH elements to the allocator. The existing fetch/acquire error
-> path rejects the retired slot. Reopen it only when the allocator acquires
-> the storage again. Also retire a reinitialized RHASH candidate abandoned
-> after insertion finds an existing element or fails: a reader of a previous
-> incarnation can still hold its value pointer and install a context there.
+On Wed, Oct 28, 2026 at 09:04 AM Sergio Lopez <slp@redhat.com> wrote:
+> This series implements SOCK_DGRAM support for virtio-vsock and
+> vhost-vsock, allowing applications to exchange connectionless messages
+> through the existing AF_VSOCK datagram API.
 
-This is overkill.
-It adds a 3rd value of twk->ctx and two new functions that hashtab.c
-calls in 6 places.
-The kfuncs start to work differently for prealloc and non-prealloc maps.
+The cover doesn't say who needs it.
 
-The map knows whether the element is deleted. Look it up.
-In bpf_task_work_acquire_ctx() the prog owns the ctx in PENDING state.
-The irq_work is not queued yet.
+Bobby and Amery took the same feature to v6:
+https://lore.kernel.org/all/20240710212555.1617795-1-amery.hung@bytedance.com/
+Stefano said there that it can work well and that the virtio spec change
+is the next step. The last mails of the thread have Amery's v7 WIP and a
+short list of what is left.
+The cover doesn't mention it. The spec change is still missing.
 
-  prog                                   delete
-  cmpxchg(&twk->ctx, NULL, ctx)          unlink the element
-  cmpxchg(&ctx->state, .., PENDING)      xchg(&twk->ctx, NULL)
-  lookup
+Why not finish v7 instead ?
 
-Either the lookup doesn't find the element or the xchg() finds the ctx.
-It's the same scheme as the usercnt check in __bpf_async_init().
+This RFC goes the other way in these places:
 
-hashtab.c doesn't change. A deleted element gets -ENOENT in all map types.
-The cost is one lookup per bpf_task_work_schedule_*().
+  what               v6                        this RFC
+  -----------------  ------------------------  ----------------------------
+  (cid, port) space  own bind table for dgram  shared with stream. The 2nd
+                                               bind() gets EADDRINUSE
+  vsk->transport     empty until connect(),    g2h or h2g, picked in
+                     lookup per packet         socket(). -ENODEV with
+                                               vsock_loopback only
+  routing            one helper for stream     2nd copy of the chain in
+                     and dgram                 vsock_assign_transport()
+  recvmsg()          in af_vsock.c,            dgram_dequeue() stays,
+                     no dgram_dequeue()        dgram_payload_len() is new
+  VMCI               fallback                  first. No virtio dgram when
+                                               its module is loaded
+  dgram > RX buffer  drop, EHOSTUNREACH in     every RX buffer is 64K
+                     the error queue
 
-The diff doesn't have the reorder of FREED and detach in
-bpf_task_work_cancel_and_free().
-That's a fix for a different race. It doesn't need a new ctx in a deleted
-element. Pls send it as a separate patch with its own steps.
+> Datagrams use destination-based routing across guest-to-host,
+> host-to-guest and loopback transports while retaining the socket's
+> transport state. VMCI keeps priority as the dedicated datagram
 
-Something like this (compile tested only):
+A dgram socket uses two members of struct virtio_vsock_sock: tx_lock and
+bytes_unsent. They serve SIOCOUTQ only.
+virtio_transport_alloc_skb() does skb_set_owner_w() already.
+udp_ioctl() returns sk_wmem_alloc_get() for SIOCOUTQ.
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 648abe1..acd62ef 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1148,6 +1148,14 @@ static void *map_key_from_value(struct bpf_map *map, void *value, u32 *arr_idx)
- 	return (void *)value - round_up(map->key_size, 8);
- }
+Without them a dgram socket has no transport state, like in v6.
+Then no need for the owner transport, dgram_transport_match(),
+fallback_transport, tx_accounted, the skb destructor, etc.
 
-+/* Is the element that holds this value still in the map? */
-+static bool bpf_map_value_is_linked(struct bpf_map *map, void *value)
-+{
-+	u32 idx;
-+
-+	return map->ops->map_lookup_elem(map, map_key_from_value(map, value, &idx)) == value;
-+}
-+
- enum bpf_async_type {
- 	BPF_ASYNC_TYPE_TIMER = 0,
- 	BPF_ASYNC_TYPE_WQ,
-@@ -4741,6 +4749,19 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
- 		return ERR_PTR(-EBUSY);
- 	}
+> transport.  Guest RX buffers accommodate complete messages when
+> datagrams are negotiated, preserving message boundaries.
 
-+	/*
-+	 * The prog can still hold a value of an element that was deleted from the map.
-+	 * bpf_task_work_cancel_and_free() is done with it and nothing stops a new callback
-+	 * when the element is freed. The ctx is published and PENDING at this point: either
-+	 * the lookup doesn't find the element or bpf_task_work_cancel_and_free() finds the ctx.
-+	 * An idle ctx stays in the element until the element is reused or freed.
-+	 */
-+	if (!bpf_map_value_is_linked(map, (void *)tw - map->record->task_work_off)) {
-+		(void)cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_STANDBY);
-+		bpf_task_work_ctx_put(ctx);
-+		return ERR_PTR(-ENOENT);
-+	}
-+
- 	/*
- 	 * If no process or bpffs is holding a reference to the map, no new callbacks should be
- 	 * scheduled. This does not address any race or correctness issue, but rather is a policy
+That's 64K per RX buffer instead of 4K, for stream and seqpacket too.
+It undoes commit 03a92f036a04 ("vsock/virtio: Resize receive buffers so
+that each SKB fits in a 4K page").
 
-[...]
-
-> +	bpf_task_work_free(&rhtab->map, rhtab_elem_value(elem, rhtab->map.key_size));
->  	bpf_obj_cancel_fields(&rhtab->map,
->  			      rhtab_elem_value(elem, rhtab->map.key_size));
->  	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
-
-bpf_wq and bpf_timer have the same problem.
-bpf_wq_init() on a deleted element installs a new cb. cb->value points to
-the element. htab_mem_dtor() ends in cancel_work(). It doesn't wait for
-bpf_wq_work(). The callback still runs when the element is freed.
-Pls fix all three.
-
-Also trim the commit log. The 5 steps and the splat are enough.
-
-pw-bot: cr
+pskb_trim_unique() doesn't reduce skb->truesize. So a datagram of 1 byte
+charges more than 64K to sk_rmem_alloc of the guest socket.
+The default sk_rcvbuf is about 208K on x86-64. The 5th datagram in the
+queue is dropped.
