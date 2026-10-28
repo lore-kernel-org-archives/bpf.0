@@ -1,64 +1,67 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.127.231.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793191124;
-	b=cutJ+FDz+P/BT8XIyJFn9cD8EyBXjrqzHI8w0xM91839SnwPAa03sQ4Wzc26b2Bp65EW
-	 6UQQuJK7SetPSgo44ECd2TUq6ImCpxkNchsuXmy7D/oE5TqBewSVjGlFtEm4vpObToUBN
-	 QFsQNLb1kkn073Jhlq92qsNcmmiyxYo0XqlE2Yf8dgpCqh7AfSybd4qkzShSPshYx99Mg
-	 uOBJP8UhY0iq8J478sxgLFVNLgIFg5m/4js/MVVbwqwOSjOhX/LIAiE1fUdVrNoj2ji0Y
-	 PtGjuLsd/C8bx2QK28wJYEmUfz6RWFsIKNhPnbDEUpUXVJOcVL8Ow0C/92y1sbuT+0A==
+	t=1793191925;
+	b=iN2foC6YWJE4GmGcEyt1fdJraDTi93J36AyB7tR9ekD7rn/4Uyew7YHPZ2C8FvsFeMdM
+	 Nk68rv7RcPXLB/KgDr6akLCU0kp+MIxK+/TX4CFdu4GyjPUUfykODOnw9QFmHfTNDpWKY
+	 XV18rOUliL8rL/AE6OusWh2TFhw29fWjXS29m1gr4r21rnw3sSsTpkJFT5FuPtUguQuAW
+	 MYlfcEEgMLSpCzw+a2A3NT3+mnXU94mJfBu0b4xfWcyIsh2HAaE7y1Io920+u9E4xE2Px
+	 KXNKC5wEcXKZSiI7E+p7yWf6KcSX+/l/wJ6cFUigqc3beEPsumh+hd2XcJZpnH04sfQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793191124;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Virus-Scanned;
-	bh=Y35jB/7Gsfr5AxAtB06a5rjbDLtINtAQhefmyIZOHpI=;
-	b=nQy1cWyCfI39qUcNL1LeCfIxGcihHzs4a+bHEEAFEyIBm/h0WGWFqviC7FmBw0VUJxx4
-	 9QmnYzCXMRytK4VjXA2td2MMi3q1vl5jNWhAK/BixmVFGtIrNPGqJfwY9japn849Yfv5j
-	 nR6DhUnvrqrAsGLMSSrbAqsdw/Tgp+8JPyOLAImHFOL8rDC0SsiinO+A1mZ2P3JJUEmpv
-	 6N/cO95A2zsUAZY1+3UGd4lPKgoy3/hSN8fJ/WuGBw8l+lEpNFaoGfA98dptsIhQ5kAtK
-	 Yqx50xUNwIC19PDaq5vVyI9sli5gjl87yD0CKNmnIWrbuJbbQnU8tv04WRvizVRzesw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793191925;
+	h=DMARC-Filter:DKIM-Signature:Message-Id:Content-Type:Subject:
+	 X-Original-From:Cc:Content-Transfer-Encoding:X-Mailer:References:
+	 In-Reply-To:Received:To:From:Date:Mime-Version:X-Lms-Return-Path;
+	bh=ruJcFMq+T+PYshOYgwUo5k4oqvbhd5wL7JLOkO0njoo=;
+	b=TtCuJRfBvKZdT98xjj5r04/DIXOBLhvAL7uYScFFdXPpKXleuNki5uMf+3onEFj6crHY
+	 SE9cehBTtHRY1gR2lTdxkWcqWwUkv/2VH1uzoU1NHc6t5BEDYTYvgc+/rgtc9te/8D3gB
+	 4+IDS47dgVzZHgC3roXxgwURmmfGpHCoDmbQ1YjhaPOxV66b27wQQI2Tsm09YwIGZwoJz
+	 hHXPIOFnXWTHIo1+qevrK4/y6fvI8xLEH/UcNSoIj7vOIPK9Sf/w+Ok+Y4aR0iP+s10bn
+	 O49bB11GSh1gC5LmGuj62bsWjJXy/UI82DiHXmFoNqUj89PRCb3UCxMuznTyXzPXh4w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=iogearbox.net;
-	spf=pass smtp.mailfrom=iogearbox.net;
-	dkim=pass header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=Y1cDorAS;
-	arc=none smtp.remote-ip=213.133.104.62
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=insta360.com;
+	spf=pass smtp.mailfrom=insta360.com;
+	dkim=pass header.d=insta360.com header.i=@insta360.com header.a=rsa-sha256 header.s=feishu2606151854 header.b=q2WpuNEn;
+	arc=none smtp.remote-ip=209.127.231.30
+Received: from va-2-30.ptr.blmpb.com (va-2-30.ptr.blmpb.com [209.127.231.30])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1EBC606A31A
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 12:38:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E1EBC606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F69D606A31A
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 12:52:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F69D606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=insta360.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=insta360.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=iogearbox.net header.i=@iogearbox.net header.a=rsa-sha256 header.s=default2302 header.b=Y1cDorAS
+	dkim=pass (2048-bit key, unprotected) header.d=insta360.com header.i=@insta360.com header.a=rsa-sha256 header.s=feishu2606151854 header.b=q2WpuNEn
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Y35jB/7Gsfr5AxAtB06a5rjbDLtINtAQhefmyIZOHpI=; b=Y1cDorAS1kbemFHldYdME6k6R/
-	884KGZE2yNx34Nzt5E2bbSHDrfK1FG3QfhbeweGAliXrCovYDTou46q428K/RGhbq6bI8e8QvO7Gi
-	VUSLuW3mHRtQuq9V7fAuf9NyMrMsrgK22UQ0+ra/tGOkUSKPvS1GV2I6eLg0wKoH3bCDKRyATTE7O
-	VBEwXq4TSMO7HK3lLS0/nmnp4vg0uDI4fePTfcIRB2rM1WyGEpuAfWFUcTn17ZXBhTwDfYwWjG2J5
-	RVVp3BRo27m1LcMTgW0LDl9H+zNKEiL3uovAGQh/nD8Bg2JRPbe/WSTg81Xr/BzSqkukV7Dd/aneX
-	7MC/MiPA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xM2vG-0006EW-0m;
-	Wed, 28 Oct 2026 13:38:30 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1xM2vF-0009rL-1S;
-	Wed, 28 Oct 2026 13:38:29 +0100
-Message-ID: <d06830ab-7858-43fa-bbcb-aeab92a3e042@iogearbox.net>
-Date: Wed, 28 Oct 2026 13:38:28 +0100
+ s=feishu2606151854; d=insta360.com; t=1793191917; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=ruJcFMq+T+PYshOYgwUo5k4oqvbhd5wL7JLOkO0njoo=;
+ b=q2WpuNEnardC3QCL0XlIgUTNG849iFNdxmtXxDCnkbehfuy6pzCMr+l/asWPKvhvdcTN+o
+ /2xQOuIcOC+Vkp2bjqVy2OsE/YCKYVBOBDFO0bC5o9zFOPbfnsA4w8OaoS11F3tjW4o6Tw
+ otJYc68qhRLqapRdTBYWAFY902QG6nhtZY2fh2xPN7M49yrSUL8hEty2JwdOKV03DRsv3U
+ pkDiAg/BRwn8+mJntQstJUX+WOToWsLaOEiL88zBda/KvG4JU1o/9nfwZJPuDtjLzMf29A
+ RefFgTFIc6ioaglfhzkI0qyTmihOIjlwPO8kBhls528VNMn1CqrjqcRxiA2aCQ==
+Message-Id: <20261028125148.1348-1-yangsongsen@insta360.com>
+Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH bpf-next] bpf: Fix suspicious RCU usage for sleepable bpf_get_stack()
+X-Original-From: Songsen Yang <yangsongsen@insta360.com>
+Cc: <song@kernel.org>, <jolsa@kernel.org>, <ihor.solodrai@linux.dev>, 
+	<kpsingh@kernel.org>, <matt@bobrowski.net>, <ast@kernel.org>, 
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>, 
+	<memxor@gmail.com>, <martin.lau@linux.dev>, <yonghong.song@linux.dev>, 
+	<emil@etsalapatis.com>, <rostedt@goodmis.org>, <mhiramat@kernel.org>, 
+	<mathieu.desnoyers@efficios.com>, <bpf@vger.kernel.org>, 
+	<linux-trace-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+X-Mailer: git-send-email 2.53.0.windows.2
+References: <20261028093548.790977-1-yangfeng59949@163.com>
+In-Reply-To: <20261028093548.790977-1-yangfeng59949@163.com>
+Received: from DT-9806 ([61.241.19.90]) by smtp.feishu.cn with ESMTPS; Wed, 28 Oct 2026 20:51:54 +0800
+To: "Feng Yang" <yangfeng59949@163.com>
+From: "Songsen Yang" <yangsongsen@insta360.com>
+Date: Wed, 28 Oct 2026 20:51:47 +0800
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -67,30 +70,50 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:bpf+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 21/21] selftests/bpf: Extend the JIT instruction
- tests for arm64 encodings
-To: bot+bpf-ci@kernel.org, puranjay@kernel.org
-Cc: memxor@gmail.com, ast@kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20261027182445.1156335-22-daniel@iogearbox.net>
- <9832ca99bb2aed8262e1986075a6bab1b7c84ebc69ef5cc3a73bb63da06e4306@mail.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-In-Reply-To: <9832ca99bb2aed8262e1986075a6bab1b7c84ebc69ef5cc3a73bb63da06e4306@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.6/28167/Wed Oct 28 07:24:17 2026)
+Mime-Version: 1.0
+X-Lms-Return-Path: <lba+26ae1efeb+57b5aa+vger.kernel.org+yangsongsen@insta360.com>
 
-On 10/27/26 8:08 PM, bot+bpf-ci@kernel.org wrote:
->> selftests/bpf: Extend the JIT instruction tests for arm64 encodings
-> 
-> TL;DR: Nit only, not a bug: the hand-packed INSN()/ATOMIC() macros for
-> load-acquire/store-release in jit_insns_arena.c could use struct bpf_insn with
-> __imm_insn(), dropping the byte-order variants.
-This and the other suggestions look good, I'll implement them and spin a v2.
+On Wed, Oct 28, 2026 at 05:35:48PM +0800, Feng Yang wrote:
+> Sleepable BPF programs run under rcu_read_lock_trace(), not classic RCU.
+> bpf_get_stack() relies on the caller holding a classic RCU read lock:
+> get_perf_callchain() -> get_callchain_entry() dereferences
+> callchain_cpus_entries, and the returned entry is read until
+> callchain_store().  __bpf_get_stack() takes that lock only for the
+> sleepable variant, i.e. when may_fault is true.
+
+Hi Feng,
+
+I hit the same root cause independently via syzbot and sent a fix a
+few hours after yours, without having seen this patch -- sorry for the
+overlap:
+
+  https://lore.kernel.org/bpf/20261028121859.994-1-yangsongsen@insta360.com/
+
+It also covers the syzbot report for BPF_PROG_TYPE_SYSCALL programs
+(always sleepable, run via bpf_prog_test_run_syscall() under
+rcu_read_lock_trace() only), which reach bpf_get_stack_raw_tp() through
+tracing_prog_func_proto():
+
+  https://syzkaller.appspot.com/bug?extid=72a43cdb78469f7fbad1
+
+The approach is different: instead of routing sleepable programs to new
+sleepable protos, it simply takes rcu_read_lock() unconditionally in
+__bpf_get_stack() around get_perf_callchain()/callchain_store(), as
+Andrii suggested earlier that an extra nested rcu_read_lock() is
+harmless:
+
+  https://lore.kernel.org/all/CAEf4BzYN33yQhO-tsF8pUWDMZoiLAXkV+Z1oP6fJkByocYcjpw@mail.gmail.com/
+
+That is a 3+/6- change in kernel/bpf/stackmap.c, it covers every caller
+of __bpf_get_stack() (including the tracepoint, raw_tp, iter and syscall
+cases listed above), and since no helper gains might_sleep it does not
+hold the per-CPU bpf_raw_tp_regs slot across a possible sleep in
+callchain_finalize(), which is the issue the Sashiko review raised here.
+
+It does not do what your patch additionally does, i.e. allow
+BPF_F_USER_BUILD_ID to fault in build IDs from these program types.
+
+I'm happy to go with whichever the maintainers prefer, or to drop mine.
 
 Thanks,
-Daniel
+Songsen
