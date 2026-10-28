@@ -1,84 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.74
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.225.133
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793153722;
-	b=kBtDxSOA9S5K7s+3VrTkpH/s5DcodijStQ3pL4bRXHyQdDpSCAKIscbrev0F07qEFYbN
-	 cOpFAIcZP57aIwpeOda1pWgImnr6fUQDet//bx41VkjqY1V1385KkPnsFBFAUdk2tmofi
-	 /0bz+0gtJASFS4EkGiPGACv6BbrCF2NSPDEIyQ68xbddBKRWdHFwzBbwNPRtoEXiqhtd8
-	 QsbCQFSnxn8fM+5gnptCD0KSLvMSA9gxm4WGN+dDDZvhK1hU+tP1TmcDU+OJyTiBfnQxj
-	 73+SFhG+o332ieIL4WEaWty2Q2gF/uMSr7G/5MFWiGTvWQ2qYtVAIRnx8hGwHsMskPA==
+	t=1793153723;
+	b=Mu6pMZ09iY0dqfJIWq+QGsCBGted0o+f0e6Hm+wOCm0soPLKmQ/u2+rA8NsutOD6MDCR
+	 VOpYf2JihtRZW8ZgXOSqJzI3rWqzfWQ/oYYVoH1T4/jeEzFuWrNVDmDa3ElXiLmCbkVUE
+	 3pAfX9L49ENHYccNzxfHvlEGop0ge0fEkapN3Jgfj/fM2yTlFDgQ9FLa9qRiZhrzdYDa6
+	 pPL6B7zPY4rIGaSEzAa3dPiG1NzMHG+CNDmN+MoCC5Q6RKeBHIa9/rUGMnCV+RaSx6V6T
+	 +ym83mnkFCIlpocDl8lIiGt2Jl29GitwZKM8FdFnpvlYZGjbMz/buCHsPEk8mugpTiQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793153722;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793153723;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Type:Content-Transfer-Encoding;
-	bh=NLBIAayvlvf3sQ+/IvGlf+0hd85ILv6HIkD5Ad9OfYo=;
-	b=Wru31R//Rqz7dFr4/i7FnSpHR4x1VE46EaGhmBYav6criKewnoyFRkWZNH1D3E5xNhNj
-	 K+t281XzcU9Mw6N4MGD83PEjDGnbA0NSsSvDB11uUJlrb8yG7uI9oVwNogooIYOh4rUi/
-	 83feur9nvTWpwh+N1wAqU4evOXlSDaz0j5nyCGBA9seZR/N1JvmHHtyZHmkGu5j2omiKa
-	 +TyxL9txshnG11fWRr3NNXdt3p9P5q+hiD2z6ojjocipJWGkQQCiUR/9uL45X8Td7K4Ar
-	 NPi/HPGiL1AyXd9Q9KKxXGKLnsLndCghg1KH9WtiyhO4Me4SKHE1I8wzKiBE2vuagrw==
+	bh=b1DHWHbFGx8smOppMf6/EZAqo9MqOnk5uaGOHEEVhzA=;
+	b=VE2GHtEOL+MUnDludgvz7Ldd8bRegrctxrOkMZBz6zdsx4fJK9CTeW/jT1AwJhUcCNks
+	 6tVX2jX0hzGHhCLvbAbMaNGqBChjaiHjLbHB7Ad8e+5GNnJ3q6p75N71ZoYAAbSFUuu9r
+	 wfPmGYpfW0mdPjU14BIVyAVeGlfBHsqvVvDo8BKasadzPmr68azPdkgV5UTYYJ483WX5g
+	 q8HGg0L1tQUnJzlCzLkRrkI3lFUIqpL6FshjkomNtdbazCi19PpjDT01u8Sp31x2eBYX1
+	 8s07QeeaE9maJJqLjOuDX2G+KMJ+oEFIyLzH5JqE0zgnYHojWg7+dIeZwQNkV9eVSRA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=02zetP6K;
-	arc=none smtp.remote-ip=74.125.225.74
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hzYDmsb6;
+	arc=none smtp.remote-ip=74.125.225.133
+Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B65606A320
-	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 02:15:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 41B65606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87823606A322
+	for <bpf@vger.kernel.org>; Wed, 28 Oct 2026 02:15:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87823606A322
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=02zetP6K
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48dea979eb9so207015f8f.0
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:15:22 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=hzYDmsb6
+Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-4a35e178418so2087105e9.0
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2026 19:15:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793153721; x=1793758521; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793153722; x=1793758522; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NLBIAayvlvf3sQ+/IvGlf+0hd85ILv6HIkD5Ad9OfYo=;
-        b=02zetP6KfskWHXaSsgPyKTFoPfCshC9wl/Kmv324aqlSN+AzJuK/lihyavsK9JJQf4
-         wxLyWj1gNL+/sT6jxbvpu9MIFx7m24qs5klDOmNp+Irl/X4J8iKWNMBEbWO2Fx6QwEj1
-         ofPFQokJD66IM6InOKkR5SVh8d6O2kEAWe6axTrSmXtSBq570XxtPXe2WJstAcvHPdpX
-         3WH+uRDMwMOeYCpmArRqR8fQYHZ4SZ6UPC9N6c+MYhCZJ3gYXrBcEyylQnY+6rKNn4uN
-         qTdB27QYo3UFWGNrJM+N4dTQETyymVm65erYTqXdmNF6oWrFaVRGaF/adEMZdL3McL7r
-         5QKg==
+        bh=b1DHWHbFGx8smOppMf6/EZAqo9MqOnk5uaGOHEEVhzA=;
+        b=hzYDmsb6k9U5O03hzqx96BfIC5yGuYVS6lswnTxqs7OndlruMnQiarfPj/yUT1QuVg
+         m0nQfSgHVdl6D7lOTxSweMhZVYKYjZlbPP2DvIJIjeIeOW6oLgsrPnQH9UeYS8vFo+PS
+         HQvkuo60mP4wf202fx+uymat8GiNeIJyDGP8js6vWk2TLg5bNl2BhsU91xcqfnqIp0C+
+         4M92XqfqidZQq2gEXSgB2sf6Zw1TOs2FWSvjXb/5QVNxowF3gtXxas+ajnbLHA57CyGt
+         RZ5GceAkjQXBsjrfkWXlzLjtOQ33P3Y60KU3g8YlKtBSPlPvnKiXZyMDx1AEvHqV+r4D
+         cJGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793153721; x=1793758521;
+        d=1e100.net; s=20260707; t=1793153722; x=1793758522;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NLBIAayvlvf3sQ+/IvGlf+0hd85ILv6HIkD5Ad9OfYo=;
-        b=NkZMeAM0lybaPc3Djq7yPdxEKrkm761nfZkH+upmIzy0q5wDovtFMHjMiVbPo7teTb
-         OuxOZ72OUS3Yvx9nbSH+wFpFpxDJXIZ5vtqdS5zELxgorevv9UQzz8ywUyzE2+zzS6aH
-         Eie9x9oq2NQ3d4Q90mz72PIo5+zZM/bnkQLjk/I5Hw3KNLV/BBuDRYwB3wjMVzXN7BtU
-         yPnAZlNbWHNkGpjAynf56ej6VH82U87QUP68O1FMAYSMlliY8DDTHwcZAZ0EztRnabwR
-         Q9uwL2WIdcLiDY7h+PhzcgVRfRI7atDDQmTCm+uOxWOrZG8C7dMHOCx4BKzIlL/xKiTT
-         My+Q==
-X-Gm-Message-State: AFq9FYLNDbydHq675Cl/Fp6PsA8K0UStMyamyyEi0bi4uAJgoyZTBaO0
-	G3jGdomkIOhhGV6sfK3G5k16hP2kZUWg9aOS/D274Hpl3vl9Z1xFfE86pQtqr9tg
-X-Gm-Gg: AYBFou2eFiTFA7h4fAv/bf7ZOVImtJX7nPTUJuwuSkbsNw4nhXehhSSxXyFJyeGY8FF
-	mriJLgAlgEn5uNAgkJ2kDqd+h7cf5kw3KPjNkoKcxEomGRY9We+4OGXdS26gP1ZHt0+MfUILJKu
-	BwvTi/oTMtLCOnYbKBlgZopgqu08O+Yzir3DgLCr6DlMrMLwyC2sBAnAA/zBa1kwGUNnxGIAMtT
-	1A6Dqgqlj5oiz2J10VxmMBJBKI3y3mrZVppcGDO5yRqHt9grmksX4wfuan0uOeQMp14R0pbxZBm
-	FpgH6YZCj/j8ykeg4Pa5J919IQcl+0fWCTSq8cWWHgKAMWPRfjdxixVRv8r/rIqpjCZ8qaa7G3G
-	8CSt/S0lYEiEF/lcGkaY0PvblIdJCnR5RcEa/AmTQNhmM4IfDLiEFuieUT/tdiaImvi8aTH0A/K
-	CwxXzqWR/PJdP/AIo2EYRjQaH8w9BLZMIe3UBcm7LY0UIy2GC/NQk9aEVpCiCYiB0PCMOWlEShO
-	Hsk95uhZgydd3b3Q3j3r+Ry91d+540zosAVJrATisA0W0h0GmLvXoE3Rlhjjhro46auJ9r2WGg+
-	YVW1lN1GUC4VCTygJbYu/B2LAtGev2BilvORjN+tqc1eAI8Sm09Cbwpk+jFsIdl26mpwof70aOj
-	6U3S14nPyc+0VSArqFJz6oEmO4Bhzh50LBrmMwAJFYYB2sgyTU9BN6E8/1kwcLqq0teHK
-X-Received: by 2002:a05:600c:4454:b0:4a1:ce33:1536 with SMTP id 5b1f17b1804b1-4a965cdb7afmr16056415e9.9.1793153720605;
-        Tue, 27 Oct 2026 19:15:20 -0700 (PDT)
+        bh=b1DHWHbFGx8smOppMf6/EZAqo9MqOnk5uaGOHEEVhzA=;
+        b=ugFveqavpEZWx0ysn/C2tiMrkc3bW6KVH6YM/Pb1I+OsPZ5inJg/9qnNCcjONb+XyB
+         23KBmrupxQGw0BvBRGT6yEnEKaULI+5XmKu3hre0zkm9riSxKiMaXQDwaJ5GKb712t3N
+         suG4jgGYwbPg5cT6LCGegq3xiJinxLfN6Ya2+yExY7+TGNVndk89oSQgvGxqPAfuB3xm
+         jsjQsp4p1ror0dz4xPCWpGCxC9cLOEwOzaGjYxIfQvSqjqKzKoi5/QJoqMopqbNmbiyz
+         DtRwOOy6r/58/ZGysowKOmMbod6fzANtx6ny8t23HUqkFpwTNtzr5zSDjvCihI3Sxxzl
+         qlsw==
+X-Gm-Message-State: AFq9FYKgsxO2obwb1VWG9HmrAffjLqI7vJkq+TrVd26PKyGegp/gWIFR
+	wzmmLP0SsyoEzHCBYB9S9cRDhxefwvZW7fuGGq1hFh8UsYm3rQROZpfa
+X-Gm-Gg: AYBFou0efJnlcQ/U27uqG4amUNn0Zn/ufWpr0T4Pv6ClNg2SOM1cQ9qVUZYq0KbFWpn
+	bhCFVa/USPRmpb43WAeMUQuCDLmEw3RUW42MQVdlpb2NWjInqevZdP7MkwD10AH/uzlkCK6pwCy
+	x385G/7DAs/NRo/PKN+1FIygGarOXdrR9jWsLahhC0mMheuNjU3PfqApn55AGKYPA6r6OmWQyT7
+	nuS6oxR5i4leHKNoYDrsAvRbQVoX58Haom0hj/3ycDcao5x5IZ+UpOLbUiQLIKyAB9ZsD7FhDAZ
+	QgTl2xXqSoeXoBTvOOHalZG36xqAKlVVn9Gy/fMjU+gg0gayzoHOIUW+k3Ym0jf8Ib0hgp+oPlm
+	k+ecbE3PmVYMojHGH7PawqViAfrGKphPO4HpZYeMEqjdV7Y+5dDE7EXd/w9cVvY3JUip88RajHU
+	ykYs1JXrKVPuiyG44MpUrHLpkwd3d+xhvWCNnQSmYrk3XFZizCozq6qBaOe2xEdVz7UNKM/vYVu
+	rjrxhAtn3djyhesFXy73jh9zVGUcy1I6evjQ6bsKAMTowJ/dKyvrLlbhc5QcVDP5ptNsF2t7neu
+	95upApapDl1o/JcwwQjMWqraHqL44SUnANGnWbSJH8LFEkKHaFJnqdAow/lkSFTq+ojNbVJKrjC
+	9LXSeOksT826yAIR1wKYdnrC5MLFpYob3gVWv4OuS/uHrhANUZ9Hmy8RWXeXlrKdGqNAl5TIb3E
+	mSoT7HR148VGTddw==
+X-Received: by 2002:a05:600c:4f89:b0:4a2:1612:637a with SMTP id 5b1f17b1804b1-4a966c4110fmr16665885e9.16.1793153721881;
+        Tue, 27 Oct 2026 19:15:21 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a97c42b3c1sm10695605e9.6.2026.10.27.19.15.20
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a977edc0fdsm10886565e9.5.2026.10.27.19.15.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 19:15:20 -0700 (PDT)
+        Tue, 27 Oct 2026 19:15:21 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org,
@@ -93,12 +94,12 @@ Cc: bpf@vger.kernel.org,
 	martin.lau@kernel.org,
 	yonghong.song@linux.dev,
 	mason@kernel.org
-Subject: Re: [RFC PATCH bpf-next v1 01/11] bpf: Give a helper a way to call its callback with a pad
-Date: Wed, 28 Oct 2026 03:15:19 +0100
-Message-ID: <20261028021519.1203900-8-memxor@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 03/11] bpf: Let a callback unwind into the pad of its helper
+Date: Wed, 28 Oct 2026 03:15:20 +0100
+Message-ID: <20261028021520.1203900-9-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <81df2f63249021a13160d155eccab3bbd591e464d05db9765a15427c3cc97650@mail.kernel.org>
-References: <03d6c53ccdf3eb0f5503eae9f9ffa5e6570549c3.1793147364.git.memxor@gmail.com> <81df2f63249021a13160d155eccab3bbd591e464d05db9765a15427c3cc97650@mail.kernel.org>
+In-Reply-To: <64d65cba8dd38be485a909c5b03c403ba78bfb67caf179deab641e22208908a8@mail.kernel.org>
+References: <cc848a0c0e4839fe34514b89561884c082650881.1793147364.git.memxor@gmail.com> <64d65cba8dd38be485a909c5b03c403ba78bfb67caf179deab641e22208908a8@mail.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Post: <mailto:bpf@vger.kernel.org>
@@ -114,18 +115,16 @@ Content-Transfer-Encoding: 8bit
 On Wed Oct 28, 2026 at 2:39 AM CET, bot+bpf-ci wrote:
 > [...]
 > TL;DR:
-> - bpf_unwind_leave() may misbehave if the helper is ftrace/kretprobe/fexit
->   traced: unwind lost, pointer or reference treated as scalar
+> - Tracing (ftrace, kretprobe, fexit) may redirect a pad helper's return
+>   address, so unwind could fall through, possibly causing use-after-free or
+>   bad r0; not yet reachable
 
 Right. Every function with a pad is notrace and no kprobe target in the
 next version, as the verifier lets only fentry attach to a subprog that
 unwinds, with a test that fexit on bpf_loop() is refused.
 
-> - With gcc, bpf_call_cb() register variables may be clobbered by KASAN/KCSAN
->   calls, possibly jumping to a bad address
+> - Stale comment in backtrack.c (nit)
 
-Right, for a call in the evaluation of a later argument, which the
-compiler does not keep the register variables across. The next version
-evaluates every argument into a temporary first.
+Fixed in the next version.
 
 > [...]
